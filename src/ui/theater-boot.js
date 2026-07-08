@@ -82,7 +82,7 @@
 import * as THREE from "three";
 import { playVerb, tickTweens, THEATER_VERBS, theaterFxFromLedger } from "./theater-verbs.js";
 import * as Parts from "./theater-parts.js";
-import { resolveWholeObject, loadWholeObjectBuilders } from "./theater-figures.js";
+import { resolveWholeObject, loadWholeObjectBuilders, WHOLE_OBJECT_REGISTRY, NEAREST_SUB } from "./theater-figures.js";
 // P1' WHOLE-OBJECT WIRING (docs/P1-WIRING.md §4 step 3): a STATIC import of probe-lib.js itself —
 // every dev/model-qa/creatures/*.js module ALSO imports probe-lib.js by the identical relative
 // specifier (resolved from dev/model-qa/, '../probe-lib.js'), which both Node and browsers resolve
@@ -2248,6 +2248,28 @@ function wholeObjectKeyFor(kind, className, recipeSlug){
 // accessor at the bottom of this file share the single source of truth.
 let WHOLE_OBJECT_ENABLED = true;
 
+/* MODEL-PATH INSTRUMENTATION (Codex diagnosis rec #2, 2026-07-08 — "visual misses stop being a black
+   box"). Every figure resolution tallies WHICH path built it: a bespoke model (exact), a NEAREST_SUB
+   stand-in (alias), the unpainted meeple (blank), a PC/bestiary recipe, or the legacy archetype cuboid
+   — plus loadFail (a real key whose builder wasn't loaded / geometry threw, the invisible failure that
+   used to look like taste). `misses` keys the cuboid/loadFail cases by their render key so "why is THIS
+   a cuboid" is answerable at a glance. Read-only diagnostics — nothing in product logic reads these;
+   exposed on window.Theater.stats.modelPaths + window.Theater.modelPathReport(). */
+const MODEL_PATH_STATS = { exact:0, alias:0, blank:0, pcRecipe:0, recipe:0, cuboid:0, loadFail:0, misses:{} };
+function _classifyWholeKey(wKey){
+  if(!wKey) return null;
+  if(wKey.indexOf("blank:") === 0) return "blank";
+  if(WHOLE_OBJECT_REGISTRY[wKey]) return "exact";
+  if(NEAREST_SUB[wKey]) return "alias";
+  return "blank";   // resolveWholeObject's figure/prop floor returned the blank entry
+}
+function _tallyPath(bucket, key){
+  MODEL_PATH_STATS[bucket] = (MODEL_PATH_STATS[bucket] || 0) + 1;
+  if((bucket === "cuboid" || bucket === "loadFail") && key){
+    MODEL_PATH_STATS.misses[key] = (MODEL_PATH_STATS.misses[key] || 0) + 1;
+  }
+}
+
 function figureFor(archetype, seed, tint, silhouette, weapon, recipeSlug, pcRecipe, kind, className){
   // P1' WHOLE-OBJECT WIRING (docs/P1-WIRING.md §4 step 5): resolved BEFORE the pcRecipe branch — the
   // roster-supersession clause (§8 decision 4: "cuboids demote to auto-fallback... never deleted").
@@ -2285,9 +2307,14 @@ function figureFor(archetype, seed, tint, silhouette, weapon, recipeSlug, pcReci
         g.userData.wholeObject = true;
         g.userData.wholeObjectKey = wKey;
         g.userData.wholeObjectDiscR = wEntry.discR;
+        _tallyPath(_classifyWholeKey(wKey), wKey);
         return g;
       }
     }
+    // a resolved entry we couldn't BUILD (builder not loaded yet / geometry threw) — the invisible
+    // failure. Record it (it still falls through to the recipe/cuboid chain below, which tallies the
+    // path actually taken; this is the separate "would-have-been-a-model" signal).
+    if(wKey && wEntry) _tallyPath("loadFail", wKey);
   }
   // MODEL-GRAMMAR G2: a unit carrying a resolvable recipeSlug renders recipe-driven (§9
   // Decision 1: recipes may improve on the fixed archetypes — new weapon/armor modules from
@@ -2305,9 +2332,13 @@ function figureFor(archetype, seed, tint, silhouette, weapon, recipeSlug, pcReci
   // chain (pcRecipe > bestiary recipe > archetype), not a new code path. A foe never carries
   // pcRecipe (theaterUnitsFrom only stamps it on pc/ally units), so this branch is a pure no-op
   // for every foe figure.
-  if(pcRecipe) return buildFigureFromRecipe(pcRecipe, tint, kind);
+  if(pcRecipe){ _tallyPath("pcRecipe", null); return buildFigureFromRecipe(pcRecipe, tint, kind); }
   const recipe = recipeFor(recipeSlug);
-  if(recipe) return buildFigureFromRecipe(recipe, tint, kind);
+  if(recipe){ _tallyPath("recipe", recipeSlug); return buildFigureFromRecipe(recipe, tint, kind); }
+  // the legacy archetype-builder path — a genuine cuboid (§U3: reached only when there is NO whole-
+  // object key, NO recipe; instrumented so this stops being invisible). `wKey||("kind:"+kind)` names
+  // the miss so the debug report says WHAT couldn't resolve (a foe recipeSlug, a keyless npc, etc.).
+  _tallyPath("cuboid", wholeObjectKeyFor(kind, className, recipeSlug) || ("kind:" + kind));
   const build = ARCHETYPE_BUILDERS[archetype] || ARCHETYPE_BUILDERS.biped;
   const g = build(seed, tint, silhouette, weapon);
   // UNIT 0 (L16): the legacy archetype-builder fallback (no recipe) turns to the SAME convention as
@@ -3562,10 +3593,18 @@ function setBoard(data){
     // TABLETOP-UNITS.md §U3: pieceKind:"prop" — a resolution miss here resolves to "blank:prop"
     // (the plain block) instead of null, so the Parts.PARTS/generic-box chain below is reached only
     // on an actual load failure (gate off / builder not loaded / geometry throws), never a bare miss.
-    if(WHOLE_OBJECT_ENABLED && p.part){
-      const wPropKey = (p.part === "pillar-broken")
-        ? ((p.partParams && p.partParams.intact) ? "prop:pillar-intact" : "prop:pillar-broken")
-        : "prop:" + p.part;
+    if(WHOLE_OBJECT_ENABLED && (p.model || p.part)){
+      // REALM-PROPS-WIRING fix (2026-07-08): a bespoke realm prop carries its own full registry key in
+      // `p.model` ("prop:sentry-turret-mount" etc.) and prefers it — this is what revives the 8 net-new
+      // realm-prop models that were dead when this resolver keyed only off `p.part` (they have no part).
+      // Everything else keeps the exact part-derived key: pillar-broken's intact/broken split, else
+      // "prop:"+part. A `model` miss (unloaded builder / geometry throw) still falls through to the
+      // Parts.PARTS/generic-box chain below, same degrade as a part miss.
+      const wPropKey = p.model
+        ? p.model
+        : ((p.part === "pillar-broken")
+          ? ((p.partParams && p.partParams.intact) ? "prop:pillar-intact" : "prop:pillar-broken")
+          : "prop:" + p.part);
       const wEntry = resolveWholeObject(wPropKey, "prop");
       if(wEntry && typeof wEntry.build === "function"){
         const wGeo = wholeObjectGeometryFor(wPropKey, false, "prop");
@@ -4147,6 +4186,18 @@ window.Theater.ready = false;
 // VALUES, not labels, so the battle-gate rig's acceptance can prove both the rebuild path and the
 // skip path actually fire (M-11..M-14).
 window.Theater.stats = { boardBuilds: 0, unitBuilds: 0, boardSkips: 0, unitSkips: 0 };
+
+// MODEL-PATH INSTRUMENTATION (2026-07-08): the live figure-resolution tally + a console-friendly report.
+// `window.Theater.stats.modelPaths` is the raw counter; modelPathReport() returns a summary with the
+// cuboid/loadFail miss keys sorted by frequency — the "which foes are still stand-ins/broken" answer.
+window.Theater.stats.modelPaths = MODEL_PATH_STATS;
+window.Theater.modelPathReport = function(){
+  const m = MODEL_PATH_STATS;
+  const total = m.exact + m.alias + m.blank + m.pcRecipe + m.recipe + m.cuboid;
+  const missList = Object.keys(m.misses).map(k => ({ key: k, count: m.misses[k] })).sort((a,b)=>b.count-a.count);
+  return { total, exact: m.exact, alias: m.alias, blank: m.blank, pcRecipe: m.pcRecipe,
+    recipe: m.recipe, cuboid: m.cuboid, loadFail: m.loadFail, misses: missList };
+};
 
 // REFERENCE-SHELF seam (docs/BESTIARY-MANUAL.md "The figure seam"): build/dispose one standalone
 // figure outside the battle stage — the Monster Manual's live-3D grid/detail viewer calls this

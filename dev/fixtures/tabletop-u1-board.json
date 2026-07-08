@@ -410,6 +410,7 @@
         "z": 1,
         "level": "half",
         "part": "table-slab",
+        "model": "prop:table-slab",
         "partParams": {},
         "realmPropName": "Star-Chart Table",
         "size": "Large"

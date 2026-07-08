@@ -1494,7 +1494,7 @@ const DM_EVENT_FIELDS = {
   death_save:        { accept:["d20"], num:["d20"] },
   temp_hp:           { accept:["n"], num:["n"] },
   combat_start:      { accept:["foes","objectiveRef","scene","segment","segmentId"] },
-  combat_end:        { accept:["method","outcome"] },
+  combat_end:        { accept:["method","outcome","reason"], alias:{ note:"reason" } },
   attack:            { accept:["advantage","attackIndex","cover","crit","d20","magnitude","slot","target","targetAC"], num:["d20","targetAC","magnitude","attackIndex"] },
   action:            { accept:["ally","dir","kind","target","trigger"] },
   opportunity_attack:{ accept:["d20","foe"], num:["d20"] },
@@ -1973,7 +1973,8 @@ function applyEvent(w,e){
       // GS.combat=null below.
       const combatMin=Math.max(1,Math.round(((GS.combat.round||1)*6)/60));
       if(typeof advanceClock==="function") advanceClock(w,combatMin);
-      addLedger(w,"outcome",{kind:"combat-end",outcome,method,downed:downCount,fled:fledCount,minutes:combatMin,source:src},
+      addLedger(w,"outcome",{kind:"combat-end",outcome,method,downed:downCount,fled:fledCount,minutes:combatMin,
+        ...(p.reason?{reason:String(p.reason)}:{}),source:src},
         "⚔ The fight ends — "+outcomePhrase+". "+downCount+" foe"+(downCount===1?"":"s")+" down"+(fledCount?(", "+fledCount+" fled"):"")+".");
       // BATTLE-THEATER §4 hook site: combat_end itself maps to silence (theaterFxFromLedger returns
       // null for "combat-end" — no single subject to animate) but the call site is still wired here

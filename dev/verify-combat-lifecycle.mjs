@@ -261,6 +261,48 @@ const check = (name, cond, detail = "") =>
 }
 
 // ============================================================================
+// 5h. HQ3-B2 — combat_end accepts a free-text `reason` (alias `note`->`reason`) via DM_EVENT_FIELDS;
+//     it folds into the combat-end ledger DETAIL object and never burns a payload-drift line.
+// ============================================================================
+{
+  const win = freshWin();
+  const world = makeWorld(win);
+  win.applyEvent(world, { type: "combat_start", payload: { foes: [{ name:"Goblin", cr:0.25 }] } });
+  const driftBefore = world.ledger.filter(e => e.type === "drift" && e.data && e.data.kind === "payload-drift").length;
+  const r = win.applyEvent(world, { type: "combat_end", payload: { outcome: "fled", reason: "the PC ran" } });
+  check("5h-i. combat_end{reason} returns ok:true", r && r.ok === true, JSON.stringify(r));
+  const driftAfter = world.ledger.filter(e => e.type === "drift" && e.data && e.data.kind === "payload-drift").length;
+  check("5h-ii. no payload-drift ledger line was added for a declared `reason`",
+    driftAfter === driftBefore, JSON.stringify({ driftBefore, driftAfter }));
+  const endEntry = [...world.ledger].reverse().find(e => e.data && e.data.kind === "combat-end");
+  check("5h-iii. the combat-end ledger entry's detail carries reason",
+    endEntry && endEntry.data.reason === "the PC ran", JSON.stringify(endEntry));
+
+  // note -> reason alias fold
+  const win2 = freshWin();
+  const world2 = makeWorld(win2);
+  win2.applyEvent(world2, { type: "combat_start", payload: { foes: [{ name:"Goblin", cr:0.25 }] } });
+  const driftBefore2 = world2.ledger.filter(e => e.type === "drift" && e.data && e.data.kind === "payload-drift").length;
+  win2.applyEvent(world2, { type: "combat_end", payload: { outcome: "fled", note: "aliased via note" } });
+  const driftAfter2 = world2.ledger.filter(e => e.type === "drift" && e.data && e.data.kind === "payload-drift").length;
+  check("5h-iv. `note` is aliased to `reason` with no payload-drift",
+    driftAfter2 === driftBefore2, JSON.stringify({ driftBefore2, driftAfter2 }));
+  const endEntry2 = [...world2.ledger].reverse().find(e => e.data && e.data.kind === "combat-end");
+  check("5h-v. note-aliased reason lands in the ledger detail as `reason`",
+    endEntry2 && endEntry2.data.reason === "aliased via note", JSON.stringify(endEntry2));
+
+  // method/outcome behavior unchanged when no reason/note is declared at all
+  const win3 = freshWin();
+  const world3 = makeWorld(win3);
+  win3.applyEvent(world3, { type: "combat_start", payload: { foes: [{ name:"Goblin", cr:0.25 }] } });
+  const r3 = win3.applyEvent(world3, { type: "combat_end", payload: { outcome: "resolved", method: "melee" } });
+  check("5h-vi. method/outcome without reason still ok:true (unaffected)", r3 && r3.ok === true, JSON.stringify(r3));
+  const endEntry3 = [...world3.ledger].reverse().find(e => e.data && e.data.kind === "combat-end");
+  check("5h-vii. no reason key present on the ledger detail when none was declared",
+    endEntry3 && !("reason" in endEntry3.data), JSON.stringify(endEntry3));
+}
+
+// ============================================================================
 // 6. chase_start before combat_end -> GS.chase survives teardown (§3d, §7.6)
 // ============================================================================
 {

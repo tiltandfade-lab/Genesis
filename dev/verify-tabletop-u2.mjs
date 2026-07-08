@@ -1,7 +1,18 @@
 /* Verify TABLETOP-UNITS U2 — the 3-column shell + ARIA contract (docs/TABLETOP-UNITS.md §U2,
    docs/TABLETOP-VISION.md §1/§9.7/§9.11). jsdom over the real genesis.html modules, same convention
    as dev/verify-battle-stage.mjs (this repo's established stage-mode fixture: stub window.Theater,
-   drive GS.combat via combatStart so stageMode flips true without a real WebGL mount).
+   which simulates a successful mount so stageMode flips true without a real WebGL context).
+
+   INTEGRATION NOTE (U1+U2 tree, Wave 1 gate): U1 severed the old combat->stageMode trigger —
+   post-U1, stageMode = !!(GS.theaterMounted && !GS.stageCollapsed) (render.js:309), combat no
+   longer gates the stage. On U2's isolated branch this fixture entered stage mode via combatStart
+   (correct THERE, where U1 was absent); on the integrated tree that path leaves theaterMounted
+   false and the stage never paints. Fix: stubTheater() now sets GS.theaterMounted to match
+   mountReturns — a stubbed, mountable Theater IS a mounted stage. RED-FIRST proof (Opus gate,
+   integration tree): before this change, checks 1/2/2b/3/6b/8a/8h/10b failed + the harness crashed
+   at 11b (prose null); the integrated PRODUCT was verified correct first (forcing theaterMounted=
+   true rendered .game.battle-stage + .stage-col + exactly one .stage-prose). startFight() is kept
+   only because the stage-prose twin needs combat content to render — not to gate the stage.
 
    U2 scope only: the mainHtml default-stage branch, the rail stage-toggle (GS.stageCollapsed), the
    760px forced-collapse rule, and the locked ARIA list (.dm-feed role=log, composer aria-label,
@@ -109,6 +120,11 @@ function stubTheater(win, { mountReturns = true } = {}) {
     zoom() { return 1; },
     retire() { calls.retire++; },
   };
+  // Post-U1 (integration tree): stageMode is gated on GS.theaterMounted, not combat. A stubbed,
+  // mountable Theater represents a stage that mounted successfully, so reflect that in GS state —
+  // this is what a real mount() leaves behind. mountReturns:false (the degrade fixture) leaves it
+  // false, exactly as a failed mount would. See the INTEGRATION NOTE in the header.
+  win.GS.theaterMounted = mountReturns;
   return calls;
 }
 

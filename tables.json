@@ -69948,6 +69948,472 @@ null,
 ]
 ]
 },
+"npc-role-spine": {
+"dice": "d35",
+"die": 35,
+"bell": false,
+"class": "Fork",
+"player_facing": "reveal",
+"voice_critical": false,
+"domain": "Social / Sentient NPCs",
+"rows": [
+[
+1,
+1,
+"",
+"Land-worker — Tied to the land and its seasons; the base everyone eats from. — 6 — labor",
+null,
+[
+"Land-worker",
+"Tied to the land and its seasons; the base everyone eats from.",
+"6",
+"labor"
+]
+],
+[
+2,
+2,
+"",
+"Wild-provider — Reads the wild and brings in what the settled can't. — 8 — wild",
+null,
+[
+"Wild-provider",
+"Reads the wild and brings in what the settled can't.",
+"8",
+"wild"
+]
+],
+[
+3,
+3,
+"",
+"Hauler — Moves the heavy things; sees everything, is asked nothing. — 10 — labor",
+null,
+[
+"Hauler",
+"Moves the heavy things; sees everything, is asked nothing.",
+"10",
+"labor"
+]
+],
+[
+4,
+4,
+"",
+"Delver — Works the dark and the tight places; patient underground. — 4 — labor",
+null,
+[
+"Delver",
+"Works the dark and the tight places; patient underground.",
+"4",
+"labor"
+]
+],
+[
+5,
+5,
+"",
+"Servant — Invisible to the powerful, and so hears every secret. — 4 — service",
+null,
+[
+"Servant",
+"Invisible to the powerful, and so hears every secret.",
+"4",
+"service"
+]
+],
+[
+6,
+6,
+"",
+"Destitute — Has nothing, so knows the streets better than anyone. — 3 — margin",
+null,
+[
+"Destitute",
+"Has nothing, so knows the streets better than anyone.",
+"3",
+"margin"
+]
+],
+[
+7,
+7,
+"",
+"Maker — Their tools carry their whole history. — 5 — craft",
+null,
+[
+"Maker",
+"Their tools carry their whole history.",
+"5",
+"craft"
+]
+],
+[
+8,
+8,
+"",
+"Metalworker — Calloused hands; deals in practical defense. — 3 — craft",
+null,
+[
+"Metalworker",
+"Calloused hands; deals in practical defense.",
+"3",
+"craft"
+]
+],
+[
+9,
+9,
+"",
+"Feeder — Up before dawn; holds the neighborhood's gossip. — 3 — craft",
+null,
+[
+"Feeder",
+"Up before dawn; holds the neighborhood's gossip.",
+"3",
+"craft"
+]
+],
+[
+10,
+10,
+"",
+"Builder — Reads every structure out of habit; knows what's load-bearing. — 3 — craft",
+null,
+[
+"Builder",
+"Reads every structure out of habit; knows what's load-bearing.",
+"3",
+"craft"
+]
+],
+[
+11,
+11,
+"",
+"Clothier — Notices the cut and quality of everyone's clothes. — 3 — craft",
+null,
+[
+"Clothier",
+"Notices the cut and quality of everyone's clothes.",
+"3",
+"craft"
+]
+],
+[
+12,
+12,
+"",
+"Outfitter — Keeps the means of travel and trade running; eyes on the weather. — 3 — craft",
+null,
+[
+"Outfitter",
+"Keeps the means of travel and trade running; eyes on the weather.",
+"3",
+"craft"
+]
+],
+[
+13,
+13,
+"",
+"Trader — Information-rich, truth-poor. — 4 — trade",
+null,
+[
+"Trader",
+"Information-rich, truth-poor.",
+"4",
+"trade"
+]
+],
+[
+14,
+14,
+"",
+"Host — Controls the space, not the people in it. — 3 — trade",
+null,
+[
+"Host",
+"Controls the space, not the people in it.",
+"3",
+"trade"
+]
+],
+[
+15,
+15,
+"",
+"Remedy-maker — Smells of bitterroot; knows what heals and what doesn't. — 3 — care",
+null,
+[
+"Remedy-maker",
+"Smells of bitterroot; knows what heals and what doesn't.",
+"3",
+"care"
+]
+],
+[
+16,
+16,
+"",
+"Healer — Trusted, and overburdened by it. — 2 — care",
+null,
+[
+"Healer",
+"Trusted, and overburdened by it.",
+"2",
+"care"
+]
+],
+[
+17,
+17,
+"",
+"Rite-keeper — Maintains the ritual, not the doctrine. — 2 — faith",
+null,
+[
+"Rite-keeper",
+"Maintains the ritual, not the doctrine.",
+"2",
+"faith"
+]
+],
+[
+18,
+18,
+"",
+"Performer — Craves the attention; hides the true feeling under it. — 1 — service",
+null,
+[
+"Performer",
+"Craves the attention; hides the true feeling under it.",
+"1",
+"service"
+]
+],
+[
+19,
+19,
+"",
+"Enforcer — Authority-adjacent, with limited real power. — 4 — authority",
+null,
+[
+"Enforcer",
+"Authority-adjacent, with limited real power.",
+"4",
+"authority"
+]
+],
+[
+20,
+20,
+"",
+"Hired-blade — Loyalty bought with coin, and cynical about it. — 2 — criminal",
+null,
+[
+"Hired-blade",
+"Loyalty bought with coin, and cynical about it.",
+"2",
+"criminal"
+]
+],
+[
+21,
+21,
+"",
+"Road-guard — Wary of the road; values a good pair of boots. — 2 — authority",
+null,
+[
+"Road-guard",
+"Wary of the road; values a good pair of boots.",
+"2",
+"authority"
+]
+],
+[
+22,
+22,
+"",
+"Outlaw — Desperate or cruel; lives outside the law. — 3 — criminal",
+null,
+[
+"Outlaw",
+"Desperate or cruel; lives outside the law.",
+"3",
+"criminal"
+]
+],
+[
+23,
+23,
+"",
+"Smuggler — Hides the cargo; speaks only in euphemism. — 2 — criminal",
+null,
+[
+"Smuggler",
+"Hides the cargo; speaks only in euphemism.",
+"2",
+"criminal"
+]
+],
+[
+24,
+24,
+"",
+"Thief — Eyes every coin-pouch; avoids every eye. — 2 — criminal",
+null,
+[
+"Thief",
+"Eyes every coin-pouch; avoids every eye.",
+"2",
+"criminal"
+]
+],
+[
+25,
+25,
+"",
+"Hidden-fanatic — Fanatical devotion behind a mundane face. — 2 — faith",
+null,
+[
+"Hidden-fanatic",
+"Fanatical devotion behind a mundane face.",
+"2",
+"faith"
+]
+],
+[
+26,
+26,
+"",
+"Recruiter — Charisma aimed at the desperate; sells belonging. — 2 — faith",
+null,
+[
+"Recruiter",
+"Charisma aimed at the desperate; sells belonging.",
+"2",
+"faith"
+]
+],
+[
+27,
+27,
+"",
+"Outsider — Chose to stay here; the reasons stay unclear. — 2 — margin",
+null,
+[
+"Outsider",
+"Chose to stay here; the reasons stay unclear.",
+"2",
+"margin"
+]
+],
+[
+28,
+28,
+"",
+"Recluse — Known of, rarely seen. — 1 — margin",
+null,
+[
+"Recluse",
+"Known of, rarely seen.",
+"1",
+"margin"
+]
+],
+[
+29,
+29,
+"",
+"Stand-in — Filling in for someone absent; borrowed authority. — 1 — authority",
+null,
+[
+"Stand-in",
+"Filling in for someone absent; borrowed authority.",
+"1",
+"authority"
+]
+],
+[
+30,
+30,
+"",
+"Unofficial-power — Power without a title. — 1 — authority",
+null,
+[
+"Unofficial-power",
+"Power without a title.",
+"1",
+"authority"
+]
+],
+[
+31,
+31,
+"",
+"Misfit — Unqualified, unwilling, or both — and in the role anyway. — 1 — margin",
+null,
+[
+"Misfit",
+"Unqualified, unwilling, or both — and in the role anyway.",
+"1",
+"margin"
+]
+],
+[
+32,
+32,
+"",
+"Pampered-elite — Wealthy, bored, insulated from real consequence. — 2 — elite",
+null,
+[
+"Pampered-elite",
+"Wealthy, bored, insulated from real consequence.",
+"2",
+"elite"
+]
+],
+[
+33,
+33,
+"",
+"Magnate — Sees every interaction as a transaction. — 1 — elite",
+null,
+[
+"Magnate",
+"Sees every interaction as a transaction.",
+"1",
+"elite"
+]
+],
+[
+34,
+34,
+"",
+"Secret-scholar — Hoards the secret knowledge; sees others as material. — 1 — faith",
+null,
+[
+"Secret-scholar",
+"Hoards the secret knowledge; sees others as material.",
+"1",
+"faith"
+]
+],
+[
+35,
+35,
+"",
+"Cipher — Their very presence is the notable thing. — 1 — margin",
+null,
+[
+"Cipher",
+"Their very presence is the notable thing.",
+"1",
+"margin"
+]
+]
+]
+},
 "npc-role": {
 "dice": "d100",
 "die": 100,

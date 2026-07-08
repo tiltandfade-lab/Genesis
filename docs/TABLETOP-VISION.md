@@ -56,7 +56,13 @@ controller; it has no inputs. Blind players lose nothing by construction (§8).
   truth (sheet/party/inventory/clocks), CENTER = the table (collapsible to zero; game whole
   without it), RIGHT = the DM zone (narration + input — the actual game). ARIA landmark order:
   right, left; center `aria-hidden` (its content reaches blind players as the prose twins that
-  already ride the digest).
+  already ride the digest). The dice overlay and any other `aria-live` element sit OUTSIDE
+  the hidden center subtree (§9.11) — hiding the stage must never mute an announcement.
+
+**Inference cost (SPEED rule 1):** V0–V5 = ZERO per-turn model calls — every layer is a pure
+projection of existing state; assembly is deterministic engine work. V6a rides the existing
+gen[] handshake budget (selection only). V6b/V6c are LICENSED but UNPRICED: each must declare
+its own latency + token budget in its unlock proposal before any build.
 
 ## §2 Piece taxonomy (from the 2026-07-07 commercial census; census text = appendix file)
 
@@ -115,10 +121,14 @@ by gate §9.6.
   the Monster-Scenery triad; no continuous scaling.
 - **One tray per room/segment**; walk = tray swap on movement (the hand lifts the old tray off,
   sets the new one down — the ONLY inter-piece animation that exists).
-- **Persistence**: tray layout re-derives from the same seeds (walk rolls are seeded); what
-  must *persist* is only the trace-overlay lane + piece removals, which ride the existing
-  per-segment reskin/`walk_update` overlay mechanism (prep.js:493-509) — event-sourced, no new
-  store. A revisited room's tray returns as it was left, corpses and all.
+- **Persistence**: `trayFrom` is a pure READ of the already-persisted segment record — walk
+  RNG runs ONCE at generation (raw `Math.random()`, walk.js:146; NOT re-derivable — only
+  lighting is seeded) and is never re-rolled. What must *persist beyond the segment record*
+  is only the trace-overlay lane + piece removals, which ride the existing per-segment
+  reskin/`walk_update` overlay mechanism (prep.js:493-509) — event-sourced, no new store.
+  A revisited room's tray returns as it was left, corpses and all. (Skeptic-pass fix: the
+  first draft claimed "walk rolls are seeded" — false; an executor re-rolling from a seed
+  would mint a different room per call.)
 - **Combat does not spawn a second surface**: `combat_start` RECONFIGURES the current tray into
   the band-lane arrangement (setBoard already consumes segment+scene); combat_end relaxes it
   back, leaving traces. One table, many arrangements. **Dedup law (adversarial-pass fix):
@@ -217,9 +227,12 @@ waits on new art beyond the blank pieces and one mat per env.
 
 ## §8 Blind parity (BLIND-PLAYABLE FULLY — the tax stays paid, by construction)
 
-Law §0.1 does the work: every staged piece maps to a state record, and every state record
-already reaches the digest/prose lane. Therefore the table can never show what prose can't
-say. Per-layer obligations: tray swaps announce as scene transitions (already narrated);
+Law §0.1 does the work: every staged piece maps to a state record, AND staging is further
+gated on digest visibility (the §2 parity condition) — a record the digest suppresses (soft
+ambient pre-contact) stages nothing beyond its aggregate presence line. Therefore the table
+can never show what prose can't say. *(Skeptic-pass fix: the first draft claimed every state
+record "already reaches" the digest — false; codex.js:410-420 deliberately suppresses
+untouched ambient records. Visibility is a gate, not a given.)* Per-layer obligations: tray swaps announce as scene transitions (already narrated);
 reveal-placements coincide with their narration beat (the same event drives both); the center
 column is `aria-hidden` decoration and fully collapsible; acceptance gate remains one full
 session via screen reader, screen off. A piece with no prose twin is a §0.1 violation — the
@@ -233,7 +246,10 @@ harness (§9) treats it as a hard failure, not a warning.
 2. **Fallback never blocks:** delete/break any registry module → blank piece renders, prose
    unchanged, zero throws (extends the existing per-entry try/catch discipline).
 3. **Anti-drift containment:** every staged piece's source ref resolves to a segment field /
-   codex record / combat unit / trace event. A piece with no state ref = hard failure.
+   codex record / combat unit / trace event **that is digest-visible this turn** (skeptic-pass
+   retarget: "has a state ref" alone passes for digest-suppressed records — the invariant blind
+   parity needs is prose-reachability, not mere existence). No ref or a suppressed ref = hard
+   failure.
 4. **Atmo mutation check:** an atmo text stuffed with prop keywords must spawn zero props.
 5. **Secret gating:** unrevealed `secret` stages nothing; the reveal event stages exactly one.
 6. **Soft/painted swap + ambient parity:** ambient NPC renders blank ONLY when the digest
@@ -242,13 +258,20 @@ harness (§9) treats it as a hard failure, not a warning.
    hard failure.
 7. **Shell parity:** with the center column `display:none`, a scripted session (jsdom) completes
    identically; ARIA landmark order right→left verified.
-8. **Perf:** tray assembly ≤250ms WARM on the reference machine; piece modules preload at
-   boot (extend `loadWholeObjectBuilders` — the prefetch doctrine), so first-tray latency
-   never pays dynamic-import cost mid-scene; no model call in the loop (SPEED).
+8. **Perf:** tray assembly ≤250ms WARM on Adam's dev machine, where "assembly" = data
+   projection + piece instancing with all builders preloaded (extend
+   `loadWholeObjectBuilders` at boot — the prefetch doctrine — and ASSERT resolved before the
+   budget window). V3+ asset packs get a separate cold-import budget declared per pack; no
+   model call in the loop (SPEED).
 9. **State hygiene:** renderer writes nothing to GS/U (mutation probe).
 10. **No double-staging:** on `combat_start`, a noun already staged as a standing prop gains a
     cover/hazard tag — the piece count for that noun stays 1 (the §3 dedup law, mutation-tested
     with a feature text that matches both the prop and cover keyword rules).
+11. **Live regions survive the hidden stage (skeptic-pass catch):** the dice overlay
+    (`role="status"`, positioned over the board center) and every other `aria-live` element
+    must live OUTSIDE the `aria-hidden` center subtree — an `aria-hidden` ancestor silently
+    suppresses descendant announcements. Check: with the center column `aria-hidden`, a roll
+    still announces its result via the live region.
 
 ## §10 Execution notes (post-Fable pipeline — spec-rubric handoff)
 
@@ -282,8 +305,22 @@ Fable's self-attack, applied inline above; executors should know these were the 
    would flake); §9.8 budget defined WARM + boot preload mandated. Honesty note added at §4
    (only urban has interactable tags today).
 
-An independent skeptic pass (Opus, against 9ee28ca) runs in parallel; surviving findings land
-as a follow-up amendment or die with a note here.
+**Independent skeptic pass (Opus, against 9ee28ca) — adjudicated same window.** It converged
+unprompted on fixes 1–3 above (parity hole, determinism gate, capture-not-origin) — strong
+cross-validation. Four of its findings survived against the amended spec and are applied:
+8. §3's "(walk rolls are seeded)" was FALSE — walk RNG is raw `Math.random()` persisted at
+   generation; only lighting is seeded. Re-derivation-by-reseed would mint a different room.
+9. The `aria-hidden` center column would have silently muted the dice overlay's live-region
+   announcements (an `aria-hidden` ancestor suppresses descendant `aria-live`) — §1 + gate
+   §9.11 now pin live regions outside the hidden subtree.
+10. §9.3 retargeted from "has a state ref" to "has a DIGEST-VISIBLE state ref" (the weaker
+   invariant went green on the exact parity break §0.1 forbids); §8's blanket "every record
+   reaches the digest" corrected — visibility is a gate, not a given.
+11. The mandatory SPEED rule-1 inference-cost declaration was missing — added at §1.
+Rejected: its harsher parity fix (never stage ambient blanks) — the aggregate-presence-line
+solution keeps inhabited scenes from reading empty while restoring parity; engine-authored
+digest input is the normal engine→DM flow, not a Charter front-run. Its killed-findings list
+(no-coordinates compliance, GS hygiene, atmo exclusion, one-surface combat) matches ours.
 
 *Census appendix: `docs/reference/TERRAIN-CENSUS-2026-07-07.md` (the 8-system survey this
 taxonomy is drawn from — piece classes, ratios, minimum vocabularies, the OpenLOCK spec).*

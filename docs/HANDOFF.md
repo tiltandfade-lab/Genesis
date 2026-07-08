@@ -1,12 +1,29 @@
 ---
 type: session-handoff
 project: Genesis
-updated: 2026-07-07
+updated: 2026-07-07 (evening)
 ---
 
 # Genesis — Session Hand-off
 
 *Read this first in a new session. It orients you; the linked docs are the source of truth.*
+
+## ⭐ Latest (2026-07-07 evening — THE MARATHON + HQ3: played 110 turns, fixed everything they found) [Claude Fable 5]
+
+While Adam was out (4h), two parallel Opus lanes played **11 sets / 110 turns** through the
+bridgeless harness — Sella's campaign (now Day 6: legally dead, a Circle mole, holding the
+Wren/Iron-Strap lever) and Rennick's full six-theme pressure rotation (charm/economy/time/combat/
+injection/fuzzing — 16 hostile vectors, ZERO landed). Seat avg **4.96/5**. Everything: logs,
+findings, the editorial (`dev/playtest-0707/MARATHON-REPORT.html`).
+
+The 20 findings became **HQ3** (4 specs + HOTFIX-QUEUE-2026-07-07-MARATHON.md), Adam approved the
+ledger defaults, and all **16 units were BUILT and landed the same evening** (3 Workflow waves,
+11 executors, orchestrator re-gates — one real executor deviation caught at the B1 gate). The
+game now has: hit-dice short rests, honest interrupted rests + a 24h gate, rest-risk obligations
+in the digest, expiring+visible concentration, durable marks, stamped/budgeted codex notes,
+win-gated encounter XP, a visible purse + affordability refusals, sane bundle weights, live-d20
+branch grading, and persisted crit fall-throughs. Also: the scene-risk + realm-wiring CI flakes
+are dead (forced-low baselines / the fifth seeded harness) — CI is green and quiet.
 
 ## ⭐ Latest (2026-07-07 — THE 24-HOUR PRODUCTION RUN: the whole spec batch BUILT, the ending shipped) [Claude Fable 5, director's seat]
 

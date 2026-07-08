@@ -4,6 +4,47 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-07-07 (night) — TABLETOP-VISION: the visual end-state locked in the final Fable window
+
+Adam's remaining Fable hours (his last — the window closes for good) spent design-locking the
+graphics engine's destination, then hardening it. Four --no-ff merges on master, all pushed:
+`9ee28ca` (the spec + census) → `4a125b6` (Fable self-attack, 7 fixes) → `2041750` (independent
+Opus skeptic adjudicated, 4 survivors) → `301f5ee` (Adam's post-pass rulings) → this sweep.
+
+**Added**
+- `docs/TABLETOP-VISION.md` — the game as a tabletop of miniatures: three laws (state-only
+  staging via capture-not-origin / miniature ontology / the invisible hand IS the DM), 9-class
+  piece taxonomy, two-rule registry schema (footprint+sockets locked, archetype × realm tags
+  free), tray grammar (pure projection; combat reconfigures the one tray; sources = walk
+  segment | interior | node | overland), centerpiece law off existing feature/interactable
+  rolls (effectDie never auto-stages; secrets stage on reveal), two-lane overlays (rolled
+  ambient + event-earned traces), blank-meeple fallback tied to codex softness, V1–V6 layer
+  map (V6 select→kitbash→generate, extended to whole scenes), 3-column shell with ARIA
+  contract, pre-alpha cut = V1+V2+shell, 11 binding acceptance gates, Sonnet unit queue U1–U7.
+- `docs/reference/TERRAIN-CENSUS-2026-07-07.md` — 8-system commercial terrain survey
+  (Dwarven Forge → OpenLOCK) behind the taxonomy: tray/template convention, ~10–15 shape
+  classes per biome, props-carry-identity, skins-over-geometry, the packaging model.
+
+**Changed**
+- DIRECTION §3.4 amended: Adam exempted the tabletop SPEC from the moratorium (build still
+  §4 soak-gated). DESIGN.md gained the dated decision line; DESIGN-GUIDE T6 marked
+  superseded-in-sequence (theater = V0, built + frozen; ES-module trigger moves to V1);
+  NEXT-STEPS gained item 6 (the post-soak tabletop queue); docs/README.md indexed both docs.
+- Session ops: created the parallel craft worktree `~/Desktop/Work/projects/Genesis-craft`
+  (branch `feat/craft-pass-2`) for the Codex tables lane with a steward-session contract.
+
+**Fixed (in the spec, by adversarial passes — before any executor could inherit them)**
+- §0.1 re-grounded capture-not-origin (Charter §8.5 inventions were unstageable as written) ·
+  ambient blank-meeple parity hole (co-location rule: digest rises to match the table) ·
+  proposal/disposal reconciliation (no resurrected encounters; corpse = default disposition) ·
+  "(walk rolls are seeded)" corrected — walk RNG is raw Math.random() persisted once ·
+  aria-hidden center would have muted the dice overlay's live region (gate §9.11) · gate §9.3
+  retargeted to digest-VISIBLE refs · SPEED rule-1 inference-cost declaration added.
+
+**Deferred**
+- The entire BUILD (U1–U7 + asset packs) — post-soak by DIRECTION §4, per design. HANDOFF's
+  ≤3-entry diet is over budget again; next clean-close trims it.
+
 ## 2026-07-07 (evening) — HQ3: the marathon's fix queue BUILT the same day it was found
 
 The 11-set/110-turn background playtest marathon (see dev/playtest-0707/, seat 4.96/5,

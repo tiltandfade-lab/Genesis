@@ -1257,3 +1257,15 @@ track's live phase:
    concentration expiry/visibility · durable marks · codex note stamps/supersede/budget · branch
    social_check live-d20 · pendingRoll persistence · combat_end reason · triage negation guard ·
    advance --toClock. Item 3's live soak now exercises all of it.
+
+6. ☐ **TABLETOP-VISION build queue (post-soak; spec-ready).** The visual end-state was
+   spec-locked + adversarially hardened 2026-07-07 (the final Fable window; docs/TABLETOP-VISION.md,
+   Adam-exempted from the spec moratorium — the BUILD still waits on DIRECTION §4 soak evidence).
+   When soak friction opens the visual lane: units U1–U7, now SPEC-LOCKED per-unit in
+   **docs/TABLETOP-UNITS.md** (exact seams file:line, locked payload shapes, §9-mapped
+   acceptance + mutation checks, effort tiers) — Sonnet-executable, Opus review on U1/U6/U7;
+   the ES-module migration rides the U1/U2 integration tree per SCALING.md. Key finding:
+   combat stage-mode already IS the end-state layout — the build largely UN-GATES what
+   exists. Pre-alpha cut = V1+V2+shell. The 11 §9
+   acceptance gates are binding; asset packs enter later via the Blender lane (census packaging
+   model: core kit → dressing packs → centerpieces).

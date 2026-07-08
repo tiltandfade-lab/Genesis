@@ -77,8 +77,11 @@ not about graphic depiction.)
 
 ## Build units
 
-- **Tables (craft-lane):** `child-want`, `child-saw` (witness/tell), `animal-kind` (realm-skinned like
-  roles), `animal-tell`. Small (d20–d100). Tags in-format.
+- **Tables (craft-lane): ✅ AUTHORED 2026-07-08** — `Child Want.md` (d20, `child-want`),
+  `Child Saw.md` (d50 witness/hook-carrier, `child-saw`), `Animal Kind.md` (d12, `animal-kind`, realm
+  reskin as an in-place note pending Adam's ruling on animal skins), `Animal Tell.md` (d20,
+  `animal-tell`). All exempt from the situation family (lever/witness/pointer atoms); die coverage
+  clean; tags in-format.
 - **Engine unit:** `rollPartial(kind, opts)` + ambient-fill integration (scene-type partial counts,
   realm-flavored) + the scaled hook-carrier / tell-points-at-hook wiring + coherence hard-default.
 - Register in DESIGN.md/NEXT-STEPS at build time (deferred — parallel graphics session on shared docs).

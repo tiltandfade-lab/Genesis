@@ -110,7 +110,13 @@ context → frontier skin (no regression).
 ## Status / next
 
 - ✅ **Spine authored** (`NPC Role Spine.md`, 35 archetypes) — this doc's backbone.
-- ⏭ **Realm skins** — author per realm (Frontier = current labels; then Noir, Theater, … as reference
-  pair first to prove the drop/add pattern, then the rest). Craft-lane.
+- ✅ **Reference-pair skins authored 2026-07-08** — `NPC Role Skin - Frontier.md` (base skin, migration
+  parity, no drops), `NPC Role Skin - Noir.md` (drops the wilds, reweights to crime/law, 10 adds), and
+  `NPC Role Skin - Theater.md` (reskins broadly to wartime forms, war-demography reweight, 8 war-only
+  adds). Drop/add/reweight pattern proven across the three. Adds assembled off `docs/REALM-ROLE-EDGES.md`.
+- ⏭ **Remaining realm skins** — the other 8 realms (Chrome, Ash, Gloom, Bright-Kingdom, Cosmic, Toon,
+  Suburb/80s, High-Seas + whichever the register lists), same skin format. Edge-role adds already
+  drafted in `docs/REALM-ROLE-EDGES.md`; each skin still needs its reskin label-map + drops + reweights.
+  Craft-lane — good orchestrator fan-out (one skin per executor).
 - ⏭ **Engine reskin-lookup + weighted pick + migration** — engine session.
 - Register in DESIGN.md/NEXT-STEPS at build time (deferred — parallel graphics session on shared docs).

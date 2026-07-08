@@ -82,8 +82,13 @@ check("R3: registry-completeness ground truth is the REAL exported builder count
 // ============================================================================
 console.log("\n=== 1. [RED-FIRST] registry integrity ===");
 {
+  // BATTLE-THEATER T2: a glb-backed entry ({ glb, discR }) is keyed by an arbitrary model handle
+  // (e.g. "test:grunt-glb"), NOT a bestiary id or realm model key — it points at a .glb asset, not a
+  // creature stat block. It carries no `module`/`fn`/`build`, so it is exempt from the bestiary-id
+  // and callable-builder checks below; its own shape is asserted separately (see the glb-shape check).
   const bestiaryKeyed = Object.keys(WHOLE_OBJECT_REGISTRY).filter(k =>
-    !k.startsWith("class:") && !k.startsWith("prop:") && !k.startsWith("light:") && !k.startsWith("blank:"));
+    !k.startsWith("class:") && !k.startsWith("prop:") && !k.startsWith("light:") && !k.startsWith("blank:")
+    && !WHOLE_OBJECT_REGISTRY[k].glb);
   check("at least one bestiary-keyed registry entry exists (red on the empty table before authoring)",
     bestiaryKeyed.length > 0, bestiaryKeyed.length);
   // REALM-MODELS-P3 widened the key population: a non-prefixed registry key is EITHER a real
@@ -120,9 +125,21 @@ console.log("\n=== 1. [RED-FIRST] registry integrity ===");
 // builder loading (needed by checks 2/3/6/8) — every registry module's real export resolved
 // ============================================================================
 await new Promise((resolve) => loadWholeObjectBuilders(resolve));
-const unresolvedAfterLoad = Object.entries(WHOLE_OBJECT_REGISTRY).filter(([k, e]) => typeof e.build !== "function");
-check("every registered entry resolves a real callable builder after loadWholeObjectBuilders settles",
+// BATTLE-THEATER T2: glb-backed entries resolve via `.glbScene` (populated only when a browser-side
+// glbLoader is injected — see theater-boot.js), NOT via `.build`. This harness calls
+// loadWholeObjectBuilders with NO glbLoader (Node has no THREE/GLTFLoader), so a glb entry correctly
+// has neither `.build` nor `.glbScene` here — the additive/skip contract. Exempt glb entries from the
+// callable-builder assertion and validate their own shape instead.
+const glbEntries = Object.entries(WHOLE_OBJECT_REGISTRY).filter(([k, e]) => e.glb);
+const unresolvedAfterLoad = Object.entries(WHOLE_OBJECT_REGISTRY).filter(([k, e]) => typeof e.build !== "function" && !e.glb);
+check("every registered (module-backed) entry resolves a real callable builder after loadWholeObjectBuilders settles",
   unresolvedAfterLoad.length === 0, JSON.stringify(unresolvedAfterLoad.map(([k]) => k)));
+check("every glb-backed entry declares a .glb string path and carries NO module/fn (the T2 seam shape)",
+  glbEntries.every(([k, e]) => typeof e.glb === "string" && e.glb && e.module == null && e.fn == null),
+  JSON.stringify(glbEntries.map(([k]) => k)));
+check("with no glbLoader injected (Node), glb entries stay unresolved — no .glbScene / .build (additive skip)",
+  glbEntries.every(([k, e]) => e.glbScene == null && typeof e.build !== "function"),
+  JSON.stringify(glbEntries.map(([k]) => k)));
 
 // ============================================================================
 // 2. [RED-FIRST] Builder contract (per entry)

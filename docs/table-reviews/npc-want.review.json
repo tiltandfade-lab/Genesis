@@ -1,8 +1,7 @@
 {
  "meta": {
   "table": "npc-want",
-  "reviewed": "2026-07-08 — 2d50 moral-spectrum draft, DRAFT for Adam's row-by-row",
-  "open_note": "Moral axis: sum 2 = world-evil, 51 = ordinary, 100 = world-good. Tails 1-in-2,500. Confirm the low-end register (EVIL enough?) and whether high-end saints should stay costly. New tag-vocab introduced: lust, curiosity, art, addiction, protect (the appetite/curiosity/art gaps)."
+  "reviewed": "2026-07-08 — 2d50 moral-spectrum, Adam-APPROVED. Kin-supremacist (sum 8) + kin-hater (sum 12) added to the evil tail. Exempt lever atom (no row_contract). Implemented."
  },
  "rows": {}
 }

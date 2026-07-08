@@ -433,7 +433,15 @@ function theaterHereSourceFor(w){
   const cur=(pn.cursor&&pn.cursor.current)||1;
   const seg=(walk.segments||[]).find(s=>s.num===cur);
   if(!seg) return { kind:"idle", env:walk.environment||undefined, realms:realms };
-  return { kind:"segment", segment:seg, env:walk.environment||undefined, realms:realms };
+  // TABLETOP-UNITS.md §U5 — the RAW walk segment (walk.segments) and the segment's own persisted
+  // reskin/trace overlay (pn.segments, the SAME per-segment array Stage-2 synthesis + the
+  // walk_update path write into — prep.js:493-509) are two DIFFERENT arrays keyed by ref "S<num>".
+  // trayFrom's overlay.traces read (theater-data.js's corpseUnitsFrom) expects them merged onto one
+  // object — a shallow copy (never mutates the real walk segment) with `.overlay` set to the
+  // matching pn.segments entry, or null when Stage-2/walk_update never wrote one for this room yet.
+  const ov=(pn.segments||[]).find(o=>o.ref==="S"+cur)||null;
+  const segWithOverlay=ov?Object.assign({},seg,{overlay:ov}):seg;
+  return { kind:"segment", segment:segWithOverlay, env:walk.environment||undefined, realms:realms };
 }
 
 /* BATTLE-STAGE / TABLETOP-VISION Standing Table (TABLETOP-UNITS.md §U1 seams 2+4) — attempts the

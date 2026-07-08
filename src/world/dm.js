@@ -1991,6 +1991,40 @@ function applyEvent(w,e){
       // victory flourish) has a hook already in place to key off. Called BEFORE GS.combat=null so a
       // verb reading live combat state (none currently do) still could.
       if(typeof cmTheaterNotify==="function") cmTheaterNotify("combat-end",{outcome,method});
+      // TABLETOP-UNITS.md §U5 — the TRACE lane: corpse records already computed for THIS fight
+      // (GS.combat.foes' own down/obliterated flags — the SAME dead-state doctrine BATTLE-THEATER
+      // already renders live) get written to the active walk's CURRENT segment overlay via the
+      // EXISTING walk_update path (prep.js:493-509/the "walk_update" case above) — no new event
+      // type, no new store. Corpse is the DEFAULT disposition for a downed foe (Adam-ruled
+      // 2026-07-07); an obliterated foe's ref rides `removed` instead of `traces`, so trayFrom's
+      // corpse read (src/engine/theater-data.js's corpseUnitsFrom) never resurrects it. Read BEFORE
+      // GS.combat=null below (foes still live here — the same discipline codexMintSignificantFoes'
+      // own read-site comment names). Merges onto whatever traces/removed this segment already
+      // carries (a room fought in twice accumulates, never overwrites — walkUpdateSegment's own
+      // Object.assign is a shallow per-key replace, so the full merged array is computed here first).
+      // Best-effort/non-blocking (matches companionPetHarmedByKind's convention above): a walk-less
+      // fight (no active walk to write onto) simply no-ops via walkUpdateSegment's own
+      // {ok:false,reason:"no-active-walk"} contract — never blocks combat_end.
+      {
+        const traceNew=[], removedNew=[];
+        (GS.combat.foes||[]).forEach(f=>{
+          if(!f||!f.down) return;
+          const ref=f.statId||f.fid||null;
+          if(!ref) return;
+          const zone=(typeof cmZoneKey==="function") ? cmZoneKey(f.band||"melee",f.lane||"C") : (f.band||"melee")+":"+(f.lane||"C");
+          if(f.obliterated) removedNew.push(ref);
+          else traceNew.push({kind:"corpse",ref,zone});
+        });
+        if((traceNew.length||removedNew.length) && typeof prepOf==="function" && typeof walkUpdateSegment==="function"){
+          const P=prepOf(w), walkId=P.activeWalkId;
+          const pn=walkId && P.nodes && P.nodes[walkId];
+          const cur=pn && pn.cursor && pn.cursor.current;
+          const existing=(cur!=null && pn) ? (pn.segments||[]).find(o=>o.ref==="S"+cur) : null;
+          const mergedTraces=((existing&&existing.traces)||[]).concat(traceNew);
+          const mergedRemoved=((existing&&existing.removed)||[]).concat(removedNew);
+          applyEvent(w,{type:"walk_update",source:src,payload:{overlay:{traces:mergedTraces,removed:mergedRemoved}}});
+        }
+      }
       GS.combat=null;
       renderWorld();   // render.js:206's prevPanel restore handles the panel teardown
       return {ok:true, outcome, downed:downCount, minutes:combatMin, xpEvents:{encounter:ev.encounter, kills:ev.kills}};

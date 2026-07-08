@@ -463,6 +463,116 @@ function theaterPropForText(text){
   return null;
 }
 
+/* TABLETOP-UNITS.md §U5 — the AMBIENT overlay lane: flat floor decals rolled from fields that
+   already exist on a segment — dressing.condition, wilderness footing, signOfPassage.name — and
+   NOTHING else. Deliberately narrower than THEATER_PROP_KEYWORD_RULES above: `atmo` is EXCLUDED on
+   purpose (TABLETOP-VISION §5 "atmo never renders — already deliberately excluded... prose-lane
+   forever"; §0.1's capture-not-origin boundary means only fields that are already rolled STATE may
+   stage a piece) and so is segment.dressing.TEXT — the room-wide feature/prop-noun pool
+   theaterSegmentFeatureText reads — this table only ever looks at `.condition`, a SEPARATE field on
+   the same dressing roll (DRESSING-WIRING.md's own {text,condition} shape). Each lane is checked
+   INDEPENDENTLY (first rule wins per lane), so a room can legally carry more than one overlay at
+   once; a lane with no keyword hit contributes nothing — unlike the prop scan's generic-cover
+   fallback, an overlay has no generic fallback (blankness is legal, TABLETOP-UNITS.md §U5). ≤4 v1
+   shapes, one flat registry entry apiece (theater-figures.js "prop:overlay-*"). */
+const THEATER_OVERLAY_KEYWORD_RULES = [
+  // cracked/shattered/fractured surfaces, and the stone-damage families that read the same way
+  // (petrified/calcified rock, frost-rime fracture lines) -> a floor crack-web decal.
+  [/crack|shatter|fractur|petrif|calcif|\brime\b/i, { part: "overlay-crack-web", params: {} }],
+  // waterlogged/sodden/flooded/damp/boggy — a standing-water puddle decal.
+  [/waterlog|sodden|\bpuddle\b|\bflood|\bswamp\b|\bbog\b|\bdamp\b|\bwet\b/i,
+    { part: "overlay-standing-water", params: {} }],
+  // moss/overgrowth/fungal bloom/lichen/algae — a moss-patch decal.
+  [/\bmoss\w*|overgrown|fungal|\blichen\b|\balgae\b/i, { part: "overlay-moss-patch", params: {} }],
+  // dragged/scraped/clawed/gnawed/tracked-through — a drag-marks decal (the signOfPassage family).
+  [/\bdrag(?:ged)?\b|\bscrape[ds]?\b|\btrack(?:s|ed)?\b|\btrail\b|\bclaw(?:ed)?\b|\bgnaw(?:ed)?\b/i,
+    { part: "overlay-drag-marks", params: {} }]
+];
+
+/* text -> an overlay part recipe {part,params} or null (no keyword hit). Never throws on
+   empty/non-string text. Mirrors theaterPropForText's own first-rule-wins contract. */
+function theaterOverlayForText(text){
+  const t = String(text || "");
+  if(!t) return null;
+  for(let i = 0; i < THEATER_OVERLAY_KEYWORD_RULES.length; i++){
+    const rx = THEATER_OVERLAY_KEYWORD_RULES[i][0];
+    if(rx.test(t)){
+      const spec = THEATER_OVERLAY_KEYWORD_RULES[i][1];
+      return typeof spec === "function" ? spec(t) : spec;
+    }
+  }
+  return null;
+}
+
+/* trayFrom's own {kind,segment|record} source shape (or a bare segment object, same convention
+   theaterSegmentFeatureText already accepts) -> the segment-like record overlaysFrom reads
+   dressing/footing/signOfPassage off. {kind:"idle"} (no room) -> null. */
+function overlaysSegmentFrom(source){
+  if(source == null) return null;
+  if(typeof source === "object" && "kind" in source){
+    if(source.kind === "idle") return null;
+    if(source.kind === "interior") return source.record || null;
+    if(source.kind === "segment") return source.segment || null;
+  }
+  return source;
+}
+
+/* TABLETOP-UNITS.md §U5 — overlaysFrom(source) -> [{part:"overlay-*",params}]. Reads EXACTLY three
+   lanes (dressing.condition / footing / signOfPassage.name), each independently, never `atmo`, never
+   segment.dressing.text (the mutation check this unit's harness runs: pointing this function at
+   .text instead of .condition must flip an atmo-adjacent false-positive fixture red). Pure,
+   null-safe — an absent/malformed segment or source returns []. */
+function overlaysFrom(source){
+  const seg = overlaysSegmentFrom(source);
+  if(!seg) return [];
+  const lanes = [];
+  if(seg.dressing && typeof seg.dressing === "object" && typeof seg.dressing.condition === "string"){
+    lanes.push(seg.dressing.condition);
+  }
+  const footingText = (seg.footing && typeof seg.footing === "object") ? seg.footing.text : seg.footing;
+  if(typeof footingText === "string") lanes.push(footingText);
+  if(seg.signOfPassage && typeof seg.signOfPassage === "object" && typeof seg.signOfPassage.name === "string"){
+    lanes.push(seg.signOfPassage.name);
+  }
+  const out = [];
+  lanes.forEach(text => {
+    const hit = theaterOverlayForText(text);
+    if(hit) out.push({ part: hit.part, params: Object.assign({}, hit.params || {}) });
+  });
+  return out;
+}
+
+/* TABLETOP-UNITS.md §U5 — the TRACE lane: corpseUnitsFrom(segment, grid) reads the segment's own
+   persisted reskin overlay (segment.overlay.traces — written by dm.js's combat_end case via the
+   EXISTING walk_update path, prep.js:493-509, no new event type/store) and stages one toppled-figure
+   unit per surviving trace. Corpse is the DEFAULT disposition (Adam-ruled 2026-07-07): a trace
+   always stages UNLESS its ref also appears in segment.overlay.removed (obliteration) — reconciled
+   here, never by the writer re-deriving anything (TABLETOP-VISION §3's "segment data proposes;
+   current state disposes"). Zone -> x/z reuses the SAME theaterZoneIndex/theaterZoneOrigin the
+   cover-prop pass above uses, so a corpse lands exactly where its zone's props do. Pure, null-safe —
+   an absent/malformed overlay returns []. */
+function corpseUnitsFrom(segment, grid){
+  const overlay = segment && segment.overlay;
+  const traces = (overlay && Array.isArray(overlay.traces)) ? overlay.traces : [];
+  if(!traces.length) return [];
+  const removed = (overlay && Array.isArray(overlay.removed)) ? overlay.removed : [];
+  return traces
+    .filter(t => t && t.kind === "corpse" && t.ref != null && removed.indexOf(t.ref) < 0)
+    .map(t => {
+      const zIdx = theaterZoneIndex(grid, t.zone);
+      const origin = zIdx ? theaterZoneOrigin(zIdx.bandIdx, zIdx.laneIdx) : { x: 0, z: 0 };
+      const bestRow = (typeof BESTIARY !== "undefined" && BESTIARY && BESTIARY[t.ref]) || null;
+      const archetype = (typeof theaterArchetypeFor === "function")
+        ? theaterArchetypeFor(bestRow && bestRow.tags && bestRow.tags.type, bestRow && bestRow.size, bestRow && bestRow.name)
+        : "biped";
+      return {
+        id: "corpse:" + t.ref + ":" + t.zone, kind: "foe", archetype, statId: t.ref,
+        x: origin.x + (THEATER_PATCH - 1) / 2, z: origin.z + (THEATER_PATCH - 1) / 2,
+        zone: t.zone, down: true, silhouette: null, className: null
+      };
+    });
+}
+
 /* REALM-PROPS-WIRING.md §2 — the realm-filtered prop select: text -> a matching REALM_PROPS entry
    (or null on no hit), keyed off `realms` (the SAME activeRealmsFor(skin,w) value threaded through
    opts.realms elsewhere in this file — theaterFloorSurfaceInfo's own realm seam). Unlike
@@ -779,6 +889,14 @@ function theaterBoardFrom(segment, scene, opts){
    TABLETOP-UNITS.md §U1: renamed from theaterBoardFrom (now a wrapper over trayFrom, above) — body
    UNCHANGED, so every combat caller sees a byte-identical board. */
 function theaterBoardBuild(segment, scene, opts){
+  // TABLETOP-UNITS.md §U5 — captured BEFORE the `scene = scene||{}` default below: a real combat
+  // caller (combatStart always supplies a real scene object — see src/world/render.js's
+  // theaterStageSync combat branch / dm.js's combat_start) always passes a truthy scene, so gating
+  // the overlay/trace additions on `!sceneProvided` keeps every combat board BYTE-IDENTICAL to
+  // before this unit (U1's own byte-gate fixture passes a real scene) — overlay lanes belong to the
+  // standing-table/tableau read, never the lanes/cover pass (TABLETOP-VISION §3 "one table, many
+  // arrangements" — combat reconfigures the SAME board, it doesn't grow new dressing).
+  const sceneProvided = !!scene;
   scene = scene || {};
   opts = opts || {};
   const env = opts.env || THEATER_DEFAULT_ENV;
@@ -1023,7 +1141,7 @@ function theaterBoardBuild(segment, scene, opts){
     // rendered both from cm.scene.hazardZones/elevZones directly.
   });
 
-  return {
+  const board = {
     tiles, props, env, light, floorMaterial,
     // REALM-SURFACES-WIRING.md §3: null on every non-realm room (regression-safe — a caller that
     // ignores these two fields sees an unchanged board shape); a named surface + its prose tint when
@@ -1045,6 +1163,21 @@ function theaterBoardBuild(segment, scene, opts){
     renderProfile: renderProfile,
     grid: { bands, lanes, bandCount: grid.bandCount, laneCount: grid.laneCount }
   };
+  // TABLETOP-UNITS.md §U5 — overlay lanes (ambient + trace), OUTSIDE combat only (see the
+  // `sceneProvided` comment above the function). Two NEW trailing keys, added ONLY on this branch —
+  // a combat caller's board object never grows these keys at all (not even as empty arrays), which
+  // is what keeps U1's `JSON.stringify(board) === JSON.stringify(FROZEN_BOARD)` byte-gate exact.
+  if(!sceneProvided){
+    // ambient (rolled): a keyword-rule read over dressing.condition/footing/signOfPassage.name ONLY.
+    board.overlays = overlaysFrom(segment).map((hit, idx) => Object.assign({
+      kind: "overlay", x: (idx % 3) * 0.6 - 0.6, z: Math.floor(idx / 3) * 0.6
+    }, hit));
+    // trace (earned): corpses persisted on the segment's own reskin overlay (segment.overlay.traces,
+    // written by dm.js's combat_end case via the existing walk_update path) — toppled by default,
+    // absent only when obliteration listed the ref in segment.overlay.removed.
+    board.corpses = corpseUnitsFrom(segment, { bands, lanes });
+  }
+  return board;
 }
 
 /* §1 archetype mapping: bestiary creatureType (data/bestiary.js tags.type, resolved onto the combat

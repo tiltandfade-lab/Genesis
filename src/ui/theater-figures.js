@@ -143,6 +143,15 @@ const WHOLE_OBJECT_REGISTRY = {
   // carries the mapping the retarget will point at).
   "prop:candelabra":    { module: "../../dev/model-qa/creatures/prop-light.js",  fn: "buildCandelabra",   discR: 0.42 },
 
+  // -------- TABLETOP-UNITS.md §U5 — the AMBIENT overlay lane: flat floor decals keyed
+  // "prop:overlay-<shape>" (src/engine/theater-data.js's THEATER_OVERLAY_KEYWORD_RULES vocabulary —
+  // ≤4 v1 shapes, no more without a spec amendment). Genuinely flat (no rim/lift, unlike prop-pool's
+  // "never a rug" ruling above) — an overlay IS the decal, not a set piece standing on the floor. ---
+  "prop:overlay-crack-web":     { module: "../../dev/model-qa/creatures/prop-overlay-decals.js", fn: "buildOverlayCrackWeb",     discR: 0.42 },
+  "prop:overlay-standing-water":{ module: "../../dev/model-qa/creatures/prop-overlay-decals.js", fn: "buildOverlayStandingWater",discR: 0.42 },
+  "prop:overlay-moss-patch":    { module: "../../dev/model-qa/creatures/prop-overlay-decals.js", fn: "buildOverlayMossPatch",    discR: 0.42 },
+  "prop:overlay-drag-marks":    { module: "../../dev/model-qa/creatures/prop-overlay-decals.js", fn: "buildOverlayDragMarks",    discR: 0.42 },
+
   // -------- lighting props: keyed "light:<LIGHT_PROFILES key>" (theater-boot.js's LIGHT_PROFILES
   // table) — Unit B anchors the rolled per-room light profile's point light at these. flameY read
   // directly off prop-light.js's own authored geometry (torch flame apex ~1.52-1.66u across its

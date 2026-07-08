@@ -1,6 +1,13 @@
 # HOTFIX-QUEUE — 2026-07-07 MARATHON (HQ3)
 
-type: build-queue · status: **SPECCED, awaiting Adam's ledger review** · built: no
+type: build-queue · status: **BUILT — all 16 units landed on master 2026-07-07 (evening)** · built: yes
+
+**Build record:** Adam approved the ledger defaults same day; 3 Workflow waves (3+6+2 executors,
+Sonnet, worktree-isolated), every unit orchestrator-re-gated (one real deviation caught + corrected
+at the B1 gate: the outcome multiplier was wiping earned kill-XP — spec ledger #2 enforced), 11
+--no-ff merges + 4 integration fixes (durability/tiyl/CONTRACT-1 stale fixture pins → floors; B2's
+missed contract regen). Final tree: full sweep 0 failures, fuzz 510/0, monkey 12/12/0-aborted,
+contract 98 events @113/113.
 
 Provenance: the 2026-07-07 background playtest marathon (11 sets / 110 turns, Sella earnest ×5 +
 Rennick adversarial ×6). Findings ledger: `dev/playtest-0707/FINDINGS.md`; editorial:

@@ -8,7 +8,7 @@ player_facing: reveal
 voice_critical: false
 ---
 
-| d150 | Feature / Landmark | Visual Description | Dimensions & Tactical Notes |
+| d153 | Feature / Landmark | Visual Description | Dimensions & Tactical Notes |
 | ---- | ------------------ | ------------------ | ---------------------------- |
 | 01   | Crumbled Masonry   | Fallen stone blocks choke half the corridor. | 10'×15' field, 2' mounds — Difficult Terrain; Half cover from substantial mounds |
 | 02   | Crumbled Masonry   | A collapsed arch spills rubble across the floor. | 5'×15' spread from arch base, 3' high — Difficult Terrain; Half cover |
@@ -160,4 +160,7 @@ voice_critical: false
 | 148  | Web Canopy         | Old, brittle webbing sags across every surface. | Full room coverage — Dim light blocked; moving through: Str DC 11 or Restrained |
 | 149  | Web Canopy         | Thick cables of web connect the walls at mid-height like rigging. | 10'×20' cable coverage, 8'–12' off floor — Can be used as rope bridges (DC 11 Acrobatics) |
 | 150  | Web Canopy         | Fresh, glistening webs block the far half of the room. | 10'×15' curtain, floor to ceiling — Dense Wall of Web: 15 HP, Vulnerable to Fire |
+| 151  | Cold Hearth        | A great fireplace set into the wall, ash long dead in the grate. | 6'×3' footprint, 8' high — Half cover; flue is a 1'-wide climb-shaft to the level above (DC 13 Athletics) |
+| 152  | Toppled Bookcase   | A tall bookcase fallen across the floor, spilling rotted ledgers. | 8'×2' footprint on its face, 2' high — Half cover along its length; Difficult Terrain to clamber over |
+| 153  | Funeral Bier       | A draped stone bier stands at the room's heart, its cloth grey with dust. | 7'×3' footprint, 3' high — Half cover; Investigation DC 12 finds what was left with the departed |
 ^dungeon-feature

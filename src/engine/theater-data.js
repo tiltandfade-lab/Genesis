@@ -25,8 +25,8 @@ const THEATER_STEP = 1.0;            // one discrete height increment (§1 rule 
    Each palette is a DESATURATED earth pairing: oxblood/steel/bone/moss mood, low saturation, ONE
    accent color per env (never more — that's what keeps it grim instead of colorful). Fields:
      top / side       — the tile column's default floor top/side pair (§1 rule 2's top!=side trick)
-     altTop           — a second top tone for the checker alternation (rule 2 again, "stronger
-                         top-face checker alternation... the FFT reference's legibility trick")
+                         (`altTop`, the old second checker tone, was RETIRED 2026-07-08 — see the
+                         CHECKER RETIRED block below; tiles still carry an inert altTop:false flag)
      water            — sunk/hazard-water tint (theaterHazardVariant's water branch reads this)
      scorch           — burn/scorch-mark tint (terrain_change's future "burn" op, T4; also used here
                          as the non-water/pit hazard tint so a caltrops-style hazard reads in-palette)
@@ -40,39 +40,48 @@ const THEATER_STEP = 1.0;            // one discrete height increment (§1 rule 
                          stone `top`, NOT `accent` — elevation must read as height, not danger */
 /* G9 TUNE 1 (docs/PRE-PLAYTEST-GAUNTLET.md §10b): orchestrator verdict was "mood right, legibility
    overshot into murk" — tile TOP colors lifted ~+35% luminance (HSL-lightness scale, dungeon was the
-   worst offender at lum 0.257) and `altTop` pushed FURTHER from `top` (was a ~0.03 luminance delta —
-   invisible after dither; now ~0.12-0.17, a real checkerboard) so the checker is plainly visible at a
-   glance. `side` colors are UNCHANGED — they were already the dark half of the top/side contrast
+   worst offender at lum 0.257). (`altTop` was pushed further from `top` in the same tune to make the
+   checker visible — that whole mechanism is now retired, see the CHECKER RETIRED block below.)
+   `side` colors are UNCHANGED — they were already the dark half of the top/side contrast
    mechanism (FFT rule 2) and this tune only touches the top face.
    `elevTint` (NEW field, G9 tune 2): the elevated-patch color. Previously elevated tiles borrowed
    `accent` (dungeon's is oxblood #7a2e28 — reads as a hazard/alarm, not a height cue). `elevTint` is
    a lightened variant of THIS env's (post-tune) stone `top` (~+45% HSL lightness) so a raised patch
    reads as "brighter ground, same family" — height, not danger. `accent` stays reserved for actual
    hazards (scorch/lava/the one saturated color a hazard is allowed to spend). */
+/* CHECKER RETIRED + SATURATION LIFT (Adam 2026-07-08, the "floors are drab as hell" ruling — "kill
+   the checkerboard overlay in ALL realms; no tabletop tray has checkerboard; it's just a subtle
+   grid, a lovely diorama"): the `altTop` COLOR field is GONE from every palette — tile-to-tile
+   parity two-tone is no longer a color mechanism anywhere (the faint grid read comes from
+   theater-boot.js's TILE_GAP void seam between tile columns, which was always the real grid). The
+   4 env `top` colors got a modest saturation lift in the same pass — these are the NO-REALM
+   fallback only (a realm room's floor color now comes from its picked surface's authored
+   `baseTint`, see theaterApplySurfaceTint below), so they stay neutral vs the realms, just less
+   drab. `elevTint` re-derived from each lifted top (same ~+45% lightness family rule as G9 tune 2). */
 const THEATER_ENV_PALETTE = {
   dungeon: {
-    top: "#64564c", side: "#241f1a", altTop: "#3e352f",
+    top: "#6e5844", side: "#241f1a",
     water: "#28414a", scorch: "#3a2418", prop: "#332b24",
     voidTint: "#0a0807", accent: "#7a2e28", // oxblood — hazards only
-    elevTint: "#917d6e" // lightened stone top — elevation reads as height, not alarm
+    elevTint: "#9c8168" // lightened stone top — elevation reads as height, not alarm
   },
   urban: {
-    top: "#7c7467", side: "#2c2822", altTop: "#4d4840",
+    top: "#857763", side: "#2c2822",
     water: "#31474f", scorch: "#3f2c1c", prop: "#413c34",
     voidTint: "#09090a", accent: "#6e6558", // bone/dust — hazards only
-    elevTint: "#ada79c"
+    elevTint: "#b5aa90"
   },
   wilderness: {
-    top: "#595d3e", side: "#22241a", altTop: "#373a26",
+    top: "#58603a", side: "#22241a",
     water: "#274a45", scorch: "#3a2a16", prop: "#38361f",
     voidTint: "#07090a", accent: "#4d5a34", // moss — hazards only
-    elevTint: "#81875a"
+    elevTint: "#7f8a52"
   },
   breach: {
-    top: "#564c55", side: "#1e181c", altTop: "#352f35",
+    top: "#604a62", side: "#1e181c",
     water: "#2a3350", scorch: "#421f2c", prop: "#312a34",
     voidTint: "#0a0610", accent: "#5a3a5e", // bruised violet — the "wrongness" accent, hazards only
-    elevTint: "#7d6e7b"
+    elevTint: "#876f88"
   }
 };
 const THEATER_DEFAULT_ENV = "dungeon";
@@ -271,8 +280,22 @@ const THEATER_PROP_KEYWORD_RULES = [
   //     drape for gibbets" note — one prop entry still reads as "a gibbet" at this budget). ---
   [/\bcage\b|gibbet|birdcage/i, { part: "cage-frame", params: { cheap: true } }],
   // --- class (b): standing stone / obelisk / pillar (intact unless the text also says broken/toppled) ---
+  // PROP-REGISTRATION (2026-07-08): the obelisk/monolith nouns REPOINTED off their pillar-broken
+  // stand-in to the bespoke inscribed-obelisk model (dev/model-qa/creatures/prop-obelisk.js,
+  // registered as "prop:obelisk"; a floating/hovering monolith takes the buildObeliskFloat variant,
+  // "prop:floating-monolith"). Keyword set UNCHANGED — only the emitted part is more specific, and
+  // ONLY for the obelisk/monolith nouns: standing-stone/menhir/column/pillar/totem-pole keep the
+  // plain pillar read (the glowing-rune arcane shaft would be the wrong silhouette for a mundane
+  // column or an uninscribed menhir), with the same intact/broken param split as before. No params:
+  // the whole-object model bakes its own size (the candelabra-retarget precedent below).
+  // (each branch is a FULL object literal — build/gen-realm-props.py's real_part_names() scans this
+  // file for literal `part: "..."` tokens, so the part strings must stay literal, never ternaried.)
   [/obelisk|standing.?stone|menhir|monolith|\bcolumn\b|\bpillar\b|support.?pillar|totem.?pole/i,
-    (text) => ({ part: "pillar-broken", params: { intact: !/broken|crumbl|shatter|toppl/i.test(text) } })],
+    (text) => !/obelisk|monolith/i.test(text)
+      ? { part: "pillar-broken", params: { intact: !/broken|crumbl|shatter|toppl/i.test(text) } }
+      : /float|hover|levitat/i.test(text)
+        ? { part: "floating-monolith", params: {} }
+        : { part: "obelisk", params: {} }],
   // P1' WHOLE-OBJECT WIRING (docs/P1-WIRING.md §4 Unit A step 7): RETARGETED off its old
   // `pillar-broken {scale:0.3,taper:true}` stand-in (a scaled-down broken-pillar approximation, from
   // before any bespoke lighting-prop model existed) to its own distinct `part` string, "candelabra" —
@@ -286,7 +309,17 @@ const THEATER_PROP_KEYWORD_RULES = [
   // "prop:candelabra" (the gate off, or the registry not yet extended) falls through to the generic
   // flat prop-box (§9 Decision 6's "never worse than today," reapplied — setBoard's own fallback path
   // for an unresolved `part` string is untouched).
-  [/candelabra|brazier.?stand|torch.?sconce/i, { part: "candelabra", params: {} }],
+  // PROP-REGISTRATION (2026-07-08): brazier text SPLIT off to the bespoke fire-brazier model
+  // (dev/model-qa/creatures/prop-pillar.js's buildBrazier — authored in the same ENV batch but never
+  // registered, so brazier-stand text was rendering as a candelabra, a wrong-noun neighbor kept only
+  // because it was the nearest real lighting prop). Keyword set UNCHANGED; candelabra/torch-sconce
+  // text still emits "candelabra" exactly as the retarget comment above specifies.
+  // (each branch is a FULL object literal — build/gen-realm-props.py's real_part_names() scans this
+  // file for literal `part: "..."` tokens, so the part strings must stay literal, never ternaried.)
+  [/candelabra|brazier.?stand|torch.?sconce/i,
+    (text) => /brazier/i.test(text)
+      ? { part: "brazier", params: {} }
+      : { part: "candelabra", params: {} }],
   // --- class (c): fountain/basin/font/cistern (large-scale only — small decorative basins stay on
   //     shrine-block per the audit's class-(b) mapping, checked further down) ---
   [/fountain|cistern|\btrough\b|\bfont\b|magical font/i, { part: "basin-block", params: {} }],
@@ -295,13 +328,16 @@ const THEATER_PROP_KEYWORD_RULES = [
   // "web-canopy" are still explicit alternatives since \bweb\b alone wouldn't catch those compounds.
   [/\bweb\b|webbing|web-canopy|cocoon|egg-sac/i, { part: "web-mass", params: {} }],
   // --- ENV WAVE D (docs/ENV-WAVES.md): portcullis-gate — the bare IRON GATE (rusted/wedged/bent/warped),
-  //     distinct from the full masonry archway. No separate "gate" part exists, so it resolves to the same
-  //     arch-frame family the archway uses; its P1' geometry-source swap is the dedicated
-  //     dev/model-qa/creatures/prop-portcullis.js (the bare-grille read that "pairs with the built
-  //     archway"). Placed ABOVE the generic archway rule so the portcullis spellings are explicit and
-  //     carry their own damage-state text, even though both currently return arch-frame. ---
+  //     distinct from the full masonry archway. PROP-REGISTRATION (2026-07-08): REPOINTED off its
+  //     arch-frame stand-in ("no separate gate part exists" no longer holds) to its own "portcullis"
+  //     part — the geometry-source swap this rule's comment always named, dev/model-qa/creatures/
+  //     prop-portcullis.js (the bare-grille read that "pairs with the built archway"), registered as
+  //     "prop:portcullis". Keyword set UNCHANGED. Stays ABOVE the generic archway rule so the
+  //     portcullis spellings win over the arch family; the arch rule below still lists "portcullis"
+  //     in its own alternation but can never see it (this rule fires first — that alternative is
+  //     dormant, kept byte-identical per the append-only discipline). ---
   [/iron portcullis|portcullis.?gate|rusted portcullis|wedged portcullis|\bportcullis\b/i,
-    { part: "arch-frame", params: {} }],
+    { part: "portcullis", params: {} }],
   // --- class (c): archway/gate (portcullis pairs arch-frame + chain-drape per the report; the single
   //     prop entry this function returns picks arch-frame — the chain read comes from the "chain"
   //     rule above firing separately if the text ALSO names chains) ---
@@ -317,16 +353,25 @@ const THEATER_PROP_KEYWORD_RULES = [
   //     handled by falling through to no match at all) ---
   [/\bwell\b|sinkhole|mine shaft|deep drain/i, { part: "well-shaft", params: {} }],
   // --- ENV WAVE D (docs/ENV-WAVES.md): bone-wall — undead architecture, a wall of skulls + long-bone
-  //     lattice. No dedicated "wall" part exists; the honest closest existing family is rubble-scatter's
-  //     BONE channel (the P1' geometry-source swap is dev/model-qa/creatures/prop-bonewall.js). Placed
-  //     ABOVE the scree/gravel rule below because "bone-wall ... screen" would otherwise stale-match
-  //     `scree` inside the word "screen" and lose the bone channel — this rule must win. ---
-  [/bone.?wall|skull.?mortared|bone.?lattice|ossuary wall/i, { part: "rubble-scatter", params: { channel: "bone", scale: 0.9 } }],
-  // --- class (b): grate/drain (raised/broken variant only) -> rubble-scatter, flat footprint ---
-  //     ENV WAVE D: the "raised drainage-grate" (open shaft + iron bars) is one of this wave's pieces;
-  //     its P1' geometry-source swap is dev/model-qa/creatures/prop-grate.js. The mapping is unchanged
-  //     (rubble-scatter flat) — the bespoke swap upgrades the read at the same part name. ---
-  [/grate|drain.?cover|sewer.?grate/i, { part: "rubble-scatter", params: { flat: true, scale: 0.4 } }],
+  //     lattice. PROP-REGISTRATION (2026-07-08): REPOINTED off its rubble-scatter bone-channel
+  //     stand-in ("no dedicated wall part exists" no longer holds) to its own "bone-wall" part — the
+  //     geometry-source swap this rule's comment always named, dev/model-qa/creatures/prop-bonewall.js,
+  //     registered as "prop:bone-wall". Keyword set UNCHANGED; the channel/scale params were the
+  //     cuboid stand-in's dressing and are dropped (the whole-object model bakes its own bone read +
+  //     size, the candelabra-retarget precedent). Stays ABOVE the scree/gravel rule below because
+  //     "bone-wall ... screen" would otherwise stale-match `scree` inside the word "screen" —
+  //     this rule must win. ---
+  [/bone.?wall|skull.?mortared|bone.?lattice|ossuary wall/i, { part: "bone-wall", params: {} }],
+  // --- class (b): grate/drain (raised/broken variant only) ---
+  //     ENV WAVE D: the "raised drainage-grate" (open shaft + iron bars) is one of this wave's pieces.
+  //     PROP-REGISTRATION (2026-07-08): REPOINTED off its rubble-scatter{flat} stand-in to its own
+  //     "grate" part — the geometry-source swap this rule's comment always named, dev/model-qa/
+  //     creatures/prop-grate.js, registered as "prop:grate" (the old "upgrades the read at the same
+  //     part name" line couldn't actually work: rubble-scatter is shared by the scree/bone-pile/
+  //     refuse rules, and one registry key can only carry one model). Keyword set UNCHANGED; the
+  //     flat/scale params were the cuboid stand-in's dressing and are dropped (the model bakes its
+  //     own low raised-rim read). ---
+  [/grate|drain.?cover|sewer.?grate/i, { part: "grate", params: {} }],
   [/scree|gravel.?patch|loose.?stone|caltrops.?field/i, { part: "rubble-scatter", params: { scale: 0.5 } }],
   [/bone.?pile|skull.?pyramid|calcified.?bones/i, { part: "rubble-scatter", params: { channel: "bone" } }],
   // --- class (c): ladder/scaffolding ---
@@ -432,8 +477,12 @@ const THEATER_PROP_KEYWORD_RULES = [
   //     61-part inventory stays exact); the bespoke whole-object module named in each comment is that
   //     part's P1' geometry-source swap. Nouns whose CURRENT rule already resolves correctly
   //     (sarcophagus->coffin-slab, hanging-cage->cage-frame, wall-manacles->chain-drape,
-  //     gear-cluster->gear-cluster, inscribed-obelisk->pillar-broken, drainage-grate->rubble-scatter)
-  //     are documented at those existing rules above and need no duplicate here. ---
+  //     gear-cluster->gear-cluster) are documented at those existing rules above and need no
+  //     duplicate here — since the 2026-07-08 PROP-REGISTRATION pass those four part families
+  //     resolve to their bespoke whole-object models (src/ui/theater-figures.js "prop:" keys), and
+  //     the two former stand-in mappings this list used to carry (inscribed-obelisk->pillar-broken,
+  //     drainage-grate->rubble-scatter) are REPOINTED at their own bespoke parts ("obelisk"/
+  //     "floating-monolith", "grate") at their rules above. ---
   // refuse-pile / crumbled-masonry — a heaped mound of broken masonry + dungeon rot. Reads as the same
   // rubble-scatter family; the bespoke read (dev/model-qa/creatures/prop-refuse.js) upgrades it at P1'.
   // Currently fell through to null (generic cover) — this gives it the right rubble family.
@@ -442,6 +491,142 @@ const THEATER_PROP_KEYWORD_RULES = [
   // basin); the bespoke disc+rim read is dev/model-qa/creatures/prop-pool.js (QA-gated: it read as a
   // POOL, not a rug, at the game camera — kept as geometry, not demoted to env-FX). Was null before.
   [/stagnant.?pool|fouled.?pool|algae.?pool|still.?water|scum.?pond/i, { part: "basin-block", params: {} }],
+
+  // --- PROP-NOUN-LIBRARY.md §4 Wave 1 (docs/MICRO-PROPS.md is the part vocabulary) — the
+  //     interactable-object nouns the d100 tables ALREADY ROLL (Dungeon/Urban/Wilderness Interactable
+  //     Object) but no rule caught, so they resolved to the generic block. Appended at the END so
+  //     nothing already matching an earlier rule is shadowed (rules only ADD resolution for text that
+  //     previously fell through to null). Two tiers, per the tabletop substitution doctrine:
+  //     (1) an EXISTING part family stands in wherever one gives an honest silhouette (bucket->crate,
+  //     valve/pulley->gear-cluster...), upgrading to bespoke later at the same part name;
+  //     (2) the floor-flush/thin-geometry mechanism families where ANY existing block part would
+  //     actively misread (a lever as a pillar, a tripwire as a crate) emit their MICRO-PROPS module
+  //     name instead (lever-set/pressure-plate/trapdoor-ring/door-hardware/bell-line) — an unresolved
+  //     part string falls to the blank:prop piece (theater-boot.js's U3 resolution-miss path), never a
+  //     hole, and the bespoke build lands at the same name with zero rule edits. Class-(d) atmo text
+  //     is untouched — theaterSegmentFeatureText never reads segment.atmo, so these nouns stage ONLY
+  //     from feature/dressing/cover/hazard text (§9.4: atmo stages nothing). ---
+  // valve wheel (dungeon 44 "Valve wheel"; wilderness "Steam Vent Valve"/"Pressure Valve") — a seized
+  // wheel mechanism reads as gearing. "Pressure Valve" lands HERE, not on the pressure-plate rule
+  // below (that rule requires the word "plate") — correct, a valve is a wheel mechanism.
+  [/valve.?wheels?|\bvalves?\b/i, { part: "gear-cluster", params: { scale: 0.5 } }],
+  // bare winch/pulley/counterweight (dungeon 54 "Counterweight pulley"; urban "pulley hoist"/"Broken
+  // Cargo Winch"; wilderness "Drawbridge Winch"/"Block and Tackle") — the gears rule above only
+  // catches the "winch drum" compound; these bare spellings fell through. Same machinery family.
+  // "Iron Portcullis Winch" stays with the portcullis rule above (earlier wins — the gate is the read).
+  [/\bpulleys?\b|counterweight|\bwinch(?:es)?\b/i, { part: "gear-cluster", params: { scale: 0.6 } }],
+  // lever/crank (dungeon 42 "Lever bar"/45 "Crank handle"; wilderness "Crank Handle"/"lever console")
+  // — no existing family reads as a small bar mechanism, so this emits MICRO-PROPS' lever-set module
+  // name (tier 2 above). Placed BEFORE the trapdoor rule below so "Trapdoor Control (lever console)"
+  // reads as the lever the player pulls, not the trapdoor it controls.
+  [/\blevers?\b|\bcranks?\b|pull.?bar/i, { part: "lever-set", params: {} }],
+  // bucket (dungeon 31 "Bucket"; wilderness "Bucket of Tar"/"Spilled Bucket of Paint") — a small round
+  // vessel, same crate family as the cookpot/kettle rule above (MICRO-PROPS bucket-and-trough upgrades
+  // it later; its trough/basin siblings already resolve via the basin-block rules).
+  [/\bbuckets?\b|\bpail\b/i, { part: "crate", params: { round: true, scale: 0.35 } }],
+  // rope coil / grappling hook (dungeon 9/29; urban "rope coil"/"Coiled Hemp Rope (50 ft)") — a coiled
+  // low round soft mass; crate(round,soft) is the honest silhouette until MICRO-PROPS' rope-kit builds.
+  // "Rope ladder" stays with the ladder rule above, "rope bridge" with the bridge-anchors rule.
+  [/rope.?coil|coil of rope|coiled (?:\w+ )?rope|grappling.?hook/i,
+    { part: "crate", params: { round: true, soft: true, scale: 0.35 } }],
+  // hand-tool cluster (dungeon 26-30 "Hammer and wedge"/"Crowbar"/"Spikes\/pitons"/"Shovel head";
+  // wilderness "Rusty Crowbar"; urban "Grave-Digger's Shovel") — MICRO-PROPS' tool-set is itself
+  // specced as a "leaned/scattered cluster", and rubble-scatter at small scale IS that silhouette
+  // today; the bespoke module upgrades the read later. Bare \bspikes\b is deliberately absent — a
+  // spike hazard field deserves its own read, and falling through is today's behavior (no regression).
+  [/crowbar|pickaxe|\bshovel\b|\bspade\b|\bmallet\b|\bpitons?\b|hammer.?and.?wedge|mining tools|rusted tools/i,
+    { part: "rubble-scatter", params: { scale: 0.4 } }],
+  // lockbox/strongbox (dungeon 16 "Metal lockbox"; urban 16) — a small strong container; the
+  // \bchest\b rule above doesn't reach these spellings. Same crate family at chest-ish scale.
+  [/lockbox|strongbox|footlocker|munitions box/i, { part: "crate", params: { scale: 0.5 } }],
+  // desk/lectern (dungeon 17 "Drawer in a collapsed desk"; urban "desk drawer") — flat-work-surface
+  // family (PROP-NOUN-LIBRARY §B's own "table-slab could carry it").
+  [/\bdesks?\b|lectern/i, { part: "table-slab", params: {} }],
+  // sconce / candle stub / oil flask (dungeon 41/21/22) — the micro light-source fixtures (MICRO-PROPS
+  // sconce-and-stub); candelabra is the light-stand family, but its rule above only catches the
+  // "torch-sconce" compound. The physical fixture is geometry; light-only GLOW stays class-(d) atmo.
+  [/\bsconces?\b|candle.?stubs?|oil.?flask/i, { part: "candelabra", params: { scale: 0.4 } }],
+  // net (dungeon 67 "Hanging net"; urban "Suspended Cargo Net"; wilderness "Torn Fishing Net") — a
+  // draped/strung mesh reads as the web-mass silhouette (PROP-NOUN-LIBRARY §J's own nearest).
+  // "Bramble Net" stays with the bramble/vine rule above (earlier wins — the thorns are the read).
+  [/hanging.?net|fishing.?net|cargo.?net|\bnets?\b/i, { part: "web-mass", params: { scale: 0.6 } }],
+  // rug/mat/carpet (dungeon 68 "Rug or mat"; urban "Peddler's Exotic Rugs") — a flat soft slab, same
+  // low-slab family the mirror rule above uses (MICRO-PROPS hanging-softs upgrades the drape later).
+  [/\brugs?\b|\bmats?\b|\bcarpet\b/i, { part: "table-slab", params: { scale: 0.5 } }],
+  // cairn (dungeon 89 "Small cairn") — a deliberate stone stack; rubble family (PROP-NOUN-LIBRARY §D).
+  [/\bcairns?\b/i, { part: "rubble-scatter", params: { scale: 0.5 } }],
+  // pressure plate / turning tile / carved dial (dungeon 52/57/58) — floor-flush mechanism; a rubble
+  // or slab stand-in would misread as debris/furniture, so this emits MICRO-PROPS' pressure-plate
+  // module name (tier 2 — blank:prop until the module builds).
+  [/pressure.?plate|turning.?tile|carved.?dial/i, { part: "pressure-plate", params: {} }],
+  // trapdoor / vent cover (dungeon 50 "Trapdoor ring"/70 "Vent cover") — flush hinged access; MICRO-
+  // PROPS trapdoor-ring. "Sliding/hinged grate" stays with the grate rule above (earlier wins).
+  [/trap.?doors?|vent.?cover/i, { part: "trapdoor-ring", params: {} }],
+  // door hardware (dungeon 61-64 "Door bar"/"Door wedge"/"Hinge pin"/"Bolt slide") — door-mounted
+  // fittings (MICRO-PROPS door-hardware). Compound-only spellings on purpose: bare \bbolt\b/\bbar\b
+  // would false-positive crossbow bolts and tavern bars. "Chain lock" (65) stays with the chain rule.
+  [/door.?bars?\b|door.?wedge|hinge.?pins?\b|bolt.?slide/i, { part: "door-hardware", params: {} }],
+  // tripwire / thread line / coil of wire / snare (dungeon 53/90/32; wilderness "Unsprung Snare Trap")
+  // — thin line-work; ANY existing block part would misread (PSX-legibility is the whole reason
+  // MICRO-PROPS' bell-line module exists), so tier 2. "Bell on a string" (33) stays with the bell rule.
+  [/trip.?wires?|thread.?line|coil of wire|\bsnares?\b/i, { part: "bell-line", params: {} }],
+  // drain plug / sluice gate / pipe spout (dungeon 49/75/71) — water hardware; basin-block is the
+  // water-fixture family ("Cistern lid" already lands there via the cistern rule above, "Trough" via
+  // \btrough\b). MICRO-PROPS' cistern-lid module upgrades the read later.
+  [/drain.?plug|sluice.?gate|\bsluice\b|pipe.?spout/i, { part: "basin-block", params: { scale: 0.4 } }],
+
+  // --- PROP-NOUN-LIBRARY.md §4 Wave 2 (docs/PROP-NOUN-LIBRARY.md §3a ◐ table-gaps) — the core
+  //     Set-Dressing / Feature nouns the Wave-2 table rows now roll, each mapped onto an EXISTING
+  //     part family so the row stages a recognizable silhouette on day one (no new PARTS keys — the
+  //     bespoke model is a separate lane). Appended at the END so nothing already matching an earlier
+  //     rule is shadowed (rules only ADD resolution for text that previously fell through to null).
+  //     Three of these ride an honest STAND-IN whose bespoke model doesn't exist yet and is FLAGGED
+  //     in-line (bookshelf/cabinet, fire-pit, reeds/foliage) — the stand-in still gives the right
+  //     footprint/read until the model lands, per §4's "a table row can land ahead of its model with
+  //     no hole." ---
+  // shelf / bookshelf / bookcase / scroll-rack (dungeon 3 "Collapsed shelf", now also Wave-2 rows) —
+  // a flat stacked-plank surface reads as the table-slab family today. FLAG: wants a bespoke
+  // shelf/cabinet model (PROP-NOUN-LIBRARY §3b ○ "no cabinet/shelf part exists").
+  [/\bshelves?\b|\bshelving\b|bookshelf|bookcase|scroll.?rack/i, { part: "table-slab", params: { scale: 0.8 } }],
+  // hearth / fireplace / fire pit / campfire / fire-ring / bonfire — a masonry fire-structure reads as
+  // the furnace-block family (a hearth genuinely IS that block; the open-fire variants ride it as an
+  // honest stand-in). FLAG: the campfire/fire-pit variants want a bespoke fire-ring model
+  // (PROP-NOUN-LIBRARY §3b ○ "fire as object — no fire part").
+  [/\bhearth\b|fireplace|chimney.?breast|fire.?pit|camp.?fire|fire.?ring|\bbonfire\b/i, { part: "furnace-block", params: {} }],
+  // bare "bier" / "funeral bier" (the earlier coffin rule only catches the "stone bier" compound) —
+  // same coffin-slab family, a low draped death-slab.
+  [/\bbier\b/i, { part: "coffin-slab", params: {} }],
+  // scrap heap / junk pile / salvage mound (modern/ash registers the refuse-pile rule's fantasy
+  // spellings miss) — same rubble-scatter debris family.
+  [/scrap.?heap|junk.?pile|salvage.?(?:mound|heap)|scrap.?pile/i, { part: "rubble-scatter", params: { scale: 0.9 } }],
+  // mooring post / bollard / dock piling (waterfront verticals) — reads as the small broken-pillar
+  // silhouette the lantern/anchor rules already use for stubby posts.
+  [/mooring.?post|\bbollard\b|dock.?piling|\bpiling\b/i, { part: "pillar-broken", params: { intact: true, scale: 0.5 } }],
+  // gravestone / headstone / tombstone / grave marker (cemetery verticals) — a low upright stone slab,
+  // same small-pillar read.
+  [/gravestone|headstone|tombstone|grave.?marker/i, { part: "pillar-broken", params: { intact: true, scale: 0.4 } }],
+  // shop sign / hanging shingle / street sign (the signpost rule catches signpost/notice-board but not
+  // these hung-shingle spellings) — same banner-pole pole-and-board silhouette.
+  [/shop.?sign|hanging.?shingle|\bshingle\b|street.?sign/i, { part: "banner-pole", params: {} }],
+  // awning / shade sail / market canopy (the tent rule catches pavilion/lean-to/tent-canopy but not
+  // these) — same tent-canopy stretched-fabric read.
+  [/\bawnings?\b|shade.?sail|market.?canopy/i, { part: "tent-canopy", params: {} }],
+  // clothesline / washing line / drying rack (strung soft-goods) — the wide-drape banner-pole variant,
+  // same family the tapestry/curtain rule uses.
+  [/clothes.?line|washing.?line|drying.?(?:rack|line)/i, { part: "banner-pole", params: { wide: true, drape: true } }],
+  // planter / flower bed / flower box / window box (garden containers) — a raised soil basin reads as
+  // the small basin-block family (PROP-NOUN-LIBRARY §3a "planter -> basin").
+  [/\bplanters?\b|flower.?bed|flower.?box|window.?box/i, { part: "basin-block", params: { scale: 0.5 } }],
+  // stump / tree stump / fallen trunk / fallen log (the tree rule catches deadfall/hollow/petrified but
+  // not these) — same tree-bare wood-fragment family.
+  [/\bstumps?\b|tree.?stump|fallen.?(?:trunk|log)/i, { part: "tree-bare", params: { channel: "skin" } }],
+  // boulder cluster (the scree/gravel rule misses the bare "boulder" noun) — same rubble-scatter
+  // loose-stone family at a chunkier scale.
+  [/\bboulders?\b/i, { part: "rubble-scatter", params: { scale: 0.7 } }],
+  // reeds / cattails / tall grass / reed clump (waterside + meadow vegetation) — vine-tangle is the
+  // honest nearest silhouette. FLAG: wants a bespoke foliage/reed model (PROP-NOUN-LIBRARY §3b ○
+  // "no living-vegetation part — tree-bare is bare-only").
+  [/\breeds?\b|cattails?|tall.?grass|reed.?clump|reed.?bed/i, { part: "vine-tangle", params: {} }],
 ];
 
 /* text (any free-text blob — feature name+flavor, a cover tag, a hazard kind) -> a prop part
@@ -567,16 +752,30 @@ const THEATER_FLOOR_ENV_FALLBACK = {
    (folded into both buckets below, never excluded either way). */
 const THEATER_FLOOR_REALM_WHERE_FOR_ENV = { dungeon: "interior", urban: "interior", wilderness: "exterior", breach: "exterior" };
 
-/* tint helper (§3 decision 2 — "one color funnel for surfaces now + render-grade later"): a tiny pure
-   function so REALM-RENDER-STYLE's future gradeColor can share this exact seam rather than each
-   inventing its own hex math. theater-data.js is the GL-free pure layer (theater-boot.js's ES-module
-   boundary is one-way — it consumes this file's output, never the reverse), so this can't reach into
-   theater-boot.js's FLOOR_MATERIAL_BASE table itself; it hands back the realm surface's own free-text
-   tint description VERBATIM (the caller/GL layer decides how — or whether — to mix it into a hex).
-   Today this is effectively a passthrough; kept as a real named function (not inlined) so
-   REALM-RENDER-STYLE's future canvas-build hook has exactly one seam to extend once it lands. */
-function theaterApplySurfaceTint(tintText){
-  return tintText || null;
+/* tint funnel (§3 decision 2 — "one color funnel for surfaces now + render-grade later" — FINALLY
+   DOING ITS DOCUMENTED JOB, Adam 2026-07-08 "floors are drab as hell / where is the red rock"):
+   resolves a picked realm surface's AUTHORED floor color — the "#rrggbb" `baseTint` every surface in
+   data/realm-surfaces.js now carries (authored in dev/model-qa/realm-surfaces.json from the surface's
+   own prose tint line, in the realm's key, tuned to read right under the realm's realmRenderProfile
+   grade). This is the ONE seam where a realm surface becomes a tile color: theaterBoardBuild feeds
+   the result through its existing gradeTint (gradeColor + the room's renderProfile) and stamps it as
+   the floor tile tint, REPLACING the generic env palette.top gray. Returns null when the surface has
+   no authored hex (an older/partial data file) — the caller falls back to the env palette, never a
+   dangling color. Still a tiny pure function in the GL-free layer (theater-boot.js's ES-module
+   boundary stays one-way); any future per-surface color math extends HERE, never per-caller. */
+function theaterApplySurfaceTint(surface){
+  return (surface && typeof surface.baseTint === "string" && surface.baseTint) || null;
+}
+
+/* tiny pure lighten for the elevated-patch variant of a realm floor color (the same "elevation reads
+   as brighter ground, SAME family" law G9 tune 2 set for env palettes via elevTint — a realm room's
+   raised patch must stay in the realm surface's own color family, not jump back to env gray).
+   Multiplicative per-channel scale, clamped — hue-preserving for the darker floors this handles. */
+function theaterLightenHex(hex, mul){
+  const h = String(hex || "").replace("#", "");
+  if(!/^[0-9a-fA-F]{6}$/.test(h)) return hex;
+  const ch = (i) => Math.min(255, Math.round(parseInt(h.slice(i, i + 2), 16) * mul));
+  return "#" + [0, 2, 4].map(i => ch(i).toString(16).padStart(2, "0")).join("");
 }
 
 /* REALM-SURFACES-WIRING.md §3 — pick one of a realm's 8 surfaces for this segment: keyword match
@@ -622,11 +821,13 @@ function theaterFloorTextPool(seg){
 }
 
 /* REALM-SURFACES-WIRING.md §3 — the richer sibling of theaterFloorMaterial: same precedence, but
-   returns the FULL pick {material, tint, surfaceName} rather than a bare material key, for callers
-   that want the realm surface's own name/tint (the render board's floor + the walk digest's dressing
-   line, both consumers named in §3). `surfaceName`/`tint` are null when opts.realms is empty/absent
-   or the realm-surface layer isn't loaded — a plain generic-material pick carries no surface name
-   (nothing DM-narratable beyond what theaterFloorMaterial already returns). Never throws. */
+   returns the FULL pick {material, tint, baseTint, surfaceName} rather than a bare material key, for
+   callers that want the realm surface's own name/tint (the render board's floor + the walk digest's
+   dressing line, both consumers named in §3). `tint` is the prose color line (narratable); `baseTint`
+   is the authored "#rrggbb" floor color via the theaterApplySurfaceTint funnel (2026-07-08).
+   `surfaceName`/`tint`/`baseTint` are null when opts.realms is empty/absent or the realm-surface
+   layer isn't loaded — a plain generic-material pick carries no surface name (nothing DM-narratable
+   beyond what theaterFloorMaterial already returns). Never throws. */
 function theaterFloorSurfaceInfo(segment, env, opts){
   const seg = segment || {};
   opts = opts || {};
@@ -643,10 +844,13 @@ function theaterFloorSurfaceInfo(segment, env, opts){
     const whereBucket = THEATER_FLOOR_REALM_WHERE_FOR_ENV[env] || "interior";
     const picked = theaterRealmSurfacePick(primaryRealm, whereBucket, seedKey, pool);
     if(picked){
-      return { material: picked.base, tint: theaterApplySurfaceTint(picked.tint), surfaceName: picked.name };
+      // tint = the surface's prose color line VERBATIM (the DM-narratable/prose-twin read, unchanged
+      // shape); baseTint = the authored "#rrggbb" via the theaterApplySurfaceTint funnel (2026-07-08)
+      // — the value theaterBoardBuild grades + stamps as the floor tile color.
+      return { material: picked.base, tint: picked.tint || null, baseTint: theaterApplySurfaceTint(picked), surfaceName: picked.name };
     }
   }
-  return { material: theaterFloorMaterial(seg, env), tint: null, surfaceName: null };
+  return { material: theaterFloorMaterial(seg, env), tint: null, baseTint: null, surfaceName: null };
 }
 
 function theaterFloorMaterial(segment, env){
@@ -676,6 +880,92 @@ function theaterFloorMaterial(segment, env){
   return THEATER_FLOOR_ENV_FALLBACK[env] || THEATER_FLOOR_ENV_FALLBACK[THEATER_DEFAULT_ENV];
 }
 
+/* TABLETOP-UNITS.md §U1 — the render-profile stamping shared by theaterBoardBuild (a real room) and
+   theaterIdleBoardFrom (the empty standing table): resolves boardRealm's sat/tint/tintAmt/contrast
+   via realmRenderProfile and re-stamps `tint` as the GL-ready NUMBER theater-boot.js's gradeColorLocal
+   needs (a string "#rrggbb" tint silently coerced to grey there — REALM-RENDER-STYLE.md §3/§4's own
+   "stamp > sync-by-convention" fix, T1). Factored out of theaterBoardFrom's body verbatim (byte-
+   identical for every existing caller) so the idle table agrees with a real room on how a resolved
+   realm becomes a render grade, instead of duplicating the coercion in two places. */
+function theaterStampRenderProfile(boardRealm){
+  const rawRenderProfile = (typeof realmRenderProfile === "function")
+    ? realmRenderProfile(boardRealm ? [boardRealm] : [])
+    : null;
+  return rawRenderProfile ? {
+    sat: rawRenderProfile.sat,
+    tint: (typeof rawRenderProfile.tint === "number")
+      ? rawRenderProfile.tint
+      : (typeof rawRenderProfile.tint === "string" && rawRenderProfile.tint
+        ? parseInt(rawRenderProfile.tint.replace("#", ""), 16)
+        : null),
+    tintAmt: rawRenderProfile.tintAmt,
+    contrast: rawRenderProfile.contrast
+  } : null;
+}
+
+/* TABLETOP-UNITS.md §U1 — the empty standing table: no rolled room, so tiles/props stay EMPTY
+   (TABLETOP-VISION.md §1 "empty table under realm light when nothing is staged") — everything else
+   (the render grade, the grid shape) reuses the exact same helpers a real room does, so the idle
+   table and a walked room always agree on how a realm's light/grade resolve. `realms` (an array of
+   active realm ids, or empty/absent) is a pure INPUT here — there is no room id to seed a pick
+   against, so `realms[0]` (deterministic, not Math.random) is the ONE resolved realm; the same
+   realms list always yields the same idle board (§9.1 purity). `light` still rolls through
+   theaterRollLight (a fixed "idle:<env>" seed key — there's no segment to carry a stamped light, so
+   this is the graceful seeded-fallback path every real room's light derivation already has). Never
+   throws on a missing/empty env or realms (theaterPaletteFor/theaterRollLight are both total). */
+function theaterIdleBoardFrom(env, realms){
+  env = env || THEATER_DEFAULT_ENV;
+  const realmList = Array.isArray(realms) ? realms : [];
+  const boardRealm = realmList.length ? realmList[0] : null;
+  const renderProfile = theaterStampRenderProfile(boardRealm);
+  const grid = (typeof cmZoneGrid === "function")
+    ? cmZoneGrid(undefined)
+    : { bands: ["melee", "near", "far", "out"], lanes: ["L", "C", "R"], bandCount: 4, laneCount: 3 };
+  const light = theaterRollLight(env, "idle:" + env, "");
+  return {
+    tiles: [], props: [], env, light, floorMaterial: null,
+    surfaceName: null, surfaceTint: null, surfaceBaseTint: null,
+    realms: realmList.length ? realmList : undefined,
+    realmId: boardRealm,
+    renderProfile: renderProfile,
+    grid: { bands: grid.bands, lanes: grid.lanes, bandCount: grid.bandCount, laneCount: grid.laneCount }
+  };
+}
+
+/* TABLETOP-UNITS.md §U1 — trayFrom(source, scene, opts): the Standing Table generalization of
+   theaterBoardFrom. source.kind selects the origin:
+     {kind:"segment", segment}  — an active walk's here-segment (all three envs) — routes through
+                                  the SAME room derivation theaterBoardFrom has always used.
+     {kind:"interior", record}  — a minted interior codex record — read the identical defensive way a
+                                  partial/narrow-harness segment already is (an absent dims/feature/
+                                  dressing/light falls through theaterBoardBuild's own total-function
+                                  defaults, never a throw); no render.js caller wires this kind yet
+                                  (a later unit's job) but the shape contract holds today.
+     {kind:"idle", env, realms} — the empty table (theaterIdleBoardFrom).
+   Same return shape in every branch (below, unchanged) — this is the ONE seam TABLETOP-VISION's
+   tray/idle/combat callers all read through. Pure: the same (source,scene,opts) snapshot always
+   yields an identical board (§9.1). */
+function trayFrom(source, scene, opts){
+  source = source || {};
+  opts = opts || {};
+  if(source.kind === "idle"){
+    const env = source.env || opts.env;
+    const realms = source.realms || opts.realms;
+    return theaterIdleBoardFrom(env, realms);
+  }
+  const segment = source.kind === "interior" ? source.record : source.segment;
+  return theaterBoardBuild(segment, scene, opts);
+}
+
+/* theaterBoardFrom is now a ONE-LINE WRAPPER over trayFrom — every existing combat caller
+   (theaterStageSync in src/world/render.js, dev/verify-battle-stage.mjs's stub harness, etc.) keeps
+   calling this exact name/signature and gets a board BYTE-IDENTICAL to before this unit (the combat
+   byte-gate, dev/verify-tabletop-u1.mjs check 1 against dev/fixtures/tabletop-u1-board.json, proves
+   it — trayFrom's "segment" branch below calls theaterBoardBuild with these exact same arguments). */
+function theaterBoardFrom(segment, scene, opts){
+  return trayFrom({ kind: "segment", segment: segment }, scene, opts);
+}
+
 /* §1 THE BOARD: segment (rolled room, carries .dims) + scene ({elevZones,hazards,hazardZones,cover,
    zoneCover,exits}) + opts ({env}) -> {tiles:[{x,z,h,kind,tint,altTop,zone}], grid:{bands,lanes,
    bandCount,laneCount}, props:[...], env}. Reuses cmZoneGrid (engine.combat, same file loads earlier
@@ -683,14 +973,16 @@ function theaterFloorMaterial(segment, env){
    (module not loaded, e.g. a narrow test harness) degrades to the same full-4x3 default cmZoneGrid
    itself falls back to, so this function never throws on a partial load.
    T1.5: opts.env (default THEATER_DEFAULT_ENV, "dungeon") selects the palette (theaterPaletteFor) —
-   every tint below now reads off that palette instead of a hardcoded literal. Each tile also carries
-   `altTop` (bool): a checkerboard flag ((tileX+tileZ) parity, computed in WORLD tile coordinates so
-   the pattern is continuous across zone boundaries, not just within one zone's 3x3 patch) the GL
-   layer uses to alternate between the palette's `top`/`altTop` colors on plain floor tiles — §1 rule
-   2's "stronger top-face checker alternation... the FFT reference's legibility trick". Hazard/
-   elevated/water tiles keep their own single tint (the checker only applies to plain floor, so a
-   hazard patch still reads as one solid warning color, not diluted by alternation). */
-function theaterBoardFrom(segment, scene, opts){
+   every tint below now reads off that palette instead of a hardcoded literal — and 2026-07-08 a
+   realm room's plain-floor tint comes from its picked realm surface's authored `baseTint` instead
+   (theaterApplySurfaceTint; the env palette is the no-realm fallback only). Each tile still carries
+   `altTop` (bool) but it is INERT — permanently false since Adam's 2026-07-08 "no tabletop tray has
+   checkerboard" ruling retired the (x+z)-parity two-tone; the field survives purely so downstream
+   consumers/fixtures keep their tile shape. Hazard/elevated/water tiles keep their own single tint
+   (hazards stay env warning colors even in a realm room).
+   TABLETOP-UNITS.md §U1: renamed from theaterBoardFrom (now a wrapper over trayFrom, above) — body
+   UNCHANGED, so every combat caller sees a byte-identical board. */
+function theaterBoardBuild(segment, scene, opts){
   scene = scene || {};
   opts = opts || {};
   const env = opts.env || THEATER_DEFAULT_ENV;
@@ -710,26 +1002,16 @@ function theaterBoardFrom(segment, scene, opts){
   // sat1/tintAmt0/contrast1) — every gradeColor call below then resolves to its input unchanged, so a
   // non-realm room's tile tints are BYTE-IDENTICAL to before this unit (the regression law §4 names
   // for "no realms").
-  const rawRenderProfile = (typeof realmRenderProfile === "function")
-    ? realmRenderProfile(boardRealm ? [boardRealm] : [])
-    : null;
   // Stamp a GL-ready profile: the tint travels as a STRING in data/realms.js's REALMS table
   // ("#c88a3c") but the GL layer's gradeColorLocal (src/ui/theater-boot.js) needs a NUMBER — the
   // mirror's own hexToRGB silently coerced any non-number tint to grey (0x808080), which is exactly
-  // how the lava-red bright-kingdom incident happened (T1). Convert ONCE here so every consumer
-  // (this file's own gradeColor calls below, and the GL layer via the stamped board.renderProfile)
-  // reads the identical numeric shape. A tint that's already a number passes through; a null/absent
-  // tint (REALM_RENDER_DEFAULT carries one, but a defensive guard costs nothing) stays null.
-  const renderProfile = rawRenderProfile ? {
-    sat: rawRenderProfile.sat,
-    tint: (typeof rawRenderProfile.tint === "number")
-      ? rawRenderProfile.tint
-      : (typeof rawRenderProfile.tint === "string" && rawRenderProfile.tint
-        ? parseInt(rawRenderProfile.tint.replace("#", ""), 16)
-        : null),
-    tintAmt: rawRenderProfile.tintAmt,
-    contrast: rawRenderProfile.contrast
-  } : null;
+  // how the lava-red bright-kingdom incident happened (T1). Convert ONCE (theaterStampRenderProfile,
+  // above — TABLETOP-UNITS.md §U1 factored this out so the idle table agrees byte-for-byte) so every
+  // consumer (this file's own gradeColor calls below, and the GL layer via the stamped
+  // board.renderProfile) reads the identical numeric shape. A tint that's already a number passes
+  // through; a null/absent tint (REALM_RENDER_DEFAULT carries one, but a defensive guard costs
+  // nothing) stays null.
+  const renderProfile = theaterStampRenderProfile(boardRealm);
   // pure per-tint grade: gradeColor (data/realms.js) returns a numeric 0xrrggbb; re-stringified to
   // "#rrggbb" so every downstream consumer (theater-boot.js's colorFor/THREE.Color, the floor-canvas
   // cache key) keeps reading the exact "#rrggbb" string shape tile.tint has always carried — a purely
@@ -794,9 +1076,20 @@ function theaterBoardFrom(segment, scene, opts){
   // of re-deriving its own independent seeded pick.
   const surfaceInfo = theaterFloorSurfaceInfo(segment, env, Object.assign({}, opts, { boardRealm: boardRealm }));
   const floorMaterial = surfaceInfo.material;
+  // 2026-07-08 (Adam: "floors are drab as hell... where is the red rock and the golden desert"):
+  // the picked realm surface's AUTHORED floor color (theaterApplySurfaceTint's funnel output) —
+  // room-wide, same scope as floorMaterial. When present it REPLACES palette.top as the floor tile
+  // tint below (the env palette stays the no-realm fallback only). Null on every non-realm room.
+  const surfaceBaseTint = surfaceInfo.baseTint || null;
 
   let tiles = [];
   let props = [];
+  // TABLETOP-UNITS.md §U6 dedup law (§9.10): tracks whether the room-wide `featureText` fallback has
+  // already claimed a real prop recipe THIS board build — see the cover-zone loop below. Board-wide
+  // (not per-zone) because featureText itself is room-wide (theaterSegmentFeatureText is computed
+  // once, above, per room not per zone) — two zones with no cover/hazard text of their own both fall
+  // back to the identical feature-derived recipe, and one noun must stage ONE piece.
+  let featureFallbackClaimed = false;
   for(let bi = 0; bi < bands.length; bi++){
     for(let li = 0; li < lanes.length; li++){
       const zoneKey = bands[bi] + ":" + lanes[li];
@@ -814,17 +1107,34 @@ function theaterBoardFrom(segment, scene, opts){
       // G9 tune 2: elevated tiles use `elevTint` (a lightened stone-top variant), NOT `accent` — accent
       // is the env's one saturated hazard color (oxblood/etc.), which read as an alarm on a plain raised
       // patch. A hazard tile still uses its own variant.tint (unaffected by this change).
-      const tint = variant ? variant.tint : (elevated ? palette.elevTint : palette.top);
+      // 2026-07-08 realm floor color: a realm room's plain floor carries the picked surface's authored
+      // baseTint (theaterApplySurfaceTint's funnel, graded below like every other tile tint); its
+      // elevated patch a LIGHTENED variant of the same color (same "brighter ground, same family"
+      // height law elevTint encodes for env rooms). Env palette.top/elevTint remain the no-realm
+      // fallback. Hazard/water tiles keep their env warning colors in BOTH cases — hazard legibility
+      // is deliberately not realm-tinted.
+      const tint = variant ? variant.tint
+        : (elevated ? (surfaceBaseTint ? theaterLightenHex(surfaceBaseTint, 1.30) : palette.elevTint)
+          : (surfaceBaseTint || palette.top));
       for(let tx = 0; tx < THEATER_PATCH; tx++){
         for(let tz = 0; tz < THEATER_PATCH; tz++){
           const wx = origin.x + tx, wz = origin.z + tz;
-          // checker alternation is WORLD-coordinate parity (continuous across zone seams), and only
-          // applies to plain, unmarked floor — a hazard/elevated tile stays one solid warning color
-          // so the checker never competes with the "something is different here" signal.
-          const altTop = (kind === "floor") && (((wx + wz) % 2) !== 0);
-          const faceTint = gradeTint(altTop ? palette.altTop : tint);
+          // CHECKER RETIRED (Adam 2026-07-08 — "no tabletop tray has checkerboard"): tile color no
+          // longer alternates on (x+z) parity; every plain floor tile in a room carries the SAME
+          // room-wide tint (the subtle grid read is theater-boot.js's TILE_GAP void seam). The
+          // `altTop` FIELD stays on the tile shape, permanently false, so downstream consumers/
+          // fixtures keep their shape — it is inert as a color mechanism.
+          const altTop = false;
+          const faceTint = gradeTint(tint);
           const material = (kind === "floor" || kind === "elevated") ? floorMaterial : null;
-          tiles.push({ x: wx, z: wz, h, kind, tint: faceTint, altTop, zone: zoneKey, material });
+          const tile = { x: wx, z: wz, h, kind, tint: faceTint, altTop, zone: zoneKey, material };
+          // stamp the RAW authored surface color on realm floor/elevated tiles — the GL layer
+          // (tileMaterialsFor) reads its presence to let the realm color LEAD the floor texture
+          // instead of the material base, and harnesses re-derive tint === grade(baseTint) from it.
+          // Omitted (not null-stamped) on non-realm tiles so a no-realm board's tile shape is
+          // byte-identical to before this change.
+          if(surfaceBaseTint && (kind === "floor" || kind === "elevated")) tile.baseTint = surfaceBaseTint;
+          tiles.push(tile);
         }
       }
       if(zoneKey in coverZones){
@@ -846,31 +1156,62 @@ function theaterBoardFrom(segment, scene, opts){
         // a breach" (§5 decision 3). No opts.realms (or no keyword hit against that realm's own prop
         // names/summaries) falls straight through to the existing generic theaterPropForText chain,
         // byte-identical to pre-unit behavior (regression law: no realms -> byte-identical).
-        const realmPropHit = (Array.isArray(opts.realms) && opts.realms.length)
-          ? (theaterRealmPropForText(zoneCoverText, opts.realms) ||
-             theaterRealmPropForText(zoneHazardKind, opts.realms) ||
-             theaterRealmPropForText(featureText, opts.realms))
-          : null;
+        // TABLETOP-UNITS.md §U6 dedup law (§9.10): the two `||` chains below are decomposed into named
+        // hits (realmHit*/plainHit*) so this function can tell WHICH text actually won the match — a
+        // win off the room-wide `featureText` (the LAST resort in both chains) is the "same noun as
+        // any other zone" case, since featureText is shared board-wide while zoneCoverText/
+        // zoneHazardKind are genuinely per-zone. The decomposition changes NOTHING about which value
+        // wins (same precedence, same result) — only adds the "which source won" fact, so the U1
+        // combat byte-gate (a single-cover-zone fixture) stays byte-identical.
+        const hasRealms = Array.isArray(opts.realms) && opts.realms.length;
+        const realmHitCover = hasRealms ? theaterRealmPropForText(zoneCoverText, opts.realms) : null;
+        const realmHitHazard = (!realmHitCover && hasRealms) ? theaterRealmPropForText(zoneHazardKind, opts.realms) : null;
+        const realmHitFeature = (!realmHitCover && !realmHitHazard && hasRealms) ? theaterRealmPropForText(featureText, opts.realms) : null;
+        const realmPropHit = realmHitCover || realmHitHazard || realmHitFeature;
+        const plainHitCover = theaterPropForText(zoneCoverText);
+        const plainHitHazard = !plainHitCover ? theaterPropForText(zoneHazardKind) : null;
+        const plainHitFeature = (!plainHitCover && !plainHitHazard) ? theaterPropForText(featureText) : null;
         const propHint = realmPropHit
-          ? { part: realmPropHit.part, params: realmPropHit.partParams || {} }
-          : (theaterPropForText(zoneCoverText) || theaterPropForText(zoneHazardKind) || theaterPropForText(featureText));
+          // REALM-PROPS-WIRING fix (2026-07-08): carry the realm prop's own bespoke `model` (a full
+          // registry key like "prop:sentry-turret-mount") alongside `part`. The 8 net-new realm props
+          // specify `model` but NO `part`; the render path keyed only off `part`, so their hand-built
+          // models were dead (rendered the generic box). Threading `model` here + preferring it in
+          // theater-boot.js's prop resolver revives them. `part` still rides for the 277 reskin props
+          // that map onto a base part.
+          ? { part: realmPropHit.part, model: realmPropHit.model, params: realmPropHit.partParams || {} }
+          : (plainHitCover || plainHitHazard || plainHitFeature);
+        const wonViaFeatureFallback = realmPropHit ? !!realmHitFeature : !!plainHitFeature;
+        // one noun -> one piece (§9.10): the FIRST zone this board build to resolve via the shared
+        // featureText fallback claims the real recipe; a LATER zone whose resolution ALSO fell back
+        // to the identical room-wide text gets a plain generic cover marker (no part/partParams)
+        // instead of a second copy of the same noun. Zone-specific cover/hazard text is never deduped
+        // (it's a genuinely distinct noun per zone). The §9.10 mutation fixture (a feature text that
+        // matches both a prop rule and a second cover zone with no text of its own) proves this by
+        // asserting the resolved part's total piece count across the board stays 1.
+        const isDuplicateFeatureNoun = wonViaFeatureFallback && featureText && featureFallbackClaimed;
+        if(wonViaFeatureFallback && featureText && !featureFallbackClaimed) featureFallbackClaimed = true;
         const propEntry = {
           kind: "cover", zone: zoneKey,
           x: origin.x + (THEATER_PATCH - 1) / 2, z: origin.z + (THEATER_PATCH - 1) / 2,
           level: coverZones[zoneKey] === true ? "half" : coverZones[zoneKey]
         };
-        if(propHint && propHint.part){
-          propEntry.part = propHint.part;
-          propEntry.partParams = propHint.params || {};
-        }
-        // REALM-PROPS-WIRING.md §3: stamp the realm prop's own name + Size (when one resolved) so the
-        // §3 footprint pass (theater-boot.js's prop mount) can read the size without re-deriving it,
-        // and so the prop's real name rides the prose twin (blind-playable, §2's own closing line).
-        // Absent on every non-realm-prop entry (regression-safe — a caller ignoring these two fields
-        // sees the exact pre-unit prop entry shape).
-        if(realmPropHit){
-          propEntry.realmPropName = realmPropHit.name;
-          propEntry.size = realmPropHit.size;
+        if(!isDuplicateFeatureNoun){
+          if(propHint && (propHint.part || propHint.model)){
+            if(propHint.part) propEntry.part = propHint.part;
+            // a bespoke realm-prop model (no `part`) stamps `model` alone — theater-boot.js's prop
+            // resolver prefers it; a plain/reskin prop keeps carrying only `part` as before.
+            if(propHint.model) propEntry.model = propHint.model;
+            propEntry.partParams = propHint.params || {};
+          }
+          // REALM-PROPS-WIRING.md §3: stamp the realm prop's own name + Size (when one resolved) so the
+          // §3 footprint pass (theater-boot.js's prop mount) can read the size without re-deriving it,
+          // and so the prop's real name rides the prose twin (blind-playable, §2's own closing line).
+          // Absent on every non-realm-prop entry (regression-safe — a caller ignoring these two fields
+          // sees the exact pre-unit prop entry shape).
+          if(realmPropHit){
+            propEntry.realmPropName = realmPropHit.name;
+            propEntry.size = realmPropHit.size;
+          }
         }
         props.push(propEntry);
       }
@@ -921,6 +1262,7 @@ function theaterBoardFrom(segment, scene, opts){
       tiles.forEach(t => {
         if(t.zone === mod.zone && t.kind !== "water"){
           t.kind = "scorch"; t.tint = gradeTint(palette.scorch); t.altTop = false; t.material = null;
+          delete t.baseTint; // a scorched tile is no longer realm floor — env warning color owns it
         }
       });
     } else if(mod.op === "collapse"){
@@ -951,6 +1293,10 @@ function theaterBoardFrom(segment, scene, opts){
     // ignores these two fields sees an unchanged board shape); a named surface + its prose tint when
     // opts.realms picked one. Room-wide (matches floorMaterial's own "one per room" scope).
     surfaceName: surfaceInfo.surfaceName, surfaceTint: surfaceInfo.tint,
+    // 2026-07-08 tint funnel: the picked surface's authored "#rrggbb" floor color (raw, pre-grade) —
+    // null on every non-realm room, same null-safe shape as surfaceName/surfaceTint above. Harnesses
+    // assert floor tile tint === gradeColor(surfaceBaseTint, renderProfile) off this field.
+    surfaceBaseTint: surfaceBaseTint,
     // REALM-RENDER-STYLE.md §3/§4: opts.realms passed straight through (undefined on a non-realm room,
     // same null-safe shape realms/surfaceName/surfaceTint already keep) so the GL layer (theater-boot.js
     // setBoard) can resolve the SAME render profile this function used for tile tints, to grade the
@@ -1607,4 +1953,281 @@ function theaterUnitsFrom(combat){
   });
 
   return { units };
+}
+
+/* ============================================================================
+   TABLETOP-UNITS.md §U4 — CAST TABLEAU + ARRANGEMENT GRAMMAR (TABLETOP-VISION.md §3).
+   Figures OUTSIDE combat: PC (+companions) + contacted here-NPCs (painted) + soft ambients
+   (blank, per §U3) placed on the standing tray by a MECHANICAL arrangement archetype — no DM/
+   model call anywhere in this file (SPEED). Combat is untouched: theaterUnitsFrom above stays
+   the combat path; a future integration point (U6) swaps the unit SOURCE on combat_start/end,
+   this file doesn't gate that switch.
+
+   castFrom(w, source) -> units[] (same shape theaterUnitsFrom emits: {id,kind,archetype,x,z,
+   silhouette?,className?,pcRecipe?,...}) gathers the cast from exactly the sources the spec
+   names, then hands them to arrangeTableau for placement:
+     - PC:            a local pc-ref derivation off w.characters (SAME shape src/world/dm.js's
+                      combat_start assembles — {name,class,mods,ac,hp,hpCur,equipped,inventory,
+                      conditionsRef} — deliberately NOT calling dm.js's livingSheet(), which
+                      would be a same-direction-as-existing-warns but avoidable L1->L4 call;
+                      this file already knows the shape, so it re-derives it locally instead).
+     - companions:    prepEligibleCompanionCreatures(w) (prep.js:107-114) — codex creature
+                      records at attitude>=1 the party travels with.
+     - contacted npcs: codexHereNowIds(w,{atNodeId:source.hereNodeId}) rule 1 (the "at the
+                      current node" rule, which already excludes untouched ambients) filtered
+                      to kind:"npc" — these are the PAINTED figures.
+     - soft ambients: codexAmbientPresenceFor(w, source.hereNodeId) — U3's shared co-location
+                      derivation (the SAME function dm.js's digest calls, by reference) — its
+                      `count` becomes that many blank:figure meeples. No individual record ref
+                      per blank (the aggregate IS the digest-side presence line per §U3; a blank
+                      meeple is anonymous by design until contact promotes it into the contacted-
+                      npc source above on a later call).
+     - corpse traces: source.traces (§U6/§U5's overlay.traces contract, OPTIONAL/additive) — a
+                      combat that already ended on this tray left toppled figures behind; staged
+                      here (never touched by arrangeTableau) at the trace's own recorded zone.
+   source = { hereNodeId, walking, shopOpen, traces?, removed? } — the three flags the arrangement
+   rule below reads, plus the two OPTIONAL trace fields (§U6). All cross-module reads are call-time
+   + typeof-guarded (this file's existing convention for
+   cmZoneGrid/realmRenderProfile/etc.) — an absent w/records/companion helper degrades to an
+   empty list, never a throw. PURE: no GS/w/U writes (§9.9); the same (w,source) snapshot always
+   yields an identical unit list (§9.1) since nothing here rolls/reads the clock or Math.random. */
+function theaterCastPcRefFrom(w){
+  const chars = (w && w.characters) || [];
+  const living = chars.filter(c => c && c.status === "living").slice(-1)[0];
+  if(!living || !living.sheet) return null;
+  const sh = living.sheet;
+  return {
+    name: living.name, class: sh.class, mods: sh.mods, ac: sh.ac, hp: sh.hp, hpCur: sh.hpCur,
+    equipped: sh.equipped || null, inventory: sh.inventory || [], conditionsRef: living
+  };
+}
+
+/* NPC -> best-candidate humanoid registry model (Adam's tabletop-substitution ruling, 2026-07-08).
+   NPCs have no bespoke per-NPC model; we pick the nearest existing humanoid piece by a light keyword
+   scan over the record's own rolled text (name + fields values + dm role/agenda notes), defaulting to
+   "commoner". TOTAL (never throws/undefined): an unmatched record is a commoner. When the NPC model
+   set grows (Adam building out townsfolk/roles), extend THIS map — every NPC re-points through one
+   seam, exactly the NEAREST_SUB pattern the bestiary already uses. Every target here is a real
+   WHOLE_OBJECT_REGISTRY key (commoner/noble/guard/cultist all exist, theater-figures.js). */
+const THEATER_NPC_MODEL_RULES = [
+  { re: /guard|soldier|sentry|watch|warden|constable|militia|knight|guardsman/, model: "guard" },
+  { re: /noble|lord|lady|baron|count|merchant|magistrate|patrician|aristocrat|courtier|master/, model: "noble" },
+  { re: /cult|priest|acolyte|zealot|devotee|hierophant|prophet|preacher|monk/, model: "cultist" },
+  { re: /bandit|thug|cutpurse|smuggler|outlaw|brigand|footpad|rogue/, model: "bandit" }
+];
+function theaterNpcModelFor(r){
+  const f = (r && r.fields) || {};
+  const dm = (r && r.dm) || {};
+  const hay = [r && r.name, f.role, f.agenda, f.method, f.occupation, f.tags && f.tags.join(" "),
+    dm.role, dm.note].filter(Boolean).join(" ").toLowerCase();
+  for(const rule of THEATER_NPC_MODEL_RULES){ if(rule.re.test(hay)) return rule.model; }
+  return "commoner";
+}
+
+function castFrom(w, source){
+  source = source || {};
+  const hereNodeId = source.hereNodeId != null ? source.hereNodeId : null;
+  const units = [];
+
+  // PC (§U4: "PC via existing pc ref") — front-of-tray always, arrangeTableau stamps x/z.
+  const pcRef = theaterCastPcRefFrom(w);
+  if(pcRef){
+    const silhouette = theaterClassSilhouetteFor(pcRef.class);
+    const pcRecipe = pcRef.equipped ? pcRecipeFrom(pcRef, pcRef.class) : null;
+    units.push({
+      id: "pc", kind: "pc", archetype: theaterArchetypeFor("humanoid", null, null),
+      x: 0, z: 0, silhouette, weapon: theaterWeaponForClass(silhouette), pcRecipe,
+      className: pcRef.class ? String(pcRef.class).toLowerCase() : null,
+      conditionMods: theaterConditionModsFrom(pcRef.conditionsRef || pcRef)
+    });
+  }
+
+  // Companions — prepEligibleCompanionCreatures(w) (prep.js:107-114): codex creature records
+  // the party travels with (attitude>=1). Read call-time/typeof-guarded — prep.js loads AFTER
+  // this file in loadOrder, classic-script globals resolve fine at call time regardless.
+  const companions = (typeof prepEligibleCompanionCreatures === "function") ? (prepEligibleCompanionCreatures(w) || []) : [];
+  companions.forEach(r => {
+    const archetype = theaterArchetypeFor((r.fields && r.fields.type) || null, (r.fields && r.fields.size) || null, r.name);
+    // A companion is a codex CREATURE record — it has a real stat chassis (r.dm.frame = the statId the
+    // mint stamped, src/world/dm.js). That IS a render key: theater-boot.js's figureFor resolves it
+    // exact-or-alias through WHOLE_OBJECT_REGISTRY/NEAREST_SUB, the SAME statId->recipeSlug read a
+    // combat ally uses (theaterUnitsFrom, above). Without this the unit had no key and figureFor's
+    // blank-figure guarantee (gated on a truthy key) fell through to an archetype CUBOID — the
+    // standing-tableau cuboid bug. Null-safe: a frame-less record (a pure invented companion) keeps
+    // recipeSlug:null and falls to the archetype build exactly as before.
+    units.push({ id: "ally:" + r.id, kind: "ally", archetype, x: 0, z: 0, ref: r.id,
+      recipeSlug: (r.dm && r.dm.frame) || (r.fields && (r.fields.statId || r.fields.model)) || null,
+      conditionMods: [] });
+  });
+
+  // Contacted here-NPCs (painted) — codexHereNowIds rule 1: records "at" hereNodeId, already
+  // excluding untouched ambients (codex.js:415) — this IS the painted-vs-blank line (§U3).
+  const contactedNpcs = [];
+  if(typeof codexHereNowIds === "function" && typeof codexOf === "function"){
+    const C = codexOf(w);
+    const hereIds = codexHereNowIds(w, { atNodeId: hereNodeId });
+    hereIds.forEach(id => {
+      const r = C.records && C.records[id];
+      if(r && r.kind === "npc") contactedNpcs.push(r);
+    });
+  }
+  contactedNpcs.forEach(r => {
+    const attitude = (typeof codexGetAttitude === "function") ? codexGetAttitude(w, r.id) : null;
+    units.push({
+      id: "npc:" + r.id, kind: "npc", archetype: theaterArchetypeFor(null, null, r.name),
+      // NPCs have no bespoke per-NPC model (only stat-frame creatures do). Adam's ruling (2026-07-08):
+      // "in a case where there is no model, we just use the best candidate, exactly how it works on a
+      // tabletop." theaterNpcModelFor maps the record's role/tags to the nearest existing humanoid
+      // registry model (commoner/noble/guard/cultist...), defaulting to "commoner". This resolves to a
+      // real painted piece instead of a cuboid; when the NPC model set expands, only the mapper grows.
+      recipeSlug: theaterNpcModelFor(r),
+      x: 0, z: 0, ref: r.id, attitude: attitude ? attitude.value : 0, conditionMods: []
+    });
+  });
+
+  // Soft ambients (blank) — U3's shared derivation, called by REFERENCE (the same function
+  // src/world/dm.js's digest calls) so the tray and the digest never drift apart on count.
+  const ambient = (typeof codexAmbientPresenceFor === "function") ? codexAmbientPresenceFor(w, hereNodeId) : null;
+  const ambientCount = ambient ? ambient.count : 0;
+  for(let i = 0; i < ambientCount; i++){
+    units.push({
+      // §U3: soft ambients are the UNPAINTED meeple until contact. `pieceKey` was dead (figureFor has
+      // no such param) — the render key is recipeSlug, which wholeObjectKeyFor returns verbatim for a
+      // non-pc/ally kind, so "blank:figure" resolves straight to the blank registry entry. Without a
+      // key here the unit cuboided instead of staging the meeple the co-location rule promises.
+      id: "ambient:" + (i + 1), kind: "ambient", archetype: "biped", x: 0, z: 0,
+      blank: true, recipeSlug: "blank:figure", conditionMods: []
+    });
+  }
+
+  // TABLETOP-UNITS.md §U6 / §U5's overlay.traces contract: corpse figures left on the tray by a
+  // combat that already ended here — `source.traces`/`source.removed` are OPTIONAL, additive fields
+  // (absent -> both empty arrays -> zero behavior change for every existing U4 caller); the caller
+  // (theaterHereSourceFor, src/world/render.js) is the one that reads the segment's reskin overlay
+  // and threads these through, this function stays ignorant of prep/walk internals, same discipline
+  // as every other source above. `kind:"corpse"` units are NEVER touched by arrangeTableau below (it
+  // only reads pc/ally/npc/ambient) — their x/z is stamped HERE, from the trace's own `zone` (the
+  // physical spot the fight left them), via the SAME grid/origin helpers a combat board's tiles use,
+  // so a corpse renders where it actually fell, not at a tableau arrangement slot. A trace whose ref
+  // appears in `removed` (obliteration) never stages a figure — corpse is the default disposition
+  // (Adam's ruling), absence is only ever earned by an explicit removal.
+  const traces = Array.isArray(source.traces) ? source.traces : [];
+  if(traces.length){
+    const removedSet = {};
+    (Array.isArray(source.removed) ? source.removed : []).forEach(ref => { if(ref) removedSet[ref] = true; });
+    const traceGrid = (typeof cmZoneGrid === "function")
+      ? cmZoneGrid(undefined)
+      : { bands: ["melee", "near", "far", "out"], lanes: ["L", "C", "R"] };
+    traces.forEach(t => {
+      if(!t || t.kind !== "corpse" || !t.ref || removedSet[t.ref]) return;
+      const idx = t.zone ? theaterZoneIndex(traceGrid, t.zone) : null;
+      const origin = idx ? theaterZoneOrigin(idx.bandIdx, idx.laneIdx) : { x: 0, z: 0 };
+      units.push({
+        // t.ref is the fallen foe's statId (the trace's recorded chassis) — a real render key, so the
+        // corpse resolves the foe's OWN model exact-or-alias (then setUnits topples it via down:true),
+        // instead of an archetype cuboid lying on its side.
+        id: "corpse:" + t.ref, kind: "corpse", archetype: "biped", x: origin.x, z: origin.z,
+        ref: t.ref, recipeSlug: t.ref, down: true, zone: t.zone || null, conditionMods: []
+      });
+    });
+  }
+
+  // Arrangement selection — MECHANICAL, no DM/model call (§U4 locked rule, priority-ordered):
+  //   shop open -> shopfront; >1 contacted NPC -> ring; exactly 1 -> facing-pair;
+  //   walking -> march; else -> vignette.
+  let arrangement;
+  if(source.shopOpen) arrangement = "shopfront";
+  else if(contactedNpcs.length > 1) arrangement = "ring";
+  else if(contactedNpcs.length === 1) arrangement = "facing-pair";
+  else if(source.walking) arrangement = "march";
+  else arrangement = "vignette";
+
+  return arrangeTableau(units, arrangement);
+}
+
+/* THE ATTITUDE -> PLACEMENT TABLE (§U4 locked rule): "hostile = far + square-on, friendly =
+   near + angled" — ONE numeric table, no per-NPC logic. Keyed by the codex attitude.value band
+   (-2 hostile .. +2 helpful, src/world/codex.js's ATTITUDE_MIN/MAX). `dist` = distance from the
+   PC/ring-center; `angle` (radians) = an additive facing nudge — 0 is square-on (facing the PC
+   dead-on), a larger value reads as more "angled" (turned partly aside, less confrontational).
+   theaterAttitudePlacementFor is TOTAL (never throws/undefined) — an out-of-table value (or a
+   deliberately pruned table row, the §U4 mutation check) falls to the neutral default, which is
+   NOT the hostile row's distance — this is what makes the mutation check bite: delete the "-2"
+   row and a hostile NPC silently reads as neutral-distance instead of far. */
+const THEATER_ATTITUDE_PLACEMENT = {
+  "-2": { dist: 3.0, angle: 0 },      // hostile: far, square-on
+  "-1": { dist: 2.5, angle: 0.15 },   // unfriendly/wary
+  "0":  { dist: 2.0, angle: 0.3 },    // neutral/indifferent
+  "1":  { dist: 1.5, angle: 0.45 },   // friendly
+  "2":  { dist: 1.0, angle: 0.6 }     // helpful: near, angled
+};
+const THEATER_ATTITUDE_PLACEMENT_DEFAULT = { dist: 2.0, angle: 0.3 };
+function theaterAttitudePlacementFor(value){
+  const key = String(Math.max(-2, Math.min(2, Math.round(value || 0))));
+  return THEATER_ATTITUDE_PLACEMENT[key] || THEATER_ATTITUDE_PLACEMENT_DEFAULT;
+}
+
+/* arrangeTableau(units, arrangement) -> units[] — PURE, stamps x/z (+ band/slot, additive
+   layout metadata) onto a fresh copy of each unit; never mutates its input array/objects.
+   arrangement in "facing-pair"|"ring"|"march"|"shopfront"|"vignette" (§U4 locked). Attitude
+   (npc units only, via theaterAttitudePlacementFor) drives distance+facing inside facing-pair/
+   ring ONLY, per the locked rule — the other three arrangements never read .attitude. */
+function arrangeTableau(units, arrangement){
+  const list = (units || []).map(u => Object.assign({}, u));
+  const byKind = k => list.filter(u => u.kind === k);
+  const pc = byKind("pc")[0] || null;
+  const allies = byKind("ally");
+  const npcs = byKind("npc");
+  const ambients = byKind("ambient");
+
+  const place = (u, x, z, band, slot) => { u.x = x; u.z = z; u.band = band; if(slot != null) u.slot = slot; };
+  const spreadX = (n, i, step) => (i - (Math.max(n, 1) - 1) / 2) * step;
+
+  if(arrangement === "shopfront"){
+    // shop open -> the vendor row (contacted NPCs = the shopkeep/patrons already spoken to) sits
+    // at the counter (z:0, "shopfront" slots, 1-based); ambients (unengaged browsers) hang back;
+    // the PC stands closest to the viewer, front-center, browsing the counter from the front.
+    if(pc) place(pc, 0, 2, "front-center");
+    npcs.forEach((u, i) => place(u, spreadX(npcs.length, i, 1.4), 0, "shopfront", i + 1));
+    allies.forEach((u, i) => place(u, spreadX(allies.length, i, 1.2), 1.4, "flank", i + 1));
+    ambients.forEach((u, i) => place(u, spreadX(ambients.length, i, 1.2), -2, "back", i + 1));
+  } else if(arrangement === "ring"){
+    // >1 contacted NPC in conversation scope: the PC holds center, each NPC takes an even radial
+    // slot around it — attitude nudges that NPC's own radius/facing (never anyone else's).
+    if(pc) place(pc, 0, 0, "center");
+    const n = npcs.length || 1;
+    npcs.forEach((u, i) => {
+      const pl = theaterAttitudePlacementFor(u.attitude);
+      const angle = (i / n) * Math.PI * 2 + pl.angle;
+      place(u, Math.sin(angle) * pl.dist, Math.cos(angle) * pl.dist, "ring", i + 1);
+    });
+    allies.forEach((u, i) => place(u, spreadX(allies.length, i, 1.0), -1.2, "flank", i + 1));
+    ambients.forEach((u, i) => place(u, spreadX(ambients.length, i, 1.2), -2.4, "back", i + 1));
+  } else if(arrangement === "facing-pair"){
+    // exactly 1 contacted NPC: a direct face-off, attitude sets how far/angled they stand.
+    if(pc) place(pc, 0, 0, "front-center");
+    npcs.forEach(u => {
+      const pl = theaterAttitudePlacementFor(u.attitude);
+      place(u, Math.sin(pl.angle) * pl.dist, Math.cos(pl.angle) * pl.dist, "facing", 1);
+    });
+    allies.forEach((u, i) => place(u, spreadX(allies.length, i, 1.0), -1.0, "flank", i + 1));
+    ambients.forEach((u, i) => place(u, spreadX(ambients.length, i, 1.2), -2.0, "back", i + 1));
+  } else if(arrangement === "march"){
+    // walking: single file, PC leads, companions/npcs/ambients trail in that order.
+    if(pc) place(pc, 0, 0, "lead");
+    let i = 0;
+    allies.forEach(u => { i++; place(u, 0, -i * 1.2, "file", i); });
+    npcs.forEach(u => { i++; place(u, 0, -i * 1.2, "file", i); });
+    ambients.forEach(u => { i++; place(u, 0, -i * 1.2, "file", i); });
+  } else {
+    // vignette (default/fallback): a loose scattered group around the PC.
+    if(pc) place(pc, 0, 0, "center");
+    const rest = allies.concat(npcs, ambients);
+    const n = rest.length || 1;
+    rest.forEach((u, i) => {
+      const angle = (i / n) * Math.PI * 2;
+      place(u, Math.sin(angle) * 1.6, Math.cos(angle) * 1.6, "loose", i + 1);
+    });
+  }
+  return list;
 }

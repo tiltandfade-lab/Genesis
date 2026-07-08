@@ -80,9 +80,14 @@
    live (tickTweens' own return value gates whether another frame gets scheduled), so an idle theater
    goes back to fully event-driven rendering the instant the last tween completes. */
 import * as THREE from "three";
+// BATTLE-THEATER T2 (docs/BATTLE-THEATER.md §7): GLTFLoader vendored under vendor/three/addons/ and
+// reached via the importmap's `three/addons/` prefix (genesis.html) — the SAME offline/no-CDN law as
+// three itself. Imported ONLY here (this file is the one ES-module boundary that already owns THREE);
+// theater-figures.js stays THREE-free and receives the parsed scene through dependency injection.
+import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { playVerb, tickTweens, THEATER_VERBS, theaterFxFromLedger } from "./theater-verbs.js";
 import * as Parts from "./theater-parts.js";
-import { resolveWholeObject, loadWholeObjectBuilders } from "./theater-figures.js";
+import { resolveWholeObject, loadWholeObjectBuilders, WHOLE_OBJECT_REGISTRY, NEAREST_SUB } from "./theater-figures.js";
 // P1' WHOLE-OBJECT WIRING (docs/P1-WIRING.md §4 step 3): a STATIC import of probe-lib.js itself —
 // every dev/model-qa/creatures/*.js module ALSO imports probe-lib.js by the identical relative
 // specifier (resolved from dev/model-qa/, '../probe-lib.js'), which both Node and browsers resolve
@@ -511,7 +516,9 @@ const FLOOR_TEX_SIZE = 64; // texels per axis (§1: "~64 texels, tiling")
 // derives; recipes lean on it so every material stays in the same tonal family as its tile tint.
 // each material's OWN characteristic base color (VS-desaturated but distinct) — so snow reads pale,
 // sand tan, grass green, mud brown, rather than every material collapsing to the env palette tint.
-// buildFloorMaterialCanvas mixes this ~70/30 toward the env tint for cohesion (material dominates).
+// buildFloorMaterialCanvas mixes this 88/12 toward the tile tint on a NO-REALM floor (material
+// dominates); on a realm-surface floor the ratio INVERTS (12/88) — the authored realm baseTint
+// leads and this color is only a hue nudge under the recipe's pattern (Adam 2026-07-08).
 const FLOOR_MATERIAL_BASE = {
   flagstone: 0x6f6f74, cobble: 0x777069, "cracked-earth": 0x7d6a4c, "cave-rock": 0x615c53,
   grass: 0x5c7038, "leaf-litter": 0x6d5a35, sand: 0xbcac7c, "snow-ice": 0xccd4e0,
@@ -661,18 +668,26 @@ const FLOOR_MATERIAL_RECIPES = {
   }
 };
 
-function buildFloorMaterialCanvas(material, colorHex, seed){
+function buildFloorMaterialCanvas(material, colorHex, seed, realmLead){
   const size = FLOOR_TEX_SIZE;
   const canvas = document.createElement("canvas");
   canvas.width = size; canvas.height = size;
   const ctx = canvas.getContext("2d");
   const img = ctx.createImageData(size, size);
   const data = img.data;
-  // material's OWN color dominates (30% env tint mixed in for cohesion), so materials READ distinct
-  // within one env instead of collapsing to the palette color.
+  // 2026-07-08 (Adam "floors are drab as hell" — the realm tint funnel): two mixing regimes off ONE
+  // room-wide tint (the checker's per-parity double-texture is gone with the parity tint itself):
+  //   realmLead (tile carries a realm surface baseTint): the AUTHORED realm color LEADS — the
+  //     material base contributes only a 12% hue nudge plus its full per-texel pattern, so red rock
+  //     reads RED and bright-kingdom SCREAMS instead of collapsing to the material's stock gray.
+  //   no realm: material's OWN color dominates as before, env tint mixed for cohesion — weight
+  //     reduced 0.30 -> 0.12 so the (gray-ish) env fallback stops dragging every material toward
+  //     the same drab hue; the recipe's own color + pattern carry the look.
   const envRGB = hexToRGB(colorHex);
   const matHex = FLOOR_MATERIAL_BASE[material];
-  const base = (matHex != null) ? mixRGB(hexToRGB(matHex), envRGB, 0.30) : envRGB;
+  const base = (matHex != null)
+    ? (realmLead ? mixRGB(envRGB, hexToRGB(matHex), 0.12) : mixRGB(hexToRGB(matHex), envRGB, 0.12))
+    : envRGB;
   const bands = [scaleRGB(base, 0.80), base, scaleRGB(base, 1.18)];
   const rand = mulberry32(seed);
   const speckle = new Uint8Array(size * size);
@@ -700,8 +715,10 @@ function buildFloorMaterialCanvas(material, colorHex, seed){
 // the tile's own `t.tint` value — a "#rrggbb" string in this codebase (theater-data.js's palette
 // entries) — used verbatim as the cache key so two tiles sharing a tint+material share one texture.
 const FLOOR_TEXTURE_CACHE = new Map();
-function buildFloorCanvasTexture(material, tintHex, seed){
-  const key = material + ":" + tintHex;
+function buildFloorCanvasTexture(material, tintHex, seed, realmLead){
+  // realmLead rides the cache key: a realm-led mix and a material-led mix of the same (material,
+  // tint) pair are genuinely different canvases and must never collide.
+  const key = material + ":" + tintHex + (realmLead ? ":realm" : "");
   const hit = FLOOR_TEXTURE_CACHE.get(key);
   if(hit) return hit;
   let tex = null;
@@ -711,7 +728,7 @@ function buildFloorCanvasTexture(material, tintHex, seed){
     // tile.tint field — never a bespoke string hash of the color (that would drift the hue).
     const parsed = new THREE.Color(tintHex);
     const colorHex = (parsed.r * 255 << 16) | (parsed.g * 255 << 8) | (parsed.b * 255 | 0);
-    const canvas = buildFloorMaterialCanvas(material, colorHex, pixelSkinHash(key + ":" + seed));
+    const canvas = buildFloorMaterialCanvas(material, colorHex, pixelSkinHash(key + ":" + seed), !!realmLead);
     tex = new THREE.CanvasTexture(canvas);
     nearestify(tex); // NearestFilter mag+min, generateMipmaps=false (§3 item 1)
     tex.wrapS = THREE.RepeatWrapping;
@@ -1064,13 +1081,16 @@ function wholeObjectDesaturateColorBuffer(col){
    crash (§4 step 5's own guard list). D7: geometry is cached and tagged so clearGroup's per-setUnits
    sweep can skip disposing a SHARED cached geometry (see clearGroup's own edit below). */
 const WHOLE_GEOMETRY_CACHE = {};
-function wholeObjectGeometryFor(key, gray){
+function wholeObjectGeometryFor(key, gray, pieceKind){
   if(!key) return null;
   const cacheKey = key + (gray ? "|gray" : "");
   const cached = WHOLE_GEOMETRY_CACHE[cacheKey];
   if(cached) return cached;
 
-  const entry = resolveWholeObject(key);
+  // TABLETOP-UNITS.md §U3: pieceKind ("figure"/"prop") threads through to resolveWholeObject so a
+  // genuine miss resolves to the blank-piece entry instead of null — see that function's own header
+  // comment. Omitted (mountLightProp's "light:" lookups) keeps the original null-on-miss contract.
+  const entry = resolveWholeObject(key, pieceKind);
   if(!entry || typeof entry.build !== "function") return null; // not registered / not yet loaded / failed import
 
   let POS, COL, CHAN;
@@ -1125,6 +1145,109 @@ function wholeObjectGeometryFor(key, gray){
   WHOLE_GEOMETRY_CACHE[cacheKey] = geo;
   return geo;
 }
+
+/* ============================================================================
+   BATTLE-THEATER T2 — THE GLB / GLTFLoader SEAM (docs/BATTLE-THEATER.md §7, vendor/three/README.md).
+   A Blender-authored .glb model loaded ALONGSIDE the hand-authored probe-lib figures, routed through
+   the IDENTICAL PS1 treatment so an import matches the shipped look, never a glossy passthrough:
+     - glbLoadScene(url): the injected loader theater-figures.js's loadWholeObjectBuilders calls (kept
+       here so THREE/GLTFLoader never enter that THREE-free, Node-importable file). One shared
+       GLTFLoader instance; resolves gltf.scene (or null). Any parse/network failure rejects and the
+       loader's own catch leaves the entry unresolved -> figureFor's glb branch skips it -> cuboid
+       fallback (the same total-function miss-chain every other whole-object call site follows).
+     - wholeObjectGeometryForGlb(cacheKey, entry): walks the parsed scene's meshes, bakes world-space
+       triangles into the SAME non-indexed POS/COL buffer shape wholeObjectGeometryFor produces from a
+       probe-lib builder, normalizes to the module size/seat convention (center X/Z, feet at y=0,
+       uniform-scaled to GLB_TARGET_HEIGHT so the downstream WHOLE_OBJECT_SCALE/disc/seat path in
+       setUnits treats it byte-identically to a procedural figure), and returns a BufferGeometry that
+       wholeObjectMaterialsFor's faceted/flat-shaded/grain-mapped/dither-snapped materials render.
+   Colour: a GLB usually carries no probe-lib CHAN channels and no baked vertex colours (the grunt
+   test asset is white PBR), so per-vertex colour is taken from a mesh vertex-colour attribute when
+   present, else the material base colour; a near-white/near-black material (no usable hue) substitutes
+   the grit-neutral stone default so a colourless export reads as desaturated stone, not glaring white;
+   then every colour is pulled GLB_DESAT_MIX of the way toward its own luma to sit in the grit palette
+   range. All tris route to the matte/Lambert bucket (slot 0) — the same slot an untagged procedural
+   tri classifies into — since there is no channel data to bucket by. This is a FIRST seam: per-entry
+   height/colour overrides and channel-tagged GLB materials are deferred tuning knobs, not this unit.
+   ============================================================================ */
+const GLB_TARGET_HEIGHT = 1.5;      // module height convention (humanoid.js tops out ~1.475 incl. its baked disc)
+const GLB_NEUTRAL_COLOR = 0x8a8378; // grit stone-grey for a colourless (near-white/black) GLB material
+const GLB_DESAT_MIX = 0.35;         // fraction each imported colour is pulled toward its own luma
+let _glbLoader = null;
+function glbLoadScene(url){
+  if(!_glbLoader) _glbLoader = new GLTFLoader();
+  return _glbLoader.loadAsync(url).then(function(gltf){ return (gltf && gltf.scene) ? gltf.scene : null; });
+}
+function wholeObjectGeometryForGlb(cacheKey, entry){
+  const cached = WHOLE_GEOMETRY_CACHE[cacheKey];
+  if(cached) return cached;
+  const scene = entry && entry.glbScene;
+  if(!scene) return null;
+  const POS = [], COL = [];
+  const tmpV = new THREE.Vector3();
+  const nCol = new THREE.Color(GLB_NEUTRAL_COLOR);
+  try {
+    scene.updateMatrixWorld(true);
+    scene.traverse(function(obj){
+      if(!obj.isMesh || !obj.geometry) return;
+      const geom = obj.geometry;
+      const posAttr = geom.getAttribute("position");
+      if(!posAttr) return;
+      const idx = geom.getIndex();
+      const colAttr = geom.getAttribute("color");
+      let mat = obj.material;
+      if(Array.isArray(mat)) mat = mat[0];
+      const baseCol = new THREE.Color(0xffffff);
+      if(mat && mat.color) baseCol.copy(mat.color);
+      const mn = Math.min(baseCol.r, baseCol.g, baseCol.b), mx = Math.max(baseCol.r, baseCol.g, baseCol.b);
+      const neutralish = (mn > 0.9) || (mx < 0.06); // no usable hue -> grit-neutral substitute
+      const world = obj.matrixWorld;
+      const vertCount = idx ? idx.count : posAttr.count;
+      for(let i = 0; i < vertCount; i++){
+        const vi = idx ? idx.getX(i) : i;
+        tmpV.fromBufferAttribute(posAttr, vi).applyMatrix4(world);
+        POS.push(tmpV.x, tmpV.y, tmpV.z);
+        let cr, cg, cb;
+        if(colAttr){ cr = colAttr.getX(vi); cg = colAttr.getY(vi); cb = colAttr.getZ(vi); }
+        else if(neutralish){ cr = nCol.r; cg = nCol.g; cb = nCol.b; }
+        else { cr = baseCol.r; cg = baseCol.g; cb = baseCol.b; }
+        const luma = cr * 0.299 + cg * 0.587 + cb * 0.114;
+        cr += (luma - cr) * GLB_DESAT_MIX; cg += (luma - cg) * GLB_DESAT_MIX; cb += (luma - cb) * GLB_DESAT_MIX;
+        COL.push(cr, cg, cb);
+      }
+    });
+  } catch(e){ delete WHOLE_GEOMETRY_CACHE[cacheKey]; return null; }
+  if(!POS.length || POS.length % 9 !== 0) return null; // empty / not clean triangle soup
+
+  // normalize to the module seat convention: center X/Z, feet (min Y) at 0, uniform-scale to target height.
+  let minX = Infinity, minY = Infinity, minZ = Infinity, maxX = -Infinity, maxY = -Infinity, maxZ = -Infinity;
+  for(let i = 0; i < POS.length; i += 3){
+    if(POS[i] < minX) minX = POS[i]; if(POS[i] > maxX) maxX = POS[i];
+    if(POS[i + 1] < minY) minY = POS[i + 1]; if(POS[i + 1] > maxY) maxY = POS[i + 1];
+    if(POS[i + 2] < minZ) minZ = POS[i + 2]; if(POS[i + 2] > maxZ) maxZ = POS[i + 2];
+  }
+  const h = maxY - minY;
+  const scale = (h > 1e-4) ? (GLB_TARGET_HEIGHT / h) : 1;
+  const cx = (minX + maxX) / 2, cz = (minZ + maxZ) / 2;
+  for(let i = 0; i < POS.length; i += 3){
+    POS[i] = (POS[i] - cx) * scale;
+    POS[i + 1] = (POS[i + 1] - minY) * scale;
+    POS[i + 2] = (POS[i + 2] - cz) * scale;
+  }
+
+  const triCount = POS.length / 9;
+  const uv = wholeObjectQuadUVs(triCount); // same per-tri grain windows the probe-lib path uses
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute("position", new THREE.Float32BufferAttribute(new Float32Array(POS), 3));
+  geo.setAttribute("color", new THREE.Float32BufferAttribute(new Float32Array(COL), 3));
+  geo.setAttribute("uv", new THREE.Float32BufferAttribute(uv, 2));
+  geo.addGroup(0, POS.length / 3, 0); // one group -> matte/Lambert bucket (slot 0); no CHAN data to bucket by
+  geo.computeVertexNormals(); // non-indexed -> per-face normals -> faceted read under flatShading (D5 look)
+  geo.userData.shared = true; // D7: clearGroup's dispose-skip tag for cached whole-object geometry
+  WHOLE_GEOMETRY_CACHE[cacheKey] = geo;
+  return geo;
+}
+
 // PSX low-res internal render: the renderer's DRAWING BUFFER is sized to this fraction of the
 // canvas's CSS size, then the canvas is stretched back up via CSS with `image-rendering:pixelated`
 // (the cheap robust route the spec calls for — "no postprocessing chain"). 1/3 per the build
@@ -2245,7 +2368,29 @@ function wholeObjectKeyFor(kind, className, recipeSlug){
 // accessor at the bottom of this file share the single source of truth.
 let WHOLE_OBJECT_ENABLED = true;
 
-function figureFor(archetype, seed, tint, silhouette, weapon, recipeSlug, pcRecipe, kind, className){
+/* MODEL-PATH INSTRUMENTATION (Codex diagnosis rec #2, 2026-07-08 — "visual misses stop being a black
+   box"). Every figure resolution tallies WHICH path built it: a bespoke model (exact), a NEAREST_SUB
+   stand-in (alias), the unpainted meeple (blank), a PC/bestiary recipe, or the legacy archetype cuboid
+   — plus loadFail (a real key whose builder wasn't loaded / geometry threw, the invisible failure that
+   used to look like taste). `misses` keys the cuboid/loadFail cases by their render key so "why is THIS
+   a cuboid" is answerable at a glance. Read-only diagnostics — nothing in product logic reads these;
+   exposed on window.Theater.stats.modelPaths + window.Theater.modelPathReport(). */
+const MODEL_PATH_STATS = { exact:0, alias:0, blank:0, glb:0, pcRecipe:0, recipe:0, cuboid:0, loadFail:0, misses:{} };
+function _classifyWholeKey(wKey){
+  if(!wKey) return null;
+  if(wKey.indexOf("blank:") === 0) return "blank";
+  if(WHOLE_OBJECT_REGISTRY[wKey]) return "exact";
+  if(NEAREST_SUB[wKey]) return "alias";
+  return "blank";   // resolveWholeObject's figure/prop floor returned the blank entry
+}
+function _tallyPath(bucket, key){
+  MODEL_PATH_STATS[bucket] = (MODEL_PATH_STATS[bucket] || 0) + 1;
+  if((bucket === "cuboid" || bucket === "loadFail") && key){
+    MODEL_PATH_STATS.misses[key] = (MODEL_PATH_STATS.misses[key] || 0) + 1;
+  }
+}
+
+function figureFor(archetype, seed, tint, silhouette, weapon, recipeSlug, pcRecipe, kind, className, wholeKeyOverride){
   // P1' WHOLE-OBJECT WIRING (docs/P1-WIRING.md §4 step 5): resolved BEFORE the pcRecipe branch — the
   // roster-supersession clause (§8 decision 4: "cuboids demote to auto-fallback... never deleted").
   // Guards, in order, EVERY ONE falling through to the EXISTING chain below (pcRecipe -> bestiary
@@ -2259,10 +2404,44 @@ function figureFor(archetype, seed, tint, silhouette, weapon, recipeSlug, pcReci
   // A resolved figure gets rotation.y = WHOLE_OBJECT_YAW unconditionally (§3-D3 — BASE_ORIENT_YAW
   // never applies on this path; every module is authored facing +z already).
   if(WHOLE_OBJECT_ENABLED){
-    const wKey = wholeObjectKeyFor(kind, className, recipeSlug);
-    const wEntry = wKey && resolveWholeObject(wKey);
-    if(wEntry && typeof wEntry.build === "function"){
-      const geo = wholeObjectGeometryFor(wKey, false);
+    // BATTLE-THEATER T2: an explicit wholeKeyOverride (the reference-shelf / prove-load path,
+    // window.Theater.refFigure.build({wholeKey})) forces a specific registry key straight onto the
+    // whole-object build path, bypassing wholeObjectKeyFor's kind/class/recipe derivation — the only
+    // way to reach a glb test entry that is deliberately not wired to any live unit's key. A falsy
+    // override falls back to the normal derivation, so every existing caller is byte-unchanged.
+    const wKey = wholeKeyOverride || wholeObjectKeyFor(kind, className, recipeSlug);
+    // TABLETOP-UNITS.md §U3: a figure request never comes up empty at the resolveWholeObject step —
+    // pieceKind:"figure" routes a genuine miss to "blank:figure" instead of null (the unpainted
+    // meeple). The cuboid fallback below is reached ONLY if the resolved entry's builder isn't
+    // loaded yet / its geometry build throws (the load-failure path — see resolveWholeObject's own
+    // header comment for the full chain).
+    // Guarded on wKey truthy (unchanged from before this unit): a unit with NO whole-object key at
+    // all (pc/ally with no className, foe with no recipeSlug) is a different situation than "a key
+    // that fails to resolve" — it correctly falls through to the pcRecipe/bestiary-recipe/archetype
+    // chain below, same as always. The blank-piece guarantee applies once we DO have a key to ask
+    // the registry about and it comes back empty.
+    const wEntry = wKey && resolveWholeObject(wKey, "figure");
+    // BATTLE-THEATER T2: a glb-backed entry (carries `.glb`, no `.build`) takes the GLTFLoader path —
+    // its parsed scene (populated on `.glbScene` by loadWholeObjectBuilders) is baked into the SAME
+    // whole-object geometry/material shape as a probe-lib figure, wrapped/seated/yawed identically, and
+    // tallied as its own "glb" resolution. glb and module entries are mutually exclusive (an entry is
+    // one or the other), so this is a peer branch to the module path, not a reorder of it. A glb entry
+    // whose scene hasn't loaded yet / whose bake fails falls through to the shared loadFail tally below.
+    if(wEntry && wEntry.glb && wEntry.glbScene){
+      const geo = wholeObjectGeometryForGlb(wKey, wEntry);
+      if(geo){
+        const mats = wholeObjectMaterialsFor(wEntry);
+        const g = new THREE.Group();
+        g.add(new THREE.Mesh(geo, mats));
+        g.rotation.y = WHOLE_OBJECT_YAW;
+        g.userData.wholeObject = true;
+        g.userData.wholeObjectKey = wKey;
+        g.userData.wholeObjectDiscR = wEntry.discR;
+        _tallyPath("glb", wKey);
+        return g;
+      }
+    } else if(wEntry && typeof wEntry.build === "function"){
+      const geo = wholeObjectGeometryFor(wKey, false, "figure");
       if(geo){
         const mats = wholeObjectMaterialsFor(wEntry);
         const mesh = new THREE.Mesh(geo, mats);
@@ -2272,9 +2451,14 @@ function figureFor(archetype, seed, tint, silhouette, weapon, recipeSlug, pcReci
         g.userData.wholeObject = true;
         g.userData.wholeObjectKey = wKey;
         g.userData.wholeObjectDiscR = wEntry.discR;
+        _tallyPath(_classifyWholeKey(wKey), wKey);
         return g;
       }
     }
+    // a resolved entry we couldn't BUILD (builder not loaded yet / geometry threw) — the invisible
+    // failure. Record it (it still falls through to the recipe/cuboid chain below, which tallies the
+    // path actually taken; this is the separate "would-have-been-a-model" signal).
+    if(wKey && wEntry) _tallyPath("loadFail", wKey);
   }
   // MODEL-GRAMMAR G2: a unit carrying a resolvable recipeSlug renders recipe-driven (§9
   // Decision 1: recipes may improve on the fixed archetypes — new weapon/armor modules from
@@ -2292,9 +2476,13 @@ function figureFor(archetype, seed, tint, silhouette, weapon, recipeSlug, pcReci
   // chain (pcRecipe > bestiary recipe > archetype), not a new code path. A foe never carries
   // pcRecipe (theaterUnitsFrom only stamps it on pc/ally units), so this branch is a pure no-op
   // for every foe figure.
-  if(pcRecipe) return buildFigureFromRecipe(pcRecipe, tint, kind);
+  if(pcRecipe){ _tallyPath("pcRecipe", null); return buildFigureFromRecipe(pcRecipe, tint, kind); }
   const recipe = recipeFor(recipeSlug);
-  if(recipe) return buildFigureFromRecipe(recipe, tint, kind);
+  if(recipe){ _tallyPath("recipe", recipeSlug); return buildFigureFromRecipe(recipe, tint, kind); }
+  // the legacy archetype-builder path — a genuine cuboid (§U3: reached only when there is NO whole-
+  // object key, NO recipe; instrumented so this stops being invisible). `wKey||("kind:"+kind)` names
+  // the miss so the debug report says WHAT couldn't resolve (a foe recipeSlug, a keyless npc, etc.).
+  _tallyPath("cuboid", wholeObjectKeyFor(kind, className, recipeSlug) || ("kind:" + kind));
   const build = ARCHETYPE_BUILDERS[archetype] || ARCHETYPE_BUILDERS.biped;
   const g = build(seed, tint, silhouette, weapon);
   // UNIT 0 (L16): the legacy archetype-builder fallback (no recipe) turns to the SAME convention as
@@ -3090,10 +3278,13 @@ function tileMaterialsFor(t, topColorCache, sideColorCache, colorFor){
   if(hasTex){
     topMat = applyPsxShaderTweaks(new THREE.MeshLambertMaterial({ map: tex, color: topColor })); // texture tinted by palette color
   } else if(t.material){
-    const floorTex = buildFloorCanvasTexture(t.material, t.tint || "#4a5a3c", (t.x || 0) + ":" + (t.z || 0));
-    // near-neutral mesh color so the material's OWN baked color shows through (the env harmony is
-    // already baked into the canvas at 30%); tinting by the full palette color here would re-collapse
-    // every material back to the env hue — the bug this replaces.
+    // t.baseTint (stamped by theaterBoardBuild only on realm-surface floor/elevated tiles) flips the
+    // canvas into realm-led mixing — the authored realm color carries the floor, the material recipe
+    // contributes pattern + a 12% hue nudge (Adam 2026-07-08: red rock reads red, not stock gray).
+    const floorTex = buildFloorCanvasTexture(t.material, t.tint || "#4a5a3c", (t.x || 0) + ":" + (t.z || 0), !!t.baseTint);
+    // near-neutral mesh color so the canvas's OWN baked color shows through (material-led or
+    // realm-led — either way the hue lives in the texture); tinting by the full palette color here
+    // would re-collapse every material back to one hue — the bug this replaces.
     topMat = applyPsxShaderTweaks(floorTex
       ? new THREE.MeshLambertMaterial({ map: floorTex, color: 0xcfcfcf })
       : new THREE.MeshLambertMaterial({ color: topColor })); // buildFloorCanvasTexture failure -> flat color, never throws
@@ -3546,13 +3737,24 @@ function setBoard(data){
     // prop:pillar-broken) off partParams.intact. Miss (gate off, no registry entry, builder not
     // loaded, geometry build throws) falls straight through to the EXISTING Parts.PARTS/generic-box
     // chain below — never a blank zone (§7.1 mutation M5's own contract).
-    if(WHOLE_OBJECT_ENABLED && p.part){
-      const wPropKey = (p.part === "pillar-broken")
-        ? ((p.partParams && p.partParams.intact) ? "prop:pillar-intact" : "prop:pillar-broken")
-        : "prop:" + p.part;
-      const wEntry = resolveWholeObject(wPropKey);
+    // TABLETOP-UNITS.md §U3: pieceKind:"prop" — a resolution miss here resolves to "blank:prop"
+    // (the plain block) instead of null, so the Parts.PARTS/generic-box chain below is reached only
+    // on an actual load failure (gate off / builder not loaded / geometry throws), never a bare miss.
+    if(WHOLE_OBJECT_ENABLED && (p.model || p.part)){
+      // REALM-PROPS-WIRING fix (2026-07-08): a bespoke realm prop carries its own full registry key in
+      // `p.model` ("prop:sentry-turret-mount" etc.) and prefers it — this is what revives the 8 net-new
+      // realm-prop models that were dead when this resolver keyed only off `p.part` (they have no part).
+      // Everything else keeps the exact part-derived key: pillar-broken's intact/broken split, else
+      // "prop:"+part. A `model` miss (unloaded builder / geometry throw) still falls through to the
+      // Parts.PARTS/generic-box chain below, same degrade as a part miss.
+      const wPropKey = p.model
+        ? p.model
+        : ((p.part === "pillar-broken")
+          ? ((p.partParams && p.partParams.intact) ? "prop:pillar-intact" : "prop:pillar-broken")
+          : "prop:" + p.part);
+      const wEntry = resolveWholeObject(wPropKey, "prop");
       if(wEntry && typeof wEntry.build === "function"){
-        const wGeo = wholeObjectGeometryFor(wPropKey, false);
+        const wGeo = wholeObjectGeometryFor(wPropKey, false, "prop");
         if(wGeo){
           const wMats = wholeObjectMaterialsFor(wEntry);
           const wg = new THREE.Group();
@@ -4100,7 +4302,16 @@ loadWholeObjectBuilders(function(){
     if(S.lastBoard) setBoard(S.lastBoard);
     if(S.lastUnits) setUnits(S.lastUnits);
   }
-});
+  // TABLETOP-UNITS.md §U1 seam 5 / TABLETOP-VISION §9.8 (perf budget, "builders preloaded"): flip the
+  // readiness flag now that every distinct whole-object module has settled (loaded or failed) — this
+  // callback only fires once, module-scope, so `ready` only ever goes false->true, never back. A
+  // caller (the U7 harness's warm-perf-loop, later) asserts this before timing trayFrom+setBoard, so
+  // the budget measures a warm loop with every builder already resolved, not the async import tax.
+  // This callback fires asynchronously (after the dynamic import() promises resolve) — by then the
+  // `window.Theater = {...}` assignment below has already run synchronously, so `window.Theater`
+  // always exists here.
+  window.Theater.ready = true;
+}, glbLoadScene); // BATTLE-THEATER T2: inject the GLTFLoader-backed scene loader (keeps theater-figures.js THREE-free)
 
 // T3: THEATER_VERBS + theaterFxFromLedger re-exported on window.Theater so classic-script callers can
 // reach them without their own import statement (ES-module scope is sealed, §2) — mirrors how every
@@ -4113,17 +4324,38 @@ window.Theater = {
   verbs: THEATER_VERBS, fxFromLedger: theaterFxFromLedger
 };
 
+// TABLETOP-UNITS.md §U1 seam 5 — the boot-preload readiness flag: false until loadWholeObjectBuilders'
+// module-scope onSettled callback (above) fires exactly once. A harness/caller asserting §9.8's warm
+// perf budget checks this first (loop timing means nothing while builders are still async-loading).
+window.Theater.ready = false;
+
 // THEATER-NEXT §3.2 step 5 — read-only diagnostics (nothing in product code reads these); moved
 // VALUES, not labels, so the battle-gate rig's acceptance can prove both the rebuild path and the
 // skip path actually fire (M-11..M-14).
 window.Theater.stats = { boardBuilds: 0, unitBuilds: 0, boardSkips: 0, unitSkips: 0 };
 
+// MODEL-PATH INSTRUMENTATION (2026-07-08): the live figure-resolution tally + a console-friendly report.
+// `window.Theater.stats.modelPaths` is the raw counter; modelPathReport() returns a summary with the
+// cuboid/loadFail miss keys sorted by frequency — the "which foes are still stand-ins/broken" answer.
+window.Theater.stats.modelPaths = MODEL_PATH_STATS;
+window.Theater.modelPathReport = function(){
+  const m = MODEL_PATH_STATS;
+  // BATTLE-THEATER T2: glb is a resolved-model path (like exact/alias), so it counts toward the total.
+  const total = m.exact + m.alias + m.blank + m.glb + m.pcRecipe + m.recipe + m.cuboid;
+  const missList = Object.keys(m.misses).map(k => ({ key: k, count: m.misses[k] })).sort((a,b)=>b.count-a.count);
+  return { total, exact: m.exact, alias: m.alias, blank: m.blank, glb: m.glb, pcRecipe: m.pcRecipe,
+    recipe: m.recipe, cuboid: m.cuboid, loadFail: m.loadFail, misses: missList };
+};
+
 // REFERENCE-SHELF seam (docs/BESTIARY-MANUAL.md "The figure seam"): build/dispose one standalone
 // figure outside the battle stage — the Monster Manual's live-3D grid/detail viewer calls this
 // instead of reaching into figureFor/clearGroup directly (both module-private). Purely additive:
 // no existing Theater method changes shape. `o` = {archetype,seed,tint,silhouette,weapon,recipeSlug}.
+// BATTLE-THEATER T2: `o.wholeKey` (optional) forces a specific whole-object registry key onto the
+// whole-object build path (threaded to figureFor's wholeKeyOverride param) — the prove-load / gate
+// entry point for the glb seam, e.g. window.Theater.refFigure.build({ wholeKey: "test:grunt-glb" }).
 window.Theater.refFigure = {
-  build: function(o){ return figureFor(o.archetype, o.seed, o.tint, o.silhouette, o.weapon, o.recipeSlug, null, "foe", null); },
+  build: function(o){ return figureFor(o.archetype, o.seed, o.tint, o.silhouette, o.weapon, o.recipeSlug, null, "foe", null, o.wholeKey); },
   dispose: function(group){ clearGroup(group); }
 };
 

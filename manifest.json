@@ -900,6 +900,7 @@
         "codexEvictSoft",
         "codexFullRecord",
         "codexHereNowIds",
+        "codexAmbientPresenceFor",
         "codexRosterLine",
         "codexDigest",
         "codexPlayerView",
@@ -1898,7 +1899,11 @@
         "THEATER_PROP_KEYWORD_RULES",
         "theaterPropForText",
         "theaterSegmentFeatureText",
+        "theaterStampRenderProfile",
+        "theaterIdleBoardFrom",
+        "trayFrom",
         "theaterBoardFrom",
+        "theaterBoardBuild",
         "theaterArchetypeFor",
         "theaterClassSilhouetteFor",
         "theaterWeaponForClass",
@@ -1909,16 +1914,27 @@
         "THEATER_SHAPE_FALLBACK_BASE",
         "THEATER_SHAPE_VALID_SIZES",
         "theaterPartVocabulary",
-        "resolveShapeHint"
+        "resolveShapeHint",
+        "theaterCastPcRefFrom",
+        "castFrom",
+        "THEATER_ATTITUDE_PLACEMENT",
+        "THEATER_ATTITUDE_PLACEMENT_DEFAULT",
+        "theaterAttitudePlacementFor",
+        "arrangeTableau"
       ],
       "callTimeDeps": [
         "cmZoneGrid",
         "cmSeedHash",
         "PART_NAMES",
         "realmRenderProfile",
-        "gradeColor"
+        "gradeColor",
+        "prepEligibleCompanionCreatures",
+        "codexHereNowIds",
+        "codexOf",
+        "codexGetAttitude",
+        "codexAmbientPresenceFor"
       ],
-      "desc": "BATTLE-THEATER T1 (docs/BATTLE-THEATER.md §1/§7) + T1.5 PSX grit pass + PASS 2 archetypes/silhouettes (2026-07-03, \"get the shapes covered\") + MODEL-GRAMMAR G2 §4b shape-hint resolver + REALM-RENDER-STYLE.md v1 (2026-07-05: theaterBoardFrom grades every tile's tint through realmRenderProfile(opts.realms)/gradeColor — data/realms.js, read defensively via typeof guards like PART_NAMES — and passes `realms` through on its return so the GL layer can grade the void/light colors it owns off the identical profile; absent/empty opts.realms is a byte-identical passthrough) — the PURE data layer feeding the three.js battle stage. theaterBoardFrom(segment, scene, opts) re-projects the existing zone grid (reuses engine.combat's cmZoneGrid, never duplicates the dims parse) into a 3x3-tiles-per-zone board: {tiles:[{x,z,h,kind,tint,altTop,zone}], props:[{kind,zone,x,z,level}], grid, env}. opts.env (default \"dungeon\") selects a desaturated-earth THEATER_ENV_PALETTE entry (dungeon/urban/wilderness/breach — theaterPaletteFor) that drives every tint: floor top/side/altTop (world-parity checker alternation on plain floor only), water/scorch hazard tints, elevated accent, cover prop tint. elevZones raise a patch THEATER_STEP; scene.hazardZones tint (and, for water/pit-ish free-text kinds, sink) their patch; scene.cover/scene.zoneCover zones get a cover prop entry. theaterUnitsFrom(combat) reads combat.grid + combat.pc/allies/foes into units[] {id,kind,archetype,x,z,down,fled,silhouette?,weapon} — archetype is a creatureType-x-size(-x-name) -> one of 9 fallback-figure buckets (biped/quadruped/flyer/serpent/swarm/giant/ooze/arachnid/amorphous-horror, theaterArchetypeFor): `giant` type or huge/gargantuan-sized biped-mapped types (minus an animal-shaped name-keyword guard, THEATER_QUAD_WORD_RX) -> giant; a spider-keyword name override (THEATER_ARACHNID_WORD_RX) -> arachnid regardless of type; `ooze` type -> ooze; `aberration` type -> amorphous-horror. PC/allies also carry `silhouette` (theaterClassSilhouetteFor off pcRef.class/a.class -> martial/ranger/caster/cleric) and `weapon` derived from it (theaterWeaponForClass); foes carry `weapon` from a name/action-text keyword scan (theaterWeaponForFoe, THEATER_WEAPON_WORD_RX — \"none\" when no weapon word is found). Multi-occupant zones get a deterministic seeded offset (theaterWithinZoneOffset, same cmSeedHash discipline as combat.js's cmPlaceFoeLane — never Math.random). MODEL-GRAMMAR G2 §4b: resolveShapeHint(shape) validates a DM-authored off-bestiary creature shape hint ({base,size,modules,channels,stance}) against the real part vocabulary (data/model-recipes.js's generated PART_NAMES global — read defensively, never imported, keeping the classic/module boundary one-way) — an unknown base drops to THEATER_SHAPE_FALLBACK_BASE (\"torso-biped\"), an unknown module part or anchor is omitted; every drop is returned in gaps[] for the caller (src/world/codex.js's codexAdd, the sole state owner) to write to the shape-gaps ledger line — this file itself never touches GS/w/U/ledger. Zero DOM/GL — the GL half (src/ui/theater-boot.js, an ES module) only consumes this file's output. Headless-testable (dev/verify-theater-data.mjs, dev/verify-model-grammar.mjs). Added 2026-07-03 (theater-core T1); extended 2026-07-03 (theater-psx-grit T1.5, theater-archetypes-2 pass 2, MODEL-GRAMMAR G2 shape-hint resolver)."
+      "desc": "BATTLE-THEATER T1 (docs/BATTLE-THEATER.md §1/§7) + T1.5 PSX grit pass + PASS 2 archetypes/silhouettes (2026-07-03, \"get the shapes covered\") + MODEL-GRAMMAR G2 §4b shape-hint resolver + REALM-RENDER-STYLE.md v1 (2026-07-05: theaterBoardFrom grades every tile's tint through realmRenderProfile(opts.realms)/gradeColor — data/realms.js, read defensively via typeof guards like PART_NAMES — and passes `realms` through on its return so the GL layer can grade the void/light colors it owns off the identical profile; absent/empty opts.realms is a byte-identical passthrough) — the PURE data layer feeding the three.js battle stage. theaterBoardFrom(segment, scene, opts) re-projects the existing zone grid (reuses engine.combat's cmZoneGrid, never duplicates the dims parse) into a 3x3-tiles-per-zone board: {tiles:[{x,z,h,kind,tint,altTop,zone}], props:[{kind,zone,x,z,level}], grid, env}. opts.env (default \"dungeon\") selects a desaturated-earth THEATER_ENV_PALETTE entry (dungeon/urban/wilderness/breach — theaterPaletteFor) that drives every tint: floor top/side/altTop (world-parity checker alternation on plain floor only), water/scorch hazard tints, elevated accent, cover prop tint. elevZones raise a patch THEATER_STEP; scene.hazardZones tint (and, for water/pit-ish free-text kinds, sink) their patch; scene.cover/scene.zoneCover zones get a cover prop entry. theaterUnitsFrom(combat) reads combat.grid + combat.pc/allies/foes into units[] {id,kind,archetype,x,z,down,fled,silhouette?,weapon} — archetype is a creatureType-x-size(-x-name) -> one of 9 fallback-figure buckets (biped/quadruped/flyer/serpent/swarm/giant/ooze/arachnid/amorphous-horror, theaterArchetypeFor): `giant` type or huge/gargantuan-sized biped-mapped types (minus an animal-shaped name-keyword guard, THEATER_QUAD_WORD_RX) -> giant; a spider-keyword name override (THEATER_ARACHNID_WORD_RX) -> arachnid regardless of type; `ooze` type -> ooze; `aberration` type -> amorphous-horror. PC/allies also carry `silhouette` (theaterClassSilhouetteFor off pcRef.class/a.class -> martial/ranger/caster/cleric) and `weapon` derived from it (theaterWeaponForClass); foes carry `weapon` from a name/action-text keyword scan (theaterWeaponForFoe, THEATER_WEAPON_WORD_RX — \"none\" when no weapon word is found). Multi-occupant zones get a deterministic seeded offset (theaterWithinZoneOffset, same cmSeedHash discipline as combat.js's cmPlaceFoeLane — never Math.random). MODEL-GRAMMAR G2 §4b: resolveShapeHint(shape) validates a DM-authored off-bestiary creature shape hint ({base,size,modules,channels,stance}) against the real part vocabulary (data/model-recipes.js's generated PART_NAMES global — read defensively, never imported, keeping the classic/module boundary one-way) — an unknown base drops to THEATER_SHAPE_FALLBACK_BASE (\"torso-biped\"), an unknown module part or anchor is omitted; every drop is returned in gaps[] for the caller (src/world/codex.js's codexAdd, the sole state owner) to write to the shape-gaps ledger line — this file itself never touches GS/w/U/ledger. Zero DOM/GL — the GL half (src/ui/theater-boot.js, an ES module) only consumes this file's output. Headless-testable (dev/verify-theater-data.mjs, dev/verify-model-grammar.mjs). Added 2026-07-03 (theater-core T1); extended 2026-07-03 (theater-psx-grit T1.5, theater-archetypes-2 pass 2, MODEL-GRAMMAR G2 shape-hint resolver). TABLETOP-UNITS.md §U4 (2026-07-08): castFrom(w,source)->units[] + arrangeTableau(units,arrangement)->units[] — the cast tableau (PC/companions/contacted-here-NPCs/soft-ambients) + the 5-way mechanical arrangement grammar (facing-pair/ring/march/shopfront/vignette), attitude-driven distance/facing inside facing-pair/ring only. Combat's theaterUnitsFrom path is untouched."
     },
     {
       "id": "ui.blockwright",

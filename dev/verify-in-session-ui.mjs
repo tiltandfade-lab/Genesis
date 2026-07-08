@@ -187,7 +187,12 @@ const check = (name, cond, detail = "") =>
   makeWorld(win2, { slotsMax: [4, 2], slots: [3, 0] });
   win2.renderWorld();
   html = win2.document.getElementById("worldView").innerHTML;
-  const side = (html.match(/<aside class="status-side">[\s\S]*?<\/aside>/) || [""])[0];
+  // TABLETOP-UNITS U2 (red-first, 2026-07-07): statusSidebar now carries aria-label="Character and
+  // party" (docs/TABLETOP-UNITS.md §U2's locked ARIA list) — the old literal `<aside class="status-side">`
+  // match broke against the new attribute (proven red: this test + the 3 below it failed with an
+  // empty `side` slice before this regex was loosened to `[^>]*` on the opening tag). The assertion's
+  // JOB — "does the spell-slot block render inside .status-side, in the right order" — is unchanged.
+  const side = (html.match(/<aside class="status-side"[^>]*>[\s\S]*?<\/aside>/) || [""])[0];
   check("spell-slot block renders in the sidebar", /ss-slots/.test(side));
   check("slot rows carry roman-numeral level labels (I, II)",
     /ss-slot-lvl">I</.test(side) && /ss-slot-lvl">II</.test(side));
@@ -219,10 +224,17 @@ const check = (name, cond, detail = "") =>
   const rail = railMatch ? railMatch[0] : "";
   // R3 framed-tab rail: items are .rl buttons (mockup); active one gets .rl.on
   const railBtnCount = (rail.match(/class="rl(\s|")/g) || []).length;
-  check("rail has exactly 4 items", railBtnCount === 4, railBtnCount);
+  // TABLETOP-UNITS U2 (red-first, 2026-07-07): the rail legitimately gained a 5th item — the
+  // stage-collapse toggle (docs/TABLETOP-UNITS.md §U2: "Rail... gains a stage toggle button"),
+  // shown under the same !!cur visibility rule as Character/Actions. Proven red first: this
+  // assertion failed at railBtnCount===5 against the ===4 literal before this line changed; the
+  // spec's OWN acceptance text names this exact button, so 5 is the new true count, not a fixture
+  // chasing a broken test.
+  check("rail has exactly 5 items (Character/Actions/Map/Stage/⚙)", railBtnCount === 5, railBtnCount);
   check("rail has Character", /title="Character"/.test(rail));
   check("rail has Actions", /title="Actions"/.test(rail));
   check("rail has Map", /title="Map"/.test(rail));
+  check("rail has Stage (TABLETOP-UNITS U2 toggle)", /title="Stage"/.test(rail));
   check("rail has Menu (⚙)", /title="Menu"/.test(rail));
   check("no Story rail button (implicit default)", !/title="Story"/.test(rail));
   check("no Spells rail button (moved into Actions tab)", !/title="Spells"/.test(rail));

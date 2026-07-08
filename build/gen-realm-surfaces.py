@@ -3,11 +3,17 @@
 
 REALM-SURFACES-WIRING.md §1: 88 realm floor surfaces (docs/REALM-SURFACES-DRAFT.md's authored
 table), one 8-entry list per realm keyed data/realms.js's REALM_IDS. Each entry:
-  {name, base, tint, where, summary}
+  {name, base, tint, baseTint, where, summary}
 `base` MUST be a key that exists in src/ui/theater-boot.js's FLOOR_MATERIAL_RECIPES (validated
 below by parsing the real source, never hand-copied) — a realm surface picking an unbuilt base
 would render flat, so this is a hard build-time gate, not a lint warning.
 `where` is normalized to interior|exterior|any.
+`baseTint` (Adam 2026-07-08 "floors are drab as hell" ruling — the REALM-SURFACES-WIRING §3
+decision-2 tint funnel, landed): the surface's AUTHORED "#rrggbb" floor color, derived from its
+own prose `tint` line in the realm's key and authored to read right UNDER the realm's
+realmRenderProfile grade (data/realms.js). Required on every surface; validated as a real hex
+below — a realm floor with no color would fall back to the generic env grays this field exists
+to kill.
 
 Mirrors build/gen-bestiary.py's discipline: edit the source json, re-run this, never hand-edit
 the generated data/realm-surfaces.js.
@@ -94,6 +100,8 @@ def validate(source, recipe_keys, realm_ids):
                 errors.append(f"{realm}/{name}: where '{where}' not one of {sorted(VALID_WHERE)}")
             if not s.get("tint"):
                 errors.append(f"{realm}/{name}: missing tint")
+            if not re.fullmatch(r"#[0-9a-f]{6}", s.get("baseTint") or ""):
+                errors.append(f"{realm}/{name}: baseTint '{s.get('baseTint')}' is not a lowercase #rrggbb hex")
             if not s.get("summary"):
                 errors.append(f"{realm}/{name}: missing summary")
     missing_realms = set(realm_ids) - seen_realms
@@ -126,13 +134,15 @@ def main():
     header = (
         "/* GENESIS DATA (generated) — data/realm-surfaces.js\n"
         "   REALM-SURFACES-WIRING.md §1 — per-realm floor surface vocabulary (docs/REALM-SURFACES-DRAFT.md's\n"
-        "   88-surface draft): REALM_SURFACES[realmId] = [{name,base,tint,where,summary}], 8 entries per\n"
-        "   realm across the 11 realms (data/realms.js). `base` is a real src/ui/theater-boot.js\n"
+        "   88-surface draft): REALM_SURFACES[realmId] = [{name,base,tint,baseTint,where,summary}], 8 entries\n"
+        "   per realm across the 11 realms (data/realms.js). `base` is a real src/ui/theater-boot.js\n"
         "   FLOOR_MATERIAL_RECIPES key (validated at generation time by build/gen-realm-surfaces.py — never\n"
-        "   hand-copied); `where` is interior|exterior|any. Consumed by theaterFloorMaterial's opts.realms\n"
-        "   seam (src/engine/theater-data.js) to pick a breach room's floor from its active realm instead of\n"
-        "   the generic 12-material pool. GENERATED from dev/model-qa/realm-surfaces.json — never hand-edit;\n"
-        "   edit the source json + re-run `python3 build/gen-realm-surfaces.py`. Added 2026-07-04.\n"
+        "   hand-copied); `where` is interior|exterior|any; `baseTint` is the surface's authored '#rrggbb'\n"
+        "   floor color (Adam 2026-07-08 — the §3 decision-2 tint funnel: theaterApplySurfaceTint reads it,\n"
+        "   floor tiles carry it instead of the generic env grays). Consumed by theaterFloorMaterial's\n"
+        "   opts.realms seam (src/engine/theater-data.js) to pick a breach room's floor from its active realm\n"
+        "   instead of the generic 12-material pool. GENERATED from dev/model-qa/realm-surfaces.json — never\n"
+        "   hand-edit; edit the source json + re-run `python3 build/gen-realm-surfaces.py`. Added 2026-07-04.\n"
         "   Classic <script> (shared global scope); defines REALM_SURFACES. */\n"
     )
     with open(OUT, "w", encoding="utf-8") as f:

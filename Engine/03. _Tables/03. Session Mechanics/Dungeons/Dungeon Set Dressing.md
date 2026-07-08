@@ -8,7 +8,7 @@ player_facing: reveal
 voice_critical: true
 ---
 
-| d100 | Set Dressing (object/feature) |
+| d108 | Set Dressing (object/feature) |
 |---:|--------------------------------|
 | 1 | Splintered crate stack, one plank half-pried loose. |
 | 2 | Rotting sack pile, twine cut and retied. |
@@ -110,4 +110,12 @@ voice_critical: true
 | 98 | A stone “plug” in the wall, edges too perfect. |
 | 99 | A thin wire loop near ankle height, almost invisible. |
 | 100 | A single object that feels placed for you: a coin, a candle, a note, a key-shaped void. |
+| 101 | A scribe’s desk shoved against the wall, one drawer splintered where it was forced. |
+| 102 | A collapsed bookshelf, its lower shelves still crammed with swollen, unreadable tomes. |
+| 103 | A cold hearth set into the wall, back stones cracked and glazed black with old soot. |
+| 104 | A low stone bier, its slab scored where something heavy was dragged off and away. |
+| 105 | A scrap heap of bent fittings and snapped tools, sorted into piles by no one still here. |
+| 106 | An iron cage tipped on its side, the door wrenched half-open from within. |
+| 107 | A reading lectern on a canted base, its slope stained with dried rivers of ink. |
+| 108 | A thick rug rolled and stood against the corner, damp-heavy and sour to the nose. |
 ^dungeon-set-dressing

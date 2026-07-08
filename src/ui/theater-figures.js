@@ -122,6 +122,22 @@ const WHOLE_OBJECT_REGISTRY = {
   "blank:figure": { module: "../../dev/model-qa/creatures/blank-figure.js", fn: "buildBlankFigure", discR: 0.42 },
   "blank:prop":   { module: "../../dev/model-qa/creatures/blank-prop.js",   fn: "buildBlankProp",   discR: 0.42 },
 
+  // ═══ BATTLE-THEATER T2 — the GLTFLoader/.glb model-loading SEAM (docs/BATTLE-THEATER.md §7,
+  //     vendor/three/README.md). A `glb`-shaped entry ({ glb, discR } instead of { module, fn })
+  //     declares a Blender-authored .glb model that loads THROUGH GLTFLoader at runtime and renders
+  //     via the SAME PS1 material treatment (faceted / vertex-colored / grain-atlas / dither-snap) +
+  //     base-disc seating as every hand-authored probe-lib figure — an import routed through the
+  //     shipped look, not a glossy passthrough. The `glb` path string uses the SAME convention as a
+  //     `module` path: relative to THIS file (src/ui/), resolved against import.meta.url by
+  //     loadWholeObjectBuilders below. A glb entry carries NO `module`/`fn` (so the existing dynamic-
+  //     import loader skips it) and NO `build` (so figureFor's module branch skips it); it gets a
+  //     `.glbScene` populated by the injected glbLoader instead, and figureFor's glb branch keys off
+  //     the presence of `.glb`. This first seam registers exactly one test model (grunt.glb, a low-
+  //     poly humanoid); it is deliberately NOT wired to any real unit's wholeObjectKeyFor output, so
+  //     it never renders in a live battle — it is reachable only by an EXPLICIT-key call
+  //     (window.Theater.refFigure.build({ wholeKey: "test:grunt-glb" })) for the browser prove-load / gate.
+  "test:grunt-glb": { glb: "../../dev/model-qa/glb/grunt.glb", discR: 0.42 },
+
   // -------- props: keyed "prop:<theater-data part name>" (src/engine/theater-data.js's
   // THEATER_PROP_KEYWORD_RULES vocabulary — see that file's own rule list for every `part` string) -----
   "prop:statue-figure": { module: "../../dev/model-qa/creatures/prop-statue.js", fn: "buildStatue",       discR: 0.42 },
@@ -751,14 +767,34 @@ export function resolveWholeObject(key, pieceKind){
    itself is the only async boundary here. Idempotent-safe to call more than once (each call re-walks
    the registry and re-populates `build` fields; harmless, just redundant work) — theater-boot.js's
    own module-scope call site (§4 step 8) only calls it once. */
-export function loadWholeObjectBuilders(onSettled){
+/* BATTLE-THEATER T2 — the optional `glbLoader` param (dependency injection that keeps THIS file
+   THREE-free / Node-importable). A glb-shaped entry ({ glb, discR }) can't be loaded by dynamic
+   import() (it's a binary asset, not an ES module), and its parse needs THREE + GLTFLoader — which
+   this module must never import (its whole reason to exist is to stay importable by the plain-ESM
+   harness with no DOM/THREE stub, per the header). So theater-boot.js (the one ES-module boundary
+   that already owns THREE) passes a `glbLoader(url) -> Promise<scene>` here; this function only
+   resolves each glb entry's path (relative to THIS file, matching the `module` convention) to an
+   absolute URL via import.meta.url and hands it off, stashing the resolved scene on `entry.glbScene`.
+   Each glb load is wrapped in its own catch exactly like a module import (a failed/absent glb leaves
+   the entry with no `.glbScene` -> figureFor's glb branch skips it -> cuboid fallback, never rejects
+   the batch) and counts toward `remaining`, so onSettled still fires exactly once after EVERY module
+   AND glb has settled (preserving the same-payload replay + `ready` semantics at the call site). When
+   `glbLoader` is omitted (the Node harness never passes one), glb entries are skipped entirely — they
+   stay unresolved, byte-identical to how an unregistered key behaves, so the harness is unaffected and
+   this stays a purely additive seam. */
+export function loadWholeObjectBuilders(onSettled, glbLoader){
   const byModule = {};
+  const glbEntries = [];
   Object.keys(WHOLE_OBJECT_REGISTRY).forEach(function(key){
     const entry = WHOLE_OBJECT_REGISTRY[key];
+    if(entry.glb){ glbEntries.push(entry); return; } // glb entries carry no `module` — loaded separately below
     (byModule[entry.module] || (byModule[entry.module] = [])).push(entry);
   });
   const modulePaths = Object.keys(byModule);
-  let remaining = modulePaths.length;
+  // glb entries only join the settle count when a loader is actually provided (browser path); with no
+  // loader (Node harness) they contribute 0 and are never touched — same as an unregistered key.
+  const glbToLoad = (typeof glbLoader === "function") ? glbEntries : [];
+  let remaining = modulePaths.length + glbToLoad.length;
   if(remaining === 0){ if(typeof onSettled === "function") onSettled(); return; }
   const settleOne = function(){
     remaining--;
@@ -774,6 +810,19 @@ export function loadWholeObjectBuilders(onSettled){
     }).catch(function(){
       // a broken/missing module: every entry sharing this path simply stays unresolved (no `build`
       // populated) — never rejects the batch, per M2's mutation-test contract (§7.1).
+      settleOne();
+    });
+  });
+  glbToLoad.forEach(function(entry){
+    let url;
+    try { url = new URL(entry.glb, import.meta.url).href; }
+    catch(e){ settleOne(); return; } // an unresolvable path — skip cleanly, entry stays unresolved
+    Promise.resolve(glbLoader(url)).then(function(scene){
+      if(scene) entry.glbScene = scene;
+      settleOne();
+    }).catch(function(){
+      // a broken/missing/unparsable .glb: entry stays without `.glbScene` -> figureFor's glb branch
+      // skips it -> cuboid fallback (same total-function discipline as the module catch above).
       settleOne();
     });
   });

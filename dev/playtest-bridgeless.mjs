@@ -377,12 +377,30 @@ function cmdPatch(dir, events) {
 // the real engine would on a proper move: departure-stamp the node being left, advance the clock,
 // move currentNodeId + seeNode, and run worldTurn("revisit") so drift resolves lazily on arrival.
 // Usage: advance --dir D [--minutes N] [--toNode "<node name>"]
+//        advance --dir D --toClock "D:HH:MM"   (HQ3-D4: absolute set, backward-allowed, harness-only)
+//        advance --dir D --toBand dawn|noon|dusk|night   (HQ3-D4: canonical band minute, keeps day)
+// toClock/toBand are an ABSOLUTE set via direct assignment — NOT advanceClock (which fires wake
+// logic; a backward set must not). Mutually exclusive with --minutes: if either is given, --minutes
+// is ignored (L14/L15, docs/HQ3-D-STATE-CODEX-HARNESS.md).
 // ============================================================================
-function cmdAdvance(dir, minutes, toNodeName) {
+const BAND_MIN = { dawn: 360, noon: 720, dusk: 1080, night: 1320 }; // L15 (state.js:59 timeOfDay bands)
+function cmdAdvance(dir, minutes, toNodeName, toClock, toBand) {
   const win = boot(load(dir));
   const w = win.activeWorld();
   const before = { day: w.clock.day, min: w.clock.min, node: win.nodeName(w, w.currentNodeId) };
-  if (minutes) win.advanceClock(w, minutes);
+  let setAbsolute = false;
+  if (toClock) {
+    const m = /^(\d+):(\d{1,2}):(\d{2})$/.exec(String(toClock).trim());
+    if (!m) { out({ ok: false, reason: "bad --toClock (want \"D:HH:MM\")", got: toClock }); return; }
+    const day = +m[1], hh = +m[2], mm = +m[3];
+    if (hh > 23 || mm > 59) { out({ ok: false, reason: "HH 0-23, MM 0-59", got: toClock }); return; }
+    w.clock.day = day; w.clock.min = hh * 60 + mm; setAbsolute = true;
+  } else if (toBand) {
+    const b = String(toBand).trim().toLowerCase();
+    if (BAND_MIN[b] == null) { out({ ok: false, reason: "bad --toBand (dawn|noon|dusk|night)", got: toBand }); return; }
+    w.clock.min = BAND_MIN[b]; setAbsolute = true; // keeps current day (L15)
+  }
+  if (!setAbsolute && minutes) win.advanceClock(w, minutes); // existing relative path unchanged
   let moved = null;
   if (toNodeName) {
     const nodes = w.map.nodes;
@@ -412,7 +430,7 @@ try {
   else if (cmd === "playerview") cmdPlayerView(args.dir);
   else if (cmd === "dmstate") cmdDmState(args.dir);
   else if (cmd === "patch") cmdPatch(args.dir, readJSON(args.events));
-  else if (cmd === "advance") cmdAdvance(args.dir, args.minutes ? parseInt(args.minutes, 10) : 0, args.toNode || null);
+  else if (cmd === "advance") cmdAdvance(args.dir, args.minutes ? parseInt(args.minutes, 10) : 0, args.toNode || null, args.toClock || null, args.toBand || null);
   else { process.stderr.write("unknown command: " + cmd + "\n"); process.exit(2); }
   // NOTE: no process.exit(0) here — each cmd* ends in out(), which exits after flushing stdout.
 } catch (e) {

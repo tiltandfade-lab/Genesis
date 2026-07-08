@@ -1453,7 +1453,16 @@
         "rollLoot",
         "NPC_BREACH_TOUCH",
         "touchedNpcChance",
-        "rollNpcBreachTouch"
+        "rollNpcBreachTouch",
+        "COHERENCE_TIERS",
+        "COHERENCE_CURVE",
+        "COHERENCE_GATED_ATOMS",
+        "COHERENCE_LEVER_POOL",
+        "coherenceTemperature",
+        "pickCoherenceTier",
+        "pickCoherence",
+        "coherencePickN",
+        "coherenceAtomGate"
       ],
       "callTimeDeps": [
         "rollTable",

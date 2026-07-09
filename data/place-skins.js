@@ -19,9 +19,18 @@
    unit 3) map a spine archetypeKey to the ambient scene-bucket vocabulary src/world/
    prep.js already owns (shrine|shop|tavern|market) — hand-maintained in this generator,
    NOT parsed from the markdown source (a scene-bucket is an engine population concern).
+   SCENE_DRESSING_BY_ARCHETYPE/SCENE_DRESSING_DEFAULT/SURFACE_TAG_BASES/
+   sceneDressingForPlace (PLACE-GEN ADDENDUM §7 unit 8) map a spine archetypeKey to
+   {propNames,surface,light} dressing — propNames matched by name against realmPropsFor's
+   real prop pool (missing skipped, never a hole), surface an abstract tag resolved against
+   REALM_SURFACES' real material vocabulary, light the archetype's authored default off
+   THEATER_LIGHT_TABLE's own vocabulary. Hand-maintained in this generator, NOT parsed from
+   the markdown source (dressing is an engine population concern, same as the scene-bucket
+   map above).
    Classic <script> (shared global scope); defines PLACE_SPINE + PLACE_SKINS +
    PLACE_SPACE_CELLS + placeForRealm + SCENE_BUCKET_BY_ARCHETYPE + SCENE_BUCKET_DEFAULT +
-   sceneBucketForArchetype. */
+   sceneBucketForArchetype + SCENE_DRESSING_BY_ARCHETYPE + SCENE_DRESSING_DEFAULT +
+   SURFACE_TAG_BASES + sceneDressingForPlace. */
 const PLACE_SPINE=[
  {
   "key": 1,
@@ -1011,6 +1020,269 @@ const SCENE_BUCKET_BY_ARCHETYPE={
  "22": "market"
 };
 const SCENE_BUCKET_DEFAULT="shop";
+const SCENE_DRESSING_BY_ARCHETYPE={
+ "1": {
+  "propNames": [
+   "Long Bar",
+   "Rain Barrel",
+   "Wandering Torch",
+   "Overflowing Trash Can"
+  ],
+  "surface": "street",
+  "light": "lamplit"
+ },
+ "2": {
+  "propNames": [
+   "Long Bar",
+   "Grog Barrel Row",
+   "Rolling Field Kitchen",
+   "Rain Barrel"
+  ],
+  "surface": "interior-wood",
+  "light": "lamplit"
+ },
+ "3": {
+  "propNames": [
+   "Munitions Crate",
+   "Trash Can Row",
+   "Overflowing Trash Can",
+   "Rolling Field Kitchen"
+  ],
+  "surface": "street",
+  "light": "daylit"
+ },
+ "4": {
+  "propNames": [
+   "Case-File Desk",
+   "Star-Chart Table",
+   "Cinderblock Stack",
+   "Wandering Torch"
+  ],
+  "surface": "interior-stone",
+  "light": "lamplit"
+ },
+ "5": {
+  "propNames": [
+   "Case-File Desk",
+   "Brig Cage",
+   "Cinderblock Stack"
+  ],
+  "surface": "interior-stone",
+  "light": "torchlit"
+ },
+ "6": {
+  "propNames": [
+   "Offertory Table",
+   "Weeping Font",
+   "Guttering Grave-Torch",
+   "Reliquary Crate Stack"
+  ],
+  "surface": "interior-stone",
+  "light": "torchlit"
+ },
+ "7": {
+  "propNames": [
+   "Embalming Table",
+   "Rain Barrel",
+   "Duckboard Walkway"
+  ],
+  "surface": "interior-wood",
+  "light": "lamplit"
+ },
+ "8": {
+  "propNames": [
+   "Scrap Heap",
+   "Cinderblock Stack",
+   "Munitions Crate Stack",
+   "Slag Heap"
+  ],
+  "surface": "interior-metal",
+  "light": "torchlit"
+ },
+ "9": {
+  "propNames": [
+   "Scrap Heap",
+   "Rust Drum",
+   "Munitions Crate",
+   "Cinderblock Stack"
+  ],
+  "surface": "interior-wood",
+  "light": "lamplit"
+ },
+ "10": {
+  "propNames": [
+   "Munitions Crate Stack",
+   "Ballast Crate Stack",
+   "Reliquary Crate Stack",
+   "Rust Drum"
+  ],
+  "surface": "interior-wood",
+  "light": "dark"
+ },
+ "11": {
+  "propNames": [
+   "Duckboard Walkway",
+   "Rain Barrel",
+   "Trash Can Row"
+  ],
+  "surface": "interior-wood",
+  "light": "lamplit"
+ },
+ "12": {
+  "propNames": [
+   "Rain Barrel",
+   "Cobweb Mass",
+   "Overflowing Trash Can"
+  ],
+  "surface": "interior-wood",
+  "light": "dark"
+ },
+ "13": {
+  "propNames": [
+   "Rift Grate",
+   "Glyph-Warded Grate",
+   "Storm Drain Grate"
+  ],
+  "surface": "street",
+  "light": "torchlit"
+ },
+ "14": {
+  "propNames": [
+   "Storm Drain Grate",
+   "Coiled Mooring Rope",
+   "Wandering Torch",
+   "Cracked Water Cistern"
+  ],
+  "surface": "street",
+  "light": "daylit"
+ },
+ "15": {
+  "propNames": [
+   "Cobweb Mass",
+   "Rust Drum",
+   "Scrap Heap",
+   "Rotted Coffin"
+  ],
+  "surface": "earth",
+  "light": "dark"
+ },
+ "16": {
+  "propNames": [
+   "Long Bar",
+   "Grog Barrel Row",
+   "Piled Party Favors"
+  ],
+  "surface": "interior-wood",
+  "light": "lamplit"
+ },
+ "17": {
+  "propNames": [
+   "Sundered Column Drum",
+   "Cobweb Mass",
+   "Rotted Coffin",
+   "Collapsed Trench Wall"
+  ],
+  "surface": "earth",
+  "light": "dark"
+ },
+ "18": {
+  "propNames": [
+   "Stacked Corpse Cairn",
+   "Cattle Skull Pile",
+   "Rotted Coffin",
+   "Guttering Grave-Torch"
+  ],
+  "surface": "earth",
+  "light": "moonlit"
+ },
+ "19": {
+  "propNames": [
+   "Wandering Torch",
+   "Cinderblock Stack",
+   "Storm Drain Grate"
+  ],
+  "surface": "interior-stone",
+  "light": "torchlit"
+ },
+ "20": {
+  "propNames": [
+   "Refuse Drift",
+   "Cobweb Mass",
+   "Cattle Skull Pile"
+  ],
+  "surface": "open-exterior",
+  "light": "overcast"
+ },
+ "21": {
+  "propNames": [
+   "Scrap Heap",
+   "Slag Heap",
+   "Rust Drum",
+   "Cinderblock Stack"
+  ],
+  "surface": "interior-metal",
+  "light": "torchlit"
+ },
+ "22": {
+  "propNames": [
+   "Overflowing Trash Can",
+   "Wandering Torch",
+   "Rain Barrel",
+   "Trash Can Row"
+  ],
+  "surface": "street",
+  "light": "daylit"
+ },
+ "23": {
+  "propNames": [
+   "Star-Chart Table",
+   "Case-File Desk",
+   "Reliquary Crate Stack"
+  ],
+  "surface": "interior-stone",
+  "light": "lamplit"
+ },
+ "24": {
+  "propNames": [
+   "Sundered Column Drum",
+   "Wandering Torch",
+   "Cinderblock Stack"
+  ],
+  "surface": "street",
+  "light": "moonlit"
+ }
+};
+const SCENE_DRESSING_DEFAULT={"propNames": [], "surface": "interior-wood", "light": "dark"};
+const SURFACE_TAG_BASES={
+ "interior-wood": [
+  "plank"
+ ],
+ "interior-stone": [
+  "flagstone",
+  "cave-rock",
+  "cobble"
+ ],
+ "interior-metal": [
+  "grating"
+ ],
+ "street": [
+  "cobble",
+  "asphalt",
+  "mud"
+ ],
+ "earth": [
+  "cracked-earth",
+  "mud",
+  "leaf-litter",
+  "scree"
+ ],
+ "open-exterior": [
+  "grass",
+  "scree",
+  "snow-ice",
+  "sand"
+ ]
+};
 
 /* placeForRealm(realmId, rng, opts) -> {archetypeKey, label, note, scale, space, staff, cast} —
    PLACE-GEN.md §2/§5 unit 1 "Engine wiring": weighted-pick a spine archetype (skin weight
@@ -1074,4 +1346,41 @@ function sceneBucketForArchetype(archetypeKey){
   if(archetypeKey==null) return SCENE_BUCKET_DEFAULT;
   var hit = SCENE_BUCKET_BY_ARCHETYPE[String(archetypeKey)];
   return hit || SCENE_BUCKET_DEFAULT;
+}
+
+/* sceneDressingForPlace(realmId, archetypeKey) -> {props:[...], surface, light} — PLACE-GEN.md
+   ADDENDUM §7 unit 8: resolves a minted place's spine archetypeKey (or an add:* key) to concrete
+   dressing for that realm. props: SCENE_DRESSING_BY_ARCHETYPE[archetypeKey].propNames matched BY
+   NAME against realmPropsFor([realmId])'s pool — a name with no match is SKIPPED (never a hole,
+   never a throw; the array is simply shorter). surface: the archetype's abstract SURFACE_TAG_
+   resolved against REALM_SURFACES[realmId] (fallback 'frontier', same convention as placeForRealm)
+   -> the first surface entry whose base is in that tag's material list, or that realm's first
+   surface entry if nothing matches (never undefined). light: the archetype's authored default
+   light-profile, straight from THEATER_LIGHT_TABLE's own vocabulary (src/engine/theater-data.js) —
+   not re-rolled here, this is an authored per-archetype fact layered under the battle-theater's own
+   dice/keyword seam. An unmapped archetypeKey (an add:* key with no per-skin override, or any
+   future spine key) falls through to SCENE_DRESSING_DEFAULT. Pure, defensive — never throws even
+   when REALM_PROPS/REALM_SURFACES/realmPropsFor haven't loaded (returns empty props / undefined
+   surface only in that unloaded-data edge case, same defensive tier as placeForRealm's own guards). */
+function sceneDressingForPlace(realmId, archetypeKey){
+  var dress = SCENE_DRESSING_BY_ARCHETYPE[String(archetypeKey)] || SCENE_DRESSING_DEFAULT;
+  var props = [];
+  if(typeof realmPropsFor === "function"){
+    var pool = realmPropsFor([realmId || "frontier"]);
+    var byName = {};
+    pool.forEach(function(p){ byName[p.name] = p; });
+    (dress.propNames || []).forEach(function(n){ if(byName[n]) props.push(byName[n]); });
+  }
+  var surface = null;
+  if(typeof REALM_SURFACES !== "undefined"){
+    var surfaces = REALM_SURFACES[realmId] || REALM_SURFACES.frontier || [];
+    var bases = SURFACE_TAG_BASES[dress.surface] || [];
+    var baseSet = {};
+    bases.forEach(function(b){ baseSet[b] = true; });
+    for(var i=0; i<surfaces.length; i++){
+      if(baseSet[surfaces[i].base]){ surface = surfaces[i]; break; }
+    }
+    if(!surface && surfaces.length) surface = surfaces[0];
+  }
+  return {props: props, surface: surface, light: dress.light};
 }

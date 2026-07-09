@@ -91,3 +91,14 @@ via a `model`-vs-`part` field bug); model-path instrumentation added (`window.Th
 
 **Remains authoring (this doc):** the 42 creature bespoke builds, the 14 prop models, the NPC model set.
 None is a wiring bug — all are art the swap-cheap seams are ready to receive.
+
+## Place-dressing prop census 2026-07-09 (PLACE-GEN §7 unit 8)
+
+`python3 build/gen-place-skins.py --census` — 24 archetypes × 3 authored realms
+(frontier/chrome/gloom): **0 thin, 0 missing-name findings.** Honest caveat: zero-by-construction —
+the SCENE_DRESSING_BY_ARCHETYPE propNames were authored against the existing REALM_PROPS pools, so
+today's census can only confirm self-consistency. Its real job starts when (a) the 8 remaining
+realm skins land, (b) Adam's spine/skin craft pass renames rows, or (c) unit 7's tray work
+surfaces scene needs the pools can't dress (counters, cell bars, altars-by-realm, market stalls) —
+run the census at each of those gates and queue net-new entries here. No pool padding was done to
+green this (report-only mode).

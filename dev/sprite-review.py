@@ -143,6 +143,11 @@ class Handler(BaseHTTPRequestHandler):
                     self._send(200, f.read(), "image/png")
             elif self.path == "/api/data":
                 self._send(200, {"registry": parse_registry(), "overlay": load_overlay()})
+            elif self.path == "/rejects":
+                p = os.path.join(ROOT, "dev", "sprite-manifests", "REJECTS.md")
+                body = open(p, "rb").read() if os.path.exists(p) else \
+                    b"No REJECTS.md yet - hit 'regen registry' after failing something."
+                self._send(200, body, "text/plain; charset=utf-8")
             else:
                 self._send(404, {"error": "not found"})
         except Exception as e:  # dev tool: surface the error to the UI, don't die

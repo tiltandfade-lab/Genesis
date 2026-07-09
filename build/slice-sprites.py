@@ -276,7 +276,88 @@ def crop_transparent(img, item, tolerance, padding):
             r, g, b, a = px[xx, yy]
             if is_magenta((r, g, b), tolerance):
                 px[xx, yy] = (r, g, b, 0)
+    defringe(crop)
     return crop
+
+
+def defringe(crop, despill=0.25, erode_excess=60, band=2):
+    """Kill the magenta halo (2026-07-09, Adam: 'everything has magenta halos!').
+
+    Keying only zeroes pixels NEAR pure #FF00FF — an anti-aliased edge pixel that blended
+    art color with the magenta background survives the key with a purple cast, so every
+    sprite ships with a 1-2px halo. Two passes, EDGE-BAND ONLY so interior purples
+    (tieflings, warlock glows) are untouched:
+
+      1. ERODE (x2): an opaque pixel touching transparency whose magenta excess
+         (min(r,b) - g) exceeds `erode_excess` is mostly background — make it transparent.
+      2. DESPILL: remaining opaque pixels within `band` px of transparency that still lean
+         magenta (r>g and b>g) get their r/b excess over g scaled down to `despill`.
+
+    Mutates the RGBA crop in place."""
+    px = crop.load()
+    w, h = crop.size
+
+    def edge_pixels():
+        out = []
+        for yy in range(h):
+            for xx in range(w):
+                if px[xx, yy][3] == 0:
+                    continue
+                for nx, ny in ((xx-1, yy), (xx+1, yy), (xx, yy-1), (xx, yy+1),
+                               (xx-1, yy-1), (xx+1, yy-1), (xx-1, yy+1), (xx+1, yy+1)):
+                    if not (0 <= nx < w and 0 <= ny < h) or px[nx, ny][3] == 0:
+                        out.append((xx, yy))
+                        break
+        return out
+
+    # pass 1: erode strongly-contaminated edge pixels (run twice — halos are 1-2px deep)
+    for _ in range(2):
+        eroded = False
+        for xx, yy in edge_pixels():
+            r, g, b, a = px[xx, yy]
+            if min(r, b) - g > erode_excess:
+                px[xx, yy] = (r, g, b, 0)
+                eroded = True
+        if not eroded:
+            break
+
+    # pass 2: despill the edge band — BFS distance-from-transparency up to `band`
+    dist = [[None] * w for _ in range(h)]
+    frontier = []
+    for yy in range(h):
+        for xx in range(w):
+            if px[xx, yy][3] == 0:
+                dist[yy][xx] = 0
+                frontier.append((xx, yy))
+    # treat the crop border as transparency too (sprites at the bbox edge)
+    for xx in range(w):
+        for yy in (0, h - 1):
+            if dist[yy][xx] is None:
+                dist[yy][xx] = 1
+                frontier.append((xx, yy))
+    for yy in range(h):
+        for xx in (0, w - 1):
+            if dist[yy][xx] is None:
+                dist[yy][xx] = 1
+                frontier.append((xx, yy))
+    d = 0
+    while frontier and d < band:
+        d += 1
+        nxt = []
+        for xx, yy in frontier:
+            for nx, ny in ((xx-1, yy), (xx+1, yy), (xx, yy-1), (xx, yy+1)):
+                if 0 <= nx < w and 0 <= ny < h and dist[ny][nx] is None:
+                    dist[ny][nx] = d
+                    nxt.append((nx, ny))
+        frontier = nxt
+    for yy in range(h):
+        for xx in range(w):
+            dd = dist[yy][xx]
+            if dd is None or dd == 0:
+                continue
+            r, g, b, a = px[xx, yy]
+            if a and r > g and b > g:
+                px[xx, yy] = (g + int((r - g) * despill), g, g + int((b - g) * despill), a)
 
 
 def load_manifest():
@@ -504,11 +585,30 @@ def main():
     ap.add_argument("--manifest-v2", metavar="SHEET_ID", default=None,
                     help="v2 mode: read dev/sprite-manifests/v2-manifest.json, slice sheet SHEET_ID "
                          "(e.g. gloom-monsters-1) — sheet_num is not used in this mode")
+    ap.add_argument("--defringe-dir", action="store_true",
+                    help="batch mode: sheet_png is a DIRECTORY of already-cut RGBA sprites; "
+                         "apply the defringe pass (halo erode + edge despill) to every PNG "
+                         "in place. For sprites cut before defringe existed in the pipeline.")
     args = ap.parse_args()
 
     if not os.path.exists(args.sheet_png):
         print(f"ERROR: sheet PNG not found: {args.sheet_png}", file=sys.stderr)
         sys.exit(1)
+
+    if args.defringe_dir:
+        if not os.path.isdir(args.sheet_png):
+            print(f"ERROR: --defringe-dir needs a directory, got {args.sheet_png}", file=sys.stderr)
+            sys.exit(1)
+        names = sorted(n for n in os.listdir(args.sheet_png) if n.endswith(".png"))
+        for i, name in enumerate(names, 1):
+            p = os.path.join(args.sheet_png, name)
+            im = Image.open(p).convert("RGBA")
+            defringe(im)
+            im.save(p)
+            if i % 100 == 0 or i == len(names):
+                print(f"  defringed {i}/{len(names)}")
+        print(f"OK: defringed {len(names)} sprites in {args.sheet_png}")
+        return
 
     if args.manifest_v2 is not None:
         v2_manifest = load_v2_manifest()

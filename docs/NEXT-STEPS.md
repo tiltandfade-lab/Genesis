@@ -34,11 +34,23 @@ with Adam's rulings folded; REALM-HOOKS spec landing next. Queue:
 3. ◐ **Build wave — the spec backlog is deep and Sonnet-ready** (each doc carries numbered units +
    red-first tests): ☑ **ANIMAL-SOCIAL U1–U6 — BUILT + GATED + MERGED 2026-07-09 night** (CHANGELOG;
    Opus re-gate caught a real DM_EVENT_TYPES / dm-contract.json / table-usage artifact-drift miss the
-   build self-reported green). REMAINING, in dependency order → TIYL-WEIGHTED-STARTS → HOOK-WALKS
-   (incl. dungeon-discovery, breach-in-walks, mid-walk entry, 8–12 segment law) → GLOOM-KEY U1–U7 →
-   PLACE-GEN U1–U6 → CAMEO-CAST U1–U5 → SHIP-TRAVEL U1–U9 → REALM-HOOKS U1–U6.
+   build self-reported green). ☑ **ANIMAL-SOCIAL-HQ HQ-1..7 — the review fix queue, LANDED 2026-07-09
+   late night** (`docs/ANIMAL-SOCIAL-HQ.md`; /code-review found the wave's verify-green-≠-wired
+   disease — realm skins / class bump / parley routing / predator witness all unwired in production —
+   all wired + gated; the WIRING LAW is now standing acceptance for wiring units: verify checks drive
+   production entry points, never the new function directly). REMAINING, in dependency order →
+   TIYL-WEIGHTED-STARTS → HOOK-WALKS (incl. dungeon-discovery, breach-in-walks, mid-walk entry,
+   8–12 segment law) → GLOOM-KEY U1–U7 → PLACE-GEN U1–U6 → CAMEO-CAST U1–U5 → SHIP-TRAVEL U1–U9 →
+   REALM-HOOKS U1–U6.
    **⚠ Each remaining spec is still SPEC-not-locked ("awaiting Adam's review") — lock it (resolve its
    open rulings) before executing, as ANIMAL-SOCIAL was locked before its build.**
+3b. ☐ **Adam rulings from the HQ review** (small, unblock when convenient): (a) urban→rural tier-0
+   banding — unshopped city nodes mint rural animal ecology and the cast freezes (documented
+   deliberate tradeoff; keep, or give nodes a real urban signal?); (b) herd/bird witness channels —
+   `move-zone`/`npc-life` writers stamp no location, those scope channels are verify-only (one small
+   stamp unit if wanted). **Standing note:** `dev/verify-animal-table-fingerprint.mjs` is SUPPOSED
+   to go red under the CRAFT-LANE row pass — that red = re-sync `ANIMAL_ENV_WEIGHTS` +
+   `ANIMAL_KNOWLEDGE_SCOPE` eyes-open, never loosen the tokens.
 4. ☐ **Models-lane handoff** (coordination note, other session): saurian warrior+scholar castes,
    2-3 rideable dino mounts, Zeal-stratum sentinel, the bat gang, ED-209-class boss, ally-mutant,
    plus the Shoggoth benchmark's hermetic re-identity ("Unformed of Nun", Adam deferred).

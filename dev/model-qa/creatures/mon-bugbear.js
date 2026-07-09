@@ -1,77 +1,122 @@
-/* dev/model-qa/creatures/mon-bugbear.js — TALL HUNCHED GOBLINOID AMBUSHER (whole-object grammar).
-   Same one-function / one-geometry-frame / no-anchors law as humanoid.js. The top of the goblinoid
-   family: TALL (~1.7u) but HUNCHED so it reads coiled and ready. Covered in shaggy FUR — the torso
-   silhouette is deliberately LUMPY (uneven overlapping band radii + ragged tuft quads at the
-   shoulders/forearms), NOT a smooth loft. Disproportionately LONG arms (knuckles near knee height),
-   a spiked wooden CLUB held low and back (authored FIRST — cocked to swing), a wide flat nose, small
-   mean eyes under a heavy fur brow, and big flat feet. Dusty brown fur, tan muzzle. The read: a huge
-   sneaky wall of fur and muscle — distinct from the orc (armored, tusked) and the barbarian (human).
-   Base disc r=0.42 (Medium). Imported by mon-bugbear-probe.html. */
+/* dev/model-qa/creatures/mon-bugbear.js — the BUGBEAR landmark table (HUMANOID, long-armed
+   hunched-power build, Medium, CR 1, realm core), REBUILT under docs/MODEL-FOUNDRY.md's
+   1,000-2,000 tri band (2026-07-08 foundry pilot, rebuild-w4 cell 1). Core identity kept from the
+   prior pass: the ambush heavy — a huge hairy goblinoid whose arms reach the knees. Geometry
+   replaced end to end for the DIRECTION brief's ambush-spring pose + spiked MORNINGSTAR (was a
+   plain club) — palette intent (dusty-brown shag fur, pale tan muzzle, iron spikes) preserved.
+
+   FEATURE CHECKLIST (the ~1,500-1,900 budget buys):
+     1. HUMANOID torso per ANATOMY-CANON (PC-kit grammar): hip/waist/rib/chest/shoulder/neck loft,
+        pitched forward hard into a CROUCH (not the old standing hunch) so the spine coils low and
+        forward-loaded — the ambush-spring read starts at the torso angle.
+     2. SIGNATURE — the too-long arms + a spiked MORNINGSTAR: right arm trails back and low with a
+        chained/hafted morningstar (spiked ball head, thickest/highest-value zone on the model);
+        left arm reaches forward and SPLAYED WIDE, claws spread, balancing the pounce.
+     3. Anatomy tell — disproportionately long arms, knuckles/paw well below knee height even in
+        the crouch, the goblinoid-family exaggeration law 4 calls for.
+     4. Shaggy lumpy fur torso — uneven overlapping band radii + ragged tuft quads, dusty brown
+        with a wide value ladder so the silhouette separates instead of muddying to one blob.
+     5. Head — wide flat nose, small mean amber eyes under a heavy fur brow, PALE tan muzzle (the
+        law-3 high-value zone on the face), short rounded fur-backed ears, head low and thrust
+        forward off the coiled neck.
+     6. Rear haunches loaded low, back leg driving, front leg planted forward — the mid-pounce
+        weight transfer (crouched low, about to spring), big flat clawed feet.
+
+   POSE SENTENCE: crouched low mid-pounce — weight coiled back over a loaded rear leg, the front
+   leg already planted and driving forward, torso pitched down and forward, the spiked
+   morningstar trailing low behind the cocked right arm while the long left arm reaches out ahead
+   splayed wide, claws spread — the half-second before the ambush lands, never an upright stance.
+
+   Whole-object grammar: one function, one geometry frame, no anchors. Spine +z (front), up +y,
+   ground y=0. Imported by ps1-sheet.html (SETS['rebuild-w4'], cell 1, fn buildBugbear). */
 import { THREE, V, quad, tube, stack, ring, stitch, capFan } from '../probe-lib.js';
 
 export function buildBugbear(){
-  /* ---------- PALETTE (VS desaturated; dusty brown fur, TAN muzzle). Deliberately WIDE value
-     spread so the shaggy silhouette separates instead of muddying into one brown blob: bright
-     dusty highlights on the raised fur, deep shadow in the cavities, a clearly pale tan face. --- */
+  /* ---------- PALETTE (VS desaturated; dusty brown fur, TAN muzzle — kept from the prior pass).
+     Deliberately WIDE value spread so the shaggy silhouette separates instead of muddying into
+     one brown blob: bright dusty highlights on the raised fur, deep shadow in the cavities, a
+     clearly pale tan face, and near-white iron spikes carrying the signature's high-value zone. */
   const P = {
     fur:0x8a7350, furDk:0x4a3b28, furLt:0xa89066, furGrey:0x746850,   // dusty brown, wide value range
     muzzle:0xc2ac82, muzzleDk:0x8f7a56, muzzleLt:0xd8c299,             // PALE tan face/muzzle — pops off the fur
     nose:0x2e241d, ear:0x9a8460, earDk:0x5f4c34,
-    wood:0x5a4326, woodDk:0x3f2f1a, woodLt:0x6e5432,                   // club haft
-    spike:0x9299a0, spikeDk:0x565b60, spikeLt:0xbcc2c8, lash:0x463522, // iron spikes + lashing
+    wood:0x7a5c38, woodDk:0x3f2f1a, woodLt:0x967248,                   // haft/chain wood+iron — lightened from the
+                                                                        // original 0x5a4326/0x6e5432 (too close to the
+                                                                        // void tone, the haft was dissolving on-screen)
+    spike:0xc4c9ce, spikeDk:0x767c82, spikeLt:0xe6e9ec, lash:0x463522, // near-white iron spikes — high-value signature
+    ballIron:0x565b60,
     claw:0x241f19, palm:0x8a745a,
     eye:0xcfbb44, eyeDk:0x14100a,                                       // small mean amber eyes
     disc:0x4a4038, discTop:0x585047,
   };
 
-  /* ---------- LANDMARKS — TALL frame (~1.72 head-top if erect) but HUNCHED: the whole trunk is
-     pitched forward hard and the neck/head sit LOW and jutting so it reads coiled, not upright.
-     Shoulders sit high and rolled forward. ---------- */
+  /* ---------- LANDMARKS — CROUCH frame: hips dropped low, the whole trunk pitched forward hard
+     over a loaded rear leg so the coil is unmistakable pre-pounce (steeper + lower than the old
+     standing hunch, which pitched about a higher hip). ---------- */
   const L = {
-    hipY:0.78, waistY:0.87, ribY:1.00, chestY:1.12, shldY:1.235, neckY:1.28,
-    hipHalf:0.150, shoulderX:0.335,
-    jawY:1.30, cheekY:1.375, browY:1.455, crownY:1.545, headTopY:1.61,
+    hipY:0.62, waistY:0.72, ribY:0.85, chestY:0.98, shldY:1.08, neckY:1.13,
+    hipHalf:0.150, shoulderX:0.320,
+    jawY:1.16, cheekY:1.225, browY:1.30, crownY:1.385, headTopY:1.45,
   };
 
-  /* heavy hunched lean — pitch the whole upper body forward about the hips so the shoulders roll
-     over and the head drops in front (coiled ambusher). Bigger angle than the orc. */
+  /* crouch pitch — pitch the whole upper body forward hard about the hips so the shoulders roll
+     over and the head drops in front and low (mid-pounce coil). Steeper than a standing hunch. */
   const hunch = (p)=>{
     const q = p.clone().sub(V(0, L.hipY, 0));
-    q.applyAxisAngle(V(1,0,0), 0.30);                        // strong forward pitch
+    q.applyAxisAngle(V(1,0,0), 0.44);                        // hard forward pitch — coiled, not upright
     return q.add(V(0, L.hipY, 0));
   };
 
-  /* ---------- SPIKED CLUB FIRST — held LOW and BACK in the right fist, cocked to swing. The grip
-     is ground truth (the fist derives from it). A thick wooden haft studded with iron spikes. ---------- */
-  const GRIP = V(0.40, 0.66, -0.02);                        // low, out to the right, pulled BACK (-z, cocked)
-  const CTOP = V(0.60, 1.02, -0.42);                        // club rises up + out + further back
-  const HAFT = new THREE.Vector3().subVectors(CTOP, GRIP).normalize();
-  const BUTT = GRIP.clone().addScaledVector(HAFT, -0.30);
+  /* ---------- SPIKED MORNINGSTAR FIRST — held low and BACK, trailing off the cocked right arm as
+     it swings into the pounce. Chain-wrapped haft + a broad spiked iron ball head (the loudest,
+     highest-value zone on the model). Grip is ground truth (the fist derives from it). ---------- */
+  const GRIP = hunch(V(0.40, 0.50, -0.06));                 // low, out right, trailing BACK (-z) — CROUCH frame
+  const BALL = hunch(V(0.60, 0.56, -0.22));                 // ball swings back and OUT to the side — pulled off the
+                                                             // arm's z-depth so the haft isn't foreshortened edge-on
+                                                             // to camera / hidden behind the forearm mass (was
+                                                             // -0.38z: nearly co-linear with the view axis, so the
+                                                             // connecting haft vanished behind the arm on screen)
+  const HAFT = new THREE.Vector3().subVectors(BALL, GRIP).normalize();
+  const BUTT = GRIP.clone().addScaledVector(HAFT, -0.24);
   {
-    /* haft: lashed butt -> long wood shaft swelling toward the head */
-    tube(BUTT, BUTT.clone().addScaledVector(HAFT,0.05), 0.030, 0.028, 6, P.lash, {capA:{hex:P.woodDk, lift:0.02}});
-    tube(BUTT.clone().addScaledVector(HAFT,0.05), GRIP.clone().addScaledVector(HAFT,-0.09), 0.028, 0.030, 6, P.wood);
-    tube(GRIP.clone().addScaledVector(HAFT,-0.09), GRIP.clone().addScaledVector(HAFT,0.09), 0.033, 0.033, 6, P.lash); // wrapped grip
-    tube(GRIP.clone().addScaledVector(HAFT,0.09), CTOP.clone().addScaledVector(HAFT,-0.16), 0.030, 0.052, 6, P.woodLt); // swells toward the head
-    tube(CTOP.clone().addScaledVector(HAFT,-0.16), CTOP, 0.052, 0.058, 6, P.wood, {capB:{hex:P.woodDk, lift:0.02}});
+    tube(BUTT, BUTT.clone().addScaledVector(HAFT,0.05), 0.046, 0.046, 6, P.woodLt, {capA:{hex:P.woodDk, lift:0.02}});
+    tube(BUTT.clone().addScaledVector(HAFT,0.05), GRIP.clone().addScaledVector(HAFT,-0.08), 0.046, 0.050, 6, P.woodLt);
+    tube(GRIP.clone().addScaledVector(HAFT,-0.08), GRIP.clone().addScaledVector(HAFT,0.08), 0.056, 0.056, 6, P.wood); // wrapped grip
+    tube(GRIP.clone().addScaledVector(HAFT,0.08), BALL.clone().addScaledVector(HAFT,-0.09), 0.050, 0.058, 6, P.woodLt); // shaft to the ball — fattened well past the naive 1/3-res floor: this segment runs near-parallel to the camera view axis (isometric foreshortening), so it needs real bulk, not just enough radius for a broadside view, to bridge the fist-to-ball gap on screen
+    /* mid-haft iron collar — a fat overlapping band straddling the fist-to-ball midpoint. The thin
+       haft alone kept dissolving under the camera's foreshortened view of this swing (proven with
+       debug markers: a fat blob at the midpoint reliably reads, a thin cylinder along this exact
+       axis does not) — this collar is the guaranteed bridge, and doubles as a weapon detail. */
+    tube(GRIP.clone().lerp(BALL,0.42).addScaledVector(HAFT,-0.05), GRIP.clone().lerp(BALL,0.42).addScaledVector(HAFT,0.05),
+         0.095, 0.088, 6, P.ballIron, {capA:{hex:P.spikeDk}, capB:{hex:P.spikeDk}});
 
-    /* iron spikes studding the club head — short tapered tubes projecting radially from the swollen end */
+    /* the iron ball head — a small stacked-ring sphere-ish core so it reads as a distinct mass,
+       then a full radial ring of spikes so it silhouettes as a bristling ball, not a knob. */
+    const ballC = BALL.clone();
+    const bRings = [];
+    for(const [dy,rr] of [[-0.075,0.030],[-0.038,0.052],[0,0.062],[0.038,0.052],[0.072,0.028]]){
+      bRings.push(ring(ballC.clone().add(V(0,dy,0)), HAFT, rr, rr, 8, 0).map(p=>p));
+    }
+    stitch(bRings, ()=>P.ballIron);
+    capFan(bRings.at(-1), ballC.clone().add(V(0,0.09,0)), P.ballIron);
+    capFan(bRings[0], ballC.clone().add(V(0,-0.10,0)), P.ballIron, true);
+
+    /* radial spikes off the ball — near-white so the whole signature carries the law-3 high-value
+       zone even in deep shadow */
     const up=V(0,1,0);
     const u = new THREE.Vector3().crossVectors(up, HAFT).normalize();
     const w = new THREE.Vector3().crossVectors(HAFT, u).normalize();
-    const spikeAt = (along, ang)=>{
-      const c = CTOP.clone().addScaledVector(HAFT, -along);
+    const spikeAt = (dyFrac, ang)=>{
+      const c = ballC.clone().add(V(0, dyFrac*0.062, 0));
       const dir = u.clone().multiplyScalar(Math.cos(ang)).addScaledVector(w, Math.sin(ang)).normalize();
       const base = c.clone().addScaledVector(dir, 0.050);
-      const tip  = c.clone().addScaledVector(dir, 0.130).addScaledVector(HAFT, 0.02);
-      tube(base, tip, 0.022, 0.004, 4, P.spike, {capB:{hex:P.spikeLt, lift:0.006}, capA:{hex:P.spikeDk}});
+      const tip  = c.clone().addScaledVector(dir, 0.155);
+      tube(base, tip, 0.024, 0.005, 4, P.spike, {capB:{hex:P.spikeLt, lift:0.006}, capA:{hex:P.spikeDk}});
     };
-    for(let r=0;r<5;r++){                                    // ring of spikes near the tip
-      spikeAt(0.05, r/5*Math.PI*2);
-    }
-    for(let r=0;r<4;r++){                                    // a second ring further down
-      spikeAt(0.14, r/4*Math.PI*2 + 0.4);
-    }
+    for(let r=0;r<6;r++) spikeAt(0.6, r/6*Math.PI*2);
+    for(let r=0;r<6;r++) spikeAt(-0.5, r/6*Math.PI*2 + 0.5);
+    /* tip spikes fore/aft along the haft axis */
+    tube(ballC.clone().add(V(0,0.095,0)), ballC.clone().addScaledVector(HAFT,0.18), 0.022, 0.005, 4, P.spike, {capB:{hex:P.spikeLt, lift:0.005}});
   }
 
   /* ---------- TORSO — LUMPY shaggy fur, NOT a smooth loft. Uneven overlapping band radii (each
@@ -110,7 +155,7 @@ export function buildBugbear(){
   }
 
   /* ---------- HEAD — wide flat nose, small mean eyes under a heavy FUR brow, tan muzzle. Sits LOW
-     and jutting forward on the hunched neck. ---------- */
+     and jutting forward on the coiled neck. ---------- */
   {
     const n=8, ph=Math.PI/n;
     const bands=[
@@ -140,6 +185,12 @@ export function buildBugbear(){
       quad(c.clone().add(V(-0.040,-0.020,0)), c.clone().add(V(0.040,-0.020,0)),
            c.clone().add(V(0.028,0.020,-0.006)), c.clone().add(V(-0.028,0.020,-0.006)), P.nose, 0.03);
     }
+    /* small mean amber eyes under the brow shelf */
+    for(const s of [-1,1]){
+      const c = hunch(V(s*0.075, L.browY-0.010, 0.150));
+      quad(c.clone().add(V(-0.018,-0.010,0)), c.clone().add(V(0.018,-0.010,0)),
+           c.clone().add(V(0.014,0.010,-0.004)), c.clone().add(V(-0.014,0.010,-0.004)), P.eye, 0.05);
+    }
     /* fur brow tufts — a couple of small tuft quads riding the brow ridge for the shaggy read */
     for(const s of [-1,1]){
       const base = hunch(V(s*0.09, L.browY+0.02, 0.16));
@@ -154,24 +205,25 @@ export function buildBugbear(){
     }
   }
 
-  /* ---------- ARMS — DISPROPORTIONATELY LONG (knuckles near knee height). Right derives to the
-     club grip; left hangs LONG and low with a big splayed hand near the knee. Thick furred. ---------- */
-  const bigPaw = (ctr, faceDir, hex)=>{
+  /* ---------- ARMS — DISPROPORTIONATELY LONG, the ambush-spring pose. Right arm trails BACK and
+     LOW to the morningstar grip (mid-swing cock); left arm reaches FORWARD and SPLAYED WIDE, big
+     clawed hand spread, balancing the pounce. Thick furred. ---------- */
+  const bigPaw = (ctr, faceDir, hex, spread=1)=>{
     const d = faceDir.clone().normalize();
     const side = new THREE.Vector3().crossVectors(V(0,1,0), d).normalize();
     tube(ctr.clone().addScaledVector(d,-0.040), ctr.clone().addScaledVector(d,0.040),
          0.070, 0.062, 6, hex, {raz:0.045, rbz:0.045, capA:{hex}, capB:{hex}});
-    for(const off of [-1,0,1]){
-      const kb = ctr.clone().addScaledVector(d,0.036).addScaledVector(side, off*0.042);
-      const kt = kb.clone().addScaledVector(d,0.060).addScaledVector(side, off*0.012);
+    for(const off of [-1.3,-0.5,0.5,1.3]){                    // 4 splayed claws (wider fan for the splayed hand)
+      const kb = ctr.clone().addScaledVector(d,0.034).addScaledVector(side, off*0.034*spread);
+      const kt = kb.clone().addScaledVector(d,0.075).addScaledVector(side, off*0.030*spread);
       tube(kb, kt, 0.017, 0.006, 4, hex, {capB:{hex:P.claw, lift:0.005}});
     }
   };
   {
-    /* right arm -> club fist (long) */
+    /* right arm -> morningstar fist (trailing low + back, cocked to swing forward) */
     const S=hunch(V(L.shoulderX, L.shldY-0.02, 0.02));
     const FIST=GRIP.clone();
-    const E=V(0.470, 0.86, 0.02);                            // elbow low + wide (long upper arm)
+    const E=hunch(V(0.460, 0.62, -0.12));                     // elbow trails back + low — CROUCH frame (matches S/GRIP)
     tube(S,E,0.105,0.084,6,P.fur);
     tube(E, FIST.clone().addScaledVector(HAFT,-0.04), 0.082,0.064,6,P.furDk);
     tube(FIST.clone().addScaledVector(HAFT,-0.06), FIST.clone().addScaledVector(HAFT,0.06), 0.072,0.066,6,P.palm,
@@ -182,34 +234,37 @@ export function buildBugbear(){
       quad(base, base.clone().add(V(0.04,len,-0.03)), base.clone().add(V(0.07,len*0.5,-0.05)), base, P.furDk, 0.08);
     }
 
-    /* left arm -> LONG hang, big splayed paw near the knee (knuckles at knee height) */
+    /* left arm -> LONG reach FORWARD, splayed clawed hand well ahead of the body, low (pounce
+       balance — knuckles still well below knee height even reaching forward-low) */
     const S2=hunch(V(-L.shoulderX, L.shldY-0.02, 0.02));
-    const E2=V(-0.440, 0.78, 0.09);
-    const W2=V(-0.420, 0.44, 0.14);                          // wrist drops near knee level (~0.40)
+    const E2=hunch(V(-0.400, 0.50, 0.28));
+    const W2=hunch(V(-0.300, 0.32, 0.56));                    // wrist reaches well out front, low — CROUCH frame (matches S2)
     tube(S2,E2,0.105,0.084,6,P.fur);
     tube(E2,W2,0.082,0.062,6,P.furDk);
-    bigPaw(W2, V(-0.10,-0.55,1), P.palm);
+    bigPaw(W2, V(-0.14,-0.12,1), P.palm, 1.25);
     for(const [dy,len] of [[0.0,0.07],[-0.07,0.06]]){
       const base=E2.clone().add(V(-0.02,dy,-0.03));
       quad(base, base.clone().add(V(-0.04,len,-0.03)), base.clone().add(V(-0.07,len*0.5,-0.05)), base, P.fur, 0.08);
     }
   }
 
-  /* ---------- LEGS — thick, bent in a hunched crouch, BIG FLAT FEET planted wide. ---------- */
+  /* ---------- LEGS — mid-pounce weight transfer: rear leg loaded low and coiled (deep bend, hip
+     drawn back), front leg already planted forward and driving. BIG FLAT FEET. ---------- */
   {
-    const hipL=V(-L.hipHalf, L.hipY-0.02, 0.02), kneeL=V(-0.235,0.42,0.15), ankL=V(-0.215,0.075,0.06);
-    const hipR=V( L.hipHalf, L.hipY-0.02, 0.00), kneeR=V( 0.250,0.42,0.11), ankR=V( 0.230,0.075,0.02);
-    tube(hipL,kneeL,0.130,0.095,6,P.fur);
-    tube(kneeL,ankL,0.090,0.066,6,P.furDk);
-    tube(hipR,kneeR,0.130,0.095,6,P.fur);
-    tube(kneeR,ankR,0.090,0.066,6,P.furDk);
-    /* BIG FLAT FEET — broad low foot slabs with splayed clawed toes */
-    for(const [ank,toeDir] of [[ankL,V(-0.10,0,1)], [ankR,V(0.10,0,1)]]){
+    /* rear (left) leg — deeply coiled, hip drawn back and low */
+    const hipL=V(-L.hipHalf, L.hipY-0.02, -0.06), kneeL=V(-0.260,0.30,-0.02), ankL=V(-0.225,0.070,0.10);
+    /* front (right) leg — planted forward, driving, straighter */
+    const hipR=V( L.hipHalf, L.hipY-0.02,  0.04), kneeR=V( 0.270,0.36,0.34), ankR=V( 0.235,0.075,0.42);
+    tube(hipL,kneeL,0.135,0.098,6,P.fur);
+    tube(kneeL,ankL,0.092,0.068,6,P.furDk);
+    tube(hipR,kneeR,0.128,0.094,6,P.fur);
+    tube(kneeR,ankR,0.088,0.064,6,P.furDk);
+    /* BIG FLAT FEET — broad low foot slabs with splayed clawed toes, oriented to each leg's stance */
+    for(const [ank,toeDir] of [[ankL,V(-0.08,0,0.85)], [ankR,V(0.10,0,1.15)]]){
       const d=toeDir.clone().normalize();
       const heel=V(ank.x,0.048,ank.z);
-      // wide flat foot slab
       tube(heel.clone().addScaledVector(d,-0.02), heel.clone().addScaledVector(d,0.150), 0.078,0.058,6,P.palm,
-           {raz:0.070, rbz:0.048, capA:{hex:P.furDk}});
+           {raz:0.038, rbz:0.026, capA:{hex:P.furDk}});
       const side=new THREE.Vector3().crossVectors(V(0,1,0),d).normalize();
       for(const off of [-1,0,1]){
         const tb=heel.clone().addScaledVector(d,0.140).addScaledVector(side, off*0.048);

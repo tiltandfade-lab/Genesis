@@ -162,7 +162,7 @@ static character per cell (not a repeat, not an animation frame), uniform cell s
 
 ---
 
-## NPC batches (50 total, 2 sheets)
+## NPC batches (75 total, 3 sheets)
 
 **Population diversity (binding):** vary skin tone, ethnicity, hair texture, build, and age across the full roster below — a sheet where every face reads as the same ethnicity is a failure, not a style choice, regardless of realm. This realm's population is entirely human (no established non-human civilian population in this realm's lore) — the diversity requirement is ethnic/physical variety only.
 
@@ -172,7 +172,7 @@ Shared mechanical instructions (restated for this section, NPC-appropriate): 5x5
 
 Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-ROLE-REALMS.md`) plus this realm's exclusive `adds`.
 
-### NPC sheet 1/2
+### NPC sheet 1/3
 
 1. **Farmer** — Tied to the land and its seasons; the base everyone eats from.
 2. **Hunter** — Reads the wild and brings in what the settled can't.
@@ -200,7 +200,7 @@ Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-R
 24. **Cutpurse** — Eyes every coin-pouch; avoids every eye.
 25. **Hidden Zealot** — Fanatical devotion behind a mundane face.
 
-### NPC sheet 2/2
+### NPC sheet 2/3
 
 1. **Cult Recruiter** — Charisma aimed at the desperate; sells belonging.
 2. **Foreign Settler** — Chose to stay here; the reasons stay unclear.
@@ -229,6 +229,34 @@ Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-R
 25. **Grey-haired preacher — the only law in town some Sundays**
 
 ---
+
+### NPC sheet 3/3
+
+1. **Dark-skinned homesteader — claimed land nobody thought would hold, made it hold**
+2. **Elderly trading-post keeper — remembers when the town was three buildings**
+3. **Broad-shouldered blacksmith — shoes every horse and settles every argument**
+4. **Young telegraph operator — knows every secret that comes through the wire**
+5. **Grey-haired midwife — delivered half the town, buried the other half**
+6. **One-eyed gunsmith — lost the eye to a misfire, still the best shot in the county**
+7. **Freckled newspaper boy — sells papers nobody reads twice**
+8. **Heavyset saloon owner — hears every confession that comes with a whiskey**
+9. **Dark-skinned cattle-drive foreman — runs the herd, and the crew, without raising his voice**
+10. **Pale, sleepless night-shift railroad watchman — guards a line nobody's tried to rob in years**
+11. **Short, sharp-eyed land surveyor — draws the boundaries everyone disputes later**
+12. **Elderly retired marshal — took the badge off, kept the reputation**
+13. **Sunburnt wheat farmer — works land that shouldn't grow anything this dry**
+14. **Multi-ethnic immigrant rancher — works twice as hard for half the respect**
+15. **Lean, twitchy stagecoach driver — outrun more holdups than he'll admit**
+16. **Stout general-store owner, dark-skinned — stocks everything, prices fairly, remembers debts**
+17. **Grey-haired preacher — the only law in town some Sundays**
+18. **Young twin ranch hands — inseparable, unreasonably good with horses**
+19. **Broad, scarred bounty-hunter — technically retired, still armed at all times**
+20. **Elderly blind fortune-teller passing through — charges a dollar, means every word**
+21. **Dark-skinned, heavily scarred trail guide — leads wagon trains through passes no map shows**
+22. **Small, quick-handed card sharp — makes an honest living cheating dishonest men**
+23. **Weathered well-digger — finds water where the surveyors said there wasn't any**
+24. **Frontier doctor, unsentimental — has performed more surgery on a kitchen table than in any clinic**
+25. **Tall, gaunt railroad accountant — keeps books for a company that barely tells the truth**
 
 ## Domestic animal batches (25 total, 1 sheet)
 

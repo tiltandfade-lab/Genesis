@@ -159,7 +159,7 @@ static character per cell (not a repeat, not an animation frame), uniform cell s
 
 ---
 
-## NPC batches (50 total, 2 sheets)
+## NPC batches (75 total, 3 sheets)
 
 **Population diversity (binding):** vary skin tone, ethnicity, hair texture, build, and age across the full roster below — a sheet where every face reads as the same ethnicity is a failure, not a style choice, regardless of realm. This realm's population also includes visible fallout-mutation variety (see the final entries below: irradiated, chem-scarred, or born-after-the-fall) alongside an ethnically varied unmutated majority — the wasteland doesn't touch everyone, and it doesn't touch anyone evenly.
 
@@ -169,7 +169,7 @@ Shared mechanical instructions (restated for this section, NPC-appropriate): 5x5
 
 Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-ROLE-REALMS.md`) plus this realm's exclusive `adds`.
 
-### NPC sheet 1/2
+### NPC sheet 1/3
 
 1. **Dirt-farmer (scorched rows, hydroponic scraps)** — Tied to the land and its seasons; the base everyone eats from.
 2. **Waste-hunter** — Reads the wild and brings in what the settled can't.
@@ -197,7 +197,7 @@ Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-R
 24. **Camp-rat** — Eyes every coin-pouch; avoids every eye.
 25. **Believer in plain clothes** — Fanatical devotion behind a mundane face.
 
-### NPC sheet 2/2
+### NPC sheet 2/3
 
 1. **Warlord's press-gang boss** — Charisma aimed at the desperate; sells belonging.
 2. **Wastelander from beyond the map** — Chose to stay here; the reasons stay unclear.
@@ -226,6 +226,34 @@ Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-R
 25. **Bone-pale forager — bleached hair and skin, the settlement's best judge of what's safe to eat**
 
 ---
+
+### NPC sheet 3/3
+
+1. **Sun-dark caravan scout — reads dust trails like a map**
+2. **Elderly bunker-born — never seen open sky before the settlement dug out**
+3. **Broad-shouldered wall-crew boss — keeps the palisade standing another season**
+4. **Young irradiated runner — patchy hair loss, fast, sent where no one else will go**
+5. **Grey-bearded still-master — brews the settlement's only clean water and its only liquor**
+6. **One-armed veteran mechanic — lost the arm to a rig, kept working the same day**
+7. **Freckled teenage lookout — youngest on the wall rotation, takes it dead serious**
+8. **Heavyset grain-hoarder's widow — inherited the stockpile, and the target on her back**
+9. **Dark-skinned tunnel-crew forewoman — knows which collapsed streets are still passable**
+10. **Pale chem-burned nurse — hands scarred from a lab accident, best medic in three settlements**
+11. **Short, wiry scavenge-team leader — sends kids out, never goes herself anymore**
+12. **Elderly seed-vault keeper — guards the last real crop stock like scripture**
+13. **Sunburnt caravan driver — decades on the road, trusts the mule more than most people**
+14. **Mixed-heritage settlement council elder — mediates every dispute, believed by fewer each year**
+15. **Lean, hollow-eyed insomniac watchman — hasn't slept right since the last raid**
+16. **Stout blacksmith's daughter, dark-skinned — better at the forge than her father was**
+17. **Grey-haired storyteller — keeps the memory of before-the-fall alive for the kids**
+18. **Young ash-touched twins — one mutated, one not, inseparable regardless**
+19. **Broad, sun-weathered wall-gate guard — checks every face twice**
+20. **Elderly, half-blind radio operator — still monitors the dead channels out of habit**
+21. **Dark-skinned, heavily scarred convoy captain — survived more ambushes than anyone alive**
+22. **Small, quick-fingered lock-picker — gets the settlement into every sealed vault it finds**
+23. **Weathered dust-farmer, greying — coaxes crops out of soil that shouldn't grow anything**
+24. **Mutation-marked healer's apprentice — glowing faint veins, gentle hands anyway**
+25. **Tall, gaunt settlement preacher — preaches survival, not salvation**
 
 ## Domestic animal batches (25 total, 1 sheet)
 

@@ -161,7 +161,7 @@ static character per cell (not a repeat, not an animation frame), uniform cell s
 
 ---
 
-## NPC batches (50 total, 2 sheets)
+## NPC batches (75 total, 3 sheets)
 
 **Population diversity (binding):** vary skin tone, ethnicity, hair texture, build, and age across the full roster below — a sheet where every face reads as the same ethnicity is a failure, not a style choice, regardless of realm. This realm's population is entirely human (no established non-human civilian population in this realm's lore) — the diversity requirement is ethnic/physical variety only.
 
@@ -171,7 +171,7 @@ Shared mechanical instructions (restated for this section, NPC-appropriate): 5x5
 
 Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-ROLE-REALMS.md`) plus this realm's exclusive `adds`.
 
-### NPC sheet 1/2
+### NPC sheet 1/3
 
 1. **Landscaper** — Tied to the land and its seasons; the base everyone eats from.
 2. **Garbage-truck driver** — Moves the heavy things; sees everything, is asked nothing.
@@ -199,7 +199,7 @@ Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-R
 24. **Devout neighbor with a locked basement** — Fanatical devotion behind a mundane face.
 25. **Door-to-door salesman** — Charisma aimed at the desperate; sells belonging.
 
-### NPC sheet 2/2
+### NPC sheet 2/3
 
 1. **New family on the block** — Chose to stay here; the reasons stay unclear.
 2. **Shut-in at the end of the cul-de-sac** — Known of, rarely seen.
@@ -228,6 +228,34 @@ Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-R
 25. **Retired schoolteacher — remembers every kid on the block, including the ones who 'moved away'**
 
 ---
+
+### NPC sheet 3/3
+
+1. **Dark-skinned block-watch volunteer — patrols at hours that don't add up**
+2. **Elderly widow, untouched by the wrongness — the only one who says it out loud**
+3. **Broad-shouldered high school football coach — everyone trusts him, no one knows why**
+4. **Young newspaper delivery kid — sees the neighborhood at hours no adult does**
+5. **Grey-haired retired mailman — knows every house's real schedule**
+6. **One-eyed hardware store owner — sells everything, asks nothing about what it's for**
+7. **Freckled kid on a bike — first to spot when something's off on the block**
+8. **Heavyset school crossing guard — has stood that corner longer than most houses have existed**
+9. **Dark-skinned real estate agent — sells houses that turn over a little too often**
+10. **Pale, sleepless night-shift nurse living two doors down — sees the neighborhood differently**
+11. **Short, sharp-eyed neighborhood gossip — knows everyone's business before they do**
+12. **Elderly retired scoutmaster — still runs troop meetings nobody remembers signing up for**
+13. **Sunburnt landscaper — mows every lawn on the block, notices what's buried underneath**
+14. **Multi-ethnic new family, still settling in — hasn't learned the unwritten rules yet**
+15. **Lean, twitchy insomniac homeowner — hasn't slept right since he moved in**
+16. **Stout diner-style café owner, dark-skinned — the block's actual town square**
+17. **Grey-haired retired police officer — took the badge off, kept the instincts**
+18. **Young twin siblings on the same street — inseparable, oddly synchronized**
+19. **Broad, cheerful HOA volunteer — smiles a little too hard at every meeting**
+20. **Elderly blind piano teacher — every kid on the block takes lessons, none remember why**
+21. **Dark-skinned, retired contractor — built half the houses on this street, avoids a few of them now**
+22. **Small, quick kid who's always outside after dark — parents never seem to notice**
+23. **Weathered groundskeeper at the community pool — closes it early some nights, no explanation**
+24. **Late-shift convenience store clerk — sees who's really awake at 3am**
+25. **Tall, gaunt insurance adjuster — assesses damage on houses that shouldn't have any**
 
 ## Domestic animal batches (25 total, 1 sheet)
 

@@ -162,7 +162,7 @@ static character per cell (not a repeat, not an animation frame), uniform cell s
 
 ---
 
-## NPC batches (50 total, 2 sheets)
+## NPC batches (75 total, 3 sheets)
 
 **Population diversity (binding):** vary skin tone, ethnicity, hair texture, build, and age across the full roster below — a sheet where every face reads as the same ethnicity is a failure, not a style choice, regardless of realm. This realm's population stays human/toylike per its own identity (no separate non-human civilian species here) — the diversity requirement is ethnic/physical variety only.
 
@@ -172,7 +172,7 @@ Shared mechanical instructions (restated for this section, NPC-appropriate): 5x5
 
 Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-ROLE-REALMS.md`) plus this realm's exclusive `adds`.
 
-### NPC sheet 1/2
+### NPC sheet 1/3
 
 1. **Overworld forager** — Reads the wild and brings in what the settled can't.
 2. **Block-pusher** — Moves the heavy things; sees everything, is asked nothing.
@@ -200,7 +200,7 @@ Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-R
 24. **Talent-scout for the Game** — Charisma aimed at the desperate; sells belonging.
 25. **Glitched-in wanderer** — Chose to stay here; the reasons stay unclear.
 
-### NPC sheet 2/2
+### NPC sheet 2/3
 
 1. **Superboss no one's beaten** — Known of, rarely seen.
 2. **Understudy mascot** — Filling in for someone absent; borrowed authority.
@@ -229,6 +229,34 @@ Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-R
 25. **Silver-haired candy-cart vendor — been here longer than the park's official history**
 
 ---
+
+### NPC sheet 3/3
+
+1. **Dark-skinned parade coordinator — keeps the too-cheerful schedule running**
+2. **Elderly ride operator — been running the same ride since before anyone remembers**
+3. **Broad-shouldered strongman act — part of the show, off-hours unreadable**
+4. **Young ticket-booth kid, freckled — first job, hasn't clocked the wrongness yet**
+5. **Grey-haired candy-cart vendor — been here longer than the park's official history**
+6. **One-eyed carousel mechanic — lost the eye fixing a horse that shouldn't move on its own**
+7. **Small, sharp-eyed fortune-teller — the only one who tells the truth, in riddles**
+8. **Heavyset funhouse mirror attendant — laughs at the same jokes every single day**
+9. **Dark-skinned face-painter — paints the same smile on every kid, some come back changed**
+10. **Pale, sleepless night-shift park janitor — cleans up things the day shift doesn't ask about**
+11. **Short, quick-handed prize-booth operator — the games are rigged, everyone half-knows it**
+12. **Elderly retired mascot performer — won't say which suit, won't say why not**
+13. **Sunburnt cotton-candy vendor — sells the same sugar-pink cloud to three generations now**
+14. **Multi-ethnic new hire, still cheerful — hasn't been here long enough to be tired yet**
+15. **Lean, twitchy roller-coaster operator — checks the harnesses twice, still nervous**
+16. **Stout balloon-animal vendor, dark-skinned — makes shapes kids swear move on their own**
+17. **Grey-haired retired ringmaster — stepped back from the spotlight, still commands a room**
+18. **Young twin performers — synchronized, a little too synchronized**
+19. **Broad, painted-smile security guard — the park's only real muscle, always grinning**
+20. **Elderly blind arcade attendant — somehow always knows who's cheating**
+21. **Dark-skinned, face-paint-scarred stunt performer — does the tricks the mascots can't**
+22. **Small, quick-handed pickpocket working the crowds — the one dishonest thing in a dishonest place**
+23. **Weathered groundskeeper — tends a garden of topiaries that are never quite the same shape twice**
+24. **Park nurse, unnervingly calm — treats injuries the rides shouldn't cause**
+25. **Tall, gaunt park accountant — the only person here who never smiles**
 
 ## Domestic animal batches (25 total, 1 sheet)
 

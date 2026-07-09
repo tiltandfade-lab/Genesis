@@ -159,7 +159,7 @@ static character per cell (not a repeat, not an animation frame), uniform cell s
 
 ---
 
-## NPC batches (50 total, 2 sheets)
+## NPC batches (75 total, 3 sheets)
 
 **Population diversity (binding):** vary skin tone, ethnicity, hair texture, build, and age across the full roster below — a sheet where every face reads as the same ethnicity is a failure, not a style choice, regardless of realm. This realm's population is entirely human (no established non-human civilian population in this realm's lore) — the diversity requirement is ethnic/physical variety only, and stays era-neutral per this realm's content-safety rule (no real-world flags/insignia).
 
@@ -169,7 +169,7 @@ Shared mechanical instructions (restated for this section, NPC-appropriate): 5x5
 
 Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-ROLE-REALMS.md`) plus this realm's exclusive `adds`.
 
-### NPC sheet 1/2
+### NPC sheet 1/3
 
 1. **Requisitioned farmer** — Tied to the land and its seasons; the base everyone eats from.
 2. **Scout** — Reads the wild and brings in what the settled can't.
@@ -197,7 +197,7 @@ Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-R
 24. **Looter** — Eyes every coin-pouch; avoids every eye.
 25. **Zealot-soldier** — Fanatical devotion behind a mundane face.
 
-### NPC sheet 2/2
+### NPC sheet 2/3
 
 1. **Press-gang** — Charisma aimed at the desperate; sells belonging.
 2. **Foreign auxiliary from afar** — Chose to stay here; the reasons stay unclear.
@@ -226,6 +226,34 @@ Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-R
 25. **Career NCO, unnamed rank — the one everyone actually listens to**
 
 ---
+
+### NPC sheet 3/3
+
+1. **Dark-skinned combat photographer — documents what the official reports leave out**
+2. **Elderly retired general, advisory only — still gives orders nobody's obligated to follow**
+3. **Broad-shouldered logistics sergeant — keeps the whole operation fed and moving**
+4. **Young enlisted radio operator — relays messages faster than command can react to them**
+5. **Grey-haired field priest — has run out of comforting things to say, keeps saying them**
+6. **One-eyed veteran scout — lost the eye two campaigns ago, still sees more than most**
+7. **Freckled runner, underage and unofficial — carries messages nobody else will risk**
+8. **Heavyset mess-hall cook — feeds the unit on whatever's left, always finds something**
+9. **Dark-skinned unit medic — keeps more people alive than the officers give her credit for**
+10. **Pale, sleepless night-watch sentry — hasn't trusted a quiet perimeter in months**
+11. **Short, sharp-eyed supply clerk — knows exactly what's missing and who took it**
+12. **Elderly retired quartermaster — has outlasted three commanding officers**
+13. **Sunburnt field engineer — builds and destroys bridges on the same day**
+14. **Multi-ethnic translator — trusted by neither side, needed by both**
+15. **Lean, twitchy demolitions specialist — steady hands, unsteady everything else**
+16. **Stout mess sergeant, dark-skinned — runs the kitchen tent like a second command post**
+17. **Grey-haired career NCO, unnamed rank — the one everyone actually listens to**
+18. **Young twin conscripts — enlisted together, refuse every assignment that splits them up**
+19. **Broad, scarred veteran infantryman — the unit's actual institutional memory**
+20. **Elderly blind veteran, non-combat role — advises on terrain from memory alone**
+21. **Dark-skinned, heavily scarred field commander — earned every stripe the hard way**
+22. **Small, quick-handed courier — moves messages faster than any radio line**
+23. **Weathered field chaplain's assistant — handles the paperwork of grief**
+24. **Combat nurse, unsentimental — has stopped counting the wounded she's treated**
+25. **Tall, gaunt intelligence officer — knows more than she's allowed to say**
 
 ## Domestic animal batches (25 total, 1 sheet)
 

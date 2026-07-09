@@ -158,7 +158,7 @@ static character per cell (not a repeat, not an animation frame), uniform cell s
 
 ---
 
-## NPC batches (50 total, 2 sheets)
+## NPC batches (75 total, 3 sheets)
 
 **Population diversity (binding):** vary skin tone, ethnicity, hair texture, build, and age across the full roster below — a sheet where every face reads as the same ethnicity is a failure, not a style choice, regardless of realm. This realm's population also includes visible early-stage star/echo-touched variety (see the final entries below — subtle transformation, not full monster-stage) alongside an ethnically varied untouched majority.
 
@@ -168,7 +168,7 @@ Shared mechanical instructions (restated for this section, NPC-appropriate): 5x5
 
 Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-ROLE-REALMS.md`) plus this realm's exclusive `adds`.
 
-### NPC sheet 1/2
+### NPC sheet 1/3
 
 1. **Omen-forager (gathers what falls when the sky argues with itself)** — Reads the wild and brings in what the settled can't.
 2. **Breach-delver (works the tears in the world; patient in the wrong places)** — Works the dark and the tight places; patient underground.
@@ -196,7 +196,7 @@ Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-R
 24. **Belonging-seller (charisma aimed at the desperate; sells a place in something vast)** — Charisma aimed at the desperate; sells belonging.
 25. **The kept-on (chose to stay after being changed; the reasons stay unclear)** — Chose to stay here; the reasons stay unclear.
 
-### NPC sheet 2/2
+### NPC sheet 2/3
 
 1. **Sky-hermit (known of, rarely seen)** — Known of, rarely seen.
 2. **Borrowed warden (filling in for someone the void took)** — Filling in for someone absent; borrowed authority.
@@ -225,6 +225,34 @@ Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-R
 25. **Newly arrived outsider — unmarked by the realm's stars entirely, an obvious tell to the locals**
 
 ---
+
+### NPC sheet 3/3
+
+1. **Dark-skinned star-chart cartographer — maps constellations that shift when unwatched**
+2. **Elderly untouched hermit — lived at the temple's edge for decades, refuses initiation**
+3. **Broad-shouldered relic-hauler — carries artifacts too heavy and too wrong for anyone else**
+4. **Young early-touched initiate — faint luminous veins, still mostly human**
+5. **Grey-haired true-name scholar — has forgotten more names than most cults ever learn**
+6. **One-eyed seer, untouched — lost the eye to a vision, gained nothing back**
+7. **Freckled temple-born child — raised in the sanctum, doesn't know another life**
+8. **Heavyset incense-master — keeps the rituals burning on schedule**
+9. **Dark-skinned starlight-glass blower — crafts the temple's ritual lenses**
+10. **Pale, sleepless dream-recorder — transcribes what the touched see at night**
+11. **Short, sharp-eyed relic-appraiser — knows which artifacts are safe to sell**
+12. **Elderly star-drunk elder — visible transformation, still lucid, still respected**
+13. **Sunburnt caravan pilgrim — walked three seasons to reach the temple**
+14. **Mixed-heritage temple librarian — untouched, catalogues what shouldn't be read twice**
+15. **Lean, twitchy echo-touched acolyte — voice doubles under stress**
+16. **Stout temple cook, dark-skinned — feeds the devout and the merely curious alike**
+17. **Grey-haired retired star-priest — stepped back from the order, still hears them**
+18. **Young twin acolytes — one touched, one not, raised identically anyway**
+19. **Broad, augmented-by-ritual temple guard — scarred with protective sigils**
+20. **Elderly blind oracle — sees more without eyes than most do with them**
+21. **Dark-skinned, heavily scarred relic-hunter — brings back what the temple can't retrieve itself**
+22. **Small, quick-handed sigil-forger — fakes protective marks for desperate pilgrims**
+23. **Weathered temple gardener — tends plants that only grow under the wrong stars**
+24. **Star-touched healer's apprentice — faint glow, gentle hands, careful bedside manner**
+25. **Tall, gaunt temple accountant — untouched, keeps the order's mundane books straight**
 
 ## Domestic animal batches (25 total, 1 sheet)
 

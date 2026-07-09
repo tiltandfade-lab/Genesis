@@ -4,6 +4,26 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-07-09 (later still) — HQ-8: npc-life writers stamp location (Adam's two rulings closed)
+
+Adam ruled both HQ-review ledger items in-session: **(a)** settlement **population estimates** are
+the intended urban-development signal (registered into PLACE-GEN scope; the lodging-tier fallback
+stands until then) — **(b)** stamp the npc-life writers: **BUILT as HQ-8** (spec appended to
+`ANIMAL-SOCIAL-HQ.md`; single Sonnet executor, worktree-isolated, orchestrator re-gated).
+
+**Fixed:** the six place-bound npc-life writers stamp `nodeId` — companion desertion /
+pet-wanders / sidekick-departure / sidekick-death (companion codex `status.at`, party-node
+fallback; the death case reads the record before its `condition:"dead"` update), turn life-event
+(node already in scope), successor-thread. The bird knowledge scope's faces-sense is now live
+against real ledgers. Deliberately unstamped: backstory seeds, faction-turns, animal-tell-refresh
+(no location = invisible to witnesses = correct). Prose twins byte-unchanged.
+
+**Gates at close:** red-first proven on the pre-fix tree; u6 grew to 49/49; u1-u5 + fingerprint +
+dm-events 70/0 + gen 68/0 green; check-manifest OK; fuzz-events 520 calls 0 findings; diff
+eyes-on; gauntlet report churn reverted.
+
+---
+
 ## 2026-07-09 (late night) — ANIMAL-SOCIAL-HQ: the review fix queue (waves 1+2 landed)
 
 A full `/code-review` of the landed U1–U6 wave (8 finder angles → 13 adversarial verifiers →

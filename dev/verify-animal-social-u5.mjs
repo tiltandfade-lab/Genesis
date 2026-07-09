@@ -91,10 +91,11 @@ console.log("\n=== GREEN: promotion + ally ===");
     const win = newWin();
     const w = mkWorld(win);
     const id = mintAnimal(win, w);
-    win.eval(`applyEvent(U.worlds['${w.id}'], { type:"codex_contact", payload:{ id:'${id}' } });`);
+    // HQ-4 Defect A: only an ENGAGED contact counts toward the promotion track.
+    win.eval(`applyEvent(U.worlds['${w.id}'], { type:"codex_contact", payload:{ id:'${id}', engaged:true } });`);
     let rec = win.eval(`codexGet(U.worlds['${w.id}'], '${id}')`);
     check("one contact does NOT yet promote", rec.dm.promoted !== true, JSON.stringify(rec.dm));
-    win.eval(`applyEvent(U.worlds['${w.id}'], { type:"codex_contact", payload:{ id:'${id}' } });`);
+    win.eval(`applyEvent(U.worlds['${w.id}'], { type:"codex_contact", payload:{ id:'${id}', engaged:true } });`);
     rec = win.eval(`codexGet(U.worlds['${w.id}'], '${id}')`);
     check("ACCEPT: a SECOND contact promotes (dm.ambient dropped, dm.promoted true)",
       rec.dm.promoted === true && rec.dm.ambient === false, JSON.stringify(rec.dm));
@@ -229,6 +230,60 @@ console.log("\n=== GREEN: promotion + ally ===");
     check("ACCEPT: a fresh animal minted at the cruelty-marked node opens colder (attitude <= -1)",
       !!coldMint && coldMint.status.attitude.value <= -1, coldMint ? JSON.stringify(coldMint.status) : "no animal drawn");
   }
+}
+
+console.log("\n=== HQ-4 Defect A: engagement discipline gates animalContactCount (ANIMAL-SOCIAL-HQ.md) ===");
+{
+  // two contacts WITHOUT engaged never promote — canon-lock side effect stays untouched.
+  const win = newWin();
+  const w = mkWorld(win);
+  const id = mintAnimal(win, w);
+  win.eval(`applyEvent(U.worlds['${w.id}'], { type:"codex_contact", payload:{ id:'${id}' } });`);
+  win.eval(`applyEvent(U.worlds['${w.id}'], { type:"codex_contact", payload:{ id:'${id}' } });`);
+  const rec = win.eval(`codexGet(U.worlds['${w.id}'], '${id}')`);
+  check("RED-FIRST: two contacts WITHOUT engaged never promote",
+    rec.dm.promoted !== true, JSON.stringify(rec.dm));
+  check("canon-lock side effect UNCHANGED: an unengaged contact still locks to canon (status.soft:false)",
+    rec.status.soft === false, JSON.stringify(rec.status));
+  check("animalContactCount stays unset/0 (never incremented without p.engaged)",
+    !rec.dm.animalContactCount, JSON.stringify(rec.dm));
+
+  // two contacts WITH engaged:true promote, as before.
+  const win2 = newWin();
+  const w2 = mkWorld(win2);
+  const id2 = mintAnimal(win2, w2);
+  win2.eval(`applyEvent(U.worlds['${w2.id}'], { type:"codex_contact", payload:{ id:'${id2}', engaged:true } });`);
+  win2.eval(`applyEvent(U.worlds['${w2.id}'], { type:"codex_contact", payload:{ id:'${id2}', engaged:true } });`);
+  const rec2 = win2.eval(`codexGet(U.worlds['${w2.id}'], '${id2}')`);
+  check("ACCEPT: two ENGAGED contacts promote (dm.promoted true)", rec2.dm.promoted === true, JSON.stringify(rec2.dm));
+}
+
+console.log("\n=== HQ-4 Defect B: animal_care target guard + id alias (ANIMAL-SOCIAL-HQ.md) ===");
+{
+  const win = newWin();
+  const w = mkWorld(win);
+  win.eval(`codexAdd(U.worlds['${w.id}'], { kind:"npc", id:"human-1", name:"Rowan",
+    fields:{}, dm:{}, status:{ soft:false, at:'home' } });`);
+  const out = win.eval(`applyEvent(U.worlds['${w.id}'], { type:"animal_care", payload:{ target:"human-1", event:"fed" } })`);
+  check("RED-FIRST: animal_care targeting a human NPC is rejected",
+    out && out.ok === false && out.reason === "not-an-animal:human-1", JSON.stringify(out));
+  const humanRec = win.eval(`codexGet(U.worlds['${w.id}'], 'human-1')`);
+  check("no fields.careLog polluted onto the human record",
+    !humanRec.fields || !humanRec.fields.careLog, JSON.stringify(humanRec.fields));
+  const ledgerLen = win.eval(`U.worlds['${w.id}'].ledger.length`);
+  check("no ledger line was written for the rejected care attempt", ledgerLen === 0, "ledgerLen=" + ledgerLen);
+
+  // real animal via the {id} alias (D6) — no target field supplied.
+  const id = mintAnimal(win, w);
+  const outAlias = win.eval(`applyEvent(U.worlds['${w.id}'], { type:"animal_care", payload:{ id:'${id}', event:"fed" } })`);
+  check("ACCEPT: animal_care with {id} (alias->target) ticks care",
+    outAlias && outAlias.ok === true && outAlias.care === 1, JSON.stringify(outAlias));
+
+  // real animal via target still ticks on a distinct day — Helpful gate math unchanged.
+  win.eval(`U.worlds['${w.id}'].clock.day = 11;`);
+  const outTarget = win.eval(`applyEvent(U.worlds['${w.id}'], { type:"animal_care", payload:{ target:'${id}', event:"fed" } })`);
+  check("care via target still ticks on a distinct day",
+    outTarget && outTarget.ok === true && outTarget.care === 2, JSON.stringify(outTarget));
 }
 
 console.log("\n=== NEGATIVE-SPACE (explicit, not an omission): recruit_creature still REJECTS partials ===");

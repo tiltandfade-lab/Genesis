@@ -31,11 +31,14 @@ with Adam's rulings folded; REALM-HOOKS spec landing next. Queue:
    - **Rime of the Frostmaiden** → wilderness (cold survival, overland dread)
 2. ☐ **Adam: row-level taste passes** on the PROVISIONAL craft (Child Saw d100, the 3 item tables,
    the 3 realm re-keys) — direction already ruled, rows await his read.
-3. ☐ **Build wave — the spec backlog is deep and Sonnet-ready** (each doc carries numbered units +
-   red-first tests): ANIMAL-SOCIAL U1–U6 → TIYL-WEIGHTED-STARTS → HOOK-WALKS (incl. dungeon-discovery,
-   breach-in-walks, mid-walk entry, 8–12 segment law) → GLOOM-KEY U1–U7 → PLACE-GEN U1–U6 →
-   CAMEO-CAST U1–U5 → SHIP-TRAVEL U1–U9 → REALM-HOOKS U1–U6. Suggested order follows
-   dependency: ANIMAL-SOCIAL env-banding first (PLACE-GEN + wilderness starts read it).
+3. ◐ **Build wave — the spec backlog is deep and Sonnet-ready** (each doc carries numbered units +
+   red-first tests): ☑ **ANIMAL-SOCIAL U1–U6 — BUILT + GATED + MERGED 2026-07-09 night** (CHANGELOG;
+   Opus re-gate caught a real DM_EVENT_TYPES / dm-contract.json / table-usage artifact-drift miss the
+   build self-reported green). REMAINING, in dependency order → TIYL-WEIGHTED-STARTS → HOOK-WALKS
+   (incl. dungeon-discovery, breach-in-walks, mid-walk entry, 8–12 segment law) → GLOOM-KEY U1–U7 →
+   PLACE-GEN U1–U6 → CAMEO-CAST U1–U5 → SHIP-TRAVEL U1–U9 → REALM-HOOKS U1–U6.
+   **⚠ Each remaining spec is still SPEC-not-locked ("awaiting Adam's review") — lock it (resolve its
+   open rulings) before executing, as ANIMAL-SOCIAL was locked before its build.**
 4. ☐ **Models-lane handoff** (coordination note, other session): saurian warrior+scholar castes,
    2-3 rideable dino mounts, Zeal-stratum sentinel, the bat gang, ED-209-class boss, ally-mutant,
    plus the Shoggoth benchmark's hermetic re-identity ("Unformed of Nun", Adam deferred).

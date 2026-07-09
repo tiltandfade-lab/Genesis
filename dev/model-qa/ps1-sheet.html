@@ -34,6 +34,21 @@ import { resetGeom, getBuffers } from './probe-lib.js';
 /* ---- SET-DRIVEN ROSTERS (?set=races etc.). Dynamic imports; a missing/broken creature file is
    skipped (the sheet renders partially mid-wave instead of dying on one bad import). ---- */
 const SETS = {
+  'catchall-w1': [
+    {name:'MAGE',           sub:'catch-all', file:'rlm-shared-mage.js',            fn:'buildMage2'},
+    {name:'HELMED HORROR',  sub:'catch-all', file:'rlm-shared-helmed-horror.js',   fn:'buildHelmedHorror'},
+    {name:'MASTIFF',        sub:'catch-all', file:'rlm-shared-mastiff.js',         fn:'buildMastiff'},
+    {name:'RAT',            sub:'catch-all', file:'rlm-shared-rat.js',             fn:'buildRat'},
+    {name:'WEREBOAR',       sub:'catch-all', file:'rlm-shared-wereboar.js',        fn:'buildWereboar'},
+    {name:'WERETIGER',      sub:'catch-all', file:'rlm-shared-weretiger.js',       fn:'buildWeretiger'},
+    {name:'SPY',            sub:'catch-all', file:'rlm-shared-spy.js',             fn:'buildSpy'},
+    {name:'GUARD CAPTAIN',  sub:'catch-all', file:'rlm-shared-guard-captain.js',   fn:'buildGuardCaptain'},
+    {name:'WIGHT LORD',     sub:'catch-all', file:'rlm-shared-wight-lord.js',      fn:'buildWightLord'},
+    {name:'HAUNTING REVENANT', sub:'catch-all', file:'rlm-shared-haunting-revenant.js', fn:'buildHauntingRevenant'},
+    {name:'CRIME LORD',     sub:'catch-all', file:'rlm-shared-bandit-crime-lord.js', fn:'buildBanditCrimeLord'},
+    {name:'LARVAE SWARM',   sub:'catch-all', file:'rlm-shared-swarm-of-larvae.js', fn:'buildSwarmOfLarvae'},
+  ],
+
   'suburb-w1': [
     {name:'ONI',            sub:'suburb w1', file:'rlm-suburb-oni.js',             fn:'buildOni'},
     {name:'SHIELD GUARDIAN',sub:'suburb w1', file:'rlm-suburb-shield-guardian.js', fn:'buildShieldGuardian'},

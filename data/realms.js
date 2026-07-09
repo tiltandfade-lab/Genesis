@@ -60,8 +60,8 @@ const REALMS = {
   cosmic: {
     id: "cosmic",
     label: "Cosmic",
-    register: "Cosmic/weird — scale that doesn't fit in a sentence; the wonder that answers back.",
-    voice: ["a sound with no source", "geometry that argues with itself", "a name too long to finish", "the drowned language"],
+    register: "Hermetic-Enochian esoterica — as above, so below, made literal: correspondences are load-bearing, true names command, sacred geometry casts, and the wonder answers back when you spell it right.",
+    voice: ["a true name, spoken exactly once", "a circle squared into a door", "the tongue of Thoth, read aloud and answering", "a heart laid on the scale"],
     render: { sat: 1.25, tint: "#8a3ce0", tintAmt: 0.30, contrast: 0.90 },
   },
   theater: {

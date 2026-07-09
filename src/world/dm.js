@@ -3203,6 +3203,15 @@ function applyEvent(w,e){
         const derived=creatureLevers(rec0);
         derived.forEach(d=>{ if(d && d.type && !declaredKeys.has(d.type)){ levers.push(d); declaredKeys.add(d.type); leversDerivedKeys.push(d.type); } });
       }
+      // HQ-3 (ANIMAL-SOCIAL-HQ.md) — same merge, same shape, for animal partials
+      // (kind:"npc", dm.partialKind==="animal"): animalLevers had zero production callers
+      // before this fix, so a hungry/lost/guarding/loyal animal's care levers never reached
+      // a social_check. Mirrors the creature branch exactly.
+      if(rec0 && rec0.kind==="npc" && rec0.dm && rec0.dm.partialKind==="animal" && typeof animalLevers==="function"){
+        const declaredKeys=new Set(levers.map(l=>(typeof l==="string")?l:(l&&l.type)));
+        const derived=animalLevers(rec0);
+        derived.forEach(d=>{ if(d && d.type && !declaredKeys.has(d.type)){ levers.push(d); declaredKeys.add(d.type); leversDerivedKeys.push(d.type); } });
+      }
       // §S2 FICTION-DC THREADING (BUG-18): when the DM supplies the DC it narrated, that DC is
       // FINAL for grading — no leverage re-pricing on top (the narrated DC already priced the scene;
       // re-discounting is how 18-vs-20 promoted a sergeant, Run 4 T6). Declared/derived DECISIVE levers

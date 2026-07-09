@@ -172,8 +172,8 @@ Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-R
 1. **Dirt-farmer (scorched rows, hydroponic scraps)** — Tied to the land and its seasons; the base everyone eats from.
 2. **Waste-hunter** — Reads the wild and brings in what the settled can't.
 3. **Convoy hand** — Moves the heavy things; sees everything, is asked nothing.
-4. **Ruin-diver or Vault-delver** — Works the dark and the tight places; patient underground.
-5. **Bonded hand (indentured to a warlord or hoarder)** — Invisible to the powerful, and so hears every secret.
+4. **Ruin-diver** — Works the dark and the tight places; patient underground.
+5. **Bonded hand (indentured to a warlord** — Invisible to the powerful, and so hears every secret.
 6. **The Starving** — Has nothing, so knows the streets better than anyone.
 7. **Salvage-tinker** — Their tools carry their whole history.
 8. **Scrap-smith** — Calloused hands; deals in practical defense.
@@ -233,16 +233,16 @@ plain magenta background. Rendered in this realm's art style (see the style bloc
 ### Domestic animal sheet 1/1
 
 1. **Domestic animal — Loyal dog — bonded to one person, reads their mood before they do.**
-2. **Domestic animal — Working beast — ox, mule, or plough-horse; earns its feed, patient, and spooks true.**
+2. **Domestic animal — Working beast (a single ox) — earns its feed, patient, and spooks true.**
 3. **Domestic animal — Barn cat — owns the place, tolerates the people, hunts the dark corners.**
 4. **Domestic animal — Stray — belongs to no one and everyone; the street's own alarm bell.**
-5. **Domestic animal — Fowl or flock — geese, hens, guineas; loud, territorial, first to mark a stranger.**
-6. **Domestic animal — Herd animal — sheep, goats, cattle; moves as one, and the one it *won't* follow is the tell.**
-7. **Domestic animal — Bird kept close — hawk, pigeon, or raven; carries, watches, and remembers a face.**
-8. **Domestic animal — Vermin-catcher — ferret, terrier, or rat-snake; goes gladly where people won't.**
+5. **Domestic animal — A single goose from the flock — loud, territorial, first to mark a stranger.**
+6. **Domestic animal — A single sheep from the herd — moves with the others, and its lone reluctance to follow is the tell.**
+7. **Domestic animal — Bird kept close (a single hawk) — carries, watches, and remembers a face.**
+8. **Domestic animal — Vermin-catcher (a single ferret) — goes gladly where people won't.**
 9. **Domestic animal — Old animal — past its working years, half-blind, and still the first to growl at the wrong thing.**
 10. **Domestic animal — Half-tamed wild thing — comes to the window, never the hand; trusts one child and no one else.**
-11. **Domestic animal — The realm-beast — [reskin slot] the drone-pet, the war-mule, the too-clever shade, the rad-mongrel.**
+11. **Domestic animal — The realm-beast (the rad-mongrel — a fused, half-metal stray that outlived the world that made it)**
 12. **Domestic animal — The town's own animal — the one everyone knows by name; its fate is the town's mood made visible.**
 
 

@@ -169,29 +169,29 @@ Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-R
 
 ### NPC sheet 1/2
 
-1. **Fisherman or Whaler** — Reads the wild and brings in what the settled can't.
-2. **Dockhand or Deckhand** — Moves the heavy things; sees everything, is asked nothing.
-3. **Hold-rat or Ballast-shifter** — Works the dark and the tight places; patient underground.
+1. **Fisherman** — Reads the wild and brings in what the settled can't.
+2. **Dockhand** — Moves the heavy things; sees everything, is asked nothing.
+3. **Hold-rat** — Works the dark and the tight places; patient underground.
 4. **Captain's steward** — Invisible to the powerful, and so hears every secret.
-5. **Wharf-beggar or Dock-tramp** — Has nothing, so knows the streets better than anyone.
+5. **Wharf-beggar** — Has nothing, so knows the streets better than anyone.
 6. **Shipwright** — Their tools carry their whole history.
-7. **Ship's smith or Cannon-armorer** — Calloused hands; deals in practical defense.
-8. **Ship's cook or Galley-hand** — Up before dawn; holds the neighborhood's gossip.
+7. **Ship's smith** — Calloused hands; deals in practical defense.
+8. **Ship's cook** — Up before dawn; holds the neighborhood's gossip.
 9. **Ship's carpenter** — Reads every structure out of habit; knows what's load-bearing.
-10. **Sailmaker or Rigger** — Notices the cut and quality of everyone's clothes.
+10. **Sailmaker** — Notices the cut and quality of everyone's clothes.
 11. **Ship's chandler** — Keeps the means of travel and trade running; eyes on the weather.
-12. **Purser or Trade-factor** — Information-rich, truth-poor.
+12. **Purser** — Information-rich, truth-poor.
 13. **Portside tavern-keeper** — Controls the space, not the people in it.
 14. **Herb-woman of the port** — Smells of bitterroot; knows what heals and what doesn't.
-15. **Surgeon's mate or Loblolly boy** — Trusted, and overburdened by it.
+15. **Surgeon's mate** — Trusted, and overburdened by it.
 16. **Ship's chaplain** — Maintains the ritual, not the doctrine.
 17. **Shantyman** — Craves the attention; hides the true feeling under it.
 18. **Master-at-arms** — Authority-adjacent, with limited real power.
 19. **Cutlass-for-hire** — Loyalty bought with coin, and cynical about it.
 20. **Convoy-escort hand** — Wary of the road; values a good pair of boots.
-21. **Pirate or Mutineer** — Desperate or cruel; lives outside the law.
-22. **Smuggler or Blockade-runner** — Hides the cargo; speaks only in euphemism.
-23. **Ship's rat or Dockside cutpurse** — Eyes every coin-pouch; avoids every eye.
+21. **Pirate** — Desperate or cruel; lives outside the law.
+22. **Smuggler** — Hides the cargo; speaks only in euphemism.
+23. **Ship's rat** — Eyes every coin-pouch; avoids every eye.
 24. **Devotee of the drowned god** — Fanatical devotion behind a mundane face.
 25. **Press-gang recruiter** — Charisma aimed at the desperate; sells belonging.
 
@@ -199,11 +199,11 @@ Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-R
 
 1. **Foreign hand signed at the last port** — Chose to stay here; the reasons stay unclear.
 2. **The one who never comes above decks** — Known of, rarely seen.
-3. **Acting mate (the officer lost or drowned)** — Filling in for someone absent; borrowed authority.
+3. **Acting mate (the officer lost** — Filling in for someone absent; borrowed authority.
 4. **Fo'c'sle boss** — Power without a title.
 5. **Landsman who never should've shipped out** — Unqualified, unwilling, or both — and in the role anyway.
 6. **Passenger of quality** — Wealthy, bored, insulated from real consequence.
-7. **Trading-company nabob or Fleet-owner** — Sees every interaction as a transaction.
+7. **Trading-company nabob** — Sees every interaction as a transaction.
 8. **Chart-hoarder with a route no captain will buy** — Hoards the secret knowledge; sees others as material.
 9. **The stowaway no manifest explains** — Their very presence is the notable thing.
 10. **Ship's captain** — Owes the crew as much as they're owed; the ledger is law aboard.
@@ -234,16 +234,16 @@ plain magenta background. Rendered in this realm's art style (see the style bloc
 ### Domestic animal sheet 1/1
 
 1. **Domestic animal — Loyal dog — bonded to one person, reads their mood before they do.**
-2. **Domestic animal — Working beast — ox, mule, or plough-horse; earns its feed, patient, and spooks true.**
+2. **Domestic animal — Working beast (a single ox) — earns its feed, patient, and spooks true.**
 3. **Domestic animal — Barn cat — owns the place, tolerates the people, hunts the dark corners.**
 4. **Domestic animal — Stray — belongs to no one and everyone; the street's own alarm bell.**
-5. **Domestic animal — Fowl or flock — geese, hens, guineas; loud, territorial, first to mark a stranger.**
-6. **Domestic animal — Herd animal — sheep, goats, cattle; moves as one, and the one it *won't* follow is the tell.**
-7. **Domestic animal — Bird kept close — hawk, pigeon, or raven; carries, watches, and remembers a face.**
-8. **Domestic animal — Vermin-catcher — ferret, terrier, or rat-snake; goes gladly where people won't.**
+5. **Domestic animal — A single goose from the flock — loud, territorial, first to mark a stranger.**
+6. **Domestic animal — A single sheep from the herd — moves with the others, and its lone reluctance to follow is the tell.**
+7. **Domestic animal — Bird kept close (a single hawk) — carries, watches, and remembers a face.**
+8. **Domestic animal — Vermin-catcher (a single ferret) — goes gladly where people won't.**
 9. **Domestic animal — Old animal — past its working years, half-blind, and still the first to growl at the wrong thing.**
 10. **Domestic animal — Half-tamed wild thing — comes to the window, never the hand; trusts one child and no one else.**
-11. **Domestic animal — The realm-beast — [reskin slot] the drone-pet, the war-mule, the too-clever shade, the rad-mongrel.**
+11. **Domestic animal — The realm-beast (the ship's cat — a barnacle-tough tabby that's outlived three captains)**
 12. **Domestic animal — The town's own animal — the one everyone knows by name; its fate is the town's mood made visible.**
 
 

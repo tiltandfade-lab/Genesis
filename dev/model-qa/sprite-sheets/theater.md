@@ -169,43 +169,43 @@ Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-R
 
 ### NPC sheet 1/2
 
-1. **Requisitioned farmer or Forager** — Tied to the land and its seasons; the base everyone eats from.
-2. **Scout or Skirmisher** — Reads the wild and brings in what the settled can't.
-3. **Ammunition-bearer or Baggage-train hand** — Moves the heavy things; sees everything, is asked nothing.
-4. **Sapper or Trench-digger** — Works the dark and the tight places; patient underground.
+1. **Requisitioned farmer** — Tied to the land and its seasons; the base everyone eats from.
+2. **Scout** — Reads the wild and brings in what the settled can't.
+3. **Ammunition-bearer** — Moves the heavy things; sees everything, is asked nothing.
+4. **Sapper** — Works the dark and the tight places; patient underground.
 5. **Officer's orderly / batman** — Invisible to the powerful, and so hears every secret.
-6. **Refugee or Straggler** — Has nothing, so knows the streets better than anyone.
-7. **Field-artificer or Smith's mate** — Their tools carry their whole history.
+6. **Refugee** — Has nothing, so knows the streets better than anyone.
+7. **Field-artificer** — Their tools carry their whole history.
 8. **Armorer** — Calloused hands; deals in practical defense.
-9. **Cook or Mess-hand** — Up before dawn; holds the neighborhood's gossip.
-10. **Field engineer or Bridge-layer** — Reads every structure out of habit; knows what's load-bearing.
-11. **Kit-mender or Tent-wright** — Notices the cut and quality of everyone's clothes.
-12. **Farrier or Wainwright of the train** — Keeps the means of travel and trade running; eyes on the weather.
+9. **Cook** — Up before dawn; holds the neighborhood's gossip.
+10. **Field engineer** — Reads every structure out of habit; knows what's load-bearing.
+11. **Kit-mender** — Notices the cut and quality of everyone's clothes.
+12. **Farrier** — Keeps the means of travel and trade running; eyes on the weather.
 13. **Sutler (camp merchant)** — Information-rich, truth-poor.
-14. **Canteen-keeper or Billet-master** — Controls the space, not the people in it.
-15. **Camp bonesetter or Herb-woman** — Smells of bitterroot; knows what heals and what doesn't.
+14. **Canteen-keeper** — Controls the space, not the people in it.
+15. **Camp bonesetter** — Smells of bitterroot; knows what heals and what doesn't.
 16. **Surgeon (the rear hospital)** — Trusted, and overburdened by it.
 17. **Chaplain** — Maintains the ritual, not the doctrine.
 18. **Camp entertainer** — Craves the attention; hides the true feeling under it.
-19. **Provost-sergeant or Military police** — Authority-adjacent, with limited real power.
-20. **Mercenary or Free-company soldier** — Loyalty bought with coin, and cynical about it.
-21. **Picket or Sentry** — Wary of the road; values a good pair of boots.
-22. **Marauder or Deserter-turned-brigand** — Desperate or cruel; lives outside the law.
-23. **Contraband-runner or Blockade-runner** — Hides the cargo; speaks only in euphemism.
-24. **Looter or Camp-thief** — Eyes every coin-pouch; avoids every eye.
-25. **Zealot-soldier or Fifth-columnist** — Fanatical devotion behind a mundane face.
+19. **Provost-sergeant** — Authority-adjacent, with limited real power.
+20. **Mercenary** — Loyalty bought with coin, and cynical about it.
+21. **Picket** — Wary of the road; values a good pair of boots.
+22. **Marauder** — Desperate or cruel; lives outside the law.
+23. **Contraband-runner** — Hides the cargo; speaks only in euphemism.
+24. **Looter** — Eyes every coin-pouch; avoids every eye.
+25. **Zealot-soldier** — Fanatical devotion behind a mundane face.
 
 ### NPC sheet 2/2
 
-1. **Press-gang or Recruiting sergeant** — Charisma aimed at the desperate; sells belonging.
+1. **Press-gang** — Charisma aimed at the desperate; sells belonging.
 2. **Foreign auxiliary from afar** — Chose to stay here; the reasons stay unclear.
 3. **Shell-shocked hermit behind the lines** — Known of, rarely seen.
 4. **Field-promoted corporal (borrowed command)** — Filling in for someone absent; borrowed authority.
-5. **Trench boss or Camp strongman** — Power without a title.
+5. **Trench boss** — Power without a title.
 6. **Conscript who should never have been called** — Unqualified, unwilling, or both — and in the role anyway.
 7. **Well-connected staff cornet** — Wealthy, bored, insulated from real consequence.
 8. **War contractor** — Sees every interaction as a transaction.
-9. **Cryptographer or War-alchemist** — Hoards the secret knowledge; sees others as material.
+9. **Cryptographer** — Hoards the secret knowledge; sees others as material.
 10. **The one no uniform explains** — Their very presence is the notable thing.
 11. **Officer** — Orders the line held; loved or hated, and rarely wrong about both.
 12. **Field-medic** — Patches what the line breaks; ran out of the good supplies weeks ago.
@@ -233,16 +233,16 @@ plain magenta background. Rendered in this realm's art style (see the style bloc
 ### Domestic animal sheet 1/1
 
 1. **Domestic animal — Loyal dog — bonded to one person, reads their mood before they do.**
-2. **Domestic animal — Working beast — ox, mule, or plough-horse; earns its feed, patient, and spooks true.**
+2. **Domestic animal — Working beast (a single ox) — earns its feed, patient, and spooks true.**
 3. **Domestic animal — Barn cat — owns the place, tolerates the people, hunts the dark corners.**
 4. **Domestic animal — Stray — belongs to no one and everyone; the street's own alarm bell.**
-5. **Domestic animal — Fowl or flock — geese, hens, guineas; loud, territorial, first to mark a stranger.**
-6. **Domestic animal — Herd animal — sheep, goats, cattle; moves as one, and the one it *won't* follow is the tell.**
-7. **Domestic animal — Bird kept close — hawk, pigeon, or raven; carries, watches, and remembers a face.**
-8. **Domestic animal — Vermin-catcher — ferret, terrier, or rat-snake; goes gladly where people won't.**
+5. **Domestic animal — A single goose from the flock — loud, territorial, first to mark a stranger.**
+6. **Domestic animal — A single sheep from the herd — moves with the others, and its lone reluctance to follow is the tell.**
+7. **Domestic animal — Bird kept close (a single hawk) — carries, watches, and remembers a face.**
+8. **Domestic animal — Vermin-catcher (a single ferret) — goes gladly where people won't.**
 9. **Domestic animal — Old animal — past its working years, half-blind, and still the first to growl at the wrong thing.**
 10. **Domestic animal — Half-tamed wild thing — comes to the window, never the hand; trusts one child and no one else.**
-11. **Domestic animal — The realm-beast — [reskin slot] the drone-pet, the war-mule, the too-clever shade, the rad-mongrel.**
+11. **Domestic animal — The realm-beast (the mess-hall mutt — a scrappy dog that's followed the unit through every front)**
 12. **Domestic animal — The town's own animal — the one everyone knows by name; its fate is the town's mood made visible.**
 
 

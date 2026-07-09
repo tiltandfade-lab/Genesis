@@ -171,25 +171,25 @@ Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-R
 
 ### NPC sheet 1/2
 
-1. **Canal-farmer or Terrace-tender** — Tied to the land and its seasons; the base everyone eats from.
-2. **Waste-runner or Ruin-hunter** — Reads the wild and brings in what the settled can't.
-3. **Stone-hauler or Relic-porter** — Moves the heavy things; sees everything, is asked nothing.
-4. **Tomb-delver or Vault-breaker** — Works the dark and the tight places; patient underground.
-5. **Bond-servant or Tomb-house attendant** — Invisible to the powerful, and so hears every secret.
-6. **Ruin-beggar or Camp-follower** — Has nothing, so knows the streets better than anyone.
-7. **Relic-tinkerer or Old-craft apprentice** — Their tools carry their whole history.
-8. **Bronze-caster or Old-alloy smith** — Calloused hands; deals in practical defense.
+1. **Canal-farmer** — Tied to the land and its seasons; the base everyone eats from.
+2. **Waste-runner** — Reads the wild and brings in what the settled can't.
+3. **Stone-hauler** — Moves the heavy things; sees everything, is asked nothing.
+4. **Tomb-delver** — Works the dark and the tight places; patient underground.
+5. **Bond-servant** — Invisible to the powerful, and so hears every secret.
+6. **Ruin-beggar** — Has nothing, so knows the streets better than anyone.
+7. **Relic-tinkerer** — Their tools carry their whole history.
+8. **Bronze-caster** — Calloused hands; deals in practical defense.
 9. **Dig-camp cook** — Up before dawn; holds the neighborhood's gossip.
-10. **Buttress-mason or Shoring-carpenter** — Reads every structure out of habit; knows what's load-bearing.
-11. **Wrap-weaver or Shroud-maker** — Notices the cut and quality of everyone's clothes.
-12. **Expedition outfitter or Camel-master** — Keeps the means of travel and trade running; eyes on the weather.
-13. **Relic-fence or Antiquities broker** — Information-rich, truth-poor.
-14. **Caravanserai-keeper or Dig-camp quartermaster** — Controls the space, not the people in it.
-15. **Curse-ward apothecary or Herb-woman** — Smells of bitterroot; knows what heals and what doesn't.
+10. **Buttress-mason** — Reads every structure out of habit; knows what's load-bearing.
+11. **Wrap-weaver** — Notices the cut and quality of everyone's clothes.
+12. **Expedition outfitter** — Keeps the means of travel and trade running; eyes on the weather.
+13. **Relic-fence** — Information-rich, truth-poor.
+14. **Caravanserai-keeper** — Controls the space, not the people in it.
+15. **Curse-ward apothecary** — Smells of bitterroot; knows what heals and what doesn't.
 16. **Dig-camp physician** — Trusted, and overburdened by it.
 17. **Grave-rite keeper** — Maintains the ritual, not the doctrine.
-18. **Epic-singer or Lorekeeper-bard** — Craves the attention; hides the true feeling under it.
-19. **Wonder-warden or Site militiaman** — Authority-adjacent, with limited real power.
+18. **Epic-singer** — Craves the attention; hides the true feeling under it.
+19. **Wonder-warden** — Authority-adjacent, with limited real power.
 20. **Tomb-raider's muscle** — Loyalty bought with coin, and cynical about it.
 21. **Waste-caravan guard** — Wary of the road; values a good pair of boots.
 22. **Wasteland raider** — Desperate or cruel; lives outside the law.
@@ -200,10 +200,10 @@ Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-R
 ### NPC sheet 2/2
 
 1. **Cult recruiter preaching the god-king's return** — Charisma aimed at the desperate; sells belonging.
-2. **Foreign scholar or Far-realm pilgrim** — Chose to stay here; the reasons stay unclear.
+2. **Foreign scholar** — Chose to stay here; the reasons stay unclear.
 3. **Ruin-hermit** — Known of, rarely seen.
 4. **Acting steward for an heir long dead** — Filling in for someone absent; borrowed authority.
-5. **Dig-boss or Camp strongman** — Power without a title.
+5. **Dig-boss** — Power without a title.
 6. **Reluctant tomb-guide** — Unqualified, unwilling, or both — and in the role anyway.
 7. **Antiquities baron** — Sees every interaction as a transaction.
 8. **Forbidden archivist** — Hoards the secret knowledge; sees others as material.
@@ -236,16 +236,16 @@ plain magenta background. Rendered in this realm's art style (see the style bloc
 ### Domestic animal sheet 1/1
 
 1. **Domestic animal — Loyal dog — bonded to one person, reads their mood before they do.**
-2. **Domestic animal — Working beast — ox, mule, or plough-horse; earns its feed, patient, and spooks true.**
+2. **Domestic animal — Working beast (a single ox) — earns its feed, patient, and spooks true.**
 3. **Domestic animal — Barn cat — owns the place, tolerates the people, hunts the dark corners.**
 4. **Domestic animal — Stray — belongs to no one and everyone; the street's own alarm bell.**
-5. **Domestic animal — Fowl or flock — geese, hens, guineas; loud, territorial, first to mark a stranger.**
-6. **Domestic animal — Herd animal — sheep, goats, cattle; moves as one, and the one it *won't* follow is the tell.**
-7. **Domestic animal — Bird kept close — hawk, pigeon, or raven; carries, watches, and remembers a face.**
-8. **Domestic animal — Vermin-catcher — ferret, terrier, or rat-snake; goes gladly where people won't.**
+5. **Domestic animal — A single goose from the flock — loud, territorial, first to mark a stranger.**
+6. **Domestic animal — A single sheep from the herd — moves with the others, and its lone reluctance to follow is the tell.**
+7. **Domestic animal — Bird kept close (a single hawk) — carries, watches, and remembers a face.**
+8. **Domestic animal — Vermin-catcher (a single ferret) — goes gladly where people won't.**
 9. **Domestic animal — Old animal — past its working years, half-blind, and still the first to growl at the wrong thing.**
 10. **Domestic animal — Half-tamed wild thing — comes to the window, never the hand; trusts one child and no one else.**
-11. **Domestic animal — The realm-beast — [reskin slot] the drone-pet, the war-mule, the too-clever shade, the rad-mongrel.**
+11. **Domestic animal — The realm-beast (the temple lizard — a small basking reptile that's never once left the ruins)**
 12. **Domestic animal — The town's own animal — the one everyone knows by name; its fate is the town's mood made visible.**
 
 

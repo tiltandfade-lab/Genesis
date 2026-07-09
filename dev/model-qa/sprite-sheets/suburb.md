@@ -171,29 +171,29 @@ Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-R
 
 ### NPC sheet 1/2
 
-1. **Landscaper or Lawn crew** — Tied to the land and its seasons; the base everyone eats from.
-2. **Garbage-truck driver or Moving crew** — Moves the heavy things; sees everything, is asked nothing.
-3. **Utility repairman or Storm-drain crew** — Works the dark and the tight places; patient underground.
-4. **Housekeeper or Pool cleaner** — Invisible to the powerful, and so hears every secret.
-5. **Runaway or Squatter in the half-built lot** — Has nothing, so knows the streets better than anyone.
-6. **Craft-fair hobbyist or Weekend woodworker** — Their tools carry their whole history.
-7. **Locksmith or Auto mechanic** — Calloused hands; deals in practical defense.
-8. **Donut-shop baker or Diner cook** — Up before dawn; holds the neighborhood's gossip.
+1. **Landscaper** — Tied to the land and its seasons; the base everyone eats from.
+2. **Garbage-truck driver** — Moves the heavy things; sees everything, is asked nothing.
+3. **Utility repairman** — Works the dark and the tight places; patient underground.
+4. **Housekeeper** — Invisible to the powerful, and so hears every secret.
+5. **Runaway** — Has nothing, so knows the streets better than anyone.
+6. **Craft-fair hobbyist** — Their tools carry their whole history.
+7. **Locksmith** — Calloused hands; deals in practical defense.
+8. **Donut-shop baker** — Up before dawn; holds the neighborhood's gossip.
 9. **Subdivision contractor** — Reads every structure out of habit; knows what's load-bearing.
 10. **Mall boutique clerk** — Notices the cut and quality of everyone's clothes.
-11. **Gas-station attendant or Bike-shop owner** — Keeps the means of travel and trade running; eyes on the weather.
+11. **Gas-station attendant** — Keeps the means of travel and trade running; eyes on the weather.
 12. **Realtor** — Information-rich, truth-poor.
-13. **Pizza-parlor or Roller-rink owner** — Controls the space, not the people in it.
+13. **Pizza-parlor** — Controls the space, not the people in it.
 14. **Drugstore pharmacist** — Smells of bitterroot; knows what heals and what doesn't.
-15. **Family physician or Pediatrician** — Trusted, and overburdened by it.
-16. **Parish minister or Sunday-school teacher** — Maintains the ritual, not the doctrine.
-17. **Local radio DJ or Talent-show emcee** — Craves the attention; hides the true feeling under it.
+15. **Family physician** — Trusted, and overburdened by it.
+16. **Parish minister** — Maintains the ritual, not the doctrine.
+17. **Local radio DJ** — Craves the attention; hides the true feeling under it.
 18. **Patrol cop** — Authority-adjacent, with limited real power.
 19. **Repo man** — Loyalty bought with coin, and cynical about it.
 20. **School crossing guard** — Wary of the road; values a good pair of boots.
 21. **Joyriding delinquent** — Desperate or cruel; lives outside the law.
 22. **Backroom bootleg-tape dealer** — Hides the cargo; speaks only in euphemism.
-23. **Shoplifter or Bike-thief** — Eyes every coin-pouch; avoids every eye.
+23. **Shoplifter** — Eyes every coin-pouch; avoids every eye.
 24. **Devout neighbor with a locked basement** — Fanatical devotion behind a mundane face.
 25. **Door-to-door salesman** — Charisma aimed at the desperate; sells belonging.
 
@@ -202,7 +202,7 @@ Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-R
 1. **New family on the block** — Chose to stay here; the reasons stay unclear.
 2. **Shut-in at the end of the cul-de-sac** — Known of, rarely seen.
 3. **Substitute teacher** — Filling in for someone absent; borrowed authority.
-4. **PTA president or Neighborhood alpha-dad** — Power without a title.
+4. **PTA president** — Power without a title.
 5. **Reluctant Little League coach** — Unqualified, unwilling, or both — and in the role anyway.
 6. **Country-club parents** — Wealthy, bored, insulated from real consequence.
 7. **Subdivision developer** — Sees every interaction as a transaction.
@@ -237,16 +237,16 @@ plain magenta background. Rendered in this realm's art style (see the style bloc
 ### Domestic animal sheet 1/1
 
 1. **Domestic animal — Loyal dog — bonded to one person, reads their mood before they do.**
-2. **Domestic animal — Working beast — ox, mule, or plough-horse; earns its feed, patient, and spooks true.**
+2. **Domestic animal — Working beast (a single ox) — earns its feed, patient, and spooks true.**
 3. **Domestic animal — Barn cat — owns the place, tolerates the people, hunts the dark corners.**
 4. **Domestic animal — Stray — belongs to no one and everyone; the street's own alarm bell.**
-5. **Domestic animal — Fowl or flock — geese, hens, guineas; loud, territorial, first to mark a stranger.**
-6. **Domestic animal — Herd animal — sheep, goats, cattle; moves as one, and the one it *won't* follow is the tell.**
-7. **Domestic animal — Bird kept close — hawk, pigeon, or raven; carries, watches, and remembers a face.**
-8. **Domestic animal — Vermin-catcher — ferret, terrier, or rat-snake; goes gladly where people won't.**
+5. **Domestic animal — A single goose from the flock — loud, territorial, first to mark a stranger.**
+6. **Domestic animal — A single sheep from the herd — moves with the others, and its lone reluctance to follow is the tell.**
+7. **Domestic animal — Bird kept close (a single hawk) — carries, watches, and remembers a face.**
+8. **Domestic animal — Vermin-catcher (a single ferret) — goes gladly where people won't.**
 9. **Domestic animal — Old animal — past its working years, half-blind, and still the first to growl at the wrong thing.**
 10. **Domestic animal — Half-tamed wild thing — comes to the window, never the hand; trusts one child and no one else.**
-11. **Domestic animal — The realm-beast — [reskin slot] the drone-pet, the war-mule, the too-clever shade, the rad-mongrel.**
+11. **Domestic animal — The realm-beast (the cul-de-sac dog — a golden retriever that's a little too calm about the wrongness next door)**
 12. **Domestic animal — The town's own animal — the one everyone knows by name; its fate is the town's mood made visible.**
 
 

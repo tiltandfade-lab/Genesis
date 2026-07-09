@@ -172,28 +172,28 @@ Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-R
 
 ### NPC sheet 1/2
 
-1. **Overworld forager or Warp-zone scout** — Reads the wild and brings in what the settled can't.
-2. **Block-pusher or Cart-hauler** — Moves the heavy things; sees everything, is asked nothing.
-3. **Pipe-diver or Underworld tunneler** — Works the dark and the tight places; patient underground.
-4. **Wind-up page or Court page** — Invisible to the powerful, and so hears every secret.
-5. **Out-of-lives drifter or Bankrupt gambler** — Has nothing, so knows the streets better than anyone.
+1. **Overworld forager** — Reads the wild and brings in what the settled can't.
+2. **Block-pusher** — Moves the heavy things; sees everything, is asked nothing.
+3. **Pipe-diver** — Works the dark and the tight places; patient underground.
+4. **Wind-up page** — Invisible to the powerful, and so hears every secret.
+5. **Out-of-lives drifter** — Has nothing, so knows the streets better than anyone.
 6. **Toymaker** — Their tools carry their whole history.
-7. **Candy-chef or Sweet-shop baker** — Up before dawn; holds the neighborhood's gossip.
+7. **Candy-chef** — Up before dawn; holds the neighborhood's gossip.
 8. **Block-mason** — Reads every structure out of habit; knows what's load-bearing.
 9. **Mascot-suit tailor** — Notices the cut and quality of everyone's clothes.
-10. **Kart-wright or Ride-mechanic** — Keeps the means of travel and trade running; eyes on the weather.
-11. **Prize-broker or Ticket-changer** — Information-rich, truth-poor.
-12. **Save-point keeper or Rest-stop host** — Controls the space, not the people in it.
+10. **Kart-wright** — Keeps the means of travel and trade running; eyes on the weather.
+11. **Prize-broker** — Information-rich, truth-poor.
+12. **Save-point keeper** — Controls the space, not the people in it.
 13. **Heart-container brewer** — Smells of bitterroot; knows what heals and what doesn't.
 14. **Extra-life nurse** — Trusted, and overburdened by it.
 15. **Checkpoint priest** — Maintains the ritual, not the doctrine.
-16. **Sideshow act or Circus barker** — Craves the attention; hides the true feeling under it.
-17. **Wind-up soldier or Rule-goon** — Authority-adjacent, with limited real power.
+16. **Sideshow act** — Craves the attention; hides the true feeling under it.
+17. **Wind-up soldier** — Authority-adjacent, with limited real power.
 18. **Rented mini-boss** — Loyalty bought with coin, and cynical about it.
 19. **Gate-guard between worlds** — Wary of the road; values a good pair of boots.
-20. **Glitch-goblin or Rule-breaker** — Desperate or cruel; lives outside the law.
+20. **Glitch-goblin** — Desperate or cruel; lives outside the law.
 21. **Contraband power-up dealer** — Hides the cargo; speaks only in euphemism.
-22. **Coin-snatcher or Item-nabber** — Eyes every coin-pouch; avoids every eye.
+22. **Coin-snatcher** — Eyes every coin-pouch; avoids every eye.
 23. **True-believer in the High Score** — Fanatical devotion behind a mundane face.
 24. **Talent-scout for the Game** — Charisma aimed at the desperate; sells belonging.
 25. **Glitched-in wanderer** — Chose to stay here; the reasons stay unclear.
@@ -204,9 +204,9 @@ Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-R
 2. **Understudy mascot** — Filling in for someone absent; borrowed authority.
 3. **Backroom high-scorer** — Power without a title.
 4. **Miscast sprite** — Unqualified, unwilling, or both — and in the role anyway.
-5. **Spoiled prince or princess** — Wealthy, bored, insulated from real consequence.
-6. **Arcade tycoon or Toy magnate** — Sees every interaction as a transaction.
-7. **Manual-keeper or Lore-hoarder** — Hoards the secret knowledge; sees others as material.
+5. **Spoiled prince** — Wealthy, bored, insulated from real consequence.
+6. **Arcade tycoon** — Sees every interaction as a transaction.
+7. **Manual-keeper** — Hoards the secret knowledge; sees others as material.
 8. **The NPC with no dialogue tree** — Their very presence is the notable thing.
 9. **Champion-by-the-rules** — Won the game everyone plays; the crown is literal, and heavier than it looks.
 10. **Prize-keeper** — Guards the reward that's watching you back; the rules protect it, not you.
@@ -236,16 +236,16 @@ plain magenta background. Rendered in this realm's art style (see the style bloc
 ### Domestic animal sheet 1/1
 
 1. **Domestic animal — Loyal dog — bonded to one person, reads their mood before they do.**
-2. **Domestic animal — Working beast — ox, mule, or plough-horse; earns its feed, patient, and spooks true.**
+2. **Domestic animal — Working beast (a single ox) — earns its feed, patient, and spooks true.**
 3. **Domestic animal — Barn cat — owns the place, tolerates the people, hunts the dark corners.**
 4. **Domestic animal — Stray — belongs to no one and everyone; the street's own alarm bell.**
-5. **Domestic animal — Fowl or flock — geese, hens, guineas; loud, territorial, first to mark a stranger.**
-6. **Domestic animal — Herd animal — sheep, goats, cattle; moves as one, and the one it *won't* follow is the tell.**
-7. **Domestic animal — Bird kept close — hawk, pigeon, or raven; carries, watches, and remembers a face.**
-8. **Domestic animal — Vermin-catcher — ferret, terrier, or rat-snake; goes gladly where people won't.**
+5. **Domestic animal — A single goose from the flock — loud, territorial, first to mark a stranger.**
+6. **Domestic animal — A single sheep from the herd — moves with the others, and its lone reluctance to follow is the tell.**
+7. **Domestic animal — Bird kept close (a single hawk) — carries, watches, and remembers a face.**
+8. **Domestic animal — Vermin-catcher (a single ferret) — goes gladly where people won't.**
 9. **Domestic animal — Old animal — past its working years, half-blind, and still the first to growl at the wrong thing.**
 10. **Domestic animal — Half-tamed wild thing — comes to the window, never the hand; trusts one child and no one else.**
-11. **Domestic animal — The realm-beast — [reskin slot] the drone-pet, the war-mule, the too-clever shade, the rad-mongrel.**
+11. **Domestic animal — The realm-beast (the wind-up pup — a clockwork toy dog that never fully stopped being a toy)**
 12. **Domestic animal — The town's own animal — the one everyone knows by name; its fate is the town's mood made visible.**
 
 

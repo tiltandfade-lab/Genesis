@@ -33,6 +33,7 @@
     "data/realm-surfaces.js",
     "data/realm-props.js",
     "data/npc-role-skins.js",
+    "data/animal-realm-skins.js",
     "data/souls-canon.js",
     "data/pronouns.js",
     "data/creation-flow.js",
@@ -480,6 +481,17 @@
       ],
       "callTimeDeps": [],
       "desc": "docs/NPC-ROLE-REALMS.md \"Data seam\" — GENERATED (NPC_ROLE_SPINE/NPC_ROLE_SKINS, from `Engine/03. _Tables/02. Social/Sentient NPCs/NPC Role Spine.md` + the 11 `NPC Role Skin - <Realm>.md` files, by build/gen-role-skins.py) + hand-written `roleForRealm(realmId,rng)`. NPC_ROLE_SPINE = 35 universal role-archetypes {key,archetype,note,weight,cls} (the old frontier-only `npc-role` d100's weights ported 1:1 — spine weights sum to 100). NPC_ROLE_SKINS[realmId] = {reskin:{\"<key>\":{label,weight}}, adds:[{role,weight,cls,note}]} — one skin per data/realms.js REALM_ID, each relabeling/dropping(weight 0)/reweighting the spine and layering on realm-unique ADD roles. roleForRealm weighted-picks ONE entry from the combined (spine-minus-drops) ∪ adds pool, keyed to the realm; unknown/absent realmId falls back to 'frontier' (no regression). Replaces the flat rollTable(\"npc-role\") call in src/engine/codex-roll.js's rollNPC — role is NEVER coherence-gated (fires at every tier). Never hand-edit the generated NPC_ROLE_SPINE/NPC_ROLE_SKINS consts; regenerate with `python3 build/gen-role-skins.py`. Added 2026-07-08."
+    },
+    {
+      "id": "data.animal-realm-skins",
+      "path": "data/animal-realm-skins.js",
+      "type": "data",
+      "owns": [
+        "ANIMAL_REALM_SKINS",
+        "animalRealmSkin"
+      ],
+      "callTimeDeps": [],
+      "desc": "docs/ANIMAL-SOCIAL.md §6 U1, RESOLVED ruling 1 (2026-07-08 night) — animal realm skins get the full spine/skin/extras treatment like roles, not just an in-place DM reskin note. HAND-AUTHORED (CRAFT-LANE, no generator — unlike data/npc-role-skins.js this is a pure single-slot label overlay, not a 35-archetype drop/add/reweight problem, so a Python data-seam step is overkill for one label per realm per table). ANIMAL_REALM_SKINS[realmId] = {domestic:<row-11 label for animal-kind>, wild:<row-11 label for wild-animal-kind>} across the 11 data/realms.js REALM_IDS (excl. realm-neutral). animalRealmSkin(kind, realmId) is a pure lookup ('domestic'|'wild', realmId) -> label|null; unknown/absent realmId returns null so rollPartial (src/engine/codex-roll.js) falls back to the table's own generic row-11 text (no regression). Applied at roll time by matching the 'realm-skin' tag on the drawn row — never bakes into the compiled tables. Added 2026-07-09 (ANIMAL-SOCIAL U1)."
     },
     {
       "id": "data.souls-canon",
@@ -1480,13 +1492,19 @@
         "coherenceAtomGate",
         "MAYHEM_REALM_IDS",
         "TEMP_LADDER",
-        "sceneTemperature"
+        "sceneTemperature",
+        "ANIMAL_ENV_WEIGHTS",
+        "weightedTableRow",
+        "rollAnimalKind"
       ],
       "callTimeDeps": [
         "rollTable",
         "rollExpr",
         "CHAR_NAMES",
         "pick",
+        "CT",
+        "tallyTableRoll",
+        "animalRealmSkin",
         "rollDie",
         "dwalkBudget",
         "dwalkLootSlot",

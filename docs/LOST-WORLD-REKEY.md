@@ -167,3 +167,13 @@ Adam ruled dino mounts IN. The re-key implements the **seam**, not a new subsyst
 5. **Serial-numbers check.** No franchise proper nouns used (no "Reptite", no "Zeal"; the strata are
    "the scaled court" / "the ones before the scales" / "the ones above / the layer beneath"). Do you
    want fixed coined proper nouns for any of the three strata, or keep them descriptive-only?
+
+## RESOLVED — Adam's rulings (2026-07-08 night)
+1. **Court contempt bites by APPROACH, not flat:** "a magic party full of social magic can do
+   pretty much anything, but if you're a guy with a big sword? You're probably going to fight a
+   monster in a pit for entertainment." Social/arcane finesse can transact with the court;
+   martial-read outsiders get the pit. DM guidance line, not a stat gate.
+2. **Zeal stratum: strictly seeded** — no explicit discovery row.
+3. **The volcanic clock lives in REALM-HOOKS** (specced separately per tonight's ruling): a clock
+   that surfaces and ticks through play — hooks you can catch wind of — never ambient-lethal
+   ("not going to just kill you for hanging out with cave people and riding dinosaurs").

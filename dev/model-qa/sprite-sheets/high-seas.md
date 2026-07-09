@@ -14,7 +14,7 @@ skin/adds) into 25-per-sheet ChatGPT prompts. Names + flavor are pulled verbatim
 game data (`dev/model-qa/realm-bestiary-draft.json` for monsters, `data/npc-role-skins.js` for
 NPCs) — not hand-invented.
 
-Style block (same for every sheet in this realm): sun-faded teal-and-driftwood palette, salt-spray dither texture, hard bright rim light off water, weathered rope/canvas/barnacle textures, one high-value wet-glint accent per sprite.
+Style block (same for every sheet in this realm): Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). sun-faded teal-and-driftwood palette, salt-spray dither texture, hard bright rim light off water, weathered rope/canvas/barnacle textures, one high-value wet-glint accent per sprite.
 
 Shared mechanical instructions (same as the master template): 5×5 grid, 25 cells, one distinct
 static character per cell (not a repeat, not an animation frame), uniform cell size, solid magenta (#FF00FF) background (no transparency, no other background elements), consistent scale across all 25, orthographic side view, each character fully visible from head to toe within its cell — no cropping at the top, bottom, or sides, the complete body must fit inside the cell boundary. **Every character in an expressive, mid-action pose that captures its essence**
@@ -161,7 +161,7 @@ static character per cell (not a repeat, not an animation frame), uniform cell s
 
 ## NPC batches (44 total, 2 sheets)
 
-Style block (repeated here so this section is self-contained): sun-faded teal-and-driftwood palette, salt-spray dither texture, hard bright rim light off water, weathered rope/canvas/barnacle textures, one high-value wet-glint accent per sprite.
+Style block (repeated here so this section is self-contained): Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). sun-faded teal-and-driftwood palette, salt-spray dither texture, hard bright rim light off water, weathered rope/canvas/barnacle textures, one high-value wet-glint accent per sprite.
 
 Shared mechanical instructions (restated for this section, NPC-appropriate): 5x5 grid, 25 cells, one distinct static character per cell (not a repeat, not an animation frame), uniform cell size, solid magenta (#FF00FF) background (no transparency, no other background elements), consistent scale across all 25, orthographic side view, each character fully visible from head to toe within its cell — no cropping at the top, bottom, or sides, the complete body must fit inside the cell boundary. **Every character in an expressive pose characteristic of their role** — mid-task, mid-gesture, caught doing the thing that defines them (the smith mid-hammer-swing, the informant glancing over a shoulder, the merchant mid-haggle, the healer mid-bandage) — never a neutral T-pose or idle stand, and never combat aggression unless the role is itself a security/enforcer type. **No scene props, furniture, tools-as-set-dressing, or background objects of any kind** — no benches, stalls, counters, carts, weapons racks, signage, etc.; only the character itself (small hand-held items that are part of the character's own body/outfit, like a held tool mid-use, are fine — freestanding set pieces are not) isolated against the plain magenta background.
 
@@ -221,7 +221,7 @@ Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-R
 
 ## Domestic animal batches (25 total, 1 sheet)
 
-Style block (repeated here so this section is self-contained): sun-faded teal-and-driftwood palette, salt-spray dither texture, hard bright rim light off water, weathered rope/canvas/barnacle textures, one high-value wet-glint accent per sprite.
+Style block (repeated here so this section is self-contained): Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). sun-faded teal-and-driftwood palette, salt-spray dither texture, hard bright rim light off water, weathered rope/canvas/barnacle textures, one high-value wet-glint accent per sprite.
 
 Shared mechanical instructions (restated for this section): 5x5 grid, uniform cell size, solid
 magenta (#FF00FF) background (no transparency, no other background elements), consistent scale,
@@ -264,7 +264,7 @@ plain magenta background. Rendered in this realm's art style (see the style bloc
 
 ## Kid batches (20 total, 1 sheet)
 
-Style block (repeated here so this section is self-contained): sun-faded teal-and-driftwood palette, salt-spray dither texture, hard bright rim light off water, weathered rope/canvas/barnacle textures, one high-value wet-glint accent per sprite.
+Style block (repeated here so this section is self-contained): Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). sun-faded teal-and-driftwood palette, salt-spray dither texture, hard bright rim light off water, weathered rope/canvas/barnacle textures, one high-value wet-glint accent per sprite.
 
 Shared mechanical instructions (restated for this section): 5x5 grid, uniform cell size, solid
 magenta (#FF00FF) background (no transparency, no other background elements), consistent scale,

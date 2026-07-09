@@ -159,7 +159,7 @@ static character per cell (not a repeat, not an animation frame), uniform cell s
 
 ---
 
-## NPC batches (75 total, 3 sheets)
+## NPC batches (150 total, 6 sheets)
 
 **Population diversity (binding):** vary skin tone, ethnicity, hair texture, build, and age across the full roster below — a sheet where every face reads as the same ethnicity is a failure, not a style choice, regardless of realm. This realm's population also includes visible synthetic/heavily-augmented variety (see the final entries below) alongside an ethnically varied baseline-human majority — not everyone in this realm is flesh.
 
@@ -169,7 +169,7 @@ Shared mechanical instructions (restated for this section, NPC-appropriate): 5x5
 
 Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-ROLE-REALMS.md`) plus this realm's exclusive `adds`.
 
-### NPC sheet 1/3
+### NPC sheet 1/6
 
 1. **Vat-farmer** — Tied to the land and its seasons; the base everyone eats from.
 2. **Freight-runner** — Moves the heavy things; sees everything, is asked nothing.
@@ -197,7 +197,7 @@ Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-R
 24. **Machine-zealot behind a work badge** — Fanatical devotion behind a mundane face.
 25. **Corp headhunter** — Charisma aimed at the desperate; sells belonging.
 
-### NPC sheet 2/3
+### NPC sheet 2/6
 
 1. **Off-world transplant** — Chose to stay here; the reasons stay unclear.
 2. **Firewall recluse** — Known of, rarely seen.
@@ -227,7 +227,7 @@ Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-R
 
 ---
 
-### NPC sheet 3/3
+### NPC sheet 3/6
 
 1. **Dark-skinned network splicer — routes data around corp firewalls for a living**
 2. **Elderly analog holdout — refuses every implant, runs the last paper archive in the sprawl**
@@ -254,6 +254,93 @@ Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-R
 23. **Weathered rooftop pigeon-keeper — an analog hobby in a digital slum**
 24. **Augmented street medic — patches gunshot wounds off the books**
 25. **Tall, gaunt corp compliance officer — enforces rules even he thinks are pointless**
+
+
+**Underworld-factions addendum (additive, 2026-07-09):** Chrome's genre touchstone is urban gang-turf drama + street-level mutant vigilantes + corporate cyborg law enforcement (tonal inspiration only — every faction/character below is an ORIGINAL design; none reproduces a specific existing franchise character, costume, or named gang). The 75 entries below add ten distinct rival street gangs (five ranked members each, each gang with its own uniform gimmick/identity so they read as visually distinct factions on the sheet), a set of original animal-mutant street vigilantes, a set of original corporate-cyborg enforcers, and ten independent underworld figures who work across every gang's turf.
+
+### NPC sheet 4/6
+
+1. **Glass-Tooth Wreckers (broken-mirror-shard vests that catch the neon in jagged flashes) — Leader — mirror shards forming a crude crown across the shoulders**
+2. **Glass-Tooth Wreckers (broken-mirror-shard vests that catch the neon in jagged flashes) — Enforcer — carries a shard-studded bat, grins with a chipped tooth**
+3. **Glass-Tooth Wreckers (broken-mirror-shard vests that catch the neon in jagged flashes) — Lookout — perched rooftop-side, signals with flashes of reflected light**
+4. **Glass-Tooth Wreckers (broken-mirror-shard vests that catch the neon in jagged flashes) — Newest recruit — vest still bare, earning shards one fight at a time**
+5. **Glass-Tooth Wreckers (broken-mirror-shard vests that catch the neon in jagged flashes) — Gang medic — patches wounds with salvaged glass-free bandaging, ironically gentle**
+6. **Voltage Howlers (jury-rigged neon face-paint that pulses with the wearer's heartbeat) — Leader — face-paint pulses brightest of the whole crew**
+7. **Voltage Howlers (jury-rigged neon face-paint that pulses with the wearer's heartbeat) — Enforcer — rigged gauntlets spark on contact**
+8. **Voltage Howlers (jury-rigged neon face-paint that pulses with the wearer's heartbeat) — Lookout — face-paint dimmed to near-invisible for night watch**
+9. **Voltage Howlers (jury-rigged neon face-paint that pulses with the wearer's heartbeat) — Newest recruit — paint job uneven, still learning the wiring**
+10. **Voltage Howlers (jury-rigged neon face-paint that pulses with the wearer's heartbeat) — Gang mechanic — keeps everyone's face-rig from shorting out**
+11. **Chain-Yard Reapers (motorcycle-chain bandolier harnesses) — Leader — chains doubled, weighted, worn like a sash of rank**
+12. **Chain-Yard Reapers (motorcycle-chain bandolier harnesses) — Enforcer — swings a length of chain like it's an extension of the arm**
+13. **Chain-Yard Reapers (motorcycle-chain bandolier harnesses) — Lookout — thin chain-mesh veil, watches the rail-yard entrances**
+14. **Chain-Yard Reapers (motorcycle-chain bandolier harnesses) — Newest recruit — one chain earned, nine to go**
+15. **Chain-Yard Reapers (motorcycle-chain bandolier harnesses) — Gang scavenger — strips scrap chain off wrecked cars for the whole crew**
+16. **Static Vultures (feathered scrap-metal shoulder rigs, a scavenger gang) — Leader — the largest scrap-feather mantle in the crew**
+17. **Static Vultures (feathered scrap-metal shoulder rigs, a scavenger gang) — Enforcer — sharpened scrap talons riveted over the knuckles**
+18. **Static Vultures (feathered scrap-metal shoulder rigs, a scavenger gang) — Lookout — perches literally on rooftops, watches for salvage and rivals alike**
+19. **Static Vultures (feathered scrap-metal shoulder rigs, a scavenger gang) — Newest recruit — half-built rig, still scavenging for the rest of it**
+20. **Static Vultures (feathered scrap-metal shoulder rigs, a scavenger gang) — Gang trader — barters salvage rights with the other gangs**
+21. **Rust Choir (welded pipe-organ percussion rigs strapped to the back) — Leader — conducts the crew's rhythm mid-fight, sets the pace of the brawl**
+22. **Rust Choir (welded pipe-organ percussion rigs strapped to the back) — Enforcer — swings a length of tuned pipe like a club that also rings**
+23. **Rust Choir (welded pipe-organ percussion rigs strapped to the back) — Lookout — taps a single low note to signal trouble**
+24. **Rust Choir (welded pipe-organ percussion rigs strapped to the back) — Newest recruit — rig still off-key, hasn't found the crew's rhythm yet**
+25. **Rust Choir (welded pipe-organ percussion rigs strapped to the back) — Gang tuner — the only one who can actually fix the welded instruments**
+
+### NPC sheet 5/6
+
+1. **Neon Widows (an all-female enforcer collective, glowing web-circuit tattoos) — Leader — circuit-web tattoos run brightest down the spine**
+2. **Neon Widows (an all-female enforcer collective, glowing web-circuit tattoos) — Enforcer — knuckle-wrap wiring sparks on impact**
+3. **Neon Widows (an all-female enforcer collective, glowing web-circuit tattoos) — Lookout — tattoo dimmed deliberately, blends into shadow**
+4. **Neon Widows (an all-female enforcer collective, glowing web-circuit tattoos) — Newest recruit — tattoo half-finished, still healing**
+5. **Neon Widows (an all-female enforcer collective, glowing web-circuit tattoos) — Gang informant — trades secrets as often as she trades blows**
+6. **Copperhead Runners (copper-wire dreadlocks, the fastest couriers in the sprawl) — Leader — the longest, oldest copper dreadlocks in the crew**
+7. **Copperhead Runners (copper-wire dreadlocks, the fastest couriers in the sprawl) — Enforcer — protects the runners' routes, rarely runs himself**
+8. **Copperhead Runners (copper-wire dreadlocks, the fastest couriers in the sprawl) — Lookout — perched at a route's midpoint, relays timing**
+9. **Copperhead Runners (copper-wire dreadlocks, the fastest couriers in the sprawl) — Newest recruit — dreadlocks still short, still proving the speed**
+10. **Copperhead Runners (copper-wire dreadlocks, the fastest couriers in the sprawl) — Gang cartographer — the only one who actually knows every route by heart**
+11. **Grid Wolves (wolf-pelt-and-scrap hybrid coats, claim the transit tunnels) — Leader — the pelt-coat with the most scrap-plate reinforcement**
+12. **Grid Wolves (wolf-pelt-and-scrap hybrid coats, claim the transit tunnels) — Enforcer — patrols the tunnel claim line, turns back trespassers**
+13. **Grid Wolves (wolf-pelt-and-scrap hybrid coats, claim the transit tunnels) — Lookout — crouches at a tunnel mouth, listens more than watches**
+14. **Grid Wolves (wolf-pelt-and-scrap hybrid coats, claim the transit tunnels) — Newest recruit — coat still mostly pelt, hasn't earned the plating yet**
+15. **Grid Wolves (wolf-pelt-and-scrap hybrid coats, claim the transit tunnels) — Gang tracker — reads foot-traffic patterns through the whole transit system**
+16. **Chrome Locusts (swarm-tactics gang, insectoid scrap-plate shoulder armor) — Leader — the plating fans out like wings when he raises his arms**
+17. **Chrome Locusts (swarm-tactics gang, insectoid scrap-plate shoulder armor) — Enforcer — swarm-tactics drilled hard, never fights alone**
+18. **Chrome Locusts (swarm-tactics gang, insectoid scrap-plate shoulder armor) — Lookout — clicks a signal through the plating, mimics real insect calls**
+19. **Chrome Locusts (swarm-tactics gang, insectoid scrap-plate shoulder armor) — Newest recruit — plating still bare metal, hasn't been etched yet**
+20. **Chrome Locusts (swarm-tactics gang, insectoid scrap-plate shoulder armor) — Gang armorer — etches the swarm markings onto every new recruit's plate**
+21. **Foundry Kings (heavy work-apron armor, run the black-market smelters) — Leader — apron scorched black from years at the forge**
+22. **Foundry Kings (heavy work-apron armor, run the black-market smelters) — Enforcer — carries an actual smith's hammer as a weapon, and uses it as one**
+23. **Foundry Kings (heavy work-apron armor, run the black-market smelters) — Lookout — watches the foundry's loading dock for corp inspectors**
+24. **Foundry Kings (heavy work-apron armor, run the black-market smelters) — Newest recruit — apron still clean, hasn't earned a single scorch mark**
+25. **Foundry Kings (heavy work-apron armor, run the black-market smelters) — Gang smelter — melts down whatever the other nine gangs bring in**
+
+### NPC sheet 6/6
+
+1. **Sewer-bred alligator-mutant vigilante — self-taught street fighter, protects the tunnel-dwellers who feed him**
+2. **Rat-mutant scout — silent, fast, trades information for scraps, trusted by no one and everyone**
+3. **Mutant opossum medic — plays dead as a defense reflex, best field medic in the undercity anyway**
+4. **Mutant raccoon tech-scavenger — nimble-fingered, strips corp tech faster than security can react**
+5. **Mutant pigeon courier — flies message routes no drone dares take**
+6. **Elder mutant vigilante, retired — trained the current generation, mostly just watches now**
+7. **Mutant stray-dog pack leader — leads a loose found-family of enhanced strays, fiercely protective**
+8. **Bio-engineered defender, lab-escapee — enhanced reflexes, still learning what 'team' means**
+9. **Corporate peacekeeper unit, chrome-plated riot armor — what's left of the original officer is mostly voice now**
+10. **Prototype directive-bound enforcer — follows orders over judgment, unsettling to everyone who remembers him before**
+11. **Decommissioned enforcer chassis, gone rogue — still patrols a beat no one assigned him anymore**
+12. **Corp compliance cyborg — enforces policy with the same blank tone for a parking violation or a riot**
+13. **Riot-frame test pilot — barely more human than the frame she wears**
+14. **Salvaged enforcer-parts dealer — sells decommissioned peacekeeper components, no questions asked**
+15. **Street-legal bounty cyborg — licensed, barely, chases contracts the peacekeepers won't touch**
+16. **Turf-neutral fixer — brokers ceasefires between gangs when it's profitable**
+17. **Underground doctor, no questions asked — patches up whichever gang pays first**
+18. **Weapons smuggler — moves gear between all ten gangs equally, trusted for exactly that reason**
+19. **Rooftop bookie — takes bets on gang skirmishes like they're sporting events**
+20. **Graffiti-tagger territory-marker — the actual reason everyone knows whose turf is whose**
+21. **Retired gang legend, now bartender — every gang still buys him a drink out of respect**
+22. **Independent scrap baron — owns the yard all ten gangs have to buy from eventually**
+23. **Corp informant embedded in the gangs — reports up, feeds the gangs just enough to stay useful**
+24. **Street preacher of the old machine-cult — preaches to whichever gang will listen that week**
+25. **Orphaned kid, gang-adjacent — too young to join, runs errands for whoever's kindest that day**
 
 ## Domestic animal batches (25 total, 1 sheet)
 

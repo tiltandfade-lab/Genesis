@@ -14,7 +14,7 @@ into 25-per-sheet ChatGPT prompts. Shared template/discipline in
 - [`fantasy.md`](fantasy.md) — **Fantasy — Genesis's default, unreskinned world** (not one of the 11 named realms; the base game's own 510-entry Monster Manual bestiary + the raw NPC Role Spine, no genre reskin): 510 monsters / 21 sheets, 75 NPC roles / 3 sheets
 - [`ash.md`](ash.md) — Ash (post-apocalyptic, the world already ended once): 118 monsters / 5 sheets, 75 NPC roles / 3 sheets
 - [`bright-kingdom.md`](bright-kingdom.md) — Bright Kingdom (Nintendo-80s cartoon, power-ups you eat, teeth under the candy): 121 monsters / 5 sheets, 75 NPC roles / 3 sheets
-- [`chrome.md`](chrome.md) — Chrome (Warriors / TMNT / RoboCop neon-slum): 118 monsters / 5 sheets, 75 NPC roles / 3 sheets
+- [`chrome.md`](chrome.md) — Chrome (Warriors / TMNT / RoboCop neon-slum): 118 monsters / 5 sheets, 150 NPC roles / 6 sheets (incl. 10 original street-gang factions + mutant vigilantes + cyborg enforcers)
 - [`cosmic.md`](cosmic.md) — Cosmic (Egyptian / Hermetic / Enochian — true names, seals, sacred geometry): 117 monsters / 5 sheets, 75 NPC roles / 3 sheets
 - [`frontier.md`](frontier.md) — Frontier (Western, a line nobody enforces): 121 monsters / 5 sheets, 75 NPC roles / 3 sheets
 - [`gloom.md`](gloom.md) — Gloom (the town that made a deal / Derry): 119 monsters / 5 sheets, 75 NPC roles / 3 sheets

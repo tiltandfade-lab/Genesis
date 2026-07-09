@@ -39,7 +39,7 @@ function turnStampVisit(w, nodeId){
 function worldTurn(w, trigger, ctx){
   if(!w) return {ok:false, reason:"no-world"};
   ctx=ctx||{};
-  const report={trigger, drift:null, factionOutcome:null, lifeEvent:null, renownFade:null, jobBoardExpired:null, ignoredFired:null};
+  const report={trigger, drift:null, factionOutcome:null, lifeEvent:null, renownFade:null, jobBoardExpired:null, ignoredFired:null, animalTellRefresh:null};
   if(trigger==="montage"){
     // wasFull snapshot BEFORE ssFactionTurn ticks — mirrors dm.js's clock_advanced/clock_fired
     // transition guard. Only a faction that CROSSES to full this montage fires; a faction whose
@@ -69,6 +69,9 @@ function worldTurn(w, trigger, ctx){
     // rolls npc-if-ignored — what the NPC DOES about being ignored — rather than sitting frozen
     // forever. One sweep per montage, same wiring shape as repuFadeTick/jobBoardTick above.
     if(typeof turnIgnoredCheck==="function") report.ignoredFired=turnIgnoredCheck(w);
+    // ANIMAL-SOCIAL.md §4/§6 U5 — a befriended ally is "a standing sensor on its node": its tell
+    // re-rolls on every world turn. One sweep per montage, same wiring shape as the sweeps above.
+    if(typeof turnAnimalAllyTellRefresh==="function") report.animalTellRefresh=turnAnimalAllyTellRefresh(w);
     // REPUTATION.md §3: "hunted flag flips pressure bearing" (WORLD-TURN rim-bearing machinery,
     // pointed inward). NOT WIRED — w.pressures carries no structured faction link (only freeform
     // `danger` prose; rollPressure/rollFaction mint independently, no factionId), so pricing which
@@ -396,6 +399,34 @@ function turnMintSuccessorThread(w, npc, fate){
   addLedger(w,"npc-life",{kind:"successor-thread",npcId:npc.id,threadId:rec?rec.id:null,fate},
     "◆ What "+npc.name+" leaves behind: "+causeShape+".");
   return rec?rec.id:null;
+}
+
+/* ============================================================
+   §4b — ANIMAL-SOCIAL.md §4/§6 U5: the befriended-ally tell refresh
+   ============================================================ */
+
+/* a befriended ally (dm.ally:true, only ever stamped at attitude +2) is "a standing sensor on its
+   node" — its tell re-rolls every world turn rather than sitting frozen at mint. The re-roll is a
+   fresh `animal-tell` draw (engine owns the noun); `tellBoundTo` clears to null so the DM re-binds
+   it to a live referent on next narration (never carries the STALE binding forward as if it still
+   pointed at the same thing — the engine never invents what the new signal means). NULL-SAFE: no
+   codex / animal-tell not compiled -> no-op, no ledger noise. */
+function turnAnimalAllyTellRefresh(w){
+  if(typeof codexOf!=="function") return null;
+  const allies=Object.values(codexOf(w).records).filter(r=>r.kind==="npc"&&r.dm&&r.dm.partialKind==="animal"&&r.dm.ally===true);
+  if(!allies.length) return null;
+  const refreshed=[];
+  allies.forEach(r=>{
+    const roll=(typeof rollTable==="function")?rollTable("animal-tell"):null;
+    if(!roll) return;
+    r.dm.tell=roll.cells?roll.cells[0]:roll.text;
+    r.dm.tellBoundTo=null;
+    refreshed.push(r.id);
+  });
+  if(!refreshed.length) return null;
+  addLedger(w,"npc-life",{kind:"animal-tell-refresh",ids:refreshed},
+    "◆ The world turns — "+refreshed.length+" befriended animal(s) sense something new.");
+  return refreshed;
 }
 
 /* ============================================================

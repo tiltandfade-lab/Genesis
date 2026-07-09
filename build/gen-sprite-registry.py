@@ -48,7 +48,9 @@ import sys
 from collections import OrderedDict
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DEFAULT_MANIFEST = os.path.join(ROOT, "dev", "fixtures", "v2-manifest.json")
+# T2's real manifest landed 2026-07-09 — the fixture at dev/fixtures/v2-manifest.json
+# remains for the verify harness only.
+DEFAULT_MANIFEST = os.path.join(ROOT, "dev", "sprite-manifests", "v2-manifest.json")
 BESTIARY_DRAFT = os.path.join(ROOT, "dev", "model-qa", "realm-bestiary-draft.json")
 OVERLAY = os.path.join(ROOT, "dev", "model-qa", "sprite-tags-overlay.json")
 SPRITES_DIR = os.path.join(ROOT, "assets", "sprites")

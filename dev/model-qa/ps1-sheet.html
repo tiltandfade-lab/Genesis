@@ -34,6 +34,21 @@ import { resetGeom, getBuffers } from './probe-lib.js';
 /* ---- SET-DRIVEN ROSTERS (?set=races etc.). Dynamic imports; a missing/broken creature file is
    skipped (the sheet renders partially mid-wave instead of dying on one bad import). ---- */
 const SETS = {
+  'frontier-w1': [
+    {name:'GIANT VULTURE', sub:'frontier · LOW',  file:'rlm-frontier-giant-vulture.js',  fn:'buildGiantVulture'},
+    {name:'VENOMOUS SNAKE',sub:'frontier · LOW',  file:'rlm-frontier-venomous-snake.js', fn:'buildVenomousSnake'},
+    {name:'BANDIT ENFORCER',sub:'frontier · LOW', file:'rlm-frontier-bandit-enforcer.js',fn:'buildBanditEnforcer'},
+    {name:'SKELETON ARCHER',sub:'frontier · LOW', file:'rlm-frontier-skeleton-archer.js',fn:'buildSkeletonArcher'},
+    {name:'BASILISK',      sub:'frontier · LOW',  file:'rlm-frontier-basilisk.js',       fn:'buildBasilisk'},
+    {name:'GLADIATOR',     sub:'frontier · LOW',  file:'rlm-frontier-gladiator.js',      fn:'buildGladiator'},
+    {name:'VULTURE',       sub:'frontier · MED',  file:'rlm-frontier-vulture.js',        fn:'buildVulture'},
+    {name:'GIANT VEN SNAKE',sub:'frontier · MED', file:'rlm-frontier-giant-venomous-snake.js', fn:'buildGiantVenomousSnake'},
+    {name:'TOUGH',         sub:'frontier · MED',  file:'rlm-frontier-tough.js',          fn:'buildTough'},
+    {name:'PERFORMER',     sub:'frontier · MED',  file:'rlm-frontier-performer.js',      fn:'buildPerformer'},
+    {name:'XORN',          sub:'frontier · MED',  file:'rlm-frontier-xorn.js',           fn:'buildXorn'},
+    {name:'ASSASSIN',      sub:'frontier · MED',  file:'rlm-frontier-assassin.js',       fn:'buildAssassin'},
+  ],
+
   'rebuild-w4': [
     {name:'CULT FANATIC', sub:'rebuild', file:'var-fanatic.js',   fn:'buildCultFanatic'},
     {name:'BUGBEAR',      sub:'rebuild', file:'mon-bugbear.js',   fn:'buildBugbear'},

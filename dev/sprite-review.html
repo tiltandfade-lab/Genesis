@@ -27,6 +27,7 @@
   .guide { position:absolute; left:0; right:0; border-top:1px dashed rgba(200,180,120,.35); font-size:10px;
            color:rgba(200,180,120,.6); }
   .guide span { position:sticky; left:4px; background:rgba(21,19,26,.7); padding:0 4px; }
+  .guide.active { border-top:2px dashed var(--accent); color:var(--accent); font-weight:600; z-index:2; }
   #lineup { position:absolute; left:0; bottom:0; top:0; display:flex; align-items:flex-end; gap:28px;
             padding:0 40px; }
   .fig { display:flex; flex-direction:column; align-items:center; position:relative; }
@@ -108,6 +109,24 @@ const SIZE_SCALE = { tiny:0.5, small:1, medium:1, large:2, huge:3, gargantuan:4 
 const sizeOf = e => (e.size || "medium").toLowerCase();
 const sizeScale = e => SIZE_SCALE[sizeOf(e)] ?? 1;
 
+/* GUIDE LADDER — art-height targets (where the HEAD should land), distinct from the plane
+   math above: SRD Small shares Medium's 1x plane, so a Small creature's head belongs LOWER
+   inside that plane (0.75x). These calibrate the sprite's DEFAULT size — the game can re-cast
+   any sprite as a giant/tiny variant later by rendering it at a different tier. `titanic` is
+   reserved headroom (no SRD size maps there yet). */
+const GUIDES = [
+  { key:"tiny",     mult:0.5,  srd:"Tiny" },
+  { key:"small",    mult:0.75, srd:"Small" },
+  { key:"medium",   mult:1,    srd:"Medium" },
+  { key:"large",    mult:2,    srd:"Large" },
+  { key:"x-large",  mult:3,    srd:"Huge" },
+  { key:"gigantic", mult:4,    srd:"Gargantuan" },
+  { key:"titanic",  mult:5,    srd:null },
+];
+const SRD_TO_GUIDE = { tiny:"tiny", small:"small", medium:"medium", large:"large",
+                       huge:"x-large", gargantuan:"gigantic" };
+const guideFor = e => GUIDES.find(g => g.key === (SRD_TO_GUIDE[sizeOf(e)] || "medium"));
+
 let REG = {}, OVERLAY = {}, list = [], idx = 0, medPx = 150;
 let pins = JSON.parse(localStorage.getItem("spritePins") || "[]");
 const $ = id => document.getElementById(id);
@@ -152,7 +171,7 @@ function figHtml(e, cls){
   return `<div class="fig ${cls}" data-slug="${e.slug}">
       ${cls === "pinned" ? `<button class="unpin" onclick="unpin('${e.slug}')">unpin ✕</button>` : ""}
       <img src="/sprites/${e.slug}.png" style="height:${h}px" draggable="false">
-      <span class="cap">${e.name} · ${sizeOf(e)}${scaleFor(e.slug) !== 1 ? " · ×" + scaleFor(e.slug).toFixed(2) : ""}</span>
+      <span class="cap">${e.name} · ${sizeOf(e)} → ${guideFor(e).key}${scaleFor(e.slug) !== 1 ? " · ×" + scaleFor(e.slug).toFixed(2) : ""}</span>
     </div>`;
 }
 function render(){
@@ -160,10 +179,13 @@ function render(){
   const groundY = 46; // px above the stage bottom, room for captions
   stage.querySelectorAll(".guide,#ground").forEach(n => n.remove());
   const g = document.createElement("div"); g.id = "ground"; g.style.bottom = groundY + "px"; stage.appendChild(g);
-  for(const [name, s] of Object.entries(SIZE_SCALE)){
-    const gl = document.createElement("div"); gl.className = "guide";
-    gl.style.bottom = (groundY + s * medPx) + "px";
-    gl.innerHTML = `<span>${name} head (${s}×)</span>`;
+  const curGuide = e && guideFor(e);
+  for(const gd of GUIDES){
+    const gl = document.createElement("div");
+    const isCur = curGuide && gd.key === curGuide.key;
+    gl.className = "guide" + (isCur ? " active" : "");
+    gl.style.bottom = (groundY + gd.mult * medPx) + "px";
+    gl.innerHTML = `<span>${gd.key} head · ${gd.mult}×${gd.srd ? " · SRD " + gd.srd : " · reserved"}${isCur ? " ◀ TARGET" : ""}</span>`;
     stage.appendChild(gl);
   }
   lineup.style.bottom = groundY + "px"; lineup.style.top = "auto"; lineup.style.height = "0";
@@ -185,6 +207,11 @@ function renderInfo(){
   $("info").innerHTML = `
     <h2>${e.name}</h2><div class="slug">${e.slug}</div>
     <p class="verdict ${st}">${st.toUpperCase()}${o.scale ? ` · scale ×${o.scale}` : ""}</p>
+    <p style="font-size:12px;background:#2c2836;border:1px solid var(--line);border-radius:4px;padding:6px 8px">
+      target: <b style="color:var(--accent)">${guideFor(e).key}</b> head line
+      (${guideFor(e).mult}×${guideFor(e).srd ? " · SRD " + guideFor(e).srd : ""})<br>
+      <span style="color:var(--dim)">calibrates this sprite's DEFAULT size — the game can
+      re-cast it as a giant or tiny variant at another tier.</span></p>
     <dl>
       <dt>realm</dt><dd>${e.realm}</dd><dt>kind</dt><dd>${e.kind}</dd>
       <dt>size</dt><dd>${e.size || "— (renders medium)"}</dd>

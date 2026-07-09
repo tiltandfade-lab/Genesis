@@ -102,3 +102,7 @@ realm skins land, (b) Adam's spine/skin craft pass renames rows, or (c) unit 7's
 surfaces scene needs the pools can't dress (counters, cell bars, altars-by-realm, market stalls) —
 run the census at each of those gates and queue net-new entries here. No pool padding was done to
 green this (report-only mode).
+
+**Superseded by the grounded sweep → `docs/PLACE-ASSET-QUEUE.md`** (2026-07-09): the concrete
+build-list version of this census — 3D architecture-shell gaps (counters/cell-bars/stalls/gates),
+setting-sprite queue (signs/banners/posters/FX), counts, and a P1 first wave.

@@ -20,6 +20,7 @@
     "data/bestiary.js",
     "data/monster-flavor.js",
     "data/realm-bestiary.js",
+    "data/sprite-registry.js",
     "data/items.js",
     "data/model-recipes.js",
     "data/model-recipe-overrides.js",
@@ -325,6 +326,16 @@
       ],
       "callTimeDeps": [],
       "desc": "REALM-WIRING §1 — GENERATED (from dev/model-qa/realm-bestiary-draft.json) realm creature layer: REALM_BESTIARY[realmId] = [{name,cr,role,type,size,frame,model}], 1092 creatures across the 11 realms (data/realms.js). `frame` is a real data/bestiary.js id (the reskin's stat chassis — mechanics stay D&D); `model` is a render key (usually a bestiary id, sometimes a `net-new: <description>` placeholder pending the 207-model queue). Consumed by src/engine/dungeon-walk.js's realmEncounterPool (a breach draws the active realm's creatures instead of the generic archetype pool, mirroring dwalkOutlandish's existing realm-filtered loot). Never hand-edit; regenerate. Added 2026-07-04."
+    },
+    {
+      "id": "data.sprite-registry",
+      "path": "data/sprite-registry.js",
+      "type": "data",
+      "owns": [
+        "SPRITE_REGISTRY"
+      ],
+      "callTimeDeps": [],
+      "desc": "docs/SPRITE-TRANSITION.md T3 — GENERATED (build/gen-sprite-registry.py) from a v2 sprite-sheet manifest (dev/sprite-manifests/v2-manifest.json once T2's build/gen-sprite-sheet-manifests.py lands; dev/fixtures/v2-manifest.json fixture until then) joined against dev/model-qa/realm-bestiary-draft.json + dev/model-qa/sprite-tags-overlay.json (the Adam redline/vision-scan overlay, deep-merged last — its `tags` array replaces the auto set when present). SPRITE_REGISTRY[slug] = {realm, kind, name, role, cr, type, size, frame, tags, sheet, cell, status}; slug scheme `spr-<realm>-<kebab-name>`; `status`:\"cut\" iff assets/sprites/<slug>.png exists at generation time, else \"pending\" (the resolution chain per docs/SPRITE-TRANSITION.md §3 is cut-sprite -> 3D whole-object -> cuboid -> blank meeple — this registry is only consulted for the first link). Join is cell name <-> bestiary creature name within the same realm (exact, then case/punct-insensitive); unjoined cells are never dropped, they keep role/cr/type/size/frame:null and are printed as a WARN list by the generator. Never hand-edit; regenerate. Consumed (future, T4) by src/ui/theater-boot.js's figureFor sprite-billboard branch. Added 2026-07-09 (feat/sprite-registry)."
     },
     {
       "id": "data.items",

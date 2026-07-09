@@ -405,7 +405,11 @@ function codexFullRecord(w, r){
   // REVIEW-FIXES-0705 U4 — the parley angle: creature-only advisory hint of which ability/skill a
   // social_check against this record should roll (Beast -> Wis/Animal Handling, else Cha/Persuasion).
   // Advisory only (the roll stays the DM's, §5 anti-drift); NPCs never carry this field.
-  if(r.kind==="creature" && typeof socialCheckAbilityFor==="function") o.parleyAbility=socialCheckAbilityFor(r);
+  // HQ-3 (ANIMAL-SOCIAL-HQ.md) — widen the gate so animal partials (kind:"npc",
+  // dm.partialKind==="animal") ALSO get the advisory ability hint; previously excluded
+  // because they aren't kind:"creature", so the digest never told the DM to route
+  // WIS/Animal Handling and the engine defaulted to Cha/Persuasion.
+  if((r.kind==="creature" || (r.kind==="npc" && r.dm && r.dm.partialKind==="animal")) && typeof socialCheckAbilityFor==="function") o.parleyAbility=socialCheckAbilityFor(r);
   // ANIMAL-SOCIAL.md §2/§6 U4 — the witness packet rides the digest ONLY once an interview is open
   // (Speak with Animals active, or the DM marked the channel open — r.dm.interviewOpen, set by the
   // animal_interview event). Absent that flag, an animal partial still ships its baseline kind+tell+
@@ -825,13 +829,18 @@ function animalPropagatePackAttitude(w, rec, newValue, cause){
    canon (status.soft:false, same posture as codexContact's canon-lock, so codexEvictSoft's pool-
    recycling sweep — `status.soft && !status.known` — can never touch it again) and stamps a home
    node (dm.homeNodeId) so it "recurs via prep at its territory/home node like any cast NPC."
-   Idempotent (`dm.promoted` guards a second call from re-stamping/re-logging); landmark row-12
-   animals are minted ALREADY promoted (prepCastEnvAnimals/prepCastAmbientScene) so this is a
-   guaranteed no-op there (`dm.ambient` is already false at mint). Null-safe/non-animal -> false. */
+   Idempotent (`dm.promoted` guards a second call from re-stamping/re-logging) — that idempotency
+   guard is ALSO what keeps landmark row-12 animals (minted already dm.promoted:true) a guaranteed
+   no-op here; it is not the ambient check's job. The wilderness territory-holder (ANIMAL-SOCIAL.md
+   §4's "the one who gets promoted first") mints with `dm.ambient:false` too (prepCastEnvAnimals) —
+   that flag was never meant to gate the holder, only to mark it as not an ordinary disposable
+   ambient draw, so the holder must pass this guard on `dm.territoryHolder` as well.
+   HQ-2 (docs/ANIMAL-SOCIAL-HQ.md): fixed a guard that read `!rec.dm.ambient` and silently killed
+   every holder-promotion trigger. Null-safe/non-animal -> false. */
 function animalMaybePromote(w, rec, cause){
   if(!rec || rec.kind!=="npc" || !(rec.dm && rec.dm.partialKind==="animal")) return false;
-  if(rec.dm.promoted) return false;                  // already promoted — no-op
-  if(!rec.dm.ambient) return false;                   // not currently an ambient record
+  if(rec.dm.promoted) return false;                  // already promoted — no-op (also excludes landmarks)
+  if(!rec.dm.ambient && !rec.dm.territoryHolder) return false;   // not an ambient record and not the holder
   const a=(typeof codexGetAttitude==="function") ? codexGetAttitude(w, rec.id) : null;
   const attitudeAboveZero=!!(a && a.value>0);
   const engagedTwice=(rec.dm.animalContactCount||0)>=2;

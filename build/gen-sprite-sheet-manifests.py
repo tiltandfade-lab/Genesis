@@ -199,6 +199,37 @@ def check_collisions(all_sheets):
     return collisions
 
 
+def resolve_collisions(all_sheets):
+    """Orchestrator policy (2026-07-09 integration): a collision between DIFFERENT kinds gets a
+    `-<kind>` suffix on the later cell; a same-kind collision gets an ordinal suffix (`-2`, `-3`).
+    Both are WARNed loudly and recorded so the disambiguation is reviewable, never silent — the
+    slug's job is unique addressability; distinct authored content is never renamed to fake clean."""
+    seen = {}   # slug -> (sheet, cell)
+    resolved = []
+    for sheet in all_sheets:
+        for cell in sheet["cells"]:
+            slug = cell["slug"]
+            if slug in seen:
+                first_sheet, first_cell = seen[slug]
+                if sheet["kind"] != first_sheet["kind"]:
+                    new = f"{slug}-{sheet['kind']}"
+                else:
+                    n = 2
+                    while f"{slug}-{n}" in seen:
+                        n += 1
+                    new = f"{slug}-{n}"
+                if new in seen:  # suffix itself collides — give up loudly
+                    return resolved, f"unresolvable collision: {new}"
+                resolved.append({"slug": new, "was": slug,
+                                 "cell": f"{sheet['id']}#{cell['n']} ({cell['name']!r})",
+                                 "first": f"{first_sheet['id']}#{first_cell['n']}"})
+                cell["slug"] = new
+                seen[new] = (sheet, cell)
+            else:
+                seen[slug] = (sheet, cell)
+    return resolved, None
+
+
 def main():
     if not os.path.isdir(SRC_DIR):
         print(f"ERROR: source dir not found: {SRC_DIR}", file=sys.stderr)
@@ -235,15 +266,19 @@ def main():
         stats = by_realm[realm]
         print(f"  {realm}: {stats['sheets']} sheets, {stats['cells']} cells")
 
-    collisions = check_collisions(all_sheets)
-    if collisions:
-        print(
-            f"ERROR: {len(collisions)} slug collision(s) detected -- two cells resolved to the "
-            "same slug (manifest NOT written; fix the source .md naming clash and re-run):",
-            file=sys.stderr,
-        )
-        for slug, first_loc, second_loc in collisions:
-            print(f"  {slug}: first seen at {first_loc}, collides with {second_loc}", file=sys.stderr)
+    resolved, fatal = resolve_collisions(all_sheets)
+    if fatal:
+        print(f"ERROR: {fatal} (manifest NOT written)", file=sys.stderr)
+        sys.exit(1)
+    for r in resolved:
+        print(f"WARN: slug collision resolved: {r['was']} -> {r['slug']} at {r['cell']} "
+              f"(first holder: {r['first']})", file=sys.stderr)
+    remaining = check_collisions(all_sheets)
+    if remaining:
+        print(f"ERROR: {len(remaining)} collision(s) survived resolution (manifest NOT written):",
+              file=sys.stderr)
+        for slug, first_loc, second_loc in remaining:
+            print(f"  {slug}: {first_loc} vs {second_loc}", file=sys.stderr)
         sys.exit(1)
 
     os.makedirs(OUT_DIR, exist_ok=True)
@@ -251,6 +286,7 @@ def main():
         "_generated_by": "build/gen-sprite-sheet-manifests.py",
         "_source": "dev/model-qa/sprite-sheets/*.md",
         "_note": "GENERATED — do not hand-edit; re-run the generator.",
+        "_collisions": resolved,
         "sheets": all_sheets,
     }
     with open(OUT_PATH, "w", encoding="utf-8") as f:

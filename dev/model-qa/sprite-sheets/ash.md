@@ -475,3 +475,11 @@ block and mechanical instructions as above.
 13. **Cindermarked Warden** — faction guard whose shard-arm glows to the elbow, ash flaking off the skin it's spending
 14. **The First Kindled** — the faction's founder, more ember than flesh now, radiant and burning down
 15. **The Ember-Stone Reliquary** — the mother-stone on its carried litter, bearers aging visibly around it
+
+### Expansion sheet E2 (1×3 grid, 3 cells) — Adam's 2026-07-09 approval-pass additions
+
+Adam confirmed the Cindermarked run as a **cult** — three cult-role additions to E1's roster.
+
+1. **Cindermarked Recruiter** — warm-palmed missionary offering a cold traveler a shard's heat, first taste free
+2. **Cindermarked Initiate** — new convert mid-branding, pressing the shard to their own sternum, rapture and terror both
+3. **The Apostate** — hollow-cheeked ex-cultist who cut the shard out, bandaged chest, forever cold now

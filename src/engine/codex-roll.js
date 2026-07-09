@@ -389,10 +389,14 @@ function rollPartial(kind, opts){
     if(skinned) animalKindText=skinned;
   }
   const wildDefault=(opts.env==="wilderness")?-1:0;   // ANIMAL-SOCIAL §3: wild draws default attitude -1
-  const attitude=/\bwild\b|\bwary\b/.test(akTags)?-1:wildDefault;
+  let attitude=/\bwild\b|\bwary\b/.test(akTags)?-1:wildDefault;
+  // ANIMAL-SOCIAL §3/§6 U3: Ranger/Druid opening-attitude-one-step-better (flat, script-owned — no DM
+  // judgment). opts.pcClass is optional; absent -> attitude unchanged (no regression for callers that
+  // don't know the acting PC's class, e.g. a scene-typed ambient draw with no single "asker").
+  if(typeof animalOpeningStep==="function") attitude=animalOpeningStep(attitude, opts.pcClass);
   return { kind:"partial", partialKind:"animal", coherence:"archetype",
     name:opts.name||null,
-    fields:{ role:"animal", animalKind:animalKindText },
+    fields:{ role:"animal", animalKind:animalKindText, care:0 },
     dm:{ tell:tx(tell), need:(typeof pick==="function")?pick(["hungry","guarding","lost","loyal"]):"hungry",
       attitude } };
 }

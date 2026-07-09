@@ -1616,8 +1616,15 @@ const DM_EVENT_FIELDS = {
   // input.overshoot)`), never in arithmetic — it is a flag, not a number. dc/total/natural ARE
   // genuinely numeric (dc: Math.round(Number(...)) + `>=` compare; total: `>=` compare, was the
   // ad-hoc Number()||0 site; natural: strict `===20` compare) — tagged.
-  social_check:      { accept:["caughtLie","cause","dc","lever","levers","natural","overshoot","skill","target","total"], num:["dc","total","natural"] },
+  // ANIMAL-SOCIAL.md §3/§6 U3 RESOLVED ruling-2 bypass fields: animalFriendshipSpell/strongCha are
+  // plain booleans (flag gates in animalHelpfulAllowed, never arithmetic) — same "flag, not a number"
+  // posture as overshoot above, so deliberately left OUT of `num`.
+  social_check:      { accept:["animalFriendshipSpell","caughtLie","cause","dc","lever","levers","natural","overshoot","skill","strongCha","target","total"], num:["dc","total","natural"] },
   attitude_shift:    { accept:["cause","target","to"], alias:{ id:"target", npc:"target" } },
+  // ANIMAL-SOCIAL.md §3/§6 U3 — the sustained-care event (feeding/tending/defending an animal partial).
+  // `event` is free text (informational — the handler doesn't branch on it, §3's flat feed/tend/defend
+  // list); `target` is the codex id.
+  animal_care:       { accept:["event","target"] },
   morale_check:      { accept:["creature","dc","mods","outcome","save","trigger"], num:["dc"] },
   parley_open:       { accept:["ceiling","creature","floor","npc","openingAttitude","target","want"] },
   insight_read:      { accept:["bestMentalMod","dc","guarded","masking","mentalMods","target","total"], num:["bestMentalMod","dc","total"] },
@@ -3218,6 +3225,24 @@ function applyEvent(w,e){
         res.to = 1;
         res.shift = res.to - res.from;
       }
+      // ANIMAL-SOCIAL.md §3/§6 U3 — the Helpful (+2) gate for animal partials (kind:"npc",
+      // rec0.dm.partialKind==="animal", minted by rollPartial/prepCastEnvAnimals). Same SHAPE as the
+      // Anomaly Law's creature grind-ceiling directly above (ordinary shifts clamp at +1/Friendly) but a
+      // DIFFERENT unlock channel: no nat-20, only the sustained-care track (fields.care, ticked by the
+      // `animal_care` event below) OR the RESOLVED ruling-2 bypass (a declared animal-friendship-class
+      // spell, or a caller-flagged strong-Charisma result — p.animalFriendshipSpell / p.strongCha).
+      // animalHelpfulAllowed is pure (src/engine/social.js); this block only reads/clamps, never writes
+      // fields.care itself (that's the dedicated event's job, so care is never inflated by a social win).
+      // MUST run before the codexSetAttitude commit below — a clamp applied after the write is a no-op.
+      const isAnimalPartial = !!(rec0 && rec0.dm && rec0.dm.partialKind==="animal");
+      if(isAnimalPartial && typeof animalHelpfulAllowed==="function"){
+        const careCount = (rec0.fields && rec0.fields.care) || 0;
+        const allowed = animalHelpfulAllowed(careCount, { animalFriendshipSpell:p.animalFriendshipSpell, strongCha:p.strongCha });
+        if(!allowed && res.to>1 && res.to>res.from){
+          res.to = 1;
+          res.shift = res.to - res.from;
+        }
+      }
       if(res.terrified) codexSetTerrified(w,p.target,true,clk);
       else if(res.to!==res.from) codexSetAttitude(w,p.target,res.to,p.cause||p.skill||"social",clk);
       // ANOMALY LAW §2b.2 — bondEligible is stamped ONLY by the anomaly channels: a nat-20 on this check,
@@ -3270,6 +3295,26 @@ function applyEvent(w,e){
       addLedger(w,"outcome",{kind:"social",target:p.target,name:nm,from:a.value,to:r.value,cause:p.cause||null,source:src},
         `✦ ${nm} — ${attitudeLabel(a.value)} → ${attitudeLabel(r.value)}${p.cause?(" ("+p.cause+")"):""}.`);
       return {ok:true, from:a.value, to:r.value};
+    }
+    /* ANIMAL-SOCIAL.md §3/§6 U3 — the sustained-care track: fields.care is a DISTINCT-VISIT counter
+       (never a per-check tick — feeding an animal three times in one scene is still ONE visit; a
+       "visit" is deduped by in-world DAY, the same grain codex/clock already use). Only fed/tended/
+       defended events tick it (p.event names the care kind, informational — the counter doesn't
+       branch on WHICH care event, per §3's flat "feed/tend/defend" list). This is the ONLY writer of
+       fields.care — the social_check Helpful-gate above only READS it, so a social win never inflates
+       the counter on its own. Null-safe: no codex/target -> {ok:false}. */
+    case "animal_care":{
+      if(typeof codexGet!=="function") return {ok:false,reason:"codex-unavailable"};
+      const r=codexGet(w,p.target); if(!r) return {ok:false,reason:"no-target:"+(p.target||"?")};
+      r.fields=r.fields||{};
+      r.fields.careLog=r.fields.careLog||[];
+      const day=clockOf(w).day;
+      const already=r.fields.careLog.indexOf(day)!==-1;
+      if(!already){ r.fields.careLog.push(day); r.fields.care=r.fields.careLog.length; }
+      else { r.fields.care=r.fields.careLog.length; }
+      addLedger(w,"outcome",{kind:"animal-care",target:p.target,event:p.event||null,day,care:r.fields.care,distinct:!already,source:src},
+        `✦ ${r.name||p.target} — cared for (${p.event||"tended"}); ${r.fields.care} distinct visit(s) so far.`);
+      return {ok:true, care:r.fields.care, distinct:!already};
     }
     case "morale_check":{                            // the DM rolls the creature's Wis save in the OPEN; the script verdicts held/broke
       if(typeof resolveMorale!=="function") return {ok:false,reason:"social-unavailable"};

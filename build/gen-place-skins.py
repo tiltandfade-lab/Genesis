@@ -22,6 +22,9 @@ Emits data/place-skins.js (classic <script> globals, NOT ES module):
   placeForRealm(realmId, rng, opts) -> {archetypeKey, label, note, scale, space, staff, cast}
     (weighted pick, hand-written JS; opts.archetypeBias multiplies listed keys' weights ×3;
     opts.excludeScale accepted for future use; unknown/absent realmId falls back to 'frontier')
+  SCENE_BUCKET_BY_ARCHETYPE / SCENE_BUCKET_DEFAULT / sceneBucketForArchetype(archetypeKey)
+    (PLACE-GEN §5 unit 3): hand-maintained spine-key -> ambient scene-bucket map (shrine|shop|
+    tavern|market, the vocabulary src/world/prep.js already owns), always-resolving accessor.
 
 Weight semantics (spec, identical to gen-role-skins.py): blank cell in a skin's reskin row =
 inherit the spine's default weight; `0` = drop (excluded from that realm's pool entirely).
@@ -217,6 +220,26 @@ PLACE_SPACE_CELLS = {
     "vast": {"wMin": 5, "wMax": 6, "dMin": 5, "dMax": 6},      # <=900 sq ft ceiling (6x6 cells)
 }
 
+# SCENE_BUCKET_BY_ARCHETYPE (PLACE-GEN.md §5 unit 3, "AMBIENT" — cast wiring): a small HAND-
+# MAINTAINED map from universal spine archetype key -> the existing scene-bucket vocabulary
+# NPC-PRESENCE-AND-HOOKS.md Component 2 already built (src/world/prep.js's AMBIENT_SCENE_BASE /
+# SCENE_PARTIALS: shrine | shop | tavern | market — NOT new bucket names, the doc names only these
+# four). Only archetypes that read unambiguously as one of the four buckets get an entry; every
+# other spine key (and every realm [ADD] key, which this generator never sees at the spine level)
+# falls through to the "shop" default the engine already uses for an unmapped/small-interior scene
+# (src/world/urban.js's sceneTypeForBuildingKit, same fallback). Maintained here, not in the
+# markdown source (§7E's Cast/Space/Staff columns are the only per-archetype fields the craft lane
+# owns) — a scene-bucket is an ENGINE population concern, not a realm-flavor concern.
+SCENE_BUCKET_BY_ARCHETYPE = {
+    1: "market",   # Gathering-place — the social switchboard; crowds, like a plaza/market
+    2: "tavern",   # Watering-hole
+    3: "market",   # Market
+    6: "shrine",   # Shrine
+    16: "tavern",  # Vice-den — pleasure economy, tavern-shaped population
+    22: "market",  # Commons — open shared ground, plaza/market-shaped population
+}
+SCENE_BUCKET_DEFAULT = "shop"
+
 # archetypeBias multiplier (HOOK-WALKS seam, PLACE-GEN §4 "Walks + HOOK-WALKS" / §5 unit 4):
 # opts.archetypeBias lists archetype/add keys a caller wants favored (e.g. a smuggling hook biases
 # toward Storehouse/Hideout/Crossing) — each listed key's pool weight is multiplied by this
@@ -277,6 +300,17 @@ function placeForRealm(realmId, rng, opts){
   var last = pool[pool.length-1]; // float-rounding guard, same pattern as roleForRealm/pickCoherenceTier
   return {archetypeKey:last.archetypeKey, label:last.label, note:last.note, scale:last.scale, space:last.space, staff:last.staff, cast:last.cast};
 }
+
+/* sceneBucketForArchetype(archetypeKey) -> one of "shrine"|"shop"|"tavern"|"market" — PLACE-GEN.md
+   §5 unit 3: resolves a minted place's spine archetypeKey to the ambient-population scene-bucket
+   vocabulary src/world/prep.js already owns (AMBIENT_SCENE_BASE/SCENE_PARTIALS). ALWAYS resolves —
+   an unmapped spine key or any realm [ADD] key (SCENE_BUCKET_BY_ARCHETYPE only covers universal
+   spine rows, per this file's own comment) falls through to SCENE_BUCKET_DEFAULT, never undefined. */
+function sceneBucketForArchetype(archetypeKey){
+  if(archetypeKey==null) return SCENE_BUCKET_DEFAULT;
+  var hit = SCENE_BUCKET_BY_ARCHETYPE[String(archetypeKey)];
+  return hit || SCENE_BUCKET_DEFAULT;
+}
 """
 
 
@@ -330,8 +364,13 @@ def main():
         "   codex-roll.js's rollPlace() calls it (PLACE-GEN §5 unit 2, not yet wired by this unit).\n"
         "   GENERATED from the Engine markdown source; never hand-edit — edit the source .md tables +\n"
         "   re-run `python3 build/gen-place-skins.py`. Added 2026-07-09.\n"
+        "   SCENE_BUCKET_BY_ARCHETYPE/SCENE_BUCKET_DEFAULT/sceneBucketForArchetype (PLACE-GEN §5\n"
+        "   unit 3) map a spine archetypeKey to the ambient scene-bucket vocabulary src/world/\n"
+        "   prep.js already owns (shrine|shop|tavern|market) — hand-maintained in this generator,\n"
+        "   NOT parsed from the markdown source (a scene-bucket is an engine population concern).\n"
         "   Classic <script> (shared global scope); defines PLACE_SPINE + PLACE_SKINS +\n"
-        "   PLACE_SPACE_CELLS + placeForRealm. */\n"
+        "   PLACE_SPACE_CELLS + placeForRealm + SCENE_BUCKET_BY_ARCHETYPE + SCENE_BUCKET_DEFAULT +\n"
+        "   sceneBucketForArchetype. */\n"
     )
     with open(OUT, "w", encoding="utf-8") as f:
         f.write(header)
@@ -339,6 +378,9 @@ def main():
         f.write("const PLACE_SKINS=" + json.dumps(out_skins, ensure_ascii=False, indent=1) + ";\n")
         f.write("const PLACE_SPACE_CELLS=" + json.dumps(PLACE_SPACE_CELLS, ensure_ascii=False, indent=1) + ";\n")
         f.write(f"const ARCHETYPE_BIAS_MULTIPLIER={ARCHETYPE_BIAS_MULTIPLIER};\n")
+        f.write("const SCENE_BUCKET_BY_ARCHETYPE=" +
+                 json.dumps({str(k): v for k, v in SCENE_BUCKET_BY_ARCHETYPE.items()}, ensure_ascii=False, indent=1) + ";\n")
+        f.write(f"const SCENE_BUCKET_DEFAULT={json.dumps(SCENE_BUCKET_DEFAULT)};\n")
         f.write(PLACE_FOR_REALM_JS)
     print(f"  -> {os.path.relpath(OUT, ROOT)}")
 

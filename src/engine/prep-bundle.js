@@ -92,7 +92,13 @@ function pbundleCast(env, region){
   if(typeof rollPlace!=="function" || typeof rollNPC!=="function") return null;
   if(typeof CT!=="function" || !Object.keys(CT()).length) return null;
   const location = rollPlace({ art:true });                // notable frontier → 0–2 art pieces (Consequence Ladder §11)
-  const npcs = [ rollNPC({ roleHint:"questgiver", region }) ];     // the questgiver the hook points at
+  // PLACE-GEN.md §5 unit 3: the location's castProfile anchor class (e.g. "trade" for a Watering-hole)
+  // filters the questgiver's role draw — the anchor NPC (the one the hook attaches to) is castProfile-
+  // true to the place it's found in. "any" ‖ absent -> unfiltered (rollNPC's own default), never a
+  // regression for a pre-unit-3 mint (no rolled.cast when the archetype draw didn't fire, e.g. lean
+  // headless contexts — see rollPlace's arche null-guard).
+  const anchorCls=(location&&location.rolled&&location.rolled.cast&&location.rolled.cast.anchor)||"any";
+  const npcs = [ rollNPC({ roleHint:"questgiver", region, roleClass:anchorCls }) ];     // the questgiver the hook points at
   if(rollExpr("d2")===2) npcs.push(rollNPC({ region }));             // 1–2 NPCs/frontier (lean; §8 open Q)
   // the concrete macguffin (the abstract hook.macguffin is the throughline; this is the actual object).
   // The DM wires "questgiver holds it / it rests in the location" over the cast; prep only places it.

@@ -284,8 +284,22 @@ function buildingApproach(w, type, opts){
   // stripped/lean harness with no prepCastAmbientScene loaded just skips this, same as every other
   // optional cross-file call in this file).
   const proprietorRec=(proprietorId && typeof codexGet==="function") ? codexGet(w, proprietorId) : null;
+  // PLACE-GEN.md §5 unit 3: when this node's own place record (minted by rollPlace, e.g.
+  // prepCastFrontier) carries a spine archetypeKey, its SCENE_BUCKET_BY_ARCHETYPE mapping wins over
+  // the building-kit bucket — the node's realm-true place-type is the truer scene shape than the
+  // generic kit fallback. Missing/unmapped node record -> unchanged sceneTypeForBuildingKit(type)
+  // behavior (no regression for a node with no place-gen mint, e.g. a bare urban-fabric district).
+  let sceneBucket=sceneTypeForBuildingKit(type);
+  if(typeof mapOf==="function" && typeof codexGet==="function" && typeof sceneBucketForArchetype==="function"){
+    const mnode=mapOf(w).nodes[nodeId];
+    const placeRec=(mnode && mnode.codexId) ? codexGet(w, mnode.codexId) : null;
+    const archKey=placeRec && placeRec.rolled && placeRec.rolled.archetypeKey;
+    if(archKey!=null && typeof SCENE_BUCKET_BY_ARCHETYPE!=="undefined" && SCENE_BUCKET_BY_ARCHETYPE[String(archKey)]){
+      sceneBucket=sceneBucketForArchetype(archKey);
+    }
+  }
   const ambient=(typeof prepCastAmbientScene==="function")
-    ? prepCastAmbientScene(w, nodeId, sceneTypeForBuildingKit(type), { anchor: proprietorRec })
+    ? prepCastAmbientScene(w, nodeId, sceneBucket, { anchor: proprietorRec })
     : null;
   return {ok:true, id:rec.id, record:rec, proprietorId, shop:rolled.shop||null, ambient};
 }

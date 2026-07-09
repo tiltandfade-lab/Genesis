@@ -166,3 +166,12 @@ L7. ☐ **Regenerate `table-registry.json/.md`** — stale after the rename/new 
 4. ☐ **Hoverboard buff proposal** (Dungeon Loot - Outlandish row 16 — Adam ruled it over-nerfed;
    propose-first, his table).
 5. ☐ Net-new `model:` slugs from the wave → model-foundry queue (models lane).
+
+## Do next (2026-07-09, sprite transition — Adam locked, docs/SPRITE-TRANSITION.md)
+
+1. ☐ **T2 manifest-v2 + slicer** · ☐ **T3 sprite registry** · ☐ **T4 theater billboard channel**
+   (Sonnet executors in flight, orchestrator gates per spec).
+2. ☐ **T5 gloom vertical slice** — GATED on Adam's first sheet PNGs in dev/sprite-sheets/incoming/;
+   eyes-on A/B vs 3D + tagging pilot (vision scan → overlay → Adam redline). Taste gate before mass slicing.
+3. ☐ Models lane pivots to trays/props/architecture (MODEL-FOUNDRY re-scoped; VISUAL-ASSET-QUEUE
+   creature targets → sprite lane).

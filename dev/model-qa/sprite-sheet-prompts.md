@@ -30,9 +30,10 @@ zone.
 Same skeleton every realm — only the **style block** and **creature list** change:
 
 > 2D pixel-art sprite sheet, 5×5 grid, 25 cells, one distinct static character per cell (NOT the
-> same character repeated, NOT an animation sequence), uniform cell size, transparent
-> background, consistent scale and rendering style across all 25, no drop shadows outside the
-> sprite, orthographic side view, each character centered and fully visible within its cell.
+> same character repeated, NOT an animation sequence), uniform cell size, solid magenta (#FF00FF) background (no transparency, no other background
+> elements), consistent scale and rendering style across all 25, no drop shadows outside the
+> sprite, orthographic side view, each character fully visible from head to toe within its cell
+> — no cropping at the top, bottom, or sides, the complete body must fit inside the cell boundary.
 > Every character is posed in an expressive, mid-action stance that captures its essence — mid-
 > lunge, mid-cast, braced to strike, snarling, never a neutral T-pose or idle stand. Art style:
 > **[realm style block]**. The 25 characters, left-to-right top-to-bottom:

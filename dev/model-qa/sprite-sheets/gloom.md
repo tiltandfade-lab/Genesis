@@ -17,9 +17,7 @@ NPCs) — not hand-invented.
 Style block (same for every sheet in this realm): muted desaturated palette — sickly yellow streetlight against blue-grey dusk, soft grain/dither texture, one unnervingly saturated warm accent color per figure (the wrongness marker), otherwise low-contrast murky background.
 
 Shared mechanical instructions (same as the master template): 5×5 grid, 25 cells, one distinct
-static character per cell (not a repeat, not an animation frame), uniform cell size, transparent
-background, consistent scale across all 25, orthographic side view, each character centered and
-fully visible. **Every character in an expressive, mid-action pose that captures its essence**
+static character per cell (not a repeat, not an animation frame), uniform cell size, solid magenta (#FF00FF) background (no transparency, no other background elements), consistent scale across all 25, orthographic side view, each character fully visible from head to toe within its cell — no cropping at the top, bottom, or sides, the complete body must fit inside the cell boundary. **Every character in an expressive, mid-action pose that captures its essence**
 — mid-lunge, mid-cast, braced, snarling — never a neutral T-pose or idle stand.
 
 ---

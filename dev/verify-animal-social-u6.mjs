@@ -98,12 +98,13 @@ function mintAnimalAtRow(win, w, row, opts){
 console.log("=== RED-FIRST: pre-U6, every kind saw the identical unscoped `seen` (no per-kind filter) ===");
 {
   const win = newWin();
+  // HQ-5 Change 3: kill entries written via the real applyEvent "kill" writer, not hand-seeded.
   const w = mkWorld(win, { ledger: [
-    { id:"e-here", type:"outcome", data:{ kind:"kill", nodeId:"home" }, day:10, min:0, text:"x" },       // predator/bird-visible
     { id:"e-move", type:"outcome", data:{ kind:"move-zone", nodeId:"home" }, day:10, min:0, text:"x" },  // herd-visible
     { id:"e-face", type:"npc-life", data:{ nodeId:"home" }, day:10, min:0, text:"x" },                    // bird-visible
-    { id:"e-adj",  type:"outcome", data:{ kind:"kill", nodeId:"north" }, day:10, min:0, text:"x" },       // adjacent, bird-only reach
   ]});
+  win.eval(`applyEvent(U.worlds['${w.id}'], {type:"kill", payload:{victimClass:"wolf", at:"home"}})`);   // predator/bird-visible
+  win.eval(`applyEvent(U.worlds['${w.id}'], {type:"kill", payload:{victimClass:"wolf", at:"north"}})`);  // adjacent, bird-only reach
   const herdId = mintAnimalAtRow(win, w, 2, { id:"herd-red" });   // row 2 = grazing herd
   const birdId = mintAnimalAtRow(win, w, 3, { id:"bird-red" });   // row 3 = watcher-bird
   check("(setup) both rows minted", !!herdId && !!birdId, "herd=" + herdId + " bird=" + birdId);
@@ -124,13 +125,18 @@ console.log("=== RED-FIRST: pre-U6, every kind saw the identical unscoped `seen`
 console.log("\n=== GREEN: knowledge scope filters `seen` + grants adjacent reach by kind ===");
 {
   const win = newWin();
+  // HQ-5 (docs/ANIMAL-SOCIAL-HQ.md Change 3): the two kill entries are now written BY the
+  // production "kill" writer via applyEvent (dm.js stamps data.nodeId itself) — never
+  // hand-seeded {kind:"kill", nodeId:...} fixtures. Hand-seeding was the exact false-green the
+  // HQ review caught: it proved the scope filter's logic but never that a real kill event
+  // produces a ledger shape animalWitnessSeen can match.
   const w = mkWorld(win, { ledger: [
-    { id:"e-kill-here",  type:"outcome", data:{ kind:"kill", nodeId:"home" }, day:10, min:0, text:"x" },
     { id:"e-move-here",  type:"outcome", data:{ kind:"move-zone", nodeId:"home" }, day:10, min:0, text:"x" },
     { id:"e-face-here",  type:"npc-life", data:{ nodeId:"home" }, day:10, min:0, text:"x" },
-    { id:"e-kill-adj",   type:"outcome", data:{ kind:"kill", nodeId:"north" }, day:10, min:0, text:"x" },
     { id:"e-drift-here", type:"drift", data:{ nodeId:"home" }, day:10, min:0, text:"x" },
   ]});
+  win.eval(`applyEvent(U.worlds['${w.id}'], {type:"kill", payload:{victimClass:"wolf", at:"home"}})`);
+  win.eval(`applyEvent(U.worlds['${w.id}'], {type:"kill", payload:{victimClass:"wolf", at:"north"}})`);
   const herdId = mintAnimalAtRow(win, w, 2, { id:"herd-1" });     // herd category
   const birdId = mintAnimalAtRow(win, w, 3, { id:"bird-1" });     // bird category
   const predId = mintAnimalAtRow(win, w, 6, { id:"pred-1" });     // predator category
@@ -231,6 +237,41 @@ console.log("\n=== GREEN: place-memory grows season/biome + rolled-hook entries 
     packet.placeMemory.some(f => /forest/i.test(f.fact) && f.season), JSON.stringify(packet.placeMemory));
   check("ACCEPT: place-memory includes the animal's own rolled node hook as a standing fact",
     packet.placeMemory.some(f => f.fact === "A trail of broken branches leads deeper into the wood."), JSON.stringify(packet.placeMemory));
+}
+
+console.log("\n=== GREEN: HQ-5 (docs/ANIMAL-SOCIAL-HQ.md) — the kill writer's ledger shape reaches a predator-scope witness ===");
+{
+  const win = newWin();
+  const w = mkWorld(win);
+  const predId = mintAnimalAtRow(win, w, 6, { id:"pred-hq5", at:"home" });  // row 6 = predator category
+  check("(setup) predator row minted", !!predId, "pred=" + predId);
+  // production kill path — applyEvent, not a hand-seeded ledger fixture (D7/Change 1: the kill
+  // writer now stamps data.nodeId itself).
+  win.eval(`applyEvent(U.worlds['${w.id}'], {type:"kill", payload:{victimClass:"wolf", at:"home"}})`);
+  // "open an interview" — the production animal_interview event (dm.js), not a raw field write.
+  const openRes = JSON.parse(win.eval(`JSON.stringify(applyEvent(U.worlds['${w.id}'], {type:"animal_interview", payload:{id:'${predId}', open:true}}))`));
+  check("(setup) interview opened via applyEvent", openRes.ok === true && openRes.interviewOpen === true, JSON.stringify(openRes));
+  const packet = JSON.parse(win.eval(`JSON.stringify(animalWitness(U.worlds['${w.id}'], codexGet(U.worlds['${w.id}'], '${predId}')))`));
+  check("ACCEPT: a predator-scope animal at the kill's node witnesses it (seen[] carries the kill)",
+    packet.seen.some(s => s.note && s.note.indexOf("loud-hurt") >= 0), JSON.stringify(packet.seen));
+  // check 3 (spec): the kill ledger line's prose twin is unchanged — only data gained nodeId.
+  const killEntry = JSON.parse(win.eval(`JSON.stringify((U.worlds['${w.id}'].ledger||[]).find(function(e){return e.data&&e.data.kind==="kill"&&e.data.nodeId==="home";}))`));
+  check("ledger line's prose twin unchanged (still \"✦ A wolf was slain.\")",
+    killEntry && killEntry.text === "✦ A wolf was slain.", JSON.stringify(killEntry));
+  check("ledger line's data carries nodeId (the only data change)",
+    killEntry && killEntry.data.nodeId === "home", JSON.stringify(killEntry));
+}
+
+console.log("\n=== GREEN: HQ-5 — predator scope no longer matches move-zone (D7: not node-scoped, was never satisfiable) ===");
+{
+  const win = newWin();
+  const w = mkWorld(win, { ledger: [
+    { id:"e-move-here", type:"outcome", data:{ kind:"move-zone", nodeId:"home" }, day:10, min:0, text:"x" },
+  ]});
+  const predId = mintAnimalAtRow(win, w, 6, { id:"pred-hq5-mz", at:"home" });
+  const packet = JSON.parse(win.eval(`JSON.stringify(animalWitness(U.worlds['${w.id}'], codexGet(U.worlds['${w.id}'], '${predId}')))`));
+  check("predator scope does NOT see a move-zone entry (dropped from predator's ledgerTypes)",
+    !packet.seen.some(s => s.note && s.note.indexOf("quick feet") >= 0), JSON.stringify(packet.seen));
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);

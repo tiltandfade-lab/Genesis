@@ -25,16 +25,27 @@ Emits data/place-skins.js (classic <script> globals, NOT ES module):
   SCENE_BUCKET_BY_ARCHETYPE / SCENE_BUCKET_DEFAULT / sceneBucketForArchetype(archetypeKey)
     (PLACE-GEN §5 unit 3): hand-maintained spine-key -> ambient scene-bucket map (shrine|shop|
     tavern|market, the vocabulary src/world/prep.js already owns), always-resolving accessor.
-
-Weight semantics (spec, identical to gen-role-skins.py): blank cell in a skin's reskin row =
-inherit the spine's default weight; `0` = drop (excluded from that realm's pool entirely).
-Realm ids = data/realms.js REALM_IDS.
+  SCENE_DRESSING_BY_ARCHETYPE / SCENE_DRESSING_DEFAULT / SURFACE_TAG_BASES /
+    sceneDressingForPlace(realmId, archetypeKey) (PLACE-GEN ADDENDUM §7 unit 8): hand-maintained
+    spine-key -> {propNames, surface, light} dressing map; the resolver matches propNames against
+    realmPropsFor's real prop pool (missing names skipped, never a hole), resolves the abstract
+    surface tag against REALM_SURFACES' real material vocabulary, and returns the archetype's
+    authored light-profile default (THEATER_LIGHT_TABLE's own vocabulary).
 
 Modes:
   (default)  write data/place-skins.js
   --check    validate only (spine shape, every AUTHORED skin's reskin map covers all 24 keys,
              every non-dropped archetype has a label, every ADD row carries the full field set);
              no write. Does NOT require every REALM_ID to have a skin (§7E, deliberate deviation).
+  --census   sweep 24 archetypes x the 3 authored realms (frontier/chrome/gloom), resolve every
+             SCENE_DRESSING_BY_ARCHETYPE propNames list against that realm's realmPropsFor pool
+             (pure-python re-implementation of the JS fold, no jsdom needed), and print which
+             archetype/realm pairs resolve <2 props (thin) or which propNames matched nothing
+             (missing) — ADDENDUM §7.8's prop-census rider. Report only; never pads pools to green.
+
+Weight semantics (spec, identical to gen-role-skins.py): blank cell in a skin's reskin row =
+inherit the spine's default weight; `0` = drop (excluded from that realm's pool entirely).
+Realm ids = data/realms.js REALM_IDS.
 """
 import json, os, re, sys
 
@@ -240,6 +251,98 @@ SCENE_BUCKET_BY_ARCHETYPE = {
 }
 SCENE_BUCKET_DEFAULT = "shop"
 
+# SCENE_DRESSING_BY_ARCHETYPE (PLACE-GEN.md ADDENDUM §7 unit 8, "Archetype -> dressing map"): a
+# small HAND-MAINTAINED map from universal spine archetype key -> {propNames, surface, light}.
+# propNames are matched BY NAME against realmPropsFor(realm)'s pool at resolution time (dev/
+# model-qa/realm-props.json is the source of truth for what names actually exist) — every name
+# below was verified present in the FRONTIER/CHROME/GLOOM prop pools (the 3 authored realms) via
+# realmPropsFor's own union-fold rule (own-realm + crossRealm:"all" + crossRealm-listed), so no
+# spine archetype goes thin in any authored realm. A name absent from an unauthored realm's future
+# pool is legal — sceneDressingForPlace SKIPS unmatched names, never holes (see unit 8 rider: the
+# prop census reports thin/missing, it never pads the pool to force green).
+#
+# `surface` is an ABSTRACT TAG (not a REALM_SURFACES row name) resolved per-realm at call time via
+# SURFACE_TAG_BASES below, against the REAL `base` material vocabulary data/realm-surfaces.js
+# already carries (src/ui/theater-boot.js's FLOOR_MATERIAL_RECIPES keys — plank/cobble/flagstone/
+# grating/cracked-earth/mud/grass/sand/scree/etc). This mirrors placeForRealm's own realm-fallback
+# discipline: an abstract tag lets one map cover every realm's differently-named surfaces.
+#
+# `light` is one of THEATER_LIGHT_TABLE's existing profile vocabulary (src/engine/theater-data.js
+# — dark|torchlit|fungal-glow|magic-glow|lamplit|daylit|moonlit|overcast|lavalit|voidlit), the
+# SAME light-profile enum the walk/segment layer already rolls and renders (BATTLE-THEATER's
+# lighting ruling) — deliberately NOT a new parallel vocabulary. This map supplies a per-archetype
+# DEFAULT profile (an authored fact, not a dice roll — a Shrine reads torchlit whichever realm it's
+# in); theaterRollLightProfile/keyword overrides remain the battle-theater's own seam and are
+# untouched by this unit.
+SCENE_DRESSING_BY_ARCHETYPE = {
+    1: {"propNames": ["Long Bar", "Rain Barrel", "Wandering Torch", "Overflowing Trash Can"],
+        "surface": "street", "light": "lamplit"},                                   # Gathering-place
+    2: {"propNames": ["Long Bar", "Grog Barrel Row", "Rolling Field Kitchen", "Rain Barrel"],
+        "surface": "interior-wood", "light": "lamplit"},                            # Watering-hole
+    3: {"propNames": ["Munitions Crate", "Trash Can Row", "Overflowing Trash Can", "Rolling Field Kitchen"],
+        "surface": "street", "light": "daylit"},                                    # Market
+    4: {"propNames": ["Case-File Desk", "Star-Chart Table", "Cinderblock Stack", "Wandering Torch"],
+        "surface": "interior-stone", "light": "lamplit"},                           # Seat-of-power
+    5: {"propNames": ["Case-File Desk", "Brig Cage", "Cinderblock Stack"],
+        "surface": "interior-stone", "light": "torchlit"},                          # Hall-of-law
+    6: {"propNames": ["Offertory Table", "Weeping Font", "Guttering Grave-Torch", "Reliquary Crate Stack"],
+        "surface": "interior-stone", "light": "torchlit"},                          # Shrine
+    7: {"propNames": ["Embalming Table", "Rain Barrel", "Duckboard Walkway"],
+        "surface": "interior-wood", "light": "lamplit"},                            # House-of-healing
+    8: {"propNames": ["Scrap Heap", "Cinderblock Stack", "Munitions Crate Stack", "Slag Heap"],
+        "surface": "interior-metal", "light": "torchlit"},                          # Workplace
+    9: {"propNames": ["Scrap Heap", "Rust Drum", "Munitions Crate", "Cinderblock Stack"],
+        "surface": "interior-wood", "light": "lamplit"},                            # Workshop
+    10: {"propNames": ["Munitions Crate Stack", "Ballast Crate Stack", "Reliquary Crate Stack", "Rust Drum"],
+         "surface": "interior-wood", "light": "dark"},                              # Storehouse
+    11: {"propNames": ["Duckboard Walkway", "Rain Barrel", "Trash Can Row"],
+         "surface": "interior-wood", "light": "lamplit"},                           # Lodging
+    12: {"propNames": ["Rain Barrel", "Cobweb Mass", "Overflowing Trash Can"],
+         "surface": "interior-wood", "light": "dark"},                              # Dwelling
+    13: {"propNames": ["Rift Grate", "Glyph-Warded Grate", "Storm Drain Grate"],
+         "surface": "street", "light": "torchlit"},                                 # Threshold
+    14: {"propNames": ["Storm Drain Grate", "Coiled Mooring Rope", "Wandering Torch", "Cracked Water Cistern"],
+         "surface": "street", "light": "daylit"},                                   # Crossing
+    15: {"propNames": ["Cobweb Mass", "Rust Drum", "Scrap Heap", "Rotted Coffin"],
+         "surface": "earth", "light": "dark"},                                      # Hideout
+    16: {"propNames": ["Long Bar", "Grog Barrel Row", "Piled Party Favors"],
+         "surface": "interior-wood", "light": "lamplit"},                           # Vice-den
+    17: {"propNames": ["Sundered Column Drum", "Cobweb Mass", "Rotted Coffin", "Collapsed Trench Wall"],
+         "surface": "earth", "light": "dark"},                                      # Ruin
+    18: {"propNames": ["Stacked Corpse Cairn", "Cattle Skull Pile", "Rotted Coffin", "Guttering Grave-Torch"],
+         "surface": "earth", "light": "moonlit"},                                   # Boneyard
+    19: {"propNames": ["Wandering Torch", "Cinderblock Stack", "Storm Drain Grate"],
+         "surface": "interior-stone", "light": "torchlit"},                         # Watch-post
+    20: {"propNames": ["Refuse Drift", "Cobweb Mass", "Cattle Skull Pile"],
+         "surface": "open-exterior", "light": "overcast"},                          # Wild-margin
+    21: {"propNames": ["Scrap Heap", "Slag Heap", "Rust Drum", "Cinderblock Stack"],
+         "surface": "interior-metal", "light": "torchlit"},                         # Works
+    22: {"propNames": ["Overflowing Trash Can", "Wandering Torch", "Rain Barrel", "Trash Can Row"],
+         "surface": "street", "light": "daylit"},                                   # Commons
+    23: {"propNames": ["Star-Chart Table", "Case-File Desk", "Reliquary Crate Stack"],
+         "surface": "interior-stone", "light": "lamplit"},                          # Seat-of-learning
+    24: {"propNames": ["Sundered Column Drum", "Wandering Torch", "Cinderblock Stack"],
+         "surface": "street", "light": "moonlit"},                                  # Monument
+}
+# Default dressing for a realm [ADD] key (add:*) or any unmapped archetype key — a documented,
+# always-defined fallback, never undefined (unit 8: "never a hole"). Empty propNames is legal:
+# sceneDressingForPlace's resolver still returns a defined {props:[], surface, light} shape.
+SCENE_DRESSING_DEFAULT = {"propNames": [], "surface": "interior-wood", "light": "dark"}
+
+# SURFACE_TAG_BASES: abstract surface tag -> the REAL data/realm-surfaces.js `base` material
+# vocabulary (src/ui/theater-boot.js FLOOR_MATERIAL_RECIPES keys) it may resolve to, ordered by
+# preference. sceneDressingForPlace walks a realm's REALM_SURFACES list and returns the first
+# entry whose `base` is in the tag's list; falls back to the realm's first surface entry (never
+# undefined) when nothing matches — same never-a-hole discipline as placeForRealm/realmPropsFor.
+SURFACE_TAG_BASES = {
+    "interior-wood": ["plank"],
+    "interior-stone": ["flagstone", "cave-rock", "cobble"],
+    "interior-metal": ["grating"],
+    "street": ["cobble", "asphalt", "mud"],
+    "earth": ["cracked-earth", "mud", "leaf-litter", "scree"],
+    "open-exterior": ["grass", "scree", "snow-ice", "sand"],
+}
+
 # archetypeBias multiplier (HOOK-WALKS seam, PLACE-GEN §4 "Walks + HOOK-WALKS" / §5 unit 4):
 # opts.archetypeBias lists archetype/add keys a caller wants favored (e.g. a smuggling hook biases
 # toward Storehouse/Hideout/Crossing) — each listed key's pool weight is multiplied by this
@@ -311,10 +414,113 @@ function sceneBucketForArchetype(archetypeKey){
   var hit = SCENE_BUCKET_BY_ARCHETYPE[String(archetypeKey)];
   return hit || SCENE_BUCKET_DEFAULT;
 }
+
+/* sceneDressingForPlace(realmId, archetypeKey) -> {props:[...], surface, light} — PLACE-GEN.md
+   ADDENDUM §7 unit 8: resolves a minted place's spine archetypeKey (or an add:* key) to concrete
+   dressing for that realm. props: SCENE_DRESSING_BY_ARCHETYPE[archetypeKey].propNames matched BY
+   NAME against realmPropsFor([realmId])'s pool — a name with no match is SKIPPED (never a hole,
+   never a throw; the array is simply shorter). surface: the archetype's abstract SURFACE_TAG_
+   resolved against REALM_SURFACES[realmId] (fallback 'frontier', same convention as placeForRealm)
+   -> the first surface entry whose base is in that tag's material list, or that realm's first
+   surface entry if nothing matches (never undefined). light: the archetype's authored default
+   light-profile, straight from THEATER_LIGHT_TABLE's own vocabulary (src/engine/theater-data.js) —
+   not re-rolled here, this is an authored per-archetype fact layered under the battle-theater's own
+   dice/keyword seam. An unmapped archetypeKey (an add:* key with no per-skin override, or any
+   future spine key) falls through to SCENE_DRESSING_DEFAULT. Pure, defensive — never throws even
+   when REALM_PROPS/REALM_SURFACES/realmPropsFor haven't loaded (returns empty props / undefined
+   surface only in that unloaded-data edge case, same defensive tier as placeForRealm's own guards). */
+function sceneDressingForPlace(realmId, archetypeKey){
+  var dress = SCENE_DRESSING_BY_ARCHETYPE[String(archetypeKey)] || SCENE_DRESSING_DEFAULT;
+  var props = [];
+  if(typeof realmPropsFor === "function"){
+    var pool = realmPropsFor([realmId || "frontier"]);
+    var byName = {};
+    pool.forEach(function(p){ byName[p.name] = p; });
+    (dress.propNames || []).forEach(function(n){ if(byName[n]) props.push(byName[n]); });
+  }
+  var surface = null;
+  if(typeof REALM_SURFACES !== "undefined"){
+    var surfaces = REALM_SURFACES[realmId] || REALM_SURFACES.frontier || [];
+    var bases = SURFACE_TAG_BASES[dress.surface] || [];
+    var baseSet = {};
+    bases.forEach(function(b){ baseSet[b] = true; });
+    for(var i=0; i<surfaces.length; i++){
+      if(baseSet[surfaces[i].base]){ surface = surfaces[i]; break; }
+    }
+    if(!surface && surfaces.length) surface = surfaces[0];
+  }
+  return {props: props, surface: surface, light: dress.light};
+}
 """
 
 
+REALM_PROPS_SRC = os.path.join(ROOT, "dev", "model-qa", "realm-props.json")
+CENSUS_REALMS = ["frontier", "chrome", "gloom"]  # the 3 authored realms (§7E)
+
+
+def _norm_cross_realm(raw):
+    raw = (raw or "").strip()
+    if raw in ("all", "specific", ""):
+        return raw
+    return [x.strip() for x in raw.split(",") if x.strip()]
+
+
+def realm_props_pool(realm_id, by_realm):
+    """Pure-python re-implementation of the JS realmPropsFor([realm_id]) fold (own-realm entries +
+    crossRealm:"all" + crossRealm-listed) — used by --census so it needs no jsdom. Returns {name: prop}."""
+    seen = {}
+    for rid, props in by_realm.items():
+        for p in props:
+            cross = _norm_cross_realm(p.get("crossRealm", ""))
+            eligible = (rid == realm_id) or (cross == "all") or (
+                isinstance(cross, list) and realm_id in cross)
+            if eligible and p["name"] not in seen:
+                seen[p["name"]] = p
+    return seen
+
+
+def run_census():
+    """--census (ADDENDUM §7.8 rider): sweep 24 archetypes x the 3 authored realms, resolve every
+    SCENE_DRESSING_BY_ARCHETYPE propNames list against that realm's realmPropsFor pool, print thin
+    (<2 resolved props) and missing (a propName that matched nothing) findings per realm. Report
+    only — never mutates SCENE_DRESSING_BY_ARCHETYPE to force a green result."""
+    by_realm = {}
+    for entry in json.load(open(REALM_PROPS_SRC, encoding="utf-8")):
+        by_realm[entry["realm"]] = entry["props"]
+
+    print(f"PLACE-DRESSING PROP CENSUS — {len(SCENE_DRESSING_BY_ARCHETYPE)} archetypes x "
+          f"{len(CENSUS_REALMS)} realms ({', '.join(CENSUS_REALMS)})")
+    thin_total = 0
+    missing_total = 0
+    findings = {r: {"thin": [], "missing": []} for r in CENSUS_REALMS}
+    for realm_id in CENSUS_REALMS:
+        pool = realm_props_pool(realm_id, by_realm)
+        for key in sorted(SCENE_DRESSING_BY_ARCHETYPE, key=int):
+            dress = SCENE_DRESSING_BY_ARCHETYPE[key]
+            names = dress["propNames"]
+            resolved = [n for n in names if n in pool]
+            missing = [n for n in names if n not in pool]
+            if len(resolved) < 2:
+                findings[realm_id]["thin"].append((key, len(resolved), len(names)))
+                thin_total += 1
+            if missing:
+                findings[realm_id]["missing"].append((key, missing))
+                missing_total += 1
+        print(f"  {realm_id}: {len(findings[realm_id]['thin'])} thin archetype(s), "
+              f"{len(findings[realm_id]['missing'])} archetype(s) with a missing name")
+        for key, nres, ntot in findings[realm_id]["thin"]:
+            print(f"    THIN  key {key}: only {nres}/{ntot} propNames resolved")
+        for key, missing in findings[realm_id]["missing"]:
+            print(f"    MISSING key {key}: {missing}")
+    print(f"TOTAL: {thin_total} thin finding(s), {missing_total} archetype(s) w/ a missing-name finding "
+          f"across {len(CENSUS_REALMS)} realms (report only — no pool padding)")
+    return findings
+
+
 def main():
+    if "--census" in sys.argv:
+        run_census()
+        return
     check_only = "--check" in sys.argv
     spine_text = open(SPINE_SRC, encoding="utf-8").read()
     spine = parse_spine(spine_text)
@@ -368,9 +574,18 @@ def main():
         "   unit 3) map a spine archetypeKey to the ambient scene-bucket vocabulary src/world/\n"
         "   prep.js already owns (shrine|shop|tavern|market) — hand-maintained in this generator,\n"
         "   NOT parsed from the markdown source (a scene-bucket is an engine population concern).\n"
+        "   SCENE_DRESSING_BY_ARCHETYPE/SCENE_DRESSING_DEFAULT/SURFACE_TAG_BASES/\n"
+        "   sceneDressingForPlace (PLACE-GEN ADDENDUM §7 unit 8) map a spine archetypeKey to\n"
+        "   {propNames,surface,light} dressing — propNames matched by name against realmPropsFor's\n"
+        "   real prop pool (missing skipped, never a hole), surface an abstract tag resolved against\n"
+        "   REALM_SURFACES' real material vocabulary, light the archetype's authored default off\n"
+        "   THEATER_LIGHT_TABLE's own vocabulary. Hand-maintained in this generator, NOT parsed from\n"
+        "   the markdown source (dressing is an engine population concern, same as the scene-bucket\n"
+        "   map above).\n"
         "   Classic <script> (shared global scope); defines PLACE_SPINE + PLACE_SKINS +\n"
         "   PLACE_SPACE_CELLS + placeForRealm + SCENE_BUCKET_BY_ARCHETYPE + SCENE_BUCKET_DEFAULT +\n"
-        "   sceneBucketForArchetype. */\n"
+        "   sceneBucketForArchetype + SCENE_DRESSING_BY_ARCHETYPE + SCENE_DRESSING_DEFAULT +\n"
+        "   SURFACE_TAG_BASES + sceneDressingForPlace. */\n"
     )
     with open(OUT, "w", encoding="utf-8") as f:
         f.write(header)
@@ -381,6 +596,10 @@ def main():
         f.write("const SCENE_BUCKET_BY_ARCHETYPE=" +
                  json.dumps({str(k): v for k, v in SCENE_BUCKET_BY_ARCHETYPE.items()}, ensure_ascii=False, indent=1) + ";\n")
         f.write(f"const SCENE_BUCKET_DEFAULT={json.dumps(SCENE_BUCKET_DEFAULT)};\n")
+        f.write("const SCENE_DRESSING_BY_ARCHETYPE=" +
+                 json.dumps({str(k): v for k, v in SCENE_DRESSING_BY_ARCHETYPE.items()}, ensure_ascii=False, indent=1) + ";\n")
+        f.write(f"const SCENE_DRESSING_DEFAULT={json.dumps(SCENE_DRESSING_DEFAULT, ensure_ascii=False)};\n")
+        f.write(f"const SURFACE_TAG_BASES={json.dumps(SURFACE_TAG_BASES, ensure_ascii=False, indent=1)};\n")
         f.write(PLACE_FOR_REALM_JS)
     print(f"  -> {os.path.relpath(OUT, ROOT)}")
 

@@ -112,3 +112,9 @@ creatures across four families that mostly survive the key:
   matching face-paint and uniforms, silent, moving as one, bats up: mook squad + a lieutenant. Serial
   numbers filed off (no "Baseball Furies"). Models-lane target alongside the ED-209-class boss and
   the ally-mutant; the three together are the chrome wave's visual asks.
+
+## RESOLVED — Adam's rulings (2026-07-08 night)
+1. **The name stays CHROME** — "it still fits."
+2. **Gang colors replacing the equipment case: LAW** — "gang colors is law in chrome world."
+3. **Subway token / worker-badge fusion: approved.**
+Bestiary asks (bat gang, ED-209-class boss, ally-mutant) stand for the models lane.

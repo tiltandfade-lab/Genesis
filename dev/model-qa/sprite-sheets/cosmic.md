@@ -187,7 +187,7 @@ Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-R
 17. **Ward-line sentry (authority-adjacent; patrols where the geometry leaks)** — Authority-adjacent, with limited real power.
 18. **Breach-mercenary (paid to stand where the wrongness runs thickest)** — Loyalty bought with coin, and cynical about it.
 19. **Waypoint-warder (wary of paths that don't lead where they used to)** — Wary of the road; values a good pair of boots.
-20. **Boundary-breaker (desperate or reckless; crosses lines meant to stay closed)** — Desperate or cruel; lives outside the law.
+20. **Boundary-breaker (desperate** — Desperate or cruel; lives outside the law.
 21. **Relic-runner (moves the sealed and the never-opened; speaks only in euphemism)** — Hides the cargo; speaks only in euphemism.
 22. **Sigil-picker (steals the wards themselves, and doesn't grasp what that undoes)** — Eyes every coin-pouch; avoids every eye.
 23. **Answer-cultist behind a mundane face** — Fanatical devotion behind a mundane face.
@@ -196,7 +196,7 @@ Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-R
 
 ### NPC sheet 2/2
 
-1. **Sky-hermit (known of, rarely seen; talks to something that isn't there — or is)** — Known of, rarely seen.
+1. **Sky-hermit (known of** — Known of, rarely seen.
 2. **Borrowed warden (filling in for someone the void took)** — Filling in for someone absent; borrowed authority.
 3. **Reading-broker (power without a title; controls who gets an augury, and when)** — Power without a title.
 4. **The unqualified reader (never should have picked up the charts, and can't put them down)** — Unqualified, unwilling, or both — and in the role anyway.
@@ -232,16 +232,16 @@ plain magenta background. Rendered in this realm's art style (see the style bloc
 ### Domestic animal sheet 1/1
 
 1. **Domestic animal — Loyal dog — bonded to one person, reads their mood before they do.**
-2. **Domestic animal — Working beast — ox, mule, or plough-horse; earns its feed, patient, and spooks true.**
+2. **Domestic animal — Working beast (a single ox) — earns its feed, patient, and spooks true.**
 3. **Domestic animal — Barn cat — owns the place, tolerates the people, hunts the dark corners.**
 4. **Domestic animal — Stray — belongs to no one and everyone; the street's own alarm bell.**
-5. **Domestic animal — Fowl or flock — geese, hens, guineas; loud, territorial, first to mark a stranger.**
-6. **Domestic animal — Herd animal — sheep, goats, cattle; moves as one, and the one it *won't* follow is the tell.**
-7. **Domestic animal — Bird kept close — hawk, pigeon, or raven; carries, watches, and remembers a face.**
-8. **Domestic animal — Vermin-catcher — ferret, terrier, or rat-snake; goes gladly where people won't.**
+5. **Domestic animal — A single goose from the flock — loud, territorial, first to mark a stranger.**
+6. **Domestic animal — A single sheep from the herd — moves with the others, and its lone reluctance to follow is the tell.**
+7. **Domestic animal — Bird kept close (a single hawk) — carries, watches, and remembers a face.**
+8. **Domestic animal — Vermin-catcher (a single ferret) — goes gladly where people won't.**
 9. **Domestic animal — Old animal — past its working years, half-blind, and still the first to growl at the wrong thing.**
 10. **Domestic animal — Half-tamed wild thing — comes to the window, never the hand; trusts one child and no one else.**
-11. **Domestic animal — The realm-beast — [reskin slot] the drone-pet, the war-mule, the too-clever shade, the rad-mongrel.**
+11. **Domestic animal — The realm-beast (the star-touched crow — a raven whose eyes hold a wrongness no one names aloud)**
 12. **Domestic animal — The town's own animal — the one everyone knows by name; its fate is the town's mood made visible.**
 
 

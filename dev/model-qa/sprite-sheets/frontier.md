@@ -172,43 +172,43 @@ Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-R
 
 ### NPC sheet 1/2
 
-1. **Farmer or Grower** — Tied to the land and its seasons; the base everyone eats from.
-2. **Hunter, Fisher, or Trapper** — Reads the wild and brings in what the settled can't.
-3. **Laborer, Porter, or Dockhand** — Moves the heavy things; sees everything, is asked nothing.
-4. **Miner or Excavator** — Works the dark and the tight places; patient underground.
-5. **Servant or Maid** — Invisible to the powerful, and so hears every secret.
-6. **Beggar or Urchin** — Has nothing, so knows the streets better than anyone.
-7. **Crafter or Artisan** — Their tools carry their whole history.
-8. **Blacksmith or Farrier** — Calloused hands; deals in practical defense.
-9. **Baker or Cook** — Up before dawn; holds the neighborhood's gossip.
-10. **Mason or Carpenter** — Reads every structure out of habit; knows what's load-bearing.
-11. **Tailor or Weaver** — Notices the cut and quality of everyone's clothes.
-12. **Wheelwright or Ostler** — Keeps the means of travel and trade running; eyes on the weather.
-13. **Merchant or Trader** — Information-rich, truth-poor.
-14. **Innkeeper or Tavernkeeper** — Controls the space, not the people in it.
-15. **Herbalist or Apothecary** — Smells of bitterroot; knows what heals and what doesn't.
-16. **Physician or Midwife** — Trusted, and overburdened by it.
-17. **Preacher or Acolyte** — Maintains the ritual, not the doctrine.
-18. **Bard or Traveling Player** — Craves the attention; hides the true feeling under it.
-19. **Town Guard or Constable** — Authority-adjacent, with limited real power.
-20. **Sellsword or Hired Gun** — Loyalty bought with coin, and cynical about it.
-21. **Caravan Guard or Outrider** — Wary of the road; values a good pair of boots.
-22. **Bandit or Road-agent** — Desperate or cruel; lives outside the law.
-23. **Smuggler or Fence** — Hides the cargo; speaks only in euphemism.
-24. **Cutpurse or Burglar** — Eyes every coin-pouch; avoids every eye.
+1. **Farmer** — Tied to the land and its seasons; the base everyone eats from.
+2. **Hunter** — Reads the wild and brings in what the settled can't.
+3. **Laborer** — Moves the heavy things; sees everything, is asked nothing.
+4. **Miner** — Works the dark and the tight places; patient underground.
+5. **Servant** — Invisible to the powerful, and so hears every secret.
+6. **Beggar** — Has nothing, so knows the streets better than anyone.
+7. **Crafter** — Their tools carry their whole history.
+8. **Blacksmith** — Calloused hands; deals in practical defense.
+9. **Baker** — Up before dawn; holds the neighborhood's gossip.
+10. **Mason** — Reads every structure out of habit; knows what's load-bearing.
+11. **Tailor** — Notices the cut and quality of everyone's clothes.
+12. **Wheelwright** — Keeps the means of travel and trade running; eyes on the weather.
+13. **Merchant** — Information-rich, truth-poor.
+14. **Innkeeper** — Controls the space, not the people in it.
+15. **Herbalist** — Smells of bitterroot; knows what heals and what doesn't.
+16. **Physician** — Trusted, and overburdened by it.
+17. **Preacher** — Maintains the ritual, not the doctrine.
+18. **Bard** — Craves the attention; hides the true feeling under it.
+19. **Town Guard** — Authority-adjacent, with limited real power.
+20. **Sellsword** — Loyalty bought with coin, and cynical about it.
+21. **Caravan Guard** — Wary of the road; values a good pair of boots.
+22. **Bandit** — Desperate or cruel; lives outside the law.
+23. **Smuggler** — Hides the cargo; speaks only in euphemism.
+24. **Cutpurse** — Eyes every coin-pouch; avoids every eye.
 25. **Hidden Zealot** — Fanatical devotion behind a mundane face.
 
 ### NPC sheet 2/2
 
-1. **Cult Recruiter or Crimper** — Charisma aimed at the desperate; sells belonging.
-2. **Foreign Settler or Drifter** — Chose to stay here; the reasons stay unclear.
+1. **Cult Recruiter** — Charisma aimed at the desperate; sells belonging.
+2. **Foreign Settler** — Chose to stay here; the reasons stay unclear.
 3. **Hermit** — Known of, rarely seen.
 4. **Acting Deputy** — Filling in for someone absent; borrowed authority.
 5. **Town Boss** — Power without a title.
 6. **Reluctant Officeholder** — Unqualified, unwilling, or both — and in the role anyway.
 7. **Landed Gentry** — Wealthy, bored, insulated from real consequence.
-8. **Land Baron or Trade Magnate** — Sees every interaction as a transaction.
-9. **Hedge-Scholar or Collector** — Hoards the secret knowledge; sees others as material.
+8. **Land Baron** — Sees every interaction as a transaction.
+9. **Hedge-Scholar** — Hoards the secret knowledge; sees others as material.
 10. **Stranger (the notable presence)** — Their very presence is the notable thing.
 11. **Marshal / lawman** — The last honest law for a hundred miles; the badge means a little less each year.
 12. **Gunslinger-for-hire** — Reputation is the whole résumé — and someone always rides in to test it.
@@ -236,16 +236,16 @@ plain magenta background. Rendered in this realm's art style (see the style bloc
 ### Domestic animal sheet 1/1
 
 1. **Domestic animal — Loyal dog — bonded to one person, reads their mood before they do.**
-2. **Domestic animal — Working beast — ox, mule, or plough-horse; earns its feed, patient, and spooks true.**
+2. **Domestic animal — Working beast (a single ox) — earns its feed, patient, and spooks true.**
 3. **Domestic animal — Barn cat — owns the place, tolerates the people, hunts the dark corners.**
 4. **Domestic animal — Stray — belongs to no one and everyone; the street's own alarm bell.**
-5. **Domestic animal — Fowl or flock — geese, hens, guineas; loud, territorial, first to mark a stranger.**
-6. **Domestic animal — Herd animal — sheep, goats, cattle; moves as one, and the one it *won't* follow is the tell.**
-7. **Domestic animal — Bird kept close — hawk, pigeon, or raven; carries, watches, and remembers a face.**
-8. **Domestic animal — Vermin-catcher — ferret, terrier, or rat-snake; goes gladly where people won't.**
+5. **Domestic animal — A single goose from the flock — loud, territorial, first to mark a stranger.**
+6. **Domestic animal — A single sheep from the herd — moves with the others, and its lone reluctance to follow is the tell.**
+7. **Domestic animal — Bird kept close (a single hawk) — carries, watches, and remembers a face.**
+8. **Domestic animal — Vermin-catcher (a single ferret) — goes gladly where people won't.**
 9. **Domestic animal — Old animal — past its working years, half-blind, and still the first to growl at the wrong thing.**
 10. **Domestic animal — Half-tamed wild thing — comes to the window, never the hand; trusts one child and no one else.**
-11. **Domestic animal — The realm-beast — [reskin slot] the drone-pet, the war-mule, the too-clever shade, the rad-mongrel.**
+11. **Domestic animal — The realm-beast (the war-mule — a scarred pack mule that's been through more gunfights than its owner)**
 12. **Domestic animal — The town's own animal — the one everyone knows by name; its fate is the town's mood made visible.**
 
 

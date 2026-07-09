@@ -168,40 +168,40 @@ Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-R
 
 ### NPC sheet 1/2
 
-1. **Longshoreman or Teamster** — Moves the heavy things; sees everything, is asked nothing.
-2. **Sandhog or Sewer-man** — Works the dark and the tight places; patient underground.
-3. **Hotel bellhop or Charwoman** — Invisible to the powerful, and so hears every secret.
-4. **Vagrant or Flophouse tenant** — Has nothing, so knows the streets better than anyone.
-5. **Machinist or Repairman** — Their tools carry their whole history.
-6. **Gunsmith or Locksmith** — Calloused hands; deals in practical defense.
-7. **Diner cook or Lunch-counter man** — Up before dawn; holds the neighborhood's gossip.
-8. **Construction hand or Building super** — Reads every structure out of habit; knows what's load-bearing.
-9. **Tailor or Seamstress** — Notices the cut and quality of everyone's clothes.
-10. **Pawnbroker or Wholesaler** — Information-rich, truth-poor.
-11. **Barkeep or Club owner** — Controls the space, not the people in it.
-12. **Chemist or Pharmacist** — Smells of bitterroot; knows what heals and what doesn't.
-13. **Back-alley doctor or Nurse** — Trusted, and overburdened by it.
+1. **Longshoreman** — Moves the heavy things; sees everything, is asked nothing.
+2. **Sandhog** — Works the dark and the tight places; patient underground.
+3. **Hotel bellhop** — Invisible to the powerful, and so hears every secret.
+4. **Vagrant** — Has nothing, so knows the streets better than anyone.
+5. **Machinist** — Their tools carry their whole history.
+6. **Gunsmith** — Calloused hands; deals in practical defense.
+7. **Diner cook** — Up before dawn; holds the neighborhood's gossip.
+8. **Construction hand** — Reads every structure out of habit; knows what's load-bearing.
+9. **Tailor** — Notices the cut and quality of everyone's clothes.
+10. **Pawnbroker** — Information-rich, truth-poor.
+11. **Barkeep** — Controls the space, not the people in it.
+12. **Chemist** — Smells of bitterroot; knows what heals and what doesn't.
+13. **Back-alley doctor** — Trusted, and overburdened by it.
 14. **Parish priest** — Maintains the ritual, not the doctrine.
-15. **Nightclub act or Emcee** — Craves the attention; hides the true feeling under it.
-16. **Beat cop or Precinct detective** — Authority-adjacent, with limited real power.
-17. **Triggerman or Leg-breaker** — Loyalty bought with coin, and cynical about it.
-18. **Bodyguard or Wheelman** — Wary of the road; values a good pair of boots.
-19. **Stick-up man or Heist crew** — Desperate or cruel; lives outside the law.
-20. **Bootlegger or Runner** — Hides the cargo; speaks only in euphemism.
-21. **Second-story man or Grifter** — Eyes every coin-pouch; avoids every eye.
+15. **Nightclub act** — Craves the attention; hides the true feeling under it.
+16. **Beat cop** — Authority-adjacent, with limited real power.
+17. **Triggerman** — Loyalty bought with coin, and cynical about it.
+18. **Bodyguard** — Wary of the road; values a good pair of boots.
+19. **Stick-up man** — Desperate or cruel; lives outside the law.
+20. **Bootlegger** — Hides the cargo; speaks only in euphemism.
+21. **Second-story man** — Eyes every coin-pouch; avoids every eye.
 22. **True-believer behind a clerk's face** — Fanatical devotion behind a mundane face.
-23. **Union organizer or Outfit recruiter** — Charisma aimed at the desperate; sells belonging.
-24. **Immigrant newcomer or Out-of-towner** — Chose to stay here; the reasons stay unclear.
+23. **Union organizer** — Charisma aimed at the desperate; sells belonging.
+24. **Immigrant newcomer** — Chose to stay here; the reasons stay unclear.
 25. **Shut-in** — Known of, rarely seen.
 
 ### NPC sheet 2/2
 
-1. **Acting captain or Understudy** — Filling in for someone absent; borrowed authority.
-2. **Ward boss or Neighborhood fixer** — Power without a title.
+1. **Acting captain** — Filling in for someone absent; borrowed authority.
+2. **Ward boss** — Power without a title.
 3. **In-over-their-head appointee** — Unqualified, unwilling, or both — and in the role anyway.
-4. **Society heir or Kept socialite** — Wealthy, bored, insulated from real consequence.
-5. **Shipping or real-estate magnate** — Sees every interaction as a transaction.
-6. **Occult collector or Alienist** — Hoards the secret knowledge; sees others as material.
+4. **Society heir** — Wealthy, bored, insulated from real consequence.
+5. **Shipping** — Sees every interaction as a transaction.
+6. **Occult collector** — Hoards the secret knowledge; sees others as material.
 7. **The stranger in the good suit** — Their very presence is the notable thing.
 8. **Private eye** — Takes the case nobody else will, for money they'll probably never see.
 9. **Fatale** — The reason the case exists; wants the one thing you can't hand over.
@@ -231,16 +231,16 @@ plain magenta background. Rendered in this realm's art style (see the style bloc
 ### Domestic animal sheet 1/1
 
 1. **Domestic animal — Loyal dog — bonded to one person, reads their mood before they do.**
-2. **Domestic animal — Working beast — ox, mule, or plough-horse; earns its feed, patient, and spooks true.**
+2. **Domestic animal — Working beast (a single ox) — earns its feed, patient, and spooks true.**
 3. **Domestic animal — Barn cat — owns the place, tolerates the people, hunts the dark corners.**
 4. **Domestic animal — Stray — belongs to no one and everyone; the street's own alarm bell.**
-5. **Domestic animal — Fowl or flock — geese, hens, guineas; loud, territorial, first to mark a stranger.**
-6. **Domestic animal — Herd animal — sheep, goats, cattle; moves as one, and the one it *won't* follow is the tell.**
-7. **Domestic animal — Bird kept close — hawk, pigeon, or raven; carries, watches, and remembers a face.**
-8. **Domestic animal — Vermin-catcher — ferret, terrier, or rat-snake; goes gladly where people won't.**
+5. **Domestic animal — A single goose from the flock — loud, territorial, first to mark a stranger.**
+6. **Domestic animal — A single sheep from the herd — moves with the others, and its lone reluctance to follow is the tell.**
+7. **Domestic animal — Bird kept close (a single hawk) — carries, watches, and remembers a face.**
+8. **Domestic animal — Vermin-catcher (a single ferret) — goes gladly where people won't.**
 9. **Domestic animal — Old animal — past its working years, half-blind, and still the first to growl at the wrong thing.**
 10. **Domestic animal — Half-tamed wild thing — comes to the window, never the hand; trusts one child and no one else.**
-11. **Domestic animal — The realm-beast — [reskin slot] the drone-pet, the war-mule, the too-clever shade, the rad-mongrel.**
+11. **Domestic animal — The realm-beast (the alley tom — a one-eyed street cat that's seen every deal go down and told no one)**
 12. **Domestic animal — The town's own animal — the one everyone knows by name; its fate is the town's mood made visible.**
 
 

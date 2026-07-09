@@ -39436,8 +39436,8 @@ null,
 ]
 },
 "child-saw": {
-"dice": "d50",
-"die": 50,
+"dice": "d100",
+"die": 100,
 "bell": false,
 "class": "Fork",
 "player_facing": "reveal",
@@ -39624,38 +39624,60 @@ null,
 17,
 17,
 "",
-"A woman in a grey cloak watches the school from the treeline and leaves the moment the bell rings. — stalker, threat",
+"Behind the blackberry tangle at the end of the lane there's a door set into the hill, and the kid's the only one small enough to have found it. — treasure, hidden-place",
 null,
 [
-"A woman in a grey cloak watches the school from the treeline and leaves the moment the bell rings.",
-"stalker, threat"
+"Behind the blackberry tangle at the end of the lane there's a door set into the hill, and the kid's the only one small enough to have found it.",
+"treasure, hidden-place"
 ]
 ],
 [
 18,
 18,
 "",
-"The mayor's dog is afraid of the mayor's brother now, and it never used to be. — menace, family",
+"There's a gap in the manor fence where two rails are cut and hung back loose — a whole orchard on the other side that grown-ups think is walled off. — secret-place, access",
 null,
 [
-"The mayor's dog is afraid of the mayor's brother now, and it never used to be.",
-"menace, family"
+"There's a gap in the manor fence where two rails are cut and hung back loose — a whole orchard on the other side that grown-ups think is walled off.",
+"secret-place, access"
 ]
 ],
 [
 19,
 19,
 "",
-"Somebody's been sleeping in the hayloft — the bootprint's too big for any kid, and it's fresh. — fugitive, intruder",
+"The kid pried up a loose hearthstone in the burned cottage, and there's a tin box down there, heavy, and it rattles like coin. — treasure, hidden",
 null,
 [
-"Somebody's been sleeping in the hayloft — the bootprint's too big for any kid, and it's fresh.",
-"fugitive, intruder"
+"The kid pried up a loose hearthstone in the burned cottage, and there's a tin box down there, heavy, and it rattles like coin.",
+"treasure, hidden"
 ]
 ],
 [
 20,
 20,
+"",
+"The kid knows where the drain tunnel under the high road comes out — a dry culvert behind the tannery nobody watches — and it runs the whole way under the town. — secret-place, access",
+null,
+[
+"The kid knows where the drain tunnel under the high road comes out — a dry culvert behind the tannery nobody watches — and it runs the whole way under the town.",
+"secret-place, access"
+]
+],
+[
+21,
+21,
+"",
+"Someone leaves warm bread on the drowned man's family's step before dawn, and it's always gone before they wake. — kindness, secret",
+null,
+[
+"Someone leaves warm bread on the drowned man's family's step before dawn, and it's always gone before they wake.",
+"kindness, secret"
+]
+],
+[
+22,
+22,
 "",
 "The apothecary weighed a powder into a twist of paper and made the man swear on his child before handing it over. — poison, oath",
 null,
@@ -39665,85 +39687,96 @@ null,
 ]
 ],
 [
-21,
-21,
-"",
-"Their mother hides a letter in the flour, reads it when she thinks they're asleep, burns one corner, and keeps the rest. — secret, love",
-null,
-[
-"Their mother hides a letter in the flour, reads it when she thinks they're asleep, burns one corner, and keeps the rest.",
-"secret, love"
-]
-],
-[
-22,
-22,
-"",
-"The ferryman took a passenger across after dark who paid in old coins the ferryman bit to check were real. — smuggling, treasure",
-null,
-[
-"The ferryman took a passenger across after dark who paid in old coins the ferryman bit to check were real.",
-"smuggling, treasure"
-]
-],
-[
 23,
 23,
 "",
-"The girl who went away to \"cousins\" is back — thinner, silent about where — and every grown-up agreed on the story too fast. — shame, conspiracy",
+"A woman in a grey cloak watches the school from the treeline and leaves the moment the bell rings. — stalker, threat",
 null,
 [
-"The girl who went away to \"cousins\" is back — thinner, silent about where — and every grown-up agreed on the story too fast.",
-"shame, conspiracy"
+"A woman in a grey cloak watches the school from the treeline and leaves the moment the bell rings.",
+"stalker, threat"
 ]
 ],
 [
 24,
 24,
 "",
-"There's a fresh grave in the paupers' field with no service: the sexton dug it at noon and filled it by dark. — murder, burial",
+"Somebody's been sleeping in the hayloft — the bootprint's too big for any kid, and it's fresh. — fugitive, intruder",
 null,
 [
-"There's a fresh grave in the paupers' field with no service: the sexton dug it at noon and filled it by dark.",
-"murder, burial"
+"Somebody's been sleeping in the hayloft — the bootprint's too big for any kid, and it's fresh.",
+"fugitive, intruder"
 ]
 ],
 [
 25,
 25,
 "",
-"The traveling peddler asked, specifically, which house held the old woman who \"remembers the flood.\" — quest, hidden-knowledge",
+"The old oak by the mill has one branch that reaches right to the rich girl's window — the kid climbed it on a dare and could've touched the glass. — secret-place, access",
 null,
 [
-"The traveling peddler asked, specifically, which house held the old woman who \"remembers the flood.\"",
-"quest, hidden-knowledge"
+"The old oak by the mill has one branch that reaches right to the rich girl's window — the kid climbed it on a dare and could've touched the glass.",
+"secret-place, access"
 ]
 ],
 [
 26,
 26,
 "",
-"Their father and two other men practice something in the barn on the nights the moon is down. — conspiracy, secret",
+"Down in the creek mud where the water's low there's the hilt of a sword sticking up, green with age, and nobody else has noticed. — treasure, weapon",
 null,
 [
-"Their father and two other men practice something in the barn on the nights the moon is down.",
-"conspiracy, secret"
+"Down in the creek mud where the water's low there's the hilt of a sword sticking up, green with age, and nobody else has noticed.",
+"treasure, weapon"
 ]
 ],
 [
 27,
 27,
 "",
-"The coins in the fountain go missing the same mornings the crippled beggar buys bread with silver. — theft, disguise",
+"The miser everyone spits at is the one who's been dropping silver in the poor-box — the kid saw him do it and slip out the side door. — kindness, secret",
 null,
 [
-"The coins in the fountain go missing the same mornings the crippled beggar buys bread with silver.",
-"theft, disguise"
+"The miser everyone spits at is the one who's been dropping silver in the poor-box — the kid saw him do it and slip out the side door.",
+"kindness, secret"
 ]
 ],
 [
 28,
 28,
+"",
+"The mayor's dog is afraid of the mayor's brother now, and it never used to be. — menace, family",
+null,
+[
+"The mayor's dog is afraid of the mayor's brother now, and it never used to be.",
+"menace, family"
+]
+],
+[
+29,
+29,
+"",
+"The neighbor who digs a grave-shaped hole by lantern-light at midnight is burying his old dog, and cries the whole time. — red-herring, grief",
+null,
+[
+"The neighbor who digs a grave-shaped hole by lantern-light at midnight is burying his old dog, and cries the whole time.",
+"red-herring, grief"
+]
+],
+[
+30,
+30,
+"",
+"The fish in the creek below the tannery are floating belly-up all the way down to the mill, and the water smells wrong. — animal-sign, poison",
+null,
+[
+"The fish in the creek below the tannery are floating belly-up all the way down to the mill, and the water smells wrong.",
+"animal-sign, poison"
+]
+],
+[
+31,
+31,
 "",
 "The steward measured every doorway on the poor street with a knotted string and wrote the numbers down. — eviction, scheme",
 null,
@@ -39753,8 +39786,96 @@ null,
 ]
 ],
 [
-29,
-29,
+32,
+32,
+"",
+"The coins in the fountain go missing the same mornings the crippled beggar buys bread with silver. — theft, disguise",
+null,
+[
+"The coins in the fountain go missing the same mornings the crippled beggar buys bread with silver.",
+"theft, disguise"
+]
+],
+[
+33,
+33,
+"",
+"There's a way across the whole market row over the rooftops without ever touching the street — the kid does it in the dark and knows which tiles hold. — secret-place, access",
+null,
+[
+"There's a way across the whole market row over the rooftops without ever touching the street — the kid does it in the dark and knows which tiles hold.",
+"secret-place, access"
+]
+],
+[
+34,
+34,
+"",
+"The two who meet in secret down by the river aren't lovers or plotters — they're planning a surprise for someone the kid loves, and the kid nearly ruined it. — red-herring, wonder",
+null,
+[
+"The two who meet in secret down by the river aren't lovers or plotters — they're planning a surprise for someone the kid loves, and the kid nearly ruined it.",
+"red-herring, wonder"
+]
+],
+[
+35,
+35,
+"",
+"Their mother hides a letter in the flour, reads it when she thinks they're asleep, burns one corner, and keeps the rest. — secret, love",
+null,
+[
+"Their mother hides a letter in the flour, reads it when she thinks they're asleep, burns one corner, and keeps the rest.",
+"secret, love"
+]
+],
+[
+36,
+36,
+"",
+"The ferryman took a passenger across after dark who paid in old coins the ferryman bit to check were real. — smuggling, treasure",
+null,
+[
+"The ferryman took a passenger across after dark who paid in old coins the ferryman bit to check were real.",
+"smuggling, treasure"
+]
+],
+[
+37,
+37,
+"",
+"The kid found a ring of iron keys sunk in the pond, still oily, not a spot of rust on them — new-hidden, not lost. — treasure, mystery",
+null,
+[
+"The kid found a ring of iron keys sunk in the pond, still oily, not a spot of rust on them — new-hidden, not lost.",
+"treasure, mystery"
+]
+],
+[
+38,
+38,
+"",
+"A different debt gets paid off at the shop each market-day by someone who won't give a name, and it's always the family closest to being put out. — kindness, secret",
+null,
+[
+"A different debt gets paid off at the shop each market-day by someone who won't give a name, and it's always the family closest to being put out.",
+"kindness, secret"
+]
+],
+[
+39,
+39,
+"",
+"The girl who went away to \"cousins\" is back — thinner, silent about where — and every grown-up agreed on the story too fast. — shame, conspiracy",
+null,
+[
+"The girl who went away to \"cousins\" is back — thinner, silent about where — and every grown-up agreed on the story too fast.",
+"shame, conspiracy"
+]
+],
+[
+40,
+40,
 "",
 "The hound that guards the warehouse was quiet the one night the warehouse was robbed. — inside-job, theft",
 null,
@@ -39764,8 +39885,52 @@ null,
 ]
 ],
 [
-30,
-30,
+41,
+41,
+"",
+"There's a cave mouth behind the waterfall — you go in wet and come out the far side of the ridge, in a day, on your feet. — secret-place, passage",
+null,
+[
+"There's a cave mouth behind the waterfall — you go in wet and come out the far side of the ridge, in a day, on your feet.",
+"secret-place, passage"
+]
+],
+[
+42,
+42,
+"",
+"Where the old barn stood, the dog digs at the same spot every day and won't be called off, and the ground gives soft. — animal-sign, buried",
+null,
+[
+"Where the old barn stood, the dog digs at the same spot every day and won't be called off, and the ground gives soft.",
+"animal-sign, buried"
+]
+],
+[
+43,
+43,
+"",
+"The \"witch\" who mutters at everyone and reads their lips is stone deaf, and she's the only grown-up who ever really listens to the kid. — red-herring, kindness",
+null,
+[
+"The \"witch\" who mutters at everyone and reads their lips is stone deaf, and she's the only grown-up who ever really listens to the kid.",
+"red-herring, kindness"
+]
+],
+[
+44,
+44,
+"",
+"Their father and two other men practice something in the barn on the nights the moon is down. — conspiracy, secret",
+null,
+[
+"Their father and two other men practice something in the barn on the nights the moon is down.",
+"conspiracy, secret"
+]
+],
+[
+45,
+45,
 "",
 "A man paid the gravedigger to send word the moment a certain person \"takes ill\" — before the doctor's even called. — plot, inheritance",
 null,
@@ -39775,8 +39940,63 @@ null,
 ]
 ],
 [
-31,
-31,
+46,
+46,
+"",
+"There's a fresh grave in the paupers' field with no service: the sexton dug it at noon and filled it by dark. — murder, burial",
+null,
+[
+"There's a fresh grave in the paupers' field with no service: the sexton dug it at noon and filled it by dark.",
+"murder, burial"
+]
+],
+[
+47,
+47,
+"",
+"The traveling peddler asked, specifically, which house held the old woman who \"remembers the flood.\" — quest, hidden-knowledge",
+null,
+[
+"The traveling peddler asked, specifically, which house held the old woman who \"remembers the flood.\"",
+"quest, hidden-knowledge"
+]
+],
+[
+48,
+48,
+"",
+"Under the third pew from the back there's a hollow, and in the hollow a bundle of letters tied in a dead woman's ribbon. — treasure, secret",
+null,
+[
+"Under the third pew from the back there's a hollow, and in the hollow a bundle of letters tied in a dead woman's ribbon.",
+"treasure, secret"
+]
+],
+[
+49,
+49,
+"",
+"The kid found where the smugglers' path leaves the beach — a stair cut in the cliff, hidden by a hung net, and it comes up inside a chapel everyone calls abandoned. — secret-place, smuggling",
+null,
+[
+"The kid found where the smugglers' path leaves the beach — a stair cut in the cliff, hidden by a hung net, and it comes up inside a chapel everyone calls abandoned.",
+"secret-place, smuggling"
+]
+],
+[
+50,
+50,
+"",
+"The gruff man who chases children off his land leaves out milk and scraps for every stray in the parish, at dawn, when he thinks no one sees. — kindness, secret",
+null,
+[
+"The gruff man who chases children off his land leaves out milk and scraps for every stray in the parish, at dawn, when he thinks no one sees.",
+"kindness, secret"
+]
+],
+[
+51,
+51,
 "",
 "The washerwoman found blood on cloth that wasn't a woman's, and didn't say a single word. — murder, cover-up",
 null,
@@ -39786,8 +40006,52 @@ null,
 ]
 ],
 [
-32,
-32,
+52,
+52,
+"",
+"The lights that cross the marsh at night are the old man's lantern — he's still out looking for the son who drowned twenty years back, and always will be. — red-herring, grief",
+null,
+[
+"The lights that cross the marsh at night are the old man's lantern — he's still out looking for the son who drowned twenty years back, and always will be.",
+"red-herring, grief"
+]
+],
+[
+53,
+53,
+"",
+"All the bees left the parish's hives on the same still morning, in one dark ribbon, headed the same way, and the old folk went quiet about it. — animal-sign, omen",
+null,
+[
+"All the bees left the parish's hives on the same still morning, in one dark ribbon, headed the same way, and the old folk went quiet about it.",
+"animal-sign, omen"
+]
+],
+[
+54,
+54,
+"",
+"In the fox's den under the roots the kid reached in and pulled out a fistful of things it had stolen — buttons, a thimble, and a signet ring with a crest. — treasure, clue",
+null,
+[
+"In the fox's den under the roots the kid reached in and pulled out a fistful of things it had stolen — buttons, a thimble, and a signet ring with a crest.",
+"treasure, clue"
+]
+],
+[
+55,
+55,
+"",
+"There's a dry well in the wood with iron rungs going down, and at the bottom a door, and behind the door it's dry and swept and someone's been living there. — secret-place, fugitive",
+null,
+[
+"There's a dry well in the wood with iron rungs going down, and at the bottom a door, and behind the door it's dry and swept and someone's been living there.",
+"secret-place, fugitive"
+]
+],
+[
+56,
+56,
 "",
 "Every kid on the street had the same dream the night the old chapel bell rang — and that bell has no rope. — occult, omen",
 null,
@@ -39797,8 +40061,19 @@ null,
 ]
 ],
 [
-33,
-33,
+57,
+57,
+"",
+"The twins next door finish the sentences of a third child who sits between them — one nobody else can see, and one they call by a name. — uncanny, dread",
+null,
+[
+"The twins next door finish the sentences of a third child who sits between them — one nobody else can see, and one they call by a name.",
+"uncanny, dread"
+]
+],
+[
+58,
+58,
 "",
 "The scarecrow in the far field is wearing the coat of the man who went missing at harvest. — occult, disappearance",
 null,
@@ -39808,8 +40083,19 @@ null,
 ]
 ],
 [
-34,
-34,
+59,
+59,
+"",
+"There's a place in the churchyard where the kid's own breath doesn't fog, no matter how cold — a square of warm air with nothing standing in it. — uncanny, breach",
+null,
+[
+"There's a place in the churchyard where the kid's own breath doesn't fog, no matter how cold — a square of warm air with nothing standing in it.",
+"uncanny, breach"
+]
+],
+[
+60,
+60,
 "",
 "The new baby next door never cries, the cat won't go in the room, and the mother's stopped singing. — changeling, dread",
 null,
@@ -39819,8 +40105,19 @@ null,
 ]
 ],
 [
-35,
-35,
+61,
+61,
+"",
+"There's a stretch of the meadow where the birds won't land — they wheel over it and away — and the grass there grows a different green. — animal-sign, breach",
+null,
+[
+"There's a stretch of the meadow where the birds won't land — they wheel over it and away — and the grass there grows a different green.",
+"animal-sign, breach"
+]
+],
+[
+62,
+62,
 "",
 "There's a door in the cellar that's warm — and it's been getting warmer since the frost came. — breach, hidden",
 null,
@@ -39830,8 +40127,19 @@ null,
 ]
 ],
 [
-36,
-36,
+63,
+63,
+"",
+"The cave behind the falls has a second passage the kid didn't take, because warm air comes out of it, steady, in and out, like breathing. — secret-place, dread",
+null,
+[
+"The cave behind the falls has a second passage the kid didn't take, because warm air comes out of it, steady, in and out, like breathing.",
+"secret-place, dread"
+]
+],
+[
+64,
+64,
 "",
 "The reflection in the miller's pond waves back a half-second late, and only for grown-ups. — occult, mirror",
 null,
@@ -39841,8 +40149,19 @@ null,
 ]
 ],
 [
-37,
-37,
+65,
+65,
+"",
+"There's a man the kid has known their whole life who hasn't aged a day in it — the same face in the oldest memory as this morning — and the grown-ups don't seem to have noticed. — uncanny, dread",
+null,
+[
+"There's a man the kid has known their whole life who hasn't aged a day in it — the same face in the oldest memory as this morning — and the grown-ups don't seem to have noticed.",
+"uncanny, dread"
+]
+],
+[
+66,
+66,
 "",
 "Their grandfather talks to someone in the orchard at dawn; there are two sets of prints, and one is bare. — haunting, secret",
 null,
@@ -39852,8 +40171,19 @@ null,
 ]
 ],
 [
-38,
-38,
+67,
+67,
+"",
+"The kid found a coin in the creek that's always cold, even in a warm pocket, stamped with a face that isn't any king in the schoolbook. — treasure, uncanny",
+null,
+[
+"The kid found a coin in the creek that's always cold, even in a warm pocket, stamped with a face that isn't any king in the schoolbook.",
+"treasure, uncanny"
+]
+],
+[
+68,
+68,
 "",
 "The stray everyone feeds has started leading the littlest kids toward the marsh — patiently, one at a time. — lure, threat",
 null,
@@ -39863,8 +40193,19 @@ null,
 ]
 ],
 [
-39,
-39,
+69,
+69,
+"",
+"At dusk every cow, dog, and cat in the parish turns to face the same bald hill, and holds still, until full dark. — animal-sign, omen",
+null,
+[
+"At dusk every cow, dog, and cat in the parish turns to face the same bald hill, and holds still, until full dark.",
+"animal-sign, omen"
+]
+],
+[
+70,
+70,
 "",
 "The well gives back a different bucket than you lower — older, and wet in the wrong season. — occult, breach",
 null,
@@ -39874,8 +40215,19 @@ null,
 ]
 ],
 [
-40,
-40,
+71,
+71,
+"",
+"The woman two doors down sleepwalks to the same fence every night and stands with her hand on the gate, and swears next morning she slept sound — but the gate's on the far side of a field she'd have to cross. — uncanny, dread",
+null,
+[
+"The woman two doors down sleepwalks to the same fence every night and stands with her hand on the gate, and swears next morning she slept sound — but the gate's on the far side of a field she'd have to cross.",
+"uncanny, dread"
+]
+],
+[
+72,
+72,
 "",
 "On the nights the fog comes up the river, one more child plays in the lane than the street has children, and nobody can say which. — changeling, dread",
 null,
@@ -39885,8 +40237,19 @@ null,
 ]
 ],
 [
-41,
-41,
+73,
+73,
+"",
+"There's a door in the hillside that's only there when the fog's up — smooth, fitted, warm to the hand — and gone by the time the kid brings anyone to see. — secret-place, breach",
+null,
+[
+"There's a door in the hillside that's only there when the fog's up — smooth, fitted, warm to the hand — and gone by the time the kid brings anyone to see.",
+"secret-place, breach"
+]
+],
+[
+74,
+74,
 "",
 "The tinker's wagon has a lock on the *inside* of a box, and once the kid heard the lock turn on its own. — captive, mystery",
 null,
@@ -39896,8 +40259,19 @@ null,
 ]
 ],
 [
-42,
-42,
+75,
+75,
+"",
+"The kid dug up a smooth long bone in the garden that hums, low, when you hold it — you feel it in your teeth — and it hums stronger toward the church. — treasure, uncanny",
+null,
+[
+"The kid dug up a smooth long bone in the garden that hums, low, when you hold it — you feel it in your teeth — and it hums stronger toward the church.",
+"treasure, uncanny"
+]
+],
+[
+76,
+76,
 "",
 "The town's oldest woman has started walking to the crossroads at night, fast, like she's late for something she's dreaded for years. — pact, omen",
 null,
@@ -39907,8 +40281,19 @@ null,
 ]
 ],
 [
-43,
-43,
+77,
+77,
+"",
+"The mother at the end of the row has set a fifth place at the table every night for years, for a child the kid's never met and no one will name, and lately the place has started coming back empty of food. — uncanny, dread",
+null,
+[
+"The mother at the end of the row has set a fifth place at the table every night for years, for a child the kid's never met and no one will name, and lately the place has started coming back empty of food.",
+"uncanny, dread"
+]
+],
+[
+78,
+78,
 "",
 "The shrine candles burn from the wick's foot upward now, and the priest has stopped letting children light them. — occult, corruption",
 null,
@@ -39918,8 +40303,19 @@ null,
 ]
 ],
 [
-44,
-44,
+79,
+79,
+"",
+"There's a spot in the cellar that eats sound — you clap and there's nothing — and it's grown from a hand's-width to the size of a door since midwinter. — breach, dread",
+null,
+[
+"There's a spot in the cellar that eats sound — you clap and there's nothing — and it's grown from a hand's-width to the size of a door since midwinter.",
+"breach, dread"
+]
+],
+[
+80,
+80,
 "",
 "Whatever lives under the bridge trades — leave a bright thing, find a stranger one — and the trades are getting bolder. — fae, bargain",
 null,
@@ -39929,8 +40325,19 @@ null,
 ]
 ],
 [
-45,
-45,
+81,
+81,
+"",
+"The \"monster\" the little ones swear lives in the reservoir is a great old catfish, pale and slow and bigger than a boat — real, and harmless, and the most wondrous thing the kid has ever seen. — red-herring, wonder",
+null,
+[
+"The \"monster\" the little ones swear lives in the reservoir is a great old catfish, pale and slow and bigger than a boat — real, and harmless, and the most wondrous thing the kid has ever seen.",
+"red-herring, wonder"
+]
+],
+[
+82,
+82,
 "",
 "The \"cousin\" staying with the wealthy family casts the wrong shadow at supper — longer, too many fingers — and only the kids' table can see it. — impostor, monster",
 null,
@@ -39940,8 +40347,19 @@ null,
 ]
 ],
 [
-46,
-46,
+83,
+83,
+"",
+"The kid followed the drain tunnel to its end and it comes out somewhere it shouldn't — too far, past where the town even reaches, into a valley the kid's never seen and can't find again from up top. — secret-place, breach",
+null,
+[
+"The kid followed the drain tunnel to its end and it comes out somewhere it shouldn't — too far, past where the town even reaches, into a valley the kid's never seen and can't find again from up top.",
+"secret-place, breach"
+]
+],
+[
+84,
+84,
 "",
 "The carrion birds have started gathering over one house three days before anyone in it dies. They're over the kid's own house now. — death-omen, dread",
 null,
@@ -39951,8 +40369,19 @@ null,
 ]
 ],
 [
-47,
-47,
+85,
+85,
+"",
+"One morning a month the creek runs the other way, uphill, quiet, for the space of an hour, and the fish all wait facing the wrong direction. — animal-sign, breach",
+null,
+[
+"One morning a month the creek runs the other way, uphill, quiet, for the space of an hour, and the fish all wait facing the wrong direction.",
+"animal-sign, breach"
+]
+],
+[
+86,
+86,
 "",
 "There's a song the babies all know that no grown-up taught them, and it names a place on no map. — occult, hidden-place",
 null,
@@ -39962,8 +40391,30 @@ null,
 ]
 ],
 [
-48,
-48,
+87,
+87,
+"",
+"The kid's own shadow has started arriving a moment after the kid does, and lately it lingers a moment after they've gone. — uncanny, dread",
+null,
+[
+"The kid's own shadow has started arriving a moment after the kid does, and lately it lingers a moment after they've gone.",
+"uncanny, dread"
+]
+],
+[
+88,
+88,
+"",
+"Behind the blackberry door in the hill there's a stair going down, and warm air, and far below a light that isn't fire — steady, blue, patient — and something down there knows the kid found the door. — breach, mythic",
+null,
+[
+"Behind the blackberry door in the hill there's a stair going down, and warm air, and far below a light that isn't fire — steady, blue, patient — and something down there knows the kid found the door.",
+"breach, mythic"
+]
+],
+[
+89,
+89,
 "",
 "The kind stranger who's been mending fences for free has closed a full ring around the town — and asked the kids to help him seal the last gap. — ritual, mythic",
 null,
@@ -39973,8 +40424,30 @@ null,
 ]
 ],
 [
-49,
-49,
+90,
+90,
+"",
+"The standing stones on the moor are closer to the town than they were — one field nearer each year the kid has counted — and no one remembers them ever having stood farther off. — cosmic, mythic",
+null,
+[
+"The standing stones on the moor are closer to the town than they were — one field nearer each year the kid has counted — and no one remembers them ever having stood farther off.",
+"cosmic, mythic"
+]
+],
+[
+91,
+91,
+"",
+"The drowned village under the reservoir has lit its windows again, down through the green water, and on still nights you can hear its bell keeping a time that isn't ours. — haunting, mythic",
+null,
+[
+"The drowned village under the reservoir has lit its windows again, down through the green water, and on still nights you can hear its bell keeping a time that isn't ours.",
+"haunting, mythic"
+]
+],
+[
+92,
+92,
 "",
 "Grandmother's mirror shows the room as it was before the fire nobody talks about — and someone's still in there, waiting to be let out. — haunting, mythic",
 null,
@@ -39984,8 +40457,85 @@ null,
 ]
 ],
 [
-50,
-50,
+93,
+93,
+"",
+"The old thing in the deep well grants the kids small wishes now — a lost cat home, a bully's fall — and each time it asks for something a little bigger back, and it has started naming names. — pact, mythic",
+null,
+[
+"The old thing in the deep well grants the kids small wishes now — a lost cat home, a bully's fall — and each time it asks for something a little bigger back, and it has started naming names.",
+"pact, mythic"
+]
+],
+[
+94,
+94,
+"",
+"There's a crack in the sky over the moor that only the youngest can see — the babies point at it and the grown-ups look at nothing — and it's a finger wider each birthday. — cosmic, mythic",
+null,
+[
+"There's a crack in the sky over the moor that only the youngest can see — the babies point at it and the grown-ups look at nothing — and it's a finger wider each birthday.",
+"cosmic, mythic"
+]
+],
+[
+95,
+95,
+"",
+"Something under the lake rises on the hottest nights just far enough to lay one enormous eye above the water, watches the town till the candles go out, and sinks — and this year it drifted closer to shore. — cosmic, dread",
+null,
+[
+"Something under the lake rises on the hottest nights just far enough to lay one enormous eye above the water, watches the town till the candles go out, and sinks — and this year it drifted closer to shore.",
+"cosmic, dread"
+]
+],
+[
+96,
+96,
+"",
+"The shadow of the mountain falls the wrong way at midsummer — east instead of west — and its tip touches the church door now, and reaches a hand's width further up the wood each year. — cosmic, mythic",
+null,
+[
+"The shadow of the mountain falls the wrong way at midsummer — east instead of west — and its tip touches the church door now, and reaches a hand's width further up the wood each year.",
+"cosmic, mythic"
+]
+],
+[
+97,
+97,
+"",
+"Since the flood, the thing wearing the mayor's face has run the town well enough that no one asks why the dogs won't share a room with it, or why it has never once cast a reflection. — impostor, mythic",
+null,
+[
+"Since the flood, the thing wearing the mayor's face has run the town well enough that no one asks why the dogs won't share a room with it, or why it has never once cast a reflection.",
+"impostor, mythic"
+]
+],
+[
+98,
+98,
+"",
+"There's a bell no one can find that tolls once, deep under everything, for each soul the town will lose before the year turns — the kid counts every year, and this year it tolled and tolled and would not stop. — omen, mythic",
+null,
+[
+"There's a bell no one can find that tolls once, deep under everything, for each soul the town will lose before the year turns — the kid counts every year, and this year it tolled and tolled and would not stop.",
+"omen, mythic"
+]
+],
+[
+99,
+99,
+"",
+"The newest star answers when the babies sing to it — it brightens, then dims, in the rhythm of the song — and lately it brightens first, and waits for them to answer. — cosmic, mythic",
+null,
+[
+"The newest star answers when the babies sing to it — it brightens, then dims, in the rhythm of the song — and lately it brightens first, and waits for them to answer.",
+"cosmic, mythic"
+]
+],
+[
+100,
+100,
 "",
 "The stars over the town are one fewer than the schoolhouse star-chart, and fewer each year the kid has counted — and this year a grown-up finally looked up and went white. — cosmic, mythic",
 null,
@@ -82806,6 +83356,149 @@ null,
 null,
 [
 "I assume fate will save me, so I take foolish risks."
+]
+]
+]
+},
+"wild-animal-kind": {
+"dice": "d12",
+"die": 12,
+"bell": false,
+"class": "Fork",
+"player_facing": "reveal",
+"voice_critical": false,
+"domain": "Social / Sentient NPCs",
+"rows": [
+[
+1,
+1,
+"",
+"Territory wolf or pack-runner — holds a stretch of ground and knows every crossing of it. — pack, territory",
+null,
+[
+"Territory wolf or pack-runner — holds a stretch of ground and knows every crossing of it.",
+"pack, territory"
+]
+],
+[
+2,
+2,
+"",
+"Grazing herd — deer, elk, or wild goats; moves as a body, and reads the wind before the ranger does. — herd, instinct",
+null,
+[
+"Grazing herd — deer, elk, or wild goats; moves as a body, and reads the wind before the ranger does.",
+"herd, instinct"
+]
+],
+[
+3,
+3,
+"",
+"Watcher-bird — hawk, owl, or crow; sees the whole valley from height and forgets nothing it circled. — bird, watcher",
+null,
+[
+"Watcher-bird — hawk, owl, or crow; sees the whole valley from height and forgets nothing it circled.",
+"bird, watcher"
+]
+],
+[
+4,
+4,
+"",
+"River or marsh dweller — otter, heron, or beaver; knows the water's moods better than any map. — water, instinct",
+null,
+[
+"River or marsh dweller — otter, heron, or beaver; knows the water's moods better than any map.",
+"water, instinct"
+]
+],
+[
+5,
+5,
+"",
+"Burrower — badger, fox, or ground-den thing; knows what the earth carries underneath. — burrow, solitary",
+null,
+[
+"Burrower — badger, fox, or ground-den thing; knows what the earth carries underneath.",
+"burrow, solitary"
+]
+],
+[
+6,
+6,
+"",
+"Ambush predator — lynx, serpent, or stalking cat; solitary, patient, and the reason the trail went quiet. — predator, solitary",
+null,
+[
+"Ambush predator — lynx, serpent, or stalking cat; solitary, patient, and the reason the trail went quiet.",
+"predator, solitary"
+]
+],
+[
+7,
+7,
+"",
+"Carrion-feeder — vulture, jackal, or scavenger-pack; first to know when something has died nearby. — scavenger, pack",
+null,
+[
+"Carrion-feeder — vulture, jackal, or scavenger-pack; first to know when something has died nearby.",
+"scavenger, pack"
+]
+],
+[
+8,
+8,
+"",
+"Migrant flock — geese, cranes, or a moving swarm; passes through and carries news of where it's been. — flock, transient",
+null,
+[
+"Migrant flock — geese, cranes, or a moving swarm; passes through and carries news of where it's been.",
+"flock, transient"
+]
+],
+[
+9,
+9,
+"",
+"Old solitary beast — a bear, a boar, a stag past its prime; scarred, wary, and gives ground to no one. — solitary, sentinel",
+null,
+[
+"Old solitary beast — a bear, a boar, a stag past its prime; scarred, wary, and gives ground to no one.",
+"solitary, sentinel"
+]
+],
+[
+10,
+10,
+"",
+"Half-wild fringe-dweller — a creature drawn to the edge of camps, curious and never quite trusting. — wild, wary",
+null,
+[
+"Half-wild fringe-dweller — a creature drawn to the edge of camps, curious and never quite trusting.",
+"wild, wary"
+]
+],
+[
+11,
+11,
+"",
+"The realm-beast — [reskin slot] the wilderness face this realm wears (see `ANIMAL_REALM_SKINS`). — realm-skin",
+null,
+[
+"The realm-beast — [reskin slot] the wilderness face this realm wears (see `ANIMAL_REALM_SKINS`).",
+"realm-skin"
+]
+],
+[
+12,
+12,
+"",
+"The elder of the wood — the beast every other animal on the node defers to; its territory IS the node. — landmark, bonded",
+null,
+[
+"The elder of the wood — the beast every other animal on the node defers to; its territory IS the node.",
+"landmark, bonded"
 ]
 ]
 ]
@@ -268022,8 +268715,8 @@ null,
 ]
 },
 "realm-items-bright-kingdom": {
-"dice": "d50",
-"die": 50,
+"dice": "d55",
+"die": 55,
 "bell": false,
 "class": "Commitment",
 "player_facing": "reveal",
@@ -268729,6 +269422,74 @@ null,
 "",
 "One use: restores 2d4 HP; DC 8 Con save or a brief case of the hiccups."
 ]
+],
+[
+51,
+51,
+"Mythic",
+"Signature — \"The Hero's Edge\" — a plain, perfectly balanced longsword, the blade every other sword in the Kingdom is secretly modeled on. — longsword — R1(L1) attuned, a reliable +1 longsword that never dulls and never rusts · R2(L7) while you are at FULL HP, every melee swing hurls a blade of light — a ranged attack at the same damage, out to 30 ft; take a single point of damage and the beams stop until you're whole again · R3(L9) at full HP the beam also cleaves through one door, wall, or barrier it strikes, cleanly, once per day — The pedestal it was drawn from is still warm. It only sings for someone the Kingdom has decided is the hero — and the DM decides who that is.",
+null,
+[
+"Mythic",
+"Signature — \"The Hero's Edge\" — a plain, perfectly balanced longsword, the blade every other sword in the Kingdom is secretly modeled on.",
+"longsword",
+"R1(L1) attuned, a reliable +1 longsword that never dulls and never rusts · R2(L7) while you are at FULL HP, every melee swing hurls a blade of light — a ranged attack at the same damage, out to 30 ft; take a single point of damage and the beams stop until you're whole again · R3(L9) at full HP the beam also cleaves through one door, wall, or barrier it strikes, cleanly, once per day",
+"The pedestal it was drawn from is still warm. It only sings for someone the Kingdom has decided is the hero — and the DM decides who that is."
+]
+],
+[
+52,
+52,
+"Strange",
+"Enchanted — \"The Homing Wing\" — a curved wooden boomerang painted like a bird, grip worn smooth. — dart — R1(L1) thrown, it flies to any object or point you can see within 60 ft and returns to your hand next turn — snatching one loose, unattended item (a few pounds at most) and bringing it back, or striking for 1d4 bludgeoning on the way · R2(L6) on a hit it can instead yank a Small-or-lighter creature's held item (DC 12) or trip a distant switch, latch, or lever as it passes — It always comes back. Try to lose it on purpose sometime; it's a little unsettling.",
+null,
+[
+"Strange",
+"Enchanted — \"The Homing Wing\" — a curved wooden boomerang painted like a bird, grip worn smooth.",
+"dart",
+"R1(L1) thrown, it flies to any object or point you can see within 60 ft and returns to your hand next turn — snatching one loose, unattended item (a few pounds at most) and bringing it back, or striking for 1d4 bludgeoning on the way · R2(L6) on a hit it can instead yank a Small-or-lighter creature's held item (DC 12) or trip a distant switch, latch, or lever as it passes",
+"It always comes back. Try to lose it on purpose sometime; it's a little unsettling."
+]
+],
+[
+53,
+53,
+"Textured",
+"Consumable — A sack of BANG BLOSSOMS — round black bombs with cartoon fuses, each drawn with a little grinning face. — alchemist's fire — One use each (the sack holds 1d4+1): light it, a five-count fuse, then a 10-ft burst — 3d6 fire/bludgeoning, DC 13 Dex for half. Set against a cracked wall, a bricked-up arch, or a cave mouth that's been begging to open, it blows the passage wide with no roll. The grinning face is not reassuring up close.",
+null,
+[
+"Textured",
+"Consumable — A sack of BANG BLOSSOMS — round black bombs with cartoon fuses, each drawn with a little grinning face.",
+"alchemist's fire",
+"One use each (the sack holds 1d4+1): light it, a five-count fuse, then a 10-ft burst — 3d6 fire/bludgeoning, DC 13 Dex for half. Set against a cracked wall, a bricked-up arch, or a cave mouth that's been begging to open, it blows the passage wide with no roll. The grinning face is not reassuring up close."
+]
+],
+[
+54,
+54,
+"Strange",
+"Enchanted — \"The Long Reach\" — a fist-sized spring-loaded launcher, clawed head, chain that spools out farther than the housing could possibly hold. — grappling hook — R1(L1) fired at a solid surface, ledge, or ring within 40 ft: it bites and reels — YOU to the anchor, or a loose object the size of a chest back to YOU, as one quick action · R2(L6) fired at a Medium-or-smaller creature: DC 13 Str or it's hauled 20 ft toward you, plus 1d4 piercing from the claw — The chain measures the same coiled or fully paid out. Nobody's found where the slack goes.",
+null,
+[
+"Strange",
+"Enchanted — \"The Long Reach\" — a fist-sized spring-loaded launcher, clawed head, chain that spools out farther than the housing could possibly hold.",
+"grappling hook",
+"R1(L1) fired at a solid surface, ledge, or ring within 40 ft: it bites and reels — YOU to the anchor, or a loose object the size of a chest back to YOU, as one quick action · R2(L6) fired at a Medium-or-smaller creature: DC 13 Str or it's hauled 20 ft toward you, plus 1d4 piercing from the claw",
+"The chain measures the same coiled or fully paid out. Nobody's found where the slack goes."
+]
+],
+[
+55,
+55,
+"Strange",
+"Consumable — A glass bottle, cork sealed with wax, a single winged spark drowsing inside. — potion of healing — One use, and it triggers itself: the first time you'd drop to 0 HP while carrying it, the spark bursts free, heals you 2d4+2, and is gone — you feel it thank you as it goes. Uncork it by choice instead and the same healing lands on any one creature you pour it over.",
+null,
+[
+"Strange",
+"Consumable — A glass bottle, cork sealed with wax, a single winged spark drowsing inside.",
+"potion of healing",
+"One use, and it triggers itself: the first time you'd drop to 0 HP while carrying it, the spark bursts free, heals you 2d4+2, and is gone — you feel it thank you as it goes. Uncork it by choice instead and the same healing lands on any one creature you pour it over."
+]
 ]
 ]
 },
@@ -268745,11 +269506,11 @@ null,
 1,
 1,
 "Grounded",
-"A cracked data-slate, screen dim in one corner, still readable. — book — Holds a few hundred pages of text. The dim corner has eaten one paragraph per page — always the same paragraph number.",
+"A cracked transit-cop data-slate, screen dim in one corner, still readable. — book — Holds a few hundred pages of text. The dim corner has eaten one paragraph per page — always the same paragraph number.",
 null,
 [
 "Grounded",
-"A cracked data-slate, screen dim in one corner, still readable.",
+"A cracked transit-cop data-slate, screen dim in one corner, still readable.",
 "book",
 "",
 "Holds a few hundred pages of text. The dim corner has eaten one paragraph per page — always the same paragraph number."
@@ -268759,11 +269520,11 @@ null,
 2,
 2,
 "Grounded",
-"A vacuum-sealed ration pouch, \"Meal, Standard Issue, Flavor Unspecified.\" — rations — Food for one day. Tastes like the packaging describes it.",
+"A vending-machine ramen brick, \"Flavor: Assorted.\" — rations — Food for one day. Tastes like the packaging describes it.",
 null,
 [
 "Grounded",
-"A vacuum-sealed ration pouch, \"Meal, Standard Issue, Flavor Unspecified.\"",
+"A vending-machine ramen brick, \"Flavor: Assorted.\"",
 "rations",
 "",
 "Food for one day. Tastes like the packaging describes it."
@@ -268773,11 +269534,11 @@ null,
 3,
 3,
 "Grounded",
-"A multi-tool with fourteen settings, two of them unlabeled. — handaxe — Counts as artisan's tools for one trade of the owner's choosing. The unlabeled settings do nothing anyone's found. Yet.",
+"A sewer-mechanic's multi-tool with fourteen settings, two of them unlabeled. — handaxe — Counts as artisan's tools for one trade of the owner's choosing. The unlabeled settings do nothing anyone's found. Yet.",
 null,
 [
 "Grounded",
-"A multi-tool with fourteen settings, two of them unlabeled.",
+"A sewer-mechanic's multi-tool with fourteen settings, two of them unlabeled.",
 "handaxe",
 "",
 "Counts as artisan's tools for one trade of the owner's choosing. The unlabeled settings do nothing anyone's found. Yet."
@@ -268787,126 +269548,126 @@ null,
 4,
 4,
 "Grounded",
-"A pair of magnetic boot clamps, scuffed from zero-g drills. — robe — Adhere to any ferrous surface on command; standard corridor decking qualifies. Walk walls, hang from ceilings, ignore lowGrav drift.",
+"A pair of gecko-grip climbing pads, scuffed from scaling transit pylons. — robe — Adhere to any wall or ceiling on command. Scale sheer surfaces, hang from rafters, cross the underside of a bridge.",
 null,
 [
 "Grounded",
-"A pair of magnetic boot clamps, scuffed from zero-g drills.",
+"A pair of gecko-grip climbing pads, scuffed from scaling transit pylons.",
 "robe",
 "",
-"Adhere to any ferrous surface on command; standard corridor decking qualifies. Walk walls, hang from ceilings, ignore lowGrav drift."
+"Adhere to any wall or ceiling on command. Scale sheer surfaces, hang from rafters, cross the underside of a bridge."
 ]
 ],
 [
 5,
 5,
 "Grounded",
-"A hard-shell equipment case, watertight, rated for vacuum and a two-story drop. — robe — Whatever fits inside (one rifle-sized item or equivalent) survives what you don't.",
+"A crew's colors — a stitched jacket-patch, the gang it names half of them dead now. — robe — Worn on their turf, the local crew reads you as one of theirs: advantage on social checks with that faction on their blocks — and disadvantage the moment a rival crew clocks the patch.",
 null,
 [
 "Grounded",
-"A hard-shell equipment case, watertight, rated for vacuum and a two-story drop.",
+"A crew's colors — a stitched jacket-patch, the gang it names half of them dead now.",
 "robe",
 "",
-"Whatever fits inside (one rifle-sized item or equivalent) survives what you don't."
+"Worn on their turf, the local crew reads you as one of theirs: advantage on social checks with that faction on their blocks — and disadvantage the moment a rival crew clocks the patch."
 ]
 ],
 [
 6,
 6,
 "Grounded",
-"A translator earpiece, battery low, one language pack installed. — robe — Renders one language fluently until the charge runs out (1d4 hours of use).",
+"A translator earpiece, battery low, one street-cant pack installed. — robe — Renders one language or gang argot fluently until the charge runs out (1d4 hours of use).",
 null,
 [
 "Grounded",
-"A translator earpiece, battery low, one language pack installed.",
+"A translator earpiece, battery low, one street-cant pack installed.",
 "robe",
 "",
-"Renders one language fluently until the charge runs out (1d4 hours of use)."
+"Renders one language or gang argot fluently until the charge runs out (1d4 hours of use)."
 ]
 ],
 [
 7,
 7,
 "Grounded",
-"A thermal blanket, foil-bright, folds to the size of a deck of cards. — robe — Advantage on the next Con save against cold exposure, once per long rest.",
+"A thermal blanket, foil-bright, folds to the size of a deck of cards. — robe — Advantage on the next Con save against cold exposure, once per long rest. Tunnel nights get down there.",
 null,
 [
 "Grounded",
 "A thermal blanket, foil-bright, folds to the size of a deck of cards.",
 "robe",
 "",
-"Advantage on the next Con save against cold exposure, once per long rest."
+"Advantage on the next Con save against cold exposure, once per long rest. Tunnel nights get down there."
 ]
 ],
 [
 8,
 8,
 "Grounded",
-"A spool of glow-tape, meters of it, adhesive still good. — robe — Mark a route through the dark: the strips shed dim light for a year. Tear-off pieces count as trail markers you can't lose.",
+"A spool of glow-tape, meters of it, adhesive still good. — robe — Mark a route through the storm drains: the strips shed dim light for a year. Tear-off pieces count as trail markers you can't lose.",
 null,
 [
 "Grounded",
 "A spool of glow-tape, meters of it, adhesive still good.",
 "robe",
 "",
-"Mark a route through the dark: the strips shed dim light for a year. Tear-off pieces count as trail markers you can't lose."
+"Mark a route through the storm drains: the strips shed dim light for a year. Tear-off pieces count as trail markers you can't lose."
 ]
 ],
 [
 9,
 9,
 "Grounded",
-"A charge cable, universal-fit, frayed at one end. — robe — Recharges most chrome-tech at half the rated speed.",
+"A charge cable, universal-fit, frayed at one end. — robe — Recharges most street-tech at half the rated speed.",
 null,
 [
 "Grounded",
 "A charge cable, universal-fit, frayed at one end.",
 "robe",
 "",
-"Recharges most chrome-tech at half the rated speed."
+"Recharges most street-tech at half the rated speed."
 ]
 ],
 [
 10,
 10,
 "Grounded",
-"A packet of anti-nausea gum, station-issue, 1d6+2 sticks. — robe — One stick: advantage against nausea, motion-sickness, and zero-g disorientation for an hour.",
+"A packet of anti-nausea gum, transit-issue, 1d6+2 sticks. — robe — One stick: advantage against nausea, motion-sickness, and the lurch of a train taking a bend too fast for an hour.",
 null,
 [
 "Grounded",
-"A packet of anti-nausea gum, station-issue, 1d6+2 sticks.",
+"A packet of anti-nausea gum, transit-issue, 1d6+2 sticks.",
 "robe",
 "",
-"One stick: advantage against nausea, motion-sickness, and zero-g disorientation for an hour."
+"One stick: advantage against nausea, motion-sickness, and the lurch of a train taking a bend too fast for an hour."
 ]
 ],
 [
 11,
 11,
 "Grounded",
-"A pressure-suit patch kit, three patches used, two left. — robe — Seals one hull or suit breach per patch, DC 10 Dex to apply under pressure.",
+"A wetsuit patch kit, three patches used, two left. — robe — Seals one drysuit or pipe breach per patch, DC 10 Dex to apply while the water's rising.",
 null,
 [
 "Grounded",
-"A pressure-suit patch kit, three patches used, two left.",
+"A wetsuit patch kit, three patches used, two left.",
 "robe",
 "",
-"Seals one hull or suit breach per patch, DC 10 Dex to apply under pressure."
+"Seals one drysuit or pipe breach per patch, DC 10 Dex to apply while the water's rising."
 ]
 ],
 [
 12,
 12,
 "Grounded",
-"A worker's ID badge, photo scratched off, clearance still active. — robe — Opens doors keyed to tier-2 clearance. The scratched photo is a custom everyone here understands.",
+"A brass subway token, worn smooth, minted for a line that stopped running years ago. — robe — Opens turnstiles, service gates, and doors keyed to old transit-authority clearance — and a few doors that were never turnstiles at all. The dead line's stamp is a custom every tunnel-hand still honors.",
 null,
 [
 "Grounded",
-"A worker's ID badge, photo scratched off, clearance still active.",
+"A brass subway token, worn smooth, minted for a line that stopped running years ago.",
 "robe",
 "",
-"Opens doors keyed to tier-2 clearance. The scratched photo is a custom everyone here understands."
+"Opens turnstiles, service gates, and doors keyed to old transit-authority clearance — and a few doors that were never turnstiles at all. The dead line's stamp is a custom every tunnel-hand still honors."
 ]
 ],
 [
@@ -268927,14 +269688,14 @@ null,
 14,
 14,
 "Textured",
-"A dead-man alarm fob, industrial-issue, clip worn bright. — robe — Clipped on, it shrieks at 120 decibels if its wearer stops moving for 30 seconds. Nothing silences it but its own button. Sleeping shifts hate it. Watch shifts swear by it.",
+"A dead-man alarm fob, sewer-crew issue, clip worn bright. — robe — Clipped on, it shrieks at 120 decibels if its wearer stops moving for 30 seconds. Nothing silences it but its own button. Night crews hate it. Solo divers swear by it.",
 null,
 [
 "Textured",
-"A dead-man alarm fob, industrial-issue, clip worn bright.",
+"A dead-man alarm fob, sewer-crew issue, clip worn bright.",
 "robe",
 "",
-"Clipped on, it shrieks at 120 decibels if its wearer stops moving for 30 seconds. Nothing silences it but its own button. Sleeping shifts hate it. Watch shifts swear by it."
+"Clipped on, it shrieks at 120 decibels if its wearer stops moving for 30 seconds. Nothing silences it but its own button. Night crews hate it. Solo divers swear by it."
 ]
 ],
 [
@@ -268955,70 +269716,70 @@ null,
 16,
 16,
 "Textured",
-"A boarding-clamp winch, palm-sized motor, 50 ft of cable. — robe — Anchors magnetically; hauls 500 lb along its cable at a walking pace. Lifts a person smoothly, a struggling person less so.",
+"A rooftop grapnel winch, palm-sized motor, 50 ft of cable. — robe — Anchors to any ledge; hauls 500 lb along its cable at a walking pace. Lifts a person smoothly, a struggling person less so.",
 null,
 [
 "Textured",
-"A boarding-clamp winch, palm-sized motor, 50 ft of cable.",
+"A rooftop grapnel winch, palm-sized motor, 50 ft of cable.",
 "robe",
 "",
-"Anchors magnetically; hauls 500 lb along its cable at a walking pace. Lifts a person smoothly, a struggling person less so."
+"Anchors to any ledge; hauls 500 lb along its cable at a walking pace. Lifts a person smoothly, a struggling person less so."
 ]
 ],
 [
 17,
 17,
 "Textured",
-"A sealed crate of fabricator resin, factory bands intact. — robe — Feeds any working fabricator (chrome ruins keep them like other ruins keep vending machines): three prints of any mundane item.",
+"A sealed drum of fabricator resin, factory bands intact. — robe — Feeds any working fabricator (the chop-shops keep them like corner stores keep vending machines): three prints of any mundane item.",
 null,
 [
 "Textured",
-"A sealed crate of fabricator resin, factory bands intact.",
+"A sealed drum of fabricator resin, factory bands intact.",
 "robe",
 "",
-"Feeds any working fabricator (chrome ruins keep them like other ruins keep vending machines): three prints of any mundane item."
+"Feeds any working fabricator (the chop-shops keep them like corner stores keep vending machines): three prints of any mundane item."
 ]
 ],
 [
 18,
 18,
 "Textured",
-"A prototype badge-clone reader, factory second, one use burned already. — robe — One more successful clone before it bricks itself, per the manufacturer's own warning label.",
+"A prototype keycard-clone reader, factory second, one use burned already. — robe — One more successful clone of a corp keycard before it bricks itself, per the manufacturer's own warning label.",
 null,
 [
 "Textured",
-"A prototype badge-clone reader, factory second, one use burned already.",
+"A prototype keycard-clone reader, factory second, one use burned already.",
 "robe",
 "",
-"One more successful clone before it bricks itself, per the manufacturer's own warning label."
+"One more successful clone of a corp keycard before it bricks itself, per the manufacturer's own warning label."
 ]
 ],
 [
 19,
 19,
 "Textured",
-"An emergency thruster pack, single-burn, gauge honest. — robe — One use: move 60 ft in any direction, ignoring gravity, opportunity attacks, and good judgment.",
+"A stolen crowd-control launch harness, single-burn, gauge honest. — robe — One use: launch 60 ft in any direction — one great vault over the block, ignoring opportunity attacks and good judgment.",
 null,
 [
 "Textured",
-"An emergency thruster pack, single-burn, gauge honest.",
+"A stolen crowd-control launch harness, single-burn, gauge honest.",
 "robe",
 "",
-"One use: move 60 ft in any direction, ignoring gravity, opportunity attacks, and good judgment."
+"One use: launch 60 ft in any direction — one great vault over the block, ignoring opportunity attacks and good judgment."
 ]
 ],
 [
 20,
 20,
 "Textured",
-"A signal jammer, brick-sized, one toggle switch. — robe — While on: every radio, scanner, and drone within 100 ft reads static. Including yours.",
+"A signal jammer, brick-sized, one toggle switch. — robe — While on: every camera, scanner, and drone within 100 ft reads static. Including yours.",
 null,
 [
 "Textured",
 "A signal jammer, brick-sized, one toggle switch.",
 "robe",
 "",
-"While on: every radio, scanner, and drone within 100 ft reads static. Including yours."
+"While on: every camera, scanner, and drone within 100 ft reads static. Including yours."
 ]
 ],
 [
@@ -269039,11 +269800,11 @@ null,
 22,
 22,
 "Strange",
-"A maintenance robot, knee-high, functional, imprint button blinking. — robe — Press the button: it follows that person. Fetches and carries up to 10 lb, opens service hatches, and complains in beeps that need no translation.",
+"A service droid, knee-high, functional, imprint button blinking. — robe — Press the button: it follows that person. Fetches and carries up to 10 lb, opens service hatches, and complains in beeps that need no translation.",
 null,
 [
 "Strange",
-"A maintenance robot, knee-high, functional, imprint button blinking.",
+"A service droid, knee-high, functional, imprint button blinking.",
 "robe",
 "",
 "Press the button: it follows that person. Fetches and carries up to 10 lb, opens service hatches, and complains in beeps that need no translation."
@@ -269053,42 +269814,42 @@ null,
 23,
 23,
 "Strange",
-"A salvaged deck plate, 5 ft square, that stays exactly room temperature forever. — robe — Anything standing on it is invisible to thermal sensing. Engineers who've tested the alloy bill for the hour and decline the follow-up.",
+"A salvaged floor panel, 5 ft square, that stays exactly room temperature forever. — robe — Anything standing on it is invisible to thermal sensing. Techs who've tested the alloy bill for the hour and decline the follow-up.",
 null,
 [
 "Strange",
-"A salvaged deck plate, 5 ft square, that stays exactly room temperature forever.",
+"A salvaged floor panel, 5 ft square, that stays exactly room temperature forever.",
 "robe",
 "",
-"Anything standing on it is invisible to thermal sensing. Engineers who've tested the alloy bill for the hour and decline the follow-up."
+"Anything standing on it is invisible to thermal sensing. Techs who've tested the alloy bill for the hour and decline the follow-up."
 ]
 ],
 [
 24,
 24,
 "Strange",
-"A rebreather cartridge producing air at a purity no known process yields. — robe — Fitted to any mask or sealed room: breathable air for one person, indefinitely. The manufacturer's logo on the housing predates the manufacturer.",
+"A rebreather cartridge producing air at a purity no known process yields. — robe — Fitted to any mask or sealed room: breathable air for one person, indefinitely — the flooded sub-levels hold no fear for its wearer. The logo on the housing predates the company that owns it.",
 null,
 [
 "Strange",
 "A rebreather cartridge producing air at a purity no known process yields.",
 "robe",
 "",
-"Fitted to any mask or sealed room: breathable air for one person, indefinitely. The manufacturer's logo on the housing predates the manufacturer."
+"Fitted to any mask or sealed room: breathable air for one person, indefinitely — the flooded sub-levels hold no fear for its wearer. The logo on the housing predates the company that owns it."
 ]
 ],
 [
 25,
 25,
 "Volatile",
-"A courier's case, locked, a beacon inside pinging steadily. — robe — Contents: 200 gp in clean fusion cells — and the beacon (DC 13 search to find it in the lining, smashable). Whoever it belongs to can follow the ping, and is: first arrival in 1d4 hours, hostile or negotiable depending on how they find you holding it.",
+"A courier's case, locked, a beacon inside pinging steadily. — robe — Contents: 200 gp in clean power cells — and the beacon (DC 13 search to find it in the lining, smashable). Whoever it belongs to can follow the ping, and is: first arrival in 1d4 hours, hostile or negotiable depending on how they find you holding it.",
 null,
 [
 "Volatile",
 "A courier's case, locked, a beacon inside pinging steadily.",
 "robe",
 "",
-"Contents: 200 gp in clean fusion cells — and the beacon (DC 13 search to find it in the lining, smashable). Whoever it belongs to can follow the ping, and is: first arrival in 1d4 hours, hostile or negotiable depending on how they find you holding it."
+"Contents: 200 gp in clean power cells — and the beacon (DC 13 search to find it in the lining, smashable). Whoever it belongs to can follow the ping, and is: first arrival in 1d4 hours, hostile or negotiable depending on how they find you holding it."
 ]
 ],
 [
@@ -269109,13 +269870,13 @@ null,
 27,
 27,
 "Mythic",
-"The root credential nobody alive was cleared to hold — roll d4: 1. The original override key to the dead world-engine still turning beneath a thousand unknowing cities. 2. The first traffic-control mind ever switched on under `[this settlement]`, still routing every cart, courier, and closed door from a room no current map admits exists — waiting for someone to log in as its original operator. 3. The fabricator prime — the template printer every lesser printer was printed BY, dust-sheeted, tray still warm. 4. The founding surveillance eye of `[this settlement]`, the first lens the city ever watched itself through, still recording — and its archive holds one file timestamped in the future. — robe — 1. R1(L9) the key hums audibly near the engine's substations · R2(L12) turned once, it silences the engine for one hour — and every city above goes dark, together, all at once 2. R1(L9) authenticated, you can green every path and open every automated door on one route across the city, once · R2(L12) handed full command, once: the city reroutes to your word for a day, and afterward it keeps one standing order you give it, permanently 3. R1(L9) prints any mundane item you can name, once per day · R2(L12) fed a schematic and a full day's power, once ever: prints one working copy of any device the party has ever held — ladders and all 4. R1(L9) query it: truthful playback of anything that ever happened at a place you name, once per day · R2(L12) play the future-timestamped file, once: see a coming disaster in full, and act on it — changing exactly what the eye recorded before it films for real — DM: whoever learns the party holds root credentials treats it as a faction-clock event — move the existing pressure machinery.",
+"The root credential nobody alive was cleared to hold — roll d4: 1. The original override key to the dead grid-mind still humming beneath a thousand unknowing blocks. 2. The first traffic-control mind ever switched on under `[this settlement]`, still routing every train, signal, and closed gate from a room no current map admits exists — waiting for someone to log in as its original operator. 3. The fabricator prime — the template printer every chop-shop printer was printed BY, dust-sheeted, tray still warm. 4. The founding surveillance eye of `[this settlement]`, the first lens the city ever watched itself through, still recording — and its archive holds one file timestamped in the future. — robe — 1. R1(L9) the key hums audibly near the grid's substations · R2(L12) turned once, it kills the grid for one hour — and every block above goes dark, together, all at once 2. R1(L9) authenticated, you can green every signal and open every automated gate on one line across the city, once · R2(L12) handed full command, once: the city reroutes to your word for a day, and afterward it keeps one standing order you give it, permanently 3. R1(L9) prints any mundane item you can name, once per day · R2(L12) fed a schematic and a full day's power, once ever: prints one working copy of any device the party has ever held — ladders and all 4. R1(L9) query it: truthful playback of anything that ever happened at a place you name, once per day · R2(L12) play the future-timestamped file, once: see a coming disaster in full, and act on it — changing exactly what the eye recorded before it films for real — DM: whoever learns the party holds root credentials treats it as a faction-clock event — move the existing pressure machinery.",
 null,
 [
 "Mythic",
-"The root credential nobody alive was cleared to hold — roll d4: 1. The original override key to the dead world-engine still turning beneath a thousand unknowing cities. 2. The first traffic-control mind ever switched on under `[this settlement]`, still routing every cart, courier, and closed door from a room no current map admits exists — waiting for someone to log in as its original operator. 3. The fabricator prime — the template printer every lesser printer was printed BY, dust-sheeted, tray still warm. 4. The founding surveillance eye of `[this settlement]`, the first lens the city ever watched itself through, still recording — and its archive holds one file timestamped in the future.",
+"The root credential nobody alive was cleared to hold — roll d4: 1. The original override key to the dead grid-mind still humming beneath a thousand unknowing blocks. 2. The first traffic-control mind ever switched on under `[this settlement]`, still routing every train, signal, and closed gate from a room no current map admits exists — waiting for someone to log in as its original operator. 3. The fabricator prime — the template printer every chop-shop printer was printed BY, dust-sheeted, tray still warm. 4. The founding surveillance eye of `[this settlement]`, the first lens the city ever watched itself through, still recording — and its archive holds one file timestamped in the future.",
 "robe",
-"1. R1(L9) the key hums audibly near the engine's substations · R2(L12) turned once, it silences the engine for one hour — and every city above goes dark, together, all at once 2. R1(L9) authenticated, you can green every path and open every automated door on one route across the city, once · R2(L12) handed full command, once: the city reroutes to your word for a day, and afterward it keeps one standing order you give it, permanently 3. R1(L9) prints any mundane item you can name, once per day · R2(L12) fed a schematic and a full day's power, once ever: prints one working copy of any device the party has ever held — ladders and all 4. R1(L9) query it: truthful playback of anything that ever happened at a place you name, once per day · R2(L12) play the future-timestamped file, once: see a coming disaster in full, and act on it — changing exactly what the eye recorded before it films for real",
+"1. R1(L9) the key hums audibly near the grid's substations · R2(L12) turned once, it kills the grid for one hour — and every block above goes dark, together, all at once 2. R1(L9) authenticated, you can green every signal and open every automated gate on one line across the city, once · R2(L12) handed full command, once: the city reroutes to your word for a day, and afterward it keeps one standing order you give it, permanently 3. R1(L9) prints any mundane item you can name, once per day · R2(L12) fed a schematic and a full day's power, once ever: prints one working copy of any device the party has ever held — ladders and all 4. R1(L9) query it: truthful playback of anything that ever happened at a place you name, once per day · R2(L12) play the future-timestamped file, once: see a coming disaster in full, and act on it — changing exactly what the eye recorded before it films for real",
 "DM: whoever learns the party holds root credentials treats it as a faction-clock event — move the existing pressure machinery."
 ]
 ],
@@ -269123,11 +269884,11 @@ null,
 28,
 28,
 "Grounded",
-"A spare fusion cell casing, drained, seals intact. — robe — Empty. Fits the Lance Pistol's slot exactly: drawn with this seated, the sidearm reads as charged — advantage on your first Intimidation check with it.",
+"A spare power-cell casing, drained, seals intact. — robe — Empty. Fits the Lance Pistol's slot exactly: drawn with this seated, the sidearm reads as charged — advantage on your first Intimidation check with it.",
 null,
 [
 "Grounded",
-"A spare fusion cell casing, drained, seals intact.",
+"A spare power-cell casing, drained, seals intact.",
 "robe",
 "",
 "Empty. Fits the Lance Pistol's slot exactly: drawn with this seated, the sidearm reads as charged — advantage on your first Intimidation check with it."
@@ -269137,81 +269898,81 @@ null,
 29,
 29,
 "Grounded",
-"A zero-g tether line, self-retracting, rated for two atmospheres of drift. — robe — Standard safety gear; keeps you from drifting further than 50 ft from anchor.",
+"A window-washer's safety tether, self-retracting, rated for the tower work. — robe — Standard safety gear; anchored, it stops you falling further than 50 ft from the last hold.",
 null,
 [
 "Grounded",
-"A zero-g tether line, self-retracting, rated for two atmospheres of drift.",
+"A window-washer's safety tether, self-retracting, rated for the tower work.",
 "robe",
 "",
-"Standard safety gear; keeps you from drifting further than 50 ft from anchor."
+"Standard safety gear; anchored, it stops you falling further than 50 ft from the last hold."
 ]
 ],
 [
 30,
 30,
 "Grounded",
-"A ration-synthesizer cartridge, single-flavor, \"protein, unspecified origin.\" — rations — Food for 3 days. The origin really is unspecified, and the crew prefers not knowing.",
+"A rack of spray cans, six colors, one nearly empty and rattling. — robe — Lay a fresh tag over a rival's on a block you hold and every ganger in the realm reads it as your claim: advantage on the next Intimidation or reputation check to press that turf. Mark a route and the crew can't lose it.",
 null,
 [
 "Grounded",
-"A ration-synthesizer cartridge, single-flavor, \"protein, unspecified origin.\"",
-"rations",
-"",
-"Food for 3 days. The origin really is unspecified, and the crew prefers not knowing."
-]
-],
-[
-31,
-31,
-"Grounded",
-"A pair of noise-cancelling ear inserts, station-issue, one slightly louder than the other. — robe — Advantage on saves against sonic and deafening effects, once per long rest.",
-null,
-[
-"Grounded",
-"A pair of noise-cancelling ear inserts, station-issue, one slightly louder than the other.",
+"A rack of spray cans, six colors, one nearly empty and rattling.",
 "robe",
 "",
-"Advantage on saves against sonic and deafening effects, once per long rest."
+"Lay a fresh tag over a rival's on a block you hold and every ganger in the realm reads it as your claim: advantage on the next Intimidation or reputation check to press that turf. Mark a route and the crew can't lose it."
+]
+],
+[
+31,
+31,
+"Grounded",
+"A pair of noise-cancelling ear inserts, transit-issue, one slightly louder than the other. — robe — Advantage on saves against sonic and deafening effects, once per long rest. The platforms are brutal.",
+null,
+[
+"Grounded",
+"A pair of noise-cancelling ear inserts, transit-issue, one slightly louder than the other.",
+"robe",
+"",
+"Advantage on saves against sonic and deafening effects, once per long rest. The platforms are brutal."
 ]
 ],
 [
 32,
 32,
 "Grounded",
-"A magnetic tool tray, spring-loaded slots, strap re-riveted. — robe — Slaps onto any bulkhead or hull; drawing a stowed item is free, even prone, even in zero-g. 1d4 bludgeoning in a pinch, and it apologizes with a clang.",
+"A magnetic tool tray, spring-loaded slots, strap re-riveted. — robe — Slaps onto any girder or shutter; drawing a stowed item is free, even prone. 1d4 bludgeoning in a pinch, and it apologizes with a clang.",
 null,
 [
 "Grounded",
 "A magnetic tool tray, spring-loaded slots, strap re-riveted.",
 "robe",
 "",
-"Slaps onto any bulkhead or hull; drawing a stowed item is free, even prone, even in zero-g. 1d4 bludgeoning in a pinch, and it apologizes with a clang."
+"Slaps onto any girder or shutter; drawing a stowed item is free, even prone. 1d4 bludgeoning in a pinch, and it apologizes with a clang."
 ]
 ],
 [
 33,
 33,
 "Grounded",
-"A maintenance exo-glove, one size fits most, knuckle servos whirring. — gauntlets of ogre power — Advantage on Strength checks to lift, hold, or brace. Too clumsy for fine work while worn — the trade every dock worker knows.",
+"A dockworker's exo-glove, one size fits most, knuckle servos whirring. — gauntlets of ogre power — Advantage on Strength checks to lift, hold, or brace. Too clumsy for fine work while worn — the trade every loader knows.",
 null,
 [
 "Grounded",
-"A maintenance exo-glove, one size fits most, knuckle servos whirring.",
+"A dockworker's exo-glove, one size fits most, knuckle servos whirring.",
 "gauntlets of ogre power",
 "",
-"Advantage on Strength checks to lift, hold, or brace. Too clumsy for fine work while worn — the trade every dock worker knows."
+"Advantage on Strength checks to lift, hold, or brace. Too clumsy for fine work while worn — the trade every loader knows."
 ]
 ],
 [
 34,
 34,
 "Textured",
-"A riot baton, stun-tipped, charge window at two. — handaxe — 1d6 bludgeoning; twice per rest, on a hit: DC 13 Con save or stunned one round.",
+"A corp-cop's smart baton, stun-tipped, charge window at two. — handaxe — 1d6 bludgeoning; twice per rest, on a hit: DC 13 Con save or stunned one round.",
 null,
 [
 "Textured",
-"A riot baton, stun-tipped, charge window at two.",
+"A corp-cop's smart baton, stun-tipped, charge window at two.",
 "handaxe",
 "",
 "1d6 bludgeoning; twice per rest, on a hit: DC 13 Con save or stunned one round."
@@ -269221,28 +269982,28 @@ null,
 35,
 35,
 "Textured",
-"A canister of hull-foam, nozzle clean, two charges. — robe — Each charge sprays a 10-ft barrier that hardens in one round: AC 15, 20 HP, blocks air, light, and pursuit. Ugly. Effective.",
+"A canister of barricade-foam, nozzle clean, two charges. — robe — Each charge sprays a 10-ft barrier that hardens in one round: AC 15, 20 HP, blocks a doorway, an alley mouth, or a pursuit. Ugly. Effective.",
 null,
 [
 "Textured",
-"A canister of hull-foam, nozzle clean, two charges.",
+"A canister of barricade-foam, nozzle clean, two charges.",
 "robe",
 "",
-"Each charge sprays a 10-ft barrier that hardens in one round: AC 15, 20 HP, blocks air, light, and pursuit. Ugly. Effective."
+"Each charge sprays a 10-ft barrier that hardens in one round: AC 15, 20 HP, blocks a doorway, an alley mouth, or a pursuit. Ugly. Effective."
 ]
 ],
 [
 36,
 36,
 "Textured",
-"A courier's grav-dolly, folding, one wheel that hums. — robe — Hauls 300 lb on any surface its magnets grip, stairs included. Folds to backpack size in two moves.",
+"A courier's folding hand-truck, one wheel that hums. — robe — Hauls 300 lb on any surface its wheels grip, stairs and subway steps included. Folds to backpack size in two moves.",
 null,
 [
 "Textured",
-"A courier's grav-dolly, folding, one wheel that hums.",
+"A courier's folding hand-truck, one wheel that hums.",
 "robe",
 "",
-"Hauls 300 lb on any surface its magnets grip, stairs included. Folds to backpack size in two moves."
+"Hauls 300 lb on any surface its wheels grip, stairs and subway steps included. Folds to backpack size in two moves."
 ]
 ],
 [
@@ -269333,14 +270094,14 @@ null,
 43,
 43,
 "Strange",
-"Enchanted — \"Split-Second Boots\" — magnetic-sole footwear tuned a fraction faster than physics strictly allows. — boots of striding and springing — R1(L1) +10 ft speed · R2(L5) once per combat, act as though under Haste for one round — The soles leave a half-step of afterimage on smooth decking, gone before anyone else looks.",
+"Enchanted — \"Split-Second Boots\" — magnetic-sole footwear tuned a fraction faster than physics strictly allows. — boots of striding and springing — R1(L1) +10 ft speed · R2(L5) once per combat, act as though under Haste for one round — The soles leave a half-step of afterimage on smooth platform tile, gone before anyone else looks.",
 null,
 [
 "Strange",
 "Enchanted — \"Split-Second Boots\" — magnetic-sole footwear tuned a fraction faster than physics strictly allows.",
 "boots of striding and springing",
 "R1(L1) +10 ft speed · R2(L5) once per combat, act as though under Haste for one round",
-"The soles leave a half-step of afterimage on smooth decking, gone before anyone else looks."
+"The soles leave a half-step of afterimage on smooth platform tile, gone before anyone else looks."
 ]
 ],
 [
@@ -269375,11 +270136,11 @@ null,
 46,
 46,
 "Strange",
-"Signature — \"Falling-Star Visor\" (frame: goggles) — a scavenged flight-recorder visor, repurposed. — goggles of night — R1(L1) darkvision 60 · R2(L4) see invisibility 1/day · R3(L7) threat-outlines: can't be surprised while worn — Canonical J3b anchor. The record light blinks when it logs. It is always logging.",
+"Signature — \"Falling-Star Visor\" (frame: goggles) — a scavenged crash-recorder visor, repurposed. — goggles of night — R1(L1) darkvision 60 · R2(L4) see invisibility 1/day · R3(L7) threat-outlines: can't be surprised while worn — Canonical J3b anchor. The record light blinks when it logs. It is always logging.",
 null,
 [
 "Strange",
-"Signature — \"Falling-Star Visor\" (frame: goggles) — a scavenged flight-recorder visor, repurposed.",
+"Signature — \"Falling-Star Visor\" (frame: goggles) — a scavenged crash-recorder visor, repurposed.",
 "goggles of night",
 "R1(L1) darkvision 60 · R2(L4) see invisibility 1/day · R3(L7) threat-outlines: can't be surprised while worn",
 "Canonical J3b anchor. The record light blinks when it logs. It is always logging."
@@ -269389,13 +270150,13 @@ null,
 47,
 47,
 "Strange",
-"Signature — \"The Foreman's Override\" — a battered control key that shouldn't open half of what it opens. — robe — R1(L1) opens any standard-security lock or airlock once per short rest · R2(L6) opens ANY lock, including magical ones, once per long rest · R3(L9) the door remembers you afterward and stays unlocked to you alone — The key claims an authority tier that lock displays render in a color you won't see anywhere else.",
+"Signature — \"The Foreman's Override\" — a battered transit-foreman's key that shouldn't open half of what it opens. — robe — R1(L1) opens any standard-security lock or gate once per short rest · R2(L6) opens ANY lock, including magical ones, once per long rest · R3(L9) the door remembers you afterward and stays unlocked to you alone — The key claims an authority tier that lock displays render in a color you won't see anywhere else.",
 null,
 [
 "Strange",
-"Signature — \"The Foreman's Override\" — a battered control key that shouldn't open half of what it opens.",
+"Signature — \"The Foreman's Override\" — a battered transit-foreman's key that shouldn't open half of what it opens.",
 "robe",
-"R1(L1) opens any standard-security lock or airlock once per short rest · R2(L6) opens ANY lock, including magical ones, once per long rest · R3(L9) the door remembers you afterward and stays unlocked to you alone",
+"R1(L1) opens any standard-security lock or gate once per short rest · R2(L6) opens ANY lock, including magical ones, once per long rest · R3(L9) the door remembers you afterward and stays unlocked to you alone",
 "The key claims an authority tier that lock displays render in a color you won't see anywhere else."
 ]
 ],
@@ -269417,25 +270178,25 @@ null,
 49,
 49,
 "Grounded",
-"Consumable — A fusion cell, half-charged, standard rating. — robe — Powers one chrome-tech charge item for its rated duration. Rust-exempt. Scarce to nonexistent off-station without a chrome tech vendor.",
+"Consumable — A power cell, half-charged, standard rating. — robe — Powers one chrome-tech charge item for its rated duration. Rust-exempt. Scarce to nonexistent off-grid without a chop-shop tech to trade with.",
 null,
 [
 "Grounded",
-"Consumable — A fusion cell, half-charged, standard rating.",
+"Consumable — A power cell, half-charged, standard rating.",
 "robe",
 "",
-"Powers one chrome-tech charge item for its rated duration. Rust-exempt. Scarce to nonexistent off-station without a chrome tech vendor."
+"Powers one chrome-tech charge item for its rated duration. Rust-exempt. Scarce to nonexistent off-grid without a chop-shop tech to trade with."
 ]
 ],
 [
 50,
 50,
 "Grounded",
-"Consumable — A medi-patch, single-use, station pharmacy stamp still legible. — robe — Heals 2d4+2 HP on application; DC 10 Con save or mild nausea for an hour if applied to an already-stable patient.",
+"Consumable — A medi-patch, single-use, street-pharmacy stamp still legible. — robe — Heals 2d4+2 HP on application; DC 10 Con save or mild nausea for an hour if applied to an already-stable patient.",
 null,
 [
 "Grounded",
-"Consumable — A medi-patch, single-use, station pharmacy stamp still legible.",
+"Consumable — A medi-patch, single-use, street-pharmacy stamp still legible.",
 "robe",
 "",
 "Heals 2d4+2 HP on application; DC 10 Con save or mild nausea for an hour if applied to an already-stable patient."
@@ -269456,14 +270217,14 @@ null,
 1,
 1,
 "Grounded",
-"A pebble, unremarkable, that happens to be perfectly round. — robe — Nothing more than that. Somehow that's a little unsettling here.",
+"A pebble, unremarkable, that happens to be a perfect sphere. — robe — Nothing more than that. Somehow the exactness of it is a little unsettling here.",
 null,
 [
 "Grounded",
-"A pebble, unremarkable, that happens to be perfectly round.",
+"A pebble, unremarkable, that happens to be a perfect sphere.",
 "robe",
 "",
-"Nothing more than that. Somehow that's a little unsettling here."
+"Nothing more than that. Somehow the exactness of it is a little unsettling here."
 ]
 ],
 [
@@ -269512,25 +270273,25 @@ null,
 5,
 5,
 "Grounded",
-"A pocket-sized notebook, blank, paper slightly too smooth. — robe — Writes on normally. Somebody clearly meant to use it and didn't get the chance.",
+"A scribe's blank papyrus scroll, fibre slightly too smooth. — robe — Takes ink normally. Somebody clearly meant to write on it and didn't get the chance.",
 null,
 [
 "Grounded",
-"A pocket-sized notebook, blank, paper slightly too smooth.",
+"A scribe's blank papyrus scroll, fibre slightly too smooth.",
 "robe",
 "",
-"Writes on normally. Somebody clearly meant to use it and didn't get the chance."
+"Takes ink normally. Somebody clearly meant to write on it and didn't get the chance."
 ]
 ],
 [
 6,
 6,
 "Grounded",
-"A candle stub, half-burned, wax an ordinary color. — candle — Burns for about an hour. The wick's already been trimmed once by someone careful.",
+"A temple candle stub, half-burned, tallow an ordinary color. — candle — Burns for about an hour. The wick's already been trimmed once by someone careful.",
 null,
 [
 "Grounded",
-"A candle stub, half-burned, wax an ordinary color.",
+"A temple candle stub, half-burned, tallow an ordinary color.",
 "candle",
 "",
 "Burns for about an hour. The wick's already been trimmed once by someone careful."
@@ -269554,25 +270315,25 @@ null,
 8,
 8,
 "Grounded",
-"A length of chain, three links, snapped clean rather than cut. — chain — Good steel. Whatever it was holding either broke free, or was let go.",
+"A length of chain, three links, snapped clean rather than cut. — chain — Good bronze. Whatever it was holding either broke free, or was let go.",
 null,
 [
 "Grounded",
 "A length of chain, three links, snapped clean rather than cut.",
 "chain",
 "",
-"Good steel. Whatever it was holding either broke free, or was let go."
+"Good bronze. Whatever it was holding either broke free, or was let go."
 ]
 ],
 [
 9,
 9,
 "Grounded",
-"A brass bell, small, no clapper. — bell — Silent. Somebody removed the clapper on purpose, recently, by the tool marks.",
+"A small bronze bell — a sistrum's bell — no clapper. — bell — Silent. Somebody removed the clapper on purpose, recently, by the tool marks.",
 null,
 [
 "Grounded",
-"A brass bell, small, no clapper.",
+"A small bronze bell — a sistrum's bell — no clapper.",
 "bell",
 "",
 "Silent. Somebody removed the clapper on purpose, recently, by the tool marks."
@@ -269582,11 +270343,11 @@ null,
 10,
 10,
 "Grounded",
-"A pair of dice carved from meteor iron. — robe — Fair. Perfectly, provably fair. Gamblers hate them.",
+"A pair of dice carved from meteor iron — the iron of heaven. — robe — Fair. Perfectly, provably fair. Gamblers hate them.",
 null,
 [
 "Grounded",
-"A pair of dice carved from meteor iron.",
+"A pair of dice carved from meteor iron — the iron of heaven.",
 "robe",
 "",
 "Fair. Perfectly, provably fair. Gamblers hate them."
@@ -269596,53 +270357,53 @@ null,
 11,
 11,
 "Grounded",
-"A single fish scale, silver, larger than any local fish should produce. — robe — Just a scale. Whatever shed it was, evidently, big.",
+"A single scarab wing-case, iridescent, larger than any beetle should grow. — robe — Just a wing-case. Whatever shed it was, evidently, big.",
 null,
 [
 "Grounded",
-"A single fish scale, silver, larger than any local fish should produce.",
+"A single scarab wing-case, iridescent, larger than any beetle should grow.",
 "robe",
 "",
-"Just a scale. Whatever shed it was, evidently, big."
+"Just a wing-case. Whatever shed it was, evidently, big."
 ]
 ],
 [
 12,
 12,
 "Grounded",
-"A folded paper crane, made from a page torn out of something with much smaller handwriting than a crane needs. — paper — Unfolds to three complete, mundane sentences and one that trails off mid-word.",
+"A folded papyrus bird, made from a page torn out of something in a much smaller hand than a fold needs. — paper — Unfolds to three complete, mundane sentences and one that trails off mid-glyph.",
 null,
 [
 "Grounded",
-"A folded paper crane, made from a page torn out of something with much smaller handwriting than a crane needs.",
+"A folded papyrus bird, made from a page torn out of something in a much smaller hand than a fold needs.",
 "paper",
 "",
-"Unfolds to three complete, mundane sentences and one that trails off mid-word."
+"Unfolds to three complete, mundane sentences and one that trails off mid-glyph."
 ]
 ],
 [
 13,
 13,
 "Textured",
-"A monk's counting beads, 108 of them, one subtly heavier. — robe — Meditating with them through a short rest: advantage on your first Intelligence or Wisdom check after. The heavy bead is number 73, every time you count.",
+"A magus's counting cord, 108 knots, one knot subtly tighter. — robe — Meditating with it through a short rest: advantage on your first Intelligence or Wisdom check after. The tight knot is number 73, every time you count.",
 null,
 [
 "Textured",
-"A monk's counting beads, 108 of them, one subtly heavier.",
+"A magus's counting cord, 108 knots, one knot subtly tighter.",
 "robe",
 "",
-"Meditating with them through a short rest: advantage on your first Intelligence or Wisdom check after. The heavy bead is number 73, every time you count."
+"Meditating with it through a short rest: advantage on your first Intelligence or Wisdom check after. The tight knot is number 73, every time you count."
 ]
 ],
 [
 14,
 14,
 "Textured",
-"A folding telescope, brass, lens flawless. — spyglass — See clear detail at a mile: count torches, read banners, recognize a face (DC rises with distance).",
+"An astronomer's folding telescope, brass, lens flawless. — spyglass — See clear detail at a mile: count torches, read banners, recognize a face (DC rises with distance).",
 null,
 [
 "Textured",
-"A folding telescope, brass, lens flawless.",
+"An astronomer's folding telescope, brass, lens flawless.",
 "spyglass",
 "",
 "See clear detail at a mile: count torches, read banners, recognize a face (DC rises with distance)."
@@ -269652,11 +270413,11 @@ null,
 15,
 15,
 "Textured",
-"A bottle of luminous algae, stoppered, faintly green. — bottle, glass — Shaken awake: dim light, 15 ft, one hour. No heat, no flame — light where fire would be a mistake.",
+"A phial of powdered star-glow, stoppered, faintly luminous. — bottle, glass — Shaken awake: dim light, 15 ft, one hour. No heat, no flame — light where fire would be a mistake.",
 null,
 [
 "Textured",
-"A bottle of luminous algae, stoppered, faintly green.",
+"A phial of powdered star-glow, stoppered, faintly luminous.",
 "bottle, glass",
 "",
 "Shaken awake: dim light, 15 ft, one hour. No heat, no flame — light where fire would be a mistake."
@@ -269680,25 +270441,25 @@ null,
 17,
 17,
 "Textured",
-"A star-metal sewing needle, cold to the touch, never dulls. — needle — Mends any tear or seam in ten minutes, and the mend is stronger than the original. Leather, sailcloth, tent hide, trust.",
+"A star-metal awl, cold to the touch, never dulls. — needle — Mends any tear or seam in ten minutes, and the mend is stronger than the original. Leather, linen, tent hide, trust.",
 null,
 [
 "Textured",
-"A star-metal sewing needle, cold to the touch, never dulls.",
+"A star-metal awl, cold to the touch, never dulls.",
 "needle",
 "",
-"Mends any tear or seam in ten minutes, and the mend is stronger than the original. Leather, sailcloth, tent hide, trust."
+"Mends any tear or seam in ten minutes, and the mend is stronger than the original. Leather, linen, tent hide, trust."
 ]
 ],
 [
 18,
 18,
 "Textured",
-"A dream journal, half-filled, entries annotated with places. — book — Slept on, you remember your own dreams perfectly on waking. Where dreams carry signal (dreamRules composes), perfect recall is not a small thing.",
+"A dream-diary of the night-boat, half-filled, entries annotated with places. — book — Slept on, you remember your own dreams perfectly on waking. Where dreams carry signal (dreamRules composes), perfect recall is not a small thing.",
 null,
 [
 "Textured",
-"A dream journal, half-filled, entries annotated with places.",
+"A dream-diary of the night-boat, half-filled, entries annotated with places.",
 "book",
 "",
 "Slept on, you remember your own dreams perfectly on waking. Where dreams carry signal (dreamRules composes), perfect recall is not a small thing."
@@ -269708,25 +270469,25 @@ null,
 19,
 19,
 "Textured",
-"A silence bottle — a small jar that holds one scream. — vial — Uncorked: the scream happens then — a full-throated human scream at the bottle's location, heard for a quarter mile. Refill by holding it open through any real scream. One at a time.",
+"A silence jar — a small vessel that holds one scream. — vial — Uncorked: the scream happens then — a full-throated human scream at the jar's location, heard for a quarter mile. Refill by holding it open through any real scream. One at a time.",
 null,
 [
 "Textured",
-"A silence bottle — a small jar that holds one scream.",
+"A silence jar — a small vessel that holds one scream.",
 "vial",
 "",
-"Uncorked: the scream happens then — a full-throated human scream at the bottle's location, heard for a quarter mile. Refill by holding it open through any real scream. One at a time."
+"Uncorked: the scream happens then — a full-throated human scream at the jar's location, heard for a quarter mile. Refill by holding it open through any real scream. One at a time."
 ]
 ],
 [
 20,
 20,
 "Textured",
-"A monastery's storm glass, crystals dozing in fluid. — robe — Blooms six hours before natural storms. Blooms in spirals before unnatural ones. It has two distinct wrongs and you will learn both.",
+"An astrologer's storm-glass, crystals dozing in fluid. — robe — Blooms six hours before natural storms. Blooms in spirals before unnatural ones. It has two distinct wrongs and you will learn both.",
 null,
 [
 "Textured",
-"A monastery's storm glass, crystals dozing in fluid.",
+"An astrologer's storm-glass, crystals dozing in fluid.",
 "robe",
 "",
 "Blooms six hours before natural storms. Blooms in spirals before unnatural ones. It has two distinct wrongs and you will learn both."
@@ -269736,56 +270497,56 @@ null,
 21,
 21,
 "Strange",
-"A tuning fork of grey metal that hums a half-second before anything else makes a sound. — robe — Advantage on initiative while held bare-handed. Always a half-second. Exactly.",
+"The Scarab of the Scale — a heart-scarab of blue faience, heavier in the palm than faience has any right to be. — robe — Set it on any balance or held flat on the palm and put a claim to it aloud: it sinks toward a lie and rises toward a truth, weighing the words the way Ma'at weighs a heart. It cannot read intent it can't hear — only what is actually said — and it will not weigh the same claim twice in a day. Ammit's appetite is patient; the scarab remembers what it caught you saying.",
 null,
 [
 "Strange",
-"A tuning fork of grey metal that hums a half-second before anything else makes a sound.",
+"The Scarab of the Scale — a heart-scarab of blue faience, heavier in the palm than faience has any right to be.",
 "robe",
 "",
-"Advantage on initiative while held bare-handed. Always a half-second. Exactly."
+"Set it on any balance or held flat on the palm and put a claim to it aloud: it sinks toward a lie and rises toward a truth, weighing the words the way Ma'at weighs a heart. It cannot read intent it can't hear — only what is actually said — and it will not weigh the same claim twice in a day. Ammit's appetite is patient; the scarab remembers what it caught you saying."
 ]
 ],
 [
 22,
 22,
 "Strange",
-"\"The Librarian's Bookmark\" — a ribbon of woven silver, cold. — robe — R1(L1) placed in any book, it marks the page that answers a question asked aloud, if the book holds one · R2(L6) once per week it works on the world: it tugs toward one asked-for thing until sunrise — It's colder in the direction it wants to go.",
+"The Deck With One Extra Card — a hand-inked tarot, and beneath the twenty-two a twenty-third that has no number and no name. — robe — R1(L1) a reading drawn for a real question gives a true omen — the DM answers one yes/no about the near future honestly, in symbol · R2(L6) draw the unnumbered card, once: it awakens the Tarot Engine for this world — a standing oracle of the Major Arcana you did not have before, its cards live from now on (see docs/COSMIC-REKEY.md §Tarot) — The extra card is always in the deck no matter how you cut it. It shows a different picture to each person who draws it, and none of them will say what they saw.",
 null,
 [
 "Strange",
-"\"The Librarian's Bookmark\" — a ribbon of woven silver, cold.",
+"The Deck With One Extra Card — a hand-inked tarot, and beneath the twenty-two a twenty-third that has no number and no name.",
 "robe",
-"R1(L1) placed in any book, it marks the page that answers a question asked aloud, if the book holds one · R2(L6) once per week it works on the world: it tugs toward one asked-for thing until sunrise",
-"It's colder in the direction it wants to go."
+"R1(L1) a reading drawn for a real question gives a true omen — the DM answers one yes/no about the near future honestly, in symbol · R2(L6) draw the unnumbered card, once: it awakens the Tarot Engine for this world — a standing oracle of the Major Arcana you did not have before, its cards live from now on (see docs/COSMIC-REKEY.md §Tarot)",
+"The extra card is always in the deck no matter how you cut it. It shows a different picture to each person who draws it, and none of them will say what they saw."
 ]
 ],
 [
 23,
 23,
 "Strange",
-"A geometric diagram, chalked onto slate, whose angles measure differently depending on who holds the protractor. — robe — Copy it onto any flat surface (one minute of chalk work): creatures crossing the copy must pass DC 12 Intelligence or move at half speed across it — the angles argue with their legs. The copy lasts until scuffed.",
+"The Squared Circle — the impossible construction, chalked onto slate, a circle a compass-and-straightedge should not be able to turn into a square. — robe — Copy it onto any flat surface (one minute of chalk work): creatures crossing the copy must pass DC 12 Intelligence or move at half speed across it — the geometry argues with their legs. The copy lasts until scuffed. Whoever drew it can walk it at full speed; they know where the corners really are.",
 null,
 [
 "Strange",
-"A geometric diagram, chalked onto slate, whose angles measure differently depending on who holds the protractor.",
+"The Squared Circle — the impossible construction, chalked onto slate, a circle a compass-and-straightedge should not be able to turn into a square.",
 "robe",
 "",
-"Copy it onto any flat surface (one minute of chalk work): creatures crossing the copy must pass DC 12 Intelligence or move at half speed across it — the angles argue with their legs. The copy lasts until scuffed."
+"Copy it onto any flat surface (one minute of chalk work): creatures crossing the copy must pass DC 12 Intelligence or move at half speed across it — the geometry argues with their legs. The copy lasts until scuffed. Whoever drew it can walk it at full speed; they know where the corners really are."
 ]
 ],
 [
 24,
 24,
 "Strange",
-"A jar of ink that writes in the dark. — ink — Words written with it are visible only in total darkness — invisible in any light. Maps, marching orders, things better unread by daylight people.",
+"The Door-Chalk — a nub of white chalk, ground from tomb-lime, warm at the tip. — ink — Draw a doorway on any solid surface with it (one round) and the outline becomes a real door for one minute — it opens onto the other side of that wall if there is one, or one pace of raw dark if there isn't. One door at a time; erasing or scuffing the line closes it, with whatever's halfway through. The chalk is a stub and getting shorter.",
 null,
 [
 "Strange",
-"A jar of ink that writes in the dark.",
+"The Door-Chalk — a nub of white chalk, ground from tomb-lime, warm at the tip.",
 "ink",
 "",
-"Words written with it are visible only in total darkness — invisible in any light. Maps, marching orders, things better unread by daylight people."
+"Draw a doorway on any solid surface with it (one round) and the outline becomes a real door for one minute — it opens onto the other side of that wall if there is one, or one pace of raw dark if there isn't. One door at a time; erasing or scuffing the line closes it, with whatever's halfway through. The chalk is a stub and getting shorter."
 ]
 ],
 [
@@ -269806,39 +270567,39 @@ null,
 26,
 26,
 "Volatile",
-"A choir tuning pipe, cracked down its length. — robe — Blown, its note grants everyone in earshot an immediate re-roll of one failed save against fear or psychic effects. The same note is heard by everything unnatural within a mile, and the nearest breach-touched creature starts moving toward the sound. It is very tempting to blow.",
+"An angelic call-pipe of grey horn, cracked down its length. — robe — Blown, its note grants everyone in earshot an immediate re-roll of one failed save against fear or psychic effects. The same note is heard by everything of the Aethyrs within a mile, and the nearest breach-touched creature starts moving toward the sound. It is very tempting to blow.",
 null,
 [
 "Volatile",
-"A choir tuning pipe, cracked down its length.",
+"An angelic call-pipe of grey horn, cracked down its length.",
 "robe",
 "",
-"Blown, its note grants everyone in earshot an immediate re-roll of one failed save against fear or psychic effects. The same note is heard by everything unnatural within a mile, and the nearest breach-touched creature starts moving toward the sound. It is very tempting to blow."
+"Blown, its note grants everyone in earshot an immediate re-roll of one failed save against fear or psychic effects. The same note is heard by everything of the Aethyrs within a mile, and the nearest breach-touched creature starts moving toward the sound. It is very tempting to blow."
 ]
 ],
 [
 27,
 27,
 "Mythic",
-"The thing that was written down before we had hands to hold the pen — roll d4: 1. The hymn with the missing verse — the Choir's original, transcribed in a hand that isn't quite a hand's, complete except for the ending everyone stopped singing on purpose. 2. The true name of `[the region]` — the one it answered to before people arrived to misname it, set down once, in symbols the eye slides off. 3. The Choir's seating chart — every voice that ever joined, every empty chair still waiting, and one blank line near the bottom that insists it is yours. 4. The star that was inked out — a wax-sealed jar, heavier than glass, with a point of light in it that matches a hole in every honest star chart. — robe — 1. R1(L9) singing what survives silences all supernatural sound and compulsion within a mile for an hour · R2(L12) completing the verse yourself at a breach mouth, once, closes that breach permanently 2. R1(L9) speaking one syllable makes the local land briefly, obediently, do as you ask — once per day, small things · R2(L12) speaking the whole name aloud, once: `[the region]` turns to look at you — it knows you thereafter, favors you, and reshapes itself, slowly, toward what it decides you meant 3. R1(L9) reading it tells you truthfully which people around you are already, unknowingly, being sung toward the Choir · R2(L12) taking your named seat, once, admits you alive — a standing voice in what the Choir decides, permanently, and `[this settlement]` begins to hum in a key it can't stop 4. R1(L9) opened at night, the star resumes its place for an hour — everything under it navigates true, and every lost condition in the region ends · R2(L12) released for good, once: the sky accepts it back — the night is one star brighter forever, and `[the region]`'s nights are never again fully dark — DM: scholars, cults, and the Choir itself all count as interested parties — word of any of these moves faction clocks.",
+"The thing that was written down before we had hands to hold the pen — roll d4: 1. The Call with the missing verse — the Nineteenth Key of the Aethyrs, the one the scryer never dared set down, transcribed in a hand that isn't quite a hand's, complete except for the ending everyone stopped speaking on purpose. 2. The true name of `[the region]` — the one it answered to before people arrived to misname it, set down once, in symbols the eye slides off. 3. The roster of the Aethyrs — every angelic name that ever answered a call, every empty governance still waiting, and one blank line near the bottom that insists it is yours. 4. The star that was inked out — a wax-sealed jar, heavier than glass, with a point of light in it that matches a hole in every honest star chart. — robe — 1. R1(L9) speaking what survives silences all supernatural sound and compulsion within a mile for an hour · R2(L12) completing the Call yourself at a breach mouth, once, closes that breach permanently 2. R1(L9) speaking one syllable makes the local land briefly, obediently, do as you ask — once per day, small things · R2(L12) speaking the whole name aloud, once: `[the region]` turns to look at you — it knows you thereafter, favors you, and reshapes itself, slowly, toward what it decides you meant 3. R1(L9) reading it tells you truthfully which people around you are already, unknowingly, being called toward the Aethyrs · R2(L12) writing your name on the blank line, once, seats you alive — a standing voice among the governance of the Aethyrs, permanently, and `[this settlement]` begins to hum in a key it can't stop 4. R1(L9) opened at night, the star resumes its place for an hour — everything under it navigates true, and every lost condition in the region ends · R2(L12) released for good, once: the sky accepts it back — the night is one star brighter forever, and `[the region]`'s nights are never again fully dark — DM: scholars, cults, and the choirs of the Aethyrs themselves all count as interested parties — word of any of these moves faction clocks.",
 null,
 [
 "Mythic",
-"The thing that was written down before we had hands to hold the pen — roll d4: 1. The hymn with the missing verse — the Choir's original, transcribed in a hand that isn't quite a hand's, complete except for the ending everyone stopped singing on purpose. 2. The true name of `[the region]` — the one it answered to before people arrived to misname it, set down once, in symbols the eye slides off. 3. The Choir's seating chart — every voice that ever joined, every empty chair still waiting, and one blank line near the bottom that insists it is yours. 4. The star that was inked out — a wax-sealed jar, heavier than glass, with a point of light in it that matches a hole in every honest star chart.",
+"The thing that was written down before we had hands to hold the pen — roll d4: 1. The Call with the missing verse — the Nineteenth Key of the Aethyrs, the one the scryer never dared set down, transcribed in a hand that isn't quite a hand's, complete except for the ending everyone stopped speaking on purpose. 2. The true name of `[the region]` — the one it answered to before people arrived to misname it, set down once, in symbols the eye slides off. 3. The roster of the Aethyrs — every angelic name that ever answered a call, every empty governance still waiting, and one blank line near the bottom that insists it is yours. 4. The star that was inked out — a wax-sealed jar, heavier than glass, with a point of light in it that matches a hole in every honest star chart.",
 "robe",
-"1. R1(L9) singing what survives silences all supernatural sound and compulsion within a mile for an hour · R2(L12) completing the verse yourself at a breach mouth, once, closes that breach permanently 2. R1(L9) speaking one syllable makes the local land briefly, obediently, do as you ask — once per day, small things · R2(L12) speaking the whole name aloud, once: `[the region]` turns to look at you — it knows you thereafter, favors you, and reshapes itself, slowly, toward what it decides you meant 3. R1(L9) reading it tells you truthfully which people around you are already, unknowingly, being sung toward the Choir · R2(L12) taking your named seat, once, admits you alive — a standing voice in what the Choir decides, permanently, and `[this settlement]` begins to hum in a key it can't stop 4. R1(L9) opened at night, the star resumes its place for an hour — everything under it navigates true, and every lost condition in the region ends · R2(L12) released for good, once: the sky accepts it back — the night is one star brighter forever, and `[the region]`'s nights are never again fully dark",
-"DM: scholars, cults, and the Choir itself all count as interested parties — word of any of these moves faction clocks."
+"1. R1(L9) speaking what survives silences all supernatural sound and compulsion within a mile for an hour · R2(L12) completing the Call yourself at a breach mouth, once, closes that breach permanently 2. R1(L9) speaking one syllable makes the local land briefly, obediently, do as you ask — once per day, small things · R2(L12) speaking the whole name aloud, once: `[the region]` turns to look at you — it knows you thereafter, favors you, and reshapes itself, slowly, toward what it decides you meant 3. R1(L9) reading it tells you truthfully which people around you are already, unknowingly, being called toward the Aethyrs · R2(L12) writing your name on the blank line, once, seats you alive — a standing voice among the governance of the Aethyrs, permanently, and `[this settlement]` begins to hum in a key it can't stop 4. R1(L9) opened at night, the star resumes its place for an hour — everything under it navigates true, and every lost condition in the region ends · R2(L12) released for good, once: the sky accepts it back — the night is one star brighter forever, and `[the region]`'s nights are never again fully dark",
+"DM: scholars, cults, and the choirs of the Aethyrs themselves all count as interested parties — word of any of these moves faction clocks."
 ]
 ],
 [
 28,
 28,
 "Grounded",
-"A brass bell-jar, cracked, that once held something the label doesn't specify. — bottle, glass — Empty now. The crack runs exactly along where a maker's mark would be.",
+"A reliquary jar, cracked, that once held something the seal doesn't specify. — bottle, glass — Empty now. The crack runs exactly along where a maker's mark would be.",
 null,
 [
 "Grounded",
-"A brass bell-jar, cracked, that once held something the label doesn't specify.",
+"A reliquary jar, cracked, that once held something the seal doesn't specify.",
 "bottle, glass",
 "",
 "Empty now. The crack runs exactly along where a maker's mark would be."
@@ -269862,39 +270623,39 @@ null,
 30,
 30,
 "Grounded",
-"A traveler's oilskin coat, patched, that smells permanently of somewhere much colder than here. — robe — Waterproof. The patches are all sewn in the same unusual stitch pattern.",
+"A pilgrim's linen mantle, patched, that smells permanently of somewhere much colder than here — tomb-cold. — robe — Sheds dust and sun. The patches are all sewn in the same unusual stitch pattern.",
 null,
 [
 "Grounded",
-"A traveler's oilskin coat, patched, that smells permanently of somewhere much colder than here.",
+"A pilgrim's linen mantle, patched, that smells permanently of somewhere much colder than here — tomb-cold.",
 "robe",
 "",
-"Waterproof. The patches are all sewn in the same unusual stitch pattern."
+"Sheds dust and sun. The patches are all sewn in the same unusual stitch pattern."
 ]
 ],
 [
 31,
 31,
 "Grounded",
-"A brass instrument, sextant-shaped, functional, slightly heavier than its size suggests. — robe — Works fine for ordinary navigation. The extra weight has never been explained by anyone who's opened the casing.",
+"An astrolabe, brass, functional, slightly heavier than its size suggests. — robe — Works fine for ordinary star-reckoning. The extra weight has never been explained by anyone who's opened the casing.",
 null,
 [
 "Grounded",
-"A brass instrument, sextant-shaped, functional, slightly heavier than its size suggests.",
+"An astrolabe, brass, functional, slightly heavier than its size suggests.",
 "robe",
 "",
-"Works fine for ordinary navigation. The extra weight has never been explained by anyone who's opened the casing."
+"Works fine for ordinary star-reckoning. The extra weight has never been explained by anyone who's opened the casing."
 ]
 ],
 [
 32,
 32,
 "Grounded",
-"A coil of fine netting, mended so many times the mending outweighs the original net. — net — Functional. Catches exactly what it should.",
+"A fowler's net, mended so many times the mending outweighs the original net. — net — Functional. Catches exactly what it should.",
 null,
 [
 "Grounded",
-"A coil of fine netting, mended so many times the mending outweighs the original net.",
+"A fowler's net, mended so many times the mending outweighs the original net.",
 "net",
 "",
 "Functional. Catches exactly what it should."
@@ -269904,11 +270665,11 @@ null,
 33,
 33,
 "Grounded",
-"An iron hook on a pole, pitted with rust despite obvious recent use. — quarterstaff — 1d6 bludgeoning. The pitting doesn't match how recently it's clearly been handled.",
+"A ritual crook — a heka-crook of iron — pitted despite obvious recent use. — quarterstaff — 1d6 bludgeoning. The pitting doesn't match how recently it's clearly been handled.",
 null,
 [
 "Grounded",
-"An iron hook on a pole, pitted with rust despite obvious recent use.",
+"A ritual crook — a heka-crook of iron — pitted despite obvious recent use.",
 "quarterstaff",
 "",
 "1d6 bludgeoning. The pitting doesn't match how recently it's clearly been handled."
@@ -269918,25 +270679,25 @@ null,
 34,
 34,
 "Textured",
-"A drowned monastery's hymnal, water-damaged, three hymns legible. — book — The third hymn, sung in full (one minute), calms rough water in a 60-ft ring for ten minutes. It was written for a reason.",
+"A tomb's Book of Going Forth, water-damaged, three spells legible. — book — The third spell, spoken in full (one minute), calms troubled water in a 60-ft ring for ten minutes. It was written for a reason.",
 null,
 [
 "Textured",
-"A drowned monastery's hymnal, water-damaged, three hymns legible.",
+"A tomb's Book of Going Forth, water-damaged, three spells legible.",
 "book",
 "",
-"The third hymn, sung in full (one minute), calms rough water in a 60-ft ring for ten minutes. It was written for a reason."
+"The third spell, spoken in full (one minute), calms troubled water in a 60-ft ring for ten minutes. It was written for a reason."
 ]
 ],
 [
 35,
 35,
 "Textured",
-"A lighthouse lens segment, prism-cut, heavy as guilt. — robe — Any light shone through it carries a mile as a tight beam — signal across a valley, or dazzle at close range (DC 12 Con, blinded one round).",
+"A shard of the Pharos lens, prism-cut, heavy as guilt. — robe — Any light shone through it carries a mile as a tight beam — signal across a valley, or dazzle at close range (DC 12 Con, blinded one round).",
 null,
 [
 "Textured",
-"A lighthouse lens segment, prism-cut, heavy as guilt.",
+"A shard of the Pharos lens, prism-cut, heavy as guilt.",
 "robe",
 "",
 "Any light shone through it carries a mile as a tight beam — signal across a valley, or dazzle at close range (DC 12 Con, blinded one round)."
@@ -269946,11 +270707,11 @@ null,
 36,
 36,
 "Textured",
-"A vial of the deep's own dark — ink-black water that light declines to cross. — vial — Poured out: a 10-ft sphere of magical darkness for one minute. Refillable only somewhere the sun has never reached.",
+"A vial of the Duat's own dark — the lightless water of the night-river, that light declines to cross. — vial — Poured out: a 10-ft sphere of magical darkness for one minute. Refillable only somewhere the sun has never reached.",
 null,
 [
 "Textured",
-"A vial of the deep's own dark — ink-black water that light declines to cross.",
+"A vial of the Duat's own dark — the lightless water of the night-river, that light declines to cross.",
 "vial",
 "",
 "Poured out: a 10-ft sphere of magical darkness for one minute. Refillable only somewhere the sun has never reached."
@@ -269960,25 +270721,25 @@ null,
 37,
 37,
 "Textured",
-"Enchanted — \"The Wanderer's Compass\" — brass, that always points toward the nearest unnatural depth. — robe — R1(L1) points to the nearest significant impossible drop-off or gulf · R2(L6) also indicates, roughly, how deep — The needle dips as well as turns. Down is a direction here.",
+"Enchanted — \"The Dowsing Ankh\" — bronze, that always points toward the nearest unnatural depth. — robe — R1(L1) points to the nearest significant impossible drop-off or gulf · R2(L6) also indicates, roughly, how deep — The loop dips as well as turns. Down is a direction here.",
 null,
 [
 "Textured",
-"Enchanted — \"The Wanderer's Compass\" — brass, that always points toward the nearest unnatural depth.",
+"Enchanted — \"The Dowsing Ankh\" — bronze, that always points toward the nearest unnatural depth.",
 "robe",
 "R1(L1) points to the nearest significant impossible drop-off or gulf · R2(L6) also indicates, roughly, how deep",
-"The needle dips as well as turns. Down is a direction here."
+"The loop dips as well as turns. Down is a direction here."
 ]
 ],
 [
 38,
 38,
 "Textured",
-"Enchanted — \"The Pilgrim's Rosary\" — beads carved from something that isn't quite bone and isn't quite stone. — robe — R1(L1) advantage on saves against fear near the truly vast or unknowable · R2(L6) once per day, calm an unnatural disturbance in a 30 ft radius for ten minutes — Every bead is a slightly different shape, like it was carved by different, unpracticed hands.",
+"Enchanted — \"The Initiate's Prayer-Cord\" — beads carved from something that isn't quite bone and isn't quite stone. — robe — R1(L1) advantage on saves against fear near the truly vast or unknowable · R2(L6) once per day, calm an unnatural disturbance in a 30 ft radius for ten minutes — Every bead is a slightly different shape, like it was carved by different, unpracticed hands.",
 null,
 [
 "Textured",
-"Enchanted — \"The Pilgrim's Rosary\" — beads carved from something that isn't quite bone and isn't quite stone.",
+"Enchanted — \"The Initiate's Prayer-Cord\" — beads carved from something that isn't quite bone and isn't quite stone.",
 "robe",
 "R1(L1) advantage on saves against fear near the truly vast or unknowable · R2(L6) once per day, calm an unnatural disturbance in a 30 ft radius for ten minutes",
 "Every bead is a slightly different shape, like it was carved by different, unpracticed hands."
@@ -269988,11 +270749,11 @@ null,
 39,
 39,
 "Textured",
-"Enchanted — \"The Deep Warden's Coat\" — heavy canvas that never quite dries all the way through. — robe — R1(L1) resistance to cold damage while wearing it · R2(L6) hold your breath twice as long in any environment — It smells, faintly and permanently, of something much larger than anything that made it.",
+"Enchanted — \"The Duat-Warden's Mantle\" — heavy linen that never quite dries all the way through. — robe — R1(L1) resistance to cold damage while wearing it · R2(L6) hold your breath twice as long in any environment — It smells, faintly and permanently, of something much larger than anything that made it.",
 null,
 [
 "Textured",
-"Enchanted — \"The Deep Warden's Coat\" — heavy canvas that never quite dries all the way through.",
+"Enchanted — \"The Duat-Warden's Mantle\" — heavy linen that never quite dries all the way through.",
 "robe",
 "R1(L1) resistance to cold damage while wearing it · R2(L6) hold your breath twice as long in any environment",
 "It smells, faintly and permanently, of something much larger than anything that made it."
@@ -270002,25 +270763,25 @@ null,
 40,
 40,
 "Strange",
-"Enchanted — \"The Listening Shell\" — palm-sized, that picks up more than sound. — robe — R1(L1) advantage on Perception checks in vast or open spaces · R2(L6) once per day, eavesdrop on a conversation happening anywhere touching the same unbroken expanse — The spiral inside goes one full turn deeper than the shell's size allows.",
+"Enchanted — \"The Listening Ear of Thoth\" — a palm-sized carved ear that picks up more than sound. — robe — R1(L1) advantage on Perception checks in vast or open spaces · R2(L6) once per day, eavesdrop on a conversation happening anywhere touching the same unbroken expanse — The whorl inside goes one full turn deeper than the carving's size allows.",
 null,
 [
 "Strange",
-"Enchanted — \"The Listening Shell\" — palm-sized, that picks up more than sound.",
+"Enchanted — \"The Listening Ear of Thoth\" — a palm-sized carved ear that picks up more than sound.",
 "robe",
 "R1(L1) advantage on Perception checks in vast or open spaces · R2(L6) once per day, eavesdrop on a conversation happening anywhere touching the same unbroken expanse",
-"The spiral inside goes one full turn deeper than the shell's size allows."
+"The whorl inside goes one full turn deeper than the carving's size allows."
 ]
 ],
 [
 41,
 41,
 "Strange",
-"Enchanted — \"Deep-Sight Lenses\" — thick glass, faintly green, ground by someone who wasn't working from a human prescription. — goggles of night — R1(L1) darkvision 60 ft in any dark or unnatural gloom · R2(L6) also reveals the outline of anything vast moving within 200 ft — In deep dark the green tint brightens slightly. It is brightest when you hold very still.",
+"Enchanted — \"The Duat-Sight Lenses\" — thick glass, faintly green, ground by someone who wasn't working from a human prescription. — goggles of night — R1(L1) darkvision 60 ft in any dark or unnatural gloom · R2(L6) also reveals the outline of anything vast moving within 200 ft — In deep dark the green tint brightens slightly. It is brightest when you hold very still.",
 null,
 [
 "Strange",
-"Enchanted — \"Deep-Sight Lenses\" — thick glass, faintly green, ground by someone who wasn't working from a human prescription.",
+"Enchanted — \"The Duat-Sight Lenses\" — thick glass, faintly green, ground by someone who wasn't working from a human prescription.",
 "goggles of night",
 "R1(L1) darkvision 60 ft in any dark or unnatural gloom · R2(L6) also reveals the outline of anything vast moving within 200 ft",
 "In deep dark the green tint brightens slightly. It is brightest when you hold very still."
@@ -270030,13 +270791,13 @@ null,
 42,
 42,
 "Strange",
-"Enchanted — \"The Choir Robe\" — plain vestments that hum in a harmony no living choir taught them. — robe — R1(L1) advantage on Performance or Religion checks involving song or chant · R2(L7) once per week, a sung request is genuinely heard by something vast, which may or may not answer — The hum is louder near the open and empty.",
+"Enchanted — \"The Aethyr Vestment\" — plain vestments that hum in a harmony no living choir taught them. — robe — R1(L1) advantage on Performance or Religion checks involving song or chant · R2(L7) once per week, a spoken Call is genuinely heard by something vast, which may or may not answer — The hum is louder near the open and empty.",
 null,
 [
 "Strange",
-"Enchanted — \"The Choir Robe\" — plain vestments that hum in a harmony no living choir taught them.",
+"Enchanted — \"The Aethyr Vestment\" — plain vestments that hum in a harmony no living choir taught them.",
 "robe",
-"R1(L1) advantage on Performance or Religion checks involving song or chant · R2(L7) once per week, a sung request is genuinely heard by something vast, which may or may not answer",
+"R1(L1) advantage on Performance or Religion checks involving song or chant · R2(L7) once per week, a spoken Call is genuinely heard by something vast, which may or may not answer",
 "The hum is louder near the open and empty."
 ]
 ],
@@ -270044,11 +270805,11 @@ null,
 43,
 43,
 "Strange",
-"Enchanted — \"The Woven Crown\" — a circlet, strange-textured, that fits like it was grown to the wearer's skull. — robe — R1(L1) understand and be understood by aberrant or utterly alien creatures of Intelligence 4 or higher · R2(L6) resistance to psychic damage while worn — It has no seam, no clasp, no beginning. It fits before you finish putting it on.",
+"Enchanted — \"The Atef Circlet\" — a crown, strange-textured, that fits like it was grown to the wearer's skull. — robe — R1(L1) understand and be understood by aberrant or utterly alien creatures of Intelligence 4 or higher · R2(L6) resistance to psychic damage while worn — It has no seam, no clasp, no beginning. It fits before you finish putting it on.",
 null,
 [
 "Strange",
-"Enchanted — \"The Woven Crown\" — a circlet, strange-textured, that fits like it was grown to the wearer's skull.",
+"Enchanted — \"The Atef Circlet\" — a crown, strange-textured, that fits like it was grown to the wearer's skull.",
 "robe",
 "R1(L1) understand and be understood by aberrant or utterly alien creatures of Intelligence 4 or higher · R2(L6) resistance to psychic damage while worn",
 "It has no seam, no clasp, no beginning. It fits before you finish putting it on."
@@ -270058,39 +270819,39 @@ null,
 44,
 44,
 "Strange",
-"Enchanted — \"The Net of Patient Waiting\" — endlessly mended netting that never quite lets its catch go. — robe — R1(L1) as a thrown restraint: DC 15 Str to escape · R2(L7) a creature it restrains cannot teleport free — Some mends are hemp, some silk, some a fiber with no name yet. All hold.",
+"Enchanted — \"The Snare of Ammit\" — endlessly mended netting that never quite lets its catch go. — robe — R1(L1) as a thrown restraint: DC 15 Str to escape · R2(L7) a creature it restrains cannot teleport free — Some mends are linen, some silk, some a fiber with no name yet. All hold.",
 null,
 [
 "Strange",
-"Enchanted — \"The Net of Patient Waiting\" — endlessly mended netting that never quite lets its catch go.",
+"Enchanted — \"The Snare of Ammit\" — endlessly mended netting that never quite lets its catch go.",
 "robe",
 "R1(L1) as a thrown restraint: DC 15 Str to escape · R2(L7) a creature it restrains cannot teleport free",
-"Some mends are hemp, some silk, some a fiber with no name yet. All hold."
+"Some mends are linen, some silk, some a fiber with no name yet. All hold."
 ]
 ],
 [
 45,
 45,
 "Strange",
-"Signature — \"The Left Gauntlet of the Choir\" (frame: gauntlet) — a single glove, heavier than its size, fingers slightly too long. — gauntlets of ogre power — R1(L1) you can hear water breathing · R2(L6) speak the drowned language; things ANSWER · R3(L10) once, command a thing that swims — it never forgives you — Canonical J3b anchor. There is no right gauntlet.",
+"Signature — \"The Left Gauntlet of the Choir\" (frame: gauntlet) — a single glove, heavier than its size, fingers slightly too long. — gauntlets of ogre power — R1(L1) you can hear the waters of Nun breathing · R2(L6) speak the tongue of the Aethyrs; things ANSWER · R3(L10) once, command a thing that swims in the deep water — it never forgives you — Canonical J3b anchor (\"Choir\" = the angelic choirs of the Aethyrs). There is no right gauntlet.",
 null,
 [
 "Strange",
 "Signature — \"The Left Gauntlet of the Choir\" (frame: gauntlet) — a single glove, heavier than its size, fingers slightly too long.",
 "gauntlets of ogre power",
-"R1(L1) you can hear water breathing · R2(L6) speak the drowned language; things ANSWER · R3(L10) once, command a thing that swims — it never forgives you",
-"Canonical J3b anchor. There is no right gauntlet."
+"R1(L1) you can hear the waters of Nun breathing · R2(L6) speak the tongue of the Aethyrs; things ANSWER · R3(L10) once, command a thing that swims in the deep water — it never forgives you",
+"Canonical J3b anchor (\"Choir\" = the angelic choirs of the Aethyrs). There is no right gauntlet."
 ]
 ],
 [
 46,
 46,
 "Strange",
-"Signature — \"The Threshold Marker\" — a plain post, weathered, that rings without wind to move it. — robe — R1(L1) points, silently, to the nearest thinny/breach threshold within a mile · R2(L6) ringing it once seals a nearby threshold for one day — at the cost of drawing the sealed side's attention to whoever rang it — The ring is felt in the sternum, not the ears.",
+"Signature — \"The Boundary-Stela\" — a plain weathered stela that rings without wind to move it. — robe — R1(L1) points, silently, to the nearest thinny/breach threshold within a mile · R2(L6) ringing it once seals a nearby threshold for one day — at the cost of drawing the sealed side's attention to whoever rang it — The ring is felt in the sternum, not the ears.",
 null,
 [
 "Strange",
-"Signature — \"The Threshold Marker\" — a plain post, weathered, that rings without wind to move it.",
+"Signature — \"The Boundary-Stela\" — a plain weathered stela that rings without wind to move it.",
 "robe",
 "R1(L1) points, silently, to the nearest thinny/breach threshold within a mile · R2(L6) ringing it once seals a nearby threshold for one day — at the cost of drawing the sealed side's attention to whoever rang it",
 "The ring is felt in the sternum, not the ears."
@@ -270100,11 +270861,11 @@ null,
 47,
 47,
 "Strange",
-"Signature — \"The Choirmaster's Baton\" — waterlogged driftwood that conducts more than music. — robe — R1(L1) once per long rest, calm a violently unnatural disturbance within 60 ft for one minute · R2(L7) instead conduct calm passage through a hostile impossible space for one hour, once per week — It keeps time even when nobody's holding it, tapping faintly against whatever it rests on.",
+"Signature — \"The Hierophant's Was-Sceptre\" — old temple staff that conducts more than music. — robe — R1(L1) once per long rest, calm a violently unnatural disturbance within 60 ft for one minute · R2(L7) instead conduct calm passage through a hostile impossible space for one hour, once per week — It keeps time even when nobody's holding it, tapping faintly against whatever it rests on.",
 null,
 [
 "Strange",
-"Signature — \"The Choirmaster's Baton\" — waterlogged driftwood that conducts more than music.",
+"Signature — \"The Hierophant's Was-Sceptre\" — old temple staff that conducts more than music.",
 "robe",
 "R1(L1) once per long rest, calm a violently unnatural disturbance within 60 ft for one minute · R2(L7) instead conduct calm passage through a hostile impossible space for one hour, once per week",
 "It keeps time even when nobody's holding it, tapping faintly against whatever it rests on."
@@ -270114,25 +270875,25 @@ null,
 48,
 48,
 "Volatile",
-"Signature — \"The Answering Cord\" — a length of pale fiber, still damp, pulling itself back toward somewhere, right now, faster than it should move. — robe — R1(L1) whoever holds it is dragged toward the nearest unnatural expanse at 30 ft per round unless they let go · R2(L9) holding on past the third round grants safe passage to where it's truly going: the angler at the far end is real, patient, and vast — it looks at you, and lets you go, once — It is a lure-line. The far end is attached.",
+"Signature — \"The Answering Cord\" — a length of pale fiber, still damp, pulling itself back toward somewhere, right now, faster than it should move. — robe — R1(L1) whoever holds it is dragged toward the nearest unnatural expanse at 30 ft per round unless they let go · R2(L9) holding on past the third round grants safe passage to where it's truly going: the Ferryman of the far shore is real, patient, and vast — it looks at you, and lets you go, once — It is a tow-line to the far bank. The far end is attached.",
 null,
 [
 "Volatile",
 "Signature — \"The Answering Cord\" — a length of pale fiber, still damp, pulling itself back toward somewhere, right now, faster than it should move.",
 "robe",
-"R1(L1) whoever holds it is dragged toward the nearest unnatural expanse at 30 ft per round unless they let go · R2(L9) holding on past the third round grants safe passage to where it's truly going: the angler at the far end is real, patient, and vast — it looks at you, and lets you go, once",
-"It is a lure-line. The far end is attached."
+"R1(L1) whoever holds it is dragged toward the nearest unnatural expanse at 30 ft per round unless they let go · R2(L9) holding on past the third round grants safe passage to where it's truly going: the Ferryman of the far shore is real, patient, and vast — it looks at you, and lets you go, once",
+"It is a tow-line to the far bank. The far end is attached."
 ]
 ],
 [
 49,
 49,
 "Grounded",
-"Consumable — A stoppered bottle of traveler's spirits, proof higher than it should legally be. — robe — One dose: advantage on the next save against fear; DC 10 Con save or one level of exhaustion after.",
+"Consumable — A stoppered jar of temple-beer, stronger than the priests admit. — robe — One dose: advantage on the next save against fear; DC 10 Con save or one level of exhaustion after.",
 null,
 [
 "Grounded",
-"Consumable — A stoppered bottle of traveler's spirits, proof higher than it should legally be.",
+"Consumable — A stoppered jar of temple-beer, stronger than the priests admit.",
 "robe",
 "",
 "One dose: advantage on the next save against fear; DC 10 Con save or one level of exhaustion after."
@@ -270142,11 +270903,11 @@ null,
 50,
 50,
 "Grounded",
-"Consumable — A packet of dried rations, salty, chewy, keeps for years. — rations — Food for 2 days. An acquired taste nobody in the party has acquired yet.",
+"Consumable — A packet of funerary offering-bread and dried figs, keeps for years. — rations — Food for 2 days. An acquired taste nobody in the party has acquired yet.",
 null,
 [
 "Grounded",
-"Consumable — A packet of dried rations, salty, chewy, keeps for years.",
+"Consumable — A packet of funerary offering-bread and dried figs, keeps for years.",
 "rations",
 "",
 "Food for 2 days. An acquired taste nobody in the party has acquired yet."
@@ -272288,8 +273049,8 @@ null,
 ]
 },
 "realm-items-lost-world": {
-"dice": "d50",
-"die": 50,
+"dice": "d54",
+"die": 54,
 "bell": false,
 "class": "Commitment",
 "player_facing": "reveal",
@@ -272300,25 +273061,25 @@ null,
 1,
 1,
 "Grounded",
-"A shard of painted pottery, glaze faded, pattern half a story nobody can finish reading. — robe — Common find at any old ruin. Worth 1 gp to a curious scholar.",
+"A shard of painted pottery, glaze faded, its pattern half a story the court's scholars pretend they cannot read. — robe — Common in the mammal middens under the old ruins. Worth 1 gp to a curious scholar — scaled or not.",
 null,
 [
 "Grounded",
-"A shard of painted pottery, glaze faded, pattern half a story nobody can finish reading.",
+"A shard of painted pottery, glaze faded, its pattern half a story the court's scholars pretend they cannot read.",
 "robe",
 "",
-"Common find at any old ruin. Worth 1 gp to a curious scholar."
+"Common in the mammal middens under the old ruins. Worth 1 gp to a curious scholar — scaled or not."
 ]
 ],
 [
 2,
 2,
 "Grounded",
-"A worn coin, face rubbed featureless, minted by no living kingdom. — robe — Legal tender nowhere. A collector pays 2 gp for the novelty; a forger pays 5 and doesn't say why.",
+"A worn token, face rubbed featureless, struck by no power the scaled court will admit ever ruled here. — robe — Legal tender nowhere. A collector pays 2 gp for the novelty; a forger pays 5 and doesn't say why.",
 null,
 [
 "Grounded",
-"A worn coin, face rubbed featureless, minted by no living kingdom.",
+"A worn token, face rubbed featureless, struck by no power the scaled court will admit ever ruled here.",
 "robe",
 "",
 "Legal tender nowhere. A collector pays 2 gp for the novelty; a forger pays 5 and doesn't say why."
@@ -272328,25 +273089,25 @@ null,
 3,
 3,
 "Grounded",
-"A chipped stone hand-axe, polished by generations of grips before it was lost. — handaxe — 1d4 slashing. Surprisingly well-balanced for its age.",
+"A chipped stone hand-axe, polished by generations of mammal grips before it was lost. — handaxe — 1d4 slashing. Surprisingly well-balanced for a tool the court would call a rock.",
 null,
 [
 "Grounded",
-"A chipped stone hand-axe, polished by generations of grips before it was lost.",
+"A chipped stone hand-axe, polished by generations of mammal grips before it was lost.",
 "handaxe",
 "",
-"1d4 slashing. Surprisingly well-balanced for its age."
+"1d4 slashing. Surprisingly well-balanced for a tool the court would call a rock."
 ]
 ],
 [
 4,
 4,
 "Grounded",
-"A machete, jungle-worn, spine notched once per season survived. — handaxe — 1d6 slashing. Clearing trail with it doubles overland pace through overgrowth.",
+"A machete, jungle-worn, spine notched once per season a forager survived the low country. — handaxe — 1d6 slashing. Clearing trail with it doubles overland pace through overgrowth.",
 null,
 [
 "Grounded",
-"A machete, jungle-worn, spine notched once per season survived.",
+"A machete, jungle-worn, spine notched once per season a forager survived the low country.",
 "handaxe",
 "",
 "1d6 slashing. Clearing trail with it doubles overland pace through overgrowth."
@@ -272356,25 +273117,25 @@ null,
 5,
 5,
 "Grounded",
-"A clay tablet, cracked, script nobody in the party reads. — robe — A scholar back in civilization translates it for a fee or a favor. Until then: a very durable dinner tray.",
+"A clay tablet, cracked, script older than any tongue spoken above or below the scale-line. — robe — A scholar back in the hills translates it for a fee or a favor. Until then: a very durable dinner tray.",
 null,
 [
 "Grounded",
-"A clay tablet, cracked, script nobody in the party reads.",
+"A clay tablet, cracked, script older than any tongue spoken above or below the scale-line.",
 "robe",
 "",
-"A scholar back in civilization translates it for a fee or a favor. Until then: a very durable dinner tray."
+"A scholar back in the hills translates it for a fee or a favor. Until then: a very durable dinner tray."
 ]
 ],
 [
 6,
 6,
 "Grounded",
-"A hank of expedition cord, waxed, 100 ft, knotted every 10. — robe — Measure depth, mark distance, or rig a descent — the knots do the counting for you.",
+"A hank of forager's cord, waxed, 100 ft, knotted every 10. — robe — Measure depth, mark distance, or rig a descent — the knots do the counting for you.",
 null,
 [
 "Grounded",
-"A hank of expedition cord, waxed, 100 ft, knotted every 10.",
+"A hank of forager's cord, waxed, 100 ft, knotted every 10.",
 "robe",
 "",
 "Measure depth, mark distance, or rig a descent — the knots do the counting for you."
@@ -272384,70 +273145,70 @@ null,
 7,
 7,
 "Grounded",
-"A stone lamp, oil long evaporated, wick-hole soot-stained. — lantern, hooded — Functional refilled with modern oil. Casts dim light, same as it did for its makers.",
+"A stone lamp, oil long evaporated, wick-hole soot-stained, cut by a hand that predates the court. — lantern, hooded — Functional refilled with rendered fat. Casts dim light, same as it did for whoever cut it.",
 null,
 [
 "Grounded",
-"A stone lamp, oil long evaporated, wick-hole soot-stained.",
+"A stone lamp, oil long evaporated, wick-hole soot-stained, cut by a hand that predates the court.",
 "lantern, hooded",
 "",
-"Functional refilled with modern oil. Casts dim light, same as it did for its makers."
+"Functional refilled with rendered fat. Casts dim light, same as it did for whoever cut it."
 ]
 ],
 [
 8,
 8,
 "Grounded",
-"A signal whistle carved from a raptor's wing-bone. — robe — Two notes: one carries a mile through jungle canopy; the other makes every small creature in earshot go silent, which is its own kind of information.",
+"A signal whistle carved from a raptor's wing-bone. — robe — Two notes: one carries a mile through canopy; the other makes every small creature in earshot go silent — which, in a valley that hunts by ear, is its own kind of information.",
 null,
 [
 "Grounded",
 "A signal whistle carved from a raptor's wing-bone.",
 "robe",
 "",
-"Two notes: one carries a mile through jungle canopy; the other makes every small creature in earshot go silent, which is its own kind of information."
+"Two notes: one carries a mile through canopy; the other makes every small creature in earshot go silent — which, in a valley that hunts by ear, is its own kind of information."
 ]
 ],
 [
 9,
 9,
 "Grounded",
-"A funerary mask fragment, gold leaf mostly flaked away. — robe — Worth 8 gp for the gold alone. The face it depicted is anyone's guess now.",
+"A funerary mask fragment, gold leaf mostly flaked away, the face beneath neither mammal nor scaled. — robe — Worth 8 gp for the gold alone. What it depicted is anyone's guess — it is older than the guessing.",
 null,
 [
 "Grounded",
-"A funerary mask fragment, gold leaf mostly flaked away.",
+"A funerary mask fragment, gold leaf mostly flaked away, the face beneath neither mammal nor scaled.",
 "robe",
 "",
-"Worth 8 gp for the gold alone. The face it depicted is anyone's guess now."
+"Worth 8 gp for the gold alone. What it depicted is anyone's guess — it is older than the guessing."
 ]
 ],
 [
 10,
 10,
 "Grounded",
-"A set of bone dice, worn smooth, symbols instead of pips. — robe — Plays a game nobody currently living knows the rules to. Gamblers invent them nightly.",
+"A set of bone dice, worn smooth, symbols instead of pips, from a game the scales never learned. — robe — Plays a game nobody currently living knows the rules to. Foragers invent them nightly.",
 null,
 [
 "Grounded",
-"A set of bone dice, worn smooth, symbols instead of pips.",
+"A set of bone dice, worn smooth, symbols instead of pips, from a game the scales never learned.",
 "robe",
 "",
-"Plays a game nobody currently living knows the rules to. Gamblers invent them nightly."
+"Plays a game nobody currently living knows the rules to. Foragers invent them nightly."
 ]
 ],
 [
 11,
 11,
 "Grounded",
-"A stone cylinder-seal that rolls out a repeating pattern in wet clay. — robe — Rolled across wax or clay, it seals a document with authority nobody can place — officials hesitate to open what it closes (one hesitation per official).",
+"A stone cylinder-seal that rolls out a repeating pattern in wet clay. — robe — Rolled across wax or clay, it seals a document with an authority nobody can place — even a court scribe hesitates to open what it closes (one hesitation per reader).",
 null,
 [
 "Grounded",
 "A stone cylinder-seal that rolls out a repeating pattern in wet clay.",
 "robe",
 "",
-"Rolled across wax or clay, it seals a document with authority nobody can place — officials hesitate to open what it closes (one hesitation per official)."
+"Rolled across wax or clay, it seals a document with an authority nobody can place — even a court scribe hesitates to open what it closes (one hesitation per reader)."
 ]
 ],
 [
@@ -272468,39 +273229,39 @@ null,
 13,
 13,
 "Textured",
-"A charcoal rubbing of a wall relief, taken in an obvious hurry. — robe — It maps this temple's true floor plan — including one room the walls pretend isn't there.",
+"A charcoal rubbing of a wall relief, taken in an obvious hurry. — robe — It maps this ruin's true floor plan — including one room the walls, and the court, pretend isn't there.",
 null,
 [
 "Textured",
 "A charcoal rubbing of a wall relief, taken in an obvious hurry.",
 "robe",
 "",
-"It maps this temple's true floor plan — including one room the walls pretend isn't there."
+"It maps this ruin's true floor plan — including one room the walls, and the court, pretend isn't there."
 ]
 ],
 [
 14,
 14,
 "Textured",
-"A boundary stone, inscribed, small enough to carry with resentment. — robe — Planted, it reads as a TRUE property marker to everyone who sees it — surveyors, soldiers, and tax men treat the line it implies as real until a rival document beats it.",
+"A boundary stone, inscribed, small enough to carry with resentment. — robe — Planted, it reads as a TRUE marker to everyone who sees it — the court's tithe-scribes, its wardens, and any human headman treat the line it implies as real until a rival claim beats it.",
 null,
 [
 "Textured",
 "A boundary stone, inscribed, small enough to carry with resentment.",
 "robe",
 "",
-"Planted, it reads as a TRUE property marker to everyone who sees it — surveyors, soldiers, and tax men treat the line it implies as real until a rival document beats it."
+"Planted, it reads as a TRUE marker to everyone who sees it — the court's tithe-scribes, its wardens, and any human headman treat the line it implies as real until a rival claim beats it."
 ]
 ],
 [
 15,
 15,
 "Textured",
-"A grapple-ladder of bronze and hide, expedition-grade, folds to a satchel. — robe — 30 ft of climbable rungs; sets itself taut on any ledge the hook catches (DC 10 throw).",
+"A grapple-ladder of hide and cold-hammered metal, forager-grade, folds to a satchel. — robe — 30 ft of climbable rungs; sets itself taut on any ledge the hook catches (DC 10 throw).",
 null,
 [
 "Textured",
-"A grapple-ladder of bronze and hide, expedition-grade, folds to a satchel.",
+"A grapple-ladder of hide and cold-hammered metal, forager-grade, folds to a satchel.",
 "robe",
 "",
 "30 ft of climbable rungs; sets itself taut on any ledge the hook catches (DC 10 throw)."
@@ -272510,14 +273271,14 @@ null,
 16,
 16,
 "Textured",
-"A block-and-tackle set, bronze pulleys, rope fresh. — block and tackle — Rigged (ten minutes): lift or lower 800 lb smoothly. A party can haul a wagon up a ziggurat if it truly must.",
+"A block-and-tackle set, pulleys of dark alloy, rope fresh. — block and tackle — Rigged (ten minutes): lift or lower 800 lb smoothly. A band can haul a wagon up a ziggurat if it truly must.",
 null,
 [
 "Textured",
-"A block-and-tackle set, bronze pulleys, rope fresh.",
+"A block-and-tackle set, pulleys of dark alloy, rope fresh.",
 "block and tackle",
 "",
-"Rigged (ten minutes): lift or lower 800 lb smoothly. A party can haul a wagon up a ziggurat if it truly must."
+"Rigged (ten minutes): lift or lower 800 lb smoothly. A band can haul a wagon up a ziggurat if it truly must."
 ]
 ],
 [
@@ -272538,25 +273299,25 @@ null,
 18,
 18,
 "Textured",
-"A surveyor's chain, ancient bronze, links uncorroded. — chain — Stretched around a campsite (ten minutes): the perimeter is LEVEL GROUND by old law — beasts of the ruin cross it reluctantly (their first approach each night is announced by rattling links).",
+"A warder's chain, old metal, links uncorroded. — chain — Stretched around a campsite (ten minutes): the perimeter reads as claimed ground by an old law the beasts still keep — raptors and worse cross it reluctantly (their first approach each night is announced by rattling links).",
 null,
 [
 "Textured",
-"A surveyor's chain, ancient bronze, links uncorroded.",
+"A warder's chain, old metal, links uncorroded.",
 "chain",
 "",
-"Stretched around a campsite (ten minutes): the perimeter is LEVEL GROUND by old law — beasts of the ruin cross it reluctantly (their first approach each night is announced by rattling links)."
+"Stretched around a campsite (ten minutes): the perimeter reads as claimed ground by an old law the beasts still keep — raptors and worse cross it reluctantly (their first approach each night is announced by rattling links)."
 ]
 ],
 [
 19,
 19,
 "Textured",
-"A firepiston of horn and brass, drilled by a master. — robe — Fire in one strike, any weather, no check — including on ground where fire has been told not to start.",
+"A firepiston of horn and dark metal, drilled by a master who is dust. — robe — Fire in one strike, any weather, no check — including on ground where fire has been told not to start.",
 null,
 [
 "Textured",
-"A firepiston of horn and brass, drilled by a master.",
+"A firepiston of horn and dark metal, drilled by a master who is dust.",
 "robe",
 "",
 "Fire in one strike, any weather, no check — including on ground where fire has been told not to start."
@@ -272566,27 +273327,27 @@ null,
 20,
 20,
 "Textured",
-"A waterskin lined with gold leaf, seam stamped with a dead king's mark. — waterskin — Water stored in it overnight is clean by morning — the old courts knew about poison. Wine, disappointingly, stays wine.",
+"A waterskin lined with gold leaf, seam stamped with the mark of a power older than the court. — waterskin — Water stored in it overnight is clean by morning — the ones before the scales knew about poison. Wine, disappointingly, stays wine.",
 null,
 [
 "Textured",
-"A waterskin lined with gold leaf, seam stamped with a dead king's mark.",
+"A waterskin lined with gold leaf, seam stamped with the mark of a power older than the court.",
 "waterskin",
 "",
-"Water stored in it overnight is clean by morning — the old courts knew about poison. Wine, disappointingly, stays wine."
+"Water stored in it overnight is clean by morning — the ones before the scales knew about poison. Wine, disappointingly, stays wine."
 ]
 ],
 [
 21,
 21,
 "Strange",
-"\"The Gardener's Gloves\" — cracked leather, seams sprouting green. — gauntlets of ogre power — R1(L1) any plant tended bare-gloved survives anything — drought, frost, salt — for a season · R2(L6) once per day, touch a plant: a full season's growth in one minute — vines climb, fruit ripens, thorns wall a door — Seeds sprout in your pockets if you forget them there.",
+"\"The Gardener's Gloves\" — cracked leather, seams sprouting green. — gauntlets of ogre power — R1(L1) any plant tended bare-gloved survives anything — drought, frost, ash-fall — for a season · R2(L6) once per day, touch a plant: a full season's growth in one minute — vines climb, fruit ripens, thorns wall a door — Seeds sprout in your pockets if you forget them there.",
 null,
 [
 "Strange",
 "\"The Gardener's Gloves\" — cracked leather, seams sprouting green.",
 "gauntlets of ogre power",
-"R1(L1) any plant tended bare-gloved survives anything — drought, frost, salt — for a season · R2(L6) once per day, touch a plant: a full season's growth in one minute — vines climb, fruit ripens, thorns wall a door",
+"R1(L1) any plant tended bare-gloved survives anything — drought, frost, ash-fall — for a season · R2(L6) once per day, touch a plant: a full season's growth in one minute — vines climb, fruit ripens, thorns wall a door",
 "Seeds sprout in your pockets if you forget them there."
 ]
 ],
@@ -272594,11 +273355,11 @@ null,
 22,
 22,
 "Strange",
-"A sundial that casts a shadow at night. — robe — The night-shadow points at the nearest living creature within 300 ft that intends you harm — and lies flat when there's none. Daylight operation regrettably ordinary.",
+"A sundial that casts a shadow at night, cut so fine no smith in the valley can copy the gnomon. — robe — The night-shadow points at the nearest living creature within 300 ft that intends you harm — and lies flat when there's none. Daylight operation regrettably ordinary.",
 null,
 [
 "Strange",
-"A sundial that casts a shadow at night.",
+"A sundial that casts a shadow at night, cut so fine no smith in the valley can copy the gnomon.",
 "robe",
 "",
 "The night-shadow points at the nearest living creature within 300 ft that intends you harm — and lies flat when there's none. Daylight operation regrettably ordinary."
@@ -272608,11 +273369,11 @@ null,
 23,
 23,
 "Strange",
-"A kings'-game board, obsidian and shell, pieces complete. — robe — Set up and played (ten minutes), the ruin observes the old courtesy: wandering guardians and predators do not enter a room where a game is in progress. The rules arrive as you play.",
+"A rulers'-game board, obsidian and shell, pieces complete, from before the scales sat any throne. — robe — Set up and played (ten minutes), the ruin observes the old courtesy: wandering guardians and predators do not enter a room where a game is in progress. The rules arrive as you play.",
 null,
 [
 "Strange",
-"A kings'-game board, obsidian and shell, pieces complete.",
+"A rulers'-game board, obsidian and shell, pieces complete, from before the scales sat any throne.",
 "robe",
 "",
 "Set up and played (ten minutes), the ruin observes the old courtesy: wandering guardians and predators do not enter a room where a game is in progress. The rules arrive as you play."
@@ -272622,67 +273383,67 @@ null,
 24,
 24,
 "Strange",
-"An hourglass filled with dust from the ruin it was found in. — robe — Turned: everyone watching sees this room as it WAS, for ten seconds — furnishings, paint, people mid-step. One turn per room, ever.",
+"An hourglass of impossibly clear glass, filled with dust from the ruin it was found in, warm to the touch and very faintly humming. — robe — Turned: everyone watching sees this room as it WAS, for ten seconds — furnishings, paint, figures mid-step, in an age before either court or ruin. One turn per room, ever.",
 null,
 [
 "Strange",
-"An hourglass filled with dust from the ruin it was found in.",
+"An hourglass of impossibly clear glass, filled with dust from the ruin it was found in, warm to the touch and very faintly humming.",
 "robe",
 "",
-"Turned: everyone watching sees this room as it WAS, for ten seconds — furnishings, paint, people mid-step. One turn per room, ever."
+"Turned: everyone watching sees this room as it WAS, for ten seconds — furnishings, paint, figures mid-step, in an age before either court or ruin. One turn per room, ever."
 ]
 ],
 [
 25,
 25,
 "Volatile",
-"A guardian's stone eye, pried from its socket, heavy as guilt. — robe — Cut into gems: 150 gp. But while you carry it whole, every intact guardian statue you pass turns its head toward the empty socket — and the first one within 30 ft wakes. Word gets around after that; the rest just watch.",
+"A guardian's stone eye, pried from its socket, heavy as guilt. — robe — Cut into gems: 150 gp. But while you carry it whole, every intact guardian the ones-before left standing turns its head toward the empty socket — and the first one within 30 ft wakes. Word gets around after that; the rest just watch.",
 null,
 [
 "Volatile",
 "A guardian's stone eye, pried from its socket, heavy as guilt.",
 "robe",
 "",
-"Cut into gems: 150 gp. But while you carry it whole, every intact guardian statue you pass turns its head toward the empty socket — and the first one within 30 ft wakes. Word gets around after that; the rest just watch."
+"Cut into gems: 150 gp. But while you carry it whole, every intact guardian the ones-before left standing turns its head toward the empty socket — and the first one within 30 ft wakes. Word gets around after that; the rest just watch."
 ]
 ],
 [
 26,
 26,
 "Volatile",
-"A clutch of leathery eggs, warm, the size of melons. 1d4 of them. — robe — Worth 50 gp each to collectors, alive. They hatch in 2d6 days wherever they happen to be — and the mother-sized thing that laid them can smell them from a mile (huntRules while carried in her range).",
+"A clutch of leathery eggs, warm, the size of melons. 1d4 of them. — robe — Worth 50 gp each to collectors, alive — and the scaled court prices its own broodstock higher than that. They hatch in 2d6 days wherever they happen to be, and the mother-sized thing that laid them can smell them from a mile (huntRules while carried in her range).",
 null,
 [
 "Volatile",
 "A clutch of leathery eggs, warm, the size of melons. 1d4 of them.",
 "robe",
 "",
-"Worth 50 gp each to collectors, alive. They hatch in 2d6 days wherever they happen to be — and the mother-sized thing that laid them can smell them from a mile (huntRules while carried in her range)."
+"Worth 50 gp each to collectors, alive — and the scaled court prices its own broodstock higher than that. They hatch in 2d6 days wherever they happen to be, and the mother-sized thing that laid them can smell them from a mile (huntRules while carried in her range)."
 ]
 ],
 [
 27,
 27,
 "Mythic",
-"The wonder that outlived its makers — roll d4: 1. The founding charter of the civilization itself, intact — the first city's name, the terms it was built under, and a blank line waiting for whoever finishes the founding. 2. The great orrery of `[the region's fallen power]`, still turning in the deepest dark, grinding toward a single hour the builders never lived to see. 3. The last living seed of the garden `[this settlement]` was raised around, kept in a vault of glass and gold. 4. The true history-tablet of `[the region]` — everything that happened, and below the line where the makers' hands stopped, everything that still will, being added to slowly by no chisel anyone has caught. — robe — 1. R1(L9) reading it aloud reveals the true, forgotten name of the ruin around you · R2(L12) signing the blank line, once: the city is refounded — permanently, and the region's ruins begin, slowly, becoming a living place again 2. R1(L9) reading its dials tells you truthfully when and where the sky over `[the region]` will next do something the builders thought worth marking · R2(L12) letting it complete its hour under an open sky, once: the alignment it was built for finally arrives — whatever the civilization was designed to receive, wakes — and the ruins redraw around the light 3. R1(L9) held to dead earth: one day's impossible growth — fruit, shade, and water from ground that had none — once per day · R2(L12) planted in open ground in good faith, once: it roots and will not be stopped — `[the region]` blooms back over a single season, and the map redraws living 4. R1(L9) the carved past reveals one true, lost fact about any ruin, name, or bloodline in `[the region]` · R2(L12) carving the next line yourself in the makers' script, once: one thing you write becomes true, permanently, as though it always had been — DM: scholars, crowns, and whatever still tends the ruins count as interested parties — word of these moves faction clocks.",
+"A wonder from the impossible layer beneath the ruins — a make no hand in this world can match — roll d4: 1. The founding charter of the ones who lived above the weather, intact — the first name they gave the sky, the terms the world was raised under, and a blank line waiting for whoever finishes the founding. 2. A great orrery of `[the region's oldest power]`, still turning in the deepest dark on no axle, grinding toward a single hour its makers arranged to miss. 3. The last living seed of the garden the whole valley was raised around, kept in a vault of glass and gold that has not clouded once. 4. The true history-tablet of `[the region]` — everything that happened, and below the line where the makers' hands stopped, everything that still will; its glyphs rearrange themselves, politely, when read wrong. — robe — 1. R1(L9) reading it aloud reveals the true, forgotten name of the ruin around you · R2(L12) signing the blank line, once: the founding is finished — permanently, and the region's ruins begin, slowly, becoming a living place again 2. R1(L9) reading its dials tells you truthfully when and where the sky over `[the region]` will next do something its makers thought worth arranging · R2(L12) letting it complete its hour under an open sky, once: the alignment it was built for finally arrives — whatever the ones above meant to receive, wakes — and the ruins redraw around the light 3. R1(L9) held to dead earth: one day's impossible growth — fruit, shade, and water from ground that had none — once per day · R2(L12) planted in open ground in good faith, once: it roots and will not be stopped — `[the region]` blooms back over a single season, and the map redraws living 4. R1(L9) the carved past reveals one true, lost fact about any ruin, name, or bloodline in `[the region]` · R2(L12) carving the next line yourself in the makers' script, once: one thing you write becomes true, permanently, as though it always had been — DM: the scaled court, the mammal clans, and whatever still tends the deepest ruins all count as interested parties — word of these moves faction clocks, and the court does not like being reminded something ruled before it.",
 null,
 [
 "Mythic",
-"The wonder that outlived its makers — roll d4: 1. The founding charter of the civilization itself, intact — the first city's name, the terms it was built under, and a blank line waiting for whoever finishes the founding. 2. The great orrery of `[the region's fallen power]`, still turning in the deepest dark, grinding toward a single hour the builders never lived to see. 3. The last living seed of the garden `[this settlement]` was raised around, kept in a vault of glass and gold. 4. The true history-tablet of `[the region]` — everything that happened, and below the line where the makers' hands stopped, everything that still will, being added to slowly by no chisel anyone has caught.",
+"A wonder from the impossible layer beneath the ruins — a make no hand in this world can match — roll d4: 1. The founding charter of the ones who lived above the weather, intact — the first name they gave the sky, the terms the world was raised under, and a blank line waiting for whoever finishes the founding. 2. A great orrery of `[the region's oldest power]`, still turning in the deepest dark on no axle, grinding toward a single hour its makers arranged to miss. 3. The last living seed of the garden the whole valley was raised around, kept in a vault of glass and gold that has not clouded once. 4. The true history-tablet of `[the region]` — everything that happened, and below the line where the makers' hands stopped, everything that still will; its glyphs rearrange themselves, politely, when read wrong.",
 "robe",
-"1. R1(L9) reading it aloud reveals the true, forgotten name of the ruin around you · R2(L12) signing the blank line, once: the city is refounded — permanently, and the region's ruins begin, slowly, becoming a living place again 2. R1(L9) reading its dials tells you truthfully when and where the sky over `[the region]` will next do something the builders thought worth marking · R2(L12) letting it complete its hour under an open sky, once: the alignment it was built for finally arrives — whatever the civilization was designed to receive, wakes — and the ruins redraw around the light 3. R1(L9) held to dead earth: one day's impossible growth — fruit, shade, and water from ground that had none — once per day · R2(L12) planted in open ground in good faith, once: it roots and will not be stopped — `[the region]` blooms back over a single season, and the map redraws living 4. R1(L9) the carved past reveals one true, lost fact about any ruin, name, or bloodline in `[the region]` · R2(L12) carving the next line yourself in the makers' script, once: one thing you write becomes true, permanently, as though it always had been",
-"DM: scholars, crowns, and whatever still tends the ruins count as interested parties — word of these moves faction clocks."
+"1. R1(L9) reading it aloud reveals the true, forgotten name of the ruin around you · R2(L12) signing the blank line, once: the founding is finished — permanently, and the region's ruins begin, slowly, becoming a living place again 2. R1(L9) reading its dials tells you truthfully when and where the sky over `[the region]` will next do something its makers thought worth arranging · R2(L12) letting it complete its hour under an open sky, once: the alignment it was built for finally arrives — whatever the ones above meant to receive, wakes — and the ruins redraw around the light 3. R1(L9) held to dead earth: one day's impossible growth — fruit, shade, and water from ground that had none — once per day · R2(L12) planted in open ground in good faith, once: it roots and will not be stopped — `[the region]` blooms back over a single season, and the map redraws living 4. R1(L9) the carved past reveals one true, lost fact about any ruin, name, or bloodline in `[the region]` · R2(L12) carving the next line yourself in the makers' script, once: one thing you write becomes true, permanently, as though it always had been",
+"DM: the scaled court, the mammal clans, and whatever still tends the deepest ruins all count as interested parties — word of these moves faction clocks, and the court does not like being reminded something ruled before it."
 ]
 ],
 [
 28,
 28,
 "Grounded",
-"A grinding stone, hand-sized, worn to a shallow bowl. — robe — Grinds grain or pigment, same as it always did.",
+"A grinding stone, hand-sized, worn to a shallow bowl by hands long before the scales. — robe — Grinds grain or pigment, same as it always did.",
 null,
 [
 "Grounded",
-"A grinding stone, hand-sized, worn to a shallow bowl.",
+"A grinding stone, hand-sized, worn to a shallow bowl by hands long before the scales.",
 "robe",
 "",
 "Grinds grain or pigment, same as it always did."
@@ -272692,28 +273453,28 @@ null,
 29,
 29,
 "Grounded",
-"A worn leather satchel, ancient stitching, straps brittle. — robe — Too fragile to carry weight. Sold with provenance to a museum or collector: 10 gp.",
+"A worn leather satchel, ancient stitching, straps brittle. — robe — Too fragile to carry weight. Sold with provenance to a hill-clan collector: 10 gp.",
 null,
 [
 "Grounded",
 "A worn leather satchel, ancient stitching, straps brittle.",
 "robe",
 "",
-"Too fragile to carry weight. Sold with provenance to a museum or collector: 10 gp."
+"Too fragile to carry weight. Sold with provenance to a hill-clan collector: 10 gp."
 ]
 ],
 [
 30,
 30,
 "Grounded",
-"A carved wooden comb, remarkably preserved. — robe — Functional, handled gently. The carving matches no known culture, which doubles its price to the right buyer (4 gp).",
+"A carved wooden comb, remarkably preserved, its motif matching neither mammal nor scaled hand. — robe — Functional, handled gently. The carving predates every culture that could claim it, which doubles its price to the right buyer (4 gp).",
 null,
 [
 "Grounded",
-"A carved wooden comb, remarkably preserved.",
+"A carved wooden comb, remarkably preserved, its motif matching neither mammal nor scaled hand.",
 "robe",
 "",
-"Functional, handled gently. The carving matches no known culture, which doubles its price to the right buyer (4 gp)."
+"Functional, handled gently. The carving predates every culture that could claim it, which doubles its price to the right buyer (4 gp)."
 ]
 ],
 [
@@ -272734,11 +273495,11 @@ null,
 32,
 32,
 "Grounded",
-"A set of stone measuring weights in a system that converts to nothing modern. — robe — Perfectly consistent, though: weigh against them and you always catch a rigged scale — advantage on checks against being cheated on weight or coin.",
+"A set of stone measuring weights in a system that converts to nothing the court or the clans still use. — robe — Perfectly consistent, though: weigh against them and you always catch a rigged scale — advantage on checks against being cheated on weight or coin.",
 null,
 [
 "Grounded",
-"A set of stone measuring weights in a system that converts to nothing modern.",
+"A set of stone measuring weights in a system that converts to nothing the court or the clans still use.",
 "robe",
 "",
 "Perfectly consistent, though: weigh against them and you always catch a rigged scale — advantage on checks against being cheated on weight or coin."
@@ -272762,11 +273523,11 @@ null,
 34,
 34,
 "Textured",
-"A field-press herbarium, boards and straps, half full. — robe — Any plant pressed in it keeps its virtue: healing herbs stay potent indefinitely instead of wilting worthless in a day.",
+"A forager's field-press herbarium, boards and straps, half full. — robe — Any plant pressed in it keeps its virtue: healing herbs stay potent indefinitely instead of wilting worthless in a day.",
 null,
 [
 "Textured",
-"A field-press herbarium, boards and straps, half full.",
+"A forager's field-press herbarium, boards and straps, half full.",
 "robe",
 "",
 "Any plant pressed in it keeps its virtue: healing herbs stay potent indefinitely instead of wilting worthless in a day."
@@ -272776,42 +273537,42 @@ null,
 35,
 35,
 "Textured",
-"A pair of stilt-walkers' poles, expedition-modified. — robe — Cross swamp, thorn-field, or scree at full pace, head above the grass line. One day's practice (DC 10 Dex) before dignity is possible.",
+"A pair of stilt-walkers' poles, forager-modified. — robe — Cross swamp, thorn-field, or ash-scree at full pace, head above the grass line. One day's practice (DC 10 Dex) before dignity is possible.",
 null,
 [
 "Textured",
-"A pair of stilt-walkers' poles, expedition-modified.",
+"A pair of stilt-walkers' poles, forager-modified.",
 "robe",
 "",
-"Cross swamp, thorn-field, or scree at full pace, head above the grass line. One day's practice (DC 10 Dex) before dignity is possible."
+"Cross swamp, thorn-field, or ash-scree at full pace, head above the grass line. One day's practice (DC 10 Dex) before dignity is possible."
 ]
 ],
 [
 36,
 36,
 "Textured",
-"A censer on a chain, bronze, still holding a block of ancient incense. — censer — Lit and swung, the smoke keeps biting insects, bats, and swarm-type vermin 15 ft off — the old processions walked through jungle for a reason. Weeks of incense left.",
+"A censer on a chain, dark metal, still holding a block of ancient incense. — censer — Lit and swung, the smoke keeps biting insects, leathery fliers, and swarm-type vermin 15 ft off — the old processions walked through this jungle for a reason. Weeks of incense left.",
 null,
 [
 "Textured",
-"A censer on a chain, bronze, still holding a block of ancient incense.",
+"A censer on a chain, dark metal, still holding a block of ancient incense.",
 "censer",
 "",
-"Lit and swung, the smoke keeps biting insects, bats, and swarm-type vermin 15 ft off — the old processions walked through jungle for a reason. Weeks of incense left."
+"Lit and swung, the smoke keeps biting insects, leathery fliers, and swarm-type vermin 15 ft off — the old processions walked through this jungle for a reason. Weeks of incense left."
 ]
 ],
 [
 37,
 37,
 "Textured",
-"Enchanted — \"The Excavator's Compass\" — brass, antique-styled, that always points toward the nearest untouched find. — robe — R1(L1) points to the nearest significant unexcavated find within a mile · R2(L6) also indicates, roughly, its age — It points down more often than any other direction. Pack a shovel.",
+"Enchanted — \"The Excavator's Compass\" — dark brass, antique-styled, that always points toward the nearest untouched find. — robe — R1(L1) points to the nearest significant unexcavated find within a mile · R2(L6) also indicates, roughly, its age — It points down more often than any other direction. Pack a shovel and a story for the wardens.",
 null,
 [
 "Textured",
-"Enchanted — \"The Excavator's Compass\" — brass, antique-styled, that always points toward the nearest untouched find.",
+"Enchanted — \"The Excavator's Compass\" — dark brass, antique-styled, that always points toward the nearest untouched find.",
 "robe",
 "R1(L1) points to the nearest significant unexcavated find within a mile · R2(L6) also indicates, roughly, its age",
-"It points down more often than any other direction. Pack a shovel."
+"It points down more often than any other direction. Pack a shovel and a story for the wardens."
 ]
 ],
 [
@@ -272846,39 +273607,39 @@ null,
 40,
 40,
 "Strange",
-"Enchanted — \"The Reader's Lens\" — a cracked magnifying lens, ground by hands that weren't working from a modern optics table. — goggles of night — R1(L1) read any ancient script as though fluent while it's held to the eye · R2(L6) also reveals faded or erased text beneath what's visible — Whatever it shows you, it shows honestly — including the parts someone wanted erased.",
+"Enchanted — \"The Reader's Lens\" — a cracked magnifying lens, ground by hands that were not working from any bench in this world. — goggles of night — R1(L1) read any dead script as though fluent while it's held to the eye · R2(L6) also reveals faded or erased text beneath what's visible — Whatever it shows you, it shows honestly — including the parts the court's scholars scraped away.",
 null,
 [
 "Strange",
-"Enchanted — \"The Reader's Lens\" — a cracked magnifying lens, ground by hands that weren't working from a modern optics table.",
+"Enchanted — \"The Reader's Lens\" — a cracked magnifying lens, ground by hands that were not working from any bench in this world.",
 "goggles of night",
-"R1(L1) read any ancient script as though fluent while it's held to the eye · R2(L6) also reveals faded or erased text beneath what's visible",
-"Whatever it shows you, it shows honestly — including the parts someone wanted erased."
+"R1(L1) read any dead script as though fluent while it's held to the eye · R2(L6) also reveals faded or erased text beneath what's visible",
+"Whatever it shows you, it shows honestly — including the parts the court's scholars scraped away."
 ]
 ],
 [
 41,
 41,
 "Strange",
-"Enchanted — \"The Warden's Seal\" — a stone signet ring, worn smooth, that opens doors its city forgot how to build. — ring of protection — R1(L1) opens any door or gate within a lost-world ruin, once per short rest · R2(L7) seals a door behind you, permanently, once per long rest — The seal on its face matches no known royal house. It works anyway. Every time.",
+"Enchanted — \"The Warden's Seal\" — a stone signet ring, worn smooth, that opens doors the world forgot how to build. — ring of protection — R1(L1) opens any door or gate within a lost-world ruin, once per short rest · R2(L7) seals a door behind you, permanently, once per long rest — The seal on its face matches no throne, scaled or mammal. It works anyway. Every time.",
 null,
 [
 "Strange",
-"Enchanted — \"The Warden's Seal\" — a stone signet ring, worn smooth, that opens doors its city forgot how to build.",
+"Enchanted — \"The Warden's Seal\" — a stone signet ring, worn smooth, that opens doors the world forgot how to build.",
 "ring of protection",
 "R1(L1) opens any door or gate within a lost-world ruin, once per short rest · R2(L7) seals a door behind you, permanently, once per long rest",
-"The seal on its face matches no known royal house. It works anyway. Every time."
+"The seal on its face matches no throne, scaled or mammal. It works anyway. Every time."
 ]
 ],
 [
 42,
 42,
 "Strange",
-"Enchanted — \"The Garden-Keeper's Shears\" — bronze, green with age, that trim any growth into shapes the wielder pictures. — handaxe — R1(L1) 1d8 slashing; shape any plant matter into a precise intended form as a bonus action · R2(L6) clear a path through ancient overgrowth instantly, once per long rest — No plant they cut grows back wrong.",
+"Enchanted — \"The Garden-Keeper's Shears\" — dark bronze, green with age, that trim any growth into shapes the wielder pictures. — handaxe — R1(L1) 1d8 slashing; shape any plant matter into a precise intended form as a bonus action · R2(L6) clear a path through ancient overgrowth instantly, once per long rest — No plant they cut grows back wrong.",
 null,
 [
 "Strange",
-"Enchanted — \"The Garden-Keeper's Shears\" — bronze, green with age, that trim any growth into shapes the wielder pictures.",
+"Enchanted — \"The Garden-Keeper's Shears\" — dark bronze, green with age, that trim any growth into shapes the wielder pictures.",
 "handaxe",
 "R1(L1) 1d8 slashing; shape any plant matter into a precise intended form as a bonus action · R2(L6) clear a path through ancient overgrowth instantly, once per long rest",
 "No plant they cut grows back wrong."
@@ -272888,95 +273649,95 @@ null,
 43,
 43,
 "Strange",
-"Enchanted — \"The Founder's Lamp\" — clay, ancient, that burns without fuel near anything the founders considered sacred. — lantern, bullseye — R1(L1) lights on its own within 30 ft of a genuinely significant lost-world site · R2(L6) its light reveals the true age of anything it illuminates — Unlit, it's cold clay. Near the sacred, the wick is already trembling.",
+"Enchanted — \"The Founder's Lamp\" — clay, ancient, that burns without fuel near anything the ones-before held sacred. — lantern, bullseye — R1(L1) lights on its own within 30 ft of a genuinely significant pre-scale site · R2(L6) its light reveals the true age of anything it illuminates — Unlit, it's cold clay. Near the deepest ruins its wick is already trembling — as if something down there is answering.",
 null,
 [
 "Strange",
-"Enchanted — \"The Founder's Lamp\" — clay, ancient, that burns without fuel near anything the founders considered sacred.",
+"Enchanted — \"The Founder's Lamp\" — clay, ancient, that burns without fuel near anything the ones-before held sacred.",
 "lantern, bullseye",
-"R1(L1) lights on its own within 30 ft of a genuinely significant lost-world site · R2(L6) its light reveals the true age of anything it illuminates",
-"Unlit, it's cold clay. Near the sacred, the wick is already trembling."
+"R1(L1) lights on its own within 30 ft of a genuinely significant pre-scale site · R2(L6) its light reveals the true age of anything it illuminates",
+"Unlit, it's cold clay. Near the deepest ruins its wick is already trembling — as if something down there is answering."
 ]
 ],
 [
 44,
 44,
 "Strange",
-"Enchanted — \"The Silent Census\" — a stone tablet that fills in missing names in its own ancient script. — robe — R1(L1) once per long rest, ask one factual question about a vanished population; it answers in its own script, translated as you read · R2(L7) the answer includes one detail nobody currently living should know — The script it answers in predates the question's language. The translation arrives as you read.",
+"Enchanted — \"The Silent Census\" — a stone tablet that fills in missing names in its own ancient script. — robe — R1(L1) once per long rest, ask one factual question about a vanished population; it answers in its own script, translated as you read · R2(L7) the answer includes one detail nobody currently living should know — The script it answers in predates the question's language, and every language the court speaks. The translation arrives as you read.",
 null,
 [
 "Strange",
 "Enchanted — \"The Silent Census\" — a stone tablet that fills in missing names in its own ancient script.",
 "robe",
 "R1(L1) once per long rest, ask one factual question about a vanished population; it answers in its own script, translated as you read · R2(L7) the answer includes one detail nobody currently living should know",
-"The script it answers in predates the question's language. The translation arrives as you read."
+"The script it answers in predates the question's language, and every language the court speaks. The translation arrives as you read."
 ]
 ],
 [
 45,
 45,
 "Strange",
-"Signature — \"The Fenced Valley's Turnstile Key\" — a bronze key, ornate, that fits nothing modern. — robe — R1(L1) opens the rusted turnstiles and failed fences of the Fenced Valley scenario freely · R2(L6) also calms one animal-path predator encountered there, once per long rest · R3(L9) the key remembers every gate it's opened, and opens its match instantly — Canonical scenario tie (BATCH3-GUARDRAILS J2's Fenced Valley — huntRules + techWorks, the failed park). The old signage still names the exhibits, present tense.",
+"Signature — \"The Preserve Turnstile Key\" — a key of obsidian and dark metal, ornate, that fits the court's game-gates and nothing the clans built. — robe — R1(L1) opens the rusted turnstiles and failed fences of the scaled court's dinosaur preserve freely · R2(L6) also calms one penned predator encountered there, once per long rest · R3(L9) the key remembers every gate it's opened, and opens its match instantly — Canonical scenario tie (BATCH3-GUARDRAILS J2's Fenced Valley — huntRules + techWorks, now the sunning-lords' hunting-preserve where the great lizards were penned before the fences failed). The court's glyph-signs still name each exhibit, present tense.",
 null,
 [
 "Strange",
-"Signature — \"The Fenced Valley's Turnstile Key\" — a bronze key, ornate, that fits nothing modern.",
+"Signature — \"The Preserve Turnstile Key\" — a key of obsidian and dark metal, ornate, that fits the court's game-gates and nothing the clans built.",
 "robe",
-"R1(L1) opens the rusted turnstiles and failed fences of the Fenced Valley scenario freely · R2(L6) also calms one animal-path predator encountered there, once per long rest · R3(L9) the key remembers every gate it's opened, and opens its match instantly",
-"Canonical scenario tie (BATCH3-GUARDRAILS J2's Fenced Valley — huntRules + techWorks, the failed park). The old signage still names the exhibits, present tense."
+"R1(L1) opens the rusted turnstiles and failed fences of the scaled court's dinosaur preserve freely · R2(L6) also calms one penned predator encountered there, once per long rest · R3(L9) the key remembers every gate it's opened, and opens its match instantly",
+"Canonical scenario tie (BATCH3-GUARDRAILS J2's Fenced Valley — huntRules + techWorks, now the sunning-lords' hunting-preserve where the great lizards were penned before the fences failed). The court's glyph-signs still name each exhibit, present tense."
 ]
 ],
 [
 46,
 46,
 "Strange",
-"Signature — \"The Last Librarian's Stylus\" — a stone stylus, ancient, that writes true words about anything it's pointed at. — robe — R1(L1) once per long rest, write one true fact about any object or place you can see — it appears as a physical inscription where you write · R2(L7) the inscription, once made, can't be erased by anyone but you — The stylus never dulls. Stone takes it like wax.",
+"Signature — \"The Last Scribe's Stylus\" — a stone stylus, ancient, that writes true words about anything it's pointed at. — robe — R1(L1) once per long rest, write one true fact about any object or place you can see — it appears as a physical inscription where you write · R2(L7) the inscription, once made, can't be erased by anyone but you — The stylus never dulls. Stone takes it like wax — which the court finds obscene, in a mammal's hand.",
 null,
 [
 "Strange",
-"Signature — \"The Last Librarian's Stylus\" — a stone stylus, ancient, that writes true words about anything it's pointed at.",
+"Signature — \"The Last Scribe's Stylus\" — a stone stylus, ancient, that writes true words about anything it's pointed at.",
 "robe",
 "R1(L1) once per long rest, write one true fact about any object or place you can see — it appears as a physical inscription where you write · R2(L7) the inscription, once made, can't be erased by anyone but you",
-"The stylus never dulls. Stone takes it like wax."
+"The stylus never dulls. Stone takes it like wax — which the court finds obscene, in a mammal's hand."
 ]
 ],
 [
 47,
 47,
 "Strange",
-"Signature — \"The Deathless King's Circlet\" — plain gold, unadorned, that fits any brow it's placed on. — robe — R1(L1) advantage on Intimidation and Persuasion against anyone who recognizes ancient royal authority · R2(L6) once per day, issue a royal decree that any NPC aware of the old kingdoms feels genuinely compelled to consider · R3(L9) the ruin itself recognizes the wearer as legitimate, briefly: doors open, traps disarm, guardians stand down — It has no size. It fits any brow it's set on, and remembers none of them.",
+"Signature — \"The Deathless Founder's Circlet\" — plain gold, unadorned, that fits any brow it's placed on. — robe — R1(L1) advantage on Intimidation and Persuasion against anyone who recognizes the authority of the ones-before · R2(L6) once per day, issue a decree that any NPC aware of the old dominion feels genuinely compelled to consider · R3(L9) the ruin itself recognizes the wearer as legitimate, briefly: doors open, traps disarm, guardians stand down — It has no size. It fits any brow it's set on — mammal or scaled — and remembers none of them.",
 null,
 [
 "Strange",
-"Signature — \"The Deathless King's Circlet\" — plain gold, unadorned, that fits any brow it's placed on.",
+"Signature — \"The Deathless Founder's Circlet\" — plain gold, unadorned, that fits any brow it's placed on.",
 "robe",
-"R1(L1) advantage on Intimidation and Persuasion against anyone who recognizes ancient royal authority · R2(L6) once per day, issue a royal decree that any NPC aware of the old kingdoms feels genuinely compelled to consider · R3(L9) the ruin itself recognizes the wearer as legitimate, briefly: doors open, traps disarm, guardians stand down",
-"It has no size. It fits any brow it's set on, and remembers none of them."
+"R1(L1) advantage on Intimidation and Persuasion against anyone who recognizes the authority of the ones-before · R2(L6) once per day, issue a decree that any NPC aware of the old dominion feels genuinely compelled to consider · R3(L9) the ruin itself recognizes the wearer as legitimate, briefly: doors open, traps disarm, guardians stand down",
+"It has no size. It fits any brow it's set on — mammal or scaled — and remembers none of them."
 ]
 ],
 [
 48,
 48,
 "Volatile",
-"Signature — \"The Waking Guardian's Core\" — a stone heart, cracked, warm, beating once per minute. — robe — R1(L1) seated in any inert guardian or construct: it wakes LOYAL to whoever seated it — one guardian, yours (DM stats it from the bestiary at a CR the tier can carry). But the beat CARRIES: while the core travels unseated, every other guardian in the ruin knows exactly where it is · R2(L9) seated in the ruin's GREAT guardian, once, if you can reach the throne-works: that one wakes yours too — The beat speeds up when you're close to a socket that fits.",
+"Signature — \"The Waking Guardian's Core\" — a stone heart, cracked, warm, beating once per minute. — robe — R1(L1) seated in any inert guardian or construct: it wakes LOYAL to whoever seated it — one guardian, yours (DM stats it from the bestiary at a CR the tier can carry). But the beat CARRIES: while the core travels unseated, every other guardian in the ruin knows exactly where it is · R2(L9) seated in the ruin's GREAT guardian, once, if you can reach the throne-works: that one wakes yours too — The beat speeds up when you're close to a socket that fits — and the court has been hunting sockets for a very long time.",
 null,
 [
 "Volatile",
 "Signature — \"The Waking Guardian's Core\" — a stone heart, cracked, warm, beating once per minute.",
 "robe",
 "R1(L1) seated in any inert guardian or construct: it wakes LOYAL to whoever seated it — one guardian, yours (DM stats it from the bestiary at a CR the tier can carry). But the beat CARRIES: while the core travels unseated, every other guardian in the ruin knows exactly where it is · R2(L9) seated in the ruin's GREAT guardian, once, if you can reach the throne-works: that one wakes yours too",
-"The beat speeds up when you're close to a socket that fits."
+"The beat speeds up when you're close to a socket that fits — and the court has been hunting sockets for a very long time."
 ]
 ],
 [
 49,
 49,
 "Grounded",
-"Consumable — A preserved fruit, mummified, from an orchard nobody's found still standing. — robe — One use: heals 1d4 HP and grants a vivid dream of a place that no longer exists — DM's discretion what it shows.",
+"Consumable — A preserved fruit, mummified, from an orchard the ones-before kept and no one has found still standing. — robe — One use: heals 1d4 HP and grants a vivid dream of a place that no longer exists — DM's discretion what it shows.",
 null,
 [
 "Grounded",
-"Consumable — A preserved fruit, mummified, from an orchard nobody's found still standing.",
+"Consumable — A preserved fruit, mummified, from an orchard the ones-before kept and no one has found still standing.",
 "robe",
 "",
 "One use: heals 1d4 HP and grants a vivid dream of a place that no longer exists — DM's discretion what it shows."
@@ -272986,14 +273747,70 @@ null,
 50,
 50,
 "Grounded",
-"Consumable — A pouch of ancient grain, somehow still viable, sealed in wax for centuries. — robe — Food for 2 days if ground and cooked. Plants a strange, thriving crop if sown instead.",
+"Consumable — A pouch of ancient grain, somehow still viable, sealed in wax for an age. — robe — Food for 2 days if ground and cooked. Plants a strange, thriving crop if sown instead.",
 null,
 [
 "Grounded",
-"Consumable — A pouch of ancient grain, somehow still viable, sealed in wax for centuries.",
+"Consumable — A pouch of ancient grain, somehow still viable, sealed in wax for an age.",
 "robe",
 "",
 "Food for 2 days if ground and cooked. Plants a strange, thriving crop if sown instead."
+]
+],
+[
+51,
+51,
+"Grounded",
+"An obsidian court-blade, knapped to a molecular edge and lashed to a bone haft — the sunning-lords' own make, not a ruin-find. — scimitar — 1d6 slashing (finesse, light — it is lighter than it looks). Ignores the first point of any armor made of hide or wood. The edge chips if you pry with it, so don't; a court knapper re-edges it for a favor, or a threat.",
+null,
+[
+"Grounded",
+"An obsidian court-blade, knapped to a molecular edge and lashed to a bone haft — the sunning-lords' own make, not a ruin-find.",
+"scimitar",
+"",
+"1d6 slashing (finesse, light — it is lighter than it looks). Ignores the first point of any armor made of hide or wood. The edge chips if you pry with it, so don't; a court knapper re-edges it for a favor, or a threat."
+]
+],
+[
+52,
+52,
+"Textured",
+"A saurian tithe-cutter — a wedge of worked obsidian the court's overseers use to score, split, and portion anything from cane to a carcass to a stubborn lock. — dagger — 1d4 piercing/slashing. As a tool: auto-succeeds at cutting rope, cane, hide, or scoring stone; grants advantage on checks to butcher, harvest, or force a simple wooden fitting. Carrying one openly marks you, to any mammal clan, as someone who deals with the scales.",
+null,
+[
+"Textured",
+"A saurian tithe-cutter — a wedge of worked obsidian the court's overseers use to score, split, and portion anything from cane to a carcass to a stubborn lock.",
+"dagger",
+"",
+"1d4 piercing/slashing. As a tool: auto-succeeds at cutting rope, cane, hide, or scoring stone; grants advantage on checks to butcher, harvest, or force a simple wooden fitting. Carrying one openly marks you, to any mammal clan, as someone who deals with the scales."
+]
+],
+[
+53,
+53,
+"Textured",
+"A court passage-token — a polished scale-scrip disc, glyph-stamped, that says the bearer is *counted*: tolerated stock, not prey, not people. — robe — Shown to any creature of the scaled court, it downgrades their default reaction one step (hostile→wary, wary→indifferent) for the length of one exchange — you are a thing the court has bothered to number. Wears off the moment you act above your station. Mammal clans spit at the sight of it.",
+null,
+[
+"Textured",
+"A court passage-token — a polished scale-scrip disc, glyph-stamped, that says the bearer is *counted*: tolerated stock, not prey, not people.",
+"robe",
+"",
+"Shown to any creature of the scaled court, it downgrades their default reaction one step (hostile→wary, wary→indifferent) for the length of one exchange — you are a thing the court has bothered to number. Wears off the moment you act above your station. Mammal clans spit at the sight of it."
+]
+],
+[
+54,
+54,
+"Strange",
+"A rider's rig for something that was never meant to be ridden — a harness of court obsidian-fittings and forager hide, clearly assembled by someone who intended to survive the attempt. — robe — Fitted to a beast large enough to bear a rider (DC 15 Animal Handling over ten minutes, at advantage if the beast is already calmed/bonded): it becomes a controlled mount under the SRD mounted-combat rules — a saddle, in other words, for a thing that has opinions. The rig does not tame; it only lets a tamed thing be ridden. The court considers a mammal in the saddle of a great lizard an unbearable joke, and then a threat.",
+null,
+[
+"Strange",
+"A rider's rig for something that was never meant to be ridden — a harness of court obsidian-fittings and forager hide, clearly assembled by someone who intended to survive the attempt.",
+"robe",
+"",
+"Fitted to a beast large enough to bear a rider (DC 15 Animal Handling over ten minutes, at advantage if the beast is already calmed/bonded): it becomes a controlled mount under the SRD mounted-combat rules — a saddle, in other words, for a thing that has opinions. The rig does not tame; it only lets a tamed thing be ridden. The court considers a mammal in the saddle of a great lizard an unbearable joke, and then a threat."
 ]
 ]
 ]
@@ -273710,8 +274527,8 @@ null,
 ]
 },
 "realm-items-suburb": {
-"dice": "d50",
-"die": 50,
+"dice": "d62",
+"die": 62,
 "bell": false,
 "class": "Commitment",
 "player_facing": "reveal",
@@ -274416,6 +275233,174 @@ null,
 "robe",
 "",
 "One use, mixed with water: advantage on the next Con save against heat exhaustion."
+]
+],
+[
+51,
+51,
+"Grounded",
+"A cast-iron frying pan, seasoned black, heavy as a promise. — mace — 1d6 bludgeoning, and it RINGS — a clean pan-struck peal every household on the block knows by heart. Swung in anger, the whole street hears exactly what kind of night it's turning into.",
+null,
+[
+"Grounded",
+"A cast-iron frying pan, seasoned black, heavy as a promise.",
+"mace",
+"",
+"1d6 bludgeoning, and it RINGS — a clean pan-struck peal every household on the block knows by heart. Swung in anger, the whole street hears exactly what kind of night it's turning into."
+]
+],
+[
+52,
+52,
+"Grounded",
+"The cracked bat — aluminum, split lengthwise, wound tight with a decade of black tape. — club — 1d4 bludgeoning (a worse bat; the crack eats the hit). It was the game-winner in the '84 championship, and the kid who swung it hasn't been seen since that summer. Somebody keeps re-taping it.",
+null,
+[
+"Grounded",
+"The cracked bat — aluminum, split lengthwise, wound tight with a decade of black tape.",
+"club",
+"",
+"1d4 bludgeoning (a worse bat; the crack eats the hit). It was the game-winner in the '84 championship, and the kid who swung it hasn't been seen since that summer. Somebody keeps re-taping it."
+]
+],
+[
+53,
+53,
+"Grounded",
+"Consumable — A slice of homemade pie, latticed, still faintly warm under wax paper. — potion of healing — One use, eaten: heals 2d4+2, and for the next hour you can't quite believe anything bad will happen to you. Tastes of a kitchen you're fairly sure you've never stood in.",
+null,
+[
+"Grounded",
+"Consumable — A slice of homemade pie, latticed, still faintly warm under wax paper.",
+"potion of healing",
+"",
+"One use, eaten: heals 2d4+2, and for the next hour you can't quite believe anything bad will happen to you. Tastes of a kitchen you're fairly sure you've never stood in."
+]
+],
+[
+54,
+54,
+"Textured",
+"A yo-yo, wooden, string waxed and true, the return sharp enough to sting. — whip — 1d4 bludgeoning, reach 10 ft, finesse — snaps out and back in one motion, trips or fetches at a distance. Landing an around-the-world in front of the block's kids buys you their trust; they've been practicing that trick for years and nobody's stuck it.",
+null,
+[
+"Textured",
+"A yo-yo, wooden, string waxed and true, the return sharp enough to sting.",
+"whip",
+"",
+"1d4 bludgeoning, reach 10 ft, finesse — snaps out and back in one motion, trips or fetches at a distance. Landing an around-the-world in front of the block's kids buys you their trust; they've been practicing that trick for years and nobody's stuck it."
+]
+],
+[
+55,
+55,
+"Textured",
+"Consumable — A brick of bottle rockets, fuses braided, \"NOT FOR SALE TO MINORS\" half scratched off. — alchemist's fire — One use: light the braid and the whole brick screams downrange — a 15 ft burst, 2d6 fire, and every dog and porch light on the block turns toward the noise. Loud, bright, and impossible to do quietly.",
+null,
+[
+"Textured",
+"Consumable — A brick of bottle rockets, fuses braided, \"NOT FOR SALE TO MINORS\" half scratched off.",
+"alchemist's fire",
+"",
+"One use: light the braid and the whole brick screams downrange — a 15 ft burst, 2d6 fire, and every dog and porch light on the block turns toward the noise. Loud, bright, and impossible to do quietly."
+]
+],
+[
+56,
+56,
+"Textured",
+"A tin lapel badge, lightning-bolt stamped, pin bent from being worn every day by someone small. — brooch of shielding — Pinned on: once per short rest, when a sudden bolt, spark, or crackling thing would strike you — the wrongness runs on wiring, after all — the badge takes it instead, and you take none. It gets warm. It has never once been changed out.",
+null,
+[
+"Textured",
+"A tin lapel badge, lightning-bolt stamped, pin bent from being worn every day by someone small.",
+"brooch of shielding",
+"",
+"Pinned on: once per short rest, when a sudden bolt, spark, or crackling thing would strike you — the wrongness runs on wiring, after all — the badge takes it instead, and you take none. It gets warm. It has never once been changed out."
+]
+],
+[
+57,
+57,
+"Strange",
+"A rabbit's-foot keychain, dyed a color no rabbit ever was, worn to suede. — stone of good luck (luckstone) — R1(L1) +1 to saves and ability checks while it's on you · R2(L6) once per day, after you see a roll, rub it and reroll — but the luck it spends comes off the block's own good fortune, and the block notices — Every kid who carried it swears it worked. Two of them aren't around to ask anymore.",
+null,
+[
+"Strange",
+"A rabbit's-foot keychain, dyed a color no rabbit ever was, worn to suede.",
+"stone of good luck (luckstone)",
+"R1(L1) +1 to saves and ability checks while it's on you · R2(L6) once per day, after you see a roll, rub it and reroll — but the luck it spends comes off the block's own good fortune, and the block notices",
+"Every kid who carried it swears it worked. Two of them aren't around to ask anymore."
+]
+],
+[
+58,
+58,
+"Strange",
+"A toy ray-gun, orange-tipped, die-cast heavy — heavier than a toy has any business being. — wand of magic missiles — R1(L1) pull the trigger: three darts of hard light, 3×(1d4+1) force, auto-hit, 7 charges before the click means click · R2(L7) it recharges itself overnight, and on the mornings after it does, the orange tip is a little less orange — It came in a cereal-box color scheme. It does not do what cereal-box toys do. Nobody remembers which catalog it shipped from.",
+null,
+[
+"Strange",
+"A toy ray-gun, orange-tipped, die-cast heavy — heavier than a toy has any business being.",
+"wand of magic missiles",
+"R1(L1) pull the trigger: three darts of hard light, 3×(1d4+1) force, auto-hit, 7 charges before the click means click · R2(L7) it recharges itself overnight, and on the mornings after it does, the orange tip is a little less orange",
+"It came in a cereal-box color scheme. It does not do what cereal-box toys do. Nobody remembers which catalog it shipped from."
+]
+],
+[
+59,
+59,
+"Strange",
+"A skateboard, deck worn to bare ply, one wheel newer than the rest. — boots of speed — R1(L1) riding it, your speed doubles and you Dash as a bonus action — down a sidewalk or a cul-de-sac curve you outrun almost anything that keeps regular hours · R2(L7) kick off a curb or a hydrant, once per chase, to clear a fence, a hedge, or a closing garage door without stopping — It rolls a hair faster downhill than physics is comfortable with. Whoever's chasing you is on foot, and stays that way.",
+null,
+[
+"Strange",
+"A skateboard, deck worn to bare ply, one wheel newer than the rest.",
+"boots of speed",
+"R1(L1) riding it, your speed doubles and you Dash as a bonus action — down a sidewalk or a cul-de-sac curve you outrun almost anything that keeps regular hours · R2(L7) kick off a curb or a hydrant, once per chase, to clear a fence, a hedge, or a closing garage door without stopping",
+"It rolls a hair faster downhill than physics is comfortable with. Whoever's chasing you is on foot, and stays that way."
+]
+],
+[
+60,
+60,
+"Volatile",
+"Under the tarp in the third garage: something long and low and chrome, keys in the ignition, tank on E. — carpet of flying — R1(L9) it turns over on the first try and RUNS — it carries the whole party fast and far, over fences and hedges and the edge of the block itself, once, until the tank coughs dry wherever it leaves you · R2(L11) push it hard enough, one time, and it punches clean out of the neighborhood into somewhere the identical doors don't reach — no coming back the same way — The tarp's been down for years and the engine's still warm. Turning the key wakes something that has been very patiently waiting for exactly this. huntRules starts the moment it starts.",
+null,
+[
+"Volatile",
+"Under the tarp in the third garage: something long and low and chrome, keys in the ignition, tank on E.",
+"carpet of flying",
+"R1(L9) it turns over on the first try and RUNS — it carries the whole party fast and far, over fences and hedges and the edge of the block itself, once, until the tank coughs dry wherever it leaves you · R2(L11) push it hard enough, one time, and it punches clean out of the neighborhood into somewhere the identical doors don't reach — no coming back the same way",
+"The tarp's been down for years and the engine's still warm. Turning the key wakes something that has been very patiently waiting for exactly this. huntRules starts the moment it starts."
+]
+],
+[
+61,
+61,
+"Grounded",
+"A red wagon, steel-bodied, handle polished by years of small hands. — chest — Hauls what kids can't carry — a body's worth of gear, a friend, the thing you found. Rolls silent on grass; everyone who sees it remembers owning one.",
+null,
+[
+"Grounded",
+"A red wagon, steel-bodied, handle polished by years of small hands.",
+"chest",
+"",
+"Hauls what kids can't carry — a body's worth of gear, a friend, the thing you found. Rolls silent on grass; everyone who sees it remembers owning one."
+]
+],
+[
+62,
+62,
+"Textured",
+"THE BIKE — banana seat, tall bars, playing card in the spokes, faster than it has any right to be. — boots of speed — R1(L1) riding it your speed doubles and you Dash as a bonus action; it carries a second rider standing on the pegs · R2(L6) once per chase, pedal hard enough and the card in the spokes goes silent for one impossible burst — cross a gap, a ditch, a thing's reach, that nothing on two wheels should cross — Every kid on the block swears their bike is the fastest. This one is right. It rings a chrome bell some blocks can hear in their sleep.",
+null,
+[
+"Textured",
+"THE BIKE — banana seat, tall bars, playing card in the spokes, faster than it has any right to be.",
+"boots of speed",
+"R1(L1) riding it your speed doubles and you Dash as a bonus action; it carries a second rider standing on the pegs · R2(L6) once per chase, pedal hard enough and the card in the spokes goes silent for one impossible burst — cross a gap, a ditch, a thing's reach, that nothing on two wheels should cross",
+"Every kid on the block swears their bike is the fastest. This one is right. It rings a chrome bell some blocks can hear in their sleep."
 ]
 ]
 ]

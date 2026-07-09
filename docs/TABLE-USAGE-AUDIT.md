@@ -4,9 +4,9 @@
 
 **What this maps:** every compiled table (`tables.json`) → source file → what *triggers* it. The Oracle tab rolls **any** table manually, so "trigger" means an **automatic** call: a generator **procedure**, a **roll-chain**, or **wired code**. Tables with none are **Oracle-only** — authored but not in any flow (wire-up or retire candidates). *Caveat: two unwired tables that cross-link each other read as ⛓ chained.*
 
-**Totals:** 383 tables / 303 files.  
-By table — ▶ procedure: **0** · ⛓ chained: **1** · 🔗 wired: **350** · ⚠️ Oracle-only: **32**.  
-⚠️ Oracle-only source files: **21** of 303.
+**Totals:** 384 tables / 304 files.  
+By table — ▶ procedure: **0** · ⛓ chained: **1** · 🔗 wired: **353** · ⚠️ Oracle-only: **30**.  
+⚠️ Oracle-only source files: **19** of 304.
 
 ---
 
@@ -24,26 +24,24 @@ Authored content not reached by any procedure, chain, or code. Click through to 
 
 ### Session Mechanics / Realms
 - [[Realm Items - Ash]] — d50, 50 rows
-- [[Realm Items - Bright-Kingdom]] — d50, 50 rows
+- [[Realm Items - Bright-Kingdom]] — d55, 55 rows
 - [[Realm Items - Chrome]] — d50, 50 rows
 - [[Realm Items - Cosmic]] — d50, 50 rows
 - [[Realm Items - Frontier]] — d50, 50 rows
 - [[Realm Items - Gloom]] — d50, 50 rows
 - [[Realm Items - High-Seas]] — d50, 50 rows
-- [[Realm Items - Lost-World]] — d50, 50 rows
+- [[Realm Items - Lost-World]] — d54, 54 rows
 - [[Realm Items - Noir]] — d50, 50 rows
-- [[Realm Items - Suburb]] — d50, 50 rows
+- [[Realm Items - Suburb]] — d62, 62 rows
 - [[Realm Items - Theater]] — d50, 50 rows
 
 ### Social / Factions
 - [[Faction Outcome]] — d20, 20 rows
 
 ### Social / Sentient NPCs
-- [[Animal Kind]] — d12, 12 rows
 - [[Animal Tell]] — d20, 20 rows
-- [[Child Saw]] — d50, 50 rows
+- [[Child Saw]] — d100, 100 rows
 - [[Child Want]] — d20, 20 rows
-- [[NPC Role Spine]] — d35, 35 rows
 
 ---
 
@@ -257,15 +255,15 @@ Authored content not reached by any procedure, chain, or code. Click through to 
 
 ### Session Mechanics / Realms
 - [[Realm Items - Ash]] — ⚠️ **Oracle-only — no auto trigger**  *(d50, 50 rows)*
-- [[Realm Items - Bright-Kingdom]] — ⚠️ **Oracle-only — no auto trigger**  *(d50, 50 rows)*
+- [[Realm Items - Bright-Kingdom]] — ⚠️ **Oracle-only — no auto trigger**  *(d55, 55 rows)*
 - [[Realm Items - Chrome]] — ⚠️ **Oracle-only — no auto trigger**  *(d50, 50 rows)*
 - [[Realm Items - Cosmic]] — ⚠️ **Oracle-only — no auto trigger**  *(d50, 50 rows)*
 - [[Realm Items - Frontier]] — ⚠️ **Oracle-only — no auto trigger**  *(d50, 50 rows)*
 - [[Realm Items - Gloom]] — ⚠️ **Oracle-only — no auto trigger**  *(d50, 50 rows)*
 - [[Realm Items - High-Seas]] — ⚠️ **Oracle-only — no auto trigger**  *(d50, 50 rows)*
-- [[Realm Items - Lost-World]] — ⚠️ **Oracle-only — no auto trigger**  *(d50, 50 rows)*
+- [[Realm Items - Lost-World]] — ⚠️ **Oracle-only — no auto trigger**  *(d54, 54 rows)*
 - [[Realm Items - Noir]] — ⚠️ **Oracle-only — no auto trigger**  *(d50, 50 rows)*
-- [[Realm Items - Suburb]] — ⚠️ **Oracle-only — no auto trigger**  *(d50, 50 rows)*
+- [[Realm Items - Suburb]] — ⚠️ **Oracle-only — no auto trigger**  *(d62, 62 rows)*
 - [[Realm Items - Theater]] — ⚠️ **Oracle-only — no auto trigger**  *(d50, 50 rows)*
 
 ### Session Mechanics / Travel & Resting
@@ -310,6 +308,7 @@ Authored content not reached by any procedure, chain, or code. Click through to 
 - [[Quest Urgency]] — 🔗 **wired in code** — table-atlas.js  *(d20, 20 rows)*
 
 ### Social / Sentient NPCs
+- [[Animal Kind]] — 🔗 **wired in code** — animal-knowledge-scope.js, animal-realm-skins.js  *(d12, 12 rows)*
 - [[NPC Ability]] — 🔗 **wired in code** — table-atlas.js  *(d30, 30 rows)*
 - [[NPC Appearance Detail]] — 🔗 **wired in code** — table-atlas.js  *(d20, 20 rows)*
 - [[NPC Behavioral Detail]] — 🔗 **wired in code** — table-atlas.js  *(d20, 20 rows)*
@@ -339,7 +338,8 @@ Authored content not reached by any procedure, chain, or code. Click through to 
 - [[NPC Race Weighted]] — 🔗 **wired in code** — table-atlas.js  *(d100, 100 rows)*
 - [[NPC Relationship to Town]] — 🔗 **wired in code** — table-atlas.js  *(d20, 20 rows)*
 - [[NPC Resource Control]] — 🔗 **wired in code** — table-atlas.js  *(d100, 100 rows)*
-- [[NPC Role]] — 🔗 **wired in code** — table-atlas.js  *(d100, 100 rows)*
+- [[NPC Role]] — 🔗 **wired in code** — npc-role-skins.js, table-atlas.js, wiki.js  *(d100, 100 rows)*
+- [[NPC Role Spine]] — 🔗 **wired in code** — npc-role-skins.js, wiki.js  *(d35, 35 rows)*
 - [[NPC Side Quest - Job Board]] — 🔗 **wired in code** — table-atlas.js  *(d300, 300 rows)*
 - [[NPC Talents]] — 🔗 **wired in code** — table-atlas.js  *(d100, 100 rows)*
 - [[NPC Temperament]] — 🔗 **wired in code** — table-atlas.js  *(d20, 20 rows)*
@@ -348,11 +348,10 @@ Authored content not reached by any procedure, chain, or code. Click through to 
 - [[NPC Useful Knowledge]] — 🔗 **wired in code** — table-atlas.js  *(d100, 100 rows)*
 - [[NPC Visual Quirk]] — 🔗 **wired in code** — table-atlas.js  *(d100, 100 rows)*
 - [[NPC Want]] — 🔗 **wired in code** — social.js, table-atlas.js  *(2d50, 99 rows)*
-- [[Animal Kind]] — ⚠️ **Oracle-only — no auto trigger**  *(d12, 12 rows)*
+- [[Wild Animal Kind]] — 🔗 **wired in code** — animal-knowledge-scope.js  *(d12, 12 rows)*
 - [[Animal Tell]] — ⚠️ **Oracle-only — no auto trigger**  *(d20, 20 rows)*
-- [[Child Saw]] — ⚠️ **Oracle-only — no auto trigger**  *(d50, 50 rows)*
+- [[Child Saw]] — ⚠️ **Oracle-only — no auto trigger**  *(d100, 100 rows)*
 - [[Child Want]] — ⚠️ **Oracle-only — no auto trigger**  *(d20, 20 rows)*
-- [[NPC Role Spine]] — ⚠️ **Oracle-only — no auto trigger**  *(d35, 35 rows)*
 
 ### Unsorted
 - [[Misc Unsorted Tables]] — 🔗 **wired in code** — table-atlas.js  *(11 sub-tables)*

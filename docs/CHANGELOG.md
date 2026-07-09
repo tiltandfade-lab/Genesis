@@ -4,6 +4,66 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-07-09 (night) — ANIMAL-SOCIAL U1–U6 built + gated; sprite-sheet prompt exploration
+
+Two threads landed 2026-07-09 evening/night (Sonnet build + Opus re-gate/close):
+
+**ANIMAL-SOCIAL U1–U6 — the full `docs/ANIMAL-SOCIAL.md` build (merged `--no-ff`).** The
+"animals as a first-class social layer" system: a wilderness region is a settlement whose NPCs are
+Beasts, and Speak with Animals is the query API against world state.
+
+**Added:** `wild-animal-kind` d12 table (the wilderness sibling of `animal-kind`; U1) +
+`ANIMAL_ENV_WEIGHTS` 5-band weighted pools + env-aware `rollPartial('animal',{env})` (U1);
+`data/animal-realm-skins.js` (per-realm domestic/wild realm-beast skins, the full spine/skin
+treatment per Adam's ruling 1); `ENV_PARTIALS` node-level animal population w/ the wilderness
+territory-holder guarantee (U2); animals on the attitude ladder — WIS(Animal Handling), `animalLevers`
+off the rolled need, ranger/druid opening-step bonus, the +2 Helpful gate behind a 3-visit `care`
+counter with the animal-friendship-spell / strong-CHA bypass (U3, ruling 2); the Speak-with-Animals
+witness packet — `animalWitness` assembles tell/seen/nearby/placeMemory from live state, significance-
+blind, deterministic, attitude-gated, with the spice-band-gated breach-perception entry (U4, ruling 3);
+promotion of engaged/named/+0-crossed ambient animals to persistent codex records + the befriended-ally
+behavior + cruelty memory, with `recruit_creature` still rejecting partials (U5); `data/animal-
+knowledge-scope.js` (herd/bird/predator/burrower/elder scopes keyed to wild-kind rows) + the witness
+`seen`-filter + pack-tag shared attitude + season/biome place-memory + guaranteed scene-hook over
+wilderness pools (U6).
+
+**Changed:** `tables.json`/`tables.js` recompiled from source — this also fixed a formatting
+regression (U1's original scripted key-merge had minified the file, producing a misleading
+-277k-line diff) and picked up stale compile drift on `child-saw` (grown d50→d100 on an earlier
+branch) + five `realm-items-*` tables (from the merged craft rekey branches) whose markdown source
+had outrun the committed JSON.
+
+**Fixed (Opus re-gate — never trust self-reported green):** the build had added `animal_interview`
+/ `animal_care` as `applyEvent` cases + `DM_EVENT_FIELDS` entries but never registered them in
+`DM_EVENT_TYPES`, and added `social_check`'s bypass fields without regenerating `dm-contract.json` —
+caught by three regressed harnesses vs master (dm-seam parity, dm-contract generator, verify-gen
+name-freeze marker). Registered the events, regenerated the contract artifact + spliced
+`docs/SEAT-PROMPT.md`, and re-anchored the verify-gen name-freeze fixture on the true invariant
+(U5 legitimately grew the guard's else-branch; behavior unchanged, RED-under-mutation preserved).
+
+**Gates:** check-manifest OK; verify-animal-social-u1..u6 all green (10/61/20/31/26/20);
+verify-dm-contract 115/115, verify-dm-seam 47/0, verify-gen 68/0 (all restored to/above master
+baseline). Two pre-existing master failures (verify-creature-determinism 7/1, verify-digest-diet
+58/1 at 12919 B) are unrelated to this work and predate the branch.
+
+**Deferred / for Codex (weekend handoff):** Adam's row-level taste pass on the CRAFT-LANE
+`wild-animal-kind` rows + the realm-skin labels; a live playtest to feel the wilderness social web;
+the rest of the 2026-07-09 build wave (TIYL-WEIGHTED-STARTS → HOOK-WALKS → GLOOM-KEY → PLACE-GEN →
+CAMEO-CAST → SHIP-TRAVEL → REALM-HOOKS, all still SPEC-not-locked, awaiting Adam's review).
+
+**Sprite-sheet prompt exploration (landed on master directly, `dev/model-qa/sprite-sheets/`).**
+An experimental (NOT canon — sprites were retired in favor of the 3D foundry) set of ChatGPT
+image-gen prompt sheets: per-realm 5×5 batches covering every bestiary monster, 75 NPCs/realm with
+explicit population diversity (realm-appropriate non-human minorities where lore supports — Ash
+mutation variety, Chrome synths + 10 original street-gang factions, Lost-World saurian-folk,
+Bright-Kingdom toon-majority, Fantasy across all 9 playable species), 25 domestic + 25 wild + 25
+dungeon animals/realm, 20 kids/realm, and a full PC set (every species×class×gender). Prompts pull
+names/flavor from live game data; all faction/character designs original (no franchise reproduction).
+Also trimmed `NEXT-STEPS.md` to the live queue (history → `NEXT-STEPS-ARCHIVE.md`) + added a
+lookup table to `docs/README.md`.
+
+---
+
 ## 2026-07-09 (later) — THE MODEL FOUNDRY BATCH: ~185 bespoke models, every foe on a real body
 
 The MODEL-FOUNDRY production run (planned in the 2026-07-08 deep-dive) executed end-to-end in one

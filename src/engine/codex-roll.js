@@ -375,11 +375,102 @@ function rollPartial(kind, opts){
   }
   // animal: kind + a tell that POINTS AT a nearby hook (breadcrumb, not a thread) — not a moral
   // agent, no want/lever stack at all; just kind + tell + a need.
-  const ak=rollTable("animal-kind"), tell=rollTable("animal-tell");
+  // ANIMAL-SOCIAL.md §1/§6 U1: opts.env picks the table + weight profile (wilderness draws from
+  // wild-animal-kind entirely; rural/village/city/dungeon reweight the domestic animal-kind pool).
+  // No opts.env -> unweighted flat animal-kind (today's behavior, unchanged — no regression for
+  // existing callers).
+  const ak=rollAnimalKind(opts.env), tell=rollTable("animal-tell");
+  const realmId=opts.realm||(opts.region&&opts.region.realm)||null;
+  const akTags=(ak&&ak.cells&&ak.cells[1])||"";
+  let animalKindText=tx(ak);
+  if(/realm-skin/.test(akTags) && typeof animalRealmSkin==="function"){
+    const skinKind=(opts.env==="wilderness")?"wild":"domestic";
+    const skinned=animalRealmSkin(skinKind, realmId);
+    if(skinned) animalKindText=skinned;
+  }
+  const wildDefault=(opts.env==="wilderness")?-1:0;   // ANIMAL-SOCIAL §3: wild draws default attitude -1
+  let attitude=/\bwild\b|\bwary\b/.test(akTags)?-1:wildDefault;
+  // ANIMAL-SOCIAL §3/§6 U3: Ranger/Druid opening-attitude-one-step-better (flat, script-owned — no DM
+  // judgment). opts.pcClass is optional; absent -> attitude unchanged (no regression for callers that
+  // don't know the acting PC's class, e.g. a scene-typed ambient draw with no single "asker").
+  if(typeof animalOpeningStep==="function") attitude=animalOpeningStep(attitude, opts.pcClass);
+  // ANIMAL-SOCIAL.md §4/§6 U5: row 12 ("the town's own animal" / "the elder of the wood") is tagged
+  // `landmark` on both animal-kind and wild-animal-kind — the caller (prepCastEnvAnimals/
+  // prepCastAmbientScene) reads this flag to mint it as an ALREADY-promoted, named codex record from
+  // the start (§4), never as a disposable ambient draw. Pure derivation off the row's own tags —
+  // never guesses which row minted.
+  const landmark=/landmark/.test(akTags);
+  // ANIMAL-SOCIAL.md §5/§6 U6 — the wild-animal-kind row number, stamped ONLY on wilderness draws
+  // (a row IS a stable identity; ak.total is the 1-indexed d12 face for a straight d12 table —
+  // verified against the compiled wild-animal-kind rows, row[0]===row[1]===row number). Domestic
+  // (non-wilderness) draws never carry this field — animal-knowledge-scope.js's scope table is keyed
+  // to wild-animal-kind rows only, per the spec's §5 breakdown. Read back by
+  // animalKnowledgeScopeFor(rec) (data/animal-knowledge-scope.js) at witness-assembly time, never
+  // re-derived from animalKindText (which may already be realm-skinned and no longer match the row's
+  // own label).
+  const wildKindRow=(opts.env==="wilderness" && ak && typeof ak.total==="number") ? ak.total : undefined;
+  // ANIMAL-SOCIAL.md §5/§6 U6 — pack-tag: wild-animal-kind rows carry a loose-faction tag
+  // (pack/flock/solitary/parliament, see the table's own Tags column) — pack-tagged animals share
+  // attitude within a node (§5 "befriend the pack leader, befriend the pack"); solitaries don't.
+  // Flat regex off the row's own tags, same posture as `landmark`/`wildDefault` above — never a
+  // second heuristic. Domestic (non-wilderness) draws are never pack-tagged (animal-kind carries no
+  // pack/flock/solitary tags at all today).
+  const packTag=/\bpack\b|\bflock\b/.test(akTags);
   return { kind:"partial", partialKind:"animal", coherence:"archetype",
     name:opts.name||null,
-    fields:{ role:"animal", animalKind:tx(ak) },
-    dm:{ tell:tx(tell), need:(typeof pick==="function")?pick(["hungry","guarding","lost","loyal"]):"hungry" } };
+    fields:{ role:"animal", animalKind:animalKindText, care:0 },
+    dm:{ tell:tx(tell), need:(typeof pick==="function")?pick(["hungry","guarding","lost","loyal"]):"hungry",
+      attitude, landmark, wildKindRow, packTag } };
+}
+
+/* ANIMAL_ENV_WEIGHTS (docs/ANIMAL-SOCIAL.md §1/§6 U1) — 5 environment bands -> row-weight vectors
+   over animal-kind's 12 rows (index 0 = row 1 ... index 11 = row 12). Numbers are engine
+   implementation-fill (per the spec: "the shape... is the law", not the exact weights) — the shape
+   enforced here: rural/village overweight herd/working-beast/fowl (rows 2/5/6), city suppresses
+   them hard toward stray/vermin/cat (rows 3/4/8), dungeon collapses to almost nothing (wary/
+   half-tamed + the realm-beast only). 'wilderness' is NOT applied to animal-kind — wilderness
+   draws rollTable('wild-animal-kind') wholesale (its own weight vector, over that table's 12
+   rows) per the spec ("wilderness ... gets one new crafted table"), so the 'wilderness' key here
+   weights *that* table, not animal-kind. */
+const ANIMAL_ENV_WEIGHTS = {
+  //          1:dog 2:workingbeast 3:cat 4:stray 5:fowl 6:herd 7:bird 8:vermin 9:old 10:halftamed 11:realmbeast 12:townanimal
+  rural:      [2,    6,             1,    1,      4,     6,     1,    1,       1,    0.5,          0.5,          0.5],
+  village:    [4,    1,             3,    2,      3,     1,     2,    2,       2,    1,            1,            1],
+  city:       [2,    0.2,           2,    5,      0.5,   0.2,   2,    3,       1,    0.5,          1,            1],
+  dungeon:    [0,    0,             0,    0.5,    0,     0,     0,    2,       0,    3,            2,            0],
+  // wild-animal-kind rows (row 11 realm-skin, row 12 elder-of-the-wood are rarer/landmark draws):
+  wilderness: [1,    1,             1,    1,      1,     1,     1,    1,       1,    1,            1,            0.5],
+};
+
+/* weightedTableRow(id, weights) — like rollTableAtBand's within-row-range pattern (engine.compiled),
+   but picks the row by an explicit weight vector instead of a spice band. weights[i] corresponds to
+   the table's (i+1)th row (1-indexed d12 rows map 1:1 to array position here — every animal-kind /
+   wild-animal-kind row IS exactly one face of the die, never a multi-row band). Falls back to a
+   flat rollTable(id) when the table is missing or weights don't match the row count (defensive —
+   never throws on a malformed vector). */
+function weightedTableRow(id, weights){
+  const t=(typeof CT==="function")?CT()[id]:null;
+  if(!t || !Array.isArray(weights) || weights.length!==t.rows.length) return rollTable(id);
+  const total=weights.reduce((a,b)=>a+b,0);
+  if(total<=0) return rollTable(id);
+  let roll=Math.random()*total, idx=0;
+  for(let i=0;i<weights.length;i++){ roll-=weights[i]; if(roll<=0){ idx=i; break; } idx=i; }
+  const row=t.rows[idx];
+  const total2=row[0]+Math.floor(Math.random()*(row[1]-row[0]+1));
+  const dice=t.dice||("d"+t.die);
+  if(typeof tallyTableRoll==="function") tallyTableRoll(id);
+  return {id,dice,total:total2,band:row[2],text:row[3],fragment:row[4],cells:row[5]||null,
+          legs:row[6]||"",pool:row[7]||"",grants:row[8]||"",motif:row[9]||""};
+}
+
+/* rollAnimalKind(env) — table + weight-profile selection for rollPartial('animal',{env}).
+   wilderness -> wild-animal-kind, weighted by ANIMAL_ENV_WEIGHTS.wilderness.
+   rural/village/city/dungeon -> animal-kind, weighted by that band's vector.
+   no env / unrecognized env -> flat unweighted rollTable('animal-kind') (today's behavior). */
+function rollAnimalKind(env){
+  if(env==="wilderness") return weightedTableRow("wild-animal-kind", ANIMAL_ENV_WEIGHTS.wilderness);
+  if(env && ANIMAL_ENV_WEIGHTS[env]) return weightedTableRow("animal-kind", ANIMAL_ENV_WEIGHTS[env]);
+  return rollTable("animal-kind");
 }
 
 /* rollItem(opts) → a record-add payload for a SPECIFIC plot-object (the macguffin a quest turns on).

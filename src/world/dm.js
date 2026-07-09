@@ -1525,7 +1525,7 @@ function codexMintSignificantFoes(w, foes){
 // list can't silently drift from the code that consumes it). An event whose type is NOT here still
 // applies if well-formed (validateEvent flags unknownType but passes it; the switch no-ops it) —
 // forward-compatible by design. Add a new case to the switch AND a line here (the test enforces both).
-const DM_EVENT_TYPES = ["hp_changed","death_save","temp_hp","combat_start","combat_end","attack","action","opportunity_attack","move_zone","grapple","shove","hazard_tick","slot_spent","cast","concentration_start","concentration_broken","resource_spent","rest","item_changed","item_split","item_use","charge_spend","charge_restore","condition_add","condition_remove","item_rust_exposure","item_claimed","condition_expired","round_tick","foe_morale","foe_action","equip","unequip","set_grip","attune","unattune","fact_canonized","codex_add","codex_link","codex_update","codex_reveal","codex_contact","social_check","attitude_shift","morale_check","parley_open","insight_read","discovery","clock_advanced","clock_fired","front_closed","encounter_resolved","kill","claim_deed","gift","epithet_grant","hire","dismiss","tend_pet","companion_update","recruit_creature","choice_logged","inspiration_granted","inspiration_spend","check","crit_outcome","stage_fx","terrain_change","adjudication","level_applied","prep_applied","prep_contact","walk_advance","walk_update","walk_complete","capture","chase_start","chase_round","chase_yield","downtime","distant_word","shrine_omen","xp_granted","open_shop","district_mint","building_approach","building_contact","job_board_read","job_accept","tarot_landed","advance_clock","move_node","start_walk","travel_start","knockout","bastion_claim","mark_added","mark_removed"];
+const DM_EVENT_TYPES = ["hp_changed","death_save","temp_hp","combat_start","combat_end","attack","action","opportunity_attack","move_zone","grapple","shove","hazard_tick","slot_spent","cast","concentration_start","concentration_broken","resource_spent","rest","item_changed","item_split","item_use","charge_spend","charge_restore","condition_add","condition_remove","item_rust_exposure","item_claimed","condition_expired","round_tick","foe_morale","foe_action","equip","unequip","set_grip","attune","unattune","fact_canonized","codex_add","codex_link","codex_update","codex_reveal","codex_contact","social_check","attitude_shift","animal_interview","animal_care","morale_check","parley_open","insight_read","discovery","clock_advanced","clock_fired","front_closed","encounter_resolved","kill","claim_deed","gift","epithet_grant","hire","dismiss","tend_pet","companion_update","recruit_creature","choice_logged","inspiration_granted","inspiration_spend","check","crit_outcome","stage_fx","terrain_change","adjudication","level_applied","prep_applied","prep_contact","walk_advance","walk_update","walk_complete","capture","chase_start","chase_round","chase_yield","downtime","distant_word","shrine_omen","xp_granted","open_shop","district_mint","building_approach","building_contact","job_board_read","job_accept","tarot_landed","advance_clock","move_node","start_walk","travel_start","knockout","bastion_claim","mark_added","mark_removed"];
 
 // The known provenance vocabulary — who asserted this event. "detected" = the engine derived it
 // from observed state (prefer); "declared" = the DM reported it (the default when omitted);
@@ -1610,14 +1610,25 @@ const DM_EVENT_FIELDS = {
   // in-character question counts; a passing glance does not) — registered at the contract boundary
   // (CLAUDE.md "normalization lives at the contract boundary, not in handlers"), never a per-handler guess.
   codex_contact:     { accept:["id","engaged"] },
+  // ANIMAL-SOCIAL.md §2/§6 U4 — opens/closes the witness-packet channel on an animal partial record
+  // (Speak with Animals active, or the DM declaring the channel open some other way). `open` (bool)
+  // is a flag, never arithmetic — same "flag, not a number" posture as social_check's overshoot.
+  animal_interview:  { accept:["id","open"] },
   // social_check.overshoot is DELIBERATELY UNTAGGED (HQ2-1-TOPUP deviation from the HOTFIX-QUEUE
   // spec, which lists num:["dc","total","natural","overshoot"]): resolveSocialCheck (src/engine/
   // social.js:64) reads it as a plain boolean truthiness gate (`if(skill==="intimidation" &&
   // input.overshoot)`), never in arithmetic — it is a flag, not a number. dc/total/natural ARE
   // genuinely numeric (dc: Math.round(Number(...)) + `>=` compare; total: `>=` compare, was the
   // ad-hoc Number()||0 site; natural: strict `===20` compare) — tagged.
-  social_check:      { accept:["caughtLie","cause","dc","lever","levers","natural","overshoot","skill","target","total"], num:["dc","total","natural"] },
+  // ANIMAL-SOCIAL.md §3/§6 U3 RESOLVED ruling-2 bypass fields: animalFriendshipSpell/strongCha are
+  // plain booleans (flag gates in animalHelpfulAllowed, never arithmetic) — same "flag, not a number"
+  // posture as overshoot above, so deliberately left OUT of `num`.
+  social_check:      { accept:["animalFriendshipSpell","caughtLie","cause","dc","lever","levers","natural","overshoot","skill","strongCha","target","total"], num:["dc","total","natural"] },
   attitude_shift:    { accept:["cause","target","to"], alias:{ id:"target", npc:"target" } },
+  // ANIMAL-SOCIAL.md §3/§6 U3 — the sustained-care event (feeding/tending/defending an animal partial).
+  // `event` is free text (informational — the handler doesn't branch on it, §3's flat feed/tend/defend
+  // list); `target` is the codex id.
+  animal_care:       { accept:["event","target"] },
   morale_check:      { accept:["creature","dc","mods","outcome","save","trigger"], num:["dc"] },
   parley_open:       { accept:["ceiling","creature","floor","npc","openingAttitude","target","want"] },
   insight_read:      { accept:["bestMentalMod","dc","guarded","masking","mentalMods","target","total"], num:["bestMentalMod","dc","total"] },
@@ -3125,6 +3136,12 @@ function applyEvent(w,e){
       const r=codexUpdate(w,p.id,p);
       return r?{ok:true, id:r.id}:{ok:false, reason:"no-record:"+(p.id||"?")};   // ROOT-C (BUG-13): a bare {ok:false} read as an ordinary refusal is how this class hid
     }
+    case "animal_interview":{                         // ANIMAL-SOCIAL.md §2/§6 U4 — open/close the witness channel
+      const r=codexGet(w,p.id);
+      if(!r || r.kind!=="npc" || !(r.dm && r.dm.partialKind==="animal")) return {ok:false, reason:"not-an-animal:"+(p.id||"?")};
+      r.dm.interviewOpen = !!p.open;
+      return {ok:true, id:r.id, interviewOpen:r.dm.interviewOpen};
+    }
     case "codex_reveal":{                            // slow drip — the player now knows of this entity
       if(typeof codexReveal!=="function") return {ok:false,reason:"codex-unavailable"};
       codexReveal(w,p.id); reveal(w,'gaz'); return {ok:true};
@@ -3153,6 +3170,14 @@ function applyEvent(w,e){
       // world.wiring-a's turnIgnoredCheck (ignoredTierOf). Settable regardless of whether a hook
       // exists (the doc's own "HOOKLESS tracked thread" case) — never gated on discovery's outcome.
       if(r && r.kind==="npc" && p.engaged){ r.dm=r.dm||{}; r.dm.engaged=true; }
+      // ANIMAL-SOCIAL.md §4/§6 U5 — "engaged twice" is one of the three promotion triggers. Every
+      // real codex_contact on an animal partial counts as one engagement (this IS the "player
+      // touched it" seam the whole promotion track hangs off), regardless of the p.engaged flag —
+      // animalMaybePromote is the single gate that decides whether count>=2 actually promotes.
+      if(r && r.kind==="npc" && r.dm && r.dm.partialKind==="animal"){
+        r.dm.animalContactCount=(r.dm.animalContactCount||0)+1;
+        if(typeof animalMaybePromote==="function") animalMaybePromote(w, r, "engaged-twice");
+      }
       const out={ok:!!r};
       if(discovery) out.discovery=discovery;
       return out;
@@ -3218,8 +3243,50 @@ function applyEvent(w,e){
         res.to = 1;
         res.shift = res.to - res.from;
       }
+      // ANIMAL-SOCIAL.md §3/§6 U3 — the Helpful (+2) gate for animal partials (kind:"npc",
+      // rec0.dm.partialKind==="animal", minted by rollPartial/prepCastEnvAnimals). Same SHAPE as the
+      // Anomaly Law's creature grind-ceiling directly above (ordinary shifts clamp at +1/Friendly) but a
+      // DIFFERENT unlock channel: no nat-20, only the sustained-care track (fields.care, ticked by the
+      // `animal_care` event below) OR the RESOLVED ruling-2 bypass (a declared animal-friendship-class
+      // spell, or a caller-flagged strong-Charisma result — p.animalFriendshipSpell / p.strongCha).
+      // animalHelpfulAllowed is pure (src/engine/social.js); this block only reads/clamps, never writes
+      // fields.care itself (that's the dedicated event's job, so care is never inflated by a social win).
+      // MUST run before the codexSetAttitude commit below — a clamp applied after the write is a no-op.
+      const isAnimalPartial = !!(rec0 && rec0.dm && rec0.dm.partialKind==="animal");
+      if(isAnimalPartial && typeof animalHelpfulAllowed==="function"){
+        const careCount = (rec0.fields && rec0.fields.care) || 0;
+        const allowed = animalHelpfulAllowed(careCount, { animalFriendshipSpell:p.animalFriendshipSpell, strongCha:p.strongCha });
+        if(!allowed && res.to>1 && res.to>res.from){
+          res.to = 1;
+          res.shift = res.to - res.from;
+        }
+      }
       if(res.terrified) codexSetTerrified(w,p.target,true,clk);
       else if(res.to!==res.from) codexSetAttitude(w,p.target,res.to,p.cause||p.skill||"social",clk);
+      // ANIMAL-SOCIAL.md §3/§4/§6 U5 — Terrified-overshoot cruelty memory: the node itself remembers
+      // (§3 "the farm dogs talk") — mark it so every animal MINTED at this node from now on opens
+      // one step colder (prepCastEnvAnimals/prepCastAmbientScene read `node.animalCruelty`). Animal-
+      // only; NPCs/creatures untouched.
+      if(res.terrified && isAnimalPartial){
+        const atNode=rec0.status && rec0.status.at;
+        const nn=(atNode && typeof mapOf==="function") ? mapOf(w).nodes[atNode] : null;
+        if(nn) nn.animalCruelty=true;
+      }
+      // ANIMAL-SOCIAL.md §4/§6 U5 — the +2 (Helpful) ally gate: stamp dm.ally + promote to a full
+      // codex record (attitude>0 is itself a promotion trigger — animalMaybePromote reads the
+      // just-committed attitude). Only fires on the SHIFT that actually LANDS on +2, never re-stamps.
+      if(isAnimalPartial && res.to===2 && res.to!==res.from){
+        rec0.dm=rec0.dm||{}; rec0.dm.ally=true;
+      }
+      if(isAnimalPartial && res.to!==res.from && res.to>0 && typeof animalMaybePromote==="function"){
+        animalMaybePromote(w, rec0, "attitude-past-zero");
+      }
+      // ANIMAL-SOCIAL.md §5/§6 U6 — pack-tag shared attitude: propagate this shift to every OTHER
+      // pack-tagged animal at the same node (never cross-node). No-op for solitary-tagged/non-animal
+      // records (animalPropagatePackAttitude's own packTag guard).
+      if(isAnimalPartial && res.to!==res.from && typeof animalPropagatePackAttitude==="function"){
+        animalPropagatePackAttitude(w, rec0, res.to, p.cause||p.skill||"pack-attitude");
+      }
       // ANOMALY LAW §2b.2 — bondEligible is stamped ONLY by the anomaly channels: a nat-20 on this check,
       // or a decisive lever that just cashed the shift to +1 (Friendly) exactly. Never by ordinary
       // grinding. NPCs never carry/consult this field (recruit_creature's own gate is creature-only).
@@ -3269,7 +3336,35 @@ function applyEvent(w,e){
       const rec=codexGet(w,p.target), nm=rec?rec.name:p.target;
       addLedger(w,"outcome",{kind:"social",target:p.target,name:nm,from:a.value,to:r.value,cause:p.cause||null,source:src},
         `✦ ${nm} — ${attitudeLabel(a.value)} → ${attitudeLabel(r.value)}${p.cause?(" ("+p.cause+")"):""}.`);
+      // ANIMAL-SOCIAL.md §4/§6 U5 — a DECLARED shift (group cascade / story beat) can also cross the
+      // promotion/ally thresholds for an animal partial, same as an ordinary social_check.
+      if(rec && rec.kind==="npc" && rec.dm && rec.dm.partialKind==="animal" && r.value!==a.value){
+        if(r.value===2) rec.dm.ally=true;
+        if(r.value>0 && typeof animalMaybePromote==="function") animalMaybePromote(w, rec, "attitude-past-zero");
+        // ANIMAL-SOCIAL.md §5/§6 U6 — same pack-tag propagation as social_check, for a DECLARED shift.
+        if(typeof animalPropagatePackAttitude==="function") animalPropagatePackAttitude(w, rec, r.value, p.cause||"pack-attitude");
+      }
       return {ok:true, from:a.value, to:r.value};
+    }
+    /* ANIMAL-SOCIAL.md §3/§6 U3 — the sustained-care track: fields.care is a DISTINCT-VISIT counter
+       (never a per-check tick — feeding an animal three times in one scene is still ONE visit; a
+       "visit" is deduped by in-world DAY, the same grain codex/clock already use). Only fed/tended/
+       defended events tick it (p.event names the care kind, informational — the counter doesn't
+       branch on WHICH care event, per §3's flat "feed/tend/defend" list). This is the ONLY writer of
+       fields.care — the social_check Helpful-gate above only READS it, so a social win never inflates
+       the counter on its own. Null-safe: no codex/target -> {ok:false}. */
+    case "animal_care":{
+      if(typeof codexGet!=="function") return {ok:false,reason:"codex-unavailable"};
+      const r=codexGet(w,p.target); if(!r) return {ok:false,reason:"no-target:"+(p.target||"?")};
+      r.fields=r.fields||{};
+      r.fields.careLog=r.fields.careLog||[];
+      const day=clockOf(w).day;
+      const already=r.fields.careLog.indexOf(day)!==-1;
+      if(!already){ r.fields.careLog.push(day); r.fields.care=r.fields.careLog.length; }
+      else { r.fields.care=r.fields.careLog.length; }
+      addLedger(w,"outcome",{kind:"animal-care",target:p.target,event:p.event||null,day,care:r.fields.care,distinct:!already,source:src},
+        `✦ ${r.name||p.target} — cared for (${p.event||"tended"}); ${r.fields.care} distinct visit(s) so far.`);
+      return {ok:true, care:r.fields.care, distinct:!already};
     }
     case "morale_check":{                            // the DM rolls the creature's Wis save in the OPEN; the script verdicts held/broke
       if(typeof resolveMorale!=="function") return {ok:false,reason:"social-unavailable"};

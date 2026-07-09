@@ -82,6 +82,8 @@ EXAMPLES = {
     "codex_contact": {"id": "npc:maddan-strole"},
     "social_check": {"target": "npc:maddan-strole", "skill": "Persuasion", "total": 18, "natural": 14, "lever": "debt"},
     "attitude_shift": {"target": "npc:maddan-strole", "to": 1, "cause": "returned the ledger"},
+    "animal_interview": {"id": "npc:ash-hound", "open": True},
+    "animal_care": {"target": "npc:ash-hound", "event": "fed"},
     "morale_check": {"creature": "f1", "trigger": "leader-down"},
     "parley_open": {"creature": "f1", "want": "food", "openingAttitude": -1},
     "insight_read": {"target": "npc:maddan-strole", "total": 16, "dc": 14},

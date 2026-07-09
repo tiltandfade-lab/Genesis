@@ -24,6 +24,6 @@ into 25-per-sheet ChatGPT prompts. Shared template/discipline in
 - [`suburb.md`](suburb.md) — Suburb (Earthbound / Back to the Future, cheerful-lawn wrongness): 120 monsters / 5 sheets, 45 NPC roles / 2 sheets
 - [`theater.md`](theater.md) — Theater (war, any war, unnamed/unflagged (per eraLens)): 118 monsters / 5 sheets, 43 NPC roles / 2 sheets
 
-**Total: 76 monster sheets + 24 NPC sheets + 12 domestic-animal sheets (12 each) + 12 kid sheets (20 each) across 12 realms (11 named realms + the default fantasy world), plus 9 PC sheets covering every race/class/gender combo.**
+**Total: 76 monster sheets + 24 NPC sheets + 12 domestic-animal sheets (25 each) + 12 kid sheets (20 each) across 12 realms (11 named realms + the default fantasy world), plus 9 PC sheets covering every race/class/gender combo.**
 
 Pose-cue note: monster pose cues are the creature's own bestiary summary line (already action-oriented in most cases); NPC pose cues are the role's spine note. Neither was hand-authored per-entry at this scale — if a specific sheet needs a bespoke pose per character (e.g. for the apex/boss-tier creatures), do that pass by hand before generating that one sheet.

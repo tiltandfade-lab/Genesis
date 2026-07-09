@@ -219,7 +219,7 @@ Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-R
 
 ---
 
-## Domestic animal batches (12 total, 1 sheet)
+## Domestic animal batches (25 total, 1 sheet)
 
 Style block (repeated here so this section is self-contained): muted desaturated palette — sickly yellow streetlight against blue-grey dusk, soft grain/dither texture, one unnervingly saturated warm accent color per figure (the wrongness marker), otherwise low-contrast murky background.
 
@@ -245,6 +245,19 @@ plain magenta background. Rendered in this realm's art style (see the style bloc
 10. **Domestic animal — Half-tamed wild thing — comes to the window, never the hand; trusts one child and no one else.**
 11. **Domestic animal — The realm-beast (the too-clever shade — a black cat that watches a beat too long before it moves)**
 12. **Domestic animal — The town's own animal — the one everyone knows by name; its fate is the town's mood made visible.**
+13. **Domestic animal — A single rabbit — twitchy, kept for the table or kept as a pet, never sure which.**
+14. **Domestic animal — A single pony — smaller and calmer than the war-mule, a child's first mount.**
+15. **Domestic animal — A single duck — waddling, unbothered, first to notice a stranger at the water's edge.**
+16. **Domestic animal — A single turkey — puffed up and loud, more guard animal than anyone admits.**
+17. **Domestic animal — A single caged songbird — kept for the sound of it, restless behind the wire.**
+18. **Domestic animal — A single turtle — slow-kept yard animal, older than most of the household.**
+19. **Domestic animal — A single pig — smarter than it's given credit for, rooting at the fence line.**
+20. **Domestic animal — A single goat — headstrong, climbs what it shouldn't, eats what it shouldn't.**
+21. **Domestic animal — A single donkey — stubborn, sure-footed, outlives every horse on the property.**
+22. **Domestic animal — A single peacock — kept for show, screams like something's wrong when nothing is.**
+23. **Domestic animal — A single hunting hound — lean, nose-down, bred for the chase and bored without it.**
+24. **Domestic animal — A single kitten — too young to have earned the barn cat's independence yet.**
+25. **Domestic animal — A single caged ferret-kit — young, hyperactive, still learning the vermin-catcher's trade.**
 
 
 ---

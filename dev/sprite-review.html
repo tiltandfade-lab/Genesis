@@ -19,6 +19,7 @@
   button:hover { border-color:var(--accent); }
   button.pass { background:#1e3320; border-color:var(--pass); }
   button.fail { background:#3a1f1f; border-color:var(--fail); }
+  button.dirty { background:#3a3212; border-color:var(--accent); color:var(--accent); font-weight:600; }
   main { flex:1; display:flex; min-height:0; }
   #stageWrap { flex:1; display:flex; flex-direction:column; min-width:0; }
   #stage { flex:1; position:relative; overflow-x:auto; overflow-y:hidden;
@@ -90,10 +91,11 @@
       <input id="scaleVal" type="text" value="1.00">
       <button id="reset1" title="reset to 1.0">1.0</button>
       <button id="pin">pin ⇩</button>
+      <button id="saveBtn" title="write scale + tags + note to the overlay">SAVE (s)</button>
       <button id="passBtn" class="pass">PASS (p)</button>
       <button id="failBtn" class="fail">FAIL (f)</button>
       <button id="clearBtn" title="clear verdict">clear</button>
-      <span class="kbd">← → navigate · [ ] scale · p/f verdict · 0 reset</span>
+      <span class="kbd">← → navigate · [ ] scale · s save · p/f verdict · 0 reset</span>
     </div>
   </div>
   <aside id="info"></aside>
@@ -129,10 +131,14 @@ const guideFor = e => GUIDES.find(g => g.key === (SRD_TO_GUIDE[sizeOf(e)] || "me
 
 let REG = {}, OVERLAY = {}, list = [], idx = 0, medPx = 150;
 let pins = JSON.parse(localStorage.getItem("spritePins") || "[]");
+const PENDING = {}; // slug -> {scale} — unsaved edits; NOTHING writes to disk until Save/Pass/Fail
 const $ = id => document.getElementById(id);
 const cur = () => list[idx];
 const ovr = slug => OVERLAY[slug] || {};
-const scaleFor = slug => (typeof ovr(slug).scale === "number" ? ovr(slug).scale : 1);
+const savedScale = slug => (typeof ovr(slug).scale === "number" ? ovr(slug).scale : 1);
+const scaleFor = slug => (PENDING[slug] && typeof PENDING[slug].scale === "number")
+  ? PENDING[slug].scale : savedScale(slug);
+const isDirty = slug => !!PENDING[slug] && Math.abs(PENDING[slug].scale - savedScale(slug)) > 1e-9;
 
 async function load(){
   const r = await fetch("/api/data"); const d = await r.json();
@@ -197,13 +203,21 @@ function render(){
   if(e){
     $("scale").value = scaleFor(e.slug);
     $("scaleVal").value = scaleFor(e.slug).toFixed(2);
+    const dirty = isDirty(e.slug);
+    $("saveBtn").classList.toggle("dirty", dirty);
+    $("saveBtn").textContent = dirty ? "SAVE (s) ●" : "SAVE (s)";
   }
   renderInfo(); renderRail(); renderProgress();
 }
+let infoSlug = null;
 function renderInfo(){
   const e = cur();
-  if(!e){ $("info").innerHTML = "<p>No sprites match the filter.</p>"; return; }
+  if(!e){ $("info").innerHTML = "<p>No sprites match the filter.</p>"; infoSlug = null; return; }
   const o = ovr(e.slug), st = stateOf(e.slug);
+  // same sprite re-rendering (slider move etc.) — keep any in-progress tag/note typing
+  const keepTags = infoSlug === e.slug && $("ovTags") ? $("ovTags").value : null;
+  const keepNote = infoSlug === e.slug && $("ovNote") ? $("ovNote").value : null;
+  infoSlug = e.slug;
   $("info").innerHTML = `
     <h2>${e.name}</h2><div class="slug">${e.slug}</div>
     <p class="verdict ${st}">${st.toUpperCase()}${o.scale ? ` · scale ×${o.scale}` : ""}</p>
@@ -225,7 +239,9 @@ function renderInfo(){
     <input type="text" id="ovTags" value="${(o.tags || []).join(", ")}" placeholder="(inherit auto tags)">
     <div style="color:var(--dim);font-size:12px;margin-top:8px">note</div>
     <textarea id="ovNote" rows="2" placeholder="why it failed / what to redo…">${o.note || ""}</textarea>
-    <button style="margin-top:6px" onclick="saveMeta()">save tags + note</button>`;
+    <button style="margin-top:6px" onclick="saveChanges()">save changes</button>`;
+  if(keepTags !== null) $("ovTags").value = keepTags;
+  if(keepNote !== null) $("ovNote").value = keepNote;
 }
 function renderRail(){
   $("rail").innerHTML = list.map((e, i) => `
@@ -259,36 +275,44 @@ function toast(msg){
   clearTimeout(t._h); t._h = setTimeout(() => t.style.opacity = 0, 1400);
 }
 
-let saveH = null;
-function setScale(v, commit){
+function setScale(v){
   const e = cur(); if(!e) return;
   v = Math.min(3, Math.max(0.3, v));
-  $("scale").value = v; $("scaleVal").value = v.toFixed(2);
-  OVERLAY[e.slug] = Object.assign({}, ovr(e.slug), { scale: v }); // optimistic; server prunes ×1
+  PENDING[e.slug] = { scale: v }; // local only — Save/Pass/Fail commit it
   render();
-  clearTimeout(saveH);
-  saveH = setTimeout(() => patch(e.slug, { scale: v }).then(() => toast("scale saved")), commit ? 0 : 450);
+}
+function metaEdits(){
+  // tags/note straight from the inputs — committed by Save/Pass/Fail alongside the scale
+  const set = {}, clear = [];
+  const tagsEl = $("ovTags"), noteEl = $("ovNote");
+  if(tagsEl){
+    const tags = tagsEl.value.split(",").map(s => s.trim()).filter(Boolean);
+    if(tags.length) set.tags = tags; else clear.push("tags");
+  }
+  if(noteEl){
+    const note = noteEl.value.trim();
+    if(note) set.note = note; else clear.push("note");
+  }
+  return { set, clear };
+}
+async function saveChanges(){
+  const e = cur(); if(!e) return;
+  const { set, clear } = metaEdits();
+  set.scale = scaleFor(e.slug);
+  await patch(e.slug, set, clear);
+  delete PENDING[e.slug];
+  toast("saved: " + e.name);
+  render();
 }
 async function verdict(v){
   const e = cur(); if(!e) return;
-  const set = { verdict: v };
-  if(v === "pass") set.scale = parseFloat($("scale").value);
-  const note = $("ovNote") && $("ovNote").value.trim();
-  if(v === "fail" && note) set.note = note;
-  await patch(e.slug, set);
+  const { set, clear } = metaEdits();
+  set.verdict = v;
+  set.scale = scaleFor(e.slug); // fold any unsaved slider position into the ruling
+  await patch(e.slug, set, clear);
+  delete PENDING[e.slug];
   toast(v.toUpperCase() + ": " + e.name);
   if(idx < list.length - 1) go(idx + 1); else render();
-}
-async function saveMeta(){
-  const e = cur(); if(!e) return;
-  const tags = $("ovTags").value.split(",").map(s => s.trim()).filter(Boolean);
-  const note = $("ovNote").value.trim();
-  const set = {}, clear = [];
-  if(tags.length) set.tags = tags; else clear.push("tags");
-  if(note) set.note = note; else clear.push("note");
-  await patch(e.slug, set, clear);
-  toast("saved");
-  render();
 }
 function go(i){ idx = Math.min(list.length - 1, Math.max(0, i)); render(); }
 function pinCur(){ const e = cur(); if(e && !pins.includes(e.slug)){ pins.push(e.slug); persistPins(); render(); } }
@@ -300,9 +324,10 @@ $("fSearch").oninput = applyFilters;
 $("zoom").oninput = e => { medPx = +e.target.value; render(); };
 $("prev").onclick = () => go(idx - 1); $("next").onclick = () => go(idx + 1);
 $("scale").oninput = e => setScale(parseFloat(e.target.value));
-$("scaleVal").onchange = e => setScale(parseFloat(e.target.value) || 1, true);
-$("reset1").onclick = () => setScale(1, true);
+$("scaleVal").onchange = e => setScale(parseFloat(e.target.value) || 1);
+$("reset1").onclick = () => setScale(1);
 $("pin").onclick = pinCur;
+$("saveBtn").onclick = saveChanges;
 $("passBtn").onclick = () => verdict("pass");
 $("failBtn").onclick = () => verdict("fail");
 $("clearBtn").onclick = async () => { const e = cur(); if(e){ await patch(e.slug, null, ["verdict"]); toast("verdict cleared"); render(); } };
@@ -317,9 +342,10 @@ document.addEventListener("keydown", ev => {
   else if(ev.key === "ArrowRight") go(idx + 1);
   else if(ev.key === "p") verdict("pass");
   else if(ev.key === "f") verdict("fail");
+  else if(ev.key === "s") saveChanges();
   else if(ev.key === "[") setScale(parseFloat($("scale").value) - 0.05);
   else if(ev.key === "]") setScale(parseFloat($("scale").value) + 0.05);
-  else if(ev.key === "0") setScale(1, true);
+  else if(ev.key === "0") setScale(1);
   else return;
   ev.preventDefault();
 });

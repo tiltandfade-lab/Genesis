@@ -1,7 +1,7 @@
 ---
 type: system-spec
 project: Genesis
-status: SPECCED — Adam ruled 2026-07-08 (post autonomous engine-wiring run); two fixes to the merged coherence/temperature system
+status: BUILT — both fixes on master 2026-07-08 (merge e28e928, fix/npc-coherence-queue); gates verify-npc-coherence-fixes 19/0 · regions 32/0 · prep-bundle 56/0 · coherence-dial 51/0
 created: 2026-07-08
 related:
   - "[[NPC-COHERENCE-DIAL]]"

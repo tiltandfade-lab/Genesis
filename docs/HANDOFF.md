@@ -33,11 +33,12 @@ backward-compat 54/0) but sits UNMERGED on `feat/npc-presence-hooks` (pushed). I
 gameplay (ambient density, discovery rates the spec says to "retune in play"), so it wants a live
 session before landing. `git merge --no-ff feat/npc-presence-hooks` when happy.
 
-**Do next (pick up here — NPC lane):** (1) **build the two queued fixes** `docs/NPC-COHERENCE-FIXES.md`
-— questgivers must not be forced to archetype (significant vs functional roleHints); `regionForNode`
-must supply `.center` so fray-by-node temperature stops being inert (do this one FIRST — it lights up
-the coherence dial + role-realms hybridization + E-PRES temperature all at once, and you'd otherwise
-tune curves against a dead signal). (2) **Playtest + merge E-PRES.** (3) Optional craft: fold in the
+**Do next (pick up here — NPC lane):** ~~build the two queued fixes~~ **DONE — `NPC-COHERENCE-FIXES`
+§1+§2 landed on master (merge `e28e928`, `fix/npc-coherence-queue`): questgivers wrinkled+ (functional
+vs significant roleHints), `regionForNode` supplies the node's `.center` so fray-by-node temperature is
+live. Re-gated 2026-07-08: coherence-fixes 19/0 · regions 32/0 · prep-bundle 56/0.** (1) **Playtest +
+merge E-PRES** (temperature signal is now live — retune density/discovery curves against it, not the
+old dead signal). (2) Optional craft: fold in the
 parked `feat/craft-kin-tension` kin rows; the animal realm-skin question (Adam's open Q in NPC-PARTIALS).
 
 ## Latest (2026-07-08 night — MODEL-FOUNDRY locked; batch modeling session is NEXT) [Opus 4.8 / Fable 5]

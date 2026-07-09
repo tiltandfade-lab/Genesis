@@ -1,0 +1,3 @@
+{
+  "_comment": "docs/SPRITE-TRANSITION.md T3 hand overlay — the Adam redline surface (vision-scan tags land here too, T5). Keyed by sprite slug (must match a data/sprite-registry.js key). Entry shape: { \"<slug>\": { \"tags\": [\"...\"], \"reusable\": \"unique|realm|cross-realm\", \"redlined\": true } }. `tags`, when present, REPLACES that slug's auto-generated tag set entirely (deep-merged last by build/gen-sprite-registry.py — overlay always wins). `reusable` and `redlined` are additive fields carried onto the registry entry as-is. Never hand-edit data/sprite-registry.js directly — edit this file and regenerate."
+}

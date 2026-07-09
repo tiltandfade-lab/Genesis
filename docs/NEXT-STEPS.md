@@ -173,3 +173,24 @@ L7. ☐ **Regenerate `table-registry.json/.md`** — stale after the rename/new 
 3. ☐ **Props + NPC set** — the 14 missing prop models and the NPC humanoid expansion
    (VISUAL-ASSET-QUEUE) via the same author-only waves.
 4. ☐ **Frontier GLB step-6 wiring** (carried from 2026-07-08).
+
+## Do next (2026-07-09, NPC/monster lane — realm-key expansion)
+
+1. ☑ **REALM-KEY-EXPANSION stat wave — DONE 2026-07-09** (+168 → 1,475 creatures, --check clean,
+   realm-bestiary.js regenerated at the close).
+2. ☐ **Adam per-realm red-pen** of the wave output (entries land PROVISIONAL, same as the base 1,307).
+3. ☐ **Faction-clock specs** — the Pink Cult pressure (suburb) + the gloom demand ladder (feeding
+   clock → active corruption rung); both are engine specs, not bestiary rows.
+4. ☐ **Hoverboard buff proposal** (Dungeon Loot - Outlandish row 16 — Adam ruled it over-nerfed;
+   propose-first, his table).
+5. ☐ Net-new `model:` slugs from the wave → model-foundry queue (models lane).
+
+## Do next (2026-07-09, sprite transition — Adam locked, docs/SPRITE-TRANSITION.md)
+
+1. ☑ **T2 manifest-v2 + slicer** · ☑ **T3 sprite registry** · ☑ **T4 theater billboard channel** —
+   ALL LANDED 2026-07-09 (re-gated: pipeline all-pass, registry 6/0 @100% join, theater 10/0).
+   Open rider: add the `item` kind to the v2 parser/registry (571 item-sheet cells currently skipped).
+2. ☐ **T5 gloom vertical slice** — GATED on Adam's first sheet PNGs in dev/sprite-sheets/incoming/;
+   eyes-on A/B vs 3D + tagging pilot (vision scan → overlay → Adam redline). Taste gate before mass slicing.
+3. ☐ Models lane pivots to trays/props/architecture (MODEL-FOUNDRY re-scoped; VISUAL-ASSET-QUEUE
+   creature targets → sprite lane).

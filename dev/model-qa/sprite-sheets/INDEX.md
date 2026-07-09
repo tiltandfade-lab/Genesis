@@ -27,3 +27,27 @@ into 25-per-sheet ChatGPT prompts. Shared template/discipline in
 **Total: 76 monster sheets + 36 NPC sheets (75 each) + 12 domestic-animal sheets (25 each) + 12 wild-animal sheets (25 each) + 12 dungeon-animal sheets (25 each) + 12 kid sheets (20 each) across 12 realms (11 named realms + the default fantasy world), plus 9 PC sheets covering every race/class/gender combo.**
 
 Pose-cue note: monster pose cues are the creature's own bestiary summary line (already action-oriented in most cases); NPC pose cues are the role's spine note. Neither was hand-authored per-entry at this scale — if a specific sheet needs a bespoke pose per character (e.g. for the apex/boss-tier creatures), do that pass by hand before generating that one sheet.
+
+**Expansion sheets (2026-07-09, appended — nothing replaced):** `docs/REALM-KEY-EXPANSION-ROSTER.md`
+draft creatures appended as one `Expansion sheet E1` per re-keyed realm — chrome (+25: salamander
+brothers/beaver/turtle recruit lane, ED-209 + handler, transit spirits, unaffiliated punk kids),
+gloom (+25: the Collector ×3 forms, the demand ladder, evil children, slashers, Monster Squad
+friendlies), suburb (+25: Biff generational set, fab five, starmen/Saturn, gremlin cute/turned
+pair, Amblin lane), lost-world (+20: saurian caste ladder, human underclass, mounts, Zeal stratum
+incl. adepts), ash (+15: the overgrown ladder, lucid/feral withered, the Cindermarked ember-stone
+faction), cosmic (+15: arcana-walkers, the 23rd card, the weighing, name-work), bright-kingdom
+(+25: game-logic-beings NPC weirdness + teeth-under-the-candy monsters). Draft/PROVISIONAL —
+awaiting Adam's taste pass before any casting into the bestiary.
+
+**Approval pass (2026-07-09, Adam — appended):** roster APPROVED at concept level. Corrections
+folded as E2 sheets: suburb +20 (fab five corrected to the TRAVELING BAND / Runaway-Five lane;
+greaser gang kept separate; **the Pink Cult** = a whole faction pressure; the scissor-handed
+gardener — villain-framed, convertible to friend; kid-built ship = Explorers × EarthBound
+crossover), ash +3 (the Cindermarked confirmed as a CULT — recruiter/initiate/apostate roles).
+
+**Item batches (2026-07-09, appended — nothing replaced):** every realm's loot table
+(`Engine/03. _Tables/05. Realms/Realm Items - *.md`) rendered as `Item sheet` sections — 571
+items across all 11 realms (d50–d62 each, die coverage verified gapless), object-icon template
+(single centered object, no characters), band noted per cell. Use: inventory icons / item-get
+cards / FFT-style loot screens (presentation TBD — asset bank first). Derived sections: edit the
+TABLE source, then regenerate.

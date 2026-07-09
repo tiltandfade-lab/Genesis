@@ -432,3 +432,109 @@ children, not teens or adults.
 19. **Kid — wants: Make their parent laugh the old way, the way from before.**
 20. **Kid — wants: Warn someone — and not one adult will slow down long enough to hear it.**
 
+
+## Expansion batches — REALM-KEY-EXPANSION-ROSTER draft, 2026-07-09 (25 total, 1 sheet)
+
+Appended additions from `docs/REALM-KEY-EXPANSION-ROSTER.md` (Adam's rulings folded): the
+Collector (the payment-taker, always a shapeshifting fear-eater — form is table-rolled), the
+demand ladder (as the feeding clock advances, the town's ordinary things turn), evil children
+(non-graphic defeat-outs authored per the children carve-out), slashers + the dream system, and
+the Monster Squad friendly lane. Same style block and mechanical instructions as above.
+
+### Expansion sheet E1 (5×5 grid, 25 cells)
+
+1. **The Collector — Storm-Drain Grin** — a smile and two eyes in a drain's darkness, one white-gloved hand extended up through the grate
+2. **The Collector — Borrowed Face** — a beloved neighbor's shape, seams wrong at the jaw, standing too still on a porch
+3. **The Collector — Payment Due** — the true shape mid-unfolding, all its borrowed faces hanging off it like coats
+4. **Rabid Family Dog** — a good dog gone wrong, foam-jawed, still wearing its name tag
+5. **Rabid Stray Alpha** — lead dog of the turned strays, head low, pack-scars glowing with the wrongness accent
+6. **The Vintage Doll** — porcelain doll with a killer's soul, knife too big for its hands, mid-step
+7. **The Puppet Troupe** — three marionettes moving without strings, one still dragging its crossbar
+8. **The Dummy Patriarch** — ventriloquist dummy seated like a king, jaw open mid-command
+9. **The Jealous Car** — gleaming vintage coupe, headlights narrowed, grille bent into a snarl, engine on
+10. **The Driverless Diesel** — rust-streaked semi rig, cab empty, air horn mid-blast
+11. **The Returned Pet** — the family cat come back from the yard grave, moving in stop-motion
+12. **The Returned Relative** — a grandmother back from the dead, smile correct, eyes not
+13. **The Corn Prophet** — child preacher in Sunday clothes at the field's edge, arms wide, congregation behind
+14. **Corn Congregation Child** — solemn kid with a sickle held like a hymnal
+15. **The Bad Seed** — one perfect child, braids and polished shoes, hands folded, head tilted
+16. **The Good Son's Shadow** — two identical boys, one half-step behind the other, only one casting a shadow
+17. **The Dream-Stalker** — burn-scarred figure in a striped sweater-shape, bladed glove, standing where sleep starts
+18. **The Lake Revenant** — drowned camper in a fogged mask, waterlogged, machete dragging a wet line
+19. **The Masked Shape** — pale-masked figure in coveralls, standing at the streetlight's edge, walking-never-running
+20. **The Gentle Flat-Head** — huge stitched protector in a too-small coat, carrying a kid's backpack carefully
+21. **The Reformed Wolf-Man** — half-turned man gripping a chain he locked onto himself, fighting the moon
+22. **The Gill-Man in the Creek** — shy amphibian figure half-risen from creek water, holding out a found toy
+23. **Harry the Hairy Neighbor** — huge sasquatch in a borrowed flannel, ducking a garage door, sheepish
+24. **The Man Who Checks the Schedule** — grey town clerk with a pocket ledger, crossing off a date
+25. **The Ladies' Auxiliary Matron** — church-hall coven leader, casserole in oven mitts, sigil in the crust
+
+## Item batches — from `Engine/03. _Tables/05. Realms/Realm Items - Gloom.md` (50 total, 2 sheets)
+
+Loot-table items as sprites (Adam 2026-07-09): inventory icons / item-get card art / FFT-style
+post-combat loot screens — presentation TBD, the asset bank comes first. Derived from the realm
+item table (edit the TABLE, then regenerate this section); band noted per cell as a value cue.
+
+**Item template (replaces the character template for these sheets):** 5×5 grid, 25 cells, ONE
+OBJECT per cell (no characters, no hands, no scene), centered, floating on the solid magenta
+(#FF00FF) background, consistent relative scale (a coin small in its cell, a rifle spanning
+its cell), full object visible with margin — no cropping. Same realm style block as above.
+Each object needs one instantly readable silhouette and one high-value focal detail; higher-band
+items (Strange/Volatile/Mythic) may glow, distort, or break physics visibly — Grounded items
+must look convincingly mundane.
+
+### Item sheet 1/2 (5×5 grid, 25 cells)
+
+1. **A wax candle** [Grounded] — A wax candle, black, unlit, smells faintly of something sweet gone slightly wrong.
+2. **A rosary** [Grounded] — A rosary, wooden beads, one bead cracked but the string intact.
+3. **A locket** [Grounded] — A locket, silver, tarnished, hinge stiff but functional.
+4. **A hand mirror** [Grounded] — A hand mirror, small, backing worn to bare metal in one corner.
+5. **A bundle of beeswax candles** [Grounded] — A bundle of beeswax candles, twelve, church-grade.
+6. **Nine cold-forged iron nails** [Grounded] — Nine cold-forged iron nails, bent from being pulled rather than fresh from a smith.
+7. **A mourning veil** [Grounded] — A mourning veil, black lace, smells faintly of one specific lily.
+8. **A storm lantern** [Grounded] — A storm lantern, black iron, glass smoked gray.
+9. **A set of tarot cards** [Grounded] — A set of tarot cards, hand-painted, missing the Death card.
+10. **A gravedigger's spade** [Grounded] — A gravedigger's spade, worn smooth at the grip.
+11. **A wedding ring** [Grounded] — A wedding ring, plain gold band, engraved with initials and a date decades past.
+12. **A child's rag doll** [Grounded] — A child's rag doll, stitched by hand, button eyes slightly uneven.
+13. **A bell-pull rope** [Textured] — A bell-pull rope, cut clean at the top, tassel intact.
+14. **A deadbolt of consecrated iron** [Textured] — A deadbolt of consecrated iron, mounting screws included.
+15. **A jar of grave-salt** [Textured] — A jar of grave-salt, coarse, gray, heavier than table salt.
+16. **A funeral photographer's camera** [Textured] — A funeral photographer's camera, six plates left.
+17. **A widow's hatpin** [Textured] — A widow's hatpin, silver, nine inches.
+18. **A surveyor's map of this parish's understructure** [Textured] — A surveyor's map of this parish's understructure — complete, dated, initialed.
+19. **An occultist's confiscated notebook** [Textured] — An occultist's confiscated notebook, three rituals described, one complete.
+20. **A sexton's key-ring** [Textured] — A sexton's key-ring, black iron, twelve keys.
+21. **A hand mirror that shows your reflection one full second behind your m** [Strange] — A hand mirror that shows your reflection one full second behind your movement, consistently.
+22. **A music box that plays a lullaby nobody recognizes** [Strange] — A music box that plays a lullaby nobody recognizes, on its own, at 3 AM exactly.
+23. **A door** [Strange] — A door, salvaged from a demolished house, cold as a winter night in any season.
+24. **A grandfather clock** [Strange] — A grandfather clock, stopped, that chimes the correct hour anyway.
+25. **A witch-bottle** [Volatile] — A witch-bottle, corked, warm, humming faintly. Something is in it. The cork is swelling.
+
+### Item sheet 2/2 (5×5 grid, 25 cells)
+
+1. **A mourner's portrait** [Volatile] — A mourner's portrait, oils, eyes closed. Every dawn, the eyes are slightly more open.
+2. **The parish's holy relic — roll d4:** [Mythic] — The parish's holy relic — roll d4: 1. The burial shroud of `[this settlement]`'s founding saint — whose bones have never been found, though the parish organized its whole faith around the promise that they will be. 2. The parish bell that tolls its own dead — muffled for a generation, because it knows things worth ringing about. 3. The sexton's ledger, every burial in a steady hand — including one dated for a day that has not yet come. 4. The reliquary finger of `[a name from the local name-culture]`, mounted pointing.
+3. **A funeral wreath** [Grounded] — A funeral wreath, dried, ribbon still black.
+4. **A set of mourning clothes** [Grounded] — A set of mourning clothes, black, well-tailored.
+5. **A holy water flask** [Grounded] — A holy water flask, pewter, mostly empty.
+6. **A gravestone rubbing** [Grounded] — A gravestone rubbing, charcoal on paper, of an epitaph too worn to read on the stone anymore.
+7. **A pocket Bible** [Grounded] — A pocket Bible, worn, spine cracked to a specific well-thumbed psalm.
+8. **A silver-plated letter opener** [Grounded] — A silver-plated letter opener, tarnished.
+9. **A pall-bearer's harness** [Textured] — A pall-bearer's harness, oiled leather, buckles blackened.
+10. **A box of black-edged stationery bearing the bishop's watermark** [Textured] — A box of black-edged stationery bearing the bishop's watermark, twenty sheets.
+11. **A verger's processional staff** [Textured] — A verger's processional staff, oak, silver-shod.
+12. **Enchanted** [Textured] — Enchanted — "The Mourner's Locket" — silver, tarnished, holding a photograph that changes who it shows.
+13. **Enchanted** [Textured] — Enchanted — "The Sexton's Coat" — heavy wool that keeps its wearer warm in any graveyard, any season.
+14. **Enchanted** [Textured] — Enchanted — "The Vigil-Keeper's Boots" — plain leather that never makes a sound on old floorboards.
+15. **Enchanted** [Strange] — Enchanted — "The Widow's Veil" — black lace that shows the wearer things others in the room can't see.
+16. **Enchanted** [Strange] — Enchanted — "The Confessor's Rosary" — wooden beads, worn smoother than the years alone explain.
+17. **Enchanted** [Strange] — Enchanted — "The Sexton's Lantern" — iron, glass smoked grey, burns without oil.
+18. **Enchanted** [Strange] — Enchanted — "The Ossuary Key" — small, black iron, that opens any door meant to keep something buried in.
+19. **Enchanted** [Strange] — Enchanted — "The Last Rites Bell" — small, silver, rung once at every proper burial in the parish's memory.
+20. **Signature** [Strange] — Signature — "The Watcher's Glass" — a hand mirror, black-backed, that shows what's actually in the room behind you.
+21. **Signature** [Strange] — Signature — "The Gravekeeper's Ledger" — a heavy book, leather-bound, that knows every grave in its parish by name.
+22. **Signature** [Strange] — Signature — "The Last Candle" — a black wax candle that has never gone out.
+23. **Signature** [Volatile] — Signature — "The Eighth Nail" — a coffin nail, black iron, warm in the hand.
+24. **Consumable** [Grounded] — Consumable — A vial of holy water, blessed properly, three doses.
+25. **Consumable** [Grounded] — Consumable — A bundle of dried funeral herbs, tied with black ribbon.

@@ -430,3 +430,97 @@ children, not teens or adults.
 19. **Kid — wants: Make their parent laugh the old way, the way from before.**
 20. **Kid — wants: Warn someone — and not one adult will slow down long enough to hear it.**
 
+
+## Expansion batches — REALM-KEY-EXPANSION-ROSTER draft, 2026-07-09 (15 total, 1 sheet)
+
+Appended additions from `docs/REALM-KEY-EXPANSION-ROSTER.md`: additions keyed to the locked
+realm identity — the tarot engine's home (the 23rd card), true-name work, the weighing of the
+heart, Enochian seals. Same style block and mechanical instructions as above.
+
+### Expansion sheet E1 (3×5 grid, 15 cells)
+
+1. **The Devourer at the Scale** — crocodile-jawed, lion-maned, hippo-haunched eater of unbalanced hearts, waiting beside the pans
+2. **The Scale-Keeper** — ibis-headed scribe, reed pen mid-stroke, weighing without malice
+3. **The Name-Eater** — a figure of negative space swallowing a written word, faces around it going blank
+4. **Enochian Watcher** — many-winged descending geometry, eyes along every edge, drawn down by a misdrawn seal
+5. **The Choir of the Untranslated Word** — three mouths in the air mid-syllable, sound rendered as cracking gold light
+6. **The 23rd Card, Walking** — a tarot card the size of a door, its figure stepping out of its own frame
+7. **Arcana-Walker: the Tower** — a striding brick-and-lightning figure, crown toppling mid-fall, permanently
+8. **Arcana-Walker: the Moon** — a pale lantern-faced deceiver, everything in its light rendered slightly wrong
+9. **Death's Understudy** — robed figure with the scythe held wrong-way-round, offering the reversed mercy
+10. **The Squared Circle** — an impossible-angle stone construct, guardian geometry that hurts to look at
+11. **Sphinx of the Seventh Gate** — gold-flecked riddling guardian, one paw on the answer, reclined mid-question
+12. **The Borrowed Tomb** — a walking sarcophagus ajar, collecting occupants, previous tenants' masks nailed on
+13. **Canopic Swarm** — four animate jars scuttling in formation, each holding out for what it's owed
+14. **The Reader Who Read Too Far** — a fallen oracle, cards orbiting them unwilled, eyes gone starfield
+15. **The Deck-Sharper** — grinning card-dealer at a folding table, dealing real arcana, stakes written in years
+
+## Item batches — from `Engine/03. _Tables/05. Realms/Realm Items - Cosmic.md` (50 total, 2 sheets)
+
+Loot-table items as sprites (Adam 2026-07-09): inventory icons / item-get card art / FFT-style
+post-combat loot screens — presentation TBD, the asset bank comes first. Derived from the realm
+item table (edit the TABLE, then regenerate this section); band noted per cell as a value cue.
+
+**Item template (replaces the character template for these sheets):** 5×5 grid, 25 cells, ONE
+OBJECT per cell (no characters, no hands, no scene), centered, floating on the solid magenta
+(#FF00FF) background, consistent relative scale (a coin small in its cell, a rifle spanning
+its cell), full object visible with margin — no cropping. Same realm style block as above.
+Each object needs one instantly readable silhouette and one high-value focal detail; higher-band
+items (Strange/Volatile/Mythic) may glow, distort, or break physics visibly — Grounded items
+must look convincingly mundane.
+
+### Item sheet 1/2 (5×5 grid, 25 cells)
+
+1. **A pebble** [Grounded] — A pebble, unremarkable, that happens to be a perfect sphere.
+2. **A length of rope** [Grounded] — A length of rope, ordinary hemp, coiled neatly by whoever left it.
+3. **A tin cup** [Grounded] — A tin cup, dented, that holds water at a perfectly ordinary temperature.
+4. **A single glove** [Grounded] — A single glove, left-handed, dropped by something that had a use for exactly one.
+5. **A scribe's blank papyrus scroll** [Grounded] — A scribe's blank papyrus scroll, fibre slightly too smooth.
+6. **A temple candle stub** [Grounded] — A temple candle stub, half-burned, tallow an ordinary color.
+7. **A small stone idol** [Grounded] — A small stone idol, worn featureless by handling, no discernible original shape.
+8. **A length of chain** [Grounded] — A length of chain, three links, snapped clean rather than cut.
+9. **A small bronze bell** [Grounded] — A small bronze bell — a sistrum's bell — no clapper.
+10. **A pair of dice carved from meteor iron** [Grounded] — A pair of dice carved from meteor iron — the iron of heaven.
+11. **A single scarab wing-case** [Grounded] — A single scarab wing-case, iridescent, larger than any beetle should grow.
+12. **A folded papyrus bird** [Grounded] — A folded papyrus bird, made from a page torn out of something in a much smaller hand than a fold needs.
+13. **A magus's counting cord** [Textured] — A magus's counting cord, 108 knots, one knot subtly tighter.
+14. **An astronomer's folding telescope** [Textured] — An astronomer's folding telescope, brass, lens flawless.
+15. **A phial of powdered star-glow** [Textured] — A phial of powdered star-glow, stoppered, faintly luminous.
+16. **A weighted plumb line that always hangs true** [Textured] — A weighted plumb line that always hangs true — even where gravity argues.
+17. **A star-metal awl** [Textured] — A star-metal awl, cold to the touch, never dulls.
+18. **A dream-diary of the night-boat** [Textured] — A dream-diary of the night-boat, half-filled, entries annotated with places.
+19. **A silence jar** [Textured] — A silence jar — a small vessel that holds one scream.
+20. **An astrologer's storm-glass** [Textured] — An astrologer's storm-glass, crystals dozing in fluid.
+21. **The Scarab of the Scale** [Strange] — The Scarab of the Scale — a heart-scarab of blue faience, heavier in the palm than faience has any right to be.
+22. **The Deck With One Extra Card** [Strange] — The Deck With One Extra Card — a hand-inked tarot, and beneath the twenty-two a twenty-third that has no number and no name.
+23. **The Squared Circle** [Strange] — The Squared Circle — the impossible construction, chalked onto slate, a circle a compass-and-straightedge should not be able to turn into a square.
+24. **The Door-Chalk** [Strange] — The Door-Chalk — a nub of white chalk, ground from tomb-lime, warm at the tip.
+25. **A meteorite fragment** [Volatile] — A meteorite fragment, fist-sized, warm, humming — it fell this week and it hasn't finished arriving.
+
+### Item sheet 2/2 (5×5 grid, 25 cells)
+
+1. **An angelic call-pipe of grey horn** [Volatile] — An angelic call-pipe of grey horn, cracked down its length.
+2. **The thing that was written down before we had hands to hold the pen — roll d4:** [Mythic] — The thing that was written down before we had hands to hold the pen — roll d4: 1. The Call with the missing verse — the Nineteenth Key of the Aethyrs, the one the scryer never dared set down, transcribed in a hand that isn't quite a hand's, complete except for the ending everyone stopped speaking on purpose. 2. The true name of `[the region]` — the one it answered to before people arrived to misname it, set down once, in symbols the eye slides off. 3. The roster of the Aethyrs — every angelic name that ever answered a call, every empty governance still waiting, and one blank line near the bottom that insists it is yours. 4. The star that was inked out — a wax-sealed jar, heavier than glass, with a point of light in it that matches a hole in every honest star chart.
+3. **A reliquary jar** [Grounded] — A reliquary jar, cracked, that once held something the seal doesn't specify.
+4. **A locked wooden box** [Grounded] — A locked wooden box, empty, hinges stiff with disuse.
+5. **A pilgrim's linen mantle** [Grounded] — A pilgrim's linen mantle, patched, that smells permanently of somewhere much colder than here — tomb-cold.
+6. **An astrolabe** [Grounded] — An astrolabe, brass, functional, slightly heavier than its size suggests.
+7. **A fowler's net** [Grounded] — A fowler's net, mended so many times the mending outweighs the original net.
+8. **A ritual crook** [Grounded] — A ritual crook — a heka-crook of iron — pitted despite obvious recent use.
+9. **A tomb's Book of Going Forth** [Textured] — A tomb's Book of Going Forth, water-damaged, three spells legible.
+10. **A shard of the Pharos lens** [Textured] — A shard of the Pharos lens, prism-cut, heavy as guilt.
+11. **A vial of the Duat's own dark** [Textured] — A vial of the Duat's own dark — the lightless water of the night-river, that light declines to cross.
+12. **Enchanted** [Textured] — Enchanted — "The Dowsing Ankh" — bronze, that always points toward the nearest unnatural depth.
+13. **Enchanted** [Textured] — Enchanted — "The Initiate's Prayer-Cord" — beads carved from something that isn't quite bone and isn't quite stone.
+14. **Enchanted** [Textured] — Enchanted — "The Duat-Warden's Mantle" — heavy linen that never quite dries all the way through.
+15. **Enchanted** [Strange] — Enchanted — "The Listening Ear of Thoth" — a palm-sized carved ear that picks up more than sound.
+16. **Enchanted** [Strange] — Enchanted — "The Duat-Sight Lenses" — thick glass, faintly green, ground by someone who wasn't working from a human prescription.
+17. **Enchanted** [Strange] — Enchanted — "The Aethyr Vestment" — plain vestments that hum in a harmony no living choir taught them.
+18. **Enchanted** [Strange] — Enchanted — "The Atef Circlet" — a crown, strange-textured, that fits like it was grown to the wearer's skull.
+19. **Enchanted** [Strange] — Enchanted — "The Snare of Ammit" — endlessly mended netting that never quite lets its catch go.
+20. **Signature** [Strange] — Signature — "The Left Gauntlet of the Choir" (frame: gauntlet) — a single glove, heavier than its size, fingers slightly too long.
+21. **Signature** [Strange] — Signature — "The Boundary-Stela" — a plain weathered stela that rings without wind to move it.
+22. **Signature** [Strange] — Signature — "The Hierophant's Was-Sceptre" — old temple staff that conducts more than music.
+23. **Signature** [Volatile] — Signature — "The Answering Cord" — a length of pale fiber, still damp, pulling itself back toward somewhere, right now, faster than it should move.
+24. **Consumable** [Grounded] — Consumable — A stoppered jar of temple-beer, stronger than the priests admit.
+25. **Consumable** [Grounded] — Consumable — A packet of funerary offering-bread and dried figs, keeps for years.

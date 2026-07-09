@@ -226,6 +226,123 @@ def main():
         review_dir = os.path.join(ROOT, "dev", "sprite-manifests", "review")
         shutil.rmtree(review_dir, ignore_errors=True)
 
+    # --- v2 pipeline (docs/SPRITE-TRANSITION.md T2.3b): --manifest-v2 <sheetId> mode against
+    # a self-contained synthetic v2-manifest.json fixture (does NOT touch the real
+    # dev/sprite-manifests/v2-manifest.json — written to a temp copy, slicer pointed at ROOT
+    # via a temp working copy swap, restored in finally). Two cases:
+    #   (a) CLEAN 5x5 — 25 cells, mild jitter, exact count -> exit 0, 25 correctly-assigned crops.
+    #   (b) IRREGULAR — jittered cells + one deliberately-merged blob (two adjacent cells drawn
+    #       overlapping so blob-detection sees 24 components, not 25) -> exit 1, review sheet
+    #       written, missing slug reported. RED-FIRST (docs/SPRITE-TRANSITION.md T2.3b): this
+    #       case must be shown failing BEFORE --manifest-v2 handling exists in slice-sprites.py
+    #       (see the branch's commit history / HANDOFF for the captured red-run output).
+    print()
+    print("=== v2 pipeline (--manifest-v2) ===")
+    V2_CELL = 100
+    V2_GRID = 5
+    V2_W = V2_H = V2_CELL * V2_GRID
+    V2_SHEET_ID = "test-v2-clean"
+    V2_SLUGS = [f"spr-test-blob-{i:02d}" for i in range(1, 26)]
+
+    def make_v2_manifest():
+        return {
+            "_generated_by": "dev/verify-sprite-pipeline.py (synthetic fixture)",
+            "sheets": [{
+                "id": V2_SHEET_ID,
+                "realm": "test",
+                "kind": "monster",
+                "sourceFile": "dev/verify-sprite-pipeline.py (synthetic)",
+                "sourceSection": "synthetic v2 self-test",
+                "expected": 25,
+                "cells": [
+                    {"n": i + 1, "name": f"Blob {i+1:02d}", "slug": V2_SLUGS[i], "cue": "test cue"}
+                    for i in range(25)
+                ],
+            }],
+        }
+
+    def make_v2_sheet(path, seed=7, merge_two=False):
+        """5x5 grid of 25 blobs, mild jitter (never a suspiciously perfect grid — matches the
+        v1 self-test's discipline). merge_two=True draws cells 0 and 1 overlapping so
+        blob-detection sees 24 components instead of 25 (the IRREGULAR case)."""
+        img = Image.new("RGB", (V2_W, V2_H), MAGENTA)
+        draw = ImageDraw.Draw(img)
+        rnd = random.Random(seed)
+        for i in range(25):
+            row, col = divmod(i, V2_GRID)
+            jitter_x = 0 if (merge_two and i == 1) else rnd.randint(-6, 6)
+            jitter_y = 0 if (merge_two and i == 1) else rnd.randint(-6, 6)
+            cx = col * V2_CELL + V2_CELL // 2 + jitter_x
+            cy = row * V2_CELL + V2_CELL // 2 + jitter_y
+            if merge_two and i == 1:
+                cx = 0 * V2_CELL + V2_CELL // 2 + (V2_CELL // 2 - 8)  # slide cell 1 into cell 0
+            r = V2_CELL // 2 - 12
+            color = ((20 + i * 6) % 200 + 30, (50 + i * 4) % 200 + 30, (80 + i * 5) % 200 + 30)
+            draw.ellipse([cx - r, cy - r, cx + r, cy + r], fill=color)
+        img.save(path)
+
+    v2_tmp = tempfile.mkdtemp(prefix="genesis-sprite-v2-selftest-")
+    v2_manifest_backup = None
+    try:
+        v2_manifest_real_path = os.path.join(ROOT, "dev", "sprite-manifests", "v2-manifest.json")
+        if os.path.exists(v2_manifest_real_path):
+            with open(v2_manifest_real_path) as f:
+                v2_manifest_backup = f.read()
+        os.makedirs(os.path.dirname(v2_manifest_real_path), exist_ok=True)
+        with open(v2_manifest_real_path, "w") as f:
+            json.dump(make_v2_manifest(), f)
+
+        # --- (a) clean 5x5 ---
+        clean_v2_png = os.path.join(v2_tmp, "clean-v2.png")
+        make_v2_sheet(clean_v2_png, merge_two=False)
+        clean_v2_out = os.path.join(v2_tmp, "out-v2-clean")
+        proc = subprocess.run(
+            [sys.executable, SLICER, clean_v2_png, "--manifest-v2", V2_SHEET_ID, "--out", clean_v2_out],
+            cwd=ROOT, capture_output=True, text=True)
+        print("--- v2 clean 5x5 run ---")
+        print(proc.stdout)
+        print(proc.stderr)
+        if proc.returncode != 0:
+            failures.append(f"v2 clean: expected exit 0, got {proc.returncode}")
+        else:
+            files = sorted(f for f in os.listdir(clean_v2_out) if f.endswith(".png"))
+            got_slugs = set(f[:-4] for f in files)
+            if got_slugs != set(V2_SLUGS):
+                failures.append(f"v2 clean: crop slug set mismatch. missing={set(V2_SLUGS)-got_slugs} extra={got_slugs-set(V2_SLUGS)}")
+            else:
+                print(f"OK: v2 clean sheet — 25/25 crops correctly assigned.")
+
+        # --- (b) irregular (RED-FIRST) ---
+        irregular_v2_png = os.path.join(v2_tmp, "irregular-v2.png")
+        make_v2_sheet(irregular_v2_png, merge_two=True)
+        irregular_v2_out = os.path.join(v2_tmp, "out-v2-irregular")
+        proc2 = subprocess.run(
+            [sys.executable, SLICER, irregular_v2_png, "--manifest-v2", V2_SHEET_ID, "--out", irregular_v2_out],
+            cwd=ROOT, capture_output=True, text=True)
+        print("--- v2 irregular (merged-blob) run ---")
+        print(proc2.stdout)
+        print(proc2.stderr)
+        if proc2.returncode == 0:
+            failures.append("v2 irregular: expected nonzero exit (mismatch honest-failure), got 0")
+        else:
+            review_path = os.path.join(ROOT, "dev", "sprite-manifests", "review", f"{V2_SHEET_ID}.html")
+            if not os.path.exists(review_path):
+                failures.append(f"v2 irregular: expected review HTML at {review_path}, not found")
+            elif "spr-test-blob-25" not in (proc2.stdout + proc2.stderr):
+                failures.append("v2 irregular: expected a missing-slug report naming the short tail slug, not found in output")
+            else:
+                print(f"OK: v2 irregular sheet — honest failure (exit {proc2.returncode}), review sheet written, missing slug reported.")
+                shutil.rmtree(os.path.dirname(review_path), ignore_errors=True)
+    finally:
+        shutil.rmtree(v2_tmp, ignore_errors=True)
+        if v2_manifest_backup is not None:
+            with open(v2_manifest_real_path, "w") as f:
+                f.write(v2_manifest_backup)
+        elif os.path.exists(v2_manifest_real_path):
+            os.remove(v2_manifest_real_path)
+        v2_review_dir = os.path.join(ROOT, "dev", "sprite-manifests", "review")
+        shutil.rmtree(v2_review_dir, ignore_errors=True)
+
     print()
     if failures:
         print(f"FAILED ({len(failures)} issue(s)):")

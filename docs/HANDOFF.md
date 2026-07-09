@@ -12,7 +12,22 @@ updated: 2026-07-08 (night)
 > parallel-sessions protocol): the **NPC subsystem** wiring (this entry) and the **MODEL-FOUNDRY**
 > modeling deep-dive (below). Both landed on master; two distinct "Do next" threads.
 
-## ⭐ Latest (2026-07-08 night — NPC subsystem WIRED: coherence · partials · role-realms · presence) [Claude Code / Opus 4.8]
+## ⭐ Latest (2026-07-09 overnight — THE DESIGN SESSION: realms re-keyed, 6 specs, craft expansions) [Claude Fable 5]
+
+Adam's crafting review became a full design session, run as three background waves (15 units, all
+orchestrator-gated, ~30 Adam rulings folded into every spec's RESOLVED section before merge).
+**On master:** specs `ANIMAL-SOCIAL` · `TIYL-WEIGHTED-STARTS` · `HOOK-WALKS` · `GLOOM-KEY` ·
+`SHIP-TRAVEL` · `PLACE-GEN` · `CAMEO-CAST` (+ `SHIP-RULES-GATHER`/saltmarsh index); craft: Child Saw
+d100, Bright-Kingdom Zelda doers + Nintendo register, Suburb Earthbound/BTTF doers, and the CHROME /
+COSMIC / LOST-WORLD re-keys (all craft PROVISIONAL pending Adam's row pass). `REALM-HOOKS` landed too (hooks join the spine/skins architecture; lethality law codified). Recompiled 383 tables; full NPC verify sweep green post-merge. Realm identities now:
+frontier · chrome (Warriors×TMNT×RoboCop) · noir · ash · suburb (Earthbound/BTTF) · cosmic
+(Egyptian/Hermetic/Enochian, tarot home) · theater · high-seas (+SHIP-TRAVEL) · lost-world (saurian
+dominion, seeded Zeal) · gloom (the town that made a deal / Derry) · bright-kingdom (Nintendo-80s).
+
+**Do next:** NEXT-STEPS top block — Adam gathers 8 books (morning), row-level taste passes, then the
+Sonnet build wave over the spec backlog; models-lane handoff list registered there too.
+
+## Latest (2026-07-08 night — NPC subsystem WIRED: coherence · partials · role-realms · presence) [Claude Code / Opus 4.8]
 
 An autonomous engine-wiring run (Adam out of the loop, `genesis-orchestrate`) that turned the
 2026-07-08 NPC craft specs into shipped engine code. **On master + pushed:** the **coherence dial**

@@ -4,6 +4,37 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-07-09 (overnight — the accidental design session) — realms re-keyed · 6 new system specs · craft expansions
+
+Adam's table-crafting session became a full design session ("the game feels like it's getting closer
+and closer to a real unique vision"). Three background waves (14 units + REALM-HOOKS in flight), every
+unit orchestrator-gated, all of Adam's ~30 rulings folded into the specs' RESOLVED sections before merge.
+
+**Added (specs, all with build units + red-first tests):** `ANIMAL-SOCIAL` (Speak-with-Animals as a
+game lane; witness packets; care-lever parley; wilderness social web), `TIYL-WEIGHTED-STARTS`
+(class+background-weighted origins, 4×/2×/1×), `HOOK-WALKS` (engaged place-thing hooks mint
+reward-terminated walks; 8–12 segment law; dungeon-discovery + breach-in-walks + mid-walk entry
+riders), `GLOOM-KEY` (the town that made a deal — town-secret d20 w/ deal-vs-attractor split,
+feeding-schedule clocks, player-rolled d20 belief-weapons), `SHIP-TRAVEL` (Saltmarsh App. A adapted:
+mobile home node, derived crew quality, full-lethality sea), `PLACE-GEN` (24-archetype place spine ×
+11 realm skins, replaces rollPlace in place), `CAMEO-CAST` (authored named NPCs w/ rarity-gated
+mints — the ET-in-suburb tech; data-only mod seam). `SHIP-RULES-GATHER` + saltmarsh-page-index.
+
+**Changed (craft, PROVISIONAL pending Adam's row-level pass):** Child Saw d50→d100 (5 new witness
+categories); Bright-Kingdom d50→d55 (+Zelda-key doers) + Nintendo/80s register; Suburb d50→d62
+(Earthbound/BTTF doers incl. THE BIKE); CHROME re-keyed (Warriors×TMNT×RoboCop neon-slum megacity);
+COSMIC re-keyed (Egyptian/Hermetic/Enochian; tarot-engine tie-in; drowned-court retired); LOST WORLD
+re-keyed (saurian dominion, three strata, seeded Zeal layer, dino-mount seam). Tables recompiled (383).
+
+**Verification:** check-manifest OK; full NPC sweep green post-merge (coherence-fixes 19/0 · dial 51/0
+· role-realms 30/0 · partials 34/0 · regions 32/0 · presence-hooks 61/0 · prep-bundle 56/0).
+
+**Added late in the night:** `REALM-HOOKS` (hooks get the spine/skins/authored-extras treatment; 24 hook shapes; the lethality law — no consequence before a surfaced tell; 75/25 npc/realm discovery split). **Deferred:** models-lane asks (saurian castes, dino mounts,
+bat gang, ED-209-class boss, ally-mutant, Zeal sentinel); book gathers (Adam, morning); all craft
+row-level taste passes.
+
+---
+
 ## 2026-07-08 (night — NPC subsystem) — coherence dial · partials · realm role skins · role-realms engine
 
 Autonomous engine-wiring run (Adam out of the loop; `genesis-orchestrate` — worktree-isolated

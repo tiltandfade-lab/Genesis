@@ -132,7 +132,7 @@ export function buildSmotheringRug(){
      edges, jittered outward/backward so it reads as airborne, not hanging limp. ---------- */
   {
     /* R2 SELF-CORRECTION (post r1 render): r1's tassels ran 0.34-0.40u long and half of them
-       (Math.random pale pick) rendered near-white — they read as a porcupine-quill burst that
+       (a random pale pick) rendered near-white — they read as a porcupine-quill burst that
        overpowered the rug silhouette instead of trailing fringe. Halved the reach, dropped the
        pale-random pick for a consistent dull-fringe hex, and angled them to trail BACK along the
        curl (closer to the body line) rather than radiating straight off it. */

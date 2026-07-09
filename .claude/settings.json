@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "deny": [
+      "Read(./tables.js)",
+      "Read(./tables.json)",
+      "Read(./data/realm-bestiary.js)",
+      "Read(./data/bestiary.js)",
+      "Read(./data/monster-flavor.js)",
+      "Read(./data/table-atlas.js)",
+      "Read(./data/table-usage.js)",
+      "Read(./data/class-progression.js)",
+      "Read(./data/npc-role-skins.js)",
+      "Read(./vendor/**)",
+      "Read(./dev/model-qa/realm-bestiary-draft.json)",
+      "Read(./dev/gauntlet-report.json)",
+      "Read(./dev/playtest-saves/**/state*.json)"
+    ]
+  }
+}

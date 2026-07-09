@@ -453,8 +453,12 @@ Once the style/layout is validated above, `dev/model-qa/sprite-sheets/` has the 
 **every creature in each realm's bestiary** (not just the 25 samples above) plus **a realm-
 themed NPC roster** pulled from the game's own 35-archetype NPC Role Spine + each realm's
 skin/adds, both batched into 25-per-sheet prompts using the same shared template and style
-blocks as this file. 55 monster sheets + 22 NPC sheets across the 11 realms — see
-[`sprite-sheets/INDEX.md`](sprite-sheets/INDEX.md) for the full link list and sheet counts.
+blocks as this file — **including a 12th `fantasy.md` for Genesis's actual default,
+unreskinned world** (the base 510-entry Monster Manual bestiary + the raw unmodified NPC Role
+Spine, no genre reskin — distinct from the "Classic D&D" hand-picked sample list above this
+line, which was just a small control group). 76 monster sheets + 24 NPC sheets across all 12
+realms — see [`sprite-sheets/INDEX.md`](sprite-sheets/INDEX.md) for the full link list and sheet
+counts.
 
 Pose cues in the full-coverage batches are auto-derived from the bestiary's own flavor/summary
 text (monsters) and the role spine's note field (NPCs) — not hand-authored per character at

@@ -1,241 +1,216 @@
-/* dev/model-qa/creatures/var-hobgoblin.js — HOBGOBLIN kin-variant (sub-nearest doctrine).
-   COPIES mon-orc.js: all coordinates+radii scaled x0.95, grey-orange skin, the ASYMMETRIC hide
-   armor read REPLACED with disciplined MATCHING bands (both shoulders one uniform dark iron
-   pauldron + a red cloth accent band across the chest — military discipline vs. orc chaos). Keeps
-   the cleaver-axe. Everything else identical. Imported by var-hobgoblin-probe.html. */
-import { THREE, V, quad, tube, stack, ring, stitch, capFan } from '../probe-lib.js';
+/* dev/model-qa/creatures/var-hobgoblin.js — HOBGOBLIN SOLDIER (REBUILD 2026-07-08 under
+   docs/MODEL-FOUNDRY.md, foundry pilot rebuild-w4, cell 5). Core identity: the DISCIPLINED
+   goblinoid — must read the opposite of the goblin: upright, uniformed, in formation, drilled
+   violence rather than wild scrabbling. Palette intent PRESERVED from the prior kin-variant pass
+   (grey-orange goblinoid hide, dark uniform iron, a red cloth/trim accent) but the geometry is a
+   full rebuild: a squared humanoid soldier frame (per ANATOMY-CANON — HUMANOID = the PC-kit
+   grammar) in a lamellar cuirass, wielding a longsword + a round shield locked square to the
+   front, caught in the phalanx step.
 
-const k = 0.95;                                 // scale factor
-const KV = (x,y,z)=>V(x*k, y*k, z*k);
+   FEATURE CHECKLIST (the ~1,000-2,000 budget buys):
+     1. HUMANOID torso, squared and UPRIGHT (no forward torque/lean) — the disciplined military
+        bearing, a straight spine, read opposite of a hunched goblin.
+     2. LAMELLAR CUIRASS — banded overlapping plate rows (alternating dark iron / lit iron ridge)
+        across the torso, plus a bright RED SASH band at the chest: the uniform tell.
+     3. SIGNATURE A — ROUND SHIELD locked SQUARE to the front (minimal outward angle, unlike an
+        angled duelist's shield), a bright iron BOSS at center: the shield-wall read, outline-
+        changing on the body's left.
+     4. SIGNATURE B — LONGSWORD held HORIZONTAL at shoulder height, blade thrust forward across
+        the body in the mid-thrust instant (not sheathed, not raised overhead): bright steel blade
+        crossing the silhouette on the right.
+     5. Pose legs — one boot planted forward (the phalanx step), the trailing leg straighter but
+        NOT lunging low: a drilled advance, not a wild leap.
+     6. Peaked LAMELLAR HELM with cheek flaps + a small red crest: completes "uniformed," echoes
+        the sash's red value beat at head height.
+
+   POSE SENTENCE: the phalanx step — shield locked flush to the front, the longsword driven
+   forward horizontal at shoulder height in a level mid-thrust, spine straight, one boot stepping
+   forward into the line: drilled violence, not a wild swing.
+
+   Whole-object grammar: one function, one geometry frame, no anchors. Spine +z (front), up +y,
+   ground y=0. Imported by ps1-sheet.html (SETS['rebuild-w4'], cell 5, fn buildHobgoblin). */
+import { THREE, V, quad, tube, stack, ring, stitch, capFan } from '../probe-lib.js';
+import { buildHead, buildBase } from '../parts.js';
 
 export function buildHobgoblin(){
-  /* ---------- PALETTE (grey-orange skin; disciplined dark iron + red cloth) ---------- */
+  /* ---------- PALETTE (grey-orange goblinoid hide; disciplined dark iron + red uniform trim) --- */
   const P = {
-    skin:0x8a6a4a, skinDk:0x5e4830, skinLt:0x9c7c56,        // grey-orange goblinoid hide
-    tusk:0xd6cba8, tuskDk:0xb4a780,
-    hide:0x5c4a30, hideDk:0x3e3120, hideLt:0x6e5a3c,
-    iron:0x4a4e52, ironDk:0x2f3236, ironLt:0x6b7076,        // DARK uniform iron (disciplined plate)
-    rust:0x6a4a34, strap:0x2c2420, loin:0x594936,
-    cloth:0x8a2a24, clothDk:0x5e1c18,                        // red cloth accent band
-    paint:0x3d2c30, paintDk:0x2a1e21,
-    scar:0x9c8f66, topknot:0x2e2a22, topknotDk:0x201d17,
-    eye:0xc4b23c, eyeDk:0x161009, nail:0x2b2620,
+    skin:0x8a6a4a, skinDk:0x5e4830, skinLt:0x9c7c56,
+    iron:0x545a5f, ironDk:0x33383c, ironLt:0x848c92,          // dark uniform iron (disciplined plate)
+    steel:0xa8afb5, steelDk:0x6b7176, steelLt:0xf3f5f6,       // bright weapon steel (value zone — near-white so it clears the in-engine lighting falloff, law 3)
+    cloth:0xc9333a, clothDk:0x7c2023,                          // red uniform sash/trim (brightened — R2 was reading near-invisible against the iron)
+    leather:0x4e3d2a, leatherDk:0x352a1c,
+    strap:0x2c2420,
     disc:0x4a4038, discTop:0x585047,
   };
 
-  /* ---------- LANDMARKS (scaled x0.95) ---------- */
+  /* ---------- RIG (stocky goblinoid: broader shoulders/hips than the human guard rig) ---------- */
   const L = {
-    hipY:0.72*k, waistY:0.81*k, ribY:0.94*k, chestY:1.055*k, shldY:1.155*k, neckY:1.20*k,
-    hipHalf:0.145*k, shoulderX:0.330*k,
-    jawY:1.225*k, cheekY:1.305*k, browY:1.385*k, crownY:1.475*k, headTopY:1.535*k,
+    hipY:0.74, waistY:0.825, ribY:0.94, chestY:1.055, shldY:1.15, neckY:1.19,
+    hipHalf:0.150, shoulderX:0.300,
+    jawY:1.220, cheekY:1.295, browY:1.370, crownY:1.460, headTopY:1.520,
   };
 
-  const lean = (p)=>{
-    const q = p.clone().sub(V(0, L.hipY, 0));
-    q.applyAxisAngle(V(1,0,0), 0.15);
-    return q.add(V(0, L.hipY, 0));
-  };
-
-  /* ---------- CLEAVER-AXE FIRST (kept, scaled) ---------- */
-  const GRIP = KV(0.375, 0.62, 0.28);
-  const HTOP = KV(0.505, 1.05, 0.44);
-  const HAFT = new THREE.Vector3().subVectors(HTOP, GRIP).normalize();
-  const BUTT = GRIP.clone().addScaledVector(HAFT, -0.34*k);
+  /* ---------- SHIELD FIRST (left arm) — locked SQUARE to the front, minimal outward angle: the
+     shield-wall read. A round shield, bright iron boss at center for the value beat. ---------- */
+  const SC = V(-0.360, 1.020, 0.360);
+  const SN = V(-0.10, 0.02, 0.994).clone().normalize();       // near-square to the front (locked)
   {
-    tube(BUTT, BUTT.clone().addScaledVector(HAFT, 0.06*k), 0.028*k, 0.026*k, 6, P.ironDk, {capA:{hex:P.iron, lift:0.02*k}});
-    tube(BUTT.clone().addScaledVector(HAFT, 0.06*k), GRIP.clone().addScaledVector(HAFT,-0.09*k), 0.024*k, 0.024*k, 6, P.rust);
-    tube(GRIP.clone().addScaledVector(HAFT,-0.09*k), GRIP.clone().addScaledVector(HAFT,0.09*k), 0.027*k, 0.027*k, 6, P.strap);
-    tube(GRIP.clone().addScaledVector(HAFT,0.09*k), HTOP.clone().addScaledVector(HAFT,-0.10*k), 0.023*k, 0.028*k, 6, P.rust);
-    tube(HTOP.clone().addScaledVector(HAFT,-0.10*k), HTOP.clone().addScaledVector(HAFT,-0.02*k), 0.030*k, 0.046*k, 6, P.ironDk);
+    const su = V(0,1,0).clone().sub(SN.clone().multiplyScalar(SN.y)).normalize();
+    const sr = new THREE.Vector3().crossVectors(SN, su).normalize();
+    const n = 10, ph = Math.PI / n;
+    const rimOuter = ring(SC.clone().addScaledVector(SN, 0.020), SN, 0.230, 0.230, n, ph);
+    const rimInner = ring(SC.clone().addScaledVector(SN, 0.020), SN, 0.190, 0.190, n, ph);
+    const back     = ring(SC.clone().addScaledVector(SN,-0.018), SN, 0.220, 0.220, n, ph);
+    stitch([rimInner, rimOuter], ()=>P.ironLt);
+    stitch([rimOuter, back], ()=>P.ironDk);
+    stitch([back, rimInner], ()=>P.iron);
+    // face panel (red-trimmed, uniform) — a large solid disc, not a thin hoop
+    const faceOuter = ring(SC.clone().addScaledVector(SN,0.028), SN, 0.190, 0.190, n, ph);
+    const faceInner = ring(SC.clone().addScaledVector(SN,0.032), SN, 0.100, 0.100, n, ph);
+    stitch([faceInner, faceOuter], ()=>P.cloth);
+    // bright boss (the value zone) — enlarged + pushed further forward to catch full light
+    const bossR = ring(SC.clone().addScaledVector(SN,0.060), SN, 0.100, 0.100, n, ph);
+    stitch([faceInner, bossR], ()=>P.steelLt);
+    capFan(bossR, SC.clone().addScaledVector(SN,0.115), P.steelLt);
+    // grip boss on the back
+    tube(SC.clone().addScaledVector(SN,-0.018), SC.clone().addScaledVector(SN,-0.075), 0.050,0.036,6,P.leather,{capB:{hex:P.skin}});
+  }
+  const SHIELD_FIST = SC.clone().addScaledVector(SN,-0.075);
 
-    const up=V(0,1,0);
-    const u = new THREE.Vector3().crossVectors(up, HAFT).normalize();
-    const w = new THREE.Vector3().crossVectors(HAFT, u).normalize();
-    const HEAD_C = HTOP.clone().addScaledVector(HAFT, -0.01*k);
-    tube(HEAD_C.clone().addScaledVector(w,-0.038*k), HEAD_C.clone().addScaledVector(w,0.038*k), 0.070*k, 0.070*k, 8, P.ironDk);
-    const s = 1;
-    const root = HEAD_C.clone().addScaledVector(u, s*0.05*k);
-    const bandN = 7, innerPts=[], outerPts=[];
-    for(let kk=0;kk<=bandN;kk++){
-      const t=kk/bandN;
-      const along = (-0.20 + t*0.40)*k;
-      const reach = (0.10 + Math.sin(t*Math.PI)*0.46)*k;
-      innerPts.push(root.clone().addScaledVector(HAFT, along*0.30).addScaledVector(u, s*reach*0.16));
-      outerPts.push(root.clone().addScaledVector(HAFT, along).addScaledVector(u, s*reach));
-    }
-    for(let kk=0;kk<bandN;kk++){
-      const a=innerPts[kk], b=innerPts[kk+1], c=outerPts[kk+1], d=outerPts[kk];
-      const off=w.clone().multiplyScalar(0.014*k);
-      quad(a.clone().add(off), b.clone().add(off), c.clone().add(off), d.clone().add(off), P.iron, 0.05);
-      quad(d.clone().sub(off), c.clone().sub(off), b.clone().sub(off), a.clone().sub(off), P.iron, 0.05);
-      quad(d.clone().add(off), c.clone().add(off), c.clone().sub(off), d.clone().sub(off), P.ironLt, 0.03);
-    }
+  /* ---------- LONGSWORD SECOND (right arm) — HORIZONTAL at shoulder height, driven forward in a
+     level mid-thrust across the body: the outline-changing signature on the right. ---------- */
+  const GRIP = V(0.235, 1.145, 0.36);
+  const TIP  = V(-0.070, 1.155, 1.130);
+  const SDIR = new THREE.Vector3().subVectors(TIP, GRIP).normalize();
+  {
+    const up = V(0,1,0);
+    const su = new THREE.Vector3().crossVectors(up, SDIR).normalize();
+    const sv = new THREE.Vector3().crossVectors(SDIR, su).normalize();
+    // pommel + grip wrap + crossguard
+    const BUTT = GRIP.clone().addScaledVector(SDIR, -0.085);
+    tube(BUTT, BUTT.clone().addScaledVector(SDIR,0.02), 0.026,0.026,6,P.steelDk,{capA:{hex:P.steel, lift:0.015}});
+    tube(BUTT.clone().addScaledVector(SDIR,0.02), GRIP.clone().addScaledVector(SDIR,-0.01), 0.020,0.020,6,P.strap);
+    const g0 = GRIP.clone().addScaledVector(SDIR, 0.02);
+    quad(g0.clone().addScaledVector(su,0.072), g0.clone().addScaledVector(su,-0.072),
+         g0.clone().addScaledVector(su,-0.072).addScaledVector(SDIR,0.022), g0.clone().addScaledVector(su,0.072).addScaledVector(SDIR,0.022),
+         P.steelDk, 0.03);
+    // blade — straight taper to a point, bright steel (the high-value zone on the right)
+    const bl=(t,w,th)=>{ const c=g0.clone().addScaledVector(SDIR,t+0.03);
+      return [c.clone().addScaledVector(su,w), c.clone().addScaledVector(sv,th), c.clone().addScaledVector(su,-w), c.clone().addScaledVector(sv,-th)]; };
+    const s0=bl(0.00,0.038,0.012), s1=bl(0.28,0.030,0.009), s2=bl(0.56,0.020,0.006), s3=bl(0.78,0.006,0.003);
+    stitch([s0,s1,s2,s3], (b)=> b<1?P.steel:P.steelLt);
+    capFan(s3, g0.clone().addScaledVector(SDIR,0.86), P.steelLt);
   }
 
-  /* ---------- TORSO ---------- */
+  /* ---------- TORSO — squared and UPRIGHT (no forward lean: disciplined bearing) ---------- */
   stack([
-    {y:L.hipY,   rx:0.245*k, rz:0.190*k, hex:P.skinDk},
-    {y:L.waistY, rx:0.220*k, rz:0.168*k, hex:P.skin},
-    {y:L.ribY,   rx:0.270*k, rz:0.198*k, hex:P.skin},
-    {y:L.chestY, rx:0.320*k, rz:0.215*k, hex:P.skinLt},
-    {y:L.shldY,  rx:0.340*k, rz:0.205*k, hex:P.skin},
-    {y:L.neckY,  rx:0.140*k, rz:0.130*k, hex:P.skinDk},
-  ], 8, {xform:lean, capTop:{hex:P.skinDk, lift:0.006*k}});
+    {y:L.hipY,   rx:0.255, rz:0.195, hex:P.skinDk},
+    {y:L.waistY, rx:0.230, rz:0.172, hex:P.iron},
+    {y:0.87,     rx:0.258, rz:0.196, hex:P.ironDk},
+    {y:L.ribY,   rx:0.278, rz:0.205, hex:P.iron},
+    {y:1.00,     rx:0.300, rz:0.212, hex:P.ironDk},
+    {y:L.chestY, rx:0.318, rz:0.218, hex:P.iron},
+    {y:L.shldY,  rx:0.330, rz:0.208, hex:P.ironDk},
+    {y:L.neckY,  rx:0.135, rz:0.128, hex:P.skinDk},
+  ], 8, {capTop:{hex:P.skinDk, lift:0.006}});
 
-  stack([
-    {y:0.50*k, rx:0.255*k, rz:0.205*k, hex:P.hideDk},
-    {y:0.62*k, rx:0.242*k, rz:0.192*k, hex:P.hide},
-    {y:L.hipY, rx:0.228*k, rz:0.178*k, hex:P.hide},
-  ], 8, {xform:lean});
-  stack([
-    {y:0.77*k, rx:0.228*k, rz:0.178*k, hex:P.strap},
-    {y:0.83*k, rx:0.225*k, rz:0.175*k, hex:P.strap},
-  ], 8, {xform:lean});
-  quad(lean(KV(-0.05,0.778,0.185)), lean(KV(0.05,0.778,0.185)),
-       lean(KV(0.05,0.828,0.180)), lean(KV(-0.05,0.828,0.180)), P.iron, 0.02);
+  /* RED SASH — a bright horizontal uniform band across the chest (the value beat, law 3) */
+  {
+    const y0=0.985, y1=1.045, hw=0.322;
+    quad(V(-hw,y0,0.145), V(hw,y0,0.145), V(hw,y1,0.145), V(-hw,y1,0.145), P.cloth, 0.04);
+    quad(V(-hw,y0,0.135), V(hw,y0,0.135), V(hw,y1,0.135), V(-hw,y1,0.135), P.clothDk, 0.04);
+    quad(V(-hw,y0,-0.140), V(hw,y0,-0.140), V(hw,y1,-0.140), V(-hw,y1,-0.140), P.cloth, 0.04);
+  }
 
-  /* ---------- DISCIPLINED MATCHING ARMOR — BOTH shoulders get an identical dark iron pauldron
-     (military uniformity, replacing the orc's one-plated-one-bare asymmetry). ---------- */
+  /* skirt/faulds — matching (uniform) plates, both sides identical unlike a bandit's mismatch */
+  stack([
+    {y:0.50, rx:0.265, rz:0.205, hex:P.ironDk},
+    {y:0.62, rx:0.250, rz:0.190, hex:P.iron},
+    {y:L.hipY-0.01, rx:0.235, rz:0.178, hex:P.ironDk},
+  ], 8, {});
+
+  /* belt */
+  stack([
+    {y:0.775, rx:0.238, rz:0.180, hex:P.leather},
+    {y:0.835, rx:0.235, rz:0.178, hex:P.leatherDk},
+  ], 8, {});
+  quad(V(-0.032,0.782,0.184), V(0.032,0.782,0.184), V(0.032,0.828,0.180), V(-0.032,0.828,0.180), P.steelDk, 0.02);
+
+  /* ---------- BOTH shoulders get an IDENTICAL matching pauldron — military uniformity ---------- */
   for(const s of [-1,1]){
-    const pivot=V(s*L.shoulderX, L.shldY+0.02*k, 0.01*k);
-    const tilt=p=>{ const q=p.clone().sub(pivot); q.applyAxisAngle(V(0,0,1), -s*0.38); return q.add(pivot); };
+    const pivot = V(s*L.shoulderX, L.shldY+0.02, 0.01);
     stack([
-      {y:L.shldY-0.05*k, rx:0.150*k, rz:0.160*k, cx:pivot.x, cz:pivot.z, hex:P.ironDk},
-      {y:L.shldY+0.02*k, rx:0.135*k, rz:0.145*k, cx:pivot.x, cz:pivot.z, hex:P.iron},
-      {y:L.shldY+0.09*k, rx:0.098*k, rz:0.104*k, cx:pivot.x, cz:pivot.z, hex:P.ironLt},
-    ], 8, {xform:p=>lean(tilt(p)), capTop:{hex:P.ironLt, lift:0.03*k}});
-    /* matching rivet nubs on each plate (symmetric — discipline) */
-    for(const [dx,dy] of [[-0.06*k,0.02*k],[0.05*k,0.05*k]]){
-      const c=lean(tilt(V(pivot.x+dx, L.shldY+dy, 0.155*k)));
-      quad(c.clone().add(V(-0.012*k,-0.012*k,0)), c.clone().add(V(0.012*k,-0.012*k,0)),
-           c.clone().add(V(0.012*k,0.012*k,0.004*k)), c.clone().add(V(-0.012*k,0.012*k,0.004*k)), P.ironLt, 0.0);
-    }
-  }
-  /* RED CLOTH ACCENT BAND — a clean uniform sash across the chest, cheek to cheek (unit colors) */
-  for(const [y,cz] of [[L.chestY+0.005*k,0.215*k]]){
-    for(const s of [-1,1]){
-      const a=lean(V(s*0.02*k, y-0.028*k, cz));
-      const b=lean(V(s*0.30*k, (L.ribY+L.chestY)/2-0.04*k, 0.13*k));
-      const c=lean(V(s*0.30*k, (L.ribY+L.chestY)/2+0.02*k, 0.13*k));
-      const d=lean(V(s*0.02*k, y+0.030*k, cz));
-      quad(a,b,c,d, P.cloth, 0.03);
-    }
-    // a darker under-edge so the sash reads as a band, not a paint smear
-    for(const s of [-1,1]){
-      const a=lean(V(s*0.02*k, L.chestY-0.030*k, 0.213*k));
-      const b=lean(V(s*0.30*k, (L.ribY+L.chestY)/2-0.058*k, 0.128*k));
-      const c=lean(V(s*0.30*k, (L.ribY+L.chestY)/2-0.040*k, 0.128*k));
-      const d=lean(V(s*0.02*k, L.chestY-0.012*k, 0.213*k));
-      quad(a,b,c,d, P.clothDk, 0.02);
-    }
+      {y:L.shldY-0.03, rx:0.145, rz:0.155, cx:pivot.x, cz:pivot.z, hex:P.ironDk},
+      {y:L.shldY+0.045, rx:0.125, rz:0.130, cx:pivot.x, cz:pivot.z, hex:P.iron},
+    ], 8, {capTop:{hex:P.ironLt, lift:0.01}});
   }
 
-  /* ---------- HEAD ---------- */
+  /* ---------- HEAD (shared module, no forward drop — chin level: disciplined) ---------- */
+  buildHead(L, P);
+
+  /* ---------- PEAKED LAMELLAR HELM — cheek flaps + a small red crest (echoes the sash) ------- */
   {
-    const n=8, ph=Math.PI/n;
-    const bands=[
-      {y:L.jawY,   rx:0.150*k, rz:0.148*k, hex:P.skinLt},
-      {y:L.cheekY, rx:0.162*k, rz:0.150*k, hex:P.skin},
-      {y:L.browY,  rx:0.150*k, rz:0.132*k, hex:P.skin},
-      {y:L.crownY, rx:0.120*k, rz:0.104*k, hex:P.skinDk},
+    const n=10, ph=Math.PI/n;
+    const domeBands=[
+      {y:L.browY+0.01,  rx:0.128, rz:0.120, hex:P.ironDk},
+      {y:L.browY+0.05,  rx:0.134, rz:0.126, hex:P.iron},
+      {y:L.crownY+0.02, rx:0.112, rz:0.102, hex:P.iron},
+      {y:L.headTopY-0.01, rx:0.062, rz:0.056, hex:P.ironDk},
     ];
-    const rings=bands.map(b=>ring(V(0,b.y,0.014*k), V(0,1,0), b.rx, b.rz, n, ph)).map(r=>r.map(lean));
-    for(const i of [1,2]) rings[1][i].z += 0.020*k;
-    for(const i of [1,2]){ rings[2][i].z += 0.070*k; rings[2][i].y -= 0.020*k; }
-    for(const i of [0,3]){ rings[2][i].z += 0.038*k; }
-    for(let b=0;b<rings.length-1;b++){
-      for(let i=0;i<n;i++){ const i2=(i+1)%n;
-        quad(rings[b][i], rings[b][i2], rings[b+1][i2], rings[b+1][i], bands[b].hex, 0.07);
-      }
-    }
-    capFan(rings[3], lean(V(0, L.headTopY, 0.006*k)), P.skinDk);
-
-    const jawFrontBot = lean(V(0, L.jawY-0.085*k, 0.150*k));
-    tube(lean(V(0,L.jawY+0.005*k,0.02*k)), jawFrontBot, 0.130*k, 0.082*k, 6, P.skinLt, {raz:0.100*k, rbz:0.066*k, capB:{hex:P.skinDk}});
-
+    const domeRings = domeBands.map(b=>ring(V(0,b.y,0.01), V(0,1,0), b.rx, b.rz, n, ph));
+    stitch(domeRings, b=>domeBands[b].hex);
+    capFan(domeRings.at(-1), V(0, L.headTopY+0.02, 0.005), P.ironDk);
+    // cheek flaps (both sides matching)
     for(const s of [-1,1]){
-      const base = lean(V(s*0.070*k, L.jawY-0.055*k, 0.150*k));
-      const mid  = lean(V(s*0.078*k, L.jawY+0.010*k, 0.175*k));
-      const tip  = lean(V(s*0.068*k, L.jawY+0.080*k, 0.165*k));
-      tube(base, mid, 0.030*k, 0.024*k, 5, P.tusk, {capA:{hex:P.tuskDk}});
-      tube(mid, tip, 0.024*k, 0.008*k, 5, P.tusk, {capB:{hex:P.tuskDk, lift:0.006*k}});
+      quad(V(s*0.112,L.browY+0.02,0.05), V(s*0.150,L.browY+0.02,0.02),
+           V(s*0.140,L.jawY-0.03,0.03), V(s*0.100,L.jawY-0.01,0.06), P.iron, 0.03);
     }
-    for(const tx of [-0.028*k, 0.028*k]){
-      const b=lean(V(tx, L.jawY-0.015*k, 0.158*k)), t=lean(V(tx, L.jawY+0.022*k, 0.154*k));
-      tube(b, t, 0.013*k, 0.006*k, 4, P.tuskDk, {capB:{hex:P.tusk, lift:0.003*k}});
-    }
-
-    /* dark face band — kept subdued (disciplined; not war-paint chaos) */
-    for(const s of [-1,1]){
-      const ey = L.cheekY + 0.010*k;
-      const a=lean(V(s*0.015*k, ey-0.024*k, 0.170*k));
-      const b=lean(V(s*0.150*k, ey-0.018*k, 0.062*k));
-      const c=lean(V(s*0.150*k, ey+0.024*k, 0.062*k));
-      const d=lean(V(s*0.015*k, ey+0.030*k, 0.170*k));
-      quad(a,b,c,d, P.paint, 0.02);
-    }
-    for(const s of [-1,1]){
-      const eb = lean(V(s*0.155*k, L.cheekY+0.01*k, -0.02*k));
-      const et = lean(V(s*0.215*k, L.cheekY+0.075*k, -0.115*k));
-      tube(eb, et, 0.048*k, 0.006*k, 5, P.skin, {raz:0.028*k, rbz:0.004*k, capA:{hex:P.skinDk}, capB:{hex:P.skinDk, lift:0.005*k}});
-    }
-
-    for(const [sx,sz] of [[-0.03*k,0.02*k],[0.05*k,-0.03*k]]){
-      const c=lean(V(sx, L.crownY+0.02*k, sz+0.02*k));
-      quad(c.clone().add(V(-0.006*k,-0.03*k,0)), c.clone().add(V(0.006*k,-0.03*k,0)),
-           c.clone().add(V(0.006*k,0.03*k,0)), c.clone().add(V(-0.006*k,0.03*k,0)), P.scar, 0.05);
-    }
-    {
-      const kb = lean(V(0, L.crownY+0.02*k, -0.02*k));
-      const km = lean(V(0, L.headTopY+0.08*k, -0.11*k));
-      const kt = lean(V(0, L.headTopY+0.14*k, -0.20*k));
-      tube(kb, km, 0.038*k, 0.030*k, 5, P.topknotDk, {capA:{hex:P.topknotDk}});
-      tube(km, kt, 0.030*k, 0.008*k, 5, P.topknot, {capB:{hex:P.topknotDk, lift:0.006*k}});
-    }
+    // red crest — a thin bright ridge along the peak, the head-height value echo
+    const crestBase = V(0, L.headTopY-0.02, -0.02), crestTip = V(0, L.headTopY+0.16, -0.05);
+    tube(crestBase, crestTip, 0.020, 0.006, 5, P.cloth, {capB:{hex:P.clothDk, lift:0.01}});
+    tube(V(0,L.crownY+0.03,-0.10), V(0,L.headTopY+0.02,-0.08), 0.026,0.020,5,P.clothDk);
   }
 
-  /* ---------- ARMS ---------- */
+  /* ---------- ARMS — right hand drives the sword horizontal; left hand locks the shield ------- */
   {
-    const S=lean(V(L.shoulderX, L.shldY-0.02*k, 0.02*k));
-    const FIST=GRIP.clone();
-    const E=KV(0.395, 0.86, 0.15);
-    tube(S,E,0.110*k,0.086*k,6,P.skin);
-    tube(E, FIST.clone().addScaledVector(HAFT,-0.03*k), 0.082*k,0.066*k,6,P.skin);
-    tube(FIST.clone().addScaledVector(HAFT,-0.06*k), FIST.clone().addScaledVector(HAFT,0.06*k), 0.070*k,0.064*k,6,P.skin,
-         {capA:{hex:P.skin}, capB:{hex:P.skin}});
+    const S = V(L.shoulderX, L.shldY-0.01, 0.02), E = V(0.30, 1.10, 0.20);
+    tube(S,E,0.084,0.066,6,P.iron);
+    tube(E,GRIP,0.062,0.050,6,P.leather,{capB:{hex:P.skin}});
+    tube(GRIP.clone().add(V(-0.05,0.05,-0.02)), GRIP.clone().add(V(0.05,-0.05,0.02)), 0.052,0.048,6,P.skin,{capA:{hex:P.skin},capB:{hex:P.skin}});
 
-    const S2=lean(V(-L.shoulderX, L.shldY-0.02*k, 0.02*k));
-    const E2=KV(-0.395, 0.86, 0.10);
-    const W2=KV(-0.360, 0.60, 0.20);
-    tube(S2,E2,0.110*k,0.086*k,6,P.skin);
-    tube(E2,W2,0.082*k,0.066*k,6,P.skin);
-    tube(W2.clone().add(V(0,0.03*k,-0.02*k)), W2.clone().add(V(0,-0.05*k,0.03*k)), 0.072*k,0.060*k,6,P.skin,
-         {capA:{hex:P.skinDk}, capB:{hex:P.skinDk}});
+    const S2 = V(-L.shoulderX, L.shldY-0.01, 0.02), E2 = V(-0.32, 1.05, 0.24);
+    tube(S2,E2,0.084,0.066,6,P.iron);
+    tube(E2,SHIELD_FIST,0.062,0.050,6,P.leather,{capB:{hex:P.skin}});
   }
 
-  /* ---------- LEGS ---------- */
+  /* ---------- LEGS — the phalanx step: right boot planted forward, left trailing straighter --- */
   {
-    const hipL=V(-L.hipHalf, L.hipY-0.02*k, 0.01*k), kneeL=KV(-0.270,0.40,0.11), ankL=KV(-0.285,0.085,0.07);
-    const hipR=V( L.hipHalf, L.hipY-0.02*k, 0.00), kneeR=KV( 0.295,0.40,-0.06), ankR=KV( 0.310,0.085,-0.12);
-    tube(hipL,kneeL,0.125*k,0.090*k,6,P.skin);
-    tube(kneeL,ankL,0.084*k,0.060*k,6,P.skinDk);
-    tube(hipR,kneeR,0.125*k,0.090*k,6,P.skin);
-    tube(kneeR,ankR,0.084*k,0.060*k,6,P.skinDk);
-    for(const [ank,toeDir] of [[ankL,V(0.06,0,1)], [ankR,V(0.85,0,0.30).normalize()]]){
+    const hipL=V(-L.hipHalf, L.hipY-0.01, -0.03), kneeL=V(-0.19,0.42,-0.05), ankL=V(-0.17,0.085,-0.06);
+    const hipR=V( L.hipHalf, L.hipY-0.01,  0.03), kneeR=V( 0.24,0.40, 0.42), ankR=V( 0.23,0.085, 0.56);
+    tube(hipL,kneeL,0.095,0.066,6,P.skinDk);
+    tube(kneeL,ankL,0.062,0.044,6,P.skinDk);
+    tube(hipR,kneeR,0.098,0.068,6,P.skinDk);
+    tube(kneeR,ankR,0.064,0.045,6,P.skinDk);
+    // matching greaves (uniform, both legs identical plate)
+    for(const [hip,knee] of [[hipL,kneeL],[hipR,kneeR]]){
+      const mid = hip.clone().lerp(knee,0.55);
       stack([
-        {y:0.015*k, rx:0.080*k, rz:0.090*k, cx:ank.x, cz:ank.z, hex:P.hideDk},
-        {y:0.10*k,  rx:0.072*k, rz:0.076*k, cx:ank.x, cz:ank.z, hex:P.hide},
-      ], 6, {capTop:{hex:P.hideDk, lift:0.006*k}, capBot:{hex:P.skinDk, lift:0.0}});
-      const toeA=V(ank.x,0.05*k,ank.z), d=toeDir.clone().normalize();
-      tube(toeA, toeA.clone().addScaledVector(d,0.140*k), 0.066*k,0.050*k,6,P.skinDk, {capB:{hex:P.nail, lift:0.012*k}, raz:0.056*k, rbz:0.038*k});
+        {y:mid.y-0.05, rx:0.072, rz:0.072, cx:mid.x, cz:mid.z, hex:P.ironDk},
+        {y:mid.y+0.05, rx:0.066, rz:0.066, cx:mid.x, cz:mid.z, hex:P.iron},
+      ], 6, {});
+    }
+    for(const [ank,toeDir] of [[ankL,V(0.03,0,1)], [ankR,V(0.02,0,1)]]){
+      stack([
+        {y:0.012, rx:0.070, rz:0.078, cx:ank.x, cz:ank.z, hex:P.leatherDk},
+        {y:0.11,  rx:0.062, rz:0.064, cx:ank.x, cz:ank.z, hex:P.leatherDk},
+        {y:0.16,  rx:0.068, rz:0.068, cx:ank.x, cz:ank.z, hex:P.leather},
+      ], 6, {capTop:{hex:P.leather, lift:0.005}, capBot:{hex:P.leatherDk, lift:0.0}});
+      const toeA=V(ank.x,0.05,ank.z), d=toeDir.clone().normalize();
+      tube(toeA, toeA.clone().addScaledVector(d,0.14), 0.056,0.042,6,P.leatherDk, {capB:{hex:P.leatherDk, lift:0.014}, raz:0.048, rbz:0.034});
     }
   }
 
-  /* ---------- base disc (scaled x0.95) ---------- */
-  {
-    const r1=ring(V(0,0.002,0), V(0,1,0), 0.42*k, 0.42*k, 16);
-    const r2=ring(V(0,0.055,0), V(0,1,0), 0.40*k, 0.40*k, 16);
-    stitch([r1,r2], ()=>P.disc);
-    capFan(r2, V(0,0.058,0), P.discTop);
-  }
+  /* ---------- base disc — shared module ---------- */
+  buildBase(P);
 }

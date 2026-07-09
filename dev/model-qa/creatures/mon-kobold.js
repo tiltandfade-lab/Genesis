@@ -1,186 +1,236 @@
-/* dev/model-qa/creatures/mon-kobold.js — SMALL HOSTILE BIPED (whole-object grammar).
-   The mini-dragonkin read: a small snouted head (short muzzle rings on a forward axis, smaller
-   than the dragonborn's), two tiny horn nubs, a thin reptile TAIL dropping to the ground behind,
-   digitigrade-hinted legs (a sharp reverse knee), and a small SPEAR held TWO-HANDED at a wary
-   diagonal (authored FIRST — both fists derive from the shaft, grips true by construction).
-   Rust-red scale tones with a paler belly. Skittish crouch. ~0.95u tall, base disc r=0.32.
-   Deliberately NOT a small dragonborn adventurer: rattier posture, a spear not fine gear, no
-   clothing — a scrappy tunnel creature. Imported by mon-kobold-probe.html. */
-import { THREE, V, quad, tube, stack, ring, stitch, capFan } from '../probe-lib.js';
+/* dev/model-qa/creatures/mon-kobold.js — KOBOLD (REBUILD, foundry pilot, rebuild-w4 cell 8),
+   HUMANOID-REPTILE family, Small, CR 1/8, realm core. Authored under docs/MODEL-FOUNDRY.md's
+   1,000-2,000 tri band. Preserves the prior pass's palette intent (rust-red scale + pale belly,
+   scrappy tunnel-creature register, no clothing/gear beyond the thrown rock) and its named
+   signature (the balancing tail + snout) — geometry replaced end to end for the skitter-throw.
+
+   FEATURE CHECKLIST (the budget buys):
+     1. HUMANOID-REPTILE Small biped per the digitigrade construction rule (ANATOMY-CANON quadruped
+        hock logic adapted to two legs): forward-thrust knee, high backward-drawn hock, clawed toes.
+     2. SIGNATURE — the balancing TAIL, whipped out hard to one side (away from the throwing arm)
+        at shoulder height, countering the twisted backpedal torque — the loudest read in silhouette.
+     3. Snout + tiny horns — short forward snout on a small dragonkin skull, two stub horn nubs.
+     4. The throwing arm — cocked past the shoulder, wrist snapped forward, a rock just leaving the
+        clawed fingers (a small trailing sphere, not gripped) — the mid-release instant.
+     5. Pale belly/throat scale ladder (law-3 high-value zone) against rust-red back/limb scale.
+     6. The SKITTER-THROW pose (law 5) — mid-backpedal: weight rocking onto the trailing back leg,
+        lead leg kicking free off the ground, torso torqued and canted backward+away from the throw
+        line, head cringing down and away from its own release, tail whipped for balance. Never a
+        standing idle stance.
+
+   POSE SENTENCE: mid-backpedal — the trailing leg planted and driving the body away, the lead leg
+   kicked loose off the ground, torso wrenched back off the throw line, the right arm snapped
+   forward at full extension with the rock just leaving its claws, the head flinched down and away
+   from its own throw, and the tail whipped hard to the left for balance.
+
+   Small, base disc r=0.32. Whole-object grammar: one function, one geometry frame, no anchors.
+   Spine +z (front), up +y, ground y=0. Imported by ps1-sheet.html (SETS['rebuild-w4'], cell 8,
+   fn buildKobold). */
+import { THREE, V, quad, tube, stack, ring, stitch, capFan, blob } from '../probe-lib.js';
 
 export function buildKobold(){
-  /* ---------- PALETTE (VS desaturated; rust-red scale + pale belly) ---------- */
+  /* ---------- PALETTE (kept from the prior pass — VS desaturated rust-red scale + pale belly) ---------- */
   const P = {
     scale:0x9a4a34, scaleDk:0x672f22, scaleLt:0xb56a4a,     // rust-red hide
-    belly:0xc0a274, bellyDk:0x94794f,                       // paler underbelly / throat
+    belly:0xd4b688, bellyDk:0xa8895a,                       // paler underbelly / throat, lifted for value contrast (R1 self-correction)
     horn:0x3a3128, hornTip:0x241f1a, nail:0x2b2620,
-    wood:0x6a5334, woodDk:0x4a3a22, iron:0x82868a, ironDk:0x565a5e, cord:0x4c4029,
-    eye:0xd8a838, eyeDk:0x1a0f0a, disc:0x4a4038, discTop:0x585047,
+    eye:0xf0c860, eyeDk:0x1a0f0a,
+    rock:0x8a8276, rockDk:0x625a4e,
+    disc:0x4a4038, discTop:0x585047,
   };
 
-  /* ---------- LANDMARKS — tiny skittish frame, snouted head, hunched. Small head (dragonkin,
-     not the huge goblin cranium — the SNOUT carries the read, not skull size). ~0.95u top. ---------- */
+  /* ---------- LANDMARKS — tiny frame, torso torqued back off the throw line. ---------- */
   const L = {
-    hipY:0.360, waistY:0.400, chestY:0.470, shldY:0.515, neckY:0.540,
+    hipY:0.330, waistY:0.375, chestY:0.450, shldY:0.500, neckY:0.525,
     hipHalf:0.086, shoulderX:0.140,
-    jawY:0.560, muzzleY:0.585, browY:0.685, crownY:0.790, headTopY:0.855,
+    jawY:0.545, muzzleY:0.572, browY:0.665, crownY:0.765, headTopY:0.828,
   };
 
-  /* forward-lean pitch (skittish crouch) applied to torso + head landmarks */
-  const pitch = (p)=>{ const q=p.clone().sub(V(0,L.hipY,0)); q.applyAxisAngle(V(1,0,0), 0.14); return q.add(V(0,L.hipY,0)); };
+  /* torso/head torque: leans BACK (away from +z throw line) and twists slightly, pivoting from
+     the hip — the backpedal recoil off the release. */
+  const torque = (p)=>{
+    const q=p.clone().sub(V(0,L.hipY,0));
+    q.applyAxisAngle(V(1,0,0), -0.30);   // lean back (opposite the old forward crouch)
+    q.applyAxisAngle(V(0,1,0), 0.16);    // twist off the throw line
+    return q.add(V(0,L.hipY,0));
+  };
 
-  /* ---------- SPEAR FIRST — held TWO-HANDED across the body at a wary diagonal (butt low-right,
-     head high-left, angled forward). Both hand grips are points ON the shaft; the fists derive. ---------- */
-  const BUTT = V(0.245, 0.150, 0.235);                      // low, out to the right, forward
-  const TIP  = V(-0.235, 0.760, 0.115);                     // up + across to the left
-  const SDIR = new THREE.Vector3().subVectors(TIP, BUTT).normalize();
-  const GRIP_LO = BUTT.clone().addScaledVector(SDIR, 0.235);   // lower (right) fist
-  const GRIP_HI = BUTT.clone().addScaledVector(SDIR, 0.470);   // upper (left) fist
-  {
-    /* wooden shaft, butt to just below the head */
-    tube(BUTT, TIP.clone().addScaledVector(SDIR,-0.145), 0.019, 0.017, 6, P.wood, {capA:{hex:P.woodDk, lift:0.01}});
-    /* cord binding wraps at each grip (a darker collar) */
-    for(const g of [GRIP_LO, GRIP_HI]) tube(g.clone().addScaledVector(SDIR,-0.024), g.clone().addScaledVector(SDIR,0.024), 0.023, 0.022, 6, P.cord);
-    /* leaf spearhead: socket + tapering blade to a point */
-    const up=V(0,0,1), su=new THREE.Vector3().crossVectors(up,SDIR).normalize(), sv=new THREE.Vector3().crossVectors(SDIR,su).normalize();
-    const base=TIP.clone().addScaledVector(SDIR,-0.145);
-    tube(base.clone().addScaledVector(SDIR,-0.02), base, 0.022, 0.020, 6, P.ironDk);   // socket collar
-    const bl=(t,w,th)=>{ const c=base.clone().addScaledVector(SDIR,t);
-      return [ c.clone().addScaledVector(su,w), c.clone().addScaledVector(sv,th), c.clone().addScaledVector(su,-w), c.clone().addScaledVector(sv,-th) ]; };
-    const s0=bl(0.0,0.020,0.014), s1=bl(0.040,0.034,0.016), s2=bl(0.110,0.018,0.010), s3=bl(0.150,0.006,0.004);
-    stitch([s0,s1,s2,s3], (b)=> b<2?P.ironDk:P.iron);
-    capFan(s3, base.clone().addScaledVector(SDIR,0.185), P.iron);
-  }
-
-  /* ---------- TORSO — slight, reptilian. Paler belly on the front, rust scale on the back/sides.
-     One loft, pitched forward for the skittish crouch. No clothing. ---------- */
+  /* ---------- TORSO — slight, reptilian, torqued back off the throw. Paler belly on the front,
+     rust scale on the back/sides. No clothing. ---------- */
   stack([
-    {y:L.hipY,   rx:0.108, rz:0.092, hex:P.scaleDk},
-    {y:L.waistY, rx:0.100, rz:0.084, hex:P.scale},
-    {y:L.chestY, rx:0.128, rz:0.100, hex:P.scale},
-    {y:L.shldY,  rx:0.132, rz:0.098, hex:P.scale},
-    {y:L.neckY,  rx:0.052, rz:0.050, hex:P.scaleDk},
-  ], 8, {xform:pitch, capTop:{hex:P.scaleDk, lift:0.004}});
+    {y:L.hipY,   rx:0.104, rz:0.090, hex:P.scaleDk},
+    {y:L.waistY, rx:0.098, rz:0.082, hex:P.scale},
+    {y:L.chestY, rx:0.122, rz:0.098, hex:P.scale},
+    {y:L.shldY,  rx:0.128, rz:0.096, hex:P.scale},
+    {y:L.neckY,  rx:0.050, rz:0.048, hex:P.scaleDk},
+  ], 8, {xform:torque, capTop:{hex:P.scaleDk, lift:0.004}});
 
-  /* pale belly strip — a few front-arc quads over the torso loft (throat-to-gut underbelly) */
+  /* pale belly strip — front-arc quads over the torso loft (throat-to-gut underbelly, the
+     high-value law-3 zone). Raised past the shell radius so it isn't buried. */
   {
     const yb=[L.hipY+0.01, L.waistY, L.chestY, L.shldY-0.01];
-    const rr=[0.094, 0.086, 0.102, 0.100];
-    const rings = yb.map((y,k)=>ring(V(0,y,0), V(0,1,0), rr[k], rr[k]*0.82, 8, Math.PI/8).map(pitch));
+    const rr=[0.090, 0.082, 0.098, 0.096];
+    const rings = yb.map((y,k)=>ring(V(0,y,0), V(0,1,0), rr[k]*1.16, rr[k]*0.94, 8, Math.PI/8).map(torque));
     for(let b=0;b<rings.length-1;b++) for(const i of [1,2]){ const i2=(i+1)%8;
-      quad(rings[b][i].clone().add(V(0,0,0.004)), rings[b][i2].clone().add(V(0,0,0.004)),
-           rings[b+1][i2].clone().add(V(0,0,0.004)), rings[b+1][i].clone().add(V(0,0,0.004)), P.belly, 0.05);
+      quad(rings[b][i], rings[b][i2], rings[b+1][i2], rings[b+1][i], P.belly, 0.05);
     }
   }
 
-  /* ---------- HEAD — small dragonkin skull with a short forward snout. The snout is smaller than
-     the dragonborn's (fewer/shorter segments) so it reads scrappy, not noble. Two tiny horn nubs. ---------- */
+  /* ---------- HEAD — small dragonkin skull, short forward snout, two tiny horn nubs. Flinched
+     DOWN and away from the throw (extra forward+down pitch layered on the torso torque). ---------- */
+  let eyeCtr=[];
   {
+    const flinch = (p)=>{
+      const q=torque(p).sub(torque(V(0,L.neckY,0)));
+      q.applyAxisAngle(V(1,0,0), -0.22);   // chin tucks down further
+      q.applyAxisAngle(V(0,1,0), 0.26);    // head turns away from the throw line
+      return q.add(torque(V(0,L.neckY,0)));
+    };
     const n=8, ph=Math.PI/n;
     const bands=[
-      {y:L.jawY,    rx:0.070, rz:0.074, hex:P.scale},        // smaller skull so the SNOUT dominates
-      {y:L.muzzleY, rx:0.082, rz:0.084, hex:P.scale},        // (not a goblin cranium)
-      {y:L.browY,   rx:0.086, rz:0.078, hex:P.scale},
-      {y:L.crownY,  rx:0.066, rz:0.058, hex:P.scaleDk},
+      {y:L.jawY,    rx:0.068, rz:0.072, hex:P.scale},
+      {y:L.muzzleY, rx:0.080, rz:0.082, hex:P.scale},
+      {y:L.browY,   rx:0.084, rz:0.076, hex:P.scale},
+      {y:L.crownY,  rx:0.064, rz:0.056, hex:P.scaleDk},
     ];
-    const rings=bands.map(b=>ring(V(0,b.y,0.008), V(0,1,0), b.rx, b.rz, n, ph)).map(r=>r.map(pitch));
-    /* brow ridge push */
-    for(const i of [1,2]){ rings[2][i].z += 0.014; rings[2][i].y -= 0.008; }
+    const rings=bands.map(b=>ring(V(0,b.y,0.008), V(0,1,0), b.rx, b.rz, n, ph)).map(r=>r.map(flinch));
     for(let b=0;b<rings.length-1;b++){
       for(let i=0;i<n;i++){ const i2=(i+1)%n;
         quad(rings[b][i], rings[b][i2], rings[b+1][i2], rings[b+1][i], bands[b].hex, 0.07);
       }
     }
-    capFan(rings[3], pitch(V(0, L.headTopY, 0.004)), P.scaleDk);
+    capFan(rings[3], flinch(V(0, L.headTopY, 0.004)), P.scaleDk);
 
-    /* SHORT SNOUT — a stubby wedge projecting forward (+z), built from two short chained tubes
-       on a +z-leaning axis, tapering to a blunt nose. Smaller/shorter than the dragonborn muzzle. */
-    const muzBase = pitch(V(0, L.muzzleY-0.008, 0.092));
-    const muzMid  = pitch(V(0, L.muzzleY-0.026, 0.168));
-    const muzTip  = pitch(V(0, L.muzzleY-0.040, 0.222));
-    tube(muzBase, muzMid, 0.082, 0.060, n, P.scale, {raz:0.064, rbz:0.048, phase:ph});
-    tube(muzMid, muzTip, 0.060, 0.028, n, P.scaleLt, {raz:0.048, rbz:0.022, phase:ph, capB:{hex:P.scaleDk, lift:0.010}});
+    /* SHORT SNOUT — stubby forward wedge, tapering to a blunt nose. */
+    const muzBase = flinch(V(0, L.muzzleY-0.008, 0.090));
+    const muzMid  = flinch(V(0, L.muzzleY-0.024, 0.164));
+    const muzTip  = flinch(V(0, L.muzzleY-0.036, 0.216));
+    tube(muzBase, muzMid, 0.080, 0.058, n, P.scale, {raz:0.062, rbz:0.046, phase:ph});
+    tube(muzMid, muzTip, 0.058, 0.026, n, P.scaleLt, {raz:0.046, rbz:0.020, phase:ph, capB:{hex:P.scaleDk, lift:0.010}});
     /* pale under-snout (throat) strip */
-    quad(pitch(V(-0.036,L.muzzleY-0.044,0.100)), pitch(V(0.036,L.muzzleY-0.044,0.100)),
-         pitch(V(0.020,L.muzzleY-0.055,0.205)), pitch(V(-0.020,L.muzzleY-0.055,0.205)), P.belly, 0.05);
+    quad(flinch(V(-0.034,L.muzzleY-0.042,0.098)), flinch(V(0.034,L.muzzleY-0.042,0.098)),
+         flinch(V(0.018,L.muzzleY-0.052,0.200)), flinch(V(-0.018,L.muzzleY-0.052,0.200)), P.belly, 0.05);
 
-    /* TWO TINY HORN NUBS — short back-swept stubs off the top/rear of the skull (much smaller
-       than the dragonborn's; just nubs). */
+    /* eyes — squeezed averted, glancing back toward the throw despite the flinch (the "did it
+       land" beat); small bright dots so the flinch reads as a choice, not blindness. */
     for(const s of [-1,1]){
-      const hb=pitch(V(s*0.052, L.crownY-0.010, -0.018));
-      const ht=pitch(V(s*0.070, L.crownY+0.048, -0.070));
-      tube(hb, ht, 0.020, 0.006, 5, P.horn, {capB:{hex:P.hornTip, lift:0.006}});
+      const ec=flinch(V(s*0.052, L.browY+0.004, 0.070));
+      eyeCtr.push(ec);
+      blob(ec.x, ec.y, ec.z, 0.014, 0.012, 0.011, P.eye, 5, 3);
+    }
+
+    /* TWO TINY HORN NUBS — short back-swept stubs off the top/rear of the skull. */
+    for(const s of [-1,1]){
+      const hb=flinch(V(s*0.050, L.crownY-0.010, -0.016));
+      const ht=flinch(V(s*0.066, L.crownY+0.044, -0.064));
+      tube(hb, ht, 0.019, 0.006, 5, P.horn, {capB:{hex:P.hornTip, lift:0.006}});
     }
   }
 
-  /* ---------- ARMS — thin. Both fists DERIVE from the two spear grips (two-handed hold). Right
-     grips low, left grips high. Small 3-claw hands wrap each grip. ---------- */
-  const clawHand = (ctr, faceDir, hex)=>{
+  /* ---------- ARMS. Right = the THROWING arm, snapped forward at full extension, wrist past
+     the release point, a rock just leaving the clawed fingers (small trailing sphere, gap from
+     the hand). Left = flung back/out for counterbalance, claws splayed. ---------- */
+  const clawHand = (ctr, faceDir, hex, spread=0.026)=>{
     const d=faceDir.clone().normalize();
     const side=new THREE.Vector3().crossVectors(V(0,1,0),d).normalize();
-    tube(ctr.clone().addScaledVector(d,-0.024), ctr.clone().addScaledVector(d,0.024), 0.040, 0.036, 6, hex, {capA:{hex}, capB:{hex}});
-    for(const off of [-0.7,0,0.7]){
-      const kb=ctr.clone().addScaledVector(d,0.020).addScaledVector(side, off*0.026);
-      const kt=kb.clone().addScaledVector(d,0.030).addScaledVector(side, off*0.008);
+    tube(ctr.clone().addScaledVector(d,-0.022), ctr.clone().addScaledVector(d,0.022), 0.038, 0.034, 6, hex, {capA:{hex}, capB:{hex}});
+    for(const off of [-0.9,0,0.9]){
+      const kb=ctr.clone().addScaledVector(d,0.018).addScaledVector(side, off*spread);
+      const kt=kb.clone().addScaledVector(d,0.034).addScaledVector(side, off*0.010);
       tube(kb, kt, 0.010, 0.004, 4, hex, {capB:{hex:P.nail, lift:0.003}});
     }
   };
   {
-    /* right arm -> lower grip */
-    const S=pitch(V(L.shoulderX, L.shldY-0.005, 0.02));
-    const E=V(0.185, 0.360, 0.120);
-    tube(S,E,0.034,0.028,6,P.scale);
-    tube(E,GRIP_LO,0.028,0.024,6,P.scale);
-    clawHand(GRIP_LO, SDIR, P.scaleLt);
+    /* right arm -> full extension throw, wrist snapped forward-down past shoulder height */
+    const S=torque(V(L.shoulderX, L.shldY-0.005, 0.02));
+    const E=V(0.235, 0.480, 0.290);           // elbow driven forward
+    const W=V(0.255, 0.410, 0.470);           // wrist at full extension, past the body line
+    tube(S,E,0.033,0.027,6,P.scale);
+    tube(E,W,0.027,0.020,6,P.scale);
+    const throwDir=new THREE.Vector3().subVectors(W,E).normalize();
+    clawHand(W, throwDir, P.scaleLt, 0.030);
+    /* the rock — mid-release, just clear of the fingers along the throw line */
+    const rockC = W.clone().addScaledVector(throwDir, 0.075);
+    blob(rockC.x, rockC.y, rockC.z, 0.024, 0.021, 0.023, P.rock, 6, 4);
+    blob(rockC.x-0.006, rockC.y-0.004, rockC.z+0.004, 0.010, 0.009, 0.010, P.rockDk, 4, 2);
 
-    /* left arm -> upper grip (reaches across, wary) */
-    const S2=pitch(V(-L.shoulderX, L.shldY-0.005, 0.02));
-    const E2=V(-0.175, 0.470, 0.130);
-    tube(S2,E2,0.034,0.028,6,P.scale);
-    tube(E2,GRIP_HI,0.028,0.024,6,P.scale);
-    clawHand(GRIP_HI, SDIR, P.scaleLt);
+    /* left arm -> flung back/out for counterbalance, claws splayed open */
+    const S2=torque(V(-L.shoulderX, L.shldY-0.005, 0.02));
+    const E2=V(-0.210, 0.430, -0.130);
+    const W2=V(-0.235, 0.380, -0.280);
+    tube(S2,E2,0.033,0.027,6,P.scale);
+    tube(E2,W2,0.027,0.020,6,P.scale);
+    const backDir=new THREE.Vector3().subVectors(W2,E2).normalize();
+    clawHand(W2, backDir, P.scaleLt, 0.032);
   }
 
-  /* ---------- LEGS — digitigrade-hinted: a sharp forward reverse-knee (hip -> knee forward ->
-     ankle back -> toe forward), spindly, in a skittish crouch. Clawed feet. ---------- */
+  /* ---------- LEGS — digitigrade-hinted backpedal: trailing (back, -z-ish) leg planted and
+     driving weight away, lead leg kicked FREE off the ground (toe clear, knee high). ---------- */
   {
-    // digitigrade: knee forward and high, ankle (hock) pulled back + low, then a forward foot
-    const buildLeg=(sx)=>{
-      const hip = V(sx*L.hipHalf, L.hipY-0.02, 0.01);
-      const knee= V(sx*0.115, 0.230, 0.100);                 // knee thrust FORWARD (+z) + up
-      const hock= V(sx*0.118, 0.135, 0.020);                 // ankle/hock pulled back + low (the reverse bend, softened)
-      const toe = V(sx*0.112, 0.055, 0.080);                 // foot plants forward again
-      tube(hip, knee, 0.044, 0.034, 6, P.scale);
-      tube(knee, hock, 0.032, 0.024, 6, P.scaleDk);
-      tube(hock, toe, 0.026, 0.020, 6, P.scaleDk, {capA:{hex:P.scaleDk}});
-      /* clawed foot: heel pad + 3 forward claw toes */
-      const d=V(sx*0.10,0,1).normalize();
-      const heel=V(toe.x, 0.045, toe.z);
+    /* trailing leg (left, sx=-1) — planted, weight-bearing, driving the backpedal */
+    const hipL = V(-L.hipHalf, L.hipY-0.02, -0.010);
+    const kneeL= V(-0.120, 0.215, -0.110);
+    const hockL= V(-0.128, 0.115, -0.045);
+    const toeL = V(-0.118, 0.040, -0.130);          // planted behind, driving the push-off
+    tube(hipL, kneeL, 0.046, 0.035, 6, P.scale);
+    tube(kneeL, hockL, 0.033, 0.025, 6, P.scaleDk);
+    tube(hockL, toeL, 0.026, 0.020, 6, P.scaleDk, {capA:{hex:P.scaleDk}});
+    {
+      const d=V(-0.10,0,-1).normalize();
+      const heel=V(toeL.x, 0.038, toeL.z);
       const side=new THREE.Vector3().crossVectors(V(0,1,0),d).normalize();
       for(const off of [-1,0,1]){
-        const tb=heel.clone().addScaledVector(side, off*0.024);
-        const tt=tb.clone().addScaledVector(d,0.070).addScaledVector(side, off*0.006);
-        tube(tb, tt, 0.013, 0.005, 4, P.scaleDk, {capB:{hex:P.nail, lift:0.004}});
+        const tb=heel.clone().addScaledVector(side, off*0.023);
+        const tt=tb.clone().addScaledVector(d,0.066).addScaledVector(side, off*0.006);
+        tube(tb, tt, 0.012, 0.005, 4, P.scaleDk, {capB:{hex:P.nail, lift:0.004}});
       }
-    };
-    buildLeg(-1); buildLeg(1);
+    }
+
+    /* lead leg (right, sx=1) — kicked free, off the ground: knee thrust high+forward, toe
+       trailing clear of the floor, the mid-backpedal beat. */
+    const hipR = V(0.086, L.hipY-0.02, 0.010);
+    const kneeR= V(0.150, 0.290, 0.185);
+    const hockR= V(0.145, 0.195, 0.150);
+    const toeR = V(0.128, 0.135, 0.205);            // never reaches y=0 — kicked clear of the ground
+    tube(hipR, kneeR, 0.044, 0.034, 6, P.scale);
+    tube(kneeR, hockR, 0.031, 0.024, 6, P.scaleDk);
+    tube(hockR, toeR, 0.025, 0.018, 6, P.scaleDk, {capA:{hex:P.scaleDk}});
+    {
+      const d=V(0.10,0.15,1).normalize();
+      const side=new THREE.Vector3().crossVectors(V(0,1,0),d).normalize();
+      for(const off of [-1,0,1]){
+        const tb=toeR.clone().addScaledVector(side, off*0.020);
+        const tt=tb.clone().addScaledVector(d,0.058).addScaledVector(side, off*0.005);
+        tube(tb, tt, 0.011, 0.004, 4, P.scaleDk, {capB:{hex:P.nail, lift:0.004}});
+      }
+    }
   }
 
-  /* ---------- TAIL — thin reptile tail chained from the LOW SPINE, dropping DOWN and BACK (-z)
-     to the ground behind the base disc, then curling up at the tip. Root sits low + well behind
-     the torso so it emerges from behind, not through the body. ---------- */
+  /* ---------- TAIL — the SIGNATURE. Whipped out HARD to the left (opposite the throwing arm),
+     roughly shoulder-height, countering the backpedal torque — the loudest silhouette read, not
+     a low trailing drop. Chained from the low spine, sweeping up and OUT-and-FORWARD (+z, toward
+     the dimetric camera at yaw45) so the whip clears the torso mass instead of hiding behind it
+     (R1 SELF-CORRECTION: the first pass swung -x/-z, straight away from the yaw45 camera —
+     it vanished behind the body in the engine render; flipped the z sweep to +z here).
+     R2 CRITIC FIX: projected the landmark chain through the actual figureScene camera — the
+     outer third (t3->tip) tapered to 0.018-0.009 radius (diameter 0.036-0.018u), BELOW the
+     0.04u law-3 feature floor, so it dissolved into a thin disconnected fleck at 1/3-res
+     (readable in the r2 capture only as an ambiguous fragment near the head, easily mistaken
+     for a leg). Fix: floor every segment's diameter above 0.04u, and swap the outer half from
+     scaleLt/scaleDk to the PALE belly tones so the tail's tip — not the belly patch — carries
+     the law-3 high-value zone, the loud signature the laws require. */
   {
-    const root = V(0.02, L.hipY-0.06, -0.175);    // low + well behind the torso
-    const t1   = V(0.045, 0.245, -0.270);         // drops DOWN-and-back, staying near centerline
-    const t2   = V(0.075, 0.170, -0.360);         // continues arcing down behind the disc
-    const t3   = V(0.095, 0.105, -0.415);
-    const t4   = V(0.105, 0.070, -0.420);         // reaches the ground behind the disc edge
-    const tip  = V(0.110, 0.105, -0.375);         // tip flicks up (alert)
-    tube(root, t1, 0.072, 0.058, 8, P.scale,   {phase:Math.PI/8});
-    tube(t1,   t2, 0.058, 0.044, 8, P.scale,   {phase:Math.PI/8});
-    tube(t2,   t3, 0.044, 0.030, 8, P.scaleLt, {phase:Math.PI/8});
-    tube(t3,   t4, 0.030, 0.019, 8, P.scaleLt, {phase:Math.PI/8});
-    tube(t4,   tip,0.019, 0.010, 8, P.scaleDk, {phase:Math.PI/8, capB:{hex:P.scaleDk, lift:0.006}});
+    const root = V(-0.02, L.hipY-0.04, -0.060);
+    const t1   = V(-0.150, L.waistY+0.06,  0.045);
+    const t2   = V(-0.300, L.chestY+0.02,  0.150);
+    const t3   = V(-0.410, L.chestY-0.02,  0.130);
+    const t4   = V(-0.475, L.chestY-0.05,  0.040);
+    const tip  = V(-0.480, L.chestY+0.04, -0.045);   // tip curls back — the balancing flick
+    tube(root, t1, 0.070, 0.056, 8, P.scale,   {phase:Math.PI/8});
+    tube(t1,   t2, 0.056, 0.042, 8, P.scale,   {phase:Math.PI/8});
+    tube(t2,   t3, 0.042, 0.032, 8, P.scaleLt, {phase:Math.PI/8});
+    tube(t3,   t4, 0.032, 0.024, 8, P.belly,   {phase:Math.PI/8});
+    tube(t4,   tip,0.024, 0.021, 8, P.belly,   {phase:Math.PI/8, capB:{hex:P.bellyDk, lift:0.008}});
   }
 
   /* ---------- base disc (Small: r=0.32) ---------- */

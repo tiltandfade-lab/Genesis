@@ -404,3 +404,10 @@ Suggested waves: U1+U2 ∥ → U3 → U4+U5 ∥ → U6+U7 ∥ → U8+U9 ∥.
    interpretation off the engine's provenance fact, never auto-detected. Confirm.
 7. **U8 table craft pass** — the encounter/hazard tables ship PROVISIONAL; schedule
    the hands-on pass (whole-corpus discipline applies).
+
+## RESOLVED — Adam's rulings (2026-07-08 night)
+1. **Sea lethality: Saltmarsh storm violence kept verbatim** — no softening until a playtest says otherwise.
+2. **Ship loss is permanent** — "adios ship."
+3. **Mutiny at full lethality** — "onto the bardo! we kind of need a million ways to die in this game."
+4. **Price anchors adopted** (raw Saltmarsh gp + the T2-rescaled upgrades).
+Still open (not yet ruled): PC-as-captain default, stolen-ship heat model, the U8 encounter/hazard craft pass scheduling.

@@ -405,7 +405,11 @@ function codexFullRecord(w, r){
   // REVIEW-FIXES-0705 U4 — the parley angle: creature-only advisory hint of which ability/skill a
   // social_check against this record should roll (Beast -> Wis/Animal Handling, else Cha/Persuasion).
   // Advisory only (the roll stays the DM's, §5 anti-drift); NPCs never carry this field.
-  if(r.kind==="creature" && typeof socialCheckAbilityFor==="function") o.parleyAbility=socialCheckAbilityFor(r);
+  // HQ-3 (ANIMAL-SOCIAL-HQ.md) — widen the gate so animal partials (kind:"npc",
+  // dm.partialKind==="animal") ALSO get the advisory ability hint; previously excluded
+  // because they aren't kind:"creature", so the digest never told the DM to route
+  // WIS/Animal Handling and the engine defaulted to Cha/Persuasion.
+  if((r.kind==="creature" || (r.kind==="npc" && r.dm && r.dm.partialKind==="animal")) && typeof socialCheckAbilityFor==="function") o.parleyAbility=socialCheckAbilityFor(r);
   // ANIMAL-SOCIAL.md §2/§6 U4 — the witness packet rides the digest ONLY once an interview is open
   // (Speak with Animals active, or the DM marked the channel open — r.dm.interviewOpen, set by the
   // animal_interview event). Absent that flag, an animal partial still ships its baseline kind+tell+

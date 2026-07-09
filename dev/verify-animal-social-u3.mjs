@@ -273,5 +273,67 @@ console.log("\n=== GREEN: post-fix behavior ===");
   }
 }
 
+console.log("\n=== HQ-3 (docs/ANIMAL-SOCIAL-HQ.md): parley routing reaches the DM digest ===");
+{
+  // WIRING LAW: drive codexDigest (production entry point), never socialCheckAbilityFor/
+  // animalLevers directly, and never codexFullRecord directly either.
+  // 1. an animal partial's digest record carries parleyAbility (WIS/Animal Handling). Force it
+  // into the here-and-now set via opts.mintIds (a legitimate production path — ON-DEMAND-GEN's
+  // spotlight — codexHereNowIds otherwise excludes an untouched-ambient partial).
+  {
+    const win = newWin();
+    const w = mkWorld(win);
+    const id = mintAnimal(win, w, { env:"village" });
+    const digest = win.eval(`JSON.stringify(codexDigest(U.worlds['${w.id}'], { atNodeId:'home', mintIds:['${id}'] }))`);
+    const parsed = JSON.parse(digest);
+    const rec = parsed.codex.find(r => r.id === id);
+    check("HQ-3.1: an animal partial's codexDigest record carries parleyAbility (WIS/Animal Handling)",
+      !!rec && rec.parleyAbility && rec.parleyAbility.ability === "wis" && rec.parleyAbility.skill === "Animal Handling",
+      JSON.stringify(rec));
+  }
+
+  // 2. a hungry-tagged animal's social_check ledger entry shows the derived feeding lever merged
+  // in (dm.js's own `leversDerived` ledger-data field, U4's precedent for surfacing the engine's
+  // auto-merged levers) — driven purely through applyEvent, no declared feeding lever supplied.
+  {
+    const win = newWin();
+    const w = mkWorld(win);
+    const id = mintAnimal(win, w, { env:"village" });
+    win.eval(`codexGet(U.worlds['${w.id}'], '${id}').dm.need = "hungry";`);
+    win.eval(`applyEvent(U.worlds['${w.id}'], { type:"social_check",
+      payload:{ target:'${id}', skill:"animal handling", total:1, dc:1 } });`);
+    const lastEntry = win.eval(`U.worlds['${w.id}'].ledger[U.worlds['${w.id}'].ledger.length-1]`);
+    const derived = (lastEntry && lastEntry.data && lastEntry.data.leversDerived) || [];
+    check("HQ-3.2: a hungry animal's social_check ledger entry lists the derived feeding lever (production merge, no lever declared)",
+      derived.includes("feeding"), JSON.stringify(lastEntry));
+  }
+
+  // 3. creatures (kind:"creature") are unchanged — existing parleyAbility path still fires.
+  {
+    const win = newWin();
+    const w = mkWorld(win);
+    win.eval(`codexAdd(U.worlds['${w.id}'], { kind:"creature", id:"wolf-1", name:"Wolf",
+      fields:{ type:"beast" }, dm:{}, status:{ soft:true, at:'home' } });`);
+    win.eval(`codexAttitudeOpen(U.worlds['${w.id}'], "wolf-1", 0, {cause:"opening"});`);
+    const digest = win.eval(`JSON.stringify(codexDigest(U.worlds['${w.id}'], { atNodeId:'home' }))`);
+    const rec = JSON.parse(digest).codex.find(r => r.id === "wolf-1");
+    check("HQ-3.3: kind:creature digest record still carries parleyAbility (WIS/Animal Handling, unchanged)",
+      !!rec && rec.parleyAbility && rec.parleyAbility.ability === "wis", JSON.stringify(rec));
+  }
+
+  // 4. human NPC records carry NO parleyAbility (the gate did not over-widen).
+  {
+    const win = newWin();
+    const w = mkWorld(win);
+    win.eval(`codexAdd(U.worlds['${w.id}'], { kind:"npc", id:"human-1", name:"Bob",
+      fields:{}, dm:{}, status:{ soft:true, at:'home' } });`);
+    win.eval(`codexAttitudeOpen(U.worlds['${w.id}'], "human-1", 0, {cause:"opening"});`);
+    const digest = win.eval(`JSON.stringify(codexDigest(U.worlds['${w.id}'], { atNodeId:'home' }))`);
+    const rec = JSON.parse(digest).codex.find(r => r.id === "human-1");
+    check("HQ-3.4: a plain human NPC digest record carries NO parleyAbility (gate not over-widened)",
+      !!rec && !("parleyAbility" in rec), JSON.stringify(rec));
+  }
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

@@ -274,5 +274,206 @@ console.log("\n=== GREEN: HQ-5 — predator scope no longer matches move-zone (D
     !packet.seen.some(s => s.note && s.note.indexOf("quick feet") >= 0), JSON.stringify(packet.seen));
 }
 
+/* ============================================================================================
+   HQ-8 (docs/ANIMAL-SOCIAL-HQ.md) — npc-life writers stamp nodeId; the bird witness channel
+   goes live. RED on master (0e203cd): no npc-life writer stamped nodeId/at, so
+   animalWitnessSeen's location filter excluded every real npc-life entry — the bird's
+   faces-sense ("a two-legged one came and went") was verify-only. THE WIRING LAW: every check
+   below drives a PRODUCTION entry point (applyEvent / worldTurn / companionAdjustLoyalty /
+   seedFromLife / ssFactionTurn) — never a hand-built ledger fixture, never the writer's own
+   addLedger call read directly.
+   ============================================================================================ */
+
+// a variant loader that lets a mutation test patch the SOURCE TEXT of a single module before eval
+// (same "the harness tests itself, no production mutation" posture as verify-animal-table-fingerprint.mjs).
+function newWinPatched(patchFn){
+  const man2 = JSON.parse(read("manifest.json"));
+  const pieces = man2.loadOrder.filter((p) => p.endsWith(".js")).map((p) => {
+    const src = read(p);
+    return patchFn ? patchFn(p, src) : src;
+  });
+  const full = read("tables.js") + "\n;\n" + pieces.join("\n;\n");
+  const dom = new JSDOM(`<!doctype html><html><body><div id="worldView"></div><div id="toast"></div><div id="shelf"></div></body></html>`,
+    { runScripts: "dangerously", url: "http://localhost/" });
+  dom.window.eval(harness + "\n" + full);
+  return dom.window;
+}
+
+console.log("\n=== HQ-8 RED-FIRST: a production npc-life event (the turn life-event tick) reaches a bird-scope witness ===");
+{
+  const win = newWin();
+  const w = mkWorld(win);
+  const birdId = mintAnimalAtRow(win, w, 3, { id:"bird-hq8", at:"home" });
+  check("(setup) bird row minted", !!birdId, "bird=" + birdId);
+
+  // seed ONE known npc at the node so turnLifeEvent's salience draw deterministically picks it
+  win.eval(`codexAdd(U.worlds['${w.id}'], { id:"npc:known-hq8", kind:"npc", name:"Aldric",
+    status:{ known:true, at:"home", condition:"alive" }, dm:{}, fields:{} });`);
+
+  // production path: advance_clock >= 1 day -> applyEvent's "advance_clock" case -> worldTurn("montage")
+  // -> turnLifeEvent(w, w.currentNodeId, {monthsLong:true}) (src/world/turn.js — the real writer).
+  const advRes = JSON.parse(win.eval(`JSON.stringify(applyEvent(U.worlds['${w.id}'], {type:"advance_clock", payload:{days:1}}))`));
+  check("(setup) advance_clock fired via production applyEvent", advRes.ok === true, JSON.stringify(advRes));
+  const lifeEntry = JSON.parse(win.eval(`JSON.stringify((U.worlds['${w.id}'].ledger||[]).find(function(e){return e.type==="npc-life" && e.data && e.data.kind==="life-event";}))`));
+  check("(setup) a life-event npc-life ledger entry was written", !!lifeEntry, JSON.stringify(lifeEntry));
+
+  const openRes = JSON.parse(win.eval(`JSON.stringify(applyEvent(U.worlds['${w.id}'], {type:"animal_interview", payload:{id:'${birdId}', open:true}}))`));
+  check("(setup) interview opened via applyEvent", openRes.ok === true && openRes.interviewOpen === true, JSON.stringify(openRes));
+
+  const packet = JSON.parse(win.eval(`JSON.stringify(animalWitness(U.worlds['${w.id}'], codexGet(U.worlds['${w.id}'], '${birdId}')))`));
+  check("ACCEPT (check 1, life-event leg): the bird's seen[] contains the npc-life life-event entry (nodeId now stamped)",
+    packet.seen.some(s => lifeEntry && s.day === lifeEntry.day && s.note && s.note.indexOf("two-legged") >= 0),
+    JSON.stringify(packet.seen));
+  check("ledger entry's data carries nodeId (the only data change)",
+    lifeEntry && lifeEntry.data.nodeId === "home", JSON.stringify(lifeEntry));
+  check("ledger entry's prose twin is byte-unchanged (starts with '◆ Aldric — ')",
+    lifeEntry && lifeEntry.text.indexOf("◆ Aldric — ") === 0, JSON.stringify(lifeEntry));
+}
+
+console.log("\n=== HQ-8 GREEN: companion desertion / pet-wanders / sidekick departure+death stamp nodeId, reach a bird witness ===");
+{
+  const win = newWin();
+  const w = mkWorld(win);
+  const birdId = mintAnimalAtRow(win, w, 3, { id:"bird-hq8-comp", at:"home" });
+  win.eval(`
+    U.worlds['${w.id}'].companions = { hirelings:[{id:"h1", codexId:"npc:hire-1", name:"Bram", role:"guide", loyalty:0}], pets:[], sidekickId:null, sidekick:null };
+    codexAdd(U.worlds['${w.id}'], { id:"npc:hire-1", kind:"npc", name:"Bram", status:{ known:true, at:"home" }, dm:{}, fields:{} });
+    companionDesert(U.worlds['${w.id}'], U.worlds['${w.id}'].companions.hirelings[0]);
+  `);
+  const desertEntry = JSON.parse(win.eval(`JSON.stringify((U.worlds['${w.id}'].ledger||[]).find(function(e){return e.data&&e.data.kind==="desertion";}))`));
+  check("(setup) desertion fired via the production companionDesert path with nodeId stamped",
+    desertEntry && desertEntry.data.nodeId === "home", JSON.stringify(desertEntry));
+  const openRes = JSON.parse(win.eval(`JSON.stringify(applyEvent(U.worlds['${w.id}'], {type:"animal_interview", payload:{id:'${birdId}', open:true}}))`));
+  check("(setup) interview opened", openRes.ok === true);
+  const packet = JSON.parse(win.eval(`JSON.stringify(animalWitness(U.worlds['${w.id}'], codexGet(U.worlds['${w.id}'], '${birdId}')))`));
+  check("ACCEPT: bird witness sees the desertion (companions.js:160/165 nodeId stamp)",
+    packet.seen.some(s => desertEntry && s.day === desertEntry.day), JSON.stringify(packet.seen));
+}
+{
+  const win = newWin();
+  const w = mkWorld(win);
+  win.eval(`
+    U.worlds['${w.id}'].companions = { hirelings:[], pets:[{id:"p1", codexId:"npc:pet-1", name:"Fen", loyalty:0}], sidekickId:null, sidekick:null };
+    codexAdd(U.worlds['${w.id}'], { id:"npc:pet-1", kind:"npc", name:"Fen", status:{ known:true, at:"home" }, dm:{}, fields:{} });
+    companionPetWanders(U.worlds['${w.id}'], U.worlds['${w.id}'].companions.pets[0]);
+  `);
+  const wandersEntry = JSON.parse(win.eval(`JSON.stringify((U.worlds['${w.id}'].ledger||[]).find(function(e){return e.data&&e.data.kind==="pet-wanders";}))`));
+  check("ACCEPT: companionPetWanders stamps nodeId from the pet's own codex record (companions.js:293/299)",
+    wandersEntry && wandersEntry.data.nodeId === "home", JSON.stringify(wandersEntry));
+}
+{
+  const win = newWin();
+  const w = mkWorld(win);
+  win.eval(`
+    U.worlds['${w.id}'].companions = { hirelings:[], pets:[], sidekickId:"npc:side-1",
+      sidekick:{ id:"npc:side-1", loyalty:0 } };
+    codexAdd(U.worlds['${w.id}'], { id:"npc:side-1", kind:"npc", name:"Toma", status:{ known:true, at:"home" }, dm:{}, fields:{} });
+    companionSidekickLeaves(U.worlds['${w.id}']);
+  `);
+  const leavesEntry = JSON.parse(win.eval(`JSON.stringify((U.worlds['${w.id}'].ledger||[]).find(function(e){return e.data&&e.data.kind==="sidekick-departure";}))`));
+  check("ACCEPT: companionSidekickLeaves stamps nodeId from the sidekick's own codex record (companions.js:413/419)",
+    leavesEntry && leavesEntry.data.nodeId === "home", JSON.stringify(leavesEntry));
+}
+{
+  const win = newWin();
+  const w = mkWorld(win);
+  win.eval(`
+    U.worlds['${w.id}'].companions = { hirelings:[], pets:[], sidekickId:"npc:side-2", sidekick:{ id:"npc:side-2", loyalty:3 } };
+    codexAdd(U.worlds['${w.id}'], { id:"npc:side-2", kind:"npc", name:"Vess", status:{ known:true, at:"home" }, dm:{}, fields:{} });
+    companionSidekickDies(U.worlds['${w.id}'], "a wound that would not close");
+  `);
+  const diesEntry = JSON.parse(win.eval(`JSON.stringify((U.worlds['${w.id}'].ledger||[]).find(function(e){return e.data&&e.data.kind==="sidekick-death";}))`));
+  check("ACCEPT: companionSidekickDies stamps nodeId from the sidekick's codex record read BEFORE the condition:dead update (companions.js:441/451)",
+    diesEntry && diesEntry.data.nodeId === "home", JSON.stringify(diesEntry));
+}
+
+console.log("\n=== HQ-8 GREEN: successor-thread stamps npc.status.at ===");
+{
+  const win = newWin();
+  const w = mkWorld(win);
+  win.eval(`
+    var npc = codexAdd(U.worlds['${w.id}'], { id:"npc:linked-1", kind:"npc", name:"Orin", status:{ known:true, at:"north", condition:"alive" }, dm:{}, fields:{} });
+    var thread = codexAdd(U.worlds['${w.id}'], { id:"thread:x", kind:"thread", name:"a favor owed", status:{known:true,soft:false} });
+    codexLink(U.worlds['${w.id}'], thread.id, "part-of", npc.id);
+    turnMintSuccessorThread(U.worlds['${w.id}'], npc, "died");
+  `);
+  const succEntry = JSON.parse(win.eval(`JSON.stringify((U.worlds['${w.id}'].ledger||[]).find(function(e){return e.data&&e.data.kind==="successor-thread";}))`));
+  check("ACCEPT: turnMintSuccessorThread stamps nodeId = npc.status.at (turn.js:399/~407)",
+    succEntry && succEntry.data.nodeId === "north", JSON.stringify(succEntry));
+}
+
+console.log("\n=== HQ-8 GREEN (D-HQ8-2 holds): backstory seeds + faction-turn + animal-tell-refresh stay UNSTAMPED, invisible to every witness ===");
+{
+  const win = newWin();
+  const w = mkWorld(win);
+  const birdId = mintAnimalAtRow(win, w, 3, { id:"bird-hq8-neg", at:"home" });
+  // production backstory-seed path: seedFromLife(w, c) (src/creator/life.js) — a real character's
+  // life.events[].seeds, not a hand-rolled ledger fixture.
+  win.eval(`
+    var c = { id:"pc-1", name:"Kess", life:{ events:[{ seeds:[{ kind:"npc", role:"an old mentor", desc:"taught her the blade", species:"human" }] }] } };
+    U.worlds['${w.id}'].gazetteer = [];
+    seedFromLife(U.worlds['${w.id}'], c);
+  `);
+  const backstoryEntry = JSON.parse(win.eval(`JSON.stringify((U.worlds['${w.id}'].ledger||[]).find(function(e){return e.type==="npc-life" && e.data && e.data.source==="char-genesis";}))`));
+  check("(setup) backstory seed written via production seedFromLife", !!backstoryEntry, JSON.stringify(backstoryEntry));
+  check("D-HQ8-2: creator/life.js's backstory seed carries NO nodeId/at (deliberately unstamped — pre-map, the PC's past)",
+    backstoryEntry && backstoryEntry.data.nodeId == null && backstoryEntry.data.at == null, JSON.stringify(backstoryEntry));
+
+  // production faction-turn path: ssFactionTurn(w) (src/engine/world-gen.js), the same function
+  // worldTurn("montage") calls.
+  win.eval(`U.worlds['${w.id}'].factions=[{name:"The Ashen Guild", clock:{filled:0,size:6}}]; ssFactionTurn(U.worlds['${w.id}']);`);
+  const factionEntry = JSON.parse(win.eval(`JSON.stringify((U.worlds['${w.id}'].ledger||[]).find(function(e){return e.data&&e.data.kind==="faction-turn";}))`));
+  check("(setup) faction-turn written via production ssFactionTurn", !!factionEntry, JSON.stringify(factionEntry));
+  check("D-HQ8-2: world-gen.js's faction-turn carries NO nodeId/at (deliberately unstamped — abstract web motion, not a scene)",
+    factionEntry && factionEntry.data.nodeId == null && factionEntry.data.at == null, JSON.stringify(factionEntry));
+
+  // production animal-tell-refresh path: turnAnimalAllyTellRefresh(w) needs an ally (dm.ally===true).
+  win.eval(`codexGet(U.worlds['${w.id}'], '${birdId}').dm.ally = true; turnAnimalAllyTellRefresh(U.worlds['${w.id}']);`);
+  const tellEntry = JSON.parse(win.eval(`JSON.stringify((U.worlds['${w.id}'].ledger||[]).find(function(e){return e.data&&e.data.kind==="animal-tell-refresh";}))`));
+  check("(setup) animal-tell-refresh written via production turnAnimalAllyTellRefresh", !!tellEntry, JSON.stringify(tellEntry));
+  check("D-HQ8-2: turn.js's animal-tell-refresh carries NO nodeId/at (deliberately unstamped — meta bookkeeping, a bird must not witness a refresh sweep)",
+    tellEntry && tellEntry.data.nodeId == null && tellEntry.data.at == null, JSON.stringify(tellEntry));
+
+  // none of the three unstamped entries can EVER appear in any witness packet — no location, so
+  // animalWitnessSeen's `loc==null` guard excludes them regardless of scope/ledgerTypes.
+  const openRes = JSON.parse(win.eval(`JSON.stringify(applyEvent(U.worlds['${w.id}'], {type:"animal_interview", payload:{id:'${birdId}', open:true}}))`));
+  const packet = JSON.parse(win.eval(`JSON.stringify(animalWitness(U.worlds['${w.id}'], codexGet(U.worlds['${w.id}'], '${birdId}')))`));
+  check("ACCEPT: none of backstory/faction-turn/animal-tell-refresh appear in the bird's witness packet at all (seen[] is empty)",
+    packet.seen.length === 0, JSON.stringify(packet.seen));
+  // the sharper assertion: the raw ledger-window query (bypassing scope) still excludes them by
+  // location alone, since animalWitnessSeen's `loc==null` short-circuit runs before the scope filter.
+  const rawEligible = win.eval(`JSON.stringify((U.worlds['${w.id}'].ledger||[]).filter(function(e){
+    var loc=(e.data&&(e.data.nodeId!=null?e.data.nodeId:e.data.at));
+    return loc!=null;
+  }).map(function(e){return e.data.kind;}))`);
+  check("no-location entries never even enter the location-eligible set (backstory/faction-turn/tell-refresh excluded)",
+    JSON.parse(rawEligible).indexOf("char-genesis")===-1 && JSON.parse(rawEligible).indexOf("faction-turn")===-1 && JSON.parse(rawEligible).indexOf("animal-tell-refresh")===-1,
+    rawEligible);
+}
+
+console.log("\n=== HQ-8 MUTATION: stripping the turn.js:354 life-event nodeId stamp turns check 1's life-event leg red ===");
+{
+  const win = newWinPatched((p, src) => {
+    if(p.endsWith("src/world/turn.js")){
+      const patched = src.replace(
+        'addLedger(w,"npc-life",{kind:"life-event",npcId:npc.id,name:npc.name,fate,band:roll.band,monthsLong:!!opts.monthsLong,nodeId},',
+        'addLedger(w,"npc-life",{kind:"life-event",npcId:npc.id,name:npc.name,fate,band:roll.band,monthsLong:!!opts.monthsLong},'
+      );
+      if(patched === src) throw new Error("HQ-8 mutation anchor not found in turn.js — update the mutation test's string match");
+      return patched;
+    }
+    return src;
+  });
+  const w = mkWorld(win);
+  const birdId = mintAnimalAtRow(win, w, 3, { id:"bird-hq8-mut", at:"home" });
+  win.eval(`codexAdd(U.worlds['${w.id}'], { id:"npc:known-mut", kind:"npc", name:"Aldric", status:{ known:true, at:"home", condition:"alive" }, dm:{}, fields:{} });`);
+  win.eval(`applyEvent(U.worlds['${w.id}'], {type:"advance_clock", payload:{days:1}})`);
+  const lifeEntry = JSON.parse(win.eval(`JSON.stringify((U.worlds['${w.id}'].ledger||[]).find(function(e){return e.type==="npc-life" && e.data && e.data.kind==="life-event";}))`));
+  win.eval(`applyEvent(U.worlds['${w.id}'], {type:"animal_interview", payload:{id:'${birdId}', open:true}})`);
+  const packet = JSON.parse(win.eval(`JSON.stringify(animalWitness(U.worlds['${w.id}'], codexGet(U.worlds['${w.id}'], '${birdId}')))`));
+  check("MUTATION: with the nodeId stamp stripped, the bird's seen[] does NOT contain the life-event (proves check 1 is load-bearing)",
+    lifeEntry && lifeEntry.data.nodeId === undefined && !packet.seen.some(s => s.day === lifeEntry.day), JSON.stringify({lifeEntry, seen:packet.seen}));
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

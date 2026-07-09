@@ -604,10 +604,31 @@ function rollBuildingInterior(opts){
   };
 }
 
+/* rollDimsInCells(space) -> {w,d} — GRID LAW (docs/PLACE-GEN.md ADDENDUM §A): uniform-integer pick
+   within PLACE_SPACE_CELLS[space]'s band, using rollDie (Math.random-backed, same rng discipline
+   the rest of this file uses — no explicit seeded-rng threading here, matching roleForRealm's
+   call-with-no-rng convention at this file's rollNPC call site). Defensive: an unknown/missing
+   space (or a missing PLACE_SPACE_CELLS load) falls back to the "roomy" band's own shape so a
+   place NEVER mints without dims once this path is reached. */
+function rollDimsInCells(space){
+  const bands=(typeof PLACE_SPACE_CELLS!=="undefined")?PLACE_SPACE_CELLS:null;
+  const band=(bands&&bands[space])||(bands&&bands.roomy)||{wMin:3,wMax:4,dMin:3,dMax:4};
+  const w=band.wMin+((typeof rollDie==="function")?rollDie(band.wMax-band.wMin+1)-1:0);
+  const d=band.dMin+((typeof rollDie==="function")?rollDie(band.dMax-band.dMin+1)-1:0);
+  return {w,d};
+}
+
 /* rollPlace(opts) → a record-add payload for a named location with a defining trait + a hidden truth.
-   opts: {name?, depth?}. depth=true also rolls place-history. */
+   opts: {name?, depth?, realm?, region?, archetypeBias?}.  depth=true also rolls place-history.
+   PLACE-GEN §5 unit 2 (ADDENDUM §A step 1 + §4 prepCastFrontier realm rider): opts.realm ‖
+   opts.region.realm ‖ 'frontier' — the SAME realm-resolution convention urban.js's
+   buildingApproach/mintDistricts use (U6) — feeds placeForRealm(realmId, rng, {archetypeBias})
+   (data/place-skins.js, PLACE-GEN §5 unit 1) to type/name/cast/dress the mint. Back-compat law:
+   opts.realm absent → frontier skin, payload a STRICT SUPERSET of the pre-unit-2 shape (dev/
+   verify-place-roll.mjs asserts field-presence against a golden captured pre-change). */
 function rollPlace(opts){
   opts=opts||{};
+  const realmId=opts.realm||(opts.region&&opts.region.realm)||"frontier";
   const setting=rollTable("place-master-setting");
   const nd=placeNameDesc(setting?setting.text:null);
   const trait=rollTable("place-traits");        // cells: [Band, Trait, Calamity]
@@ -618,7 +639,20 @@ function rollPlace(opts){
   const sc=(secret&&secret.cells)||[];
   const secretText=sc[2]||sc[1]||(secret?secret.text:null);
   const hist=opts.depth?rollTable("place-history"):null;
+  // the archetype draw (spine+skin) — type/label/scale/space/staff/cast for this mint. Null-safe:
+  // an unloaded data seam (headless/lean context) leaves the pre-unit-2 behavior untouched.
+  const arche=(typeof placeForRealm==="function")?placeForRealm(realmId, null, {archetypeBias:opts.archetypeBias}):null;
+  const skin=(typeof PLACE_SKINS!=="undefined")?(PLACE_SKINS[realmId]||PLACE_SKINS.frontier):null;
+  // name: skin namePatterns (mundane-key realms) emit a DM-facing hint field ONLY (PLACE-GEN §3.2
+  // scope fence — no token-filling machinery in v1); the actual name still always comes from
+  // placeNameDesc, unchanged, so a no-skin/no-pattern realm's name path is byte-identical.
+  let namePattern=null;
+  if(skin && skin.namePatterns && skin.namePatterns.length){
+    const idx=(typeof rollDie==="function")?rollDie(skin.namePatterns.length)-1:0;
+    namePattern=skin.namePatterns[Math.max(0,Math.min(skin.namePatterns.length-1,idx))];
+  }
   const name=opts.name||nd.name||"Unnamed Place";
+  const typeLabel=arche?arche.label:null;
   const payload={
     kind:"location", name, provenance:"rolled",
     rolled:{ setting:setting?setting.text:null, trait:traitText, calamity,
@@ -626,6 +660,21 @@ function rollPlace(opts){
     fields:{ desc:nd.desc||null, trait:traitText, calamity },
     dm:{ secret:secretText, secretBand:sc[0]||(secret?secret.band:null), history:hist?hist.text:null }
   };
+  if(arche){
+    payload.rolled.archetypeKey=arche.archetypeKey;
+    payload.rolled.archetypeLabel=arche.label;
+    payload.rolled.archetypeNote=arche.note;
+    payload.rolled.space=arche.space;
+    payload.rolled.staff=arche.staff;
+    payload.rolled.cast=arche.cast;
+    payload.rolled.dims=rollDimsInCells(arche.space);
+    if(namePattern) payload.rolled.namePattern=namePattern;
+    payload.fields.type=typeLabel;
+    payload.dm.itemsPool="realm-items-"+realmId;
+    // pointer-only (PLACE-GEN §3.6) — resolution to actual REALM_PROPS/surfaces keys is unit 8's
+    // job; this is the realm handle the dressing resolver reads later.
+    payload.dm.dressing={ props:realmId, surfaces:realmId };
+  }
   // CONSEQUENCE LADDER (docs/CONSEQUENCE-LADDER.md §11): a NOTABLE place (opt-in via opts.art — prep
   // passes it) carries 0–2 art pieces. The depiction text is player-facing flavor (fields.art); only
   // hook/thread-seed pieces become pull-able HANDLES (dm.artHandles), minted as their own codex records

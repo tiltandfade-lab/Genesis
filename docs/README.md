@@ -14,6 +14,25 @@ All Genesis design docs, specs, research, and operational notes live in this fol
 `Reference/SRD-Data/spells.json`) are **relative to the Genesis repo root**, not to this `docs/` folder.
 References to *other docs* are by name and resolve as siblings here.
 
+## Quick lookup — if you're looking for X, go to Y
+
+Skip the full index below when you already know the topic. This table exists so an agent (or
+Adam) can jump straight to the right doc instead of grepping/reading its way there.
+
+| Looking for... | Go to |
+| --- | --- |
+| What to work on next / the live build queue | `NEXT-STEPS.md` (top section only — older queues archived in `NEXT-STEPS-ARCHIVE.md`) |
+| Orientation for a new session | `HANDOFF.md` |
+| Why a decision was made | `DESIGN.md` (locked decisions, dated) → then the linked spec |
+| A subsystem's exact contract/behavior | the matching `type: system-spec` doc, listed below |
+| Realm identity / style / touchstone | `REALM-HOOKS.md` (current, re-keyed) — `data/realms.js` is the older baseline |
+| Creature stats, names, per-realm rosters | `data/bestiary.js` (SRD/global) · `dev/model-qa/realm-bestiary-draft.json` (per-realm, compiled from `REALM-BESTIARY-DRAFT.md`) |
+| 3D model / render style rules (silhouette, value, pose) | `MODEL-FOUNDRY.md` (the 6 laws) |
+| Table architecture (markdown source → compiled JSON) | `Two tracks run in parallel` section below + `compile-tables.py` |
+| Module list / what owns what symbol | `manifest.json` (repo root) |
+| Historical "what happened" / past sessions | `CHANGELOG.md` (newest first) |
+| Something that used to be here | check `NEXT-STEPS-ARCHIVE.md` before assuming it's gone |
+
 ## Genres (the `type:` frontmatter taxonomy)
 
 **North star** (`type: design-guide`) — the dream, the look, and the ordered path; sits *above* the decision registry.

@@ -12,7 +12,7 @@ updated: 2026-07-08 (night)
 > parallel-sessions protocol): the **NPC subsystem** wiring (this entry) and the **MODEL-FOUNDRY**
 > modeling deep-dive (below). Both landed on master; two distinct "Do next" threads.
 
-## ⭐ Latest (2026-07-08 night — NPC subsystem WIRED: coherence · partials · role-realms; presence PARKED) [Claude Code / Opus 4.8]
+## ⭐ Latest (2026-07-08 night — NPC subsystem WIRED: coherence · partials · role-realms · presence) [Claude Code / Opus 4.8]
 
 An autonomous engine-wiring run (Adam out of the loop, `genesis-orchestrate`) that turned the
 2026-07-08 NPC craft specs into shipped engine code. **On master + pushed:** the **coherence dial**
@@ -36,10 +36,10 @@ rewire. Re-gated at merge on the now-live temperature signal: presence-hooks 61/
 **Do next (pick up here — NPC lane):** ~~build the two queued fixes~~ **DONE — `NPC-COHERENCE-FIXES`
 §1+§2 landed on master (merge `e28e928`, `fix/npc-coherence-queue`): questgivers wrinkled+ (functional
 vs significant roleHints), `regionForNode` supplies the node's `.center` so fray-by-node temperature is
-live. Re-gated 2026-07-08: coherence-fixes 19/0 · regions 32/0 · prep-bundle 56/0.** (1) **Playtest +
-merge E-PRES** (temperature signal is now live — retune density/discovery curves against it, not the
-old dead signal). (2) Optional craft: fold in the
-parked `feat/craft-kin-tension` kin rows; the animal realm-skin question (Adam's open Q in NPC-PARTIALS).
+live. Re-gated 2026-07-08: coherence-fixes 19/0 · regions 32/0 · prep-bundle 56/0.** E-PRES is also
+MERGED (above). (1) **Continue the table craft pass** (Adam's active lane — expect further architecture
+shifts out of it). (2) Retune E-PRES density/discovery curves in the next live session. (3) Optional
+craft: fold in the `feat/craft-kin-tension` kin rows; the animal realm-skin question (NPC-PARTIALS).
 
 ## Latest (2026-07-08 night — MODEL-FOUNDRY locked; batch modeling session is NEXT) [Opus 4.8 / Fable 5]
 

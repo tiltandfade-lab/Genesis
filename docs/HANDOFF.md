@@ -27,11 +27,11 @@ unit personally re-gated (never on executor self-report). Specs: `NPC-COHERENCE-
 verify-role-realms 30/30 (all red-first proven) · full sweep 0 fails · fuzz+monkey clean · the
 fixture-sync that the full re-gate caught (verify-gen/prep-bundle) landed too.
 
-**PARKED (needs your playtest):** **E-PRES presence-and-hooks** — ambient population + hook discovery
-+ 3-tier attention + the live if-ignored rewire — is BUILT + fully gated (verify-presence-hooks 61/0,
-backward-compat 54/0) but sits UNMERGED on `feat/npc-presence-hooks` (pushed). It changes felt
-gameplay (ambient density, discovery rates the spec says to "retune in play"), so it wants a live
-session before landing. `git merge --no-ff feat/npc-presence-hooks` when happy.
+**E-PRES presence-and-hooks — MERGED to master 2026-07-08 (Adam ruled: land without a playtest;
+crafting continues).** Ambient population + hook discovery + 3-tier attention + the live if-ignored
+rewire. Re-gated at merge on the now-live temperature signal: presence-hooks 61/0 (harness synced —
+2f origin=sleepy x0.5, §3 de-flaked to N=1000), full NPC suite green. The spec's "retune in play"
+(ambient density, discovery rates) still stands — tune during the next live session.
 
 **Do next (pick up here — NPC lane):** ~~build the two queued fixes~~ **DONE — `NPC-COHERENCE-FIXES`
 §1+§2 landed on master (merge `e28e928`, `fix/npc-coherence-queue`): questgivers wrinkled+ (functional

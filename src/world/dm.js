@@ -1610,6 +1610,10 @@ const DM_EVENT_FIELDS = {
   // in-character question counts; a passing glance does not) — registered at the contract boundary
   // (CLAUDE.md "normalization lives at the contract boundary, not in handlers"), never a per-handler guess.
   codex_contact:     { accept:["id","engaged"] },
+  // ANIMAL-SOCIAL.md §2/§6 U4 — opens/closes the witness-packet channel on an animal partial record
+  // (Speak with Animals active, or the DM declaring the channel open some other way). `open` (bool)
+  // is a flag, never arithmetic — same "flag, not a number" posture as social_check's overshoot.
+  animal_interview:  { accept:["id","open"] },
   // social_check.overshoot is DELIBERATELY UNTAGGED (HQ2-1-TOPUP deviation from the HOTFIX-QUEUE
   // spec, which lists num:["dc","total","natural","overshoot"]): resolveSocialCheck (src/engine/
   // social.js:64) reads it as a plain boolean truthiness gate (`if(skill==="intimidation" &&
@@ -3131,6 +3135,12 @@ function applyEvent(w,e){
       if(typeof codexUpdate!=="function") return {ok:false,reason:"codex-unavailable"};
       const r=codexUpdate(w,p.id,p);
       return r?{ok:true, id:r.id}:{ok:false, reason:"no-record:"+(p.id||"?")};   // ROOT-C (BUG-13): a bare {ok:false} read as an ordinary refusal is how this class hid
+    }
+    case "animal_interview":{                         // ANIMAL-SOCIAL.md §2/§6 U4 — open/close the witness channel
+      const r=codexGet(w,p.id);
+      if(!r || r.kind!=="npc" || !(r.dm && r.dm.partialKind==="animal")) return {ok:false, reason:"not-an-animal:"+(p.id||"?")};
+      r.dm.interviewOpen = !!p.open;
+      return {ok:true, id:r.id, interviewOpen:r.dm.interviewOpen};
     }
     case "codex_reveal":{                            // slow drip — the player now knows of this entity
       if(typeof codexReveal!=="function") return {ok:false,reason:"codex-unavailable"};

@@ -200,7 +200,7 @@ L7. ☐ **Regenerate `table-registry.json/.md`** — stale after the rename/new 
 1. ☑ **Book gathers** — DMG14 settlements + random dungeons, DMG24 settlements + bastions
    (docs/PLACE-GATHER-*.md, vision-read, committed 2acdcb8). VRGtR full book still wanted
    (current file = subclasses excerpt; Adam sourcing) → Gloom domain-gen gather.
-2. ☐ **Settlement thin-table upgrades** (authorized): Ruler Status / Race Relations / Mythology /
+2. ☑ **Settlement thin-table upgrades — DONE 2026-07-09 (663a7b8, re-gated): Ruler Status / Race Relations / Mythology /
    Nearby / Relevancy → Master-Setting-grade d100, seeded from the DMG14 gather; GRID-LAW
    dimensions on physical rows; originals archived; land PROVISIONAL for Adam's red-pen.
 3. ☐ **GRID LAW rewire** (PLACE-GEN ADDENDUM §A): (1) place mints emit cell footprints,

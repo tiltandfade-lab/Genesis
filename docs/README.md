@@ -30,7 +30,7 @@ Adam) can jump straight to the right doc instead of grepping/reading its way the
 | 3D model / render style rules (silhouette, value, pose) | `MODEL-FOUNDRY.md` (the 6 laws) |
 | Table architecture (markdown source → compiled JSON) | `Two tracks run in parallel` section below + `compile-tables.py` |
 | Module list / what owns what symbol | `manifest.json` (repo root) |
-| Historical "what happened" / past sessions | `CHANGELOG.md` (newest first) |
+| Historical "what happened" / past sessions | `CHANGELOG.md` (newest first; older entries in `CHANGELOG-ARCHIVE.md`) |
 | Something that used to be here | check `NEXT-STEPS-ARCHIVE.md` before assuming it's gone |
 
 ## Genres (the `type:` frontmatter taxonomy)
@@ -151,7 +151,8 @@ Adam) can jump straight to the right doc instead of grepping/reading its way the
 - `REAUTHORING-SWEEP-PLAN.md` (`type: build-plan`) — the executable two-lane plan for the table re-authoring sweep: recontext primitives + SRD lenses + creature scrub + monster wiring, split into autonomous-safe (overnight) vs. propose-and-wait (destructive) lanes. Companion to `TABLE-REAUTHORING-PREP.md` (the per-table flavor brief).
 - `CORPUS-INTENSITY-MAP.md` (`type: generated-map`) — **generated** by `build/corpus-intensity-map.py`: every table scored for spice ceiling (explosive headroom) + floor (copy-paste/ungraded). The navigation surface for the whole-corpus craft pass. Re-run after edits.
 - `REAUTHORING-RUBRIC.md` (`type: rubric`) — the shared standard for the craft pass: the quality floor + the explosive ceiling, benched on the corpus's own best rows, with the per-table working loop. Read with the map.
-- `CHANGELOG.md` — dated record of changes, newest first.
+- `CHANGELOG.md` — dated record of changes, newest first (newest 25 entries; older auto-archive to `CHANGELOG-ARCHIVE.md` via `build/archive-docs.py`).
+- `CHANGELOG-ARCHIVE.md` (`type: changelog-archive`) — read-only overflow of older CHANGELOG entries; the two files read as one continuous history.
 - `SCALING.md` — the architecture/scaling audit + the "when to migrate" answer.
 
 **Audit / scan**

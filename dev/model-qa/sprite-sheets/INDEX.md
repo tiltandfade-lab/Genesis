@@ -51,3 +51,7 @@ items across all 11 realms (d50–d62 each, die coverage verified gapless), obje
 (single centered object, no characters), band noted per cell. Use: inventory icons / item-get
 cards / FFT-style loot screens (presentation TBD — asset bank first). Derived sections: edit the
 TABLE source, then regenerate.
+
+**Fantasy item batches (2026-07-09, appended):** the default realm's item universe from
+`data/items.js` — 175 SRD mundane (7 sheets, kind-tagged) + 200 magic items (8 sheets,
+rarity-tagged), same object-icon template as the realm loot-table sections.

@@ -45,8 +45,12 @@ export function buildHelmedHorror(){
   const P = {
     plate: 0x8a92a0, plateDk: 0x5c6472,           // main ornate plate — cool steel
     plateLt: 0xb8c0cc,                            // ornate edge-trim bevel (law 3/6 high-value)
+    plateFar: 0xe2e7ee,                           // R2: far-shoulder gusset — the facing-normal-dimmed
+                                                   // face needs a near-white base to still clear the
+                                                   // law-3 body-mass floor after shading knocks it down
     void: 0x0a0908, voidLt: 0x161418,             // starfield-void interior — the gap reveal
-    glow: 0xd8fbff, glowCore: 0xffffff,           // SIGNATURE A — the helm slit (>=140 RGB)
+    glow: 0xf0feff, glowCore: 0xffffff,           // SIGNATURE A — the helm slit (>=140 RGB); R2:
+                                                   // pushed glow toward near-white cyan (was 0xd8fbff)
     gauntlet: 0x707886, gauntletDk: 0x484f5c,
     blade: 0x9aa2ac, bladeDk: 0x6a7078,
     fuller: 0xe4eaf0,                              // SIGNATURE B — the sword's bright fuller line
@@ -145,7 +149,15 @@ export function buildHelmedHorror(){
      a flat dark hex on one shoulder that vanished into the void (law 3 failure). Fixed: vanes
      now stay BELOW crown height and fan outward/backward only, and BOTH shoulders use the same
      bright outer face (P.plate) with only the thin inner gusset going dark, so neither side
-     disappears against the void. ===== */
+     disappears against the void.
+     R2 SELF-CORRECTION (flag: far pauldron still goes dark — facing-normal artifact): probed the
+     actual visible winding per shoulder — with this pitched pose/camera the s>0 (far) shoulder
+     shows its INNER GUSSET face to camera (the "outer" P.plate quad is back-facing/culled there),
+     while the s<0 (near) shoulder shows its outer face as intended. So the far side was reading
+     P.plateDk under directional dimming — near-invisible against the void. Fix: the far shoulder's
+     camera-facing gusset now uses P.plateFar (near-white steel) so it still clears the law-3
+     body-mass floor after shading; the near shoulder is untouched (its outer face already reads
+     fine). ===== */
   for(const s of [-1, 1]){
     const root = xf(V(s * 0.195, L.shldY - 0.015, 0.02));
     const vaneLens = [0.185, 0.145, 0.105];
@@ -156,8 +168,9 @@ export function buildHelmedHorror(){
       const tip = xf(V(s * (0.195 + len * 0.95), L.shldY - 0.015 - drop, 0.02 - len * rake));
       const wA = xf(V(s * (0.205 + i * 0.015), L.shldY + 0.05 - i * 0.015, 0.06 - i * 0.02));
       const wB = xf(V(s * (0.205 + i * 0.015), L.shldY - 0.06 - i * 0.02, -0.01 - i * 0.03));
-      quad(wA, tip, wB, root, P.plate, 0.05);           // bright outer face — both shoulders (law 3)
-      quad(root, wB, tip, wA, P.plateDk, 0.06);          // dark inner gusset gives the vane real thickness
+      quad(wA, tip, wB, root, P.plate, 0.05);           // bright outer face — near shoulder (law 3)
+      quad(root, wB, tip, wA, s > 0 ? P.plateFar : P.plateDk, 0.06);   // R2: far shoulder's camera-
+                                                          // facing gusset brightened to compensate
       // bright edge-trim bevel hugging the vane's outer (leading) rake — a slim second strip
       // offset toward the void side so it reads as a distinct bright line, not a doubled face
       const wAedge = V(wA.x, wA.y - 0.01, wA.z);
@@ -185,18 +198,25 @@ export function buildHelmedHorror(){
     const brow = ring(V(helmC.x, helmC.y - 0.02, helmC.z - 0.015), V(0, 1, 0), 0.098, 0.113, 10, Math.PI / 10);
     stitch([dome, brow], () => P.plateLt);
 
-    // GLOW SLIT — the sole face, a bright horizontal band across the front of the visor void
+    // GLOW SLIT — the sole face, a bright horizontal band across the front of the visor void.
+    // R2 SELF-CORRECTION (flag: slit faint at scale): probed with a debug hex swap and found the
+    // slit's quad winding (TL,TR,BR,BL) produced a normal facing -z — BACK-FACING/culled from this
+    // camera, i.e. it rendered NOTHING at all (not merely dim). Reordered to (BL,BR,TR,TL) to match
+    // the chestFront quad's working +z-facing winding. Also: the brow ring's front surface sits at
+    // z~helmC.z+0.113, so the old slit at z+0.105 sat FLUSH/recessed against the dome instead of
+    // reading proud of it — enlarged the band and pushed it to z+0.135, clear of the dome surface.
     const slitY = helmC.y - 0.015;
-    const sa = V(helmC.x - 0.085, slitY + 0.02, helmC.z + 0.105);
-    const sb = V(helmC.x + 0.085, slitY + 0.02, helmC.z + 0.105);
-    const sc = V(helmC.x + 0.085, slitY - 0.02, helmC.z + 0.105);
-    const sd = V(helmC.x - 0.085, slitY - 0.02, helmC.z + 0.105);
+    const sa = V(helmC.x - 0.10, slitY + 0.028, helmC.z + 0.135);
+    const sb = V(helmC.x + 0.10, slitY + 0.028, helmC.z + 0.135);
+    const sc = V(helmC.x + 0.10, slitY - 0.028, helmC.z + 0.135);
+    const sd = V(helmC.x - 0.10, slitY - 0.028, helmC.z + 0.135);
     // dark void recess behind the slit (the "empty helm" read) then the bright glow line in front
-    quad(V(sa.x, sa.y + 0.02, sa.z - 0.03), V(sb.x, sb.y + 0.02, sb.z - 0.03),
-      V(sc.x, sc.y - 0.02, sc.z - 0.03), V(sd.x, sd.y - 0.02, sd.z - 0.03), P.void, 0.02);
-    quad(sa, sb, sc, sd, P.glow, 0.03);
-    quad(V(sa.x + 0.012, sa.y + 0.006, sa.z + 0.002), V(sb.x - 0.012, sb.y + 0.006, sb.z + 0.002),
-      V(sc.x - 0.012, sc.y - 0.006, sc.z + 0.002), V(sd.x + 0.012, sd.y - 0.006, sd.z + 0.002), P.glowCore, 0.02);
+    // — all three quads reordered (d,c,b,a) for the corrected +z-facing winding.
+    quad(V(sd.x, sd.y - 0.02, sd.z - 0.045), V(sc.x, sc.y - 0.02, sc.z - 0.045),
+      V(sb.x, sb.y + 0.02, sb.z - 0.045), V(sa.x, sa.y + 0.02, sa.z - 0.045), P.void, 0.02);
+    quad(sd, sc, sb, sa, P.glow, 0.03);
+    quad(V(sd.x + 0.012, sd.y - 0.006, sd.z + 0.002), V(sc.x - 0.012, sc.y - 0.006, sc.z + 0.002),
+      V(sb.x - 0.012, sb.y + 0.006, sb.z + 0.002), V(sa.x + 0.012, sa.y + 0.006, sa.z + 0.002), P.glowCore, 0.02);
   }
 
   /* ===== ARMS + GAUNTLETS — both gauntlets grip the greatsword's crossguard directly below

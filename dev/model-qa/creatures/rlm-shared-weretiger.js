@@ -50,7 +50,7 @@ export function buildWeretiger(){
   const P = {
     coat: 0xc47a3c, coatDk: 0x9a5c28,
     stripe: 0x150c08, stripeSoft: 0x3a2818,
-    cream: 0xead9b8, creamDk: 0xc9b48c,
+    cream: 0xf7edcf, creamDk: 0xc9b48c,
     pawDk: 0x3a2818,
     claw: 0xe8e0cc,
     eye: 0xd8c840,
@@ -80,10 +80,13 @@ export function buildWeretiger(){
   /* helper: a countable dark stripe band wrapped as a shallow quad belt over a limb/torso point,
      oriented perpendicular to the local +z (front) axis — law 1's countable-feature discipline. */
   function stripeBand(c, rx, rz, halfH, hex){
-    quad(V(c.x - rx, c.y - halfH, c.z + rz * 0.4), V(c.x + rx, c.y - halfH, c.z + rz * 0.4),
-      V(c.x + rx, c.y + halfH, c.z + rz * 0.4), V(c.x - rx, c.y + halfH, c.z + rz * 0.4), hex, 0.05);
-    quad(V(c.x - rx, c.y - halfH, c.z - rz * 0.4), V(c.x + rx, c.y - halfH, c.z - rz * 0.4),
-      V(c.x + rx, c.y + halfH, c.z - rz * 0.4), V(c.x - rx, c.y + halfH, c.z - rz * 0.4), hex, 0.05);
+    // R2 self-correction: 0.4x proud offset let bands sit nearly flush with the surface and
+    // z-fight/vanish into the coat at 1/3-res — pushed proud to 0.58x so every band reads as a
+    // discrete raised stripe (law 1, "countable").
+    quad(V(c.x - rx, c.y - halfH, c.z + rz * 0.58), V(c.x + rx, c.y - halfH, c.z + rz * 0.58),
+      V(c.x + rx, c.y + halfH, c.z + rz * 0.58), V(c.x - rx, c.y + halfH, c.z + rz * 0.58), hex, 0.05);
+    quad(V(c.x - rx, c.y - halfH, c.z - rz * 0.58), V(c.x + rx, c.y - halfH, c.z - rz * 0.58),
+      V(c.x + rx, c.y + halfH, c.z - rz * 0.58), V(c.x - rx, c.y + halfH, c.z - rz * 0.58), hex, 0.05);
   }
 
   /* ===== LEGS — digitigrade feline: hip -> thigh -> HIGH backward hock -> short vertical
@@ -119,32 +122,36 @@ export function buildWeretiger(){
 
   /* ===== TORSO — lean coiled muscle, low and level, stripe bands wrapping the mass. ===== */
   const torsoBands = [
-    { y: L.hipY,   rx: 0.150, rz: 0.135, hex: P.coat },
-    { y: L.waistY, rx: 0.168, rz: 0.150, hex: P.coatDk },
-    { y: L.ribY,   rx: 0.195, rz: 0.172, hex: P.coat },
-    { y: L.chestY, rx: 0.205, rz: 0.178, hex: P.coatDk },
-    { y: L.shldY,  rx: 0.198, rz: 0.165, hex: P.coat },
-    { y: L.neckY,  rx: 0.100, rz: 0.092, hex: P.coatDk },
+    { y: L.hipY,   rx: 0.142, rz: 0.128, hex: P.coat },
+    { y: L.waistY, rx: 0.122, rz: 0.112, hex: P.coatDk },     // nipped waist — the feline taper-in
+    { y: L.ribY,   rx: 0.158, rz: 0.145, hex: P.coat },
+    { y: L.chestY, rx: 0.174, rz: 0.152, hex: P.coatDk },     // peak, trimmed off the old blocky bulk
+    { y: L.shldY,  rx: 0.162, rz: 0.135, hex: P.coat },
+    { y: L.neckY,  rx: 0.088, rz: 0.080, hex: P.coatDk },
   ];
   stack(torsoBands, 14, { xform: twist });
 
-  /* countable torso stripe bands (law 1) riding the twisted mass, front and back faces */
-  for(const yy of [L.hipY + 0.03, L.waistY + 0.02, L.ribY - 0.02, L.ribY + 0.05, L.chestY, L.chestY + 0.07]){
-    const c = twist(V(0, yy, 0.17));
-    stripeBand(c, 0.14, 0.05, 0.026, P.stripe);
-    const cs = twist(V(0.13, yy, 0.06));
-    stripeBand(cs, 0.05, 0.09, 0.026, P.stripe);
-    const cs2 = twist(V(-0.13, yy, 0.06));
-    stripeBand(cs2, 0.05, 0.09, 0.026, P.stripe);
-    const cb = twist(V(0, yy, -0.15));
-    stripeBand(cb, 0.13, 0.05, 0.026, P.stripe);
+  /* countable torso stripe bands (law 1) riding the twisted mass, front and back faces.
+     R2 self-correction: 6 thin y-levels read as a faint texture smear at 1/3-res — cut to 4
+     BOLD bands (fewer, bigger, darker per the flag) spaced across the visible torso height,
+     each nearly 2x the old half-height so they read as discrete countable bands, not a haze. */
+  for(const yy of [L.hipY + 0.04, L.waistY + 0.04, L.ribY + 0.03, L.chestY + 0.02]){
+    const c = twist(V(0, yy, 0.175));
+    stripeBand(c, 0.15, 0.07, 0.046, P.stripe);
+    const cs = twist(V(0.135, yy, 0.06));
+    stripeBand(cs, 0.055, 0.11, 0.046, P.stripe);
+    const cs2 = twist(V(-0.135, yy, 0.06));
+    stripeBand(cs2, 0.055, 0.11, 0.046, P.stripe);
+    const cb = twist(V(0, yy, -0.155));
+    stripeBand(cb, 0.14, 0.06, 0.046, P.stripe);
   }
 
-  /* cream chest patch — the law-3 high-value zone breaking the stripe field */
+  /* cream chest patch — the law-3 high-value zone breaking the stripe field. R2: brightened +
+     enlarged so it actually reads as a bright anchor instead of a dim sliver behind the arm. */
   {
-    const c = twist(V(0, L.chestY - 0.02, 0.185));
-    quad(V(c.x - 0.055, c.y - 0.07, c.z), V(c.x + 0.055, c.y - 0.07, c.z),
-      V(c.x + 0.045, c.y + 0.08, c.z + 0.01), V(c.x - 0.045, c.y + 0.08, c.z + 0.01), P.cream, 0.05);
+    const c = twist(V(0, L.chestY - 0.02, 0.19));
+    quad(V(c.x - 0.075, c.y - 0.10, c.z), V(c.x + 0.075, c.y - 0.10, c.z),
+      V(c.x + 0.062, c.y + 0.11, c.z + 0.01), V(c.x - 0.062, c.y + 0.11, c.z + 0.01), P.cream, 0.06);
   }
 
   /* ===== TAIL — long balanced tail in a live S-curve off the tailbone, banded with the stripe

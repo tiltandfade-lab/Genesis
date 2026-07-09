@@ -28,11 +28,14 @@ import { V, quad, tube, ring, stitch, capFan, stack, blob, setChannels } from '.
 export function buildDarkmantle(){
   /* ---------- PALETTE (COSMIC desaturated; dark dome top vs PALE underside — Law 3 contrast) ---------- */
   const P = {
-    domeDk:0x352d48, dome:0x453a5e, domeLt:0x554870,        // mottled dome top — bumped clear of the void (Law 3)
-    mottleA:0x3e3454, mottleB:0x2e2642,                       // dome texture bands
-    underDk:0x8a7ea0, under:0xb4a8c8, underLt:0xe4d8f4,       // PALE underside — the high-value zone (>=140 RGB)
-    rim:0xcdb8e8,                                             // the flared RIM itself is the loud high-value band —
-                                                               // camera-visible at any angle, unlike the hidden underside
+    // SECONDPASS FIX (flag: dome top vanishes dark-on-dark) — every dome tone lifted so its
+    // average value clears the void (10,9,8) by >=70; rim + underside brightened further so the
+    // mantle edge and belly both carry the Law-3 high-value load, not just the tentacles/maw.
+    domeDk:0x58506b, dome:0x685d81, domeLt:0x73668e,        // mottled dome top — lifted clear of the void (Law 3)
+    mottleA:0x615777, mottleB:0x564e6a,                       // dome texture bands — lifted with the dome
+    underDk:0x9e92b4, under:0xc3b7d7, underLt:0xeee2fe,       // PALE underside — brightened further (>=140 RGB, margin added)
+    rim:0xe4d4fa,                                             // the flared RIM itself is the loud pale high-value band
+                                                               // at the mantle edge — camera-visible at any angle
     tent:0x453a5e, tentDk:0x2e2642, tentPale:0xc4b4dc,        // tentacles, bright gripping tips
     maw:0x0f0d16, beak:0x453a5e,                              // dark maw + small beak
     disc:0x322a3c, discTop:0x3e3448,                          // cosmic void-purple disc
@@ -51,16 +54,24 @@ export function buildDarkmantle(){
   const apex   = V(0, hoverY+0.30, -0.05);   // dome apex, nudged -z = falling-backward lean
   const rimY   = hoverY + 0.06;              // the flared rim — widest point, the signature silhouette
 
-  /* ---------- DOME — a wide flared cone/umbrella lofted from the apex down to the flared rim,
-     each band widening fast near the bottom so the "just opened" umbrella read survives the squint. ---------- */
+  /* ---------- DOME — a wide flared cone/umbrella lofted from the flared rim UP to the apex.
+     SECONDPASS FIX (root cause of "dome top vanishes"): stack()'s outward-normal convention is
+     ASCENDING y (narrow end first at the LOW y, widening as y increases — verified against the
+     piercer's tip-at-bottom band order). The original array ran apex-first at HIGH y down to the
+     rim at LOW y — descending — which flips the winding so the dome's outer surface faces INWARD
+     and DOWN and backface-culls from the standard camera: computed vertex normals confirmed this
+     (ny about -0.9, radial dot negative) — the dome wasn't dark, it was invisible, no palette
+     value could have fixed that. Reordered rim-to-apex (ascending y) so the outward face points
+     up/out and actually renders; palette also lifted per the flag (dome >=70 over void, underside
+     brighter) now that the surface is visible for those values to matter. ---------- */
   {
     const n = 12, ph = Math.PI/n;
     const bands = [
-      {y:apex.y,        rx:0.02, rz:0.02, cx:apex.x, cz:apex.z, hex:P.domeDk},
-      {y:hoverY+0.22,    rx:0.14, rz:0.14, cx:-0.02,  cz:-0.03,  hex:P.dome},
-      {y:hoverY+0.14,    rx:0.30, rz:0.29, cx:-0.01,  cz:-0.01,  hex:P.mottleA},
-      {y:hoverY+0.08,    rx:0.44, rz:0.43, cx:0,      cz:0,      hex:P.dome},
       {y:rimY,           rx:0.56, rz:0.55, cx:0,      cz:0.01,   hex:P.rim},   // the flared rim — max width, HIGH VALUE
+      {y:hoverY+0.08,    rx:0.44, rz:0.43, cx:0,      cz:0,      hex:P.dome},
+      {y:hoverY+0.14,    rx:0.30, rz:0.29, cx:-0.01,  cz:-0.01,  hex:P.mottleA},
+      {y:hoverY+0.22,    rx:0.14, rz:0.14, cx:-0.02,  cz:-0.03,  hex:P.dome},
+      {y:apex.y,        rx:0.02, rz:0.02, cx:apex.x, cz:apex.z, hex:P.domeDk},
     ];
     stack(bands, n, { phase:ph });
   }

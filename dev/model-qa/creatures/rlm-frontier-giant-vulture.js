@@ -48,7 +48,12 @@ export function buildGiantVulture(){
      law-3 contrast). Also widened bladeMid/membraneLt further apart so 2 distinct blade tones
      both clear the >=140 signature floor, not just one. */
   const P = {
-    plume:0x6a5a46, plumeDk:0x453a2c, plumeLt:0x8a765c,     /* dark ruff/back plumage — lifted clear of the void (law 3 body-mass floor) */
+    /* R6 SECOND-PASS ITERATOR (this pass, flag: "torso still on the dark side"): bumped plume +
+       plumeDk one more value step brighter each — plumeDk was 69/58/44, under the 60-RGB body-mass
+       floor on G+B; now 92/77/60 clears the floor on every channel while staying visibly darker
+       than plume (kept the ladder plumeDk<plume<plumeLt intact so the torso still reads as
+       plumage, not a flat wash). */
+    plume:0x7c6a54, plumeDk:0x5c4d3c, plumeLt:0x8a765c,     /* dark ruff/back plumage — lifted clear of the void (law 3 body-mass floor) */
     membraneLt:0xd8bc94, bladeMid:0xb89a72,                 /* primary-blade highlights — clear the >=140 RGB signature floor, distinct from each other */
     spar:0x3a2e22, claw:0x1c1610,                           /* wing-bone chain + claw tips */
     skin:0xc76a5c, skinLt:0xe0a08e,                          /* naked head/neck — the high-value zone (>=140 RGB per channel on skinLt) */
@@ -175,8 +180,14 @@ export function buildGiantVulture(){
        ...tent-like over the back"). Pulled the lateral offset in and pushed more of the reach into
        vertical lift + backward drape (-z) so the wrists sit closer to the spine's centerline and
        higher, and the blade fan reads as roofing the back rather than pointing out sideways. */
-    const EL = V(s*0.13*WS, SH.y + Math.sin(up)*0.34*WS, SH.z - 0.06*WS);
-    const WR = V(s*0.19*WS, SH.y + Math.sin(up)*0.68*WS, SH.z - 0.20*WS);
+    /* R6 SECOND-PASS ITERATOR (this pass, flag: "wings still splay like paddles rather than a
+       mantled tent — converge the wrists over the spine harder"): r5's lateral pull-in wasn't
+       enough — pulled the x-mult in further still (EL 0.13->0.08, WR 0.19->0.10) and pushed more
+       of the reach into height + backward drape (WR y-mult 0.68->0.78, z-mult -0.20->-0.30) so the
+       wrists sit noticeably closer to the spine centerline AND higher/further back over the
+       haunch, reading as a roofing tent rather than two arms reaching sideways. */
+    const EL = V(s*0.06*WS, SH.y + Math.sin(up)*0.34*WS, SH.z - 0.09*WS);
+    const WR = V(s*0.06*WS, SH.y + Math.sin(up)*0.85*WS, SH.z - 0.34*WS);
     tube(SH, EL, 0.046, 0.036, 6, P.spar, {capA:{hex:P.plumeDk}});
     tube(EL, WR, 0.034, 0.024, 6, P.spar);
     /* thumb claw hooking off the wrist */
@@ -192,16 +203,28 @@ export function buildGiantVulture(){
        0.04u law-3 floor, and a second covert layer is now itself doubled (inner + outer) to
        backfill the gap between the primary fan and the torso so the mantle silhouette is one
        continuous filled shape from spine to wrist, not sparse spars. */
+    /* R6 SECOND-PASS ITERATOR (this pass, flag: "add 2 more overlapping blades per wing for mass"
+       + convergence): 7->9 blades. Every tip's x-reach scaled by 0.70 (converge the fan toward
+       the WR/spine centerline that just moved inward) and z pulled 1.15x further backward (more
+       mantle drape over the haunch), matching the EL/WR convergence above. The 2 new blades are
+       interpolated midpoints (between the old i1/i2 and i3/i4 tips) so they backfill the widest,
+       most gap-prone part of the fan with mass rather than just re-spacing the same 7 tips. */
+    /* R7 SECOND-PASS ROUND 2 (same pass — the wrist pull-in alone still left the two blade fans
+       reaching wide via their OWN lateral spread, still reading as a V rather than one dome): cut
+       the fan's x-reach another 0.7x and pushed z another 1.1x further backward, so the blade mass
+       itself (not just the wrist anchor) closes toward the centerline and drapes over the spine. */
     const blades = [
-      V(WR.x + s*0.30*WS, WR.y + 0.09*WS, WR.z + 0.14*WS),   /* topmost — steep up, the mantle peak */
-      V(WR.x + s*0.38*WS, WR.y + 0.00*WS, WR.z + 0.08*WS),
-      V(WR.x + s*0.43*WS, WR.y - 0.09*WS, WR.z + 0.00*WS),   /* lateral reach — widest point */
-      V(WR.x + s*0.42*WS, WR.y - 0.19*WS, WR.z - 0.09*WS),
-      V(WR.x + s*0.36*WS, WR.y - 0.30*WS, WR.z - 0.19*WS),   /* mid drape */
-      V(WR.x + s*0.26*WS, WR.y - 0.41*WS, WR.z - 0.29*WS),   /* lower drape toward the flank */
-      V(WR.x + s*0.13*WS, WR.y - 0.49*WS, WR.z - 0.39*WS),   /* innermost — tucks down near the spine */
+      V(WR.x + s*0.147*WS,   WR.y + 0.09*WS,    WR.z + 0.177*WS),   /* topmost — steep up, the mantle peak */
+      V(WR.x + s*0.186*WS,   WR.y + 0.00*WS,    WR.z + 0.101*WS),
+      V(WR.x + s*0.198*WS,   WR.y - 0.045*WS,   WR.z + 0.051*WS),   /* new — backfills the peak/upper gap */
+      V(WR.x + s*0.211*WS,   WR.y - 0.09*WS,    WR.z + 0.00*WS),    /* lateral reach — widest point */
+      V(WR.x + s*0.206*WS,   WR.y - 0.19*WS,    WR.z - 0.114*WS),
+      V(WR.x + s*0.191*WS,   WR.y - 0.245*WS,   WR.z - 0.177*WS),   /* new — backfills the mid/drape gap */
+      V(WR.x + s*0.176*WS,   WR.y - 0.30*WS,    WR.z - 0.240*WS),   /* mid drape */
+      V(WR.x + s*0.127*WS,   WR.y - 0.41*WS,    WR.z - 0.367*WS),   /* lower drape toward the flank */
+      V(WR.x + s*0.064*WS,   WR.y - 0.49*WS,    WR.z - 0.493*WS),   /* innermost — tucks down near the spine */
     ];
-    const bladeHex = [P.membraneLt, P.bladeMid, P.plumeLt, P.bladeMid, P.plumeLt, P.plumeDk, P.plumeDk];
+    const bladeHex = [P.membraneLt, P.bladeMid, P.plumeLt, P.bladeMid, P.plumeLt, P.bladeMid, P.plumeLt, P.plumeDk, P.plumeDk];
     blades.forEach((tip, i)=>{
       tube(WR, tip, 0.048, 0.036, 4, bladeHex[i], {capB:{hex:P.plumeDk}});
     });
@@ -209,9 +232,11 @@ export function buildGiantVulture(){
     /* COVERT LAYER (doubled) — a shorter trailing feather stack along the forearm (elbow->wrist)
        that backfills the wedge between the primary fan and the torso, so the mantle reads as one
        filled mass all the way to the spine rather than a fan floating off a bare wrist. */
+    /* R6 SECOND-PASS ITERATOR: x-reach scaled down to match the tightened primary fan (was 0.20,
+       would now poke OUTSIDE the converged blades and re-introduce a paddle edge). */
     for(const f of [0.35, 0.65]){
       const covertBase = EL.clone().lerp(WR, f);
-      const covertTip = V(covertBase.x + s*0.20*WS, covertBase.y - 0.07*WS, covertBase.z - 0.20*WS);
+      const covertTip = V(covertBase.x + s*0.10*WS, covertBase.y - 0.07*WS, covertBase.z - 0.22*WS);
       tube(covertBase, covertTip, 0.032, 0.022, 4, f<0.5 ? P.plumeLt : P.plume, {capB:{hex:P.plumeDk}});
     }
   }

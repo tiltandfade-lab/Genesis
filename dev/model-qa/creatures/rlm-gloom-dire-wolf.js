@@ -60,7 +60,9 @@ export function buildDireWolf(){
     belly:0x94886e, ruff:0x8a8068,
     crest:0x746b54, crestPale:0xcabe9a,          // ragged spine crest, patchy pale tufts
     muzzle:0x8c8268, muzzleLt:0xa89c7a, nose:0x181410,
-    maw:0x1e1712, tongue:0x6a3e38, tooth:0xe6ddc6,
+    // SECONDPASS FLAG FIX (2026-07-09): tooth pushed near-white (was 0xe6ddc6, rendered as faint
+    // dark ticks against the muzzle) — same class as mon-wolf's secondpass fix.
+    maw:0x1e1712, tongue:0x6a3e38, tooth:0xfff6e2,
     ear:0x6b624c, earIn:0x211c16,
     eye:0x100d0a, eyeGlow:0xb6ce3c,               // sickly yellow-green glow
     claw:0x181410, disc:0x453c30, discTop:0x534a3c,
@@ -179,33 +181,47 @@ export function buildDireWolf(){
     const rings=bands.map(b=>ring(V(0,b.y,b.z), V(0,0,1), b.rx, b.rz, n, ph));
     stitch(rings, b=>bands[b].hex);
 
+    // SECONDPASS FLAG FIX (2026-07-09): the open maw read as faint dark ticks — same fix class as
+    // mon-wolf's secondpass pass. Root causes stacked: (1) the gap between upper/lower jaw base was
+    // too narrow for the signature to carry at 1/3-res, (2) the fang tip's z-offset (+0.006) sat
+    // BEHIND the base's z-offset (+0.016) — tip pointed backward instead of forward, tilting the
+    // face normal away from the camera/key-light exactly like mon-wolf's pre-fix winding bug, so the
+    // "teeth" rendered dim regardless of size, (3) tooth color (0xe6ddc6) sat well under a near-white
+    // floor. Fix: raised the upper jaw / dropped the lower jaw further (bigger gap), widened+deepened
+    // the dark maw void so muzzle-vs-cavity carries a real value step, flipped the fang tip forward
+    // of the root, resized fangs well clear of the 0.04u floor, tooth pushed to near-white above.
     const jawY = H*0.562;
-    const uB=V(0, jawY+0.052, 0.86), uM=V(0, jawY+0.040, 1.04), uT=V(0, jawY+0.022, 1.18);
+    const uB=V(0, jawY+0.064, 0.86), uM=V(0, jawY+0.040, 1.04), uT=V(0, jawY+0.022, 1.18);
     tube(uB, uM, 0.076, 0.059, n, P.muzzle, {raz:0.065, rbz:0.048, phase:ph});
     tube(uM, uT, 0.059, 0.033, n, P.muzzle, {raz:0.048, rbz:0.027, phase:ph, capB:{hex:P.nose, lift:0.010}});
-    // ASYMMETRIC mouth void — the right side (s=1) drops lower than the left, a subtle wrong-hinge tell
-    quad(V(-0.050,jawY-0.006,0.89), V(0.050,jawY-0.006,0.89),
-         V(0.040,jawY-0.055,1.11), V(-0.032,jawY-0.014,1.11), P.maw, 0.02);
-    const lB=V(0, jawY-0.056, 0.86), lM=V(0.010, jawY-0.078, 1.03), lT=V(0.014, jawY-0.090, 1.13);
+    // ASYMMETRIC mouth void — the right side (s=1) drops lower than the left, a subtle wrong-hinge
+    // tell; widened+deepened per the flag fix so the dark cavity itself carries at 1/3-res.
+    quad(V(-0.056,jawY+0.008,0.89), V(0.056,jawY+0.008,0.89),
+         V(0.044,jawY-0.078,1.11), V(-0.036,jawY-0.030,1.11), P.maw, 0.02);
+    const lB=V(0, jawY-0.068, 0.86), lM=V(0.010, jawY-0.078, 1.03), lT=V(0.014, jawY-0.090, 1.13);
     tube(lB, lM, 0.061, 0.042, n, P.muzzle,   {raz:0.046, rbz:0.033, phase:ph});
     tube(lM, lT, 0.042, 0.025, n, P.muzzleLt, {raz:0.033, rbz:0.018, phase:ph, capB:{hex:P.muzzleLt, lift:0.008}});
     quad(V(-0.023,jawY-0.030,0.94), V(0.023,jawY-0.030,0.94),
          V(0.019,jawY-0.038,1.08), V(-0.019,jawY-0.038,1.08), P.tongue, 0.04);
 
-    /* geometric TEETH — a wide bared-fang row, the value payload (law 3) ---------- */
+    /* geometric TEETH — a wide bared-fang row, the value payload (law 3).
+       SECONDPASS FLAG FIX: tip pushed FORWARD of the root (base z+0.012 < apex z+0.046, was the
+       reverse at +0.016/+0.006) — tilts the face normal toward the camera/key-light instead of away
+       from it (the same winding-direction bug mon-wolf's fix caught), and sizes bumped ~65-75% so
+       every fang clears the 0.04u feature floor with real area instead of dissolving at 1/3-res. */
     const fang=(x,y,z,w,h,down)=>{
       const ty = down ? y-h : y+h;
-      const p1 = down ? V(x+w,y,z+0.016) : V(x-w,y,z+0.016);
-      const p2 = down ? V(x-w,y,z+0.016) : V(x+w,y,z+0.016);
-      quad(p1, p2, V(x,ty,z+0.006), V(x,ty,z+0.006), P.tooth, 0.02);
+      const p1 = down ? V(x+w,y,z+0.012) : V(x-w,y,z+0.012);
+      const p2 = down ? V(x-w,y,z+0.012) : V(x+w,y,z+0.012);
+      quad(p1, p2, V(x,ty,z+0.046), V(x,ty,z+0.046), P.tooth, 0.02);
     };
     for(const s of [-1,1]){
-      fang(s*0.044, jawY+0.004, 0.955, 0.032, 0.074, true);
-      fang(s*0.020, jawY-0.002, 1.005, 0.021, 0.042, true);
-      fang(s*0.064, jawY+0.008, 0.905, 0.024, 0.048, true);
+      fang(s*0.046, jawY+0.010, 0.955, 0.056, 0.128, true);
+      fang(s*0.020, jawY+0.000, 1.005, 0.044, 0.078, true);
+      fang(s*0.066, jawY+0.014, 0.905, 0.048, 0.086, true);
     }
     for(const s of [-1,1]){
-      fang(s*0.038, jawY-0.048, 0.955, 0.024, 0.045, false);
+      fang(s*0.040, jawY-0.060, 0.955, 0.046, 0.080, false);
     }
 
     /* PINNED-BACK EARS — swept flat against the skull, running-flat rather than pricked */

@@ -157,6 +157,18 @@ const WHOLE_OBJECT_REGISTRY = {
   "nightmare":           { module: "../../dev/model-qa/creatures/rlm-frontier-nightmare.js",        fn: "buildNightmare",       discR: 0.55, opacity: 0.85 },
   "desperate-bandit":    { module: "../../dev/model-qa/creatures/rlm-frontier-desperate-bandit.js", fn: "buildDesperateBandit", discR: 0.42 },
   "scout":               { module: "../../dev/model-qa/creatures/rlm-frontier-scout.js",            fn: "buildScout",           discR: 0.42 },
+  "cockatrice":          { module: "../../dev/model-qa/creatures/rlm-bright-cockatrice.js",       fn: "buildCockatrice",      discR: 0.32 },
+  "gelatinous-cube":     { module: "../../dev/model-qa/creatures/rlm-bright-gelatinous-cube.js",  fn: "buildGelatinousCube",  discR: 0.62, opacity: 0.62 },
+  "iron-golem":          { module: "../../dev/model-qa/creatures/rlm-bright-iron-golem.js",       fn: "buildIronGolem",       discR: 0.62 },
+  "flesh-golem":         { module: "../../dev/model-qa/creatures/rlm-bright-flesh-golem.js",      fn: "buildFleshGolem",      discR: 0.55 },
+  "clay-golem":          { module: "../../dev/model-qa/creatures/rlm-bright-clay-golem.js",       fn: "buildClayGolem",       discR: 0.55 },
+  "pixie":               { module: "../../dev/model-qa/creatures/rlm-bright-pixie.js",            fn: "buildPixie",           discR: 0.26 },
+  "imp":                 { module: "../../dev/model-qa/creatures/rlm-bright-imp.js",              fn: "buildImp",             discR: 0.30 },
+  "ettin":               { module: "../../dev/model-qa/creatures/rlm-bright-ettin.js",            fn: "buildEttin",           discR: 0.62 },
+  "giant-crocodile":     { module: "../../dev/model-qa/creatures/rlm-bright-giant-crocodile.js",  fn: "buildGiantCrocodile",  discR: 0.72 },
+  "homunculus":          { module: "../../dev/model-qa/creatures/rlm-bright-homunculus.js",       fn: "buildHomunculus",      discR: 0.26 },
+  "smoke-mephit":        { module: "../../dev/model-qa/creatures/rlm-bright-smoke-mephit.js",     fn: "buildSmokeMephit",     discR: 0.32, opacity: 0.85 },
+  "satyr-revelmaster":   { module: "../../dev/model-qa/creatures/rlm-bright-satyr-revelmaster.js", fn: "buildSatyrRevelmaster", discR: 0.42 },
   "scarecrow":           { module: "../../dev/model-qa/creatures/rlm-gloom-scarecrow.js",   fn: "buildScarecrow", discR: 0.42 },
   "fire-elemental":      { module: "../../dev/model-qa/creatures/mon-fireelem.js", fn: "buildFireElemental", discR: 0.55 },
   "earth-elemental":     { module: "../../dev/model-qa/creatures/mon-earthelem.js", fn: "buildEarthElemental", discR: 0.55 },
@@ -750,7 +762,7 @@ const NEAREST_SUB = {
   "centaur-warden": "cultist", "cultist-roster-base-2024-stat-blocks": "cultist", "druid-circle-warden": "cultist",
   "dryad": "cultist", "fish-folk-archpriest": "cultist",
   "mage": "cultist", "priest": "cultist", "priest-acolyte": "cultist",
-  "satyr": "cultist", "satyr-revelmaster": "cultist",
+  "satyr": "satyr-revelmaster",
   
   // -> giant-lizard (18)
   "allosaurus": "giant-lizard", "ankylosaurus": "giant-lizard", "bulette-pup": "giant-lizard",
@@ -784,18 +796,18 @@ const NEAREST_SUB = {
   "nalfeshnee": "ogre", "nycaloth": "ogre", "oni": "ogre",
   "pit-fiend": "ogre",
   // -> ice-mephit (14)
-  "dretch": "ice-mephit", "dust-mephit": "ice-mephit", "homunculus": "ice-mephit",
-  "imp": "ice-mephit", "lantern-sage": "ice-mephit", "magma-mephit": "ice-mephit",
-  "manes": "ice-mephit", "pixie": "ice-mephit", "pixie-wonderbringer": "ice-mephit",
-  "quasit": "ice-mephit", "smoke-mephit": "ice-mephit", "spined-devil": "ice-mephit",
+  "dretch": "imp", "dust-mephit": "smoke-mephit",
+  "lantern-sage": "ice-mephit", "magma-mephit": "smoke-mephit",
+  "manes": "imp", "pixie-wonderbringer": "pixie",
+  "quasit": "imp", "spined-devil": "imp",
   "steam-mephit": "ice-mephit",
   // -> harpy (12)
   "aarakocra-aeromancer": "harpy", "aarakocra-skirmisher": "harpy", "blood-hawk": "harpy",
-  "cockatrice": "harpy", "cockatrice-regent": "harpy", "eagle": "harpy",
+  "cockatrice-regent": "cockatrice", "eagle": "harpy",
   "hawk": "harpy", "owl": "harpy",
   "swarm-of-ravens": "harpy",
   // -> wyvern (11)
-  "crocodile": "wyvern", "giant-crocodile": "wyvern", "giant-eagle": "wyvern",
+  "crocodile": "giant-crocodile", "giant-eagle": "wyvern",
   "giant-owl": "wyvern", "griffon": "wyvern",
   "hippogriff": "wyvern", "pteranodon": "wyvern",
   "roc": "wyvern", "vrock": "wyvern",
@@ -806,7 +818,7 @@ const NEAREST_SUB = {
   
   // -> hill-giant (9)
   "cloud-giant": "hill-giant", "cyclops-oracle": "hill-giant", "cyclops-sentry": "hill-giant",
-  "ettin": "hill-giant", "fire-giant": "hill-giant", "fomorian": "hill-giant",
+  "fire-giant": "hill-giant", "fomorian": "hill-giant",
   "frost-giant": "hill-giant", "stone-giant": "hill-giant", "storm-giant": "hill-giant",
   // -> warhorse (7)
   "boar": "warhorse", "deer": "warhorse", "elk": "warhorse",
@@ -828,8 +840,8 @@ const NEAREST_SUB = {
   "bone-naga": "giant-constrictor-snake", "couatl": "giant-constrictor-snake", "guardian-naga": "giant-constrictor-snake",
   "salamander-fire-snake": "giant-constrictor-snake", "swarm-of-venomous-snakes": "venomous-snake",
   // -> stone-golem (6)
-  "brazen-gorgon": "stone-golem", "clay-golem": "stone-golem", "colossus": "stone-golem",
-  "flesh-golem": "stone-golem", "iron-golem": "stone-golem",
+  "brazen-gorgon": "gorgon", "colossus": "stone-golem",
+  
   // -> giant-bat (4)
   "bat": "giant-bat", "stirge": "giant-bat", "swarm-of-insects": "giant-bat",
   "swarm-of-stirges": "giant-bat",
@@ -838,7 +850,7 @@ const NEAREST_SUB = {
   // -> ghoul (3)
   "ghast-base": "ghast", "ghast-gravecaller-spellstitched-elite": "ghast",
   // -> gray-ooze (2)
-  "blob-of-annihilation": "gray-ooze", "gelatinous-cube": "gray-ooze",
+  "blob-of-annihilation": "gray-ooze",
   // -> giant-spider (1)
   "ettercap": "giant-spider",
   // -> commoner (1)

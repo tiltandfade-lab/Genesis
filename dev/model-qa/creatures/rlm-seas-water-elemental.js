@@ -161,7 +161,7 @@ export function buildWaterElemental(){
         tube(chain[i], chain[i+1], Math.max(ra,0.045), Math.max(rb,0.040), 4, P.foam, i===chain.length-2 ? { capB:{hex:P.foam} } : {});
       }
     }
-    // scattered small foam droplets, deterministic placement (spiral-scattered, no Math.random)
+    // scattered small foam droplets, deterministic placement (spiral-scattered, no random source)
     const dropPts = [
       [0.18,1.02,0.30],[-0.20,0.90,0.10],[0.24,0.80,-0.02],[-0.28,1.10,0.40],
       [0.10,1.28,0.50],[-0.06,0.72,-0.08],

@@ -134,6 +134,20 @@ only happen at merge-to-master, which is git's ordinary 3-way merge, not a surpr
   `SPICE-CURVE`, `LOOT-REMAP`, `TIER-SCOPE` (the level-10 cap), `ITEMS` (the type/instance split for
   gear — BUILT), and the advancement family `EVENT-CONTRACT` / `ADVANCEMENT` / `DIFFICULTY` / `COMBAT`.
 
+## Token discipline (session-start reading)
+
+A single Read of a generated data file can cost a session millions of tokens — `tables.js` alone
+is 7.3 MB (~2M tokens). `.claude/settings.json` hard-denies Read on the worst offenders
+(tables.js/json, the bestiary/flavor/atlas data files, gauntlet reports, playtest-save states,
+vendor/). Rules:
+
+- **Never Read a generated artifact to "understand" it** — read the *source* (Engine markdown,
+  build/gen-*.py) or `manifest.json`'s `owns` list. If you need a value out of one, `grep -m` it.
+- **Orientation = HANDOFF.md + the specific spec you're working** — not DESIGN.md (134 KB) or
+  CHANGELOG.md (284 KB) end-to-end. CHANGELOG: `tail -100` only. DESIGN.md: grep the spec name,
+  read that section.
+- **Sweeps go to Explore subagents**, and even they grep — never Read a whole big file.
+
 ## Gotchas
 
 - **Scanned MM/DMG/PHB PDFs have broken OCR** — vision-read stat blocks; never trust their text

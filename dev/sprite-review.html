@@ -78,7 +78,7 @@
   </select>
   <input id="fSearch" type="text" placeholder="search name…" size="16">
   <label style="color:var(--dim);font-size:12px">zoom
-    <input id="zoom" type="range" min="60" max="320" value="150" style="width:110px;vertical-align:middle"></label>
+    <input id="zoom" type="range" min="30" max="320" value="150" style="width:110px;vertical-align:middle"></label>
   <button id="regen" title="fold the overlay into data/sprite-registry.js + refresh REJECTS.md">regen registry</button>
   <a href="/rejects" target="_blank" style="color:var(--fail);font-size:12px" title="dev/sprite-manifests/REJECTS.md — the regen shopping list">rejects ↗</a>
   <span class="progress" id="progress"></span>
@@ -88,7 +88,7 @@
     <div id="stage"><div id="lineup"></div></div>
     <div id="controls">
       <button id="prev">◀</button><button id="next">▶</button>
-      <label>scale <input id="scale" type="range" min="0.3" max="3" step="0.01" value="1"></label>
+      <label>scale <input id="scale" type="range" min="0.1" max="8" step="0.01" value="1"></label>
       <input id="scaleVal" type="text" value="1.00">
       <button id="reset1" title="reset to 1.0">1.0</button>
       <button id="pin">pin ⇩</button>
@@ -117,15 +117,21 @@ const sizeScale = e => SIZE_SCALE[sizeOf(e)] ?? 1;
    inside that plane (0.75x). These calibrate the sprite's DEFAULT size — the game can re-cast
    any sprite as a giant/tiny variant later by rendering it at a different tier. `titanic` is
    reserved headroom (no SRD size maps there yet). */
+/* Head-height in feet: medium head = 6 ft (a human), everything else scales off that. */
 const GUIDES = [
-  { key:"tiny",     mult:0.5,  srd:"Tiny" },
+  { key:"tiny",     mult:0.25, srd:"Tiny" },
   { key:"small",    mult:0.75, srd:"Small" },
   { key:"medium",   mult:1,    srd:"Medium" },
   { key:"large",    mult:2,    srd:"Large" },
   { key:"x-large",  mult:3,    srd:"Huge" },
   { key:"gigantic", mult:4,    srd:"Gargantuan" },
-  { key:"titanic",  mult:5,    srd:null },
+  { key:"titanic",  mult:6,    srd:null },
 ];
+const MEDIUM_FT = 6;
+function feetLabel(mult){
+  const ft = mult * MEDIUM_FT, whole = Math.floor(ft), inches = Math.round((ft - whole) * 12);
+  return inches ? `${whole}′${inches}″` : `${whole}′`;
+}
 const SRD_TO_GUIDE = { tiny:"tiny", small:"small", medium:"medium", large:"large",
                        huge:"x-large", gargantuan:"gigantic" };
 const guideFor = e => GUIDES.find(g => g.key === (SRD_TO_GUIDE[sizeOf(e)] || "medium"));
@@ -192,7 +198,7 @@ function render(){
     const isCur = curGuide && gd.key === curGuide.key;
     gl.className = "guide" + (isCur ? " active" : "");
     gl.style.bottom = (groundY + gd.mult * medPx) + "px";
-    gl.innerHTML = `<span>${gd.key} head · ${gd.mult}×${gd.srd ? " · SRD " + gd.srd : " · reserved"}${isCur ? " ◀ TARGET" : ""}</span>`;
+    gl.innerHTML = `<span>${gd.key} head · ${feetLabel(gd.mult)} · ${gd.mult}×${gd.srd ? " · SRD " + gd.srd : " · reserved"}${isCur ? " ◀ TARGET" : ""}</span>`;
     stage.appendChild(gl);
   }
   lineup.style.bottom = groundY + "px"; lineup.style.top = "auto"; lineup.style.height = "0";
@@ -224,7 +230,7 @@ function renderInfo(){
     <p class="verdict ${st}">${st.toUpperCase()}${o.scale ? ` · scale ×${o.scale}` : ""}</p>
     <p style="font-size:12px;background:#2c2836;border:1px solid var(--line);border-radius:4px;padding:6px 8px">
       target: <b style="color:var(--accent)">${guideFor(e).key}</b> head line
-      (${guideFor(e).mult}×${guideFor(e).srd ? " · SRD " + guideFor(e).srd : ""})<br>
+      (${feetLabel(guideFor(e).mult)} · ${guideFor(e).mult}×${guideFor(e).srd ? " · SRD " + guideFor(e).srd : ""})<br>
       <span style="color:var(--dim)">calibrates this sprite's DEFAULT size — the game can
       re-cast it as a giant or tiny variant at another tier.</span></p>
     <dl>
@@ -278,7 +284,7 @@ function toast(msg){
 
 function setScale(v){
   const e = cur(); if(!e) return;
-  v = Math.min(3, Math.max(0.3, v));
+  v = Math.min(8, Math.max(0.1, v)); // wide on purpose — calibrate true titan/speck sizes here; the game can cap at render time
   PENDING[e.slug] = { scale: v }; // local only — Save/Pass/Fail commit it
   render();
 }

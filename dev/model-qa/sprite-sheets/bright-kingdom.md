@@ -164,99 +164,100 @@ static character per cell (not a repeat, not an animation frame), uniform cell s
 
 ## NPC batches (75 total, 3 sheets)
 
-**Population diversity (binding):** vary skin tone, ethnicity, hair texture, build, and age across the full roster below — a sheet where every face reads as the same ethnicity is a failure, not a style choice, regardless of realm. This realm's population stays human/toylike per its own identity (no separate non-human civilian species here) — the diversity requirement is ethnic/physical variety only.
+**Population diversity (binding) — toon-majority world:** this realm's population is MAJORITY non-human original toon-creatures (animate objects, anthropomorphic animals, storybook-cartoon beings) — humans are a visible MINORITY here, guests/staff in a world that isn't built around them. Roughly 80% of the 75 entries below are toon-creatures, ~20% are human (and those human entries should still vary in ethnicity/age/build across themselves). Every creature design below is original to this prompt set — do not render any recognizable existing character from any franchise; these are generic archetypes in the classic-cartoon-mascot genre, not specific IP.
 
 Style block (repeated here so this section is self-contained): Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration) — this IS one of Genesis's intentionally cartoony realms, so chunky rounded shapes and exaggerated proportions are correct here. saturated cotton-candy-pink and mint palette, clean bold outlines, chunky rounded shapes like an 8-bit mascot, bright rim light — but with one unsettling detail (sharp teeth, too-wide eyes) per sprite that reads even in silhouette.
 
 Shared mechanical instructions (restated for this section, NPC-appropriate): 5x5 grid, 25 cells, one distinct static character per cell (not a repeat, not an animation frame), uniform cell size, solid magenta (#FF00FF) background (no transparency, no other background elements), consistent scale across all 25, orthographic side view, each character fully visible from head to toe within its cell — no cropping at the top, bottom, or sides, the complete body must fit inside the cell boundary. **Every character in an expressive pose characteristic of their role** — mid-task, mid-gesture, caught doing the thing that defines them (the smith mid-hammer-swing, the informant glancing over a shoulder, the merchant mid-haggle, the healer mid-bandage) — never a neutral T-pose or idle stand, and never combat aggression unless the role is itself a security/enforcer type. **No scene props, furniture, tools-as-set-dressing, or background objects of any kind** — no benches, stalls, counters, carts, weapons racks, signage, etc.; only the character itself (small hand-held items that are part of the character's own body/outfit, like a held tool mid-use, are fine — freestanding set pieces are not) isolated against the plain magenta background.
 
-Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-ROLE-REALMS.md`) plus this realm's exclusive `adds`.
+Unlike every other realm's NPC section, this roster is NOT the reskinned 35-archetype NPC Role
+Spine (per `NPC-ROLE-REALMS.md`) — Bright-Kingdom's toon-majority population needed original
+non-human archetypes the spine's flat human-role labels can't express, so this list is
+hand-authored instead.
 
 ### NPC sheet 1/3
 
-1. **Overworld forager** — Reads the wild and brings in what the settled can't.
-2. **Block-pusher** — Moves the heavy things; sees everything, is asked nothing.
-3. **Pipe-diver** — Works the dark and the tight places; patient underground.
-4. **Wind-up page** — Invisible to the powerful, and so hears every secret.
-5. **Out-of-lives drifter** — Has nothing, so knows the streets better than anyone.
-6. **Toymaker** — Their tools carry their whole history.
-7. **Candy-chef** — Up before dawn; holds the neighborhood's gossip.
-8. **Block-mason** — Reads every structure out of habit; knows what's load-bearing.
-9. **Mascot-suit tailor** — Notices the cut and quality of everyone's clothes.
-10. **Kart-wright** — Keeps the means of travel and trade running; eyes on the weather.
-11. **Prize-broker** — Information-rich, truth-poor.
-12. **Save-point keeper** — Controls the space, not the people in it.
-13. **Heart-container brewer** — Smells of bitterroot; knows what heals and what doesn't.
-14. **Extra-life nurse** — Trusted, and overburdened by it.
-15. **Checkpoint priest** — Maintains the ritual, not the doctrine.
-16. **Sideshow act** — Craves the attention; hides the true feeling under it.
-17. **Wind-up soldier** — Authority-adjacent, with limited real power.
-18. **Rented mini-boss** — Loyalty bought with coin, and cynical about it.
-19. **Gate-guard between worlds** — Wary of the road; values a good pair of boots.
-20. **Glitch-goblin** — Desperate or cruel; lives outside the law.
-21. **Contraband power-up dealer** — Hides the cargo; speaks only in euphemism.
-22. **Coin-snatcher** — Eyes every coin-pouch; avoids every eye.
-23. **True-believer in the High Score** — Fanatical devotion behind a mundane face.
-24. **Talent-scout for the Game** — Charisma aimed at the desperate; sells belonging.
-25. **Glitched-in wanderer** — Chose to stay here; the reasons stay unclear.
+1. **Animate teacup waiter — hops table to table on a saucer for legs, always resetting a spilled tray**
+2. **Mushroom-capped gardener — squat body, wide round cap for a head, tends the sugar-beet patch**
+3. **Walking alarm-clock postman — ticking loudly, always three minutes early**
+4. **Candy-corn shopkeeper — triangular striped body, sells sweets that double as currency**
+5. **Plaid-vested fox tailor — measures customers with a tape that never quite tells the truth**
+6. **Round-bellied frog innkeeper — croaks out the nightly specials**
+7. **Animate broom sweeper — no visible face, still somehow deeply expressive**
+8. **Acorn-capped squirrel banker — counts coins faster than anyone can watch**
+9. **Puffball cloud-person mail sorter — drifts a few inches off the ground, always**
+10. **Piano-key zebra musician — stripes double as sheet music somehow**
+11. **Jelly-bean-jar merchant — body made of stacked jellybeans, restocks himself**
+12. **Waddling duck constable — badge too big for his chest, takes the job very seriously**
+13. **Star-shaped night-watchman — glows faintly, patrols after the park closes**
+14. **Carnivorous flower-person florist — sells bouquets, watches the customers a beat too long**
+15. **Animate umbrella doorman — opens for rain or trouble, whichever comes first**
+16. **Beanstalk-vine gardener — grows a little taller every scene, never mentions it**
+17. **Egg-shaped chef — cracks a hairline more each time he laughs, never actually breaks**
+18. **Round hedgehog cobbler — quills double as extra hands for pinning leather**
+19. **Bunny-eared candy-striper nurse — the park infirmary's only real professional**
+20. **Animate wind-up-key vendor — sells the keys that wind up the wind-up soldiers**
+21. **Sunflower-headed farmer — turns to face whichever direction the crowd's headed**
+22. **Puppet-jointed marionette librarian — strings visible, moves like she doesn't notice them**
+23. **Round raccoon pickpocket, comic not menacing — always gets caught, never minds**
+24. **Chubby bee beekeeper — tends the hives that make the park's actual honey**
+25. **Animate lollipop crossing-guard — stops traffic with a literal giant sucker sign**
 
 ### NPC sheet 2/3
 
-1. **Superboss no one's beaten** — Known of, rarely seen.
-2. **Understudy mascot** — Filling in for someone absent; borrowed authority.
-3. **Backroom high-scorer** — Power without a title.
-4. **Miscast sprite** — Unqualified, unwilling, or both — and in the role anyway.
-5. **Spoiled prince** — Wealthy, bored, insulated from real consequence.
-6. **Arcade tycoon** — Sees every interaction as a transaction.
-7. **Manual-keeper** — Hoards the secret knowledge; sees others as material.
-8. **The NPC with no dialogue tree** — Their very presence is the notable thing.
-9. **Champion-by-the-rules** — Won the game everyone plays; the crown is literal, and heavier than it looks.
-10. **Prize-keeper** — Guards the reward that's watching you back; the rules protect it, not you.
-11. **Perpetual challenger** — Respawns to try again — cheerfully, endlessly, and a little wrong.
-12. **Power-up peddler** — Sells the thing you eat to get strong. The fine print has teeth.
-13. **Referee** — Enforces rules a child could recite, with consequences a child shouldn't see.
-14. **Mascot / herald** — The too-cheerful face that greets you; the smile never once drops.
-15. **Collectible-hoarder** — Needs all of the set — and the last piece is guarded by something.
-16. **Level-boss** — Sits at the top of the map, bound by the rules to wait for a challenger.
-17. **Fairy-godmother figure** — Grants the boon; the fine print is a fairy-tale kind of cruel.
-18. **Reset-warden** — Puts everything back the way it was each morning, and hates when you notice.
-19. **Dark-skinned parade coordinator — keeps the too-cheerful schedule running**
-20. **Elderly ride operator — been running the same ride since before anyone remembers**
-21. **Multi-ethnic mascot performer — inside the suit, could be anyone, that's the point**
-22. **Freckled ticket-booth kid — first job, hasn't clocked the wrongness yet**
-23. **Tall, broad-shouldered strongman performer — part of the show, off-hours unreadable**
-24. **Small, sharp-eyed fortune-teller — the only one who tells the truth, in riddles**
-25. **Silver-haired candy-cart vendor — been here longer than the park's official history**
-
----
+1. **Owl-faced night librarian — reads by moonlight, never needs the lamp**
+2. **Penguin-shaped ice-cream vendor — waddles the exact same route every single day**
+3. **Animate pocket-watch clockmaker — every gear visible, ticks faintly when he talks**
+4. **Cat-eared seamstress — sews costumes for every performer in the park**
+5. **Turtle-shelled mailman — slow, reliable, never once late in living memory**
+6. **Animate paintbrush portrait artist — bristles for fingers, always mid-stroke**
+7. **Round marshmallow baker — a little too warm to the touch, sells s'mores**
+8. **Firefly lamplighter — lights the park's lanterns at dusk with no ladder**
+9. **Puffin-faced ferry operator — runs the little boat ride, sings off-key sea shanties**
+10. **Animate top-hat, a magician's assistant — the hat does most of the actual talking**
+11. **Chipmunk-cheeked snack vendor — cheeks somehow hold an entire tray of popcorn**
+12. **Round dumpling dim-sum chef — steam constantly rising off his own head**
+13. **Butterfly-winged face-painter — dusts glitter off her wings between customers**
+14. **Gopher-toothed construction foreman — rebuilds the same ride every season**
+15. **Animate scarecrow security guard — straw arms, surprisingly firm grip**
+16. **Round pufferfish balloon-seller — puffs up when startled, still smiling**
+17. **Fox-eared fortune-cookie vendor — every fortune is oddly, specifically true**
+18. **Animate music-box dancer, off-duty — pirouettes even just walking to work**
+19. **Badger-faced blacksmith — forges the park's ride parts by hand, old-school**
+20. **Round spider seamstress — eight hands, finishes orders twice as fast as anyone**
+21. **Animate paper-lantern lamplighter's apprentice — glows a little dimmer, still learning**
+22. **Squirrel-tailed accountant — counts the park's take twice, trusts no one, not even himself**
+23. **Frog-throated town crier — announces every parade a little too loudly**
+24. **Animate sock-puppet street performer — no visible strings, unsettlingly lifelike**
+25. **Round hedgehog paperboy — quills hold the rolled-up newspapers**
 
 ### NPC sheet 3/3
 
-1. **Dark-skinned parade coordinator — keeps the too-cheerful schedule running**
-2. **Elderly ride operator — been running the same ride since before anyone remembers**
-3. **Broad-shouldered strongman act — part of the show, off-hours unreadable**
-4. **Young ticket-booth kid, freckled — first job, hasn't clocked the wrongness yet**
-5. **Grey-haired candy-cart vendor — been here longer than the park's official history**
-6. **One-eyed carousel mechanic — lost the eye fixing a horse that shouldn't move on its own**
-7. **Small, sharp-eyed fortune-teller — the only one who tells the truth, in riddles**
-8. **Heavyset funhouse mirror attendant — laughs at the same jokes every single day**
-9. **Dark-skinned face-painter — paints the same smile on every kid, some come back changed**
-10. **Pale, sleepless night-shift park janitor — cleans up things the day shift doesn't ask about**
-11. **Short, quick-handed prize-booth operator — the games are rigged, everyone half-knows it**
-12. **Elderly retired mascot performer — won't say which suit, won't say why not**
-13. **Sunburnt cotton-candy vendor — sells the same sugar-pink cloud to three generations now**
-14. **Multi-ethnic new hire, still cheerful — hasn't been here long enough to be tired yet**
-15. **Lean, twitchy roller-coaster operator — checks the harnesses twice, still nervous**
-16. **Stout balloon-animal vendor, dark-skinned — makes shapes kids swear move on their own**
-17. **Grey-haired retired ringmaster — stepped back from the spotlight, still commands a room**
-18. **Young twin performers — synchronized, a little too synchronized**
-19. **Broad, painted-smile security guard — the park's only real muscle, always grinning**
-20. **Elderly blind arcade attendant — somehow always knows who's cheating**
-21. **Dark-skinned, face-paint-scarred stunt performer — does the tricks the mascots can't**
-22. **Small, quick-handed pickpocket working the crowds — the one dishonest thing in a dishonest place**
-23. **Weathered groundskeeper — tends a garden of topiaries that are never quite the same shape twice**
-24. **Park nurse, unnervingly calm — treats injuries the rides shouldn't cause**
-25. **Tall, gaunt park accountant — the only person here who never smiles**
+1. **Beetle-shelled roller-rink DJ — shell doubles as a speaker somehow**
+2. **Animate gingerbread baker's apprentice — smells faintly of cinnamon at all times**
+3. **Bat-winged night-shift janitor — cleans the park after the lights go down**
+4. **Round otter lifeguard — the water-ride's actual only qualified rescuer**
+5. **Animate kite street-vendor — the kites tug at him like they want to fly off on their own**
+6. **Chipmunk twins running the popcorn stand — synchronized, mildly unnerving**
+7. **Round frog-faced ticket-taker — croaks out 'one, please' all day long**
+8. **Animate wind-chime musician — sways gently even indoors**
+9. **Fox-tailed reformed pickpocket, now security — still has the fastest hands in the park**
+10. **Round snail mail-cart pusher — slow, but nothing ever gets lost**
+11. **Human parade coordinator, dark-skinned — one of the few flesh-and-blood staff, keeps the too-cheerful schedule running**
+12. **Elderly human ride mechanic — been fixing rides here since before most of the toons remember**
+13. **Human ticket-booth kid, freckled — new hire, still adjusting to coworkers who are literally alive teacups**
+14. **Human night-shift security guard — the toons handle most of it, he mostly just watches**
+15. **Multi-ethnic human tour guide — explains the park to visitors who don't realize how much of it is actually alive**
+16. **Elderly human food vendor — one of the last humans who still cooks by hand instead of somehow being made of the food itself**
+17. **Human janitor — cleans up glitter and confetti that never seems to actually run out**
+18. **Human maintenance crew lead, dark-skinned — the only one who goes near the rides when they're 'resting'**
+19. **Human first-aid station nurse — treats human guests; the toon staff mostly can't be hurt the same way**
+20. **Human retired performer — used to be in the park's old human-only sideshow, stayed on as groundskeeper**
+21. **Human accountant — audits a park whose currency is sometimes literal candy**
+22. **Human new hire, still visibly shaken — first week, still hasn't adjusted to a coworker being a sentient teapot**
+23. **Human longtime resident — grew up beside the park, one of a handful of humans who actually live inside its boundary**
+24. **Human late-night radio DJ — broadcasts from a booth just outside the gates; half the toons tune in**
+25. **Elderly human founder's descendant — technically still owns the deed, mostly lets the park run itself now**
 
 ## Domestic animal batches (25 total, 1 sheet)
 

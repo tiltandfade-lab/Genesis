@@ -368,3 +368,7 @@ declared.
    as linked partial records from mint? (Recommend one-record; peel-off on demand.)
 5. **The three shipped entries themselves** — §7 prose is draft canon; your craft pass owns the
    final text (names, wants, hooks), same as any hand-authored table.
+
+## RESOLVED — Adam (2026-07-08 night)
+**Defaults accepted as drafted** ("i think your default cameo spec is accurate") — 2% base chance,
+uniqueness scope, group handling, wildcard posture all stand as the draft's recommendations.

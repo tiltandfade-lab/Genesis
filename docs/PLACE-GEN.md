@@ -399,3 +399,30 @@ close the loop end-to-end. Numbering continues §5.
     (1 band = 5 cells deep, 1 lane = 4 wide). Own unit, after 7 proves the cell grid.
 
 Dependency order: 1→2→{3,8}→7→10, 9 anytime after 2, 11 after 7. Unit 6 stays parallel.
+
+### E. Source format contract (craft lane landed 2026-07-09 — unit 1 parses EXACTLY this)
+
+Files (in `Engine/03. _Tables/05. Realms/`): `Place Spine.md` + `Place Skin - <Realm>.md`
+(Frontier, Chrome, Gloom landed; 8 realms backfill later — a missing skin falls back to frontier
+at roll time, exactly like `roleForRealm`).
+
+**Spine row** (24 rows):
+`| # | Archetype | Function-note | Weight | Scale | Space | Staff | Cast |`
+- `#` int stable key · `Weight` int · `Scale` = `site` (only value today)
+- `Space` ∈ `cramped|roomy|vast` — the GRID-LAW band; band→cell-dims mapping lives in the
+  generated JS (constants sourced from the Bastion gather), NOT in the markdown.
+- `Staff` = `N` or `N-M` headcount band (string, parsed to {min,max}).
+- `Cast` = `anchorCls / ambientCls+ambientCls` — classes from the NPC spine Tags vocabulary
+  (labor wild service margin craft trade care faith authority criminal elite) plus `any` =
+  unfiltered. Parse: split on `/`, anchor before, ambient list split on `+`.
+
+**Skin reskin row:** `| N · Archetype | <label> | Weight |` — blank Weight = inherit spine,
+`0` = drop (label is `—` by convention, never surfaced).
+**Skin ADD row:** `| [ADD] | <label> | Weight | Scale | Space | Staff | Cast | Note |` —
+same field semantics as the spine; ADD keys are `add:<slug-of-label>`.
+**Skin `## Name patterns` section (optional):** markdown list, `- <pattern>` lines, `<token>`
+placeholders passed through verbatim for the engine/DM to fill (Gloom has one; Frontier omits →
+`placeNameDesc` path). Absent section = no patterns.
+
+These spine/skin files are label-overlays like the NPC spine — compile-tables.py skips them;
+`build/gen-place-skins.py` (unit 1) is their only consumer.

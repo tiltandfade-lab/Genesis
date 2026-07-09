@@ -330,11 +330,18 @@ const check = (name, cond, detail = "") =>
 // MUTATION CHECKS — break each guard, watch the harness fail, restore.
 // ============================================================
 
-// (a) name-freeze: neutralize the guard in codex.js — a known record's rename should now succeed
+// (a) name-freeze: neutralize the guard in codex.js — a known record's rename should now succeed.
+// FIXTURE UPDATE 2026-07-09 (ANIMAL-SOCIAL U5): the guard's `else` branch grew from a single
+// `else r.name=patch.name;` into a block that ALSO fires the animal-promotion trigger on a
+// successful rename (§4/§6 U5). The freeze behavior is unchanged; only the code shape moved, so
+// the marker/mutation are re-anchored on the true invariant — the `if(r.status.known)` freeze
+// condition itself — rather than the whole block. Mutating that condition to `if(false)` makes the
+// freeze never fire, so a known record falls through to the rename: RED by construction, and robust
+// to future edits of the (now larger) else block.
 {
   const original = read("src/world/codex.js");
-  const marker = "if(patch.name!=null){\n    if(r.status.known){ console.warn(\"[codex] name-freeze — rename refused on a known record:\",id); }\n    else r.name=patch.name;\n  }";
-  const mutated = "if(patch.name!=null){ r.name=patch.name; }";
+  const marker = "if(r.status.known){ console.warn(\"[codex] name-freeze — rename refused on a known record:\",id); }";
+  const mutated = "if(false){ console.warn(\"[codex] name-freeze — rename refused on a known record:\",id); }";
   if (!original.includes(marker)) { fail++; console.log("  ✗ MUTATION(name-freeze): guard text not found verbatim — spec drifted?"); }
   else {
     const mutSrc = ("tables.js" ? read("tables.js") : "") + "\n;\n" +

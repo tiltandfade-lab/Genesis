@@ -147,6 +147,36 @@
         }
       }
     },
+    "animal_care": {
+      "fields": [
+        "event",
+        "target"
+      ],
+      "aliases": {},
+      "num": [],
+      "example": {
+        "type": "animal_care",
+        "payload": {
+          "target": "npc:ash-hound",
+          "event": "fed"
+        }
+      }
+    },
+    "animal_interview": {
+      "fields": [
+        "id",
+        "open"
+      ],
+      "aliases": {},
+      "num": [],
+      "example": {
+        "type": "animal_interview",
+        "payload": {
+          "id": "npc:ash-hound",
+          "open": true
+        }
+      }
+    },
     "attack": {
       "fields": [
         "advantage",
@@ -1615,6 +1645,7 @@
     },
     "social_check": {
       "fields": [
+        "animalFriendshipSpell",
         "caughtLie",
         "cause",
         "dc",
@@ -1623,6 +1654,7 @@
         "natural",
         "overshoot",
         "skill",
+        "strongCha",
         "target",
         "total"
       ],

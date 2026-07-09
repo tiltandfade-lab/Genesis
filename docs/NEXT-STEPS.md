@@ -34,11 +34,31 @@ with Adam's rulings folded; REALM-HOOKS spec landing next. Queue:
 3. ◐ **Build wave — the spec backlog is deep and Sonnet-ready** (each doc carries numbered units +
    red-first tests): ☑ **ANIMAL-SOCIAL U1–U6 — BUILT + GATED + MERGED 2026-07-09 night** (CHANGELOG;
    Opus re-gate caught a real DM_EVENT_TYPES / dm-contract.json / table-usage artifact-drift miss the
-   build self-reported green). REMAINING, in dependency order → TIYL-WEIGHTED-STARTS → HOOK-WALKS
-   (incl. dungeon-discovery, breach-in-walks, mid-walk entry, 8–12 segment law) → GLOOM-KEY U1–U7 →
-   PLACE-GEN U1–U6 → CAMEO-CAST U1–U5 → SHIP-TRAVEL U1–U9 → REALM-HOOKS U1–U6.
+   build self-reported green). ☑ **ANIMAL-SOCIAL-HQ HQ-1..7 — the review fix queue, LANDED 2026-07-09
+   late night** (`docs/ANIMAL-SOCIAL-HQ.md`; /code-review found the wave's verify-green-≠-wired
+   disease — realm skins / class bump / parley routing / predator witness all unwired in production —
+   all wired + gated; the WIRING LAW is now standing acceptance for wiring units: verify checks drive
+   production entry points, never the new function directly). REMAINING, in dependency order →
+   TIYL-WEIGHTED-STARTS → HOOK-WALKS (incl. dungeon-discovery, breach-in-walks, mid-walk entry,
+   8–12 segment law) → GLOOM-KEY U1–U7 → PLACE-GEN U1–U6 → CAMEO-CAST U1–U5 → SHIP-TRAVEL U1–U9 →
+   REALM-HOOKS U1–U6.
    **⚠ Each remaining spec is still SPEC-not-locked ("awaiting Adam's review") — lock it (resolve its
    open rulings) before executing, as ANIMAL-SOCIAL was locked before its build.**
+3b. ☑ **Adam rulings from the HQ review — RULED 2026-07-09 late night:** (a) urban→rural tier-0
+   banding — **settlement POPULATION estimates are the intended urban-development signal** ("at some
+   point we need to start estimating populations for the cities and towns … helps me a lot on
+   tabletop when I am creating a map for a town"); the tier-0 lodging fallback STANDS until
+   populations exist. Populations belong to the PLACE-GEN spec's scope when that build wave lands —
+   they'd drive `nodeEnvBand`, place-tier stock, and town-map presentation alike. (b) npc-life stamp
+   — **BUILT as HQ-8, landed 2026-07-09 late night**: the six place-bound npc-life writers
+   (companion desertion/pet-wanders/sidekick-departure/sidekick-death, turn life-event,
+   successor-thread) stamp `nodeId`; backstory seeds / faction-turns / tell-refresh stay
+   location-less by design (a bird must not witness world-gen). Bird's faces-sense is now live in
+   production; herd's `move-zone` movement-sense stays deferred until map-scale movement witnessing
+   has a real source (travel transitions, someday — design question, not a stamp).
+   **Standing note:** `dev/verify-animal-table-fingerprint.mjs` is SUPPOSED
+   to go red under the CRAFT-LANE row pass — that red = re-sync `ANIMAL_ENV_WEIGHTS` +
+   `ANIMAL_KNOWLEDGE_SCOPE` eyes-open, never loosen the tokens.
 4. ☐ **Models-lane handoff** (coordination note, other session): saurian warrior+scholar castes,
    2-3 rideable dino mounts, Zeal-stratum sentinel, the bat gang, ED-209-class boss, ally-mutant,
    plus the Shoggoth benchmark's hermetic re-identity ("Unformed of Nun", Adam deferred).

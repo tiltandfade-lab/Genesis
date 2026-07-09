@@ -351,7 +351,9 @@ function turnLifeEvent(w, nodeId, opts){
   const roll=(typeof rollTable==="function")?rollTable("npc-life-event"):null;
   if(!roll){ console.warn("[world-turn] npc-life-event not compiled — life-event skipped (null-safe)"); return null; }
   const fate=(roll.cells&&roll.cells[0])||turnFateFromText(roll.text);
-  addLedger(w,"npc-life",{kind:"life-event",npcId:npc.id,name:npc.name,fate,band:roll.band,monthsLong:!!opts.monthsLong},
+  // HQ-8 (docs/ANIMAL-SOCIAL-HQ.md D-HQ8-1/D-HQ8-3): nodeId is ALREADY in scope — the caller's
+  // known-NPC filter above selected npc among those with status.at===nodeId; stamp it.
+  addLedger(w,"npc-life",{kind:"life-event",npcId:npc.id,name:npc.name,fate,band:roll.band,monthsLong:!!opts.monthsLong,nodeId},
     "◆ "+npc.name+" — "+roll.text);
   if(typeof codexUpdate==="function"){
     if(fate==="died"||fate==="vanished") codexUpdate(w,npc.id,{status:{condition:fate}});
@@ -396,7 +398,8 @@ function turnMintSuccessorThread(w, npc, fate){
     dm:{ legs:"thread-seed", pool:"npc-life", causeShape, whatRemains, inherits:null },
     status:{ known:false, soft:true, at:npc.status.at||null } });
   if(rec && typeof codexLink==="function") codexLink(w, rec.id, "part-of", npc.id);
-  addLedger(w,"npc-life",{kind:"successor-thread",npcId:npc.id,threadId:rec?rec.id:null,fate},
+  // HQ-8 (D-HQ8-1/D-HQ8-3): stamp nodeId — the thread seeds where the person was.
+  addLedger(w,"npc-life",{kind:"successor-thread",npcId:npc.id,threadId:rec?rec.id:null,fate,nodeId:npc.status.at||null},
     "◆ What "+npc.name+" leaves behind: "+causeShape+".");
   return rec?rec.id:null;
 }
@@ -413,7 +416,7 @@ function turnMintSuccessorThread(w, npc, fate){
    codex / animal-tell not compiled -> no-op, no ledger noise. */
 function turnAnimalAllyTellRefresh(w){
   if(typeof codexOf!=="function") return null;
-  const allies=Object.values(codexOf(w).records).filter(r=>r.kind==="npc"&&r.dm&&r.dm.partialKind==="animal"&&r.dm.ally===true);
+  const allies=Object.values(codexOf(w).records).filter(r=>isAnimalPartial(r)&&r.dm.ally===true);
   if(!allies.length) return null;
   const refreshed=[];
   allies.forEach(r=>{

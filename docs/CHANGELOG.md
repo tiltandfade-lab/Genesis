@@ -42,6 +42,70 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 **Verification:** check-manifest OK · realm-wiring 78/0 · dm-events 70/0 · social 97/0 ·
 theater-sprites 10/0 · sprite-registry 6/0 · sprite-pipeline all-pass. Known pre-existing reds
 (digest-diet 58/1, creature-determinism grep-gate) unchanged, not from this branch.
+## 2026-07-09 (later still) — HQ-8: npc-life writers stamp location (Adam's two rulings closed)
+
+Adam ruled both HQ-review ledger items in-session: **(a)** settlement **population estimates** are
+the intended urban-development signal (registered into PLACE-GEN scope; the lodging-tier fallback
+stands until then) — **(b)** stamp the npc-life writers: **BUILT as HQ-8** (spec appended to
+`ANIMAL-SOCIAL-HQ.md`; single Sonnet executor, worktree-isolated, orchestrator re-gated).
+
+**Fixed:** the six place-bound npc-life writers stamp `nodeId` — companion desertion /
+pet-wanders / sidekick-departure / sidekick-death (companion codex `status.at`, party-node
+fallback; the death case reads the record before its `condition:"dead"` update), turn life-event
+(node already in scope), successor-thread. The bird knowledge scope's faces-sense is now live
+against real ledgers. Deliberately unstamped: backstory seeds, faction-turns, animal-tell-refresh
+(no location = invisible to witnesses = correct). Prose twins byte-unchanged.
+
+**Gates at close:** red-first proven on the pre-fix tree; u6 grew to 49/49; u1-u5 + fingerprint +
+dm-events 70/0 + gen 68/0 green; check-manifest OK; fuzz-events 520 calls 0 findings; diff
+eyes-on; gauntlet report churn reverted.
+
+---
+
+## 2026-07-09 (late night) — ANIMAL-SOCIAL-HQ: the review fix queue (waves 1+2 landed)
+
+A full `/code-review` of the landed U1–U6 wave (8 finder angles → 13 adversarial verifiers →
+10 confirmed / 2 refuted) exposed one dominant disease: **verify-green ≠ wired** — U1/U3/U6
+mechanisms passed their harnesses because the scripts hand-fed options and ledger shapes no
+production call site supplies. Spec `docs/ANIMAL-SOCIAL-HQ.md` (locked, 7 units) + 6 parallel
+Sonnet executors (Workflow-throttled, worktree-isolated) + 1 singleton; orchestrator re-gated
+every unit on the integrated tree. Master merges `c8f49ae` (HQ-1..6) + `90d49e5` (HQ-7), pushed.
+
+**Fixed:** realm-skin overlay + ranger/druid opening bump now actually reach production —
+`prepCastEnvAnimals`/`prepCastAmbientScene` forward `realm` (activeRealmsFor) + `pcClass`
+(living-PC sheet) to `rollPartial` (HQ-1); the wilderness territory-holder can promote —
+`animalMaybePromote`'s `!dm.ambient` guard now passes `dm.territoryHolder` (HQ-2); animal
+partials ship `parleyAbility` (WIS/Animal Handling) in the digest + `animalLevers` merges in
+social_check like creatureLevers (HQ-3); animal promotion counts only `p.engaged` contacts
+(spec's "engaged twice" — passing canon-locks no longer promote) + `animal_care` refuses
+non-animals (`not-an-animal`) and takes `alias:{id:"target"}` (HQ-4); the kill ledger writer
+stamps `nodeId` so the predator witness scope matches real ledgers, `outcome:move-zone` dropped
+from predator (combat band:lane, never a map node), verify-u6 rewritten to drive production
+writers instead of hand-seeded fixtures (HQ-5). Also: 4 flaky/broken verify fixtures caught at
+integration (unengaged promotion regression check; absolute-attitude asserts over random village
+openers) — fixtures pinned deterministic, u3 soaked 30/30.
+
+**Added:** `dev/verify-animal-table-fingerprint.mjs` — pins row count + per-row tokens of
+animal-kind/wild-animal-kind so Adam's CRAFT-LANE pass turns the silent positional-coupling break
+(`ANIMAL_ENV_WEIGHTS`, `ANIMAL_KNOWLEDGE_SCOPE`) into a named re-sync task; it is SUPPOSED to go
+red under that pass. `weightedTableRow` mismatch fallback now warns loud once per table (HQ-6).
+
+**Changed (no behavior):** HQ-7 cleanup — shared `isAnimalPartial()` predicate replaces 14 inline
+copies (engine-purity carve-out kept in social.js); `mintAnimalPartial()` extracts the six-rule
+mint tail duplicated across both prep casters (byte-identical, fixture-proven); manifest `owns`
+registered for 28 animal globals + callTimeDeps + `data.animal-knowledge-scope` LAYER entry
+(its standing check-manifest WARN resolved).
+
+**Gates at close:** check-manifest OK; u1–u6 + fingerprint + dm-events (70/0) + gen (68/0) green
+across repeated sweeps; gauntlet-fuzz-events 0 findings; gauntlet-monkey 12/12, 0 aborted;
+`dm-contract.json` regenerated at merge (byte-identical); every unit diff eyes-on reviewed.
+
+**Deferred (Adam's ledger):** the urban→rural tier-0 banding (unshopped city nodes mint rural
+animal ecologies and the cast freezes — documented deliberate tradeoff; needs a ruling on a real
+urban signal); herd's `move-zone` + bird's `npc-life` witness channels stay verify-only until
+those writers stamp locations (every scope now has ≥1 live channel); boolean payload coercion
+(`!!p.x` per-handler is codebase-wide convention — a systemic `bool:[]` fold-layer tag if ever);
+witness-scan ledger windowing (measured negligible today, grows with world age).
 
 ---
 

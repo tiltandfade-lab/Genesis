@@ -48,7 +48,10 @@
 const ANIMAL_KNOWLEDGE_SCOPE_CATEGORIES = {
   herd:     { ledgerTypes: ["outcome:move-zone", "drift"], adjacentReach: false },
   bird:     { ledgerTypes: ["npc-life", "outcome:kill", "canon:discovery"], adjacentReach: true },
-  predator: { ledgerTypes: ["outcome:kill", "outcome:move-zone"], adjacentReach: false },
+  // HQ-5 (docs/ANIMAL-SOCIAL-HQ.md D7): outcome:move-zone REMOVED — its from/to are combat
+  // band:lane strings, structurally never map nodes, so it can never satisfy a node-scoped
+  // witness. Re-add only once a node-stamped move-zone writer exists.
+  predator: { ledgerTypes: ["outcome:kill"], adjacentReach: false },
   burrower: { ledgerTypes: ["drift", "canon:discovery"], adjacentReach: false },
   elder:    { ledgerTypes: null, adjacentReach: true },
   generic:  { ledgerTypes: null, adjacentReach: false },

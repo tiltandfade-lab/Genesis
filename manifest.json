@@ -955,9 +955,25 @@
         "codexPlayerView",
         "CODEX_MECH_PROV",
         "codexIsMechanical",
+        "isAnimalPartial",
         "codexProvenanceReport",
         "codexGazKind",
-        "ensureCodex"
+        "ensureCodex",
+        "animalHandleFor",
+        "ANIMAL_LEDGER_SENSE",
+        "animalLedgerSenseFor",
+        "animalLedgerTypeMatches",
+        "animalWitnessSeen",
+        "animalWitnessNearby",
+        "ANIMAL_SEASONS",
+        "animalSeasonLabel",
+        "animalWitnessPlaceMemory",
+        "ANIMAL_BREACH_PERCEPTION_FLOOR",
+        "animalWitnessBreachEntry",
+        "animalWitnessGate",
+        "animalWitness",
+        "animalPropagatePackAttitude",
+        "animalMaybePromote"
       ],
       "callTimeDeps": [
         "slug",
@@ -1535,7 +1551,8 @@
         "dwalkCoin",
         "regionBlendedName",
         "frayLevel",
-        "roleForRealm"
+        "roleForRealm",
+        "animalOpeningStep"
       ],
       "desc": "The CODEX rollers (Phases 2+5; docs/CODEX.md §2) — the engine mints the atoms. rollNPC()/rollPlace()/rollItem()/rollBuildingInterior()/rollLoot() chain the compiled npc-*/place-*/plot-item/plot-lock/building-interior/dungeon-loot-* tables (via rollTable / the dungeon-walk budget chain) into a codexAdd-ready payload: `rolled` (raw dice verbatim), a player-safe `fields` glance-read, and DM-only `dm` levers; items carry a `source` pointer (§8b). They do NOT write the world — prep/the DM emit codex_add events. The AI assigns final meaning + wires links. BATCH3-PLAN unit 8 (docs/BREACH.md §2d): rollNPC also carries a rare breach-touched rider — NPC_BREACH_TOUCH (hand-authored PROVISIONAL d12 vocabulary) + touchedNpcChance/rollNpcBreachTouch (fray-scaled ~2%→8% via engine.region's frayLevel, optional/null-safe dep) — landing on `dm.breachTouch` only on the rare roll that clears the threshold; every other payload is byte-identical to before."
     },
@@ -1666,7 +1683,14 @@
         "resolveMorale",
         "insightReadDC",
         "socialCheckAbilityFor",
-        "creatureLevers"
+        "creatureLevers",
+        "ANIMAL_NEED_LEVERS",
+        "animalLevers",
+        "ANIMAL_OPENING_CLASSES",
+        "animalOpeningStep",
+        "animalCheckAdvantage",
+        "ANIMAL_HELPFUL_CARE_VISITS",
+        "animalHelpfulAllowed"
       ],
       "callTimeDeps": [
         "ATTITUDE_MIN",
@@ -2547,7 +2571,8 @@
         "turnMintSuccessorThread",
         "turnRecall",
         "turnRecallWhy",
-        "turnEcho"
+        "turnEcho",
+        "turnAnimalAllyTellRefresh"
       ],
       "callTimeDeps": [
         "mapOf",
@@ -2794,7 +2819,14 @@
         "prepCastAmbientScene",
         "HOOK_DISCOVERY_CHANCE",
         "hookDiscoveryChance",
-        "hookDiscoveryRoll"
+        "hookDiscoveryRoll",
+        "ENV_PARTIALS",
+        "nodeEnvBand",
+        "prepCastEnvAnimals",
+        "ANIMAL_LANDMARK_NAMES",
+        "ANIMAL_LANDMARK_NAMES_DEFAULT",
+        "animalLandmarkName",
+        "mintAnimalPartial"
       ],
       "callTimeDeps": [
         "assemblePrepBundle",
@@ -2830,7 +2862,8 @@
         "sceneTemperature",
         "activeRealmsFor",
         "applyRustExposure",
-        "livingSheet"
+        "livingSheet",
+        "codexAttitudeOpen"
       ],
       "desc": "Session-Prep state (docs/SESSION-PREP.md #3+#5): startPrep assembles the bundle + binds each environment to a SOFT 'rumored frontier' node (soft edge = the quest hook); applyPrep enriches frontiers from the DM's synthesis overlays + writes soft new-canon; lockOnContact flips soft→hard on entry (Charter §8.4); prepHandoff/copyPrepHandoff export the staged bundle for the Bridge. Recycle/debt for unvisited prep. TRAVEL-WALKS (docs/TRAVEL-WALKS.md): prepStartTravelWalk stores a kind:\"travel\" walk directly on the destination node's prep slot (walkOfFrontier reads pn.walk first); walkAdvance/walkComplete branch on pn.kind===\"travel\" for per-segment clock + arrival-vs-promotion. DURABILITY-TRIO.md §2: walkComplete's travel-arrival branch detects a \"water\" biome among the completed walk's rolled legs (the one real submersion signal in this codebase) and rolls a rust exposure (world.durability's applyRustExposure, late-binding call) against every carried instance."
     },

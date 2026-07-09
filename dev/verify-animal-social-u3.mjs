@@ -140,13 +140,17 @@ console.log("\n=== GREEN: post-fix behavior ===");
   {
     const win = newWin();
     const w = mkWorld(win);
-    const idPlain = mintAnimal(win, w, { env:"village", pcClass:null });
+    // FIXTURE FIX (flake): two independent village draws can land on rows with DIFFERENT base
+    // openings (domestic 0 vs wild/wary -1), so comparing absolute attitudes across them is
+    // nondeterministic. Wilderness rows ALL open at -1, making the comparison deterministic
+    // (the same trick HQ-1's own checks use).
+    const idPlain = mintAnimal(win, w, { env:"wilderness", pcClass:null });
     const w2 = mkWorld(win, { id:"w-ranger" });
-    const idRanger = mintAnimal(win, w2, { env:"village", pcClass:"ranger" });
+    const idRanger = mintAnimal(win, w2, { env:"wilderness", pcClass:"ranger" });
     const plainV = win.eval(`codexGetAttitude(U.worlds['${w.id}'], '${idPlain}').value`);
     const rangerV = win.eval(`codexGetAttitude(U.worlds['w-ranger'], '${idRanger}').value`);
-    check("ranger opening reads one step better than plain (0 -> 1 for a domestic/village draw)",
-      rangerV === plainV + 1, `plain=${plainV} ranger=${rangerV}`);
+    check("ranger opening reads one step better than plain (-1 -> 0 for a wilderness draw)",
+      plainV === -1 && rangerV === 0, `plain=${plainV} ranger=${rangerV}`);
     check("clamped at ATTITUDE_MAX (never overshoots Helpful from the opening bump alone)",
       rangerV <= 2);
   }
@@ -208,6 +212,10 @@ console.log("\n=== GREEN: post-fix behavior ===");
     const win = newWin();
     const w = mkWorld(win);
     const id = mintAnimal(win, w, { env:"village" });
+    // FIXTURE FIX (flake): pin the opener to 0 first — a village mint occasionally draws a wild/wary
+    // row that opens at -1, making "one success reaches +1" nondeterministic. The check's subject is
+    // the care-track cap, not the opening row.
+    win.eval(`applyEvent(U.worlds['${w.id}'], { type:"attitude_shift", payload:{ target:'${id}', to:0, cause:"fixture-pin" } });`);
     // hand-shift to +1 first (one ordinary success).
     win.eval(`applyEvent(U.worlds['${w.id}'], { type:"social_check", payload:{ target:'${id}', skill:"persuasion", total:99, dc:1 } });`);
     const afterOne = win.eval(`codexGetAttitude(U.worlds['${w.id}'], '${id}').value`);
@@ -235,7 +243,10 @@ console.log("\n=== GREEN: post-fix behavior ===");
     const win = newWin();
     const w = mkWorld(win);
     const id = mintAnimal(win, w, { env:"village" });
-    win.eval(`applyEvent(U.worlds['${w.id}'], { type:"social_check", payload:{ target:'${id}', skill:"persuasion", total:99, dc:1 } });`); // -> +1
+    // FIXTURE FIX (flake): a village mint occasionally draws a wild/wary row that opens at -1, and a
+    // -1 opener can't reach +2 in two checks. Pin the pre-bypass attitude to +1 deterministically so
+    // both bypass checks test the GATE BYPASS itself, never the random opening row.
+    win.eval(`applyEvent(U.worlds['${w.id}'], { type:"attitude_shift", payload:{ target:'${id}', to:1, cause:"fixture-pin" } });`);
     const bypassSpell = win.eval(`applyEvent(U.worlds['${w.id}'], { type:"social_check",
       payload:{ target:'${id}', skill:"persuasion", total:99, dc:1, animalFriendshipSpell:true } });`);
     check("animal-friendship-class spell bypasses the 3-visit gate (care=0 still reaches +2)",
@@ -243,7 +254,7 @@ console.log("\n=== GREEN: post-fix behavior ===");
 
     const w2 = mkWorld(win, { id:"w-cha" });
     const id2 = mintAnimal(win, w2, { env:"village" });
-    win.eval(`applyEvent(U.worlds['w-cha'], { type:"social_check", payload:{ target:'${id2}', skill:"persuasion", total:99, dc:1 } });`); // -> +1
+    win.eval(`applyEvent(U.worlds['w-cha'], { type:"attitude_shift", payload:{ target:'${id2}', to:1, cause:"fixture-pin" } });`); // same pin as above
     const bypassCha = win.eval(`applyEvent(U.worlds['w-cha'], { type:"social_check",
       payload:{ target:'${id2}', skill:"persuasion", total:99, dc:1, strongCha:true } });`);
     check("a caller-flagged strong-Charisma result bypasses the 3-visit gate too",
@@ -270,6 +281,68 @@ console.log("\n=== GREEN: post-fix behavior ===");
     // step past +1 over repeated checks same as it always could pre-this-unit.
     check("a plain NPC record is unaffected by the animal Helpful-gate (isAnimalPartial=false path)",
       typeof out.to === "number");
+  }
+}
+
+console.log("\n=== HQ-3 (docs/ANIMAL-SOCIAL-HQ.md): parley routing reaches the DM digest ===");
+{
+  // WIRING LAW: drive codexDigest (production entry point), never socialCheckAbilityFor/
+  // animalLevers directly, and never codexFullRecord directly either.
+  // 1. an animal partial's digest record carries parleyAbility (WIS/Animal Handling). Force it
+  // into the here-and-now set via opts.mintIds (a legitimate production path — ON-DEMAND-GEN's
+  // spotlight — codexHereNowIds otherwise excludes an untouched-ambient partial).
+  {
+    const win = newWin();
+    const w = mkWorld(win);
+    const id = mintAnimal(win, w, { env:"village" });
+    const digest = win.eval(`JSON.stringify(codexDigest(U.worlds['${w.id}'], { atNodeId:'home', mintIds:['${id}'] }))`);
+    const parsed = JSON.parse(digest);
+    const rec = parsed.codex.find(r => r.id === id);
+    check("HQ-3.1: an animal partial's codexDigest record carries parleyAbility (WIS/Animal Handling)",
+      !!rec && rec.parleyAbility && rec.parleyAbility.ability === "wis" && rec.parleyAbility.skill === "Animal Handling",
+      JSON.stringify(rec));
+  }
+
+  // 2. a hungry-tagged animal's social_check ledger entry shows the derived feeding lever merged
+  // in (dm.js's own `leversDerived` ledger-data field, U4's precedent for surfacing the engine's
+  // auto-merged levers) — driven purely through applyEvent, no declared feeding lever supplied.
+  {
+    const win = newWin();
+    const w = mkWorld(win);
+    const id = mintAnimal(win, w, { env:"village" });
+    win.eval(`codexGet(U.worlds['${w.id}'], '${id}').dm.need = "hungry";`);
+    win.eval(`applyEvent(U.worlds['${w.id}'], { type:"social_check",
+      payload:{ target:'${id}', skill:"animal handling", total:1, dc:1 } });`);
+    const lastEntry = win.eval(`U.worlds['${w.id}'].ledger[U.worlds['${w.id}'].ledger.length-1]`);
+    const derived = (lastEntry && lastEntry.data && lastEntry.data.leversDerived) || [];
+    check("HQ-3.2: a hungry animal's social_check ledger entry lists the derived feeding lever (production merge, no lever declared)",
+      derived.includes("feeding"), JSON.stringify(lastEntry));
+  }
+
+  // 3. creatures (kind:"creature") are unchanged — existing parleyAbility path still fires.
+  {
+    const win = newWin();
+    const w = mkWorld(win);
+    win.eval(`codexAdd(U.worlds['${w.id}'], { kind:"creature", id:"wolf-1", name:"Wolf",
+      fields:{ type:"beast" }, dm:{}, status:{ soft:true, at:'home' } });`);
+    win.eval(`codexAttitudeOpen(U.worlds['${w.id}'], "wolf-1", 0, {cause:"opening"});`);
+    const digest = win.eval(`JSON.stringify(codexDigest(U.worlds['${w.id}'], { atNodeId:'home' }))`);
+    const rec = JSON.parse(digest).codex.find(r => r.id === "wolf-1");
+    check("HQ-3.3: kind:creature digest record still carries parleyAbility (WIS/Animal Handling, unchanged)",
+      !!rec && rec.parleyAbility && rec.parleyAbility.ability === "wis", JSON.stringify(rec));
+  }
+
+  // 4. human NPC records carry NO parleyAbility (the gate did not over-widen).
+  {
+    const win = newWin();
+    const w = mkWorld(win);
+    win.eval(`codexAdd(U.worlds['${w.id}'], { kind:"npc", id:"human-1", name:"Bob",
+      fields:{}, dm:{}, status:{ soft:true, at:'home' } });`);
+    win.eval(`codexAttitudeOpen(U.worlds['${w.id}'], "human-1", 0, {cause:"opening"});`);
+    const digest = win.eval(`JSON.stringify(codexDigest(U.worlds['${w.id}'], { atNodeId:'home' }))`);
+    const rec = JSON.parse(digest).codex.find(r => r.id === "human-1");
+    check("HQ-3.4: a plain human NPC digest record carries NO parleyAbility (gate not over-widened)",
+      !!rec && !("parleyAbility" in rec), JSON.stringify(rec));
   }
 }
 

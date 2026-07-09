@@ -141,7 +141,7 @@ function codexUpdate(w, id, patch){
       // ANIMAL-SOCIAL.md §4/§6 U5 — "named" is one of the three promotion triggers (engaged twice /
       // named / raised past +0). Stamp it on the successful rename, then run the promotion check —
       // animal-only, no-op for every other kind.
-      if(r.kind==="npc" && r.dm && r.dm.partialKind==="animal"){
+      if(isAnimalPartial(r)){
         r.dm.named=true;
         if(typeof animalMaybePromote==="function") animalMaybePromote(w, r, "named");
       }
@@ -405,14 +405,18 @@ function codexFullRecord(w, r){
   // REVIEW-FIXES-0705 U4 — the parley angle: creature-only advisory hint of which ability/skill a
   // social_check against this record should roll (Beast -> Wis/Animal Handling, else Cha/Persuasion).
   // Advisory only (the roll stays the DM's, §5 anti-drift); NPCs never carry this field.
-  if(r.kind==="creature" && typeof socialCheckAbilityFor==="function") o.parleyAbility=socialCheckAbilityFor(r);
+  // HQ-3 (ANIMAL-SOCIAL-HQ.md) — widen the gate so animal partials (kind:"npc",
+  // dm.partialKind==="animal") ALSO get the advisory ability hint; previously excluded
+  // because they aren't kind:"creature", so the digest never told the DM to route
+  // WIS/Animal Handling and the engine defaulted to Cha/Persuasion.
+  if((r.kind==="creature" || isAnimalPartial(r)) && typeof socialCheckAbilityFor==="function") o.parleyAbility=socialCheckAbilityFor(r);
   // ANIMAL-SOCIAL.md §2/§6 U4 — the witness packet rides the digest ONLY once an interview is open
   // (Speak with Animals active, or the DM marked the channel open — r.dm.interviewOpen, set by the
   // animal_interview event). Absent that flag, an animal partial still ships its baseline kind+tell+
   // need via fields/dm above — this is purely additive, never a regression of today's shape.
   // ANIMAL-SOCIAL.md §4/§6 U5 — a befriended ally (r.dm.ally===true) auto-volunteers the packet
   // regardless of the interview channel ("no check" — the ally doesn't wait to be asked).
-  if(r.kind==="npc" && r.dm && r.dm.partialKind==="animal" && (r.dm.interviewOpen || r.dm.ally===true) && typeof animalWitness==="function"){
+  if(isAnimalPartial(r) && (r.dm.interviewOpen || r.dm.ally===true) && typeof animalWitness==="function"){
     o.witness=animalWitness(w, r);
   }
   return o;
@@ -597,7 +601,7 @@ function animalHandleFor(rec){
     const t=(rec.fields && rec.fields.type) ? String(rec.fields.type).toLowerCase() : null;
     return t ? "the "+t+"-shaped one" : "a wild thing";
   }
-  const role=(rec.dm && rec.dm.partialKind==="animal") ? "another animal"
+  const role=isAnimalPartial(rec) ? "another animal"
     : (rec.fields && rec.fields.role) ? String(rec.fields.role) : null;
   return role ? "the "+role : "a two-legged one";
 }
@@ -776,7 +780,7 @@ function animalWitnessGate(w, rec, full){
    fabricated here; absent a binding, `to` is null and `available` stays true (the ally still offers
    to lead, there's just nowhere pinned yet). */
 function animalWitness(w, rec){
-  if(!w || !rec || rec.kind!=="npc" || !(rec.dm && rec.dm.partialKind==="animal")) return null;
+  if(!w || !isAnimalPartial(rec)) return null;
   const at=rec.status && rec.status.at;
   const tell={ text:(rec.dm && rec.dm.tell) || null, boundTo:(rec.dm && rec.dm.tellBoundTo) || null };
   const seen=animalWitnessSeen(w, rec, at);
@@ -808,7 +812,7 @@ function animalPropagatePackAttitude(w, rec, newValue, cause){
   const propagated=[];
   Object.values(C.records).forEach(other=>{
     if(!other || other.id===rec.id) return;
-    if(!(other.kind==="npc" && other.dm && other.dm.partialKind==="animal" && other.dm.packTag)) return;
+    if(!(isAnimalPartial(other) && other.dm.packTag)) return;
     if(!(other.status && other.status.at===at)) return;
     const a=codexGetAttitude(w, other.id);
     if(!a || a.value===newValue) return;
@@ -825,13 +829,18 @@ function animalPropagatePackAttitude(w, rec, newValue, cause){
    canon (status.soft:false, same posture as codexContact's canon-lock, so codexEvictSoft's pool-
    recycling sweep — `status.soft && !status.known` — can never touch it again) and stamps a home
    node (dm.homeNodeId) so it "recurs via prep at its territory/home node like any cast NPC."
-   Idempotent (`dm.promoted` guards a second call from re-stamping/re-logging); landmark row-12
-   animals are minted ALREADY promoted (prepCastEnvAnimals/prepCastAmbientScene) so this is a
-   guaranteed no-op there (`dm.ambient` is already false at mint). Null-safe/non-animal -> false. */
+   Idempotent (`dm.promoted` guards a second call from re-stamping/re-logging) — that idempotency
+   guard is ALSO what keeps landmark row-12 animals (minted already dm.promoted:true) a guaranteed
+   no-op here; it is not the ambient check's job. The wilderness territory-holder (ANIMAL-SOCIAL.md
+   §4's "the one who gets promoted first") mints with `dm.ambient:false` too (prepCastEnvAnimals) —
+   that flag was never meant to gate the holder, only to mark it as not an ordinary disposable
+   ambient draw, so the holder must pass this guard on `dm.territoryHolder` as well.
+   HQ-2 (docs/ANIMAL-SOCIAL-HQ.md): fixed a guard that read `!rec.dm.ambient` and silently killed
+   every holder-promotion trigger. Null-safe/non-animal -> false. */
 function animalMaybePromote(w, rec, cause){
-  if(!rec || rec.kind!=="npc" || !(rec.dm && rec.dm.partialKind==="animal")) return false;
-  if(rec.dm.promoted) return false;                  // already promoted — no-op
-  if(!rec.dm.ambient) return false;                   // not currently an ambient record
+  if(!isAnimalPartial(rec)) return false;
+  if(rec.dm.promoted) return false;                  // already promoted — no-op (also excludes landmarks)
+  if(!rec.dm.ambient && !rec.dm.territoryHolder) return false;   // not an ambient record and not the holder
   const a=(typeof codexGetAttitude==="function") ? codexGetAttitude(w, rec.id) : null;
   const attitudeAboveZero=!!(a && a.value>0);
   const engagedTwice=(rec.dm.animalContactCount||0)>=2;
@@ -856,6 +865,10 @@ function animalMaybePromote(w, rec, cause){
    = INVENTED. The Codex's whole job is to push this ratio toward mechanical. Saltrest baseline ≈ 0.20. */
 const CODEX_MECH_PROV = ["rolled","recontextualized","prep"];
 function codexIsMechanical(r){ return !!r && CODEX_MECH_PROV.indexOf(r.provenance) >= 0; }
+/* ANIMAL-SOCIAL-HQ.md HQ-7 item 1 — the shared "is this an animal partial?" predicate. Consolidates
+   ~12 inline copies of `rec.kind==="npc" && rec.dm && rec.dm.partialKind==="animal"` scattered across
+   codex.js/dm.js/prep.js/turn.js (grep'd 2026-07-09) into one definition. Pure, null-safe. */
+function isAnimalPartial(rec){ return !!(rec && rec.kind==="npc" && rec.dm && rec.dm.partialKind==="animal"); }
 function codexProvenanceReport(w){
   const recs=Object.values(codexOf(w).records);
   const byProvenance={}, byKind={}; let mech=0, soft=0, recon=0, known=0;

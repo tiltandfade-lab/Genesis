@@ -116,6 +116,11 @@ function socialCheckAbilityFor(rec){
   // ANIMAL-SOCIAL.md §3/§6 U3: an animal partial (rec.dm.partialKind==="animal" — minted via
   // rollPartial + prepCastEnvAnimals/prepCastAmbientScene, kind:"npc") reads the same as a Beast
   // creature — WIS (Animal Handling). Checked ALONGSIDE the creature/Beast branch, not instead of it.
+  // ANIMAL-SOCIAL-HQ.md HQ-7 item 1 (deliberate DEVIATION): world.codex now owns a shared
+  // isAnimalPartial(rec) predicate, but this file is src/engine/social.js — engine layer. Calling it
+  // would be an engine->world upward dep (LAYER in build/check-manifest.py has engine.social at L1,
+  // same tier as world.codex, but engine must not import from world). Kept local on purpose —
+  // engine purity beats DRY here, per the spec's own carve-out.
   const partialKind = (rec && rec.dm && rec.dm.partialKind) || null;
   if(type === "beast" || partialKind === "animal") return { ability:"wis", skill:"Animal Handling" };
   return { ability:"cha", skill:"Persuasion" };

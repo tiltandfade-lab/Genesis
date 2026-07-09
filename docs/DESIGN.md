@@ -270,6 +270,20 @@ violation of the anti-drift north star. The Codex is the structural fix.
 | **Presence & hooks = the consequence-spectrum sim** (BUILT, PARKED) | Ambient population (scene-type × temperature) + a guaranteed scene hook + hook discovery on interaction + a three-tier attention model (engaged → tracked bespoke ratchet; discovered-dropped → one-shot; never-touched → nothing) unifying the if-ignored sweep onto each hook's own consequence. Fully gated but **parked on `feat/npc-presence-hooks`** for a felt-gameplay playtest before merge. |
 | **Two fixes queued** (SPECCED) | Questgivers must not be forced to archetype (significant vs functional roleHints); `regionForNode` must supply `.center` so fray-by-node temperature stops being inert on the live path (shared by all three consumers). `NPC-COHERENCE-FIXES.md`. |
 
+## Locked decisions (2026-07-09 late — ANIMAL-SOCIAL-HQ, the review fix queue; BUILT + LANDED)
+
+*A /code-review of the landed U1–U6 wave (8 finders → 13 adversarial verifiers) found the wave's
+defect class — verify-green ≠ wired. Spec: `ANIMAL-SOCIAL-HQ.md` (7 units, all landed 2026-07-09
+late night, master `c8f49ae` + `90d49e5`).*
+
+| Decision | Choice |
+| --- | --- |
+| **THE WIRING LAW** (standing acceptance for wiring units) | Every verify check added for a wiring fix must drive a PRODUCTION entry point (`prepCastEnvAnimals` / `prepCastAmbientScene` / `applyEvent` / `codexDigest`) — never the new function directly with hand-built options. A check that hand-feeds what production never supplies proves plumbing, not wiring: that's how realm skins, the ranger/druid bump, animal parley routing, and the predator witness scope all shipped green-but-dead. Orchestrate-pipeline re-gates should ask "who CALLS this in production?" of every new mechanism. |
+| **Holder promotability** (BUILT) | The wilderness territory-holder passes `animalMaybePromote` via `dm.territoryHolder` — the `!dm.ambient` guard was only ever meant to no-op already-promoted landmarks (§4 "the one who gets promoted first"). |
+| **Engagement discipline is species-blind** (BUILT) | Animal promotion counts only `p.engaged` contacts, matching the NPC engage-threshold three lines up — "engaged twice" means engaged, not contacted; passing canon-locks never promote a walk-on. |
+| **Validate, don't re-key** (BUILT — the CRAFT-LANE guard) | `ANIMAL_ENV_WEIGHTS` + `ANIMAL_KNOWLEDGE_SCOPE` stay positional (Adam's craft pass owns the rows; we don't retag his tables), guarded by `dev/verify-animal-table-fingerprint.mjs` — a harness that is SUPPOSED to go red under the row pass, converting silent drift into a named re-sync task. Never green it by loosening tokens. `weightedTableRow` mismatch now warns loud instead of silently flattening. |
+| **Witness scopes match production ledger shapes** (BUILT) | The kill writer stamps `nodeId` (payload `p.at` preferred, current node fallback); `outcome:move-zone` dropped from the predator scope (combat `band:lane`, structurally never a map node). Residual: herd/`move-zone` + bird/`npc-life` channels stay verify-only until those writers stamp locations — Adam ruling queued (NEXT-STEPS 3b), alongside the urban→rural tier-0 banding tradeoff. |
+
 ## The registry is the design spine
 
 `table-registry.json/.md` (270 active tables, ~18.8k rows, 11 archived) started as a discoverability fix but is becoming the backbone. Three independent needs all resolve to **per-table flags in the registry**:

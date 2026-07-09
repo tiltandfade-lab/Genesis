@@ -156,9 +156,15 @@ function companionDesert(w, hireling){
   const C = companionsOf(w);
   const i = C.hirelings.findIndex(h => h.id === hireling.id);
   if(i >= 0) C.hirelings.splice(i, 1);
-  if(typeof addLedger === "function")
-    addLedger(w, "npc-life", { kind:"desertion", codexId:hireling.codexId, name:hireling.name, role:hireling.role },
+  if(typeof addLedger === "function"){
+    // HQ-8 (docs/ANIMAL-SOCIAL-HQ.md D-HQ8-1/D-HQ8-3): stamp nodeId so a bird-scope witness at this
+    // node can see the desertion — the companion's own codex record status.at when resolvable, else
+    // the party's current node (desertion happens with/near the party).
+    const hirelingRec = (typeof codexGet === "function") ? codexGet(w, hireling.codexId) : null;
+    const nodeId = (hirelingRec && hirelingRec.status && hirelingRec.status.at) || w.currentNodeId || null;
+    addLedger(w, "npc-life", { kind:"desertion", codexId:hireling.codexId, name:hireling.name, role:hireling.role, nodeId },
       "◆ " + hireling.name + " deserts at the next safe moment — the bargain wasn't worth it.");
+  }
   if(typeof codexAdd === "function"){
     const id = (typeof prepCastId === "function") ? prepCastId(w, "thread", hireling.name + " — grievance")
       : ("thread:" + slug(hireling.name) + "-grievance-" + uid());
@@ -289,8 +295,13 @@ function companionPetWanders(w, pet){
   const C = companionsOf(w);
   const i = C.pets.findIndex(x => x.id === pet.id);
   if(i >= 0) C.pets.splice(i, 1);
-  if(typeof addLedger === "function")
-    addLedger(w, "npc-life", { kind:"pet-wanders", codexId:pet.codexId, name:pet.name }, "◆ " + pet.name + " wanders off — the bond wasn't tended.");
+  if(typeof addLedger === "function"){
+    // HQ-8 (D-HQ8-1/D-HQ8-3): stamp nodeId — pet's own codex record status.at when resolvable, else
+    // the party's current node.
+    const petRec = (typeof codexGet === "function") ? codexGet(w, pet.codexId) : null;
+    const nodeId = (petRec && petRec.status && petRec.status.at) || w.currentNodeId || null;
+    addLedger(w, "npc-life", { kind:"pet-wanders", codexId:pet.codexId, name:pet.name, nodeId }, "◆ " + pet.name + " wanders off — the bond wasn't tended.");
+  }
   return true;
 }
 
@@ -408,9 +419,15 @@ function companionSidekickAdjustLoyalty(w, delta, cause){
 function companionSidekickLeaves(w){
   const C = companionsOf(w);
   if(!C.sidekickId) return false;
-  const codexId = C.sidekickId, name = (typeof codexGet === "function" && codexGet(w, codexId)) ? codexGet(w, codexId).name : "your sidekick";
-  if(typeof addLedger === "function")
-    addLedger(w, "npc-life", { kind:"sidekick-departure", codexId }, "◆ " + name + " leaves — it should feel like a breakup, not a resignation.");
+  const codexId = C.sidekickId;
+  const sidekickRec = (typeof codexGet === "function") ? codexGet(w, codexId) : null;
+  const name = sidekickRec ? sidekickRec.name : "your sidekick";
+  if(typeof addLedger === "function"){
+    // HQ-8 (D-HQ8-1/D-HQ8-3): stamp nodeId — sidekick's own codex record status.at when resolvable,
+    // else the party's current node.
+    const nodeId = (sidekickRec && sidekickRec.status && sidekickRec.status.at) || w.currentNodeId || null;
+    addLedger(w, "npc-life", { kind:"sidekick-departure", codexId, nodeId }, "◆ " + name + " leaves — it should feel like a breakup, not a resignation.");
+  }
   if(typeof codexAdd === "function"){
     const id = (typeof prepCastId === "function") ? prepCastId(w, "thread", name + " — departed")
       : ("thread:" + slug(name) + "-departed-" + uid());
@@ -437,8 +454,13 @@ function companionSidekickDies(w, cause){
   const rec = (typeof codexGet === "function") ? codexGet(w, codexId) : null;
   const name = rec ? rec.name : "your sidekick";
   if(typeof codexUpdate === "function") codexUpdate(w, codexId, { status:{ condition:"dead" } });
-  if(typeof addLedger === "function")
-    addLedger(w, "npc-life", { kind:"sidekick-death", codexId, cause: cause||null }, "◆ " + name + " falls, and does not rise again.");
+  if(typeof addLedger === "function"){
+    // HQ-8 (D-HQ8-1/D-HQ8-3): stamp nodeId — sidekick's own codex record status.at (read before the
+    // condition:"dead" update above, which doesn't touch .at) when resolvable, else the party's
+    // current node.
+    const nodeId = (rec && rec.status && rec.status.at) || w.currentNodeId || null;
+    addLedger(w, "npc-life", { kind:"sidekick-death", codexId, cause: cause||null, nodeId }, "◆ " + name + " falls, and does not rise again.");
+  }
   if(typeof codexAdd === "function"){
     const id = (typeof prepCastId === "function") ? prepCastId(w, "thread", name + " — grief")
       : ("thread:" + slug(name) + "-grief-" + uid());

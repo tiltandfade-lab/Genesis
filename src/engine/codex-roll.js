@@ -297,6 +297,15 @@ function rollNPC(opts){
     const hRoll=(typeof Math.random==="function")?Math.random():0.5;
     if(hRoll<p) roleRoll=roleForRealm(opts.hybridRealm, null, {addsOnly:true});
   }
+  // PLACE-GEN.md §5 unit 3: opts.roleClass ("any" ‖ absent == unfiltered, matches the spine's Cast
+  // vocabulary) filters the home-realm role draw to that NPC spine Tags class — a FILTERED-POOL pick
+  // (roleForRealm's own opts.filterCls, data/npc-role-skins.js), not a retry loop, so a place's
+  // anchor NPC reliably lands on-class even when that class is a thin minority of the realm's
+  // weighted pool. Never dangles: roleForRealm itself falls through to the unfiltered pool when the
+  // requested class has zero candidates in this realm's skin — a place ALWAYS mints an anchor NPC.
+  if(!roleRoll && opts.roleClass && opts.roleClass!=="any" && typeof roleForRealm==="function"){
+    roleRoll=roleForRealm(realmId, null, {filterCls:opts.roleClass});
+  }
   if(!roleRoll) roleRoll=(typeof roleForRealm==="function")?roleForRealm(realmId):null;
   const quirk=gate.quirk?rollTable("npc-visual-quirk"):null;
   const mann=gate.manner?rollTable("npc-mannerisms"):null;
@@ -311,6 +320,10 @@ function rollNPC(opts){
   const roleLabel=roleRoll?roleRoll.label:tx(rollTable("npc-role"));
   const roleNote=roleRoll?roleRoll.note:null;
   const roleArchetypeKey=roleRoll?roleRoll.archetypeKey:null;
+  // PLACE-GEN.md §5 unit 3: additive — the NPC spine Tags class this role actually landed on, so a
+  // caller that asked for opts.roleClass can verify the filter held (or that the never-dangle fallback
+  // fired). Every existing caller ignores this field; payload shape for them is unchanged otherwise.
+  const roleCls=roleRoll?roleRoll.cls:null;
   const species=opts.species||npcSpeciesFromRace(tx(race));
   // ON-DEMAND-GEN §3 (Quick NPC Generator 2.0 pattern): 1d2 gender roll picks the gendered name pool.
   const gender=(typeof rollDie==="function"?rollDie(2):(Math.random()<0.5?1:2))===1?"female":"male";
@@ -321,7 +334,7 @@ function rollNPC(opts){
     rolled:{ race:tx(race), role:roleLabel, quirk:tx(quirk), mannerism:tx(mann),
       flawSecret:tx(flaw), bond:tx(bond), fear:tx(fear), leverage:tx(lever),
       want:tx(want), motivation:tx(moti), roleHint:opts.roleHint||null, gender, coherence,
-      archetypeKey:roleArchetypeKey, roleNote:roleNote },
+      archetypeKey:roleArchetypeKey, roleNote:roleNote, roleCls:roleCls },
     fields:{ species, role:roleLabel,
       demeanor:[tx(quirk),tx(mann)].filter(Boolean).join("; ")||null },
     dm:{ secret:tx(flaw), fear:tx(fear), bond:tx(bond),

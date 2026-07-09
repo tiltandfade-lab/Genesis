@@ -90,8 +90,8 @@ const REALMS = {
   "lost-world": {
     id: "lost-world",
     label: "Lost World",
-    register: "Vanished civilizations & epic-fantasy antiquity — a wonder that outlived everyone who built it.",
-    voice: ["a monument with no living reader", "a name that means king in a dead tongue", "sand that used to be a garden", "a road that goes nowhere on purpose"],
+    register: "Deep-time saurian dominion — the scaled court rules the world and does not consider you people, yet; humankind is the clever vermin in the high country, and the mountain is always about to open.",
+    voice: ["the court's verdict passed over your head, not to you", "a mammal's warren dug under a giant's footprint", "ash on the wind that isn't from any fire you lit", "older stone beneath the old stone, humming"],
     render: { sat: 1.00, tint: "#c89a3c", tintAmt: 0.15, contrast: 1.05 },
   },
   gloom: {

@@ -146,6 +146,12 @@ def emit_entry(slug, e):
         fields.append(f'reusable:{js_str(e["reusable"])}')
     if e.get("redlined") is not None:
         fields.append("redlined:" + json.dumps(bool(e["redlined"])))
+    if e.get("scale") is not None:
+        fields.append(f'scale:{json.dumps(e["scale"])}')
+    if e.get("verdict") is not None:
+        fields.append(f'verdict:{js_str(e["verdict"])}')
+    if e.get("note") is not None:
+        fields.append(f'note:{js_str(e["note"])}')
     return " \"" + slug + "\": {" + ", ".join(fields) + "},\n"
 
 
@@ -224,6 +230,16 @@ def build_registry(manifest_path, check_only=False, overlay_path=OVERLAY, out_pa
                 entry["reusable"] = ov["reusable"]
             if "redlined" in ov:
                 entry["redlined"] = ov["redlined"]
+            # Sprite-review overlay keys (dev/sprite-review.py writes these): scale is the
+            # per-slug render-height multiplier (heads-line-up calibration; theater billboard
+            # consumes it), verdict is the pass/fail ruling ("fail" makes the theater fall
+            # through to the 3D chain), note is the reviewer's free-text reason.
+            if isinstance(ov.get("scale"), (int, float)) and ov["scale"] > 0 and ov["scale"] != 1:
+                entry["scale"] = round(float(ov["scale"]), 3)
+            if ov.get("verdict") in ("pass", "fail"):
+                entry["verdict"] = ov["verdict"]
+            if isinstance(ov.get("note"), str) and ov["note"].strip():
+                entry["note"] = ov["note"].strip()
             entries[slug] = entry
 
     coverage = (monster_joined / monster_total * 100) if monster_total else 100.0

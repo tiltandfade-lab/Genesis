@@ -14,6 +14,10 @@ related:
 
 The running execution order. `DESIGN.md` holds the *what* and *why*; this holds the *in what order*. Update in the same change as progress. Status: ☐ todo · ◐ in progress · ☑ done.
 
+**Auto-archive rule (2026-07-09):** at most 4 dated `## Do next (...)` blocks live here; older ones
+roll into `NEXT-STEPS-ARCHIVE.md` via `python3 build/archive-docs.py --emit`. Standing plan
+sections (tracks/layers/etc.) are never auto-archived.
+
 ## Do next (2026-07-09 overnight — the design session landed; supersedes below)
 
 The accidental design session (see CHANGELOG 2026-07-09): 6 system specs + 6 craft expansions merged

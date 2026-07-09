@@ -152,7 +152,9 @@
         "event",
         "target"
       ],
-      "aliases": {},
+      "aliases": {
+        "id": "target"
+      },
       "num": [],
       "example": {
         "type": "animal_care",

@@ -49,6 +49,7 @@ so it'll serve the app fine but every DM turn fails as "bridge unreachable." See
 | validate modules (run after ANY module edit) | `python3 build/check-manifest.py` |
 | recompile tables (after editing Engine table markdown) | `python3 "Engine/00. _System/compile-tables.py" --emit` |
 | regenerate the creator spell list | `python3 build/gen-spells-slim.py` |
+| roll old CHANGELOG/NEXT-STEPS entries to their archives (run at session close) | `python3 build/archive-docs.py --check` → if over cap, `--emit` |
 | run a dev DM session (AI DM over the bridge) | `python3 dev/dm-bridge.py` (serves the app **and** the mailbox); then `/loop` watch `.dm/` as the DM — runbook in `docs/DM-BRIDGE.md` |
 | verify the DM bridge | `python3 dev/verify-bridge.py` (transport+contract) · `node dev/verify-dm-events.mjs` (applyEvent runtime, needs jsdom) |
 | headless test | jsdom: load the real `genesis.html` with all modules in document order, drive the flow, assert. (`npm i jsdom` in a scratch dir, e.g. `~/.genesis-jsdom`; reinstall per environment.) |
@@ -133,6 +134,23 @@ only happen at merge-to-master, which is git's ordinary 3-way merge, not a surpr
 - System specs (`type: system-spec`): `NEW-GAME-FLOW`, `CHAR-CREATION`, `SPATIAL-MODEL`,
   `SPICE-CURVE`, `LOOT-REMAP`, `TIER-SCOPE` (the level-10 cap), `ITEMS` (the type/instance split for
   gear — BUILT), and the advancement family `EVENT-CONTRACT` / `ADVANCEMENT` / `DIFFICULTY` / `COMBAT`.
+
+## Token discipline (session-start reading)
+
+A single Read of a generated data file can cost a session millions of tokens — `tables.js` alone
+is 7.3 MB (~2M tokens). `.claude/settings.json` hard-denies Read on the worst offenders
+(tables.js/json, the bestiary/flavor/atlas data files, gauntlet reports, playtest-save states,
+vendor/). Rules:
+
+- **Never Read a generated artifact to "understand" it** — read the *source* (Engine markdown,
+  build/gen-*.py) or `manifest.json`'s `owns` list. If you need a value out of one, `grep -m` it.
+- **Orientation = HANDOFF.md + the specific spec you're working** — not DESIGN.md (134 KB) end-to-end
+  (grep the spec name, read that section).
+- **Sweeps go to Explore subagents**, and even they grep — never Read a whole big file.
+- **CHANGELOG.md + NEXT-STEPS.md auto-archive** (Adam's ruling 2026-07-09): CHANGELOG keeps the
+  newest 25 entries, NEXT-STEPS at most 4 dated `## Do next` blocks; older ones roll to
+  `*-ARCHIVE.md` siblings. At session close run `python3 build/archive-docs.py --check` — if it
+  complains, `--emit`. Archives are read-only history; never hand-edit or append to them directly.
 
 ## Gotchas
 

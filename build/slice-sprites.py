@@ -393,14 +393,18 @@ def slice_v2_sheet(args, v2_manifest):
 
     ordered = assign_row_major(top)
 
-    os.makedirs(args.out, exist_ok=True)
+    # Honest failure: on a count mismatch the slug assignment is untrustworthy (largest-N
+    # selection can pull blobs from anywhere on the sheet), so candidate crops go to a
+    # quarantine dir for the review sheet — never into the production sprite dir.
+    out_dir = args.out if ok else os.path.join(V2_REVIEW_DIR, f"{sheet['id']}-quarantine")
+    os.makedirs(out_dir, exist_ok=True)
     crops = []
     n_match = min(len(ordered), len(slugs))
     for i in range(n_match):
         slug = slugs[i]
         item = ordered[i]
         crop = crop_transparent(img, item, args.tolerance, args.padding)
-        out_path = os.path.join(args.out, f"{slug}.png")
+        out_path = os.path.join(out_dir, f"{slug}.png")
         crop.save(out_path)
         crops.append((slug, out_path))
 
@@ -408,7 +412,11 @@ def slice_v2_sheet(args, v2_manifest):
     unassigned_components = ordered[n_match:] if len(ordered) > n_match else []
     unassigned_extra_bboxes = [it["bbox"] for it in unassigned_components] + [bbox(c) for c in extra]
 
-    print(f"Wrote {len(crops)} sprites to {args.out}")
+    if ok:
+        print(f"Wrote {len(crops)} sprites to {out_dir}")
+    else:
+        print(f"Count mismatch — {len(crops)} candidate crops QUARANTINED to {out_dir} "
+              f"(nothing written to {args.out})")
 
     # ALWAYS write the review contact sheet in v2 mode (spec T2.2) — non-uniform sheets make
     # eyes mandatory, not just a mismatch fallback.
@@ -537,14 +545,17 @@ def main():
 
     ordered = assign_row_major(top)
 
-    os.makedirs(args.out, exist_ok=True)
+    # Honest failure: on a count mismatch the slug assignment is untrustworthy — quarantine
+    # candidate crops for the review sheet; never write them into the production sprite dir.
+    out_dir = args.out if ok else os.path.join(REVIEW_DIR, f"{sheet_key}-quarantine")
+    os.makedirs(out_dir, exist_ok=True)
     crops = []
     n_match = min(len(ordered), len(slugs))
     for i in range(n_match):
         slug = slugs[i]
         item = ordered[i]
         crop = crop_transparent(img, item, args.tolerance, args.padding)
-        out_path = os.path.join(args.out, f"{slug}.png")
+        out_path = os.path.join(out_dir, f"{slug}.png")
         crop.save(out_path)
         crops.append((slug, out_path))
 
@@ -552,7 +563,11 @@ def main():
     unassigned_components = ordered[n_match:] if len(ordered) > n_match else []
     unassigned_extra_bboxes = [it["bbox"] for it in unassigned_components] + [bbox(c) for c in extra]
 
-    print(f"Wrote {len(crops)} sprites to {args.out}")
+    if ok:
+        print(f"Wrote {len(crops)} sprites to {out_dir}")
+    else:
+        print(f"Count mismatch — {len(crops)} candidate crops QUARANTINED to {out_dir} "
+              f"(nothing written to {args.out})")
 
     review_written = False
     if args.review or not ok or missing_slugs or unassigned_extra_bboxes:

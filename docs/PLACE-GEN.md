@@ -322,3 +322,49 @@ Every unit: own branch, `check-manifest.py`, regression run of `verify-prep-bund
 ## RESOLVED — Adam's rulings (2026-07-08 night)
 1. **Spine-24 + replace-rollPlace-in-place: adopted as drafted.** Adam does a craft pass on the spine rows and skin labels later — rows land PROVISIONAL.
 2. **Pattern-naming for mundane-key realms: yes.**
+
+---
+
+## ADDENDUM 2026-07-09 — the visual-engine expansion (Adam's rulings, binding)
+
+Context: the source gathers landed (`PLACE-GATHER-DMG14-SETTLEMENTS`, `PLACE-GATHER-DMG14-DUNGEONS`,
+`PLACE-GATHER-DMG24-SETTLEMENTS`, `PLACE-GATHER-DMG24-BASTIONS` — vision-read, committed 2acdcb8),
+and Adam expanded the plan: **generated places are no longer narrative-first with a render bolted
+on — they generate the actual diorama spaces the tabletop shows.** Three rulings supersede parts
+of the body above:
+
+### A. THE GRID LAW — 5-ft cells are the spatial standard (NEW, rewire-class)
+
+> **Every generated space is measured in real D&D 5-ft cells.** Any table row, kit, skin field, or
+> spec that describes a physical space carries dimensions in feet divisible by 5. The diorama floor
+> is divided into 5×5-ft cells.
+
+Honest inventory at ruling time: **nothing was standardized.** Combat space = bands×lanes
+(1 band ≈ 25 ft depth, 1 lane ≈ 20 ft width, `src/engine/combat.js:28`); theater tiles are
+abstract (`TILE_SIZE=1` world unit, no footage); blockwright cuboids likewise. Adam ruled the
+rewire worth it. The arithmetic is clean: **1 band = 5 cells deep, 1 lane = 4 cells wide** —
+bands/lanes become *views over* the cell grid (combat math initially unchanged, reading derived
+bands), not casualties of it. Rewire order: (1) place-gen emits footprints in cells from birth,
+(2) theater tiles bind 1 tile = 1 cell (5 ft), (3) combat band/lane derives from cell geometry.
+Step 3 is its own unit; steps 1–2 ride with this spec's build.
+
+### B. Scope fence amended — structured interiors are IN
+
+§3's "no interior floor-plans beyond the existing building-interior roll" is **lifted**. The DMG14
+Appendix A machinery (start → chambers → purpose-by-site-type → state → contents → dressing, all
+gathered) becomes the raw material for a **structured interior generator**: a site mint can emit
+rooms with real cell dimensions, purposes, and dressing pointers — realm-skinned like everything
+else. The Bastion facility taxonomy contributes **space bands (Cramped/Roomy/Vast, in sq ft → cells)
+and staffing counts** as spine-row fields. Interior gen is a new build unit family (spec section to
+be drafted before its build wave); the v1 fence on per-place economy/schedules still holds.
+
+### C. Settlement-table upgrade lane (authorized 2026-07-09)
+
+The five thin ported tables — `Place Ruler Status`, `Place Race Relations`, `Place Mythology`,
+`Place Nearby`, `Place Relevancy` — get the Master-Setting-grade craft treatment (d100, 5-band,
+66/20/9/4/1 authoring spread), seeded from the DMG14 gather rows. Physical rows carry GRID-LAW
+dimensions. Originals archive to `zz_Archive/`; upgraded rows land **PROVISIONAL** pending Adam's
+red-pen (the 06-22 precedent).
+
+Still outstanding: full Van Richten's (current file is a subclasses excerpt — no domain-gen
+chapter); Adam is sourcing it. Gloom skin gather waits on it.

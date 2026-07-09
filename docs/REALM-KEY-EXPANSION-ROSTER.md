@@ -1,6 +1,6 @@
 ---
 type: craft-draft
-status: "DRAFT — concepts only, folded from Adam's rulings 2026-07-09; no tiers/stats yet; awaiting Adam's taste pass"
+status: "APPROVED (concepts) — Adam 2026-07-09 ('add that stuff and i approve it'); tiers/stats/casting still pending"
 branch: claude/npc-monster-realm-expansion-edb64a
 created: 2026-07-09
 canonical: false
@@ -120,8 +120,18 @@ entry carries an authored non-graphic defeat-out.
   hooks, never combat.
 - **The frantic taxi** — an angry cab that hunts jaywalkers (Adam's "angry taxi").
 - **The runaway dog + the garden snake** — low-CR pest lane (Adam's "dog and snake").
-- **The fab five** — a five-piece crew of pompadoured toughs who attack in choreography (Adam's call;
-  Sharks/Frank's-gang lane — reads as the town's "greaser crew" set).
+- **The Traveling Five** `(R)` — the fab five CORRECTED (Adam): the *touring band* (Runaway-Five
+  lane) — five-piece showband, perpetually in debt to whoever owns the venue; allies, transport,
+  and a rescue hook (buy out their contract), never enemies.
+- **The greaser gang** — the Sharks/Frank's-gang lane kept as its own entry: pompadoured toughs
+  who fight in choreography; the town's second bully pole alongside Biff's crew.
+- **The Pink Cult** `(S)` — FACTION PRESSURE (Adam): Happy-cult lane — smiling converts painting
+  the town pink one fence at a time; door proselytizers, a compound at the edge of town, neighbors
+  quietly joining between visits. Runs as a faction clock, not a monster: town pinkness = the
+  pressure gauge; the priest `(B social)` and the painted-over holdout house are the set pieces.
+- **The scissor-handed gardener** `(S)(R)` — Edward lane: framed as the villain by the town
+  (mwahaha, sorry Edward); genuinely dangerous hands, genuinely gentle heart. A conversion
+  target — the town's fear is the antagonist, and recruiting him is the win state.
 - **Possessed lawn flamingo flock** · **runaway RC-car swarm** · **door-to-door salesman who won't leave** `(S)`.
 
 ### HOA lane (Adam: keep — "still great")
@@ -134,7 +144,8 @@ entry carries an authored non-graphic defeat-out.
 - **The visitor in the shed** `(R)` — ET-shaped cameo (CAMEO-CAST rarity-gated mint).
 - **The little fixers** `(R)` — *batteries-not-included tiny helper machines; nest in an eave, repair
   one broken thing a night.
-- **The kid-built ship** — Explorers/Navigator lane: a high-band start/hook, not a creature.
+- **The kid-built ship** — Explorers × EarthBound crossover (Adam): the neighborhood kids' junk-built
+  craft that actually works; a high-band start/hook, not a creature.
 
 ### Scene ask (place-lane, registered here so it doesn't get lost)
 - **High school / diner / prom** needs a home in suburb's PLACE-GEN skin (archetype rows: the school,
@@ -167,8 +178,8 @@ Adam's sprite session already generated supermutant/ghoul analogs — **cast the
   the realm's best lore NPCs; *feral withered* — the mook horde.
 - **The glow-called** — feral withered drawn to radiation sources; environmental-hazard creatures.
 
-### The ember-stone faction (from the sprite generator's glowing-ember accident — Adam wants it)
-- **The Cindermarked** — a faction of NPCs who found a **magic ember-stone**; each carries a shard
+### The ember-stone CULT (Adam confirmed: run it as a cult — from the sprite generator's glowing-ember accident)
+- **The Cindermarked** — a **cult** grown around a found **magic ember-stone**; each carries a shard
   that glows through the skin (the sprite artifact becomes the identity). Draft concept for the
   stone's power (Adam to pick/re-taste): **it burns fuel that isn't there** — a shard warms a body,
   powers a dead machine, or cooks a meal without consuming anything… and the faction is quietly

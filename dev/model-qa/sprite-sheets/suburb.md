@@ -469,3 +469,31 @@ sheets above). Same style block and mechanical instructions as above.
 23. **The Visitor in the Shed** — small wrinkled being among garden tools, finger-light glowing, hiding
 24. **The Little Fixers** — palm-sized machine helpers nesting in an eave, one soldering mid-flight
 25. **The Prom-Night Thing** — the thing the school rumor is actually about, corsage still pinned to it
+
+### Expansion sheet E2 (4×5 grid, 20 cells) — Adam's 2026-07-09 approval-pass additions
+
+**Correction note (nothing replaced):** E1 entries 9–11 ("The Fab Five") re-read as the GREASER
+GANG below — Adam clarified the fab five is the *traveling band* (Runaway-Five lane), added here
+as allies. Also new: the Pink Cult (a whole faction pressure) and the scissor-handed gardener
+(villain-framed, convertible to friend).
+
+1. **The Traveling Five — Bandleader** — pencil-mustache frontman mid-showstopping-pose, bass held high, debt-collector's notice in his pocket
+2. **The Traveling Five — Horn Section** — two brothers mid-blast, trumpet and sax, sweat flying
+3. **The Traveling Five — Drummer** — mid-fill, one stick airborne, grin bigger than the kit
+4. **The Traveling Five — Keys Man** — hunched over a shoulder-strapped keyboard, fingers blurred
+5. **The Traveling Five — the Manager** — harried man with a briefcase of IOUs, mid-plead with an unseen venue owner
+6. **Greaser Gang — the Frank** — pompadoured leader mid-finger-snap, jacket collar up, comb like a switchblade
+7. **Greaser Gang — the Twins** — two matched toughs mid-synchronized-step
+8. **Greaser Gang — the Backline** — two more in choreography, one mid-spin, one clapping the beat
+9. **Pink Cult — Door Proselytizer** — beaming convert mid-knock, pamphlets fanned, everything he wears freshly pink
+10. **Pink Cult — the Painter** — coveralls and roller, mid-stroke turning a picket fence pink, humming
+11. **Pink Cult — Choir Mother** — round smiling matron leading an unheard hymn, robe pink to the hem
+12. **Pink Cult — the Priest** — tall serene leader in pink vestments, arms wide, smile a degree too fixed
+13. **Pink Cult — Converted Neighbor** — a familiar dad from up the street, half his clothes still normal, half already pink
+14. **Pink Cult — the Holdout** — grim homeowner guarding the block's last unpainted house, garden hose held like a rifle
+15. **The Scissor-Handed Gardener** — gentle pale figure in patchwork leather, blade-fingers spread mid-topiary-snip, eyes apologetic
+16. **The Gardener's Topiary** — a hedge dinosaur mid-trim, impossibly good, evidence of the gentle heart
+17. **Torch-and-Casserole Mob** — three neighbors mid-march on the gardener's house, flashlights and a hot dish
+18. **The Kid-Built Ship** — junk-welded backyard craft mid-hover, wagon wheels and a satellite dish, genuinely working
+19. **Ship Crew Kid — the Pilot** — determined kid in a bike helmet and welding goggles, joystick from a lawn tractor
+20. **Ship Crew Kid — the Engineer** — younger kid dwarfed by a tool belt, soldering iron raised in triumph

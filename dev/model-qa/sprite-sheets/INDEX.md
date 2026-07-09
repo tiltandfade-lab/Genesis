@@ -38,3 +38,9 @@ incl. adepts), ash (+15: the overgrown ladder, lucid/feral withered, the Cinderm
 faction), cosmic (+15: arcana-walkers, the 23rd card, the weighing, name-work), bright-kingdom
 (+25: game-logic-beings NPC weirdness + teeth-under-the-candy monsters). Draft/PROVISIONAL —
 awaiting Adam's taste pass before any casting into the bestiary.
+
+**Approval pass (2026-07-09, Adam — appended):** roster APPROVED at concept level. Corrections
+folded as E2 sheets: suburb +20 (fab five corrected to the TRAVELING BAND / Runaway-Five lane;
+greaser gang kept separate; **the Pink Cult** = a whole faction pressure; the scissor-handed
+gardener — villain-framed, convertible to friend; kid-built ship = Explorers × EarthBound
+crossover), ash +3 (the Cindermarked confirmed as a CULT — recruiter/initiate/apostate roles).

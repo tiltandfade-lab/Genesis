@@ -211,3 +211,9 @@ identities authored with Adam (the apexes/tentpoles); 0 need restat. Nothing rec
    true name belongs to)?
 6. **Displaced item doers** (tuning-fork, Librarian's Bookmark, protractor-diagram, dark-ink) — leave
    retired, or fold any back in by growing the table past d50?
+
+## RESOLVED — Adam's rulings (2026-07-08 night)
+1. **Tarot awakening: BOTH** — the 23rd-card item AND a low ambient chance on Mythic Cosmic beats.
+2. **Drowned-court cluster: RETIRE** (Adam has no connection to the material — retire rather than re-key; the freed rows go to the hermetic/Egyptian key).
+3. **Shoggoth benchmark:** adopt the draft's "First Matter / The Unformed of Nun" — Adam defers (no context yet), coordinate with the models lane, revisitable after he meets the realm.
+4. **Apex entity: NAMELESS** — "the thing the true name belongs to." (Adam tempted by Thoth-as-law; revisit as the realm gets shaped.)

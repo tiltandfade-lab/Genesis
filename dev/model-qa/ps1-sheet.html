@@ -34,6 +34,21 @@ import { resetGeom, getBuffers } from './probe-lib.js';
 /* ---- SET-DRIVEN ROSTERS (?set=races etc.). Dynamic imports; a missing/broken creature file is
    skipped (the sheet renders partially mid-wave instead of dying on one bad import). ---- */
 const SETS = {
+  'frontier-w2': [
+    {name:'GIANT VULTURE', sub:'requeue',  file:'rlm-frontier-giant-vulture.js', fn:'buildGiantVulture'},
+    {name:'ASSASSIN',      sub:'requeue',  file:'rlm-frontier-assassin.js',      fn:'buildAssassin'},
+    {name:'JACKAL',        sub:'frontier', file:'rlm-frontier-jackal.js',        fn:'buildJackal'},
+    {name:'RHINOCEROS',    sub:'frontier', file:'rlm-frontier-rhinoceros.js',    fn:'buildRhinoceros'},
+    {name:'HIPPOPOTAMUS',  sub:'frontier', file:'rlm-frontier-hippopotamus.js',  fn:'buildHippopotamus'},
+    {name:'SALAMANDER',    sub:'frontier', file:'rlm-frontier-salamander.js',    fn:'buildSalamander'},
+    {name:'PERYTON',       sub:'frontier', file:'rlm-frontier-peryton.js',       fn:'buildPeryton'},
+    {name:'GORGON',        sub:'frontier', file:'rlm-frontier-gorgon.js',        fn:'buildGorgon'},
+    {name:'SPIRIT NAGA',   sub:'frontier', file:'rlm-frontier-spirit-naga.js',   fn:'buildSpiritNaga'},
+    {name:'NIGHTMARE',     sub:'frontier', file:'rlm-frontier-nightmare.js',     fn:'buildNightmare'},
+    {name:'DESPERATE BANDIT', sub:'frontier', file:'rlm-frontier-desperate-bandit.js', fn:'buildDesperateBandit'},
+    {name:'SCOUT',         sub:'frontier', file:'rlm-frontier-scout.js',         fn:'buildScout'},
+  ],
+
   'frontier-w1': [
     {name:'GIANT VULTURE', sub:'frontier · LOW',  file:'rlm-frontier-giant-vulture.js',  fn:'buildGiantVulture'},
     {name:'VENOMOUS SNAKE',sub:'frontier · LOW',  file:'rlm-frontier-venomous-snake.js', fn:'buildVenomousSnake'},

@@ -432,3 +432,39 @@ children, not teens or adults.
 19. **Kid — wants: Make their parent laugh the old way, the way from before.**
 20. **Kid — wants: Warn someone — and not one adult will slow down long enough to hear it.**
 
+
+## Expansion batches — REALM-KEY-EXPANSION-ROSTER draft, 2026-07-09 (25 total, 1 sheet)
+
+Appended additions from `docs/REALM-KEY-EXPANSION-ROSTER.md` (Adam's rulings folded): the
+Collector (the payment-taker, always a shapeshifting fear-eater — form is table-rolled), the
+demand ladder (as the feeding clock advances, the town's ordinary things turn), evil children
+(non-graphic defeat-outs authored per the children carve-out), slashers + the dream system, and
+the Monster Squad friendly lane. Same style block and mechanical instructions as above.
+
+### Expansion sheet E1 (5×5 grid, 25 cells)
+
+1. **The Collector — Storm-Drain Grin** — a smile and two eyes in a drain's darkness, one white-gloved hand extended up through the grate
+2. **The Collector — Borrowed Face** — a beloved neighbor's shape, seams wrong at the jaw, standing too still on a porch
+3. **The Collector — Payment Due** — the true shape mid-unfolding, all its borrowed faces hanging off it like coats
+4. **Rabid Family Dog** — a good dog gone wrong, foam-jawed, still wearing its name tag
+5. **Rabid Stray Alpha** — lead dog of the turned strays, head low, pack-scars glowing with the wrongness accent
+6. **The Vintage Doll** — porcelain doll with a killer's soul, knife too big for its hands, mid-step
+7. **The Puppet Troupe** — three marionettes moving without strings, one still dragging its crossbar
+8. **The Dummy Patriarch** — ventriloquist dummy seated like a king, jaw open mid-command
+9. **The Jealous Car** — gleaming vintage coupe, headlights narrowed, grille bent into a snarl, engine on
+10. **The Driverless Diesel** — rust-streaked semi rig, cab empty, air horn mid-blast
+11. **The Returned Pet** — the family cat come back from the yard grave, moving in stop-motion
+12. **The Returned Relative** — a grandmother back from the dead, smile correct, eyes not
+13. **The Corn Prophet** — child preacher in Sunday clothes at the field's edge, arms wide, congregation behind
+14. **Corn Congregation Child** — solemn kid with a sickle held like a hymnal
+15. **The Bad Seed** — one perfect child, braids and polished shoes, hands folded, head tilted
+16. **The Good Son's Shadow** — two identical boys, one half-step behind the other, only one casting a shadow
+17. **The Dream-Stalker** — burn-scarred figure in a striped sweater-shape, bladed glove, standing where sleep starts
+18. **The Lake Revenant** — drowned camper in a fogged mask, waterlogged, machete dragging a wet line
+19. **The Masked Shape** — pale-masked figure in coveralls, standing at the streetlight's edge, walking-never-running
+20. **The Gentle Flat-Head** — huge stitched protector in a too-small coat, carrying a kid's backpack carefully
+21. **The Reformed Wolf-Man** — half-turned man gripping a chain he locked onto himself, fighting the moon
+22. **The Gill-Man in the Creek** — shy amphibian figure half-risen from creek water, holding out a found toy
+23. **Harry the Hairy Neighbor** — huge sasquatch in a borrowed flannel, ducking a garage door, sheepish
+24. **The Man Who Checks the Schedule** — grey town clerk with a pocket ledger, crossing off a date
+25. **The Ladies' Auxiliary Matron** — church-hall coven leader, casserole in oven mitts, sigil in the crust

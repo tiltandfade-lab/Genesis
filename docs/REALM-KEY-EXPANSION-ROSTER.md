@@ -180,6 +180,55 @@ Adam's sprite session already generated supermutant/ghoul analogs — **cast the
 
 ---
 
+## COSMIC — tarot's home realm (Egyptian / Hermetic / Enochian)
+
+Additions keyed to what the 2026-07-08 identity locked: the tarot engine LIVES here (the 23rd
+card awakens it), true names command, the heart gets weighed, the apex is nameless.
+
+- **The arcana, walking** — major-arcana entities as creatures: **the Tower** (a disaster that
+  arrives with a body), **the Moon** (the liar light — everything seen under it is slightly untrue),
+  **Death's understudy** `(S)` (upright it takes, reversed it's mercy — parley-first).
+- **The 23rd card, walking** `(M)` — the card that isn't in any deck; meeting it is how the tarot
+  engine wakes in a world.
+- **The weighing:** **the Devourer at the scale** `(B)` (eats unbalanced hearts — Ammit lane) ·
+  **scale-keeper ibis scribe** `(S)` — weighs, never fights; the verdict is the encounter.
+- **Name-work:** **name-eater** — erases your true name (you become unaddressable: NPCs can't
+  remember you, wards can't include you) · **the choir of the untranslated word** — a sound with
+  intent · **Enochian watcher** — descends when a seal is drawn wrong.
+- **Geometry + tomb lane:** the squared-circle construct (impossible-angle guardian) · sphinx of
+  the seventh gate · the borrowed tomb (sarcophagus that collects) · canopic swarm (four jars,
+  your organs sold separately) · the reader who read too far (fallen oracle) · **deck-sharper**
+  `(S)` — a con man dealing *real* cards; the stakes are years of your life.
+
+## BRIGHT-KINGDOM — Nintendo-80s, teeth under the candy (Adam: "very weird, especially the NPCs")
+
+The weirdness engine: **game-logic beings who don't know they're game-logic** — the rules of a
+side-scroller as folk metaphysics. NPC-heavy on purpose.
+
+### Weird NPCs
+- **The shopkeeper who is a door** — you trade *through* him; nobody's seen the shop.
+- **A key that is a person** `(R)` — the Zelda-key doer made flesh; opens one thing, once, and
+  knows it.
+- **Extra-life vendor** `(S)` — sells 1-ups; never says what they cost. **The continue-screen
+  attendant** — meets you at death and counts down from 9 (death-rebirth system cameo seam).
+- **The princess who rescues herself** `(R)` — cameo-cast; deeply annoyed by the trope.
+- **Glitch-child** — clips through walls, speaks in scrambled tiles. **The out-of-bounds man** —
+  lives past the level boundary; knows too much about the world's edges. **Minus-world exile** —
+  came back from the level that shouldn't exist, wrong in ways the town politely ignores.
+- **Tutorial ghost** — explains things nobody asked, cannot stop. **Save-point hermit** —
+  remembers every version of you `(M-band lore)`. **The speedrunner** — a local who moves wrong
+  and skips space.
+- **Coin-block farmer** (hits blocks for a living, arms like anvils) · **invisible-wall mason** ·
+  **warp-pipe toll troll** `(S)` · **boss-door herald** (announces bosses, deeply tired) ·
+  **unlicensed power-up dealer** `(S)` (mushrooms of dubious provenance) · **the credits choir**
+  (sings the names of everyone who ever finished).
+- **High-score king** `(S)(B)` — the leaderboard tyrant; a social boss.
+
+### Teeth-under-the-candy monsters
+- Gumdrop hound pack · piranha-planter · spike-shell bruiser · **the false king in the final
+  castle** `(B)` ("your quarry is in another castle" made into a creature — a decoy that fights) ·
+  **the kill-screen** `(M)` — the place-thing where the world simply runs out.
+
 ## Next steps
 1. Adam taste pass on this doc (red-pen concepts, pick the ember-stone power, name taste).
 2. Then: expand each realm section to full draft-table rows (name/role/CR-band/frame/summary) in

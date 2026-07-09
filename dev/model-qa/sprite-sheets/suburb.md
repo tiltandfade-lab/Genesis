@@ -433,3 +433,39 @@ children, not teens or adults.
 19. **Kid — wants: Make their parent laugh the old way, the way from before.**
 20. **Kid — wants: Warn someone — and not one adult will slow down long enough to hear it.**
 
+
+## Expansion batches — REALM-KEY-EXPANSION-ROSTER draft, 2026-07-09 (25 total, 1 sheet)
+
+Appended additions from `docs/REALM-KEY-EXPANSION-ROSTER.md` (Adam's rulings folded): the BTTF
+strand (Biff-shaped bully set, generational), the Earthbound strand (frantic taxi, dog-and-snake,
+fab five, starmen, Mr. Saturn analog, psychic kid), and the Amblin lane (gremlin realm-bleed
+pair, the visitor, the little fixers). HOA entries NOT repeated (already on the monster/NPC
+sheets above). Same style block and mechanical instructions as above.
+
+### Expansion sheet E1 (5×5 grid, 25 cells)
+
+1. **The Bully (Kid Era)** — letterman-jacket teen mid-shove, fist raised, knuckles fresh from a locker
+2. **The Bully's Toady** — smaller kid laughing before the joke lands, pointing wherever the bully points
+3. **The Bully's Muscle** — big slow lieutenant cracking knuckles, waiting to be told
+4. **The Bully (Dad Era)** — same face at 40, supervisor's short-sleeve shirt, jabbing a finger
+5. **The Bully (Grandpa Era)** — same face at 70, cane raised mid-rant from a porch
+6. **The Frantic Taxi** — checkered cab up on two wheels mid-turn, no driver, meter running wild
+7. **The Runaway Dog** — scrappy loose mutt mid-lunge, leash still attached and whipping
+8. **The Garden Snake** — coiled hose-sized snake in the flowerbed, more indignant than deadly
+9. **The Fab Five — Pompadour Leader** — snapping fingers mid-strut, jacket collar up
+10. **The Fab Five — the Twins** — two matched toughs mid-synchronized-step, combs out like knives
+11. **The Fab Five — the Backline** — two more in choreography, one mid-spin, one clapping the beat
+12. **The Psychic Kid** — striped-shirt kid in a baseball cap, hand to temple, air rippling
+13. **Starman Analog** — chrome-skinned visitor in an almost-right suit, teleport static around its feet
+14. **Starman Elite** — taller, gold-chromed, one arm raised mid-psychic-flash
+15. **Mr. Saturn Analog Villager** — round little being, all nose and eyebrows, one hair with a bow, mid-bounce
+16. **Possessed Lawn Flamingo Flock** — five plastic flamingos mid-stalk, heads rotated wrong
+17. **Runaway RC-Car Swarm** — a dozen toy cars swarming like piranha, antennas whipping
+18. **The Door-to-Door Salesman** — too-wide grin, foot literally in a door frame he carries with him
+19. **The Van at 1:15 AM** — panel van circling, headlights off, door sliding open mid-roll
+20. **The Garage Experiment** — a hedge-trimmer/vacuum/something gone sapient, trailing its inventor's extension cord
+21. **The Gremlin (Cute Mode)** — big-eared fuzzball begging adorably, midnight rules not yet broken
+22. **The Gremlin (Turned)** — the same creature post-rules-broken, spined and cackling, gloom-band wrongness accent
+23. **The Visitor in the Shed** — small wrinkled being among garden tools, finger-light glowing, hiding
+24. **The Little Fixers** — palm-sized machine helpers nesting in an eave, one soldering mid-flight
+25. **The Prom-Night Thing** — the thing the school rumor is actually about, corsage still pinned to it

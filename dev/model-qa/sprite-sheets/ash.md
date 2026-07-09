@@ -448,3 +448,30 @@ children, not teens or adults.
 19. **Kid — wants: Make their parent laugh the old way, the way from before.**
 20. **Kid — wants: Warn someone — and not one adult will slow down long enough to hear it.**
 
+
+## Expansion batches — REALM-KEY-EXPANSION-ROSTER draft, 2026-07-09 (15 total, 1 sheet)
+
+Appended additions from `docs/REALM-KEY-EXPANSION-ROSTER.md` (Adam's rulings folded): the
+supermutant analog ladder (**the overgrown** — made, not born; somebody's still making them),
+the ghoul analog split into lucid/feral lanes (**the withered**), and **the Cindermarked** —
+the faction born from this sheet set's own glowing-ember accent (Adam: a faction of NPCs who
+found a magic stone). Existing ghoul/mutant entries on sheets 1–5 are NOT repeated. Same style
+block and mechanical instructions as above.
+
+### Expansion sheet E1 (3×5 grid, 15 cells)
+
+1. **Overgrown Brute** — slab-muscled made-mutant, surgical seams still visible, car-door shield
+2. **Overgrown Pack-Leader** — smarter overgrown with a salvaged rebreather, directing two others by fist-signs
+3. **Overgrown Siege-Breaker** — the biggest of the made, carrying a lamppost like a bat, mid-swing
+4. **The Overgrown Warlord** — armored in welded road signs, standing on a wreck, made-mark branded proud
+5. **The Maker's Apprentice** — hooded surgeon of the vats, tools of the making on a bandolier, recruiting
+6. **Lucid Withered Lore-Keeper** — skin gone to parchment, pre-fall memories intact, mid-story with a salvaged book
+7. **Lucid Withered Trader** — withered merchant with a cart-harness, prices fair, face frightening
+8. **Feral Withered Runner** — sprinting hollow-eyed husk, all hunger, mid-leap off rubble
+9. **The Glow-Called** — feral withered lit faintly green, drawn moth-like toward a reactor's warmth
+10. **Cindermarked Shard-Bearer** — ragged wanderer, ember-glow shining through the skin of one clenched fist
+11. **Cindermarked Ember-Speaker** — faction priest, shard set in a neck-torc, warmth-halo in the ash-cold
+12. **Cindermarked Pilgrim** — traveler following a shard's pull like a compass, footprints steaming
+13. **Cindermarked Warden** — faction guard whose shard-arm glows to the elbow, ash flaking off the skin it's spending
+14. **The First Kindled** — the faction's founder, more ember than flesh now, radiant and burning down
+15. **The Ember-Stone Reliquary** — the mother-stone on its carried litter, bearers aging visibly around it

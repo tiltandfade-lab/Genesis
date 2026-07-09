@@ -435,3 +435,39 @@ children, not teens or adults.
 19. **Kid — wants: Make their parent laugh the old way, the way from before.**
 20. **Kid — wants: Warn someone — and not one adult will slow down long enough to hear it.**
 
+
+## Expansion batches — REALM-KEY-EXPANSION-ROSTER draft, 2026-07-09 (25 total, 1 sheet)
+
+Appended additions from `docs/REALM-KEY-EXPANSION-ROSTER.md` (Adam: bright "could and should be
+very weird, especially the NPCs"). The weirdness engine: **game-logic beings who don't know
+they're game-logic** — side-scroller rules as folk metaphysics. Entries 1–20 are NPCs (use the
+NPC-section pose discipline: mid-task, not combat); 21–25 are teeth-under-the-candy monsters.
+Same style block and mechanical instructions as above.
+
+### Expansion sheet E1 (5×5 grid, 25 cells)
+
+1. **The Shopkeeper Who Is a Door** — an ornate door with a counter-hatch mid-transaction; nobody has seen the shop
+2. **The Key Who Is a Person** — small brass-headed being, teeth-for-feet, proudly knows exactly one lock
+3. **The Extra-Life Vendor** — beaming merchant holding up a glowing 1-up, price tag conspicuously blank
+4. **The Continue-Screen Attendant** — patient robed usher holding a number card reading 9, mid-countdown
+5. **Warp-Pipe Toll Troll** — squat collector seated atop a green pipe, palm out, exact change only
+6. **The Princess Who Rescues Herself** — crowned figure climbing out her own tower window, rope of bedsheets, done waiting
+7. **Glitch-Child** — kid rendered half-in-wrong-tiles, one arm scrambled, mid-clip through a wall edge
+8. **The Out-of-Bounds Man** — weathered hermit standing on nothing past the level's edge, pointing at the seam
+9. **Minus-World Exile** — returned traveler, colors slightly inverted, townsfolk politely not noticing
+10. **Tutorial Ghost** — translucent guide mid-gesture at an arrow only it can see, cannot stop explaining
+11. **Save-Point Hermit** — serene elder seated in a ring of soft light, remembering every version of you
+12. **The Speedrunner** — local mid-motion-blur, feet not touching the ground, clipping a corner that should be solid
+13. **Coin-Block Farmer** — overalls, anvil arms, mid-punch under a floating block, coins fountaining
+14. **Invisible-Wall Mason** — trowel raised against empty air, building what everyone bumps into
+15. **Boss-Door Herald** — trumpeter in livery before a huge skull-lock door, announcing, deeply tired
+16. **The Unlicensed Power-Up Dealer** — trench-coated toad-thing, coat lined with mushrooms of dubious provenance
+17. **The Credits Choir** — three robed singers mid-note, a scroll of finishers' names spooling from the choirbook
+18. **The High-Score King** — throne of stacked arcade tokens, three-letter crown reading AAA, sneering
+19. **A Chest That Eats (Politely)** — locked chest mid-curtsy, napkin tucked in its lid, tongue as a red carpet
+20. **The Moon with the Face** — the low moon itself, grinning too wide, visibly closer than yesterday
+21. **Gumdrop Hound** — candy-bright pack hunter, sugar-shell hide, teeth entirely real
+22. **Piranha-Planter** — snapping flower in a cheerful terracotta pot it drags with it
+23. **Spike-Shell Bruiser** — round jolly-faced bruiser whose shell is all spikes, mid-shoulder-charge
+24. **The False King** — jeweled decoy monarch mid-taunt, crown slipping, "your quarry is elsewhere"
+25. **The Kill-Screen** — the place where the world runs out, rendered as a creature of torn tiles and static

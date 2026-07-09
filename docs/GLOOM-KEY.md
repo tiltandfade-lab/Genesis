@@ -258,3 +258,15 @@ regenerated artifacts only at master merge.
    deal. Too soft? (An option: also convert one town faction hostile — the deal's beneficiaries.)
 6. **Conviction cap 4 / d4 die** for belief-weapons — numbers are placeholders pending a combat
    pass against the town-monster CR band.
+
+## RESOLVED — Adam's rulings (2026-07-08 night)
+1. **Derry rule: adopted** — "ain't hanging out in weird town for nothin."
+2. **SETTLED cost is PER-MONSTER, not universal:** the table splits into **deal-rows** (the
+   town's fortune IS the arrangement; killing the monster calls the debt — prosperity downgrade
+   applies) and **attractor-rows** (the town is simply weird-af and draws horrors; kill it and the
+   town's fine — but the vacancy invites). Tag every row `deal` or `attractor`; the clock/SETTLED
+   machinery reads the tag.
+3. **d20 stays** (no cut to d12). Two secrets only via compound row 20, as drafted.
+4. **Belief-weapons: the conviction moment is a d20 THE PLAYER ROLLS** (the inhaler gets its own
+   d20 to determine whether you believe it's battery acid) — per the house "player rolls the
+   effect" doctrine. Conviction-counter numbers remain combat-pass placeholders.

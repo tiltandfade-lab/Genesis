@@ -368,3 +368,34 @@ red-pen (the 06-22 precedent).
 
 Still outstanding: full Van Richten's (current file is a subclasses excerpt — no domain-gen
 chapter); Adam is sourcing it. Gloom skin gather waits on it.
+
+### D. §7 WIRING MAP — mint → world → DM → table (added 2026-07-09, Adam's ask)
+
+Traced from the live tree. The engine seams (units 1–6 above) stand; these are the units that
+close the loop end-to-end. Numbering continues §5.
+
+7. **Tray source: `node` + `interior` kinds** (the big one). The render chain is live
+   (`theaterHereSourceFor` → `trayFrom(source)` → `setBoard`, `src/world/render.js:416` /
+   `src/engine/theater-data.js:948`) but only `segment` and `idle` source kinds are built;
+   TABLETOP-VISION's `node`/`interior` vocabulary is locked and unbuilt (node-tray dressing was
+   explicitly deferred in TABLETOP-UNITS' closing note). Build: `trayFrom` gains a `node` branch
+   reading the codex place record — **footprint in 5-ft cells (GRID LAW: mint emits `dims:{w,d}`
+   in cells; 1 tile = 1 cell = 5 ft)**, floor/light from realm surfaces, props resolved via unit 8's
+   archetype map through the existing `REALM_PROPS` never-a-hole fallback. `interior` kind follows
+   the same shape fed by the interior generator (ADDENDUM §B) when it lands.
+8. **Archetype → dressing map.** `SCENE_DRESSING_BY_ARCHETYPE` in `data/place-skins.js`: per spine
+   archetype, prop-name pulls from the realm's `REALM_PROPS` pool + surface key + light default
+   (+ optional per-skin overrides). Rider: **prop census** — sweep the 24 archetypes × realm pools
+   for missing architecture props (counters, altars, stalls, cells, shelving, thrones); net-new
+   entries queue to the models lane (its post-sprite pivot IS trays/props/architecture).
+9. **TIYL start routing.** The bardo hometown beat (`src/creator/bardo.js:14`) rolls
+   `place-master-setting` directly and `play.js:66` makes it the origin node — route it through
+   `rollPlace({realm})` instead so the start settlement is born typed/cast/dressed like every
+   other place. Composes with TIYL-WEIGHTED-STARTS (class weighting rides the same call's bias).
+10. **DM digest exposure.** The current place's `{archetypeKey,label,dims,dressing-summary}` joins
+    the digest's location line (small, section-budgeted per digest diet) so the seat narrates the
+    space the table is showing — one derivation, prose and tray can never disagree.
+11. **GRID-LAW combat derivation** (carried from §A): bands/lanes derive from cell geometry
+    (1 band = 5 cells deep, 1 lane = 4 wide). Own unit, after 7 proves the cell grid.
+
+Dependency order: 1→2→{3,8}→7→10, 9 anytime after 2, 11 after 7. Unit 6 stays parallel.

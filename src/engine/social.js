@@ -113,7 +113,11 @@ function resolveMorale(input){
 function socialCheckAbilityFor(rec){
   const type = (rec && rec.kind === "creature" && rec.fields && rec.fields.type)
     ? String(rec.fields.type).toLowerCase() : null;
-  if(type === "beast") return { ability:"wis", skill:"Animal Handling" };
+  // ANIMAL-SOCIAL.md §3/§6 U3: an animal partial (rec.dm.partialKind==="animal" — minted via
+  // rollPartial + prepCastEnvAnimals/prepCastAmbientScene, kind:"npc") reads the same as a Beast
+  // creature — WIS (Animal Handling). Checked ALONGSIDE the creature/Beast branch, not instead of it.
+  const partialKind = (rec && rec.dm && rec.dm.partialKind) || null;
+  if(type === "beast" || partialKind === "animal") return { ability:"wis", skill:"Animal Handling" };
   return { ability:"cha", skill:"Persuasion" };
 }
 
@@ -138,6 +142,72 @@ function creatureLevers(rec, opts){
   const hostileBand = flavorRows.some(r => r && (r.band === "Volatile" || r.band === "Mythic"));
   if(opts.hostileFlavor || hostileBand) levers.push({ type:"fear", eligible:true });
   return levers;
+}
+
+/* ANIMAL-SOCIAL.md §3/§6 U3 — animal care levers, mirroring creatureLevers' posture: derived straight
+   off the partial's OWN rolled `need` (dm.need — hungry/guarding/lost/loyal, minted by rollPartial),
+   never invented at check-time. Pure; never mutates `rec`. Levers are CARE, not coin/leverage/fear —
+   deliberately NOT SOCIAL_LEVER_MODS keys (an animal's want stack doesn't run the adult economy); the
+   caller (dm.js's social_check) is the one that turns `advantage`/`disadvantage` flags into dice
+   instructions, same division of labor as socialCheckAbilityFor only picking the skill.
+     hungry   -> {type:"feeding",    advantage:true,  consumableSink:true}  (share rations = ADV, a sink)
+     lost     -> {type:"guiding"}                                          (return it home/to its person)
+     guarding -> {type:"threshold",  wrongApproachDisadvantage:true}       (approach wrong = DISADV)
+     loyal    -> {type:"throughPerson"}                                    (win over its person instead)
+   PLUS the universal lever every animal carries regardless of need: {type:"patience", revisit:true} —
+   a kind revisit grants a fresh check (the codex is what persists that across prep re-entries, §3). */
+const ANIMAL_NEED_LEVERS = {
+  hungry:   { type:"feeding",    advantage:true, consumableSink:true },
+  lost:     { type:"guiding" },
+  guarding: { type:"threshold",  wrongApproachDisadvantage:true },
+  loyal:    { type:"throughPerson" },
+};
+function animalLevers(rec){
+  const need = rec && rec.dm && rec.dm.need;
+  const levers = [];
+  const needLever = ANIMAL_NEED_LEVERS[need];
+  if(needLever) levers.push(Object.assign({}, needLever));
+  levers.push({ type:"patience", revisit:true });
+  return levers;
+}
+
+/* ANIMAL-SOCIAL.md §3 — class-native flat mechanical bonuses (no DM judgment, per the DM-CHARTER
+   anti-drift rule — these are script-owned rules, not narrated calls).
+     - animalOpeningStep(base, pcClass): Rangers/Druids read every animal's OPENING attitude one step
+       friendlier (clamped to ATTITUDE_MAX) — applied ONCE, at mint/first-contact, never re-applied on
+       every check (opening is rolled/stamped once, SOCIAL.md §1.1's own law).
+     - animalCheckAdvantage(pcClass, swaActive): Speak with Animals ACTIVE grants advantage on the
+       Animal Handling check against the target ("you can negotiate") — independent of class; a
+       ranger/druid gets BOTH the opening bump (mint-time) and, only while the spell is up, advantage
+       (check-time) — two separate flat rules, not stacked into one. */
+const ANIMAL_OPENING_CLASSES = { ranger:true, druid:true };
+function animalOpeningStep(base, pcClass){
+  const b = Math.round(Number(base) || 0);
+  const cls = pcClass ? String(pcClass).toLowerCase() : null;
+  if(cls && ANIMAL_OPENING_CLASSES[cls]) return Math.min(ATTITUDE_MAX, b + 1);
+  return b;
+}
+function animalCheckAdvantage(pcClass, swaActive){
+  return !!swaActive;   // SwA grants advantage regardless of class — any caster/source that has it active
+}
+
+/* ANIMAL-SOCIAL.md §3 — the Helpful (+2) gate. Ordinary checks clamp at +1 (Friendly), mirroring the
+   Anomaly Law's grind ceiling (dm.js's kind:"creature" block) — the SAME shape, applied to
+   kind:"npc" animal partials (rec.dm.partialKind==="animal") instead of kind:"creature" records, since
+   animals mint as codex `npc` records (NPC-PARTIALS.md). +2 is reachable ONLY by:
+     (a) the sustained-care track — fields.care (a distinct-visit counter ticked by dm.js's
+         `animal_care` event) has reached ANIMAL_HELPFUL_CARE_VISITS (3), OR
+     (b) the RESOLVED ruling-2 bypass — an animal-friendship-class spell declared on the check
+         (opts.animalFriendshipSpell truthy) OR a STRONG Charisma result for a class built for it
+         (opts.strongCha truthy — the caller's own threshold call, e.g. total>=20 Persuasion/Animal
+         Handling; this function does not invent the threshold, it only honors the caller's flag).
+   Pure; takes the counter + bypass flags, returns whether an Helpful (+2) shift may stand THIS check —
+   never mutates anything. */
+const ANIMAL_HELPFUL_CARE_VISITS = 3;
+function animalHelpfulAllowed(careCount, opts){
+  opts = opts || {};
+  if(opts.animalFriendshipSpell || opts.strongCha) return true;
+  return (Number(careCount) || 0) >= ANIMAL_HELPFUL_CARE_VISITS;
 }
 
 /* §6 — Insight DC to READ an NPC's current attitude (decided 2026-06-28): base 10, +5 if guarded/closed,

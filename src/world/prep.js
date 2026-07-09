@@ -174,6 +174,16 @@ function prepCastEnvAnimals(w, nodeId){
       dm:Object.assign({}, p.dm, { ambient:!isHolder, partial:true, partialKind:p.partialKind,
         envCast:true, envBand:band, territoryHolder:isHolder||undefined })
     }));
+    // ANIMAL-SOCIAL.md §3/§6 U3 RED-FIRST FIX: rollPartial computes an opening `dm.attitude` number
+    // (wild/-1 default, ranger/druid-bumped) but nothing ever stamped it onto r.status.attitude — the
+    // ladder codexGetAttitude/codexSetAttitude/social_check actually read. Before this line, EVERY
+    // animal partial silently read as the lazy Indifferent(0) default regardless of its rolled/tagged
+    // attitude (proven in dev/verify-animal-social-u3.mjs's RED section). Stamp it ONCE at mint via
+    // the real writer (codexAttitudeOpen honors the "opening rolled once" law — a second mint attempt
+    // on the same node is already blocked by the `already` idempotency guard above).
+    if(rec && typeof codexAttitudeOpen==="function"){
+      codexAttitudeOpen(w, rec.id, (p.dm && p.dm.attitude!=null) ? p.dm.attitude : 0, { cause:"animal-opening" });
+    }
     if(rec) minted.push(rec.id);
   }
   return { minted:minted.length, ids:minted, band };
@@ -279,6 +289,12 @@ function prepCastAmbientScene(w, nodeId, sceneBucket, opts){
           status:{ soft:true, at:atId },
           dm:Object.assign({}, p.dm, { ambient:true, partial:true, partialKind:p.partialKind, sceneBucket:bucket })
         }));
+        // ANIMAL-SOCIAL §3/§6 U3: same opening-attitude stamp as prepCastEnvAnimals (see that comment) —
+        // scene-typed animal partials (market/tavern/shop/shrine) need it too; child partials don't run
+        // the attitude ladder at all, so this is animal-only.
+        if(rec && kind==="animal" && typeof codexAttitudeOpen==="function"){
+          codexAttitudeOpen(w, rec.id, (p.dm && p.dm.attitude!=null) ? p.dm.attitude : 0, { cause:"animal-opening" });
+        }
         if(rec) partials.push(rec);
       }
     });

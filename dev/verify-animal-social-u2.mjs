@@ -80,8 +80,15 @@ console.log("=== RED-FIRST: wilderness node mints 0 animals today (pre-fix behav
     finally { Math.random = _origRandom; }
   })();`);
   const recs = animalRecs(win, w, "home");
-  console.log(`  (informational) forced-miss wilderness node mints ${recs.length} animals (expected 0 — draws are gated, a miss ends them)`);
-  check("RED baseline: a forced-miss draw sequence mints 0 animals (proves the draw is gated, not unconditional)", recs.length === 0);
+  // ANIMAL-SOCIAL.md §5/§6 U6 DEVIATION: a wilderness node's i===0 (territory-holder) draw was made
+  // UNCONDITIONAL by U6, per §5's own wording ("each wilderness node's ENV_PARTIALS cast INCLUDES
+  // one territory-holder" — a guarantee, not a maybe) — this is what closes U6's accept criterion
+  // ("a wilderness node always has >=1 hook after prep"). A forced-miss RNG sequence now mints
+  // EXACTLY the guaranteed holder (1), never 0; every OTHER draw (i>=1, any band) stays gated exactly
+  // as this unit (U2) originally built it — proven by the still-gated dungeon/rural/etc. trials below.
+  console.log(`  (informational) forced-miss wilderness node mints ${recs.length} animals (expected 1 post-U6 — the territory-holder draw is unconditional; every other draw is still gated and misses)`);
+  check("RED-then-amended-GREEN (U6): a forced-miss draw sequence mints exactly the guaranteed territory-holder (1), never more",
+    recs.length === 1 && recs[0].dm.territoryHolder === true, JSON.stringify(recs.map(r=>r.dm)));
 }
 
 console.log("\n=== GREEN: post-fix behavior ===");

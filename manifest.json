@@ -34,6 +34,7 @@
     "data/realm-props.js",
     "data/npc-role-skins.js",
     "data/animal-realm-skins.js",
+    "data/animal-knowledge-scope.js",
     "data/souls-canon.js",
     "data/pronouns.js",
     "data/creation-flow.js",
@@ -492,6 +493,18 @@
       ],
       "callTimeDeps": [],
       "desc": "docs/ANIMAL-SOCIAL.md §6 U1, RESOLVED ruling 1 (2026-07-08 night) — animal realm skins get the full spine/skin/extras treatment like roles, not just an in-place DM reskin note. HAND-AUTHORED (CRAFT-LANE, no generator — unlike data/npc-role-skins.js this is a pure single-slot label overlay, not a 35-archetype drop/add/reweight problem, so a Python data-seam step is overkill for one label per realm per table). ANIMAL_REALM_SKINS[realmId] = {domestic:<row-11 label for animal-kind>, wild:<row-11 label for wild-animal-kind>} across the 11 data/realms.js REALM_IDS (excl. realm-neutral). animalRealmSkin(kind, realmId) is a pure lookup ('domestic'|'wild', realmId) -> label|null; unknown/absent realmId returns null so rollPartial (src/engine/codex-roll.js) falls back to the table's own generic row-11 text (no regression). Applied at roll time by matching the 'realm-skin' tag on the drawn row — never bakes into the compiled tables. Added 2026-07-09 (ANIMAL-SOCIAL U1)."
+    },
+    {
+      "id": "data.animal-knowledge-scope",
+      "path": "data/animal-knowledge-scope.js",
+      "type": "data",
+      "owns": [
+        "ANIMAL_KNOWLEDGE_SCOPE_CATEGORIES",
+        "ANIMAL_KNOWLEDGE_SCOPE",
+        "animalKnowledgeScopeFor"
+      ],
+      "callTimeDeps": [],
+      "desc": "docs/ANIMAL-SOCIAL.md §5/§6 U6 — the crafted `animal-knowledge-scope` mapping: what the herd knows vs what the raven knows. HAND-AUTHORED (CRAFT-LANE, data not a rolled table), keyed by wild-animal-kind's own d12 row number (a row IS a stable identity). ANIMAL_KNOWLEDGE_SCOPE[1..12] -> one of 6 categories (herd/bird/predator/burrower/elder/generic); ANIMAL_KNOWLEDGE_SCOPE_CATEGORIES[category] = {ledgerTypes: string[]|null, adjacentReach: bool}. animalKnowledgeScopeFor(rec) is a pure lookup off rec.dm.wildKindRow (stamped at mint by rollPartial for env:'wilderness' draws only, src/engine/codex-roll.js) -> {category,ledgerTypes,adjacentReach}; no row (domestic draws, or pre-U6 records) -> 'generic' (every ledger type, no adjacent reach — byte-identical to pre-U6 behavior). Consumed by src/world/codex.js's animalWitnessSeen (the witness packet's `seen`-filter + adjacent-node reach) and prep.js's prepCastEnvAnimals (wild-animal-kind row -> dm.packTag for §5's pack-tag shared-attitude law, stamped in codex-roll.js alongside wildKindRow). Added 2026-07-09 (ANIMAL-SOCIAL U6)."
     },
     {
       "id": "data.souls-canon",

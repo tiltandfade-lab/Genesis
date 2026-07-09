@@ -400,11 +400,27 @@ function rollPartial(kind, opts){
   // the start (§4), never as a disposable ambient draw. Pure derivation off the row's own tags —
   // never guesses which row minted.
   const landmark=/landmark/.test(akTags);
+  // ANIMAL-SOCIAL.md §5/§6 U6 — the wild-animal-kind row number, stamped ONLY on wilderness draws
+  // (a row IS a stable identity; ak.total is the 1-indexed d12 face for a straight d12 table —
+  // verified against the compiled wild-animal-kind rows, row[0]===row[1]===row number). Domestic
+  // (non-wilderness) draws never carry this field — animal-knowledge-scope.js's scope table is keyed
+  // to wild-animal-kind rows only, per the spec's §5 breakdown. Read back by
+  // animalKnowledgeScopeFor(rec) (data/animal-knowledge-scope.js) at witness-assembly time, never
+  // re-derived from animalKindText (which may already be realm-skinned and no longer match the row's
+  // own label).
+  const wildKindRow=(opts.env==="wilderness" && ak && typeof ak.total==="number") ? ak.total : undefined;
+  // ANIMAL-SOCIAL.md §5/§6 U6 — pack-tag: wild-animal-kind rows carry a loose-faction tag
+  // (pack/flock/solitary/parliament, see the table's own Tags column) — pack-tagged animals share
+  // attitude within a node (§5 "befriend the pack leader, befriend the pack"); solitaries don't.
+  // Flat regex off the row's own tags, same posture as `landmark`/`wildDefault` above — never a
+  // second heuristic. Domestic (non-wilderness) draws are never pack-tagged (animal-kind carries no
+  // pack/flock/solitary tags at all today).
+  const packTag=/\bpack\b|\bflock\b/.test(akTags);
   return { kind:"partial", partialKind:"animal", coherence:"archetype",
     name:opts.name||null,
     fields:{ role:"animal", animalKind:animalKindText, care:0 },
     dm:{ tell:tx(tell), need:(typeof pick==="function")?pick(["hungry","guarding","lost","loyal"]):"hungry",
-      attitude, landmark } };
+      attitude, landmark, wildKindRow, packTag } };
 }
 
 /* ANIMAL_ENV_WEIGHTS (docs/ANIMAL-SOCIAL.md §1/§6 U1) — 5 environment bands -> row-weight vectors

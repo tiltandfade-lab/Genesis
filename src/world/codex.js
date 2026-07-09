@@ -602,9 +602,10 @@ function animalHandleFor(rec){
   return role ? "the "+role : "a two-legged one";
 }
 
-/* ANIMAL-KNOWLEDGE-SCOPE (U6 stub — until the crafted `animal-knowledge-scope` table lands, every
-   kind gets the same generic sense mapping; U6 narrows this by wild-kind). Maps a ledger entry's
-   `type`/`data.kind` to a sensory channel + a sense-data-only note — NEVER interpolates a name. */
+/* Maps a ledger entry's `type`/`data.kind` to a sensory channel + a sense-data-only note — NEVER
+   interpolates a name. ANIMAL-SOCIAL.md §5/§6 U6 narrows WHICH of these an animal reports by kind
+   via animalKnowledgeScopeFor (data/animal-knowledge-scope.js) — see animalLedgerTypeMatches +
+   animalWitnessSeen's scope filter below. */
 const ANIMAL_LEDGER_SENSE = {
   "drift":       { sense:"smell", note:"the place itself smelled different afterward" },
   "npc-life":    { sense:"sight", note:"a two-legged one came and went" },
@@ -619,16 +620,38 @@ function animalLedgerSenseFor(e){
   return ANIMAL_LEDGER_SENSE[composite] || ANIMAL_LEDGER_SENSE[e.type] || { sense:"sound", note:"something happened nearby" };
 }
 
-/* entries in the SRD's "past day" window at (or, for a bird-kind animal, adjacent to) the animal's
-   own status.at. Only ledger entries carrying a resolvable location (data.nodeId or data.at) are
-   eligible — an entry with no location is never guessed onto the animal's turf. */
+/* ANIMAL-SOCIAL.md §5/§6 U6 — does ledger entry `e` fall inside knowledge-scope `ledgerTypes`?
+   null (no filter, animal-knowledge-scope.js's "generic"/"elder" categories) -> everything passes,
+   byte-identical to pre-U6 behavior. Otherwise matches either the composite key ("outcome:kill") or
+   the bare type ("drift") — same two-tier lookup animalLedgerSenseFor itself already uses, so a
+   scope entry never has to know which tier a given ledger type resolves at. */
+function animalLedgerTypeMatches(e, ledgerTypes){
+  if(!ledgerTypes) return true;
+  const composite=e.type+":"+((e.data&&e.data.kind)||"");
+  return ledgerTypes.indexOf(composite)>=0 || ledgerTypes.indexOf(e.type)>=0;
+}
+
+/* entries in the SRD's "past day" window at (or, for an adjacent-reach kind, adjacent to) the
+   animal's own status.at. Only ledger entries carrying a resolvable location (data.nodeId or
+   data.at) are eligible — an entry with no location is never guessed onto the animal's turf.
+   ANIMAL-SOCIAL.md §5/§6 U6 — adjacent-node reach now comes off the row-driven knowledge scope
+   (animalKnowledgeScopeFor's adjacentReach — bird/elder categories) rather than a text regex on the
+   kind label alone; the old bird-text regex stays as an OR-fallback so a realm-skinned or domestic
+   bird-flavored draw with no wildKindRow (pre-U6 records, or a non-wilderness bird-ish animal-kind
+   row) keeps its adjacent reach unchanged — purely additive, never a narrowing of what already
+   worked. Once the scope resolves, `seen` is further filtered to the scope's own ledgerTypes (§5:
+   "a raven-scope packet includes adjacent-node events, a herd-scope packet does not" — the herd
+   scope's ledgerTypes already excludes the "faces/carrion" entries a herd wouldn't remark on, even
+   at its own node). */
 function animalWitnessSeen(w, rec, at){
   if(!w || !at) return [];
   const day=(typeof clockOf==="function") ? clockOf(w).day : 0;
   const animalKind=(rec.fields && rec.fields.animalKind) || "";
-  const isBird=/raven|hawk|owl|crow|falcon|bird|eagle/i.test(animalKind);
+  const isBirdText=/raven|hawk|owl|crow|falcon|bird|eagle/i.test(animalKind);
+  const scope=(typeof animalKnowledgeScopeFor==="function") ? animalKnowledgeScopeFor(rec) : null;
+  const adjacentReach=!!(isBirdText || (scope && scope.adjacentReach));
   const eligible=new Set([at]);
-  if(isBird && typeof mapOf==="function"){
+  if(adjacentReach && typeof mapOf==="function"){
     (mapOf(w).edges||[]).forEach(ed=>{
       if(ed.from===at) eligible.add(ed.to);
       if(ed.to===at) eligible.add(ed.from);
@@ -638,6 +661,7 @@ function animalWitnessSeen(w, rec, at){
     .filter(e=>{
       const loc=(e.data&&(e.data.nodeId!=null?e.data.nodeId:e.data.at));
       if(loc==null || !eligible.has(loc)) return false;
+      if(!animalLedgerTypeMatches(e, scope && scope.ledgerTypes)) return false;
       return (day - e.day) <= 1;   // the SRD's "within the past day"
     })
     .map(e=>{
@@ -661,9 +685,31 @@ function animalWitnessNearby(w, rec, at){
   return { exits, creatures };
 }
 
+/* ANIMAL-SOCIAL.md §5/§6 U6 — a deterministic season label off the world clock. Numbers are
+   implementation-fill (a 364-day year split into 4 even quarters); the SHAPE is the law (a stable,
+   reproducible season word for a given clock day — never a fresh roll, same posture as every other
+   "the shape is the law, not the exact figures" note in this spec family). */
+const ANIMAL_SEASONS=["spring","summer","autumn","winter"];
+function animalSeasonLabel(w){
+  const day=(typeof clockOf==="function") ? clockOf(w).day : 0;
+  const doy=((day%364)+364)%364;
+  return ANIMAL_SEASONS[Math.floor(doy/91)%4];
+}
+
 /* standing facts about the animal's own territory — the §2 exception to the 1-day window ("place-
-   memory" persists). Reads only the node's own already-rolled fields (never invents a fact). */
-function animalWitnessPlaceMemory(w, at){
+   memory" persists). Reads only the node's own already-rolled fields (never invents a fact).
+   ANIMAL-SOCIAL.md §5/§6 U6 extends this with two more already-rolled sources, per the spec ("place-
+   memory... includes the node's standing wilderness facts — the walk system's biome + any rolled
+   node hooks — plus season-keyed entries"):
+     - the walk system's biome (P.bundle.environments[pn.idx].walk.startBiome, the SAME already-
+       rolled walk data prepNodeLabel/pbundleSummWalk read elsewhere — never a second biome roll),
+       season-keyed via animalSeasonLabel above.
+     - the node's rolled hook — `rec.dm.hook` (the guaranteed npc-hook d300 draw, ensureSceneHook,
+       now extended over wilderness animal pools by this same unit below) rides here as a STANDING
+       fact rather than a one-time interview answer, because a hook is inherently the "region's live
+       hook" (§5), not a bounded past-day event. `rec` is optional (a non-animal caller, or a call
+       before the hook has minted, simply skips this entry — never fabricated). */
+function animalWitnessPlaceMemory(w, at, rec){
   if(!w || !at) return [];
   const out=[];
   const n=(typeof mapOf==="function") ? mapOf(w).nodes[at] : null;
@@ -671,6 +717,12 @@ function animalWitnessPlaceMemory(w, at){
     const loc=codexOf(w).records[n.codexId];
     if(loc && loc.status && loc.status.condition) out.push({ fact:"the place has been "+loc.status.condition+" for a while now" });
   }
+  const P=(typeof prepOf==="function") ? prepOf(w) : null;
+  const pn=P && P.nodes && P.nodes[at];
+  const env=(pn && P.bundle && Array.isArray(P.bundle.environments)) ? P.bundle.environments[pn.idx] : null;
+  const biome=env && env.walk && env.walk.startBiome;
+  if(biome) out.push({ fact:`this ground reads ${String(biome).toLowerCase()} come ${animalSeasonLabel(w)}`, season:animalSeasonLabel(w) });
+  if(rec && rec.dm && rec.dm.hook && rec.dm.hook.text) out.push({ fact:rec.dm.hook.text, ref:rec.dm.hook.ref||null });
   return out;
 }
 
@@ -731,10 +783,39 @@ function animalWitness(w, rec){
   const breachEntry=animalWitnessBreachEntry(w, at);
   if(breachEntry) seen.push(breachEntry);
   const nearby=animalWitnessNearby(w, rec, at);
-  const placeMemory=animalWitnessPlaceMemory(w, at);
+  const placeMemory=animalWitnessPlaceMemory(w, at, rec);
   const full={ tell, seen, nearby, placeMemory };
   if(rec.dm.ally===true) full.guide={ available:true, recallable:true, to:tell.boundTo };
   return animalWitnessGate(w, rec, full);
+}
+
+/* ANIMAL-SOCIAL.md §5/§6 U6 — pack-tag shared attitude: pack-tagged animals (rec.dm.packTag,
+   stamped at mint off the wild-animal-kind row's own Tags column — src/engine/codex-roll.js) share
+   attitude WITHIN THE SAME NODE ("befriend the pack leader, befriend the pack; wrong one, all of
+   them"); solitary-tagged rows (packTag falsy) never propagate. Scoped to `rec.status.at` ONLY —
+   never cross-node (a pack's reputation doesn't precede it to the next valley, §6's own accept
+   criterion). Writes every OTHER pack member via the real codexSetAttitude writer (never a raw
+   status.attitude mutation), so each member's own per-record floor/ceiling clamp still applies —
+   propagation can't push a member past ITS OWN ceiling even if the source shift could. Called from
+   dm.js's social_check/attitude_shift handlers (the same call sites the U5 promotion/ally stamps
+   already use) — deliberately not a standalone event/DM_EVENT_TYPES entry, same posture as
+   animalMaybePromote. Returns the array of propagated-to ids (empty/no-op-safe throughout). */
+function animalPropagatePackAttitude(w, rec, newValue, cause){
+  if(!w || !rec || !(rec.dm && rec.dm.packTag) || newValue==null) return [];
+  const at=rec.status && rec.status.at;
+  if(!at || typeof codexOf!=="function" || typeof codexSetAttitude!=="function" || typeof codexGetAttitude!=="function") return [];
+  const C=codexOf(w);
+  const propagated=[];
+  Object.values(C.records).forEach(other=>{
+    if(!other || other.id===rec.id) return;
+    if(!(other.kind==="npc" && other.dm && other.dm.partialKind==="animal" && other.dm.packTag)) return;
+    if(!(other.status && other.status.at===at)) return;
+    const a=codexGetAttitude(w, other.id);
+    if(!a || a.value===newValue) return;
+    codexSetAttitude(w, other.id, newValue, cause||"pack-attitude", (typeof clockOf==="function")?clockOf(w).day:null);
+    propagated.push(other.id);
+  });
+  return propagated;
 }
 
 /* ANIMAL-SOCIAL.md §4/§6 U5 — promotion: any animal engaged twice, named (codexUpdate above), or

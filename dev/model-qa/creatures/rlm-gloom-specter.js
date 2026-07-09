@@ -46,13 +46,20 @@ function hollowEye(cx, cy, cz, r, dir, socket, glow){
 
 /* a rib bone: two short tubes meeting at a raised center point — a cheap arc across the chest.
    Radius kept at/above the 0.04u feature floor (law 3) and painted in the PALE bone color (not the
-   dark torso fill) so it actually breaks through instead of dissolving into the chest at 1/3-res. */
+   dark torso fill) so it actually breaks through instead of dissolving into the chest at 1/3-res.
+   SECOND-PASS FIX (flag: the 3 arcs rendered as one amorphous tan blob — only the camera-near apex
+   caught light while the end points sat flush against the torso surface, so the engine shaded each
+   arc as a bright dot fading into dark torso instead of a lit ridge). Two changes: (1) the end
+   points now sit at frontZ*0.48 instead of *0.30 — a +z bias that pulls the WHOLE arc toward the
+   camera, not just its center, so light rakes the full ridge; (2) each rib now takes its own
+   boneHex/boneHexDk pair (called with a distinct tone per rib below) so the three read as separate
+   ridges even where they're close in y, instead of one same-toned mass. */
 function ribArc(y, dip, halfW, frontZ, boneHex, boneHexDk){
-  const left = V(-halfW, y, frontZ * 0.30);
+  const left = V(-halfW, y, frontZ * 0.48);
   const center = V(0, y - dip, frontZ);
-  const right = V(halfW, y, frontZ * 0.30);
-  tube(left, center, 0.040, 0.050, 5, boneHex, { capA: { hex: boneHexDk } });
-  tube(center, right, 0.050, 0.040, 5, boneHex, { capB: { hex: boneHexDk } });
+  const right = V(halfW, y, frontZ * 0.48);
+  tube(left, center, 0.044, 0.056, 5, boneHex, { capA: { hex: boneHexDk } });
+  tube(center, right, 0.056, 0.044, 5, boneHex, { capB: { hex: boneHexDk } });
 }
 
 /* one clawed finger: two tapering segments, pale base into a dark claw tip. */
@@ -91,7 +98,12 @@ export function buildSpecter(){
     // feature is).
     tatterA:0x6f7c96, tatterA2:0x54617a, tatterB:0x9fadc0,
     pale:0xcdd6d2, paleDk:0x9aa6a0,                         // face + hands — the pale grudge flesh
-    bone:0xc9c2a8, boneDk:0x8f8972,                         // exposed ribs
+    // exposed ribs — SECOND-PASS FIX: 3 distinct tones (was one bone/boneDk pair shared by all
+    // three arcs, which read as one same-toned blob) so each rib is its own bright ridge, brightest
+    // at top (nearest the light) grading down.
+    bone:0xdcd3b6, boneDk:0xa39c81,
+    bone2:0xc9c2a8, boneDk2:0x938c72,
+    bone3:0xb3ab8e, boneDk3:0x7d7660,
     socket:0x0d1013, glow:0xa8f0c4,                         // hollow eyes + eerie value-contrast spark
     mouth:0x0a0c0f, claw:0x74827c,
   };
@@ -115,13 +127,16 @@ export function buildSpecter(){
     { y:L.neckY,  rx:0.070, rz:0.068, cz:0.110, hex:P.paleDk },
   ], 10, {});
 
-  /* exposed rib bones breaking through the torn chest — 3 arcs, all in the PALE bone tone (one
-     consistently readable value against the dark torso) so all three break through, not just one.
+  /* exposed rib bones breaking through the torn chest — 3 arcs.
      R2 CRITIC FIX: vertical gap widened 0.08->~0.10-0.10 apart (was clustering into one blob in
-     the engine render instead of 3 countable arcs — law 1). */
-  ribArc(L.chestY - 0.02, 0.012, 0.118, 0.250, P.bone, P.boneDk);
-  ribArc(L.chestY - 0.12, 0.010, 0.132, 0.230, P.bone, P.boneDk);
-  ribArc(L.chestY - 0.22, 0.008, 0.144, 0.205, P.bone, P.boneDk);
+     the engine render instead of 3 countable arcs — law 1).
+     SECOND-PASS FIX: gap widened again to ~0.13 apart, the dip deepened (more visible curve per
+     rib instead of a near-flat bump) and each arc now carries its own bone tone (see palette) plus
+     the ribArc()-internal +z bias, so the three separate into distinct lit ridges instead of one
+     amorphous tan mass. */
+  ribArc(L.chestY - 0.02, 0.018, 0.118, 0.250, P.bone,  P.boneDk);
+  ribArc(L.chestY - 0.15, 0.015, 0.132, 0.230, P.bone2, P.boneDk2);
+  ribArc(L.chestY - 0.28, 0.013, 0.144, 0.205, P.bone3, P.boneDk3);
 
   /* skull-face — gaunt: PINCHED cheeks (narrower band than jaw/brow either side of it), head
      bands walk BACKWARD in cz past the neck (the "thrown back" reel). */

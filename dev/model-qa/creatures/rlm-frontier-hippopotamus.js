@@ -51,8 +51,8 @@ export function buildHippopotamus(){
   const P = {
     hide: 0x767e70, hideDk: 0x565e50, hideLt: 0x929a86,
     belly: 0x40463c,
-    mouth: 0xd2685e, mouthDk: 0x943c34,
-    tusk: 0xece2c8, tuskDk: 0xc8bc9a,
+    mouth: 0xe8837a, mouthDk: 0xb85850,
+    tusk: 0xf6efdc, tuskDk: 0xe0d4ae,
     eye: 0x14100c, ear: 0x565e50,
     hoofDk: 0x282520,
     disc: 0x2a2822, discTop: 0x353128,
@@ -237,34 +237,48 @@ export function buildHippopotamus(){
        in world-y is no longer "further into the mouth" locally, and the wedge punched through
        the ground plane. Rebuilt entirely in HEAD-LOCAL space (through headXf, same frame as
        the lower jaw) so the wedge stays anchored to the head regardless of throw-back angle. */
-    const mouthHingeL = headXf(V(-0.17 * S, L.jawHingeY, 0.10 * S));
-    const mouthHingeR = headXf(V(0.17 * S, L.jawHingeY, 0.10 * S));
-    const mouthTipL = headXf(V(-0.11 * S, L.jawHingeY - 0.16 * S, 0.10 * S + 0.30 * S));
-    const mouthTipR = headXf(V(0.11 * S, L.jawHingeY - 0.16 * S, 0.10 * S + 0.30 * S));
-    quad(mouthHingeL, mouthHingeR, mouthTipR, mouthTipL, P.mouth, 0.05);
+    /* SECOND-PASS FIX (flagged: gape barely visible). Two compounding causes, fixed together:
+       (1) measured the actual quad normals against the sheet's fixed dimetric camera
+       (yaw45/el30) — the pink wedge, throat patch, and lower jaw front face all computed to
+       face AWAY from the camera (dot ~-0.35 to -0.73), so MeshLambertMaterial's default
+       FrontSide culling was dropping them entirely; no amount of brightening a culled triangle
+       helps. Reversing each quad's vertex winding flips the face normal onto the camera
+       (verified dot ~+0.73 for the pink wedge) without touching the pose rotation at all.
+       (2) even winding-fixed, the wedge was narrower/shorter than the snout-top slab (P.hide,
+       spans hinge x+-0.20S to tip x+-0.16S, z 0.10S-0.44S) sitting in front of it and got mostly
+       occluded. Widened past the slab's edges at both ends and pushed the tip further forward
+       (z) than the slab's own tip so the pink pokes out past the snout in screen space instead
+       of hiding underneath it. Net result verified in the after-render: a bold pink diagonal
+       reads clearly across the head silhouette with a tusk peg visible at its base. */
+    const mouthHingeL = headXf(V(-0.25 * S, L.jawHingeY, 0.10 * S));
+    const mouthHingeR = headXf(V(0.25 * S, L.jawHingeY, 0.10 * S));
+    const mouthTipL = headXf(V(-0.19 * S, L.jawHingeY - 0.16 * S, 0.10 * S + 0.38 * S));
+    const mouthTipR = headXf(V(0.19 * S, L.jawHingeY - 0.16 * S, 0.10 * S + 0.38 * S));
+    quad(mouthTipL, mouthTipR, mouthHingeR, mouthHingeL, P.mouth, 0.05);
     // back-of-throat darker patch at the hinge, depth cue
-    const throatL = headXf(V(-0.14 * S, L.jawHingeY - 0.05 * S, 0.10 * S + 0.02 * S));
-    const throatR = headXf(V(0.14 * S, L.jawHingeY - 0.05 * S, 0.10 * S + 0.02 * S));
-    quad(mouthHingeL, mouthHingeR, throatR, throatL, P.mouthDk, 0.05);
+    const throatL = headXf(V(-0.20 * S, L.jawHingeY - 0.05 * S, 0.10 * S + 0.02 * S));
+    const throatR = headXf(V(0.20 * S, L.jawHingeY - 0.05 * S, 0.10 * S + 0.02 * S));
+    quad(throatL, throatR, mouthHingeR, mouthHingeL, P.mouthDk, 0.05);
 
     /* LOWER JAW — built entirely in HEAD-LOCAL space (offsets composed through the single
        headXf transform, same frame the upper jaw already rides) and dropped well below/behind
        the upper jaw locally so the two slabs pry apart into the full wedge (the 180-degree
        gape) without a second independent rotation (the r1 self-correction below: a second
        from-scratch hinge rotation compounded with the neck/head rotations and put the jaw
-       geometry underground — see the self-review note at file bottom). */
+       geometry underground — see the self-review note at file bottom). Winding reversed in the
+       second pass for the same camera-facing reason as the mouth wedge above. */
     const lHinge = headXf(V(0, L.jawHingeY - 0.01 * S, 0.10 * S));
     const lTip = headXf(V(0, L.jawHingeY - 0.26 * S, 0.10 * S + 0.20 * S));
-    quad(V(lHinge.x - 0.18 * S, lHinge.y, lHinge.z), V(lHinge.x + 0.18 * S, lHinge.y, lHinge.z),
-      V(lTip.x + 0.14 * S, lTip.y, lTip.z), V(lTip.x - 0.14 * S, lTip.y, lTip.z), P.hideDk, 0.04);
+    quad(V(lTip.x - 0.19 * S, lTip.y, lTip.z), V(lTip.x + 0.19 * S, lTip.y, lTip.z),
+      V(lHinge.x + 0.23 * S, lHinge.y, lHinge.z), V(lHinge.x - 0.23 * S, lHinge.y, lHinge.z), P.hideDk, 0.04);
 
     /* TUSK PEGS — pale, blunt, countable: 2 lower canine tusks (bigger, jutting up from the
        lower jaw into the gape) + a row of small upper/lower incisor pegs. The law-3 signature
        feature sitting right in the pink high-value zone. Also head-local, composed via headXf. */
     for (const s of [-1, 1]) {
-      const tb = headXf(V(s * 0.10 * S, L.jawHingeY - 0.23 * S, 0.10 * S + 0.14 * S));
-      const ttLocal = headXf(V(s * 0.09 * S, L.jawHingeY - 0.14 * S, 0.10 * S + 0.10 * S));
-      tube(tb, ttLocal, 0.028 * S, 0.012 * S, 9, P.tusk, { capB: { hex: P.tusk, lift: 0.006 } });
+      const tb = headXf(V(s * 0.11 * S, L.jawHingeY - 0.23 * S, 0.10 * S + 0.14 * S));
+      const ttLocal = headXf(V(s * 0.10 * S, L.jawHingeY - 0.14 * S, 0.10 * S + 0.10 * S));
+      tube(tb, ttLocal, 0.034 * S, 0.015 * S, 9, P.tusk, { capB: { hex: P.tusk, lift: 0.006 } });
     }
     // small incisor peg row, upper jaw front edge — 5 countable pegs across the gape
     for (let i = -2; i <= 2; i++) {

@@ -50,11 +50,12 @@ export function buildRhinoceros(){
   /* ---------- PALETTE — dust-brown hide, pale two-horn stack (the law-3 high-value zone),
      dark hooves/eyes, a slightly paler belly/underside for barrel value contrast. ---------- */
   const P = {
-    hide: 0x6e5a42, hideDk: 0x4c3e2c, belly: 0x8c795a, humpDk: 0x40331f,
-    horn: 0xd8cdae, hornDk: 0xa89876,
-    hoof: 0x241c14, hoofDk: 0x160f0a,
-    ear: 0x584634, eye: 0x0d0a07,
+    hide: 0x9c8258, hideDk: 0x7a6640, belly: 0xbcab84, humpDk: 0x6c5836,
+    horn: 0xede4cc, hornDk: 0xc9bc98,
+    hoof: 0x2e2318, hoofDk: 0x1c150e,
+    ear: 0x746040, eye: 0x0d0a07,
     disc: 0x3c332a, discTop: 0x483d32,
+    dust: 0xcabf9e, dustDk: 0xa89c7c,
   };
 
   /* ---------- SPINE LANDMARKS — the dive-crest-plunge trace: rump raised/driving, back level-
@@ -125,17 +126,20 @@ export function buildRhinoceros(){
      stacked directly behind a longer curved nasal horn out front — both pale (law-3 high-value
      zone), sitting right at the charge's leading point below shoulder height. ---------- */
   {
-    /* browhorn — shorter, blunter, set back near the brow */
-    const bhB = V(0, S.headT.y+0.08, S.headT.z-0.02), bhT = V(0, S.headT.y+0.28, S.headT.z+0.08);
-    tube(bhB, bhT, 0.095, 0.038, 8, P.horn, {phase:Math.PI/8, capB:{hex:P.hornDk, lift:0.01}});
+    /* browhorn — shorter, blunter, set back near the brow. Enlarged per the flag note (near-
+       white, bigger stack — the signature was reading too small/dark against the body mass). */
+    const bhB = V(0, S.headT.y+0.06, S.headT.z-0.04), bhT = V(0, S.headT.y+0.34, S.headT.z+0.10);
+    tube(bhB, bhT, 0.120, 0.050, 9, P.horn, {phase:Math.PI/9, capB:{hex:P.hornDk, lift:0.012}});
     /* nasal horn — the long curved leader, rooted forward of the browhorn and sweeping up-
        forward past the nose tip, the animal's foremost point; enlarged + pushed further out in
-       front of the barrel silhouette so the signature reads unoccluded from the render camera. */
-    const nhB = V(0, S.nose.y+0.08, S.nose.z-0.14);
-    const nhM = V(0, S.nose.y+0.34, S.nose.z+0.08);
-    const nhT = V(0, S.nose.y+0.62, S.nose.z+0.28);
-    tube(nhB, nhM, 0.120, 0.068, 8, P.horn, {phase:Math.PI/8, capA:{hex:P.hornDk, lift:0.01}});
-    tube(nhM, nhT, 0.068, 0.016, 8, P.horn, {phase:Math.PI/8, capB:{hex:P.hornDk, lift:0.006}});
+       front of the barrel silhouette so the signature reads unoccluded from the render camera.
+       Thickened and lengthened further (flag: "make the horn stack bigger and near-white") so
+       it carries the law-3 high-value zone unmistakably at the charge's leading point. */
+    const nhB = V(0, S.nose.y+0.06, S.nose.z-0.16);
+    const nhM = V(0, S.nose.y+0.40, S.nose.z+0.10);
+    const nhT = V(0, S.nose.y+0.74, S.nose.z+0.34);
+    tube(nhB, nhM, 0.150, 0.086, 9, P.horn, {phase:Math.PI/9, capA:{hex:P.hornDk, lift:0.012}});
+    tube(nhM, nhT, 0.086, 0.020, 9, P.horn, {phase:Math.PI/9, capB:{hex:P.hornDk, lift:0.008}});
   }
 
   /* ---------- LEGS — 4 thick plumb-column legs. Mid-gallop: front pair reaches/drives under
@@ -158,19 +162,23 @@ export function buildRhinoceros(){
     const toenails=(hoof, faceZ)=>{
       for(const sx of [-1,0,1]) blob(hoof.x+sx*0.045, hoof.y+0.01, hoof.z+faceZ*0.05, 0.024,0.018,0.020, P.hoofDk, 5, 3);
     };
-    /* front pair — near-plumb columns under the chest/hump, driving weight forward */
-    toenails(legCol(-0.24, 0.24, -0.26, 0.34, 0.185, 0.115, 0.0), 1);
-    toenails(legCol( 0.24, 0.20,  0.26, 0.30, 0.185, 0.115, 0.02), 1);
+    /* front pair — near-plumb columns under the chest/hump, driving weight forward. Splayed
+       wider (hipX/footX pushed out) and slimmed a touch so each leg reads as its own silhouette
+       with real void between them, instead of fusing into one dark leg-mass at the base. */
+    toenails(legCol(-0.32, 0.24, -0.36, 0.34, 0.165, 0.100, 0.0), 1);
+    toenails(legCol( 0.32, 0.20,  0.38, 0.30, 0.165, 0.100, 0.02), 1);
 
-    /* rear DRIVING leg — planted, angular stifle/hock zigzag, high tucked stifle */
+    /* rear DRIVING leg — planted, angular stifle/hock zigzag, high tucked stifle. Pushed
+       further out to -x so it clears the barrel and the rear-extended leg's silhouette instead
+       of stacking on the centerline. */
     {
-      const H = V(-0.22, S.rump.y-0.10, -0.56);
-      const stifle = V(-0.22*1.02, S.rump.y-0.30, -0.44);   // stifle forward, high
-      const hock   = V(-0.24, 0.20, -0.52);
-      const hoof   = V(-0.24, 0.04, -0.48);
-      tube(H, stifle, 0.20, 0.115, 11, P.hide);
-      tube(stifle, hock, 0.115, 0.075, 10, P.hideDk);
-      tube(hock, hoof, 0.075, 0.088, 8, P.hide, {capB:{hex:P.hoofDk, lift:0.01}});
+      const H = V(-0.30, S.rump.y-0.10, -0.56);
+      const stifle = V(-0.30*1.02, S.rump.y-0.30, -0.44);   // stifle forward, high
+      const hock   = V(-0.33, 0.20, -0.52);
+      const hoof   = V(-0.33, 0.04, -0.48);
+      tube(H, stifle, 0.185, 0.105, 11, P.hide);
+      tube(stifle, hock, 0.105, 0.070, 10, P.hideDk);
+      tube(hock, hoof, 0.070, 0.082, 8, P.hide, {capB:{hex:P.hoofDk, lift:0.01}});
       toenails(hoof, 1);
     }
     /* rear EXTENDED leg — full and straight out behind, off the ground: the gallop signature.
@@ -194,6 +202,18 @@ export function buildRhinoceros(){
     const tip= V(0.04, S.rump.y-0.10, S.rump.z-0.42);
     tube(t0, t1, 0.055, 0.036, 6, P.hideDk);
     tube(t1, tip, 0.036, 0.010, 6, P.hideDk, {capB:{hex:P.hideDk, lift:0.006}});
+  }
+
+  /* ---------- DUST CLOUD — a trailing puff kicked up behind the extended rear leg: a pale
+     value anchor at the rear (flag: "consider a dust-cloud value anchor at the rear") that
+     reads at a squint and sells the gallop's velocity/speed without touching the anatomy.
+     Layered blobs, paler+larger higher in the puff, duskier low where it's still lifting. */
+  {
+    const dz = -1.30;
+    blob(0.48, 0.05, dz,      0.10, 0.06, 0.10, P.dustDk, 6, 3);
+    blob(0.40, 0.15, dz-0.10, 0.15, 0.10, 0.14, P.dust,   6, 3);
+    blob(0.58, 0.21, dz-0.02, 0.13, 0.09, 0.12, P.dust,   6, 3);
+    blob(0.46, 0.30, dz-0.18, 0.11, 0.08, 0.10, P.dust,   5, 3);
   }
 
   /* ---------- base disc — under the three grounded hooves only (front pair + the driving rear),

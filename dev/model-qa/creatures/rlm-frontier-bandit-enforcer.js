@@ -47,12 +47,16 @@ export function buildBanditEnforcer(){
      to near-white so the strained-coat signature actually carries the high-value zone. */
   const P = {
     coat: 0x4a4030, coatDk: 0x322a1f, coatLt: 0x5e523e,
-    shirt: 0xf0e6c4, shirtDk: 0xb0a37e,
+    shirt: 0xf8f0d8, shirtDk: 0xb0a37e,
     skin: 0xb28a62, skinDk: 0x7e5e40,
     hat: 0x2a2419, hatBand: 0x5c4830,
-    brass: 0xdcb85c, brassDk: 0x9c7e3c,
+    brass: 0xecc978, brassDk: 0x9c7e3c,
     club: 0x5c4632, clubDk: 0x3c2c1e,
     disc: 0x36312a, discTop: 0x423b32,
+    /* R4 SECOND-PASS (bulk read too thin at 386t for a heavy): a leather payroll-pouch
+       is the second kit item — mid-brown, bright enough to hold its own silhouette
+       against the dark coat without competing with the brass/shirt signature. */
+    pouch: 0x7d5a3a, pouchDk: 0x4e3822,
   };
 
   /* ===== RIG — forward C-curve spine: hips back-and-low, ribcage/shoulders forward-and-up,
@@ -91,13 +95,16 @@ export function buildBanditEnforcer(){
     const n = 8, ph = Math.PI / 8;
     /* R2: torso, neck and head are now ONE continuous ring chain (no separate disconnected
        shells) so there is never a void gap between shoulders and skull. */
+    /* R4 SECOND-PASS: torso girth bumped ~12-15% across every band (flag: "the bulk read
+       is thin for a heavy") — a real mass increase, not padding tris; the ring segment
+       count is unchanged, only the radii, so this costs zero triangles. */
     const bands = [
-      { y: L.hipY,   rx: 0.185, rz: 0.170, hex: P.coatDk, lean: 0.00 },
-      { y: L.waistY, rx: 0.215, rz: 0.200, hex: P.coat,   lean: 0.10 },   // the gut push
-      { y: L.ribY,   rx: 0.225, rz: 0.195, hex: P.coatLt, lean: 0.18 },
-      { y: L.chestY, rx: 0.220, rz: 0.190, hex: P.coat,   lean: 0.24 },
-      { y: L.shldY,  rx: 0.235, rz: 0.185, hex: P.coat,   lean: 0.28 },   // rolled-forward shoulders, widest
-      { y: L.neckY,  rx: 0.135, rz: 0.125, hex: P.skinDk, lean: 0.31 },   // neck taper, thick bull-neck
+      { y: L.hipY,   rx: 0.205, rz: 0.190, hex: P.coatDk, lean: 0.00 },
+      { y: L.waistY, rx: 0.245, rz: 0.230, hex: P.coat,   lean: 0.10 },   // the gut push
+      { y: L.ribY,   rx: 0.255, rz: 0.220, hex: P.coatLt, lean: 0.18 },
+      { y: L.chestY, rx: 0.248, rz: 0.215, hex: P.coat,   lean: 0.24 },
+      { y: L.shldY,  rx: 0.262, rz: 0.205, hex: P.coat,   lean: 0.28 },   // rolled-forward shoulders, widest
+      { y: L.neckY,  rx: 0.148, rz: 0.138, hex: P.skinDk, lean: 0.31 },   // neck taper, thick bull-neck
     ];
     const rings = bands.map(b => ring(V(hipBackX, b.y, leanZ(b.lean) + b.lean), V(0, 1, 0), b.rx, b.rz, n, ph));
     stitch(rings, (i) => bands[i].hex);
@@ -126,10 +133,20 @@ export function buildBanditEnforcer(){
        than keep reverse-engineering the exact curve, went further and MEASURED: pushed the tilt
        much steeper (near-45 degrees, dot-with-key ~0.85+) and widened the panel so it's the
        dominant chest read, not a sliver. Buttons now ride the same steep plane, each carrying
-       a matching internal tilt so no individual button is flatter than the panel around it. */
-    quad(V(0.10, L.chestY + 0.04, 0.50), V(-0.10, L.chestY + 0.04, 0.50),
-         V(-0.10, L.waistY - 0.03, 0.72), V(0.10, L.waistY - 0.03, 0.72), P.shirt, 0.035);
-    const buttonZc = [0.685, 0.626, 0.566];   // steep gut-flare plane, same slope as the shirt panel
+       a matching internal tilt so no individual button is flatter than the panel around it.
+       R4 SECOND-PASS (flag: bulk read too thin for a heavy, brighten the shirt): the R3d push
+       was SO extreme (bottom corner sat 0.32-0.42u proud of the true waist surface) that the
+       panel stopped reading as a coat lapel at all and instead read as a detached flag/card
+       floating off the body in the engine render — the opposite of "strained coat." Pulled it
+       back to a torso-hugging clearance (top ~0.03u proud of the new, wider chest surface;
+       bottom ~0.10u proud of the new waist surface — MORE relative clearance at the bottom
+       than the top is what actually reads as "gut push," not a huge absolute swing) and
+       widened the bottom corners so it flares like fabric pulled taut over a gut instead of a
+       rigid card. Backstopped with a brighter base P.shirt hex so the value floor doesn't
+       depend entirely on the light-catching angle. */
+    quad(V(0.10, L.chestY + 0.04, 0.49), V(-0.10, L.chestY + 0.04, 0.49),
+         V(-0.13, L.waistY - 0.03, 0.43), V(0.13, L.waistY - 0.03, 0.43), P.shirt, 0.035);
+    const buttonZc = [0.445, 0.461, 0.477];   // recomputed onto the pulled-back panel plane
     const buttonT = [0.05, 0.13, 0.21];
     for (let bi = 0; bi < buttonT.length; bi++) {
       const t = buttonT[bi];
@@ -144,6 +161,38 @@ export function buildBanditEnforcer(){
     /* coat hem riding up off the hips from the gut push — a short flared skirt, gapping open */
     quad(V(-0.20, L.hipY - 0.02, leanZ(0) - 0.14), V(0.20, L.hipY - 0.02, leanZ(0) - 0.14),
          V(0.24, L.hipY - 0.14, leanZ(0) - 0.10), V(-0.24, L.hipY - 0.14, leanZ(0) - 0.10), P.coatDk, 0.04);
+
+    /* R4 SECOND-PASS — SECOND strained coat panel (flag: "strained coat panels" plural): a
+       side seam popping at the ribs on the opposite flank from the belly gap, a lighter
+       coatLt bulge reading as real cloth tension from three-quarter view, not just the
+       one center-front gap. Adds a distinct mass silhouette break on the profile. */
+    quad(V(0.22, L.ribY + 0.02, 0.16), V(0.30, L.ribY - 0.03, 0.14),
+         V(0.27, L.waistY + 0.03, 0.09), V(0.19, L.waistY + 0.06, 0.11), P.coatLt, 0.05);
+
+    /* R4 SECOND-PASS — pale shirt collar (checklist item 5 named it, geometry never carried
+       it): a thin bright strip at the neckline, reinforcing the high-value ladder right at
+       the shoulder/head junction where the "thin" read was worst. */
+    quad(V(-0.075, L.neckY - 0.02, 0.47), V(0.075, L.neckY - 0.02, 0.47),
+         V(0.065, L.neckY + 0.03, 0.485), V(-0.065, L.neckY + 0.03, 0.485), P.shirt, 0.03);
+
+    /* R4 SECOND-PASS — SECOND kit item (flag): a leather payroll pouch on the belt, the
+       "collections" tool of a debt-collection enforcer. Adds real hip-level mass and a
+       readable secondary silhouette bump beside the legs.
+       R4c (look-and-fix): first placement (-x side, low forward clearance) sat in the
+       render's darkest, most shadowed region and never separated from the coat — same
+       failure class as the original shirt-panel bug, just smaller stakes. Moved to the +x
+       side (the side that's actually catching the key light in this render, proven by the
+       shirt panel's own fix) and pushed further forward, with a brighter base hex as a
+       floor independent of the light angle. */
+    {
+      const pouchTop = V(0.24, L.waistY - 0.03, 0.20);
+      const pouchBot = V(0.22, L.hipY + 0.01, 0.26);
+      tube(pouchTop, pouchBot, 0.050, 0.066, 6, P.pouch, { capA: { hex: P.pouchDk }, capB: { hex: P.pouchDk } });
+      quad(V(pouchTop.x - 0.024, pouchTop.y - 0.01, pouchTop.z + 0.035),
+           V(pouchTop.x + 0.024, pouchTop.y - 0.01, pouchTop.z + 0.035),
+           V(pouchTop.x + 0.020, pouchTop.y - 0.055, pouchTop.z + 0.038),
+           V(pouchTop.x - 0.020, pouchTop.y - 0.055, pouchTop.z + 0.038), P.brass, 0.03);
+    }
   }
 
   /* ---------- HEAD — heavy jowled, dropped forward bull-like between rolled shoulders,
@@ -201,33 +250,47 @@ export function buildBanditEnforcer(){
        both wrists well proud of the torso front, and pushed the club elbow further out in x
        (beyond the shoulder ring's own 0.235 max radius) so the bent arm pokes past the torso
        outline (POSE-ANATOMY law 3: a visible elbow, not swallowed by the torso silhouette). */
-    /* CLUB ARM (right side, -x): shoulder raised, elbow bent sharply, club cocked overhead-
-       forward, mid-tap toward the off-hand. */
+    /* CLUB ARM (right side, -x): shoulder raised, elbow bent sharply, club cocked, mid-tap
+       toward the off-hand.
+       R4 SECOND-PASS (flag: make the club tap-pose read at squint): the torso girth bump
+       above ate most of this elbow's clearance past the shoulder ring (was 0.065u proud of
+       rx, now only 0.017u) — pushed the elbow and wrist further out/forward so the bent arm
+       still pokes a clean break past the wider silhouette, and chunked up the club/knuckle
+       radii so the weapon itself survives 1/3-res instead of thinning to a wire.
+       R4b (look-and-fix after the first bake): the OLD wrC.y (shldY+0.24 = 1.14) sat ABOVE
+       headY (1.10) — the club was floating up near/over the head, nowhere near "chest
+       height," and with nothing for it to visibly tap the whole gesture read as a stray
+       dangling glove, not a threat display. Dropped the wrist to shoulder height and pointed
+       the club tip AT the off-hand fist's actual coordinates (below) so the two elements
+       visually connect into one "cocked, about to tap" cluster instead of two unrelated
+       floating shapes. */
     const shC = V(-0.185, L.shldY + 0.03, shBase - 0.01);
-    const elC = V(-0.30, L.shldY + 0.15, shBase + 0.13);
-    const wrC = V(-0.15, L.shldY + 0.23, shBase + 0.40);
-    tube(shC, elC, 0.062, 0.052, 6, P.coat, { capA: { hex: P.coatDk } });
-    tube(elC, wrC, 0.052, 0.040, 6, P.coat, { capB: { hex: P.skin, lift: 0.012 } });
-    /* the club, gripped, angled down toward the off-hand */
-    const clubTip = V(wrC.x + 0.11, wrC.y - 0.16, wrC.z + 0.05);
-    tube(wrC, clubTip, 0.026, 0.044, 6, P.club, { capB: { hex: P.clubDk } });
+    const elC = V(-0.335, L.shldY + 0.10, shBase + 0.16);
+    const wrC = V(-0.155, L.shldY - 0.02, shBase + 0.46);
+    tube(shC, elC, 0.066, 0.056, 6, P.coat, { capA: { hex: P.coatDk } });
+    tube(elC, wrC, 0.056, 0.044, 6, P.coat, { capB: { hex: P.skin, lift: 0.012 } });
     /* brass knuckle-band on the club grip — the high-value glint */
-    quad(V(wrC.x - 0.028, wrC.y - 0.02, wrC.z), V(wrC.x + 0.028, wrC.y - 0.02, wrC.z),
-         V(wrC.x + 0.022, wrC.y + 0.024, wrC.z + 0.02), V(wrC.x - 0.022, wrC.y + 0.024, wrC.z + 0.02), P.brass, 0.03);
+    quad(V(wrC.x - 0.032, wrC.y - 0.024, wrC.z), V(wrC.x + 0.032, wrC.y - 0.024, wrC.z),
+         V(wrC.x + 0.026, wrC.y + 0.028, wrC.z + 0.022), V(wrC.x - 0.026, wrC.y + 0.028, wrC.z + 0.022), P.brass, 0.03);
 
-    /* OFF-HAND ARM (left side, +x): bent, palm raised low-and-forward to receive the tap,
-       elbow bent ~120°, brass-knuckled fist. */
+    /* OFF-HAND ARM (left side, +x): bent, palm raised to receive the tap, elbow bent ~120°,
+       brass-knuckled fist. R4b: pushed further +x/+z off the torso/shirt-panel silhouette
+       so it reads as its own separate shape instead of blending into the panel behind it. */
     const shO = V(0.19, L.shldY, shBase - 0.02);
-    const elO = V(0.27, L.chestY + 0.02, shBase + 0.10);
-    const wrO = V(0.17, L.chestY + 0.10, shBase + 0.36);
-    tube(shO, elO, 0.060, 0.050, 6, P.coat, { capA: { hex: P.coatDk } });
-    tube(elO, wrO, 0.050, 0.040, 6, P.coat, { capB: { hex: P.skin, lift: 0.012 } });
+    const elO = V(0.32, L.chestY + 0.02, shBase + 0.14);
+    const wrO = V(0.23, L.chestY + 0.09, shBase + 0.48);
+    tube(shO, elO, 0.064, 0.054, 6, P.coat, { capA: { hex: P.coatDk } });
+    tube(elO, wrO, 0.054, 0.044, 6, P.coat, { capB: { hex: P.skin, lift: 0.012 } });
+    /* the club, gripped, tip aimed directly at the off-hand fist — chunked up from
+       0.026-0.044 so the weapon itself survives 1/3-res, and now points at a REAL target. */
+    const clubTip = V(wrO.x - 0.02, wrO.y + 0.05, wrO.z - 0.03);
+    tube(wrC, clubTip, 0.034, 0.056, 6, P.club, { capB: { hex: P.clubDk } });
     /* fist block */
-    quad(V(wrO.x - 0.032, wrO.y - 0.03, wrO.z), V(wrO.x + 0.032, wrO.y - 0.03, wrO.z),
-         V(wrO.x + 0.028, wrO.y + 0.032, wrO.z + 0.02), V(wrO.x - 0.028, wrO.y + 0.032, wrO.z + 0.02), P.skinDk, 0.035);
+    quad(V(wrO.x - 0.036, wrO.y - 0.032, wrO.z), V(wrO.x + 0.036, wrO.y - 0.032, wrO.z),
+         V(wrO.x + 0.032, wrO.y + 0.034, wrO.z + 0.022), V(wrO.x - 0.032, wrO.y + 0.034, wrO.z + 0.022), P.skinDk, 0.035);
     /* brass knuckle-duster across the fist (enlarged to clear the law-3 0.04u floor on both axes) */
-    quad(V(wrO.x - 0.036, wrO.y + 0.012, wrO.z + 0.018), V(wrO.x + 0.036, wrO.y + 0.012, wrO.z + 0.018),
-         V(wrO.x + 0.030, wrO.y + 0.055, wrO.z + 0.035), V(wrO.x - 0.030, wrO.y + 0.055, wrO.z + 0.035), P.brass, 0.03);
+    quad(V(wrO.x - 0.040, wrO.y + 0.014, wrO.z + 0.020), V(wrO.x + 0.040, wrO.y + 0.014, wrO.z + 0.020),
+         V(wrO.x + 0.034, wrO.y + 0.060, wrO.z + 0.038), V(wrO.x - 0.034, wrO.y + 0.060, wrO.z + 0.038), P.brass, 0.03);
   }
 
   /* ---------- base disc (Medium: r=0.42) ---------- */

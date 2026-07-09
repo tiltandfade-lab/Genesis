@@ -45,6 +45,11 @@ export function buildDeathDog(){
     ear:0x50543f, earIn:0x27281c,
     eye:0xff8050,                                     // dead-eye glint, brightened r2 (critic pass) — measured zero-contrast in r2 engine render, pushed hotter+bigger
     claw:0x1c1a15, disc:0x3a3830, discTop:0x464438,
+    // SECONDPASS FIX (batch-review flag): a distinctly lighter hide tone for the RAISED head's
+    // skull bands — a material-level (not just geometry/facing-dependent) bright zone, so that
+    // head reads as its own mass against the darker saddle/shoulder tones behind it even where a
+    // thin glint quad might self-occlude at this pitch. >=140 RGB avg (176,184,156).
+    coatHi:0xb0b89c, coatHiDk:0x8a9078,
   };
 
   const H = 0.74;                               // shoulder-height reference — lower than the wolf (H0.80): starved, sunk stance
@@ -125,11 +130,19 @@ export function buildDeathDog(){
      the shoulder station, top edge riding the back line, but split to different angles: LEFT neck
      drops low + forward (sniffing), RIGHT neck rises high + out (snarling). Shared headBuild() so
      the tri cost of authoring two heads stays cheap. ---------- */
+  /* SECONDPASS FIX (batch-review flag): the fork read one-headed at sheet distance — necks forked
+     from nearly the same point (0.09u apart) and the raised head barely cleared the back topline
+     (0.037u), so it blended into the shoulder mass instead of reading as a second head. Widened
+     the fork base, dropped the low head further down-forward, and pushed the raised head much
+     higher + pulled back toward the shoulders (clear silhouette separation, not stacked forward). */
   const shoulderBackTop = T.at(-1).backTop, neckR = 0.095;
-  const neckBaseL = V(-0.045, shoulderBackTop-neckR, T.at(-1).z);
-  const neckBaseR = V( 0.045, shoulderBackTop-neckR, T.at(-1).z);
-  const headLowBase  = V(-0.12, H*0.42, 0.56);     // low head — down and forward, ground-sniffing
-  const headHighBase = V( 0.10, H*1.02, 0.50);     // raised head — up and snarling
+  const neckBaseL = V(-0.085, shoulderBackTop-neckR, T.at(-1).z);
+  const neckBaseR = V( 0.085, shoulderBackTop-neckR, T.at(-1).z);
+  const headLowBase  = V(-0.16, H*0.40, 0.58);     // low head — down and forward, ground-sniffing
+  // SECONDPASS FIX v2: the bbox-autofit camera zooms OUT to fit any height gain, erasing it —
+  // so lean on SIDEWAYS projection instead (clears the torso's own half-width, 0.155, by 2x),
+  // twisting the second head out past the body's own silhouette rather than stacking on top of it.
+  const headHighBase = V( 0.34, H*0.98, 0.32);     // raised head — twisted OUT to the side, snarling past the shoulder
 
   tube(neckBaseL, headLowBase,  neckR, neckR*0.62, N, P.ruff, {phase:Math.PI/N});
   tube(neckBaseR, headHighBase, neckR, neckR*0.62, N, P.ruff, {phase:Math.PI/N});
@@ -140,11 +153,16 @@ export function buildDeathDog(){
     const fwd = axis.clone().normalize();
     const n=8, ph=Math.PI/n;
     const p=(t)=>base.clone().addScaledVector(fwd,t);
+    // SECONDPASS FIX: the raised (snarling) head uses the lighter coatHi/coatHiDk skull-band
+    // tones — a standalone material bright-zone so it separates from the darker saddle mass
+    // behind it even when a thin glint quad is grazing-angle to the key light.
+    const skC = snarlUp ? P.coatHi   : P.coat;
+    const skD = snarlUp ? P.coatHiDk : P.coatDk;
     const bands=[
-      {t:0.00, rx:0.086, rz:0.082, hex:P.coat},
-      {t:0.11, rx:0.072, rz:0.066, hex:P.coat},
-      {t:0.24, rx:0.048, rz:0.042, hex:P.coatDk},
-      {t:0.34, rx:0.030, rz:0.026, hex:P.coatDk},
+      {t:0.00, rx:0.086, rz:0.082, hex:skC},
+      {t:0.11, rx:0.072, rz:0.066, hex:skC},
+      {t:0.24, rx:0.048, rz:0.042, hex:skD},
+      {t:0.34, rx:0.030, rz:0.026, hex:skD},
     ];
     const rs=bands.map(b=>ring(p(b.t), fwd, b.rx, b.rz, n, ph));
     stitch(rs, b=>bands[b].hex);
@@ -172,6 +190,17 @@ export function buildDeathDog(){
       const ft = fb.clone().addScaledVector(jVert,-0.045).addScaledVector(fwd,0.01);
       quad(fb.clone().add(jSide.clone().multiplyScalar(s*0.012)), fb.clone().sub(jSide.clone().multiplyScalar(s*0.012)), ft, ft, P.tooth, 0.02);
     }
+    // SECONDPASS FIX (batch-review flag): a pale bone-exposed patch riding the top of the snout
+    // bridge — EACH head gets its own >=140-RGB high-value zone (law 3), thematically the same
+    // starved-corpse bone-showing-through read as the rib band. Same literal-offset diamond shape
+    // as the proven eye-glint quad below (renders correctly front-facing on both the down-pitched
+    // and up-pitched head without a fwd-dependent winding risk).
+    {
+      const snoutC = jawC.clone().addScaledVector(fwd, 0.11).addScaledVector(jVert, upOff*0.65);
+      const sg = 0.042;
+      quad(snoutC.clone().add(V(0,sg,0.006)), snoutC.clone().add(V(-sg*0.85,0,0.012)),
+           snoutC.clone().add(V(0,-sg,0.006)), snoutC.clone().add(V(sg*0.85,0,0.012)), P.rib, 0.05);
+    }
     // dull red dead-eye glints — CRITIC PASS r3 ROOT CAUSE: the original (top,right,bottom,left)
     // point order also produced a -z (backward) normal — backface-culled, not merely undersized.
     // Enlarged past the 0.04u floor, pushed proud along fwd to avoid self-occlusion against the
@@ -191,8 +220,10 @@ export function buildDeathDog(){
     }
   }
 
-  headOn(headLowBase,  V(-0.35, -0.55, 0.75), false);   // low head — pitched down-forward, jaws mostly closed
-  headOn(headHighBase, V( 0.30,  0.35, 0.90), true);     // raised head — pitched up-out, snarling wide
+  // SECONDPASS FIX: amplified pitch divergence (steeper down / steeper up) so the two muzzles
+  // point clearly different directions, reinforcing the height/angle split from the new bases.
+  headOn(headLowBase,  V(-0.36, -0.55, 0.72), false);   // low head — pitched down-forward, jaws mostly closed
+  headOn(headHighBase, V( 0.62,  0.38, 0.50), true);     // raised head — twisted hard sideways+up, snarling out past the shoulder
 
   /* ---------- LEGS — starved digitigrade Z-zigzag hind, thinner than a live wolf; near-straight
      front. A creeping-advance stagger: front legs reach forward unevenly, hind legs coiled tight

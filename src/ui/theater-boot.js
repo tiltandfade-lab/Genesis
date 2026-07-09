@@ -2375,7 +2375,7 @@ let WHOLE_OBJECT_ENABLED = true;
    used to look like taste). `misses` keys the cuboid/loadFail cases by their render key so "why is THIS
    a cuboid" is answerable at a glance. Read-only diagnostics — nothing in product logic reads these;
    exposed on window.Theater.stats.modelPaths + window.Theater.modelPathReport(). */
-const MODEL_PATH_STATS = { exact:0, alias:0, blank:0, glb:0, pcRecipe:0, recipe:0, cuboid:0, loadFail:0, misses:{} };
+const MODEL_PATH_STATS = { exact:0, alias:0, blank:0, glb:0, pcRecipe:0, recipe:0, cuboid:0, loadFail:0, sprite:0, misses:{} };
 function _classifyWholeKey(wKey){
   if(!wKey) return null;
   if(wKey.indexOf("blank:") === 0) return "blank";
@@ -2390,7 +2390,152 @@ function _tallyPath(bucket, key){
   }
 }
 
+/* ============================================================================
+   SPRITE-TRANSITION T4 (docs/SPRITE-TRANSITION.md) — the theater sprite-billboard channel. Adam's
+   2026-07-09 ruling: creatures become 2D sheet-cut sprites (T2 slices them, T3 registers them in
+   `data/sprite-registry.js`'s `SPRITE_REGISTRY` global); the three.js stage keeps the trays/props/
+   architecture job (untouched by this unit) and gains ONE new figure path — a billboarded plane —
+   ahead of the existing whole-object/glb/recipe/cuboid chain. Total-function discipline, same as
+   every other figureFor path: a missing registry, an unmatched slug, a pending (not-yet-cut) entry,
+   or a failed/not-yet-loaded texture ALL fall through to the existing 3D chain untouched — this
+   channel only ever ADDS a resolution, it never blocks one.
+
+   Kill switch: SPRITE_CHANNEL_ENABLED, module-scope, same escape-hatch convention as
+   WHOLE_OBJECT_ENABLED just above (window.Theater.spriteChannel accessor at the bottom of this file)
+   — default ON, flippable at runtime to force every figure through the 3D chain for an A/B capture.
+
+   Inert until T3 lands: `typeof SPRITE_REGISTRY !== "undefined"` guards every read below, so this
+   whole branch is a silent no-op in any tree/harness that hasn't loaded data/sprite-registry.js yet
+   (this unit's own dev/verify-theater-sprites.mjs supplies a FIXTURE registry rather than depending
+   on T3's branch, per the spec's explicit "do not depend on T3" instruction). */
+let SPRITE_CHANNEL_ENABLED = true;
+
+// texture cache, keyed by sprite slug: undefined (never requested) | "pending" | "failed" | a loaded
+// THREE.Texture. Exposed read/write on window.Theater._spriteTextureCache (bottom of this file) as a
+// TEST-ONLY seam — dev/verify-theater-sprites.mjs pre-seeds a fake Texture here to exercise the
+// cut-status render path without a real network/file image load (the spec's own "stub texture
+// loader" instruction); nothing in product logic writes to this object from outside spriteTextureFor.
+const SPRITE_TEXTURE_CACHE = {};
+
+// join-key normalizer (docs/SPRITE-TRANSITION.md's own kebab discipline, loosened further for a
+// forgiving join): lowercase, strip everything but [a-z0-9] so "Grinning Poppet" and a bestiary
+// recipeSlug of "grinning-poppet" (or "grinningPoppet") normalize to the same key.
+function normalizeSpriteKey(s){
+  return (s || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+}
+
+/* T4.1 resolution: recipeSlug is already "the exact bestiary id" (wholeObjectKeyFor's own header
+   comment) — join it against SPRITE_REGISTRY's `name` field (the manifest/registry's own join key
+   per the spec's shared-data-shapes section, "cell name <-> realm-bestiary-draft.json creature name
+   within the same realm"). Only a `status:"cut"` entry ever resolves here: a same-name entry that is
+   still `status:"pending"` (not yet sliced) is a real miss for THIS function — it returns null and
+   the caller falls through to the existing 3D chain untouched, exactly like a whole-object key that
+   doesn't resolve. (The spec's fuller realm/type/size fallback tier is NOT implemented in this unit
+   — see the T4 deviation note in the unit's own handoff; the exact-name/cut-only tier above is the
+   one every RED-FIRST acceptance check in this unit's spec actually exercises.) */
+function spriteEntryFor(recipeSlug){
+  if(!recipeSlug || typeof SPRITE_REGISTRY === "undefined" || !SPRITE_REGISTRY) return null;
+  const wantKey = normalizeSpriteKey(recipeSlug);
+  if(!wantKey) return null;
+  for(const regKey in SPRITE_REGISTRY){
+    const e = SPRITE_REGISTRY[regKey];
+    if(!e || !e.name || e.status !== "cut") continue;
+    if(normalizeSpriteKey(e.name) === wantKey) return Object.assign({ slug: regKey }, e);
+  }
+  return null; // no cut entry by that name — a pending-only match (or no match at all) falls through
+}
+
+// SPRITE-SIZE LADDER — deliberately its OWN table, not a reuse of sizeScaleFor's SIZE_SCALE above.
+// SIZE_SCALE is a cosmetic in-game-readability tune (gargantuan/medium = 2.2x) for the cuboid/recipe
+// figure family; a billboard plane instead bakes the SRD size CATEGORY's real space ratio (5ft
+// Medium square vs. a 20ft Gargantuan footprint = 4 squares = 4x) so "a Gargantuan dragon sprite must
+// visibly dwarf a Medium PC sprite" (the spec's own decision 4 wording) holds at the geometry level,
+// not just a readability nudge — this is the ratio dev/verify-theater-sprites.mjs's check (c) proves.
+const SPRITE_SIZE_SCALE = {
+  tiny: 0.5, small: 1, medium: 1, large: 2, huge: 3, gargantuan: 4
+};
+function spriteSizeScaleFor(size){
+  const s = (size || "medium").toLowerCase();
+  return SPRITE_SIZE_SCALE[s] != null ? SPRITE_SIZE_SCALE[s] : 1;
+}
+
+/* Async texture fetch, mirroring the glb path's own "resolved now or fall through, pick it up on the
+   next replay" convention (loadWholeObjectBuilders' onSettled callback, this file's module-scope call
+   near the bottom): a cache miss kicks off THREE.TextureLoader.load and returns null immediately (this
+   call's figure falls through to the 3D chain, exactly like a whole-object entry whose builder isn't
+   loaded yet) — success nearest-filters the texture (no mipmap smear, matching the PS1/cutout look)
+   and, if the theater is still mounted, replays S.lastUnits (same null-the-dirty-key-then-resend
+   trick loadWholeObjectBuilders' callback uses) so the sprite appears on the very next render without
+   the caller having to re-drive anything. A failed load caches "failed" — permanently falls through,
+   never retried, never throws. */
+function spriteTextureFor(slug){
+  const cached = SPRITE_TEXTURE_CACHE[slug];
+  if(cached && cached !== "pending" && cached !== "failed") return cached;
+  if(cached === "pending" || cached === "failed") return null;
+  SPRITE_TEXTURE_CACHE[slug] = "pending";
+  textureLoader.load(
+    "assets/sprites/" + slug + ".png",
+    function(tex){
+      tex.magFilter = THREE.NearestFilter;
+      tex.minFilter = THREE.NearestFilter;
+      tex.generateMipmaps = false;
+      SPRITE_TEXTURE_CACHE[slug] = tex;
+      if(S.mounted && S.lastUnits){
+        S.unitsKey = null; // force the dirty-key skip past, same trick as the glb-settle replay
+        setUnits(S.lastUnits);
+      }
+    },
+    undefined,
+    function(){ SPRITE_TEXTURE_CACHE[slug] = "failed"; }
+  );
+  return null;
+}
+
+/* Billboard construction (T4.2): a single THREE plane, textured, nearest-filtered, alpha-cutout (no
+   blend-order fighting between overlapping sprites), sized from the SPRITE-SIZE LADDER above times
+   GLB_TARGET_HEIGHT (the module-height convention this file already established for the glb path,
+   L1173 — reused here rather than inventing a second height constant, since both paths bake an
+   ABSOLUTE authored size into their own geometry the same way). Seated feet-at-0 (mesh.position.y =
+   h/2 lifts the plane's own center up to half its height, matching every other figure's feet-on-the-
+   base-disc convention) — the base disc ITSELF is untouched (setUnits' own math; see this unit's
+   header note: this group carries no userData.wholeObject, so it falls through setUnits' EXISTING
+   non-whole-object disc branch, unmodified by this unit). Y-axis-only billboarding to the camera is
+   applied per render pass by updateSpriteBillboardYaw() (scheduleRender, below) rather than baked
+   here — the group's OWN rotation.y is reset every dirty render, so it never drifts out of sync with
+   whichever way setUnits/rotate() last left the camera. */
+function buildSpriteBillboard(entry){
+  const tex = spriteTextureFor(entry.slug);
+  if(!tex) return null; // not loaded yet / failed load -> caller falls through, never rejects
+  const h = spriteSizeScaleFor(entry.size) * GLB_TARGET_HEIGHT;
+  const geo = new THREE.PlaneGeometry(h, h); // square plane; the sprite's own alpha silhouette reads the real shape
+  const mat = new THREE.MeshBasicMaterial({
+    map: tex, transparent: true, alphaTest: 0.5, side: THREE.DoubleSide, depthWrite: true
+  });
+  const mesh = new THREE.Mesh(geo, mat);
+  mesh.position.y = h / 2;
+  const g = new THREE.Group();
+  g.add(mesh);
+  g.userData.sprite = true;
+  g.userData.spriteSlug = entry.slug;
+  g.userData.spriteBillboardMesh = mesh; // updateSpriteBillboardYaw's per-frame Y-facing target
+  return g;
+}
+
 function figureFor(archetype, seed, tint, silhouette, weapon, recipeSlug, pcRecipe, kind, className, wholeKeyOverride){
+  // SPRITE-TRANSITION T4: the sprite-billboard channel resolves AHEAD of the whole-object/glb/recipe/
+  // cuboid chain below (docs/SPRITE-TRANSITION.md T4.1) — creature-kind pieces only (a pc/ally keys
+  // off its CLASS, not a bestiary name, so it has no sprite-registry join key at all and always skips
+  // straight past this branch, same as it always skipped the bestiary recipeSlug lookup further down).
+  // Every guard here falls through rather than throwing/rendering blank: gate off, no registry loaded,
+  // no name match, a pending (not-yet-cut) match, or a texture that hasn't loaded yet all reach the
+  // SAME existing chain this file already had.
+  if(SPRITE_CHANNEL_ENABLED && kind !== "pc" && kind !== "ally"){
+    const sEntry = spriteEntryFor(recipeSlug);
+    if(sEntry){
+      const sg = buildSpriteBillboard(sEntry);
+      if(sg){ _tallyPath("sprite", sEntry.slug); return sg; }
+    }
+  }
   // P1' WHOLE-OBJECT WIRING (docs/P1-WIRING.md §4 step 5): resolved BEFORE the pcRecipe branch — the
   // roster-supersession clause (§8 decision 4: "cuboids demote to auto-fallback... never deleted").
   // Guards, in order, EVERY ONE falling through to the EXISTING chain below (pcRecipe -> bestiary
@@ -2704,11 +2849,32 @@ function markDirty(){
   scheduleRender();
 }
 
+// SPRITE-TRANSITION T4.2: Y-axis-only billboarding — every sprite group (tagged userData.sprite by
+// buildSpriteBillboard) turns to face the camera's current yaw step each render pass, rotating the
+// GROUP about Y only (rotation.x/z stay 0 — "sprites stay upright" per the spec) rather than a true
+// look-at (which would also tip the plane's top toward/away from the camera at this game's fixed
+// elevation, reading as a leaning card instead of an upright PS1/Doom sprite). The camera only ever
+// sits at one of placeCamera's 4 discrete 90°-step yaws (+ the fixed CAM_YAW_OFFSET_DEG dimetric
+// offset), so recomputing this on every dirty render (cheap — a handful of live sprite units at most)
+// is simpler and just as correct as hooking rotate()/placeCamera() separately. A plane is authored
+// facing +Z (buildSpriteBillboard's own PlaneGeometry default); +PI turns that face to point back at
+// the camera position (which sits at angle `yaw` from the board origin, looking inward).
+function updateSpriteBillboardYaw(){
+  if(!S.unitGroup) return;
+  const yaw = (S.rotationStep * 90 * Math.PI) / 180 + (CAM_YAW_OFFSET_DEG * Math.PI) / 180;
+  const facing = yaw + Math.PI;
+  for(let i = 0; i < S.unitGroup.children.length; i++){
+    const fig = S.unitGroup.children[i];
+    if(fig && fig.userData && fig.userData.sprite) fig.rotation.y = facing;
+  }
+}
+
 function scheduleRender(){
   if(!S.mounted || S.raf) return;
   S.raf = requestAnimationFrame(() => {
     S.raf = null;
     if(S.dirty && S.renderer && S.scene && S.camera){
+      updateSpriteBillboardYaw();
       S.renderer.render(S.scene, S.camera);
       S.dirty = false;
     }
@@ -4341,10 +4507,12 @@ window.Theater.stats.modelPaths = MODEL_PATH_STATS;
 window.Theater.modelPathReport = function(){
   const m = MODEL_PATH_STATS;
   // BATTLE-THEATER T2: glb is a resolved-model path (like exact/alias), so it counts toward the total.
-  const total = m.exact + m.alias + m.blank + m.glb + m.pcRecipe + m.recipe + m.cuboid;
+  // SPRITE-TRANSITION T4: sprite joins the same "resolved" family — a billboard is a real render, not
+  // a miss, so it counts toward total exactly like glb/exact/alias/pcRecipe/recipe do.
+  const total = m.exact + m.alias + m.blank + m.glb + m.pcRecipe + m.recipe + m.cuboid + m.sprite;
   const missList = Object.keys(m.misses).map(k => ({ key: k, count: m.misses[k] })).sort((a,b)=>b.count-a.count);
   return { total, exact: m.exact, alias: m.alias, blank: m.blank, glb: m.glb, pcRecipe: m.pcRecipe,
-    recipe: m.recipe, cuboid: m.cuboid, loadFail: m.loadFail, misses: missList };
+    recipe: m.recipe, cuboid: m.cuboid, loadFail: m.loadFail, sprite: m.sprite, misses: missList };
 };
 
 // REFERENCE-SHELF seam (docs/BESTIARY-MANUAL.md "The figure seam"): build/dispose one standalone
@@ -4390,3 +4558,20 @@ Object.defineProperty(window.Theater, "wholeObject", {
   set: function(v){ WHOLE_OBJECT_ENABLED = !!v; S.boardKey = null; S.unitsKey = null; },
   enumerable: true, configurable: true
 });
+
+/* SPRITE-TRANSITION T4 (docs/SPRITE-TRANSITION.md T4.3): `window.Theater.spriteChannel` (get/set) —
+   the exact pixelSkin/wholeObject A/B-toggle pattern. Default TRUE (shipped-on). Flipping to false
+   forces every figureFor call past the sprite branch entirely (3D chain exclusively, the A/B-capture
+   kill switch T4.3 calls for) — same "next call picks it up" contract as its two siblings above. */
+Object.defineProperty(window.Theater, "spriteChannel", {
+  get: function(){ return SPRITE_CHANNEL_ENABLED; },
+  set: function(v){ SPRITE_CHANNEL_ENABLED = !!v; S.boardKey = null; S.unitsKey = null; },
+  enumerable: true, configurable: true
+});
+
+// SPRITE-TRANSITION T4 — TEST-ONLY SEAM: exposes the module-private texture cache so a harness (this
+// unit's own dev/verify-theater-sprites.mjs) can pre-seed a fake THREE.Texture-like object for a slug
+// before calling refFigure.build/setUnits, exercising the cut-status render path without a real
+// network/file image load ("stub texture loader" per the spec). Nothing in product logic reads or
+// writes this from outside spriteTextureFor — same read-only-diagnostics spirit as window.Theater.stats.
+window.Theater._spriteTextureCache = SPRITE_TEXTURE_CACHE;

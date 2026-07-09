@@ -34,6 +34,21 @@ import { resetGeom, getBuffers } from './probe-lib.js';
 /* ---- SET-DRIVEN ROSTERS (?set=races etc.). Dynamic imports; a missing/broken creature file is
    skipped (the sheet renders partially mid-wave instead of dying on one bad import). ---- */
 const SETS = {
+  'suburb-w1': [
+    {name:'ONI',            sub:'suburb w1', file:'rlm-suburb-oni.js',             fn:'buildOni'},
+    {name:'SHIELD GUARDIAN',sub:'suburb w1', file:'rlm-suburb-shield-guardian.js', fn:'buildShieldGuardian'},
+    {name:'TROGLODYTE',     sub:'suburb w1', file:'rlm-suburb-troglodyte.js',      fn:'buildTroglodyte'},
+    {name:'JACKALWERE',     sub:'suburb w1', file:'rlm-suburb-jackalwere.js',      fn:'buildJackalwere'},
+    {name:'BULETTE PUP',    sub:'suburb w1', file:'rlm-suburb-bulette-pup.js',     fn:'buildBulettePup'},
+    {name:'VROCK',          sub:'suburb w1', file:'rlm-suburb-vrock.js',           fn:'buildVrock'},
+    {name:'CHASME',         sub:'suburb w1', file:'rlm-suburb-chasme.js',          fn:'buildChasme'},
+    {name:'MARILITH',       sub:'suburb w1', file:'rlm-suburb-marilith.js',        fn:'buildMarilith'},
+    {name:'SMOTHERING RUG', sub:'suburb w1', file:'rlm-suburb-smothering-rug.js',  fn:'buildSmotheringRug'},
+    {name:'GULTHIAS BLIGHT',sub:'suburb w1', file:'rlm-suburb-gulthias-blight.js', fn:'buildGulthiasBlight'},
+    {name:'LICH',           sub:'suburb w1', file:'rlm-suburb-lich.js',            fn:'buildLich'},
+    {name:'DEATH KNIGHT',   sub:'suburb w1', file:'rlm-suburb-death-knight.js',    fn:'buildDeathKnight'},
+  ],
+
   'cosmic-w1': [
     {name:'GIBBERING MOUTHER', sub:'cosmic w1', file:'rlm-cosmic-gibbering-mouther.js', fn:'buildGibberingMouther'},
     {name:'PHASE SPIDER',   sub:'cosmic w1', file:'rlm-cosmic-phase-spider.js',    fn:'buildPhaseSpider'},

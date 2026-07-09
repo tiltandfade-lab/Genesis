@@ -279,7 +279,7 @@ plain magenta background. Rendered in this realm's art style (see the style bloc
 8. **Domestic animal — Vermin-catcher (a single ferret) — goes gladly where people won't.**
 9. **Domestic animal — Old animal — past its working years, half-blind, and still the first to growl at the wrong thing.**
 10. **Domestic animal — Half-tamed wild thing — comes to the window, never the hand; trusts one child and no one else.**
-11. **Domestic animal — The realm-beast (the mess-hall mutt — a scrappy dog that's followed the unit through every front)**
+11. **Domestic animal — The realm-beast (a war-mule, unfazed by artillery, carries what the quartermaster can't)**
 12. **Domestic animal — The town's own animal — the one everyone knows by name; its fate is the town's mood made visible.**
 13. **Domestic animal — A single rabbit — twitchy, kept for the table or kept as a pet, never sure which.**
 14. **Domestic animal — A single pony — smaller and calmer than the war-mule, a child's first mount.**
@@ -295,6 +295,102 @@ plain magenta background. Rendered in this realm's art style (see the style bloc
 24. **Domestic animal — A single kitten — too young to have earned the barn cat's independence yet.**
 25. **Domestic animal — A single caged ferret-kit — young, hyperactive, still learning the vermin-catcher's trade.**
 
+
+---
+
+## Wild animal batches (25 total, 1 sheet)
+
+Style block (repeated here so this section is self-contained): Pixel-art sprite rendering
+(visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale).
+desaturated olive-and-khaki palette, heavy dither for smoke/haze, hard directional light like a flare or muzzle-flash, worn canvas/leather gear textures, avoid any real-world flag, insignia, or named-conflict iconography (content-safety — keep it era-neutral).
+
+Shared mechanical instructions (restated for this section): 5x5 grid, uniform cell size, solid
+magenta (#FF00FF) background (no transparency, no other background elements), consistent scale,
+orthographic side view, each animal fully visible from head to toe within its cell — no cropping.
+**Every animal in a characteristic wild-living pose** — alert, stalking, grazing, mid-flight,
+territorial — never stiff/taxidermied, never tame-looking (these are wilderness creatures, not
+pets). **No scene props, furniture, dens, or background objects of any kind** — no burrows,
+nests-as-set-dressing, foliage clusters, etc.; the animal itself only, isolated against the plain
+magenta background. Sourced from the game's own `wild-animal-kind` table (`Engine/03. _Tables/02.
+Social/Sentient NPCs/Wild Animal Kind.md`) plus additional single-animal variety to fill the
+sheet; entry 11 (the realm-beast) uses this realm's real skin from `data/animal-realm-skins.js`.
+
+### Wild animal sheet 1/1
+
+1. **Wild animal — Territory wolf — holds a stretch of ground and knows every crossing of it**
+2. **Wild animal — A single deer from the herd — moves with the herd, reads the wind before the ranger does**
+3. **Wild animal — Watcher-hawk — sees the whole valley from height and forgets nothing it circled**
+4. **Wild animal — River otter — knows the water's moods better than any map**
+5. **Wild animal — Burrowing badger — knows what the earth carries underneath**
+6. **Wild animal — Ambush lynx — solitary, patient, and the reason the trail went quiet**
+7. **Wild animal — A single vulture from the carrion flock — first to know when something has died nearby**
+8. **Wild animal — A single goose from the migrant flock — passes through and carries news of where it's been**
+9. **Wild animal — Old solitary boar — scarred, wary, and gives ground to no one**
+10. **Wild animal — Half-wild fringe fox — drawn to the edge of camps, curious and never quite trusting**
+11. **Wild animal — The realm-beast (a battlefield crow, thick in numbers where the fighting was worst)**
+12. **Wild animal — The elder of the wood — the beast every other animal on the node defers to**
+13. **Wild animal — A single elk — grazes the tree line at dawn, gone before full light**
+14. **Wild animal — A lone timber-wolf pup — not yet part of any pack, still learning to hunt**
+15. **Wild animal — A red fox kit — curious, unafraid, too young to know better**
+16. **Wild animal — A great owl — silent wingbeats, watches more than it hunts**
+17. **Wild animal — A wild boar sow — tusks lowered, protective of ground she doesn't even own yet**
+18. **Wild animal — A mountain goat — sure-footed on a ledge no predator bothers to follow**
+19. **Wild animal — A black bear — foraging, unbothered, dangerous only if pressed**
+20. **Wild animal — A heron — stalks the shallows on legs too thin to look that patient**
+21. **Wild animal — A wild turkey tom — displaying, loud, oblivious to anything hunting it**
+22. **Wild animal — A bull elk — antlers full-grown, the season's rut making it reckless**
+23. **Wild animal — A badger — low, broad, digging with total disregard for anything nearby**
+24. **Wild animal — A peregrine falcon — stooping mid-hunt, faster than anything else in the sky**
+25. **Wild animal — A lynx kitten — spotted coat, play-stalking something that isn't there yet**
+
+---
+
+## Dungeon animal batches (25 total, 1 sheet)
+
+**Lore note:** per `docs/ANIMAL-SOCIAL.md` §1, the dungeon environment band is animal-population
+near-zero — "each one is a signal," not ambient wildlife. Every entry below is either a
+domestic/wild animal that ended up somewhere it shouldn't be, or a creature that has adapted to
+permanent dark — never a "generic cave critter."
+
+Style block (repeated here so this section is self-contained): Pixel-art sprite rendering
+(visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale).
+desaturated olive-and-khaki palette, heavy dither for smoke/haze, hard directional light like a flare or muzzle-flash, worn canvas/leather gear textures, avoid any real-world flag, insignia, or named-conflict iconography (content-safety — keep it era-neutral).
+
+Shared mechanical instructions (restated for this section): 5x5 grid, uniform cell size, solid
+magenta (#FF00FF) background (no transparency, no other background elements), consistent scale,
+orthographic side view, each animal fully visible from head to toe within its cell — no cropping.
+**Every animal in a characteristic pose for its situation** — wary, cornered, feral, startled,
+adapted-to-dark — never a relaxed/domestic pose (even the lost pets down here read as changed by
+the place). **No scene props, furniture, cages-as-set-dressing, or background objects of any
+kind** — the animal itself only, isolated against the plain magenta background.
+
+### Dungeon animal sheet 1/1
+
+1. **Dungeon animal — Feral vermin-catcher — once someone's ferret or terrier, now lives wild in the tunnels, still killing rats out of habit**
+2. **Dungeon animal — Blind cave rat — pale, sightless, thrives in total dark, first sign something's been dug through**
+3. **Dungeon animal — Tunnel bat colony straggler — a single bat that never rejoined the swarm, clings alone near a cracked vent**
+4. **Dungeon animal — Half-tamed thing — comes to a lantern's light, never a hand, feeds on what the dungeon leaves behind**
+5. **Dungeon animal — Lost hunting hound — a noble's dog that wandered too far in and never found the way back out**
+6. **Dungeon animal — Cave-adapted spider — pale, eyeless, spins webs across passages nobody's walked in years**
+7. **Dungeon animal — Wrong-place goat — a farm animal that fell through a sinkhole and somehow survived down here**
+8. **Dungeon animal — Glow-moss grazer — a small rodent whose fur has picked up a faint luminescence from what it eats**
+9. **Dungeon animal — Echo-startled bird — a single bird trapped in the upper galleries, flies at every footstep**
+10. **Dungeon animal — Scarred guard-dog gone feral — once trained to patrol these halls, now answers to no one**
+11. **Dungeon animal — Blind salamander — pale, slow, the kind of thing that shouldn't have a reason to be this deep**
+12. **Dungeon animal — Starving stray — a cat or dog that followed someone in and got left behind**
+13. **Dungeon animal — Unnervingly large lone rat — alone, watching, doesn't scatter like the others**
+14. **Dungeon animal — Tunnel-adapted snake — pale-scaled, sluggish in the cold, strikes only when cornered**
+15. **Dungeon animal — Chained beast, escaped its post — a working animal that slipped its old restraint, still wears the collar**
+16. **Dungeon animal — Nest-robbing crow — one bird that's learned the dungeon's side passages better than most explorers**
+17. **Dungeon animal — Deep-well fish, stranded — flopping in a puddle far from any real water source**
+18. **Dungeon animal — Sole survivor packhorse — the last of a caravan's animals, malnourished, still saddled**
+19. **Dungeon animal — Cave cricket, oversized — chirping alone in the dark, first warning of the swarm nearby**
+20. **Dungeon animal — Feral falconry bird — a hawk that escaped its jesses generations ago, now hunts the tunnels' vermin**
+21. **Dungeon animal — Wrongly-still lizard — motionless so long it's mistaken for a carving, until it isn't**
+22. **Dungeon animal — Abandoned mine canary — a small bird in a rusted cage, somehow still alive, still singing**
+23. **Dungeon animal — Tunnel-blind mole — huge clawed forepaws, displaces more earth than it should be able to**
+24. **Dungeon animal — Trapped messenger pigeon — still carries a note no one living will ever read**
+25. **Dungeon animal — An ordinary animal, deliberately unremarkable — domestic or wild, doesn't matter; its presence this deep IS the signal, let the scene decide what it means**
 
 ---
 

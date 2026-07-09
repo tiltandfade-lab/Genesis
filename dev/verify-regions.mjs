@@ -58,6 +58,23 @@ function baseWorld(id){
   };
 }
 
+/* DETERMINISM (2026-07-09, same class as verify-digest-diet's seeded fixture): every engine roll in
+   this harness runs against the jsdom window's Math.random, and none of the assertions has
+   randomness as the point under test (§8 already stubs it outright; §6f' verifies WEIGHTS, which a
+   uniform seeded PRNG exercises identically). Live randomness here only meant a red run could never
+   be reproduced — the 2026-07-09 sweep saw exactly one un-loggable failure that then passed 400/400
+   retries. Each freshDom seeds the window's PRNG with a fixed per-call seed (mulberry32, seeds
+   1001, 1002, …), so every run of this file is byte-identical: a future red is REAL and replayable,
+   never roll luck. */
+function mulberry32(seed){
+  return function(){
+    seed |= 0; seed = (seed + 0x6D2B79F5) | 0;
+    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+let domSeq = 0;
 function freshDom(loadSrc = srcText){
   const dom = new JSDOM(
     `<!doctype html><html><body><div id="worldView"></div><div id="toast"></div></body></html>`,
@@ -66,7 +83,9 @@ function freshDom(loadSrc = srcText){
   const win = dom.window;
   win.eval(harness + "\n" + loadSrc);
   win.requestAnimationFrame = (fn) => setTimeout(fn, 0);
-  const world = baseWorld("w-regions-" + Math.random().toString(36).slice(2));
+  domSeq += 1;
+  win.Math.random = mulberry32(1000 + domSeq);   // fixed per-call seed — see DETERMINISM note above
+  const world = baseWorld("w-regions-" + domSeq);
   const originId = win.addNode(world, "Test Hold", "Setting");
   win.setNodeXY(world, originId, 0, 0);
   world.currentNodeId = originId; world.startNodeId = originId;

@@ -145,6 +145,18 @@ const WHOLE_OBJECT_REGISTRY = {
   "tough":               { module: "../../dev/model-qa/creatures/rlm-frontier-tough.js",                fn: "buildTough",              discR: 0.42 },
   "performer":           { module: "../../dev/model-qa/creatures/rlm-frontier-performer.js",            fn: "buildPerformer",          discR: 0.42 },
   "xorn":                { module: "../../dev/model-qa/creatures/rlm-frontier-xorn.js",                 fn: "buildXorn",               discR: 0.42 },
+  "giant-vulture":       { module: "../../dev/model-qa/creatures/rlm-frontier-giant-vulture.js",    fn: "buildGiantVulture",    discR: 0.42 },
+  "assassin":            { module: "../../dev/model-qa/creatures/rlm-frontier-assassin.js",         fn: "buildAssassin",        discR: 0.42 },
+  "jackal":              { module: "../../dev/model-qa/creatures/rlm-frontier-jackal.js",           fn: "buildJackal",          discR: 0.42 },
+  "rhinoceros":          { module: "../../dev/model-qa/creatures/rlm-frontier-rhinoceros.js",       fn: "buildRhinoceros",      discR: 0.68 },
+  "hippopotamus":        { module: "../../dev/model-qa/creatures/rlm-frontier-hippopotamus.js",     fn: "buildHippopotamus",    discR: 0.68 },
+  "salamander":          { module: "../../dev/model-qa/creatures/rlm-frontier-salamander.js",       fn: "buildSalamander",      discR: 0.55 },
+  "peryton":             { module: "../../dev/model-qa/creatures/rlm-frontier-peryton.js",          fn: "buildPeryton",         discR: 0.42 },
+  "gorgon":              { module: "../../dev/model-qa/creatures/rlm-frontier-gorgon.js",           fn: "buildGorgon",          discR: 0.62 },
+  "spirit-naga":         { module: "../../dev/model-qa/creatures/rlm-frontier-spirit-naga.js",      fn: "buildSpiritNaga",      discR: 0.62 },
+  "nightmare":           { module: "../../dev/model-qa/creatures/rlm-frontier-nightmare.js",        fn: "buildNightmare",       discR: 0.55, opacity: 0.85 },
+  "desperate-bandit":    { module: "../../dev/model-qa/creatures/rlm-frontier-desperate-bandit.js", fn: "buildDesperateBandit", discR: 0.42 },
+  "scout":               { module: "../../dev/model-qa/creatures/rlm-frontier-scout.js",            fn: "buildScout",           discR: 0.42 },
   "scarecrow":           { module: "../../dev/model-qa/creatures/rlm-gloom-scarecrow.js",   fn: "buildScarecrow", discR: 0.42 },
   "fire-elemental":      { module: "../../dev/model-qa/creatures/mon-fireelem.js", fn: "buildFireElemental", discR: 0.55 },
   "earth-elemental":     { module: "../../dev/model-qa/creatures/mon-earthelem.js", fn: "buildEarthElemental", discR: 0.55 },
@@ -616,7 +628,7 @@ const WHOLE_OBJECT_REGISTRY = {
    fallback, never a broken lookup (figureFor's existing chain). */
 const NEAREST_SUB = {
   // canine/wolf-silhouette family -> wolf
-  "winter-wolf": "wolf", "jackal": "wolf", "hyena": "wolf", "blink-dog": "wolf",
+  "winter-wolf": "wolf", "hyena": "wolf", "blink-dog": "wolf",
   // small vermin -> giant rat (swarm-of-rats REMOVED 2026-07-04: it now has a BESPOKE swarm module —
   // subbing it to giant-rat made it read as one big rat, Adam's QA complaint)
   "giant-fire-beetle": "giant-rat", "weasel": "giant-rat",
@@ -678,8 +690,7 @@ const NEAREST_SUB = {
   "death-cultist": "cultist-fanatic", "aberrant-cultist": "cultist-fanatic", "elemental-cultist": "cultist-fanatic",
   "fiend-cultist": "cultist-fanatic",
   "bandit-courier": "bandit", "bandit-deceiver": "bandit",
-  "bandit-crime-lord": "bandit", "desperate-bandit": "bandit",
-  // spider variants -> giant wolf spider
+  "bandit-crime-lord": "bandit", // spider variants -> giant wolf spider
   // (giant-wolf-spider maps 1:1 above)
   // veteran/guard command chain
   "guard-captain": "guard", "berserker-commander": "berserker",
@@ -695,7 +706,7 @@ const NEAREST_SUB = {
   "crab": "giant-spider", "seahorse": "giant-rat", "ochre-jelly": "gray-ooze",
   "animated-rug-of-smothering": "gray-ooze",
   "water-weird": "giant-constrictor-snake", "clawed-drowner": "ghoul",
-  "hell-hound": "wolf", "nightmare": "warhorse", "larva": "zombie",
+  "hell-hound": "wolf", "larva": "zombie",
   "warrior-infantry": "guard", "vampire-familiar": "noble",
   "guilt-stained-vagrant": "commoner", "helmed-horror": "animated-armor",
   "sphinx-of-wonder": "young-red-dragon", "awakened-shrub": "needle-blight",
@@ -721,9 +732,9 @@ const NEAREST_SUB = {
   "brown-bear": "owlbear", "camel": "owlbear", "elephant": "owlbear",
   "giant-ape": "owlbear", "giant-goat": "owlbear",
   "giant-scorpion": "owlbear", "giant-shark": "owlbear", "giant-squid": "owlbear",
-  "giant-toad": "owlbear", "hippopotamus": "owlbear", "hunter-shark": "owlbear",
+  "giant-toad": "owlbear", "hunter-shark": "owlbear",
   "killer-whale": "owlbear", "lion": "owlbear", "mammoth": "owlbear",
-  "polar-bear": "owlbear", "rhinoceros": "owlbear", "saber-toothed-tiger": "owlbear",
+  "polar-bear": "owlbear", "saber-toothed-tiger": "owlbear",
   "tiger": "owlbear", "werebear": "owlbear",
   // -> giant-rat (20)
   "baboon": "giant-rat", "badger": "giant-rat", "frog": "giant-rat",
@@ -753,14 +764,13 @@ const NEAREST_SUB = {
   "dao": "earth-elemental", "efreeti": "fire-elemental",
   "elemental-cataclysm": "earth-elemental", "galeb-duhr": "earth-elemental", "magmin": "earth-elemental",
   "merfolk-skirmisher": "sahuagin-warrior", "merfolk-wavebender": "water-elemental",
-  "salamander": "earth-elemental", "salamander-inferno-master": "earth-elemental",
+  "salamander-inferno-master": "earth-elemental",
   
   // -> warrior-veteran (15)
-  "assassin": "warrior-veteran", "astral-raider-knight": "warrior-veteran", "astral-raider-warrior": "warrior-veteran",
+  "astral-raider-knight": "warrior-veteran", "astral-raider-warrior": "warrior-veteran",
   "bullywug-warrior": "warrior-veteran",
   "performer-legend": "performer", "performer-maestro": "performer",
-  "questing-knight": "warrior-veteran", "scout": "warrior-veteran",
-  "spy": "warrior-veteran", "spy-master": "warrior-veteran", "tough-boss": "tough",
+  "questing-knight": "warrior-veteran", "spy": "warrior-veteran", "spy-master": "warrior-veteran", "tough-boss": "tough",
   // -> needle-blight (14)
   "awakened-tree": "needle-blight", "gas-spore-fungus": "needle-blight", "gulthias-blight": "needle-blight",
   "myconid-adult": "needle-blight", "myconid-sovereign": "needle-blight", "myconid-sprout": "needle-blight",
@@ -786,8 +796,8 @@ const NEAREST_SUB = {
   "swarm-of-ravens": "harpy",
   // -> wyvern (11)
   "crocodile": "wyvern", "giant-crocodile": "wyvern", "giant-eagle": "wyvern",
-  "giant-owl": "wyvern", "giant-vulture": "wyvern", "griffon": "wyvern",
-  "hippogriff": "wyvern", "peryton": "wyvern", "pteranodon": "wyvern",
+  "giant-owl": "wyvern", "griffon": "wyvern",
+  "hippogriff": "wyvern", "pteranodon": "wyvern",
   "roc": "wyvern", "vrock": "wyvern",
   // -> wolf (10)
   "ape": "wolf", "giant-badger": "wolf",
@@ -816,10 +826,10 @@ const NEAREST_SUB = {
   "juvenile-shadow-dragon": "shadow", "shadow-dragon": "shadow",
   // -> giant-constrictor-snake (6)
   "bone-naga": "giant-constrictor-snake", "couatl": "giant-constrictor-snake", "guardian-naga": "giant-constrictor-snake",
-  "salamander-fire-snake": "giant-constrictor-snake", "spirit-naga": "giant-constrictor-snake", "swarm-of-venomous-snakes": "giant-constrictor-snake",
+  "salamander-fire-snake": "giant-constrictor-snake", "swarm-of-venomous-snakes": "venomous-snake",
   // -> stone-golem (6)
   "brazen-gorgon": "stone-golem", "clay-golem": "stone-golem", "colossus": "stone-golem",
-  "flesh-golem": "stone-golem", "gorgon": "stone-golem", "iron-golem": "stone-golem",
+  "flesh-golem": "stone-golem", "iron-golem": "stone-golem",
   // -> giant-bat (4)
   "bat": "giant-bat", "stirge": "giant-bat", "swarm-of-insects": "giant-bat",
   "swarm-of-stirges": "giant-bat",

@@ -57,9 +57,38 @@ export function buildSkeletonWarrior(){
     hipHalf:0.10, shoulderX:0.225,
   };
 
+  /* ===== POSEFIX 2026-07-08 (docs/ANATOMY-CANON.md POSE-ANATOMY, Adam's ruling) — the SPINE GESTURE
+     authored first, everything else hangs off it. Weight settles onto the planted shield-side (−x)
+     leg at the hips; the ribcage recovers back toward center/sword-side as it rises; the shoulder
+     line twists hard against the square hips — shield shoulder forward, sword shoulder back (law
+     3/4 counterpose) — before the skull drops forward off a neck pivot (below). Pelvis / torso core
+     / ribcage / spine column / breastplate / pauldron / shoulders all read off these SAME waypoints
+     so the torso curves as one rigid gesture, not independent limb tweaks (law 1). ===== */
+  const CV = {                                     // {cx,cz} per landmark Y, low -> high
+    pelvis: {cx:-0.026, cz: 0.000},
+    waist:  {cx:-0.013, cz: 0.010},
+    rib0:   {cx:-0.001, cz: 0.014},
+    rib1:   {cx: 0.010, cz: 0.018},
+    rib2:   {cx: 0.019, cz: 0.017},
+    rib3:   {cx: 0.026, cz: 0.015},
+    shldC:  {cx: 0.030, cz: 0.016},                 // shoulder line CENTER (core stack top / breastplate)
+    shldL:  {cx: 0.030, cz: 0.058},                 // shoulder line, SHIELD (left) side — forward twist
+    shldR:  {cx: 0.030, cz:-0.020},                 // shoulder line, SWORD (right) side — back twist
+  };
+  /* the skull rides the curve up off the neck, then pitches forward hard about that neck pivot —
+     one rigid-body rotation reused everywhere the skull's points are built (Vt wraps every V() in
+     the skull block below) so the head stays a solid piece, never independently re-modeled. */
+  const SKULL_BASE={x:0.034, z:0.018}, SKULL_PIVOT_Y=L.neckY-0.005, SKULL_TILT=0.46; // ~26 deg forward nod
+  const TILT_AXIS = V(0, Math.cos(SKULL_TILT), Math.sin(SKULL_TILT));
+  const Vt = (x,y,z) => {
+    const dy=y-SKULL_PIVOT_Y, dz=z, c=Math.cos(SKULL_TILT), s=Math.sin(SKULL_TILT);
+    return V(x+SKULL_BASE.x, SKULL_PIVOT_Y + dy*c - dz*s, SKULL_BASE.z + dy*s + dz*c);
+  };
+
   /* ===== BLADE FIRST — drawn back and cocked over the RIGHT shoulder, point up-and-back, a held
      wind-up (not a swing in flight). The grip is ground truth; the right hand derives from it. ===== */
-  const GRIP=V(0.30,1.24,-0.20), TIP=V(0.58,1.70,-0.52);
+  const GRIP=V(0.15,1.62,-0.38), TIP=V(0.02,1.98,-0.66);   // POSEFIX: cocked mid-windup, angled up and
+                                                            // back behind the skull — not extended overhead
   const BLADE=new THREE.Vector3().subVectors(TIP,GRIP).normalize();
   const BUTT=GRIP.clone().addScaledVector(BLADE,-0.10);
   {
@@ -85,7 +114,7 @@ export function buildSkeletonWarrior(){
 
   /* ===== SHIELD — a kite shape held forward in the LEFT hand, the guard-up read. Held roughly
      facing +z (the camera) with a slight outward tilt so it reads in 3/4 as well as front. ===== */
-  const shieldCenter = V(-0.20, 0.94, 0.30);
+  const shieldCenter = V(-0.18, 0.94, 0.33);  // POSEFIX: nudged with the shield-shoulder forward twist
   {
     const nrm = V(0.18, 0, 0.98).normalize();               // slight outward tilt
     const up2 = V(0,1,0), side = new THREE.Vector3().crossVectors(up2, nrm).normalize();
@@ -120,25 +149,34 @@ export function buildSkeletonWarrior(){
 
   /* ===== PELVIS BLOCK ===== */
   stack([
-    {y:L.pelvisY-0.02, rx:0.150, rz:0.110, hex:P.boneDk},
-    {y:L.pelvisY+0.05, rx:0.135, rz:0.100, hex:P.bone},
-    {y:L.waistY-0.02,  rx:0.070, rz:0.058, hex:P.bone},
+    {y:L.pelvisY-0.02, cx:CV.pelvis.cx, cz:CV.pelvis.cz, rx:0.150, rz:0.110, hex:P.boneDk},
+    {y:L.pelvisY+0.05, cx:CV.pelvis.cx, cz:CV.pelvis.cz, rx:0.135, rz:0.100, hex:P.bone},
+    {y:L.waistY-0.02,  cx:CV.waist.cx,  cz:CV.waist.cz,  rx:0.070, rz:0.058, hex:P.bone},
   ], 7, {capBot:{hex:P.boneDk, lift:0.01}});
 
   /* ===== TORSO CORE — dark hollow the ribs/breastplate wrap ===== */
   stack([
-    {y:L.waistY, rx:0.052, rz:0.046, hex:P.hollow},
-    {y:L.rib1Y,  rx:0.058, rz:0.050, hex:P.hollow},
-    {y:L.rib3Y,  rx:0.060, rz:0.052, hex:P.hollow},
-    {y:L.shldY,  rx:0.066, rz:0.056, hex:P.hollow},
+    {y:L.waistY, cx:CV.waist.cx, cz:CV.waist.cz, rx:0.052, rz:0.046, hex:P.hollow},
+    {y:L.rib1Y,  cx:CV.rib1.cx,  cz:CV.rib1.cz,  rx:0.058, rz:0.050, hex:P.hollow},
+    {y:L.rib3Y,  cx:CV.rib3.cx,  cz:CV.rib3.cz,  rx:0.060, rz:0.052, hex:P.hollow},
+    {y:L.shldY,  cx:CV.shldC.cx, cz:CV.shldC.cz, rx:0.066, rz:0.056, hex:P.hollow},
   ], 7, {capTop:{hex:P.hollow, lift:0.005}});
 
-  /* the spine — a knobbed dark-bone column up the back of the core */
+  /* the spine — a knobbed dark-bone column up the back of the core; follows the SAME curve as the
+     torso stack above (law 1), offset ~0.03 further back (−z) since the spine sits at the rear of
+     the ribcage, not centered in it. */
   {
-    const seg=[[L.waistY,-0.030],[L.rib0Y,-0.034],[L.rib1Y,-0.036],[L.rib2Y,-0.038],[L.rib3Y,-0.040],[L.shldY,-0.040]];
+    const seg=[
+      [L.waistY, CV.waist.cx,        CV.waist.cz-0.030],
+      [L.rib0Y,  CV.rib0.cx,         CV.rib0.cz-0.033],
+      [L.rib1Y,  CV.rib1.cx,         CV.rib1.cz-0.035],
+      [L.rib2Y,  CV.rib2.cx,         CV.rib2.cz-0.037],
+      [L.rib3Y,  CV.rib3.cx,         CV.rib3.cz-0.039],
+      [L.shldY,  CV.shldC.cx,        CV.shldC.cz-0.039],
+    ];
     for(let i=0;i<seg.length-1;i++)
-      tube(V(0,seg[i][0],seg[i][1]), V(0,seg[i+1][0],seg[i+1][1]), 0.026,0.024,5,P.boneDk);
-    for(const [y,z] of seg) blob(0,y,z, 0.028,0.020,0.026, P.bone, 6, 4);
+      tube(V(seg[i][1],seg[i][0],seg[i][2]), V(seg[i+1][1],seg[i+1][0],seg[i+1][2]), 0.026,0.024,5,P.boneDk);
+    for(const [y,x,z] of seg) blob(x,y,z, 0.028,0.020,0.026, P.bone, 6, 4);
   }
 
   /* ===== RIBCAGE — 3 pale band-loops, open at the back. The front-center third rib is largely hidden
@@ -146,13 +184,13 @@ export function buildSkeletonWarrior(){
      under the kit (law 4: anatomy first, kit rides on top). ===== */
   {
     const ribs=[
-      {y:L.rib0Y, rx:0.150, rz:0.120},
-      {y:L.rib2Y, rx:0.164, rz:0.128},
-      {y:L.rib3Y, rx:0.140, rz:0.112},
+      {y:L.rib0Y, cx:CV.rib0.cx, cz:CV.rib0.cz, rx:0.150, rz:0.120},
+      {y:L.rib2Y, cx:CV.rib2.cx, cz:CV.rib2.cz, rx:0.164, rz:0.128},
+      {y:L.rib3Y, cx:CV.rib3.cx, cz:CV.rib3.cz, rx:0.140, rz:0.112},
     ];
     for(const rb of ribs){
-      const outer=ring(V(0,rb.y,0.006), V(0,1,0), rb.rx, rb.rz, 8, Math.PI/8);
-      const outer2=ring(V(0,rb.y+0.040,0.006), V(0,1,0), rb.rx*0.94, rb.rz*0.94, 8, Math.PI/8);
+      const outer=ring(V(rb.cx,rb.y,rb.cz+0.006), V(0,1,0), rb.rx, rb.rz, 8, Math.PI/8);
+      const outer2=ring(V(rb.cx,rb.y+0.040,rb.cz+0.006), V(0,1,0), rb.rx*0.94, rb.rz*0.94, 8, Math.PI/8);
       for(const arr of [outer,outer2]) for(const i of [0,5,6,7]){ arr[i].z *= 0.35; arr[i].x *= 0.78; }
       stitch([outer,outer2], ()=>P.bone);
     }
@@ -161,22 +199,29 @@ export function buildSkeletonWarrior(){
   /* ===== BREASTPLATE PATCH — a battered dark-iron plate over the front-center chest only, hip-
      level to shoulder, NOT wrapping the sides/back (ribs stay exposed there). Cracked lower corner. */
   {
-    const bpY0=L.waistY+0.01, bpY1=L.shldY-0.03, bhw0=0.075, bhw1=0.098, z0=0.150, z1=0.168;
-    const bl=V(-bhw0,bpY0,z0), br=V(bhw0,bpY0,z0), tl=V(-bhw1,bpY1,z1), tr=V(bhw1,bpY1,z1);
-    /* a chipped lower-right corner — a notch cut into the plate, dark-iron edge showing thickness */
-    const notch=V(bhw0*0.35, bpY0+0.055, z0+0.006);
+    const bpY0=L.waistY+0.01, bpY1=L.shldY-0.03, bhw0=0.075, bhw1=0.098;
+    /* POSEFIX: bottom corners ride the near-waist curve (mild); top corners ride the TWISTED
+       shoulder line (shldL forward / shldR back) so the plate itself sells the torso twist. */
+    const cxBot=CV.rib0.cx, czBot=CV.rib0.cz;
+    const bl=V(cxBot-bhw0,bpY0,czBot), br=V(cxBot+bhw0,bpY0,czBot),
+          tl=V(CV.shldL.cx-bhw1,bpY1,CV.shldL.cz), tr=V(CV.shldR.cx+bhw1,bpY1,CV.shldR.cz);
+    /* a chipped lower-right (sword-side) corner — a notch cut into the plate, dark-iron edge
+       showing thickness */
+    const notch=V(cxBot+bhw0*0.35, bpY0+0.055, czBot+0.006);
     quad(bl, notch, notch, tl, P.iron, 0.05);
     quad(notch, br, tr, notch, P.iron, 0.05);
-    /* rust streak + rivets across the plate */
-    tube(V(-0.02,bpY0+0.03,z0+0.01), V(0.015,bpY1-0.02,z1+0.005), 0.010,0.008,4,P.rust);
-    for(const rx of [-0.05,0.05]) blob(rx, (bpY0+bpY1)/2, (z0+z1)/2+0.01, 0.012,0.012,0.010, P.ironDk, 4, 2);
-    /* plate edge thickness (a thin dark strip along the top) */
-    quad(tl, tr, V(bhw1,bpY1+0.012,z1-0.01), V(-bhw1,bpY1+0.012,z1-0.01), P.ironDk, 0.03);
+    /* rust streak + rivets across the plate (mid-curve, unaffected by the twist) */
+    const midCx=(cxBot+CV.shldC.cx)/2, midCz=(czBot+CV.shldC.cz)/2;
+    tube(V(midCx-0.02,bpY0+0.03,midCz+0.01), V(midCx+0.015,bpY1-0.02,midCz+0.02), 0.010,0.008,4,P.rust);
+    for(const rx of [-0.05,0.05]) blob(midCx+rx, (bpY0+bpY1)/2, midCz+0.03, 0.012,0.012,0.010, P.ironDk, 4, 2);
+    /* plate edge thickness (a thin dark strip along the top, following the twisted top corners) */
+    quad(tl, tr, V(CV.shldR.cx+bhw1,bpY1+0.012,CV.shldR.cz-0.01), V(CV.shldL.cx-bhw1,bpY1+0.012,CV.shldL.cz-0.01), P.ironDk, 0.03);
   }
 
-  /* ===== PAULDRON — a single asymmetric iron dome on the LEFT (shield) shoulder only. ===== */
-  blob(-L.shoulderX*0.96, L.shldY+0.015, 0.01, 0.078,0.052,0.070, P.iron, 6, 3);
-  blob(-L.shoulderX*0.96, L.shldY+0.045, 0.01, 0.040,0.022,0.036, P.ironLt, 5, 2);   /* rivet cap highlight */
+  /* ===== PAULDRON — a single asymmetric iron dome on the LEFT (shield) shoulder only. Rides the
+     twisted shldL waypoint (forward with the counterpose). ===== */
+  blob(-L.shoulderX*0.96+CV.shldL.cx, L.shldY+0.015, CV.shldL.cz, 0.078,0.052,0.070, P.iron, 6, 3);
+  blob(-L.shoulderX*0.96+CV.shldL.cx, L.shldY+0.045, CV.shldL.cz, 0.040,0.022,0.036, P.ironLt, 5, 2);   /* rivet cap highlight */
 
   /* ===== SKULL — pale, oversized, two BIG DARK eye voids + a narrow jaw (same correctness read as
      the bare skeleton — armor is garnish, not a substitute for the anatomy). ===== */
@@ -189,22 +234,24 @@ export function buildSkeletonWarrior(){
       {y:L.browY,   rx:0.118, rz:0.114, hex:P.boneLt},
       {y:L.crownY,  rx:0.100, rz:0.098, hex:P.bone},
     ];
-    const rings=bands.map(b=>ring(V(0,b.y,0.008), V(0,1,0), b.rx, b.rz, n, ph));
+    /* POSEFIX: every point in this block routes through Vt() — the rigid forward-nod pitch about
+       the neck pivot (defined above, before the blade). The whole skull moves as one solid piece. */
+    const rings=bands.map(b=>ring(Vt(0,b.y,0.008), TILT_AXIS, b.rx, b.rz, n, ph));
     for(let b=0;b<rings.length-1;b++) for(let i=0;i<n;i++){
       const i2=(i+1)%n;
       quad(rings[b][i], rings[b][i2], rings[b+1][i2], rings[b+1][i], bands[b].hex, 0.06);
     }
-    capFan(rings[4], V(0, L.headTopY, 0.004), P.bone);
+    capFan(rings[4], Vt(0, L.headTopY, 0.004), P.bone);
 
     const ey=L.cheekY+0.028, ezOut=0.128, ezIn=0.040;
     for(const s of [-1,1]){
       const exI=s*0.030, exO=s*0.088, htop=0.050, hbot=0.048;
       const xa=Math.min(exI,exO), xb=Math.max(exI,exO);
-      const rimTL=V(xa, ey+htop, ezOut), rimTR=V(xb, ey+htop, ezOut),
-            rimBR=V(xb, ey-hbot, ezOut), rimBL=V(xa, ey-hbot, ezOut);
+      const rimTL=Vt(xa, ey+htop, ezOut), rimTR=Vt(xb, ey+htop, ezOut),
+            rimBR=Vt(xb, ey-hbot, ezOut), rimBL=Vt(xa, ey-hbot, ezOut);
       const inx=0.014;
-      const flrTL=V(xa+inx, ey+htop*0.6, ezIn), flrTR=V(xb-inx, ey+htop*0.6, ezIn),
-            flrBR=V(xb-inx, ey-hbot*0.6, ezIn), flrBL=V(xa+inx, ey-hbot*0.6, ezIn);
+      const flrTL=Vt(xa+inx, ey+htop*0.6, ezIn), flrTR=Vt(xb-inx, ey+htop*0.6, ezIn),
+            flrBR=Vt(xb-inx, ey-hbot*0.6, ezIn), flrBL=Vt(xa+inx, ey-hbot*0.6, ezIn);
       quad(rimTL, rimTR, flrTR, flrTL, P.socket, 0.02);
       quad(rimBR, rimBL, flrBL, flrBR, P.socket, 0.02);
       quad(rimTR, rimBR, flrBR, flrTR, P.socket, 0.02);
@@ -212,16 +259,16 @@ export function buildSkeletonWarrior(){
       quad(flrTL, flrTR, flrBR, flrBL, P.hollow, 0.0);
     }
     const ny=L.cheekY;
-    quad(V(-0.016,ny+0.01,0.122), V(0.016,ny+0.01,0.122), V(0.010,ny-0.05,0.078), V(-0.010,ny-0.05,0.078), P.socket, 0.02);
+    quad(Vt(-0.016,ny+0.01,0.122), Vt(0.016,ny+0.01,0.122), Vt(0.010,ny-0.05,0.078), Vt(-0.010,ny-0.05,0.078), P.socket, 0.02);
 
     const jawDrop=0.05;
-    const jl=V(-0.050,L.jawBotY-jawDrop,0.05), jr=V(0.050,L.jawBotY-jawDrop,0.05),
-          jf=V(0,L.jawBotY-jawDrop-0.026,0.115);
+    const jl=Vt(-0.050,L.jawBotY-jawDrop,0.05), jr=Vt(0.050,L.jawBotY-jawDrop,0.05),
+          jf=Vt(0,L.jawBotY-jawDrop-0.026,0.115);
     tube(jl, jf, 0.021,0.019,5,P.boneDk);
     tube(jf, jr, 0.019,0.021,5,P.boneDk);
-    tube(V(-0.058,L.jawY-0.008,0.075), V(0.058,L.jawY-0.008,0.075), 0.013,0.012,4,P.boneLt);
-    quad(V(-0.052,L.jawY-0.024,0.100), V(0.052,L.jawY-0.024,0.100),
-         V(0.046,L.jawBotY-jawDrop+0.012,0.090), V(-0.046,L.jawBotY-jawDrop+0.012,0.090), P.socket, 0.02);
+    tube(Vt(-0.058,L.jawY-0.008,0.075), Vt(0.058,L.jawY-0.008,0.075), 0.013,0.012,4,P.boneLt);
+    quad(Vt(-0.052,L.jawY-0.024,0.100), Vt(0.052,L.jawY-0.024,0.100),
+         Vt(0.046,L.jawBotY-jawDrop+0.012,0.090), Vt(-0.046,L.jawBotY-jawDrop+0.012,0.090), P.socket, 0.02);
 
     /* battered brow-band — a broken skullcap arc riding low across the brow, the last of the helm.
        Two short arcs (a gap at the front where it's shattered) so the skull-read stays clear. */
@@ -230,7 +277,7 @@ export function buildSkeletonWarrior(){
       const seg=[]; const steps=3;
       for(let i=0;i<=steps;i++){
         const t=a+(b-a)*(i/steps);
-        seg.push(V(Math.sin(t)*0.122, bandY, Math.cos(t)*0.118+0.006));
+        seg.push(Vt(Math.sin(t)*0.122, bandY, Math.cos(t)*0.118+0.006));
       }
       for(let i=0;i<steps;i++)
         tube(seg[i], seg[i+1], 0.014,0.014,4,P.ironDk,{capA:{hex:P.ironDk},capB:{hex:P.ironDk}});
@@ -266,10 +313,17 @@ export function buildSkeletonWarrior(){
   {
     const knob=(p,r)=>blob(p.x,p.y,p.z, r,r*0.85,r, P.boneLt, 6, 4);
 
-    /* RIGHT arm — drawn back and cocked over the shoulder into the sword grip. */
-    const S=V(L.shoulderX, L.shldY-0.02, 0.01);
+    /* RIGHT arm — POSEFIX: cocked into the windup, elbow bent ~110deg (not a straight stick). The
+       shoulder rides the twisted shldR waypoint (law 3 — shoulder moves WITH the arm/torso twist);
+       the elbow pulls out and up so the bend reads clearly in screen-space Y, not buried in depth. */
+    const S=V(L.shoulderX+CV.shldR.cx, L.shldY-0.02, CV.shldR.cz);
     const FIST=GRIP.clone().addScaledVector(BLADE,-0.01);
-    const E=V(0.36,1.44,-0.28);
+    /* R3: solved against the actual dimetric camera (yaw 45/elev 30, ps1-sheet.html) — screen_x
+       ~= (x−z)/sqrt2. R2's elbow sagged BELOW the shoulder-to-grip line but stayed BETWEEN them in
+       screen_x, so it read as one smooth curve, not a joint. This E's screen_x clears BOTH the
+       shoulder's and the grip's screen_x, so the elbow pokes out past both ends of the arm — a real
+       zigzag, not a sag (law 5). */
+    const E=V(0.52,1.28,-0.14);
     const W=FIST.clone().add(V(-0.02,0.03,-0.03));
     knob(S,0.052);
     tube(S,E,0.036,0.030,6,P.bone);
@@ -279,8 +333,9 @@ export function buildSkeletonWarrior(){
     tube(FIST.clone().addScaledVector(BLADE,-0.05), FIST.clone().addScaledVector(BLADE,0.05), 0.036,0.032,6,P.boneLt,{capA:{hex:P.boneLt},capB:{hex:P.boneLt}});
 
     /* LEFT arm — bent forward, forearm horizontal, gripping the shield strap. Pauldron already
-       covers the shoulder knob so this starts from the upper arm. */
-    const S2=V(-L.shoulderX, L.shldY-0.03, 0.01), E2=V(-0.26,1.02,0.14), W2=shieldCenter.clone().add(V(0.02,-0.06,-0.10));
+       covers the shoulder knob so this starts from the upper arm. Shoulder rides the twisted shldL
+       waypoint (forward with the counterpose); elbow/shield shifted the same delta to keep the bend. */
+    const S2=V(-L.shoulderX+CV.shldL.cx, L.shldY-0.03, CV.shldL.cz), E2=V(-0.23,1.02,0.188), W2=shieldCenter.clone().add(V(0.02,-0.06,-0.10));
     knob(S2,0.050);
     tube(S2,E2,0.034,0.030,6,P.bone);
     knob(E2,0.042);

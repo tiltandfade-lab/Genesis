@@ -60,13 +60,17 @@ export function buildCockatrice(){
 
   /* landmark spine — the neck-to-tail gesture curve: chest arched forward-down into the
      extended neck (strike line), tail curling up-and-back (counterpose). Small creature. */
+  /* SECOND-PASS FIX (batch review flag — crab-like silhouette): body raised +0.08 off the legs
+     (longer visible thigh segment), neck re-angled UP instead of diving to ground level (headB now
+     rides level with neckB, reach shortened in z) so the strike reads as a forward-thrust bird peck,
+     not a claw dragging the head to the floor. */
   const S = {
-    tailBase: V(-0.02, 0.32, -0.20),
-    rump:     V( 0.00, 0.36, -0.08),
-    chest:    V( 0.02, 0.38,  0.10),   // keeled breast block
-    neckB:    V( 0.04, 0.40,  0.20),
-    neckM:    V( 0.10, 0.38,  0.34),
-    headB:    V( 0.16, 0.34,  0.46),   // neck extended forward — the strike, kept clear of the legs
+    tailBase: V(-0.02, 0.40, -0.20),
+    rump:     V( 0.00, 0.44, -0.08),
+    chest:    V( 0.02, 0.46,  0.10),   // keeled breast block
+    neckB:    V( 0.04, 0.48,  0.20),
+    neckM:    V( 0.09, 0.50,  0.30),   // arcs UP off neckB, not down
+    headB:    V( 0.14, 0.48,  0.38),   // held near body-top height — shortened reach, raised angle
   };
 
   /* ---------- BODY — keeled breast block, plush felt ---------- */
@@ -90,42 +94,43 @@ export function buildCockatrice(){
 
   /* rooster head — small blocky skull, button eyes, short curved beak */
   {
-    const skull0 = S.headB, skull1 = V(0.20, 0.34, 0.54);
+    const skull0 = S.headB, skull1 = V(0.18, 0.48, 0.46);
     tube(skull0, skull1, 0.048, 0.042, 7, C.felt, { phase: Math.PI / 7 });
     /* button eyes — small, high-contrast, punched INTO the plush */
     for (const s of [-1, 1]) {
       const ex = 0.028 * s;
-      quad(V(0.18 + ex, 0.36, 0.48), V(0.20 + ex, 0.36, 0.50), V(0.20 + ex, 0.33, 0.50), V(0.18 + ex, 0.33, 0.48), C.eyeWhite, 0.01);
-      quad(V(0.185 + ex, 0.353, 0.483), V(0.195 + ex, 0.353, 0.492), V(0.195 + ex, 0.338, 0.492), V(0.185 + ex, 0.338, 0.483), C.eyeDk, 0.006);
+      quad(V(0.16 + ex, 0.50, 0.40), V(0.18 + ex, 0.50, 0.42), V(0.18 + ex, 0.47, 0.42), V(0.16 + ex, 0.47, 0.40), C.eyeWhite, 0.01);
+      quad(V(0.165 + ex, 0.493, 0.403), V(0.175 + ex, 0.493, 0.412), V(0.175 + ex, 0.478, 0.412), V(0.165 + ex, 0.478, 0.403), C.eyeDk, 0.006);
     }
     /* short curved beak, snapped open toward target — reveals hooked teeth + dark throat */
-    const bBase = V(0.20, 0.335, 0.54), bTip = V(0.235, 0.295, 0.64);
+    const bBase = V(0.18, 0.475, 0.46), bTip = V(0.215, 0.435, 0.56);
     tube(bBase, bTip, 0.028, 0.010, 6, C.beak, { phase: Math.PI / 6, capB: { hex: C.beakDk } });
-    const bLoBase = V(0.20, 0.315, 0.54), bLoTip = V(0.23, 0.265, 0.625);
+    const bLoBase = V(0.18, 0.455, 0.46), bLoTip = V(0.21, 0.405, 0.545);
     tube(bLoBase, bLoTip, 0.024, 0.008, 6, C.beakDk, { phase: Math.PI / 6, capB: { hex: C.beakDk } });
     /* dark throat well between the mandibles */
-    quad(V(0.185, 0.32, 0.56), V(0.215, 0.32, 0.56), V(0.215, 0.285, 0.605), V(0.185, 0.285, 0.605), C.throat, 0.02);
+    quad(V(0.165, 0.46, 0.48), V(0.195, 0.46, 0.48), V(0.195, 0.425, 0.525), V(0.165, 0.425, 0.525), C.throat, 0.02);
     /* hooked steel teeth, sewn in wrong — small pale curved hooks against the dark throat */
-    for (const [hx, hy] of [[0.192, 0.312], [0.205, 0.308], [0.218, 0.312]]) {
-      tube(V(hx, hy, 0.57), V(hx + 0.006, hy - 0.018, 0.585), 0.006, 0.002, 3, C.hook, { capB: { hex: C.hook } });
+    for (const [hx, hy] of [[0.172, 0.452], [0.185, 0.448], [0.198, 0.452]]) {
+      tube(V(hx, hy, 0.49), V(hx + 0.006, hy - 0.018, 0.505), 0.006, 0.002, 3, C.hook, { capB: { hex: C.hook } });
     }
-    /* comb — bright red, tall, jagged, on the crown (the loudest zone at the silhouette top,
-       enlarged in the fix round so it reads as a value spike at a squint) */
+    /* comb — bright red, tall, jagged, on the crown (the loudest zone at the silhouette top).
+       SECOND-PASS FIX: enlarged again (thicker spikes, taller reach) — the crab-read flag noted
+       the comb wasn't reading as the loud avian signature it needs to be. */
     const combPts = [
-      [0.20, 0.375, 0.48, 0.445, 0.425], [0.205, 0.395, 0.51, 0.475, 0.475], [0.20, 0.385, 0.54, 0.455, 0.515],
+      [0.18, 0.515, 0.40, 0.66, 0.335], [0.185, 0.535, 0.43, 0.69, 0.385], [0.18, 0.525, 0.46, 0.67, 0.425],
     ];
     for (const [bx, by, bz, ty, tz] of combPts) {
-      tube(V(bx, by, bz), V(bx, ty, tz), 0.026, 0.005, 4, C.comb, { capB: { hex: C.combDk } });
+      tube(V(bx, by, bz), V(bx, ty, tz), 0.038, 0.009, 4, C.comb, { capB: { hex: C.combDk } });
     }
     /* wattle — hangs under the beak, saturated red */
-    tube(V(0.195, 0.305, 0.545), V(0.195, 0.255, 0.555), 0.016, 0.006, 4, C.wattle, { capB: { hex: C.wattle } });
+    tube(V(0.175, 0.445, 0.465), V(0.175, 0.395, 0.475), 0.016, 0.006, 4, C.wattle, { capB: { hex: C.wattle } });
   }
 
   /* ---------- WINGS — small filled feather-mass, spread laterally + ASYMMETRIC mid-beat
      (fix round: pulled OUT to the sides rather than stacked near-vertical, so the silhouette
      reads bird-with-wings instead of a crab/antenna shape) ---------- */
   const wing = (side, beatUp) => {
-    const root = V(side * 0.11, 0.37 + (beatUp ? 0.03 : -0.01), -0.02);
+    const root = V(side * 0.11, 0.45 + (beatUp ? 0.03 : -0.01), -0.02);
     const elbow = V(side * 0.30, root.y + (beatUp ? 0.10 : -0.06), root.z - 0.02);
     const tip = V(side * 0.46, elbow.y + (beatUp ? 0.06 : -0.14), elbow.z - 0.04);
     tube(root, elbow, 0.045, 0.032, 6, C.feather, { phase: Math.PI / 6 });
@@ -145,25 +150,29 @@ export function buildCockatrice(){
   wing(-1, true);   // beat UP
   wing(1, false);   // beat DOWN — asymmetric mid-stroke
 
-  /* ---------- SCALED LIZARD TAIL — the hybrid tell, whipped up + curled behind ---------- */
+  /* ---------- SCALED LIZARD TAIL — the hybrid tell, whipped up + curled behind ----------
+     SECOND-PASS FIX: thickened substantially (was reading as a thin pincer/spike, contributing
+     to the crab silhouette); now a heavy meaty counterweight tail. */
   {
     const t0 = S.tailBase;
-    const t1 = V(-0.06, 0.42, -0.34);   // whips upward
-    const t2 = V(-0.02, 0.52, -0.46);   // curls back over
-    const t3 = V(0.06, 0.48, -0.52);    // tip curling down
-    tube(t0, t1, 0.052, 0.038, 7, C.scale, { phase: Math.PI / 7 });
-    tube(t1, t2, 0.038, 0.024, 7, C.scaleDk, { phase: Math.PI / 7 });
-    tube(t2, t3, 0.024, 0.008, 6, C.scaleLt, { phase: Math.PI / 6, capB: { hex: C.scaleDk } });
+    const t1 = V(-0.06, 0.50, -0.34);   // whips upward
+    const t2 = V(-0.02, 0.60, -0.46);   // curls back over
+    const t3 = V(0.06, 0.56, -0.52);    // tip curling down
+    tube(t0, t1, 0.074, 0.056, 7, C.scale, { phase: Math.PI / 7 });
+    tube(t1, t2, 0.056, 0.036, 7, C.scaleDk, { phase: Math.PI / 7 });
+    tube(t2, t3, 0.036, 0.014, 6, C.scaleLt, { phase: Math.PI / 6, capB: { hex: C.scaleDk } });
     /* overlapping scale rings — small raised bands distinct from the plush body texture */
     for (const t of [t0, t0.clone().lerp(t1, 0.5), t1, t1.clone().lerp(t2, 0.5), t2]) {
-      quad(V(t.x - 0.03, t.y - 0.01, t.z), V(t.x + 0.03, t.y - 0.01, t.z), V(t.x + 0.025, t.y + 0.015, t.z + 0.01), V(t.x - 0.025, t.y + 0.015, t.z + 0.01), C.scaleDk, 0.02);
+      quad(V(t.x - 0.045, t.y - 0.012, t.z), V(t.x + 0.045, t.y - 0.012, t.z), V(t.x + 0.038, t.y + 0.02, t.z + 0.014), V(t.x - 0.038, t.y + 0.02, t.z + 0.014), C.scaleDk, 0.02);
     }
   }
 
-  /* ---------- LEGS — thin scaled, one planted (~120deg knee), one drawn up mid-hop ---------- */
+  /* ---------- LEGS — thin scaled, one planted (~120deg knee), one drawn up mid-hop ----------
+     SECOND-PASS FIX: hips raised with the body (+0.08) — the thigh segment is now visibly longer,
+     lifting the whole figure off the disc instead of sitting low and wide. */
   {
     /* planted leg — bears weight, visible bent knee, foot flat on the disc */
-    const hipP = V(0.03, 0.32, -0.02), kneeP = V(0.06, 0.18, 0.00), footP = V(0.02, 0.05, 0.06);
+    const hipP = V(0.03, 0.40, -0.02), kneeP = V(0.06, 0.18, 0.00), footP = V(0.02, 0.05, 0.06);
     tube(hipP, kneeP, 0.030, 0.020, 6, C.leg, { phase: Math.PI / 6 });
     tube(kneeP, footP, 0.018, 0.012, 6, C.leg, { capB: { hex: C.claw, lift: 0.01 } });
     for (const [dx, dz] of [[0.018, 0.03], [0.0, 0.035], [-0.018, 0.03]]) {
@@ -171,7 +180,7 @@ export function buildCockatrice(){
     }
 
     /* drawn-up leg — hip AND knee fold tight, foot lifted, mid-hop */
-    const hipD = V(-0.03, 0.34, 0.02), kneeD = V(-0.06, 0.22, 0.10), footD = V(-0.03, 0.17, 0.06);
+    const hipD = V(-0.03, 0.42, 0.02), kneeD = V(-0.06, 0.22, 0.10), footD = V(-0.03, 0.17, 0.06);
     tube(hipD, kneeD, 0.028, 0.018, 6, C.felt, { phase: Math.PI / 6 });
     tube(kneeD, footD, 0.016, 0.010, 6, C.leg, { capB: { hex: C.claw, lift: 0.008 } });
     for (const [dx, dz] of [[0.012, 0.02], [0.0, 0.024], [-0.012, 0.02]]) {

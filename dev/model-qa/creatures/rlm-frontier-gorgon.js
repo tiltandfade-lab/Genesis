@@ -69,7 +69,10 @@ export function buildGorgon(){
     leg:  0x808d99, legDk: 0x5c6570,                          // front/hind leg iron, brightened
     hoof: 0x2a2f35,                                           // dark blunt hoof wedge, no toes
     horn: 0xe2dbca, hornDk: 0xb8ae98,                         // cast bone-pale horn cones
-    dust: 0xf0ebdd, dustDk: 0xcdc6ae,                          // pale petrifying dust jets, brightened
+    dust: 0xdcebf2, dustDk: 0xaecad9,                          // R2: cool pale blue-white dust — was a
+                                                                // warm cream indistinguishable from the
+                                                                // horn's bone-tan; the jets need their own
+                                                                // material read to separate from the horns
     rivet: 0xb6c0ca,                                          // small bright rivet studs on seams
     eye: 0x1a140e, eyeGlow: 0xf0a03a,                         // ember-forge eye glow, brightened
     disc: 0x1c2126, discTop: 0x232a30,
@@ -79,14 +82,22 @@ export function buildGorgon(){
      down toward the head (pre-charge dive) instead of level. dive() carries every torso/neck/
      head/horn/eye point through the same forward-down tilt so the whole body reads as one
      committed lean, not a level barrel with a bowed neck glued on. ===== */
-  const DIVE_DEG = 16;              // topline drop toward the head (+z, down)
-  const DIVE_PIVOT = V(0, 0.62, 0.05);   // pivots near the withers, not the ground — hooves stay planted
+  /* R2 SECONDPASS FIX (flag: "reads as a slumped sleeping mass"): the r1 pivot (near the withers,
+     z=0.05, close to the chest) put most of the skull/neck z-distance on the FAR side of the
+     pivot from the withers, so the rotation math folded the neck-base UP above the withers and
+     only barely dropped the muzzle below it (~0.11u) — the topline came out lumpy/flat instead of
+     a clean raised-chest-to-lowered-head arc, reading as a compressed curled mass. Moving the
+     pivot forward+up (closer to the actual withers peak) and cutting the angle back gives a
+     monotonic descending topline: withers/chest peak highest, neck/head drop well below it,
+     hindquarters taper down toward the tail — the "coiled to charge" silhouette the pose sentence
+     describes, verified point-by-point before re-baking. */
+  const DIVE_DEG = 8;                // topline drop toward the head (+z, down)
+  const DIVE_PIVOT = V(0, 0.66, 0.28);   // pivots at the withers peak — chest/withers stay raised
   /* LIFT — a small uniform world-y bias applied to every dive()-carried point (body/neck/head/
-     horns/eyes/dust/tail). The rear-belly underside of the haunch/rump bands rotates just below
-     true ground under the -16deg tilt (bbox floor came out ~-0.034u); legs are grounded
-     independently via explicit world targets below and are unaffected by this bias, so nudging
-     the whole dived silhouette up clears the floor without touching leg placement. */
-  const LIFT = 0.08;
+     horns/eyes/dust/tail). Legs are grounded independently via explicit world targets below and
+     are unaffected by this bias, so nudging the whole dived silhouette up clears the floor
+     without touching leg placement. */
+  const LIFT = 0.09;
   function dive(p){
     const rel = V(p.x, p.y - DIVE_PIVOT.y, p.z - DIVE_PIVOT.z);
     const r = -DIVE_DEG * Math.PI / 180, c = Math.cos(r), s = Math.sin(r);
@@ -117,12 +128,18 @@ export function buildGorgon(){
     capFan(divedRings.at(-1), dive(V(0, bodyBands.at(-1).y - 0.03, bodyBands.at(-1).z - 0.06)), P.ironDk);
     /* seam lines — a thin dark ring riding the leading edge of each band step (the overlap
        shadow), plus small bright rivet studs at 4 points per seam so the plates read riveted,
-       not painted stripes. */
+       not painted stripes. R2 SECONDPASS FIX (flag: "the iron does not read as METAL"): the
+       feature checklist promised "bright polished-edge highlights riding every plate's top rim"
+       but only the dark underside shadow was ever built — no actual highlight existed, so the
+       whole barrel read as flat-lit cloth. Added a thin edgeBr strip riding the TOP of each band
+       step (the dorsal/back-seam rim, opposite the dark shadow) — that's the specular-edge cue
+       that makes overlapping plates read as polished metal instead of a painted blob. */
     for(let bi = 1; bi < divedRings.length - 1; bi++){
       const ringPts = divedRings[bi];
       for(let i = 0; i < n; i++){
         const i2 = (i + 1) % n;
         quad(ringPts[i], ringPts[i2], ringPts[i2].clone().add(V(0, -0.018, 0)), ringPts[i].clone().add(V(0, -0.018, 0)), P.seam, 0.05);
+        quad(ringPts[i].clone().add(V(0, 0.014, 0)), ringPts[i2].clone().add(V(0, 0.014, 0)), ringPts[i2], ringPts[i], P.edgeBr, 0.03);
       }
       if(bi % 2 === 1){
         for(let k = 0; k < 4; k++){
@@ -147,6 +164,7 @@ export function buildGorgon(){
     for(let i = 0; i < 10; i++){
       const i2 = (i + 1) % 10;
       quad(seamRing[i], seamRing[i2], seamRing[i2].clone().add(V(0, -0.016, 0)), seamRing[i].clone().add(V(0, -0.016, 0)), P.seam, 0.05);
+      quad(seamRing[i].clone().add(V(0, 0.012, 0)), seamRing[i2].clone().add(V(0, 0.012, 0)), seamRing[i2], seamRing[i], P.edgeBr, 0.03);
     }
   }
 
@@ -170,7 +188,10 @@ export function buildGorgon(){
      (thick base, tapering to a sharp point, no organic ridging). */
   function horn(rootLocal, tipLocal){
     const root = dive(rootLocal), tip = dive(tipLocal);
-    tube(root, tip, 0.075, 0.010, 6, P.horn, { capB: { hex: P.hornDk } });
+    // R2 SECONDPASS FIX (flag: "make the horns pop"): tip radius 0.010 (0.02u diameter) sat
+    // under the law-3 0.04u feature floor and dissolved at 1/3-res; widened to clear it while
+    // keeping the tapered cast-cone silhouette.
+    tube(root, tip, 0.075, 0.022, 6, P.horn, { capB: { hex: P.hornDk } });
     // bright edge stripe along the top of the horn (law-3 high value on the signature)
     const upOff = V(0, 0.02, 0);
     quad(root.clone().add(upOff), tip.clone().add(V(0, 0.006, 0)), tip.clone().add(V(0, 0.006, 0)), root.clone().add(upOff), P.edgeBr, 0.05);
@@ -189,16 +210,21 @@ export function buildGorgon(){
   }
 
   /* nostril dust jets — two pale flared cones streaming forward-down off the muzzle vents,
-     the "breathing petrifying dust" beat, distinct light shapes ahead of the lowered head. */
+     the "breathing petrifying dust" beat, distinct light shapes ahead of the lowered head.
+     R2 SECONDPASS FIX (flag: "make ... dust jets pop"): the old cream tone sat right next to
+     the horn's bone-tan (same warm pale family) so the two signatures smeared into one
+     indistinct pale cluster at the head; recolored cool blue-white (see palette) and pushed the
+     tip further forward-down so the plume clears the horn silhouette entirely instead of
+     overlapping it in screen space. */
   function dustJet(rootLocal, dirLocal, hex){
     const root = dive(rootLocal);
     const dir = norm(dirLocal);
-    const mid = root.clone().addScaledVector(dir, 0.14).add(V(0, -0.02, 0));
-    const tip = root.clone().addScaledVector(dir, 0.30).add(V(0, -0.03, 0));
+    const mid = root.clone().addScaledVector(dir, 0.17).add(V(0, -0.035, 0));
+    const tip = root.clone().addScaledVector(dir, 0.38).add(V(0, -0.06, 0));
     mid.y = Math.max(mid.y, 0.09);
     tip.y = Math.max(tip.y, 0.09);
-    tube(root, mid, 0.028, 0.045, 6, hex);
-    tube(mid, tip, 0.045, 0.065, 6, hex, { capB: { hex } });
+    tube(root, mid, 0.032, 0.052, 6, hex);
+    tube(mid, tip, 0.052, 0.075, 6, hex, { capB: { hex } });
   }
   dustJet(V(0.045, 0.185, 1.44), [0.15, -0.15, 1], P.dust);
   dustJet(V(-0.045, 0.185, 1.44), [-0.15, -0.15, 1], P.dustDk);

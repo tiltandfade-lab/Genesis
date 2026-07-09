@@ -46,16 +46,21 @@ export function buildSpy(){
   /* ---------- PALETTE (neutral noir — desaturated coat/hat browns-grays, no single realm's
      gimmick color; the envelope + glint-eyes carry the ONLY high-value law-3 zones). ---------- */
   const P = {
-    coat: 0x4a463e, coatDk: 0x302c26, coatHi: 0x615c50,
+    /* R2 SECOND-PASS SELF-CORRECTION (post r1 flag: "very dark overall — below the law-3 body
+       floor"): lifted the coat/hat families two value-steps (still desaturated/drab, just no
+       longer reading as near-black at 1/3-res+dither) and repurposed the hatband ring from a
+       near-void accent into a genuinely PALE value break; envelope pushed brighter so the
+       "feeding both sides" tell survives the engine grade per law 3 (>=140 RGB signature zones). */
+    coat: 0x686153, coatDk: 0x4a4438, coatHi: 0x847c68,
     lapel: 0x262320,
     belt: 0x1c1a16,
-    hat: 0x38342c, hatDk: 0x201d18, hatBand: 0x151310,
+    hat: 0x504a3e, hatDk: 0x38332a, hatBand: 0xc8bc98,
     void: 0x140f0c, voidDeep: 0x0a0908,
     glint: 0xe8e2c8, glintHi: 0xffffff,
     pants: 0x2c2a24, pantsDk: 0x1c1a16,
     shoe: 0x201c16, shoeDk: 0x100e0a,
     skin: 0x9c7250, skinDk: 0x6c4c34,
-    envelope: 0xd8cca0, envelopeDk: 0xa89868, envelopeSeal: 0x8a2c22,
+    envelope: 0xf0e4c0, envelopeDk: 0xc0b080, envelopeSeal: 0x8a2c22,
     disc: 0x36312a, discTop: 0x423b32,
   };
 
@@ -118,8 +123,8 @@ export function buildSpy(){
     { y: L.hipY,   rx: 0.175, rz: 0.155, hex: P.coatDk },
     { y: L.waistY, rx: 0.190, rz: 0.170, hex: P.belt },
     { y: L.ribY,   rx: 0.205, rz: 0.180, hex: P.coat },
-    { y: L.chestY, rx: 0.212, rz: 0.176, hex: P.coatDk },
-    { y: L.shldY,  rx: 0.218, rz: 0.166, hex: P.coat },
+    { y: L.chestY, rx: 0.212, rz: 0.176, hex: P.coat },
+    { y: L.shldY,  rx: 0.218, rz: 0.166, hex: P.coatHi },
     { y: L.neckY,  rx: 0.072, rz: 0.066, hex: P.coatDk },
   ];
   stack(torsoBands, 9, { xform: lean });
@@ -190,9 +195,11 @@ export function buildSpy(){
        never reached the render. Widened to 0.05u, pulled further forward (+z) clear of the
        brim shadow so they read as two hot points instead of dissolving into the void mass. */
     for (const s of [-1, 1]) {
+      /* second-pass: vertical extent was 0.028u, under the 0.04u law-3 floor — widened to 0.04u
+         tall so the glint survives 1/3-res+dither as a genuine hot point, not a sliver. */
       const e = headXf(V(s * 0.028, L.browY - 0.035, 0.088));
-      quad(V(e.x - 0.026, e.y - 0.014, e.z), V(e.x + 0.026, e.y - 0.014, e.z),
-        V(e.x + 0.022, e.y + 0.014, e.z + 0.01), V(e.x - 0.022, e.y + 0.014, e.z + 0.01), P.glintHi, 0.01);
+      quad(V(e.x - 0.026, e.y - 0.02, e.z), V(e.x + 0.026, e.y - 0.02, e.z),
+        V(e.x + 0.022, e.y + 0.02, e.z + 0.01), V(e.x - 0.022, e.y + 0.02, e.z + 0.01), P.glintHi, 0.01);
     }
 
     /* skull cap under the hat, dark, minimal — the hat/void carry the read */

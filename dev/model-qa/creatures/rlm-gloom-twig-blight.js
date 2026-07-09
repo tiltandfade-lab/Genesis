@@ -92,6 +92,27 @@ export function buildTwigBlight(){
   };
   /* forward pitch: the whole spine leans +z (toward the reach) as it rises */
   const spineCz = { waist: 0.00, rib: 0.03, chest: 0.06, shld: 0.10, neck: 0.13 };
+  /* POSEFIX (2026-07-08, ANATOMY-CANON "POSE-ANATOMY"): lateral C-curve — the pelvis sits OVER
+     the weight-bearing lead leg (-x) and the shoulder girdle counterpoises to +x, so hips and
+     shoulders read in opposition (rule 4) instead of both centered on a plumb x=0 line (rule 1's
+     "trace hips->shoulders->skull" test). The neck continues the sway toward the lolled head. */
+  const spineCx = { waist: -0.062, rib: -0.028, chest: 0.014, shld: 0.055, neck: 0.075 };
+  const SPINE_BANDS = [
+    [L.waistY, spineCx.waist, spineCz.waist], [L.ribY, spineCx.rib, spineCz.rib],
+    [L.chestY, spineCx.chest, spineCz.chest], [L.shldY, spineCx.shld, spineCz.shld],
+    [L.neckY, spineCx.neck, spineCz.neck],
+  ];
+  /* interpolate the spine's x/z offset at any y along the C-curve — used to keep the bindings,
+     stuffing tufts and pinned scrap riding ON the (now laterally-swept) torso instead of floating
+     off it on the old x=0 assumption. */
+  function spineAt(y){
+    for(let i = 0; i < SPINE_BANDS.length - 1; i++){
+      const [y0, x0, z0] = SPINE_BANDS[i], [y1, x1, z1] = SPINE_BANDS[i + 1];
+      if(y >= y0 && y <= y1){ const t = (y - y0) / (y1 - y0); return { x: x0 + (x1 - x0) * t, z: z0 + (z1 - z0) * t }; }
+    }
+    return y < SPINE_BANDS[0][0] ? { x: SPINE_BANDS[0][1], z: SPINE_BANDS[0][2] }
+      : { x: SPINE_BANDS.at(-1)[1], z: SPINE_BANDS.at(-1)[2] };
+  }
 
   /* ===== LEGS — lead (front-planted, nearer-vertical) vs trailing (bent, dragging). ===== */
   {
@@ -123,11 +144,11 @@ export function buildTwigBlight(){
      side" read comes from cx drift on the head bands instead of a post-hoc rotation. */
   const headCx = 0.075, headCz = spineCz.neck + 0.02;
   const torso = stack([
-    { y: L.waistY, rx: 0.075, rz: 0.062, cz: spineCz.waist, hex: P.twigDk },
-    { y: L.ribY,   rx: 0.082, rz: 0.068, cz: spineCz.rib,   hex: P.twig },
-    { y: L.chestY, rx: 0.088, rz: 0.072, cz: spineCz.chest, hex: P.twigLt },
-    { y: L.shldY,  rx: 0.080, rz: 0.066, cz: spineCz.shld,  hex: P.twig },
-    { y: L.neckY,  rx: 0.030, rz: 0.028, cz: spineCz.neck,  hex: P.twigDk },
+    { y: L.waistY, rx: 0.075, rz: 0.062, cx: spineCx.waist, cz: spineCz.waist, hex: P.twigDk },
+    { y: L.ribY,   rx: 0.082, rz: 0.068, cx: spineCx.rib,   cz: spineCz.rib,   hex: P.twig },
+    { y: L.chestY, rx: 0.088, rz: 0.072, cx: spineCx.chest, cz: spineCz.chest, hex: P.twigLt },
+    { y: L.shldY,  rx: 0.080, rz: 0.066, cx: spineCx.shld,  cz: spineCz.shld,  hex: P.twig },
+    { y: L.neckY,  rx: 0.030, rz: 0.028, cx: spineCx.neck,  cz: spineCz.neck,  hex: P.twigDk },
     { y: L.headY,        rx: 0.052, rz: 0.048, cx: headCx * 0.4, cz: headCz,          hex: P.straw },
     { y: L.headY + 0.045, rx: 0.058, rz: 0.052, cx: headCx,       cz: headCz + 0.01,  hex: P.straw },
     { y: L.crownY,       rx: 0.040, rz: 0.036, cx: headCx * 1.15, cz: headCz - 0.005, hex: P.strawDk },
@@ -137,13 +158,16 @@ export function buildTwigBlight(){
   /* straw stuffing tufts poking between the bindings — cheap silhouette-breaking detail at the waist
      and ribs (the "poppet" read), thin quad slivers, jittered directions. */
   {
+    /* tuftSpots are [xOffset, y, zOffset] relative to the spine centerline at that y — POSEFIX:
+       resolved against spineAt(y) so the tufts ride the swept C-curve torso, not a fixed x=0 line. */
     const tuftSpots = [
-      [ 0.065, L.waistY + 0.01, spineCz.waist + 0.03], [-0.06,  L.waistY + 0.02, spineCz.waist - 0.02],
-      [ 0.07,  L.ribY,          spineCz.rib + 0.02],    [-0.065, L.ribY - 0.02,  spineCz.rib - 0.03],
+      [ 0.065, L.waistY + 0.01, 0.03], [-0.06,  L.waistY + 0.02, -0.02],
+      [ 0.07,  L.ribY,          0.02], [-0.065, L.ribY - 0.02,   -0.03],
     ];
-    for(const [x, y, z] of tuftSpots){
-      const base = V(x, y, z);
-      const dir = norm([x * 1.5, 0.6, z * 0.5 + 0.3]);
+    for(const [xOff, y, zOff] of tuftSpots){
+      const sp = spineAt(y);
+      const base = V(sp.x + xOff, y, sp.z + zOff);
+      const dir = norm([xOff * 1.5, 0.6, zOff * 0.5 + 0.3]);
       const tip = base.clone().addScaledVector(dir, 0.05);
       const perp = V(0.006, 0.006, 0);
       quad(base.clone().sub(perp), base.clone().add(perp), tip, tip, P.straw, 0.08);
@@ -154,7 +178,8 @@ export function buildTwigBlight(){
      "bound bundle" tell that separates this from the needle-blight's smooth bark trunk. */
   {
     for(const y of [L.waistY + 0.03, L.ribY + 0.02, L.chestY - 0.02]){
-      const c = V(0, y, spineCz.waist + (y - L.waistY) * (spineCz.chest / (L.chestY - L.waistY)));
+      const sp = spineAt(y); // POSEFIX: ride the swept torso, not the old x=0 line
+      const c = V(sp.x, y, sp.z);
       const r1 = ring(c, V(0, 1, 0), 0.086, 0.070, 6, Math.PI / 6);
       const r2 = ring(V(c.x, c.y + 0.012, c.z), V(0, 1, 0), 0.082, 0.066, 6, Math.PI / 6);
       stitch([r1, r2], () => P.knot);
@@ -165,7 +190,7 @@ export function buildTwigBlight(){
      a dark twig-pin driven through it. The single highest-value zone in the model (law 3). ===== */
   {
     const cz = spineCz.chest;
-    const cx0 = 0.0, cy0 = L.chestY - 0.01;
+    const cx0 = spineCx.chest, cy0 = L.chestY - 0.01; // POSEFIX: pinned to the swept chest band
     const w = 0.052, h = 0.066;
     const a = V(cx0 - w, cy0 + h, cz + 0.075);
     const b = V(cx0 + w, cy0 + h, cz + 0.075);
@@ -197,23 +222,29 @@ export function buildTwigBlight(){
     }
   }
 
-  /* ===== ARMS — both stick arms reaching straight out ahead at chest height, twig-fan hands
-     splayed, per the pose sentence (never at rest). Slight asymmetry: right leads a touch further. */
+  /* ===== ARMS — POSEFIX (2026-07-08): both stick arms still reach out ahead at chest height,
+     but now BREAK at a real twig-elbow (rule 2 — an arc with a visible angle, never a dead-
+     straight broomstick shoulder-to-fingertip). Shoulders ride with the arm (rule 3) and drop
+     opposite the pelvis C-curve (rule 4 counterpose): the right shoulder rides UP with the
+     torso's +x shoulder-band sweep and its elbow cocks up-and-out (~120deg, the leading/more
+     "alive" reach); the left shoulder DROPS and its elbow droops down-and-under (~135deg, a
+     slacker trailing reach) — the two elbow angles read as clearly different bends, not a
+     mirrored pair. */
   {
-    const shR = V(L.shoulderX, L.shldY - 0.01, spineCz.shld + 0.01);
-    const elR = V(0.22, L.shldY - 0.02, spineCz.shld + 0.16);
-    const wrR = V(0.36, L.shldY - 0.03, spineCz.shld + 0.30);
+    const shR = V(L.shoulderX + spineCx.shld, L.shldY + 0.02, spineCz.shld + 0.01); // shoulder rides up w/ +x sweep
+    const elR = V(0.29, L.shldY + 0.075, spineCz.shld + 0.105);                     // elbow cocked UP+OUT ~120deg
+    const wrR = V(0.34, L.shldY - 0.04, spineCz.shld + 0.24);
     twigSeg(shR, elR, 0.029, 0.022, P.twig, P.knot);
     twigSeg(elR, wrR, 0.021, 0.015, P.twigDk, P.knot);
-    for(const d of [[0.35, 0.35, 0.85], [0.10, 0.25, 1.0], [-0.15, 0.15, 0.95], [-0.40, 0.05, 0.80]])
+    for(const d of [[0.55, -0.55, 0.75], [0.30, -0.65, 0.85], [0.05, -0.70, 0.85], [-0.20, -0.60, 0.80]])
       twigFinger(wrR, d, 0.075, P.twig, P.knot);
 
-    const shL = V(-L.shoulderX, L.shldY - 0.01, spineCz.shld + 0.00);
-    const elL = V(-0.21, L.shldY - 0.03, spineCz.shld + 0.14);
-    const wrL = V(-0.33, L.shldY - 0.05, spineCz.shld + 0.26);
+    const shL = V(-L.shoulderX + spineCx.shld, L.shldY - 0.05, spineCz.shld + 0.00); // shoulder DROPPED
+    const elL = V(-0.2325, L.shldY - 0.132, spineCz.shld + 0.11);                    // elbow drooped DOWN ~135deg
+    const wrL = V(-0.33, L.shldY - 0.08, spineCz.shld + 0.22);
     twigSeg(shL, elL, 0.028, 0.021, P.twig, P.knot);
     twigSeg(elL, wrL, 0.020, 0.014, P.twigDk, P.knot);
-    for(const d of [[-0.35, 0.30, 0.85], [-0.10, 0.20, 1.0], [0.15, 0.10, 0.95], [0.38, 0.0, 0.80]])
+    for(const d of [[-0.70, 0.55, 0.65], [-0.45, 0.45, 0.85], [-0.15, 0.35, 0.95], [0.15, 0.25, 0.90]])
       twigFinger(wrL, d, 0.070, P.twig, P.knot);
   }
 

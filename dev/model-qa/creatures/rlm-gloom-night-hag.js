@@ -76,10 +76,24 @@ export function buildNightHag(){
     hipHalf:0.115, shoulderX:0.190,
     jawY:1.12, cheekY:1.185, browY:1.245, crownY:1.32,
   };
-  /* strong forward hunch about the hips — the humped-back / mid-bargain lean (pose law 5) */
+  /* POSEFIX (2026-07-08): the C-SPINE — a genuine pelvis->skull curve, not one rigid tilt. Pitch
+     ramps UP from the pelvis to a deep peak at the humped upper back, then curls back DOWN through
+     the neck/head (the crone straightening her neck to fix her mark with the offer) — the classic
+     hunchback C/S read (ANATOMY-CANON POSE-ANATOMY law 1: author the gesture curve, don't rotate a
+     plumb column). Angle is a function of the point's OWN pre-transform y, so every per-point call
+     site (torso rings, hump, hem, pendant, head bands, face features, hair) picks up the local
+     curve automatically. */
+  const smooth01 = (t)=>{ t = Math.max(0, Math.min(1, t)); return t*t*(3-2*t); };
+  const HUNCH_BASE = 0.34, HUNCH_PEAK = 0.76, HUNCH_HEAD = 0.50;   // rad: pelvis / upper-back hump / skull
+  const hunchAngle = (y)=>{
+    if(y <= L.hipY) return HUNCH_BASE;
+    if(y <= L.shldY) return HUNCH_BASE + (HUNCH_PEAK - HUNCH_BASE) * smooth01((y - L.hipY) / (L.shldY - L.hipY));
+    return HUNCH_PEAK + (HUNCH_HEAD - HUNCH_PEAK) * smooth01((y - L.shldY) / (L.crownY - L.shldY));
+  };
   const hunch = (p)=>{
+    const theta = hunchAngle(p.y);
     const q = p.clone().sub(V(0, L.hipY, 0));
-    q.applyAxisAngle(V(1,0,0), 0.50);
+    q.applyAxisAngle(V(1,0,0), theta);
     return q.add(V(0, L.hipY, 0));
   };
 
@@ -216,22 +230,32 @@ export function buildNightHag(){
     }
   };
 
-  /* ---------- ARMS — leading RIGHT hand extended forward, palm-up, mid-offer (the bargain gesture).
-     Trailing LEFT hand hooked down at the hip, clutching the soul-sack. ---------- */
+  /* ---------- ARMS — POSEFIX (2026-07-08): both arms now carry a real elbow ARC (ANATOMY-CANON
+     POSE-ANATOMY law 2), not a near-straight rod. Shoulders ride the C-spine (law 3, hunch() at
+     the shoulder anchor). R1 SELF-CORRECTION: the first pass bent the elbows in 3D (~50-100°) but
+     the bend lived mostly in DEPTH (z) relative to this sheet's fixed ~45°/30° dimetric camera, so
+     it foreshortened to a near-straight silhouette (law 5 failure even though law 2's angle math
+     passed) — projected the landmarks through the actual ps1-sheet camera to confirm, then re-aimed
+     the elbows to break sideways/vertically in SCREEN space, not just in the raw 3D angle.
+     RIGHT — the bargain arm: elbow flares out to the side above the wrist line, forearm breaks
+     ~87° off the upper arm sweeping back down-forward to the presenting palm-up hand — a clear
+     screen-space kink, not a straight fall from shoulder to hand.
+     LEFT — the soul-sack arm: elbow rides HIGH, above the shoulder line, a sharp ~40° point, then
+     the forearm drops back down to clutch the sack tight against the body near the ribs. ---------- */
   {
     const S1 = hunch(V(L.shoulderX, L.shldY-0.01, 0.02));
-    const E1 = V(0.255, 0.86, 0.28);
-    const W1 = V(0.290, 0.80, 0.52);
+    const E1 = V(0.290, 0.87, 0.24);                           // elbow flares out to the side — the kink
+    const W1 = V(0.430, 0.80, 0.52);                           // forearm sweeps back down-forward to the offer
     tube(S1, E1, 0.052, 0.040, 5, P.skin);
     tube(E1, W1, 0.040, 0.028, 5, P.skinDk);
-    clawHand(W1, V(0.20,-0.10,0.95), P.skin);                  // palm-up, reaching forward-out
+    clawHand(W1, V(0.44,-0.22,0.87), P.skin);                  // palm-up, continuing the forearm break
 
     const S2 = hunch(V(-L.shoulderX, L.shldY-0.01, 0.02));
-    const E2 = V(-0.240, 0.76, 0.10);
-    const W2 = V(-0.210, 0.60, 0.10);
+    const E2 = V(-0.240, 0.95, 0.22);                          // elbow rides ABOVE the shoulder — sharp point
+    const W2 = V(-0.130, 0.82, 0.28);                          // forearm drops back in tight, high, to the sack
     tube(S2, E2, 0.052, 0.038, 5, P.skin);
     tube(E2, W2, 0.038, 0.026, 5, P.skinDk);
-    clawHand(W2, V(-0.10,-0.80,0.55), P.skin);                 // hooked down, clutching the sack
+    clawHand(W2, V(0.61,-0.72,0.33), P.skin);                  // clutching in tight against the body
 
     /* ---------- SOUL-SACK — a small drawstring bag clutched in the trailing left hand. ---------- */
     {

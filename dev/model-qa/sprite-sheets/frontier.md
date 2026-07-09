@@ -162,7 +162,7 @@ static character per cell (not a repeat, not an animation frame), uniform cell s
 
 ---
 
-## NPC batches (75 total, 3 sheets)
+## NPC batches (71 total, 3 sheets — 4 exact-duplicate entries removed from sheet 3/3 2026-07-09, see SPRITE-TRANSITION T2)
 
 **Population diversity (binding):** vary skin tone, ethnicity, hair texture, build, and age across the full roster below — a sheet where every face reads as the same ethnicity is a failure, not a style choice, regardless of realm. This realm's population is entirely human (no established non-human civilian population in this realm's lore) — the diversity requirement is ethnic/physical variety only.
 
@@ -232,31 +232,27 @@ Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-R
 
 ### NPC sheet 3/3
 
-1. **Dark-skinned homesteader — claimed land nobody thought would hold, made it hold**
-2. **Elderly trading-post keeper — remembers when the town was three buildings**
-3. **Broad-shouldered blacksmith — shoes every horse and settles every argument**
-4. **Young telegraph operator — knows every secret that comes through the wire**
-5. **Grey-haired midwife — delivered half the town, buried the other half**
-6. **One-eyed gunsmith — lost the eye to a misfire, still the best shot in the county**
-7. **Freckled newspaper boy — sells papers nobody reads twice**
-8. **Heavyset saloon owner — hears every confession that comes with a whiskey**
-9. **Dark-skinned cattle-drive foreman — runs the herd, and the crew, without raising his voice**
-10. **Pale, sleepless night-shift railroad watchman — guards a line nobody's tried to rob in years**
-11. **Short, sharp-eyed land surveyor — draws the boundaries everyone disputes later**
-12. **Elderly retired marshal — took the badge off, kept the reputation**
-13. **Sunburnt wheat farmer — works land that shouldn't grow anything this dry**
-14. **Multi-ethnic immigrant rancher — works twice as hard for half the respect**
-15. **Lean, twitchy stagecoach driver — outrun more holdups than he'll admit**
-16. **Stout general-store owner, dark-skinned — stocks everything, prices fairly, remembers debts**
-17. **Grey-haired preacher — the only law in town some Sundays**
-18. **Young twin ranch hands — inseparable, unreasonably good with horses**
-19. **Broad, scarred bounty-hunter — technically retired, still armed at all times**
-20. **Elderly blind fortune-teller passing through — charges a dollar, means every word**
-21. **Dark-skinned, heavily scarred trail guide — leads wagon trains through passes no map shows**
-22. **Small, quick-handed card sharp — makes an honest living cheating dishonest men**
-23. **Weathered well-digger — finds water where the surveyors said there wasn't any**
-24. **Frontier doctor, unsentimental — has performed more surgery on a kitchen table than in any clinic**
-25. **Tall, gaunt railroad accountant — keeps books for a company that barely tells the truth**
+1. **Broad-shouldered blacksmith — shoes every horse and settles every argument**
+2. **Grey-haired midwife — delivered half the town, buried the other half**
+3. **One-eyed gunsmith — lost the eye to a misfire, still the best shot in the county**
+4. **Freckled newspaper boy — sells papers nobody reads twice**
+5. **Heavyset saloon owner — hears every confession that comes with a whiskey**
+6. **Dark-skinned cattle-drive foreman — runs the herd, and the crew, without raising his voice**
+7. **Pale, sleepless night-shift railroad watchman — guards a line nobody's tried to rob in years**
+8. **Short, sharp-eyed land surveyor — draws the boundaries everyone disputes later**
+9. **Elderly retired marshal — took the badge off, kept the reputation**
+10. **Sunburnt wheat farmer — works land that shouldn't grow anything this dry**
+11. **Multi-ethnic immigrant rancher — works twice as hard for half the respect**
+12. **Lean, twitchy stagecoach driver — outrun more holdups than he'll admit**
+13. **Stout general-store owner, dark-skinned — stocks everything, prices fairly, remembers debts**
+14. **Young twin ranch hands — inseparable, unreasonably good with horses**
+15. **Broad, scarred bounty-hunter — technically retired, still armed at all times**
+16. **Elderly blind fortune-teller passing through — charges a dollar, means every word**
+17. **Dark-skinned, heavily scarred trail guide — leads wagon trains through passes no map shows**
+18. **Small, quick-handed card sharp — makes an honest living cheating dishonest men**
+19. **Weathered well-digger — finds water where the surveyors said there wasn't any**
+20. **Frontier doctor, unsentimental — has performed more surgery on a kitchen table than in any clinic**
+21. **Tall, gaunt railroad accountant — keeps books for a company that barely tells the truth**
 
 ## Domestic animal batches (25 total, 1 sheet)
 
@@ -434,3 +430,68 @@ children, not teens or adults.
 19. **Kid — wants: Make their parent laugh the old way, the way from before.**
 20. **Kid — wants: Warn someone — and not one adult will slow down long enough to hear it.**
 
+
+## Item batches — from `Engine/03. _Tables/05. Realms/Realm Items - Frontier.md` (45 total, 2 sheets)
+
+Loot-table items as sprites (Adam 2026-07-09): inventory icons / item-get card art / FFT-style
+post-combat loot screens — presentation TBD, the asset bank comes first. Derived from the realm
+item table (edit the TABLE, then regenerate this section); band noted per cell as a value cue.
+
+**Item template (replaces the character template for these sheets):** 5×5 grid, 25 cells, ONE
+OBJECT per cell (no characters, no hands, no scene), centered, floating on the solid magenta
+(#FF00FF) background, consistent relative scale (a coin small in its cell, a rifle spanning
+its cell), full object visible with margin — no cropping. Same realm style block as above.
+Each object needs one instantly readable silhouette and one high-value focal detail; higher-band
+items (Strange/Volatile/Mythic) may glow, distort, or break physics visibly — Grounded items
+must look convincingly mundane.
+
+### Item sheet 1/2 (5×5 grid, 25 cells)
+
+1. **A trail cook's battered coffee pot** [Grounded] — A trail cook's battered coffee pot, dented from a hundred campfires. | pot, iron
+2. **A deck of dog-eared playing cards** [Grounded] — A deck of dog-eared playing cards, one corner chewed by a mule. | gaming set
+3. **A hand-tooled leather gun belt** [Grounded] — A hand-tooled leather gun belt, oiled soft from years of wear. | leather armor
+4. **A tin star** [Grounded] — A tin star, unofficial — cut from a can, pinned crooked.
+5. **A bedroll rated for hard ground and colder nights than the label admit** [Grounded] — A bedroll rated for hard ground and colder nights than the label admits.
+6. **A trail map** [Grounded] — A trail map, hand-drawn, three towns behind on its own information.
+7. **A box of percussion caps and a full powder flask** [Grounded] — A box of percussion caps and a full powder flask. | bullets, firearm
+8. **A tobacco tin** [Grounded] — A tobacco tin, dented, half full, smells like better days.
+9. **A canteen that never quite loses the taste of the last thing it carrie** [Grounded] — A canteen that never quite loses the taste of the last thing it carried.
+10. **A saddle-worn Bible** [Grounded] — A saddle-worn Bible, spine cracked to Psalms.
+11. **A spare set of horseshoes** [Grounded] — A spare set of horseshoes, cold-forged, a little uneven.
+12. **Forty feet of good rope** [Grounded] — Forty feet of good rope, tallow-waxed against rot.
+13. **A marshal's badge pulled off a body nobody's claimed** [Textured]
+14. **A deed to a claim that's either played out or hasn't been found yet** [Textured] — A deed to a claim that's either played out or hasn't been found yet — the seller wasn't specific.
+15. **A stagecoach strongbox** [Textured] — A stagecoach strongbox, locked, iron-banded, heavier than it looks.
+16. **A folding shovel** [Textured] — A folding shovel, army surplus, edge honed past regulation.
+17. **A gambler's vest with seven hidden pockets** [Textured]
+18. **A gambler's marked deck** [Textured] — A gambler's marked deck, the marks subtle enough to survive one honest inspection. | gaming set
+19. **A rustler's running iron** [Textured] — A rustler's running iron, filed to change any brand into any other.
+20. **A pair of batwing saloon doors** [Textured] — A pair of batwing saloon doors, salvaged, hinges included.
+21. **A compass that points** [Strange] — A compass that points, without fail, toward the nearest unmarked grave.
+22. **A branding iron that leaves a mark shaped like a symbol no rancher in ** [Strange] — A branding iron that leaves a mark shaped like a symbol no rancher in three counties claims.
+23. **A lariat coiled from gray horsehair** [Strange] — A lariat coiled from gray horsehair, lighter than it should be.
+24. **A poker chip from a casino nobody can place** [Strange] — A poker chip from a casino nobody can place, heavy as a double eagle.
+25. **A crate of sweating dynamite** [Volatile] — A crate of sweating dynamite, twelve sticks, beads glistening on the paper.
+
+### Item sheet 2/2 (4×5 grid, 20 cells)
+
+1. **A wild stallion** [Volatile] — A wild stallion, saddled, reins warm in your hand. Nobody broke him. He disagrees with the saddle.
+2. **The thing the territory was settled by — roll d4:** [Mythic] — The thing the territory was settled by — roll d4: 1. The unfired bullet — the last round of the war that named this territory, casing blank, waiting for a name. 2. The homestead patent, blank, bearing the territorial seal — the last one ever printed, never filed. 3. The golden spike from the railroad that was never finished — the line stopped where the money did. 4. The marshal's commission, counter-signed by the territory itself, sworn to no town in particular.
+3. **A pair of leather chaps** [Grounded] — A pair of leather chaps, scarred from a decade of mesquite and barbed wire. | leather armor
+4. **A prospector's pan** [Grounded] — A prospector's pan, dented, gold-flecked from wishful thinking more than luck.
+5. **A hitching post's iron ring** [Grounded] — A hitching post's iron ring, pried loose, still bearing rope-groove scars.
+6. **A duster coat** [Grounded] — A duster coat, sand-colored, weatherproofed with a recipe the tailor won't share.
+7. **A tin of hardtack biscuits that could double as masonry** [Grounded]
+8. **A cattle-drive foreman's tally whip** [Grounded] — A cattle-drive foreman's tally whip, more noise than sting.
+9. **A spyglass with a cracked eyepiece and a scratch that sits exactly on ** [Textured] — A spyglass with a cracked eyepiece and a scratch that sits exactly on the horizon.
+10. **A farrier's full kit in a roll** [Textured] — A farrier's full kit in a roll, tools worn to fit one grip. | smith's tools
+11. **A stove-in guitar with one true string left** [Textured]
+12. **Enchanted** [Textured] — Enchanted — "Six-Gun of the Fair Draw" — a revolver that seems to know it's being watched.
+13. **Enchanted** [Textured] — Enchanted — "The Marshal's Coat" — a long duster with a star sewn faintly into the lining.
+14. **Enchanted** [Textured] — Enchanted — "Dead Man's Hand" — a poker hand, framed, that never leaves your coat pocket.
+15. **Enchanted** [Strange] — Enchanted — "The Undertaker's Tape Measure" — cloth tape, weighted ends, folds itself.
+16. **Enchanted** [Strange] — Enchanted — "The Claim-Jumper's Pick" — a mining pick that hums faintly near anything worth digging up.
+17. **Signature** [Strange] — Signature — "The Last Honest Badge" — tin, hand-cut, worn soft at the edges, no department stamped anywhere on it.
+18. **Signature** [Volatile] — Signature — "The Debt Collector" — a coiled bullwhip, black leather, that never quite finishes uncoiling.
+19. **Consumable** [Grounded] — Consumable — A box of "Long-Nine" cartridges, hand-loaded, smelling faintly of sulfur and something sweeter.
+20. **Consumable** [Grounded] — Consumable — A tin of "Snake-Oil" salve, three fingers left, label mostly worn away.

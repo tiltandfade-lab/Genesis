@@ -518,3 +518,107 @@ children, not teens or adults.
 19. **Kid — wants: Make their parent laugh the old way, the way from before.**
 20. **Kid — wants: Warn someone — and not one adult will slow down long enough to hear it.**
 
+
+## Expansion batches — REALM-KEY-EXPANSION-ROSTER draft, 2026-07-09 (25 total, 1 sheet)
+
+Appended additions from `docs/REALM-KEY-EXPANSION-ROSTER.md` (Adam's rulings folded). Same
+style block and mechanical instructions as the monster sheets above. Gang crews are NOT
+repeated here (NPC sheets 4–6 already carry the 10 factions at 5 sprites each).
+
+### Expansion sheet E1 (5×5 grid, 25 cells)
+
+1. **Neon Salamander Brother — the Eldest** — mutant salamander in a wrapped training sash, neon skin-stripes, mid-kata, calm
+2. **Neon Salamander Brother — the Hothead** — brighter stripes, mid-flying-kick, mouth open mid-yell
+3. **Neon Salamander Brother — the Quiet One** — dimmest glow, half-turned, staff planted, watching
+4. **The Beaver in the Gi** — broad mutant beaver in a worn martial-arts gi, mid-stance, tail as the third leg
+5. **Loner Snapping-Turtle Mutant** — single gruff turtle mutant, hooded, shell scarred, arms crossed mid-refusal
+6. **The Splice Saint** — gaunt benevolent mutant hermit draped in patched robes, palm out in blessing
+7. **Rat-King Bruiser** — hulking mutant rat with smaller rats riding its shoulders like a court
+8. **Oozed Cockroach Hulk** — chitin-plated roach mutant, one arm regrowing, refuses to fall
+9. **Oozed Pigeon Flock** — a wheeling mass of wrong-eyed pigeons sharing one barrel's worth of mind
+10. **The Apex Sewer Thing** — vast pale shape half out of a storm drain, the thing even the crews won't name
+11. **ED-209-Class Enforcement Mech** — chicken-walker heavy mech, autocannon arms mid-deploy, warning strobe
+12. **The Mech's Handler** — corporate suit with a control gauntlet, shouting compliance phrases
+13. **Corp Cop Pair** — two chrome-visored corporate officers moving as one unit, batons drawn
+14. **Compliance Auditor** — immaculate clerk with a terminal briefcase, freezing an account mid-keystroke
+15. **Turnstile Ghost** — translucent commuter forever pushing through a turnstile that never gives
+16. **Third-Rail Elemental** — arcing electricity given a crawling body, welded to the track line
+17. **The Conductor** — tall uniformed figure with a lantern, punching a ticket that isn't for this line
+18. **Punk Kid — Pipe-Swinger** — teenage tough, no colors yet, length of pipe, more scared than mean
+19. **Punk Kid — Firecracker** — grinning kid mid-throw, pockets full of black-cat fireworks
+20. **Punk Kid — Shoplifter** — hoodie stuffed full, mid-sprint, looking back
+21. **Punk Kid — Wannabe Tagger** — spray can raised at a wall already claimed by a real crew
+22. **Punk Kid — Skate Rat** — mid-ollie off a curb, deck plastered in stolen stickers
+23. **Punk Kid — Mouthy Lookout** — leaning on nothing, two-finger whistle, selling everyone out for five bucks
+24. **Punk Kid — Dine-and-Dasher** — vaulting a diner counter with the till's worth of loose bills
+25. **Punk Kid — the Kid with the Dog** — scrawny kid, one loyal street mutt, both bristling
+
+## Item batches — from `Engine/03. _Tables/05. Realms/Realm Items - Chrome.md` (50 total, 2 sheets)
+
+Loot-table items as sprites (Adam 2026-07-09): inventory icons / item-get card art / FFT-style
+post-combat loot screens — presentation TBD, the asset bank comes first. Derived from the realm
+item table (edit the TABLE, then regenerate this section); band noted per cell as a value cue.
+
+**Item template (replaces the character template for these sheets):** 5×5 grid, 25 cells, ONE
+OBJECT per cell (no characters, no hands, no scene), centered, floating on the solid magenta
+(#FF00FF) background, consistent relative scale (a coin small in its cell, a rifle spanning
+its cell), full object visible with margin — no cropping. Same realm style block as above.
+Each object needs one instantly readable silhouette and one high-value focal detail; higher-band
+items (Strange/Volatile/Mythic) may glow, distort, or break physics visibly — Grounded items
+must look convincingly mundane.
+
+### Item sheet 1/2 (5×5 grid, 25 cells)
+
+1. **A cracked transit-cop data-slate** [Grounded] — A cracked transit-cop data-slate, screen dim in one corner, still readable.
+2. **A vending-machine ramen brick** [Grounded] — A vending-machine ramen brick, "Flavor: Assorted."
+3. **A sewer-mechanic's multi-tool with fourteen settings** [Grounded] — A sewer-mechanic's multi-tool with fourteen settings, two of them unlabeled.
+4. **A pair of gecko-grip climbing pads** [Grounded] — A pair of gecko-grip climbing pads, scuffed from scaling transit pylons.
+5. **A crew's colors** [Grounded] — A crew's colors — a stitched jacket-patch, the gang it names half of them dead now.
+6. **A translator earpiece** [Grounded] — A translator earpiece, battery low, one street-cant pack installed.
+7. **A thermal blanket** [Grounded] — A thermal blanket, foil-bright, folds to the size of a deck of cards.
+8. **A spool of glow-tape** [Grounded] — A spool of glow-tape, meters of it, adhesive still good.
+9. **A charge cable** [Grounded] — A charge cable, universal-fit, frayed at one end.
+10. **A packet of anti-nausea gum** [Grounded] — A packet of anti-nausea gum, transit-issue, 1d6+2 sticks.
+11. **A wetsuit patch kit** [Grounded] — A wetsuit patch kit, three patches used, two left.
+12. **A brass subway token** [Grounded] — A brass subway token, worn smooth, minted for a line that stopped running years ago.
+13. **A dead quadrotor drone** [Textured] — A dead quadrotor drone, one arm bent, camera port smashed.
+14. **A dead-man alarm fob** [Textured] — A dead-man alarm fob, sewer-crew issue, clip worn bright.
+15. **A black-market cortex stimulant** [Textured] — A black-market cortex stimulant, three doses, unlabeled batch number.
+16. **A rooftop grapnel winch** [Textured] — A rooftop grapnel winch, palm-sized motor, 50 ft of cable.
+17. **A sealed drum of fabricator resin** [Textured] — A sealed drum of fabricator resin, factory bands intact.
+18. **A prototype keycard-clone reader** [Textured] — A prototype keycard-clone reader, factory second, one use burned already.
+19. **A stolen crowd-control launch harness** [Textured] — A stolen crowd-control launch harness, single-burn, gauge honest.
+20. **A signal jammer** [Textured] — A signal jammer, brick-sized, one toggle switch.
+21. **A visor readout that flags one figure per crowd as "NON-STANDARD** [Strange] — A visor readout that flags one figure per crowd as "NON-STANDARD."
+22. **A service droid** [Strange] — A service droid, knee-high, functional, imprint button blinking.
+23. **A salvaged floor panel** [Strange] — A salvaged floor panel, 5 ft square, that stays exactly room temperature forever.
+24. **A rebreather cartridge producing air at a purity no known process yiel** [Strange] — A rebreather cartridge producing air at a purity no known process yields.
+25. **A courier's case** [Volatile] — A courier's case, locked, a beacon inside pinging steadily.
+
+### Item sheet 2/2 (5×5 grid, 25 cells)
+
+1. **An overclocked power cell** [Volatile] — An overclocked power cell, hot to the touch, casing discolored.
+2. **The root credential nobody alive was cleared to hold — roll d4:** [Mythic] — The root credential nobody alive was cleared to hold — roll d4: 1. The original override key to the dead grid-mind still humming beneath a thousand unknowing blocks. 2. The first traffic-control mind ever switched on under `[this settlement]`, still routing every train, signal, and closed gate from a room no current map admits exists — waiting for someone to log in as its original operator. 3. The fabricator prime — the template printer every chop-shop printer was printed BY, dust-sheeted, tray still warm. 4. The founding surveillance eye of `[this settlement]`, the first lens the city ever watched itself through, still recording — and its archive holds one file timestamped in the future.
+3. **A spare power-cell casing** [Grounded] — A spare power-cell casing, drained, seals intact.
+4. **A window-washer's safety tether** [Grounded] — A window-washer's safety tether, self-retracting, rated for the tower work.
+5. **A rack of spray cans** [Grounded] — A rack of spray cans, six colors, one nearly empty and rattling.
+6. **A pair of noise-cancelling ear inserts** [Grounded] — A pair of noise-cancelling ear inserts, transit-issue, one slightly louder than the other.
+7. **A magnetic tool tray** [Grounded] — A magnetic tool tray, spring-loaded slots, strap re-riveted.
+8. **A dockworker's exo-glove** [Grounded] — A dockworker's exo-glove, one size fits most, knuckle servos whirring.
+9. **A corp-cop's smart baton** [Textured] — A corp-cop's smart baton, stun-tipped, charge window at two.
+10. **A canister of barricade-foam** [Textured] — A canister of barricade-foam, nozzle clean, two charges.
+11. **A courier's folding hand-truck** [Textured] — A courier's folding hand-truck, one wheel that hums.
+12. **Enchanted** [Textured] — Enchanted — "Overclock Coil" — a wrist unit that runs hot even idle.
+13. **Enchanted** [Textured] — Enchanted — "Grip-Sync Gauntlets" — smart-fiber gloves that read your grip before you close your hand.
+14. **Enchanted** [Textured] — Enchanted — "Null-Static Cloak" — a shimmer-weave coat that eats ambient radio noise.
+15. **Enchanted** [Strange] — Enchanted — "Second-Skin Plating" — subdermal-style armor worn over clothing, not under skin.
+16. **Enchanted** [Strange] — Enchanted — "Ghost-Read Visor" — a heads-up display that renders one extra layer nobody else's gear shows.
+17. **Enchanted** [Strange] — Enchanted — "Debt-Ledger Chip" — a financial implant reader that reads more than balances.
+18. **Enchanted** [Strange] — Enchanted — "Split-Second Boots" — magnetic-sole footwear tuned a fraction faster than physics strictly allows.
+19. **Enchanted** [Strange] — Enchanted — "Signal-Ghost Earpiece" — a comm unit that picks up channels that don't exist yet.
+20. **Signature** [Strange] — Signature — "Lance Pistol" (frame: hand crossbow; CHARGE item, cells) — a sidearm that fires cohered light.
+21. **Signature** [Strange] — Signature — "Falling-Star Visor" (frame: goggles) — a scavenged crash-recorder visor, repurposed.
+22. **Signature** [Strange] — Signature — "The Foreman's Override" — a battered transit-foreman's key that shouldn't open half of what it opens.
+23. **Signature** [Volatile] — Signature — "The Last Cell" — a fusion core that began arming the moment it was picked up. Seven gauge segments. One goes dark each dawn.
+24. **Consumable** [Grounded] — Consumable — A power cell, half-charged, standard rating.
+25. **Consumable** [Grounded] — Consumable — A medi-patch, single-use, street-pharmacy stamp still legible.

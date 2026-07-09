@@ -431,3 +431,73 @@ children, not teens or adults.
 19. **Kid — wants: Make their parent laugh the old way, the way from before.**
 20. **Kid — wants: Warn someone — and not one adult will slow down long enough to hear it.**
 
+
+## Item batches — from `Engine/03. _Tables/05. Realms/Realm Items - Theater.md` (50 total, 2 sheets)
+
+Loot-table items as sprites (Adam 2026-07-09): inventory icons / item-get card art / FFT-style
+post-combat loot screens — presentation TBD, the asset bank comes first. Derived from the realm
+item table (edit the TABLE, then regenerate this section); band noted per cell as a value cue.
+
+**Item template (replaces the character template for these sheets):** 5×5 grid, 25 cells, ONE
+OBJECT per cell (no characters, no hands, no scene), centered, floating on the solid magenta
+(#FF00FF) background, consistent relative scale (a coin small in its cell, a rifle spanning
+its cell), full object visible with margin — no cropping. Same realm style block as above.
+Each object needs one instantly readable silhouette and one high-value focal detail; higher-band
+items (Strange/Volatile/Mythic) may glow, distort, or break physics visibly — Grounded items
+must look convincingly mundane.
+
+### Item sheet 1/2 (5×5 grid, 25 cells)
+
+1. **A soldier's letter home** [Grounded] — A soldier's letter home, unsent, folded and refolded until the creases are soft as cloth.
+2. **A tin ration box** [Grounded] — A tin ration box, dented, lid held shut with wire.
+3. **An entrenching tool** [Grounded] — An entrenching tool, short-handled, blade nicked from digging more than it was built for.
+4. **A canteen** [Grounded] — A canteen, dented, engraved with initials not matching whoever's currently carrying it.
+5. **A field dressing kit** [Grounded] — A field dressing kit, half-used, bandages yellowed with age but intact.
+6. **A deck of cards** [Grounded] — A deck of cards, worn soft, one card short.
+7. **A compass** [Grounded] — A compass, service-issue, needle steady and true.
+8. **A whistle** [Grounded] — A whistle, brass, worn smooth at the mouthpiece.
+9. **A pocket-sized prayer book** [Grounded] — A pocket-sized prayer book, water-stained, spine cracked to a well-worn page.
+10. **A pair of worn boots** [Grounded] — A pair of worn boots, resoled at least twice by a field cobbler's careful hand.
+11. **A signal mirror** [Grounded] — A signal mirror, cracked, still catches the sun well enough to be seen for miles.
+12. **A folding trench periscope** [Grounded] — A folding trench periscope, mirrors true.
+13. **A field stove** [Textured] — A field stove, trench-pattern, burns anything.
+14. **A deserter's forged discharge papers** [Textured] — A deserter's forged discharge papers, well-made, one detail slightly wrong.
+15. **A stretcher** [Textured] — A stretcher, rolled, poles sound.
+16. **A camouflage cape** [Textured] — A camouflage cape, local-pattern, mud-proofed.
+17. **A sealed ration of real coffee** [Textured] — A sealed ration of real coffee — or this era's equivalent. Three brews.
+18. **A gas-cape and hood** [Textured] — A gas-cape and hood, sealed in waxed paper.
+19. **A truce flag** [Textured] — A truce flag, plain, on a stripped pole.
+20. **A pair of trench waders** [Textured] — A pair of trench waders, patched, tall as regret.
+21. **A field telephone that connects to a line that was cut months ago** [Strange]
+22. **A duckboard section that never sinks** [Strange]
+23. **A drummer's drum** [Strange] — A drummer's drum, hide unbroken, sticks tied on.
+24. **A sniper's ghillie veil** [Strange] — A sniper's ghillie veil — or this era's face of it: leaf-cloak, wolf-cape.
+25. **A signal rocket** [Volatile] — A signal rocket, red, in a waxed tube.
+
+### Item sheet 2/2 (5×5 grid, 25 cells)
+
+1. **A live carrier pigeon in a wicker cage** [Volatile] — A live carrier pigeon in a wicker cage, message capsule empty.
+2. **The relic every side that's fought here has left behind — roll d4:** [Mythic] — The relic every side that's fought here has left behind — roll d4: 1. The single armistice bell, cast from melted weapons off every side that's ever fought here, that hasn't rung in a generation because nobody's agreed it's earned yet. 2. The roll of the dead of `[the region]`, kept unbroken across every side and era, every name in the hand of the era that fell — with a blank final column the keepers swear ends the fighting the day it's allowed to stay empty. 3. The field-standard of `[the region's fallen power]` — the colors that flew over the last army to think it had won here for good — kept, patched, never quite surrendered. 4. The last letter home of `[a name from the local name-culture]`, a soldier of no side the living agree on, that says plainly what the whole war was actually for — sealed, undelivered, passed from trembling hand to trembling hand.
+3. **A mess kit** [Grounded] — A mess kit, dented tin, fork tines slightly bent from prying open more than food.
+4. **A spare set of buttons** [Grounded] — A spare set of buttons, brass, polished bright despite everything else looking field-worn.
+5. **A trench candle** [Grounded] — A trench candle, short, burns slower than it should for its size.
+6. **A sewing kit** [Grounded] — A sewing kit, small, needles rusted but thread intact.
+7. **A worn photograph** [Grounded] — A worn photograph, creased through the middle from a shirt pocket over someone's heart.
+8. **A trench club** [Grounded] — A trench club, improvised, wrapped leather over a weighted iron head.
+9. **A field promotion order** [Textured] — A field promotion order, signed in haste, the name line blank.
+10. **A bugle** [Textured] — A bugle, dented, valves true.
+11. **A quartermaster's stamp** [Textured] — A quartermaster's stamp, brass, handle worn to the grip of one patient hand.
+12. **Enchanted** [Textured] — Enchanted — "The Steady Hand" — a service sidearm, worn smooth at the grip.
+13. **Enchanted** [Textured] — Enchanted — "The Watchman's Coat" — a field coat, patched, that keeps its wearer warmer than the fabric should allow.
+14. **Enchanted** [Textured] — Enchanted — "The Marcher's Boots" — resoled leather that never quite blisters.
+15. **Enchanted** [Strange] — Enchanted — "The Truce Whistle" — brass, plain, that sounds different depending on who's listening.
+16. **Enchanted** [Strange] — Enchanted — "The Correspondent's Lens" — a monocle, cracked, that sees past the smoke.
+17. **Enchanted** [Strange] — Enchanted — "The Quartermaster's Ledger" — a service ledger that always balances, eventually.
+18. **Enchanted** [Strange] — Enchanted — "The Medic's Kit, Unending" — a field medical satchel that's never quite empty.
+19. **Enchanted** [Strange] — Enchanted — "The Sentry's Watch" — a pocket watch that runs perfectly, and knows when it matters.
+20. **Signature** [Strange] — Signature — "The Long Watch's Rifle" — a service long-arm, worn smooth from a thousand shoulders.
+21. **Signature** [Strange] — Signature — "The Faded Standard" — a war banner, faded past recognition of which side it once belonged to.
+22. **Signature** [Strange] — Signature — "The Armistice Pen" — a simple fountain pen that's signed more endings than any single hand could remember.
+23. **Signature** [Volatile] — Signature — "The Last Charge's Horn" — a battered bugle that sounds ITSELF the moment allies begin to rout.
+24. **Consumable** [Grounded] — Consumable — A field ration tin, standard issue, unopened.
+25. **Consumable** [Grounded] — Consumable — A field dressing packet, sealed, gauze and antiseptic.

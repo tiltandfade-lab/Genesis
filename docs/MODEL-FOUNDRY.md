@@ -1,7 +1,7 @@
 ---
 type: system-spec
 project: Genesis
-status: LOCKED 2026-07-08 (Fable) — the per-model authoring process + batch dispatch design for the
+status: RE-SCOPED 2026-07-09 — CREATURE waves DONE/PARKED (Adam locked docs/SPRITE-TRANSITION.md: creatures → sprites; the 185-body roster stays as the fallback tier). This process now applies to TRAYS / PROPS / ARCHITECTURE modeling only. Original lock 2026-07-08 (Fable) — the per-model authoring process + batch dispatch design for the
   1k–2k-tri bestiary build-out (band amended by Adam same day: 1,000–2,000 safe band; pose = an
   expression law). Supersedes the 500-tri economy and the parametric-rig detour.
   Distilled from the 2026-07-08 wolf deep-dive + cosmic-set pilot (v1→v2, 5 creatures, 2 engine gates).

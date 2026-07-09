@@ -1,12 +1,49 @@
 ---
 type: session-handoff
 project: Genesis
-updated: 2026-07-08 (night)
+updated: 2026-07-09 (night)
 ---
 
 # Genesis — Session Hand-off
 
 *Read this first in a new session. It orients you; the linked docs are the source of truth.*
+
+## ⭐ Latest (2026-07-09 night — ANIMAL-SOCIAL U1–U6 landed; handing to Codex for the weekend) [Sonnet build → Opus re-gate/close]
+
+The full `docs/ANIMAL-SOCIAL.md` build (U1–U6) is **built, gated, and merged to master** — animals
+are now a first-class social layer (a wilderness region = a settlement whose NPCs are Beasts; Speak
+with Animals = a query API against world state). Per-unit detail is in the CHANGELOG entry. The
+Opus re-gate caught + fixed a real contract-registry bug the build had self-reported green
+(`animal_interview`/`animal_care` were added as `applyEvent` cases + `DM_EVENT_FIELDS` entries but
+never registered in `DM_EVENT_TYPES`; `dm-contract.json` + `data/table-usage.js` were stale) — the
+"never trust self-reported green" step earning its keep.
+
+**Gates at close:** check-manifest OK; all six unit harnesses green; verify-dm-contract 115/115,
+verify-dm-seam 47/0, verify-gen 68/0, verify-table-usage-data 7/0. Full 135-harness sweep clean
+**except two failures that predate this branch and fail identically on master** —
+verify-creature-determinism (7/1, a Math.random hit under `dev/model-qa/creatures/`) and
+verify-digest-diet (58/1, the 50-record fixture at 12919 B, 919 B over its 12 KB budget). Neither
+is animal-social's doing.
+
+**Do next (Codex weekend / next session):**
+1. **Adam's row-level taste pass** on the CRAFT-LANE `wild-animal-kind` d12 rows +
+   `data/animal-realm-skins.js` realm-beast labels (direction is ruled; the rows are drafts).
+2. **A live playtest** to feel the wilderness social web — does the DM run animal interviews from
+   the witness packet, does pack-attitude propagate, does a befriended raven recur across sessions.
+3. **The rest of the 2026-07-09 build wave** (`NEXT-STEPS.md` item 3): TIYL-WEIGHTED-STARTS →
+   HOOK-WALKS → GLOOM-KEY → PLACE-GEN → CAMEO-CAST → SHIP-TRAVEL → REALM-HOOKS. **All still
+   SPEC-not-locked** — each doc says "awaiting Adam's review"; lock the spec (resolve its open
+   rulings) before executing, exactly as ANIMAL-SOCIAL was locked before this build.
+4. Optionally, the two pre-existing sweep failures above if a session touches that surface.
+
+**Also on master (2026-07-09, separate exploratory thread — Sonnet):** the
+`dev/model-qa/sprite-sheets/` prompt sets — experimental ChatGPT image-gen prompts (NOT canon;
+sprites stay retired in favor of the 3D foundry), per-realm coverage of monsters / 75 NPCs (with
+explicit population diversity + realm-appropriate non-human minorities) / domestic+wild+dungeon
+animals / kids / a full PC set. `NEXT-STEPS.md` was trimmed to the live queue (history →
+`NEXT-STEPS-ARCHIVE.md`) + a lookup table added to `docs/README.md`.
+
+---
 
 > **Two sessions closed 2026-07-08 night, in parallel** (worktree-isolated per the new CLAUDE.md
 > parallel-sessions protocol): the **NPC subsystem** wiring (this entry) and the **MODEL-FOUNDRY**

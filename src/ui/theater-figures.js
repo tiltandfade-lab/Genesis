@@ -117,6 +117,14 @@ const WHOLE_OBJECT_REGISTRY = {
   "knight":              { module: "../../dev/model-qa/creatures/rlm-gloom-knight.js",           fn: "buildKnight",           discR: 0.42 },
   "graveyard-revenant":  { module: "../../dev/model-qa/creatures/rlm-gloom-graveyard-revenant.js", fn: "buildGraveyardRevenant", discR: 0.72 },
   "yuan-ti-abomination": { module: "../../dev/model-qa/creatures/rlm-gloom-yuan-ti-abomination.js", fn: "buildYuanTiAbomination", discR: 0.62 },
+  "swarm-of-bats":       { module: "../../dev/model-qa/creatures/rlm-gloom-swarm-of-bats.js",    fn: "buildSwarmOfBats",      discR: 0.55 },
+  "sahuagin-warrior":    { module: "../../dev/model-qa/creatures/rlm-seas-sahuagin-warrior.js",  fn: "buildSahuaginWarrior",  discR: 0.42 },
+  "giant-octopus":       { module: "../../dev/model-qa/creatures/rlm-seas-giant-octopus.js",     fn: "buildGiantOctopus",     discR: 0.62 },
+  "giant-crab":          { module: "../../dev/model-qa/creatures/rlm-seas-giant-crab.js",        fn: "buildGiantCrab",        discR: 0.42 },
+  "water-elemental":     { module: "../../dev/model-qa/creatures/rlm-seas-water-elemental.js",   fn: "buildWaterElemental",   discR: 0.55, opacity: 0.72 },
+  "swarm-of-piranhas":   { module: "../../dev/model-qa/creatures/rlm-seas-swarm-of-piranhas.js", fn: "buildSwarmOfPiranhas",  discR: 0.55 },
+  "rust-monster":        { module: "../../dev/model-qa/creatures/rlm-seas-rust-monster.js",      fn: "buildRustMonster",      discR: 0.42 },
+  "sahuagin-baron":      { module: "../../dev/model-qa/creatures/rlm-seas-sahuagin-baron.js",    fn: "buildSahuaginBaron",    discR: 0.55 },
   "scarecrow":           { module: "../../dev/model-qa/creatures/rlm-gloom-scarecrow.js",   fn: "buildScarecrow", discR: 0.42 },
   "fire-elemental":      { module: "../../dev/model-qa/creatures/mon-fireelem.js", fn: "buildFireElemental", discR: 0.55 },
   "earth-elemental":     { module: "../../dev/model-qa/creatures/mon-earthelem.js", fn: "buildEarthElemental", discR: 0.55 },
@@ -605,7 +613,7 @@ const NEAREST_SUB = {
   // horse family -> warhorse (the flesh horse). draft/riding horses share its silhouette
   "riding-horse": "warhorse", "draft-horse": "warhorse", "giant-seahorse": "warhorse",
   // flyer family -> giant bat
-  "flying-snake": "giant-bat", "swarm-of-bats": "giant-bat",
+  "flying-snake": "giant-bat",
   // ooze family
   "psychic-gray-ooze": "gray-ooze", "black-pudding": "gray-ooze",
   // arachnid family -> giant spider
@@ -691,7 +699,7 @@ const NEAREST_SUB = {
   // -> owlbear (23)
   "archelon": "owlbear", "bearded-devil": "owlbear", "black-bear": "owlbear",
   "brown-bear": "owlbear", "camel": "owlbear", "elephant": "owlbear",
-  "giant-ape": "owlbear", "giant-goat": "owlbear", "giant-octopus": "owlbear",
+  "giant-ape": "owlbear", "giant-goat": "owlbear",
   "giant-scorpion": "owlbear", "giant-shark": "owlbear", "giant-squid": "owlbear",
   "giant-toad": "owlbear", "hippopotamus": "owlbear", "hunter-shark": "owlbear",
   "killer-whale": "owlbear", "lion": "owlbear", "mammoth": "owlbear",
@@ -703,7 +711,7 @@ const NEAREST_SUB = {
   "piranha": "giant-rat", "pirate-admiral": "pirate-captain",
   "rat": "giant-rat", "scorpion": "giant-rat",
   "swarm-of-crawling-claws": "giant-rat", "swarm-of-dretches": "giant-rat", "swarm-of-larvae": "giant-rat",
-  "swarm-of-lemures": "giant-rat", "swarm-of-piranhas": "giant-rat", "triceratops": "giant-rat",
+  "swarm-of-lemures": "giant-rat", "triceratops": "giant-rat",
   "yuan-ti-infiltrator": "giant-rat",
   // -> cultist (19)
   "arch-hag": "cultist", "archdruid": "cultist", "archmage": "cultist",
@@ -717,7 +725,7 @@ const NEAREST_SUB = {
   "allosaurus": "giant-lizard", "ankylosaurus": "giant-lizard", "bulette-pup": "giant-lizard",
   "deep-brute": "giant-lizard", "deep-brute-thonot": "giant-lizard",
   "lizardfolk-geomancer": "giant-lizard", "lizardfolk-sovereign": "giant-lizard",
-  "plesiosaurus": "giant-lizard", "rust-monster": "giant-lizard", "thri-kreen-marauder": "giant-lizard",
+  "plesiosaurus": "giant-lizard", "thri-kreen-marauder": "giant-lizard",
   "thri-kreen-psion": "giant-lizard", "troglodyte": "giant-lizard", "tyrannosaurus-rex": "giant-lizard",
   "yuan-ti-malison-type-1": "giant-lizard", "yuan-ti-malison-type-2": "giant-lizard", "yuan-ti-malison-type-3": "giant-lizard",
   // -> earth-elemental (16)
@@ -725,13 +733,13 @@ const NEAREST_SUB = {
   "dao": "earth-elemental", "djinni": "earth-elemental", "efreeti": "earth-elemental",
   "elemental-cataclysm": "earth-elemental", "galeb-duhr": "earth-elemental", "magmin": "earth-elemental",
   "marid": "earth-elemental", "merfolk-skirmisher": "earth-elemental", "merfolk-wavebender": "earth-elemental",
-  "salamander": "earth-elemental", "salamander-inferno-master": "earth-elemental", "water-elemental": "earth-elemental",
+  "salamander": "earth-elemental", "salamander-inferno-master": "earth-elemental",
   "xorn": "earth-elemental",
   // -> warrior-veteran (15)
   "assassin": "warrior-veteran", "astral-raider-knight": "warrior-veteran", "astral-raider-warrior": "warrior-veteran",
   "bullywug-warrior": "warrior-veteran", "gladiator": "warrior-veteran",
   "performer": "warrior-veteran", "performer-legend": "warrior-veteran", "performer-maestro": "warrior-veteran",
-  "questing-knight": "warrior-veteran", "sahuagin-warrior": "warrior-veteran", "scout": "warrior-veteran",
+  "questing-knight": "warrior-veteran", "scout": "warrior-veteran",
   "spy": "warrior-veteran", "spy-master": "warrior-veteran", "tough-boss": "warrior-veteran",
   // -> needle-blight (14)
   "awakened-tree": "needle-blight", "gas-spore-fungus": "needle-blight", "gulthias-blight": "needle-blight",
@@ -744,7 +752,7 @@ const NEAREST_SUB = {
   "glabrezu": "ogre", "hezrou": "ogre", "horned-devil": "ogre",
   "ice-devil": "ogre", "lamia": "ogre", "marilith": "ogre",
   "nalfeshnee": "ogre", "nycaloth": "ogre", "oni": "ogre",
-  "pit-fiend": "ogre", "sahuagin-baron": "ogre",
+  "pit-fiend": "ogre",
   // -> ice-mephit (14)
   "dretch": "ice-mephit", "dust-mephit": "ice-mephit", "homunculus": "ice-mephit",
   "imp": "ice-mephit", "lantern-sage": "ice-mephit", "magma-mephit": "ice-mephit",
@@ -763,7 +771,7 @@ const NEAREST_SUB = {
   "roc": "wyvern", "vrock": "wyvern",
   // -> wolf (10)
   "ape": "wolf", "giant-badger": "wolf",
-  "giant-crab": "wolf", "giant-frog": "wolf", "giant-wasp": "wolf",
+  "giant-frog": "wolf", "giant-wasp": "wolf",
   "goat": "wolf", "jackalwere": "wolf", "panther": "wolf",
   "reef-shark": "wolf",
   // -> hill-giant (9)

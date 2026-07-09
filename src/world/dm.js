@@ -3138,7 +3138,7 @@ function applyEvent(w,e){
     }
     case "animal_interview":{                         // ANIMAL-SOCIAL.md §2/§6 U4 — open/close the witness channel
       const r=codexGet(w,p.id);
-      if(!r || r.kind!=="npc" || !(r.dm && r.dm.partialKind==="animal")) return {ok:false, reason:"not-an-animal:"+(p.id||"?")};
+      if(!isAnimalPartial(r)) return {ok:false, reason:"not-an-animal:"+(p.id||"?")};
       r.dm.interviewOpen = !!p.open;
       return {ok:true, id:r.id, interviewOpen:r.dm.interviewOpen};
     }
@@ -3173,7 +3173,7 @@ function applyEvent(w,e){
       // ANIMAL-SOCIAL.md §4/§6 U5 — "engaged twice" is one of the three promotion triggers. Only a
       // DM-declared engaged contact counts (matching the NPC engage-threshold discipline three lines
       // up) — a passing contact never advances the counter.
-      if(r && r.kind==="npc" && r.dm && r.dm.partialKind==="animal" && p.engaged){
+      if(isAnimalPartial(r) && p.engaged){
         r.dm.animalContactCount=(r.dm.animalContactCount||0)+1;
         if(typeof animalMaybePromote==="function") animalMaybePromote(w, r, "engaged-twice");
       }
@@ -3206,7 +3206,7 @@ function applyEvent(w,e){
       // (kind:"npc", dm.partialKind==="animal"): animalLevers had zero production callers
       // before this fix, so a hungry/lost/guarding/loyal animal's care levers never reached
       // a social_check. Mirrors the creature branch exactly.
-      if(rec0 && rec0.kind==="npc" && rec0.dm && rec0.dm.partialKind==="animal" && typeof animalLevers==="function"){
+      if(isAnimalPartial(rec0) && typeof animalLevers==="function"){
         const declaredKeys=new Set(levers.map(l=>(typeof l==="string")?l:(l&&l.type)));
         const derived=animalLevers(rec0);
         derived.forEach(d=>{ if(d && d.type && !declaredKeys.has(d.type)){ levers.push(d); declaredKeys.add(d.type); leversDerivedKeys.push(d.type); } });
@@ -3260,8 +3260,10 @@ function applyEvent(w,e){
       // animalHelpfulAllowed is pure (src/engine/social.js); this block only reads/clamps, never writes
       // fields.care itself (that's the dedicated event's job, so care is never inflated by a social win).
       // MUST run before the codexSetAttitude commit below — a clamp applied after the write is a no-op.
-      const isAnimalPartial = !!(rec0 && rec0.dm && rec0.dm.partialKind==="animal");
-      if(isAnimalPartial && typeof animalHelpfulAllowed==="function"){
+      // ANIMAL-SOCIAL-HQ.md HQ-7 item 1: local name isAnimalRec0 (not isAnimalPartial) — the shared
+      // predicate of that name now lives in world.codex; this avoids shadowing it in this scope.
+      const isAnimalRec0 = isAnimalPartial(rec0);
+      if(isAnimalRec0 && typeof animalHelpfulAllowed==="function"){
         const careCount = (rec0.fields && rec0.fields.care) || 0;
         const allowed = animalHelpfulAllowed(careCount, { animalFriendshipSpell:p.animalFriendshipSpell, strongCha:p.strongCha });
         if(!allowed && res.to>1 && res.to>res.from){
@@ -3275,7 +3277,7 @@ function applyEvent(w,e){
       // (§3 "the farm dogs talk") — mark it so every animal MINTED at this node from now on opens
       // one step colder (prepCastEnvAnimals/prepCastAmbientScene read `node.animalCruelty`). Animal-
       // only; NPCs/creatures untouched.
-      if(res.terrified && isAnimalPartial){
+      if(res.terrified && isAnimalRec0){
         const atNode=rec0.status && rec0.status.at;
         const nn=(atNode && typeof mapOf==="function") ? mapOf(w).nodes[atNode] : null;
         if(nn) nn.animalCruelty=true;
@@ -3283,16 +3285,16 @@ function applyEvent(w,e){
       // ANIMAL-SOCIAL.md §4/§6 U5 — the +2 (Helpful) ally gate: stamp dm.ally + promote to a full
       // codex record (attitude>0 is itself a promotion trigger — animalMaybePromote reads the
       // just-committed attitude). Only fires on the SHIFT that actually LANDS on +2, never re-stamps.
-      if(isAnimalPartial && res.to===2 && res.to!==res.from){
+      if(isAnimalRec0 && res.to===2 && res.to!==res.from){
         rec0.dm=rec0.dm||{}; rec0.dm.ally=true;
       }
-      if(isAnimalPartial && res.to!==res.from && res.to>0 && typeof animalMaybePromote==="function"){
+      if(isAnimalRec0 && res.to!==res.from && res.to>0 && typeof animalMaybePromote==="function"){
         animalMaybePromote(w, rec0, "attitude-past-zero");
       }
       // ANIMAL-SOCIAL.md §5/§6 U6 — pack-tag shared attitude: propagate this shift to every OTHER
       // pack-tagged animal at the same node (never cross-node). No-op for solitary-tagged/non-animal
       // records (animalPropagatePackAttitude's own packTag guard).
-      if(isAnimalPartial && res.to!==res.from && typeof animalPropagatePackAttitude==="function"){
+      if(isAnimalRec0 && res.to!==res.from && typeof animalPropagatePackAttitude==="function"){
         animalPropagatePackAttitude(w, rec0, res.to, p.cause||p.skill||"pack-attitude");
       }
       // ANOMALY LAW §2b.2 — bondEligible is stamped ONLY by the anomaly channels: a nat-20 on this check,
@@ -3346,7 +3348,7 @@ function applyEvent(w,e){
         `✦ ${nm} — ${attitudeLabel(a.value)} → ${attitudeLabel(r.value)}${p.cause?(" ("+p.cause+")"):""}.`);
       // ANIMAL-SOCIAL.md §4/§6 U5 — a DECLARED shift (group cascade / story beat) can also cross the
       // promotion/ally thresholds for an animal partial, same as an ordinary social_check.
-      if(rec && rec.kind==="npc" && rec.dm && rec.dm.partialKind==="animal" && r.value!==a.value){
+      if(isAnimalPartial(rec) && r.value!==a.value){
         if(r.value===2) rec.dm.ally=true;
         if(r.value>0 && typeof animalMaybePromote==="function") animalMaybePromote(w, rec, "attitude-past-zero");
         // ANIMAL-SOCIAL.md §5/§6 U6 — same pack-tag propagation as social_check, for a DECLARED shift.
@@ -3364,7 +3366,7 @@ function applyEvent(w,e){
     case "animal_care":{
       if(typeof codexGet!=="function") return {ok:false,reason:"codex-unavailable"};
       const r=codexGet(w,p.target);
-      if(!r || r.kind!=="npc" || !(r.dm && r.dm.partialKind==="animal")) return {ok:false, reason:"not-an-animal:"+(p.target||"?")};
+      if(!isAnimalPartial(r)) return {ok:false, reason:"not-an-animal:"+(p.target||"?")};
       r.fields=r.fields||{};
       r.fields.careLog=r.fields.careLog||[];
       const day=clockOf(w).day;

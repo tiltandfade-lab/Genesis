@@ -413,7 +413,7 @@ function turnMintSuccessorThread(w, npc, fate){
    codex / animal-tell not compiled -> no-op, no ledger noise. */
 function turnAnimalAllyTellRefresh(w){
   if(typeof codexOf!=="function") return null;
-  const allies=Object.values(codexOf(w).records).filter(r=>r.kind==="npc"&&r.dm&&r.dm.partialKind==="animal"&&r.dm.ally===true);
+  const allies=Object.values(codexOf(w).records).filter(r=>isAnimalPartial(r)&&r.dm.ally===true);
   if(!allies.length) return null;
   const refreshed=[];
   allies.forEach(r=>{

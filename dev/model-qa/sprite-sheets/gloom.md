@@ -158,16 +158,13 @@ static character per cell (not a repeat, not an animation frame), uniform cell s
 18. **the Woeful Cry** — keening death-omen spirit; herald, not killer
 19. **the House That Remembers** — a haunted manor that rearranges itself to relive its dead
 
-
 ---
 
 ## NPC batches (43 total, 2 sheets)
 
-Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-ROLE-REALMS.md`)
-plus this realm's exclusive `adds`. These are civilian/social-layer sprites, not combat monsters
-— pose direction should read as **a characteristic action for the role** (the smith mid-hammer,
-the informant mid-glance-over-shoulder) rather than combat aggression, unless the role is itself
-a security/enforcer type.
+Shared mechanical instructions (restated for this section, NPC-appropriate): 5x5 grid, 25 cells, one distinct static character per cell (not a repeat, not an animation frame), uniform cell size, solid magenta (#FF00FF) background (no transparency, no other background elements), consistent scale across all 25, orthographic side view, each character fully visible from head to toe within its cell — no cropping at the top, bottom, or sides, the complete body must fit inside the cell boundary. **Every character in an expressive pose characteristic of their role** — mid-task, mid-gesture, caught doing the thing that defines them (the smith mid-hammer-swing, the informant glancing over a shoulder, the merchant mid-haggle, the healer mid-bandage) — never a neutral T-pose or idle stand, and never combat aggression unless the role is itself a security/enforcer type.
+
+Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-ROLE-REALMS.md`) plus this realm's exclusive `adds`.
 
 ### NPC sheet 1/2
 

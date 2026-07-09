@@ -162,7 +162,7 @@ branch sets are STRIPPED and the graded outcome is lost.
 - `codex_update` — fields: `id`, `name`, `shape`, `fields`, `dm`, `status`, `note`, `supersedes` — e.g. `{"type":"codex_update","payload":{"id":"npc:maddan-strole","dm":{"tell":"watches the fist not the face"}}}` — note: APPENDS to dm.notes[] (DM-only)
 - `codex_link` — fields: `from`, `rel`, `to` — e.g. `{"type":"codex_link","payload":{"from":"npc:maddan-strole","rel":"fears","to":"faction:the-hooks"}}`
 - `codex_reveal` — fields: `id` — e.g. `{"type":"codex_reveal","payload":{"id":"npc:maddan-strole"}}`
-- `codex_contact` — fields: `id` — e.g. `{"type":"codex_contact","payload":{"id":"npc:maddan-strole"}}`
+- `codex_contact` — fields: `id`, `engaged` — e.g. `{"type":"codex_contact","payload":{"id":"npc:maddan-strole"}}`
 - `discovery` — fields: `makeNode`, `nodeId`, `reveal`, `what`, `enter`, `travelMin` — e.g. `{"type":"discovery","payload":{"what":"The Traitor's Tree","makeNode":true}}` (aliases accepted: `name`→`what`)
 - `fact_canonized` — fields: `factId`, `what` — e.g. `{"type":"fact_canonized","payload":{"what":"The harbor bell rings itself before a drowning."}}` (aliases accepted: `text`→`what`)
 - `clock_advanced` — fields: `clockId`, `delta` — e.g. `{"type":"clock_advanced","payload":{"clockId":"the-hooks","delta":1}}` (aliases accepted: `id`→`clockId`, `faction`→`clockId`, `by`→`delta`) — clockId: copy digest `powers[].clockId` / `fronts[].clockId` verbatim

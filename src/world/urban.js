@@ -124,6 +124,20 @@ function mintDistricts(w, nodeId, opts){
 /* buildingsOf(w) -> per-world building registry, keyed by codex id -> {nodeId, type}. */
 function buildingsOf(w){ return w.urban ? (w.urban.buildings || (w.urban.buildings={})) : (districtsOf(w).buildings={}); }
 
+/* NPC-PRESENCE-AND-HOOKS.md Component 2 — BUILDING_KIT_TYPES' 13 ids mapped onto the doc's four
+   ambient-population buckets (shrine/shop/tavern/market-plaza-dock). temple is the shrine analog;
+   dock-house is the market/plaza/dock analog (the only kit that reads as a big open trade space); the
+   4 shop-delegating kinds (smithy/apothecary/general/arcanist) plus the remaining "small interior"
+   kits (guildhall/manor/garrison/court/bathhouse/warehouse) all bucket to "shop" — the doc names only
+   four buckets, and none of those six reads as a shrine/tavern/market, so "shop" (small interior) is
+   the correct catch-all, not a guessed 5th bucket. */
+const SCENE_TYPE_BY_KIT = {
+  temple: "shrine",
+  tavern: "tavern",
+  "dock-house": "market",
+};
+function sceneTypeForBuildingKit(type){ return SCENE_TYPE_BY_KIT[type] || "shop"; }
+
 /* buildingApproach(w, type, opts) — mint a typed building SOFT at a node (player intent or DM
    `gen`) — never pre-built (docs/URBAN-FABRIC.md §2 "buildings mint soft on approach, lock on
    contact"). Returns the minted codex record (kind:"location") or {ok:false,reason} on an unknown
@@ -165,7 +179,16 @@ function buildingApproach(w, type, opts){
   if(proprietorId && typeof codexLink==="function") codexLink(w, rec.id, "located-in", nodeId);
   const B=buildingsOf(w);
   B[rec.id]={ nodeId, type, locked:false };
-  return {ok:true, id:rec.id, record:rec, proprietorId, shop:rolled.shop||null};
+  // NPC-PRESENCE-AND-HOOKS.md Component 2/3.1 — populate THIS scene (never an empty room) + guarantee
+  // its anchor (the proprietor, when one was minted) carries a hook. Additive: buildingApproach's
+  // return shape gains ONE new key (`ambient`); every existing field is unchanged. Null-safe (a
+  // stripped/lean harness with no prepCastAmbientScene loaded just skips this, same as every other
+  // optional cross-file call in this file).
+  const proprietorRec=(proprietorId && typeof codexGet==="function") ? codexGet(w, proprietorId) : null;
+  const ambient=(typeof prepCastAmbientScene==="function")
+    ? prepCastAmbientScene(w, nodeId, sceneTypeForBuildingKit(type), { anchor: proprietorRec })
+    : null;
+  return {ok:true, id:rec.id, record:rec, proprietorId, shop:rolled.shop||null, ambient};
 }
 
 /* buildingContact(w, id) — the player TOUCHES the building: lock soft->hard (codexContact, same

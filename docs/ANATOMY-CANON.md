@@ -113,6 +113,12 @@ These rules bind every humanoid/hybrid pose, and the critic pass gates on them:
 Critic gate question (d), added to the standard three: **trace the spine and the elbows — is
 there a gesture line, and do the arms articulate?**
 
+**Sanctioned exception (Adam, 2026-07-08): rigor-mortis stiffness.** The MUMMY (and kin whose
+flavor is literally locked-stiff dead tissue) may carry a dead-straight arm as an expressive
+choice — the stiffness IS the creature. The exception is per-creature and deliberate (state it
+in the file header), never a default; the spine-gesture rule still applies (a stiff arm on a
+curved, leaning body reads as rigor; a stiff arm on a plumb spine is still a mannequin).
+
 ## Family: QUADRUPED — DIGITIGRADE (canine, feline) — SEEDED
 
 Stands on the toes; the visible "backward knee" is the **hock (ankle)**, set HIGH. This is the single

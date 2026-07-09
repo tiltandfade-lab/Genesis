@@ -45,7 +45,34 @@ export function buildCommoner(){
   /* slight forward-into-the-stride lean + a small counter-twist so the torso reads as walking,
      not standing at attention — much lighter than the old working-stoop */
   const HIP_PIVOT_Y = L.hipY;
-  const lean = (p) => { const t = Math.max(0, p.y - HIP_PIVOT_Y); return V(p.x - t*0.03, p.y, p.z + t*0.12); };
+
+  /* SPINE GESTURE (POSEFIX 2026-07-08, ANATOMY-CANON POSE-ANATOMY): the pelvis->skull curve IS
+     the pose. Weight rolls onto the forward-planted LEFT leg, so the pelvis tilts up on the left
+     (HIP_TILT); the raised right (hailing) arm drags its shoulder up, so the upper spine
+     counter-tilts the OPPOSITE way (SH_TILT) — classic contrapposto zigzag. spineDy blends the
+     two with bt(y): 0 (pure hip tilt) at the hip band -> 1 (pure shoulder tilt) at the shoulder
+     band, so the tilt reverses sign around the ribs/waist — that reversal is the S-curve. Every
+     per-vertex xform in this file (torso stack, apron, head, cap) routes through spineDy via
+     `lean`, so the whole figure tilts as one continuous gesture, not a plumb column with limbs
+     bolted on. */
+  const HIP_TILT = 0.035, SH_TILT = 0.06;
+  const spineDy = (p) => {
+    const bt = Math.max(0, Math.min(1, (p.y - L.hipY) / (L.shldY - L.hipY)));
+    const dyHip = -(HIP_TILT / L.hipHalf) * p.x;     // left(-x) hip rises, right(+x) hip drops
+    const dySh  =  (SH_TILT  / L.shoulderX) * p.x;    // right(+x) shoulder rises, left(-x) drops
+    return (1 - bt) * dyHip + bt * dySh;
+  };
+  /* spineDy above ROTATES each band (tilts it) but every band's CENTER stays on x=0 — a rotated
+     ring is still a plumb line by center-of-mass, which fails the literal "trace hips->shoulders
+     ->skull" test. spineDx TRANSLATES the centerline itself: the pelvis center shifts toward the
+     weight-bearing left leg, the ribcage/shoulder center counter-shifts right (toward the raised
+     arm), crossing near the waist — that lateral zigzag is what actually traces as an S-curve. */
+  const HIP_SHIFT = -0.030, SH_SHIFT = 0.024;
+  const spineDx = (p) => {
+    const bt = Math.max(0, Math.min(1, (p.y - L.hipY) / (L.shldY - L.hipY)));
+    return (1 - bt) * HIP_SHIFT + bt * SH_SHIFT;
+  };
+  const lean = (p) => { const t = Math.max(0, p.y - HIP_PIVOT_Y); return V(p.x - t*0.03 + spineDx(p), p.y + spineDy(p), p.z + t*0.12); };
 
   /* BASKET FIRST — the grip is ground truth for the left arm. Rides against the left hip, not
      dangling at arm's length: grip sits IN, close to the body. */
@@ -167,10 +194,14 @@ export function buildCommoner(){
   /* arms — RIGHT thrown up in a hailing wave (breaks the silhouette upward, the "mid-gesture"
      signal); LEFT bent in tight to grip the basket handle against the hip. */
   {
-    /* raised hailing arm: shoulder -> elbow out+up -> forearm up -> open hand near head height */
-    const S=V(L.shoulderX*0.98, L.shldY+0.01, 0.00);
-    const E=V(0.315, L.shldY+0.155, 0.02);
-    const Wr=V(0.235, L.headTopY-0.02, -0.01);
+    /* raised hailing arm (POSEFIX 2026-07-08): shoulder rides UP with the arm (shrug lift ON TOP
+       of the spine's own shoulder-tilt) -> elbow throws OUT-and-forward, well clear of the S-Wr
+       line, for a real visible kink -> forearm angles UP-and-IN to bring the open hand to head
+       height. Upper-arm/forearm ~0.19/0.18 (comparable lengths, not a 2x mismatch) so the elbow
+       bend reads ~119° — inside the 100-150 deg band, not a straight flagpole. */
+    const S=V(L.shoulderX*0.98 + spineDx(V(0,L.shldY,0)), L.shldY + spineDy(V(L.shoulderX*0.98,L.shldY,0)) + 0.025, 0.00);
+    const E=V(0.394 + spineDx(V(0,L.shldY,0)), 1.247, 0.028);
+    const Wr=V(0.378 + spineDx(V(0,L.shldY,0)), 1.426, 0.019);
     tube(S,E,0.068,0.056,6,P.tunic);
     tube(E,Wr,0.054,0.044,6,P.skin,{capB:{hex:P.skin}});
     /* open hand: a small flat splay of three short nubs off the wrist, cheap "fingers spread" tell */
@@ -180,8 +211,9 @@ export function buildCommoner(){
       tube(palm, palm.clone().add(V(dx,0.045,0.0)), 0.012,0.008,4,P.skinDk);
     }
 
-    /* left arm — tight bend, forearm angled down-in to the basket grip */
-    const S2=V(-L.shoulderX*0.94, L.shldY-0.01, 0.01);
+    /* left arm — tight bend, forearm angled down-in to the basket grip. Shoulder routes through
+       the same spine tilt as the right side (drops opposite the raised arm's shoulder rise). */
+    const S2=V(-L.shoulderX*0.94 + spineDx(V(0,L.shldY,0)), L.shldY + spineDy(V(-L.shoulderX*0.94,L.shldY,0)) - 0.01, 0.01);
     const E2=V(-0.315, 0.80, 0.075);
     tube(S2,E2,0.068,0.055,6,P.tunic);
     tube(E2,GRIPL,0.052,0.040,6,P.tunic,{capB:{hex:P.skin}});
@@ -192,8 +224,12 @@ export function buildCommoner(){
   /* legs — MID-STRIDE: left forward + knee-lifted (contralateral to the raised right arm), right
      trailing back on the ball of the foot (weight rolling off the toe, not flat). */
   {
-    const hipL=V(-L.hipHalf*0.95, L.hipY-0.01, 0.01), kneeL=V(-0.145,0.415,0.145), ankL=V(-0.135,0.085,0.205);
-    const hipR=V( L.hipHalf*0.95, L.hipY-0.01, 0.00), kneeR=V( 0.095,0.335,-0.155), ankR=V( 0.150,0.050,-0.230);
+    /* hip roots carry the pelvis tilt (weight settling onto the forward-planted left leg raises
+       the left hip; the right/trailing hip drops the same amount) so the leg roots agree with
+       the torso's tilted hip band instead of hanging off a flat pelvis line. */
+    const hipDx = spineDx(V(0,L.hipY,0));
+    const hipL=V(-L.hipHalf*0.95 + hipDx, L.hipY-0.01 + spineDy(V(-L.hipHalf*0.95,L.hipY,0)), 0.01), kneeL=V(-0.145,0.415,0.145), ankL=V(-0.135,0.085,0.205);
+    const hipR=V( L.hipHalf*0.95 + hipDx, L.hipY-0.01 + spineDy(V( L.hipHalf*0.95,L.hipY,0)), 0.00), kneeR=V( 0.095,0.335,-0.155), ankR=V( 0.150,0.050,-0.230);
     tube(hipL,kneeL,0.078,0.058,6,P.trouserDk);
     tube(kneeL,ankL,0.054,0.040,6,P.trouser);
     tube(hipR,kneeR,0.078,0.056,6,P.trouserDk);

@@ -471,3 +471,81 @@ Same style block and mechanical instructions as above.
 23. **Spike-Shell Bruiser** — round jolly-faced bruiser whose shell is all spikes, mid-shoulder-charge
 24. **The False King** — jeweled decoy monarch mid-taunt, crown slipping, "your quarry is elsewhere"
 25. **The Kill-Screen** — the place where the world runs out, rendered as a creature of torn tiles and static
+
+## Item batches — from `Engine/03. _Tables/05. Realms/Realm Items - Bright-Kingdom.md` (55 total, 3 sheets)
+
+Loot-table items as sprites (Adam 2026-07-09): inventory icons / item-get card art / FFT-style
+post-combat loot screens — presentation TBD, the asset bank comes first. Derived from the realm
+item table (edit the TABLE, then regenerate this section); band noted per cell as a value cue.
+
+**Item template (replaces the character template for these sheets):** 5×5 grid, 25 cells, ONE
+OBJECT per cell (no characters, no hands, no scene), centered, floating on the solid magenta
+(#FF00FF) background, consistent relative scale (a coin small in its cell, a rifle spanning
+its cell), full object visible with margin — no cropping. Same realm style block as above.
+Each object needs one instantly readable silhouette and one high-value focal detail; higher-band
+items (Strange/Volatile/Mythic) may glow, distort, or break physics visibly — Grounded items
+must look convincingly mundane.
+
+### Item sheet 1/3 (5×5 grid, 25 cells)
+
+1. **A wrapped hard candy** [Grounded] — A wrapped hard candy, bright red, flavor unclear from the wrapper alone.
+2. **A party favor whistle** [Grounded] — A party favor whistle, paper unfurl-tongue attached.
+3. **A small plush toy** [Grounded] — A small plush toy, stitched smile a little too wide.
+4. **A paper crown from the Kingdom's birthday package** [Grounded] — A paper crown from the Kingdom's birthday package, grease-spotted, one size fits all.
+5. **A coloring book** [Grounded] — A coloring book, half-filled-in, crayon strictly inside the lines except for one page.
+6. **A party balloon** [Grounded] — A party balloon, inflated, that hasn't sagged despite clearly being days old.
+7. **A wind-up toy soldier** [Grounded] — A wind-up toy soldier, key still turnable, marches in a neat circle when wound.
+8. **A scratch-and-sniff sticker sheet** [Grounded] — A scratch-and-sniff sticker sheet, half used.
+9. **A pinwheel** [Grounded] — A pinwheel, tin blades, spins even in perfectly still air.
+10. **A prize claw-machine token** [Grounded] — A prize claw-machine token, brass-colored, good for one try.
+11. **A jump rope** [Grounded] — A jump rope, striped, handles worn smooth.
+12. **A "World's Best" ribbon** [Grounded] — A "World's Best" ribbon, blue, pinned crooked, category left blank.
+13. **Consumable** [Textured] — Consumable — A mushroom gummy, red-capped, white-spotted. The wrapper just says SUPER.
+14. **Consumable** [Textured] — Consumable — A star drop, gold, humming faintly through the wrapper.
+15. **Consumable** [Textured] — Consumable — A pocket ball, red and white, weighted exactly right for throwing.
+16. **Consumable** [Textured] — Consumable — A pepper lolly, red-striped, warning label peeling.
+17. **Consumable** [Textured] — Consumable — A packet of BLAST BERRY popping crystals.
+18. **A bag of steel jacks** [Textured] — A bag of steel jacks, bouncing ball included.
+19. **A yo-yo** [Textured] — A yo-yo, tournament-grade, string unfrayed.
+20. **A strip of five ride tickets** [Textured] — A strip of five ride tickets, the old kind — "ADMIT ONE, ANY ATTRACTION."
+21. **"The 1-UP"** [Strange] — "The 1-UP" — a mushroom of painted rubber, warm, heavier than it looks.
+22. **A hobby horse** [Strange] — A hobby horse, stick-mounted, mane inexplicably real.
+23. **A funhouse mirror panel** [Strange] — A funhouse mirror panel, salvaged, that shows the viewer as exactly one inch taller.
+24. **A cotton candy machine** [Strange] — A cotton candy machine, cart-mounted, that spins sugar into the shape of whatever the buyer is currently thinking about.
+25. **A mascot costume head** [Volatile] — A mascot costume head, empty, smiling.
+
+### Item sheet 2/3 (5×5 grid, 25 cells)
+
+1. **A birthday cake** [Volatile] — A birthday cake, boxed, candles pre-lit inside the box.
+2. **The first wonder the park was built to imitate — roll d4:** [Mythic] — The first wonder the park was built to imitate — roll d4: 1. The original Wishing Coin, minted the day the Kingdom was founded — every fountain since has been quietly imitating it. 2. The Founder's own golden ticket, punched exactly once — every turnstile still knows it on sight. 3. The very first prize ever won here, kept behind glass the child never came back for. 4. The Founder's recipe card for the very first treat sold here — every sweet-cart since has been baking a fainter copy.
+3. **A stuffed rabbit** [Grounded] — A stuffed rabbit, ears slightly asymmetric from a factory quirk.
+4. **A snow globe** [Grounded] — A snow globe, plastic, depicting the Kingdom's main gate under gentle fake snow.
+5. **A "Fun Pass" wristband** [Grounded] — A "Fun Pass" wristband, paper, one day's admission already used.
+6. **A bag of stale popcorn** [Grounded] — A bag of stale popcorn, mostly kernels.
+7. **A pair of novelty sunglasses** [Grounded] — A pair of novelty sunglasses, star-shaped lenses.
+8. **A foam finger** [Grounded] — A foam finger, "#1," slightly deflated.
+9. **A squeaky mallet** [Textured] — A squeaky mallet, carnival-prize size, handle taped.
+10. **A ring-toss set** [Textured] — A ring-toss set, park-official, rings suspiciously fair.
+11. **A bundle of sparklers** [Textured] — A bundle of sparklers, two dozen, fuses dry.
+12. **Enchanted** [Textured] — Enchanted — "The Lucky Penny Locket" — a coin-shaped charm on a cheap chain.
+13. **Enchanted** [Textured] — Enchanted — "The Merry-Go-Round Medallion" — brass, warm, shaped like a carousel horse.
+14. **Enchanted** [Textured] — Enchanted — "The Funhouse Slippers" — mismatched, one striped, one polka-dotted.
+15. **Enchanted** [Strange] — Enchanted — "The Cotton Candy Cloud" — a puff of spun sugar that never melts, never shrinks.
+16. **Enchanted** [Strange] — Enchanted — "The Prize Wheel Spinner" — a small handheld wheel, brightly painted, that always lands on something useful.
+17. **Enchanted** [Strange] — Enchanted — "The Story-Time Storybook" — a picture book that reads a little differently to everyone who opens it.
+18. **Enchanted** [Strange] — Enchanted — "The Fun-House Goggles" — plastic-rimmed, lenses swirled with color.
+19. **Enchanted** [Strange] — Enchanted — "The Wishing Well Bucket" — small, tin, that always comes up with something when lowered.
+20. **Signature** [Strange] — Signature — *the Jordans* (canonical, ADAM-REVIEW-1) — Nike Air Jordan 1s, immaculate, never scuffed no matter the terrain.
+21. **Signature** [Strange] — Signature — "Lunch Pail of Holding" (frame: bag-of-holding-lite) — a metal lunch pail, cheerful sticker design, dented at the corners.
+22. **Signature** [Strange] — Signature — "The Fanfare Trumpet" — a toy trumpet that plays a real, triumphant note when it matters.
+23. **Signature** [Volatile] — Signature — "The Overwound King" — a wind-up toy king, fist-sized, its key turning on its own, one notch per hour.
+24. **Consumable** [Grounded] — Consumable — A "Power Berry," bright purple, single bite.
+25. **Consumable** [Grounded] — Consumable — A "Fizzy Pop," ice-cold can, unfamiliar brand.
+
+### Item sheet 3/3 (1×5 grid, 5 cells)
+
+1. **Signature** [Mythic] — Signature — "The Hero's Edge" — a plain, perfectly balanced longsword, the blade every other sword in the Kingdom is secretly modeled on.
+2. **Enchanted** [Strange] — Enchanted — "The Homing Wing" — a curved wooden boomerang painted like a bird, grip worn smooth.
+3. **Consumable** [Textured] — Consumable — A sack of BANG BLOSSOMS — round black bombs with cartoon fuses, each drawn with a little grinning face.
+4. **Enchanted** [Strange] — Enchanted — "The Long Reach" — a fist-sized spring-loaded launcher, clawed head, chain that spools out farther than the housing could possibly hold.
+5. **Consumable** [Strange] — Consumable — A glass bottle, cork sealed with wax, a single winged spark drowsing inside.

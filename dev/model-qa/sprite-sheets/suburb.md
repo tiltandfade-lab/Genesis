@@ -497,3 +497,88 @@ as allies. Also new: the Pink Cult (a whole faction pressure) and the scissor-ha
 18. **The Kid-Built Ship** — junk-welded backyard craft mid-hover, wagon wheels and a satellite dish, genuinely working
 19. **Ship Crew Kid — the Pilot** — determined kid in a bike helmet and welding goggles, joystick from a lawn tractor
 20. **Ship Crew Kid — the Engineer** — younger kid dwarfed by a tool belt, soldering iron raised in triumph
+
+## Item batches — from `Engine/03. _Tables/05. Realms/Realm Items - Suburb.md` (62 total, 3 sheets)
+
+Loot-table items as sprites (Adam 2026-07-09): inventory icons / item-get card art / FFT-style
+post-combat loot screens — presentation TBD, the asset bank comes first. Derived from the realm
+item table (edit the TABLE, then regenerate this section); band noted per cell as a value cue.
+
+**Item template (replaces the character template for these sheets):** 5×5 grid, 25 cells, ONE
+OBJECT per cell (no characters, no hands, no scene), centered, floating on the solid magenta
+(#FF00FF) background, consistent relative scale (a coin small in its cell, a rifle spanning
+its cell), full object visible with margin — no cropping. Same realm style block as above.
+Each object needs one instantly readable silhouette and one high-value focal detail; higher-band
+items (Strange/Volatile/Mythic) may glow, distort, or break physics visibly — Grounded items
+must look convincingly mundane.
+
+### Item sheet 1/3 (5×5 grid, 25 cells)
+
+1. **A garden gnome** [Grounded] — A garden gnome, chipped, paint faded to mostly primer.
+2. **A cul-de-sac homeowners' association newsletter** [Grounded] — A cul-de-sac homeowners' association newsletter, mimeographed, three weeks old.
+3. **A garage door opener** [Grounded] — A garage door opener, unlabeled, batteries fresh.
+4. **A tricycle** [Grounded] — A tricycle, abandoned mid-driveway, one wheel still spinning slowly when found.
+5. **A welcome mat** [Grounded] — A welcome mat, "Home Sweet Home," worn smooth in the shape of feet that don't match anyone in the house.
+6. **A casserole dish** [Grounded] — A casserole dish, foil-covered, still warm.
+7. **A sprinkler timer** [Grounded] — A sprinkler timer, set for 3 AM, that nobody in the house set that way.
+8. **A stack of takeout menus** [Grounded] — A stack of takeout menus, all for restaurants sharing one phone number.
+9. **A school photo** [Grounded] — A school photo, class portrait, one child's face slightly blurred no matter how many copies are printed.
+10. **A walkie-talkie** [Grounded] — A walkie-talkie, one of a pair, channel dial glued at 4.
+11. **A VHS tape** [Grounded] — A VHS tape, hand-labeled "BLOCK PARTY '86," partly taped over.
+12. **A neighborhood watch armband** [Grounded] — A neighborhood watch armband, faded yellow, "Watching Out For You."
+13. **A garage-sale price gun** [Textured] — A garage-sale price gun, half a roll of stickers left.
+14. **A box of curfew candles** [Textured] — A box of curfew candles, the block's own, eight left.
+15. **A slip-n-slide** [Textured] — A slip-n-slide, rolled tight, hose included.
+16. **A pool skimmer on a telescoping pole** [Textured]
+17. **A toolbox labeled DAD'S** [Textured] — A toolbox labeled DAD'S — ASK FIRST, complete.
+18. **A casserole carrier** [Textured] — A casserole carrier, insulated, straps floral.
+19. **A paper-route bag** [Textured] — A paper-route bag, canvas, drop list laminated.
+20. **A badminton set** [Textured] — A badminton set, complete, net sagging.
+21. **A nightlight that stays lit through any power outage** [Strange] — A nightlight that stays lit through any power outage, any weather, indefinitely.
+22. **"The Sleepover Flashlight"** [Strange] — "The Sleepover Flashlight" — heavy chrome, tape on the switch.
+23. **A dog whistle on a nail** [Strange] — A dog whistle on a nail, taken from beside someone's back door.
+24. **A box fan** [Strange] — A box fan, humming, cord frayed at the plug exactly like every box fan.
+25. **A telephone** [Volatile] — A telephone, unplugged, ringing.
+
+### Item sheet 2/3 (5×5 grid, 25 cells)
+
+1. **A kid's retainer** [Volatile] — A kid's retainer, wrapped in a napkin, still warm somehow.
+2. **The paperwork the neighborhood was really built on — roll d4:** [Mythic] — The paperwork the neighborhood was really built on — roll d4: 1. The original plat map for the subdivision, hand-drawn, every house's true dimensions — larger, stranger, older than the visible lots — the surveyor's signature still wet after fifty years. 2. The founding homeowners' covenant of `[this settlement]`, whose final clause — the one nobody reads aloud at meetings — spells out what the neighborhood agreed to give up, and to what, in exchange for staying so quiet and so green. 3. The developer's master key, cut before any door here had a lock — it opens every identical house, and a few doors that aren't on any street. 4. The very first Welcome sign, which lists the exact current population in cheerful cut vinyl, updated by no hand anyone's caught, and has never once been wrong.
+3. **A lawn chair** [Grounded] — A lawn chair, folding, faded stripes.
+4. **A box of sidewalk chalk** [Grounded] — A box of sidewalk chalk, mostly white, a few colors worn to nubs.
+5. **A bicycle bell** [Grounded] — A bicycle bell, chrome, rings clear on a bike that otherwise squeaks terribly.
+6. **A can of off-brand soda** [Grounded] — A can of off-brand soda, warm, from a machine that takes exact change only.
+7. **A stack of coupons** [Grounded] — A stack of coupons, expired, for a grocery store that closed and reopened under a new name twice.
+8. **A softball bat** [Grounded] — A softball bat, aluminum, dinged from a decade of pickup games.
+9. **A sprinkler key** [Textured] — A sprinkler key, city-issue, T-handled.
+10. **A pair of home phones** [Textured] — A pair of home phones, hardwired to each other, 200 ft of cord.
+11. **A neighborhood directory** [Textured] — A neighborhood directory, spiral-bound, updated in pen.
+12. **Enchanted** [Textured] — Enchanted — "The Good Neighbor's Casserole Dish" — ceramic, patterned, always warm to the touch.
+13. **Enchanted** [Textured] — Enchanted — "The Cul-de-Sac Watch" — a wristwatch, plastic, novelty brand, that keeps perfect neighborhood time.
+14. **Enchanted** [Textured] — Enchanted — "Porch-Light Charm" — a solar garden light shaped like a sunflower.
+15. **Enchanted** [Strange] — Enchanted — "The Welcome Wagon Basket" — a gift basket, endlessly re-filled.
+16. **Enchanted** [Strange] — Enchanted — "The Sleepwalker's Slippers" — pink, fuzzy, worn thin at the heel.
+17. **Enchanted** [Strange] — Enchanted — "The Neighborhood Watch Binoculars" — chunky, plastic-cased, hobbyist-grade.
+18. **Enchanted** [Strange] — Enchanted — "The Founders' Coupon Book" — thick, cheerful, bound in yellowing cellophane.
+19. **Enchanted** [Strange] — Enchanted — "The Homeowner's Deed" — laminated, framed, hung in an identical spot in every living room on the block.
+20. **Signature** [Strange] — Signature — "The Sleep-Stalker's Doorbell" — a plain brass button that rings somewhere other than the door it's mounted on.
+21. **Signature** [Strange] — Signature — "The Curfew Bell" — a school hand-bell, brass, that no one remembers being issued.
+22. **Signature** [Strange] — Signature — "The Block Captain's Clipboard" — battered, HOA logo faded, that always has the right form.
+23. **Signature** [Volatile] — Signature — "The Waking Hour" — an alarm clock, ordinary, counting down to the block's next bad night.
+24. **Consumable** [Grounded] — Consumable — A juice box, suspiciously perfect condition, "Kid's Choice" brand.
+25. **Consumable** [Grounded] — Consumable — A packet of powdered lemonade mix, half used, folded shut with a binder clip.
+
+### Item sheet 3/3 (3×5 grid, 12 cells)
+
+1. **A cast-iron frying pan** [Grounded] — A cast-iron frying pan, seasoned black, heavy as a promise.
+2. **The cracked bat** [Grounded] — The cracked bat — aluminum, split lengthwise, wound tight with a decade of black tape.
+3. **Consumable** [Grounded] — Consumable — A slice of homemade pie, latticed, still faintly warm under wax paper.
+4. **A yo-yo** [Textured] — A yo-yo, wooden, string waxed and true, the return sharp enough to sting.
+5. **Consumable** [Textured] — Consumable — A brick of bottle rockets, fuses braided, "NOT FOR SALE TO MINORS" half scratched off.
+6. **A tin lapel badge** [Textured] — A tin lapel badge, lightning-bolt stamped, pin bent from being worn every day by someone small.
+7. **A rabbit's-foot keychain** [Strange] — A rabbit's-foot keychain, dyed a color no rabbit ever was, worn to suede.
+8. **A toy ray-gun** [Strange] — A toy ray-gun, orange-tipped, die-cast heavy — heavier than a toy has any business being.
+9. **A skateboard** [Strange] — A skateboard, deck worn to bare ply, one wheel newer than the rest.
+10. **Under the tarp in the third garage: something long and low and chrome** [Volatile] — Under the tarp in the third garage: something long and low and chrome, keys in the ignition, tank on E.
+11. **A red wagon** [Grounded] — A red wagon, steel-bodied, handle polished by years of small hands.
+12. **THE BIKE** [Textured] — THE BIKE — banana seat, tall bars, playing card in the spokes, faster than it has any right to be.

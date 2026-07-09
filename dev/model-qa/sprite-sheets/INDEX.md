@@ -44,3 +44,10 @@ folded as E2 sheets: suburb +20 (fab five corrected to the TRAVELING BAND / Runa
 greaser gang kept separate; **the Pink Cult** = a whole faction pressure; the scissor-handed
 gardener — villain-framed, convertible to friend; kid-built ship = Explorers × EarthBound
 crossover), ash +3 (the Cindermarked confirmed as a CULT — recruiter/initiate/apostate roles).
+
+**Item batches (2026-07-09, appended — nothing replaced):** every realm's loot table
+(`Engine/03. _Tables/05. Realms/Realm Items - *.md`) rendered as `Item sheet` sections — 571
+items across all 11 realms (d50–d62 each, die coverage verified gapless), object-icon template
+(single centered object, no characters), band noted per cell. Use: inventory icons / item-get
+cards / FFT-style loot screens (presentation TBD — asset bank first). Derived sections: edit the
+TABLE source, then regenerate.

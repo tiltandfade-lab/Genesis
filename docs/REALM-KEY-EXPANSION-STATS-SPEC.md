@@ -41,10 +41,12 @@ elements, and a banded d-flavor table each. **Append-only** into
   (510 keys); `--check` fails on a frame that doesn't resolve. Custom attack/trait text goes in
   `traits.note` / flavorTable rows — the frame owns the numbers (edit-source discipline: we do
   not hand-roll stat math).
-- **flavorTable bands** follow the house spice ladder and the band-calibration ruling: rows 1–5
-  Grounded, 6 Textured, 7 Strange, 8 Volatile (d8); d10 (elite+) adds a 9th Volatile and a 10th
-  **Mythic only if the creature can genuinely carry a world-changing chain** — Volatile = active
-  escalating force, Mythic = forever. No band inflation to look exciting.
+- **flavorTable bands** — CORRECTED at build time (2026-07-09): the real `gen-realm-bestiary.py`
+  contract is **universal d8 / exactly 8 rows** (1–5 Grounded, 6 Textured, 7 Strange, row 8 ∈
+  {Volatile, **Mythic**}), `treasure` ∈ none|individual|hoard, `habitat` from the frozen 17-value
+  vocab. The spec's original d10/`incidental` invention was wrong against the validator — the
+  artifacts were mechanically transformed to conform (validator preserved, not weakened). Mythic
+  row 8 ONLY on `(M)`-flagged entries; Volatile = active escalating force, Mythic = forever.
 - **role↔CR banding** (match the existing distribution): mook ≤1 · elite 2–4 · high 5–8 ·
   apex 9+. `(B)` roster entries land high/apex; `(M)` entries are apex with a Mythic row.
 - **Recruitables/social entries** (`(R)`/`(S)`) still get full entries — the frame covers the
@@ -100,7 +102,8 @@ with 3 exemplar entries from that realm's existing block pasted into the prompt.
   && node dev/verify-realm-wiring.mjs`.
 - After the wave: one summary table (name/realm/role/CR/frame) posted for Adam's per-realm skim;
   entries are PROVISIONAL until his red-pen, same as the original 1,307.
-- Net-new `model:` slugs roll up into the model-foundry queue (models lane owns them; count expected ~25–40).
+- Net-new `model:` slugs are **SPRITE asks, not foundry asks** (amended 2026-07-09 per
+  docs/SPRITE-TRANSITION.md — the entries already sit on the expansion sprite sheets).
 
 ## 6. Cost envelope (estimate, agreed 2026-07-09)
 

@@ -84,6 +84,24 @@ def load_bestiary_by_realm():
             exact[c["name"]] = c
             loose.setdefault(norm(c["name"]), c)
         by_realm[realm] = {"exact": exact, "loose": loose}
+    # The "fantasy" sheet realm is the base game's own 510-entry bestiary (data/bestiary.js),
+    # not a realm block in the draft JSON — join it against BESTIARY directly (integration fix
+    # 2026-07-09; without this every fantasy monster cell reads as unjoined and coverage lies).
+    bjs = open(os.path.join(ROOT, "data", "bestiary.js"), encoding="utf-8").read()
+    exact, loose = {}, {}
+    for m in re.finditer(r'"([a-z0-9-]+)":\s*\{[^{}]*?"name":\s*"((?:[^"\\]|\\.)*)"', bjs):
+        key, name = m.group(1), json.loads('"' + m.group(2) + '"')
+        c = {"name": name, "frame": key, "role": None, "cr": None, "type": None, "size": None}
+        for fld in ("cr", "role", "type", "size"):
+            fm = re.search(r'"%s":\s*("(?:[^"\\]|\\.)*"|[0-9.]+)' % fld, bjs[m.start():m.start() + 600])
+            if fm:
+                try:
+                    c[fld] = json.loads(fm.group(1))
+                except ValueError:
+                    pass
+        exact.setdefault(name, c)
+        loose.setdefault(norm(name), c)
+    by_realm["fantasy"] = {"exact": exact, "loose": loose}
     return by_realm
 
 

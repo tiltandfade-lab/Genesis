@@ -132,10 +132,15 @@ def parse_file(path, realm):
             raise ParseError(f"{rel_path}:{idx+1}: unrecognized sheet heading shape: {line.strip()!r}")
         kind_words = m.group(1).strip().lower()
         if kind_words not in KIND_MAP:
-            raise ParseError(
-                f"{rel_path}:{idx+1}: unrecognized sheet kind {m.group(1)!r} "
-                f"(known: {sorted(KIND_MAP)})"
-            )
+            # A sheet-shaped heading whose kind isn't one of the 8 this spec owns (e.g. "Item"
+            # sheets — a sibling loot-icon pipeline, `Engine/03. _Tables/05. Realms/Realm Items
+            # - <realm>.md`-sourced, not part of docs/SPRITE-TRANSITION.md's creature/NPC/
+            # animal/kid/PC scope). Skip it, don't fail loud — this is a real, intentional,
+            # out-of-scope content category, not a parse-integrity problem.
+            print(f"SKIP: {rel_path}:{idx+1}: '{line.strip()}' — kind {m.group(1)!r} is outside "
+                  f"the v2 manifest's kind enum ({sorted(KIND_MAP)}), not a creature/NPC/animal/"
+                  "kid/PC sheet")
+            continue
         kind, kind_plural = KIND_MAP[kind_words]
         seq = seq_token(m.group(2))
         section_end = heading_idxs[pos + 1] if pos + 1 < len(heading_idxs) else len(lines)

@@ -21,10 +21,10 @@ subsystem — ☑ coherence dial, ☑ partials (`rollPartial` + 4 tables), ☑ a
 `roleForRealm`, ☑ data-seam recompile — plus ☑ the CLAUDE.md parallel-sessions protocol; and the
 modeling deep-dive — ☑ MODEL-FOUNDRY locked, ☑ ANATOMY-CANON, ☑ cosmic pilot. Live threads:
 
-1. ☐ **NPC lane — build the two fixes** (`docs/NPC-COHERENCE-FIXES.md`): **§2 `regionForNode.center`
-   FIRST** (it un-inerts fray-by-node temperature for the coherence dial + role-realms hybridization +
-   E-PRES at once — tune curves only after), then **§1 questgiver-not-archetype** (significant vs
-   functional roleHints; closes the hook-bearer-richness flag).
+1. ☑ **NPC lane — the two fixes** (`docs/NPC-COHERENCE-FIXES.md`) — DONE, on master (merge `e28e928`,
+   `fix/npc-coherence-queue`): §2 `regionForNode` supplies node `.center` (fray-by-node temperature
+   live for the dial + hybridization + E-PRES) and §1 questgiver-not-archetype (functional-hints set +
+   wrinkled floor). Re-gated 2026-07-08: coherence-fixes 19/0 · regions 32/0 · prep-bundle 56/0.
 2. ☐ **NPC lane — playtest + merge E-PRES** — `feat/npc-presence-hooks` is built + gated + pushed,
    parked for a felt-gameplay playtest (ambient density, discovery rates). Merge `--no-ff` when happy.
 3. ☐ **Models lane — the batch modeling session** — `/genesis-orchestrate` over `docs/MODEL-FOUNDRY.md`;

@@ -397,6 +397,13 @@ function codexFullRecord(w, r){
   // social_check against this record should roll (Beast -> Wis/Animal Handling, else Cha/Persuasion).
   // Advisory only (the roll stays the DM's, §5 anti-drift); NPCs never carry this field.
   if(r.kind==="creature" && typeof socialCheckAbilityFor==="function") o.parleyAbility=socialCheckAbilityFor(r);
+  // ANIMAL-SOCIAL.md §2/§6 U4 — the witness packet rides the digest ONLY once an interview is open
+  // (Speak with Animals active, or the DM marked the channel open — r.dm.interviewOpen, set by the
+  // animal_interview event). Absent that flag, an animal partial still ships its baseline kind+tell+
+  // need via fields/dm above — this is purely additive, never a regression of today's shape.
+  if(r.kind==="npc" && r.dm && r.dm.partialKind==="animal" && r.dm.interviewOpen && typeof animalWitness==="function"){
+    o.witness=animalWitness(w, r);
+  }
   return o;
 }
 
@@ -554,6 +561,156 @@ function codexPlayerView(w){
     if((r.kind==="npc"||r.kind==="creature") && a && a.read) o.attitude={ value:a.value, label:attitudeLabel(a.value) };
     return o;
   });
+}
+
+/* ============================================================================
+   ANIMAL-SOCIAL.md §2/§6 U4 — the WITNESS PACKET (Speak with Animals lane)
+   ============================================================================
+   animalWitness(w, rec) — what an interviewed animal can report: "information about nearby
+   locations and monsters... including whatever it has perceived within the past day" (SRD, quoted
+   in the spec). READ-ONLY / DETERMINISTIC: reads only w.ledger (the World State Ledger, already-
+   rolled events), w.codex (already-minted records), w.map (already-rolled nodes/edges) — NEVER
+   invents anything at ask-time, NEVER mutates w or rec. Same world state -> byte-identical packet.
+
+   The significance-blind law (§2, binding): the packet carries SENSE-DATA, never meaning, and NEVER
+   an NPC's proper name — only role/smell HANDLES (animalHandleFor below). This is enforced by
+   construction: every helper below reads structured `data`/`fields` off records/ledger entries,
+   never a record's own `.name` or a ledger entry's free-text `.text` (which DOES carry names, e.g.
+   "${c.name} grows to level..." — copying it verbatim would leak identity through an animal's mouth). */
+
+/* animalHandleFor(rec) — a nameless sense-handle for ANOTHER codex record ("the two-legged one",
+   "the loud one", never rec.name). Pure; rec may be an npc or creature record. */
+function animalHandleFor(rec){
+  if(!rec) return "something";
+  if(rec.kind==="creature"){
+    const t=(rec.fields && rec.fields.type) ? String(rec.fields.type).toLowerCase() : null;
+    return t ? "the "+t+"-shaped one" : "a wild thing";
+  }
+  const role=(rec.dm && rec.dm.partialKind==="animal") ? "another animal"
+    : (rec.fields && rec.fields.role) ? String(rec.fields.role) : null;
+  return role ? "the "+role : "a two-legged one";
+}
+
+/* ANIMAL-KNOWLEDGE-SCOPE (U6 stub — until the crafted `animal-knowledge-scope` table lands, every
+   kind gets the same generic sense mapping; U6 narrows this by wild-kind). Maps a ledger entry's
+   `type`/`data.kind` to a sensory channel + a sense-data-only note — NEVER interpolates a name. */
+const ANIMAL_LEDGER_SENSE = {
+  "drift":       { sense:"smell", note:"the place itself smelled different afterward" },
+  "npc-life":    { sense:"sight", note:"a two-legged one came and went" },
+  "outcome:kill":     { sense:"sound", note:"a loud-hurt smell, then not-moving" },
+  "outcome:social":   { sense:"sound", note:"raised voices, then quiet" },
+  "outcome:move-zone":{ sense:"sight", note:"quick feet, back and forth" },
+  "canon:discovery":  { sense:"sight", note:"something was uncovered nearby" },
+};
+function animalLedgerSenseFor(e){
+  if(!e) return null;
+  const composite=e.type+":"+((e.data&&e.data.kind)||"");
+  return ANIMAL_LEDGER_SENSE[composite] || ANIMAL_LEDGER_SENSE[e.type] || { sense:"sound", note:"something happened nearby" };
+}
+
+/* entries in the SRD's "past day" window at (or, for a bird-kind animal, adjacent to) the animal's
+   own status.at. Only ledger entries carrying a resolvable location (data.nodeId or data.at) are
+   eligible — an entry with no location is never guessed onto the animal's turf. */
+function animalWitnessSeen(w, rec, at){
+  if(!w || !at) return [];
+  const day=(typeof clockOf==="function") ? clockOf(w).day : 0;
+  const animalKind=(rec.fields && rec.fields.animalKind) || "";
+  const isBird=/raven|hawk|owl|crow|falcon|bird|eagle/i.test(animalKind);
+  const eligible=new Set([at]);
+  if(isBird && typeof mapOf==="function"){
+    (mapOf(w).edges||[]).forEach(ed=>{
+      if(ed.from===at) eligible.add(ed.to);
+      if(ed.to===at) eligible.add(ed.from);
+    });
+  }
+  return (w.ledger||[])
+    .filter(e=>{
+      const loc=(e.data&&(e.data.nodeId!=null?e.data.nodeId:e.data.at));
+      if(loc==null || !eligible.has(loc)) return false;
+      return (day - e.day) <= 1;   // the SRD's "within the past day"
+    })
+    .map(e=>{
+      const s=animalLedgerSenseFor(e);
+      return { day:e.day, min:e.min, sense:s.sense, note:s.note, atHere:(e.data.nodeId!=null?e.data.nodeId:e.data.at)===at };
+    });
+}
+
+/* nearby exits + creature/npc records sharing the node — place names are fine (that's the SRD floor
+   "locations and monsters"), but any OTHER record is surfaced only as a handle, never its name. */
+function animalWitnessNearby(w, rec, at){
+  if(!w || !at) return { exits:[], creatures:[] };
+  const exits=(typeof mapOf==="function")
+    ? (mapOf(w).edges||[]).filter(ed=>ed.from===at||ed.to===at)
+        .map(ed=>({ bearing:ed.bearing, to:(ed.from===at?ed.to:ed.from), toName:nodeName(w,(ed.from===at?ed.to:ed.from)) }))
+    : [];
+  const C=codexOf(w);
+  const creatures=Object.values(C.records)
+    .filter(r=>r.id!==rec.id && r.status && r.status.at===at && (r.kind==="creature"||r.kind==="npc"))
+    .map(r=>({ handle:animalHandleFor(r), kind:r.kind }));
+  return { exits, creatures };
+}
+
+/* standing facts about the animal's own territory — the §2 exception to the 1-day window ("place-
+   memory" persists). Reads only the node's own already-rolled fields (never invents a fact). */
+function animalWitnessPlaceMemory(w, at){
+  if(!w || !at) return [];
+  const out=[];
+  const n=(typeof mapOf==="function") ? mapOf(w).nodes[at] : null;
+  if(n && n.codexId){
+    const loc=codexOf(w).records[n.codexId];
+    if(loc && loc.status && loc.status.condition) out.push({ fact:"the place has been "+loc.status.condition+" for a while now" });
+  }
+  return out;
+}
+
+/* ANIMAL-SOCIAL.md RESOLVED ruling 3 (2026-07-08 night) — breach-tagged perceptions ARE included,
+   spice-band-gated: an interviewed animal in a high-band world MAY report the thing with no smell.
+   Deterministic — the entry's PRESENCE is gated by the node's own already-rolled drift band (or an
+   active marooned realm), never by a fresh roll at ask-time (which would break the determinism
+   contract). Threshold: Volatile+ on the shared SPICE_ORDER ladder (band-calibration ruling: Volatile
+   = an active force, exactly the register this uncanny-leak belongs to). */
+const ANIMAL_BREACH_PERCEPTION_FLOOR = "Volatile";
+function animalWitnessBreachEntry(w, at){
+  if(!w) return null;
+  let band=null;
+  const n=(typeof mapOf==="function") ? mapOf(w).nodes[at] : null;
+  if(n && n.codexId){
+    const loc=codexOf(w).records[n.codexId];
+    band=loc && loc.status ? loc.status.condition : null;
+  }
+  const bandHigh = typeof SPICE_ORDER!=="undefined" && band!=null
+    && SPICE_ORDER.indexOf(band) >= SPICE_ORDER.indexOf(ANIMAL_BREACH_PERCEPTION_FLOOR);
+  const realmActive = !!(w.realm && w.realm.active);
+  if(!bandHigh && !realmActive) return null;
+  return { day:(typeof clockOf==="function"?clockOf(w).day:0), sense:"breach", note:"the thing with no smell" };
+}
+
+/* attitude gates VOLUNTEERED DEPTH, not the underlying truth (§2 "Willingness gates the interview,
+   not the truth"): the full packet is always computed (determinism/reproducibility), but Hostile/
+   Unfriendly (-2/-1) volunteers nothing beyond the tell — the existing social_check ladder (§3) is
+   how a player opens it up. Friendly-or-better (>=0) volunteers the full packet. */
+function animalWitnessGate(w, rec, full){
+  const a=(typeof codexGetAttitude==="function") ? codexGetAttitude(w, rec.id) : { value:0 };
+  const value=(a && a.value!=null) ? a.value : 0;
+  if(value <= -1){
+    return { tell:full.tell, seen:[], nearby:{ exits:[], creatures:[] }, placeMemory:[], gated:true };
+  }
+  return full;
+}
+
+/* THE ASSEMBLER. rec must be a codex npc record minted via rollPartial('animal',...)
+   (rec.dm.partialKind==="animal"). Returns null for anything else (never guesses a witness packet
+   for a non-animal record). */
+function animalWitness(w, rec){
+  if(!w || !rec || rec.kind!=="npc" || !(rec.dm && rec.dm.partialKind==="animal")) return null;
+  const at=rec.status && rec.status.at;
+  const tell={ text:(rec.dm && rec.dm.tell) || null, boundTo:(rec.dm && rec.dm.tellBoundTo) || null };
+  const seen=animalWitnessSeen(w, rec, at);
+  const breachEntry=animalWitnessBreachEntry(w, at);
+  if(breachEntry) seen.push(breachEntry);
+  const nearby=animalWitnessNearby(w, rec, at);
+  const placeMemory=animalWitnessPlaceMemory(w, at);
+  return animalWitnessGate(w, rec, { tell, seen, nearby, placeMemory });
 }
 
 /* provenance / mechanical-vs-invented audit — the anti-drift ratio test (docs/CODEX.md §7 success metric).

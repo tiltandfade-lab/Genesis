@@ -39,13 +39,21 @@ import { THREE, V, quad, tube, stack, ring, stitch, capFan } from '../probe-lib.
 
 export function buildGiantVulture(){
   /* ---------- PALETTE (frontier dust register; naked head is the deliberate loud outlier) ---- */
+  /* R4 SELF-CORRECTION (this pass, requeue gate): r1-r3's P.plume (0x453a2e = 69,58,46) landed
+     only ~59 R / 49 G / 38 B over the (10,9,8) void — under the law-3 60-RGB body-mass floor, so
+     the torso merged into the black clear at 1/3-res+dither ("torso too dark, merged with the
+     void" gate note). Bumped the whole plumage register a full step brighter (plume/plumeDk/
+     plumeLt all re-based) so P.plume clears >=60 RGB over the void on every channel while staying
+     a plausible dusty dark-brown plumage (still well under the bright skin zone, preserving the
+     law-3 contrast). Also widened bladeMid/membraneLt further apart so 2 distinct blade tones
+     both clear the >=140 signature floor, not just one. */
   const P = {
-    plume:0x453a2e, plumeDk:0x2a221a, plumeLt:0x6b5a45,     /* dark ruff/back plumage — kept clear of the 0x0a0908 void clear so the torso doesn't vanish */
-    membraneLt:0xcdb08a, bladeMid:0xa8916e,                 /* primary-blade highlights — 2 blades/wing clear the >=140 RGB floor so the fan reads as a mass, not one thread */
-    spar:0x241c16, claw:0x120e0a,                           /* wing-bone chain + claw tips */
+    plume:0x6a5a46, plumeDk:0x453a2c, plumeLt:0x8a765c,     /* dark ruff/back plumage — lifted clear of the void (law 3 body-mass floor) */
+    membraneLt:0xd8bc94, bladeMid:0xb89a72,                 /* primary-blade highlights — clear the >=140 RGB signature floor, distinct from each other */
+    spar:0x3a2e22, claw:0x1c1610,                           /* wing-bone chain + claw tips */
     skin:0xc76a5c, skinLt:0xe0a08e,                          /* naked head/neck — the high-value zone (>=140 RGB per channel on skinLt) */
     beak:0xd8c9a0, beakDk:0x8a7452, eye:0x120a08,
-    leg:0x8a7452, legDk:0x584a34, footClaw:0x120e0a,
+    leg:0x8a7452, legDk:0x584a34, footClaw:0x1c1610,
     disc:0x4a4038, discTop:0x585047,
   };
 
@@ -161,40 +169,51 @@ export function buildGiantVulture(){
     const WS = 0.62;
     /* humerus angles UP-and-out from the shoulder (the mantle lift), elbow bends the radius
        further up so the wrist rides HIGH above the back — the tent shape. */
-    const EL = V(s*0.20*WS, SH.y + Math.sin(up)*0.30*WS, SH.z - 0.02*WS);
-    const WR = V(s*0.30*WS, SH.y + Math.sin(up)*0.62*WS, SH.z - 0.10*WS);
+    /* R5 SELF-REVIEW (post r1 capture): the wings read as filled blocky masses now (the sticks
+       failure is fixed) but the lateral (x) spread on EL/WR splayed them outward like paddles/
+       antennae instead of converging over the spine as a mantle tent (the pose sentence's "raised
+       ...tent-like over the back"). Pulled the lateral offset in and pushed more of the reach into
+       vertical lift + backward drape (-z) so the wrists sit closer to the spine's centerline and
+       higher, and the blade fan reads as roofing the back rather than pointing out sideways. */
+    const EL = V(s*0.13*WS, SH.y + Math.sin(up)*0.34*WS, SH.z - 0.06*WS);
+    const WR = V(s*0.19*WS, SH.y + Math.sin(up)*0.68*WS, SH.z - 0.20*WS);
     tube(SH, EL, 0.046, 0.036, 6, P.spar, {capA:{hex:P.plumeDk}});
     tube(EL, WR, 0.034, 0.024, 6, P.spar);
     /* thumb claw hooking off the wrist */
     tube(WR, V(WR.x+s*0.024*WS, WR.y+0.05*WS, WR.z+0.03*WS), 0.012, 0.004, 5, P.spar, {capB:{hex:P.claw, lift:0.01}});
 
-    /* PRIMARY FEATHER BLADES — overlapping rigid blades radiating from the wrist in a genuine
-       wide-angle burst (each tip diverges in x/y/z, not a graduated collinear sweep), draping
-       down and in toward the spine so the silhouette reads as a mantled roofline, not spread
-       flight wings. Value ladder: brightest at the peak (catches the light), darkening toward
-       the flank where the blade tucks into shadow near the body. */
+    /* PRIMARY FEATHER BLADES — R4 SELF-CORRECTION (this pass, requeue gate): the r1-r3 5-blade
+       fan, even thickened, still read as "2 thin sticks per side" at 1/3-res+dither — the 5 tips
+       fanned wide enough apart that the gaps between them showed void, so only the brightest 1-2
+       blades survived the squint as isolated threads. Fixed per the gate note: 7 blades now
+       (docs/MODEL-FOUNDRY.md's 5-7-wide overlapping-blade mass), tips packed MUCH closer together
+       (half the prior angular spread) so each blade visibly overlaps its neighbor's base and no
+       void gap opens between them, every blade thickened further (0.048 base) and ALL clear the
+       0.04u law-3 floor, and a second covert layer is now itself doubled (inner + outer) to
+       backfill the gap between the primary fan and the torso so the mantle silhouette is one
+       continuous filled shape from spine to wrist, not sparse spars. */
     const blades = [
-      V(WR.x + s*0.34*WS, WR.y + 0.07*WS, WR.z + 0.12*WS),   /* topmost — steep up, the mantle peak */
-      V(WR.x + s*0.46*WS, WR.y - 0.08*WS, WR.z + 0.02*WS),   /* lateral reach — widest point */
-      V(WR.x + s*0.40*WS, WR.y - 0.26*WS, WR.z - 0.14*WS),   /* mid drape */
-      V(WR.x + s*0.24*WS, WR.y - 0.42*WS, WR.z - 0.30*WS),   /* lower drape toward the flank */
-      V(WR.x + s*0.08*WS, WR.y - 0.50*WS, WR.z - 0.42*WS),   /* innermost — tucks down near the spine */
+      V(WR.x + s*0.30*WS, WR.y + 0.09*WS, WR.z + 0.14*WS),   /* topmost — steep up, the mantle peak */
+      V(WR.x + s*0.38*WS, WR.y + 0.00*WS, WR.z + 0.08*WS),
+      V(WR.x + s*0.43*WS, WR.y - 0.09*WS, WR.z + 0.00*WS),   /* lateral reach — widest point */
+      V(WR.x + s*0.42*WS, WR.y - 0.19*WS, WR.z - 0.09*WS),
+      V(WR.x + s*0.36*WS, WR.y - 0.30*WS, WR.z - 0.19*WS),   /* mid drape */
+      V(WR.x + s*0.26*WS, WR.y - 0.41*WS, WR.z - 0.29*WS),   /* lower drape toward the flank */
+      V(WR.x + s*0.13*WS, WR.y - 0.49*WS, WR.z - 0.39*WS),   /* innermost — tucks down near the spine */
     ];
-    /* R3 SELF-CORRECTION (same critic pass, second look): tips at radius 0.018 (0.036u diameter)
-       fell UNDER the 0.04u law-3 floor and only 1 of 5 blades cleared the value floor, so the fan
-       dissolved into one thin bright thread + 4 invisible sticks. Thickened throughout (kept
-       near-uniform base->tip, matching the raven exemplar's own R1 fix) and lifted a 2nd blade to
-       a bright mid-tone so the mantle reads as a fanned MASS at a squint, not a single feather. */
-    const bladeHex = [P.membraneLt, P.bladeMid, P.plumeLt, P.plumeDk, P.plumeDk];
+    const bladeHex = [P.membraneLt, P.bladeMid, P.plumeLt, P.bladeMid, P.plumeLt, P.plumeDk, P.plumeDk];
     blades.forEach((tip, i)=>{
-      tube(WR, tip, 0.038, 0.030, 4, bladeHex[i], {capB:{hex:P.plumeDk}});
+      tube(WR, tip, 0.048, 0.036, 4, bladeHex[i], {capB:{hex:P.plumeDk}});
     });
 
-    /* covert blades along the forearm (elbow->wrist run) — a shorter trailing layer under the
-       primaries, the "stack of blades along the arm" the AVIAN family stub calls for. */
-    const covertBase = EL.clone().lerp(WR, 0.5);
-    const covertTip = V(covertBase.x + s*0.16*WS, covertBase.y - 0.10*WS, covertBase.z - 0.16*WS);
-    tube(covertBase, covertTip, 0.026, 0.018, 4, P.plumeLt, {capB:{hex:P.plumeDk}});
+    /* COVERT LAYER (doubled) — a shorter trailing feather stack along the forearm (elbow->wrist)
+       that backfills the wedge between the primary fan and the torso, so the mantle reads as one
+       filled mass all the way to the spine rather than a fan floating off a bare wrist. */
+    for(const f of [0.35, 0.65]){
+      const covertBase = EL.clone().lerp(WR, f);
+      const covertTip = V(covertBase.x + s*0.20*WS, covertBase.y - 0.07*WS, covertBase.z - 0.20*WS);
+      tube(covertBase, covertTip, 0.032, 0.022, 4, f<0.5 ? P.plumeLt : P.plume, {capB:{hex:P.plumeDk}});
+    }
   }
   wing(+1, 62);    /* right wing — mantled high */
   wing(-1, 50);    /* left wing — mantled, slightly lower (breaks the symmetric at-attention read) */

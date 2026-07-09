@@ -526,8 +526,14 @@ function prepCastFrontier(w, nodeId, env){
   // PREP-NAME-COLLISIONS: reroll the location on a same-kind name collision (bounded, same table path)
   // before minting — catches both a re-drawn table row AND two frontiers in this pass landing on the
   // same named place. Falls back to prepCastId's -N suffix only if 5 honest rerolls still collide.
+  // PLACE-GEN §5 unit 2 rider (ADDENDUM §4): thread the node's realm into the reroll draw, same
+  // node->realm derivation buildingApproach/mintDistricts use (U6) — regionForNode(w,nodeId).realm,
+  // default 'frontier' inside rollPlace itself when null. Never overrides an opts.realm the caller
+  // already supplied (there is none here — this is the reroll-on-collision path only).
+  const frontierRealm=(typeof regionForNode==="function")
+    ? (function(){ const r=regionForNode(w,nodeId); return r&&r.realm; })() : null;
   let loc=env.cast.location;
-  if(loc && typeof rollPlace==="function") loc=prepCastNoDupe(w,"location",loc,()=>rollPlace({ art:true }));
+  if(loc && typeof rollPlace==="function") loc=prepCastNoDupe(w,"location",loc,()=>rollPlace({ art:true, realm:frontierRealm||undefined }));
   let locId=null;
   if(loc){
     const lr=codexAdd(w, Object.assign({}, loc, { id:prepCastId(w,loc.kind||"location",loc.name), provenance:"prep" }));

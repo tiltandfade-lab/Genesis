@@ -80,6 +80,8 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MANIFEST_PATH = os.path.join(ROOT, "dev", "sprite-manifests", "manifest.json")
 DEFAULT_OUT = os.path.join(ROOT, "assets", "sprites")
 REVIEW_DIR = os.path.join(ROOT, "dev", "sprite-manifests", "review")
+V2_MANIFEST_PATH = os.path.join(ROOT, "dev", "sprite-manifests", "v2-manifest.json")
+V2_REVIEW_DIR = os.path.join(ROOT, "dev", "sprite-manifests", "review")
 
 MAGENTA = (255, 0, 255)
 DEFAULT_TOLERANCE = 60  # Euclidean RGB distance; ~60 catches JPEG fringe without eating limbs
@@ -286,6 +288,25 @@ def load_manifest():
         return json.load(f)
 
 
+def load_v2_manifest():
+    if not os.path.exists(V2_MANIFEST_PATH):
+        print(f"ERROR: v2 manifest not found at {V2_MANIFEST_PATH}. Run "
+              "build/gen-sprite-sheet-manifests.py first.", file=sys.stderr)
+        sys.exit(1)
+    with open(V2_MANIFEST_PATH) as f:
+        return json.load(f)
+
+
+def v2_sheet_for(sheet_id, v2_manifest):
+    for sheet in v2_manifest["sheets"]:
+        if sheet["id"] == sheet_id:
+            return sheet
+    ids = [s["id"] for s in v2_manifest["sheets"]]
+    print(f"ERROR: sheet id '{sheet_id}' not found in v2-manifest.json ({len(ids)} sheets). "
+          f"Nearest names: {[i for i in ids if sheet_id.split('-')[0] in i][:8]}", file=sys.stderr)
+    sys.exit(1)
+
+
 def sheet_key_for(sheet_num, manifest):
     digits = max(2, len(str(manifest["sheetCount"])))
     key = f"sheet-{sheet_num:0{digits}d}"
@@ -300,7 +321,10 @@ def sheet_key_for(sheet_num, manifest):
     return key
 
 
-def write_review_html(sheet_num, crops, unassigned_extra, missing_slugs, out_path, sheet_png_path):
+def write_review_html(sheet_label, crops, unassigned_extra, missing_slugs, out_path, sheet_png_path):
+    """sheet_label may be an int (v1 sheet-number mode -> zero-padded "sheet-NN") or a string
+    (v2 mode -> the manifest's own sheet id, e.g. "gloom-monsters-1")."""
+    label = f"sheet-{sheet_label:02d}" if isinstance(sheet_label, int) else str(sheet_label)
     os.makedirs(os.path.dirname(out_path), exist_ok=True)
     rows_html = []
     for slug, crop_path in crops:
@@ -317,7 +341,7 @@ def write_review_html(sheet_num, crops, unassigned_extra, missing_slugs, out_pat
     if missing_slugs:
         missing_html = "<h2>Manifest slugs with no matched component</h2><p>" + ", ".join(missing_slugs) + "</p>"
     html = f"""<!doctype html><html><head><meta charset="utf-8">
-<title>sheet-{sheet_num:02d} review</title>
+<title>{label} review</title>
 <style>
 body {{ font-family: -apple-system, sans-serif; background:#222; color:#eee; padding:16px; }}
 .grid {{ display:grid; grid-template-columns: repeat(6, 1fr); gap:8px; }}
@@ -327,7 +351,7 @@ body {{ font-family: -apple-system, sans-serif; background:#222; color:#eee; pad
 .label {{ font-size:11px; margin-top:4px; word-break:break-all; }}
 h1,h2 {{ font-weight:600; }}
 </style></head><body>
-<h1>sheet-{sheet_num:02d} review — {len(crops)} crops assigned</h1>
+<h1>{label} review — {len(crops)} crops assigned</h1>
 <p>Source: {sheet_png_path}</p>
 <div class="grid">{''.join(rows_html)}</div>
 {extra_html}
@@ -336,6 +360,80 @@ h1,h2 {{ font-weight:600; }}
 """
     with open(out_path, "w") as f:
         f.write(html)
+
+
+def slice_v2_sheet(args, v2_manifest):
+    """--manifest-v2 <sheetId> mode: read the v2 manifest's cells (name/slug/cue, in `n`
+    order) for the given sheet id, blob-detect the source PNG the same way sheet mode does,
+    and match top-N components in row-major order to the cell slugs. ALWAYS writes the review
+    contact sheet (v2 sheets aren't guaranteed uniform — ImageGen grid discipline is imperfect
+    per docs/SPRITE-TRANSITION.md — so eyes-on review is mandatory even on a clean count match,
+    not just on mismatch). On a count mismatch: review sheet + named missing slugs + exit 1,
+    same honest-failure discipline as sheet-number mode."""
+    sheet = v2_sheet_for(args.manifest_v2, v2_manifest)
+    cells = sorted(sheet["cells"], key=lambda c: c["n"])
+    slugs = [c["slug"] for c in cells]
+    expect = args.expect if args.expect is not None else sheet["expected"]
+
+    img = Image.open(args.sheet_png).convert("RGB")
+    w, h = img.size
+    print(f"Loaded {args.sheet_png} ({w}x{h}), v2 sheet={sheet['id']} "
+          f"(realm={sheet['realm']}, kind={sheet['kind']}), expect={expect} cells")
+
+    mask = build_mask(img, args.tolerance)
+    raw_components = find_components(mask, w, h)
+    merged = merge_fragments(raw_components, w, h)
+    merged.sort(key=len, reverse=True)
+
+    print(f"Found {len(raw_components)} raw components -> {len(merged)} after fragment-merge")
+
+    ok = len(merged) == expect
+    top = merged[:expect]
+    extra = merged[expect:]
+
+    ordered = assign_row_major(top)
+
+    os.makedirs(args.out, exist_ok=True)
+    crops = []
+    n_match = min(len(ordered), len(slugs))
+    for i in range(n_match):
+        slug = slugs[i]
+        item = ordered[i]
+        crop = crop_transparent(img, item, args.tolerance, args.padding)
+        out_path = os.path.join(args.out, f"{slug}.png")
+        crop.save(out_path)
+        crops.append((slug, out_path))
+
+    missing_slugs = slugs[n_match:] if len(slugs) > n_match else []
+    unassigned_components = ordered[n_match:] if len(ordered) > n_match else []
+    unassigned_extra_bboxes = [it["bbox"] for it in unassigned_components] + [bbox(c) for c in extra]
+
+    print(f"Wrote {len(crops)} sprites to {args.out}")
+
+    # ALWAYS write the review contact sheet in v2 mode (spec T2.2) — non-uniform sheets make
+    # eyes mandatory, not just a mismatch fallback.
+    review_path = os.path.join(V2_REVIEW_DIR, f"{sheet['id']}.html")
+    write_review_html(sheet["id"], crops, unassigned_extra_bboxes, missing_slugs, review_path, args.sheet_png)
+    print(f"Review contact sheet: {review_path}")
+
+    if not ok:
+        print(
+            f"FAIL: found {len(merged)} components, expected {expect} "
+            f"(after merge; {len(extra)} extra unassigned, "
+            f"{max(0, expect - len(merged))} short).",
+            file=sys.stderr,
+        )
+        if missing_slugs:
+            print(f"Slugs with no matched component: {missing_slugs}", file=sys.stderr)
+        sys.exit(1)
+
+    if missing_slugs or unassigned_extra_bboxes:
+        print("FAIL: component count matched expect, but assignment is incomplete "
+              "(should not happen — investigate).", file=sys.stderr)
+        sys.exit(1)
+
+    print(f"OK: {len(crops)}/{expect} cells sliced and assigned in row-major order (v2 sheet {sheet['id']}).")
+    sys.exit(0)
 
 
 def slice_single(args, manifest):
@@ -395,11 +493,19 @@ def main():
     ap.add_argument("--out", default=DEFAULT_OUT, help="output dir for sliced sprites")
     ap.add_argument("--single", metavar="SLUG", default=None,
                     help="hero-singles mode: the image is ONE creature; save it as <out>/<SLUG>.png")
+    ap.add_argument("--manifest-v2", metavar="SHEET_ID", default=None,
+                    help="v2 mode: read dev/sprite-manifests/v2-manifest.json, slice sheet SHEET_ID "
+                         "(e.g. gloom-monsters-1) — sheet_num is not used in this mode")
     args = ap.parse_args()
 
     if not os.path.exists(args.sheet_png):
         print(f"ERROR: sheet PNG not found: {args.sheet_png}", file=sys.stderr)
         sys.exit(1)
+
+    if args.manifest_v2 is not None:
+        v2_manifest = load_v2_manifest()
+        slice_v2_sheet(args, v2_manifest)
+        return  # slice_v2_sheet exits
 
     manifest = load_manifest()
 

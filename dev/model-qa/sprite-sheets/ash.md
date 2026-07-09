@@ -448,3 +448,108 @@ children, not teens or adults.
 19. **Kid — wants: Make their parent laugh the old way, the way from before.**
 20. **Kid — wants: Warn someone — and not one adult will slow down long enough to hear it.**
 
+
+## Expansion batches — REALM-KEY-EXPANSION-ROSTER draft, 2026-07-09 (15 total, 1 sheet)
+
+Appended additions from `docs/REALM-KEY-EXPANSION-ROSTER.md` (Adam's rulings folded): the
+supermutant analog ladder (**the overgrown** — made, not born; somebody's still making them),
+the ghoul analog split into lucid/feral lanes (**the withered**), and **the Cindermarked** —
+the faction born from this sheet set's own glowing-ember accent (Adam: a faction of NPCs who
+found a magic stone). Existing ghoul/mutant entries on sheets 1–5 are NOT repeated. Same style
+block and mechanical instructions as above.
+
+### Expansion sheet E1 (3×5 grid, 15 cells)
+
+1. **Overgrown Brute** — slab-muscled made-mutant, surgical seams still visible, car-door shield
+2. **Overgrown Pack-Leader** — smarter overgrown with a salvaged rebreather, directing two others by fist-signs
+3. **Overgrown Siege-Breaker** — the biggest of the made, carrying a lamppost like a bat, mid-swing
+4. **The Overgrown Warlord** — armored in welded road signs, standing on a wreck, made-mark branded proud
+5. **The Maker's Apprentice** — hooded surgeon of the vats, tools of the making on a bandolier, recruiting
+6. **Lucid Withered Lore-Keeper** — skin gone to parchment, pre-fall memories intact, mid-story with a salvaged book
+7. **Lucid Withered Trader** — withered merchant with a cart-harness, prices fair, face frightening
+8. **Feral Withered Runner** — sprinting hollow-eyed husk, all hunger, mid-leap off rubble
+9. **The Glow-Called** — feral withered lit faintly green, drawn moth-like toward a reactor's warmth
+10. **Cindermarked Shard-Bearer** — ragged wanderer, ember-glow shining through the skin of one clenched fist
+11. **Cindermarked Ember-Speaker** — faction priest, shard set in a neck-torc, warmth-halo in the ash-cold
+12. **Cindermarked Pilgrim** — traveler following a shard's pull like a compass, footprints steaming
+13. **Cindermarked Warden** — faction guard whose shard-arm glows to the elbow, ash flaking off the skin it's spending
+14. **The First Kindled** — the faction's founder, more ember than flesh now, radiant and burning down
+15. **The Ember-Stone Reliquary** — the mother-stone on its carried litter, bearers aging visibly around it
+
+### Expansion sheet E2 (1×3 grid, 3 cells) — Adam's 2026-07-09 approval-pass additions
+
+Adam confirmed the Cindermarked run as a **cult** — three cult-role additions to E1's roster.
+
+1. **Cindermarked Recruiter** — warm-palmed missionary offering a cold traveler a shard's heat, first taste free
+2. **Cindermarked Initiate** — new convert mid-branding, pressing the shard to their own sternum, rapture and terror both
+3. **The Apostate** — hollow-cheeked ex-cultist who cut the shard out, bandaged chest, forever cold now
+
+## Item batches — from `Engine/03. _Tables/05. Realms/Realm Items - Ash.md` (50 total, 2 sheets)
+
+Loot-table items as sprites (Adam 2026-07-09): inventory icons / item-get card art / FFT-style
+post-combat loot screens — presentation TBD, the asset bank comes first. Derived from the realm
+item table (edit the TABLE, then regenerate this section); band noted per cell as a value cue.
+
+**Item template (replaces the character template for these sheets):** 5×5 grid, 25 cells, ONE
+OBJECT per cell (no characters, no hands, no scene), centered, floating on the solid magenta
+(#FF00FF) background, consistent relative scale (a coin small in its cell, a rifle spanning
+its cell), full object visible with margin — no cropping. Same realm style block as above.
+Each object needs one instantly readable silhouette and one high-value focal detail; higher-band
+items (Strange/Volatile/Mythic) may glow, distort, or break physics visibly — Grounded items
+must look convincingly mundane.
+
+### Item sheet 1/2 (5×5 grid, 25 cells)
+
+1. **A shopping cart** [Grounded] — A shopping cart, one wheel seized, bed lined with flattened cardboard.
+2. **A roll of duct tape** [Grounded] — A roll of duct tape, half spent, edges gone furry.
+3. **A scavenger's crowbar** [Grounded] — A scavenger's crowbar, notched from prying more than doors.
+4. **A can of preserved meat** [Grounded] — A can of preserved meat, label long gone, dents suggesting it's survived worse than storage.
+5. **A gas mask** [Grounded] — A gas mask, seals sound, one sealed filter left in the pouch.
+6. **A patched-together bicycle** [Grounded] — A patched-together bicycle, one gear missing, chain held with wire.
+7. **A water purification tablet strip** [Grounded] — A water purification tablet strip, four tablets left.
+8. **A salvaged hand-crank flashlight** [Grounded] — A salvaged hand-crank flashlight, dim, casing cracked.
+9. **A jar of bottle caps** [Grounded] — A jar of bottle caps, sorted by color.
+10. **A pair of heavy work gloves** [Grounded] — A pair of heavy work gloves, palms gone shiny.
+11. **A stapled pharmacy bag** [Grounded] — A stapled pharmacy bag, someone else's name, 1d3 doses inside.
+12. **A water jug patched with tape in three different colors** [Grounded]
+13. **A hazmat suit** [Textured] — A hazmat suit, patched at one knee.
+14. **A sealed case of pre-collapse whiskey** [Textured] — A sealed case of pre-collapse whiskey, twelve bottles, excelsior packing intact.
+15. **A fire axe** [Textured] — A fire axe, red paint chipped to primer.
+16. **A pre-collapse toolbox** [Textured] — A pre-collapse toolbox, complete, drawers that still glide.
+17. **A roll of military camouflage netting** [Textured] — A roll of military camouflage netting, one scorched corner.
+18. **A megaphone** [Textured] — A megaphone, dented bell, battery contact bent back into service.
+19. **A water-purifier straw** [Textured] — A water-purifier straw, filter counter reading 30 days.
+20. **A trader's counterfeit scrip** [Textured] — A trader's counterfeit scrip, well-made, one denomination short of undetectable.
+21. **A vending-machine service key** [Strange] — A vending-machine service key, stamped SERVICE — REGION 7.
+22. **"The Last Working Thing"** [Strange] — "The Last Working Thing" — an unbranded multi-tool from a dead town, every hinge still true.
+23. **A wind-up music box** [Strange] — A wind-up music box, brass drum, crank worn bright.
+24. **A traffic light** [Strange] — A traffic light, salvaged whole, cycling patiently wherever it's hung and powered.
+25. **A camp stove built** [Volatile] — A camp stove built, expertly, around an unexploded artillery shell.
+
+### Item sheet 2/2 (5×5 grid, 25 cells)
+
+1. **A caged canary** [Volatile] — A caged canary, alive, glossy, fed by someone until very recently.
+2. **The thing the survivors kept — roll d4:** [Mythic] — The thing the survivors kept — roll d4: 1. The last working seed vault on the continent, door open for the first time in a generation, every strain inside viable. 2. The reactor heart — a sealed fuel core, still warm, still whole, from the plant that powered the whole region once. 3. The emergency broadcast console, intact, dust-sheeted, and the mic is live. 4. The unbroken water-oath of `[the region's fallen power]`, sworn over the last clean well before the collapse — the pipes still answer anyone who speaks the old words right.
+3. **A patchwork tarp** [Grounded] — A patchwork tarp, waxed, stitched from four different pre-collapse fabrics.
+4. **A hand-wound pocket watch** [Grounded] — A hand-wound pocket watch, accurate to a few minutes a day if you remember it.
+5. **A siphon hose with the technique taped to it in faded marker** [Grounded]
+6. **A jury-rigged solar charger** [Grounded] — A jury-rigged solar charger, three panels, one cracked.
+7. **A settlement doctor's suture kit** [Grounded] — A settlement doctor's suture kit, half-used, needle dulled.
+8. **A tire-iron** [Grounded] — A tire-iron, bent slightly from use as more than a tool.
+9. **A pre-collapse police vest** [Textured] — A pre-collapse police vest, ceramic plates intact, straps re-sewn.
+10. **A bundle of road flares** [Textured] — A bundle of road flares, eleven, wax seals unbroken.
+11. **A child's wagon** [Textured] — A child's wagon, steel-bodied, all four wheels true.
+12. **Enchanted** [Textured] — Enchanted — "Everclean Filter" — a scavenged water filter that never clogs.
+13. **Enchanted** [Textured] — Enchanted — "The Steadfast Jacket" — patched leather that's stopped more than weather.
+14. **Enchanted** [Textured] — Enchanted — "Long-Haul Boots" — cracked leather, resoled twice, never a third.
+15. **Enchanted** [Strange] — Enchanted — "Two-Hundred-Year Batteries" — a four-pack, heavy for their size, still shrink-wrapped.
+16. **Enchanted** [Strange] — Enchanted — "The Bottomless Jerry Can" — dented, olive-drab, heavier at dawn.
+17. **Enchanted** [Strange] — Enchanted — "The Scrapwright's Magnet" — a horseshoe magnet on a knotted rope.
+18. **Enchanted** [Strange] — Enchanted — "Salvager's Third Eye" — a welder's lens, cracked, mounted on a headband.
+19. **Enchanted** [Strange] — Enchanted — "The Cold Box" — a lunch cooler, humming faintly, latch polished by use.
+20. **Signature** [Strange] — Signature — "The Saw" (frame: greataxe; fuel; LOUD) — a chainsaw-bar weapon, fuel-fed, deafening.
+21. **Signature** [Strange] — Signature — "Clicking Amulet" — a battered pendant with a needle that never sits still.
+22. **Signature** [Strange] — Signature — "The Last Broadcast" — a hand-crank radio that picks up one station, always, everywhere.
+23. **Signature** [Volatile] — Signature — "The Dead Man's Switch" — a wrist-strap rig wired to a sealed satchel charge. Armed is the only state it's ever been found in.
+24. **Consumable** [Grounded] — Consumable — A jerry can of scavenged fuel, three-quarters full, smells wrong but burns fine.
+25. **Consumable** [Grounded] — Consumable — A strip of pre-collapse antibiotics, foil-backed, two doses intact.

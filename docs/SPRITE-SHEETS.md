@@ -1,7 +1,7 @@
 ---
 type: system-spec
 project: Genesis
-status: PARKED 2026-07-03 — Adam ruled same day to run with the 3D low-poly procedural figures instead (BATTLE-THEATER §3; browser-operated generation proved too slow, and the minis fit the "leave room for imagination" ethos). Pipeline (manifests + slicer, self-test green) kept intact in case pixel-art re-enters via an artist's hands.
+status: UN-PARKED 2026-07-09 — Adam locked the sprite transition (docs/SPRITE-TRANSITION.md): creatures become sprites, sourced from the dev/model-qa/sprite-sheets/ prompt lane. This doc's slicer + keying conventions are the resurrected base; the v2 manifest/generator adaptations live in SPRITE-TRANSITION T2. The 2026-07-03 park (3D-figures ruling) is REVERSED for creatures; 3D keeps trays/architecture.
 created: 2026-07-03
 related:
   - "[[BATTLE-THEATER]]"   # §3 — the T2-sprites unit consumes assets/sprites/ later

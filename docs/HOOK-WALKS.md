@@ -255,3 +255,19 @@ full regression sweep + check-manifest at land; register in DESIGN.md/NEXT-STEPS
 4. **The befriended-animal guide discount** (§5.3, −1 segment) — reward or exploit?
 5. **Revival trigger for the parked branch pattern** (§4) — bless the "trinket-band incidental
    finds only" carve-out now, or leave fully parked?
+
+## RESOLVED — Adam's rulings (2026-07-08 night)
+1. **Resume-with-staleness-decay: adopted.**
+2. **Mythic finales CAN open into full dungeons.** Wider ruling attached: (a) walks can discover
+   dungeon entrances (any band, wilderness especially); entrance state rolls the EXISTING
+   dungeon-door-type + dungeon-door-state pair (wiring-b.js dwalkDoorRoll) at the mouth — old-school
+   locked/sealed/guarded/no-key-was-ever-meant-to-exist; (b) the BREACH system enters the walk
+   system as a spawnable walk event, env-weighted dungeon/wilderness > urban (slightly).
+3. **Length dice constraint (Adam):** real walks function best at 8–12 segments — "some of the
+   layouts only function in those numbers." Dinky low-band quests roll small counts; consider
+   level-proportionate ranges. Retune §1's table to respect the layout-functional floor before U-build.
+4. Guide discount: kept.
+5. **NEW WORK ITEM — alternate entrances / mid-walk entry:** dungeons need multiple
+   entrances/exits (the Exit Destination d100 already authors secondary surface exits — hidden
+   hatch, cliffside opening); walk assembly must support an alternate entrance that "plops you
+   right in the middle" (entry at segment k, both directions live). Add as a build unit.

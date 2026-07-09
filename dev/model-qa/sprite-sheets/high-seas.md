@@ -431,3 +431,73 @@ children, not teens or adults.
 19. **Kid — wants: Make their parent laugh the old way, the way from before.**
 20. **Kid — wants: Warn someone — and not one adult will slow down long enough to hear it.**
 
+
+## Item batches — from `Engine/03. _Tables/05. Realms/Realm Items - High-Seas.md` (50 total, 2 sheets)
+
+Loot-table items as sprites (Adam 2026-07-09): inventory icons / item-get card art / FFT-style
+post-combat loot screens — presentation TBD, the asset bank comes first. Derived from the realm
+item table (edit the TABLE, then regenerate this section); band noted per cell as a value cue.
+
+**Item template (replaces the character template for these sheets):** 5×5 grid, 25 cells, ONE
+OBJECT per cell (no characters, no hands, no scene), centered, floating on the solid magenta
+(#FF00FF) background, consistent relative scale (a coin small in its cell, a rifle spanning
+its cell), full object visible with margin — no cropping. Same realm style block as above.
+Each object needs one instantly readable silhouette and one high-value focal detail; higher-band
+items (Strange/Volatile/Mythic) may glow, distort, or break physics visibly — Grounded items
+must look convincingly mundane.
+
+### Item sheet 1/2 (5×5 grid, 25 cells)
+
+1. **A ship's bell** [Grounded] — A ship's bell, cracked, salvage-grade.
+2. **A barnacle-crusted lockbox** [Grounded] — A barnacle-crusted lockbox, hinges stiff but sound.
+3. **A fisherman's oilskin coat** [Grounded] — A fisherman's oilskin coat, patched, smells permanently of brine.
+4. **A brass sextant** [Grounded] — A brass sextant, functional, case velvet worn through.
+5. **A coil of fishing net** [Grounded] — A coil of fishing net, mended more than original.
+6. **A boat hook** [Grounded] — A boat hook, iron, pitted with rust despite obvious recent use.
+7. **A ship's log** [Grounded] — A ship's log, salt-warped, mostly routine entries.
+8. **A tin of ship's biscuit** [Grounded] — A tin of ship's biscuit, hard as the deck planking.
+9. **A coil of tarred rope** [Grounded] — A coil of tarred rope, 50 ft, smells strongly of pitch.
+10. **A captain's spyglass** [Grounded] — A captain's spyglass, one lens scratched, still serviceable.
+11. **A boarding axe** [Grounded] — A boarding axe, salt-pitted, edge kept honest.
+12. **A pair of sea boots** [Grounded] — A pair of sea boots, salt-stained white at the cuffs.
+13. **A bosun's whistle** [Textured] — A bosun's whistle, silver, chain intact.
+14. **A current tide almanac for this coast** [Textured] — A current tide almanac for this coast, printed, dog-eared.
+15. **A merchant company's letter of marque** [Textured] — A merchant company's letter of marque, expired, seal impressive.
+16. **A sea anchor** [Textured] — A sea anchor, canvas and hoop, lines whipped neat.
+17. **A jar of lamp oil pressed from something deep** [Textured] — A jar of lamp oil pressed from something deep — it burns underwater.
+18. **A pressed sailor's discharge papers** [Textured] — A pressed sailor's discharge papers, forged competently, one detail slightly wrong.
+19. **A captured privateer's flag** [Textured] — A captured privateer's flag, folded, powder-scorched at one corner.
+20. **A diving bell weight-harness** [Textured] — A diving bell weight-harness, straps re-stitched.
+21. **"The Quartermaster's Dice"** [Strange] — "The Quartermaster's Dice" — bone, worn smooth, always fair in one specific way.
+22. **A fiddle** [Strange] — A fiddle, weathered, strings new, that plays sea-legs into a crew.
+23. **A tide pool in a sealed jar that never evaporates** [Strange]
+24. **A ship's figurehead** [Strange] — A ship's figurehead, salvaged, carved eyes bright.
+25. **A becalming charm** [Volatile] — A becalming charm — a knot of pale hair and ribbon, found nailed to the mast.
+
+### Item sheet 2/2 (5×5 grid, 25 cells)
+
+1. **A powder keg** [Volatile] — A powder keg, bone-dry, stamped with the armory brand of a navy that wants it back.
+2. **The thing the Company can't afford you to find — roll d4:** [Mythic] — The thing the Company can't afford you to find — roll d4: 1. The last uncorrupted chart of the true trade routes, before the Company redrew the seas to suit its ledgers. 2. The crew-book of `[the region's fallen power]`'s flagship — every name signed, every share of the last great haul still owed. 3. The founding harbor-bell of `[this settlement]`, cast the day the first ship came home safe. 4. The true log of the horizon-line, in which is written every ship that ever sailed past the charts' edge and what answered them — with one blank page, dated, waiting for a ship not yet launched.
+3. **A ship's carpenter's toolkit** [Grounded] — A ship's carpenter's toolkit, half complete, missing exactly the tool needed for the current repair.
+4. **A cask of ship's grog** [Grounded] — A cask of ship's grog, three-quarters full, rationed by the quartermaster's own hand.
+5. **A signal flag set** [Grounded] — A signal flag set, faded, missing two flags from the standard code.
+6. **A ship's cat's collar** [Grounded] — A ship's cat's collar, small brass bell attached.
+7. **A coil of oiled canvas** [Grounded] — A coil of oiled canvas, patch-grade, enough for one sail repair.
+8. **A cutlass** [Grounded] — A cutlass, well-used, notches filed smooth on the cutting side.
+9. **A whaler's harpoon** [Textured] — A whaler's harpoon, line-eye intact, shaft scarred.
+10. **The pilot's charts for `[this settlement]`'s harbor** [Textured] — The pilot's charts for `[this settlement]`'s harbor — the real ones, sandbars and all.
+11. **A pair of storm lanterns** [Textured] — A pair of storm lanterns, gimbaled, glass thick as a thumb.
+12. **Enchanted** [Textured] — Enchanted — "The Wrecker's Compass" — brass, waterproof, needle black.
+13. **Enchanted** [Textured] — Enchanted — "The First Mate's Knots" — a cord of nine knots, tar-dark, tied by someone patient.
+14. **Enchanted** [Textured] — Enchanted — "The Whaler's Coat" — oiled canvas, heavy, never quite dry all the way through.
+15. **Enchanted** [Strange] — Enchanted — "The Middle-Watch Hourglass" — ship's glass, sand pale as bone, runs exactly one watch.
+16. **Enchanted** [Strange] — Enchanted — "The Crow's-Nest Eye" — a scrimshaw monocular, carved with a lidless eye.
+17. **Enchanted** [Strange] — Enchanted — "The Barnacle Crown" — a circlet, crusted, that fits like it was grown to the wearer's skull.
+18. **Enchanted** [Strange] — Enchanted — "The Galley Pot That Feeds the Watch" — black iron, ladle chained to the handle.
+19. **Enchanted** [Strange] — Enchanted — "The Drowned Choirmaster's Whistle" — carved from something bone-pale, that carries oddly far over water.
+20. **Signature** [Strange] — Signature — "The Captain's Wheel-Charm" — a small brass fitting, mounted on any helm it's given to.
+21. **Signature** [Strange] — Signature — "The Drydock's Anchor" — rust-black, oversized, that has never once dragged.
+22. **Signature** [Strange] — Signature — "The Articles of the Free Wind" — ship's articles on sailcloth vellum, terms fair, signatures old.
+23. **Signature** [Volatile] — Signature — "The Kraken's Bell" — a ship's bell, black with age, that rings itself once at every dusk spent at sea.
+24. **Consumable** [Grounded] — Consumable — A small cask of ship's grog, three servings.
+25. **Consumable** [Grounded] — Consumable — A packet of dried salt fish, keeps for a full voyage.

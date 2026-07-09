@@ -430,3 +430,73 @@ children, not teens or adults.
 19. **Kid — wants: Make their parent laugh the old way, the way from before.**
 20. **Kid — wants: Warn someone — and not one adult will slow down long enough to hear it.**
 
+
+## Item batches — from `Engine/03. _Tables/05. Realms/Realm Items - Noir.md` (50 total, 2 sheets)
+
+Loot-table items as sprites (Adam 2026-07-09): inventory icons / item-get card art / FFT-style
+post-combat loot screens — presentation TBD, the asset bank comes first. Derived from the realm
+item table (edit the TABLE, then regenerate this section); band noted per cell as a value cue.
+
+**Item template (replaces the character template for these sheets):** 5×5 grid, 25 cells, ONE
+OBJECT per cell (no characters, no hands, no scene), centered, floating on the solid magenta
+(#FF00FF) background, consistent relative scale (a coin small in its cell, a rifle spanning
+its cell), full object visible with margin — no cropping. Same realm style block as above.
+Each object needs one instantly readable silhouette and one high-value focal detail; higher-band
+items (Strange/Volatile/Mythic) may glow, distort, or break physics visibly — Grounded items
+must look convincingly mundane.
+
+### Item sheet 1/2 (5×5 grid, 25 cells)
+
+1. **A trench coat** [Grounded] — A trench coat, rain-dark, missing one button.
+2. **A notepad** [Grounded] — A notepad, half-filled with shorthand only its owner could read.
+3. **A locksmith's cutaway practice padlock** [Grounded] — A locksmith's cutaway practice padlock, mechanism visible.
+4. **A bottle of bourbon** [Grounded] — A bottle of bourbon, bottom-shelf, three fingers left.
+5. **A pack of unfiltered cigarettes** [Grounded] — A pack of unfiltered cigarettes, half gone.
+6. **A cast-iron doorstop shaped like a terrier** [Grounded]
+7. **A private investigator's license** [Grounded] — A private investigator's license, laminated, photo a decade out of date.
+8. **A pocket dictaphone** [Grounded] — A pocket dictaphone, wire-recorded, one spool.
+9. **A tin of shoe polish** [Grounded] — A tin of shoe polish, worn down to a sliver.
+10. **A bus timetable** [Grounded] — A bus timetable, current, every late-night route accurate.
+11. **A pair of loaded dice** [Grounded] — A pair of loaded dice, ivory, beautifully weighted.
+12. **A stack of business cards for a company that folded two years ago** [Grounded]
+13. **A stakeout kit: dented thermos** [Textured] — A stakeout kit: dented thermos, good binoculars, ruled logbook.
+14. **A bail bondsman's blank bond** [Textured] — A bail bondsman's blank bond, countersigned, seal genuine.
+15. **A city directory** [Textured] — A city directory, current year, spine unbroken.
+16. **A courtroom stenographer's machine** [Textured] — A courtroom stenographer's machine, cased, ribbon fresh.
+17. **A photographer's flash rig** [Textured] — A photographer's flash rig, bulbs in foam, trigger cable coiled.
+18. **A dead man's watch** [Textured] — A dead man's watch, stopped at the hour he was found.
+19. **A bottle of knockout drops** [Textured] — A bottle of knockout drops, eyedropper cap, pharmacy-grade.
+20. **A skeleton key blank and a tin of casting wax** [Textured]
+21. **A cigarette lighter that lights** [Strange] — A cigarette lighter that lights, every time, exactly once per lie told in its presence — then goes dark until the next one.
+22. **A demo record** [Strange] — A demo record, unlabeled acetate, grooves barely worn.
+23. **"The Honest Flask"** [Strange] — "The Honest Flask" — a hip flask, dented, engraved "To L."
+24. **A retired detective's case file whose margins update overnight in his ** [Strange] — A retired detective's case file whose margins update overnight in his handwriting.
+25. **A getaway car** [Volatile] — A getaway car, engine warm, keys in it, plates hot.
+
+### Item sheet 2/2 (5×5 grid, 25 cells)
+
+1. **A police-band scanner** [Volatile] — A police-band scanner, stolen, currently barking descriptions of the party — wrong about everything but the location.
+2. **The thing this city would kill to keep — roll d4:** [Mythic] — The thing this city would kill to keep — roll d4: 1. The Mayor's pardon, pre-signed, undated, seal genuine — the blank where the name goes has never been filled. 2. The key to the city — the literal one, iron, from before the ceremony ever used a replica. 3. The torch singer's last set, one shellac record, the only pressing — the song she sang the night the war between the families stopped for six hours. 4. The getaway route — a hand-drawn map of the one way out of the city nobody has ever been caught on.
+3. **A cracked pair of reading glasses** [Grounded] — A cracked pair of reading glasses, prescription strong, case scuffed.
+4. **A pair of handcuffs** [Grounded] — A pair of handcuffs, police-issue, one key.
+5. **A revolver cleaning kit** [Grounded] — A revolver cleaning kit, half the oil gone.
+6. **A stack of hush money** [Grounded] — A stack of hush money, small bills, rubber-banded, less than it looks.
+7. **A bulletproof bible** [Grounded] — A bulletproof bible, pocket-sized, lead-lined cover.
+8. **A brass knuckle set** [Grounded] — A brass knuckle set, well-worn, grip taped over cracked metal.
+9. **A doorman's whistle from the city's best hotel** [Textured]
+10. **A press pass** [Textured] — A press pass, laminated, from a paper that still prints.
+11. **A pawnshop owner's loupe on a neck chain** [Textured]
+12. **Enchanted** [Textured] — Enchanted — "The Informant's Coin" — a worn dollar that always lands the same way when it matters.
+13. **Enchanted** [Textured] — Enchanted — "Rainmaker's Umbrella" — black, unremarkable, never actually wet.
+14. **Enchanted** [Textured] — Enchanted — "The Alibi Watch" — a pocket watch that always shows a time that's convenient.
+15. **Enchanted** [Strange] — Enchanted — "The Tailor's Favor" — an overcoat, beautifully cut, heavier in the lining than the cloth explains.
+16. **Enchanted** [Strange] — Enchanted — "Confessor's Cufflinks" — plain silver, warm against a truthful wrist.
+17. **Enchanted** [Strange] — Enchanted — "The Runner's Loafers" — scuffed wingtips that never quite make noise on stairs.
+18. **Enchanted** [Strange] — Enchanted — "The Dead Drop Case" — a briefcase always slightly heavier than what's visibly inside.
+19. **Enchanted** [Strange] — Enchanted — "The Last Word" — a fountain pen that finishes any signature honestly.
+20. **Signature** [Strange] — Signature — "The Grey Fedora" — worn soft at the brim, sitting slightly crooked no matter how you set it.
+21. **Signature** [Strange] — Signature — "Deadbolt Special" (frame: light crossbow; cartridges) — loud is the point.
+22. **Signature** [Strange] — Signature — "The Silent Partner" — a ledger, leather-bound, that balances itself to the truth whether or not the numbers agree.
+23. **Signature** [Volatile] — Signature — "The Contract" — a blank page filling itself in, right now, in a name that keeps almost being yours.
+24. **Consumable** [Grounded] — Consumable — A vial of "Clean Slate" solvent, three doses, chemist unlicensed.
+25. **Consumable** [Grounded] — Consumable — A bindle of aspirin powder, off-brand, folded paper packet.

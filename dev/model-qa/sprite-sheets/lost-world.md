@@ -161,7 +161,7 @@ static character per cell (not a repeat, not an animation frame), uniform cell s
 
 ---
 
-## NPC batches (75 total, 3 sheets)
+## NPC batches (74 total, 3 sheets — 1 exact-duplicate entry removed from sheet 3/3 2026-07-09, see SPRITE-TRANSITION T2)
 
 **Population diversity (binding):** vary skin tone, ethnicity, hair texture, build, and age across the full roster below — a sheet where every face reads as the same ethnicity is a failure, not a style choice, regardless of realm. This realm's population is explicitly mixed: saurian-folk (scaled, reptilian features, per this realm's own court identity) and humans genuinely coexist here — see the final entries below for saurian-folk examples, not a reskin of the human entries, alongside an ethnically varied human population.
 
@@ -244,18 +244,17 @@ Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-R
 11. **Short, sharp-eyed saurian-folk scout — scaled, fast through the jungle canopy**
 12. **Elderly saurian-folk elder — scaled, remembers the mountain-clock's last full turn**
 13. **Sunburnt human overseer — manages a work crew that resents him fairly**
-14. **Mixed-heritage court runner — human and saurian both claim relation, belongs fully to neither**
-15. **Lean, twitchy human tomb-scout — works the lower strata for coin, hates every minute**
-16. **Stout saurian-folk cook — scaled, runs the court kitchens with an iron claw**
-17. **Grey-haired human retired soldier — one of the few outsiders the court still trusts**
-18. **Young saurian-folk twins — scaled, training for temple-guard duty together**
-19. **Broad, scarred saurian-folk laborer — scaled, does the heaviest lifting in the quarry**
-20. **Elderly blind human oracle — reads the mountain-clock's rumble better than sighted priests**
-21. **Dark-skinned, heavily scarred human relic-hunter — brings back what the court won't send its own for**
-22. **Small, quick-handed human pickpocket — works the market strata, avoids the temple guard**
-23. **Weathered saurian-folk gardener — scaled, tends the terraced court gardens**
-24. **Saurian-folk healer's apprentice — scaled, gentle-clawed, still learning**
-25. **Tall, gaunt human court accountant — keeps books for a court that barely uses coin**
+14. **Lean, twitchy human tomb-scout — works the lower strata for coin, hates every minute**
+15. **Stout saurian-folk cook — scaled, runs the court kitchens with an iron claw**
+16. **Grey-haired human retired soldier — one of the few outsiders the court still trusts**
+17. **Young saurian-folk twins — scaled, training for temple-guard duty together**
+18. **Broad, scarred saurian-folk laborer — scaled, does the heaviest lifting in the quarry**
+19. **Elderly blind human oracle — reads the mountain-clock's rumble better than sighted priests**
+20. **Dark-skinned, heavily scarred human relic-hunter — brings back what the court won't send its own for**
+21. **Small, quick-handed human pickpocket — works the market strata, avoids the temple guard**
+22. **Weathered saurian-folk gardener — scaled, tends the terraced court gardens**
+23. **Saurian-folk healer's apprentice — scaled, gentle-clawed, still learning**
+24. **Tall, gaunt human court accountant — keeps books for a court that barely uses coin**
 
 ## Domestic animal batches (25 total, 1 sheet)
 
@@ -464,3 +463,149 @@ style block and mechanical instructions as above.
 18. **Zeal Adept — Magus-Engineer** — human in layered work-robes, one hand casting, one hand wrenching a humming panel
 19. **Zeal Adept — Blade-Scholar** — human duelist mid-guard with a blade that is also an instrument
 20. **Zeal Adept Elder** — grey human elder, magic and technology braided in the staff they lean on, unruled
+
+## Item batches — from `Engine/03. _Tables/05. Realms/Realm Items - Lost-World.md` (49 total, 2 sheets)
+
+Loot-table items as sprites (Adam 2026-07-09): inventory icons / item-get card art / FFT-style
+post-combat loot screens — presentation TBD, the asset bank comes first. Derived from the realm
+item table (edit the TABLE, then regenerate this section); band noted per cell as a value cue.
+
+**Item template (replaces the character template for these sheets):** 5×5 grid, 25 cells, ONE
+OBJECT per cell (no characters, no hands, no scene), centered, floating on the solid magenta
+(#FF00FF) background, consistent relative scale (a coin small in its cell, a rifle spanning
+its cell), full object visible with margin — no cropping. Same realm style block as above.
+Each object needs one instantly readable silhouette and one high-value focal detail; higher-band
+items (Strange/Volatile/Mythic) may glow, distort, or break physics visibly — Grounded items
+must look convincingly mundane.
+
+### Item sheet 1/2 (5×5 grid, 25 cells)
+
+1. **A shard of painted pottery** [Grounded] — A shard of painted pottery, glaze faded, its pattern half a story the court's scholars pretend they cannot read.
+2. **A worn token** [Grounded] — A worn token, face rubbed featureless, struck by no power the scaled court will admit ever ruled here.
+3. **A chipped stone hand-axe** [Grounded] — A chipped stone hand-axe, polished by generations of mammal grips before it was lost.
+4. **A machete** [Grounded] — A machete, jungle-worn, spine notched once per season a forager survived the low country.
+5. **A clay tablet** [Grounded] — A clay tablet, cracked, script older than any tongue spoken above or below the scale-line.
+6. **A hank of forager's cord** [Grounded] — A hank of forager's cord, waxed, 100 ft, knotted every 10.
+7. **A stone lamp** [Grounded] — A stone lamp, oil long evaporated, wick-hole soot-stained, cut by a hand that predates the court. | lantern, hooded
+8. **A signal whistle carved from a raptor's wing-bone** [Grounded]
+9. **A funerary mask fragment** [Grounded] — A funerary mask fragment, gold leaf mostly flaked away, the face beneath neither mammal nor scaled.
+10. **A set of bone dice** [Grounded] — A set of bone dice, worn smooth, symbols instead of pips, from a game the scales never learned.
+11. **A stone cylinder-seal that rolls out a repeating pattern in wet clay** [Grounded]
+12. **A pot of resin-pitch** [Grounded] — A pot of resin-pitch, sealed, still tacky.
+13. **A charcoal rubbing of a wall relief** [Textured] — A charcoal rubbing of a wall relief, taken in an obvious hurry.
+14. **A boundary stone** [Textured] — A boundary stone, inscribed, small enough to carry with resentment.
+15. **A grapple-ladder of hide and cold-hammered metal** [Textured] — A grapple-ladder of hide and cold-hammered metal, forager-grade, folds to a satchel.
+16. **A block-and-tackle set** [Textured] — A block-and-tackle set, pulleys of dark alloy, rope fresh. | block and tackle
+17. **A specimen case** [Textured] — A specimen case, cork-lined, latches sound.
+18. **A warder's chain** [Textured] — A warder's chain, old metal, links uncorroded.
+19. **A firepiston of horn and dark metal** [Textured] — A firepiston of horn and dark metal, drilled by a master who is dust.
+20. **A waterskin lined with gold leaf** [Textured] — A waterskin lined with gold leaf, seam stamped with the mark of a power older than the court.
+21. **A sundial that casts a shadow at night** [Strange] — A sundial that casts a shadow at night, cut so fine no smith in the valley can copy the gnomon.
+22. **A rulers'-game board** [Strange] — A rulers'-game board, obsidian and shell, pieces complete, from before the scales sat any throne.
+23. **An hourglass of impossibly clear glass** [Strange] — An hourglass of impossibly clear glass, filled with dust from the ruin it was found in, warm to the touch and very faintly humming.
+24. **A guardian's stone eye** [Volatile] — A guardian's stone eye, pried from its socket, heavy as guilt.
+25. **A clutch of leathery eggs** [Volatile] — A clutch of leathery eggs, warm, the size of melons. 1d4 of them.
+
+### Item sheet 2/2 (5×5 grid, 24 cells)
+
+1. **A wonder from the impossible layer beneath the ruins — a make no hand in this world can match — roll d4:** [Mythic] — A wonder from the impossible layer beneath the ruins — a make no hand in this world can match — roll d4: 1. The founding charter of the ones who lived above the weather, intact — the first name they gave the sky, the terms the world was raised under, and a blank line waiting for whoever finishes the founding. 2. A great orrery of `[the region's oldest power]`, still turning in the deepest dark on no axle, grinding toward a single hour its makers arranged to miss. 3. The last living seed of the garden the whole valley was raised around, kept in a vault of glass and gold that has not clouded once. 4. The true history-tablet of `[the region]` — everything that happened, and below the line where the makers' hands stopped, everything that still will; its glyphs rearrange themselves, politely, when read wrong.
+2. **A grinding stone** [Grounded] — A grinding stone, hand-sized, worn to a shallow bowl by hands long before the scales.
+3. **A worn leather satchel** [Grounded] — A worn leather satchel, ancient stitching, straps brittle.
+4. **A carved wooden comb** [Grounded] — A carved wooden comb, remarkably preserved, its motif matching neither mammal nor scaled hand.
+5. **A bronze mirror** [Grounded] — A bronze mirror, tarnished nearly black.
+6. **A set of stone measuring weights in a system that converts to nothing ** [Grounded] — A set of stone measuring weights in a system that converts to nothing the court or the clans still use.
+7. **A stone mace-head** [Grounded] — A stone mace-head, unhafted, heavier than its size suggests.
+8. **A forager's field-press herbarium** [Textured] — A forager's field-press herbarium, boards and straps, half full.
+9. **A pair of stilt-walkers' poles** [Textured] — A pair of stilt-walkers' poles, forager-modified.
+10. **A censer on a chain** [Textured] — A censer on a chain, dark metal, still holding a block of ancient incense.
+11. **Enchanted** [Textured] — Enchanted — "The Excavator's Compass" — dark brass, antique-styled, that always points toward the nearest untouched find.
+12. **Enchanted** [Textured] — Enchanted — "The Porter's Yoke" — ancient wood, balance perfect.
+13. **Enchanted** [Strange] — Enchanted — "The Garden-Keeper's Shears" — dark bronze, green with age, that trim any growth into shapes the wielder pictures.
+14. **Enchanted** [Strange] — Enchanted — "The Silent Census" — a stone tablet that fills in missing names in its own ancient script.
+15. **Signature** [Strange] — Signature — "The Preserve Turnstile Key" — a key of obsidian and dark metal, ornate, that fits the court's game-gates and nothing the clans built.
+16. **Signature** [Strange] — Signature — "The Last Scribe's Stylus" — a stone stylus, ancient, that writes true words about anything it's pointed at.
+17. **Signature** [Strange] — Signature — "The Deathless Founder's Circlet" — plain gold, unadorned, that fits any brow it's placed on.
+18. **Signature** [Volatile] — Signature — "The Waking Guardian's Core" — a stone heart, cracked, warm, beating once per minute.
+19. **Consumable** [Grounded] — Consumable — A preserved fruit, mummified, from an orchard the ones-before kept and no one has found still standing.
+20. **Consumable** [Grounded] — Consumable — A pouch of ancient grain, somehow still viable, sealed in wax for an age.
+21. **An obsidian court-blade** [Grounded] — An obsidian court-blade, knapped to a molecular edge and lashed to a bone haft — the sunning-lords' own make, not a ruin-find.
+22. **A saurian tithe-cutter** [Textured] — A saurian tithe-cutter — a wedge of worked obsidian the court's overseers use to score, split, and portion anything from cane to a carcass to a stubborn lock.
+23. **A court passage-token** [Textured] — A court passage-token — a polished scale-scrip disc, glyph-stamped, that says the bearer is *counted*: tolerated stock, not prey, not people.
+24. **A rider's rig for something that was never meant to be ridden** [Strange] — A rider's rig for something that was never meant to be ridden — a harness of court obsidian-fittings and forager hide, clearly assembled by someone who intended to survive the attempt.
+
+## Item batches — from `Engine/03. _Tables/05. Realms/Realm Items - Lost-World.md` (54 total, 3 sheets)
+
+Loot-table items as sprites (Adam 2026-07-09): inventory icons / item-get card art / FFT-style
+post-combat loot screens — presentation TBD, the asset bank comes first. Derived from the realm
+item table (edit the TABLE, then regenerate this section); band noted per cell as a value cue.
+
+**Item template (replaces the character template for these sheets):** 5×5 grid, 25 cells, ONE
+OBJECT per cell (no characters, no hands, no scene), centered, floating on the solid magenta
+(#FF00FF) background, consistent relative scale (a coin small in its cell, a rifle spanning
+its cell), full object visible with margin — no cropping. Same realm style block as above.
+Each object needs one instantly readable silhouette and one high-value focal detail; higher-band
+items (Strange/Volatile/Mythic) may glow, distort, or break physics visibly — Grounded items
+must look convincingly mundane.
+
+### Item sheet 1/3 (5×5 grid, 25 cells)
+
+1. **A shard of painted pottery** [Grounded] — A shard of painted pottery, glaze faded, its pattern half a story the court's scholars pretend they cannot read.
+2. **A worn token** [Grounded] — A worn token, face rubbed featureless, struck by no power the scaled court will admit ever ruled here.
+3. **A chipped stone hand-axe** [Grounded] — A chipped stone hand-axe, polished by generations of mammal grips before it was lost.
+4. **A machete** [Grounded] — A machete, jungle-worn, spine notched once per season a forager survived the low country.
+5. **A clay tablet** [Grounded] — A clay tablet, cracked, script older than any tongue spoken above or below the scale-line.
+6. **A hank of forager's cord** [Grounded] — A hank of forager's cord, waxed, 100 ft, knotted every 10.
+7. **A stone lamp** [Grounded] — A stone lamp, oil long evaporated, wick-hole soot-stained, cut by a hand that predates the court.
+8. **A signal whistle carved from a raptor's wing-bone** [Grounded]
+9. **A funerary mask fragment** [Grounded] — A funerary mask fragment, gold leaf mostly flaked away, the face beneath neither mammal nor scaled.
+10. **A set of bone dice** [Grounded] — A set of bone dice, worn smooth, symbols instead of pips, from a game the scales never learned.
+11. **A stone cylinder-seal that rolls out a repeating pattern in wet clay** [Grounded]
+12. **A pot of resin-pitch** [Grounded] — A pot of resin-pitch, sealed, still tacky.
+13. **A charcoal rubbing of a wall relief** [Textured] — A charcoal rubbing of a wall relief, taken in an obvious hurry.
+14. **A boundary stone** [Textured] — A boundary stone, inscribed, small enough to carry with resentment.
+15. **A grapple-ladder of hide and cold-hammered metal** [Textured] — A grapple-ladder of hide and cold-hammered metal, forager-grade, folds to a satchel.
+16. **A block-and-tackle set** [Textured] — A block-and-tackle set, pulleys of dark alloy, rope fresh.
+17. **A specimen case** [Textured] — A specimen case, cork-lined, latches sound.
+18. **A warder's chain** [Textured] — A warder's chain, old metal, links uncorroded.
+19. **A firepiston of horn and dark metal** [Textured] — A firepiston of horn and dark metal, drilled by a master who is dust.
+20. **A waterskin lined with gold leaf** [Textured] — A waterskin lined with gold leaf, seam stamped with the mark of a power older than the court.
+21. **"The Gardener's Gloves"** [Strange] — "The Gardener's Gloves" — cracked leather, seams sprouting green.
+22. **A sundial that casts a shadow at night** [Strange] — A sundial that casts a shadow at night, cut so fine no smith in the valley can copy the gnomon.
+23. **A rulers'-game board** [Strange] — A rulers'-game board, obsidian and shell, pieces complete, from before the scales sat any throne.
+24. **An hourglass of impossibly clear glass** [Strange] — An hourglass of impossibly clear glass, filled with dust from the ruin it was found in, warm to the touch and very faintly humming.
+25. **A guardian's stone eye** [Volatile] — A guardian's stone eye, pried from its socket, heavy as guilt.
+
+### Item sheet 2/3 (5×5 grid, 25 cells)
+
+1. **A clutch of leathery eggs** [Volatile] — A clutch of leathery eggs, warm, the size of melons. 1d4 of them.
+2. **A wonder from the impossible layer beneath the ruins — a make no hand in this world can match — roll d4:** [Mythic] — A wonder from the impossible layer beneath the ruins — a make no hand in this world can match — roll d4: 1. The founding charter of the ones who lived above the weather, intact — the first name they gave the sky, the terms the world was raised under, and a blank line waiting for whoever finishes the founding. 2. A great orrery of `[the region's oldest power]`, still turning in the deepest dark on no axle, grinding toward a single hour its makers arranged to miss. 3. The last living seed of the garden the whole valley was raised around, kept in a vault of glass and gold that has not clouded once. 4. The true history-tablet of `[the region]` — everything that happened, and below the line where the makers' hands stopped, everything that still will; its glyphs rearrange themselves, politely, when read wrong.
+3. **A grinding stone** [Grounded] — A grinding stone, hand-sized, worn to a shallow bowl by hands long before the scales.
+4. **A worn leather satchel** [Grounded] — A worn leather satchel, ancient stitching, straps brittle.
+5. **A carved wooden comb** [Grounded] — A carved wooden comb, remarkably preserved, its motif matching neither mammal nor scaled hand.
+6. **A bronze mirror** [Grounded] — A bronze mirror, tarnished nearly black.
+7. **A set of stone measuring weights in a system that converts to nothing ** [Grounded] — A set of stone measuring weights in a system that converts to nothing the court or the clans still use.
+8. **A stone mace-head** [Grounded] — A stone mace-head, unhafted, heavier than its size suggests.
+9. **A forager's field-press herbarium** [Textured] — A forager's field-press herbarium, boards and straps, half full.
+10. **A pair of stilt-walkers' poles** [Textured] — A pair of stilt-walkers' poles, forager-modified.
+11. **A censer on a chain** [Textured] — A censer on a chain, dark metal, still holding a block of ancient incense.
+12. **Enchanted** [Textured] — Enchanted — "The Excavator's Compass" — dark brass, antique-styled, that always points toward the nearest untouched find.
+13. **Enchanted** [Textured] — Enchanted — "The Porter's Yoke" — ancient wood, balance perfect.
+14. **Enchanted** [Textured] — Enchanted — "The Wanderer's Sandals" — ancient leather, resoled countless times.
+15. **Enchanted** [Strange] — Enchanted — "The Reader's Lens" — a cracked magnifying lens, ground by hands that were not working from any bench in this world.
+16. **Enchanted** [Strange] — Enchanted — "The Warden's Seal" — a stone signet ring, worn smooth, that opens doors the world forgot how to build.
+17. **Enchanted** [Strange] — Enchanted — "The Garden-Keeper's Shears" — dark bronze, green with age, that trim any growth into shapes the wielder pictures.
+18. **Enchanted** [Strange] — Enchanted — "The Founder's Lamp" — clay, ancient, that burns without fuel near anything the ones-before held sacred.
+19. **Enchanted** [Strange] — Enchanted — "The Silent Census" — a stone tablet that fills in missing names in its own ancient script.
+20. **Signature** [Strange] — Signature — "The Preserve Turnstile Key" — a key of obsidian and dark metal, ornate, that fits the court's game-gates and nothing the clans built.
+21. **Signature** [Strange] — Signature — "The Last Scribe's Stylus" — a stone stylus, ancient, that writes true words about anything it's pointed at.
+22. **Signature** [Strange] — Signature — "The Deathless Founder's Circlet" — plain gold, unadorned, that fits any brow it's placed on.
+23. **Signature** [Volatile] — Signature — "The Waking Guardian's Core" — a stone heart, cracked, warm, beating once per minute.
+24. **Consumable** [Grounded] — Consumable — A preserved fruit, mummified, from an orchard the ones-before kept and no one has found still standing.
+25. **Consumable** [Grounded] — Consumable — A pouch of ancient grain, somehow still viable, sealed in wax for an age.
+
+### Item sheet 3/3 (1×5 grid, 4 cells)
+
+1. **An obsidian court-blade** [Grounded] — An obsidian court-blade, knapped to a molecular edge and lashed to a bone haft — the sunning-lords' own make, not a ruin-find.
+2. **A saurian tithe-cutter** [Textured] — A saurian tithe-cutter — a wedge of worked obsidian the court's overseers use to score, split, and portion anything from cane to a carcass to a stubborn lock.
+3. **A court passage-token** [Textured] — A court passage-token — a polished scale-scrip disc, glyph-stamped, that says the bearer is *counted*: tolerated stock, not prey, not people.
+4. **A rider's rig for something that was never meant to be ridden** [Strange] — A rider's rig for something that was never meant to be ridden — a harness of court obsidian-fittings and forager hide, clearly assembled by someone who intended to survive the attempt.

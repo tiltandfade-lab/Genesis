@@ -34,6 +34,21 @@ import { resetGeom, getBuffers } from './probe-lib.js';
 /* ---- SET-DRIVEN ROSTERS (?set=races etc.). Dynamic imports; a missing/broken creature file is
    skipped (the sheet renders partially mid-wave instead of dying on one bad import). ---- */
 const SETS = {
+  'bright-w1': [
+    {name:'COCKATRICE',    sub:'bright w1', file:'rlm-bright-cockatrice.js',     fn:'buildCockatrice'},
+    {name:'GELATINOUS CUBE',sub:'bright w1', file:'rlm-bright-gelatinous-cube.js', fn:'buildGelatinousCube'},
+    {name:'IRON GOLEM',    sub:'bright w1', file:'rlm-bright-iron-golem.js',     fn:'buildIronGolem'},
+    {name:'FLESH GOLEM',   sub:'bright w1', file:'rlm-bright-flesh-golem.js',    fn:'buildFleshGolem'},
+    {name:'CLAY GOLEM',    sub:'bright w1', file:'rlm-bright-clay-golem.js',     fn:'buildClayGolem'},
+    {name:'PIXIE',         sub:'bright w1', file:'rlm-bright-pixie.js',          fn:'buildPixie'},
+    {name:'IMP',           sub:'bright w1', file:'rlm-bright-imp.js',            fn:'buildImp'},
+    {name:'ETTIN',         sub:'bright w1', file:'rlm-bright-ettin.js',          fn:'buildEttin'},
+    {name:'GIANT CROCODILE',sub:'bright w1', file:'rlm-bright-giant-crocodile.js', fn:'buildGiantCrocodile'},
+    {name:'HOMUNCULUS',    sub:'bright w1', file:'rlm-bright-homunculus.js',     fn:'buildHomunculus'},
+    {name:'SMOKE MEPHIT',  sub:'bright w1', file:'rlm-bright-smoke-mephit.js',   fn:'buildSmokeMephit'},
+    {name:'SATYR REVELMASTER',sub:'bright w1', file:'rlm-bright-satyr-revelmaster.js', fn:'buildSatyrRevelmaster'},
+  ],
+
   'frontier-w2': [
     {name:'GIANT VULTURE', sub:'requeue',  file:'rlm-frontier-giant-vulture.js', fn:'buildGiantVulture'},
     {name:'ASSASSIN',      sub:'requeue',  file:'rlm-frontier-assassin.js',      fn:'buildAssassin'},

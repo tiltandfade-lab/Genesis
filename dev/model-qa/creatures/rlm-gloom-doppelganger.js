@@ -68,55 +68,74 @@ export function buildDoppelganger(){
     waistY: 0.84, ribY: 0.94, chestY: 1.03, shldY: 1.12, neckY: 1.17,
     jawY: 1.205, cheekY: 1.255, browY: 1.305, crownY: 1.35,
     shoulderX: 0.155, hipHalf: 0.085,
+    /* POSEFIX (2026-07-08, ANATOMY-CANON "POSE-ANATOMY"): the pelvis->skull spine GESTURE — a
+       shallow counter-plant at the pelvis (weight rooted over the planted composed/-x leg), then
+       a sweeping lean+twist through rib/chest/shoulder/neck TOWARD the melting (+x) side, into a
+       head tilt that overshoots furthest at the crown (a rotation about the neck pivot, not a
+       flat translate) — an S-curve, not one straight diagonal. cx = world-x offset per band. */
+    pelvisX: -0.015, waistX: -0.003, ribX: 0.025, chestX: 0.058, shldX: 0.088, neckX: 0.108,
+    jawX: 0.120, cheekX: 0.138, browX: 0.152, crownX: 0.168,
   };
 
   /* ===== TORSO — one lean loft, pelvis to neck. Uniform grey; anatomy carries the read, the
-     split lives in the face/limbs only (law 4: get the body right first). ===== */
+     split lives in the face/limbs only (law 4: get the body right first). POSEFIX: cx per band
+     carries the spine-gesture lean/twist toward the melting side (see L.*X above). ===== */
   stack([
-    { y: L.pelvisY, rx: 0.095, rz: 0.075, cz: 0.000, hex: P.bodyDk },
-    { y: L.waistY,  rx: 0.088, rz: 0.070, cz: 0.010, hex: P.body },
-    { y: L.ribY,    rx: 0.108, rz: 0.085, cz: 0.020, hex: P.body },
-    { y: L.chestY,  rx: 0.122, rz: 0.095, cz: 0.030, hex: P.bodyLt },
-    { y: L.shldY,   rx: 0.135, rz: 0.090, cz: 0.038, hex: P.body },
-    { y: L.neckY,   rx: 0.052, rz: 0.050, cz: 0.045, hex: P.bodyDk },
+    { y: L.pelvisY, rx: 0.095, rz: 0.075, cx: L.pelvisX, cz: 0.000, hex: P.bodyDk },
+    { y: L.waistY,  rx: 0.088, rz: 0.070, cx: L.waistX,  cz: 0.010, hex: P.body },
+    { y: L.ribY,    rx: 0.108, rz: 0.085, cx: L.ribX,    cz: 0.020, hex: P.body },
+    { y: L.chestY,  rx: 0.122, rz: 0.095, cx: L.chestX,  cz: 0.030, hex: P.bodyLt },
+    { y: L.shldY,   rx: 0.135, rz: 0.090, cx: L.shldX,   cz: 0.038, hex: P.body },
+    { y: L.neckY,   rx: 0.052, rz: 0.050, cx: L.neckX,   cz: 0.045, hex: P.bodyDk },
   ], 10, { capBot: { hex: P.bodyDk, lift: 0.02 } });
 
   /* ===== HEAD — built by hand (not stack()) so each quad can be colored per-side: composed
-     (screen-left, -x, still-carved) vs blank (screen-right, +x, SIGNATURE B). ===== */
+     (screen-left, -x, still-carved) vs blank (screen-right, +x, SIGNATURE B). POSEFIX: cx per
+     band continues the spine gesture into a head TILT off-axis — the head rotates about the
+     neck pivot (offset grows with distance from L.neckX), so the crown overshoots furthest.
+     The composed/blank split is computed relative to each band's OWN cx (local-x), not world
+     x=0 — otherwise the whole head would flood one color once it's no longer centered. ===== */
   {
     const n = 8, ph = Math.PI / n;
     const bands = [
-      { y: L.jawY,   rx: 0.062, rz: 0.068, cz: 0.050 },
-      { y: L.cheekY, rx: 0.072, rz: 0.075, cz: 0.065 },
-      { y: L.browY,  rx: 0.075, rz: 0.070, cz: 0.050 },
-      { y: L.crownY, rx: 0.062, rz: 0.058, cz: 0.015 },
+      { y: L.jawY,   rx: 0.062, rz: 0.068, cx: L.jawX,   cz: 0.050 },
+      { y: L.cheekY, rx: 0.072, rz: 0.075, cx: L.cheekX, cz: 0.065 },
+      { y: L.browY,  rx: 0.075, rz: 0.070, cx: L.browX,  cz: 0.050 },
+      { y: L.crownY, rx: 0.062, rz: 0.058, cx: L.crownX, cz: 0.015 },
     ];
-    const rings = bands.map(b => ring(V(0, b.y, b.cz), V(0, 1, 0), b.rx, b.rz, n, ph));
+    const rings = bands.map(b => ring(V(b.cx, b.y, b.cz), V(0, 1, 0), b.rx, b.rz, n, ph));
     for(let b = 0; b < rings.length - 1; b++){
       for(let i = 0; i < n; i++){
         const i2 = (i + 1) % n;
-        const avgX = (rings[b][i].x + rings[b][i2].x + rings[b + 1][i].x + rings[b + 1][i2].x) / 4;
-        const hex = avgX >= 0 ? (b % 2 ? P.blankLt : P.blankFace) : (b % 2 ? P.compFace : P.compDk);
+        const localX = (rings[b][i].x - bands[b].cx) + (rings[b][i2].x - bands[b].cx)
+                      + (rings[b + 1][i].x - bands[b + 1].cx) + (rings[b + 1][i2].x - bands[b + 1].cx);
+        const hex = localX >= 0 ? (b % 2 ? P.blankLt : P.blankFace) : (b % 2 ? P.compFace : P.compDk);
         quad(rings[b][i], rings[b][i2], rings[b + 1][i2], rings[b + 1][i], hex, 0.06);
       }
     }
-    capFan(rings.at(-1), V(0, L.crownY + 0.02, 0.010), P.blankFace);
+    capFan(rings.at(-1), V(L.crownX, L.crownY + 0.02, 0.010), P.blankFace);
 
-    /* composed half — one dark carved eye socket + a short closed mouth line (screen-left only). */
-    blob(-0.040, L.cheekY + 0.028, 0.115, 0.020, 0.017, 0.014, P.socket, 5, 3);
-    quad(V(-0.044, L.jawY + 0.018, 0.108), V(-0.014, L.jawY + 0.018, 0.108),
-         V(-0.016, L.jawY + 0.006, 0.104), V(-0.042, L.jawY + 0.006, 0.104), P.mouth, 0.03);
+    /* composed half — one dark carved eye socket + a short closed mouth line (screen-left of
+       the head's OWN local center, i.e. offset from L.cheekX/L.jawX — rides the head tilt). */
+    blob(L.cheekX - 0.040, L.cheekY + 0.028, 0.115, 0.020, 0.017, 0.014, P.socket, 5, 3);
+    quad(V(L.jawX - 0.044, L.jawY + 0.018, 0.108), V(L.jawX - 0.014, L.jawY + 0.018, 0.108),
+         V(L.jawX - 0.016, L.jawY + 0.006, 0.104), V(L.jawX - 0.042, L.jawY + 0.006, 0.104), P.mouth, 0.03);
 
     /* blank half — no eye, no mouth; one small darker glisten-drip low on the cheek (the
        "faintly glistening, dissolving" read from the pose sentence). */
-    blob(0.048, L.cheekY - 0.010, 0.112, 0.024, 0.030, 0.018, P.glisten, 5, 3);
+    blob(L.cheekX + 0.048, L.cheekY - 0.010, 0.112, 0.024, 0.030, 0.018, P.glisten, 5, 3);
   }
 
-  /* ===== LEFT (composed) ARM — relaxed at its side, normal proportions, 4-finger hand. ===== */
+  /* ===== LEFT (composed) ARM — relaxed at its side, normal proportions, 4-finger hand.
+     POSEFIX: shoulder DROPPED (counterpose against the torso's lean/twist into the melting
+     side — the composed side settles, it isn't fighting the shift) and the elbow now bends a
+     real ~139 degrees (interior) — a shoulder->elbow->wrist ARC, not a straight hang, per
+     ANATOMY-CANON POSE-ANATOMY rule 2. Shoulder x also rides the torso's new local surface
+     (L.shldX - L.shoulderX) instead of a world-centered offset. ===== */
   {
-    const sh = V(-L.shoulderX, L.shldY - 0.01, 0.020);
-    const el = V(-0.205, 0.860, 0.045);
-    const wr = V(-0.195, 0.650, 0.030);
+    const sh = V(L.shldX - L.shoulderX, L.shldY - 0.05, 0.035);
+    const el = V(-0.100, 0.815, 0.090);
+    const wr = V(-0.020, 0.690, 0.175);
     knob(sh, 0.050, P.body);
     tube(sh, el, 0.036, 0.030, 6, P.body);
     knob(el, 0.040, P.bodyDk);
@@ -135,9 +154,12 @@ export function buildDoppelganger(){
      invisible as a distinct limb. Pulled z back near zero/slightly behind and pushed x further
      out so the sag reads as a separate outward shape, and split the sag into a mid-value shaft +
      a lightened "glistening" forearm segment for its own value contrast (law 3), not just riding
-     on the face's pale zone. ===== */
+     on the face's pale zone. POSEFIX: shoulder x now rides L.shldX (the torso's new lean-
+     driven surface offset) instead of world 0 — same L.shoulderX reach off the torso as
+     before, otherwise the knob buries inside the now-shifted ribcage. el/wr/hd (the sag/paddle/
+     drip signature itself) are untouched. ===== */
   {
-    const sh = V(L.shoulderX, L.shldY - 0.01, 0.020);
+    const sh = V(L.shldX + L.shoulderX, L.shldY - 0.01, 0.020);
     const el = V(0.360, 0.740, 0.020);
     const wr = V(0.430, 0.440, -0.010);
     const hd = V(0.460, 0.230, -0.030);
@@ -158,8 +180,9 @@ export function buildDoppelganger(){
   /* ===== LEGS — asymmetric mid-shift stance: LEFT planted/weight-bearing, RIGHT softened with a
      puddling foot instead of a clean sole. ===== */
   {
-    /* LEFT — normal, planted, weight-bearing */
-    const hipL = V(-L.hipHalf, L.hipY - 0.02, 0.000);
+    /* LEFT — normal, planted, weight-bearing. hip x rides L.pelvisX (POSEFIX — the small
+       counter-plant the spine gesture is rooted over). */
+    const hipL = V(L.pelvisX - L.hipHalf, L.hipY - 0.02, 0.000);
     const kneeL = V(-0.092, L.kneeY, 0.020);
     const ankL = V(-0.088, L.ankleY, 0.030);
     knob(hipL, 0.044, P.body);
@@ -174,7 +197,7 @@ export function buildDoppelganger(){
        split into two silhouettes instead of one dark column (they read fused at the old
        narrow 0.10 spread), and lightened + enlarged the puddle blob so it stands out against
        the dark base disc instead of vanishing into it (law 3). */
-    const hipR = V(L.hipHalf, L.hipY - 0.02, 0.000);
+    const hipR = V(L.pelvisX + L.hipHalf, L.hipY - 0.02, 0.000);
     const kneeR = V(0.150, L.kneeY - 0.02, 0.035);
     const ankR = V(0.160, L.ankleY + 0.02, 0.045);
     knob(hipR, 0.044, P.body);

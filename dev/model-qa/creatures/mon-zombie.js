@@ -14,16 +14,21 @@
      3. Torn tunic skirt, ragged uneven hem (per-panel jagged lengths + a couple of loose hanging
         strips) — the corpse-clothing tell.
      4. LOLLED head — rolled off-axis at the neck pivot, dark slack-mouth gap, mottled rot patches.
-     5. BOTH arms out UNEVENLY reaching (law 5's pose) — near arm high and forward with splayed
-        grasping fingers, far arm lower and further back, both clearly mid-reach, neither hanging
-        dead — this is the shamble-reach itself, not a limp.
+     5. POSEFIX 2026-07-08 (Adam's POSE-ANATOMY ruling) — arms carry ZOMBIE LOOSENESS as HANGING
+        JOINTS, not a rigor-mortis reach (the mummy carve-out does not apply to this creature):
+        the dragging-leg-side arm hangs and SWINGS mid-pendulum, bent hard at the elbow, wrist
+        low and trailing; the planting-leg-side arm is only BARELY lifted off the hang, elbow
+        bent, hand resting near the belly — its shoulder rolls forward/up with the lift (law 3).
+        Neither arm is a straight stick; both read a visible elbow arc.
      6. One leg PLANTS forward (weight-bearing stride), the other DRAGS behind carving a furrow —
         stiff knee, toe trailing low and turned, the limp's tell.
 
-   POSE SENTENCE: caught mid-shamble, torso stooped forward off-axis, head lolled onto one
-   shoulder, both arms thrown out at uneven heights reaching for whatever's ahead of it, one leg
-   striding forward to plant while the other drags stiff-kneed behind — dragging a furrow, not
-   walking — never an at-attention stance, always the half-second of the lurch itself.
+   POSE SENTENCE: caught mid-shamble, torso stooped forward AND slumped laterally toward the
+   dragging leg (the spine gesture — not a plumb diagonal), head lolled onto one shoulder, the
+   near arm hanging loose mid-swing with a hard elbow bend while the far arm is barely lifted off
+   its hang with a rolled-forward shoulder, one leg striding forward to plant while the other
+   drags stiff-kneed behind — dragging a furrow, not walking — never an at-attention stance,
+   always the half-second of the lurch itself.
 
    Whole-object grammar: one function, one geometry frame, no anchors. Spine +z (front), up +y,
    ground y=0. Imported by ps1-sheet.html (SETS['rebuild-w3'], cell 1, fn buildZombie). */
@@ -46,13 +51,16 @@ export function buildZombie(){
     jawY:1.175, cheekY:1.25, browY:1.325, crownY:1.415, headTopY:1.475,
   };
 
-  /* THE STOOP — everything above the hip pivot leans FORWARD (+z) and drifts to one side (−x),
-     sinking slightly, growing with height so the head leads furthest off-axis. */
+  /* THE STOOP — everything above the hip pivot leans FORWARD (+z) and drifts to one side (+x, the
+     DRAGGING-LEG side — POSEFIX 2026-07-08, Adam's POSE-ANATOMY ruling), sinking slightly, growing
+     with height so the head leads furthest off-axis. This IS the spine gesture: one C-curve from
+     pelvis to skull slumping toward the dragging leg (dragging leg is +x, see LEGS below) — the
+     lurch collapsing sideways onto its bad side, not a plumb lean. */
   const HIPY = L.hipY;
   const stoop = (p) => {
     const t = Math.max(0, p.y - HIPY);
     const t2 = t*t;
-    return V(p.x - t*0.10 - t2*0.04,
+    return V(p.x + t*0.10 + t2*0.04,
              p.y - t*0.05,
              p.z + t*0.20 + t2*0.09);
   };
@@ -145,36 +153,48 @@ export function buildZombie(){
     { const q=xf(V(0.05,L.cheekY,0.09)); blob(q.x,q.y,q.z, 0.028,0.024,0.022, P.rotDk, 6, 4); }
   }
 
-  /* ===== ARMS — BOTH thrown out reaching, at UNEVEN heights (the shamble-reach, not a limp) ===== */
+  /* ===== ARMS — POSEFIX 2026-07-08: HANGING joints, not a rigor-mortis reach. Both elbows bend
+     hard (~105-127°, never a straight stick); the two arms are UNEVEN — one swinging loose off a
+     plain hang, the other barely lifted with its shoulder rolled forward (law 3). ===== */
   {
     const Ss = (x) => stoop(V(x, L.shldY-0.01, 0.015));
+    /* Elbow/wrist are authored as OFFSETS off the already-stooped shoulder, not independently
+       re-stooped raw points — a hanging wrist sits near/below hip height, where stoop()'s offset
+       collapses toward zero while the shoulder (well above hip) carries a large offset; stooping
+       each joint on its own raw y tears the arm apart. Offsets keep the arm rigid on the torso. */
 
-    /* NEAR arm (right) — HIGH and forward, splayed grasping fingers — the loudest reach */
+    /* NEAR arm (right) — the DRAGGING-LEG side — hangs and SWINGS mid-pendulum: upper arm drops
+       almost straight down off the shoulder, forearm kicks BACK and further down at a hard elbow
+       bend, wrist low and trailing behind the body line — the loose dead-weight swing. */
     const S=Ss(L.shoulderX*0.9);
-    const E=stoop(V(0.30,1.04,0.26));
-    const W=stoop(V(0.27,1.02,0.58));
+    const E=S.clone().add(V(0.040,-0.330,0.105));
+    const W=E.clone().add(V(0.040,-0.240,-0.170));
     tube(S,E,0.070,0.056,6,P.tunicDk);
     tube(E,W,0.052,0.044,6,P.skin);
     blob(W.x,W.y,W.z, 0.05,0.045,0.05, P.skin, 6, 4);
-    const fanDirs=[V(-0.35,-0.1,1),V(-0.15,0.15,1),V(0.05,0.25,1),V(0.25,0.12,1),V(0.32,-0.2,0.9)];
+    /* loose dangling fingers — hang down and trail back with the wrist, not splayed forward */
+    const fanDirs=[V(-0.25,-1,-0.25),V(0.05,-1,-0.15),V(0.30,-0.85,0.05),V(0.35,-0.6,0.25),V(0.10,-0.55,0.40)];
     for(const d of fanDirs){
       const dn=d.clone().normalize();
-      const tip=W.clone().addScaledVector(dn,0.11);
+      const tip=W.clone().addScaledVector(dn,0.10);
       tube(W, tip, 0.017,0.010,4,P.skin,{capB:{hex:P.nail}});
     }
 
-    /* FAR arm (left) — LOWER and further back, still reaching outward, not hanging dead — the
-       asymmetric second reach that reads as a lurching shamble rather than a single-arm grab */
-    const S2=Ss(-L.shoulderX*0.9);
-    const E2=stoop(V(-0.32,0.86,0.20));
-    const W2=stoop(V(-0.40,0.72,0.34));
+    /* FAR arm (left) — the PLANTING-LEG side — only BARELY lifted off the hang: shoulder rolled
+       forward/up with the lift (law 3), elbow flares OUT and DOWN clear of the wound signature
+       (both live on this side of the torso — the elbow has to swing wide before the forearm cuts
+       back in), hand resting near the belly rather than reaching out. */
+    const S2=stoop(V(-L.shoulderX*0.9, L.shldY+0.02, 0.045));   /* rolled-forward/up shoulder */
+    const E2=S2.clone().add(V(-0.050,-0.320,0.040));
+    const W2=E2.clone().add(V(0.190,-0.080,0.060));
     tube(S2,E2,0.070,0.056,6,P.tunicDk);
     tube(E2,W2,0.052,0.044,6,P.skin);
     blob(W2.x,W2.y,W2.z, 0.046,0.042,0.046, P.skin, 6, 4);
-    const fanDirs2=[V(-0.4,-0.15,0.6),V(-0.3,0.1,0.8),V(-0.1,0.2,0.9),V(0.1,0.05,0.85)];
+    /* relaxed fingers curled near the belly, not splayed outward */
+    const fanDirs2=[V(-0.3,-0.5,0.4),V(-0.1,-0.6,0.5),V(0.1,-0.5,0.55),V(0.25,-0.3,0.45)];
     for(const d of fanDirs2){
       const dn=d.clone().normalize();
-      const tip=W2.clone().addScaledVector(dn,0.095);
+      const tip=W2.clone().addScaledVector(dn,0.085);
       tube(W2, tip, 0.015,0.009,4,P.skin,{capB:{hex:P.nail}});
     }
   }

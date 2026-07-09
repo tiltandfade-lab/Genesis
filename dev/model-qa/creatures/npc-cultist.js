@@ -46,28 +46,32 @@ export function buildCultist(){
     jawY:1.145, cheekY:1.215, browY:1.29, crownY:1.375, headTopY:1.435,
   };
 
-  /* trunk (one loft, hips->neck) — arched BACK: verts pushed -z (backward) as y rises, chest lifted */
+  /* trunk (one loft, hips->neck) — POSEFIX 2026-07-08: a genuine C-curve, not a plumb column.
+     Pelvis reads FORWARD (+z, positive cz) at the hip, the curve sweeps backward (-z) climbing
+     through rib/chest/shoulder/neck — chest lifted, the whole upper spine arched back. */
   stack([
-    {y:L.hipY,   rx:0.185, rz:0.145, cz:0.0,    hex:P.robeDk},
-    {y:L.waistY, rx:0.168, rz:0.130, cz:-0.006, hex:P.robe},
-    {y:L.ribY,   rx:0.192, rz:0.148, cz:-0.020, hex:P.robe},
-    {y:L.chestY, rx:0.210, rz:0.162, cz:-0.038, hex:P.robeLt},
-    {y:L.shldY,  rx:0.208, rz:0.150, cz:-0.052, hex:P.robeLt},
-    {y:L.neckY,  rx:0.080, rz:0.076, cz:-0.058, hex:P.robeDk},
+    {y:L.hipY,   rx:0.185, rz:0.145, cz:0.010,  hex:P.robeDk},
+    {y:L.waistY, rx:0.168, rz:0.130, cz:-0.012, hex:P.robe},
+    {y:L.ribY,   rx:0.192, rz:0.148, cz:-0.055, hex:P.robe},
+    {y:L.chestY, rx:0.216, rz:0.165, cz:-0.100, hex:P.robeLt},
+    {y:L.shldY,  rx:0.208, rz:0.150, cz:-0.125, hex:P.robeLt},
+    {y:L.neckY,  rx:0.080, rz:0.076, cz:-0.145, hex:P.robeDk},
   ], 8, {capTop:{hex:P.robeDk, lift:0.004}});
 
-  /* FULL ROBE — floor-length outer shell, heavier toward the hem (this IS the lower body) */
+  /* FULL ROBE — floor-length outer shell, heavier toward the hem (this IS the lower body).
+     Pelvis pushed forward (+z) at the hem, tapering up to the hip cz to hand off cleanly into
+     the trunk's counter-arch above. */
   stack([
-    {y:0.04,  rx:0.275, rz:0.230, cz:0.020, hex:P.robeDk},
-    {y:0.22,  rx:0.258, rz:0.212, cz:0.016, hex:P.robe},
-    {y:0.42,  rx:0.235, rz:0.190, cz:0.008, hex:P.robe},
-    {y:0.60,  rx:0.212, rz:0.168, cz:0.000, hex:P.robeLt},
-    {y:L.hipY,rx:0.190, rz:0.148, cz:-0.006,hex:P.robeLt},
+    {y:0.04,  rx:0.275, rz:0.230, cz:0.050, hex:P.robeDk},
+    {y:0.22,  rx:0.258, rz:0.212, cz:0.044, hex:P.robe},
+    {y:0.42,  rx:0.235, rz:0.190, cz:0.032, hex:P.robe},
+    {y:0.60,  rx:0.212, rz:0.168, cz:0.018, hex:P.robeLt},
+    {y:L.hipY,rx:0.190, rz:0.148, cz:0.010, hex:P.robeLt},
   ], 8, {});
   // hem flare lip
   stack([
-    {y:0.03,  rx:0.300, rz:0.250, cz:0.022, hex:P.robeDk},
-    {y:0.12,  rx:0.270, rz:0.222, cz:0.018, hex:P.robe},
+    {y:0.03,  rx:0.300, rz:0.250, cz:0.052, hex:P.robeDk},
+    {y:0.12,  rx:0.270, rz:0.222, cz:0.046, hex:P.robe},
   ], 8, {capBot:{hex:P.robeDk, lift:0.0}});
 
   /* ROPE BELT with a hanging cord tail (knotted, dangling to mid-thigh) — unchanged signature */
@@ -90,25 +94,28 @@ export function buildCultist(){
      (outer shell + open front window + dark lining) as before, just re-angled for the new pose. */
   {
     const n=8, ph=Math.PI/n, faceCols=[1,2];
+    /* POSEFIX 2026-07-08: head follows the trunk's new -0.145 neck cz — shifted back by the same
+       delta as before (~-0.087) so the hood's own internal curve (still opening forward toward
+       the crown) is preserved, it just rides the more dramatic backward arch now. */
     const bands=[
-      {y:L.neckY-0.01,  rx:0.100, rz:0.098, cz:-0.058, hex:P.robeDk},
-      {y:L.jawY+0.03,   rx:0.130, rz:0.124, cz:-0.055, hex:P.robe},
-      {y:L.cheekY+0.05, rx:0.138, rz:0.130, cz:-0.040, hex:P.robeLt},
-      {y:L.browY+0.09,  rx:0.130, rz:0.122, cz:-0.010, hex:P.robe},
-      {y:L.crownY+0.13, rx:0.106, rz:0.098, cz:0.030, hex:P.robeDk},
+      {y:L.neckY-0.01,  rx:0.100, rz:0.098, cz:-0.145, hex:P.robeDk},
+      {y:L.jawY+0.03,   rx:0.130, rz:0.124, cz:-0.142, hex:P.robe},
+      {y:L.cheekY+0.05, rx:0.138, rz:0.130, cz:-0.127, hex:P.robeLt},
+      {y:L.browY+0.09,  rx:0.130, rz:0.122, cz:-0.097, hex:P.robe},
+      {y:L.crownY+0.13, rx:0.106, rz:0.098, cz:-0.057, hex:P.robeDk},
     ];
     const rings=bands.map(b=>ring(V(0,b.y,b.cz), V(0,1,0), b.rx, b.rz, n, ph));
     const skip={1:faceCols, 2:faceCols, 3:faceCols};
     stitch(rings, b=>bands[b].hex, skip);
-    capFan(rings.at(-1), V(0, L.headTopY+0.16, 0.075), P.robeDk);
+    capFan(rings.at(-1), V(0, L.headTopY+0.16, -0.012), P.robeDk);
     // deep inner lining walls framing the face window (dark, receding into the hood)
     const inner=bands.map(b=>ring(V(0,b.y,b.cz+0.05), V(0,1,0), b.rx-0.025, b.rz-0.025, n, ph));
     for(let b=1;b<4;b++) for(const edge of [1,2])
       quad(rings[b][edge], inner[b][edge], inner[b+1][edge], rings[b+1][edge], P.robeDk, 0.03);
     /* THE FACE-VOID — recessed dark shadow-well, tilted to face UP-and-forward (following the
        snapped-back head), still the single legal exception to the house eye standard. */
-    const voidCenter = V(0, (L.jawY+L.browY)/2+0.04, 0.045);
-    const voidNormal = V(0, 0.45, 1).normalize();
+    const voidCenter = V(0, (L.jawY+L.browY)/2+0.04, -0.045);
+    const voidNormal = V(0, 0.65, 1).normalize();
     const voidRing = ring(voidCenter, voidNormal, 0.070, 0.088, 10);
     capFan(voidRing, voidCenter.clone().addScaledVector(voidNormal, -0.05), P.void);
     const lipRing = ring(voidCenter.clone().addScaledVector(voidNormal, 0.012), voidNormal, 0.078, 0.096, 10);
@@ -117,7 +124,7 @@ export function buildCultist(){
 
   /* ================= THE RITUAL DAGGER — raised OVERHEAD in the right fist, blade pointing UP.
      Authored before the arms so the right wrist can derive to the grip. */
-  const GRIP_HI = V(0.24, 1.64, -0.04), GRIP_LO = V(0.235, 1.51, -0.045);
+  const GRIP_HI = V(0.235, 1.64, -0.105), GRIP_LO = V(0.230, 1.505, -0.11);
   const BLADE_DIR = new THREE.Vector3().subVectors(GRIP_HI, GRIP_LO).normalize();   // points up
   const TIP = GRIP_HI.clone().addScaledVector(BLADE_DIR, 0.24);
   {
@@ -130,13 +137,15 @@ export function buildCultist(){
     tube(GRIP_LO, TIP, 0.026, 0.004, 6, P.steel, {capB:{hex:P.steel}});
   }
 
-  /* arms — BOTH thrown up to the sky. Right hand grips the dagger overhead; left is open-palmed,
-     raised alongside it. Wide bell sleeves (cuff wider than wrist) fall open toward the shoulder —
-     gravity-dropped, the pose's second silhouette tell. */
+  /* arms — POSEFIX 2026-07-08 (ANATOMY-CANON POSE-ANATOMY): the "candlestick" (both arms straight,
+     near-symmetric, mirrored heights) is a gate failure — staggered instead. RIGHT (dagger) arm
+     rides HIGH with a clear ~114° elbow bend and its shoulder lifted with it (rule 3). LEFT (off)
+     arm is lower AND wider — a ~114° elbow swung out to the side rather than mirroring the dagger
+     arm overhead — so the silhouette reads as one asymmetric gesture, not a tuning fork. */
   {
-    // right arm: shoulder -> elbow (raised, elbow forward of shoulder) -> wrist at the dagger grip
-    const S_R=V(0.190, L.shldY-0.005, -0.02);
-    const E_R=V(0.245, 1.36, 0.04);
+    // right arm: shoulder (lifted, rides with the raised arm) -> elbow (kicked out, bent ~114°) -> wrist at the dagger grip
+    const S_R=V(0.185, L.shldY+0.025, -0.04);
+    const E_R=V(0.240, 1.260, 0.060);
     const W_R=GRIP_LO.clone().add(V(0.005,-0.01,0.01));
     tube(S_R,E_R,0.080,0.062,6,P.robe);
     tube(E_R,W_R,0.062,0.046,6,P.robeLt,{capB:{hex:P.hand}});
@@ -147,14 +156,15 @@ export function buildCultist(){
       {y:E_R.y-0.10, rx:0.100, rz:0.090, cx:E_R.x-0.02, cz:E_R.z-0.05, hex:P.robeDk},
     ], 6, {capBot:{hex:P.robeDk, lift:0.0}});
 
-    // left arm: shoulder -> elbow -> open raised palm, mirrored and slightly lower/wider
-    const S_L=V(-0.190, L.shldY-0.005, -0.02);
-    const E_L=V(-0.255, 1.32, 0.06);
-    const W_L=V(-0.245, 1.56, -0.03);
+    // left arm: shoulder (relaxed, below the dagger shoulder) -> elbow swung WIDE and low -> open
+    // palm raised only to chest/shoulder height — lower AND wider than the dagger arm, never mirrored.
+    const S_L=V(-0.195, L.shldY-0.015, -0.03);
+    const E_L=V(-0.310, 1.180, 0.100);
+    const W_L=V(-0.440, 1.300, 0.000);
     tube(S_L,E_L,0.080,0.062,6,P.robe);
     tube(E_L,W_L,0.062,0.046,6,P.robeLt,{capB:{hex:P.hand}});
     // open palm — a short flattened stub capped at the fingertip line
-    tube(W_L, W_L.clone().add(V(-0.01,0.10,-0.03)), 0.040,0.030,6,P.hand, {capA:{hex:P.hand}, capB:{hex:P.handDk}});
+    tube(W_L, W_L.clone().add(V(-0.06,0.06,-0.02)), 0.040,0.030,6,P.hand, {capA:{hex:P.hand}, capB:{hex:P.handDk}});
     stack([
       {y:E_L.y+0.03, rx:0.075, rz:0.070, cx:E_L.x+0.01, cz:E_L.z-0.02, hex:P.robeLt},
       {y:E_L.y-0.10, rx:0.100, rz:0.090, cx:E_L.x+0.02, cz:E_L.z-0.05, hex:P.robeDk},

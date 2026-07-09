@@ -14,6 +14,34 @@ related:
 
 The running execution order. `DESIGN.md` holds the *what* and *why*; this holds the *in what order*. Update in the same change as progress. Status: ☐ todo · ◐ in progress · ☑ done.
 
+## Do next (2026-07-09 overnight — the design session landed; supersedes below)
+
+The accidental design session (see CHANGELOG 2026-07-09): 6 system specs + 6 craft expansions merged
+with Adam's rulings folded; REALM-HOOKS spec landing next. Queue:
+
+1. ☐ **Adam (morning): gather the books** into `Reference/` for the Saltmarsh treatment (page index +
+   system gather each — highest-fit first):
+   - **Van Richten's Guide to Ravenloft** → GLOOM (Domains of Dread, horror kits, Darklords)
+   - **Tomb of Annihilation** → LOST WORLD (hexcrawl travel, jungle survival, dino mounts/races)
+   - **Wild Beyond the Witchlight** → BRIGHT-KINGDOM (carnival games, fey bargains)
+   - **Curse of Strahd** → COSMIC (the Tarokka reading — deck-driven prep blueprint)
+   - **Explorer's Guide to Wildemount** → TIYL (the Heroic Chronicle weighted-origin system)
+   - **Descent into Avernus** → CHROME (war machines / vehicle combat)
+   - **Acquisitions Incorporated** → economy (organization/franchise sinks)
+   - **Rime of the Frostmaiden** → wilderness (cold survival, overland dread)
+2. ☐ **Adam: row-level taste passes** on the PROVISIONAL craft (Child Saw d100, the 3 item tables,
+   the 3 realm re-keys) — direction already ruled, rows await his read.
+3. ☐ **Build wave — the spec backlog is deep and Sonnet-ready** (each doc carries numbered units +
+   red-first tests): ANIMAL-SOCIAL U1–U6 → TIYL-WEIGHTED-STARTS → HOOK-WALKS (incl. dungeon-discovery,
+   breach-in-walks, mid-walk entry, 8–12 segment law) → GLOOM-KEY U1–U7 → PLACE-GEN U1–U6 →
+   CAMEO-CAST U1–U5 → SHIP-TRAVEL U1–U9 → REALM-HOOKS U1–U6. Suggested order follows
+   dependency: ANIMAL-SOCIAL env-banding first (PLACE-GEN + wilderness starts read it).
+4. ☐ **Models-lane handoff** (coordination note, other session): saurian warrior+scholar castes,
+   2-3 rideable dino mounts, Zeal-stratum sentinel, the bat gang, ED-209-class boss, ally-mutant,
+   plus the Shoggoth benchmark's hermetic re-identity ("Unformed of Nun", Adam deferred).
+5. ☐ Standing: playtest + retune (E-PRES curves, hook-walk lengths, ship lethality all
+   "felt-in-play" items); the NPC-lane optional craft (kin rows fold-in).
+
 ## Do next (2026-07-08 night — after the NPC-wiring + MODEL-FOUNDRY sessions; supersedes below)
 
 Two parallel sessions closed 2026-07-08 (see HANDOFF's two entries). **Landed to master:** the NPC

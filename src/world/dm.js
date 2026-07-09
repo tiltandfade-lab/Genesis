@@ -3539,7 +3539,13 @@ function applyEvent(w,e){
     }
 
     case "kill":{
-      addLedger(w,"outcome",{kind:"kill",victimClass:p.victimClass,factionId:p.factionId||null,walk:wkStamp,source:src},
+      // HQ-5 (docs/ANIMAL-SOCIAL-HQ.md): stamp the node the kill happened at so
+      // animalWitnessSeen (a location-scoped filter) can ever match this entry — prefer an
+      // explicit payload node (p.at, already DM_EVENT_FIELDS-accepted for this event) over the
+      // party's current node, same payload->fallback idiom this case already uses below for the
+      // witness cascade (p.at!=null?p.at:w.currentNodeId).
+      const killAt=(p.at!=null)?p.at:w.currentNodeId;
+      addLedger(w,"outcome",{kind:"kill",victimClass:p.victimClass,factionId:p.factionId||null,nodeId:killAt,walk:wkStamp,source:src},
         "✦ A "+(p.victimClass||"being")+" was slain"+(p.factionId?(" — "+p.factionId+" will remember"):"")+".");
       // DETECTED social cost (SOCIAL §5 / DIFFICULTY murder-hobo answer): a CIVILIAN kill near witnesses
       // turns every co-located codex NPC Hostile — no DM report; the script remembers who saw. (The

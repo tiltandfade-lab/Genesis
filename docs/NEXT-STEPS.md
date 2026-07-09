@@ -1348,12 +1348,12 @@ tri band 1,000–2,000 spent only on the capture criteria (anatomy chief), two S
 essence), engine-PS1 gate, waves of 8–12 background units. Items 1–2 below are RESHAPED accordingly;
 the old MODEL-BLITZ-24H Blender-hero lane is superseded.
 
-1. ☐ **THE BATCH MODELING SESSION** (next session, `/genesis-orchestrate` + `docs/MODEL-FOUNDRY.md`
+1. ☑ **THE BATCH MODELING SESSION** (DONE 2026-07-09 — 14 merges, ~185 models, all realms anchored; see CHANGELOG) (next session, `/genesis-orchestrate` + `docs/MODEL-FOUNDRY.md`
    as the locked spec) — waves over VISUAL-ASSET-QUEUE, one realm per wave, stand-in-heaviest first:
    gloom (66%) → high-seas (62%) → frontier (56%) → bright-kingdom (56%) → cosmic (54%) → the rest.
    Wave 1 of cosmic carries the Creeper rework (failed laws 2–3 twice — the pilot's one red).
    Per wave: registry wiring by the orchestrator + `check-manifest.py` + `verify-theater-figures.mjs`.
-2. ☐ **Original-roster revisit under the foundry laws** (after the realm waves) — re-author the ~117
+2. ☑ **Original-roster revisit** (DONE 2026-07-09 — all 42 alias targets rebuilt in waves 1–4; signatures kept, wolf maw fixed in the second pass) (after the realm waves) — re-author the ~117
    exact-key creatures at the new bands, KEEPING signatures (the wolf keeps its open maw; law 4).
 3. ☐ **Step-6 wire the frontier GLBs** — `genesis-blender-mcp/out/frontier/final/{gunhand,boothill,
    longhorn,ironhorse}.glb` → copy into `dev/model-qa/glb/`, add `{glb,discR}` registry entries,
@@ -1363,3 +1363,13 @@ the old MODEL-BLITZ-24H Blender-hero lane is superseded.
 5. Doctrine LOCKED (`docs/MODELING-PIPELINE.md`): refs-first · 2 taste-gated rounds · metric-is-a-
    guardrail-not-target · look-with-eyes-on-lit-renders · kit grammar · scale-contract-first.
    Kit/figure GLBs: `genesis-blender-mcp/out/<realm>/`. Prop-noun table gaps flagged in `PROP-NOUN-LIBRARY.md`.
+
+## Do next (2026-07-09, models lane — post-foundry-batch)
+
+1. ☐ **Re-key coverage audit** — once Adam's realm re-keys land, sweep every realm's `model` keys vs
+   the registry; repoint onto the 185-body roster, queue only true silhouette gaps for a wave.
+2. ☐ **Beautification queue** — Adam scans the wave sheets (review Artifact / dev/model-qa/sheets/),
+   names offenders; run them through the second-pass pattern (proven 18/18).
+3. ☐ **Props + NPC set** — the 14 missing prop models and the NPC humanoid expansion
+   (VISUAL-ASSET-QUEUE) via the same author-only waves.
+4. ☐ **Frontier GLB step-6 wiring** (carried from 2026-07-08).

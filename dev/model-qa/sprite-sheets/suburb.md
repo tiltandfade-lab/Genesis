@@ -161,7 +161,9 @@ static character per cell (not a repeat, not an animation frame), uniform cell s
 
 ---
 
-## NPC batches (45 total, 2 sheets)
+## NPC batches (50 total, 2 sheets)
+
+**Population diversity (binding):** vary skin tone, ethnicity, hair texture, build, and age across the full roster below — a sheet where every face reads as the same ethnicity is a failure, not a style choice, regardless of realm. This realm's population is entirely human (no established non-human civilian population in this realm's lore) — the diversity requirement is ethnic/physical variety only.
 
 Style block (repeated here so this section is self-contained): Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). bright manicured-suburbia palette — lawn green, siding beige, porch-light amber — rendered slightly too clean/saturated to feel safe, soft daytime shading that curdles at the edges of each figure, one off-key color note breaking the cheerfulness per sprite.
 
@@ -219,6 +221,11 @@ Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-R
 18. **The bully** — The wrongness with a letterman jacket and a car that's too nice.
 19. **Diner waitress** — The town's real hub; refills the coffee and dispenses the verdict.
 20. **Mall security** — A uniform, a flashlight, and expansive delusions of jurisdiction.
+21. **Dark-skinned block-association president — the actual power on the street, not the HOA**
+22. **Elderly widower, untouched by the wrongness — the only one who says it out loud**
+23. **Multi-ethnic PTA newcomer — hasn't learned the unwritten rules yet**
+24. **Teen paperboy — sees the neighborhood at hours no adult does**
+25. **Retired schoolteacher — remembers every kid on the block, including the ones who 'moved away'**
 
 ---
 

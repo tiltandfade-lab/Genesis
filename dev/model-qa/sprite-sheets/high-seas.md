@@ -159,7 +159,9 @@ static character per cell (not a repeat, not an animation frame), uniform cell s
 
 ---
 
-## NPC batches (44 total, 2 sheets)
+## NPC batches (50 total, 2 sheets)
+
+**Population diversity (binding):** vary skin tone, ethnicity, hair texture, build, and age across the full roster below — a sheet where every face reads as the same ethnicity is a failure, not a style choice, regardless of realm. This realm's population is entirely human (no established non-human civilian population in this realm's lore) — the diversity requirement is ethnic/physical variety only.
 
 Style block (repeated here so this section is self-contained): Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). sun-faded teal-and-driftwood palette, salt-spray dither texture, hard bright rim light off water, weathered rope/canvas/barnacle textures, one high-value wet-glint accent per sprite.
 
@@ -199,7 +201,7 @@ Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-R
 
 1. **Foreign hand signed at the last port** — Chose to stay here; the reasons stay unclear.
 2. **The one who never comes above decks** — Known of, rarely seen.
-3. **Acting mate (the officer lost** — Filling in for someone absent; borrowed authority.
+3. **Acting mate (the officer lost)** — Filling in for someone absent; borrowed authority.
 4. **Fo'c'sle boss** — Power without a title.
 5. **Landsman who never should've shipped out** — Unqualified, unwilling, or both — and in the role anyway.
 6. **Passenger of quality** — Wealthy, bored, insulated from real consequence.
@@ -216,6 +218,12 @@ Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-R
 17. **Cabin-child** — Sees everything, counts for nothing, and remembers all of it.
 18. **Merchant-shipper** — Owns the cargo, never the risk; insures against their own crew.
 19. **Shipwreck-survivor** — Washed in from somewhere that sank; knows a way back no one wants.
+20. **Dark-skinned ship's cook — feeds the crew, poisons no one, everyone's still suspicious**
+21. **Elderly harbor-master — knows every ship that's ever lied about its cargo**
+22. **Multi-ethnic press-gang survivor — three ships, three escapes, still sailing**
+23. **Young stowaway, not yet caught — will be, eventually**
+24. **Weathered lighthouse keeper — the last honest light on this coast**
+25. **Foreign-tongued trader — deals in goods no customs house has a name for**
 
 ---
 

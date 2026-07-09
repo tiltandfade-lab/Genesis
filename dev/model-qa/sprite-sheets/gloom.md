@@ -160,7 +160,9 @@ static character per cell (not a repeat, not an animation frame), uniform cell s
 
 ---
 
-## NPC batches (43 total, 2 sheets)
+## NPC batches (50 total, 2 sheets)
+
+**Population diversity (binding):** vary skin tone, ethnicity, hair texture, build, and age across the full roster below — a sheet where every face reads as the same ethnicity is a failure, not a style choice, regardless of realm. This realm's population also includes a small visibly-touched minority consistent with the town's supernatural undercurrent (see the final entries below) — it must read as a minority tell, not the norm, alongside an ethnically varied ordinary majority.
 
 Style block (repeated here so this section is self-contained): Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). muted desaturated palette — sickly yellow streetlight against blue-grey dusk, soft grain/dither texture, one unnervingly saturated warm accent color per figure (the wrongness marker), otherwise low-contrast murky background.
 
@@ -216,6 +218,13 @@ Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-R
 16. **The last witness** — Saw what took the others; no one believes them yet, and time is short.
 17. **Reliquary-keeper** — Guards the bones, or the object, that must never once be moved.
 18. **Doomed-line heir** — The family the curse has been patient with, for generations.
+19. **Pallid-touched shopkeeper — the minority tell: unnaturally still, unnaturally pale, everyone pretends not to notice**
+20. **Dark-skinned town doctor — one of the few who still asks real questions**
+21. **Grave-cool hand — a handshake that runs a few degrees too cold, otherwise ordinary**
+22. **Elderly matriarch, untouched — the town's actual moral center, and she knows what's wrong**
+23. **Newcomer family — recently arrived, don't yet know what the town is**
+24. **Multi-ethnic congregation regular — attends every service, asks no questions**
+25. **Night-shift diner cook — sees everyone who's out too late, says nothing**
 
 ---
 

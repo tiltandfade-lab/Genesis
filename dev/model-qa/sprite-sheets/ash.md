@@ -159,7 +159,9 @@ static character per cell (not a repeat, not an animation frame), uniform cell s
 
 ---
 
-## NPC batches (43 total, 2 sheets)
+## NPC batches (50 total, 2 sheets)
+
+**Population diversity (binding):** vary skin tone, ethnicity, hair texture, build, and age across the full roster below — a sheet where every face reads as the same ethnicity is a failure, not a style choice, regardless of realm. This realm's population also includes visible fallout-mutation variety (see the final entries below: irradiated, chem-scarred, or born-after-the-fall) alongside an ethnically varied unmutated majority — the wasteland doesn't touch everyone, and it doesn't touch anyone evenly.
 
 Style block (repeated here so this section is self-contained): Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). bleached-bone and rust-orange palette over ash-grey ground, heavy dither/grain for a scorched-air haze, cracked/scarred skin or plating textures, one ember-glow high-value accent per sprite.
 
@@ -173,7 +175,7 @@ Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-R
 2. **Waste-hunter** — Reads the wild and brings in what the settled can't.
 3. **Convoy hand** — Moves the heavy things; sees everything, is asked nothing.
 4. **Ruin-diver** — Works the dark and the tight places; patient underground.
-5. **Bonded hand (indentured to a warlord** — Invisible to the powerful, and so hears every secret.
+5. **Bonded hand (indentured to a warlord)** — Invisible to the powerful, and so hears every secret.
 6. **The Starving** — Has nothing, so knows the streets better than anyone.
 7. **Salvage-tinker** — Their tools carry their whole history.
 8. **Scrap-smith** — Calloused hands; deals in practical defense.
@@ -215,6 +217,13 @@ Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-R
 16. **Marked-by-the-end** — Changed by what happened — feared, and quietly indispensable.
 17. **Convoy-runner** — Moves goods between dead towns, armored, paranoid, and usually right to be.
 18. **Reclaimer** — Trying to restart one dead thing — a pump, a field, a school — against all sense.
+19. **Ash-touched elder — grey-cracked skin from decades in the fallout, runs the settlement's water reclaimer**
+20. **Rot-marked scavenger — patchy hairless chem-mutation, trusted with the hot zones no one else will enter**
+21. **Glow-eyed child — faint bioluminescent eyes from womb-exposure, born after the fall**
+22. **Twice-skinned trader — visibly regenerating burn scars that never fully close**
+23. **Convoy cook — dark-skinned, sun-weathered, feeds whoever's still standing after a raid**
+24. **Silver-locked water-witch — an older woman who reads the cracked earth for the next safe well**
+25. **Bone-pale forager — bleached hair and skin, the settlement's best judge of what's safe to eat**
 
 ---
 

@@ -159,7 +159,9 @@ static character per cell (not a repeat, not an animation frame), uniform cell s
 
 ---
 
-## NPC batches (44 total, 2 sheets)
+## NPC batches (50 total, 2 sheets)
+
+**Population diversity (binding):** vary skin tone, ethnicity, hair texture, build, and age across the full roster below — a sheet where every face reads as the same ethnicity is a failure, not a style choice, regardless of realm. This realm's population also includes visible synthetic/heavily-augmented variety (see the final entries below) alongside an ethnically varied baseline-human majority — not everyone in this realm is flesh.
 
 Style block (repeated here so this section is self-contained): Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). gritty low-poly-PS1-inspired pixel art, chunky dithered shading, neon-magenta and cyan rim light against dark asphalt tones, servo/chrome plating with visible rivets and grime, high value contrast so each silhouette reads instantly against a dark background.
 
@@ -216,6 +218,12 @@ Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-R
 17. **Habitat-warden** — Keeps life-support running; holds everyone's air, quietly, in one hand.
 18. **Splice-addict** — Chasing the next upgrade past what a body was meant to hold.
 19. **Corporate exec** — A quarterly god; the battery under the whole town is a line on their sheet.
+20. **Full-conversion synth — a synthetic body wearing a human face, passes until it doesn't**
+21. **Chrome-grafted courier — heavy augmentation, more visible metal than skin at this point**
+22. **Unmodified holdout — dark-skinned, deliberately un-augmented, distrusts anyone with a chrome arm**
+23. **Vat-grown replicant — technically not born, still clocks in for the same shift as everyone else**
+24. **Multi-ethnic street doctor — patches up whoever can pay, chrome or flesh**
+25. **First-gen synth elder — one of the oldest models still running, treated like furniture by the corp**
 
 ---
 

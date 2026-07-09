@@ -162,7 +162,9 @@ static character per cell (not a repeat, not an animation frame), uniform cell s
 
 ---
 
-## NPC batches (43 total, 2 sheets)
+## NPC batches (50 total, 2 sheets)
+
+**Population diversity (binding):** vary skin tone, ethnicity, hair texture, build, and age across the full roster below — a sheet where every face reads as the same ethnicity is a failure, not a style choice, regardless of realm. This realm's population is entirely human (no established non-human civilian population in this realm's lore) — the diversity requirement is ethnic/physical variety only.
 
 Style block (repeated here so this section is self-contained): Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). sun-bleached sepia-and-rust palette, dusty film-grain texture, hard midday rim light casting long low-value shadows, weathered leather/canvas/tin textures with visible wear.
 
@@ -218,6 +220,13 @@ Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-R
 16. **Circuit judge** — The law itself, in town three days a month, gone before the appeals.
 17. **Cattle baron** — Owns the range, and the water rights everyone else has to cross.
 18. **Wanted outlaw** — A face on a poster, worth more dead — and starting to believe it.
+19. **Dark-skinned homesteader — claimed land nobody thought would hold, made it hold**
+20. **Elderly trading-post keeper — remembers when the town was three buildings**
+21. **Multi-ethnic railhand crew boss — laid the track everyone else profits from**
+22. **Young telegraph operator — knows every secret that comes through the wire**
+23. **Weathered midwife — delivered half the town, buried the other half**
+24. **Foreign-tongued immigrant rancher — works twice as hard for half the respect**
+25. **Grey-haired preacher — the only law in town some Sundays**
 
 ---
 

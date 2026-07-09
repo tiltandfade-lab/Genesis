@@ -34,6 +34,30 @@ import { resetGeom, getBuffers } from './probe-lib.js';
 /* ---- SET-DRIVEN ROSTERS (?set=races etc.). Dynamic imports; a missing/broken creature file is
    skipped (the sheet renders partially mid-wave instead of dying on one bad import). ---- */
 const SETS = {
+  'rebuild-w4': [
+    {name:'CULT FANATIC', sub:'rebuild', file:'var-fanatic.js',   fn:'buildCultFanatic'},
+    {name:'BUGBEAR',      sub:'rebuild', file:'mon-bugbear.js',   fn:'buildBugbear'},
+    {name:'FIRE ELEMENTAL', sub:'rebuild', file:'mon-fireelem.js', fn:'buildFireElemental'},
+    {name:'GOBLIN',       sub:'rebuild', file:'mon-goblin.js',    fn:'buildGoblin'},
+    {name:'GNOLL',        sub:'rebuild', file:'mon-gnoll.js',     fn:'buildGnoll'},
+    {name:'HOBGOBLIN',    sub:'rebuild', file:'var-hobgoblin.js', fn:'buildHobgoblin'},
+    {name:'WORG',         sub:'rebuild', file:'var-worg.js',      fn:'buildWorg'},
+    {name:'COMMONER',     sub:'rebuild', file:'npc-commoner.js',  fn:'buildCommoner'},
+    {name:'KOBOLD',       sub:'rebuild', file:'mon-kobold.js',    fn:'buildKobold'},
+    {name:'TROLL',        sub:'rebuild', file:'mon-troll.js',     fn:'buildTroll'},
+  ],
+  'seas-w2': [
+    {name:'SEA HAG',          sub:'high-seas w2', file:'rlm-seas-sea-hag.js',           fn:'buildSeaHag'},
+    {name:'AIR ELEMENTAL',    sub:'high-seas w2', file:'rlm-seas-air-elemental.js',     fn:'buildAirElemental'},
+    {name:'INVISIBLE STALKER',sub:'high-seas w2', file:'rlm-seas-invisible-stalker.js', fn:'buildInvisibleStalker'},
+    {name:'DRAGON TURTLE',    sub:'high-seas w2', file:'rlm-seas-dragon-turtle.js',     fn:'buildDragonTurtle'},
+    {name:'BONE DEVIL',       sub:'high-seas w2', file:'rlm-seas-bone-devil.js',        fn:'buildBoneDevil'},
+    {name:'DJINNI',           sub:'high-seas w2', file:'rlm-seas-djinni.js',            fn:'buildDjinni'},
+    {name:'MARID',            sub:'high-seas w2', file:'rlm-seas-marid.js',             fn:'buildMarid'},
+    {name:'BERSERKER',        sub:'high-seas w2', file:'rlm-seas-berserker.js',         fn:'buildBerserker'},
+    {name:'BANDIT CAPTAIN',   sub:'high-seas w2', file:'rlm-seas-bandit-captain.js',    fn:'buildBanditCaptain'},
+  ],
+
   'rebuild-w3': [
     {name:'GHOUL',        sub:'rebuild', file:'mon-ghoul.js',  fn:'buildGhoul'},
     {name:'ZOMBIE',       sub:'rebuild', file:'mon-zombie.js', fn:'buildZombie'},

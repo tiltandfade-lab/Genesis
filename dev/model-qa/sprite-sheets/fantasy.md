@@ -597,15 +597,13 @@ static character per cell (not a repeat, not an animation frame), uniform cell s
 9. **Colossus** — Gargantuan Construct (Titan), Unaligned, CR 25 — signature move: Multiattack
 10. **Tarrasque** — Gargantuan Monstrosity (Titan), Unaligned, CR 30 — signature move: Multiattack
 
-
 ---
 
 ## NPC batches (35 total, 2 sheets)
 
-The unmodified 35-archetype NPC Role Spine — no realm skin applied, generic fantasy-world
-labels. Pose direction should read as a characteristic action for the role (the smith
-mid-hammer, the guard braced at a post) rather than combat aggression, unless the archetype is
-itself martial.
+Shared mechanical instructions (restated for this section, NPC-appropriate): 5x5 grid, 25 cells, one distinct static character per cell (not a repeat, not an animation frame), uniform cell size, solid magenta (#FF00FF) background (no transparency, no other background elements), consistent scale across all 25, orthographic side view, each character fully visible from head to toe within its cell — no cropping at the top, bottom, or sides, the complete body must fit inside the cell boundary. **Every character in an expressive pose characteristic of their role** — mid-task, mid-gesture, caught doing the thing that defines them (the smith mid-hammer-swing, the informant glancing over a shoulder, the merchant mid-haggle, the healer mid-bandage) — never a neutral T-pose or idle stand, and never combat aggression unless the role is itself a security/enforcer type.
+
+The unmodified 35-archetype NPC Role Spine — no realm skin applied, generic fantasy-world labels.
 
 ### NPC sheet 1/2
 

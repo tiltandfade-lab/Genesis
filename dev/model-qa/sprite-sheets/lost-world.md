@@ -217,3 +217,68 @@ Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-R
 18. **Keeper-of-the-flame** — Tends a rite whose meaning is lost but whose lapse is deeply feared.
 19. **Awakened sleeper** — Roused out of the old age into this one; entirely, dangerously out of time.
 
+---
+
+## Domestic animal batches (12 total, 1 sheet)
+
+Shared mechanical instructions (restated for this section): 5x5 grid, uniform cell size, solid
+magenta (#FF00FF) background (no transparency, no other background elements), consistent scale,
+orthographic side view, each animal fully visible from head to toe within its cell — no cropping.
+**Every animal in a characteristic living pose** — alert, mid-stride, grooming, watching — never
+stiff/taxidermied. **No scene props, furniture, pens, or background objects of any kind** — no
+fences, feed troughs, leashes-as-set-dressing, etc.; the animal itself only, isolated against the
+plain magenta background. Rendered in this realm's art style (see the style block above).
+
+### Domestic animal sheet 1/1
+
+1. **Domestic animal — Loyal dog — bonded to one person, reads their mood before they do.**
+2. **Domestic animal — Working beast — ox, mule, or plough-horse; earns its feed, patient, and spooks true.**
+3. **Domestic animal — Barn cat — owns the place, tolerates the people, hunts the dark corners.**
+4. **Domestic animal — Stray — belongs to no one and everyone; the street's own alarm bell.**
+5. **Domestic animal — Fowl or flock — geese, hens, guineas; loud, territorial, first to mark a stranger.**
+6. **Domestic animal — Herd animal — sheep, goats, cattle; moves as one, and the one it *won't* follow is the tell.**
+7. **Domestic animal — Bird kept close — hawk, pigeon, or raven; carries, watches, and remembers a face.**
+8. **Domestic animal — Vermin-catcher — ferret, terrier, or rat-snake; goes gladly where people won't.**
+9. **Domestic animal — Old animal — past its working years, half-blind, and still the first to growl at the wrong thing.**
+10. **Domestic animal — Half-tamed wild thing — comes to the window, never the hand; trusts one child and no one else.**
+11. **Domestic animal — The realm-beast — [reskin slot] the drone-pet, the war-mule, the too-clever shade, the rad-mongrel.**
+12. **Domestic animal — The town's own animal — the one everyone knows by name; its fate is the town's mood made visible.**
+
+
+---
+
+## Kid batches (20 total, 1 sheet)
+
+Shared mechanical instructions (restated for this section): 5x5 grid, uniform cell size, solid
+magenta (#FF00FF) background (no transparency, no other background elements), consistent scale,
+orthographic side view, each kid fully visible from head to toe within its cell — no cropping.
+**Every kid in a candid, characterful pose** — mid-play, mid-chase, peeking around a corner,
+caught in the act of the thing they want — never a neutral T-pose or idle stand, and never
+combat/violent poses. **No scene props, furniture, or background objects of any kind** — no
+toys-as-set-dressing, benches, carts, etc.; the child itself only, isolated against the plain
+magenta background. Rendered in this realm's art style (see the style block above); ages read as
+children, not teens or adults.
+
+### Kid sheet 1/1
+
+1. **Kid — wants: Find the dog that didn't come home.**
+2. **Kid — wants: Put it back before anyone notices it was gone.**
+3. **Kid — wants: Be believed by one grown-up — just one — about the thing they saw.**
+4. **Kid — wants: Stay up late enough to catch the thing that comes at night.**
+5. **Kid — wants: Get back what was taken from them — and it's the object the whole plot turns on.**
+6. **Kid — wants: Keep the secret they swore to keep, even now that it's gone wrong.**
+7. **Kid — wants: Win back the friend who stopped coming around.**
+8. **Kid — wants: Prove they're not a baby by going where they're forbidden to go.**
+9. **Kid — wants: Keep the pretty thing they found — which someone dangerous is tearing the town apart to recover.**
+10. **Kid — wants: Feed the thing in the woods that's been kind to them.**
+11. **Kid — wants: Not have to go home tonight.**
+12. **Kid — wants: Find out what the grown-ups whisper about behind the shut door.**
+13. **Kid — wants: Get their small hoard back from whoever confiscated it.**
+14. **Kid — wants: Slip a message to the one person the family has forbidden them to see.**
+15. **Kid — wants: Be chosen — for the errand, the team, the trust — for once.**
+16. **Kid — wants: Keep the little one from finding out the bad thing that happened.**
+17. **Kid — wants: Trade the strange coin they found for something they actually want.**
+18. **Kid — wants: See the locked place opened, just once, just to know.**
+19. **Kid — wants: Make their parent laugh the old way, the way from before.**
+20. **Kid — wants: Warn someone — and not one adult will slow down long enough to hear it.**
+

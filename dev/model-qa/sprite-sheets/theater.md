@@ -159,7 +159,9 @@ static character per cell (not a repeat, not an animation frame), uniform cell s
 
 ---
 
-## NPC batches (43 total, 2 sheets)
+## NPC batches (50 total, 2 sheets)
+
+**Population diversity (binding):** vary skin tone, ethnicity, hair texture, build, and age across the full roster below — a sheet where every face reads as the same ethnicity is a failure, not a style choice, regardless of realm. This realm's population is entirely human (no established non-human civilian population in this realm's lore) — the diversity requirement is ethnic/physical variety only, and stays era-neutral per this realm's content-safety rule (no real-world flags/insignia).
 
 Style block (repeated here so this section is self-contained): Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). desaturated olive-and-khaki palette, heavy dither for smoke/haze, hard directional light like a flare or muzzle-flash, worn canvas/leather gear textures, avoid any real-world flag, insignia, or named-conflict iconography (content-safety — keep it era-neutral).
 
@@ -215,6 +217,13 @@ Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-R
 16. **War-orphan / camp-follower** — The war's dependents; survive in its margins, move when it moves.
 17. **The captured** — Belongs to no side now — and is leverage to every side.
 18. **Veteran, missing a piece** — Came home from a war no one names, and it followed them back.
+19. **Dark-skinned field medic — keeps more of the unit alive than the officers do**
+20. **Elderly quartermaster — has outlasted three commanding officers**
+21. **Multi-ethnic supply-line driver — the actual reason the front doesn't starve**
+22. **Young enlisted cook — feeds the unit on whatever's left**
+23. **Grey-haired chaplain — runs out of comforting things to say, keeps saying them anyway**
+24. **Foreign-tongued translator — trusted by neither side, needed by both**
+25. **Career NCO, unnamed rank — the one everyone actually listens to**
 
 ---
 

@@ -158,7 +158,9 @@ static character per cell (not a repeat, not an animation frame), uniform cell s
 
 ---
 
-## NPC batches (42 total, 2 sheets)
+## NPC batches (50 total, 2 sheets)
+
+**Population diversity (binding):** vary skin tone, ethnicity, hair texture, build, and age across the full roster below — a sheet where every face reads as the same ethnicity is a failure, not a style choice, regardless of realm. This realm's population is entirely human (no established non-human civilian population in this realm's lore) — the diversity requirement is ethnic/physical variety only.
 
 Style block (repeated here so this section is self-contained): Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). high-contrast black-and-white-leaning palette with one desaturated color accent (neon-sign red or venetian-blind amber), hard rim lighting like a streetlamp through blinds, long dramatic shadow shapes, trench-coat silhouettes.
 
@@ -213,6 +215,14 @@ Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-R
 15. **Widow with a policy** — Grieving, insured, and lying about exactly one thing.
 16. **Newshound** — Chases the story past the point where it's safe to print.
 17. **Numbers-runner** — The block's small-time bank, and owes upward every single week.
+18. **Dark-skinned homicide detective — the one cop in the precinct who can't be bought**
+19. **Elderly pawnshop owner — knows every stolen thing in the city by sight**
+20. **Multi-ethnic dockworker crew boss — runs a crew nobody messes with**
+21. **Sharp-dressed defense attorney — wins cases the DA swears were unwinnable**
+22. **Grey-haired diner waitress — hears more confessions than the priest**
+23. **Young beat cop, still clean — everyone's taking bets on how long that lasts**
+24. **Immigrant tailor — makes the suits every wiseguy in three blocks wears**
+25. **Late-shift switchboard operator — knows which calls to 'lose'**
 
 ---
 

@@ -599,7 +599,9 @@ static character per cell (not a repeat, not an animation frame), uniform cell s
 
 ---
 
-## NPC batches (35 total, 2 sheets)
+## NPC batches (50 total, 2 sheets)
+
+**Population diversity (binding):** this realm's population is explicitly multi-species per the game's own 9-species roster (Dragonborn, Dwarf, Elf, Gnome, Goliath, Halfling, Human, Orc, Tiefling) — every entry below is tagged with its species; render accordingly and do not default untagged entries to Human. Human entries should still vary in ethnicity/skin tone across the sheet — a sheet where every human reads as the same ethnicity is a failure, not a style choice.
 
 Style block (repeated here so this section is self-contained): Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from.
 
@@ -609,44 +611,59 @@ The unmodified 35-archetype NPC Role Spine — no realm skin applied, generic fa
 
 ### NPC sheet 1/2
 
-1. **Land-worker** — Tied to the land and its seasons; the base everyone eats from.
-2. **Wild-provider** — Reads the wild and brings in what the settled can't.
-3. **Hauler** — Moves the heavy things; sees everything, is asked nothing.
-4. **Delver** — Works the dark and the tight places; patient underground.
-5. **Servant** — Invisible to the powerful, and so hears every secret.
-6. **Destitute** — Has nothing, so knows the streets better than anyone.
-7. **Maker** — Their tools carry their whole history.
-8. **Metalworker** — Calloused hands; deals in practical defense.
-9. **Feeder** — Up before dawn; holds the neighborhood's gossip.
-10. **Builder** — Reads every structure out of habit; knows what's load-bearing.
-11. **Clothier** — Notices the cut and quality of everyone's clothes.
-12. **Outfitter** — Keeps the means of travel and trade running; eyes on the weather.
-13. **Trader** — Information-rich, truth-poor.
-14. **Host** — Controls the space, not the people in it.
-15. **Remedy-maker** — Smells of bitterroot; knows what heals and what doesn't.
-16. **Healer** — Trusted, and overburdened by it.
-17. **Rite-keeper** — Maintains the ritual, not the doctrine.
-18. **Performer** — Craves the attention; hides the true feeling under it.
-19. **Enforcer** — Authority-adjacent, with limited real power.
-20. **Hired-blade** — Loyalty bought with coin, and cynical about it.
-21. **Road-guard** — Wary of the road; values a good pair of boots.
-22. **Outlaw** — Desperate or cruel; lives outside the law.
-23. **Smuggler** — Hides the cargo; speaks only in euphemism.
-24. **Thief** — Eyes every coin-pouch; avoids every eye.
-25. **Hidden-fanatic** — Fanatical devotion behind a mundane face.
+1. **Land-worker (Dragonborn)** — Tied to the land and its seasons; the base everyone eats from.
+2. **Wild-provider (Dwarf)** — Reads the wild and brings in what the settled can't.
+3. **Hauler (Elf)** — Moves the heavy things; sees everything, is asked nothing.
+4. **Delver (Gnome)** — Works the dark and the tight places; patient underground.
+5. **Servant (Goliath)** — Invisible to the powerful, and so hears every secret.
+6. **Destitute (Halfling)** — Has nothing, so knows the streets better than anyone.
+7. **Maker (Human)** — Their tools carry their whole history.
+8. **Metalworker (Orc)** — Calloused hands; deals in practical defense.
+9. **Feeder (Tiefling)** — Up before dawn; holds the neighborhood's gossip.
+10. **Builder (Dragonborn)** — Reads every structure out of habit; knows what's load-bearing.
+11. **Clothier (Dwarf)** — Notices the cut and quality of everyone's clothes.
+12. **Outfitter (Elf)** — Keeps the means of travel and trade running; eyes on the weather.
+13. **Trader (Gnome)** — Information-rich, truth-poor.
+14. **Host (Goliath)** — Controls the space, not the people in it.
+15. **Remedy-maker (Halfling)** — Smells of bitterroot; knows what heals and what doesn't.
+16. **Healer (Human)** — Trusted, and overburdened by it.
+17. **Rite-keeper (Orc)** — Maintains the ritual, not the doctrine.
+18. **Performer (Tiefling)** — Craves the attention; hides the true feeling under it.
+19. **Enforcer (Dragonborn)** — Authority-adjacent, with limited real power.
+20. **Hired-blade (Dwarf)** — Loyalty bought with coin, and cynical about it.
+21. **Road-guard (Elf)** — Wary of the road; values a good pair of boots.
+22. **Outlaw (Gnome)** — Desperate or cruel; lives outside the law.
+23. **Smuggler (Goliath)** — Hides the cargo; speaks only in euphemism.
+24. **Thief (Halfling)** — Eyes every coin-pouch; avoids every eye.
+25. **Hidden-fanatic (Human)** — Fanatical devotion behind a mundane face.
 
 ### NPC sheet 2/2
 
-1. **Recruiter** — Charisma aimed at the desperate; sells belonging.
-2. **Outsider** — Chose to stay here; the reasons stay unclear.
-3. **Recluse** — Known of, rarely seen.
-4. **Stand-in** — Filling in for someone absent; borrowed authority.
-5. **Unofficial-power** — Power without a title.
-6. **Misfit** — Unqualified, unwilling, or both — and in the role anyway.
-7. **Pampered-elite** — Wealthy, bored, insulated from real consequence.
-8. **Magnate** — Sees every interaction as a transaction.
-9. **Secret-scholar** — Hoards the secret knowledge; sees others as material.
-10. **Cipher** — Their very presence is the notable thing.
+1. **Recruiter (Orc)** — Charisma aimed at the desperate; sells belonging.
+2. **Outsider (Tiefling)** — Chose to stay here; the reasons stay unclear.
+3. **Recluse (Dragonborn)** — Known of, rarely seen.
+4. **Stand-in (Dwarf)** — Filling in for someone absent; borrowed authority.
+5. **Unofficial-power (Elf)** — Power without a title.
+6. **Misfit (Gnome)** — Unqualified, unwilling, or both — and in the role anyway.
+7. **Pampered-elite (Goliath)** — Wealthy, bored, insulated from real consequence.
+8. **Magnate (Halfling)** — Sees every interaction as a transaction.
+9. **Secret-scholar (Human)** — Hoards the secret knowledge; sees others as material.
+10. **Cipher (Orc)** — Their very presence is the notable thing.
+11. **Dwarven forge-master — three generations of the same smithy, soot in every crease**
+12. **Elven archivist — keeper of a library older than the town around it**
+13. **Halfling innkeeper — knows every traveler's business before they've unpacked**
+14. **Orcish caravan guard — hired muscle with a reputation for actually caring about the cargo**
+15. **Tiefling fortune-teller — half the town swears by her, half crosses the street**
+16. **Gnomish tinkerer — clockwork contraptions that mostly work**
+17. **Goliath quarry foreman — the only one strong enough to reset a slipped cart alone**
+18. **Dragonborn temple guard — devout, literal-minded, takes the oath seriously**
+19. **Human miller — dust-covered, counts every sack twice**
+20. **Dwarven brewer — the tavern's actual reason for existing**
+21. **Elven fletcher — every arrow leaves her stall true**
+22. **Halfling farmer, dark-skinned — tends the best soil in the valley**
+23. **Orcish healer — gentle hands, a reputation people are slow to trust**
+24. **Tiefling blacksmith's apprentice — still learning, already better than most journeymen**
+25. **Human midwife, elderly — delivered half the village, remembers all of it**
 
 ---
 

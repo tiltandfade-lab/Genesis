@@ -158,7 +158,9 @@ static character per cell (not a repeat, not an animation frame), uniform cell s
 
 ---
 
-## NPC batches (43 total, 2 sheets)
+## NPC batches (50 total, 2 sheets)
+
+**Population diversity (binding):** vary skin tone, ethnicity, hair texture, build, and age across the full roster below — a sheet where every face reads as the same ethnicity is a failure, not a style choice, regardless of realm. This realm's population also includes visible early-stage star/echo-touched variety (see the final entries below — subtle transformation, not full monster-stage) alongside an ethnically varied untouched majority.
 
 Style block (repeated here so this section is self-contained): Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). deep indigo-and-gold palette, geometric sacred-symbol linework glowing as the high-value zone, obsidian-dark base tones so gold sigils read as each silhouette's defining feature, faint starfield dither in the background.
 
@@ -187,7 +189,7 @@ Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-R
 17. **Ward-line sentry (authority-adjacent; patrols where the geometry leaks)** — Authority-adjacent, with limited real power.
 18. **Breach-mercenary (paid to stand where the wrongness runs thickest)** — Loyalty bought with coin, and cynical about it.
 19. **Waypoint-warder (wary of paths that don't lead where they used to)** — Wary of the road; values a good pair of boots.
-20. **Boundary-breaker (desperate** — Desperate or cruel; lives outside the law.
+20. **Boundary-breaker (desperate or cruel)** — Desperate or cruel; lives outside the law.
 21. **Relic-runner (moves the sealed and the never-opened; speaks only in euphemism)** — Hides the cargo; speaks only in euphemism.
 22. **Sigil-picker (steals the wards themselves, and doesn't grasp what that undoes)** — Eyes every coin-pouch; avoids every eye.
 23. **Answer-cultist behind a mundane face** — Fanatical devotion behind a mundane face.
@@ -196,7 +198,7 @@ Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-R
 
 ### NPC sheet 2/2
 
-1. **Sky-hermit (known of** — Known of, rarely seen.
+1. **Sky-hermit (known of, rarely seen)** — Known of, rarely seen.
 2. **Borrowed warden (filling in for someone the void took)** — Filling in for someone absent; borrowed authority.
 3. **Reading-broker (power without a title; controls who gets an augury, and when)** — Power without a title.
 4. **The unqualified reader (never should have picked up the charts, and can't put them down)** — Unqualified, unwilling, or both — and in the role anyway.
@@ -214,6 +216,13 @@ Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-R
 16. **Sleeper-medium** — Speaks the drowned language — but only while asleep, and can't be woken safely.
 17. **Void-beacon keeper** — Tends the light that warns things OFF, not ships in.
 18. **Scholar-gone-too-far** — Knew too much; now the knowing lives in them and pays no rent.
+19. **Star-touched acolyte — early transformation, skin faintly luminous at the joints, not yet monstrous**
+20. **Echo-marked scribe — voice occasionally doubles half a second behind itself**
+21. **Dark-skinned temple keeper — tends the true-name archive, untouched by the stars**
+22. **Salt-scarred pilgrim — ritual scarring, not transformation, from the desert crossing**
+23. **Star-drunk elder — visible transformation, eyes gone to pinpricks of light, still lucid, still respected**
+24. **Multi-generational archivist — one of a devout family line, untouched, keeper of records**
+25. **Newly arrived outsider — unmarked by the realm's stars entirely, an obvious tell to the locals**
 
 ---
 

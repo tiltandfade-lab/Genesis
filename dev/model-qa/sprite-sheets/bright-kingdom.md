@@ -162,7 +162,9 @@ static character per cell (not a repeat, not an animation frame), uniform cell s
 
 ---
 
-## NPC batches (43 total, 2 sheets)
+## NPC batches (50 total, 2 sheets)
+
+**Population diversity (binding):** vary skin tone, ethnicity, hair texture, build, and age across the full roster below — a sheet where every face reads as the same ethnicity is a failure, not a style choice, regardless of realm. This realm's population stays human/toylike per its own identity (no separate non-human civilian species here) — the diversity requirement is ethnic/physical variety only.
 
 Style block (repeated here so this section is self-contained): Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration) — this IS one of Genesis's intentionally cartoony realms, so chunky rounded shapes and exaggerated proportions are correct here. saturated cotton-candy-pink and mint palette, clean bold outlines, chunky rounded shapes like an 8-bit mascot, bright rim light — but with one unsettling detail (sharp teeth, too-wide eyes) per sprite that reads even in silhouette.
 
@@ -218,6 +220,13 @@ Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-R
 16. **Level-boss** — Sits at the top of the map, bound by the rules to wait for a challenger.
 17. **Fairy-godmother figure** — Grants the boon; the fine print is a fairy-tale kind of cruel.
 18. **Reset-warden** — Puts everything back the way it was each morning, and hates when you notice.
+19. **Dark-skinned parade coordinator — keeps the too-cheerful schedule running**
+20. **Elderly ride operator — been running the same ride since before anyone remembers**
+21. **Multi-ethnic mascot performer — inside the suit, could be anyone, that's the point**
+22. **Freckled ticket-booth kid — first job, hasn't clocked the wrongness yet**
+23. **Tall, broad-shouldered strongman performer — part of the show, off-hours unreadable**
+24. **Small, sharp-eyed fortune-teller — the only one who tells the truth, in riddles**
+25. **Silver-haired candy-cart vendor — been here longer than the park's official history**
 
 ---
 

@@ -161,7 +161,9 @@ static character per cell (not a repeat, not an animation frame), uniform cell s
 
 ---
 
-## NPC batches (44 total, 2 sheets)
+## NPC batches (50 total, 2 sheets)
+
+**Population diversity (binding):** vary skin tone, ethnicity, hair texture, build, and age across the full roster below — a sheet where every face reads as the same ethnicity is a failure, not a style choice, regardless of realm. This realm's population is explicitly mixed: saurian-folk (scaled, reptilian features, per this realm's own court identity) and humans genuinely coexist here — see the final entries below for saurian-folk examples, not a reskin of the human entries, alongside an ethnically varied human population.
 
 Style block (repeated here so this section is self-contained): Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). humid jungle-green-and-ember palette, heavy atmospheric dither for volcanic haze, warm ember rim light against deep shadow strata, scale/hide textures, one glowing high-value accent (ritual paint, ember-lit eyes) per sprite.
 
@@ -218,6 +220,12 @@ Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-R
 17. **Expedition-guide** — Leads outsiders in. Doesn't always lead the same number out.
 18. **Keeper-of-the-flame** — Tends a rite whose meaning is lost but whose lapse is deeply feared.
 19. **Awakened sleeper** — Roused out of the old age into this one; entirely, dangerously out of time.
+20. **Saurian-folk artisan — scaled, reptilian features, lower-strata craftsperson, not court-rank**
+21. **Saurian-folk elder — scaled, remembers the mountain-clock's last turn**
+22. **Dark-skinned human trader — outsider, tolerated for what they bring**
+23. **Saurian-folk temple guard — humanoid build, reptilian face and scale**
+24. **Sun-weathered human guide — the only one who'll lead outsiders past the lower strata**
+25. **Mixed-heritage court runner — human and saurian both claim relation, belongs fully to neither**
 
 ---
 

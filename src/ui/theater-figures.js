@@ -125,6 +125,16 @@ const WHOLE_OBJECT_REGISTRY = {
   "swarm-of-piranhas":   { module: "../../dev/model-qa/creatures/rlm-seas-swarm-of-piranhas.js", fn: "buildSwarmOfPiranhas",  discR: 0.55 },
   "rust-monster":        { module: "../../dev/model-qa/creatures/rlm-seas-rust-monster.js",      fn: "buildRustMonster",      discR: 0.42 },
   "sahuagin-baron":      { module: "../../dev/model-qa/creatures/rlm-seas-sahuagin-baron.js",    fn: "buildSahuaginBaron",    discR: 0.55 },
+  "reef-shark":          { module: "../../dev/model-qa/creatures/rlm-seas-reef-shark.js",        fn: "buildReefShark",        discR: 0.42 },
+  "sea-hag":             { module: "../../dev/model-qa/creatures/rlm-seas-sea-hag.js",           fn: "buildSeaHag",           discR: 0.42 },
+  "air-elemental":       { module: "../../dev/model-qa/creatures/rlm-seas-air-elemental.js",     fn: "buildAirElemental",     discR: 0.55, opacity: 0.72 },
+  "invisible-stalker":   { module: "../../dev/model-qa/creatures/rlm-seas-invisible-stalker.js", fn: "buildInvisibleStalker", discR: 0.55, opacity: 0.55 },
+  "dragon-turtle":       { module: "../../dev/model-qa/creatures/rlm-seas-dragon-turtle.js",     fn: "buildDragonTurtle",     discR: 0.80 },
+  "bone-devil":          { module: "../../dev/model-qa/creatures/rlm-seas-bone-devil.js",        fn: "buildBoneDevil",        discR: 0.55 },
+  "djinni":              { module: "../../dev/model-qa/creatures/rlm-seas-djinni.js",            fn: "buildDjinni",           discR: 0.55 },
+  "marid":               { module: "../../dev/model-qa/creatures/rlm-seas-marid.js",             fn: "buildMarid",            discR: 0.62 },
+  "berserker":           { module: "../../dev/model-qa/creatures/rlm-seas-berserker.js",         fn: "buildBerserker",        discR: 0.42 },
+  "bandit-captain":      { module: "../../dev/model-qa/creatures/rlm-seas-bandit-captain.js",    fn: "buildBanditCaptain",    discR: 0.42 },
   "scarecrow":           { module: "../../dev/model-qa/creatures/rlm-gloom-scarecrow.js",   fn: "buildScarecrow", discR: 0.42 },
   "fire-elemental":      { module: "../../dev/model-qa/creatures/mon-fireelem.js", fn: "buildFireElemental", discR: 0.55 },
   "earth-elemental":     { module: "../../dev/model-qa/creatures/mon-earthelem.js", fn: "buildEarthElemental", discR: 0.55 },
@@ -657,12 +667,12 @@ const NEAREST_SUB = {
   // cultist/bandit civilian-warband family
   "death-cultist": "cultist-fanatic", "aberrant-cultist": "cultist-fanatic", "elemental-cultist": "cultist-fanatic",
   "fiend-cultist": "cultist-fanatic",
-  "bandit-courier": "bandit", "bandit-captain": "bandit", "bandit-deceiver": "bandit",
+  "bandit-courier": "bandit", "bandit-deceiver": "bandit",
   "bandit-crime-lord": "bandit", "desperate-bandit": "bandit",
   // spider variants -> giant wolf spider
   // (giant-wolf-spider maps 1:1 above)
   // veteran/guard command chain
-  "guard-captain": "guard", "berserker": "warrior-veteran", "berserker-commander": "warrior-veteran",
+  "guard-captain": "guard", "berserker-commander": "berserker",
   // ── BESTIARY-COVERAGE alias batch (2026-07-04, docs/BESTIARY-COVERAGE.md §6): 35 CR≤10
   //    creatures judged not worth even a variant — nearest-body aliases, zero modeling. Targets
   //    verified to exist as bespoke bodies at land time. (3 more — will-o-wisp→ghost, piranha→
@@ -674,7 +684,7 @@ const NEAREST_SUB = {
   "darkmantle": "giant-bat", "piercer": "gray-ooze", "basilisk": "giant-lizard", "lizard": "giant-lizard",
   "crab": "giant-spider", "seahorse": "giant-rat", "ochre-jelly": "gray-ooze",
   "animated-rug-of-smothering": "gray-ooze",
-  "invisible-stalker": "fire-elemental", "water-weird": "giant-constrictor-snake", "clawed-drowner": "ghoul",
+  "water-weird": "giant-constrictor-snake", "clawed-drowner": "ghoul",
   "hell-hound": "wolf", "nightmare": "warhorse", "larva": "zombie",
   "tough": "bandit", "warrior-infantry": "guard", "vampire-familiar": "noble",
   "guilt-stained-vagrant": "commoner", "helmed-horror": "animated-armor",
@@ -692,7 +702,7 @@ const NEAREST_SUB = {
   "ancient-green-dragon": "young-red-dragon", "ancient-red-dragon": "young-red-dragon", "ancient-silver-dragon": "young-red-dragon",
   "ancient-white-dragon": "young-red-dragon", "blue-dragon-wyrmling": "young-red-dragon", "brass-dragon-wyrmling": "young-red-dragon",
   "bronze-dragon-wyrmling": "young-red-dragon", "copper-dragon-wyrmling": "young-red-dragon", "dracolich": "young-red-dragon",
-  "dragon-turtle": "young-red-dragon", "faerie-dragon": "young-red-dragon", "faerie-dragon-youth": "young-red-dragon",
+  "faerie-dragon": "young-red-dragon", "faerie-dragon-youth": "young-red-dragon",
   "gold-dragon-roster-5e-2024-mechanics": "young-red-dragon", "green-dragon-wyrmling": "young-red-dragon", "half-dragon": "young-red-dragon",
   "pseudodragon": "young-red-dragon", "red-dragon-wyrmling": "young-red-dragon", "silver-dragon-wyrmling": "young-red-dragon",
   "white-dragon-wyrmling": "young-red-dragon",
@@ -720,7 +730,7 @@ const NEAREST_SUB = {
   "dryad": "cultist", "fish-folk-archpriest": "cultist",
   "mage": "cultist", "priest": "cultist", "priest-acolyte": "cultist",
   "satyr": "cultist", "satyr-revelmaster": "cultist",
-  "sea-hag": "cultist",
+  
   // -> giant-lizard (18)
   "allosaurus": "giant-lizard", "ankylosaurus": "giant-lizard", "bulette-pup": "giant-lizard",
   "deep-brute": "giant-lizard", "deep-brute-thonot": "giant-lizard",
@@ -729,10 +739,10 @@ const NEAREST_SUB = {
   "thri-kreen-psion": "giant-lizard", "troglodyte": "giant-lizard", "tyrannosaurus-rex": "giant-lizard",
   "yuan-ti-malison-type-1": "giant-lizard", "yuan-ti-malison-type-2": "giant-lizard", "yuan-ti-malison-type-3": "giant-lizard",
   // -> earth-elemental (16)
-  "air-elemental": "earth-elemental", "azer-pyromancer": "earth-elemental", "azer-sentinel": "earth-elemental",
-  "dao": "earth-elemental", "djinni": "earth-elemental", "efreeti": "earth-elemental",
+  "azer-pyromancer": "earth-elemental", "azer-sentinel": "earth-elemental",
+  "dao": "earth-elemental", "efreeti": "fire-elemental",
   "elemental-cataclysm": "earth-elemental", "galeb-duhr": "earth-elemental", "magmin": "earth-elemental",
-  "marid": "earth-elemental", "merfolk-skirmisher": "earth-elemental", "merfolk-wavebender": "earth-elemental",
+  "merfolk-skirmisher": "sahuagin-warrior", "merfolk-wavebender": "water-elemental",
   "salamander": "earth-elemental", "salamander-inferno-master": "earth-elemental",
   "xorn": "earth-elemental",
   // -> warrior-veteran (15)
@@ -748,7 +758,7 @@ const NEAREST_SUB = {
   "tree-blight": "needle-blight", "vine-blight": "needle-blight",
   "violet-fungus": "needle-blight", "violet-fungus-necrohulk": "needle-blight",
   // -> ogre (14)
-  "balor": "ogre", "bone-devil": "ogre", "chasme": "ogre",
+  "balor": "ogre", "chasme": "ogre",
   "glabrezu": "ogre", "hezrou": "ogre", "horned-devil": "ogre",
   "ice-devil": "ogre", "lamia": "ogre", "marilith": "ogre",
   "nalfeshnee": "ogre", "nycaloth": "ogre", "oni": "ogre",
@@ -773,7 +783,7 @@ const NEAREST_SUB = {
   "ape": "wolf", "giant-badger": "wolf",
   "giant-frog": "wolf", "giant-wasp": "wolf",
   "goat": "wolf", "jackalwere": "wolf", "panther": "wolf",
-  "reef-shark": "wolf",
+  
   // -> hill-giant (9)
   "cloud-giant": "hill-giant", "cyclops-oracle": "hill-giant", "cyclops-sentry": "hill-giant",
   "ettin": "hill-giant", "fire-giant": "hill-giant", "fomorian": "hill-giant",

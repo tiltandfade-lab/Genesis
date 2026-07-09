@@ -153,3 +153,16 @@ L7. ☐ **Regenerate `table-registry.json/.md`** — stale after the rename/new 
 3. ☐ **Props + NPC set** — the 14 missing prop models and the NPC humanoid expansion
    (VISUAL-ASSET-QUEUE) via the same author-only waves.
 4. ☐ **Frontier GLB step-6 wiring** (carried from 2026-07-08).
+
+## Do next (2026-07-09, NPC/monster lane — realm-key expansion)
+
+1. ☐ **REALM-KEY-EXPANSION stat wave** — run `docs/REALM-KEY-EXPANSION-STATS-SPEC.md` (SPEC-LOCKED,
+   Adam-approved roster): ~160 creatures to MM standard, appended to
+   `dev/model-qa/realm-bestiary-draft.json`. U1–U7 Sonnet parallel per realm, U0 weird-dozen
+   frontier-authored last; gates in spec §4; regen `data/realm-bestiary.js` only at the master merge.
+2. ☐ **Adam per-realm red-pen** of the wave output (entries land PROVISIONAL, same as the base 1,307).
+3. ☐ **Faction-clock specs** — the Pink Cult pressure (suburb) + the gloom demand ladder (feeding
+   clock → active corruption rung); both are engine specs, not bestiary rows.
+4. ☐ **Hoverboard buff proposal** (Dungeon Loot - Outlandish row 16 — Adam ruled it over-nerfed;
+   propose-first, his table).
+5. ☐ Net-new `model:` slugs from the wave → model-foundry queue (models lane).

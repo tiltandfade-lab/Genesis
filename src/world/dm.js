@@ -1628,7 +1628,7 @@ const DM_EVENT_FIELDS = {
   // ANIMAL-SOCIAL.md §3/§6 U3 — the sustained-care event (feeding/tending/defending an animal partial).
   // `event` is free text (informational — the handler doesn't branch on it, §3's flat feed/tend/defend
   // list); `target` is the codex id.
-  animal_care:       { accept:["event","target"] },
+  animal_care:       { accept:["event","target"], alias:{ id:"target" } },
   morale_check:      { accept:["creature","dc","mods","outcome","save","trigger"], num:["dc"] },
   parley_open:       { accept:["ceiling","creature","floor","npc","openingAttitude","target","want"] },
   insight_read:      { accept:["bestMentalMod","dc","guarded","masking","mentalMods","target","total"], num:["bestMentalMod","dc","total"] },
@@ -3170,11 +3170,10 @@ function applyEvent(w,e){
       // world.wiring-a's turnIgnoredCheck (ignoredTierOf). Settable regardless of whether a hook
       // exists (the doc's own "HOOKLESS tracked thread" case) — never gated on discovery's outcome.
       if(r && r.kind==="npc" && p.engaged){ r.dm=r.dm||{}; r.dm.engaged=true; }
-      // ANIMAL-SOCIAL.md §4/§6 U5 — "engaged twice" is one of the three promotion triggers. Every
-      // real codex_contact on an animal partial counts as one engagement (this IS the "player
-      // touched it" seam the whole promotion track hangs off), regardless of the p.engaged flag —
-      // animalMaybePromote is the single gate that decides whether count>=2 actually promotes.
-      if(r && r.kind==="npc" && r.dm && r.dm.partialKind==="animal"){
+      // ANIMAL-SOCIAL.md §4/§6 U5 — "engaged twice" is one of the three promotion triggers. Only a
+      // DM-declared engaged contact counts (matching the NPC engage-threshold discipline three lines
+      // up) — a passing contact never advances the counter.
+      if(r && r.kind==="npc" && r.dm && r.dm.partialKind==="animal" && p.engaged){
         r.dm.animalContactCount=(r.dm.animalContactCount||0)+1;
         if(typeof animalMaybePromote==="function") animalMaybePromote(w, r, "engaged-twice");
       }
@@ -3355,7 +3354,8 @@ function applyEvent(w,e){
        the counter on its own. Null-safe: no codex/target -> {ok:false}. */
     case "animal_care":{
       if(typeof codexGet!=="function") return {ok:false,reason:"codex-unavailable"};
-      const r=codexGet(w,p.target); if(!r) return {ok:false,reason:"no-target:"+(p.target||"?")};
+      const r=codexGet(w,p.target);
+      if(!r || r.kind!=="npc" || !(r.dm && r.dm.partialKind==="animal")) return {ok:false, reason:"not-an-animal:"+(p.target||"?")};
       r.fields=r.fields||{};
       r.fields.careLog=r.fields.careLog||[];
       const day=clockOf(w).day;

@@ -150,7 +150,15 @@ function nodeEnvBand(w, nodeId){
    §5 territory-holder: the wilderness band's FIRST draw is minted NON-ambient (`dm.ambient:false`,
    `dm.territoryHolder:true`) — the node's residence anchor / named-record promotion candidate, not a
    disposable walk-on; every other draw (any band) stays a normal ambient partial. Null-safe: no
-   codex/rollPartial, or the node carries no prep env yet -> no-op. */
+   codex/rollPartial, or the node carries no prep env yet -> no-op.
+   ANIMAL-SOCIAL.md §5/§6 U6 — "each wilderness node's ENV_PARTIALS cast INCLUDES one territory-
+   holder" (§5, stated as a guarantee, not a maybe) + the guaranteed-scene-hook law extended to
+   wilderness pools ("the hook rides the territory-holder's tell") together require the wilderness
+   band's i===0 draw to be UNCONDITIONAL — the ordinary per-draw chance gate below still governs
+   every other draw (any band), but a wilderness node's territory-holder/hook-anchor can never
+   silently fail to mint on an unlucky roll (U2's own chance gate applied to i===0 too, which could
+   leave a wilderness node hookless — the accept criterion below closes that gap). DEVIATION from
+   U2's original draw loop, scoped narrowly to i===0 of the wilderness band only. */
 function prepCastEnvAnimals(w, nodeId){
   if(!nodeId || typeof codexAdd!=="function" || typeof rollPartial!=="function") return {minted:0};
   const band=nodeEnvBand(w, nodeId);
@@ -170,7 +178,8 @@ function prepCastEnvAnimals(w, nodeId){
   const crueltyPenalty=(nn && nn.animalCruelty)?-1:0;
   const minted=[];
   for(let i=0;i<draws;i++){
-    if((typeof Math.random==="function"?Math.random():1) >= chance) break;   // a miss ends the draws
+    const isTerritoryHolderDraw=(band==="wilderness" && i===0);
+    if(!isTerritoryHolderDraw && (typeof Math.random==="function"?Math.random():1) >= chance) break;   // a miss ends the draws
     const p=rollPartial("animal", { env:band, region });
     const isHolder=(band==="wilderness" && i===0);
     // ANIMAL-SOCIAL.md §4/§6 U5 — row 12 (landmark: town's-own-animal / elder-of-the-wood) mints
@@ -196,6 +205,18 @@ function prepCastEnvAnimals(w, nodeId){
       codexAttitudeOpen(w, rec.id, base+crueltyPenalty, { cause:"animal-opening" });
     }
     if(rec) minted.push(rec.id);
+  }
+  // ANIMAL-SOCIAL.md §5/§6 U6 — the guaranteed-scene-hook law, extended over wilderness animal pools
+  // ("the hook rides the territory-holder's tell", matching interiors' own ensureSceneHook call in
+  // prepCastAmbient above). Idempotent (ensureSceneHook itself skips a pool that already carries a
+  // hooked record) — a re-visit within the session's idempotency cap never re-rolls. Anchored on the
+  // territory-holder when this call minted one (the wilderness i===0 guarantee above); falls back to
+  // ensureSceneHook's own recs[0] default for bands with no holder concept (rural/village/city/
+  // dungeon), so the guarantee isn't wilderness-exclusive even though the spec text names wilderness.
+  if(minted.length && typeof codexOf==="function" && typeof ensureSceneHook==="function"){
+    const pool=minted.map(id=>codexOf(w).records[id]).filter(Boolean);
+    const holder=pool.find(r=>r.dm && r.dm.territoryHolder) || null;
+    ensureSceneHook(pool, holder);
   }
   return { minted:minted.length, ids:minted, band };
 }

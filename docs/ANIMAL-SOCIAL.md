@@ -1,7 +1,7 @@
 ---
 type: system-spec
 project: Genesis
-status: SPEC — drafted by Fable 2026-07-08, awaiting Adam's review
+status: SPECCED — locked 2026-07-09 for orchestrated build (all 4 open rulings resolved 2026-07-08 night, see RESOLVED section below)
 created: 2026-07-08
 origin: Adam — "I really want to reward people who use Speak with Animals… a ranger or druid that
   mostly plays the game by speaking with animals would be such a fun playthrough."

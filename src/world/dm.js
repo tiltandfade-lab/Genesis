@@ -3281,6 +3281,12 @@ function applyEvent(w,e){
       if(isAnimalPartial && res.to!==res.from && res.to>0 && typeof animalMaybePromote==="function"){
         animalMaybePromote(w, rec0, "attitude-past-zero");
       }
+      // ANIMAL-SOCIAL.md §5/§6 U6 — pack-tag shared attitude: propagate this shift to every OTHER
+      // pack-tagged animal at the same node (never cross-node). No-op for solitary-tagged/non-animal
+      // records (animalPropagatePackAttitude's own packTag guard).
+      if(isAnimalPartial && res.to!==res.from && typeof animalPropagatePackAttitude==="function"){
+        animalPropagatePackAttitude(w, rec0, res.to, p.cause||p.skill||"pack-attitude");
+      }
       // ANOMALY LAW §2b.2 — bondEligible is stamped ONLY by the anomaly channels: a nat-20 on this check,
       // or a decisive lever that just cashed the shift to +1 (Friendly) exactly. Never by ordinary
       // grinding. NPCs never carry/consult this field (recruit_creature's own gate is creature-only).
@@ -3335,6 +3341,8 @@ function applyEvent(w,e){
       if(rec && rec.kind==="npc" && rec.dm && rec.dm.partialKind==="animal" && r.value!==a.value){
         if(r.value===2) rec.dm.ally=true;
         if(r.value>0 && typeof animalMaybePromote==="function") animalMaybePromote(w, rec, "attitude-past-zero");
+        // ANIMAL-SOCIAL.md §5/§6 U6 — same pack-tag propagation as social_check, for a DECLARED shift.
+        if(typeof animalPropagatePackAttitude==="function") animalPropagatePackAttitude(w, rec, r.value, p.cause||"pack-attitude");
       }
       return {ok:true, from:a.value, to:r.value};
     }

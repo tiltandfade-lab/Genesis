@@ -220,7 +220,18 @@ Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-R
 
 ## Domestic animal batches (25 total, 1 sheet)
 
-Style block (repeated here so this section is self-contained): bleached-bone and rust-orange palette over ash-grey ground, heavy dither/grain for a scorched-air haze, cracked/scarred skin or plating textures, one ember-glow high-value accent per sprite.
+Style block, ADJUSTED for animals (the shared realm style block's "one ember-glow accent per
+sprite" line does not apply here — on a test render it came out as a disconnected glowing orb
+bolted onto the animal like jewelry, applied to all 25 instead of a rare few, and it pulled
+rendering budget away from the coat/texture work, so several animals (rabbit, goose, pony) came
+out looking clean and un-scorched instead of matching the ragged ones): bleached-bone and
+rust-orange palette over ash-grey ground, heavy dither/grain for a scorched-air haze. **Every
+single animal, no exceptions, gets the same degree of wear**: matted/singed fur or feathers,
+ash-dust caked in the coat, visible rib or bone structure where the fur has thinned, cracked or
+scarred skin at the extremities (paws, muzzle, ears) — this is the ash-realm identity, carried
+by TEXTURE across all 25, not by a lighting gimmick on a few. Do not add glowing embers, glowing
+eyes, or any light-emitting accent to any animal in this batch — value contrast should come from
+the palette (pale bone tones against darker ash-grey ground) and coat texture alone.
 
 Shared mechanical instructions (restated for this section): 5x5 grid, uniform cell size, solid
 magenta (#FF00FF) background (no transparency, no other background elements), consistent scale,

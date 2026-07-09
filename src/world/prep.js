@@ -104,7 +104,79 @@ function prepCastAmbient(w, nodeId){
     const pool=Object.values(codexOf(w).records||{}).filter(r=>r.kind==="npc" && r.status && r.status.at===nodeId && r.dm && r.dm.ambient && !r.dm.partial);
     ensureSceneHook(pool);
   }
+  // ANIMAL-SOCIAL.md §1/§6 U2 — node-level animal population, keyed by the node's env band. Additive
+  // to the generic NPC pool above; never touches it.
+  if(typeof prepCastEnvAnimals==="function") prepCastEnvAnimals(w, nodeId);
   return { minted:minted.length, ids:minted };
+}
+
+/* ANIMAL-SOCIAL.md §1 — node-level env-band animal population (frequency map). Per-draw gated chance
+   + a fixed draw ceiling per band, same grammar as SCENE_PARTIALS below (a miss ends the draws — no
+   forced count). Numbers are engine implementation-fill straight from the spec's own table; the
+   shape (wilderness ≈ always, dungeon ≈ almost never) is the law, not the exact figures. */
+const ENV_PARTIALS = {
+  wilderness: { animal:0.9, draws:3 },
+  rural:      { animal:0.7, draws:2 },
+  village:    { animal:0.5, draws:2 },
+  city:       { animal:0.25, draws:2 },
+  dungeon:    { animal:0.08, draws:1 },
+};
+/* nodeEnvBand(w, nodeId) -> one of ENV_PARTIALS' 5 keys, or null if the node carries no prep env yet
+   (soft/unprepped nodes, or a node this session never bound). P.nodes[id].env carries the raw band —
+   "wilderness"/"urban"/"dungeon" (§1) — urban resolves to rural/village/city via the node's
+   settlement tier: reuses nodeLodgingTier's existing PLACE_TIERS lookup (0 hamlet/1 village/2-3
+   town-city) rather than inventing a second "how big is this place" heuristic — tier 0 -> rural,
+   tier 1 -> village, tier >=2 -> city (§1: "smallest settlements read rural, mid read village, large
+   read city"). */
+function nodeEnvBand(w, nodeId){
+  const P=(typeof prepOf==="function")?prepOf(w):null;
+  const pn=P && P.nodes && P.nodes[nodeId];
+  const raw=pn && pn.env;
+  if(!raw) return null;
+  if(raw==="wilderness" || raw==="dungeon") return raw;
+  if(raw==="urban"){
+    const tier=nodeLodgingTier(w, nodeId);
+    if(tier<=0) return "rural";
+    if(tier===1) return "village";
+    return "city";
+  }
+  return null;
+}
+/* prepCastEnvAnimals(w, nodeId) — ANIMAL-SOCIAL.md §1/§6 U2: mints this node's ambient animal
+   population per ENV_PARTIALS' draw grammar (rollPartial('animal',{env:band}), U1's weighted-pool
+   selection). Idempotent — skips if the node already carries an env-cast animal partial (a re-visit
+   within the same session doesn't re-roll or double-mint, same posture as prepCastAmbient's own
+   `already>=target` guard above).
+   §5 territory-holder: the wilderness band's FIRST draw is minted NON-ambient (`dm.ambient:false`,
+   `dm.territoryHolder:true`) — the node's residence anchor / named-record promotion candidate, not a
+   disposable walk-on; every other draw (any band) stays a normal ambient partial. Null-safe: no
+   codex/rollPartial, or the node carries no prep env yet -> no-op. */
+function prepCastEnvAnimals(w, nodeId){
+  if(!nodeId || typeof codexAdd!=="function" || typeof rollPartial!=="function") return {minted:0};
+  const band=nodeEnvBand(w, nodeId);
+  if(!band) return {minted:0};
+  if(typeof codexOf==="function"){
+    const recs=codexOf(w).records||{};
+    const already=Object.values(recs).some(r=>r.kind==="npc" && r.status && r.status.at===nodeId && r.dm && r.dm.envCast && r.dm.partialKind==="animal");
+    if(already) return {minted:0, already:true};
+  }
+  const cfg=ENV_PARTIALS[band]||{};
+  const chance=cfg.animal||0, draws=cfg.draws||0;
+  const region=(typeof regionForNode==="function")?regionForNode(w,nodeId):null;
+  const minted=[];
+  for(let i=0;i<draws;i++){
+    if((typeof Math.random==="function"?Math.random():1) >= chance) break;   // a miss ends the draws
+    const p=rollPartial("animal", { env:band, region });
+    const isHolder=(band==="wilderness" && i===0);
+    const rec=codexAdd(w, Object.assign({}, p, { kind:"npc",
+      id:prepCastId(w, "npc", p.name||"animal-partial"),
+      status:{ soft:true, at:nodeId },
+      dm:Object.assign({}, p.dm, { ambient:!isHolder, partial:true, partialKind:p.partialKind,
+        envCast:true, envBand:band, territoryHolder:isHolder||undefined })
+    }));
+    if(rec) minted.push(rec.id);
+  }
+  return { minted:minted.length, ids:minted, band };
 }
 
 /* ============================================================================

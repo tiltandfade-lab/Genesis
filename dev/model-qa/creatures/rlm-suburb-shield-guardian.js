@@ -115,23 +115,38 @@ export function buildShieldGuardian(){
     blob(toe.x, 0.035, toe.z, 0.095, 0.032, 0.115, hex, 6, 3);
   }
   {
-    // LEAD leg (left, +x) — planted forward and wide, knee bent, taking the impact
-    const hip = V(0.20, 0.60, -0.02);
-    const knee = V(0.36, 0.29, 0.22);
-    const ankle = V(0.34, 0.13, 0.44);
+    // LEAD leg (left, +x) — planted forward and wide, knee bent, taking the impact.
+    // R2b fix (second-pass flag: "lead leg is hidden"): the old hip/knee/ankle x-offsets grew
+    // slower than the z-forward reach, so in the dimetric camera projection (screen-x ~ x-z) the
+    // lead foot's screen position crossed OVER the rear leg's and hid behind it. Widened the x
+    // spread at every joint so x dominates z the whole way down (also restored a real knee bend —
+    // the first widen pass over-straightened it to ~170deg; the knee now bulges forward to
+    // ~122deg per POSE-ANATOMY law 2) and pulled the toe direction off pure +z (was drifting the
+    // toe's screen position away from the ankle, reading as a detached blob) so the foot stays
+    // visually attached to the leg.
+    const hip = V(0.28, 0.60, -0.02);
+    const knee = V(0.40, 0.32, 0.30);
+    const ankle = V(0.46, 0.12, 0.26);
     legSeg(hip, knee, ankle, P.bronze, P.bronzeDk);
-    bigFoot(ankle, norm([0.14, 0, 1]), P.bronze, P.bronzeDk);
+    bigFoot(ankle, norm([0.6, 0, 0.7]), P.bronze, P.bronzeDk);
   }
   {
-    // REAR leg (right, -x) — driven back straighter, bracing the shove
-    const hip = V(-0.20, 0.60, -0.02);
-    const knee = V(-0.31, 0.32, -0.30);
-    const ankle = V(-0.28, 0.12, -0.48);
-    legSeg(hip, knee, ankle, P.bronzeDk, P.bronze);
-    bigFoot(ankle, norm([-0.1, 0, -0.6]), P.bronzeDk, P.bronze);
+    // REAR leg (right, -x) — driven back straighter, bracing the shove (kept near-straight,
+    // ~173deg, per the pose sentence). R2b fix: widening x alone wasn't enough — this leg's hip
+    // sits inside the torso's own footprint, so in the orthographic camera's z-buffer the torso
+    // occluded almost the entire thigh+shin regardless of color (verified with a pure-red
+    // diagnostic bake). Cut the z (backward) reach way down and pushed x hard sideways instead —
+    // depth into the torso was what hid it, not lateral position — so the shin+foot now clear the
+    // torso's silhouette edge and read as a connected leg instead of a floating foot. Also
+    // brightened to bronzeLt/bronze (was bronzeDk/bronze) so what's visible clears the void floor.
+    const hip = V(-0.30, 0.60, -0.02);
+    const knee = V(-0.50, 0.30, -0.08);
+    const ankle = V(-0.58, 0.12, -0.10);
+    legSeg(hip, knee, ankle, P.bronzeLt, P.bronze);
+    bigFoot(ankle, norm([-0.3, 0, -0.85]), P.bronze, P.bronzeDk);
   }
   /* knee joint collars — bright wood-grain seam ring at each knee, per feature 6 */
-  for(const kn of [V(0.36, 0.29, 0.22), V(-0.31, 0.32, -0.30)]){
+  for(const kn of [V(0.40, 0.32, 0.30), V(-0.50, 0.30, -0.08)]){
     const r1 = ring(kn, V(0, 1, 0), 0.128, 0.128, 8);
     const r2 = ring(kn.clone().add(V(0, 0.02, 0)), V(0, 1, 0), 0.134, 0.134, 8);
     stitch([r1, r2], () => P.seamLt);
@@ -174,29 +189,33 @@ export function buildShieldGuardian(){
      a glowing violet-white amulet disc seated inside. Built in LOCAL space then carried through
      brace() so it rides the leaning/rotated chest plate. ===== */
   {
-    const keyCenterLocal = V(0.02, 1.05, 0.33);
+    // R2b fix (second-pass flag: "amulet is small and half-occluded"): dropped onto the lower
+    // chest/belly plate (was riding right where the crossed-forearm guard sat, y=1.05) and
+    // enlarged ~30% across the board so it clears the arms' new crossing zone (see ARMS below,
+    // which now stays above y~1.02) and reads as the single brightest/coolest shape at a squint.
+    const keyCenterLocal = V(0.02, 0.85, 0.37);
     // dark keyhole housing (circle body + narrow slot below, built as two stacked blobs read as
     // one silhouette shape)
     const kc = brace(keyCenterLocal);
-    blob(kc.x, kc.y, kc.z, 0.155, 0.155, 0.03, P.keyhole, 10, 3);
-    const slotLocal = keyCenterLocal.clone().add(V(0, -0.14, 0.002));
+    blob(kc.x, kc.y, kc.z, 0.20, 0.20, 0.035, P.keyhole, 10, 3);
+    const slotLocal = keyCenterLocal.clone().add(V(0, -0.17, 0.002));
     const sc = brace(slotLocal);
-    blob(sc.x, sc.y, sc.z, 0.06, 0.09, 0.025, P.keyhole, 8, 3);
+    blob(sc.x, sc.y, sc.z, 0.075, 0.11, 0.03, P.keyhole, 8, 3);
 
     // amulet disc seated in the keyhole — concentric rings, white-hot core -> violet -> deep-violet edge
     const discRings = [
-      { r: 0.115, hex: P.amuletEdge },
-      { r: 0.075, hex: P.amuletMid },
-      { r: 0.035, hex: P.amuletCore },
+      { r: 0.15, hex: P.amuletEdge },
+      { r: 0.10, hex: P.amuletMid },
+      { r: 0.05, hex: P.amuletCore },
     ];
     for(const dr of discRings){
-      const c = keyCenterLocal.clone().add(V(0, 0, 0.03));
-      blob(brace(c).x, brace(c).y, brace(c).z, dr.r, dr.r, 0.018, dr.hex, 10, 2);
+      const c = keyCenterLocal.clone().add(V(0, 0, 0.035));
+      blob(brace(c).x, brace(c).y, brace(c).z, dr.r, dr.r, 0.02, dr.hex, 10, 2);
     }
     // amulet rim highlight — thin bright ring around the disc edge
     {
-      const r1 = ring(keyCenterLocal.clone().add(V(0, 0, 0.035)), V(0, 0, 1), 0.13, 0.13, 12).map(brace);
-      const r2 = ring(keyCenterLocal.clone().add(V(0, 0, 0.033)), V(0, 0, 1), 0.122, 0.122, 12).map(brace);
+      const r1 = ring(keyCenterLocal.clone().add(V(0, 0, 0.04)), V(0, 0, 1), 0.17, 0.17, 12).map(brace);
+      const r2 = ring(keyCenterLocal.clone().add(V(0, 0, 0.038)), V(0, 0, 1), 0.16, 0.16, 12).map(brace);
       stitch([r1, r2], () => P.amuletMid);
     }
   }
@@ -232,14 +251,19 @@ export function buildShieldGuardian(){
       blob(p.x, p.y, p.z, 0.028, 0.026, 0.026, hexRim, 5, 3);
     }
   }
-  // RIGHT arm (rear shoulder) — crosses toward the left at CHEST/COLLAR height (R2 fix: r1's
-  // wrist landed at head height and the crossed forearms swallowed the whole head into one
-  // blob — pulled the whole cross down so it guards the chest and clears the head/neck).
+  // RIGHT arm (rear shoulder) — crosses toward the lead side. R2b fix (second-pass flag: "the
+  // crossed forearms read as one rounded mass"): r1/R2's two forearms ran nearly PARALLEL
+  // through the same point (both sweeping +x, both landing near the same y/z), so their tubes
+  // lay flush against each other with no gap. Kept the R2 cap (wrist stays well below head
+  // y=1.44, learned from the earlier head-swallow regression) but swung this arm's crossing
+  // band HIGH (el/wr y 1.22->1.35) while the left arm's band (below) stays LOW (y 1.02->1.07) —
+  // a real ~0.25-0.3u vertical gap opens where the two forearms cross, reading as a genuine
+  // X instead of a merged blob, and the whole band sits above the amulet (now at y=0.85).
   {
     const sh = shoulderR;
-    const elLocal = shoulderRLocal.clone().add(V(0.06, -0.14, 0.22));
+    const elLocal = V(-0.28, 1.22, 0.22);
     const el = brace(elLocal);
-    const wrLocal = elLocal.clone().add(V(0.36, 0.06, 0.14));
+    const wrLocal = V(0.20, 1.35, 0.42);
     const wr = brace(wrLocal);
     armSeg(sh, el, wr, P.bronzeDk, P.bronze, 0.115, 0.10, 0.155, 0.125);
     slabForearmEnd(wr, [0.5, 0.15, -0.1], P.bronzeDk, P.rim);
@@ -247,13 +271,14 @@ export function buildShieldGuardian(){
     const r2 = ring(el.clone().add(V(0.01, 0.01, 0.01)), V(0.5, -0.2, 0.7), 0.12, 0.12, 6);
     stitch([r1, r2], () => P.seamLt);
   }
-  // LEFT arm (lead shoulder) — crosses toward the right just below the right arm's crossing
-  // point, both wrists well below the chin so the head stays clear of the block.
+  // LEFT arm (lead shoulder) — crosses toward the rear side, LOW band (see note above), passing
+  // clearly below the right forearm's high band so the two read as a crossed X with daylight
+  // between them, guarding the chest without sitting on top of the (now lower) amulet.
   {
     const sh = shoulderL;
-    const elLocal = shoulderLLocal.clone().add(V(-0.06, -0.22, 0.20));
+    const elLocal = V(0.28, 1.07, 0.18);
     const el = brace(elLocal);
-    const wrLocal = elLocal.clone().add(V(-0.34, 0.02, 0.16));
+    const wrLocal = V(-0.22, 1.02, 0.34);
     const wr = brace(wrLocal);
     armSeg(sh, el, wr, P.bronze, P.bronzeLt, 0.115, 0.10, 0.155, 0.125);
     slabForearmEnd(wr, [-0.5, 0.1, 0.0], P.bronze, P.rim);

@@ -42,11 +42,15 @@ export function buildTroglodyte(){
   /* ---------- PALETTE (VS-desaturated suburb register: dull olive-grey scale body low-value,
      pale belly-strip + pale frill/crest edges the two high-value zones law 3 needs). ---------- */
   const P = {
-    scale: 0x545c48, scaleDk: 0x363c2e, scaleLt: 0x676f56,   // olive-grey hide, dark-vs-void ok
-    belly: 0xc8bc8c, bellyDk: 0xa2986c,                        // pale belly strip, the value spine
-    frill: 0xd4c894, frillDk: 0x9c9066,                        // pale-edged frill/crest, the signature
+    // SECOND-PASS (2026-07-09, flag: whole figure on the dark edge) — body lifted one step
+    // (scaleDk was avg-74 against the void-70 floor before; now clears it), belly/frill pushed
+    // harder past the >=140-channel signature floor, eye glow brightened + enlarged to hold at
+    // sheet distance.
+    scale: 0x6e765c, scaleDk: 0x4c5240, scaleLt: 0x81896a,     // olive-grey hide, lifted a step
+    belly: 0xe0d6aa, bellyDk: 0xbcb48c,                        // pale belly strip, brightened harder
+    frill: 0xe2d8a6, frillDk: 0xb6ac84,                        // pale-edged frill/crest, brightened harder
     claw: 0x201d16, mouth: 0x1a1611, tongue: 0x6e2f2a,
-    eye: 0x14110c, eyeGlow: 0xb8c468,
+    eye: 0x14110c, eyeGlow: 0xe4ee8c,
     disc: 0x3a352a, discTop: 0x453f32,
   };
 
@@ -116,13 +120,22 @@ export function buildTroglodyte(){
          V(headC.x+0.19, headC.y-0.06,  headC.z+0.10), V(headC.x+0.19, headC.y-0.06,  headC.z+0.02), P.mouth, 0.03);
     tube(V(headC.x+0.10, headC.y-0.05, headC.z+0.06), V(headC.x+0.19, headC.y-0.06, headC.z+0.07), 0.010, 0.004, 4, P.tongue, {capB:{hex:P.tongue}});
 
-    /* eyes — dull glow pair, set to face the viewer's sideways stare */
+    /* eyes — glow pair, set to face the viewer's sideways stare. SECOND-PASS ROOT-CAUSE FIX #1:
+       the r1 quads were wound top-left->top-right->bottom-right->bottom-left, which is CLOCKWISE
+       as seen from +z — that puts the face normal at -z, so with FrontSide-only materials the
+       eyes were backface-culled and NEVER rendered, at any brightness. The dark socket is now
+       rewound CCW-from-+z (matching the belly-strip quads that do render) so it actually faces
+       camera. FIX #2: even correctly wound, a flat MeshLambertMaterial quad's brightness still
+       depends on the light angle (no emissive channel) — under this scene's lighting a re-wound
+       flat glow quad rendered as a muted ~(107,112,60), not a readable "glow". Swapped the glow
+       highlight for a small blob() sphere (the same primitive the cosmic-set ethereal-eye
+       creatures use) sized past the 0.04u floor: a sphere always presents a lit, camera-facing
+       surface regardless of exact winding/angle, so it reads as a steady bright point. */
     for(const dz of [0.05, -0.03]){
       const ex = headC.x + 0.055, ey = headC.y + 0.055, ez = headC.z + dz*0.6 + 0.03;
-      quad(V(ex-0.014, ey+0.012, ez), V(ex+0.014, ey+0.012, ez),
-           V(ex+0.012, ey-0.012, ez), V(ex-0.012, ey-0.012, ez), P.eye, 0.02);
-      quad(V(ex-0.006, ey+0.006, ez+0.004), V(ex+0.006, ey+0.006, ez+0.004),
-           V(ex+0.005, ey-0.006, ez+0.004), V(ex-0.005, ey-0.006, ez+0.004), P.eyeGlow, 0.05);
+      quad(V(ex-0.019, ey-0.019, ez), V(ex+0.019, ey-0.019, ez),
+           V(ex+0.021, ey+0.019, ez), V(ex-0.021, ey+0.019, ez), P.eye, 0.02);
+      blob(ex, ey, ez+0.014, 0.023, 0.020, 0.016, P.eyeGlow, 5, 2);
     }
 
     /* fanned skull frill — the loud pale-edged signature, splayed CLOSE against the back of the

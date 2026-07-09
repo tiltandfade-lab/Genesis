@@ -45,8 +45,8 @@ export function buildWolf(){
     belly:0xc4b9a2, ruff:0xaea290,            // paler throat/belly ruff
     hackle:0x6b6252, hackleTip:0xe4d9b8,      // raised hackle ridge — PALE tip = the value-contrast zone
     sock:0xcabf9e,                            // lighter lower-leg "sock" (digitigrade cannon readability)
-    muzzle:0x7c7360, muzzleLt:0xaea192, nose:0x201b18,
-    maw:0x3a2622, tongue:0x9a5a54, tooth:0xf0e8d4,
+    muzzle:0x7c7360, muzzleLt:0xd8c39c, nose:0x201b18,   // muzzleLt brightened+warmed — the "warm bright muzzle zone" (secondpass flag fix)
+    maw:0x3a2622, tongue:0x9a5a54, tooth:0xfff6e2,        // tooth pushed near-white (was 0xf0e8d4, rendered dim below the belly-highlight floor — secondpass flag fix)
     ear:0x685c4c, earIn:0x362c22,
     claw:0x2c2620, disc:0x4a4038, discTop:0x585047,
   };
@@ -124,18 +124,25 @@ export function buildWolf(){
        bared-teeth snarl — never the old dislocated wide gape). */
     /* r1 self-correction #3: the mouth read too small/thin at this camera distance — beefed up the
        muzzle radii (chunkier snout, easier to read as a head not a stick) and enlarged/brightened the
-       fang row + widened the dark maw gap so the open-maw signature actually carries. */
+       fang row + widened the dark maw gap so the open-maw signature actually carries.
+       SECONDPASS FLAG FIX (2026-07-09): batch review measured fangs peaking ~128 RGB, dimmer than an
+       incidental belly highlight (169) — the signature wasn't loud. Root cause: the gape was too
+       shallow AND the fang quads were too small (near/under the 0.04u feature floor), so they got
+       diluted at 1/3-res instead of reading as bright teeth. Fix = bigger gap (upper jaw raised,
+       lower jaw dropped further) + fangs resized well clear of the floor + tooth color pushed to
+       near-white + the nasal-bridge tube swapped to the brightened warm P.muzzleLt so the whole snout
+       is a bright warm zone the eye lands on first. */
     const jawY = H*0.700;
-    const uB=V(0, jawY+0.048, 0.68), uM=V(0, jawY+0.036, 0.85), uT=V(0, jawY+0.020, 0.97);
-    tube(uB, uM, 0.072, 0.056, n, P.muzzle, {raz:0.062, rbz:0.046, phase:ph});
-    tube(uM, uT, 0.056, 0.032, n, P.muzzle, {raz:0.046, rbz:0.026, phase:ph, capB:{hex:P.nose, lift:0.010}});
-    quad(V(-0.048,jawY-0.006,0.71), V(0.048,jawY-0.006,0.71),
-         V(0.030,jawY-0.012,0.92), V(-0.030,jawY-0.012,0.92), P.maw, 0.02);
-    const lB=V(0, jawY-0.052, 0.68), lM=V(0, jawY-0.068, 0.84), lT=V(0, jawY-0.078, 0.92);
+    const uB=V(0, jawY+0.066, 0.68), uM=V(0, jawY+0.052, 0.86), uT=V(0, jawY+0.034, 0.98);
+    tube(uB, uM, 0.072, 0.056, n, P.muzzle,   {raz:0.062, rbz:0.046, phase:ph});
+    tube(uM, uT, 0.056, 0.032, n, P.muzzleLt, {raz:0.046, rbz:0.026, phase:ph, capB:{hex:P.nose, lift:0.010}});
+    quad(V(-0.052,jawY+0.010,0.70), V(0.052,jawY+0.010,0.70),
+         V(0.034,jawY-0.010,0.95), V(-0.034,jawY-0.010,0.95), P.maw, 0.02);
+    const lB=V(0, jawY-0.072, 0.68), lM=V(0, jawY-0.096, 0.85), lT=V(0, jawY-0.110, 0.94);
     tube(lB, lM, 0.058, 0.040, n, P.muzzle,   {raz:0.044, rbz:0.032, phase:ph});
     tube(lM, lT, 0.040, 0.024, n, P.muzzleLt, {raz:0.032, rbz:0.018, phase:ph, capB:{hex:P.muzzleLt, lift:0.008}});
-    quad(V(-0.022,jawY-0.026,0.76), V(0.022,jawY-0.026,0.76),
-         V(0.018,jawY-0.032,0.88), V(-0.018,jawY-0.032,0.88), P.tongue, 0.04);
+    quad(V(-0.024,jawY-0.046,0.76), V(0.024,jawY-0.046,0.76),
+         V(0.020,jawY-0.054,0.90), V(-0.020,jawY-0.054,0.90), P.tongue, 0.04);
 
     /* geometric TEETH — a LARGER, brighter bared-fang row (upper canines+incisors+carnassial hint,
        lower canines) — the signature's high-value zone (law 3).
@@ -147,20 +154,32 @@ export function buildWolf(){
        "essence" gate failure (open-maw signature not loud). Fix: swap (a,b) for the down case so
        both orientations wind the same way and face +z. Also bumped w/h ~45% and pushed the fangs
        further off the muzzle surface (z+0.014 not +0.008) so they clear the 0.04u feature floor and
-       don't get swallowed by the jaw-tube silhouette. */
+       don't get swallowed by the jaw-tube silhouette.
+       SECONDPASS FLAG FIX: sizing alone wasn't enough — measured after the first resize, fangs still
+       only reached ~133 RGB (vs the 169 belly highlight). Tried a 3-face pyramid (the hackle-spike
+       technique) next, expecting more volume to read from every angle — measured WORSE (~126): the
+       pyramid's "down" faces wind with a normal tilted -y/-z (into the skull, away from both the
+       dimetric camera at +x+y+z AND the key light at (5,9,7)), so most of its surface went dark. The
+       original flat single-triangle already had the RIGHT winding (normal ≈ pure +z, facing camera
+       and catching real diffuse light — verify: (p2-p1)×(apex-p1) resolves to (0, ∓0.016w, +2wh) for
+       both down orientations). Kept that flat triangle, pushed it further: bigger w/h again, and a
+       bigger forward z-offset so the tooth clears the jaw-tube surface instead of partially embedding
+       in it (self-occlusion was diluting the readable footprint). */
     const fang=(x,y,z,w,h,down)=>{
+      // tip pushed FORWARD of the root (was the reverse) — tilts the face normal toward +y as well as
+      // +z, catching more of the key light (5,9,7) instead of a near-pure +z grazing angle.
       const ty = down ? y-h : y+h;
-      const p1 = down ? V(x+w,y,z+0.014) : V(x-w,y,z+0.014);
-      const p2 = down ? V(x-w,y,z+0.014) : V(x+w,y,z+0.014);
-      quad(p1, p2, V(x,ty,z+0.006), V(x,ty,z+0.006), P.tooth, 0.02);
+      const p1 = down ? V(x+w,y,z+0.010) : V(x-w,y,z+0.010);
+      const p2 = down ? V(x-w,y,z+0.010) : V(x+w,y,z+0.010);
+      quad(p1, p2, V(x,ty,z+0.040), V(x,ty,z+0.040), P.tooth, 0.02);
     };
     for(const s of [-1,1]){
-      fang(s*0.040, jawY+0.002, 0.775, 0.029, 0.067, true);
-      fang(s*0.018, jawY-0.002, 0.815, 0.019, 0.038, true);
-      fang(s*0.058, jawY+0.006, 0.735, 0.022, 0.044, true);
+      fang(s*0.050, jawY+0.028, 0.78, 0.058, 0.130, true);   // main canine — LOUD, near-white, well past the floor
+      fang(s*0.022, jawY+0.024, 0.82, 0.050, 0.082, true);   // incisor
+      fang(s*0.070, jawY+0.032, 0.74, 0.050, 0.088, true);   // carnassial hint
     }
     for(const s of [-1,1]){
-      fang(s*0.034, jawY-0.044, 0.775, 0.022, 0.041, false);
+      fang(s*0.042, jawY-0.062, 0.78, 0.050, 0.082, false);
     }
 
     /* throat/ruff FRINGE — small raised tufts under the jaw (bristled aggression, value accent) */

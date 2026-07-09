@@ -81,9 +81,9 @@ export function buildGulthiasBlight(){
     // ladder so the body clears the void on its own, independent of the face/sap accents.
     barkDk: 0x352a1e, bark: 0x5c4a34, barkLt: 0x836a47,    // near-void trailing flank -> lit leading flank
     barkHi: 0xa78957,                                        // knot/ridge highlight rim
-    wood: 0xd8c9a0, woodHi: 0xefe4c4,                        // pale exposed heartwood (break/mouth interior)
+    wood: 0xdecfa8, woodHi: 0xf5ecd2,                        // pale exposed heartwood (break/mouth interior)
     eyeVoid: 0x0a0806,                                       // hollow eye-socket dark
-    sap: 0x8c0e15, sapHi: 0xd61b2b, sapGlint: 0xff5468,      // blood-red sap ladder, glint is the >=140 zone
+    sap: 0x9c0f18, sapHi: 0xe0202f, sapGlint: 0xff3d4e,      // blood-red sap ladder, glint is the >=140 zone
     dirt: 0x2e2416,                                          // root-tip mud smear
   };
 
@@ -113,8 +113,8 @@ export function buildGulthiasBlight(){
     // jagged broken-end shards + weeping sap
     const shardTip = add(brk, V(dir.x * 0.10, 0.09, dir.z * 0.10));
     tube(brk, shardTip, 0.06, 0.005, 5, P.wood, {});
-    const sapTip = add(brk, V(-dir.z * 0.02, -0.16, dir.x * 0.02));
-    tube(brk, sapTip, 0.035, 0.012, 5, P.sap, { capB: { hex: P.sapGlint, lift: -0.01 } });
+    const sapTip = add(brk, V(-dir.z * 0.03, -0.20, dir.x * 0.03));
+    tube(brk, sapTip, 0.05, 0.02, 5, P.sap, { capB: { hex: P.sapGlint, lift: -0.014 } });
   }
   // planted (front-left, front-right, back-right — bracing the forward lunge)
   plantedRoot(V(-0.56, 0.0, 0.82), 0.26, V(-0.14, 0, 0.10));
@@ -147,33 +147,67 @@ export function buildGulthiasBlight(){
     tube(knot, knotB, 0.05, 0.02, 5, P.barkHi, {});
   }
 
-  /* ================= BARK FACE — mid-scream, mouth-split + hollow eyes ================= */
-  // eyes: two recessed dark sockets on the upper-mid trunk leading face
-  const eyeY = 1.62, eyeZBase = 0.63;
-  for (const ex of [-0.145, 0.145]){
-    const c = V(ex, eyeY, eyeZBase + Math.abs(ex) * 0.15);
-    const a = add(c, V(-0.075, 0.055, 0));
-    const b = add(c, V(0.075, 0.05, -0.01));
-    const d = add(c, V(0.06, -0.06, -0.01));
-    const e = add(c, V(-0.06, -0.055, 0));
-    quad(a, b, d, e, P.eyeVoid, 0.04);
+  /* ================= BARK FACE — mid-scream, mouth-split + hollow eyes =================
+     SECOND-PASS FIX (flag: "bark face is muddy — the scream does not read"): r2's face quads
+     were WOUND BACKWARDS (checked the cross product by hand — both eye triangles and both mouth
+     triangles resolved to -z-facing normals) against a camera that views from the +x/+z octant
+     (probe-lib's dimetric cam(45,35,...)). MeshLambertMaterial defaults to THREE.FrontSide, so
+     every one of those triangles was backface-culled — not merely dim, literally never drawn.
+     On top of that the eye x-offsets (±0.145 in world space) sat outside the trunk's actual
+     cross-section at eyeY (cx≈0.21, half-width≈0.27 there), so even a winding fix would've left
+     them floating off the bark surface. FIX: added trunkAt(y) to sample the real stack profile,
+     re-centered every face vertex against it (proud of the shell by a small +z epsilon so the
+     quads win the z-fight instead of hiding behind the trunk's own ring geometry), reversed the
+     vertex order on every face quad (a,b,d,e -> a,e,d,b) to flip the normal to +z, and enlarged
+     every feature (~40% bigger eyes, ~45% wider gash) per the flag note. */
+  function trunkAt(y){
+    for (let i = 0; i < trunkBands.length - 1; i++){
+      const b0 = trunkBands[i], b1 = trunkBands[i + 1];
+      if (y >= b0.y && y <= b1.y){
+        const t = (y - b0.y) / (b1.y - b0.y);
+        return {
+          cx: b0.cx + (b1.cx - b0.cx) * t, cz: b0.cz + (b1.cz - b0.cz) * t,
+          rx: b0.rx + (b1.rx - b0.rx) * t, rz: b0.rz + (b1.rz - b0.rz) * t,
+        };
+      }
+    }
+    const b = y < trunkBands[0].y ? trunkBands[0] : trunkBands.at(-1);
+    return { cx: b.cx, cz: b.cz, rx: b.rx, rz: b.rz };
   }
-  // mouth-split — a wide gaping vertical gash, widest at center, pale heartwood interior
-  const mouthTop = V(0.06, 1.34, 0.72);
-  const mouthMid = V(0.10, 1.14, 0.86);
-  const mouthBot = V(0.08, 0.96, 0.70);
-  const mL = [add(mouthTop, V(-0.05, 0, 0)), add(mouthMid, V(-0.14, 0, 0.02)), add(mouthBot, V(-0.05, 0, 0))];
-  const mR = [add(mouthTop, V(0.05, 0, 0)), add(mouthMid, V(0.14, 0, 0.02)), add(mouthBot, V(0.05, 0, 0))];
-  quad(mL[0], mR[0], mR[1], mL[1], P.eyeVoid, 0.05);
-  quad(mL[1], mR[1], mR[2], mL[2], P.eyeVoid, 0.05);
-  // pale heartwood strip set back inside the gash — law 3's headline high-value zone
-  const wL = [add(mL[0], V(0.015, 0, -0.03)), add(mL[1], V(0.05, 0, -0.05)), add(mL[2], V(0.015, 0, -0.03))];
-  const wR = [add(mR[0], V(-0.015, 0, -0.03)), add(mR[1], V(-0.05, 0, -0.05)), add(mR[2], V(-0.015, 0, -0.03))];
-  quad(wL[0], wR[0], wR[1], wL[1], P.woodHi, 0.03);
-  quad(wL[1], wR[1], wR[2], wL[2], P.wood, 0.04);
-  // sap weeping from the mouth corner
-  tube(add(mouthBot, V(0.06, 0, 0.0)), add(mouthBot, V(0.10, -0.28, -0.03)), 0.035, 0.01, 5, P.sap,
-    { capB: { hex: P.sapGlint, lift: -0.01 } });
+  // eyes: two recessed dark sockets on the upper-mid trunk leading face, straddling the trunk's
+  // ACTUAL centerline at that height (not a fixed world x) so both sit on the bark, not off it
+  const eyeY = 1.62;
+  const eT = trunkAt(eyeY);
+  for (const s of [-1, 1]){
+    const c = V(eT.cx + s * eT.rx * 0.42, eyeY, eT.cz + eT.rz + 0.02);
+    const a = add(c, V(-0.105, 0.077, 0));
+    const b = add(c, V(0.105, 0.07, -0.014));
+    const d = add(c, V(0.084, -0.084, -0.014));
+    const e = add(c, V(-0.084, -0.077, 0));
+    quad(a, e, d, b, P.eyeVoid, 0.04); // winding reversed (was a,b,d,e) so the normal faces +z
+  }
+  // mouth-split — a wide gaping vertical gash, widest at center, pale heartwood interior; each
+  // anchor rides the trunk's own cx/front-z at its height so the gash sits ON the leading flank
+  const mtT = trunkAt(1.34), mtM = trunkAt(1.14), mtB = trunkAt(0.96);
+  const mouthTop = V(mtT.cx, 1.34, mtT.cz + mtT.rz + 0.025);
+  const mouthMid = V(mtM.cx, 1.14, mtM.cz + mtM.rz + 0.03);
+  const mouthBot = V(mtB.cx, 0.96, mtB.cz + mtB.rz + 0.025);
+  const mL = [add(mouthTop, V(-0.075, 0, 0)), add(mouthMid, V(-0.20, 0, 0.02)), add(mouthBot, V(-0.075, 0, 0))];
+  const mR = [add(mouthTop, V(0.075, 0, 0)), add(mouthMid, V(0.20, 0, 0.02)), add(mouthBot, V(0.075, 0, 0))];
+  quad(mL[0], mL[1], mR[1], mR[0], P.eyeVoid, 0.05); // winding reversed (was mL0,mR0,mR1,mL1)
+  quad(mL[1], mL[2], mR[2], mR[1], P.eyeVoid, 0.05); // winding reversed (was mL1,mR1,mR2,mL2)
+  // pale heartwood strip nested inside the gash — law 3's headline high-value zone, pushed
+  // proud of the void quads (+z) so it wins the z-fight and actually reads instead of hiding
+  function insetMouth(frac, lift){
+    return [0, 1, 2].map(i => lerp3(mL[i], mR[i], frac).add(V(0, 0, lift)));
+  }
+  const wL = insetMouth(0.19, 0.014);
+  const wR = insetMouth(0.81, 0.014);
+  quad(wL[0], wL[1], wR[1], wR[0], P.woodHi, 0.03); // winding reversed (was wL0,wR0,wR1,wL1)
+  quad(wL[1], wL[2], wR[2], wR[1], P.wood, 0.04);   // winding reversed (was wL1,wR1,wR2,wL2)
+  // sap weeping from the mouth corner — enlarged + reddened per the flag note
+  tube(add(mouthBot, V(0.075, 0, 0.0)), add(mouthBot, V(0.13, -0.30, -0.02)), 0.05, 0.018, 5, P.sap,
+    { capB: { hex: P.sapGlint, lift: -0.012 } });
 
   /* ================= CANOPY CLAWS — 8 forking branches, all raked forward ================= */
   function clawBranch(baseDirX, baseDirY, len, twigSpread){
@@ -202,8 +236,8 @@ export function buildGulthiasBlight(){
 
   /* blood-red sap drops hanging from three canopy claw-tips — the second law-3 accent */
   for (const tip of [tip1, tip3, tip7]){
-    const drop = add(tip, V(0, -0.14, 0.02));
-    tube(tip, drop, 0.03, 0.008, 5, P.sap, { capB: { hex: P.sapGlint, lift: -0.008 } });
+    const drop = add(tip, V(0, -0.19, 0.03));
+    tube(tip, drop, 0.045, 0.016, 5, P.sap, { capB: { hex: P.sapGlint, lift: -0.012 } });
   }
 
   return { name: 'GULTHIAS BLIGHT' };

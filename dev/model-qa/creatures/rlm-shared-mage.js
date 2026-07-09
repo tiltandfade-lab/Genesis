@@ -47,12 +47,13 @@ export function buildMage2(){
      gimmick color; the mote carries the ONLY saturated/bright hue, law-3 high value zone). ---------- */
   const P = {
     robeOuter: 0x6c6250, robeOuterDk: 0x484030,
-    robeUnder: 0x847a58, robeUnderDk: 0x584f3a,
+    robeUnder: 0x9c9268, robeUnderDk: 0x746a4e,
     hood: 0x504838, hoodDk: 0x342e24,
     skin: 0xb08e68, skinDk: 0x7c5e42,
     sash: 0x8a6c40, sashDk: 0x5c4828,
     belt: 0x342e22, pouch: 0x584a30,
-    boot: 0x3a3226, bootDk: 0x241f18,
+    boot: 0x6c5f4a, bootDk: 0x584c3c,
+    hemLit: 0xc8bc86,
     staff: 0x6c5838, staffDk: 0x463824,
     focus: 0x241f18,
     mote: 0x9ef0ff, moteCore: 0xffffff, moteFade: 0x5ac4dc, moteFaint: 0x2c6070,
@@ -116,18 +117,33 @@ export function buildMage2(){
   stack(torsoBands, 10, { xform: arch });
 
   /* robe hem — asymmetric flared panels trailing back behind the stagger, blown-back read;
-     longer/wider on the trailing (-z) side, a shorter snap on the +x staff side */
+     longer/wider on the trailing (-z) side, a shorter snap on the +x staff side. Each blown-back
+     panel gets a thin bright rim strip along its outer (windward) edge — flag-note fix: without
+     a value break the panels melted into the boots/disc at the base; the rim gives the flare a
+     lit edge so the stagger reads crisply against the dark ground. */
+    const lerp = (a, b, t) => V(a.x + (b.x - a.x) * t, a.y + (b.y - a.y) * t, a.z + (b.z - a.z) * t);
+    const RIM_T = 0.80; // rim strip starts 80% of the way out from the hip anchor
   {
     const hipC = arch(V(0, L.hipY - 0.02, 0));
     const p1 = arch(V(-0.20, L.hipY - 0.02, -0.05));
     const p2 = arch(V(-0.30, L.hipY - 0.10, -0.30));
     const p3 = arch(V(-0.02, L.hipY - 0.10, -0.34));
     quad(V(hipC.x, hipC.y, hipC.z), V(p1.x, p1.y, p1.z), V(p2.x, p2.y, p2.z), V(p3.x, p3.y, p3.z), P.robeOuterDk, 0.05);
+    {
+      const p1i = lerp(hipC, p1, RIM_T), p2i = lerp(hipC, p2, RIM_T), p3i = lerp(hipC, p3, RIM_T);
+      quad(p1i, p1, p2, p2i, P.hemLit, 0.03);
+      quad(p2i, p2, p3, p3i, P.hemLit, 0.03);
+    }
 
     const q1 = arch(V(0.20, L.hipY - 0.03, 0.02));
     const q2 = arch(V(0.30, L.hipY - 0.09, -0.10));
     const q3 = arch(V(0.10, L.hipY - 0.09, -0.16));
     quad(V(hipC.x, hipC.y, hipC.z), V(q1.x, q1.y, q1.z), V(q2.x, q2.y, q2.z), V(q3.x, q3.y, q3.z), P.robeOuter, 0.05);
+    {
+      const q1i = lerp(hipC, q1, RIM_T), q2i = lerp(hipC, q2, RIM_T), q3i = lerp(hipC, q3, RIM_T);
+      quad(q1i, q1, q2, q2i, P.hemLit, 0.03);
+      quad(q2i, q2, q3, q3i, P.hemLit, 0.03);
+    }
 
     /* front hem panel, following the forward-planted leg */
     const f1 = arch(V(0.10, L.hipY - 0.03, 0.05));

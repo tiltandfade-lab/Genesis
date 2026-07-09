@@ -44,11 +44,19 @@ with Adam's rulings folded; REALM-HOOKS spec landing next. Queue:
    REALM-HOOKS U1–U6.
    **⚠ Each remaining spec is still SPEC-not-locked ("awaiting Adam's review") — lock it (resolve its
    open rulings) before executing, as ANIMAL-SOCIAL was locked before its build.**
-3b. ☐ **Adam rulings from the HQ review** (small, unblock when convenient): (a) urban→rural tier-0
-   banding — unshopped city nodes mint rural animal ecology and the cast freezes (documented
-   deliberate tradeoff; keep, or give nodes a real urban signal?); (b) herd/bird witness channels —
-   `move-zone`/`npc-life` writers stamp no location, those scope channels are verify-only (one small
-   stamp unit if wanted). **Standing note:** `dev/verify-animal-table-fingerprint.mjs` is SUPPOSED
+3b. ☑ **Adam rulings from the HQ review — RULED 2026-07-09 late night:** (a) urban→rural tier-0
+   banding — **settlement POPULATION estimates are the intended urban-development signal** ("at some
+   point we need to start estimating populations for the cities and towns … helps me a lot on
+   tabletop when I am creating a map for a town"); the tier-0 lodging fallback STANDS until
+   populations exist. Populations belong to the PLACE-GEN spec's scope when that build wave lands —
+   they'd drive `nodeEnvBand`, place-tier stock, and town-map presentation alike. (b) npc-life stamp
+   — **BUILT as HQ-8, landed 2026-07-09 late night**: the six place-bound npc-life writers
+   (companion desertion/pet-wanders/sidekick-departure/sidekick-death, turn life-event,
+   successor-thread) stamp `nodeId`; backstory seeds / faction-turns / tell-refresh stay
+   location-less by design (a bird must not witness world-gen). Bird's faces-sense is now live in
+   production; herd's `move-zone` movement-sense stays deferred until map-scale movement witnessing
+   has a real source (travel transitions, someday — design question, not a stamp).
+   **Standing note:** `dev/verify-animal-table-fingerprint.mjs` is SUPPOSED
    to go red under the CRAFT-LANE row pass — that red = re-sync `ANIMAL_ENV_WEIGHTS` +
    `ANIMAL_KNOWLEDGE_SCOPE` eyes-open, never loosen the tokens.
 4. ☐ **Models-lane handoff** (coordination note, other session): saurian warrior+scholar castes,

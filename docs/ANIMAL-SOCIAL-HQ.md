@@ -353,3 +353,42 @@ harness must pass before AND after, unchanged.
 - Close: CHANGELOG + HANDOFF + NEXT-STEPS via /genesis-clean-close; register this spec in
   DESIGN.md; ledger item for Adam: the urban→rural tier-0 banding ruling (kept-as-designed
   vs a node-type signal).
+
+---
+
+## HQ-8 — npc-life writers stamp location (Adam's ruling, 2026-07-09: "stamp with the npc life")
+
+**Defect (residual from HQ-5):** the bird knowledge scope lists `npc-life` in its ledgerTypes,
+but no npc-life writer stamps `nodeId`/`at`, so `animalWitnessSeen`'s location filter excludes
+every real entry — the bird's faces-sense ("a two-legged one came and went") is verify-only.
+
+**Decisions:**
+- **D-HQ8-1 (which writers stamp):** only npc-life events that HAPPEN AT A PLACE:
+  - `src/world/companions.js:160` (desertion), `:293` (pet-wanders), `:413` (sidekick-departure),
+    `:441` (sidekick-death) — node = the companion's codex record `status.at` when resolvable,
+    else `w.currentNodeId` (companion events happen with/near the party).
+  - `src/world/turn.js:354` (life-event) — `nodeId` is ALREADY in scope (the line-342 filter
+    selects NPCs at that node); stamp it.
+  - `src/world/turn.js:399` (successor-thread) — `npc.status.at || null` (the thread seeds where
+    the person was).
+- **D-HQ8-2 (which writers stay unstamped, deliberately):** `src/creator/life.js:151` (backstory
+  seeds — pre-map, the PC's past), `src/engine/world-gen.js:127` (faction-turn — abstract web
+  motion, not a scene), `src/world/turn.js:427` (animal-tell-refresh — meta bookkeeping; a bird
+  must not "witness" a refresh sweep). No location = invisible to witnesses = correct.
+- **D-HQ8-3 (key):** `nodeId`, matching the kill/drift writers and `animalWitnessSeen`'s
+  preferred key. Add it to the entry's data object; prose twins unchanged.
+- **OUT OF SCOPE:** herd's `move-zone` channel (map-scale movement witnessing keys off travel
+  transitions someday — a design question, not a stamp); the scope map; the loc filter.
+
+**Verification** (extend `dev/verify-animal-social-u6.mjs`; THE WIRING LAW — production writers
+via their real entry points, applyEvent-driven interviews):
+1. ⊗ RED-FIRST: at a node with a bird-scope animal, fire a real companion npc-life event through
+   its production path (e.g. the desertion/pet-wanders writer via its owning function, or the
+   turn life-event tick with a seeded known NPC at the node) → open an interview on the bird →
+   its `seen[]` contains the npc-life entry. Prove RED on master first.
+2. A backstory npc-life seed (creator path) and a faction-turn entry do NOT appear in any
+   witness packet (D-HQ8-2 holds).
+3. The stamped entries' prose twins are byte-unchanged (data-only addition).
+4. Mutation: strip the turn.js:354 stamp → check 1's life-event leg goes red.
+5. Regression: u1–u6 + fingerprint + dm-events + gen + check-manifest; gauntlet-fuzz-events
+   (ledger data shape changed).

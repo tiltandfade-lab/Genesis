@@ -447,10 +447,23 @@ const ANIMAL_ENV_WEIGHTS = {
    the table's (i+1)th row (1-indexed d12 rows map 1:1 to array position here — every animal-kind /
    wild-animal-kind row IS exactly one face of the die, never a multi-row band). Falls back to a
    flat rollTable(id) when the table is missing or weights don't match the row count (defensive —
-   never throws on a malformed vector). */
+   never throws on a malformed vector).
+   HQ-6 (docs/ANIMAL-SOCIAL-HQ.md D8) — the row/weight coupling this function leans on is fragile:
+   ANIMAL_ENV_WEIGHTS is a positional 12-vector authored against TODAY's animal-kind/wild-animal-kind
+   row order/count, and Adam's craft pass on those tables WILL rewrite them. When the length check
+   above fails (table exists but row count no longer matches the weight vector), warn LOUDLY once
+   per table id per session instead of silently reverting to a flat roll forever — truth over green;
+   whoever re-syncs the maps should do so eyes-open, not discover the silent fallback months later. */
+const __animalWeightMismatchWarned = new Set();
 function weightedTableRow(id, weights){
   const t=(typeof CT==="function")?CT()[id]:null;
-  if(!t || !Array.isArray(weights) || weights.length!==t.rows.length) return rollTable(id);
+  if(!t || !Array.isArray(weights) || weights.length!==t.rows.length){
+    if(t && !__animalWeightMismatchWarned.has(id)){
+      __animalWeightMismatchWarned.add(id);
+      console.warn("[animal-env] weight/row count mismatch for "+id+" — env weighting DISABLED (flat roll)");
+    }
+    return rollTable(id);
+  }
   const total=weights.reduce((a,b)=>a+b,0);
   if(total<=0) return rollTable(id);
   let roll=Math.random()*total, idx=0;

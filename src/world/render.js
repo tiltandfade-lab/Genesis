@@ -423,11 +423,33 @@ function renderWorld(){
    its later combat both agree on which realm is active. Pure, null-safe throughout — any missing link
    in the prep/walk chain (no active walk, a narrow test harness, prep.js not loaded) degrades to
    {kind:"idle"}, never a throw. */
+/* PLACE-GEN.md ADDENDUM §7 unit 7 — the node-tray lookup: mirrors urban.js's buildingApproach
+   precedent for finding a node's bound codex place record (mapOf(w).nodes[nodeId].codexId ->
+   codexGet), reused here rather than forked. Fires only when the record actually carries a spine
+   archetypeKey (rollPlace's own archetype draw, codex-roll.js) — an untyped node (no place-gen mint
+   at all, e.g. a bare urban-fabric district node) is NOT a node-tray candidate and this returns null,
+   same "degrade to idle" law theaterHereSourceFor's every other missing-link case already keeps.
+   Null-safe throughout: absent mapOf/codexGet (a narrow test harness), an unbound node, or a record
+   with no rolled.archetypeKey all return null, never a throw. */
+function theaterNodeSourceFor(w,nodeId){
+  if(!nodeId) return null;
+  if(typeof mapOf!=="function"||typeof codexGet!=="function") return null;
+  const mnode=mapOf(w).nodes[nodeId];
+  if(!mnode||!mnode.codexId) return null;
+  const rec=codexGet(w,mnode.codexId);
+  if(!rec||!rec.rolled||rec.rolled.archetypeKey==null) return null;
+  return rec;
+}
+
 function theaterHereSourceFor(w){
   const realms=(typeof theaterActiveRealmsFor==="function")?theaterActiveRealmsFor(w):[];
-  if(typeof prepOf!=="function"||typeof walkOfFrontier!=="function") return { kind:"idle", realms:realms };
-  const P=prepOf(w), id=P.activeWalkId;
-  if(!id) return { kind:"idle", realms:realms };
+  const hasWalkSeam=(typeof prepOf==="function"&&typeof walkOfFrontier==="function");
+  const P=hasWalkSeam?prepOf(w):null, id=P&&P.activeWalkId;
+  if(!id){
+    const nodeRec=theaterNodeSourceFor(w,w&&w.currentNodeId);
+    if(nodeRec) return { kind:"node", record:nodeRec, realms:realms };
+    return { kind:"idle", realms:realms };
+  }
   const pn=P.nodes&&P.nodes[id], walk=walkOfFrontier(w,id);
   if(!pn||!walk) return { kind:"idle", realms:realms };
   const cur=(pn.cursor&&pn.cursor.current)||1;

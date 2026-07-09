@@ -32,8 +32,8 @@ const REALMS = {
   chrome: {
     id: "chrome",
     label: "Chrome",
-    register: "Tech/sci-fi — clean hard surfaces, cheap miracles, and a battery bar always dropping.",
-    voice: ["a charge indicator", "vacuum-sealed corridors", "the hum under everything", "a manual nobody kept"],
+    register: "Neon-slum megacity — subway thunder, turf sprayed in code, mutants in the storm drains, and a badge that answers to a boardroom.",
+    voice: ["a subway rattling the grates below", "a fresh tag sprayed over an old one", "the servo-whine of a corporate enforcer", "gang colors that say this block is spoken for"],
     render: { sat: 0.85, tint: "#3ec8c0", tintAmt: 0.18, contrast: 1.15 },
   },
   noir: {

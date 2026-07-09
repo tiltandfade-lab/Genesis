@@ -8,7 +8,34 @@ updated: 2026-07-09 (night)
 
 *Read this first in a new session. It orients you; the linked docs are the source of truth.*
 
-## ⭐ Latest (2026-07-09 night — ANIMAL-SOCIAL U1–U6 landed; handing to Codex for the weekend) [Sonnet build → Opus re-gate/close]
+## ⭐ Latest (2026-07-09 late — REALM-KEY EXPANSION + SPRITE TRANSITION T1–T4) [Claude Fable 5]
+
+**What shipped (branch `claude/npc-monster-realm-expansion-edb64a`, one --no-ff merge):**
+the approved realm-key expansion roster (docs/REALM-KEY-EXPANSION-ROSTER.md) statted to MM standard —
+**+168 creatures → 1,475 total, `gen-realm-bestiary --check` clean**, `data/realm-bestiary.js`
+regenerated at close, all PROVISIONAL pending Adam's red-pen. Plus the **SPRITE-TRANSITION** decision
+(LOCKED: creatures → ImageGen sprites; 3D keeps trays/architecture; docs/SPRITE-TRANSITION.md) built
+through T4: sheet-manifest generator (181 sheets / 4,316 cells), slicer v2 (non-uniform-tolerant,
+fail-loud), `data/sprite-registry.js` (4,316 entries, 100% monster join), theater billboard channel
+(sprite-first `figureFor`, kill switch). Item sheets added from all 11 loot tables (571 objects).
+docs/ASSET-SYNC.md records the request-on-demand asset posture.
+
+**Verification (all run at close):** check-manifest OK · realm-wiring 78/0 · dm-events 70/0 ·
+social 97/0 · theater-sprites 10/0 · sprite-registry 6/0 · sprite-pipeline all-pass.
+
+**Do next (pick up here):**
+1. **T5 gloom vertical slice** the moment Adam drops sheet PNGs in `dev/sprite-sheets/incoming/` —
+   slice → registry regen → eyes-on A/B vs 3D in the theater → tagging pilot (vision scan →
+   `dev/model-qa/sprite-tags-overlay.json` → Adam redline). Taste gate before mass slicing.
+2. Adam's per-realm red-pen of the 168 new creatures (and the 4 slug-collision resolutions recorded
+   in `dev/sprite-manifests/v2-manifest.json` `_collisions`).
+3. Add the `item` kind to the v2 parser + registry so the 571 item sheets manifest/slice.
+4. Spec the two faction clocks: Pink Cult pressure (suburb) + gloom demand ladder.
+5. Hoverboard buff proposal (Adam's table, propose-first).
+
+---
+
+## Latest (2026-07-09 night — ANIMAL-SOCIAL U1–U6 landed; handing to Codex for the weekend) [Sonnet build → Opus re-gate/close]
 
 The full `docs/ANIMAL-SOCIAL.md` build (U1–U6) is **built, gated, and merged to master** — animals
 are now a first-class social layer (a wilderness region = a settlement whose NPCs are Beasts; Speak
@@ -49,7 +76,7 @@ animals / kids / a full PC set. `NEXT-STEPS.md` was trimmed to the live queue (h
 > parallel-sessions protocol): the **NPC subsystem** wiring (this entry) and the **MODEL-FOUNDRY**
 > modeling deep-dive (below). Both landed on master; two distinct "Do next" threads.
 
-## ⭐ Latest (2026-07-09 — THE MODEL FOUNDRY BATCH: ~185 bespoke models landed) [Claude Fable 5]
+## Latest (2026-07-09 — THE MODEL FOUNDRY BATCH: ~185 bespoke models landed) [Claude Fable 5]
 
 The batch modeling session ran the locked `docs/MODEL-FOUNDRY.md` process over the whole
 VISUAL-ASSET-QUEUE in one sitting: **14 merges, ~185 bespoke bodies** — all 42 high-traffic rebuild

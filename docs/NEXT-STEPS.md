@@ -194,3 +194,18 @@ L7. ☐ **Regenerate `table-registry.json/.md`** — stale after the rename/new 
    eyes-on A/B vs 3D + tagging pilot (vision scan → overlay → Adam redline). Taste gate before mass slicing.
 3. ☐ Models lane pivots to trays/props/architecture (MODEL-FOUNDRY re-scoped; VISUAL-ASSET-QUEUE
    creature targets → sprite lane).
+
+## Do next (2026-07-09, place-gen lane — visual-engine expansion)
+
+1. ☑ **Book gathers** — DMG14 settlements + random dungeons, DMG24 settlements + bastions
+   (docs/PLACE-GATHER-*.md, vision-read, committed 2acdcb8). VRGtR full book still wanted
+   (current file = subclasses excerpt; Adam sourcing) → Gloom domain-gen gather.
+2. ☐ **Settlement thin-table upgrades** (authorized): Ruler Status / Race Relations / Mythology /
+   Nearby / Relevancy → Master-Setting-grade d100, seeded from the DMG14 gather; GRID-LAW
+   dimensions on physical rows; originals archived; land PROVISIONAL for Adam's red-pen.
+3. ☐ **GRID LAW rewire** (PLACE-GEN ADDENDUM §A): (1) place mints emit cell footprints,
+   (2) theater 1 tile = 1 cell (5 ft), (3) combat bands/lanes derive from cell geometry (own unit).
+4. ☐ **Interior-gen spec section** — DMG14 Appendix A chain + Bastion space-bands, realm-skinned,
+   before its build wave.
+5. ☐ **Place Spine craft pass** (Adam) — spine rows + skin labels vs the Bastion 35-facility
+   cross-check (space band + staffing fields added per ADDENDUM §B).

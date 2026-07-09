@@ -238,3 +238,7 @@ Dependency order: U1 → U2 → {U3, U4, U5} (U3–U5 independent of each other)
   want rogues to *earn* "watched, or marked" more often.
 - **R5 — Wilderness threshold.** Rider fires only on a `wild`-tagged hometown row (proposed),
   or also when ranger/druid rolls `frontier`?
+
+## RESOLVED — Adam's rulings (2026-07-08 night)
+1. **4×/2×/1× ladder confirmed** as drafted.
+2. **Background JOINS class in the weights** (overrides the class-only-v1 recommendation): background's top tag enters at 2× per the draft's optional mechanism. "Background actually makes even more sense."

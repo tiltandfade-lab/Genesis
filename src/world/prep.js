@@ -165,7 +165,7 @@ function prepCastEnvAnimals(w, nodeId){
   if(!band) return {minted:0};
   if(typeof codexOf==="function"){
     const recs=codexOf(w).records||{};
-    const already=Object.values(recs).some(r=>r.kind==="npc" && r.status && r.status.at===nodeId && r.dm && r.dm.envCast && r.dm.partialKind==="animal");
+    const already=Object.values(recs).some(r=>r.status && r.status.at===nodeId && r.dm && r.dm.envCast && isAnimalPartial(r));
     if(already) return {minted:0, already:true};
   }
   const cfg=ENV_PARTIALS[band]||{};
@@ -181,37 +181,18 @@ function prepCastEnvAnimals(w, nodeId){
   const pcClass=(pc&&pc.sheet&&pc.sheet.class)||null;
   // ANIMAL-SOCIAL.md §3/§4/§6 U5 — cruelty memory: a Terrified-overshoot on THIS node (stamped by
   // dm.js's social_check, w.map.nodes[nodeId].animalCruelty) opens every animal minted here one step
-  // colder from now on ("the farm dogs talk").
-  const nn=(typeof mapOf==="function")?mapOf(w).nodes[nodeId]:null;
-  const crueltyPenalty=(nn && nn.animalCruelty)?-1:0;
+  // colder from now on ("the farm dogs talk"). HQ-7 item 2: the node lookup + penalty now lives
+  // inside mintAnimalPartial (keyed off the same nodeId, passed through as atId).
   const minted=[];
   for(let i=0;i<draws;i++){
     const isTerritoryHolderDraw=(band==="wilderness" && i===0);
     if(!isTerritoryHolderDraw && (typeof Math.random==="function"?Math.random():1) >= chance) break;   // a miss ends the draws
     const p=rollPartial("animal", { env:band, region, realm:realmId, pcClass });
     const isHolder=(band==="wilderness" && i===0);
-    // ANIMAL-SOCIAL.md §4/§6 U5 — row 12 (landmark: town's-own-animal / elder-of-the-wood) mints
-    // ALREADY promoted + named, never as a disposable ambient draw.
-    const isLandmark=!!(p.dm && p.dm.landmark);
-    const rec=codexAdd(w, Object.assign({}, p, { kind:"npc",
-      id:prepCastId(w, "npc", p.name||"animal-partial"),
-      name:isLandmark?(p.name||animalLandmarkName(band)):p.name,
-      status:{ soft:!isLandmark, at:nodeId },
-      dm:Object.assign({}, p.dm, { ambient:!(isHolder||isLandmark), partial:true, partialKind:p.partialKind,
-        envCast:true, envBand:band, territoryHolder:isHolder||undefined,
-        promoted:isLandmark||undefined, named:isLandmark||undefined, homeNodeId:isLandmark?nodeId:undefined })
-    }));
-    // ANIMAL-SOCIAL.md §3/§6 U3 RED-FIRST FIX: rollPartial computes an opening `dm.attitude` number
-    // (wild/-1 default, ranger/druid-bumped) but nothing ever stamped it onto r.status.attitude — the
-    // ladder codexGetAttitude/codexSetAttitude/social_check actually read. Before this line, EVERY
-    // animal partial silently read as the lazy Indifferent(0) default regardless of its rolled/tagged
-    // attitude (proven in dev/verify-animal-social-u3.mjs's RED section). Stamp it ONCE at mint via
-    // the real writer (codexAttitudeOpen honors the "opening rolled once" law — a second mint attempt
-    // on the same node is already blocked by the `already` idempotency guard above).
-    if(rec && typeof codexAttitudeOpen==="function"){
-      const base=(p.dm && p.dm.attitude!=null) ? p.dm.attitude : 0;
-      codexAttitudeOpen(w, rec.id, base+crueltyPenalty, { cause:"animal-opening" });
-    }
+    // ANIMAL-SOCIAL-HQ.md HQ-7 item 2: the mint-tail (landmark derivation, name fallback, soft/ambient/
+    // promoted/named/homeNodeId stamps, cruelty-penalized codexAttitudeOpen) is now the shared
+    // mintAnimalPartial helper below — this caller's genuine differences ({band, isHolder}) ride opts.
+    const rec=mintAnimalPartial(w, p, nodeId, { band, isHolder });
     if(rec) minted.push(rec.id);
   }
   // ANIMAL-SOCIAL.md §5/§6 U6 — the guaranteed-scene-hook law, extended over wilderness animal pools
@@ -239,6 +220,51 @@ const ANIMAL_LANDMARK_NAMES_DEFAULT=["Juniper","Ash","Whisper","Thistle","Old Be
 function animalLandmarkName(band){
   const pool=ANIMAL_LANDMARK_NAMES[band]||ANIMAL_LANDMARK_NAMES_DEFAULT;
   return pool[Math.floor((typeof Math.random==="function"?Math.random():0)*pool.length)];
+}
+
+/* ANIMAL-SOCIAL-HQ.md HQ-7 item 2 — mintAnimalPartial(w, p, atId, opts): the six mint-tail rules
+   duplicated between prepCastEnvAnimals and prepCastAmbientScene's animal branch, extracted into one
+   helper. `p` is a rollPartial("animal",...) result; `atId` is the node/scene placement id (nodeId for
+   the env caster, atId for the scene caster — same accessor, different variable name at the call
+   site). `opts` carries each caller's GENUINE differences:
+     - env caster:   { band, isHolder }         (wilderness territory-holder draw, envCast/envBand tag)
+     - scene caster: { sceneBucket }            (market/tavern/shop/shrine tag, no holder concept)
+   The six rules, now byte-identical for both callers (assert via JSON.stringify fixture, HQ-7 report):
+     1. cruelty penalty       — nn.animalCruelty at atId -> -1 opening penalty, else 0.
+     2. landmark derivation   — isLandmark = !!(p.dm && p.dm.landmark) (row-12 landmark draw).
+     3. landmark-name fallback— animalLandmarkName(opts.band||null): the env caster passes its real
+        band (wilderness's own name pool); the scene caster passes no band at all (opts.band
+        undefined -> null), same as its old inline animalLandmarkName(null) call — NOT sceneBucket.
+     4. soft:!isLandmark.
+     5. promoted/named/homeNodeId stamps (+ ambient/territoryHolder/envCast/envBand vs sceneBucket —
+        the one caller-specific dm-field set, folded in via extraDm below).
+     6. codexAttitudeOpen (opening attitude = p.dm.attitude (default 0) + the cruelty penalty).
+   Returns the minted record (or null/undefined if codexAdd declines), same as the old inline calls. */
+function mintAnimalPartial(w, p, atId, opts){
+  opts=opts||{};
+  const isHolder=!!opts.isHolder;
+  const isLandmark=!!(p.dm && p.dm.landmark);
+  const nn=(typeof mapOf==="function")?mapOf(w).nodes[atId]:null;
+  const crueltyPenalty=(nn && nn.animalCruelty)?-1:0;
+  // the ONE caller-specific dm-field set: env casts tag envCast/envBand/territoryHolder; scene casts
+  // tag sceneBucket. opts.sceneBucket is only ever supplied by the scene caster (the env caster never
+  // sets it), so this discriminates the two callers without a separate "which caller" flag.
+  const extraDm=(opts.sceneBucket!=null)
+    ? { sceneBucket:opts.sceneBucket }
+    : { envCast:true, envBand:opts.band, territoryHolder:isHolder||undefined };
+  const rec=codexAdd(w, Object.assign({}, p, { kind:"npc",
+    id:prepCastId(w, "npc", p.name||"animal-partial"),
+    name:isLandmark?(p.name||animalLandmarkName(opts.band||null)):p.name,
+    status:{ soft:!isLandmark, at:atId },
+    dm:Object.assign({}, p.dm, { ambient:!(isHolder||isLandmark), partial:true, partialKind:p.partialKind },
+      extraDm,
+      { promoted:isLandmark||undefined, named:isLandmark||undefined, homeNodeId:isLandmark?atId:undefined })
+  }));
+  if(rec && typeof codexAttitudeOpen==="function"){
+    const base=(p.dm && p.dm.attitude!=null) ? p.dm.attitude : 0;
+    codexAttitudeOpen(w, rec.id, base+crueltyPenalty, { cause:"animal-opening" });
+  }
+  return rec;
 }
 
 /* ============================================================================
@@ -338,10 +364,6 @@ function prepCastAmbientScene(w, nodeId, sceneBucket, opts){
     const pcClass=(livingChar&&livingChar.sheet&&livingChar.sheet.class)||null;
     ["child","animal"].forEach(kind=>{
       const chance=pc[kind]||0;
-      // ANIMAL-SOCIAL.md §3/§4/§6 U5 — same cruelty-memory read as prepCastEnvAnimals, keyed off atId
-      // (this scene's actual placement node).
-      const nnScene=(kind==="animal" && typeof mapOf==="function")?mapOf(w).nodes[atId]:null;
-      const crueltyPenaltyScene=(nnScene && nnScene.animalCruelty)?-1:0;
       for(let i=0;i<2;i++){
         if((typeof Math.random==="function"?Math.random():1) >= chance) break;   // a miss ends this kind's draws
         // ANIMAL-SOCIAL-HQ.md HQ-1 (Change 2): forward realm + pcClass to rollPartial for every
@@ -349,21 +371,20 @@ function prepCastAmbientScene(w, nodeId, sceneBucket, opts){
         // (verified: src/engine/codex-roll.js:355-396, the "child" branch never reads them), so this
         // is harmless for kind==="child".
         const p=rollPartial(kind, { region, realm:realmId, pcClass });
-        const isLandmark=!!(kind==="animal" && p.dm && p.dm.landmark);
-        const rec=codexAdd(w, Object.assign({}, p, { kind:"npc",
-          id:prepCastId(w, "npc", p.name||(kind+"-partial")),
-          name:isLandmark?(p.name||animalLandmarkName(null)):p.name,
-          status:{ soft:!isLandmark, at:atId },
-          dm:Object.assign({}, p.dm, { ambient:!isLandmark, partial:true, partialKind:p.partialKind, sceneBucket:bucket,
-            promoted:isLandmark||undefined, named:isLandmark||undefined, homeNodeId:isLandmark?atId:undefined })
-        }));
-        // ANIMAL-SOCIAL §3/§6 U3: same opening-attitude stamp as prepCastEnvAnimals (see that comment) —
-        // scene-typed animal partials (market/tavern/shop/shrine) need it too; child partials don't run
-        // the attitude ladder at all, so this is animal-only.
-        if(rec && kind==="animal" && typeof codexAttitudeOpen==="function"){
-          const base=(p.dm && p.dm.attitude!=null) ? p.dm.attitude : 0;
-          codexAttitudeOpen(w, rec.id, base+crueltyPenaltyScene, { cause:"animal-opening" });
-        }
+        // ANIMAL-SOCIAL-HQ.md HQ-7 item 2: the animal branch's mint-tail now runs through the shared
+        // mintAnimalPartial helper (same one prepCastEnvAnimals uses) — this caller's genuine
+        // difference is {sceneBucket:bucket}, no {band, isHolder}. Child partials are OUT of scope
+        // for the helper (mintAnimalPartial is animal-only; children never derive a landmark or run
+        // the attitude ladder) — their own inline mint stays exactly as it was.
+        const rec=(kind==="animal")
+          ? mintAnimalPartial(w, p, atId, { sceneBucket:bucket })
+          : codexAdd(w, Object.assign({}, p, { kind:"npc",
+              id:prepCastId(w, "npc", p.name||(kind+"-partial")),
+              name:p.name,
+              status:{ soft:true, at:atId },
+              dm:Object.assign({}, p.dm, { ambient:true, partial:true, partialKind:p.partialKind, sceneBucket:bucket,
+                promoted:undefined, named:undefined, homeNodeId:undefined })
+            }));
         if(rec) partials.push(rec);
       }
     });

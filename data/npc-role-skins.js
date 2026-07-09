@@ -2522,10 +2522,19 @@ const NPC_ROLE_SKINS={
    opts.addsOnly (bool, additive) restricts the pool to ONLY that realm's [ADD] rows — the
    NPC-ROLE-REALMS.md hybridization seam (src/engine/codex-roll.js's rollNPC opts.hybridRealm rider)
    draws a fray-scaled minority of picks from a *breached* realm's edge-adds specifically, never its
-   whole reskinned spine (the "Fallout pocket": a war-shape washes up, not a whole parallel town). */
+   whole reskinned spine (the "Fallout pocket": a war-shape washes up, not a whole parallel town).
+   PLACE-GEN.md §5 unit 3 (cast wiring): opts.filterCls (a NPC spine Tags class, e.g. "trade") is a
+   FILTERED-POOL pick, not a retry — the combined spine∪adds pool is narrowed to entries whose cls
+   matches before the weighted pick, so a place's anchor NPC (e.g. a Watering-hole's `trade` anchor)
+   reliably lands on-class even when that class is a thin minority of the realm's weighted pool
+   (retrying the unfiltered draw would under-hit a rare class; this never does). "any" is treated as
+   no filter (the castProfile's own unfiltered sentinel). NEVER DANGLES: if the filtered pool is
+   empty (the class has zero candidates in this realm's skin), falls back to the full unfiltered
+   pool below — a place always mints an anchor. */
 function roleForRealm(realmId, rng, opts){
   var rnd = (typeof rng === "function") ? rng : Math.random;
   var addsOnly = !!(opts && opts.addsOnly);
+  var filterCls = (opts && opts.filterCls && opts.filterCls!=="any") ? opts.filterCls : null;
   var skin = (NPC_ROLE_SKINS[realmId]) || NPC_ROLE_SKINS.frontier || null;
   if(!skin) return null; // defensive: data file failed to load / is empty — never throw
   var pool = [];
@@ -2543,6 +2552,10 @@ function roleForRealm(realmId, rng, opts){
     pool.push({archetypeKey:"add:"+add.role, label:add.role, note:add.note, cls:add.cls, weight:add.weight});
   });
   if(!pool.length) return null; // defensive: a malformed skin dropped everything (or addsOnly on an empty adds list) — never throw
+  if(filterCls){
+    var filtered = pool.filter(function(p){ return p.cls===filterCls; });
+    if(filtered.length) pool = filtered; // else: zero candidates for this class — never-dangle fallthrough to the full pool
+  }
   var total = 0;
   for(var i=0;i<pool.length;i++) total += pool[i].weight;
   var roll = rnd() * total;

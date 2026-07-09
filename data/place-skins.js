@@ -15,8 +15,13 @@
    codex-roll.js's rollPlace() calls it (PLACE-GEN §5 unit 2, not yet wired by this unit).
    GENERATED from the Engine markdown source; never hand-edit — edit the source .md tables +
    re-run `python3 build/gen-place-skins.py`. Added 2026-07-09.
+   SCENE_BUCKET_BY_ARCHETYPE/SCENE_BUCKET_DEFAULT/sceneBucketForArchetype (PLACE-GEN §5
+   unit 3) map a spine archetypeKey to the ambient scene-bucket vocabulary src/world/
+   prep.js already owns (shrine|shop|tavern|market) — hand-maintained in this generator,
+   NOT parsed from the markdown source (a scene-bucket is an engine population concern).
    Classic <script> (shared global scope); defines PLACE_SPINE + PLACE_SKINS +
-   PLACE_SPACE_CELLS + placeForRealm. */
+   PLACE_SPACE_CELLS + placeForRealm + SCENE_BUCKET_BY_ARCHETYPE + SCENE_BUCKET_DEFAULT +
+   sceneBucketForArchetype. */
 const PLACE_SPINE=[
  {
   "key": 1,
@@ -997,6 +1002,15 @@ const PLACE_SPACE_CELLS={
  }
 };
 const ARCHETYPE_BIAS_MULTIPLIER=3;
+const SCENE_BUCKET_BY_ARCHETYPE={
+ "1": "market",
+ "2": "tavern",
+ "3": "market",
+ "6": "shrine",
+ "16": "tavern",
+ "22": "market"
+};
+const SCENE_BUCKET_DEFAULT="shop";
 
 /* placeForRealm(realmId, rng, opts) -> {archetypeKey, label, note, scale, space, staff, cast} —
    PLACE-GEN.md §2/§5 unit 1 "Engine wiring": weighted-pick a spine archetype (skin weight
@@ -1049,4 +1063,15 @@ function placeForRealm(realmId, rng, opts){
   }
   var last = pool[pool.length-1]; // float-rounding guard, same pattern as roleForRealm/pickCoherenceTier
   return {archetypeKey:last.archetypeKey, label:last.label, note:last.note, scale:last.scale, space:last.space, staff:last.staff, cast:last.cast};
+}
+
+/* sceneBucketForArchetype(archetypeKey) -> one of "shrine"|"shop"|"tavern"|"market" — PLACE-GEN.md
+   §5 unit 3: resolves a minted place's spine archetypeKey to the ambient-population scene-bucket
+   vocabulary src/world/prep.js already owns (AMBIENT_SCENE_BASE/SCENE_PARTIALS). ALWAYS resolves —
+   an unmapped spine key or any realm [ADD] key (SCENE_BUCKET_BY_ARCHETYPE only covers universal
+   spine rows, per this file's own comment) falls through to SCENE_BUCKET_DEFAULT, never undefined. */
+function sceneBucketForArchetype(archetypeKey){
+  if(archetypeKey==null) return SCENE_BUCKET_DEFAULT;
+  var hit = SCENE_BUCKET_BY_ARCHETYPE[String(archetypeKey)];
+  return hit || SCENE_BUCKET_DEFAULT;
 }

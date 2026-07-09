@@ -2440,6 +2440,7 @@ function spriteEntryFor(recipeSlug){
   for(const regKey in SPRITE_REGISTRY){
     const e = SPRITE_REGISTRY[regKey];
     if(!e || !e.name || e.status !== "cut") continue;
+    if(e.verdict === "fail") continue; // review-failed art never renders — falls through to the 3D chain
     if(normalizeSpriteKey(e.name) === wantKey) return Object.assign({ slug: regKey }, e);
   }
   return null; // no cut entry by that name — a pending-only match (or no match at all) falls through
@@ -2506,7 +2507,12 @@ function spriteTextureFor(slug){
 function buildSpriteBillboard(entry){
   const tex = spriteTextureFor(entry.slug);
   if(!tex) return null; // not loaded yet / failed load -> caller falls through, never rejects
-  const h = spriteSizeScaleFor(entry.size) * GLB_TARGET_HEIGHT;
+  // entry.scale = the per-slug heads-line-up calibration from the sprite-review overlay
+  // (dev/sprite-review.py -> sprite-tags-overlay.json -> gen-sprite-registry.py) — crops vary
+  // in headroom/tightness, so the size ladder alone can't make same-size creatures read the
+  // same height.
+  const calib = (typeof entry.scale === "number" && entry.scale > 0) ? entry.scale : 1;
+  const h = spriteSizeScaleFor(entry.size) * GLB_TARGET_HEIGHT * calib;
   const geo = new THREE.PlaneGeometry(h, h); // square plane; the sprite's own alpha silhouette reads the real shape
   const mat = new THREE.MeshBasicMaterial({
     map: tex, transparent: true, alphaTest: 0.5, side: THREE.DoubleSide, depthWrite: true

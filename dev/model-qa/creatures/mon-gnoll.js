@@ -1,98 +1,122 @@
 /* dev/model-qa/creatures/mon-gnoll.js — the GNOLL landmark table (hyena-man biped, Medium).
-   Whole-object grammar: one function, one geometry frame, no anchors. Held weapon authored FIRST
-   so the gripping fist derives from the haft. The read is CACKLING HUNTER, told by silhouette:
-   a TALL lanky biped (~1.65u) hunched forward — shoulders carried HIGHER than the hips with the
-   neck thrust out low ahead of the chest (the hyena stoop) — topped by a snouted hyena HEAD with
-   a forward-projecting MUZZLE parted open on teeth, tall rounded EARS, and a spotted MANE of dark
-   ridge-tufts running from the crown down the back of the neck to the shoulders. Digitigrade legs
-   (a bent hock, weight on the toes). Matted tan-yellow hide dotted with dark spot quads on the
-   shoulders and haunches. A crude bone-hafted axe hangs from one fist. Imported by
-   mon-gnoll-probe.html + the proof sheet. */
+   REBUILD (rebuild-w4, cell 4) — pose replaced under MODEL-FOUNDRY law 5; palette + named
+   signature (spotted mane crest) carried over from the prior pass; geometry rebuilt around the
+   loping-snap moment and a low-carried spear.
+
+   FEATURE CHECKLIST (the tri budget buys):
+   1. Sloped hyena BACK LINE — shoulders driven high, hips driven low (steeper than a human
+      slouch): the family tell, ANATOMY-CANON HUMANOID-HYENA.
+   2. Spotted dark MANE CREST down the nape — the loud signature, high enough value to read
+      against the void.
+   3. Muzzle + open jaw with pale fangs, turned SIDEWAYS off the spine axis — the bite-at-nothing.
+   4. Tall rounded ears, one leading one trailing (falls out of the head yaw for free).
+   5. Asymmetric loping legs — one planted forward, one trailing high behind — the mid-stride catch.
+   6. A crude flint-headed spear carried LOW in the trailing-side fist, point leveled forward.
+
+   POSE SENTENCE: caught mid-lope — weight driving off the trailing (right) leg, the left leg
+   reaching forward to plant, spear held low and forward in the right fist, head snapped hard to
+   the left off the spine to snarl-bite at something beside it that isn't there.
+
+   Whole-object grammar: one function, one geometry frame, no anchors. Spear authored FIRST so the
+   gripping fist derives from the haft, same as the axe was before. Imported by mon-gnoll-probe.html
+   + the proof sheet. */
 import { THREE, V, quad, tube, stack, ring, stitch, capFan } from '../probe-lib.js';
 
 export function buildGnoll(){
-  /* ---------- PALETTE (VS desaturated; matted tan-yellow hyena hide + dark mane/spots) ---------- */
+  /* ---------- PALETTE (VS desaturated; matted tan-yellow hyena hide + dark mane/spots) —
+     carried over from the prior pass, unchanged. bone/stone slots now dress the spear instead
+     of the axe. ---------- */
   const P = {
     hide:0xa7935e, hideDk:0x83714a, hideLt:0xc0ad78,       // matted tan-yellow coat
     belly:0x9c8f6e, throat:0xb2a37a,                        // paler chest/throat
-    mane:0x4a3f2c, maneDk:0x352d1f,                         // dark spotted mane ridge
+    mane:0x4a3f2c, maneDk:0x352d1f, maneHi:0xe9dcac,        // dark spotted mane ridge + a near-white lit crest tip (the value-contrast zone, calibrated off the bugbear spikeLt precedent)
     spot:0x59492f, spotDk:0x40341f,                         // dark hide spots
     muzzle:0x8f7d52, muzzleLt:0xa89468, nose:0x241d18,
     maw:0x38231f, tongue:0x8f524c, tooth:0xe2d9c4,
     ear:0x83714a, earIn:0x40341f,
     eye:0x171210, eyeGlow:0xc59a3e,                          // yellow predator eye
-    bone:0xcabf9e, boneDk:0x9a8f70, sinew:0x6e5a3c,          // bone haft + lashing
-    stone:0x71685c, stoneDk:0x4c453c,                        // crude stone axe-head
+    wood:0xcabf9e, woodDk:0x9a8f70, sinew:0x6e5a3c,          // spear haft + lashing
+    flint:0x71685c, flintDk:0x4c453c,                        // crude flaked-stone spearhead
     disc:0x4a4038, discTop:0x585047,
   };
 
-  /* ---------- LANDMARKS — TALL lanky biped, ~1.65u. The stoop: the SHOULDER line sits high, and
-     the neck angles FORWARD + DOWN out ahead of the chest so the head leads low. Hips carried a
-     touch forward under the leaning torso. ---------- */
+  /* ---------- LANDMARKS — TALL lanky biped, ~1.65u. Steeper stoop than the prior pass: the
+     shoulder-to-hip drop is exaggerated (0.58u vs the old 0.46u) to sell the sloped hyena back as
+     the family tell even from silhouette alone. Head base is lifted/forward for the snap turn. */
   const L = {
-    hipY:0.80, waistY:0.90, ribY:1.02, chestY:1.16, shldY:1.26,
-    hipHalf:0.120, shoulderX:0.255,
-    /* neck+head thrust FORWARD (+z) and a little above the shoulder — the hunched hyena carry.
-       Head lifted vs pass 1 so the muzzle reads clearly ABOVE the chest, forward reach shortened. */
-    neckBz:0.05, neckB_Y:1.28,
-    neckz:0.20, neckY:1.35,
-    headz:0.29, headBaseY:1.40,
+    hipY:0.72, waistY:0.84, ribY:0.98, chestY:1.14, shldY:1.30,
+    hipHalf:0.115, shoulderX:0.250,
+    neckBz:0.06, neckz:0.22, neckY:1.38,
+    headz:0.30, headBaseY:1.44,
   };
 
-  /* ===== HELD WEAPON FIRST — a crude bone-hafted stone axe, held one-handed at the right hip,
-     haft roughly vertical (leaning slightly out). The fist point is derived from the haft below. == */
-  const HAFT_TOP = V(0.36, 1.10, 0.30);      // upper haft (near the head end)
-  const HAFT_BOT = V(0.31, 0.42, 0.24);      // lower haft (butt)
-  const HAFT = new THREE.Vector3().subVectors(HAFT_TOP, HAFT_BOT).normalize();
-  const GRIP = V(0.335, 0.80, 0.275);        // where the fist closes on the haft
+  /* head-yaw frame — the whole head assembly (cranium/muzzle/ears/teeth) is authored in a LOCAL
+     forward-facing frame (dx sideways, dy vertical off headBaseY, dz forward off headz) and then
+     rotated about the pivot by HEAD_YAW so the skull snaps to the left off the spine axis (the
+     bite-at-nothing). Everything else (mane, neck) stays on-axis so the crest still reads as a
+     straight dorsal line into the turned head. */
+  const HEAD_YAW = -0.58;
+  const hc = Math.cos(HEAD_YAW), hs = Math.sin(HEAD_YAW);
+  const hp = (dx,dy,dz) => V(dx*hc - dz*hs, L.headBaseY + dy, L.headz + (dx*hs + dz*hc));
+
+  /* ===== HELD WEAPON FIRST — a crude flint-headed spear, gripped one-handed in the RIGHT fist and
+     carried LOW, leveled forward across the trailing hip (the loping-snap carry). The fist point is
+     derived from the haft below. ===== */
+  const SPEAR_BUTT = V(0.30, 0.66, -0.16);     // butt end, back near the trailing hip
+  const SPEAR_TIP  = V(0.11, 0.42, 0.66);      // point, forward and low, leveled
+  const SHAFT = new THREE.Vector3().subVectors(SPEAR_TIP, SPEAR_BUTT).normalize();
+  const GRIP = SPEAR_BUTT.clone().lerp(SPEAR_TIP, 0.30);   // where the fist closes, back third
   {
-    // the bone haft — a slightly knobbly shaft (two segments, faint swell at the grip)
-    const mid = HAFT_BOT.clone().lerp(HAFT_TOP, 0.5);
-    tube(HAFT_BOT, mid, 0.026, 0.030, 6, P.bone, {capA:{hex:P.boneDk, lift:0.02}});
-    tube(mid, HAFT_TOP, 0.030, 0.026, 6, P.boneDk);
-    // sinew lashing rings just below the head
-    for(const t of [0.86, 0.92]){
-      const c = HAFT_BOT.clone().lerp(HAFT_TOP, t);
-      const r = ring(c, HAFT, 0.034, 0.034, 6);
-      const r2 = ring(c.clone().addScaledVector(HAFT,0.02), HAFT, 0.034, 0.034, 6);
+    const headBase = SPEAR_BUTT.clone().lerp(SPEAR_TIP, 0.82);   // where the flint head is lashed on
+    // haft — two segments, a faint taper toward the head
+    tube(SPEAR_BUTT, GRIP, 0.024, 0.026, 6, P.wood, {capA:{hex:P.woodDk, lift:0.02}});
+    tube(GRIP, headBase, 0.026, 0.020, 6, P.woodDk);
+    tube(headBase, SPEAR_TIP.clone().addScaledVector(SHAFT,-0.10), 0.020, 0.014, 6, P.wood);
+    // sinew lashing rings binding the flint head on
+    for(const t of [0.80, 0.86]){
+      const c = SPEAR_BUTT.clone().lerp(SPEAR_TIP, t);
+      const r = ring(c, SHAFT, 0.030, 0.030, 6);
+      const r2 = ring(c.clone().addScaledVector(SHAFT,0.018), SHAFT, 0.030, 0.030, 6);
       stitch([r,r2], ()=>P.sinew);
     }
-    // crude chipped STONE axe-head lashed to the top: a CHUNKY solid wedge blade off one side of
-    // the haft, built as a thick slab (front + back faces + a broad edge cap) so it reads as a
-    // hefty stone axe, not a flake. Sweeps out to +x and slightly forward.
-    const head = HAFT_TOP.clone().addScaledVector(HAFT,-0.02);
-    const side = new THREE.Vector3().crossVectors(HAFT, V(0,0,1)).normalize(); // blade sweeps to +x/-z side
-    const bladeOut = side.clone().multiplyScalar(0.21).add(V(0,0.01,0.05));    // longer reach
-    const th = V(0.045,0,-0.055);                                              // slab thickness offset
-    const bTop  = head.clone().add(V(0,0.105,0));
-    const bBot  = head.clone().add(V(0,-0.105,0));
-    const edgeT = head.clone().add(bladeOut).add(V(0,0.060,0));
-    const edgeB = head.clone().add(bladeOut).add(V(0,-0.060,0));
-    // FRONT face
-    quad(bBot, bTop, edgeT, edgeB, P.stone, 0.05);
-    // BACK face (offset by slab thickness)
-    quad(bBot.clone().add(th), bTop.clone().add(th), edgeT.clone().add(th), edgeB.clone().add(th), P.stoneDk, 0.05);
-    // top rim, bottom rim, and the broad cutting-edge cap
-    quad(bTop, bTop.clone().add(th), edgeT.clone().add(th), edgeT, P.stoneDk, 0.03);
-    quad(bBot, bBot.clone().add(th), edgeB.clone().add(th), edgeB, P.stone, 0.03);
-    quad(edgeB, edgeT, edgeT.clone().add(th), edgeB.clone().add(th), P.stoneDk, 0.03);
-    // back of the head where it meets the haft (butt of the blade)
-    quad(bBot, bBot.clone().add(th), bTop.clone().add(th), bTop, P.stoneDk, 0.03);
+    // crude flaked-stone spearhead — a flat leaf-shaped diamond blade, front+back slab faces so it
+    // reads solid, not a flake. Point continues the shaft axis; the widest flare sits mid-blade.
+    const bAxis = SHAFT.clone();
+    const side = new THREE.Vector3().crossVectors(bAxis, V(0,1,0)).normalize();
+    const up = new THREE.Vector3().crossVectors(side, bAxis).normalize();
+    const flareC = SPEAR_TIP.clone().addScaledVector(bAxis,-0.09);
+    const flareA = flareC.clone().addScaledVector(side, 0.055);
+    const flareB = flareC.clone().addScaledVector(side,-0.055);
+    const tipPt  = SPEAR_TIP.clone();
+    const heelPt = SPEAR_TIP.clone().addScaledVector(bAxis,-0.155);
+    const slab   = up.clone().multiplyScalar(0.020);   // slab thickness offset (gives the blade volume)
+    // FRONT face (two tris: heel-flareA-tip, heel-tip-flareB)
+    quad(heelPt, flareA, tipPt, tipPt, P.flint, 0.04);
+    quad(heelPt, tipPt, flareB, flareB, P.flint, 0.04);
+    // BACK face offset along the slab normal
+    quad(heelPt.clone().add(slab), tipPt.clone().add(slab), flareA.clone().add(slab), flareA.clone().add(slab), P.flintDk, 0.04);
+    quad(heelPt.clone().add(slab), flareB.clone().add(slab), tipPt.clone().add(slab), tipPt.clone().add(slab), P.flintDk, 0.04);
+    // thin edge rim tying front to back along both cutting edges
+    quad(heelPt, heelPt.clone().add(slab), flareA.clone().add(slab), flareA, P.flintDk, 0.02);
+    quad(flareA, flareA.clone().add(slab), tipPt.clone().add(slab), tipPt, P.flintDk, 0.02);
+    quad(tipPt, tipPt.clone().add(slab), flareB.clone().add(slab), flareB, P.flintDk, 0.02);
+    quad(flareB, flareB.clone().add(slab), heelPt.clone().add(slab), heelPt, P.flintDk, 0.02);
   }
 
-  /* ===== TRUNK — one lean loft, hips -> shoulders. Narrow waist, a deeper high chest and broad
-     shoulders (the hyena's forequarter mass) so the top-heavy hunched read carries. ===== */
+  /* ===== TRUNK — one lean loft, hips -> shoulders, with a forward-drive twist: the ribcage/chest
+     bands are pushed forward (+z) relative to the hips so the whole trunk reads as leaning INTO
+     the stride, not just stooped in place. ===== */
   stack([
-    {y:L.hipY,   rx:0.170, rz:0.135, hex:P.hideDk},
-    {y:L.waistY, rx:0.150, rz:0.120, hex:P.hide},
-    {y:L.ribY,   rx:0.186, rz:0.150, hex:P.hide},
-    {y:L.chestY, rx:0.216, rz:0.170, hex:P.hide},
-    {y:L.shldY,  rx:0.232, rz:0.168, hex:P.hideDk},   // broad high shoulders
+    {y:L.hipY,   rx:0.164, rz:0.130, hex:P.hideDk},
+    {y:L.waistY, rx:0.146, rz:0.116, hex:P.hide},
+    {y:L.ribY,   rx:0.182, rz:0.148, hex:P.hide},
+    {y:L.chestY, rx:0.214, rz:0.170, hex:P.hide},
+    {y:L.shldY,  rx:0.228, rz:0.166, hex:P.hideDk},   // broad high shoulders
   ], 8, {});
 
   /* pale throat/belly strip down the front */
-  quad(V(-0.09,L.hipY+0.02,0.132), V(0.09,L.hipY+0.02,0.132),
-       V(0.10,L.chestY-0.02,0.168), V(-0.10,L.chestY-0.02,0.168), P.belly, 0.05);
+  quad(V(-0.09,L.hipY+0.02,0.128), V(0.09,L.hipY+0.02,0.128),
+       V(0.10,L.chestY-0.02,0.166), V(-0.10,L.chestY-0.02,0.166), P.belly, 0.05);
 
   /* a scatter of dark hide SPOTS across the shoulders/haunches (the hyena dapple) */
   {
@@ -100,159 +124,179 @@ export function buildGnoll(){
       const rr=ring(V(x,y,z), V(0,0,1), r, r*0.8, 6);
       capFan(rr, V(x,y,z+0.004), hex);
     };
-    spot(-0.16,1.20,0.10,0.030,P.spot);  spot(0.14,1.16,0.13,0.026,P.spotDk);
-    spot(0.19,1.24,0.02,0.024,P.spot);   spot(-0.19,1.11,-0.02,0.028,P.spotDk);
-    spot(-0.11,0.96,0.11,0.026,P.spot);  spot(0.13,0.90,0.10,0.022,P.spotDk);
-    spot(0.05,1.08,0.16,0.020,P.spot);   spot(-0.06,1.14,0.15,0.018,P.spotDk);
+    spot(-0.16,1.24,0.09,0.030,P.spot);  spot(0.15,1.20,0.12,0.026,P.spotDk);
+    spot(0.19,1.28,0.02,0.024,P.spot);   spot(-0.19,1.15,-0.02,0.028,P.spotDk);
+    spot(-0.11,0.92,0.10,0.026,P.spot);  spot(0.13,0.86,0.09,0.022,P.spotDk);
+    spot(0.05,1.05,0.15,0.020,P.spot);   spot(-0.06,1.11,0.14,0.018,P.spotDk);
   }
 
-  /* ===== NECK — thrusts FORWARD and DOWN out of the high shoulders (the stoop). A tube leaning +z. */
+  /* ===== NECK — thrusts FORWARD out of the high shoulders, then hands off to the yawed head. */
   {
     const nBase = V(0, L.shldY-0.02, L.neckBz+0.05);
-    const nOut  = V(0, L.headBaseY-0.06, L.headz-0.04);   // reach up INTO the lifted head base
-    tube(nBase, nOut, 0.100, 0.082, 8, P.hideDk, {phase:Math.PI/8});
-    // paler throat under the neck
+    const nOut  = V(0, L.headBaseY-0.06, L.headz-0.10);   // reach up toward the head pivot
+    tube(nBase, nOut, 0.098, 0.080, 8, P.hideDk, {phase:Math.PI/8});
     quad(V(-0.06,L.shldY-0.10,0.12), V(0.06,L.shldY-0.10,0.12),
          V(0.05,L.neckY-0.08,L.neckz+0.02), V(-0.05,L.neckY-0.08,L.neckz+0.02), P.throat, 0.05);
   }
 
-  /* ===== HEAD — hyena skull thrust out low ahead of the neck, with a forward MUZZLE parted on
-     teeth, tall rounded EARS, sloped low brow. Built around a forward face-center at (0, headBaseY,
-     headz). ===== */
+  /* ===== HEAD — hyena skull with a forward muzzle parted on teeth, tall rounded ears, sloped low
+     brow. Authored in the LOCAL forward-facing frame (dx,dy,dz) and placed via hp(), which yaws
+     the whole assembly LEFT off the spine (the bite-at-nothing). ===== */
   {
     const n=8, ph=Math.PI/n;
-    const cx=0, cz=L.headz;
     /* cranium loft: jaw -> cheek -> brow -> crown, small and sloped (hyena head is compact) */
     const bands=[
-      {y:L.headBaseY-0.02, rx:0.088, rz:0.100, hex:P.hide},
-      {y:L.headBaseY+0.03, rx:0.108, rz:0.112, hex:P.hide},
-      {y:L.headBaseY+0.08, rx:0.106, rz:0.100, hex:P.hideDk},   // brow
-      {y:L.headBaseY+0.13, rx:0.082, rz:0.078, hex:P.hideDk},   // crown
+      {dy:-0.02, rx:0.088, rz:0.100, hex:P.hide},
+      {dy: 0.03, rx:0.108, rz:0.112, hex:P.hide},
+      {dy: 0.08, rx:0.106, rz:0.100, hex:P.hideDk},   // brow
+      {dy: 0.13, rx:0.082, rz:0.078, hex:P.hideDk},   // crown
     ];
-    const rings=bands.map(b=>ring(V(cx,b.y,cz), V(0,1,0), b.rx, b.rz, n, ph));
-    // slope the brow forward/down for the sloped-skull read
-    for(const i of [1,2]){ rings[2][i].z += 0.014; rings[2][i].y -= 0.008; }
+    /* ring axis is the loft direction (vertical, +y) — unaffected by the head yaw, which only
+       rotates each ring's CENTER via hp(). */
+    const rings=bands.map(b=>ring(hp(0,b.dy,0), V(0,1,0), b.rx, b.rz, n, ph));
     stitch(rings, b=>bands[b].hex);
-    capFan(rings[3], V(cx, L.headBaseY+0.165, cz-0.006), P.maneDk);   // dark crown into the mane
+    /* crown cap is the top-facing surface (catches the overhead light even with the head yawed) —
+       lit bright as the mane's value-contrast zone, since the nape tufts behind it sit in shadow. */
+    capFan(rings[3], hp(0, 0.165, -0.006), P.maneHi);
 
-    /* MUZZLE — a wedge projecting forward (+z), two chained tapering tubes, parted at the tip on a
-       dark open mouth with tooth hints. Angled slightly DOWN (nose leads low). */
-    const jawY = L.headBaseY-0.03;
+    /* MUZZLE — a wedge projecting forward in the local frame, parted at the tip on a dark open
+       mouth with tooth hints. Angled slightly down (nose leads low). */
+    const jawDy = -0.03;
     // dark open mouth cavity first (behind the teeth)
     {
-      const mb=V(0, jawY+0.01, cz+0.075), mm=V(0, jawY-0.015, cz+0.185);
+      const mb=hp(0, jawDy+0.01, 0.075), mm=hp(0, jawDy-0.015, 0.185);
       tube(mb, mm, 0.058, 0.044, n, P.maw, {raz:0.046, rbz:0.034, phase:ph, capB:{hex:P.maw, lift:0.006}});
-      quad(V(-0.024,jawY-0.04,cz+0.10), V(0.024,jawY-0.04,cz+0.10),
-           V(0.020,jawY-0.045,cz+0.20), V(-0.020,jawY-0.045,cz+0.20), P.tongue, 0.04);
+      quad(hp(-0.024,jawDy-0.04,0.10), hp(0.024,jawDy-0.04,0.10),
+           hp(0.020,jawDy-0.045,0.20), hp(-0.020,jawDy-0.045,0.20), P.tongue, 0.04);
     }
-    // UPPER jaw wedge (projects forward, nose at the tip)
-    const uB=V(0, jawY+0.045, cz+0.06), uM=V(0, jawY+0.030, cz+0.205), uT=V(0, jawY+0.010, cz+0.30);
+    // UPPER jaw wedge
+    const uB=hp(0, jawDy+0.045, 0.06), uM=hp(0, jawDy+0.030, 0.205), uT=hp(0, jawDy+0.010, 0.30);
     tube(uB, uM, 0.086, 0.064, n, P.muzzle, {raz:0.062, rbz:0.046, phase:ph});
     tube(uM, uT, 0.064, 0.034, n, P.muzzle, {raz:0.046, rbz:0.024, phase:ph, capB:{hex:P.nose, lift:0.010}});
-    // LOWER jaw wedge (dropped + angled down — the gape)
-    const lB=V(0, jawY-0.055, cz+0.06), lM=V(0, jawY-0.095, cz+0.19), lT=V(0, jawY-0.120, cz+0.27);
+    // LOWER jaw wedge (dropped + angled down — the gape, snapping wide for the bite-at-nothing)
+    const lB=hp(0, jawDy-0.065, 0.06), lM=hp(0, jawDy-0.120, 0.19), lT=hp(0, jawDy-0.150, 0.26);
     tube(lB, lM, 0.066, 0.046, n, P.muzzle, {raz:0.048, rbz:0.034, phase:ph});
     tube(lM, lT, 0.046, 0.024, n, P.muzzleLt, {raz:0.034, rbz:0.018, phase:ph, capB:{hex:P.muzzleLt, lift:0.008}});
 
-    /* geometric TEETH — pale fangs on both jaw lines */
-    const fang=(x,y,z,w,h,down)=>{
-      const ty = down ? y-h : y+h;
-      quad(V(x-w,y,z+0.006), V(x+w,y,z+0.006), V(x,ty,z+0.004), V(x,ty,z+0.004), P.tooth, 0.02);
+    /* geometric TEETH — pale fangs on both jaw lines, wide-set for the snap */
+    const fang=(dx,dy,dz,w,h,down)=>{
+      const base=hp(dx,dy,dz);
+      const tipPt=hp(dx, down?dy-h:dy+h, dz-0.002);
+      quad(hp(dx-w,dy,dz+0.006), hp(dx+w,dy,dz+0.006), tipPt, tipPt, P.tooth, 0.02);
     };
     for(const s of [-1,1]){
-      fang(s*0.044, jawY+0.008, cz+0.11, 0.017, 0.058, true);   // upper canine
-      fang(s*0.022, jawY+0.006, cz+0.15, 0.011, 0.030, true);   // upper incisor
-      fang(s*0.040, jawY-0.055, cz+0.11, 0.014, 0.046, false);  // lower canine
+      fang(s*0.044, jawDy+0.008, 0.11, 0.017, 0.058, true);   // upper canine
+      fang(s*0.022, jawDy+0.006, 0.15, 0.011, 0.030, true);   // upper incisor
+      fang(s*0.040, jawDy-0.055, 0.11, 0.014, 0.046, false);  // lower canine
     }
-    /* TALL ROUNDED EARS — two upright wedges on the crown, rounded tips, set back a touch */
+    /* TALL ROUNDED EARS — two upright wedges on the crown, rounded tips, set back a touch. The
+       head yaw naturally staggers them (leading/trailing) — no extra asymmetry needed. */
     for(const s of [-1,1]){
-      const base=V(s*0.072, L.headBaseY+0.14, cz-0.02);
-      const tip =V(s*0.100, L.headBaseY+0.30, cz-0.05);   // tall, tips up + slightly back
+      const base=hp(s*0.072, 0.14, -0.02);
+      const tip =hp(s*0.100, 0.30, -0.05);
       tube(base, tip, 0.058, 0.030, 6, P.ear, {raz:0.040, rbz:0.024, capB:{hex:P.ear, lift:0.010}});
-      // dark inner-ear fleck
-      quad(V(s*0.056,L.headBaseY+0.155,cz-0.005), V(s*0.088,L.headBaseY+0.155,cz-0.012),
-           V(s*0.096,L.headBaseY+0.285,cz-0.045), V(s*0.070,L.headBaseY+0.285,cz-0.038), P.earIn, 0.03);
+      quad(hp(s*0.056,0.155,-0.005), hp(s*0.088,0.155,-0.012),
+           hp(s*0.096,0.285,-0.045), hp(s*0.070,0.285,-0.038), P.earIn, 0.03);
     }
   }
 
-  /* ===== MANE — a dark spotted ridge of tufts running from the crown down the back of the neck to
-     the shoulders. A chain of short back-swept tubes along the nape (-z of the neck), tallest at the
-     crown, fading into the shoulders. This is the signature dorsal line. ===== */
+  /* ===== MANE — the dark spotted ridge of tufts running from behind the crown down the back of
+     the neck to the shoulders. Stays ON the spine axis (not yawed) so it reads as a straight
+     dorsal crest feeding INTO the twisted head — this is the loud signature + the value-contrast
+     zone (mane/spot palette sits well above the void floor).
+     CRITIC FIX (pass-2, r5->r6): the nape tuft (old pts[1]) sat almost exactly at the neck tube's
+     tip (same y/z as nOut) and leaned -z (backward, away from BOTH the key light at (5,9,7) and
+     the camera) with a tip radius (0.020) right at the 0.04u floor — sampled render pixels there
+     came back AT OR BELOW the void (10,9,8), i.e. the loud signature didn't exist on screen
+     (law 3). Pulled every tuft root clear of the neck/shoulder trunk radii, dropped the backward
+     lean to near-zero so the bright caps face up into the key light instead of into shadow, and
+     grew the signature tuft's radii well past the feature floor. ===== */
   {
-    const maneY0 = L.headBaseY+0.10;         // starts high behind the crown
-    // spine of the mane from behind-crown down to the withers
     const pts = [
-      V(0, L.headBaseY+0.11, L.headz-0.07),
-      V(0, L.neckY+0.02,     L.neckz-0.02),
-      V(0, L.shldY+0.03,     0.02),
-      V(0, L.shldY-0.02,     -0.08),
+      V(0, L.headBaseY+0.15, L.headz-0.16),   // picks up just behind the (now-turned) crown
+      V(0, L.neckY-0.06,     L.neckz-0.17),   // clear of the neck tube's back surface, not coincident with its tip
+      V(0, L.shldY+0.10,     -0.20),          // clear of the shoulder trunk's rz=0.166 back radius
+      V(0, L.shldY+0.02,     -0.24),
     ];
-    // tuft heights along the ridge (tallest near the crown)
-    const tuftH = [0.11, 0.13, 0.10, 0.07];
+    const tuftH = [0.12, 0.20, 0.13, 0.09];
     for(let i=0;i<pts.length;i++){
       const b=pts[i];
-      const top=b.clone().add(V(0, tuftH[i], -0.02));   // tuft leans slightly back
-      tube(b, top, 0.040, 0.014, 5, i%2?P.maneDk:P.mane, {capB:{hex:P.maneDk, lift:0.008}});
-      // a couple of side tufts to broaden the ridge crest
+      const top=b.clone().add(V(0, tuftH[i], -0.005));   // near-vertical lean so the cap faces up into the key light
+      const baseR = i===1?0.066:0.048, tipR = i===1?0.032:0.020;
+      /* the tallest crest tuft (i===1, at the nape) catches the light — colored bright along its
+         WHOLE shaft (not just the tip cap, which is too small on its own to survive 1/3-res per
+         law 3) so the signature actually carries the model's high-value zone, not just a dark
+         silhouette bump. */
+      tube(b, top, baseR, tipR, 5, i===1?P.maneHi:(i%2?P.maneDk:P.mane), {capB:{hex:i===1?P.maneHi:P.maneDk, lift:0.008}});
       for(const s of [-1,1]){
-        const sb=b.clone().add(V(s*0.028,0,0.005));
-        const st=sb.clone().add(V(s*0.02, tuftH[i]*0.72, -0.02));
-        tube(sb, st, 0.026, 0.010, 4, P.maneDk, {capB:{hex:P.maneDk, lift:0.006}});
+        const sb=b.clone().add(V(s*0.034,0,0.005));
+        const st=sb.clone().add(V(s*0.024, tuftH[i]*0.72, -0.01));
+        tube(sb, st, i===1?0.038:0.030, i===1?0.018:0.014, 4, i===1?P.maneHi:P.maneDk, {capB:{hex:i===1?P.maneHi:P.maneDk, lift:0.006}});
       }
     }
-    // a dark base ridge tying the tufts together down the nape
     for(let i=0;i<pts.length-1;i++){
       const a=pts[i], b=pts[i+1];
       tube(a, b, 0.038, 0.038, 6, P.maneDk);
     }
   }
 
-  /* ===== ARMS — long and lanky. RIGHT hand grips the axe haft (derived from GRIP); LEFT hangs
-     loose with clawed fingers. Shoulders sit high and wide. ===== */
+  /* ===== ARMS — long and lanky. RIGHT hand grips the spear low and forward (derived from GRIP);
+     LEFT swings back and up, echoing the running counter-motion (opposite the forward left leg). */
   {
-    // RIGHT arm to the grip
+    // RIGHT arm to the spear grip
     const S=V(L.shoulderX, L.shldY-0.03, 0.02);
-    const E=V(0.335, 0.98, 0.16);                 // elbow out + forward
-    const W=GRIP.clone().add(V(0.0,0.06,-0.02));   // wrist just above/behind the grip
+    const E=V(0.30, 0.92, 0.20);                   // elbow driven forward-down toward the low carry
+    const W=GRIP.clone().add(V(0.0,0.05,-0.02));
     tube(S,E,0.078,0.060,6,P.hide);
     tube(E,W,0.058,0.046,6,P.hideDk);
-    // fist wrapped around the haft, aligned to the haft axis
-    tube(GRIP.clone().addScaledVector(HAFT,-0.055), GRIP.clone().addScaledVector(HAFT,0.055),
+    tube(GRIP.clone().addScaledVector(SHAFT,-0.055), GRIP.clone().addScaledVector(SHAFT,0.055),
          0.050,0.046,6,P.hideLt, {capA:{hex:P.hideLt}, capB:{hex:P.hideLt}});
 
-    // LEFT arm hanging, clawed fingers spread down
+    // LEFT arm swinging back and up (counter to the forward left leg — the running catch)
     const S2=V(-L.shoulderX, L.shldY-0.03, 0.02);
-    const E2=V(-0.315, 0.96, 0.06);
-    const W2=V(-0.285, 0.66, 0.12);
+    const E2=V(-0.32, 1.02, -0.14);
+    const W2=V(-0.27, 0.88, -0.30);
     tube(S2,E2,0.078,0.060,6,P.hide);
     tube(E2,W2,0.058,0.046,6,P.hideDk);
-    // palm nub + spread clawed fingers
-    tube(W2, W2.clone().add(V(0,-0.06,0.02)), 0.048,0.040,6,P.hideLt, {capB:{hex:P.hideLt}});
-    const HW=W2.clone().add(V(0,-0.07,0.02));
+    tube(W2, W2.clone().add(V(-0.02,-0.05,-0.05)), 0.048,0.040,6,P.hideLt, {capB:{hex:P.hideLt}});
+    const HW=W2.clone().add(V(-0.02,-0.06,-0.06));
     for(const dx of [-0.03,-0.01,0.015,0.035]){
-      tube(HW, HW.clone().add(V(dx,-0.075,0.02)), 0.014,0.008,4,P.hideLt,{capB:{hex:P.nose}});  // dark claw tips
+      tube(HW, HW.clone().add(V(dx,-0.05,-0.04)), 0.014,0.008,4,P.hideLt,{capB:{hex:P.nose}});
     }
   }
 
-  /* ===== LEGS — DIGITIGRADE: a bent hock, the heel raised, weight forward on the long toes. Long
-     lean thighs from the hips, angled slightly back, then a forward-kicked shank to the toe. ===== */
+  /* ===== LEGS — DIGITIGRADE, ASYMMETRIC mid-lope: the LEFT leg drives forward to plant, the
+     RIGHT leg trails high behind, hock lifted and toe barely clearing the ground — the caught-
+     mid-stride read. Both keep the 3-segment hip->stifle->hock->toe hyena zigzag. ===== */
   {
-    const leg=(hipX, footX, footZ, sign)=>{
-      const hip=V(hipX, L.hipY-0.02, 0.02);
-      const knee=V(hipX + sign*0.010, 0.50, 0.11);       // knee forward (thigh angles down-forward)
-      const hock=V(footX, 0.24, -0.06);                  // the raised digitigrade hock, pulled BACK
-      const toe=V(footX, 0.055, footZ);                  // long toe planted forward
-      tube(hip, knee, 0.086, 0.058, 6, P.hide);          // thigh
-      tube(knee, hock, 0.052, 0.038, 6, P.hideDk);       // shank down to the hock
-      tube(hock, toe, 0.040, 0.034, 6, P.hideDk, {capB:{hex:P.muzzle, lift:0.006}});  // long foot/toe
-      // claw flecks at the toe front
+    // LEFT leg — forward-planted (opposite the trailing right spear arm's counter-swing)
+    {
+      const hip=V(-L.hipHalf, L.hipY-0.02, 0.02);
+      const knee=V(-L.hipHalf-0.02, 0.48, 0.22);      // stifle driven forward
+      const hock=V(-0.145, 0.20, 0.30);               // hock still raised, but pushed forward under the reach
+      const toe=V(-0.145, 0.045, 0.44);               // long toe planted well forward
+      tube(hip, knee, 0.086, 0.058, 6, P.hide);
+      tube(knee, hock, 0.052, 0.038, 6, P.hideDk);
+      tube(hock, toe, 0.040, 0.034, 6, P.hideDk, {capB:{hex:P.muzzle, lift:0.006}});
       for(const cx of [-0.020,0,0.020]){
-        quad(V(toe.x+cx-0.006,0.035,toe.z+0.03), V(toe.x+cx+0.006,0.035,toe.z+0.03),
-             V(toe.x+cx+0.004,0.012,toe.z+0.055), V(toe.x+cx-0.004,0.012,toe.z+0.055), P.nose, 0.0);
+        quad(V(toe.x+cx-0.006,0.032,toe.z+0.03), V(toe.x+cx+0.006,0.032,toe.z+0.03),
+             V(toe.x+cx+0.004,0.010,toe.z+0.055), V(toe.x+cx-0.004,0.010,toe.z+0.055), P.nose, 0.0);
       }
-    };
-    leg(-L.hipHalf, -0.150, 0.20, -1);
-    leg( L.hipHalf,  0.150, 0.17,  1);
+    }
+    // RIGHT leg — trailing high behind, driving the push-off; toe lifted clear of the disc
+    {
+      const hip=V(L.hipHalf, L.hipY-0.02, 0.00);
+      const knee=V(L.hipHalf+0.02, 0.44, -0.10);      // stifle pulled back and up
+      const hock=V(0.175, 0.30, -0.34);               // hock swung high and far back
+      const toe=V(0.175, 0.115, -0.44);               // toe trailing, clear of the ground
+      tube(hip, knee, 0.086, 0.058, 6, P.hide);
+      tube(knee, hock, 0.052, 0.038, 6, P.hideDk);
+      tube(hock, toe, 0.040, 0.034, 6, P.hideDk, {capB:{hex:P.muzzle, lift:0.006}});
+      for(const cx of [-0.020,0,0.020]){
+        quad(V(toe.x+cx-0.006,toe.y-0.02,toe.z-0.03), V(toe.x+cx+0.006,toe.y-0.02,toe.z-0.03),
+             V(toe.x+cx+0.004,toe.y-0.043,toe.z-0.055), V(toe.x+cx-0.004,toe.y-0.043,toe.z-0.055), P.nose, 0.0);
+      }
+    }
   }
 
   /* base disc (Medium: r=0.42) */

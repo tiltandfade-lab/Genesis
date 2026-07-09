@@ -136,7 +136,16 @@ function codexUpdate(w, id, patch){
   const r=codexGet(w,id); if(!r) return null;
   if(patch.name!=null){
     if(r.status.known){ console.warn("[codex] name-freeze — rename refused on a known record:",id); }
-    else r.name=patch.name;
+    else {
+      r.name=patch.name;
+      // ANIMAL-SOCIAL.md §4/§6 U5 — "named" is one of the three promotion triggers (engaged twice /
+      // named / raised past +0). Stamp it on the successful rename, then run the promotion check —
+      // animal-only, no-op for every other kind.
+      if(r.kind==="npc" && r.dm && r.dm.partialKind==="animal"){
+        r.dm.named=true;
+        if(typeof animalMaybePromote==="function") animalMaybePromote(w, r, "named");
+      }
+    }
   }
   // MODEL-GRAMMAR G2 §4b canon-lock: once a record has a resolved `.shape` (set once, at mint —
   // codexResolveShapeOnMint above), NO later patch can replace it — "the mogwai sidekick looks
@@ -401,7 +410,9 @@ function codexFullRecord(w, r){
   // (Speak with Animals active, or the DM marked the channel open — r.dm.interviewOpen, set by the
   // animal_interview event). Absent that flag, an animal partial still ships its baseline kind+tell+
   // need via fields/dm above — this is purely additive, never a regression of today's shape.
-  if(r.kind==="npc" && r.dm && r.dm.partialKind==="animal" && r.dm.interviewOpen && typeof animalWitness==="function"){
+  // ANIMAL-SOCIAL.md §4/§6 U5 — a befriended ally (r.dm.ally===true) auto-volunteers the packet
+  // regardless of the interview channel ("no check" — the ally doesn't wait to be asked).
+  if(r.kind==="npc" && r.dm && r.dm.partialKind==="animal" && (r.dm.interviewOpen || r.dm.ally===true) && typeof animalWitness==="function"){
     o.witness=animalWitness(w, r);
   }
   return o;
@@ -688,8 +699,13 @@ function animalWitnessBreachEntry(w, at){
 /* attitude gates VOLUNTEERED DEPTH, not the underlying truth (§2 "Willingness gates the interview,
    not the truth"): the full packet is always computed (determinism/reproducibility), but Hostile/
    Unfriendly (-2/-1) volunteers nothing beyond the tell — the existing social_check ladder (§3) is
-   how a player opens it up. Friendly-or-better (>=0) volunteers the full packet. */
+   how a player opens it up. Friendly-or-better (>=0) volunteers the full packet.
+   ANIMAL-SOCIAL.md §4/§6 U5 — a befriended ally (rec.dm.ally===true, only ever stamped at attitude
+   +2) short-circuits straight to the full packet with NO gate check at all ("auto-volunteer the
+   full witness packet with no check") — never even consults the attitude value. Every other animal
+   keeps the exact -1/-2 gate above, unchanged. */
 function animalWitnessGate(w, rec, full){
+  if(rec && rec.dm && rec.dm.ally===true) return full;
   const a=(typeof codexGetAttitude==="function") ? codexGetAttitude(w, rec.id) : { value:0 };
   const value=(a && a.value!=null) ? a.value : 0;
   if(value <= -1){
@@ -700,7 +716,13 @@ function animalWitnessGate(w, rec, full){
 
 /* THE ASSEMBLER. rec must be a codex npc record minted via rollPartial('animal',...)
    (rec.dm.partialKind==="animal"). Returns null for anything else (never guesses a witness packet
-   for a non-animal record). */
+   for a non-animal record).
+   ANIMAL-SOCIAL.md §4/§6 U5 — a befriended ally also carries `guide` on the packet: the soft-recall
+   walk seam's own data shape (CHASE-SOFT-RECALL.md — a `recallable` flag + a bound referent), so a
+   future walk consumer can offer "the animal leads you there" without this unit inventing a new
+   travel mechanism. `to` is whatever the tell is CURRENTLY bound to (dm.tellBoundTo, DM-set) — never
+   fabricated here; absent a binding, `to` is null and `available` stays true (the ally still offers
+   to lead, there's just nowhere pinned yet). */
 function animalWitness(w, rec){
   if(!w || !rec || rec.kind!=="npc" || !(rec.dm && rec.dm.partialKind==="animal")) return null;
   const at=rec.status && rec.status.at;
@@ -710,7 +732,39 @@ function animalWitness(w, rec){
   if(breachEntry) seen.push(breachEntry);
   const nearby=animalWitnessNearby(w, rec, at);
   const placeMemory=animalWitnessPlaceMemory(w, at);
-  return animalWitnessGate(w, rec, { tell, seen, nearby, placeMemory });
+  const full={ tell, seen, nearby, placeMemory };
+  if(rec.dm.ally===true) full.guide={ available:true, recallable:true, to:tell.boundTo };
+  return animalWitnessGate(w, rec, full);
+}
+
+/* ANIMAL-SOCIAL.md §4/§6 U5 — promotion: any animal engaged twice, named (codexUpdate above), or
+   raised past +0 (Friendly) promotes from ambient to a full codex record — drop `dm.ambient` (keep
+   the rest of the partial stack: partial:true/partialKind/fields.animalKind/dm.tell/dm.need/
+   fields.care all survive untouched — "keep the partial stack"). Promotion locks the record to
+   canon (status.soft:false, same posture as codexContact's canon-lock, so codexEvictSoft's pool-
+   recycling sweep — `status.soft && !status.known` — can never touch it again) and stamps a home
+   node (dm.homeNodeId) so it "recurs via prep at its territory/home node like any cast NPC."
+   Idempotent (`dm.promoted` guards a second call from re-stamping/re-logging); landmark row-12
+   animals are minted ALREADY promoted (prepCastEnvAnimals/prepCastAmbientScene) so this is a
+   guaranteed no-op there (`dm.ambient` is already false at mint). Null-safe/non-animal -> false. */
+function animalMaybePromote(w, rec, cause){
+  if(!rec || rec.kind!=="npc" || !(rec.dm && rec.dm.partialKind==="animal")) return false;
+  if(rec.dm.promoted) return false;                  // already promoted — no-op
+  if(!rec.dm.ambient) return false;                   // not currently an ambient record
+  const a=(typeof codexGetAttitude==="function") ? codexGetAttitude(w, rec.id) : null;
+  const attitudeAboveZero=!!(a && a.value>0);
+  const engagedTwice=(rec.dm.animalContactCount||0)>=2;
+  const named=!!rec.dm.named;
+  if(!engagedTwice && !named && !attitudeAboveZero) return false;
+  rec.dm.ambient=false;
+  rec.dm.promoted=true;
+  rec.dm.homeNodeId=rec.status && rec.status.at || null;
+  rec.status=rec.status||{};
+  rec.status.soft=false;
+  codexTouch(codexOf(w), rec);
+  addLedger(w,"canon",{kind:"animal-promoted",id:rec.id,cause:cause||null,homeNodeId:rec.dm.homeNodeId,source:"play"},
+    `◆ ${rec.name||rec.fields&&rec.fields.animalKind||"the animal"} — no longer a passing face; it belongs to this place now.`);
+  return true;
 }
 
 /* provenance / mechanical-vs-invented audit — the anti-drift ratio test (docs/CODEX.md §7 success metric).

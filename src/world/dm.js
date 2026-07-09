@@ -3170,6 +3170,14 @@ function applyEvent(w,e){
       // world.wiring-a's turnIgnoredCheck (ignoredTierOf). Settable regardless of whether a hook
       // exists (the doc's own "HOOKLESS tracked thread" case) — never gated on discovery's outcome.
       if(r && r.kind==="npc" && p.engaged){ r.dm=r.dm||{}; r.dm.engaged=true; }
+      // ANIMAL-SOCIAL.md §4/§6 U5 — "engaged twice" is one of the three promotion triggers. Every
+      // real codex_contact on an animal partial counts as one engagement (this IS the "player
+      // touched it" seam the whole promotion track hangs off), regardless of the p.engaged flag —
+      // animalMaybePromote is the single gate that decides whether count>=2 actually promotes.
+      if(r && r.kind==="npc" && r.dm && r.dm.partialKind==="animal"){
+        r.dm.animalContactCount=(r.dm.animalContactCount||0)+1;
+        if(typeof animalMaybePromote==="function") animalMaybePromote(w, r, "engaged-twice");
+      }
       const out={ok:!!r};
       if(discovery) out.discovery=discovery;
       return out;
@@ -3255,6 +3263,24 @@ function applyEvent(w,e){
       }
       if(res.terrified) codexSetTerrified(w,p.target,true,clk);
       else if(res.to!==res.from) codexSetAttitude(w,p.target,res.to,p.cause||p.skill||"social",clk);
+      // ANIMAL-SOCIAL.md §3/§4/§6 U5 — Terrified-overshoot cruelty memory: the node itself remembers
+      // (§3 "the farm dogs talk") — mark it so every animal MINTED at this node from now on opens
+      // one step colder (prepCastEnvAnimals/prepCastAmbientScene read `node.animalCruelty`). Animal-
+      // only; NPCs/creatures untouched.
+      if(res.terrified && isAnimalPartial){
+        const atNode=rec0.status && rec0.status.at;
+        const nn=(atNode && typeof mapOf==="function") ? mapOf(w).nodes[atNode] : null;
+        if(nn) nn.animalCruelty=true;
+      }
+      // ANIMAL-SOCIAL.md §4/§6 U5 — the +2 (Helpful) ally gate: stamp dm.ally + promote to a full
+      // codex record (attitude>0 is itself a promotion trigger — animalMaybePromote reads the
+      // just-committed attitude). Only fires on the SHIFT that actually LANDS on +2, never re-stamps.
+      if(isAnimalPartial && res.to===2 && res.to!==res.from){
+        rec0.dm=rec0.dm||{}; rec0.dm.ally=true;
+      }
+      if(isAnimalPartial && res.to!==res.from && res.to>0 && typeof animalMaybePromote==="function"){
+        animalMaybePromote(w, rec0, "attitude-past-zero");
+      }
       // ANOMALY LAW §2b.2 — bondEligible is stamped ONLY by the anomaly channels: a nat-20 on this check,
       // or a decisive lever that just cashed the shift to +1 (Friendly) exactly. Never by ordinary
       // grinding. NPCs never carry/consult this field (recruit_creature's own gate is creature-only).
@@ -3304,6 +3330,12 @@ function applyEvent(w,e){
       const rec=codexGet(w,p.target), nm=rec?rec.name:p.target;
       addLedger(w,"outcome",{kind:"social",target:p.target,name:nm,from:a.value,to:r.value,cause:p.cause||null,source:src},
         `✦ ${nm} — ${attitudeLabel(a.value)} → ${attitudeLabel(r.value)}${p.cause?(" ("+p.cause+")"):""}.`);
+      // ANIMAL-SOCIAL.md §4/§6 U5 — a DECLARED shift (group cascade / story beat) can also cross the
+      // promotion/ally thresholds for an animal partial, same as an ordinary social_check.
+      if(rec && rec.kind==="npc" && rec.dm && rec.dm.partialKind==="animal" && r.value!==a.value){
+        if(r.value===2) rec.dm.ally=true;
+        if(r.value>0 && typeof animalMaybePromote==="function") animalMaybePromote(w, rec, "attitude-past-zero");
+      }
       return {ok:true, from:a.value, to:r.value};
     }
     /* ANIMAL-SOCIAL.md §3/§6 U3 — the sustained-care track: fields.care is a DISTINCT-VISIT counter

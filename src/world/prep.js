@@ -163,16 +163,26 @@ function prepCastEnvAnimals(w, nodeId){
   const cfg=ENV_PARTIALS[band]||{};
   const chance=cfg.animal||0, draws=cfg.draws||0;
   const region=(typeof regionForNode==="function")?regionForNode(w,nodeId):null;
+  // ANIMAL-SOCIAL.md §3/§4/§6 U5 — cruelty memory: a Terrified-overshoot on THIS node (stamped by
+  // dm.js's social_check, w.map.nodes[nodeId].animalCruelty) opens every animal minted here one step
+  // colder from now on ("the farm dogs talk").
+  const nn=(typeof mapOf==="function")?mapOf(w).nodes[nodeId]:null;
+  const crueltyPenalty=(nn && nn.animalCruelty)?-1:0;
   const minted=[];
   for(let i=0;i<draws;i++){
     if((typeof Math.random==="function"?Math.random():1) >= chance) break;   // a miss ends the draws
     const p=rollPartial("animal", { env:band, region });
     const isHolder=(band==="wilderness" && i===0);
+    // ANIMAL-SOCIAL.md §4/§6 U5 — row 12 (landmark: town's-own-animal / elder-of-the-wood) mints
+    // ALREADY promoted + named, never as a disposable ambient draw.
+    const isLandmark=!!(p.dm && p.dm.landmark);
     const rec=codexAdd(w, Object.assign({}, p, { kind:"npc",
       id:prepCastId(w, "npc", p.name||"animal-partial"),
-      status:{ soft:true, at:nodeId },
-      dm:Object.assign({}, p.dm, { ambient:!isHolder, partial:true, partialKind:p.partialKind,
-        envCast:true, envBand:band, territoryHolder:isHolder||undefined })
+      name:isLandmark?(p.name||animalLandmarkName(band)):p.name,
+      status:{ soft:!isLandmark, at:nodeId },
+      dm:Object.assign({}, p.dm, { ambient:!(isHolder||isLandmark), partial:true, partialKind:p.partialKind,
+        envCast:true, envBand:band, territoryHolder:isHolder||undefined,
+        promoted:isLandmark||undefined, named:isLandmark||undefined, homeNodeId:isLandmark?nodeId:undefined })
     }));
     // ANIMAL-SOCIAL.md §3/§6 U3 RED-FIRST FIX: rollPartial computes an opening `dm.attitude` number
     // (wild/-1 default, ranger/druid-bumped) but nothing ever stamped it onto r.status.attitude — the
@@ -182,11 +192,24 @@ function prepCastEnvAnimals(w, nodeId){
     // the real writer (codexAttitudeOpen honors the "opening rolled once" law — a second mint attempt
     // on the same node is already blocked by the `already` idempotency guard above).
     if(rec && typeof codexAttitudeOpen==="function"){
-      codexAttitudeOpen(w, rec.id, (p.dm && p.dm.attitude!=null) ? p.dm.attitude : 0, { cause:"animal-opening" });
+      const base=(p.dm && p.dm.attitude!=null) ? p.dm.attitude : 0;
+      codexAttitudeOpen(w, rec.id, base+crueltyPenalty, { cause:"animal-opening" });
     }
     if(rec) minted.push(rec.id);
   }
   return { minted:minted.length, ids:minted, band };
+}
+
+/* ANIMAL-SOCIAL.md §4/§6 U5 — a provisional name for a row-12 landmark animal (DM confirms later,
+   same posture as rollPartial's child-name comment). Deterministic pick off a small local pool —
+   never invents a fact beyond "this landmark animal has a name." */
+const ANIMAL_LANDMARK_NAMES={
+  wilderness:["Old Bramble","Thornback","Moss","Greywind","The Antler King"],
+};
+const ANIMAL_LANDMARK_NAMES_DEFAULT=["Juniper","Ash","Whisper","Thistle","Old Bell"];
+function animalLandmarkName(band){
+  const pool=ANIMAL_LANDMARK_NAMES[band]||ANIMAL_LANDMARK_NAMES_DEFAULT;
+  return pool[Math.floor((typeof Math.random==="function"?Math.random():0)*pool.length)];
 }
 
 /* ============================================================================
@@ -281,19 +304,27 @@ function prepCastAmbientScene(w, nodeId, sceneBucket, opts){
     const pc=SCENE_PARTIALS[bucket]||{};
     ["child","animal"].forEach(kind=>{
       const chance=pc[kind]||0;
+      // ANIMAL-SOCIAL.md §3/§4/§6 U5 — same cruelty-memory read as prepCastEnvAnimals, keyed off atId
+      // (this scene's actual placement node).
+      const nnScene=(kind==="animal" && typeof mapOf==="function")?mapOf(w).nodes[atId]:null;
+      const crueltyPenaltyScene=(nnScene && nnScene.animalCruelty)?-1:0;
       for(let i=0;i<2;i++){
         if((typeof Math.random==="function"?Math.random():1) >= chance) break;   // a miss ends this kind's draws
         const p=rollPartial(kind, { region });
+        const isLandmark=!!(kind==="animal" && p.dm && p.dm.landmark);
         const rec=codexAdd(w, Object.assign({}, p, { kind:"npc",
           id:prepCastId(w, "npc", p.name||(kind+"-partial")),
-          status:{ soft:true, at:atId },
-          dm:Object.assign({}, p.dm, { ambient:true, partial:true, partialKind:p.partialKind, sceneBucket:bucket })
+          name:isLandmark?(p.name||animalLandmarkName(null)):p.name,
+          status:{ soft:!isLandmark, at:atId },
+          dm:Object.assign({}, p.dm, { ambient:!isLandmark, partial:true, partialKind:p.partialKind, sceneBucket:bucket,
+            promoted:isLandmark||undefined, named:isLandmark||undefined, homeNodeId:isLandmark?atId:undefined })
         }));
         // ANIMAL-SOCIAL §3/§6 U3: same opening-attitude stamp as prepCastEnvAnimals (see that comment) —
         // scene-typed animal partials (market/tavern/shop/shrine) need it too; child partials don't run
         // the attitude ladder at all, so this is animal-only.
         if(rec && kind==="animal" && typeof codexAttitudeOpen==="function"){
-          codexAttitudeOpen(w, rec.id, (p.dm && p.dm.attitude!=null) ? p.dm.attitude : 0, { cause:"animal-opening" });
+          const base=(p.dm && p.dm.attitude!=null) ? p.dm.attitude : 0;
+          codexAttitudeOpen(w, rec.id, base+crueltyPenaltyScene, { cause:"animal-opening" });
         }
         if(rec) partials.push(rec);
       }

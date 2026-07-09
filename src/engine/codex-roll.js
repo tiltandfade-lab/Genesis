@@ -394,11 +394,17 @@ function rollPartial(kind, opts){
   // judgment). opts.pcClass is optional; absent -> attitude unchanged (no regression for callers that
   // don't know the acting PC's class, e.g. a scene-typed ambient draw with no single "asker").
   if(typeof animalOpeningStep==="function") attitude=animalOpeningStep(attitude, opts.pcClass);
+  // ANIMAL-SOCIAL.md §4/§6 U5: row 12 ("the town's own animal" / "the elder of the wood") is tagged
+  // `landmark` on both animal-kind and wild-animal-kind — the caller (prepCastEnvAnimals/
+  // prepCastAmbientScene) reads this flag to mint it as an ALREADY-promoted, named codex record from
+  // the start (§4), never as a disposable ambient draw. Pure derivation off the row's own tags —
+  // never guesses which row minted.
+  const landmark=/landmark/.test(akTags);
   return { kind:"partial", partialKind:"animal", coherence:"archetype",
     name:opts.name||null,
     fields:{ role:"animal", animalKind:animalKindText, care:0 },
     dm:{ tell:tx(tell), need:(typeof pick==="function")?pick(["hungry","guarding","lost","loyal"]):"hungry",
-      attitude } };
+      attitude, landmark } };
 }
 
 /* ANIMAL_ENV_WEIGHTS (docs/ANIMAL-SOCIAL.md §1/§6 U1) — 5 environment bands -> row-weight vectors

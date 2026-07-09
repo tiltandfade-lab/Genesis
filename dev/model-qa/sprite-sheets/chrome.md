@@ -159,7 +159,7 @@ static character per cell (not a repeat, not an animation frame), uniform cell s
 
 ---
 
-## NPC batches (150 total, 6 sheets)
+## NPC batches (175 total, 7 sheets)
 
 **Population diversity (binding):** vary skin tone, ethnicity, hair texture, build, and age across the full roster below — a sheet where every face reads as the same ethnicity is a failure, not a style choice, regardless of realm. This realm's population also includes visible synthetic/heavily-augmented variety (see the final entries below) alongside an ethnically varied baseline-human majority — not everyone in this realm is flesh.
 
@@ -342,6 +342,40 @@ Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-R
 24. **Street preacher of the old machine-cult — preaches to whichever gang will listen that week**
 25. **Orphaned kid, gang-adjacent — too young to join, runs errands for whoever's kindest that day**
 
+**Turf-war gang expansion (additive, 2026-07-09, second wave):** five more rival street gangs in the
+same urban gang-turf register as sheets 4–6 (tonal homage to the classic one-night-gauntlet gang
+movie only — every gang below is an ORIGINAL design; none reproduces a specific existing franchise
+gang, costume, or character). Same rank structure: five ranked members each, each gang with its own
+uniform gimmick so the factions read apart at a glance. This brings the realm's gang count to 15.
+
+### NPC sheet 7/7
+
+1. **Wheelhouse Rollers (quad-roller-skate crew in matching strap-bib coveralls — never stop moving, even standing still) — Leader — skates backward through the whole conversation, coveralls covered in earned patches**
+2. **Wheelhouse Rollers (quad-roller-skate crew in matching strap-bib coveralls) — Enforcer — heaviest skater in the crew, uses momentum like a weapon, mid-shoulder-check**
+3. **Wheelhouse Rollers (quad-roller-skate crew in matching strap-bib coveralls) — Lookout — rolls slow figure-eights at the turf line, never breaks the loop**
+4. **Wheelhouse Rollers (quad-roller-skate crew in matching strap-bib coveralls) — Newest recruit — still wobbly on the stops, coveralls bare of patches**
+5. **Wheelhouse Rollers (quad-roller-skate crew in matching strap-bib coveralls) — Gang wheelwright — keeps every bearing in the crew spinning true, tools in the bib pocket**
+6. **Pennant Devils (full warpaint faces, pinstriped ball-club uniforms, nail-studded bats) — Leader — warpaint in the crew's colors, bat resting across the shoulders like a yoke**
+7. **Pennant Devils (full warpaint faces, pinstriped ball-club uniforms, nail-studded bats) — Enforcer — mid-swing, the crew's heaviest hitter, paint smeared from the last fight**
+8. **Pennant Devils (full warpaint faces, pinstriped ball-club uniforms, nail-studded bats) — Lookout — crouched in a catcher's stance, flashes hand-signs down the block**
+9. **Pennant Devils (full warpaint faces, pinstriped ball-club uniforms, nail-studded bats) — Newest recruit — paint still clean and unsmudged, gripping the bat too tight**
+10. **Pennant Devils (full warpaint faces, pinstriped ball-club uniforms, nail-studded bats) — Gang painter — mixes and applies every member's warpaint, fingers permanently stained**
+11. **Kaiser Caps (leather peaked biker caps and engine-grease colors — a biker gang whose bikes died years ago) — Leader — cap tilted low, kickstarter pedal worn on a chain like a medallion**
+12. **Kaiser Caps (leather peaked biker caps and engine-grease colors, bikes long dead) — Enforcer — swings a drive-belt strap, jacket sleeves cut at the shoulder**
+13. **Kaiser Caps (leather peaked biker caps and engine-grease colors, bikes long dead) — Lookout — polishes the cap's brim to a mirror shine, watches the street in it**
+14. **Kaiser Caps (leather peaked biker caps and engine-grease colors, bikes long dead) — Newest recruit — cap still stiff and new, hasn't earned the grease yet**
+15. **Kaiser Caps (leather peaked biker caps and engine-grease colors, bikes long dead) — Gang mechanic — still rebuilding the one engine the crew swears will run again**
+16. **The Hush (whiteface greasepaint over thrift-store formalwear — a gang under a standing vow of silence) — Leader — immaculate white face, commands the crew with two-finger gestures alone**
+17. **The Hush (whiteface greasepaint over thrift-store formalwear, vow of silence) — Enforcer — cracked paint over a broken nose, lets the silence do the threatening**
+18. **The Hush (whiteface greasepaint over thrift-store formalwear, vow of silence) — Lookout — motionless as a mannequin in a doorway until the signal, then gone**
+19. **The Hush (whiteface greasepaint over thrift-store formalwear, vow of silence) — Newest recruit — paint applied unevenly, still catches himself almost speaking**
+20. **The Hush (whiteface greasepaint over thrift-store formalwear, vow of silence) — Gang signalman — invented the crew's whole gesture-language, hands never still**
+21. **Dial-Tone Dolls (all-female crew, vintage dresses over combat boots — they invite you somewhere safe, and it isn't) — Leader — the warmest smile on the block and a straight razor in the hairpin**
+22. **Dial-Tone Dolls (all-female crew, vintage dresses over combat boots, the invitation is the trap) — Enforcer — springs the ambush, boots first, dress hem weighted with washers**
+23. **Dial-Tone Dolls (all-female crew, vintage dresses over combat boots, the invitation is the trap) — Lookout — works the corner payphone, one ring means company's coming**
+24. **Dial-Tone Dolls (all-female crew, vintage dresses over combat boots, the invitation is the trap) — Newest recruit — still practicing the smile in shop windows, boots already scuffed**
+25. **Dial-Tone Dolls (all-female crew, vintage dresses over combat boots, the invitation is the trap) — Gang hostess — runs the safehouse that isn't, remembers every mark's name**
+
 ## Domestic animal batches (25 total, 1 sheet)
 
 Style block (repeated here so this section is self-contained): Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). gritty low-poly-PS1-inspired pixel art, chunky dithered shading, neon-magenta and cyan rim light against dark asphalt tones, servo/chrome plating with visible rivets and grime, high value contrast so each silhouette reads instantly against a dark background.
@@ -523,7 +557,7 @@ children, not teens or adults.
 
 Appended additions from `docs/REALM-KEY-EXPANSION-ROSTER.md` (Adam's rulings folded). Same
 style block and mechanical instructions as the monster sheets above. Gang crews are NOT
-repeated here (NPC sheets 4–6 already carry the 10 factions at 5 sprites each).
+repeated here (NPC sheets 4–7 already carry the 15 factions at 5 sprites each).
 
 ### Expansion sheet E1 (5×5 grid, 25 cells)
 

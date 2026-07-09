@@ -825,13 +825,18 @@ function animalPropagatePackAttitude(w, rec, newValue, cause){
    canon (status.soft:false, same posture as codexContact's canon-lock, so codexEvictSoft's pool-
    recycling sweep — `status.soft && !status.known` — can never touch it again) and stamps a home
    node (dm.homeNodeId) so it "recurs via prep at its territory/home node like any cast NPC."
-   Idempotent (`dm.promoted` guards a second call from re-stamping/re-logging); landmark row-12
-   animals are minted ALREADY promoted (prepCastEnvAnimals/prepCastAmbientScene) so this is a
-   guaranteed no-op there (`dm.ambient` is already false at mint). Null-safe/non-animal -> false. */
+   Idempotent (`dm.promoted` guards a second call from re-stamping/re-logging) — that idempotency
+   guard is ALSO what keeps landmark row-12 animals (minted already dm.promoted:true) a guaranteed
+   no-op here; it is not the ambient check's job. The wilderness territory-holder (ANIMAL-SOCIAL.md
+   §4's "the one who gets promoted first") mints with `dm.ambient:false` too (prepCastEnvAnimals) —
+   that flag was never meant to gate the holder, only to mark it as not an ordinary disposable
+   ambient draw, so the holder must pass this guard on `dm.territoryHolder` as well.
+   HQ-2 (docs/ANIMAL-SOCIAL-HQ.md): fixed a guard that read `!rec.dm.ambient` and silently killed
+   every holder-promotion trigger. Null-safe/non-animal -> false. */
 function animalMaybePromote(w, rec, cause){
   if(!rec || rec.kind!=="npc" || !(rec.dm && rec.dm.partialKind==="animal")) return false;
-  if(rec.dm.promoted) return false;                  // already promoted — no-op
-  if(!rec.dm.ambient) return false;                   // not currently an ambient record
+  if(rec.dm.promoted) return false;                  // already promoted — no-op (also excludes landmarks)
+  if(!rec.dm.ambient && !rec.dm.territoryHolder) return false;   // not an ambient record and not the holder
   const a=(typeof codexGetAttitude==="function") ? codexGetAttitude(w, rec.id) : null;
   const attitudeAboveZero=!!(a && a.value>0);
   const engagedTwice=(rec.dm.animalContactCount||0)>=2;

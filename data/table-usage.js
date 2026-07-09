@@ -149,10 +149,13 @@ const TABLE_USAGE = {
   },
   "animal-kind": {
     "base": "Animal Kind",
-    "cls": "ORACLE-ONLY",
+    "cls": "WIRED",
     "consumers": {
       "chain": [],
-      "code": [],
+      "code": [
+        "animal-knowledge-scope.js",
+        "animal-realm-skins.js"
+      ],
       "procedure": []
     },
     "domain": "Social / Sentient NPCs",
@@ -2776,7 +2779,9 @@ const TABLE_USAGE = {
     "consumers": {
       "chain": [],
       "code": [
-        "table-atlas.js"
+        "npc-role-skins.js",
+        "table-atlas.js",
+        "wiki.js"
       ],
       "procedure": [
         "Quick NPC Generator 2.0.md"
@@ -2787,10 +2792,13 @@ const TABLE_USAGE = {
   },
   "npc-role-spine": {
     "base": "NPC Role Spine",
-    "cls": "ORACLE-ONLY",
+    "cls": "WIRED",
     "consumers": {
       "chain": [],
-      "code": [],
+      "code": [
+        "npc-role-skins.js",
+        "wiki.js"
+      ],
       "procedure": []
     },
     "domain": "Social / Sentient NPCs",
@@ -5147,6 +5155,19 @@ const TABLE_USAGE = {
     },
     "domain": "World Building / Starting State",
     "file": "Engine/03. _Tables/01. World Building/Starting State/Starting State - Entry.md"
+  },
+  "wild-animal-kind": {
+    "base": "Wild Animal Kind",
+    "cls": "WIRED",
+    "consumers": {
+      "chain": [],
+      "code": [
+        "animal-knowledge-scope.js"
+      ],
+      "procedure": []
+    },
+    "domain": "Social / Sentient NPCs",
+    "file": "Engine/03. _Tables/02. Social/Sentient NPCs/Wild Animal Kind.md"
   },
   "wilderness-active-magic": {
     "base": "Wilderness Magic Effect Lv 1-5",

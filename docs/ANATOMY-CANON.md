@@ -85,6 +85,34 @@ These are tool-level truths surfaced by the wolf iterations; bake them into `bui
    `ps1-capture.mjs` (the shipping dither+vertex-snap+1/3-res shader). The Blender probe is a fast lens;
    the engine PS1 render is the acceptance gate. (Wolf confirmed in-engine: `wolf-rigcmp-ps1.png`.)
 
+## POSE-ANATOMY — the spine is the pose; arms bend at joints (Adam's ruling, 2026-07-08)
+
+Batch-review finding after foundry waves 1–3 (Adam, eyes-on the wave sheets): the recurring
+weakness is **awkward arm articulation and an unconsidered spine** — limbs posed on a mannequin.
+These rules bind every humanoid/hybrid pose, and the critic pass gates on them:
+
+1. **The spine is the pose.** Every pose starts as a SPINE GESTURE — one readable C- or S-curve
+   from pelvis to skull (lean, twist, arch, hunch). Author the spine curve FIRST, then hang limbs
+   off it continuing its line. A vertical-column torso with action limbs bolted on is a gate
+   failure ("mannequin pose"). Test: trace hips→shoulders→skull in the render; if the trace is a
+   plumb line while the arms are "acting," the pose is fake.
+2. **Arms bend only at joints, and always bend.** Shoulder→elbow→wrist must read as an ARC with a
+   visible elbow angle (~100–150° for most actions). A dead-straight arm (one segment shoulder to
+   fingertip) or a hyperextended/backwards elbow is a gate failure. Even a full reach keeps a
+   slight elbow break. Same for legs at the knee.
+3. **Shoulders ride with the arm.** An arm raised above chest height drags its shoulder up and
+   tilts the upper spine toward/away from the action; the neck/head counter. An overhead arm on
+   level, square shoulders reads as a doll.
+4. **Counterpose or fall over.** Weight on one leg tilts the hips; the shoulders tilt in
+   OPPOSITION (contrapposto); an arm thrown forward is balanced by hip/other-arm counter. Squared
+   hips + squared shoulders + symmetric feet is the at-attention failure law 5 already bans.
+5. **The gesture line survives the squint.** At 1/3-res the whole figure should still read as one
+   sweeping line of action (the spine curve extended through the loudest limb). If the squint
+   shows a T- or X-shape of straight sticks, re-pose — do not re-model.
+
+Critic gate question (d), added to the standard three: **trace the spine and the elbows — is
+there a gesture line, and do the arms articulate?**
+
 ## Family: QUADRUPED — DIGITIGRADE (canine, feline) — SEEDED
 
 Stands on the toes; the visible "backward knee" is the **hock (ankle)**, set HIGH. This is the single

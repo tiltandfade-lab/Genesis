@@ -1270,7 +1270,8 @@
         "rollExpr",
         "rollTable",
         "rollTableAtBand",
-        "rollTableSpiced"
+        "rollTableSpiced",
+        "rollTableInRange"
       ],
       "callTimeDeps": [
         "window.GENESIS_TABLES",
@@ -1476,7 +1477,10 @@
         "pickCoherenceTier",
         "pickCoherence",
         "coherencePickN",
-        "coherenceAtomGate"
+        "coherenceAtomGate",
+        "MAYHEM_REALM_IDS",
+        "TEMP_LADDER",
+        "sceneTemperature"
       ],
       "callTimeDeps": [
         "rollTable",
@@ -2738,7 +2742,17 @@
         "prepStartTravelWalk",
         "prepEligibleCompanionCreatures",
         "walkCloseOrphan",
-        "WALK_SEG_MIN"
+        "WALK_SEG_MIN",
+        "AMBIENT_SCENE_BASE",
+        "AMBIENT_SCENE_TEMP_MULT",
+        "SCENE_PARTIALS",
+        "ambientSceneCount",
+        "sceneHookRoll",
+        "ensureSceneHook",
+        "prepCastAmbientScene",
+        "HOOK_DISCOVERY_CHANCE",
+        "hookDiscoveryChance",
+        "hookDiscoveryRoll"
       ],
       "callTimeDeps": [
         "assemblePrepBundle",
@@ -2768,6 +2782,11 @@
         "regionForNode",
         "tarotAmbientBonus",
         "tarotVectorOf",
+        "rollTable",
+        "rollExpr",
+        "rollPartial",
+        "sceneTemperature",
+        "activeRealmsFor",
         "applyRustExposure",
         "livingSheet"
       ],
@@ -2894,6 +2913,7 @@
         "pcMoveTo",
         "travelDepart",
         "findEdge",
+        "hookDiscoveryRoll",
         "rollNPC",
         "rollBuildingInterior",
         "rollItem",
@@ -3347,13 +3367,16 @@
         "buildingsOf",
         "buildingApproach",
         "buildingContact",
-        "tavernContactFire"
+        "tavernContactFire",
+        "SCENE_TYPE_BY_KIT",
+        "sceneTypeForBuildingKit"
       ],
       "callTimeDeps": [
         "BUILDING_KITS",
         "BUILDING_KIT_TYPES",
         "rollTable",
         "rollDie",
+        "prepCastAmbientScene",
         "rollBuildingInterior",
         "rollNPC",
         "makeShop",
@@ -3431,6 +3454,8 @@
         "restRiskSevere",
         "restRiskRoll",
         "IGNORED_STALE_DAYS",
+        "ignoredTierOf",
+        "ignoredFallbackRange",
         "turnIgnoredCandidates",
         "turnIgnoredCheck",
         "parleyWantRoll",
@@ -3445,6 +3470,7 @@
         "addLedger",
         "clockOf",
         "rollTable",
+        "rollTableInRange",
         "rollDie",
         "codexOf",
         "nodeLodgingTier",

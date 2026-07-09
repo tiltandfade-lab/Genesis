@@ -1605,7 +1605,11 @@ const DM_EVENT_FIELDS = {
   codex_link:        { accept:["from","rel","to"] },
   codex_update:      { accept:["id","name","shape","fields","dm","status","note","supersedes"] },   // HQ3-D2: supersedes flags the pushed note as a correction (codexUpdate)
   codex_reveal:      { accept:["id"] },
-  codex_contact:     { accept:["id"] },
+  // NPC-PRESENCE-AND-HOOKS.md Component 4's "engage threshold": `engaged` (bool) is the DM's declared
+  // signal that the player accepted/acted on/meaningfully pursued this NPC's hook (a second
+  // in-character question counts; a passing glance does not) — registered at the contract boundary
+  // (CLAUDE.md "normalization lives at the contract boundary, not in handlers"), never a per-handler guess.
+  codex_contact:     { accept:["id","engaged"] },
   // social_check.overshoot is DELIBERATELY UNTAGGED (HQ2-1-TOPUP deviation from the HOTFIX-QUEUE
   // spec, which lists num:["dc","total","natural","overshoot"]): resolveSocialCheck (src/engine/
   // social.js:64) reads it as a plain boolean truthiness gate (`if(skill==="intimidation" &&
@@ -3129,7 +3133,29 @@ function applyEvent(w,e){
       if(typeof codexContact!=="function") return {ok:false,reason:"codex-unavailable"};
       const r=codexContact(w,p.id);
       if(r) addLedger(w,"canon",{kind:"codex-contact",id:p.id,source:"play"},`◆ ${r.name} — encountered; locked to canon.`);
-      return {ok:!!r};
+      // NPC-PRESENCE-AND-HOOKS.md Component 3.2 — demand-driven hook discovery, fired on this real
+      // "player touched an ambient NPC" seam (never pre-rolled at mint). ONE attempt ever per record
+      // (r.dm.discoveryRolled), so a repeat contact call never re-rolls; a hook already present
+      // (guaranteed-scene-hook beat discovery to it) reports found:true/preExisting instead of
+      // double-hooking. Partials (children/animals — r.dm.partial) are OUT OF SCOPE here: their own
+      // hook-analogs (dm.saw/dm.tell) were already resolved at rollPartial() mint time, per
+      // NPC-PARTIALS.md — never a second, unrelated npc-hook d300 draw on top.
+      let discovery=null;
+      if(r && r.kind==="npc" && !r.dm.partial){
+        r.dm=r.dm||{};
+        if(!r.dm.discoveryRolled){
+          r.dm.discoveryRolled=true;
+          discovery=(typeof hookDiscoveryRoll==="function") ? hookDiscoveryRoll(w, r) : {found:false};
+        }
+      }
+      // Component 4's "engage threshold" — the DM-declared signal (accepted/acted on/pursued the
+      // hook) that promotes a touched NPC from "discovered-not-engaged" to "touched & kept" for
+      // world.wiring-a's turnIgnoredCheck (ignoredTierOf). Settable regardless of whether a hook
+      // exists (the doc's own "HOOKLESS tracked thread" case) — never gated on discovery's outcome.
+      if(r && r.kind==="npc" && p.engaged){ r.dm=r.dm||{}; r.dm.engaged=true; }
+      const out={ok:!!r};
+      if(discovery) out.discovery=discovery;
+      return out;
     }
 
     /* ---- SOCIAL (docs/SOCIAL.md §5): attitude / parley / morale — the social analog of combat. The DM

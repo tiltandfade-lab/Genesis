@@ -170,39 +170,91 @@ function restInterruptMinutes(fullMin){
 // moving without you" fact, just keyed off a codex record's own clock instead of a node's.
 const IGNORED_STALE_DAYS = 14;
 
-/* turnIgnoredCandidates(w, today) — every codex record carrying an open thread (dm.legs is
-   "hook"|"thread-seed", !dm.resolved) whose dm.lastIgnoredCheck (or, absent that, its mint-time
-   touchedSeq-adjacent day — see below) is at least IGNORED_STALE_DAYS in the past. Never invents a
-   creation day the record doesn't carry: a thread with no ignoredSinceDay stamp yet is stamped NOW
-   (first observation) rather than assumed instantly stale — so a thread minted THIS session never
-   fires on its very first montage. */
+/* NPC-PRESENCE-AND-HOOKS.md Component 4 "the three-tier attention model + if-ignored unification"
+   (2026-07-08 rewire — supersedes this file's original flat "any dm.legs record fires the generic
+   table" sweep). ignoredTierOf(r) classifies a codex record into which if-ignored MECHANISM applies,
+   or null (never a candidate at all):
+     "legacy"   — r.dm.legs is "hook"|"thread-seed" (the pre-existing thread-seed/art-handle family,
+                  BATCH3-PLAN unit 8's original scope). BACKWARD-COMPAT: this tag ALWAYS wins and ALWAYS
+                  fires the generic npc-if-ignored fallback (now band-escalating, see
+                  ignoredFallbackRange below) — a save carrying old dm.legs records with no dm.hook/
+                  dm.engaged degrades to exactly this, never throws, never silently changes shape.
+                  An NPC that is r.dm.engaged===true but carries NO r.dm.hook (the doc's "HOOKLESS
+                  tracked thread" bullet) reuses this SAME tier/mechanism — engaged-but-hookless has
+                  nothing bespoke to fire, so it's the generic fallback too, just explicitly tracked
+                  rather than legacy-tagged. One mechanism, two ways to enter it.
+     "engaged"  — kind:"npc", r.dm.hook present, r.dm.engaged===true. TOUCHED & KEPT (component 4's
+                  first tier): fires the hook's OWN bespoke If-Ignored text, ratcheting by
+                  ignoredRolls, PLAYER-visible ledger (type:"outcome" — it's their thread, they know).
+     "discovered" — kind:"npc", r.dm.hook present, NOT engaged, but TOUCHED (status.soft===false —
+                  codex_contact already fired). TOUCHED & DROPPED: fires the hook's own If-Ignored
+                  ONCE, then r.dm.resolved=true closes the thread — DM-only ledger (type:"drift",
+                  same convention this file already used for every if-ignored line pre-rewire).
+     null (never-touched) — kind:"npc", r.dm.hook present, r.status.soft still true (ambient, never
+                  contacted, never engaged) — "nothing fires, ever" (Component 4's 3rd tier; NOT a
+                  candidate at all, not even a staleness-window stamp).
+   A hook payload with no .ifIgnored text (a malformed/older shape) degrades to the generic fallback
+   rather than fabricating consequence text — checked at fire time in turnIgnoredCheck, not here. */
+function ignoredTierOf(r){
+  if(!r || !r.dm || r.dm.resolved) return null;
+  if(r.dm.legs==="hook" || r.dm.legs==="thread-seed") return "legacy";
+  if(r.kind!=="npc") return null;
+  if(r.dm.engaged) return r.dm.hook ? "engaged" : "legacy";
+  if(r.dm.hook){
+    const touched = !(r.status && r.status.soft);
+    return touched ? "discovered" : null;
+  }
+  return null;
+}
+
+/* turnIgnoredCandidates(w, today) — every codex record ignoredTierOf() classifies into a real tier,
+   whose dm.ignoredSinceDay is at least IGNORED_STALE_DAYS in the past. Never invents a creation day
+   the record doesn't carry: a thread with no ignoredSinceDay stamp yet is stamped NOW (first
+   observation) rather than assumed instantly stale — so a thread minted THIS session never fires on
+   its very first montage. */
 function turnIgnoredCandidates(w, today){
   if(typeof codexOf!=="function") return [];
   const recs=Object.values(codexOf(w).records||{});
   return recs.filter(r=>{
-    if(!r.dm || (r.dm.legs!=="hook" && r.dm.legs!=="thread-seed")) return false;
-    if(r.dm.resolved) return false;
+    if(!ignoredTierOf(r)) return false;
     if(r.dm.ignoredSinceDay==null){ r.dm.ignoredSinceDay=today; return false; }   // first observation — stamp, don't fire
     return (today - r.dm.ignoredSinceDay) >= IGNORED_STALE_DAYS;
   });
 }
 
+/* ignoredFallbackRange(ignoredRolls) — the generic npc-if-ignored fallback's ESCALATION-BY-COUNT fix
+   (Component 4: "escalate by ignoredRolls... not the current flat re-roll, which can drift MILDER").
+   The table is ungraded (no bands) but reads as an ordinal severity ladder by row number (see
+   rollTableInRange's own header, src/engine/compiled.js) — so escalation here means widening/shifting
+   the roll RANGE: window 1 (first fire) pulls mostly-mild rows, window 3+ pulls mostly-severe ones.
+   This file's own implementation-fill for the exact cut points (the doc sets the SHAPE — "window 1
+   low band, window 3 high band" — not exact numbers), same posture as codex-roll.js's
+   COHERENCE_LEVER_POOL comment. */
+function ignoredFallbackRange(ignoredRolls){
+  const n=Math.max(1, ignoredRolls||1);
+  if(n<=1) return [1,40];
+  if(n===2) return [25,75];
+  return [60,100];
+}
+
 /* turnIgnoredCheck(w) — THE SWEEP (called from worldTurn's montage branch, mirrors repuFadeTick/
-   jobBoardTick's existing wiring shape). For each stale candidate: roll ONE npc-if-ignored result
-   (what the NPC does about being ignored) + npc-if-ignored-regional-effects when the record carries
-   a region tag (r.fields.region / r.dm.region — best-effort, read-only, never guessed if absent).
-   Ledgers a `drift` entry per thread, advances dm.ignoredRolls (an escalating counter so repeat
-   ignoring is VISIBLE — the digest/DM can read "this is the 3rd time nothing happened" rather than
-   the exact same flavor forever) and resets ignoredSinceDay so the NEXT check waits another full
-   staleness window (time-honesty: the world doesn't re-fire on the same thread every single montage,
-   it fires once per window — same posture as jobBoardTick firing once per elapsed TTL, not every
-   montage regardless). Returns the list of {id,name,text,regionalText} fired this sweep. */
+   jobBoardTick's existing wiring shape). Routes each stale candidate by ignoredTierOf's tier:
+     engaged    -> the hook's bespoke ifIgnored, ratcheting by ignoredRolls, PLAYER ledger (outcome).
+     discovered -> the hook's bespoke ifIgnored, ONE-SHOT, then dm.resolved=true, DM ledger (drift).
+     legacy     -> the generic npc-if-ignored fallback (+ regional-effects when the record carries a
+                   region tag), now band-escalating by ignoredRolls via ignoredFallbackRange — same
+                   DM ledger (drift) shape as before this rewire, so pre-existing consumers/tests of
+                   this sweep (dev/verify-wiring-a.mjs §3/§3b/§4) see byte-identical behavior.
+   Every branch advances dm.ignoredRolls and resets dm.ignoredSinceDay (time-honesty: fires once per
+   staleness window, never every single montage). Returns the list of fired entries this sweep. */
 function turnIgnoredCheck(w){
   const today=(typeof clockOf==="function") ? clockOf(w).day : 0;
   const candidates=turnIgnoredCandidates(w, today);
   const fired=[];
-  candidates.forEach(r=>{
-    const roll=(typeof rollTable==="function") ? rollTable("npc-if-ignored") : null;
+  function fireLegacyFallback(r){
+    const range=ignoredFallbackRange(r.dm.ignoredRolls);
+    const roll=(typeof rollTableInRange==="function") ? rollTableInRange("npc-if-ignored", range[0], range[1])
+      : ((typeof rollTable==="function") ? rollTable("npc-if-ignored") : null);
     if(!roll){ console.warn("[wiring-a] npc-if-ignored not compiled — if-ignored check skipped (null-safe)"); return; }
     const region=(r.fields && r.fields.region) || (r.dm && r.dm.region) || null;
     let regionalText=null;
@@ -210,12 +262,37 @@ function turnIgnoredCheck(w){
       const rroll=(typeof rollTable==="function") ? rollTable("npc-if-ignored-regional-effects") : null;
       if(rroll) regionalText=rroll.text;
     }
-    r.dm.ignoredRolls=(r.dm.ignoredRolls||0)+1;
-    r.dm.ignoredSinceDay=today;   // reset the window — the NEXT fire waits another full IGNORED_STALE_DAYS
     if(typeof addLedger==="function") addLedger(w,"drift",
       { kind:"if-ignored", id:r.id, name:r.name, text:roll.text, regionalText, rolls:r.dm.ignoredRolls, source:"world-turn" },
       `While ignored, ${r.name} — ${roll.text}${regionalText?" ("+regionalText+")":""}`);
-    fired.push({ id:r.id, name:r.name, text:roll.text, regionalText });
+    fired.push({ id:r.id, name:r.name, text:roll.text, regionalText, tier:"legacy" });
+  }
+  candidates.forEach(r=>{
+    const tier=ignoredTierOf(r);
+    r.dm.ignoredRolls=(r.dm.ignoredRolls||0)+1;
+    r.dm.ignoredSinceDay=today;   // reset the window — the NEXT fire waits another full IGNORED_STALE_DAYS
+    if(tier==="engaged" || tier==="discovered"){
+      const text=r.dm.hook && r.dm.hook.ifIgnored;
+      if(!text){ fireLegacyFallback(r); return; }   // malformed hook payload — degrade, never fabricate
+      if(tier==="engaged"){
+        // TOUCHED & KEPT — the thread's OWN bespoke If-Ignored, ratcheting by ignoredRolls (the count
+        // rides the ledger text so repeat ignoring is visible), PLAYER-visible ledger.
+        if(typeof addLedger==="function") addLedger(w,"outcome",
+          { kind:"if-ignored", id:r.id, name:r.name, text, rolls:r.dm.ignoredRolls, hooked:true, source:"world-turn" },
+          `While ignored (${r.dm.ignoredRolls}x now), ${r.name} — ${text}`);
+        fired.push({ id:r.id, name:r.name, text, rolls:r.dm.ignoredRolls, tier });
+      } else {
+        // TOUCHED & DROPPED — fires ONCE, offscreen, then the thread CLOSES. DM ledger only — never a
+        // player checklist; diegetic surfacing (a rumor, an aftermath) is the DM's job, not the sweep's.
+        r.dm.resolved=true;
+        if(typeof addLedger==="function") addLedger(w,"drift",
+          { kind:"if-ignored", id:r.id, name:r.name, text, hooked:true, oneShot:true, source:"world-turn" },
+          `While ignored, ${r.name} — ${text}`);
+        fired.push({ id:r.id, name:r.name, text, tier, resolved:true });
+      }
+      return;
+    }
+    fireLegacyFallback(r);
   });
   return fired;
 }

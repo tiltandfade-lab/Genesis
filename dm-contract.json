@@ -513,7 +513,8 @@
     },
     "codex_contact": {
       "fields": [
-        "id"
+        "id",
+        "engaged"
       ],
       "aliases": {},
       "num": [],

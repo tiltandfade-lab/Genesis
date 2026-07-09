@@ -433,3 +433,34 @@ children, not teens or adults.
 19. **Kid — wants: Make their parent laugh the old way, the way from before.**
 20. **Kid — wants: Warn someone — and not one adult will slow down long enough to hear it.**
 
+
+## Expansion batches — REALM-KEY-EXPANSION-ROSTER draft, 2026-07-09 (20 total, 1 sheet)
+
+Appended additions from `docs/REALM-KEY-EXPANSION-ROSTER.md` (Adam approved the full map): the
+saurian caste ladder as court officers (distinct from the saurian-folk commoners on the NPC
+sheets), the human underclass, dino mounts, and the seeded-only Zeal stratum — including Adam's
+new ruling: **Zeal adepts, humans who know and understand both magic and technology**. Same
+style block and mechanical instructions as above.
+
+### Expansion sheet E1 (4×5 grid, 20 cells)
+
+1. **Saurian Overseer** — scaled taskmaster on a quarry ledge, tally-staff mid-strike, humans beneath notice
+2. **Saurian Tithe-Collector** — robed court reptile weighing a warren's grain against a bronze standard
+3. **Court Herald** — lean feathered runner mid-stride, verdict-scroll held high, never slowing
+4. **Arena Warden** — scarred saurian with a hooked pole-goad, unbarring the pit gate
+5. **Saurian Magistrate** — jeweled court judge mid-gavel, one claw open for the transaction, the other pointing at the pit
+6. **The Court Prince** — towering crested saurian in ceremonial plate, cloak of office, verdict already decided
+7. **Warren Rat-Catcher** — wiry human of the underclass, sling and sack, working the giant footprint's shadow
+8. **Collaborator Foreman** — human overseer of humans, court-issued whip, avoiding every eye
+9. **Free-Warren Raider** — masked human rebel mid-vault, stolen court bronze in hand
+10. **Pit Runner** — lean sprint-dinosaur bred for the arena, mid-stride, harness scars
+11. **Saddle-Broken Ceratopsian** — horned mount in court barding, head lowered under saddle
+12. **War-Howdah Bull** — massive quadruped with a fighting platform strapped to its back, mid-bellow
+13. **Mount-Wrangler of the Low Stables** — human stable-keeper the saurians tolerate because the beasts trust him
+14. **The Mountain's Own** — the deep-time apex half-emerged from the volcanic dark, older than the court
+15. **Zeal Sentinel Construct** — geometric humming guardian at a sealed door, seeded-stratum glow
+16. **The Dreaming Archivist** — robed figure asleep upright, records writing themselves around it
+17. **The Pilgrim Who Found the Door** — ragged traveler holding a light that isn't fire, changed
+18. **Zeal Adept — Magus-Engineer** — human in layered work-robes, one hand casting, one hand wrenching a humming panel
+19. **Zeal Adept — Blade-Scholar** — human duelist mid-guard with a blade that is also an instrument
+20. **Zeal Adept Elder** — grey human elder, magic and technology braided in the staff they lean on, unruled

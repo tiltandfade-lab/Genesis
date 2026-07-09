@@ -518,3 +518,37 @@ children, not teens or adults.
 19. **Kid — wants: Make their parent laugh the old way, the way from before.**
 20. **Kid — wants: Warn someone — and not one adult will slow down long enough to hear it.**
 
+
+## Expansion batches — REALM-KEY-EXPANSION-ROSTER draft, 2026-07-09 (25 total, 1 sheet)
+
+Appended additions from `docs/REALM-KEY-EXPANSION-ROSTER.md` (Adam's rulings folded). Same
+style block and mechanical instructions as the monster sheets above. Gang crews are NOT
+repeated here (NPC sheets 4–6 already carry the 10 factions at 5 sprites each).
+
+### Expansion sheet E1 (5×5 grid, 25 cells)
+
+1. **Neon Salamander Brother — the Eldest** — mutant salamander in a wrapped training sash, neon skin-stripes, mid-kata, calm
+2. **Neon Salamander Brother — the Hothead** — brighter stripes, mid-flying-kick, mouth open mid-yell
+3. **Neon Salamander Brother — the Quiet One** — dimmest glow, half-turned, staff planted, watching
+4. **The Beaver in the Gi** — broad mutant beaver in a worn martial-arts gi, mid-stance, tail as the third leg
+5. **Loner Snapping-Turtle Mutant** — single gruff turtle mutant, hooded, shell scarred, arms crossed mid-refusal
+6. **The Splice Saint** — gaunt benevolent mutant hermit draped in patched robes, palm out in blessing
+7. **Rat-King Bruiser** — hulking mutant rat with smaller rats riding its shoulders like a court
+8. **Oozed Cockroach Hulk** — chitin-plated roach mutant, one arm regrowing, refuses to fall
+9. **Oozed Pigeon Flock** — a wheeling mass of wrong-eyed pigeons sharing one barrel's worth of mind
+10. **The Apex Sewer Thing** — vast pale shape half out of a storm drain, the thing even the crews won't name
+11. **ED-209-Class Enforcement Mech** — chicken-walker heavy mech, autocannon arms mid-deploy, warning strobe
+12. **The Mech's Handler** — corporate suit with a control gauntlet, shouting compliance phrases
+13. **Corp Cop Pair** — two chrome-visored corporate officers moving as one unit, batons drawn
+14. **Compliance Auditor** — immaculate clerk with a terminal briefcase, freezing an account mid-keystroke
+15. **Turnstile Ghost** — translucent commuter forever pushing through a turnstile that never gives
+16. **Third-Rail Elemental** — arcing electricity given a crawling body, welded to the track line
+17. **The Conductor** — tall uniformed figure with a lantern, punching a ticket that isn't for this line
+18. **Punk Kid — Pipe-Swinger** — teenage tough, no colors yet, length of pipe, more scared than mean
+19. **Punk Kid — Firecracker** — grinning kid mid-throw, pockets full of black-cat fireworks
+20. **Punk Kid — Shoplifter** — hoodie stuffed full, mid-sprint, looking back
+21. **Punk Kid — Wannabe Tagger** — spray can raised at a wall already claimed by a real crew
+22. **Punk Kid — Skate Rat** — mid-ollie off a curb, deck plastered in stolen stickers
+23. **Punk Kid — Mouthy Lookout** — leaning on nothing, two-finger whistle, selling everyone out for five bucks
+24. **Punk Kid — Dine-and-Dasher** — vaulting a diner counter with the till's worth of loose bills
+25. **Punk Kid — the Kid with the Dog** — scrawny kid, one loyal street mutt, both bristling

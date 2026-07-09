@@ -430,3 +430,27 @@ children, not teens or adults.
 19. **Kid — wants: Make their parent laugh the old way, the way from before.**
 20. **Kid — wants: Warn someone — and not one adult will slow down long enough to hear it.**
 
+
+## Expansion batches — REALM-KEY-EXPANSION-ROSTER draft, 2026-07-09 (15 total, 1 sheet)
+
+Appended additions from `docs/REALM-KEY-EXPANSION-ROSTER.md`: additions keyed to the locked
+realm identity — the tarot engine's home (the 23rd card), true-name work, the weighing of the
+heart, Enochian seals. Same style block and mechanical instructions as above.
+
+### Expansion sheet E1 (3×5 grid, 15 cells)
+
+1. **The Devourer at the Scale** — crocodile-jawed, lion-maned, hippo-haunched eater of unbalanced hearts, waiting beside the pans
+2. **The Scale-Keeper** — ibis-headed scribe, reed pen mid-stroke, weighing without malice
+3. **The Name-Eater** — a figure of negative space swallowing a written word, faces around it going blank
+4. **Enochian Watcher** — many-winged descending geometry, eyes along every edge, drawn down by a misdrawn seal
+5. **The Choir of the Untranslated Word** — three mouths in the air mid-syllable, sound rendered as cracking gold light
+6. **The 23rd Card, Walking** — a tarot card the size of a door, its figure stepping out of its own frame
+7. **Arcana-Walker: the Tower** — a striding brick-and-lightning figure, crown toppling mid-fall, permanently
+8. **Arcana-Walker: the Moon** — a pale lantern-faced deceiver, everything in its light rendered slightly wrong
+9. **Death's Understudy** — robed figure with the scythe held wrong-way-round, offering the reversed mercy
+10. **The Squared Circle** — an impossible-angle stone construct, guardian geometry that hurts to look at
+11. **Sphinx of the Seventh Gate** — gold-flecked riddling guardian, one paw on the answer, reclined mid-question
+12. **The Borrowed Tomb** — a walking sarcophagus ajar, collecting occupants, previous tenants' masks nailed on
+13. **Canopic Swarm** — four animate jars scuttling in formation, each holding out for what it's owed
+14. **The Reader Who Read Too Far** — a fallen oracle, cards orbiting them unwilled, eyes gone starfield
+15. **The Deck-Sharper** — grinning card-dealer at a folding table, dealing real arcana, stakes written in years

@@ -25,8 +25,9 @@ modeling deep-dive — ☑ MODEL-FOUNDRY locked, ☑ ANATOMY-CANON, ☑ cosmic p
    `fix/npc-coherence-queue`): §2 `regionForNode` supplies node `.center` (fray-by-node temperature
    live for the dial + hybridization + E-PRES) and §1 questgiver-not-archetype (functional-hints set +
    wrinkled floor). Re-gated 2026-07-08: coherence-fixes 19/0 · regions 32/0 · prep-bundle 56/0.
-2. ☐ **NPC lane — playtest + merge E-PRES** — `feat/npc-presence-hooks` is built + gated + pushed,
-   parked for a felt-gameplay playtest (ambient density, discovery rates). Merge `--no-ff` when happy.
+2. ☑ **NPC lane — E-PRES MERGED to master 2026-07-08** (Adam ruled: land without a playtest). Re-gated
+   on the live temperature signal (61/0; harness synced + de-flaked). ☐ Retune density/discovery
+   curves in the next live session.
 3. ☐ **Models lane — the batch modeling session** — `/genesis-orchestrate` over `docs/MODEL-FOUNDRY.md`;
    wave order gloom → high-seas → frontier → bright-kingdom → cosmic, then the original-roster revisit.
 4. ☐ Optional NPC craft: fold in `feat/craft-kin-tension` kin rows; rule the animal realm-skin Q.

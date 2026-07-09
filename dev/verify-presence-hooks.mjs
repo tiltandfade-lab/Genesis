@@ -130,12 +130,11 @@ console.log("\n--- 2. prepCastAmbientScene: counts + guaranteed hook ---");
 
 console.log("\n--- 2f. ambient count: scene-bucket base x temperature multiplier (distribution) ---");
 {
-  // NOTE: regionForNode's REAL return carries no `.center` (a pre-existing gap this file's header
-  // comments document — same one the already-merged coherence dial has), so fray-by-node-position is
-  // inert through the live prepCastAmbientScene path; the ONE live lever that actually reaches a
-  // hotter temperature band is the realm floor (opts.realm), which is exactly how a mayhem realm
-  // manifests in real play (w.realm.active), not node coordinates. This block controls temperature via
-  // opts.realm rather than node x/y for that reason.
+  // NOTE: regionForNode supplies the node's `.center` since NPC-COHERENCE-FIXES §2 (merge e28e928),
+  // so fray-by-node-position is LIVE through prepCastAmbientScene: the harness `home` node sits at
+  // x:0,y:0 (origin -> fray 0 -> "sleepy" -> x0.5), so the ordinary-band x1 read is only reachable
+  // here via the realm floor / a mid-fray node, not the default fixture. 2f asserts the sleepy origin
+  // read (3d6 x 0.5 ~= 5.25); 2g still proves the mayhem realm floor (opts.realm) lifts density.
   const win = newWin();
   const N = 200;
   let marketOrdinary = 0, marketMayhem = 0, shrineOrdinary = 0;
@@ -150,8 +149,9 @@ console.log("\n--- 2f. ambient count: scene-bucket base x temperature multiplier
     marketMayhem += r2.minted;
   }
   const avgOrdinary = marketOrdinary / N, avgMayhem = marketMayhem / N;
-  // 3d6 average is 10.5; x1 -> ~10.5, x1.6 (the "strained" floor) -> ~16.8 (rounded per-roll, generous tolerance).
-  check("2f. market/ordinary average lands near 3d6's mean (10.5, tolerance +-3)", Math.abs(avgOrdinary - 10.5) < 3, avgOrdinary);
+  // 3d6 average is 10.5; origin node reads "sleepy" x0.5 -> ~5.25 (live fray signal, coherence-fixes §2);
+  // the mayhem "strained" floor x1.6 -> ~16.8 (rounded per-roll, generous tolerance).
+  check("2f. market at an origin node lands near 3d6 x sleepy 0.5 (~5.25, tolerance +-2)", Math.abs(avgOrdinary - 5.25) < 2, avgOrdinary);
   check("2g. a mayhem-realm scene is demonstrably DENSER than an ordinary one", avgMayhem > avgOrdinary * 1.3, `${avgMayhem} vs ${avgOrdinary}`);
 
   for (let i = 0; i < N; i++) {
@@ -204,7 +204,7 @@ console.log("\n--- 3. hookDiscoveryRoll / codex_contact wiring ---");
   Object.keys(bands).forEach(band => {
     win.eval(`sceneTemperature = function(){ return "${band}"; };`);
     const w = mkWorld(win, {});
-    const N = 300;
+    const N = 1000;   // ±6% at N=300 was only ~2.2σ (flaked both directions in gate re-runs); 1000 puts it past 4σ
     let found = 0;
     for (let i = 0; i < N; i++) {
       const rec = win.codexAdd(w, { kind: "npc", name: band + "-" + i, provenance: "rolled",

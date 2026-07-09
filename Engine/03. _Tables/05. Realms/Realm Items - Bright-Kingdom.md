@@ -15,7 +15,7 @@ remembers: item
 > **PROVISIONAL — Adam skim pending.** The BRIGHT KINGDOM realm's item universe (docs/BREACH.md
 > §2d, BATCH3-GUARDRAILS.md J2 restructure). **Re-authored 2026-07-03 to ADAM-REVIEW-2 §3/§3b**
 > (doers-only — pointers extracted to `docs/REALM-PLOT-ITEMS-PARKED.md`; coherence laws: wired
-> physics only, cross-breach R1s, no undefined referents, Volatile = live-danger items). d50;
+> physics only, cross-breach R1s, no undefined referents, Volatile = live-danger items). d55;
 > breach draws inside a `bright-kingdom`-tagged walk roll THIS table; legacy Outlandish d300
 > stays the anachronism-intrusion grab-bag. Register per J3b: Toybox/anachronism/whimsical
 > wonder — power-ups you EAT, rules a child could recite, teeth underneath the candy.
@@ -26,9 +26,13 @@ remembers: item
 > verbatim among the signature wonders, and **"Lunch Pail of Holding" is the J3b-anchored second
 > ladder**. Rank ladders sit on enchanted + signature rows; reality-breaking rungs floor at L9.
 > **Band shares run hotter than H2's baseline by construction** (see Frontier's frontmatter).
-> d50, Commitment ceiling.
+> **Zelda-key doers 51–55** (Adam 2026-07-08) extend the die to d55 — a full-HP legendary blade
+> (beam mirrors the "while at FULL HP" conditional convention), a retrieving boomerang, spatial
+> bombs that blow open cracked walls, a reach-launcher, and a self-triggering bottled revive; all
+> DOERS, serial-numbers-filed, framed on existing `data/items.js` ids.
+> d55, Commitment ceiling.
 
-| d50 | Band | Item | Frame | Ranks | Note |
+| d55 | Band | Item | Frame | Ranks | Note |
 |---|---|---|---|---|---|
 | 1 | Grounded | A wrapped hard candy, bright red, flavor unclear from the wrapper alone. | robe | | Tastes like cherry. Nothing more. |
 | 2 | Grounded | A party favor whistle, paper unfurl-tongue attached. | signal whistle | | Makes a cheerful noise. No mechanical effect. The Kingdom's most honest item. |
@@ -80,4 +84,9 @@ remembers: item
 | 48 | Volatile | **Signature** — "The Overwound King" — a wind-up toy king, fist-sized, its key turning on its own, one notch per hour. | robe | R1(L1) released deliberately: it marches in a straight line for one minute, invulnerable, through walls, doors, and anything else — a 5-ft tunnel, a cleared obstacle, or cover you advance behind; then it rewinds itself over a day · R2(L9) at 24 unattended notches it releases anyway, direction random | Someone overwound it once. The Kingdom still has the hallway. |
 | 49 | Grounded | **Consumable** — A "Power Berry," bright purple, single bite. | robe | | One use: advantage on your next Strength check or save. Eat this, become that. |
 | 50 | Grounded | **Consumable** — A "Fizzy Pop," ice-cold can, unfamiliar brand. | robe | | One use: restores 2d4 HP; DC 8 Con save or a brief case of the hiccups. |
+| 51 | Mythic | **Signature** — "The Hero's Edge" — a plain, perfectly balanced longsword, the blade every other sword in the Kingdom is secretly modeled on. | longsword | R1(L1) attuned, a reliable +1 longsword that never dulls and never rusts · R2(L7) while you are at FULL HP, every melee swing hurls a blade of light — a ranged attack at the same damage, out to 30 ft; take a single point of damage and the beams stop until you're whole again · R3(L9) at full HP the beam also cleaves through one door, wall, or barrier it strikes, cleanly, once per day | The pedestal it was drawn from is still warm. It only sings for someone the Kingdom has decided is the hero — and the DM decides who that is. |
+| 52 | Strange | **Enchanted** — "The Homing Wing" — a curved wooden boomerang painted like a bird, grip worn smooth. | dart | R1(L1) thrown, it flies to any object or point you can see within 60 ft and returns to your hand next turn — snatching one loose, unattended item (a few pounds at most) and bringing it back, or striking for 1d4 bludgeoning on the way · R2(L6) on a hit it can instead yank a Small-or-lighter creature's held item (DC 12) or trip a distant switch, latch, or lever as it passes | It always comes back. Try to lose it on purpose sometime; it's a little unsettling. |
+| 53 | Textured | **Consumable** — A sack of BANG BLOSSOMS — round black bombs with cartoon fuses, each drawn with a little grinning face. | alchemist's fire | One use each (the sack holds 1d4+1): light it, a five-count fuse, then a 10-ft burst — 3d6 fire/bludgeoning, DC 13 Dex for half. Set against a cracked wall, a bricked-up arch, or a cave mouth that's been begging to open, it blows the passage wide with no roll. The grinning face is not reassuring up close. |
+| 54 | Strange | **Enchanted** — "The Long Reach" — a fist-sized spring-loaded launcher, clawed head, chain that spools out farther than the housing could possibly hold. | grappling hook | R1(L1) fired at a solid surface, ledge, or ring within 40 ft: it bites and reels — YOU to the anchor, or a loose object the size of a chest back to YOU, as one quick action · R2(L6) fired at a Medium-or-smaller creature: DC 13 Str or it's hauled 20 ft toward you, plus 1d4 piercing from the claw | The chain measures the same coiled or fully paid out. Nobody's found where the slack goes. |
+| 55 | Strange | **Consumable** — A glass bottle, cork sealed with wax, a single winged spark drowsing inside. | potion of healing | One use, and it triggers itself: the first time you'd drop to 0 HP while carrying it, the spark bursts free, heals you 2d4+2, and is gone — you feel it thank you as it goes. Uncork it by choice instead and the same healing lands on any one creature you pour it over. |
 ^realm-items-bright-kingdom

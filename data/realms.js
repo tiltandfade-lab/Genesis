@@ -104,7 +104,7 @@ const REALMS = {
   "bright-kingdom": {
     id: "bright-kingdom",
     label: "Bright Kingdom",
-    register: "Toybox/anachronism/whimsical wonder — power-ups you EAT, rules a child could recite, teeth underneath the candy.",
+    register: "A Nintendo world crossed with the best of 80s cartoon/video-game nostalgia — power-ups you EAT, Saturday-morning-cartoon cameos in the very air, rules a child could recite, teeth underneath the candy.",
     voice: ["a fanfare for a small victory", "a rule everyone already knows", "a prize that's watching you", "the too-bright color of a warning"],
     render: { sat: 1.25, tint: "#ffb0e0", tintAmt: 0.24, contrast: 0.92 },  // Adam 2026-07-05: candyland/mushroom-kingdom, NOT lava — cotton-candy pink tint, lifted contrast (bright+airy), the old #e83c64 red read as a fire level
   },

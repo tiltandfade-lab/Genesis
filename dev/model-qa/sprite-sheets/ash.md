@@ -220,18 +220,22 @@ Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-R
 
 ## Domestic animal batches (25 total, 1 sheet)
 
-Style block, ADJUSTED for animals (the shared realm style block's "one ember-glow accent per
-sprite" line does not apply here — on a test render it came out as a disconnected glowing orb
-bolted onto the animal like jewelry, applied to all 25 instead of a rare few, and it pulled
-rendering budget away from the coat/texture work, so several animals (rabbit, goose, pony) came
-out looking clean and un-scorched instead of matching the ragged ones): bleached-bone and
-rust-orange palette over ash-grey ground, heavy dither/grain for a scorched-air haze. **Every
-single animal, no exceptions, gets the same degree of wear**: matted/singed fur or feathers,
-ash-dust caked in the coat, visible rib or bone structure where the fur has thinned, cracked or
-scarred skin at the extremities (paws, muzzle, ears) — this is the ash-realm identity, carried
-by TEXTURE across all 25, not by a lighting gimmick on a few. Do not add glowing embers, glowing
-eyes, or any light-emitting accent to any animal in this batch — value contrast should come from
-the palette (pale bone tones against darker ash-grey ground) and coat texture alone.
+**Ash-realm lore note (adopted, not just a render fix):** a first test render put a glowing
+ember accent on every single animal, and some of them read great — like the creature itself
+carries a live coal under the skin or behind the eye, a mark of the world that already ended
+once. That's now a real, optional trait of Ash-realm fauna: **roughly 1 in 4–5 animals** carries
+a visible ember-glow (an eye, a crack in the hide, a spot on the chest) — not all 25, and never
+as a floating disconnected orb bolted on like jewelry; it must read as coming FROM the animal
+(glowing under thin skin, an ember-lit eye, light leaking from a scar) not sitting ON it. Adam
+is also generating a fully non-ember pass of this same sheet to compare side by side — this
+prompt is the "some carry the ember" version.
+
+Style block, adjusted for animals: bleached-bone and rust-orange palette over ash-grey ground,
+heavy dither/grain for a scorched-air haze. **Every animal, ember or not, gets the same degree
+of wear**: matted/singed fur or feathers, ash-dust caked in the coat, visible rib or bone
+structure where the fur has thinned, cracked or scarred skin at the extremities (paws, muzzle,
+ears) — the ash-realm identity is carried by TEXTURE across all 25 first, with the ember as a
+rare bonus detail on a few, never the main event and never uniform across the sheet.
 
 Shared mechanical instructions (restated for this section): 5x5 grid, uniform cell size, solid
 magenta (#FF00FF) background (no transparency, no other background elements), consistent scale,

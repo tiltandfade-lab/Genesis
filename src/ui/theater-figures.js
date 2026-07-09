@@ -181,6 +181,18 @@ const WHOLE_OBJECT_REGISTRY = {
   "brain-crawler":       { module: "../../dev/model-qa/creatures/rlm-cosmic-brain-crawler.js",      fn: "buildBrainCrawler",     discR: 0.32 },
   "undead-eye-tyrant":   { module: "../../dev/model-qa/creatures/rlm-cosmic-undead-eye-tyrant.js",  fn: "buildUndeadEyeTyrant",  discR: 0.68 },
   "astral-raider-knight":{ module: "../../dev/model-qa/creatures/rlm-cosmic-astral-raider-knight.js", fn: "buildAstralRaiderKnight", discR: 0.42 },
+  "oni":                 { module: "../../dev/model-qa/creatures/rlm-suburb-oni.js",             fn: "buildOni",             discR: 0.62 },
+  "shield-guardian":     { module: "../../dev/model-qa/creatures/rlm-suburb-shield-guardian.js", fn: "buildShieldGuardian",  discR: 0.62 },
+  "troglodyte":          { module: "../../dev/model-qa/creatures/rlm-suburb-troglodyte.js",      fn: "buildTroglodyte",      discR: 0.42 },
+  "jackalwere":          { module: "../../dev/model-qa/creatures/rlm-suburb-jackalwere.js",      fn: "buildJackalwere",      discR: 0.42 },
+  "bulette-pup":         { module: "../../dev/model-qa/creatures/rlm-suburb-bulette-pup.js",     fn: "buildBulettePup",      discR: 0.42 },
+  "vrock":               { module: "../../dev/model-qa/creatures/rlm-suburb-vrock.js",           fn: "buildVrock",           discR: 0.62 },
+  "chasme":              { module: "../../dev/model-qa/creatures/rlm-suburb-chasme.js",          fn: "buildChasme",          discR: 0.55 },
+  "marilith":            { module: "../../dev/model-qa/creatures/rlm-suburb-marilith.js",        fn: "buildMarilith",        discR: 0.62 },
+  "animated-rug-of-smothering": { module: "../../dev/model-qa/creatures/rlm-suburb-smothering-rug.js", fn: "buildSmotheringRug", discR: 0.42 },
+  "gulthias-blight":     { module: "../../dev/model-qa/creatures/rlm-suburb-gulthias-blight.js", fn: "buildGulthiasBlight",  discR: 0.80 },
+  "lich":                { module: "../../dev/model-qa/creatures/rlm-suburb-lich.js",            fn: "buildLich",            discR: 0.42 },
+  "death-knight":        { module: "../../dev/model-qa/creatures/rlm-suburb-death-knight.js",    fn: "buildDeathKnight",     discR: 0.62 },
   "scarecrow":           { module: "../../dev/model-qa/creatures/rlm-gloom-scarecrow.js",   fn: "buildScarecrow", discR: 0.42 },
   "fire-elemental":      { module: "../../dev/model-qa/creatures/mon-fireelem.js", fn: "buildFireElemental", discR: 0.55 },
   "earth-elemental":     { module: "../../dev/model-qa/creatures/mon-earthelem.js", fn: "buildEarthElemental", discR: 0.55 },
@@ -699,7 +711,7 @@ const NEAREST_SUB = {
   "young-silver-dragon": "young-red-dragon", "young-white-dragon": "young-red-dragon",
   "black-dragon-wyrmling": "young-red-dragon", "adult-black-dragon": "young-red-dragon", "ancient-black-dragon": "young-red-dragon",
   // mimic/construct family
-  "greater-mimic": "mimic", "shield-guardian": "animated-armor",
+  "greater-mimic": "mimic",
   // incorporeal family -> wraith / shadow
   "swamp-shadow": "shadow",   // greater-shadow -> specter (foundry-pilot block below)
   // elemental family
@@ -728,7 +740,7 @@ const NEAREST_SUB = {
   "secret-eye": "undead-eye-tyrant",
   "lizard": "giant-lizard",
   "crab": "giant-crab", "seahorse": "giant-rat",
-  "animated-rug-of-smothering": "gray-ooze",
+  
   "water-weird": "giant-constrictor-snake", "clawed-drowner": "ghoul",
   "hell-hound": "wolf", "larva": "zombie",
   "warrior-infantry": "guard", "vampire-familiar": "noble",
@@ -777,11 +789,11 @@ const NEAREST_SUB = {
   "satyr": "satyr-revelmaster",
   
   // -> giant-lizard (18)
-  "allosaurus": "giant-lizard", "ankylosaurus": "giant-lizard", "bulette-pup": "giant-lizard",
+  "allosaurus": "giant-lizard", "ankylosaurus": "giant-lizard",
   "deep-brute": "giant-lizard", "deep-brute-thonot": "giant-lizard",
   "lizardfolk-geomancer": "giant-lizard", "lizardfolk-sovereign": "giant-lizard",
   "plesiosaurus": "giant-lizard", "thri-kreen-marauder": "giant-lizard",
-  "thri-kreen-psion": "giant-lizard", "troglodyte": "giant-lizard", "tyrannosaurus-rex": "giant-lizard",
+  "thri-kreen-psion": "giant-lizard", "tyrannosaurus-rex": "giant-lizard",
   "yuan-ti-malison-type-1": "giant-lizard", "yuan-ti-malison-type-2": "giant-lizard", "yuan-ti-malison-type-3": "giant-lizard",
   // -> earth-elemental (16)
   "azer-pyromancer": "earth-elemental", "azer-sentinel": "earth-elemental",
@@ -796,16 +808,16 @@ const NEAREST_SUB = {
   "performer-legend": "performer", "performer-maestro": "performer",
   "questing-knight": "warrior-veteran", "spy": "warrior-veteran", "spy-master": "warrior-veteran", "tough-boss": "tough",
   // -> needle-blight (14)
-  "awakened-tree": "needle-blight", "gas-spore-fungus": "needle-blight", "gulthias-blight": "needle-blight",
+  "awakened-tree": "needle-blight", "gas-spore-fungus": "needle-blight",
   "myconid-adult": "needle-blight", "myconid-sovereign": "needle-blight", "myconid-sprout": "needle-blight",
   "shambling-mound": "needle-blight", "shrieker-fungus": "needle-blight", "treant": "needle-blight",
   "tree-blight": "needle-blight", "vine-blight": "needle-blight",
   "violet-fungus-necrohulk": "violet-fungus",
   // -> ogre (14)
-  "balor": "ogre", "chasme": "ogre",
+  "balor": "ogre",
   "glabrezu": "ogre", "hezrou": "ogre", "horned-devil": "ogre",
-  "ice-devil": "ogre", "lamia": "ogre", "marilith": "ogre",
-  "nalfeshnee": "ogre", "nycaloth": "ogre", "oni": "ogre",
+  "ice-devil": "bone-devil", "lamia": "ogre",
+  "nalfeshnee": "ogre", "nycaloth": "vrock",
   "pit-fiend": "ogre",
   // -> ice-mephit (14)
   "dretch": "imp", "dust-mephit": "smoke-mephit",
@@ -822,11 +834,11 @@ const NEAREST_SUB = {
   "crocodile": "giant-crocodile", "giant-eagle": "wyvern",
   "giant-owl": "wyvern", "griffon": "wyvern",
   "hippogriff": "wyvern", "pteranodon": "wyvern",
-  "roc": "wyvern", "vrock": "wyvern",
+  "roc": "wyvern",
   // -> wolf (10)
   "ape": "wolf", "giant-badger": "wolf",
   "giant-frog": "wolf", "giant-wasp": "wolf",
-  "goat": "wolf", "jackalwere": "wolf", "panther": "wolf",
+  "goat": "wolf", "panther": "wolf",
   
   // -> hill-giant (9)
   "cloud-giant": "hill-giant", "cyclops-oracle": "hill-giant", "cyclops-sentry": "hill-giant",
@@ -837,11 +849,11 @@ const NEAREST_SUB = {
   "giant-boar": "warhorse", "giant-elk": "warhorse", "pegasus": "warhorse",
   "wereboar": "warhorse",
   // -> wight (7)
-  "death-knight": "wight", "death-knight-aspirant": "wight",
+  "death-knight-aspirant": "death-knight",
   "haunting-revenant": "wight", "mummy-lord": "mummy",
   
   // -> skeleton (7)
-  "demilich": "skeleton", "lich": "skeleton", "vampire": "vampire-spawn",
+  "demilich": "lich", "vampire": "vampire-spawn",
   "vampire-nightbringer": "vampire-spawn", "vampire-umbral-lord": "vampire-spawn",
   // -> specter (the 2026-07-08 foundry-pilot bespoke: mid-lunge incorporeal reacher)
   "banshee": "specter", "ghost": "specter", "poltergeist": "specter",

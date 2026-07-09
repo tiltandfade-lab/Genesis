@@ -259,5 +259,77 @@ console.log("\n=== NEGATIVE-SPACE (explicit, not an omission): recruit_creature 
     out2 && out2.ok === false && out2.reason === "not-a-creature", JSON.stringify(out2));
 }
 
+console.log("\n=== HQ-2: the territory-holder can promote (docs/ANIMAL-SOCIAL-HQ.md HQ-2) ===");
+{
+  function findWildernessRecord(win, predicate, tries){
+    let found = null, worldId = null;
+    for(let i=0;i<(tries||200) && !found;i++){
+      const wid = "w-hq2-"+i;
+      const w2 = mkWorld(win, { id: wid, nodes: { wild1: { id:"wild1", name:"Deep Wood", type:"Setting", x:9, y:9 } } });
+      w2.prep.nodes.wild1 = { env:"wilderness" };
+      const out = win.eval(`prepCastEnvAnimals(U.worlds['${wid}'], 'wild1')`);
+      const ids = out.ids || [];
+      for(const id of ids){
+        const r = win.eval(`codexGet(U.worlds['${wid}'], '${id}')`);
+        if(r && predicate(r)){ found = r; worldId = wid; break; }
+      }
+    }
+    return { rec: found, worldId };
+  }
+
+  // 1. RED-FIRST: a territory-holder, named via codex_update, must promote exactly like an ambient.
+  {
+    const win = newWin();
+    const { rec: holder, worldId } = findWildernessRecord(win, r => r.dm && r.dm.territoryHolder && !r.dm.landmark);
+    check("(sanity) found a non-landmark territory holder in wilderness draws", !!holder,
+      "no holder found in 200 attempts");
+    if(holder){
+      check("(sanity) holder mints ambient:false, status.soft:true, no promoted/homeNodeId (the defect's shape)",
+        holder.dm.ambient===false && holder.status.soft===true && !holder.dm.promoted && !holder.dm.homeNodeId,
+        JSON.stringify({dm:holder.dm, status:holder.status}));
+      win.eval(`applyEvent(U.worlds['${worldId}'], { type:"codex_update", payload:{ id:'${holder.id}', name:"Old Bramblehorn" } });`);
+      const rec = win.eval(`codexGet(U.worlds['${worldId}'], '${holder.id}')`);
+      check("ACCEPT: naming the territory-holder promotes it (dm.promoted true, status.soft false, homeNodeId stamped)",
+        rec.dm.promoted===true && rec.status.soft===false && !!rec.dm.homeNodeId, JSON.stringify(rec.dm));
+      const ledgerHit = win.eval(`(U.worlds['${worldId}'].ledger||[]).some(function(e){return e.data && e.data.kind==="animal-promoted" && e.data.id==='${holder.id}';})`);
+      check("ACCEPT: the ◆ animal-promoted ledger beat fires for the holder same as an ambient",
+        ledgerHit === true);
+    }
+  }
+
+  // 2. Landmark record: promotion does NOT re-fire (no duplicate ledger beat) — already-promoted guard.
+  {
+    const win = newWin();
+    const { rec: landmark, worldId } = findWildernessRecord(win, r => r.dm && r.dm.landmark);
+    check("(sanity) found a landmark record in wilderness draws", !!landmark, "no landmark found in 200 attempts");
+    if(landmark){
+      check("(sanity) landmark mints already dm.promoted:true, dm.ambient:false",
+        landmark.dm.promoted===true && landmark.dm.ambient===false, JSON.stringify(landmark.dm));
+      const before = win.eval(`(U.worlds['${worldId}'].ledger||[]).filter(function(e){return e.data && e.data.kind==="animal-promoted" && e.data.id==='${landmark.id}';}).length`);
+      // codex_contact is a real, always-legal event on the landmark (unlike a rename, which the
+      // name-freeze guard may refuse once known) — drive the promotion re-check through it.
+      win.eval(`applyEvent(U.worlds['${worldId}'], { type:"codex_contact", payload:{ id:'${landmark.id}' } });`);
+      const after = win.eval(`(U.worlds['${worldId}'].ledger||[]).filter(function(e){return e.data && e.data.kind==="animal-promoted" && e.data.id==='${landmark.id}';}).length`);
+      check("ACCEPT: an already-promoted landmark does not re-fire the promotion ledger beat",
+        before === 0 && after === 0, "before="+before+" after="+after);
+      const rec = win.eval(`codexGet(U.worlds['${worldId}'], '${landmark.id}')`);
+      check("landmark stays promoted/known-canon after the no-op re-check", rec.dm.promoted===true);
+    }
+  }
+
+  // 3. Plain ambient animal promotion is unaffected (existing u5 §1-3 checks above stay green;
+  // this is a targeted re-check with the SAME guard change in play).
+  {
+    const win = newWin();
+    const w = mkWorld(win);
+    const id = mintAnimal(win, w, { id:"plain-ambient-hq2" });
+    win.eval(`applyEvent(U.worlds['${w.id}'], { type:"codex_contact", payload:{ id:'${id}' } });`);
+    win.eval(`applyEvent(U.worlds['${w.id}'], { type:"codex_contact", payload:{ id:'${id}' } });`);
+    const rec = win.eval(`codexGet(U.worlds['${w.id}'], '${id}')`);
+    check("REGRESSION: a plain ambient animal still promotes on the second engaged contact",
+      rec.dm.promoted===true && rec.dm.ambient===false && rec.status.soft===false, JSON.stringify(rec.dm));
+  }
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

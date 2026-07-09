@@ -34,6 +34,21 @@ import { resetGeom, getBuffers } from './probe-lib.js';
 /* ---- SET-DRIVEN ROSTERS (?set=races etc.). Dynamic imports; a missing/broken creature file is
    skipped (the sheet renders partially mid-wave instead of dying on one bad import). ---- */
 const SETS = {
+  'cosmic-w1': [
+    {name:'GIBBERING MOUTHER', sub:'cosmic w1', file:'rlm-cosmic-gibbering-mouther.js', fn:'buildGibberingMouther'},
+    {name:'PHASE SPIDER',   sub:'cosmic w1', file:'rlm-cosmic-phase-spider.js',    fn:'buildPhaseSpider'},
+    {name:'BLACK PUDDING',  sub:'cosmic w1', file:'rlm-cosmic-black-pudding.js',   fn:'buildBlackPudding'},
+    {name:'DARKMANTLE',     sub:'cosmic w1', file:'rlm-cosmic-darkmantle.js',      fn:'buildDarkmantle'},
+    {name:'PIERCER',        sub:'cosmic w1', file:'rlm-cosmic-piercer.js',         fn:'buildPiercer'},
+    {name:'STIRGE',         sub:'cosmic w1', file:'rlm-cosmic-stirge.js',          fn:'buildStirge'},
+    {name:'VIOLET FUNGUS',  sub:'cosmic w1', file:'rlm-cosmic-violet-fungus.js',   fn:'buildVioletFungus'},
+    {name:'OCHRE JELLY',    sub:'cosmic w1', file:'rlm-cosmic-ochre-jelly.js',     fn:'buildOchreJelly'},
+    {name:'ETTERCAP',       sub:'cosmic w1', file:'rlm-cosmic-ettercap.js',        fn:'buildEttercap'},
+    {name:'BRAIN CRAWLER',  sub:'cosmic w1', file:'rlm-cosmic-brain-crawler.js',   fn:'buildBrainCrawler'},
+    {name:'EYE TYRANT',     sub:'cosmic w1', file:'rlm-cosmic-undead-eye-tyrant.js', fn:'buildUndeadEyeTyrant'},
+    {name:'ASTRAL KNIGHT',  sub:'cosmic w1', file:'rlm-cosmic-astral-raider-knight.js', fn:'buildAstralRaiderKnight'},
+  ],
+
   'bright-w1': [
     {name:'COCKATRICE',    sub:'bright w1', file:'rlm-bright-cockatrice.js',     fn:'buildCockatrice'},
     {name:'GELATINOUS CUBE',sub:'bright w1', file:'rlm-bright-gelatinous-cube.js', fn:'buildGelatinousCube'},

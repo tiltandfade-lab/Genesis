@@ -193,6 +193,18 @@ const WHOLE_OBJECT_REGISTRY = {
   "gulthias-blight":     { module: "../../dev/model-qa/creatures/rlm-suburb-gulthias-blight.js", fn: "buildGulthiasBlight",  discR: 0.80 },
   "lich":                { module: "../../dev/model-qa/creatures/rlm-suburb-lich.js",            fn: "buildLich",            discR: 0.42 },
   "death-knight":        { module: "../../dev/model-qa/creatures/rlm-suburb-death-knight.js",    fn: "buildDeathKnight",     discR: 0.62 },
+  "mage":                { module: "../../dev/model-qa/creatures/rlm-shared-mage.js",              fn: "buildMage2",           discR: 0.42 },
+  "helmed-horror":       { module: "../../dev/model-qa/creatures/rlm-shared-helmed-horror.js",     fn: "buildHelmedHorror",    discR: 0.42 },
+  "mastiff":             { module: "../../dev/model-qa/creatures/rlm-shared-mastiff.js",           fn: "buildMastiff",         discR: 0.42 },
+  "rat":                 { module: "../../dev/model-qa/creatures/rlm-shared-rat.js",               fn: "buildRat",             discR: 0.24 },
+  "wereboar":            { module: "../../dev/model-qa/creatures/rlm-shared-wereboar.js",          fn: "buildWereboar",        discR: 0.42 },
+  "weretiger":           { module: "../../dev/model-qa/creatures/rlm-shared-weretiger.js",         fn: "buildWeretiger",       discR: 0.42 },
+  "spy":                 { module: "../../dev/model-qa/creatures/rlm-shared-spy.js",               fn: "buildSpy",             discR: 0.42 },
+  "guard-captain":       { module: "../../dev/model-qa/creatures/rlm-shared-guard-captain.js",     fn: "buildGuardCaptain",    discR: 0.42 },
+  "wight-lord":          { module: "../../dev/model-qa/creatures/rlm-shared-wight-lord.js",        fn: "buildWightLord",       discR: 0.42 },
+  "haunting-revenant":   { module: "../../dev/model-qa/creatures/rlm-shared-haunting-revenant.js", fn: "buildHauntingRevenant", discR: 0.55, opacity: 0.85 },
+  "bandit-crime-lord":   { module: "../../dev/model-qa/creatures/rlm-shared-bandit-crime-lord.js", fn: "buildBanditCrimeLord", discR: 0.42 },
+  "swarm-of-larvae":     { module: "../../dev/model-qa/creatures/rlm-shared-swarm-of-larvae.js",   fn: "buildSwarmOfLarvae",   discR: 0.55 },
   "scarecrow":           { module: "../../dev/model-qa/creatures/rlm-gloom-scarecrow.js",   fn: "buildScarecrow", discR: 0.42 },
   "fire-elemental":      { module: "../../dev/model-qa/creatures/mon-fireelem.js", fn: "buildFireElemental", discR: 0.55 },
   "earth-elemental":     { module: "../../dev/model-qa/creatures/mon-earthelem.js", fn: "buildEarthElemental", discR: 0.55 },
@@ -664,10 +676,10 @@ const WHOLE_OBJECT_REGISTRY = {
    fallback, never a broken lookup (figureFor's existing chain). */
 const NEAREST_SUB = {
   // canine/wolf-silhouette family -> wolf
-  "winter-wolf": "wolf", "hyena": "wolf", "blink-dog": "wolf",
+  "winter-wolf": "dire-wolf", "hyena": "wolf", "blink-dog": "wolf",
   // small vermin -> giant rat (swarm-of-rats REMOVED 2026-07-04: it now has a BESPOKE swarm module —
   // subbing it to giant-rat made it read as one big rat, Adam's QA complaint)
-  "giant-fire-beetle": "giant-rat", "weasel": "giant-rat",
+  "giant-fire-beetle": "giant-centipede", "weasel": "giant-rat",
   // goblinoid family -> goblin-warrior (small greenskin)
   "goblin-minion": "goblin-warrior", "goblin-cutter-minion": "goblin-warrior",
   "goblin-boss": "goblin-warrior", "goblin-hexer": "goblin-warrior",
@@ -676,8 +688,8 @@ const NEAREST_SUB = {
   // undead-shambler family -> skeleton / zombie. (flaming-skeleton + warhorse-skeleton PROMOTED to
   // direct bespoke registry entries 2026-07-04: flaming-skeleton = the ember variant; warhorse-skeleton
   // = a skeletal HORSE, NOT the humanoid skeleton — Adam's QA correction of the old alias.)
-  "minotaur-skeleton": "skeleton",
-  "zombie-plague-carrier": "zombie", "ogre-zombie": "zombie", "eye-tyrant-zombie": "zombie",
+  "minotaur-skeleton": "rlm-toppled-minotaur-skeleton-guard",
+  "zombie-plague-carrier": "zombie", "ogre-zombie": "zombie", "eye-tyrant-zombie": "undead-eye-tyrant",
   // horse family -> warhorse (the flesh horse). draft/riding horses share its silhouette
   "riding-horse": "warhorse", "draft-horse": "warhorse", "giant-seahorse": "warhorse",
   // flyer family -> giant bat
@@ -701,7 +713,6 @@ const NEAREST_SUB = {
   // owlbear/minotaur
   "primeval-owlbear": "owlbear", "owlbear-cub": "owlbear",
   // undead-commander family -> wight
-  "wight-lord": "wight",
   // shapeshifter -> werewolf
   // (no additional werewolf variants in the current bestiary corpus)
   // dragon wave -> young red dragon stands in for every young/adult chromatic silhouette family
@@ -726,16 +737,16 @@ const NEAREST_SUB = {
   "death-cultist": "cultist-fanatic", "aberrant-cultist": "cultist-fanatic", "elemental-cultist": "cultist-fanatic",
   "fiend-cultist": "cultist-fanatic",
   "bandit-courier": "bandit", "bandit-deceiver": "bandit",
-  "bandit-crime-lord": "bandit", // spider variants -> giant wolf spider
+  // spider variants -> giant wolf spider
   // (giant-wolf-spider maps 1:1 above)
   // veteran/guard command chain
-  "guard-captain": "guard", "berserker-commander": "berserker",
+  "berserker-commander": "berserker",
   // ── BESTIARY-COVERAGE alias batch (2026-07-04, docs/BESTIARY-COVERAGE.md §6): 35 CR≤10
   //    creatures judged not worth even a variant — nearest-body aliases, zero modeling. Targets
   //    verified to exist as bespoke bodies at land time. (3 more — will-o-wisp→ghost, piranha→
   //    hunter-shark, lantern-sage→sprite — wait on unbuilt bodies from the wave plan.)
   "flameskull": "skeleton", "drowned-husk": "zombie",
-  "mastiff": "wolf", "giant-hyena": "worg", "mule": "warhorse", "pony": "warhorse",
+  "giant-hyena": "worg", "mule": "warhorse", "pony": "warhorse",
   "bog-twisted-giant-rat": "giant-rat", "mire-creeper": "giant-bat",
   "secret-eye": "undead-eye-tyrant",
   "lizard": "giant-lizard",
@@ -744,8 +755,7 @@ const NEAREST_SUB = {
   "water-weird": "giant-constrictor-snake", "clawed-drowner": "ghoul",
   "hell-hound": "wolf", "larva": "zombie",
   "warrior-infantry": "guard", "vampire-familiar": "noble",
-  "guilt-stained-vagrant": "commoner", "helmed-horror": "animated-armor",
-  "sphinx-of-wonder": "young-red-dragon", "awakened-shrub": "needle-blight",
+  "guilt-stained-vagrant": "commoner", "sphinx-of-wonder": "sphinx-of-lore", "awakened-shrub": "needle-blight",
   // ═══ COVERAGE EXPANSION 2026-07-04 (dev/model-qa/creature-coverage-audit.mjs): silhouette-
   //     family aliases lifting live-combat model coverage 32% -> 87% with ZERO new geometry.
   //     Each is a heuristic silhouette guess (type+size+name), gated at taste review — a wrong
@@ -764,28 +774,27 @@ const NEAREST_SUB = {
   "pseudodragon": "young-red-dragon", "red-dragon-wyrmling": "young-red-dragon", "silver-dragon-wyrmling": "young-red-dragon",
   "white-dragon-wyrmling": "young-red-dragon",
   // -> owlbear (23)
-  "archelon": "owlbear", "bearded-devil": "owlbear", "black-bear": "owlbear",
-  "brown-bear": "owlbear", "camel": "owlbear", "elephant": "owlbear",
-  "giant-ape": "owlbear", "giant-goat": "owlbear",
-  "giant-scorpion": "owlbear", "giant-shark": "owlbear", "giant-squid": "owlbear",
-  "giant-toad": "owlbear", "hunter-shark": "owlbear",
-  "killer-whale": "owlbear", "lion": "owlbear", "mammoth": "owlbear",
+  "archelon": "dragon-turtle", "bearded-devil": "barbed-devil", "black-bear": "owlbear",
+  "brown-bear": "owlbear", "camel": "warhorse", "elephant": "rhinoceros",
+  "giant-ape": "owlbear", "giant-goat": "warhorse",
+  "giant-scorpion": "giant-crab", "giant-shark": "reef-shark", "giant-squid": "giant-octopus",
+  "giant-toad": "fallout-toad", "hunter-shark": "reef-shark",
+  "killer-whale": "reef-shark", "lion": "owlbear", "mammoth": "rhinoceros",
   "polar-bear": "owlbear", "saber-toothed-tiger": "owlbear",
-  "tiger": "owlbear", "werebear": "owlbear",
+  "tiger": "owlbear", "werebear": "rlm-brine-cursed-werebear-bosun",
   // -> giant-rat (20)
   "baboon": "giant-rat", "badger": "giant-rat", "frog": "giant-rat",
-  "giant-weasel": "giant-rat", "octopus": "giant-rat",
-  "piranha": "giant-rat", "pirate-admiral": "pirate-captain",
-  "rat": "giant-rat", "scorpion": "giant-rat",
-  "swarm-of-crawling-claws": "giant-rat", "swarm-of-dretches": "giant-rat", "swarm-of-larvae": "giant-rat",
-  "swarm-of-lemures": "giant-rat", "triceratops": "giant-rat",
-  "yuan-ti-infiltrator": "giant-rat",
+  "giant-weasel": "giant-rat", "octopus": "giant-octopus",
+  "piranha": "reef-shark", "pirate-admiral": "pirate-captain",
+  "scorpion": "giant-crab",
+  "swarm-of-crawling-claws": "crawling-claw", "swarm-of-dretches": "giant-rat", "swarm-of-lemures": "giant-rat", "triceratops": "rhinoceros",
+  "yuan-ti-infiltrator": "giant-lizard",
   // -> cultist (19)
-  "arch-hag": "cultist", "archdruid": "cultist", "archmage": "cultist",
+  "arch-hag": "green-hag", "archdruid": "cultist", "archmage": "cultist",
   "archpriest": "cultist", "bullywug-bog-sage-mud-lord": "cultist", "centaur-trooper": "cultist",
   "centaur-warden": "cultist", "cultist-roster-base-2024-stat-blocks": "cultist", "druid-circle-warden": "cultist",
-  "dryad": "cultist", "fish-folk-archpriest": "cultist",
-  "mage": "cultist", "priest": "cultist", "priest-acolyte": "cultist",
+  "dryad": "cultist", "fish-folk-archpriest": "fish-folk",
+  "priest": "cultist", "priest-acolyte": "cultist",
   "satyr": "satyr-revelmaster",
   
   // -> giant-lizard (18)
@@ -797,16 +806,16 @@ const NEAREST_SUB = {
   "yuan-ti-malison-type-1": "giant-lizard", "yuan-ti-malison-type-2": "giant-lizard", "yuan-ti-malison-type-3": "giant-lizard",
   // -> earth-elemental (16)
   "azer-pyromancer": "earth-elemental", "azer-sentinel": "earth-elemental",
-  "dao": "earth-elemental", "efreeti": "fire-elemental",
+  "dao": "earth-elemental", "efreeti": "djinni",
   "elemental-cataclysm": "earth-elemental", "galeb-duhr": "earth-elemental", "magmin": "earth-elemental",
-  "merfolk-skirmisher": "sahuagin-warrior", "merfolk-wavebender": "water-elemental",
-  "salamander-inferno-master": "earth-elemental",
+  "merfolk-skirmisher": "sahuagin-warrior", "merfolk-wavebender": "sahuagin-warrior",
+  "salamander-inferno-master": "salamander",
   
   // -> warrior-veteran (15)
   "astral-raider-warrior": "astral-raider-knight",
   "bullywug-warrior": "warrior-veteran",
   "performer-legend": "performer", "performer-maestro": "performer",
-  "questing-knight": "warrior-veteran", "spy": "warrior-veteran", "spy-master": "warrior-veteran", "tough-boss": "tough",
+  "questing-knight": "knight", "spy-master": "assassin", "tough-boss": "tough",
   // -> needle-blight (14)
   "awakened-tree": "needle-blight", "gas-spore-fungus": "needle-blight",
   "myconid-adult": "needle-blight", "myconid-sovereign": "needle-blight", "myconid-sprout": "needle-blight",
@@ -815,29 +824,29 @@ const NEAREST_SUB = {
   "violet-fungus-necrohulk": "violet-fungus",
   // -> ogre (14)
   "balor": "ogre",
-  "glabrezu": "ogre", "hezrou": "ogre", "horned-devil": "ogre",
-  "ice-devil": "bone-devil", "lamia": "ogre",
+  "glabrezu": "ogre", "hezrou": "ogre", "horned-devil": "bone-devil",
+  "ice-devil": "bone-devil", "lamia": "rlm-serpent-sworn-lamia-of-the-oasis-court",
   "nalfeshnee": "ogre", "nycaloth": "vrock",
   "pit-fiend": "ogre",
   // -> ice-mephit (14)
   "dretch": "imp", "dust-mephit": "smoke-mephit",
-  "lantern-sage": "ice-mephit", "magma-mephit": "smoke-mephit",
+  "lantern-sage": "sprite", "magma-mephit": "smoke-mephit",
   "manes": "imp", "pixie-wonderbringer": "pixie",
   "quasit": "imp", "spined-devil": "imp",
   "steam-mephit": "ice-mephit",
   // -> harpy (12)
-  "aarakocra-aeromancer": "harpy", "aarakocra-skirmisher": "harpy", "blood-hawk": "harpy",
-  "cockatrice-regent": "cockatrice", "eagle": "harpy",
-  "hawk": "harpy", "owl": "harpy",
-  "swarm-of-ravens": "harpy",
+  "aarakocra-aeromancer": "harpy", "aarakocra-skirmisher": "harpy", "blood-hawk": "vulture",
+  "cockatrice-regent": "cockatrice", "eagle": "giant-vulture",
+  "hawk": "vulture", "owl": "vulture",
+  "swarm-of-ravens": "raven",
   // -> wyvern (11)
-  "crocodile": "giant-crocodile", "giant-eagle": "wyvern",
-  "giant-owl": "wyvern", "griffon": "wyvern",
+  "crocodile": "giant-crocodile", "giant-eagle": "giant-vulture",
+  "giant-owl": "giant-vulture", "griffon": "wyvern",
   "hippogriff": "wyvern", "pteranodon": "wyvern",
-  "roc": "wyvern",
+  "roc": "blightborn-roc",
   // -> wolf (10)
-  "ape": "wolf", "giant-badger": "wolf",
-  "giant-frog": "wolf", "giant-wasp": "wolf",
+  "ape": "owlbear", "giant-badger": "wolf",
+  "giant-frog": "fallout-toad", "giant-wasp": "stirge",
   "goat": "wolf", "panther": "wolf",
   
   // -> hill-giant (9)
@@ -847,10 +856,9 @@ const NEAREST_SUB = {
   // -> warhorse (7)
   "boar": "warhorse", "deer": "warhorse", "elk": "warhorse",
   "giant-boar": "warhorse", "giant-elk": "warhorse", "pegasus": "warhorse",
-  "wereboar": "warhorse",
   // -> wight (7)
   "death-knight-aspirant": "death-knight",
-  "haunting-revenant": "wight", "mummy-lord": "mummy",
+  "mummy-lord": "mummy",
   
   // -> skeleton (7)
   "demilich": "lich", "vampire": "vampire-spawn",
@@ -859,30 +867,27 @@ const NEAREST_SUB = {
   "banshee": "specter", "ghost": "specter", "poltergeist": "specter",
   "greater-shadow": "specter",
   // -> shadow (still the flat mirror-double read)
-  "juvenile-shadow-dragon": "shadow", "shadow-dragon": "shadow",
+  "juvenile-shadow-dragon": "young-red-dragon", "shadow-dragon": "young-red-dragon",
   // -> giant-constrictor-snake (6)
-  "bone-naga": "giant-constrictor-snake", "couatl": "giant-constrictor-snake", "guardian-naga": "giant-constrictor-snake",
-  "salamander-fire-snake": "giant-constrictor-snake", "swarm-of-venomous-snakes": "venomous-snake",
+  "bone-naga": "spirit-naga", "couatl": "giant-constrictor-snake", "guardian-naga": "spirit-naga",
+  "salamander-fire-snake": "salamander", "swarm-of-venomous-snakes": "venomous-snake",
   // -> stone-golem (6)
   "brazen-gorgon": "gorgon", "colossus": "stone-golem",
   
   // -> giant-bat (4)
   "bat": "giant-bat", "swarm-of-stirges": "stirge", "swarm-of-insects": "giant-bat",
-  "swarm-of-stirges": "giant-bat",
   // -> animated-armor (3)
   "clockwork-law-construct-duodrone": "animated-armor", "clockwork-law-construct-monodrone": "animated-armor", "clockwork-law-construct-tridrone": "animated-armor",
   // -> ghoul (3)
   "ghast-base": "ghast", "ghast-gravecaller-spellstitched-elite": "ghast",
   // -> gray-ooze (2)
-  "blob-of-annihilation": "gray-ooze",
+  "blob-of-annihilation": "black-pudding",
   // -> giant-spider (1)
   
   // -> commoner (1)
-  "myconid-spore-servant": "commoner",
+  "myconid-spore-servant": "violet-fungus",
   // -> werewolf (1)
-  "weretiger": "werewolf",
-
-};
+  };
 
 /* resolveWholeObject(key, pieceKind): exact registry hit -> NEAREST_SUB alias (one hop only,
    resolved back through the registry) -> (pieceKind given) "blank:<pieceKind>" -> null. Never

@@ -322,3 +322,9 @@ serialization rule).
    high-band worlds let interviewed animals report breach-tagged perceptions ("the thing with no
    smell") as a spice-band-gated packet entry? (Cheap to add in U4; pure fuel per the
    band-calibration ruling.)
+
+## RESOLVED — Adam's rulings (2026-07-08 night)
+1. **Animal realm skins: the spine/skin/extras treatment** (overrides the in-place-note recommendation) — Animal Kind gets per-realm skins like roles, "it can allow for some spectacular additions per realm." U1 grows accordingly.
+2. **Helpful gate = 3 distinct care visits as the GENERAL gate**, but bypassable: *animal friendship*-class spells and strong Charisma results can shortcut it for the classes built for it.
+3. **Breach-tagged perceptions: YES, spice-band-gated** — interviewed animals in high-band worlds may report the thing with no smell.
+4. Befriended-guide walk discount: kept.

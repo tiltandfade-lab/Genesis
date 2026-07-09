@@ -161,7 +161,7 @@ static character per cell (not a repeat, not an animation frame), uniform cell s
 
 ---
 
-## NPC batches (50 total, 2 sheets)
+## NPC batches (75 total, 3 sheets)
 
 **Population diversity (binding):** vary skin tone, ethnicity, hair texture, build, and age across the full roster below — a sheet where every face reads as the same ethnicity is a failure, not a style choice, regardless of realm. This realm's population is explicitly mixed: saurian-folk (scaled, reptilian features, per this realm's own court identity) and humans genuinely coexist here — see the final entries below for saurian-folk examples, not a reskin of the human entries, alongside an ethnically varied human population.
 
@@ -171,7 +171,7 @@ Shared mechanical instructions (restated for this section, NPC-appropriate): 5x5
 
 Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-ROLE-REALMS.md`) plus this realm's exclusive `adds`.
 
-### NPC sheet 1/2
+### NPC sheet 1/3
 
 1. **Canal-farmer** — Tied to the land and its seasons; the base everyone eats from.
 2. **Waste-runner** — Reads the wild and brings in what the settled can't.
@@ -199,7 +199,7 @@ Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-R
 24. **Tomb-robber** — Eyes every coin-pouch; avoids every eye.
 25. **Dead-god zealot behind a digger's face** — Fanatical devotion behind a mundane face.
 
-### NPC sheet 2/2
+### NPC sheet 2/3
 
 1. **Cult recruiter preaching the god-king's return** — Charisma aimed at the desperate; sells belonging.
 2. **Foreign scholar** — Chose to stay here; the reasons stay unclear.
@@ -228,6 +228,34 @@ Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-R
 25. **Mixed-heritage court runner — human and saurian both claim relation, belongs fully to neither**
 
 ---
+
+### NPC sheet 3/3
+
+1. **Dark-skinned jungle guide — the only human who knows the safe paths through the lower strata**
+2. **Elderly saurian-folk record-keeper — scaled, remembers three generations of court decree**
+3. **Broad-shouldered human quarry worker — hauls temple stone alongside the saurian laborers**
+4. **Young saurian-folk apprentice priest — scaled, still learning the mountain-clock's rites**
+5. **Grey-haired human herbalist — trusted by both strata for remedies neither fully understands**
+6. **One-eyed human trapper — lost the eye to something still down in the lower ruins**
+7. **Freckled human child raised in the court — plays with saurian-folk children, doesn't see the difference yet**
+8. **Heavyset saurian-folk market vendor — scaled, sells goods from all three strata**
+9. **Dark-skinned human court translator — bridges human and saurian-folk speech**
+10. **Pale human archivist — catalogues ruins the court would rather forget**
+11. **Short, sharp-eyed saurian-folk scout — scaled, fast through the jungle canopy**
+12. **Elderly saurian-folk elder — scaled, remembers the mountain-clock's last full turn**
+13. **Sunburnt human overseer — manages a work crew that resents him fairly**
+14. **Mixed-heritage court runner — human and saurian both claim relation, belongs fully to neither**
+15. **Lean, twitchy human tomb-scout — works the lower strata for coin, hates every minute**
+16. **Stout saurian-folk cook — scaled, runs the court kitchens with an iron claw**
+17. **Grey-haired human retired soldier — one of the few outsiders the court still trusts**
+18. **Young saurian-folk twins — scaled, training for temple-guard duty together**
+19. **Broad, scarred saurian-folk laborer — scaled, does the heaviest lifting in the quarry**
+20. **Elderly blind human oracle — reads the mountain-clock's rumble better than sighted priests**
+21. **Dark-skinned, heavily scarred human relic-hunter — brings back what the court won't send its own for**
+22. **Small, quick-handed human pickpocket — works the market strata, avoids the temple guard**
+23. **Weathered saurian-folk gardener — scaled, tends the terraced court gardens**
+24. **Saurian-folk healer's apprentice — scaled, gentle-clawed, still learning**
+25. **Tall, gaunt human court accountant — keeps books for a court that barely uses coin**
 
 ## Domestic animal batches (25 total, 1 sheet)
 

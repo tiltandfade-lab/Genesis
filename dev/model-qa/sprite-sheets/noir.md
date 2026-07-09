@@ -158,7 +158,7 @@ static character per cell (not a repeat, not an animation frame), uniform cell s
 
 ---
 
-## NPC batches (50 total, 2 sheets)
+## NPC batches (75 total, 3 sheets)
 
 **Population diversity (binding):** vary skin tone, ethnicity, hair texture, build, and age across the full roster below — a sheet where every face reads as the same ethnicity is a failure, not a style choice, regardless of realm. This realm's population is entirely human (no established non-human civilian population in this realm's lore) — the diversity requirement is ethnic/physical variety only.
 
@@ -168,7 +168,7 @@ Shared mechanical instructions (restated for this section, NPC-appropriate): 5x5
 
 Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-ROLE-REALMS.md`) plus this realm's exclusive `adds`.
 
-### NPC sheet 1/2
+### NPC sheet 1/3
 
 1. **Longshoreman** — Moves the heavy things; sees everything, is asked nothing.
 2. **Sandhog** — Works the dark and the tight places; patient underground.
@@ -196,7 +196,7 @@ Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-R
 24. **Immigrant newcomer** — Chose to stay here; the reasons stay unclear.
 25. **Shut-in** — Known of, rarely seen.
 
-### NPC sheet 2/2
+### NPC sheet 2/3
 
 1. **Acting captain** — Filling in for someone absent; borrowed authority.
 2. **Ward boss** — Power without a title.
@@ -225,6 +225,34 @@ Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-R
 25. **Late-shift switchboard operator — knows which calls to 'lose'**
 
 ---
+
+### NPC sheet 3/3
+
+1. **Dark-skinned homicide beat reporter — gets the story before the cops finish the scene**
+2. **Elderly retired judge — knows where every body in the city is actually buried**
+3. **Broad-shouldered union enforcer — keeps the docks running his employer's way**
+4. **Young numbers-runner, still clean — everyone's placing bets on how long that lasts**
+5. **Grey-haired pawnshop owner — moves stolen goods with a straight face**
+6. **One-eyed bookie — lost the eye collecting a debt, collects faster now**
+7. **Freckled newsboy — hears more than the reporters, sells none of it cheap**
+8. **Heavyset diner owner — feeds cops and criminals at the same counter, charges both**
+9. **Dark-skinned jazz club singer — knows every secret the late crowd whispers**
+10. **Pale, sleepless insomniac cabbie — drives half the city's worst decisions home**
+11. **Short, sharp-eyed fence — moves anything, asks nothing, remembers everything**
+12. **Elderly retired beat cop — walked this block for thirty years, still does out of habit**
+13. **Sunburnt dockworker — loads crates that never quite match the manifest**
+14. **Mixed-heritage court stenographer — records every word, sells a few she shouldn't**
+15. **Lean, twitchy informant — feeds tips to whoever pays more that week**
+16. **Stout diner waitress, dark-skinned — hears every confession over the coffee counter**
+17. **Grey-haired retired mob accountant — knows where the real money went**
+18. **Young twin messenger boys — run errands for three different families, tell none of them**
+19. **Broad, scarred bouncer — the club's only real law after midnight**
+20. **Elderly blind newsstand vendor — sells papers, hears everything said nearby**
+21. **Dark-skinned, heavily scarred hired muscle — works for whoever's paying this month**
+22. **Small, quick-handed pickpocket — the only honest thief left in this part of town**
+23. **Weathered tailor — makes the suits every wiseguy in three blocks wears**
+24. **Late-shift hospital nurse — patches up the wounds nobody reports**
+25. **Tall, gaunt DA's office clerk — files the cases that mysteriously go cold**
 
 ## Domestic animal batches (25 total, 1 sheet)
 

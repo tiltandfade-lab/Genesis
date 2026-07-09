@@ -159,7 +159,7 @@ static character per cell (not a repeat, not an animation frame), uniform cell s
 
 ---
 
-## NPC batches (50 total, 2 sheets)
+## NPC batches (75 total, 3 sheets)
 
 **Population diversity (binding):** vary skin tone, ethnicity, hair texture, build, and age across the full roster below — a sheet where every face reads as the same ethnicity is a failure, not a style choice, regardless of realm. This realm's population is entirely human (no established non-human civilian population in this realm's lore) — the diversity requirement is ethnic/physical variety only.
 
@@ -169,7 +169,7 @@ Shared mechanical instructions (restated for this section, NPC-appropriate): 5x5
 
 Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-ROLE-REALMS.md`) plus this realm's exclusive `adds`.
 
-### NPC sheet 1/2
+### NPC sheet 1/3
 
 1. **Fisherman** — Reads the wild and brings in what the settled can't.
 2. **Dockhand** — Moves the heavy things; sees everything, is asked nothing.
@@ -197,7 +197,7 @@ Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-R
 24. **Devotee of the drowned god** — Fanatical devotion behind a mundane face.
 25. **Press-gang recruiter** — Charisma aimed at the desperate; sells belonging.
 
-### NPC sheet 2/2
+### NPC sheet 2/3
 
 1. **Foreign hand signed at the last port** — Chose to stay here; the reasons stay unclear.
 2. **The one who never comes above decks** — Known of, rarely seen.
@@ -226,6 +226,34 @@ Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-R
 25. **Foreign-tongued trader — deals in goods no customs house has a name for**
 
 ---
+
+### NPC sheet 3/3
+
+1. **Dark-skinned rigging specialist — fastest hands aloft on the whole ship**
+2. **Elderly retired captain, harbor-bound — tells the same three stories, all of them true**
+3. **Broad-shouldered ship's carpenter — keeps the hull honest through every storm**
+4. **Young powder-monkey, still green — hasn't seen real battle yet**
+5. **Grey-bearded navigator — trusts the stars over any chart**
+6. **One-eyed bosun — lost the eye to a rope snap, never slowed down**
+7. **Freckled cabin boy — smuggled aboard, too useful to put ashore now**
+8. **Heavyset ship's cook — feeds forty men on rations meant for twenty**
+9. **Dark-skinned harbor merchant — trades in goods no manifest fully explains**
+10. **Pale, sleepless night watch — hasn't trusted a calm sea in years**
+11. **Short, sharp-eyed customs inspector — takes bribes from everyone equally**
+12. **Elderly retired quartermaster — keeps better books than the captain ever did**
+13. **Sunburnt fisherman — works waters the navy warns everyone away from**
+14. **Mixed-heritage dockside tavern owner — hears every rumor before the harbor-master does**
+15. **Lean, twitchy signal-flag operator — reads distant ships faster than anyone**
+16. **Stout sailmaker, dark-skinned — patches canvas that's survived three captains**
+17. **Grey-haired retired privateer — pardoned, mostly, and still armed**
+18. **Young twin deckhands — inseparable, terrible luck, somehow always survive**
+19. **Broad, scarred harpooner — the whaling crew's most valuable and most feared hand**
+20. **Elderly blind lighthouse keeper — knows the coast by sound and current alone**
+21. **Dark-skinned, heavily scarred smuggler captain — outruns the navy more often than not**
+22. **Small, quick-handed cutpurse working the docks — takes coin, never blood**
+23. **Weathered rope-maker — supplies half the fleet from one small shop**
+24. **Ship's surgeon, unsentimental — has amputated more limbs than she can count**
+25. **Tall, gaunt customs magistrate — technically incorruptible, practically exhausted**
 
 ## Domestic animal batches (25 total, 1 sheet)
 

@@ -160,7 +160,7 @@ static character per cell (not a repeat, not an animation frame), uniform cell s
 
 ---
 
-## NPC batches (50 total, 2 sheets)
+## NPC batches (75 total, 3 sheets)
 
 **Population diversity (binding):** vary skin tone, ethnicity, hair texture, build, and age across the full roster below — a sheet where every face reads as the same ethnicity is a failure, not a style choice, regardless of realm. This realm's population also includes a small visibly-touched minority consistent with the town's supernatural undercurrent (see the final entries below) — it must read as a minority tell, not the norm, alongside an ethnically varied ordinary majority.
 
@@ -170,7 +170,7 @@ Shared mechanical instructions (restated for this section, NPC-appropriate): 5x5
 
 Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-ROLE-REALMS.md`) plus this realm's exclusive `adds`.
 
-### NPC sheet 1/2
+### NPC sheet 1/3
 
 1. **Tenant farmer** — Tied to the land and its seasons; the base everyone eats from.
 2. **Trapper** — Reads the wild and brings in what the settled can't.
@@ -198,7 +198,7 @@ Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-R
 24. **Cult recruiter** — Charisma aimed at the desperate; sells belonging.
 25. **The newcomer who stayed** — Chose to stay here; the reasons stay unclear.
 
-### NPC sheet 2/2
+### NPC sheet 2/3
 
 1. **Hermit at the tree-line** — Known of, rarely seen.
 2. **Acting elder** — Filling in for someone absent; borrowed authority.
@@ -227,6 +227,34 @@ Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-R
 25. **Night-shift diner cook — sees everyone who's out too late, says nothing**
 
 ---
+
+### NPC sheet 3/3
+
+1. **Dark-skinned funeral-home apprentice — young, unbothered by a job that unsettles everyone else**
+2. **Elderly untouched schoolteacher — the town's last honest source of information**
+3. **Broad-shouldered gravedigger — knows exactly how many graves the cemetery is quietly short**
+4. **Young pallid-touched altar boy — minority tell, doesn't yet understand what it means**
+5. **Grey-haired diner owner — serves the same regulars every night, never asks why they're out so late**
+6. **One-eyed pawnshop keeper — buys things people shouldn't be selling**
+7. **Freckled paperboy, still ordinary — delivers to houses that don't answer anymore**
+8. **Heavyset town mechanic — the only one who'll drive out past the old mill after dark**
+9. **Dark-skinned church organist — plays every Sunday, has stopped asking who's really listening**
+10. **Pale, sleepless night-shift nurse — sees things at the hospital she doesn't log**
+11. **Short, sharp-eyed antique dealer — every item has a story he won't finish telling**
+12. **Elderly grave-cool caretaker — minority tell, tends the cemetery like it's still growing**
+13. **Sunburnt farmhand — one of the few who works the fields at the town's edge without fear**
+14. **Mixed-heritage librarian — untouched, keeps the town records more complete than anyone realizes**
+15. **Lean, twitchy insomniac motel clerk — checks guests in, never checks them out on the books**
+16. **Stout diner cook, dark-skinned — feeds the night shift, forgets faces on purpose**
+17. **Grey-haired retired sheriff — knows which cases were never really closed**
+18. **Young twin siblings — one seems fine, the other hasn't been right since the fair**
+19. **Broad, pallid-touched mill worker — minority tell, still shows up to a mill that shouldn't run**
+20. **Elderly blind fortune-teller at the county fair — charges a dollar, means every word**
+21. **Dark-skinned, heavily scarred volunteer firefighter — has seen what the fires actually are**
+22. **Small, quick-handed pickpocket kid — the only honest thief in a town full of worse secrets**
+23. **Weathered groundskeeper at the old estate — won't say what's in the locked wing**
+24. **Touched hospice nurse — minority tell, gentle with the dying, unnervingly calm about it**
+25. **Tall, gaunt town accountant — untouched, the only books in town that actually balance**
 
 ## Domestic animal batches (25 total, 1 sheet)
 

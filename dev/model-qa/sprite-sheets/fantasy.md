@@ -599,7 +599,7 @@ static character per cell (not a repeat, not an animation frame), uniform cell s
 
 ---
 
-## NPC batches (50 total, 2 sheets)
+## NPC batches (75 total, 3 sheets)
 
 **Population diversity (binding):** this realm's population is explicitly multi-species per the game's own 9-species roster (Dragonborn, Dwarf, Elf, Gnome, Goliath, Halfling, Human, Orc, Tiefling) — every entry below is tagged with its species; render accordingly and do not default untagged entries to Human. Human entries should still vary in ethnicity/skin tone across the sheet — a sheet where every human reads as the same ethnicity is a failure, not a style choice.
 
@@ -609,7 +609,7 @@ Shared mechanical instructions (restated for this section, NPC-appropriate): 5x5
 
 The unmodified 35-archetype NPC Role Spine — no realm skin applied, generic fantasy-world labels.
 
-### NPC sheet 1/2
+### NPC sheet 1/3
 
 1. **Land-worker (Dragonborn)** — Tied to the land and its seasons; the base everyone eats from.
 2. **Wild-provider (Dwarf)** — Reads the wild and brings in what the settled can't.
@@ -637,7 +637,7 @@ The unmodified 35-archetype NPC Role Spine — no realm skin applied, generic fa
 24. **Thief (Halfling)** — Eyes every coin-pouch; avoids every eye.
 25. **Hidden-fanatic (Human)** — Fanatical devotion behind a mundane face.
 
-### NPC sheet 2/2
+### NPC sheet 2/3
 
 1. **Recruiter (Orc)** — Charisma aimed at the desperate; sells belonging.
 2. **Outsider (Tiefling)** — Chose to stay here; the reasons stay unclear.
@@ -666,6 +666,34 @@ The unmodified 35-archetype NPC Role Spine — no realm skin applied, generic fa
 25. **Human midwife, elderly — delivered half the village, remembers all of it**
 
 ---
+
+### NPC sheet 3/3
+
+1. **Human town crier (Human) — announces news, rumor, and the occasional lie for coin**
+2. **Dwarven mine assayer (Dwarf) — judges ore quality by weight and smell alone**
+3. **Elven ranger's apprentice (Elf) — still learning to read a trail properly**
+4. **Halfling roadside chef (Halfling) — feeds every traveler who passes, no exceptions**
+5. **Orcish caravan blacksmith (Orc) — repairs wagon wheels faster than anyone in three towns**
+6. **Tiefling street performer (Tiefling) — half the crowd is there for the trick, half for the horror**
+7. **Gnomish alchemist's assistant (Gnome) — mixes potions that mostly don't explode**
+8. **Goliath bridge-toll keeper (Goliath) — collects the fee, stops the trouble, rarely needs to try hard**
+9. **Dragonborn ship's purser (Dragonborn) — keeps the manifest honest, mostly**
+10. **Human midwife's apprentice (Human) — dark-skinned, learning the trade from her mother**
+11. **Dwarven brewery heiress (Dwarf) — runs the family business better than her father did**
+12. **Elven scribe (Elf) — copies manuscripts for the town archive, meticulous to a fault**
+13. **Halfling orchard keeper, elderly (Halfling) — knows every tree in the grove by name**
+14. **Orcish stable hand (Orc) — gentle with horses, terrifying to everyone else**
+15. **Tiefling tavern owner (Tiefling) — runs the friendliest bar in a town that fears her kind**
+16. **Gnomish clockmaker (Gnome) — every clock in town keeps slightly different time, on purpose**
+17. **Goliath dockworker (Goliath) — moves cargo alone that takes four other men**
+18. **Dragonborn temple acolyte, young (Dragonborn) — devout, earnest, still memorizing the rites**
+19. **Human wheelwright (Human) — dark-skinned, third generation in the same shop**
+20. **Dwarven town guard captain, elderly (Dwarf) — decades on the wall, trusted by everyone**
+21. **Elven herbalist (Elf) — sells cures and, quietly, a few curses**
+22. **Halfling messenger runner (Halfling) — fastest feet in the county, mostly ignored otherwise**
+23. **Orcish farrier (Orc) — shoes every horse in the valley, feared and respected equally**
+24. **Tiefling fortune-teller's rival (Tiefling) — claims to be the real seer in town**
+25. **Human retired soldier, one-armed (Human) — dark-skinned, runs the town's only proper tavern brawl rules**
 
 ## Domestic animal batches (25 total, 1 sheet)
 

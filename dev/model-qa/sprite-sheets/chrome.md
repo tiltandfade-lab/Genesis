@@ -159,7 +159,7 @@ static character per cell (not a repeat, not an animation frame), uniform cell s
 
 ---
 
-## NPC batches (50 total, 2 sheets)
+## NPC batches (75 total, 3 sheets)
 
 **Population diversity (binding):** vary skin tone, ethnicity, hair texture, build, and age across the full roster below — a sheet where every face reads as the same ethnicity is a failure, not a style choice, regardless of realm. This realm's population also includes visible synthetic/heavily-augmented variety (see the final entries below) alongside an ethnically varied baseline-human majority — not everyone in this realm is flesh.
 
@@ -169,7 +169,7 @@ Shared mechanical instructions (restated for this section, NPC-appropriate): 5x5
 
 Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-ROLE-REALMS.md`) plus this realm's exclusive `adds`.
 
-### NPC sheet 1/2
+### NPC sheet 1/3
 
 1. **Vat-farmer** — Tied to the land and its seasons; the base everyone eats from.
 2. **Freight-runner** — Moves the heavy things; sees everything, is asked nothing.
@@ -197,7 +197,7 @@ Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-R
 24. **Machine-zealot behind a work badge** — Fanatical devotion behind a mundane face.
 25. **Corp headhunter** — Charisma aimed at the desperate; sells belonging.
 
-### NPC sheet 2/2
+### NPC sheet 2/3
 
 1. **Off-world transplant** — Chose to stay here; the reasons stay unclear.
 2. **Firewall recluse** — Known of, rarely seen.
@@ -226,6 +226,34 @@ Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-R
 25. **First-gen synth elder — one of the oldest models still running, treated like furniture by the corp**
 
 ---
+
+### NPC sheet 3/3
+
+1. **Dark-skinned network splicer — routes data around corp firewalls for a living**
+2. **Elderly analog holdout — refuses every implant, runs the last paper archive in the sprawl**
+3. **Broad-shouldered dockyard loader, heavily augmented — half his body is replacement parts**
+4. **Young synth-rights organizer — fighting for a legal status that doesn't exist yet**
+5. **Grey-haired corp retiree — pension paid in obsolete hardware upgrades**
+6. **One-eyed black-market optics dealer — sells the good cybereyes, no questions**
+7. **Freckled teenage code-runner — too young for the job, too good to turn away**
+8. **Heavyset noodle-cart owner — feeds half the block, hears everything**
+9. **Dark-skinned mega-tower janitor — cleans up after people who don't see her**
+10. **Pale, sleep-deprived night-shift trader — lives on stims and market spikes**
+11. **Short, sharp-eyed pawnshop fixer — moves stolen chrome parts fast**
+12. **Elderly first-generation cyborg — one of the originals, treated like a museum piece**
+13. **Sunburnt rooftop farmer — grows real vegetables above the smog line**
+14. **Mixed-heritage precinct clerk — files the reports no one reads**
+15. **Lean, twitchy stim-runner — delivers the good stuff, avoids the corp patrols**
+16. **Stout mechanic, dark-skinned — keeps the district's drones flying past their warranty**
+17. **Grey-haired retired enforcer — traded the badge for a noodle stand, mostly at peace**
+18. **Young twin synth-techs — build and repair the district's cheap labor bots**
+19. **Broad, augmented bouncer — the club's only real security**
+20. **Elderly blind data-diver — navigates the net by feel alone**
+21. **Dark-skinned, heavily scarred smuggler captain — moves cargo the corps pretend not to see**
+22. **Small, quick-handed chip forger — makes fake IDs that actually pass**
+23. **Weathered rooftop pigeon-keeper — an analog hobby in a digital slum**
+24. **Augmented street medic — patches gunshot wounds off the books**
+25. **Tall, gaunt corp compliance officer — enforces rules even he thinks are pointless**
 
 ## Domestic animal batches (25 total, 1 sheet)
 

@@ -318,3 +318,7 @@ Every unit: own branch, `check-manifest.py`, regression run of `verify-prep-bund
    hybridize rarer than people (defensible: a foreign *building* is louder than a foreign face).
 7. **`gen kind:"place"` un-reservation** — stays reserved in v1 per ON-DEMAND-GEN. Rule when the
    DM seat may mint whole places mid-turn.
+
+## RESOLVED — Adam's rulings (2026-07-08 night)
+1. **Spine-24 + replace-rollPlace-in-place: adopted as drafted.** Adam does a craft pass on the spine rows and skin labels later — rows land PROVISIONAL.
+2. **Pattern-naming for mundane-key realms: yes.**

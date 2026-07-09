@@ -12,7 +12,34 @@ updated: 2026-07-08 (night)
 > parallel-sessions protocol): the **NPC subsystem** wiring (this entry) and the **MODEL-FOUNDRY**
 > modeling deep-dive (below). Both landed on master; two distinct "Do next" threads.
 
-## ⭐ Latest (2026-07-09 overnight — THE DESIGN SESSION: realms re-keyed, 6 specs, craft expansions) [Claude Fable 5]
+## ⭐ Latest (2026-07-09 — THE MODEL FOUNDRY BATCH: ~185 bespoke models landed) [Claude Fable 5]
+
+The batch modeling session ran the locked `docs/MODEL-FOUNDRY.md` process over the whole
+VISUAL-ASSET-QUEUE in one sitting: **14 merges, ~185 bespoke bodies** — all 42 high-traffic rebuild
+targets re-authored, gloom/high-seas/frontier/bright-kingdom/cosmic/suburb anchor waves, a cross-realm
+catch-all (mage/helmed-horror/were-trio/canine ladder), a 52-alias repoint sweep, a pose-fix wave, and
+a closing second-iteration pass on all 18 flagged models (0 reverts). Every foe in the game now
+resolves to a real silhouette. Review page (Artifact) has every wave sheet.
+
+**Process locked mid-session (Adam's rulings):** author-only production config — LOW-effort Sonnet
+authors + mandatory hostile self-review, no critic pass (A/B-proven 2.2× faster at equal quality);
+orchestrator mechanical gate stays (bake/floor/manifest/theater-figures/sheets + eyes-on); Adam
+hand-picks from sheets → targeted fix waves (the second-pass pattern, which improved 18/18).
+**Doctrine:** POSE-ANATOMY in ANATOMY-CANON (spine is the pose; elbows always bend; rigor-mortis
+carve-out = mummy only). **Also landed:** NPC-COHERENCE-FIXES §1+§2 (background agent, red-first).
+
+**Verification:** every wave — check-manifest OK, verify-theater-figures 40/40, verify-model-grammar
+87/87, orchestrator re-baked every unit (floor gate [-0.01,0.08]), eyes-on every contact sheet
+(`dev/model-qa/sheets/`). Scars codified into prompts: root-tree writers, dark-on-dark, floor clips,
+backface-culled features, phantom self-reports; landing chains now hard-abort on wrong branch.
+
+**Do next (pick up here):** (1) re-run the model coverage audit once Adam's realm re-keys land
+(most new keys should map onto the 185-body roster — repoints, not authoring); (2) Adam's
+sheet-scan → beautification queue (5 IMPROVED_WITH_DOUBT residuals flagged in the second-pass
+reports); (3) the 14 prop models + NPC humanoid set (VISUAL-ASSET-QUEUE §props/§NPCs);
+(4) frontier GLB step-6 wiring (unchanged, below).
+
+## Latest (2026-07-09 overnight — THE DESIGN SESSION: realms re-keyed, 6 specs, craft expansions) [Claude Fable 5]
 
 Adam's crafting review became a full design session, run as three background waves (15 units, all
 orchestrator-gated, ~30 Adam rulings folded into every spec's RESOLVED section before merge).

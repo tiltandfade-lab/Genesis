@@ -169,6 +169,18 @@ const WHOLE_OBJECT_REGISTRY = {
   "homunculus":          { module: "../../dev/model-qa/creatures/rlm-bright-homunculus.js",       fn: "buildHomunculus",      discR: 0.26 },
   "smoke-mephit":        { module: "../../dev/model-qa/creatures/rlm-bright-smoke-mephit.js",     fn: "buildSmokeMephit",     discR: 0.32, opacity: 0.85 },
   "satyr-revelmaster":   { module: "../../dev/model-qa/creatures/rlm-bright-satyr-revelmaster.js", fn: "buildSatyrRevelmaster", discR: 0.42 },
+  "gibbering-mouther":   { module: "../../dev/model-qa/creatures/rlm-cosmic-gibbering-mouther.js",  fn: "buildGibberingMouther", discR: 0.42 },
+  "phase-spider":        { module: "../../dev/model-qa/creatures/rlm-cosmic-phase-spider.js",       fn: "buildPhaseSpider",      discR: 0.62, opacity: 0.88 },
+  "black-pudding":       { module: "../../dev/model-qa/creatures/rlm-cosmic-black-pudding.js",      fn: "buildBlackPudding",     discR: 0.55 },
+  "darkmantle":          { module: "../../dev/model-qa/creatures/rlm-cosmic-darkmantle.js",         fn: "buildDarkmantle",       discR: 0.32 },
+  "piercer":             { module: "../../dev/model-qa/creatures/rlm-cosmic-piercer.js",            fn: "buildPiercer",          discR: 0.32 },
+  "stirge":              { module: "../../dev/model-qa/creatures/rlm-cosmic-stirge.js",             fn: "buildStirge",           discR: 0.30 },
+  "violet-fungus":       { module: "../../dev/model-qa/creatures/rlm-cosmic-violet-fungus.js",      fn: "buildVioletFungus",     discR: 0.32 },
+  "ochre-jelly":         { module: "../../dev/model-qa/creatures/rlm-cosmic-ochre-jelly.js",        fn: "buildOchreJelly",       discR: 0.42 },
+  "ettercap":            { module: "../../dev/model-qa/creatures/rlm-cosmic-ettercap.js",           fn: "buildEttercap",         discR: 0.42 },
+  "brain-crawler":       { module: "../../dev/model-qa/creatures/rlm-cosmic-brain-crawler.js",      fn: "buildBrainCrawler",     discR: 0.32 },
+  "undead-eye-tyrant":   { module: "../../dev/model-qa/creatures/rlm-cosmic-undead-eye-tyrant.js",  fn: "buildUndeadEyeTyrant",  discR: 0.68 },
+  "astral-raider-knight":{ module: "../../dev/model-qa/creatures/rlm-cosmic-astral-raider-knight.js", fn: "buildAstralRaiderKnight", discR: 0.42 },
   "scarecrow":           { module: "../../dev/model-qa/creatures/rlm-gloom-scarecrow.js",   fn: "buildScarecrow", discR: 0.42 },
   "fire-elemental":      { module: "../../dev/model-qa/creatures/mon-fireelem.js", fn: "buildFireElemental", discR: 0.55 },
   "earth-elemental":     { module: "../../dev/model-qa/creatures/mon-earthelem.js", fn: "buildEarthElemental", discR: 0.55 },
@@ -659,9 +671,9 @@ const NEAREST_SUB = {
   // flyer family -> giant bat
   "flying-snake": "giant-bat",
   // ooze family
-  "psychic-gray-ooze": "gray-ooze", "black-pudding": "gray-ooze",
+  "psychic-gray-ooze": "gray-ooze",
   // arachnid family -> giant spider
-  "phase-spider": "giant-spider", "spider": "giant-spider",
+  "spider": "giant-spider",
   // orc/gnoll/bugbear warband
   "orc-berserker": "orc-warrior", "orc-blind-prophet": "orc-warrior",
   "gnoll-pack-lord": "gnoll-warrior", "gnoll-fang-of-the-beast": "gnoll-warrior", "gnoll-demoniac": "gnoll-warrior",
@@ -713,9 +725,9 @@ const NEAREST_SUB = {
   "flameskull": "skeleton", "drowned-husk": "zombie",
   "mastiff": "wolf", "giant-hyena": "worg", "mule": "warhorse", "pony": "warhorse",
   "bog-twisted-giant-rat": "giant-rat", "mire-creeper": "giant-bat",
-  "gibbering-mouther": "gray-ooze", "secret-eye": "gray-ooze", "brain-crawler": "giant-spider",
-  "darkmantle": "giant-bat", "piercer": "gray-ooze", "lizard": "giant-lizard",
-  "crab": "giant-spider", "seahorse": "giant-rat", "ochre-jelly": "gray-ooze",
+  "secret-eye": "undead-eye-tyrant",
+  "lizard": "giant-lizard",
+  "crab": "giant-crab", "seahorse": "giant-rat",
   "animated-rug-of-smothering": "gray-ooze",
   "water-weird": "giant-constrictor-snake", "clawed-drowner": "ghoul",
   "hell-hound": "wolf", "larva": "zombie",
@@ -779,7 +791,7 @@ const NEAREST_SUB = {
   "salamander-inferno-master": "earth-elemental",
   
   // -> warrior-veteran (15)
-  "astral-raider-knight": "warrior-veteran", "astral-raider-warrior": "warrior-veteran",
+  "astral-raider-warrior": "astral-raider-knight",
   "bullywug-warrior": "warrior-veteran",
   "performer-legend": "performer", "performer-maestro": "performer",
   "questing-knight": "warrior-veteran", "spy": "warrior-veteran", "spy-master": "warrior-veteran", "tough-boss": "tough",
@@ -788,7 +800,7 @@ const NEAREST_SUB = {
   "myconid-adult": "needle-blight", "myconid-sovereign": "needle-blight", "myconid-sprout": "needle-blight",
   "shambling-mound": "needle-blight", "shrieker-fungus": "needle-blight", "treant": "needle-blight",
   "tree-blight": "needle-blight", "vine-blight": "needle-blight",
-  "violet-fungus": "needle-blight", "violet-fungus-necrohulk": "needle-blight",
+  "violet-fungus-necrohulk": "violet-fungus",
   // -> ogre (14)
   "balor": "ogre", "chasme": "ogre",
   "glabrezu": "ogre", "hezrou": "ogre", "horned-devil": "ogre",
@@ -827,7 +839,7 @@ const NEAREST_SUB = {
   // -> wight (7)
   "death-knight": "wight", "death-knight-aspirant": "wight",
   "haunting-revenant": "wight", "mummy-lord": "mummy",
-  "undead-eye-tyrant": "wight",
+  
   // -> skeleton (7)
   "demilich": "skeleton", "lich": "skeleton", "vampire": "vampire-spawn",
   "vampire-nightbringer": "vampire-spawn", "vampire-umbral-lord": "vampire-spawn",
@@ -843,7 +855,7 @@ const NEAREST_SUB = {
   "brazen-gorgon": "gorgon", "colossus": "stone-golem",
   
   // -> giant-bat (4)
-  "bat": "giant-bat", "stirge": "giant-bat", "swarm-of-insects": "giant-bat",
+  "bat": "giant-bat", "swarm-of-stirges": "stirge", "swarm-of-insects": "giant-bat",
   "swarm-of-stirges": "giant-bat",
   // -> animated-armor (3)
   "clockwork-law-construct-duodrone": "animated-armor", "clockwork-law-construct-monodrone": "animated-armor", "clockwork-law-construct-tridrone": "animated-armor",
@@ -852,7 +864,7 @@ const NEAREST_SUB = {
   // -> gray-ooze (2)
   "blob-of-annihilation": "gray-ooze",
   // -> giant-spider (1)
-  "ettercap": "giant-spider",
+  
   // -> commoner (1)
   "myconid-spore-servant": "commoner",
   // -> werewolf (1)

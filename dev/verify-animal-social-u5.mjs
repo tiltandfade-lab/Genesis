@@ -378,8 +378,11 @@ console.log("\n=== HQ-2: the territory-holder can promote (docs/ANIMAL-SOCIAL-HQ
     const win = newWin();
     const w = mkWorld(win);
     const id = mintAnimal(win, w, { id:"plain-ambient-hq2" });
-    win.eval(`applyEvent(U.worlds['${w.id}'], { type:"codex_contact", payload:{ id:'${id}' } });`);
-    win.eval(`applyEvent(U.worlds['${w.id}'], { type:"codex_contact", payload:{ id:'${id}' } });`);
+    // FIXTURE FIX (wave-1 integration): the contacts must carry engaged:true — the HQ-4 engagement
+    // gate ("engaged twice", ANIMAL-SOCIAL §4) is the intended behavior, and this check's own name
+    // always said "engaged contact". Red under the integrated tree until the flag was added.
+    win.eval(`applyEvent(U.worlds['${w.id}'], { type:"codex_contact", payload:{ id:'${id}', engaged:true } });`);
+    win.eval(`applyEvent(U.worlds['${w.id}'], { type:"codex_contact", payload:{ id:'${id}', engaged:true } });`);
     const rec = win.eval(`codexGet(U.worlds['${w.id}'], '${id}')`);
     check("REGRESSION: a plain ambient animal still promotes on the second engaged contact",
       rec.dm.promoted===true && rec.dm.ambient===false && rec.status.soft===false, JSON.stringify(rec.dm));

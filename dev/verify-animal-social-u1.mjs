@@ -123,5 +123,150 @@ console.log("\n=== GREEN: post-fix behavior ===");
     (() => { const p = win.eval("rollPartial('animal')"); return p && p.partialKind === "animal" && !!p.fields.animalKind; })());
 }
 
+console.log("\n=== ANIMAL-SOCIAL-HQ HQ-1: realm-skin overlay reaches PRODUCTION mint sites ===");
+{
+  // WIRING LAW: drive prepCastEnvAnimals / prepCastAmbientScene — the real mint entry points —
+  // never rollPartial directly with hand-built opts. mkWorld/mkAnimalWin mirror u2/u3's own
+  // world-shape convention (prep.nodes env grammar, codex.records store).
+  function mkAnimalWin() {
+    const win = boot();
+    win.eval("var __hq1_win_marker = 1;"); // keep boot()'s eval-return semantics simple
+    return win;
+  }
+  function mkWorld(win, opts) {
+    opts = opts || {};
+    win.eval(`U.worlds['${opts.id}'] = {
+      id:'${opts.id}',
+      characters: ${JSON.stringify(opts.characters || [{ status: "living", sheet: { class: opts.pcClass || null } }])},
+      map: { nodes: Object.assign({ home:{ id:'home' } }, ${JSON.stringify(opts.nodes || {})}), edges: [] },
+      codex: { records:{}, version:1 },
+      prep: { nodes: ${JSON.stringify(opts.prepNodes || {})}, overlays:{} },
+      regions:{}, shops: ${JSON.stringify(opts.shops || {})}, realm: ${JSON.stringify(opts.realm || { active: false })},
+    };
+    U.activeWorldId = '${opts.id}';`);
+  }
+
+  // 1. ⊗ RED-FIRST: an active realm with a skin (gloom), wilderness node, mint via
+  // prepCastEnvAnimals in a loop until a realm-skin-tagged row mints — the skinned text must
+  // appear, never the raw "[reskin slot]" placeholder. Captured red on master 2026-07-09:
+  //   "REALM-SKIN wired through prepCastEnvAnimals (gloom wild skin seen): false" — 40 trials,
+  //   0 skinned draws, because prepCastEnvAnimals never passed opts.realm to rollPartial.
+  {
+    const win = mkAnimalWin();
+    let sawSkin = false, sawRawSlot = false;
+    for (let i = 0; i < 60 && !sawSkin; i++) {
+      const id = "hq1-realm-" + i;
+      mkWorld(win, { id, realm: { active: true, name: "gloom" },
+        prepNodes: { home: { env: "wilderness", soft: false, locked: false, hook: null } } });
+      win.eval(`prepCastEnvAnimals(U.worlds['${id}'], 'home');`);
+      const texts = win.eval(`Object.values(U.worlds['${id}'].codex.records).map(r=>(r.fields||{}).animalKind||"")`);
+      if (texts.some((t) => /pale stag glimpsed once at treeline/.test(t))) sawSkin = true;
+      if (texts.some((t) => /\[reskin slot\]/.test(t))) sawRawSlot = true;
+    }
+    check("prepCastEnvAnimals forwards the active realm to rollPartial: a gloom wild realm-skin mints through production",
+      sawSkin, "gloom's wild skin text never appeared across 60 wilderness trials");
+  }
+
+  // 2. scene-cast assertion (mutation check for Change 2): prepCastAmbientScene forwards the
+  // realmId it already resolves at prep.js:314 (opts.realm||(region&&region.realm)||null) into
+  // rollPartial — drive the scene caster (a "market" bucket, which SCENE_PARTIALS gives a nonzero
+  // 'animal' chance) with an explicit opts.realm (the real caller-supplied path per that existing
+  // line — region records carry no .realm today, D3/out-of-scope, so opts.realm IS the production
+  // channel this function's own header already documents) and look for the gloom domestic skin.
+  {
+    const win = mkAnimalWin();
+    let sawSceneSkin = false;
+    for (let i = 0; i < 80 && !sawSceneSkin; i++) {
+      const id = "hq1-scene-realm-" + i;
+      mkWorld(win, { id, realm: { active: true, name: "gloom" } });
+      win.eval(`prepCastAmbientScene(U.worlds['${id}'], 'home', 'market', { realm:'gloom' });`);
+      const texts = win.eval(`Object.values(U.worlds['${id}'].codex.records).map(r=>(r.fields||{}).animalKind||"")`);
+      if (texts.some((t) => /a black dog that shows up at the worst moment/.test(t))) sawSceneSkin = true;
+    }
+    check("prepCastAmbientScene forwards opts.realm to rollPartial: a gloom domestic realm-skin mints through the scene caster",
+      sawSceneSkin, "gloom's domestic skin text never appeared across 80 scene-cast trials");
+  }
+
+  // 3. no-realm world -> prep runs clean, no throw, no skin text (guard: activeRealmsFor
+  // undefined / w.characters missing must never throw — jsdom partial-boot tolerance).
+  {
+    const win = mkAnimalWin();
+    let threw = false;
+    try {
+      win.eval(`U.worlds['hq1-norealm'] = { id:'hq1-norealm', map:{ nodes:{ home:{id:'home'} }, edges:[] },
+        codex:{ records:{}, version:1 }, prep:{ nodes:{ home:{ env:'wilderness', soft:false, locked:false, hook:null } }, overlays:{} },
+        regions:{}, shops:{}, realm:{ active:false } };
+        U.activeWorldId='hq1-norealm';
+        prepCastEnvAnimals(U.worlds['hq1-norealm'], 'home');`);
+    } catch (e) { threw = true; }
+    check("no-realm, no-characters world: prepCastEnvAnimals runs clean (no throw)", !threw);
+  }
+}
+
+console.log("\n=== ANIMAL-SOCIAL-HQ HQ-1: ranger/druid class bump reaches PRODUCTION mint sites ===");
+{
+  function mkAnimalWin() { return boot(); }
+  function mkWorld(win, opts) {
+    opts = opts || {};
+    win.eval(`U.worlds['${opts.id}'] = {
+      id:'${opts.id}',
+      characters: [{ status:'living', sheet:{ class: ${JSON.stringify(opts.pcClass || null)} } }],
+      map: { nodes: Object.assign({ home:{ id:'home' } }, ${JSON.stringify(opts.nodes || {})}), edges: [] },
+      codex: { records:{}, version:1 },
+      prep: { nodes: ${JSON.stringify(opts.prepNodes || {})}, overlays:{} },
+      regions:{}, shops: ${JSON.stringify(opts.shops || {})}, realm: { active:false },
+    };
+    U.activeWorldId = '${opts.id}';`);
+  }
+  function attitudesFor(win, cls, n) {
+    const out = [];
+    for (let i = 0; i < n; i++) {
+      const id = "hq1-cls-" + cls + "-" + i;
+      mkWorld(win, { id, pcClass: cls, prepNodes: { home: { env: "wilderness", soft: false, locked: false, hook: null } } });
+      win.eval(`prepCastEnvAnimals(U.worlds['${id}'], 'home');`);
+      out.push(...win.eval(`Object.values(U.worlds['${id}'].codex.records).map(r=>r.status.attitude.value)`));
+    }
+    return out;
+  }
+
+  // 1. ⊗ RED-FIRST: a wilderness draw's opening attitude defaults to -1 (wild default) and never
+  // reads any better for a ranger PC when minted through prepCastEnvAnimals — must FAIL on master
+  // (captured 2026-07-09: fighter avg=-1, ranger avg=-1, identical — prepCastEnvAnimals never read
+  // w.characters or passed opts.pcClass to rollPartial).
+  {
+    const win = mkAnimalWin();
+    const fighterVals = attitudesFor(win, "fighter", 20);
+    const rangerVals = attitudesFor(win, "ranger", 20);
+    check("prepCastEnvAnimals wires the living PC's class to rollPartial: ranger opens one step better than fighter (wilderness, deterministic -1 vs 0)",
+      fighterVals.every((v) => v === -1) && rangerVals.every((v) => v === 0),
+      `fighter=${JSON.stringify(fighterVals)} ranger=${JSON.stringify(rangerVals)}`);
+  }
+
+  // 2. druid gets the same bump as ranger; a non-bumped class (fighter) stays at wild default.
+  {
+    const win = mkAnimalWin();
+    const druidVals = attitudesFor(win, "druid", 10);
+    check("druid opens at the same bumped attitude as ranger (0, not -1)", druidVals.every((v) => v === 0), JSON.stringify(druidVals));
+  }
+
+  // 3. no-PC world (characters empty/missing) -> prep runs clean, attitude unbumped (-1), no throw.
+  {
+    const win = mkAnimalWin();
+    let threw = false;
+    let vals = [];
+    try {
+      win.eval(`U.worlds['hq1-nopc'] = { id:'hq1-nopc', characters: [],
+        map:{ nodes:{ home:{id:'home'} }, edges:[] }, codex:{ records:{}, version:1 },
+        prep:{ nodes:{ home:{ env:'wilderness', soft:false, locked:false, hook:null } }, overlays:{} },
+        regions:{}, shops:{}, realm:{ active:false } };
+        U.activeWorldId='hq1-nopc';
+        prepCastEnvAnimals(U.worlds['hq1-nopc'], 'home');`);
+      vals = win.eval(`Object.values(U.worlds['hq1-nopc'].codex.records).map(r=>r.status.attitude.value)`);
+    } catch (e) { threw = true; }
+    check("empty-characters world: prepCastEnvAnimals runs clean, attitude stays at wild default (-1), no throw",
+      !threw && vals.every((v) => v === -1), `threw=${threw} vals=${JSON.stringify(vals)}`);
+  }
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

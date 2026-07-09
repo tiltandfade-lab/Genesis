@@ -171,6 +171,14 @@ function prepCastEnvAnimals(w, nodeId){
   const cfg=ENV_PARTIALS[band]||{};
   const chance=cfg.animal||0, draws=cfg.draws||0;
   const region=(typeof regionForNode==="function")?regionForNode(w,nodeId):null;
+  // ANIMAL-SOCIAL-HQ.md HQ-1 (D3): the live active realm, the exact resolver prep.js's own
+  // hookDiscoveryChance (prep.js:378) already uses — reaches rollPartial's realm-skin overlay
+  // (data/animal-realm-skins.js) so a realm-skin-tagged row can mint its skinned text in production.
+  const realmId=(typeof activeRealmsFor==="function")?((activeRealmsFor(null,w)||[])[0]||null):null;
+  // ANIMAL-SOCIAL-HQ.md HQ-1 (D2): the living PC, the dm.js:1048 livingSheet inline pattern —
+  // never import/call livingSheet itself (world.dm-owned; prep must not gain an upward dep).
+  const pc=(w.characters||[]).filter(c=>c&&c.status==="living").slice(-1)[0];
+  const pcClass=(pc&&pc.sheet&&pc.sheet.class)||null;
   // ANIMAL-SOCIAL.md §3/§4/§6 U5 — cruelty memory: a Terrified-overshoot on THIS node (stamped by
   // dm.js's social_check, w.map.nodes[nodeId].animalCruelty) opens every animal minted here one step
   // colder from now on ("the farm dogs talk").
@@ -180,7 +188,7 @@ function prepCastEnvAnimals(w, nodeId){
   for(let i=0;i<draws;i++){
     const isTerritoryHolderDraw=(band==="wilderness" && i===0);
     if(!isTerritoryHolderDraw && (typeof Math.random==="function"?Math.random():1) >= chance) break;   // a miss ends the draws
-    const p=rollPartial("animal", { env:band, region });
+    const p=rollPartial("animal", { env:band, region, realm:realmId, pcClass });
     const isHolder=(band==="wilderness" && i===0);
     // ANIMAL-SOCIAL.md §4/§6 U5 — row 12 (landmark: town's-own-animal / elder-of-the-wood) mints
     // ALREADY promoted + named, never as a disposable ambient draw.
@@ -323,6 +331,11 @@ function prepCastAmbientScene(w, nodeId, sceneBucket, opts){
   const partials=[];
   if(typeof rollPartial==="function"){
     const pc=SCENE_PARTIALS[bucket]||{};
+    // ANIMAL-SOCIAL-HQ.md HQ-1 (D2): the living PC (dm.js:1048 livingSheet inline pattern) — same
+    // lookup as prepCastEnvAnimals, named livingChar here since `pc` above already means "partial
+    // config" (SCENE_PARTIALS[bucket]), not "player character".
+    const livingChar=(w.characters||[]).filter(c=>c&&c.status==="living").slice(-1)[0];
+    const pcClass=(livingChar&&livingChar.sheet&&livingChar.sheet.class)||null;
     ["child","animal"].forEach(kind=>{
       const chance=pc[kind]||0;
       // ANIMAL-SOCIAL.md §3/§4/§6 U5 — same cruelty-memory read as prepCastEnvAnimals, keyed off atId
@@ -331,7 +344,11 @@ function prepCastAmbientScene(w, nodeId, sceneBucket, opts){
       const crueltyPenaltyScene=(nnScene && nnScene.animalCruelty)?-1:0;
       for(let i=0;i<2;i++){
         if((typeof Math.random==="function"?Math.random():1) >= chance) break;   // a miss ends this kind's draws
-        const p=rollPartial(kind, { region });
+        // ANIMAL-SOCIAL-HQ.md HQ-1 (Change 2): forward realm + pcClass to rollPartial for every
+        // scene-typed kind — rollPartial only reads opts.realm/opts.pcClass on its "animal" branch
+        // (verified: src/engine/codex-roll.js:355-396, the "child" branch never reads them), so this
+        // is harmless for kind==="child".
+        const p=rollPartial(kind, { region, realm:realmId, pcClass });
         const isLandmark=!!(kind==="animal" && p.dm && p.dm.landmark);
         const rec=codexAdd(w, Object.assign({}, p, { kind:"npc",
           id:prepCastId(w, "npc", p.name||(kind+"-partial")),

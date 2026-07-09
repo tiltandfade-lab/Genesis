@@ -44,7 +44,10 @@ DLSS/upscluster is someone else's problem later.
    the high-expression pose**, the creature at its most alive moment (mid-lunge, mid-cast, braced,
    writhing). A neutral T-stance/at-attention pose on a creature whose flavor implies action is a
    gate failure. Pose is baked into the landmark table, so it's authored in pass 1 and gated in
-   pass 2.
+   pass 2. **Amended 2026-07-08 (Adam, batch review): pose anatomy is part of this law — the
+   spine carries the gesture (author the pelvis→skull curve first) and arms/legs articulate at
+   bent joints, never straight sticks or hyperextensions. See ANATOMY-CANON "POSE-ANATOMY"; the
+   critic gains question (d): trace the spine line and the elbows.**
 6. **Gate in the real engine.** Acceptance renders come from `ps1-sheet.html` + `ps1-capture.mjs`
    (the byte-faithful shipping shader). Probe/Blender renders are working lenses only.
 

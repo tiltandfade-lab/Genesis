@@ -212,12 +212,12 @@ readable as a small billboard element" in place of the creature sheets' "mid-act
 | **Part 1 total (new sweep findings)** | **10** | **6** | **4** | **20** |
 | Part 2 signs | 3 | 2 | 0 | 5 |
 | Part 2 banners/flags | 1 | 1 | 1 | 3 |
-| Part 2 paintings/posters/notices | 2 | 2 | 0 | 4 |
+| Part 2 paintings/posters/notices | 3 | 2 | 0 | 5 |
 | Part 2 window glows | 2 | 1 | 0 | 3 |
 | Part 2 graffiti tags | 1 | 1 | 0 | 2 |
 | Part 2 FX sprites | 2 | 2 | 2 | 6 |
-| **Part 2 total** | **11** | **9** | **3** | **23** |
-| **Grand total (new findings, excludes pre-scoped net-new)** | **21** | **15** | **7** | **43** |
+| **Part 2 total** | **12** | **9** | **3** | **24** |
+| **Grand total (new findings, excludes pre-scoped net-new)** | **22** | **15** | **7** | **44** |
 
 By realm (Part 1 + Part 2, cross-realm entries counted once under "all"):
 

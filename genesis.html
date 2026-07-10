@@ -1380,6 +1380,13 @@
      keeps). Republishes its two symbols onto `window` for src/ui/theater-boot.js's sealed ES-module
      scope to read (see that file's window.Theater.setInteriorBoard). -->
 <script src="src/ui/theater-interior.js"></script>
+<!-- GR1 (docs/GRAPHICS-ENGINE.md build unit GR1, §E TEXTURE-PER-REALM) — procedural per-realm
+     material CanvasTexture painters (materialTexturePixels). Classic script, loaded right after
+     theater-interior.js (which OWNS REALM_MATERIALS, the registry naming which painter each realm/
+     surface uses) and before theater-boot.js's sealed ES-module scope (the sole GL consumer that turns
+     a painter's pixel buffer into a real THREE.CanvasTexture). Republishes its symbols onto `window`
+     for that scope to read, same convention theater-interior.js's own tag comment documents. -->
+<script src="src/ui/theater-materials.js"></script>
 <script src="src/ui/blockwright.js"></script>
 <script src="src/ui/dice.js"></script>
 <script src="src/ui/oracle.js"></script>

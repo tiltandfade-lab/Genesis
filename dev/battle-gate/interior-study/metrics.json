@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-10T21:01:44.526Z",
+  "generatedAt": "2026-07-10T21:09:05.890Z",
   "scenes": {
     "chrome": {
       "label": "chrome Hub dungeon room",
@@ -13,7 +13,7 @@
           "wallHeightBase": 2.4,
           "fog": {
             "color": "#0d1518",
-            "density": 0.008
+            "density": 0.024
           },
           "tileKit": {
             "floorColor": "#8fa6b0",
@@ -3748,7 +3748,7 @@
           "wallHeightBase": 2.4,
           "fog": {
             "color": "#0a0710",
-            "density": 0.012
+            "density": 0.035
           },
           "tileKit": {
             "floorColor": "#453b4d",
@@ -4926,8 +4926,8 @@
     "notes": [
       "startSession() called"
     ],
-    "worldId": "mrff8ch22bq84",
-    "worldName": "Old Oak Wharf"
+    "worldId": "mrffhsy6a7uy8",
+    "worldName": "Ash-Hollow"
   },
   "theaterState": {
     "hasBattleStage": true,

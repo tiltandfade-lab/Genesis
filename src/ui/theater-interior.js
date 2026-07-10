@@ -49,7 +49,7 @@ const INTERIOR_TILE_KITS = Object.freeze({
     floorColor: "#8fa6b0", wallColor: "#3d525d", trimColor: "#d8f0f8",
     floorPattern: [[0, 1], [1, 0]],
     wallPattern: [[0, 0, 1], [1, 0, 0], [0, 1, 0]],
-    fog: Object.freeze({ color: "#0d1518", density: 0.008 }),
+    fog: Object.freeze({ color: "#0d1518", density: 0.024 }),
     lightKind: "lamp", lightColor: "#bfe8ff", lightIntensity: 1.1
   }),
   gloom: Object.freeze({
@@ -57,7 +57,7 @@ const INTERIOR_TILE_KITS = Object.freeze({
     floorColor: "#453b4d", wallColor: "#2a222e", trimColor: "#6b5878",
     floorPattern: [[0, 0], [0, 1]],
     wallPattern: [[1, 0, 0], [0, 0, 0], [0, 0, 1]],
-    fog: Object.freeze({ color: "#0a0710", density: 0.012 }),
+    fog: Object.freeze({ color: "#0a0710", density: 0.035 }),
     lightKind: "torch", lightColor: "#ff9a44", lightIntensity: 1.3
   }),
   fantasy: Object.freeze({
@@ -65,7 +65,7 @@ const INTERIOR_TILE_KITS = Object.freeze({
     floorColor: "#7a6248", wallColor: "#4a3b2c", trimColor: "#c9a85c",
     floorPattern: [[0, 1], [1, 1]],
     wallPattern: [[0, 1, 0], [1, 1, 1], [0, 1, 0]],
-    fog: Object.freeze({ color: "#120d08", density: 0.008 }),
+    fog: Object.freeze({ color: "#120d08", density: 0.024 }),
     lightKind: "torch", lightColor: "#ffb347", lightIntensity: 1.3
   })
 });

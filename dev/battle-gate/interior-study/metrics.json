@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-10T20:53:26.903Z",
+  "generatedAt": "2026-07-10T21:01:44.526Z",
   "scenes": {
     "chrome": {
       "label": "chrome Hub dungeon room",
@@ -3672,6 +3672,12 @@
             "minZ": 2,
             "maxZ": 31
           },
+          "focusRect": {
+            "minX": 11,
+            "maxX": 16,
+            "minZ": 12,
+            "maxZ": 18
+          },
           "meta": {
             "roomCount": 5,
             "floorCount": 203,
@@ -4849,6 +4855,12 @@
             "minZ": 3,
             "maxZ": 10
           },
+          "focusRect": {
+            "minX": 3,
+            "maxX": 8,
+            "minZ": 5,
+            "maxZ": 9
+          },
           "meta": {
             "roomCount": 2,
             "floorCount": 63,
@@ -4914,8 +4926,8 @@
     "notes": [
       "startSession() called"
     ],
-    "worldId": "mrfexoimzav4a",
-    "worldName": "The Thresher's Field"
+    "worldId": "mrff8ch22bq84",
+    "worldName": "Old Oak Wharf"
   },
   "theaterState": {
     "hasBattleStage": true,
@@ -4956,7 +4968,7 @@
       "fileName": "gloom-d-fog.png"
     }
   ],
-  "studyCardPath": "/Users/adamstephenson/Desktop/Work/projects/Genesis/.claude/worktrees/agent-a179128fc24d45d58/dev/battle-gate/interior-study/study-card.png",
+  "studyCardPath": "/Users/adamstephenson/Desktop/Work/projects/Genesis/.claude/worktrees/genesis-sprite-corpus-tags-edeaac/dev/battle-gate/interior-study/study-card.png",
   "consoleErrors": [
     "Failed to load resource: the server responded with a status of 404 (File not found)",
     "Failed to load resource: the server responded with a status of 404 (File not found)"

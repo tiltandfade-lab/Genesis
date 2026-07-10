@@ -73,6 +73,7 @@
     "src/engine/dungeon-walk.js",
     "src/engine/place-spatialize.js",
     "src/engine/place-semantics.js",
+    "src/engine/place-dressing.js",
     "src/engine/wild-walk.js",
     "src/engine/quest-hook.js",
     "src/engine/prep-bundle.js",
@@ -1457,6 +1458,16 @@
         "semanticizePlan"
       ],
       "desc": "DUNGEON-GRAPH.md U2 — semantics + scale domains, layered on U1's SpatialPlan. semanticizePlan(plan, segments, residents) extends a spatializePlan() output (never mutates it) with: (1) room roles from the corridor graph — entrance (entry segment) / finale (isFinale segment) / path (on the deterministic BFS critical path entry→finale) / pocket (degree-1 dead end, non-finale — HOOK-WALKS §4's parked branch-node idea's honest home) / side (everything else); (2) difficulty bands (room.band) from depth — shallow (depth 0-1, always)/mid/deep via a tertile split of [0,maxDepth], monotone non-decreasing along the critical path by construction (asserted, honest-fail on regression); (3) SCALE DOMAINS per law §2 ('a room that merely fits its monster is a prison') — every resident with scaleVsHuman>=2.0 claims its room + adjacent path/side rooms (patrol radius 1) at that scale; apex:true with scaleVsHuman>=4.0 claims the WHOLE dungeon instead; domain rooms get room.scaleDomain=max(current,scale), and any room below the fit-test minimum (ceil(scale)+2 cells per axis) is GROWN (re-carved, re-centered) with the plan's cells buffer fully rebuilt and BFS reachability re-verified from scratch (honest-fail if still unreachable); corridors inside a >1.0-scale domain get width>=2+heightScale; doors between differing-scale rooms get transition:true+squeeze:true (squeeze = geometry/DM hand-wave per Adam's ruling — no sprite/render work); (4) plan.domains[] ({scale,segNums,transitions:[doorIdx]}), always including the residual 1.0 human domain unless an apex claim consumed every room. Depends on SPATIAL_CELL (engine.place-spatialize's global) — must load after it. Pure engine-layer data code, no w/U/render/DOM, no RNG (fully deterministic function of its inputs). U3 (volumetric renderer)/U4 (walk binding) consume this output; rendering/walk-store writes/encounter-loot table wiring/beat content are out of scope here per spec."
+    },
+    {
+      "id": "engine.place-dressing",
+      "path": "src/engine/place-dressing.js",
+      "type": "logic",
+      "owns": [
+        "dressPlan",
+        "REALM_DRESSING"
+      ],
+      "desc": "GRAPHICS-ENGINE.md Part II §D DRESSING SYSTEM, build unit GR2 (data half) — the props+foliage card placement pass, layered on U1/U2's SpatialPlan. dressPlan(plan, opts) extends a spatializePlan()/semanticizePlan() output (never mutates it) with plan.dressing=[{slug,x,y,primary,cardKind,roomSegNum,lightAffine?}]: a seeded per-room roll (opts.walkId, falling back to plan.seed) picking card entries off the REALM_DRESSING stub registry (~6 real dressing-gen-manifest slugs per supported interior realm — chrome/gloom/fantasy, the same 3 kits src/ui/theater-interior.js's INTERIOR_TILE_KITS ships) per room.role density (Wildermyth rule: entrance sparse/pocket dense/finale staged, 1-3 focal pieces per room max, filler beyond), placed on FLOOR cells only, never the room's own combat-space center 2x2, blockers/wall-hangs constrained to wall-adjacent cells, light-primary cards co-located with the room's real light seeds (independently reimplements theater-interior.js's light-candidate formula rather than importing it — engine-layer purity: src/engine/* never calls into src/ui/*). Depends on SPATIAL_CELL/dspHashStr/dspMulberry32 (engine.place-spatialize's globals) — must load after it. Pure engine-layer data code, no THREE/DOM/render, no Math.random (fully deterministic function of its inputs). The render half (src/ui/theater-boot.js's setInteriorBoard dressingGroup) mounts plan.dressing as upright billboard cards against a placeholder label-card texture until DRESSING-GEN's real assets/dressing/<slug>.png art lands — zero code change on that swap."
     },
     {
       "id": "engine.wild-walk",

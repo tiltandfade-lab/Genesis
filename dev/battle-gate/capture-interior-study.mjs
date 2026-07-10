@@ -176,7 +176,7 @@ async function waitForTheater(page) {
 // EXACT id/num/label/isFinale/depth/exits/light shape src/engine/walk.js:593-625 builds) — same
 // generator family dev/verify-dungeon-*.mjs already use, reimplemented in-page since this runs inside
 // the real browser, not node vm.
-async function buildScene(page, { topology, realmId, env, walkId, residents }) {
+async function buildScene(page, { topology, realmId, env, walkId, residents, lightProfile }) {
   return await page.evaluate((cfg) => {
     try {
       function buildFixture(topology, n) {
@@ -209,9 +209,10 @@ async function buildScene(page, { topology, realmId, env, walkId, residents }) {
       const semPlan = cfg.residents ? semanticizePlan(plan, fixture, cfg.residents) : plan;
       const focusSegNum = semPlan.rooms[0].segNum;
       const board = interiorBuildBoard(semPlan, { realmId: cfg.realmId, env: cfg.env, focusSegNum, radius: 2 });
+      if (cfg.lightProfile) board.lightProfile = cfg.lightProfile;
       return { ok: true, board, meta: board.meta };
     } catch (e) { return { ok: false, error: e.message, stack: e.stack }; }
-  }, { topology, realmId, env, walkId, residents });
+  }, { topology, realmId, env, walkId, residents, lightProfile });
 }
 
 const VARIANTS = [
@@ -224,8 +225,8 @@ const VARIANTS = [
 ];
 
 const SCENES = [
-  { key: "chrome", label: "chrome Hub dungeon room", topology: "The Hub", realmId: "chrome", env: "dungeon", walkId: "interior-study-chrome-hub", residents: null },
-  { key: "gloom", label: "gloom Spine crypt room", topology: "The Spine", realmId: "gloom", env: "dungeon", walkId: "interior-study-gloom-spine", residents: [{ segNum: 1, scaleVsHuman: 2.5, apex: false }] },
+  { key: "chrome", label: "chrome Hub dungeon room", topology: "The Hub", realmId: "chrome", env: "dungeon", walkId: "interior-study-chrome-hub", residents: null, lightProfile: "lamplit" },
+  { key: "gloom", label: "gloom Spine crypt room", topology: "The Spine", realmId: "gloom", env: "dungeon", walkId: "interior-study-gloom-spine", residents: [{ segNum: 1, scaleVsHuman: 2.5, apex: false }], lightProfile: "torchlit" },
 ];
 
 async function main() {
@@ -238,6 +239,7 @@ async function main() {
     await page.goto(`${BASE}/genesis.html`, { waitUntil: "networkidle0", timeout: 30000 });
     await sleep(300);
 
+    await page.addStyleTag({ content: "#toast,.toast,#bardoCard,#spicePop,#diceOverlay{display:none !important;visibility:hidden !important}" });
     const boot = await bootToInSession(page);
     metrics.boot = boot;
     if (!boot.ok) throw new Error("boot failed: " + JSON.stringify(boot));

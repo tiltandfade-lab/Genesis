@@ -4182,7 +4182,9 @@ function setInteriorBoard(data){
   if(S.renderer) S.renderer.setClearColor(fogColorObj, 1);
 
   S.lightPropAnchor = null; // interior boards carry no light-prop registry mapping (data.light absent) — plain profile lighting
-  applyLightProfile(LIGHT_DEFAULT_PROFILE);
+  // interior boards may name their own profile (the tile kits are dark-value surfaces; the "dark"
+  // default reads near-black on them — study card v1/v2). Falls back to the standing default.
+  applyLightProfile((data.lightProfile && LIGHT_PROFILES[data.lightProfile]) ? data.lightProfile : LIGHT_DEFAULT_PROFILE);
 
   const kit = data.tileKit || {};
   const floorTex = interiorPatternTexture(kit.floorColor, kit.floorPattern, Math.max(1, b.maxX - b.minX + 1), Math.max(1, b.maxZ - b.minZ + 1));

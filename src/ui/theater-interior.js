@@ -44,21 +44,21 @@ const INTERIOR_TILE_KITS = Object.freeze({
     floorColor: "#8fa6b0", wallColor: "#3d525d", trimColor: "#d8f0f8",
     floorPattern: [[0, 1], [1, 0]],
     wallPattern: [[0, 0, 1], [1, 0, 0], [0, 1, 0]],
-    fog: Object.freeze({ color: "#0d1518", density: 0.045 })
+    fog: Object.freeze({ color: "#0d1518", density: 0.008 })
   }),
   gloom: Object.freeze({
     realmId: "gloom",
-    floorColor: "#2c2630", wallColor: "#171319", trimColor: "#4a3b52",
+    floorColor: "#453b4d", wallColor: "#2a222e", trimColor: "#6b5878",
     floorPattern: [[0, 0], [0, 1]],
     wallPattern: [[1, 0, 0], [0, 0, 0], [0, 0, 1]],
-    fog: Object.freeze({ color: "#0a0710", density: 0.075 })
+    fog: Object.freeze({ color: "#0a0710", density: 0.012 })
   }),
   fantasy: Object.freeze({
     realmId: "fantasy",
     floorColor: "#7a6248", wallColor: "#4a3b2c", trimColor: "#c9a85c",
     floorPattern: [[0, 1], [1, 1]],
     wallPattern: [[0, 1, 0], [1, 1, 1], [0, 1, 0]],
-    fog: Object.freeze({ color: "#120d08", density: 0.05 })
+    fog: Object.freeze({ color: "#120d08", density: 0.008 })
   })
 });
 const INTERIOR_DEFAULT_KIT = "chrome";

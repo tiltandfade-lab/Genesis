@@ -78,3 +78,121 @@ The 2026-07-10 dungeon-graph build converged on this grammar independently:
   dressing-card family will need its own §8-style manifest law).
 - The study rig (dev/battle-gate/capture-interior-study.mjs) is the standing screenshot
   gate for every GR unit.
+
+---
+
+# PART II — THE MARRIAGE (2026-07-10 late: research-grounded; Adam's four rulings folded)
+
+Research digests: `scratchpad wildermyth-research/{engine,modding}-digest.md` (sourced;
+key facts recorded here so the spec survives the scratchpad). Confirmed: custom Java
+engine, OpenGL, explicitly "2.5D" — flat painted art moving through a 3D board/camera/
+lighting space; characters = depth-ordered PNG layers; combat maps assembled by a
+tag-driven MissionBuilder over a scenery kit (primary tag: focalPoint/floor/lamp/
+barricade/setPiece × biome × interior/exterior × station); effects = named animation
+scripts referenced from ability JSON; transformations = aspect-gated layer swaps.
+
+**The mapping that makes this cheap:** their MissionBuilder ↔ our place-gen (engine owns
+the nouns; tags are the shared language). Their animation-script registry ↔ our
+`theater-verbs.js` (`THEATER_VERBS`/`playVerb`/`tickTweens` — already data-driven).
+Their aspect-gated layer swaps ↔ our GUISE forms. Their scenery JSON+PNG cards ↔ our
+sprite pipeline. Genesis = Dwarf Fortress simulation depth + Daggerfall procedural
+breadth (Adam: scale/breadth/simulation ONLY — no first-person ambitions) + Wildermyth
+presentation, rendering OUR corpus.
+
+## §A STANDEE VERBS (Adam ruling: verbs now, puppets later)
+
+Data-driven whole-standee tweens bound to EVENTS, never hardcoded per-creature.
+Registry `STANDEE_VERBS` (extends theater-verbs.js conventions): each verb = a named
+tween script {phases of translate/rotate/scale/tint/flash on the billboard group}.
+v1 verb set:
+- `act-attack` — lean-in lunge toward target + snap back
+- `act-cast` — rise 0.2 cells + hold + settle (casting glow rides the effects layer)
+- `move-step` — hop-slide per cell (the DM's mechanical repositioning uses this too)
+- `hit-damage` — shake + white flash + brief red tint; `hit-crit` adds squash-stretch
+- `fall-death` — tip-over (rotate to floor plane) + desaturate; corpse stays as a card
+- `heal` / `buff` / `debuff` — pulse tints (green/gold/violet whisper)
+- `guise-swap` — crossfade texture + scale to the new form (GUISE G3's verb)
+Law: verbs manipulate the GROUP transform/tint only — never the sprite pixels
+(SPRITE PURITY). Ability/event JSON names its verb (`animationVerb` field at the
+contract boundary), mirroring their `specialAnimationEffect` pattern.
+**Puppet tier (LATER, spec'd not built):** corpus generation from round 4 onward favors
+segmentation-friendly poses (limbs distinct from torso silhouette where natural) so a
+future AI-segmentation pass can cut layered puppets without regenerating art.
+
+## §B EFFECT SPRITES (Adam ruling: shared core + realm accents)
+
+New sheet family `effects` (flat cards, animated by verb scripts as 2-4 frame swaps or
+transform tweens — no particle engine in v1):
+- **Shared core (~3 sheets, neutral style):** impacts (slash arcs, blunt stars, pierce
+  glints), magic (cast circles, bolt heads, burst rings), status (blood spatter per the
+  tone ruling, smoke puffs, sparks, heal motes, shield shimmer), environmental (dust,
+  splash, ember drift).
+- **Realm accents (12 small sheets, 6-9 cells each):** the realm's signature energy —
+  chrome neon arc-flash, gloom ichor + VHS static tear, cosmic gold constellation
+  burst, ash ember gout, bright-kingdom star-pop, noir muzzle flash, etc.
+Effects render as camera-facing cards at the standee layer, additive blending allowed
+(they are EFFECTS, not characters — purity law doesn't apply), realm accent picked by
+the scene's realm, core picked by the event type.
+
+## §C INTERACTIVE OBJECTS (Adam ruling: cards with states)
+
+New sheet family `objects`: flat sprite cards with STATE VARIANTS, Wildermyth-style.
+- v1 archetype set: door (shut/ajar/open/broken), chest (closed/open/looted), lever
+  (left/right), shrine (dormant/lit), campfire (unlit/lit/dead), trap (hidden/sprung),
+  portal (sealed/active), container-misc (barrel/crate intact/broken).
+- Per realm SKIN: the archetype × realm look (chrome blast-door vs gloom crypt door).
+  Shared manifest law: `slug, archetype, state, realm, aspects[]` — aspects =
+  interactability (openable, lootable, triggerable), mirroring their Aspects field.
+- States are TEXTURE SWAPS on one card (same footprint, same binding) — the door
+  doesn't move, it becomes its next state. MIMIC HOOK: a mimic is an object card whose
+  entity has a GUISE creature form (docs/GUISE.md object-guiser class, now mechanized).
+- Architecture stays prism (walls, doorFRAMES); the door LEAF in the frame is a card.
+
+## §D DRESSING SYSTEM (foliage + clutter; the MissionBuilder marriage)
+
+New sheet family `dressing` (flat cards; some cross-pair for volume — foliage law):
+- **Per realm roster (~2 sheets each: `flora` + `clutter`):** realm-true foliage
+  (fantasy: oak/fern/ivy/mushroom ring; lost-world: fronds/cycads; ash: burnt snags/
+  fungal blooms; chrome: planters/cable-vines/holo-ads; gloom: dead hedges/cattails/
+  gravestones…) + clutter (rubble, bones, crates, banners, moss hangs, puddles).
+- **Tag schema (the shared language, theirs → ours):** every dressing card carries
+  `{ primary: focal|floor|wall-hang|light|blocker|setPiece, biome: <realm terrain
+  words>, location: interior|exterior, station: forge|library|shrine|camp|market|… }`.
+- **THE ROLL (engine owns the nouns):** place-gen/walk-gen emit a seeded dressing pass
+  per room/segment: room role + realm + env + station tables pick counts and tags
+  (pockets get focal pieces, paths get blockers/rubble, finale rooms get setPieces,
+  light-tagged cards co-locate with the light sources U3 already seeds). Deterministic
+  from the walk/place id (law 7). DM never rolls dressing; the DM may only NAME what
+  the engine placed (nouns law).
+- Density by role: entrance sparse → pocket dense → finale staged. Interior renderer
+  mounts dressing as shadow-casting cards (GR2's channel).
+
+## §E TEXTURE-PER-REALM (GR1 refined)
+
+Realm material registry `REALM_MATERIALS`: per realm × surface kind (floor/wall/trim)
+→ {material: stone-course|plank|slab|metal-panel|flesh|ice|…, grain: subtle intensity,
+palette anchors}. Procedural CanvasTextures at boot (seeded, nearest-filtered, one
+texel density per kit) — low contrast ALWAYS (the subtle-texture law): readable as
+material at glance distance, never busy under sprites.
+
+## §F SPRITE-GEN QUEUE ADDITIONS (the ask: spec'd into the queue)
+
+New generation wave **DRESSING-GEN** (after round 3; rosters below are the red-pen
+surface — prompts generate mechanically per SPRITE-GEN-V2 §10 once Adam approves):
+1. `flora` ×12 realms (16-24 cards each; eye-level cards, magenta key, NO floor plane,
+   flat-icon law does NOT apply)
+2. `clutter` ×12 realms (12-16 cards each)
+3. `objects` ×12 realms (8 archetypes × avg 3 states ≈ 24 cells each)
+4. `effects-core` ×3 shared sheets + `effects-accent` ×12 mini-sheets
+5. Every sheet under the standing laws: manifest-first (§8), expressive where alive,
+   no-blank-slots alts, additive fold, chroma per §7.
+Estimated total: ~51 sheets / ~900 cells — the next big codex campaign after round 3.
+
+## §G STILL OPEN FOR ADAM (small, non-blocking)
+
+1. Corpse persistence: death verb leaves the card tipped on the floor — forever, or
+   fade after N rounds? (DF-brain says forever; render budget says probably fine.)
+2. Weather/exterior atmosphere (their system was un-researchable): defer to the
+   exterior-walks render pass, or spec a simple realm-sky + drift-particle card layer now?
+3. Blood tone default at the effects layer: full grim (current DM register) with the
+   children carve-out — confirm it applies to VISUALS too.

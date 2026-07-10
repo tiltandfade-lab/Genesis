@@ -22,8 +22,13 @@ Codex packets READY: regen-v3 round3 (incl. magenta-fails ×12) + DRESSING-GEN (
 1. **Interior piece scale** — mediums render giant in rooms (contact sheet): fix the
    cell-vs-scale convention in interiorBuildPieces alongside the REGISTRY SIZING FOLD
    (corpus-sizing + v3-sizing + floor rulings → regenerate sprite-registry).
-2. Codex runs: regen-v3/round3/RUN-NOTES.md then dressing-gen/RUN-NOTES.md; fold arrivals
-   per ADDITIVE FOLD LAW; dressing art auto-drops into the placeholder channel.
+2. **DRESSING ART STARTED LANDING (2026-07-10 ~20:00)** — 25 dressing-gen sheets committed
+   UNGATED on the branch (`ui-sketches/sprite-sheets/*-dg-*.png`): all 3 FLAGSHIP realms
+   (fantasy/gloom/chrome) have flora+clutter+objects, plus effects core + all 12 accent
+   sheets + ash. **Next session = VP2 + VP2b**: gate → CLEAN-SHAPES/defringe slice per the
+   dressing-gen manifests → write assets/dressing/<slug>.png → extend REALM_DRESSING →
+   re-shoot the loop gate (placeholders fall away). Then the Gallery Pass on any clipped
+   arrivals. Codex still running regen-v3/round3 (magenta-fails etc.) in parallel.
 3. Adam taste calls: AO default (recommend OFF), GRAPHICS-ENGINE §G (corpses persist?,
    weather, blood visuals), DUNGEON-GRAPH open items.
 4. GIT-LFS migration at the quiet post-merge hour (runbook ready).

@@ -38,6 +38,10 @@
   .fig.pinned img { opacity:.85; }
   .fig.ref svg { height:100%; display:block; }
   .fig .unpin { position:absolute; top:-22px; font-size:10px; }
+  .fig .abtag { position:absolute; top:-22px; right:0; font-size:10px; font-weight:700; padding:1px 6px;
+                border-radius:3px; }
+  .fig .abtag.new { background:#1e3320; color:var(--pass); border:1px solid var(--pass); }
+  .fig .abtag.old { background:#3a1f1f; color:var(--fail); border:1px solid var(--fail); }
   #controls { display:flex; gap:14px; align-items:center; padding:8px 12px; background:var(--panel);
               border-top:1px solid var(--line); flex-wrap:wrap; }
   #controls input[type=range] { width:260px; }
@@ -99,11 +103,12 @@
       <input id="scaleVal" type="text" value="1.00">
       <button id="reset1" title="reset to 1.0">1.0</button>
       <button id="pin">pin ⇩</button>
+      <button id="abBtn" title="toggle NEW (recut) / OLD (pre-recut) art — SPRITE-RESCUE U4" style="display:none">A/B (x)</button>
       <button id="saveBtn" title="write scale + tags + note to the overlay">SAVE (s)</button>
       <button id="passBtn" class="pass">PASS (p)</button>
       <button id="failBtn" class="fail">FAIL (f)</button>
       <button id="clearBtn" title="clear verdict">clear</button>
-      <span class="kbd">← → navigate · [ ] scale · s save · p/f verdict · 0 reset</span>
+      <span class="kbd">← → navigate · [ ] scale · s save · p/f verdict · 0 reset · x A/B</span>
     </div>
   </div>
   <aside id="info"></aside>
@@ -160,6 +165,7 @@ const guideFor = e => GUIDES.find(g => g.key === (SRD_TO_GUIDE[sizeOf(e)] || "me
 
 let REG = {}, OVERLAY = {}, list = [], idx = 0, medPx = 150;
 let MAGENTA = {}, TRIAGE = {}, PREV = []; // SPRITE-RESCUE U1 scan/triage + U4 A/B backups
+let showPrev = false; // U4: A/B toggle — show the /sprites-prev/ backup instead of the current cut
 let pins = JSON.parse(localStorage.getItem("spritePins") || "[]");
 const PENDING = {}; // slug -> {scale} — unsaved edits; NOTHING writes to disk until Save/Pass/Fail
 const $ = id => document.getElementById(id);
@@ -226,9 +232,15 @@ function figHtml(e, cls){
   const h = Math.round(sizeScale(e) * medPx * scaleFor(e.slug));
   const goff = groundOffsetFor(e);
   const shiftStyle = goff ? ` transform:translateY(${Math.round(goff * h)}px);` : "";
+  // U4 A/B toggle: only the CURRENT (focused) figure can show the pre-recut backup
+  const usePrev = cls === "current" && showPrev && isRescued(e.slug);
+  const src = usePrev ? `/sprites-prev/${e.slug}.png` : `/sprites/${e.slug}.png`;
+  const abTag = (cls === "current" && isRescued(e.slug))
+    ? `<span class="abtag ${usePrev ? "old" : "new"}">${usePrev ? "OLD" : "NEW"}</span>` : "";
   return `<div class="fig ${cls}" data-slug="${e.slug}">
       ${cls === "pinned" ? `<button class="unpin" onclick="unpin('${e.slug}')">unpin ✕</button>` : ""}
-      <img src="/sprites/${e.slug}.png" style="height:${h}px;${shiftStyle}" draggable="false">
+      ${abTag}
+      <img src="${src}" style="height:${h}px;${shiftStyle}" draggable="false">
       <span class="cap">${e.name} · ${sizeOf(e)} → ${guideFor(e).key}${scaleFor(e.slug) !== 1 ? " · ×" + scaleFor(e.slug).toFixed(2) : ""}</span>
     </div>`;
 }
@@ -263,6 +275,9 @@ function render(){
     $("saveBtn").classList.toggle("dirty", dirty);
     $("saveBtn").textContent = dirty ? "SAVE (s) ●" : "SAVE (s)";
   }
+  // U4 A/B toggle: button only shows when the focused slug has a pre-recut backup
+  $("abBtn").style.display = (e && isRescued(e.slug)) ? "" : "none";
+  $("abBtn").classList.toggle("dirty", showPrev);
   renderInfo(); renderRail(); renderProgress();
 }
 let infoSlug = null;
@@ -372,7 +387,8 @@ async function verdict(v){
   toast(v.toUpperCase() + ": " + e.name);
   if(idx < list.length - 1) go(idx + 1); else render();
 }
-function go(i){ idx = Math.min(list.length - 1, Math.max(0, i)); render(); }
+function go(i){ idx = Math.min(list.length - 1, Math.max(0, i)); showPrev = false; render(); }
+function toggleAB(){ const e = cur(); if(e && isRescued(e.slug)){ showPrev = !showPrev; render(); } }
 function pinCur(){ const e = cur(); if(e && !pins.includes(e.slug)){ pins.push(e.slug); persistPins(); render(); } }
 function unpin(slug){ pins = pins.filter(s => s !== slug); persistPins(); render(); }
 function persistPins(){ localStorage.setItem("spritePins", JSON.stringify(pins)); }
@@ -385,6 +401,7 @@ $("scale").oninput = e => setScale(parseFloat(e.target.value));
 $("scaleVal").onchange = e => setScale(parseFloat(e.target.value) || 1);
 $("reset1").onclick = () => setScale(1);
 $("pin").onclick = pinCur;
+$("abBtn").onclick = toggleAB;
 $("saveBtn").onclick = saveChanges;
 $("passBtn").onclick = () => verdict("pass");
 $("failBtn").onclick = () => verdict("fail");
@@ -404,6 +421,7 @@ document.addEventListener("keydown", ev => {
   else if(ev.key === "[") setScale(parseFloat($("scale").value) - 0.05);
   else if(ev.key === "]") setScale(parseFloat($("scale").value) + 0.05);
   else if(ev.key === "0") setScale(1);
+  else if(ev.key === "x") toggleAB();
   else return;
   ev.preventDefault();
 });

@@ -34,10 +34,10 @@
   },
   "spr-fantasy-adult-black-dragon": {
     "edge": 0,
-    "interior": 897,
-    "opaque": 32349,
-    "pct": 2.8,
-    "strong": 97
+    "interior": 356,
+    "opaque": 33879,
+    "pct": 1.1,
+    "strong": 6
   },
   "spr-fantasy-adult-blue-dragon": {
     "edge": 0,
@@ -48,52 +48,52 @@
   },
   "spr-fantasy-adult-brass-dragon": {
     "edge": 0,
-    "interior": 77,
-    "opaque": 31047,
+    "interior": 55,
+    "opaque": 31499,
     "pct": 0.2,
-    "strong": 6
+    "strong": 0
   },
   "spr-fantasy-adult-bronze-dragon": {
     "edge": 0,
-    "interior": 58,
-    "opaque": 27961,
-    "pct": 0.2,
-    "strong": 10
+    "interior": 37,
+    "opaque": 28351,
+    "pct": 0.1,
+    "strong": 0
   },
   "spr-fantasy-adult-copper-dragon": {
     "edge": 0,
-    "interior": 169,
-    "opaque": 29648,
-    "pct": 0.6,
-    "strong": 79
+    "interior": 98,
+    "opaque": 30883,
+    "pct": 0.3,
+    "strong": 0
   },
   "spr-fantasy-adult-green-dragon": {
     "edge": 0,
-    "interior": 27,
-    "opaque": 27880,
-    "pct": 0.1,
-    "strong": 2
+    "interior": 12,
+    "opaque": 28433,
+    "pct": 0.0,
+    "strong": 0
   },
   "spr-fantasy-adult-red-dragon": {
     "edge": 0,
-    "interior": 223,
-    "opaque": 37006,
-    "pct": 0.6,
-    "strong": 102
+    "interior": 122,
+    "opaque": 38229,
+    "pct": 0.3,
+    "strong": 1
   },
   "spr-fantasy-adult-silver-dragon": {
     "edge": 0,
-    "interior": 289,
-    "opaque": 33127,
-    "pct": 0.9,
-    "strong": 55
+    "interior": 26,
+    "opaque": 35469,
+    "pct": 0.1,
+    "strong": 0
   },
   "spr-fantasy-adult-white-dragon": {
     "edge": 0,
-    "interior": 231,
-    "opaque": 29441,
-    "pct": 0.8,
-    "strong": 39
+    "interior": 30,
+    "opaque": 32743,
+    "pct": 0.1,
+    "strong": 0
   },
   "spr-fantasy-air-elemental": {
     "edge": 0,
@@ -111,66 +111,66 @@
   },
   "spr-fantasy-ancient-black-dragon": {
     "edge": 0,
-    "interior": 204,
-    "opaque": 34113,
-    "pct": 0.6,
-    "strong": 50
+    "interior": 0,
+    "opaque": 37516,
+    "pct": 0.0,
+    "strong": 0
   },
   "spr-fantasy-ancient-blue-dragon": {
     "edge": 0,
-    "interior": 106,
+    "interior": 4,
     "opaque": 28961,
-    "pct": 0.4,
-    "strong": 14
+    "pct": 0.0,
+    "strong": 0
   },
   "spr-fantasy-ancient-brass-dragon": {
     "edge": 0,
-    "interior": 195,
-    "opaque": 30932,
-    "pct": 0.6,
-    "strong": 43
+    "interior": 100,
+    "opaque": 31747,
+    "pct": 0.3,
+    "strong": 0
   },
   "spr-fantasy-ancient-bronze-dragon": {
     "edge": 0,
-    "interior": 170,
-    "opaque": 35656,
-    "pct": 0.5,
-    "strong": 75
+    "interior": 118,
+    "opaque": 36475,
+    "pct": 0.3,
+    "strong": 12
   },
   "spr-fantasy-ancient-copper-dragon": {
     "edge": 0,
-    "interior": 102,
-    "opaque": 33552,
-    "pct": 0.3,
-    "strong": 21
+    "interior": 48,
+    "opaque": 34622,
+    "pct": 0.1,
+    "strong": 0
   },
   "spr-fantasy-ancient-green-dragon": {
     "edge": 0,
-    "interior": 46,
+    "interior": 22,
     "opaque": 35853,
     "pct": 0.1,
-    "strong": 6
+    "strong": 0
   },
   "spr-fantasy-ancient-red-dragon": {
     "edge": 0,
-    "interior": 64,
+    "interior": 17,
     "opaque": 26917,
-    "pct": 0.2,
-    "strong": 10
+    "pct": 0.1,
+    "strong": 0
   },
   "spr-fantasy-ancient-silver-dragon": {
     "edge": 0,
-    "interior": 174,
+    "interior": 22,
     "opaque": 30103,
-    "pct": 0.6,
-    "strong": 16
+    "pct": 0.1,
+    "strong": 0
   },
   "spr-fantasy-ancient-white-dragon": {
     "edge": 0,
-    "interior": 290,
-    "opaque": 29676,
-    "pct": 1.0,
-    "strong": 76
+    "interior": 220,
+    "opaque": 30119,
+    "pct": 0.7,
+    "strong": 37
   },
   "spr-fantasy-animated-armor": {
     "edge": 0,
@@ -223,38 +223,38 @@
   },
   "spr-fantasy-arch-hag": {
     "edge": 0,
-    "interior": 115,
-    "opaque": 23022,
-    "pct": 0.5,
-    "strong": 35
+    "interior": 49,
+    "opaque": 24639,
+    "pct": 0.2,
+    "strong": 0
   },
   "spr-fantasy-archdruid": {
     "edge": 0,
-    "interior": 83,
-    "opaque": 32487,
-    "pct": 0.3,
-    "strong": 15
+    "interior": 50,
+    "opaque": 33354,
+    "pct": 0.1,
+    "strong": 4
   },
   "spr-fantasy-archelon": {
     "edge": 0,
-    "interior": 46,
-    "opaque": 27255,
-    "pct": 0.2,
-    "strong": 2
+    "interior": 19,
+    "opaque": 27521,
+    "pct": 0.1,
+    "strong": 0
   },
   "spr-fantasy-archmage": {
     "edge": 0,
-    "interior": 191,
-    "opaque": 30325,
-    "pct": 0.6,
-    "strong": 52
+    "interior": 108,
+    "opaque": 31193,
+    "pct": 0.3,
+    "strong": 4
   },
   "spr-fantasy-archpriest": {
     "edge": 0,
-    "interior": 215,
-    "opaque": 28959,
-    "pct": 0.7,
-    "strong": 52
+    "interior": 113,
+    "opaque": 29707,
+    "pct": 0.4,
+    "strong": 2
   },
   "spr-fantasy-assassin": {
     "edge": 0,
@@ -272,17 +272,17 @@
   },
   "spr-fantasy-astral-raider-knight": {
     "edge": 0,
-    "interior": 97,
-    "opaque": 18402,
-    "pct": 0.5,
-    "strong": 1
+    "interior": 53,
+    "opaque": 18767,
+    "pct": 0.3,
+    "strong": 0
   },
   "spr-fantasy-astral-raider-warrior": {
     "edge": 0,
-    "interior": 40,
-    "opaque": 18577,
-    "pct": 0.2,
-    "strong": 3
+    "interior": 5,
+    "opaque": 19447,
+    "pct": 0.0,
+    "strong": 0
   },
   "spr-fantasy-awakened-shrub": {
     "edge": 0,
@@ -293,10 +293,10 @@
   },
   "spr-fantasy-awakened-tree": {
     "edge": 0,
-    "interior": 93,
-    "opaque": 27110,
-    "pct": 0.3,
-    "strong": 9
+    "interior": 64,
+    "opaque": 27903,
+    "pct": 0.2,
+    "strong": 0
   },
   "spr-fantasy-axe-beak": {
     "edge": 0,
@@ -335,10 +335,10 @@
   },
   "spr-fantasy-balor": {
     "edge": 0,
-    "interior": 613,
-    "opaque": 28570,
-    "pct": 2.1,
-    "strong": 310
+    "interior": 487,
+    "opaque": 29493,
+    "pct": 1.7,
+    "strong": 19
   },
   "spr-fantasy-bandit": {
     "edge": 0,
@@ -363,10 +363,10 @@
   },
   "spr-fantasy-bandit-crime-lord": {
     "edge": 0,
-    "interior": 601,
-    "opaque": 24797,
-    "pct": 2.4,
-    "strong": 6
+    "interior": 18,
+    "opaque": 25878,
+    "pct": 0.1,
+    "strong": 0
   },
   "spr-fantasy-bandit-deceiver": {
     "edge": 0,
@@ -384,10 +384,10 @@
   },
   "spr-fantasy-banshee": {
     "edge": 0,
-    "interior": 246,
-    "opaque": 22374,
-    "pct": 1.1,
-    "strong": 71
+    "interior": 0,
+    "opaque": 26368,
+    "pct": 0.0,
+    "strong": 0
   },
   "spr-fantasy-barbed-devil": {
     "edge": 0,
@@ -419,17 +419,17 @@
   },
   "spr-fantasy-behir": {
     "edge": 0,
-    "interior": 32,
-    "opaque": 30010,
+    "interior": 34,
+    "opaque": 30563,
     "pct": 0.1,
     "strong": 0
   },
   "spr-fantasy-berserker": {
     "edge": 0,
-    "interior": 20,
-    "opaque": 17025,
+    "interior": 22,
+    "opaque": 17184,
     "pct": 0.1,
-    "strong": 6
+    "strong": 3
   },
   "spr-fantasy-berserker-commander": {
     "edge": 0,
@@ -454,9 +454,9 @@
   },
   "spr-fantasy-black-pudding": {
     "edge": 0,
-    "interior": 22,
-    "opaque": 28093,
-    "pct": 0.1,
+    "interior": 3,
+    "opaque": 28600,
+    "pct": 0.0,
     "strong": 0
   },
   "spr-fantasy-blind-deep-stalker": {
@@ -475,10 +475,10 @@
   },
   "spr-fantasy-blob-of-annihilation": {
     "edge": 0,
-    "interior": 275,
+    "interior": 47,
     "opaque": 39314,
-    "pct": 0.7,
-    "strong": 37
+    "pct": 0.1,
+    "strong": 3
   },
   "spr-fantasy-blood-hawk": {
     "edge": 0,
@@ -545,17 +545,17 @@
   },
   "spr-fantasy-brazen-gorgon": {
     "edge": 0,
-    "interior": 83,
-    "opaque": 25852,
-    "pct": 0.3,
-    "strong": 24
+    "interior": 57,
+    "opaque": 26396,
+    "pct": 0.2,
+    "strong": 6
   },
   "spr-fantasy-bronze-dragon-wyrmling": {
     "edge": 0,
-    "interior": 32,
-    "opaque": 21999,
+    "interior": 28,
+    "opaque": 22464,
     "pct": 0.1,
-    "strong": 11
+    "strong": 1
   },
   "spr-fantasy-brown-bear": {
     "edge": 0,
@@ -706,10 +706,10 @@
   },
   "spr-fantasy-cloaker": {
     "edge": 0,
-    "interior": 636,
-    "opaque": 20032,
-    "pct": 3.2,
-    "strong": 54
+    "interior": 125,
+    "opaque": 21690,
+    "pct": 0.6,
+    "strong": 0
   },
   "spr-fantasy-clockwork-law-construct-duodrone": {
     "edge": 0,
@@ -741,10 +741,10 @@
   },
   "spr-fantasy-cloud-giant": {
     "edge": 0,
-    "interior": 413,
-    "opaque": 29695,
-    "pct": 1.4,
-    "strong": 129
+    "interior": 247,
+    "opaque": 30910,
+    "pct": 0.8,
+    "strong": 14
   },
   "spr-fantasy-cockatrice": {
     "edge": 0,
@@ -755,10 +755,10 @@
   },
   "spr-fantasy-cockatrice-regent": {
     "edge": 0,
-    "interior": 32,
-    "opaque": 21744,
+    "interior": 25,
+    "opaque": 22244,
     "pct": 0.1,
-    "strong": 7
+    "strong": 1
   },
   "spr-fantasy-colossus": {
     "edge": 0,
@@ -776,10 +776,10 @@
   },
   "spr-fantasy-constrictor-snake": {
     "edge": 0,
-    "interior": 32,
-    "opaque": 22250,
+    "interior": 29,
+    "opaque": 22542,
     "pct": 0.1,
-    "strong": 20
+    "strong": 11
   },
   "spr-fantasy-copper-dragon-wyrmling": {
     "edge": 0,
@@ -804,10 +804,10 @@
   },
   "spr-fantasy-crawling-claw": {
     "edge": 0,
-    "interior": 109,
-    "opaque": 11453,
-    "pct": 1.0,
-    "strong": 11
+    "interior": 74,
+    "opaque": 11788,
+    "pct": 0.6,
+    "strong": 4
   },
   "spr-fantasy-crocodile": {
     "edge": 0,
@@ -972,10 +972,10 @@
   },
   "spr-fantasy-djinni": {
     "edge": 0,
-    "interior": 217,
-    "opaque": 20837,
-    "pct": 1.0,
-    "strong": 46
+    "interior": 165,
+    "opaque": 21201,
+    "pct": 0.8,
+    "strong": 18
   },
   "spr-fantasy-domestic-animal-a-single-caged-ferret-kit-young-hyperactive-still-learning-the-vermin-catcher-s-trade": {
     "edge": 0,
@@ -1007,10 +1007,10 @@
   },
   "spr-fantasy-domestic-animal-a-single-goat-headstrong-climbs-what-it-shouldn-t-eats-what-it-shouldn-t": {
     "edge": 0,
-    "interior": 26,
-    "opaque": 21408,
+    "interior": 19,
+    "opaque": 21586,
     "pct": 0.1,
-    "strong": 7
+    "strong": 2
   },
   "spr-fantasy-domestic-animal-a-single-goose-from-the-flock-loud-territorial-first-to-mark-a-stranger": {
     "edge": 0,
@@ -1042,9 +1042,9 @@
   },
   "spr-fantasy-domestic-animal-a-single-pig-smarter-than-it-s-given-credit-for-rooting-at-the-fence-line": {
     "edge": 0,
-    "interior": 36,
-    "opaque": 21326,
-    "pct": 0.2,
+    "interior": 25,
+    "opaque": 21488,
+    "pct": 0.1,
     "strong": 0
   },
   "spr-fantasy-domestic-animal-a-single-pony-smaller-and-calmer-than-the-war-mule-a-child-s-first-mount": {
@@ -1161,10 +1161,10 @@
   },
   "spr-fantasy-dracolich": {
     "edge": 0,
-    "interior": 797,
-    "opaque": 31583,
-    "pct": 2.5,
-    "strong": 175
+    "interior": 269,
+    "opaque": 33483,
+    "pct": 0.8,
+    "strong": 2
   },
   "spr-fantasy-draft-horse": {
     "edge": 0,
@@ -1175,10 +1175,10 @@
   },
   "spr-fantasy-dragon-turtle": {
     "edge": 0,
-    "interior": 258,
-    "opaque": 28090,
-    "pct": 0.9,
-    "strong": 203
+    "interior": 231,
+    "opaque": 28525,
+    "pct": 0.8,
+    "strong": 3
   },
   "spr-fantasy-dragonborn-ship-s-purser-dragonborn-keeps-the-manifest-honest-mostly": {
     "edge": 0,
@@ -1266,15 +1266,15 @@
   },
   "spr-fantasy-dungeon-animal-cave-adapted-spider-pale-eyeless-spins-webs-across-passages-nobody-s-walked-in-years": {
     "edge": 0,
-    "interior": 256,
-    "opaque": 14706,
-    "pct": 1.7,
-    "strong": 88
+    "interior": 105,
+    "opaque": 15910,
+    "pct": 0.7,
+    "strong": 0
   },
   "spr-fantasy-dungeon-animal-cave-cricket-oversized-chirping-alone-in-the-dark-first-warning-of-the-swarm-nearby": {
     "edge": 0,
-    "interior": 23,
-    "opaque": 10056,
+    "interior": 25,
+    "opaque": 10323,
     "pct": 0.2,
     "strong": 1
   },
@@ -1413,10 +1413,10 @@
   },
   "spr-fantasy-dust-mephit": {
     "edge": 0,
-    "interior": 838,
-    "opaque": 15235,
-    "pct": 5.5,
-    "strong": 343
+    "interior": 0,
+    "opaque": 19985,
+    "pct": 0.0,
+    "strong": 0
   },
   "spr-fantasy-dwarven-brewer-the-tavern-s-actual-reason-for-existing": {
     "edge": 0,
@@ -1483,10 +1483,10 @@
   },
   "spr-fantasy-elemental-cataclysm": {
     "edge": 0,
-    "interior": 2073,
+    "interior": 1647,
     "opaque": 39522,
-    "pct": 5.2,
-    "strong": 762
+    "pct": 4.2,
+    "strong": 311
   },
   "spr-fantasy-elemental-cultist": {
     "edge": 0,
@@ -1546,10 +1546,10 @@
   },
   "spr-fantasy-empyrean": {
     "edge": 0,
-    "interior": 2311,
+    "interior": 409,
     "opaque": 27331,
-    "pct": 8.5,
-    "strong": 328
+    "pct": 1.5,
+    "strong": 1
   },
   "spr-fantasy-empyrean-iota": {
     "edge": 0,
@@ -1616,10 +1616,10 @@
   },
   "spr-fantasy-fiend-cultist": {
     "edge": 0,
-    "interior": 197,
-    "opaque": 19297,
-    "pct": 1.0,
-    "strong": 39
+    "interior": 110,
+    "opaque": 20067,
+    "pct": 0.5,
+    "strong": 3
   },
   "spr-fantasy-fire-elemental": {
     "edge": 0,
@@ -1679,10 +1679,10 @@
   },
   "spr-fantasy-flesh-golem": {
     "edge": 0,
-    "interior": 59,
-    "opaque": 22359,
-    "pct": 0.3,
-    "strong": 11
+    "interior": 16,
+    "opaque": 23074,
+    "pct": 0.1,
+    "strong": 0
   },
   "spr-fantasy-flying-snake": {
     "edge": 0,
@@ -1749,10 +1749,10 @@
   },
   "spr-fantasy-ghast-base": {
     "edge": 0,
-    "interior": 34,
-    "opaque": 12180,
-    "pct": 0.3,
-    "strong": 14
+    "interior": 28,
+    "opaque": 12517,
+    "pct": 0.2,
+    "strong": 1
   },
   "spr-fantasy-ghast-gravecaller-spellstitched-elite": {
     "edge": 0,
@@ -1763,10 +1763,10 @@
   },
   "spr-fantasy-ghost": {
     "edge": 0,
-    "interior": 851,
-    "opaque": 19711,
-    "pct": 4.3,
-    "strong": 240
+    "interior": 0,
+    "opaque": 24542,
+    "pct": 0.0,
+    "strong": 0
   },
   "spr-fantasy-ghoul": {
     "edge": 0,
@@ -1847,10 +1847,10 @@
   },
   "spr-fantasy-giant-elk": {
     "edge": 0,
-    "interior": 111,
-    "opaque": 18624,
-    "pct": 0.6,
-    "strong": 29
+    "interior": 42,
+    "opaque": 20413,
+    "pct": 0.2,
+    "strong": 0
   },
   "spr-fantasy-giant-fire-beetle": {
     "edge": 0,
@@ -2127,17 +2127,17 @@
   },
   "spr-fantasy-gorgon": {
     "edge": 0,
-    "interior": 94,
-    "opaque": 22297,
-    "pct": 0.4,
-    "strong": 3
+    "interior": 23,
+    "opaque": 23696,
+    "pct": 0.1,
+    "strong": 0
   },
   "spr-fantasy-graveyard-revenant": {
     "edge": 0,
-    "interior": 160,
-    "opaque": 21670,
-    "pct": 0.7,
-    "strong": 26
+    "interior": 23,
+    "opaque": 24207,
+    "pct": 0.1,
+    "strong": 0
   },
   "spr-fantasy-gray-chaos-frog": {
     "edge": 0,
@@ -2162,17 +2162,17 @@
   },
   "spr-fantasy-greater-shadow": {
     "edge": 0,
-    "interior": 1546,
-    "opaque": 21097,
-    "pct": 7.3,
-    "strong": 47
+    "interior": 0,
+    "opaque": 26311,
+    "pct": 0.0,
+    "strong": 0
   },
   "spr-fantasy-green-chaos-frog": {
     "edge": 0,
-    "interior": 360,
-    "opaque": 28511,
-    "pct": 1.3,
-    "strong": 39
+    "interior": 195,
+    "opaque": 29153,
+    "pct": 0.7,
+    "strong": 1
   },
   "spr-fantasy-green-dragon-wyrmling": {
     "edge": 0,
@@ -2190,10 +2190,10 @@
   },
   "spr-fantasy-grell": {
     "edge": 0,
-    "interior": 417,
-    "opaque": 17838,
-    "pct": 2.3,
-    "strong": 39
+    "interior": 114,
+    "opaque": 18772,
+    "pct": 0.6,
+    "strong": 5
   },
   "spr-fantasy-grick": {
     "edge": 0,
@@ -2323,10 +2323,10 @@
   },
   "spr-fantasy-haunting-revenant": {
     "edge": 0,
-    "interior": 1183,
-    "opaque": 25053,
-    "pct": 4.7,
-    "strong": 85
+    "interior": 606,
+    "opaque": 26369,
+    "pct": 2.3,
+    "strong": 11
   },
   "spr-fantasy-hawk": {
     "edge": 0,
@@ -2358,10 +2358,10 @@
   },
   "spr-fantasy-hezrou": {
     "edge": 0,
-    "interior": 68,
-    "opaque": 24591,
-    "pct": 0.3,
-    "strong": 10
+    "interior": 23,
+    "opaque": 25692,
+    "pct": 0.1,
+    "strong": 1
   },
   "spr-fantasy-hidden-fanatic-human": {
     "edge": 0,
@@ -2540,10 +2540,10 @@
   },
   "spr-fantasy-invisible-stalker": {
     "edge": 0,
-    "interior": 7899,
-    "opaque": 11057,
-    "pct": 71.4,
-    "strong": 6701
+    "interior": 0,
+    "opaque": 15507,
+    "pct": 0.0,
+    "strong": 0
   },
   "spr-fantasy-iron-golem": {
     "edge": 0,
@@ -2715,10 +2715,10 @@
   },
   "spr-fantasy-killer-whale": {
     "edge": 0,
-    "interior": 335,
-    "opaque": 20835,
-    "pct": 1.6,
-    "strong": 135
+    "interior": 217,
+    "opaque": 21575,
+    "pct": 1.0,
+    "strong": 18
   },
   "spr-fantasy-knight": {
     "edge": 0,
@@ -2743,17 +2743,17 @@
   },
   "spr-fantasy-kraken": {
     "edge": 0,
-    "interior": 101,
+    "interior": 38,
     "opaque": 32791,
-    "pct": 0.3,
-    "strong": 20
+    "pct": 0.1,
+    "strong": 2
   },
   "spr-fantasy-lacedon-sodden-ghoul": {
     "edge": 0,
-    "interior": 137,
-    "opaque": 19551,
-    "pct": 0.7,
-    "strong": 18
+    "interior": 12,
+    "opaque": 22217,
+    "pct": 0.1,
+    "strong": 0
   },
   "spr-fantasy-lamia": {
     "edge": 0,
@@ -2876,10 +2876,10 @@
   },
   "spr-fantasy-manes-vaporspawn": {
     "edge": 0,
-    "interior": 1237,
-    "opaque": 19517,
-    "pct": 6.3,
-    "strong": 52
+    "interior": 0,
+    "opaque": 24240,
+    "pct": 0.0,
+    "strong": 0
   },
   "spr-fantasy-manticore": {
     "edge": 0,
@@ -2890,10 +2890,10 @@
   },
   "spr-fantasy-marid": {
     "edge": 0,
-    "interior": 574,
-    "opaque": 21688,
-    "pct": 2.6,
-    "strong": 222
+    "interior": 360,
+    "opaque": 22933,
+    "pct": 1.6,
+    "strong": 14
   },
   "spr-fantasy-marilith": {
     "edge": 0,
@@ -2925,10 +2925,10 @@
   },
   "spr-fantasy-merfolk-wavebender": {
     "edge": 0,
-    "interior": 812,
-    "opaque": 25811,
-    "pct": 3.1,
-    "strong": 268
+    "interior": 160,
+    "opaque": 30782,
+    "pct": 0.5,
+    "strong": 0
   },
   "spr-fantasy-merrow": {
     "edge": 0,
@@ -3296,9 +3296,9 @@
   },
   "spr-fantasy-piercer": {
     "edge": 0,
-    "interior": 127,
-    "opaque": 20713,
-    "pct": 0.6,
+    "interior": 18,
+    "opaque": 21753,
+    "pct": 0.1,
     "strong": 0
   },
   "spr-fantasy-piranha": {
@@ -3317,10 +3317,10 @@
   },
   "spr-fantasy-pirate-admiral": {
     "edge": 0,
-    "interior": 94,
-    "opaque": 26512,
-    "pct": 0.4,
-    "strong": 32
+    "interior": 68,
+    "opaque": 27304,
+    "pct": 0.2,
+    "strong": 5
   },
   "spr-fantasy-pirate-captain": {
     "edge": 0,
@@ -3352,17 +3352,17 @@
   },
   "spr-fantasy-planetar": {
     "edge": 0,
-    "interior": 989,
-    "opaque": 30032,
-    "pct": 3.3,
-    "strong": 499
+    "interior": 0,
+    "opaque": 33404,
+    "pct": 0.0,
+    "strong": 0
   },
   "spr-fantasy-plesiosaurus": {
     "edge": 0,
-    "interior": 109,
-    "opaque": 17921,
-    "pct": 0.6,
-    "strong": 38
+    "interior": 89,
+    "opaque": 18400,
+    "pct": 0.5,
+    "strong": 5
   },
   "spr-fantasy-polar-bear": {
     "edge": 0,
@@ -3373,10 +3373,10 @@
   },
   "spr-fantasy-poltergeist": {
     "edge": 0,
-    "interior": 329,
-    "opaque": 17500,
-    "pct": 1.9,
-    "strong": 44
+    "interior": 28,
+    "opaque": 21869,
+    "pct": 0.1,
+    "strong": 0
   },
   "spr-fantasy-pony": {
     "edge": 0,
@@ -3408,10 +3408,10 @@
   },
   "spr-fantasy-psychic-gray-ooze": {
     "edge": 0,
-    "interior": 49,
-    "opaque": 23230,
-    "pct": 0.2,
-    "strong": 2
+    "interior": 18,
+    "opaque": 23648,
+    "pct": 0.1,
+    "strong": 0
   },
   "spr-fantasy-pteranodon": {
     "edge": 0,
@@ -3506,10 +3506,10 @@
   },
   "spr-fantasy-remorhaz": {
     "edge": 0,
-    "interior": 40,
-    "opaque": 34570,
+    "interior": 18,
+    "opaque": 35301,
     "pct": 0.1,
-    "strong": 4
+    "strong": 0
   },
   "spr-fantasy-rhinoceros": {
     "edge": 0,
@@ -3548,10 +3548,10 @@
   },
   "spr-fantasy-roc": {
     "edge": 0,
-    "interior": 432,
-    "opaque": 27608,
-    "pct": 1.6,
-    "strong": 2
+    "interior": 9,
+    "opaque": 28830,
+    "pct": 0.0,
+    "strong": 0
   },
   "spr-fantasy-roper": {
     "edge": 0,
@@ -3653,10 +3653,10 @@
   },
   "spr-fantasy-sea-hag": {
     "edge": 0,
-    "interior": 94,
-    "opaque": 25156,
-    "pct": 0.4,
-    "strong": 11
+    "interior": 34,
+    "opaque": 26445,
+    "pct": 0.1,
+    "strong": 0
   },
   "spr-fantasy-seahorse": {
     "edge": 0,
@@ -3688,24 +3688,24 @@
   },
   "spr-fantasy-shadow": {
     "edge": 0,
-    "interior": 207,
-    "opaque": 16601,
-    "pct": 1.2,
-    "strong": 8
+    "interior": 19,
+    "opaque": 18749,
+    "pct": 0.1,
+    "strong": 0
   },
   "spr-fantasy-shadow-dragon": {
     "edge": 0,
-    "interior": 1673,
-    "opaque": 28830,
-    "pct": 5.8,
-    "strong": 105
+    "interior": 684,
+    "opaque": 29900,
+    "pct": 2.3,
+    "strong": 4
   },
   "spr-fantasy-shambling-mound": {
     "edge": 0,
-    "interior": 84,
-    "opaque": 29223,
-    "pct": 0.3,
-    "strong": 12
+    "interior": 64,
+    "opaque": 29683,
+    "pct": 0.2,
+    "strong": 7
   },
   "spr-fantasy-shield-guardian": {
     "edge": 0,
@@ -3723,38 +3723,38 @@
   },
   "spr-fantasy-silver-dragon-wyrmling": {
     "edge": 0,
-    "interior": 134,
-    "opaque": 22909,
-    "pct": 0.6,
-    "strong": 44
+    "interior": 24,
+    "opaque": 25002,
+    "pct": 0.1,
+    "strong": 0
   },
   "spr-fantasy-skeleton": {
     "edge": 0,
-    "interior": 97,
-    "opaque": 11734,
-    "pct": 0.8,
-    "strong": 6
+    "interior": 32,
+    "opaque": 12154,
+    "pct": 0.3,
+    "strong": 0
   },
   "spr-fantasy-skeleton-archer": {
     "edge": 0,
-    "interior": 120,
-    "opaque": 14053,
-    "pct": 0.9,
-    "strong": 34
+    "interior": 11,
+    "opaque": 15854,
+    "pct": 0.1,
+    "strong": 0
   },
   "spr-fantasy-skeleton-warrior": {
     "edge": 0,
-    "interior": 107,
-    "opaque": 17172,
-    "pct": 0.6,
-    "strong": 8
+    "interior": 3,
+    "opaque": 18662,
+    "pct": 0.0,
+    "strong": 0
   },
   "spr-fantasy-smoke-mephit": {
     "edge": 0,
-    "interior": 110,
-    "opaque": 17895,
-    "pct": 0.6,
-    "strong": 10
+    "interior": 69,
+    "opaque": 18447,
+    "pct": 0.4,
+    "strong": 1
   },
   "spr-fantasy-smuggler-goliath": {
     "edge": 0,
@@ -3765,24 +3765,24 @@
   },
   "spr-fantasy-solar": {
     "edge": 0,
-    "interior": 1633,
-    "opaque": 35803,
-    "pct": 4.6,
-    "strong": 691
+    "interior": 895,
+    "opaque": 36881,
+    "pct": 2.4,
+    "strong": 0
   },
   "spr-fantasy-specter": {
     "edge": 0,
-    "interior": 286,
-    "opaque": 21097,
-    "pct": 1.4,
-    "strong": 19
+    "interior": 26,
+    "opaque": 23763,
+    "pct": 0.1,
+    "strong": 0
   },
   "spr-fantasy-sphinx-of-lore": {
     "edge": 0,
-    "interior": 37,
-    "opaque": 32718,
+    "interior": 28,
+    "opaque": 33030,
     "pct": 0.1,
-    "strong": 5
+    "strong": 2
   },
   "spr-fantasy-sphinx-of-secrets": {
     "edge": 0,
@@ -3793,10 +3793,10 @@
   },
   "spr-fantasy-sphinx-of-valor": {
     "edge": 0,
-    "interior": 119,
-    "opaque": 33280,
-    "pct": 0.4,
-    "strong": 22
+    "interior": 82,
+    "opaque": 33526,
+    "pct": 0.2,
+    "strong": 7
   },
   "spr-fantasy-sphinx-of-wonder": {
     "edge": 0,
@@ -3842,10 +3842,10 @@
   },
   "spr-fantasy-spy-master": {
     "edge": 0,
-    "interior": 36,
-    "opaque": 18524,
-    "pct": 0.2,
-    "strong": 8
+    "interior": 19,
+    "opaque": 19030,
+    "pct": 0.1,
+    "strong": 0
   },
   "spr-fantasy-stand-in-dwarf": {
     "edge": 0,
@@ -3856,10 +3856,10 @@
   },
   "spr-fantasy-steam-mephit": {
     "edge": 0,
-    "interior": 38,
-    "opaque": 21934,
-    "pct": 0.2,
-    "strong": 6
+    "interior": 26,
+    "opaque": 22129,
+    "pct": 0.1,
+    "strong": 3
   },
   "spr-fantasy-stirge": {
     "edge": 0,
@@ -3870,8 +3870,8 @@
   },
   "spr-fantasy-stone-giant": {
     "edge": 0,
-    "interior": 25,
-    "opaque": 26928,
+    "interior": 17,
+    "opaque": 27188,
     "pct": 0.1,
     "strong": 0
   },
@@ -3898,24 +3898,24 @@
   },
   "spr-fantasy-swamp-shadow": {
     "edge": 0,
-    "interior": 101,
-    "opaque": 21674,
-    "pct": 0.5,
-    "strong": 34
+    "interior": 63,
+    "opaque": 23282,
+    "pct": 0.3,
+    "strong": 5
   },
   "spr-fantasy-swarm-of-bats": {
     "edge": 0,
-    "interior": 189,
-    "opaque": 13364,
-    "pct": 1.4,
-    "strong": 46
+    "interior": 53,
+    "opaque": 16865,
+    "pct": 0.3,
+    "strong": 0
   },
   "spr-fantasy-swarm-of-crawling-claws": {
     "edge": 0,
-    "interior": 891,
-    "opaque": 24695,
-    "pct": 3.6,
-    "strong": 195
+    "interior": 366,
+    "opaque": 27930,
+    "pct": 1.3,
+    "strong": 0
   },
   "spr-fantasy-swarm-of-dretches": {
     "edge": 0,
@@ -3926,17 +3926,17 @@
   },
   "spr-fantasy-swarm-of-insects": {
     "edge": 0,
-    "interior": 678,
-    "opaque": 13220,
-    "pct": 5.1,
-    "strong": 152
+    "interior": 139,
+    "opaque": 17445,
+    "pct": 0.8,
+    "strong": 0
   },
   "spr-fantasy-swarm-of-larvae": {
     "edge": 0,
-    "interior": 75,
-    "opaque": 26184,
-    "pct": 0.3,
-    "strong": 5
+    "interior": 52,
+    "opaque": 26523,
+    "pct": 0.2,
+    "strong": 1
   },
   "spr-fantasy-swarm-of-lemures": {
     "edge": 0,
@@ -3947,24 +3947,24 @@
   },
   "spr-fantasy-swarm-of-piranhas": {
     "edge": 0,
-    "interior": 1296,
-    "opaque": 23998,
-    "pct": 5.4,
-    "strong": 335
+    "interior": 137,
+    "opaque": 27436,
+    "pct": 0.5,
+    "strong": 0
   },
   "spr-fantasy-swarm-of-rats": {
     "edge": 0,
-    "interior": 119,
-    "opaque": 21165,
-    "pct": 0.6,
-    "strong": 16
+    "interior": 89,
+    "opaque": 21808,
+    "pct": 0.4,
+    "strong": 0
   },
   "spr-fantasy-swarm-of-ravens": {
     "edge": 0,
-    "interior": 61,
-    "opaque": 19654,
-    "pct": 0.3,
-    "strong": 11
+    "interior": 47,
+    "opaque": 20026,
+    "pct": 0.2,
+    "strong": 6
   },
   "spr-fantasy-swarm-of-stirges": {
     "edge": 0,
@@ -4024,10 +4024,10 @@
   },
   "spr-fantasy-the-vine-blight": {
     "edge": 0,
-    "interior": 81,
-    "opaque": 22685,
-    "pct": 0.4,
-    "strong": 19
+    "interior": 43,
+    "opaque": 24123,
+    "pct": 0.2,
+    "strong": 1
   },
   "spr-fantasy-thief-halfling": {
     "edge": 0,
@@ -4122,10 +4122,10 @@
   },
   "spr-fantasy-tree-blight": {
     "edge": 0,
-    "interior": 113,
-    "opaque": 26427,
-    "pct": 0.4,
-    "strong": 14
+    "interior": 25,
+    "opaque": 29393,
+    "pct": 0.1,
+    "strong": 0
   },
   "spr-fantasy-triceratops": {
     "edge": 0,
@@ -4150,10 +4150,10 @@
   },
   "spr-fantasy-troll-amalgam": {
     "edge": 0,
-    "interior": 43,
-    "opaque": 29560,
+    "interior": 33,
+    "opaque": 30518,
     "pct": 0.1,
-    "strong": 10
+    "strong": 0
   },
   "spr-fantasy-troll-limb": {
     "edge": 0,
@@ -4192,10 +4192,10 @@
   },
   "spr-fantasy-unicorn": {
     "edge": 0,
-    "interior": 194,
-    "opaque": 21136,
-    "pct": 0.9,
-    "strong": 21
+    "interior": 0,
+    "opaque": 23468,
+    "pct": 0.0,
+    "strong": 0
   },
   "spr-fantasy-unofficial-power-elf": {
     "edge": 0,
@@ -4206,17 +4206,17 @@
   },
   "spr-fantasy-vampire": {
     "edge": 0,
-    "interior": 30,
-    "opaque": 26982,
+    "interior": 20,
+    "opaque": 27291,
     "pct": 0.1,
-    "strong": 6
+    "strong": 2
   },
   "spr-fantasy-vampire-familiar": {
     "edge": 0,
-    "interior": 35,
-    "opaque": 24605,
+    "interior": 24,
+    "opaque": 25300,
     "pct": 0.1,
-    "strong": 17
+    "strong": 1
   },
   "spr-fantasy-vampire-nightbringer": {
     "edge": 0,
@@ -4304,10 +4304,10 @@
   },
   "spr-fantasy-warhorse-skeleton": {
     "edge": 0,
-    "interior": 26,
-    "opaque": 16153,
-    "pct": 0.2,
-    "strong": 2
+    "interior": 11,
+    "opaque": 16863,
+    "pct": 0.1,
+    "strong": 0
   },
   "spr-fantasy-warrior-infantry": {
     "edge": 0,
@@ -4325,17 +4325,17 @@
   },
   "spr-fantasy-water-elemental": {
     "edge": 0,
-    "interior": 434,
-    "opaque": 29057,
-    "pct": 1.5,
-    "strong": 180
+    "interior": 216,
+    "opaque": 30450,
+    "pct": 0.7,
+    "strong": 4
   },
   "spr-fantasy-water-weird": {
     "edge": 0,
-    "interior": 186,
-    "opaque": 28958,
-    "pct": 0.6,
-    "strong": 68
+    "interior": 51,
+    "opaque": 33489,
+    "pct": 0.2,
+    "strong": 0
   },
   "spr-fantasy-weasel": {
     "edge": 0,
@@ -4381,10 +4381,10 @@
   },
   "spr-fantasy-white-dragon-wyrmling": {
     "edge": 0,
-    "interior": 71,
-    "opaque": 18762,
-    "pct": 0.4,
-    "strong": 9
+    "interior": 34,
+    "opaque": 19554,
+    "pct": 0.2,
+    "strong": 2
   },
   "spr-fantasy-wight": {
     "edge": 0,
@@ -4598,10 +4598,10 @@
   },
   "spr-fantasy-winter-wolf": {
     "edge": 0,
-    "interior": 69,
-    "opaque": 24701,
-    "pct": 0.3,
-    "strong": 12
+    "interior": 30,
+    "opaque": 25358,
+    "pct": 0.1,
+    "strong": 2
   },
   "spr-fantasy-wolf": {
     "edge": 0,
@@ -4619,10 +4619,10 @@
   },
   "spr-fantasy-wraith": {
     "edge": 0,
-    "interior": 197,
-    "opaque": 19842,
-    "pct": 1.0,
-    "strong": 32
+    "interior": 63,
+    "opaque": 22720,
+    "pct": 0.3,
+    "strong": 0
   },
   "spr-fantasy-wyvern": {
     "edge": 0,
@@ -4717,10 +4717,10 @@
   },
   "spr-fantasy-yuan-ti-abomination": {
     "edge": 0,
-    "interior": 136,
-    "opaque": 28448,
-    "pct": 0.5,
-    "strong": 14
+    "interior": 70,
+    "opaque": 29046,
+    "pct": 0.2,
+    "strong": 2
   },
   "spr-fantasy-yuan-ti-infiltrator": {
     "edge": 0,
@@ -4731,10 +4731,10 @@
   },
   "spr-fantasy-yuan-ti-malison-type-1": {
     "edge": 0,
-    "interior": 94,
-    "opaque": 25180,
-    "pct": 0.4,
-    "strong": 7
+    "interior": 67,
+    "opaque": 25471,
+    "pct": 0.3,
+    "strong": 5
   },
   "spr-fantasy-yuan-ti-malison-type-2": {
     "edge": 0,
@@ -4745,10 +4745,10 @@
   },
   "spr-fantasy-yuan-ti-malison-type-3": {
     "edge": 0,
-    "interior": 211,
-    "opaque": 24560,
-    "pct": 0.9,
-    "strong": 35
+    "interior": 49,
+    "opaque": 26885,
+    "pct": 0.2,
+    "strong": 0
   },
   "spr-fantasy-zombie": {
     "edge": 0,
@@ -4759,10 +4759,10 @@
   },
   "spr-fantasy-zombie-plague-carrier": {
     "edge": 0,
-    "interior": 62,
-    "opaque": 16450,
-    "pct": 0.4,
-    "strong": 16
+    "interior": 35,
+    "opaque": 16954,
+    "pct": 0.2,
+    "strong": 2
   },
   "spr-pc-dragonborn-barbarian-female": {
     "edge": 0,
@@ -5144,17 +5144,17 @@
   },
   "spr-pc-elf-druid-female": {
     "edge": 0,
-    "interior": 70,
+    "interior": 0,
     "opaque": 16155,
-    "pct": 0.4,
-    "strong": 17
+    "pct": 0.0,
+    "strong": 0
   },
   "spr-pc-elf-druid-male": {
     "edge": 0,
-    "interior": 27,
+    "interior": 8,
     "opaque": 16122,
-    "pct": 0.2,
-    "strong": 14
+    "pct": 0.0,
+    "strong": 0
   },
   "spr-pc-elf-fighter-female": {
     "edge": 0,
@@ -5186,10 +5186,10 @@
   },
   "spr-pc-elf-paladin-female": {
     "edge": 0,
-    "interior": 79,
+    "interior": 50,
     "opaque": 14235,
-    "pct": 0.6,
-    "strong": 34
+    "pct": 0.4,
+    "strong": 0
   },
   "spr-pc-elf-paladin-male": {
     "edge": 0,
@@ -5298,17 +5298,17 @@
   },
   "spr-pc-gnome-cleric-female": {
     "edge": 0,
-    "interior": 81,
+    "interior": 21,
     "opaque": 13836,
-    "pct": 0.6,
-    "strong": 2
+    "pct": 0.2,
+    "strong": 0
   },
   "spr-pc-gnome-cleric-male": {
     "edge": 0,
-    "interior": 103,
+    "interior": 41,
     "opaque": 14671,
-    "pct": 0.7,
-    "strong": 4
+    "pct": 0.3,
+    "strong": 0
   },
   "spr-pc-gnome-druid-female": {
     "edge": 0,
@@ -5648,17 +5648,17 @@
   },
   "spr-pc-halfling-druid-female": {
     "edge": 0,
-    "interior": 263,
+    "interior": 200,
     "opaque": 17755,
-    "pct": 1.5,
-    "strong": 83
+    "pct": 1.1,
+    "strong": 6
   },
   "spr-pc-halfling-druid-male": {
     "edge": 0,
-    "interior": 112,
+    "interior": 92,
     "opaque": 20235,
-    "pct": 0.6,
-    "strong": 50
+    "pct": 0.5,
+    "strong": 13
   },
   "spr-pc-halfling-fighter-female": {
     "edge": 0,
@@ -5809,24 +5809,24 @@
   },
   "spr-pc-human-cleric-male": {
     "edge": 0,
-    "interior": 184,
+    "interior": 97,
     "opaque": 21285,
-    "pct": 0.9,
-    "strong": 17
+    "pct": 0.5,
+    "strong": 0
   },
   "spr-pc-human-druid-female": {
     "edge": 0,
-    "interior": 99,
+    "interior": 69,
     "opaque": 19239,
-    "pct": 0.5,
-    "strong": 47
+    "pct": 0.4,
+    "strong": 3
   },
   "spr-pc-human-druid-male": {
     "edge": 0,
-    "interior": 56,
+    "interior": 28,
     "opaque": 22074,
-    "pct": 0.3,
-    "strong": 14
+    "pct": 0.1,
+    "strong": 0
   },
   "spr-pc-human-fighter-female": {
     "edge": 0,
@@ -5858,17 +5858,17 @@
   },
   "spr-pc-human-paladin-female": {
     "edge": 0,
-    "interior": 250,
+    "interior": 73,
     "opaque": 19439,
-    "pct": 1.3,
-    "strong": 55
+    "pct": 0.4,
+    "strong": 0
   },
   "spr-pc-human-paladin-male": {
     "edge": 0,
-    "interior": 229,
+    "interior": 57,
     "opaque": 21093,
-    "pct": 1.1,
-    "strong": 41
+    "pct": 0.3,
+    "strong": 0
   },
   "spr-pc-human-ranger-female": {
     "edge": 0,
@@ -5900,17 +5900,17 @@
   },
   "spr-pc-human-sorcerer-female": {
     "edge": 0,
-    "interior": 204,
+    "interior": 100,
     "opaque": 18752,
-    "pct": 1.1,
-    "strong": 55
+    "pct": 0.5,
+    "strong": 0
   },
   "spr-pc-human-sorcerer-male": {
     "edge": 0,
-    "interior": 211,
+    "interior": 148,
     "opaque": 19159,
-    "pct": 1.1,
-    "strong": 91
+    "pct": 0.8,
+    "strong": 0
   },
   "spr-pc-human-warlock-female": {
     "edge": 0,
@@ -5970,31 +5970,31 @@
   },
   "spr-pc-orc-cleric-female": {
     "edge": 0,
-    "interior": 190,
+    "interior": 103,
     "opaque": 22673,
-    "pct": 0.8,
-    "strong": 42
+    "pct": 0.5,
+    "strong": 0
   },
   "spr-pc-orc-cleric-male": {
     "edge": 0,
-    "interior": 170,
+    "interior": 91,
     "opaque": 25761,
-    "pct": 0.7,
-    "strong": 44
+    "pct": 0.4,
+    "strong": 0
   },
   "spr-pc-orc-druid-female": {
     "edge": 0,
-    "interior": 153,
+    "interior": 121,
     "opaque": 20784,
-    "pct": 0.7,
-    "strong": 97
+    "pct": 0.6,
+    "strong": 14
   },
   "spr-pc-orc-druid-male": {
     "edge": 0,
-    "interior": 124,
+    "interior": 86,
     "opaque": 20998,
-    "pct": 0.6,
-    "strong": 59
+    "pct": 0.4,
+    "strong": 2
   },
   "spr-pc-orc-fighter-female": {
     "edge": 0,
@@ -6131,10 +6131,10 @@
   },
   "spr-pc-tiefling-bard-male": {
     "edge": 0,
-    "interior": 862,
+    "interior": 102,
     "opaque": 19385,
-    "pct": 4.4,
-    "strong": 21
+    "pct": 0.5,
+    "strong": 5
   },
   "spr-pc-tiefling-cleric-female": {
     "edge": 0,

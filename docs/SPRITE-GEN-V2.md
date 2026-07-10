@@ -165,8 +165,14 @@ Every regen prompt is assembled from these clauses, in this order:
    for theater/gloom/noir/ash/high-seas; cleaner-crisp allowed for fantasy/frontier/
    lost-world/cosmic) + realm identity line (chrome hyper-neon, cosmic navy-gold, etc.).
    Suburb/bright-kingdom: their own stylized register (bright-kingdom per §4 direction).
-6. **Expression clause** — "readable facial expression on every character at cell
-   resolution; expressive faces are a requirement, not decoration."
+6. **Expression clause (EXPANDED 2026-07-10 PM — the FFVI standard)** — "readable
+   facial expression on every character at cell resolution; expressive faces are a
+   requirement, not decoration. Every CREATURE sells its power and tells its story in
+   one silhouette: pose mid-intent (snarl, coiled to strike, mid-cast, hackles up) and
+   signature effects where they characterize — drool, sparks, smoke, ember glow,
+   dripping venom, crackling energy. No mannequin stillness, no neutral museum poses
+   (constructs/uncanny subjects may be still ON PURPOSE, and it should read as
+   intentional). Touchstone: FFVI-era spritework — maximum character per sprite."
 7. **Palette clause** — the SPRITE-PALETTE richness law for the realm (§5).
 8. **Swarm clause** (when applicable) — "swarms as a mounded pile at eye level, not
    scattered/stacked from above."

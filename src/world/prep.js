@@ -671,6 +671,7 @@ function applyPrep(w, result){
     pn.overlaid=true;                                    // applyPrep ran for this env — set regardless of whether briefing/segments came back null
     if(pn.needsReskin) pn.needsReskin=false;             // WALK-CONSUMPTION (Step B): the promoted frontier is now reskinned
     const nn=m.nodes[id]; if(nn) nn.brief=ov.briefing||null;
+    prepAttachSpatialPlan(w, id);                        // DUNGEON-GRAPH.md U4 §1 — dungeon-shaped frontiers get pn.spatial here, same overlay home as pn.segments above
   });
   let canonN=0;
   Object.keys(overlays).forEach(env=>{ (overlays[env].newCanon||[]).forEach(nc=>{
@@ -754,6 +755,117 @@ function prepStartTravelWalk(w, opts){
 function walkEntrySeg(walk){
   if(!walk || !walk.segments || !walk.segments.length) return 1;
   const e=walk.segments.find(s=>s.depth===0); return e?e.num:walk.segments[0].num;
+}
+
+/* ============================================================
+   DUNGEON-GRAPH.md U4 — walk binding. Room-enter == segment-enter: the EXISTING cursor above (pn.cursor)
+   IS the room the party stands in once a spatial plan exists — no second consumption path, no new event.
+   pn.spatial lives in the SAME prep-node overlay pn.segments already occupies (applyPrep, above);
+   attached once at prep time (walkId = the walk's storage key = the P.nodes id, so spatializePlan's
+   determinism law — same walkId ⇒ byte-identical cells — holds across re-entries/replays).
+   ============================================================ */
+
+/* attach a spatial+semantic plan to a dungeon-shaped frontier's prep-node overlay. Scoped to
+   `kind`-less frontier nodes only (never travel/job walks — their env is never "dungeon" for travel,
+   and job walks are deliberately excluded so a dungeon-envHint job walk stays untouched, matching
+   this unit's literal "prep-node overlay… same home as pn.segments" scope) whose rolled walk is
+   actually environment:"dungeon" with a non-empty segment graph. Residents: prep time never rolls
+   creature stat data (dwalkEncounter mints archetype/composition strings, not scaleVsHuman) — so this
+   always starts from pn.spatialResidents (default []), a pure human-scale plan; prepReSemanticizeSpatial
+   is the seam a LATER encounter-roll caller can use to re-derive scale domains once real resident data
+   exists (U4 does not invent that data itself, per the unit's own instruction). Every other environment
+   is completely untouched (pn.spatial is simply never set) — the BYTE-GATE (walk store shape for
+   non-dungeon walks identical before/after this unit) holds because this function returns before any
+   write when the guard fails. Honest-fail per U1/U2's own law: a plan/semantics call that can't verify
+   throws inside spatializePlan/semanticizePlan — caught here so a mechanically-honest failure never
+   crashes prep; pn.spatial simply stays null (identical to "no spatial surface" pre-U4). */
+function prepAttachSpatialPlan(w, id){
+  const P=prepOf(w), pn=P.nodes&&P.nodes[id];
+  if(!pn || pn.kind==="travel" || pn.kind==="job" || pn.env!=="dungeon") return null;
+  if(typeof spatializePlan!=="function" || typeof semanticizePlan!=="function") return null;
+  const walk=walkOfFrontier(w,id);
+  if(!walk || walk.environment!=="dungeon" || !Array.isArray(walk.segments) || !walk.segments.length) return null;
+  try{
+    const plan0=spatializePlan(walk.segments, walk.topology, { walkId:id });
+    pn.spatialResidents=pn.spatialResidents||[];
+    pn.spatial=semanticizePlan(plan0, walk.segments, pn.spatialResidents);
+  }catch(e){
+    pn.spatial=null;   // honest-fail, never a hand-patched plan (mirrors U1/U2's own discipline)
+  }
+  return pn.spatial;
+}
+
+/* the re-semanticize seam (U4 §1): callable once real resident data lands (a future encounter-roll
+   unit) to re-derive scale domains WITHOUT re-rolling the geometry — spatializePlan is walkId-seeded,
+   so re-running it with the SAME walkId reproduces the identical cells buffer; only semanticizePlan's
+   residents-driven layer changes. Never invents an encounter roll itself — the caller supplies
+   `residents` ([{segNum,sizeBand,scaleVsHuman,apex}], place-semantics.js's own shape). */
+function prepReSemanticizeSpatial(w, id, residents){
+  const P=prepOf(w), pn=P.nodes&&P.nodes[id];
+  if(!pn || !pn.spatial) return null;
+  const walk=walkOfFrontier(w,id);
+  if(!walk || typeof spatializePlan!=="function" || typeof semanticizePlan!=="function") return null;
+  try{
+    const plan0=spatializePlan(walk.segments, walk.topology, { walkId:id });
+    pn.spatialResidents=residents||[];
+    pn.spatial=semanticizePlan(plan0, walk.segments, pn.spatialResidents);
+  }catch(e){
+    return null;
+  }
+  return pn.spatial;
+}
+
+/* U4 §2 — segment cursor → room mapping. Consumers (U3's tray render + dm.js's combat cell-dims seam)
+   ask "which room is the party in" from the EXISTING walk cursor (pn.cursor.current) through this one
+   pure lookup — no new consumption path, no walkComplete change. Null-safe: no spatial plan / no
+   matching room ⇒ null (never a fabricated room). */
+function spatialRoomForSeg(pn, segNum){
+  if(!pn || !pn.spatial || !Array.isArray(pn.spatial.rooms)) return null;
+  return pn.spatial.rooms.find(r=>r.segNum===segNum) || null;
+}
+
+/* U4 §4 — the mechanical repositioning seam (Adam's ruling, docs/DUNGEON-GRAPH.md status line: desired,
+   minimal). Board-piece positions live as DATA on the spatial overlay itself: pn.spatial.positions =
+   { <pieceId>: {segNum, x, y, isPlayer} } — a per-piece record naming which room it's in and its
+   cell-space (x,y) within that room. spatialRepositionOnTimePass(pn, minutes) is a PURE function of
+   its own inputs (pn.spatial.seed — the SAME deterministic seed spatializePlan derived from walkId —
+   plus the piece id plus `minutes`): calling it twice with the identical pn.spatial.seed/pieceId/minutes
+   always drifts to the identical cell, so a caller re-deriving "where should this piece be at elapsed=X"
+   never needs to replay every earlier tick. Every NON-player piece drifts to a uniformly-picked FLOOR
+   cell within its OWN room's rect (never a WALL/VOID/DOOR cell, never a different room — this is a
+   drift, not a route); the player's piece (isPlayer:true) is NEVER touched — DM-agency law: never move
+   the player's own piece. Data-only: no render code, no scheduler wiring (the passTime caller hookup is
+   a later unit) — this file only exports the function and lets a caller (or a test) invoke it. Mutates
+   pn.spatial.positions in place (matching the store's own "positions live on the overlay" law) and
+   returns the same positions map for convenience. No-op (returns null) when there's no spatial plan or
+   no positions have been placed yet — this unit does not invent piece placement, only drift once some
+   exists. */
+function spatialRepositionOnTimePass(pn, minutes){
+  if(!pn || !pn.spatial || !Array.isArray(pn.spatial.rooms) || !pn.spatial.positions) return null;
+  const plan=pn.spatial, positions=plan.positions, cellW=plan.cellW, cells=plan.cells;
+  const roomBySeg={}; plan.rooms.forEach(r=>{ roomBySeg[r.segNum]=r; });
+  const seedBase=(plan.seed!=null) ? plan.seed : 0;
+  const cellCode=(typeof SPATIAL_CELL!=="undefined") ? SPATIAL_CELL.FLOOR : 1;
+  // small deterministic string hash + mulberry32 PRNG — same reference pattern place-spatialize.js's
+  // dspHashStr/dspMulberry32 use, duplicated here (not shared) so this file stays a pure w-taking
+  // module with no cross-file internal-helper dependency (spatializePlan/semanticizePlan are the only
+  // cross-module surface this unit reaches for).
+  const hashStr=(s)=>{ let h=5381; const str=String(s); for(let i=0;i<str.length;i++) h=((h<<5)+h+str.charCodeAt(i))|0; return h>>>0; };
+  const rngFor=(pieceId)=>{ let a=hashStr(seedBase+"|"+pieceId+"|"+minutes)>>>0;
+    return function(){ a|=0; a=(a+0x6d2b79f5)|0; let t=Math.imul(a^(a>>>15),1|a); t=(t+Math.imul(t^(t>>>7),61|t))^t; return ((t^(t>>>14))>>>0)/4294967296; }; };
+  Object.keys(positions).forEach(pieceId=>{
+    const piece=positions[pieceId];
+    if(!piece || piece.isPlayer) return;                 // DM-agency law: never move the player's piece
+    const room=roomBySeg[piece.segNum]; if(!room) return;
+    const floorCells=[];
+    for(let yy=room.y; yy<room.y+room.d; yy++) for(let xx=room.x; xx<room.x+room.w; xx++){
+      const idx=yy*cellW+xx; if(cells[idx]===cellCode) floorCells.push({x:xx,y:yy});
+    }
+    if(!floorCells.length) return;
+    const rng=rngFor(pieceId), pick=floorCells[Math.floor(rng()*floorCells.length)];
+    piece.x=pick.x; piece.y=pick.y;
+  });
+  return positions;
 }
 
 /* DETECTED-EVENTS.md DE-5 — an orphaned walk closes ITSELF the moment a different walk activates.

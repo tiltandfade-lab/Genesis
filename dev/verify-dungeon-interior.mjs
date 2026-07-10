@@ -32,6 +32,20 @@
      8. degrades cleanly on a bare U1 plan (no U2 semantics: no role/scaleDomain/band fields) — never
         throws, every room defaults scaleDomain 1.0.
 
+   ITERATION 2 (Adam's 2026-07-10 evening taste-gate feedback, ruling 2 — real light sources):
+     9. every kept room emits ≥1 light entry ({x,z,y,color,intensity,kind,roomSegNum}); a chrome-kit
+        board's lights are all kind:"lamp", a gloom/fantasy-kit board's are all kind:"torch" (law 3's
+        realm-flavor split reaching the light layer, not just the tile colors).
+    10. light count per room stays in [1,3] (the spec's own "1-3 per room" bound); determinism — same
+        (plan,opts) twice -> byte-identical lights array (same law as check 7, extended to lights).
+
+   NOTE — GL-layer checks (rulings 1 sprite-purity flags, 2 shadow-map enable/restore + cast-shadow
+   caps, 3 piece-sprite resolution) are NOT re-implemented here: this harness is deliberately THREE/
+   DOM-free (this file's own header). Those live in dev/battle-gate/capture-interior-study.mjs, which
+   boots a real Chrome + THREE.WebGLRenderer and asserts window.Theater.interiorPsxAudit() /
+   .shadowMapEnabled() / .interiorPiecesResolved() against the LIVE mounted scene graph (its own header
+   comment documents the check-to-ruling mapping) — the only place those flags physically exist.
+
    Run:  node dev/verify-dungeon-interior.mjs */
 import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
@@ -196,6 +210,47 @@ group("8 — degrades cleanly on a bare U1 plan (no U2 semantics)");
   try { board = M.interiorBuildBoard(plan, { realmId: "chrome" }); } catch (e) { threw = true; }
   ok(!threw, "interiorBuildBoard never throws on a bare (non-U2) plan");
   ok(board && board.instances.wall.every((w) => w.sy === board.wallHeightBase), "every wall at the base height (scaleDomain 1.0 default, no U2 fields needed)");
+}
+
+group("9 — every kept room emits >=1 light; realm-flavored kind (chrome=lamp, gloom/fantasy=torch)");
+{
+  const fixture = buildChainFixture(6);
+  const plan = M.spatializePlan(fixture, "The Spine", { walkId: "u3-lights-chrome" });
+  const chromeBoard = M.interiorBuildBoard(plan, { realmId: "chrome" });
+  ok(chromeBoard.instances.floor.length > 0, "sanity: chrome board has floor instances");
+  ok(Array.isArray(chromeBoard.lights) && chromeBoard.lights.length > 0, "chrome board emits >=1 light");
+  ok(chromeBoard.lights.every((l) => l.kind === "lamp"), "every chrome-kit light is kind:\"lamp\"");
+  ok(chromeBoard.lights.every((l) => typeof l.color === "string" && typeof l.intensity === "number"), "every light carries color+intensity");
+  ok(chromeBoard.lights.every((l) => typeof l.roomSegNum === "number"), "every light is attributed to a roomSegNum");
+
+  const roomSegNums = new Set(chromeBoard.rooms ? chromeBoard.rooms.map((r) => r.segNum) : plan.rooms.map((r) => r.segNum));
+  const litSegNums = new Set(chromeBoard.lights.map((l) => l.roomSegNum));
+  ok([...roomSegNums].every((s) => litSegNums.has(s)), "every room in the plan has at least one light attributed to it");
+
+  const gloomBoard = M.interiorBuildBoard(plan, { realmId: "gloom" });
+  ok(gloomBoard.lights.length > 0 && gloomBoard.lights.every((l) => l.kind === "torch"), "every gloom-kit light is kind:\"torch\"");
+  const fantasyBoard = M.interiorBuildBoard(plan, { realmId: "fantasy" });
+  ok(fantasyBoard.lights.length > 0 && fantasyBoard.lights.every((l) => l.kind === "torch"), "every fantasy-kit light is kind:\"torch\"");
+  console.log(`  ✓ chrome ${chromeBoard.lights.length} lamp lights / gloom ${gloomBoard.lights.length} torch lights / fantasy ${fantasyBoard.lights.length} torch lights`);
+}
+
+group("10 — light count per room in [1,3]; determinism (same plan,opts -> byte-identical lights)");
+{
+  const fixture = buildChainFixture(8);
+  const plan = M.spatializePlan(fixture, "The Hub", { walkId: "u3-lights-bounds" });
+  const board = M.interiorBuildBoard(plan, { realmId: "gloom" });
+  const perRoom = {};
+  board.lights.forEach((l) => { perRoom[l.roomSegNum] = (perRoom[l.roomSegNum] || 0) + 1; });
+  const counts = Object.values(perRoom);
+  ok(counts.length > 0, "at least one room carries lights");
+  ok(counts.every((c) => c >= 1 && c <= 3), `every room's light count is in [1,3] (got: ${counts.join(",")})`);
+
+  const b1 = M.interiorBuildBoard(plan, { realmId: "gloom", focusSegNum: 2, radius: 2 });
+  const b2 = M.interiorBuildBoard(plan, { realmId: "gloom", focusSegNum: 2, radius: 2 });
+  ok(JSON.stringify(b1.lights) === JSON.stringify(b2.lights), "lights array byte-identical across two calls with the same inputs");
+
+  const trimmed = M.interiorBuildBoard(plan, { realmId: "gloom", focusSegNum: 2, radius: 1 });
+  ok(trimmed.lights.length <= board.lights.length, `focus-trimmed lights (${trimmed.lights.length}) <= whole-plan lights (${board.lights.length})`);
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);

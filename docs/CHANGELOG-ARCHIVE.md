@@ -14,6 +14,40 @@ to load every session (the live file keeps the newest entries; see the script fo
 Newest-first, same as the live file — the two files read as one continuous history, live file
 first. Read-only record: never hand-edit, never add entries here directly.
 
+## 2026-07-05 (later-3) — THE DM SEAM: TYPED CONTRACTS + STRUCTURED TELEMETRY
+
+Hardening the one interface where the AI DM meets the deterministic engine — the two production-
+maturity moves Adam named (docs/POSITIONING.md "Immediate"). Branch `feat/dm-seam`; master green
+(check-manifest OK; verify-dm-seam 38/0 + regression verify-dm-events 36/0, verify-roll-branches
+29/0, verify-digest-diet 33/0, verify-combat-lifecycle 52/0, verify-bridge.py 43/0).
+
+### Added
+- **Typed contracts at the seam** (`src/world/dm.js`) — `validateEvent` / `validateTurnResponse`
+  machine-check the two inbound shapes (the DM's typed events; its whole turn response) against
+  docs/EVENT-CONTRACT.md before the engine trusts them, plus JSDoc `@typedef`s for `DMEvent` /
+  `TurnResponse` / `DMTurnTelemetry`. Forward-compatible: an unknown-but-well-formed event type
+  still passes (the switch no-ops it); only malformed *envelopes* are rejected, and never by
+  throwing. `DM_EVENT_TYPES` enumerates the full 87-type vocabulary, held in lockstep with
+  `applyEvent`'s switch by a parity test.
+- **Structured telemetry on the DM seat** — `logDmTurn` records one `DMTurnTelemetry` row per
+  completed turn (latency, lane + model, digest/turn/response bytes, applied event types, mint
+  count, an *estimated* token/$ cost from measured bytes via `dmEstimateCost`/`DM_MODEL_RATES`).
+  Ring-buffered in `GS.dm.telemetry` (cap 200) and shipped to the bridge's new **`POST /telemetry`**
+  sink → `.dm/telemetry.jsonl` (`dev/dm-bridge.py`) — the mailbox-path twin of `seat-costs.jsonl`,
+  filling the gap where loop-era DM turns carried no consolidated cost/latency row.
+- **`docs/POSITIONING.md`** — the career/case-study/ethos artifact (Genesis as an AI-engineer
+  case study; the two-door pitch; the five exhibits; the maturity roadmap). For fall-2026 fundraise
+  or AI-engineer contract conversations.
+- **`dev/verify-dm-seam.mjs`** — 38 assertions incl. a red-first parity + load-bearing mutation check.
+
+### Changed
+- `applyEvent`'s envelope guard now routes through `validateEvent` (was a bare `!w||!e||!e.type`);
+  a malformed event returns `{ok:false, reason:"invalid-envelope", errors:[…]}` instead of throwing.
+- `sendTurn` stashes send-side metrics (`GS.dm.lastTurnMeta`); `applyResponse` closes the telemetry
+  row and validates the response (non-blocking — logs violations, still applies what's valid).
+
+---
+
 ## 2026-07-05 (later-2) — TWO CODE-REVIEW WAVES + THE REFERENCE SHELF (Monster Manual & Wiki)
 
 A large orchestrated session. Deep `/code-review` of the accumulated work, all findings repaired

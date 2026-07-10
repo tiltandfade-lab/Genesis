@@ -8,6 +8,28 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-07-10 (late night) — ART DIRECTION CLOSED: 13 rulings, two armed waves, dressing art landing
+
+**Added (specs — build is Adam's word)**
+- docs/BEAUTY-WAVE.md (VP0-VP8 + VP1.5 + VP2b): VP0 two-flag study card (ortho-vs-perspective ×
+  PSX-on/off, Adam's pixel-verdict), VP1 true-scale piece fix + registry sizing fold (the kaiju
+  defect), VP1.5 corpus unification pass (realm master palettes + texel density + defringe, one
+  batch, no codex spend), VP2 dressing fold, VP2b THE GALLERY PASS (clipped/reject sprites → framed
+  realm paintings, paintingOf provenance, mimic-guise legal), VP3 ground design, VP4 scene art
+  direction, VP5 battle-UI redesign, VP6 life pass + visible-history scars, VP7 contact grounding,
+  VP8 the beauty-shot gate (side-by-side vs a real Wildermyth frame).
+- docs/UNIFICATION-WAVE.md (UW1-UW4): ONE CHANNEL (diorama; flat table → legacy → retirement),
+  exterior + settlement dioramas, PORTRAITS (busts w/ 3-expression sets — expressionSet law's
+  production surface — + dialogue lower-third).
+- 13 art-direction rulings registered in DESIGN.md: clean-shapes, PS1-scope-cut, perspective camera,
+  framing law, value law, FLAGSHIP REALMS (fantasy/gloom/chrome; realm = expansion pack, ~6-mo
+  drops), master palettes, texel density, portraits, outline law, defringe-standard, visible history,
+  gallery pass. CLEAN-SHAPES + outline clauses patched into all pending codex packets.
+
+**Added (art)**
+- 25 DRESSING-GEN codex sheets landed + backed up UNGATED (flagships flora/clutter/objects +
+  effects core + all accents + ash). VP2 gate/slice/fold is next session's first move.
+
 ## 2026-07-10 (evening) — WILDERMYTH GRAMMAR: engine marriage BUILT + dressing-gen packets + finale loop gate 5/5
 
 **Added**
@@ -1023,38 +1045,4 @@ run surfaced is logged as a future fix, not fixed here.
 - **FIX-C:** action-economy visualization (movement counter + action/bonus icons + movement bar; BG3's
   *system* is a free-to-use convention, its *icon art* is not — render our own). Needs an
   action-economy model underneath first.
-
-## 2026-07-05 (later-3) — THE DM SEAM: TYPED CONTRACTS + STRUCTURED TELEMETRY
-
-Hardening the one interface where the AI DM meets the deterministic engine — the two production-
-maturity moves Adam named (docs/POSITIONING.md "Immediate"). Branch `feat/dm-seam`; master green
-(check-manifest OK; verify-dm-seam 38/0 + regression verify-dm-events 36/0, verify-roll-branches
-29/0, verify-digest-diet 33/0, verify-combat-lifecycle 52/0, verify-bridge.py 43/0).
-
-### Added
-- **Typed contracts at the seam** (`src/world/dm.js`) — `validateEvent` / `validateTurnResponse`
-  machine-check the two inbound shapes (the DM's typed events; its whole turn response) against
-  docs/EVENT-CONTRACT.md before the engine trusts them, plus JSDoc `@typedef`s for `DMEvent` /
-  `TurnResponse` / `DMTurnTelemetry`. Forward-compatible: an unknown-but-well-formed event type
-  still passes (the switch no-ops it); only malformed *envelopes* are rejected, and never by
-  throwing. `DM_EVENT_TYPES` enumerates the full 87-type vocabulary, held in lockstep with
-  `applyEvent`'s switch by a parity test.
-- **Structured telemetry on the DM seat** — `logDmTurn` records one `DMTurnTelemetry` row per
-  completed turn (latency, lane + model, digest/turn/response bytes, applied event types, mint
-  count, an *estimated* token/$ cost from measured bytes via `dmEstimateCost`/`DM_MODEL_RATES`).
-  Ring-buffered in `GS.dm.telemetry` (cap 200) and shipped to the bridge's new **`POST /telemetry`**
-  sink → `.dm/telemetry.jsonl` (`dev/dm-bridge.py`) — the mailbox-path twin of `seat-costs.jsonl`,
-  filling the gap where loop-era DM turns carried no consolidated cost/latency row.
-- **`docs/POSITIONING.md`** — the career/case-study/ethos artifact (Genesis as an AI-engineer
-  case study; the two-door pitch; the five exhibits; the maturity roadmap). For fall-2026 fundraise
-  or AI-engineer contract conversations.
-- **`dev/verify-dm-seam.mjs`** — 38 assertions incl. a red-first parity + load-bearing mutation check.
-
-### Changed
-- `applyEvent`'s envelope guard now routes through `validateEvent` (was a bare `!w||!e||!e.type`);
-  a malformed event returns `{ok:false, reason:"invalid-envelope", errors:[…]}` instead of throwing.
-- `sendTurn` stashes send-side metrics (`GS.dm.lastTurnMeta`); `applyResponse` closes the telemetry
-  row and validates the response (non-blocking — logs violations, still applies what's valid).
-
----
 

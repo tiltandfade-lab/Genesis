@@ -201,12 +201,12 @@ function independentCriticalPath(segments, entryId, finaleId) {
 function runMutationDemo() {
   console.log("=== MUTATION TEST: fit-test regrowth disabled ===");
   const semSrc = read(SEMANTICS_PATH);
-  const marker = "dsmFitTestAndGrow(out)";
+  const marker = "dsmFitTestAndGrow(out); // FIT-TEST-CALL-SITE";
   if (!semSrc.includes(marker)) {
-    console.log("  ✗ could not find the fit-test-and-grow call to mutate — source drifted, update the marker");
+    console.log("  ✗ could not find the fit-test-and-grow call site to mutate — source drifted, update the marker");
     process.exit(1);
   }
-  const mutatedSrc = semSrc.replace(marker, "/* MUTATED: fit-test regrowth disabled for this demo */ null");
+  const mutatedSrc = semSrc.replace(marker, "/* MUTATED: fit-test regrowth call site disabled for this demo */ null; //");
   if (mutatedSrc === semSrc) {
     console.log("  ✗ mutation did not change the source — nothing was disabled");
     process.exit(1);
@@ -276,11 +276,19 @@ function main() {
   {
     // Spine: s1-s2-s3-s4-s5-s6 straight chain, entry=s1 (depth0), finale=s6. Every room IS the
     // critical path (a pure chain), so there is no "pocket"/"side" room to assert here — that's
-    // the honest shape of a Spine. Assert entrance/finale/path precisely.
-    const fx = buildFixture("The Spine", 6, 2);
-    const plan0 = spatializePlan(fx.segments, "The Spine", { walkId: "roles-spine" });
-    const plan = semanticizePlan(plan0, fx.segments, []);
-    const byId = {}; fx.segments.forEach((s) => { byId[s.num] = s.id; });
+    // the honest shape of a Spine. Built explicitly (not via buildFixture's Spine group, which
+    // can add a randomized loop-back chord for n>=5 — a legitimate alternate topology, but not
+    // the pure chain this check wants to hand-assert) so the fixture is unambiguous.
+    const spineSegs = [
+      { id: "s1", num: 1, label: "s1", isFinale: false, depth: 0, exits: [{ targetId: "s2", num: 2, label: "s2", isFinale: false }], light: "normal" },
+      { id: "s2", num: 2, label: "s2", isFinale: false, depth: 1, exits: [{ targetId: "s1", num: 1, label: "s1", isFinale: false }, { targetId: "s3", num: 3, label: "s3", isFinale: false }], light: "normal" },
+      { id: "s3", num: 3, label: "s3", isFinale: false, depth: 2, exits: [{ targetId: "s2", num: 2, label: "s2", isFinale: false }, { targetId: "s4", num: 4, label: "s4", isFinale: false }], light: "normal" },
+      { id: "s4", num: 4, label: "s4", isFinale: false, depth: 3, exits: [{ targetId: "s3", num: 3, label: "s3", isFinale: false }, { targetId: "s5", num: 5, label: "s5", isFinale: false }], light: "normal" },
+      { id: "s5", num: 5, label: "s5", isFinale: false, depth: 4, exits: [{ targetId: "s4", num: 4, label: "s4", isFinale: false }, { targetId: "s6", num: 6, label: "s6", isFinale: true }], light: "normal" },
+      { id: "s6", num: 6, label: "s6", isFinale: true, depth: 5, exits: [{ targetId: "s5", num: 5, label: "s5", isFinale: false }], light: "normal" },
+    ];
+    const plan0 = spatializePlan(spineSegs, "The Spine", { walkId: "roles-spine" });
+    const plan = semanticizePlan(plan0, spineSegs, []);
     const roleOf = {}; plan.rooms.forEach((r) => { roleOf[r.segId] = r.role; });
     check("Spine: s1 (entry) role=entrance", roleOf["s1"] === "entrance", roleOf["s1"]);
     check("Spine: s6 (finale) role=finale", roleOf["s6"] === "finale", roleOf["s6"]);
@@ -377,7 +385,8 @@ function main() {
       });
       check(`every domain room dims >= ${minDim}x${minDim} (fit test)`, allFit, fitSamples.join(" | "));
     }
-    const reach = independentReachabilityCheck(plan, midSeg.depth === fx.segments.find((s) => s.id === fx.entryId).depth ? fx.entryId : fx.entryId, SPATIAL_CELL);
+    const entrySeg = fx.segments.find((s) => s.id === fx.entryId);
+    const reach = independentReachabilityCheck(plan, entrySeg.num, SPATIAL_CELL);
     check("BFS reachability re-verifies after any regrowth (independent check)", reach.ok, `unreachable=${reach.unreachable}`);
   }
 
@@ -402,7 +411,8 @@ function main() {
     }
     const transitionDoors = plan.doors.filter((d) => d.transition);
     check("zero transition doors", transitionDoors.length === 0, transitionDoors.length);
-    const reach = independentReachabilityCheck(plan, fx.entryId, SPATIAL_CELL);
+    const entrySeg4 = fx.segments.find((s) => s.id === fx.entryId);
+    const reach = independentReachabilityCheck(plan, entrySeg4.num, SPATIAL_CELL);
     check("BFS reachability re-verifies (independent check)", reach.ok, `unreachable=${reach.unreachable}`);
   }
 

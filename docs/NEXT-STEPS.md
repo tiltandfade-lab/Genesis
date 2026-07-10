@@ -23,6 +23,13 @@ sections (tracks/layers/etc.) are never auto-archived.
 The accidental design session (see CHANGELOG 2026-07-09): 6 system specs + 6 craft expansions merged
 with Adam's rulings folded; REALM-HOOKS spec landing next. Queue:
 
+**Place-gen riders (2026-07-09 late night — the engine wave LANDED, full sweep green; open items
+carried forward from the archived place-gen lane block):** ① Adam red-pen + P1-wave go/no-go on
+`docs/PLACE-ASSET-QUEUE.md` (the spend gate) · ② Adam craft pass on Place Spine rows + 3 skin labels
++ the 5 upgraded settlement tables (all PROVISIONAL) · ③ interior-gen spec section (DMG14 Appendix A
+chain + Bastion space-bands, realm-skinned) before its build wave · ④ 8 backfill realm skins (craft
+lane) · ⑤ HOOK-WALKS terminus-bias table when that spec locks (the archetypeBias parameter is live).
+
 1. ☐ **Adam (morning): gather the books** into `Reference/` for the Saltmarsh treatment (page index +
    system gather each — highest-fit first):
    - **Van Richten's Guide to Ravenloft** → GLOOM (Domains of Dread, horror kits, Darklords)
@@ -206,3 +213,4 @@ L7. ☐ **Regenerate `table-registry.json/.md`** — stale after the rename/new 
 5. ☐ **Remaining realms** — PNGs → slice → auto-scale → review (pattern proven end-to-end).
 6. ☐ Models lane pivots to trays/props/architecture (MODEL-FOUNDRY re-scoped; VISUAL-ASSET-QUEUE
    creature targets → sprite lane).
+

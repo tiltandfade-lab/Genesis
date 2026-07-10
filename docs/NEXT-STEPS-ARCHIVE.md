@@ -18,6 +18,24 @@ just preserves the old ordered-queue framing for anyone reconstructing why a cal
 
 ---
 
+## Do next (2026-07-09, place-gen lane — visual-engine expansion)
+
+1. ☑ **Book gathers** — DMG14 settlements + random dungeons, DMG24 settlements + bastions
+   (docs/PLACE-GATHER-*.md, vision-read, committed 2acdcb8). VRGtR full book still wanted
+   (current file = subclasses excerpt; Adam sourcing) → Gloom domain-gen gather.
+2. ☑ **Settlement thin-table upgrades — DONE 2026-07-09 (663a7b8, re-gated): Ruler Status / Race Relations / Mythology /
+   Nearby / Relevancy → Master-Setting-grade d100, seeded from the DMG14 gather; GRID-LAW
+   dimensions on physical rows; originals archived; land PROVISIONAL for Adam's red-pen.
+3. ☑ **GRID LAW rewire — DONE 2026-07-09** (U2 mints emit cell dims, U7 tray 1 tile = 1 cell,
+   U11 combat grid from cells; all orchestrator-re-gated, byte-gates intact): (1) place mints emit cell footprints,
+   (2) theater 1 tile = 1 cell (5 ft), (3) combat bands/lanes derive from cell geometry (own unit).
+3b. ☑ **Engine wave U1-U3, U5-U11 — ALL LANDED 2026-07-09** (see CHANGELOG late-night entry;
+   full sweep zero failures). Open riders: HOOK-WALKS terminus table (blocked on spec lock),
+   8 backfill skins, P1 asset wave (Adam go/no-go — docs/PLACE-ASSET-QUEUE.md).
+4. ☐ **Interior-gen spec section** — DMG14 Appendix A chain + Bastion space-bands, realm-skinned,
+   before its build wave.
+5. ☐ **Place Spine craft pass** (Adam) — spine rows + skin labels vs the Bastion 35-facility
+   cross-check (space band + staffing fields added per ADDENDUM §B).
 ## Do next (2026-07-08 night — after the NPC-wiring + MODEL-FOUNDRY sessions; supersedes below)
 
 Two parallel sessions closed 2026-07-08 (see HANDOFF's two entries). **Landed to master:** the NPC

@@ -174,3 +174,60 @@ const BUILDING_KITS = {
    canonical list rollBuilding validates against. Kept in sync with BUILDING_KITS' keys by hand
    (a small, hand-authored catalog — no generator needed). */
 const BUILDING_KIT_TYPES = Object.keys(BUILDING_KITS);
+
+/* BUILDING_KIT_REALM_LABELS — PLACE-GEN §5 unit 6: per-realm LABEL overrides for every
+   BUILDING_KITS id. Data-only — kit mechanics (proprietorRoleHint/economyTie/hookLane/
+   delegatesToShop/tavern flag) are untouched; only the display label changes per realm.
+   Frontier needs no entry (BUILDING_KITS' own .label IS the Frontier label — that's the
+   existing default vocabulary place-skin-frontier.md also documents). Every chrome/gloom kit id
+   carries a label here — no partial maps (rollBuilding/buildingKitLabelForRealm below would
+   silently fall back to the Frontier label on a missing key, which is exactly the drift this
+   completeness note guards against).
+   Voice source: Engine/03. _Tables/05. Realms/Place Skin - {Chrome,Gloom}.md (PLACE-GEN §2) +
+   data/realms.js registers — Chrome = neon-slum megacity (Warriors/TMNT/RoboCop), Gloom = Derry
+   (mundane small-town American forms, wrong underneath). */
+const BUILDING_KIT_REALM_LABELS = {
+  chrome: {
+    tavern: "Noodle Bar",
+    temple: "Street Shrine",
+    guildhall: "Union Hall",
+    manor: "Penthouse Suite",
+    garrison: "Precinct House",
+    court: "Arbitration Floor",
+    bathhouse: "Steam Den",
+    "gambling-den": "Basement Fight Pit",
+    warehouse: "Container Stack",
+    "dock-house": "Loading Dock",
+    smithy: "Machine Shop",
+    apothecary: "Unlicensed Clinic",
+    general: "Corner Bodega",
+    arcanist: "Chip-and-Splice Stall",
+  },
+  gloom: {
+    tavern: "The Diner",
+    temple: "White-Steeple Church",
+    guildhall: "Grange Hall",
+    manor: "The Old Family Place",
+    garrison: "Sheriff's Office",
+    court: "County Courtroom",
+    bathhouse: "Public Bathhouse",
+    "gambling-den": "The Roadhouse",
+    warehouse: "Self-Storage Lot",
+    "dock-house": "Boathouse",
+    smithy: "The Repair Shop",
+    apothecary: "Drugstore",
+    general: "Main Street Grocery",
+    arcanist: "The Curiosity Shop",
+  },
+};
+
+/* buildingKitLabelForRealm(type, realmId) -> the realm-voiced label for a BUILDING_KITS id, or
+   the kit's own default (Frontier) label when realmId has no override map or the type is unknown
+   there. Never throws on an unknown kit id (caller — rollBuilding — already gates unknown types;
+   this stays defensive so a bad id here degrades to undefined rather than a crash). */
+function buildingKitLabelForRealm(type, realmId){
+  const kit=BUILDING_KITS[type];
+  if(!kit) return undefined;
+  const overrides=BUILDING_KIT_REALM_LABELS[realmId];
+  return (overrides && overrides[type]) || kit.label;
+}

@@ -43,6 +43,11 @@ function rollBuilding(type, opts){
   const kits=(typeof BUILDING_KITS!=="undefined")?BUILDING_KITS:null;
   if(!kits || !kits[type]) return {ok:false, reason:"unknown-type"};
   const kit=kits[type];
+  // PLACE-GEN §5 unit 6: realm resolution mirrors rollNPC/sceneTemperature's convention exactly —
+  // opts.realm ‖ opts.region.realm, default 'frontier' (no realm context -> unchanged behavior,
+  // byte-identical labels, since BUILDING_KIT_REALM_LABELS carries no frontier entry).
+  const realmId=opts.realm||(opts.region&&opts.region.realm)||"frontier";
+  const realmLabel=(typeof buildingKitLabelForRealm==="function") ? buildingKitLabelForRealm(type, realmId) : kit.label;
   const interior=(typeof rollBuildingInterior==="function") ? rollBuildingInterior({kind:type}) : null;
   let name=opts.name||null;
   if(!name && kit.namePattern && typeof rollTable==="function"){
@@ -50,7 +55,7 @@ function rollBuilding(type, opts){
     if(r && r.cells && r.cells.length>=2) name="The "+r.cells[0].replace(/^The\s+/i,"")+" "+r.cells[1];
     else if(r) name=r.text;
   }
-  const out={ ok:true, type, kit:Object.assign({label:kit.label},kit), interior, name:name||kit.label };
+  const out={ ok:true, type, kit:Object.assign({},kit,{label:realmLabel}), interior, name:name||realmLabel };
   if(kit.delegatesToShop && typeof makeShop==="function"){
     out.shop=makeShop({ tier:opts.tier, archetype:kit.delegatesToShop, nodeId:opts.nodeId, name:out.name, rng:opts.rng });
   }
@@ -76,6 +81,80 @@ function districtCount(tier){
 /* districtsOf(w) -> the write-once per-world district ledger, keyed by nodeId -> [codex ids]. */
 function districtsOf(w){ return w.urban || (w.urban={ districtsByNode:{} }); }
 
+/* DISTRICT_TYPE_REALM_LABELS — PLACE-GEN §5 unit 6: relabel map for the `urban-district-type`
+   d20 roll's 20 fixed labels (Engine/03. _Tables/03. Session Mechanics/Dungeons/Urban District
+   Type.md), keyed by the compiled table's cells[0] text exactly. Chrome/Gloom only (Frontier
+   stays the table's own vocabulary — no entry needed, same completeness convention as
+   BUILDING_KIT_REALM_LABELS in data/building-kits.js). Voice source: Place Skin - {Chrome,Gloom}
+   .md + data/realms.js registers. */
+const DISTRICT_TYPE_REALM_LABELS = {
+  chrome: {
+    "Civic / Lord's Keep": "Corp Tower District",
+    "Noble Estates": "Executive Arcology",
+    "Wealthy Residential": "Uptown High-Rises",
+    "Magic District": "The Splice Quarter",
+    "Botanical Gardens": "The Arcology Mezzanine Gardens",
+    "Embassy / Diplomatic": "Consulate Row",
+    "Fine Shops & Finance": "The Exchange Block",
+    "Temple District": "Shrine Row",
+    "Guildhall District": "Union Row",
+    "Marketplace / Bazaar": "The Night Market",
+    "Average Residential": "Stacked-Block Housing",
+    "Garrison / Military": "The Precinct Blocks",
+    "Caravan / Outlanders": "The Transit Yards",
+    "Theater / Entertainment": "The Arcade Strip",
+    "Inn & Tavern District": "Noodle Row",
+    "Waterfront / Docks": "The Container Docks",
+    "Warehouse District": "The Sorting Floors",
+    "Tannery / Industrial": "The Transformer Yards",
+    "Slum / Shantytown": "The Underlevels",
+    "Undercity / Sewers": "The Storm Drains",
+  },
+  gloom: {
+    "Civic / Lord's Keep": "The Town Hall Green",
+    "Noble Estates": "The Old Money Houses",
+    "Wealthy Residential": "Maple Street",
+    "Magic District": "The Antique Row",
+    "Botanical Gardens": "The Memorial Park",
+    "Embassy / Diplomatic": "The County Office",
+    "Fine Shops & Finance": "The Bank on Main",
+    "Temple District": "Church Row",
+    "Guildhall District": "The Grange Hall Block",
+    "Marketplace / Bazaar": "Main Street",
+    "Average Residential": "The Cul-de-Sacs",
+    "Garrison / Military": "The Sheriff's Block",
+    "Caravan / Outlanders": "The Highway Motels",
+    "Theater / Entertainment": "The Fairground",
+    "Inn & Tavern District": "The Roadhouse Strip",
+    "Waterfront / Docks": "The Millrace",
+    "Warehouse District": "The Self-Storage Lot",
+    "Tannery / Industrial": "The Mill District",
+    "Slum / Shantytown": "The Barrens",
+    "Undercity / Sewers": "The Storm Cellars",
+  },
+};
+
+/* districtTypeLabelForRealm(typeLabel, realmId) -> the realm-voiced district label, or the
+   table's own label when realmId has no override map or the label is unmapped there (never
+   throws, never invents a 21st district type). */
+function districtTypeLabelForRealm(typeLabel, realmId){
+  const overrides=DISTRICT_TYPE_REALM_LABELS[realmId];
+  return (overrides && overrides[typeLabel]) || typeLabel;
+}
+
+/* districtFactionHandle(w) -> PLACE-GEN §5 unit 6 "Chrome districts carry a faction handle
+   default": picks an existing w.factions entry's name (the only faction machinery already live —
+   turn.js/reputation.js/capture.js all read w.factions) when one exists; otherwise returns
+   {factionPending:true} so the field still reads honestly rather than fabricating a faction. This
+   is NOT new faction plumbing — no faction is created, assigned, or mutated here, only read. */
+function districtFactionHandle(w){
+  const facs=(w&&w.factions)||[];
+  if(!facs.length) return {faction:null, factionPending:true};
+  const idx=(typeof rollDie==="function") ? (rollDie(facs.length)-1) : 0;
+  const f=facs[Math.max(0,Math.min(facs.length-1,idx))];
+  return {faction:(f&&f.name)||null, factionPending:false};
+}
+
 /* mintDistricts(w, nodeId, opts) — mint districts for `nodeId` ONCE (idempotent: a second call on
    an already-minted node is a no-op, returning the existing ids — BATCH3-GUARDRAILS J1 mutation
    check: "re-entry re-mints, fails"). opts.tier (PLACE_TIERS index) selects the count; omitted ->
@@ -88,11 +167,19 @@ function mintDistricts(w, nodeId, opts){
   if(U.districtsByNode[nodeId]) return {ids:U.districtsByNode[nodeId], minted:false};
   const tier=(opts.tier!=null) ? opts.tier : ((typeof nodeLodgingTier==="function") ? nodeLodgingTier(w,nodeId) : 0);
   const count=districtCount(tier);
+  // PLACE-GEN §5 unit 6: realm resolution mirrors buildingApproach/rollBuilding's convention —
+  // opts.realm ‖ opts.region.realm ‖ regionForNode(w,nodeId).realm, default 'frontier' (no realm
+  // context -> unchanged behavior; DISTRICT_TYPE_REALM_LABELS carries no frontier entry so a
+  // frontier realmId is a byte-identical no-op relabel).
+  const realmId=opts.realm||(opts.region&&opts.region.realm)
+    ||((typeof regionForNode==="function") ? (function(){ const r=regionForNode(w,nodeId); return r&&r.realm; })() : null)
+    ||"frontier";
   const ids=[];
   for(let i=0;i<count;i++){
     const roll=(typeof rollTable==="function") ? rollTable("urban-district-type") : null;
     const cells=(roll&&roll.cells)||[];
-    const typeLabel=cells[0]||(roll?roll.text:("District "+(i+1)));
+    const baseTypeLabel=cells[0]||(roll?roll.text:("District "+(i+1)));
+    const typeLabel=(typeof districtTypeLabelForRealm==="function") ? districtTypeLabelForRealm(baseTypeLabel, realmId) : baseTypeLabel;
     const tierLabel=cells[1]||null;
     const desc=cells[2]||null;
     const name=typeLabel+" District";
@@ -101,11 +188,15 @@ function mintDistricts(w, nodeId, opts){
     // same table already serves at engine.walk's assembly (the collision ruling: walk-skin owns the
     // walk, environment-skin also serves the district). Null-safe.
     const skin=(typeof districtSkinRoll==="function") ? districtSkinRoll() : null;
+    // PLACE-GEN §5 unit 6: "Chrome districts carry a faction handle default" — read-only pick off
+    // w.factions (districtFactionHandle above); every other realm gets no faction field at all
+    // (not even factionPending) to keep non-Chrome district records byte-identical to pre-change.
+    const factionInfo=(realmId==="chrome" && typeof districtFactionHandle==="function") ? districtFactionHandle(w) : null;
     const id=(typeof codexAdd==="function") ? codexAdd(w, {
       kind:"district", name,
       provenance:"rolled",
       rolled:{ type:typeLabel, tierLabel, desc, skin, ref: roll?("urban-district-type#"+roll.total):null },
-      fields:{ type:typeLabel, tierLabel, desc, skin },
+      fields: Object.assign({ type:typeLabel, tierLabel, desc, skin }, factionInfo ? { faction:factionInfo.faction, factionPending:factionInfo.factionPending } : {}),
       status:{ soft:true, at:nodeId }
     }).id : null;
     if(id){
@@ -146,9 +237,17 @@ function sceneTypeForBuildingKit(type){ return SCENE_TYPE_BY_KIT[type] || "shop"
    so a typed building never doubles up on cast when ambient NPCs already stand ready. */
 function buildingApproach(w, type, opts){
   opts=opts||{};
-  const rolled=rollBuilding(type, opts);
-  if(!rolled.ok) return rolled;
   const nodeId=opts.nodeId||w.currentNodeId;
+  // PLACE-GEN §5 unit 6: derive the node's realm the same way prep.js/codex-roll.js do
+  // (regionForNode -> region.realm), same pattern as rollNPC's opts.region.realm read — only when
+  // the caller hasn't already supplied opts.realm/opts.region explicitly.
+  let rollOpts=opts;
+  if(!opts.realm && !(opts.region&&opts.region.realm) && typeof regionForNode==="function"){
+    const region=regionForNode(w, nodeId);
+    if(region && region.realm) rollOpts=Object.assign({}, opts, {realm:region.realm});
+  }
+  const rolled=rollBuilding(type, rollOpts);
+  if(!rolled.ok) return rolled;
   let proprietorId=null;
   if(typeof codexAdd==="function"){
     let proprietor=null;
@@ -185,8 +284,22 @@ function buildingApproach(w, type, opts){
   // stripped/lean harness with no prepCastAmbientScene loaded just skips this, same as every other
   // optional cross-file call in this file).
   const proprietorRec=(proprietorId && typeof codexGet==="function") ? codexGet(w, proprietorId) : null;
+  // PLACE-GEN.md §5 unit 3: when this node's own place record (minted by rollPlace, e.g.
+  // prepCastFrontier) carries a spine archetypeKey, its SCENE_BUCKET_BY_ARCHETYPE mapping wins over
+  // the building-kit bucket — the node's realm-true place-type is the truer scene shape than the
+  // generic kit fallback. Missing/unmapped node record -> unchanged sceneTypeForBuildingKit(type)
+  // behavior (no regression for a node with no place-gen mint, e.g. a bare urban-fabric district).
+  let sceneBucket=sceneTypeForBuildingKit(type);
+  if(typeof mapOf==="function" && typeof codexGet==="function" && typeof sceneBucketForArchetype==="function"){
+    const mnode=mapOf(w).nodes[nodeId];
+    const placeRec=(mnode && mnode.codexId) ? codexGet(w, mnode.codexId) : null;
+    const archKey=placeRec && placeRec.rolled && placeRec.rolled.archetypeKey;
+    if(archKey!=null && typeof SCENE_BUCKET_BY_ARCHETYPE!=="undefined" && SCENE_BUCKET_BY_ARCHETYPE[String(archKey)]){
+      sceneBucket=sceneBucketForArchetype(archKey);
+    }
+  }
   const ambient=(typeof prepCastAmbientScene==="function")
-    ? prepCastAmbientScene(w, nodeId, sceneTypeForBuildingKit(type), { anchor: proprietorRec })
+    ? prepCastAmbientScene(w, nodeId, sceneBucket, { anchor: proprietorRec })
     : null;
   return {ok:true, id:rec.id, record:rec, proprietorId, shop:rolled.shop||null, ambient};
 }

@@ -8,6 +8,55 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-07-09 (late night) — PLACE-GEN build wave: places are realm-true from birth and render as dioramas
+
+**Added**
+- **Place Spine + skins (U0, PROVISIONAL):** `Engine/03. _Tables/05. Realms/Place Spine.md` (24 site
+  archetypes: weight, scale, GRID-LAW space band, staff band, castProfile) + `Place Skin -
+  {Frontier,Chrome,Gloom}.md` (relabel/drop/add/reweight + namePatterns). Adam's craft pass pending.
+- **`build/gen-place-skins.py` → `data/place-skins.js` (U1):** `PLACE_SPINE`/`PLACE_SKINS`/
+  `PLACE_SPACE_CELLS`/`placeForRealm` (+U3 `SCENE_BUCKET_BY_ARCHETYPE`, +U8 `SCENE_DRESSING_BY_
+  ARCHETYPE`/`sceneDressingForPlace`/`--census`). Missing skins legal → frontier fallback at roll time.
+- **GRID LAW (rewire-class, DESIGN-registered):** every generated space measures in real 5-ft cells;
+  1 band = 5 cells deep, 1 lane = 4 wide. `rollPlace` emits `rolled.dims` in cells (U2); node trays
+  render 1 tile = 1 cell (U7); typed-place fights derive their zone grid from cells (`cmGridFromCells`,
+  U11 — text-parse path byte-identical for everything else).
+- **Tray node source (U7):** `trayFrom({kind:"node"})` + `theaterNodeSourceFor` — a minted place
+  renders as its diorama (floor = dims, dressing-driven floor/light/props, deterministic scatter).
+  Screenshot-gated (`dev/battle-gate/capture-place-tray.mjs`, eyeballed: gloom diner reads).
+- **Cast wiring (U3):** anchor NPCs land on-class via `roleForRealm({filterCls})` filtered-pool
+  (never-dangle); ambient fill maps archetype → scene bucket.
+- **Breach leak (U5):** `rollPlace({hybridRealm})` minority cross-skin mints, SHARED `ROLE_HYBRID_K`
+  (one law with the NPC leak); leaked mints carry `dm.dressing.hybridProps` as the visual tell.
+- **Kit/district relabels (U6):** `BUILDING_KIT_REALM_LABELS` chrome/gloom (all 14 kits) + district
+  relabel map + chrome faction handles; frontier byte-identical (golden-tested).
+- **TIYL routing (U9):** origin settlements carry realm `itemsPool`/`dressing` pointers (pointers
+  only — settlements stay compositional; bardo presentation byte-identical).
+- **DM digest location line (U10):** typed nodes read "<name> — <archetype>, WxD ft, <light>
+  (props…)", 88 B, derived through the tray's own lookups (one derivation).
+- **Book gathers:** DMG14 settlements + random dungeons, DMG24 settlements + bastions
+  (`docs/PLACE-GATHER-*.md`, vision-read) + `dev/model-qa/dmg2014-page-index.json`.
+- **PLACE-ASSET-QUEUE** (`docs/PLACE-ASSET-QUEUE.md`, PROVISIONAL): 44 grounded entries (22 P1);
+  main finding = zero architecture-shell vocabulary in the prop stack. Sprite half translated to
+  `dev/model-qa/sprite-sheets/setting-dressing.md` (4 sheets / 47 cells) + INDEX line.
+
+**Changed**
+- Five thin settlement tables (Ruler Status / Race Relations / Mythology / Nearby / Relevancy) →
+  Master-Setting grade (d100, 5-band 66/20/9/4/1, DMG14 seeds, GRID-LAW dimensions; originals in
+  `zz_Archive/`, rows PROVISIONAL).
+- Merged origin/master mid-wave (the 3ceb4ad CI green wave) — the 3 pre-existing sweep reds
+  (digest-diet/dm-contract/creature-determinism) were already fixed there, not re-fixed.
+- `ROLE_HYBRID_K` const→let (mutation-guard testability; no production reassignment).
+
+**Verification** — every unit orchestrator-re-gated on its branch tip + the integrated tree; full
+`dev/verify-*.mjs` sweep ZERO failures at close; `check-manifest.py` OK throughout; combat byte-gate
+(tabletop-u1 45/45) intact; fuzz 520 calls / 0 findings.
+
+**Deferred** — HOOK-WALKS terminus-bias table (blocked on that spec locking; the `archetypeBias`
+parameter itself landed in U2); 8 backfill realm skins (craft lane); per-realm place-secret tables
+(Adam ruling open); interior generator (spec section first); P1 asset wave (Adam go/no-go);
+`sprite-sheet-prompts.md` shared template referenced by realm sheets but missing (pre-existing).
+
 ## 2026-07-09 (sprite night) — fantasy realm sliced (896 sprites) + review tool + auto-scale + XL regen lane
 
 **Added**
@@ -1044,57 +1093,4 @@ under the parley angle; the harness realm-key population gap; 10 buried figures 
 habitat/activity — ~2.5× the 510-corpus spend; launch on his word) · REALM-RENDER-STYLE tune ·
 PACING-DIALS §3 questions · prop size→footprint veto row · 11 _review flags in the draft JSON ·
 deep /code-review pass Monday post-refresh.
-
-## 2026-07-04 (later 3) — THE REALM ARC: 100% models, floors, figure AO, realm content + wiring [Opus]
-
-A very large session. Battlemap playtest → full model coverage → floor materials → the realm-content
-program (bestiary/floors/props at scale) → the active-realm wiring seam. All landed unit-by-unit with
-per-unit re-gates + pushed to origin; master green (check-manifest OK, verify-theater-data 165/0,
-verify-theater-figures 38/0, verify-realm-wiring 20/0).
-
-### Added
-- **Creature model coverage → 100%** (was 32%): 280 silhouette-family NEAREST_SUB aliases (→87%),
-  then the **66 net-new bespoke monsters** (docs/CREATURE-MODELS-P2.md) — Wave 1 (4) + Batch 2A (6)
-  hand-executed, **56 built by a Workflow fan-out** (one agent/creature); registered + gated (visual
-  wave sheets) + landed. No cuboid fallbacks remain (bestiary 510/510 modeled).
-- **Procedural floor materials** (docs/FLOOR-TEXTURES.md): 12 base PSX CanvasTextures derived from
-  rolled terrain (biome/footing/scene) + **5 net-new realm-surface bases** (grating/asphalt/void-floor/
-  rope-matting/candy-tile) = **17 materials**. `theaterFloorMaterial` in theater-data.js + the render
-  in theater-boot.js. Floor review sheet (dev/model-qa/floor-review-sheet.png).
-- **Baked figure AO** — per-fragment darkening toward each model's base (occluded/grounded read),
-  figures only, no postprocess pass.
-- **Realm content program (approach C, text-first):** bestiary **~100/realm = 1092 creatures**
-  (docs/REALM-BESTIARY-DRAFT.md + REALM-BESTIARY-SCAN.md, all frames validated), a **legal familiar-
-  icons batch** (docs/REALM-BESTIARY-ICONS.md — 219: 100 public-domain source-versions + 110
-  archetypes + 9 folklore, source-tagged), **88 realm surfaces** (docs/REALM-SURFACES-DRAFT.md), and
-  **308 realm props** (docs/REALM-PROPS-DRAFT.md — cross-realm tagged: 50 universal / 167 shared / 91
-  bespoke). `data/realm-bestiary.js` (generated creature layer).
-- **Realm-creature WIRING** (docs/REALM-WIRING.md, `feat/realm-wiring`): breach encounters now spawn
-  the **active realm's** creatures — `dwalkEncounter` realm-filter + **18% adjacent-realm leak** +
-  `activeRealmsFor` resolver; reskin resolution frame=stats / modelKey=render / name=realm; non-realm
-  foes byte-identical. New harness verify-realm-wiring.mjs (20/0, red-first mutation proven).
-- Specs/proposals: **REALM-RENDER-STYLE.md** (per-realm saturation/palette/contrast/shape grade —
-  proposal, awaiting Adam's ruling), **DREAM-HORIZON §H∞ "The Private Cut"** (personal local
-  content-overlay dream + the hard legal line the repo keeps).
-- Dev tooling: battlemap playtest harness (audit + render + capture + FINDINGS), proof-sheets driver,
-  chassis-catalog, floor-swatch sheet.
-
-### Changed
-- Floor material color model: each material carries its OWN base color (~30% env mix) so materials
-  read distinct within an env (snow pale / sand tan / dungeon flagstone warm-grey), mesh color
-  near-neutral. **suburb realm LOCKED to 1980s suburban Americana.**
-
-### Fixed
-- Wave-1 manticore wings + bulette dorsal fin (weak silhouettes); 6 too-dark monster palettes;
-  yochlol sunk below the disc (bbox); AO moved off floor tiles onto the figures (Adam's correction);
-  19 type-in-frame slips in the icons batch auto-remapped to real chassis.
-
-### Deferred / queued (the realm-enrichment production tail — next session)
-- **Net-new geometry:** 207 net-new creature models + 31 net-new prop models (net-new floor bases
-  DONE). Build via the proven workflow.
-- **Prop-sizing render pass** (battlemap finding #3: size → prop scale/zone-occupancy) — every realm
-  prop already carries a Size.
-- **Surface-select wiring** + the **render-style grade** — both ride the `activeRealmsFor` seam now.
-- **Urban/wilderness creature-wiring** (dungeon done; walk.js/wild-walk.js are the follow-up).
-- Text review/reshape of the realm drafts + fold the icons batch into the main bestiary.
 

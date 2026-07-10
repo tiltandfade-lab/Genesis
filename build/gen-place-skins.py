@@ -285,7 +285,14 @@ SCENE_DRESSING_BY_ARCHETYPE = {
         "surface": "interior-stone", "light": "lamplit"},                           # Seat-of-power
     5: {"propNames": ["Case-File Desk", "Brig Cage", "Cinderblock Stack"],
         "surface": "interior-stone", "light": "torchlit"},                          # Hall-of-law
-    6: {"propNames": ["Offertory Table", "Weeping Font", "Guttering Grave-Torch", "Reliquary Crate Stack"],
+    # PLACE-ASSET-QUEUE Part 1a finding: row 6's propNames were all scatter (font/torch/crate) with
+    # no altar anchor, even though the anchor already exists (prop:shrine-block, base "altar" in
+    # dev/model-qa/realm-props.json). "Blood-Slick Altar" (gloom's own base:"altar" entry) carries
+    # crossRealm:[frontier,lost-world,cosmic] — the widest reach of any altar-base entry, covering
+    # 2 of the 3 authored realms (frontier+gloom; chrome's own altar-base entry, "Terminal Stand",
+    # is crossRealm:"specific" and doesn't fold in) — sceneDressingForPlace skips it there, never a
+    # hole (unit 8's own discipline, see file header).
+    6: {"propNames": ["Offertory Table", "Weeping Font", "Guttering Grave-Torch", "Reliquary Crate Stack", "Blood-Slick Altar"],
         "surface": "interior-stone", "light": "torchlit"},                          # Shrine
     7: {"propNames": ["Embalming Table", "Rain Barrel", "Duckboard Walkway"],
         "surface": "interior-wood", "light": "lamplit"},                            # House-of-healing

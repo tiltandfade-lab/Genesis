@@ -1075,7 +1075,8 @@ const SCENE_DRESSING_BY_ARCHETYPE={
    "Offertory Table",
    "Weeping Font",
    "Guttering Grave-Torch",
-   "Reliquary Crate Stack"
+   "Reliquary Crate Stack",
+   "Blood-Slick Altar"
   ],
   "surface": "interior-stone",
   "light": "torchlit"

@@ -128,6 +128,30 @@ Wildermyth rule (1-3 focal, filler sparse — visual-conventions.md #5).
 frame contains zero placeholder-label textures (pixel-scan for the placeholder's
 signature color); slice QA per ADDITIVE FOLD LAW (gate verdicts recorded).
 
+## VP2b — THE GALLERY PASS (Adam 2026-07-10 night: bottom-clipped sprites become paintings)
+
+Reclamation, pure additive law — sprites whose art is cut off at the bottom edge are
+defective standees but perfectly-composed FRAMED ART:
+1. **Detect (mechanical):** alpha touching the bottom image edge across ≥ 30% of the
+   width = bottom-clipped candidate; union with Adam's review fails whose notes flag
+   clipping; also sweep quarantine + the `-takeN` reject takes (paid-for art, additive
+   law). Emit `dev/model-qa/gallery-candidates.json` for a one-pass eyeball cull.
+2. **Frame (procedural):** composite each keeper into a painting card — realm frame
+   styles (fantasy gilt/wood, gloom cracked-black w/ a canted option, chrome bezel
+   holo-display, per REALM_MATERIALS trim colors) + a canvas-texture inset behind the
+   subject; output `assets/dressing/<realm>-painting-<n>.png`.
+3. **Register:** join REALM_DRESSING as `primary: wall-hang` cards (the dressing roll
+   already places wall-hangs against wall cells); castable lore hooks ride free —
+   a creature's portrait hanging in a dungeon is foreshadowing the DM can NAME, and a
+   painting is a legal mimic guise (GUISE object-guiser class).
+4. Subjects keep provenance: card manifest carries `paintingOf: <source slug>` so the
+   DM/codex knows whose face hangs on the wall.
+*Verify:* detector precision on a labeled sample (no full-body sprite falsely eaten);
+frames deterministic per realm; every emitted card joins REALM_DRESSING and resolves
+on disk; a gloom study frame shows ≥1 hung painting, READ. OUT OF SCOPE: generating
+NEW painting art (this pass only reclaims; authored paintings can join dressing-gen
+rosters later).
+
 ## VP3 — GROUND DESIGN (floors that read composed, not extruded)
 
 In `src/ui/theater-interior.js` (all seeded off walkId — determinism law):

@@ -256,9 +256,12 @@ async function buildScene(page, { topology, realmId, env, walkId, residents, lig
 // shadows, ruling 2) — the sweep is 3 combos, not 6: (a) flat, (b) +AO, (d) +fog. Banded/quantized
 // lighting is dropped from the taste-gate sweep per Adam's explicit "Adam dropped banded implicitly".
 const VARIANTS = [
-  { key: "a-flat", label: "(a) flat baseline", flags: { ao: false, banded: false, fog: false } },
-  { key: "b-ao", label: "(b) +baked AO at wall-floor seams", flags: { ao: true, banded: false, fog: false } },
-  { key: "d-fog", label: "(d) +realm-tinted fog", flags: { ao: false, banded: false, fog: true } },
+  { key: "b1-ao-soft", label: "(b1) AO soft (0.55)", flags: { ao: true, aoFactor: 0.55, banded: false, fog: false } },
+  { key: "b2-ao-med", label: "(b2) AO medium (0.40)", flags: { ao: true, aoFactor: 0.40, banded: false, fog: false } },
+  { key: "b3-ao-heavy", label: "(b3) AO heavy (0.25)", flags: { ao: true, aoFactor: 0.25, banded: false, fog: false } },
+  { key: "c1-band-6", label: "(c1) banded 6 steps (subtle)", flags: { ao: false, banded: true, bandedSteps: 6, fog: false } },
+  { key: "c2-band-4", label: "(c2) banded 4 steps", flags: { ao: false, banded: true, bandedSteps: 4, fog: false } },
+  { key: "c3-band-3", label: "(c3) banded 3 steps (hard)", flags: { ao: false, banded: true, bandedSteps: 3, fog: false } },
 ];
 
 // ITERATION 2, ruling 3: (chrome Hub, lamplit) 3 chrome-ish/fantasy creature sprites + 1 humanoid PC;

@@ -3621,11 +3621,15 @@ const FIG_AO_FLOOR = 0.52, FIG_AO_RANGE = 1.05;
 // sets opts.banded — window.Theater.setInteriorVariant, added for the study rig, is the only path
 // that reaches it) — a deliberately narrow, reversible toggle until Adam's taste-gate picks a look.
 const INTERIOR_BANDED_STEPS = 4;
-const BANDED_GLSL = `
+function bandedGlslFor(steps){
+  const s = (typeof steps === "number" && steps >= 2 && steps <= 16) ? steps : INTERIOR_BANDED_STEPS;
+  return `
   #ifdef INTERIOR_BANDED
-  outgoingLight = floor(outgoingLight * ${INTERIOR_BANDED_STEPS.toFixed(1)} + 0.5) / ${INTERIOR_BANDED_STEPS.toFixed(1)};
+  outgoingLight = floor(outgoingLight * ${s.toFixed(1)} + 0.5) / ${s.toFixed(1)};
   #endif
 `;
+}
+const BANDED_GLSL = bandedGlslFor(INTERIOR_BANDED_STEPS);
 function applyPsxShaderTweaks(material, opts){
   const figureAO = !!(opts && opts.figureAO);
   const banded = !!(opts && opts.banded);
@@ -3636,7 +3640,7 @@ function applyPsxShaderTweaks(material, opts){
     if(banded){
       shader.fragmentShader = "#define INTERIOR_BANDED\n" + shader.fragmentShader.replace(
         "#include <opaque_fragment>",
-        BANDED_GLSL + "\n  #include <opaque_fragment>"
+        bandedGlslFor(opts && opts.bandedSteps) + "\n  #include <opaque_fragment>"
       );
     }
     if(figureAO){
@@ -4145,9 +4149,9 @@ function interiorUnitBoxGeometry(){
 // reference repo's screenshots actually read as: the darker line right where a wall meets the floor.
 // Pure function over the plain instance arrays — no THREE, easy to unit-test, applied only when the
 // study rig's AO variant is on (product callers never set this; see setInteriorVariant below).
-function interiorApplyAODarkening(instances){
+function interiorApplyAODarkening(instances, factor){
   const wallKeys = new Set((instances.wall || []).map((w) => w.x + "," + w.z));
-  const AO_FACTOR = 0.45; // was 0.68 — invisible next to torch lighting at room framing (Adam, card v5)
+  const AO_FACTOR = (typeof factor === "number" && factor > 0 && factor < 1) ? factor : 0.45; // default = card-v6 pick; variant.aoFactor sweeps it (intensity taste card)
   ["floor", "doorframe"].forEach((kind) => {
     (instances[kind] || []).forEach((inst) => {
       const seam = [[1, 0], [-1, 0], [0, 1], [0, -1]].some(([dx, dz]) => wallKeys.has((inst.x + dx) + "," + (inst.z + dz)));
@@ -4171,7 +4175,7 @@ function interiorBuildInstancedMesh(list, cx, cz, texture, variant, shadowKind){
   const geo = interiorUnitBoxGeometry();
   const mat = applyPsxShaderTweaks(new THREE.MeshLambertMaterial(
     texture ? { map: texture } : { color: 0xffffff }
-  ), { banded: !!(variant && variant.banded) });
+  ), { banded: !!(variant && variant.banded), bandedSteps: variant && variant.bandedSteps });
   const mesh = new THREE.InstancedMesh(geo, mat, list.length);
   // DUNGEON-GRAPH.md U3 iteration-2, ruling 2: wall/floor/pillar/doorframe instanced meshes cast AND
   // receive real shadows on an interior board (harmless while renderer.shadowMap.enabled is false on
@@ -4384,7 +4388,7 @@ function setInteriorBoard(data){
         wall: (data.instances && data.instances.wall || []).map((o) => Object.assign({}, o)),
         doorframe: (data.instances && data.instances.doorframe || []).map((o) => Object.assign({}, o)),
         pillar: (data.instances && data.instances.pillar || []).map((o) => Object.assign({}, o)),
-      })
+      }, variant.aoFactor)
     : (data.instances || {});
   const floorMesh = interiorBuildInstancedMesh(inst.floor, cx, cz, floorTex, variant, "floor");
   // CUTAWAY WALLS (study card v4): when the board frames a focus room, the room's CAMERA-SIDE

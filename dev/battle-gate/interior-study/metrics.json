@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-10T21:09:05.890Z",
+  "generatedAt": "2026-07-10T21:15:09.272Z",
   "scenes": {
     "chrome": {
       "label": "chrome Hub dungeon room",
@@ -4926,8 +4926,8 @@
     "notes": [
       "startSession() called"
     ],
-    "worldId": "mrffhsy6a7uy8",
-    "worldName": "Ash-Hollow"
+    "worldId": "mrffplfbvecmk",
+    "worldName": "Mire-End"
   },
   "theaterState": {
     "hasBattleStage": true,
@@ -4935,37 +4935,67 @@
     "hasCanvas": true,
     "hasSetInteriorBoard": true
   },
-  "shotCount": 6,
+  "shotCount": 12,
   "shots": [
     {
       "sceneKey": "chrome",
-      "variantKey": "a-flat",
-      "fileName": "chrome-a-flat.png"
+      "variantKey": "b1-ao-soft",
+      "fileName": "chrome-b1-ao-soft.png"
     },
     {
       "sceneKey": "chrome",
-      "variantKey": "b-ao",
-      "fileName": "chrome-b-ao.png"
+      "variantKey": "b2-ao-med",
+      "fileName": "chrome-b2-ao-med.png"
     },
     {
       "sceneKey": "chrome",
-      "variantKey": "d-fog",
-      "fileName": "chrome-d-fog.png"
+      "variantKey": "b3-ao-heavy",
+      "fileName": "chrome-b3-ao-heavy.png"
+    },
+    {
+      "sceneKey": "chrome",
+      "variantKey": "c1-band-6",
+      "fileName": "chrome-c1-band-6.png"
+    },
+    {
+      "sceneKey": "chrome",
+      "variantKey": "c2-band-4",
+      "fileName": "chrome-c2-band-4.png"
+    },
+    {
+      "sceneKey": "chrome",
+      "variantKey": "c3-band-3",
+      "fileName": "chrome-c3-band-3.png"
     },
     {
       "sceneKey": "gloom",
-      "variantKey": "a-flat",
-      "fileName": "gloom-a-flat.png"
+      "variantKey": "b1-ao-soft",
+      "fileName": "gloom-b1-ao-soft.png"
     },
     {
       "sceneKey": "gloom",
-      "variantKey": "b-ao",
-      "fileName": "gloom-b-ao.png"
+      "variantKey": "b2-ao-med",
+      "fileName": "gloom-b2-ao-med.png"
     },
     {
       "sceneKey": "gloom",
-      "variantKey": "d-fog",
-      "fileName": "gloom-d-fog.png"
+      "variantKey": "b3-ao-heavy",
+      "fileName": "gloom-b3-ao-heavy.png"
+    },
+    {
+      "sceneKey": "gloom",
+      "variantKey": "c1-band-6",
+      "fileName": "gloom-c1-band-6.png"
+    },
+    {
+      "sceneKey": "gloom",
+      "variantKey": "c2-band-4",
+      "fileName": "gloom-c2-band-4.png"
+    },
+    {
+      "sceneKey": "gloom",
+      "variantKey": "c3-band-3",
+      "fileName": "gloom-c3-band-3.png"
     }
   ],
   "studyCardPath": "/Users/adamstephenson/Desktop/Work/projects/Genesis/.claude/worktrees/genesis-sprite-corpus-tags-edeaac/dev/battle-gate/interior-study/study-card.png",

@@ -1,0 +1,201 @@
+{
+ "file": "high-seas-humanoid-v3-04.png",
+ "realm": "high-seas",
+ "gridClass": "humanoid",
+ "grid": "6 rows x 4 columns",
+ "chroma": "#FF00FF",
+ "cells": [
+  {
+   "slug": "high-seas-boy-in-bandana-shading-eyes",
+   "label": "boy in bandana shading eyes",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "high-seas-kids-01.png|r1c1",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "high-seas-girl-hands-on-hips-shading-eyes",
+   "label": "girl hands on hips shading eyes",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "high-seas-kids-01.png|r1c2",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "high-seas-boy-shading-eyes",
+   "label": "boy shading eyes",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "high-seas-kids-01.png|r1c3",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "high-seas-blond-boy-climbing-pole",
+   "label": "blond boy climbing pole",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "high-seas-kids-01.png|r1c4",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "high-seas-girl-finger-to-lips",
+   "label": "girl finger to lips",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "high-seas-kids-01.png|r1c5",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "high-seas-boy-pointing",
+   "label": "boy pointing",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "high-seas-kids-01.png|r2c1",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "high-seas-redhead-girl-holding-ball",
+   "label": "redhead girl holding ball",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "high-seas-kids-01.png|r2c2",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "high-seas-boy-running",
+   "label": "boy running",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "high-seas-kids-01.png|r2c3",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "high-seas-girl-hand-to-ear-listening",
+   "label": "girl hand to ear listening",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "high-seas-kids-01.png|r2c4",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "high-seas-blond-boy-hand-on-hip",
+   "label": "blond boy hand on hip",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "high-seas-kids-01.png|r2c5",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "high-seas-girl-looking-left",
+   "label": "girl looking left",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "high-seas-kids-01.png|r3c1",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "high-seas-girl-hand-on-hip",
+   "label": "girl hand on hip",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "high-seas-kids-01.png|r3c2",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "high-seas-blond-kid-shading-eyes",
+   "label": "blond kid shading eyes",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "high-seas-kids-01.png|r3c3",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "high-seas-girl-cradling-object",
+   "label": "girl cradling object",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "high-seas-kids-01.png|r3c4",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "high-seas-boy-arms-crossed",
+   "label": "boy arms crossed",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "high-seas-kids-01.png|r3c5",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "high-seas-curly-haired-boy",
+   "label": "curly-haired boy",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "high-seas-kids-01.png|r4c1",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "high-seas-blonde-girl-whispering",
+   "label": "blonde girl whispering",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "high-seas-kids-01.png|r4c2",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "high-seas-boy-whispering-leaning",
+   "label": "boy whispering/leaning",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "high-seas-kids-01.png|r4c3",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "high-seas-boy-leaning-forward",
+   "label": "boy leaning forward",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "high-seas-kids-01.png|r4c4",
+   "reason": "regen-shortleg"
+  },
+  {
+   "slug": "high-seas-boy-sitting-on-sack",
+   "label": "boy sitting on sack",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "high-seas-kids-01.png|r4c5",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "high-seas-boy-with-dreadlocks",
+   "label": "boy with dreadlocks",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "high-seas-kids-01.png|r5c1",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "high-seas-boy-hands-in-jacket",
+   "label": "boy hands in jacket",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "high-seas-kids-01.png|r5c2",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "high-seas-boy-in-head-wrap-saluting",
+   "label": "boy in head wrap saluting",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "high-seas-kids-01.png|r5c3",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "high-seas-slouching-kid-in-suspenders",
+   "label": "slouching kid in suspenders",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "high-seas-kids-01.png|r5c4",
+   "reason": "regen-style"
+  }
+ ]
+}

@@ -1,0 +1,17 @@
+{
+ "file": "lost-world-solo-v3-12.png",
+ "realm": "lost-world",
+ "gridClass": "solo",
+ "grid": "1 row x 1 column",
+ "chroma": "#FF00FF",
+ "cells": [
+  {
+   "slug": "lost-world-mosasaurus",
+   "label": "mosasaurus",
+   "family": "animals",
+   "sizeBand": "gargantuan",
+   "replaces": "lost-world-wild-animals-2.png|r4c1",
+   "reason": "regen-underres"
+  }
+ ]
+}

@@ -1,0 +1,25 @@
+{
+ "file": "frontier-huge-v3-01.png",
+ "realm": "frontier",
+ "gridClass": "huge",
+ "grid": "1 row x 2 columns",
+ "chroma": "#FF00FF",
+ "cells": [
+  {
+   "slug": "frontier-armored-demon-bull",
+   "label": "armored demon bull",
+   "family": "monsters",
+   "sizeBand": "huge",
+   "replaces": "frontier-monsters-4-c2.png|r1c5",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "frontier-spectral-cavalry-charge",
+   "label": "spectral cavalry charge",
+   "family": "monsters",
+   "sizeBand": "huge",
+   "replaces": "frontier-monsters-4-c2.png|r2c5",
+   "reason": "regen-underres"
+  }
+ ]
+}

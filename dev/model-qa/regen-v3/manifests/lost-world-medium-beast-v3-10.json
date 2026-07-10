@@ -1,0 +1,33 @@
+{
+ "file": "lost-world-medium-beast-v3-10.png",
+ "realm": "lost-world",
+ "gridClass": "medium-beast",
+ "grid": "1 row x 4 columns",
+ "chroma": "#FF00FF",
+ "cells": [
+  {
+   "slug": "lost-world-opossum-rat-group",
+   "label": "opossum-rat group",
+   "family": "animals",
+   "sizeBand": "medium",
+   "replaces": "lost-world-dungeon-animals-2.png|r3c4",
+   "reason": "FAIL-adam"
+  },
+  {
+   "slug": "lost-world-termite-swarm",
+   "label": "termite swarm",
+   "family": "animals",
+   "sizeBand": "medium",
+   "replaces": "lost-world-dungeon-animals-2.png|r5c2",
+   "reason": "FAIL-adam"
+  },
+  {
+   "slug": "lost-world-mite-swarm",
+   "label": "mite swarm",
+   "family": "animals",
+   "sizeBand": "medium",
+   "replaces": "lost-world-dungeon-animals-2.png|r5c5",
+   "reason": "FAIL-adam"
+  }
+ ]
+}

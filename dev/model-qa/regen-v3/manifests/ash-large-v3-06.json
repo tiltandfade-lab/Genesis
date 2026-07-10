@@ -1,0 +1,41 @@
+{
+ "file": "ash-large-v3-06.png",
+ "realm": "ash",
+ "gridClass": "large",
+ "grid": "2 rows x 2 columns",
+ "chroma": "#FF00FF",
+ "cells": [
+  {
+   "slug": "ash-spider-queen-with-brood",
+   "label": "spider queen with brood",
+   "family": "monsters",
+   "sizeBand": "large",
+   "replaces": "ash-monsters-3-c2.png|r2c3",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "ash-purple-spined-chitin-beast",
+   "label": "purple spined chitin beast",
+   "family": "monsters",
+   "sizeBand": "large",
+   "replaces": "ash-monsters-3-c2.png|r3c2",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "ash-two-headed-ogre-with-club",
+   "label": "two-headed ogre with club",
+   "family": "monsters",
+   "sizeBand": "large",
+   "replaces": "ash-monsters-3-c2.png|r3c4",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "ash-slime-covered-troll",
+   "label": "slime-covered troll",
+   "family": "monsters",
+   "sizeBand": "large",
+   "replaces": "ash-monsters-3-c2.png|r4c3",
+   "reason": "regen-underres"
+  }
+ ]
+}

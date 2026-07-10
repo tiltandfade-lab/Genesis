@@ -1,0 +1,17 @@
+{
+ "file": "theater-large-v3-17.png",
+ "realm": "theater",
+ "gridClass": "large",
+ "grid": "1 row x 2 columns",
+ "chroma": "#FF00FF",
+ "cells": [
+  {
+   "slug": "theater-elk",
+   "label": "elk",
+   "family": "animals",
+   "sizeBand": "large",
+   "replaces": "theater-wild-animals-01.png|r5c2",
+   "reason": "regen-underres"
+  }
+ ]
+}

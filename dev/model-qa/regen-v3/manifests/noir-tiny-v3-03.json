@@ -1,0 +1,89 @@
+{
+ "file": "noir-tiny-v3-03.png",
+ "realm": "noir",
+ "gridClass": "tiny",
+ "grid": "2 rows x 7 columns",
+ "chroma": "#FF00FF",
+ "cells": [
+  {
+   "slug": "noir-gecko",
+   "label": "gecko",
+   "family": "animals",
+   "sizeBand": "tiny",
+   "replaces": "noir-domestic-animals-2.png|r5c3",
+   "reason": "FAIL-adam"
+  },
+  {
+   "slug": "noir-house-centipede",
+   "label": "house centipede",
+   "family": "animals",
+   "sizeBand": "tiny",
+   "replaces": "noir-dungeon-animals-2.png|r2c2",
+   "reason": "FAIL-adam"
+  },
+  {
+   "slug": "noir-tarantula",
+   "label": "tarantula",
+   "family": "animals",
+   "sizeBand": "tiny",
+   "replaces": "noir-dungeon-animals-2.png|r2c3",
+   "reason": "FAIL-adam"
+  },
+  {
+   "slug": "noir-darkling-beetle",
+   "label": "darkling beetle",
+   "family": "animals",
+   "sizeBand": "tiny",
+   "replaces": "noir-dungeon-animals-2.png|r2c5",
+   "reason": "FAIL-adam"
+  },
+  {
+   "slug": "noir-beetle",
+   "label": "beetle",
+   "family": "animals",
+   "sizeBand": "tiny",
+   "replaces": "noir-dungeon-animals-2.png|r3c1",
+   "reason": "FAIL-adam"
+  },
+  {
+   "slug": "noir-moth-spread",
+   "label": "moth spread",
+   "family": "animals",
+   "sizeBand": "tiny",
+   "replaces": "noir-dungeon-animals-2.png|r3c2",
+   "reason": "FAIL-adam"
+  },
+  {
+   "slug": "noir-cockroach",
+   "label": "cockroach",
+   "family": "animals",
+   "sizeBand": "tiny",
+   "replaces": "noir-dungeon-animals-2.png|r3c4",
+   "reason": "FAIL-adam"
+  },
+  {
+   "slug": "noir-planarian-slime",
+   "label": "planarian/slime",
+   "family": "animals",
+   "sizeBand": "tiny",
+   "replaces": "noir-dungeon-animals-2.png|r3c5",
+   "reason": "FAIL-adam"
+  },
+  {
+   "slug": "noir-cellar-spider",
+   "label": "cellar spider",
+   "family": "animals",
+   "sizeBand": "tiny",
+   "replaces": "noir-dungeon-animals-2.png|r4c4",
+   "reason": "FAIL-adam"
+  },
+  {
+   "slug": "noir-pale-beetle",
+   "label": "pale beetle",
+   "family": "animals",
+   "sizeBand": "tiny",
+   "replaces": "noir-dungeon-animals-2.png|r5c4",
+   "reason": "FAIL-adam"
+  }
+ ]
+}

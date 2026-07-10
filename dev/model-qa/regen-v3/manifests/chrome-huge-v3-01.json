@@ -1,0 +1,25 @@
+{
+ "file": "chrome-huge-v3-01.png",
+ "realm": "chrome",
+ "gridClass": "huge",
+ "grid": "1 row x 2 columns",
+ "chroma": "#00FF00",
+ "cells": [
+  {
+   "slug": "chrome-smokestack-boss-machine",
+   "label": "smokestack boss machine",
+   "family": "monsters",
+   "sizeBand": "huge",
+   "replaces": "chrome-monsters-1-c2.png|r5c3",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "chrome-holo-cube-server-fortress-with-cannons",
+   "label": "holo-cube server fortress with cannons",
+   "family": "monsters",
+   "sizeBand": "huge",
+   "replaces": "chrome-monsters-4-c2.png|r2c4",
+   "reason": "regen-underres"
+  }
+ ]
+}

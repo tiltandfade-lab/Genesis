@@ -1,0 +1,57 @@
+{
+ "file": "frontier-tiny-v3-20.png",
+ "realm": "frontier",
+ "gridClass": "tiny",
+ "grid": "1 row x 7 columns",
+ "chroma": "#FF00FF",
+ "cells": [
+  {
+   "slug": "frontier-centipede",
+   "label": "centipede",
+   "family": "animals",
+   "sizeBand": "tiny",
+   "replaces": "frontier-dungeon-animals-2.png|r1c3",
+   "reason": "FAIL-adam"
+  },
+  {
+   "slug": "frontier-toad",
+   "label": "toad",
+   "family": "animals",
+   "sizeBand": "tiny",
+   "replaces": "frontier-dungeon-animals-2.png|r1c4",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "frontier-ticks-group",
+   "label": "ticks group",
+   "family": "animals",
+   "sizeBand": "tiny",
+   "replaces": "frontier-dungeon-animals-2.png|r1c5",
+   "reason": "FAIL-adam"
+  },
+  {
+   "slug": "frontier-brown-spider",
+   "label": "brown spider",
+   "family": "animals",
+   "sizeBand": "tiny",
+   "replaces": "frontier-dungeon-animals-2.png|r3c4",
+   "reason": "FAIL-adam"
+  },
+  {
+   "slug": "frontier-mites-group",
+   "label": "mites group",
+   "family": "animals",
+   "sizeBand": "tiny",
+   "replaces": "frontier-dungeon-animals-2.png|r4c2",
+   "reason": "FAIL-adam"
+  },
+  {
+   "slug": "frontier-pale-mites-group",
+   "label": "pale mites group",
+   "family": "animals",
+   "sizeBand": "tiny",
+   "replaces": "frontier-dungeon-animals-2.png|r5c3",
+   "reason": "FAIL-adam"
+  }
+ ]
+}

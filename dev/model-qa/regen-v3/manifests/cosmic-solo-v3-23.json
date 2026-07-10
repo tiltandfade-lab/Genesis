@@ -1,0 +1,17 @@
+{
+ "file": "cosmic-solo-v3-23.png",
+ "realm": "cosmic",
+ "gridClass": "solo",
+ "grid": "1 row x 1 column",
+ "chroma": "#FF00FF",
+ "cells": [
+  {
+   "slug": "cosmic-pentagonal-maw-over-drowned-city",
+   "label": "pentagonal maw over drowned city",
+   "family": "monsters",
+   "sizeBand": "gargantuan",
+   "replaces": "cosmic-mm-04.png|r5c2",
+   "reason": "regen-underres"
+  }
+ ]
+}

@@ -1,0 +1,58 @@
+{
+ "file": "cosmic-arcana-large-v3-26.png",
+ "realm": "cosmic",
+ "gridClass": "arcana-large",
+ "grid": "2 rows x 4 columns",
+ "chroma": "#FF00FF",
+ "cells": [
+  {
+   "slug": "cosmic-the-wheel-of-fortune",
+   "label": "The Wheel of Fortune - a great turning gold wheel inscribed with sigils, sphinx perched on top, serpent descending one side, jackal-headed figure rising the other",
+   "family": "arcana",
+   "sizeBand": "large",
+   "reason": "expansion-arcana"
+  },
+  {
+   "slug": "cosmic-death",
+   "label": "Death - skeletal knight in black armor astride a pale horse, carrying a black banner with a white rose",
+   "family": "arcana",
+   "sizeBand": "large",
+   "reason": "expansion-arcana"
+  },
+  {
+   "slug": "cosmic-the-tower",
+   "label": "The Tower - a lightning-struck stone tower come alive as a striding golem, its crown blasted off and burning, tiny figures falling from its windows",
+   "family": "arcana",
+   "sizeBand": "large",
+   "reason": "expansion-arcana"
+  },
+  {
+   "slug": "cosmic-knight-of-wands",
+   "label": "Knight of Wands - armored rider on a rearing horse brandishing a flaming sprouting staff",
+   "family": "arcana",
+   "sizeBand": "large",
+   "reason": "expansion-arcana"
+  },
+  {
+   "slug": "cosmic-knight-of-cups",
+   "label": "Knight of Cups - graceful armored rider on a calm white horse holding out a golden chalice",
+   "family": "arcana",
+   "sizeBand": "large",
+   "reason": "expansion-arcana"
+  },
+  {
+   "slug": "cosmic-knight-of-swords",
+   "label": "Knight of Swords - charging rider on a storm-grey horse, sword thrust forward, cloak whipping",
+   "family": "arcana",
+   "sizeBand": "large",
+   "reason": "expansion-arcana"
+  },
+  {
+   "slug": "cosmic-knight-of-pentacles",
+   "label": "Knight of Pentacles - patient armored rider on a heavy black draft horse, holding a gold coin-disc",
+   "family": "arcana",
+   "sizeBand": "large",
+   "reason": "expansion-arcana"
+  }
+ ]
+}

@@ -1,0 +1,49 @@
+{
+ "file": "chrome-humanoid-v3-03.png",
+ "realm": "chrome",
+ "gridClass": "humanoid",
+ "grid": "2 rows x 4 columns",
+ "chroma": "#00FF00",
+ "cells": [
+  {
+   "slug": "chrome-holo-idol-singer-on-stage",
+   "label": "holo idol singer on stage",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "chrome-npcs-1-c2.png|r4c2",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "chrome-big-chef-eating-noodles",
+   "label": "big chef eating noodles",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "chrome-npcs-3-c2.png|r2c3",
+   "reason": "regen-shortleg"
+  },
+  {
+   "slug": "chrome-crocodile-mutant",
+   "label": "crocodile mutant",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "chrome-npcs-6-c2.png|r1c1",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "chrome-cyborg-with-tablet",
+   "label": "cyborg with tablet",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "chrome-npcs-6-c2.png|r4c4",
+   "reason": "regen-shortleg"
+  },
+  {
+   "slug": "chrome-butcher-with-towel",
+   "label": "butcher with towel",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "chrome-npcs-6-c2.png|r5c1",
+   "reason": "regen-shortleg"
+  }
+ ]
+}

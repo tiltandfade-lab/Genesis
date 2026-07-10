@@ -1,0 +1,41 @@
+{
+ "file": "chrome-large-v3-10.png",
+ "realm": "chrome",
+ "gridClass": "large",
+ "grid": "2 rows x 2 columns",
+ "chroma": "#00FF00",
+ "cells": [
+  {
+   "slug": "chrome-green-glow-zombie-mech",
+   "label": "green-glow zombie mech",
+   "family": "monsters",
+   "sizeBand": "large",
+   "replaces": "chrome-monsters-5-c2.png|r1c2",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "chrome-stone-bronze-golem-hulk",
+   "label": "stone/bronze golem hulk",
+   "family": "monsters",
+   "sizeBand": "large",
+   "replaces": "chrome-monsters-5-c2.png|r1c5",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "chrome-giant-skull-spider-bot",
+   "label": "giant skull spider bot",
+   "family": "monsters",
+   "sizeBand": "large",
+   "replaces": "chrome-monsters-5-c2.png|r2c4",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "chrome-squad-of-cube-head-androids",
+   "label": "squad of cube-head androids",
+   "family": "monsters",
+   "sizeBand": "large",
+   "replaces": "chrome-monsters-5-c2.png|r3c1",
+   "reason": "regen-underres"
+  }
+ ]
+}

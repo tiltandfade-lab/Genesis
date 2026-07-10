@@ -1,0 +1,51 @@
+{
+ "file": "gloom-horror-large-v3-08.png",
+ "realm": "gloom",
+ "gridClass": "horror-monsters",
+ "grid": "2 rows x 3 columns",
+ "chroma": "#FF00FF",
+ "cells": [
+  {
+   "slug": "gloom-graboid-burrower-erupting-from-the-earth",
+   "label": "graboid burrower erupting from the earth, jaw petals wide",
+   "family": "monsters",
+   "sizeBand": "large",
+   "reason": "expansion-vhs-horror"
+  },
+  {
+   "slug": "gloom-amorphous-crimson-blob-mid-engulf",
+   "label": "amorphous crimson blob mid-engulf, half a bicycle disappearing into it",
+   "family": "monsters",
+   "sizeBand": "large",
+   "reason": "expansion-vhs-horror"
+  },
+  {
+   "slug": "gloom-possessed-black-muscle-car-with-a-grinning-grill",
+   "label": "possessed black muscle car with a grinning grille and one headlight winking",
+   "family": "monsters",
+   "sizeBand": "large",
+   "reason": "expansion-vhs-horror"
+  },
+  {
+   "slug": "gloom-spider-legged-head-splice-horror",
+   "label": "spider-legged head-splice horror, a human face scuttling on crab legs",
+   "family": "monsters",
+   "sizeBand": "large",
+   "reason": "expansion-vhs-horror"
+  },
+  {
+   "slug": "gloom-swarm-ball-of-small-toothy-gremlin-critters-roll",
+   "label": "swarm-ball of small toothy gremlin-critters rolling as one mound",
+   "family": "monsters",
+   "sizeBand": "large",
+   "reason": "expansion-vhs-horror"
+  },
+  {
+   "slug": "gloom-swamp-shambler-trailing-weeds",
+   "label": "swamp shambler trailing weeds, one arm a root mass",
+   "family": "monsters",
+   "sizeBand": "large",
+   "reason": "expansion-vhs-horror"
+  }
+ ]
+}

@@ -487,12 +487,24 @@ function rollDungeonWalk(opts){
   // resolver; BREACH.md §0 wraps it in the 2d10 bell + fray-shift tail dispatch (breach-core,
   // engine.breach) — a center result is byte-identical to the pre-breach chain, tails reach for
   // the (not-yet-authored) breach/nightmare tables and fall back to center when they're absent.
-  // HQ2-8 (walk-tail): the shared walkResolveSkinAndSpice tail (engine.walk) — was triplicated
-  // byte-for-byte here/wild-walk.js/walk.js; see its own comment there. REALM-WIRING §2/§3: the
-  // active realm list this walk's encounters draw from — [] outside a breach (byte-identical
-  // behavior to before this unit), non-empty inside one (or a marooned realm walk,
-  // opts.world.realm.active). Threaded into every non-finale room's dwalkEncounter call below.
-  const { hexAt, spiceTier, skin, activeRealms } = walkResolveSkinAndSpice("dungeon", opts);
+  const centerSkinFn = ()=> (typeof tarotSpiceBiasedSkin==="function") ? tarotSpiceBiasedSkin(tarot, "dungeon", region)
+      : ((typeof regionBiasedWalkSkin==="function") ? regionBiasedWalkSkin(region,"dungeon")
+      : ((typeof rollWalkSkin==="function") ? rollWalkSkin("dungeon") : null));
+  // hex axial position (for breachFrayMod) — nodeXY gives render {x,y}; worldToAxial (engine.hexmap)
+  // converts to the {q,r} frayLevel/FRAY_1/FRAY_2 actually key off. No world/node/converter -> null,
+  // frayMod defaults to 0 (never assumes rim-ward).
+  const nodeAt = (opts.world && typeof nodeXY==="function") ? nodeXY(opts.world, opts.world.currentNodeId) : null;
+  const hexAt = (nodeAt && typeof worldToAxial==="function") ? worldToAxial(nodeAt.x, nodeAt.y) : null;
+  // SPICE-RAISE: resolve + stamp the walk's region spice tier BEFORE any skin/segment roll fires.
+  const spiceTier=(typeof spiceTierAt==="function") ? spiceTierAt(hexAt&&hexAt.q, hexAt&&hexAt.r) : "baseline";
+  if(typeof GS!=="undefined") GS.walkSpiceTier=spiceTier;
+  const skin = (typeof rollWalkSkinBreach==="function")
+      ? rollWalkSkinBreach("dungeon", { q: hexAt&&hexAt.q, r: hexAt&&hexAt.r, centerFn: centerSkinFn })
+      : centerSkinFn();
+  // REALM-WIRING §2/§3: the active realm list this walk's encounters draw from — [] outside a
+  // breach (byte-identical behavior to before this unit), non-empty inside one (or a marooned realm
+  // walk, opts.world.realm.active). Threaded into every non-finale room's dwalkEncounter call below.
+  const activeRealms=activeRealmsFor(skin, opts.world);
 
   // setup rolls — the briefing bag
   const [typeArch,typeAtmo]=walkPick("dungeon-type",1,3);

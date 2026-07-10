@@ -283,30 +283,5 @@ const check = (name, cond, detail = "") =>
     ok, JSON.stringify(digest && digest.spiceTier));
 }
 
-// ============================================================
-// 13 (HQ2-8g). tier is THREADED explicitly into the skin-fn chain, not left to each callee's own
-//     GS.walkSpiceTier fallback: spy on rollTable (rollTableSpiced's un-spiced sibling reached when
-//     SPICE_ORDER/rollTableSpiced-level weighting isn't in play — here we spy the entry point every
-//     tier-aware call funnels through, rollWalkSkin itself) and prove the EXPLICIT param wins over a
-//     deliberately-stale GS.walkSpiceTier.
-// ============================================================
-{ const { win } = freshDom();
-  const calls = [];
-  win.eval(`(function(){ var _orig = rollWalkSkin; window.rollWalkSkin = function(envKind, tier){ window.__spyCalls.push(tier); return _orig(envKind, tier); }; })();`);
-  win.__spyCalls = [];
-  win.GS.walkSpiceTier = "rim"; // deliberately stale/wrong
-  win.regionBiasedWalkSkin(null, "urban", "baseline"); // explicit tier passed straight through
-  const gotBaseline = win.__spyCalls.every(t => t === "baseline");
-  check("13a. regionBiasedWalkSkin(region,envKind,tier) threads tier into rollWalkSkin (not GS.walkSpiceTier)",
-    win.__spyCalls.length >= 1 && gotBaseline, JSON.stringify(win.__spyCalls));
-
-  win.__spyCalls = [];
-  win.GS.walkSpiceTier = "fray2"; // deliberately stale/wrong
-  win.tarotSpiceBiasedSkin(null, "dungeon", null, "rim");
-  const gotRim = win.__spyCalls.every(t => t === "rim");
-  check("13b. tarotSpiceBiasedSkin(vector,envKind,region,tier) threads tier into rollWalkSkin (not GS.walkSpiceTier)",
-    win.__spyCalls.length >= 1 && gotRim, JSON.stringify(win.__spyCalls));
-}
-
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

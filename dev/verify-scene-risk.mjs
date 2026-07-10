@@ -23,35 +23,11 @@ const harness = `var U={worlds:{},activeWorldId:null,revealed:{}}; var SEED=null
 const accessors = "function __riskVocab(){return SCENE_RISK_VOCAB;} function __riskLadder(){return SCENE_RISK_LADDER;} " +
   "function __riskStakes(){return SCENE_RISK_STAKES;} function __riskFallback(){return SCENE_RISK_FALLBACK_TELEGRAPH;}";
 
-// HOTFIX-QUEUE-2026-07-07 HQ2-10 — flake-proofing: rollUrbanWalk/rollDungeonWalk draw real dice over
-// live Math.random, and test 4's "all three MOVED" assertion compares against a freshly-rolled center
-// walk that can occasionally land on nightmare/corpse-hard-to-recover/map by chance alone (RED
-// baseline: failed 2/10). Install a deterministic mulberry32 generator as the window's Math.random
-// (idiom copied verbatim from dev/playtest-bridgeless.mjs's --seed path). --seed=<int> overrides; a
-// FIXED default keeps an un-argumented run deterministic too.
-// HQ2-10b (2026-07-07 follow-up) — the seed alone is content-coupled: a table edit on ANY branch
-// reshuffles what the fixed seed rolls, so checks 2b/3/4d (which compared forced values against a
-// RANDOM baseline walk) went red on branches that never touched scene-risk. Those checks now force
-// their baseline's §3.2 inputs (Grounded skin, no tail, tier 1, heat 0, no enemies) so the baseline
-// band is ALWAYS safe, whatever the tables roll. Must stay green under any --seed.
-const __seedArg = process.argv.find((a) => a.startsWith("--seed="));
-const RNG_SEED = __seedArg ? (parseInt(__seedArg.slice(7), 10) >>> 0) || 1 : 20260707;
-function installSeededRandom(win, seed){
-  let s = seed >>> 0;
-  win.Math.random = () => {
-    s |= 0; s = (s + 0x6D2B79F5) | 0;
-    let t = Math.imul(s ^ (s >>> 15), 1 | s);
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
-
 function newWin() {
   const full = read("tables.js") + "\n;\n" + man.loadOrder.filter((p) => p.endsWith(".js")).map(read).join("\n;\n") + "\n;\n" + accessors;
   const dom = new JSDOM(`<!doctype html><html><body><div id="worldView"></div><div id="toast"></div></body></html>`,
     { runScripts: "dangerously", url: "http://localhost/" });
   dom.window.eval(harness + "\n" + full);
-  installSeededRandom(dom.window, RNG_SEED);   // BEFORE any scenario's first roll (HQ2-10)
   dom.window.requestAnimationFrame = (fn) => setTimeout(fn, 0);
   return dom.window;
 }
@@ -97,11 +73,6 @@ console.log("\n--- 2. T1 urban walk, forced Grounded skin -> deterministic recom
   const win = newWin();
   const walk = win.rollUrbanWalk({ segCount: 5, tier: 1 });
   check("2. rollUrbanWalk stamps walk.risk", !!walk.risk, JSON.stringify(walk.risk));
-  // the section's premise ("forced Grounded skin") was never actually enforced — a rolled skin
-  // TAIL (nightmare/breach) overrides §3.2 arithmetic and breaks the recompute. Force it (HQ2-10b).
-  delete walk.risk;
-  walk.skin = { text: "x", band: "Grounded" };
-  win.sceneRiskOf(walk, null);
   const expectedBand = (() => {
     // recompute expected band in-harness from the SAME walk (derivation must agree, not a tautology
     // against itself — we don't call sceneRiskDangerBand a second time, we redo the §3.2 arithmetic).
@@ -118,14 +89,7 @@ console.log("\n--- 3. MUTATION: band moves when skin/tier force a higher score -
 {
   const win = newWin();
   const walk = win.rollUrbanWalk({ segCount: 5, tier: 1 });
-  // deterministic-LOW baseline (HQ2-10b): a rolled walk can land deadly on its own, colliding with
-  // the forced-high band this check expects to move AWAY from. Force score 0 → always "safe".
-  delete walk.risk;
-  walk.skin = { text:"x", band:"Grounded" };
-  walk.tier = 1; walk.heatStart = 0;
-  walk.segments = [mkSeg(1), mkSeg(2), mkSeg(3,{isFinale:true})];
-  const before = win.sceneRiskOf(walk, null).risk.dangerBand;
-  check("3-pre. forced-low baseline is safe", before === "safe", before);
+  const before = walk.risk.dangerBand;
   delete walk.risk;
   walk.skin = { text:"x", band:"Volatile" };
   walk.tier = 2;
@@ -140,14 +104,6 @@ console.log("\n--- 4. Breach-tail walk -> nightmare band + stakes/trace MOVED --
 {
   const win = newWin();
   const centerWalk = win.rollUrbanWalk({ segCount: 4, tier: 1 });
-  // deterministic-SAFE center (HQ2-10b): a rolled center can land nightmare/deadly by chance and
-  // collide with the breach values 4d expects to move away from. Force the §3.2 inputs low.
-  delete centerWalk.risk;
-  centerWalk.skin = { text:"x", band:"Grounded" };
-  centerWalk.tier = 1; centerWalk.heatStart = 0;
-  centerWalk.segments = [mkSeg(1), mkSeg(2), mkSeg(3,{isFinale:true})];
-  win.sceneRiskOf(centerWalk, null);
-  check("4-pre. forced-low center is safe", centerWalk.risk.dangerBand === "safe", centerWalk.risk.dangerBand);
   const breachWalk = JSON.parse(JSON.stringify({ environment:"urban", tier:1, segments: centerWalk.segments, heatStart:0 }));
   breachWalk.skin = { text:"x", band:"Grounded", tail:"breach" };
   const stamped = win.sceneRiskOf(breachWalk, null);

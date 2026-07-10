@@ -360,8 +360,8 @@ function codexFullRecord(w, r){
 }
 
 /* the ids of the "here-and-now set" (DIGEST-DIET §1): records that ride the digest FULL every turn,
-   regardless of touchedSeq. opts:{atNodeId, walkNodeId, mintIds, ackSeq, founding}. Bounded by scene
-   size, not world size — this is the whole point of the split. */
+   regardless of touchedSeq. opts:{atNodeId, walkNodeId, mintIds, ackSeq}. Bounded by scene size, not
+   world size — this is the whole point of the split. */
 function codexHereNowIds(w, opts){
   opts=opts||{};
   const C=codexOf(w), ids=new Set();
@@ -374,22 +374,9 @@ function codexHereNowIds(w, opts){
     const untouchedAmbient = r.dm && r.dm.ambient && r.status && r.status.soft;
     // 1. at the current node, or at a node of the active walk (both are "here" for narration purposes)
     if(!untouchedAmbient && r.status && r.status.at!=null && (r.status.at===opts.atNodeId || (opts.walkNodeId!=null && r.status.at===opts.walkNodeId))) ids.add(r.id);
-    // HQ2-11 (PROVISIONAL, founding-digest-diet): on the FOUNDING turn only, a record the PC has
-    // already CONTACTED (status.known, or soft locked to hard via codex_contact) rides full even off
-    // the opening node — the "contacted OR nearby" founding slice the spec calls for. Off-founding,
-    // rule 4 below already carries a contacted record forward via its touchedSeq bump, so this branch
-    // would be redundant (and is gated off to keep the steady-state path byte-for-byte unchanged).
-    if(opts.founding && r.status && (r.status.known || r.status.soft===false)) ids.add(r.id);
     // 4. touched since the last acknowledged turn (the delta, §2) — a crashed/unanswered turn never
     // advances digestAckSeq, so nothing already shipped silently drops out of the DM's view.
-    // HQ2-11 (PROVISIONAL): SUPPRESSED at founding — ackSeq is always 0 on a world's first-ever digest
-    // (digestHereOpts's own comment), and codexAdd's codexTouch stamps touchedSeq>0 on every record
-    // minted during world-gen prep, so with rule 4 live this branch alone matches the ENTIRE just-
-    // generated prep codex on turn 1 (the founding-digest-diet bug — dev/state-eval/budgets.json's
-    // hx-01-founding fixture blew totalFounding on this). Full prep stays in w.codex regardless (this
-    // function only scopes the DIGEST slice); post-founding, ackSeq carries a real per-turn watermark
-    // and rule 4 resumes its normal job untouched.
-    if(!opts.founding && opts.ackSeq!=null && typeof r.touchedSeq==="number" && r.touchedSeq>opts.ackSeq) ids.add(r.id);
+    if(opts.ackSeq!=null && typeof r.touchedSeq==="number" && r.touchedSeq>opts.ackSeq) ids.add(r.id);
   });
   // 2. the active walk's cast (pn.cast ids) — always full, not just when at that node
   (opts.castIds||[]).forEach(id=>{ if(C.records[id]) ids.add(id); });
@@ -397,13 +384,6 @@ function codexHereNowIds(w, opts){
   (opts.mintIds||[]).forEach(id=>{ if(C.records[id]) ids.add(id); });
   return ids;
 }
-
-/* HQ2-11 (PROVISIONAL, founding-digest-diet): a conservative static ceiling for the founding turn's
-   `codex` section, independent of dev/state-eval/budgets.json (a dev-only measurement artifact the
-   app never reads at runtime). Sized so codex + every OTHER section's own worst-case budgets.json
-   ceiling still clears totalFounding (32768) with margin — the exact number is a taste call, not a
-   locked contract; flagged for Fable's gate same as the rest of this unit. */
-const CODEX_FOUNDING_BYTE_CAP = 22528;
 
 /* a roster one-liner — enough for the DM to remember the record exists and pull it on demand via
    dev/peek-state.py (§1); no fields/dm/links (that's the whole savings). */
@@ -422,44 +402,9 @@ function codexDigest(w, opts){
   const all=Object.values(C.records).filter(r=>r.kind!=="region");
   if(!opts) return all.map(r=>codexFullRecord(w, r));   // back-compat: unscoped call ships every record full
   const here=codexHereNowIds(w, opts);
-  const hereRecs=all.filter(r=>here.has(r.id));
-  const notHereRecs=all.filter(r=>!here.has(r.id));
-  // HQ2-11 (PROVISIONAL, founding-digest-diet): the founding turn does NOT roster the rest-of-prep set
-  // the way a steady-state turn rosters its "not here" records — the fix shape is explicit that the
-  // un-sliced prep "stays in w.codex (behind the screen)... NOT dumped in the opening digest" at ALL
-  // (neither tier), not merely demoted to a one-liner. Rostering the full prep dump here would just move
-  // the overflow from `codex` onto `codexRoster` (this fixture's prep alone would blow codexRoster's own
-  // budgets.json ceiling — a section this unit's spec explicitly says not to touch) — a shell game, not
-  // a fix. Post-founding (opts.founding false) this branch never runs; steady-state rostering (below)
-  // is untouched.
-  if(opts.founding && hereRecs.length){
-    // Edge case (ruled): a founding scene with an unusually large nearby/contacted set could still blow
-    // the codex budget even after suppressing the touchedSeq-delta rule above. Cap it: contacted records
-    // first (already-met NPCs matter most to the opening scene), then everything else in the here set
-    // ordered by mint order (touchedSeq) for determinism; whatever doesn't fit under CODEX_FOUNDING_BYTE_CAP
-    // spills into codexRoster (a one-liner + an implicit count via its length) so the DM knows more exists
-    // behind the screen — the ONLY thing that ever lands in codexRoster on a founding turn.
-    const contacted=r=>!!(r.status && (r.status.known || r.status.soft===false));
-    const ordered=hereRecs.slice().sort((a,b)=>{
-      const ca=contacted(a)?0:1, cb=contacted(b)?0:1;
-      if(ca!==cb) return ca-cb;
-      return (a.touchedSeq||0)-(b.touchedSeq||0);
-    });
-    const kept=[]; const spilled=[]; let bytes=0;
-    ordered.forEach(r=>{
-      const full=codexFullRecord(w, r);
-      const b=JSON.stringify(full).length;
-      if(kept.length && bytes+b>CODEX_FOUNDING_BYTE_CAP){ spilled.push(r); return; }
-      kept.push(full); bytes+=b;
-    });
-    return {
-      codex: kept,
-      codexRoster: spilled.map(codexRosterLine)
-    };
-  }
   return {
-    codex: hereRecs.map(r=>codexFullRecord(w, r)),
-    codexRoster: notHereRecs.map(codexRosterLine)
+    codex: all.filter(r=>here.has(r.id)).map(r=>codexFullRecord(w, r)),
+    codexRoster: all.filter(r=>!here.has(r.id)).map(codexRosterLine)
   };
 }
 

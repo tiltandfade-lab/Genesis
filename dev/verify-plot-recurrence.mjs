@@ -26,23 +26,6 @@ const moduleSrc = man.loadOrder.filter((p) => p.endsWith(".js")).map(read).join(
 const srcText = read("tables.js") + "\n;\n" + moduleSrc;
 const harness = `var U={worlds:{},activeWorldId:null,revealed:{}}; var SEED=null;`;
 
-// HOTFIX-QUEUE-2026-07-07 HQ2-10 — flake-proofing: test 0 samples 400 live rollItem() draws looking
-// for at least one Mythic (d300, 3/300 rows) fire; on live Math.random that's a real (tiny but
-// nonzero) chance of an all-miss run. Install a deterministic mulberry32 generator as the window's
-// Math.random (idiom copied verbatim from dev/playtest-bridgeless.mjs's --seed path) so a CI run is
-// reproducible. --seed=<int> overrides; a FIXED default keeps an un-argumented run deterministic too.
-const __seedArg = process.argv.find((a) => a.startsWith("--seed="));
-const RNG_SEED = __seedArg ? (parseInt(__seedArg.slice(7), 10) >>> 0) || 1 : 20260707;
-function installSeededRandom(win, seed){
-  let s = seed >>> 0;
-  win.Math.random = () => {
-    s |= 0; s = (s + 0x6D2B79F5) | 0;
-    let t = Math.imul(s ^ (s >>> 15), 1 | s);
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
-
 function baseWorld(id){
   return {
     id, name: "The Recurrence Test",
@@ -64,7 +47,6 @@ function freshDom(loadSrc = srcText){
   );
   const win = dom.window;
   win.eval(harness + "\n" + loadSrc);
-  installSeededRandom(win, RNG_SEED);   // BEFORE any scenario's first roll (HQ2-10)
   win.fetch = () => Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve({}) });
   win.requestAnimationFrame = (fn) => setTimeout(fn, 0);
   win.GS.dm = { turnId: null, pending: false, poll: null, rollReq: null, ask: null, animate: false };

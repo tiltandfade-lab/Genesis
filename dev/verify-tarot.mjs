@@ -8,7 +8,7 @@
       neuter tarotVectorOf's no-draw guard, confirm a phantom draw leaks a nonzero nudge, then
       restore.
    §2 the draw — tarotDraw(w) stores exactly one card on w.tarot with a player-facing omen and
-      (for a Major) a DM-only mutator {op,params,dmNote}; a minor draw carries mutator:null.
+      (for a Major) a DM-only mutator {op,params,note}; a minor draw carries mutator:null.
    §4 Majors anchored VERBATIM — the 5 Adam-approved samples (TAROT-SESSION.md §4) match byte-for-
       byte in data/tarot.js.
    Roller hooks — tarotArchetypeBias/tarotBiasedArchetypePool/tarotSpiceBiasedSkin/tarotAmbientBonus/
@@ -120,7 +120,7 @@ const check = (name, cond, detail = "") =>
 
 // ============================================================
 // 3. tarotDraw(w) — stores exactly one card on w.tarot; player-facing omen present; a Major draw
-//    carries a DM-only mutator {op,params,dmNote}, a minor draw carries mutator:null.
+//    carries a DM-only mutator {op,params,note}, a minor draw carries mutator:null.
 // ============================================================
 { const { win, world } = freshDom();
   const draw = win.tarotDraw(world);
@@ -129,10 +129,10 @@ const check = (name, cond, detail = "") =>
     typeof draw.name === "string" && typeof draw.reversed === "boolean" && typeof draw.omen === "string",
     JSON.stringify(draw));
   if (draw.major) {
-    check("3c. a Major draw carries a DM-only mutator {op,dmNote,visibleTell,payoff} (HQ2-8c: note alias retired)",
-      draw.mutator && typeof draw.mutator.op === "string" &&
+    check("3c. a Major draw carries a DM-only mutator {op,note,dmNote,visibleTell,payoff} (alias intact)",
+      draw.mutator && typeof draw.mutator.op === "string" && typeof draw.mutator.note === "string" &&
       typeof draw.mutator.dmNote === "string" && typeof draw.mutator.visibleTell === "string" &&
-      typeof draw.mutator.payoff === "string" && draw.mutator.note === undefined,
+      typeof draw.mutator.payoff === "string" && draw.mutator.note === draw.mutator.dmNote,
       JSON.stringify(draw.mutator));
   } else {
     check("3c. a minor draw carries mutator:null", draw.mutator === null, JSON.stringify(draw.mutator));
@@ -189,7 +189,7 @@ function baseWorldForLoop(win){ return { session: 1, tarot: null }; }
     win.tarotVectorOf(w2).ambientBonus > 0, JSON.stringify(win.tarotVectorOf(w2)));
 
   const towerCard = win.__tarotMajors().find(m => m.name === "The Tower");
-  const w3 = { session:1, tarot:{ session:1, name:"The Tower", major:true, suit:null, rank:null, court:false, domain:null, reversed:false, omen:towerCard.up.omen, mutator:{ op:towerCard.up.op, params:towerCard.up.params, dmNote:towerCard.up.dmNote } } };
+  const w3 = { session:1, tarot:{ session:1, name:"The Tower", major:true, suit:null, rank:null, court:false, domain:null, reversed:false, omen:towerCard.up.omen, mutator:{ op:towerCard.up.op, params:towerCard.up.params, note:towerCard.up.note } } };
   const v3 = win.tarotVectorOf(w3);
   check("5d. The Tower (upright)'s op/params ride through the vector unmechanized (op:'advanceHottestClock', no numeric nudge)",
     v3.op === "advanceHottestClock" && v3.archetypeMult === 1.0 && v3.spiceDir === 0, JSON.stringify(v3));
@@ -238,8 +238,8 @@ function baseWorldForLoop(win){ return { session: 1, tarot: null }; }
 //     card name + omen (player-facing) but never the mutator's op/params/note (DM-only surface).
 // ============================================================
 {
-  check("6f. beginSession's tarot log line never references draw.mutator/.op (grep-level)",
-    !/draw\.mutator|draw\.op\b/.test(read("src/world/play.js").split("function beginSession")[1].split("function startSession")[0]),
+  check("6f. beginSession's tarot log line never references draw.mutator/.op/.note (grep-level)",
+    !/draw\.mutator|draw\.op\b|draw\.note/.test(read("src/world/play.js").split("function beginSession")[1].split("function startSession")[0]),
     "beginSession's frontispiece surfaced a mutator field");
   const { win, world } = freshDom();
   // direct check: tarotFrontispiece/tarotDigestCard never expose op/params on the FRONTISPIECE surface
@@ -412,7 +412,7 @@ function baseWorldForLoop(win){ return { session: 1, tarot: null }; }
   world.tarot = win.tarotDraw(world);
   world.tarot = { session:1, name:"The Tower", major:true, suit:null, rank:null, court:false, domain:null,
     glyph:"✦", reversed:false, omen:tower.up.omen,
-    mutator:{ op:tower.up.op, params:tower.up.params, dmNote:tower.up.dmNote, visibleTell:tower.up.visibleTell, payoff:tower.up.payoff, target:null },
+    mutator:{ op:tower.up.op, params:tower.up.params, dmNote:tower.up.dmNote, note:tower.up.dmNote, visibleTell:tower.up.visibleTell, payoff:tower.up.payoff, target:null },
     sense: win.__tarotReversalSense() ? win.__tarotReversalSense()["up"] : null };
   const dm = win.tarotDigestCard(world);
   const majorOk = dm && typeof dm.sense==="string" && !("tone" in dm) && !("handle" in dm) && !("rankSense" in dm);
@@ -471,7 +471,7 @@ function baseWorldForLoop(win){ return { session: 1, tarot: null }; }
   const moon = win.__tarotMajors().find(m=>m.name==="The Moon");
   const w = { session:2, tarot:{ session:2, name:"The Moon", major:true, suit:null, rank:null, court:false,
     domain:null, glyph:"✦", reversed:false, omen:moon.up.omen,
-    mutator:{ op:moon.up.op, params:moon.up.params, dmNote:moon.up.dmNote, visibleTell:moon.up.visibleTell, payoff:moon.up.payoff, target:null } } };
+    mutator:{ op:moon.up.op, params:moon.up.params, dmNote:moon.up.dmNote, note:moon.up.dmNote, visibleTell:moon.up.visibleTell, payoff:moon.up.payoff, target:null } } };
   const v = win.tarotVectorOf(w);
   const def = win.__tarotDefaultVector();
   check("12a. Moon-up vector: walkMotif==='mirror'; tarotWalkMotif(null)===null; default vector walkMotif===null",
@@ -484,7 +484,7 @@ function baseWorldForLoop(win){ return { session: 1, tarot: null }; }
   const moon = win.__tarotMajors().find(m=>m.name==="The Moon");
   const moonWorld = { session:2, tarot:{ session:2, name:"The Moon", major:true, suit:null, rank:null, court:false,
     domain:null, glyph:"✦", reversed:false, omen:moon.up.omen,
-    mutator:{ op:moon.up.op, params:moon.up.params, dmNote:moon.up.dmNote, visibleTell:moon.up.visibleTell, payoff:moon.up.payoff, target:null } } };
+    mutator:{ op:moon.up.op, params:moon.up.params, dmNote:moon.up.dmNote, note:moon.up.dmNote, visibleTell:moon.up.visibleTell, payoff:moon.up.payoff, target:null } } };
   const walk = { segments:[{ depth:0 }], environment:"dungeon" };
   win.applySkinGrants(walk, { motif:null, grants:"" }, moonWorld);
   check("12b. gap-fill: applySkinGrants(walk,{motif:null,grants:''},moonWorld) sets walk.motif='mirror', motifSource='tarot', motifSession=session",
@@ -497,7 +497,7 @@ function baseWorldForLoop(win){ return { session: 1, tarot: null }; }
   const moon = win.__tarotMajors().find(m=>m.name==="The Moon");
   const moonWorld = { session:2, tarot:{ session:2, name:"The Moon", major:true, suit:null, rank:null, court:false,
     domain:null, glyph:"✦", reversed:false, omen:moon.up.omen,
-    mutator:{ op:moon.up.op, params:moon.up.params, dmNote:moon.up.dmNote, visibleTell:moon.up.visibleTell, payoff:moon.up.payoff, target:null } } };
+    mutator:{ op:moon.up.op, params:moon.up.params, dmNote:moon.up.dmNote, note:moon.up.dmNote, visibleTell:moon.up.visibleTell, payoff:moon.up.payoff, target:null } } };
   const walk = { segments:[{ depth:0 }], environment:"dungeon" };
   win.applySkinGrants(walk, { motif:"ash", grants:"" }, moonWorld);
   check("12c. no override: a walk whose skin rolled motif:'ash' keeps 'ash' and sets no motifSource",
@@ -567,7 +567,7 @@ function baseWorldForLoop(win){ return { session: 1, tarot: null }; }
   const nm = "The Cindergore Pact";
   const w = { session:1, currentNodeId:null, ledger:[], factions:[ { name:nm, clock:{ filled:1, size:6 } } ], pressures:[], codex:{ records:{} },
     tarot:{ session:1, name:"The Devil", major:true, reversed:true, omen:"x",
-      mutator:{ op:"pressureFaction", params:{ mode:"advance" }, dmNote:"x", visibleTell:"x", payoff:"x",
+      mutator:{ op:"pressureFaction", params:{ mode:"advance" }, dmNote:"x", note:"x", visibleTell:"x", payoff:"x",
         target:{ kind:"faction", id:win.__slug(nm), label:nm } }, landed:[] } };
   const r = win.applyEvent(w, { type:"clock_advanced", payload:{ clockId:win.__slug(nm), delta:1 }, source:"declared" });
   const fac = w.factions[0];

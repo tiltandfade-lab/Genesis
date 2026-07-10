@@ -155,12 +155,21 @@ function rollWildernessWalk(opts){
   // (§0 fork) — travel walks (opts.kind==="travel") get it free too, unconditional at assembly.
   // BREACH.md §0 wraps the existing bias chain (CENTER resolver) in the 2d10 bell + fray-shift tail
   // dispatch (breach-core, engine.breach) — a center result is byte-identical to the pre-breach chain.
-  // HQ2-8 (walk-tail): the shared walkResolveSkinAndSpice tail (engine.walk) — was triplicated
-  // byte-for-byte here/dungeon-walk.js/walk.js; see its own comment there. REALM-WALK-WIRING §1: the
-  // active realm list this walk's encounters draw from — [] outside a breach (byte-identical to
-  // before this unit), non-empty inside one (or a marooned realm walk). Threaded into every leg's
-  // wwalkEncounter call below (mirrors dungeon-walk.js/walk.js).
-  const { hexAt, spiceTier, skin, activeRealms } = walkResolveSkinAndSpice("wilderness", opts);
+  const centerSkinFn = ()=> (typeof tarotSpiceBiasedSkin==="function") ? tarotSpiceBiasedSkin(tarot, "wilderness", region)
+      : ((typeof regionBiasedWalkSkin==="function") ? regionBiasedWalkSkin(region,"wilderness")
+      : ((typeof rollWalkSkin==="function") ? rollWalkSkin("wilderness") : null));
+  const nodeAt = (opts.world && typeof nodeXY==="function") ? nodeXY(opts.world, opts.world.currentNodeId) : null;
+  const hexAt = (nodeAt && typeof worldToAxial==="function") ? worldToAxial(nodeAt.x, nodeAt.y) : null;
+  // SPICE-RAISE: resolve + stamp the walk's region spice tier BEFORE any skin/segment roll fires.
+  const spiceTier=(typeof spiceTierAt==="function") ? spiceTierAt(hexAt&&hexAt.q, hexAt&&hexAt.r) : "baseline";
+  if(typeof GS!=="undefined") GS.walkSpiceTier=spiceTier;
+  const skin = (typeof rollWalkSkinBreach==="function")
+      ? rollWalkSkinBreach("wilderness", { q: hexAt&&hexAt.q, r: hexAt&&hexAt.r, centerFn: centerSkinFn })
+      : centerSkinFn();
+  // REALM-WALK-WIRING §1: the active realm list this walk's encounters draw from — [] outside a
+  // breach (byte-identical to before this unit), non-empty inside one (or a marooned realm walk).
+  // Threaded into every leg's wwalkEncounter call below (mirrors dungeon-walk.js/walk.js).
+  const activeRealms=(typeof activeRealmsFor==="function") ? activeRealmsFor(skin, opts.world) : [];
 
   // starting biome (per-leg override, else single override, else rolled)
   let cur = biomes ? { biome:biomes[0], biomeDesc:"" } : (opts.biome ? { biome:opts.biome, biomeDesc:"" } : wwalkBiome());

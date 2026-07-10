@@ -75,15 +75,8 @@ function reveal(w,k,text){if(!w.revealed)w.revealed={};if(w.revealed[k])return;
   w.revealed[k]=true;U.revealed=U.revealed||{};U.revealed[k]=true;if(text)toast(text);}
 function showAllPanels(){const w=activeWorld();if(!w)return;if(!w.revealed)w.revealed={};
   REVEAL_KEYS.forEach(k=>w.revealed[k]=true);U.showAll=true;saveU(U);renderWorld();}
-// The KO-wake check now fires from THE one primitive every clock-advancing site shares
-// (HOTFIX-QUEUE-2026-07-07 HQ2-2). Re-entrancy guard: koCheckWake never ticks the clock today, but
-// if it ever does, the flag stops a loop.
 function advanceClock(w,minutes){const c=clockOf(w);const total=c.min+minutes;
-  c.day+=Math.floor(total/1440);c.min=((total%1440)+1440)%1440;
-  if(!advanceClock._busy && typeof koCheckWake==="function"){
-    advanceClock._busy=true; try{ koCheckWake(w); } finally{ advanceClock._busy=false; }
-  }
-  return c;}
+  c.day+=Math.floor(total/1440);c.min=((total%1440)+1440)%1440;return c;}
 
 /* --- the World State Ledger: ONE append-only home for all change-over-time.
    types: canon (write-once facts) · transition (time jumps) · spatial (routes)

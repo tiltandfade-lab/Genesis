@@ -286,6 +286,7 @@ function pcMoveTo(w, nodeId, opts){
   if(min>0) advanceClock(w,min);
   w.currentNodeId=nodeId; seeNode(w,nodeId);
   if(typeof worldTurn==="function") worldTurn(w,"revisit",{nodeId:nodeId});   // drift on arrival
+  if(typeof koCheckWake==="function") koCheckWake(w);
   const c=clockOf(w);
   addLedger(w,"transition",{kind:"move",fromNodeId:from,toNodeId:nodeId,advanceMin:min,cause:opts.cause||null,source:opts.src||"declared"},
     "→ "+nodeName(w,nodeId)+(min?(" — "+Math.round(min/6)/10+"h on the way"):"")+". Now Day "+c.day+", "+timeOfDay(c.min)+".");

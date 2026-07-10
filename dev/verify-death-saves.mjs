@@ -144,25 +144,6 @@ const dom = new JSDOM(`<!doctype html><html><body><div id="worldView"></div>
   </body></html>`,
   { runScripts: "dangerously", url: "http://localhost/" });
 dom.window.eval(read("tables.js") + "\nvar U={worlds:{},activeWorldId:null,revealed:{}};\n" + srcAll);
-// HOTFIX-QUEUE-2026-07-07 orchestrator extension to HQ2-10 — flake-proofing: the "a long rest clears
-// temp HP" check (below) drives applyEvent(rest:"long") -> restRiders -> restRiskRoll
-// (src/world/wiring-a.js), which rolls a live Math.random() interruptChance gate; a severe+interrupted
-// roll skips restRecover (incl. clearTempHp) entirely, found flaking ~5-10% during HQ2-2. Install a
-// deterministic mulberry32 generator as the window's Math.random (idiom copied verbatim from
-// dev/playtest-bridgeless.mjs's --seed path), seeded BEFORE any scenario in this section rolls, with
-// the default seed chosen so the long-rest path lands non-interrupted (deterministic-green).
-// --seed=<int> overrides.
-const __seedArg = process.argv.find((a) => a.startsWith("--seed="));
-const RNG_SEED = __seedArg ? (parseInt(__seedArg.slice(7), 10) >>> 0) || 1 : 20260707;
-(function installSeededRandom(win, seed){
-  let s = seed >>> 0;
-  win.Math.random = () => {
-    s |= 0; s = (s + 0x6D2B79F5) | 0;
-    let t = Math.imul(s ^ (s >>> 15), 1 | s);
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-})(dom.window, RNG_SEED);
 const win = dom.window;
 const world = {
   id: "w-death", name: "Death Test", gazetteer: [], log: [], ledger: [], clock: { day: 1, min: 360 },

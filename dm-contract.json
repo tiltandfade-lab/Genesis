@@ -98,7 +98,6 @@
         "trigger"
       ],
       "aliases": {},
-      "num": [],
       "example": {
         "type": "action",
         "payload": {
@@ -113,7 +112,6 @@
         "situation"
       ],
       "aliases": {},
-      "num": [],
       "example": {
         "type": "adjudication",
         "payload": {
@@ -134,7 +132,6 @@
         "mins": "minutes",
         "min": "minutes"
       },
-      "num": [],
       "example": {
         "type": "advance_clock",
         "payload": {
@@ -156,12 +153,6 @@
         "targetAC"
       ],
       "aliases": {},
-      "num": [
-        "d20",
-        "targetAC",
-        "magnitude",
-        "attackIndex"
-      ],
       "example": {
         "type": "attack",
         "payload": {
@@ -181,7 +172,6 @@
         "id": "target",
         "npc": "target"
       },
-      "num": [],
       "example": {
         "type": "attitude_shift",
         "payload": {
@@ -200,7 +190,6 @@
         "itemId"
       ],
       "aliases": {},
-      "num": [],
       "example": {
         "type": "attune",
         "payload": {
@@ -218,7 +207,6 @@
       "aliases": {
         "id": "nodeId"
       },
-      "num": [],
       "example": {
         "type": "bastion_claim",
         "payload": {
@@ -236,7 +224,6 @@
         "tier"
       ],
       "aliases": {},
-      "num": [],
       "example": {
         "type": "building_approach",
         "payload": {
@@ -252,7 +239,6 @@
         "id"
       ],
       "aliases": {},
-      "num": [],
       "example": {
         "type": "building_contact",
         "payload": {
@@ -277,7 +263,6 @@
         "spell"
       ],
       "aliases": {},
-      "num": [],
       "example": {
         "type": "cast",
         "payload": {
@@ -294,9 +279,6 @@
         "target"
       ],
       "aliases": {},
-      "num": [
-        "n"
-      ],
       "example": {
         "type": "charge_restore",
         "payload": {
@@ -310,9 +292,6 @@
         "n"
       ],
       "aliases": {},
-      "num": [
-        "n"
-      ],
       "example": {
         "type": "charge_spend",
         "payload": {
@@ -326,7 +305,6 @@
         "pursuerWon"
       ],
       "aliases": {},
-      "num": [],
       "example": {
         "type": "chase_round",
         "payload": {
@@ -341,7 +319,6 @@
         "terrain"
       ],
       "aliases": {},
-      "num": [],
       "example": {
         "type": "chase_start",
         "payload": {
@@ -355,7 +332,6 @@
         "side"
       ],
       "aliases": {},
-      "num": [],
       "example": {
         "type": "chase_yield",
         "payload": {
@@ -374,12 +350,6 @@
         "reroll"
       ],
       "aliases": {},
-      "num": [
-        "d20",
-        "bonus",
-        "reroll",
-        "dc"
-      ],
       "example": {
         "type": "check",
         "payload": {
@@ -399,7 +369,6 @@
         "weight"
       ],
       "aliases": {},
-      "num": [],
       "example": {
         "type": "choice_logged",
         "payload": {
@@ -419,9 +388,6 @@
         "weight"
       ],
       "aliases": {},
-      "num": [
-        "weight"
-      ],
       "example": {
         "type": "claim_deed",
         "payload": {
@@ -441,9 +407,6 @@
         "faction": "clockId",
         "by": "delta"
       },
-      "num": [
-        "delta"
-      ],
       "example": {
         "type": "clock_advanced",
         "payload": {
@@ -466,7 +429,6 @@
         "faction": "clockId",
         "by": "delta"
       },
-      "num": [],
       "example": {
         "type": "clock_fired",
         "payload": {
@@ -492,7 +454,6 @@
         "ledgerRefs"
       ],
       "aliases": {},
-      "num": [],
       "example": {
         "type": "codex_add",
         "payload": {
@@ -512,7 +473,6 @@
         "id"
       ],
       "aliases": {},
-      "num": [],
       "example": {
         "type": "codex_contact",
         "payload": {
@@ -527,7 +487,6 @@
         "to"
       ],
       "aliases": {},
-      "num": [],
       "example": {
         "type": "codex_link",
         "payload": {
@@ -542,7 +501,6 @@
         "id"
       ],
       "aliases": {},
-      "num": [],
       "example": {
         "type": "codex_reveal",
         "payload": {
@@ -561,7 +519,6 @@
         "note"
       ],
       "aliases": {},
-      "num": [],
       "example": {
         "type": "codex_update",
         "payload": {
@@ -581,7 +538,6 @@
         "outcome"
       ],
       "aliases": {},
-      "num": [],
       "example": {
         "type": "combat_end",
         "payload": {
@@ -598,7 +554,6 @@
         "segmentId"
       ],
       "aliases": {},
-      "num": [],
       "example": {
         "type": "combat_start",
         "payload": {
@@ -622,9 +577,6 @@
         "pcLevel"
       ],
       "aliases": {},
-      "num": [
-        "delta"
-      ],
       "example": {
         "type": "companion_update",
         "payload": {
@@ -640,7 +592,6 @@
         "spell"
       ],
       "aliases": {},
-      "num": [],
       "example": {
         "type": "concentration_broken",
         "payload": {
@@ -653,7 +604,6 @@
         "spell"
       ],
       "aliases": {},
-      "num": [],
       "example": {
         "type": "concentration_start",
         "payload": {
@@ -670,9 +620,6 @@
         "ttl"
       ],
       "aliases": {},
-      "num": [
-        "n"
-      ],
       "example": {
         "type": "condition_add",
         "payload": {
@@ -693,7 +640,6 @@
         "target"
       ],
       "aliases": {},
-      "num": [],
       "example": {
         "type": "condition_expired",
         "payload": {
@@ -709,7 +655,6 @@
         "target"
       ],
       "aliases": {},
-      "num": [],
       "example": {
         "type": "condition_remove",
         "payload": {
@@ -731,10 +676,6 @@
         "tier"
       ],
       "aliases": {},
-      "num": [
-        "magnitude",
-        "natural"
-      ],
       "example": {
         "type": "crit_outcome",
         "payload": {
@@ -751,9 +692,6 @@
         "d20"
       ],
       "aliases": {},
-      "num": [
-        "d20"
-      ],
       "example": {
         "type": "death_save",
         "payload": {
@@ -773,7 +711,6 @@
       "aliases": {
         "name": "what"
       },
-      "num": [],
       "example": {
         "type": "discovery",
         "payload": {
@@ -787,7 +724,6 @@
         "hirelingId"
       ],
       "aliases": {},
-      "num": [],
       "example": {
         "type": "dismiss",
         "payload": {
@@ -798,7 +734,6 @@
     "distant_word": {
       "fields": [],
       "aliases": {},
-      "num": [],
       "example": {
         "type": "distant_word",
         "payload": {}
@@ -813,7 +748,6 @@
         "tier"
       ],
       "aliases": {},
-      "num": [],
       "example": {
         "type": "district_mint",
         "payload": {
@@ -841,7 +775,6 @@
         "outcome"
       ],
       "aliases": {},
-      "num": [],
       "example": {
         "type": "encounter_resolved",
         "payload": {
@@ -863,7 +796,6 @@
       "aliases": {
         "epithet": "text"
       },
-      "num": [],
       "example": {
         "type": "epithet_grant",
         "payload": {
@@ -877,7 +809,6 @@
         "slot"
       ],
       "aliases": {},
-      "num": [],
       "example": {
         "type": "equip",
         "payload": {
@@ -894,7 +825,6 @@
       "aliases": {
         "text": "what"
       },
-      "num": [],
       "example": {
         "type": "fact_canonized",
         "payload": {
@@ -908,7 +838,6 @@
         "foe"
       ],
       "aliases": {},
-      "num": [],
       "example": {
         "type": "foe_action",
         "payload": {
@@ -925,10 +854,6 @@
         "want"
       ],
       "aliases": {},
-      "num": [
-        "d20",
-        "dispositionRoll"
-      ],
       "example": {
         "type": "foe_morale",
         "payload": {
@@ -948,7 +873,6 @@
         "clockId": "ledgerId",
         "id": "ledgerId"
       },
-      "num": [],
       "example": {
         "type": "front_closed",
         "payload": {
@@ -975,9 +899,6 @@
         "to": "target",
         "item": "what"
       },
-      "num": [
-        "weight"
-      ],
       "example": {
         "type": "gift",
         "payload": {
@@ -995,11 +916,6 @@
         "target"
       ],
       "aliases": {},
-      "num": [
-        "bonus",
-        "d20",
-        "defenderD20"
-      ],
       "example": {
         "type": "grapple",
         "payload": {
@@ -1017,7 +933,6 @@
         "roundsHeld"
       ],
       "aliases": {},
-      "num": [],
       "example": {
         "type": "hazard_tick",
         "payload": {
@@ -1046,9 +961,6 @@
         "nonlethal"
       ],
       "aliases": {},
-      "num": [
-        "delta"
-      ],
       "example": {
         "type": "hp_changed",
         "payload": {
@@ -1067,11 +979,6 @@
         "total"
       ],
       "aliases": {},
-      "num": [
-        "bestMentalMod",
-        "dc",
-        "total"
-      ],
       "example": {
         "type": "insight_read",
         "payload": {
@@ -1087,7 +994,6 @@
         "reason"
       ],
       "aliases": {},
-      "num": [],
       "example": {
         "type": "inspiration_granted",
         "payload": {
@@ -1104,10 +1010,6 @@
         "on"
       ],
       "aliases": {},
-      "num": [
-        "d20",
-        "d20b"
-      ],
       "example": {
         "type": "inspiration_spend",
         "payload": {
@@ -1128,9 +1030,6 @@
         "takenBy"
       ],
       "aliases": {},
-      "num": [
-        "gold"
-      ],
       "example": {
         "type": "item_changed",
         "payload": {
@@ -1160,7 +1059,6 @@
         "id": "codexId",
         "item": "codexId"
       },
-      "num": [],
       "example": {
         "type": "item_claimed",
         "payload": {
@@ -1180,7 +1078,6 @@
         "kind"
       ],
       "aliases": {},
-      "num": [],
       "example": {
         "type": "item_rust_exposure",
         "payload": {
@@ -1194,9 +1091,6 @@
         "qty"
       ],
       "aliases": {},
-      "num": [
-        "qty"
-      ],
       "example": {
         "type": "item_split",
         "payload": {
@@ -1211,7 +1105,6 @@
         "roll"
       ],
       "aliases": {},
-      "num": [],
       "example": {
         "type": "item_use",
         "payload": {
@@ -1224,7 +1117,6 @@
         "postingId"
       ],
       "aliases": {},
-      "num": [],
       "example": {
         "type": "job_accept",
         "payload": {
@@ -1238,7 +1130,6 @@
         "tier"
       ],
       "aliases": {},
-      "num": [],
       "example": {
         "type": "job_board_read",
         "payload": {
@@ -1256,7 +1147,6 @@
         "victimId"
       ],
       "aliases": {},
-      "num": [],
       "example": {
         "type": "kill",
         "payload": {
@@ -1270,7 +1160,6 @@
         "cause"
       ],
       "aliases": {},
-      "num": [],
       "example": {
         "type": "knockout",
         "payload": {
@@ -1285,7 +1174,6 @@
         "to"
       ],
       "aliases": {},
-      "num": [],
       "example": {
         "type": "level_applied",
         "payload": {
@@ -1305,9 +1193,6 @@
         "trigger"
       ],
       "aliases": {},
-      "num": [
-        "dc"
-      ],
       "example": {
         "type": "morale_check",
         "payload": {
@@ -1327,7 +1212,6 @@
         "node": "nodeId",
         "id": "nodeId"
       },
-      "num": [],
       "example": {
         "type": "move_node",
         "payload": {
@@ -1345,7 +1229,6 @@
         "who"
       ],
       "aliases": {},
-      "num": [],
       "example": {
         "type": "move_zone",
         "payload": {
@@ -1365,7 +1248,6 @@
         "tier"
       ],
       "aliases": {},
-      "num": [],
       "example": {
         "type": "open_shop",
         "payload": {
@@ -1381,9 +1263,6 @@
         "foe"
       ],
       "aliases": {},
-      "num": [
-        "d20"
-      ],
       "example": {
         "type": "opportunity_attack",
         "payload": {
@@ -1402,7 +1281,6 @@
         "want"
       ],
       "aliases": {},
-      "num": [],
       "example": {
         "type": "parley_open",
         "payload": {
@@ -1428,7 +1306,6 @@
         "nodeId"
       ],
       "aliases": {},
-      "num": [],
       "example": {
         "type": "prep_contact",
         "payload": {
@@ -1450,7 +1327,6 @@
         "wageNote"
       ],
       "aliases": {},
-      "num": [],
       "example": {
         "type": "recruit_creature",
         "payload": {
@@ -1465,9 +1341,6 @@
         "n"
       ],
       "aliases": {},
-      "num": [
-        "n"
-      ],
       "example": {
         "type": "resource_spent",
         "payload": {
@@ -1480,7 +1353,6 @@
         "kind"
       ],
       "aliases": {},
-      "num": [],
       "example": {
         "type": "rest",
         "payload": {
@@ -1494,7 +1366,6 @@
         "round"
       ],
       "aliases": {},
-      "num": [],
       "example": {
         "type": "round_tick",
         "payload": {
@@ -1508,7 +1379,6 @@
         "grip"
       ],
       "aliases": {},
-      "num": [],
       "example": {
         "type": "set_grip",
         "payload": {
@@ -1525,11 +1395,6 @@
         "target"
       ],
       "aliases": {},
-      "num": [
-        "bonus",
-        "d20",
-        "defenderD20"
-      ],
       "example": {
         "type": "shove",
         "payload": {
@@ -1553,7 +1418,6 @@
         "level"
       ],
       "aliases": {},
-      "num": [],
       "example": {
         "type": "slot_spent",
         "payload": {
@@ -1575,11 +1439,6 @@
         "total"
       ],
       "aliases": {},
-      "num": [
-        "dc",
-        "total",
-        "natural"
-      ],
       "example": {
         "type": "social_check",
         "payload": {
@@ -1600,7 +1459,6 @@
         "who"
       ],
       "aliases": {},
-      "num": [],
       "example": {
         "type": "stage_fx",
         "payload": {
@@ -1619,7 +1477,6 @@
         "id": "nodeId",
         "node": "nodeId"
       },
-      "num": [],
       "example": {
         "type": "start_walk",
         "payload": {
@@ -1633,7 +1490,6 @@
         "ref"
       ],
       "aliases": {},
-      "num": [],
       "example": {
         "type": "tarot_landed",
         "payload": {
@@ -1647,9 +1503,6 @@
         "n"
       ],
       "aliases": {},
-      "num": [
-        "n"
-      ],
       "example": {
         "type": "temp_hp",
         "payload": {
@@ -1662,7 +1515,6 @@
         "target"
       ],
       "aliases": {},
-      "num": [],
       "example": {
         "type": "tend_pet",
         "payload": {
@@ -1680,7 +1532,6 @@
         "at": "zone",
         "kind": "op"
       },
-      "num": [],
       "example": {
         "type": "terrain_change",
         "payload": {
@@ -1701,7 +1552,6 @@
         "to": "toNodeId",
         "dest": "toNodeId"
       },
-      "num": [],
       "example": {
         "type": "travel_start",
         "payload": {
@@ -1716,7 +1566,6 @@
         "itemId"
       ],
       "aliases": {},
-      "num": [],
       "example": {
         "type": "unattune",
         "payload": {
@@ -1729,7 +1578,6 @@
         "slot"
       ],
       "aliases": {},
-      "num": [],
       "example": {
         "type": "unequip",
         "payload": {
@@ -1743,7 +1591,6 @@
         "toSeg"
       ],
       "aliases": {},
-      "num": [],
       "example": {
         "type": "walk_advance",
         "payload": {
@@ -1757,7 +1604,6 @@
         "nodeId"
       ],
       "aliases": {},
-      "num": [],
       "example": {
         "type": "walk_complete",
         "payload": {}
@@ -1770,7 +1616,6 @@
         "seg"
       ],
       "aliases": {},
-      "num": [],
       "example": {
         "type": "walk_update",
         "payload": {

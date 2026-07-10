@@ -67,8 +67,19 @@ plain global per house style, one entry per line):
 name ↔ `dev/model-qa/realm-bestiary-draft.json` creature name within the same realm (exact,
 then case/punct-insensitive; unjoined cells emit with nulls + a WARN list — NEVER dropped).
 **Hand overlay** — `dev/model-qa/sprite-tags-overlay.json`: `{ "<slug>": { tags:[...],
-reusable:"unique|realm|cross-realm", redlined:true } }`, deep-merged last (the Adam redline
-surface; vision-scan tags land here too, T5).
+reusable:"unique|realm|cross-realm", redlined:true, scale:1.4, verdict:"pass|fail",
+note:"..." } }`, deep-merged last (the Adam redline surface; vision-scan tags land here
+too, T5). The review keys (added 2026-07-09 with the review tool): `scale` = per-slug
+billboard-height multiplier (heads-line-up calibration — theater-boot's
+`buildSpriteBillboard` multiplies it into the plane height; ×1 is pruned, keeping the
+overlay sparse); `verdict:"fail"` = review-failed art (spriteEntryFor skips it — falls
+through to the 3D chain even though the PNG is cut); `note` = reviewer free text.
+**Review tool:** `python3 dev/sprite-review.py` → http://127.0.0.1:5179/ — browse every
+cut sprite with its registry tags, drag a scale slider against per-size head guide lines
+(the px math mirrors SPRITE_SIZE_SCALE so what lines up in the tool lines up on stage),
+pin reference sprites for comparison, pass/fail with keyboard (`p`/`f`), and every ruling
+writes `sprite-tags-overlay.json` directly (atomic); the UI's "regen registry" button
+folds the overlay into `data/sprite-registry.js`.
 
 ## Units
 

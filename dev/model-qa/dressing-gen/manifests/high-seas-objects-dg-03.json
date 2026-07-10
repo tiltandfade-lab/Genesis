@@ -1,0 +1,260 @@
+{
+ "file": "high-seas-objects-dg-03.png",
+ "realm": "high-seas",
+ "family": "objects",
+ "grid": "5 rows x 5 columns",
+ "chroma": "#FF00FF",
+ "wave": "dressing-gen",
+ "cells": [
+  {
+   "slug": "high-seas-obj-door-shut",
+   "label": "door, shut state — in the realm's own material language",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "door",
+   "state": "shut"
+  },
+  {
+   "slug": "high-seas-obj-door-ajar",
+   "label": "door, ajar state — in the realm's own material language",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "door",
+   "state": "ajar"
+  },
+  {
+   "slug": "high-seas-obj-door-open",
+   "label": "door, open state — in the realm's own material language",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "door",
+   "state": "open"
+  },
+  {
+   "slug": "high-seas-obj-door-broken",
+   "label": "door, broken state — in the realm's own material language",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "door",
+   "state": "broken"
+  },
+  {
+   "slug": "high-seas-obj-chest-closed",
+   "label": "chest, closed state — barnacled sea-chest.",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "chest",
+   "state": "closed"
+  },
+  {
+   "slug": "high-seas-obj-chest-open",
+   "label": "chest, open state — barnacled sea-chest.",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "chest",
+   "state": "open"
+  },
+  {
+   "slug": "high-seas-obj-chest-looted",
+   "label": "chest, looted state — barnacled sea-chest.",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "chest",
+   "state": "looted"
+  },
+  {
+   "slug": "high-seas-obj-lever-left",
+   "label": "lever, left state — in the realm's own material language",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "lever",
+   "state": "left"
+  },
+  {
+   "slug": "high-seas-obj-lever-right",
+   "label": "lever, right state — in the realm's own material language",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "lever",
+   "state": "right"
+  },
+  {
+   "slug": "high-seas-obj-shrine-dormant",
+   "label": "shrine, dormant state — in the realm's own material language",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "shrine",
+   "state": "dormant"
+  },
+  {
+   "slug": "high-seas-obj-shrine-lit",
+   "label": "shrine, lit state — in the realm's own material language",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "shrine",
+   "state": "lit"
+  },
+  {
+   "slug": "high-seas-obj-campfire-unlit",
+   "label": "campfire, unlit state — in the realm's own material language",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "campfire",
+   "state": "unlit"
+  },
+  {
+   "slug": "high-seas-obj-campfire-lit",
+   "label": "campfire, lit state — in the realm's own material language",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "campfire",
+   "state": "lit"
+  },
+  {
+   "slug": "high-seas-obj-campfire-dead",
+   "label": "campfire, dead state — in the realm's own material language",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "campfire",
+   "state": "dead"
+  },
+  {
+   "slug": "high-seas-obj-trap-hidden",
+   "label": "trap, hidden state — in the realm's own material language",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "trap",
+   "state": "hidden"
+  },
+  {
+   "slug": "high-seas-obj-trap-sprung",
+   "label": "trap, sprung state — in the realm's own material language",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "trap",
+   "state": "sprung"
+  },
+  {
+   "slug": "high-seas-obj-portal-sealed",
+   "label": "portal, sealed state — in the realm's own material language",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "portal",
+   "state": "sealed"
+  },
+  {
+   "slug": "high-seas-obj-portal-active",
+   "label": "portal, active state — in the realm's own material language",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "portal",
+   "state": "active"
+  },
+  {
+   "slug": "high-seas-obj-container-intact",
+   "label": "container, intact state — brine-crusted barrel",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "container",
+   "state": "intact"
+  },
+  {
+   "slug": "high-seas-obj-container-cracked",
+   "label": "container, cracked state — brine-crusted barrel",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "container",
+   "state": "cracked"
+  },
+  {
+   "slug": "high-seas-obj-container-broken",
+   "label": "container, broken state — brine-crusted barrel",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "container",
+   "state": "broken"
+  },
+  {
+   "slug": "high-seas-obj-door-shut-alt",
+   "label": "ALT of 'door, shut state — in the realm's own material language' — different shape/growth/wear, same kind",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "size": null,
+   "altOf": "high-seas-obj-door-shut"
+  },
+  {
+   "slug": "high-seas-obj-door-ajar-alt",
+   "label": "ALT of 'door, ajar state — in the realm's own material language' — different shape/growth/wear, same kind",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "size": null,
+   "altOf": "high-seas-obj-door-ajar"
+  },
+  {
+   "slug": "high-seas-obj-door-open-alt",
+   "label": "ALT of 'door, open state — in the realm's own material language' — different shape/growth/wear, same kind",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "size": null,
+   "altOf": "high-seas-obj-door-open"
+  },
+  {
+   "slug": "high-seas-obj-door-broken-alt",
+   "label": "ALT of 'door, broken state — in the realm's own material language' — different shape/growth/wear, same kind",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "size": null,
+   "altOf": "high-seas-obj-door-broken"
+  }
+ ]
+}

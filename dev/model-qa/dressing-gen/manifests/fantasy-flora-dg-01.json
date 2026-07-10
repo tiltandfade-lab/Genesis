@@ -1,0 +1,192 @@
+{
+ "file": "fantasy-flora-dg-01.png",
+ "realm": "fantasy",
+ "family": "dressing-flora",
+ "grid": "5 rows x 4 columns",
+ "chroma": "#FF00FF",
+ "wave": "dressing-gen",
+ "cells": [
+  {
+   "slug": "fantasy-flora-oak",
+   "label": "broad naturalist oak, bark deep and roots knuckled above soil",
+   "tags": {
+    "primary": "setPiece",
+    "location": "exterior"
+   },
+   "size": "large"
+  },
+  {
+   "slug": "fantasy-flora-fern",
+   "label": "common woodland fern cluster, dew-heavy fronds",
+   "tags": {
+    "primary": "floor",
+    "location": "exterior"
+   },
+   "size": "small"
+  },
+  {
+   "slug": "fantasy-flora-ivywall",
+   "label": "climbing ivy sheeting a stone wall in true green",
+   "tags": {
+    "primary": "wall-hang",
+    "location": "both"
+   },
+   "size": "medium"
+  },
+  {
+   "slug": "fantasy-flora-mushroomring",
+   "label": "fairy-ring mushroom cluster at the base of a stump",
+   "tags": {
+    "primary": "focal",
+    "location": "exterior"
+   },
+   "size": "small"
+  },
+  {
+   "slug": "fantasy-flora-brambleblocker",
+   "label": "dense naturalist bramble hedge, thorned and impassable",
+   "tags": {
+    "primary": "blocker",
+    "location": "exterior"
+   },
+   "size": "medium"
+  },
+  {
+   "slug": "fantasy-flora-wildflowerpatch",
+   "label": "wildflower patch in honest meadow colors",
+   "tags": {
+    "primary": "floor",
+    "location": "exterior"
+   },
+   "size": "small"
+  },
+  {
+   "slug": "fantasy-flora-willowdrape",
+   "label": "weeping willow drape hanging low over still water",
+   "tags": {
+    "primary": "setPiece",
+    "location": "exterior"
+   },
+   "size": "large"
+  },
+  {
+   "slug": "fantasy-flora-mossboulder",
+   "label": "moss-capped boulder, green thick on the shaded face",
+   "tags": {
+    "primary": "floor",
+    "location": "both"
+   },
+   "size": "medium"
+  },
+  {
+   "slug": "fantasy-flora-cattailreed",
+   "label": "cattail reed stand at a marsh's edge",
+   "tags": {
+    "primary": "floor",
+    "location": "exterior"
+   },
+   "size": "medium"
+  },
+  {
+   "slug": "fantasy-flora-vinelattice",
+   "label": "grape-vine lattice trained up a wooden trellis",
+   "tags": {
+    "primary": "wall-hang",
+    "location": "exterior"
+   },
+   "size": "medium"
+  },
+  {
+   "slug": "fantasy-flora-thistlecluster",
+   "label": "purple thistle cluster growing between cobblestone cracks",
+   "tags": {
+    "primary": "floor",
+    "location": "both"
+   },
+   "size": "small"
+  },
+  {
+   "slug": "fantasy-flora-herbbundle",
+   "label": "hanging dried-herb bundle, rosemary and sage tied at the stem",
+   "tags": {
+    "primary": "wall-hang",
+    "location": "interior"
+   },
+   "size": "small"
+  },
+  {
+   "slug": "fantasy-flora-toadstool",
+   "label": "single oversized red-capped toadstool, white-spotted",
+   "tags": {
+    "primary": "focal",
+    "location": "exterior"
+   },
+   "size": "small"
+  },
+  {
+   "slug": "fantasy-flora-birchgrove",
+   "label": "slender birch sapling cluster, bark peeling white-grey",
+   "tags": {
+    "primary": "floor",
+    "location": "exterior"
+   },
+   "size": "medium"
+  },
+  {
+   "slug": "fantasy-flora-rootarch",
+   "label": "exposed tree-root archway grown over an old footpath",
+   "tags": {
+    "primary": "setPiece",
+    "location": "exterior"
+   },
+   "size": "large"
+  },
+  {
+   "slug": "fantasy-flora-lilypad",
+   "label": "lily pad cluster afloat on a still pond edge",
+   "tags": {
+    "primary": "floor",
+    "location": "exterior"
+   },
+   "size": "small"
+  },
+  {
+   "slug": "fantasy-flora-honeycomb-nook",
+   "label": "wild honeycomb nook built into a hollow trunk",
+   "tags": {
+    "primary": "focal",
+    "location": "exterior"
+   },
+   "size": "small"
+  },
+  {
+   "slug": "fantasy-flora-hedgerow",
+   "label": "clipped naturalist hedgerow marking an old garden bound",
+   "tags": {
+    "primary": "blocker",
+    "location": "exterior"
+   },
+   "size": "medium"
+  },
+  {
+   "slug": "fantasy-flora-oak-alt",
+   "label": "ALT of 'broad naturalist oak, bark deep and roots knuckled above soil' — different shape/growth/wear, same kind",
+   "tags": {
+    "primary": "setPiece",
+    "location": "exterior"
+   },
+   "size": "large",
+   "altOf": "fantasy-flora-oak"
+  },
+  {
+   "slug": "fantasy-flora-fern-alt",
+   "label": "ALT of 'common woodland fern cluster, dew-heavy fronds' — different shape/growth/wear, same kind",
+   "tags": {
+    "primary": "floor",
+    "location": "exterior"
+   },
+   "size": "small",
+   "altOf": "fantasy-flora-fern"
+  }
+ ]
+}

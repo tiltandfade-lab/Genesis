@@ -1,0 +1,156 @@
+{
+ "file": "ash-clutter-dg-02.png",
+ "realm": "ash",
+ "family": "dressing-clutter",
+ "grid": "4 rows x 4 columns",
+ "chroma": "#FF00FF",
+ "wave": "dressing-gen",
+ "cells": [
+  {
+   "slug": "ash-clutter-rustplate",
+   "label": "corroded hull plate half-buried in drifted ash",
+   "tags": {
+    "primary": "floor",
+    "location": "exterior"
+   },
+   "size": "medium"
+  },
+  {
+   "slug": "ash-clutter-truckbones",
+   "label": "stripped chassis bones of a burned-out war truck",
+   "tags": {
+    "primary": "setPiece",
+    "location": "exterior"
+   },
+   "size": "large"
+  },
+  {
+   "slug": "ash-clutter-emberpile",
+   "label": "smoldering ember pile still glowing under grey crust",
+   "tags": {
+    "primary": "floor",
+    "location": "both"
+   },
+   "size": "small"
+  },
+  {
+   "slug": "ash-clutter-gasmask",
+   "label": "cracked gas mask half-swallowed by drifted ash",
+   "tags": {
+    "primary": "floor",
+    "location": "both"
+   },
+   "size": "small"
+  },
+  {
+   "slug": "ash-clutter-rustbarrel",
+   "label": "leaning rust-eaten drum, seams weeping toxic sludge",
+   "tags": {
+    "primary": "blocker",
+    "location": "both"
+   },
+   "size": "medium"
+  },
+  {
+   "slug": "ash-clutter-chainlink",
+   "label": "torn chainlink fence sagging under a weight of ash",
+   "tags": {
+    "primary": "wall-hang",
+    "location": "exterior"
+   },
+   "size": "medium"
+  },
+  {
+   "slug": "ash-clutter-bonepile",
+   "label": "charred bone pile stacked at a cairn of warning",
+   "tags": {
+    "primary": "setPiece",
+    "location": "exterior"
+   },
+   "size": "medium"
+  },
+  {
+   "slug": "ash-clutter-scraphook",
+   "label": "rusted meat hook chain dangling from a scavenged beam",
+   "tags": {
+    "primary": "wall-hang",
+    "location": "interior"
+   },
+   "size": "small"
+  },
+  {
+   "slug": "ash-clutter-toxicpuddle",
+   "label": "glowing toxic puddle pooled in a crater dent",
+   "tags": {
+    "primary": "floor",
+    "location": "both"
+   },
+   "size": "small"
+  },
+  {
+   "slug": "ash-clutter-cindercrate",
+   "label": "split supply crate, contents long since ash-caked",
+   "tags": {
+    "primary": "floor",
+    "location": "both"
+   },
+   "size": "medium"
+  },
+  {
+   "slug": "ash-clutter-tirestack",
+   "label": "stack of melted tires fused into a black lump",
+   "tags": {
+    "primary": "blocker",
+    "location": "exterior"
+   },
+   "size": "medium"
+  },
+  {
+   "slug": "ash-clutter-signpost",
+   "label": "bent road sign, paint scoured clean by ash storms",
+   "tags": {
+    "primary": "wall-hang",
+    "location": "exterior"
+   },
+   "size": "small"
+  },
+  {
+   "slug": "ash-clutter-skullmount",
+   "label": "basalt-hide skull mounted on a rebar spike",
+   "tags": {
+    "primary": "focal",
+    "location": "both"
+   },
+   "size": "small"
+  },
+  {
+   "slug": "ash-clutter-ventpipe",
+   "label": "cracked vent pipe hissing a thread of ember smoke",
+   "tags": {
+    "primary": "wall-hang",
+    "location": "interior"
+   },
+   "size": "small"
+  },
+  {
+   "slug": "ash-clutter-rustplate-alt",
+   "label": "ALT of 'corroded hull plate half-buried in drifted ash' — different shape/growth/wear, same kind",
+   "tags": {
+    "primary": "floor",
+    "location": "exterior"
+   },
+   "size": "medium",
+   "altOf": "ash-clutter-rustplate"
+  },
+  {
+   "slug": "ash-clutter-truckbones-alt",
+   "label": "ALT of 'stripped chassis bones of a burned-out war truck' — different shape/growth/wear, same kind",
+   "tags": {
+    "primary": "setPiece",
+    "location": "exterior"
+   },
+   "size": "large",
+   "altOf": "ash-clutter-truckbones"
+  }
+ ]
+}

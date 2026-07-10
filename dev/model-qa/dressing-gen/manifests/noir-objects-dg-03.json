@@ -1,0 +1,260 @@
+{
+ "file": "noir-objects-dg-03.png",
+ "realm": "noir",
+ "family": "objects",
+ "grid": "5 rows x 5 columns",
+ "chroma": "#FF00FF",
+ "wave": "dressing-gen",
+ "cells": [
+  {
+   "slug": "noir-obj-door-shut",
+   "label": "door, shut state — frosted-glass office door.",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "door",
+   "state": "shut"
+  },
+  {
+   "slug": "noir-obj-door-ajar",
+   "label": "door, ajar state — frosted-glass office door.",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "door",
+   "state": "ajar"
+  },
+  {
+   "slug": "noir-obj-door-open",
+   "label": "door, open state — frosted-glass office door.",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "door",
+   "state": "open"
+  },
+  {
+   "slug": "noir-obj-door-broken",
+   "label": "door, broken state — frosted-glass office door.",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "door",
+   "state": "broken"
+  },
+  {
+   "slug": "noir-obj-chest-closed",
+   "label": "chest, closed state — in the realm's own material language",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "chest",
+   "state": "closed"
+  },
+  {
+   "slug": "noir-obj-chest-open",
+   "label": "chest, open state — in the realm's own material language",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "chest",
+   "state": "open"
+  },
+  {
+   "slug": "noir-obj-chest-looted",
+   "label": "chest, looted state — in the realm's own material language",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "chest",
+   "state": "looted"
+  },
+  {
+   "slug": "noir-obj-lever-left",
+   "label": "lever, left state — in the realm's own material language",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "lever",
+   "state": "left"
+  },
+  {
+   "slug": "noir-obj-lever-right",
+   "label": "lever, right state — in the realm's own material language",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "lever",
+   "state": "right"
+  },
+  {
+   "slug": "noir-obj-shrine-dormant",
+   "label": "shrine, dormant state — in the realm's own material language",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "shrine",
+   "state": "dormant"
+  },
+  {
+   "slug": "noir-obj-shrine-lit",
+   "label": "shrine, lit state — in the realm's own material language",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "shrine",
+   "state": "lit"
+  },
+  {
+   "slug": "noir-obj-campfire-unlit",
+   "label": "campfire, unlit state — in the realm's own material language",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "campfire",
+   "state": "unlit"
+  },
+  {
+   "slug": "noir-obj-campfire-lit",
+   "label": "campfire, lit state — in the realm's own material language",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "campfire",
+   "state": "lit"
+  },
+  {
+   "slug": "noir-obj-campfire-dead",
+   "label": "campfire, dead state — in the realm's own material language",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "campfire",
+   "state": "dead"
+  },
+  {
+   "slug": "noir-obj-trap-hidden",
+   "label": "trap, hidden state — spring-loaded bear trap under debris",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "trap",
+   "state": "hidden"
+  },
+  {
+   "slug": "noir-obj-trap-sprung",
+   "label": "trap, sprung state — spring-loaded bear trap under debris",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "trap",
+   "state": "sprung"
+  },
+  {
+   "slug": "noir-obj-portal-sealed",
+   "label": "portal, sealed state — in the realm's own material language",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "portal",
+   "state": "sealed"
+  },
+  {
+   "slug": "noir-obj-portal-active",
+   "label": "portal, active state — in the realm's own material language",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "portal",
+   "state": "active"
+  },
+  {
+   "slug": "noir-obj-container-intact",
+   "label": "container, intact state — in the realm's own material language",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "container",
+   "state": "intact"
+  },
+  {
+   "slug": "noir-obj-container-cracked",
+   "label": "container, cracked state — in the realm's own material language",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "container",
+   "state": "cracked"
+  },
+  {
+   "slug": "noir-obj-container-broken",
+   "label": "container, broken state — in the realm's own material language",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "container",
+   "state": "broken"
+  },
+  {
+   "slug": "noir-obj-door-shut-alt",
+   "label": "ALT of 'door, shut state — frosted-glass office door.' — different shape/growth/wear, same kind",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "size": null,
+   "altOf": "noir-obj-door-shut"
+  },
+  {
+   "slug": "noir-obj-door-ajar-alt",
+   "label": "ALT of 'door, ajar state — frosted-glass office door.' — different shape/growth/wear, same kind",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "size": null,
+   "altOf": "noir-obj-door-ajar"
+  },
+  {
+   "slug": "noir-obj-door-open-alt",
+   "label": "ALT of 'door, open state — frosted-glass office door.' — different shape/growth/wear, same kind",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "size": null,
+   "altOf": "noir-obj-door-open"
+  },
+  {
+   "slug": "noir-obj-door-broken-alt",
+   "label": "ALT of 'door, broken state — frosted-glass office door.' — different shape/growth/wear, same kind",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "size": null,
+   "altOf": "noir-obj-door-broken"
+  }
+ ]
+}

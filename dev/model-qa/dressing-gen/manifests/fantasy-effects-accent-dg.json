@@ -1,0 +1,48 @@
+{
+ "file": "fantasy-effects-accent-dg.png",
+ "realm": "fantasy",
+ "family": "effects-accent",
+ "grid": "2 rows x 4 columns",
+ "chroma": "#FF00FF",
+ "wave": "dressing-gen",
+ "cells": [
+  {
+   "slug": "fx-fantasy-leafburst",
+   "label": "leaf-burst scatter, naturalist green flecks"
+  },
+  {
+   "slug": "fx-fantasy-holyglow",
+   "label": "holy radiant glow, warm golden bloom"
+  },
+  {
+   "slug": "fx-fantasy-frostshard",
+   "label": "crystalline frost shard burst, icy glint"
+  },
+  {
+   "slug": "fx-fantasy-emberrune",
+   "label": "carved rune ember flash, firelit glyph"
+  },
+  {
+   "slug": "fx-fantasy-featherdrift",
+   "label": "drifting feather scatter, soft fall"
+  },
+  {
+   "slug": "fx-fantasy-mossbloom",
+   "label": "living moss bloom pulse, verdant spread"
+  },
+  {
+   "slug": "fx-fantasy-leafburst-alt",
+   "label": "ALT of 'leaf-burst scatter, naturalist green flecks' — different shape/growth/wear, same kind",
+   "tags": null,
+   "size": null,
+   "altOf": "fx-fantasy-leafburst"
+  },
+  {
+   "slug": "fx-fantasy-holyglow-alt",
+   "label": "ALT of 'holy radiant glow, warm golden bloom' — different shape/growth/wear, same kind",
+   "tags": null,
+   "size": null,
+   "altOf": "fx-fantasy-holyglow"
+  }
+ ]
+}

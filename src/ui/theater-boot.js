@@ -4399,6 +4399,13 @@ function interiorBuildPieces(pieces, cx, cz){
     const g = buildSpriteBillboard(entry);
     if(!g) return; // texture not loaded yet — falls through, same as every other billboard resolution
     g.position.set((p.cellX || 0) - (cx || 0), (base.floor || 0) - 0.4, (p.cellY || 0) - (cz || 0)); // origin-shifted like every tile/light (the v3 card bug: raw cell coords rendered pieces outside the fitted frame); -0.4: feet on the y=-0.5 floor plane
+    // DUNGEON-GRAPH.md finale-gate finding: a caller may tag an interior piece with the combat foe's
+    // own `fid` (o.foes[i].fid, combat.js's combatStart) so play(verb,{who:fid}) — the SAME production
+    // standee-verb entry point combat damage already routes through (§A STANDEE VERBS WIRING, this
+    // file's STANDEE_VERB_FOR_THEATER_VERB table) — can resolve a piece standing in an interior room,
+    // not just a unit built by setUnits(). Optional/additive: a piece with no `fid` is untagged and
+    // behaves exactly as before.
+    if(p.fid != null) g.userData.unitId = String(p.fid);
     group.add(g);
     resolved++;
   });
@@ -4747,12 +4754,33 @@ function zoneToWorld(band, lane){
 
 /* T3 findUnit (§4 ctx contract): unit id -> its mounted THREE.Object3D group, tagged with
    userData.unitId at setUnits() time below. Returns null pre-mount / unknown id — every verb treats
-   that as "can't resolve this unit," a clean no-op. */
+   that as "can't resolve this unit," a clean no-op.
+   DUNGEON-GRAPH.md finale-gate finding (the dungeon-loop-gate, dev/battle-gate/capture-dungeon-loop.mjs):
+   an interior board's `pieces` (interiorBuildPieces, above) live in S.interiorGroup's own pieces
+   sub-group, not S.unitGroup — before this fix, play(verb,{who:fid}) could NEVER resolve a piece
+   standing in a rendered room (findUnit only ever searched S.unitGroup), even though interiorBuildPieces
+   already stamps userData.unitId when the caller tags a piece with its combat fid. Walk S.interiorGroup
+   one level deep (interiorGroup -> {tile/wall/light/pieces sub-groups} -> sprite groups), the SAME
+   traversal shape updateSpriteBillboardYaw already uses for the identical reason — checked AFTER
+   S.unitGroup so the ordinary combat-stage lookup is untouched (byte-identical when no interior board
+   is mounted / no piece carries a matching id). */
 function findUnit(id){
-  if(!S.unitGroup || id == null) return null;
+  if(id == null) return null;
   const idStr = String(id);
-  for(let i = 0; i < S.unitGroup.children.length; i++){
-    if(S.unitGroup.children[i].userData && S.unitGroup.children[i].userData.unitId === idStr) return S.unitGroup.children[i];
+  if(S.unitGroup){
+    for(let i = 0; i < S.unitGroup.children.length; i++){
+      if(S.unitGroup.children[i].userData && S.unitGroup.children[i].userData.unitId === idStr) return S.unitGroup.children[i];
+    }
+  }
+  if(S.interiorGroup){
+    for(let i = 0; i < S.interiorGroup.children.length; i++){
+      const sub = S.interiorGroup.children[i];
+      if(!sub || !sub.children) continue;
+      for(let j = 0; j < sub.children.length; j++){
+        const fig = sub.children[j];
+        if(fig && fig.userData && fig.userData.unitId === idStr) return fig;
+      }
+    }
   }
   return null;
 }
@@ -5278,6 +5306,12 @@ window.Theater.interiorDressingCount = function(){ return S.interiorDressingCoun
 window.Theater.interiorDressingWorldPositions = function(){ return S.interiorDressingWorldPositions || []; };
 window.Theater.interiorBoardOrigin = function(){ return S.boardOrigin ? { cx: S.boardOrigin.cx, cz: S.boardOrigin.cz } : null; };
 window.Theater.shadowMapEnabled = function(){ return !!(S.renderer && S.renderer.shadowMap.enabled); };
+// dungeon-loop-gate (dev/battle-gate/capture-dungeon-loop.mjs) — a harness-facing read-only accessor,
+// same family as the interior* diagnostics above: how many verb tweens (play()'s own S.tweens, the
+// standee AND ordinary 3D-figure verbs both push into this one array) are still live right now, so a
+// capture rig can poll-until-settled instead of guessing a fixed sleep duration before screenshotting
+// a verb's terminal frame.
+window.Theater.tweensLive = function(){ return (S.tweens && S.tweens.length) || 0; };
 
 // DUNGEON-GRAPH.md U3 iteration-2, SPRITE PURITY ruling — a harness-facing diagnostic (dev/verify-
 // dungeon-interior.mjs's puppeteer check, dev/battle-gate/capture-interior-study.mjs's metrics) that

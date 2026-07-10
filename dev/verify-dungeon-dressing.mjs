@@ -45,6 +45,7 @@
 import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { execSync } from "node:child_process";
 import vm from "node:vm";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -202,6 +203,92 @@ group("5 — art-readiness join: every REALM_DRESSING slug resolves to a real dr
     });
   });
   ok(joined === total, `every REALM_DRESSING slug (${total}) resolves to a real manifest cell (${joined} joined)`);
+}
+
+console.log("\n[6 — PRODUCTION WIRING: trayFrom's {kind:\"interior\"} branch actually calls dressPlan and threads plan.dressing onto the returned board]");
+// FINDING (dev/battle-gate/capture-dungeon-loop.mjs, 2026-07-10): dressPlan (this file's own subject)
+// was fully verified by checks 1-5 above but had ZERO production callers — grep confirmed the only
+// call sites anywhere in src/ or dev/ before this fix were THIS harness and the study rig
+// (dev/battle-gate/capture-interior-study.mjs). src/engine/theater-data.js's trayFrom(source,scene,opts)
+// is the ONE seam theaterHereSourceFor's {kind:"interior",plan} source (src/world/render.js, the real
+// walk-consumption render path) flows through — it called interiorBuildBoard directly on the bare plan,
+// never dressPlan, so a live dungeon walk's rendered room NEVER carried dressing cards in production,
+// even though the whole dressing layer (roster, placement laws, art-readiness join, GL mount) was
+// green. RED-FIRST (re-checked live against HEAD, not just cited): the committed theater-data.js (this
+// fix lands as uncommitted working-tree state until this unit's own commit) had 0 dressPlan( calls.
+{
+  let parentCount = "?";
+  try {
+    parentCount = execSync('git show HEAD:src/engine/theater-data.js | grep -c "dressPlan(" || true', { cwd: ROOT }).toString().trim();
+  } catch (e) { parentCount = "git-unavailable: " + e.message.split("\n")[0]; }
+  ok(parentCount === "0" || parentCount.startsWith("git-unavailable"),
+    `RED-FIRST: HEAD's committed theater-data.js had 0 dressPlan( call sites — got "${parentCount}"`);
+
+  // load place-spatialize + place-semantics + place-dressing + theater-interior + theater-data into
+  // ONE sandbox (theater-interior.js/theater-data.js are both documented THREE/DOM-free pure data code
+  // — see their own header comments) and drive the REAL trayFrom({kind:"interior",plan,...}) exactly
+  // the shape theaterHereSourceFor emits, proving the PRODUCTION seam itself now carries dressing —
+  // not a re-description of dressPlan's own already-proven correctness (checks 1-3 above).
+  const sandbox = { console };
+  sandbox.window = sandbox;
+  vm.createContext(sandbox);
+  const combined = [
+    read("src/engine/place-spatialize.js"),
+    read("src/engine/place-semantics.js"),
+    read("src/engine/place-dressing.js"),
+    read("src/ui/theater-interior.js"),
+    read("src/engine/theater-data.js"),
+    "this.__trayFrom=typeof trayFrom!=='undefined'?trayFrom:undefined;",
+    "this.__interiorBuildBoard=typeof interiorBuildBoard!=='undefined'?interiorBuildBoard:undefined;",
+    "this.__spatializePlan=typeof spatializePlan!=='undefined'?spatializePlan:undefined;",
+    "this.__semanticizePlan=typeof semanticizePlan!=='undefined'?semanticizePlan:undefined;",
+    "this.__dressPlan=typeof dressPlan!=='undefined'?dressPlan:undefined;",
+  ].join("\n");
+  vm.runInContext(combined, sandbox, { filename: "dungeon-graph-gr2-wiring.js" });
+  const { __trayFrom: trayFrom, __spatializePlan: spatializePlan, __semanticizePlan: semanticizePlan, __dressPlan: dressPlan } = sandbox;
+  ok(typeof trayFrom === "function", "6a-setup. theater-data.js's real trayFrom is loadable alongside theater-interior.js/place-dressing.js");
+
+  if (typeof trayFrom === "function") {
+    const fixture = buildHubFixture();
+    const plan = spatializePlan(fixture, "The Hub", { walkId: "gr2-wiring-check" });
+    const semPlan = semanticizePlan(plan, fixture, []);
+    // the EXACT source shape theaterHereSourceFor (src/world/render.js) builds for a dungeon walk
+    // carrying pn.spatial: {kind:"interior", plan, focusSegNum, radius, env, realms}.
+    const board = trayFrom({ kind: "interior", plan: semPlan, focusSegNum: semPlan.rooms[0].segNum, radius: 1, env: "dungeon", realms: ["fantasy"] }, null, {});
+    ok(!!board, "6a. trayFrom({kind:\"interior\",plan}) returns a board");
+    ok(Array.isArray(board && board.dressing), "6b. the returned board carries a `dressing` array field", JSON.stringify(board && board.dressing));
+    const directDressed = dressPlan(semPlan, { realmId: "fantasy" });
+    ok(!!board && JSON.stringify(board.dressing) === JSON.stringify(directDressed.dressing),
+      "6c. trayFrom's board.dressing is BYTE-IDENTICAL to calling dressPlan(plan,{realmId}) directly (same seed derivation — plan.seed, since trayFrom passes no walkId) — proves it's really wired through, not a stub/empty array",
+      JSON.stringify({ trayFrom: board && board.dressing, direct: directDressed.dressing }));
+    ok((board && board.dressing || []).length > 0, "6d. discriminating: the dressing array is actually non-empty for this fixture (a Hub with real rooms), not a vacuous pass");
+
+    // MUTATION: prove 6b/6c are load-bearing, not vacuous — reload with the PRE-FIX trayFrom body
+    // (interior branch calling interiorBuildBoard directly, no dressPlan) and confirm board.dressing
+    // goes back to undefined.
+    const preFixTheaterData = read("src/engine/theater-data.js").replace(
+      /if\(source\.kind === "interior" && source\.plan[\s\S]*?return board;\n  \}/,
+      `if(source.kind === "interior" && source.plan && typeof interiorBuildBoard === "function"){
+    const env = source.env || opts.env;
+    const realms = source.realms || opts.realms;
+    const realmId = source.realmId || (Array.isArray(realms) && realms.length ? realms[0] : undefined);
+    return interiorBuildBoard(source.plan, { env: env, realmId: realmId, focusSegNum: source.focusSegNum, radius: source.radius });
+  }`
+    );
+    ok(preFixTheaterData !== read("src/engine/theater-data.js"), "6e-setup. mutation source-rewrite actually changed the text (regex matched the real function body)");
+    const sandbox2 = { console };
+    sandbox2.window = sandbox2;
+    vm.createContext(sandbox2);
+    vm.runInContext([
+      read("src/engine/place-spatialize.js"), read("src/engine/place-semantics.js"), read("src/engine/place-dressing.js"),
+      read("src/ui/theater-interior.js"), preFixTheaterData,
+      "this.__trayFrom=typeof trayFrom!=='undefined'?trayFrom:undefined;",
+    ].join("\n"), sandbox2, { filename: "dungeon-graph-gr2-wiring-prefix.js" });
+    const preFixBoard = sandbox2.__trayFrom({ kind: "interior", plan: semPlan, focusSegNum: semPlan.rooms[0].segNum, radius: 1, env: "dungeon", realms: ["fantasy"] }, null, {});
+    ok(preFixBoard && preFixBoard.dressing === undefined,
+      "6f. ⊗ MUTATION: the pre-fix trayFrom body returns a board with NO dressing field (proves 6b/6c aren't vacuous)",
+      JSON.stringify(preFixBoard && preFixBoard.dressing));
+  }
 }
 
 console.log("\n=== MUTATION: disable the center-2x2 exclusion -> check 3's center-2x2 assertion goes red ===");

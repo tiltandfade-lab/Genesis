@@ -1,0 +1,17 @@
+{
+ "file": "high-seas-solo-v3-16.png",
+ "realm": "high-seas",
+ "gridClass": "solo",
+ "grid": "1 row x 1 column",
+ "chroma": "#FF00FF",
+ "cells": [
+  {
+   "slug": "high-seas-leviathan-tentacled-mass",
+   "label": "leviathan tentacled mass",
+   "family": "monsters",
+   "sizeBand": "gargantuan",
+   "replaces": "high-seas-mm-01.png|r5c4",
+   "reason": "regen-underres"
+  }
+ ]
+}

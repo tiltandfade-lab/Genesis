@@ -1,0 +1,345 @@
+{
+ "file": "theater-tiny-v3-24.png",
+ "realm": "theater",
+ "gridClass": "tiny",
+ "grid": "6 rows x 7 columns",
+ "chroma": "#FF00FF",
+ "cells": [
+  {
+   "slug": "theater-quail",
+   "label": "quail",
+   "family": "animals",
+   "sizeBand": "tiny",
+   "replaces": "theater-domestic-animals-2.png|r2c5",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "theater-budgie-in-gilt-cage",
+   "label": "budgie in gilt cage",
+   "family": "animals",
+   "sizeBand": "tiny",
+   "replaces": "theater-domestic-animals-2.png|r3c4",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "theater-guinea-pig",
+   "label": "guinea pig",
+   "family": "animals",
+   "sizeBand": "tiny",
+   "replaces": "theater-domestic-animals-2.png|r3c5",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "theater-hedgehog",
+   "label": "hedgehog",
+   "family": "animals",
+   "sizeBand": "tiny",
+   "replaces": "theater-domestic-animals-2.png|r4c1",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "theater-swallow",
+   "label": "swallow",
+   "family": "animals",
+   "sizeBand": "tiny",
+   "replaces": "theater-domestic-animals-2.png|r4c5",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "theater-snail",
+   "label": "snail",
+   "family": "animals",
+   "sizeBand": "tiny",
+   "replaces": "theater-domestic-animals-2.png|r5c3",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "theater-jar-of-leeches",
+   "label": "jar of leeches",
+   "family": "animals",
+   "sizeBand": "tiny",
+   "replaces": "theater-domestic-animals-2.png|r5c5",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "theater-pale-spider",
+   "label": "pale spider",
+   "family": "animals",
+   "sizeBand": "tiny",
+   "replaces": "theater-dungeon-animals-01.png|r2c1",
+   "reason": "FAIL-adam"
+  },
+  {
+   "slug": "theater-lizard",
+   "label": "lizard",
+   "family": "animals",
+   "sizeBand": "tiny",
+   "replaces": "theater-dungeon-animals-01.png|r5c1",
+   "reason": "FAIL-adam"
+  },
+  {
+   "slug": "theater-glowworm",
+   "label": "glowworm",
+   "family": "animals",
+   "sizeBand": "tiny",
+   "replaces": "theater-dungeon-animals-2.png|r1c1",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "theater-silverfish",
+   "label": "silverfish",
+   "family": "animals",
+   "sizeBand": "tiny",
+   "replaces": "theater-dungeon-animals-2.png|r1c2",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "theater-dark-millipede",
+   "label": "dark millipede",
+   "family": "animals",
+   "sizeBand": "tiny",
+   "replaces": "theater-dungeon-animals-2.png|r1c3",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "theater-cave-shrimp",
+   "label": "cave shrimp",
+   "family": "animals",
+   "sizeBand": "tiny",
+   "replaces": "theater-dungeon-animals-2.png|r1c4",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "theater-collared-starling",
+   "label": "collared starling",
+   "family": "animals",
+   "sizeBand": "tiny",
+   "replaces": "theater-dungeon-animals-2.png|r2c1",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "theater-white-weevil",
+   "label": "white weevil",
+   "family": "animals",
+   "sizeBand": "tiny",
+   "replaces": "theater-dungeon-animals-2.png|r2c2",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "theater-slug-leech-blob",
+   "label": "slug/leech blob",
+   "family": "animals",
+   "sizeBand": "tiny",
+   "replaces": "theater-dungeon-animals-2.png|r2c3",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "theater-grub-with-candle",
+   "label": "grub with candle",
+   "family": "animals",
+   "sizeBand": "tiny",
+   "replaces": "theater-dungeon-animals-2.png|r2c4",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "theater-centipede",
+   "label": "centipede",
+   "family": "animals",
+   "sizeBand": "tiny",
+   "replaces": "theater-dungeon-animals-2.png|r2c5",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "theater-cockroach",
+   "label": "cockroach",
+   "family": "animals",
+   "sizeBand": "tiny",
+   "replaces": "theater-dungeon-animals-2.png|r3c1",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "theater-vested-crow",
+   "label": "vested crow",
+   "family": "animals",
+   "sizeBand": "tiny",
+   "replaces": "theater-dungeon-animals-2.png|r3c4",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "theater-grey-isopod",
+   "label": "grey isopod",
+   "family": "animals",
+   "sizeBand": "tiny",
+   "replaces": "theater-dungeon-animals-2.png|r3c5",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "theater-black-scorpion",
+   "label": "black scorpion",
+   "family": "animals",
+   "sizeBand": "tiny",
+   "replaces": "theater-dungeon-animals-2.png|r4c2",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "theater-pale-slug",
+   "label": "pale slug",
+   "family": "animals",
+   "sizeBand": "tiny",
+   "replaces": "theater-dungeon-animals-2.png|r4c3",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "theater-pale-cave-gecko",
+   "label": "pale cave gecko",
+   "family": "animals",
+   "sizeBand": "tiny",
+   "replaces": "theater-dungeon-animals-2.png|r4c4",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "theater-robin-in-cage",
+   "label": "robin in cage",
+   "family": "animals",
+   "sizeBand": "tiny",
+   "replaces": "theater-dungeon-animals-2.png|r5c3",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "theater-pale-salamander",
+   "label": "pale salamander",
+   "family": "animals",
+   "sizeBand": "tiny",
+   "replaces": "theater-dungeon-animals-2.png|r5c5",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "theater-frog",
+   "label": "frog",
+   "family": "animals",
+   "sizeBand": "tiny",
+   "replaces": "theater-wild-animals-2.png|r1c2",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "theater-stick-insect",
+   "label": "stick insect",
+   "family": "animals",
+   "sizeBand": "tiny",
+   "replaces": "theater-wild-animals-2.png|r1c3",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "theater-leaf-insect",
+   "label": "leaf insect",
+   "family": "animals",
+   "sizeBand": "tiny",
+   "replaces": "theater-wild-animals-2.png|r1c4",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "theater-moth",
+   "label": "moth",
+   "family": "animals",
+   "sizeBand": "tiny",
+   "replaces": "theater-wild-animals-2.png|r1c5",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "theater-plover-wing-display",
+   "label": "plover wing display",
+   "family": "animals",
+   "sizeBand": "tiny",
+   "replaces": "theater-wild-animals-2.png|r2c2",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "theater-nightjar-lying",
+   "label": "nightjar lying",
+   "family": "animals",
+   "sizeBand": "tiny",
+   "replaces": "theater-wild-animals-2.png|r2c3",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "theater-woodcock",
+   "label": "woodcock",
+   "family": "animals",
+   "sizeBand": "tiny",
+   "replaces": "theater-wild-animals-2.png|r2c4",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "theater-mantis",
+   "label": "mantis",
+   "family": "animals",
+   "sizeBand": "tiny",
+   "replaces": "theater-wild-animals-2.png|r3c2",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "theater-swift-flying",
+   "label": "swift flying",
+   "family": "animals",
+   "sizeBand": "tiny",
+   "replaces": "theater-wild-animals-2.png|r3c4",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "theater-magpie",
+   "label": "magpie",
+   "family": "animals",
+   "sizeBand": "tiny",
+   "replaces": "theater-wild-animals-2.png|r3c5",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "theater-vole",
+   "label": "vole",
+   "family": "animals",
+   "sizeBand": "tiny",
+   "replaces": "theater-wild-animals-2.png|r4c4",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "theater-corncrake",
+   "label": "corncrake",
+   "family": "animals",
+   "sizeBand": "tiny",
+   "replaces": "theater-wild-animals-2.png|r4c5",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "theater-shrike",
+   "label": "shrike",
+   "family": "animals",
+   "sizeBand": "tiny",
+   "replaces": "theater-wild-animals-2.png|r5c2",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "theater-cuckoo",
+   "label": "cuckoo",
+   "family": "animals",
+   "sizeBand": "tiny",
+   "replaces": "theater-wild-animals-2.png|r5c3",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "theater-lemming",
+   "label": "lemming",
+   "family": "animals",
+   "sizeBand": "tiny",
+   "replaces": "theater-wild-animals-2.png|r5c4",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "theater-toad",
+   "label": "toad",
+   "family": "animals",
+   "sizeBand": "tiny",
+   "replaces": "theater-wild-animals-2.png|r5c5",
+   "reason": "regen-style"
+  }
+ ]
+}

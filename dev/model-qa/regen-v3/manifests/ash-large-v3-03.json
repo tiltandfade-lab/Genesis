@@ -1,0 +1,41 @@
+{
+ "file": "ash-large-v3-03.png",
+ "realm": "ash",
+ "gridClass": "large",
+ "grid": "2 rows x 2 columns",
+ "chroma": "#FF00FF",
+ "cells": [
+  {
+   "slug": "ash-mutant-cow",
+   "label": "mutant cow",
+   "family": "animals",
+   "sizeBand": "large",
+   "replaces": "ash-domestic-animals-2.png|r1c1",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "ash-pale-bison",
+   "label": "pale bison",
+   "family": "animals",
+   "sizeBand": "large",
+   "replaces": "ash-domestic-animals-2.png|r1c4",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "ash-shaggy-yak",
+   "label": "shaggy yak",
+   "family": "animals",
+   "sizeBand": "large",
+   "replaces": "ash-domestic-animals-2.png|r2c5",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "ash-pack-bison-with-luggage",
+   "label": "pack bison with luggage",
+   "family": "animals",
+   "sizeBand": "large",
+   "replaces": "ash-domestic-animals-2.png|r3c4",
+   "reason": "regen-underres"
+  }
+ ]
+}

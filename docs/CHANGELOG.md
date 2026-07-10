@@ -8,6 +8,45 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-07-10 — SPRITE-GEN-V2: the great sprite cleanup, perspective law, V3 regen wave (650 gated sprites), casting-grade tags
+
+**Added**
+- `docs/SPRITE-GEN-V2.md` — the regen-wave law book: eye-level perspective law (front/side/¾ compatible;
+  high-angle/top-down quarantined), size-tier grid ladder (titanic 1x1 → tiniest 8x8; humanoids ALWAYS 4x6),
+  per-realm finish law (grim realms grimy-dithered, bright realms cleaner), chroma-key law (magenta default,
+  pure green for chrome/suburb), Armed Toons Law, expression requirement, swarm pile-style law.
+- `docs/SPRITE-TAGS.md` — casting-grade tag schema: BINDING LAW (sprite fixed to its NPC once assigned),
+  EXPRESSION-VARIANT LAW (same form + different expression = same character, `expressionSet` ids),
+  CASTING LAW (DM casts sprites onto surprise-play characters via kind/role/age/build/mood/portability;
+  castability tiers unique/named/generic/crowd).
+- **Perspective survey** (`dev/model-qa/perspective-survey/`) — 9 vision agents classified all 2,431
+  uncommitted sprites per cell; contact sheets A/B/Q; final-verdicts.csv; Adam failed 80 in the new
+  review tool (`dev/perspective-review.py` → :5181, click-to-fail, writes rulings.json).
+- **REGEN-V3 packets** (`dev/model-qa/regen-v3/`) — 161 sheets / 755 sprites of exact codex prompts,
+  per-realm, with pre-generated slug manifests; style-refs/ (12 sweep-rated exemplar sheets); realm
+  expansions ruled + authored same day: cosmic tarot arcana (37), frontier tribal (34, dignity register),
+  suburb Amblin/Earthbound (34), gloom VHS-horror canon (34), bright-kingdom armed toons (Zelda+Mario grammar).
+- **V3 wave gated + sliced**: Adam's codex sessions delivered 143/161 sheets; 11 gate agents passed
+  142/143 on style; all 650 sprites sliced to transparent PNGs at `dev/sprite-sheets/incoming/v3/<realm>/`
+  with `v3-sizing.json` (pxHeight, band scale, qaFlags) and `v3-tags.json` (full casting schema, 650/650).
+- **Off-angle giveaway pack** — 78 quarantined sprites keyed to transparency, sorted by angle, CC0 README
+  (`dev/model-qa/quarantine-pack/` + zip on Desktop). Nothing deleted.
+- Round-2 codex packets (`regen-v3/round2/`): cosmic-r2 (15 missing), gloom-r2 (3), fixes-r2 (9).
+
+**Changed**
+- Worktrees pruned 21 → 1 (only the sprite-gen lane remains); 37 dead worktree-agent branches deleted
+  (each verified merged); parked WIP banked as commits on feat/craft-npc-situation +
+  claude/fantasy-sprite-slicing; all live branches pushed to origin.
+
+**Fixed**
+- The 2026-07-09 overnight codex blast (41 sheets straight onto master, no perspective lock) is fully
+  triaged: 78% usable under the eye-level law, rejects regenerated in V3, off-angle quarantined.
+
+**Deferred**
+- Round-2 codex run (18 missing + 9 fix sheets — packets ready for Adam's 3PM window); registry fold-in of
+  v3 sizing/tags; committed-corpus retro-tag + ash painterly check; NPC expression pass (law 2 wiring);
+  sprite lane's 59 uncommitted round-2 sheets still parked in its worktree.
+
 ## 2026-07-09 (late night) — PLACE-GEN build wave: places are realm-true from birth and render as dioramas
 
 **Added**
@@ -1053,44 +1092,4 @@ a lost-then-recovered merge) but landed clean.
 - NPC-KNOWLEDGE-GRADES build (executor died to the throttle; queued for relaunch) · deep `/code-review` pass
   (Monday, post-token-refresh) · REALM-RENDER-STYLE fine-tune by eye (§2 warm-brown middle band) · the 11
   `_review` CR-ceiling flags in the draft JSON (Adam's call) · figure baked-vertex-color grading (render v2).
-
-## 2026-07-05 — THE MONSTER PRODUCTION WAVE (overnight, Fable orchestrating ~120 background agents)
-
-**Everything landed + pushed to origin; final sweep 94 harnesses / 0 failed.** One night took the
-monster layer from "realm content drafted" to "every monster in the game is a described, storied,
-modeled, recruitable individual." ~30 --no-ff merges. Highlights:
-
-- **Six-spec production lock** (REALM-ENRICHMENT-WRITING / REALM-STORY-WIRING / REALM-WALK-WIRING /
-  REALM-SURFACES-WIRING / REALM-PROPS-WIRING / REALM-MODELS-P3) + later MONSTER-STORY-WIRING,
-  REALM-TRAITS-APPLY, MONSTER-FLAVOR-TABLES, MONSTER-PARLEY (+§2b), PACING-DIALS (draft).
-- **Phase 1 (engine):** icons fold → 1307 creatures + gen-realm-bestiary.py; breach foes reach the
-  DM digest + codex creature minting; urban/wild realm spawns; realm surfaces (+5 floor recipes) +
-  realm props (308, size→footprint pass) on the activeRealmsFor seam.
-- **MONSTER-STORY:** habitat drives selection (misfits stamp `displaced` — a story fact), behavior/
-  activity ride the digest as `doing`, boss/CR≥3 regular foes mint codex records, Adam's 104 custom
-  d10s roll once at first mint (canon-locked), quest hooks bind the destination's actual threat.
-- **TRAITS-APPLY:** cmApplyTraits — authored traits rename/replace chassis actions live in combat
-  (divergence licensed within CR budget; Adam's 100%-traits + "new stuff not reskins" rulings).
-- **MONSTER-PARLEY + THE ANOMALY LAW:** creatures join the attitude ladder (Beasts roll Animal
-  Handling); recruitment is difficult af — grind clamps at Friendly; bondEligible only via nat-20 /
-  decisive lever / 3% friendly spawn; pet/hireling/sidekick tiers (Tasha's model); parley-angle
-  hooks; befriended creatures recur via prep. The bullywug crocodile hunter is now possible.
-- **FLAVOR CORPUS:** all 510 regular monsters got an original desc + a spice-graded d8 table
-  (variant XOR hook), MM-2024-grounded by a vision-read pass (16 upgrades; yochlol re-authored
-  IP-clean). data/monster-flavor.js + gen-monster-flavor.py.
-- **PHASE 2:** 1307/1307 realm descs; **229 creature + 8 prop net-new whole-object models** across
-  7 render-judged waves — the realm net-new queue is EMPTY (0 model:"net-new" remain).
-- **Reference layer:** persistent vision-verified page indexes for ALL FIVE books
-  (mm/dmg/phb/tashas/xgte-page-index.json) with cross-maps; CLAUDE.md points at them.
-- **Ops:** worktree hygiene (2.0G→~0.6G), play/complaints dupes removed (rig recreates), continuous
-  push-on-land adopted; token-lean law saved to memory (no ultra before Mon eve refresh).
-
-**Orchestrator re-gate catches this session (why the pipeline exists):** narrator-agent delegation
-loops (MM index, twice); the chassis-SRD-traits field collision; monster-story 8d flaky 1-in-4
-under the parley angle; the harness realm-key population gap; 10 buried figures + cable-snake.
-
-**Parked for Adam:** Phase 2b (realm traits at the 100% ruling + realm d8 tables + own treasure/
-habitat/activity — ~2.5× the 510-corpus spend; launch on his word) · REALM-RENDER-STYLE tune ·
-PACING-DIALS §3 questions · prop size→footprint veto row · 11 _review flags in the draft JSON ·
-deep /code-review pass Monday post-refresh.
 

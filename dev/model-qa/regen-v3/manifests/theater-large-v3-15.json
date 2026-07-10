@@ -1,0 +1,41 @@
+{
+ "file": "theater-large-v3-15.png",
+ "realm": "theater",
+ "gridClass": "large",
+ "grid": "2 rows x 2 columns",
+ "chroma": "#FF00FF",
+ "cells": [
+  {
+   "slug": "theater-butcher-golem-with-cleaver",
+   "label": "butcher golem with cleaver",
+   "family": "monsters",
+   "sizeBand": "large",
+   "replaces": "theater-mm-04.png|r2c2",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "theater-overgrown-war-wagon",
+   "label": "overgrown war wagon",
+   "family": "monsters",
+   "sizeBand": "large",
+   "replaces": "theater-mm-04.png|r3c1",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "theater-armored-chimera-tiger",
+   "label": "armored chimera tiger",
+   "family": "monsters",
+   "sizeBand": "large",
+   "replaces": "theater-mm-04.png|r3c5",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "theater-barbed-skeleton-hulk",
+   "label": "barbed skeleton hulk",
+   "family": "monsters",
+   "sizeBand": "large",
+   "replaces": "theater-mm-04.png|r4c2",
+   "reason": "regen-underres"
+  }
+ ]
+}

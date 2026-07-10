@@ -1,0 +1,41 @@
+{
+ "file": "gloom-large-v3-01.png",
+ "realm": "gloom",
+ "gridClass": "large",
+ "grid": "2 rows x 2 columns",
+ "chroma": "#FF00FF",
+ "cells": [
+  {
+   "slug": "gloom-draped-funeral-horse",
+   "label": "draped funeral horse",
+   "family": "animals",
+   "sizeBand": "large",
+   "replaces": "gloom-domestic-animals-2.png|r1c2",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "gloom-pack-donkey",
+   "label": "pack donkey",
+   "family": "animals",
+   "sizeBand": "large",
+   "replaces": "gloom-domestic-animals-2.png|r1c4",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "gloom-dairy-cow",
+   "label": "dairy cow",
+   "family": "animals",
+   "sizeBand": "large",
+   "replaces": "gloom-domestic-animals-2.png|r2c5",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "gloom-grey-draft-horse",
+   "label": "grey draft horse",
+   "family": "animals",
+   "sizeBand": "large",
+   "replaces": "gloom-domestic-animals-2.png|r3c3",
+   "reason": "regen-underres"
+  }
+ ]
+}

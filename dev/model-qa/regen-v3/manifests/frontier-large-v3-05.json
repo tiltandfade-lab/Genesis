@@ -1,0 +1,41 @@
+{
+ "file": "frontier-large-v3-05.png",
+ "realm": "frontier",
+ "gridClass": "large",
+ "grid": "2 rows x 2 columns",
+ "chroma": "#FF00FF",
+ "cells": [
+  {
+   "slug": "frontier-draft-horse",
+   "label": "draft horse",
+   "family": "animals",
+   "sizeBand": "large",
+   "replaces": "frontier-domestic-animals-2.png|r1c1",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "frontier-galloping-bay-horse",
+   "label": "galloping bay horse",
+   "family": "animals",
+   "sizeBand": "large",
+   "replaces": "frontier-domestic-animals-2.png|r1c2",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "frontier-gray-horse",
+   "label": "gray horse",
+   "family": "animals",
+   "sizeBand": "large",
+   "replaces": "frontier-domestic-animals-2.png|r1c3",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "frontier-dark-bay-horse",
+   "label": "dark bay horse",
+   "family": "animals",
+   "sizeBand": "large",
+   "replaces": "frontier-domestic-animals-2.png|r1c4",
+   "reason": "regen-underres"
+  }
+ ]
+}

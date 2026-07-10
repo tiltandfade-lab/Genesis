@@ -1,0 +1,49 @@
+{
+ "file": "cosmic-medium-beast-v3-19.png",
+ "realm": "cosmic",
+ "gridClass": "medium-beast",
+ "grid": "2 rows x 4 columns",
+ "chroma": "#FF00FF",
+ "cells": [
+  {
+   "slug": "cosmic-caparisoned-saluki-dog",
+   "label": "caparisoned saluki dog",
+   "family": "animals",
+   "sizeBand": "medium",
+   "replaces": "cosmic-domestic-animals-2.png|r2c3",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "cosmic-goat-with-vessel-and-drape",
+   "label": "goat with vessel and drape",
+   "family": "animals",
+   "sizeBand": "medium",
+   "replaces": "cosmic-domestic-animals-2.png|r2c4",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "cosmic-bridled-monitor-lizard",
+   "label": "bridled monitor lizard",
+   "family": "animals",
+   "sizeBand": "medium",
+   "replaces": "cosmic-domestic-animals-2.png|r3c1",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "cosmic-draped-water-buffalo-calf",
+   "label": "draped water buffalo calf",
+   "family": "animals",
+   "sizeBand": "medium",
+   "replaces": "cosmic-domestic-animals-2.png|r4c4",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "cosmic-chained-baboon",
+   "label": "chained baboon",
+   "family": "animals",
+   "sizeBand": "medium",
+   "replaces": "cosmic-domestic-animals-2.png|r5c2",
+   "reason": "regen-style"
+  }
+ ]
+}

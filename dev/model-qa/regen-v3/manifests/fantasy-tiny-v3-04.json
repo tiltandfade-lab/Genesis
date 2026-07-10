@@ -1,0 +1,57 @@
+{
+ "file": "fantasy-tiny-v3-04.png",
+ "realm": "fantasy",
+ "gridClass": "tiny",
+ "grid": "1 row x 7 columns",
+ "chroma": "#FF00FF",
+ "cells": [
+  {
+   "slug": "fantasy-silverfish-group",
+   "label": "silverfish group",
+   "family": "animals",
+   "sizeBand": "tiny",
+   "replaces": "fantasy-dungeon-animals-2.png|r1c5",
+   "reason": "FAIL-adam"
+  },
+  {
+   "slug": "fantasy-devil-s-coach-horse-earwig",
+   "label": "devil's coach-horse/earwig",
+   "family": "animals",
+   "sizeBand": "tiny",
+   "replaces": "fantasy-dungeon-animals-2.png|r2c1",
+   "reason": "FAIL-adam"
+  },
+  {
+   "slug": "fantasy-centipede",
+   "label": "centipede",
+   "family": "animals",
+   "sizeBand": "tiny",
+   "replaces": "fantasy-dungeon-animals-2.png|r2c2",
+   "reason": "FAIL-adam"
+  },
+  {
+   "slug": "fantasy-tick",
+   "label": "tick",
+   "family": "animals",
+   "sizeBand": "tiny",
+   "replaces": "fantasy-dungeon-animals-2.png|r3c1",
+   "reason": "FAIL-adam"
+  },
+  {
+   "slug": "fantasy-pale-scorpion",
+   "label": "pale scorpion",
+   "family": "animals",
+   "sizeBand": "tiny",
+   "replaces": "fantasy-dungeon-animals-2.png|r5c2",
+   "reason": "FAIL-adam"
+  },
+  {
+   "slug": "fantasy-mites-group",
+   "label": "mites group",
+   "family": "animals",
+   "sizeBand": "tiny",
+   "replaces": "fantasy-dungeon-animals-2.png|r5c3",
+   "reason": "FAIL-adam"
+  }
+ ]
+}

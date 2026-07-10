@@ -1,0 +1,113 @@
+{
+ "file": "theater-humanoid-v3-07.png",
+ "realm": "theater",
+ "gridClass": "humanoid",
+ "grid": "4 rows x 4 columns",
+ "chroma": "#FF00FF",
+ "cells": [
+  {
+   "slug": "theater-axe-warrior-wight",
+   "label": "axe warrior wight",
+   "family": "monsters",
+   "sizeBand": "medium",
+   "replaces": "theater-mm-01.png|r3c4",
+   "reason": "regen-shortleg"
+  },
+  {
+   "slug": "theater-undead-centurion",
+   "label": "undead centurion",
+   "family": "monsters",
+   "sizeBand": "medium",
+   "replaces": "theater-mm-01.png|r5c3",
+   "reason": "regen-shortleg"
+  },
+  {
+   "slug": "theater-rat-swarm-scatter",
+   "label": "rat swarm scatter",
+   "family": "monsters",
+   "sizeBand": "medium",
+   "replaces": "theater-mm-02.png|r1c1",
+   "reason": "FAIL-adam"
+  },
+  {
+   "slug": "theater-tricorne-musketeer-firing",
+   "label": "tricorne musketeer firing",
+   "family": "monsters",
+   "sizeBand": "medium",
+   "replaces": "theater-mm-02.png|r1c5",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "theater-barbed-armored-knight",
+   "label": "barbed armored knight",
+   "family": "monsters",
+   "sizeBand": "medium",
+   "replaces": "theater-mm-02.png|r4c2",
+   "reason": "regen-shortleg"
+  },
+  {
+   "slug": "theater-zombie-emerging-from-hatch",
+   "label": "zombie emerging from hatch",
+   "family": "monsters",
+   "sizeBand": "medium",
+   "replaces": "theater-mm-02.png|r5c5",
+   "reason": "FAIL-adam"
+  },
+  {
+   "slug": "theater-brute-with-sledgehammer",
+   "label": "brute with sledgehammer",
+   "family": "monsters",
+   "sizeBand": "medium",
+   "replaces": "theater-mm-03.png|r2c3",
+   "reason": "regen-shortleg"
+  },
+  {
+   "slug": "theater-empty",
+   "label": "empty",
+   "family": "monsters",
+   "sizeBand": "medium",
+   "replaces": "theater-mm-05.png|r4c4",
+   "reason": "FAIL-adam"
+  },
+  {
+   "slug": "theater-empty",
+   "label": "empty",
+   "family": "monsters",
+   "sizeBand": "medium",
+   "replaces": "theater-mm-05.png|r4c5",
+   "reason": "FAIL-adam"
+  },
+  {
+   "slug": "theater-smith-with-funnel-and-hammer",
+   "label": "smith with funnel and hammer",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "theater-npc-01.png|r2c3",
+   "reason": "regen-shortleg"
+  },
+  {
+   "slug": "theater-cook-with-ladle",
+   "label": "cook with ladle",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "theater-npc-01.png|r2c4",
+   "reason": "regen-shortleg"
+  },
+  {
+   "slug": "theater-foreman-with-ledger",
+   "label": "foreman with ledger",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "theater-npc-03.png|r1c3",
+   "reason": "regen-shortleg"
+  },
+  {
+   "slug": "theater-scribe-with-notebook",
+   "label": "scribe with notebook",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "theater-npc-03.png|r3c1",
+   "reason": "regen-shortleg"
+  }
+ ]
+}

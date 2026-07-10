@@ -1,0 +1,41 @@
+{
+ "file": "high-seas-large-v3-08.png",
+ "realm": "high-seas",
+ "gridClass": "large",
+ "grid": "2 rows x 2 columns",
+ "chroma": "#FF00FF",
+ "cells": [
+  {
+   "slug": "high-seas-drowned-zombie-horde",
+   "label": "drowned zombie horde",
+   "family": "monsters",
+   "sizeBand": "large",
+   "replaces": "high-seas-mm-01.png|r4c4",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "high-seas-barnacle-hulk-with-net-of-skulls",
+   "label": "barnacle hulk with net of skulls",
+   "family": "monsters",
+   "sizeBand": "large",
+   "replaces": "high-seas-mm-02.png|r1c3",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "high-seas-tentacled-maw-beast",
+   "label": "tentacled maw beast",
+   "family": "monsters",
+   "sizeBand": "large",
+   "replaces": "high-seas-mm-02.png|r4c3",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "high-seas-coral-golem-hulk",
+   "label": "coral golem hulk",
+   "family": "monsters",
+   "sizeBand": "large",
+   "replaces": "high-seas-mm-03.png|r1c1",
+   "reason": "regen-underres"
+  }
+ ]
+}

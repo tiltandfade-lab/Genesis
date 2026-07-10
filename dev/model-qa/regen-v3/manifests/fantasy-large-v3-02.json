@@ -1,0 +1,25 @@
+{
+ "file": "fantasy-large-v3-02.png",
+ "realm": "fantasy",
+ "gridClass": "large",
+ "grid": "1 row x 2 columns",
+ "chroma": "#FF00FF",
+ "cells": [
+  {
+   "slug": "fantasy-muskox",
+   "label": "muskox",
+   "family": "animals",
+   "sizeBand": "large",
+   "replaces": "fantasy-wild-animals-2.png|r3c1",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "fantasy-bison",
+   "label": "bison",
+   "family": "animals",
+   "sizeBand": "large",
+   "replaces": "fantasy-wild-animals-2.png|r4c1",
+   "reason": "regen-underres"
+  }
+ ]
+}

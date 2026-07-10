@@ -167,6 +167,16 @@ Style block (repeated here so this section is self-contained): Pixel-art sprite 
 
 Shared mechanical instructions (restated for this section, NPC-appropriate): 5x5 grid, 25 cells, one distinct static character per cell (not a repeat, not an animation frame), uniform cell size, solid magenta (#FF00FF) background (no transparency, no other background elements), consistent scale across all 25, orthographic side view, each character fully visible from head to toe within its cell — no cropping at the top, bottom, or sides, the complete body must fit inside the cell boundary. **Every character in an expressive pose characteristic of their role** — mid-task, mid-gesture, caught doing the thing that defines them (the smith mid-hammer-swing, the informant glancing over a shoulder, the merchant mid-haggle, the healer mid-bandage) — never a neutral T-pose or idle stand, and never combat aggression unless the role is itself a security/enforcer type. **No scene props, furniture, tools-as-set-dressing, or background objects of any kind** — no benches, stalls, counters, carts, weapons racks, signage, etc.; only the character itself (small hand-held items that are part of the character's own body/outfit, like a held tool mid-use, are fine — freestanding set pieces are not) isolated against the plain magenta background.
 
+**Chrome humanoid/gang sheet formula (2026-07-09):** use a true **portrait canvas** for Chrome
+NPC/gang taste-pass sheets, targeting 4:5 rather than square. Do not merely ask for "4:5
+composition inside a square"; the actual image canvas should be portrait so the model gives
+humanoids enough vertical room. Keep row-major 5x5 ordering and `#FF00FF`, but favor tall
+full-body sprites with smaller heads, longer thighs and shins, visible knees/ankles, and
+complete boots/skates/feet. For gang sheets, each row must read as its own gang through
+shared color and repeated uniform elements; include the roller-skate gang, overalls gang,
+baseball-jersey-with-facepaint gang, and one all-girl gang when doing the Chrome taste-pass
+variants.
+
 Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-ROLE-REALMS.md`) plus this realm's exclusive `adds`.
 
 ### NPC sheet 1/6

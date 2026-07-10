@@ -1,0 +1,41 @@
+{
+ "file": "cosmic-large-v3-06.png",
+ "realm": "cosmic",
+ "gridClass": "large",
+ "grid": "2 rows x 2 columns",
+ "chroma": "#FF00FF",
+ "cells": [
+  {
+   "slug": "cosmic-star-scale-crocodile",
+   "label": "star-scale crocodile",
+   "family": "animals",
+   "sizeBand": "large",
+   "replaces": "cosmic-domestic-animals-2.png|r1c5",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "cosmic-pair-of-draped-donkeys",
+   "label": "pair of draped donkeys",
+   "family": "animals",
+   "sizeBand": "large",
+   "replaces": "cosmic-domestic-animals-2.png|r3c5",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "cosmic-star-blanket-cow",
+   "label": "star-blanket cow",
+   "family": "animals",
+   "sizeBand": "large",
+   "replaces": "cosmic-domestic-animals-2.png|r5c5",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "cosmic-bull",
+   "label": "bull",
+   "family": "animals",
+   "sizeBand": "large",
+   "replaces": "cosmic-domesticated-animals-01.png|r1c2",
+   "reason": "regen-underres"
+  }
+ ]
+}

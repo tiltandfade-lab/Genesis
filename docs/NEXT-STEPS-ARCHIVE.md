@@ -18,6 +18,25 @@ just preserves the old ordered-queue framing for anyone reconstructing why a cal
 
 ---
 
+## Do next (2026-07-09, sprite transition — Adam locked, docs/SPRITE-TRANSITION.md)
+
+1. ☑ **T2 manifest-v2 + slicer** · ☑ **T3 sprite registry** · ☑ **T4 theater billboard channel** —
+   ALL LANDED 2026-07-09 (re-gated: pipeline all-pass, registry 6/0 @100% join, theater 10/0).
+   Open rider: add the `item` kind to the v2 parser/registry (571 item-sheet cells currently skipped).
+2. ☑ **T5 vertical slice — DONE 2026-07-09 on FANTASY (not gloom; Adam's PNGs arrived fantasy-first).**
+   896 sprites cut+defringed+committed, review tool built (`dev/sprite-review.py`), auto-scale pass
+   (852 scales, 410 flagged), Adam's first review sitting 366 pass / 44 fail. Scale + fail-verdict
+   wired into the theater (12/0). Still open from T5: the eyes-on theater A/B vs 3D.
+3. ☐ **XL/titan/redo regen round** — Adam generates the 64 sheets in
+   `dev/sprite-manifests/XL-REGEN-PROMPTS.md` (9′+ creatures at 2× detail: 24 titan solos, 39 XL
+   2×2, 1 redo); slice via `--manifest-path dev/sprite-manifests/xl-regen-manifest.json`; re-rule
+   re-cut fails; regen registry.
+4. ☐ **Finish the fantasy review pass** (486 unreviewed; `flagged ⚠` filter = the priority queue).
+5. ☐ **Remaining realms** — PNGs → slice → auto-scale → review (pattern proven end-to-end).
+6. ☐ Models lane pivots to trays/props/architecture (MODEL-FOUNDRY re-scoped; VISUAL-ASSET-QUEUE
+   creature targets → sprite lane).
+
+
 ## Do next (2026-07-09, place-gen lane — visual-engine expansion)
 
 1. ☑ **Book gathers** — DMG14 settlements + random dungeons, DMG24 settlements + bastions

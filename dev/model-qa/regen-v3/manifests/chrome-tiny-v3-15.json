@@ -1,0 +1,25 @@
+{
+ "file": "chrome-tiny-v3-15.png",
+ "realm": "chrome",
+ "gridClass": "tiny",
+ "grid": "1 row x 7 columns",
+ "chroma": "#00FF00",
+ "cells": [
+  {
+   "slug": "chrome-robot-gecko",
+   "label": "robot gecko",
+   "family": "animals",
+   "sizeBand": "tiny",
+   "replaces": "chrome-domestic-animals-2.png|r3c5",
+   "reason": "FAIL-adam"
+  },
+  {
+   "slug": "chrome-robot-mantis",
+   "label": "robot mantis",
+   "family": "animals",
+   "sizeBand": "tiny",
+   "replaces": "chrome-wild-animals-2.png|r2c1",
+   "reason": "regen-style"
+  }
+ ]
+}

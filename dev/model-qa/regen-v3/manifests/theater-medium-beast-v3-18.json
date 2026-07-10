@@ -1,0 +1,57 @@
+{
+ "file": "theater-medium-beast-v3-18.png",
+ "realm": "theater",
+ "gridClass": "medium-beast",
+ "grid": "2 rows x 4 columns",
+ "chroma": "#FF00FF",
+ "cells": [
+  {
+   "slug": "theater-llama",
+   "label": "llama",
+   "family": "animals",
+   "sizeBand": "medium",
+   "replaces": "theater-domestic-animals-2.png|r1c4",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "theater-alpaca",
+   "label": "alpaca",
+   "family": "animals",
+   "sizeBand": "medium",
+   "replaces": "theater-domestic-animals-2.png|r1c5",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "theater-reindeer",
+   "label": "reindeer",
+   "family": "animals",
+   "sizeBand": "medium",
+   "replaces": "theater-domestic-animals-2.png|r2c2",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "theater-circus-seal-with-ball",
+   "label": "circus seal with ball",
+   "family": "animals",
+   "sizeBand": "medium",
+   "replaces": "theater-dungeon-animals-2.png|r4c1",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "theater-scruffy-grey-dog",
+   "label": "scruffy grey dog",
+   "family": "animals",
+   "sizeBand": "medium",
+   "replaces": "theater-dungeon-animals-2.png|r5c4",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "theater-coyote-wolf",
+   "label": "coyote/wolf",
+   "family": "animals",
+   "sizeBand": "medium",
+   "replaces": "theater-wild-animals-2.png|r5c1",
+   "reason": "regen-style"
+  }
+ ]
+}

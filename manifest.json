@@ -72,6 +72,7 @@
     "src/engine/walk-archetypes.js",
     "src/engine/dungeon-walk.js",
     "src/engine/place-spatialize.js",
+    "src/engine/place-semantics.js",
     "src/engine/wild-walk.js",
     "src/engine/quest-hook.js",
     "src/engine/prep-bundle.js",
@@ -1446,6 +1447,15 @@
         "SPATIAL_CELL"
       ],
       "desc": "DUNGEON-GRAPH.md U1 — the spatializer. spatializePlan(segments, topologyName, opts) turns a walk's segment graph (rooms=nodes, exits=edges — the src/engine/walk.js:593-625 shape rollDungeonWalk et al already produce) into a walkable cell-grid SpatialPlan (DUNGEON-GRAPH.md 'Shared data shape': seed/topology/cellW/cellD/cells Uint8Array of SPATIAL_CELL codes VOID|FLOOR|WALL|DOOR|WATER/rooms[]/corridors[]/doors[]/domains[]). Pure engine-layer data code — no w/U/render/DOM. Deterministic: seed hashes opts.walkId (mulberry32, same reference pattern as src/ui/theater-boot.js's) — never Math.random/Date.now un-seeded, so the same walk id reproduces a byte-identical cells buffer. Pipeline: per-topology layout seed (Hub/Stronghold radial, Onion concentric, Loop/Web ring, Branch tree-drift, everything else linear-drift) → room rect placement → AABB separation → corridor carving along EXITS ONLY (never an invented edge) → rasterize (VOID 8-adjacent to FLOOR/DOOR/WATER becomes WALL; corridor/room-perimeter meets become DOOR) → BFS reachability verify from the entry segment's room → on failure, mutate the seed and retry (≤5 more attempts), then honest-fail (throws naming the topology+seed — never a hand-patched plan). Web/Labyrinth Fragment crossing edges are caught generically at corridor-carve time (a corridor whose cells overlap an already-carved corridor's cells gets bridge:true) rather than via a topology-special-cased geometry check. U2 (semantics/scale domains)/U3 (volumetric renderer)/U4 (walk binding) consume this output; out of scope here per spec."
+    },
+    {
+      "id": "engine.place-semantics",
+      "path": "src/engine/place-semantics.js",
+      "type": "logic",
+      "owns": [
+        "semanticizePlan"
+      ],
+      "desc": "DUNGEON-GRAPH.md U2 — semantics + scale domains, layered on U1's SpatialPlan. semanticizePlan(plan, segments, residents) extends a spatializePlan() output (never mutates it) with: (1) room roles from the corridor graph — entrance (entry segment) / finale (isFinale segment) / path (on the deterministic BFS critical path entry→finale) / pocket (degree-1 dead end, non-finale — HOOK-WALKS §4's parked branch-node idea's honest home) / side (everything else); (2) difficulty bands (room.band) from depth — shallow (depth 0-1, always)/mid/deep via a tertile split of [0,maxDepth], monotone non-decreasing along the critical path by construction (asserted, honest-fail on regression); (3) SCALE DOMAINS per law §2 ('a room that merely fits its monster is a prison') — every resident with scaleVsHuman>=2.0 claims its room + adjacent path/side rooms (patrol radius 1) at that scale; apex:true with scaleVsHuman>=4.0 claims the WHOLE dungeon instead; domain rooms get room.scaleDomain=max(current,scale), and any room below the fit-test minimum (ceil(scale)+2 cells per axis) is GROWN (re-carved, re-centered) with the plan's cells buffer fully rebuilt and BFS reachability re-verified from scratch (honest-fail if still unreachable); corridors inside a >1.0-scale domain get width>=2+heightScale; doors between differing-scale rooms get transition:true+squeeze:true (squeeze = geometry/DM hand-wave per Adam's ruling — no sprite/render work); (4) plan.domains[] ({scale,segNums,transitions:[doorIdx]}), always including the residual 1.0 human domain unless an apex claim consumed every room. Depends on SPATIAL_CELL (engine.place-spatialize's global) — must load after it. Pure engine-layer data code, no w/U/render/DOM, no RNG (fully deterministic function of its inputs). U3 (volumetric renderer)/U4 (walk binding) consume this output; rendering/walk-store writes/encounter-loot table wiring/beat content are out of scope here per spec."
     },
     {
       "id": "engine.wild-walk",

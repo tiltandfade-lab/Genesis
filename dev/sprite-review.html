@@ -145,8 +145,12 @@ function feetLabel(mult){
   return inches ? `${whole}′${inches}″` : `${whole}′`;
 }
 
-/* 6′ human reference silhouette — vector (not a sprite PNG) so the crown of the head sits
-   EXACTLY at the medium guide line; ~7.5-head standing proportions. Always on stage. */
+/* The in-world human reference (Adam 2026-07-09): a verdict:pass Medium human sprite drawn at
+   its calibrated height in the lineup, so everything is judged against a REAL in-world human.
+   Closest passed human to true 6′ at swap time: tough-boss at scale 1.033 (~6′2″). Swap the
+   slug if a truer 6-footer passes later. The vector silhouette below stays as the onerror
+   fallback (e.g. the sprite file missing in a lean clone). */
+const REF_SLUG = "spr-fantasy-tough-boss";
 const REF_SILHOUETTE = `
 <svg viewBox="0 0 36 100" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMax meet">
   <g fill="rgba(160,150,175,0.45)">
@@ -260,9 +264,16 @@ function render(){
   }
   lineup.style.bottom = groundY + "px"; lineup.style.top = "auto"; lineup.style.height = "0";
   lineup.style.alignItems = "flex-end"; lineup.style.position = "absolute";
-  const refHtml = `<div class="fig ref" title="6′ human reference — head exactly on the medium line">
-      <div style="height:${medPx}px;display:flex;align-items:flex-end">${REF_SILHOUETTE}</div>
-      <span class="cap">6′ ref</span>
+  /* Real-sprite reference (Adam 2026-07-09): REF_SLUG renders at its own calibrated height
+     (scale × medium plane) — exactly how the theater would size it — feet on the ground line.
+     Falls back to the vector silhouette if the PNG can't load. */
+  const refScale = savedScale(REF_SLUG);
+  const refHtml = `<div class="fig ref" title="${REF_SLUG} — passed human at its calibrated in-world height (×${refScale})">
+      <div style="height:${medPx}px;display:flex;align-items:flex-end">
+        <img src="/sprites/${REF_SLUG}.png" style="height:${Math.round(refScale * medPx)}px"
+             draggable="false" onerror="this.parentNode.innerHTML = REF_SILHOUETTE">
+      </div>
+      <span class="cap">${feetLabel(refScale)} human ref</span>
     </div>`;
   const pinned = pins.map(s => REG[s] && Object.assign({ slug: s }, REG[s])).filter(Boolean);
   lineup.innerHTML = refHtml + pinned.map(p => figHtml(p, "pinned")).join("") + (e ? figHtml(e, "current") : "");

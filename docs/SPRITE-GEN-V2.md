@@ -49,6 +49,11 @@ long quadrupeds/serpents/vehicles → landscape cells.
 - **Every realm EXCEPT suburb and bright-kingdom: "pixelated but realistic"** —
   pixel-art grit, realistic proportions/materials. NOT painterly (ash's current
   defect), not cartoon/toy.
+- **CLEAN-SHAPES AMENDMENT (Adam 2026-07-10 night — the beauty review):** clean value
+  shapes FIRST, grit as seasoning. Dither confined to shadow regions and edges — never
+  mid-tones; large flat value planes carry the form; silhouette-first. Every sheet is
+  JUDGED AT 50% ZOOM (play distance) — grit that reads as noise at half size fails.
+  Grim realms keep more seasoning than bright ones; nobody dithers mid-tones.
 - Suburb + bright-kingdom keep their own stylized look, judged on internal consistency.
 - **Finish law (RULED): per-realm.** Grim realms (theater, gloom, noir, ash, high-seas)
   = grimy dense-dithered finish; brighter realms (fantasy, frontier, lost-world, cosmic)
@@ -202,7 +207,10 @@ fold, and nothing good is ever lost to a regen:
    stays live, the sheet goes back on the queue with a corrective line (see
    cosmic-large-v3-09, round 2).
 2. **Slice** — only passing sheets are cut (chroma key → bbox-trim transparent PNGs,
-   chroma kept under alpha); pxHeight re-measured into the sizing file.
+   chroma kept under alpha); pxHeight re-measured into the sizing file. **DEFRINGE IS
+   A STANDARD SLICE STEP (Adam 2026-07-10 night)** — the unmix/defringe pass (the
+   magenta-lane tech) runs on every cut, not as a rescue: halo pixels read as cutout
+   crust against lit 3D.
 3. **Tag** — mood/pose/qaFlags refreshed on the re-cut sprites; identity tags carry over.
 4. **Relabel-to-art** — when the generated art doesn't match its rostered subject, the
    display noun follows the ART (overlay `name` override → regenerate the registry;

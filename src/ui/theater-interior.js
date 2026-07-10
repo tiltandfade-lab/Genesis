@@ -47,23 +47,38 @@
 // (interiorPatternTexture) is gone from the wiring below the kits. Kits keep floorColor/wallColor/
 // trimColor (still the flat trim/doorframe/pillar color, and the palette anchor REALM_MATERIALS' own
 // entries paint the material AROUND) + fog + light flavor, unchanged in shape from U3.
+// GR3 (docs/GRAPHICS-ENGINE.md build unit GR3, LIGHT RIG LAW): each kit's own `grade` field —
+// {tint, strength, fogWhisper} — REPLACES the old ad-hoc per-kit `fog.density` numbers (GR1-era kits
+// each hand-picked a density 0.02-0.035 with no shared rationale; GR3's taste ruling is explicit:
+// "fog off by default except a whisper where the realm earns it — gloom keeps a whisper, others 0").
+// `tint`/`strength` feed theater-boot.js's existing gradeColorLocal (the SAME GL-side grade mirror the
+// flat standing table already uses for its own REALM-RENDER-STYLE profile — GR3's "apply the same
+// hemisphere+grade to the flat standing table" parity is the shared FUNCTION, not a duplicated table)
+// — strength is a tint-blend fraction, bound LOW (<=0.15, GR3's own acceptance) so it reads as a mood
+// wash on the void/fog backdrop, never a color-replace. `fogWhisper` is the interior board's own fog
+// density default (setInteriorBoard reads kit.fogWhisper off tileKit, below) — 0 for every realm
+// except gloom, which keeps the tiniest whisper (its own crypt-fog identity, GR1 era already implied
+// this by giving gloom the densest ad-hoc fog of the three original kits).
 const INTERIOR_TILE_KITS = Object.freeze({
   chrome: Object.freeze({
     realmId: "chrome",
     floorColor: "#8fa6b0", wallColor: "#3d525d", trimColor: "#d8f0f8",
-    fog: Object.freeze({ color: "#0d1518", density: 0.024 }),
+    fog: Object.freeze({ color: "#0d1518" }),
+    grade: Object.freeze({ tint: "#bfe8ff", strength: 0.08, fogWhisper: 0 }),
     lightKind: "lamp", lightColor: "#bfe8ff", lightIntensity: 1.1
   }),
   gloom: Object.freeze({
     realmId: "gloom",
     floorColor: "#453b4d", wallColor: "#2a222e", trimColor: "#6b5878",
-    fog: Object.freeze({ color: "#0a0710", density: 0.035 }),
+    fog: Object.freeze({ color: "#0a0710" }),
+    grade: Object.freeze({ tint: "#6b5878", strength: 0.12, fogWhisper: 0.015 }),
     lightKind: "torch", lightColor: "#ff9a44", lightIntensity: 1.3
   }),
   fantasy: Object.freeze({
     realmId: "fantasy",
     floorColor: "#7a6248", wallColor: "#4a3b2c", trimColor: "#c9a85c",
-    fog: Object.freeze({ color: "#120d08", density: 0.024 }),
+    fog: Object.freeze({ color: "#120d08" }),
+    grade: Object.freeze({ tint: "#ffb347", strength: 0.07, fogWhisper: 0 }),
     lightKind: "torch", lightColor: "#ffb347", lightIntensity: 1.3
   }),
   // ─── GR1: the other 9 realms (docs/GRAPHICS-ENGINE.md GR1 acceptance — "cover ALL 12 realms"),
@@ -74,7 +89,8 @@ const INTERIOR_TILE_KITS = Object.freeze({
     // "grey-ash base with ember orange and toxic green accents"
     realmId: "ash",
     floorColor: "#46423d", wallColor: "#2f2c28", trimColor: "#ff6a2e",
-    fog: Object.freeze({ color: "#1a1613", density: 0.03 }),
+    fog: Object.freeze({ color: "#1a1613" }),
+    grade: Object.freeze({ tint: "#ff6a2e", strength: 0.1, fogWhisper: 0 }),
     lightKind: "torch", lightColor: "#ff7a3d", lightIntensity: 1.3
   }),
   "bright-kingdom": Object.freeze({
@@ -82,7 +98,8 @@ const INTERIOR_TILE_KITS = Object.freeze({
     // "rich storybook palette with real shadow"
     realmId: "bright-kingdom",
     floorColor: "#c9a15c", wallColor: "#8a6d4a", trimColor: "#f4d35e",
-    fog: Object.freeze({ color: "#221a10", density: 0.02 }),
+    fog: Object.freeze({ color: "#221a10" }),
+    grade: Object.freeze({ tint: "#f4d35e", strength: 0.06, fogWhisper: 0 }),
     lightKind: "torch", lightColor: "#ffcf6b", lightIntensity: 1.2
   }),
   cosmic: Object.freeze({
@@ -90,7 +107,8 @@ const INTERIOR_TILE_KITS = Object.freeze({
     // constellation sigils" / "disciplined navy-and-gold with rich accent color"
     realmId: "cosmic",
     floorColor: "#171b33", wallColor: "#10132a", trimColor: "#d4af37",
-    fog: Object.freeze({ color: "#07091a", density: 0.03 }),
+    fog: Object.freeze({ color: "#07091a" }),
+    grade: Object.freeze({ tint: "#d4af37", strength: 0.09, fogWhisper: 0 }),
     lightKind: "lamp", lightColor: "#e8c25a", lightIntensity: 1.2
   }),
   frontier: Object.freeze({
@@ -98,7 +116,8 @@ const INTERIOR_TILE_KITS = Object.freeze({
     // wood and leather" / "earthy palette"
     realmId: "frontier",
     floorColor: "#a9865c", wallColor: "#7c5f3e", trimColor: "#9c8a63",
-    fog: Object.freeze({ color: "#1c150c", density: 0.022 }),
+    fog: Object.freeze({ color: "#1c150c" }),
+    grade: Object.freeze({ tint: "#ffb347", strength: 0.07, fogWhisper: 0 }),
     lightKind: "torch", lightColor: "#ffb347", lightIntensity: 1.2
   }),
   "high-seas": Object.freeze({
@@ -106,7 +125,8 @@ const INTERIOR_TILE_KITS = Object.freeze({
     // rope and teal spectral glow" / "muted brine palette with rich teal/brass accents"
     realmId: "high-seas",
     floorColor: "#3f4a45", wallColor: "#2a332f", trimColor: "#b08d3e",
-    fog: Object.freeze({ color: "#0a1210", density: 0.032 }),
+    fog: Object.freeze({ color: "#0a1210" }),
+    grade: Object.freeze({ tint: "#6fd9c9", strength: 0.1, fogWhisper: 0 }),
     lightKind: "lamp", lightColor: "#6fd9c9", lightIntensity: 1.1
   }),
   "lost-world": Object.freeze({
@@ -114,7 +134,8 @@ const INTERIOR_TILE_KITS = Object.freeze({
     // naturalist jungle palette"
     realmId: "lost-world",
     floorColor: "#3d4a2e", wallColor: "#2a3320", trimColor: "#d8c9a3",
-    fog: Object.freeze({ color: "#0f1509", density: 0.028 }),
+    fog: Object.freeze({ color: "#0f1509" }),
+    grade: Object.freeze({ tint: "#ffa64d", strength: 0.08, fogWhisper: 0 }),
     lightKind: "torch", lightColor: "#ffa64d", lightIntensity: 1.2
   }),
   noir: Object.freeze({
@@ -122,7 +143,8 @@ const INTERIOR_TILE_KITS = Object.freeze({
     // "desaturated sepia-grayscale palette"
     realmId: "noir",
     floorColor: "#3a3530", wallColor: "#4a423a", trimColor: "#8a7a63",
-    fog: Object.freeze({ color: "#141210", density: 0.03 }),
+    fog: Object.freeze({ color: "#141210" }),
+    grade: Object.freeze({ tint: "#d9c48a", strength: 0.11, fogWhisper: 0 }),
     lightKind: "lamp", lightColor: "#d9c48a", lightIntensity: 1.0
   }),
   suburb: Object.freeze({
@@ -130,7 +152,8 @@ const INTERIOR_TILE_KITS = Object.freeze({
     // suburban palette, muted for feral subjects"
     realmId: "suburb",
     floorColor: "#cfc7a0", wallColor: "#b8a97e", trimColor: "#7c8a6a",
-    fog: Object.freeze({ color: "#17160f", density: 0.02 }),
+    fog: Object.freeze({ color: "#17160f" }),
+    grade: Object.freeze({ tint: "#ffcf8a", strength: 0.05, fogWhisper: 0 }),
     lightKind: "lamp", lightColor: "#ffcf8a", lightIntensity: 1.0
   }),
   theater: Object.freeze({
@@ -138,11 +161,13 @@ const INTERIOR_TILE_KITS = Object.freeze({
     // war-torn cloth" / "narrow mud-olive palette with drab military tones"
     realmId: "theater",
     floorColor: "#4a4632", wallColor: "#3a3826", trimColor: "#8a7f5c",
-    fog: Object.freeze({ color: "#141208", density: 0.032 }),
+    fog: Object.freeze({ color: "#141208" }),
+    grade: Object.freeze({ tint: "#d9a24d", strength: 0.1, fogWhisper: 0 }),
     lightKind: "torch", lightColor: "#d9a24d", lightIntensity: 1.2
   })
 });
 const INTERIOR_DEFAULT_KIT = "chrome";
+const INTERIOR_GRADE_STRENGTH_MAX = 0.15; // GR3 acceptance bound — every kit's grade.strength stays <= this
 
 /* ─── GR1 — REALM_MATERIALS (docs/GRAPHICS-ENGINE.md §E TEXTURE-PER-REALM) ────────────────────────
    Per realm x surface (floor/wall/trim) -> {material, grainIntensity}. A SIBLING registry to
@@ -419,12 +444,55 @@ const ITR_SQUEEZE_HEIGHT_FRAC = 0.5;
 const ITR_SQUEEZE_WIDTH_FRAC = 0.6;
 const ITR_PILLAR_MIN_DIM = 6;       // room must be >= this many cells per axis to earn corner pillars
 
+// ─── GR4 (docs/GRAPHICS-ENGINE.md build unit GR4, STAGE LAW): the diorama edge skirt — a darkened
+// realm-tinted prism band ringing the board's own bounding-rect perimeter, 0.4 cells deep, hanging
+// BELOW the y=-0.5 floor plane (theater-boot.js's interiorBuildInstancedMesh's own "every column's
+// base sits on the SAME y=-0.5 floor plane" convention — the skirt is the one instance kind that grows
+// DOWN off that plane instead of up, see that function's shadowKind==="skirt" branch) — "so the
+// floating slab reads finished from every yaw" (the spec's own words: a rectangular ring around the
+// whole rendered footprint, not a per-room treatment, since the tray itself floats as ONE slab). Pure
+// geometric derivation off the board's own tracked bounds, same discipline as pillars above (no RNG,
+// no dressing-table roll). `kit` supplies the tint source (wallColor, darkened) so the skirt reads as
+// realm-flavored, never a neutral grey collar. */
+const ITR_SKIRT_DEPTH = 0.4;        // "0.4 cells deep" per the spec
+const ITR_SKIRT_DARKEN = 0.4;       // multiplicative darken factor on kit.wallColor (band reads "in shadow")
+function itrDarkenHex(hex, factor) {
+  const h = String(hex || "#888888").replace("#", "");
+  const full = h.length === 3 ? h.split("").map((c) => c + c).join("") : h;
+  const n = parseInt(full, 16);
+  const v = Number.isFinite(n) ? n : 0x888888;
+  const clamp = (x) => (x < 0 ? 0 : x > 255 ? 255 : Math.round(x));
+  const r = clamp(((v >> 16) & 255) * factor), g = clamp(((v >> 8) & 255) * factor), b = clamp((v & 255) * factor);
+  return "#" + [r, g, b].map((x) => x.toString(16).padStart(2, "0")).join("");
+}
+// itrBuildSkirtRing(bounds, kit) -> [{x,z,sx,sy,sz,color}] — one skirt instance per cell on the OUTER
+// ring of the board's own tracked bounding rect (bounds.{minX,maxX,minZ,maxZ}, the SAME object
+// interiorBuildBoard already computes for its own `bounds` field — never a second derivation). A
+// degenerate 1-wide/1-deep bounds (every cell sits on an edge by definition) skirts the WHOLE strip,
+// same as any other perimeter-of-a-1xN-rect degenerate case — never throws, never empty on a real board.
+function itrBuildSkirtRing(bounds, kit) {
+  const skirt = [];
+  if (!bounds || !Number.isFinite(bounds.minX) || !Number.isFinite(bounds.maxX)) return skirt;
+  const color = itrDarkenHex(kit.wallColor, ITR_SKIRT_DARKEN);
+  for (let x = bounds.minX; x <= bounds.maxX; x++) {
+    for (let z = bounds.minZ; z <= bounds.maxZ; z++) {
+      const onEdge = x === bounds.minX || x === bounds.maxX || z === bounds.minZ || z === bounds.maxZ;
+      if (!onEdge) continue;
+      skirt.push({ x, z, sx: 1, sy: ITR_SKIRT_DEPTH, sz: 1, color });
+    }
+  }
+  return skirt;
+}
+
 /** interiorBuildBoard(plan, opts) → InteriorBoard:
- * { kind:"interior3d", env, realmId, cellSize:1, wallHeightBase, fog:{color,density},
+ * { kind:"interior3d", env, realmId, cellSize:1, wallHeightBase, fog:{color},
  *   tileKit:{floorColor,wallColor,trimColor,
- *     floorMaterial,wallMaterial,trimMaterial,floorGrain,wallGrain,trimGrain},
+ *     floorMaterial,wallMaterial,trimMaterial,floorGrain,wallGrain,trimGrain,
+ *     gradeTint,gradeStrength,fogWhisper},
  *   instances:{ floor:[{x,z,sx,sy,sz,color}], wall:[...], doorframe:[{...,squeeze}], pillar:[...] },
- *   bounds:{minX,maxX,minZ,maxZ}, meta:{roomCount,floorCount,wallCount,doorCount,pillarCount} }
+ *   skirt:[{x,z,sx,sy,sz,color}] (GR4 — the diorama edge band, a sibling of `instances`, never counted
+ *     toward the "4 known instance kinds" data-shape check: it's a separate render channel),
+ *   bounds:{minX,maxX,minZ,maxZ}, meta:{roomCount,floorCount,wallCount,doorCount,pillarCount,skirtCount} }
  * `plan` is a U1 spatializePlan() output, ideally U2-extended (semanticizePlan) for room.scaleDomain/
  * door.transition/door.squeeze — a bare U1 plan degrades cleanly (every room defaults scaleDomain 1.0,
  * every door renders as a normal non-squeeze frame), never throws.
@@ -509,6 +577,7 @@ function interiorBuildBoard(plan, opts) {
 
   const roomCount = keepSet === null ? plan.rooms.length : keepSet.size;
   if (!Number.isFinite(minX)) { minX = 0; maxX = 0; minZ = 0; maxZ = 0; } // degenerate empty-keep guard
+  const skirt = itrBuildSkirtRing({ minX: minX, maxX: maxX, minZ: minZ, maxZ: maxZ }, kit);
 
   return {
     kind: "interior3d",
@@ -526,8 +595,21 @@ function interiorBuildBoard(plan, opts) {
       trimMaterial: realmMaterialFor(kit.realmId, "trim").material,
       floorGrain: realmMaterialFor(kit.realmId, "floor").grainIntensity,
       wallGrain: realmMaterialFor(kit.realmId, "wall").grainIntensity,
-      trimGrain: realmMaterialFor(kit.realmId, "trim").grainIntensity },
+      trimGrain: realmMaterialFor(kit.realmId, "trim").grainIntensity,
+      // GR3 (docs/GRAPHICS-ENGINE.md §E-adjacent, build unit GR3 LIGHT RIG LAW): the per-realm grade —
+      // theater-boot.js's setInteriorBoard reads these three off tileKit directly (never re-resolves
+      // the kit itself) to feed gradeColorLocal (the void/fog backdrop) and the fog-density default,
+      // same "kit carries the final numbers, GL layer just applies them" split floorGrain/wallGrain
+      // already keep.
+      gradeTint: (kit.grade && kit.grade.tint) || null,
+      gradeStrength: (kit.grade && kit.grade.strength) || 0,
+      fogWhisper: (kit.grade && kit.grade.fogWhisper) || 0 },
     instances: { floor: floor, wall: wall, doorframe: doorframe, pillar: pillar },
+    // GR4 (docs/GRAPHICS-ENGINE.md build unit GR4 STAGE LAW): the edge skirt, computed off the SAME
+    // bounds this function already tracked above (no second bounds derivation) — a sibling of
+    // `instances`, not a 5th member of it (see this function's own doc comment on why check 2's "4
+    // known instance kinds" data-shape claim is untouched by this addition).
+    skirt: skirt,
     lights: lights,
     bounds: { minX: minX, maxX: maxX, minZ: minZ, maxZ: maxZ },
     // camera-framing hint: when a focus room was requested, carry its rect (raw plan cell space —
@@ -540,7 +622,8 @@ function interiorBuildBoard(plan, opts) {
       return fr ? { minX: fr.x, maxX: fr.x + fr.w - 1, minZ: fr.y, maxZ: fr.y + fr.d - 1 } : null;
     })(),
     meta: { roomCount: roomCount, floorCount: floor.length, wallCount: wall.length,
-      doorCount: doorframe.length, pillarCount: pillar.length, lightCount: lights.length }
+      doorCount: doorframe.length, pillarCount: pillar.length, lightCount: lights.length,
+      skirtCount: skirt.length }
   };
 }
 

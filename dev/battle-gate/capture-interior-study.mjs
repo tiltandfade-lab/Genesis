@@ -11,18 +11,24 @@
    billboards standing in the room at true scale; (4) shadows are BASELINE ON in every variant (ruling
    2 — real PointLights + cast shadows on interiors, no longer a study-only toggle).
 
-   GR1 PASS (docs/GRAPHICS-ENGINE.md build unit GR1, §E TEXTURE-PER-REALM): Adam's own instruction for
-   this unit's card — "3 realms (chrome/gloom/fantasy) x 2 variants (materials on / old flat, labeled)"
-   — REPLACES the iteration-2 AO/banded sweep entirely (that sweep answered a different taste question,
-   GR3's job when it lands; this card's ONE job is "does GR1's material texture actually read"). SCENES
-   grew from 2 to 3 (added a fantasy Spine crypt scene, reusing the SAME fantasy-tagged sprites U3's own
-   gloom scene already draws from — regen-v3's own "cut" status confirms these at authoring time); the
-   materials-off variant sets `window.Theater.setInteriorVariant({materials:false})` — setInteriorBoard's
-   own GR1 wiring (src/ui/theater-boot.js) reads that flag and drops floorTex/wallTex to `null` (a flat
-   single base-color material, interiorBuildInstancedMesh's own untextured branch) instead of baking a
-   REALM_MATERIALS texture — an honest OLD-FLAT baseline, not a resurrection of the retired pattern
-   texture (which no longer exists in the codebase at all). 6 panels total (3 realms x 2 variants) + one
-   contact sheet.
+   GR1 PASS (docs/GRAPHICS-ENGINE.md build unit GR1, §E TEXTURE-PER-REALM, historical): "3 realms
+   (chrome/gloom/fantasy) x 2 variants (materials on / old flat, labeled)" — REPLACED the iteration-2
+   AO/banded sweep entirely. SCENES grew from 2 to 3 (added a fantasy Spine crypt scene, reusing the
+   SAME fantasy-tagged sprites U3's own gloom scene already draws from — regen-v3's own "cut" status
+   confirms these at authoring time).
+
+   GR3+GR4 PASS (docs/GRAPHICS-ENGINE.md build units GR3 LIGHT RIG LAW + GR4 STAGE LAW): this pass's
+   ONE job is "does the hemisphere key + per-realm grade + diorama edge skirt actually read" — REPLACES
+   the GR1 materials-on/materials-off variant pair with rig-on/rig-off (materials stay ON, GR1's own
+   baseline, in BOTH variants now — GR1's own question is already answered/landed). `rig-off` sets
+   `window.Theater.setInteriorVariant({rig:false})` — setInteriorBoard's own GR3 wiring
+   (src/ui/theater-boot.js) reads that flag, dims the shared HemisphereLight to 0 for the render and
+   drops the per-realm gradeColorLocal profile to null (an honest NO-RIG baseline: torches/lamps only,
+   no soft key, no grade wash, no whisper fog) — never a resurrection of any retired code path. The
+   GR4 skirt itself has no on/off toggle (it's cheap, always-on geometry, not a taste-gated variant) —
+   it's simply visible in every panel, both variants, at every yaw. SCENES stay the SAME 3 (chrome
+   Hub/gloom Spine/fantasy Spine) — this pass answers a lighting/grade/edge-finish question, not a
+   scene-roster question. 6 panels total (3 realms x 2 variants) + one contact sheet.
 
    Sibling of dev/battle-gate/capture-place-tray.mjs — reuses that script's proven server/Chrome/boot
    conventions VERBATIM (see its own header comment for the "why" behind each) rather than
@@ -30,14 +36,15 @@
    (bootToInSession), build three deterministic SpatialPlans directly via the app's own real global
    functions (spatializePlan/semanticizePlan/interiorBuildBoard — no mocks), attach `pieces` from the
    live sprite registry, push each through window.Theater.setInteriorBoard, sweep
-   window.Theater.setInteriorVariant across the 2 materials combos, and screenshot each of the
+   window.Theater.setInteriorVariant across the 2 rig combos, and screenshot each of the
    resulting 6 frames. Honest pixels: no cherry-picking — every variant that renders gets captured and
    included in the contact sheet, pass or fail. metrics.json also carries the sprite-purity/shadow/
    pieces audit (window.Theater.interiorPsxAudit / .shadowMapEnabled / .interiorPiecesResolved) dev/
-   verify-dungeon-interior.mjs's browser-mode checks re-assert against a fresh boot.
+   verify-dungeon-interior.mjs's own checks (16-21) re-assert the underlying data/structural claims
+   without a browser.
 
    Run:  node dev/battle-gate/capture-interior-study.mjs
-   Output: dev/battle-gate/interior-study/{chrome,gloom,fantasy}-{materials-on,materials-off}-*.png +
+   Output: dev/battle-gate/interior-study/{chrome,gloom,fantasy}-{rig-on,rig-off}-*.png +
    study-card.png + metrics.json */
 
 import { spawn } from "node:child_process";
@@ -263,14 +270,13 @@ async function buildScene(page, { topology, realmId, env, walkId, residents, lig
   }, { topology, realmId, env, walkId, residents, lightProfile, pieces });
 }
 
-// GR1 (docs/GRAPHICS-ENGINE.md build unit GR1): Adam's own instruction for this card — "materials on /
-// old flat, labeled" — 2 variants, not the iteration-2 AO/banded sweep (that sweep answered a different
-// taste question; this card's ONE job is proving GR1's material texture actually reads at glance
-// distance). Shadows/AO/banded/fog all stay at setInteriorBoard's own baseline defaults in both
-// variants (ao:false, banded:false, fog defaults on) — `materials` is the ONLY thing that changes.
+// GR3+GR4 (docs/GRAPHICS-ENGINE.md build units GR3 LIGHT RIG LAW + GR4 STAGE LAW): this card's ONE job
+// is proving the hemisphere key + per-realm grade actually read at glance distance (the skirt has no
+// toggle — it's always on in both panels, see this file's own header). materials stay ON (GR1's own
+// landed baseline) in both variants; `rig` is the ONLY thing that changes.
 const VARIANTS = [
-  { key: "materials-on", label: "materials ON (GR1)", flags: { materials: true, ao: false, banded: false } },
-  { key: "materials-off", label: "materials OFF (old flat)", flags: { materials: false, ao: false, banded: false } },
+  { key: "rig-on", label: "rig ON (GR3 hemisphere+grade)", flags: { materials: true, ao: false, banded: false, rig: true } },
+  { key: "rig-off", label: "rig OFF (torches/lamps only)", flags: { materials: true, ao: false, banded: false, rig: false } },
 ];
 
 // ITERATION 2, ruling 3 (piece sprites) + GR1 (3rd scene, Adam's own "chrome/gloom/fantasy" card spec):

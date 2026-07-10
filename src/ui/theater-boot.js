@@ -300,6 +300,20 @@ function hexToRGB(hex){
   return { r: (n >> 16) & 0xff, g: (n >> 8) & 0xff, b: n & 0xff };
 }
 function rgbToHex(r, g, b){ return (clamp255(r) << 16) | (clamp255(g) << 8) | clamp255(b); }
+// GR3 (docs/GRAPHICS-ENGINE.md build unit GR3): src/ui/theater-interior.js's kit colors are authored as
+// "#rrggbb" STRINGS (THREE.Color/CanvasTexture callers there accept strings directly), but
+// gradeColorLocal's own hexToRGB only accepts a NUMBER (every other caller already has one resolved —
+// see hexToRGB's own comment). This is the one small bridge: a string kit color -> the numeric form
+// gradeColorLocal needs, so the interior board's void/fog backdrop can route through the SAME grade
+// function the flat table already uses (S.realmProfile below) rather than inventing a second grade
+// math. Never throws on a malformed/absent string — defaults to mid-grey, same discipline hexToRGB
+// itself keeps for a bad numeric input.
+function hexStrToNum(str){
+  const h = String(str || "").replace("#", "");
+  const full = h.length === 3 ? h.split("").map((c) => c + c).join("") : h;
+  const n = parseInt(full, 16);
+  return Number.isFinite(n) ? n : 0x808080;
+}
 // scale an {r,g,b} toward black/white by `f` (f<1 darker, f>1 lighter), clamped.
 function scaleRGB(c, f){ return { r: c.r * f, g: c.g * f, b: c.b * f }; }
 // Rec.601 luma in [0,1] for an {r,g,b}-bytes color.
@@ -1272,6 +1286,12 @@ const FOG_FAR = 40;
 // theater-data.js's own THEATER_DEFAULT_ENV value by convention (kept in sync by naming, not import).
 const THEATER_DEFAULT_ENV_FALLBACK = "dungeon";
 const VOID_BG = 0x0a0908; // matches theater-data's dungeon palette voidTint — overridden per-env in setBoard
+
+// GRAPHICS-ENGINE.md GR3 LIGHT RIG LAW: the shared soft hemisphere key's own sky/ground/intensity —
+// named constants (not inline literals) so mount()'s construction and setInteriorBoard's study-rig
+// on/off toggle (S.interiorVariant.rig, dev/battle-gate/capture-interior-study.mjs's rig-on/rig-off
+// card) both read the SAME authored default, never two numbers that could drift apart.
+const HEMI_SKY = 0xfff1dc, HEMI_GROUND = 0x1b2430, HEMI_INTENSITY_DEFAULT = 0.22;
 
 // tile kind -> the manifest's semantic texture key it prefers (theaterBoardFrom's kind vocabulary,
 // src/engine/theater-data.js). A kind with no matching manifest entry stays palette-only (the no-
@@ -2889,7 +2909,8 @@ function createTheaterState(){
     // + flickerRaf/flickerRunning drive the flicker tick (tickLightFlicker) — a SEPARATE, cheap-by-design
     // low-frequency loop from both the render-on-demand `raf` and the tween `tweenRaf` chains (see that
     // function's own header for why a full-rAF loop would be wasteful for a "flicker ~2x/sec" cadence).
-    ambientLight: null, pointLights: [], lightProfileKey: null, flickerRaf: null, keyLight: null, fillLight: null
+    ambientLight: null, pointLights: [], lightProfileKey: null, flickerRaf: null, keyLight: null, fillLight: null,
+    hemiLight: null // GR3: the shared soft hemisphere key, added once at mount() — see mount()'s own comment
   };
 }
 
@@ -3783,6 +3804,20 @@ function mount(el, opts){
   scene.add(fill);
   S.fillLight = fill;
 
+  // GRAPHICS-ENGINE.md GR3 LIGHT RIG LAW ("one soft key — hemisphere or low-intensity directional,
+  // subtle warm/cool split"): a single soft HemisphereLight, added ONCE here at mount() so BOTH render
+  // channels (the flat standing table via setBoard, the volumetric interior tray via setInteriorBoard)
+  // share the identical rig by construction — neither board-building function ever touches it, so
+  // there is no per-channel wiring to drift out of parity (GR3's own "tabletop parity pass" ruling).
+  // Warm-sky/cool-ground split, LOW intensity by design — the scene's own torches/lamps (interior
+  // PointLights, applyLightProfile's ambient+points on the table) stay the actual drama; this only
+  // keeps the unlit side of a Lambert face from reading pure-black. THREE.HemisphereLight can never
+  // cast a shadow (no .castShadow on this light type at all) — adding it here is incapable of
+  // reopening the "no shadow maps" tabletop ruling (§2) by itself, by construction, not by convention.
+  const hemi = new THREE.HemisphereLight(HEMI_SKY, HEMI_GROUND, HEMI_INTENSITY_DEFAULT);
+  scene.add(hemi);
+  S.hemiLight = hemi;
+
   const tileGroup = new THREE.Group();
   const propGroup = new THREE.Group();
   const unitGroup = new THREE.Group();
@@ -3897,6 +3932,11 @@ function setBoard(data){
   // the only place that turns shadow-mapping ON, so this is the one place it turns back off, however
   // many interior trays were mounted in between.
   if(S.renderer) S.renderer.shadowMap.enabled = false;
+  // GR3: restore the shared hemisphere key to its authored default whenever a table board mounts —
+  // the ONLY place it's ever dimmed is setInteriorBoard's study-rig-only `variant.rig===false` toggle
+  // (no product path sets it), same "one place turns it down, this is the one place it turns back up"
+  // discipline the shadowMap restore just above already keeps.
+  if(S.hemiLight) S.hemiLight.intensity = HEMI_INTENSITY_DEFAULT;
   drainTweens(S); // A2: force-complete every live tween BEFORE tearing down the board/FX it may reference
   clearGroup(S.fxGroup); // A2: a new board must never inherit the old board's still-animating debris/glyphs
   S.lastBoard = data; // P1' WHOLE-OBJECT WIRING (§4 step 8): replay target for the async post-load re-render
@@ -4220,13 +4260,23 @@ function interiorBuildInstancedMesh(list, cx, cz, texture, variant, shadowKind){
   // the combat/tabletop path — these flags are simply never consulted there). Floors are the one
   // exception on cast: a floor slab casting onto itself/adjacent floor cells buys nothing and only
   // costs shadow-map budget, so floors receive-only, everything else casts+receives.
-  mesh.receiveShadow = true;
-  mesh.castShadow = shadowKind !== "floor";
+  // GR4 (docs/GRAPHICS-ENGINE.md build unit GR4): the skirt band hangs BELOW the floor, entirely out of
+  // camera-visible contact with anything else on stage — it neither casts (nothing above it to shadow)
+  // nor receives (nothing would ever cast onto the underside of the tray) a shadow, keeping it free
+  // (never added to the shadow-map budget INTERIOR_SHADOW_CASTER_CAP already governs).
+  mesh.receiveShadow = shadowKind !== "skirt";
+  mesh.castShadow = shadowKind !== "floor" && shadowKind !== "skirt";
   const m = new THREE.Matrix4();
   const colorObj = new THREE.Color();
+  // GR4: every OTHER kind grows UP off the shared y=-0.5 floor plane (position.y = sy/2-0.5, this
+  // function's own header comment); the skirt is the one kind that hangs DOWN off that same plane
+  // instead — its own top face sits flush at y=-0.5 and it extends downward by its own sy, reading as
+  // the underside of the floating slab rather than a second floor layer.
+  const skirtBand = shadowKind === "skirt";
   list.forEach((inst, i) => {
+    const y = skirtBand ? (-0.5 - (inst.sy || 1) / 2) : ((inst.sy || 1) / 2 - 0.5);
     m.compose(
-      new THREE.Vector3(inst.x - cx, (inst.sy || 1) / 2 - 0.5, inst.z - cz),
+      new THREE.Vector3(inst.x - cx, y, inst.z - cz),
       new THREE.Quaternion(),
       new THREE.Vector3(Math.max(0.01, inst.sx || 1), Math.max(0.01, inst.sy || 1), Math.max(0.01, inst.sz || 1))
     );
@@ -4511,15 +4561,43 @@ function setInteriorBoard(data){
   const env = data.env || THEATER_DEFAULT_ENV_FALLBACK;
   S.env = env;
   S.realmProfile = null; // tileKit colors are already final (src/ui/theater-interior.js) — no second grade pass
-  const fogColor = (data.fog && data.fog.color) || voidTintFor(env);
-  const fogColorObj = new THREE.Color(fogColor);
-  // study-rig fog variant (d/f): `variant.fog === false` swaps in a near-zero-density FogExp2 instead
-  // of removing S.scene.fog outright — placeCamera (above) unconditionally reads S.scene.fog.near/far
-  // when it exists, and setBoard's own combat path expects SOME fog object to mutate .color on, so a
-  // null fog would silently break the NEXT combat render rather than this one. Every product caller
-  // (no S.interiorVariant set) gets the real density, byte-identical to before this study-rig unit.
-  const fogOn = variant.fog !== false;
-  const fogDensity = fogOn ? ((data.fog && data.fog.density) || 0.05) : 0.0015;
+  const kit = data.tileKit || {};
+  // GR3 (docs/GRAPHICS-ENGINE.md build unit GR3, LIGHT RIG LAW): the kit's own gradeTint/gradeStrength
+  // (src/ui/theater-interior.js's tileKit, GR3 addition) becomes a gradeColorLocal-shaped profile —
+  // the SAME grade FUNCTION setBoard's own void-tint line already applies for the flat table (line
+  // ~3981's `gradeColorLocal(voidTintFor(env), S.realmProfile)`), just sourced from the kit's own
+  // authored numbers instead of data/realms.js's REALM_RENDER_DEFAULT table (GR3's "parity" is the
+  // shared math, not a duplicated per-realm registry — the interior kits and the table's realm
+  // profiles are deliberately two different authored sources, per REALM_MATERIALS' own sibling-
+  // registry precedent one unit up). null when a kit carries no grade at all (an unresolved/legacy
+  // realmId) -> gradeColorLocal's own no-op passthrough, never a thrown/undefined color.
+  // study-rig ONLY toggle (dev/battle-gate/capture-interior-study.mjs's rig-on/rig-off card, mirroring
+  // GR1's own materials-on/off convention): `variant.rig === false` drops the grade profile to null
+  // (an honest "no GR3 grade" baseline) and dims the shared hemisphere key to 0 for THIS render — no
+  // product caller ever sets S.interiorVariant, so this is a no-op everywhere except the study card.
+  const rigOn = variant.rig !== false;
+  if(S.hemiLight) S.hemiLight.intensity = rigOn ? HEMI_INTENSITY_DEFAULT : 0;
+  const gradeProfile = (rigOn && kit.gradeStrength)
+    ? { sat: 1, tintAmt: kit.gradeStrength, contrast: 1, tint: hexStrToNum(kit.gradeTint) }
+    : null;
+  // GR4 (docs/GRAPHICS-ENGINE.md build unit GR4 STAGE LAW): "void backdrop tinted per realm — route
+  // voidTintFor through the kit grade" — the fallback branch (a kit with no authored fog.color) now
+  // grades voidTintFor(env) instead of using it raw; a kit-authored fog.color is graded too (the SAME
+  // profile, so the two branches never diverge in how "final" a color reads).
+  const fogColorNum = gradeColorLocal(
+    (data.fog && data.fog.color) ? hexStrToNum(data.fog.color) : voidTintFor(env),
+    gradeProfile
+  );
+  const fogColorObj = new THREE.Color(fogColorNum);
+  // GR3: the interior fog DEFAULT is now the kit's own fogWhisper (tileKit.fogWhisper, GR3 addition) —
+  // "fog off by default except a whisper where the realm earns it" REPLACES the old ad-hoc per-kit
+  // `fog.density` numbers (0.02-0.035, GR1-era, no shared rationale). study-rig fog variant (d/f):
+  // `variant.fog === false` still swaps in a near-zero-density FogExp2 instead of removing S.scene.fog
+  // outright — placeCamera (above) unconditionally reads S.scene.fog.near/far when it exists, and
+  // setBoard's own combat path expects SOME fog object to mutate .color on, so a null fog would
+  // silently break the NEXT combat render rather than this one.
+  const fogWhisper = (typeof kit.fogWhisper === "number" && isFinite(kit.fogWhisper)) ? kit.fogWhisper : 0;
+  const fogDensity = variant.fog === false ? 0.0015 : fogWhisper;
   if(S.scene){
     S.scene.background = fogColorObj;
     S.scene.fog = new THREE.FogExp2(fogColorObj, fogDensity);
@@ -4531,7 +4609,6 @@ function setInteriorBoard(data){
   // default reads near-black on them — study card v1/v2). Falls back to the standing default.
   applyLightProfile((data.lightProfile && LIGHT_PROFILES[data.lightProfile]) ? data.lightProfile : LIGHT_DEFAULT_PROFILE);
 
-  const kit = data.tileKit || {};
   // GR1 (docs/GRAPHICS-ENGINE.md build unit GR1): floor/wall each bake their own REALM_MATERIALS
   // painter into a real CanvasTexture (interiorMaterialTexture, above) — replaces the old flat-pattern
   // texture entirely, per GR1's own "replace the current flat/pattern textures" instruction. The study
@@ -4585,8 +4662,14 @@ function setInteriorBoard(data){
   const wallMesh = interiorBuildInstancedMesh(wallList, cx, cz, wallTex, variant, "wall");
   const doorMesh = interiorBuildInstancedMesh(inst.doorframe, cx, cz, null, variant, "doorframe");
   const pillarMesh = interiorBuildInstancedMesh(inst.pillar, cx, cz, null, variant, "pillar");
-  [floorMesh, wallMesh, doorMesh, pillarMesh].forEach((mesh) => { if(mesh) S.interiorGroup.add(mesh); });
-  S.interiorMeshCount = [floorMesh, wallMesh, doorMesh, pillarMesh].filter(Boolean).length;
+  // GR4 (docs/GRAPHICS-ENGINE.md build unit GR4): the diorama edge skirt — data.skirt (src/ui/theater-
+  // interior.js's interiorBuildBoard, GR4 addition), a sibling of `instances` (never counted toward the
+  // "4 known instance kinds" data-shape check — see that function's own doc comment). Untextured (flat
+  // darkened color, same as pillar/doorframe) — a texture would be wasted detail on a band the camera
+  // only ever sees edge-on.
+  const skirtMesh = interiorBuildInstancedMesh(data.skirt, cx, cz, null, variant, "skirt");
+  [floorMesh, wallMesh, doorMesh, pillarMesh, skirtMesh].forEach((mesh) => { if(mesh) S.interiorGroup.add(mesh); });
+  S.interiorMeshCount = [floorMesh, wallMesh, doorMesh, pillarMesh, skirtMesh].filter(Boolean).length;
 
   // DUNGEON-GRAPH.md U3 iteration-2, ruling 2: real environmental light sources (data.lights, emitted
   // by src/ui/theater-interior.js's interiorBuildBoard) — realm-flavored PointLights + their own

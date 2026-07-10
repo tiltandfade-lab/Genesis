@@ -6,11 +6,16 @@ no copy-paste round-trips:
 
   GET  /                → the review UI
   GET  /sprites/<slug>.png → the cut sprite from assets/sprites/
-  GET  /api/data        → { registry, overlay, magenta, triage } — SPRITE_REGISTRY (parsed
+  GET  /sprites-prev/<slug>.png → the PRE-recut backup from
+                          dev/sprite-manifests/review/prev/ (404 when absent) — SPRITE-RESCUE
+                          U3's before copy, for the U4 A/B toggle
+  GET  /api/data        → { registry, overlay, magenta, triage, prev } — SPRITE_REGISTRY (parsed
                           out of data/sprite-registry.js via a node one-liner) deep-merged
                           view, the raw overlay, the parsed magenta-scan.json (SPRITE-RESCUE
-                          U1, `{}` if not yet generated) and the parsed magenta-triage.json
-                          (U6, `{}` if not yet generated)
+                          U1, `{}` if not yet generated), the parsed magenta-triage.json
+                          (U6, `{}` if not yet generated), and `prev` — the list of slugs that
+                          have a backup under dev/sprite-manifests/review/prev/ (`[]` if the
+                          dir doesn't exist yet)
   POST /api/overlay     → body {"slug": "...", "set": {...}, "clear": ["key", ...]}
                           merges into dev/model-qa/sprite-tags-overlay.json (atomic write).
                           Recognized keys: scale (number, per-slug billboard height multiplier
@@ -21,6 +26,10 @@ no copy-paste round-trips:
 
 The overlay file is the ONLY thing this server writes (plus the regen side effect above).
 Registry/manifest stay generated-only per the repo discipline.
+
+Rescue flow (SPRITE-RESCUE D4): a recut sprite that had verdict:"fail" gets re-ruled in this
+tool; on PASS the overlay flips, and the wave close re-runs build/gen-xl-regen-sheets.py so
+the slug leaves the REDO tier.
 
 Run:  python3 dev/sprite-review.py   → http://127.0.0.1:5179/
 """
@@ -40,6 +49,7 @@ SPRITES_DIR = os.path.join(ROOT, "assets", "sprites")
 UI_HTML = os.path.join(ROOT, "dev", "sprite-review.html")
 MAGENTA_SCAN = os.path.join(ROOT, "dev", "sprite-manifests", "magenta-scan.json")
 MAGENTA_TRIAGE = os.path.join(ROOT, "dev", "sprite-manifests", "magenta-triage.json")
+PREV_DIR = os.path.join(ROOT, "dev", "sprite-manifests", "review", "prev")
 PORT = 5179
 
 SLUG_RE = re.compile(r"^spr-[a-z0-9-]+$")
@@ -74,6 +84,18 @@ def load_json_or_empty(path):
         return {}
     with open(path, encoding="utf-8") as f:
         return json.load(f)
+
+
+def list_prev():
+    """Slugs with a pre-recut backup under dev/sprite-manifests/review/prev/ (U3's before
+    copy). Never a crash — the dir doesn't exist until the first recut runs."""
+    if not os.path.isdir(PREV_DIR):
+        return []
+    out = []
+    for name in os.listdir(PREV_DIR):
+        if name.endswith(".png") and SLUG_RE.match(name[:-4]):
+            out.append(name[:-4])
+    return sorted(out)
 
 
 def save_overlay(data):
@@ -142,7 +164,8 @@ class Handler(BaseHTTPRequestHandler):
         self.wfile.write(payload)
 
     def log_message(self, fmt, *args):  # keep the console readable
-        if "/sprites/" not in (args[0] if args else ""):
+        path = args[0] if args else ""
+        if "/sprites/" not in path and "/sprites-prev/" not in path:
             sys.stderr.write("[review] " + (fmt % args) + "\n")
 
     def do_GET(self):
@@ -161,11 +184,23 @@ class Handler(BaseHTTPRequestHandler):
                     return
                 with open(p, "rb") as f:
                     self._send(200, f.read(), "image/png")
+            elif self.path.startswith("/sprites-prev/"):
+                name = os.path.basename(self.path)
+                if not (name.endswith(".png") and SLUG_RE.match(name[:-4])):
+                    self._send(404, {"error": "bad sprite path"})
+                    return
+                p = os.path.join(PREV_DIR, name)
+                if not os.path.exists(p):
+                    self._send(404, {"error": "no such prev sprite"})
+                    return
+                with open(p, "rb") as f:
+                    self._send(200, f.read(), "image/png")
             elif self.path == "/api/data":
                 self._send(200, {
                     "registry": parse_registry(), "overlay": load_overlay(),
                     "magenta": load_json_or_empty(MAGENTA_SCAN),
                     "triage": load_json_or_empty(MAGENTA_TRIAGE),
+                    "prev": list_prev(),
                 })
             elif self.path == "/rejects":
                 p = os.path.join(ROOT, "dev", "sprite-manifests", "REJECTS.md")

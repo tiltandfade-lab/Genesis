@@ -91,10 +91,47 @@ function bindWorld(){
   // ON-DEMAND-GEN §6: the start town always qualifies as inhabited (nodeInhabited's first clause) —
   // cast its ambient pool once at founding, before the first prep/startPrep ever runs.
   if(typeof ensureCodex==="function") ensureCodex(world);
+  if(typeof mintOriginPlaceThread==="function") mintOriginPlaceThread(world, originId);
   if(typeof prepCastAmbient==="function") prepCastAmbient(world, originId);
   U.worlds[id]=world; U.activeWorldId=id; saveU(U);
   toast("A new world enters the universe ✦");
   renderWorld(); showTab('world');
+}
+
+/* PLACE-GEN §7 unit 9 (TIYL start routing, docs/PLACE-GEN.md ADDENDUM §7D item 9): the bardo
+   hometown beat rolls place-master-setting DIRECTLY (src/creator/bardo.js:14,
+   {t:"hometown",beat:"setting",id:"place-master-setting"}) and this function's `originId` above
+   is minted straight from that roll (GS.SEED.master) — so without this seam the start settlement
+   got NONE of rollPlace's realm composition (§3: itemsPool/dressing pointers) that every other
+   minted place gets.
+   SCOPE-FENCE DECISION (unit-9 spec's documented fallback, taken here): PLACE-GEN's own "Scale"
+   section (docs/PLACE-GEN.md ~line 173, "settlements stay compositional") states a place-type row
+   is a SITE (one scene's worth of space) and a settlement is explicitly NOT a spine row. Calling
+   rollPlace(opts) directly for the origin would run placeForRealm's archetype draw and wrongly
+   type the WHOLE TOWN as one site archetype (e.g. "Watering-hole") — wrong scale. So this is the
+   "honest minimal version" the spec allows instead: thread the realm-scoped itemsPool + dressing
+   POINTERS onto the origin's already-existing codex record, with NO archetype draw and therefore
+   NO dims (GRID-LAW cell dims come from PLACE_SPACE_CELLS[archetype.space] — a settlement has no
+   archetype/space band to key off; each of the settlement's individual notable SITES gets its own
+   rollPlace archetype draw later, through the district fabric — that's unit 7's tray-node-source
+   job, not this origin record's).
+   SACRED: the player already saw the bardo's rolled name/desc during creation (paintCard, the
+   hometown beat's fragment presentation) — this function NEVER touches rec.name/rec.fields.desc/
+   rec.rolled, only ADDS rec.dm.itemsPool/rec.dm.dressing, fields the record didn't carry before.
+   Realm resolution mirrors rollPlace's own opts.realm ‖ opts.region.realm ‖ 'frontier' convention,
+   reading world.realm.name — the "marooned in a realm" shape (data/realms.js:133/§3). A freshly
+   bound world never has world.realm set at genesis (that only happens later, via a breach/
+   marooning event) — so realmId resolves to 'frontier' for every world today. Documented, real
+   no-op: the thread is correct and live for a future already-marooned start; it has nothing but
+   'frontier' to thread yet in the current flow. */
+function mintOriginPlaceThread(w, originId){
+  if(!w || !originId) return;
+  const rec=(typeof codexGet==="function") ? codexGet(w, "location:"+originId) : null;
+  if(!rec) return;
+  const realmId=(w.realm && w.realm.name) || "frontier";
+  rec.dm=rec.dm||{};
+  rec.dm.itemsPool="realm-items-"+realmId;
+  rec.dm.dressing={props:realmId, surfaces:realmId};
 }
 
 /* HOTFIX-QUEUE-2026-07-06 H4: transient per-fight/per-chase state must never survive a world

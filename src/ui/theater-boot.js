@@ -2512,7 +2512,16 @@ function buildSpriteBillboard(entry){
   // in headroom/tightness, so the size ladder alone can't make same-size creatures read the
   // same height.
   const calib = (typeof entry.scale === "number" && entry.scale > 0) ? entry.scale : 1;
-  const h = spriteSizeScaleFor(entry.size) * GLB_TARGET_HEIGHT * calib;
+  // DUNGEON-GRAPH.md law 1 (TRUE-SCALE RENDER LAW): scaleVsHuman (feet/5.5, the real progression-payoff
+  // ratio) wins over the SRD size-CATEGORY ladder (spriteSizeScaleFor) whenever it's present — on either
+  // the registry entry itself (once data/sprite-registry.js's corpus-sizing fold lands, HANDOFF item 2)
+  // or passed straight through on the board piece data (`entry.scaleVsHuman`, a caller-supplied override
+  // — no registry edit required to exercise true scale today). Absent on both -> the old compressed
+  // SRD-category ladder, byte-identical to before this law (the "legacy fallback view only" clause).
+  const sizeMultiplier = (typeof entry.scaleVsHuman === "number" && entry.scaleVsHuman > 0)
+    ? entry.scaleVsHuman
+    : spriteSizeScaleFor(entry.size);
+  const h = sizeMultiplier * GLB_TARGET_HEIGHT * calib;
   const geo = new THREE.PlaneGeometry(h, h); // square plane; the sprite's own alpha silhouette reads the real shape
   const mat = new THREE.MeshBasicMaterial({
     map: tex, transparent: true, alphaTest: 0.5, side: THREE.DoubleSide, depthWrite: true
@@ -3551,12 +3560,31 @@ const VERTEX_SNAP_GLSL = `
 // tiles never pass figureAO. FIG_AO_FLOOR = darkest multiplier at the base; FIG_AO_RANGE = the
 // object-space height over which it lifts back to full light.
 const FIG_AO_FLOOR = 0.52, FIG_AO_RANGE = 1.05;
+// DUNGEON-GRAPH.md U3 render-quality study card (b/c/e/f variants, dev/battle-gate/capture-interior-
+// study.mjs): quantized/banded lighting — floors the lit color to a small number of discrete steps,
+// the classic PS1-era "no smooth gradient" read (mirrors DITHER_GLSL's own injection pattern one
+// section up, applied at the SAME <opaque_fragment> seam). Study-card-only today (no product caller
+// sets opts.banded — window.Theater.setInteriorVariant, added for the study rig, is the only path
+// that reaches it) — a deliberately narrow, reversible toggle until Adam's taste-gate picks a look.
+const INTERIOR_BANDED_STEPS = 4;
+const BANDED_GLSL = `
+  #ifdef INTERIOR_BANDED
+  outgoingLight = floor(outgoingLight * ${INTERIOR_BANDED_STEPS.toFixed(1)} + 0.5) / ${INTERIOR_BANDED_STEPS.toFixed(1)};
+  #endif
+`;
 function applyPsxShaderTweaks(material, opts){
   const figureAO = !!(opts && opts.figureAO);
-  if(!PSX_DITHER_ENABLED && !PSX_VERTEX_SNAP_ENABLED && !figureAO) return material;
+  const banded = !!(opts && opts.banded);
+  if(!PSX_DITHER_ENABLED && !PSX_VERTEX_SNAP_ENABLED && !figureAO && !banded) return material;
   const priorHook = material.onBeforeCompile;
   material.onBeforeCompile = (shader, renderer) => {
     if(typeof priorHook === "function") priorHook(shader, renderer);
+    if(banded){
+      shader.fragmentShader = "#define INTERIOR_BANDED\n" + shader.fragmentShader.replace(
+        "#include <opaque_fragment>",
+        BANDED_GLSL + "\n  #include <opaque_fragment>"
+      );
+    }
     if(figureAO){
       shader.vertexShader = "varying float vFigY;\n" + shader.vertexShader.replace(
         "#include <project_vertex>",
@@ -3587,7 +3615,15 @@ function applyPsxShaderTweaks(material, opts){
   // figureAO materials inject a DIFFERENT shader body than tiles, but the onBeforeCompile.toString()
   // is identical (only the captured `figureAO` closure var differs) — so give them a distinct cache
   // key or three would share one program between AO and non-AO materials (the wrong one wins).
-  if(figureAO) material.customProgramCacheKey = () => "figAO|" + (PSX_DITHER_ENABLED ? "d" : "") + (PSX_VERTEX_SNAP_ENABLED ? "v" : "");
+  // both figureAO and banded inject shader text that isn't reflected in onBeforeCompile.toString()
+  // (only the captured boolean's VALUE differs, not the source text) — three's cache keying by that
+  // string would otherwise share ONE compiled program across e.g. a banded and a non-banded material,
+  // silently applying the wrong one. Distinct keys per active flag combo, same discipline figureAO
+  // already established.
+  if(figureAO || banded){
+    material.customProgramCacheKey = () => "psx|" + (figureAO ? "figAO" : "") + (banded ? "banded" : "")
+      + (PSX_DITHER_ENABLED ? "d" : "") + (PSX_VERTEX_SNAP_ENABLED ? "v" : "");
+  }
   return material;
 }
 
@@ -3652,7 +3688,12 @@ function mount(el, opts){
   const unitGroup = new THREE.Group();
   const shadowGroup = new THREE.Group();
   const fxGroup = new THREE.Group();     // T3: verb/FX primitives (theater-verbs.js), swept like any other group
-  scene.add(tileGroup, propGroup, shadowGroup, unitGroup, fxGroup);
+  // DUNGEON-GRAPH.md U3: the volumetric interior board's own group (InstancedMesh floor/wall/doorframe/
+  // pillar) — a peer to tileGroup, never reused for it (materially different geometry shape, see
+  // setInteriorBoard's own header comment). Swept independently so a combat board (setBoard) and an
+  // interior tray (setInteriorBoard) never leave each other's meshes on stage.
+  const interiorGroup = new THREE.Group();
+  scene.add(tileGroup, propGroup, shadowGroup, unitGroup, fxGroup, interiorGroup);
 
   S.mounted = true;
   S.el = el;
@@ -3664,6 +3705,8 @@ function mount(el, opts){
   S.unitGroup = unitGroup;
   S.shadowGroup = shadowGroup;
   S.fxGroup = fxGroup;
+  S.interiorGroup = interiorGroup;
+  S.interiorMeshCount = 0;
   S.tweens = [];
   S.rotationStep = 0;
   S.boardCenter = new THREE.Vector3(0, 0, 0);
@@ -3752,6 +3795,7 @@ function setBoard(data){
   S.lastBoard = data; // P1' WHOLE-OBJECT WIRING (§4 step 8): replay target for the async post-load re-render
   clearGroup(S.tileGroup);
   clearGroup(S.propGroup);
+  clearGroup(S.interiorGroup); // DUNGEON-GRAPH.md U3: a combat board must not leave a prior interior tray's meshes on stage
   // REALM-PROPS-WIRING.md §3: recomputed fresh every setBoard call (swept the same way tile/prop
   // groups are — a stale prior board's occupied zones never survive a re-render). Populated in the
   // prop-mount loop below, exposed for a future placement-pass consumer (never read/enforced by
@@ -3986,6 +4030,201 @@ function setBoard(data){
 
   placeCamera();
   markDirty();
+}
+
+// ─── DUNGEON-GRAPH.md U3 — the volumetric interior renderer's GL layer ──────────────────────────────
+// A dedicated procedural-canvas texture per tile kit/pattern (2-tone, NearestFilter, RepeatWrapping) —
+// cached per (baseColor,pattern) key so re-rendering the same kit never rebuilds the canvas. Reads
+// INTERIOR_TILE_KITS' plain pattern spec (a small 0/1 grid, src/ui/theater-interior.js) — this is the
+// ONE place that spec ever becomes an actual THREE.Texture, keeping theater-interior.js itself DOM/GL-
+// free (its own header comment's "data in this file, geometry/GL in theater-boot.js" split).
+const INTERIOR_TEXTURE_CACHE = {};
+function interiorPatternTexture(baseColorHex, pattern, repeatX, repeatZ){
+  if(!pattern || !pattern.length || !pattern[0].length) return null;
+  const key = baseColorHex + ":" + JSON.stringify(pattern) + ":" + repeatX + ":" + repeatZ;
+  if(INTERIOR_TEXTURE_CACHE[key]) return INTERIOR_TEXTURE_CACHE[key];
+  const rows = pattern.length, cols = pattern[0].length;
+  const block = 8; // px per pattern cell — small enough to stay crisp nearest-filtered at close range
+  const canvas = document.createElement("canvas");
+  canvas.width = cols * block; canvas.height = rows * block;
+  const ctx = canvas.getContext("2d");
+  const base = new THREE.Color(baseColorHex);
+  const dark = base.clone().multiplyScalar(0.85);
+  const light = base.clone().multiplyScalar(1.15);
+  for(let ry = 0; ry < rows; ry++){
+    for(let rx = 0; rx < cols; rx++){
+      const c = pattern[ry][rx] ? light : dark;
+      ctx.fillStyle = "#" + c.getHexString();
+      ctx.fillRect(rx * block, ry * block, block, block);
+    }
+  }
+  const tex = new THREE.CanvasTexture(canvas);
+  tex.wrapS = THREE.RepeatWrapping; tex.wrapT = THREE.RepeatWrapping;
+  tex.repeat.set(Math.max(1, repeatX || 1), Math.max(1, repeatZ || 1));
+  nearestify(tex);
+  INTERIOR_TEXTURE_CACHE[key] = tex;
+  return tex;
+}
+
+// unit cube, shared by every InstancedMesh kind below — each instance's own transform (position+scale
+// baked into its matrix) is what gives it its real footprint/height, per VOLUMETRIC WALL LAW (real
+// BoxGeometry with height, never a flat plane) — never re-created per call.
+let INTERIOR_UNIT_BOX = null;
+function interiorUnitBoxGeometry(){
+  if(!INTERIOR_UNIT_BOX) INTERIOR_UNIT_BOX = new THREE.BoxGeometry(1, 1, 1);
+  return INTERIOR_UNIT_BOX;
+}
+
+// DUNGEON-GRAPH.md U3 render-quality study card (a/e/f variants): "baked vertex AO — darken wall-floor
+// seams". A true per-vertex bake doesn't apply to a shared-geometry InstancedMesh (every instance reuses
+// the SAME unit-cube vertices) — the INSTANCE-level equivalent this rig uses instead is a per-instance
+// COLOR darken on any floor/door cell 4-adjacent to a wall cell (the contact seam), which is what the
+// reference repo's screenshots actually read as: the darker line right where a wall meets the floor.
+// Pure function over the plain instance arrays — no THREE, easy to unit-test, applied only when the
+// study rig's AO variant is on (product callers never set this; see setInteriorVariant below).
+function interiorApplyAODarkening(instances){
+  const wallKeys = new Set((instances.wall || []).map((w) => w.x + "," + w.z));
+  const AO_FACTOR = 0.68;
+  ["floor", "doorframe"].forEach((kind) => {
+    (instances[kind] || []).forEach((inst) => {
+      const seam = [[1, 0], [-1, 0], [0, 1], [0, -1]].some(([dx, dz]) => wallKeys.has((inst.x + dx) + "," + (inst.z + dz)));
+      if(!seam) return;
+      const c = new THREE.Color(inst.color || "#ffffff").multiplyScalar(AO_FACTOR);
+      inst.color = "#" + c.getHexString();
+    });
+  });
+  return instances;
+}
+
+// one InstancedMesh per tile KIND (floor/wall/doorframe/pillar) — the draw-call budget DUNGEON-GRAPH.md
+// U3's acceptance names ("draw calls <= 1 per tile kind"), however many hundreds/thousands of instances
+// an 80-room plan carries. `list` is one of data.instances.{floor,wall,doorframe,pillar} (§ interiorBuildBoard,
+// src/ui/theater-interior.js) — each entry {x,z,sx,sy,sz,color}. Ground convention matches the existing
+// tile-column math a few hundred lines up (mesh.position.y = h/2-0.5 -> every column's base sits on the
+// SAME y=-0.5 floor plane): here that's y = sy/2 - 0.5. `variant.banded` (study rig only) routes through
+// applyPsxShaderTweaks' quantized-lighting injection.
+function interiorBuildInstancedMesh(list, cx, cz, texture, variant){
+  if(!list || !list.length) return null;
+  const geo = interiorUnitBoxGeometry();
+  const mat = applyPsxShaderTweaks(new THREE.MeshLambertMaterial(
+    texture ? { map: texture } : { color: 0xffffff }
+  ), { banded: !!(variant && variant.banded) });
+  const mesh = new THREE.InstancedMesh(geo, mat, list.length);
+  const m = new THREE.Matrix4();
+  const colorObj = new THREE.Color();
+  list.forEach((inst, i) => {
+    m.compose(
+      new THREE.Vector3(inst.x - cx, (inst.sy || 1) / 2 - 0.5, inst.z - cz),
+      new THREE.Quaternion(),
+      new THREE.Vector3(Math.max(0.01, inst.sx || 1), Math.max(0.01, inst.sy || 1), Math.max(0.01, inst.sz || 1))
+    );
+    mesh.setMatrixAt(i, m);
+    colorObj.set(inst.color || "#ffffff");
+    mesh.setColorAt(i, colorObj);
+  });
+  mesh.instanceMatrix.needsUpdate = true;
+  if(mesh.instanceColor) mesh.instanceColor.needsUpdate = true;
+  return mesh;
+}
+
+/* window.Theater.setInteriorBoard(data) — DUNGEON-GRAPH.md U3's tray-render entry point for a
+   src/ui/theater-interior.js `interiorBuildBoard(plan, opts)` output ({kind:"interior3d", env, realmId,
+   wallHeightBase, fog, tileKit, instances:{floor,wall,doorframe,pillar}, bounds, meta}). Peer to
+   setBoard (above), not a wrapper over it — an interior board's geometry (real-height wall PRISMS via
+   InstancedMesh) is a materially different shape than the combat tile-column grid, so this owns its own
+   group (S.interiorGroup) and its own camera-fit/fog bookkeeping, while reusing setBoard's proven
+   conventions (dirty-key skip, clearGroup, placeCamera, applyLightProfile) wherever the shape lines up.
+   Clears S.tileGroup/S.propGroup too (and setBoard, above, clears S.interiorGroup) so switching between
+   a combat board and a standing-table interior tray never leaves the OTHER render's meshes on stage. */
+function setInteriorBoard(data){
+  if(!S.mounted || !data) return;
+  // DUNGEON-GRAPH.md U3 render-quality study card: S.interiorVariant (window.Theater.setInteriorVariant,
+  // below) folds into the dirty key so a variant-only change (same board data, different AO/banded/fog
+  // flags — exactly what the study rig does per scene) still forces a rebuild instead of skipping.
+  const variant = S.interiorVariant || {};
+  const dirtyKey = "interior:" + JSON.stringify(variant) + ":" + JSON.stringify(data);
+  if(dirtyKey === S.boardKey){ window.Theater.stats.boardSkips++; return; }
+  S.boardKey = dirtyKey;
+  window.Theater.stats.boardBuilds++;
+  drainTweens(S);
+  clearGroup(S.fxGroup);
+  S.lastBoard = data;
+  clearGroup(S.tileGroup);
+  clearGroup(S.propGroup);
+  clearGroup(S.interiorGroup);
+  S.propOccupiedZones = {};
+
+  const b = data.bounds || { minX: 0, maxX: 0, minZ: 0, maxZ: 0 };
+  const cx = (b.minX + b.maxX) / 2, cz = (b.minZ + b.maxZ) / 2;
+  S.boardCenter = new THREE.Vector3(0, 0, 0);
+  S.boardOrigin = { cx, cz };
+  S.boardHalfX = (b.maxX - b.minX) / 2 + 1;
+  S.boardHalfZ = (b.maxZ - b.minZ) / 2 + 1;
+  S.boardHalfExtent = Math.max(S.boardHalfX, S.boardHalfZ);
+  S.lastGrid = null; // no band/lane grid on an interior tray — zoneToWorld/zoom-bias callers degrade to their own defaults
+
+  const env = data.env || THEATER_DEFAULT_ENV_FALLBACK;
+  S.env = env;
+  S.realmProfile = null; // tileKit colors are already final (src/ui/theater-interior.js) — no second grade pass
+  const fogColor = (data.fog && data.fog.color) || voidTintFor(env);
+  const fogColorObj = new THREE.Color(fogColor);
+  // study-rig fog variant (d/f): `variant.fog === false` swaps in a near-zero-density FogExp2 instead
+  // of removing S.scene.fog outright — placeCamera (above) unconditionally reads S.scene.fog.near/far
+  // when it exists, and setBoard's own combat path expects SOME fog object to mutate .color on, so a
+  // null fog would silently break the NEXT combat render rather than this one. Every product caller
+  // (no S.interiorVariant set) gets the real density, byte-identical to before this study-rig unit.
+  const fogOn = variant.fog !== false;
+  const fogDensity = fogOn ? ((data.fog && data.fog.density) || 0.05) : 0.0015;
+  if(S.scene){
+    S.scene.background = fogColorObj;
+    S.scene.fog = new THREE.FogExp2(fogColorObj, fogDensity);
+  }
+  if(S.renderer) S.renderer.setClearColor(fogColorObj, 1);
+
+  S.lightPropAnchor = null; // interior boards carry no light-prop registry mapping (data.light absent) — plain profile lighting
+  applyLightProfile(LIGHT_DEFAULT_PROFILE);
+
+  const kit = data.tileKit || {};
+  const floorTex = interiorPatternTexture(kit.floorColor, kit.floorPattern, Math.max(1, b.maxX - b.minX + 1), Math.max(1, b.maxZ - b.minZ + 1));
+  const wallTex = interiorPatternTexture(kit.wallColor, kit.wallPattern, 1, Math.max(1, data.wallHeightBase || 1));
+
+  // study-rig AO variant (b/e/f): darken instance colors at wall-floor seams (interiorApplyAODarkening,
+  // above) — operates on a SHALLOW-CLONED instances object so the caller's own `data` (which may be
+  // S.lastBoard, replayed by setInteriorVariant below) is never mutated in place.
+  const inst = variant.ao
+    ? interiorApplyAODarkening({
+        floor: (data.instances && data.instances.floor || []).map((o) => Object.assign({}, o)),
+        wall: (data.instances && data.instances.wall || []).map((o) => Object.assign({}, o)),
+        doorframe: (data.instances && data.instances.doorframe || []).map((o) => Object.assign({}, o)),
+        pillar: (data.instances && data.instances.pillar || []).map((o) => Object.assign({}, o)),
+      })
+    : (data.instances || {});
+  const floorMesh = interiorBuildInstancedMesh(inst.floor, cx, cz, floorTex, variant);
+  const wallMesh = interiorBuildInstancedMesh(inst.wall, cx, cz, wallTex, variant);
+  const doorMesh = interiorBuildInstancedMesh(inst.doorframe, cx, cz, null, variant);
+  const pillarMesh = interiorBuildInstancedMesh(inst.pillar, cx, cz, null, variant);
+  [floorMesh, wallMesh, doorMesh, pillarMesh].forEach((mesh) => { if(mesh) S.interiorGroup.add(mesh); });
+  S.interiorMeshCount = [floorMesh, wallMesh, doorMesh, pillarMesh].filter(Boolean).length;
+
+  placeCamera();
+  markDirty();
+}
+
+/* window.Theater.setInteriorVariant(flags) — DUNGEON-GRAPH.md U3 render-quality study card ONLY
+   (dev/battle-gate/capture-interior-study.mjs is the sole caller; no product code path sets this).
+   flags: {ao, banded, fog} — see interiorApplyAODarkening / applyPsxShaderTweaks' banded injection /
+   setInteriorBoard's fogOn ternary above for what each does. Merges onto S.interiorVariant (persists
+   across calls, same convention as S.zoomLevel) and, if an interior board is already mounted, forces
+   an immediate rebuild under the new flags by replaying S.lastBoard through setInteriorBoard (the
+   SAME "null the dirty key, replay" trick the async texture/glb loaders already use elsewhere in this
+   file) — the study rig calls this BETWEEN setInteriorBoard(sameBoard) calls to capture every variant
+   of the identical scene. */
+function setInteriorVariant(flags){
+  S.interiorVariant = Object.assign({}, S.interiorVariant, flags || {});
+  if(S.lastBoard && S.lastBoard.kind === "interior3d"){
+    S.boardKey = null;
+    setInteriorBoard(S.lastBoard);
+  }
 }
 
 /* T3 zoneToWorld (§4 ctx contract, theater-verbs.js): "band:lane" -> the SAME world tile coordinates
@@ -4492,9 +4731,14 @@ loadWholeObjectBuilders(function(){
 // treats a missing window.Theater/fxFromLedger as a clean no-op (headless/jsdom), never a throw.
 // reattach: the canvas re-parenting seam (battle-stage; renderWorld's innerHTML pass detaches the canvas).
 window.Theater = {
-  mount, reattach, setBoard, setUnits, setTextures, rotate, zoom, retire, play,
+  mount, reattach, setBoard, setInteriorBoard, setInteriorVariant, setUnits, setTextures, rotate, zoom, retire, play,
   verbs: THEATER_VERBS, fxFromLedger: theaterFxFromLedger
 };
+
+// DUNGEON-GRAPH.md U3 acceptance (3): "draw calls <= 1 per tile kind" — a read-only diagnostic so a
+// capture/verify harness can assert the InstancedMesh count directly instead of trusting a screenshot.
+// 0 before any setInteriorBoard call (no interior board mounted yet).
+window.Theater.interiorMeshCount = function(){ return S.interiorMeshCount || 0; };
 
 // TABLETOP-UNITS.md §U1 seam 5 — the boot-preload readiness flag: false until loadWholeObjectBuilders'
 // module-scope onSettled callback (above) fires exactly once. A harness/caller asserting §9.8's warm

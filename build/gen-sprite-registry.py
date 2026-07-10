@@ -246,6 +246,11 @@ def build_registry(manifest_path, check_only=False, overlay_path=OVERLAY, out_pa
                 entry["verdict"] = ov["verdict"]
             if isinstance(ov.get("note"), str) and ov["note"].strip():
                 entry["note"] = ov["note"].strip()
+            # SPRITE-RESCUE D5/U5a: groundOffset is the fraction of crop height below the
+            # ground-contact line (0-0.5); the theater billboard shifts the plane up by this
+            # amount so the ART's feet, not the crop's bottom edge, sit on the base disc.
+            if isinstance(ov.get("groundOffset"), (int, float)) and 0 <= ov["groundOffset"] <= 0.5:
+                entry["groundOffset"] = round(float(ov["groundOffset"]), 3)
             if cell.get("cue"):
                 cell_cue[slug] = cell["cue"]
             entries[slug] = entry

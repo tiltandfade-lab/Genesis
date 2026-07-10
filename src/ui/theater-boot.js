@@ -3633,8 +3633,21 @@ const BANDED_GLSL = bandedGlslFor(INTERIOR_BANDED_STEPS);
 function applyPsxShaderTweaks(material, opts){
   const figureAO = !!(opts && opts.figureAO);
   const banded = !!(opts && opts.banded);
-  if(!PSX_DITHER_ENABLED && !PSX_VERTEX_SNAP_ENABLED && !figureAO && !banded) return material;
+  // baseAO (Adam, AO card round 2): the contact gradient belongs on the VERTICAL surfaces too —
+  // walls/pillars darken at their base and fade up (unit-box local Y, pre-instance-scale, so the
+  // gradient rides every prism proportionally). {floor: darkness at the base, range: fraction of
+  // local height the fade climbs}.
+  const baseAO = opts && opts.baseAO;
+  if(!PSX_DITHER_ENABLED && !PSX_VERTEX_SNAP_ENABLED && !figureAO && !banded && !baseAO) return material;
   const priorHook = material.onBeforeCompile;
+  // three.js caches compiled programs keyed (in part) on onBeforeCompile.toString() — every call
+  // here shares the SAME closure text, so materials whose injected CONSTANTS differ (aoFactor,
+  // bandedSteps) would silently reuse the first-compiled program (the AO-ladder-looks-identical
+  // bug). An explicit per-options cache key forces a distinct program per variant.
+  material.customProgramCacheKey = function(){
+    return "psx:" + JSON.stringify({ f: figureAO, b: banded, s: opts && opts.bandedSteps || 0,
+      a: baseAO ? [baseAO.floor, baseAO.range] : 0, d: PSX_DITHER_ENABLED, v: PSX_VERTEX_SNAP_ENABLED });
+  };
   material.onBeforeCompile = (shader, renderer) => {
     if(typeof priorHook === "function") priorHook(shader, renderer);
     if(banded){
@@ -3651,6 +3664,18 @@ function applyPsxShaderTweaks(material, opts){
       shader.fragmentShader = "varying float vFigY;\n" + shader.fragmentShader.replace(
         "#include <opaque_fragment>",
         "  outgoingLight *= mix(" + FIG_AO_FLOOR.toFixed(2) + ", 1.0, clamp(vFigY / " + FIG_AO_RANGE.toFixed(2) + ", 0.0, 1.0));\n  #include <opaque_fragment>"
+      );
+    }
+    if(baseAO){
+      const aoFloor = (typeof baseAO.floor === "number" ? baseAO.floor : 0.45).toFixed(2);
+      const aoRange = (typeof baseAO.range === "number" ? baseAO.range : 0.45).toFixed(2);
+      shader.vertexShader = "varying float vBaseY;\n" + shader.vertexShader.replace(
+        "#include <project_vertex>",
+        "#include <project_vertex>\n  vBaseY = position.y + 0.5;"
+      );
+      shader.fragmentShader = "varying float vBaseY;\n" + shader.fragmentShader.replace(
+        "#include <opaque_fragment>",
+        "  outgoingLight *= mix(" + aoFloor + ", 1.0, clamp(vBaseY / " + aoRange + ", 0.0, 1.0));\n  #include <opaque_fragment>"
       );
     }
     if(PSX_DITHER_ENABLED){
@@ -4173,9 +4198,11 @@ function interiorApplyAODarkening(instances, factor){
 function interiorBuildInstancedMesh(list, cx, cz, texture, variant, shadowKind){
   if(!list || !list.length) return null;
   const geo = interiorUnitBoxGeometry();
+  const vertical = shadowKind === "wall" || shadowKind === "pillar" || shadowKind === "doorframe";
   const mat = applyPsxShaderTweaks(new THREE.MeshLambertMaterial(
     texture ? { map: texture } : { color: 0xffffff }
-  ), { banded: !!(variant && variant.banded), bandedSteps: variant && variant.bandedSteps });
+  ), { banded: !!(variant && variant.banded), bandedSteps: variant && variant.bandedSteps,
+       baseAO: (variant && variant.ao && vertical) ? { floor: variant.aoFactor || 0.45, range: 0.22 } : null }); // tight contact band — 0.45 spread read as mush (pixel-diff proved it rendered, eyes said no)
   const mesh = new THREE.InstancedMesh(geo, mat, list.length);
   // DUNGEON-GRAPH.md U3 iteration-2, ruling 2: wall/floor/pillar/doorframe instanced meshes cast AND
   // receive real shadows on an interior board (harmless while renderer.shadowMap.enabled is false on

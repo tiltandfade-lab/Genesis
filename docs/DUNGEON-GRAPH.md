@@ -1,7 +1,17 @@
 # DUNGEON-GRAPH — marrying the walk topologies to a volumetric floor-plan engine
 
 type: system-spec
-status: SPEC (Adam authorized speccing 2026-07-10 PM; build NOT yet authorized — units below are Sonnet-ready pending his red-pen)
+status: SPECCED (Adam authorized BUILD ORDER 2026-07-10 PM — U1→U2→(U3∥U4); squeeze = geometry + a roll/DM hand-wave, no sprite; static figurines stand, but turn-based MECHANICAL REPOSITIONING of pieces as time passes is desired in-scene; end-of-day goal: battle scenes rendering in real dungeon rooms + loop testing)
+
+## Verified anchors (orchestrator, 2026-07-10 PM — current tree)
+
+- `src/engine/dungeon-walk.js:16` `DUNGEON_TOPOLOGIES` · `:477` `rollDungeonWalk`
+- walk segment shape (id/num/label/isFinale/depth/exits[]/light): built in
+  `src/engine/walk.js:593-625`; stored via `pn.segments` (`src/world/prep.js:670`)
+- tray render seam: `src/world/render.js:543` (`trayFrom(...)` + `window.Theater.setBoard`)
+- combat cell dims seam: `src/world/dm.js:2056` (exact geometry passed to combatStart as cellDims)
+- billboards: `src/ui/theater-boot.js:2507` `buildSpriteBillboard`, `:3489` `nearestify`
+- theater palettes/env: `src/engine/theater-data.js` (`THEATER_ENV_PALETTE` etc.)
 
 ## Why this is cheap: the graph already exists at runtime
 

@@ -1,98 +1,141 @@
-# DUNGEON-GRAPH — marrying the walk topologies to a spatial floor-plan engine
+# DUNGEON-GRAPH — marrying the walk topologies to a volumetric floor-plan engine
 
 type: system-spec
-status: PROVISIONAL (Adam design session 2026-07-10 — rulings captured, build not authorized)
+status: SPEC (Adam authorized speccing 2026-07-10 PM; build NOT yet authorized — units below are Sonnet-ready pending his red-pen)
 
-The walk technology already generates dungeon STRUCTURE as graphs — the Dungeon
-Procedure v4.2 Generator (`Engine/01. _Templates/Dungeon Procedure v4.2 Generator.md`)
-builds 12 named topologies (The Spine / Branch / Cascade / Ruin / Loop / Hub /
-Stronghold / Figure-8 / Convergence / Onion / Web / Labyrinth Fragment), each with
-min-segment counts and fallback degradation. The threejs-procedural-dungeon study
-(2026-07-10) showed the missing half: a **spatializer** that turns a section graph
-into a walkable cell-grid floor plan. This spec is the marriage.
+## Why this is cheap: the graph already exists at runtime
 
-## Rulings captured 2026-07-10 (Adam)
+The walk technology IS the dungeon graph. `src/engine/dungeon-walk.js` (owns
+`rollDungeonWalk`, `DUNGEON_TOPOLOGIES` — the Dungeon Procedure v4.2 port) rolls one of
+12 topologies (Spine/Branch/Cascade/Ruin/Loop/Hub/Stronghold/Figure-8/Convergence/
+Onion/Web/Labyrinth-Fragment), and the walk store keeps the WHOLE graph: each segment is
+`{ id, num, label, isFinale, depth, exits:[{targetId, num, label, isFinale}], light, … }`
+— segments are nodes, exits are edges, `depth` is BFS-from-entry. Nothing needs
+extracting; the spatializer consumes `walk.segments` as-is.
 
-1. **TRUE-SCALE RENDER LAW.** Creatures render at true scale — feet/5.5 vs a human,
-   per `corpus-sizing.json`/`v3-sizing.json` (`scaleVsHuman`). No engine does this;
-   dragon size must not get lost. The old compressed tabletop scale (overlay `scale`)
-   is deprecated as a *target*; it survives only as a fallback view where a scene
-   physically can't hold true scale. Massive creatures are a progression payoff —
-   players should eventually walk into rooms that contain something 6× their height.
-2. **EPIC-SPACE RULE (place-gen adjustment).** If an epic monster rolls, the space
-   must hold it: room/cell footprints derive from the rolled inhabitants' size bands
-   (gargantuan ⇒ its chamber ≥ its footprint + fighting room; titanic ⇒ open-air or
-   vault-scale). Place-gen gains a size budget input from the encounter roll.
-3. **DRAGON GUISES (codify).** Dragon-grade entities can wear human form (or inhabit
-   humans). Mechanically: one codex entity, multiple bound sprites — a `guiseOf` link
-   between a true-form sprite and a humanoid sprite. Extends SPRITE-TAGS binding law:
-   binding an entity binds its whole guise set; revealing the true form is a scene
-   beat, not a new NPC. (Which entities get guises: dragons ruled; candidates beyond
-   dragons await Adam.)
-4. **DISTANCE = DIFFICULTY (adopted).** Depth-from-entrance is the difficulty dial —
-   old-school, roguelike-wave-compatible. Shallow dives exit safely; going deep means
-   packing hardy. Danger, loot quality, and light all key off graph depth.
-5. **LIVING DUNGEON ECOSYSTEMS (direction).** With the creature/NPC corpus at scale,
-   dungeon inhabitants become an ecosystem: factions by depth band, predator/prey
-   chains from the realm bestiary, restock/drift between visits. Design lane opened,
-   not specced.
-6. **SET-PIECE POSTURE.** Most places are NEVER authored — the engine's job is
-   beautiful procedural places. Set pieces need a smarter placement algorithm before
-   they're used (wisely and beautifully, not sprinkled). Candidate lane: authored
-   set-piece SHELLS built in Blender (Adam has new Claude+Blender environment
-   tutorials; the parked Blender MCP lane is the tooling), dropped into generated
-   frames at graph-chosen anchor rooms.
+What's missing is the SPATIALIZER (graph → walkable cell-grid floor plan) and a
+VOLUMETRIC interior renderer. The threejs-procedural-dungeon study (2026-07-10, MIT)
+supplies both patterns; we delete its edge-invention stage (Delaunay+MST) because our
+edges are authored by the topology roll.
 
-## Topology compatibility (v4.2 graphs × the spatializer)
+## Laws (Adam 2026-07-10)
 
-The repo's pipeline is: scatter rooms → separate → **[Delaunay+MST to invent edges]**
-→ carve corridors → rasterize to cell grid → BFS verify → decorate. For Genesis we
-**delete the bracketed stage** — v4.2's topology builders already emit the edges; the
-spatializer only *embeds* a given graph in 2D and carves it. That makes the two
-systems compatible by construction: both speak nodes-and-edges.
+1. **TRUE-SCALE RENDER LAW.** Creatures render at `scaleVsHuman` (feet/5.5) true scale.
+   Dragon size is a progression payoff. The old compressed tabletop scale is a legacy
+   fallback view only.
+2. **SCALE-DOMAIN RULE** (supersedes the draft "epic-space rule"). A room that merely
+   fits its monster is a prison. When a large+ resident rolls, the dungeon scales AROUND
+   it: the connected subgraph the creature inhabits (its **scale domain** — lair chamber
+   + the corridors/rooms it patrols) is built at that creature's scale (door heights,
+   corridor widths, ceiling implied by wall height). Human-scale and creature-scale
+   domains join at explicit transition rooms (the squeeze, the great gate, the collapsed
+   gallery). An apex resident of gargantuan+ may scale the ENTIRE dungeon.
+3. **DISTANCE = DIFFICULTY.** Depth-from-entrance (`segment.depth`, already computed)
+   drives danger, loot quality, and light. Dive shallow and exit safely, or pack hardy
+   and go deep. Old-school honored: this game serves the dungeons AND the dragons —
+   dungeon-crawl discipline is a first-class register, not improv garnish.
+4. **VOLUMETRIC WALL LAW.** Interior architecture is real low-poly PRISM geometry —
+   instanced boxes with height for walls, slabs for floors, real pillars — never
+   textured flat planes. Volume is why the reference module reads well: prism faces
+   catch light differently per side. PS1 grammar preserved: low poly counts,
+   `nearestify()`d textures, quantized vertex-color lighting, fog. (This upgrades the
+   engine's current billboard/flat-face habit — walls get thickness.)
+5. **PROCEDURAL-FIRST.** Most places are never authored. Set pieces wait for a smarter
+   placement algorithm; the Blender shell lane is FAR-FUTURE (parked). Near-term render
+   beauty comes from better three.js technique (see U3 study card), not new DCC lanes.
+6. **ADDITIVE RECOVERY (codex).** Sheets lost to codex session limits are recoverable
+   from the session chat — codex can re-save already-rendered images. Recovered art
+   enters through the standard §10b additive fold: worst case quarantined, best case
+   bonus mood/expression variants.
 
-| v4.2 topology | 2D embedding | notes |
-|---|---|---|
-| Spine, Cascade, Branch, Ruin | trivial | chains/trees always embed flat |
-| Loop, Figure-8, Stronghold | easy | planar cycles; keep the loop visually round so it READS as a loop |
-| Hub (wheel-and-spoke) | easy | radial layout seed — hub room center, spokes out |
-| Convergence, Onion | moderate | Onion wants concentric ring layout; Convergence wants shared-terminus fan |
-| Web, Labyrinth Fragment | hardest | may produce crossing edges; planarize or route the crossing as a bridge/undercroft (verticality as a feature, not a bug) |
+## Shared data shape (new)
 
-Per-topology **layout seeds** (radial for Hub, concentric for Onion, linear-drift for
-Spine…) replace the repo's random disc scatter, so the shape the walk-roller chose
-stays legible in the rendered floor plan.
+`SpatialPlan` — output of U1, input of U3/U4 (attached to the walk's prep-node overlay,
+same home as `pn.segments`):
 
-## Integration plan (build units, NOT yet authorized)
+```
+{ seed, topology, cellW, cellD,                    // GRID LAW: 1 cell = 5 ft
+  cells: Uint8Array (VOID|FLOOR|WALL|DOOR|WATER),  // row-major cellW×cellD
+  rooms: [{ segNum, segId, x, y, w, d,             // cell-space rect (or ellipse flag)
+            depth, isFinale, role,                 // role from beat binding (U2)
+            scaleDomain }],                        // 1.0 human | creature scaleVsHuman
+  corridors: [{ fromSeg, toSeg, cells, width }],
+  doors: [{ x, y, betweenSegs, heightScale }],
+  domains: [{ scale, segNums, transitions:[doorIdx] }] }
+```
 
-Core, built once (classic scripts, no ESM, per repo law):
-- **U1 spatializer** — `src/engine/place-spatialize.js`: v4.2 graph + GRID-LAW dims →
-  cell grid (FLOOR/WALL/DOOR), topology layout seeds, room separation, L-corridor
-  carving, BFS reachability verify (reroll on fail, never patch). Pure data; no three.js.
-- **U2 semantics pass** — depth-from-entrance per room; walk-beat → room binding
-  (critical path = walk spine, dead-end pockets = optional beats); EPIC-SPACE budget;
-  distance=difficulty bands feeding encounter/loot/light.
-- **U3 render tie-in** — tray `interior` source kind (already spec'd in PLACE-GEN §D):
-  InstancedMesh-per-tile-kind in theater-boot, existing `nearestify()` billboards,
-  TRUE-SCALE sprite sizing from `scaleVsHuman`.
-- **U4 walk binding** — walk segments map to rooms; the existing walk-consumption loop
-  is unchanged (segment enter == room enter); `walk_complete` untouched.
+## Build units (Sonnet-executable; branch per house rules; red-first in the jsdom harness)
 
-Per ecosystem/realm, each a thin skin over the core:
-- **tile kit** (floor/wall/door surfaces in realm finish) — data + a few textures;
-- **inhabitant binding** (realm bestiary by depth band + faction seeds for the living
-  ecosystem);
-- **dressing profile** (REALM_PROPS by room role/depth).
-Cost shape: the CORE is ~4 Sonnet build units (one orchestrated wave). Each ecosystem
-after that is roughly one unit of data authoring — the long pole is ART (architecture
-shell props were the #1 gap in PLACE-ASSET-QUEUE), not code.
+**U1 — spatializer.** New `src/engine/place-spatialize.js` (classic script, register in
+manifest.json; owns `spatializePlan`, `SPATIAL_CELL`). Input: `walk.segments` +
+topology name + GRID-LAW dims per room size class. Deterministic from a seed derived
+from the walk id (NO Date.now/Math.random un-seeded — replay law). Stages: per-topology
+layout seed (Hub radial, Onion concentric rings, Spine linear-drift, Loop ring,
+Web planarize-or-bridge — a crossing edge becomes a bridge/undercroft flag, verticality
+is a feature) → room rect placement → AABB separation → corridor carve along EXITS ONLY
+→ rasterize → BFS reachability verify from the entry segment → on fail, mutate seed and
+reroll (≤5) then exit honest-fail (no hand-patched plans, ever).
+*Acceptance:* all 12 topologies × sizes 3/6/12 segments produce verified plans, zero
+unreachable floor cells, 100 seeds each; Hub renders radially (spoke angle spread
+asserted); Web crossings emit bridge flags, never overlaps. *Red-first:* feed a Loop
+graph, assert today there is no spatial plan surface at all.
 
-## Open for Adam
+**U2 — semantics + scale domains.** Extend the spatializer output: bind walk beats to
+rooms (critical path entry→finale = the walk spine; dead-end pockets host optional
+beats — HOOK-WALKS §4's parked branch-node idea gets its honest home HERE, as rooms you
+can see and skip); difficulty bands from `depth` (encounter CR budget, loot tier, light
+level); SCALE DOMAINS from rolled residents (law 2: domain subgraph at creature scale,
+transition doors marked, apex-gargantuan+ may scale everything).
+*Acceptance:* a rolled gargantuan resident yields ≥1 domain with scale ≥4.0 whose
+chamber + patrol corridors all pass the fit test (room dims ≥ creature footprint +
+2 cells fighting room); depth bands monotone non-decreasing along the critical path.
+*Red-first:* roll a dragon lair today, assert the room footprint can't hold the sprite
+at true scale.
 
-1. Guise scope — dragons only, or a guise-capable class of entities (fey, fiends,
-   cosmic arcana)?
-2. True-scale fallback — when a titanic creature meets an interior, does the room
-   scale up (EPIC-SPACE), the encounter re-roll, or the creature stay outside?
-3. Set-piece Blender lane — revive the parked Blender MCP pipeline for environment
-   shells? (Adam's new tutorial series is the trigger.)
-4. Build authorization for U1–U4.
+**U3 — volumetric interior renderer.** Extend theater (`src/ui/theater-boot.js` lane):
+new tray source kind `interior` (the PLACE-GEN §D unit-7 branch) consuming SpatialPlan.
+One `THREE.InstancedMesh` per tile kind (floor slab, wall prism, doorframe, pillar) —
+per-instance transform + vertex color; wall height × the room's `scaleDomain`; realm
+tile-kit data object (floor/wall/trim textures from realm surfaces, fog color/density,
+palette) per realm; sprites stay `nearestify()`d billboards at TRUE SCALE
+(`scaleVsHuman`), colliding correctly with the plan's walls.
+*Render-quality study card (one unit of R&D, timeboxed):* baked vertex AO (darken
+wall-floor seams — the reference repo's biggest "looks good" trick), quantized/banded
+lighting for the PS1 read, fog-as-palette (realm fog color pulls the whole frame
+coherent), texel-density discipline (one texture scale across kit pieces). Deliver as
+side-by-side screenshots for Adam's taste gate.
+*Acceptance:* screenshot gate — a Hub dungeon at chrome + a Spine crypt at gloom read
+as VOLUMES (Adam eyeballs); draw calls ≤ 1 per tile kind + 1 per sprite; 60fps at 80
+rooms on the dev machine. *Red-first:* today `trayFrom` has no `interior` kind (grep).
+
+**U4 — walk binding.** Room-enter == segment-enter: the EXISTING walk consumption loop
+drives movement (WALK-CONSUMPTION unchanged — the cursor moves segment to segment; the
+camera/party token moves room to room). `walk_complete` fires exactly as today. Combat
+zone grids derive from the room's cells (the place-gen combat-from-cells seam already
+landed). WIRING LAW: acceptance greps must show PRODUCTION callers (the tray render
+path and the walk consumption path), not test harnesses.
+*Acceptance:* a live dungeon walk consumed segment-by-segment moves the rendered party
+through the plan; completing the finale room fires the standard `walk_complete`;
+byte-gate on the walk store shape (no schema drift).
+*Red-first:* consuming a dungeon walk today renders no interior.
+
+**U5 (deferred, design lane) — living ecosystem.** Factions by depth band, predator/
+prey from realm bestiary, restock/drift between visits. Not specced here; the corpus
+(2,500+ tagged creatures) and the casting system are the enabling assets.
+
+Unit order: U1 → U2 → (U3 ∥ U4) → U5 later. Mutation test: break the BFS verifier so it
+always passes and confirm U1's acceptance catches an unreachable-room plan.
+
+## Sprite-side dependency
+
+True-scale render needs `scaleVsHuman` live in `data/sprite-registry.js` — that's the
+pending fold of `corpus-sizing.json` + `v3-sizing.json` (regenerate, never hand-edit;
+HANDOFF item 2). GUISE (docs/GUISE.md) rides the same fold.
+
+## Open for Adam (red-pen surface)
+
+1. U3 study card taste gate — which reference look wins (banded-light PS1 vs the repo's
+   painted-miniature glow, adapted)?
+2. Scale-domain transitions — squeeze rooms as player-visible fiction (crawl on hands
+   and knees into the great hall) or pure geometry?
+3. Build authorization + ordering vs the sprite-lane merge and round-3 codex wave.

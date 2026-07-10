@@ -4124,37 +4124,33 @@ function setBoard(data){
   markDirty();
 }
 
-// ─── DUNGEON-GRAPH.md U3 — the volumetric interior renderer's GL layer ──────────────────────────────
-// A dedicated procedural-canvas texture per tile kit/pattern (2-tone, NearestFilter, RepeatWrapping) —
-// cached per (baseColor,pattern) key so re-rendering the same kit never rebuilds the canvas. Reads
-// INTERIOR_TILE_KITS' plain pattern spec (a small 0/1 grid, src/ui/theater-interior.js) — this is the
-// ONE place that spec ever becomes an actual THREE.Texture, keeping theater-interior.js itself DOM/GL-
-// free (its own header comment's "data in this file, geometry/GL in theater-boot.js" split).
-const INTERIOR_TEXTURE_CACHE = {};
-function interiorPatternTexture(baseColorHex, pattern, repeatX, repeatZ){
-  if(!pattern || !pattern.length || !pattern[0].length) return null;
-  const key = baseColorHex + ":" + JSON.stringify(pattern) + ":" + repeatX + ":" + repeatZ;
-  if(INTERIOR_TEXTURE_CACHE[key]) return INTERIOR_TEXTURE_CACHE[key];
-  const rows = pattern.length, cols = pattern[0].length;
-  const block = 8; // px per pattern cell — small enough to stay crisp nearest-filtered at close range
+// ─── DUNGEON-GRAPH.md U3 / GR1 (docs/GRAPHICS-ENGINE.md build unit GR1) — the volumetric interior
+// renderer's GL layer ──────────────────────────────────────────────────────────────────────────────
+// interiorMaterialTexture: the ONE place src/ui/theater-materials.js's pure pixel buffer
+// (materialTexturePixels) becomes an actual THREE.CanvasTexture — putImageData onto a real <canvas>,
+// nearest-filtered, RepeatWrapping (same "data layer elsewhere, GL layer here" split
+// theater-interior.js's own header keeps, one file down: theater-materials.js stays as canvas/DOM-free
+// as theater-interior.js does). Cached per (material,baseColor,seedKey) — GR1's own "boot-time, seeded"
+// instruction: the SAME realm+surface always resolves the SAME cached texture object, baked once, never
+// rebuilt per room/plan/session (materialTexturePixels itself is already deterministic off that same
+// key — this cache just avoids re-painting the identical buffer + re-uploading it to the GPU on every
+// setInteriorBoard call). seedKey is "<realmId>:<surface>" (theater-interior.js's tileKit doesn't carry
+// realmId+surface directly here, so setInteriorBoard passes them through explicitly, below).
+const INTERIOR_MATERIAL_TEXTURE_CACHE = {};
+function interiorMaterialTexture(material, baseColorHex, seedKey, grainIntensity, repeatX, repeatZ){
+  if(!material || !baseColorHex) return null;
+  const key = material + ":" + baseColorHex + ":" + seedKey + ":" + grainIntensity + ":" + repeatX + ":" + repeatZ;
+  if(INTERIOR_MATERIAL_TEXTURE_CACHE[key]) return INTERIOR_MATERIAL_TEXTURE_CACHE[key];
+  const pixels = materialTexturePixels(material, baseColorHex, seedKey, MATERIAL_TEXEL_PX, grainIntensity);
   const canvas = document.createElement("canvas");
-  canvas.width = cols * block; canvas.height = rows * block;
+  canvas.width = pixels.width; canvas.height = pixels.height;
   const ctx = canvas.getContext("2d");
-  const base = new THREE.Color(baseColorHex);
-  const dark = base.clone().multiplyScalar(0.85);
-  const light = base.clone().multiplyScalar(1.15);
-  for(let ry = 0; ry < rows; ry++){
-    for(let rx = 0; rx < cols; rx++){
-      const c = pattern[ry][rx] ? light : dark;
-      ctx.fillStyle = "#" + c.getHexString();
-      ctx.fillRect(rx * block, ry * block, block, block);
-    }
-  }
+  ctx.putImageData(new ImageData(pixels.data, pixels.width, pixels.height), 0, 0);
   const tex = new THREE.CanvasTexture(canvas);
   tex.wrapS = THREE.RepeatWrapping; tex.wrapT = THREE.RepeatWrapping;
   tex.repeat.set(Math.max(1, repeatX || 1), Math.max(1, repeatZ || 1));
   nearestify(tex);
-  INTERIOR_TEXTURE_CACHE[key] = tex;
+  INTERIOR_MATERIAL_TEXTURE_CACHE[key] = tex;
   return tex;
 }
 
@@ -4403,8 +4399,23 @@ function setInteriorBoard(data){
   applyLightProfile((data.lightProfile && LIGHT_PROFILES[data.lightProfile]) ? data.lightProfile : LIGHT_DEFAULT_PROFILE);
 
   const kit = data.tileKit || {};
-  const floorTex = interiorPatternTexture(kit.floorColor, kit.floorPattern, Math.max(1, b.maxX - b.minX + 1), Math.max(1, b.maxZ - b.minZ + 1));
-  const wallTex = interiorPatternTexture(kit.wallColor, kit.wallPattern, 1, Math.max(1, data.wallHeightBase || 1));
+  // GR1 (docs/GRAPHICS-ENGINE.md build unit GR1): floor/wall each bake their own REALM_MATERIALS
+  // painter into a real CanvasTexture (interiorMaterialTexture, above) — replaces the old flat-pattern
+  // texture entirely, per GR1's own "replace the current flat/pattern textures" instruction. The study
+  // rig's `variant.materials === false` (dev/battle-gate/capture-interior-study.mjs's before/after
+  // card) drops back to texture:null (a flat single-color material, interiorBuildInstancedMesh's own
+  // "no texture" branch) so a materials-off shot is an honest OLD-FLAT baseline, not the retired
+  // pattern texture (which no longer exists) — product callers never set this flag, so this is a no-op
+  // everywhere except the study card.
+  const materialsOn = variant.materials !== false;
+  const floorTex = materialsOn
+    ? interiorMaterialTexture(kit.floorMaterial, kit.floorColor, data.realmId + ":floor", kit.floorGrain,
+        Math.max(1, b.maxX - b.minX + 1), Math.max(1, b.maxZ - b.minZ + 1))
+    : null;
+  const wallTex = materialsOn
+    ? interiorMaterialTexture(kit.wallMaterial, kit.wallColor, data.realmId + ":wall", kit.wallGrain,
+        1, Math.max(1, data.wallHeightBase || 1))
+    : null;
 
   // study-rig AO variant (b/e/f): darken instance colors at wall-floor seams (interiorApplyAODarkening,
   // above) — operates on a SHALLOW-CLONED instances object so the caller's own `data` (which may be

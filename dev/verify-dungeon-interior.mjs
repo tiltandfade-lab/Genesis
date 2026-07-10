@@ -46,6 +46,26 @@
    .shadowMapEnabled() / .interiorPiecesResolved() against the LIVE mounted scene graph (its own header
    comment documents the check-to-ruling mapping) — the only place those flags physically exist.
 
+   GR1 ADDITIONS (docs/GRAPHICS-ENGINE.md build unit GR1, §E TEXTURE-PER-REALM — checks 11-15 below):
+   RED-FIRST, checked 2026-07-10 against origin/claude/genesis-sprite-corpus-tags-edeaac tip cd84f7685:
+     `git show cd84f7685:src/ui/theater-interior.js | grep -c REALM_MATERIALS` -> 0; src/ui/theater-
+     materials.js did not exist at that tip at all (`git cat-file -e` fails). Both now exist (this unit).
+   11. REALM_MATERIALS exists and every one of the 12 realms (INTERIOR_TILE_KITS' own key set) resolves
+       a full material kit — floor/wall/trim each carry a material string + numeric grainIntensity.
+   12. determinism — materialTexturePixels(material,baseColor,seedStr,size,grain) called twice with the
+       IDENTICAL 5 args produces a byte-identical pixel buffer (Buffer.compare === 0); a different
+       seedStr (same material/color) produces a DIFFERENT buffer (the boot-time-seeded, not constant,
+       claim).
+   13. contrast bound — every sampled pixel's per-channel deviation from the base color stays within
+       the declared grainIntensity (plus a small byte-rounding epsilon) — the SUBTLE-TEXTURE LAW's own
+       "low contrast ALWAYS" instruction, asserted on REAL painted pixels, not just the painter's
+       by-construction argument.
+   14. texel density — for every realm, the floor and wall material textures bake at the SAME pixel
+       dimensions (MATERIAL_TEXEL_PX, shared, never a per-surface override) — "one texel density across
+       a kit" (the law's own words).
+   15. an unknown material name degrades to the mottle painter rather than throwing (interiorTileKitFor/
+       realmMaterialFor's own "never throws" discipline, mirrored one layer down).
+
    Run:  node dev/verify-dungeon-interior.mjs */
 import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
@@ -63,10 +83,16 @@ function loadModules() {
     read("src/engine/place-spatialize.js"),
     read("src/engine/place-semantics.js"),
     read("src/ui/theater-interior.js"),
+    read("src/ui/theater-materials.js"),
     ";this.__spatializePlan=typeof spatializePlan!=='undefined'?spatializePlan:undefined;",
     "this.__semanticizePlan=typeof semanticizePlan!=='undefined'?semanticizePlan:undefined;",
     "this.__interiorBuildBoard=typeof interiorBuildBoard!=='undefined'?interiorBuildBoard:undefined;",
     "this.__INTERIOR_TILE_KITS=typeof INTERIOR_TILE_KITS!=='undefined'?INTERIOR_TILE_KITS:undefined;",
+    "this.__REALM_MATERIALS=typeof REALM_MATERIALS!=='undefined'?REALM_MATERIALS:undefined;",
+    "this.__realmMaterialFor=typeof realmMaterialFor!=='undefined'?realmMaterialFor:undefined;",
+    "this.__materialTexturePixels=typeof materialTexturePixels!=='undefined'?materialTexturePixels:undefined;",
+    "this.__MATERIAL_TEXEL_PX=typeof MATERIAL_TEXEL_PX!=='undefined'?MATERIAL_TEXEL_PX:undefined;",
+    "this.__materialFamilyFor=typeof materialFamilyFor!=='undefined'?materialFamilyFor:undefined;",
   ].join("\n");
   vm.runInContext(combined, sandbox, { filename: "dungeon-graph-u3.js" });
   return {
@@ -74,8 +100,22 @@ function loadModules() {
     semanticizePlan: sandbox.__semanticizePlan,
     interiorBuildBoard: sandbox.__interiorBuildBoard,
     INTERIOR_TILE_KITS: sandbox.__INTERIOR_TILE_KITS,
+    REALM_MATERIALS: sandbox.__REALM_MATERIALS,
+    realmMaterialFor: sandbox.__realmMaterialFor,
+    materialTexturePixels: sandbox.__materialTexturePixels,
+    MATERIAL_TEXEL_PX: sandbox.__MATERIAL_TEXEL_PX,
+    materialFamilyFor: sandbox.__materialFamilyFor,
   };
 }
+
+// #ffabcd -> {r,g,b} (test-side only — independent of theater-materials.js's own mtHexToRgb, so a bug
+// in that internal helper can't silently cancel out against this check's own parsing).
+function hexToRgb(hex) {
+  const h = String(hex).replace("#", "");
+  const n = parseInt(h, 16);
+  return { r: (n >> 16) & 255, g: (n >> 8) & 255, b: n & 255 };
+}
+// node's Buffer is available without an import (global) — used for byte-identical buffer comparisons.
 
 function fixtureHash(s) {
   let h = 5381;
@@ -251,6 +291,107 @@ group("10 — light count per room in [1,3]; determinism (same plan,opts -> byte
 
   const trimmed = M.interiorBuildBoard(plan, { realmId: "gloom", focusSegNum: 2, radius: 1 });
   ok(trimmed.lights.length <= board.lights.length, `focus-trimmed lights (${trimmed.lights.length}) <= whole-plan lights (${board.lights.length})`);
+}
+
+// ═══ GR1 (docs/GRAPHICS-ENGINE.md build unit GR1, §E TEXTURE-PER-REALM) — this file's own header
+// comment documents the RED-FIRST proof for these 5 groups. ══════════════════════════════════════════
+
+group("11 — REALM_MATERIALS: all 12 realms resolve a full material kit (floor/wall/trim)");
+{
+  ok(typeof M.REALM_MATERIALS === "object" && M.REALM_MATERIALS, "REALM_MATERIALS is an object");
+  ok(typeof M.realmMaterialFor === "function", "realmMaterialFor is a function");
+  const realmIds = Object.keys(M.INTERIOR_TILE_KITS);
+  ok(realmIds.length === 12, `INTERIOR_TILE_KITS carries exactly 12 realms (got ${realmIds.length}: ${realmIds.join(",")})`);
+  realmIds.forEach((realmId) => {
+    ["floor", "wall", "trim"].forEach((surface) => {
+      const entry = M.realmMaterialFor(realmId, surface);
+      ok(entry && typeof entry.material === "string" && entry.material.length > 0,
+        `realm "${realmId}" surface "${surface}" carries a material string`);
+      ok(entry && typeof entry.grainIntensity === "number" && entry.grainIntensity > 0 && entry.grainIntensity <= 0.14,
+        `realm "${realmId}" surface "${surface}" carries a LOW grainIntensity in (0, 0.14] (got ${entry && entry.grainIntensity})`);
+      ok(entry && typeof entry.color === "string" && /^#[0-9a-fA-F]{6}$/.test(entry.color),
+        `realm "${realmId}" surface "${surface}" resolves a real hex color anchor (got ${entry && entry.color})`);
+    });
+  });
+  console.log(`  ✓ all 12 realms x 3 surfaces resolve a full {material,grainIntensity,color} kit`);
+}
+
+group("12 — determinism: materialTexturePixels(same args) -> byte-identical buffer; a different seed differs");
+{
+  const a1 = M.materialTexturePixels("stone-course", "#453b4d", "gloom:floor", 64, 0.12);
+  const a2 = M.materialTexturePixels("stone-course", "#453b4d", "gloom:floor", 64, 0.12);
+  ok(Buffer.compare(Buffer.from(a1.data), Buffer.from(a2.data)) === 0, "identical (material,color,seed,size,grain) -> byte-identical pixel buffer");
+  const b1 = M.materialTexturePixels("stone-course", "#453b4d", "gloom:wall", 64, 0.12);
+  ok(Buffer.compare(Buffer.from(a1.data), Buffer.from(b1.data)) !== 0, "a DIFFERENT seedStr (same material/color) paints a different buffer — boot-time SEEDED, not a constant texture");
+  const c1 = M.materialTexturePixels("metal-panel", "#8fa6b0", "chrome:floor", 64, 0.09);
+  const c2 = M.materialTexturePixels("metal-panel", "#8fa6b0", "chrome:floor", 64, 0.09);
+  ok(Buffer.compare(Buffer.from(c1.data), Buffer.from(c2.data)) === 0, "determinism holds for a second (material,realm,surface) combo too (metal-panel/chrome)");
+}
+
+group("13 — contrast bound: sampled pixels stay within the declared grainIntensity of the base color (SUBTLE-TEXTURE LAW)");
+{
+  const CASES = [
+    ["stone-course", "#453b4d", "gloom:floor", 0.12],
+    ["plank", "#a9865c", "frontier:floor", 0.11],
+    ["metal-panel", "#3d525d", "chrome:wall", 0.09],
+    ["moss-stone", "#3d4a2e", "lost-world:floor", 0.12],
+    ["mottle", "#3a3530", "noir:floor", 0.1],
+  ];
+  const EPS = 0.02; // byte-rounding slack — mtClampByte rounds to the nearest integer channel value
+  CASES.forEach(([material, baseHex, seedStr, grain]) => {
+    const px = M.materialTexturePixels(material, baseHex, seedStr, 64, grain);
+    const base = hexToRgb(baseHex);
+    let maxDev = 0;
+    for (let i = 0; i < px.data.length; i += 4) {
+      [["r", 0], ["g", 1], ["b", 2]].forEach(([ch, off]) => {
+        const baseByte = base[ch];
+        if (baseByte === 0) return; // a 0 base channel can only paint 0 (factor x 0 = 0) — no ratio to check
+        const dev = Math.abs(px.data[i + off] - baseByte) / baseByte;
+        if (dev > maxDev) maxDev = dev;
+      });
+    }
+    ok(maxDev <= grain + EPS, `${material} @ "${seedStr}": max sampled channel deviation ${maxDev.toFixed(4)} <= declared grainIntensity ${grain} (+${EPS} rounding slack)`);
+  });
+  console.log(`  ✓ ${CASES.length} material/realm combos sampled, all within their LOW-contrast band`);
+}
+
+group("14 — texel density: floor and wall bake at the SAME pixel dimensions for every realm (one texel density per kit)");
+{
+  ok(typeof M.MATERIAL_TEXEL_PX === "number" && M.MATERIAL_TEXEL_PX > 0, "MATERIAL_TEXEL_PX is a positive number");
+  const realmIds = Object.keys(M.INTERIOR_TILE_KITS);
+  realmIds.forEach((realmId) => {
+    const floorEntry = M.realmMaterialFor(realmId, "floor");
+    const wallEntry = M.realmMaterialFor(realmId, "wall");
+    const floorPx = M.materialTexturePixels(floorEntry.material, floorEntry.color, realmId + ":floor", undefined, floorEntry.grainIntensity);
+    const wallPx = M.materialTexturePixels(wallEntry.material, wallEntry.color, realmId + ":wall", undefined, wallEntry.grainIntensity);
+    ok(floorPx.width === M.MATERIAL_TEXEL_PX && floorPx.height === M.MATERIAL_TEXEL_PX, `realm "${realmId}" floor texture bakes at MATERIAL_TEXEL_PX (${M.MATERIAL_TEXEL_PX}) — got ${floorPx.width}x${floorPx.height}`);
+    ok(floorPx.width === wallPx.width && floorPx.height === wallPx.height, `realm "${realmId}" floor (${floorPx.width}x${floorPx.height}) and wall (${wallPx.width}x${wallPx.height}) bake at IDENTICAL texel density`);
+  });
+  console.log(`  ✓ ${realmIds.length} realms: floor/wall texel density matches (all at ${M.MATERIAL_TEXEL_PX}px)`);
+}
+
+group("15 — an unknown/typo'd material name degrades to the mottle painter rather than throwing");
+{
+  let threw = false, px = null;
+  try { px = M.materialTexturePixels("not-a-real-material", "#8fa6b0", "test:unknown", 64, 0.1); } catch (e) { threw = true; }
+  ok(!threw, "materialTexturePixels never throws on an unknown material name");
+  ok(px && px.width === 64 && px.height === 64, "unknown material still paints a full-size buffer (mottle fallback)");
+  // the fallback ROUTES to the mottle family (materialFamilyFor's own job) — checked directly, rather
+  // than expecting byte-identity with an explicit "mottle" call: the pixel seed folds in the material
+  // NAME itself ("not-a-real-material" vs "mottle"), so the two buffers differing is expected and
+  // correct (still boot-time-seeded per name), not a sign the fallback failed.
+  ok(typeof M.materialFamilyFor === "function" && M.materialFamilyFor("not-a-real-material") === "mottle",
+    "materialFamilyFor routes an unknown material name to the \"mottle\" family");
+  const base = hexToRgb("#8fa6b0");
+  let maxDev = 0;
+  for (let i = 0; i < px.data.length; i += 4) {
+    [["r", 0], ["g", 1], ["b", 2]].forEach(([ch, off]) => {
+      if (base[ch] === 0) return;
+      const dev = Math.abs(px.data[i + off] - base[ch]) / base[ch];
+      if (dev > maxDev) maxDev = dev;
+    });
+  }
+  ok(maxDev <= 0.1 + 0.02, `unknown-material fallback still paints within a LOW-contrast band (mottle's own bilinear-bounded output) — max deviation ${maxDev.toFixed(4)}`);
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);

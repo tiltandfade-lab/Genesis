@@ -158,7 +158,12 @@ Every regen prompt is assembled from these clauses, in this order:
    landscape for long ones. Items/tiny: square cells.
 3. **Perspective clause** — "ground-level/eye-level camera only; front, side, or
    three-quarter views; never high-angle, never top-down; feet on an implied flat
-   ground line, no floor plane."
+   ground line, no floor plane." **BUG COROLLARY (Adam 2026-07-10 PM — the recurring
+   defect):** for insects/bugs/tiny creatures the clause must be spelled out —
+   worm's-eye ground camera at the creature's OWN eye level, side/three-quarter
+   PROFILE, "as if photographed by another bug beside it"; generators otherwise
+   default to looking down at small things. If the back reads more than the side,
+   the angle is wrong.
 4. **Proportion clause** — "realistic proportions; adult humanoids with legs ~half of
    total height; children as realistically-proportioned kids, not chibi."
 5. **Style clause** — "pixelated but realistic" + the realm's finish (grimy-dithered

@@ -7,7 +7,23 @@ Instructions for the codex agent. Work through every sheet below IN ORDER, unsup
 For each sheet:
 1. Generate one image using the EXACT prompt in the code block. Do not improvise, reorder, or substitute subjects.
 2. Save the PNG at `ui-sketches/sprite-sheets/<filename>` using the exact filename in the heading.
-3. Check the result: correct sprite count, eye-level camera (no top-down), solid background, no floor planes, no chibi. If wrong, regenerate that sheet ONCE, keep the better attempt, and move on.
+3. Check the result against ALL of these before moving on:
+   a. correct sprite count, solid background, no floor planes, no chibi;
+   b. eye-level camera — and for INSECTS / BUGS / TINY CREATURES this is the rule you
+      always break: the camera sits at the CREATURE'S own eye level, a worm's-eye
+      ground camera looking at it in side or three-quarter PROFILE, as if you are
+      another bug standing next to it. NEVER looking down at it like something on a
+      floor, table, or specimen tray. If you can see the top of its back more than
+      its side, it is WRONG — regenerate;
+   c. EXPRESSION (the FFVI standard): every figure must be EXPRESSING something,
+      energetically — mid-intent pose, face reads, signature effects selling its
+      power. A creature staring blankly at the viewer like it's bombing on stage is
+      a FAIL even if everything else is perfect;
+   d. STYLE matches the realm reference PNG's pixel grain, grit, and palette discipline.
+   If any check fails: regenerate the sheet, up to 3 total attempts, keep the best.
+3b. NEVER DISCARD A RENDER: save every attempt you generate, including rejected ones,
+   as `<filename>-take2.png`, `-take3.png` beside the winner. Rejected takes are
+   harvested later as mood/expression variants — they are paid for, keep them.
 4. STYLE: every sheet must match the realm reference's pixel grain, grit, shading and palette discipline exactly.
 5. NO BLANK SLOTS: every grid slot listed has a subject (base roles + ALT variants). Draw them all.
 6. Never edit any other files.
@@ -16,7 +32,7 @@ For each sheet:
 
 ```
 Create a sprite sheet: a 6 rows x 4 columns grid (portrait cells, taller than wide) of 24 individual game sprites, evenly spaced, on a solid #FF00FF magenta background filling every non-subject pixel. Canvas orientation: portrait (taller than wide, e.g. 1024x1536).
-Camera: ground-level eye-level view for every sprite - front, side, or three-quarter angle only. NEVER high-angle, NEVER top-down. Each subject stands on an implied flat ground line. No floor plane, no ground shadows, no background scenery, no text or labels.
+Camera: ground-level eye-level view for every sprite - front, side, or three-quarter angle only. NEVER high-angle, NEVER top-down. For any insect, bug, or tiny creature: worm's-eye ground camera at the creature's OWN eye level, side or three-quarter PROFILE — as if photographed by another bug beside it; if the top of its back is more visible than its side, the angle is wrong. Each subject stands on an implied flat ground line. No floor plane, no ground shadows, no background scenery, no text or labels.
 Setting: volcanic ash wasteland — basalt hide, ember cracks, rust, toxic biolume.
 Style: dense gritty dithered pixel art. Realistic proportions and materials - adult humanoids have legs about half their total height; children are realistically proportioned kids, never chibi. Every character face must have a readable expression at sprite size. Every creature must sell its power and story in one pose: mid-intent stance (snarl, coiled to strike, mid-cast), signature effects where they characterize (drool, sparks, smoke, glow, venom). No mannequin stillness. Touchstone: FFVI-era spritework — maximum character per sprite. Finish: grimy dense-dithered ash grit — match dev/model-qa/regen-v3/style-refs/ash-style-ref.png exactly; NOT painterly, no airbrushed shading.
 Palette: grey-ash base with ember orange and toxic green accents; colorful-within-realm, no monochrome mud.
@@ -51,7 +67,7 @@ Subjects, one per cell, left to right then top to bottom:
 
 ```
 Create a sprite sheet: a 6 rows x 4 columns grid (portrait cells, taller than wide) of 24 individual game sprites, evenly spaced, on a solid #FF00FF magenta background filling every non-subject pixel. Canvas orientation: portrait (taller than wide, e.g. 1024x1536).
-Camera: ground-level eye-level view for every sprite - front, side, or three-quarter angle only. NEVER high-angle, NEVER top-down. Each subject stands on an implied flat ground line. No floor plane, no ground shadows, no background scenery, no text or labels.
+Camera: ground-level eye-level view for every sprite - front, side, or three-quarter angle only. NEVER high-angle, NEVER top-down. For any insect, bug, or tiny creature: worm's-eye ground camera at the creature's OWN eye level, side or three-quarter PROFILE — as if photographed by another bug beside it; if the top of its back is more visible than its side, the angle is wrong. Each subject stands on an implied flat ground line. No floor plane, no ground shadows, no background scenery, no text or labels.
 Setting: volcanic ash wasteland — basalt hide, ember cracks, rust, toxic biolume.
 Style: dense gritty dithered pixel art. Realistic proportions and materials - adult humanoids have legs about half their total height; children are realistically proportioned kids, never chibi. Every character face must have a readable expression at sprite size. Every creature must sell its power and story in one pose: mid-intent stance (snarl, coiled to strike, mid-cast), signature effects where they characterize (drool, sparks, smoke, glow, venom). No mannequin stillness. Touchstone: FFVI-era spritework — maximum character per sprite. Finish: grimy dense-dithered ash grit — match dev/model-qa/regen-v3/style-refs/ash-style-ref.png exactly; NOT painterly, no airbrushed shading.
 Palette: grey-ash base with ember orange and toxic green accents; colorful-within-realm, no monochrome mud.
@@ -86,7 +102,7 @@ Subjects, one per cell, left to right then top to bottom:
 
 ```
 Create a sprite sheet: a 6 rows x 4 columns grid (portrait cells, taller than wide) of 24 individual game sprites, evenly spaced, on a solid #FF00FF magenta background filling every non-subject pixel. Canvas orientation: portrait (taller than wide, e.g. 1024x1536).
-Camera: ground-level eye-level view for every sprite - front, side, or three-quarter angle only. NEVER high-angle, NEVER top-down. Each subject stands on an implied flat ground line. No floor plane, no ground shadows, no background scenery, no text or labels.
+Camera: ground-level eye-level view for every sprite - front, side, or three-quarter angle only. NEVER high-angle, NEVER top-down. For any insect, bug, or tiny creature: worm's-eye ground camera at the creature's OWN eye level, side or three-quarter PROFILE — as if photographed by another bug beside it; if the top of its back is more visible than its side, the angle is wrong. Each subject stands on an implied flat ground line. No floor plane, no ground shadows, no background scenery, no text or labels.
 Setting: volcanic ash wasteland — basalt hide, ember cracks, rust, toxic biolume.
 Style: dense gritty dithered pixel art. Realistic proportions and materials - adult humanoids have legs about half their total height; children are realistically proportioned kids, never chibi. Every character face must have a readable expression at sprite size. Every creature must sell its power and story in one pose: mid-intent stance (snarl, coiled to strike, mid-cast), signature effects where they characterize (drool, sparks, smoke, glow, venom). No mannequin stillness. Touchstone: FFVI-era spritework — maximum character per sprite. Finish: grimy dense-dithered ash grit — match dev/model-qa/regen-v3/style-refs/ash-style-ref.png exactly; NOT painterly, no airbrushed shading.
 Palette: grey-ash base with ember orange and toxic green accents; colorful-within-realm, no monochrome mud.
@@ -121,7 +137,7 @@ Subjects, one per cell, left to right then top to bottom:
 
 ```
 Create a sprite sheet: a 6 rows x 4 columns grid (portrait cells, taller than wide) of 24 individual game sprites, evenly spaced, on a solid #FF00FF magenta background filling every non-subject pixel. Canvas orientation: portrait (taller than wide, e.g. 1024x1536).
-Camera: ground-level eye-level view for every sprite - front, side, or three-quarter angle only. NEVER high-angle, NEVER top-down. Each subject stands on an implied flat ground line. No floor plane, no ground shadows, no background scenery, no text or labels.
+Camera: ground-level eye-level view for every sprite - front, side, or three-quarter angle only. NEVER high-angle, NEVER top-down. For any insect, bug, or tiny creature: worm's-eye ground camera at the creature's OWN eye level, side or three-quarter PROFILE — as if photographed by another bug beside it; if the top of its back is more visible than its side, the angle is wrong. Each subject stands on an implied flat ground line. No floor plane, no ground shadows, no background scenery, no text or labels.
 Setting: volcanic ash wasteland — basalt hide, ember cracks, rust, toxic biolume.
 Style: dense gritty dithered pixel art. Realistic proportions and materials - adult humanoids have legs about half their total height; children are realistically proportioned kids, never chibi. Every character face must have a readable expression at sprite size. Every creature must sell its power and story in one pose: mid-intent stance (snarl, coiled to strike, mid-cast), signature effects where they characterize (drool, sparks, smoke, glow, venom). No mannequin stillness. Touchstone: FFVI-era spritework — maximum character per sprite. Finish: grimy dense-dithered ash grit — match dev/model-qa/regen-v3/style-refs/ash-style-ref.png exactly; NOT painterly, no airbrushed shading.
 Palette: grey-ash base with ember orange and toxic green accents; colorful-within-realm, no monochrome mud.
@@ -156,7 +172,7 @@ Subjects, one per cell, left to right then top to bottom:
 
 ```
 Create a sprite sheet: a 6 rows x 4 columns grid (portrait cells) of 24 individual game sprites, evenly spaced, on a solid #FF00FF magenta background filling every non-subject pixel. Canvas orientation: portrait (taller than wide, e.g. 1024x1536).
-Camera: ground-level eye-level view for every sprite - front, side, or three-quarter angle only. NEVER high-angle, NEVER top-down. Each subject stands on an implied flat ground line. No floor plane, no ground shadows, no background scenery, no text or labels.
+Camera: ground-level eye-level view for every sprite - front, side, or three-quarter angle only. NEVER high-angle, NEVER top-down. For any insect, bug, or tiny creature: worm's-eye ground camera at the creature's OWN eye level, side or three-quarter PROFILE — as if photographed by another bug beside it; if the top of its back is more visible than its side, the angle is wrong. Each subject stands on an implied flat ground line. No floor plane, no ground shadows, no background scenery, no text or labels.
 Setting: volcanic ash wasteland — basalt hide, ember cracks, rust, toxic biolume.
 Style: dense gritty dithered pixel art. Realistic proportions and materials - adult humanoids have legs about half their total height; children are realistically proportioned kids, never chibi. Every character face must have a readable expression at sprite size. Every creature must sell its power and story in one pose: mid-intent stance (snarl, coiled to strike, mid-cast), signature effects where they characterize (drool, sparks, smoke, glow, venom). No mannequin stillness. Touchstone: FFVI-era spritework — maximum character per sprite. Finish: grimy dense-dithered ash grit — match dev/model-qa/regen-v3/style-refs/ash-style-ref.png exactly; kids are short realistically-proportioned people, never chibi.
 Palette: grey-ash base with ember orange and toxic green accents; colorful-within-realm, no monochrome mud.
@@ -191,7 +207,7 @@ Subjects, one per cell, left to right then top to bottom:
 
 ```
 Create a sprite sheet: a 4 rows x 4 columns grid (roomy square-to-landscape cells for quadrupeds) of 16 individual game sprites, evenly spaced, on a solid #FF00FF magenta background filling every non-subject pixel. Canvas orientation: landscape (wider than tall, e.g. 1536x1024).
-Camera: ground-level eye-level view for every sprite - front, side, or three-quarter angle only. NEVER high-angle, NEVER top-down. Each subject stands on an implied flat ground line. No floor plane, no ground shadows, no background scenery, no text or labels.
+Camera: ground-level eye-level view for every sprite - front, side, or three-quarter angle only. NEVER high-angle, NEVER top-down. For any insect, bug, or tiny creature: worm's-eye ground camera at the creature's OWN eye level, side or three-quarter PROFILE — as if photographed by another bug beside it; if the top of its back is more visible than its side, the angle is wrong. Each subject stands on an implied flat ground line. No floor plane, no ground shadows, no background scenery, no text or labels.
 Setting: volcanic ash wasteland — basalt hide, ember cracks, rust, toxic biolume.
 Style: dense gritty dithered pixel art. Realistic proportions and materials - adult humanoids have legs about half their total height; children are realistically proportioned kids, never chibi. Every character face must have a readable expression at sprite size. Every creature must sell its power and story in one pose: mid-intent stance (snarl, coiled to strike, mid-cast), signature effects where they characterize (drool, sparks, smoke, glow, venom). No mannequin stillness. Touchstone: FFVI-era spritework — maximum character per sprite. Finish: grimy dense-dithered ash grit — match dev/model-qa/regen-v3/style-refs/ash-style-ref.png exactly; NOT painterly fur illustration, visible pixel grain everywhere.
 Palette: grey-ash base with ember orange and toxic green accents; colorful-within-realm, no monochrome mud.
@@ -218,7 +234,7 @@ Subjects, one per cell, left to right then top to bottom:
 
 ```
 Create a sprite sheet: a 4 rows x 4 columns grid (roomy square-to-landscape cells for quadrupeds) of 16 individual game sprites, evenly spaced, on a solid #FF00FF magenta background filling every non-subject pixel. Canvas orientation: landscape (wider than tall, e.g. 1536x1024).
-Camera: ground-level eye-level view for every sprite - front, side, or three-quarter angle only. NEVER high-angle, NEVER top-down. Each subject stands on an implied flat ground line. No floor plane, no ground shadows, no background scenery, no text or labels.
+Camera: ground-level eye-level view for every sprite - front, side, or three-quarter angle only. NEVER high-angle, NEVER top-down. For any insect, bug, or tiny creature: worm's-eye ground camera at the creature's OWN eye level, side or three-quarter PROFILE — as if photographed by another bug beside it; if the top of its back is more visible than its side, the angle is wrong. Each subject stands on an implied flat ground line. No floor plane, no ground shadows, no background scenery, no text or labels.
 Setting: volcanic ash wasteland — basalt hide, ember cracks, rust, toxic biolume.
 Style: dense gritty dithered pixel art. Realistic proportions and materials - adult humanoids have legs about half their total height; children are realistically proportioned kids, never chibi. Every character face must have a readable expression at sprite size. Every creature must sell its power and story in one pose: mid-intent stance (snarl, coiled to strike, mid-cast), signature effects where they characterize (drool, sparks, smoke, glow, venom). No mannequin stillness. Touchstone: FFVI-era spritework — maximum character per sprite. Finish: grimy dense-dithered ash grit — match dev/model-qa/regen-v3/style-refs/ash-style-ref.png exactly; NOT painterly fur illustration, visible pixel grain everywhere.
 Palette: grey-ash base with ember orange and toxic green accents; colorful-within-realm, no monochrome mud.

@@ -7,7 +7,23 @@ Instructions for the codex agent. Work through every sheet below IN ORDER, unsup
 For each sheet:
 1. Generate one image using the EXACT prompt in the code block. Do not improvise, reorder, or substitute subjects.
 2. Save the PNG at `ui-sketches/sprite-sheets/<filename>` using the exact filename in the heading.
-3. Check the result: correct sprite count, eye-level camera (no top-down), solid background, no floor planes, no chibi. If wrong, regenerate that sheet ONCE, keep the better attempt, and move on.
+3. Check the result against ALL of these before moving on:
+   a. correct sprite count, solid background, no floor planes, no chibi;
+   b. eye-level camera — and for INSECTS / BUGS / TINY CREATURES this is the rule you
+      always break: the camera sits at the CREATURE'S own eye level, a worm's-eye
+      ground camera looking at it in side or three-quarter PROFILE, as if you are
+      another bug standing next to it. NEVER looking down at it like something on a
+      floor, table, or specimen tray. If you can see the top of its back more than
+      its side, it is WRONG — regenerate;
+   c. EXPRESSION (the FFVI standard): every figure must be EXPRESSING something,
+      energetically — mid-intent pose, face reads, signature effects selling its
+      power. A creature staring blankly at the viewer like it's bombing on stage is
+      a FAIL even if everything else is perfect;
+   d. STYLE matches the realm reference PNG's pixel grain, grit, and palette discipline.
+   If any check fails: regenerate the sheet, up to 3 total attempts, keep the best.
+3b. NEVER DISCARD A RENDER: save every attempt you generate, including rejected ones,
+   as `<filename>-take2.png`, `-take3.png` beside the winner. Rejected takes are
+   harvested later as mood/expression variants — they are paid for, keep them.
 4. STYLE: before the first sheet, open and study the realm's reference image named in this packet — every sheet must match its pixel grain, grit, shading and palette discipline exactly.
 5. Never edit any other files.
 
@@ -15,7 +31,7 @@ For each sheet:
 
 ```
 Create a sprite sheet: a 1 row x 2 columns grid (big roomy cells) of 2 individual game sprites, evenly spaced, on a solid #FF00FF magenta background filling every non-subject pixel. Canvas orientation: landscape (wider than tall, e.g. 1536x1024).
-Camera: ground-level eye-level view for every sprite - front, side, or three-quarter angle only. NEVER high-angle, NEVER top-down. Each subject stands on an implied flat ground line. No floor plane, no ground shadows, no background scenery, no text or labels.
+Camera: ground-level eye-level view for every sprite - front, side, or three-quarter angle only. NEVER high-angle, NEVER top-down. For any insect, bug, or tiny creature: worm's-eye ground camera at the creature's OWN eye level, side or three-quarter PROFILE — as if photographed by another bug beside it; if the top of its back is more visible than its side, the angle is wrong. Each subject stands on an implied flat ground line. No floor plane, no ground shadows, no background scenery, no text or labels.
 Setting: prehistoric lost-world jungle — dinosaurs and primeval fauna.
 Style: clean crisp PIXEL ART with realistic materials — visible pixel grain and outline weight, NOT photorealistic, NOT smooth gradients. Match the pixel grain, grit, shading and palette discipline of the realm's established style exactly.
 Palette: rich naturalist jungle palette.
@@ -28,7 +44,7 @@ Subjects, one per cell, left to right then top to bottom:
 
 ```
 Create a sprite sheet: a 1 row x 1 column grid (small square cell) of 1 individual game sprites, evenly spaced, on a solid #FF00FF magenta background filling every non-subject pixel. Canvas orientation: square.
-Camera: ground-level eye-level view for every sprite - front, side, or three-quarter angle only. NEVER high-angle, NEVER top-down. Each subject stands on an implied flat ground line. No floor plane, no ground shadows, no background scenery, no text or labels.
+Camera: ground-level eye-level view for every sprite - front, side, or three-quarter angle only. NEVER high-angle, NEVER top-down. For any insect, bug, or tiny creature: worm's-eye ground camera at the creature's OWN eye level, side or three-quarter PROFILE — as if photographed by another bug beside it; if the top of its back is more visible than its side, the angle is wrong. Each subject stands on an implied flat ground line. No floor plane, no ground shadows, no background scenery, no text or labels.
 Setting: drowned age-of-sail realm — brine, barnacle crust, kelp rot.
 Style: dense grimy dithered pixel art. Match the pixel grain, grit, shading and palette discipline of the realm's established style exactly.
 Palette: muted brine palette.
@@ -40,7 +56,7 @@ Subjects, one per cell, left to right then top to bottom:
 
 ```
 Create a sprite sheet: a 1 row x 1 column grid (cell taller than wide) of 1 individual game sprites, evenly spaced, on a solid #FF00FF magenta background filling every non-subject pixel. Canvas orientation: portrait (taller than wide).
-Camera: ground-level eye-level view for every sprite - front, side, or three-quarter angle only. NEVER high-angle, NEVER top-down. Each subject stands on an implied flat ground line. No floor plane, no ground shadows, no background scenery, no text or labels.
+Camera: ground-level eye-level view for every sprite - front, side, or three-quarter angle only. NEVER high-angle, NEVER top-down. For any insect, bug, or tiny creature: worm's-eye ground camera at the creature's OWN eye level, side or three-quarter PROFILE — as if photographed by another bug beside it; if the top of its back is more visible than its side, the angle is wrong. Each subject stands on an implied flat ground line. No floor plane, no ground shadows, no background scenery, no text or labels.
 Setting: wild-west frontier — native plains warrior, grounded and dignified, period plains-nations visual vocabulary, never caricature.
 Style: clean crisp pixel art with realistic materials. Match the pixel grain, grit, shading and palette discipline of the realm's established style exactly.
 Palette: earthy palette with warpaint reds and blacks.
@@ -52,7 +68,7 @@ Subjects, one per cell, left to right then top to bottom:
 
 ```
 Create a sprite sheet: a 1 row x 1 column grid (big roomy cell) of 1 individual game sprites, evenly spaced, on a solid #FF00FF magenta background filling every non-subject pixel. Canvas orientation: landscape or square.
-Camera: ground-level eye-level view for every sprite - front, side, or three-quarter angle only. NEVER high-angle, NEVER top-down. Each subject stands on an implied flat ground line. No floor plane, no ground shadows, no background scenery, no text or labels.
+Camera: ground-level eye-level view for every sprite - front, side, or three-quarter angle only. NEVER high-angle, NEVER top-down. For any insect, bug, or tiny creature: worm's-eye ground camera at the creature's OWN eye level, side or three-quarter PROFILE — as if photographed by another bug beside it; if the top of its back is more visible than its side, the angle is wrong. Each subject stands on an implied flat ground line. No floor plane, no ground shadows, no background scenery, no text or labels.
 Setting: prehistoric lost-world jungle.
 Style: clean crisp pixel art with realistic materials. Match the pixel grain, grit, shading and palette discipline of the realm's established style exactly.
 Palette: rich naturalist jungle palette.
@@ -64,7 +80,7 @@ Subjects, one per cell, left to right then top to bottom:
 
 ```
 Create a sprite sheet: a 1 row x 1 column grid (big roomy cell) of 1 individual game sprites, evenly spaced, on a solid #FF00FF magenta background filling every non-subject pixel. Canvas orientation: square.
-Camera: ground-level eye-level view for every sprite - front, side, or three-quarter angle only. NEVER high-angle, NEVER top-down. Each subject stands on an implied flat ground line. No floor plane, no ground shadows, no background scenery, no text or labels.
+Camera: ground-level eye-level view for every sprite - front, side, or three-quarter angle only. NEVER high-angle, NEVER top-down. For any insect, bug, or tiny creature: worm's-eye ground camera at the creature's OWN eye level, side or three-quarter PROFILE — as if photographed by another bug beside it; if the top of its back is more visible than its side, the angle is wrong. Each subject stands on an implied flat ground line. No floor plane, no ground shadows, no background scenery, no text or labels.
 Setting: midnight cosmic-Egyptian realm — deep navy traced with gold constellation sigils.
 Style: dense gritty dithered pixel art. Match the pixel grain, grit, shading and palette discipline of the realm's established style exactly.
 Palette: disciplined navy-and-gold.
@@ -76,7 +92,7 @@ Subjects, one per cell, left to right then top to bottom:
 
 ```
 Create a sprite sheet: a 2 rows x 2 columns grid (cells wider than tall) of 4 individual game sprites, evenly spaced, on a solid #FF00FF magenta background filling every non-subject pixel. Canvas orientation: landscape (wider than tall).
-Camera: ground-level eye-level view for every sprite - front, side, or three-quarter angle only. NEVER high-angle, NEVER top-down. Each subject stands on an implied flat ground line. No floor plane, no ground shadows, no background scenery, no text or labels.
+Camera: ground-level eye-level view for every sprite - front, side, or three-quarter angle only. NEVER high-angle, NEVER top-down. For any insect, bug, or tiny creature: worm's-eye ground camera at the creature's OWN eye level, side or three-quarter PROFILE — as if photographed by another bug beside it; if the top of its back is more visible than its side, the angle is wrong. Each subject stands on an implied flat ground line. No floor plane, no ground shadows, no background scenery, no text or labels.
 Setting: volcanic ash wasteland — basalt hide, ember cracks, rust, toxic biolume.
 Style: gritty dithered pixel art. Match the pixel grain, grit, shading and palette discipline of the realm's established style exactly.
 Palette: grey-ash base with ember orange accents.
@@ -91,7 +107,7 @@ Subjects, one per cell, left to right then top to bottom:
 
 ```
 Create a sprite sheet: a 2 rows x 2 columns grid (cells wider than tall) of 4 individual game sprites, evenly spaced, on a solid #FF00FF magenta background filling every non-subject pixel. Canvas orientation: landscape (wider than tall).
-Camera: ground-level eye-level view for every sprite - front, side, or three-quarter angle only. NEVER high-angle, NEVER top-down. Each subject stands on an implied flat ground line. No floor plane, no ground shadows, no background scenery, no text or labels.
+Camera: ground-level eye-level view for every sprite - front, side, or three-quarter angle only. NEVER high-angle, NEVER top-down. For any insect, bug, or tiny creature: worm's-eye ground camera at the creature's OWN eye level, side or three-quarter PROFILE — as if photographed by another bug beside it; if the top of its back is more visible than its side, the angle is wrong. Each subject stands on an implied flat ground line. No floor plane, no ground shadows, no background scenery, no text or labels.
 Setting: volcanic ash wasteland — basalt hide, ember cracks, rust, toxic biolume.
 Style: gritty dithered pixel art. Match the pixel grain, grit, shading and palette discipline of the realm's established style exactly.
 Palette: grey-ash base with ember orange accents.
@@ -106,7 +122,7 @@ Subjects, one per cell, left to right then top to bottom:
 
 ```
 Create a sprite sheet: a 2 rows x 2 columns grid (cells wider than tall) of 4 individual game sprites, evenly spaced, on a solid #FF00FF magenta background filling every non-subject pixel. Canvas orientation: landscape (wider than tall).
-Camera: ground-level eye-level view for every sprite - front, side, or three-quarter angle only. NEVER high-angle, NEVER top-down. Each subject stands on an implied flat ground line. No floor plane, no ground shadows, no background scenery, no text or labels.
+Camera: ground-level eye-level view for every sprite - front, side, or three-quarter angle only. NEVER high-angle, NEVER top-down. For any insect, bug, or tiny creature: worm's-eye ground camera at the creature's OWN eye level, side or three-quarter PROFILE — as if photographed by another bug beside it; if the top of its back is more visible than its side, the angle is wrong. Each subject stands on an implied flat ground line. No floor plane, no ground shadows, no background scenery, no text or labels.
 Setting: classic high-fantasy realm — naturalist medieval world.
 Style: clean crisp pixel art with realistic materials. Match the pixel grain, grit, shading and palette discipline of the realm's established style exactly.
 Palette: naturalistic palette, species-true colors.
@@ -121,7 +137,7 @@ Subjects, one per cell, left to right then top to bottom:
 
 ```
 Create a sprite sheet: a 1 row x 2 columns grid (cells wider than tall) of 2 individual game sprites, evenly spaced, on a solid #FF00FF magenta background filling every non-subject pixel. Canvas orientation: landscape (wider than tall).
-Camera: ground-level eye-level view for every sprite - front, side, or three-quarter angle only. NEVER high-angle, NEVER top-down. Each subject stands on an implied flat ground line. No floor plane, no ground shadows, no background scenery, no text or labels.
+Camera: ground-level eye-level view for every sprite - front, side, or three-quarter angle only. NEVER high-angle, NEVER top-down. For any insect, bug, or tiny creature: worm's-eye ground camera at the creature's OWN eye level, side or three-quarter PROFILE — as if photographed by another bug beside it; if the top of its back is more visible than its side, the angle is wrong. Each subject stands on an implied flat ground line. No floor plane, no ground shadows, no background scenery, no text or labels.
 Setting: classic high-fantasy realm — naturalist medieval world.
 Style: clean crisp pixel art with realistic materials. Match the pixel grain, grit, shading and palette discipline of the realm's established style exactly.
 Palette: naturalistic palette, species-true colors.

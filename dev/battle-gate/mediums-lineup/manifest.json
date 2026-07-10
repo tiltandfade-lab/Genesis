@@ -1,0 +1,321 @@
+{
+  "generatedAt": "2026-07-10T20:33:46.182Z",
+  "route": "real-engine",
+  "routeNote": "window.Theater.setUnits/setBoard driven live via combat_start(applyEvent) + theaterUnitsFrom's real recipeSlug->SPRITE_REGISTRY join (SPRITE-TRANSITION T4) — no mock, no size override; every piece renders at its committed registry scale.",
+  "worstTwelve": [
+    {
+      "statId": "giant-weasel",
+      "slug": "spr-fantasy-giant-weasel",
+      "label": "giant weasel",
+      "family": "monsters",
+      "sizeBand": "medium",
+      "pxHeight": 111,
+      "feet": 2.5,
+      "scaleVsHuman": 0.45,
+      "sheet": "fantasy-monsters-2",
+      "cell": 19
+    },
+    {
+      "statId": "giant-badger",
+      "slug": "spr-fantasy-giant-badger",
+      "label": "giant badger",
+      "family": "monsters",
+      "sizeBand": "medium",
+      "pxHeight": 119,
+      "feet": 3,
+      "scaleVsHuman": 0.55,
+      "sheet": "fantasy-monsters-4",
+      "cell": 1
+    },
+    {
+      "statId": "mastiff",
+      "slug": "spr-fantasy-mastiff",
+      "label": "mastiff",
+      "family": "monsters",
+      "sizeBand": "medium",
+      "pxHeight": 137,
+      "feet": 2.8,
+      "scaleVsHuman": 0.51,
+      "sheet": "fantasy-monsters-3",
+      "cell": 1
+    },
+    {
+      "statId": "giant-frog",
+      "slug": "spr-fantasy-giant-frog",
+      "label": "giant frog",
+      "family": "monsters",
+      "sizeBand": "medium",
+      "pxHeight": 139,
+      "feet": 2.5,
+      "scaleVsHuman": 0.45,
+      "sheet": "fantasy-monsters-4",
+      "cell": 4
+    },
+    {
+      "statId": "panther",
+      "slug": "spr-fantasy-panther",
+      "label": "panther",
+      "family": "monsters",
+      "sizeBand": "medium",
+      "pxHeight": 139,
+      "feet": 2.5,
+      "scaleVsHuman": 0.45,
+      "sheet": "fantasy-monsters-4",
+      "cell": 11
+    },
+    {
+      "statId": "larva",
+      "slug": "spr-fantasy-larva",
+      "label": "larva",
+      "family": "monsters",
+      "sizeBand": "medium",
+      "pxHeight": 146,
+      "feet": 2,
+      "scaleVsHuman": 0.36,
+      "sheet": "fantasy-monsters-1",
+      "cell": 19
+    },
+    {
+      "statId": "giant-wolf-spider",
+      "slug": "spr-fantasy-giant-wolf-spider",
+      "label": "giant wolf spider",
+      "family": "monsters",
+      "sizeBand": "medium",
+      "pxHeight": 154,
+      "feet": 3,
+      "scaleVsHuman": 0.55,
+      "sheet": "fantasy-monsters-4",
+      "cell": 8
+    },
+    {
+      "statId": "reef-shark",
+      "slug": "spr-fantasy-reef-shark",
+      "label": "reef shark",
+      "family": "monsters",
+      "sizeBand": "medium",
+      "pxHeight": 155,
+      "feet": 3,
+      "scaleVsHuman": 0.55,
+      "sheet": "fantasy-monsters-6",
+      "cell": 4
+    },
+    {
+      "statId": "gray-ooze",
+      "slug": "spr-fantasy-gray-ooze",
+      "label": "gray ooze",
+      "family": "monsters",
+      "sizeBand": "medium",
+      "pxHeight": 158,
+      "feet": 3,
+      "scaleVsHuman": 0.55,
+      "sheet": "fantasy-monsters-5",
+      "cell": 19
+    },
+    {
+      "statId": "blink-dog",
+      "slug": "spr-fantasy-blink-dog",
+      "label": "blink dog",
+      "family": "monsters",
+      "sizeBand": "medium",
+      "pxHeight": 160,
+      "feet": 2.8,
+      "scaleVsHuman": 0.51,
+      "sheet": "fantasy-monsters-3",
+      "cell": 16
+    },
+    {
+      "statId": "rust-monster",
+      "slug": "spr-fantasy-rust-monster",
+      "label": "rust monster",
+      "family": "monsters",
+      "sizeBand": "medium",
+      "pxHeight": 161,
+      "feet": 3.5,
+      "scaleVsHuman": 0.64,
+      "sheet": "fantasy-monsters-6",
+      "cell": 5
+    },
+    {
+      "statId": "wolf",
+      "slug": "spr-fantasy-wolf",
+      "label": "wolf",
+      "family": "monsters",
+      "sizeBand": "medium",
+      "pxHeight": 162,
+      "feet": 2.8,
+      "scaleVsHuman": 0.51,
+      "sheet": "fantasy-monsters-5",
+      "cell": 3
+    }
+  ],
+  "knownGoodMedium": {
+    "statId": "pirate-admiral",
+    "slug": "spr-fantasy-pirate-admiral",
+    "label": "pirate admiral",
+    "family": "monsters",
+    "sizeBand": "medium",
+    "pxHeight": 258,
+    "feet": 5.9,
+    "scaleVsHuman": 1.07,
+    "sheet": "fantasy-monsters-19",
+    "cell": 5
+  },
+  "largeContrast": {
+    "statId": "ogre-zombie",
+    "slug": "spr-fantasy-ogre-zombie",
+    "label": "ogre zombie",
+    "family": "monsters",
+    "sizeBand": "large",
+    "pxHeight": 233,
+    "feet": 9.5,
+    "scaleVsHuman": 1.73,
+    "sheet": "fantasy-monsters-10",
+    "cell": 2
+  },
+  "notes": [],
+  "boot": {
+    "ok": true,
+    "notes": [
+      "startSession() called"
+    ],
+    "worldId": "mrfe8dhnt4dlv",
+    "worldName": "The Gravity-Well"
+  },
+  "fight": {
+    "ok": true,
+    "raw": {
+      "ok": true,
+      "combat": {
+        "round": 1,
+        "first": "enemy",
+        "foes": [
+          {
+            "fid": "f1",
+            "name": "giant weasel",
+            "band": "melee",
+            "lane": "R"
+          },
+          {
+            "fid": "f2",
+            "name": "giant badger",
+            "band": "melee",
+            "lane": "C"
+          },
+          {
+            "fid": "f3",
+            "name": "mastiff",
+            "band": "melee",
+            "lane": "C"
+          },
+          {
+            "fid": "f4",
+            "name": "giant frog",
+            "band": "near",
+            "lane": "L"
+          },
+          {
+            "fid": "f5",
+            "name": "panther",
+            "band": "near",
+            "lane": "C"
+          },
+          {
+            "fid": "f6",
+            "name": "larva",
+            "band": "near",
+            "lane": "C"
+          },
+          {
+            "fid": "f7",
+            "name": "giant wolf spider",
+            "band": "far",
+            "lane": "C"
+          },
+          {
+            "fid": "f8",
+            "name": "reef shark",
+            "band": "far",
+            "lane": "L"
+          },
+          {
+            "fid": "f9",
+            "name": "gray ooze",
+            "band": "far",
+            "lane": "C"
+          },
+          {
+            "fid": "f10",
+            "name": "blink dog",
+            "band": "out",
+            "lane": "R"
+          },
+          {
+            "fid": "f11",
+            "name": "rust monster",
+            "band": "out",
+            "lane": "L"
+          },
+          {
+            "fid": "f12",
+            "name": "wolf",
+            "band": "out",
+            "lane": "R"
+          },
+          {
+            "fid": "f13",
+            "name": "pirate admiral",
+            "band": "melee",
+            "lane": "C"
+          },
+          {
+            "fid": "f14",
+            "name": "ogre zombie",
+            "band": "melee",
+            "lane": "C"
+          }
+        ]
+      }
+    }
+  },
+  "stage": {
+    "ready": true,
+    "state": {
+      "hasBattleStage": true,
+      "theaterMounted": true,
+      "hasCanvas": true
+    }
+  },
+  "resolvedSpritesProbe": {
+    "ok": true,
+    "byCase": {
+      "spr-fantasy-giant-weasel": "loaded",
+      "spr-fantasy-giant-badger": "loaded",
+      "spr-fantasy-mastiff": "loaded",
+      "spr-fantasy-giant-frog": "loaded",
+      "spr-fantasy-panther": "loaded",
+      "spr-fantasy-larva": "loaded",
+      "spr-fantasy-giant-wolf-spider": "loaded",
+      "spr-fantasy-reef-shark": "loaded",
+      "spr-fantasy-gray-ooze": "loaded",
+      "spr-fantasy-blink-dog": "loaded",
+      "spr-fantasy-rust-monster": "loaded",
+      "spr-fantasy-wolf": "loaded",
+      "spr-fantasy-pirate-admiral": "loaded",
+      "spr-fantasy-ogre-zombie": "loaded"
+    }
+  },
+  "consoleErrors": [
+    "Failed to load resource: the server responded with a status of 404 (File not found)",
+    "Failed to load resource: the server responded with a status of 404 (File not found)"
+  ],
+  "consoleErrorsCount": 2,
+  "canvasFound": true,
+  "tableMeanLum": 40.15862413194466,
+  "zoomResult": {
+    "ok": true,
+    "via": "Theater.zoom",
+    "steps": 5,
+    "finalZoomLevel": 0.45
+  },
+  "closeupMeanLum": 41.54770833333361
+}

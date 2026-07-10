@@ -157,8 +157,11 @@ ok(typeof M.INTERIOR_TILE_KITS === "object" && M.INTERIOR_TILE_KITS, "INTERIOR_T
   const kit = M.INTERIOR_TILE_KITS[k];
   ok(kit && typeof kit.floorColor === "string" && typeof kit.wallColor === "string" && typeof kit.trimColor === "string",
     `kit "${k}" carries floor/wall/trim colors`);
-  ok(kit && kit.fog && typeof kit.fog.color === "string" && typeof kit.fog.density === "number",
-    `kit "${k}" carries fog {color,density}`);
+  // GR3 (docs/GRAPHICS-ENGINE.md build unit GR3): kit.fog.density (the old ad-hoc per-kit number,
+  // 0.02-0.035) is RETIRED — the interior fog default is now kit.grade.fogWhisper (checks 16-21,
+  // below). fog keeps only its color (still the void/fog backdrop's base tint).
+  ok(kit && kit.fog && typeof kit.fog.color === "string",
+    `kit "${k}" carries fog {color}`);
 });
 console.log(`  ✓ ${pass} passed so far`);
 
@@ -392,6 +395,152 @@ group("15 — an unknown/typo'd material name degrades to the mottle painter rat
     });
   }
   ok(maxDev <= 0.1 + 0.02, `unknown-material fallback still paints within a LOW-contrast band (mottle's own bilinear-bounded output) — max deviation ${maxDev.toFixed(4)}`);
+}
+
+// ============================================================================
+// GR3+GR4 ADDITIONS (docs/GRAPHICS-ENGINE.md build units GR3 LIGHT RIG LAW + GR4 STAGE LAW —
+// checks 16-21 below).
+//
+// RED-FIRST (checked 2026-07-10 against origin/claude/genesis-sprite-corpus-tags-edeaac tip 51b6d85,
+// BEFORE this unit's edits):
+//   `git show 51b6d85:src/ui/theater-boot.js | grep -c HemisphereLight` -> 0 (no hemisphere key existed
+//   at all — mount() built only a key+fill DirectionalLight pair, applyLightProfile's ambient/points).
+//   `git show 51b6d85:src/ui/theater-boot.js | grep -n 'skirt'` -> 5 hits, ALL "robe-skirt" (a character
+//   CLOTHING part name, theaterFigures' cloth-material dispatch) — zero hits for a diorama-edge/board-
+//   perimeter skirt group; `git show 51b6d85:src/ui/theater-interior.js | grep -c
+//   'gradeTint\|gradeStrength\|fogWhisper'` -> 0 (kits carried only an ad-hoc per-kit `fog.density`
+//   number, 0.02-0.035, no shared per-realm grade concept at all). Both are now real (this unit) — see
+//   theater-boot.js's `new THREE.HemisphereLight(...)` in mount() and its `shadowKind==="skirt"` branch
+//   in interiorBuildInstancedMesh/setInteriorBoard, and theater-interior.js's per-kit `grade` field +
+//   `itrBuildSkirtRing`.
+//
+//   16. structural (text-scan theater-boot.js, the ES-module GL boundary file excluded from this
+//       harness's own vm sandbox — same "text-scan cross-reference" discipline dev/verify-theater-
+//       light-props.mjs already established for GL-layer facts a pure-data harness can't exercise
+//       without a browser): a HemisphereLight is constructed exactly once, inside mount() (so BOTH
+//       render channels — setBoard's flat table AND setInteriorBoard's volumetric tray — inherit the
+//       SAME rig instance by construction by sharing S.scene, never a per-channel duplicate wired
+//       separately that could drift out of parity); its intensity literal stays <= the GR3 bound.
+//   17. regression (text-scan): setBoard's existing "restore shadowMap.enabled=false whenever a
+//       COMBAT/tabletop board mounts" line (U3-era, unchanged by this unit) is still present and still
+//       the ONLY place shadow-mapping turns back off — the tabletop "no shadow maps" ruling (§2) stays
+//       intact even though mount() now shares a light (HemisphereLight, which per the three.js API has
+//       no castShadow property at all — incapable of reopening that ruling by construction).
+//   18. structural (text-scan): setInteriorBoard wires the skirt InstancedMesh (data.skirt through
+//       interiorBuildInstancedMesh(..., "skirt")) and grades its own void/fog backdrop through the
+//       kit's own gradeTint/gradeStrength via gradeColorLocal (GR4's "route voidTintFor through the kit
+//       grade" + GR3's "same grade function as the table's own void-tint line").
+//   19. GR3 grade data: INTERIOR_TILE_KITS' `grade` field exists for all 12 realms; every strength stays
+//       <= INTERIOR_GRADE_STRENGTH_MAX (0.15, the GR3 acceptance bound); fogWhisper is 0 for every realm
+//       EXCEPT gloom (the taste ruling: "fog off by default except a whisper where the realm earns it —
+//       gloom keeps a whisper, others 0"), and interiorBuildBoard's own tileKit output threads all three
+//       fields through verbatim (never re-derived, never dropped).
+//   20. GR4 skirt data: interiorBuildBoard's `skirt` array rings the FULL board-bounds perimeter (count
+//       matches the plain w*h-minus-interior formula for the fixture's own tracked bounds) and — via the
+//       SAME y-formula theater-boot.js's interiorBuildInstancedMesh uses for shadowKind==="skirt"
+//       (y = -0.5 - sy/2) — sits strictly below y=-0.5, never overlapping the shared floor plane.
+//   21. determinism: same (plan,opts) twice -> skirt array byte-identical (JSON-equal), same law as
+//       check 7 (instances) / check 10 (lights), extended to the skirt channel.
+// ============================================================================
+const bootSrc = read("src/ui/theater-boot.js");
+
+group("16 — GR3: a shared HemisphereLight is built once in mount() (table+interior parity by construction)");
+{
+  const mountMatch = bootSrc.match(/function mount\(el, opts\)\{[\s\S]*?\n\}\n/);
+  ok(!!mountMatch, "mount(el, opts) function body is found in theater-boot.js");
+  const mountBody = mountMatch ? mountMatch[0] : "";
+  const hemiCallsInMount = (mountBody.match(/new THREE\.HemisphereLight\(/g) || []).length;
+  ok(hemiCallsInMount === 1, `exactly one HemisphereLight is constructed inside mount() — found ${hemiCallsInMount}`);
+  const hemiCallsWhole = (bootSrc.match(/new THREE\.HemisphereLight\(/g) || []).length;
+  ok(hemiCallsWhole === 1, `HemisphereLight is constructed in exactly ONE place in the whole file (no per-channel duplicate) — found ${hemiCallsWhole}`);
+  ok(/new THREE\.HemisphereLight\(HEMI_SKY, HEMI_GROUND, HEMI_INTENSITY_DEFAULT\)/.test(mountBody),
+    "mount() constructs the hemisphere off the named HEMI_SKY/HEMI_GROUND/HEMI_INTENSITY_DEFAULT constants (not an untraceable inline literal)");
+  const intensityMatch = bootSrc.match(/const HEMI_SKY = 0x[0-9a-f]+, HEMI_GROUND = 0x[0-9a-f]+, HEMI_INTENSITY_DEFAULT = ([0-9.]+);/);
+  const intensity = intensityMatch ? parseFloat(intensityMatch[1]) : NaN;
+  const HEMI_INTENSITY_BOUND = 0.35;
+  ok(Number.isFinite(intensity) && intensity > 0 && intensity <= HEMI_INTENSITY_BOUND,
+    `HEMI_INTENSITY_DEFAULT (${intensity}) is a positive number <= ${HEMI_INTENSITY_BOUND} (low-intensity key — the scene's own torches/lamps stay the drama)`);
+  ok(/scene\.add\(hemi\)/.test(mountBody), "the hemisphere light is added to the scene inside mount() (persists for every board mounted after)");
+}
+
+group("17 — REGRESSION: the tabletop's own shadowMap-off restore (U3, unchanged) still stands");
+{
+  ok(/if\(S\.renderer\) S\.renderer\.shadowMap\.enabled = false;/.test(bootSrc),
+    "setBoard still restores renderer.shadowMap.enabled=false whenever a combat/tabletop board mounts");
+  const onCount = (bootSrc.match(/S\.renderer\.shadowMap\.enabled = true;/g) || []).length;
+  ok(onCount === 1, `shadow-mapping is turned ON in exactly one place (setInteriorBoard) — found ${onCount}`);
+}
+
+group("18 — GR4/GR3 wiring: skirt InstancedMesh + kit-graded void/fog backdrop in setInteriorBoard");
+{
+  ok(/interiorBuildInstancedMesh\(data\.skirt, cx, cz, null, variant, "skirt"\)/.test(bootSrc),
+    "setInteriorBoard builds a skirt InstancedMesh off data.skirt");
+  ok(/gradeColorLocal\(\s*\n?\s*\(data\.fog && data\.fog\.color\) \? hexStrToNum\(data\.fog\.color\) : voidTintFor\(env\),/.test(bootSrc),
+    "setInteriorBoard grades its void/fog backdrop color through gradeColorLocal (routes voidTintFor through the kit grade)");
+  ok(/const fogWhisper = \(typeof kit\.fogWhisper === "number"/.test(bootSrc),
+    "setInteriorBoard's fog-density default reads kit.fogWhisper (not the old ad-hoc 0.05 literal)");
+  ok(!/\(data\.fog && data\.fog\.density\) \|\| 0\.05/.test(bootSrc),
+    "the old ad-hoc `(data.fog && data.fog.density) || 0.05` fog-density default is gone");
+}
+
+group("19 — GR3 grade data: all 12 realms carry {tint,strength<=0.15,fogWhisper}; only gloom whispers");
+{
+  const realmIds = Object.keys(M.INTERIOR_TILE_KITS);
+  ok(realmIds.length === 12, `INTERIOR_TILE_KITS carries all 12 realms — found ${realmIds.length}`);
+  let whisperRealms = [];
+  realmIds.forEach((realmId) => {
+    const kit = M.INTERIOR_TILE_KITS[realmId];
+    const grade = kit && kit.grade;
+    ok(grade && typeof grade.tint === "string" && typeof grade.strength === "number" && typeof grade.fogWhisper === "number",
+      `realm "${realmId}" kit carries a full grade {tint,strength,fogWhisper}`);
+    ok(grade && grade.strength >= 0 && grade.strength <= 0.15,
+      `realm "${realmId}" grade.strength (${grade && grade.strength}) stays within [0, 0.15] (GR3 acceptance bound)`);
+    if (grade && grade.fogWhisper > 0) whisperRealms.push(realmId);
+    // interiorBuildBoard's own tileKit output threads these three fields through verbatim off a real
+    // built board (never just reading the raw kit table) — proves the wiring, not just the source data.
+    const fixture = buildChainFixture(3);
+    const plan = M.semanticizePlan(M.spatializePlan(fixture, { seed: fixtureHash(realmId) }));
+    const board = M.interiorBuildBoard(plan, { realmId });
+    ok(board.tileKit.gradeTint === grade.tint && board.tileKit.gradeStrength === grade.strength && board.tileKit.fogWhisper === grade.fogWhisper,
+      `realm "${realmId}": interiorBuildBoard's tileKit.{gradeTint,gradeStrength,fogWhisper} match the kit's own grade verbatim`);
+  });
+  ok(whisperRealms.length === 1 && whisperRealms[0] === "gloom",
+    `exactly gloom keeps a nonzero fogWhisper (others 0) — found [${whisperRealms.join(", ")}]`);
+}
+
+group("20 — GR4 skirt data: rings the full board-bounds perimeter, sits below y=-0.5");
+{
+  [3, 8, 20].forEach((n) => {
+    const fixture = buildChainFixture(n);
+    const plan = M.semanticizePlan(M.spatializePlan(fixture, { seed: fixtureHash("skirt:" + n) }));
+    const board = M.interiorBuildBoard(plan, { realmId: "gloom" });
+    const b = board.bounds;
+    const w = b.maxX - b.minX + 1, d = b.maxZ - b.minZ + 1;
+    const expected = (w <= 1 || d <= 1) ? Math.max(0, w * d) : (2 * w + 2 * d - 4);
+    ok(board.skirt.length === expected,
+      `n=${n} plan: skirt count (${board.skirt.length}) matches the board-bounds perimeter formula (expected ${expected}, bounds ${w}x${d})`);
+    ok(board.meta.skirtCount === board.skirt.length, `n=${n} plan: meta.skirtCount matches skirt.length`);
+    // independent check: every skirt cell sits on the bounds' own outer ring (never an interior cell).
+    const offRing = board.skirt.filter((s) => s.x !== b.minX && s.x !== b.maxX && s.z !== b.minZ && s.z !== b.maxZ);
+    ok(offRing.length === 0, `n=${n} plan: every skirt instance sits on the bounds' outer ring (0 interior leaks, found ${offRing.length})`);
+    // the SAME y-formula theater-boot.js's interiorBuildInstancedMesh applies for shadowKind==="skirt"
+    // (y = -0.5 - sy/2) — computed independently here, off the plain data shape, never trusting a GL
+    // render to prove it.
+    const belowFloor = board.skirt.every((s) => (-0.5 - (s.sy || 1) / 2) < -0.5);
+    ok(belowFloor, `n=${n} plan: every skirt instance's own GL-formula y sits strictly below the shared y=-0.5 floor plane`);
+    ok(board.skirt.every((s) => s.sy === 0.4), `n=${n} plan: every skirt instance carries the GR4 0.4-cell depth`);
+  });
+}
+
+group("21 — determinism: same (plan,opts) twice -> skirt array byte-identical (extends checks 7/10)");
+{
+  const fixture = buildChainFixture(12);
+  const plan1 = M.semanticizePlan(M.spatializePlan(fixture, { seed: 424242 }));
+  const plan2 = M.semanticizePlan(M.spatializePlan(fixture, { seed: 424242 }));
+  const boardA = M.interiorBuildBoard(plan1, { realmId: "ash" });
+  const boardB = M.interiorBuildBoard(plan2, { realmId: "ash" });
+  ok(JSON.stringify(boardA.skirt) === JSON.stringify(boardB.skirt), "skirt array is byte-identical across two independent builds of the same (plan,opts)");
+  ok(boardA.skirt.length > 0, "the fixture actually produced skirt instances (a non-vacuous determinism check)");
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);

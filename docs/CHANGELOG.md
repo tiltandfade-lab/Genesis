@@ -8,6 +8,55 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-07-09 (late night) — PLACE-GEN build wave: places are realm-true from birth and render as dioramas
+
+**Added**
+- **Place Spine + skins (U0, PROVISIONAL):** `Engine/03. _Tables/05. Realms/Place Spine.md` (24 site
+  archetypes: weight, scale, GRID-LAW space band, staff band, castProfile) + `Place Skin -
+  {Frontier,Chrome,Gloom}.md` (relabel/drop/add/reweight + namePatterns). Adam's craft pass pending.
+- **`build/gen-place-skins.py` → `data/place-skins.js` (U1):** `PLACE_SPINE`/`PLACE_SKINS`/
+  `PLACE_SPACE_CELLS`/`placeForRealm` (+U3 `SCENE_BUCKET_BY_ARCHETYPE`, +U8 `SCENE_DRESSING_BY_
+  ARCHETYPE`/`sceneDressingForPlace`/`--census`). Missing skins legal → frontier fallback at roll time.
+- **GRID LAW (rewire-class, DESIGN-registered):** every generated space measures in real 5-ft cells;
+  1 band = 5 cells deep, 1 lane = 4 wide. `rollPlace` emits `rolled.dims` in cells (U2); node trays
+  render 1 tile = 1 cell (U7); typed-place fights derive their zone grid from cells (`cmGridFromCells`,
+  U11 — text-parse path byte-identical for everything else).
+- **Tray node source (U7):** `trayFrom({kind:"node"})` + `theaterNodeSourceFor` — a minted place
+  renders as its diorama (floor = dims, dressing-driven floor/light/props, deterministic scatter).
+  Screenshot-gated (`dev/battle-gate/capture-place-tray.mjs`, eyeballed: gloom diner reads).
+- **Cast wiring (U3):** anchor NPCs land on-class via `roleForRealm({filterCls})` filtered-pool
+  (never-dangle); ambient fill maps archetype → scene bucket.
+- **Breach leak (U5):** `rollPlace({hybridRealm})` minority cross-skin mints, SHARED `ROLE_HYBRID_K`
+  (one law with the NPC leak); leaked mints carry `dm.dressing.hybridProps` as the visual tell.
+- **Kit/district relabels (U6):** `BUILDING_KIT_REALM_LABELS` chrome/gloom (all 14 kits) + district
+  relabel map + chrome faction handles; frontier byte-identical (golden-tested).
+- **TIYL routing (U9):** origin settlements carry realm `itemsPool`/`dressing` pointers (pointers
+  only — settlements stay compositional; bardo presentation byte-identical).
+- **DM digest location line (U10):** typed nodes read "<name> — <archetype>, WxD ft, <light>
+  (props…)", 88 B, derived through the tray's own lookups (one derivation).
+- **Book gathers:** DMG14 settlements + random dungeons, DMG24 settlements + bastions
+  (`docs/PLACE-GATHER-*.md`, vision-read) + `dev/model-qa/dmg2014-page-index.json`.
+- **PLACE-ASSET-QUEUE** (`docs/PLACE-ASSET-QUEUE.md`, PROVISIONAL): 44 grounded entries (22 P1);
+  main finding = zero architecture-shell vocabulary in the prop stack. Sprite half translated to
+  `dev/model-qa/sprite-sheets/setting-dressing.md` (4 sheets / 47 cells) + INDEX line.
+
+**Changed**
+- Five thin settlement tables (Ruler Status / Race Relations / Mythology / Nearby / Relevancy) →
+  Master-Setting grade (d100, 5-band 66/20/9/4/1, DMG14 seeds, GRID-LAW dimensions; originals in
+  `zz_Archive/`, rows PROVISIONAL).
+- Merged origin/master mid-wave (the 3ceb4ad CI green wave) — the 3 pre-existing sweep reds
+  (digest-diet/dm-contract/creature-determinism) were already fixed there, not re-fixed.
+- `ROLE_HYBRID_K` const→let (mutation-guard testability; no production reassignment).
+
+**Verification** — every unit orchestrator-re-gated on its branch tip + the integrated tree; full
+`dev/verify-*.mjs` sweep ZERO failures at close; `check-manifest.py` OK throughout; combat byte-gate
+(tabletop-u1 45/45) intact; fuzz 520 calls / 0 findings.
+
+**Deferred** — HOOK-WALKS terminus-bias table (blocked on that spec locking; the `archetypeBias`
+parameter itself landed in U2); 8 backfill realm skins (craft lane); per-realm place-secret tables
+(Adam ruling open); interior generator (spec section first); P1 asset wave (Adam go/no-go);
+`sprite-sheet-prompts.md` shared template referenced by realm sheets but missing (pre-existing).
+
 ## 2026-07-09 (night) — Doc auto-archive rule + CI/token-discipline session close
 
 **Added**
@@ -1047,50 +1096,4 @@ verify-theater-figures 38/0, verify-realm-wiring 20/0).
 - **Surface-select wiring** + the **render-style grade** — both ride the `activeRealmsFor` seam now.
 - **Urban/wilderness creature-wiring** (dungeon done; walk.js/wild-walk.js are the follow-up).
 - Text review/reshape of the realm drafts + fold the icons batch into the main bestiary.
-
-## 2026-07-04 (later 2) — THE LIVE-QA ARC: roster completion, the eye reversal, the texture no [Opus]
-
-Continues from the delegation close. Adam ran a live QA review of the master render sheet and the
-in-app roster; this arc is his rulings executed + the bestiary program specced + a texture
-experiment run and rejected. All landed unit-by-unit with per-unit re-gates (verify-theater-figures
-38/38 each), final sweep 92/92 + manifest OK, pushed to origin.
-
-### Added
-- **Race×class matrix COMPLETE — all 72 combos** (18 starter + 54 completion: dwarf/gnome/halfling
-  + half-orc/tiefling/dragonborn × their remaining classes). Authored EYELESS, ranger bows to the
-  D spec. 72-cell `racecls` sheet re-rendered from the integrated tree. verified all 72 import clean.
-- **Bestiary tail wave** (Adam's live-QA nine + a bow fix): rat-swarm rebuilt as 6 mouse bodies
-  (was one big rat via a bad alias), bespoke giant-lizard/ice-mephit/deep-stalker/needle-blight,
-  wolf mouth pass, flaming-skeleton variant (glow-tagged ember accents in the sockets), horse +
-  skeletal-warhorse (fixed the warhorse-skeleton→humanoid alias), prop-table/bench proportion, and
-  the ranger's bow swapped to the D-at-rest primary (string tip-to-tip on the nocks).
-- **BESTIARY-COVERAGE.md** — the model program to close the 381-uncovered gap. Tier-2 cut: 312
-  build-priority (CR≤10) / 69 deferred (CR11+). ~16 real new silhouette bodies after demotions
-  carry the whole CR≤10 tail (the six highest-leverage unlock ~76 creatures); the rest are variants
-  or aliases. §2 is Adam's new-body gate. **35 zero-modeling aliases LANDED** (targets verified
-  present); the wave plan awaits his gate.
-- Three afternoon specs (from the chase-playtest findings + Adam's approval): **CHASE-SOFT-RECALL**
-  (BUILT — escaped significant quarries mint codex handles, turnRecall-proven, 30/30) and
-  **DRESSING-ATMOSPHERE** (BUILT — one air/odor/sound lane per room/leg/segment, 36/36); **CHASE-BITE**
-  drafted SPEC-ONLY for Adam's design pick (flat −2 rider recommended vs adv/dis).
-
-### Changed
-- **Eye standard REVERSED** (Adam: "across the board the eyes are in the wrong place — get rid of
-  them"). Humanoid eye quads stripped corpus-wide (75 files + shared buildHead); owlbear/spider
-  feature-eyes, skull sockets, and closed-helm visor slits kept as the character features they are.
-  Ruling recorded in REFERENCE-DIRECTION. The starter-18 racecls were already swept (verified: a
-  face renders as a blank plane) — a stale "still carry eyes" note was corrected.
-- **Flame glow** refined to additive+translucent (opacity .85, depthWrite off) so fire reads as
-  emitted light, not painted orange. **WHOLE_OBJECT_SCALE 1.2** (adjacency-proven, figures don't
-  touch), **gold PC-disc rim +39% px** (rim-only, never figure tint).
-
-### Deferred / Ruled-out
-- **ChatGPT painted-texture pipeline — RULED A CLEAR FAIL** (Adam). Ran the full round-trip: a
-  25-slot swatch library → 12 creatures wearing the tiles through the real PS1 pass. Bright materials
-  read (troll fur, lava, ghost-vapor, bone) but dark tiles mud out under the dither and the win didn't
-  justify a painted-asset dependency. **Generated grain stays the tier** — reaffirmed under the
-  existing ruling; NEVER wired into the live renderer (the game is unchanged). Dev experiment files
-  kept as documented dead-end evidence.
-- Bestiary build waves (the ~16 new bodies) — await Adam's §2 gate. Grit pick still held at 1/3
-  (zoom crops waiting). CHASE-BITE build awaits the design pick. Env waves W+U still queued.
 

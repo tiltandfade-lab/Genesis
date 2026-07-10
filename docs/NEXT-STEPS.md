@@ -23,6 +23,13 @@ sections (tracks/layers/etc.) are never auto-archived.
 The accidental design session (see CHANGELOG 2026-07-09): 6 system specs + 6 craft expansions merged
 with Adam's rulings folded; REALM-HOOKS spec landing next. Queue:
 
+**Place-gen riders (2026-07-09 late night — the engine wave LANDED, full sweep green; open items
+carried forward from the archived place-gen lane block):** ① Adam red-pen + P1-wave go/no-go on
+`docs/PLACE-ASSET-QUEUE.md` (the spend gate) · ② Adam craft pass on Place Spine rows + 3 skin labels
++ the 5 upgraded settlement tables (all PROVISIONAL) · ③ interior-gen spec section (DMG14 Appendix A
+chain + Bastion space-bands, realm-skinned) before its build wave · ④ 8 backfill realm skins (craft
+lane) · ⑤ HOOK-WALKS terminus-bias table when that spec locks (the archetypeBias parameter is live).
+
 1. ☐ **Adam (morning): gather the books** into `Reference/` for the Saltmarsh treatment (page index +
    system gather each — highest-fit first):
    - **Van Richten's Guide to Ravenloft** → GLOOM (Domains of Dread, horror kits, Darklords)
@@ -199,17 +206,3 @@ L7. ☐ **Regenerate `table-registry.json/.md`** — stale after the rename/new 
 3. ☐ Models lane pivots to trays/props/architecture (MODEL-FOUNDRY re-scoped; VISUAL-ASSET-QUEUE
    creature targets → sprite lane).
 
-## Do next (2026-07-09, place-gen lane — visual-engine expansion)
-
-1. ☑ **Book gathers** — DMG14 settlements + random dungeons, DMG24 settlements + bastions
-   (docs/PLACE-GATHER-*.md, vision-read, committed 2acdcb8). VRGtR full book still wanted
-   (current file = subclasses excerpt; Adam sourcing) → Gloom domain-gen gather.
-2. ☑ **Settlement thin-table upgrades — DONE 2026-07-09 (663a7b8, re-gated): Ruler Status / Race Relations / Mythology /
-   Nearby / Relevancy → Master-Setting-grade d100, seeded from the DMG14 gather; GRID-LAW
-   dimensions on physical rows; originals archived; land PROVISIONAL for Adam's red-pen.
-3. ☐ **GRID LAW rewire** (PLACE-GEN ADDENDUM §A): (1) place mints emit cell footprints,
-   (2) theater 1 tile = 1 cell (5 ft), (3) combat bands/lanes derive from cell geometry (own unit).
-4. ☐ **Interior-gen spec section** — DMG14 Appendix A chain + Bastion space-bands, realm-skinned,
-   before its build wave.
-5. ☐ **Place Spine craft pass** (Adam) — spine rows + skin labels vs the Bastion 35-facility
-   cross-check (space band + staffing fields added per ADDENDUM §B).

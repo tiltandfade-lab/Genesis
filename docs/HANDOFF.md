@@ -6,9 +6,34 @@ updated: 2026-07-09 (late night)
 
 # Genesis — Session Hand-off
 
+## ⭐ Latest (2026-07-09, late night) — PLACE-GEN built end-to-end: places are realm-true and render as dioramas [Claude Fable]
+
+The whole PLACE-GEN wave landed on `claude/place-generation-a57dd2` (11 units, each a --no-ff merge,
+each orchestrator-re-gated): Place Spine (24 archetypes) + Frontier/Chrome/Gloom skins (PROVISIONAL),
+the generator + `placeForRealm`, the `rollPlace` realm swap with GRID-LAW cell dims, cast wiring,
+breach leak (shared constant), kit/district relabels, **the tray node source (a minted place renders
+as its diorama — screenshot-gated, the gloom diner reads)**, dressing map + prop census, TIYL origin
+routing, the DM digest location line (one-derivation law), and combat zone grids derived from known
+cells. GRID LAW registered in DESIGN.md; ARCHITECTURE.md updated (new Place Generation entry + tray
+source kinds). Also: 4 vision-read book gathers (DMG14/24), 5 settlement tables upgraded to
+Master-Setting grade, and `docs/PLACE-ASSET-QUEUE.md` (44 entries, 22 P1 — main finding: zero
+architecture-shell props exist) with the sprite half in `dev/model-qa/sprite-sheets/setting-dressing.md`.
+
+**Verification:** full verify sweep ZERO failures at close; combat byte-gate intact; fuzz 0 findings.
+
+**Do next (pick up here):**
+1. Adam red-pen: PLACE-ASSET-QUEUE + P1 wave go/no-go (the spend gate) · Place Spine rows + 3 skin
+   labels · the 5 settlement tables.
+2. Merge `claude/place-generation-a57dd2` → master (clean close paused at the confirm gate),
+   regenerate tables.js/dm-contract at the merge per worktree law.
+3. 8 backfill realm skins (craft lane) · interior-gen spec section (off the Appendix A gather) ·
+   HOOK-WALKS terminus table when that spec locks.
+4. Full Van Richten's still wanted (current file = subclasses excerpt) → Gloom domain-gen gather.
+
+
 *Read this first in a new session. It orients you; the linked docs are the source of truth.*
 
-## ⭐ Latest (2026-07-09 late — REALM-KEY EXPANSION + SPRITE TRANSITION T1–T4) [Claude Fable 5]
+## Latest (2026-07-09 late — REALM-KEY EXPANSION + SPRITE TRANSITION T1–T4) [Claude Fable 5]
 
 **What shipped (branch `claude/npc-monster-realm-expansion-edb64a`, one --no-ff merge):**
 the approved realm-key expansion roster (docs/REALM-KEY-EXPANSION-ROSTER.md) statted to MM standard —

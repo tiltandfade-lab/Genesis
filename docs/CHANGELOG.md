@@ -8,6 +8,33 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-07-10 (evening) — WILDERMYTH GRAMMAR: engine marriage BUILT + dressing-gen packets + finale loop gate 5/5
+
+**Added**
+- North star: docs/GRAPHICS-ENGINE.md (Part I recipe + Part II research-grounded marriage;
+  Wildermyth research digests committed). Identity: DF sim × Daggerfall breadth × Wildermyth
+  presentation.
+- ENGINE WAVE (all landed, each --no-ff + orchestrator re-gate): STANDEE VERBS
+  (src/ui/standee-verbs.js, 61 checks; combat hurt/down routes sprites); GR2 dressing
+  channel (src/engine/place-dressing.js dressPlan + card render w/ placeholders, 371);
+  GR1 REALM_MATERIALS (12 realms, seeded low-contrast painters, 187); GR3+GR4 hemisphere
+  key + per-realm grade + whisper fog + diorama skirt (254).
+- FINALE LOOP GATE 5/5 (dev/battle-gate/dungeon-loop/): five REAL rolled dungeons
+  (Web/Ruin/Figure-8/Loop topologies, chrome/gloom/fantasy) end-to-end — roll → prep →
+  combat_start → volumetric render → standee verbs — zero fixture, zero breaks. Caught+
+  fixed 2 verify-green-but-not-wired bugs (trayFrom interior never called dressPlan;
+  findUnit blind to interior pieces).
+- Sprite queue: DRESSING-GEN packets (50 sheets/852 cells, flora+clutter+objects×12 +
+  effects core/accents, Wildermyth construction rules in every prompt) + round-3
+  magenta-fails addendum (12 Adam-failed sprites, ANTI-MAGENTA clause).
+- sprite-review floor-line setter; interior camera focusRect + CUTAWAY WALLS; sprite
+  standee tilt (squash killed); SPRITE PURITY (billboards exempt from PSX).
+
+**Known open**
+- Interior PIECE SCALE misreads (mediums render giant in rooms — loop-gate contact sheet);
+  fix rides the registry sizing fold. AO knob off by default (Adam pending final word).
+- Codex waves pending: round-3 + dressing-gen (packets ready, RUN-NOTES order).
+
 ## 2026-07-10 (afternoon) — corpus retro-tagged, DUNGEON-GRAPH U1/U2/U4 live, codex packets hardened, floor-line tool
 
 **Added**

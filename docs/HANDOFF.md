@@ -6,7 +6,30 @@ updated: 2026-07-10
 
 # Genesis — Session Hand-off
 
-## ⭐ Latest (2026-07-10 afternoon) — corpus retro-tag + DUNGEON-GRAPH U1/U2/U4 + hardened codex packets [Claude Fable]
+## ⭐ Latest (2026-07-10 evening) — WILDERMYTH GRAMMAR built end-to-end; loop gate 5/5 [Claude Fable]
+
+Branch `claude/genesis-sprite-corpus-tags-edeaac` (pushed; master merge = Adam's call).
+Adam ruled Wildermyth the graphics north star (docs/GRAPHICS-ENGINE.md; DF × Daggerfall ×
+Wildermyth). The WHOLE presentation stack landed tonight: standee verbs (hit/death/guise
+tweens wired to combat), dressing roll + card channel (placeholder textures, art-ready
+against dev/model-qa/dressing-gen manifests), REALM_MATERIALS subtle textures (12 realms),
+hemisphere+grade light rig, whisper fog, diorama skirt, cutaway walls, sprite purity,
+standee tilt. FINALE GATE: 5/5 real rolled dungeons render with combat + verbs, zero
+fixtures (contact sheet at dev/battle-gate/dungeon-loop/) — 2 wiring bugs caught+fixed.
+Codex packets READY: regen-v3 round3 (incl. magenta-fails ×12) + DRESSING-GEN (50 sheets).
+
+**Do next (pick up here):**
+1. **Interior piece scale** — mediums render giant in rooms (contact sheet): fix the
+   cell-vs-scale convention in interiorBuildPieces alongside the REGISTRY SIZING FOLD
+   (corpus-sizing + v3-sizing + floor rulings → regenerate sprite-registry).
+2. Codex runs: regen-v3/round3/RUN-NOTES.md then dressing-gen/RUN-NOTES.md; fold arrivals
+   per ADDITIVE FOLD LAW; dressing art auto-drops into the placeholder channel.
+3. Adam taste calls: AO default (recommend OFF), GRAPHICS-ENGINE §G (corpses persist?,
+   weather, blood visuals), DUNGEON-GRAPH open items.
+4. GIT-LFS migration at the quiet post-merge hour (runbook ready).
+5. GUISE G1-G4 + NPC expression pass; puppet-tier posing law rides round-4 prompts.
+
+## Latest (2026-07-10 afternoon) — corpus retro-tag + DUNGEON-GRAPH U1/U2/U4 + hardened codex packets [Claude Fable]
 
 Branch `claude/genesis-sprite-corpus-tags-edeaac` (pushed; **merge to master = Adam's call**).
 All 896 committed sprites carry casting-grade tags (`dev/model-qa/corpus-tags.json`) + true-scale

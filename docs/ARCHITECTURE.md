@@ -247,8 +247,7 @@ reachability verify (reroll ≤5, then honest-fail); deterministic per walkId.
 depth=difficulty bands, SCALE DOMAINS (a big resident's territory builds at its scale;
 prison-rule regrowth; transition/squeeze doors). Consumed by prep (`pn.spatial`), the theater
 interior renderer (volumetric prism InstancedMesh tile kits), and combat cell dims (dm.js).
-**Lives in:** `src/engine/place-spatialize.js`, `src/engine/place-semantics.js`,
-`src/ui/theater-interior.js`. **Spec:** docs/DUNGEON-GRAPH.md
+**Lives in:** `src/engine/place-{spatialize,semantics}.js`, `src/ui/theater-interior.js`. **Spec:** docs/DUNGEON-GRAPH.md
 
 ## World layer (persistent state, flow, and the event surface)
 

@@ -261,6 +261,19 @@ const WIKI_INDEX = [
     "spec": "docs/CROWNING-BASTION.md"
   },
   {
+    "system": "Dungeon Graph — spatializer + semantics [2026-07-10]",
+    "slug": "dungeon-graph-spatializer-semantics-2026-07-10",
+    "layer": "Engine layer",
+    "whatItIs": "Turns a rolled walk's segment graph (segments=rooms, exits=edges, any of the 12 topologies) into a verified 5-ft cell-grid floor plan (SpatialPlan), then layers meaning on it.",
+    "howItWorks": "`spatializePlan(segments, topology, {walkId})` — per-topology layout seed → room placement → AABB separation → corridors along real edges only → rasterize → BFS reachability verify (reroll ≤5, then honest-fail); deterministic per walkId. `semanticizePlan(plan, segments, residents)` — room roles (entrance/finale/path/pocket/side), depth=difficulty bands, SCALE DOMAINS (a big resident's territory builds at its scale; prison-rule regrowth; transition/squeeze doors). Consumed by prep (`pn.spatial`), the theater interior renderer (volumetric prism InstancedMesh tile kits), and combat cell dims (dm.js).",
+    "livesIn": [
+      "src/engine/place-{spatialize",
+      "semantics}.js",
+      "src/ui/theater-interior.js"
+    ],
+    "spec": "docs/DUNGEON-GRAPH.md"
+  },
+  {
     "system": "World Spine (State, Clock, Ledger, Map)",
     "slug": "world-spine-state-clock-ledger-map",
     "layer": "World layer",

@@ -34,8 +34,21 @@ The 2026-07-10 dungeon-graph build converged on this grammar independently:
    Billboards face the camera (yaw + elevation tilt), cast alpha-tested shadows, receive
    none. No shader effects touch character pixels (SPRITE PURITY, ruled today).
 2. **BLOCK LAW.** Architecture is clean prism volumes — few faces, sharp silhouettes.
-   Detail lives in the TEXTURE, not the mesh. PS1 grammar (low poly, quantized light,
-   dither) applies to WORLD surfaces only.
+   Detail lives in the TEXTURE, not the mesh. **PS1 SCOPE AMENDMENT (Adam 2026-07-10
+   night):** on the diorama/interior channel PS1 survives as PALETTE + POLY DISCIPLINE
+   ONLY — the PSX dither shader and vertex snap come OFF world surfaces (they mush the
+   subtle materials; sprites were already exempt). Pending Adam's pixel-verdict on the
+   VP0 study card; the flat tabletop keeps its current look until then.
+2b. **CAMERA LAW (Adam 2026-07-10 night, pending VP0 pixels).** Gentle PERSPECTIVE
+   (~20° FOV) replaces orthographic on the diorama — parallel lines converging is the
+   cheapest depth there is. Standee tilt math carries over.
+2c. **FRAMING LAW (Adam 2026-07-10 night).** True scale is honest; the CAMERA composes.
+   During combat beats the camera fits the ACTION CLUSTER (participants + 1 cell
+   margin), not the room — Wildermyth frames actors, not architecture. Exploration
+   beats may frame the room.
+2d. **VALUE LAW (Adam 2026-07-10 night).** Hue is identity, value is composition:
+   every scene owns a dark, a mid, and ONE bright; palette richness lives inside that
+   hierarchy. (The palette law's missing half.)
 3. **SUBTLE-TEXTURE LAW (gap 1).** Every block face carries a low-contrast material
    texture — enough to read wood grain / stone course / brushed metal at glance distance,
    never noisy, never photographic. Implementation: procedural CanvasTextures generated

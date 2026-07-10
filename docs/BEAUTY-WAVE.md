@@ -26,6 +26,25 @@ emit sites ~:150-156) · battle overlay documented in docs/BATTLE-VISUALS.md
 (band rails MELEE/NEAR/FAR/OUT left, L/C/R top; DOM lives in the theater host —
 VP5 step 0 greps its ids from genesis.html).
 
+## FLAGSHIP SCOPE (Adam 2026-07-10 night)
+
+**Three flagship realms get the full wave: FANTASY, GLOOM, CHROME.** Every VP unit
+builds its mechanism realm-agnostic but polishes, tunes, and gates ONLY the flagships;
+the other nine realms inherit the proven kit later, realm-by-realm — **each realm is an
+expansion pack** (product strategy: land the core with the flagships, then a new realm
+drop roughly every 6 months keeps the audience fed). Dressing/effects art beyond the
+flagships stays queued, not gating.
+
+## VP0 — THE TWO-FLAG STUDY CARD (run before everything; Adam's pixel-verdict)
+
+Same seeded gloom+fantasy rooms × four cells: {ortho, perspective ~20° FOV} ×
+{PSX dither+snap ON world, OFF world}. One card, four constructions, Adam picks with
+eyes. His pick locks GRAPHICS-ENGINE 2/2b before VP3/VP4 build on top. (Sprites remain
+PSX-exempt in all cells; tabletop untouched.)
+*Verify:* the four cells are pixel-distinct (pairwise diff > threshold); harnesses
+green under both camera modes (placeCamera math asserted for perspective: action
+cluster fully in frustum).
+
 ## VP1 — TRUE-SCALE PIECES + the registry sizing fold  (defect fix; run first)
 
 The kaiju bug: `interiorBuildPieces` sizes billboards through the TABLETOP convention
@@ -173,8 +192,8 @@ becomes the next wave's queue.
 
 ## Order + dependencies
 
-VP1 first (defect; unblocks honest judgment of everything else). VP2 when codex art
-lands (independent). VP3 → VP4 (art direction wants ground design under it). VP5, VP6,
+VP0 + VP1 first (VP0 = Adam's two pixel-rulings; VP1 = the defect). VP2 when codex art
+lands (independent; flagship sheets prioritized in the codex order). VP3 → VP4 (art direction wants ground design under it). VP5, VP6,
 VP7 independent after VP1. VP8 last, after VP2. Executors: Sonnet each, isolated
 worktrees, orchestrator re-gates (screenshots READ, not trusted); every unit re-runs
 the loop gate before landing (the standing regression for this whole surface).

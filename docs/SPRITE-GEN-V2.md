@@ -179,11 +179,49 @@ sprites regen at their CORRECT tier; the 548 minor-under-res keeps stay live and
 re-tier opportunistically in later waves. Quarantine (78) exports to its own folder
 with manifest, never deleted.
 
+## 10b. THE ADDITIVE FOLD LAW (Adam 2026-07-10 — how regen arrivals enter the corpus)
+
+Regeneration is ADDITIVE, never destructive. Every arriving sheet goes through the same
+fold, and nothing good is ever lost to a regen:
+
+1. **Gate** — vision agent judges the arrival against the realm style-ref + its manifest
+   (style, grid/roster, perspective, static cells) AND against the art it replaces:
+   every gate records **betterThanOld**. A regen that is mechanically clean but loses
+   detail/dynamism/menace vs the old art is a CONTENT REGRESSION → **reject**: old art
+   stays live, the sheet goes back on the queue with a corrective line (see
+   cosmic-large-v3-09, round 2).
+2. **Slice** — only passing sheets are cut (chroma key → bbox-trim transparent PNGs,
+   chroma kept under alpha); pxHeight re-measured into the sizing file.
+3. **Tag** — mood/pose/qaFlags refreshed on the re-cut sprites; identity tags carry over.
+4. **Relabel-to-art** — when the generated art doesn't match its rostered subject, the
+   display noun follows the ART (overlay `name` override → regenerate the registry;
+   mechanical stats keep flowing from the manifest join). The orphaned ROLE is not
+   deleted — it goes to the next regen pass as a backfill cell. Labels never lie about
+   the art; wants never die, they re-queue.
+5. Quarantined art (off-angle, painterly) is never deleted — it exports to
+   `dev/model-qa/quarantine-pack/<bin>/` with a manifest and ships as a Desktop zip.
+
+## 10c. THE NO-BLANK-SLOTS LAW (Adam 2026-07-10)
+
+A generation is paid for whether the grid is full or not — **every grid slot carries a
+subject**. When a sheet's roster doesn't fill its ladder grid, the empty slots are
+filled with **bonus ALT cells**: ancestry/sex alts of roster NPCs, coat/color alts of
+animals and monsters, palette variants of high-use roles. Alts are marked in the sheet
+manifest (`altOf` + `reason:"alt-bonus"`) so they index like everything else (§8).
+Alts of the same subject share style and silhouette DNA but are NOT expression variants
+(SPRITE-TAGS law 2) — they are different individuals wearing the same role.
+
 ## 11. Still open
 
 1. Adam's final confirmation of §10.
-2. Committed-corpus style check (esp. ash — Adam's painterly impression) before
-   regen-ing anything already live.
+2. ~~Committed-corpus style check (esp. ash)~~ **DONE 2026-07-10**: drift confirmed —
+   the 5 ash-mm sheets conform; the 9 npc/kids/domesticated sheets are strongly
+   painterly → quarantined (`dev/model-qa/quarantine-pack/painterly-ash/`, Desktop zip)
+   and re-queued as **round 3** (`dev/model-qa/regen-v3/round3/`: ash restyle 7 sheets,
+   fantasy backfill+true-forms 2, cosmic-large-09 redo 1 — all with §10c alt fills).
+3. Round-2 remains partially outstanding: cosmic-r2 (15 sheets) + gloom-r2 (3) never
+   arrived; of fixes-r2 only 5 sheets landed (4 folded, cosmic-large-v3-09 rejected
+   per §10b).
 
 ## 12. Survey artifacts
 

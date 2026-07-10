@@ -1121,7 +1121,7 @@
   ]
  },
  "spr-fantasy-cockatrice-regent": {
-  "label": "cockatrice regent",
+  "label": "drake regent",
   "family": "monsters",
   "sizeBand": "large",
   "pxHeight": 216,
@@ -1453,7 +1453,7 @@
   "cell": 17
  },
  "spr-fantasy-domestic-animal-a-single-caged-ferret-kit-young-hyperactive-still-learning-the-vermin-catcher-s-trade": {
-  "label": "domestic animal \u2014 a single caged ferret-kit \u2014 young, hyperactive, still learning the vermin-catcher's trade.",
+  "label": "domestic animal — a single caged ferret-kit — young, hyperactive, still learning the vermin-catcher's trade.",
   "family": "animals",
   "sizeBand": "tiny",
   "pxHeight": 214,
@@ -1466,7 +1466,7 @@
   ]
  },
  "spr-fantasy-domestic-animal-a-single-caged-songbird-kept-for-the-sound-of-it-restless-behind-the-wire": {
-  "label": "domestic animal \u2014 a single caged songbird \u2014 kept for the sound of it, restless behind the wire.",
+  "label": "domestic animal — a single caged songbird — kept for the sound of it, restless behind the wire.",
   "family": "animals",
   "sizeBand": "tiny",
   "pxHeight": 219,
@@ -1479,7 +1479,7 @@
   ]
  },
  "spr-fantasy-domestic-animal-a-single-donkey-stubborn-sure-footed-outlives-every-horse-on-the-property": {
-  "label": "domestic animal \u2014 a single donkey \u2014 stubborn, sure-footed, outlives every horse on the property.",
+  "label": "domestic animal — a single donkey — stubborn, sure-footed, outlives every horse on the property.",
   "family": "animals",
   "sizeBand": "medium",
   "pxHeight": 214,
@@ -1489,7 +1489,7 @@
   "cell": 21
  },
  "spr-fantasy-domestic-animal-a-single-duck-waddling-unbothered-first-to-notice-a-stranger-at-the-water-s-edge": {
-  "label": "domestic animal \u2014 a single duck \u2014 waddling, unbothered, first to notice a stranger at the water's edge.",
+  "label": "domestic animal — a single duck — waddling, unbothered, first to notice a stranger at the water's edge.",
   "family": "animals",
   "sizeBand": "small",
   "pxHeight": 185,
@@ -1502,7 +1502,7 @@
   ]
  },
  "spr-fantasy-domestic-animal-a-single-goat-headstrong-climbs-what-it-shouldn-t-eats-what-it-shouldn-t": {
-  "label": "domestic animal \u2014 a single goat \u2014 headstrong, climbs what it shouldn't, eats what it shouldn't.",
+  "label": "domestic animal — a single goat — headstrong, climbs what it shouldn't, eats what it shouldn't.",
   "family": "animals",
   "sizeBand": "small",
   "pxHeight": 206,
@@ -1512,7 +1512,7 @@
   "cell": 20
  },
  "spr-fantasy-domestic-animal-a-single-goose-from-the-flock-loud-territorial-first-to-mark-a-stranger": {
-  "label": "domestic animal \u2014 a single goose from the flock \u2014 loud, territorial, first to mark a stranger.",
+  "label": "domestic animal — a single goose from the flock — loud, territorial, first to mark a stranger.",
   "family": "animals",
   "sizeBand": "small",
   "pxHeight": 212,
@@ -1525,7 +1525,7 @@
   ]
  },
  "spr-fantasy-domestic-animal-a-single-hunting-hound-lean-nose-down-bred-for-the-chase-and-bored-without-it": {
-  "label": "domestic animal \u2014 a single hunting hound \u2014 lean, nose-down, bred for the chase and bored without it.",
+  "label": "domestic animal — a single hunting hound — lean, nose-down, bred for the chase and bored without it.",
   "family": "animals",
   "sizeBand": "medium",
   "pxHeight": 188,
@@ -1535,7 +1535,7 @@
   "cell": 23
  },
  "spr-fantasy-domestic-animal-a-single-kitten-too-young-to-have-earned-the-barn-cat-s-independence-yet": {
-  "label": "domestic animal \u2014 a single kitten \u2014 too young to have earned the barn cat's independence yet.",
+  "label": "domestic animal — a single kitten — too young to have earned the barn cat's independence yet.",
   "family": "animals",
   "sizeBand": "tiny",
   "pxHeight": 155,
@@ -1545,7 +1545,7 @@
   "cell": 24
  },
  "spr-fantasy-domestic-animal-a-single-peacock-kept-for-show-screams-like-something-s-wrong-when-nothing-is": {
-  "label": "domestic animal \u2014 a single peacock \u2014 kept for show, screams like something's wrong when nothing is.",
+  "label": "domestic animal — a single peacock — kept for show, screams like something's wrong when nothing is.",
   "family": "animals",
   "sizeBand": "small",
   "pxHeight": 209,
@@ -1555,7 +1555,7 @@
   "cell": 22
  },
  "spr-fantasy-domestic-animal-a-single-pig-smarter-than-it-s-given-credit-for-rooting-at-the-fence-line": {
-  "label": "domestic animal \u2014 a single pig \u2014 smarter than it's given credit for, rooting at the fence line.",
+  "label": "domestic animal — a single pig — smarter than it's given credit for, rooting at the fence line.",
   "family": "animals",
   "sizeBand": "medium",
   "pxHeight": 151,
@@ -1568,7 +1568,7 @@
   ]
  },
  "spr-fantasy-domestic-animal-a-single-pony-smaller-and-calmer-than-the-war-mule-a-child-s-first-mount": {
-  "label": "domestic animal \u2014 a single pony \u2014 smaller and calmer than the war-mule, a child's first mount.",
+  "label": "domestic animal — a single pony — smaller and calmer than the war-mule, a child's first mount.",
   "family": "animals",
   "sizeBand": "medium",
   "pxHeight": 209,
@@ -1578,7 +1578,7 @@
   "cell": 14
  },
  "spr-fantasy-domestic-animal-a-single-rabbit-twitchy-kept-for-the-table-or-kept-as-a-pet-never-sure-which": {
-  "label": "domestic animal \u2014 a single rabbit \u2014 twitchy, kept for the table or kept as a pet, never sure which.",
+  "label": "domestic animal — a single rabbit — twitchy, kept for the table or kept as a pet, never sure which.",
   "family": "animals",
   "sizeBand": "tiny",
   "pxHeight": 161,
@@ -1588,7 +1588,7 @@
   "cell": 13
  },
  "spr-fantasy-domestic-animal-a-single-sheep-from-the-herd-moves-with-the-others-and-its-lone-reluctance-to-follow-is-the-tell": {
-  "label": "domestic animal \u2014 a single sheep from the herd \u2014 moves with the others, and its lone reluctance to follow is the tell.",
+  "label": "domestic animal — a single sheep from the herd — moves with the others, and its lone reluctance to follow is the tell.",
   "family": "animals",
   "sizeBand": "medium",
   "pxHeight": 155,
@@ -1598,7 +1598,7 @@
   "cell": 6
  },
  "spr-fantasy-domestic-animal-a-single-turkey-puffed-up-and-loud-more-guard-animal-than-anyone-admits": {
-  "label": "domestic animal \u2014 a single turkey \u2014 puffed up and loud, more guard animal than anyone admits.",
+  "label": "domestic animal — a single turkey — puffed up and loud, more guard animal than anyone admits.",
   "family": "animals",
   "sizeBand": "small",
   "pxHeight": 202,
@@ -1608,7 +1608,7 @@
   "cell": 16
  },
  "spr-fantasy-domestic-animal-a-single-turtle-slow-kept-yard-animal-older-than-most-of-the-household": {
-  "label": "domestic animal \u2014 a single turtle \u2014 slow-kept yard animal, older than most of the household.",
+  "label": "domestic animal — a single turtle — slow-kept yard animal, older than most of the household.",
   "family": "animals",
   "sizeBand": "small",
   "pxHeight": 132,
@@ -1618,7 +1618,7 @@
   "cell": 18
  },
  "spr-fantasy-domestic-animal-barn-cat-owns-the-place-tolerates-the-people-hunts-the-dark-corners": {
-  "label": "domestic animal \u2014 barn cat \u2014 owns the place, tolerates the people, hunts the dark corners.",
+  "label": "domestic animal — barn cat — owns the place, tolerates the people, hunts the dark corners.",
   "family": "animals",
   "sizeBand": "small",
   "pxHeight": 208,
@@ -1631,7 +1631,7 @@
   ]
  },
  "spr-fantasy-domestic-animal-bird-kept-close-a-single-hawk-carries-watches-and-remembers-a-face": {
-  "label": "domestic animal \u2014 bird kept close (a single hawk) \u2014 carries, watches, and remembers a face.",
+  "label": "domestic animal — bird kept close (a single hawk) — carries, watches, and remembers a face.",
   "family": "animals",
   "sizeBand": "small",
   "pxHeight": 196,
@@ -1644,7 +1644,7 @@
   ]
  },
  "spr-fantasy-domestic-animal-half-tamed-wild-thing-comes-to-the-window-never-the-hand-trusts-one-child-and-no-one-else": {
-  "label": "domestic animal \u2014 half-tamed wild thing \u2014 comes to the window, never the hand; trusts one child and no one else.",
+  "label": "domestic animal — half-tamed wild thing — comes to the window, never the hand; trusts one child and no one else.",
   "family": "animals",
   "sizeBand": "small",
   "pxHeight": 196,
@@ -1654,7 +1654,7 @@
   "cell": 10
  },
  "spr-fantasy-domestic-animal-loyal-dog-bonded-to-one-person-reads-their-mood-before-they-do": {
-  "label": "domestic animal \u2014 loyal dog \u2014 bonded to one person, reads their mood before they do.",
+  "label": "domestic animal — loyal dog — bonded to one person, reads their mood before they do.",
   "family": "animals",
   "sizeBand": "medium",
   "pxHeight": 189,
@@ -1664,7 +1664,7 @@
   "cell": 1
  },
  "spr-fantasy-domestic-animal-old-animal-past-its-working-years-half-blind-and-still-the-first-to-growl-at-the-wrong-thing": {
-  "label": "domestic animal \u2014 old animal \u2014 past its working years, half-blind, and still the first to growl at the wrong thing.",
+  "label": "domestic animal — old animal — past its working years, half-blind, and still the first to growl at the wrong thing.",
   "family": "animals",
   "sizeBand": "medium",
   "pxHeight": 176,
@@ -1674,7 +1674,7 @@
   "cell": 9
  },
  "spr-fantasy-domestic-animal-stray-belongs-to-no-one-and-everyone-the-street-s-own-alarm-bell": {
-  "label": "domestic animal \u2014 stray \u2014 belongs to no one and everyone; the street's own alarm bell.",
+  "label": "domestic animal — stray — belongs to no one and everyone; the street's own alarm bell.",
   "family": "animals",
   "sizeBand": "medium",
   "pxHeight": 151,
@@ -1687,7 +1687,7 @@
   ]
  },
  "spr-fantasy-domestic-animal-the-realm-beast-the-realm-beast-a-locally-distinct-pet-one-animal-realm-appropriate": {
-  "label": "domestic animal \u2014 the realm-beast (the realm-beast \u2014 a locally distinct pet, one animal, realm-appropriate)",
+  "label": "domestic animal — the realm-beast (the realm-beast — a locally distinct pet, one animal, realm-appropriate)",
   "family": "animals",
   "sizeBand": "tiny",
   "pxHeight": 174,
@@ -1700,7 +1700,7 @@
   ]
  },
  "spr-fantasy-domestic-animal-the-town-s-own-animal-the-one-everyone-knows-by-name-its-fate-is-the-town-s-mood-made-visible": {
-  "label": "domestic animal \u2014 the town's own animal \u2014 the one everyone knows by name; its fate is the town's mood made visible.",
+  "label": "domestic animal — the town's own animal — the one everyone knows by name; its fate is the town's mood made visible.",
   "family": "animals",
   "sizeBand": "tiny",
   "pxHeight": 204,
@@ -1710,7 +1710,7 @@
   "cell": 12
  },
  "spr-fantasy-domestic-animal-vermin-catcher-a-single-ferret-goes-gladly-where-people-won-t": {
-  "label": "domestic animal \u2014 vermin-catcher (a single ferret) \u2014 goes gladly where people won't.",
+  "label": "domestic animal — vermin-catcher (a single ferret) — goes gladly where people won't.",
   "family": "animals",
   "sizeBand": "tiny",
   "pxHeight": 123,
@@ -1723,7 +1723,7 @@
   ]
  },
  "spr-fantasy-domestic-animal-working-beast-a-single-ox-earns-its-feed-patient-and-spooks-true": {
-  "label": "domestic animal \u2014 working beast (a single ox) \u2014 earns its feed, patient, and spooks true.",
+  "label": "domestic animal — working beast (a single ox) — earns its feed, patient, and spooks true.",
   "family": "animals",
   "sizeBand": "large",
   "pxHeight": 194,
@@ -1773,7 +1773,7 @@
   "cell": 13
  },
  "spr-fantasy-dragonborn-ship-s-purser-dragonborn-keeps-the-manifest-honest-mostly": {
-  "label": "dragonborn ship's purser (dragonborn) \u2014 keeps the manifest honest, mostly",
+  "label": "dragonborn ship's purser (dragonborn) — keeps the manifest honest, mostly",
   "family": "npcs",
   "sizeBand": "medium",
   "pxHeight": 252,
@@ -1783,7 +1783,7 @@
   "cell": 9
  },
  "spr-fantasy-dragonborn-temple-acolyte-young-dragonborn-devout-earnest-still-memorizing-the-rites": {
-  "label": "dragonborn temple acolyte, young (dragonborn) \u2014 devout, earnest, still memorizing the rites",
+  "label": "dragonborn temple acolyte, young (dragonborn) — devout, earnest, still memorizing the rites",
   "family": "npcs",
   "sizeBand": "medium",
   "pxHeight": 210,
@@ -1793,7 +1793,7 @@
   "cell": 18
  },
  "spr-fantasy-dragonborn-temple-guard-devout-literal-minded-takes-the-oath-seriously": {
-  "label": "dragonborn temple guard \u2014 devout, literal-minded, takes the oath seriously",
+  "label": "tiefling minstrel",
   "family": "npcs",
   "sizeBand": "medium",
   "pxHeight": 211,
@@ -1853,7 +1853,7 @@
   "cell": 1
  },
  "spr-fantasy-dungeon-animal-abandoned-mine-canary-a-small-bird-in-a-rusted-cage-somehow-still-alive-still-singing": {
-  "label": "dungeon animal \u2014 abandoned mine canary \u2014 a small bird in a rusted cage, somehow still alive, still singing",
+  "label": "dungeon animal — abandoned mine canary — a small bird in a rusted cage, somehow still alive, still singing",
   "family": "animals",
   "sizeBand": "tiny",
   "pxHeight": 175,
@@ -1866,7 +1866,7 @@
   ]
  },
  "spr-fantasy-dungeon-animal-an-ordinary-animal-deliberately-unremarkable-domestic-or-wild-doesn-t-matter-its-presence-this-deep-is-the-signal-let-the-scene-decide-what-it-means": {
-  "label": "dungeon animal \u2014 an ordinary animal, deliberately unremarkable \u2014 domestic or wild, doesn't matter; its presence this deep is the signal, let the scene decide what it means",
+  "label": "dungeon animal — an ordinary animal, deliberately unremarkable — domestic or wild, doesn't matter; its presence this deep is the signal, let the scene decide what it means",
   "family": "animals",
   "sizeBand": "tiny",
   "pxHeight": 159,
@@ -1876,7 +1876,7 @@
   "cell": 25
  },
  "spr-fantasy-dungeon-animal-blind-cave-rat-pale-sightless-thrives-in-total-dark-first-sign-something-s-been-dug-through": {
-  "label": "dungeon animal \u2014 blind cave rat \u2014 pale, sightless, thrives in total dark, first sign something's been dug through",
+  "label": "dungeon animal — blind cave rat — pale, sightless, thrives in total dark, first sign something's been dug through",
   "family": "animals",
   "sizeBand": "tiny",
   "pxHeight": 135,
@@ -1889,7 +1889,7 @@
   ]
  },
  "spr-fantasy-dungeon-animal-blind-salamander-pale-slow-the-kind-of-thing-that-shouldn-t-have-a-reason-to-be-this-deep": {
-  "label": "dungeon animal \u2014 blind salamander \u2014 pale, slow, the kind of thing that shouldn't have a reason to be this deep",
+  "label": "dungeon animal — blind salamander — pale, slow, the kind of thing that shouldn't have a reason to be this deep",
   "family": "animals",
   "sizeBand": "tiny",
   "pxHeight": 104,
@@ -1902,7 +1902,7 @@
   ]
  },
  "spr-fantasy-dungeon-animal-cave-adapted-spider-pale-eyeless-spins-webs-across-passages-nobody-s-walked-in-years": {
-  "label": "dungeon animal \u2014 cave-adapted spider \u2014 pale, eyeless, spins webs across passages nobody's walked in years",
+  "label": "dungeon animal — cave-adapted spider — pale, eyeless, spins webs across passages nobody's walked in years",
   "family": "animals",
   "sizeBand": "tiny",
   "pxHeight": 162,
@@ -1915,7 +1915,7 @@
   ]
  },
  "spr-fantasy-dungeon-animal-cave-cricket-oversized-chirping-alone-in-the-dark-first-warning-of-the-swarm-nearby": {
-  "label": "dungeon animal \u2014 cave cricket, oversized \u2014 chirping alone in the dark, first warning of the swarm nearby",
+  "label": "dungeon animal — cave cricket, oversized — chirping alone in the dark, first warning of the swarm nearby",
   "family": "animals",
   "sizeBand": "tiny",
   "pxHeight": 199,
@@ -1928,7 +1928,7 @@
   ]
  },
  "spr-fantasy-dungeon-animal-chained-beast-escaped-its-post-a-working-animal-that-slipped-its-old-restraint-still-wears-the-collar": {
-  "label": "dungeon animal \u2014 chained beast, escaped its post \u2014 a working animal that slipped its old restraint, still wears the collar",
+  "label": "dungeon animal — chained beast, escaped its post — a working animal that slipped its old restraint, still wears the collar",
   "family": "animals",
   "sizeBand": "medium",
   "pxHeight": 189,
@@ -1938,7 +1938,7 @@
   "cell": 15
  },
  "spr-fantasy-dungeon-animal-deep-well-fish-stranded-flopping-in-a-puddle-far-from-any-real-water-source": {
-  "label": "dungeon animal \u2014 deep-well fish, stranded \u2014 flopping in a puddle far from any real water source",
+  "label": "dungeon animal — deep-well fish, stranded — flopping in a puddle far from any real water source",
   "family": "animals",
   "sizeBand": "tiny",
   "pxHeight": 136,
@@ -1951,7 +1951,7 @@
   ]
  },
  "spr-fantasy-dungeon-animal-echo-startled-bird-a-single-bird-trapped-in-the-upper-galleries-flies-at-every-footstep": {
-  "label": "dungeon animal \u2014 echo-startled bird \u2014 a single bird trapped in the upper galleries, flies at every footstep",
+  "label": "dungeon animal — echo-startled bird — a single bird trapped in the upper galleries, flies at every footstep",
   "family": "animals",
   "sizeBand": "tiny",
   "pxHeight": 179,
@@ -1964,7 +1964,7 @@
   ]
  },
  "spr-fantasy-dungeon-animal-feral-falconry-bird-a-hawk-that-escaped-its-jesses-generations-ago-now-hunts-the-tunnels-vermin": {
-  "label": "dungeon animal \u2014 feral falconry bird \u2014 a hawk that escaped its jesses generations ago, now hunts the tunnels' vermin",
+  "label": "dungeon animal — feral falconry bird — a hawk that escaped its jesses generations ago, now hunts the tunnels' vermin",
   "family": "animals",
   "sizeBand": "tiny",
   "pxHeight": 246,
@@ -1977,7 +1977,7 @@
   ]
  },
  "spr-fantasy-dungeon-animal-feral-vermin-catcher-once-someone-s-ferret-or-terrier-now-lives-wild-in-the-tunnels-still-killing-rats-out-of-habit": {
-  "label": "dungeon animal \u2014 feral vermin-catcher \u2014 once someone's ferret or terrier, now lives wild in the tunnels, still killing rats out of habit",
+  "label": "dungeon animal — feral vermin-catcher — once someone's ferret or terrier, now lives wild in the tunnels, still killing rats out of habit",
   "family": "animals",
   "sizeBand": "tiny",
   "pxHeight": 135,
@@ -1987,7 +1987,7 @@
   "cell": 1
  },
  "spr-fantasy-dungeon-animal-glow-moss-grazer-a-small-rodent-whose-fur-has-picked-up-a-faint-luminescence-from-what-it-eats": {
-  "label": "dungeon animal \u2014 glow-moss grazer \u2014 a small rodent whose fur has picked up a faint luminescence from what it eats",
+  "label": "dungeon animal — glow-moss grazer — a small rodent whose fur has picked up a faint luminescence from what it eats",
   "family": "animals",
   "sizeBand": "tiny",
   "pxHeight": 136,
@@ -2000,7 +2000,7 @@
   ]
  },
  "spr-fantasy-dungeon-animal-half-tamed-thing-comes-to-a-lantern-s-light-never-a-hand-feeds-on-what-the-dungeon-leaves-behind": {
-  "label": "dungeon animal \u2014 half-tamed thing \u2014 comes to a lantern's light, never a hand, feeds on what the dungeon leaves behind",
+  "label": "dungeon animal — half-tamed thing — comes to a lantern's light, never a hand, feeds on what the dungeon leaves behind",
   "family": "animals",
   "sizeBand": "tiny",
   "pxHeight": 150,
@@ -2010,7 +2010,7 @@
   "cell": 4
  },
  "spr-fantasy-dungeon-animal-lost-hunting-hound-a-noble-s-dog-that-wandered-too-far-in-and-never-found-the-way-back-out": {
-  "label": "dungeon animal \u2014 lost hunting hound \u2014 a noble's dog that wandered too far in and never found the way back out",
+  "label": "dungeon animal — lost hunting hound — a noble's dog that wandered too far in and never found the way back out",
   "family": "animals",
   "sizeBand": "medium",
   "pxHeight": 173,
@@ -2020,7 +2020,7 @@
   "cell": 5
  },
  "spr-fantasy-dungeon-animal-nest-robbing-crow-one-bird-that-s-learned-the-dungeon-s-side-passages-better-than-most-explorers": {
-  "label": "dungeon animal \u2014 nest-robbing crow \u2014 one bird that's learned the dungeon's side passages better than most explorers",
+  "label": "dungeon animal — nest-robbing crow — one bird that's learned the dungeon's side passages better than most explorers",
   "family": "animals",
   "sizeBand": "tiny",
   "pxHeight": 171,
@@ -2033,7 +2033,7 @@
   ]
  },
  "spr-fantasy-dungeon-animal-scarred-guard-dog-gone-feral-once-trained-to-patrol-these-halls-now-answers-to-no-one": {
-  "label": "dungeon animal \u2014 scarred guard-dog gone feral \u2014 once trained to patrol these halls, now answers to no one",
+  "label": "dungeon animal — scarred guard-dog gone feral — once trained to patrol these halls, now answers to no one",
   "family": "animals",
   "sizeBand": "medium",
   "pxHeight": 165,
@@ -2043,7 +2043,7 @@
   "cell": 10
  },
  "spr-fantasy-dungeon-animal-sole-survivor-packhorse-the-last-of-a-caravan-s-animals-malnourished-still-saddled": {
-  "label": "dungeon animal \u2014 sole survivor packhorse \u2014 the last of a caravan's animals, malnourished, still saddled",
+  "label": "dungeon animal — sole survivor packhorse — the last of a caravan's animals, malnourished, still saddled",
   "family": "animals",
   "sizeBand": "large",
   "pxHeight": 209,
@@ -2053,7 +2053,7 @@
   "cell": 18
  },
  "spr-fantasy-dungeon-animal-starving-stray-a-cat-or-dog-that-followed-someone-in-and-got-left-behind": {
-  "label": "dungeon animal \u2014 starving stray \u2014 a cat or dog that followed someone in and got left behind",
+  "label": "dungeon animal — starving stray — a cat or dog that followed someone in and got left behind",
   "family": "animals",
   "sizeBand": "tiny",
   "pxHeight": 168,
@@ -2063,7 +2063,7 @@
   "cell": 12
  },
  "spr-fantasy-dungeon-animal-trapped-messenger-pigeon-still-carries-a-note-no-one-living-will-ever-read": {
-  "label": "dungeon animal \u2014 trapped messenger pigeon \u2014 still carries a note no one living will ever read",
+  "label": "dungeon animal — trapped messenger pigeon — still carries a note no one living will ever read",
   "family": "animals",
   "sizeBand": "tiny",
   "pxHeight": 181,
@@ -2073,7 +2073,7 @@
   "cell": 24
  },
  "spr-fantasy-dungeon-animal-tunnel-adapted-snake-pale-scaled-sluggish-in-the-cold-strikes-only-when-cornered": {
-  "label": "dungeon animal \u2014 tunnel-adapted snake \u2014 pale-scaled, sluggish in the cold, strikes only when cornered",
+  "label": "dungeon animal — tunnel-adapted snake — pale-scaled, sluggish in the cold, strikes only when cornered",
   "family": "animals",
   "sizeBand": "small",
   "pxHeight": 182,
@@ -2086,7 +2086,7 @@
   ]
  },
  "spr-fantasy-dungeon-animal-tunnel-bat-colony-straggler-a-single-bat-that-never-rejoined-the-swarm-clings-alone-near-a-cracked-vent": {
-  "label": "dungeon animal \u2014 tunnel bat colony straggler \u2014 a single bat that never rejoined the swarm, clings alone near a cracked vent",
+  "label": "dungeon animal — tunnel bat colony straggler — a single bat that never rejoined the swarm, clings alone near a cracked vent",
   "family": "animals",
   "sizeBand": "tiny",
   "pxHeight": 219,
@@ -2099,7 +2099,7 @@
   ]
  },
  "spr-fantasy-dungeon-animal-tunnel-blind-mole-huge-clawed-forepaws-displaces-more-earth-than-it-should-be-able-to": {
-  "label": "dungeon animal \u2014 tunnel-blind mole \u2014 huge clawed forepaws, displaces more earth than it should be able to",
+  "label": "dungeon animal — tunnel-blind mole — huge clawed forepaws, displaces more earth than it should be able to",
   "family": "animals",
   "sizeBand": "small",
   "pxHeight": 146,
@@ -2112,7 +2112,7 @@
   ]
  },
  "spr-fantasy-dungeon-animal-unnervingly-large-lone-rat-alone-watching-doesn-t-scatter-like-the-others": {
-  "label": "dungeon animal \u2014 unnervingly large lone rat \u2014 alone, watching, doesn't scatter like the others",
+  "label": "dungeon animal — unnervingly large lone rat — alone, watching, doesn't scatter like the others",
   "family": "animals",
   "sizeBand": "small",
   "pxHeight": 171,
@@ -2122,7 +2122,7 @@
   "cell": 13
  },
  "spr-fantasy-dungeon-animal-wrong-place-goat-a-farm-animal-that-fell-through-a-sinkhole-and-somehow-survived-down-here": {
-  "label": "dungeon animal \u2014 wrong-place goat \u2014 a farm animal that fell through a sinkhole and somehow survived down here",
+  "label": "dungeon animal — wrong-place goat — a farm animal that fell through a sinkhole and somehow survived down here",
   "family": "animals",
   "sizeBand": "small",
   "pxHeight": 220,
@@ -2132,7 +2132,7 @@
   "cell": 7
  },
  "spr-fantasy-dungeon-animal-wrongly-still-lizard-motionless-so-long-it-s-mistaken-for-a-carving-until-it-isn-t": {
-  "label": "dungeon animal \u2014 wrongly-still lizard \u2014 motionless so long it's mistaken for a carving, until it isn't",
+  "label": "dungeon animal — wrongly-still lizard — motionless so long it's mistaken for a carving, until it isn't",
   "family": "animals",
   "sizeBand": "small",
   "pxHeight": 121,
@@ -2158,7 +2158,7 @@
   ]
  },
  "spr-fantasy-dwarven-brewer-the-tavern-s-actual-reason-for-existing": {
-  "label": "dwarven brewer \u2014 the tavern's actual reason for existing",
+  "label": "dwarven brewer — the tavern's actual reason for existing",
   "family": "npcs",
   "sizeBand": "medium",
   "pxHeight": 203,
@@ -2168,7 +2168,7 @@
   "cell": 20
  },
  "spr-fantasy-dwarven-brewery-heiress-dwarf-runs-the-family-business-better-than-her-father-did": {
-  "label": "dwarven brewery heiress (dwarf) \u2014 runs the family business better than her father did",
+  "label": "dwarven brewery heiress (dwarf) — runs the family business better than her father did",
   "family": "npcs",
   "sizeBand": "medium",
   "pxHeight": 199,
@@ -2178,7 +2178,7 @@
   "cell": 11
  },
  "spr-fantasy-dwarven-forge-master-three-generations-of-the-same-smithy-soot-in-every-crease": {
-  "label": "dwarven forge-master \u2014 three generations of the same smithy, soot in every crease",
+  "label": "dwarven forge-master — three generations of the same smithy, soot in every crease",
   "family": "npcs",
   "sizeBand": "medium",
   "pxHeight": 200,
@@ -2188,7 +2188,7 @@
   "cell": 11
  },
  "spr-fantasy-dwarven-mine-assayer-dwarf-judges-ore-quality-by-weight-and-smell-alone": {
-  "label": "dwarven mine assayer (dwarf) \u2014 judges ore quality by weight and smell alone",
+  "label": "dwarven mine assayer (dwarf) — judges ore quality by weight and smell alone",
   "family": "npcs",
   "sizeBand": "medium",
   "pxHeight": 196,
@@ -2198,7 +2198,7 @@
   "cell": 2
  },
  "spr-fantasy-dwarven-town-guard-captain-elderly-dwarf-decades-on-the-wall-trusted-by-everyone": {
-  "label": "dwarven town guard captain, elderly (dwarf) \u2014 decades on the wall, trusted by everyone",
+  "label": "dwarven town guard captain, elderly (dwarf) — decades on the wall, trusted by everyone",
   "family": "npcs",
   "sizeBand": "medium",
   "pxHeight": 222,
@@ -2288,7 +2288,7 @@
   "cell": 24
  },
  "spr-fantasy-elven-archivist-keeper-of-a-library-older-than-the-town-around-it": {
-  "label": "elven archivist \u2014 keeper of a library older than the town around it",
+  "label": "elven archivist — keeper of a library older than the town around it",
   "family": "npcs",
   "sizeBand": "medium",
   "pxHeight": 203,
@@ -2298,7 +2298,7 @@
   "cell": 12
  },
  "spr-fantasy-elven-fletcher-every-arrow-leaves-her-stall-true": {
-  "label": "elven fletcher \u2014 every arrow leaves her stall true",
+  "label": "elven fletcher — every arrow leaves her stall true",
   "family": "npcs",
   "sizeBand": "medium",
   "pxHeight": 219,
@@ -2308,7 +2308,7 @@
   "cell": 21
  },
  "spr-fantasy-elven-herbalist-elf-sells-cures-and-quietly-a-few-curses": {
-  "label": "elven herbalist (elf) \u2014 sells cures and, quietly, a few curses",
+  "label": "elven herbalist (elf) — sells cures and, quietly, a few curses",
   "family": "npcs",
   "sizeBand": "medium",
   "pxHeight": 208,
@@ -2318,7 +2318,7 @@
   "cell": 21
  },
  "spr-fantasy-elven-ranger-s-apprentice-elf-still-learning-to-read-a-trail-properly": {
-  "label": "elven ranger's apprentice (elf) \u2014 still learning to read a trail properly",
+  "label": "elven ranger's apprentice (elf) — still learning to read a trail properly",
   "family": "npcs",
   "sizeBand": "medium",
   "pxHeight": 182,
@@ -2328,7 +2328,7 @@
   "cell": 3
  },
  "spr-fantasy-elven-scribe-elf-copies-manuscripts-for-the-town-archive-meticulous-to-a-fault": {
-  "label": "elven scribe (elf) \u2014 copies manuscripts for the town archive, meticulous to a fault",
+  "label": "elven scribe (elf) — copies manuscripts for the town archive, meticulous to a fault",
   "family": "npcs",
   "sizeBand": "medium",
   "pxHeight": 212,
@@ -3056,7 +3056,7 @@
   "cell": 18
  },
  "spr-fantasy-gnomish-alchemist-s-assistant-gnome-mixes-potions-that-mostly-don-t-explode": {
-  "label": "gnomish alchemist's assistant (gnome) \u2014 mixes potions that mostly don't explode",
+  "label": "gnomish alchemist's assistant (gnome) — mixes potions that mostly don't explode",
   "family": "npcs",
   "sizeBand": "small",
   "pxHeight": 171,
@@ -3066,7 +3066,7 @@
   "cell": 7
  },
  "spr-fantasy-gnomish-clockmaker-gnome-every-clock-in-town-keeps-slightly-different-time-on-purpose": {
-  "label": "gnomish clockmaker (gnome) \u2014 every clock in town keeps slightly different time, on purpose",
+  "label": "gnomish clockmaker (gnome) — every clock in town keeps slightly different time, on purpose",
   "family": "npcs",
   "sizeBand": "small",
   "pxHeight": 173,
@@ -3076,7 +3076,7 @@
   "cell": 16
  },
  "spr-fantasy-gnomish-tinkerer-clockwork-contraptions-that-mostly-work": {
-  "label": "gnomish tinkerer \u2014 clockwork contraptions that mostly work",
+  "label": "human tinkerer",
   "family": "npcs",
   "sizeBand": "medium",
   "pxHeight": 207,
@@ -3162,7 +3162,7 @@
   "cell": 12
  },
  "spr-fantasy-goliath-bridge-toll-keeper-goliath-collects-the-fee-stops-the-trouble-rarely-needs-to-try-hard": {
-  "label": "goliath bridge-toll keeper (goliath) \u2014 collects the fee, stops the trouble, rarely needs to try hard",
+  "label": "goliath bridge-toll keeper (goliath) — collects the fee, stops the trouble, rarely needs to try hard",
   "family": "npcs",
   "sizeBand": "large",
   "pxHeight": 272,
@@ -3172,7 +3172,7 @@
   "cell": 8
  },
  "spr-fantasy-goliath-dockworker-goliath-moves-cargo-alone-that-takes-four-other-men": {
-  "label": "goliath dockworker (goliath) \u2014 moves cargo alone that takes four other men",
+  "label": "goliath dockworker (goliath) — moves cargo alone that takes four other men",
   "family": "npcs",
   "sizeBand": "large",
   "pxHeight": 236,
@@ -3182,7 +3182,7 @@
   "cell": 17
  },
  "spr-fantasy-goliath-quarry-foreman-the-only-one-strong-enough-to-reset-a-slipped-cart-alone": {
-  "label": "goliath quarry foreman \u2014 the only one strong enough to reset a slipped cart alone",
+  "label": "goliath quarry foreman — the only one strong enough to reset a slipped cart alone",
   "family": "npcs",
   "sizeBand": "large",
   "pxHeight": 212,
@@ -3192,7 +3192,7 @@
   "cell": 17
  },
  "spr-fantasy-gorgon": {
-  "label": "gorgon",
+  "label": "gilded medusa",
   "family": "monsters",
   "sizeBand": "large",
   "pxHeight": 223,
@@ -3288,7 +3288,7 @@
   "cell": 13
  },
  "spr-fantasy-grell": {
-  "label": "grell",
+  "label": "lurking fiend",
   "family": "monsters",
   "sizeBand": "medium",
   "pxHeight": 212,
@@ -3398,7 +3398,7 @@
   "cell": 13
  },
  "spr-fantasy-halfling-farmer-dark-skinned-tends-the-best-soil-in-the-valley": {
-  "label": "halfling farmer, dark-skinned \u2014 tends the best soil in the valley",
+  "label": "halfling farmer, dark-skinned — tends the best soil in the valley",
   "family": "npcs",
   "sizeBand": "small",
   "pxHeight": 184,
@@ -3408,7 +3408,7 @@
   "cell": 22
  },
  "spr-fantasy-halfling-innkeeper-knows-every-traveler-s-business-before-they-ve-unpacked": {
-  "label": "halfling innkeeper \u2014 knows every traveler's business before they've unpacked",
+  "label": "halfling innkeeper — knows every traveler's business before they've unpacked",
   "family": "npcs",
   "sizeBand": "small",
   "pxHeight": 181,
@@ -3418,7 +3418,7 @@
   "cell": 13
  },
  "spr-fantasy-halfling-messenger-runner-halfling-fastest-feet-in-the-county-mostly-ignored-otherwise": {
-  "label": "halfling messenger runner (halfling) \u2014 fastest feet in the county, mostly ignored otherwise",
+  "label": "halfling messenger runner (halfling) — fastest feet in the county, mostly ignored otherwise",
   "family": "npcs",
   "sizeBand": "small",
   "pxHeight": 179,
@@ -3428,7 +3428,7 @@
   "cell": 22
  },
  "spr-fantasy-halfling-orchard-keeper-elderly-halfling-knows-every-tree-in-the-grove-by-name": {
-  "label": "halfling orchard keeper, elderly (halfling) \u2014 knows every tree in the grove by name",
+  "label": "halfling orchard keeper, elderly (halfling) — knows every tree in the grove by name",
   "family": "npcs",
   "sizeBand": "small",
   "pxHeight": 179,
@@ -3438,7 +3438,7 @@
   "cell": 13
  },
  "spr-fantasy-halfling-roadside-chef-halfling-feeds-every-traveler-who-passes-no-exceptions": {
-  "label": "halfling roadside chef (halfling) \u2014 feeds every traveler who passes, no exceptions",
+  "label": "halfling roadside chef (halfling) — feeds every traveler who passes, no exceptions",
   "family": "npcs",
   "sizeBand": "small",
   "pxHeight": 181,
@@ -3664,7 +3664,7 @@
   "cell": 14
  },
  "spr-fantasy-human-midwife-elderly-delivered-half-the-village-remembers-all-of-it": {
-  "label": "human midwife, elderly \u2014 delivered half the village, remembers all of it",
+  "label": "village acolyte",
   "family": "npcs",
   "sizeBand": "medium",
   "pxHeight": 222,
@@ -3674,7 +3674,7 @@
   "cell": 25
  },
  "spr-fantasy-human-midwife-s-apprentice-human-dark-skinned-learning-the-trade-from-her-mother": {
-  "label": "human midwife's apprentice (human) \u2014 dark-skinned, learning the trade from her mother",
+  "label": "human midwife's apprentice (human) — dark-skinned, learning the trade from her mother",
   "family": "npcs",
   "sizeBand": "medium",
   "pxHeight": 226,
@@ -3684,7 +3684,7 @@
   "cell": 10
  },
  "spr-fantasy-human-miller-dust-covered-counts-every-sack-twice": {
-  "label": "human miller \u2014 dust-covered, counts every sack twice",
+  "label": "dragonborn gate guard",
   "family": "npcs",
   "sizeBand": "medium",
   "pxHeight": 227,
@@ -3694,7 +3694,7 @@
   "cell": 19
  },
  "spr-fantasy-human-retired-soldier-one-armed-human-dark-skinned-runs-the-town-s-only-proper-tavern-brawl-rules": {
-  "label": "human retired soldier, one-armed (human) \u2014 dark-skinned, runs the town's only proper tavern brawl rules",
+  "label": "human retired soldier, one-armed (human) — dark-skinned, runs the town's only proper tavern brawl rules",
   "family": "npcs",
   "sizeBand": "medium",
   "pxHeight": 210,
@@ -3704,7 +3704,7 @@
   "cell": 25
  },
  "spr-fantasy-human-town-crier-human-announces-news-rumor-and-the-occasional-lie-for-coin": {
-  "label": "human town crier (human) \u2014 announces news, rumor, and the occasional lie for coin",
+  "label": "human town crier (human) — announces news, rumor, and the occasional lie for coin",
   "family": "npcs",
   "sizeBand": "medium",
   "pxHeight": 219,
@@ -3714,7 +3714,7 @@
   "cell": 1
  },
  "spr-fantasy-human-wheelwright-human-dark-skinned-third-generation-in-the-same-shop": {
-  "label": "human wheelwright (human) \u2014 dark-skinned, third generation in the same shop",
+  "label": "human wheelwright (human) — dark-skinned, third generation in the same shop",
   "family": "npcs",
   "sizeBand": "medium",
   "pxHeight": 218,
@@ -3853,7 +3853,7 @@
   "cell": 9
  },
  "spr-fantasy-kid-wants-be-believed-by-one-grown-up-just-one-about-the-thing-they-saw": {
-  "label": "kid \u2014 wants: be believed by one grown-up \u2014 just one \u2014 about the thing they saw.",
+  "label": "kid — wants: be believed by one grown-up — just one — about the thing they saw.",
   "family": "kids",
   "sizeBand": "small",
   "pxHeight": 189,
@@ -3863,7 +3863,7 @@
   "cell": 3
  },
  "spr-fantasy-kid-wants-be-chosen-for-the-errand-the-team-the-trust-for-once": {
-  "label": "kid \u2014 wants: be chosen \u2014 for the errand, the team, the trust \u2014 for once.",
+  "label": "kid — wants: be chosen — for the errand, the team, the trust — for once.",
   "family": "kids",
   "sizeBand": "small",
   "pxHeight": 195,
@@ -3873,7 +3873,7 @@
   "cell": 15
  },
  "spr-fantasy-kid-wants-feed-the-thing-in-the-woods-that-s-been-kind-to-them": {
-  "label": "kid \u2014 wants: feed the thing in the woods that's been kind to them.",
+  "label": "kid — wants: feed the thing in the woods that's been kind to them.",
   "family": "kids",
   "sizeBand": "small",
   "pxHeight": 205,
@@ -3883,7 +3883,7 @@
   "cell": 10
  },
  "spr-fantasy-kid-wants-find-out-what-the-grown-ups-whisper-about-behind-the-shut-door": {
-  "label": "kid \u2014 wants: find out what the grown-ups whisper about behind the shut door.",
+  "label": "kid — wants: find out what the grown-ups whisper about behind the shut door.",
   "family": "kids",
   "sizeBand": "small",
   "pxHeight": 199,
@@ -3893,7 +3893,7 @@
   "cell": 12
  },
  "spr-fantasy-kid-wants-find-the-dog-that-didn-t-come-home": {
-  "label": "kid \u2014 wants: find the dog that didn't come home.",
+  "label": "kid — wants: find the dog that didn't come home.",
   "family": "kids",
   "sizeBand": "small",
   "pxHeight": 180,
@@ -3903,7 +3903,7 @@
   "cell": 1
  },
  "spr-fantasy-kid-wants-get-back-what-was-taken-from-them-and-it-s-the-object-the-whole-plot-turns-on": {
-  "label": "kid \u2014 wants: get back what was taken from them \u2014 and it's the object the whole plot turns on.",
+  "label": "kid — wants: get back what was taken from them — and it's the object the whole plot turns on.",
   "family": "kids",
   "sizeBand": "small",
   "pxHeight": 191,
@@ -3913,7 +3913,7 @@
   "cell": 5
  },
  "spr-fantasy-kid-wants-get-their-small-hoard-back-from-whoever-confiscated-it": {
-  "label": "kid \u2014 wants: get their small hoard back from whoever confiscated it.",
+  "label": "kid — wants: get their small hoard back from whoever confiscated it.",
   "family": "kids",
   "sizeBand": "small",
   "pxHeight": 198,
@@ -3923,7 +3923,7 @@
   "cell": 13
  },
  "spr-fantasy-kid-wants-keep-the-little-one-from-finding-out-the-bad-thing-that-happened": {
-  "label": "kid \u2014 wants: keep the little one from finding out the bad thing that happened.",
+  "label": "kid — wants: keep the little one from finding out the bad thing that happened.",
   "family": "kids",
   "sizeBand": "small",
   "pxHeight": 188,
@@ -3933,7 +3933,7 @@
   "cell": 16
  },
  "spr-fantasy-kid-wants-keep-the-pretty-thing-they-found-which-someone-dangerous-is-tearing-the-town-apart-to-recover": {
-  "label": "kid \u2014 wants: keep the pretty thing they found \u2014 which someone dangerous is tearing the town apart to recover.",
+  "label": "kid — wants: keep the pretty thing they found — which someone dangerous is tearing the town apart to recover.",
   "family": "kids",
   "sizeBand": "small",
   "pxHeight": 206,
@@ -3943,7 +3943,7 @@
   "cell": 9
  },
  "spr-fantasy-kid-wants-keep-the-secret-they-swore-to-keep-even-now-that-it-s-gone-wrong": {
-  "label": "kid \u2014 wants: keep the secret they swore to keep, even now that it's gone wrong.",
+  "label": "kid — wants: keep the secret they swore to keep, even now that it's gone wrong.",
   "family": "kids",
   "sizeBand": "small",
   "pxHeight": 204,
@@ -3953,7 +3953,7 @@
   "cell": 6
  },
  "spr-fantasy-kid-wants-make-their-parent-laugh-the-old-way-the-way-from-before": {
-  "label": "kid \u2014 wants: make their parent laugh the old way, the way from before.",
+  "label": "kid — wants: make their parent laugh the old way, the way from before.",
   "family": "kids",
   "sizeBand": "small",
   "pxHeight": 188,
@@ -3963,7 +3963,7 @@
   "cell": 19
  },
  "spr-fantasy-kid-wants-not-have-to-go-home-tonight": {
-  "label": "kid \u2014 wants: not have to go home tonight.",
+  "label": "kid — wants: not have to go home tonight.",
   "family": "kids",
   "sizeBand": "small",
   "pxHeight": 206,
@@ -3973,7 +3973,7 @@
   "cell": 11
  },
  "spr-fantasy-kid-wants-prove-they-re-not-a-baby-by-going-where-they-re-forbidden-to-go": {
-  "label": "kid \u2014 wants: prove they're not a baby by going where they're forbidden to go.",
+  "label": "kid — wants: prove they're not a baby by going where they're forbidden to go.",
   "family": "kids",
   "sizeBand": "small",
   "pxHeight": 188,
@@ -3983,7 +3983,7 @@
   "cell": 8
  },
  "spr-fantasy-kid-wants-put-it-back-before-anyone-notices-it-was-gone": {
-  "label": "kid \u2014 wants: put it back before anyone notices it was gone.",
+  "label": "kid — wants: put it back before anyone notices it was gone.",
   "family": "kids",
   "sizeBand": "small",
   "pxHeight": 190,
@@ -3993,7 +3993,7 @@
   "cell": 2
  },
  "spr-fantasy-kid-wants-see-the-locked-place-opened-just-once-just-to-know": {
-  "label": "kid \u2014 wants: see the locked place opened, just once, just to know.",
+  "label": "kid — wants: see the locked place opened, just once, just to know.",
   "family": "kids",
   "sizeBand": "small",
   "pxHeight": 178,
@@ -4006,7 +4006,7 @@
   ]
  },
  "spr-fantasy-kid-wants-slip-a-message-to-the-one-person-the-family-has-forbidden-them-to-see": {
-  "label": "kid \u2014 wants: slip a message to the one person the family has forbidden them to see.",
+  "label": "kid — wants: slip a message to the one person the family has forbidden them to see.",
   "family": "kids",
   "sizeBand": "small",
   "pxHeight": 197,
@@ -4016,7 +4016,7 @@
   "cell": 14
  },
  "spr-fantasy-kid-wants-stay-up-late-enough-to-catch-the-thing-that-comes-at-night": {
-  "label": "kid \u2014 wants: stay up late enough to catch the thing that comes at night.",
+  "label": "kid — wants: stay up late enough to catch the thing that comes at night.",
   "family": "kids",
   "sizeBand": "small",
   "pxHeight": 180,
@@ -4026,7 +4026,7 @@
   "cell": 4
  },
  "spr-fantasy-kid-wants-trade-the-strange-coin-they-found-for-something-they-actually-want": {
-  "label": "kid \u2014 wants: trade the strange coin they found for something they actually want.",
+  "label": "kid — wants: trade the strange coin they found for something they actually want.",
   "family": "kids",
   "sizeBand": "small",
   "pxHeight": 193,
@@ -4036,7 +4036,7 @@
   "cell": 17
  },
  "spr-fantasy-kid-wants-warn-someone-and-not-one-adult-will-slow-down-long-enough-to-hear-it": {
-  "label": "kid \u2014 wants: warn someone \u2014 and not one adult will slow down long enough to hear it.",
+  "label": "kid — wants: warn someone — and not one adult will slow down long enough to hear it.",
   "family": "kids",
   "sizeBand": "small",
   "pxHeight": 188,
@@ -4046,7 +4046,7 @@
   "cell": 20
  },
  "spr-fantasy-kid-wants-win-back-the-friend-who-stopped-coming-around": {
-  "label": "kid \u2014 wants: win back the friend who stopped coming around.",
+  "label": "kid — wants: win back the friend who stopped coming around.",
   "family": "kids",
   "sizeBand": "small",
   "pxHeight": 203,
@@ -4252,7 +4252,7 @@
   "cell": 24
  },
  "spr-fantasy-magnate-halfling": {
-  "label": "magnate (halfling)",
+  "label": "orc trade boss",
   "family": "npcs",
   "sizeBand": "medium",
   "pxHeight": 221,
@@ -4688,7 +4688,7 @@
   "cell": 1
  },
  "spr-fantasy-orcish-caravan-blacksmith-orc-repairs-wagon-wheels-faster-than-anyone-in-three-towns": {
-  "label": "orcish caravan blacksmith (orc) \u2014 repairs wagon wheels faster than anyone in three towns",
+  "label": "orcish caravan blacksmith (orc) — repairs wagon wheels faster than anyone in three towns",
   "family": "npcs",
   "sizeBand": "medium",
   "pxHeight": 211,
@@ -4698,7 +4698,7 @@
   "cell": 5
  },
  "spr-fantasy-orcish-caravan-guard-hired-muscle-with-a-reputation-for-actually-caring-about-the-cargo": {
-  "label": "orcish caravan guard \u2014 hired muscle with a reputation for actually caring about the cargo",
+  "label": "orcish caravan guard — hired muscle with a reputation for actually caring about the cargo",
   "family": "npcs",
   "sizeBand": "medium",
   "pxHeight": 215,
@@ -4708,7 +4708,7 @@
   "cell": 14
  },
  "spr-fantasy-orcish-farrier-orc-shoes-every-horse-in-the-valley-feared-and-respected-equally": {
-  "label": "orcish farrier (orc) \u2014 shoes every horse in the valley, feared and respected equally",
+  "label": "orcish farrier (orc) — shoes every horse in the valley, feared and respected equally",
   "family": "npcs",
   "sizeBand": "medium",
   "pxHeight": 211,
@@ -4718,7 +4718,7 @@
   "cell": 23
  },
  "spr-fantasy-orcish-healer-gentle-hands-a-reputation-people-are-slow-to-trust": {
-  "label": "orcish healer \u2014 gentle hands, a reputation people are slow to trust",
+  "label": "orcish healer — gentle hands, a reputation people are slow to trust",
   "family": "npcs",
   "sizeBand": "medium",
   "pxHeight": 223,
@@ -4728,7 +4728,7 @@
   "cell": 23
  },
  "spr-fantasy-orcish-stable-hand-orc-gentle-with-horses-terrifying-to-everyone-else": {
-  "label": "orcish stable hand (orc) \u2014 gentle with horses, terrifying to everyone else",
+  "label": "orcish stable hand (orc) — gentle with horses, terrifying to everyone else",
   "family": "npcs",
   "sizeBand": "medium",
   "pxHeight": 226,
@@ -4768,7 +4768,7 @@
   "cell": 22
  },
  "spr-fantasy-outsider-tiefling": {
-  "label": "outsider (tiefling)",
+  "label": "dwarf fowler",
   "family": "npcs",
   "sizeBand": "medium",
   "pxHeight": 202,
@@ -4814,7 +4814,7 @@
   ]
  },
  "spr-fantasy-pampered-elite-goliath": {
-  "label": "pampered-elite (goliath)",
+  "label": "human smith",
   "family": "npcs",
   "sizeBand": "medium",
   "pxHeight": 222,
@@ -5172,7 +5172,7 @@
   "cell": 3
  },
  "spr-fantasy-recruiter-orc": {
-  "label": "recruiter (orc)",
+  "label": "orc farmer",
   "family": "npcs",
   "sizeBand": "medium",
   "pxHeight": 208,
@@ -5477,7 +5477,7 @@
   ]
  },
  "spr-fantasy-secret-scholar-human": {
-  "label": "secret-scholar (human)",
+  "label": "tiefling baker",
   "family": "npcs",
   "sizeBand": "medium",
   "pxHeight": 217,
@@ -6071,7 +6071,7 @@
   "cell": 5
  },
  "spr-fantasy-tiefling-blacksmith-s-apprentice-still-learning-already-better-than-most-journeymen": {
-  "label": "tiefling blacksmith's apprentice \u2014 still learning, already better than most journeymen",
+  "label": "tiefling courier",
   "family": "npcs",
   "sizeBand": "medium",
   "pxHeight": 194,
@@ -6081,7 +6081,7 @@
   "cell": 24
  },
  "spr-fantasy-tiefling-fortune-teller-half-the-town-swears-by-her-half-crosses-the-street": {
-  "label": "tiefling fortune-teller \u2014 half the town swears by her, half crosses the street",
+  "label": "tiefling fortune-teller — half the town swears by her, half crosses the street",
   "family": "npcs",
   "sizeBand": "medium",
   "pxHeight": 189,
@@ -6091,7 +6091,7 @@
   "cell": 15
  },
  "spr-fantasy-tiefling-fortune-teller-s-rival-tiefling-claims-to-be-the-real-seer-in-town": {
-  "label": "tiefling fortune-teller's rival (tiefling) \u2014 claims to be the real seer in town",
+  "label": "tiefling fortune-teller's rival (tiefling) — claims to be the real seer in town",
   "family": "npcs",
   "sizeBand": "medium",
   "pxHeight": 219,
@@ -6101,7 +6101,7 @@
   "cell": 24
  },
  "spr-fantasy-tiefling-street-performer-tiefling-half-the-crowd-is-there-for-the-trick-half-for-the-horror": {
-  "label": "tiefling street performer (tiefling) \u2014 half the crowd is there for the trick, half for the horror",
+  "label": "tiefling street performer (tiefling) — half the crowd is there for the trick, half for the horror",
   "family": "npcs",
   "sizeBand": "medium",
   "pxHeight": 233,
@@ -6111,7 +6111,7 @@
   "cell": 6
  },
  "spr-fantasy-tiefling-tavern-owner-tiefling-runs-the-friendliest-bar-in-a-town-that-fears-her-kind": {
-  "label": "tiefling tavern owner (tiefling) \u2014 runs the friendliest bar in a town that fears her kind",
+  "label": "tiefling tavern owner (tiefling) — runs the friendliest bar in a town that fears her kind",
   "family": "npcs",
   "sizeBand": "medium",
   "pxHeight": 227,
@@ -6586,7 +6586,7 @@
   "cell": 25
  },
  "spr-fantasy-wild-animal-a-badger-low-broad-digging-with-total-disregard-for-anything-nearby": {
-  "label": "wild animal \u2014 a badger \u2014 low, broad, digging with total disregard for anything nearby",
+  "label": "wild animal — a badger — low, broad, digging with total disregard for anything nearby",
   "family": "animals",
   "sizeBand": "small",
   "pxHeight": 129,
@@ -6596,7 +6596,7 @@
   "cell": 23
  },
  "spr-fantasy-wild-animal-a-black-bear-foraging-unbothered-dangerous-only-if-pressed": {
-  "label": "wild animal \u2014 a black bear \u2014 foraging, unbothered, dangerous only if pressed",
+  "label": "wild animal — a black bear — foraging, unbothered, dangerous only if pressed",
   "family": "animals",
   "sizeBand": "large",
   "pxHeight": 163,
@@ -6606,7 +6606,7 @@
   "cell": 19
  },
  "spr-fantasy-wild-animal-a-bull-elk-antlers-full-grown-the-season-s-rut-making-it-reckless": {
-  "label": "wild animal \u2014 a bull elk \u2014 antlers full-grown, the season's rut making it reckless",
+  "label": "wild animal — a bull elk — antlers full-grown, the season's rut making it reckless",
   "family": "animals",
   "sizeBand": "large",
   "pxHeight": 222,
@@ -6616,7 +6616,7 @@
   "cell": 22
  },
  "spr-fantasy-wild-animal-a-great-owl-silent-wingbeats-watches-more-than-it-hunts": {
-  "label": "wild animal \u2014 a great owl \u2014 silent wingbeats, watches more than it hunts",
+  "label": "wild animal — a great owl — silent wingbeats, watches more than it hunts",
   "family": "animals",
   "sizeBand": "small",
   "pxHeight": 189,
@@ -6626,7 +6626,7 @@
   "cell": 16
  },
  "spr-fantasy-wild-animal-a-heron-stalks-the-shallows-on-legs-too-thin-to-look-that-patient": {
-  "label": "wild animal \u2014 a heron \u2014 stalks the shallows on legs too thin to look that patient",
+  "label": "wild animal — a heron — stalks the shallows on legs too thin to look that patient",
   "family": "animals",
   "sizeBand": "medium",
   "pxHeight": 220,
@@ -6636,7 +6636,7 @@
   "cell": 20
  },
  "spr-fantasy-wild-animal-a-lone-timber-wolf-pup-not-yet-part-of-any-pack-still-learning-to-hunt": {
-  "label": "wild animal \u2014 a lone timber-wolf pup \u2014 not yet part of any pack, still learning to hunt",
+  "label": "wild animal — a lone timber-wolf pup — not yet part of any pack, still learning to hunt",
   "family": "animals",
   "sizeBand": "small",
   "pxHeight": 135,
@@ -6646,7 +6646,7 @@
   "cell": 14
  },
  "spr-fantasy-wild-animal-a-lynx-kitten-spotted-coat-play-stalking-something-that-isn-t-there-yet": {
-  "label": "wild animal \u2014 a lynx kitten \u2014 spotted coat, play-stalking something that isn't there yet",
+  "label": "wild animal — a lynx kitten — spotted coat, play-stalking something that isn't there yet",
   "family": "animals",
   "sizeBand": "small",
   "pxHeight": 146,
@@ -6659,7 +6659,7 @@
   ]
  },
  "spr-fantasy-wild-animal-a-mountain-goat-sure-footed-on-a-ledge-no-predator-bothers-to-follow": {
-  "label": "wild animal \u2014 a mountain goat \u2014 sure-footed on a ledge no predator bothers to follow",
+  "label": "wild animal — a mountain goat — sure-footed on a ledge no predator bothers to follow",
   "family": "animals",
   "sizeBand": "medium",
   "pxHeight": 194,
@@ -6669,7 +6669,7 @@
   "cell": 18
  },
  "spr-fantasy-wild-animal-a-peregrine-falcon-stooping-mid-hunt-faster-than-anything-else-in-the-sky": {
-  "label": "wild animal \u2014 a peregrine falcon \u2014 stooping mid-hunt, faster than anything else in the sky",
+  "label": "wild animal — a peregrine falcon — stooping mid-hunt, faster than anything else in the sky",
   "family": "animals",
   "sizeBand": "tiny",
   "pxHeight": 164,
@@ -6682,7 +6682,7 @@
   ]
  },
  "spr-fantasy-wild-animal-a-red-fox-kit-curious-unafraid-too-young-to-know-better": {
-  "label": "wild animal \u2014 a red fox kit \u2014 curious, unafraid, too young to know better",
+  "label": "wild animal — a red fox kit — curious, unafraid, too young to know better",
   "family": "animals",
   "sizeBand": "small",
   "pxHeight": 135,
@@ -6692,7 +6692,7 @@
   "cell": 15
  },
  "spr-fantasy-wild-animal-a-single-deer-from-the-herd-moves-with-the-herd-reads-the-wind-before-the-ranger-does": {
-  "label": "wild animal \u2014 a single deer from the herd \u2014 moves with the herd, reads the wind before the ranger does",
+  "label": "wild animal — a single deer from the herd — moves with the herd, reads the wind before the ranger does",
   "family": "animals",
   "sizeBand": "medium",
   "pxHeight": 217,
@@ -6702,7 +6702,7 @@
   "cell": 2
  },
  "spr-fantasy-wild-animal-a-single-elk-grazes-the-tree-line-at-dawn-gone-before-full-light": {
-  "label": "wild animal \u2014 a single elk \u2014 grazes the tree line at dawn, gone before full light",
+  "label": "wild animal — a single elk — grazes the tree line at dawn, gone before full light",
   "family": "animals",
   "sizeBand": "large",
   "pxHeight": 193,
@@ -6712,7 +6712,7 @@
   "cell": 13
  },
  "spr-fantasy-wild-animal-a-single-goose-from-the-migrant-flock-passes-through-and-carries-news-of-where-it-s-been": {
-  "label": "wild animal \u2014 a single goose from the migrant flock \u2014 passes through and carries news of where it's been",
+  "label": "wild animal — a single goose from the migrant flock — passes through and carries news of where it's been",
   "family": "animals",
   "sizeBand": "small",
   "pxHeight": 190,
@@ -6722,7 +6722,7 @@
   "cell": 8
  },
  "spr-fantasy-wild-animal-a-single-vulture-from-the-carrion-flock-first-to-know-when-something-has-died-nearby": {
-  "label": "wild animal \u2014 a single vulture from the carrion flock \u2014 first to know when something has died nearby",
+  "label": "wild animal — a single vulture from the carrion flock — first to know when something has died nearby",
   "family": "animals",
   "sizeBand": "small",
   "pxHeight": 195,
@@ -6732,7 +6732,7 @@
   "cell": 7
  },
  "spr-fantasy-wild-animal-a-wild-boar-sow-tusks-lowered-protective-of-ground-she-doesn-t-even-own-yet": {
-  "label": "wild animal \u2014 a wild boar sow \u2014 tusks lowered, protective of ground she doesn't even own yet",
+  "label": "wild animal — a wild boar sow — tusks lowered, protective of ground she doesn't even own yet",
   "family": "animals",
   "sizeBand": "medium",
   "pxHeight": 159,
@@ -6745,7 +6745,7 @@
   ]
  },
  "spr-fantasy-wild-animal-a-wild-turkey-tom-displaying-loud-oblivious-to-anything-hunting-it": {
-  "label": "wild animal \u2014 a wild turkey tom \u2014 displaying, loud, oblivious to anything hunting it",
+  "label": "wild animal — a wild turkey tom — displaying, loud, oblivious to anything hunting it",
   "family": "animals",
   "sizeBand": "small",
   "pxHeight": 209,
@@ -6755,7 +6755,7 @@
   "cell": 21
  },
  "spr-fantasy-wild-animal-ambush-lynx-solitary-patient-and-the-reason-the-trail-went-quiet": {
-  "label": "wild animal \u2014 ambush lynx \u2014 solitary, patient, and the reason the trail went quiet",
+  "label": "wild animal — ambush lynx — solitary, patient, and the reason the trail went quiet",
   "family": "animals",
   "sizeBand": "small",
   "pxHeight": 144,
@@ -6768,7 +6768,7 @@
   ]
  },
  "spr-fantasy-wild-animal-burrowing-badger-knows-what-the-earth-carries-underneath": {
-  "label": "wild animal \u2014 burrowing badger \u2014 knows what the earth carries underneath",
+  "label": "wild animal — burrowing badger — knows what the earth carries underneath",
   "family": "animals",
   "sizeBand": "small",
   "pxHeight": 123,
@@ -6778,7 +6778,7 @@
   "cell": 5
  },
  "spr-fantasy-wild-animal-half-wild-fringe-fox-drawn-to-the-edge-of-camps-curious-and-never-quite-trusting": {
-  "label": "wild animal \u2014 half-wild fringe fox \u2014 drawn to the edge of camps, curious and never quite trusting",
+  "label": "wild animal — half-wild fringe fox — drawn to the edge of camps, curious and never quite trusting",
   "family": "animals",
   "sizeBand": "small",
   "pxHeight": 155,
@@ -6788,7 +6788,7 @@
   "cell": 10
  },
  "spr-fantasy-wild-animal-old-solitary-boar-scarred-wary-and-gives-ground-to-no-one": {
-  "label": "wild animal \u2014 old solitary boar \u2014 scarred, wary, and gives ground to no one",
+  "label": "wild animal — old solitary boar — scarred, wary, and gives ground to no one",
   "family": "animals",
   "sizeBand": "medium",
   "pxHeight": 177,
@@ -6801,7 +6801,7 @@
   ]
  },
  "spr-fantasy-wild-animal-river-otter-knows-the-water-s-moods-better-than-any-map": {
-  "label": "wild animal \u2014 river otter \u2014 knows the water's moods better than any map",
+  "label": "wild animal — river otter — knows the water's moods better than any map",
   "family": "animals",
   "sizeBand": "small",
   "pxHeight": 139,
@@ -6811,7 +6811,7 @@
   "cell": 4
  },
  "spr-fantasy-wild-animal-territory-wolf-holds-a-stretch-of-ground-and-knows-every-crossing-of-it": {
-  "label": "wild animal \u2014 territory wolf \u2014 holds a stretch of ground and knows every crossing of it",
+  "label": "wild animal — territory wolf — holds a stretch of ground and knows every crossing of it",
   "family": "animals",
   "sizeBand": "medium",
   "pxHeight": 194,
@@ -6821,7 +6821,7 @@
   "cell": 1
  },
  "spr-fantasy-wild-animal-the-elder-of-the-wood-the-beast-every-other-animal-on-the-node-defers-to": {
-  "label": "wild animal \u2014 the elder of the wood \u2014 the beast every other animal on the node defers to",
+  "label": "wild animal — the elder of the wood — the beast every other animal on the node defers to",
   "family": "animals",
   "sizeBand": "large",
   "pxHeight": 239,
@@ -6831,7 +6831,7 @@
   "cell": 12
  },
  "spr-fantasy-wild-animal-the-realm-beast-a-locally-distinct-wild-creature-one-animal-realm-appropriate": {
-  "label": "wild animal \u2014 the realm-beast (a locally distinct wild creature, one animal, realm-appropriate)",
+  "label": "wild animal — the realm-beast (a locally distinct wild creature, one animal, realm-appropriate)",
   "family": "animals",
   "sizeBand": "large",
   "pxHeight": 172,
@@ -6841,7 +6841,7 @@
   "cell": 11
  },
  "spr-fantasy-wild-animal-watcher-hawk-sees-the-whole-valley-from-height-and-forgets-nothing-it-circled": {
-  "label": "wild animal \u2014 watcher-hawk \u2014 sees the whole valley from height and forgets nothing it circled",
+  "label": "wild animal — watcher-hawk — sees the whole valley from height and forgets nothing it circled",
   "family": "animals",
   "sizeBand": "small",
   "pxHeight": 211,

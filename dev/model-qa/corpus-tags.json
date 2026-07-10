@@ -2605,14 +2605,14 @@
    "portability": [
     "fantasy"
    ],
-   "label": "cockatrice regent",
+   "label": "drake regent",
    "realm": "fantasy",
    "family": "monsters",
    "sizeBand": "large",
    "expressionSet": null,
    "bound": null,
    "qaFlags": [
-    "mismatch-label-vs-art"
+    "relabeled-to-art"
    ]
   },
   "spr-fantasy-colossus": {
@@ -3398,7 +3398,7 @@
     "suburb",
     "frontier"
    ],
-   "label": "domestic animal \u2014 a single caged ferret-kit \u2014 young, hyperactive, still learning the vermin-catcher's trade.",
+   "label": "domestic animal — a single caged ferret-kit — young, hyperactive, still learning the vermin-catcher's trade.",
    "realm": "fantasy",
    "family": "animals",
    "sizeBand": "tiny",
@@ -3424,7 +3424,7 @@
     "suburb",
     "bright-kingdom"
    ],
-   "label": "domestic animal \u2014 a single caged songbird \u2014 kept for the sound of it, restless behind the wire.",
+   "label": "domestic animal — a single caged songbird — kept for the sound of it, restless behind the wire.",
    "realm": "fantasy",
    "family": "animals",
    "sizeBand": "tiny",
@@ -3448,7 +3448,7 @@
     "frontier",
     "suburb"
    ],
-   "label": "domestic animal \u2014 a single donkey \u2014 stubborn, sure-footed, outlives every horse on the property.",
+   "label": "domestic animal — a single donkey — stubborn, sure-footed, outlives every horse on the property.",
    "realm": "fantasy",
    "family": "animals",
    "sizeBand": "medium",
@@ -3472,7 +3472,7 @@
     "suburb",
     "frontier"
    ],
-   "label": "domestic animal \u2014 a single duck \u2014 waddling, unbothered, first to notice a stranger at the water's edge.",
+   "label": "domestic animal — a single duck — waddling, unbothered, first to notice a stranger at the water's edge.",
    "realm": "fantasy",
    "family": "animals",
    "sizeBand": "small",
@@ -3496,7 +3496,7 @@
     "frontier",
     "suburb"
    ],
-   "label": "domestic animal \u2014 a single goat \u2014 headstrong, climbs what it shouldn't, eats what it shouldn't.",
+   "label": "domestic animal — a single goat — headstrong, climbs what it shouldn't, eats what it shouldn't.",
    "realm": "fantasy",
    "family": "animals",
    "sizeBand": "small",
@@ -3520,7 +3520,7 @@
     "suburb",
     "frontier"
    ],
-   "label": "domestic animal \u2014 a single goose from the flock \u2014 loud, territorial, first to mark a stranger.",
+   "label": "domestic animal — a single goose from the flock — loud, territorial, first to mark a stranger.",
    "realm": "fantasy",
    "family": "animals",
    "sizeBand": "small",
@@ -3543,7 +3543,7 @@
     "fantasy",
     "frontier"
    ],
-   "label": "domestic animal \u2014 a single hunting hound \u2014 lean, nose-down, bred for the chase and bored without it.",
+   "label": "domestic animal — a single hunting hound — lean, nose-down, bred for the chase and bored without it.",
    "realm": "fantasy",
    "family": "animals",
    "sizeBand": "medium",
@@ -3567,7 +3567,7 @@
     "suburb",
     "bright-kingdom"
    ],
-   "label": "domestic animal \u2014 a single kitten \u2014 too young to have earned the barn cat's independence yet.",
+   "label": "domestic animal — a single kitten — too young to have earned the barn cat's independence yet.",
    "realm": "fantasy",
    "family": "animals",
    "sizeBand": "tiny",
@@ -3591,7 +3591,7 @@
     "bright-kingdom",
     "cosmic"
    ],
-   "label": "domestic animal \u2014 a single peacock \u2014 kept for show, screams like something's wrong when nothing is.",
+   "label": "domestic animal — a single peacock — kept for show, screams like something's wrong when nothing is.",
    "realm": "fantasy",
    "family": "animals",
    "sizeBand": "small",
@@ -3615,7 +3615,7 @@
     "suburb",
     "frontier"
    ],
-   "label": "domestic animal \u2014 a single pig \u2014 smarter than it's given credit for, rooting at the fence line.",
+   "label": "domestic animal — a single pig — smarter than it's given credit for, rooting at the fence line.",
    "realm": "fantasy",
    "family": "animals",
    "sizeBand": "medium",
@@ -3639,7 +3639,7 @@
     "frontier",
     "suburb"
    ],
-   "label": "domestic animal \u2014 a single pony \u2014 smaller and calmer than the war-mule, a child's first mount.",
+   "label": "domestic animal — a single pony — smaller and calmer than the war-mule, a child's first mount.",
    "realm": "fantasy",
    "family": "animals",
    "sizeBand": "medium",
@@ -3663,7 +3663,7 @@
     "suburb",
     "frontier"
    ],
-   "label": "domestic animal \u2014 a single rabbit \u2014 twitchy, kept for the table or kept as a pet, never sure which.",
+   "label": "domestic animal — a single rabbit — twitchy, kept for the table or kept as a pet, never sure which.",
    "realm": "fantasy",
    "family": "animals",
    "sizeBand": "tiny",
@@ -3687,7 +3687,7 @@
     "frontier",
     "suburb"
    ],
-   "label": "domestic animal \u2014 a single sheep from the herd \u2014 moves with the others, and its lone reluctance to follow is the tell.",
+   "label": "domestic animal — a single sheep from the herd — moves with the others, and its lone reluctance to follow is the tell.",
    "realm": "fantasy",
    "family": "animals",
    "sizeBand": "medium",
@@ -3711,7 +3711,7 @@
     "suburb",
     "frontier"
    ],
-   "label": "domestic animal \u2014 a single turkey \u2014 puffed up and loud, more guard animal than anyone admits.",
+   "label": "domestic animal — a single turkey — puffed up and loud, more guard animal than anyone admits.",
    "realm": "fantasy",
    "family": "animals",
    "sizeBand": "small",
@@ -3735,7 +3735,7 @@
     "suburb",
     "frontier"
    ],
-   "label": "domestic animal \u2014 a single turtle \u2014 slow-kept yard animal, older than most of the household.",
+   "label": "domestic animal — a single turtle — slow-kept yard animal, older than most of the household.",
    "realm": "fantasy",
    "family": "animals",
    "sizeBand": "small",
@@ -3762,7 +3762,7 @@
     "suburb",
     "frontier"
    ],
-   "label": "domestic animal \u2014 barn cat \u2014 owns the place, tolerates the people, hunts the dark corners.",
+   "label": "domestic animal — barn cat — owns the place, tolerates the people, hunts the dark corners.",
    "realm": "fantasy",
    "family": "animals",
    "sizeBand": "small",
@@ -3785,7 +3785,7 @@
     "fantasy",
     "frontier"
    ],
-   "label": "domestic animal \u2014 bird kept close (a single hawk) \u2014 carries, watches, and remembers a face.",
+   "label": "domestic animal — bird kept close (a single hawk) — carries, watches, and remembers a face.",
    "realm": "fantasy",
    "family": "animals",
    "sizeBand": "small",
@@ -3808,7 +3808,7 @@
     "fantasy",
     "frontier"
    ],
-   "label": "domestic animal \u2014 half-tamed wild thing \u2014 comes to the window, never the hand; trusts one child and no one else.",
+   "label": "domestic animal — half-tamed wild thing — comes to the window, never the hand; trusts one child and no one else.",
    "realm": "fantasy",
    "family": "animals",
    "sizeBand": "small",
@@ -3832,7 +3832,7 @@
     "suburb",
     "frontier"
    ],
-   "label": "domestic animal \u2014 loyal dog \u2014 bonded to one person, reads their mood before they do.",
+   "label": "domestic animal — loyal dog — bonded to one person, reads their mood before they do.",
    "realm": "fantasy",
    "family": "animals",
    "sizeBand": "medium",
@@ -3856,7 +3856,7 @@
     "suburb",
     "frontier"
    ],
-   "label": "domestic animal \u2014 old animal \u2014 past its working years, half-blind, and still the first to growl at the wrong thing.",
+   "label": "domestic animal — old animal — past its working years, half-blind, and still the first to growl at the wrong thing.",
    "realm": "fantasy",
    "family": "animals",
    "sizeBand": "medium",
@@ -3880,7 +3880,7 @@
     "noir",
     "suburb"
    ],
-   "label": "domestic animal \u2014 stray \u2014 belongs to no one and everyone; the street's own alarm bell.",
+   "label": "domestic animal — stray — belongs to no one and everyone; the street's own alarm bell.",
    "realm": "fantasy",
    "family": "animals",
    "sizeBand": "medium",
@@ -3904,7 +3904,7 @@
     "gloom",
     "lost-world"
    ],
-   "label": "domestic animal \u2014 the realm-beast (the realm-beast \u2014 a locally distinct pet, one animal, realm-appropriate)",
+   "label": "domestic animal — the realm-beast (the realm-beast — a locally distinct pet, one animal, realm-appropriate)",
    "realm": "fantasy",
    "family": "animals",
    "sizeBand": "tiny",
@@ -3929,7 +3929,7 @@
     "bright-kingdom",
     "noir"
    ],
-   "label": "domestic animal \u2014 the town's own animal \u2014 the one everyone knows by name; its fate is the town's mood made visible.",
+   "label": "domestic animal — the town's own animal — the one everyone knows by name; its fate is the town's mood made visible.",
    "realm": "fantasy",
    "family": "animals",
    "sizeBand": "tiny",
@@ -3952,7 +3952,7 @@
     "fantasy",
     "suburb"
    ],
-   "label": "domestic animal \u2014 vermin-catcher (a single ferret) \u2014 goes gladly where people won't.",
+   "label": "domestic animal — vermin-catcher (a single ferret) — goes gladly where people won't.",
    "realm": "fantasy",
    "family": "animals",
    "sizeBand": "tiny",
@@ -3979,7 +3979,7 @@
     "frontier",
     "suburb"
    ],
-   "label": "domestic animal \u2014 working beast (a single ox) \u2014 earns its feed, patient, and spooks true.",
+   "label": "domestic animal — working beast (a single ox) — earns its feed, patient, and spooks true.",
    "realm": "fantasy",
    "family": "animals",
    "sizeBand": "large",
@@ -4102,7 +4102,7 @@
     "fantasy",
     "high-seas"
    ],
-   "label": "dragonborn ship's purser (dragonborn) \u2014 keeps the manifest honest, mostly",
+   "label": "dragonborn ship's purser (dragonborn) — keeps the manifest honest, mostly",
    "realm": "fantasy",
    "family": "npcs",
    "sizeBand": "medium",
@@ -4128,7 +4128,7 @@
     "fantasy",
     "theater"
    ],
-   "label": "dragonborn temple acolyte, young (dragonborn) \u2014 devout, earnest, still memorizing the rites",
+   "label": "dragonborn temple acolyte, young (dragonborn) — devout, earnest, still memorizing the rites",
    "realm": "fantasy",
    "family": "npcs",
    "sizeBand": "medium",
@@ -4154,14 +4154,14 @@
     "theater",
     "gloom"
    ],
-   "label": "dragonborn temple guard \u2014 devout, literal-minded, takes the oath seriously",
+   "label": "tiefling minstrel",
    "realm": "fantasy",
    "family": "npcs",
    "sizeBand": "medium",
    "expressionSet": null,
    "bound": null,
    "qaFlags": [
-    "mismatch-label-vs-art"
+    "relabeled-to-art"
    ]
   },
   "spr-fantasy-dretch": {
@@ -4308,7 +4308,7 @@
     "fantasy",
     "gloom"
    ],
-   "label": "dungeon animal \u2014 abandoned mine canary \u2014 a small bird in a rusted cage, somehow still alive, still singing",
+   "label": "dungeon animal — abandoned mine canary — a small bird in a rusted cage, somehow still alive, still singing",
    "realm": "fantasy",
    "family": "animals",
    "sizeBand": "tiny",
@@ -4333,7 +4333,7 @@
     "suburb",
     "frontier"
    ],
-   "label": "dungeon animal \u2014 an ordinary animal, deliberately unremarkable \u2014 domestic or wild, doesn't matter; its presence this deep is the signal, let the scene decide what it means",
+   "label": "dungeon animal — an ordinary animal, deliberately unremarkable — domestic or wild, doesn't matter; its presence this deep is the signal, let the scene decide what it means",
    "realm": "fantasy",
    "family": "animals",
    "sizeBand": "tiny",
@@ -4356,7 +4356,7 @@
     "fantasy",
     "gloom"
    ],
-   "label": "dungeon animal \u2014 blind cave rat \u2014 pale, sightless, thrives in total dark, first sign something's been dug through",
+   "label": "dungeon animal — blind cave rat — pale, sightless, thrives in total dark, first sign something's been dug through",
    "realm": "fantasy",
    "family": "animals",
    "sizeBand": "tiny",
@@ -4379,7 +4379,7 @@
     "fantasy",
     "gloom"
    ],
-   "label": "dungeon animal \u2014 blind salamander \u2014 pale, slow, the kind of thing that shouldn't have a reason to be this deep",
+   "label": "dungeon animal — blind salamander — pale, slow, the kind of thing that shouldn't have a reason to be this deep",
    "realm": "fantasy",
    "family": "animals",
    "sizeBand": "tiny",
@@ -4402,7 +4402,7 @@
     "fantasy",
     "gloom"
    ],
-   "label": "dungeon animal \u2014 cave-adapted spider \u2014 pale, eyeless, spins webs across passages nobody's walked in years",
+   "label": "dungeon animal — cave-adapted spider — pale, eyeless, spins webs across passages nobody's walked in years",
    "realm": "fantasy",
    "family": "animals",
    "sizeBand": "tiny",
@@ -4425,7 +4425,7 @@
     "fantasy",
     "gloom"
    ],
-   "label": "dungeon animal \u2014 cave cricket, oversized \u2014 chirping alone in the dark, first warning of the swarm nearby",
+   "label": "dungeon animal — cave cricket, oversized — chirping alone in the dark, first warning of the swarm nearby",
    "realm": "fantasy",
    "family": "animals",
    "sizeBand": "tiny",
@@ -4452,7 +4452,7 @@
     "gloom",
     "frontier"
    ],
-   "label": "dungeon animal \u2014 chained beast, escaped its post \u2014 a working animal that slipped its old restraint, still wears the collar",
+   "label": "dungeon animal — chained beast, escaped its post — a working animal that slipped its old restraint, still wears the collar",
    "realm": "fantasy",
    "family": "animals",
    "sizeBand": "medium",
@@ -4476,7 +4476,7 @@
     "high-seas",
     "gloom"
    ],
-   "label": "dungeon animal \u2014 deep-well fish, stranded \u2014 flopping in a puddle far from any real water source",
+   "label": "dungeon animal — deep-well fish, stranded — flopping in a puddle far from any real water source",
    "realm": "fantasy",
    "family": "animals",
    "sizeBand": "tiny",
@@ -4499,7 +4499,7 @@
     "fantasy",
     "gloom"
    ],
-   "label": "dungeon animal \u2014 echo-startled bird \u2014 a single bird trapped in the upper galleries, flies at every footstep",
+   "label": "dungeon animal — echo-startled bird — a single bird trapped in the upper galleries, flies at every footstep",
    "realm": "fantasy",
    "family": "animals",
    "sizeBand": "tiny",
@@ -4526,7 +4526,7 @@
     "frontier",
     "lost-world"
    ],
-   "label": "dungeon animal \u2014 feral falconry bird \u2014 a hawk that escaped its jesses generations ago, now hunts the tunnels' vermin",
+   "label": "dungeon animal — feral falconry bird — a hawk that escaped its jesses generations ago, now hunts the tunnels' vermin",
    "realm": "fantasy",
    "family": "animals",
    "sizeBand": "tiny",
@@ -4549,7 +4549,7 @@
     "fantasy",
     "gloom"
    ],
-   "label": "dungeon animal \u2014 feral vermin-catcher \u2014 once someone's ferret or terrier, now lives wild in the tunnels, still killing rats out of habit",
+   "label": "dungeon animal — feral vermin-catcher — once someone's ferret or terrier, now lives wild in the tunnels, still killing rats out of habit",
    "realm": "fantasy",
    "family": "animals",
    "sizeBand": "tiny",
@@ -4572,7 +4572,7 @@
     "fantasy",
     "gloom"
    ],
-   "label": "dungeon animal \u2014 glow-moss grazer \u2014 a small rodent whose fur has picked up a faint luminescence from what it eats",
+   "label": "dungeon animal — glow-moss grazer — a small rodent whose fur has picked up a faint luminescence from what it eats",
    "realm": "fantasy",
    "family": "animals",
    "sizeBand": "tiny",
@@ -4595,7 +4595,7 @@
     "fantasy",
     "gloom"
    ],
-   "label": "dungeon animal \u2014 half-tamed thing \u2014 comes to a lantern's light, never a hand, feeds on what the dungeon leaves behind",
+   "label": "dungeon animal — half-tamed thing — comes to a lantern's light, never a hand, feeds on what the dungeon leaves behind",
    "realm": "fantasy",
    "family": "animals",
    "sizeBand": "tiny",
@@ -4619,7 +4619,7 @@
     "gloom",
     "frontier"
    ],
-   "label": "dungeon animal \u2014 lost hunting hound \u2014 a noble's dog that wandered too far in and never found the way back out",
+   "label": "dungeon animal — lost hunting hound — a noble's dog that wandered too far in and never found the way back out",
    "realm": "fantasy",
    "family": "animals",
    "sizeBand": "medium",
@@ -4644,7 +4644,7 @@
     "suburb",
     "noir"
    ],
-   "label": "dungeon animal \u2014 nest-robbing crow \u2014 one bird that's learned the dungeon's side passages better than most explorers",
+   "label": "dungeon animal — nest-robbing crow — one bird that's learned the dungeon's side passages better than most explorers",
    "realm": "fantasy",
    "family": "animals",
    "sizeBand": "tiny",
@@ -4670,7 +4670,7 @@
     "gloom",
     "frontier"
    ],
-   "label": "dungeon animal \u2014 scarred guard-dog gone feral \u2014 once trained to patrol these halls, now answers to no one",
+   "label": "dungeon animal — scarred guard-dog gone feral — once trained to patrol these halls, now answers to no one",
    "realm": "fantasy",
    "family": "animals",
    "sizeBand": "medium",
@@ -4698,7 +4698,7 @@
     "high-seas",
     "suburb"
    ],
-   "label": "dungeon animal \u2014 sole survivor packhorse \u2014 the last of a caravan's animals, malnourished, still saddled",
+   "label": "dungeon animal — sole survivor packhorse — the last of a caravan's animals, malnourished, still saddled",
    "realm": "fantasy",
    "family": "animals",
    "sizeBand": "large",
@@ -4723,7 +4723,7 @@
     "gloom",
     "noir"
    ],
-   "label": "dungeon animal \u2014 starving stray \u2014 a cat or dog that followed someone in and got left behind",
+   "label": "dungeon animal — starving stray — a cat or dog that followed someone in and got left behind",
    "realm": "fantasy",
    "family": "animals",
    "sizeBand": "tiny",
@@ -4750,7 +4750,7 @@
     "high-seas",
     "gloom"
    ],
-   "label": "dungeon animal \u2014 trapped messenger pigeon \u2014 still carries a note no one living will ever read",
+   "label": "dungeon animal — trapped messenger pigeon — still carries a note no one living will ever read",
    "realm": "fantasy",
    "family": "animals",
    "sizeBand": "tiny",
@@ -4773,7 +4773,7 @@
     "fantasy",
     "gloom"
    ],
-   "label": "dungeon animal \u2014 tunnel-adapted snake \u2014 pale-scaled, sluggish in the cold, strikes only when cornered",
+   "label": "dungeon animal — tunnel-adapted snake — pale-scaled, sluggish in the cold, strikes only when cornered",
    "realm": "fantasy",
    "family": "animals",
    "sizeBand": "small",
@@ -4797,7 +4797,7 @@
     "gloom",
     "lost-world"
    ],
-   "label": "dungeon animal \u2014 tunnel bat colony straggler \u2014 a single bat that never rejoined the swarm, clings alone near a cracked vent",
+   "label": "dungeon animal — tunnel bat colony straggler — a single bat that never rejoined the swarm, clings alone near a cracked vent",
    "realm": "fantasy",
    "family": "animals",
    "sizeBand": "tiny",
@@ -4820,7 +4820,7 @@
     "fantasy",
     "gloom"
    ],
-   "label": "dungeon animal \u2014 tunnel-blind mole \u2014 huge clawed forepaws, displaces more earth than it should be able to",
+   "label": "dungeon animal — tunnel-blind mole — huge clawed forepaws, displaces more earth than it should be able to",
    "realm": "fantasy",
    "family": "animals",
    "sizeBand": "small",
@@ -4844,7 +4844,7 @@
     "gloom",
     "suburb"
    ],
-   "label": "dungeon animal \u2014 unnervingly large lone rat \u2014 alone, watching, doesn't scatter like the others",
+   "label": "dungeon animal — unnervingly large lone rat — alone, watching, doesn't scatter like the others",
    "realm": "fantasy",
    "family": "animals",
    "sizeBand": "small",
@@ -4868,7 +4868,7 @@
     "suburb",
     "frontier"
    ],
-   "label": "dungeon animal \u2014 wrong-place goat \u2014 a farm animal that fell through a sinkhole and somehow survived down here",
+   "label": "dungeon animal — wrong-place goat — a farm animal that fell through a sinkhole and somehow survived down here",
    "realm": "fantasy",
    "family": "animals",
    "sizeBand": "small",
@@ -4892,7 +4892,7 @@
     "gloom",
     "lost-world"
    ],
-   "label": "dungeon animal \u2014 wrongly-still lizard \u2014 motionless so long it's mistaken for a carving, until it isn't",
+   "label": "dungeon animal — wrongly-still lizard — motionless so long it's mistaken for a carving, until it isn't",
    "realm": "fantasy",
    "family": "animals",
    "sizeBand": "small",
@@ -4943,7 +4943,7 @@
     "high-seas",
     "frontier"
    ],
-   "label": "dwarven brewer \u2014 the tavern's actual reason for existing",
+   "label": "dwarven brewer — the tavern's actual reason for existing",
    "realm": "fantasy",
    "family": "npcs",
    "sizeBand": "medium",
@@ -4969,7 +4969,7 @@
     "fantasy",
     "frontier"
    ],
-   "label": "dwarven brewery heiress (dwarf) \u2014 runs the family business better than her father did",
+   "label": "dwarven brewery heiress (dwarf) — runs the family business better than her father did",
    "realm": "fantasy",
    "family": "npcs",
    "sizeBand": "medium",
@@ -4994,7 +4994,7 @@
     "fantasy",
     "frontier"
    ],
-   "label": "dwarven forge-master \u2014 three generations of the same smithy, soot in every crease",
+   "label": "dwarven forge-master — three generations of the same smithy, soot in every crease",
    "realm": "fantasy",
    "family": "npcs",
    "sizeBand": "medium",
@@ -5022,7 +5022,7 @@
     "frontier",
     "gloom"
    ],
-   "label": "dwarven mine assayer (dwarf) \u2014 judges ore quality by weight and smell alone",
+   "label": "dwarven mine assayer (dwarf) — judges ore quality by weight and smell alone",
    "realm": "fantasy",
    "family": "npcs",
    "sizeBand": "medium",
@@ -5048,7 +5048,7 @@
     "theater",
     "high-seas"
    ],
-   "label": "dwarven town guard captain, elderly (dwarf) \u2014 decades on the wall, trusted by everyone",
+   "label": "dwarven town guard captain, elderly (dwarf) — decades on the wall, trusted by everyone",
    "realm": "fantasy",
    "family": "npcs",
    "sizeBand": "medium",
@@ -5270,7 +5270,7 @@
     "fantasy",
     "cosmic"
    ],
-   "label": "elven archivist \u2014 keeper of a library older than the town around it",
+   "label": "elven archivist — keeper of a library older than the town around it",
    "realm": "fantasy",
    "family": "npcs",
    "sizeBand": "medium",
@@ -5295,7 +5295,7 @@
     "fantasy",
     "frontier"
    ],
-   "label": "elven fletcher \u2014 every arrow leaves her stall true",
+   "label": "elven fletcher — every arrow leaves her stall true",
    "realm": "fantasy",
    "family": "npcs",
    "sizeBand": "medium",
@@ -5322,7 +5322,7 @@
     "gloom",
     "cosmic"
    ],
-   "label": "elven herbalist (elf) \u2014 sells cures and, quietly, a few curses",
+   "label": "elven herbalist (elf) — sells cures and, quietly, a few curses",
    "realm": "fantasy",
    "family": "npcs",
    "sizeBand": "medium",
@@ -5349,7 +5349,7 @@
     "frontier",
     "lost-world"
    ],
-   "label": "elven ranger's apprentice (elf) \u2014 still learning to read a trail properly",
+   "label": "elven ranger's apprentice (elf) — still learning to read a trail properly",
    "realm": "fantasy",
    "family": "npcs",
    "sizeBand": "medium",
@@ -5375,7 +5375,7 @@
     "fantasy",
     "cosmic"
    ],
-   "label": "elven scribe (elf) \u2014 copies manuscripts for the town archive, meticulous to a fault",
+   "label": "elven scribe (elf) — copies manuscripts for the town archive, meticulous to a fault",
    "realm": "fantasy",
    "family": "npcs",
    "sizeBand": "medium",
@@ -7131,7 +7131,7 @@
     "fantasy",
     "chrome"
    ],
-   "label": "gnomish alchemist's assistant (gnome) \u2014 mixes potions that mostly don't explode",
+   "label": "gnomish alchemist's assistant (gnome) — mixes potions that mostly don't explode",
    "realm": "fantasy",
    "family": "npcs",
    "sizeBand": "small",
@@ -7156,7 +7156,7 @@
     "fantasy",
     "chrome"
    ],
-   "label": "gnomish clockmaker (gnome) \u2014 every clock in town keeps slightly different time, on purpose",
+   "label": "gnomish clockmaker (gnome) — every clock in town keeps slightly different time, on purpose",
    "realm": "fantasy",
    "family": "npcs",
    "sizeBand": "small",
@@ -7182,14 +7182,14 @@
     "suburb",
     "frontier"
    ],
-   "label": "gnomish tinkerer \u2014 clockwork contraptions that mostly work",
+   "label": "human tinkerer",
    "realm": "fantasy",
    "family": "npcs",
    "sizeBand": "medium",
    "expressionSet": null,
    "bound": null,
    "qaFlags": [
-    "mismatch-label-vs-art"
+    "relabeled-to-art"
    ]
   },
   "spr-fantasy-goat": {
@@ -7386,7 +7386,7 @@
     "fantasy",
     "frontier"
    ],
-   "label": "goliath bridge-toll keeper (goliath) \u2014 collects the fee, stops the trouble, rarely needs to try hard",
+   "label": "goliath bridge-toll keeper (goliath) — collects the fee, stops the trouble, rarely needs to try hard",
    "realm": "fantasy",
    "family": "npcs",
    "sizeBand": "large",
@@ -7412,7 +7412,7 @@
     "frontier",
     "high-seas"
    ],
-   "label": "goliath dockworker (goliath) \u2014 moves cargo alone that takes four other men",
+   "label": "goliath dockworker (goliath) — moves cargo alone that takes four other men",
    "realm": "fantasy",
    "family": "npcs",
    "sizeBand": "large",
@@ -7435,7 +7435,7 @@
     "fantasy",
     "frontier"
    ],
-   "label": "goliath quarry foreman \u2014 the only one strong enough to reset a slipped cart alone",
+   "label": "goliath quarry foreman — the only one strong enough to reset a slipped cart alone",
    "realm": "fantasy",
    "family": "npcs",
    "sizeBand": "large",
@@ -7461,14 +7461,14 @@
     "fantasy",
     "gloom"
    ],
-   "label": "gorgon",
+   "label": "gilded medusa",
    "realm": "fantasy",
    "family": "monsters",
    "sizeBand": "large",
    "expressionSet": null,
    "bound": null,
    "qaFlags": [
-    "mismatch-label-vs-art"
+    "relabeled-to-art"
    ]
   },
   "spr-fantasy-graveyard-revenant": {
@@ -7682,14 +7682,14 @@
     "gloom",
     "cosmic"
    ],
-   "label": "grell",
+   "label": "lurking fiend",
    "realm": "fantasy",
    "family": "monsters",
    "sizeBand": "medium",
    "expressionSet": null,
    "bound": null,
    "qaFlags": [
-    "mismatch-label-vs-art"
+    "relabeled-to-art"
    ]
   },
   "spr-fantasy-grick": {
@@ -7957,7 +7957,7 @@
     "frontier",
     "suburb"
    ],
-   "label": "halfling farmer, dark-skinned \u2014 tends the best soil in the valley",
+   "label": "halfling farmer, dark-skinned — tends the best soil in the valley",
    "realm": "fantasy",
    "family": "npcs",
    "sizeBand": "small",
@@ -7983,7 +7983,7 @@
     "suburb",
     "frontier"
    ],
-   "label": "halfling innkeeper \u2014 knows every traveler's business before they've unpacked",
+   "label": "halfling innkeeper — knows every traveler's business before they've unpacked",
    "realm": "fantasy",
    "family": "npcs",
    "sizeBand": "small",
@@ -8010,7 +8010,7 @@
     "suburb",
     "frontier"
    ],
-   "label": "halfling messenger runner (halfling) \u2014 fastest feet in the county, mostly ignored otherwise",
+   "label": "halfling messenger runner (halfling) — fastest feet in the county, mostly ignored otherwise",
    "realm": "fantasy",
    "family": "npcs",
    "sizeBand": "small",
@@ -8037,7 +8037,7 @@
     "suburb",
     "frontier"
    ],
-   "label": "halfling orchard keeper, elderly (halfling) \u2014 knows every tree in the grove by name",
+   "label": "halfling orchard keeper, elderly (halfling) — knows every tree in the grove by name",
    "realm": "fantasy",
    "family": "npcs",
    "sizeBand": "small",
@@ -8064,7 +8064,7 @@
     "suburb",
     "frontier"
    ],
-   "label": "halfling roadside chef (halfling) \u2014 feeds every traveler who passes, no exceptions",
+   "label": "halfling roadside chef (halfling) — feeds every traveler who passes, no exceptions",
    "realm": "fantasy",
    "family": "npcs",
    "sizeBand": "small",
@@ -8606,14 +8606,14 @@
     "gloom",
     "theater"
    ],
-   "label": "human midwife, elderly \u2014 delivered half the village, remembers all of it",
+   "label": "village acolyte",
    "realm": "fantasy",
    "family": "npcs",
    "sizeBand": "medium",
    "expressionSet": null,
    "bound": null,
    "qaFlags": [
-    "mismatch-label-vs-art"
+    "relabeled-to-art"
    ]
   },
   "spr-fantasy-human-midwife-s-apprentice-human-dark-skinned-learning-the-trade-from-her-mother": {
@@ -8635,7 +8635,7 @@
     "fantasy",
     "suburb"
    ],
-   "label": "human midwife's apprentice (human) \u2014 dark-skinned, learning the trade from her mother",
+   "label": "human midwife's apprentice (human) — dark-skinned, learning the trade from her mother",
    "realm": "fantasy",
    "family": "npcs",
    "sizeBand": "medium",
@@ -8660,14 +8660,14 @@
     "fantasy",
     "theater"
    ],
-   "label": "human miller \u2014 dust-covered, counts every sack twice",
+   "label": "dragonborn gate guard",
    "realm": "fantasy",
    "family": "npcs",
    "sizeBand": "medium",
    "expressionSet": null,
    "bound": null,
    "qaFlags": [
-    "mismatch-label-vs-art"
+    "relabeled-to-art"
    ]
   },
   "spr-fantasy-human-retired-soldier-one-armed-human-dark-skinned-runs-the-town-s-only-proper-tavern-brawl-rules": {
@@ -8690,7 +8690,7 @@
     "suburb",
     "high-seas"
    ],
-   "label": "human retired soldier, one-armed (human) \u2014 dark-skinned, runs the town's only proper tavern brawl rules",
+   "label": "human retired soldier, one-armed (human) — dark-skinned, runs the town's only proper tavern brawl rules",
    "realm": "fantasy",
    "family": "npcs",
    "sizeBand": "medium",
@@ -8717,7 +8717,7 @@
     "theater",
     "suburb"
    ],
-   "label": "human town crier (human) \u2014 announces news, rumor, and the occasional lie for coin",
+   "label": "human town crier (human) — announces news, rumor, and the occasional lie for coin",
    "realm": "fantasy",
    "family": "npcs",
    "sizeBand": "medium",
@@ -8744,7 +8744,7 @@
     "frontier",
     "suburb"
    ],
-   "label": "human wheelwright (human) \u2014 dark-skinned, third generation in the same shop",
+   "label": "human wheelwright (human) — dark-skinned, third generation in the same shop",
    "realm": "fantasy",
    "family": "npcs",
    "sizeBand": "medium",
@@ -9060,7 +9060,7 @@
     "frontier",
     "suburb"
    ],
-   "label": "kid \u2014 wants: be believed by one grown-up \u2014 just one \u2014 about the thing they saw.",
+   "label": "kid — wants: be believed by one grown-up — just one — about the thing they saw.",
    "realm": "fantasy",
    "family": "kids",
    "sizeBand": "small",
@@ -9084,7 +9084,7 @@
     "frontier",
     "suburb"
    ],
-   "label": "kid \u2014 wants: be chosen \u2014 for the errand, the team, the trust \u2014 for once.",
+   "label": "kid — wants: be chosen — for the errand, the team, the trust — for once.",
    "realm": "fantasy",
    "family": "kids",
    "sizeBand": "small",
@@ -9110,7 +9110,7 @@
     "gloom",
     "frontier"
    ],
-   "label": "kid \u2014 wants: feed the thing in the woods that's been kind to them.",
+   "label": "kid — wants: feed the thing in the woods that's been kind to them.",
    "realm": "fantasy",
    "family": "kids",
    "sizeBand": "small",
@@ -9134,7 +9134,7 @@
     "frontier",
     "suburb"
    ],
-   "label": "kid \u2014 wants: find out what the grown-ups whisper about behind the shut door.",
+   "label": "kid — wants: find out what the grown-ups whisper about behind the shut door.",
    "realm": "fantasy",
    "family": "kids",
    "sizeBand": "small",
@@ -9158,7 +9158,7 @@
     "frontier",
     "suburb"
    ],
-   "label": "kid \u2014 wants: find the dog that didn't come home.",
+   "label": "kid — wants: find the dog that didn't come home.",
    "realm": "fantasy",
    "family": "kids",
    "sizeBand": "small",
@@ -9182,7 +9182,7 @@
     "frontier",
     "suburb"
    ],
-   "label": "kid \u2014 wants: get back what was taken from them \u2014 and it's the object the whole plot turns on.",
+   "label": "kid — wants: get back what was taken from them — and it's the object the whole plot turns on.",
    "realm": "fantasy",
    "family": "kids",
    "sizeBand": "small",
@@ -9208,7 +9208,7 @@
     "frontier",
     "suburb"
    ],
-   "label": "kid \u2014 wants: get their small hoard back from whoever confiscated it.",
+   "label": "kid — wants: get their small hoard back from whoever confiscated it.",
    "realm": "fantasy",
    "family": "kids",
    "sizeBand": "small",
@@ -9232,7 +9232,7 @@
     "frontier",
     "suburb"
    ],
-   "label": "kid \u2014 wants: keep the little one from finding out the bad thing that happened.",
+   "label": "kid — wants: keep the little one from finding out the bad thing that happened.",
    "realm": "fantasy",
    "family": "kids",
    "sizeBand": "small",
@@ -9258,7 +9258,7 @@
     "frontier",
     "suburb"
    ],
-   "label": "kid \u2014 wants: keep the pretty thing they found \u2014 which someone dangerous is tearing the town apart to recover.",
+   "label": "kid — wants: keep the pretty thing they found — which someone dangerous is tearing the town apart to recover.",
    "realm": "fantasy",
    "family": "kids",
    "sizeBand": "small",
@@ -9284,7 +9284,7 @@
     "frontier",
     "suburb"
    ],
-   "label": "kid \u2014 wants: keep the secret they swore to keep, even now that it's gone wrong.",
+   "label": "kid — wants: keep the secret they swore to keep, even now that it's gone wrong.",
    "realm": "fantasy",
    "family": "kids",
    "sizeBand": "small",
@@ -9308,7 +9308,7 @@
     "frontier",
     "suburb"
    ],
-   "label": "kid \u2014 wants: make their parent laugh the old way, the way from before.",
+   "label": "kid — wants: make their parent laugh the old way, the way from before.",
    "realm": "fantasy",
    "family": "kids",
    "sizeBand": "small",
@@ -9332,7 +9332,7 @@
     "frontier",
     "suburb"
    ],
-   "label": "kid \u2014 wants: not have to go home tonight.",
+   "label": "kid — wants: not have to go home tonight.",
    "realm": "fantasy",
    "family": "kids",
    "sizeBand": "small",
@@ -9356,7 +9356,7 @@
     "frontier",
     "suburb"
    ],
-   "label": "kid \u2014 wants: prove they're not a baby by going where they're forbidden to go.",
+   "label": "kid — wants: prove they're not a baby by going where they're forbidden to go.",
    "realm": "fantasy",
    "family": "kids",
    "sizeBand": "small",
@@ -9382,7 +9382,7 @@
     "frontier",
     "suburb"
    ],
-   "label": "kid \u2014 wants: put it back before anyone notices it was gone.",
+   "label": "kid — wants: put it back before anyone notices it was gone.",
    "realm": "fantasy",
    "family": "kids",
    "sizeBand": "small",
@@ -9408,7 +9408,7 @@
     "frontier",
     "suburb"
    ],
-   "label": "kid \u2014 wants: see the locked place opened, just once, just to know.",
+   "label": "kid — wants: see the locked place opened, just once, just to know.",
    "realm": "fantasy",
    "family": "kids",
    "sizeBand": "small",
@@ -9434,7 +9434,7 @@
     "frontier",
     "suburb"
    ],
-   "label": "kid \u2014 wants: slip a message to the one person the family has forbidden them to see.",
+   "label": "kid — wants: slip a message to the one person the family has forbidden them to see.",
    "realm": "fantasy",
    "family": "kids",
    "sizeBand": "small",
@@ -9458,7 +9458,7 @@
     "gloom",
     "suburb"
    ],
-   "label": "kid \u2014 wants: stay up late enough to catch the thing that comes at night.",
+   "label": "kid — wants: stay up late enough to catch the thing that comes at night.",
    "realm": "fantasy",
    "family": "kids",
    "sizeBand": "small",
@@ -9485,7 +9485,7 @@
     "frontier",
     "theater"
    ],
-   "label": "kid \u2014 wants: trade the strange coin they found for something they actually want.",
+   "label": "kid — wants: trade the strange coin they found for something they actually want.",
    "realm": "fantasy",
    "family": "kids",
    "sizeBand": "small",
@@ -9510,7 +9510,7 @@
     "frontier",
     "gloom"
    ],
-   "label": "kid \u2014 wants: warn someone \u2014 and not one adult will slow down long enough to hear it.",
+   "label": "kid — wants: warn someone — and not one adult will slow down long enough to hear it.",
    "realm": "fantasy",
    "family": "kids",
    "sizeBand": "small",
@@ -9534,7 +9534,7 @@
     "suburb",
     "frontier"
    ],
-   "label": "kid \u2014 wants: win back the friend who stopped coming around.",
+   "label": "kid — wants: win back the friend who stopped coming around.",
    "realm": "fantasy",
    "family": "kids",
    "sizeBand": "small",
@@ -10034,14 +10034,14 @@
     "frontier",
     "suburb"
    ],
-   "label": "magnate (halfling)",
+   "label": "orc trade boss",
    "realm": "fantasy",
    "family": "npcs",
    "sizeBand": "medium",
    "expressionSet": null,
    "bound": null,
    "qaFlags": [
-    "mismatch-label-vs-art"
+    "relabeled-to-art"
    ]
   },
   "spr-fantasy-maker-human": {
@@ -11121,7 +11121,7 @@
     "fantasy",
     "frontier"
    ],
-   "label": "orcish caravan blacksmith (orc) \u2014 repairs wagon wheels faster than anyone in three towns",
+   "label": "orcish caravan blacksmith (orc) — repairs wagon wheels faster than anyone in three towns",
    "realm": "fantasy",
    "family": "npcs",
    "sizeBand": "medium",
@@ -11144,14 +11144,14 @@
     "fantasy",
     "frontier"
    ],
-   "label": "orcish caravan guard \u2014 hired muscle with a reputation for actually caring about the cargo",
+   "label": "orcish caravan guard — hired muscle with a reputation for actually caring about the cargo",
    "realm": "fantasy",
    "family": "npcs",
    "sizeBand": "medium",
    "expressionSet": null,
    "bound": null,
    "qaFlags": [
-    "mismatch-label-vs-art"
+    "soft-mismatch-kept-label"
    ]
   },
   "spr-fantasy-orcish-farrier-orc-shoes-every-horse-in-the-valley-feared-and-respected-equally": {
@@ -11173,7 +11173,7 @@
     "fantasy",
     "frontier"
    ],
-   "label": "orcish farrier (orc) \u2014 shoes every horse in the valley, feared and respected equally",
+   "label": "orcish farrier (orc) — shoes every horse in the valley, feared and respected equally",
    "realm": "fantasy",
    "family": "npcs",
    "sizeBand": "medium",
@@ -11198,7 +11198,7 @@
     "fantasy",
     "frontier"
    ],
-   "label": "orcish healer \u2014 gentle hands, a reputation people are slow to trust",
+   "label": "orcish healer — gentle hands, a reputation people are slow to trust",
    "realm": "fantasy",
    "family": "npcs",
    "sizeBand": "medium",
@@ -11223,7 +11223,7 @@
     "fantasy",
     "frontier"
    ],
-   "label": "orcish stable hand (orc) \u2014 gentle with horses, terrifying to everyone else",
+   "label": "orcish stable hand (orc) — gentle with horses, terrifying to everyone else",
    "realm": "fantasy",
    "family": "npcs",
    "sizeBand": "medium",
@@ -11324,14 +11324,14 @@
     "fantasy",
     "frontier"
    ],
-   "label": "outsider (tiefling)",
+   "label": "dwarf fowler",
    "realm": "fantasy",
    "family": "npcs",
    "sizeBand": "medium",
    "expressionSet": null,
    "bound": null,
    "qaFlags": [
-    "mismatch-label-vs-art"
+    "relabeled-to-art"
    ]
   },
   "spr-fantasy-owl": {
@@ -11425,14 +11425,14 @@
     "frontier",
     "suburb"
    ],
-   "label": "pampered-elite (goliath)",
+   "label": "human smith",
    "realm": "fantasy",
    "family": "npcs",
    "sizeBand": "medium",
    "expressionSet": null,
    "bound": null,
    "qaFlags": [
-    "mismatch-label-vs-art"
+    "relabeled-to-art"
    ]
   },
   "spr-fantasy-panther": {
@@ -12255,7 +12255,7 @@
    "expressionSet": null,
    "bound": null,
    "qaFlags": [
-    "mismatch-label-vs-art"
+    "soft-mismatch-kept-label"
    ]
   },
   "spr-fantasy-recruiter-orc": {
@@ -12277,14 +12277,14 @@
     "fantasy",
     "frontier"
    ],
-   "label": "recruiter (orc)",
+   "label": "orc farmer",
    "realm": "fantasy",
    "family": "npcs",
    "sizeBand": "medium",
    "expressionSet": null,
    "bound": null,
    "qaFlags": [
-    "mismatch-label-vs-art"
+    "relabeled-to-art"
    ]
   },
   "spr-fantasy-red-chaos-frog": {
@@ -13009,14 +13009,14 @@
     "suburb",
     "gloom"
    ],
-   "label": "secret-scholar (human)",
+   "label": "tiefling baker",
    "realm": "fantasy",
    "family": "npcs",
    "sizeBand": "medium",
    "expressionSet": null,
    "bound": null,
    "qaFlags": [
-    "mismatch-label-vs-art"
+    "relabeled-to-art"
    ]
   },
   "spr-fantasy-servant-goliath": {
@@ -14321,14 +14321,14 @@
     "frontier",
     "suburb"
    ],
-   "label": "tiefling blacksmith's apprentice \u2014 still learning, already better than most journeymen",
+   "label": "tiefling courier",
    "realm": "fantasy",
    "family": "npcs",
    "sizeBand": "medium",
    "expressionSet": null,
    "bound": null,
    "qaFlags": [
-    "mismatch-label-vs-art"
+    "relabeled-to-art"
    ]
   },
   "spr-fantasy-tiefling-fortune-teller-half-the-town-swears-by-her-half-crosses-the-street": {
@@ -14350,14 +14350,14 @@
     "frontier",
     "suburb"
    ],
-   "label": "tiefling fortune-teller \u2014 half the town swears by her, half crosses the street",
+   "label": "tiefling fortune-teller — half the town swears by her, half crosses the street",
    "realm": "fantasy",
    "family": "npcs",
    "sizeBand": "medium",
    "expressionSet": null,
    "bound": null,
    "qaFlags": [
-    "mismatch-label-vs-art"
+    "soft-mismatch-kept-label"
    ]
   },
   "spr-fantasy-tiefling-fortune-teller-s-rival-tiefling-claims-to-be-the-real-seer-in-town": {
@@ -14379,7 +14379,7 @@
     "fantasy",
     "gloom"
    ],
-   "label": "tiefling fortune-teller's rival (tiefling) \u2014 claims to be the real seer in town",
+   "label": "tiefling fortune-teller's rival (tiefling) — claims to be the real seer in town",
    "realm": "fantasy",
    "family": "npcs",
    "sizeBand": "medium",
@@ -14405,7 +14405,7 @@
     "fantasy",
     "gloom"
    ],
-   "label": "tiefling street performer (tiefling) \u2014 half the crowd is there for the trick, half for the horror",
+   "label": "tiefling street performer (tiefling) — half the crowd is there for the trick, half for the horror",
    "realm": "fantasy",
    "family": "npcs",
    "sizeBand": "medium",
@@ -14431,7 +14431,7 @@
     "gloom",
     "frontier"
    ],
-   "label": "tiefling tavern owner (tiefling) \u2014 runs the friendliest bar in a town that fears her kind",
+   "label": "tiefling tavern owner (tiefling) — runs the friendliest bar in a town that fears her kind",
    "realm": "fantasy",
    "family": "npcs",
    "sizeBand": "medium",
@@ -15570,7 +15570,7 @@
     "frontier",
     "suburb"
    ],
-   "label": "wild animal \u2014 a badger \u2014 low, broad, digging with total disregard for anything nearby",
+   "label": "wild animal — a badger — low, broad, digging with total disregard for anything nearby",
    "realm": "fantasy",
    "family": "animals",
    "sizeBand": "small",
@@ -15594,7 +15594,7 @@
     "frontier",
     "lost-world"
    ],
-   "label": "wild animal \u2014 a black bear \u2014 foraging, unbothered, dangerous only if pressed",
+   "label": "wild animal — a black bear — foraging, unbothered, dangerous only if pressed",
    "realm": "fantasy",
    "family": "animals",
    "sizeBand": "large",
@@ -15617,14 +15617,14 @@
     "fantasy",
     "frontier"
    ],
-   "label": "wild animal \u2014 a bull elk \u2014 antlers full-grown, the season's rut making it reckless",
+   "label": "wild animal — a bull elk — antlers full-grown, the season's rut making it reckless",
    "realm": "fantasy",
    "family": "animals",
    "sizeBand": "large",
    "expressionSet": null,
    "bound": null,
    "qaFlags": [
-    "mismatch-label-vs-art"
+    "soft-mismatch-kept-label"
    ]
   },
   "spr-fantasy-wild-animal-a-great-owl-silent-wingbeats-watches-more-than-it-hunts": {
@@ -15645,7 +15645,7 @@
     "gloom",
     "suburb"
    ],
-   "label": "wild animal \u2014 a great owl \u2014 silent wingbeats, watches more than it hunts",
+   "label": "wild animal — a great owl — silent wingbeats, watches more than it hunts",
    "realm": "fantasy",
    "family": "animals",
    "sizeBand": "small",
@@ -15669,7 +15669,7 @@
     "frontier",
     "suburb"
    ],
-   "label": "wild animal \u2014 a heron \u2014 stalks the shallows on legs too thin to look that patient",
+   "label": "wild animal — a heron — stalks the shallows on legs too thin to look that patient",
    "realm": "fantasy",
    "family": "animals",
    "sizeBand": "medium",
@@ -15693,7 +15693,7 @@
     "frontier",
     "gloom"
    ],
-   "label": "wild animal \u2014 a lone timber-wolf pup \u2014 not yet part of any pack, still learning to hunt",
+   "label": "wild animal — a lone timber-wolf pup — not yet part of any pack, still learning to hunt",
    "realm": "fantasy",
    "family": "animals",
    "sizeBand": "small",
@@ -15716,7 +15716,7 @@
     "fantasy",
     "frontier"
    ],
-   "label": "wild animal \u2014 a lynx kitten \u2014 spotted coat, play-stalking something that isn't there yet",
+   "label": "wild animal — a lynx kitten — spotted coat, play-stalking something that isn't there yet",
    "realm": "fantasy",
    "family": "animals",
    "sizeBand": "small",
@@ -15739,7 +15739,7 @@
     "fantasy",
     "frontier"
    ],
-   "label": "wild animal \u2014 a mountain goat \u2014 sure-footed on a ledge no predator bothers to follow",
+   "label": "wild animal — a mountain goat — sure-footed on a ledge no predator bothers to follow",
    "realm": "fantasy",
    "family": "animals",
    "sizeBand": "medium",
@@ -15763,7 +15763,7 @@
     "frontier",
     "high-seas"
    ],
-   "label": "wild animal \u2014 a peregrine falcon \u2014 stooping mid-hunt, faster than anything else in the sky",
+   "label": "wild animal — a peregrine falcon — stooping mid-hunt, faster than anything else in the sky",
    "realm": "fantasy",
    "family": "animals",
    "sizeBand": "tiny",
@@ -15787,7 +15787,7 @@
     "frontier",
     "suburb"
    ],
-   "label": "wild animal \u2014 a red fox kit \u2014 curious, unafraid, too young to know better",
+   "label": "wild animal — a red fox kit — curious, unafraid, too young to know better",
    "realm": "fantasy",
    "family": "animals",
    "sizeBand": "small",
@@ -15811,7 +15811,7 @@
     "frontier",
     "suburb"
    ],
-   "label": "wild animal \u2014 a single deer from the herd \u2014 moves with the herd, reads the wind before the ranger does",
+   "label": "wild animal — a single deer from the herd — moves with the herd, reads the wind before the ranger does",
    "realm": "fantasy",
    "family": "animals",
    "sizeBand": "medium",
@@ -15834,7 +15834,7 @@
     "fantasy",
     "frontier"
    ],
-   "label": "wild animal \u2014 a single elk \u2014 grazes the tree line at dawn, gone before full light",
+   "label": "wild animal — a single elk — grazes the tree line at dawn, gone before full light",
    "realm": "fantasy",
    "family": "animals",
    "sizeBand": "large",
@@ -15859,7 +15859,7 @@
     "suburb",
     "frontier"
    ],
-   "label": "wild animal \u2014 a single goose from the migrant flock \u2014 passes through and carries news of where it's been",
+   "label": "wild animal — a single goose from the migrant flock — passes through and carries news of where it's been",
    "realm": "fantasy",
    "family": "animals",
    "sizeBand": "small",
@@ -15884,7 +15884,7 @@
     "ash",
     "lost-world"
    ],
-   "label": "wild animal \u2014 a single vulture from the carrion flock \u2014 first to know when something has died nearby",
+   "label": "wild animal — a single vulture from the carrion flock — first to know when something has died nearby",
    "realm": "fantasy",
    "family": "animals",
    "sizeBand": "small",
@@ -15908,7 +15908,7 @@
     "frontier",
     "lost-world"
    ],
-   "label": "wild animal \u2014 a wild boar sow \u2014 tusks lowered, protective of ground she doesn't even own yet",
+   "label": "wild animal — a wild boar sow — tusks lowered, protective of ground she doesn't even own yet",
    "realm": "fantasy",
    "family": "animals",
    "sizeBand": "medium",
@@ -15933,7 +15933,7 @@
     "suburb",
     "frontier"
    ],
-   "label": "wild animal \u2014 a wild turkey tom \u2014 displaying, loud, oblivious to anything hunting it",
+   "label": "wild animal — a wild turkey tom — displaying, loud, oblivious to anything hunting it",
    "realm": "fantasy",
    "family": "animals",
    "sizeBand": "small",
@@ -15957,7 +15957,7 @@
     "frontier",
     "lost-world"
    ],
-   "label": "wild animal \u2014 ambush lynx \u2014 solitary, patient, and the reason the trail went quiet",
+   "label": "wild animal — ambush lynx — solitary, patient, and the reason the trail went quiet",
    "realm": "fantasy",
    "family": "animals",
    "sizeBand": "small",
@@ -15981,7 +15981,7 @@
     "frontier",
     "lost-world"
    ],
-   "label": "wild animal \u2014 burrowing badger \u2014 knows what the earth carries underneath",
+   "label": "wild animal — burrowing badger — knows what the earth carries underneath",
    "realm": "fantasy",
    "family": "animals",
    "sizeBand": "small",
@@ -16006,7 +16006,7 @@
     "suburb",
     "lost-world"
    ],
-   "label": "wild animal \u2014 half-wild fringe fox \u2014 drawn to the edge of camps, curious and never quite trusting",
+   "label": "wild animal — half-wild fringe fox — drawn to the edge of camps, curious and never quite trusting",
    "realm": "fantasy",
    "family": "animals",
    "sizeBand": "small",
@@ -16030,7 +16030,7 @@
     "frontier",
     "lost-world"
    ],
-   "label": "wild animal \u2014 old solitary boar \u2014 scarred, wary, and gives ground to no one",
+   "label": "wild animal — old solitary boar — scarred, wary, and gives ground to no one",
    "realm": "fantasy",
    "family": "animals",
    "sizeBand": "medium",
@@ -16054,7 +16054,7 @@
     "frontier",
     "lost-world"
    ],
-   "label": "wild animal \u2014 river otter \u2014 knows the water's moods better than any map",
+   "label": "wild animal — river otter — knows the water's moods better than any map",
    "realm": "fantasy",
    "family": "animals",
    "sizeBand": "small",
@@ -16079,7 +16079,7 @@
     "gloom",
     "lost-world"
    ],
-   "label": "wild animal \u2014 territory wolf \u2014 holds a stretch of ground and knows every crossing of it",
+   "label": "wild animal — territory wolf — holds a stretch of ground and knows every crossing of it",
    "realm": "fantasy",
    "family": "animals",
    "sizeBand": "medium",
@@ -16103,7 +16103,7 @@
     "frontier",
     "lost-world"
    ],
-   "label": "wild animal \u2014 the elder of the wood \u2014 the beast every other animal on the node defers to",
+   "label": "wild animal — the elder of the wood — the beast every other animal on the node defers to",
    "realm": "fantasy",
    "family": "animals",
    "sizeBand": "large",
@@ -16131,7 +16131,7 @@
     "lost-world",
     "gloom"
    ],
-   "label": "wild animal \u2014 the realm-beast (a locally distinct wild creature, one animal, realm-appropriate)",
+   "label": "wild animal — the realm-beast (a locally distinct wild creature, one animal, realm-appropriate)",
    "realm": "fantasy",
    "family": "animals",
    "sizeBand": "large",
@@ -16159,7 +16159,7 @@
     "bright-kingdom",
     "lost-world"
    ],
-   "label": "wild animal \u2014 watcher-hawk \u2014 sees the whole valley from height and forgets nothing it circled",
+   "label": "wild animal — watcher-hawk — sees the whole valley from height and forgets nothing it circled",
    "realm": "fantasy",
    "family": "animals",
    "sizeBand": "small",

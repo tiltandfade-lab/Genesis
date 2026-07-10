@@ -1,0 +1,201 @@
+{
+ "file": "ash-kids-r3-01.png",
+ "realm": "ash",
+ "grid": "6 rows x 4 columns",
+ "chroma": "#FF00FF",
+ "round": 3,
+ "cells": [
+  {
+   "slug": "ash-kid-kid-u2014-wants-find-the",
+   "label": "Kid \\u2014 wants: Find the dog that didn't come home.",
+   "family": "kids",
+   "sizeBand": "small",
+   "replaces": "spr-ash-kid-wants-find-the-dog-that-didn-t-come-home",
+   "reason": "restyle-painterly"
+  },
+  {
+   "slug": "ash-kid-kid-u2014-wants-put-it",
+   "label": "Kid \\u2014 wants: Put it back before anyone notices it was gone.",
+   "family": "kids",
+   "sizeBand": "small",
+   "replaces": "spr-ash-kid-wants-put-it-back-before-anyone-notices-it-was-gone",
+   "reason": "restyle-painterly"
+  },
+  {
+   "slug": "ash-kid-kid-u2014-wants-be-believed",
+   "label": "Kid \\u2014 wants: Be believed by one grown-up \\u2014 just one \\u2014 about the thing they saw.",
+   "family": "kids",
+   "sizeBand": "small",
+   "replaces": "spr-ash-kid-wants-be-believed-by-one-grown-up-just-one-about-the-thing-they-saw",
+   "reason": "restyle-painterly"
+  },
+  {
+   "slug": "ash-kid-kid-u2014-wants-stay-up",
+   "label": "Kid \\u2014 wants: Stay up late enough to catch the thing that comes at night.",
+   "family": "kids",
+   "sizeBand": "small",
+   "replaces": "spr-ash-kid-wants-stay-up-late-enough-to-catch-the-thing-that-comes-at-night",
+   "reason": "restyle-painterly"
+  },
+  {
+   "slug": "ash-kid-kid-u2014-wants-get-back",
+   "label": "Kid \\u2014 wants: Get back what was taken from them \\u2014 and it's the object the whole plot turns on.",
+   "family": "kids",
+   "sizeBand": "small",
+   "replaces": "spr-ash-kid-wants-get-back-what-was-taken-from-them-and-it-s-the-object-the-whole-plot-turns-on",
+   "reason": "restyle-painterly"
+  },
+  {
+   "slug": "ash-kid-kid-u2014-wants-keep-the",
+   "label": "Kid \\u2014 wants: Keep the secret they swore to keep, even now that it's gone wrong.",
+   "family": "kids",
+   "sizeBand": "small",
+   "replaces": "spr-ash-kid-wants-keep-the-secret-they-swore-to-keep-even-now-that-it-s-gone-wrong",
+   "reason": "restyle-painterly"
+  },
+  {
+   "slug": "ash-kid-kid-u2014-wants-win-back",
+   "label": "Kid \\u2014 wants: Win back the friend who stopped coming around.",
+   "family": "kids",
+   "sizeBand": "small",
+   "replaces": "spr-ash-kid-wants-win-back-the-friend-who-stopped-coming-around",
+   "reason": "restyle-painterly"
+  },
+  {
+   "slug": "ash-kid-kid-u2014-wants-prove-theyre",
+   "label": "Kid \\u2014 wants: Prove they're not a baby by going where they're forbidden to go.",
+   "family": "kids",
+   "sizeBand": "small",
+   "replaces": "spr-ash-kid-wants-prove-they-re-not-a-baby-by-going-where-they-re-forbidden-to-go",
+   "reason": "restyle-painterly"
+  },
+  {
+   "slug": "ash-kid-kid-u2014-wants-keep-the-2",
+   "label": "Kid \\u2014 wants: Keep the pretty thing they found \\u2014 which someone dangerous is tearing the town apart to recover.",
+   "family": "kids",
+   "sizeBand": "small",
+   "replaces": "spr-ash-kid-wants-keep-the-pretty-thing-they-found-which-someone-dangerous-is-tearing-the-town-apart-to-recover",
+   "reason": "restyle-painterly"
+  },
+  {
+   "slug": "ash-kid-kid-u2014-wants-feed-the",
+   "label": "Kid \\u2014 wants: Feed the thing in the woods that's been kind to them.",
+   "family": "kids",
+   "sizeBand": "small",
+   "replaces": "spr-ash-kid-wants-feed-the-thing-in-the-woods-that-s-been-kind-to-them",
+   "reason": "restyle-painterly"
+  },
+  {
+   "slug": "ash-kid-kid-u2014-wants-not-have",
+   "label": "Kid \\u2014 wants: Not have to go home tonight.",
+   "family": "kids",
+   "sizeBand": "small",
+   "replaces": "spr-ash-kid-wants-not-have-to-go-home-tonight",
+   "reason": "restyle-painterly"
+  },
+  {
+   "slug": "ash-kid-kid-u2014-wants-find-out",
+   "label": "Kid \\u2014 wants: Find out what the grown-ups whisper about behind the shut door.",
+   "family": "kids",
+   "sizeBand": "small",
+   "replaces": "spr-ash-kid-wants-find-out-what-the-grown-ups-whisper-about-behind-the-shut-door",
+   "reason": "restyle-painterly"
+  },
+  {
+   "slug": "ash-kid-kid-u2014-wants-get-their",
+   "label": "Kid \\u2014 wants: Get their small hoard back from whoever confiscated it.",
+   "family": "kids",
+   "sizeBand": "small",
+   "replaces": "spr-ash-kid-wants-get-their-small-hoard-back-from-whoever-confiscated-it",
+   "reason": "restyle-painterly"
+  },
+  {
+   "slug": "ash-kid-kid-u2014-wants-slip-a",
+   "label": "Kid \\u2014 wants: Slip a message to the one person the family has forbidden them to see.",
+   "family": "kids",
+   "sizeBand": "small",
+   "replaces": "spr-ash-kid-wants-slip-a-message-to-the-one-person-the-family-has-forbidden-them-to-see",
+   "reason": "restyle-painterly"
+  },
+  {
+   "slug": "ash-kid-kid-u2014-wants-be-chosen",
+   "label": "Kid \\u2014 wants: Be chosen \\u2014 for the errand, the team, the trust \\u2014 for once.",
+   "family": "kids",
+   "sizeBand": "small",
+   "replaces": "spr-ash-kid-wants-be-chosen-for-the-errand-the-team-the-trust-for-once",
+   "reason": "restyle-painterly"
+  },
+  {
+   "slug": "ash-kid-kid-u2014-wants-keep-the-3",
+   "label": "Kid \\u2014 wants: Keep the little one from finding out the bad thing that happened.",
+   "family": "kids",
+   "sizeBand": "small",
+   "replaces": "spr-ash-kid-wants-keep-the-little-one-from-finding-out-the-bad-thing-that-happened",
+   "reason": "restyle-painterly"
+  },
+  {
+   "slug": "ash-kid-kid-u2014-wants-trade-the",
+   "label": "Kid \\u2014 wants: Trade the strange coin they found for something they actually want.",
+   "family": "kids",
+   "sizeBand": "small",
+   "replaces": "spr-ash-kid-wants-trade-the-strange-coin-they-found-for-something-they-actually-want",
+   "reason": "restyle-painterly"
+  },
+  {
+   "slug": "ash-kid-kid-u2014-wants-see-the",
+   "label": "Kid \\u2014 wants: See the locked place opened, just once, just to know.",
+   "family": "kids",
+   "sizeBand": "small",
+   "replaces": "spr-ash-kid-wants-see-the-locked-place-opened-just-once-just-to-know",
+   "reason": "restyle-painterly"
+  },
+  {
+   "slug": "ash-kid-kid-u2014-wants-make-their",
+   "label": "Kid \\u2014 wants: Make their parent laugh the old way, the way from before.",
+   "family": "kids",
+   "sizeBand": "small",
+   "replaces": "spr-ash-kid-wants-make-their-parent-laugh-the-old-way-the-way-from-before",
+   "reason": "restyle-painterly"
+  },
+  {
+   "slug": "ash-kid-kid-u2014-wants-warn-someone",
+   "label": "Kid \\u2014 wants: Warn someone \\u2014 and not one adult will slow down long enough to hear it.",
+   "family": "kids",
+   "sizeBand": "small",
+   "replaces": "spr-ash-kid-wants-warn-someone-and-not-one-adult-will-slow-down-long-enough-to-hear-it",
+   "reason": "restyle-painterly"
+  },
+  {
+   "slug": "ash-kid-kid-u2014-wants-find-the-alt",
+   "label": "ALT of 'Kid \\u2014 wants: Find the dog that didn't come home.' — different kid, same want",
+   "family": "kids",
+   "sizeBand": "small",
+   "altOf": "ash-kid-kid-u2014-wants-find-the",
+   "reason": "alt-bonus"
+  },
+  {
+   "slug": "ash-kid-kid-u2014-wants-put-it-alt",
+   "label": "ALT of 'Kid \\u2014 wants: Put it back before anyone notices it was gone.' — different kid, same want",
+   "family": "kids",
+   "sizeBand": "small",
+   "altOf": "ash-kid-kid-u2014-wants-put-it",
+   "reason": "alt-bonus"
+  },
+  {
+   "slug": "ash-kid-kid-u2014-wants-be-believed-alt",
+   "label": "ALT of 'Kid \\u2014 wants: Be believed by one grown-up \\u2014 just one \\u2014 about the thing they saw.' — different kid, same want",
+   "family": "kids",
+   "sizeBand": "small",
+   "altOf": "ash-kid-kid-u2014-wants-be-believed",
+   "reason": "alt-bonus"
+  },
+  {
+   "slug": "ash-kid-kid-u2014-wants-stay-up-alt",
+   "label": "ALT of 'Kid \\u2014 wants: Stay up late enough to catch the thing that comes at night.' — different kid, same want",
+   "family": "kids",
+   "sizeBand": "small",
+   "altOf": "ash-kid-kid-u2014-wants-stay-up",
+   "reason": "alt-bonus"
+  }
+ ]
+}

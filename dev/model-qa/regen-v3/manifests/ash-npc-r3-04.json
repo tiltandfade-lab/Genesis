@@ -1,0 +1,201 @@
+{
+ "file": "ash-npc-r3-04.png",
+ "realm": "ash",
+ "grid": "6 rows x 4 columns",
+ "chroma": "#FF00FF",
+ "round": 3,
+ "cells": [
+  {
+   "slug": "ash-weathered-dustfarmer-greying-u2014-coaxes",
+   "label": "Weathered dust-farmer, greying \\u2014 coaxes crops out of soil that shouldn't grow anything",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "spr-ash-weathered-dust-farmer-greying-coaxes-crops-out-of-soil-that-shouldn-t-grow-anything",
+   "reason": "restyle-painterly"
+  },
+  {
+   "slug": "ash-mutationmarked-healers-apprentice-u2014-glowing",
+   "label": "Mutation-marked healer's apprentice \\u2014 glowing faint veins, gentle hands anyway",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "spr-ash-mutation-marked-healer-s-apprentice-glowing-faint-veins-gentle-hands-anyway",
+   "reason": "restyle-painterly"
+  },
+  {
+   "slug": "ash-tall-gaunt-settlement-preacher-u2014",
+   "label": "Tall, gaunt settlement preacher \\u2014 preaches survival, not salvation",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "spr-ash-tall-gaunt-settlement-preacher-preaches-survival-not-salvation",
+   "reason": "restyle-painterly"
+  },
+  {
+   "slug": "ash-dirtfarmer-alt",
+   "label": "ALT of 'Dirt-farmer (scorched rows, hydroponic scraps)' — different ancestry/sex/palette, same role",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "altOf": "ash-dirtfarmer",
+   "reason": "alt-bonus"
+  },
+  {
+   "slug": "ash-wastehunter-alt",
+   "label": "ALT of 'Waste-hunter' — different ancestry/sex/palette, same role",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "altOf": "ash-wastehunter",
+   "reason": "alt-bonus"
+  },
+  {
+   "slug": "ash-convoy-hand-alt",
+   "label": "ALT of 'Convoy hand' — different ancestry/sex/palette, same role",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "altOf": "ash-convoy-hand",
+   "reason": "alt-bonus"
+  },
+  {
+   "slug": "ash-ruindiver-alt",
+   "label": "ALT of 'Ruin-diver' — different ancestry/sex/palette, same role",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "altOf": "ash-ruindiver",
+   "reason": "alt-bonus"
+  },
+  {
+   "slug": "ash-bonded-hand-alt",
+   "label": "ALT of 'Bonded hand (indentured to a warlord)' — different ancestry/sex/palette, same role",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "altOf": "ash-bonded-hand",
+   "reason": "alt-bonus"
+  },
+  {
+   "slug": "ash-the-starving-alt",
+   "label": "ALT of 'The Starving' — different ancestry/sex/palette, same role",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "altOf": "ash-the-starving",
+   "reason": "alt-bonus"
+  },
+  {
+   "slug": "ash-salvagetinker-alt",
+   "label": "ALT of 'Salvage-tinker' — different ancestry/sex/palette, same role",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "altOf": "ash-salvagetinker",
+   "reason": "alt-bonus"
+  },
+  {
+   "slug": "ash-scrapsmith-alt",
+   "label": "ALT of 'Scrap-smith' — different ancestry/sex/palette, same role",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "altOf": "ash-scrapsmith",
+   "reason": "alt-bonus"
+  },
+  {
+   "slug": "ash-rationcook-alt",
+   "label": "ALT of 'Ration-cook' — different ancestry/sex/palette, same role",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "altOf": "ash-rationcook",
+   "reason": "alt-bonus"
+  },
+  {
+   "slug": "ash-wallraiser-alt",
+   "label": "ALT of 'Wall-raiser' — different ancestry/sex/palette, same role",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "altOf": "ash-wallraiser",
+   "reason": "alt-bonus"
+  },
+  {
+   "slug": "ash-ragmender-alt",
+   "label": "ALT of 'Rag-mender' — different ancestry/sex/palette, same role",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "altOf": "ash-ragmender",
+   "reason": "alt-bonus"
+  },
+  {
+   "slug": "ash-rigmechanic-alt",
+   "label": "ALT of 'Rig-mechanic' — different ancestry/sex/palette, same role",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "altOf": "ash-rigmechanic",
+   "reason": "alt-bonus"
+  },
+  {
+   "slug": "ash-barterrunner-alt",
+   "label": "ALT of 'Barter-runner' — different ancestry/sex/palette, same role",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "altOf": "ash-barterrunner",
+   "reason": "alt-bonus"
+  },
+  {
+   "slug": "ash-waystationkeeper-alt",
+   "label": "ALT of 'Waystation-keeper' — different ancestry/sex/palette, same role",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "altOf": "ash-waystationkeeper",
+   "reason": "alt-bonus"
+  },
+  {
+   "slug": "ash-herbscrounger-alt",
+   "label": "ALT of 'Herb-scrounger' — different ancestry/sex/palette, same role",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "altOf": "ash-herbscrounger",
+   "reason": "alt-bonus"
+  },
+  {
+   "slug": "ash-settlement-medic-alt",
+   "label": "ALT of 'Settlement medic' — different ancestry/sex/palette, same role",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "altOf": "ash-settlement-medic",
+   "reason": "alt-bonus"
+  },
+  {
+   "slug": "ash-keeper-of-the-old-rites-alt",
+   "label": "ALT of 'Keeper of the old rites' — different ancestry/sex/palette, same role",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "altOf": "ash-keeper-of-the-old-rites",
+   "reason": "alt-bonus"
+  },
+  {
+   "slug": "ash-wastebard-alt",
+   "label": "ALT of 'Waste-bard' — different ancestry/sex/palette, same role",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "altOf": "ash-wastebard",
+   "reason": "alt-bonus"
+  },
+  {
+   "slug": "ash-warlords-enforcer-alt",
+   "label": "ALT of 'Warlord's enforcer' — different ancestry/sex/palette, same role",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "altOf": "ash-warlords-enforcer",
+   "reason": "alt-bonus"
+  },
+  {
+   "slug": "ash-gunforhire-alt",
+   "label": "ALT of 'Gun-for-hire' — different ancestry/sex/palette, same role",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "altOf": "ash-gunforhire",
+   "reason": "alt-bonus"
+  },
+  {
+   "slug": "ash-convoy-escort-alt",
+   "label": "ALT of 'Convoy escort' — different ancestry/sex/palette, same role",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "altOf": "ash-convoy-escort",
+   "reason": "alt-bonus"
+  }
+ ]
+}

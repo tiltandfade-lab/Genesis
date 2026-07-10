@@ -63,6 +63,9 @@
   .thumb.current { border-color:var(--accent); }
   .thumb .dot { position:absolute; top:2px; right:2px; width:8px; height:8px; border-radius:50%; }
   .dot.pass { background:var(--pass); } .dot.fail { background:var(--fail); }
+  .thumb .mbadge { position:absolute; bottom:2px; left:2px; font-size:9px; line-height:1; padding:1px 3px;
+           border-radius:3px; background:rgba(198,60,198,.85); color:#fff; }
+  .mbadge.inline { position:static; display:inline-block; margin-left:6px; }
   .kbd { color:var(--dim); font-size:11px; margin-left:auto; }
   #toast { position:fixed; bottom:110px; right:320px; background:#2c2836; border:1px solid var(--accent);
            border-radius:4px; padding:6px 12px; opacity:0; transition:opacity .2s; pointer-events:none; }
@@ -77,6 +80,8 @@
     <option value="">state: all</option><option value="unreviewed">unreviewed</option>
     <option value="pass">pass</option><option value="fail">fail</option>
     <option value="flagged">flagged ⚠</option>
+    <option value="magenta-flagged">magenta-flagged 🟣</option>
+    <option value="rescued">rescued (A/B)</option>
   </select>
   <input id="fSearch" type="text" placeholder="search name…" size="16">
   <label style="color:var(--dim);font-size:12px">zoom
@@ -154,6 +159,7 @@ const SRD_TO_GUIDE = { tiny:"tiny", small:"small", medium:"medium", large:"large
 const guideFor = e => GUIDES.find(g => g.key === (SRD_TO_GUIDE[sizeOf(e)] || "medium"));
 
 let REG = {}, OVERLAY = {}, list = [], idx = 0, medPx = 150;
+let MAGENTA = {}, TRIAGE = {}, PREV = []; // SPRITE-RESCUE U1 scan/triage + U4 A/B backups
 let pins = JSON.parse(localStorage.getItem("spritePins") || "[]");
 const PENDING = {}; // slug -> {scale} — unsaved edits; NOTHING writes to disk until Save/Pass/Fail
 const $ = id => document.getElementById(id);
@@ -163,11 +169,18 @@ const savedScale = slug => (typeof ovr(slug).scale === "number" ? ovr(slug).scal
 const scaleFor = slug => (PENDING[slug] && typeof PENDING[slug].scale === "number")
   ? PENDING[slug].scale : savedScale(slug);
 const isDirty = slug => !!PENDING[slug] && Math.abs(PENDING[slug].scale - savedScale(slug)) > 1e-9;
+// SPRITE-RESCUE U1: magenta-leak scan lookups. magenta-scan.json may not exist yet
+// (dev/scan-magenta.py not yet run) — MAGENTA defaults to {} from /api/data, never a crash.
+const magentaOf = slug => MAGENTA[slug] || { edge: 0, interior: 0 };
+const magentaPx = slug => { const m = magentaOf(slug); return (m.edge || 0) + (m.interior || 0); };
+const isMagentaFlagged = slug => magentaPx(slug) > 20;
+const isRescued = slug => PREV.includes(slug); // U4: slug has a /sprites-prev/ A/B backup
 
 async function load(){
   const r = await fetch("/api/data"); const d = await r.json();
   if(d.error){ alert(d.error); return; }
   REG = d.registry; OVERLAY = d.overlay;
+  MAGENTA = d.magenta || {}; TRIAGE = d.triage || {}; PREV = d.prev || [];
   const cutEntries = Object.entries(REG).filter(([,e]) => e.status === "cut");
   fillFilter("fRealm", "realm", cutEntries.map(([,e]) => e.realm));
   fillFilter("fKind", "kind", cutEntries.map(([,e]) => e.kind));
@@ -190,6 +203,8 @@ function applyFilters(){
     .filter(([, e]) => (!fr || e.realm === fr) && (!fk || e.kind === fk) && (!fs || sizeOf(e) === fs))
     .filter(([s]) => !st ||
       (st === "flagged" ? (ovr(s).note || "").startsWith("⚠")
+       : st === "magenta-flagged" ? isMagentaFlagged(s)
+       : st === "rescued" ? isRescued(s)
        : st === "unreviewed" ? stateOf(s) === "unreviewed" : stateOf(s) === st))
     .filter(([s, e]) => !q || e.name.toLowerCase().includes(q) || s.includes(q))
     .map(([slug, e]) => Object.assign({ slug }, e))
@@ -250,7 +265,8 @@ function renderInfo(){
   infoSlug = e.slug;
   $("info").innerHTML = `
     <h2>${e.name}</h2><div class="slug">${e.slug}</div>
-    <p class="verdict ${st}">${st.toUpperCase()}${o.scale ? ` · scale ×${o.scale}` : ""}</p>
+    <p class="verdict ${st}">${st.toUpperCase()}${o.scale ? ` · scale ×${o.scale}` : ""}${
+      isMagentaFlagged(e.slug) ? `<span class="mbadge inline" title="interior ${magentaOf(e.slug).interior || 0}px · edge ${magentaOf(e.slug).edge || 0}px">M:${magentaOf(e.slug).interior || 0}px</span>` : ""}</p>
     <p style="font-size:12px;background:#2c2836;border:1px solid var(--line);border-radius:4px;padding:6px 8px">
       target: <b style="color:var(--accent)">${guideFor(e).key}</b> head line
       (${feetLabel(guideFor(e).mult)} · ${guideFor(e).mult}×${guideFor(e).srd ? " · SRD " + guideFor(e).srd : ""})<br>
@@ -278,6 +294,7 @@ function renderRail(){
     <div class="thumb ${i === idx ? "current" : ""}" onclick="go(${i})" title="${e.name}">
       <img src="/sprites/${e.slug}.png" loading="lazy">
       ${stateOf(e.slug) !== "unreviewed" ? `<span class="dot ${stateOf(e.slug)}"></span>` : ""}
+      ${isMagentaFlagged(e.slug) ? `<span class="mbadge">M:${magentaOf(e.slug).interior || 0}px</span>` : ""}
     </div>`).join("");
   const c = $("rail").querySelector(".current");
   if(c) c.scrollIntoView({ block: "nearest", inline: "center" });

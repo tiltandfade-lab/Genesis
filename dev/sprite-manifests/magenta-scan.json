@@ -1,0 +1,6279 @@
+{
+  "_generated_by": "dev/scan-magenta.py",
+  "_thresholds": {
+    "margin": 50,
+    "strong": 110
+  },
+  "spr-fantasy-aarakocra-aeromancer": {
+    "edge": 0,
+    "interior": 179,
+    "opaque": 28674,
+    "pct": 0.6,
+    "strong": 51
+  },
+  "spr-fantasy-aarakocra-skirmisher": {
+    "edge": 0,
+    "interior": 39,
+    "opaque": 21402,
+    "pct": 0.2,
+    "strong": 13
+  },
+  "spr-fantasy-aberrant-cultist": {
+    "edge": 0,
+    "interior": 1310,
+    "opaque": 19167,
+    "pct": 6.8,
+    "strong": 107
+  },
+  "spr-fantasy-abominable-yeti": {
+    "edge": 0,
+    "interior": 28,
+    "opaque": 29804,
+    "pct": 0.1,
+    "strong": 1
+  },
+  "spr-fantasy-adult-black-dragon": {
+    "edge": 0,
+    "interior": 897,
+    "opaque": 32349,
+    "pct": 2.8,
+    "strong": 97
+  },
+  "spr-fantasy-adult-blue-dragon": {
+    "edge": 0,
+    "interior": 115,
+    "opaque": 34396,
+    "pct": 0.3,
+    "strong": 35
+  },
+  "spr-fantasy-adult-brass-dragon": {
+    "edge": 0,
+    "interior": 77,
+    "opaque": 31047,
+    "pct": 0.2,
+    "strong": 6
+  },
+  "spr-fantasy-adult-bronze-dragon": {
+    "edge": 0,
+    "interior": 58,
+    "opaque": 27961,
+    "pct": 0.2,
+    "strong": 10
+  },
+  "spr-fantasy-adult-copper-dragon": {
+    "edge": 0,
+    "interior": 169,
+    "opaque": 29648,
+    "pct": 0.6,
+    "strong": 79
+  },
+  "spr-fantasy-adult-green-dragon": {
+    "edge": 0,
+    "interior": 27,
+    "opaque": 27880,
+    "pct": 0.1,
+    "strong": 2
+  },
+  "spr-fantasy-adult-red-dragon": {
+    "edge": 0,
+    "interior": 223,
+    "opaque": 37006,
+    "pct": 0.6,
+    "strong": 102
+  },
+  "spr-fantasy-adult-silver-dragon": {
+    "edge": 0,
+    "interior": 289,
+    "opaque": 33127,
+    "pct": 0.9,
+    "strong": 55
+  },
+  "spr-fantasy-adult-white-dragon": {
+    "edge": 0,
+    "interior": 231,
+    "opaque": 29441,
+    "pct": 0.8,
+    "strong": 39
+  },
+  "spr-fantasy-air-elemental": {
+    "edge": 0,
+    "interior": 221,
+    "opaque": 20794,
+    "pct": 1.1,
+    "strong": 60
+  },
+  "spr-fantasy-allosaurus": {
+    "edge": 0,
+    "interior": 1,
+    "opaque": 20649,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-ancient-black-dragon": {
+    "edge": 0,
+    "interior": 204,
+    "opaque": 34113,
+    "pct": 0.6,
+    "strong": 50
+  },
+  "spr-fantasy-ancient-blue-dragon": {
+    "edge": 0,
+    "interior": 106,
+    "opaque": 28961,
+    "pct": 0.4,
+    "strong": 14
+  },
+  "spr-fantasy-ancient-brass-dragon": {
+    "edge": 0,
+    "interior": 195,
+    "opaque": 30932,
+    "pct": 0.6,
+    "strong": 43
+  },
+  "spr-fantasy-ancient-bronze-dragon": {
+    "edge": 0,
+    "interior": 170,
+    "opaque": 35656,
+    "pct": 0.5,
+    "strong": 75
+  },
+  "spr-fantasy-ancient-copper-dragon": {
+    "edge": 0,
+    "interior": 102,
+    "opaque": 33552,
+    "pct": 0.3,
+    "strong": 21
+  },
+  "spr-fantasy-ancient-green-dragon": {
+    "edge": 0,
+    "interior": 46,
+    "opaque": 35853,
+    "pct": 0.1,
+    "strong": 6
+  },
+  "spr-fantasy-ancient-red-dragon": {
+    "edge": 0,
+    "interior": 64,
+    "opaque": 26917,
+    "pct": 0.2,
+    "strong": 10
+  },
+  "spr-fantasy-ancient-silver-dragon": {
+    "edge": 0,
+    "interior": 174,
+    "opaque": 30103,
+    "pct": 0.6,
+    "strong": 16
+  },
+  "spr-fantasy-ancient-white-dragon": {
+    "edge": 0,
+    "interior": 290,
+    "opaque": 29676,
+    "pct": 1.0,
+    "strong": 76
+  },
+  "spr-fantasy-animated-armor": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 17788,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-animated-flying-sword": {
+    "edge": 0,
+    "interior": 2,
+    "opaque": 6685,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-animated-rug-of-smothering": {
+    "edge": 0,
+    "interior": 83,
+    "opaque": 26126,
+    "pct": 0.3,
+    "strong": 14
+  },
+  "spr-fantasy-ankheg": {
+    "edge": 0,
+    "interior": 1,
+    "opaque": 24750,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-ankylosaurus": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 32632,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-ape": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 19473,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-arcanaloth": {
+    "edge": 0,
+    "interior": 34,
+    "opaque": 26198,
+    "pct": 0.1,
+    "strong": 10
+  },
+  "spr-fantasy-arch-hag": {
+    "edge": 0,
+    "interior": 115,
+    "opaque": 23022,
+    "pct": 0.5,
+    "strong": 35
+  },
+  "spr-fantasy-archdruid": {
+    "edge": 0,
+    "interior": 83,
+    "opaque": 32487,
+    "pct": 0.3,
+    "strong": 15
+  },
+  "spr-fantasy-archelon": {
+    "edge": 0,
+    "interior": 46,
+    "opaque": 27255,
+    "pct": 0.2,
+    "strong": 2
+  },
+  "spr-fantasy-archmage": {
+    "edge": 0,
+    "interior": 191,
+    "opaque": 30325,
+    "pct": 0.6,
+    "strong": 52
+  },
+  "spr-fantasy-archpriest": {
+    "edge": 0,
+    "interior": 215,
+    "opaque": 28959,
+    "pct": 0.7,
+    "strong": 52
+  },
+  "spr-fantasy-assassin": {
+    "edge": 0,
+    "interior": 1,
+    "opaque": 13991,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-astral-raider-dracomancer": {
+    "edge": 0,
+    "interior": 452,
+    "opaque": 18884,
+    "pct": 2.4,
+    "strong": 80
+  },
+  "spr-fantasy-astral-raider-knight": {
+    "edge": 0,
+    "interior": 97,
+    "opaque": 18402,
+    "pct": 0.5,
+    "strong": 1
+  },
+  "spr-fantasy-astral-raider-warrior": {
+    "edge": 0,
+    "interior": 40,
+    "opaque": 18577,
+    "pct": 0.2,
+    "strong": 3
+  },
+  "spr-fantasy-awakened-shrub": {
+    "edge": 0,
+    "interior": 50,
+    "opaque": 18351,
+    "pct": 0.3,
+    "strong": 11
+  },
+  "spr-fantasy-awakened-tree": {
+    "edge": 0,
+    "interior": 93,
+    "opaque": 27110,
+    "pct": 0.3,
+    "strong": 9
+  },
+  "spr-fantasy-axe-beak": {
+    "edge": 0,
+    "interior": 9,
+    "opaque": 18011,
+    "pct": 0.0,
+    "strong": 1
+  },
+  "spr-fantasy-azer-pyromancer": {
+    "edge": 0,
+    "interior": 184,
+    "opaque": 19773,
+    "pct": 0.9,
+    "strong": 67
+  },
+  "spr-fantasy-azer-sentinel": {
+    "edge": 0,
+    "interior": 16,
+    "opaque": 23387,
+    "pct": 0.1,
+    "strong": 0
+  },
+  "spr-fantasy-baboon": {
+    "edge": 0,
+    "interior": 5,
+    "opaque": 20489,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-badger": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 19656,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-balor": {
+    "edge": 0,
+    "interior": 613,
+    "opaque": 28570,
+    "pct": 2.1,
+    "strong": 310
+  },
+  "spr-fantasy-bandit": {
+    "edge": 0,
+    "interior": 10,
+    "opaque": 16690,
+    "pct": 0.1,
+    "strong": 3
+  },
+  "spr-fantasy-bandit-captain": {
+    "edge": 0,
+    "interior": 8,
+    "opaque": 22377,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-bandit-courier": {
+    "edge": 0,
+    "interior": 7,
+    "opaque": 15436,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-bandit-crime-lord": {
+    "edge": 0,
+    "interior": 601,
+    "opaque": 24797,
+    "pct": 2.4,
+    "strong": 6
+  },
+  "spr-fantasy-bandit-deceiver": {
+    "edge": 0,
+    "interior": 10,
+    "opaque": 17996,
+    "pct": 0.1,
+    "strong": 5
+  },
+  "spr-fantasy-bandit-enforcer": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 16421,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-banshee": {
+    "edge": 0,
+    "interior": 246,
+    "opaque": 22374,
+    "pct": 1.1,
+    "strong": 71
+  },
+  "spr-fantasy-barbed-devil": {
+    "edge": 0,
+    "interior": 16,
+    "opaque": 19196,
+    "pct": 0.1,
+    "strong": 0
+  },
+  "spr-fantasy-basilisk": {
+    "edge": 0,
+    "interior": 1,
+    "opaque": 25435,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-bat": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 13033,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-bearded-devil": {
+    "edge": 0,
+    "interior": 27,
+    "opaque": 23921,
+    "pct": 0.1,
+    "strong": 6
+  },
+  "spr-fantasy-behir": {
+    "edge": 0,
+    "interior": 32,
+    "opaque": 30010,
+    "pct": 0.1,
+    "strong": 0
+  },
+  "spr-fantasy-berserker": {
+    "edge": 0,
+    "interior": 20,
+    "opaque": 17025,
+    "pct": 0.1,
+    "strong": 6
+  },
+  "spr-fantasy-berserker-commander": {
+    "edge": 0,
+    "interior": 22,
+    "opaque": 20493,
+    "pct": 0.1,
+    "strong": 8
+  },
+  "spr-fantasy-black-bear": {
+    "edge": 0,
+    "interior": 3,
+    "opaque": 21234,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-black-dragon-wyrmling": {
+    "edge": 0,
+    "interior": 16,
+    "opaque": 23752,
+    "pct": 0.1,
+    "strong": 3
+  },
+  "spr-fantasy-black-pudding": {
+    "edge": 0,
+    "interior": 22,
+    "opaque": 28093,
+    "pct": 0.1,
+    "strong": 0
+  },
+  "spr-fantasy-blind-deep-stalker": {
+    "edge": 0,
+    "interior": 21,
+    "opaque": 13676,
+    "pct": 0.2,
+    "strong": 1
+  },
+  "spr-fantasy-blink-dog": {
+    "edge": 0,
+    "interior": 18,
+    "opaque": 16671,
+    "pct": 0.1,
+    "strong": 4
+  },
+  "spr-fantasy-blob-of-annihilation": {
+    "edge": 0,
+    "interior": 275,
+    "opaque": 39314,
+    "pct": 0.7,
+    "strong": 37
+  },
+  "spr-fantasy-blood-hawk": {
+    "edge": 0,
+    "interior": 5,
+    "opaque": 19644,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-blue-chaos-frog": {
+    "edge": 0,
+    "interior": 25,
+    "opaque": 29665,
+    "pct": 0.1,
+    "strong": 3
+  },
+  "spr-fantasy-blue-dragon-wyrmling": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 17803,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-boar": {
+    "edge": 0,
+    "interior": 3,
+    "opaque": 22119,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-bog-twisted-giant-rat": {
+    "edge": 0,
+    "interior": 19,
+    "opaque": 25008,
+    "pct": 0.1,
+    "strong": 2
+  },
+  "spr-fantasy-bone-devil": {
+    "edge": 0,
+    "interior": 138,
+    "opaque": 31039,
+    "pct": 0.4,
+    "strong": 26
+  },
+  "spr-fantasy-bone-naga": {
+    "edge": 0,
+    "interior": 198,
+    "opaque": 25123,
+    "pct": 0.8,
+    "strong": 10
+  },
+  "spr-fantasy-brain-crawler": {
+    "edge": 0,
+    "interior": 24,
+    "opaque": 16381,
+    "pct": 0.1,
+    "strong": 8
+  },
+  "spr-fantasy-brass-dragon-wyrmling": {
+    "edge": 0,
+    "interior": 16,
+    "opaque": 19446,
+    "pct": 0.1,
+    "strong": 1
+  },
+  "spr-fantasy-brazen-gorgon": {
+    "edge": 0,
+    "interior": 83,
+    "opaque": 25852,
+    "pct": 0.3,
+    "strong": 24
+  },
+  "spr-fantasy-bronze-dragon-wyrmling": {
+    "edge": 0,
+    "interior": 32,
+    "opaque": 21999,
+    "pct": 0.1,
+    "strong": 11
+  },
+  "spr-fantasy-brown-bear": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 21453,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-bugbear-stalker": {
+    "edge": 0,
+    "interior": 2,
+    "opaque": 26507,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-bugbear-stalker-strangler": {
+    "edge": 0,
+    "interior": 122,
+    "opaque": 23233,
+    "pct": 0.5,
+    "strong": 39
+  },
+  "spr-fantasy-bugbear-warrior": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 23969,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-builder-dragonborn": {
+    "edge": 0,
+    "interior": 4,
+    "opaque": 15869,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-bulette": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 30088,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-bulette-pup": {
+    "edge": 0,
+    "interior": 1,
+    "opaque": 27492,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-bullywug-bog-sage-mud-lord": {
+    "edge": 0,
+    "interior": 16,
+    "opaque": 24868,
+    "pct": 0.1,
+    "strong": 5
+  },
+  "spr-fantasy-bullywug-warrior": {
+    "edge": 0,
+    "interior": 21,
+    "opaque": 16223,
+    "pct": 0.1,
+    "strong": 4
+  },
+  "spr-fantasy-cambion": {
+    "edge": 0,
+    "interior": 29,
+    "opaque": 23185,
+    "pct": 0.1,
+    "strong": 8
+  },
+  "spr-fantasy-camel": {
+    "edge": 0,
+    "interior": 1,
+    "opaque": 21444,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-carrion-crawler": {
+    "edge": 0,
+    "interior": 19,
+    "opaque": 24372,
+    "pct": 0.1,
+    "strong": 0
+  },
+  "spr-fantasy-cat": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 15062,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-centaur-trooper": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 21107,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-centaur-warden": {
+    "edge": 0,
+    "interior": 12,
+    "opaque": 25065,
+    "pct": 0.0,
+    "strong": 3
+  },
+  "spr-fantasy-chain-devil": {
+    "edge": 0,
+    "interior": 108,
+    "opaque": 18652,
+    "pct": 0.6,
+    "strong": 17
+  },
+  "spr-fantasy-chasme": {
+    "edge": 0,
+    "interior": 147,
+    "opaque": 22781,
+    "pct": 0.6,
+    "strong": 3
+  },
+  "spr-fantasy-chimera": {
+    "edge": 0,
+    "interior": 19,
+    "opaque": 30209,
+    "pct": 0.1,
+    "strong": 0
+  },
+  "spr-fantasy-cipher-orc": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 17606,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-clawed-drowner": {
+    "edge": 0,
+    "interior": 32,
+    "opaque": 23152,
+    "pct": 0.1,
+    "strong": 0
+  },
+  "spr-fantasy-clay-golem": {
+    "edge": 0,
+    "interior": 4,
+    "opaque": 29143,
+    "pct": 0.0,
+    "strong": 1
+  },
+  "spr-fantasy-cloaker": {
+    "edge": 0,
+    "interior": 636,
+    "opaque": 20032,
+    "pct": 3.2,
+    "strong": 54
+  },
+  "spr-fantasy-clockwork-law-construct-duodrone": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 15735,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-clockwork-law-construct-monodrone": {
+    "edge": 0,
+    "interior": 65,
+    "opaque": 18283,
+    "pct": 0.4,
+    "strong": 24
+  },
+  "spr-fantasy-clockwork-law-construct-tridrone": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 12586,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-clothier-dwarf": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 18520,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-cloud-giant": {
+    "edge": 0,
+    "interior": 413,
+    "opaque": 29695,
+    "pct": 1.4,
+    "strong": 129
+  },
+  "spr-fantasy-cockatrice": {
+    "edge": 0,
+    "interior": 1,
+    "opaque": 17987,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-cockatrice-regent": {
+    "edge": 0,
+    "interior": 32,
+    "opaque": 21744,
+    "pct": 0.1,
+    "strong": 7
+  },
+  "spr-fantasy-colossus": {
+    "edge": 0,
+    "interior": 10,
+    "opaque": 32176,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-commoner": {
+    "edge": 0,
+    "interior": 7,
+    "opaque": 19514,
+    "pct": 0.0,
+    "strong": 2
+  },
+  "spr-fantasy-constrictor-snake": {
+    "edge": 0,
+    "interior": 32,
+    "opaque": 22250,
+    "pct": 0.1,
+    "strong": 20
+  },
+  "spr-fantasy-copper-dragon-wyrmling": {
+    "edge": 0,
+    "interior": 9,
+    "opaque": 22432,
+    "pct": 0.0,
+    "strong": 1
+  },
+  "spr-fantasy-couatl": {
+    "edge": 0,
+    "interior": 237,
+    "opaque": 24535,
+    "pct": 1.0,
+    "strong": 43
+  },
+  "spr-fantasy-crab": {
+    "edge": 0,
+    "interior": 1,
+    "opaque": 17661,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-crawling-claw": {
+    "edge": 0,
+    "interior": 109,
+    "opaque": 11453,
+    "pct": 1.0,
+    "strong": 11
+  },
+  "spr-fantasy-crocodile": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 15073,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-cultist": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 19954,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-cultist-fanatic": {
+    "edge": 0,
+    "interior": 3,
+    "opaque": 19137,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-cyclops-oracle": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 30987,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-cyclops-sentry": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 27213,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-dao": {
+    "edge": 0,
+    "interior": 278,
+    "opaque": 22801,
+    "pct": 1.2,
+    "strong": 84
+  },
+  "spr-fantasy-darkmantle": {
+    "edge": 0,
+    "interior": 35,
+    "opaque": 14954,
+    "pct": 0.2,
+    "strong": 0
+  },
+  "spr-fantasy-death-chaos-frog": {
+    "edge": 0,
+    "interior": 46,
+    "opaque": 23288,
+    "pct": 0.2,
+    "strong": 7
+  },
+  "spr-fantasy-death-cultist": {
+    "edge": 0,
+    "interior": 80,
+    "opaque": 18527,
+    "pct": 0.4,
+    "strong": 21
+  },
+  "spr-fantasy-death-dog": {
+    "edge": 0,
+    "interior": 3,
+    "opaque": 19498,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-death-knight": {
+    "edge": 0,
+    "interior": 45,
+    "opaque": 20866,
+    "pct": 0.2,
+    "strong": 12
+  },
+  "spr-fantasy-death-knight-aspirant": {
+    "edge": 0,
+    "interior": 30,
+    "opaque": 24251,
+    "pct": 0.1,
+    "strong": 0
+  },
+  "spr-fantasy-deep-brute": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 22556,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-deep-brute-thonot": {
+    "edge": 0,
+    "interior": 1,
+    "opaque": 23545,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-deer": {
+    "edge": 0,
+    "interior": 20,
+    "opaque": 18375,
+    "pct": 0.1,
+    "strong": 4
+  },
+  "spr-fantasy-delver-gnome": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 11785,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-demilich": {
+    "edge": 0,
+    "interior": 1679,
+    "opaque": 16043,
+    "pct": 10.5,
+    "strong": 180
+  },
+  "spr-fantasy-desperate-bandit": {
+    "edge": 0,
+    "interior": 2,
+    "opaque": 15546,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-destitute-halfling": {
+    "edge": 0,
+    "interior": 1,
+    "opaque": 13593,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-deva": {
+    "edge": 0,
+    "interior": 377,
+    "opaque": 25788,
+    "pct": 1.5,
+    "strong": 72
+  },
+  "spr-fantasy-dire-wolf": {
+    "edge": 0,
+    "interior": 3,
+    "opaque": 21595,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-dire-worg": {
+    "edge": 0,
+    "interior": 11,
+    "opaque": 26127,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-displacer-beast": {
+    "edge": 0,
+    "interior": 1479,
+    "opaque": 23838,
+    "pct": 6.2,
+    "strong": 128
+  },
+  "spr-fantasy-djinni": {
+    "edge": 0,
+    "interior": 217,
+    "opaque": 20837,
+    "pct": 1.0,
+    "strong": 46
+  },
+  "spr-fantasy-domestic-animal-a-single-caged-ferret-kit-young-hyperactive-still-learning-the-vermin-catcher-s-trade": {
+    "edge": 0,
+    "interior": 86,
+    "opaque": 14361,
+    "pct": 0.6,
+    "strong": 20
+  },
+  "spr-fantasy-domestic-animal-a-single-caged-songbird-kept-for-the-sound-of-it-restless-behind-the-wire": {
+    "edge": 0,
+    "interior": 76,
+    "opaque": 13271,
+    "pct": 0.6,
+    "strong": 19
+  },
+  "spr-fantasy-domestic-animal-a-single-donkey-stubborn-sure-footed-outlives-every-horse-on-the-property": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 20709,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-domestic-animal-a-single-duck-waddling-unbothered-first-to-notice-a-stranger-at-the-water-s-edge": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 13533,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-domestic-animal-a-single-goat-headstrong-climbs-what-it-shouldn-t-eats-what-it-shouldn-t": {
+    "edge": 0,
+    "interior": 26,
+    "opaque": 21408,
+    "pct": 0.1,
+    "strong": 7
+  },
+  "spr-fantasy-domestic-animal-a-single-goose-from-the-flock-loud-territorial-first-to-mark-a-stranger": {
+    "edge": 0,
+    "interior": 30,
+    "opaque": 12264,
+    "pct": 0.2,
+    "strong": 16
+  },
+  "spr-fantasy-domestic-animal-a-single-hunting-hound-lean-nose-down-bred-for-the-chase-and-bored-without-it": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 18975,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-domestic-animal-a-single-kitten-too-young-to-have-earned-the-barn-cat-s-independence-yet": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 13973,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-domestic-animal-a-single-peacock-kept-for-show-screams-like-something-s-wrong-when-nothing-is": {
+    "edge": 0,
+    "interior": 2,
+    "opaque": 14437,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-domestic-animal-a-single-pig-smarter-than-it-s-given-credit-for-rooting-at-the-fence-line": {
+    "edge": 0,
+    "interior": 36,
+    "opaque": 21326,
+    "pct": 0.2,
+    "strong": 0
+  },
+  "spr-fantasy-domestic-animal-a-single-pony-smaller-and-calmer-than-the-war-mule-a-child-s-first-mount": {
+    "edge": 0,
+    "interior": 2,
+    "opaque": 24371,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-domestic-animal-a-single-rabbit-twitchy-kept-for-the-table-or-kept-as-a-pet-never-sure-which": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 15835,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-domestic-animal-a-single-sheep-from-the-herd-moves-with-the-others-and-its-lone-reluctance-to-follow-is-the-tell": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 19416,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-domestic-animal-a-single-turkey-puffed-up-and-loud-more-guard-animal-than-anyone-admits": {
+    "edge": 0,
+    "interior": 8,
+    "opaque": 26298,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-domestic-animal-a-single-turtle-slow-kept-yard-animal-older-than-most-of-the-household": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 17864,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-domestic-animal-barn-cat-owns-the-place-tolerates-the-people-hunts-the-dark-corners": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 17855,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-domestic-animal-bird-kept-close-a-single-hawk-carries-watches-and-remembers-a-face": {
+    "edge": 0,
+    "interior": 7,
+    "opaque": 17045,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-domestic-animal-half-tamed-wild-thing-comes-to-the-window-never-the-hand-trusts-one-child-and-no-one-else": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 18370,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-domestic-animal-loyal-dog-bonded-to-one-person-reads-their-mood-before-they-do": {
+    "edge": 0,
+    "interior": 11,
+    "opaque": 18578,
+    "pct": 0.1,
+    "strong": 0
+  },
+  "spr-fantasy-domestic-animal-old-animal-past-its-working-years-half-blind-and-still-the-first-to-growl-at-the-wrong-thing": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 21491,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-domestic-animal-stray-belongs-to-no-one-and-everyone-the-street-s-own-alarm-bell": {
+    "edge": 0,
+    "interior": 17,
+    "opaque": 17050,
+    "pct": 0.1,
+    "strong": 7
+  },
+  "spr-fantasy-domestic-animal-the-realm-beast-the-realm-beast-a-locally-distinct-pet-one-animal-realm-appropriate": {
+    "edge": 0,
+    "interior": 1,
+    "opaque": 17180,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-domestic-animal-the-town-s-own-animal-the-one-everyone-knows-by-name-its-fate-is-the-town-s-mood-made-visible": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 20614,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-domestic-animal-vermin-catcher-a-single-ferret-goes-gladly-where-people-won-t": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 14790,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-domestic-animal-working-beast-a-single-ox-earns-its-feed-patient-and-spooks-true": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 26578,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-doppelganger": {
+    "edge": 0,
+    "interior": 83,
+    "opaque": 19843,
+    "pct": 0.4,
+    "strong": 4
+  },
+  "spr-fantasy-dracolich": {
+    "edge": 0,
+    "interior": 797,
+    "opaque": 31583,
+    "pct": 2.5,
+    "strong": 175
+  },
+  "spr-fantasy-draft-horse": {
+    "edge": 0,
+    "interior": 4,
+    "opaque": 30349,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-dragon-turtle": {
+    "edge": 0,
+    "interior": 258,
+    "opaque": 28090,
+    "pct": 0.9,
+    "strong": 203
+  },
+  "spr-fantasy-dragonborn-ship-s-purser-dragonborn-keeps-the-manifest-honest-mostly": {
+    "edge": 0,
+    "interior": 13,
+    "opaque": 24031,
+    "pct": 0.1,
+    "strong": 3
+  },
+  "spr-fantasy-dragonborn-temple-acolyte-young-dragonborn-devout-earnest-still-memorizing-the-rites": {
+    "edge": 0,
+    "interior": 6,
+    "opaque": 14685,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-dragonborn-temple-guard-devout-literal-minded-takes-the-oath-seriously": {
+    "edge": 0,
+    "interior": 13,
+    "opaque": 15267,
+    "pct": 0.1,
+    "strong": 1
+  },
+  "spr-fantasy-dretch": {
+    "edge": 0,
+    "interior": 37,
+    "opaque": 16197,
+    "pct": 0.2,
+    "strong": 0
+  },
+  "spr-fantasy-drider": {
+    "edge": 0,
+    "interior": 149,
+    "opaque": 21010,
+    "pct": 0.7,
+    "strong": 19
+  },
+  "spr-fantasy-drowned-husk": {
+    "edge": 0,
+    "interior": 62,
+    "opaque": 25342,
+    "pct": 0.2,
+    "strong": 18
+  },
+  "spr-fantasy-druid-circle-warden": {
+    "edge": 0,
+    "interior": 23,
+    "opaque": 30865,
+    "pct": 0.1,
+    "strong": 4
+  },
+  "spr-fantasy-dryad": {
+    "edge": 0,
+    "interior": 19,
+    "opaque": 16688,
+    "pct": 0.1,
+    "strong": 2
+  },
+  "spr-fantasy-dungeon-animal-abandoned-mine-canary-a-small-bird-in-a-rusted-cage-somehow-still-alive-still-singing": {
+    "edge": 0,
+    "interior": 2,
+    "opaque": 12175,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-dungeon-animal-an-ordinary-animal-deliberately-unremarkable-domestic-or-wild-doesn-t-matter-its-presence-this-deep-is-the-signal-let-the-scene-decide-what-it-means": {
+    "edge": 0,
+    "interior": 1,
+    "opaque": 18189,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-dungeon-animal-blind-cave-rat-pale-sightless-thrives-in-total-dark-first-sign-something-s-been-dug-through": {
+    "edge": 0,
+    "interior": 10,
+    "opaque": 14080,
+    "pct": 0.1,
+    "strong": 1
+  },
+  "spr-fantasy-dungeon-animal-blind-salamander-pale-slow-the-kind-of-thing-that-shouldn-t-have-a-reason-to-be-this-deep": {
+    "edge": 0,
+    "interior": 2,
+    "opaque": 12475,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-dungeon-animal-cave-adapted-spider-pale-eyeless-spins-webs-across-passages-nobody-s-walked-in-years": {
+    "edge": 0,
+    "interior": 256,
+    "opaque": 14706,
+    "pct": 1.7,
+    "strong": 88
+  },
+  "spr-fantasy-dungeon-animal-cave-cricket-oversized-chirping-alone-in-the-dark-first-warning-of-the-swarm-nearby": {
+    "edge": 0,
+    "interior": 23,
+    "opaque": 10056,
+    "pct": 0.2,
+    "strong": 1
+  },
+  "spr-fantasy-dungeon-animal-chained-beast-escaped-its-post-a-working-animal-that-slipped-its-old-restraint-still-wears-the-collar": {
+    "edge": 0,
+    "interior": 3,
+    "opaque": 25989,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-dungeon-animal-deep-well-fish-stranded-flopping-in-a-puddle-far-from-any-real-water-source": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 14832,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-dungeon-animal-echo-startled-bird-a-single-bird-trapped-in-the-upper-galleries-flies-at-every-footstep": {
+    "edge": 0,
+    "interior": 1,
+    "opaque": 13169,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-dungeon-animal-feral-falconry-bird-a-hawk-that-escaped-its-jesses-generations-ago-now-hunts-the-tunnels-vermin": {
+    "edge": 0,
+    "interior": 18,
+    "opaque": 23217,
+    "pct": 0.1,
+    "strong": 2
+  },
+  "spr-fantasy-dungeon-animal-feral-vermin-catcher-once-someone-s-ferret-or-terrier-now-lives-wild-in-the-tunnels-still-killing-rats-out-of-habit": {
+    "edge": 0,
+    "interior": 8,
+    "opaque": 16942,
+    "pct": 0.0,
+    "strong": 2
+  },
+  "spr-fantasy-dungeon-animal-glow-moss-grazer-a-small-rodent-whose-fur-has-picked-up-a-faint-luminescence-from-what-it-eats": {
+    "edge": 0,
+    "interior": 8,
+    "opaque": 14919,
+    "pct": 0.1,
+    "strong": 0
+  },
+  "spr-fantasy-dungeon-animal-half-tamed-thing-comes-to-a-lantern-s-light-never-a-hand-feeds-on-what-the-dungeon-leaves-behind": {
+    "edge": 0,
+    "interior": 19,
+    "opaque": 17363,
+    "pct": 0.1,
+    "strong": 5
+  },
+  "spr-fantasy-dungeon-animal-lost-hunting-hound-a-noble-s-dog-that-wandered-too-far-in-and-never-found-the-way-back-out": {
+    "edge": 0,
+    "interior": 6,
+    "opaque": 18518,
+    "pct": 0.0,
+    "strong": 3
+  },
+  "spr-fantasy-dungeon-animal-nest-robbing-crow-one-bird-that-s-learned-the-dungeon-s-side-passages-better-than-most-explorers": {
+    "edge": 0,
+    "interior": 1,
+    "opaque": 15738,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-dungeon-animal-scarred-guard-dog-gone-feral-once-trained-to-patrol-these-halls-now-answers-to-no-one": {
+    "edge": 0,
+    "interior": 5,
+    "opaque": 23675,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-dungeon-animal-sole-survivor-packhorse-the-last-of-a-caravan-s-animals-malnourished-still-saddled": {
+    "edge": 0,
+    "interior": 4,
+    "opaque": 24732,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-dungeon-animal-starving-stray-a-cat-or-dog-that-followed-someone-in-and-got-left-behind": {
+    "edge": 0,
+    "interior": 13,
+    "opaque": 19044,
+    "pct": 0.1,
+    "strong": 7
+  },
+  "spr-fantasy-dungeon-animal-trapped-messenger-pigeon-still-carries-a-note-no-one-living-will-ever-read": {
+    "edge": 0,
+    "interior": 22,
+    "opaque": 16155,
+    "pct": 0.1,
+    "strong": 0
+  },
+  "spr-fantasy-dungeon-animal-tunnel-adapted-snake-pale-scaled-sluggish-in-the-cold-strikes-only-when-cornered": {
+    "edge": 0,
+    "interior": 4,
+    "opaque": 20493,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-dungeon-animal-tunnel-bat-colony-straggler-a-single-bat-that-never-rejoined-the-swarm-clings-alone-near-a-cracked-vent": {
+    "edge": 0,
+    "interior": 2,
+    "opaque": 18817,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-dungeon-animal-tunnel-blind-mole-huge-clawed-forepaws-displaces-more-earth-than-it-should-be-able-to": {
+    "edge": 0,
+    "interior": 2,
+    "opaque": 20848,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-dungeon-animal-unnervingly-large-lone-rat-alone-watching-doesn-t-scatter-like-the-others": {
+    "edge": 0,
+    "interior": 2,
+    "opaque": 22539,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-dungeon-animal-wrong-place-goat-a-farm-animal-that-fell-through-a-sinkhole-and-somehow-survived-down-here": {
+    "edge": 0,
+    "interior": 4,
+    "opaque": 19226,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-dungeon-animal-wrongly-still-lizard-motionless-so-long-it-s-mistaken-for-a-carving-until-it-isn-t": {
+    "edge": 0,
+    "interior": 4,
+    "opaque": 13460,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-dust-mephit": {
+    "edge": 0,
+    "interior": 838,
+    "opaque": 15235,
+    "pct": 5.5,
+    "strong": 343
+  },
+  "spr-fantasy-dwarven-brewer-the-tavern-s-actual-reason-for-existing": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 19658,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-dwarven-brewery-heiress-dwarf-runs-the-family-business-better-than-her-father-did": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 19619,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-dwarven-forge-master-three-generations-of-the-same-smithy-soot-in-every-crease": {
+    "edge": 0,
+    "interior": 7,
+    "opaque": 19119,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-dwarven-mine-assayer-dwarf-judges-ore-quality-by-weight-and-smell-alone": {
+    "edge": 0,
+    "interior": 6,
+    "opaque": 19059,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-dwarven-town-guard-captain-elderly-dwarf-decades-on-the-wall-trusted-by-everyone": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 16015,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-eagle": {
+    "edge": 0,
+    "interior": 3,
+    "opaque": 19619,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-earth-elemental": {
+    "edge": 0,
+    "interior": 4,
+    "opaque": 30747,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-efreeti": {
+    "edge": 0,
+    "interior": 420,
+    "opaque": 21856,
+    "pct": 1.9,
+    "strong": 127
+  },
+  "spr-fantasy-elder-deep-thing": {
+    "edge": 0,
+    "interior": 1889,
+    "opaque": 31585,
+    "pct": 6.0,
+    "strong": 72
+  },
+  "spr-fantasy-elemental-cataclysm": {
+    "edge": 0,
+    "interior": 2073,
+    "opaque": 39522,
+    "pct": 5.2,
+    "strong": 762
+  },
+  "spr-fantasy-elemental-cultist": {
+    "edge": 0,
+    "interior": 25,
+    "opaque": 19756,
+    "pct": 0.1,
+    "strong": 6
+  },
+  "spr-fantasy-elephant": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 32832,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-elk": {
+    "edge": 0,
+    "interior": 8,
+    "opaque": 24417,
+    "pct": 0.0,
+    "strong": 2
+  },
+  "spr-fantasy-elven-archivist-keeper-of-a-library-older-than-the-town-around-it": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 18324,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-elven-fletcher-every-arrow-leaves-her-stall-true": {
+    "edge": 0,
+    "interior": 3,
+    "opaque": 16666,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-elven-herbalist-elf-sells-cures-and-quietly-a-few-curses": {
+    "edge": 0,
+    "interior": 38,
+    "opaque": 15988,
+    "pct": 0.2,
+    "strong": 14
+  },
+  "spr-fantasy-elven-ranger-s-apprentice-elf-still-learning-to-read-a-trail-properly": {
+    "edge": 0,
+    "interior": 9,
+    "opaque": 18609,
+    "pct": 0.0,
+    "strong": 3
+  },
+  "spr-fantasy-elven-scribe-elf-copies-manuscripts-for-the-town-archive-meticulous-to-a-fault": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 16645,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-empyrean": {
+    "edge": 0,
+    "interior": 2311,
+    "opaque": 27331,
+    "pct": 8.5,
+    "strong": 328
+  },
+  "spr-fantasy-empyrean-iota": {
+    "edge": 0,
+    "interior": 4502,
+    "opaque": 15917,
+    "pct": 28.3,
+    "strong": 192
+  },
+  "spr-fantasy-enforcer-dragonborn": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 17811,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-erinyes": {
+    "edge": 0,
+    "interior": 99,
+    "opaque": 27181,
+    "pct": 0.4,
+    "strong": 24
+  },
+  "spr-fantasy-ettercap": {
+    "edge": 0,
+    "interior": 6,
+    "opaque": 20689,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-ettin": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 27223,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-eye-tyrant": {
+    "edge": 0,
+    "interior": 441,
+    "opaque": 18467,
+    "pct": 2.4,
+    "strong": 5
+  },
+  "spr-fantasy-eye-tyrant-zombie": {
+    "edge": 0,
+    "interior": 46,
+    "opaque": 22523,
+    "pct": 0.2,
+    "strong": 6
+  },
+  "spr-fantasy-faerie-dragon-youth": {
+    "edge": 0,
+    "interior": 32,
+    "opaque": 16522,
+    "pct": 0.2,
+    "strong": 5
+  },
+  "spr-fantasy-feeder-tiefling": {
+    "edge": 0,
+    "interior": 16,
+    "opaque": 14375,
+    "pct": 0.1,
+    "strong": 8
+  },
+  "spr-fantasy-fiend-cultist": {
+    "edge": 0,
+    "interior": 197,
+    "opaque": 19297,
+    "pct": 1.0,
+    "strong": 39
+  },
+  "spr-fantasy-fire-elemental": {
+    "edge": 0,
+    "interior": 162,
+    "opaque": 23885,
+    "pct": 0.7,
+    "strong": 73
+  },
+  "spr-fantasy-fire-giant": {
+    "edge": 0,
+    "interior": 107,
+    "opaque": 26284,
+    "pct": 0.4,
+    "strong": 34
+  },
+  "spr-fantasy-fish-folk": {
+    "edge": 0,
+    "interior": 6,
+    "opaque": 21089,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-fish-folk-archpriest": {
+    "edge": 0,
+    "interior": 33,
+    "opaque": 20231,
+    "pct": 0.2,
+    "strong": 0
+  },
+  "spr-fantasy-fish-folk-monitor": {
+    "edge": 0,
+    "interior": 6,
+    "opaque": 20443,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-fish-folk-whip": {
+    "edge": 0,
+    "interior": 7,
+    "opaque": 18089,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-flameskull": {
+    "edge": 0,
+    "interior": 78,
+    "opaque": 15281,
+    "pct": 0.5,
+    "strong": 28
+  },
+  "spr-fantasy-flaming-skeleton": {
+    "edge": 0,
+    "interior": 173,
+    "opaque": 14792,
+    "pct": 1.2,
+    "strong": 60
+  },
+  "spr-fantasy-flesh-golem": {
+    "edge": 0,
+    "interior": 59,
+    "opaque": 22359,
+    "pct": 0.3,
+    "strong": 11
+  },
+  "spr-fantasy-flying-snake": {
+    "edge": 0,
+    "interior": 1,
+    "opaque": 14824,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-fomorian": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 28723,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-frog": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 15663,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-frost-giant": {
+    "edge": 0,
+    "interior": 28,
+    "opaque": 29797,
+    "pct": 0.1,
+    "strong": 4
+  },
+  "spr-fantasy-galeb-duhr": {
+    "edge": 0,
+    "interior": 7,
+    "opaque": 29885,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-gargoyle": {
+    "edge": 0,
+    "interior": 2,
+    "opaque": 30413,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-gas-spore-fungus": {
+    "edge": 0,
+    "interior": 2422,
+    "opaque": 30255,
+    "pct": 8.0,
+    "strong": 76
+  },
+  "spr-fantasy-gelatinous-cube": {
+    "edge": 0,
+    "interior": 2,
+    "opaque": 34452,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-ghast": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 13385,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-ghast-base": {
+    "edge": 0,
+    "interior": 34,
+    "opaque": 12180,
+    "pct": 0.3,
+    "strong": 14
+  },
+  "spr-fantasy-ghast-gravecaller-spellstitched-elite": {
+    "edge": 0,
+    "interior": 97,
+    "opaque": 22788,
+    "pct": 0.4,
+    "strong": 18
+  },
+  "spr-fantasy-ghost": {
+    "edge": 0,
+    "interior": 851,
+    "opaque": 19711,
+    "pct": 4.3,
+    "strong": 240
+  },
+  "spr-fantasy-ghoul": {
+    "edge": 0,
+    "interior": 13,
+    "opaque": 15255,
+    "pct": 0.1,
+    "strong": 2
+  },
+  "spr-fantasy-giant-ape": {
+    "edge": 0,
+    "interior": 2,
+    "opaque": 32013,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-giant-axe-beak": {
+    "edge": 0,
+    "interior": 24,
+    "opaque": 27587,
+    "pct": 0.1,
+    "strong": 3
+  },
+  "spr-fantasy-giant-badger": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 16083,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-giant-bat": {
+    "edge": 0,
+    "interior": 1,
+    "opaque": 16789,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-giant-boar": {
+    "edge": 0,
+    "interior": 10,
+    "opaque": 22697,
+    "pct": 0.0,
+    "strong": 3
+  },
+  "spr-fantasy-giant-centipede": {
+    "edge": 0,
+    "interior": 155,
+    "opaque": 10020,
+    "pct": 1.5,
+    "strong": 42
+  },
+  "spr-fantasy-giant-constrictor-snake": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 31174,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-giant-crab": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 19281,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-giant-crocodile": {
+    "edge": 0,
+    "interior": 10,
+    "opaque": 25027,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-giant-eagle": {
+    "edge": 0,
+    "interior": 11,
+    "opaque": 21320,
+    "pct": 0.1,
+    "strong": 2
+  },
+  "spr-fantasy-giant-elk": {
+    "edge": 0,
+    "interior": 111,
+    "opaque": 18624,
+    "pct": 0.6,
+    "strong": 29
+  },
+  "spr-fantasy-giant-fire-beetle": {
+    "edge": 0,
+    "interior": 9,
+    "opaque": 17709,
+    "pct": 0.1,
+    "strong": 1
+  },
+  "spr-fantasy-giant-frog": {
+    "edge": 0,
+    "interior": 3,
+    "opaque": 16459,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-giant-goat": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 20030,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-giant-hyena": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 20845,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-giant-lizard": {
+    "edge": 0,
+    "interior": 6,
+    "opaque": 15665,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-giant-octopus": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 26171,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-giant-owl": {
+    "edge": 0,
+    "interior": 6,
+    "opaque": 19595,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-giant-rat": {
+    "edge": 0,
+    "interior": 8,
+    "opaque": 21247,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-giant-scorpion": {
+    "edge": 0,
+    "interior": 1,
+    "opaque": 19132,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-giant-seahorse": {
+    "edge": 0,
+    "interior": 1,
+    "opaque": 17245,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-giant-shark": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 18382,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-giant-spider": {
+    "edge": 0,
+    "interior": 19,
+    "opaque": 18145,
+    "pct": 0.1,
+    "strong": 8
+  },
+  "spr-fantasy-giant-squid": {
+    "edge": 0,
+    "interior": 6493,
+    "opaque": 25541,
+    "pct": 25.4,
+    "strong": 266
+  },
+  "spr-fantasy-giant-toad": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 20988,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-giant-venomous-snake": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 21326,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-giant-vulture": {
+    "edge": 0,
+    "interior": 9,
+    "opaque": 23594,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-giant-wasp": {
+    "edge": 0,
+    "interior": 242,
+    "opaque": 14547,
+    "pct": 1.7,
+    "strong": 26
+  },
+  "spr-fantasy-giant-weasel": {
+    "edge": 0,
+    "interior": 17,
+    "opaque": 13492,
+    "pct": 0.1,
+    "strong": 3
+  },
+  "spr-fantasy-giant-wolf-spider": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 13024,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-gibbering-mouther": {
+    "edge": 0,
+    "interior": 1,
+    "opaque": 23519,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-glabrezu": {
+    "edge": 0,
+    "interior": 68,
+    "opaque": 28175,
+    "pct": 0.2,
+    "strong": 16
+  },
+  "spr-fantasy-gladiator": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 18581,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-gnoll-demoniac": {
+    "edge": 0,
+    "interior": 71,
+    "opaque": 23613,
+    "pct": 0.3,
+    "strong": 7
+  },
+  "spr-fantasy-gnoll-fang-of-the-beast": {
+    "edge": 0,
+    "interior": 37,
+    "opaque": 25112,
+    "pct": 0.1,
+    "strong": 4
+  },
+  "spr-fantasy-gnoll-pack-lord": {
+    "edge": 0,
+    "interior": 6,
+    "opaque": 25985,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-gnoll-warrior": {
+    "edge": 0,
+    "interior": 3,
+    "opaque": 23327,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-gnomish-alchemist-s-assistant-gnome-mixes-potions-that-mostly-don-t-explode": {
+    "edge": 0,
+    "interior": 13,
+    "opaque": 12850,
+    "pct": 0.1,
+    "strong": 1
+  },
+  "spr-fantasy-gnomish-clockmaker-gnome-every-clock-in-town-keeps-slightly-different-time-on-purpose": {
+    "edge": 0,
+    "interior": 93,
+    "opaque": 12577,
+    "pct": 0.7,
+    "strong": 0
+  },
+  "spr-fantasy-gnomish-tinkerer-clockwork-contraptions-that-mostly-work": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 15669,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-goat": {
+    "edge": 0,
+    "interior": 3,
+    "opaque": 22277,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-goblin-boss": {
+    "edge": 0,
+    "interior": 1,
+    "opaque": 19605,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-goblin-cutter-minion": {
+    "edge": 0,
+    "interior": 3,
+    "opaque": 17386,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-goblin-hexer": {
+    "edge": 0,
+    "interior": 165,
+    "opaque": 20354,
+    "pct": 0.8,
+    "strong": 58
+  },
+  "spr-fantasy-goblin-minion": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 19768,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-goblin-warrior": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 17037,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-gold-dragon-roster-5e-2024-mechanics": {
+    "edge": 0,
+    "interior": 6,
+    "opaque": 28576,
+    "pct": 0.0,
+    "strong": 2
+  },
+  "spr-fantasy-goliath-bridge-toll-keeper-goliath-collects-the-fee-stops-the-trouble-rarely-needs-to-try-hard": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 25342,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-goliath-dockworker-goliath-moves-cargo-alone-that-takes-four-other-men": {
+    "edge": 0,
+    "interior": 24,
+    "opaque": 22920,
+    "pct": 0.1,
+    "strong": 4
+  },
+  "spr-fantasy-goliath-quarry-foreman-the-only-one-strong-enough-to-reset-a-slipped-cart-alone": {
+    "edge": 0,
+    "interior": 11,
+    "opaque": 20102,
+    "pct": 0.1,
+    "strong": 0
+  },
+  "spr-fantasy-gorgon": {
+    "edge": 0,
+    "interior": 94,
+    "opaque": 22297,
+    "pct": 0.4,
+    "strong": 3
+  },
+  "spr-fantasy-graveyard-revenant": {
+    "edge": 0,
+    "interior": 160,
+    "opaque": 21670,
+    "pct": 0.7,
+    "strong": 26
+  },
+  "spr-fantasy-gray-chaos-frog": {
+    "edge": 0,
+    "interior": 29,
+    "opaque": 26763,
+    "pct": 0.1,
+    "strong": 2
+  },
+  "spr-fantasy-gray-ooze": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 19499,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-greater-mimic": {
+    "edge": 0,
+    "interior": 1,
+    "opaque": 31754,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-greater-shadow": {
+    "edge": 0,
+    "interior": 1546,
+    "opaque": 21097,
+    "pct": 7.3,
+    "strong": 47
+  },
+  "spr-fantasy-green-chaos-frog": {
+    "edge": 0,
+    "interior": 360,
+    "opaque": 28511,
+    "pct": 1.3,
+    "strong": 39
+  },
+  "spr-fantasy-green-dragon-wyrmling": {
+    "edge": 0,
+    "interior": 36,
+    "opaque": 29727,
+    "pct": 0.1,
+    "strong": 2
+  },
+  "spr-fantasy-green-hag": {
+    "edge": 0,
+    "interior": 33,
+    "opaque": 22990,
+    "pct": 0.1,
+    "strong": 6
+  },
+  "spr-fantasy-grell": {
+    "edge": 0,
+    "interior": 417,
+    "opaque": 17838,
+    "pct": 2.3,
+    "strong": 39
+  },
+  "spr-fantasy-grick": {
+    "edge": 0,
+    "interior": 2,
+    "opaque": 27419,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-grick-ancient": {
+    "edge": 0,
+    "interior": 34,
+    "opaque": 25321,
+    "pct": 0.1,
+    "strong": 9
+  },
+  "spr-fantasy-griffon": {
+    "edge": 0,
+    "interior": 6,
+    "opaque": 22650,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-guard": {
+    "edge": 0,
+    "interior": 5,
+    "opaque": 16223,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-guard-captain": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 19252,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-guardian-naga": {
+    "edge": 0,
+    "interior": 243,
+    "opaque": 25598,
+    "pct": 0.9,
+    "strong": 67
+  },
+  "spr-fantasy-guilt-stained-vagrant": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 23121,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-gulthias-blight": {
+    "edge": 0,
+    "interior": 135,
+    "opaque": 35489,
+    "pct": 0.4,
+    "strong": 49
+  },
+  "spr-fantasy-half-dragon": {
+    "edge": 0,
+    "interior": 12,
+    "opaque": 25225,
+    "pct": 0.0,
+    "strong": 1
+  },
+  "spr-fantasy-half-ogre-ogrillon": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 24656,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-halfling-farmer-dark-skinned-tends-the-best-soil-in-the-valley": {
+    "edge": 0,
+    "interior": 16,
+    "opaque": 15013,
+    "pct": 0.1,
+    "strong": 6
+  },
+  "spr-fantasy-halfling-innkeeper-knows-every-traveler-s-business-before-they-ve-unpacked": {
+    "edge": 0,
+    "interior": 40,
+    "opaque": 14337,
+    "pct": 0.3,
+    "strong": 7
+  },
+  "spr-fantasy-halfling-messenger-runner-halfling-fastest-feet-in-the-county-mostly-ignored-otherwise": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 16835,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-halfling-orchard-keeper-elderly-halfling-knows-every-tree-in-the-grove-by-name": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 12860,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-halfling-roadside-chef-halfling-feeds-every-traveler-who-passes-no-exceptions": {
+    "edge": 0,
+    "interior": 3,
+    "opaque": 14106,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-harpy": {
+    "edge": 0,
+    "interior": 17,
+    "opaque": 19963,
+    "pct": 0.1,
+    "strong": 2
+  },
+  "spr-fantasy-harpy-matriarch": {
+    "edge": 0,
+    "interior": 6,
+    "opaque": 22935,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-hauler-elf": {
+    "edge": 0,
+    "interior": 7,
+    "opaque": 17045,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-haunting-revenant": {
+    "edge": 0,
+    "interior": 1183,
+    "opaque": 25053,
+    "pct": 4.7,
+    "strong": 85
+  },
+  "spr-fantasy-hawk": {
+    "edge": 0,
+    "interior": 1,
+    "opaque": 18250,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-healer-human": {
+    "edge": 0,
+    "interior": 1,
+    "opaque": 14709,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-hell-hound": {
+    "edge": 0,
+    "interior": 46,
+    "opaque": 18340,
+    "pct": 0.3,
+    "strong": 9
+  },
+  "spr-fantasy-helmed-horror": {
+    "edge": 0,
+    "interior": 60,
+    "opaque": 18623,
+    "pct": 0.3,
+    "strong": 9
+  },
+  "spr-fantasy-hezrou": {
+    "edge": 0,
+    "interior": 68,
+    "opaque": 24591,
+    "pct": 0.3,
+    "strong": 10
+  },
+  "spr-fantasy-hidden-fanatic-human": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 15232,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-hill-giant": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 25384,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-hippogriff": {
+    "edge": 0,
+    "interior": 2,
+    "opaque": 26915,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-hippopotamus": {
+    "edge": 0,
+    "interior": 1,
+    "opaque": 29280,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-hired-blade-dwarf": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 17317,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-hobgoblin-captain": {
+    "edge": 0,
+    "interior": 19,
+    "opaque": 22223,
+    "pct": 0.1,
+    "strong": 3
+  },
+  "spr-fantasy-hobgoblin-iron-shadow": {
+    "edge": 0,
+    "interior": 8,
+    "opaque": 25212,
+    "pct": 0.0,
+    "strong": 2
+  },
+  "spr-fantasy-hobgoblin-soldier": {
+    "edge": 0,
+    "interior": 4,
+    "opaque": 19474,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-homunculus": {
+    "edge": 0,
+    "interior": 8,
+    "opaque": 14682,
+    "pct": 0.1,
+    "strong": 1
+  },
+  "spr-fantasy-hook-horror": {
+    "edge": 0,
+    "interior": 398,
+    "opaque": 20305,
+    "pct": 2.0,
+    "strong": 0
+  },
+  "spr-fantasy-horned-devil": {
+    "edge": 0,
+    "interior": 4,
+    "opaque": 28802,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-host-goliath": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 23192,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-human-midwife-elderly-delivered-half-the-village-remembers-all-of-it": {
+    "edge": 0,
+    "interior": 8,
+    "opaque": 18788,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-human-midwife-s-apprentice-human-dark-skinned-learning-the-trade-from-her-mother": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 18510,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-human-miller-dust-covered-counts-every-sack-twice": {
+    "edge": 0,
+    "interior": 3,
+    "opaque": 21029,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-human-retired-soldier-one-armed-human-dark-skinned-runs-the-town-s-only-proper-tavern-brawl-rules": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 14483,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-human-town-crier-human-announces-news-rumor-and-the-occasional-lie-for-coin": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 19740,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-human-wheelwright-human-dark-skinned-third-generation-in-the-same-shop": {
+    "edge": 0,
+    "interior": 3,
+    "opaque": 20704,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-hunter-shark": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 18213,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-hydra": {
+    "edge": 0,
+    "interior": 19,
+    "opaque": 29167,
+    "pct": 0.1,
+    "strong": 3
+  },
+  "spr-fantasy-hyena": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 25879,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-ice-devil": {
+    "edge": 0,
+    "interior": 277,
+    "opaque": 28200,
+    "pct": 1.0,
+    "strong": 62
+  },
+  "spr-fantasy-ice-mephit": {
+    "edge": 0,
+    "interior": 22,
+    "opaque": 18442,
+    "pct": 0.1,
+    "strong": 0
+  },
+  "spr-fantasy-imp": {
+    "edge": 0,
+    "interior": 5,
+    "opaque": 15310,
+    "pct": 0.0,
+    "strong": 1
+  },
+  "spr-fantasy-incubus": {
+    "edge": 0,
+    "interior": 26,
+    "opaque": 21479,
+    "pct": 0.1,
+    "strong": 8
+  },
+  "spr-fantasy-invisible-stalker": {
+    "edge": 0,
+    "interior": 7899,
+    "opaque": 11057,
+    "pct": 71.4,
+    "strong": 6701
+  },
+  "spr-fantasy-iron-golem": {
+    "edge": 0,
+    "interior": 107,
+    "opaque": 24452,
+    "pct": 0.4,
+    "strong": 32
+  },
+  "spr-fantasy-jackal": {
+    "edge": 0,
+    "interior": 5,
+    "opaque": 20337,
+    "pct": 0.0,
+    "strong": 1
+  },
+  "spr-fantasy-jackalwere": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 20506,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-juvenile-shadow-dragon": {
+    "edge": 0,
+    "interior": 746,
+    "opaque": 22994,
+    "pct": 3.2,
+    "strong": 35
+  },
+  "spr-fantasy-kid-wants-be-believed-by-one-grown-up-just-one-about-the-thing-they-saw": {
+    "edge": 0,
+    "interior": 5,
+    "opaque": 15071,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-kid-wants-be-chosen-for-the-errand-the-team-the-trust-for-once": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 14750,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-kid-wants-feed-the-thing-in-the-woods-that-s-been-kind-to-them": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 19536,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-kid-wants-find-out-what-the-grown-ups-whisper-about-behind-the-shut-door": {
+    "edge": 0,
+    "interior": 5,
+    "opaque": 17610,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-kid-wants-find-the-dog-that-didn-t-come-home": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 14587,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-kid-wants-get-back-what-was-taken-from-them-and-it-s-the-object-the-whole-plot-turns-on": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 14323,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-kid-wants-get-their-small-hoard-back-from-whoever-confiscated-it": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 15554,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-kid-wants-keep-the-little-one-from-finding-out-the-bad-thing-that-happened": {
+    "edge": 0,
+    "interior": 1,
+    "opaque": 22825,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-kid-wants-keep-the-pretty-thing-they-found-which-someone-dangerous-is-tearing-the-town-apart-to-recover": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 18356,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-kid-wants-keep-the-secret-they-swore-to-keep-even-now-that-it-s-gone-wrong": {
+    "edge": 0,
+    "interior": 12,
+    "opaque": 15439,
+    "pct": 0.1,
+    "strong": 5
+  },
+  "spr-fantasy-kid-wants-make-their-parent-laugh-the-old-way-the-way-from-before": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 16464,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-kid-wants-not-have-to-go-home-tonight": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 15359,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-kid-wants-prove-they-re-not-a-baby-by-going-where-they-re-forbidden-to-go": {
+    "edge": 0,
+    "interior": 2,
+    "opaque": 15478,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-kid-wants-put-it-back-before-anyone-notices-it-was-gone": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 15971,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-kid-wants-see-the-locked-place-opened-just-once-just-to-know": {
+    "edge": 0,
+    "interior": 1,
+    "opaque": 15745,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-kid-wants-slip-a-message-to-the-one-person-the-family-has-forbidden-them-to-see": {
+    "edge": 0,
+    "interior": 25,
+    "opaque": 15399,
+    "pct": 0.2,
+    "strong": 11
+  },
+  "spr-fantasy-kid-wants-stay-up-late-enough-to-catch-the-thing-that-comes-at-night": {
+    "edge": 0,
+    "interior": 1,
+    "opaque": 16280,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-kid-wants-trade-the-strange-coin-they-found-for-something-they-actually-want": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 16561,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-kid-wants-warn-someone-and-not-one-adult-will-slow-down-long-enough-to-hear-it": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 18056,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-kid-wants-win-back-the-friend-who-stopped-coming-around": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 15908,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-killer-whale": {
+    "edge": 0,
+    "interior": 335,
+    "opaque": 20835,
+    "pct": 1.6,
+    "strong": 135
+  },
+  "spr-fantasy-knight": {
+    "edge": 0,
+    "interior": 11,
+    "opaque": 19773,
+    "pct": 0.1,
+    "strong": 1
+  },
+  "spr-fantasy-kobold": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 17613,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-kobold-inventor": {
+    "edge": 0,
+    "interior": 1,
+    "opaque": 19896,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-kraken": {
+    "edge": 0,
+    "interior": 101,
+    "opaque": 32791,
+    "pct": 0.3,
+    "strong": 20
+  },
+  "spr-fantasy-lacedon-sodden-ghoul": {
+    "edge": 0,
+    "interior": 137,
+    "opaque": 19551,
+    "pct": 0.7,
+    "strong": 18
+  },
+  "spr-fantasy-lamia": {
+    "edge": 0,
+    "interior": 15,
+    "opaque": 18523,
+    "pct": 0.1,
+    "strong": 4
+  },
+  "spr-fantasy-land-worker-dragonborn": {
+    "edge": 0,
+    "interior": 17,
+    "opaque": 15988,
+    "pct": 0.1,
+    "strong": 6
+  },
+  "spr-fantasy-lantern-sage": {
+    "edge": 0,
+    "interior": 1515,
+    "opaque": 21881,
+    "pct": 6.9,
+    "strong": 33
+  },
+  "spr-fantasy-larva": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 21787,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-lemure": {
+    "edge": 0,
+    "interior": 198,
+    "opaque": 20919,
+    "pct": 0.9,
+    "strong": 1
+  },
+  "spr-fantasy-lich": {
+    "edge": 0,
+    "interior": 2105,
+    "opaque": 27836,
+    "pct": 7.6,
+    "strong": 36
+  },
+  "spr-fantasy-lion": {
+    "edge": 0,
+    "interior": 3,
+    "opaque": 23123,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-lizard": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 13620,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-lizardfolk-geomancer": {
+    "edge": 0,
+    "interior": 27,
+    "opaque": 20447,
+    "pct": 0.1,
+    "strong": 0
+  },
+  "spr-fantasy-lizardfolk-sovereign": {
+    "edge": 0,
+    "interior": 41,
+    "opaque": 25931,
+    "pct": 0.2,
+    "strong": 5
+  },
+  "spr-fantasy-mage": {
+    "edge": 0,
+    "interior": 111,
+    "opaque": 23927,
+    "pct": 0.5,
+    "strong": 37
+  },
+  "spr-fantasy-magma-mephit": {
+    "edge": 0,
+    "interior": 61,
+    "opaque": 20311,
+    "pct": 0.3,
+    "strong": 10
+  },
+  "spr-fantasy-magmin": {
+    "edge": 0,
+    "interior": 8,
+    "opaque": 22740,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-magnate-halfling": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 19116,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-maker-human": {
+    "edge": 0,
+    "interior": 1,
+    "opaque": 15498,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-mammoth": {
+    "edge": 0,
+    "interior": 4,
+    "opaque": 29662,
+    "pct": 0.0,
+    "strong": 1
+  },
+  "spr-fantasy-manes": {
+    "edge": 0,
+    "interior": 21,
+    "opaque": 19415,
+    "pct": 0.1,
+    "strong": 0
+  },
+  "spr-fantasy-manes-vaporspawn": {
+    "edge": 0,
+    "interior": 1237,
+    "opaque": 19517,
+    "pct": 6.3,
+    "strong": 52
+  },
+  "spr-fantasy-manticore": {
+    "edge": 0,
+    "interior": 3,
+    "opaque": 25383,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-marid": {
+    "edge": 0,
+    "interior": 574,
+    "opaque": 21688,
+    "pct": 2.6,
+    "strong": 222
+  },
+  "spr-fantasy-marilith": {
+    "edge": 0,
+    "interior": 37,
+    "opaque": 22852,
+    "pct": 0.2,
+    "strong": 7
+  },
+  "spr-fantasy-mastiff": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 16410,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-medusa": {
+    "edge": 0,
+    "interior": 92,
+    "opaque": 21876,
+    "pct": 0.4,
+    "strong": 20
+  },
+  "spr-fantasy-merfolk-skirmisher": {
+    "edge": 0,
+    "interior": 22,
+    "opaque": 16548,
+    "pct": 0.1,
+    "strong": 2
+  },
+  "spr-fantasy-merfolk-wavebender": {
+    "edge": 0,
+    "interior": 812,
+    "opaque": 25811,
+    "pct": 3.1,
+    "strong": 268
+  },
+  "spr-fantasy-merrow": {
+    "edge": 0,
+    "interior": 16,
+    "opaque": 18642,
+    "pct": 0.1,
+    "strong": 2
+  },
+  "spr-fantasy-metalworker-orc": {
+    "edge": 0,
+    "interior": 37,
+    "opaque": 19430,
+    "pct": 0.2,
+    "strong": 9
+  },
+  "spr-fantasy-mezzoloth": {
+    "edge": 0,
+    "interior": 1,
+    "opaque": 23144,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-mimic": {
+    "edge": 0,
+    "interior": 2,
+    "opaque": 27766,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-mind-thief": {
+    "edge": 0,
+    "interior": 1355,
+    "opaque": 20283,
+    "pct": 6.7,
+    "strong": 19
+  },
+  "spr-fantasy-mind-thief-arcanist": {
+    "edge": 0,
+    "interior": 2275,
+    "opaque": 23558,
+    "pct": 9.7,
+    "strong": 198
+  },
+  "spr-fantasy-minotaur-of-the-horned-king": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 28431,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-minotaur-skeleton": {
+    "edge": 0,
+    "interior": 17,
+    "opaque": 19141,
+    "pct": 0.1,
+    "strong": 1
+  },
+  "spr-fantasy-mire-creeper": {
+    "edge": 0,
+    "interior": 7,
+    "opaque": 20280,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-misfit-gnome": {
+    "edge": 0,
+    "interior": 1,
+    "opaque": 14348,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-mule": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 19660,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-mummy": {
+    "edge": 0,
+    "interior": 16,
+    "opaque": 12561,
+    "pct": 0.1,
+    "strong": 1
+  },
+  "spr-fantasy-mummy-lord": {
+    "edge": 0,
+    "interior": 73,
+    "opaque": 18886,
+    "pct": 0.4,
+    "strong": 18
+  },
+  "spr-fantasy-myconid-adult": {
+    "edge": 0,
+    "interior": 20,
+    "opaque": 32465,
+    "pct": 0.1,
+    "strong": 5
+  },
+  "spr-fantasy-myconid-sovereign": {
+    "edge": 0,
+    "interior": 21,
+    "opaque": 29470,
+    "pct": 0.1,
+    "strong": 5
+  },
+  "spr-fantasy-myconid-spore-servant": {
+    "edge": 0,
+    "interior": 10,
+    "opaque": 21938,
+    "pct": 0.0,
+    "strong": 2
+  },
+  "spr-fantasy-myconid-sprout": {
+    "edge": 0,
+    "interior": 12,
+    "opaque": 26148,
+    "pct": 0.0,
+    "strong": 2
+  },
+  "spr-fantasy-nalfeshnee": {
+    "edge": 0,
+    "interior": 36,
+    "opaque": 30182,
+    "pct": 0.1,
+    "strong": 12
+  },
+  "spr-fantasy-night-hag": {
+    "edge": 0,
+    "interior": 7,
+    "opaque": 23853,
+    "pct": 0.0,
+    "strong": 1
+  },
+  "spr-fantasy-nightmare": {
+    "edge": 0,
+    "interior": 139,
+    "opaque": 25151,
+    "pct": 0.6,
+    "strong": 15
+  },
+  "spr-fantasy-noble": {
+    "edge": 0,
+    "interior": 365,
+    "opaque": 16769,
+    "pct": 2.2,
+    "strong": 0
+  },
+  "spr-fantasy-nycaloth": {
+    "edge": 0,
+    "interior": 124,
+    "opaque": 24010,
+    "pct": 0.5,
+    "strong": 1
+  },
+  "spr-fantasy-ochre-jelly": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 30852,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-octopus": {
+    "edge": 0,
+    "interior": 51,
+    "opaque": 25105,
+    "pct": 0.2,
+    "strong": 0
+  },
+  "spr-fantasy-ogre": {
+    "edge": 0,
+    "interior": 4,
+    "opaque": 31863,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-ogre-howdah": {
+    "edge": 0,
+    "interior": 52,
+    "opaque": 29414,
+    "pct": 0.2,
+    "strong": 16
+  },
+  "spr-fantasy-ogre-zombie": {
+    "edge": 0,
+    "interior": 8,
+    "opaque": 21692,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-oni": {
+    "edge": 0,
+    "interior": 9,
+    "opaque": 27208,
+    "pct": 0.0,
+    "strong": 3
+  },
+  "spr-fantasy-orc-berserker": {
+    "edge": 0,
+    "interior": 3,
+    "opaque": 21598,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-orc-blind-prophet": {
+    "edge": 0,
+    "interior": 35,
+    "opaque": 23935,
+    "pct": 0.1,
+    "strong": 7
+  },
+  "spr-fantasy-orc-warrior": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 20260,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-orcish-caravan-blacksmith-orc-repairs-wagon-wheels-faster-than-anyone-in-three-towns": {
+    "edge": 0,
+    "interior": 8,
+    "opaque": 23612,
+    "pct": 0.0,
+    "strong": 1
+  },
+  "spr-fantasy-orcish-caravan-guard-hired-muscle-with-a-reputation-for-actually-caring-about-the-cargo": {
+    "edge": 0,
+    "interior": 2,
+    "opaque": 21508,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-orcish-farrier-orc-shoes-every-horse-in-the-valley-feared-and-respected-equally": {
+    "edge": 0,
+    "interior": 1,
+    "opaque": 19933,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-orcish-healer-gentle-hands-a-reputation-people-are-slow-to-trust": {
+    "edge": 0,
+    "interior": 7,
+    "opaque": 22946,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-orcish-stable-hand-orc-gentle-with-horses-terrifying-to-everyone-else": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 21557,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-otyugh": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 30645,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-outfitter-elf": {
+    "edge": 0,
+    "interior": 5,
+    "opaque": 14883,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-outlaw-gnome": {
+    "edge": 0,
+    "interior": 3,
+    "opaque": 16433,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-outsider-tiefling": {
+    "edge": 0,
+    "interior": 2,
+    "opaque": 21055,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-owl": {
+    "edge": 0,
+    "interior": 23,
+    "opaque": 20595,
+    "pct": 0.1,
+    "strong": 8
+  },
+  "spr-fantasy-owlbear": {
+    "edge": 0,
+    "interior": 3,
+    "opaque": 29188,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-owlbear-cub": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 28201,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-pampered-elite-goliath": {
+    "edge": 0,
+    "interior": 2,
+    "opaque": 16931,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-panther": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 15437,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-pegasus": {
+    "edge": 0,
+    "interior": 70,
+    "opaque": 25188,
+    "pct": 0.3,
+    "strong": 11
+  },
+  "spr-fantasy-performer": {
+    "edge": 0,
+    "interior": 9,
+    "opaque": 13926,
+    "pct": 0.1,
+    "strong": 0
+  },
+  "spr-fantasy-performer-legend": {
+    "edge": 0,
+    "interior": 1304,
+    "opaque": 20904,
+    "pct": 6.2,
+    "strong": 161
+  },
+  "spr-fantasy-performer-maestro": {
+    "edge": 0,
+    "interior": 17,
+    "opaque": 20185,
+    "pct": 0.1,
+    "strong": 5
+  },
+  "spr-fantasy-performer-tiefling": {
+    "edge": 0,
+    "interior": 184,
+    "opaque": 14610,
+    "pct": 1.3,
+    "strong": 1
+  },
+  "spr-fantasy-peryton": {
+    "edge": 0,
+    "interior": 14,
+    "opaque": 21187,
+    "pct": 0.1,
+    "strong": 3
+  },
+  "spr-fantasy-phase-spider": {
+    "edge": 0,
+    "interior": 87,
+    "opaque": 20896,
+    "pct": 0.4,
+    "strong": 9
+  },
+  "spr-fantasy-piercer": {
+    "edge": 0,
+    "interior": 127,
+    "opaque": 20713,
+    "pct": 0.6,
+    "strong": 0
+  },
+  "spr-fantasy-piranha": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 19372,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-pirate": {
+    "edge": 0,
+    "interior": 2,
+    "opaque": 18134,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-pirate-admiral": {
+    "edge": 0,
+    "interior": 94,
+    "opaque": 26512,
+    "pct": 0.4,
+    "strong": 32
+  },
+  "spr-fantasy-pirate-captain": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 23432,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-pit-fiend": {
+    "edge": 0,
+    "interior": 54,
+    "opaque": 25610,
+    "pct": 0.2,
+    "strong": 25
+  },
+  "spr-fantasy-pixie": {
+    "edge": 0,
+    "interior": 521,
+    "opaque": 12355,
+    "pct": 4.2,
+    "strong": 36
+  },
+  "spr-fantasy-pixie-wonderbringer": {
+    "edge": 0,
+    "interior": 779,
+    "opaque": 11297,
+    "pct": 6.9,
+    "strong": 93
+  },
+  "spr-fantasy-planetar": {
+    "edge": 0,
+    "interior": 989,
+    "opaque": 30032,
+    "pct": 3.3,
+    "strong": 499
+  },
+  "spr-fantasy-plesiosaurus": {
+    "edge": 0,
+    "interior": 109,
+    "opaque": 17921,
+    "pct": 0.6,
+    "strong": 38
+  },
+  "spr-fantasy-polar-bear": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 26238,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-poltergeist": {
+    "edge": 0,
+    "interior": 329,
+    "opaque": 17500,
+    "pct": 1.9,
+    "strong": 44
+  },
+  "spr-fantasy-pony": {
+    "edge": 0,
+    "interior": 55,
+    "opaque": 18247,
+    "pct": 0.3,
+    "strong": 21
+  },
+  "spr-fantasy-priest": {
+    "edge": 0,
+    "interior": 26,
+    "opaque": 22055,
+    "pct": 0.1,
+    "strong": 5
+  },
+  "spr-fantasy-priest-acolyte": {
+    "edge": 0,
+    "interior": 2,
+    "opaque": 16978,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-primeval-owlbear": {
+    "edge": 0,
+    "interior": 27,
+    "opaque": 32881,
+    "pct": 0.1,
+    "strong": 5
+  },
+  "spr-fantasy-psychic-gray-ooze": {
+    "edge": 0,
+    "interior": 49,
+    "opaque": 23230,
+    "pct": 0.2,
+    "strong": 2
+  },
+  "spr-fantasy-pteranodon": {
+    "edge": 0,
+    "interior": 12,
+    "opaque": 14246,
+    "pct": 0.1,
+    "strong": 2
+  },
+  "spr-fantasy-purple-worm": {
+    "edge": 0,
+    "interior": 2507,
+    "opaque": 33162,
+    "pct": 7.6,
+    "strong": 0
+  },
+  "spr-fantasy-quasit": {
+    "edge": 0,
+    "interior": 14,
+    "opaque": 12990,
+    "pct": 0.1,
+    "strong": 1
+  },
+  "spr-fantasy-questing-knight": {
+    "edge": 0,
+    "interior": 18,
+    "opaque": 20655,
+    "pct": 0.1,
+    "strong": 4
+  },
+  "spr-fantasy-rakshasa": {
+    "edge": 0,
+    "interior": 7,
+    "opaque": 21454,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-rat": {
+    "edge": 0,
+    "interior": 7,
+    "opaque": 13367,
+    "pct": 0.1,
+    "strong": 0
+  },
+  "spr-fantasy-raven": {
+    "edge": 0,
+    "interior": 17,
+    "opaque": 16914,
+    "pct": 0.1,
+    "strong": 6
+  },
+  "spr-fantasy-recluse-dragonborn": {
+    "edge": 0,
+    "interior": 4,
+    "opaque": 17759,
+    "pct": 0.0,
+    "strong": 1
+  },
+  "spr-fantasy-recruiter-orc": {
+    "edge": 0,
+    "interior": 13,
+    "opaque": 15513,
+    "pct": 0.1,
+    "strong": 3
+  },
+  "spr-fantasy-red-chaos-frog": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 27963,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-red-dragon-wyrmling": {
+    "edge": 0,
+    "interior": 22,
+    "opaque": 19365,
+    "pct": 0.1,
+    "strong": 4
+  },
+  "spr-fantasy-reef-shark": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 16372,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-remedy-maker-halfling": {
+    "edge": 0,
+    "interior": 1,
+    "opaque": 11619,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-remorhaz": {
+    "edge": 0,
+    "interior": 40,
+    "opaque": 34570,
+    "pct": 0.1,
+    "strong": 4
+  },
+  "spr-fantasy-rhinoceros": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 28004,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-ridden-wyvern": {
+    "edge": 0,
+    "interior": 65,
+    "opaque": 23106,
+    "pct": 0.3,
+    "strong": 10
+  },
+  "spr-fantasy-riding-horse": {
+    "edge": 0,
+    "interior": 5,
+    "opaque": 18497,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-rite-keeper-orc": {
+    "edge": 0,
+    "interior": 6,
+    "opaque": 18879,
+    "pct": 0.0,
+    "strong": 1
+  },
+  "spr-fantasy-road-guard-elf": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 16857,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-roc": {
+    "edge": 0,
+    "interior": 432,
+    "opaque": 27608,
+    "pct": 1.6,
+    "strong": 2
+  },
+  "spr-fantasy-roper": {
+    "edge": 0,
+    "interior": 162,
+    "opaque": 25059,
+    "pct": 0.6,
+    "strong": 20
+  },
+  "spr-fantasy-rust-monster": {
+    "edge": 0,
+    "interior": 12,
+    "opaque": 20373,
+    "pct": 0.1,
+    "strong": 2
+  },
+  "spr-fantasy-saber-toothed-tiger": {
+    "edge": 0,
+    "interior": 16,
+    "opaque": 21793,
+    "pct": 0.1,
+    "strong": 6
+  },
+  "spr-fantasy-sahuagin-baron": {
+    "edge": 0,
+    "interior": 23,
+    "opaque": 18846,
+    "pct": 0.1,
+    "strong": 4
+  },
+  "spr-fantasy-sahuagin-priest": {
+    "edge": 0,
+    "interior": 17,
+    "opaque": 18586,
+    "pct": 0.1,
+    "strong": 3
+  },
+  "spr-fantasy-sahuagin-warrior": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 16385,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-salamander": {
+    "edge": 0,
+    "interior": 22,
+    "opaque": 23948,
+    "pct": 0.1,
+    "strong": 4
+  },
+  "spr-fantasy-salamander-fire-snake": {
+    "edge": 0,
+    "interior": 22,
+    "opaque": 21600,
+    "pct": 0.1,
+    "strong": 4
+  },
+  "spr-fantasy-salamander-inferno-master": {
+    "edge": 0,
+    "interior": 645,
+    "opaque": 29256,
+    "pct": 2.2,
+    "strong": 369
+  },
+  "spr-fantasy-satyr": {
+    "edge": 0,
+    "interior": 7,
+    "opaque": 16661,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-satyr-revelmaster": {
+    "edge": 0,
+    "interior": 74,
+    "opaque": 21107,
+    "pct": 0.4,
+    "strong": 14
+  },
+  "spr-fantasy-scarecrow": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 18878,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-scorpion": {
+    "edge": 0,
+    "interior": 14,
+    "opaque": 13364,
+    "pct": 0.1,
+    "strong": 0
+  },
+  "spr-fantasy-scout": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 18966,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-sea-hag": {
+    "edge": 0,
+    "interior": 94,
+    "opaque": 25156,
+    "pct": 0.4,
+    "strong": 11
+  },
+  "spr-fantasy-seahorse": {
+    "edge": 0,
+    "interior": 23,
+    "opaque": 11934,
+    "pct": 0.2,
+    "strong": 8
+  },
+  "spr-fantasy-secret-eye": {
+    "edge": 0,
+    "interior": 11,
+    "opaque": 19496,
+    "pct": 0.1,
+    "strong": 0
+  },
+  "spr-fantasy-secret-scholar-human": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 14638,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-servant-goliath": {
+    "edge": 0,
+    "interior": 5,
+    "opaque": 16855,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-shadow": {
+    "edge": 0,
+    "interior": 207,
+    "opaque": 16601,
+    "pct": 1.2,
+    "strong": 8
+  },
+  "spr-fantasy-shadow-dragon": {
+    "edge": 0,
+    "interior": 1673,
+    "opaque": 28830,
+    "pct": 5.8,
+    "strong": 105
+  },
+  "spr-fantasy-shambling-mound": {
+    "edge": 0,
+    "interior": 84,
+    "opaque": 29223,
+    "pct": 0.3,
+    "strong": 12
+  },
+  "spr-fantasy-shield-guardian": {
+    "edge": 0,
+    "interior": 4,
+    "opaque": 23056,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-shrieker-fungus": {
+    "edge": 0,
+    "interior": 21,
+    "opaque": 21878,
+    "pct": 0.1,
+    "strong": 3
+  },
+  "spr-fantasy-silver-dragon-wyrmling": {
+    "edge": 0,
+    "interior": 134,
+    "opaque": 22909,
+    "pct": 0.6,
+    "strong": 44
+  },
+  "spr-fantasy-skeleton": {
+    "edge": 0,
+    "interior": 97,
+    "opaque": 11734,
+    "pct": 0.8,
+    "strong": 6
+  },
+  "spr-fantasy-skeleton-archer": {
+    "edge": 0,
+    "interior": 120,
+    "opaque": 14053,
+    "pct": 0.9,
+    "strong": 34
+  },
+  "spr-fantasy-skeleton-warrior": {
+    "edge": 0,
+    "interior": 107,
+    "opaque": 17172,
+    "pct": 0.6,
+    "strong": 8
+  },
+  "spr-fantasy-smoke-mephit": {
+    "edge": 0,
+    "interior": 110,
+    "opaque": 17895,
+    "pct": 0.6,
+    "strong": 10
+  },
+  "spr-fantasy-smuggler-goliath": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 24326,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-solar": {
+    "edge": 0,
+    "interior": 1633,
+    "opaque": 35803,
+    "pct": 4.6,
+    "strong": 691
+  },
+  "spr-fantasy-specter": {
+    "edge": 0,
+    "interior": 286,
+    "opaque": 21097,
+    "pct": 1.4,
+    "strong": 19
+  },
+  "spr-fantasy-sphinx-of-lore": {
+    "edge": 0,
+    "interior": 37,
+    "opaque": 32718,
+    "pct": 0.1,
+    "strong": 5
+  },
+  "spr-fantasy-sphinx-of-secrets": {
+    "edge": 0,
+    "interior": 16,
+    "opaque": 27640,
+    "pct": 0.1,
+    "strong": 3
+  },
+  "spr-fantasy-sphinx-of-valor": {
+    "edge": 0,
+    "interior": 119,
+    "opaque": 33280,
+    "pct": 0.4,
+    "strong": 22
+  },
+  "spr-fantasy-sphinx-of-wonder": {
+    "edge": 0,
+    "interior": 18,
+    "opaque": 20153,
+    "pct": 0.1,
+    "strong": 2
+  },
+  "spr-fantasy-spider": {
+    "edge": 0,
+    "interior": 17,
+    "opaque": 10124,
+    "pct": 0.2,
+    "strong": 6
+  },
+  "spr-fantasy-spined-devil": {
+    "edge": 0,
+    "interior": 4,
+    "opaque": 14274,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-spirit-naga": {
+    "edge": 0,
+    "interior": 567,
+    "opaque": 23119,
+    "pct": 2.5,
+    "strong": 156
+  },
+  "spr-fantasy-sprite": {
+    "edge": 0,
+    "interior": 1035,
+    "opaque": 9663,
+    "pct": 10.7,
+    "strong": 16
+  },
+  "spr-fantasy-spy": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 19984,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-spy-master": {
+    "edge": 0,
+    "interior": 36,
+    "opaque": 18524,
+    "pct": 0.2,
+    "strong": 8
+  },
+  "spr-fantasy-stand-in-dwarf": {
+    "edge": 0,
+    "interior": 9,
+    "opaque": 14708,
+    "pct": 0.1,
+    "strong": 0
+  },
+  "spr-fantasy-steam-mephit": {
+    "edge": 0,
+    "interior": 38,
+    "opaque": 21934,
+    "pct": 0.2,
+    "strong": 6
+  },
+  "spr-fantasy-stirge": {
+    "edge": 0,
+    "interior": 2,
+    "opaque": 8900,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-stone-giant": {
+    "edge": 0,
+    "interior": 25,
+    "opaque": 26928,
+    "pct": 0.1,
+    "strong": 0
+  },
+  "spr-fantasy-stone-golem": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 31027,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-storm-giant": {
+    "edge": 0,
+    "interior": 32,
+    "opaque": 26438,
+    "pct": 0.1,
+    "strong": 2
+  },
+  "spr-fantasy-succubus": {
+    "edge": 0,
+    "interior": 76,
+    "opaque": 20494,
+    "pct": 0.4,
+    "strong": 2
+  },
+  "spr-fantasy-swamp-shadow": {
+    "edge": 0,
+    "interior": 101,
+    "opaque": 21674,
+    "pct": 0.5,
+    "strong": 34
+  },
+  "spr-fantasy-swarm-of-bats": {
+    "edge": 0,
+    "interior": 189,
+    "opaque": 13364,
+    "pct": 1.4,
+    "strong": 46
+  },
+  "spr-fantasy-swarm-of-crawling-claws": {
+    "edge": 0,
+    "interior": 891,
+    "opaque": 24695,
+    "pct": 3.6,
+    "strong": 195
+  },
+  "spr-fantasy-swarm-of-dretches": {
+    "edge": 0,
+    "interior": 537,
+    "opaque": 23647,
+    "pct": 2.3,
+    "strong": 44
+  },
+  "spr-fantasy-swarm-of-insects": {
+    "edge": 0,
+    "interior": 678,
+    "opaque": 13220,
+    "pct": 5.1,
+    "strong": 152
+  },
+  "spr-fantasy-swarm-of-larvae": {
+    "edge": 0,
+    "interior": 75,
+    "opaque": 26184,
+    "pct": 0.3,
+    "strong": 5
+  },
+  "spr-fantasy-swarm-of-lemures": {
+    "edge": 0,
+    "interior": 189,
+    "opaque": 19220,
+    "pct": 1.0,
+    "strong": 14
+  },
+  "spr-fantasy-swarm-of-piranhas": {
+    "edge": 0,
+    "interior": 1296,
+    "opaque": 23998,
+    "pct": 5.4,
+    "strong": 335
+  },
+  "spr-fantasy-swarm-of-rats": {
+    "edge": 0,
+    "interior": 119,
+    "opaque": 21165,
+    "pct": 0.6,
+    "strong": 16
+  },
+  "spr-fantasy-swarm-of-ravens": {
+    "edge": 0,
+    "interior": 61,
+    "opaque": 19654,
+    "pct": 0.3,
+    "strong": 11
+  },
+  "spr-fantasy-swarm-of-stirges": {
+    "edge": 0,
+    "interior": 24,
+    "opaque": 7483,
+    "pct": 0.3,
+    "strong": 3
+  },
+  "spr-fantasy-swarm-of-venomous-snakes": {
+    "edge": 0,
+    "interior": 18,
+    "opaque": 22960,
+    "pct": 0.1,
+    "strong": 4
+  },
+  "spr-fantasy-tarrasque": {
+    "edge": 0,
+    "interior": 2,
+    "opaque": 34839,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-the-cultist-roster-base-2024-stat-blocks": {
+    "edge": 0,
+    "interior": 26,
+    "opaque": 20800,
+    "pct": 0.1,
+    "strong": 9
+  },
+  "spr-fantasy-the-faerie-dragon": {
+    "edge": 0,
+    "interior": 835,
+    "opaque": 17864,
+    "pct": 4.7,
+    "strong": 127
+  },
+  "spr-fantasy-the-needle-blight": {
+    "edge": 0,
+    "interior": 2,
+    "opaque": 17826,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-the-pseudodragon": {
+    "edge": 0,
+    "interior": 1,
+    "opaque": 14521,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-the-twig-blight": {
+    "edge": 0,
+    "interior": 11,
+    "opaque": 12809,
+    "pct": 0.1,
+    "strong": 1
+  },
+  "spr-fantasy-the-vine-blight": {
+    "edge": 0,
+    "interior": 81,
+    "opaque": 22685,
+    "pct": 0.4,
+    "strong": 19
+  },
+  "spr-fantasy-thief-halfling": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 14741,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-thri-kreen-marauder": {
+    "edge": 0,
+    "interior": 13,
+    "opaque": 17657,
+    "pct": 0.1,
+    "strong": 0
+  },
+  "spr-fantasy-thri-kreen-psion": {
+    "edge": 0,
+    "interior": 479,
+    "opaque": 19824,
+    "pct": 2.4,
+    "strong": 70
+  },
+  "spr-fantasy-tiefling-blacksmith-s-apprentice-still-learning-already-better-than-most-journeymen": {
+    "edge": 0,
+    "interior": 1,
+    "opaque": 14418,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-tiefling-fortune-teller-half-the-town-swears-by-her-half-crosses-the-street": {
+    "edge": 0,
+    "interior": 3,
+    "opaque": 13334,
+    "pct": 0.0,
+    "strong": 1
+  },
+  "spr-fantasy-tiefling-fortune-teller-s-rival-tiefling-claims-to-be-the-real-seer-in-town": {
+    "edge": 0,
+    "interior": 654,
+    "opaque": 18078,
+    "pct": 3.6,
+    "strong": 8
+  },
+  "spr-fantasy-tiefling-street-performer-tiefling-half-the-crowd-is-there-for-the-trick-half-for-the-horror": {
+    "edge": 1,
+    "interior": 6,
+    "opaque": 17321,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-tiefling-tavern-owner-tiefling-runs-the-friendliest-bar-in-a-town-that-fears-her-kind": {
+    "edge": 0,
+    "interior": 1,
+    "opaque": 18309,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-tiger": {
+    "edge": 0,
+    "interior": 1,
+    "opaque": 25897,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-tough": {
+    "edge": 0,
+    "interior": 10,
+    "opaque": 16042,
+    "pct": 0.1,
+    "strong": 1
+  },
+  "spr-fantasy-tough-boss": {
+    "edge": 0,
+    "interior": 17,
+    "opaque": 17708,
+    "pct": 0.1,
+    "strong": 0
+  },
+  "spr-fantasy-trader-gnome": {
+    "edge": 0,
+    "interior": 16,
+    "opaque": 13780,
+    "pct": 0.1,
+    "strong": 7
+  },
+  "spr-fantasy-treant": {
+    "edge": 0,
+    "interior": 54,
+    "opaque": 28913,
+    "pct": 0.2,
+    "strong": 8
+  },
+  "spr-fantasy-tree-blight": {
+    "edge": 0,
+    "interior": 113,
+    "opaque": 26427,
+    "pct": 0.4,
+    "strong": 14
+  },
+  "spr-fantasy-triceratops": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 29584,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-troglodyte": {
+    "edge": 0,
+    "interior": 1,
+    "opaque": 26923,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-troll": {
+    "edge": 0,
+    "interior": 6,
+    "opaque": 30090,
+    "pct": 0.0,
+    "strong": 1
+  },
+  "spr-fantasy-troll-amalgam": {
+    "edge": 0,
+    "interior": 43,
+    "opaque": 29560,
+    "pct": 0.1,
+    "strong": 10
+  },
+  "spr-fantasy-troll-limb": {
+    "edge": 0,
+    "interior": 6,
+    "opaque": 16986,
+    "pct": 0.0,
+    "strong": 1
+  },
+  "spr-fantasy-tyrannosaurus-rex": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 24064,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-ultroloth": {
+    "edge": 0,
+    "interior": 625,
+    "opaque": 30849,
+    "pct": 2.0,
+    "strong": 41
+  },
+  "spr-fantasy-umber-hulk": {
+    "edge": 0,
+    "interior": 3,
+    "opaque": 19118,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-undead-eye-tyrant": {
+    "edge": 0,
+    "interior": 484,
+    "opaque": 18480,
+    "pct": 2.6,
+    "strong": 27
+  },
+  "spr-fantasy-unicorn": {
+    "edge": 0,
+    "interior": 194,
+    "opaque": 21136,
+    "pct": 0.9,
+    "strong": 21
+  },
+  "spr-fantasy-unofficial-power-elf": {
+    "edge": 0,
+    "interior": 1,
+    "opaque": 20533,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-vampire": {
+    "edge": 0,
+    "interior": 30,
+    "opaque": 26982,
+    "pct": 0.1,
+    "strong": 6
+  },
+  "spr-fantasy-vampire-familiar": {
+    "edge": 0,
+    "interior": 35,
+    "opaque": 24605,
+    "pct": 0.1,
+    "strong": 17
+  },
+  "spr-fantasy-vampire-nightbringer": {
+    "edge": 0,
+    "interior": 5,
+    "opaque": 25434,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-vampire-spawn": {
+    "edge": 0,
+    "interior": 16,
+    "opaque": 25085,
+    "pct": 0.1,
+    "strong": 1
+  },
+  "spr-fantasy-vampire-umbral-lord": {
+    "edge": 0,
+    "interior": 197,
+    "opaque": 26191,
+    "pct": 0.8,
+    "strong": 43
+  },
+  "spr-fantasy-venomous-snake": {
+    "edge": 0,
+    "interior": 11,
+    "opaque": 12153,
+    "pct": 0.1,
+    "strong": 1
+  },
+  "spr-fantasy-violet-fungus": {
+    "edge": 0,
+    "interior": 5090,
+    "opaque": 25135,
+    "pct": 20.3,
+    "strong": 430
+  },
+  "spr-fantasy-violet-fungus-necrohulk": {
+    "edge": 0,
+    "interior": 3557,
+    "opaque": 28297,
+    "pct": 12.6,
+    "strong": 234
+  },
+  "spr-fantasy-void-monk-monk": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 20381,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-void-monk-psion": {
+    "edge": 0,
+    "interior": 45,
+    "opaque": 17227,
+    "pct": 0.3,
+    "strong": 6
+  },
+  "spr-fantasy-void-monk-zerth": {
+    "edge": 0,
+    "interior": 730,
+    "opaque": 22122,
+    "pct": 3.3,
+    "strong": 238
+  },
+  "spr-fantasy-vrock": {
+    "edge": 0,
+    "interior": 1212,
+    "opaque": 27954,
+    "pct": 4.3,
+    "strong": 26
+  },
+  "spr-fantasy-vulture": {
+    "edge": 0,
+    "interior": 36,
+    "opaque": 23035,
+    "pct": 0.2,
+    "strong": 7
+  },
+  "spr-fantasy-warhorse": {
+    "edge": 0,
+    "interior": 5,
+    "opaque": 20985,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-warhorse-skeleton": {
+    "edge": 0,
+    "interior": 26,
+    "opaque": 16153,
+    "pct": 0.2,
+    "strong": 2
+  },
+  "spr-fantasy-warrior-infantry": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 15887,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-warrior-veteran": {
+    "edge": 0,
+    "interior": 6,
+    "opaque": 24898,
+    "pct": 0.0,
+    "strong": 1
+  },
+  "spr-fantasy-water-elemental": {
+    "edge": 0,
+    "interior": 434,
+    "opaque": 29057,
+    "pct": 1.5,
+    "strong": 180
+  },
+  "spr-fantasy-water-weird": {
+    "edge": 0,
+    "interior": 186,
+    "opaque": 28958,
+    "pct": 0.6,
+    "strong": 68
+  },
+  "spr-fantasy-weasel": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 12095,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-werebear": {
+    "edge": 0,
+    "interior": 3,
+    "opaque": 28194,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-wereboar": {
+    "edge": 0,
+    "interior": 26,
+    "opaque": 22976,
+    "pct": 0.1,
+    "strong": 2
+  },
+  "spr-fantasy-wererat": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 25409,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-weretiger": {
+    "edge": 0,
+    "interior": 4,
+    "opaque": 20572,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-werewolf": {
+    "edge": 0,
+    "interior": 3,
+    "opaque": 21774,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-white-dragon-wyrmling": {
+    "edge": 0,
+    "interior": 71,
+    "opaque": 18762,
+    "pct": 0.4,
+    "strong": 9
+  },
+  "spr-fantasy-wight": {
+    "edge": 0,
+    "interior": 121,
+    "opaque": 22362,
+    "pct": 0.5,
+    "strong": 0
+  },
+  "spr-fantasy-wight-lord": {
+    "edge": 0,
+    "interior": 15,
+    "opaque": 23339,
+    "pct": 0.1,
+    "strong": 2
+  },
+  "spr-fantasy-wild-animal-a-badger-low-broad-digging-with-total-disregard-for-anything-nearby": {
+    "edge": 0,
+    "interior": 1,
+    "opaque": 18675,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-wild-animal-a-black-bear-foraging-unbothered-dangerous-only-if-pressed": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 23491,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-wild-animal-a-bull-elk-antlers-full-grown-the-season-s-rut-making-it-reckless": {
+    "edge": 0,
+    "interior": 5,
+    "opaque": 21242,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-wild-animal-a-great-owl-silent-wingbeats-watches-more-than-it-hunts": {
+    "edge": 0,
+    "interior": 26,
+    "opaque": 15519,
+    "pct": 0.2,
+    "strong": 6
+  },
+  "spr-fantasy-wild-animal-a-heron-stalks-the-shallows-on-legs-too-thin-to-look-that-patient": {
+    "edge": 0,
+    "interior": 9,
+    "opaque": 10134,
+    "pct": 0.1,
+    "strong": 0
+  },
+  "spr-fantasy-wild-animal-a-lone-timber-wolf-pup-not-yet-part-of-any-pack-still-learning-to-hunt": {
+    "edge": 0,
+    "interior": 19,
+    "opaque": 13259,
+    "pct": 0.1,
+    "strong": 1
+  },
+  "spr-fantasy-wild-animal-a-lynx-kitten-spotted-coat-play-stalking-something-that-isn-t-there-yet": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 14532,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-wild-animal-a-mountain-goat-sure-footed-on-a-ledge-no-predator-bothers-to-follow": {
+    "edge": 0,
+    "interior": 13,
+    "opaque": 22571,
+    "pct": 0.1,
+    "strong": 5
+  },
+  "spr-fantasy-wild-animal-a-peregrine-falcon-stooping-mid-hunt-faster-than-anything-else-in-the-sky": {
+    "edge": 0,
+    "interior": 7,
+    "opaque": 14020,
+    "pct": 0.0,
+    "strong": 1
+  },
+  "spr-fantasy-wild-animal-a-red-fox-kit-curious-unafraid-too-young-to-know-better": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 13437,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-wild-animal-a-single-deer-from-the-herd-moves-with-the-herd-reads-the-wind-before-the-ranger-does": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 16286,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-wild-animal-a-single-elk-grazes-the-tree-line-at-dawn-gone-before-full-light": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 22071,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-wild-animal-a-single-goose-from-the-migrant-flock-passes-through-and-carries-news-of-where-it-s-been": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 12856,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-wild-animal-a-single-vulture-from-the-carrion-flock-first-to-know-when-something-has-died-nearby": {
+    "edge": 0,
+    "interior": 7,
+    "opaque": 19521,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-wild-animal-a-wild-boar-sow-tusks-lowered-protective-of-ground-she-doesn-t-even-own-yet": {
+    "edge": 0,
+    "interior": 2,
+    "opaque": 21027,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-wild-animal-a-wild-turkey-tom-displaying-loud-oblivious-to-anything-hunting-it": {
+    "edge": 0,
+    "interior": 21,
+    "opaque": 26548,
+    "pct": 0.1,
+    "strong": 0
+  },
+  "spr-fantasy-wild-animal-ambush-lynx-solitary-patient-and-the-reason-the-trail-went-quiet": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 18651,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-wild-animal-burrowing-badger-knows-what-the-earth-carries-underneath": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 16637,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-wild-animal-half-wild-fringe-fox-drawn-to-the-edge-of-camps-curious-and-never-quite-trusting": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 15826,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-wild-animal-old-solitary-boar-scarred-wary-and-gives-ground-to-no-one": {
+    "edge": 0,
+    "interior": 3,
+    "opaque": 25264,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-wild-animal-river-otter-knows-the-water-s-moods-better-than-any-map": {
+    "edge": 0,
+    "interior": 2,
+    "opaque": 11664,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-wild-animal-territory-wolf-holds-a-stretch-of-ground-and-knows-every-crossing-of-it": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 19654,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-wild-animal-the-elder-of-the-wood-the-beast-every-other-animal-on-the-node-defers-to": {
+    "edge": 0,
+    "interior": 3,
+    "opaque": 17865,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-wild-animal-the-realm-beast-a-locally-distinct-wild-creature-one-animal-realm-appropriate": {
+    "edge": 0,
+    "interior": 2,
+    "opaque": 23550,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-wild-animal-watcher-hawk-sees-the-whole-valley-from-height-and-forgets-nothing-it-circled": {
+    "edge": 0,
+    "interior": 15,
+    "opaque": 15662,
+    "pct": 0.1,
+    "strong": 1
+  },
+  "spr-fantasy-wild-provider-dwarf": {
+    "edge": 0,
+    "interior": 10,
+    "opaque": 18135,
+    "pct": 0.1,
+    "strong": 0
+  },
+  "spr-fantasy-will-o-wisp": {
+    "edge": 0,
+    "interior": 28,
+    "opaque": 10869,
+    "pct": 0.3,
+    "strong": 10
+  },
+  "spr-fantasy-winged-kobold-urd": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 15644,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-winter-wolf": {
+    "edge": 0,
+    "interior": 69,
+    "opaque": 24701,
+    "pct": 0.3,
+    "strong": 12
+  },
+  "spr-fantasy-wolf": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 18564,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-worg": {
+    "edge": 0,
+    "interior": 3,
+    "opaque": 17125,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-wraith": {
+    "edge": 0,
+    "interior": 197,
+    "opaque": 19842,
+    "pct": 1.0,
+    "strong": 32
+  },
+  "spr-fantasy-wyvern": {
+    "edge": 0,
+    "interior": 59,
+    "opaque": 25641,
+    "pct": 0.2,
+    "strong": 12
+  },
+  "spr-fantasy-xorn": {
+    "edge": 0,
+    "interior": 6,
+    "opaque": 24286,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-yeti": {
+    "edge": 0,
+    "interior": 10,
+    "opaque": 31164,
+    "pct": 0.0,
+    "strong": 3
+  },
+  "spr-fantasy-yochlol": {
+    "edge": 0,
+    "interior": 751,
+    "opaque": 23177,
+    "pct": 3.2,
+    "strong": 70
+  },
+  "spr-fantasy-young-black-dragon": {
+    "edge": 0,
+    "interior": 35,
+    "opaque": 24429,
+    "pct": 0.1,
+    "strong": 10
+  },
+  "spr-fantasy-young-blue-dragon": {
+    "edge": 0,
+    "interior": 72,
+    "opaque": 26402,
+    "pct": 0.3,
+    "strong": 10
+  },
+  "spr-fantasy-young-brass-dragon": {
+    "edge": 0,
+    "interior": 5,
+    "opaque": 29970,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-young-bronze-dragon": {
+    "edge": 0,
+    "interior": 43,
+    "opaque": 23838,
+    "pct": 0.2,
+    "strong": 8
+  },
+  "spr-fantasy-young-copper-dragon": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 24366,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-young-green-dragon": {
+    "edge": 0,
+    "interior": 6,
+    "opaque": 25159,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-young-red-dragon": {
+    "edge": 0,
+    "interior": 88,
+    "opaque": 29861,
+    "pct": 0.3,
+    "strong": 4
+  },
+  "spr-fantasy-young-silver-dragon": {
+    "edge": 0,
+    "interior": 44,
+    "opaque": 25214,
+    "pct": 0.2,
+    "strong": 8
+  },
+  "spr-fantasy-young-white-dragon": {
+    "edge": 0,
+    "interior": 263,
+    "opaque": 30029,
+    "pct": 0.9,
+    "strong": 54
+  },
+  "spr-fantasy-yuan-ti-abomination": {
+    "edge": 0,
+    "interior": 136,
+    "opaque": 28448,
+    "pct": 0.5,
+    "strong": 14
+  },
+  "spr-fantasy-yuan-ti-infiltrator": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 20755,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-yuan-ti-malison-type-1": {
+    "edge": 0,
+    "interior": 94,
+    "opaque": 25180,
+    "pct": 0.4,
+    "strong": 7
+  },
+  "spr-fantasy-yuan-ti-malison-type-2": {
+    "edge": 0,
+    "interior": 1,
+    "opaque": 21114,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-fantasy-yuan-ti-malison-type-3": {
+    "edge": 0,
+    "interior": 211,
+    "opaque": 24560,
+    "pct": 0.9,
+    "strong": 35
+  },
+  "spr-fantasy-zombie": {
+    "edge": 0,
+    "interior": 20,
+    "opaque": 14264,
+    "pct": 0.1,
+    "strong": 3
+  },
+  "spr-fantasy-zombie-plague-carrier": {
+    "edge": 0,
+    "interior": 62,
+    "opaque": 16450,
+    "pct": 0.4,
+    "strong": 16
+  },
+  "spr-pc-dragonborn-barbarian-female": {
+    "edge": 0,
+    "interior": 37,
+    "opaque": 18209,
+    "pct": 0.2,
+    "strong": 8
+  },
+  "spr-pc-dragonborn-barbarian-male": {
+    "edge": 0,
+    "interior": 8,
+    "opaque": 20635,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-pc-dragonborn-bard-female": {
+    "edge": 0,
+    "interior": 1028,
+    "opaque": 17262,
+    "pct": 6.0,
+    "strong": 67
+  },
+  "spr-pc-dragonborn-bard-male": {
+    "edge": 0,
+    "interior": 196,
+    "opaque": 18576,
+    "pct": 1.1,
+    "strong": 104
+  },
+  "spr-pc-dragonborn-cleric-female": {
+    "edge": 0,
+    "interior": 19,
+    "opaque": 20947,
+    "pct": 0.1,
+    "strong": 1
+  },
+  "spr-pc-dragonborn-cleric-male": {
+    "edge": 0,
+    "interior": 4,
+    "opaque": 21375,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-pc-dragonborn-druid-female": {
+    "edge": 0,
+    "interior": 212,
+    "opaque": 20147,
+    "pct": 1.1,
+    "strong": 122
+  },
+  "spr-pc-dragonborn-druid-male": {
+    "edge": 0,
+    "interior": 108,
+    "opaque": 20199,
+    "pct": 0.5,
+    "strong": 45
+  },
+  "spr-pc-dragonborn-fighter-female": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 19849,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-pc-dragonborn-fighter-male": {
+    "edge": 0,
+    "interior": 2,
+    "opaque": 19934,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-pc-dragonborn-monk-female": {
+    "edge": 0,
+    "interior": 121,
+    "opaque": 14384,
+    "pct": 0.8,
+    "strong": 0
+  },
+  "spr-pc-dragonborn-monk-male": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 15197,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-pc-dragonborn-paladin-female": {
+    "edge": 0,
+    "interior": 1,
+    "opaque": 17177,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-pc-dragonborn-paladin-male": {
+    "edge": 0,
+    "interior": 3,
+    "opaque": 17356,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-pc-dragonborn-ranger-female": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 16458,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-pc-dragonborn-ranger-male": {
+    "edge": 0,
+    "interior": 2,
+    "opaque": 16436,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-pc-dragonborn-rogue-female": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 13726,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-pc-dragonborn-rogue-male": {
+    "edge": 0,
+    "interior": 7,
+    "opaque": 15966,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-pc-dragonborn-sorcerer-female": {
+    "edge": 0,
+    "interior": 1417,
+    "opaque": 17855,
+    "pct": 7.9,
+    "strong": 61
+  },
+  "spr-pc-dragonborn-sorcerer-male": {
+    "edge": 0,
+    "interior": 572,
+    "opaque": 18904,
+    "pct": 3.0,
+    "strong": 1
+  },
+  "spr-pc-dragonborn-warlock-female": {
+    "edge": 0,
+    "interior": 659,
+    "opaque": 19281,
+    "pct": 3.4,
+    "strong": 213
+  },
+  "spr-pc-dragonborn-warlock-male": {
+    "edge": 0,
+    "interior": 1409,
+    "opaque": 20403,
+    "pct": 6.9,
+    "strong": 213
+  },
+  "spr-pc-dragonborn-wizard-female": {
+    "edge": 0,
+    "interior": 243,
+    "opaque": 20118,
+    "pct": 1.2,
+    "strong": 69
+  },
+  "spr-pc-dragonborn-wizard-male": {
+    "edge": 0,
+    "interior": 87,
+    "opaque": 20205,
+    "pct": 0.4,
+    "strong": 10
+  },
+  "spr-pc-dwarf-barbarian-female": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 22531,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-pc-dwarf-barbarian-male": {
+    "edge": 0,
+    "interior": 18,
+    "opaque": 23349,
+    "pct": 0.1,
+    "strong": 4
+  },
+  "spr-pc-dwarf-bard-female": {
+    "edge": 0,
+    "interior": 16,
+    "opaque": 16651,
+    "pct": 0.1,
+    "strong": 1
+  },
+  "spr-pc-dwarf-bard-male": {
+    "edge": 0,
+    "interior": 89,
+    "opaque": 20706,
+    "pct": 0.4,
+    "strong": 0
+  },
+  "spr-pc-dwarf-cleric-female": {
+    "edge": 0,
+    "interior": 66,
+    "opaque": 18312,
+    "pct": 0.4,
+    "strong": 24
+  },
+  "spr-pc-dwarf-cleric-male": {
+    "edge": 0,
+    "interior": 21,
+    "opaque": 23357,
+    "pct": 0.1,
+    "strong": 0
+  },
+  "spr-pc-dwarf-druid-female": {
+    "edge": 0,
+    "interior": 1064,
+    "opaque": 20267,
+    "pct": 5.2,
+    "strong": 4
+  },
+  "spr-pc-dwarf-druid-male": {
+    "edge": 0,
+    "interior": 59,
+    "opaque": 23604,
+    "pct": 0.2,
+    "strong": 17
+  },
+  "spr-pc-dwarf-fighter-female": {
+    "edge": 0,
+    "interior": 3,
+    "opaque": 20735,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-pc-dwarf-fighter-male": {
+    "edge": 0,
+    "interior": 20,
+    "opaque": 24023,
+    "pct": 0.1,
+    "strong": 0
+  },
+  "spr-pc-dwarf-monk-female": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 15719,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-pc-dwarf-monk-male": {
+    "edge": 0,
+    "interior": 5,
+    "opaque": 17636,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-pc-dwarf-paladin-female": {
+    "edge": 0,
+    "interior": 31,
+    "opaque": 18788,
+    "pct": 0.2,
+    "strong": 0
+  },
+  "spr-pc-dwarf-paladin-male": {
+    "edge": 0,
+    "interior": 5,
+    "opaque": 23285,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-pc-dwarf-ranger-female": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 18095,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-pc-dwarf-ranger-male": {
+    "edge": 0,
+    "interior": 22,
+    "opaque": 20766,
+    "pct": 0.1,
+    "strong": 4
+  },
+  "spr-pc-dwarf-rogue-female": {
+    "edge": 0,
+    "interior": 6,
+    "opaque": 17292,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-pc-dwarf-rogue-male": {
+    "edge": 0,
+    "interior": 1,
+    "opaque": 17154,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-pc-dwarf-sorcerer-female": {
+    "edge": 0,
+    "interior": 16,
+    "opaque": 18224,
+    "pct": 0.1,
+    "strong": 2
+  },
+  "spr-pc-dwarf-sorcerer-male": {
+    "edge": 0,
+    "interior": 1320,
+    "opaque": 17527,
+    "pct": 7.5,
+    "strong": 385
+  },
+  "spr-pc-dwarf-warlock-female": {
+    "edge": 0,
+    "interior": 72,
+    "opaque": 23167,
+    "pct": 0.3,
+    "strong": 11
+  },
+  "spr-pc-dwarf-warlock-male": {
+    "edge": 0,
+    "interior": 488,
+    "opaque": 19475,
+    "pct": 2.5,
+    "strong": 4
+  },
+  "spr-pc-dwarf-wizard-female": {
+    "edge": 0,
+    "interior": 99,
+    "opaque": 20240,
+    "pct": 0.5,
+    "strong": 35
+  },
+  "spr-pc-dwarf-wizard-male": {
+    "edge": 0,
+    "interior": 119,
+    "opaque": 24000,
+    "pct": 0.5,
+    "strong": 36
+  },
+  "spr-pc-elf-barbarian-female": {
+    "edge": 0,
+    "interior": 7,
+    "opaque": 23422,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-pc-elf-barbarian-male": {
+    "edge": 0,
+    "interior": 78,
+    "opaque": 23088,
+    "pct": 0.3,
+    "strong": 18
+  },
+  "spr-pc-elf-bard-female": {
+    "edge": 0,
+    "interior": 872,
+    "opaque": 14892,
+    "pct": 5.9,
+    "strong": 8
+  },
+  "spr-pc-elf-bard-male": {
+    "edge": 0,
+    "interior": 12,
+    "opaque": 14524,
+    "pct": 0.1,
+    "strong": 0
+  },
+  "spr-pc-elf-cleric-female": {
+    "edge": 0,
+    "interior": 59,
+    "opaque": 17154,
+    "pct": 0.3,
+    "strong": 7
+  },
+  "spr-pc-elf-cleric-male": {
+    "edge": 0,
+    "interior": 102,
+    "opaque": 16800,
+    "pct": 0.6,
+    "strong": 17
+  },
+  "spr-pc-elf-druid-female": {
+    "edge": 0,
+    "interior": 70,
+    "opaque": 16155,
+    "pct": 0.4,
+    "strong": 17
+  },
+  "spr-pc-elf-druid-male": {
+    "edge": 0,
+    "interior": 27,
+    "opaque": 16122,
+    "pct": 0.2,
+    "strong": 14
+  },
+  "spr-pc-elf-fighter-female": {
+    "edge": 0,
+    "interior": 5,
+    "opaque": 16140,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-pc-elf-fighter-male": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 17350,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-pc-elf-monk-female": {
+    "edge": 0,
+    "interior": 8,
+    "opaque": 12604,
+    "pct": 0.1,
+    "strong": 1
+  },
+  "spr-pc-elf-monk-male": {
+    "edge": 0,
+    "interior": 45,
+    "opaque": 13111,
+    "pct": 0.3,
+    "strong": 12
+  },
+  "spr-pc-elf-paladin-female": {
+    "edge": 0,
+    "interior": 79,
+    "opaque": 14235,
+    "pct": 0.6,
+    "strong": 34
+  },
+  "spr-pc-elf-paladin-male": {
+    "edge": 0,
+    "interior": 1,
+    "opaque": 14025,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-pc-elf-ranger-female": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 11278,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-pc-elf-ranger-male": {
+    "edge": 0,
+    "interior": 1,
+    "opaque": 12570,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-pc-elf-rogue-female": {
+    "edge": 0,
+    "interior": 47,
+    "opaque": 11765,
+    "pct": 0.4,
+    "strong": 6
+  },
+  "spr-pc-elf-rogue-male": {
+    "edge": 0,
+    "interior": 473,
+    "opaque": 10985,
+    "pct": 4.3,
+    "strong": 25
+  },
+  "spr-pc-elf-sorcerer-female": {
+    "edge": 0,
+    "interior": 456,
+    "opaque": 14454,
+    "pct": 3.2,
+    "strong": 44
+  },
+  "spr-pc-elf-sorcerer-male": {
+    "edge": 0,
+    "interior": 83,
+    "opaque": 16181,
+    "pct": 0.5,
+    "strong": 13
+  },
+  "spr-pc-elf-warlock-female": {
+    "edge": 0,
+    "interior": 1540,
+    "opaque": 14496,
+    "pct": 10.6,
+    "strong": 238
+  },
+  "spr-pc-elf-warlock-male": {
+    "edge": 0,
+    "interior": 489,
+    "opaque": 18112,
+    "pct": 2.7,
+    "strong": 18
+  },
+  "spr-pc-elf-wizard-female": {
+    "edge": 0,
+    "interior": 1604,
+    "opaque": 14843,
+    "pct": 10.8,
+    "strong": 49
+  },
+  "spr-pc-elf-wizard-male": {
+    "edge": 0,
+    "interior": 9,
+    "opaque": 16718,
+    "pct": 0.1,
+    "strong": 3
+  },
+  "spr-pc-gnome-barbarian-female": {
+    "edge": 0,
+    "interior": 228,
+    "opaque": 13661,
+    "pct": 1.7,
+    "strong": 6
+  },
+  "spr-pc-gnome-barbarian-male": {
+    "edge": 0,
+    "interior": 1,
+    "opaque": 15267,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-pc-gnome-bard-female": {
+    "edge": 0,
+    "interior": 249,
+    "opaque": 14875,
+    "pct": 1.7,
+    "strong": 0
+  },
+  "spr-pc-gnome-bard-male": {
+    "edge": 0,
+    "interior": 1,
+    "opaque": 9724,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-pc-gnome-cleric-female": {
+    "edge": 0,
+    "interior": 81,
+    "opaque": 13836,
+    "pct": 0.6,
+    "strong": 2
+  },
+  "spr-pc-gnome-cleric-male": {
+    "edge": 0,
+    "interior": 103,
+    "opaque": 14671,
+    "pct": 0.7,
+    "strong": 4
+  },
+  "spr-pc-gnome-druid-female": {
+    "edge": 0,
+    "interior": 10,
+    "opaque": 14766,
+    "pct": 0.1,
+    "strong": 0
+  },
+  "spr-pc-gnome-druid-male": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 14787,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-pc-gnome-fighter-female": {
+    "edge": 0,
+    "interior": 1290,
+    "opaque": 14678,
+    "pct": 8.8,
+    "strong": 19
+  },
+  "spr-pc-gnome-fighter-male": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 14453,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-pc-gnome-monk-female": {
+    "edge": 0,
+    "interior": 17,
+    "opaque": 12319,
+    "pct": 0.1,
+    "strong": 3
+  },
+  "spr-pc-gnome-monk-male": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 11817,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-pc-gnome-paladin-female": {
+    "edge": 0,
+    "interior": 15,
+    "opaque": 14525,
+    "pct": 0.1,
+    "strong": 0
+  },
+  "spr-pc-gnome-paladin-male": {
+    "edge": 0,
+    "interior": 25,
+    "opaque": 15317,
+    "pct": 0.2,
+    "strong": 0
+  },
+  "spr-pc-gnome-ranger-female": {
+    "edge": 0,
+    "interior": 36,
+    "opaque": 12438,
+    "pct": 0.3,
+    "strong": 17
+  },
+  "spr-pc-gnome-ranger-male": {
+    "edge": 0,
+    "interior": 12,
+    "opaque": 13766,
+    "pct": 0.1,
+    "strong": 3
+  },
+  "spr-pc-gnome-rogue-female": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 10149,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-pc-gnome-rogue-male": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 11971,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-pc-gnome-sorcerer-female": {
+    "edge": 0,
+    "interior": 1035,
+    "opaque": 13409,
+    "pct": 7.7,
+    "strong": 49
+  },
+  "spr-pc-gnome-sorcerer-male": {
+    "edge": 0,
+    "interior": 1607,
+    "opaque": 16188,
+    "pct": 9.9,
+    "strong": 176
+  },
+  "spr-pc-gnome-warlock-female": {
+    "edge": 0,
+    "interior": 496,
+    "opaque": 14345,
+    "pct": 3.5,
+    "strong": 109
+  },
+  "spr-pc-gnome-warlock-male": {
+    "edge": 0,
+    "interior": 291,
+    "opaque": 15532,
+    "pct": 1.9,
+    "strong": 129
+  },
+  "spr-pc-gnome-wizard-female": {
+    "edge": 0,
+    "interior": 150,
+    "opaque": 16037,
+    "pct": 0.9,
+    "strong": 56
+  },
+  "spr-pc-gnome-wizard-male": {
+    "edge": 0,
+    "interior": 144,
+    "opaque": 18586,
+    "pct": 0.8,
+    "strong": 51
+  },
+  "spr-pc-goliath-barbarian-female": {
+    "edge": 0,
+    "interior": 8,
+    "opaque": 29562,
+    "pct": 0.0,
+    "strong": 4
+  },
+  "spr-pc-goliath-barbarian-male": {
+    "edge": 0,
+    "interior": 44,
+    "opaque": 30493,
+    "pct": 0.1,
+    "strong": 5
+  },
+  "spr-pc-goliath-bard-female": {
+    "edge": 0,
+    "interior": 562,
+    "opaque": 16985,
+    "pct": 3.3,
+    "strong": 1
+  },
+  "spr-pc-goliath-bard-male": {
+    "edge": 0,
+    "interior": 21,
+    "opaque": 20370,
+    "pct": 0.1,
+    "strong": 9
+  },
+  "spr-pc-goliath-cleric-female": {
+    "edge": 0,
+    "interior": 472,
+    "opaque": 22554,
+    "pct": 2.1,
+    "strong": 10
+  },
+  "spr-pc-goliath-cleric-male": {
+    "edge": 0,
+    "interior": 100,
+    "opaque": 25288,
+    "pct": 0.4,
+    "strong": 6
+  },
+  "spr-pc-goliath-druid-female": {
+    "edge": 0,
+    "interior": 65,
+    "opaque": 17170,
+    "pct": 0.4,
+    "strong": 27
+  },
+  "spr-pc-goliath-druid-male": {
+    "edge": 0,
+    "interior": 5,
+    "opaque": 19316,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-pc-goliath-fighter-female": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 21913,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-pc-goliath-fighter-male": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 24129,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-pc-goliath-monk-female": {
+    "edge": 0,
+    "interior": 23,
+    "opaque": 17437,
+    "pct": 0.1,
+    "strong": 9
+  },
+  "spr-pc-goliath-monk-male": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 21738,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-pc-goliath-paladin-female": {
+    "edge": 0,
+    "interior": 46,
+    "opaque": 19989,
+    "pct": 0.2,
+    "strong": 8
+  },
+  "spr-pc-goliath-paladin-male": {
+    "edge": 0,
+    "interior": 51,
+    "opaque": 21940,
+    "pct": 0.2,
+    "strong": 8
+  },
+  "spr-pc-goliath-ranger-female": {
+    "edge": 0,
+    "interior": 24,
+    "opaque": 15307,
+    "pct": 0.2,
+    "strong": 7
+  },
+  "spr-pc-goliath-ranger-male": {
+    "edge": 0,
+    "interior": 19,
+    "opaque": 18850,
+    "pct": 0.1,
+    "strong": 6
+  },
+  "spr-pc-goliath-rogue-female": {
+    "edge": 0,
+    "interior": 44,
+    "opaque": 15089,
+    "pct": 0.3,
+    "strong": 3
+  },
+  "spr-pc-goliath-rogue-male": {
+    "edge": 0,
+    "interior": 1,
+    "opaque": 16585,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-pc-goliath-sorcerer-female": {
+    "edge": 0,
+    "interior": 1022,
+    "opaque": 19538,
+    "pct": 5.2,
+    "strong": 3
+  },
+  "spr-pc-goliath-sorcerer-male": {
+    "edge": 0,
+    "interior": 58,
+    "opaque": 25020,
+    "pct": 0.2,
+    "strong": 19
+  },
+  "spr-pc-goliath-warlock-female": {
+    "edge": 0,
+    "interior": 517,
+    "opaque": 18635,
+    "pct": 2.8,
+    "strong": 49
+  },
+  "spr-pc-goliath-warlock-male": {
+    "edge": 0,
+    "interior": 125,
+    "opaque": 23894,
+    "pct": 0.5,
+    "strong": 40
+  },
+  "spr-pc-goliath-wizard-female": {
+    "edge": 0,
+    "interior": 901,
+    "opaque": 19484,
+    "pct": 4.6,
+    "strong": 29
+  },
+  "spr-pc-goliath-wizard-male": {
+    "edge": 0,
+    "interior": 38,
+    "opaque": 21278,
+    "pct": 0.2,
+    "strong": 10
+  },
+  "spr-pc-halfling-barbarian-female": {
+    "edge": 0,
+    "interior": 5,
+    "opaque": 16111,
+    "pct": 0.0,
+    "strong": 1
+  },
+  "spr-pc-halfling-barbarian-male": {
+    "edge": 0,
+    "interior": 18,
+    "opaque": 17877,
+    "pct": 0.1,
+    "strong": 0
+  },
+  "spr-pc-halfling-bard-female": {
+    "edge": 0,
+    "interior": 661,
+    "opaque": 15194,
+    "pct": 4.4,
+    "strong": 73
+  },
+  "spr-pc-halfling-bard-male": {
+    "edge": 0,
+    "interior": 2,
+    "opaque": 15148,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-pc-halfling-cleric-female": {
+    "edge": 0,
+    "interior": 159,
+    "opaque": 20732,
+    "pct": 0.8,
+    "strong": 39
+  },
+  "spr-pc-halfling-cleric-male": {
+    "edge": 0,
+    "interior": 106,
+    "opaque": 14575,
+    "pct": 0.7,
+    "strong": 20
+  },
+  "spr-pc-halfling-druid-female": {
+    "edge": 0,
+    "interior": 263,
+    "opaque": 17755,
+    "pct": 1.5,
+    "strong": 83
+  },
+  "spr-pc-halfling-druid-male": {
+    "edge": 0,
+    "interior": 112,
+    "opaque": 20235,
+    "pct": 0.6,
+    "strong": 50
+  },
+  "spr-pc-halfling-fighter-female": {
+    "edge": 0,
+    "interior": 12,
+    "opaque": 18151,
+    "pct": 0.1,
+    "strong": 0
+  },
+  "spr-pc-halfling-fighter-male": {
+    "edge": 0,
+    "interior": 1,
+    "opaque": 18011,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-pc-halfling-monk-female": {
+    "edge": 0,
+    "interior": 9,
+    "opaque": 12904,
+    "pct": 0.1,
+    "strong": 4
+  },
+  "spr-pc-halfling-monk-male": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 14363,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-pc-halfling-paladin-female": {
+    "edge": 0,
+    "interior": 156,
+    "opaque": 18490,
+    "pct": 0.8,
+    "strong": 2
+  },
+  "spr-pc-halfling-paladin-male": {
+    "edge": 0,
+    "interior": 162,
+    "opaque": 19112,
+    "pct": 0.8,
+    "strong": 37
+  },
+  "spr-pc-halfling-ranger-female": {
+    "edge": 0,
+    "interior": 41,
+    "opaque": 17409,
+    "pct": 0.2,
+    "strong": 6
+  },
+  "spr-pc-halfling-ranger-male": {
+    "edge": 0,
+    "interior": 35,
+    "opaque": 18496,
+    "pct": 0.2,
+    "strong": 11
+  },
+  "spr-pc-halfling-rogue-female": {
+    "edge": 0,
+    "interior": 2,
+    "opaque": 14119,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-pc-halfling-rogue-male": {
+    "edge": 0,
+    "interior": 1,
+    "opaque": 14762,
+    "pct": 0.0,
+    "strong": 1
+  },
+  "spr-pc-halfling-sorcerer-female": {
+    "edge": 0,
+    "interior": 689,
+    "opaque": 16727,
+    "pct": 4.1,
+    "strong": 13
+  },
+  "spr-pc-halfling-sorcerer-male": {
+    "edge": 0,
+    "interior": 643,
+    "opaque": 17422,
+    "pct": 3.7,
+    "strong": 7
+  },
+  "spr-pc-halfling-warlock-female": {
+    "edge": 0,
+    "interior": 902,
+    "opaque": 16911,
+    "pct": 5.3,
+    "strong": 158
+  },
+  "spr-pc-halfling-warlock-male": {
+    "edge": 0,
+    "interior": 1479,
+    "opaque": 19863,
+    "pct": 7.4,
+    "strong": 118
+  },
+  "spr-pc-halfling-wizard-female": {
+    "edge": 0,
+    "interior": 128,
+    "opaque": 16779,
+    "pct": 0.8,
+    "strong": 49
+  },
+  "spr-pc-halfling-wizard-male": {
+    "edge": 0,
+    "interior": 107,
+    "opaque": 17489,
+    "pct": 0.6,
+    "strong": 54
+  },
+  "spr-pc-human-barbarian-female": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 19687,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-pc-human-barbarian-male": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 26456,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-pc-human-bard-female": {
+    "edge": 0,
+    "interior": 309,
+    "opaque": 16337,
+    "pct": 1.9,
+    "strong": 10
+  },
+  "spr-pc-human-bard-male": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 17150,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-pc-human-cleric-female": {
+    "edge": 0,
+    "interior": 181,
+    "opaque": 17794,
+    "pct": 1.0,
+    "strong": 11
+  },
+  "spr-pc-human-cleric-male": {
+    "edge": 0,
+    "interior": 184,
+    "opaque": 21285,
+    "pct": 0.9,
+    "strong": 17
+  },
+  "spr-pc-human-druid-female": {
+    "edge": 0,
+    "interior": 99,
+    "opaque": 19239,
+    "pct": 0.5,
+    "strong": 47
+  },
+  "spr-pc-human-druid-male": {
+    "edge": 0,
+    "interior": 56,
+    "opaque": 22074,
+    "pct": 0.3,
+    "strong": 14
+  },
+  "spr-pc-human-fighter-female": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 18464,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-pc-human-fighter-male": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 20402,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-pc-human-monk-female": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 15596,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-pc-human-monk-male": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 15525,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-pc-human-paladin-female": {
+    "edge": 0,
+    "interior": 250,
+    "opaque": 19439,
+    "pct": 1.3,
+    "strong": 55
+  },
+  "spr-pc-human-paladin-male": {
+    "edge": 0,
+    "interior": 229,
+    "opaque": 21093,
+    "pct": 1.1,
+    "strong": 41
+  },
+  "spr-pc-human-ranger-female": {
+    "edge": 0,
+    "interior": 9,
+    "opaque": 19004,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-pc-human-ranger-male": {
+    "edge": 0,
+    "interior": 19,
+    "opaque": 21068,
+    "pct": 0.1,
+    "strong": 10
+  },
+  "spr-pc-human-rogue-female": {
+    "edge": 0,
+    "interior": 15,
+    "opaque": 15075,
+    "pct": 0.1,
+    "strong": 4
+  },
+  "spr-pc-human-rogue-male": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 15937,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-pc-human-sorcerer-female": {
+    "edge": 0,
+    "interior": 204,
+    "opaque": 18752,
+    "pct": 1.1,
+    "strong": 55
+  },
+  "spr-pc-human-sorcerer-male": {
+    "edge": 0,
+    "interior": 211,
+    "opaque": 19159,
+    "pct": 1.1,
+    "strong": 91
+  },
+  "spr-pc-human-warlock-female": {
+    "edge": 0,
+    "interior": 1116,
+    "opaque": 20317,
+    "pct": 5.5,
+    "strong": 184
+  },
+  "spr-pc-human-warlock-male": {
+    "edge": 0,
+    "interior": 995,
+    "opaque": 20871,
+    "pct": 4.8,
+    "strong": 162
+  },
+  "spr-pc-human-wizard-female": {
+    "edge": 0,
+    "interior": 40,
+    "opaque": 18924,
+    "pct": 0.2,
+    "strong": 8
+  },
+  "spr-pc-human-wizard-male": {
+    "edge": 0,
+    "interior": 90,
+    "opaque": 21089,
+    "pct": 0.4,
+    "strong": 46
+  },
+  "spr-pc-orc-barbarian-female": {
+    "edge": 0,
+    "interior": 16,
+    "opaque": 18842,
+    "pct": 0.1,
+    "strong": 6
+  },
+  "spr-pc-orc-barbarian-male": {
+    "edge": 0,
+    "interior": 8,
+    "opaque": 24664,
+    "pct": 0.0,
+    "strong": 2
+  },
+  "spr-pc-orc-bard-female": {
+    "edge": 0,
+    "interior": 527,
+    "opaque": 19413,
+    "pct": 2.7,
+    "strong": 17
+  },
+  "spr-pc-orc-bard-male": {
+    "edge": 0,
+    "interior": 6,
+    "opaque": 22701,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-pc-orc-cleric-female": {
+    "edge": 0,
+    "interior": 190,
+    "opaque": 22673,
+    "pct": 0.8,
+    "strong": 42
+  },
+  "spr-pc-orc-cleric-male": {
+    "edge": 0,
+    "interior": 170,
+    "opaque": 25761,
+    "pct": 0.7,
+    "strong": 44
+  },
+  "spr-pc-orc-druid-female": {
+    "edge": 0,
+    "interior": 153,
+    "opaque": 20784,
+    "pct": 0.7,
+    "strong": 97
+  },
+  "spr-pc-orc-druid-male": {
+    "edge": 0,
+    "interior": 124,
+    "opaque": 20998,
+    "pct": 0.6,
+    "strong": 59
+  },
+  "spr-pc-orc-fighter-female": {
+    "edge": 0,
+    "interior": 0,
+    "opaque": 18481,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-pc-orc-fighter-male": {
+    "edge": 0,
+    "interior": 23,
+    "opaque": 21137,
+    "pct": 0.1,
+    "strong": 4
+  },
+  "spr-pc-orc-monk-female": {
+    "edge": 0,
+    "interior": 120,
+    "opaque": 13814,
+    "pct": 0.9,
+    "strong": 1
+  },
+  "spr-pc-orc-monk-male": {
+    "edge": 0,
+    "interior": 4,
+    "opaque": 18303,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-pc-orc-paladin-female": {
+    "edge": 0,
+    "interior": 150,
+    "opaque": 19015,
+    "pct": 0.8,
+    "strong": 18
+  },
+  "spr-pc-orc-paladin-male": {
+    "edge": 0,
+    "interior": 141,
+    "opaque": 22454,
+    "pct": 0.6,
+    "strong": 25
+  },
+  "spr-pc-orc-ranger-female": {
+    "edge": 0,
+    "interior": 29,
+    "opaque": 17676,
+    "pct": 0.2,
+    "strong": 7
+  },
+  "spr-pc-orc-ranger-male": {
+    "edge": 0,
+    "interior": 10,
+    "opaque": 18835,
+    "pct": 0.1,
+    "strong": 2
+  },
+  "spr-pc-orc-rogue-female": {
+    "edge": 0,
+    "interior": 8,
+    "opaque": 15113,
+    "pct": 0.1,
+    "strong": 5
+  },
+  "spr-pc-orc-rogue-male": {
+    "edge": 0,
+    "interior": 1,
+    "opaque": 16577,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-pc-orc-sorcerer-female": {
+    "edge": 0,
+    "interior": 217,
+    "opaque": 17879,
+    "pct": 1.2,
+    "strong": 43
+  },
+  "spr-pc-orc-sorcerer-male": {
+    "edge": 0,
+    "interior": 288,
+    "opaque": 19767,
+    "pct": 1.5,
+    "strong": 84
+  },
+  "spr-pc-orc-warlock-female": {
+    "edge": 0,
+    "interior": 724,
+    "opaque": 19305,
+    "pct": 3.8,
+    "strong": 54
+  },
+  "spr-pc-orc-warlock-male": {
+    "edge": 0,
+    "interior": 300,
+    "opaque": 21856,
+    "pct": 1.4,
+    "strong": 95
+  },
+  "spr-pc-orc-wizard-female": {
+    "edge": 0,
+    "interior": 177,
+    "opaque": 19374,
+    "pct": 0.9,
+    "strong": 30
+  },
+  "spr-pc-orc-wizard-male": {
+    "edge": 0,
+    "interior": 519,
+    "opaque": 23301,
+    "pct": 2.2,
+    "strong": 198
+  },
+  "spr-pc-tiefling-barbarian-female": {
+    "edge": 0,
+    "interior": 23,
+    "opaque": 21349,
+    "pct": 0.1,
+    "strong": 5
+  },
+  "spr-pc-tiefling-barbarian-male": {
+    "edge": 0,
+    "interior": 1,
+    "opaque": 22187,
+    "pct": 0.0,
+    "strong": 0
+  },
+  "spr-pc-tiefling-bard-female": {
+    "edge": 0,
+    "interior": 1126,
+    "opaque": 19131,
+    "pct": 5.9,
+    "strong": 26
+  },
+  "spr-pc-tiefling-bard-male": {
+    "edge": 0,
+    "interior": 862,
+    "opaque": 19385,
+    "pct": 4.4,
+    "strong": 21
+  },
+  "spr-pc-tiefling-cleric-female": {
+    "edge": 0,
+    "interior": 386,
+    "opaque": 19338,
+    "pct": 2.0,
+    "strong": 51
+  },
+  "spr-pc-tiefling-cleric-male": {
+    "edge": 0,
+    "interior": 459,
+    "opaque": 22636,
+    "pct": 2.0,
+    "strong": 123
+  },
+  "spr-pc-tiefling-druid-female": {
+    "edge": 0,
+    "interior": 710,
+    "opaque": 21802,
+    "pct": 3.3,
+    "strong": 59
+  },
+  "spr-pc-tiefling-druid-male": {
+    "edge": 0,
+    "interior": 182,
+    "opaque": 21795,
+    "pct": 0.8,
+    "strong": 94
+  },
+  "spr-pc-tiefling-fighter-female": {
+    "edge": 9,
+    "interior": 101,
+    "opaque": 20008,
+    "pct": 0.5,
+    "strong": 8
+  },
+  "spr-pc-tiefling-fighter-male": {
+    "edge": 0,
+    "interior": 18,
+    "opaque": 21032,
+    "pct": 0.1,
+    "strong": 0
+  },
+  "spr-pc-tiefling-monk-female": {
+    "edge": 4,
+    "interior": 55,
+    "opaque": 14975,
+    "pct": 0.4,
+    "strong": 4
+  },
+  "spr-pc-tiefling-monk-male": {
+    "edge": 0,
+    "interior": 22,
+    "opaque": 17225,
+    "pct": 0.1,
+    "strong": 6
+  },
+  "spr-pc-tiefling-paladin-female": {
+    "edge": 7,
+    "interior": 489,
+    "opaque": 21153,
+    "pct": 2.3,
+    "strong": 138
+  },
+  "spr-pc-tiefling-paladin-male": {
+    "edge": 4,
+    "interior": 456,
+    "opaque": 20259,
+    "pct": 2.3,
+    "strong": 138
+  },
+  "spr-pc-tiefling-ranger-female": {
+    "edge": 8,
+    "interior": 80,
+    "opaque": 17490,
+    "pct": 0.5,
+    "strong": 27
+  },
+  "spr-pc-tiefling-ranger-male": {
+    "edge": 6,
+    "interior": 600,
+    "opaque": 20139,
+    "pct": 3.0,
+    "strong": 2
+  },
+  "spr-pc-tiefling-rogue-female": {
+    "edge": 12,
+    "interior": 65,
+    "opaque": 15650,
+    "pct": 0.5,
+    "strong": 12
+  },
+  "spr-pc-tiefling-rogue-male": {
+    "edge": 6,
+    "interior": 14,
+    "opaque": 17209,
+    "pct": 0.1,
+    "strong": 0
+  },
+  "spr-pc-tiefling-sorcerer-female": {
+    "edge": 10,
+    "interior": 353,
+    "opaque": 21217,
+    "pct": 1.7,
+    "strong": 189
+  },
+  "spr-pc-tiefling-sorcerer-male": {
+    "edge": 6,
+    "interior": 1525,
+    "opaque": 22505,
+    "pct": 6.8,
+    "strong": 380
+  },
+  "spr-pc-tiefling-warlock-female": {
+    "edge": 10,
+    "interior": 523,
+    "opaque": 19519,
+    "pct": 2.7,
+    "strong": 160
+  },
+  "spr-pc-tiefling-warlock-male": {
+    "edge": 26,
+    "interior": 918,
+    "opaque": 22769,
+    "pct": 4.1,
+    "strong": 22
+  },
+  "spr-pc-tiefling-wizard-female": {
+    "edge": 0,
+    "interior": 2323,
+    "opaque": 22166,
+    "pct": 10.5,
+    "strong": 81
+  },
+  "spr-pc-tiefling-wizard-male": {
+    "edge": 1,
+    "interior": 333,
+    "opaque": 23038,
+    "pct": 1.4,
+    "strong": 97
+  }
+}

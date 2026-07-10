@@ -8,6 +8,52 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-07-10 (overnight) — PLACE-PARTS wave: all 19 Part-1 place parts modeled + wired
+
+The overnight run over `docs/PLACE-ASSET-QUEUE.md` Part 1 (spec: `docs/PLACE-PARTS-WAVE.md`, BUILT),
+on branch `claude/overnight-parts-modeling-d0131e` (3 commits; master merge awaits Adam's morning
+sheet review). 19 units, 3 chained Sonnet waves (author-only config), every unit orchestrator
+re-gated + eyes-on through the real PS1 sheets (`dev/model-qa/sheets/place-parts-wave-{a,b,c}.png`).
+
+**Added**
+- **Wave A (P1 anchors, 8):** counter-run (the Long Bar repoint — rows 1/2/16 upgrade off
+  table-slab for free) · judge-bench · cell-bars · stall-frame · standpipe (gloom ADD anchor) ·
+  shop-counter · doorframe (param-typed plank/steel/stone/screen) · gate-checkpoint. 3 are
+  donor-file extensions (dedupe-hard), donors proven byte-unchanged.
+- **Wave B (P2, 8):** forge-hearth · stock-shelves · bandstand · mill-wheel · power-junction ·
+  rail fence-run · chainlink turf fence (claim-cloth tell) · turnstile row.
+- **Wave C (P3, 3):** pew-row · loading-dock · careening-frame (registry+high-seas pool only; its
+  dressing row lands with the high-seas skin backfill).
+- **Wiring, all through the production path:** WHOLE_OBJECT_REGISTRY +19 `prop:*` keys,
+  `REGISTERED_PROP_SLUGS` +19, realm-props pool entries (tail placement), 13 dressing rows
+  re-anchored (Market/Hall-of-law/Threshold/Works/Commons/Storehouse/Shrine/Wild-margin/…),
+  `data/realm-props.js` + `data/place-skins.js` regenerated.
+- **Harness growth (red-first, all proven red pre-wiring):** verify-place-dressing (f1-f7, g1-g6,
+  h1-h3 — anchors row-wired + every emitted `prop:` model registry-live) + verify-place-tray (f1-f2
+  — a minted frontier Threshold carries `prop:gate-checkpoint` through `trayFrom` itself).
+
+**Fixed (re-gate catches, each re-proven on a fresh sheet)**
+- The `'stand'⊂'stands'` / `'rack'⊂'cracked'` realm-prop substring-steal class — the second one broke
+  the U1 combat byte-gate; all new names/summaries swept for the trap class (rail⊂trail,
+  bank⊂embankment, turn⊂turning, stone, line⊂skyline), entries moved to pool tails.
+- B1 forge-hearth mouth was **backface-culled** (wound inward — invisible from every camera);
+  rebuilt on the +x/+z corner with verified normals + floor glow-spill.
+- B4 mill wheel edge-on to the sheet camera → axis re-oriented, full 10-paddle ring.
+- A5 standpipe + C3 careening frame dark-on-dark (the Creeper class) → value rebases.
+- A7 doorframe under the 120-tri floor → hinges/latch/threshold/lintel + legible ajar leaf.
+- C2 loading-dock roll-door value-merged into the concrete → galvanized pale + coarse slats.
+
+**Deferred**
+- Morning pick-list (Adam): C3 hull-rib curvature (IMPROVED_WITH_DOUBT) · B4 wet-quarter tell ·
+  A7 hinge subtlety. PLACE-ASSET-QUEUE Part 2 (setting sprites) = Adam's ImageGen lane. The 31
+  pre-scoped `net-new:` realm-props fixtures stay with their realm waves. Doorframe rim-exit
+  consumer rides the PLACE-GEN rim work.
+
+**Verification:** per-unit bakes re-run by the orchestrator (19/19 + donor regressions); red-first
+proofs both directions; check-manifest OK; place-dressing 25/0 · place-tray 19/0 · place-skins 23/0 ·
+theater-figures 40/0 · theater-data 329/0 · realm-wiring 78/0 · tabletop-u1 byte-gate 45/0; full
+verify sweep at close (result in HANDOFF); three contact sheets eyes-on.
+
 ## 2026-07-09 (late night) — PLACE-GEN build wave: places are realm-true from birth and render as dioramas
 
 **Added**
@@ -1053,44 +1099,4 @@ a lost-then-recovered merge) but landed clean.
 - NPC-KNOWLEDGE-GRADES build (executor died to the throttle; queued for relaunch) · deep `/code-review` pass
   (Monday, post-token-refresh) · REALM-RENDER-STYLE fine-tune by eye (§2 warm-brown middle band) · the 11
   `_review` CR-ceiling flags in the draft JSON (Adam's call) · figure baked-vertex-color grading (render v2).
-
-## 2026-07-05 — THE MONSTER PRODUCTION WAVE (overnight, Fable orchestrating ~120 background agents)
-
-**Everything landed + pushed to origin; final sweep 94 harnesses / 0 failed.** One night took the
-monster layer from "realm content drafted" to "every monster in the game is a described, storied,
-modeled, recruitable individual." ~30 --no-ff merges. Highlights:
-
-- **Six-spec production lock** (REALM-ENRICHMENT-WRITING / REALM-STORY-WIRING / REALM-WALK-WIRING /
-  REALM-SURFACES-WIRING / REALM-PROPS-WIRING / REALM-MODELS-P3) + later MONSTER-STORY-WIRING,
-  REALM-TRAITS-APPLY, MONSTER-FLAVOR-TABLES, MONSTER-PARLEY (+§2b), PACING-DIALS (draft).
-- **Phase 1 (engine):** icons fold → 1307 creatures + gen-realm-bestiary.py; breach foes reach the
-  DM digest + codex creature minting; urban/wild realm spawns; realm surfaces (+5 floor recipes) +
-  realm props (308, size→footprint pass) on the activeRealmsFor seam.
-- **MONSTER-STORY:** habitat drives selection (misfits stamp `displaced` — a story fact), behavior/
-  activity ride the digest as `doing`, boss/CR≥3 regular foes mint codex records, Adam's 104 custom
-  d10s roll once at first mint (canon-locked), quest hooks bind the destination's actual threat.
-- **TRAITS-APPLY:** cmApplyTraits — authored traits rename/replace chassis actions live in combat
-  (divergence licensed within CR budget; Adam's 100%-traits + "new stuff not reskins" rulings).
-- **MONSTER-PARLEY + THE ANOMALY LAW:** creatures join the attitude ladder (Beasts roll Animal
-  Handling); recruitment is difficult af — grind clamps at Friendly; bondEligible only via nat-20 /
-  decisive lever / 3% friendly spawn; pet/hireling/sidekick tiers (Tasha's model); parley-angle
-  hooks; befriended creatures recur via prep. The bullywug crocodile hunter is now possible.
-- **FLAVOR CORPUS:** all 510 regular monsters got an original desc + a spice-graded d8 table
-  (variant XOR hook), MM-2024-grounded by a vision-read pass (16 upgrades; yochlol re-authored
-  IP-clean). data/monster-flavor.js + gen-monster-flavor.py.
-- **PHASE 2:** 1307/1307 realm descs; **229 creature + 8 prop net-new whole-object models** across
-  7 render-judged waves — the realm net-new queue is EMPTY (0 model:"net-new" remain).
-- **Reference layer:** persistent vision-verified page indexes for ALL FIVE books
-  (mm/dmg/phb/tashas/xgte-page-index.json) with cross-maps; CLAUDE.md points at them.
-- **Ops:** worktree hygiene (2.0G→~0.6G), play/complaints dupes removed (rig recreates), continuous
-  push-on-land adopted; token-lean law saved to memory (no ultra before Mon eve refresh).
-
-**Orchestrator re-gate catches this session (why the pipeline exists):** narrator-agent delegation
-loops (MM index, twice); the chassis-SRD-traits field collision; monster-story 8d flaky 1-in-4
-under the parley angle; the harness realm-key population gap; 10 buried figures + cable-snake.
-
-**Parked for Adam:** Phase 2b (realm traits at the 100% ruling + realm d8 tables + own treasure/
-habitat/activity — ~2.5× the 510-corpus spend; launch on his word) · REALM-RENDER-STYLE tune ·
-PACING-DIALS §3 questions · prop size→footprint veto row · 11 _review flags in the draft JSON ·
-deep /code-review pass Monday post-refresh.
 

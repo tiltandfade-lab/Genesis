@@ -6,7 +6,36 @@ updated: 2026-07-09 (late night)
 
 # Genesis — Session Hand-off
 
-## ⭐ Latest (2026-07-09, late night) — PLACE-GEN built end-to-end: places are realm-true and render as dioramas [Claude Fable]
+## ⭐ Latest (2026-07-10, overnight) — PLACE-PARTS wave: all 19 Part-1 place parts modeled + wired [Claude Fable 5, orchestrator]
+
+Adam's overnight go on the PLACE-ASSET-QUEUE spend gate. `docs/PLACE-PARTS-WAVE.md` (BUILT) ran
+Part 1's models lane end-to-end on `claude/overnight-parts-modeling-d0131e`: **19 place parts in 3
+chained Sonnet waves** — the P1 anchors (counter-run/judge-bench/cell-bars/stall-frame/standpipe/
+shop-counter/doorframe/gate-checkpoint), the P2 pieces (forge-hearth/stock-shelves/bandstand/
+mill-wheel/power-junction/fence-run/turf-fence/turnstile-row), the P3 tail (pew-row/loading-dock/
+careening-frame). All wired through the PRODUCTION dressing path (registry +19 · pool entries ·
+13 dressing rows · artifacts regenerated) with red-first harness proofs both directions — a minted
+Threshold now renders a real checkpoint gate via `trayFrom`, the Market gets its stall+shop counter,
+Hall-of-law its bench+bars, gloom Works the standpipe. The architecture-shell gap the census called
+"zero-by-construction" is closed for the 3 authored realms. Six re-gate catches fixed same night
+(substring-steal class incl. a U1 byte-gate break, a backface-culled forge mouth, two dark-on-dark,
+an edge-on wheel, a sub-floor doorframe) — full detail in the CHANGELOG entry.
+
+**Verification:** 19/19 bakes re-run by the orchestrator + donor-file byte-regressions; red-first
+proofs (f/g/h checks); check-manifest OK; place suite + theater suite + realm-wiring + the U1
+combat byte-gate all green; three PS1 contact sheets eyes-on (8/8 · 8/8 · 3/3 pass).
+
+**Do next (pick up here):**
+1. **Adam's morning sheet review** (`dev/model-qa/sheets/place-parts-wave-{a,b,c}.png`) → then
+   merge `claude/overnight-parts-modeling-d0131e` → master (--no-ff; regenerate tables-class
+   artifacts at the merge per worktree law). Pick-list flags: C3 careening hull-rib
+   (IMPROVED_WITH_DOUBT) · B4 wet-quarter tell · A7 hinge subtlety.
+2. **Part 2 setting sprites** — Adam's ImageGen lane (sheet plan in PLACE-ASSET-QUEUE Part 2;
+   `signs-frontier`/`signs-chrome`/`signs-gloom`/`fx-cross-realm`).
+3. The prior queue stands: 8 backfill realm skins (careening frame's row rides high-seas) ·
+   interior-gen spec · Adam red-pens (Place Spine rows, 3 skin labels, 5 settlement tables).
+
+##  Latest (2026-07-09, late night) — PLACE-GEN built end-to-end: places are realm-true and render as dioramas [Claude Fable]
 
 The whole PLACE-GEN wave landed on `claude/place-generation-a57dd2` (11 units, each a --no-ff merge,
 each orchestrator-re-gated): Place Spine (24 archetypes) + Frontier/Chrome/Gloom skins (PROVISIONAL),

@@ -1,9 +1,12 @@
 ---
 type: build-spec
 project: Genesis
-status: "SPECCED 2026-07-09 — locked by Adam's overnight go ('set up the overnight session to
-  model the parts for the new place generation 3d system'). Executes PLACE-ASSET-QUEUE Part 1
-  (models lane). All output PROVISIONAL pending Adam's morning sheet review."
+status: "BUILT 2026-07-10 (overnight) — all 19 units authored, wired, and gated on branch
+  claude/overnight-parts-modeling-d0131e (3 commits: spec 4b42039 · Wave A 0713973 · Waves B+C
+  5519965). Models PROVISIONAL pending Adam's morning sheet review (sheets:
+  dev/model-qa/sheets/place-parts-wave-{a,b,c}.png). Morning pick-list flags: C3 careening frame
+  IMPROVED_WITH_DOUBT (hull-rib curvature weak) · B4 mill wheel wet-quarter tell subtle · A7
+  doorframe hinge detail small at grade. Master merge awaits Adam's confirm."
 created: 2026-07-09
 related:
   - "[[PLACE-ASSET-QUEUE]]"   # the grounded sweep this executes — briefs live there

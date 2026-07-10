@@ -1,7 +1,9 @@
 ---
 type: build-queue
 project: Genesis
-status: "PROVISIONAL 2026-07-09 — Fable-lane draft, Adam red-pen pending"
+status: "PROVISIONAL 2026-07-09 — Fable-lane draft, Adam red-pen pending. PART 1 (models lane)
+  BUILT 2026-07-10 overnight via docs/PLACE-PARTS-WAVE.md — all 19 3D entries modeled + wired
+  (the altar row was already wired by unit 8). Part 2 (sprites) remains Adam's ImageGen lane."
 created: 2026-07-09
 related:
   - "[[PLACE-GEN]]"

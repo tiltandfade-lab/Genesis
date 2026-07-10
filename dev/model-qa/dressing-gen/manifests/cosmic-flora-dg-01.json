@@ -1,0 +1,192 @@
+{
+ "file": "cosmic-flora-dg-01.png",
+ "realm": "cosmic",
+ "family": "dressing-flora",
+ "grid": "5 rows x 4 columns",
+ "chroma": "#FF00FF",
+ "wave": "dressing-gen",
+ "cells": [
+  {
+   "slug": "cosmic-flora-starflesh-bloom",
+   "label": "star-flesh bloom pulsing faint gold beneath navy skin",
+   "tags": {
+    "primary": "focal",
+    "location": "both"
+   },
+   "size": "medium"
+  },
+  {
+   "slug": "cosmic-flora-sigilvine",
+   "label": "constellation-sigil vine tracing gold lines up a column",
+   "tags": {
+    "primary": "wall-hang",
+    "location": "both"
+   },
+   "size": "medium"
+  },
+  {
+   "slug": "cosmic-flora-nightlotus",
+   "label": "black lotus afloat in still navy water, gold-veined petals",
+   "tags": {
+    "primary": "focal",
+    "location": "interior"
+   },
+   "size": "small"
+  },
+  {
+   "slug": "cosmic-flora-obsidianreed",
+   "label": "obsidian-glass reed bed chiming faintly in unseen wind",
+   "tags": {
+    "primary": "floor",
+    "location": "exterior"
+   },
+   "size": "medium"
+  },
+  {
+   "slug": "cosmic-flora-eldritch-coral",
+   "label": "eldritch coral growth branching in impossible angles",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "size": "large"
+  },
+  {
+   "slug": "cosmic-flora-duskgrass",
+   "label": "dusk-navy grass tuft, each blade tipped with a gold star",
+   "tags": {
+    "primary": "floor",
+    "location": "exterior"
+   },
+   "size": "small"
+  },
+  {
+   "slug": "cosmic-flora-astral-moss",
+   "label": "astral moss glowing in slow constellation pulses",
+   "tags": {
+    "primary": "wall-hang",
+    "location": "interior"
+   },
+   "size": "small"
+  },
+  {
+   "slug": "cosmic-flora-scarabvine",
+   "label": "scarab-carapace vine, gold shells clicking softly along the stem",
+   "tags": {
+    "primary": "blocker",
+    "location": "both"
+   },
+   "size": "medium"
+  },
+  {
+   "slug": "cosmic-flora-voidfern",
+   "label": "void-black fern, fronds edged in razor gold thread",
+   "tags": {
+    "primary": "floor",
+    "location": "both"
+   },
+   "size": "small"
+  },
+  {
+   "slug": "cosmic-flora-sunfruit",
+   "label": "dying-sun fruit cluster, husk cracked to reveal molten gold",
+   "tags": {
+    "primary": "focal",
+    "location": "exterior"
+   },
+   "size": "small"
+  },
+  {
+   "slug": "cosmic-flora-sarcophagus-ivy",
+   "label": "funerary ivy climbing a cracked sarcophagus lid",
+   "tags": {
+    "primary": "wall-hang",
+    "location": "interior"
+   },
+   "size": "medium"
+  },
+  {
+   "slug": "cosmic-flora-nebula-bramble",
+   "label": "nebula-hued thornbramble, colors shifting like distant gas clouds",
+   "tags": {
+    "primary": "blocker",
+    "location": "exterior"
+   },
+   "size": "medium"
+  },
+  {
+   "slug": "cosmic-flora-hourglassflower",
+   "label": "hourglass-shaped flower, sand trickling instead of pollen",
+   "tags": {
+    "primary": "focal",
+    "location": "both"
+   },
+   "size": "small"
+  },
+  {
+   "slug": "cosmic-flora-basaltpalm",
+   "label": "black basalt palm frond frozen mid-sway, dusted gold",
+   "tags": {
+    "primary": "floor",
+    "location": "exterior"
+   },
+   "size": "large"
+  },
+  {
+   "slug": "cosmic-flora-glyphlichen",
+   "label": "glyph-patterned lichen crawling a crypt wall, glowing faint gold",
+   "tags": {
+    "primary": "wall-hang",
+    "location": "interior"
+   },
+   "size": "small"
+  },
+  {
+   "slug": "cosmic-flora-crownthorn",
+   "label": "crown-shaped thorn cluster, once a pharaoh's garden hedge",
+   "tags": {
+    "primary": "setPiece",
+    "location": "exterior"
+   },
+   "size": "medium"
+  },
+  {
+   "slug": "cosmic-flora-starweed",
+   "label": "loose starweed drift, seeds glinting like scattered sequins",
+   "tags": {
+    "primary": "floor",
+    "location": "both"
+   },
+   "size": "small"
+  },
+  {
+   "slug": "cosmic-flora-ankh-vine",
+   "label": "ankh-shaped vine growth wound tight around a broken column",
+   "tags": {
+    "primary": "focal",
+    "location": "both"
+   },
+   "size": "small"
+  },
+  {
+   "slug": "cosmic-flora-starflesh-bloom-alt",
+   "label": "ALT of 'star-flesh bloom pulsing faint gold beneath navy skin' — different shape/growth/wear, same kind",
+   "tags": {
+    "primary": "focal",
+    "location": "both"
+   },
+   "size": "medium",
+   "altOf": "cosmic-flora-starflesh-bloom"
+  },
+  {
+   "slug": "cosmic-flora-sigilvine-alt",
+   "label": "ALT of 'constellation-sigil vine tracing gold lines up a column' — different shape/growth/wear, same kind",
+   "tags": {
+    "primary": "wall-hang",
+    "location": "both"
+   },
+   "size": "medium",
+   "altOf": "cosmic-flora-sigilvine"
+  }
+ ]
+}

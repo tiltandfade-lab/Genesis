@@ -1,0 +1,260 @@
+{
+ "file": "lost-world-objects-dg-03.png",
+ "realm": "lost-world",
+ "family": "objects",
+ "grid": "5 rows x 5 columns",
+ "chroma": "#FF00FF",
+ "wave": "dressing-gen",
+ "cells": [
+  {
+   "slug": "lost-world-obj-door-shut",
+   "label": "door, shut state — in the realm's own material language",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "door",
+   "state": "shut"
+  },
+  {
+   "slug": "lost-world-obj-door-ajar",
+   "label": "door, ajar state — in the realm's own material language",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "door",
+   "state": "ajar"
+  },
+  {
+   "slug": "lost-world-obj-door-open",
+   "label": "door, open state — in the realm's own material language",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "door",
+   "state": "open"
+  },
+  {
+   "slug": "lost-world-obj-door-broken",
+   "label": "door, broken state — in the realm's own material language",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "door",
+   "state": "broken"
+  },
+  {
+   "slug": "lost-world-obj-chest-closed",
+   "label": "chest, closed state — in the realm's own material language",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "chest",
+   "state": "closed"
+  },
+  {
+   "slug": "lost-world-obj-chest-open",
+   "label": "chest, open state — in the realm's own material language",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "chest",
+   "state": "open"
+  },
+  {
+   "slug": "lost-world-obj-chest-looted",
+   "label": "chest, looted state — in the realm's own material language",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "chest",
+   "state": "looted"
+  },
+  {
+   "slug": "lost-world-obj-lever-left",
+   "label": "lever, left state — in the realm's own material language",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "lever",
+   "state": "left"
+  },
+  {
+   "slug": "lost-world-obj-lever-right",
+   "label": "lever, right state — in the realm's own material language",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "lever",
+   "state": "right"
+  },
+  {
+   "slug": "lost-world-obj-shrine-dormant",
+   "label": "shrine, dormant state — in the realm's own material language",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "shrine",
+   "state": "dormant"
+  },
+  {
+   "slug": "lost-world-obj-shrine-lit",
+   "label": "shrine, lit state — in the realm's own material language",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "shrine",
+   "state": "lit"
+  },
+  {
+   "slug": "lost-world-obj-campfire-unlit",
+   "label": "campfire, unlit state — ringed stone fire pit",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "campfire",
+   "state": "unlit"
+  },
+  {
+   "slug": "lost-world-obj-campfire-lit",
+   "label": "campfire, lit state — ringed stone fire pit",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "campfire",
+   "state": "lit"
+  },
+  {
+   "slug": "lost-world-obj-campfire-dead",
+   "label": "campfire, dead state — ringed stone fire pit",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "campfire",
+   "state": "dead"
+  },
+  {
+   "slug": "lost-world-obj-trap-hidden",
+   "label": "trap, hidden state — camouflaged pit-trap with stakes",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "trap",
+   "state": "hidden"
+  },
+  {
+   "slug": "lost-world-obj-trap-sprung",
+   "label": "trap, sprung state — camouflaged pit-trap with stakes",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "trap",
+   "state": "sprung"
+  },
+  {
+   "slug": "lost-world-obj-portal-sealed",
+   "label": "portal, sealed state — in the realm's own material language",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "portal",
+   "state": "sealed"
+  },
+  {
+   "slug": "lost-world-obj-portal-active",
+   "label": "portal, active state — in the realm's own material language",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "portal",
+   "state": "active"
+  },
+  {
+   "slug": "lost-world-obj-container-intact",
+   "label": "container, intact state — in the realm's own material language",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "container",
+   "state": "intact"
+  },
+  {
+   "slug": "lost-world-obj-container-cracked",
+   "label": "container, cracked state — in the realm's own material language",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "container",
+   "state": "cracked"
+  },
+  {
+   "slug": "lost-world-obj-container-broken",
+   "label": "container, broken state — in the realm's own material language",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "container",
+   "state": "broken"
+  },
+  {
+   "slug": "lost-world-obj-door-shut-alt",
+   "label": "ALT of 'door, shut state — in the realm's own material language' — different shape/growth/wear, same kind",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "size": null,
+   "altOf": "lost-world-obj-door-shut"
+  },
+  {
+   "slug": "lost-world-obj-door-ajar-alt",
+   "label": "ALT of 'door, ajar state — in the realm's own material language' — different shape/growth/wear, same kind",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "size": null,
+   "altOf": "lost-world-obj-door-ajar"
+  },
+  {
+   "slug": "lost-world-obj-door-open-alt",
+   "label": "ALT of 'door, open state — in the realm's own material language' — different shape/growth/wear, same kind",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "size": null,
+   "altOf": "lost-world-obj-door-open"
+  },
+  {
+   "slug": "lost-world-obj-door-broken-alt",
+   "label": "ALT of 'door, broken state — in the realm's own material language' — different shape/growth/wear, same kind",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "size": null,
+   "altOf": "lost-world-obj-door-broken"
+  }
+ ]
+}

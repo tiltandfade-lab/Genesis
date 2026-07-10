@@ -1,0 +1,156 @@
+{
+ "file": "bright-kingdom-clutter-dg-02.png",
+ "realm": "bright-kingdom",
+ "family": "dressing-clutter",
+ "grid": "4 rows x 4 columns",
+ "chroma": "#FF00FF",
+ "wave": "dressing-gen",
+ "cells": [
+  {
+   "slug": "bk-clutter-toychest",
+   "label": "toppled toy chest spilling wind-up soldiers",
+   "tags": {
+    "primary": "floor",
+    "location": "interior"
+   },
+   "size": "medium"
+  },
+  {
+   "slug": "bk-clutter-brokencrown",
+   "label": "dented parade-armor crown piece, gilt paint chipping",
+   "tags": {
+    "primary": "floor",
+    "location": "both"
+   },
+   "size": "small"
+  },
+  {
+   "slug": "bk-clutter-wantedscroll",
+   "label": "curling storybook wanted scroll pinned with a dagger",
+   "tags": {
+    "primary": "wall-hang",
+    "location": "interior"
+   },
+   "size": "small"
+  },
+  {
+   "slug": "bk-clutter-marblepile",
+   "label": "stack of oversized glass playing marbles, one cracked",
+   "tags": {
+    "primary": "floor",
+    "location": "both"
+   },
+   "size": "small"
+  },
+  {
+   "slug": "bk-clutter-puppetstring",
+   "label": "tangled marionette strings hanging from a rafter hook",
+   "tags": {
+    "primary": "wall-hang",
+    "location": "interior"
+   },
+   "size": "medium"
+  },
+  {
+   "slug": "bk-clutter-cannonball",
+   "label": "dented cannonball prop, painted like a bowling ball",
+   "tags": {
+    "primary": "floor",
+    "location": "both"
+   },
+   "size": "small"
+  },
+  {
+   "slug": "bk-clutter-throneshard",
+   "label": "broken toy-throne armrest, velvet torn to stuffing",
+   "tags": {
+    "primary": "setPiece",
+    "location": "interior"
+   },
+   "size": "medium"
+  },
+  {
+   "slug": "bk-clutter-jesterhat",
+   "label": "discarded jester's bell-cap, one bell silent and cracked",
+   "tags": {
+    "primary": "floor",
+    "location": "both"
+   },
+   "size": "small"
+  },
+  {
+   "slug": "bk-clutter-cagebars",
+   "label": "gilded birdcage bars bent wide enough to escape through",
+   "tags": {
+    "primary": "blocker",
+    "location": "both"
+   },
+   "size": "medium"
+  },
+  {
+   "slug": "bk-clutter-confettiheap",
+   "label": "drift of spent confetti and snapped party streamers",
+   "tags": {
+    "primary": "floor",
+    "location": "both"
+   },
+   "size": "small"
+  },
+  {
+   "slug": "bk-clutter-swordstump",
+   "label": "toy broadsword snapped off at the hilt, stuck in a stump",
+   "tags": {
+    "primary": "floor",
+    "location": "exterior"
+   },
+   "size": "small"
+  },
+  {
+   "slug": "bk-clutter-lanternstring",
+   "label": "string of paper lanterns, half burnt through",
+   "tags": {
+    "primary": "wall-hang",
+    "location": "both"
+   },
+   "size": "medium"
+  },
+  {
+   "slug": "bk-clutter-mirrorshard",
+   "label": "cracked fun-house mirror shard reflecting a warped grin",
+   "tags": {
+    "primary": "setPiece",
+    "location": "interior"
+   },
+   "size": "medium"
+  },
+  {
+   "slug": "bk-clutter-drumkeg",
+   "label": "dented parade drum used as a makeshift keg",
+   "tags": {
+    "primary": "floor",
+    "location": "both"
+   },
+   "size": "medium"
+  },
+  {
+   "slug": "bk-clutter-toychest-alt",
+   "label": "ALT of 'toppled toy chest spilling wind-up soldiers' — different shape/growth/wear, same kind",
+   "tags": {
+    "primary": "floor",
+    "location": "interior"
+   },
+   "size": "medium",
+   "altOf": "bk-clutter-toychest"
+  },
+  {
+   "slug": "bk-clutter-brokencrown-alt",
+   "label": "ALT of 'dented parade-armor crown piece, gilt paint chipping' — different shape/growth/wear, same kind",
+   "tags": {
+    "primary": "floor",
+    "location": "both"
+   },
+   "size": "small",
+   "altOf": "bk-clutter-brokencrown"
+  }
+ ]
+}

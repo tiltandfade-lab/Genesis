@@ -1,0 +1,156 @@
+{
+ "file": "high-seas-clutter-dg-02.png",
+ "realm": "high-seas",
+ "family": "dressing-clutter",
+ "grid": "4 rows x 4 columns",
+ "chroma": "#FF00FF",
+ "wave": "dressing-gen",
+ "cells": [
+  {
+   "slug": "hs-clutter-brasscompass-broken",
+   "label": "cracked brass compass, needle spinning loose in brine fog",
+   "tags": {
+    "primary": "floor",
+    "location": "interior"
+   },
+   "size": "small"
+  },
+  {
+   "slug": "hs-clutter-rope-coil-rotted",
+   "label": "rotted rope coil, fibers unraveling to green slime",
+   "tags": {
+    "primary": "floor",
+    "location": "both"
+   },
+   "size": "small"
+  },
+  {
+   "slug": "hs-clutter-shipwheel-wreck",
+   "label": "broken ship's wheel, half its spokes snapped off",
+   "tags": {
+    "primary": "setPiece",
+    "location": "interior"
+   },
+   "size": "medium"
+  },
+  {
+   "slug": "hs-clutter-barrel-brine",
+   "label": "brine-soaked cargo barrel, staves bowed and weeping salt",
+   "tags": {
+    "primary": "floor",
+    "location": "both"
+   },
+   "size": "medium"
+  },
+  {
+   "slug": "hs-clutter-anchorchain-heap",
+   "label": "heavy anchor chain heap, links crusted in rust and barnacle",
+   "tags": {
+    "primary": "blocker",
+    "location": "both"
+   },
+   "size": "medium"
+  },
+  {
+   "slug": "hs-clutter-lanternglass-shard",
+   "label": "cracked ship lantern, glass shattered, teal glow still faint",
+   "tags": {
+    "primary": "wall-hang",
+    "location": "interior"
+   },
+   "size": "small"
+  },
+  {
+   "slug": "hs-clutter-fishingnet-tangle",
+   "label": "torn fishing net tangled around a broken cleat",
+   "tags": {
+    "primary": "floor",
+    "location": "both"
+   },
+   "size": "small"
+  },
+  {
+   "slug": "hs-clutter-drownedchest",
+   "label": "waterlogged chest, lock rusted solid, lid swollen shut",
+   "tags": {
+    "primary": "setPiece",
+    "location": "interior"
+   },
+   "size": "medium"
+  },
+  {
+   "slug": "hs-clutter-hookline-rust",
+   "label": "rusted grappling hook still trailing a snapped line",
+   "tags": {
+    "primary": "wall-hang",
+    "location": "both"
+   },
+   "size": "small"
+  },
+  {
+   "slug": "hs-clutter-hullplank-broken",
+   "label": "splintered hull plank torn loose, edges soft with rot",
+   "tags": {
+    "primary": "floor",
+    "location": "interior"
+   },
+   "size": "small"
+  },
+  {
+   "slug": "hs-clutter-bottleship-crack",
+   "label": "cracked ship-in-a-bottle, tiny sails moldering inside",
+   "tags": {
+    "primary": "floor",
+    "location": "interior"
+   },
+   "size": "small"
+  },
+  {
+   "slug": "hs-clutter-crowsnestdebris",
+   "label": "fallen crow's nest debris, wicker basket half-collapsed",
+   "tags": {
+    "primary": "floor",
+    "location": "exterior"
+   },
+   "size": "medium"
+  },
+  {
+   "slug": "hs-clutter-teal-bioluminescent-stain",
+   "label": "faint teal bioluminescent stain pooled in a deck seam",
+   "tags": {
+    "primary": "floor",
+    "location": "interior"
+   },
+   "size": "small"
+  },
+  {
+   "slug": "hs-clutter-sailtatter",
+   "label": "tattered sailcloth draped and dripping brine",
+   "tags": {
+    "primary": "wall-hang",
+    "location": "both"
+   },
+   "size": "medium"
+  },
+  {
+   "slug": "hs-clutter-brasscompass-broken-alt",
+   "label": "ALT of 'cracked brass compass, needle spinning loose in brine fog' — different shape/growth/wear, same kind",
+   "tags": {
+    "primary": "floor",
+    "location": "interior"
+   },
+   "size": "small",
+   "altOf": "hs-clutter-brasscompass-broken"
+  },
+  {
+   "slug": "hs-clutter-rope-coil-rotted-alt",
+   "label": "ALT of 'rotted rope coil, fibers unraveling to green slime' — different shape/growth/wear, same kind",
+   "tags": {
+    "primary": "floor",
+    "location": "both"
+   },
+   "size": "small",
+   "altOf": "hs-clutter-rope-coil-rotted"
+  }
+ ]
+}

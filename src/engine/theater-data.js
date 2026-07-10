@@ -932,6 +932,122 @@ function theaterIdleBoardFrom(env, realms){
   };
 }
 
+/* PLACE-GEN.md ADDENDUM §7 unit 7 — deterministic pick-a-tile-for-a-prop hash, seeded off the
+   record id + the prop's own index (NOT Math.random — trayFrom is a pure data layer, §9.1: the same
+   record always yields the same board). Reuses theaterLightSeedHash's algorithm (this file's one
+   shared string-hash primitive) rather than inventing a second one. Linear-probes forward on a
+   collision (two props hashing to the same tile) so every dressing prop that fits gets a distinct
+   cell — deterministic because the probe walks from the SAME hashed start every call. */
+function theaterNodePropTile(recordId, idx, cellCount, taken){
+  if(cellCount <= 0) return -1;
+  const start = theaterLightSeedHash(String(recordId || "") + ":prop:" + idx) % cellCount;
+  for(let i = 0; i < cellCount; i++){
+    const cell = (start + i) % cellCount;
+    if(!taken[cell]){ taken[cell] = true; return cell; }
+  }
+  return -1; // more props than floor cells — the excess simply doesn't place (never a throw/overflow)
+}
+
+/* PLACE-GEN.md ADDENDUM §7 unit 7 — the tray for a minted, realm-typed PLACE node (TABLETOP-VISION's
+   node-tray vocabulary, deferred by TABLETOP-UNITS' closing note, now built). `record` is the codex
+   place record rollPlace/codexAdd produced (src/engine/codex-roll.js `rollPlace`).
+
+   GRID-LAW DIVERGENCE (ADDENDUM §A, documented per that section's instruction): every OTHER trayFrom
+   branch derives its grid from cmZoneGrid — a combat abstraction where one band/lane ZONE is a 3x3
+   tile PATCH (THEATER_PATCH), i.e. a "zone" is a coarse ~15x15-cell region, not a real building
+   footprint. A minted place already carries its own real footprint in cells (`rolled.dims:{w,d}`,
+   rollDimsInCells — GRID LAW: 1 tile = 1 cell = 5 ft), so this branch does NOT run it through
+   cmZoneGrid's patch derivation at all: the floor is exactly `dims.w` x `dims.d` tiles, one tile per
+   cell, full stop. `grid.bands`/`grid.lanes` here are therefore synthetic row/column LABELS ("r0".."c0"
+   etc, not CM_BANDS/CM_LANES combat-zone names) sized bandCount=d/laneCount=w purely so this board's
+   top-level shape matches every other branch's {tiles,grid,props,env,...} contract (the GL layer/
+   setBoard reads tiles' own x/z for bounds and never needs CM_BANDS semantics for a non-combat tray)
+   — no combat ever runs against a node tray, so no caller reads these zone labels as real bands/lanes.
+
+   Realm resolution: mirrors rollPlace's own archeRealmId law (codex-roll.js) — a breach-leaked mint's
+   archetype was drawn against the LEAKED realm's skin, so its dressing must resolve against that same
+   realm, not the place's base realm. `record.dm.dressing.hybridProps` (leak) wins over `.props` (base)
+   wins over the tray's own active-realms list (source.realms, same fallback idle already uses) wins
+   over "frontier" (never undefined — sceneDressingForPlace's own frontier fallback convention).
+
+   Missing/partial record fields (no `.rolled`, no `.dims`, no `.archetypeKey`) degrade to a bare
+   1x1 floor with no props — never a throw, same total-function discipline theaterBoardBuild's own
+   defensive reads already keep for a partial/narrow-harness segment. Pure: no RNG, no GS/w/U touch —
+   same (record,realms,env) snapshot always yields an identical board (§9.1). */
+function theaterNodeBoardBuild(record, realms, env){
+  env = env || THEATER_DEFAULT_ENV;
+  const rec = record || {};
+  const rolled = rec.rolled || {};
+  const dims = rolled.dims || {};
+  const w = (Number.isFinite(dims.w) && dims.w > 0) ? Math.floor(dims.w) : 1;
+  const d = (Number.isFinite(dims.d) && dims.d > 0) ? Math.floor(dims.d) : 1;
+  const archetypeKey = rolled.archetypeKey != null ? rolled.archetypeKey : null;
+  const dressingPtr = rec.dm && rec.dm.dressing;
+  const realmList = Array.isArray(realms) ? realms : [];
+  const dressRealm = (dressingPtr && (dressingPtr.hybridProps || dressingPtr.props))
+    || (realmList.length ? realmList[0] : null)
+    || "frontier";
+  const dressing = (typeof sceneDressingForPlace === "function")
+    ? sceneDressingForPlace(dressRealm, archetypeKey)
+    : { props: [], surface: null, light: null };
+  const surface = dressing.surface || null;
+  const renderProfile = theaterStampRenderProfile(dressRealm);
+  const floorMaterial = surface ? surface.base : null;
+  const surfaceBaseTint = surface ? theaterApplySurfaceTint(surface) : null;
+  const gradeTint = (hex) => {
+    if(typeof gradeColor !== "function" || !renderProfile) return hex;
+    const graded = gradeColor(hex, renderProfile);
+    return "#" + graded.toString(16).padStart(6, "0");
+  };
+  const palette = theaterPaletteFor(env);
+  const tileTint = gradeTint(surfaceBaseTint || palette.top);
+
+  const bands = []; for(let z = 0; z < d; z++) bands.push("r" + z);
+  const lanes = []; for(let x = 0; x < w; x++) lanes.push("c" + x);
+
+  const tiles = [];
+  for(let z = 0; z < d; z++){
+    for(let x = 0; x < w; x++){
+      tiles.push({ x: x, z: z, h: 0, kind: "floor", tint: tileTint, altTop: false,
+        zone: "r" + z + ":c" + x, material: floorMaterial });
+    }
+  }
+
+  const cellCount = w * d;
+  const taken = {};
+  const props = [];
+  (dressing.props || []).forEach((p, idx) => {
+    const cell = theaterNodePropTile(rec.id, idx, cellCount, taken);
+    if(cell < 0) return; // more dressing props than floor cells — excess simply doesn't place
+    const px = cell % w, pz = Math.floor(cell / w);
+    const propEntry = { kind: "cover", zone: "r" + pz + ":c" + px, x: px, z: pz, level: null };
+    if(p.part) propEntry.part = p.part;
+    if(p.model) propEntry.model = p.model;
+    propEntry.partParams = p.partParams || {};
+    propEntry.realmPropName = p.name;
+    propEntry.size = p.size;
+    props.push(propEntry);
+  });
+
+  // light: an AUTHORED per-archetype default (SCENE_DRESSING_BY_ARCHETYPE, data/place-skins.js) —
+  // never re-rolled here, same "authored fact layered under the dice/keyword seam" discipline
+  // sceneDressingForPlace's own doc comment states. rolled===profile (no dice were consulted) and
+  // overridden stays false (no feature-text keyword layer exists for a node tray to override with).
+  const lightProfile = dressing.light || THEATER_DEFAULT_LIGHT;
+  const light = { profile: lightProfile, rolled: lightProfile, overridden: false };
+
+  return {
+    tiles: tiles, props: props, env: env, light: light, floorMaterial: floorMaterial,
+    surfaceName: surface ? surface.name : null,
+    surfaceTint: surface ? (surface.tint || null) : null,
+    surfaceBaseTint: surfaceBaseTint,
+    realms: realmList.length ? realmList : undefined,
+    realmId: dressRealm,
+    renderProfile: renderProfile,
+    grid: { bands: bands, lanes: lanes, bandCount: d, laneCount: w }
+  };
+}
+
 /* TABLETOP-UNITS.md §U1 — trayFrom(source, scene, opts): the Standing Table generalization of
    theaterBoardFrom. source.kind selects the origin:
      {kind:"segment", segment}  — an active walk's here-segment (all three envs) — routes through
@@ -941,6 +1057,10 @@ function theaterIdleBoardFrom(env, realms){
                                   dressing/light falls through theaterBoardBuild's own total-function
                                   defaults, never a throw); no render.js caller wires this kind yet
                                   (a later unit's job) but the shape contract holds today.
+     {kind:"node", record}      — PLACE-GEN.md ADDENDUM §7 unit 7: a minted, realm-typed place codex
+                                  record — theaterNodeBoardBuild, above (GRID LAW footprint, NOT the
+                                  cmZoneGrid patch derivation the other kinds use — see that
+                                  function's own divergence note).
      {kind:"idle", env, realms} — the empty table (theaterIdleBoardFrom).
    Same return shape in every branch (below, unchanged) — this is the ONE seam TABLETOP-VISION's
    tray/idle/combat callers all read through. Pure: the same (source,scene,opts) snapshot always
@@ -952,6 +1072,11 @@ function trayFrom(source, scene, opts){
     const env = source.env || opts.env;
     const realms = source.realms || opts.realms;
     return theaterIdleBoardFrom(env, realms);
+  }
+  if(source.kind === "node"){
+    const env = source.env || opts.env;
+    const realms = source.realms || opts.realms;
+    return theaterNodeBoardBuild(source.record, realms, env);
   }
   const segment = source.kind === "interior" ? source.record : source.segment;
   return theaterBoardBuild(segment, scene, opts);

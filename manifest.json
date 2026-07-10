@@ -34,6 +34,7 @@
     "data/realm-surfaces.js",
     "data/realm-props.js",
     "data/npc-role-skins.js",
+    "data/place-skins.js",
     "data/animal-realm-skins.js",
     "data/animal-knowledge-scope.js",
     "data/souls-canon.js",
@@ -493,6 +494,26 @@
       ],
       "callTimeDeps": [],
       "desc": "docs/NPC-ROLE-REALMS.md \"Data seam\" — GENERATED (NPC_ROLE_SPINE/NPC_ROLE_SKINS, from `Engine/03. _Tables/02. Social/Sentient NPCs/NPC Role Spine.md` + the 11 `NPC Role Skin - <Realm>.md` files, by build/gen-role-skins.py) + hand-written `roleForRealm(realmId,rng)`. NPC_ROLE_SPINE = 35 universal role-archetypes {key,archetype,note,weight,cls} (the old frontier-only `npc-role` d100's weights ported 1:1 — spine weights sum to 100). NPC_ROLE_SKINS[realmId] = {reskin:{\"<key>\":{label,weight}}, adds:[{role,weight,cls,note}]} — one skin per data/realms.js REALM_ID, each relabeling/dropping(weight 0)/reweighting the spine and layering on realm-unique ADD roles. roleForRealm weighted-picks ONE entry from the combined (spine-minus-drops) ∪ adds pool, keyed to the realm; unknown/absent realmId falls back to 'frontier' (no regression). Replaces the flat rollTable(\"npc-role\") call in src/engine/codex-roll.js's rollNPC — role is NEVER coherence-gated (fires at every tier). Never hand-edit the generated NPC_ROLE_SPINE/NPC_ROLE_SKINS consts; regenerate with `python3 build/gen-role-skins.py`. Added 2026-07-08."
+    },
+    {
+      "id": "data.place-skins",
+      "path": "data/place-skins.js",
+      "type": "data",
+      "owns": [
+        "PLACE_SPINE",
+        "PLACE_SKINS",
+        "PLACE_SPACE_CELLS",
+        "placeForRealm",
+        "SCENE_BUCKET_BY_ARCHETYPE",
+        "SCENE_BUCKET_DEFAULT",
+        "sceneBucketForArchetype",
+        "SCENE_DRESSING_BY_ARCHETYPE",
+        "SCENE_DRESSING_DEFAULT",
+        "SURFACE_TAG_BASES",
+        "sceneDressingForPlace"
+      ],
+      "callTimeDeps": [],
+      "desc": "docs/PLACE-GEN.md §2/§5 unit 1 + ADDENDUM §7E — GENERATED (PLACE_SPINE/PLACE_SKINS, from `Engine/03. _Tables/05. Realms/Place Spine.md` + the authored `Place Skin - <Realm>.md` files [Frontier/Chrome/Gloom landed; 8 realms backfill later], by build/gen-place-skins.py) + hand-written `placeForRealm(realmId,rng,opts)` + `PLACE_SPACE_CELLS` (GRID-LAW footprint bands in 5-ft cells, sourced from the DMG24 Bastion gather). PLACE_SPINE = 24 universal site-archetypes {key,archetype,note,weight,scale,space,staff:{min,max},cast:{anchor,ambient:[...]}}. PLACE_SKINS[realmId] = {reskin:{\"<key>\":{label,weight}}, adds:[{key,label,weight,scale,space,staff,cast,note}], namePatterns:[...]} — ONLY AUTHORED REALMS APPEAR (missing skins are legal per §7E, a deliberate deviation from gen-role-skins.py); placeForRealm falls back to the frontier skin at roll time for every other realm id. placeForRealm weighted-picks ONE entry from the combined (spine-minus-drops) ∪ adds pool; opts.archetypeBias multiplies listed keys' weights ×ARCHETYPE_BIAS_MULTIPLIER (HOOK-WALKS seam); opts.excludeScale drops listed scale tags (future-proofing, no-op today). Consumed by src/engine/codex-roll.js's rollPlace() (PLACE-GEN §5 unit 2). PLACE-GEN §5 unit 3 (cast wiring, 2026-07-09): SCENE_BUCKET_BY_ARCHETYPE = {spineKey(string): bucket} hand-maintained map (only in this generator, not the markdown source) + SCENE_BUCKET_DEFAULT (\"shop\") + sceneBucketForArchetype(archetypeKey) — an always-resolving accessor onto the ambient scene-bucket vocabulary src/world/prep.js already owns (shrine|shop|tavern|market); src/world/urban.js's buildingApproach prefers it over the building-kit bucket when the node's own place record carries an archetypeKey. PLACE-GEN ADDENDUM §7 unit 8 (dressing map, 2026-07-09): SCENE_DRESSING_BY_ARCHETYPE = {spineKey(string): {propNames,surface,light}} hand-maintained map (only in this generator) + SCENE_DRESSING_DEFAULT (never-a-hole fallback for add:* keys/unmapped archetypes) + SURFACE_TAG_BASES (abstract surface tag → real data/realm-surfaces.js `base` material vocabulary) + sceneDressingForPlace(realmId,archetypeKey) — resolves propNames against realmPropsFor's real pool (missing names skipped, never a hole), resolves the surface tag against REALM_SURFACES, and returns the archetype's authored light-profile default (THEATER_LIGHT_TABLE's vocabulary, src/engine/theater-data.js). §7.8 prop census: `python3 build/gen-place-skins.py --census`. Never hand-edit the generated PLACE_SPINE/PLACE_SKINS/PLACE_SPACE_CELLS/SCENE_BUCKET_BY_ARCHETYPE/SCENE_DRESSING_BY_ARCHETYPE consts; regenerate with `python3 build/gen-place-skins.py`. Added 2026-07-09."
     },
     {
       "id": "data.animal-realm-skins",

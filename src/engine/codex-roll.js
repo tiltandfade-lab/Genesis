@@ -282,7 +282,10 @@ function sceneTemperature(region, realm){
    E-PRES ambient-population wiring per NPC-ROLE-REALMS.md §Hybridization "Guard: minority only... the
    world stays legibly its own realm" — this unit builds the mechanism + the opt-in seam, not the
    auto-detection. */
-const ROLE_HYBRID_K=0.5; // fray=1 -> p=0.5, clamped by the 0.35 cap below; fray=0.7 is where the cap first binds
+let ROLE_HYBRID_K=0.5; // fray=1 -> p=0.5, clamped by the 0.35 cap below; fray=0.7 is where the cap first binds
+// (let, not const: PLACE-GEN §5 unit 5's shared-constant mutation-test guard redefines this at
+// runtime in dev/verify-place-leak.mjs to prove the place leak reads the SAME live binding as the
+// NPC leak rather than a forked/duplicated number — no production caller reassigns it.)
 function rollNPC(opts){
   opts=opts||{};
   const coherence=pickCoherence(opts);
@@ -296,6 +299,15 @@ function rollNPC(opts){
     const p=Math.min(0.35, fray*ROLE_HYBRID_K);
     const hRoll=(typeof Math.random==="function")?Math.random():0.5;
     if(hRoll<p) roleRoll=roleForRealm(opts.hybridRealm, null, {addsOnly:true});
+  }
+  // PLACE-GEN.md §5 unit 3: opts.roleClass ("any" ‖ absent == unfiltered, matches the spine's Cast
+  // vocabulary) filters the home-realm role draw to that NPC spine Tags class — a FILTERED-POOL pick
+  // (roleForRealm's own opts.filterCls, data/npc-role-skins.js), not a retry loop, so a place's
+  // anchor NPC reliably lands on-class even when that class is a thin minority of the realm's
+  // weighted pool. Never dangles: roleForRealm itself falls through to the unfiltered pool when the
+  // requested class has zero candidates in this realm's skin — a place ALWAYS mints an anchor NPC.
+  if(!roleRoll && opts.roleClass && opts.roleClass!=="any" && typeof roleForRealm==="function"){
+    roleRoll=roleForRealm(realmId, null, {filterCls:opts.roleClass});
   }
   if(!roleRoll) roleRoll=(typeof roleForRealm==="function")?roleForRealm(realmId):null;
   const quirk=gate.quirk?rollTable("npc-visual-quirk"):null;
@@ -311,6 +323,10 @@ function rollNPC(opts){
   const roleLabel=roleRoll?roleRoll.label:tx(rollTable("npc-role"));
   const roleNote=roleRoll?roleRoll.note:null;
   const roleArchetypeKey=roleRoll?roleRoll.archetypeKey:null;
+  // PLACE-GEN.md §5 unit 3: additive — the NPC spine Tags class this role actually landed on, so a
+  // caller that asked for opts.roleClass can verify the filter held (or that the never-dangle fallback
+  // fired). Every existing caller ignores this field; payload shape for them is unchanged otherwise.
+  const roleCls=roleRoll?roleRoll.cls:null;
   const species=opts.species||npcSpeciesFromRace(tx(race));
   // ON-DEMAND-GEN §3 (Quick NPC Generator 2.0 pattern): 1d2 gender roll picks the gendered name pool.
   const gender=(typeof rollDie==="function"?rollDie(2):(Math.random()<0.5?1:2))===1?"female":"male";
@@ -321,7 +337,7 @@ function rollNPC(opts){
     rolled:{ race:tx(race), role:roleLabel, quirk:tx(quirk), mannerism:tx(mann),
       flawSecret:tx(flaw), bond:tx(bond), fear:tx(fear), leverage:tx(lever),
       want:tx(want), motivation:tx(moti), roleHint:opts.roleHint||null, gender, coherence,
-      archetypeKey:roleArchetypeKey, roleNote:roleNote },
+      archetypeKey:roleArchetypeKey, roleNote:roleNote, roleCls:roleCls },
     fields:{ species, role:roleLabel,
       demeanor:[tx(quirk),tx(mann)].filter(Boolean).join("; ")||null },
     dm:{ secret:tx(flaw), fear:tx(fear), bond:tx(bond),
@@ -604,10 +620,43 @@ function rollBuildingInterior(opts){
   };
 }
 
+/* rollDimsInCells(space) -> {w,d} — GRID LAW (docs/PLACE-GEN.md ADDENDUM §A): uniform-integer pick
+   within PLACE_SPACE_CELLS[space]'s band, using rollDie (Math.random-backed, same rng discipline
+   the rest of this file uses — no explicit seeded-rng threading here, matching roleForRealm's
+   call-with-no-rng convention at this file's rollNPC call site). Defensive: an unknown/missing
+   space (or a missing PLACE_SPACE_CELLS load) falls back to the "roomy" band's own shape so a
+   place NEVER mints without dims once this path is reached. */
+function rollDimsInCells(space){
+  const bands=(typeof PLACE_SPACE_CELLS!=="undefined")?PLACE_SPACE_CELLS:null;
+  const band=(bands&&bands[space])||(bands&&bands.roomy)||{wMin:3,wMax:4,dMin:3,dMax:4};
+  const w=band.wMin+((typeof rollDie==="function")?rollDie(band.wMax-band.wMin+1)-1:0);
+  const d=band.dMin+((typeof rollDie==="function")?rollDie(band.dMax-band.dMin+1)-1:0);
+  return {w,d};
+}
+
 /* rollPlace(opts) → a record-add payload for a named location with a defining trait + a hidden truth.
-   opts: {name?, depth?}. depth=true also rolls place-history. */
+   opts: {name?, depth?, realm?, region?, archetypeBias?, hybridRealm?}.  depth=true also rolls
+   place-history.
+   PLACE-GEN §5 unit 2 (ADDENDUM §A step 1 + §4 prepCastFrontier realm rider): opts.realm ‖
+   opts.region.realm ‖ 'frontier' — the SAME realm-resolution convention urban.js's
+   buildingApproach/mintDistricts use (U6) — feeds placeForRealm(realmId, rng, {archetypeBias})
+   (data/place-skins.js, PLACE-GEN §5 unit 1) to type/name/cast/dress the mint. Back-compat law:
+   opts.realm absent → frontier skin, payload a STRICT SUPERSET of the pre-unit-2 shape (dev/
+   verify-place-roll.mjs asserts field-presence against a golden captured pre-change).
+   PLACE-GEN §5 unit 5 (breach leak, PLACE-GEN §4 "Breach-blending"): opts.hybridRealm is an
+   ADDITIVE, explicit opt-in (no existing caller passes it — every current call site's archetype
+   draw is byte-identical to before this rider). When present AND fray>0 (opts.region.center via
+   frayLevel, same convention as rollNPC's hybridization rider above), a fray-scaled MINORITY of
+   mints (p=min(0.35, fray*ROLE_HYBRID_K) — the SAME global shared constant as the NPC leak, not a
+   forked number) draw their WHOLE archetype from opts.hybridRealm's skin (placeForRealm(hybridRealm,
+   ...) — the entire breached skin: reskins + adds, deliberately broader than the NPC leak's
+   addsOnly narrowing, per §4 "the frontier town with one Theater mess tent"). Everything else about
+   the mint (name path, secret, region inputs) stays home-realm. On a leak hit the payload also
+   carries the visual tell: dm.dressing.hybridProps=<hybridRealm> (additive; home props/surfaces
+   pointers unchanged) and rolled.hybridRealm=<hybridRealm>. */
 function rollPlace(opts){
   opts=opts||{};
+  const realmId=opts.realm||(opts.region&&opts.region.realm)||"frontier";
   const setting=rollTable("place-master-setting");
   const nd=placeNameDesc(setting?setting.text:null);
   const trait=rollTable("place-traits");        // cells: [Band, Trait, Calamity]
@@ -618,7 +667,30 @@ function rollPlace(opts){
   const sc=(secret&&secret.cells)||[];
   const secretText=sc[2]||sc[1]||(secret?secret.text:null);
   const hist=opts.depth?rollTable("place-history"):null;
+  // breach leak (§5 unit 5): minority cross-skin archetype draw, sharing the NPC leak constant.
+  const center=opts.region&&opts.region.center;
+  const fray=(center && typeof frayLevel==="function") ? frayLevel(center.q, center.r) : 0;
+  let leakedRealm=null;
+  if(opts.hybridRealm && fray>0){
+    const p=Math.min(0.35, fray*ROLE_HYBRID_K);
+    const hRoll=(typeof Math.random==="function")?Math.random():0.5;
+    if(hRoll<p) leakedRealm=opts.hybridRealm;
+  }
+  const archeRealmId=leakedRealm||realmId;
+  // the archetype draw (spine+skin) — type/label/scale/space/staff/cast for this mint. Null-safe:
+  // an unloaded data seam (headless/lean context) leaves the pre-unit-2 behavior untouched.
+  const arche=(typeof placeForRealm==="function")?placeForRealm(archeRealmId, null, {archetypeBias:opts.archetypeBias}):null;
+  const skin=(typeof PLACE_SKINS!=="undefined")?(PLACE_SKINS[realmId]||PLACE_SKINS.frontier):null;
+  // name: skin namePatterns (mundane-key realms) emit a DM-facing hint field ONLY (PLACE-GEN §3.2
+  // scope fence — no token-filling machinery in v1); the actual name still always comes from
+  // placeNameDesc, unchanged, so a no-skin/no-pattern realm's name path is byte-identical.
+  let namePattern=null;
+  if(skin && skin.namePatterns && skin.namePatterns.length){
+    const idx=(typeof rollDie==="function")?rollDie(skin.namePatterns.length)-1:0;
+    namePattern=skin.namePatterns[Math.max(0,Math.min(skin.namePatterns.length-1,idx))];
+  }
   const name=opts.name||nd.name||"Unnamed Place";
+  const typeLabel=arche?arche.label:null;
   const payload={
     kind:"location", name, provenance:"rolled",
     rolled:{ setting:setting?setting.text:null, trait:traitText, calamity,
@@ -626,6 +698,25 @@ function rollPlace(opts){
     fields:{ desc:nd.desc||null, trait:traitText, calamity },
     dm:{ secret:secretText, secretBand:sc[0]||(secret?secret.band:null), history:hist?hist.text:null }
   };
+  if(arche){
+    payload.rolled.archetypeKey=arche.archetypeKey;
+    payload.rolled.archetypeLabel=arche.label;
+    payload.rolled.archetypeNote=arche.note;
+    payload.rolled.space=arche.space;
+    payload.rolled.staff=arche.staff;
+    payload.rolled.cast=arche.cast;
+    payload.rolled.dims=rollDimsInCells(arche.space);
+    if(namePattern) payload.rolled.namePattern=namePattern;
+    payload.fields.type=typeLabel;
+    payload.dm.itemsPool="realm-items-"+realmId;
+    // pointer-only (PLACE-GEN §3.6) — resolution to actual REALM_PROPS/surfaces keys is unit 8's
+    // job; this is the realm handle the dressing resolver reads later.
+    payload.dm.dressing={ props:realmId, surfaces:realmId };
+    if(leakedRealm){
+      payload.rolled.hybridRealm=leakedRealm;
+      payload.dm.dressing.hybridProps=leakedRealm;
+    }
+  }
   // CONSEQUENCE LADDER (docs/CONSEQUENCE-LADDER.md §11): a NOTABLE place (opt-in via opts.art — prep
   // passes it) carries 0–2 art pieces. The depiction text is player-facing flavor (fields.art); only
   // hook/thread-seed pieces become pull-able HANDLES (dm.artHandles), minted as their own codex records

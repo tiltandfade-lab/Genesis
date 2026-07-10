@@ -22,6 +22,7 @@ rendered takes in chat, save ALL of them (`-take2`, `-take3` suffixes).
 - `round3/ash-r3.md` — 7 sheets (painterly-ash replacement: 75 NPCs, 24 kids-slots, 32 animal-slots)
 - `round3/fantasy-r3.md` — 2 sheets (relabel-orphan backfill + gorgon/grell true-forms)
 - `round3/cosmic-r3.md` — 1 sheet (cosmic-large-09 redo, DO-NOT-SIMPLIFY corrective)
+- `round3/magenta-fails-r3.md` — 3 sheets (Adam-failed magenta-leak monsters ×12; the ANTI-MAGENTA clause is the point)
 
 ## Standing rules (repeated in every header — the expensive lessons)
 1. EXPRESSION: a creature staring blankly like it's bombing on stage = FAIL. FFVI

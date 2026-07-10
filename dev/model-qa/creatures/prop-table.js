@@ -132,3 +132,138 @@ export function buildTable(){
     capFan(r2, V(0,0.058,0), P.discTop);
   }
 }
+
+/* dev/model-qa/creatures/prop-table.js — buildCounterRun — the COUNTER-RUN / BAR: a waist-high
+   service run of scarred plank, straight with an L-corner return at one end. Whole-object,
+   footprint 2x1 five-ft cells (1 cell ~1.25u -> ~2.5u x 1.25u ground plan). Distinct from
+   buildTable() above: taller (waist-high, ~0.88u top vs the table's ~0.62u), one-sided (a solid
+   front apron + foot-rail, no legs to walk around), and longer/service-run shaped, not a sit-down
+   table. Features the budget buys:
+     - a long WAIST-HIGH PLANK TOP running straight, with an L-CORNER RETURN turning the end
+       (the signature feature — names it "counter/bar" at a glance, not "table")
+     - a solid FRONT APRON/KICKBOARD below the top on both runs (one-sided service face)
+     - a FOOT-RAIL tube along the front, proud of the apron near the floor (bar-rail read)
+     - scarred PLANK-SEAM lines on the top (worn service surface)
+     - CLUTTER on the top — two bottles, a mug, and a draped rag hanging off the front lip — the
+       USE-TELL: this bar is mid-service, not a bare geometric plank.
+   Use sentence: a long tavern/shop bar mid-shift, bottles and a rag left out where the last round
+   was poured. VS-desaturated scarred-oak palette (few close browns + one pale worn-edge + one
+   dark rag accent), matching the exemplar's palette discipline. */
+export function buildCounterRun(){
+  /* ---------- PALETTE (VS desaturated scarred oak + dull bar-clutter accents) ---------- */
+  const P = {
+    top:0x6e5230, topDk:0x4e3a20, topLt:0x83643c, plank:0x543e22,
+    apron:0x5a4126, apronDk:0x3d2c19,
+    rail:0x453322, railDk:0x2e2116,
+    wornEdge:0x9c8256,                                   // pale worn-plank edge (weathering accent)
+    bottle:0x3d5240, bottleDk:0x293a2c, bottleGlass:0x577a5f,   // dull green glass
+    mug:0x6d5233, mugDk:0x4a3922, mugRim:0x877050,
+    rag:0x8a7a5e, ragDk:0x5c4d38,                        // dull cloth
+    disc:0x3a352b, discTop:0x46402f,
+  };
+
+  /* helper: axis-aligned box, 3-tone shaded (top lit, front lit, others mid/dark). Matches the
+     gold exemplar's box() convention. */
+  function box(x0,x1, y0,y1, z0,z1, top, mid, dk){
+    const A=V(x0,y0,z0), B=V(x1,y0,z0), Cc=V(x1,y0,z1), D=V(x0,y0,z1);
+    const E=V(x0,y1,z0), F=V(x1,y1,z0), G=V(x1,y1,z1), H=V(x0,y1,z1);
+    quad(H,G,F,E, top, 0.05);
+    quad(D,Cc,B,A, dk, 0.03);
+    quad(D,H,E,A, mid, 0.04);
+    quad(B,F,G,Cc, mid, 0.04);
+    quad(A,E,F,B, dk, 0.04);
+    quad(Cc,G,H,D, top, 0.05);
+  }
+
+  /* ---------- LANDMARKS ---------- */
+  const FLOOR = 0.055;                 // ground clearance (matches the floor gate)
+  const topThick = 0.055;
+  const topY1 = 0.88;                  // waist-high top surface
+  const topY0 = topY1 - topThick;
+  // MAIN RUN — long, along X. Front face (service side) at -Z.
+  const mainX0=-1.15, mainX1=0.85, mainZ0=-0.14, mainZ1=0.14;
+  // RETURN — the L-corner, turning at the +X end, running away in +Z.
+  const retX0=0.71, retX1=0.99, retZ0=0.14, retZ1=0.90;
+
+  /* ===== 1) FRONT APRON / KICKBOARD — solid service-face panel below the top, both runs. ===== */
+  box(mainX0, mainX1, FLOOR, topY0, mainZ0, mainZ1, P.apron, P.apron, P.apronDk);
+  box(retX0, retX1, FLOOR, topY0, retZ0, retZ1, P.apron, P.apron, P.apronDk);
+
+  /* ===== 2) THE TOP — the long waist-high plank run with the L-CORNER RETURN (the signature
+     feature: reads "bar/counter" at a squint from the run+turn silhouette alone). Slight overhang
+     past the apron on all open edges. ===== */
+  box(mainX0-0.02, mainX1+0.02, topY0, topY1, mainZ0-0.02, mainZ1+0.02, P.topLt, P.top, P.topDk);
+  box(retX0-0.02, retX1+0.02, topY0, topY1, retZ0-0.02, retZ1+0.02, P.topLt, P.top, P.topDk);
+  // plank seams — darker lengthwise lines on the main run top
+  for(const pz of [-0.05, 0.05]){
+    quad(V(mainX0, topY1+0.002, pz-0.010), V(mainX1, topY1+0.002, pz-0.010),
+         V(mainX1, topY1+0.002, pz+0.010), V(mainX0, topY1+0.002, pz+0.010), P.plank, 0.02);
+  }
+  // one plank seam on the return top (crosswise, along Z)
+  quad(V(retX0+0.06, topY1+0.002, retZ0), V(retX0+0.06, topY1+0.002, retZ1),
+       V(retX0-0.06+0.14, topY1+0.002, retZ1), V(retX0-0.06+0.14, topY1+0.002, retZ0), P.plank, 0.02);
+  // pale worn-edge facets at the two exposed corners (the top-lit weathering accent, ~0.04u legible)
+  quad(V(mainX0-0.02,topY1,mainZ0-0.02), V(mainX0+0.10,topY1,mainZ0-0.02),
+       V(mainX0-0.02,topY1-0.045,mainZ0-0.02), V(mainX0-0.02,topY1-0.045,mainZ0-0.02), P.wornEdge, 0.03);
+  quad(V(retX1+0.02,topY1,retZ1+0.02), V(retX1+0.02,topY1-0.045,retZ1+0.02),
+       V(retX1-0.10,topY1,retZ1+0.02), V(retX1-0.10,topY1,retZ1+0.02), P.wornEdge, 0.03);
+
+  /* ===== 3) FOOT-RAIL — a tube proud of the front apron near the floor, the length of the main
+     run (the bar-rail tell that distinguishes this from a plain table's leg silhouette). ===== */
+  {
+    const railY=0.18, railZ=mainZ0-0.05;
+    tube(V(mainX0+0.05, railY, railZ), V(mainX1-0.05, railY, railZ), 0.028, 0.028, 8, P.rail,
+      {capA:{hex:P.railDk}, capB:{hex:P.railDk}});
+    // two stub brackets holding the rail against the apron
+    for(const bx of [mainX0+0.20, mainX1-0.20]){
+      tube(V(bx, railY, railZ), V(bx, railY, mainZ0+0.01), 0.020, 0.020, 5, P.railDk);
+    }
+  }
+
+  /* ===== 4) CLUTTER — the USE-TELL. Two bottles, a mug, a draped rag along the main-run top,
+     clustered toward the corner where the runs meet (busiest service spot). ===== */
+  {
+    const surfY=topY1;
+    // BOTTLE A — tall tapered stack (dull green glass), left of center
+    const b1x=-0.55, b1z=-0.02, b1b=surfY+0.004;
+    stack([
+      {y:b1b,        rx:0.038, cx:b1x, cz:b1z, hex:P.bottleDk},
+      {y:b1b+0.05,   rx:0.040, cx:b1x, cz:b1z, hex:P.bottle},
+      {y:b1b+0.14,   rx:0.034, cx:b1x, cz:b1z, hex:P.bottle},
+      {y:b1b+0.19,   rx:0.016, cx:b1x, cz:b1z, hex:P.bottleGlass},
+      {y:b1b+0.23,   rx:0.013, cx:b1x, cz:b1z, hex:P.bottleGlass},
+    ], 8, {capTop:{hex:P.bottleGlass}, capBot:{hex:P.bottleDk}});
+    // BOTTLE B — shorter, tilted-read companion bottle, right of it
+    const b2x=-0.40, b2z=0.04, b2b=surfY+0.004;
+    stack([
+      {y:b2b,        rx:0.036, cx:b2x, cz:b2z, hex:P.bottleDk},
+      {y:b2b+0.045,  rx:0.038, cx:b2x, cz:b2z, hex:P.bottle},
+      {y:b2b+0.11,   rx:0.032, cx:b2x, cz:b2z, hex:P.bottle},
+      {y:b2b+0.15,   rx:0.014, cx:b2x+0.01, cz:b2z, hex:P.bottleGlass},
+    ], 8, {capTop:{hex:P.bottleGlass}, capBot:{hex:P.bottleDk}});
+    // MUG — ringed cylinder + handle nub, near the corner
+    const mx=0.55, mz=0.02, mb=surfY+0.004, mt=surfY+0.10;
+    stack([
+      {y:mb,          rx:0.050, cx:mx, cz:mz, hex:P.mugDk},
+      {y:mb+0.025,    rx:0.053, cx:mx, cz:mz, hex:P.mug},
+      {y:mt-0.018,    rx:0.051, cx:mx, cz:mz, hex:P.mug},
+      {y:mt,          rx:0.053, cx:mx, cz:mz, hex:P.mugRim},
+    ], 10, {capBot:{hex:P.mugDk}});
+    capFan(ring(V(mx, mt-0.004, mz), V(0,1,0), 0.046, 0.046, 10, 0), V(mx, mt-0.006, mz), 0x2a1d10);
+    const hy=(mb+mt)/2;
+    tube(V(mx+0.050, hy-0.025, mz), V(mx+0.078, hy, mz), 0.012,0.012, 5, P.mug);
+    tube(V(mx+0.078, hy, mz), V(mx+0.050, hy+0.025, mz), 0.012,0.012, 5, P.mug);
+    // RAG — a draped cloth hanging off the front lip of the main run (flat top quad + a hanging
+    // front quad, tilted so it reads as fabric, not a flat sticker)
+    const rx0=0.10, rx1=0.28, rz=mainZ0;
+    quad(V(rx0,surfY+0.006,rz+0.10), V(rx1,surfY+0.006,rz+0.09), V(rx1,surfY+0.006,rz-0.02), V(rx0,surfY+0.006,rz-0.01), P.rag, 0.05);
+    quad(V(rx0,surfY+0.004,rz-0.02), V(rx1,surfY+0.004,rz-0.02), V(rx1,topY0+0.10,rz-0.06), V(rx0,topY0+0.14,rz-0.06), P.ragDk, 0.05);
+  }
+
+  /* base rectangle — grounding shadow plane matching the 2x1 footprint (not a round disc; this
+     prop's footprint is rectangular, not square, so a rectangular grounding plane reads truer). */
+  {
+    const gx0=mainX0-0.06, gx1=retX1+0.06, gz0=mainZ0-0.10, gz1=retZ1+0.06;
+    quad(V(gx0,0.002,gz0), V(gx1,0.002,gz0), V(gx1,0.002,gz1), V(gx0,0.002,gz1), P.disc, 0.04);
+  }
+}

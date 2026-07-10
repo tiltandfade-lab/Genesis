@@ -1043,9 +1043,10 @@ const SCENE_DRESSING_BY_ARCHETYPE={
  },
  "3": {
   "propNames": [
+   "Market Stall Frame",
+   "Shop Counter",
    "Munitions Crate",
    "Trash Can Row",
-   "Overflowing Trash Can",
    "Rolling Field Kitchen"
   ],
   "surface": "street",
@@ -1053,9 +1054,9 @@ const SCENE_DRESSING_BY_ARCHETYPE={
  },
  "4": {
   "propNames": [
+   "Judge's Bench",
    "Case-File Desk",
    "Star-Chart Table",
-   "Cinderblock Stack",
    "Wandering Torch"
   ],
   "surface": "interior-stone",
@@ -1063,9 +1064,10 @@ const SCENE_DRESSING_BY_ARCHETYPE={
  },
  "5": {
   "propNames": [
+   "Judge's Bench",
+   "Cell Bar Run",
    "Case-File Desk",
-   "Brig Cage",
-   "Cinderblock Stack"
+   "Brig Cage"
   ],
   "surface": "interior-stone",
   "light": "torchlit"
@@ -1102,10 +1104,10 @@ const SCENE_DRESSING_BY_ARCHETYPE={
  },
  "9": {
   "propNames": [
+   "Shop Counter",
    "Scrap Heap",
    "Rust Drum",
-   "Munitions Crate",
-   "Cinderblock Stack"
+   "Munitions Crate"
   ],
   "surface": "interior-wood",
   "light": "lamplit"
@@ -1140,9 +1142,9 @@ const SCENE_DRESSING_BY_ARCHETYPE={
  },
  "13": {
   "propNames": [
+   "Checkpoint Gate",
    "Rift Grate",
-   "Glyph-Warded Grate",
-   "Storm Drain Grate"
+   "Glyph-Warded Grate"
   ],
   "surface": "street",
   "light": "torchlit"
@@ -1159,8 +1161,8 @@ const SCENE_DRESSING_BY_ARCHETYPE={
  },
  "15": {
   "propNames": [
+   "Cell Bar Run",
    "Cobweb Mass",
-   "Rust Drum",
    "Scrap Heap",
    "Rotted Coffin"
   ],
@@ -1216,10 +1218,10 @@ const SCENE_DRESSING_BY_ARCHETYPE={
  },
  "21": {
   "propNames": [
+   "Riveted Standpipe Tank",
    "Scrap Heap",
    "Slag Heap",
-   "Rust Drum",
-   "Cinderblock Stack"
+   "Rust Drum"
   ],
   "surface": "interior-metal",
   "light": "torchlit"

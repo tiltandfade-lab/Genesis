@@ -666,6 +666,20 @@ const WHOLE_OBJECT_REGISTRY = {
   "prop:sin-eaters-bowl-stand":   { module: "../../dev/model-qa/creatures/prop-sin-eaters-bowl-stand.js",   fn: "buildPropSinEatersBowlStand",     discR: 0.32 },
   "prop:charnel-pit":             { module: "../../dev/model-qa/creatures/prop-charnel-pit.js",              fn: "buildPropCharnelPit",              discR: 0.68 },
   "prop:whispering-curtain-row":  { module: "../../dev/model-qa/creatures/prop-whispering-curtain-row.js",  fn: "buildPropWhisperingCurtainRow",   discR: 0.68 },
+
+  // -------- PLACE-PARTS-WAVE Wave A (2026-07-09 overnight, docs/PLACE-PARTS-WAVE.md) — the P1
+  //     place-anchor props (PLACE-ASSET-QUEUE Part 1a/1b). Three are new exports on existing donor
+  //     modules (counter-run/cell-bars/doorframe — dedupe-hard law); the rest are net-new modules.
+  //     Reached by the dressing seam (sceneDressingForPlace -> theaterNodeBoardBuild) and the
+  //     realm-prop-select seam; no THEATER_PROP_KEYWORD_RULES part of their own (same as p3-props). --
+  "prop:counter-run":     { module: "../../dev/model-qa/creatures/prop-table.js",           fn: "buildCounterRun",           discR: 0.55 },
+  "prop:judge-bench":     { module: "../../dev/model-qa/creatures/prop-judge-bench.js",     fn: "buildPropJudgeBench",       discR: 0.55 },
+  "prop:cell-bars":       { module: "../../dev/model-qa/creatures/prop-hangingcage.js",     fn: "buildBarRun",               discR: 0.42 },
+  "prop:stall-frame":     { module: "../../dev/model-qa/creatures/prop-stall-frame.js",     fn: "buildPropStallFrame",       discR: 0.42 },
+  "prop:standpipe":       { module: "../../dev/model-qa/creatures/prop-standpipe.js",       fn: "buildPropStandpipe",        discR: 0.68 },
+  "prop:shop-counter":    { module: "../../dev/model-qa/creatures/prop-shop-counter.js",    fn: "buildPropShopCounter",      discR: 0.42 },
+  "prop:doorframe":       { module: "../../dev/model-qa/creatures/prop-arch.js",            fn: "buildDoorframe",            discR: 0.42 },
+  "prop:gate-checkpoint": { module: "../../dev/model-qa/creatures/prop-gate-checkpoint.js", fn: "buildPropGateCheckpoint",   discR: 0.55 },
 };
 
 /* NEAREST-SUB (R4): starter table only. Each key is a bestiary id NOT covered above; each value MUST

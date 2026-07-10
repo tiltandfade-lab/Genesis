@@ -279,11 +279,14 @@ SCENE_DRESSING_BY_ARCHETYPE = {
         "surface": "street", "light": "lamplit"},                                   # Gathering-place
     2: {"propNames": ["Long Bar", "Grog Barrel Row", "Rolling Field Kitchen", "Rain Barrel"],
         "surface": "interior-wood", "light": "lamplit"},                            # Watering-hole
-    3: {"propNames": ["Munitions Crate", "Trash Can Row", "Overflowing Trash Can", "Rolling Field Kitchen"],
+    # PLACE-PARTS-WAVE Wave A (2026-07-09): anchor-first rows — the archetype-naming piece leads its
+    # row (Market gains its stall+shop counter, Hall-of-law its bench+bars, Threshold a real gate,
+    # gloom Works the standpipe — the Blood-Slick-Altar realm-scoped precedent, see row 6 note).
+    3: {"propNames": ["Market Stall Frame", "Shop Counter", "Munitions Crate", "Trash Can Row", "Rolling Field Kitchen"],
         "surface": "street", "light": "daylit"},                                    # Market
-    4: {"propNames": ["Case-File Desk", "Star-Chart Table", "Cinderblock Stack", "Wandering Torch"],
+    4: {"propNames": ["Judge's Bench", "Case-File Desk", "Star-Chart Table", "Wandering Torch"],
         "surface": "interior-stone", "light": "lamplit"},                           # Seat-of-power
-    5: {"propNames": ["Case-File Desk", "Brig Cage", "Cinderblock Stack"],
+    5: {"propNames": ["Judge's Bench", "Cell Bar Run", "Case-File Desk", "Brig Cage"],
         "surface": "interior-stone", "light": "torchlit"},                          # Hall-of-law
     # PLACE-ASSET-QUEUE Part 1a finding: row 6's propNames were all scatter (font/torch/crate) with
     # no altar anchor, even though the anchor already exists (prop:shrine-block, base "altar" in
@@ -298,7 +301,7 @@ SCENE_DRESSING_BY_ARCHETYPE = {
         "surface": "interior-wood", "light": "lamplit"},                            # House-of-healing
     8: {"propNames": ["Scrap Heap", "Cinderblock Stack", "Munitions Crate Stack", "Slag Heap"],
         "surface": "interior-metal", "light": "torchlit"},                          # Workplace
-    9: {"propNames": ["Scrap Heap", "Rust Drum", "Munitions Crate", "Cinderblock Stack"],
+    9: {"propNames": ["Shop Counter", "Scrap Heap", "Rust Drum", "Munitions Crate"],
         "surface": "interior-wood", "light": "lamplit"},                            # Workshop
     10: {"propNames": ["Munitions Crate Stack", "Ballast Crate Stack", "Reliquary Crate Stack", "Rust Drum"],
          "surface": "interior-wood", "light": "dark"},                              # Storehouse
@@ -306,11 +309,11 @@ SCENE_DRESSING_BY_ARCHETYPE = {
          "surface": "interior-wood", "light": "lamplit"},                           # Lodging
     12: {"propNames": ["Rain Barrel", "Cobweb Mass", "Overflowing Trash Can"],
          "surface": "interior-wood", "light": "dark"},                              # Dwelling
-    13: {"propNames": ["Rift Grate", "Glyph-Warded Grate", "Storm Drain Grate"],
+    13: {"propNames": ["Checkpoint Gate", "Rift Grate", "Glyph-Warded Grate"],
          "surface": "street", "light": "torchlit"},                                 # Threshold
     14: {"propNames": ["Storm Drain Grate", "Coiled Mooring Rope", "Wandering Torch", "Cracked Water Cistern"],
          "surface": "street", "light": "daylit"},                                   # Crossing
-    15: {"propNames": ["Cobweb Mass", "Rust Drum", "Scrap Heap", "Rotted Coffin"],
+    15: {"propNames": ["Cell Bar Run", "Cobweb Mass", "Scrap Heap", "Rotted Coffin"],
          "surface": "earth", "light": "dark"},                                      # Hideout
     16: {"propNames": ["Long Bar", "Grog Barrel Row", "Piled Party Favors"],
          "surface": "interior-wood", "light": "lamplit"},                           # Vice-den
@@ -322,7 +325,7 @@ SCENE_DRESSING_BY_ARCHETYPE = {
          "surface": "interior-stone", "light": "torchlit"},                         # Watch-post
     20: {"propNames": ["Refuse Drift", "Cobweb Mass", "Cattle Skull Pile"],
          "surface": "open-exterior", "light": "overcast"},                          # Wild-margin
-    21: {"propNames": ["Scrap Heap", "Slag Heap", "Rust Drum", "Cinderblock Stack"],
+    21: {"propNames": ["Riveted Standpipe Tank", "Scrap Heap", "Slag Heap", "Rust Drum"],
          "surface": "interior-metal", "light": "torchlit"},                         # Works
     22: {"propNames": ["Overflowing Trash Can", "Wandering Torch", "Rain Barrel", "Trash Can Row"],
          "surface": "street", "light": "daylit"},                                   # Commons

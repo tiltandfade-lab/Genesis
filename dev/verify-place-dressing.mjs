@@ -133,5 +133,40 @@ for (const row of SPINE) {
 check("MUTATION: (a)'s shape guarantee still holds even with an empty prop pool (never a hole)",
   mutatedAllDefined, "a stubbed-empty prop pool broke the always-defined shape contract");
 
+// (f) PLACE-PARTS-WAVE Wave A — the P1 anchor props are row-wired and registry-live (THE WIRING
+// LAW: these checks drive the production sceneDressingForPlace path, never a hand-fed prop key).
+// RED-FIRST: proven failing on the pre-wiring tree (all 7 red), green after the wiring commit.
+console.log("\n(f) PLACE-PARTS-WAVE Wave A anchors — row-wired + registry-live");
+// WHOLE_OBJECT_REGISTRY lives in an ES-module boundary file (src/ui/theater-figures.js, NOT in the
+// classic loadOrder this harness evals) — so registry-liveness is checked by parsing the registry
+// keys out of the file text, the same discipline build/gen-realm-props.py's real_part_names() uses.
+const registryTxt = read("src/ui/theater-figures.js");
+const REGISTRY_KEYS = new Set([...registryTxt.matchAll(/"((?:prop|light|class):[a-z0-9-]+)"\s*:\s*\{/g)].map((m) => m[1]));
+const registryHas = (k) => REGISTRY_KEYS.has(k);
+const modelsAt = (realmId, key) =>
+  win.__sceneDressingForPlace(realmId, key).props.map((p) => p.model).filter(Boolean);
+check("f1. frontier Watering-hole (2) carries prop:counter-run (the Long Bar repoint off table-slab)",
+  modelsAt("frontier", 2).includes("prop:counter-run"), JSON.stringify(modelsAt("frontier", 2)));
+check("f2. frontier Market (3) carries prop:stall-frame + prop:shop-counter",
+  modelsAt("frontier", 3).includes("prop:stall-frame") && modelsAt("frontier", 3).includes("prop:shop-counter"),
+  JSON.stringify(modelsAt("frontier", 3)));
+check("f3. frontier Hall-of-law (5) carries prop:judge-bench + prop:cell-bars",
+  modelsAt("frontier", 5).includes("prop:judge-bench") && modelsAt("frontier", 5).includes("prop:cell-bars"),
+  JSON.stringify(modelsAt("frontier", 5)));
+check("f4. frontier Threshold (13) carries prop:gate-checkpoint (a controlled crossing, not scenery)",
+  modelsAt("frontier", 13).includes("prop:gate-checkpoint"), JSON.stringify(modelsAt("frontier", 13)));
+check("f5. gloom Works (21) carries prop:standpipe (the named-ADD anchor, Blood-Slick-Altar precedent)",
+  modelsAt("gloom", 21).includes("prop:standpipe"), JSON.stringify(modelsAt("gloom", 21)));
+let unregistered = [];
+for (const realmId of AUTHORED_REALMS) for (const row of SPINE) {
+  for (const m of modelsAt(realmId, row.key)) {
+    if (m.startsWith("prop:") && !registryHas(m)) unregistered.push(`${realmId}/${row.key}:${m}`);
+  }
+}
+check("f6. every prop: model the dressing map emits (24 keys x 3 realms) is registry-live", unregistered.length === 0,
+  JSON.stringify(unregistered));
+check("f7. prop:doorframe is registry-live (rim-exit consumer pending — registry entry must exist now)",
+  registryHas("prop:doorframe"), "prop:doorframe missing from WHOLE_OBJECT_REGISTRY");
+
 console.log(`\n${pass} passed, ${fail} failed`);
 if (fail > 0) process.exit(1);

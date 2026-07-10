@@ -88,6 +88,15 @@ REGISTERED_PROP_SLUGS = {
     "sin-eaters-bowl-stand",
     "charnel-pit",
     "whispering-curtain-row",
+    # PLACE-PARTS-WAVE Wave A (2026-07-09, docs/PLACE-PARTS-WAVE.md) — the P1 place anchors.
+    "counter-run",
+    "judge-bench",
+    "cell-bars",
+    "stall-frame",
+    "standpipe",
+    "shop-counter",
+    "doorframe",
+    "gate-checkpoint",
 }
 
 

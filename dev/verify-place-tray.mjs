@@ -171,5 +171,33 @@ const FIXTURE_RECORD = {
     board.tiles.length === 1, board.tiles.length);
 }
 
+// ============================================================================
+// (f) PLACE-PARTS-WAVE Wave A — a Threshold place renders its checkpoint-gate anchor through the
+// PRODUCTION node path (trayFrom -> theaterNodeBoardBuild -> sceneDressingForPlace), never a
+// hand-fed prop key (THE WIRING LAW). RED-FIRST: fails on the pre-wiring tree.
+// ============================================================================
+{
+  const win = freshWin();
+  const thresholdRecord = {
+    id: "loc:fixture-threshold-gate",
+    kind: "location", name: "The Toll Gap", provenance: "rolled",
+    rolled: {
+      archetypeKey: "13", archetypeLabel: "Threshold", space: "tight",
+      dims: { w: 3, d: 2 }, staff: { min: 1, max: 2 }, cast: { anchorCls: "guard", ambientCls: [] }
+    },
+    fields: { desc: "a controlled crossing", type: "Threshold" },
+    dm: { itemsPool: "realm-items-frontier", dressing: { props: "frontier", surfaces: "frontier" } },
+    status: { soft: true, at: "n1" }
+  };
+  const board = win.trayFrom({ kind: "node", record: thresholdRecord, realms: ["frontier"], env: "urban" }, null, {});
+  const models = (board.props || []).map((p) => p.model).filter(Boolean);
+  check("f1. a frontier Threshold node tray carries prop:gate-checkpoint via the production dressing path",
+    models.includes("prop:gate-checkpoint"), JSON.stringify(models));
+  const gate = (board.props || []).find((p) => p.model === "prop:gate-checkpoint");
+  check("f2. the gate prop entry carries name + size (came from the realm pool, not invented)",
+    !!gate && typeof gate.realmPropName === "string" && typeof gate.size === "string",
+    JSON.stringify(gate));
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

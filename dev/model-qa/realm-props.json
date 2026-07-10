@@ -4,7 +4,7 @@
   "props": [
    {
     "name": "Long Bar",
-    "base": "table",
+    "base": "counter-run",
     "size": "Large",
     "cover": "half",
     "crossRealm": "all",
@@ -316,6 +316,60 @@
     "crossRealm": "noir",
     "flavor": "A cast-iron pot-belly stove ticking with heat, its flue punched crookedly through the wall.",
     "summary": "cast-iron stove, half cover"
+   },
+   {
+    "name": "Judge's Bench",
+    "base": "judge-bench",
+    "size": "Large",
+    "cover": "half",
+    "crossRealm": "all",
+    "flavor": "A raised platform and desk-run where somebody's word becomes law, gavel-block still at hand.",
+    "summary": "raised authority dais, desk-run, high-backed seat"
+   },
+   {
+    "name": "Cell Bar Run",
+    "base": "cell-bars",
+    "size": "Medium",
+    "cover": "half",
+    "crossRealm": "all",
+    "flavor": "Floor-to-lintel iron bars with a brass lock-plate, the hasp thrown on somebody's bad night.",
+    "summary": "iron bar cell wall segment, locked door panel"
+   },
+   {
+    "name": "Market Stall Frame",
+    "base": "stall-frame",
+    "size": "Large",
+    "cover": "half",
+    "crossRealm": "all",
+    "flavor": "A lean-to skeleton under sun-bleached cloth, goods still out on the counter lip.",
+    "summary": "lean-to market stall, sagging canopy, stocked counter lip"
+   },
+   {
+    "name": "Shop Counter",
+    "base": "shop-counter",
+    "size": "Medium",
+    "cover": "half",
+    "crossRealm": "all",
+    "flavor": "An L of scarred counter with a till-box and a stocked nook behind it — you are being served here.",
+    "summary": "L-shaped service counter, coin box, back-shelf nook"
+   },
+   {
+    "name": "Doorway Frame",
+    "base": "doorframe",
+    "size": "Medium",
+    "cover": "none",
+    "crossRealm": "all",
+    "flavor": "A plain jamb-and-lintel frame, its door hanging ajar on whoever came through last.",
+    "summary": "human-scale doorway jamb and lintel, door ajar"
+   },
+   {
+    "name": "Checkpoint Gate",
+    "base": "gate-checkpoint",
+    "size": "Large",
+    "cover": "half",
+    "crossRealm": "all",
+    "flavor": "A pale-banded barrier arm frozen half-down beside a guard-stand — somebody controls this gap.",
+    "summary": "barrier-arm checkpoint gate beside a sentry shelter"
    }
   ]
  },
@@ -3124,6 +3178,15 @@
     "crossRealm": "specific",
     "flavor": "A timber funeral pyre built and never lit, the shrouded form atop it beaded with frost.",
     "summary": "unlit funeral pyre, half cover"
+   },
+   {
+    "name": "Riveted Standpipe Tank",
+    "base": "standpipe",
+    "size": "Huge",
+    "cover": "three-quarters",
+    "crossRealm": "specific",
+    "flavor": "A squat steel water tower on stub legs, its service door painted shut more than once.",
+    "summary": "riveted standpipe water tank, stub legs, painted-shut hatch"
    }
   ]
  },

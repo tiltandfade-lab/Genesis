@@ -18,10 +18,8 @@ const REALM_PROPS={
    "size": "Large",
    "cover": "half",
    "crossRealm": "all",
-   "model": "prop:table-slab",
-   "summary": "long bartop slab, half cover along its run",
-   "part": "table-slab",
-   "partParams": {}
+   "model": "prop:counter-run",
+   "summary": "long bartop slab, half cover along its run"
   },
   {
    "name": "Hitching Rail",
@@ -443,6 +441,54 @@ const REALM_PROPS={
    "summary": "cast-iron stove, half cover",
    "part": "candelabra",
    "partParams": {}
+  },
+  {
+   "name": "Judge's Bench",
+   "size": "Large",
+   "cover": "half",
+   "crossRealm": "all",
+   "model": "prop:judge-bench",
+   "summary": "raised authority dais, desk-run, high-backed seat"
+  },
+  {
+   "name": "Cell Bar Run",
+   "size": "Medium",
+   "cover": "half",
+   "crossRealm": "all",
+   "model": "prop:cell-bars",
+   "summary": "iron bar cell wall segment, locked door panel"
+  },
+  {
+   "name": "Market Stall Frame",
+   "size": "Large",
+   "cover": "half",
+   "crossRealm": "all",
+   "model": "prop:stall-frame",
+   "summary": "lean-to market stall, sagging canopy, stocked counter lip"
+  },
+  {
+   "name": "Shop Counter",
+   "size": "Medium",
+   "cover": "half",
+   "crossRealm": "all",
+   "model": "prop:shop-counter",
+   "summary": "L-shaped service counter, coin box, back-shelf nook"
+  },
+  {
+   "name": "Doorway Frame",
+   "size": "Medium",
+   "cover": "none",
+   "crossRealm": "all",
+   "model": "prop:doorframe",
+   "summary": "human-scale doorway jamb and lintel, door ajar"
+  },
+  {
+   "name": "Checkpoint Gate",
+   "size": "Large",
+   "cover": "half",
+   "crossRealm": "all",
+   "model": "prop:gate-checkpoint",
+   "summary": "barrier-arm checkpoint gate beside a sentry shelter"
   }
  ],
  "chrome": [
@@ -4153,6 +4199,14 @@ const REALM_PROPS={
    "summary": "unlit funeral pyre, half cover",
    "part": "candelabra",
    "partParams": {}
+  },
+  {
+   "name": "Riveted Standpipe Tank",
+   "size": "Huge",
+   "cover": "three-quarters",
+   "crossRealm": "specific",
+   "model": "prop:standpipe",
+   "summary": "riveted standpipe water tank, stub legs, painted-shut hatch"
   }
  ],
  "bright-kingdom": [

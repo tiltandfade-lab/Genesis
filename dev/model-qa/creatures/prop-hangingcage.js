@@ -131,3 +131,106 @@ export function buildHangingCage(){
     capFan(r2, V(0,0.058,0), P.discTop);
   }
 }
+
+/* ===== buildBarRun — the CELL BARS / holding-frame: a floor-standing vertical iron-bar frame,
+   floor to near-ceiling, one 5-ft cell wide, meant to tile side-by-side into a cell wall.
+   Feature checklist (what the budget buys):
+     - two heavy iron FRAME POSTS (left/right) so modules butt seamlessly edge-to-edge in a run
+     - a stone SILL (bottom rail) the posts root into + a stone LINTEL (top rail) near-ceiling
+     - 7 vertical BARS (~0.05u thick, well over the 1/3-res floor) spanning sill to a mid lock-rail
+     - a LOCK-RAIL crossbar at chest height carrying the door's swing, binding the bars mid-span
+     - a bright brass-toned LOCK-PLATE + dark keyhole slot centered on the lock-rail — the one
+       high-value zone and the use-tell (a door someone actually locks)
+     - a rust wash down two bars + a scuff on the sill (age/use)
+   Use sentence: this is a cell door caught mid-lock — the bar gate sits shut, the plate's hasp
+   thrown, rust bleeding down the bars from hands gripping them season after season.
+   Scale: overall ~2.2u tall (floor to near-ceiling), ~1.2u wide (one cell). Vertical piece;
+   built on y≈0.055 like the exemplar. Imported by prop-hangingcage-probe.html. */
+export function buildBarRun(){
+  /* ---------- PALETTE (VS desaturated iron + stone, one brass accent) ---------- */
+  const P = {
+    iron:0x4a4c4f, ironDk:0x2e2f31, ironLt:0x676a6e, ironDkr:0x1e1f20,   // bars
+    stone:0x615e57, stoneDk:0x46433d, stoneLt:0x77746a,                  // sill + lintel
+    rust:0x644428, rustDk:0x442e1b,
+    brass:0xb99a52, brassDk:0x7c6530, brassLt:0xd9bd78,                  // lock-plate (the pale accent)
+    keyhole:0x161310,
+    disc:0x38332a, discTop:0x433d2e,
+  };
+
+  const halfW = 0.60;                 // module half-width (~1.2u wide, one cell)
+  const barTop = 2.10;                // bars run up to just under the lintel
+  const barBot = 0.16;                // bars root into the sill top
+  const lockY0 = 1.02, lockY1 = 1.12; // lock-rail crossbar band
+
+  /* helper: an axis-aligned rectangular box, top lit / sides mid / bottom dark (matches exemplar). */
+  function box(x0,x1, y0,y1, z0,z1, top, mid, dk){
+    const A=V(x0,y0,z0), B=V(x1,y0,z0), Cc=V(x1,y0,z1), D=V(x0,y0,z1);
+    const E=V(x0,y1,z0), F=V(x1,y1,z0), G=V(x1,y1,z1), H=V(x0,y1,z1);
+    quad(H,G,F,E, top, 0.05);
+    quad(D,Cc,B,A, dk, 0.05);
+    quad(D,H,E,A, mid, 0.05);
+    quad(B,F,G,Cc, mid, 0.05);
+    quad(A,E,F,B, dk, 0.05);
+    quad(Cc,G,H,D, top, 0.05);
+  }
+
+  /* ===== 1) SILL — stone bottom rail the frame roots into, floor level. ===== */
+  box(-halfW,halfW, 0.055,0.16, -0.10,0.10, P.stoneLt, P.stone, P.stoneDk);
+
+  /* ===== 2) LINTEL — stone top rail near-ceiling (~2.2u). ===== */
+  box(-halfW,halfW, barTop,2.20, -0.10,0.10, P.stoneLt, P.stone, P.stoneDk);
+
+  /* ===== 3) FRAME POSTS — heavy iron uprights at each edge, floor to lintel, so this module
+     butts flush against the next one in a run (tiling law). ===== */
+  box(-halfW,-halfW+0.06, 0.055,barTop, -0.05,0.05, P.ironLt, P.iron, P.ironDkr);
+  box( halfW-0.06,halfW, 0.055,barTop, -0.05,0.05, P.ironLt, P.iron, P.ironDkr);
+
+  /* ===== 4) BARS — vertical iron bars, sill to lintel, running through the lock-rail band. Bars
+     are ~0.05u thick (radius 0.025) — comfortably over the 1/3-res feature floor. ===== */
+  const barCount = 7;
+  const inner = halfW - 0.10;
+  for(let i=0;i<barCount;i++){
+    const t = i/(barCount-1);
+    const x = -inner + t*2*inner;
+    tube(V(x,barBot,0), V(x,barTop,0), 0.025,0.025, 6, i%2?P.iron:P.ironDk,
+      {capA:{hex:P.ironDkr}, capB:{hex:P.ironLt}});
+  }
+
+  /* ===== 5) LOCK-RAIL — a horizontal iron crossbar at chest height binding all the bars mid-span
+     (the door's swing line). ===== */
+  box(-halfW+0.05,halfW-0.05, lockY0,lockY1, -0.045,0.045, P.ironLt, P.iron, P.ironDkr);
+
+  /* ===== 6) LOCK-PLATE — a bright brass plate + dark keyhole slot centered on the lock-rail.
+     The ONE high-value (light) zone + the use-tell: this bar-door is caught locked. ===== */
+  {
+    const cx=0.0, cy=(lockY0+lockY1)/2, cz=0.05;
+    box(cx-0.11,cx+0.11, lockY0-0.03,lockY1+0.03, cz-0.012,cz+0.012, P.brassLt, P.brass, P.brassDk);
+    // keyhole slot: round top + a dark drop below (classic keyhole silhouette)
+    const kr=ring(V(cx,cy+0.02,cz+0.014), V(0,0,1), 0.022,0.022, 8);
+    capFan(kr, V(cx,cy+0.02,cz+0.02), P.keyhole);
+    quad(V(cx-0.010,cy+0.01,cz+0.014), V(cx+0.010,cy+0.01,cz+0.014),
+         V(cx+0.008,cy-0.05,cz+0.014), V(cx-0.008,cy-0.05,cz+0.014), P.keyhole, 0.0);
+    // a thrown hasp nub at the plate's edge (locked-shut tell)
+    tube(V(cx+0.11,cy,cz+0.01), V(cx+0.16,cy,cz+0.01), 0.014,0.010,5, P.brassDk);
+  }
+
+  /* ===== 7) age wash — rust bleeding down two bars from hand-grip height, a scuff on the sill. ===== */
+  {
+    const rustBars = [1,4];
+    for(const i of rustBars){
+      const t = i/(barCount-1);
+      const x = -inner + t*2*inner;
+      quad(V(x-0.014,lockY1,0.026), V(x+0.014,lockY1,0.026),
+           V(x+0.011,barBot+0.05,0.024), V(x-0.011,barBot+0.05,0.024), i===1?P.rust:P.rustDk, 0.05);
+    }
+    quad(V(-0.30,0.16,0.10), V(0.05,0.16,0.10), V(-0.10,0.155,0.10), V(-0.30,0.155,0.10), P.rustDk, 0.04);
+  }
+
+  /* base disc — shared style (r=0.42), consistent with the module's floor-standing footprint. */
+  {
+    const r1=ring(V(0,0.002,0), V(0,1,0), 0.42, 0.42, 16);
+    const r2=ring(V(0,0.055,0), V(0,1,0), 0.40, 0.40, 16);
+    stitch([r1,r2], ()=>P.disc);
+    capFan(r2, V(0,0.058,0), P.discTop);
+  }
+}

@@ -78,6 +78,42 @@ math asserted for a nonzero-floor fixture. Mutation: stub the fold off → regis
 check reds. Re-run the FULL loop gate (5/5) and READ the contact sheet — knights stand
 human-height beside doors.
 
+## VP1.5 — THE CORPUS UNIFICATION PASS (palette + texel + fringe; one batch, no codex spend)
+
+The collage killer (Adam's rulings #2/#3/#7): one mechanical reprocess of every cut
+sprite, then automatic on every future fold (extends the ADDITIVE FOLD slice step).
+1. **REALM MASTER PALETTES:** derive a fixed 32-48 color palette per realm — seeded from
+   the realm's style-ref PNG + kit/grade colors (k-means over the style ref, then hand
+   room for skin/metal ramps; emit `dev/model-qa/realm-palettes/<realm>.json`, a
+   GENERATED artifact with a build script). Every sprite quantizes to its realm's
+   palette at slice time (nearest-color, alpha untouched, NO dithering added).
+2. **TEXEL DENSITY LAW:** target pixels-per-foot per size band (one number, e.g. medium
+   ≈ 36 px/ft → a 5.5ft human ≈ 200px tall; derive the exact target from the corpus
+   median so most sprites resample ≤ 1.5×). Downsample = nearest; upsample = xBRZ 4×
+   then nearest-down to target (the validated upscaler card). `feet` from the registry
+   fold (VP1) is the input — VP1 runs first.
+3. **DEFRINGE** (ruling #7) runs in the same sweep (the magenta-lane unmix pass).
+4. Output OVERWRITES assets/sprites/*.png + the v3 incoming set; originals archived to
+   quarantine-pack/pre-unification/ (additive law — one zip, then the folder may be
+   LFS'd). Registry pxHeight fields regenerate.
+5. FLAGSHIPS gate the eyeball pass (fantasy/gloom/chrome contact sheets, READ);
+   the other realms process mechanically under the same laws.
+*Verify:* every processed sprite's colors ⊆ its realm palette (exact set check);
+texel targets hit ±10%; alpha byte-identical where no fringe was removed; before/after
+contact sheet per flagship realm READ by the orchestrator + Adam. Mutation: run with
+quantization stubbed → the palette-subset check reds.
+
+## OUTLINE LAW (ruling #5 — per-realm, enforced in prompts + gates + the unification pass)
+
+One outline treatment per realm, no mixing. Flagship defaults (Adam may red-pen):
+**fantasy** = selective dark-umber outline (outer silhouette only) · **gloom** = full
+1px near-black outline (the VHS-horror cel look) · **chrome** = NO line; neon rim-edge
+carries the silhouette. Others drafted in `realm-palettes/<realm>.json` (`outline:` field)
+and applied when their expansion ships. Prompts gain a per-realm outline clause
+(patched into pending packets for the three flagships only); the style gate checks it;
+the unification pass can ENFORCE the gloom full-outline mechanically (edge-detect +
+darken) but never synthesizes selective/none styles — those are generation-time.
+
 ## VP2 — DRESSING ART FOLD (codex arrivals → the wired channel)
 
 When dressing-gen sheets land (`ui-sketches/sprite-sheets/*-dg-*.png`, root tree):
@@ -161,7 +197,11 @@ the card; Adam gets final eyes.
 3. **Ambient motes:** 4-8 seeded drifting particle cards per room (ember for torch
    realms / dust for lamp realms — tint from kit), slow vertical drift + wrap, additive,
    tiny (0.05-0.12 units).
-4. **Hit effects wiring:** when effects-core art lands (VP2 fold), `hit-damage`/
+4. **VISIBLE HISTORY (ruling #5b):** combat leaves marks — on hit/death, seeded blood/
+   scorch decal cards (the VP3 `cover` channel) drop at the event cell and PERSIST in
+   the room's dressing record (stamped into pn.spatial.dressing, so the codex place
+   remembers its battles across visits; grim register, children carve-out as ever).
+5. **Hit effects wiring:** when effects-core art lands (VP2 fold), `hit-damage`/
    `fall-death`/`act-cast` verbs spawn their effect card (oversized 1.5-2×, per
    GRAPHICS-ENGINE §B) at the target; until art lands, a procedural flash-ring quad
    stands in behind the same seam (`effectCardFor(name) || proceduralRing`).

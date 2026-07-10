@@ -20,6 +20,20 @@ Shared mechanical instructions (same as the master template): 5×5 grid, 25 cell
 static character per cell (not a repeat, not an animation frame), uniform cell size, solid magenta (#FF00FF) background (no transparency, no other background elements), consistent scale across all 25, orthographic side view, each character fully visible from head to toe within its cell — no cropping at the top, bottom, or sides, the complete body must fit inside the cell boundary. **Every character in an expressive, mid-action pose that captures its essence**
 — mid-lunge, mid-cast, braced, snarling — never a neutral T-pose or idle stand.
 
+**Palette law (2026-07-09)** — SPRITE-PALETTE P1–P5: Ash keeps its base
+bleached-bone-and-rust-orange duo — that's the identity, it never goes away. But no sheet stays
+a duotone read: pull deliberate accents from a five-family menu suited to a world that already
+poisoned itself — **chem-green** (leaking coolant, mutant ichor, vat-glow), **warning-yellow**
+(old hazard stencils, caution paint, sodium-lamp sodium haze), **cyanotic blue** (radiation
+bruising, cold static-shock, dead-screen glow), **bruised violet** (chem-burn discoloration,
+UV-lamp light, festering wounds), and the ember-orange-red of the realm's own live-coal accent
+already in use. Across any 25-cell sheet, at least 4 of these families must show up as
+deliberate accents — never two adjacent cells reading as the same bone/rust duo with nothing
+else in it. Anti-key clause (binding on every figure, every sheet, no exception): **no hot
+magenta or neon pink anywhere on a figure** — any #FF00FF-adjacent hue fights the chroma key.
+Violets and UV-blue are fine; anything that wants to be hot pink goes desaturated or shifts
+toward violet instead.
+
 ---
 
 ## Monster batches (118 total, 5 sheets)
@@ -255,7 +269,7 @@ Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-R
 24. **Mutation-marked healer's apprentice — glowing faint veins, gentle hands anyway**
 25. **Tall, gaunt settlement preacher — preaches survival, not salvation**
 
-## Domestic animal batches (25 total, 1 sheet)
+## Domestic animal batches (50 total, 2 sheets)
 
 **Ash-realm lore note (adopted, not just a render fix):** a first test render put a glowing
 ember accent on every single animal, and some of them read great — like the creature itself
@@ -284,7 +298,7 @@ stiff/taxidermied. **No scene props, furniture, pens, or background objects of a
 fences, feed troughs, leashes-as-set-dressing, etc.; the animal itself only, isolated against the
 plain magenta background. Rendered in this realm's art style (see the style block above).
 
-### Domestic animal sheet 1/1
+### Domestic animal sheet 1/2
 
 1. **Domestic animal — Loyal dog — bonded to one person, reads their mood before they do.**
 2. **Domestic animal — Working beast (a single ox) — earns its feed, patient, and spooks true.**
@@ -312,10 +326,44 @@ plain magenta background. Rendered in this realm's art style (see the style bloc
 24. **Domestic animal — A single kitten — too young to have earned the barn cat's independence yet.**
 25. **Domestic animal — A single caged ferret-kit — young, hyperactive, still learning the vermin-catcher's trade.**
 
+**Ash-realm-native second sheet (P6):** all 25 below are new mutant/rad-adapted species bred or
+kept by settlements — no repeats of the base roster above, no repeats across this realm's other
+new animal sheets. Same style block, same shared mechanical instructions, same ember-glow rarity
+note as the sheet above, and the same **Palette law (2026-07-09)** block up top applies — pull
+the accent menu (chem-green / warning-yellow / cyanotic blue / bruised violet / ember-orange-red)
+across these 25, no hot magenta.
+
+### Domestic animal sheet 2/2
+
+1. **Glasshide Milker** — a rad-adapted grazer bred for milk, hide gone translucent-crystalline at the flanks.
+2. **Cinderclaw Fowl** — coop bird with faintly warm claws, settles on its clutch of warm eggs.
+3. **Sump-Snail Herd** — grazing mutant snails driven along like tiny cattle for their edible mantle.
+4. **Tallowback Grazer** — a fat-humped beast kept and rendered down for lamp oil.
+5. **Static Coop-Roach** — a harmless swarm kept penned for pest control, legs crackling faintly.
+6. **Bristlehusk Hog** — a bristle-backed swine analog rooting up tuber scraps.
+7. **Ledger-Moth Swarm** — silk-spinning moths tended on racks for cloth thread.
+8. **Warmspine Lizard-Pet** — curled at the hearth for the body heat it radiates.
+9. **Cracklewing Dove** — coop bird whose wingbeats snap with a faint static discharge.
+10. **Sootcoat Herder-Beast** — a woolly grazer naturally soot-dark, driven by a single herder.
+11. **Grub-Vat Tender** — a kept larval creature farmed in a barrel for protein.
+12. **Wax-Tick Milker** — a small tick-like grazer stroked for its waxy secretion.
+13. **Copperscale Carp-Pond** — pond fish farmed in a settlement's cracked cistern.
+14. **Rindhide Pack-Beast** — thick-hided burden animal, patient under a heavy load.
+15. **Glimmer-Moss Grazer, tamed** — the wild glow-moss eater's penned and gentled cousin.
+16. **Barkskin Guard-Beast** — bark-plated animal chained at the gate, mostly for the look of it.
+17. **Hush-Wing Coop Bird** — an unusually silent fowl prized for not drawing raider attention.
+18. **Ration-Hound Analog** — scent-tracking mutant kept to sniff out spoiled stores.
+19. **Cistern Eel, tamed** — kept in the water tank, eating larvae to keep it clean.
+20. **Fume-Proof Milker** — a thick-hided grazer that shrugs off a light gas leak.
+21. **Emberwool Shearling** — sheared each season for a faintly warm wool.
+22. **Twitch-Ear Burrow-Pet** — a nervous kept burrower, first to feel a tremor coming.
+23. **Sludge-Fed Grazer** — thrives on chemical runoff no other kept beast can stomach.
+24. **Chime-Shell Snail** — kept for the ring of its shell, an improvised door-alarm.
+25. **Hearthglow Lap-Beast** — a small warm-bodied pet that curls in a lap like a portable heater.
 
 ---
 
-## Wild animal batches (25 total, 1 sheet)
+## Wild animal batches (50 total, 2 sheets)
 
 Style block (repeated here so this section is self-contained): Pixel-art sprite rendering
 (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale).
@@ -332,7 +380,7 @@ magenta background. Sourced from the game's own `wild-animal-kind` table (`Engin
 Social/Sentient NPCs/Wild Animal Kind.md`) plus additional single-animal variety to fill the
 sheet; entry 11 (the realm-beast) uses this realm's real skin from `data/animal-realm-skins.js`.
 
-### Wild animal sheet 1/1
+### Wild animal sheet 1/2
 
 1. **Wild animal — Territory wolf — holds a stretch of ground and knows every crossing of it**
 2. **Wild animal — A single deer from the herd — moves with the herd, reads the wind before the ranger does**
@@ -360,9 +408,44 @@ sheet; entry 11 (the realm-beast) uses this realm's real skin from `data/animal-
 24. **Wild animal — A peregrine falcon — stooping mid-hunt, faster than anything else in the sky**
 25. **Wild animal — A lynx kitten — spotted coat, play-stalking something that isn't there yet**
 
+**Ash-realm-native second sheet (P6):** all 25 below are new mutant/rad-adapted species, feral
+and unclaimed — no repeats of the base roster above, no repeats across this realm's other new
+animal sheets. Same style block, same shared mechanical instructions as the sheet above, and the
+same **Palette law (2026-07-09)** block up top applies — pull the accent menu (chem-green /
+warning-yellow / cyanotic blue / bruised violet / ember-orange-red) across these 25, no hot
+magenta.
+
+### Wild animal sheet 2/2
+
+1. **Glasshorn Charger** — territorial grazer, light-refracting horns lowered, charges anything that crosses its ground.
+2. **Static-Mane Prowler** — a maned predator whose mane crackles faintly the instant before it strikes.
+3. **Ashveil Glider** — membrane-winged creature gliding silent between ruined rooflines.
+4. **Barbtail Scrapper** — spiny mid-sized scavenger-predator, tail lashed up in warning.
+5. **Fume-Wing Circler** — a large flying scavenger circling patiently over a leaking gas vent.
+6. **Thornhide Rooter** — armored tusked rooter digging through rubble for buried grubs.
+7. **Cracklejaw Stalker** — a silent hunter, jaw sparking a heartbeat before it lunges.
+8. **Duskmarrow Grazer** — a herd animal that only grazes at dusk, wary of the heat-shimmer hours.
+9. **Glowrib Burrower** — a burrowing beast whose exposed ribs give off a faint glow underground.
+10. **Rustquill Roostbird** — rust-quilled ground bird that explodes into flight when startled.
+11. **Chitterhide Pack-Runner** — a small pack hunter chattering to coordinate the chase.
+12. **Sunscald Wyrm-Lizard** — heat-tolerant reptile basking flat against scorched metal.
+13. **Vent-Born Skimmer** — a flying insectoid riding thermal drafts off a cracked vent.
+14. **Hollow-Bone Strider** — long-legged wader picking its way across the ash-flats.
+15. **Bramble-Quill Boar-Kin** — a quilled tusked beast that bristles the instant it's threatened.
+16. **Static-Eyed Watcher-Bird** — perched high, eyes crackling faintly the moment it spots movement.
+17. **Cinderpelt Loner** — a solitary big-cat predator, soot-dark coat, ember-lit eyes tracking prey.
+18. **Fissure Diver** — a creature that dives straight into ground cracks to ambush or escape.
+19. **Molt-Scale Basker** — sheds glassy scales that litter the ground where it suns itself.
+20. **Ashfall Kite** — a scavenger bird riding falling ash like a thermal, wings barely moving.
+21. **Grumblehide Tusker** — a stout tusked grazer, low warning rumble building before it charges.
+22. **Wire-Whisker Burrow-Stalker** — a whiskered predator hunting entirely by ground vibration.
+23. **Halflight Prowler** — active only in the grey hour between day and full dark.
+24. **Rattling Carapace Skitterer** — a fast chitinous mover whose shell rattles audibly as it runs.
+25. **Longshadow Ranger-Beast** — an elusive apex predator known to most only by its long cast shadow at dusk.
+
 ---
 
-## Dungeon animal batches (25 total, 1 sheet)
+## Dungeon animal batches (50 total, 2 sheets)
 
 **Lore note:** per `docs/ANIMAL-SOCIAL.md` §1, the dungeon environment band is animal-population
 near-zero — "each one is a signal," not ambient wildlife. Every entry below is either a
@@ -381,7 +464,7 @@ adapted-to-dark — never a relaxed/domestic pose (even the lost pets down here 
 the place). **No scene props, furniture, cages-as-set-dressing, or background objects of any
 kind** — the animal itself only, isolated against the plain magenta background.
 
-### Dungeon animal sheet 1/1
+### Dungeon animal sheet 1/2
 
 1. **Dungeon animal — Feral vermin-catcher — once someone's ferret or terrier, now lives wild in the tunnels, still killing rats out of habit**
 2. **Dungeon animal — Blind cave rat — pale, sightless, thrives in total dark, first sign something's been dug through**
@@ -408,6 +491,41 @@ kind** — the animal itself only, isolated against the plain magenta background
 23. **Dungeon animal — Tunnel-blind mole — huge clawed forepaws, displaces more earth than it should be able to**
 24. **Dungeon animal — Trapped messenger pigeon — still carries a note no one living will ever read**
 25. **Dungeon animal — An ordinary animal, deliberately unremarkable — domestic or wild, doesn't matter; its presence this deep IS the signal, let the scene decide what it means**
+
+**Ash-realm-native second sheet (P6):** all 25 below are new mutant/rad-adapted species already
+adapted to the permanent dark of vaults, bunkers, and reactor sub-levels — no repeats of the
+base roster above, no repeats across this realm's other new animal sheets. Same style block,
+same shared mechanical instructions and lore note as the sheet above, and the same **Palette law
+(2026-07-09)** block up top applies — pull the accent menu (chem-green / warning-yellow /
+cyanotic blue / bruised violet / ember-orange-red) across these 25, no hot magenta.
+
+### Dungeon animal sheet 2/2
+
+1. **Coolant-Pale Drifter** — bleached creature drifting slow through flooded reactor coolant tunnels.
+2. **Rebar-Nester** — builds its nest from bent rebar, chitters loudly when disturbed.
+3. **Emergency-Light Moth Colony** — swarms the last working bulb in the complex, wings ticking like a clock.
+4. **Sump-Blind Skulker** — eyeless scavenger navigating a flooded sub-basement by smell alone.
+5. **Ration-Vault Weevil Swarm** — infests a sealed food store, the first sign a cache has gone bad.
+6. **Cable-Nest Skitterer** — nests inside a bundle of dead wiring, sparking faintly as it moves.
+7. **Blast-Door Roost Bat** — a colony roosting behind a door no one has opened in years.
+8. **Silo-Deep Glowworm** — strings of faint bioluminescence strung along a silo's inner wall.
+9. **Concrete-Grub Borer** — a larval creature that has eaten slow channels through old concrete.
+10. **Reactor-Core Slitherer** — pale, legless, drawn to the last residual warmth in a dead core.
+11. **Vault-Seal Silverfish Swarm** — feeds on the old paper stock in a sealed archive room.
+12. **Drainage-Pipe Crawler** — a segmented thing that lives its whole life inside old drainage lines.
+13. **Stairwell-Echo Flitter** — a small winged thing that startles at every footstep's echo.
+14. **Bunker-Pale Skink** — a sightless lizard-thing gone pale after generations underground.
+15. **Server-Rack Nester** — nests inside a dead server rack, gnawing at the old insulation.
+16. **Elevator-Shaft Faller** — clings to the shaft wall, drops onto anything passing below.
+17. **Ash-Drift Cistern Fish** — a blind fish surviving in a near-empty cistern.
+18. **Subfloor Chitter-Swarm** — heard constantly underfoot, rarely actually seen.
+19. **Warhead-Bay Roach Colony** — thrives closest to the hottest, most forbidden room in the complex.
+20. **Munitions-Locker Mite Swarm** — nearly invisible, first thing to react when the locker door opens.
+21. **Cracked-Pipe Leech** — waits in a slow drip, latches onto anything that brushes past.
+22. **Fallout-Shelter Stray Brood** — a litter born to a stray that got sealed in, fully feral now.
+23. **Access-Tunnel Glider** — glides silently between levels through the old vent shafts.
+24. **Deep-Vault Pale Crab** — a blind scuttler picking through a flooded lowest sub-level.
+25. **Last-Light Moth** — drawn to the single working bulb left in the whole complex, and dies fighting for it.
 
 ---
 

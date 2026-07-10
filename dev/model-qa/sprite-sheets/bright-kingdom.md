@@ -16,6 +16,19 @@ NPCs) — not hand-invented.
 
 Style block (same for every sheet in this realm): Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration) — this IS one of Genesis's intentionally cartoony realms, so chunky rounded shapes and exaggerated proportions are correct here. saturated cotton-candy-pink and mint palette, clean bold outlines, chunky rounded shapes like an 8-bit mascot, bright rim light — but with one unsettling detail (sharp teeth, too-wide eyes) per sprite that reads even in silhouette.
 
+**Palette law (2026-07-09)** — SPRITE-PALETTE P1–P5: the Kingdom keeps its cotton-candy-pink
+and mint as the base duo — that's the mascot read, don't lose it — but no single sheet gets to
+live in that duo alone. Pull deliberate accents from the midway's own signage and prize-wall:
+**bubblegum-cyan** (arcade-glow, cotton-candy-machine spin), **marigold-gold** (ticket brass,
+funhouse trim, prize ribbons), **grape-violet** (plush-prize fur, twilight-parade shadow —
+this is also the realm's safe harbor for anything that would otherwise skew hot pink, see
+below), **cherry-red** (candy-shell gloss, warning-stripe awnings), and **sherbet-orange**
+(popcorn boxes, jack-o'-lantern grins, carnival-tent canvas). Any 25-cell sheet in this realm
+must show at least 4 of these accent families as deliberate choices across its cast — no two
+cells sitting side by side reading as the same base-duo repeat. P5 anti-key, verbatim: no hot
+magenta / neon pink on any figure — #FF00FF-adjacent hues fight the chroma key; violets/UV are
+fine, hot pinks go desaturated or shift violet.
+
 Shared mechanical instructions (same as the master template): 5×5 grid, 25 cells, one distinct
 static character per cell (not a repeat, not an animation frame), uniform cell size, solid magenta (#FF00FF) background (no transparency, no other background elements), consistent scale across all 25, orthographic side view, each character fully visible from head to toe within its cell — no cropping at the top, bottom, or sides, the complete body must fit inside the cell boundary. **Every character in an expressive, mid-action pose that captures its essence**
 — mid-lunge, mid-cast, braced, snarling — never a neutral T-pose or idle stand.
@@ -259,7 +272,7 @@ hand-authored instead.
 24. **Human late-night radio DJ — broadcasts from a booth just outside the gates; half the toons tune in**
 25. **Elderly human founder's descendant — technically still owns the deed, mostly lets the park run itself now**
 
-## Domestic animal batches (25 total, 1 sheet)
+## Domestic animal batches (50 total, 2 sheets)
 
 Style block (repeated here so this section is self-contained): Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration) — this IS one of Genesis's intentionally cartoony realms, so chunky rounded shapes and exaggerated proportions are correct here. saturated cotton-candy-pink and mint palette, clean bold outlines, chunky rounded shapes like an 8-bit mascot, bright rim light — but with one unsettling detail (sharp teeth, too-wide eyes) per sprite that reads even in silhouette.
 
@@ -271,7 +284,7 @@ stiff/taxidermied. **No scene props, furniture, pens, or background objects of a
 fences, feed troughs, leashes-as-set-dressing, etc.; the animal itself only, isolated against the
 plain magenta background. Rendered in this realm's art style (see the style block above).
 
-### Domestic animal sheet 1/1
+### Domestic animal sheet 1/2
 
 1. **Domestic animal — Loyal dog — bonded to one person, reads their mood before they do.**
 2. **Domestic animal — Working beast (a single ox) — earns its feed, patient, and spooks true.**
@@ -299,10 +312,49 @@ plain magenta background. Rendered in this realm's art style (see the style bloc
 24. **Domestic animal — A single kitten — too young to have earned the barn cat's independence yet.**
 25. **Domestic animal — A single caged ferret-kit — young, hyperactive, still learning the vermin-catcher's trade.**
 
+### Domestic animal sheet 2/2
+
+Style block (repeated here so this section is self-contained): Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration) — this IS one of Genesis's intentionally cartoony realms, so chunky rounded shapes and exaggerated proportions are correct here. saturated cotton-candy-pink and mint palette, clean bold outlines, chunky rounded shapes like an 8-bit mascot, bright rim light — but with one unsettling detail (sharp teeth, too-wide eyes) per sprite that reads even in silhouette. Palette per this file's Palette law block above — spread accents across the 4-6 named hue families, no hot magenta/neon pink on any figure.
+
+Shared mechanical instructions (restated for this section): 5x5 grid, uniform cell size, solid
+magenta (#FF00FF) background (no transparency, no other background elements), consistent scale,
+orthographic side view, each animal fully visible from head to toe within its cell — no cropping.
+**Every animal in a characteristic living pose** — alert, mid-stride, grooming, watching — never
+stiff/taxidermied. **No scene props, furniture, pens, or background objects of any kind** — no
+fences, feed troughs, leashes-as-set-dressing, etc.; the animal itself only, isolated against the
+plain magenta background. Rendered in this realm's art style (see the style block above).
+Realm-native second roster (SPRITE-PALETTE P6): Bright Kingdom's own toon-mascot logic applied
+to kept/tame creatures — no repeats of sheet 1/2's base species.
+
+1. **Wind-Up Canary** — clockwork bird in a gilded cage, sings on the hour, winds down between
+2. **Plush-Eared Lapdog** — stuffed-toy-textured pet, sheds tufts of cotton fluff when startled
+3. **Marzipan Mouse** — sugar-sculpted pet mouse, nibbles its own tail out of habit
+4. **Balloon-Tail Cat** — house cat with a helium-taut tail that tugs it upward mid-leap
+5. **Teacup Parade Piglet** — miniature mascot pig, trots tight looping figure-eights
+6. **Ribbon-Maned Show Pony** — parade-groomed, visibly preens the moment it hears applause
+7. **Confetti Finch** — caged songbird that molts glitter instead of feathers
+8. **Gumdrop Hamster** — sticky sugar-sheened coat, cheeks always packed with hoarded candy
+9. **Squeaky Retriever Pup** — squeaks like a chew-toy with every single bite and step
+10. **Cotton-Tail Mascot Bunny** — oversized ears bounce a half-beat behind each hop
+11. **Music-Box Kitten** — purrs down to a stop mid-nap, needs a key-turn to start again
+12. **Star-Badge Sheepdog** — herds the park's toon crowds instead of any flock
+13. **Candy-Striped Tabby** — barber-pole coat pattern, naps curled in shop windows
+14. **Party-Favor Parakeet** — unfurls a paper noisemaker-tongue when it squawks
+15. **Jelly-Bean Terrier** — bounces stiff-legged like it's molded from jellied candy
+16. **Popcorn-Fluff Bunny** — kernel-textured fur, scatters real kernels when it shakes out
+17. **Wind-Chime Goat** — small bells woven through its coat, chimes with every headbutt
+18. **Sugar-Glass Tortoise** — slow-moving shell catches light like spun sugar
+19. **Marching-Band Mule** — trained to step in perfect time with the parade brass
+20. **Pinwheel-Tailed Dove** — tail feathers spin lazily in the breeze like a toy pinwheel
+21. **Licorice-Whip House Snake** — coiled black-candy-colored pet, gentler than the name suggests
+22. **Fizzy-Pop Frog** — throat sac bubbles and fizzes like carbonation when it croaks
+23. **Living Origami Crane** — paper-creased pet bird, refolds its own wings after every flight
+24. **Candle-Wick Ferret** — tail tip flickers faintly like a lit wick, never actually burns
+25. **Toy-Drum Puppy** — barks in a fixed marching rhythm, like a wind-up toy drummer
 
 ---
 
-## Wild animal batches (25 total, 1 sheet)
+## Wild animal batches (50 total, 2 sheets)
 
 Style block (repeated here so this section is self-contained): Pixel-art sprite rendering
 (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration — this IS one of Genesis's intentionally cartoony realms, so chunky rounded shapes and exaggerated proportions are correct here).
@@ -319,7 +371,7 @@ magenta background. Sourced from the game's own `wild-animal-kind` table (`Engin
 Social/Sentient NPCs/Wild Animal Kind.md`) plus additional single-animal variety to fill the
 sheet; entry 11 (the realm-beast) uses this realm's real skin from `data/animal-realm-skins.js`.
 
-### Wild animal sheet 1/1
+### Wild animal sheet 1/2
 
 1. **Wild animal — Territory wolf — holds a stretch of ground and knows every crossing of it**
 2. **Wild animal — A single deer from the herd — moves with the herd, reads the wind before the ranger does**
@@ -347,9 +399,51 @@ sheet; entry 11 (the realm-beast) uses this realm's real skin from `data/animal-
 24. **Wild animal — A peregrine falcon — stooping mid-hunt, faster than anything else in the sky**
 25. **Wild animal — A lynx kitten — spotted coat, play-stalking something that isn't there yet**
 
+### Wild animal sheet 2/2
+
+Style block (repeated here so this section is self-contained): Pixel-art sprite rendering
+(visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration — this IS one of Genesis's intentionally cartoony realms, so chunky rounded shapes and exaggerated proportions are correct here).
+saturated cotton-candy-pink and mint palette, clean bold outlines, chunky rounded shapes like an 8-bit mascot, bright rim light — but with one unsettling detail (sharp teeth, too-wide eyes) per sprite that reads even in silhouette. Palette per this file's Palette law block above — spread accents across the 4-6 named hue families, no hot magenta/neon pink on any figure.
+
+Shared mechanical instructions (restated for this section): 5x5 grid, uniform cell size, solid
+magenta (#FF00FF) background (no transparency, no other background elements), consistent scale,
+orthographic side view, each animal fully visible from head to toe within its cell — no cropping.
+**Every animal in a characteristic wild-living pose** — alert, stalking, grazing, mid-flight,
+territorial — never stiff/taxidermied, never tame-looking. **No scene props, furniture, dens, or
+background objects of any kind** — no burrows, nests-as-set-dressing, foliage clusters, etc.; the
+animal itself only, isolated against the plain magenta background. Realm-native second roster
+(SPRITE-PALETTE P6): the park's fringe and hedge-maze wildlife, carnival-touched but untamed — no
+repeats of sheet 1/2's base species.
+
+1. **Briar-Thorn Hare** — hedge-maze dweller, vanishes clean into thornwork hedges
+2. **Kite-Tailed Hawk** — trails a torn paper-kite tail that never quite comes loose
+3. **Storm-Cloud Ram** — a lone personal raincloud follows only this one animal
+4. **Toadstool-Back Toad** — mushrooms sprout along its spine, puffs spores when startled
+5. **Glass-Antlered Stag** — antlers chime like wind-glass, fragile-looking but hard as stone
+6. **Marquee-Eyed Owl** — eyes glow steady like a lit-up midway sign in the dark
+7. **Wicker-Boned Fox** — twig-and-wicker-framed body, creaks audibly at a full run
+8. **Firefly-Halo Deer** — trails a permanent drifting halo of lantern-bugs
+9. **Tangled Kite-Hawk Fledgling** — young hawk still snarled in torn kite-string, flies crooked
+10. **Barrel-Back Beetle** — carnival-barrel-shell beetle that rolls itself downhill to flee
+11. **Papercut Moth** — origami-winged moth, wingbeats leave faint paper-fold creases in the air
+12. **Tumbleweed Hedgehog** — curls into a tight ball and blows across open midway ground
+13. **Glowworm Badger** — faint bioluminescent stripe down its back, visible only at dusk
+14. **Sawdust-Scented Boar** — carries a carnival-sawdust musk, roots through midway litter
+15. **Ribbon-Eel** — streamer-thin freshwater eel that ripples like a parade ribbon in the current
+16. **Chalk-Line Lynx** — dust-pale coat leaves faint chalk marks wherever it treads
+17. **Kettle-Corn Crow** — brazen thief, snatches popped kernels straight off vendor carts
+18. **Windup-Wing Sparrow** — clicks faintly mid-flight like a tiny clockwork mechanism
+19. **Marbled-Glass Frog** — translucent skin swirled with color like carnival marbles
+20. **Streamer-Tailed Pheasant** — trailing plumage snaps like crepe-paper streamers in flight
+21. **Ashcan Raccoon** — midway scavenger, unbothered by crowds, steals anything that shines
+22. **Spun-Sugar Spider** — web threads glisten and smell faintly sweet
+23. **Thistle-Crowned Doe** — burrs and thistle-growth tangled into a crown on her antlers
+24. **Nightlight Moth** — glows soft amber, drawn to the park's lantern-lit paths after close
+25. **Sideshow Stag Beetle** — oversized mandibles like a strongman's mustache, territorial
+
 ---
 
-## Dungeon animal batches (25 total, 1 sheet)
+## Dungeon animal batches (50 total, 2 sheets)
 
 **Lore note:** per `docs/ANIMAL-SOCIAL.md` §1, the dungeon environment band is animal-population
 near-zero — "each one is a signal," not ambient wildlife. Every entry below is either a
@@ -368,7 +462,7 @@ adapted-to-dark — never a relaxed/domestic pose (even the lost pets down here 
 the place). **No scene props, furniture, cages-as-set-dressing, or background objects of any
 kind** — the animal itself only, isolated against the plain magenta background.
 
-### Dungeon animal sheet 1/1
+### Dungeon animal sheet 1/2
 
 1. **Dungeon animal — Feral vermin-catcher — once someone's ferret or terrier, now lives wild in the tunnels, still killing rats out of habit**
 2. **Dungeon animal — Blind cave rat — pale, sightless, thrives in total dark, first sign something's been dug through**
@@ -395,6 +489,51 @@ kind** — the animal itself only, isolated against the plain magenta background
 23. **Dungeon animal — Tunnel-blind mole — huge clawed forepaws, displaces more earth than it should be able to**
 24. **Dungeon animal — Trapped messenger pigeon — still carries a note no one living will ever read**
 25. **Dungeon animal — An ordinary animal, deliberately unremarkable — domestic or wild, doesn't matter; its presence this deep IS the signal, let the scene decide what it means**
+
+### Dungeon animal sheet 2/2
+
+**Lore note:** same discipline as sheet 1/2 — each entry below is either a domestic/wild Bright
+Kingdom animal that ended up somewhere it shouldn't be, or a creature adapted to the park's own
+permanent dark (understage, backstage, maintenance tunnels) — never a generic cave critter.
+
+Style block (repeated here so this section is self-contained): Pixel-art sprite rendering
+(visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration — this IS one of Genesis's intentionally cartoony realms, so chunky rounded shapes and exaggerated proportions are correct here).
+saturated cotton-candy-pink and mint palette, clean bold outlines, chunky rounded shapes like an 8-bit mascot, bright rim light — but with one unsettling detail (sharp teeth, too-wide eyes) per sprite that reads even in silhouette. Palette per this file's Palette law block above — spread accents across the 4-6 named hue families, no hot magenta/neon pink on any figure.
+
+Shared mechanical instructions (restated for this section): 5x5 grid, uniform cell size, solid
+magenta (#FF00FF) background (no transparency, no other background elements), consistent scale,
+orthographic side view, each animal fully visible from head to toe within its cell — no cropping.
+**Every animal in a characteristic pose for its situation** — wary, cornered, feral, startled,
+adapted-to-dark — never a relaxed/domestic pose. **No scene props, furniture, cages-as-set-
+dressing, or background objects of any kind** — the animal itself only, isolated against the
+plain magenta background. Realm-native second roster (SPRITE-PALETTE P6): the tunnels and
+understage spaces beneath the park — no repeats of sheet 1/2's base species.
+
+1. **Backstage Rat-King** — several sewer rats fused tail-to-tail, scurries as one tangled body
+2. **Forgotten Mascot Moth** — drawn to the dead glow of a discarded mascot-suit's eye-lights, won't leave it
+3. **Prop-Closet Bat** — nests in disused costume racks, wings snarled in stray ribbon
+4. **Understage Cricket** — chirps in time with the muffled parade music overhead
+5. **Wardrobe Silverfish** — grown oversized on decades of costume glue and starch
+6. **Popcorn-Vent Pigeon** — nests in the machinery ducts, feathers dusted grey with old kernel-ash
+7. **Lost Parade Horse** — a carousel-parade horse wandered into the maintenance tunnels, tack still buckled on
+8. **Ticket-Stub Squirrel** — hoards old ticket stubs in its tunnel nest like a magpie hoards shine
+9. **Blacklight Gecko** — skin faintly fluoresces under the tunnels' emergency blacklights
+10. **Sewer-Grate Duckling** — imprinted on the machinery hum, follows it like a mother
+11. **Cable-Run Snake** — lives coiled along warm power conduits in the service halls
+12. **Last-Light Moth** — one straggler still circling a dead work-lamp long after its swarm scattered
+13. **Costume-Silk Spider** — spins its web from stolen costume thread, glints like sequins
+14. **Chalk-Dusted Tunnel Mouse** — pale from years spent in the paint-and-plaster storage halls
+15. **Echo-Pit Toad** — its croak gets swallowed and returned wrong by the tunnel acoustics
+16. **Dead-Ride Rabbit** — nests inside a mothballed attraction, thumps in time with its motor's last tick
+17. **Tagged Sub-Level Bat** — still wears a corroded metal band from a long-cancelled study
+18. **Boiler-Room Salamander** — thrives in the heat runoff from the park's old machinery
+19. **Mascot-Head Stray** — a feral cat that's taken to wearing a torn mascot head as its den
+20. **Grease-Trap Eel** — lives in the runoff channels beneath the food court, surprisingly hardy
+21. **Contract-Eating Moth** — eats old paper permits in the storage vault, wings dusted with ink
+22. **Wrong-Tunnel Groundhog** — burrowed in from outside, now lost in the service corridors
+23. **Understudy's Canary** — left behind in an old dressing room, cage door long rusted open, still singing
+24. **Mini-Rail Mouse** — lives along the kiddie-train tracks, flees the same schedule every day
+25. **The Last Balloon-Animal** — a discarded balloon-animal creature, deflated, still twitching faintly
 
 ---
 

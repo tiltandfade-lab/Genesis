@@ -20,6 +20,21 @@ Shared mechanical instructions (same as the master template): 5×5 grid, 25 cell
 static character per cell (not a repeat, not an animation frame), uniform cell size, solid magenta (#FF00FF) background (no transparency, no other background elements), consistent scale across all 25, orthographic side view, each character fully visible from head to toe within its cell — no cropping at the top, bottom, or sides, the complete body must fit inside the cell boundary. **Every character in an expressive, mid-action pose that captures its essence**
 — mid-lunge, mid-cast, braced, snarling — never a neutral T-pose or idle stand.
 
+**Palette law (2026-07-09)** — SPRITE-PALETTE P1–P5: the realm's sun-faded teal-and-driftwood
+base stays — that duo can and should still dominate any given figure. But no 25-cell sheet in
+this realm reads as just teal-and-driftwood anymore; work a broader accent menu in on top of it,
+figure by figure: **coral-rust** (dried blood, cutlass rust, tanned rope-tar red), **brass-gold**
+(fittings, coin, lantern-flame, epaulette braid), **kelp-verdigris** (weathered copper, algae
+bloom, hull-growth green), **storm-cyan** (squall light, cold electric sky, deep bioluminescent
+blue), and **bruised-violet** (ghost-light, deep-trench glow, drowned-things pallor) — pick
+these to characterize a creature or role, not to blanket every cell in the same rainbow. Any
+25-cell sheet must carry at least 4 of these hue families in deliberate accents across its cast,
+and no two adjacent cells should read as the same base-plus-accent duo back to back — vary which
+accent leads sheet to sheet. Anti-key (binding on every figure, every sheet): no hot magenta or
+neon pink anywhere on a figure — anything #FF00FF-adjacent fights the chroma key. Violets and
+UV-blue are fine and encouraged (see bruised-violet above); where a hot pink would otherwise
+read (coral flesh, exotic dye, a bruise), desaturate it or shift it toward violet instead.
+
 ---
 
 ## Monster batches (118 total, 5 sheets)
@@ -255,7 +270,7 @@ Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-R
 24. **Ship's surgeon, unsentimental — has amputated more limbs than she can count**
 25. **Tall, gaunt customs magistrate — technically incorruptible, practically exhausted**
 
-## Domestic animal batches (25 total, 1 sheet)
+## Domestic animal batches (50 total, 2 sheets)
 
 Style block (repeated here so this section is self-contained): Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). sun-faded teal-and-driftwood palette, salt-spray dither texture, hard bright rim light off water, weathered rope/canvas/barnacle textures, one high-value wet-glint accent per sprite.
 
@@ -267,7 +282,7 @@ stiff/taxidermied. **No scene props, furniture, pens, or background objects of a
 fences, feed troughs, leashes-as-set-dressing, etc.; the animal itself only, isolated against the
 plain magenta background. Rendered in this realm's art style (see the style block above).
 
-### Domestic animal sheet 1/1
+### Domestic animal sheet 1/2
 
 1. **Domestic animal — Loyal dog — bonded to one person, reads their mood before they do.**
 2. **Domestic animal — Working beast (a single ox) — earns its feed, patient, and spooks true.**
@@ -295,10 +310,50 @@ plain magenta background. Rendered in this realm's art style (see the style bloc
 24. **Domestic animal — A single kitten — too young to have earned the barn cat's independence yet.**
 25. **Domestic animal — A single caged ferret-kit — young, hyperactive, still learning the vermin-catcher's trade.**
 
+Style block (repeated here so this section is self-contained): Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). sun-faded teal-and-driftwood palette, salt-spray dither texture, hard bright rim light off water, weathered rope/canvas/barnacle textures, one high-value wet-glint accent per sprite. Palette law reference: see **Palette law (2026-07-09)** above — work the accent menu in across this cast, no hot magenta/neon pink on any figure.
+
+Shared mechanical instructions (restated for this section): 5x5 grid, uniform cell size, solid
+magenta (#FF00FF) background (no transparency, no other background elements), consistent scale,
+orthographic side view, each animal fully visible from head to toe within its cell — no cropping.
+**Every animal in a characteristic living pose** — alert, mid-stride, grooming, watching — never
+stiff/taxidermied. **No scene props, furniture, pens, or background objects of any kind** — no
+fences, feed troughs, leashes-as-set-dressing, etc.; the animal itself only, isolated against the
+plain magenta background. Rendered in this realm's art style (see the style block above).
+Realm-native fauna (SPRITE-PALETTE P6): pelagic/shore/ship life kept aboard or around the ports of
+this realm — no repeats of sheet 1/2's base roster, no repeats across this realm's animal kinds.
+
+### Domestic animal sheet 2/2
+
+1. **Ship's Parrot** — Perches the rigging, mimics the bosun's orders back word for word.
+2. **Captain's Macaw** — Vivid plumage, screeches at anyone unfamiliar boarding.
+3. **Tavern Mynah** — Repeats gossip back to the room, exact and merciless.
+4. **Tame Pelican** — Begs scraps at the fish-cleaning table, unbothered by the knife.
+5. **Working Cormorant** — Dives on a tether, surfaces with a fish for its keeper.
+6. **Mascot Seal Pup** — Raised aboard since it washed up small, sleeps curled in the scuppers.
+7. **Trading-Post Sea Lion** — Trained for a customs-house crowd, barks and claps on cue.
+8. **Foreign-Port Monkey** — Small, quick-fingered, steals more than it's ever fed.
+9. **Reformed Stowaway Raccoon** — Foraged its way aboard, then into being tolerated.
+10. **Galley Rooster** — Crows the watch-change better than any bell.
+11. **Salt-Marsh Guinea Fowl** — Louder alarm than any dog, hated and kept anyway.
+12. **Dockyard Mule** — Hauls the heaviest crates, kicks the laziest hands.
+13. **Ship's Mongoose** — Brought aboard for rat control, keeps to itself between kills.
+14. **Hold-Kept Milk Cow** — Cramped, patient, keeps the officers in cream.
+15. **Belowdecks Guinea Pig** — A child's pet, first to squeak at foul weather.
+16. **Jarred Hermit Crab** — Traded shells twice since it came aboard.
+17. **Cistern-Kept Eel** — Eats galley scraps, mistaken for a sea monster by new hands.
+18. **Souvenir Iguana** — Brought back from a southern port, suns itself on deck.
+19. **Barrel Octopus** — A curiosity kept alive in a cask for the crew's amusement.
+20. **Following Dolphin** — Not owned, not fed, but shows up for this one ship alone.
+21. **Trained Fetching Lemur** — Rare foreign pet, sent aloft for retrievals a sailor won't climb for.
+22. **Coastal Homing Tern** — Carries short messages between ships in sight of each other.
+23. **Wager-Pit Quail** — Small, kept for the dockside gambling circuit, meaner than its size.
+24. **Ballast-Deck Tortoise** — Slow, ancient-seeming, kept as much for luck as company.
+25. **Sea-Chest Scorpion** — Exotic pet kept in a lidded box, brought back and half-forgotten.
+
 
 ---
 
-## Wild animal batches (25 total, 1 sheet)
+## Wild animal batches (50 total, 2 sheets)
 
 Style block (repeated here so this section is self-contained): Pixel-art sprite rendering
 (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale).
@@ -315,7 +370,7 @@ magenta background. Sourced from the game's own `wild-animal-kind` table (`Engin
 Social/Sentient NPCs/Wild Animal Kind.md`) plus additional single-animal variety to fill the
 sheet; entry 11 (the realm-beast) uses this realm's real skin from `data/animal-realm-skins.js`.
 
-### Wild animal sheet 1/1
+### Wild animal sheet 1/2
 
 1. **Wild animal — Territory wolf — holds a stretch of ground and knows every crossing of it**
 2. **Wild animal — A single deer from the herd — moves with the herd, reads the wind before the ranger does**
@@ -343,9 +398,51 @@ sheet; entry 11 (the realm-beast) uses this realm's real skin from `data/animal-
 24. **Wild animal — A peregrine falcon — stooping mid-hunt, faster than anything else in the sky**
 25. **Wild animal — A lynx kitten — spotted coat, play-stalking something that isn't there yet**
 
+Style block (repeated here so this section is self-contained): Pixel-art sprite rendering
+(visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale).
+sun-faded teal-and-driftwood palette, salt-spray dither texture, hard bright rim light off water, weathered rope/canvas/barnacle textures, one high-value wet-glint accent per sprite. Palette law reference: see **Palette law (2026-07-09)** above — work the accent menu in across this cast, no hot magenta/neon pink on any figure.
+
+Shared mechanical instructions (restated for this section): 5x5 grid, uniform cell size, solid
+magenta (#FF00FF) background (no transparency, no other background elements), consistent scale,
+orthographic side view, each animal fully visible from head to toe within its cell — no cropping.
+**Every animal in a characteristic wild-living pose** — alert, stalking, grazing, mid-flight,
+territorial — never stiff/taxidermied, never tame-looking (these are wilderness creatures, not
+pets). **No scene props, furniture, dens, or background objects of any kind** — no burrows,
+nests-as-set-dressing, foliage clusters, etc.; the animal itself only, isolated against the plain
+magenta background. Realm-native fauna (SPRITE-PALETTE P6): open-ocean and coastal wildlife —
+no repeats of sheet 1/2's base roster, no repeats across this realm's animal kinds.
+
+### Wild animal sheet 2/2
+
+1. **Surfacing Sperm Whale** — A lone bull breaks for air, then is gone under again.
+2. **Shadowing Orca** — A solitary orca trails a ship for miles, patient and unreadable.
+3. **Bow-Wave Porpoise** — Rides the wake, gone in a breath.
+4. **Grazing Manatee** — Slow and placid, working a shallow inlet's grass bed.
+5. **Gliding Manta Ray** — Passes beneath the keel, one wingtip breaking the surface.
+6. **Patrolling Hammerhead** — Works a reef edge, unhurried, unbothered by anything smaller.
+7. **Drifting Whale Shark** — Enormous and harmless, moving through a plankton bloom.
+8. **Breaching Swordfish** — Clears the water whole, gone before it's believed.
+9. **Cutting Sailfish** — Dorsal fin up, the fastest thing in these waters.
+10. **Fighting Marlin** — Fights the hook far longer than any fish reasonably should.
+11. **Ambush Barracuda** — Hangs motionless, then closes the distance in an instant.
+12. **Turning Tuna School** — A wall of silver that turns as a single animal.
+13. **Skipping Flying Fish School** — Breaks the surface in a glittering, gliding arc.
+14. **Banded Sea Snake** — Patient, slow-moving, far more venomous than it looks.
+15. **Arguing Cuttlefish** — Flashes color across its skin, communicating without a sound.
+16. **Deep-Shadow Giant Squid** — A shape at depth, one tentacle-tip breaking the dark water.
+17. **Drifting Nautilus** — Spiraled shell, going wherever the current decides.
+18. **Night-Crawling Horseshoe Crab** — Ancient, armored, working the tideline after dark.
+19. **Vanishing Ghost Crab** — Bone-pale, sideways-fast, down its hole before it's fully seen.
+20. **Tide-Pool Sea Spider** — Long-legged, picking its way across the shallows.
+21. **Grazing Nudibranch** — A bright, poisonous ribbon of a creature working a reef.
+22. **Harassing Frigatebird** — Never lands on water, bullies other birds for their catch.
+23. **Endless-Glide Albatross** — Miles of open air without a single wingbeat.
+24. **Diving Gannet** — Folds its wings and drops arrow-straight into the water.
+25. **Stout-Diving Puffin** — Comically built for the air, surprisingly fast underwater.
+
 ---
 
-## Dungeon animal batches (25 total, 1 sheet)
+## Dungeon animal batches (50 total, 2 sheets)
 
 **Lore note:** per `docs/ANIMAL-SOCIAL.md` §1, the dungeon environment band is animal-population
 near-zero — "each one is a signal," not ambient wildlife. Every entry below is either a
@@ -364,7 +461,7 @@ adapted-to-dark — never a relaxed/domestic pose (even the lost pets down here 
 the place). **No scene props, furniture, cages-as-set-dressing, or background objects of any
 kind** — the animal itself only, isolated against the plain magenta background.
 
-### Dungeon animal sheet 1/1
+### Dungeon animal sheet 1/2
 
 1. **Dungeon animal — Feral vermin-catcher — once someone's ferret or terrier, now lives wild in the tunnels, still killing rats out of habit**
 2. **Dungeon animal — Blind cave rat — pale, sightless, thrives in total dark, first sign something's been dug through**
@@ -391,6 +488,49 @@ kind** — the animal itself only, isolated against the plain magenta background
 23. **Dungeon animal — Tunnel-blind mole — huge clawed forepaws, displaces more earth than it should be able to**
 24. **Dungeon animal — Trapped messenger pigeon — still carries a note no one living will ever read**
 25. **Dungeon animal — An ordinary animal, deliberately unremarkable — domestic or wild, doesn't matter; its presence this deep IS the signal, let the scene decide what it means**
+
+Style block (repeated here so this section is self-contained): Pixel-art sprite rendering
+(visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale).
+sun-faded teal-and-driftwood palette, salt-spray dither texture, hard bright rim light off water, weathered rope/canvas/barnacle textures, one high-value wet-glint accent per sprite. Palette law reference: see **Palette law (2026-07-09)** above — work the accent menu in across this cast, no hot magenta/neon pink on any figure.
+
+Shared mechanical instructions (restated for this section): 5x5 grid, uniform cell size, solid
+magenta (#FF00FF) background (no transparency, no other background elements), consistent scale,
+orthographic side view, each animal fully visible from head to toe within its cell — no cropping.
+**Every animal in a characteristic pose for its situation** — wary, cornered, feral, startled,
+adapted-to-dark — never a relaxed/domestic pose (even the lost pets down here read as changed by
+the place). **No scene props, furniture, cages-as-set-dressing, or background objects of any
+kind** — the animal itself only, isolated against the plain magenta background. Realm-native
+fauna (SPRITE-PALETTE P6): bilge/shipwreck/sea-cave creatures adapted to permanent dark or
+stranded there — no repeats of sheet 1/2's base roster, no repeats across this realm's animal
+kinds.
+
+### Dungeon animal sheet 2/2
+
+1. **Blind Cave Shrimp** — Pale, eyeless, filters whatever drifts down through the bilge.
+2. **Stranded Anglerfish** — Washed into a flooded hold, its lure the only light down there.
+3. **Wreck Centipede** — Long-bodied and fast in total dark, nests between a ship's ribs.
+4. **Ballast Woodlouse Swarm** — Thrives in the wet dark between the frames, scatters at lantern-light.
+5. **Cave-Pale Newt** — Translucent, clings motionless to a dripping bulkhead.
+6. **Cistern Leech** — Fat and patient, waits in standing bilgewater for something to wade through.
+7. **Bilge Toad** — Pale, bloated, croaks once and goes silent for hours.
+8. **Stranded Mudskipper** — Flops between waterlogged planks, breathing air far longer than it should.
+9. **Blind Hold-Crab** — Pale-shelled, sideways-quick, lives where the light never reaches.
+10. **Cave-Adapted Isopod** — An armored, oversized bilge pillbug that curls tight at the first vibration.
+11. **Wreck Silverfish Swarm** — Devours old rope and log-paper, scatters at any light.
+12. **Trapped Hold Jellyfish** — Pulses weakly in a flooded compartment, shouldn't have survived this long.
+13. **Wreck-Adapted Tick Swarm** — Patient and blood-hungry, waits for anything warm to pass through.
+14. **Ballast Flatworm Colony** — Pale and ribbon-shaped, drifting in water nobody's disturbed in years.
+15. **Shipworm Swarm** — Burrows through waterlogged planking, hollowing a hull from within.
+16. **Cave-Pale Sea Cucumber** — Slow, spineless, unnervingly humanlike when lantern-light finds it.
+17. **Ballast-Deck Roach Swarm** — Thrives in ship holds the world over, thicker and bolder down here.
+18. **Stranded Cowrie** — Pale, slow, shell scoured smooth by decades in the ballast dark.
+19. **Wreck-Cave Krill Swarm** — Clouds the water near a breach, first sign something bigger is near.
+20. **Lost Remora** — Sucker-mouthed, lost its host ship long ago, drifts against the dark hull alone.
+21. **Displaced Fiddler Crab Colony** — Small, one-clawed, scuttling somewhere it has no business surviving.
+22. **Stranded Storm Petrel** — One bird, blown into a sea-cave, hasn't found daylight since.
+23. **Cave-Blind Bristleworm** — Segmented, hair-fine spines, nesting in rotted rope and old rigging.
+24. **Hull-Fused Limpet Colony** — Cemented to the plating, patient past any reckoning.
+25. **Glassfish Shoal** — Translucent, near-invisible, drifting through the flooded lowest hold.
 
 ---
 

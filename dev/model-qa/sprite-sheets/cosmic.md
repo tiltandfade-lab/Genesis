@@ -16,6 +16,23 @@ NPCs) — not hand-invented.
 
 Style block (same for every sheet in this realm): Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). deep indigo-and-gold palette, geometric sacred-symbol linework glowing as the high-value zone, obsidian-dark base tones so gold sigils read as each silhouette's defining feature, faint starfield dither in the background.
 
+**Palette law (2026-07-09)** — SPRITE-PALETTE P1–P5. This realm keeps its base palette —
+deep indigo-and-gold, obsidian-dark base tones, gold sacred-symbol linework as the high-value
+zone, faint starfield dither — that identity is locked, never diluted. Within it, liberal: a
+five-hue accent menu keeps every sheet from reading as pure indigo-and-gold monotone —
+**lapis violet-blue** (deeper cousin to the base indigo, shadow-side glows and secondary
+sigils), **carnelian orange-red** (warm accent for wards, old-blood warning marks), **malachite
+green** (verdigris patina, oxidized bronze fittings, old-copper ritual tools), **faience
+turquoise** (the temple-glaze blue-green, for beads, inlay, glazed accents), and **ash-silver
+starlight** (a near-white cool highlight for pinpoint stars and true-name script, distinct from
+the gold). Sheet-level rule: across any 25-cell sheet, at least 4 of these 5 accent families
+must appear as deliberate accents (not just background dither), and no two adjacent cells may
+read as the same base+accent duo — vary which accent leads cell to cell. **Anti-key (P5, every
+figure, no exceptions):** no hot magenta / neon pink anywhere on a figure — anything
+#FF00FF-adjacent fights the chroma key; violets and ultraviolet blues (the lapis-violet accent
+above) are fine, but any hot-pink impulse (a "psychic glow," say) must go desaturated or shift
+toward violet instead.
+
 Shared mechanical instructions (same as the master template): 5×5 grid, 25 cells, one distinct
 static character per cell (not a repeat, not an animation frame), uniform cell size, solid magenta (#FF00FF) background (no transparency, no other background elements), consistent scale across all 25, orthographic side view, each character fully visible from head to toe within its cell — no cropping at the top, bottom, or sides, the complete body must fit inside the cell boundary. **Every character in an expressive, mid-action pose that captures its essence**
 — mid-lunge, mid-cast, braced, snarling — never a neutral T-pose or idle stand.
@@ -266,7 +283,7 @@ stiff/taxidermied. **No scene props, furniture, pens, or background objects of a
 fences, feed troughs, leashes-as-set-dressing, etc.; the animal itself only, isolated against the
 plain magenta background. Rendered in this realm's art style (see the style block above).
 
-### Domestic animal sheet 1/1
+### Domestic animal sheet 1/2
 
 1. **Domestic animal — Loyal dog — bonded to one person, reads their mood before they do.**
 2. **Domestic animal — Working beast (a single ox) — earns its feed, patient, and spooks true.**
@@ -294,6 +311,41 @@ plain magenta background. Rendered in this realm's art style (see the style bloc
 24. **Domestic animal — A single kitten — too young to have earned the barn cat's independence yet.**
 25. **Domestic animal — A single caged ferret-kit — young, hyperactive, still learning the vermin-catcher's trade.**
 
+### Domestic animal sheet 2/2
+
+Realm-native second pass (SPRITE-PALETTE P6): 25 all-new species kept by this realm's temple
+households, none repeating the base roster above. Same style block, same shared mechanical
+instructions as sheet 1/2 above (5×5 grid, 25 cells, uniform cell size, solid magenta #FF00FF
+background, consistent scale, orthographic side view, each animal fully visible head to toe, no
+cropping, a characteristic living pose — never stiff/taxidermied — no scene props/furniture/pens
+of any kind, animal only, isolated against plain magenta), rendered per this realm's style block
+and its palette law above (accent per the 5-hue menu; no hot magenta/pink on any figure).
+
+1. **Temple mongoose** — kept to kill the vault-snakes, fearless of the ones that shouldn't be there.
+2. **Star-broody hen** — lays eggs warm from something other than her own body heat.
+3. **Caged jerboa** — desert hopper, wide star-eyes, keeps no normal sleep schedule.
+4. **Desert sand cat** — huge-eared half-lap-half-mouser, kept more for luck than for mice.
+5. **Leashed baby crocodile** — temple-pond mascot, suns itself under a star-shaped lamp.
+6. **Cattle egret** — rides the yoke-ox's back, first to flinch at the sky.
+7. **Incense-civet** — musk-gland kept animal, perfumes the whole household passively.
+8. **Saluki-line courser** — sand-bred sighthound, kept for speed across open dune.
+9. **Ibex nanny, milk-kept** — sure-footed on the temple steps, headbutts anyone but her handler.
+10. **Desert hedgehog** — kept loose in the garden, rolls tight at the first footstep.
+11. **Nile monitor on a tether** — semi-wild ratter, bites if crowded.
+12. **Star-quiet dove** — gone silent for a season, still fed daily out of superstition.
+13. **Basket-kept scorpion** — venom milked for the household wards, handled with practiced calm.
+14. **Fennec fox kit** — den-raised, steals shiny things off the household altar.
+15. **Yoked mule pair** — bred for hauling temple stone, panics if separated.
+16. **Household cobra, fed and feared** — a working ward kept in a covered basket, not a pet exactly.
+17. **Temple-kept serval** — the sacred cat's wilder cousin, aloof and put on display rather than worked.
+18. **Star-melon patch's guardian toad** — kept to eat the crop-pests, glows faintly under a full moon.
+19. **Water-buffalo calf** — new-born and wobbly, kept close to the flooded field.
+20. **Caged quail** — kept for the eggs and the soft nervous noise.
+21. **Silk-moth brood** — raised for thread, cocoons that shimmer faintly after dark.
+22. **Chained temple baboon** — sacred, ill-tempered, doted on regardless.
+23. **Lamp-imprinted duckling clutch** — hatched under a lamp, follows the light instead of a mother.
+24. **Old blind-and-deaf housecat** — sleeps through everything but the hour before dawn.
+25. **Conjunction-born calf** — born under a rare star-alignment, kept and never put to work.
 
 ---
 
@@ -314,7 +366,7 @@ magenta background. Sourced from the game's own `wild-animal-kind` table (`Engin
 Social/Sentient NPCs/Wild Animal Kind.md`) plus additional single-animal variety to fill the
 sheet; entry 11 (the realm-beast) uses this realm's real skin from `data/animal-realm-skins.js`.
 
-### Wild animal sheet 1/1
+### Wild animal sheet 1/2
 
 1. **Wild animal — Territory wolf — holds a stretch of ground and knows every crossing of it**
 2. **Wild animal — A single deer from the herd — moves with the herd, reads the wind before the ranger does**
@@ -342,6 +394,43 @@ sheet; entry 11 (the realm-beast) uses this realm's real skin from `data/animal-
 24. **Wild animal — A peregrine falcon — stooping mid-hunt, faster than anything else in the sky**
 25. **Wild animal — A lynx kitten — spotted coat, play-stalking something that isn't there yet**
 
+### Wild animal sheet 2/2
+
+Realm-native second pass (SPRITE-PALETTE P6): 25 all-new species for this realm's open desert
+and night sky, none repeating the base roster above or the new domestic roster (sheet 2/2 above).
+Same style block, same shared mechanical instructions as sheet 1/2 above (5×5 grid, uniform cell
+size, solid magenta #FF00FF background, consistent scale, orthographic side view, each animal
+fully visible head to toe, no cropping, a characteristic wild-living pose — alert, stalking,
+grazing, mid-flight, territorial, never tame-looking — no scene props/dens/foliage of any kind,
+animal only, isolated against plain magenta), rendered per this realm's style block and its
+palette law above (accent per the 5-hue menu; no hot magenta/pink on any figure).
+
+1. **Oryx bull** — straight horns catching starlight, leads the herd only after dark.
+2. **Desert jackal pack** — scavenger chorus, howls fall into a rhythm that isn't natural.
+3. **Horned viper** — buried to the eyes in sand, strikes before it's seen.
+4. **Caracal** — tufted ears, leaps straight up out of scrub to snatch birds mid-air.
+5. **Aoudad** — cliff-walking wild sheep-cousin, grazes ledges no predator will follow.
+6. **Egyptian spiny-tailed lizard (Dhub)** — basks motionless for hours, then closes ground fast.
+7. **Sandgrouse flock** — flies for miles to water on a schedule that never varies.
+8. **Striped hyena, lone scout** — laughs at something not there, patient past reason.
+9. **Addax antelope** — near-white coat, moves like it's already half a ghost.
+10. **Puff adder** — thick-bodied ambush viper, barely bothers to hide.
+11. **Rock hyrax colony** — sentries on every high stone, screeching the alarm down the line.
+12. **Locust swarm, off-season** — arrives when the charts say it shouldn't, strips a field to stalks.
+13. **Scarab beetle swarm** — moves as one glittering carpet over open ground.
+14. **Sand-colored chameleon** — shifts not just hue but seems to blur its own outline.
+15. **Wild dromedary bull** — rutting season making it genuinely dangerous.
+16. **Barbary lion, last wild pride** — marks territory under a sky it seems to actually read.
+17. **Grevy's zebra harem** — stripes swim in the heat-shimmer, hardest animal here to look straight at.
+18. **Desert hare** — dust-colored, freezes flat rather than runs, first choice always wrong.
+19. **Klipspringer** — tiny cliff-antelope, impossibly precise footing on sheer rock.
+20. **Star-mapped tortoise** — ancient, patterns on its shell that shift a fraction between full moons.
+21. **Camel spider** — fast, ugly, harmless, universally feared anyway.
+22. **Nubian bee-eater flock** — flashes color low over the dunes, first bird to vanish before a sandstorm.
+23. **Void-bat colony** — pours from the cave mouth at dusk in a shape that briefly reads as a constellation.
+24. **Jungle cat, marsh-edge hunter** — bigger and warier than anything ever kept as a pet.
+25. **Sacred ibis, wild flock** — sacred only by resemblance; nothing tame about this one.
+
 ---
 
 ## Dungeon animal batches (25 total, 1 sheet)
@@ -363,7 +452,7 @@ adapted-to-dark — never a relaxed/domestic pose (even the lost pets down here 
 the place). **No scene props, furniture, cages-as-set-dressing, or background objects of any
 kind** — the animal itself only, isolated against the plain magenta background.
 
-### Dungeon animal sheet 1/1
+### Dungeon animal sheet 1/2
 
 1. **Dungeon animal — Feral vermin-catcher — once someone's ferret or terrier, now lives wild in the tunnels, still killing rats out of habit**
 2. **Dungeon animal — Blind cave rat — pale, sightless, thrives in total dark, first sign something's been dug through**
@@ -390,6 +479,44 @@ kind** — the animal itself only, isolated against the plain magenta background
 23. **Dungeon animal — Tunnel-blind mole — huge clawed forepaws, displaces more earth than it should be able to**
 24. **Dungeon animal — Trapped messenger pigeon — still carries a note no one living will ever read**
 25. **Dungeon animal — An ordinary animal, deliberately unremarkable — domestic or wild, doesn't matter; its presence this deep IS the signal, let the scene decide what it means**
+
+### Dungeon animal sheet 2/2
+
+Realm-native second pass (SPRITE-PALETTE P6): 25 all-new species per the dungeon's own lore
+rule (`docs/ANIMAL-SOCIAL.md` §1 — animal population near-zero down here, "each one is a
+signal"), none repeating the base roster above or the new domestic/wild rosters (sheets 2/2
+above). Same style block, same shared mechanical instructions as sheet 1/2 above (5×5 grid,
+uniform cell size, solid magenta #FF00FF background, consistent scale, orthographic side view,
+each animal fully visible head to toe, no cropping, a characteristic pose for its situation —
+wary, cornered, feral, startled, adapted-to-dark, never relaxed/domestic — no scene props/cages
+of any kind, animal only, isolated against plain magenta), rendered per this realm's style block
+and its palette law above (accent per the 5-hue menu; no hot magenta/pink on any figure).
+
+1. **Star-blind cave gerbil** — surface-warren stray, fell through a sinkhole, hops in perfect circles now.
+2. **Void-touched millipede, overgrown** — bigger than anything topside, glows faint violet down every segment.
+3. **Star-drift cave crab colony** — blind, pale, clicks in unison like it's counting something.
+4. **Choir-mimic darkling beetle** — wing-cases click in a rhythm that sounds like speech if you listen too long.
+5. **Star-marked cave gecko** — translucent skin shows a faint constellation pattern underneath, harmless and everywhere.
+6. **Sunken newborn, species unclear** — swept down a flooded shaft, markings long gone under cave silt, no one's sure what it would have grown into.
+7. **Star-blind isopod colony** — pale, segmented, drifts along a slow current in perfect formation.
+8. **Star-touched cave newt** — glows steady where its surface-pond cousins only flash.
+9. **Cave-drifted blind eel** — washed down from a flooded channel, swimming muscle-memory intact, eyes long gone.
+10. **Star-warped silverfish swarm** — a single ticking stream along the wall, counting down to something.
+11. **Void-pale hatchling, species uncertain** — orphaned from an egg swept down a drain, imprinted on nothing at all.
+12. **Wrong-count springtail swarm** — thousands, none of them ever moving in quite the same countable group twice.
+13. **Star-blind cave centipede** — impossibly fast in absolute dark, more legs than anyone's bothered to count.
+14. **Feral cave roach colony** — thrives on nothing at all, scatters from any light source instantly.
+15. **Star-drunk cave moth, singular** — wings patterned like a constellation nobody's charted, drawn to any glow.
+16. **Void-touched leech, overgrown** — waits in the flooded stretches, patient past any reasonable measure.
+17. **Cave wasp nest, dormant** — impossible this deep, but the hum starts the moment torchlight passes.
+18. **Sunken shell husk, still occupied** — something moved in after whatever built it didn't need it anymore.
+19. **Star-touched cave frog** — sits utterly still for days, jumps only when the geometry feels wrong to it.
+20. **Angle-wrong stick insect** — motionless so long it reads as part of the wall, until the wall moves.
+21. **Star-blind cave shrimp colony** — translucent, blind, thrives in a pool no map shows.
+22. **Void-drifted snail, overgrown** — leaves a faintly luminous trail that fades wrong, backward from where it's going.
+23. **Feral cave termite mound, active** — should not survive down here on nothing, does anyway.
+24. **Star-marked cave weevil** — burrows through stone dust as easily as its surface cousin burrows through grain.
+25. **An ordinary stray, deliberately unremarkable** — species doesn't matter; per the dungeon's rule, its presence this deep IS the signal, let the scene decide.
 
 ---
 

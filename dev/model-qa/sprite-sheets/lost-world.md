@@ -16,6 +16,20 @@ NPCs) — not hand-invented.
 
 Style block (same for every sheet in this realm): Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). humid jungle-green-and-ember palette, heavy atmospheric dither for volcanic haze, warm ember rim light against deep shadow strata, scale/hide textures, one glowing high-value accent (ritual paint, ember-lit eyes) per sprite.
 
+**Palette law (2026-07-09)** — SPRITE-PALETTE P1–P5: the humid jungle-green-and-ember base
+stays exactly as named above — that duo carries the realm and is never diluted off it. But no
+sheet in this realm may read as ONLY that duo; the court has metal, blood, ritual, and water in
+it too. Every sheet pulls its deliberate accents from this realm's own menu: **bronze-gold**
+(court regalia, tithe-scrip, temple fittings), **blood-rust** (oxidized stone, old wounds, dried
+sacrifice-paint), **violet-amethyst** (ritual dye, priestly UV-adjacent glow, the "Zeal" seeded
+stratum's hum), **canal-turquoise** (cistern water, temple tile, algae-slick stone), and
+**bone-ivory** (sun-bleached temple stone, tusk, funerary wrap). Across any 25-cell sheet, at
+least 4 of these 5 accent families must show up as deliberate, legible accents (paint, cloth,
+gem, glow, patina) — not just the base duo repainted — and no two adjacent cells may read as the
+same accent-duo pairing. No hot magenta / neon pink on any figure — anything #FF00FF-adjacent
+fights the chroma key; violets and UV-blue are fine and encouraged here, but any hot-pink impulse
+goes desaturated or shifts fully violet instead.
+
 Shared mechanical instructions (same as the master template): 5×5 grid, 25 cells, one distinct
 static character per cell (not a repeat, not an animation frame), uniform cell size, solid magenta (#FF00FF) background (no transparency, no other background elements), consistent scale across all 25, orthographic side view, each character fully visible from head to toe within its cell — no cropping at the top, bottom, or sides, the complete body must fit inside the cell boundary. **Every character in an expressive, mid-action pose that captures its essence**
 — mid-lunge, mid-cast, braced, snarling — never a neutral T-pose or idle stand.
@@ -268,7 +282,7 @@ stiff/taxidermied. **No scene props, furniture, pens, or background objects of a
 fences, feed troughs, leashes-as-set-dressing, etc.; the animal itself only, isolated against the
 plain magenta background. Rendered in this realm's art style (see the style block above).
 
-### Domestic animal sheet 1/1
+### Domestic animal sheet 1/2
 
 1. **Domestic animal — Loyal dog — bonded to one person, reads their mood before they do.**
 2. **Domestic animal — Working beast (a single ox) — earns its feed, patient, and spooks true.**
@@ -296,6 +310,46 @@ plain magenta background. Rendered in this realm's art style (see the style bloc
 24. **Domestic animal — A single kitten — too young to have earned the barn cat's independence yet.**
 25. **Domestic animal — A single caged ferret-kit — young, hyperactive, still learning the vermin-catcher's trade.**
 
+Style block (repeated here so this section is self-contained): Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). humid jungle-green-and-ember palette, heavy atmospheric dither for volcanic haze, warm ember rim light against deep shadow strata, scale/hide textures, one glowing high-value accent (ritual paint, ember-lit eyes) per sprite. Palette per the Palette law block above (SPRITE-PALETTE P1–P5) — base duo kept, but bronze-gold / blood-rust / violet-amethyst / canal-turquoise / bone-ivory accents deliberately worked in, no hot magenta.
+
+Shared mechanical instructions (restated for this section): 5x5 grid, uniform cell size, solid
+magenta (#FF00FF) background (no transparency, no other background elements), consistent scale,
+orthographic side view, each animal fully visible from head to toe within its cell — no cropping.
+**Every animal in a characteristic living pose** — alert, mid-stride, grooming, watching — never
+stiff/taxidermied. **No scene props, furniture, pens, or background objects of any kind** — no
+fences, feed troughs, leashes-as-set-dressing, etc.; the animal itself only, isolated against the
+plain magenta background. Rendered in this realm's art style (see the style block above).
+Realm-native second roster (SPRITE-PALETTE P6): no repeats of sheet 1/2's base species, all
+new lost-world-true fauna — court-kept reptiles, dinosaurs, and jungle life, never a reskin of
+another realm's animal list.
+
+### Domestic animal sheet 2/2
+
+1. **Compsognathus ratter** — small quick dino kept to hunt vermin around the court kitchens, darting underfoot and snapping at scraps
+2. **Court parrot-lizard** — small feathered dino kept in the aviary, mimicking court speech, perched with head cocked mid-phrase
+3. **Yoke-broken Iguanodon calf** — young plant-eater raised into the plow harness, docile, leaning into the yoke
+4. **Ember-warmed newt, temple-kept** — coiled near the coals, glowing faint orange in low light
+5. **Nest-warden skink** — kept to guard egg clutches from thieves, coiled protective, hissing at anything close
+6. **Tithe-scale gecko** — trained to sit atop the collector's ledger and never move, motionless on a stack of tablets
+7. **Fan-bearer's chameleon** — kept for its color-shifting show at court functions, perched on a fan handle, shifting hue
+8. **Dig-camp capybara** — placid burrow-camp animal that tolerates any handler, sprawled in the mud, unbothered
+9. **Bell-collared caiman pup** — young river-lizard raised tame for the canal locks, basking with a bronze bell at its neck
+10. **Court hornbill** — showy aviary bird announcing arrivals, perched, throat working through its call
+11. **Terrace toucan** — ornamental, fruit-fed, hopping the terrace rails with a beak full of fruit
+12. **Elder's tortoise-mount** — old and slow enough for the frail to ride, plodding forward under a worn saddle-blanket
+13. **Warren Ouranosaur calf** — small sail-backed herbivore raised as a pack animal, nose down, hauling a laden frame
+14. **Caged tree-frog chorus** — kept by dig-camp cooks to call the weather's turn, throat inflated in a wicker cage
+15. **Orchard sunbird flock, semi-tame** — flitting hive-quick among the terrace blossoms, feeding as they go
+16. **Hanging-garden sloth** — a leisure pet left to graze the vines untended, hanging from a rafter, barely moving
+17. **Silk-moth tender's brood** — giant moths raised for their thread, wings folded, clustered on a frame
+18. **Terrace-bed snail-herd** — kept for both food and slow company, gliding a slick trail across a leaf
+19. **Court macaw-mimic** — taught the herald's opening line, perched on a shoulder, repeating a phrase mid-squawk
+20. **Basking court iguana** — a sunning pet kept near the throne's heated stones, sprawled flat, unmoving
+21. **Quarry yoke-lizard** — a small keeper-dino bred to nip stragglers into line, trotting alongside the draft team
+22. **Sail-back Dimetrodon-kin** — an old temple heat-pet, sail raised, radiating warmth beside a sickbed
+23. **Cistern anaconda, kept** — a placid constrictor that keeps the water cistern free of rats, coiled loose at its rim
+24. **Granary mantis-brood** — giant mantises raised to guard the grain from smaller pests, forelimbs folded among the sacks
+25. **Terrace beetle-brood** — kept for its iridescent shell, traded and prized, clustered glinting on a feed-tray
 
 ---
 
@@ -316,7 +370,7 @@ magenta background. Sourced from the game's own `wild-animal-kind` table (`Engin
 Social/Sentient NPCs/Wild Animal Kind.md`) plus additional single-animal variety to fill the
 sheet; entry 11 (the realm-beast) uses this realm's real skin from `data/animal-realm-skins.js`.
 
-### Wild animal sheet 1/1
+### Wild animal sheet 1/2
 
 1. **Wild animal — Territory wolf — holds a stretch of ground and knows every crossing of it**
 2. **Wild animal — A single deer from the herd — moves with the herd, reads the wind before the ranger does**
@@ -344,6 +398,49 @@ sheet; entry 11 (the realm-beast) uses this realm's real skin from `data/animal-
 24. **Wild animal — A peregrine falcon — stooping mid-hunt, faster than anything else in the sky**
 25. **Wild animal — A lynx kitten — spotted coat, play-stalking something that isn't there yet**
 
+Style block (repeated here so this section is self-contained): Pixel-art sprite rendering
+(visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale).
+humid jungle-green-and-ember palette, heavy atmospheric dither for volcanic haze, warm ember rim light against deep shadow strata, scale/hide textures, one glowing high-value accent (ritual paint, ember-lit eyes) per sprite. Palette per the Palette law block above (SPRITE-PALETTE P1–P5) — base duo kept, but bronze-gold / blood-rust / violet-amethyst / canal-turquoise / bone-ivory accents deliberately worked in, no hot magenta.
+
+Shared mechanical instructions (restated for this section): 5x5 grid, uniform cell size, solid
+magenta (#FF00FF) background (no transparency, no other background elements), consistent scale,
+orthographic side view, each animal fully visible from head to toe within its cell — no cropping.
+**Every animal in a characteristic wild-living pose** — alert, stalking, grazing, mid-flight,
+territorial — never stiff/taxidermied, never tame-looking (these are wilderness creatures, not
+pets). **No scene props, furniture, dens, or background objects of any kind** — no burrows,
+nests-as-set-dressing, foliage clusters, etc.; the animal itself only, isolated against the plain
+magenta background. Realm-native second roster (SPRITE-PALETTE P6): no repeats of sheet 1/2's
+base species and no repeats of the domestic sheet's new roster — dinosaurs and jungle-true wild
+life this time.
+
+### Wild animal sheet 2/2
+
+1. **Stegosaurus grazer** — plated herbivore browsing the low canopy, tail-plates swaying as it crops ferns
+2. **Ankylosaurus tail-breaker** — armored herbivore whose club-tail drags a groove through the mud as it grazes
+3. **Parasaurolophus herd-caller** — crested hadrosaur bugling across the valley, herd answering in kind
+4. **Kentrosaurus browser** — spiked herbivore at the thorn-scrub edge, spines flared, backing from a threat
+5. **Dilophosaurus flare-crest** — twin-crested hunter that fans its crest and hisses before it strikes
+6. **Deinonychus pack** — sickle-clawed hunters coursing the tree line, mid-leap, claw raised
+7. **Oviraptor nest-raider** — quick omnivore crouched over a stolen egg, head cocked at any sound
+8. **Gallimimus runner** — ostrich-built dino at full sprint across the open flats, neck low, tail streaming
+9. **Therizinosaurus browser** — long-clawed giant hooking a high branch down to graze
+10. **Baryonyx river-fisher** — hook-clawed hunter with its snout dipped in the shallows, a fish thrashing in its jaws
+11. **Carnotaurus charger** — horned predator mid-charge through the undergrowth, head down
+12. **Microraptor glider** — four-winged small dino gliding flat between canopy branches
+13. **Archaeopteryx flock** — primitive feathered fliers roosting a cliff face, wings half-spread
+14. **Quetzalcoatlus soarer** — giant-winged flier banking high over the ziggurats on the thermals
+15. **Plesiosaurus of the oxbow** — long-necked swimmer with its neck arced above a still backwater, watching
+16. **Mosasaurus of the drowned channel** — apex swimmer breaching briefly, then rolling back under
+17. **Megalania monitor** — giant venomous monitor lizard stalking the riverbank, tongue flicking low
+18. **Terror-bird of the reed flats** — flightless apex hunter sprinting low, beak snapping
+19. **Wild Komodo of the scrubland** — venomous ambush lizard denning in dry brush, jaw slack with drool
+20. **River gharial, wild and unowned** — jaw snapping sideways at a fish crossing its stretch of water
+21. **Wild tapir of the undergrowth** — shy browser already bolting at the first snapped twig
+22. **Giant dragonfly swarm** — oversized insects hovering the marsh air in a tight, humming cluster
+23. **Poison dart-frog chorus** — brilliantly marked frogs calling from wet leaves, throats pulsing
+24. **Wild jungle tarantula** — legs spanning a full stride, motionless in ambush at a burrow mouth
+25. **Brachiosaur-kin canopy browser** — towering long-necked herbivore stripping the high canopy leaf by leaf
+
 ---
 
 ## Dungeon animal batches (25 total, 1 sheet)
@@ -365,7 +462,7 @@ adapted-to-dark — never a relaxed/domestic pose (even the lost pets down here 
 the place). **No scene props, furniture, cages-as-set-dressing, or background objects of any
 kind** — the animal itself only, isolated against the plain magenta background.
 
-### Dungeon animal sheet 1/1
+### Dungeon animal sheet 1/2
 
 1. **Dungeon animal — Feral vermin-catcher — once someone's ferret or terrier, now lives wild in the tunnels, still killing rats out of habit**
 2. **Dungeon animal — Blind cave rat — pale, sightless, thrives in total dark, first sign something's been dug through**
@@ -392,6 +489,49 @@ kind** — the animal itself only, isolated against the plain magenta background
 23. **Dungeon animal — Tunnel-blind mole — huge clawed forepaws, displaces more earth than it should be able to**
 24. **Dungeon animal — Trapped messenger pigeon — still carries a note no one living will ever read**
 25. **Dungeon animal — An ordinary animal, deliberately unremarkable — domestic or wild, doesn't matter; its presence this deep IS the signal, let the scene decide what it means**
+
+Style block (repeated here so this section is self-contained): Pixel-art sprite rendering
+(visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale).
+humid jungle-green-and-ember palette, heavy atmospheric dither for volcanic haze, warm ember rim light against deep shadow strata, scale/hide textures, one glowing high-value accent (ritual paint, ember-lit eyes) per sprite. Palette per the Palette law block above (SPRITE-PALETTE P1–P5) — base duo kept, but bronze-gold / blood-rust / violet-amethyst / canal-turquoise / bone-ivory accents deliberately worked in, no hot magenta.
+
+Shared mechanical instructions (restated for this section): 5x5 grid, uniform cell size, solid
+magenta (#FF00FF) background (no transparency, no other background elements), consistent scale,
+orthographic side view, each animal fully visible from head to toe within its cell — no cropping.
+**Every animal in a characteristic pose for its situation** — wary, cornered, feral, startled,
+adapted-to-dark — never a relaxed/domestic pose (even the lost pets down here read as changed by
+the place). **No scene props, furniture, cages-as-set-dressing, or background objects of any
+kind** — the animal itself only, isolated against the plain magenta background. Realm-native
+second roster (SPRITE-PALETTE P6): no repeats of sheet 1/2's base species and no repeats of
+either new roster above — dark-adapted or stranded lost-world-true fauna, per the `docs/ANIMAL-SOCIAL.md`
+§1 near-zero-population rule (each one is a signal, never ambient cave critters).
+
+### Dungeon animal sheet 2/2
+
+1. **Blind Ichthyosaur remnant** — trapped in a flooded cistern-shaft generations back, finning in slow useless circles
+2. **Feral Pachycephalosaurus, dome cracked and blind** — head-butts anything that moves in the dark
+3. **Troodon-kin, eyes gone huge and pale** — hunts entirely by sound in total black
+4. **Lost Rhamphorhynchus roost** — small cave-pterosaurs that never found daylight again, screeching at torchlight
+5. **Edaphosaurus remnant, sail gone pale** — an old sail-back that crawled down chasing warmth and stayed
+6. **Placodont of the drowned vault** — an armored shell-crushing reptile stranded when a channel sealed
+7. **Nothosaur, blind and thin** — a slim aquatic reptile gone eyeless in a flooded gallery
+8. **Giant cave isopod** — pale and armored, rolling tight at the first hint of light
+9. **Giant cave centipede** — dozens of legs clattering across stone, drawn to vibration alone
+10. **Feral cave axolotl swarm, translucent** — pale and gilled, drifting through a black flooded pool
+11. **Deep-shaft leech colony** — fat and patient, clinging to the ceiling above a black pool
+12. **Blind cave crayfish colony** — clustering pale and eyeless around a black spring, scattering at the first vibration
+13. **Stranded cave-prawn brood, pale and blind** — washed down a flooded sluice as spawn, grown large in the dark
+14. **Blind burrowing shrew colony** — a tight cluster excavating fresh tunnel by feel alone, teeth clicking
+15. **Cave silverfish swarm, thousands strong** — flowing over stone like a silver tide at the edge of torchlight
+16. **Giant glistening cave earthworm** — thick as an arm, surfacing briefly then vanishing back into the wall
+17. **Deep-vault cave slug, glistening and vast** — leaving a faint luminous trail across the tunnel floor
+18. **Cave-adapted basilisk lizard, pale and blind** — sprints upright across black water on reflex alone
+19. **Stranded lemur-kin troop, eyes gone saucer-wide in the dark** — clustered tight on a ledge, freezing at every torch
+20. **Sunken cassowary-kin, flightless now** — wings dragging, walking the tunnel floor, kick reflex still lethal
+21. **Blind eel colony, flooded gallery** — a knot of pale eels drawn to any disturbance in the still water
+22. **Blind cave termite swarm** — a pale colony working tunnels no one dug on purpose
+23. **Deep-vault firefly swarm, light gone dead** — the glow bred out of them generations back, dark now among the rest
+24. **Oversized blind cave millipede** — rippling across the tunnel floor in a dense, segmented mass
+25. **Deep tomb tick-swarm, blood-starved** — clinging to stone in a solid mat, rousing at the warmth of anything living
 
 ---
 

@@ -20,6 +20,12 @@ Shared mechanical instructions (same as the master template): 5×5 grid, 25 cell
 static character per cell (not a repeat, not an animation frame), uniform cell size, solid magenta (#FF00FF) background (no transparency, no other background elements), consistent scale across all 25, orthographic side view, each character fully visible from head to toe within its cell — no cropping at the top, bottom, or sides, the complete body must fit inside the cell boundary. **Every character in an expressive, mid-action pose that captures its essence**
 — mid-lunge, mid-cast, braced, snarling — never a neutral T-pose or idle stand.
 
+**Palette law (2026-07-09)** — SPRITE-PALETTE P1–P5: Gloom's restraint is the design — no
+richness push (P2); the sickly-streetlight/blue-grey duotone above stays exactly as specified,
+with no added accent menu. NO hot magenta / neon pink anywhere on a figure — anything
+#FF00FF-adjacent fights the chroma key; violets/UV-blue are fine, hot pink accents must go
+desaturated or shift violet.
+
 ---
 
 ## Monster batches (119 total, 5 sheets)
@@ -268,7 +274,7 @@ stiff/taxidermied. **No scene props, furniture, pens, or background objects of a
 fences, feed troughs, leashes-as-set-dressing, etc.; the animal itself only, isolated against the
 plain magenta background. Rendered in this realm's art style (see the style block above).
 
-### Domestic animal sheet 1/1
+### Domestic animal sheet 1/2
 
 1. **Domestic animal — Loyal dog — bonded to one person, reads their mood before they do.**
 2. **Domestic animal — Working beast (a single ox) — earns its feed, patient, and spooks true.**
@@ -296,6 +302,40 @@ plain magenta background. Rendered in this realm's art style (see the style bloc
 24. **Domestic animal — A single kitten — too young to have earned the barn cat's independence yet.**
 25. **Domestic animal — A single caged ferret-kit — young, hyperactive, still learning the vermin-catcher's trade.**
 
+### Domestic animal sheet 2/2
+
+Realm-native second set (SPRITE-PALETTE P6): kept animals native to this graveyard-and-moor
+parish, no repeats of the sheet-1/2 roster. Same shared mechanical instructions as sheet 1/2
+above (5x5 grid, magenta background, characteristic living pose, no scene props) and the same
+realm style block; see the palette law block near the top of this file — restraint stays, no
+accent push.
+
+1. **Domestic animal — Church cat — the parish's own cat, sleeps on grave-warmed stones.**
+2. **Domestic animal — Funeral hearse-horse — black-plumed, walks the dead's last mile at a slow, practiced pace.**
+3. **Domestic animal — Watch-goose of the boneyard — nests among headstones, screams at anyone digging.**
+4. **Domestic animal — Sexton's mule — hauls the digging tools, unbothered by the work.**
+5. **Domestic animal — Mourning dove kept in a coop — cooing constant, a low mournful sound.**
+6. **Domestic animal — Vestry cat — keeps the church mice down, tolerated by the priest alone.**
+7. **Domestic animal — Tollhouse dog — chained near the toll bridge, barks at every crossing after dark.**
+8. **Domestic animal — Shepherd's collie of the moor — herds sheep through fog by memory alone.**
+9. **Domestic animal — Kept corvid (a tame crow) — unsettling in its mimicry of names it's heard once.**
+10. **Domestic animal — Milk cow of the last farm — placid, grazes right up to the churchyard fence-line.**
+11. **Domestic animal — Kept silkworm brood — reared in trays in a shuttered upstairs room.**
+12. **Domestic animal — Apiary hive, a single kept swarm — the beekeeper's hive, never stings the family.**
+13. **Domestic animal — Coach-team draft horse — pulls the mourning coach, blinkered, unbothered by the route.**
+14. **Domestic animal — Ratting terrier of the mill — small, relentless, keeps the grain store clear.**
+15. **Domestic animal — Caged linnet — a songbird kept by a lonely widow for the sound of it.**
+16. **Domestic animal — Watch-ram of the hillside pen — butts at anything that isn't the shepherd.**
+17. **Domestic animal — Draft ox of the peat-cutters — hauls turf sledges across the bog daily.**
+18. **Domestic animal — Sexton's tabby — stalks the ossuary shelves, indifferent to the bones.**
+19. **Domestic animal — Homing pigeon of the parish post — carries word between the outlying farms.**
+20. **Domestic animal — Farrier's old gelding — patient, long used to rough handling.**
+21. **Domestic animal — Kept raven of the bell tower — the ringer's companion, answers to a whistle.**
+22. **Domestic animal — Lap-dog of the manor widow — small, overfed, yaps at every knock on the door.**
+23. **Domestic animal — Guinea fowl of the yard — shrill alarm at anything unfamiliar on the road.**
+24. **Domestic animal — Watch-goat tethered at the crossroads — chews steadily at the boundary-marker post.**
+25. **Domestic animal — Toll-bridge donkey — stubborn, flatly refuses to cross once the light's gone.**
+
 
 ---
 
@@ -316,7 +356,7 @@ magenta background. Sourced from the game's own `wild-animal-kind` table (`Engin
 Social/Sentient NPCs/Wild Animal Kind.md`) plus additional single-animal variety to fill the
 sheet; entry 11 (the realm-beast) uses this realm's real skin from `data/animal-realm-skins.js`.
 
-### Wild animal sheet 1/1
+### Wild animal sheet 1/2
 
 1. **Wild animal — Territory wolf — holds a stretch of ground and knows every crossing of it**
 2. **Wild animal — A single deer from the herd — moves with the herd, reads the wind before the ranger does**
@@ -344,6 +384,40 @@ sheet; entry 11 (the realm-beast) uses this realm's real skin from `data/animal-
 24. **Wild animal — A peregrine falcon — stooping mid-hunt, faster than anything else in the sky**
 25. **Wild animal — A lynx kitten — spotted coat, play-stalking something that isn't there yet**
 
+### Wild animal sheet 2/2
+
+Realm-native second set (SPRITE-PALETTE P6): wild fauna of this graveyard-and-moor country, no
+repeats of the sheet-1/2 roster and none of the domestic-sheet-2/2 species above. Same shared
+mechanical instructions as sheet 1/2 above (5x5 grid, magenta background, characteristic wild
+pose, no dens/nests-as-props) and the same realm style block; see the palette law block near the
+top of this file — restraint stays, no accent push.
+
+1. **Wild animal — Feral moor pony — shaggy, ownerless, roams the high moor in small bands.**
+2. **Wild animal — Raven of the gallows-tree — watches for what falls, never far from the noose.**
+3. **Wild animal — Churchyard fox — dens beneath old headstones, indifferent to who's buried there.**
+4. **Wild animal — Moor adder — basks on a flat grave-slab in the weak sun between plots.**
+5. **Wild animal — Bog heron — stands motionless over the peat pools for hours at a stretch.**
+6. **Wild animal — Carrion crow of the boneyard — first to a fresh-turned grave, waits without shame.**
+7. **Wild animal — Moth swarm of the crypt-flowers — drawn thick to the mourning-lilies at dusk.**
+8. **Wild animal — Feral moor sheep — unshorn, half-wild, descended from a flock long since abandoned.**
+9. **Wild animal — Peat-bog frog — croaks from black water at the edge of the marked graves.**
+10. **Wild animal — Nightjar of the yew trees — its churring call the locals still call an omen.**
+11. **Wild animal — Wildcat of the hedgerow — solitary, larger and meaner than any barn cat.**
+12. **Wild animal — Moor grouse — explodes out of the heather the moment something gets too close.**
+13. **Wild animal — Barrow hare — runs the old burial mounds at dusk, never caught twice by the same dog.**
+14. **Wild animal — Stoat of the drystone wall — hunts the churchyard's rat population unbidden.**
+15. **Wild animal — Grey heron of the drowning pool — a fixture at the water everyone else avoids.**
+16. **Wild animal — Weasel of the ossuary wall — slips between the stacked bones after rats.**
+17. **Wild animal — Moor buzzard — circles the gallows hill on quiet afternoons, patient.**
+18. **Wild animal — Fen otter — hunts the reed-choked drainage ditch behind the churchyard.**
+19. **Wild animal — Feral goat of the tor — descended from strays, climbs the old cairn stones.**
+20. **Wild animal — Corpse-fly swarm — the first and least-loved sign of a bad summer.**
+21. **Wild animal — Moor stoat-kit — young, still clumsy, denned under a fallen headstone.**
+22. **Wild animal — Curlew of the wet moor — its cry carries further than any bell in the tower.**
+23. **Wild animal — Moor kestrel — hovers stock-still over the drystone walls hunting rodents alone.**
+24. **Wild animal — Feral pig of the old wood — rooting near the boundary wall, tusked and wary.**
+25. **Wild animal — Grey moor wolf, last of its line — rarely seen, blamed for every missing lamb.**
+
 ---
 
 ## Dungeon animal batches (25 total, 1 sheet)
@@ -365,7 +439,7 @@ adapted-to-dark — never a relaxed/domestic pose (even the lost pets down here 
 the place). **No scene props, furniture, cages-as-set-dressing, or background objects of any
 kind** — the animal itself only, isolated against the plain magenta background.
 
-### Dungeon animal sheet 1/1
+### Dungeon animal sheet 1/2
 
 1. **Dungeon animal — Feral vermin-catcher — once someone's ferret or terrier, now lives wild in the tunnels, still killing rats out of habit**
 2. **Dungeon animal — Blind cave rat — pale, sightless, thrives in total dark, first sign something's been dug through**
@@ -392,6 +466,40 @@ kind** — the animal itself only, isolated against the plain magenta background
 23. **Dungeon animal — Tunnel-blind mole — huge clawed forepaws, displaces more earth than it should be able to**
 24. **Dungeon animal — Trapped messenger pigeon — still carries a note no one living will ever read**
 25. **Dungeon animal — An ordinary animal, deliberately unremarkable — domestic or wild, doesn't matter; its presence this deep IS the signal, let the scene decide what it means**
+
+### Dungeon animal sheet 2/2
+
+Realm-native second set (SPRITE-PALETTE P6): creatures adapted to this parish's undercroft and
+catacombs specifically, no repeats of the sheet-1/2 roster and none of the domestic- or
+wild-sheet-2/2 species above. Same shared mechanical instructions as sheet 1/2 above (5x5 grid,
+magenta background, wary/adapted-to-dark pose, no cage/prop set-dressing) and the same realm
+style block; see the palette law block near the top of this file — restraint stays, no accent push.
+
+1. **Dungeon animal — Ossuary moth — pale, feeds on old grave-cloth in sealed vaults.**
+2. **Dungeon animal — Crypt-slime snail — its trail glistens across a sarcophagus lid, unnaturally slow.**
+3. **Dungeon animal — Vault beetle — carapace the color of old bone, clusters in stacked-skull niches.**
+4. **Dungeon animal — Blind crypt-worm — pale ring-worm surfacing through cracked mortar.**
+5. **Dungeon animal — Coffin-lining mouse — nests in rotted silk, deaf to any noise from above.**
+6. **Dungeon animal — Tomb-adapted tick swarm — clings to anything that lingers here too long.**
+7. **Dungeon animal — Reliquary roach colony — infests the older sealed shelves, scatters at lantern-light.**
+8. **Dungeon animal — Catacomb bat, pale-furred — roosts where no wild colony would ever settle.**
+9. **Dungeon animal — Grave-lichen grazer, a small pale grub — eats the growth off the older stones.**
+10. **Dungeon animal — Crypt-adapted centipede — long, segmented, hunts the moth swarms in the dark.**
+11. **Dungeon animal — Stone-cold newt — lives in the standing water pooled on a cracked crypt floor.**
+12. **Dungeon animal — Shroud-moth larvae mass — writhes beneath undisturbed grave-cloth.**
+13. **Dungeon animal — Ossuary rat-king, still growing — several rats fused at the tail, avoided even by the others.**
+14. **Dungeon animal — Blind crypt-spider, pale and patient — webs spun corner to corner over a sealed door.**
+15. **Dungeon animal — Underground stream eel — blind, pale, lives in the water table beneath the oldest graves.**
+16. **Dungeon animal — Grave-goods magpie, trapped below — stole something bright, can't find the way back up.**
+17. **Dungeon animal — Vault-adapted silverfish swarm — strips the old parish record pages left down here.**
+18. **Dungeon animal — Catacomb toad — fat, pale, feeds on the insects the crypt attracts.**
+19. **Dungeon animal — Coffin-borer beetle — the reason older caskets don't survive a century down here.**
+20. **Dungeon animal — Deep-crypt salamander, faintly luminous — the one true light source in the oldest chamber.**
+21. **Dungeon animal — Tomb-guard dog's bones, still twitching — not undead, just an old superstition proven half-true tonight.**
+22. **Dungeon animal — Charnel-house fly swarm, unnaturally patient — waits rather than swarms, which is worse.**
+23. **Dungeon animal — Blind crypt-owlet, wingless from disuse — hatched down here generations ago, never once flew.**
+24. **Dungeon animal — Reliquary mouse, white-furred — nests inside the emptied bone-boxes.**
+25. **Dungeon animal — The last bell-ringer's cat, gone feral below — followed him down once and never came back up.**
 
 ---
 

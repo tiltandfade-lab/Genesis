@@ -16,6 +16,21 @@ early sheets are common/mundane and later sheets skew toward named/legendary thr
 
 Style block: Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from.
 
+**Palette law (2026-07-09)** — SPRITE-PALETTE P1–P5: keep the warm parchment-adjacent base
+(the leather/vellum/candlelit-sepia ground this whole realm sits on stays the dominant read on
+any figure) but every sheet earns a real accent menu on top of it — this is the actual Monster
+Manual page, not a monochrome woodcut. Accent hue families for this realm: **dragon-scale
+red** (blood, banners, warning markings), **deep forest green** (hide, moss, cloak-wool),
+**royal amethyst** (arcane glow, noble trim, venom), **brass-and-verdigris gold** (armor,
+coin, trophy metal), **storm-teal** (cold-iron, deep water, undead pallor), **bone ivory**
+(fangs, old paper, sun-bleached ruin stone). Sheet-level rule: across any 25-cell sheet, at
+least 4 of these hue families must show up as deliberate accents (not just background wash),
+and no two cells sitting next to each other in the grid may read as the same two-hue duo —
+vary which accent leads from cell to cell the way an actual illustrated bestiary page would.
+Anti-key clause (every figure, no exceptions): NO hot magenta / neon pink anywhere on a
+figure — anything #FF00FF-adjacent fights the chroma key (the SPRITE-RESCUE leak class);
+violets/UV-blue are fine, hot pink accents must go desaturated or shift toward violet instead.
+
 Shared mechanical instructions (same as the master template): 5×5 grid, 25 cells, one distinct
 static character per cell (not a repeat, not an animation frame), uniform cell size, solid magenta (#FF00FF) background (no transparency, no other background elements), consistent scale across all 25, orthographic side view, each character fully visible from head to toe within its cell — no cropping at the top, bottom, or sides, the complete body must fit inside the cell boundary. **Every character in an expressive, mid-action pose that captures its essence**
 — mid-lunge, mid-cast, braced, snarling — never a neutral T-pose or idle stand.
@@ -695,7 +710,7 @@ The unmodified 35-archetype NPC Role Spine — no realm skin applied, generic fa
 24. **Tiefling fortune-teller's rival (Tiefling) — claims to be the real seer in town**
 25. **Human retired soldier, one-armed (Human) — dark-skinned, runs the town's only proper tavern brawl rules**
 
-## Domestic animal batches (25 total, 1 sheet)
+## Domestic animal batches (50 total, 2 sheets)
 
 Style block (repeated here so this section is self-contained): Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from.
 
@@ -707,7 +722,7 @@ stiff/taxidermied. **No scene props, furniture, pens, or background objects of a
 fences, feed troughs, leashes-as-set-dressing, etc.; the animal itself only, isolated against the
 plain magenta background. Rendered in this realm's art style (see the style block above).
 
-### Domestic animal sheet 1/1
+### Domestic animal sheet 1/2
 
 1. **Domestic animal — Loyal dog — bonded to one person, reads their mood before they do.**
 2. **Domestic animal — Working beast (a single ox) — earns its feed, patient, and spooks true.**
@@ -735,10 +750,49 @@ plain magenta background. Rendered in this realm's art style (see the style bloc
 24. **Domestic animal — A single kitten — too young to have earned the barn cat's independence yet.**
 25. **Domestic animal — A single caged ferret-kit — young, hyperactive, still learning the vermin-catcher's trade.**
 
+Style block (repeated here so this section is self-contained): Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Palette per the Palette law block above.
+
+Shared mechanical instructions (restated for this section): 5x5 grid, uniform cell size, solid
+magenta (#FF00FF) background (no transparency, no other background elements), consistent scale,
+orthographic side view, each animal fully visible from head to toe within its cell — no cropping.
+**Every animal in a characteristic living pose** — alert, mid-stride, grooming, watching — never
+stiff/taxidermied. **No scene props, furniture, pens, or background objects of any kind** — no
+fences, feed troughs, leashes-as-set-dressing, etc.; the animal itself only, isolated against the
+plain magenta background. Rendered in this realm's art style (see the style block above). Per
+SPRITE-PALETTE P6, this second sheet is a deeper-cut roster of realm-native domesticated stock —
+no repeats of sheet 1/2's species, no repeats across this realm's other animal kinds.
+
+### Domestic animal sheet 2/2
+
+1. **Domestic animal — Water buffalo — heavy plow-beast, patient in the mud, unhurried by anything.**
+2. **Domestic animal — Alpaca — fiber-stock, skittish, sheared once a season.**
+3. **Domestic animal — Llama — flock-guardian, plants its feet and stares down anything that gets too close.**
+4. **Domestic animal — Caravan camel — kneels to load, unbothered by the noise of the yard.**
+5. **Domestic animal — Yak — shaggy high-pasture draft beast, moves like the mountain owes it nothing.**
+6. **Domestic animal — Guinea fowl — paranoid flock alarm, pacing and shrieking at nothing.**
+7. **Domestic animal — Yard quail — low scuttling run, startles at any passing shadow.**
+8. **Domestic animal — Penned pheasant — kept for the table, flares its collar when cornered.**
+9. **Domestic animal — Guinea pig — hutch-kept, freezes mid-nibble at any sound.**
+10. **Domestic animal — Hedgehog — curled defensively, kept about the granary for the pest control.**
+11. **Domestic animal — Silkworm moth — farmed on its spool, still spinning out of habit.**
+12. **Domestic animal — Hive-kept honeybee — single sentinel, wings raised at the hive mouth.**
+13. **Domestic animal — Tame ermine — sleek indoor ratter, quicker than the barn cat and knows it.**
+14. **Domestic animal — Barn weasel — thin, quick, prized over the cat when the grain's at stake.**
+15. **Domestic animal — Kept civet — exotic pest-control pet, nocturnal, half-tame at best.**
+16. **Domestic animal — Tame polecat — ratter's cousin, kept on a short lead near the cellar.**
+17. **Domestic animal — Tame raven — cocks its head at anything that shines, kept for the company.**
+18. **Domestic animal — Tame magpie — hops after a dropped coin, hoards what it can carry.**
+19. **Domestic animal — Nesting jackdaw — kept about the eaves, chatters at every arrival.**
+20. **Domestic animal — Eave sparrow — nests under the thatch, first to scatter at a raised voice.**
+21. **Domestic animal — Manor swan — ornamental pond-keep, hisses if the children get too close.**
+22. **Domestic animal — Barn swallow — nests in the rafters, threads the doorway at speed.**
+23. **Domestic animal — Farmed snail — slow garden-kept stock, raised for the table.**
+24. **Domestic animal — Mill-pond eel — kept in the sluice trap, thrashes when the gate lifts.**
+25. **Domestic animal — Ornamental carp — pond-kept, drifts to the surface at feeding time.**
 
 ---
 
-## Wild animal batches (25 total, 1 sheet)
+## Wild animal batches (50 total, 2 sheets)
 
 Style block (repeated here so this section is self-contained): Pixel-art sprite rendering
 (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale).
@@ -755,7 +809,7 @@ magenta background. Sourced from the game's own `wild-animal-kind` table (`Engin
 Social/Sentient NPCs/Wild Animal Kind.md`) plus additional single-animal variety to fill the
 sheet; entry 11 (the realm-beast) uses this realm's real skin from `data/animal-realm-skins.js`.
 
-### Wild animal sheet 1/1
+### Wild animal sheet 1/2
 
 1. **Wild animal — Territory wolf — holds a stretch of ground and knows every crossing of it**
 2. **Wild animal — A single deer from the herd — moves with the herd, reads the wind before the ranger does**
@@ -783,9 +837,52 @@ sheet; entry 11 (the realm-beast) uses this realm's real skin from `data/animal-
 24. **Wild animal — A peregrine falcon — stooping mid-hunt, faster than anything else in the sky**
 25. **Wild animal — A lynx kitten — spotted coat, play-stalking something that isn't there yet**
 
+Style block (repeated here so this section is self-contained): Pixel-art sprite rendering
+(visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale).
+traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Palette per the Palette law block above.
+
+Shared mechanical instructions (restated for this section): 5x5 grid, uniform cell size, solid
+magenta (#FF00FF) background (no transparency, no other background elements), consistent scale,
+orthographic side view, each animal fully visible from head to toe within its cell — no cropping.
+**Every animal in a characteristic wild-living pose** — alert, stalking, grazing, mid-flight,
+territorial — never stiff/taxidermied, never tame-looking (these are wilderness creatures, not
+pets). **No scene props, furniture, dens, or background objects of any kind** — no burrows,
+nests-as-set-dressing, foliage clusters, etc.; the animal itself only, isolated against the plain
+magenta background. Per SPRITE-PALETTE P6, this second sheet is a deeper-cut roster of
+realm-native wild species — no repeats of sheet 1/2's species, no repeats across this realm's
+other animal kinds.
+
+### Wild animal sheet 2/2
+
+1. **Wild animal — Pine marten — arboreal predator, slips along a branch without a sound**
+2. **Wild animal — Wolverine — squat and vicious, holds a kill against anything bigger**
+3. **Wild animal — River sturgeon — armored river giant, surfaces once a season**
+4. **Wild animal — Osprey — dives talons-first into open water**
+5. **Wild animal — Kingfisher — perches dead-still, then a blur into the shallows**
+6. **Wild animal — Ibex — braces on a knife-edge ledge, unbothered by the drop**
+7. **Wild animal — Chamois — bounds cliff to cliff, never looks down**
+8. **Wild animal — Capercaillie — fans its tail, drums a challenge into the treeline**
+9. **Wild animal — Ptarmigan — near-invisible against the snow until it bolts**
+10. **Wild animal — Aurochs bull — wild cattle, holds ground and lowers its horns**
+11. **Wild animal — Musk ox — shaggy herd-guardian, forms a defensive ring**
+12. **Wild animal — Snow leopard — pale-coated ambush cat, gone before the eye catches it**
+13. **Wild animal — Mountain hare — freezes mid-bound, coat shifting with the season**
+14. **Wild animal — Golden eagle — riding a thermal, marking territory below**
+15. **Wild animal — Caribou — antlered migrant, herd-instinct in every step**
+16. **Wild animal — Bison — huge and placid, until it isn't**
+17. **Wild animal — Antelope — bolts at the first wrong sound, gone in three strides**
+18. **Wild animal — Gazelle — grazes tense, always facing the open ground**
+19. **Wild animal — Tapir — snuffling forest browser, more shy than it looks**
+20. **Wild animal — Warthog — tusked, low-slung, backs into its den snout-out**
+21. **Wild animal — Mongoose — coiled and quick, circles anything that strikes first**
+22. **Wild animal — Meerkat — sentry posture, up on its hind legs scanning the horizon**
+23. **Wild animal — Armadillo — curls tight at the first sign of a threat**
+24. **Wild animal — Pangolin — scaled, rolls into an armored ball**
+25. **Wild animal — Ocelot — spotted and low, stalking the underbrush at dusk**
+
 ---
 
-## Dungeon animal batches (25 total, 1 sheet)
+## Dungeon animal batches (50 total, 2 sheets)
 
 **Lore note:** per `docs/ANIMAL-SOCIAL.md` §1, the dungeon environment band is animal-population
 near-zero — "each one is a signal," not ambient wildlife. Every entry below is either a
@@ -804,7 +901,7 @@ adapted-to-dark — never a relaxed/domestic pose (even the lost pets down here 
 the place). **No scene props, furniture, cages-as-set-dressing, or background objects of any
 kind** — the animal itself only, isolated against the plain magenta background.
 
-### Dungeon animal sheet 1/1
+### Dungeon animal sheet 1/2
 
 1. **Dungeon animal — Feral vermin-catcher — once someone's ferret or terrier, now lives wild in the tunnels, still killing rats out of habit**
 2. **Dungeon animal — Blind cave rat — pale, sightless, thrives in total dark, first sign something's been dug through**
@@ -831,6 +928,48 @@ kind** — the animal itself only, isolated against the plain magenta background
 23. **Dungeon animal — Tunnel-blind mole — huge clawed forepaws, displaces more earth than it should be able to**
 24. **Dungeon animal — Trapped messenger pigeon — still carries a note no one living will ever read**
 25. **Dungeon animal — An ordinary animal, deliberately unremarkable — domestic or wild, doesn't matter; its presence this deep IS the signal, let the scene decide what it means**
+
+Style block (repeated here so this section is self-contained): Pixel-art sprite rendering
+(visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale).
+traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Palette per the Palette law block above.
+
+Shared mechanical instructions (restated for this section): 5x5 grid, uniform cell size, solid
+magenta (#FF00FF) background (no transparency, no other background elements), consistent scale,
+orthographic side view, each animal fully visible from head to toe within its cell — no cropping.
+**Every animal in a characteristic pose for its situation** — wary, cornered, feral, startled,
+adapted-to-dark — never a relaxed/domestic pose. **No scene props, furniture, cages-as-set-
+dressing, or background objects of any kind** — the animal itself only, isolated against the
+plain magenta background. Per SPRITE-PALETTE P6, this second sheet is a deeper-cut roster of
+dark-adapted realm-native species — no repeats of sheet 1/2's species, no repeats across this
+realm's other animal kinds.
+
+### Dungeon animal sheet 2/2
+
+1. **Dungeon animal — Cave shrimp — blind, drifts through a flooded gallery antennae-first**
+2. **Dungeon animal — Glowworm cluster — faint bioluminescent trail strung along the ceiling**
+3. **Dungeon animal — Cave newt — pale, gilled, motionless until the light passes**
+4. **Dungeon animal — Tunnel beetle — armored, burrows steadily through packed grave-soil**
+5. **Dungeon animal — Cave silverfish swarm — scatters from lantern light across old parchment**
+6. **Dungeon animal — Vinegaroon — whip-tailed and armored, backs into a crevice, tail raised**
+7. **Dungeon animal — Cave centipede — segmented and fast, pours itself between the stones**
+8. **Dungeon animal — Blind cave crab — pale-shelled, sidles along a flooded ledge**
+9. **Dungeon animal — Cave-adapted toad — squats in a damp alcove, throat pulsing slow**
+10. **Dungeon animal — Cistern leech — clings to the waterline, uncoils toward warmth**
+11. **Dungeon animal — Deep tick — bloated, clings low on stone, barely moves until fed**
+12. **Dungeon animal — Well-worm — blind and segmented, recoils into the wet stone**
+13. **Dungeon animal — Blind cave crayfish — backs away claws-first into a flooded crack**
+14. **Dungeon animal — Subterranean vole — small, blind-adapted, freezes at the lantern's edge**
+15. **Dungeon animal — Pale cave gecko — clings flat to the ceiling, motionless overhead**
+16. **Dungeon animal — Ossuary wasp — nests in a hollow bone, defensive at the entrance**
+17. **Dungeon animal — Deep-pool frog — pale-skinned, half-submerged, throat working**
+18. **Dungeon animal — Deep-cistern isopod — armored and slow, curls at the first vibration**
+19. **Dungeon animal — Cave millipede — long and pale, ripples along a damp wall**
+20. **Dungeon animal — Root-cellar mouse — quick and pale-coated, freezes mid-dash**
+21. **Dungeon animal — Grotto moth — pale wings, flutters weakly toward any lit lantern**
+22. **Dungeon animal — Cave cockroach — glossy and fast, skitters for the nearest crack**
+23. **Dungeon animal — Blind cave scorpion — tail raised, backs into a fissure**
+24. **Dungeon animal — Tomb-dust mite swarm — a faint shifting haze over old bone**
+25. **Dungeon animal — Cave pseudoscorpion — tiny, pincers raised, rides in on driftwood or fur**
 
 ---
 

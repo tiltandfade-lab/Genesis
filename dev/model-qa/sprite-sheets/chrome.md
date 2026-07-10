@@ -16,6 +16,23 @@ NPCs) — not hand-invented.
 
 Style block (same for every sheet in this realm): Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). gritty low-poly-PS1-inspired pixel art, chunky dithered shading, neon-magenta and cyan rim light against dark asphalt tones, servo/chrome plating with visible rivets and grime, high value contrast so each silhouette reads instantly against a dark background.
 
+**Palette law (2026-07-09)** — SPRITE-PALETTE P1–P5: Chrome keeps its base identity — dark
+gunmetal/asphalt chassis and shadow as the canvas, with cyan as the anchor rim-light — but the
+corpus-wide "neon-magenta rim light" habit named in the style block above retires under P5: magenta
+IS the chroma-key background color, so no figure may carry it as a rim light, visor glow, hair-rig,
+or paint accent going forward. In its place Chrome runs P3's hyper-neon-everywhere law: every figure
+carries emissive neon on its lights, visor, hair, tubing, or signage-glow — never left a flat dark
+shape — drawn from a five-family accent menu: **neon cyan** (the realm's signature anchor),
+**electric lime** (coolant leaks, targeting reticles, sickly bio-splice glow), **acid orange**
+(warning strobes, welding sparks, gang-paint accents), **laser red** (scan-lines, targeting lasers,
+alarm wash), and **ultraviolet/violet** (blacklight tattoo-ink, cortex-implant glow, high-end corp
+tech). Sheet-level rule: across any 25-cell sheet, at least 4 of these hue families must appear as
+deliberate emissive accents, and no two adjacent cells may read as the same duo — vary which
+neon(s) light which figure. Dark chassis/asphalt is the canvas every figure sits on, never the whole
+read — a cell that reads as gunmetal-and-shadow with no neon accent fails this law. Anti-key clause
+(P5, binding everywhere): no hot magenta / neon pink on any figure — #FF00FF-adjacent hues fight the
+chroma key; violets/UV fine, hot pinks go desaturated or shift violet.
+
 Shared mechanical instructions (same as the master template): 5×5 grid, 25 cells, one distinct
 static character per cell (not a repeat, not an animation frame), uniform cell size, solid magenta (#FF00FF) background (no transparency, no other background elements), consistent scale across all 25, orthographic side view, each character fully visible from head to toe within its cell — no cropping at the top, bottom, or sides, the complete body must fit inside the cell boundary. **Every character in an expressive, mid-action pose that captures its essence**
 — mid-lunge, mid-cast, braced, snarling — never a neutral T-pose or idle stand.
@@ -342,7 +359,7 @@ Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-R
 24. **Street preacher of the old machine-cult — preaches to whichever gang will listen that week**
 25. **Orphaned kid, gang-adjacent — too young to join, runs errands for whoever's kindest that day**
 
-## Domestic animal batches (25 total, 1 sheet)
+## Domestic animal batches (50 total, 2 sheets)
 
 Style block (repeated here so this section is self-contained): Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). gritty low-poly-PS1-inspired pixel art, chunky dithered shading, neon-magenta and cyan rim light against dark asphalt tones, servo/chrome plating with visible rivets and grime, high value contrast so each silhouette reads instantly against a dark background.
 
@@ -354,7 +371,7 @@ stiff/taxidermied. **No scene props, furniture, pens, or background objects of a
 fences, feed troughs, leashes-as-set-dressing, etc.; the animal itself only, isolated against the
 plain magenta background. Rendered in this realm's art style (see the style block above).
 
-### Domestic animal sheet 1/1
+### Domestic animal sheet 1/2
 
 1. **Domestic animal — Loyal dog — bonded to one person, reads their mood before they do.**
 2. **Domestic animal — Working beast (a single ox) — earns its feed, patient, and spooks true.**
@@ -382,10 +399,50 @@ plain magenta background. Rendered in this realm's art style (see the style bloc
 24. **Domestic animal — A single kitten — too young to have earned the barn cat's independence yet.**
 25. **Domestic animal — A single caged ferret-kit — young, hyperactive, still learning the vermin-catcher's trade.**
 
+Style block (repeated here so this section is self-contained): Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). gritty low-poly-PS1-inspired pixel art, chunky dithered shading, neon-magenta and cyan rim light against dark asphalt tones, servo/chrome plating with visible rivets and grime, high value contrast so each silhouette reads instantly against a dark background. Per the Palette law block above, magenta rim-light retires — light these in the neon-cyan / electric-lime / acid-orange / laser-red / ultraviolet accent menu instead, ≥4 hue families across the sheet.
+
+Shared mechanical instructions (restated for this section): 5x5 grid, uniform cell size, solid
+magenta (#FF00FF) background (no transparency, no other background elements), consistent scale,
+orthographic side view, each animal fully visible from head to toe within its cell — no cropping.
+**Every animal in a characteristic living pose** — alert, mid-stride, grooming, watching — never
+stiff/taxidermied. **No scene props, furniture, pens, or background objects of any kind** — no
+fences, feed troughs, leashes-as-set-dressing, etc.; the animal itself only, isolated against the
+plain magenta background. Rendered in this realm's art style (see the style block above). Per P6
+(realm-true fauna), this second sheet is Chrome-native: gene-mod, robotic, and feral-urban
+companions — no repeats of sheet 1/2's base roster.
+
+### Domestic animal sheet 2/2
+
+1. **Domestic animal — Companion-Bot, Puppy-Chassis — vat-built puppy-analog, servo-fur twitches like the real thing, never grows past the mold.**
+2. **Domestic animal — Lap-Drone — palm-sized hovering pet-bot, chirps and nuzzles in for a charge.**
+3. **Domestic animal — Splice-Finch — gene-mod songbird, feathers threaded with a faint circuit pattern.**
+4. **Domestic animal — Guard-Mite — thumb-sized drone-insect kept as a cheap apartment alarm.**
+5. **Domestic animal — Vat-Koi — lab-grown ornamental fish, circles its tank on a magnetic fin, no pump needed.**
+6. **Domestic animal — Coolant Newt — tank-kept amphibian bred to feed on stray current, glows faint blue when full.**
+7. **Domestic animal — Owl-Unit (Companion Model) — miniature owl-shaped bot, patrols the apartment after dark on silent rotors.**
+8. **Domestic animal — Pocket Cockatiel, Synthesized Call — gene-mod bird bred for a looped, non-natural song.**
+9. **Domestic animal — Domesticated Roach — pet-mod cockroach that grooms loose wiring, oddly beloved by mechanics.**
+10. **Domestic animal — Bonded Hamster — wheel-run pet whose wheel trickle-charges a night-light.**
+11. **Domestic animal — Chrome-Scaled Iguana — gene-mod lizard kept for its faint metallic sheen.**
+12. **Domestic animal — Companion Eel — a single tame eel that lights the tank when it recognizes its owner's step.**
+13. **Domestic animal — Pocket Marmoset — gene-mod micro-primate, popular high-rise pet, mimics its owner's gestures.**
+14. **Domestic animal — Static-Cling Chinchilla — a soft-furred pet whose coat crackles faintly with stray charge.**
+15. **Domestic animal — Wall-Trained Gecko — bred to patrol apartment walls for real pests.**
+16. **Domestic animal — Vat-Quail Chick — lab-grown quail-analog, imprints on the first face it sees.**
+17. **Domestic animal — Servo-Tortoise — a slow, armored pet-bot popular with shut-ins, never needs feeding.**
+18. **Domestic animal — Bootleg Chrome-Claw Gerbil — cheap back-alley pet-mod, claws plated for "style."**
+19. **Domestic animal — Corp-Subscription Companion — a leased pet-bot, animal-shaped, repossessed if payments lapse.**
+20. **Domestic animal — Retrofitted Guard-Chassis (Terrier-Class) — an aging robotic guard-pet with a bolted-on hip brace.**
+21. **Domestic animal — Bonded Vole, Lab-Imprinted — a lab rodent imprinted on one owner, rides a shoulder everywhere.**
+22. **Domestic animal — Micro-Breed Guinea Pig — gene-mod teacup breed, popular balcony pet.**
+23. **Domestic animal — Chrome Mockingbird-Unit, Pre-Loaded — a mechanical bird sold pre-loaded with a hundred tunes.**
+24. **Domestic animal — Splice-Axolotl — a gene-mod amphibian kept for its permanently juvenile, faintly glowing gills.**
+25. **Domestic animal — Imprint-Kit (Fresh Companion-Bot) — a juvenile pet-bot fresh off the line, hasn't learned its name yet.**
+
 
 ---
 
-## Wild animal batches (25 total, 1 sheet)
+## Wild animal batches (50 total, 2 sheets)
 
 Style block (repeated here so this section is self-contained): Pixel-art sprite rendering
 (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale).
@@ -402,7 +459,7 @@ magenta background. Sourced from the game's own `wild-animal-kind` table (`Engin
 Social/Sentient NPCs/Wild Animal Kind.md`) plus additional single-animal variety to fill the
 sheet; entry 11 (the realm-beast) uses this realm's real skin from `data/animal-realm-skins.js`.
 
-### Wild animal sheet 1/1
+### Wild animal sheet 1/2
 
 1. **Wild animal — Territory wolf — holds a stretch of ground and knows every crossing of it**
 2. **Wild animal — A single deer from the herd — moves with the herd, reads the wind before the ranger does**
@@ -430,9 +487,52 @@ sheet; entry 11 (the realm-beast) uses this realm's real skin from `data/animal-
 24. **Wild animal — A peregrine falcon — stooping mid-hunt, faster than anything else in the sky**
 25. **Wild animal — A lynx kitten — spotted coat, play-stalking something that isn't there yet**
 
+Style block (repeated here so this section is self-contained): Pixel-art sprite rendering
+(visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale).
+gritty low-poly-PS1-inspired pixel art, chunky dithered shading, neon-magenta and cyan rim light against dark asphalt tones, servo/chrome plating with visible rivets and grime, high value contrast so each silhouette reads instantly against a dark background. Per the Palette law block above, magenta rim-light retires — light these in the neon-cyan / electric-lime / acid-orange / laser-red / ultraviolet accent menu instead, ≥4 hue families across the sheet.
+
+Shared mechanical instructions (restated for this section): 5x5 grid, uniform cell size, solid
+magenta (#FF00FF) background (no transparency, no other background elements), consistent scale,
+orthographic side view, each animal fully visible from head to toe within its cell — no cropping.
+**Every animal in a characteristic wild-living pose** — alert, stalking, grazing, mid-flight,
+territorial — never stiff/taxidermied, never tame-looking (these are wilderness creatures, not
+pets). **No scene props, furniture, dens, or background objects of any kind** — no burrows,
+nests-as-set-dressing, foliage clusters, etc.; the animal itself only, isolated against the plain
+magenta background. Per P6 (realm-true fauna), this second sheet is Chrome-native: feral-urban
+escapees and gene-mod/robotic ferals roaming outside anyone's ownership — no repeats of sheet
+1/2's base roster.
+
+### Wild animal sheet 2/2
+
+1. **Wild animal — Feral Splice-Coyote — escaped gene-lab canid, prowls the rail yards in a loose pack**
+2. **Wild animal — Rogue Maintenance-Bot, Territorial — an abandoned utility bot that's claimed a block as its own**
+3. **Wild animal — Chrome-Backed Gull — scavenger bird with a fused metal wing-brace, thrives on rooftop trash**
+4. **Wild animal — Feral Sentry-Pack, Decommissioned — abandoned security-bots hunting together on old patrol logic**
+5. **Wild animal — Rooftop Tarantula, Gene-Swelled — lab-escapee spider-analog grown past natural size**
+6. **Wild animal — Storm-Drain Mantis — an oversized gene-mod insect ambushing from flooded runoff grates**
+7. **Wild animal — Corroded Junction Beetle — a beetle-analog that's learned to nest in dead transformer housings**
+8. **Wild animal — Skybridge Starling Murmuration, Mutated — a flock with a faint chrome sheen threading the feathers**
+9. **Wild animal — Alley Raccoon, Wire-Fingered — an urban scavenger whose paws have fused with stray filament**
+10. **Wild animal — Feral Splice-Possum — a lab-escapee that plays dead with unsettling mechanical precision**
+11. **Wild animal — Scrapyard Skunk, Chrome-Striped — a real skunk whose stripe has picked up a faint metallic glint**
+12. **Wild animal — Rust-Molt Chameleon — a gene-mod reptile that shifts color to match scrap-metal instead of foliage**
+13. **Wild animal — Feral Signal-Moth Cloud — escaped lab moths clustering on broadcast towers, drawn to the hum**
+14. **Wild animal — Grid-Nesting Magpie — a bird that's built its nest entirely from scavenged wire and bottle caps**
+15. **Wild animal — Storm-Runoff Crayfish, Overgrown — a bottom-feeder grown too large in the warm runoff water**
+16. **Wild animal — Feral Combat-Chassis, Decommissioned — an old military bot running loose, still drilled on lockdown routines**
+17. **Wild animal — Rooftop Centipede Swarm, Gene-Mod — an oversized colony nesting in the gaps between panels**
+18. **Wild animal — Alley Armadillo, Plated — a real armadillo whose natural plating reads as chrome under sodium light**
+19. **Wild animal — Junction-Box Scorpion — a gene-mod arachnid drawn to the warmth of live wiring**
+20. **Wild animal — Feral Macaw, Escaped Pet-Stock — a loud, brilliant bird gone wild off a smuggler's crashed shipment**
+21. **Wild animal — Feral Splice-Slug, Overgrown — a gene-mod detritivore leaving a faint conductive slime trail**
+22. **Wild animal — Rooftop Dragonfly Swarm, Chrome-Winged — an oversized gene-mod insect hunting drone-scale prey**
+23. **Wild animal — Feral Splice-Piranha, Storm Drain — a lab-escapee fish that's colonized the flood tunnels**
+24. **Wild animal — Corroded Firefly Cloud — bioluminescent insects pulsing in sync with nearby power surges**
+25. **Wild animal — Scrapyard Millipede, Oversized — a gene-mod detritivore stripping insulation off buried cable**
+
 ---
 
-## Dungeon animal batches (25 total, 1 sheet)
+## Dungeon animal batches (50 total, 2 sheets)
 
 **Lore note:** per `docs/ANIMAL-SOCIAL.md` §1, the dungeon environment band is animal-population
 near-zero — "each one is a signal," not ambient wildlife. Every entry below is either a
@@ -451,7 +551,7 @@ adapted-to-dark — never a relaxed/domestic pose (even the lost pets down here 
 the place). **No scene props, furniture, cages-as-set-dressing, or background objects of any
 kind** — the animal itself only, isolated against the plain magenta background.
 
-### Dungeon animal sheet 1/1
+### Dungeon animal sheet 1/2
 
 1. **Dungeon animal — Feral vermin-catcher — once someone's ferret or terrier, now lives wild in the tunnels, still killing rats out of habit**
 2. **Dungeon animal — Blind cave rat — pale, sightless, thrives in total dark, first sign something's been dug through**
@@ -478,6 +578,49 @@ kind** — the animal itself only, isolated against the plain magenta background
 23. **Dungeon animal — Tunnel-blind mole — huge clawed forepaws, displaces more earth than it should be able to**
 24. **Dungeon animal — Trapped messenger pigeon — still carries a note no one living will ever read**
 25. **Dungeon animal — An ordinary animal, deliberately unremarkable — domestic or wild, doesn't matter; its presence this deep IS the signal, let the scene decide what it means**
+
+Style block (repeated here so this section is self-contained): Pixel-art sprite rendering
+(visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale).
+gritty low-poly-PS1-inspired pixel art, chunky dithered shading, neon-magenta and cyan rim light against dark asphalt tones, servo/chrome plating with visible rivets and grime, high value contrast so each silhouette reads instantly against a dark background. Per the Palette law block above, magenta rim-light retires — light these in the neon-cyan / electric-lime / acid-orange / laser-red / ultraviolet accent menu instead, ≥4 hue families across the sheet.
+
+Shared mechanical instructions (restated for this section): 5x5 grid, uniform cell size, solid
+magenta (#FF00FF) background (no transparency, no other background elements), consistent scale,
+orthographic side view, each animal fully visible from head to toe within its cell — no cropping.
+**Every animal in a characteristic pose for its situation** — wary, cornered, feral, startled,
+adapted-to-dark — never a relaxed/domestic pose (even the lost pets down here read as changed by
+the place). **No scene props, furniture, cages-as-set-dressing, or background objects of any
+kind** — the animal itself only, isolated against the plain magenta background. Per P6 (realm-true
+fauna) and the dungeon lore note above (near-zero population, each one a signal), this second sheet
+is Chrome-native: derelict maintenance-bots and pale gene-mod invertebrates that have adapted to
+permanent dark — no repeats of sheet 1/2's base roster.
+
+### Dungeon animal sheet 2/2
+
+1. **Dungeon animal — Derelict Maintenance-Mite — a thumb-sized repair-bot still patrolling a route no one owns**
+2. **Dungeon animal — Reactor-Warmed Isopod Colony — pale gene-mod crustaceans nesting near a leaking coolant line**
+3. **Dungeon animal — Blind Vault Silverfish Swarm — a colony thriving on old paper archives no one's opened in years**
+4. **Dungeon animal — Corroded Janitor-Chassis, Inert-ish — a service-bot shell still twitching on backup power**
+5. **Dungeon animal — Sub-Level Companion-Bot, Lost — someone's pet-bot that wandered into the maintenance shafts and stayed**
+6. **Dungeon animal — Dead-Channel Music-Unit — an abandoned mechanical bird-bot left behind in a monitoring post, still singing**
+7. **Dungeon animal — Blind Cave Leech, Overgrown — a gene-mod bloodfeeder grown pale and huge in the total dark**
+8. **Dungeon animal — Ash-Grey Tick Colony — a swarm that's adapted to feed on stray current instead of blood**
+9. **Dungeon animal — Junction-Nest Earwig Swarm — insects nesting inside a dead server rack's ventilation gaps**
+10. **Dungeon animal — Forgotten Sentry-Shell, Motion-Lit — an inert robotic guard-shape, sensor light still blinking**
+11. **Dungeon animal — Sump-Pit Pillbug Colony, Oversized — a colony grown too large in the flooded lowest level**
+12. **Dungeon animal — Static-Fed Springtail Swarm — tiny gene-mod insects that graze on residual charge in dead conduits**
+13. **Dungeon animal — The Last Patrol-Unit — an owl-shaped maintenance-bot still walking a route that no longer exists**
+14. **Dungeon animal — Blind Vault Cicada, Silent — a cicada-analog that's lost its call across generations of total dark**
+15. **Dungeon animal — Abandoned Companion-Chassis, Twitching — a leased pet-bot repossession crew never came to collect**
+16. **Dungeon animal — Coolant-Line Snail Colony — slow gene-mod mollusks grazing the residue off old pipe seals**
+17. **Dungeon animal — Sub-Basement Woodlouse Swarm, Radiant — a colony that's picked up a faint glow from the leak above it**
+18. **Dungeon animal — Reactor-Adjacent Flea Colony — gene-mod parasites drawn to the last warm-blooded thing that passed through**
+19. **Dungeon animal — Deep-Vault Planarian, Regenerating — a flatworm-analog that won't stay dead, keeps rebuilding from scraps**
+20. **Dungeon animal — Void-Adjacent Companion-Bot, Wrong — a pet-bot that wandered too near a breach seal, runs different code now**
+21. **Dungeon animal — Sub-Level Aphid Swarm, Dormant — gene-mod insects gone still near a cold reactor vent**
+22. **Dungeon animal — Blind Tunnel Companion-Drone, Discarded — a child's pet-bot abandoned down here, still mimics passing footsteps**
+23. **Dungeon animal — Deep-Sump Catfish, Blind — a genuine bottom-feeder gone pale and eyeless in the flooded sub-basement**
+24. **Dungeon animal — Trapped Signal-Chassis, Looping — a courier-bot stuck replaying its last delivery route forever**
+25. **Dungeon animal — An ordinary bot, deliberately unremarkable — janitor-class or pet-class, doesn't matter; its presence this deep IS the signal, let the scene decide what it means**
 
 ---
 

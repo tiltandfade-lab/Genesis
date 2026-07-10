@@ -20,6 +20,20 @@ Shared mechanical instructions (same as the master template): 5×5 grid, 25 cell
 static character per cell (not a repeat, not an animation frame), uniform cell size, solid magenta (#FF00FF) background (no transparency, no other background elements), consistent scale across all 25, orthographic side view, each character fully visible from head to toe within its cell — no cropping at the top, bottom, or sides, the complete body must fit inside the cell boundary. **Every character in an expressive, mid-action pose that captures its essence**
 — mid-lunge, mid-cast, braced, snarling — never a neutral T-pose or idle stand.
 
+**Palette law (2026-07-09)** — SPRITE-PALETTE P1-P5: this realm KEEPS its base palette — lawn
+green, siding beige, porch-light amber, rendered too clean/saturated to feel safe. Within that
+base, every sheet draws deliberate accents from a 5-family menu built for the "curdled cheerfulness"
+identity: **chlorine-pool cyan** (the too-blue backyard pool, popsicle-blue tints), **hazard-tape
+orange/yellow** (construction-cone orange, caution-sign yellow — the "somebody roped this off"
+note), **bug-zapper violet** (UV-purple porch light, the color of the thing that shouldn't glow),
+**candy-red** (a fire hydrant, a stop sign, a Big Wheel — the one saturated warm note per figure),
+and **rot-green** (a sickly algae/mildew green, distinct from the lawn's healthy green — where the
+cheerfulness has gone bad). Sheet-level rule: across any 25-cell sheet, at least 4 of these 5 hue
+families must appear as deliberate accents, and no two adjacent cells may read as the same
+base+accent duo. **Anti-key clause:** no hot magenta / neon pink anywhere on a figure — anything
+#FF00FF-adjacent fights the chroma key; violets/UV are fine, hot pinks must go desaturated or
+shift toward violet.
+
 ---
 
 ## Monster batches (120 total, 5 sheets)
@@ -269,7 +283,7 @@ stiff/taxidermied. **No scene props, furniture, pens, or background objects of a
 fences, feed troughs, leashes-as-set-dressing, etc.; the animal itself only, isolated against the
 plain magenta background. Rendered in this realm's art style (see the style block above).
 
-### Domestic animal sheet 1/1
+### Domestic animal sheet 1/2
 
 1. **Domestic animal — Loyal dog — bonded to one person, reads their mood before they do.**
 2. **Domestic animal — Working beast (a single ox) — earns its feed, patient, and spooks true.**
@@ -297,6 +311,45 @@ plain magenta background. Rendered in this realm's art style (see the style bloc
 24. **Domestic animal — A single kitten — too young to have earned the barn cat's independence yet.**
 25. **Domestic animal — A single caged ferret-kit — young, hyperactive, still learning the vermin-catcher's trade.**
 
+### Domestic animal sheet 2/2
+
+Style block (repeated here so this section is self-contained): Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). bright manicured-suburbia palette — lawn green, siding beige, porch-light amber — rendered slightly too clean/saturated to feel safe, soft daytime shading that curdles at the edges of each figure, one off-key color note breaking the cheerfulness per sprite. Palette law reference: see the palette-law block above the Monster batches — accents drawn from the chlorine-pool cyan / hazard-tape orange-yellow / bug-zapper violet / candy-red / rot-green menu, anti-key clause in force.
+
+Shared mechanical instructions (restated for this section): 5x5 grid, uniform cell size, solid
+magenta (#FF00FF) background (no transparency, no other background elements), consistent scale,
+orthographic side view, each animal fully visible from head to toe within its cell — no cropping.
+**Every animal in a characteristic living pose** — alert, mid-stride, grooming, watching — never
+stiff/taxidermied. **No scene props, furniture, pens, or background objects of any kind** — no
+fences, feed troughs, leashes-as-set-dressing, etc.; the animal itself only, isolated against the
+plain magenta background. Rendered in this realm's art style (see the style block above). This
+sheet is the second, realm-native pass per SPRITE-PALETTE P6 — HOA-legal, breed-registry, and
+purse-dog tier, no repeats of sheet 1/2's base roster.
+
+1. **Show-Groomed Poodle** — trotting a tight show-ring gait, pompom cut catching the light
+2. **Clipped-Tail Corgi** — low to the ground, herding an imaginary flock across the lawn
+3. **Sweater-Wearing Chihuahua** — trembling, alert, barking twice its size
+4. **Labradoodle Puppy** — bounding clumsily, ears flopping past its own feet
+5. **Indoor-Only Persian Cat** — draped over a sunbeam, unbothered by anything outside
+6. **Siamese Cat** — perched, vocal mid-yowl, tracking something past the window
+7. **4-H Guinea Pig** — nose twitching, popcorning in its cage-free run
+8. **Syrian Hamster** — cheeks stuffed, mid-scurry across an exercise wheel's edge
+9. **Quiet-Hours-Trained Parakeet** — head-tilted, mimicking a doorbell mid-chirp
+10. **Cockatiel** — crest raised, whistling a tune it picked up from the TV
+11. **Desk-Bowl Betta Fish** — fins flared, circling its bowl in a slow display
+12. **Backyard Koi** — gliding just under the pond's surface, mouth breaking the water
+13. **Terrarium Leopard Gecko** — frozen mid-stalk on a heat rock, tail flicking
+14. **HOA-Approved Corn Snake** — coiled loosely, tongue flicking at the terrarium glass
+15. **Souvenir-Shop Hermit Crab** — dragging its painted shell across the sand
+16. **Rescue African Grey Parrot** — bobbing on a perch, repeating a phrase it shouldn't know
+17. **Miniature Schnauzer** — bristled and alert, standing guard at the porch step
+18. **Wiener-Dog-Club Dachshund** — low-slung, trotting proudly in a tiny jacket
+19. **Bichon Frise** — puffed and bouncing, mid-spin chasing its own tail
+20. **Show-Circuit Sphynx Cat** — wrinkled and warm-seeking, draped over a heating vent
+21. **Dust-Bath Chinchilla** — mid-roll in its dust bath, fur a gray blur
+22. **Show-Fur Angora Rabbit** — fluffed to twice its size, grooming an impossibly long ear
+23. **HOA-Skirting Backyard Chicken** — scratching the dirt behind a too-tall privacy fence
+24. **Petting-Zoo Loaner Llama** — chewing placidly, tethered for the block party's petting pen
+25. **Golden Doodle Therapy Dog** — sitting perfectly still, vest on, eyes soft and watchful
 
 ---
 
@@ -317,7 +370,7 @@ magenta background. Sourced from the game's own `wild-animal-kind` table (`Engin
 Social/Sentient NPCs/Wild Animal Kind.md`) plus additional single-animal variety to fill the
 sheet; entry 11 (the realm-beast) uses this realm's real skin from `data/animal-realm-skins.js`.
 
-### Wild animal sheet 1/1
+### Wild animal sheet 1/2
 
 1. **Wild animal — Territory wolf — holds a stretch of ground and knows every crossing of it**
 2. **Wild animal — A single deer from the herd — moves with the herd, reads the wind before the ranger does**
@@ -345,6 +398,48 @@ sheet; entry 11 (the realm-beast) uses this realm's real skin from `data/animal-
 24. **Wild animal — A peregrine falcon — stooping mid-hunt, faster than anything else in the sky**
 25. **Wild animal — A lynx kitten — spotted coat, play-stalking something that isn't there yet**
 
+### Wild animal sheet 2/2
+
+Style block (repeated here so this section is self-contained): Pixel-art sprite rendering
+(visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale).
+bright manicured-suburbia palette — lawn green, siding beige, porch-light amber — rendered slightly too clean/saturated to feel safe, soft daytime shading that curdles at the edges of each figure, one off-key color note breaking the cheerfulness per sprite. Palette law reference: see the palette-law block above the Monster batches — accents drawn from the chlorine-pool cyan / hazard-tape orange-yellow / bug-zapper violet / candy-red / rot-green menu, anti-key clause in force.
+
+Shared mechanical instructions (restated for this section): 5x5 grid, uniform cell size, solid
+magenta (#FF00FF) background (no transparency, no other background elements), consistent scale,
+orthographic side view, each animal fully visible from head to toe within its cell — no cropping.
+**Every animal in a characteristic wild-living pose** — alert, stalking, grazing, mid-flight,
+territorial — never stiff/taxidermied, never tame-looking (these are wilderness creatures, not
+pets). **No scene props, furniture, dens, or background objects of any kind** — no burrows,
+nests-as-set-dressing, foliage clusters, etc.; the animal itself only, isolated against the plain
+magenta background. This sheet is the second, realm-native pass per SPRITE-PALETTE P6 —
+raccoon/possum/coyote/HOA-edge urban wildlife, no repeats of sheet 1/2's base roster.
+
+1. **Trash-Panel Raccoon** — dumpster-lid propped open, mid-rummage, unbothered by the noise
+2. **Playing-Possum Opossum** — collapsed rigid in the driveway, one eye tracking movement
+3. **Dusk-Silhouette Coyote** — trotting the property line at last light, head low
+4. **Storm-Drain Muskrat** — paddling the culvert runoff, slick and low in the water
+5. **Attic-Nesting Gray Squirrel** — frozen mid-leap between gutter and roofline
+6. **Chimney-Swift Colony Straggler** — wheeling alone above a capped chimney at dusk
+7. **Backyard Skunk** — tail raised, backing toward the fence line, warning first
+8. **Shed-Burrowing Groundhog** — hunched at a fresh hole, dirt still kicking from its paws
+9. **Flowerbed-Digging Armadillo** — snout-down, plowing a bed of mulch in one motion
+10. **Feral Urban Turkey Vulture** — hunched on a rooftop ridge, wings half-spread to dry
+11. **Power-Line Red-Tailed Hawk** — perched dead-still on the wire, scanning the yards below
+12. **Starling Murmuration Scout** — banking hard at the edge of a wheeling flock
+13. **House-Sparrow Flock Outlier** — puffed and alone on a gutter's edge, chirping short
+14. **Sewer-Line Norway Rat** — squeezed flat through a curb-drain gap, tail last
+15. **Rooftop Pigeon Flock** — clustered on a ridge vent, one bird mid-strut
+16. **Dumpster Crow** — working a latch loose with its beak, patient and deliberate
+17. **Mimic-Caller Blue Jay** — head cocked, throat working through someone else's car alarm
+18. **Cheek-Pouch Chipmunk** — bolting across a walkway, cheeks bulging with stolen seed
+19. **Culvert Crawdad** — backing into a crack in the concrete, claws raised
+20. **Porch-Eave Bat Colony** — pouring out from under the eave in a tight evening stream
+21. **Drainage-Ditch Cottonmouth** — coiled at the ditch's waterline, mouth gaping white in warning
+22. **Africanized Backyard Bee Swarm** — boiling out of a wall void in a dense angry column
+23. **Retention-Pond Nutria** — hunched at the water's edge, gnawing through the bank grass
+24. **Retention-Pond Snapping Turtle** — motionless just under the surface, only eyes and ridge showing
+25. **Vacant-Lot Black Rat Snake** — stretched full-length across sun-warmed pavement, unmoving
+
 ---
 
 ## Dungeon animal batches (25 total, 1 sheet)
@@ -366,7 +461,7 @@ adapted-to-dark — never a relaxed/domestic pose (even the lost pets down here 
 the place). **No scene props, furniture, cages-as-set-dressing, or background objects of any
 kind** — the animal itself only, isolated against the plain magenta background.
 
-### Dungeon animal sheet 1/1
+### Dungeon animal sheet 1/2
 
 1. **Dungeon animal — Feral vermin-catcher — once someone's ferret or terrier, now lives wild in the tunnels, still killing rats out of habit**
 2. **Dungeon animal — Blind cave rat — pale, sightless, thrives in total dark, first sign something's been dug through**
@@ -393,6 +488,54 @@ kind** — the animal itself only, isolated against the plain magenta background
 23. **Dungeon animal — Tunnel-blind mole — huge clawed forepaws, displaces more earth than it should be able to**
 24. **Dungeon animal — Trapped messenger pigeon — still carries a note no one living will ever read**
 25. **Dungeon animal — An ordinary animal, deliberately unremarkable — domestic or wild, doesn't matter; its presence this deep IS the signal, let the scene decide what it means**
+
+### Dungeon animal sheet 2/2
+
+**Lore note:** per `docs/ANIMAL-SOCIAL.md` §1, the dungeon environment band is animal-population
+near-zero — "each one is a signal," not ambient wildlife. Every entry below is a suburb
+domestic/wild animal that ended up somewhere it shouldn't be (a sealed crawlspace, a storm-drain
+tunnel, a basement dead zone) or has adapted to permanent dark down there — never a generic cave
+critter.
+
+Style block (repeated here so this section is self-contained): Pixel-art sprite rendering
+(visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale).
+bright manicured-suburbia palette — lawn green, siding beige, porch-light amber — rendered slightly too clean/saturated to feel safe, soft daytime shading that curdles at the edges of each figure, one off-key color note breaking the cheerfulness per sprite. Palette law reference: see the palette-law block above the Monster batches — accents drawn from the chlorine-pool cyan / hazard-tape orange-yellow / bug-zapper violet / candy-red / rot-green menu, anti-key clause in force.
+
+Shared mechanical instructions (restated for this section): 5x5 grid, uniform cell size, solid
+magenta (#FF00FF) background (no transparency, no other background elements), consistent scale,
+orthographic side view, each animal fully visible from head to toe within its cell — no cropping.
+**Every animal in a characteristic pose for its situation** — wary, cornered, feral, startled,
+adapted-to-dark — never a relaxed/domestic pose (even the lost pets down here read as changed by
+the place). **No scene props, furniture, cages-as-set-dressing, or background objects of any
+kind** — the animal itself only, isolated against the plain magenta background. This sheet is the
+second, realm-native pass per SPRITE-PALETTE P6 — suburb basement/crawlspace/storm-tunnel
+infrastructure, no repeats of sheet 1/2's base roster.
+
+1. **Furnace-Vent Moth Swarm** — drawn to the pilot light, thickest where the duct runs coldest
+2. **Crawlspace Opossum** — plays dead permanently, hasn't moved in what might be years
+3. **Sump-Pit Crayfish** — blind, pale, thriving in standing floodwater no one's pumped out
+4. **Wall-Void Mouse Colony** — chewed clean through the wiring, nests behind every outlet
+5. **Storm-Drain Goldfish** — flushed years ago, somehow still circling the same concrete pool
+6. **Silverfish Swarm** — carpets the damp corner where the boxes never get opened
+7. **Attic-Crawl Raccoon** — sealed in since the last renovation, bigger than it should be
+8. **Buried Koi** — nobody remembers stocking the backyard pond that's now underground
+9. **Crawlspace Skunk** — spray gone stale and permanent in the dead air
+10. **Foundation Termite Swarm** — patient, structural, been at it since before the family moved in
+11. **Sub-Basement Chained Mutt** — leashed to a post since the house changed hands, still waiting
+12. **Drywall-Void Bat** — roosts where the light switch has never once worked
+13. **Septic-Line Rat Tangle** — a knot of them, too many to be one nest
+14. **Storm-Tunnel Coyote** — wandered down from the culvert, gone lean and lightless
+15. **Pool-Filter Eel** — living in the intake line of a pool that's been drained for years
+16. **Crawlspace Black Snake** — keeps the rodents down, never once seen doing it
+17. **Sub-Floor Cricket Chorus** — the only sound down here, and it never stops
+18. **Boiler-Room Roach Swarm** — thrives on the heat no one else can stand
+19. **Old Well Toad** — blind, fed only by what falls in from above
+20. **Stud-Wall Carpenter Ants** — hollowing the frame from the inside, one wall at a time
+21. **Doghouse's Last Resident** — chained under the slab, forgotten with the house built over it
+22. **Culvert Catfish** — bottom-feeding in total dark, bigger than the pipe should allow
+23. **Chest-Freezer Stowaway Lizard** — outlived whatever else was down here with it
+24. **Crawlspace Feral Tabby** — lean, silent, has learned every gap in the floor joists
+25. **An Unmarked Pet Carrier** — still latched, something inside shifts when you pass; the scene decides what it means
 
 ---
 

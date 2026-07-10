@@ -16,6 +16,20 @@ NPCs) — not hand-invented.
 
 Style block (same for every sheet in this realm): Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). sun-bleached sepia-and-rust palette, dusty film-grain texture, hard midday rim light casting long low-value shadows, weathered leather/canvas/tin textures with visible wear.
 
+**Palette law (2026-07-09)** — SPRITE-PALETTE P1-P5
+
+This realm keeps its base palette — sun-bleached sepia-and-rust, the dusty film-grain wash,
+that hard midday rim light — as the identity every sheet reads from. Around that base, work in
+a wider accent menu so figures don't collapse into one wash of dust: **turquoise-sky**
+(silver-and-turquoise jewelry, painted signage, a hard-blue noon sky), **oxide-red** (rust, red
+rock, dried blood), **sun-gold** (wheat, brass fittings, low raking sun), **sage-scrub** (cactus,
+sagebrush, tarnished copper patina), and **indigo-denim** (worn denim, bruised shadow,
+gun-bluing). The base sepia-and-rust duo can own any single figure, but never a whole sheet:
+across any 25-cell sheet, at least 4 of these hue families must show up as deliberate accents,
+and no two adjacent cells should read as the same duo. **P5 — anti-key clause (binding, every
+realm):** no hot magenta / neon pink on any figure — #FF00FF-adjacent hues fight the chroma key;
+violets and UV-blue are fine, hot pinks go desaturated or shift violet.
+
 Shared mechanical instructions (same as the master template): 5×5 grid, 25 cells, one distinct
 static character per cell (not a repeat, not an animation frame), uniform cell size, solid magenta (#FF00FF) background (no transparency, no other background elements), consistent scale across all 25, orthographic side view, each character fully visible from head to toe within its cell — no cropping at the top, bottom, or sides, the complete body must fit inside the cell boundary. **Every character in an expressive, mid-action pose that captures its essence**
 — mid-lunge, mid-cast, braced, snarling — never a neutral T-pose or idle stand.
@@ -254,7 +268,7 @@ Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-R
 20. **Frontier doctor, unsentimental — has performed more surgery on a kitchen table than in any clinic**
 21. **Tall, gaunt railroad accountant — keeps books for a company that barely tells the truth**
 
-## Domestic animal batches (25 total, 1 sheet)
+## Domestic animal batches (50 total, 2 sheets)
 
 Style block (repeated here so this section is self-contained): Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). sun-bleached sepia-and-rust palette, dusty film-grain texture, hard midday rim light casting long low-value shadows, weathered leather/canvas/tin textures with visible wear.
 
@@ -266,7 +280,7 @@ stiff/taxidermied. **No scene props, furniture, pens, or background objects of a
 fences, feed troughs, leashes-as-set-dressing, etc.; the animal itself only, isolated against the
 plain magenta background. Rendered in this realm's art style (see the style block above).
 
-### Domestic animal sheet 1/1
+### Domestic animal sheet 1/2
 
 1. **Domestic animal — Loyal dog — bonded to one person, reads their mood before they do.**
 2. **Domestic animal — Working beast (a single ox) — earns its feed, patient, and spooks true.**
@@ -294,10 +308,45 @@ plain magenta background. Rendered in this realm's art style (see the style bloc
 24. **Domestic animal — A single kitten — too young to have earned the barn cat's independence yet.**
 25. **Domestic animal — A single caged ferret-kit — young, hyperactive, still learning the vermin-catcher's trade.**
 
+### Domestic animal sheet 2/2
+
+Realm-true fauna (SPRITE-PALETTE P6): a second, all-new domestic roster — frontier ranch and
+homestead stock, no repeats of sheet 1/2's animals. Same style block, same shared mechanical
+instructions as sheet 1/2 above (5x5 grid, uniform cell size, solid magenta background,
+characteristic living pose, no scene props), rendered under this realm's palette law (see the
+palette law block at the top of this file — work the accent menu across the sheet, not just the
+base sepia-and-rust duo).
+
+1. **Plow horse** — heavy-boned draft breed, leans into the harness before the whip lands
+2. **Cutting horse** — quick-footed stock horse, reads a steer's next move before it makes it
+3. **Cavalry remount** — army-bred gelding, doesn't flinch at gunfire anymore
+4. **Carriage gelding** — town-bred, high-stepping, spooked by anything but wagon wheels
+5. **Racing filly** — sleek and restless, bred for the county-fair quarter-mile
+6. **Rough-string bronc** — unbroken ranch colt, bucks the new hand off before breakfast
+7. **Milk cow** — placid, chews slow, kicks fast if surprised
+8. **Longhorn steer** — rangy horns spanning a full wagon-width, slow to spook and slower to forgive
+9. **Rodeo bull** — scarred and penned separate, paws the ground before the gate opens
+10. **Dairy calf** — knock-kneed, still learning the milking-shed routine
+11. **Prize heifer** — blue-ribbon stock, fussed over more than most of the ranch hands
+12. **Guinea fowl** — shrill alarm bird, patrols the yard louder than any watchman
+13. **Yard rooster** — struts, crows too early, spurs first and asks questions never
+14. **Laying hen** — fat and content, broods anything roughly egg-shaped
+15. **Bantam rooster** — miniature and furious, picks fights with animals ten times its size
+16. **Surplus Army camel** — leftover from the frontier Camel Corps experiment, foul-tempered, hauls heavier loads than any mule
+17. **Freight llama** — imported novelty pack animal, sure-footed on switchback trail where horses balk
+18. **Green-broke ranch colt** — barely halter-trained, tests every fence it's tied to
+19. **Sale-barn mare** — auction-worn, flinches at raised hands, still gentle with children
+20. **Remount colt** — young cavalry-bound horse, not yet steady under gunfire
+21. **Delivery-route mare** — smaller cart horse, knows the route without guidance
+22. **Stud stallion** — kept separate, pure bloodline, temperamental around other males
+23. **Fence-line yearling** — young cattle stock, curious, always first to the fence when riders pass
+24. **Show gelding** — groomed for the county-fair ring, vain and easily spooked by crowds
+25. **Barn-raised orphan calf** — bottle-fed by hand, follows people instead of the herd
+
 
 ---
 
-## Wild animal batches (25 total, 1 sheet)
+## Wild animal batches (50 total, 2 sheets)
 
 Style block (repeated here so this section is self-contained): Pixel-art sprite rendering
 (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale).
@@ -314,7 +363,7 @@ magenta background. Sourced from the game's own `wild-animal-kind` table (`Engin
 Social/Sentient NPCs/Wild Animal Kind.md`) plus additional single-animal variety to fill the
 sheet; entry 11 (the realm-beast) uses this realm's real skin from `data/animal-realm-skins.js`.
 
-### Wild animal sheet 1/1
+### Wild animal sheet 1/2
 
 1. **Wild animal — Territory wolf — holds a stretch of ground and knows every crossing of it**
 2. **Wild animal — A single deer from the herd — moves with the herd, reads the wind before the ranger does**
@@ -342,9 +391,44 @@ sheet; entry 11 (the realm-beast) uses this realm's real skin from `data/animal-
 24. **Wild animal — A peregrine falcon — stooping mid-hunt, faster than anything else in the sky**
 25. **Wild animal — A lynx kitten — spotted coat, play-stalking something that isn't there yet**
 
+### Wild animal sheet 2/2
+
+Realm-true fauna (SPRITE-PALETTE P6): a second, all-new wild roster — genuine prairie-and-butte
+species, no repeats of sheet 1/2's animals. Same style block, same shared mechanical
+instructions as sheet 1/2 above (5x5 grid, uniform cell size, solid magenta background,
+characteristic wild-living pose, never tame-looking, no scene props), rendered under this
+realm's palette law (see the palette law block at the top of this file — work the accent menu
+across the sheet, not just the base sepia-and-rust duo).
+
+1. **Pronghorn antelope** — fastest thing on the flat, watches from a rise before it runs
+2. **Black-tailed jackrabbit** — zigzag sprinter, freezes flat before it bolts
+3. **Prairie rattlesnake** — coiled in tall grass, rattles once as a courtesy
+4. **Prairie dog** — burrow sentry, barks a warning down the whole colony
+5. **Bull snake** — non-venomous mimic, puffs and hisses like something worse
+6. **Greater roadrunner** — ground-courses at speed, outruns anything that tries to catch it
+7. **Golden eagle** — butte-nesting raptor, takes prairie dogs whole from a stoop
+8. **Bobcat** — smaller and more common than the ambush lynx, works the scrub edge alone
+9. **Nine-banded armadillo** — digs for grubs at dusk, curls tight or bolts when startled
+10. **Bighorn ram** — butte-climbing, rams rivals off narrow ledges over territory
+11. **Painted bunting** — vivid multicolor songbird, a rare bright flash across the dun grassland
+12. **Wild bison bull** — free-ranging herd bull, still holds the old migration paths
+13. **Rock squirrel** — butte-cliff scavenger, bold around any unguarded camp
+14. **Sage grouse** — struts a mating display on the open flat, explodes into flight when startled
+15. **Horned lizard** — flat-bodied, spits blood from its own eyes when truly cornered
+16. **American kestrel** — smallest prairie raptor, hovers dead-still over a hunting field
+17. **Collared peccary** — tusked scrub-pig, travels in a tight defensive band
+18. **Ringtail** — nocturnal, dens in rock crevices along the butte face
+19. **Migrating tarantula** — slow and deliberate, crosses open ground in late summer
+20. **Butte scorpion** — glows faintly under UV, hides under sun-warmed stone
+21. **Gila monster** — venomous, slow-moving, rarely bothers anything that leaves it be
+22. **Pronghorn fawn** — spotted, hides flat in the grass while the herd grazes on
+23. **Prairie chicken** — lekking ground bird, drums and dances at dawn
+24. **Pocket mouse** — small nocturnal seed-gatherer, stuffs its cheek pouches before a shadow crosses
+25. **Chuckwalla** — wedges into rock cracks, puffs up to lodge tight when threatened
+
 ---
 
-## Dungeon animal batches (25 total, 1 sheet)
+## Dungeon animal batches (50 total, 2 sheets)
 
 **Lore note:** per `docs/ANIMAL-SOCIAL.md` §1, the dungeon environment band is animal-population
 near-zero — "each one is a signal," not ambient wildlife. Every entry below is either a
@@ -363,7 +447,7 @@ adapted-to-dark — never a relaxed/domestic pose (even the lost pets down here 
 the place). **No scene props, furniture, cages-as-set-dressing, or background objects of any
 kind** — the animal itself only, isolated against the plain magenta background.
 
-### Dungeon animal sheet 1/1
+### Dungeon animal sheet 1/2
 
 1. **Dungeon animal — Feral vermin-catcher — once someone's ferret or terrier, now lives wild in the tunnels, still killing rats out of habit**
 2. **Dungeon animal — Blind cave rat — pale, sightless, thrives in total dark, first sign something's been dug through**
@@ -390,6 +474,41 @@ kind** — the animal itself only, isolated against the plain magenta background
 23. **Dungeon animal — Tunnel-blind mole — huge clawed forepaws, displaces more earth than it should be able to**
 24. **Dungeon animal — Trapped messenger pigeon — still carries a note no one living will ever read**
 25. **Dungeon animal — An ordinary animal, deliberately unremarkable — domestic or wild, doesn't matter; its presence this deep IS the signal, let the scene decide what it means**
+
+### Dungeon animal sheet 2/2
+
+Realm-true fauna (SPRITE-PALETTE P6): a second, all-new dungeon roster — creatures that have
+adapted to permanent dark or wandered somewhere they shouldn't be, no repeats of sheet 1/2's
+animals. Same lore note, style block, and shared mechanical instructions as sheet 1/2 above
+(5x5 grid, uniform cell size, solid magenta background, wary/cornered/adapted-to-dark pose,
+no scene props), rendered under this realm's palette law (see the palette law block at the top
+of this file — work the accent menu across the sheet, not just the base sepia-and-rust duo).
+
+1. **Cave millipede** — pale armored segments, curls into a coin-sized ball under lantern light
+2. **Flooded-gallery crayfish** — colorless, feels its way through standing shaft water
+3. **Cave centipede** — long-legged and fast, avoids light on pure reflex
+4. **Blind tunnel toad** — displaced amphibian, croaks in a flooded shaft nobody ever drained
+5. **Cave beetle swarm** — clicking carapaces, scatters the instant a lantern turns
+6. **Shaft-roosting swift** — small bird nesting in an abandoned mine air-shaft, darts out at dusk
+7. **Cave-blind newt** — pale and eyeless, a different animal than the blind salamander one shaft over
+8. **Cave-adapted isopod** — pale, rolls into a tight ball, thrives on the tunnel damp
+9. **Feral assay-office wasp nest** — stings anything that disturbs the rafters of the abandoned office
+10. **Blind cave shrimp** — translucent, drifts in the flooded lower gallery pool
+11. **Sunken-well leech** — waits motionless in standing shaft water until something wades through
+12. **Boothill grave-moth** — pale-winged, only emerges from freshly disturbed grave dirt
+13. **Shaft firefly** — the only light down here besides a lantern, drawn to both in equal measure
+14. **Camel spider** — fast and ugly, not truly a spider, prefers the dry upper tunnels to the wet lower ones
+15. **Cave silverfish colony** — papery and quick, strips old ledgers and coffin linings to nothing
+16. **Displaced homestead housefly swarm** — thick and loud, first sign something's been rotting nearby
+17. **Tunnel tick nest** — waits on a low ceiling ledge, drops onto anything passing beneath
+18. **Blind cave earwig** — pale pincers, hides in cracks too narrow for a lantern to reach
+19. **Cave-roosting moth swarm** — pale wings, drawn to any lantern that enters
+20. **Sunken-shaft snail cluster** — slow-moving, pale-shelled, clings to wet stone in silent clusters
+21. **Boothill dung beetle** — rolls what it finds, doesn't care that it's a graveyard
+22. **Cave-pale grasshopper** — thrives on the sparse lichen, doesn't remember it could once fly far
+23. **Deep-shaft spider mite swarm** — nearly invisible, blankets anything left still too long
+24. **Grave-dirt worm cluster** — thick ropes of them, first thing the diggers find and the last thing they mention
+25. **Cave-adapted click beetle** — snaps loud in the dark, first sound most miners mistake for a footstep
 
 ---
 

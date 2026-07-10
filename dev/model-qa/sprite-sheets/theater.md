@@ -20,6 +20,22 @@ Shared mechanical instructions (same as the master template): 5×5 grid, 25 cell
 static character per cell (not a repeat, not an animation frame), uniform cell size, solid magenta (#FF00FF) background (no transparency, no other background elements), consistent scale across all 25, orthographic side view, each character fully visible from head to toe within its cell — no cropping at the top, bottom, or sides, the complete body must fit inside the cell boundary. **Every character in an expressive, mid-action pose that captures its essence**
 — mid-lunge, mid-cast, braced, snarling — never a neutral T-pose or idle stand.
 
+**Palette law (2026-07-09)** — SPRITE-PALETTE P1–P5: the olive-and-khaki base stays — it's
+the mud, canvas, and dead grass this whole theater is built on, and it keeps dominating any
+given figure. But no sheet reads as one soaked-through duotone anymore. Five accent families
+work into the gear, the light, and the wounds without breaking the era-neutral rule: **oxide
+rust-red** (dried blood, rusted wire, old blood-brown rifle-metal), **mustard chem-green**
+(the gas itself, and anything it's touched — respirator glass, sickened skin, tarnished
+brass), **flare-signal orange** (muzzle-flash, tracer glow, a distress flare lighting a face
+from below), **faded parade-brass gold** (dulled buttons, braid, a medal that's seen too much
+weather), and **storm-violet** (bruised twilight sky, cordite-haze, a UV-cold hour before
+dawn). Rule for any 25-cell sheet: at least 4 of these 5 families must show up as deliberate
+accents across the sheet, and no two adjacent cells may read as the same two-color duo — vary
+which accent leads and which recedes, cell to cell. Anti-key (binding on every figure, no
+exception): no hot magenta or neon pink anywhere on a figure — anything #FF00FF-adjacent
+fights the chroma key. Violets and UV-blue are fine here (storm-violet above); a hot pink
+accent must desaturate or shift toward violet before it ships.
+
 ---
 
 ## Monster batches (118 total, 5 sheets)
@@ -255,7 +271,7 @@ Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-R
 24. **Combat nurse, unsentimental — has stopped counting the wounded she's treated**
 25. **Tall, gaunt intelligence officer — knows more than she's allowed to say**
 
-## Domestic animal batches (25 total, 1 sheet)
+## Domestic animal batches (50 total, 2 sheets)
 
 Style block (repeated here so this section is self-contained): Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). desaturated olive-and-khaki palette, heavy dither for smoke/haze, hard directional light like a flare or muzzle-flash, worn canvas/leather gear textures, avoid any real-world flag, insignia, or named-conflict iconography (content-safety — keep it era-neutral).
 
@@ -267,7 +283,7 @@ stiff/taxidermied. **No scene props, furniture, pens, or background objects of a
 fences, feed troughs, leashes-as-set-dressing, etc.; the animal itself only, isolated against the
 plain magenta background. Rendered in this realm's art style (see the style block above).
 
-### Domestic animal sheet 1/1
+### Domestic animal sheet 1/2
 
 1. **Domestic animal — Loyal dog — bonded to one person, reads their mood before they do.**
 2. **Domestic animal — Working beast (a single ox) — earns its feed, patient, and spooks true.**
@@ -298,7 +314,49 @@ plain magenta background. Rendered in this realm's art style (see the style bloc
 
 ---
 
-## Wild animal batches (25 total, 1 sheet)
+### Domestic animal sheet 2/2
+
+Style block (repeated here so this section is self-contained): Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). desaturated olive-and-khaki palette, heavy dither for smoke/haze, hard directional light like a flare or muzzle-flash, worn canvas/leather gear textures, avoid any real-world flag, insignia, or named-conflict iconography (content-safety — keep it era-neutral). Palette law applies here same as the rest of the file (see the Palette law block above) — the base olive-and-khaki stays dominant, but accents pull from the five named families, at least 4 per sheet, no adjacent-cell duo repeats, no hot magenta/neon pink on any figure.
+
+Shared mechanical instructions (restated for this section): 5x5 grid, uniform cell size, solid
+magenta (#FF00FF) background (no transparency, no other background elements), consistent scale,
+orthographic side view, each animal fully visible from head to toe within its cell — no cropping.
+**Every animal in a characteristic living pose** — alert, mid-stride, grooming, watching — never
+stiff/taxidermied. **No scene props, furniture, pens, or background objects of any kind** — no
+fences, feed troughs, leashes-as-set-dressing, etc.; the animal itself only, isolated against the
+plain magenta background. Rendered in this realm's art style (see the style block above). All-new
+realm-native fauna per SPRITE-PALETTE P6 — supply-line, camp-kept, and stagecraft-adjacent animals
+this theater's wars actually run on, no repeats of sheet 1/2's roster.
+
+1. **Kept Ornamental Koi** — Officers' garden-pond fish, kept for calm color amid the noise, unfazed by distant guns.
+2. **Water Buffalo** — Broad, mud-caked draft beast hauling supply carts through the worst ground.
+3. **Camel** — Long-legged pack animal for the dry-front supply lines, unbothered by dust or noise.
+4. **Llama** — Sure-footed high-ground pack animal, spits when crowded, carries more than it looks like it should.
+5. **Alpaca** — Fleece-heavy pack animal kept partly for wool, partly for the wool's camouflage-grey shade.
+6. **Yak** — Shaggy cold-front draft beast, hauls guns and gear where nothing wheeled can go.
+7. **Reindeer** — Antlered northern-front sled and pack animal, moves silent over snow no truck could cross.
+8. **Draft Zebu** — Hump-backed plow-ox variant put to hauling field guns instead.
+9. **Guinea Fowl** — Loud, spotted yard bird kept as a living alarm for anything approaching at night.
+10. **Quail** — Small ground bird kept caged near the wire, bursts upward at the first tripped wire.
+11. **Rooster** — Crows on a handler's cue to mask a work party's noise at first light.
+12. **Broody Hen** — Sits tight on her clutch through shelling, barely flinching at the nearest impact.
+13. **Kept Ornamental Swan** — A parade-ground pond bird, hissing and preened, kept for the officers' show of normalcy.
+14. **Caged Parakeet** — Small bright cage-bird kept for morale, mimics the whistle-signal better than most soldiers.
+15. **Guinea Pig** — Small kept rodent, calm-tempered mascot passed hand to hand down the line.
+16. **Hedgehog** — Rolled tight at the first loud noise, kept in camp to clear the vermin the cats miss.
+17. **Mongoose** — Quick, low-slung ratter kept where the local rat population outpaces the cats.
+18. **Civet** — Nocturnal, musk-scented kept animal, prized (and traded) for the scent itself.
+19. **Trained Raven** — Taught to fetch bright objects for a camp entertainer's act, still does the trick unprompted.
+20. **Barn Swallow** — Nests under the eaves of whatever's still standing, unbothered by the noise below.
+21. **Tame Polecat** — Kept on a long leash for ratting the grain stores, bad-tempered and effective.
+22. **Kept Honeybee Hive** — A working hive kept for wax and the little sugar it still yields.
+23. **Farmed Snail** — Kept in a slatted crate as an emergency ration, glacially unbothered by anything.
+24. **Kept Cochineal Beetle Brood** — Crushed for the red dye that marks maps, bandages, and rank alike.
+25. **Farmed Medicinal Leech Jar** — A field medic's jar of them, kept fed and ready for the next wound.
+
+---
+
+## Wild animal batches (50 total, 2 sheets)
 
 Style block (repeated here so this section is self-contained): Pixel-art sprite rendering
 (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale).
@@ -315,7 +373,7 @@ magenta background. Sourced from the game's own `wild-animal-kind` table (`Engin
 Social/Sentient NPCs/Wild Animal Kind.md`) plus additional single-animal variety to fill the
 sheet; entry 11 (the realm-beast) uses this realm's real skin from `data/animal-realm-skins.js`.
 
-### Wild animal sheet 1/1
+### Wild animal sheet 1/2
 
 1. **Wild animal — Territory wolf — holds a stretch of ground and knows every crossing of it**
 2. **Wild animal — A single deer from the herd — moves with the herd, reads the wind before the ranger does**
@@ -345,7 +403,52 @@ sheet; entry 11 (the realm-beast) uses this realm's real skin from `data/animal-
 
 ---
 
-## Dungeon animal batches (25 total, 1 sheet)
+### Wild animal sheet 2/2
+
+Style block (repeated here so this section is self-contained): Pixel-art sprite rendering
+(visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale).
+desaturated olive-and-khaki palette, heavy dither for smoke/haze, hard directional light like a flare or muzzle-flash, worn canvas/leather gear textures, avoid any real-world flag, insignia, or named-conflict iconography (content-safety — keep it era-neutral). Palette law applies here same as the rest of the file (see the Palette law block above) — the base olive-and-khaki stays dominant, but accents pull from the five named families, at least 4 per sheet, no adjacent-cell duo repeats, no hot magenta/neon pink on any figure.
+
+Shared mechanical instructions (restated for this section): 5x5 grid, uniform cell size, solid
+magenta (#FF00FF) background (no transparency, no other background elements), consistent scale,
+orthographic side view, each animal fully visible from head to toe within its cell — no cropping.
+**Every animal in a characteristic wild-living pose** — alert, stalking, grazing, mid-flight,
+territorial — never stiff/taxidermied, never tame-looking (these are wilderness creatures, not
+pets). **No scene props, furniture, dens, or background objects of any kind** — no burrows,
+nests-as-set-dressing, foliage clusters, etc.; the animal itself only, isolated against the plain
+magenta background. All-new realm-native fauna per SPRITE-PALETTE P6 — this theater's wild things
+are all natural camouflage, mimicry, and decoy-behavior specialists, or creatures that have moved
+into the wreckage the fighting leaves behind; no repeats of sheet 1/2's roster.
+
+1. **Ptarmigan** — Molts stark white for the season, near-invisible against frost and drifted ash.
+2. **Color-Shifting Tree Frog** — Skin shifts tone mid-perch to match whatever bark or char it's gripping.
+3. **Stick-Mimic Insect** — Body a dead ringer for a snapped twig, motionless on a shattered branch.
+4. **Leaf-Mimic Insect** — Wings veined and browned to match the dead leaves scattered around it.
+5. **Bark-Pattern Moth** — Wings flattened and patterned to vanish against scorched bark.
+6. **Opossum** — Drops and plays dead on cue, the oldest trick in the wild's own repertoire.
+7. **Broken-Wing Plover** — Fakes a crippled wing to drag a threat away from its ground nest.
+8. **Nightjar** — Plumage matches leaf-litter so exactly it's stepped on before it's seen.
+9. **Woodcock** — Freezes bill-down in dead brush, invisible until it explodes into flight.
+10. **Ermine** — Coat flips stark white with the season, a natural camouflage switch.
+11. **Arctic Hare** — Coat pales with the season, bounding low across churned, frost-white ground.
+12. **Praying Mantis** — Poised like a broken twig, motionless, until the strike.
+13. **Bower-Building Songbird** — Decorates its nest with scavenged shell-casings and bright shrapnel like stage-dressing.
+14. **Crater-Nesting Swift** — Wheels and roosts inside a blasted crater's lip, gone at first light.
+15. **Shrapnel-Gleaming Magpie** — Can't resist bright metal scraps off the field, nest glittering with them.
+16. **Cordite-Drawn Midge Swarm** — Thickens around any lit flare, easily mistaken for drifting smoke.
+17. **Camouflage-Coated Weasel** — Dun-and-shadow coat all season, moves like a thrown shadow through the grass.
+18. **Distraction-Calling Grouse** — Drums and flushes loud on purpose to pull attention off its brood.
+19. **Debris-Burrowing Vole** — Tunnels beneath collapsed earthworks, invisible until the ground itself moves.
+20. **Flare-Startled Corncrake** — A secretive ground bird that only breaks cover when a flare goes up.
+21. **Ash-Dusted Jackal** — Coat pale with drifting ash, barely a shape against the wasted ground.
+22. **Wire-Perching Shrike** — Impales its catch on barbed wire the same as it would thorns.
+23. **Mimic Cuckoo** — Lays in another bird's nest and vanishes before the switch is ever noticed.
+24. **Frost-Pale Lemming** — Coat pales to match frost-rimed ground, burrows between the artillery's lulls.
+25. **Motionless Mudflat Toad** — Skin the exact color of churned mud, holds dead still through the barrage's rumble.
+
+---
+
+## Dungeon animal batches (50 total, 2 sheets)
 
 **Lore note:** per `docs/ANIMAL-SOCIAL.md` §1, the dungeon environment band is animal-population
 near-zero — "each one is a signal," not ambient wildlife. Every entry below is either a
@@ -364,7 +467,7 @@ adapted-to-dark — never a relaxed/domestic pose (even the lost pets down here 
 the place). **No scene props, furniture, cages-as-set-dressing, or background objects of any
 kind** — the animal itself only, isolated against the plain magenta background.
 
-### Dungeon animal sheet 1/1
+### Dungeon animal sheet 1/2
 
 1. **Dungeon animal — Feral vermin-catcher — once someone's ferret or terrier, now lives wild in the tunnels, still killing rats out of habit**
 2. **Dungeon animal — Blind cave rat — pale, sightless, thrives in total dark, first sign something's been dug through**
@@ -391,6 +494,56 @@ kind** — the animal itself only, isolated against the plain magenta background
 23. **Dungeon animal — Tunnel-blind mole — huge clawed forepaws, displaces more earth than it should be able to**
 24. **Dungeon animal — Trapped messenger pigeon — still carries a note no one living will ever read**
 25. **Dungeon animal — An ordinary animal, deliberately unremarkable — domestic or wild, doesn't matter; its presence this deep IS the signal, let the scene decide what it means**
+
+---
+
+### Dungeon animal sheet 2/2
+
+**Lore note:** per `docs/ANIMAL-SOCIAL.md` §1, the dungeon environment band is animal-population
+near-zero — "each one is a signal," not ambient wildlife. Every entry below is either a
+displaced camp/performer animal that ended up somewhere it shouldn't be, or a creature that has
+adapted to permanent dark — never a "generic cave critter."
+
+Style block (repeated here so this section is self-contained): Pixel-art sprite rendering
+(visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale).
+desaturated olive-and-khaki palette, heavy dither for smoke/haze, hard directional light like a flare or muzzle-flash, worn canvas/leather gear textures, avoid any real-world flag, insignia, or named-conflict iconography (content-safety — keep it era-neutral). Palette law applies here same as the rest of the file (see the Palette law block above) — the base olive-and-khaki stays dominant, but accents pull from the five named families, at least 4 per sheet, no adjacent-cell duo repeats, no hot magenta/neon pink on any figure.
+
+Shared mechanical instructions (restated for this section): 5x5 grid, uniform cell size, solid
+magenta (#FF00FF) background (no transparency, no other background elements), consistent scale,
+orthographic side view, each animal fully visible from head to toe within its cell — no cropping.
+**Every animal in a characteristic pose for its situation** — wary, cornered, feral, startled,
+adapted-to-dark — never a relaxed/domestic pose (even the lost mascots down here read as changed
+by the place). **No scene props, furniture, cages-as-set-dressing, or background objects of any
+kind** — the animal itself only, isolated against the plain magenta background. All-new
+realm-native fauna per SPRITE-PALETTE P6 — this theater's dungeon fauna is either true dark-cave
+life or a lost piece of the war's own stagecraft (a camp entertainer's trained animal, a
+mine-gallery mascot) that never found its way back out; no repeats of sheet 1/2's roster.
+
+1. **Cave Glowworm** — Strung along the tunnel roof like dim stage-lights nobody installed.
+2. **Cave Silverfish** — Slips through stacked ammunition crates and old paper stores, first sign of long neglect.
+3. **Cave Millipede** — Pale, segmented, ripples along the tunnel wall untouched by the light.
+4. **Blind Cave Shrimp** — Colorless, eyeless, drifts in flooded sump water nobody's checked in months.
+5. **Displaced Circus Monkey** — Trained to tumble and salute, still performs the trick alone in the dark.
+6. **Escaped Mimic Starling** — Trained for a camp entertainer's act, still parrots a laugh from nowhere nearby.
+7. **Ghost-Pale Cave Weevil** — Colorless, wingless, scuttles over unexploded ordnance without setting it off.
+8. **Sump-Dwelling Flatworm** — Thrives in the flooded gallery water nobody's tested since the mine went in.
+9. **Tallow-Candle Grub** — Burrows into stored candle-stubs, the sappers' unwelcome sign the stores went unchecked.
+10. **Deep-Shaft Centipede** — Pale, many-legged, ambushes anything smaller that stumbles into the collapsed gallery.
+11. **Echo-Blind Cave Cockroach** — Swarms briefly whenever a charge goes off nearby, then vanishes into the rubble.
+12. **Flare-Answering Firefly Swarm** — Winged, drawn to true signal flares, mistaken twice now for enemy semaphore.
+13. **Sunken Duckboard Eel** — Writhes in standing water beneath rotted duckboards, blind and the color of drowned wood.
+14. **Displaced Trained Jackdaw** — Learned to fetch bright objects for a camp act, now hoards shell-casings in a dead-end gallery.
+15. **Chalk-Pale Cave Woodlouse** — Rolls tight at the smallest vibration, the tunnel's most reliable tremor-gauge.
+16. **Trapped Performing Seal** — Barks in the flooded lower gallery, still angling for a fish that isn't coming.
+17. **Runaway Sideshow Scorpion** — Escaped a traveling show's box, glows faint violet under any stray UV light down here.
+18. **Ash-Pale Cave Slug** — Glistens faintly in lantern light, slow enough to pass for old wax drippings.
+19. **Blind Cave Gecko** — Clings motionless to the tunnel roof, translucent skin lit faint violet by leftover flare-glow.
+20. **Cave-Adapted Harvestman** — Long-legged, translucent, tests a fresh crack in the gallery ceiling like it's checking the stage.
+21. **Lost Regimental Mascot Tortoise** — Carried as a slow-motion good-luck charm, forgotten down here years back, still alive.
+22. **Phosphor-Dusted Springtail Swarm** — Lifts off any disturbed patch of mold, faint green-gold in lantern light.
+23. **Understudy Finch, Caged** — Kept as a spare for the mine canary, never once tested, feathers dulled from disuse.
+24. **A Once-Trained Animal, Unremarkable Now** — Some camp performer's old act, species hardly matters down here; its being lost IS the signal.
+25. **Blind Cave Skink** — Pale-scaled, eyeless, suns itself uselessly under a cracked shaft's sliver of light.
 
 ---
 

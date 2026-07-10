@@ -18,6 +18,22 @@ Classes: Barbarian, Bard, Cleric, Druid, Fighter, Monk, Paladin, Ranger, Rogue, 
 
 Style block: clean painterly fantasy character-portrait style turned pixel-sprite, warm parchment-adjacent palette, medium value contrast, class-appropriate gear/armor readable in silhouette — matches the `fantasy.md` default-world style so PCs and monsters share one visual language.
 
+**Palette law (2026-07-09)** — SPRITE-PALETTE P1–P5: the parchment-warm base stays — it's
+the shared visual language with `fantasy.md` and it does not get overridden. But 216 heroes
+in one undifferentiated sepia wash reads as one hero copy-pasted 216 times, and species/class
+is exactly the axis that should carry color. Layer in a class/species-appropriate accent from:
+**crimson-blood** (barbarian rage, orc/dragonborn heat), **royal-sapphire** (paladin oath-light,
+cleric divinity), **forest-verdant** (druid/ranger wild-magic, elf/halfling nature ties),
+**burnished-gold** (bard performance-glow, dwarf/goliath metalwork), **arcane-violet** (wizard
+sigils, warlock patron-marks, tiefling heritage), **ember-orange** (sorcerer surge, gnome/human
+warmth) — worn as the glowing spell-effect, the weapon's magic, a signature cloth/hair/eye
+color, or gear trim, never repainting the whole figure off-palette. Sheet-level rule: across
+any 25-cell sheet, at least 4 of these accent families must be represented by deliberate
+choices, and no two adjacent cells should read as the same accent duo. P5 anti-key clause: no
+hot magenta / neon pink anywhere on a figure — anything #FF00FF-adjacent fights the chroma key
+background; violets and UV-blue are fine, but any hot-pink impulse (tiefling skin, sorcerer
+surge, warlock glow) must go desaturated or shift toward violet instead.
+
 Shared mechanical instructions (same as the master template): 5x5 grid, 25 cells, one distinct
 static character per cell (not a repeat, not an animation frame), uniform cell size, solid
 magenta (#FF00FF) background (no transparency, no other background elements), consistent scale

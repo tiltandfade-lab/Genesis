@@ -8,7 +8,46 @@ updated: 2026-07-09 (late night)
 
 *Read this first in a new session. It orients you; the linked docs are the source of truth.*
 
-## ⭐ Latest (2026-07-09 late — REALM-KEY EXPANSION + SPRITE TRANSITION T1–T4) [Claude Fable 5]
+## ⭐ Latest (2026-07-09 sprite night — FANTASY REALM SLICED + REVIEW TOOL + AUTO-SCALE + XL REGEN LANE) [Claude Fable 5]
+
+**T5 ran on FANTASY, not gloom** — Adam's first PNGs were the default realm (183 source sheets at
+`ui-sketches/sprite-sheets/`). **896 production sprites cut** (510 fantasy monsters / 75 NPCs / 75
+animals / 20 kids / 216 PCs), defringed (magenta-halo kill in the slicer), **corpus + sprites now
+COMMITTED** (backup ruling — the standing "no git backup" risk is closed).
+
+**What shipped (branch `claude/fantasy-sprite-slicing-fc3187`):**
+- **Sprite review tool** — `python3 dev/sprite-review.py` → http://127.0.0.1:5179/ (CLAUDE.md
+  commands table). Tags · 7-band imperial head-guide ladder (tiny 1′6″ → titanic 36′) + 6′ human
+  silhouette · scale slider 0.1–8 · explicit Save Changes · pass/fail · `flagged ⚠` filter · writes
+  the overlay directly · "regen registry" button. Adam's first sitting: **366 pass / 44 fail**.
+- **Auto-scale pass** — 852 computed heads-line-up scales (SRD/zoology heights ÷ size plane), 410
+  flagged for Adam; his rulings always win. Scale + fail-verdict are WIRED into the theater
+  billboard path (height × scale; fails fall through to 3D) — verify-theater-sprites 12/0.
+- **XL/titan/redo regen lane** — Adam's ruling: 9′+ creatures under-res at 25/sheet. 64 paste-ready
+  generation blocks in `dev/sprite-manifests/XL-REGEN-PROMPTS.md` (24 titan solos ≥24′ · 39 XL 2×2
+  sheets · 1 redo sheet of the 16 small fails), anti-magenta-artifact rider baked in;
+  `xl-regen-manifest.json` keys ORIGINAL slugs so re-slices overwrite. `REJECTS.md` = the fail list.
+- **Slicer honesty fix** — count-mismatch no longer writes misassigned sprites (quarantines under
+  review/); proved live on the padded sheet 21.
+
+**Verification (all at close):** check-manifest OK · theater-sprites 12/0 · sprite-registry 6/0 ·
+sprite-pipeline all-pass.
+
+**Do next (pick up here):**
+1. **Adam generates the 64 XL/titan/redo sheets** (XL-REGEN-PROMPTS.md, paste-ready); slice each with
+   `python3 build/slice-sprites.py <png> --manifest-v2 <sheetId> --manifest-path
+   dev/sprite-manifests/xl-regen-manifest.json --review` → re-review (re-cut fails stay blocked
+   until re-ruled) → regen registry.
+2. Finish the fantasy review pass (486 unreviewed; the `flagged ⚠` filter is the priority queue —
+   410 auto-scale flags).
+3. Other realms' PNGs → same slice → auto-scale → review loop (the pattern is proven end-to-end).
+4. `item` kind in the v2 parser/registry (13 fantasy item sheets + 571 item cells waiting).
+5. Theater eyes-on A/B (billboards vs 3D on the stage) — the last unchecked T5 box; billboard
+   square-plane aspect stretch noted in CHANGELOG Deferred.
+
+---
+
+## Latest (2026-07-09 late — REALM-KEY EXPANSION + SPRITE TRANSITION T1–T4) [Claude Fable 5]
 
 **What shipped (branch `claude/npc-monster-realm-expansion-edb64a`, one --no-ff merge):**
 the approved realm-key expansion roster (docs/REALM-KEY-EXPANSION-ROSTER.md) statted to MM standard —

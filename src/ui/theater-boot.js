@@ -86,6 +86,10 @@ import * as THREE from "three";
 // theater-figures.js stays THREE-free and receives the parsed scene through dependency injection.
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { playVerb, tickTweens, THEATER_VERBS, theaterFxFromLedger } from "./theater-verbs.js";
+// GRAPHICS-ENGINE Part II §A: the sibling billboard-standee verb library — see that file's header for
+// why it's a separate module from theater-verbs.js (rotation-ownership conflict with
+// updateSpriteBillboardYaw, below) and for the ctx-binding contract bindStandeeCtx/playStandeeVerb use.
+import { playStandeeVerb, bindStandeeCtx, STANDEE_VERBS } from "./standee-verbs.js";
 import * as Parts from "./theater-parts.js";
 import { resolveWholeObject, loadWholeObjectBuilders, WHOLE_OBJECT_REGISTRY, NEAREST_SUB } from "./theater-figures.js";
 // P1' WHOLE-OBJECT WIRING (docs/P1-WIRING.md §4 step 3): a STATIC import of probe-lib.js itself —
@@ -4531,6 +4535,18 @@ function buildTheaterCtx(){
    the tween tick loop with render-on-demand preserved — animate only while a tween is live." Null-safe
    pre-mount (matches every other Theater method). Delegates verb semantics entirely to theater-verbs.js;
    this function's only job is ctx construction + kicking the tween loop while at least one tween is live. */
+// GRAPHICS-ENGINE Part II §A WIRING (the standing production caller this unit proves against): the
+// combat damage path already routes through play("hurt",{who,...}) / play("down",{who,...}) via
+// cmTheaterNotify -> theaterFxFromLedger (render.js's hp/attack/foe-turn ledger hooks, src/world/dm.js's
+// call sites). A 3D whole-object/glb figure plays theater-verbs.js's vHurt/vDown unchanged. A SPRITE
+// billboard unit (SPRITE-TRANSITION T4 channel — userData.sprite=true, buildSpriteBillboard above) has
+// no skeletal rig for vHurt's jitter/vDown's toppled-prone rotation to read correctly against (those
+// verbs assume a posed 3D figure with real depth), so §A specs its own hit-damage/fall-death standee
+// verbs for exactly this case. This table is the ONLY new mapping this wiring adds — no new event
+// fields, no new ledger kinds (the WIRING LAW's "re-gate greps production callers" — the events feeding
+// `verb`/`opts` here are the pre-existing hurt/down dispatch, untouched).
+const STANDEE_VERB_FOR_THEATER_VERB = Object.freeze({ hurt: "hit-damage", down: "fall-death" });
+
 function play(verb, opts){
   if(!S.mounted) return false;
   // THEATER-NEXT §3.2 — an animation may leave transforms displaced (knockback's slide, absurdity's
@@ -4538,7 +4554,19 @@ function play(verb, opts){
   // both keys so that next sync always rebuilds — exactly today's behavior on any turn containing an
   // animation. The skip only ever fires on animation-free turns.
   S.boardKey = null; S.unitsKey = null;
-  const ok = playVerb(buildTheaterCtx(), verb, opts || {});
+  opts = opts || {};
+  const standeeVerb = STANDEE_VERB_FOR_THEATER_VERB[verb];
+  const unit = standeeVerb && opts.who != null ? findUnit(opts.who) : null;
+  if(unit && unit.userData && unit.userData.sprite){
+    bindStandeeCtx(buildTheaterCtx());
+    const played = playStandeeVerb(unit, standeeVerb, opts);
+    if(played){ startTweenLoop(); return true; }
+    // an unresolvable/decline standee verb (e.g. hurt fired before the sprite texture finished loading,
+    // buildSpriteBillboard's own "not loaded yet" miss) falls through to the ordinary 3D-figure verb
+    // below rather than silently dropping the animation — matches every other Theater.play null-safety
+    // posture in this file (never a hard failure for a missing/late asset).
+  }
+  const ok = playVerb(buildTheaterCtx(), verb, opts);
   if(ok) startTweenLoop();
   return ok;
 }
@@ -4986,7 +5014,12 @@ loadWholeObjectBuilders(function(){
 // reattach: the canvas re-parenting seam (battle-stage; renderWorld's innerHTML pass detaches the canvas).
 window.Theater = {
   mount, reattach, setBoard, setInteriorBoard, setInteriorVariant, setUnits, setTextures, rotate, zoom, retire, play,
-  verbs: THEATER_VERBS, fxFromLedger: theaterFxFromLedger
+  verbs: THEATER_VERBS, fxFromLedger: theaterFxFromLedger,
+  // GRAPHICS-ENGINE Part II §A: the standee-verb registry, re-exported the same "classic-script-
+  // reachable surface" way THEATER_VERBS is above — no classic-script caller needs this today (play()
+  // dispatches internally), but it keeps the surface symmetric and gives dev tooling/consoles the same
+  // introspection theater-verbs.js already offers.
+  standeeVerbs: STANDEE_VERBS
 };
 
 // DUNGEON-GRAPH.md U3 acceptance (3): "draw calls <= 1 per tile kind" — a read-only diagnostic so a

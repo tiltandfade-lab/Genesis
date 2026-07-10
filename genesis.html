@@ -1425,6 +1425,15 @@
      import, not a second copy of the module. Kept as its own file/manifest entry specifically so this
      unit doesn't collide with parallel units editing theater-boot.js's figure geometry / palette work. -->
 <script type="module" src="src/ui/theater-verbs.js"></script>
+<!-- GRAPHICS-ENGINE Part II §A (docs/GRAPHICS-ENGINE.md): the billboard-standee verb/tween library —
+     a SIBLING module to theater-verbs.js just above (see that file's own tag comment for the pairing-
+     check rationale, identical here) — imported by theater-boot.js (below) via a plain ES `import`, and
+     ALSO given its own <script type="module"> tag here so check-manifest.py's module-tag-pairing check
+     is satisfied; browsers dedupe an ES module by URL, so this is a harmless no-op second entry point.
+     Kept as its own file/manifest entry (not a new section in theater-verbs.js) specifically because
+     billboard standees have a rotation-ownership conflict 3D figures never had — see standee-verbs.js's
+     own header ("THE COMPOSITION CONTRACT") for the full reasoning. -->
+<script type="module" src="src/ui/standee-verbs.js"></script>
 <!-- P1' WHOLE-OBJECT WIRING (docs/P1-WIRING.md §2.3/§4 Unit A step 2): the creatureId/class/prop/light
      -> builder registry (dev/model-qa/creatures/) — imported by theater-boot.js (below) via a plain ES
      `import`, and ALSO given its own <script type="module"> tag here so check-manifest.py's module-tag-

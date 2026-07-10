@@ -232,6 +232,13 @@ def build_registry(manifest_path, check_only=False, overlay_path=OVERLAY, out_pa
                 "sheet": sheet_id, "cell": n,
                 "status": "cut" if os.path.exists(os.path.join(SPRITES_DIR, f"{slug}.png")) else "pending",
             }
+            # Overlay `name` = relabel-to-art (Adam's 2026-07-10 ruling: when the
+            # generated art doesn't match the rostered subject, the display noun
+            # follows the ART; the orphaned role goes to the regen queue). Applied
+            # AFTER the bestiary join so mechanical stats still key off the
+            # manifest's original name.
+            if isinstance(ov.get("name"), str) and ov["name"].strip():
+                entry["name"] = ov["name"].strip()
             if "reusable" in ov:
                 entry["reusable"] = ov["reusable"]
             if "redlined" in ov:

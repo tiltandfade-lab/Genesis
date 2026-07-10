@@ -1,0 +1,69 @@
+{
+ "quarantined": "2026-07-10",
+ "reason": "painterly style drift (SPRITE-GEN-V2 \u00a74 style law) \u2014 Adam ruling: quarantine + regen under ash grit",
+ "sheets": [
+  {
+   "file": "ash-npc-01.png",
+   "verdict": "painterly-drift",
+   "severity": "strong",
+   "why": "Faces and hands are smoothly airbrush-shaded with soft gradient blending and almost no visible dither/pixel grain; cloth and skin read as painted illustration, not pixel art, in sharp contrast to the reference's coarse chunky shading.",
+   "driftCells": "whole sheet \u2014 most pronounced on faces/skin (e.g. row 3 col 3 'orator', row 2 col 3 'blacksmith')"
+  },
+  {
+   "file": "ash-npc-01b.png",
+   "verdict": "painterly-drift",
+   "severity": "strong",
+   "why": "Same soft airbrushed skin/face rendering and smooth cloth gradients as ash-npc-01; edges are softer and less jagged than the reference, dither grain is largely absent from faces and highlights.",
+   "driftCells": "whole sheet \u2014 faces especially (row 1 all, row 3 col 1 'fat merchant')"
+  },
+  {
+   "file": "ash-npc-02.png",
+   "verdict": "painterly-drift",
+   "severity": "strong",
+   "why": "Smooth gradient shading on faces/robes with minimal grit or pixel-block texture; reads as painted portrait art layered onto a game-sheet grid rather than pixel-art figures.",
+   "driftCells": "whole sheet"
+  },
+  {
+   "file": "ash-npc-test-01.png",
+   "verdict": "painterly-drift",
+   "severity": "strong",
+   "why": "Consistent with the other npc sheets \u2014 soft brushy shading, smooth skin tones, gentle gradients on cloaks/rags, very little dithering compared to the reference's harsh grain.",
+   "driftCells": "whole sheet \u2014 faces and hands most clearly painterly"
+  },
+  {
+   "file": "ash-npc-test-02.png",
+   "verdict": "painterly-drift",
+   "severity": "strong",
+   "why": "Same painterly finish: smooth illustrated faces, soft cloth shading, edges softer than reference's jagged pixel silhouette; the girl w/ falcon (row 5 col 4) and old man (row 5 col 5) are especially illustration-like.",
+   "driftCells": "whole sheet"
+  },
+  {
+   "file": "ash-kids-01.png",
+   "verdict": "painterly-drift",
+   "severity": "strong",
+   "why": "Children's faces and skin are smoothly shaded with soft gradients and clean linework, essentially no visible dither grain; reads as storybook illustration rather than pixel art, a sharper departure than even the npc sheets.",
+   "driftCells": "whole sheet"
+  },
+  {
+   "file": "ash-kids-02.png",
+   "verdict": "painterly-drift",
+   "severity": "strong",
+   "why": "Same soft painterly rendering as kids-01 \u2014 smooth faces, gentle color blending on rags, minimal pixel grit; the rabbit/companion cells (row 2 col 5) reinforce a picture-book illustration feel.",
+   "driftCells": "whole sheet"
+  },
+  {
+   "file": "ash-domesticated-animals-01.png",
+   "verdict": "painterly-drift",
+   "severity": "strong",
+   "why": "Fur is rendered with fine painted strokes and smooth blended shading (near-photoreal), essentially zero visible dither or hard pixel edges; this is the strongest departure from the reference of any sheet reviewed \u2014 reads as fantasy stock-art / book illustration, not pixel art.",
+   "driftCells": "whole sheet"
+  },
+  {
+   "file": "ash-domesticated-animals-02.png",
+   "verdict": "painterly-drift",
+   "severity": "strong",
+   "why": "Identical painterly character to animals-01: smooth painted fur/feather rendering, soft gradient shading, no meaningful pixel grain; same severity as animals-01.",
+   "driftCells": "whole sheet"
+  }
+ ]
+}

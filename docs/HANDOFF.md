@@ -19,9 +19,12 @@ fixtures (contact sheet at dev/battle-gate/dungeon-loop/) — 2 wiring bugs caug
 Codex packets READY: regen-v3 round3 (incl. magenta-fails ×12) + DRESSING-GEN (50 sheets).
 
 **Do next (pick up here):**
-1. **Interior piece scale** — mediums render giant in rooms (contact sheet): fix the
-   cell-vs-scale convention in interiorBuildPieces alongside the REGISTRY SIZING FOLD
-   (corpus-sizing + v3-sizing + floor rulings → regenerate sprite-registry).
+1. **THE BEAUTY WAVE is armed (docs/BEAUTY-WAVE.md, VP0-VP8) → then UNIFICATION-WAVE
+   (docs/UNIFICATION-WAVE.md, UW1-UW4).** Art direction is CLOSED (13 rulings in DESIGN.md);
+   everything ahead is execution. Start VP0 (Adam's two pixel-verdicts: perspective-vs-ortho,
+   PSX-dither-on-vs-off) + VP1 (the kaiju piece-scale fix + registry sizing fold — mediums
+   render giant today, contact sheet). Then VP1.5 corpus unification (palettes/texel/defringe,
+   one batch), VP2/VP2b (dressing fold + gallery pass — art is HERE, item 2).
 2. **DRESSING ART STARTED LANDING (2026-07-10 ~20:00)** — 25 dressing-gen sheets committed
    UNGATED on the branch (`ui-sketches/sprite-sheets/*-dg-*.png`): all 3 FLAGSHIP realms
    (fantasy/gloom/chrome) have flora+clutter+objects, plus effects core + all 12 accent

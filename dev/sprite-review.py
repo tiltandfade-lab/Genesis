@@ -89,7 +89,7 @@ def save_overlay(data):
             os.remove(tmp)
 
 
-ALLOWED_KEYS = {"scale", "verdict", "note", "tags", "redlined", "reusable"}
+ALLOWED_KEYS = {"scale", "verdict", "note", "tags", "redlined", "reusable", "groundOffset"}
 
 
 def apply_patch(slug, set_keys, clear_keys):
@@ -106,6 +106,13 @@ def apply_patch(slug, set_keys, clear_keys):
                 raise ValueError(f"scale out of range: {v}")
             if abs(v - 1.0) < 1e-9:  # scale 1 = no calibration; keep the overlay sparse
                 entry.pop("scale", None)
+                continue
+        if k == "groundOffset":
+            v = float(v)
+            if not (0 <= v <= 0.5):
+                raise ValueError(f"groundOffset out of range: {v}")
+            if abs(v) < 1e-9:  # 0 = no offset; keep the overlay sparse
+                entry.pop("groundOffset", None)
                 continue
         if k == "verdict" and v not in ("pass", "fail"):
             raise ValueError(f"verdict must be pass|fail, got {v!r}")

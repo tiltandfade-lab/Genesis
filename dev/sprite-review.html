@@ -213,11 +213,22 @@ function applyFilters(){
   render();
 }
 
+/* groundOffset (0-0.5, dev/sprite-review.py overlay key, SPRITE-RESCUE D5): fraction of crop
+   height BELOW the ground-contact line. Mirrors theater-boot.js's buildSpriteBillboard, which
+   shifts the whole plane DOWN by h*groundOffset so the art's real ground contact — not the crop's
+   bottom edge — lands on the base disc. Here we translateY the <img> down by the same px amount so
+   the ground-contact line (not the image's bottom edge) sits on the ground line drawn below. */
+const groundOffsetFor = e => {
+  const v = ovr(e.slug).groundOffset;
+  return (typeof v === "number" && v > 0 && v <= 0.5) ? v : 0;
+};
 function figHtml(e, cls){
   const h = Math.round(sizeScale(e) * medPx * scaleFor(e.slug));
+  const goff = groundOffsetFor(e);
+  const shiftStyle = goff ? ` transform:translateY(${Math.round(goff * h)}px);` : "";
   return `<div class="fig ${cls}" data-slug="${e.slug}">
       ${cls === "pinned" ? `<button class="unpin" onclick="unpin('${e.slug}')">unpin ✕</button>` : ""}
-      <img src="/sprites/${e.slug}.png" style="height:${h}px" draggable="false">
+      <img src="/sprites/${e.slug}.png" style="height:${h}px;${shiftStyle}" draggable="false">
       <span class="cap">${e.name} · ${sizeOf(e)} → ${guideFor(e).key}${scaleFor(e.slug) !== 1 ? " · ×" + scaleFor(e.slug).toFixed(2) : ""}</span>
     </div>`;
 }

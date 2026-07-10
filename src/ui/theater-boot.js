@@ -2513,12 +2513,23 @@ function buildSpriteBillboard(entry){
   // same height.
   const calib = (typeof entry.scale === "number" && entry.scale > 0) ? entry.scale : 1;
   const h = spriteSizeScaleFor(entry.size) * GLB_TARGET_HEIGHT * calib;
-  const geo = new THREE.PlaneGeometry(h, h); // square plane; the sprite's own alpha silhouette reads the real shape
+  // SPRITE-RESCUE D6: 886/896 crops are non-square, but a square (h,h) plane width-distorts every
+  // one of them (worst case ~2.1x too wide, spr-pc-goliath-paladin-male at 0.47 aspect). Derive the
+  // plane's width from the texture's own pixel aspect ratio; height stays h (untouched, so existing
+  // approved `scale` calibrations survive unchanged).
+  const rawAspect = tex && tex.image ? tex.image.width / tex.image.height : NaN;
+  const aspect = (Number.isFinite(rawAspect) && rawAspect > 0) ? rawAspect : 1;
+  const geo = new THREE.PlaneGeometry(h * aspect, h); // width follows the crop's aspect; height is the calibrated size
   const mat = new THREE.MeshBasicMaterial({
     map: tex, transparent: true, alphaTest: 0.5, side: THREE.DoubleSide, depthWrite: true
   });
   const mesh = new THREE.Mesh(geo, mat);
-  mesh.position.y = h / 2;
+  // SPRITE-RESCUE D5: groundOffset (0-0.5, fraction of crop height below the ground-contact line;
+  // absent/0 = today's feet-at-plane-bottom convention) shifts the plane up so the ART's ground
+  // contact — not the crop's bottom edge — sits on the base disc.
+  const groundOffset = (typeof entry.groundOffset === "number" && entry.groundOffset > 0 && entry.groundOffset <= 0.5)
+    ? entry.groundOffset : 0;
+  mesh.position.y = h / 2 - h * groundOffset;
   const g = new THREE.Group();
   g.add(mesh);
   g.userData.sprite = true;

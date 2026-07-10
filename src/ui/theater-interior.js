@@ -38,27 +38,35 @@
 // canvas texture (two shades of the base color) — this file stays canvas/DOM-free, it only supplies the
 // PATTERN SPEC as plain data, same "data in this file, geometry/GL in theater-boot.js" split as the rest
 // of this module.
+// DUNGEON-GRAPH.md U3 iteration-2, ruling 2 (real environmental light sources): each kit also names
+// its own light FLAVOR — chrome reads as cool wall-strip/lamp fixtures (an artificial-light realm),
+// gloom/fantasy read as open-flame torches (a pre-industrial realm) — `lightKind` drives which
+// interiorBuildLightMarker shape theater-boot.js builds (lamp = a short horizontal strip; torch = a
+// vertical flame quad), `lightColor`/`lightIntensity` are the PointLight's own color/brightness.
 const INTERIOR_TILE_KITS = Object.freeze({
   chrome: Object.freeze({
     realmId: "chrome",
     floorColor: "#8fa6b0", wallColor: "#3d525d", trimColor: "#d8f0f8",
     floorPattern: [[0, 1], [1, 0]],
     wallPattern: [[0, 0, 1], [1, 0, 0], [0, 1, 0]],
-    fog: Object.freeze({ color: "#0d1518", density: 0.008 })
+    fog: Object.freeze({ color: "#0d1518", density: 0.008 }),
+    lightKind: "lamp", lightColor: "#bfe8ff", lightIntensity: 1.1
   }),
   gloom: Object.freeze({
     realmId: "gloom",
     floorColor: "#453b4d", wallColor: "#2a222e", trimColor: "#6b5878",
     floorPattern: [[0, 0], [0, 1]],
     wallPattern: [[1, 0, 0], [0, 0, 0], [0, 0, 1]],
-    fog: Object.freeze({ color: "#0a0710", density: 0.012 })
+    fog: Object.freeze({ color: "#0a0710", density: 0.012 }),
+    lightKind: "torch", lightColor: "#ff9a44", lightIntensity: 1.3
   }),
   fantasy: Object.freeze({
     realmId: "fantasy",
     floorColor: "#7a6248", wallColor: "#4a3b2c", trimColor: "#c9a85c",
     floorPattern: [[0, 1], [1, 1]],
     wallPattern: [[0, 1, 0], [1, 1, 1], [0, 1, 0]],
-    fog: Object.freeze({ color: "#120d08", density: 0.008 })
+    fog: Object.freeze({ color: "#120d08", density: 0.008 }),
+    lightKind: "torch", lightColor: "#ffb347", lightIntensity: 1.3
   })
 });
 const INTERIOR_DEFAULT_KIT = "chrome";
@@ -191,6 +199,56 @@ function itrBuildKeepGrid(plan, keepSet, roomIdx, corridorIdx) {
   return kept2;
 }
 
+// ─── DUNGEON-GRAPH.md U3 iteration-2, ruling 2: per-room light sources ──────────────────────────────
+// Deterministic (DETERMINISM LAW, this file's own header): seeded off dspHashStr/dspMulberry32, the
+// SAME reference PRNG pattern src/engine/place-spatialize.js's own header names ("the same reference
+// pattern src/ui/theater-boot.js's mulberry32 uses") — both functions are plain classic-script globals
+// (place-spatialize.js loads before this file, per manifest.json's loadOrder), no re-implementation.
+const ITR_LIGHT_HEIGHT = { lamp: 1.8, torch: 1.4 };
+function itrRoomLightCount(room) {
+  const area = room.w * room.d;
+  if (area < 30) return 1;
+  if (area < 80) return 2;
+  return 3;
+}
+// perimeter candidates: floor cells one ring in from the room's own rect edge (the wall/door-adjacent
+// band) — "positions at wall/door positions" per the spec. Falls back to the room's own interior cells
+// if the room is too small to have a distinct perimeter ring (e.g. a 1xN sliver room).
+function itrRoomLightCandidates(room) {
+  const pts = [];
+  for (let yy = room.y; yy < room.y + room.d; yy++) {
+    for (let xx = room.x; xx < room.x + room.w; xx++) {
+      const onEdge = xx === room.x || xx === room.x + room.w - 1 || yy === room.y || yy === room.y + room.d - 1;
+      if (onEdge) pts.push({ x: xx, y: yy });
+    }
+  }
+  return pts.length ? pts : [{ x: room.x, y: room.y }];
+}
+// per-room deterministic light list — `plan.seed` (U1's own stored seed, always present) folded into
+// the per-room hash so two rooms with identical rects in DIFFERENT plans never pick the same pattern,
+// while the SAME plan replayed twice (the determinism acceptance every U1-U4 harness checks) always
+// yields byte-identical lights.
+function itrRoomLights(room, plan, kit) {
+  const seed = dspHashStr("u3-light:" + (plan.seed || "") + ":" + room.segNum + ":" + room.x + "," + room.y);
+  const rng = dspMulberry32(seed);
+  const candidates = itrRoomLightCandidates(room);
+  // deterministic Fisher-Yates shuffle (seeded rng, not Math.random — DETERMINISM LAW)
+  const shuffled = candidates.slice();
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(rng() * (i + 1));
+    const t = shuffled[i]; shuffled[i] = shuffled[j]; shuffled[j] = t;
+  }
+  const n = Math.min(itrRoomLightCount(room), shuffled.length);
+  const kind = kit.lightKind || "torch";
+  const height = ITR_LIGHT_HEIGHT[kind] || 1.5;
+  return shuffled.slice(0, n).map((c) => ({
+    x: c.x, z: c.y, y: height,
+    color: kit.lightColor || "#ff9a44",
+    intensity: kit.lightIntensity || 1.2,
+    kind, roomSegNum: room.segNum
+  }));
+}
+
 const ITR_WALL_HEIGHT_BASE = 2.4;   // world units — taller than GLB_TARGET_HEIGHT (1.5, a human figure)
 const ITR_FLOOR_HEIGHT = 0.2;
 const ITR_DOOR_HEIGHT_FRAC = 0.85;  // a normal doorframe reads slightly lower than the full wall
@@ -275,6 +333,16 @@ function interiorBuildBoard(plan, opts) {
     });
   });
 
+  // DUNGEON-GRAPH.md U3 iteration-2, ruling 2: one light list per KEPT room, folded into a single flat
+  // array (theater-boot.js's interiorBuildLights consumes the whole board's lights at once — the room
+  // grouping is preserved per-entry via roomSegNum, not via nested structure, matching the flat
+  // instances.{floor,wall,...} convention this function already keeps).
+  const lights = [];
+  (plan.rooms || []).forEach((r) => {
+    if (keepSet !== null && !keepSet.has(r.segNum)) return;
+    itrRoomLights(r, plan, kit).forEach((l) => lights.push(l));
+  });
+
   const roomCount = keepSet === null ? plan.rooms.length : keepSet.size;
   if (!Number.isFinite(minX)) { minX = 0; maxX = 0; minZ = 0; maxZ = 0; } // degenerate empty-keep guard
 
@@ -288,9 +356,10 @@ function interiorBuildBoard(plan, opts) {
     tileKit: { floorColor: kit.floorColor, wallColor: kit.wallColor, trimColor: kit.trimColor,
       floorPattern: kit.floorPattern, wallPattern: kit.wallPattern },
     instances: { floor: floor, wall: wall, doorframe: doorframe, pillar: pillar },
+    lights: lights,
     bounds: { minX: minX, maxX: maxX, minZ: minZ, maxZ: maxZ },
     meta: { roomCount: roomCount, floorCount: floor.length, wallCount: wall.length,
-      doorCount: doorframe.length, pillarCount: pillar.length }
+      doorCount: doorframe.length, pillarCount: pillar.length, lightCount: lights.length }
   };
 }
 

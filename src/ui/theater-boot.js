@@ -2485,6 +2485,16 @@ function spriteTextureFor(slug){
         S.unitsKey = null; // force the dirty-key skip past, same trick as the glb-settle replay
         setUnits(S.lastUnits);
       }
+      // DUNGEON-GRAPH.md U3 iteration-2, ruling 3: an interior board's `pieces` are billboard sprites
+      // too (interiorBuildPieces -> buildSpriteBillboard, same async-texture-not-loaded-yet miss this
+      // callback exists to recover from) — S.lastUnits alone (above) never covers them, since pieces
+      // mount via S.lastBoard/setInteriorBoard, a completely separate replay target. Same "null the
+      // dirty key, replay" trick, gated to the interior3d board kind so a combat board's lastBoard is
+      // never accidentally replayed through the wrong builder.
+      if(S.mounted && S.lastBoard && S.lastBoard.kind === "interior3d"){
+        S.boardKey = null;
+        setInteriorBoard(S.lastBoard);
+      }
     },
     undefined,
     function(){ SPRITE_TEXTURE_CACHE[slug] = "failed"; }
@@ -2526,8 +2536,29 @@ function buildSpriteBillboard(entry){
   const mat = new THREE.MeshBasicMaterial({
     map: tex, transparent: true, alphaTest: 0.5, side: THREE.DoubleSide, depthWrite: true
   });
+  // DUNGEON-GRAPH.md U3 iteration-2, SPRITE PURITY ruling (Adam 2026-07-10 evening): billboards must
+  // carry ZERO PS1 distortion (no dither, no vertex-snap) — a flat-cut 2D sprite reads as a sticker
+  // the moment its texel grid wobbles or dithers, unlike a real low-poly mesh where those tricks read
+  // as "in-world" texture grain. This material deliberately never routes through applyPsxShaderTweaks
+  // (contrast wholeObjectMaterialsFor/figureMaterialFor/interiorBuildInstancedMesh, which all do).
+  // userData.psxExempt is a TESTABILITY flag only (no runtime behavior reads it) — dev/verify-dungeon-
+  // interior.mjs's sprite-purity check asserts it's set (billboards) vs. absent+psxApplied set (walls).
+  mat.userData.psxExempt = true;
   const mesh = new THREE.Mesh(geo, mat);
   mesh.position.y = h / 2;
+  // DUNGEON-GRAPH.md U3 iteration-2, ruling 2 (real light sources + cast shadows, interiors only):
+  // a billboard CASTS a shadow (so creature silhouettes fall on the interior floor) via a dedicated
+  // alpha-tested depth material (a plain opaque depth pass would cast a solid SQUARE shadow off the
+  // plane's full quad, not the sprite's actual cutout silhouette) but never RECEIVES one (a receiving
+  // billboard would show other casters' shadows smeared across its own flat alpha-cutout face, which
+  // reads as a lighting bug, not grounding). Harmless when renderer.shadowMap.enabled is false (the
+  // combat/tabletop path, §2's untouched "no shadow maps" ruling) — shadowMap being globally off means
+  // these per-mesh flags are simply never consulted there.
+  mesh.castShadow = true;
+  mesh.receiveShadow = false;
+  mesh.customDepthMaterial = new THREE.MeshDepthMaterial({
+    map: tex, alphaTest: 0.5, depthPacking: THREE.RGBADepthPacking
+  });
   const g = new THREE.Group();
   g.add(mesh);
   g.userData.sprite = true;
@@ -2875,12 +2906,28 @@ function markDirty(){
 // facing +Z (buildSpriteBillboard's own PlaneGeometry default); +PI turns that face to point back at
 // the camera position (which sits at angle `yaw` from the board origin, looking inward).
 function updateSpriteBillboardYaw(){
-  if(!S.unitGroup) return;
   const yaw = (S.rotationStep * 90 * Math.PI) / 180 + (CAM_YAW_OFFSET_DEG * Math.PI) / 180;
   const facing = yaw + Math.PI;
-  for(let i = 0; i < S.unitGroup.children.length; i++){
-    const fig = S.unitGroup.children[i];
-    if(fig && fig.userData && fig.userData.sprite) fig.rotation.y = facing;
+  if(S.unitGroup){
+    for(let i = 0; i < S.unitGroup.children.length; i++){
+      const fig = S.unitGroup.children[i];
+      if(fig && fig.userData && fig.userData.sprite) fig.rotation.y = facing;
+    }
+  }
+  // DUNGEON-GRAPH.md U3 iteration-2, ruling 3: interior "pieces" (creature/PC sprites standing in the
+  // room) are billboard groups too (interiorBuildPieces -> buildSpriteBillboard, same userData.sprite
+  // tag), but they live in S.interiorGroup's own pieces sub-group, not S.unitGroup — walk the group
+  // tree one level deep (interiorGroup -> {tile/wall/light/pieces sub-groups} -> sprite groups) rather
+  // than a flat scan, so this stays cheap even on an 80-room whole-plan interior render.
+  if(S.interiorGroup){
+    for(let i = 0; i < S.interiorGroup.children.length; i++){
+      const sub = S.interiorGroup.children[i];
+      if(!sub || !sub.children) continue;
+      for(let j = 0; j < sub.children.length; j++){
+        const fig = sub.children[j];
+        if(fig && fig.userData && fig.userData.sprite) fig.rotation.y = facing;
+      }
+    }
   }
 }
 
@@ -3624,6 +3671,10 @@ function applyPsxShaderTweaks(material, opts){
     material.customProgramCacheKey = () => "psx|" + (figureAO ? "figAO" : "") + (banded ? "banded" : "")
       + (PSX_DITHER_ENABLED ? "d" : "") + (PSX_VERTEX_SNAP_ENABLED ? "v" : "");
   }
+  // TESTABILITY flag only (no runtime behavior reads it) — pairs with buildSpriteBillboard's
+  // userData.psxExempt so dev/verify-dungeon-interior.mjs's sprite-purity check can assert wall/tile
+  // materials actually got the PSX onBeforeCompile injection while billboard materials never do.
+  material.userData.psxApplied = true;
   return material;
 }
 
@@ -3790,6 +3841,11 @@ function setBoard(data){
   if(dirtyKey === S.boardKey){ window.Theater.stats.boardSkips++; return; }
   S.boardKey = dirtyKey;
   window.Theater.stats.boardBuilds++;
+  // DUNGEON-GRAPH.md U3 iteration-2, ruling 2: restore the standing table's "no shadow maps" ruling
+  // (§2, mount()'s own default below) whenever a COMBAT/tabletop board mounts — setInteriorBoard is
+  // the only place that turns shadow-mapping ON, so this is the one place it turns back off, however
+  // many interior trays were mounted in between.
+  if(S.renderer) S.renderer.shadowMap.enabled = false;
   drainTweens(S); // A2: force-complete every live tween BEFORE tearing down the board/FX it may reference
   clearGroup(S.fxGroup); // A2: a new board must never inherit the old board's still-animating debris/glyphs
   S.lastBoard = data; // P1' WHOLE-OBJECT WIRING (§4 step 8): replay target for the async post-load re-render
@@ -4103,13 +4159,20 @@ function interiorApplyAODarkening(instances){
 // tile-column math a few hundred lines up (mesh.position.y = h/2-0.5 -> every column's base sits on the
 // SAME y=-0.5 floor plane): here that's y = sy/2 - 0.5. `variant.banded` (study rig only) routes through
 // applyPsxShaderTweaks' quantized-lighting injection.
-function interiorBuildInstancedMesh(list, cx, cz, texture, variant){
+function interiorBuildInstancedMesh(list, cx, cz, texture, variant, shadowKind){
   if(!list || !list.length) return null;
   const geo = interiorUnitBoxGeometry();
   const mat = applyPsxShaderTweaks(new THREE.MeshLambertMaterial(
     texture ? { map: texture } : { color: 0xffffff }
   ), { banded: !!(variant && variant.banded) });
   const mesh = new THREE.InstancedMesh(geo, mat, list.length);
+  // DUNGEON-GRAPH.md U3 iteration-2, ruling 2: wall/floor/pillar/doorframe instanced meshes cast AND
+  // receive real shadows on an interior board (harmless while renderer.shadowMap.enabled is false on
+  // the combat/tabletop path — these flags are simply never consulted there). Floors are the one
+  // exception on cast: a floor slab casting onto itself/adjacent floor cells buys nothing and only
+  // costs shadow-map budget, so floors receive-only, everything else casts+receives.
+  mesh.receiveShadow = true;
+  mesh.castShadow = shadowKind !== "floor";
   const m = new THREE.Matrix4();
   const colorObj = new THREE.Color();
   list.forEach((inst, i) => {
@@ -4136,6 +4199,113 @@ function interiorBuildInstancedMesh(list, cx, cz, texture, variant){
    conventions (dirty-key skip, clearGroup, placeCamera, applyLightProfile) wherever the shape lines up.
    Clears S.tileGroup/S.propGroup too (and setBoard, above, clears S.interiorGroup) so switching between
    a combat board and a standing-table interior tray never leaves the OTHER render's meshes on stage. */
+// DUNGEON-GRAPH.md U3 iteration-2, ruling 2: cap total shadow-CASTING lights per interior board —
+// each shadow-casting PointLight is its own shadow-map render pass, so an unbounded count on an
+// 80-room whole-plan render would tank frame time. Non-casting lights still LIGHT the scene (real
+// PointLight, real falloff, real color) — they just skip the shadow-map cost. Nearest-to-focus wins
+// (see interiorAssignShadowCasters below); this is a render-BUDGET cap, not a data-shape cap — U3's
+// own instance/draw-call budget is untouched.
+const INTERIOR_SHADOW_CASTER_CAP = 4;
+const INTERIOR_SHADOW_MAP_SIZE = 512; // small per-light map — 4 lights x 512^2 stays cheap on the dev machine
+
+// deterministic distance-sort + cap: the CENTER (cx,cz) is the focus-room-or-whole-plan centroid
+// setInteriorBoard already computes (the SAME point placeCamera aims at) — lights nearest that point
+// are the ones actually inside/adjacent the room the camera is looking at, so they're the ones worth
+// paying the shadow-map cost for.
+function interiorAssignShadowCasters(lights, cx, cz){
+  const withDist = (lights || []).map((l, i) => ({
+    l, i, d: Math.hypot((l.x || 0) - cx, (l.z || 0) - cz)
+  }));
+  withDist.sort((a, b) => a.d - b.d);
+  const casterIdx = new Set(withDist.slice(0, INTERIOR_SHADOW_CASTER_CAP).map((w) => w.i));
+  return (lights || []).map((l, i) => Object.assign({}, l, { castShadow: casterIdx.has(i) }));
+}
+
+// small visible emissive marker mesh at a light's position — Adam's ruling 2 closer: "the source
+// should read as an object, not magic". A torch gets a thin flame-colored quad (billboard-shaped, no
+// camera-facing update needed at study-card distances — a static vertical quad reads fine); a lamp
+// gets a short horizontal strip box (wall-sconce silhouette). Unlit (MeshBasicMaterial) + additive so
+// it reads bright regardless of the room's own light level, same "this surface emits" logic the
+// whole-object flame material (wholeObjectMaterialsFor slot 3, this file's own header note) already
+// established — no new visual language invented here, just reused at interior scale.
+function interiorBuildLightMarker(light){
+  const isLamp = light.kind === "lamp";
+  const geo = isLamp
+    ? new THREE.BoxGeometry(0.5, 0.12, 0.12)
+    : new THREE.PlaneGeometry(0.18, 0.32);
+  const mat = new THREE.MeshBasicMaterial({
+    color: light.color || "#ffbb66", transparent: true, opacity: 0.9,
+    blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide
+  });
+  const mesh = new THREE.Mesh(geo, mat);
+  mesh.castShadow = false; mesh.receiveShadow = false; // a light source's own marker never shadows itself
+  return mesh;
+}
+
+// data.lights -> {group, casters} — builds one THREE.PointLight + one emissive marker mesh per light
+// entry (src/ui/theater-interior.js's interiorBuildBoard emits the plain {x,z,y,color,intensity,kind,
+// roomSegNum} data; this is the ONE place that becomes real THREE objects, same "data in theater-
+// interior.js, GL in theater-boot.js" split the rest of this render already keeps). Shadow-casting
+// lights get a small shadow-map budget (INTERIOR_SHADOW_MAP_SIZE) + a near/far tuned to interior room
+// scale (never the board-wide combat camera's frustum).
+function interiorBuildLights(lights, cx, cz){
+  const group = new THREE.Group();
+  const assigned = interiorAssignShadowCasters(lights, cx, cz);
+  let casters = 0;
+  assigned.forEach((light) => {
+    const pl = new THREE.PointLight(
+      light.color || "#ffbb66",
+      light.intensity != null ? light.intensity : 1.2,
+      light.distance != null ? light.distance : 12,
+      light.decay != null ? light.decay : 2
+    );
+    pl.position.set((light.x || 0) - cx, light.y != null ? light.y : 1.4, (light.z || 0) - cz);
+    if(light.castShadow){
+      pl.castShadow = true;
+      pl.shadow.mapSize.set(INTERIOR_SHADOW_MAP_SIZE, INTERIOR_SHADOW_MAP_SIZE);
+      pl.shadow.camera.near = 0.1;
+      pl.shadow.camera.far = light.distance != null ? light.distance : 12;
+      pl.shadow.bias = -0.002;
+      casters++;
+    }
+    group.add(pl);
+    const marker = interiorBuildLightMarker(light);
+    marker.position.copy(pl.position);
+    if(light.kind !== "lamp") marker.position.y -= 0.15; // torch flame sits slightly below its light point (on the sconce)
+    group.add(marker);
+  });
+  return { group, casters };
+}
+
+// data.pieces -> billboard sprites standing IN the room (DUNGEON-GRAPH.md U3 iteration-2, ruling 3:
+// "creatures render at true scale... standing on the floor"). Each entry {slug, cellX, cellY,
+// scaleVsHuman?} joins the sprite registry via the SAME spriteEntryFor/buildSpriteBillboard path a
+// combat board's units use — no second billboard code path invented. `entry.floor` (when the registry
+// carries it — a future per-slug base-offset field, degrades to 0 today) nudges the sprite's feet up/
+// down off the y=-0.5 floor plane (a flying/floating creature's registry entry can sit its silhouette
+// correctly without this function knowing anything about flight). Returns {group, resolved, requested}
+// so setInteriorBoard can expose "did every piece sprite resolve" on window.Theater for the capture
+// rig's metrics (a piece whose slug doesn't join the registry, or whose texture hasn't loaded yet,
+// silently skips — same total-function/never-throw discipline every other figure resolution in this
+// file keeps).
+function interiorBuildPieces(pieces){
+  const group = new THREE.Group();
+  let resolved = 0;
+  (pieces || []).forEach((p) => {
+    const base = spriteEntryFor(p.slug);
+    if(!base) return;
+    const entry = Object.assign({}, base, {
+      scaleVsHuman: p.scaleVsHuman != null ? p.scaleVsHuman : base.scaleVsHuman
+    });
+    const g = buildSpriteBillboard(entry);
+    if(!g) return; // texture not loaded yet — falls through, same as every other billboard resolution
+    g.position.set(p.cellX || 0, (base.floor || 0) - 0.4, p.cellY || 0); // -0.4: feet on the y=-0.5 floor plane (mesh.position.y already lifts h/2 inside the group)
+    group.add(g);
+    resolved++;
+  });
+  return { group, resolved, requested: (pieces || []).length };
+}
+
 function setInteriorBoard(data){
   if(!S.mounted || !data) return;
   // DUNGEON-GRAPH.md U3 render-quality study card: S.interiorVariant (window.Theater.setInteriorVariant,
@@ -4153,6 +4323,10 @@ function setInteriorBoard(data){
   clearGroup(S.propGroup);
   clearGroup(S.interiorGroup);
   S.propOccupiedZones = {};
+  // DUNGEON-GRAPH.md U3 iteration-2, ruling 2: interior boards get real shadow-mapping — the
+  // tabletop/combat path's "no shadow maps" ruling (§2, this file's mount()-time default + setBoard's
+  // own explicit restore below) is untouched; this is the ONE place shadow-mapping turns on.
+  if(S.renderer) S.renderer.shadowMap.enabled = true;
 
   const b = data.bounds || { minX: 0, maxX: 0, minZ: 0, maxZ: 0 };
   const cx = (b.minX + b.maxX) / 2, cz = (b.minZ + b.maxZ) / 2;
@@ -4201,12 +4375,28 @@ function setInteriorBoard(data){
         pillar: (data.instances && data.instances.pillar || []).map((o) => Object.assign({}, o)),
       })
     : (data.instances || {});
-  const floorMesh = interiorBuildInstancedMesh(inst.floor, cx, cz, floorTex, variant);
-  const wallMesh = interiorBuildInstancedMesh(inst.wall, cx, cz, wallTex, variant);
-  const doorMesh = interiorBuildInstancedMesh(inst.doorframe, cx, cz, null, variant);
-  const pillarMesh = interiorBuildInstancedMesh(inst.pillar, cx, cz, null, variant);
+  const floorMesh = interiorBuildInstancedMesh(inst.floor, cx, cz, floorTex, variant, "floor");
+  const wallMesh = interiorBuildInstancedMesh(inst.wall, cx, cz, wallTex, variant, "wall");
+  const doorMesh = interiorBuildInstancedMesh(inst.doorframe, cx, cz, null, variant, "doorframe");
+  const pillarMesh = interiorBuildInstancedMesh(inst.pillar, cx, cz, null, variant, "pillar");
   [floorMesh, wallMesh, doorMesh, pillarMesh].forEach((mesh) => { if(mesh) S.interiorGroup.add(mesh); });
   S.interiorMeshCount = [floorMesh, wallMesh, doorMesh, pillarMesh].filter(Boolean).length;
+
+  // DUNGEON-GRAPH.md U3 iteration-2, ruling 2: real environmental light sources (data.lights, emitted
+  // by src/ui/theater-interior.js's interiorBuildBoard) — realm-flavored PointLights + their own
+  // visible emissive markers, capped at INTERIOR_SHADOW_CASTER_CAP shadow-casters.
+  const lightsBuilt = interiorBuildLights(data.lights, cx, cz);
+  S.interiorGroup.add(lightsBuilt.group);
+  S.interiorShadowCasterCount = lightsBuilt.casters;
+  S.interiorLightCount = (data.lights || []).length;
+
+  // DUNGEON-GRAPH.md U3 iteration-2, ruling 3: creature/PC billboard sprites standing in the room
+  // (data.pieces, a plain field the caller sets directly on the board object — independent of
+  // interiorBuildBoard, same as data.lightProfile above).
+  const piecesBuilt = interiorBuildPieces(data.pieces);
+  S.interiorGroup.add(piecesBuilt.group);
+  S.interiorPiecesResolved = piecesBuilt.resolved;
+  S.interiorPiecesRequested = piecesBuilt.requested;
 
   placeCamera();
   markDirty();
@@ -4741,6 +4931,40 @@ window.Theater = {
 // capture/verify harness can assert the InstancedMesh count directly instead of trusting a screenshot.
 // 0 before any setInteriorBoard call (no interior board mounted yet).
 window.Theater.interiorMeshCount = function(){ return S.interiorMeshCount || 0; };
+
+// DUNGEON-GRAPH.md U3 iteration-2 diagnostics (same "read-only, harness-facing" discipline as
+// interiorMeshCount just above) — the capture rig's metrics.json needs to confirm every piece sprite
+// actually resolved (not silently skipped for a texture-not-loaded/registry-miss reason) and that
+// shadow-mapping is on for an interior board / restored off for a combat board.
+window.Theater.interiorPiecesResolved = function(){ return S.interiorPiecesResolved || 0; };
+window.Theater.interiorPiecesRequested = function(){ return S.interiorPiecesRequested || 0; };
+window.Theater.interiorLightCount = function(){ return S.interiorLightCount || 0; };
+window.Theater.interiorShadowCasterCount = function(){ return S.interiorShadowCasterCount || 0; };
+window.Theater.shadowMapEnabled = function(){ return !!(S.renderer && S.renderer.shadowMap.enabled); };
+
+// DUNGEON-GRAPH.md U3 iteration-2, SPRITE PURITY ruling — a harness-facing diagnostic (dev/verify-
+// dungeon-interior.mjs's puppeteer check, dev/battle-gate/capture-interior-study.mjs's metrics) that
+// scans the currently-mounted interior board's own scene graph for the two userData flags applyPsxShaderTweaks
+// / buildSpriteBillboard set (see both functions' own header comments): every wall/floor/doorframe/
+// pillar InstancedMesh material should carry psxApplied, every billboard sprite material should carry
+// psxExempt and neither should carry the other's flag. Read-only, never mutates the scene.
+window.Theater.interiorPsxAudit = function(){
+  const audit = { wallMaterialsChecked: 0, wallMaterialsPsxApplied: 0, billboardsChecked: 0, billboardsPsxExempt: 0, billboardsWronglyPsxApplied: 0 };
+  if(!S.interiorGroup) return audit;
+  S.interiorGroup.traverse((obj) => {
+    if(obj.isInstancedMesh && obj.material){
+      audit.wallMaterialsChecked++;
+      if(obj.material.userData && obj.material.userData.psxApplied) audit.wallMaterialsPsxApplied++;
+    }
+    if(obj.userData && obj.userData.sprite && obj.userData.spriteBillboardMesh){
+      const mat = obj.userData.spriteBillboardMesh.material;
+      audit.billboardsChecked++;
+      if(mat && mat.userData && mat.userData.psxExempt) audit.billboardsPsxExempt++;
+      if(mat && mat.userData && mat.userData.psxApplied) audit.billboardsWronglyPsxApplied++;
+    }
+  });
+  return audit;
+};
 
 // TABLETOP-UNITS.md §U1 seam 5 — the boot-preload readiness flag: false until loadWholeObjectBuilders'
 // module-scope onSettled callback (above) fires exactly once. A harness/caller asserting §9.8's warm

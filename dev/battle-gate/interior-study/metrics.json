@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-10T20:27:13.628Z",
+  "generatedAt": "2026-07-10T20:53:26.903Z",
   "scenes": {
     "chrome": {
       "label": "chrome Hub dungeon room",
@@ -3583,6 +3583,89 @@
               }
             ]
           },
+          "lights": [
+            {
+              "x": 16,
+              "z": 17,
+              "y": 1.8,
+              "color": "#bfe8ff",
+              "intensity": 1.1,
+              "kind": "lamp",
+              "roomSegNum": 1
+            },
+            {
+              "x": 11,
+              "z": 14,
+              "y": 1.8,
+              "color": "#bfe8ff",
+              "intensity": 1.1,
+              "kind": "lamp",
+              "roomSegNum": 1
+            },
+            {
+              "x": 24,
+              "z": 25,
+              "y": 1.8,
+              "color": "#bfe8ff",
+              "intensity": 1.1,
+              "kind": "lamp",
+              "roomSegNum": 2
+            },
+            {
+              "x": 24,
+              "z": 26,
+              "y": 1.8,
+              "color": "#bfe8ff",
+              "intensity": 1.1,
+              "kind": "lamp",
+              "roomSegNum": 2
+            },
+            {
+              "x": 3,
+              "z": 23,
+              "y": 1.8,
+              "color": "#bfe8ff",
+              "intensity": 1.1,
+              "kind": "lamp",
+              "roomSegNum": 3
+            },
+            {
+              "x": 3,
+              "z": 24,
+              "y": 1.8,
+              "color": "#bfe8ff",
+              "intensity": 1.1,
+              "kind": "lamp",
+              "roomSegNum": 3
+            },
+            {
+              "x": 15,
+              "z": 7,
+              "y": 1.8,
+              "color": "#bfe8ff",
+              "intensity": 1.1,
+              "kind": "lamp",
+              "roomSegNum": 4
+            },
+            {
+              "x": 15,
+              "z": 3,
+              "y": 1.8,
+              "color": "#bfe8ff",
+              "intensity": 1.1,
+              "kind": "lamp",
+              "roomSegNum": 4
+            },
+            {
+              "x": 31,
+              "z": 7,
+              "y": 1.8,
+              "color": "#bfe8ff",
+              "intensity": 1.1,
+              "kind": "lamp",
+              "roomSegNum": 5
+            }
+          ],
           "bounds": {
             "minX": 2,
             "maxX": 33,
@@ -3594,21 +3677,57 @@
             "floorCount": 203,
             "wallCount": 169,
             "doorCount": 7,
-            "pillarCount": 12
+            "pillarCount": 12,
+            "lightCount": 9
           },
-          "lightProfile": "lamplit"
+          "lightProfile": "lamplit",
+          "pieces": [
+            {
+              "slug": "Wolf",
+              "cellX": 12,
+              "cellY": 13
+            },
+            {
+              "slug": "Giant Rat",
+              "cellX": 15,
+              "cellY": 13
+            },
+            {
+              "slug": "Spider",
+              "cellX": 12,
+              "cellY": 17
+            },
+            {
+              "slug": "Knight",
+              "cellX": 15,
+              "cellY": 17
+            }
+          ]
         },
         "meta": {
           "roomCount": 5,
           "floorCount": 203,
           "wallCount": 169,
           "doorCount": 7,
-          "pillarCount": 12
+          "pillarCount": 12,
+          "lightCount": 9
         }
       },
       "mounted": {
         "ok": true,
-        "meshCount": 4
+        "meshCount": 4,
+        "piecesResolved": 4,
+        "piecesRequested": 4,
+        "lightCount": 9,
+        "shadowCasterCount": 4,
+        "shadowMapEnabled": true,
+        "psxAudit": {
+          "wallMaterialsChecked": 4,
+          "wallMaterialsPsxApplied": 4,
+          "billboardsChecked": 4,
+          "billboardsPsxExempt": 4,
+          "billboardsWronglyPsxApplied": 0
+        }
       }
     },
     "gloom": {
@@ -3804,60 +3923,6 @@
                 "scaleDomain": 2.5
               },
               {
-                "x": 21,
-                "z": 5,
-                "sx": 1,
-                "sy": 0.2,
-                "sz": 1,
-                "color": "#453b4d",
-                "scaleDomain": 1
-              },
-              {
-                "x": 22,
-                "z": 5,
-                "sx": 1,
-                "sy": 0.2,
-                "sz": 1,
-                "color": "#453b4d",
-                "scaleDomain": 1
-              },
-              {
-                "x": 23,
-                "z": 5,
-                "sx": 1,
-                "sy": 0.2,
-                "sz": 1,
-                "color": "#453b4d",
-                "scaleDomain": 1
-              },
-              {
-                "x": 24,
-                "z": 5,
-                "sx": 1,
-                "sy": 0.2,
-                "sz": 1,
-                "color": "#453b4d",
-                "scaleDomain": 1
-              },
-              {
-                "x": 25,
-                "z": 5,
-                "sx": 1,
-                "sy": 0.2,
-                "sz": 1,
-                "color": "#453b4d",
-                "scaleDomain": 1
-              },
-              {
-                "x": 26,
-                "z": 5,
-                "sx": 1,
-                "sy": 0.2,
-                "sz": 1,
-                "color": "#453b4d",
-                "scaleDomain": 1
-              },
-              {
                 "x": 3,
                 "z": 6,
                 "sx": 1,
@@ -3955,87 +4020,6 @@
                 "sz": 1,
                 "color": "#453b4d",
                 "scaleDomain": 2.5
-              },
-              {
-                "x": 18,
-                "z": 6,
-                "sx": 1,
-                "sy": 0.2,
-                "sz": 1,
-                "color": "#453b4d",
-                "scaleDomain": 1
-              },
-              {
-                "x": 19,
-                "z": 6,
-                "sx": 1,
-                "sy": 0.2,
-                "sz": 1,
-                "color": "#453b4d",
-                "scaleDomain": 1
-              },
-              {
-                "x": 20,
-                "z": 6,
-                "sx": 1,
-                "sy": 0.2,
-                "sz": 1,
-                "color": "#453b4d",
-                "scaleDomain": 1
-              },
-              {
-                "x": 21,
-                "z": 6,
-                "sx": 1,
-                "sy": 0.2,
-                "sz": 1,
-                "color": "#453b4d",
-                "scaleDomain": 1
-              },
-              {
-                "x": 22,
-                "z": 6,
-                "sx": 1,
-                "sy": 0.2,
-                "sz": 1,
-                "color": "#453b4d",
-                "scaleDomain": 1
-              },
-              {
-                "x": 23,
-                "z": 6,
-                "sx": 1,
-                "sy": 0.2,
-                "sz": 1,
-                "color": "#453b4d",
-                "scaleDomain": 1
-              },
-              {
-                "x": 24,
-                "z": 6,
-                "sx": 1,
-                "sy": 0.2,
-                "sz": 1,
-                "color": "#453b4d",
-                "scaleDomain": 1
-              },
-              {
-                "x": 25,
-                "z": 6,
-                "sx": 1,
-                "sy": 0.2,
-                "sz": 1,
-                "color": "#453b4d",
-                "scaleDomain": 1
-              },
-              {
-                "x": 26,
-                "z": 6,
-                "sx": 1,
-                "sy": 0.2,
-                "sz": 1,
-                "color": "#453b4d",
-                "scaleDomain": 1
               },
               {
                 "x": 3,
@@ -4173,87 +4157,6 @@
                 "scaleDomain": 2.5
               },
               {
-                "x": 18,
-                "z": 7,
-                "sx": 1,
-                "sy": 0.2,
-                "sz": 1,
-                "color": "#453b4d",
-                "scaleDomain": 1
-              },
-              {
-                "x": 19,
-                "z": 7,
-                "sx": 1,
-                "sy": 0.2,
-                "sz": 1,
-                "color": "#453b4d",
-                "scaleDomain": 1
-              },
-              {
-                "x": 20,
-                "z": 7,
-                "sx": 1,
-                "sy": 0.2,
-                "sz": 1,
-                "color": "#453b4d",
-                "scaleDomain": 1
-              },
-              {
-                "x": 21,
-                "z": 7,
-                "sx": 1,
-                "sy": 0.2,
-                "sz": 1,
-                "color": "#453b4d",
-                "scaleDomain": 1
-              },
-              {
-                "x": 22,
-                "z": 7,
-                "sx": 1,
-                "sy": 0.2,
-                "sz": 1,
-                "color": "#453b4d",
-                "scaleDomain": 1
-              },
-              {
-                "x": 23,
-                "z": 7,
-                "sx": 1,
-                "sy": 0.2,
-                "sz": 1,
-                "color": "#453b4d",
-                "scaleDomain": 1
-              },
-              {
-                "x": 24,
-                "z": 7,
-                "sx": 1,
-                "sy": 0.2,
-                "sz": 1,
-                "color": "#453b4d",
-                "scaleDomain": 1
-              },
-              {
-                "x": 25,
-                "z": 7,
-                "sx": 1,
-                "sy": 0.2,
-                "sz": 1,
-                "color": "#453b4d",
-                "scaleDomain": 1
-              },
-              {
-                "x": 26,
-                "z": 7,
-                "sx": 1,
-                "sy": 0.2,
-                "sz": 1,
-                "color": "#453b4d",
-                "scaleDomain": 1
-              },
-              {
                 "x": 3,
                 "z": 8,
                 "sx": 1,
@@ -4387,60 +4290,6 @@
                 "sz": 1,
                 "color": "#453b4d",
                 "scaleDomain": 2.5
-              },
-              {
-                "x": 21,
-                "z": 8,
-                "sx": 1,
-                "sy": 0.2,
-                "sz": 1,
-                "color": "#453b4d",
-                "scaleDomain": 1
-              },
-              {
-                "x": 22,
-                "z": 8,
-                "sx": 1,
-                "sy": 0.2,
-                "sz": 1,
-                "color": "#453b4d",
-                "scaleDomain": 1
-              },
-              {
-                "x": 23,
-                "z": 8,
-                "sx": 1,
-                "sy": 0.2,
-                "sz": 1,
-                "color": "#453b4d",
-                "scaleDomain": 1
-              },
-              {
-                "x": 24,
-                "z": 8,
-                "sx": 1,
-                "sy": 0.2,
-                "sz": 1,
-                "color": "#453b4d",
-                "scaleDomain": 1
-              },
-              {
-                "x": 25,
-                "z": 8,
-                "sx": 1,
-                "sy": 0.2,
-                "sz": 1,
-                "color": "#453b4d",
-                "scaleDomain": 1
-              },
-              {
-                "x": 26,
-                "z": 8,
-                "sx": 1,
-                "sy": 0.2,
-                "sz": 1,
-                "color": "#453b4d",
-                "scaleDomain": 1
               },
               {
                 "x": 3,
@@ -4652,78 +4501,6 @@
                 "scaleDomain": 2.5
               },
               {
-                "x": 20,
-                "z": 4,
-                "sx": 1,
-                "sy": 2.4,
-                "sz": 1,
-                "color": "#2a222e",
-                "scaleDomain": 1
-              },
-              {
-                "x": 21,
-                "z": 4,
-                "sx": 1,
-                "sy": 2.4,
-                "sz": 1,
-                "color": "#2a222e",
-                "scaleDomain": 1
-              },
-              {
-                "x": 22,
-                "z": 4,
-                "sx": 1,
-                "sy": 2.4,
-                "sz": 1,
-                "color": "#2a222e",
-                "scaleDomain": 1
-              },
-              {
-                "x": 23,
-                "z": 4,
-                "sx": 1,
-                "sy": 2.4,
-                "sz": 1,
-                "color": "#2a222e",
-                "scaleDomain": 1
-              },
-              {
-                "x": 24,
-                "z": 4,
-                "sx": 1,
-                "sy": 2.4,
-                "sz": 1,
-                "color": "#2a222e",
-                "scaleDomain": 1
-              },
-              {
-                "x": 25,
-                "z": 4,
-                "sx": 1,
-                "sy": 2.4,
-                "sz": 1,
-                "color": "#2a222e",
-                "scaleDomain": 1
-              },
-              {
-                "x": 26,
-                "z": 4,
-                "sx": 1,
-                "sy": 2.4,
-                "sz": 1,
-                "color": "#2a222e",
-                "scaleDomain": 1
-              },
-              {
-                "x": 27,
-                "z": 4,
-                "sx": 1,
-                "sy": 2.4,
-                "sz": 1,
-                "color": "#2a222e",
-                "scaleDomain": 1
-              },
-              {
                 "x": 2,
                 "z": 5,
                 "sx": 1,
@@ -4758,33 +4535,6 @@
                 "sz": 1,
                 "color": "#2a222e",
                 "scaleDomain": 2.5
-              },
-              {
-                "x": 19,
-                "z": 5,
-                "sx": 1,
-                "sy": 2.4,
-                "sz": 1,
-                "color": "#2a222e",
-                "scaleDomain": 1
-              },
-              {
-                "x": 20,
-                "z": 5,
-                "sx": 1,
-                "sy": 2.4,
-                "sz": 1,
-                "color": "#2a222e",
-                "scaleDomain": 1
-              },
-              {
-                "x": 27,
-                "z": 5,
-                "sx": 1,
-                "sy": 2.4,
-                "sz": 1,
-                "color": "#2a222e",
-                "scaleDomain": 1
               },
               {
                 "x": 2,
@@ -4832,15 +4582,6 @@
                 "scaleDomain": 2.5
               },
               {
-                "x": 27,
-                "z": 6,
-                "sx": 1,
-                "sy": 2.4,
-                "sz": 1,
-                "color": "#2a222e",
-                "scaleDomain": 1
-              },
-              {
                 "x": 2,
                 "z": 7,
                 "sx": 1,
@@ -4866,33 +4607,6 @@
                 "sz": 1,
                 "color": "#2a222e",
                 "scaleDomain": 2.5
-              },
-              {
-                "x": 19,
-                "z": 8,
-                "sx": 1,
-                "sy": 2.4,
-                "sz": 1,
-                "color": "#2a222e",
-                "scaleDomain": 1
-              },
-              {
-                "x": 20,
-                "z": 8,
-                "sx": 1,
-                "sy": 2.4,
-                "sz": 1,
-                "color": "#2a222e",
-                "scaleDomain": 1
-              },
-              {
-                "x": 27,
-                "z": 8,
-                "sx": 1,
-                "sy": 2.4,
-                "sz": 1,
-                "color": "#2a222e",
-                "scaleDomain": 1
               },
               {
                 "x": 2,
@@ -4994,78 +4708,6 @@
                 "scaleDomain": 1
               },
               {
-                "x": 20,
-                "z": 9,
-                "sx": 1,
-                "sy": 2.4,
-                "sz": 1,
-                "color": "#2a222e",
-                "scaleDomain": 1
-              },
-              {
-                "x": 21,
-                "z": 9,
-                "sx": 1,
-                "sy": 2.4,
-                "sz": 1,
-                "color": "#2a222e",
-                "scaleDomain": 1
-              },
-              {
-                "x": 22,
-                "z": 9,
-                "sx": 1,
-                "sy": 2.4,
-                "sz": 1,
-                "color": "#2a222e",
-                "scaleDomain": 1
-              },
-              {
-                "x": 23,
-                "z": 9,
-                "sx": 1,
-                "sy": 2.4,
-                "sz": 1,
-                "color": "#2a222e",
-                "scaleDomain": 1
-              },
-              {
-                "x": 24,
-                "z": 9,
-                "sx": 1,
-                "sy": 2.4,
-                "sz": 1,
-                "color": "#2a222e",
-                "scaleDomain": 1
-              },
-              {
-                "x": 25,
-                "z": 9,
-                "sx": 1,
-                "sy": 2.4,
-                "sz": 1,
-                "color": "#2a222e",
-                "scaleDomain": 1
-              },
-              {
-                "x": 26,
-                "z": 9,
-                "sx": 1,
-                "sy": 2.4,
-                "sz": 1,
-                "color": "#2a222e",
-                "scaleDomain": 1
-              },
-              {
-                "x": 27,
-                "z": 9,
-                "sx": 1,
-                "sy": 2.4,
-                "sz": 1,
-                "color": "#2a222e",
-                "scaleDomain": 1
-              },
-              {
                 "x": 2,
                 "z": 10,
                 "sx": 1,
@@ -5150,16 +4792,6 @@
                 "transition": true
               },
               {
-                "x": 21,
-                "z": 6,
-                "sx": 0.6,
-                "sy": 3,
-                "sz": 0.6,
-                "color": "#6b5878",
-                "squeeze": true,
-                "transition": true
-              },
-              {
                 "x": 8,
                 "z": 7,
                 "sx": 0.8,
@@ -5178,46 +4810,101 @@
                 "color": "#6b5878",
                 "squeeze": false,
                 "transition": false
-              },
-              {
-                "x": 26,
-                "z": 7,
-                "sx": 0.8,
-                "sy": 2.04,
-                "sz": 0.8,
-                "color": "#6b5878",
-                "squeeze": false,
-                "transition": false
               }
             ],
             "pillar": []
           },
+          "lights": [
+            {
+              "x": 5,
+              "z": 9,
+              "y": 1.4,
+              "color": "#ff9a44",
+              "intensity": 1.3,
+              "kind": "torch",
+              "roomSegNum": 1
+            },
+            {
+              "x": 5,
+              "z": 5,
+              "y": 1.4,
+              "color": "#ff9a44",
+              "intensity": 1.3,
+              "kind": "torch",
+              "roomSegNum": 1
+            },
+            {
+              "x": 17,
+              "z": 6,
+              "y": 1.4,
+              "color": "#ff9a44",
+              "intensity": 1.3,
+              "kind": "torch",
+              "roomSegNum": 2
+            }
+          ],
           "bounds": {
             "minX": 2,
-            "maxX": 27,
+            "maxX": 18,
             "minZ": 3,
             "maxZ": 10
           },
           "meta": {
-            "roomCount": 3,
-            "floorCount": 93,
-            "wallCount": 71,
-            "doorCount": 5,
-            "pillarCount": 0
+            "roomCount": 2,
+            "floorCount": 63,
+            "wallCount": 48,
+            "doorCount": 3,
+            "pillarCount": 0,
+            "lightCount": 3
           },
-          "lightProfile": "torchlit"
+          "lightProfile": "torchlit",
+          "pieces": [
+            {
+              "slug": "Ogre Zombie",
+              "cellX": 4,
+              "cellY": 6
+            },
+            {
+              "slug": "Skeleton",
+              "cellX": 7,
+              "cellY": 6
+            },
+            {
+              "slug": "Zombie",
+              "cellX": 4,
+              "cellY": 8
+            },
+            {
+              "slug": "Guard",
+              "cellX": 7,
+              "cellY": 8
+            }
+          ]
         },
         "meta": {
-          "roomCount": 3,
-          "floorCount": 93,
-          "wallCount": 71,
-          "doorCount": 5,
-          "pillarCount": 0
+          "roomCount": 2,
+          "floorCount": 63,
+          "wallCount": 48,
+          "doorCount": 3,
+          "pillarCount": 0,
+          "lightCount": 3
         }
       },
       "mounted": {
         "ok": true,
-        "meshCount": 3
+        "meshCount": 3,
+        "piecesResolved": 4,
+        "piecesRequested": 4,
+        "lightCount": 3,
+        "shadowCasterCount": 3,
+        "shadowMapEnabled": true,
+        "psxAudit": {
+          "wallMaterialsChecked": 3,
+          "wallMaterialsPsxApplied": 3,
+          "billboardsChecked": 4,
+          "billboardsPsxExempt": 4,
+          "billboardsWronglyPsxApplied": 0
+        }
       }
     }
   },
@@ -5227,8 +4914,8 @@
     "notes": [
       "startSession() called"
     ],
-    "worldId": "mrfdzyihe3qii",
-    "worldName": "The Gravity-Well"
+    "worldId": "mrfexoimzav4a",
+    "worldName": "The Thresher's Field"
   },
   "theaterState": {
     "hasBattleStage": true,
@@ -5236,7 +4923,7 @@
     "hasCanvas": true,
     "hasSetInteriorBoard": true
   },
-  "shotCount": 12,
+  "shotCount": 6,
   "shots": [
     {
       "sceneKey": "chrome",
@@ -5250,23 +4937,8 @@
     },
     {
       "sceneKey": "chrome",
-      "variantKey": "c-banded",
-      "fileName": "chrome-c-banded.png"
-    },
-    {
-      "sceneKey": "chrome",
       "variantKey": "d-fog",
       "fileName": "chrome-d-fog.png"
-    },
-    {
-      "sceneKey": "chrome",
-      "variantKey": "e-ao-banded",
-      "fileName": "chrome-e-ao-banded.png"
-    },
-    {
-      "sceneKey": "chrome",
-      "variantKey": "f-ao-banded-fog",
-      "fileName": "chrome-f-ao-banded-fog.png"
     },
     {
       "sceneKey": "gloom",
@@ -5280,26 +4952,11 @@
     },
     {
       "sceneKey": "gloom",
-      "variantKey": "c-banded",
-      "fileName": "gloom-c-banded.png"
-    },
-    {
-      "sceneKey": "gloom",
       "variantKey": "d-fog",
       "fileName": "gloom-d-fog.png"
-    },
-    {
-      "sceneKey": "gloom",
-      "variantKey": "e-ao-banded",
-      "fileName": "gloom-e-ao-banded.png"
-    },
-    {
-      "sceneKey": "gloom",
-      "variantKey": "f-ao-banded-fog",
-      "fileName": "gloom-f-ao-banded-fog.png"
     }
   ],
-  "studyCardPath": "/Users/adamstephenson/Desktop/Work/projects/Genesis/.claude/worktrees/genesis-sprite-corpus-tags-edeaac/dev/battle-gate/interior-study/study-card.png",
+  "studyCardPath": "/Users/adamstephenson/Desktop/Work/projects/Genesis/.claude/worktrees/agent-a179128fc24d45d58/dev/battle-gate/interior-study/study-card.png",
   "consoleErrors": [
     "Failed to load resource: the server responded with a status of 404 (File not found)",
     "Failed to load resource: the server responded with a status of 404 (File not found)"

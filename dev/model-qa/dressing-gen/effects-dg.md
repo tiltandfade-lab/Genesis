@@ -15,7 +15,7 @@ Instructions for the codex agent. Work through every sheet IN ORDER, unsupervise
 Create a sprite sheet: a 3 rows x 4 columns grid of 12 individual game SCENERY CARDS, evenly spaced, on a solid #FF00FF magenta background filling every non-subject pixel. Canvas orientation: landscape (wider than tall, e.g. 1536x1024).
 Construction: each cell is ONE EFFECT CARD — a bold flat energy/impact shape with visible linework and a strong graphic read, designed to composite OVERSIZED at 1.5-2x character scale (slash arcs, burst rings, spatters). NO ground plane, NO scene, NO character — the effect shape alone on the solid background. Hot core + readable edge; these render additively over the scene.
 Setting: shared/neutral game-effects space — no realm identity, universal readability.
-Style: dense pixel art, crisp readable shapes.
+Style: dense pixel art, crisp readable shapes. CLEAN-SHAPES LAW: large flat value planes carry every form; dither only in shadow regions and edges, never mid-tones; silhouette first. The sheet must read clean at 50% zoom.
 Palette: high-contrast readable accents on transparent-friendly shapes.
 Subjects, one per cell, left to right then top to bottom:
 1. clean slash arc, blade-edge trail
@@ -38,7 +38,7 @@ Subjects, one per cell, left to right then top to bottom:
 Create a sprite sheet: a 3 rows x 4 columns grid of 12 individual game SCENERY CARDS, evenly spaced, on a solid #FF00FF magenta background filling every non-subject pixel. Canvas orientation: landscape (wider than tall, e.g. 1536x1024).
 Construction: each cell is ONE EFFECT CARD — a bold flat energy/impact shape with visible linework and a strong graphic read, designed to composite OVERSIZED at 1.5-2x character scale (slash arcs, burst rings, spatters). NO ground plane, NO scene, NO character — the effect shape alone on the solid background. Hot core + readable edge; these render additively over the scene.
 Setting: shared/neutral game-effects space — no realm identity, universal readability.
-Style: dense pixel art, crisp readable shapes.
+Style: dense pixel art, crisp readable shapes. CLEAN-SHAPES LAW: large flat value planes carry every form; dither only in shadow regions and edges, never mid-tones; silhouette first. The sheet must read clean at 50% zoom.
 Palette: high-contrast readable accents on transparent-friendly shapes.
 Subjects, one per cell, left to right then top to bottom:
 1. metallic spark burst, scatter shower
@@ -61,7 +61,7 @@ Subjects, one per cell, left to right then top to bottom:
 Create a sprite sheet: a 2 rows x 4 columns grid of 8 individual game SCENERY CARDS, evenly spaced, on a solid #FF00FF magenta background filling every non-subject pixel. Canvas orientation: landscape (wider than tall, e.g. 1536x1024).
 Construction: each cell is ONE EFFECT CARD — a bold flat energy/impact shape with visible linework and a strong graphic read, designed to composite OVERSIZED at 1.5-2x character scale (slash arcs, burst rings, spatters). NO ground plane, NO scene, NO character — the effect shape alone on the solid background. Hot core + readable edge; these render additively over the scene.
 Setting: volcanic ash wasteland — basalt hide, ember cracks, rust, toxic biolume.
-Style: dense pixel art, realistic materials, grimy dense-dithered finish — match dev/model-qa/regen-v3/style-refs/ash-style-ref.png's grain and palette discipline exactly.
+Style: dense pixel art, realistic materials, grimy dense-dithered finish — match dev/model-qa/regen-v3/style-refs/ash-style-ref.png's grain and palette discipline exactly. CLEAN-SHAPES LAW: large flat value planes carry every form; dither only in shadow regions and edges, never mid-tones; silhouette first. The sheet must read clean at 50% zoom.
 Palette: grey-ash base with ember orange and toxic green accents.
 Subjects, one per cell, left to right then top to bottom:
 1. volcanic ember gout, orange cinder plume
@@ -80,7 +80,7 @@ Subjects, one per cell, left to right then top to bottom:
 Create a sprite sheet: a 2 rows x 4 columns grid of 8 individual game SCENERY CARDS, evenly spaced, on a solid #FF00FF magenta background filling every non-subject pixel. Canvas orientation: landscape (wider than tall, e.g. 1536x1024).
 Construction: each cell is ONE EFFECT CARD — a bold flat energy/impact shape with visible linework and a strong graphic read, designed to composite OVERSIZED at 1.5-2x character scale (slash arcs, burst rings, spatters). NO ground plane, NO scene, NO character — the effect shape alone on the solid background. Hot core + readable edge; these render additively over the scene.
 Setting: bright toy kingdom rebuilt in Nintendo-era video-game vocabulary — the Zelda move: a real bestiary reinterpreted in-style (knights, fairies, rock-folk, pig-soldiers, skeletal wolves) with Mario-grammar bold readable enemy silhouettes; fairy-tale grim underneath (toys with teeth, Brothers-Grimm menace), cool before cute. Cute things in this realm can be ARMED and dangerous — Roger Rabbit rules: even the weasels carry guns.
-Style: the realm's own stylized register, internally consistent.
+Style: the realm's own stylized register, internally consistent. CLEAN-SHAPES LAW: large flat value planes carry every form; dither only in shadow regions and edges, never mid-tones; silhouette first. The sheet must read clean at 50% zoom.
 Palette: rich storybook palette with real shadow.
 Subjects, one per cell, left to right then top to bottom:
 1. storybook star-pop burst, cheerful sparkle
@@ -99,7 +99,7 @@ Subjects, one per cell, left to right then top to bottom:
 Create a sprite sheet: a 2 rows x 4 columns grid of 8 individual game SCENERY CARDS, evenly spaced, on a solid #FF00FF magenta background filling every non-subject pixel. Canvas orientation: landscape (wider than tall, e.g. 1536x1024).
 Construction: each cell is ONE EFFECT CARD — a bold flat energy/impact shape with visible linework and a strong graphic read, designed to composite OVERSIZED at 1.5-2x character scale (slash arcs, burst rings, spatters). NO ground plane, NO scene, NO character — the effect shape alone on the solid background. Hot core + readable edge; these render additively over the scene.
 Setting: neon-cyberpunk chrome city — gunmetal machines and street-level cyberpunk figures with hyper-neon emissive accents.
-Style: dense pixel art, realistic materials, clean-crisp pixel finish — match dev/model-qa/regen-v3/style-refs/chrome-style-ref.png's grain and palette discipline exactly.
+Style: dense pixel art, realistic materials, clean-crisp pixel finish — match dev/model-qa/regen-v3/style-refs/chrome-style-ref.png's grain and palette discipline exactly. CLEAN-SHAPES LAW: large flat value planes carry every form; dither only in shadow regions and edges, never mid-tones; silhouette first. The sheet must read clean at 50% zoom.
 Palette: rich neon palette against dark metals.
 Subjects, one per cell, left to right then top to bottom:
 1. neon arc-flash, electric cyan crackle
@@ -118,7 +118,7 @@ Subjects, one per cell, left to right then top to bottom:
 Create a sprite sheet: a 2 rows x 4 columns grid of 8 individual game SCENERY CARDS, evenly spaced, on a solid #FF00FF magenta background filling every non-subject pixel. Canvas orientation: landscape (wider than tall, e.g. 1536x1024).
 Construction: each cell is ONE EFFECT CARD — a bold flat energy/impact shape with visible linework and a strong graphic read, designed to composite OVERSIZED at 1.5-2x character scale (slash arcs, burst rings, spatters). NO ground plane, NO scene, NO character — the effect shape alone on the solid background. Hot core + readable edge; these render additively over the scene.
 Setting: midnight cosmic-Egyptian realm — deep navy bodies traced with gold constellation sigils, eldritch star-flesh.
-Style: dense pixel art, realistic materials, clean-crisp pixel finish — match dev/model-qa/regen-v3/style-refs/cosmic-style-ref.png's grain and palette discipline exactly.
+Style: dense pixel art, realistic materials, clean-crisp pixel finish — match dev/model-qa/regen-v3/style-refs/cosmic-style-ref.png's grain and palette discipline exactly. CLEAN-SHAPES LAW: large flat value planes carry every form; dither only in shadow regions and edges, never mid-tones; silhouette first. The sheet must read clean at 50% zoom.
 Palette: disciplined navy-and-gold with rich accent color where the subject earns it.
 Subjects, one per cell, left to right then top to bottom:
 1. gold constellation burst, connecting star-lines
@@ -137,7 +137,7 @@ Subjects, one per cell, left to right then top to bottom:
 Create a sprite sheet: a 2 rows x 4 columns grid of 8 individual game SCENERY CARDS, evenly spaced, on a solid #FF00FF magenta background filling every non-subject pixel. Canvas orientation: landscape (wider than tall, e.g. 1536x1024).
 Construction: each cell is ONE EFFECT CARD — a bold flat energy/impact shape with visible linework and a strong graphic read, designed to composite OVERSIZED at 1.5-2x character scale (slash arcs, burst rings, spatters). NO ground plane, NO scene, NO character — the effect shape alone on the solid background. Hot core + readable edge; these render additively over the scene.
 Setting: classic high-fantasy realm — naturalist medieval world.
-Style: dense pixel art, realistic materials, clean-crisp pixel finish — match dev/model-qa/regen-v3/style-refs/fantasy-style-ref.png's grain and palette discipline exactly.
+Style: dense pixel art, realistic materials, clean-crisp pixel finish — match dev/model-qa/regen-v3/style-refs/fantasy-style-ref.png's grain and palette discipline exactly. CLEAN-SHAPES LAW: large flat value planes carry every form; dither only in shadow regions and edges, never mid-tones; silhouette first. The sheet must read clean at 50% zoom.
 Palette: naturalistic palette, species-true colors.
 Subjects, one per cell, left to right then top to bottom:
 1. leaf-burst scatter, naturalist green flecks
@@ -156,7 +156,7 @@ Subjects, one per cell, left to right then top to bottom:
 Create a sprite sheet: a 2 rows x 4 columns grid of 8 individual game SCENERY CARDS, evenly spaced, on a solid #FF00FF magenta background filling every non-subject pixel. Canvas orientation: landscape (wider than tall, e.g. 1536x1024).
 Construction: each cell is ONE EFFECT CARD — a bold flat energy/impact shape with visible linework and a strong graphic read, designed to composite OVERSIZED at 1.5-2x character scale (slash arcs, burst rings, spatters). NO ground plane, NO scene, NO character — the effect shape alone on the solid background. Hot core + readable edge; these render additively over the scene.
 Setting: wild-west frontier — sun-bleached earth tones, period costume, weathered wood and leather.
-Style: dense pixel art, realistic materials, clean-crisp pixel finish — match dev/model-qa/regen-v3/style-refs/frontier-style-ref.png's grain and palette discipline exactly.
+Style: dense pixel art, realistic materials, clean-crisp pixel finish — match dev/model-qa/regen-v3/style-refs/frontier-style-ref.png's grain and palette discipline exactly. CLEAN-SHAPES LAW: large flat value planes carry every form; dither only in shadow regions and edges, never mid-tones; silhouette first. The sheet must read clean at 50% zoom.
 Palette: earthy palette, species-true color for animals.
 Subjects, one per cell, left to right then top to bottom:
 1. whirling dust-devil kickup, sun-bleached swirl
@@ -175,7 +175,7 @@ Subjects, one per cell, left to right then top to bottom:
 Create a sprite sheet: a 2 rows x 4 columns grid of 8 individual game SCENERY CARDS, evenly spaced, on a solid #FF00FF magenta background filling every non-subject pixel. Canvas orientation: landscape (wider than tall, e.g. 1536x1024).
 Construction: each cell is ONE EFFECT CARD — a bold flat energy/impact shape with visible linework and a strong graphic read, designed to composite OVERSIZED at 1.5-2x character scale (slash arcs, burst rings, spatters). NO ground plane, NO scene, NO character — the effect shape alone on the solid background. Hot core + readable edge; these render additively over the scene.
 Setting: funerary gloom realm — desaturated mourning tones, bone, wilt.
-Style: dense pixel art, realistic materials, grimy dense-dithered finish — match dev/model-qa/regen-v3/style-refs/gloom-style-ref.png's grain and palette discipline exactly.
+Style: dense pixel art, realistic materials, grimy dense-dithered finish — match dev/model-qa/regen-v3/style-refs/gloom-style-ref.png's grain and palette discipline exactly. CLEAN-SHAPES LAW: large flat value planes carry every form; dither only in shadow regions and edges, never mid-tones; silhouette first. The sheet must read clean at 50% zoom.
 Palette: narrow desaturated grey-brown palette.
 Subjects, one per cell, left to right then top to bottom:
 1. black ichor spatter, funerary dark spray
@@ -194,7 +194,7 @@ Subjects, one per cell, left to right then top to bottom:
 Create a sprite sheet: a 2 rows x 4 columns grid of 8 individual game SCENERY CARDS, evenly spaced, on a solid #FF00FF magenta background filling every non-subject pixel. Canvas orientation: landscape (wider than tall, e.g. 1536x1024).
 Construction: each cell is ONE EFFECT CARD — a bold flat energy/impact shape with visible linework and a strong graphic read, designed to composite OVERSIZED at 1.5-2x character scale (slash arcs, burst rings, spatters). NO ground plane, NO scene, NO character — the effect shape alone on the solid background. Hot core + readable edge; these render additively over the scene.
 Setting: drowned age-of-sail realm — brine, barnacle crust, kelp rot, weathered rope and teal spectral glow.
-Style: dense pixel art, realistic materials, grimy dense-dithered finish — match dev/model-qa/regen-v3/style-refs/high-seas-style-ref.png's grain and palette discipline exactly.
+Style: dense pixel art, realistic materials, grimy dense-dithered finish — match dev/model-qa/regen-v3/style-refs/high-seas-style-ref.png's grain and palette discipline exactly. CLEAN-SHAPES LAW: large flat value planes carry every form; dither only in shadow regions and edges, never mid-tones; silhouette first. The sheet must read clean at 50% zoom.
 Palette: muted brine palette with rich teal/brass accents.
 Subjects, one per cell, left to right then top to bottom:
 1. teal spectral flare, ghostly brine glow
@@ -213,7 +213,7 @@ Subjects, one per cell, left to right then top to bottom:
 Create a sprite sheet: a 2 rows x 4 columns grid of 8 individual game SCENERY CARDS, evenly spaced, on a solid #FF00FF magenta background filling every non-subject pixel. Canvas orientation: landscape (wider than tall, e.g. 1536x1024).
 Construction: each cell is ONE EFFECT CARD — a bold flat energy/impact shape with visible linework and a strong graphic read, designed to composite OVERSIZED at 1.5-2x character scale (slash arcs, burst rings, spatters). NO ground plane, NO scene, NO character — the effect shape alone on the solid background. Hot core + readable edge; these render additively over the scene.
 Setting: prehistoric lost-world jungle — dinosaurs and primeval fauna.
-Style: dense pixel art, realistic materials, clean-crisp pixel finish — match dev/model-qa/regen-v3/style-refs/lost-world-style-ref.png's grain and palette discipline exactly.
+Style: dense pixel art, realistic materials, clean-crisp pixel finish — match dev/model-qa/regen-v3/style-refs/lost-world-style-ref.png's grain and palette discipline exactly. CLEAN-SHAPES LAW: large flat value planes carry every form; dither only in shadow regions and edges, never mid-tones; silhouette first. The sheet must read clean at 50% zoom.
 Palette: rich naturalist jungle palette.
 Subjects, one per cell, left to right then top to bottom:
 1. primal roar shockwave, ground-rattle ring
@@ -232,7 +232,7 @@ Subjects, one per cell, left to right then top to bottom:
 Create a sprite sheet: a 2 rows x 4 columns grid of 8 individual game SCENERY CARDS, evenly spaced, on a solid #FF00FF magenta background filling every non-subject pixel. Canvas orientation: landscape (wider than tall, e.g. 1536x1024).
 Construction: each cell is ONE EFFECT CARD — a bold flat energy/impact shape with visible linework and a strong graphic read, designed to composite OVERSIZED at 1.5-2x character scale (slash arcs, burst rings, spatters). NO ground plane, NO scene, NO character — the effect shape alone on the solid background. Hot core + readable edge; these render additively over the scene.
 Setting: rain-slick noir port city — sepia and soot, streetlamp monochrome.
-Style: dense pixel art, realistic materials, grimy dense-dithered finish — match dev/model-qa/regen-v3/style-refs/noir-style-ref.png's grain and palette discipline exactly.
+Style: dense pixel art, realistic materials, grimy dense-dithered finish — match dev/model-qa/regen-v3/style-refs/noir-style-ref.png's grain and palette discipline exactly. CLEAN-SHAPES LAW: large flat value planes carry every form; dither only in shadow regions and edges, never mid-tones; silhouette first. The sheet must read clean at 50% zoom.
 Palette: desaturated sepia-grayscale palette.
 Subjects, one per cell, left to right then top to bottom:
 1. muzzle flash burst, high-contrast monochrome flare
@@ -251,7 +251,7 @@ Subjects, one per cell, left to right then top to bottom:
 Create a sprite sheet: a 2 rows x 4 columns grid of 8 individual game SCENERY CARDS, evenly spaced, on a solid #FF00FF magenta background filling every non-subject pixel. Canvas orientation: landscape (wider than tall, e.g. 1536x1024).
 Construction: each cell is ONE EFFECT CARD — a bold flat energy/impact shape with visible linework and a strong graphic read, designed to composite OVERSIZED at 1.5-2x character scale (slash arcs, burst rings, spatters). NO ground plane, NO scene, NO character — the effect shape alone on the solid background. Hot core + readable edge; these render additively over the scene.
 Setting: uncanny modern suburbia — groomed surfaces hiding menace.
-Style: the realm's own stylized register, internally consistent.
+Style: the realm's own stylized register, internally consistent. CLEAN-SHAPES LAW: large flat value planes carry every form; dither only in shadow regions and edges, never mid-tones; silhouette first. The sheet must read clean at 50% zoom.
 Palette: bright suburban palette, muted for feral subjects.
 Subjects, one per cell, left to right then top to bottom:
 1. sprinkler mist burst, sunny droplet spray
@@ -270,7 +270,7 @@ Subjects, one per cell, left to right then top to bottom:
 Create a sprite sheet: a 2 rows x 4 columns grid of 8 individual game SCENERY CARDS, evenly spaced, on a solid #FF00FF magenta background filling every non-subject pixel. Canvas orientation: landscape (wider than tall, e.g. 1536x1024).
 Construction: each cell is ONE EFFECT CARD — a bold flat energy/impact shape with visible linework and a strong graphic read, designed to composite OVERSIZED at 1.5-2x character scale (slash arcs, burst rings, spatters). NO ground plane, NO scene, NO character — the effect shape alone on the solid background. Hot core + readable edge; these render additively over the scene.
 Setting: endless-war theater realm — WWI trench grime, mud, rust, gas-haze, war-torn cloth.
-Style: dense pixel art, realistic materials, grimy dense-dithered finish — match dev/model-qa/regen-v3/style-refs/theater-style-ref.png's grain and palette discipline exactly.
+Style: dense pixel art, realistic materials, grimy dense-dithered finish — match dev/model-qa/regen-v3/style-refs/theater-style-ref.png's grain and palette discipline exactly. CLEAN-SHAPES LAW: large flat value planes carry every form; dither only in shadow regions and edges, never mid-tones; silhouette first. The sheet must read clean at 50% zoom.
 Palette: narrow mud-olive palette with drab military tones.
 Subjects, one per cell, left to right then top to bottom:
 1. artillery shell burst, mud-olive smoke bloom

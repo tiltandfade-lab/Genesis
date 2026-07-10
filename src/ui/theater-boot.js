@@ -2908,10 +2908,17 @@ function markDirty(){
 function updateSpriteBillboardYaw(){
   const yaw = (S.rotationStep * 90 * Math.PI) / 180 + (CAM_YAW_OFFSET_DEG * Math.PI) / 180;
   const facing = yaw + Math.PI;
+  // Camera-pitch tilt (Adam 2026-07-10 evening): an upright quad under the elevated ortho camera
+  // foreshortens vertically by cos(elevation) — reads as a SQUASHED sprite. Tilting each standee
+  // back by the camera elevation makes the quad camera-perpendicular: full sprite height on
+  // screen, no distortion, feet still anchored at the group origin. rotation order YXZ so the
+  // pitch rides the yaw.
+  const tilt = (CAM_ELEV_DEG * Math.PI) / 180; // top leans AWAY from the camera (standee), not into the floor
+  function face(fig){ fig.rotation.order = "YXZ"; fig.rotation.y = facing; fig.rotation.x = tilt; }
   if(S.unitGroup){
     for(let i = 0; i < S.unitGroup.children.length; i++){
       const fig = S.unitGroup.children[i];
-      if(fig && fig.userData && fig.userData.sprite) fig.rotation.y = facing;
+      if(fig && fig.userData && fig.userData.sprite) face(fig);
     }
   }
   // DUNGEON-GRAPH.md U3 iteration-2, ruling 3: interior "pieces" (creature/PC sprites standing in the
@@ -2925,7 +2932,7 @@ function updateSpriteBillboardYaw(){
       if(!sub || !sub.children) continue;
       for(let j = 0; j < sub.children.length; j++){
         const fig = sub.children[j];
-        if(fig && fig.userData && fig.userData.sprite) fig.rotation.y = facing;
+        if(fig && fig.userData && fig.userData.sprite) face(fig);
       }
     }
   }
@@ -4140,7 +4147,7 @@ function interiorUnitBoxGeometry(){
 // study rig's AO variant is on (product callers never set this; see setInteriorVariant below).
 function interiorApplyAODarkening(instances){
   const wallKeys = new Set((instances.wall || []).map((w) => w.x + "," + w.z));
-  const AO_FACTOR = 0.68;
+  const AO_FACTOR = 0.45; // was 0.68 — invisible next to torch lighting at room framing (Adam, card v5)
   ["floor", "doorframe"].forEach((kind) => {
     (instances[kind] || []).forEach((inst) => {
       const seam = [[1, 0], [-1, 0], [0, 1], [0, -1]].some(([dx, dz]) => wallKeys.has((inst.x + dx) + "," + (inst.z + dz)));

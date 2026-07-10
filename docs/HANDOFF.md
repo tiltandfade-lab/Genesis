@@ -6,7 +6,45 @@ updated: 2026-07-10
 
 # Genesis — Session Hand-off
 
-## ⭐ Latest (2026-07-10) — SPRITE-GEN-V2: cleanup, perspective law, V3 wave gated (650 sprites), casting tags [Claude Fable]
+## ⭐ Latest (2026-07-10 afternoon) — corpus retro-tag + DUNGEON-GRAPH U1/U2/U4 + hardened codex packets [Claude Fable]
+
+Branch `claude/genesis-sprite-corpus-tags-edeaac` (pushed; **merge to master = Adam's call**).
+All 896 committed sprites carry casting-grade tags (`dev/model-qa/corpus-tags.json`) + true-scale
+sizing (`corpus-sizing.json`, feet/5.5 — the overlay's old scale is a compressed render scale,
+not comparable for large+). Ash painterly drift CONFIRMED in the 9 committed npc/kids/animal
+sheets (mm sheets clean) → quarantined + re-queued; 13 label/art mismatches relabeled-to-art
+(fantasy-npcs-2 was systemically misassigned), orphan roles re-queued. **DUNGEON-GRAPH is FULLY BUILT
+(U1/U2/U3/U4)**: walk topologies → verified cell-grid floor plans with room roles,
+depth=difficulty, SCALE DOMAINS (docs/DUNGEON-GRAPH.md; place-spatialize 9/9, place-semantics
+26/26, walk-bind 20/20, fuzz/monkey clean). Laws ruled: TRUE-SCALE render, EXPRESSIVE CREATURE
+(FFVI), ADDITIVE FOLD, NO-BLANK-SLOTS, BUG COROLLARY; docs/GUISE.md = universal sprite-swap
+spec. Codex packets (rounds 2+3) hardened for the ~5PM window — `regen-v3/round3/RUN-NOTES.md`
+is the paste order (recovery step 0 first). sprite-review gained the FLOOR-line setter
+(click sprite → overlay `floor` → registry). docs/GIT-LFS-MIGRATION.md = ready runbook.
+
+**Verification:** check-manifest OK; dungeon harnesses 9/26/27/20 + walk-consumption 37 +
+combat-cells 13 + dm-events 70 all green; gauntlet fuzz 0 findings, monkey 0 aborted.
+Known pre-existing red: `verify-table-usage-data.mjs` fails on master too (1 check) — not ours.
+
+**Do next (pick up here):**
+1. **Study-card RE-SHOT then Adam's taste gate** — U3 LANDED (volumetric prisms proven,
+   4-draw-call budget, 27/27; orchestrator caught + fixed the U3↔U4 pn.spatial seam) but the
+   card's fog variants render near-black and gloom is underexposed — recalibrate
+   dev/battle-gate/capture-interior-study.mjs (fog density, gloom exposure, suppress the
+   ambient toast) and re-shoot before Adam picks the finish. THEN the finale: battle scene
+   in a real generated dungeon room at true scale + loop test.
+2. Adam's ~5PM codex window → `regen-v3/round3/RUN-NOTES.md` (recovery first, then round-2
+   remainder, then round-3); gate → slice → tag arrivals per the ADDITIVE FOLD LAW.
+3. Registry sizing fold: corpus-sizing.json + v3-sizing.json + `floor` rulings →
+   regenerate data/sprite-registry.js (never hand-edit); then Adam re-judges the "crusty
+   mediums" in-engine (his ruling: no fails on resolution alone until seen in engine).
+4. GIT-LFS migration at the first quiet post-merge moment (docs/GIT-LFS-MIGRATION.md;
+   needs Adam: $5 LFS pack + force-push confirm).
+5. GUISE G1-G4 + NPC expression pass ride together after sprite assignments settle.
+6. Land the sprite lane (claude/sprite-gen-refactor-magenta, now fully committed) at the
+   gen-wave sweep, per standing plan.
+
+## Latest (2026-07-10) — SPRITE-GEN-V2: cleanup, perspective law, V3 wave gated (650 sprites), casting tags [Claude Fable]
 
 The great sprite cleanup after the 2026-07-09 overnight codex blast. **State:** worktrees pruned 21→1
 (only the sprite-gen lane remains, its 59 round-2 sheets still parked there); all 2,431 uncommitted

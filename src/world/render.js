@@ -467,10 +467,9 @@ function theaterHereSourceFor(w){
   // home as pn.segments, docs/DUNGEON-GRAPH.md "Shared data shape" header) renders its current room +
   // immediate surroundings as the volumetric standing table instead of the flat combat-zone-grid tray.
   // pn.spatial is stamped by prepAttachSpatialPlan (src/world/prep.js, U4) for dungeon-shaped
-  // DUNGEON-GRAPH.md U4's "walk binding" job, explicitly out of scope here) — this branch is the
-  // RENDER-SIDE half only, additive and dormant until U4 lands: absent pn.spatial (every walk
-  // today), theaterHereSourceFor is byte-identical to before this unit (falls through to the existing
-  // {kind:"segment"} return below).
+  // frontiers at prep time. This branch is the render-side half: absent pn.spatial (non-dungeon
+  // walks), theaterHereSourceFor falls through byte-identical to the existing {kind:"segment"}
+  // return below.
   if(pn.spatial){
     return { kind:"interior", plan:pn.spatial, focusSegNum:cur, radius:1,
       env:walk.environment||undefined, realms:realms,

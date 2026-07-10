@@ -413,5 +413,56 @@ function extractConst(src, name){
   }
 }
 
+console.log("\n=== PART C — findUnit resolves interior-board pieces, not just combat unitGroup (dungeon-loop-gate finding) ===");
+// FINDING (dev/battle-gate/capture-dungeon-loop.mjs, 2026-07-10): interiorBuildPieces (the
+// setInteriorBoard `pieces` layer) mounts sprite billboards under S.interiorGroup's own pieces
+// sub-group, never S.unitGroup — before this unit's fix, findUnit only ever searched S.unitGroup, so
+// play(verb,{who:fid}) could NEVER resolve a creature standing in a rendered interior room even when
+// interiorBuildPieces had already tagged it userData.unitId=fid. RED-FIRST (re-checked live against
+// this same tip, not just cited): the OLD findUnit body (`if(!S.unitGroup...` guard, single flat loop
+// over S.unitGroup.children only) is verifiably absent from theater-boot.js today —
+// `grep -c "if(S.interiorGroup){" ` below asserts the fix's own new branch is present in the real file
+// (not a description of it) before exercising the extracted function against a stub scene graph.
+{
+  const hasInteriorBranch = (bootSrc.match(/function findUnit\(id\)\{[\s\S]{0,900}?S\.interiorGroup/) != null);
+  check("C0-setup. RED-FIRST: theater-boot.js's real findUnit(id) body reaches S.interiorGroup (the fix is actually present in source, not just this harness's stub)",
+    hasInteriorBranch);
+
+  const findUnitFnSrc = extractFn(bootSrc, "findUnit");
+  check("C0-setup. theater-boot.js's real findUnit(id) function is present", !!findUnitFnSrc);
+
+  if (findUnitFnSrc) {
+    const factory = new Function("S", findUnitFnSrc + "\nreturn findUnit;");
+    // a piece mounted by interiorBuildPieces: a billboard GROUP tagged userData.sprite + userData.unitId
+    // (only when the caller supplied a fid — see this unit's own comment on interiorBuildPieces), sitting
+    // TWO levels below S.interiorGroup (interiorGroup -> pieces-subgroup -> the billboard group itself),
+    // the exact tree shape updateSpriteBillboardYaw's own precedent traversal already assumes.
+    const interiorPiece = { userData: { sprite: true, unitId: "f3" } };
+    const piecesSubGroup = { children: [interiorPiece] };
+    const combatUnit = { userData: { sprite: true, unitId: "f1" } };
+    const S = {
+      unitGroup: { children: [combatUnit] },
+      interiorGroup: { children: [piecesSubGroup] },
+    };
+    const findUnit = factory(S);
+
+    check("C1a. findUnit resolves a combat unit from S.unitGroup unchanged (byte-identical to pre-fix behavior)",
+      findUnit("f1") === combatUnit);
+    check("C1b. findUnit resolves an interior-board piece nested in S.interiorGroup's pieces sub-group (the fix)",
+      findUnit("f3") === interiorPiece);
+    check("C1c. findUnit still returns null for an unknown id",
+      findUnit("nope") === null);
+    check("C1d. findUnit is null-safe with no S.interiorGroup at all (a plain combat-stage mount, no interior board ever set)",
+      (() => { const S2 = { unitGroup: { children: [combatUnit] } }; const fu2 = factory(S2); return fu2("f1") === combatUnit && fu2("f3") === null; })());
+
+    // MUTATION: prove C1b is load-bearing, not vacuous — with the interiorGroup search disabled
+    // (simulating the pre-fix function), "f3" must fail to resolve.
+    const preFixSrc = "function findUnit(id){ if(!S.unitGroup || id == null) return null; const idStr = String(id); for(let i=0;i<S.unitGroup.children.length;i++){ if(S.unitGroup.children[i].userData && S.unitGroup.children[i].userData.unitId === idStr) return S.unitGroup.children[i]; } return null; }";
+    const preFixFindUnit = new Function("S", preFixSrc + "\nreturn findUnit;")(S);
+    check("C1e. ⊗ MUTATION: the pre-fix findUnit body fails to resolve the same interior piece (proves C1b isn't vacuous)",
+      preFixFindUnit("f3") === null);
+  }
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail > 0 ? 1 : 0);

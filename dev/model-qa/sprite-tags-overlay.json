@@ -13,10 +13,12 @@
   "spr-fantasy-aberrant-cultist": {
     "groundOffset": 0.07,
     "note": "auto-scale v2 (span 0.86): est 5.8′",
-    "scale": 1.124
+    "scale": 1.124,
+    "verdict": "pass"
   },
   "spr-fantasy-abominable-yeti": {
-    "scale": 0.778
+    "scale": 0.99,
+    "verdict": "fail"
   },
   "spr-fantasy-adult-black-dragon": {
     "note": "⚠ auto-scale (art likely extends above head): est 18′",
@@ -168,7 +170,8 @@
   "spr-fantasy-archmage": {
     "groundOffset": 0.05,
     "note": "auto-scale v2 (span 0.90): est 5.9′ — staff rises above head, excluded from crown",
-    "scale": 1.093
+    "scale": 1.28,
+    "verdict": "pass"
   },
   "spr-fantasy-archpriest": {
     "note": "⚠ auto-scale (height uncertain): est 5.8′",
@@ -178,7 +181,8 @@
   "spr-fantasy-assassin": {
     "groundOffset": 0.14,
     "note": "⚠ auto-scale v2 (span 0.78): est 5.8′ (low conf) — crouched leaping pose lowers apparent crop height vs standing height",
-    "scale": 1.239
+    "scale": 1.12,
+    "verdict": "pass"
   },
   "spr-fantasy-astral-raider-dracomancer": {
     "note": "⚠ auto-scale (height uncertain): est 6′",
@@ -223,12 +227,14 @@
   "spr-fantasy-baboon": {
     "groundOffset": 0.15,
     "note": "⚠ auto-scale v2 (span 0.73): est 2.3′ (low conf) — quadruped; crown height measured at raised head, not shoulder",
-    "scale": 0.525
+    "scale": 1.09,
+    "verdict": "pass"
   },
   "spr-fantasy-badger": {
     "groundOffset": 0.15,
     "note": "⚠ auto-scale v2 (span 0.70): est 1′ (low conf)",
-    "scale": 0.476
+    "scale": 0.65,
+    "verdict": "pass"
   },
   "spr-fantasy-balor": {
     "note": "⚠ auto-scale (art likely extends above head): est 14′",
@@ -268,7 +274,7 @@
   "spr-fantasy-banshee": {
     "note": "⚠ auto-scale (art likely extends above head): est 5.5′",
     "scale": 1.14,
-    "verdict": "fail"
+    "verdict": "pass"
   },
   "spr-fantasy-barbed-devil": {
     "note": "⚠ auto-scale (art likely extends above head): est 6.5′",
@@ -282,7 +288,8 @@
   "spr-fantasy-bat": {
     "groundOffset": 0.28,
     "note": "⚠ auto-scale v2 (span 0.42): est 2′ (low conf) — in flight, no ground contact — used visual float-line under tucked legs",
-    "scale": 1.587
+    "scale": 1.587,
+    "verdict": "pass"
   },
   "spr-fantasy-bearded-devil": {
     "note": "⚠ auto-scale (art likely extends above head): est 6.5′",
@@ -316,7 +323,8 @@
   "spr-fantasy-black-pudding": {
     "groundOffset": 0.06,
     "note": "auto-scale v2 (span 0.89): est 5′ — no-head ooze, top of main mass used as crown",
-    "scale": 0.468
+    "scale": 0.91,
+    "verdict": "pass"
   },
   "spr-fantasy-blind-deep-stalker": {
     "note": "⚠ auto-scale (height uncertain): est 5.5′",
@@ -366,7 +374,8 @@
   "spr-fantasy-bone-naga": {
     "groundOffset": 0.05,
     "note": "auto-scale v2 (span 0.90): est 8′ — reared serpent-humanoid; tail-coil contact used as ground line",
-    "scale": 0.741
+    "scale": 1.06,
+    "verdict": "pass"
   },
   "spr-fantasy-brain-crawler": {
     "note": "⚠ auto-scale (height uncertain; art likely extends above head): est 1.5′",
@@ -416,7 +425,8 @@
   "spr-fantasy-bulette": {
     "groundOffset": 0.1,
     "note": "auto-scale v2 (span 0.75): est 5′ — crown at eye-ridge, excludes dorsal armor points",
-    "scale": 0.556
+    "scale": 1.14,
+    "verdict": "pass"
   },
   "spr-fantasy-bulette-pup": {
     "note": "⚠ auto-scale (height uncertain): est 4′",
@@ -451,7 +461,8 @@
   "spr-fantasy-cat": {
     "groundOffset": 0.12,
     "note": "auto-scale v2 (span 0.60): est 1.2′ — pouncing crouch; ground line at hind-paw contact, front paw reaching not grounded",
-    "scale": 0.667
+    "scale": 0.667,
+    "verdict": "pass"
   },
   "spr-fantasy-centaur-trooper": {
     "note": "⚠ auto-scale (art likely extends above head): est 7′",
@@ -519,7 +530,8 @@
     "scale": 0.863
   },
   "spr-fantasy-cloud-giant": {
-    "scale": 1.333
+    "scale": 1.02,
+    "verdict": "fail"
   },
   "spr-fantasy-cockatrice": {
     "note": "⚠ auto-scale (art likely extends above head): est 2.5′",
@@ -539,7 +551,8 @@
   "spr-fantasy-commoner": {
     "groundOffset": 0.05,
     "note": "auto-scale v2 (span 0.88): est 5.8′",
-    "scale": 1.098
+    "scale": 0.96,
+    "verdict": "pass"
   },
   "spr-fantasy-constrictor-snake": {
     "groundOffset": 0.12,
@@ -559,12 +572,14 @@
   "spr-fantasy-crab": {
     "groundOffset": 0.15,
     "note": "auto-scale v2 (span 0.65): est 0.4′",
-    "scale": 0.205
+    "scale": 0.38,
+    "verdict": "pass"
   },
   "spr-fantasy-crawling-claw": {
     "groundOffset": 0.08,
     "note": "⚠ auto-scale v2 (span 0.80): est 1.2′ (low conf) — crouched crawling pose, crown/ground both ambiguous",
-    "scale": 0.5
+    "scale": 0.94,
+    "verdict": "pass"
   },
   "spr-fantasy-crocodile": {
     "groundOffset": 0.15,
@@ -877,12 +892,12 @@
   },
   "spr-fantasy-dungeon-animal-cave-adapted-spider-pale-eyeless-spins-webs-across-passages-nobody-s-walked-in-years": {
     "note": "⚠ auto-scale (scale clamped): est 0.5′",
-    "scale": 0.1,
+    "scale": 0.51,
     "verdict": "pass"
   },
   "spr-fantasy-dungeon-animal-cave-cricket-oversized-chirping-alone-in-the-dark-first-warning-of-the-swarm-nearby": {
     "note": "⚠ auto-scale (scale clamped): est 0.4′",
-    "scale": 0.16,
+    "scale": 0.52,
     "verdict": "pass"
   },
   "spr-fantasy-dungeon-animal-chained-beast-escaped-its-post-a-working-animal-that-slipped-its-old-restraint-still-wears-the-collar": {
@@ -897,13 +912,13 @@
   },
   "spr-fantasy-dungeon-animal-echo-startled-bird-a-single-bird-trapped-in-the-upper-galleries-flies-at-every-footstep": {
     "note": "⚠ auto-scale (art likely extends above head; scale clamped): est 0.4′",
-    "scale": 0.18,
+    "scale": 0.29,
     "verdict": "pass"
   },
   "spr-fantasy-dungeon-animal-feral-falconry-bird-a-hawk-that-escaped-its-jesses-generations-ago-now-hunts-the-tunnels-vermin": {
     "groundOffset": 0.22,
-    "note": "⚠ auto-scale v2 (span 0.72): est 1.6′ (low conf) — dynamic flight/dive pose, no ground line; trailing jess/lure below talons excluded",
-    "scale": 0.37
+    "scale": 0.5,
+    "verdict": "pass"
   },
   "spr-fantasy-dungeon-animal-feral-vermin-catcher-once-someone-s-ferret-or-terrier-now-lives-wild-in-the-tunnels-still-killing-rats-out-of-habit": {
     "note": "⚠ auto-scale (height uncertain): est 1.0′",
@@ -912,7 +927,7 @@
   },
   "spr-fantasy-dungeon-animal-glow-moss-grazer-a-small-rodent-whose-fur-has-picked-up-a-faint-luminescence-from-what-it-eats": {
     "note": "⚠ auto-scale (height uncertain; scale clamped): est 0.3′",
-    "scale": 0.13,
+    "scale": 0.26,
     "verdict": "pass"
   },
   "spr-fantasy-dungeon-animal-half-tamed-thing-comes-to-a-lantern-s-light-never-a-hand-feeds-on-what-the-dungeon-leaves-behind": {
@@ -921,23 +936,23 @@
     "verdict": "pass"
   },
   "spr-fantasy-dungeon-animal-lost-hunting-hound-a-noble-s-dog-that-wandered-too-far-in-and-never-found-the-way-back-out": {
-    "scale": 0.333,
+    "scale": 0.4,
     "verdict": "pass"
   },
   "spr-fantasy-dungeon-animal-nest-robbing-crow-one-bird-that-s-learned-the-dungeon-s-side-passages-better-than-most-explorers": {
     "note": "⚠ auto-scale (scale clamped): est 0.6′",
-    "scale": 0.17,
+    "scale": 0.22,
     "verdict": "pass"
   },
   "spr-fantasy-dungeon-animal-scarred-guard-dog-gone-feral-once-trained-to-patrol-these-halls-now-answers-to-no-one": {
     "groundOffset": 0.03,
-    "note": "⚠ auto-scale v2 (span 0.88): est 2.8′ (low conf)",
-    "scale": 0.53
+    "scale": 0.44,
+    "verdict": "pass"
   },
   "spr-fantasy-dungeon-animal-sole-survivor-packhorse-the-last-of-a-caravan-s-animals-malnourished-still-saddled": {
     "groundOffset": 0.03,
-    "note": "auto-scale v2 (span 0.93): est 5.3′",
-    "scale": 0.95
+    "scale": 1.14,
+    "verdict": "pass"
   },
   "spr-fantasy-dungeon-animal-starving-stray-a-cat-or-dog-that-followed-someone-in-and-got-left-behind": {
     "note": "⚠ auto-scale (height uncertain): est 1.5′",
@@ -966,23 +981,23 @@
   },
   "spr-fantasy-dungeon-animal-unnervingly-large-lone-rat-alone-watching-doesn-t-scatter-like-the-others": {
     "note": "⚠ auto-scale (scale clamped): est 0.4′",
-    "scale": 0.1,
+    "scale": 0.17,
     "verdict": "pass"
   },
   "spr-fantasy-dungeon-animal-wrong-place-goat-a-farm-animal-that-fell-through-a-sinkhole-and-somehow-survived-down-here": {
     "groundOffset": 0.05,
-    "note": "⚠ auto-scale v2 (span 0.81): est 3′ (low conf) — horns excluded from crown",
-    "scale": 0.617
+    "scale": 0.55,
+    "verdict": "pass"
   },
   "spr-fantasy-dungeon-animal-wrongly-still-lizard-motionless-so-long-it-s-mistaken-for-a-carving-until-it-isn-t": {
     "note": "⚠ auto-scale (scale clamped): est 0.3′",
-    "scale": 0.16,
+    "scale": 0.24,
     "verdict": "pass"
   },
   "spr-fantasy-dust-mephit": {
     "note": "⚠ auto-scale (art likely extends above head): est 3′",
     "scale": 0.94,
-    "verdict": "fail"
+    "verdict": "pass"
   },
   "spr-fantasy-dwarven-brewer-the-tavern-s-actual-reason-for-existing": {
     "groundOffset": 0.03,
@@ -1012,7 +1027,8 @@
   "spr-fantasy-eagle": {
     "groundOffset": 0.3,
     "note": "⚠ auto-scale v2 (span 0.65): est 2.7′ (low conf) — dive/attack flight pose, float-line taken at talons; trailing tail feathers excluded",
-    "scale": 0.692
+    "scale": 0.692,
+    "verdict": "pass"
   },
   "spr-fantasy-earth-elemental": {
     "note": "⚠ auto-scale (art likely extends above head): est 8′",
@@ -1046,7 +1062,7 @@
   },
   "spr-fantasy-elk": {
     "note": "⚠ auto-scale (art likely extends above head): est 7′",
-    "scale": 1.02,
+    "scale": 0.97,
     "verdict": "fail"
   },
   "spr-fantasy-elven-archivist-keeper-of-a-library-older-than-the-town-around-it": {
@@ -1133,6 +1149,9 @@
     "scale": 1.22,
     "verdict": "pass"
   },
+  "spr-fantasy-fire-giant": {
+    "verdict": "fail"
+  },
   "spr-fantasy-fish-folk": {
     "note": "⚠ auto-scale (height uncertain): est 5′",
     "scale": 1.19,
@@ -1156,7 +1175,8 @@
   "spr-fantasy-flameskull": {
     "groundOffset": 0.15,
     "note": "⚠ auto-scale v2 (span 0.53): est 0.6′ (low conf) — true flyer, no ground contact; bone skull top under flame corona, float-line at base of fire mass",
-    "scale": 0.377
+    "scale": 0.97,
+    "verdict": "pass"
   },
   "spr-fantasy-flaming-skeleton": {
     "note": "⚠ auto-scale (art likely extends above head): est 5.8′",
@@ -1181,10 +1201,12 @@
   "spr-fantasy-frog": {
     "groundOffset": 0.1,
     "note": "⚠ auto-scale v2 (span 0.76): est 0.4′ (low conf) — ordinary Tiny frog, squat crouched stance",
-    "scale": 0.175
+    "scale": 0.26,
+    "verdict": "pass"
   },
   "spr-fantasy-frost-giant": {
-    "scale": 0.889
+    "scale": 0.889,
+    "verdict": "fail"
   },
   "spr-fantasy-galeb-duhr": {
     "note": "⚠ auto-scale (height uncertain): est 6′",
@@ -1221,7 +1243,7 @@
   },
   "spr-fantasy-ghost": {
     "note": "⚠ auto-scale (art likely extends above head): est 6′",
-    "verdict": "fail"
+    "verdict": "pass"
   },
   "spr-fantasy-ghoul": {
     "groundOffset": 0.07,
@@ -1229,7 +1251,8 @@
     "scale": 1.104
   },
   "spr-fantasy-giant-ape": {
-    "scale": 0.667
+    "scale": 1.01,
+    "verdict": "fail"
   },
   "spr-fantasy-giant-axe-beak": {
     "note": "⚠ auto-scale (height uncertain; art likely extends above head): est 9′",
@@ -1267,7 +1290,8 @@
   "spr-fantasy-giant-crocodile": {
     "groundOffset": 0.12,
     "note": "auto-scale v2 (span 0.66): est 4.5′ — low sprawling body; head/eye-ridge crown, front feet ground line",
-    "scale": 0.379
+    "scale": 1.13,
+    "verdict": "fail"
   },
   "spr-fantasy-giant-eagle": {
     "note": "⚠ auto-scale (art likely extends above head): est 6′",
@@ -1276,7 +1300,7 @@
   },
   "spr-fantasy-giant-elk": {
     "note": "⚠ auto-scale (art likely extends above head): est 9′",
-    "scale": 0.5,
+    "scale": 0.71,
     "verdict": "fail"
   },
   "spr-fantasy-giant-fire-beetle": {
@@ -1331,7 +1355,8 @@
   "spr-fantasy-giant-shark": {
     "groundOffset": 0.15,
     "note": "⚠ auto-scale v2 (span 0.73): est 5′ (low conf) — horizontal swimmer, no ground contact; dorsal-to-belly body depth used as proxy",
-    "scale": 0.381
+    "scale": 1.09,
+    "verdict": "fail"
   },
   "spr-fantasy-giant-spider": {
     "groundOffset": 0.08,
@@ -1501,12 +1526,12 @@
   "spr-fantasy-greater-shadow": {
     "note": "⚠ auto-scale (height uncertain; art likely extends above head): est 5.5′",
     "scale": 0.917,
-    "verdict": "fail"
+    "verdict": "pass"
   },
   "spr-fantasy-green-chaos-frog": {
     "note": "⚠ auto-scale (height uncertain): est 7′",
     "scale": 1.2,
-    "verdict": "fail"
+    "verdict": "pass"
   },
   "spr-fantasy-green-dragon-wyrmling": {
     "note": "⚠ auto-scale (art likely extends above head): est 5.5′",
@@ -1659,7 +1684,8 @@
   "spr-fantasy-hippopotamus": {
     "groundOffset": 0.1,
     "note": "⚠ auto-scale v2 (span 0.80): est 5′ (low conf) — head raised with jaw open, raising crown line above resting shoulder height",
-    "scale": 0.521
+    "scale": 1.01,
+    "verdict": "pass"
   },
   "spr-fantasy-hired-blade-dwarf": {
     "groundOffset": 0.08,
@@ -1768,7 +1794,7 @@
   "spr-fantasy-invisible-stalker": {
     "note": "⚠ auto-scale (height uncertain): est 8′",
     "scale": 1.08,
-    "verdict": "fail"
+    "verdict": "pass"
   },
   "spr-fantasy-jackal": {
     "scale": 0.51,
@@ -1887,7 +1913,8 @@
   "spr-fantasy-killer-whale": {
     "groundOffset": 0.18,
     "note": "⚠ auto-scale v2 (span 0.77): est 9′ (low conf) — breaching from water; groundFrac = splash/waterline, not a true stand height",
-    "scale": 0.649
+    "scale": 1.03,
+    "verdict": "pass"
   },
   "spr-fantasy-knight": {
     "note": "⚠ auto-scale (art likely extends above head): est 6′",
@@ -1911,13 +1938,14 @@
   },
   "spr-fantasy-lacedon-sodden-ghoul": {
     "note": "⚠ auto-scale (height uncertain): est 5′",
-    "scale": 1.15,
-    "verdict": "fail"
+    "scale": 1.03,
+    "verdict": "pass"
   },
   "spr-fantasy-lamia": {
     "groundOffset": 0.03,
     "note": "⚠ auto-scale v2 (span 0.89): est 9′ (low conf) — coiled serpent tail elevates torso; ground = tail's lowest coil contact",
-    "scale": 0.843
+    "scale": 1.05,
+    "verdict": "pass"
   },
   "spr-fantasy-land-worker-dragonborn": {
     "groundOffset": 0.04,
@@ -1965,7 +1993,8 @@
   "spr-fantasy-mage": {
     "groundOffset": 0.04,
     "note": "⚠ auto-scale v2 (span 0.80): est 5.7′ (low conf) — crown = skull top under hat brim, not the hat's pointed tip",
-    "scale": 1.188
+    "scale": 1.188,
+    "verdict": "pass"
   },
   "spr-fantasy-magma-mephit": {
     "note": "⚠ auto-scale (art likely extends above head): est 3′",
@@ -1999,8 +2028,8 @@
   },
   "spr-fantasy-manes-vaporspawn": {
     "note": "⚠ auto-scale (height uncertain): est 4.5′",
-    "scale": 1.31,
-    "verdict": "fail"
+    "scale": 1.2,
+    "verdict": "pass"
   },
   "spr-fantasy-manticore": {
     "note": "⚠ auto-scale (art likely extends above head): est 6′",
@@ -2034,12 +2063,11 @@
   },
   "spr-fantasy-merfolk-wavebender": {
     "note": "⚠ auto-scale (height uncertain): est 5.5′",
-    "scale": 0.917,
-    "verdict": "fail"
+    "verdict": "pass"
   },
   "spr-fantasy-merrow": {
     "note": "⚠ auto-scale (art likely extends above head): est 9′",
-    "scale": 1.18,
+    "scale": 1.03,
     "verdict": "fail"
   },
   "spr-fantasy-metalworker-orc": {
@@ -2241,7 +2269,8 @@
   "spr-fantasy-owlbear": {
     "groundOffset": 0.05,
     "note": "auto-scale v2 (span 0.85): est 8′",
-    "scale": 0.784
+    "scale": 1.13,
+    "verdict": "pass"
   },
   "spr-fantasy-owlbear-cub": {
     "note": "⚠ auto-scale (height uncertain): est 4′",
@@ -2608,12 +2637,12 @@
   "spr-fantasy-skeleton-archer": {
     "note": "⚠ auto-scale (art likely extends above head): est 5.5′",
     "scale": 1.14,
-    "verdict": "fail"
+    "verdict": "pass"
   },
   "spr-fantasy-skeleton-warrior": {
     "note": "⚠ auto-scale (art likely extends above head): est 5.7′",
     "scale": 0.99,
-    "verdict": "fail"
+    "verdict": "pass"
   },
   "spr-fantasy-smoke-mephit": {
     "note": "⚠ auto-scale (art likely extends above head): est 3′",
@@ -2628,12 +2657,12 @@
   "spr-fantasy-solar": {
     "note": "⚠ auto-scale (art likely extends above head): est 10′",
     "scale": 0.833,
-    "verdict": "fail"
+    "verdict": "pass"
   },
   "spr-fantasy-specter": {
     "note": "⚠ auto-scale (art likely extends above head): est 5.5′",
     "scale": 0.917,
-    "verdict": "fail"
+    "verdict": "pass"
   },
   "spr-fantasy-sphinx-of-lore": {
     "note": "⚠ auto-scale (height uncertain): est 8′",
@@ -2700,11 +2729,16 @@
     "scale": 1.19,
     "verdict": "pass"
   },
+  "spr-fantasy-stone-giant": {
+    "verdict": "fail"
+  },
   "spr-fantasy-stone-golem": {
-    "scale": 0.833
+    "scale": 1.08,
+    "verdict": "fail"
   },
   "spr-fantasy-storm-giant": {
-    "scale": 1.167
+    "scale": 1.07,
+    "verdict": "fail"
   },
   "spr-fantasy-succubus": {
     "note": "⚠ auto-scale (art likely extends above head): est 6′",
@@ -2732,7 +2766,7 @@
   },
   "spr-fantasy-swarm-of-insects": {
     "note": "⚠ auto-scale (height uncertain): est 3′",
-    "scale": 0.5,
+    "scale": 1.16,
     "verdict": "fail"
   },
   "spr-fantasy-swarm-of-larvae": {
@@ -2747,8 +2781,8 @@
   },
   "spr-fantasy-swarm-of-piranhas": {
     "note": "⚠ auto-scale (height uncertain): est 2′",
-    "scale": 1.77,
-    "verdict": "fail"
+    "scale": 1.12,
+    "verdict": "pass"
   },
   "spr-fantasy-swarm-of-rats": {
     "note": "⚠ auto-scale (height uncertain): est 2′",
@@ -2803,7 +2837,7 @@
   "spr-fantasy-the-vine-blight": {
     "note": "⚠ auto-scale (art likely extends above head): est 5′",
     "scale": 1.18,
-    "verdict": "fail"
+    "verdict": "pass"
   },
   "spr-fantasy-thief-halfling": {
     "groundOffset": 0.04,
@@ -2873,7 +2907,7 @@
   "spr-fantasy-tree-blight": {
     "note": "⚠ auto-scale (height uncertain; art likely extends above head): est 14′",
     "scale": 0.778,
-    "verdict": "fail"
+    "verdict": "pass"
   },
   "spr-fantasy-triceratops": {
     "note": "⚠ auto-scale (art likely extends above head): est 9′",
@@ -2885,12 +2919,13 @@
     "scale": 1.03
   },
   "spr-fantasy-troll": {
-    "scale": 0.75
+    "scale": 1.12,
+    "verdict": "pass"
   },
   "spr-fantasy-troll-amalgam": {
     "note": "⚠ auto-scale (height uncertain; art likely extends above head): est 10′",
     "scale": 0.833,
-    "verdict": "fail"
+    "verdict": "pass"
   },
   "spr-fantasy-troll-limb": {
     "note": "⚠ auto-scale (height uncertain): est 2′",
@@ -2898,7 +2933,8 @@
     "verdict": "pass"
   },
   "spr-fantasy-tyrannosaurus-rex": {
-    "scale": 0.833
+    "scale": 0.833,
+    "verdict": "fail"
   },
   "spr-fantasy-ultroloth": {
     "note": "⚠ auto-scale (height uncertain): est 6′",
@@ -3011,12 +3047,13 @@
     "verdict": "pass"
   },
   "spr-fantasy-water-elemental": {
-    "scale": 0.833
+    "scale": 1.07,
+    "verdict": "pass"
   },
   "spr-fantasy-water-weird": {
     "note": "⚠ auto-scale (height uncertain; art likely extends above head): est 8′",
     "scale": 0.81,
-    "verdict": "fail"
+    "verdict": "pass"
   },
   "spr-fantasy-weasel": {
     "groundOffset": 0.14,
@@ -3204,7 +3241,8 @@
   "spr-fantasy-winter-wolf": {
     "groundOffset": 0.08,
     "note": "⚠ auto-scale v2 (span 0.78): est 3.6′ (low conf) — crouched snarling pose lowers head from full standing height",
-    "scale": 0.385
+    "scale": 1.19,
+    "verdict": "pass"
   },
   "spr-fantasy-wolf": {
     "groundOffset": 0.07,
@@ -3234,7 +3272,8 @@
   "spr-fantasy-yeti": {
     "groundOffset": 0.06,
     "note": "auto-scale v2 (span 0.75): est 8′ — raised fist rises above head but excluded, that's a limb not the skull",
-    "scale": 0.889
+    "scale": 1.23,
+    "verdict": "pass"
   },
   "spr-fantasy-yochlol": {
     "note": "⚠ auto-scale (height uncertain; art likely extends above head): est 6′",

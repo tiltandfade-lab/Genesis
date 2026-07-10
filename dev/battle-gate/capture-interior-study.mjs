@@ -1,22 +1,33 @@
 #!/usr/bin/env node
 /* dev/battle-gate/capture-interior-study.mjs — DUNGEON-GRAPH.md U3's REQUIRED render-quality STUDY
-   CARD (the taste gate): renders the SAME two seeded scenes — a chrome Hub dungeon room and a gloom
-   Spine crypt room — under 6 render variants each ((a) flat baseline, (b) +baked-AO-approximation at
-   wall-floor seams, (c) +banded/quantized lighting, (d) +realm-tinted fog, (e) AO+banded,
-   (f) AO+banded+fog), and writes labeled PNGs + a combined contact sheet for Adam's eyeball gate
-   (docs/DUNGEON-GRAPH.md "Open for Adam" item 1).
+   CARD (the taste gate).
+
+   ITERATION 2 (Adam's 2026-07-10 evening taste-gate feedback — "bigger card + creatures in the
+   rooms"): the card was too small to read wall-prism volume, and empty rooms didn't sell "this is a
+   real dungeon". This pass: (1) viewport bumped to 1600x1200 per shot (was 1280x800 total-page); (2)
+   the camera is pulled TIGHT into the focus room (radius:1, not 2 — the WHOLE-plan-vs-just-this-room
+   trim DUNGEON-GRAPH.md U3 item 2 already supports) so wall PRISMS read as unmistakably volumetric
+   (thickness/height occluding the room behind); (3) each scene now carries `pieces` — real sprite
+   billboards standing in the room at true scale (chrome Hub: 3 creatures + 1 PC; gloom Spine crypt:
+   ogre-zombie + 2 small undead + 1 PC); (4) shadows are BASELINE ON in every variant (ruling 2 — real
+   PointLights + cast shadows on interiors, no longer a study-only toggle), and the variant sweep drops
+   from 6 to 3 per scene (Adam's ruling: (a) flat, (b) +AO, (d) +fog — banded dropped) for 6 total
+   panels + one contact sheet, not 12.
 
    Sibling of dev/battle-gate/capture-place-tray.mjs — reuses that script's proven server/Chrome/boot
    conventions VERBATIM (see its own header comment for the "why" behind each) rather than
    reinventing them. Trimmed/extended to this unit's own scope: boot into a real session
    (bootToInSession), build two deterministic SpatialPlans directly via the app's own real global
-   functions (spatializePlan/semanticizePlan/interiorBuildBoard — no mocks), push each through
-   window.Theater.setInteriorBoard, sweep window.Theater.setInteriorVariant across the 6 combos, and
-   screenshot each of the resulting 12 frames. Honest pixels: no cherry-picking — every variant that
-   renders gets captured and included in the contact sheet, pass or fail.
+   functions (spatializePlan/semanticizePlan/interiorBuildBoard — no mocks), attach `pieces` from the
+   live sprite registry, push each through window.Theater.setInteriorBoard, sweep
+   window.Theater.setInteriorVariant across the 3 combos, and screenshot each of the resulting 6
+   frames. Honest pixels: no cherry-picking — every variant that renders gets captured and included in
+   the contact sheet, pass or fail. metrics.json also carries the sprite-purity/shadow/pieces audit
+   (window.Theater.interiorPsxAudit / .shadowMapEnabled / .interiorPiecesResolved) dev/verify-dungeon-
+   interior.mjs's browser-mode checks re-assert against a fresh boot.
 
    Run:  node dev/battle-gate/capture-interior-study.mjs
-   Output: dev/battle-gate/interior-study/{chrome,gloom}-{a..f}-*.png + study-card.png + metrics.json */
+   Output: dev/battle-gate/interior-study/{chrome,gloom}-{a,b,d}-*.png + study-card.png + metrics.json */
 
 import { spawn } from "node:child_process";
 import { createRequire } from "node:module";
@@ -73,9 +84,12 @@ async function startServer() {
   throw new Error(`no usable port: tried ${PORT_CANDIDATES.join(", ")}`);
 }
 
+// ITERATION 2 (Adam: "bigger card"): 1600x1200 per shot, up from 1280x800 — big enough that wall-prism
+// thickness/height and standing sprite pieces both read clearly at contact-sheet thumbnail size too.
+const SHOT_W = 1600, SHOT_H = 1200;
 async function launchChrome() {
-  const args = ["--headless=new", "--no-sandbox", "--disable-gpu-sandbox", "--use-gl=angle", "--enable-webgl", "--ignore-gpu-blocklist", "--window-size=1280,800"];
-  return await puppeteer.launch({ executablePath: CHROME, headless: "new", args, defaultViewport: { width: 1280, height: 800, deviceScaleFactor: 1 } });
+  const args = ["--headless=new", "--no-sandbox", "--disable-gpu-sandbox", "--use-gl=angle", "--enable-webgl", "--ignore-gpu-blocklist", `--window-size=${SHOT_W},${SHOT_H}`];
+  return await puppeteer.launch({ executablePath: CHROME, headless: "new", args, defaultViewport: { width: SHOT_W, height: SHOT_H, deviceScaleFactor: 1 } });
 }
 async function newPage(browser) {
   const page = await browser.newPage();
@@ -176,7 +190,12 @@ async function waitForTheater(page) {
 // EXACT id/num/label/isFinale/depth/exits/light shape src/engine/walk.js:593-625 builds) — same
 // generator family dev/verify-dungeon-*.mjs already use, reimplemented in-page since this runs inside
 // the real browser, not node vm.
-async function buildScene(page, { topology, realmId, env, walkId, residents, lightProfile }) {
+// ITERATION 2, ruling 3: `cfg.pieces` is a plain list of sprite-registry NAMES (the same join key
+// spriteEntryFor uses) — buildScene resolves each against the focus room's own rect into deterministic
+// cellX/cellY floor positions (interior corners) in-page, see piecePositions() inside the evaluate()
+// callback below (needs the freshly-built room rect, not something this node-side wrapper could
+// precompute before the plan exists).
+async function buildScene(page, { topology, realmId, env, walkId, residents, lightProfile, pieces }) {
   return await page.evaluate((cfg) => {
     try {
       function buildFixture(topology, n) {
@@ -207,26 +226,52 @@ async function buildScene(page, { topology, realmId, env, walkId, residents, lig
       const fixture = buildFixture(cfg.topology, 6);
       const plan = spatializePlan(fixture, cfg.topology, { walkId: cfg.walkId });
       const semPlan = cfg.residents ? semanticizePlan(plan, fixture, cfg.residents) : plan;
-      const focusSegNum = semPlan.rooms[0].segNum;
-      const board = interiorBuildBoard(semPlan, { realmId: cfg.realmId, env: cfg.env, focusSegNum, radius: 2 });
+      const focusRoom = semPlan.rooms[0];
+      const focusSegNum = focusRoom.segNum;
+      // ITERATION 2 (Adam: camera pulled tight into the focus room): radius:1, not 2 — render ONLY the
+      // focus room + its immediate doors/corridor stubs, so the fitted camera sits close enough that
+      // wall thickness/height are unmistakable, not a distant whole-plan overview.
+      const board = interiorBuildBoard(semPlan, { realmId: cfg.realmId, env: cfg.env, focusSegNum, radius: 1 });
       if (cfg.lightProfile) board.lightProfile = cfg.lightProfile;
+      // ITERATION 2, ruling 3: pieces placed at deterministic interior-corner/center cells of the
+      // focus room rect (in-page since it needs the freshly-built room rect, not something buildScene's
+      // node-side caller could precompute before the plan exists).
+      function piecePositions(room, count) {
+        const inX = Math.max(room.x + 1, room.x), inY = Math.max(room.y + 1, room.y);
+        const maxX = Math.max(inX, room.x + room.w - 2), maxY = Math.max(inY, room.y + room.d - 2);
+        return [{ x: inX, y: inY }, { x: maxX, y: inY }, { x: inX, y: maxY }, { x: maxX, y: maxY }].slice(0, count);
+      }
+      if (cfg.pieces && cfg.pieces.length) {
+        const positions = piecePositions(focusRoom, cfg.pieces.length);
+        board.pieces = cfg.pieces.map((slug, i) => ({
+          slug, cellX: positions[i].x, cellY: positions[i].y,
+        }));
+      }
       return { ok: true, board, meta: board.meta };
     } catch (e) { return { ok: false, error: e.message, stack: e.stack }; }
-  }, { topology, realmId, env, walkId, residents, lightProfile });
+  }, { topology, realmId, env, walkId, residents, lightProfile, pieces });
 }
 
+// ITERATION 2 (Adam's ruling): shadows are BASELINE ON in every variant now (real PointLights + cast
+// shadows, ruling 2) — the sweep is 3 combos, not 6: (a) flat, (b) +AO, (d) +fog. Banded/quantized
+// lighting is dropped from the taste-gate sweep per Adam's explicit "Adam dropped banded implicitly".
 const VARIANTS = [
   { key: "a-flat", label: "(a) flat baseline", flags: { ao: false, banded: false, fog: false } },
   { key: "b-ao", label: "(b) +baked AO at wall-floor seams", flags: { ao: true, banded: false, fog: false } },
-  { key: "c-banded", label: "(c) +banded/quantized lighting", flags: { ao: false, banded: true, fog: false } },
   { key: "d-fog", label: "(d) +realm-tinted fog", flags: { ao: false, banded: false, fog: true } },
-  { key: "e-ao-banded", label: "(e) AO+banded", flags: { ao: true, banded: true, fog: false } },
-  { key: "f-ao-banded-fog", label: "(f) AO+banded+fog", flags: { ao: true, banded: true, fog: true } },
 ];
 
+// ITERATION 2, ruling 3: (chrome Hub, lamplit) 3 chrome-ish/fantasy creature sprites + 1 humanoid PC;
+// (gloom Spine crypt, torchlit) ogre-zombie + 2 small undead + 1 humanoid PC. Sprite-registry NAMES
+// (spriteEntryFor's join key) — every one of these confirmed `status:"cut"` in data/sprite-registry.js
+// at authoring time (only the fantasy realm has cut sprites today per SPRITE-TRANSITION's own history;
+// the spec's "3 chrome-ish or fantasy" wording explicitly allows fantasy-tagged sprites in the chrome
+// scene until a chrome-tagged creature wave lands).
 const SCENES = [
-  { key: "chrome", label: "chrome Hub dungeon room", topology: "The Hub", realmId: "chrome", env: "dungeon", walkId: "interior-study-chrome-hub", residents: null, lightProfile: "lamplit" },
-  { key: "gloom", label: "gloom Spine crypt room", topology: "The Spine", realmId: "gloom", env: "dungeon", walkId: "interior-study-gloom-spine", residents: [{ segNum: 1, scaleVsHuman: 2.5, apex: false }], lightProfile: "torchlit" },
+  { key: "chrome", label: "chrome Hub dungeon room", topology: "The Hub", realmId: "chrome", env: "dungeon", walkId: "interior-study-chrome-hub", residents: null, lightProfile: "lamplit",
+    pieces: ["Wolf", "Giant Rat", "Spider", "Knight"] },
+  { key: "gloom", label: "gloom Spine crypt room", topology: "The Spine", realmId: "gloom", env: "dungeon", walkId: "interior-study-gloom-spine", residents: [{ segNum: 1, scaleVsHuman: 2.5, apex: false }], lightProfile: "torchlit",
+    pieces: ["Ogre Zombie", "Skeleton", "Zombie", "Guard"] },
 ];
 
 async function main() {
@@ -256,11 +301,54 @@ async function main() {
       if (!built.ok) { metrics.notes.push(`scene ${scene.key} FAILED to build: ${built.error}`); continue; }
 
       const mounted = await page.evaluate((board) => {
-        try { window.Theater.setInteriorBoard(board); return { ok: true, meshCount: window.Theater.interiorMeshCount() }; }
-        catch (e) { return { ok: false, error: e.message }; }
+        try {
+          window.Theater.setInteriorBoard(board);
+          // ITERATION 2 audit — sprite purity, shadow state, piece resolution (rulings 1/2/3) asserted
+          // directly against the LIVE mounted scene graph, not inferred from a screenshot.
+          return {
+            ok: true,
+            meshCount: window.Theater.interiorMeshCount(),
+            piecesResolved: window.Theater.interiorPiecesResolved(),
+            piecesRequested: window.Theater.interiorPiecesRequested(),
+            lightCount: window.Theater.interiorLightCount(),
+            shadowCasterCount: window.Theater.interiorShadowCasterCount(),
+            shadowMapEnabled: window.Theater.shadowMapEnabled(),
+            psxAudit: window.Theater.interiorPsxAudit(),
+          };
+        } catch (e) { return { ok: false, error: e.message }; }
       }, built.board);
       metrics.scenes[scene.key].mounted = mounted;
       if (!mounted.ok) { metrics.notes.push(`scene ${scene.key} setInteriorBoard FAILED: ${mounted.error}`); continue; }
+
+      // piece sprite textures load ASYNC (spriteTextureFor's textureLoader.load callback replays
+      // setInteriorBoard once each texture lands — see that callback's own header note) — the first
+      // setInteriorBoard call above almost always mounts with 0 pieces resolved (textures not loaded
+      // yet). Poll interiorPiecesResolved() up to ~3s (local file loads, this is generous) before
+      // trusting the "resolved" count, rather than judging resolution off a race-prone single read.
+      if (mounted.piecesRequested > 0) {
+        const deadline = Date.now() + 3000;
+        let latest = mounted;
+        while (Date.now() < deadline && latest.piecesResolved < latest.piecesRequested) {
+          await sleep(200);
+          latest = await page.evaluate(() => ({
+            piecesResolved: window.Theater.interiorPiecesResolved(),
+            piecesRequested: window.Theater.interiorPiecesRequested(),
+            psxAudit: window.Theater.interiorPsxAudit(), // re-read too: 0 billboards existed at the FIRST mount
+          }));
+        }
+        mounted.piecesResolved = latest.piecesResolved;
+        if (latest.psxAudit) mounted.psxAudit = latest.psxAudit;
+        metrics.scenes[scene.key].mounted = mounted;
+      }
+      if (mounted.piecesRequested > 0 && mounted.piecesResolved < mounted.piecesRequested) {
+        metrics.notes.push(`scene ${scene.key}: only ${mounted.piecesResolved}/${mounted.piecesRequested} piece sprites resolved`);
+      }
+      if (!mounted.shadowMapEnabled) {
+        metrics.notes.push(`scene ${scene.key}: shadowMap NOT enabled on an interior board`);
+      }
+      if (mounted.psxAudit.billboardsChecked > 0 && mounted.psxAudit.billboardsWronglyPsxApplied > 0) {
+        metrics.notes.push(`scene ${scene.key}: ${mounted.psxAudit.billboardsWronglyPsxApplied} billboard(s) wrongly carry PSX shader tweaks`);
+      }
 
       for (const variant of VARIANTS) {
         await page.evaluate((flags) => { window.Theater.setInteriorVariant(flags); }, variant.flags);
@@ -330,6 +418,13 @@ async function main() {
     log("wrote metrics.json —", metrics.shotCount, "shots,", metrics.consoleErrorsCount, "console errors");
     if (metrics.shotCount < SCENES.length * VARIANTS.length) {
       log("WARNING: not every scene/variant combo produced a shot — see metrics.notes:", metrics.notes);
+      process.exitCode = 1;
+    }
+    // ITERATION 2: a piece sprite that failed to resolve, or shadow-mapping not actually on, is a
+    // silent regression a screenshot alone wouldn't catch (the frame still renders, just missing the
+    // thing Adam asked for) — fail the gate the same way an incomplete shot set does.
+    if (metrics.notes.some((n) => /piece sprites resolved|shadowMap NOT enabled|wrongly carry PSX/.test(n))) {
+      log("WARNING: iteration-2 audit found issues — see metrics.notes:", metrics.notes);
       process.exitCode = 1;
     }
   } catch (e) {

@@ -1,0 +1,41 @@
+{
+ "file": "theater-large-v3-14.png",
+ "realm": "theater",
+ "gridClass": "large",
+ "grid": "2 rows x 2 columns",
+ "chroma": "#FF00FF",
+ "cells": [
+  {
+   "slug": "theater-ballista",
+   "label": "ballista",
+   "family": "monsters",
+   "sizeBand": "large",
+   "replaces": "theater-mm-03.png|r4c5",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "theater-tiger-rider",
+   "label": "tiger rider",
+   "family": "monsters",
+   "sizeBand": "large",
+   "replaces": "theater-mm-03.png|r5c1",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "theater-armored-rider-on-horse",
+   "label": "armored rider on horse",
+   "family": "monsters",
+   "sizeBand": "large",
+   "replaces": "theater-mm-03.png|r5c4",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "theater-cannon-mech-walker",
+   "label": "cannon mech walker",
+   "family": "monsters",
+   "sizeBand": "large",
+   "replaces": "theater-mm-04.png|r1c3",
+   "reason": "regen-underres"
+  }
+ ]
+}

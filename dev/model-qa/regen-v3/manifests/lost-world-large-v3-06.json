@@ -1,0 +1,41 @@
+{
+ "file": "lost-world-large-v3-06.png",
+ "realm": "lost-world",
+ "gridClass": "large",
+ "grid": "2 rows x 2 columns",
+ "chroma": "#FF00FF",
+ "cells": [
+  {
+   "slug": "lost-world-ichthyosaur",
+   "label": "ichthyosaur",
+   "family": "animals",
+   "sizeBand": "large",
+   "replaces": "lost-world-dungeon-animals-2.png|r1c1",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "lost-world-small-tyrannosaur",
+   "label": "small tyrannosaur",
+   "family": "animals",
+   "sizeBand": "large",
+   "replaces": "lost-world-dungeon-animals-2.png|r1c2",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "lost-world-perched-pterosaur",
+   "label": "perched pterosaur",
+   "family": "animals",
+   "sizeBand": "large",
+   "replaces": "lost-world-dungeon-animals-2.png|r1c4",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "lost-world-dimetrodon",
+   "label": "dimetrodon",
+   "family": "animals",
+   "sizeBand": "large",
+   "replaces": "lost-world-dungeon-animals-2.png|r1c5",
+   "reason": "regen-underres"
+  }
+ ]
+}

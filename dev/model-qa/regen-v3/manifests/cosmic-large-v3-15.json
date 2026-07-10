@@ -1,0 +1,41 @@
+{
+ "file": "cosmic-large-v3-15.png",
+ "realm": "cosmic",
+ "gridClass": "large",
+ "grid": "2 rows x 2 columns",
+ "chroma": "#FF00FF",
+ "cells": [
+  {
+   "slug": "cosmic-fish-troll-crouched-with-spear",
+   "label": "fish-troll crouched with spear",
+   "family": "monsters",
+   "sizeBand": "large",
+   "replaces": "cosmic-mm-04.png|r5c3",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "cosmic-fish-troll-with-chain-flail",
+   "label": "fish-troll with chain flail",
+   "family": "monsters",
+   "sizeBand": "large",
+   "replaces": "cosmic-mm-04.png|r5c4",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "cosmic-skeletal-winged-demon",
+   "label": "skeletal winged demon",
+   "family": "monsters",
+   "sizeBand": "large",
+   "replaces": "cosmic-mm-05.png|r1c1",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "cosmic-shrouded-tentacle-pillar-figure",
+   "label": "shrouded tentacle pillar figure",
+   "family": "monsters",
+   "sizeBand": "large",
+   "replaces": "cosmic-mm-05.png|r1c4",
+   "reason": "regen-underres"
+  }
+ ]
+}

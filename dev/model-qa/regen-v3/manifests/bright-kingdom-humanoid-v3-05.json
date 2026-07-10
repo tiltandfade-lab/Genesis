@@ -1,0 +1,121 @@
+{
+ "file": "bright-kingdom-humanoid-v3-05.png",
+ "realm": "bright-kingdom",
+ "gridClass": "monsters-medium",
+ "grid": "4 rows x 4 columns",
+ "chroma": "#FF00FF",
+ "cells": [
+  {
+   "slug": "bright-kingdom-toon-weasel-gangster-in-a-pinstripe-vest-aiming-",
+   "label": "toon weasel gangster in a pinstripe vest aiming a tommy gun",
+   "family": "monsters",
+   "sizeBand": "medium",
+   "reason": "regen-direction"
+  },
+  {
+   "slug": "bright-kingdom-toon-weasel-knife-thrower-with-a-mean-grin-blade",
+   "label": "toon weasel knife-thrower with a mean grin, blades fanned in one paw",
+   "family": "monsters",
+   "sizeBand": "medium",
+   "reason": "regen-direction"
+  },
+  {
+   "slug": "bright-kingdom-helmeted-turtle-soldier-mid-hammer-throw-armored",
+   "label": "helmeted turtle-soldier mid hammer-throw, armored shell",
+   "family": "monsters",
+   "sizeBand": "medium",
+   "reason": "regen-direction"
+  },
+  {
+   "slug": "bright-kingdom-second-turtle-soldier-crouched-beside-a-stack-of",
+   "label": "second turtle-soldier crouched beside a stack of hammers, winding up",
+   "family": "monsters",
+   "sizeBand": "medium",
+   "reason": "regen-direction"
+  },
+  {
+   "slug": "bright-kingdom-pig-soldier-with-a-crude-spear-and-wooden-shield",
+   "label": "pig-soldier with a crude spear and wooden shield",
+   "family": "monsters",
+   "sizeBand": "medium",
+   "reason": "regen-direction"
+  },
+  {
+   "slug": "bright-kingdom-pig-soldier-archer-drawing-a-short-bow",
+   "label": "pig-soldier archer drawing a short bow",
+   "family": "monsters",
+   "sizeBand": "medium",
+   "reason": "regen-direction"
+  },
+  {
+   "slug": "bright-kingdom-tin-toy-soldier-with-musket-and-fixed-bayonet",
+   "label": "tin toy-soldier with musket and fixed bayonet",
+   "family": "monsters",
+   "sizeBand": "medium",
+   "reason": "regen-direction"
+  },
+  {
+   "slug": "bright-kingdom-nutcracker-soldier-with-a-drawn-saber-jaw-open",
+   "label": "nutcracker soldier with a drawn saber, jaw open",
+   "family": "monsters",
+   "sizeBand": "medium",
+   "reason": "regen-direction"
+  },
+  {
+   "slug": "bright-kingdom-jack-in-the-box-ambusher-spring-loaded-boxing-gl",
+   "label": "jack-in-the-box ambusher, spring-loaded boxing glove cocked",
+   "family": "monsters",
+   "sizeBand": "medium",
+   "reason": "regen-direction"
+  },
+  {
+   "slug": "bright-kingdom-one-button-eyed-teddy-bear-shouldering-a-woodsma",
+   "label": "one-button-eyed teddy bear shouldering a woodsman's axe",
+   "family": "monsters",
+   "sizeBand": "medium",
+   "reason": "regen-direction"
+  },
+  {
+   "slug": "bright-kingdom-porcelain-doll-duelist-with-a-rapier-cracked-che",
+   "label": "porcelain doll duelist with a rapier, cracked cheek",
+   "family": "monsters",
+   "sizeBand": "medium",
+   "reason": "regen-direction"
+  },
+  {
+   "slug": "bright-kingdom-wind-up-cymbal-monkey-holding-a-lit-stick-of-dyn",
+   "label": "wind-up cymbal monkey holding a lit stick of dynamite",
+   "family": "monsters",
+   "sizeBand": "medium",
+   "reason": "regen-direction"
+  },
+  {
+   "slug": "bright-kingdom-gumdrop-armored-knight-with-a-warhammer",
+   "label": "gumdrop-armored knight with a warhammer",
+   "family": "monsters",
+   "sizeBand": "medium",
+   "reason": "regen-direction"
+  },
+  {
+   "slug": "bright-kingdom-skeletal-toy-wolf-with-glowing-button-eyes",
+   "label": "skeletal toy wolf with glowing button eyes",
+   "family": "monsters",
+   "sizeBand": "medium",
+   "reason": "regen-direction"
+  },
+  {
+   "slug": "bright-kingdom-fairy-knight-with-a-wasp-lance-and-acorn-helm",
+   "label": "fairy knight with a wasp-lance and acorn helm",
+   "family": "monsters",
+   "sizeBand": "medium",
+   "reason": "regen-direction"
+  },
+  {
+   "slug": "bright-kingdom-balloon-animal-poodle-twisted-around-a-switchbla",
+   "label": "balloon-animal poodle twisted around a switchblade",
+   "family": "monsters",
+   "sizeBand": "medium",
+   "reason": "regen-direction"
+  }
+ ]
+}

@@ -1,0 +1,41 @@
+{
+ "file": "theater-large-v3-12.png",
+ "realm": "theater",
+ "gridClass": "large",
+ "grid": "2 rows x 2 columns",
+ "chroma": "#FF00FF",
+ "cells": [
+  {
+   "slug": "theater-lancer-on-rearing-horse",
+   "label": "lancer on rearing horse",
+   "family": "monsters",
+   "sizeBand": "large",
+   "replaces": "theater-mm-02.png|r3c2",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "theater-soldier-column-in-fog",
+   "label": "soldier column in fog",
+   "family": "monsters",
+   "sizeBand": "large",
+   "replaces": "theater-mm-02.png|r4c3",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "theater-giant-mole-beast",
+   "label": "giant mole beast",
+   "family": "monsters",
+   "sizeBand": "large",
+   "replaces": "theater-mm-02.png|r4c5",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "theater-gas-ghost-cloud",
+   "label": "gas ghost cloud",
+   "family": "monsters",
+   "sizeBand": "large",
+   "replaces": "theater-mm-02.png|r5c1",
+   "reason": "regen-underres"
+  }
+ ]
+}

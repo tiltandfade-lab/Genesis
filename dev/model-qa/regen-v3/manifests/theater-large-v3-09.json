@@ -1,0 +1,41 @@
+{
+ "file": "theater-large-v3-09.png",
+ "realm": "theater",
+ "gridClass": "large",
+ "grid": "2 rows x 2 columns",
+ "chroma": "#FF00FF",
+ "cells": [
+  {
+   "slug": "theater-ox-in-harness",
+   "label": "ox in harness",
+   "family": "animals",
+   "sizeBand": "large",
+   "replaces": "theater-domesticated-animals-01.png|r1c2",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "theater-pack-donkey",
+   "label": "pack donkey",
+   "family": "animals",
+   "sizeBand": "large",
+   "replaces": "theater-domesticated-animals-01.png|r3c1",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "theater-draft-horse",
+   "label": "draft horse",
+   "family": "animals",
+   "sizeBand": "large",
+   "replaces": "theater-domesticated-animals-01.png|r3c2",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "theater-donkey",
+   "label": "donkey",
+   "family": "animals",
+   "sizeBand": "large",
+   "replaces": "theater-domesticated-animals-01.png|r5c1",
+   "reason": "regen-underres"
+  }
+ ]
+}

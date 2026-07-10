@@ -16,9 +16,11 @@ NPCs) — not hand-invented.
 
 Style block (same for every sheet in this realm): Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). deep indigo-and-gold palette, geometric sacred-symbol linework glowing as the high-value zone, obsidian-dark base tones so gold sigils read as each silhouette's defining feature, faint starfield dither in the background.
 
+Generation guardrails for character sheets (binding): use a true portrait output canvas for humanoid-forward sheets — target 4:5 width:height, and accept 4:6 when needed to preserve full-body silhouettes. Taller is better than squat for character sprites. Humanoid figures must have anatomically correct, readable legs with knees, ankles, feet, and weight-bearing stance; no shortened stump legs, fused legs, hidden feet, or robe shapes that erase the body plan unless the creature is explicitly non-humanoid. Solid flat magenta (#FF00FF) is background only: absolutely no magenta or pink cast, glow, rim-light, halo, reflection, antialias fringe, or bleed on any figure, clothing, sigil, limb, wing membrane, translucent part, fur, or held item. Keep crisp hard silhouette edges against magenta.
+
 Shared mechanical instructions (same as the master template): 5×5 grid, 25 cells, one distinct
 static character per cell (not a repeat, not an animation frame), uniform cell size, solid magenta (#FF00FF) background (no transparency, no other background elements), consistent scale across all 25, orthographic side view, each character fully visible from head to toe within its cell — no cropping at the top, bottom, or sides, the complete body must fit inside the cell boundary. **Every character in an expressive, mid-action pose that captures its essence**
-— mid-lunge, mid-cast, braced, snarling — never a neutral T-pose or idle stand.
+— mid-lunge, mid-cast, braced, snarling — never a neutral T-pose or idle stand. For all humanoid or partly humanoid entries, favor tall readable proportions over compact chibi proportions; legs and feet must remain visible and anatomically coherent even under robes, armor, tentacles, or ritual vestments.
 
 ---
 
@@ -164,7 +166,7 @@ static character per cell (not a repeat, not an animation frame), uniform cell s
 
 Style block (repeated here so this section is self-contained): Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). deep indigo-and-gold palette, geometric sacred-symbol linework glowing as the high-value zone, obsidian-dark base tones so gold sigils read as each silhouette's defining feature, faint starfield dither in the background.
 
-Shared mechanical instructions (restated for this section, NPC-appropriate): 5x5 grid, 25 cells, one distinct static character per cell (not a repeat, not an animation frame), uniform cell size, solid magenta (#FF00FF) background (no transparency, no other background elements), consistent scale across all 25, orthographic side view, each character fully visible from head to toe within its cell — no cropping at the top, bottom, or sides, the complete body must fit inside the cell boundary. **Every character in an expressive pose characteristic of their role** — mid-task, mid-gesture, caught doing the thing that defines them (the smith mid-hammer-swing, the informant glancing over a shoulder, the merchant mid-haggle, the healer mid-bandage) — never a neutral T-pose or idle stand, and never combat aggression unless the role is itself a security/enforcer type. **No scene props, furniture, tools-as-set-dressing, or background objects of any kind** — no benches, stalls, counters, carts, weapons racks, signage, etc.; only the character itself (small hand-held items that are part of the character's own body/outfit, like a held tool mid-use, are fine — freestanding set pieces are not) isolated against the plain magenta background.
+Shared mechanical instructions (restated for this section, NPC-appropriate): 5x5 grid, 25 cells, one distinct static character per cell (not a repeat, not an animation frame), uniform cell size, solid magenta (#FF00FF) background (no transparency, no other background elements), consistent scale across all 25, orthographic side view, each character fully visible from head to toe within its cell — no cropping at the top, bottom, or sides, the complete body must fit inside the cell boundary. Use a true portrait output canvas for the sheet (target 4:5 width:height; 4:6 acceptable if needed) so the people can be taller and fully legible. **Every character in an expressive pose characteristic of their role** — mid-task, mid-gesture, caught doing the thing that defines them (the smith mid-hammer-swing, the informant glancing over a shoulder, the merchant mid-haggle, the healer mid-bandage) — never a neutral T-pose or idle stand, and never combat aggression unless the role is itself a security/enforcer type. **People must have anatomically correct readable legs and feet** — no squat compression, fused legs, robe columns, missing ankles, or cropped boots; ritual robes and vestments must still imply knees, stance, and foot placement. **No magenta bleed into the figure** — magenta is background only, never a glow/fringe/reflection on clothing, skin, hair, sigils, lenses, star-glow, or held items. **No scene props, furniture, tools-as-set-dressing, or background objects of any kind** — no benches, stalls, counters, carts, weapons racks, signage, etc.; only the character itself (small hand-held items that are part of the character's own body/outfit, like a held tool mid-use, are fine — freestanding set pieces are not) isolated against the plain magenta background.
 
 Roles are the realm's reskin of the universal 35-archetype NPC spine (per `NPC-ROLE-REALMS.md`) plus this realm's exclusive `adds`.
 
@@ -400,6 +402,10 @@ Style block (repeated here so this section is self-contained): Pixel-art sprite 
 Shared mechanical instructions (restated for this section): 5x5 grid, uniform cell size, solid
 magenta (#FF00FF) background (no transparency, no other background elements), consistent scale,
 orthographic side view, each kid fully visible from head to toe within its cell — no cropping.
+Use a true portrait output canvas for the sheet (target 4:5 width:height; 4:6 acceptable if needed)
+so the children read as full-body sprites with visible legs and feet, not squat head-and-torso
+icons. Magenta is background only; no magenta or pink bleed, glow, rim-light, or antialias fringe
+may touch the child, clothing, hair, held item, or subtle star/echo-touched effect.
 **Every kid in a candid, characterful pose** — mid-play, mid-chase, peeking around a corner,
 caught in the act of the thing they want — never a neutral T-pose or idle stand, and never
 combat/violent poses. **No scene props, furniture, or background objects of any kind** — no
@@ -435,7 +441,11 @@ children, not teens or adults.
 
 Appended additions from `docs/REALM-KEY-EXPANSION-ROSTER.md`: additions keyed to the locked
 realm identity — the tarot engine's home (the 23rd card), true-name work, the weighing of the
-heart, Enochian seals. Same style block and mechanical instructions as above.
+heart, Enochian seals. Same style block and mechanical instructions as above. For the humanoid and
+partly humanoid expansion entries, use a true portrait canvas if generating this sheet alone
+(target 4:5 width:height; 4:6 acceptable), keep full-body readable legs/feet where anatomy exists,
+and keep magenta strictly outside the figure with no pink bleed into gold sigils, starfields,
+transparent effects, wings, robes, or held cards.
 
 ### Expansion sheet E1 (3×5 grid, 15 cells)
 

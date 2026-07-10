@@ -1,0 +1,25 @@
+{
+ "file": "frontier-huge-v3-02.png",
+ "realm": "frontier",
+ "gridClass": "huge",
+ "grid": "1 row x 2 columns",
+ "chroma": "#FF00FF",
+ "cells": [
+  {
+   "slug": "frontier-steam-mech-walker",
+   "label": "steam mech walker",
+   "family": "monsters",
+   "sizeBand": "huge",
+   "replaces": "frontier-monsters-4-c2.png|r4c3",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "frontier-giant-holding-dust-devil",
+   "label": "giant holding dust devil",
+   "family": "monsters",
+   "sizeBand": "huge",
+   "replaces": "frontier-monsters-5-c2.png|r2c3",
+   "reason": "regen-underres"
+  }
+ ]
+}

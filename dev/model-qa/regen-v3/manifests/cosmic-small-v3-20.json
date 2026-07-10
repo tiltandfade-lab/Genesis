@@ -1,0 +1,121 @@
+{
+ "file": "cosmic-small-v3-20.png",
+ "realm": "cosmic",
+ "gridClass": "small",
+ "grid": "3 rows x 5 columns",
+ "chroma": "#FF00FF",
+ "cells": [
+  {
+   "slug": "cosmic-star-marked-mongoose",
+   "label": "star-marked mongoose",
+   "family": "animals",
+   "sizeBand": "small",
+   "replaces": "cosmic-domestic-animals-2.png|r1c1",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "cosmic-starry-hen-with-chicks",
+   "label": "starry hen with chicks",
+   "family": "animals",
+   "sizeBand": "small",
+   "replaces": "cosmic-domestic-animals-2.png|r1c2",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "cosmic-rabbit-in-gilded-birdcage",
+   "label": "rabbit in gilded birdcage",
+   "family": "animals",
+   "sizeBand": "small",
+   "replaces": "cosmic-domestic-animals-2.png|r1c3",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "cosmic-collared-ocelot-kitten",
+   "label": "collared ocelot kitten",
+   "family": "animals",
+   "sizeBand": "small",
+   "replaces": "cosmic-domestic-animals-2.png|r1c4",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "cosmic-gilded-egret",
+   "label": "gilded egret",
+   "family": "animals",
+   "sizeBand": "small",
+   "replaces": "cosmic-domestic-animals-2.png|r2c1",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "cosmic-civet-with-censer",
+   "label": "civet with censer",
+   "family": "animals",
+   "sizeBand": "small",
+   "replaces": "cosmic-domestic-animals-2.png|r2c2",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "cosmic-fennec-fox",
+   "label": "fennec fox",
+   "family": "animals",
+   "sizeBand": "small",
+   "replaces": "cosmic-domestic-animals-2.png|r3c4",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "cosmic-cobra-reared-from-bowl",
+   "label": "cobra reared from bowl",
+   "family": "animals",
+   "sizeBand": "small",
+   "replaces": "cosmic-domestic-animals-2.png|r4c1",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "cosmic-collared-serval-cat",
+   "label": "collared serval cat",
+   "family": "animals",
+   "sizeBand": "small",
+   "replaces": "cosmic-domestic-animals-2.png|r4c2",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "cosmic-draped-grey-kitten",
+   "label": "draped grey kitten",
+   "family": "animals",
+   "sizeBand": "small",
+   "replaces": "cosmic-domestic-animals-2.png|r5c4",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "cosmic-pale-sigil-kitten",
+   "label": "pale sigil kitten",
+   "family": "animals",
+   "sizeBand": "small",
+   "replaces": "cosmic-dungeon-animals-2.png|r5c5",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "cosmic-red-fox",
+   "label": "red fox",
+   "family": "animals",
+   "sizeBand": "small",
+   "replaces": "cosmic-wild-animals-01.png|r2c5",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "cosmic-fox-kit",
+   "label": "fox kit",
+   "family": "animals",
+   "sizeBand": "small",
+   "replaces": "cosmic-wild-animals-01.png|r3c5",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "cosmic-ibis-group",
+   "label": "ibis group",
+   "family": "animals",
+   "sizeBand": "small",
+   "replaces": "cosmic-wild-animals-2.png|r5c5",
+   "reason": "regen-style"
+  }
+ ]
+}

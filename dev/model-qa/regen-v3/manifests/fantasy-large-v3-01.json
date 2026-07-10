@@ -1,0 +1,41 @@
+{
+ "file": "fantasy-large-v3-01.png",
+ "realm": "fantasy",
+ "gridClass": "large",
+ "grid": "2 rows x 2 columns",
+ "chroma": "#FF00FF",
+ "cells": [
+  {
+   "slug": "fantasy-water-buffalo",
+   "label": "water buffalo",
+   "family": "animals",
+   "sizeBand": "large",
+   "replaces": "fantasy-domestic-animals-2.png|r1c1",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "fantasy-camel-with-saddle",
+   "label": "camel with saddle",
+   "family": "animals",
+   "sizeBand": "large",
+   "replaces": "fantasy-domestic-animals-2.png|r1c4",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "fantasy-yak",
+   "label": "yak",
+   "family": "animals",
+   "sizeBand": "large",
+   "replaces": "fantasy-domestic-animals-2.png|r1c5",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "fantasy-wisent-bison",
+   "label": "wisent/bison",
+   "family": "animals",
+   "sizeBand": "large",
+   "replaces": "fantasy-wild-animals-2.png|r2c5",
+   "reason": "regen-underres"
+  }
+ ]
+}

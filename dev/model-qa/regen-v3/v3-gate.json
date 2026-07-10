@@ -1,0 +1,1222 @@
+{
+ "sheets": [
+  {
+   "file": "cosmic-arcana-major-v3-25.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": "all 18 cards present in manifest order and iconic; nothing lazy"
+  },
+  {
+   "file": "cosmic-arcana-large-v3-26.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": "7 cells as expected (4+3); Tower's bright yellow lightning is the only palette excursion and reads intentional"
+  },
+  {
+   "file": "cosmic-arcana-court-v3-27.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": "all 12 courts present and on-label; enthroned stillness is in character throughout"
+  },
+  {
+   "file": "cosmic-huge-v3-01.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [
+    "r1c1"
+   ],
+   "otherDefects": "castle-brick golem is dead-frontal, symmetrical, arms hanging \u2014 reads mannequin even for a construct; sphinx (r1c2) is strong"
+  },
+  {
+   "file": "cosmic-huge-v3-02.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": ""
+  },
+  {
+   "file": "cosmic-huge-v3-03.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": "single-cell manifest, single sprite left-aligned; right half of canvas is empty chroma \u2014 fine if slicer uses manifest count"
+  },
+  {
+   "file": "cosmic-humanoid-v3-04.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": "r6c1 pink static/lightning humanoid is rendered in hot pink/magenta tones very close to the #FF00FF chroma key \u2014 high risk the keyer eats or fringes the sprite; all 24 subjects otherwise present, ordered, and posed"
+  },
+  {
+   "file": "cosmic-humanoid-v3-05.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": "1 sprite for 1 manifest cell; star-shield has a soft golden glow halo that may leave fringe after keying"
+  },
+  {
+   "file": "cosmic-large-v3-06.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": "draped donkeys (r1c2) lean slightly cute/big-eyed vs the ref's grit \u2014 borderline, not chibi; all 4 subjects correct"
+  },
+  {
+   "file": "cosmic-large-v3-07.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": "r1c2 'impossible Penrose cube' reads as an ordinary open cube frame \u2014 the impossible-geometry gimmick didn't land; subject otherwise acceptable"
+  },
+  {
+   "file": "cosmic-large-v3-08.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": ""
+  },
+  {
+   "file": "cosmic-large-v3-09.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": ""
+  },
+  {
+   "file": "theater-solo-v3-20.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": ""
+  },
+  {
+   "file": "theater-large-v3-13.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": ""
+  },
+  {
+   "file": "theater-large-v3-14.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": ""
+  },
+  {
+   "file": "theater-large-v3-15.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": ""
+  },
+  {
+   "file": "theater-large-v3-16.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": ""
+  },
+  {
+   "file": "theater-large-v3-17.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": "canvas is 1x2 but manifest authors only 1 cell; single elk present, right half empty chroma as expected"
+  },
+  {
+   "file": "theater-medium-beast-v3-18.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": ""
+  },
+  {
+   "file": "theater-small-v3-19.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": "koi/swan/rooster brighter than the olive band but subject-appropriate and grain-consistent"
+  },
+  {
+   "file": "theater-solo-v3-21.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": ""
+  },
+  {
+   "file": "theater-solo-v3-22.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": ""
+  },
+  {
+   "file": "theater-solo-v3-23.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": ""
+  },
+  {
+   "file": "theater-tiny-v3-24.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": "budgie bright green in gilt cage \u2014 subject-demanded, grain matches"
+  },
+  {
+   "file": "high-seas-solo-v3-15.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": ""
+  },
+  {
+   "file": "high-seas-large-v3-13.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": ""
+  },
+  {
+   "file": "high-seas-medium-beast-v3-14.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": ""
+  },
+  {
+   "file": "high-seas-small-v3-15.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": ""
+  },
+  {
+   "file": "high-seas-solo-v3-16.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": "small seafloor/coral dressing at base of the mass; integrated into the silhouette, likely intentional"
+  },
+  {
+   "file": "high-seas-solo-v3-17.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": ""
+  },
+  {
+   "file": "high-seas-solo-v3-18.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": ""
+  },
+  {
+   "file": "high-seas-solo-v3-19.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": ""
+  },
+  {
+   "file": "high-seas-solo-v3-20.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": ""
+  },
+  {
+   "file": "high-seas-solo-v3-21.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": ""
+  },
+  {
+   "file": "high-seas-solo-v3-22.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": ""
+  },
+  {
+   "file": "high-seas-tiny-v3-23.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": "r1c1 silverfish trio rendered as three fish-folk humanoid warriors, not silverfish insects \u2014 wrong subject for a tiny-band vermin cell"
+  },
+  {
+   "file": "ash-large-v3-03.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [
+    "r1c1",
+    "r1c2",
+    "r2c1",
+    "r2c2"
+   ],
+   "otherDefects": "all four livestock are neutral stand-and-stare poses; texture/grime attitude is strong but zero pose action across the sheet"
+  },
+  {
+   "file": "ash-huge-v3-01.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": ""
+  },
+  {
+   "file": "ash-humanoid-v3-02.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [
+    "r1c1"
+   ],
+   "otherDefects": "manifest grid string says 1x4 but only 3 cells listed and 3 sprites present; sprites occupy top ~40% of a tall canvas, lower area empty chroma"
+  },
+  {
+   "file": "ash-large-v3-04.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [
+    "r1c1",
+    "r1c2",
+    "r2c1"
+   ],
+   "otherDefects": ""
+  },
+  {
+   "file": "ash-large-v3-05.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": ""
+  },
+  {
+   "file": "ash-large-v3-06.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": "two-headed ogre (r2c1) is frontal and symmetrical but both heads roaring \u2014 passed on attitude"
+  },
+  {
+   "file": "ash-large-v3-07.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": ""
+  },
+  {
+   "file": "ash-large-v3-08.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": ""
+  },
+  {
+   "file": "ash-small-v3-09.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": "manifest grid string says 1x5 but lists 4 cells; 4 swarm piles present, consistent with cells"
+  },
+  {
+   "file": "ash-tiny-v3-10.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": "manifest grid string says 1x7 but lists 1 cell; single cockroach present top-left, rest of canvas empty chroma"
+  },
+  {
+   "file": "noir-large-v3-01.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": ""
+  },
+  {
+   "file": "noir-small-v3-02.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": ""
+  },
+  {
+   "file": "noir-tiny-v3-03.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": "10 sprites laid out 7+3 across two rows (manifest says 2x7); top-down pinned-specimen poses, consistent with realm ref grammar"
+  },
+  {
+   "file": "fantasy-large-v3-01.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [
+    "r1c1",
+    "r1c2",
+    "r2c1",
+    "r2c2"
+   ],
+   "otherDefects": "all four are neutral stand-and-stare livestock; matches the fantasy ref's naturalist pose grammar, so may be intentional \u2014 flagged per the pose rule"
+  },
+  {
+   "file": "fantasy-large-v3-02.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [
+    "r1c1",
+    "r1c2"
+   ],
+   "otherDefects": "muskox and bison both frontal stand-and-stare, no gesture"
+  },
+  {
+   "file": "fantasy-small-v3-03.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": "manifest grid string says 1x5 but lists 2 cells; 2 piles present, consistent with cells"
+  },
+  {
+   "file": "fantasy-tiny-v3-04.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": "manifest grid string says 1x7 but lists 6 cells; 6 subjects present"
+  },
+  {
+   "file": "high-seas-large-v3-04.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": ""
+  },
+  {
+   "file": "high-seas-huge-v3-01.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": ""
+  },
+  {
+   "file": "high-seas-huge-v3-02.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": ""
+  },
+  {
+   "file": "high-seas-huge-v3-03.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": ""
+  },
+  {
+   "file": "high-seas-humanoid-v3-04.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [
+    "r4c4",
+    "r6c1"
+   ],
+   "otherDefects": "kids' skin tones read slightly brighter/softer than the corpse-teal ref, but rag palette, grit, and pixel grain hold; r1c4 climbing-pole sprite's pole runs off the top edge of the cell"
+  },
+  {
+   "file": "high-seas-humanoid-v3-05.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": "7 subjects in a 2x4 grid (r2c4 empty), matches the 7-cell manifest"
+  },
+  {
+   "file": "high-seas-large-v3-06.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": ""
+  },
+  {
+   "file": "high-seas-large-v3-07.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": "manifest r3 'gaunt saddled horse' reads as a sturdy draft horse, not gaunt \u2014 minor subject drift"
+  },
+  {
+   "file": "high-seas-large-v3-08.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [
+    "r2c2"
+   ],
+   "otherDefects": "coral golem is a stiff symmetric frontal arms-at-sides pose"
+  },
+  {
+   "file": "high-seas-large-v3-09.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": "r1c1 'coral-encrusted hulk' rendered as a walking ghost-ship creature rather than a humanoid hulk \u2014 possible subject drift, though it suits the slot"
+  },
+  {
+   "file": "high-seas-large-v3-10.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": ""
+  },
+  {
+   "file": "high-seas-large-v3-11.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": ""
+  },
+  {
+   "file": "high-seas-large-v3-12.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": ""
+  },
+  {
+   "file": "lost-world-huge-v3-02.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": ""
+  },
+  {
+   "file": "lost-world-huge-v3-01.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": ""
+  },
+  {
+   "file": "lost-world-huge-v3-03.png",
+   "styleMatch": false,
+   "styleWhy": "Both cells rendered photoreal/painterly \u2014 smooth gradients, fine feather/scale detail, no pixel grain or outline weight vs the ref",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": ""
+  },
+  {
+   "file": "lost-world-huge-v3-04.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": ""
+  },
+  {
+   "file": "lost-world-large-v3-05.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": "r1c2 'belled crocodile' shows no bell/collar (plain crocodile)"
+  },
+  {
+   "file": "lost-world-large-v3-06.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": "r2c1 perched pterosaur includes a branch prop (intended perch, but it's a floor-contact object); r2c2 dimetrodon near-duplicates sheet 05's dimetrodon"
+  },
+  {
+   "file": "lost-world-large-v3-07.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": "r2c1 giant worm has small soil-clump ground contact at base (minor)"
+  },
+  {
+   "file": "lost-world-large-v3-08.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": ""
+  },
+  {
+   "file": "lost-world-large-v3-09.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": "right half of the 1x2 canvas empty \u2014 consistent with manifest's single cell"
+  },
+  {
+   "file": "lost-world-medium-beast-v3-10.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": "3 subjects in a 1x4 canvas (matches 3 manifest cells; 4th column empty)"
+  },
+  {
+   "file": "lost-world-solo-v3-11.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": ""
+  },
+  {
+   "file": "lost-world-solo-v3-12.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": ""
+  },
+  {
+   "file": "lost-world-solo-v3-13.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": ""
+  },
+  {
+   "file": "lost-world-tiny-v3-14.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": "faint off-chroma cell gridlines visible across the sprite row (7 cell borders show against the magenta) \u2014 will leave hairline artifacts after chroma-key; sprites sit small in a large mostly-empty canvas"
+  },
+  {
+   "file": "suburb-npcs-v3-03.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": "background pure green OK; all 16 on-label; r1c4 quiet pale kid stands still hands-in-pockets but the stillness is the character (nosebleed present)"
+  },
+  {
+   "file": "bright-kingdom-large-v3-01.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": ""
+  },
+  {
+   "file": "bright-kingdom-medium-beast-v3-02.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": "5 sprites fill only r1c1-r1c4 + r2c1 of the 2x4 grid (matches manifest count); all subjects present and on-label"
+  },
+  {
+   "file": "bright-kingdom-small-v3-03.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": "13 sprites in 5/5/3 rows per manifest; every subject present with prop/attitude"
+  },
+  {
+   "file": "bright-kingdom-tiny-v3-04.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": "9 sprites (7+2) per manifest; row 2 starts at left, cells r2c1-r2c2"
+  },
+  {
+   "file": "bright-kingdom-humanoid-v3-05.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": "full 4x4, all 16 on-label, poses lively throughout (tin soldier stands at attention but that is the subject)"
+  },
+  {
+   "file": "suburb-small-v3-01.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": "background pure green OK; 7 sprites (5+2) match manifest; swarm piles read clearly"
+  },
+  {
+   "file": "suburb-tiny-v3-02.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": "background pure green OK; single betta-in-bowl sprite in r1c1 of 1x7 grid, matches 1-cell manifest"
+  },
+  {
+   "file": "suburb-enemies-v3-04.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [
+    "r2c1"
+   ],
+   "otherDefects": "background pure green OK; r2c1 TV-head figure is fully frontal, arms limp at sides \u2014 arguably intentional uncanny stillness but reads mannequin; garden gnome trio rendered as 3 gnomes in one cell (correct per label)"
+  },
+  {
+   "file": "suburb-enemies-large-v3-05.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [
+    "r1c1"
+   ],
+   "otherDefects": "background pure green OK; r1c1 neighborhood thing stands straight with arms hanging, no gesture (petal head reads closed-ish); UFO tractor-beam light cone extends below sprite \u2014 will carry into the cut alpha"
+  },
+  {
+   "file": "gloom-large-v3-01.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": "all 4 on-label; quadrupeds standing naturally, era-true gloom grit"
+  },
+  {
+   "file": "gloom-large-v3-02.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": "3 sprites fill r1c1, r1c2, r2c1 of 2x2 per manifest"
+  },
+  {
+   "file": "gloom-medium-beast-v3-03.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": "5 sprites (4+1) match manifest; swarms and skeletal dog all on-label"
+  },
+  {
+   "file": "gloom-small-v3-04.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": "2 sprites in row 1 of 1x5 grid per 2-cell manifest"
+  },
+  {
+   "file": "gloom-tiny-v3-05.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": "2 sprites in r1c1-r1c2 of 1x7 grid per 2-cell manifest; pale spider has skull marking \u2014 nice gloom touch"
+  },
+  {
+   "file": "theater-large-v3-05.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": ""
+  },
+  {
+   "file": "theater-huge-v3-01.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": ""
+  },
+  {
+   "file": "theater-huge-v3-02.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": ""
+  },
+  {
+   "file": "theater-huge-v3-03.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": ""
+  },
+  {
+   "file": "theater-huge-v3-04.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": ""
+  },
+  {
+   "file": "theater-huge-v3-05.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": ""
+  },
+  {
+   "file": "theater-huge-v3-06.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": "manifest lists 1 cell in a 1x2 sheet; right half empty as expected"
+  },
+  {
+   "file": "theater-humanoid-v3-07.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [
+    "r1c2"
+   ],
+   "otherDefects": "11 sprites match the 11 non-empty manifest cells but packed as 3 rows (4/3/4) instead of the declared 4x4; r1c2 undead centurion is a stiff symmetrical arms-at-sides mannequin"
+  },
+  {
+   "file": "theater-large-v3-08.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": ""
+  },
+  {
+   "file": "theater-large-v3-09.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": ""
+  },
+  {
+   "file": "theater-large-v3-10.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": ""
+  },
+  {
+   "file": "theater-large-v3-11.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": ""
+  },
+  {
+   "file": "theater-large-v3-12.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": "r1c2 soldier-column-in-fog: the fog fade-out is semi-transparent over the chroma, leaving magenta-tinted haze baked into the sprite's trailing edge \u2014 will show pink fringing after keying"
+  },
+  {
+   "file": "frontier-large-v3-05.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": ""
+  },
+  {
+   "file": "frontier-huge-v3-01.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [
+    "r1c1"
+   ],
+   "otherDefects": "armored demon bull is a stiff symmetric arms-at-sides stand; spectral posse cell reads well"
+  },
+  {
+   "file": "frontier-huge-v3-02.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": ""
+  },
+  {
+   "file": "frontier-huge-v3-03.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": "single manifest cell fills only left half of a 1x2 canvas (expected)"
+  },
+  {
+   "file": "frontier-humanoid-v3-04.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [
+    "r1c4"
+   ],
+   "otherDefects": "r1c4 lawman brute is near-duplicate of r1c1 with club hanging straight down, stiff symmetric stance"
+  },
+  {
+   "file": "frontier-large-v3-06.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": ""
+  },
+  {
+   "file": "frontier-large-v3-07.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": ""
+  },
+  {
+   "file": "frontier-large-v3-08.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": ""
+  },
+  {
+   "file": "frontier-large-v3-09.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [
+    "r1c2"
+   ],
+   "otherDefects": "steam golem stands symmetric arms-at-sides; snake-pit cell includes a stone-ring ground base (intentional per label 'giant snake in snake pit' but it is a floor plane)"
+  },
+  {
+   "file": "frontier-large-v3-10.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": "hanged-men cell includes gallows structure (part of subject); poses static by nature of subject"
+  },
+  {
+   "file": "frontier-large-v3-11.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [
+    "r2c2"
+   ],
+   "otherDefects": "iron golem is a fully symmetric arms-at-sides mannequin stand; rock elemental borderline but has hunch/menace"
+  },
+  {
+   "file": "frontier-large-v3-12.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": ""
+  },
+  {
+   "file": "frontier-tribal-npcs-v3-21.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": "no caricature \u2014 all 16 read as grounded, individualized people; r1c3 chief arms-crossed is per-manifest intent, not a mannequin"
+  },
+  {
+   "file": "frontier-large-v3-13.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": "r2c2 outlaw gang: four riflemen stand in a fairly flat front-facing lineup \u2014 posed but acceptable (weapons ready, varied faces)"
+  },
+  {
+   "file": "frontier-large-v3-14.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": ""
+  },
+  {
+   "file": "frontier-solo-v3-15.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": ""
+  },
+  {
+   "file": "frontier-solo-v3-16.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": ""
+  },
+  {
+   "file": "frontier-solo-v3-17.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": ""
+  },
+  {
+   "file": "frontier-solo-v3-18.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": ""
+  },
+  {
+   "file": "frontier-solo-v3-19.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": "rendered text baked into sprite (SHERIFF/SALOON/BANK/LIVERY/GENERAL STORE signs) \u2014 arguably intrinsic to a town-golem of buildings, flagging per rule"
+  },
+  {
+   "file": "frontier-tiny-v3-20.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": "manifest grid string says 1x7 but lists 6 cells; image has exactly the 6 listed subjects in order \u2014 manifest grid string off by one"
+  },
+  {
+   "file": "frontier-tribal-enemies-v3-22.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": "no caricature \u2014 grounded and menacing; r2c1 dog-soldier rendered literally with a leashed dog rather than the sash-staked-to-ground coup-stick concept (subject drift, visually fine)"
+  },
+  {
+   "file": "frontier-tribal-large-v3-23.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": "serpent water-splash, thunderbird lightning, and ghost-bison dust have slightly soft airbrushed effect edges vs the crunchier ref grain \u2014 minor, within family; mounted raider is a grounded warrior, no caricature"
+  },
+  {
+   "file": "chrome-humanoid-v3-09.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": ""
+  },
+  {
+   "file": "chrome-huge-v3-01.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": ""
+  },
+  {
+   "file": "chrome-huge-v3-02.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": "manifest declares 1x2 grid but only 1 cell listed; sprite fills left half, right half empty green (consistent with 1 manifest cell)"
+  },
+  {
+   "file": "chrome-humanoid-v3-03.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": "only 5 of 8 grid positions used, matching the 5 manifest cells; all subjects match labels (idol on holo-stage, chef eating, croc mutant, cyborg w/ tablet, butcher w/ towel+cleaver)"
+  },
+  {
+   "file": "chrome-large-v3-04.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": ""
+  },
+  {
+   "file": "chrome-large-v3-05.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": ""
+  },
+  {
+   "file": "chrome-large-v3-06.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": ""
+  },
+  {
+   "file": "chrome-large-v3-07.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": ""
+  },
+  {
+   "file": "chrome-large-v3-08.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": ""
+  },
+  {
+   "file": "chrome-large-v3-09.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [
+    "r2c2"
+   ],
+   "otherDefects": "r2c2 brass pope is rigidly symmetrical arms-at-sides \u2014 arguably intended (label says monolith figure) but it is the one mannequin-grade pose on the sheet"
+  },
+  {
+   "file": "chrome-large-v3-10.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": ""
+  },
+  {
+   "file": "chrome-large-v3-11.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": "r2c1 'three-headed robot dog pack' rendered as ONE cerberus-style three-headed dog, not a pack of dogs \u2014 acceptable read of the label but flagging the ambiguity"
+  },
+  {
+   "file": "chrome-medium-beast-v3-12.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": "7 sprites for 7 manifest cells in the 2x4 grid (one slot empty, expected); all swarm subjects present and distinct"
+  },
+  {
+   "file": "chrome-small-v3-13.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": "finish is slightly cleaner/cuter than the ref's grit (pet-robot subjects) but pixel grain, outline weight, and neon-on-gunmetal palette all hold \u2014 passing"
+  },
+  {
+   "file": "chrome-solo-v3-14.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": ""
+  },
+  {
+   "file": "chrome-tiny-v3-15.png",
+   "styleMatch": true,
+   "styleWhy": "",
+   "gridOk": true,
+   "staticCells": [],
+   "otherDefects": "2 sprites for 2 manifest cells in the declared 1x7 row (remaining slots empty green, expected)"
+  }
+ ]
+}

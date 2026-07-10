@@ -1,0 +1,41 @@
+{
+ "file": "ash-large-v3-04.png",
+ "realm": "ash",
+ "gridClass": "large",
+ "grid": "2 rows x 2 columns",
+ "chroma": "#FF00FF",
+ "cells": [
+  {
+   "slug": "ash-harnessed-ox",
+   "label": "harnessed ox",
+   "family": "animals",
+   "sizeBand": "large",
+   "replaces": "ash-domestic-animals-2.png|r4c1",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "ash-gas-mask-bull",
+   "label": "gas-mask bull",
+   "family": "animals",
+   "sizeBand": "large",
+   "replaces": "ash-domestic-animals-2.png|r4c5",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "ash-slime-dripping-cow",
+   "label": "slime-dripping cow",
+   "family": "animals",
+   "sizeBand": "large",
+   "replaces": "ash-domestic-animals-2.png|r5c3",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "ash-purple-chitin-beast",
+   "label": "purple chitin beast",
+   "family": "monsters",
+   "sizeBand": "large",
+   "replaces": "ash-monsters-1-c2.png|r3c4",
+   "reason": "regen-underres"
+  }
+ ]
+}

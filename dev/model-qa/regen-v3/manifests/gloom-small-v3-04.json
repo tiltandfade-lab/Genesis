@@ -1,0 +1,25 @@
+{
+ "file": "gloom-small-v3-04.png",
+ "realm": "gloom",
+ "gridClass": "small",
+ "grid": "1 row x 5 columns",
+ "chroma": "#FF00FF",
+ "cells": [
+  {
+   "slug": "gloom-crate-of-grubs",
+   "label": "crate of grubs",
+   "family": "animals",
+   "sizeBand": "small",
+   "replaces": "gloom-domestic-animals-2.png|r3c1",
+   "reason": "FAIL-adam"
+  },
+  {
+   "slug": "gloom-maggot-pile",
+   "label": "maggot pile",
+   "family": "animals",
+   "sizeBand": "small",
+   "replaces": "gloom-dungeon-animals-2.png|r3c2",
+   "reason": "FAIL-adam"
+  }
+ ]
+}

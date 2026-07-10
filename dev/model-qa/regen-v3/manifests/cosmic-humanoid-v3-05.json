@@ -1,0 +1,17 @@
+{
+ "file": "cosmic-humanoid-v3-05.png",
+ "realm": "cosmic",
+ "gridClass": "humanoid",
+ "grid": "1 row x 4 columns",
+ "chroma": "#FF00FF",
+ "cells": [
+  {
+   "slug": "cosmic-warrior-with-spear-and-star-shield",
+   "label": "warrior with spear and star shield",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "cosmic-npc-03.png|r4c4",
+   "reason": "regen-shortleg"
+  }
+ ]
+}

@@ -1,0 +1,23 @@
+{
+ "file": "bright-kingdom-large-v3-01.png",
+ "realm": "bright-kingdom",
+ "gridClass": "animals-large",
+ "grid": "1 row x 2 columns",
+ "chroma": "#FF00FF",
+ "cells": [
+  {
+   "slug": "bright-kingdom-saddled-toy-warhorse-in-dented-parade-armor",
+   "label": "saddled toy warhorse in dented parade armor",
+   "family": "animals",
+   "sizeBand": "large",
+   "reason": "regen-direction"
+  },
+  {
+   "slug": "bright-kingdom-rock-folk-brute-cracking-its-knuckles-boulder-sh",
+   "label": "rock-folk brute cracking its knuckles, boulder shoulders, calm heavy-lidded face",
+   "family": "animals",
+   "sizeBand": "large",
+   "reason": "regen-direction"
+  }
+ ]
+}

@@ -1,0 +1,25 @@
+{
+ "file": "high-seas-huge-v3-02.png",
+ "realm": "high-seas",
+ "gridClass": "huge",
+ "grid": "1 row x 2 columns",
+ "chroma": "#FF00FF",
+ "cells": [
+  {
+   "slug": "high-seas-multi-headed-hydra",
+   "label": "multi-headed hydra",
+   "family": "monsters",
+   "sizeBand": "huge",
+   "replaces": "high-seas-mm-04.png|r2c4",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "high-seas-storm-sea-god-torso-in-water",
+   "label": "storm sea-god torso in water",
+   "family": "monsters",
+   "sizeBand": "huge",
+   "replaces": "high-seas-mm-05.png|r4c2",
+   "reason": "regen-underres"
+  }
+ ]
+}

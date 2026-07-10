@@ -1,0 +1,49 @@
+{
+ "file": "chrome-small-v3-13.png",
+ "realm": "chrome",
+ "gridClass": "small",
+ "grid": "1 row x 5 columns",
+ "chroma": "#00FF00",
+ "cells": [
+  {
+   "slug": "chrome-robot-cat",
+   "label": "robot cat",
+   "family": "animals",
+   "sizeBand": "small",
+   "replaces": "chrome-domestic-animals-2.png|r1c2",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "chrome-orb-robot-with-antenna",
+   "label": "orb robot with antenna",
+   "family": "animals",
+   "sizeBand": "small",
+   "replaces": "chrome-domestic-animals-2.png|r4c4",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "chrome-small-robot-dog",
+   "label": "small robot dog",
+   "family": "animals",
+   "sizeBand": "small",
+   "replaces": "chrome-dungeon-animals-2.png|r1c5",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "chrome-sweeper-brush-robot",
+   "label": "sweeper/brush robot",
+   "family": "animals",
+   "sizeBand": "small",
+   "replaces": "chrome-dungeon-animals-2.png|r5c5",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "chrome-robot-macaw",
+   "label": "robot macaw",
+   "family": "animals",
+   "sizeBand": "small",
+   "replaces": "chrome-wild-animals-2.png|r4c5",
+   "reason": "regen-style"
+  }
+ ]
+}

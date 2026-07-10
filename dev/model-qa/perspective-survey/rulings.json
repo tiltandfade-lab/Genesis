@@ -1,0 +1,322 @@
+{
+ "theater-mm-02.png|r5c5": {
+  "ruling": "fail",
+  "ts": 1783693299
+ },
+ "theater-mm-02.png|r1c1": {
+  "ruling": "fail",
+  "ts": 1783693302
+ },
+ "theater-mm-05.png|r4c4": {
+  "ruling": "fail",
+  "ts": 1783693305
+ },
+ "theater-mm-05.png|r4c5": {
+  "ruling": "fail",
+  "ts": 1783693305
+ },
+ "theater-dungeon-animals-01.png|r2c1": {
+  "ruling": "fail",
+  "ts": 1783693306
+ },
+ "theater-dungeon-animals-01.png|r5c1": {
+  "ruling": "fail",
+  "ts": 1783693308
+ },
+ "chrome-domestic-animals-2.png|r3c5": {
+  "ruling": "fail",
+  "ts": 1783693316
+ },
+ "chrome-dungeon-animals-2.png|r1c3": {
+  "ruling": "fail",
+  "ts": 1783693319
+ },
+ "chrome-dungeon-animals-2.png|r2c3": {
+  "ruling": "fail",
+  "ts": 1783693320
+ },
+ "chrome-dungeon-animals-2.png|r2c4": {
+  "ruling": "fail",
+  "ts": 1783693320
+ },
+ "chrome-dungeon-animals-2.png|r3c2": {
+  "ruling": "fail",
+  "ts": 1783693321
+ },
+ "chrome-dungeon-animals-2.png|r4c4": {
+  "ruling": "fail",
+  "ts": 1783693341
+ },
+ "chrome-dungeon-animals-2.png|r5c1": {
+  "ruling": "fail",
+  "ts": 1783693341
+ },
+ "gloom-domestic-animals-2.png|r3c1": {
+  "ruling": "fail",
+  "ts": 1783693366
+ },
+ "gloom-dungeon-animals-2.png|r2c1": {
+  "ruling": "fail",
+  "ts": 1783693369
+ },
+ "gloom-dungeon-animals-2.png|r2c2": {
+  "ruling": "fail",
+  "ts": 1783693370
+ },
+ "gloom-dungeon-animals-2.png|r2c5": {
+  "ruling": "fail",
+  "ts": 1783693371
+ },
+ "gloom-dungeon-animals-2.png|r3c2": {
+  "ruling": "fail",
+  "ts": 1783693373
+ },
+ "gloom-dungeon-animals-2.png|r3c4": {
+  "ruling": "fail",
+  "ts": 1783693379
+ },
+ "gloom-dungeon-animals-2.png|r4c2": {
+  "ruling": "fail",
+  "ts": 1783693379
+ },
+ "gloom-dungeon-animals-2.png|r5c2": {
+  "ruling": "fail",
+  "ts": 1783693383
+ },
+ "high-seas-dungeon-animals-2.png|r1c4": {
+  "ruling": "fail",
+  "ts": 1783693387
+ },
+ "high-seas-dungeon-animals-2.png|r3c1": {
+  "ruling": "fail",
+  "ts": 1783693388
+ },
+ "high-seas-dungeon-animals-2.png|r3c3": {
+  "ruling": "fail",
+  "ts": 1783693388
+ },
+ "high-seas-dungeon-animals-2.png|r3c5": {
+  "ruling": "fail",
+  "ts": 1783693391
+ },
+ "high-seas-dungeon-animals-2.png|r4c2": {
+  "ruling": "fail",
+  "ts": 1783693393
+ },
+ "high-seas-dungeon-animals-2.png|r4c4": {
+  "ruling": "fail",
+  "ts": 1783693399
+ },
+ "high-seas-dungeon-animals-2.png|r5c4": {
+  "ruling": "fail",
+  "ts": 1783693400
+ },
+ "high-seas-wild-animals-2.png|r4c3": {
+  "ruling": "fail",
+  "ts": 1783693402
+ },
+ "high-seas-wild-animals-2.png|r4c5": {
+  "ruling": "fail",
+  "ts": 1783693403
+ },
+ "lost-world-domestic-animals-2.png|r5c5": {
+  "ruling": "fail",
+  "ts": 1783693415
+ },
+ "lost-world-dungeon-animals-2.png|r3c4": {
+  "ruling": "fail",
+  "ts": 1783693436
+ },
+ "lost-world-dungeon-animals-2.png|r5c2": {
+  "ruling": "fail",
+  "ts": 1783693454
+ },
+ "lost-world-dungeon-animals-2.png|r5c5": {
+  "ruling": "fail",
+  "ts": 1783693458
+ },
+ "lost-world-wild-animals-2.png|r5c4": {
+  "ruling": "fail",
+  "ts": 1783693469
+ },
+ "noir-domestic-animals-2.png|r5c3": {
+  "ruling": "fail",
+  "ts": 1783693477
+ },
+ "noir-dungeon-animals-2.png|r1c1": {
+  "ruling": "fail",
+  "ts": 1783693479
+ },
+ "noir-dungeon-animals-2.png|r2c2": {
+  "ruling": "fail",
+  "ts": 1783693480
+ },
+ "noir-dungeon-animals-2.png|r2c3": {
+  "ruling": "fail",
+  "ts": 1783693481
+ },
+ "noir-dungeon-animals-2.png|r2c4": {
+  "ruling": "fail",
+  "ts": 1783693482
+ },
+ "noir-dungeon-animals-2.png|r2c5": {
+  "ruling": "fail",
+  "ts": 1783693483
+ },
+ "noir-dungeon-animals-2.png|r3c1": {
+  "ruling": "fail",
+  "ts": 1783693483
+ },
+ "noir-dungeon-animals-2.png|r3c2": {
+  "ruling": "fail",
+  "ts": 1783693490
+ },
+ "noir-dungeon-animals-2.png|r3c4": {
+  "ruling": "fail",
+  "ts": 1783693491
+ },
+ "noir-dungeon-animals-2.png|r3c5": {
+  "ruling": "fail",
+  "ts": 1783693493
+ },
+ "noir-dungeon-animals-2.png|r4c4": {
+  "ruling": "fail",
+  "ts": 1783693495
+ },
+ "noir-dungeon-animals-2.png|r5c1": {
+  "ruling": "fail",
+  "ts": 1783693496
+ },
+ "noir-dungeon-animals-2.png|r5c4": {
+  "ruling": "fail",
+  "ts": 1783693496
+ },
+ "noir-dungeon-animals-2.png|r5c5": {
+  "ruling": "fail",
+  "ts": 1783693497
+ },
+ "noir-wild-animals-2.png|r3c5": {
+  "ruling": "fail",
+  "ts": 1783693498
+ },
+ "suburb-domestic-animals-2.png|r3c4": {
+  "ruling": "fail",
+  "ts": 1783693505
+ },
+ "suburb-dungeon-animals-2.png|r1c4": {
+  "ruling": "fail",
+  "ts": 1783693509
+ },
+ "suburb-dungeon-animals-2.png|r2c1": {
+  "ruling": "fail",
+  "ts": 1783693510
+ },
+ "suburb-dungeon-animals-2.png|r2c5": {
+  "ruling": "fail",
+  "ts": 1783693511
+ },
+ "suburb-dungeon-animals-2.png|r4c2": {
+  "ruling": "fail",
+  "ts": 1783693515
+ },
+ "suburb-dungeon-animals-2.png|r4c3": {
+  "ruling": "fail",
+  "ts": 1783693516
+ },
+ "suburb-dungeon-animals-2.png|r4c5": {
+  "ruling": "fail",
+  "ts": 1783693517
+ },
+ "theater-dungeon-animals-2.png|r5c2": {
+  "ruling": "fail",
+  "ts": 1783693534
+ },
+ "ash-dungeon-animals-2.png|r1c5": {
+  "ruling": "fail",
+  "ts": 1783693563
+ },
+ "ash-dungeon-animals-2.png|r3c1": {
+  "ruling": "fail",
+  "ts": 1783693564
+ },
+ "ash-dungeon-animals-2.png|r4c3": {
+  "ruling": "fail",
+  "ts": 1783693580
+ },
+ "ash-dungeon-animals-2.png|r4c4": {
+  "ruling": "fail",
+  "ts": 1783693582
+ },
+ "ash-dungeon-animals-2.png|r4c5": {
+  "ruling": "fail",
+  "ts": 1783693585
+ },
+ "cosmic-dungeon-animals-2.png|r2c5": {
+  "ruling": "fail",
+  "ts": 1783693602
+ },
+ "cosmic-dungeon-animals-2.png|r3c4": {
+  "ruling": "fail",
+  "ts": 1783693604
+ },
+ "cosmic-wild-animals-2.png|r3c3": {
+  "ruling": "fail",
+  "ts": 1783693610
+ },
+ "fantasy-dungeon-animals-2.png|r1c2": {
+  "ruling": "fail",
+  "ts": 1783693620
+ },
+ "fantasy-dungeon-animals-2.png|r1c5": {
+  "ruling": "fail",
+  "ts": 1783693625
+ },
+ "fantasy-dungeon-animals-2.png|r2c1": {
+  "ruling": "fail",
+  "ts": 1783693629
+ },
+ "fantasy-dungeon-animals-2.png|r2c2": {
+  "ruling": "fail",
+  "ts": 1783693630
+ },
+ "fantasy-dungeon-animals-2.png|r3c1": {
+  "ruling": "fail",
+  "ts": 1783693635
+ },
+ "fantasy-dungeon-animals-2.png|r5c2": {
+  "ruling": "fail",
+  "ts": 1783693641
+ },
+ "fantasy-dungeon-animals-2.png|r5c3": {
+  "ruling": "fail",
+  "ts": 1783693643
+ },
+ "fantasy-dungeon-animals-2.png|r5c4": {
+  "ruling": "fail",
+  "ts": 1783693646
+ },
+ "frontier-dungeon-animals-2.png|r1c3": {
+  "ruling": "fail",
+  "ts": 1783693648
+ },
+ "frontier-dungeon-animals-2.png|r1c5": {
+  "ruling": "fail",
+  "ts": 1783693651
+ },
+ "frontier-dungeon-animals-2.png|r3c4": {
+  "ruling": "fail",
+  "ts": 1783693655
+ },
+ "frontier-dungeon-animals-2.png|r4c2": {
+  "ruling": "fail",
+  "ts": 1783693663
+ },
+ "frontier-dungeon-animals-2.png|r5c3": {
+  "ruling": "fail",
+  "ts": 1783693667
+ },
+ "cosmic-expansion-e1-01.png|r4c1": {
+  "ruling": "fail",
+  "ts": 1783693695
+ }
+}

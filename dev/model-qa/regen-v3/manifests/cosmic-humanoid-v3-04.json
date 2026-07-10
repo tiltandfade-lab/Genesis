@@ -1,0 +1,201 @@
+{
+ "file": "cosmic-humanoid-v3-04.png",
+ "realm": "cosmic",
+ "gridClass": "humanoid",
+ "grid": "6 rows x 4 columns",
+ "chroma": "#FF00FF",
+ "cells": [
+  {
+   "slug": "cosmic-boy-shading-eyes-walking",
+   "label": "boy shading eyes walking",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "cosmic-kids-01.png|r1c1",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "cosmic-girl-crouching-at-wall",
+   "label": "girl crouching at wall",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "cosmic-kids-01.png|r1c2",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "cosmic-girl-praying-standing",
+   "label": "girl praying standing",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "cosmic-kids-01.png|r1c3",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "cosmic-kid-sitting-on-block-looking-up",
+   "label": "kid sitting on block looking up",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "cosmic-kids-01.png|r1c4",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "cosmic-boy-running-with-orb",
+   "label": "boy running with orb",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "cosmic-kids-01.png|r1c5",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "cosmic-braided-girl-finger-to-lips",
+   "label": "braided girl finger to lips",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "cosmic-kids-01.png|r2c1",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "cosmic-boy-in-robe-reaching-out",
+   "label": "boy in robe reaching out",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "cosmic-kids-01.png|r2c2",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "cosmic-boy-climbing-stairs",
+   "label": "boy climbing stairs",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "cosmic-kids-01.png|r2c3",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "cosmic-girl-with-braids-holding-orb",
+   "label": "girl with braids holding orb",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "cosmic-kids-01.png|r2c4",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "cosmic-kid-kneeling-feeding-starry-fawn",
+   "label": "kid kneeling feeding starry fawn",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "cosmic-kids-01.png|r2c5",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "cosmic-cloaked-kid-walking-gazing-up",
+   "label": "cloaked kid walking gazing up",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "cosmic-kids-01.png|r3c1",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "cosmic-red-haired-girl-listening-at-door",
+   "label": "red-haired girl listening at door",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "cosmic-kids-01.png|r3c2",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "cosmic-kid-clutching-bundle",
+   "label": "kid clutching bundle",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "cosmic-kids-01.png|r3c3",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "cosmic-girl-bent-forward-handing-note",
+   "label": "girl bent forward handing note",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "cosmic-kids-01.png|r3c4",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "cosmic-blond-kid-looking-up",
+   "label": "blond kid looking up",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "cosmic-kids-01.png|r3c5",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "cosmic-girl-comforting-small-sibling",
+   "label": "girl comforting small sibling",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "cosmic-kids-01.png|r4c1",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "cosmic-kid-holding-round-mirror",
+   "label": "kid holding round mirror",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "cosmic-kids-01.png|r4c2",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "cosmic-girl-reaching-for-keyhole-on-door",
+   "label": "girl reaching for keyhole on door",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "cosmic-kids-01.png|r4c3",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "cosmic-laughing-kid-hands-on-hips",
+   "label": "laughing kid hands on hips",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "cosmic-kids-01.png|r4c4",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "cosmic-caped-kid-running-arm-outstretched",
+   "label": "caped kid running arm outstretched",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "cosmic-kids-01.png|r4c5",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "cosmic-pink-static-lightning-humanoid",
+   "label": "pink static/lightning humanoid",
+   "family": "monsters",
+   "sizeBand": "medium",
+   "replaces": "cosmic-mm-02.png|r1c4",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "cosmic-cook-stirring-cauldron",
+   "label": "cook stirring cauldron",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "cosmic-npc-01.png|r2c2",
+   "reason": "regen-shortleg"
+  },
+  {
+   "slug": "cosmic-starfield-spirit-walking",
+   "label": "starfield spirit walking",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "cosmic-npc-02.png|r2c4",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "cosmic-muscular-man-carrying-stone-head",
+   "label": "muscular man carrying stone head",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "cosmic-npc-03.png|r1c3",
+   "reason": "regen-shortleg"
+  }
+ ]
+}

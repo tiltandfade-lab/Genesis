@@ -15,6 +15,14 @@ magenta `#FF00FF` background, key it out in post). Two lanes: **sheets** (6×6 g
 creatures/image — the bulk tiers) and **hero singles** (one production sprite per image —
 every CR ≥ 3 creature plus every `role: leader`).
 
+**Humanoid sheet formula:** for NPC, kid, gang, fashion-heavy, roller-skate, or otherwise
+humanoid-forward batches, use a true **portrait canvas** by default instead of a square sheet.
+Target **4:5** (`width:height`) and accept a slightly taller portrait output when it preserves
+full bodies. Do not merely ask for "4:5 composition inside a square"; prompt for the actual
+image canvas to be portrait so each row/cell has more vertical room. Keep the same flat
+`#FF00FF` background and grid/order discipline. This prevents the recurring short-legged,
+squat, or boot-cropped outputs seen on square humanoid sheets.
+
 ## The pipeline
 
 1. **`python3 build/gen-sprite-manifests.py`** reads `data/bestiary.js`, clusters all 508

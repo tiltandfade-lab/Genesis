@@ -76,7 +76,7 @@ def save_overlay(data):
             os.remove(tmp)
 
 
-ALLOWED_KEYS = {"scale", "verdict", "note", "tags", "redlined", "reusable"}
+ALLOWED_KEYS = {"scale", "verdict", "note", "tags", "redlined", "reusable", "floor"}
 
 
 def apply_patch(slug, set_keys, clear_keys):
@@ -94,6 +94,17 @@ def apply_patch(slug, set_keys, clear_keys):
             if abs(v - 1.0) < 1e-9:  # scale 1 = no calibration; keep the overlay sparse
                 entry.pop("scale", None)
                 continue
+        if k == "floor":
+            # ground-contact line: fraction of the sprite image's height measured UP from
+            # its bottom edge (0 = the bottom edge IS the floor). The theater mounts the
+            # figurine disc at this line. Kept sparse: 0/absent means "bottom edge".
+            v = float(v)
+            if not (0.0 <= v <= 0.9):
+                raise ValueError(f"floor out of range (0..0.9): {v}")
+            if v < 1e-9:
+                entry.pop("floor", None)
+                continue
+            v = round(v, 4)
         if k == "verdict" and v not in ("pass", "fail"):
             raise ValueError(f"verdict must be pass|fail, got {v!r}")
         if k == "tags" and not (isinstance(v, list) and all(isinstance(t, str) for t in v)):

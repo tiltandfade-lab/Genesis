@@ -2417,6 +2417,15 @@ let SPRITE_CHANNEL_ENABLED = true;
 // loader" instruction); nothing in product logic writes to this object from outside spriteTextureFor.
 const SPRITE_TEXTURE_CACHE = {};
 
+// GRAPHICS-ENGINE.md GR2 (dressing cards): texture cache keyed by dressing slug — either a
+// synchronously-generated placeholder label-card CanvasTexture (art doesn't exist yet — DRESSING-GEN
+// runs in the codex after this unit) or, once assets/dressing/<slug>.png resolves, the real loaded
+// THREE.Texture swapped in in-place. Unlike SPRITE_TEXTURE_CACHE above, a cache MISS here never
+// returns null — dressingTextureFor always returns a usable texture immediately (the placeholder),
+// so a dressing card never silently fails to mount pending an async load; see dressingTextureFor's
+// own header comment for the swap-on-load mechanics.
+const DRESSING_TEXTURE_CACHE = {};
+
 // join-key normalizer (docs/SPRITE-TRANSITION.md's own kebab discipline, loosened further for a
 // forgiving join): lowercase, strip everything but [a-z0-9] so "Grinning Poppet" and a bestiary
 // recipeSlug of "grinning-poppet" (or "grinningPoppet") normalize to the same key.
@@ -3794,6 +3803,8 @@ function mount(el, opts){
   S.fxGroup = fxGroup;
   S.interiorGroup = interiorGroup;
   S.interiorMeshCount = 0;
+  S.interiorDressingCount = 0;
+  S.interiorDressingWorldPositions = [];
   S.tweens = [];
   S.rotationStep = 0;
   S.boardCenter = new THREE.Vector3(0, 0, 0);
@@ -4344,6 +4355,124 @@ function interiorBuildPieces(pieces, cx, cz){
   return { group, resolved, requested: (pieces || []).length };
 }
 
+// GRAPHICS-ENGINE.md GR2 §D DRESSING SYSTEM (render half) — data.dressing entries (src/engine/
+// place-dressing.js's dressPlan output: {slug,x,y,primary,cardKind,roomSegNum,lightAffine?}) mount
+// as upright CARDS, the same standee construction billboard pieces already use (nearestify, alpha-
+// cutout, camera-facing yaw+tilt via updateSpriteBillboardYaw's face(), tagged userData.sprite so
+// that function's existing "walk S.interiorGroup one level deep" scan already picks these up with
+// zero changes there), shadow-casting, sized by CARD_SIZE_BY_KIND off the entry's own `cardKind`
+// (small/medium/large, mirroring the manifest's own `size` field).
+const CARD_SIZE_BY_KIND = { small: 0.6, medium: 1.0, large: 1.6 };
+function dressingCardHeight(cardKind){
+  return CARD_SIZE_BY_KIND[cardKind] != null ? CARD_SIZE_BY_KIND[cardKind] : CARD_SIZE_BY_KIND.medium;
+}
+
+// synchronously-built label-card CanvasTexture — the dev-only stand-in for a not-yet-generated
+// assets/dressing/<slug>.png (DRESSING-GEN runs in the codex after this unit; see this file's own
+// GR2 header note above). Small, legible, nearest-filtered (matches every other procedural texture
+// this file builds, e.g. interiorPatternTexture) so it reads clearly as "placeholder art", not a
+// rendering bug, at study-card distances.
+function dressingPlaceholderTexture(slug){
+  const canvas = document.createElement("canvas");
+  canvas.width = 128; canvas.height = 128;
+  const ctx = canvas.getContext("2d");
+  ctx.fillStyle = "#2a2a2a"; ctx.fillRect(0, 0, 128, 128);
+  ctx.strokeStyle = "#c9a85c"; ctx.lineWidth = 4;
+  ctx.strokeRect(4, 4, 120, 120);
+  ctx.fillStyle = "#e8e8e8";
+  ctx.font = "11px monospace";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  // word-wrap the slug across a few lines — long dressing slugs (e.g. "gloom-clutter-mausoleumdoor-
+  // shard") need to break somewhere to stay legible in a 128px card.
+  const words = String(slug || "dressing").split("-");
+  const lines = [];
+  let line = "";
+  words.forEach((w) => {
+    const next = line ? line + "-" + w : w;
+    if(next.length > 14 && line){ lines.push(line); line = w; } else { line = next; }
+  });
+  if(line) lines.push(line);
+  const lineH = 14, startY = 64 - ((lines.length - 1) * lineH) / 2;
+  lines.forEach((ln, i) => ctx.fillText(ln, 64, startY + i * lineH));
+  const tex = new THREE.CanvasTexture(canvas);
+  nearestify(tex);
+  return tex;
+}
+
+// mirrors spriteTextureFor's async-load/replay convention (this file's own established pattern) but
+// NEVER returns null: a cache miss synthesizes+caches the placeholder immediately (so the caller's
+// card mounts on the very first render pass, no pending/blank state) while a real
+// assets/dressing/<slug>.png load races in the background; on success the cache entry is swapped to
+// the real texture and S.lastBoard is replayed (same "null the dirty key, resend" trick), so real art
+// drops in with ZERO code change the moment DRESSING-GEN's files land. A failed load just keeps the
+// placeholder forever (loader that "falls back cleanly", per this unit's own brief) — never retried,
+// never throws.
+function dressingTextureFor(slug){
+  const cached = DRESSING_TEXTURE_CACHE[slug];
+  if(cached) return cached;
+  const placeholder = dressingPlaceholderTexture(slug);
+  DRESSING_TEXTURE_CACHE[slug] = placeholder;
+  textureLoader.load(
+    "assets/dressing/" + slug + ".png",
+    function(tex){
+      nearestify(tex);
+      DRESSING_TEXTURE_CACHE[slug] = tex;
+      if(S.mounted && S.lastBoard && S.lastBoard.kind === "interior3d"){
+        S.boardKey = null;
+        setInteriorBoard(S.lastBoard);
+      }
+    },
+    undefined,
+    function(){ /* no assets/dressing/<slug>.png yet (or failed) — placeholder stays permanently */ }
+  );
+  return placeholder;
+}
+
+// a single dressing card group — same construction discipline as buildSpriteBillboard (SPRITE PURITY:
+// psxExempt, no dither/vertex-snap on card pixels; camera-facing group, feet-at-origin, alpha-cutout
+// shadow casting via a MeshDepthMaterial keyed off the same texture) — kept as its OWN function
+// (not a buildSpriteBillboard call) since dressing cards resolve via dressingTextureFor (always-
+// available placeholder-or-real) rather than the sprite registry's resolved-or-null join.
+function buildDressingCard(entry){
+  const tex = dressingTextureFor(entry.slug);
+  const h = dressingCardHeight(entry.cardKind);
+  const geo = new THREE.PlaneGeometry(h, h);
+  const mat = new THREE.MeshBasicMaterial({
+    map: tex, transparent: true, alphaTest: 0.5, side: THREE.DoubleSide, depthWrite: true
+  });
+  mat.userData.psxExempt = true; // SPRITE PURITY — cards are flat painted art, never PS1-distorted
+  const mesh = new THREE.Mesh(geo, mat);
+  mesh.position.y = h / 2;
+  mesh.castShadow = true;
+  mesh.receiveShadow = false;
+  mesh.customDepthMaterial = new THREE.MeshDepthMaterial({
+    map: tex, alphaTest: 0.5, depthPacking: THREE.RGBADepthPacking
+  });
+  const g = new THREE.Group();
+  g.add(mesh);
+  g.userData.sprite = true; // updateSpriteBillboardYaw's existing scan picks this group up unmodified
+  g.userData.dressingSlug = entry.slug;
+  return g;
+}
+
+// data.dressing -> group of dressing card standees, origin-shifted the SAME way tiles/lights/pieces
+// already are (the v3 card bug class this unit's own brief calls out by name: raw cell coords render
+// outside the fitted camera frame — every mount in this function goes through the (cx,cz) subtraction,
+// no exceptions).
+function interiorBuildDressing(dressing, cx, cz){
+  const group = new THREE.Group();
+  (dressing || []).forEach((d) => {
+    if(!d || !d.slug) return;
+    const g = buildDressingCard(d);
+    // -0.4: feet on the y=-0.5 floor plane, the SAME convention interiorBuildPieces already
+    // establishes for billboard groups standing in an interior room (that function's own comment).
+    g.position.set((d.x || 0) - (cx || 0), -0.4, (d.y || 0) - (cz || 0));
+    group.add(g);
+  });
+  return group;
+}
+
 function setInteriorBoard(data){
   if(!S.mounted || !data) return;
   // DUNGEON-GRAPH.md U3 render-quality study card: S.interiorVariant (window.Theater.setInteriorVariant,
@@ -4459,6 +4588,20 @@ function setInteriorBoard(data){
   S.interiorGroup.add(piecesBuilt.group);
   S.interiorPiecesResolved = piecesBuilt.resolved;
   S.interiorPiecesRequested = piecesBuilt.requested;
+
+  // GRAPHICS-ENGINE.md GR2 §D: dressing cards (data.dressing, src/engine/place-dressing.js's
+  // dressPlan output — a plain field the caller sets directly on the board object, same convention
+  // as data.pieces/data.lightProfile above).
+  const dressingGroup = interiorBuildDressing(data.dressing, cx, cz);
+  S.interiorGroup.add(dressingGroup);
+  S.interiorDressingCount = (data.dressing || []).length;
+  // harness-facing diagnostic (dev/verify-dungeon-dressing.mjs check 4: "render mount... origin-
+  // shifted correctly") — one entry per mounted card, its REAL world position read straight off the
+  // group THREE actually placed (never recomputed by the test), so the check proves the mount, not a
+  // parallel formula that could drift from it.
+  S.interiorDressingWorldPositions = dressingGroup.children.map((g) => ({
+    slug: g.userData && g.userData.dressingSlug, x: g.position.x, y: g.position.y, z: g.position.z
+  }));
 
   placeCamera();
   markDirty();
@@ -5002,6 +5145,11 @@ window.Theater.interiorPiecesResolved = function(){ return S.interiorPiecesResol
 window.Theater.interiorPiecesRequested = function(){ return S.interiorPiecesRequested || 0; };
 window.Theater.interiorLightCount = function(){ return S.interiorLightCount || 0; };
 window.Theater.interiorShadowCasterCount = function(){ return S.interiorShadowCasterCount || 0; };
+// GRAPHICS-ENGINE.md GR2: same read-only harness-facing discipline — how many dressing cards mounted
+// on the last setInteriorBoard call. 0 before any interior board / on a board with no data.dressing.
+window.Theater.interiorDressingCount = function(){ return S.interiorDressingCount || 0; };
+window.Theater.interiorDressingWorldPositions = function(){ return S.interiorDressingWorldPositions || []; };
+window.Theater.interiorBoardOrigin = function(){ return S.boardOrigin ? { cx: S.boardOrigin.cx, cz: S.boardOrigin.cz } : null; };
 window.Theater.shadowMapEnabled = function(){ return !!(S.renderer && S.renderer.shadowMap.enabled); };
 
 // DUNGEON-GRAPH.md U3 iteration-2, SPRITE PURITY ruling — a harness-facing diagnostic (dev/verify-

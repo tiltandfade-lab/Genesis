@@ -14,8 +14,14 @@ Reads data/sprite-registry.js + the review overlay + the v2 manifest (for cues) 
 Tiers (effective height = overlay scale x 6ft x SRD size-plane multiplier):
   TITAN  >= 24 ft            -> one creature per sheet (full-frame, max detail)
   XL     9 - 24 ft           -> 2x2 sheets, 4 creatures each (~2.5x cell resolution)
-  LARGE  5 - 8 ft            -> 3x3 sheets, 9 creatures each (~1.7x cell resolution vs 5x5)
+  LARGE  5 - 8 ft            -> 3x3 sheets, 9 sprites each (~1.7x cell resolution vs 5x5)
   REDO   verdict:fail < 9 ft -> standard 5x5 sheets (art was rejected, size was fine)
+
+Scope: TITAN/XL/REDO cover cut fantasy MONSTERS (the original 2x ruling). LARGE covers ALL
+cut sprites in the 5-8 ft band: fantasy slugs of every kind (monster, npc, kid, the animal
+kinds) go on fantasy-large-N sheets under the fantasy style block, and the realm-"pc"
+character sprites go on their own pc-large-N sheets under pc-characters.md's shared style
+block — never mix realms (or style blocks) on one sheet.
 
 LARGE and REDO both cover sub-9ft creatures but are mutually exclusive: a failed-verdict
 sprite in the 5-8 ft band still goes to REDO (art was rejected, not resolution), while LARGE
@@ -42,6 +48,7 @@ REGISTRY_JS = os.path.join(ROOT, "data", "sprite-registry.js")
 OVERLAY = os.path.join(ROOT, "dev", "model-qa", "sprite-tags-overlay.json")
 V2_MANIFEST = os.path.join(ROOT, "dev", "sprite-manifests", "v2-manifest.json")
 STYLE_SOURCE = os.path.join(ROOT, "dev", "model-qa", "sprite-sheets", "fantasy.md")
+PC_STYLE_SOURCE = os.path.join(ROOT, "dev", "model-qa", "sprite-sheets", "pc-characters.md")
 OUT_MD = os.path.join(ROOT, "dev", "sprite-manifests", "XL-REGEN-PROMPTS.md")
 OUT_MANIFEST = os.path.join(ROOT, "dev", "sprite-manifests", "xl-regen-manifest.json")
 
@@ -76,13 +83,13 @@ def load_registry():
     return json.loads(out.stdout)
 
 
-def style_block():
-    with open(STYLE_SOURCE, encoding="utf-8") as f:
+def style_block(source=STYLE_SOURCE):
+    with open(source, encoding="utf-8") as f:
         for line in f:
             m = re.match(r"Style block: (.+)", line.strip())
             if m:
                 return m.group(1)
-    raise SystemExit(f"no 'Style block:' line found in {STYLE_SOURCE}")
+    raise SystemExit(f"no 'Style block:' line found in {source}")
 
 
 def main():
@@ -91,6 +98,7 @@ def main():
     v2 = json.load(open(V2_MANIFEST, encoding="utf-8"))
     cues = {c["slug"]: c.get("cue", "") for s in v2["sheets"] for c in s["cells"]}
     style = style_block()
+    pc_style = style_block(PC_STYLE_SOURCE)
 
     def eff_ft(slug, e):
         sc = (overlay.get(slug) or {}).get("scale") or 1
@@ -98,7 +106,7 @@ def main():
 
     cut = {k: v for k, v in reg.items()
            if v["status"] == "cut" and v["realm"] == REALM and v["kind"] == "monster"}
-    titans, xl, large, redo = [], [], [], []
+    titans, xl, redo = [], [], []
     for slug, e in sorted(cut.items(), key=lambda kv: -eff_ft(kv[0], kv[1])):
         ft = eff_ft(slug, e)
         failed = (overlay.get(slug) or {}).get("verdict") == "fail"
@@ -106,10 +114,21 @@ def main():
             titans.append((slug, e, ft))
         elif ft >= XL_MIN_FT:
             xl.append((slug, e, ft))
-        elif ft >= LARGE_MIN_FT and not failed:
-            large.append((slug, e, ft))
         elif failed:
             redo.append((slug, e, ft))
+
+    # LARGE pass: ALL cut sprites in [5, 9) ft — fantasy every kind + realm-"pc" characters —
+    # excluding fail verdicts (those are REDO's, if fantasy monsters) and anything the
+    # TITAN/XL/REDO tiers already claimed.
+    claimed = {slug for slug, _, _ in titans + xl + redo}
+    large, large_pc = [], []
+    for slug, e in sorted(reg.items(), key=lambda kv: -eff_ft(kv[0], kv[1])):
+        if e["status"] != "cut" or e["realm"] not in (REALM, "pc") or slug in claimed:
+            continue
+        ft = eff_ft(slug, e)
+        failed = (overlay.get(slug) or {}).get("verdict") == "fail"
+        if LARGE_MIN_FT <= ft < XL_MIN_FT and not failed:
+            (large_pc if e["realm"] == "pc" else large).append((slug, e, ft))
 
     sheets = []
     md = [
@@ -125,8 +144,10 @@ def main():
         "verdict:pass; a resolution regen is not the same art as what was ruled on.\n\n"
         f"**{len(titans)} titan solos · {len(xl)} XL creatures "
         f"({(len(xl)+XL_PER_SHEET-1)//XL_PER_SHEET} sheets of {XL_PER_SHEET}) · "
-        f"{len(large)} large creatures "
+        f"{len(large)} large fantasy sprites "
         f"({(len(large)+LARGE_PER_SHEET-1)//LARGE_PER_SHEET if large else 0} sheets of {LARGE_PER_SHEET}) · "
+        f"{len(large_pc)} large PC sprites "
+        f"({(len(large_pc)+LARGE_PER_SHEET-1)//LARGE_PER_SHEET if large_pc else 0} sheets of {LARGE_PER_SHEET}) · "
         f"{len(redo)} redo creatures**\n\n",
     ]
 
@@ -168,24 +189,33 @@ def main():
                   + "".join(cell_line(n + 1, slug, e, ft) for n, (slug, e, ft) in enumerate(chunk))
                   + "```\n\n")
 
-    if large:
-        md.append(f"## Large 3x3 sheets (5-8 ft) ({LARGE_PER_SHEET} creatures, each rendered "
-                  "LARGE — ~1.7x the detail of a standard 5x5 sheet)\n\n")
-        for i in range(0, len(large), LARGE_PER_SHEET):
-            chunk = large[i:i + LARGE_PER_SHEET]
-            sid = f"{REALM}-large-{i // LARGE_PER_SHEET + 1}"
-            sheets.append({"id": sid, "realm": REALM, "kind": "monster",
+    large_groups = [
+        (large, REALM, "mixed", style, "creature",
+         f"## Large 3x3 sheets (5-8 ft) ({LARGE_PER_SHEET} sprites, each rendered LARGE — "
+         "~1.7x the detail of a standard 5x5 sheet; fantasy realm, all kinds)\n\n"),
+        (large_pc, "pc", "pc", pc_style, "character",
+         f"## Large 3x3 PC sheets (5-8 ft) ({LARGE_PER_SHEET} player characters per sheet — "
+         "pc-characters.md style block, never mixed onto fantasy sheets)\n\n"),
+    ]
+    for group, g_realm, g_kind, g_style, noun, heading in large_groups:
+        if not group:
+            continue
+        md.append(heading)
+        for i in range(0, len(group), LARGE_PER_SHEET):
+            chunk = group[i:i + LARGE_PER_SHEET]
+            sid = f"{g_realm}-large-{i // LARGE_PER_SHEET + 1}"
+            sheets.append({"id": sid, "realm": g_realm, "kind": g_kind,
                            "sourceFile": os.path.relpath(OUT_MD, ROOT),
-                           "sourceSection": f"Large sheet {i // LARGE_PER_SHEET + 1}",
+                           "sourceSection": f"Large sheet {sid}",
                            "expected": len(chunk),
                            "cells": [{"n": n + 1, "name": e["name"], "slug": slug,
                                       "cue": cues.get(slug, "")}
                                      for n, (slug, e, ft) in enumerate(chunk)]})
             md.append(f"### {sid}\n\n```\n"
-                      f"3x3 grid, {len(chunk)} distinct creatures, one distinct creature per "
-                      f"cell, uniform cell size, each creature rendered LARGE — filling its "
+                      f"3x3 grid, {len(chunk)} distinct {noun}s, one distinct {noun} per "
+                      f"cell, uniform cell size, each {noun} rendered LARGE — filling its "
                       f"cell, roughly 1.7x the detail of a small sprite. Consistent scale "
-                      f"across cells. {style} {CLEAN_KEY_RULES}\n\n"
+                      f"across cells. {g_style} {CLEAN_KEY_RULES}\n\n"
                       + "".join(cell_line(n + 1, slug, e, ft) for n, (slug, e, ft) in enumerate(chunk))
                       + "```\n\n")
 
@@ -217,10 +247,12 @@ def main():
     print(f"wrote {OUT_MD}")
     print(f"wrote {OUT_MANIFEST} ({len(sheets)} sheets: {len(titans)} titan, "
           f"{(len(xl)+XL_PER_SHEET-1)//XL_PER_SHEET} XL, "
-          f"{(len(large)+LARGE_PER_SHEET-1)//LARGE_PER_SHEET if large else 0} large, "
+          f"{(len(large)+LARGE_PER_SHEET-1)//LARGE_PER_SHEET if large else 0} large-fantasy, "
+          f"{(len(large_pc)+LARGE_PER_SHEET-1)//LARGE_PER_SHEET if large_pc else 0} large-pc, "
           f"{(len(redo)+REDO_PER_SHEET-1)//REDO_PER_SHEET if redo else 0} redo)")
     print(f"population: {len(titans)} titan slugs, {len(xl)} XL slugs, "
-          f"{len(large)} large slugs, {len(redo)} redo slugs")
+          f"{len(large)} large-fantasy slugs, {len(large_pc)} large-pc slugs, "
+          f"{len(redo)} redo slugs")
 
 
 if __name__ == "__main__":

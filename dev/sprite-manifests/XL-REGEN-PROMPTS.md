@@ -12,7 +12,7 @@ Large/XL slices replace previously APPROVED art with brand-new art too — those
 slugs need a fresh pass through the review tool even though they already carried
 verdict:pass; a resolution regen is not the same art as what was ruled on.
 
-**24 titan solos · 161 XL creatures (41 sheets of 4) · 215 large creatures (24 sheets of 9) · 16 redo creatures**
+**24 titan solos · 161 XL creatures (41 sheets of 4) · 274 large fantasy sprites (31 sheets of 9) · 157 large PC sprites (18 sheets of 9) · 16 redo creatures**
 
 ## Titan solos (one creature per image — full frame, maximum detail)
 
@@ -658,7 +658,7 @@ ONE single creature, centered, filling most of the frame, maximum detail. Pixel-
 1. **Troll** — Large Giant, Chaotic Evil, CR 5 — signature move: Multiattack — stands ~9 ft tall
 ```
 
-## Large 3x3 sheets (5-8 ft) (9 creatures, each rendered LARGE — ~1.7x the detail of a standard 5x5 sheet)
+## Large 3x3 sheets (5-8 ft) (9 sprites, each rendered LARGE — ~1.7x the detail of a standard 5x5 sheet; fantasy realm, all kinds)
 
 ### fantasy-large-1
 
@@ -667,13 +667,13 @@ ONE single creature, centered, filling most of the frame, maximum detail. Pixel-
 
 1. **Bone Naga** — Large Undead, Neutral Evil, CR 4 — signature move: Multiattack — stands ~9 ft tall
 2. **Giant Octopus** — Large Beast, Unaligned, CR 1 — signature move: Tentacles — stands ~9 ft tall
-3. **Peryton** — Medium Monstrosity, Chaotic Evil, CR 2 — signature move: Multiattack — stands ~9 ft tall
-4. **Displacer Beast** — Large Monstrosity, Lawful Evil, CR 3 — signature move: Multiattack — stands ~9 ft tall
-5. **Red Dragon Wyrmling** — Medium Dragon (Chromatic), Chaotic Evil, CR 4 — signature move: Multiattack — stands ~9 ft tall
-6. **Questing Knight** — Medium or Small Humanoid, Neutral, CR 8 — signature move: Multiattack — stands ~9 ft tall
-7. **Lizardfolk Geomancer** — Medium Elemental, Neutral, CR 2 — signature move: Multiattack — stands ~9 ft tall
-8. **Plesiosaurus** — Large Beast (Dinosaur), Unaligned, CR 2 — signature move: Bite — stands ~9 ft tall
-9. **Greater Mimic** — Large Monstrosity (Shapechanger), Neutral, CR 4 — signature move: Multiattack — stands ~9 ft tall
+3. **Wild animal — A bull elk — antlers full-grown, the season's rut making it reckless** —  — stands ~9 ft tall
+4. **Peryton** — Medium Monstrosity, Chaotic Evil, CR 2 — signature move: Multiattack — stands ~9 ft tall
+5. **Displacer Beast** — Large Monstrosity, Lawful Evil, CR 3 — signature move: Multiattack — stands ~9 ft tall
+6. **Red Dragon Wyrmling** — Medium Dragon (Chromatic), Chaotic Evil, CR 4 — signature move: Multiattack — stands ~9 ft tall
+7. **Questing Knight** — Medium or Small Humanoid, Neutral, CR 8 — signature move: Multiattack — stands ~9 ft tall
+8. **Lizardfolk Geomancer** — Medium Elemental, Neutral, CR 2 — signature move: Multiattack — stands ~9 ft tall
+9. **Plesiosaurus** — Large Beast (Dinosaur), Unaligned, CR 2 — signature move: Bite — stands ~9 ft tall
 ```
 
 ### fantasy-large-2
@@ -681,15 +681,15 @@ ONE single creature, centered, filling most of the frame, maximum detail. Pixel-
 ```
 3x3 grid, 9 distinct creatures, one distinct creature per cell, uniform cell size, each creature rendered LARGE — filling its cell, roughly 1.7x the detail of a small sprite. Consistent scale across cells. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).
 
-1. **Druid (Circle Warden)** — Medium or Small Humanoid (Druid), Neutral, CR 2 — signature move: Multiattack — stands ~8 ft tall
-2. **Aarakocra Aeromancer** — Medium Elemental, Neutral, CR 4 — signature move: Multiattack — stands ~8 ft tall
-3. **Gladiator** — Medium or Small Humanoid, Neutral, CR 5 — signature move: Multiattack — stands ~8 ft tall
-4. **Chain Devil** — Medium Fiend (Devil), Lawful Evil, CR 8 — signature move: Multiattack — stands ~8 ft tall
-5. **Werewolf** — Medium or Small Monstrosity (Lycanthrope), Chaotic Evil, CR 3 — signature move: Multiattack — stands ~8 ft tall
-6. **Berserker Commander** — Medium or Small Humanoid, Neutral, CR 8 — signature move: Multiattack — stands ~8 ft tall
-7. **Basilisk** — Medium Monstrosity, Unaligned, CR 3 — signature move: Bite — stands ~8 ft tall
-8. **Barbed Devil** — Medium Fiend (Devil), Lawful Evil, CR 5 — signature move: Multiattack — stands ~8 ft tall
-9. **Half-Ogre (Ogrillon)** — Medium Humanoid (Orc, Giant), Chaotic Evil, CR 1 — signature move: Battleaxe — stands ~8 ft tall
+1. **Greater Mimic** — Large Monstrosity (Shapechanger), Neutral, CR 4 — signature move: Multiattack — stands ~9 ft tall
+2. **Host (Goliath)** — Controls the space, not the people in it. — stands ~8 ft tall
+3. **Druid (Circle Warden)** — Medium or Small Humanoid (Druid), Neutral, CR 2 — signature move: Multiattack — stands ~8 ft tall
+4. **Aarakocra Aeromancer** — Medium Elemental, Neutral, CR 4 — signature move: Multiattack — stands ~8 ft tall
+5. **Gladiator** — Medium or Small Humanoid, Neutral, CR 5 — signature move: Multiattack — stands ~8 ft tall
+6. **Chain Devil** — Medium Fiend (Devil), Lawful Evil, CR 8 — signature move: Multiattack — stands ~8 ft tall
+7. **Werewolf** — Medium or Small Monstrosity (Lycanthrope), Chaotic Evil, CR 3 — signature move: Multiattack — stands ~8 ft tall
+8. **Berserker Commander** — Medium or Small Humanoid, Neutral, CR 8 — signature move: Multiattack — stands ~8 ft tall
+9. **Basilisk** — Medium Monstrosity, Unaligned, CR 3 — signature move: Bite — stands ~8 ft tall
 ```
 
 ### fantasy-large-3
@@ -697,15 +697,15 @@ ONE single creature, centered, filling most of the frame, maximum detail. Pixel-
 ```
 3x3 grid, 9 distinct creatures, one distinct creature per cell, uniform cell size, each creature rendered LARGE — filling its cell, roughly 1.7x the detail of a small sprite. Consistent scale across cells. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).
 
-1. **Camel** — Large Beast, Unaligned, CR 0.125 — signature move: Bite — stands ~8 ft tall
-2. **Gnoll Demoniac** — Medium Fiend (Gnoll), Chaotic Evil, CR 8 — signature move: Multiattack — stands ~8 ft tall
-3. **Deva** — Medium Celestial (Angel), Lawful Good, CR 10 — signature move: Multiattack — stands ~8 ft tall
-4. **Shadow** — Medium Undead, Chaotic Evil, CR 0.5 — signature move: Strength Drain — stands ~8 ft tall
-5. **Bugbear Stalker** — Medium Fey (Goblinoid), Chaotic Evil, CR 3 — signature move: Multiattack — stands ~8 ft tall
-6. **Weretiger** — Medium or Small Monstrosity (Lycanthrope), Neutral, CR 4 — signature move: Multiattack — stands ~8 ft tall
-7. **Yochlol** — Medium Fiend (Demon), Chaotic Evil, CR 10 — signature move: Multiattack — stands ~8 ft tall
-8. **Archpriest** — Medium or Small Humanoid (Cleric), Neutral, CR 12 — signature move: Multiattack — stands ~8 ft tall
-9. **Polar Bear** — Large Beast, Unaligned, CR 2 — signature move: Multiattack — stands ~8 ft tall
+1. **Barbed Devil** — Medium Fiend (Devil), Lawful Evil, CR 5 — signature move: Multiattack — stands ~8 ft tall
+2. **Half-Ogre (Ogrillon)** — Medium Humanoid (Orc, Giant), Chaotic Evil, CR 1 — signature move: Battleaxe — stands ~8 ft tall
+3. **Servant (Goliath)** — Invisible to the powerful, and so hears every secret. — stands ~8 ft tall
+4. **Goliath dockworker (Goliath) — moves cargo alone that takes four other men** —  — stands ~8 ft tall
+5. **Camel** — Large Beast, Unaligned, CR 0.125 — signature move: Bite — stands ~8 ft tall
+6. **Gnoll Demoniac** — Medium Fiend (Gnoll), Chaotic Evil, CR 8 — signature move: Multiattack — stands ~8 ft tall
+7. **Deva** — Medium Celestial (Angel), Lawful Good, CR 10 — signature move: Multiattack — stands ~8 ft tall
+8. **Shadow** — Medium Undead, Chaotic Evil, CR 0.5 — signature move: Strength Drain — stands ~8 ft tall
+9. **Goliath bridge-toll keeper (Goliath) — collects the fee, stops the trouble, rarely needs to try hard** —  — stands ~8 ft tall
 ```
 
 ### fantasy-large-4
@@ -713,15 +713,15 @@ ONE single creature, centered, filling most of the frame, maximum detail. Pixel-
 ```
 3x3 grid, 9 distinct creatures, one distinct creature per cell, uniform cell size, each creature rendered LARGE — filling its cell, roughly 1.7x the detail of a small sprite. Consistent scale across cells. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).
 
-1. **Flesh Golem** — Medium Construct, Neutral, CR 5 — signature move: Multiattack — stands ~8 ft tall
-2. **Aarakocra Skirmisher** — Medium Elemental, Neutral, CR 0.25 — signature move: Talons — stands ~8 ft tall
-3. **Giant Wasp** — Medium Beast, Unaligned, CR 0.5 — signature move: Sting — stands ~8 ft tall
-4. **Thri-kreen Psion** — Medium Monstrosity, Neutral, CR 3 — signature move: Multiattack — stands ~8 ft tall
-5. **Helmed Horror** — Medium Construct, Neutral, CR 4 — signature move: Multiattack — stands ~8 ft tall
-6. **Werebear** — Medium or Small Monstrosity (Lycanthrope), Neutral Good, CR 5 — signature move: Multiattack — stands ~8 ft tall
-7. **Archdruid** — (The Archdruid stat block does not appear in the 2024 Monster Manual. The stat block below is retained from the 2014 edition as a campaign reference — treat as non-canonical until a 2024 equivalent is published.), CR 12 — signature move: Spellcasting — stands ~8 ft tall
-8. **Warhorse Skeleton** — Large Undead, Lawful Evil, CR 0.5 — signature move: Hooves — stands ~8 ft tall
-9. **Bulette Pup** — Medium Monstrosity, Unaligned, CR 2 — signature move: Bite — stands ~8 ft tall
+1. **Smuggler (Goliath)** — Hides the cargo; speaks only in euphemism. — stands ~8 ft tall
+2. **Bugbear Stalker** — Medium Fey (Goblinoid), Chaotic Evil, CR 3 — signature move: Multiattack — stands ~8 ft tall
+3. **Weretiger** — Medium or Small Monstrosity (Lycanthrope), Neutral, CR 4 — signature move: Multiattack — stands ~8 ft tall
+4. **Yochlol** — Medium Fiend (Demon), Chaotic Evil, CR 10 — signature move: Multiattack — stands ~8 ft tall
+5. **Archpriest** — Medium or Small Humanoid (Cleric), Neutral, CR 12 — signature move: Multiattack — stands ~8 ft tall
+6. **Polar Bear** — Large Beast, Unaligned, CR 2 — signature move: Multiattack — stands ~8 ft tall
+7. **Flesh Golem** — Medium Construct, Neutral, CR 5 — signature move: Multiattack — stands ~8 ft tall
+8. **Aarakocra Skirmisher** — Medium Elemental, Neutral, CR 0.25 — signature move: Talons — stands ~8 ft tall
+9. **Giant Wasp** — Medium Beast, Unaligned, CR 0.5 — signature move: Sting — stands ~8 ft tall
 ```
 
 ### fantasy-large-5
@@ -729,15 +729,15 @@ ONE single creature, centered, filling most of the frame, maximum detail. Pixel-
 ```
 3x3 grid, 9 distinct creatures, one distinct creature per cell, uniform cell size, each creature rendered LARGE — filling its cell, roughly 1.7x the detail of a small sprite. Consistent scale across cells. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).
 
-1. **Secret-Eye** — Medium Aberration, Neutral Evil, CR 2 — signature move: Multiattack — stands ~8 ft tall
-2. **Couatl** — Medium Celestial, Lawful Good, CR 4 — signature move: Bite — stands ~8 ft tall
-3. **Gray Chaos-Frog** — Medium Aberration, Chaotic Neutral, CR 9 — signature move: Multiattack — stands ~8 ft tall
-4. **Death Chaos-Frog** — Medium Aberration, Chaotic Evil, CR 10 — signature move: Multiattack — stands ~8 ft tall
-5. **Yuan-ti Malison (Type 3)** — Medium Monstrosity, Neutral Evil, CR 3 — signature move: Multiattack — stands ~8 ft tall
-6. **Orc Warrior** — Medium Humanoid (Orc), Chaotic Evil, CR 0.5 — signature move: Greataxe — stands ~8 ft tall
-7. **Drowned Husk** — CR 0.25 — signature move: Slam — stands ~8 ft tall
-8. **Salamander Fire Snake** — Medium Elemental, Neutral Evil, CR 1 — signature move: Bite — stands ~8 ft tall
-9. **Erinyes** — Medium Fiend (Devil), Lawful Evil, CR 12 — signature move: Multiattack — stands ~8 ft tall
+1. **Thri-kreen Psion** — Medium Monstrosity, Neutral, CR 3 — signature move: Multiattack — stands ~8 ft tall
+2. **Helmed Horror** — Medium Construct, Neutral, CR 4 — signature move: Multiattack — stands ~8 ft tall
+3. **Werebear** — Medium or Small Monstrosity (Lycanthrope), Neutral Good, CR 5 — signature move: Multiattack — stands ~8 ft tall
+4. **Archdruid** — (The Archdruid stat block does not appear in the 2024 Monster Manual. The stat block below is retained from the 2014 edition as a campaign reference — treat as non-canonical until a 2024 equivalent is published.), CR 12 — signature move: Spellcasting — stands ~8 ft tall
+5. **Warhorse Skeleton** — Large Undead, Lawful Evil, CR 0.5 — signature move: Hooves — stands ~8 ft tall
+6. **Bulette Pup** — Medium Monstrosity, Unaligned, CR 2 — signature move: Bite — stands ~8 ft tall
+7. **Secret-Eye** — Medium Aberration, Neutral Evil, CR 2 — signature move: Multiattack — stands ~8 ft tall
+8. **Couatl** — Medium Celestial, Lawful Good, CR 4 — signature move: Bite — stands ~8 ft tall
+9. **Gray Chaos-Frog** — Medium Aberration, Chaotic Neutral, CR 9 — signature move: Multiattack — stands ~8 ft tall
 ```
 
 ### fantasy-large-6
@@ -745,15 +745,15 @@ ONE single creature, centered, filling most of the frame, maximum detail. Pixel-
 ```
 3x3 grid, 9 distinct creatures, one distinct creature per cell, uniform cell size, each creature rendered LARGE — filling its cell, roughly 1.7x the detail of a small sprite. Consistent scale across cells. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).
 
-1. **Ultroloth** — Medium Fiend (Yugoloth), Neutral Evil, CR 13 — signature move: Multiattack — stands ~8 ft tall
-2. **Brown Bear** — Large Beast, Unaligned, CR 1 — signature move: Multiattack — stands ~8 ft tall
-3. **Bearded Devil** — Medium Fiend (Devil), Lawful Evil, CR 3 — signature move: Multiattack — stands ~8 ft tall
-4. **Half-Dragon** — Medium Dragon, Neutral, CR 5 — signature move: Multiattack — stands ~8 ft tall
-5. **Rakshasa** — Medium Fiend, Lawful Evil, CR 13 — signature move: Multiattack — stands ~8 ft tall
-6. **Harpy** — Medium Monstrosity, Chaotic Evil, CR 1 — signature move: Multiattack — stands ~8 ft tall
-7. **Cultist Fanatic** — Medium or Small Humanoid, Neutral, CR 2 — signature move: Pact Blade — stands ~8 ft tall
-8. **Bugbear Stalker (Strangler)** — Medium Humanoid (Goblinoid), Chaotic Evil, CR 3 — signature move: Multiattack — stands ~8 ft tall
-9. **Death Knight** — Medium or Small Undead, Chaotic Evil, CR 17 — signature move: Multiattack — stands ~8 ft tall
+1. **Death Chaos-Frog** — Medium Aberration, Chaotic Evil, CR 10 — signature move: Multiattack — stands ~8 ft tall
+2. **Pampered-elite (Goliath)** — Wealthy, bored, insulated from real consequence. — stands ~8 ft tall
+3. **Yuan-ti Malison (Type 3)** — Medium Monstrosity, Neutral Evil, CR 3 — signature move: Multiattack — stands ~8 ft tall
+4. **Orc Warrior** — Medium Humanoid (Orc), Chaotic Evil, CR 0.5 — signature move: Greataxe — stands ~8 ft tall
+5. **Drowned Husk** — CR 0.25 — signature move: Slam — stands ~8 ft tall
+6. **Salamander Fire Snake** — Medium Elemental, Neutral Evil, CR 1 — signature move: Bite — stands ~8 ft tall
+7. **Erinyes** — Medium Fiend (Devil), Lawful Evil, CR 12 — signature move: Multiattack — stands ~8 ft tall
+8. **Ultroloth** — Medium Fiend (Yugoloth), Neutral Evil, CR 13 — signature move: Multiattack — stands ~8 ft tall
+9. **Brown Bear** — Large Beast, Unaligned, CR 1 — signature move: Multiattack — stands ~8 ft tall
 ```
 
 ### fantasy-large-7
@@ -761,15 +761,15 @@ ONE single creature, centered, filling most of the frame, maximum detail. Pixel-
 ```
 3x3 grid, 9 distinct creatures, one distinct creature per cell, uniform cell size, each creature rendered LARGE — filling its cell, roughly 1.7x the detail of a small sprite. Consistent scale across cells. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).
 
-1. **Swarm of Ravens** — Medium Swarm of Tiny Beasts, Unaligned, CR 0.25 — signature move: Beaks — stands ~8 ft tall
-2. **Arcanaloth** — Medium Fiend (Yugoloth), Neutral Evil, CR 12 — signature move: Multiattack — stands ~8 ft tall
-3. **Astral Raider Dracomancer** — Medium Aberration (Gith), Lawful Evil, CR 16 — signature move: Multiattack — stands ~8 ft tall
-4. **Myconid Sovereign** — Large Plant, Lawful Neutral, CR 2 — signature move: Multiattack — stands ~8 ft tall
-5. **Bandit** — Medium or Small Humanoid, Neutral, CR 0.125 — signature move: Scimitar — stands ~8 ft tall
-6. **Clockwork Law-Construct Duodrone** — Medium Construct, Lawful Neutral, CR 0.25 — signature move: Multiattack — stands ~8 ft tall
-7. **Draft Horse** — Large Beast, Unaligned, CR 0.25 — signature move: Hooves — stands ~8 ft tall
-8. **The Needle Blight** — Medium Plant, Neutral Evil, CR 0.25 — signature move: Claw — stands ~8 ft tall
-9. **Clockwork Law-Construct Tridrone** — Medium Construct, Lawful Neutral, CR 0.5 — signature move: Multiattack — stands ~8 ft tall
+1. **Bearded Devil** — Medium Fiend (Devil), Lawful Evil, CR 3 — signature move: Multiattack — stands ~8 ft tall
+2. **Half-Dragon** — Medium Dragon, Neutral, CR 5 — signature move: Multiattack — stands ~8 ft tall
+3. **Rakshasa** — Medium Fiend, Lawful Evil, CR 13 — signature move: Multiattack — stands ~8 ft tall
+4. **Harpy** — Medium Monstrosity, Chaotic Evil, CR 1 — signature move: Multiattack — stands ~8 ft tall
+5. **Cultist Fanatic** — Medium or Small Humanoid, Neutral, CR 2 — signature move: Pact Blade — stands ~8 ft tall
+6. **Bugbear Stalker (Strangler)** — Medium Humanoid (Goblinoid), Chaotic Evil, CR 3 — signature move: Multiattack — stands ~8 ft tall
+7. **Death Knight** — Medium or Small Undead, Chaotic Evil, CR 17 — signature move: Multiattack — stands ~8 ft tall
+8. **Orcish farrier (Orc) — shoes every horse in the valley, feared and respected equally** —  — stands ~8 ft tall
+9. **Swarm of Ravens** — Medium Swarm of Tiny Beasts, Unaligned, CR 0.25 — signature move: Beaks — stands ~8 ft tall
 ```
 
 ### fantasy-large-8
@@ -777,10 +777,26 @@ ONE single creature, centered, filling most of the frame, maximum detail. Pixel-
 ```
 3x3 grid, 9 distinct creatures, one distinct creature per cell, uniform cell size, each creature rendered LARGE — filling its cell, roughly 1.7x the detail of a small sprite. Consistent scale across cells. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).
 
-1. **Warhorse** — Large Beast, Unaligned, CR 0.5 — signature move: Hooves — stands ~8 ft tall
-2. **Thri-kreen Marauder** — Medium Monstrosity, Neutral, CR 1 — signature move: Multiattack — stands ~8 ft tall
-3. **Priest** — Medium or Small Humanoid (Cleric), Neutral, CR 2 — signature move: Multiattack — stands ~8 ft tall
-4. **Incubus** — Medium Fiend, Neutral Evil, CR 4 — signature move: Multiattack — stands ~8 ft tall
+1. **Arcanaloth** — Medium Fiend (Yugoloth), Neutral Evil, CR 12 — signature move: Multiattack — stands ~8 ft tall
+2. **Astral Raider Dracomancer** — Medium Aberration (Gith), Lawful Evil, CR 16 — signature move: Multiattack — stands ~8 ft tall
+3. **Myconid Sovereign** — Large Plant, Lawful Neutral, CR 2 — signature move: Multiattack — stands ~8 ft tall
+4. **Bandit** — Medium or Small Humanoid, Neutral, CR 0.125 — signature move: Scimitar — stands ~8 ft tall
+5. **Clockwork Law-Construct Duodrone** — Medium Construct, Lawful Neutral, CR 0.25 — signature move: Multiattack — stands ~8 ft tall
+6. **Draft Horse** — Large Beast, Unaligned, CR 0.25 — signature move: Hooves — stands ~8 ft tall
+7. **The Needle Blight** — Medium Plant, Neutral Evil, CR 0.25 — signature move: Claw — stands ~8 ft tall
+8. **Clockwork Law-Construct Tridrone** — Medium Construct, Lawful Neutral, CR 0.5 — signature move: Multiattack — stands ~8 ft tall
+9. **Warhorse** — Large Beast, Unaligned, CR 0.5 — signature move: Hooves — stands ~8 ft tall
+```
+
+### fantasy-large-9
+
+```
+3x3 grid, 9 distinct creatures, one distinct creature per cell, uniform cell size, each creature rendered LARGE — filling its cell, roughly 1.7x the detail of a small sprite. Consistent scale across cells. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).
+
+1. **Thri-kreen Marauder** — Medium Monstrosity, Neutral, CR 1 — signature move: Multiattack — stands ~8 ft tall
+2. **Priest** — Medium or Small Humanoid (Cleric), Neutral, CR 2 — signature move: Multiattack — stands ~8 ft tall
+3. **Incubus** — Medium Fiend, Neutral Evil, CR 4 — signature move: Multiattack — stands ~8 ft tall
+4. **Orcish caravan blacksmith (Orc) — repairs wagon wheels faster than anyone in three towns** —  — stands ~8 ft tall
 5. **Deep-Brute** — Medium Monstrosity, Chaotic Neutral, CR 2 — signature move: Multiattack — stands ~8 ft tall
 6. **Orc Blind Prophet** — Medium Humanoid (Orc), Chaotic Evil, CR 2 — signature move: Multiattack — stands ~8 ft tall
 7. **Gnoll Warrior** — Medium Fiend (Gnoll), Chaotic Evil, CR 0.5 — signature move: Rend — stands ~7 ft tall
@@ -788,7 +804,7 @@ ONE single creature, centered, filling most of the frame, maximum detail. Pixel-
 9. **Fish-Folk Whip** — Medium Aberration, Neutral Evil, CR 1 — signature move: Pincer Staff — stands ~7 ft tall
 ```
 
-### fantasy-large-9
+### fantasy-large-10
 
 ```
 3x3 grid, 9 distinct creatures, one distinct creature per cell, uniform cell size, each creature rendered LARGE — filling its cell, roughly 1.7x the detail of a small sprite. Consistent scale across cells. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).
@@ -804,36 +820,20 @@ ONE single creature, centered, filling most of the frame, maximum detail. Pixel-
 9. **Myconid Spore Servant** — Medium or Small Plant, Unaligned, CR 1 — signature move: Slam — stands ~7 ft tall
 ```
 
-### fantasy-large-10
-
-```
-3x3 grid, 9 distinct creatures, one distinct creature per cell, uniform cell size, each creature rendered LARGE — filling its cell, roughly 1.7x the detail of a small sprite. Consistent scale across cells. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).
-
-1. **Pirate Admiral** — Medium or Small Humanoid, Neutral, CR 12 — signature move: Multiattack — stands ~7 ft tall
-2. **Violet Fungus** — Medium Plant, Unaligned, CR 0.25 — signature move: Multiattack — stands ~7 ft tall
-3. **Owlbear Cub** — Medium Monstrosity, Unaligned, CR 1 — signature move: Multiattack — stands ~7 ft tall
-4. **Poltergeist** — Medium or Small Undead, Chaotic Neutral, CR 2 — signature move: Multiattack — stands ~7 ft tall
-5. **Wererat** — Medium or Small Monstrosity (Lycanthrope), Lawful Evil, CR 2 — signature move: Multiattack — stands ~7 ft tall
-6. **Astral Raider Warrior** — Medium Aberration (Gith), Lawful Evil, CR 3 — signature move: Multiattack — stands ~7 ft tall
-7. **Grell** — Medium Aberration, Neutral Evil, CR 3 — signature move: Multiattack — stands ~7 ft tall
-8. **Clockwork Law-Construct Monodrone** — Medium Construct, Lawful Neutral, CR 0.125 — signature move: Gear — stands ~7 ft tall
-9. **Bugbear Warrior** — Medium Humanoid (Goblinoid), Chaotic Evil, CR 2 — signature move: Multiattack — stands ~7 ft tall
-```
-
 ### fantasy-large-11
 
 ```
 3x3 grid, 9 distinct creatures, one distinct creature per cell, uniform cell size, each creature rendered LARGE — filling its cell, roughly 1.7x the detail of a small sprite. Consistent scale across cells. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).
 
-1. **Flaming Skeleton** — Medium Undead, Lawful Evil, CR 3 — signature move: Multiattack — stands ~7 ft tall
-2. **Wight** — Medium Undead, Neutral Evil, CR 3 — signature move: Multiattack — stands ~7 ft tall
-3. **Azer Pyromancer** — Medium Elemental, Lawful Neutral, CR 6 — signature move: Multiattack — stands ~7 ft tall
-4. **The Cultist Roster (Base 2024 Stat Blocks)** — CR 0.125 — signature move: Ritual Sickle — stands ~7 ft tall
-5. **Hobgoblin Captain** — Medium Humanoid (Goblinoid), Lawful Evil, CR 3 — signature move: Multiattack — stands ~7 ft tall
-6. **Guard Captain** — Medium or Small Humanoid, Neutral, CR 4 — signature move: Multiattack — stands ~7 ft tall
-7. **Galeb Duhr** — Medium Elemental, Neutral, CR 6 — signature move: Avalanche Slam — stands ~7 ft tall
-8. **Medusa** — Medium Monstrosity, Lawful Evil, CR 6 — signature move: Multiattack — stands ~7 ft tall
-9. **Death Knight Aspirant** — Medium or Small Undead, Chaotic Evil, CR 11 — signature move: Multiattack — stands ~7 ft tall
+1. **Pirate Admiral** — Medium or Small Humanoid, Neutral, CR 12 — signature move: Multiattack — stands ~7 ft tall
+2. **Human miller — dust-covered, counts every sack twice** —  — stands ~7 ft tall
+3. **Violet Fungus** — Medium Plant, Unaligned, CR 0.25 — signature move: Multiattack — stands ~7 ft tall
+4. **Owlbear Cub** — Medium Monstrosity, Unaligned, CR 1 — signature move: Multiattack — stands ~7 ft tall
+5. **Poltergeist** — Medium or Small Undead, Chaotic Neutral, CR 2 — signature move: Multiattack — stands ~7 ft tall
+6. **Wererat** — Medium or Small Monstrosity (Lycanthrope), Lawful Evil, CR 2 — signature move: Multiattack — stands ~7 ft tall
+7. **Astral Raider Warrior** — Medium Aberration (Gith), Lawful Evil, CR 3 — signature move: Multiattack — stands ~7 ft tall
+8. **Grell** — Medium Aberration, Neutral Evil, CR 3 — signature move: Multiattack — stands ~7 ft tall
+9. **Orcish caravan guard — hired muscle with a reputation for actually caring about the cargo** —  — stands ~7 ft tall
 ```
 
 ### fantasy-large-12
@@ -841,15 +841,15 @@ ONE single creature, centered, filling most of the frame, maximum detail. Pixel-
 ```
 3x3 grid, 9 distinct creatures, one distinct creature per cell, uniform cell size, each creature rendered LARGE — filling its cell, roughly 1.7x the detail of a small sprite. Consistent scale across cells. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).
 
-1. **Mind-Thief Arcanist** — Medium Aberration, Lawful Evil, CR 11 — signature move: Multiattack — stands ~7 ft tall
-2. **Mummy Lord** — Medium or Small Undead (Cleric), Lawful Evil, CR 15 — signature move: Multiattack — stands ~7 ft tall
-3. **Desperate Bandit** — CR 0.125 — signature move: Scimitar — stands ~7 ft tall
-4. **Mire Creeper** — CR 0.125 — signature move: Blood Drain — stands ~7 ft tall
-5. **Fish-Folk** — Medium Aberration, Neutral Evil, CR 0.25 — signature move: Spear — stands ~7 ft tall
-6. **Fish-Folk Monitor** — Medium Aberration, Neutral Evil, CR 3 — signature move: Multiattack — stands ~7 ft tall
-7. **Fiend Cultist** — Medium or Small Humanoid, Neutral Evil, CR 8 — signature move: Multiattack — stands ~7 ft tall
-8. **Mage** — Medium or Small Humanoid (Wizard), Neutral, CR 6 — signature move: Multiattack — stands ~7 ft tall
-9. **Empyrean Iota** — Medium Celestial or Fiend (Titan), Neutral, CR 1 — signature move: Otherworldly Strike — stands ~7 ft tall
+1. **Clockwork Law-Construct Monodrone** — Medium Construct, Lawful Neutral, CR 0.125 — signature move: Gear — stands ~7 ft tall
+2. **Bugbear Warrior** — Medium Humanoid (Goblinoid), Chaotic Evil, CR 2 — signature move: Multiattack — stands ~7 ft tall
+3. **Flaming Skeleton** — Medium Undead, Lawful Evil, CR 3 — signature move: Multiattack — stands ~7 ft tall
+4. **Wight** — Medium Undead, Neutral Evil, CR 3 — signature move: Multiattack — stands ~7 ft tall
+5. **Azer Pyromancer** — Medium Elemental, Lawful Neutral, CR 6 — signature move: Multiattack — stands ~7 ft tall
+6. **The Cultist Roster (Base 2024 Stat Blocks)** — CR 0.125 — signature move: Ritual Sickle — stands ~7 ft tall
+7. **Hobgoblin Captain** — Medium Humanoid (Goblinoid), Lawful Evil, CR 3 — signature move: Multiattack — stands ~7 ft tall
+8. **Guard Captain** — Medium or Small Humanoid, Neutral, CR 4 — signature move: Multiattack — stands ~7 ft tall
+9. **Galeb Duhr** — Medium Elemental, Neutral, CR 6 — signature move: Avalanche Slam — stands ~7 ft tall
 ```
 
 ### fantasy-large-13
@@ -857,15 +857,15 @@ ONE single creature, centered, filling most of the frame, maximum detail. Pixel-
 ```
 3x3 grid, 9 distinct creatures, one distinct creature per cell, uniform cell size, each creature rendered LARGE — filling its cell, roughly 1.7x the detail of a small sprite. Consistent scale across cells. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).
 
-1. **Ettercap** — Medium Monstrosity, Neutral Evil, CR 2 — signature move: Multiattack — stands ~7 ft tall
-2. **Knight** — Medium or Small Humanoid, Neutral, CR 3 — signature move: Multiattack — stands ~7 ft tall
-3. **Xorn** — Medium Elemental, Neutral, CR 5 — signature move: Multiattack — stands ~7 ft tall
-4. **Sahuagin Priest** — Medium Fiend, Lawful Evil, CR 2 — signature move: Multiattack — stands ~7 ft tall
-5. **Swarm of Crawling Claws** — Medium Swarm of Tiny Undead, Neutral Evil, CR 3 — signature move: Swarm of Grasping Hands — stands ~7 ft tall
-6. **Wereboar** — Medium or Small Monstrosity (Lycanthrope), Neutral Evil, CR 4 — signature move: Multiattack — stands ~7 ft tall
-7. **Yuan-ti Infiltrator** — Medium Monstrosity, Neutral Evil, CR 1 — signature move: Multiattack — stands ~7 ft tall
-8. **Elemental Cultist** — Medium or Small Humanoid, Chaotic Evil, CR 8 — signature move: Multiattack — stands ~7 ft tall
-9. **Bandit Enforcer** — CR 0.5 — signature move: Multiattack — stands ~7 ft tall
+1. **Medusa** — Medium Monstrosity, Lawful Evil, CR 6 — signature move: Multiattack — stands ~7 ft tall
+2. **Death Knight Aspirant** — Medium or Small Undead, Chaotic Evil, CR 11 — signature move: Multiattack — stands ~7 ft tall
+3. **Mind-Thief Arcanist** — Medium Aberration, Lawful Evil, CR 11 — signature move: Multiattack — stands ~7 ft tall
+4. **Mummy Lord** — Medium or Small Undead (Cleric), Lawful Evil, CR 15 — signature move: Multiattack — stands ~7 ft tall
+5. **Desperate Bandit** — CR 0.125 — signature move: Scimitar — stands ~7 ft tall
+6. **Mire Creeper** — CR 0.125 — signature move: Blood Drain — stands ~7 ft tall
+7. **Fish-Folk** — Medium Aberration, Neutral Evil, CR 0.25 — signature move: Spear — stands ~7 ft tall
+8. **Fish-Folk Monitor** — Medium Aberration, Neutral Evil, CR 3 — signature move: Multiattack — stands ~7 ft tall
+9. **Fiend Cultist** — Medium or Small Humanoid, Neutral Evil, CR 8 — signature move: Multiattack — stands ~7 ft tall
 ```
 
 ### fantasy-large-14
@@ -873,15 +873,15 @@ ONE single creature, centered, filling most of the frame, maximum detail. Pixel-
 ```
 3x3 grid, 9 distinct creatures, one distinct creature per cell, uniform cell size, each creature rendered LARGE — filling its cell, roughly 1.7x the detail of a small sprite. Consistent scale across cells. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).
 
-1. **Satyr** — Medium Fey, Chaotic Neutral, CR 0.5 — signature move: Hooves — stands ~7 ft tall
-2. **Hobgoblin Iron Shadow** — Medium Humanoid (Goblinoid), Lawful Evil, CR 2 — signature move: Multiattack — stands ~7 ft tall
-3. **Orc Berserker** — Medium Humanoid (Orc), Chaotic Evil, CR 2 — signature move: Multiattack — stands ~7 ft tall
-4. **Wight Lord** — Medium Undead, Neutral Evil, CR 5 — signature move: Multiattack — stands ~7 ft tall
-5. **Fish-Folk Archpriest** — Medium Aberration, Neutral Evil, CR 6 — signature move: Multiattack — stands ~7 ft tall
-6. **Death Cultist** — Medium or Small Humanoid, Neutral Evil, CR 8 — signature move: Multiattack — stands ~7 ft tall
-7. **Vampire Nightbringer** — Medium or Small Undead, Neutral Evil, CR 8 — signature move: Multiattack — stands ~7 ft tall
-8. **Vampire Umbral Lord** — Medium or Small Undead, Lawful Evil, CR 15 — signature move: Multiattack — stands ~7 ft tall
-9. **Giant Shark** — Huge Beast, Unaligned, CR 5 — signature move: Multiattack — stands ~7 ft tall
+1. **Cipher (Orc)** — Their very presence is the notable thing. — stands ~7 ft tall
+2. **Mage** — Medium or Small Humanoid (Wizard), Neutral, CR 6 — signature move: Multiattack — stands ~7 ft tall
+3. **Orcish stable hand (Orc) — gentle with horses, terrifying to everyone else** —  — stands ~7 ft tall
+4. **Empyrean Iota** — Medium Celestial or Fiend (Titan), Neutral, CR 1 — signature move: Otherworldly Strike — stands ~7 ft tall
+5. **Ettercap** — Medium Monstrosity, Neutral Evil, CR 2 — signature move: Multiattack — stands ~7 ft tall
+6. **Knight** — Medium or Small Humanoid, Neutral, CR 3 — signature move: Multiattack — stands ~7 ft tall
+7. **Xorn** — Medium Elemental, Neutral, CR 5 — signature move: Multiattack — stands ~7 ft tall
+8. **Elven ranger's apprentice (Elf) — still learning to read a trail properly** —  — stands ~7 ft tall
+9. **Land-worker (Dragonborn)** — Tied to the land and its seasons; the base everyone eats from. — stands ~7 ft tall
 ```
 
 ### fantasy-large-15
@@ -889,18 +889,66 @@ ONE single creature, centered, filling most of the frame, maximum detail. Pixel-
 ```
 3x3 grid, 9 distinct creatures, one distinct creature per cell, uniform cell size, each creature rendered LARGE — filling its cell, roughly 1.7x the detail of a small sprite. Consistent scale across cells. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).
 
-1. **Blind Deep-Stalker** — Medium Aberration, Neutral Evil, CR 0.25 — signature move: Bone Cudgel — stands ~7 ft tall
-2. **Grick** — Medium Aberration, Unaligned, CR 2 — signature move: Multiattack — stands ~7 ft tall
-3. **Spy Master** — Medium or Small Humanoid, Neutral, CR 10 — signature move: Multiattack — stands ~7 ft tall
-4. **Hobgoblin Soldier** — Medium Humanoid (Goblinoid), Lawful Evil, CR 0.5 — signature move: Longsword — stands ~7 ft tall
-5. **Scout** — Medium or Small Humanoid, Neutral, CR 0.5 — signature move: Multiattack — stands ~7 ft tall
-6. **Giant Crocodile** — Huge Beast, Unaligned, CR 5 — signature move: Multiattack — stands ~7 ft tall
-7. **Animated Armor** — Medium Construct, Unaligned, CR 1 — signature move: Multiattack — stands ~7 ft tall
+1. **Tiefling tavern owner (Tiefling) — runs the friendliest bar in a town that fears her kind** —  — stands ~7 ft tall
+2. **Sahuagin Priest** — Medium Fiend, Lawful Evil, CR 2 — signature move: Multiattack — stands ~7 ft tall
+3. **Swarm of Crawling Claws** — Medium Swarm of Tiny Undead, Neutral Evil, CR 3 — signature move: Swarm of Grasping Hands — stands ~7 ft tall
+4. **Wereboar** — Medium or Small Monstrosity (Lycanthrope), Neutral Evil, CR 4 — signature move: Multiattack — stands ~7 ft tall
+5. **Hauler (Elf)** — Moves the heavy things; sees everything, is asked nothing. — stands ~7 ft tall
+6. **Tiefling fortune-teller's rival (Tiefling) — claims to be the real seer in town** —  — stands ~7 ft tall
+7. **Orcish healer — gentle hands, a reputation people are slow to trust** —  — stands ~7 ft tall
+8. **Yuan-ti Infiltrator** — Medium Monstrosity, Neutral Evil, CR 1 — signature move: Multiattack — stands ~7 ft tall
+9. **Elemental Cultist** — Medium or Small Humanoid, Chaotic Evil, CR 8 — signature move: Multiattack — stands ~7 ft tall
+```
+
+### fantasy-large-16
+
+```
+3x3 grid, 9 distinct creatures, one distinct creature per cell, uniform cell size, each creature rendered LARGE — filling its cell, roughly 1.7x the detail of a small sprite. Consistent scale across cells. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).
+
+1. **Bandit Enforcer** — CR 0.5 — signature move: Multiattack — stands ~7 ft tall
+2. **Enforcer (Dragonborn)** — Authority-adjacent, with limited real power. — stands ~7 ft tall
+3. **Recluse (Dragonborn)** — Known of, rarely seen. — stands ~7 ft tall
+4. **Human town crier (Human) — announces news, rumor, and the occasional lie for coin** —  — stands ~7 ft tall
+5. **Satyr** — Medium Fey, Chaotic Neutral, CR 0.5 — signature move: Hooves — stands ~7 ft tall
+6. **Hobgoblin Iron Shadow** — Medium Humanoid (Goblinoid), Lawful Evil, CR 2 — signature move: Multiattack — stands ~7 ft tall
+7. **Orc Berserker** — Medium Humanoid (Orc), Chaotic Evil, CR 2 — signature move: Multiattack — stands ~7 ft tall
+8. **Wight Lord** — Medium Undead, Neutral Evil, CR 5 — signature move: Multiattack — stands ~7 ft tall
+9. **Fish-Folk Archpriest** — Medium Aberration, Neutral Evil, CR 6 — signature move: Multiattack — stands ~7 ft tall
+```
+
+### fantasy-large-17
+
+```
+3x3 grid, 9 distinct creatures, one distinct creature per cell, uniform cell size, each creature rendered LARGE — filling its cell, roughly 1.7x the detail of a small sprite. Consistent scale across cells. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).
+
+1. **Death Cultist** — Medium or Small Humanoid, Neutral Evil, CR 8 — signature move: Multiattack — stands ~7 ft tall
+2. **Vampire Nightbringer** — Medium or Small Undead, Neutral Evil, CR 8 — signature move: Multiattack — stands ~7 ft tall
+3. **Vampire Umbral Lord** — Medium or Small Undead, Lawful Evil, CR 15 — signature move: Multiattack — stands ~7 ft tall
+4. **Wild animal — The realm-beast (a locally distinct wild creature, one animal, realm-appropriate)** —  — stands ~7 ft tall
+5. **Metalworker (Orc)** — Calloused hands; deals in practical defense. — stands ~7 ft tall
+6. **Tiefling street performer (Tiefling) — half the crowd is there for the trick, half for the horror** —  — stands ~7 ft tall
+7. **Giant Shark** — Huge Beast, Unaligned, CR 5 — signature move: Multiattack — stands ~7 ft tall
+8. **Blind Deep-Stalker** — Medium Aberration, Neutral Evil, CR 0.25 — signature move: Bone Cudgel — stands ~7 ft tall
+9. **Grick** — Medium Aberration, Unaligned, CR 2 — signature move: Multiattack — stands ~7 ft tall
+```
+
+### fantasy-large-18
+
+```
+3x3 grid, 9 distinct creatures, one distinct creature per cell, uniform cell size, each creature rendered LARGE — filling its cell, roughly 1.7x the detail of a small sprite. Consistent scale across cells. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).
+
+1. **Spy Master** — Medium or Small Humanoid, Neutral, CR 10 — signature move: Multiattack — stands ~7 ft tall
+2. **Hobgoblin Soldier** — Medium Humanoid (Goblinoid), Lawful Evil, CR 0.5 — signature move: Longsword — stands ~7 ft tall
+3. **Scout** — Medium or Small Humanoid, Neutral, CR 0.5 — signature move: Multiattack — stands ~7 ft tall
+4. **Giant Crocodile** — Huge Beast, Unaligned, CR 5 — signature move: Multiattack — stands ~7 ft tall
+5. **Animated Armor** — Medium Construct, Unaligned, CR 1 — signature move: Multiattack — stands ~7 ft tall
+6. **Performer (Tiefling)** — Craves the attention; hides the true feeling under it. — stands ~7 ft tall
+7. **Dragonborn ship's purser (Dragonborn) — keeps the manifest honest, mostly** —  — stands ~7 ft tall
 8. **Skeleton** — Medium Undead, Lawful Evil, CR 0.25 — signature move: Shortsword — stands ~7 ft tall
 9. **Zombie Plague Carrier** — Medium Undead, Neutral Evil, CR 0.5 — signature move: Slam — stands ~7 ft tall
 ```
 
-### fantasy-large-16
+### fantasy-large-19
 
 ```
 3x3 grid, 9 distinct creatures, one distinct creature per cell, uniform cell size, each creature rendered LARGE — filling its cell, roughly 1.7x the detail of a small sprite. Consistent scale across cells. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).
@@ -912,56 +960,8 @@ ONE single creature, centered, filling most of the frame, maximum detail. Pixel-
 5. **Sahuagin Warrior** — Medium Fiend, Lawful Evil, CR 0.5 — signature move: Multiattack — stands ~7 ft tall
 6. **Aberrant Cultist** — Medium or Small Humanoid, Neutral Evil, CR 8 — signature move: Multiattack — stands ~7 ft tall
 7. **Vampire** — Medium or Small Undead, Lawful Evil, CR 13 — signature move: Multiattack (Vampire Form Only) — stands ~7 ft tall
-8. **Pirate** — Medium or Small Humanoid, Neutral, CR 1 — signature move: Multiattack — stands ~7 ft tall
-9. **Ghast** — Medium Undead, Chaotic Evil, CR 2 — signature move: Bite — stands ~7 ft tall
-```
-
-### fantasy-large-17
-
-```
-3x3 grid, 9 distinct creatures, one distinct creature per cell, uniform cell size, each creature rendered LARGE — filling its cell, roughly 1.7x the detail of a small sprite. Consistent scale across cells. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).
-
-1. **Mummy** — Medium or Small Undead, Lawful Evil, CR 3 — signature move: Multiattack — stands ~7 ft tall
-2. **Warrior Veteran** — Medium or Small Humanoid, Neutral, CR 3 — signature move: Multiattack — stands ~7 ft tall
-3. **Ghast Gravecaller (Spellstitched Elite)** — Medium Undead, Chaotic Evil_ _Gravecallers are ghasts whose flesh has been ritually stitched with glowing abyssal runes, granting them the ability to wield dark magic and call the dead directly from the earth., CR 6 — signature move: Multiattack — stands ~7 ft tall
-4. **Astral Raider Knight** — Medium Aberration (Gith), Lawful Evil, CR 8 — signature move: Multiattack — stands ~7 ft tall
-5. **Merfolk Skirmisher** — Medium Elemental, Neutral, CR 0.125 — signature move: Ocean Spear — stands ~7 ft tall
-6. **Ape** — Medium Beast, Unaligned, CR 0.5 — signature move: Multiattack — stands ~7 ft tall
-7. **Bulette** — Large Monstrosity, Unaligned, CR 5 — signature move: Multiattack — stands ~7 ft tall
-8. **Guard** — Medium or Small Humanoid, Neutral, CR 0.125 — signature move: Spear — stands ~7 ft tall
-9. **The Twig Blight** — Small Plant, Neutral Evil, CR 0.125 — signature move: Claw — stands ~7 ft tall
-```
-
-### fantasy-large-18
-
-```
-3x3 grid, 9 distinct creatures, one distinct creature per cell, uniform cell size, each creature rendered LARGE — filling its cell, roughly 1.7x the detail of a small sprite. Consistent scale across cells. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).
-
-1. **Succubus** — Medium Fiend, Neutral Evil, CR 4 — signature move: Multiattack — stands ~7 ft tall
-2. **Performer Maestro** — Medium or Small Humanoid, Neutral, CR 6 — signature move: Multiattack — stands ~7 ft tall
-3. **Pirate Captain** — Medium or Small Humanoid, Neutral, CR 6 — signature move: Multiattack — stands ~7 ft tall
-4. **Zombie** — Medium Undead, Neutral Evil, CR 0.25 — signature move: Slam — stands ~7 ft tall
-5. **Ghoul** — Medium Undead, Chaotic Evil, CR 1 — signature move: Multiattack — stands ~7 ft tall
-6. **Smoke Mephit** — Small Elemental, Neutral Evil, CR 0.25 — signature move: Claw — stands ~7 ft tall
-7. **Void-Monk Monk** — Medium Aberration (Gith), Lawful Neutral, CR 2 — signature move: Multiattack — stands ~7 ft tall
-8. **Commoner** — Medium or Small Humanoid, Neutral, CR 0 — signature move: Club — stands ~7 ft tall
-9. **Archmage** — Medium Humanoid (Wizard), Neutral, CR 12 — signature move: Multiattack — stands ~7 ft tall
-```
-
-### fantasy-large-19
-
-```
-3x3 grid, 9 distinct creatures, one distinct creature per cell, uniform cell size, each creature rendered LARGE — filling its cell, roughly 1.7x the detail of a small sprite. Consistent scale across cells. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).
-
-1. **Priest Acolyte** — Medium or Small Humanoid (Cleric), Neutral, CR 0.25 — signature move: Mace — stands ~7 ft tall
-2. **Riding Horse** — Large Beast, Unaligned, CR 0.25 — signature move: Hooves — stands ~7 ft tall
-3. **Steam Mephit** — Small Elemental, Neutral Evil, CR 0.25 — signature move: Claw — stands ~7 ft tall
-4. **Performer Legend** — Medium or Small Humanoid, Neutral, CR 10 — signature move: Multiattack — stands ~7 ft tall
-5. **Deep-Brute Thonot** — Medium Monstrosity, Chaotic Neutral, CR 3 — signature move: Multiattack — stands ~6 ft tall
-6. **Lizardfolk Sovereign** — Medium Elemental, Neutral, CR 4 — signature move: Multiattack — stands ~6 ft tall
-7. **Tough** — Medium or Small Humanoid, Neutral, CR 0.5 — signature move: Mace — stands ~6 ft tall
-8. **Spy** — Medium or Small Humanoid, Neutral, CR 1 — signature move: Shortsword — stands ~6 ft tall
-9. **Void-Monk Zerth** — Medium Aberration (Gith), Lawful Neutral, CR 5 — signature move: Multiattack — stands ~6 ft tall
+8. **Rite-keeper (Orc)** — Maintains the ritual, not the doctrine. — stands ~7 ft tall
+9. **Unofficial-power (Elf)** — Power without a title. — stands ~7 ft tall
 ```
 
 ### fantasy-large-20
@@ -969,15 +969,15 @@ ONE single creature, centered, filling most of the frame, maximum detail. Pixel-
 ```
 3x3 grid, 9 distinct creatures, one distinct creature per cell, uniform cell size, each creature rendered LARGE — filling its cell, roughly 1.7x the detail of a small sprite. Consistent scale across cells. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).
 
-1. **Bandit Deceiver** — Medium or Small Humanoid, Neutral, CR 7 — signature move: Multiattack — stands ~6 ft tall
-2. **Void-Monk Psion** — Medium Aberration (Gith), Lawful Neutral, CR 12 — signature move: Multiattack — stands ~6 ft tall
-3. **Dryad** — Medium Fey, Neutral, CR 1 — signature move: Multiattack — stands ~6 ft tall
-4. **Vampire Spawn** — Medium or Small Undead, Neutral Evil, CR 5 — signature move: Multiattack — stands ~6 ft tall
-5. **Wraith** — Medium Undead, Neutral Evil, CR 5 — signature move: Life Drain — stands ~6 ft tall
-6. **Bandit Crime Lord** — Medium or Small Humanoid, Neutral, CR 11 — signature move: Multiattack — stands ~6 ft tall
-7. **Cultist** — Medium or Small Humanoid, Neutral, CR 0.125 — signature move: Ritual Sickle — stands ~6 ft tall
-8. **Performer** — Medium or Small Humanoid, Neutral, CR 0.5 — signature move: Shortsword — stands ~6 ft tall
-9. **Darkmantle** — Small Aberration, Unaligned, CR 0.5 — signature move: Crush — stands ~6 ft tall
+1. **Builder (Dragonborn)** — Reads every structure out of habit; knows what's load-bearing. — stands ~7 ft tall
+2. **Pirate** — Medium or Small Humanoid, Neutral, CR 1 — signature move: Multiattack — stands ~7 ft tall
+3. **Ghast** — Medium Undead, Chaotic Evil, CR 2 — signature move: Bite — stands ~7 ft tall
+4. **Mummy** — Medium or Small Undead, Lawful Evil, CR 3 — signature move: Multiattack — stands ~7 ft tall
+5. **Warrior Veteran** — Medium or Small Humanoid, Neutral, CR 3 — signature move: Multiattack — stands ~7 ft tall
+6. **Ghast Gravecaller (Spellstitched Elite)** — Medium Undead, Chaotic Evil_ _Gravecallers are ghasts whose flesh has been ritually stitched with glowing abyssal runes, granting them the ability to wield dark magic and call the dead directly from the earth., CR 6 — signature move: Multiattack — stands ~7 ft tall
+7. **Astral Raider Knight** — Medium Aberration (Gith), Lawful Evil, CR 8 — signature move: Multiattack — stands ~7 ft tall
+8. **Merfolk Skirmisher** — Medium Elemental, Neutral, CR 0.125 — signature move: Ocean Spear — stands ~7 ft tall
+9. **Ape** — Medium Beast, Unaligned, CR 0.5 — signature move: Multiattack — stands ~7 ft tall
 ```
 
 ### fantasy-large-21
@@ -985,15 +985,15 @@ ONE single creature, centered, filling most of the frame, maximum detail. Pixel-
 ```
 3x3 grid, 9 distinct creatures, one distinct creature per cell, uniform cell size, each creature rendered LARGE — filling its cell, roughly 1.7x the detail of a small sprite. Consistent scale across cells. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).
 
-1. **Noble** — Medium or Small Humanoid, Neutral, CR 0.125 — signature move: Rapier — stands ~6 ft tall
-2. **Bandit Captain** — Medium or Small Humanoid, Neutral, CR 2 — signature move: Multiattack — stands ~6 ft tall
-3. **Doppelganger** — Medium Monstrosity, Neutral, CR 3 — signature move: Multiattack — stands ~6 ft tall
-4. **Harpy Matriarch** — Medium Monstrosity, Chaotic Evil, CR 3 — signature move: Multiattack — stands ~6 ft tall
-5. **Satyr Revelmaster** — Medium Fey, Chaotic Neutral, CR 6 — signature move: Multiattack — stands ~6 ft tall
-6. **Mind-Thief** — Medium Aberration, Lawful Evil, CR 7 — signature move: Tentacles — stands ~6 ft tall
-7. **Hippopotamus** — Large Beast, Unaligned, CR 4 — signature move: Multiattack — stands ~6 ft tall
-8. **Lich** — Medium Undead (Wizard), Neutral Evil, CR 21 — signature move: Multiattack — stands ~6 ft tall
-9. **Tough Boss** — Medium or Small Humanoid, Neutral, CR 4 — signature move: Multiattack — stands ~6 ft tall
+1. **Hidden-fanatic (Human)** — Fanatical devotion behind a mundane face. — stands ~7 ft tall
+2. **Human wheelwright (Human) — dark-skinned, third generation in the same shop** —  — stands ~7 ft tall
+3. **Bulette** — Large Monstrosity, Unaligned, CR 5 — signature move: Multiattack — stands ~7 ft tall
+4. **Dragonborn temple acolyte, young (Dragonborn) — devout, earnest, still memorizing the rites** —  — stands ~7 ft tall
+5. **Guard** — Medium or Small Humanoid, Neutral, CR 0.125 — signature move: Spear — stands ~7 ft tall
+6. **The Twig Blight** — Small Plant, Neutral Evil, CR 0.125 — signature move: Claw — stands ~7 ft tall
+7. **Succubus** — Medium Fiend, Neutral Evil, CR 4 — signature move: Multiattack — stands ~7 ft tall
+8. **Performer Maestro** — Medium or Small Humanoid, Neutral, CR 6 — signature move: Multiattack — stands ~7 ft tall
+9. **Pirate Captain** — Medium or Small Humanoid, Neutral, CR 6 — signature move: Multiattack — stands ~7 ft tall
 ```
 
 ### fantasy-large-22
@@ -1001,15 +1001,15 @@ ONE single creature, centered, filling most of the frame, maximum detail. Pixel-
 ```
 3x3 grid, 9 distinct creatures, one distinct creature per cell, uniform cell size, each creature rendered LARGE — filling its cell, roughly 1.7x the detail of a small sprite. Consistent scale across cells. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).
 
-1. **Troglodyte** — Medium Monstrosity, Chaotic Evil, CR 0.25 — signature move: Rend — stands ~6 ft tall
-2. **Gargoyle** — Medium Elemental, Chaotic Evil, CR 2 — signature move: Multiattack — stands ~6 ft tall
-3. **Goblin Hexer** — Small Fey (Goblinoid), Chaotic Neutral_ _Rare spellcasters among goblin-kind. They use dark, debilitating magic to control the battlefield while hiding behind their allies., CR 3 — signature move: Multiattack — stands ~6 ft tall
-4. **Winged Kobold (Urd)** — Small Humanoid, Lawful Evil, CR 0.25 — signature move: Dagger — stands ~6 ft tall
-5. **Mule** — Medium Beast, Unaligned, CR 0.125 — signature move: Hooves — stands ~6 ft tall
-6. **Night Hag** — Medium Fiend, Neutral Evil, CR 5 — signature move: Multiattack — stands ~6 ft tall
-7. **Saber-Toothed Tiger** — Large Beast, Unaligned, CR 2 — signature move: Multiattack — stands ~6 ft tall
-8. **Spined Devil** — Small Fiend (Devil), Lawful Evil, CR 2 — signature move: Multiattack — stands ~6 ft tall
-9. **Jackalwere** — Small Fiend, Chaotic Evil, CR 0.5 — signature move: Multiattack — stands ~6 ft tall
+1. **Zombie** — Medium Undead, Neutral Evil, CR 0.25 — signature move: Slam — stands ~7 ft tall
+2. **Ghoul** — Medium Undead, Chaotic Evil, CR 1 — signature move: Multiattack — stands ~7 ft tall
+3. **Smoke Mephit** — Small Elemental, Neutral Evil, CR 0.25 — signature move: Claw — stands ~7 ft tall
+4. **Void-Monk Monk** — Medium Aberration (Gith), Lawful Neutral, CR 2 — signature move: Multiattack — stands ~7 ft tall
+5. **Commoner** — Medium or Small Humanoid, Neutral, CR 0 — signature move: Club — stands ~7 ft tall
+6. **Archmage** — Medium Humanoid (Wizard), Neutral, CR 12 — signature move: Multiattack — stands ~7 ft tall
+7. **Priest Acolyte** — Medium or Small Humanoid (Cleric), Neutral, CR 0.25 — signature move: Mace — stands ~7 ft tall
+8. **Riding Horse** — Large Beast, Unaligned, CR 0.25 — signature move: Hooves — stands ~7 ft tall
+9. **Steam Mephit** — Small Elemental, Neutral Evil, CR 0.25 — signature move: Claw — stands ~7 ft tall
 ```
 
 ### fantasy-large-23
@@ -1017,30 +1017,423 @@ ONE single creature, centered, filling most of the frame, maximum detail. Pixel-
 ```
 3x3 grid, 9 distinct creatures, one distinct creature per cell, uniform cell size, each creature rendered LARGE — filling its cell, roughly 1.7x the detail of a small sprite. Consistent scale across cells. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).
 
-1. **Magma Mephit** — Small Elemental, Neutral Evil, CR 0.5 — signature move: Claw — stands ~6 ft tall
-2. **Lantern-Sage** — Small Aberration, Lawful Good, CR 0.125 — signature move: Tentacle — stands ~6 ft tall
-3. **Cockatrice** — Small Monstrosity, Unaligned, CR 0.5 — signature move: Petrifying Bite — stands ~6 ft tall
-4. **Ice Mephit** — Small Elemental, Neutral Evil, CR 0.5 — signature move: Claw — stands ~6 ft tall
-5. **Vampire Familiar** — Medium or Small Humanoid, Neutral Evil, CR 3 — signature move: Multiattack — stands ~6 ft tall
-6. **Ochre Jelly** — Large Ooze, Unaligned, CR 2 — signature move: Pseudopod — stands ~6 ft tall
-7. **Black Pudding** — Large Ooze, Unaligned, CR 4 — signature move: Dissolving Pseudopod — stands ~6 ft tall
-8. **Bullywug Bog Sage (Mud Lord)** — Medium Fey, Neutral, CR 4 — signature move: Multiattack — stands ~6 ft tall
-9. **Troll Limb** — Small Giant, Chaotic Evil, CR 0.5 — signature move: Rend — stands ~6 ft tall
+1. **Performer Legend** — Medium or Small Humanoid, Neutral, CR 10 — signature move: Multiattack — stands ~7 ft tall
+2. **Maker (Human)** — Their tools carry their whole history. — stands ~7 ft tall
+3. **Human retired soldier, one-armed (Human) — dark-skinned, runs the town's only proper tavern brawl rules** —  — stands ~7 ft tall
+4. **Dragonborn temple guard — devout, literal-minded, takes the oath seriously** —  — stands ~7 ft tall
+5. **Elven herbalist (Elf) — sells cures and, quietly, a few curses** —  — stands ~7 ft tall
+6. **Deep-Brute Thonot** — Medium Monstrosity, Chaotic Neutral, CR 3 — signature move: Multiattack — stands ~6 ft tall
+7. **Lizardfolk Sovereign** — Medium Elemental, Neutral, CR 4 — signature move: Multiattack — stands ~6 ft tall
+8. **Tough** — Medium or Small Humanoid, Neutral, CR 0.5 — signature move: Mace — stands ~6 ft tall
+9. **Spy** — Medium or Small Humanoid, Neutral, CR 1 — signature move: Shortsword — stands ~6 ft tall
 ```
 
 ### fantasy-large-24
 
 ```
-3x3 grid, 8 distinct creatures, one distinct creature per cell, uniform cell size, each creature rendered LARGE — filling its cell, roughly 1.7x the detail of a small sprite. Consistent scale across cells. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).
+3x3 grid, 9 distinct creatures, one distinct creature per cell, uniform cell size, each creature rendered LARGE — filling its cell, roughly 1.7x the detail of a small sprite. Consistent scale across cells. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).
 
-1. **Guilt-Stained Vagrant** — CR 0 — signature move: Knife — stands ~6 ft tall
-2. **Green Hag** — Medium Fey, Neutral Evil, CR 3 — signature move: Multiattack — stands ~6 ft tall
-3. **Azer Sentinel** — Medium Elemental, Lawful Neutral, CR 2 — signature move: Burning Hammer — stands ~5 ft tall
-4. **Ankheg** — Large Monstrosity, Unaligned, CR 2 — signature move: Bite — stands ~5 ft tall
-5. **Sea Hag** — Medium Fey, Chaotic Evil, CR 2 — signature move: Claw — stands ~5 ft tall
-6. **Psychic Gray Ooze** — Medium Ooze, Unaligned, CR 1 — signature move: Pseudopod — stands ~5 ft tall
-7. **Swarm of Stirges** — Medium Swarm of Tiny Monstrosities, Unaligned, CR 2 — signature move: Swarm of Proboscises — stands ~5 ft tall
-8. **Giant Boar** — Large Beast, Unaligned, CR 2 — signature move: Gore — stands ~5 ft tall
+1. **Void-Monk Zerth** — Medium Aberration (Gith), Lawful Neutral, CR 5 — signature move: Multiattack — stands ~6 ft tall
+2. **Bandit Deceiver** — Medium or Small Humanoid, Neutral, CR 7 — signature move: Multiattack — stands ~6 ft tall
+3. **Void-Monk Psion** — Medium Aberration (Gith), Lawful Neutral, CR 12 — signature move: Multiattack — stands ~6 ft tall
+4. **Dryad** — Medium Fey, Neutral, CR 1 — signature move: Multiattack — stands ~6 ft tall
+5. **Outfitter (Elf)** — Keeps the means of travel and trade running; eyes on the weather. — stands ~6 ft tall
+6. **Healer (Human)** — Trusted, and overburdened by it. — stands ~6 ft tall
+7. **Human midwife's apprentice (Human) — dark-skinned, learning the trade from her mother** —  — stands ~6 ft tall
+8. **Vampire Spawn** — Medium or Small Undead, Neutral Evil, CR 5 — signature move: Multiattack — stands ~6 ft tall
+9. **Wraith** — Medium Undead, Neutral Evil, CR 5 — signature move: Life Drain — stands ~6 ft tall
+```
+
+### fantasy-large-25
+
+```
+3x3 grid, 9 distinct creatures, one distinct creature per cell, uniform cell size, each creature rendered LARGE — filling its cell, roughly 1.7x the detail of a small sprite. Consistent scale across cells. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).
+
+1. **Bandit Crime Lord** — Medium or Small Humanoid, Neutral, CR 11 — signature move: Multiattack — stands ~6 ft tall
+2. **Cultist** — Medium or Small Humanoid, Neutral, CR 0.125 — signature move: Ritual Sickle — stands ~6 ft tall
+3. **Performer** — Medium or Small Humanoid, Neutral, CR 0.5 — signature move: Shortsword — stands ~6 ft tall
+4. **Road-guard (Elf)** — Wary of the road; values a good pair of boots. — stands ~6 ft tall
+5. **Elven archivist — keeper of a library older than the town around it** —  — stands ~6 ft tall
+6. **Recruiter (Orc)** — Charisma aimed at the desperate; sells belonging. — stands ~6 ft tall
+7. **Outsider (Tiefling)** — Chose to stay here; the reasons stay unclear. — stands ~6 ft tall
+8. **Darkmantle** — Small Aberration, Unaligned, CR 0.5 — signature move: Crush — stands ~6 ft tall
+9. **Noble** — Medium or Small Humanoid, Neutral, CR 0.125 — signature move: Rapier — stands ~6 ft tall
+```
+
+### fantasy-large-26
+
+```
+3x3 grid, 9 distinct creatures, one distinct creature per cell, uniform cell size, each creature rendered LARGE — filling its cell, roughly 1.7x the detail of a small sprite. Consistent scale across cells. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).
+
+1. **Bandit Captain** — Medium or Small Humanoid, Neutral, CR 2 — signature move: Multiattack — stands ~6 ft tall
+2. **Feeder (Tiefling)** — Up before dawn; holds the neighborhood's gossip. — stands ~6 ft tall
+3. **Elven fletcher — every arrow leaves her stall true** —  — stands ~6 ft tall
+4. **Doppelganger** — Medium Monstrosity, Neutral, CR 3 — signature move: Multiattack — stands ~6 ft tall
+5. **Harpy Matriarch** — Medium Monstrosity, Chaotic Evil, CR 3 — signature move: Multiattack — stands ~6 ft tall
+6. **Satyr Revelmaster** — Medium Fey, Chaotic Neutral, CR 6 — signature move: Multiattack — stands ~6 ft tall
+7. **Mind-Thief** — Medium Aberration, Lawful Evil, CR 7 — signature move: Tentacles — stands ~6 ft tall
+8. **Tiefling blacksmith's apprentice — still learning, already better than most journeymen** —  — stands ~6 ft tall
+9. **Secret-scholar (Human)** — Hoards the secret knowledge; sees others as material. — stands ~6 ft tall
+```
+
+### fantasy-large-27
+
+```
+3x3 grid, 9 distinct creatures, one distinct creature per cell, uniform cell size, each creature rendered LARGE — filling its cell, roughly 1.7x the detail of a small sprite. Consistent scale across cells. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).
+
+1. **Hippopotamus** — Large Beast, Unaligned, CR 4 — signature move: Multiattack — stands ~6 ft tall
+2. **Lich** — Medium Undead (Wizard), Neutral Evil, CR 21 — signature move: Multiattack — stands ~6 ft tall
+3. **Human midwife, elderly — delivered half the village, remembers all of it** —  — stands ~6 ft tall
+4. **Tough Boss** — Medium or Small Humanoid, Neutral, CR 4 — signature move: Multiattack — stands ~6 ft tall
+5. **Troglodyte** — Medium Monstrosity, Chaotic Evil, CR 0.25 — signature move: Rend — stands ~6 ft tall
+6. **Gargoyle** — Medium Elemental, Chaotic Evil, CR 2 — signature move: Multiattack — stands ~6 ft tall
+7. **Goblin Hexer** — Small Fey (Goblinoid), Chaotic Neutral_ _Rare spellcasters among goblin-kind. They use dark, debilitating magic to control the battlefield while hiding behind their allies., CR 3 — signature move: Multiattack — stands ~6 ft tall
+8. **Magnate (Halfling)** — Sees every interaction as a transaction. — stands ~6 ft tall
+9. **Tiefling fortune-teller — half the town swears by her, half crosses the street** —  — stands ~6 ft tall
+```
+
+### fantasy-large-28
+
+```
+3x3 grid, 9 distinct creatures, one distinct creature per cell, uniform cell size, each creature rendered LARGE — filling its cell, roughly 1.7x the detail of a small sprite. Consistent scale across cells. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).
+
+1. **Winged Kobold (Urd)** — Small Humanoid, Lawful Evil, CR 0.25 — signature move: Dagger — stands ~6 ft tall
+2. **Domestic animal — A single donkey — stubborn, sure-footed, outlives every horse on the property.** —  — stands ~6 ft tall
+3. **Elven scribe (Elf) — copies manuscripts for the town archive, meticulous to a fault** —  — stands ~6 ft tall
+4. **Mule** — Medium Beast, Unaligned, CR 0.125 — signature move: Hooves — stands ~6 ft tall
+5. **Night Hag** — Medium Fiend, Neutral Evil, CR 5 — signature move: Multiattack — stands ~6 ft tall
+6. **Saber-Toothed Tiger** — Large Beast, Unaligned, CR 2 — signature move: Multiattack — stands ~6 ft tall
+7. **Spined Devil** — Small Fiend (Devil), Lawful Evil, CR 2 — signature move: Multiattack — stands ~6 ft tall
+8. **Wild animal — A single elk — grazes the tree line at dawn, gone before full light** —  — stands ~6 ft tall
+9. **Gnomish tinkerer — clockwork contraptions that mostly work** —  — stands ~6 ft tall
+```
+
+### fantasy-large-29
+
+```
+3x3 grid, 9 distinct creatures, one distinct creature per cell, uniform cell size, each creature rendered LARGE — filling its cell, roughly 1.7x the detail of a small sprite. Consistent scale across cells. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).
+
+1. **Jackalwere** — Small Fiend, Chaotic Evil, CR 0.5 — signature move: Multiattack — stands ~6 ft tall
+2. **Magma Mephit** — Small Elemental, Neutral Evil, CR 0.5 — signature move: Claw — stands ~6 ft tall
+3. **Lantern-Sage** — Small Aberration, Lawful Good, CR 0.125 — signature move: Tentacle — stands ~6 ft tall
+4. **Cockatrice** — Small Monstrosity, Unaligned, CR 0.5 — signature move: Petrifying Bite — stands ~6 ft tall
+5. **Ice Mephit** — Small Elemental, Neutral Evil, CR 0.5 — signature move: Claw — stands ~6 ft tall
+6. **Vampire Familiar** — Medium or Small Humanoid, Neutral Evil, CR 3 — signature move: Multiattack — stands ~6 ft tall
+7. **Dungeon animal — Sole survivor packhorse — the last of a caravan's animals, malnourished, still saddled** —  — stands ~6 ft tall
+8. **Ochre Jelly** — Large Ooze, Unaligned, CR 2 — signature move: Pseudopod — stands ~6 ft tall
+9. **Black Pudding** — Large Ooze, Unaligned, CR 4 — signature move: Dissolving Pseudopod — stands ~6 ft tall
+```
+
+### fantasy-large-30
+
+```
+3x3 grid, 9 distinct creatures, one distinct creature per cell, uniform cell size, each creature rendered LARGE — filling its cell, roughly 1.7x the detail of a small sprite. Consistent scale across cells. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).
+
+1. **Bullywug Bog Sage (Mud Lord)** — Medium Fey, Neutral, CR 4 — signature move: Multiattack — stands ~6 ft tall
+2. **Troll Limb** — Small Giant, Chaotic Evil, CR 0.5 — signature move: Rend — stands ~6 ft tall
+3. **Guilt-Stained Vagrant** — CR 0 — signature move: Knife — stands ~6 ft tall
+4. **Green Hag** — Medium Fey, Neutral Evil, CR 3 — signature move: Multiattack — stands ~6 ft tall
+5. **Domestic animal — Working beast (a single ox) — earns its feed, patient, and spooks true.** —  — stands ~5 ft tall
+6. **Azer Sentinel** — Medium Elemental, Lawful Neutral, CR 2 — signature move: Burning Hammer — stands ~5 ft tall
+7. **Ankheg** — Large Monstrosity, Unaligned, CR 2 — signature move: Bite — stands ~5 ft tall
+8. **Sea Hag** — Medium Fey, Chaotic Evil, CR 2 — signature move: Claw — stands ~5 ft tall
+9. **Psychic Gray Ooze** — Medium Ooze, Unaligned, CR 1 — signature move: Pseudopod — stands ~5 ft tall
+```
+
+### fantasy-large-31
+
+```
+3x3 grid, 4 distinct creatures, one distinct creature per cell, uniform cell size, each creature rendered LARGE — filling its cell, roughly 1.7x the detail of a small sprite. Consistent scale across cells. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).
+
+1. **Clothier (Dwarf)** — Notices the cut and quality of everyone's clothes. — stands ~5 ft tall
+2. **Goliath quarry foreman — the only one strong enough to reset a slipped cart alone** —  — stands ~5 ft tall
+3. **Swarm of Stirges** — Medium Swarm of Tiny Monstrosities, Unaligned, CR 2 — signature move: Swarm of Proboscises — stands ~5 ft tall
+4. **Giant Boar** — Large Beast, Unaligned, CR 2 — signature move: Gore — stands ~5 ft tall
+```
+
+## Large 3x3 PC sheets (5-8 ft) (9 player characters per sheet — pc-characters.md style block, never mixed onto fantasy sheets)
+
+### pc-large-1
+
+```
+3x3 grid, 9 distinct characters, one distinct character per cell, uniform cell size, each character rendered LARGE — filling its cell, roughly 1.7x the detail of a small sprite. Consistent scale across cells. clean painterly fantasy character-portrait style turned pixel-sprite, warm parchment-adjacent palette, medium value contrast, class-appropriate gear/armor readable in silhouette — matches the `fantasy.md` default-world style so PCs and monsters share one visual language. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).
+
+1. **Goliath Fighter (Male)** — braced combat stance, weapon mid-swing, shield up — stands ~9 ft tall
+2. **Goliath Paladin (Female)** — sword raised in an oath-gesture, holy light along the blade — stands ~9 ft tall
+3. **Goliath Sorcerer (Male)** — wild arcane energy erupting from open palms, hair/robe caught in the surge — stands ~9 ft tall
+4. **Goliath Wizard (Male)** — mid-spellcast, spellbook in one hand, arcane sigil forming at the other — stands ~9 ft tall
+5. **Goliath Rogue (Male)** — crouched mid-strike from stealth, dual daggers, sly grin — stands ~9 ft tall
+6. **Goliath Ranger (Male)** — bow drawn full-pull, aiming, a hunting companion implied at the flank — stands ~8 ft tall
+7. **Goliath Barbarian (Male)** — mid-rage, greataxe raised overhead, roaring — stands ~8 ft tall
+8. **Goliath Druid (Male)** — mid-shapeshift or spellcasting, wild energy crackling around raised hands — stands ~8 ft tall
+9. **Goliath Barbarian (Female)** — mid-rage, greataxe raised overhead, roaring — stands ~8 ft tall
+```
+
+### pc-large-2
+
+```
+3x3 grid, 9 distinct characters, one distinct character per cell, uniform cell size, each character rendered LARGE — filling its cell, roughly 1.7x the detail of a small sprite. Consistent scale across cells. clean painterly fantasy character-portrait style turned pixel-sprite, warm parchment-adjacent palette, medium value contrast, class-appropriate gear/armor readable in silhouette — matches the `fantasy.md` default-world style so PCs and monsters share one visual language. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).
+
+1. **Goliath Bard (Male)** — mid-performance, instrument in hand, a spell shimmering off the music — stands ~8 ft tall
+2. **Goliath Warlock (Male)** — eldritch energy coiling from an outstretched hand, patron's mark glowing — stands ~8 ft tall
+3. **Tiefling Paladin (Male)** — sword raised in an oath-gesture, holy light along the blade — stands ~8 ft tall
+4. **Goliath Cleric (Male)** — channeling divine energy, holy symbol raised, radiant light at the hand — stands ~8 ft tall
+5. **Goliath Sorcerer (Female)** — wild arcane energy erupting from open palms, hair/robe caught in the surge — stands ~8 ft tall
+6. **Tiefling Paladin (Female)** — sword raised in an oath-gesture, holy light along the blade — stands ~8 ft tall
+7. **Dragonborn Barbarian (Male)** — mid-rage, greataxe raised overhead, roaring — stands ~8 ft tall
+8. **Dragonborn Cleric (Female)** — channeling divine energy, holy symbol raised, radiant light at the hand — stands ~8 ft tall
+9. **Orc Ranger (Male)** — bow drawn full-pull, aiming, a hunting companion implied at the flank — stands ~8 ft tall
+```
+
+### pc-large-3
+
+```
+3x3 grid, 9 distinct characters, one distinct character per cell, uniform cell size, each character rendered LARGE — filling its cell, roughly 1.7x the detail of a small sprite. Consistent scale across cells. clean painterly fantasy character-portrait style turned pixel-sprite, warm parchment-adjacent palette, medium value contrast, class-appropriate gear/armor readable in silhouette — matches the `fantasy.md` default-world style so PCs and monsters share one visual language. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).
+
+1. **Goliath Bard (Female)** — mid-performance, instrument in hand, a spell shimmering off the music — stands ~8 ft tall
+2. **Goliath Ranger (Female)** — bow drawn full-pull, aiming, a hunting companion implied at the flank — stands ~8 ft tall
+3. **Dragonborn Cleric (Male)** — channeling divine energy, holy symbol raised, radiant light at the hand — stands ~8 ft tall
+4. **Dragonborn Paladin (Male)** — sword raised in an oath-gesture, holy light along the blade — stands ~8 ft tall
+5. **Dragonborn Paladin (Female)** — sword raised in an oath-gesture, holy light along the blade — stands ~8 ft tall
+6. **Orc Sorcerer (Male)** — wild arcane energy erupting from open palms, hair/robe caught in the surge — stands ~8 ft tall
+7. **Goliath Fighter (Female)** — braced combat stance, weapon mid-swing, shield up — stands ~8 ft tall
+8. **Goliath Monk (Male)** — mid-flying-kick or braced martial-arts stance, fists wrapped, focused — stands ~8 ft tall
+9. **Dragonborn Bard (Male)** — mid-performance, instrument in hand, a spell shimmering off the music — stands ~8 ft tall
+```
+
+### pc-large-4
+
+```
+3x3 grid, 9 distinct characters, one distinct character per cell, uniform cell size, each character rendered LARGE — filling its cell, roughly 1.7x the detail of a small sprite. Consistent scale across cells. clean painterly fantasy character-portrait style turned pixel-sprite, warm parchment-adjacent palette, medium value contrast, class-appropriate gear/armor readable in silhouette — matches the `fantasy.md` default-world style so PCs and monsters share one visual language. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).
+
+1. **Dragonborn Ranger (Female)** — bow drawn full-pull, aiming, a hunting companion implied at the flank — stands ~8 ft tall
+2. **Goliath Monk (Female)** — mid-flying-kick or braced martial-arts stance, fists wrapped, focused — stands ~8 ft tall
+3. **Goliath Warlock (Female)** — eldritch energy coiling from an outstretched hand, patron's mark glowing — stands ~8 ft tall
+4. **Dragonborn Fighter (Male)** — braced combat stance, weapon mid-swing, shield up — stands ~8 ft tall
+5. **Orc Warlock (Male)** — eldritch energy coiling from an outstretched hand, patron's mark glowing — stands ~8 ft tall
+6. **Dragonborn Druid (Male)** — mid-shapeshift or spellcasting, wild energy crackling around raised hands — stands ~8 ft tall
+7. **Dragonborn Rogue (Male)** — crouched mid-strike from stealth, dual daggers, sly grin — stands ~8 ft tall
+8. **Goliath Cleric (Female)** — channeling divine energy, holy symbol raised, radiant light at the hand — stands ~8 ft tall
+9. **Goliath Rogue (Female)** — crouched mid-strike from stealth, dual daggers, sly grin — stands ~8 ft tall
+```
+
+### pc-large-5
+
+```
+3x3 grid, 9 distinct characters, one distinct character per cell, uniform cell size, each character rendered LARGE — filling its cell, roughly 1.7x the detail of a small sprite. Consistent scale across cells. clean painterly fantasy character-portrait style turned pixel-sprite, warm parchment-adjacent palette, medium value contrast, class-appropriate gear/armor readable in silhouette — matches the `fantasy.md` default-world style so PCs and monsters share one visual language. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).
+
+1. **Human Barbarian (Female)** — mid-rage, greataxe raised overhead, roaring — stands ~8 ft tall
+2. **Tiefling Wizard (Male)** — mid-spellcast, spellbook in one hand, arcane sigil forming at the other — stands ~8 ft tall
+3. **Tiefling Monk (Male)** — mid-flying-kick or braced martial-arts stance, fists wrapped, focused — stands ~8 ft tall
+4. **Dragonborn Barbarian (Female)** — mid-rage, greataxe raised overhead, roaring — stands ~8 ft tall
+5. **Dragonborn Fighter (Female)** — braced combat stance, weapon mid-swing, shield up — stands ~8 ft tall
+6. **Goliath Druid (Female)** — mid-shapeshift or spellcasting, wild energy crackling around raised hands — stands ~8 ft tall
+7. **Goliath Wizard (Female)** — mid-spellcast, spellbook in one hand, arcane sigil forming at the other — stands ~8 ft tall
+8. **Orc Wizard (Male)** — mid-spellcast, spellbook in one hand, arcane sigil forming at the other — stands ~8 ft tall
+9. **Tiefling Sorcerer (Male)** — wild arcane energy erupting from open palms, hair/robe caught in the surge — stands ~8 ft tall
+```
+
+### pc-large-6
+
+```
+3x3 grid, 9 distinct characters, one distinct character per cell, uniform cell size, each character rendered LARGE — filling its cell, roughly 1.7x the detail of a small sprite. Consistent scale across cells. clean painterly fantasy character-portrait style turned pixel-sprite, warm parchment-adjacent palette, medium value contrast, class-appropriate gear/armor readable in silhouette — matches the `fantasy.md` default-world style so PCs and monsters share one visual language. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).
+
+1. **Tiefling Barbarian (Male)** — mid-rage, greataxe raised overhead, roaring — stands ~8 ft tall
+2. **Dragonborn Druid (Female)** — mid-shapeshift or spellcasting, wild energy crackling around raised hands — stands ~8 ft tall
+3. **Orc Rogue (Male)** — crouched mid-strike from stealth, dual daggers, sly grin — stands ~8 ft tall
+4. **Tiefling Warlock (Male)** — eldritch energy coiling from an outstretched hand, patron's mark glowing — stands ~8 ft tall
+5. **Dragonborn Bard (Female)** — mid-performance, instrument in hand, a spell shimmering off the music — stands ~8 ft tall
+6. **Dragonborn Monk (Male)** — mid-flying-kick or braced martial-arts stance, fists wrapped, focused — stands ~8 ft tall
+7. **Human Barbarian (Male)** — mid-rage, greataxe raised overhead, roaring — stands ~8 ft tall
+8. **Tiefling Rogue (Male)** — crouched mid-strike from stealth, dual daggers, sly grin — stands ~8 ft tall
+9. **Orc Barbarian (Male)** — mid-rage, greataxe raised overhead, roaring — stands ~8 ft tall
+```
+
+### pc-large-7
+
+```
+3x3 grid, 9 distinct characters, one distinct character per cell, uniform cell size, each character rendered LARGE — filling its cell, roughly 1.7x the detail of a small sprite. Consistent scale across cells. clean painterly fantasy character-portrait style turned pixel-sprite, warm parchment-adjacent palette, medium value contrast, class-appropriate gear/armor readable in silhouette — matches the `fantasy.md` default-world style so PCs and monsters share one visual language. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).
+
+1. **Tiefling Druid (Male)** — mid-shapeshift or spellcasting, wild energy crackling around raised hands — stands ~8 ft tall
+2. **Tiefling Fighter (Female)** — braced combat stance, weapon mid-swing, shield up — stands ~8 ft tall
+3. **Orc Paladin (Male)** — sword raised in an oath-gesture, holy light along the blade — stands ~8 ft tall
+4. **Dragonborn Monk (Female)** — mid-flying-kick or braced martial-arts stance, fists wrapped, focused — stands ~8 ft tall
+5. **Orc Ranger (Female)** — bow drawn full-pull, aiming, a hunting companion implied at the flank — stands ~8 ft tall
+6. **Orc Rogue (Female)** — crouched mid-strike from stealth, dual daggers, sly grin — stands ~7 ft tall
+7. **Orc Wizard (Female)** — mid-spellcast, spellbook in one hand, arcane sigil forming at the other — stands ~7 ft tall
+8. **Dragonborn Wizard (Male)** — mid-spellcast, spellbook in one hand, arcane sigil forming at the other — stands ~7 ft tall
+9. **Tiefling Fighter (Male)** — braced combat stance, weapon mid-swing, shield up — stands ~7 ft tall
+```
+
+### pc-large-8
+
+```
+3x3 grid, 9 distinct characters, one distinct character per cell, uniform cell size, each character rendered LARGE — filling its cell, roughly 1.7x the detail of a small sprite. Consistent scale across cells. clean painterly fantasy character-portrait style turned pixel-sprite, warm parchment-adjacent palette, medium value contrast, class-appropriate gear/armor readable in silhouette — matches the `fantasy.md` default-world style so PCs and monsters share one visual language. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).
+
+1. **Elf Rogue (Male)** — crouched mid-strike from stealth, dual daggers, sly grin — stands ~7 ft tall
+2. **Orc Barbarian (Female)** — mid-rage, greataxe raised overhead, roaring — stands ~7 ft tall
+3. **Dragonborn Ranger (Male)** — bow drawn full-pull, aiming, a hunting companion implied at the flank — stands ~7 ft tall
+4. **Tiefling Sorcerer (Female)** — wild arcane energy erupting from open palms, hair/robe caught in the surge — stands ~7 ft tall
+5. **Orc Druid (Male)** — mid-shapeshift or spellcasting, wild energy crackling around raised hands — stands ~7 ft tall
+6. **Human Fighter (Male)** — braced combat stance, weapon mid-swing, shield up — stands ~7 ft tall
+7. **Tiefling Barbarian (Female)** — mid-rage, greataxe raised overhead, roaring — stands ~7 ft tall
+8. **Tiefling Cleric (Female)** — channeling divine energy, holy symbol raised, radiant light at the hand — stands ~7 ft tall
+9. **Tiefling Druid (Female)** — mid-shapeshift or spellcasting, wild energy crackling around raised hands — stands ~7 ft tall
+```
+
+### pc-large-9
+
+```
+3x3 grid, 9 distinct characters, one distinct character per cell, uniform cell size, each character rendered LARGE — filling its cell, roughly 1.7x the detail of a small sprite. Consistent scale across cells. clean painterly fantasy character-portrait style turned pixel-sprite, warm parchment-adjacent palette, medium value contrast, class-appropriate gear/armor readable in silhouette — matches the `fantasy.md` default-world style so PCs and monsters share one visual language. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).
+
+1. **Dragonborn Wizard (Female)** — mid-spellcast, spellbook in one hand, arcane sigil forming at the other — stands ~7 ft tall
+2. **Elf Rogue (Female)** — crouched mid-strike from stealth, dual daggers, sly grin — stands ~7 ft tall
+3. **Tiefling Warlock (Female)** — eldritch energy coiling from an outstretched hand, patron's mark glowing — stands ~7 ft tall
+4. **Tiefling Wizard (Female)** — mid-spellcast, spellbook in one hand, arcane sigil forming at the other — stands ~7 ft tall
+5. **Orc Bard (Male)** — mid-performance, instrument in hand, a spell shimmering off the music — stands ~7 ft tall
+6. **Orc Cleric (Male)** — channeling divine energy, holy symbol raised, radiant light at the hand — stands ~7 ft tall
+7. **Orc Fighter (Male)** — braced combat stance, weapon mid-swing, shield up — stands ~7 ft tall
+8. **Elf Paladin (Male)** — sword raised in an oath-gesture, holy light along the blade — stands ~7 ft tall
+9. **Elf Barbarian (Female)** — mid-rage, greataxe raised overhead, roaring — stands ~7 ft tall
+```
+
+### pc-large-10
+
+```
+3x3 grid, 9 distinct characters, one distinct character per cell, uniform cell size, each character rendered LARGE — filling its cell, roughly 1.7x the detail of a small sprite. Consistent scale across cells. clean painterly fantasy character-portrait style turned pixel-sprite, warm parchment-adjacent palette, medium value contrast, class-appropriate gear/armor readable in silhouette — matches the `fantasy.md` default-world style so PCs and monsters share one visual language. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).
+
+1. **Tiefling Bard (Female)** — mid-performance, instrument in hand, a spell shimmering off the music — stands ~7 ft tall
+2. **Orc Sorcerer (Female)** — wild arcane energy erupting from open palms, hair/robe caught in the surge — stands ~7 ft tall
+3. **Orc Warlock (Female)** — eldritch energy coiling from an outstretched hand, patron's mark glowing — stands ~7 ft tall
+4. **Orc Monk (Male)** — mid-flying-kick or braced martial-arts stance, fists wrapped, focused — stands ~7 ft tall
+5. **Elf Barbarian (Male)** — mid-rage, greataxe raised overhead, roaring — stands ~7 ft tall
+6. **Elf Ranger (Female)** — bow drawn full-pull, aiming, a hunting companion implied at the flank — stands ~7 ft tall
+7. **Human Fighter (Female)** — braced combat stance, weapon mid-swing, shield up — stands ~7 ft tall
+8. **Dragonborn Sorcerer (Male)** — wild arcane energy erupting from open palms, hair/robe caught in the surge — stands ~7 ft tall
+9. **Dragonborn Warlock (Male)** — eldritch energy coiling from an outstretched hand, patron's mark glowing — stands ~7 ft tall
+```
+
+### pc-large-11
+
+```
+3x3 grid, 9 distinct characters, one distinct character per cell, uniform cell size, each character rendered LARGE — filling its cell, roughly 1.7x the detail of a small sprite. Consistent scale across cells. clean painterly fantasy character-portrait style turned pixel-sprite, warm parchment-adjacent palette, medium value contrast, class-appropriate gear/armor readable in silhouette — matches the `fantasy.md` default-world style so PCs and monsters share one visual language. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).
+
+1. **Human Rogue (Male)** — crouched mid-strike from stealth, dual daggers, sly grin — stands ~7 ft tall
+2. **Tiefling Bard (Male)** — mid-performance, instrument in hand, a spell shimmering off the music — stands ~7 ft tall
+3. **Tiefling Cleric (Male)** — channeling divine energy, holy symbol raised, radiant light at the hand — stands ~7 ft tall
+4. **Elf Paladin (Female)** — sword raised in an oath-gesture, holy light along the blade — stands ~7 ft tall
+5. **Elf Ranger (Male)** — bow drawn full-pull, aiming, a hunting companion implied at the flank — stands ~7 ft tall
+6. **Elf Wizard (Male)** — mid-spellcast, spellbook in one hand, arcane sigil forming at the other — stands ~7 ft tall
+7. **Tiefling Monk (Female)** — mid-flying-kick or braced martial-arts stance, fists wrapped, focused — stands ~7 ft tall
+8. **Tiefling Rogue (Female)** — crouched mid-strike from stealth, dual daggers, sly grin — stands ~7 ft tall
+9. **Dragonborn Rogue (Female)** — crouched mid-strike from stealth, dual daggers, sly grin — stands ~7 ft tall
+```
+
+### pc-large-12
+
+```
+3x3 grid, 9 distinct characters, one distinct character per cell, uniform cell size, each character rendered LARGE — filling its cell, roughly 1.7x the detail of a small sprite. Consistent scale across cells. clean painterly fantasy character-portrait style turned pixel-sprite, warm parchment-adjacent palette, medium value contrast, class-appropriate gear/armor readable in silhouette — matches the `fantasy.md` default-world style so PCs and monsters share one visual language. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).
+
+1. **Human Ranger (Male)** — bow drawn full-pull, aiming, a hunting companion implied at the flank — stands ~7 ft tall
+2. **Elf Warlock (Male)** — eldritch energy coiling from an outstretched hand, patron's mark glowing — stands ~7 ft tall
+3. **Elf Sorcerer (Male)** — wild arcane energy erupting from open palms, hair/robe caught in the surge — stands ~7 ft tall
+4. **Orc Druid (Female)** — mid-shapeshift or spellcasting, wild energy crackling around raised hands — stands ~7 ft tall
+5. **Dragonborn Sorcerer (Female)** — wild arcane energy erupting from open palms, hair/robe caught in the surge — stands ~7 ft tall
+6. **Dragonborn Warlock (Female)** — eldritch energy coiling from an outstretched hand, patron's mark glowing — stands ~7 ft tall
+7. **Tiefling Ranger (Male)** — bow drawn full-pull, aiming, a hunting companion implied at the flank — stands ~7 ft tall
+8. **Elf Monk (Male)** — mid-flying-kick or braced martial-arts stance, fists wrapped, focused — stands ~7 ft tall
+9. **Orc Cleric (Female)** — channeling divine energy, holy symbol raised, radiant light at the hand — stands ~7 ft tall
+```
+
+### pc-large-13
+
+```
+3x3 grid, 9 distinct characters, one distinct character per cell, uniform cell size, each character rendered LARGE — filling its cell, roughly 1.7x the detail of a small sprite. Consistent scale across cells. clean painterly fantasy character-portrait style turned pixel-sprite, warm parchment-adjacent palette, medium value contrast, class-appropriate gear/armor readable in silhouette — matches the `fantasy.md` default-world style so PCs and monsters share one visual language. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).
+
+1. **Orc Fighter (Female)** — braced combat stance, weapon mid-swing, shield up — stands ~7 ft tall
+2. **Orc Paladin (Female)** — sword raised in an oath-gesture, holy light along the blade — stands ~7 ft tall
+3. **Human Ranger (Female)** — bow drawn full-pull, aiming, a hunting companion implied at the flank — stands ~7 ft tall
+4. **Human Rogue (Female)** — crouched mid-strike from stealth, dual daggers, sly grin — stands ~7 ft tall
+5. **Human Monk (Male)** — mid-flying-kick or braced martial-arts stance, fists wrapped, focused — stands ~7 ft tall
+6. **Elf Fighter (Male)** — braced combat stance, weapon mid-swing, shield up — stands ~7 ft tall
+7. **Elf Warlock (Female)** — eldritch energy coiling from an outstretched hand, patron's mark glowing — stands ~7 ft tall
+8. **Elf Wizard (Female)** — mid-spellcast, spellbook in one hand, arcane sigil forming at the other — stands ~7 ft tall
+9. **Elf Monk (Female)** — mid-flying-kick or braced martial-arts stance, fists wrapped, focused — stands ~7 ft tall
+```
+
+### pc-large-14
+
+```
+3x3 grid, 9 distinct characters, one distinct character per cell, uniform cell size, each character rendered LARGE — filling its cell, roughly 1.7x the detail of a small sprite. Consistent scale across cells. clean painterly fantasy character-portrait style turned pixel-sprite, warm parchment-adjacent palette, medium value contrast, class-appropriate gear/armor readable in silhouette — matches the `fantasy.md` default-world style so PCs and monsters share one visual language. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).
+
+1. **Tiefling Ranger (Female)** — bow drawn full-pull, aiming, a hunting companion implied at the flank — stands ~7 ft tall
+2. **Human Bard (Male)** — mid-performance, instrument in hand, a spell shimmering off the music — stands ~7 ft tall
+3. **Human Paladin (Male)** — sword raised in an oath-gesture, holy light along the blade — stands ~7 ft tall
+4. **Human Warlock (Male)** — eldritch energy coiling from an outstretched hand, patron's mark glowing — stands ~7 ft tall
+5. **Orc Bard (Female)** — mid-performance, instrument in hand, a spell shimmering off the music — stands ~7 ft tall
+6. **Human Paladin (Female)** — sword raised in an oath-gesture, holy light along the blade — stands ~7 ft tall
+7. **Elf Sorcerer (Female)** — wild arcane energy erupting from open palms, hair/robe caught in the surge — stands ~7 ft tall
+8. **Human Cleric (Male)** — channeling divine energy, holy symbol raised, radiant light at the hand — stands ~7 ft tall
+9. **Human Monk (Female)** — mid-flying-kick or braced martial-arts stance, fists wrapped, focused — stands ~7 ft tall
+```
+
+### pc-large-15
+
+```
+3x3 grid, 9 distinct characters, one distinct character per cell, uniform cell size, each character rendered LARGE — filling its cell, roughly 1.7x the detail of a small sprite. Consistent scale across cells. clean painterly fantasy character-portrait style turned pixel-sprite, warm parchment-adjacent palette, medium value contrast, class-appropriate gear/armor readable in silhouette — matches the `fantasy.md` default-world style so PCs and monsters share one visual language. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).
+
+1. **Elf Cleric (Male)** — channeling divine energy, holy symbol raised, radiant light at the hand — stands ~7 ft tall
+2. **Orc Monk (Female)** — mid-flying-kick or braced martial-arts stance, fists wrapped, focused — stands ~7 ft tall
+3. **Elf Fighter (Female)** — braced combat stance, weapon mid-swing, shield up — stands ~7 ft tall
+4. **Elf Bard (Male)** — mid-performance, instrument in hand, a spell shimmering off the music — stands ~7 ft tall
+5. **Elf Druid (Male)** — mid-shapeshift or spellcasting, wild energy crackling around raised hands — stands ~7 ft tall
+6. **Human Warlock (Female)** — eldritch energy coiling from an outstretched hand, patron's mark glowing — stands ~7 ft tall
+7. **Human Druid (Male)** — mid-shapeshift or spellcasting, wild energy crackling around raised hands — stands ~7 ft tall
+8. **Elf Cleric (Female)** — channeling divine energy, holy symbol raised, radiant light at the hand — stands ~7 ft tall
+9. **Human Sorcerer (Male)** — wild arcane energy erupting from open palms, hair/robe caught in the surge — stands ~7 ft tall
+```
+
+### pc-large-16
+
+```
+3x3 grid, 9 distinct characters, one distinct character per cell, uniform cell size, each character rendered LARGE — filling its cell, roughly 1.7x the detail of a small sprite. Consistent scale across cells. clean painterly fantasy character-portrait style turned pixel-sprite, warm parchment-adjacent palette, medium value contrast, class-appropriate gear/armor readable in silhouette — matches the `fantasy.md` default-world style so PCs and monsters share one visual language. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).
+
+1. **Elf Bard (Female)** — mid-performance, instrument in hand, a spell shimmering off the music — stands ~7 ft tall
+2. **Human Druid (Female)** — mid-shapeshift or spellcasting, wild energy crackling around raised hands — stands ~7 ft tall
+3. **Human Wizard (Male)** — mid-spellcast, spellbook in one hand, arcane sigil forming at the other — stands ~7 ft tall
+4. **Elf Druid (Female)** — mid-shapeshift or spellcasting, wild energy crackling around raised hands — stands ~7 ft tall
+5. **Human Bard (Female)** — mid-performance, instrument in hand, a spell shimmering off the music — stands ~6 ft tall
+6. **Human Cleric (Female)** — channeling divine energy, holy symbol raised, radiant light at the hand — stands ~6 ft tall
+7. **Human Sorcerer (Female)** — wild arcane energy erupting from open palms, hair/robe caught in the surge — stands ~6 ft tall
+8. **Human Wizard (Female)** — mid-spellcast, spellbook in one hand, arcane sigil forming at the other — stands ~6 ft tall
+9. **Dwarf Paladin (Male)** — sword raised in an oath-gesture, holy light along the blade — stands ~5 ft tall
+```
+
+### pc-large-17
+
+```
+3x3 grid, 9 distinct characters, one distinct character per cell, uniform cell size, each character rendered LARGE — filling its cell, roughly 1.7x the detail of a small sprite. Consistent scale across cells. clean painterly fantasy character-portrait style turned pixel-sprite, warm parchment-adjacent palette, medium value contrast, class-appropriate gear/armor readable in silhouette — matches the `fantasy.md` default-world style so PCs and monsters share one visual language. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).
+
+1. **Dwarf Monk (Male)** — mid-flying-kick or braced martial-arts stance, fists wrapped, focused — stands ~5 ft tall
+2. **Dwarf Paladin (Female)** — sword raised in an oath-gesture, holy light along the blade — stands ~5 ft tall
+3. **Dwarf Fighter (Male)** — braced combat stance, weapon mid-swing, shield up — stands ~5 ft tall
+4. **Dwarf Sorcerer (Male)** — wild arcane energy erupting from open palms, hair/robe caught in the surge — stands ~5 ft tall
+5. **Dwarf Barbarian (Male)** — mid-rage, greataxe raised overhead, roaring — stands ~5 ft tall
+6. **Dwarf Barbarian (Female)** — mid-rage, greataxe raised overhead, roaring — stands ~5 ft tall
+7. **Dwarf Ranger (Male)** — bow drawn full-pull, aiming, a hunting companion implied at the flank — stands ~5 ft tall
+8. **Dwarf Rogue (Male)** — crouched mid-strike from stealth, dual daggers, sly grin — stands ~5 ft tall
+9. **Dwarf Cleric (Male)** — channeling divine energy, holy symbol raised, radiant light at the hand — stands ~5 ft tall
+```
+
+### pc-large-18
+
+```
+3x3 grid, 4 distinct characters, one distinct character per cell, uniform cell size, each character rendered LARGE — filling its cell, roughly 1.7x the detail of a small sprite. Consistent scale across cells. clean painterly fantasy character-portrait style turned pixel-sprite, warm parchment-adjacent palette, medium value contrast, class-appropriate gear/armor readable in silhouette — matches the `fantasy.md` default-world style so PCs and monsters share one visual language. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).
+
+1. **Dwarf Druid (Male)** — mid-shapeshift or spellcasting, wild energy crackling around raised hands — stands ~5 ft tall
+2. **Dwarf Druid (Female)** — mid-shapeshift or spellcasting, wild energy crackling around raised hands — stands ~5 ft tall
+3. **Dwarf Fighter (Female)** — braced combat stance, weapon mid-swing, shield up — stands ~5 ft tall
+4. **Dwarf Warlock (Male)** — eldritch energy coiling from an outstretched hand, patron's mark glowing — stands ~5 ft tall
 ```
 
 ## Redo sheets (standard size — art rejected in review, size was fine)

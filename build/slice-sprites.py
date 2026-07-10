@@ -276,7 +276,88 @@ def crop_transparent(img, item, tolerance, padding):
             r, g, b, a = px[xx, yy]
             if is_magenta((r, g, b), tolerance):
                 px[xx, yy] = (r, g, b, 0)
+    defringe(crop)
     return crop
+
+
+def defringe(crop, despill=0.25, erode_excess=60, band=2):
+    """Kill the magenta halo (2026-07-09, Adam: 'everything has magenta halos!').
+
+    Keying only zeroes pixels NEAR pure #FF00FF — an anti-aliased edge pixel that blended
+    art color with the magenta background survives the key with a purple cast, so every
+    sprite ships with a 1-2px halo. Two passes, EDGE-BAND ONLY so interior purples
+    (tieflings, warlock glows) are untouched:
+
+      1. ERODE (x2): an opaque pixel touching transparency whose magenta excess
+         (min(r,b) - g) exceeds `erode_excess` is mostly background — make it transparent.
+      2. DESPILL: remaining opaque pixels within `band` px of transparency that still lean
+         magenta (r>g and b>g) get their r/b excess over g scaled down to `despill`.
+
+    Mutates the RGBA crop in place."""
+    px = crop.load()
+    w, h = crop.size
+
+    def edge_pixels():
+        out = []
+        for yy in range(h):
+            for xx in range(w):
+                if px[xx, yy][3] == 0:
+                    continue
+                for nx, ny in ((xx-1, yy), (xx+1, yy), (xx, yy-1), (xx, yy+1),
+                               (xx-1, yy-1), (xx+1, yy-1), (xx-1, yy+1), (xx+1, yy+1)):
+                    if not (0 <= nx < w and 0 <= ny < h) or px[nx, ny][3] == 0:
+                        out.append((xx, yy))
+                        break
+        return out
+
+    # pass 1: erode strongly-contaminated edge pixels (run twice — halos are 1-2px deep)
+    for _ in range(2):
+        eroded = False
+        for xx, yy in edge_pixels():
+            r, g, b, a = px[xx, yy]
+            if min(r, b) - g > erode_excess:
+                px[xx, yy] = (r, g, b, 0)
+                eroded = True
+        if not eroded:
+            break
+
+    # pass 2: despill the edge band — BFS distance-from-transparency up to `band`
+    dist = [[None] * w for _ in range(h)]
+    frontier = []
+    for yy in range(h):
+        for xx in range(w):
+            if px[xx, yy][3] == 0:
+                dist[yy][xx] = 0
+                frontier.append((xx, yy))
+    # treat the crop border as transparency too (sprites at the bbox edge)
+    for xx in range(w):
+        for yy in (0, h - 1):
+            if dist[yy][xx] is None:
+                dist[yy][xx] = 1
+                frontier.append((xx, yy))
+    for yy in range(h):
+        for xx in (0, w - 1):
+            if dist[yy][xx] is None:
+                dist[yy][xx] = 1
+                frontier.append((xx, yy))
+    d = 0
+    while frontier and d < band:
+        d += 1
+        nxt = []
+        for xx, yy in frontier:
+            for nx, ny in ((xx-1, yy), (xx+1, yy), (xx, yy-1), (xx, yy+1)):
+                if 0 <= nx < w and 0 <= ny < h and dist[ny][nx] is None:
+                    dist[ny][nx] = d
+                    nxt.append((nx, ny))
+        frontier = nxt
+    for yy in range(h):
+        for xx in range(w):
+            dd = dist[yy][xx]
+            if dd is None or dd == 0:
+                continue
+            r, g, b, a = px[xx, yy]
+            if a and r > g and b > g:
+                px[xx, yy] = (g + int((r - g) * despill), g, g + int((b - g) * despill), a)
 
 
 def load_manifest():
@@ -288,12 +369,14 @@ def load_manifest():
         return json.load(f)
 
 
-def load_v2_manifest():
-    if not os.path.exists(V2_MANIFEST_PATH):
-        print(f"ERROR: v2 manifest not found at {V2_MANIFEST_PATH}. Run "
-              "build/gen-sprite-sheet-manifests.py first.", file=sys.stderr)
+def load_v2_manifest(path=None):
+    path = path or V2_MANIFEST_PATH
+    if not os.path.exists(path):
+        print(f"ERROR: v2 manifest not found at {path}. Run "
+              "build/gen-sprite-sheet-manifests.py first (or gen-xl-regen-sheets.py "
+              "for the XL/redo manifest).", file=sys.stderr)
         sys.exit(1)
-    with open(V2_MANIFEST_PATH) as f:
+    with open(path) as f:
         return json.load(f)
 
 
@@ -393,14 +476,18 @@ def slice_v2_sheet(args, v2_manifest):
 
     ordered = assign_row_major(top)
 
-    os.makedirs(args.out, exist_ok=True)
+    # Honest failure: on a count mismatch the slug assignment is untrustworthy (largest-N
+    # selection can pull blobs from anywhere on the sheet), so candidate crops go to a
+    # quarantine dir for the review sheet — never into the production sprite dir.
+    out_dir = args.out if ok else os.path.join(V2_REVIEW_DIR, f"{sheet['id']}-quarantine")
+    os.makedirs(out_dir, exist_ok=True)
     crops = []
     n_match = min(len(ordered), len(slugs))
     for i in range(n_match):
         slug = slugs[i]
         item = ordered[i]
         crop = crop_transparent(img, item, args.tolerance, args.padding)
-        out_path = os.path.join(args.out, f"{slug}.png")
+        out_path = os.path.join(out_dir, f"{slug}.png")
         crop.save(out_path)
         crops.append((slug, out_path))
 
@@ -408,7 +495,11 @@ def slice_v2_sheet(args, v2_manifest):
     unassigned_components = ordered[n_match:] if len(ordered) > n_match else []
     unassigned_extra_bboxes = [it["bbox"] for it in unassigned_components] + [bbox(c) for c in extra]
 
-    print(f"Wrote {len(crops)} sprites to {args.out}")
+    if ok:
+        print(f"Wrote {len(crops)} sprites to {out_dir}")
+    else:
+        print(f"Count mismatch — {len(crops)} candidate crops QUARANTINED to {out_dir} "
+              f"(nothing written to {args.out})")
 
     # ALWAYS write the review contact sheet in v2 mode (spec T2.2) — non-uniform sheets make
     # eyes mandatory, not just a mismatch fallback.
@@ -433,6 +524,22 @@ def slice_v2_sheet(args, v2_manifest):
         sys.exit(1)
 
     print(f"OK: {len(crops)}/{expect} cells sliced and assigned in row-major order (v2 sheet {sheet['id']}).")
+
+    # Regen-lane honesty: a re-cut slug that still carries verdict:"fail" in the review
+    # overlay stays BLOCKED in the theater (spriteEntryFor skips it) even though its new
+    # art just landed — remind, never silently clear a ruling.
+    overlay_path = os.path.join(ROOT, "dev", "model-qa", "sprite-tags-overlay.json")
+    if os.path.exists(overlay_path):
+        try:
+            with open(overlay_path) as f:
+                ov = json.load(f)
+            still_failed = [s for s, _ in crops if (ov.get(s) or {}).get("verdict") == "fail"]
+            if still_failed:
+                print(f"NOTE: {len(still_failed)} re-cut slug(s) still carry verdict:\"fail\" in the "
+                      f"overlay and will NOT render until re-ruled in the review tool "
+                      f"(python3 dev/sprite-review.py): {still_failed}")
+        except (ValueError, OSError):
+            pass
     sys.exit(0)
 
 
@@ -496,14 +603,36 @@ def main():
     ap.add_argument("--manifest-v2", metavar="SHEET_ID", default=None,
                     help="v2 mode: read dev/sprite-manifests/v2-manifest.json, slice sheet SHEET_ID "
                          "(e.g. gloom-monsters-1) — sheet_num is not used in this mode")
+    ap.add_argument("--manifest-path", metavar="PATH", default=None,
+                    help="override the v2 manifest file (e.g. dev/sprite-manifests/"
+                         "xl-regen-manifest.json for the XL/titan/redo regen lane)")
+    ap.add_argument("--defringe-dir", action="store_true",
+                    help="batch mode: sheet_png is a DIRECTORY of already-cut RGBA sprites; "
+                         "apply the defringe pass (halo erode + edge despill) to every PNG "
+                         "in place. For sprites cut before defringe existed in the pipeline.")
     args = ap.parse_args()
 
     if not os.path.exists(args.sheet_png):
         print(f"ERROR: sheet PNG not found: {args.sheet_png}", file=sys.stderr)
         sys.exit(1)
 
+    if args.defringe_dir:
+        if not os.path.isdir(args.sheet_png):
+            print(f"ERROR: --defringe-dir needs a directory, got {args.sheet_png}", file=sys.stderr)
+            sys.exit(1)
+        names = sorted(n for n in os.listdir(args.sheet_png) if n.endswith(".png"))
+        for i, name in enumerate(names, 1):
+            p = os.path.join(args.sheet_png, name)
+            im = Image.open(p).convert("RGBA")
+            defringe(im)
+            im.save(p)
+            if i % 100 == 0 or i == len(names):
+                print(f"  defringed {i}/{len(names)}")
+        print(f"OK: defringed {len(names)} sprites in {args.sheet_png}")
+        return
+
     if args.manifest_v2 is not None:
-        v2_manifest = load_v2_manifest()
+        v2_manifest = load_v2_manifest(args.manifest_path)
         slice_v2_sheet(args, v2_manifest)
         return  # slice_v2_sheet exits
 
@@ -537,14 +666,17 @@ def main():
 
     ordered = assign_row_major(top)
 
-    os.makedirs(args.out, exist_ok=True)
+    # Honest failure: on a count mismatch the slug assignment is untrustworthy — quarantine
+    # candidate crops for the review sheet; never write them into the production sprite dir.
+    out_dir = args.out if ok else os.path.join(REVIEW_DIR, f"{sheet_key}-quarantine")
+    os.makedirs(out_dir, exist_ok=True)
     crops = []
     n_match = min(len(ordered), len(slugs))
     for i in range(n_match):
         slug = slugs[i]
         item = ordered[i]
         crop = crop_transparent(img, item, args.tolerance, args.padding)
-        out_path = os.path.join(args.out, f"{slug}.png")
+        out_path = os.path.join(out_dir, f"{slug}.png")
         crop.save(out_path)
         crops.append((slug, out_path))
 
@@ -552,7 +684,11 @@ def main():
     unassigned_components = ordered[n_match:] if len(ordered) > n_match else []
     unassigned_extra_bboxes = [it["bbox"] for it in unassigned_components] + [bbox(c) for c in extra]
 
-    print(f"Wrote {len(crops)} sprites to {args.out}")
+    if ok:
+        print(f"Wrote {len(crops)} sprites to {out_dir}")
+    else:
+        print(f"Count mismatch — {len(crops)} candidate crops QUARANTINED to {out_dir} "
+              f"(nothing written to {args.out})")
 
     review_written = False
     if args.review or not ok or missing_slugs or unassigned_extra_bboxes:

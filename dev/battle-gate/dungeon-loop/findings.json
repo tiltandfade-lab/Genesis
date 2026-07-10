@@ -1,0 +1,602 @@
+{
+  "generatedAt": "2026-07-10T22:50:55.610Z",
+  "iterations": [
+    {
+      "loopIndex": 1,
+      "cfg": {
+        "loopIndex": 1,
+        "segCount": 4,
+        "realmId": "chrome",
+        "foes": [
+          "Wolf",
+          "Giant Rat",
+          "Spider"
+        ]
+      },
+      "breaks": [],
+      "drive": {
+        "ok": true,
+        "stage": "done",
+        "loopIndex": 1,
+        "topology": "The Web",
+        "segCount": 5,
+        "environment": "dungeon",
+        "nodeId": "dungeon-loop-1",
+        "roomCount": 5,
+        "reachability": {
+          "ok": true,
+          "unreachable": 0
+        },
+        "targetSegNum": 3,
+        "room": {
+          "segNum": 3,
+          "x": 14,
+          "y": 3,
+          "w": 4,
+          "d": 6
+        },
+        "foes": [
+          {
+            "fid": "f1",
+            "name": "Wolf"
+          },
+          {
+            "fid": "f2",
+            "name": "Giant Rat"
+          },
+          {
+            "fid": "f3",
+            "name": "Spider"
+          }
+        ],
+        "combatGrid": {
+          "bands": [
+            "melee",
+            "near"
+          ],
+          "lanes": [
+            "C"
+          ],
+          "bandCount": 2,
+          "laneCount": 1
+        },
+        "pnCursor": 3
+      },
+      "topology": "The Web",
+      "roomCount": 5,
+      "reachability": {
+        "ok": true,
+        "unreachable": 0
+      },
+      "rendered": {
+        "ok": true,
+        "stage": "setInteriorBoard",
+        "dressingCountFromTray": 40,
+        "meshCount": 3,
+        "piecesRequested": 3,
+        "piecesResolved": 3,
+        "dressingCount": 40
+      },
+      "verbResults": {
+        "hurt": {
+          "ok": true
+        },
+        "down": {
+          "ok": true
+        }
+      },
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 404 (File not found)",
+        "Failed to load resource: the server responded with a status of 404 (File not found)",
+        "Failed to load resource: the server responded with a status of 404 (File not found)",
+        "Failed to load resource: the server responded with a status of 404 (File not found)",
+        "Failed to load resource: the server responded with a status of 404 (File not found)",
+        "Failed to load resource: the server responded with a status of 404 (File not found)",
+        "Failed to load resource: the server responded with a status of 404 (File not found)"
+      ],
+      "urls404": [
+        "http://127.0.0.1:5211/dm/health",
+        "http://127.0.0.1:5211/dm/health",
+        "http://127.0.0.1:5211/assets/dressing/chrome-clutter-vendingwreck.png",
+        "http://127.0.0.1:5211/assets/dressing/chrome-flora-lightpod.png",
+        "http://127.0.0.1:5211/assets/dressing/chrome-flora-hologram-fern.png",
+        "http://127.0.0.1:5211/assets/dressing/chrome-flora-circuitmoss.png",
+        "http://127.0.0.1:5211/assets/dressing/chrome-clutter-turnstile.png",
+        "http://127.0.0.1:5211/assets/dressing/chrome-flora-neonbonsai.png"
+      ],
+      "benign404Count": 8,
+      "summary": {
+        "topology": "The Web",
+        "realm": "chrome",
+        "roomCount": 5,
+        "planVerified": true,
+        "piecesResolved": 3,
+        "piecesRequested": 3,
+        "dressingCount": 40,
+        "meshCount": 3,
+        "consoleErrorCount": 7,
+        "breakCount": 0
+      }
+    },
+    {
+      "loopIndex": 2,
+      "cfg": {
+        "loopIndex": 2,
+        "segCount": 6,
+        "realmId": "gloom",
+        "foes": [
+          "Ogre Zombie",
+          "Skeleton",
+          "Zombie",
+          "Guard"
+        ]
+      },
+      "breaks": [],
+      "drive": {
+        "ok": true,
+        "stage": "done",
+        "loopIndex": 2,
+        "topology": "The Ruin",
+        "segCount": 7,
+        "environment": "dungeon",
+        "nodeId": "dungeon-loop-2",
+        "roomCount": 7,
+        "reachability": {
+          "ok": true,
+          "unreachable": 0
+        },
+        "targetSegNum": 4,
+        "room": {
+          "segNum": 4,
+          "x": 21,
+          "y": 12,
+          "w": 6,
+          "d": 7
+        },
+        "foes": [
+          {
+            "fid": "f1",
+            "name": "Ogre Zombie"
+          },
+          {
+            "fid": "f2",
+            "name": "Skeleton"
+          },
+          {
+            "fid": "f3",
+            "name": "Zombie"
+          },
+          {
+            "fid": "f4",
+            "name": "Guard"
+          }
+        ],
+        "combatGrid": {
+          "bands": [
+            "melee",
+            "near"
+          ],
+          "lanes": [
+            "L",
+            "C"
+          ],
+          "bandCount": 2,
+          "laneCount": 2
+        },
+        "pnCursor": 4
+      },
+      "topology": "The Ruin",
+      "roomCount": 7,
+      "reachability": {
+        "ok": true,
+        "unreachable": 0
+      },
+      "rendered": {
+        "ok": true,
+        "stage": "setInteriorBoard",
+        "dressingCountFromTray": 64,
+        "meshCount": 4,
+        "piecesRequested": 4,
+        "piecesResolved": 4,
+        "dressingCount": 64
+      },
+      "verbResults": {
+        "hurt": {
+          "ok": true
+        },
+        "down": {
+          "ok": true
+        }
+      },
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 404 (File not found)",
+        "Failed to load resource: the server responded with a status of 404 (File not found)",
+        "Failed to load resource: the server responded with a status of 404 (File not found)",
+        "Failed to load resource: the server responded with a status of 404 (File not found)",
+        "Failed to load resource: the server responded with a status of 404 (File not found)",
+        "Failed to load resource: the server responded with a status of 404 (File not found)"
+      ],
+      "urls404": [
+        "http://127.0.0.1:5211/assets/dressing/gloom-clutter-lanternrust.png",
+        "http://127.0.0.1:5211/assets/dressing/gloom-clutter-mausoleumdoor-shard.png",
+        "http://127.0.0.1:5211/assets/dressing/gloom-clutter-ironfence-gap.png",
+        "http://127.0.0.1:5211/assets/dressing/gloom-flora-bonelichen.png",
+        "http://127.0.0.1:5211/assets/dressing/gloom-flora-mourningfern.png",
+        "http://127.0.0.1:5211/assets/dressing/gloom-flora-driedwreath.png"
+      ],
+      "benign404Count": 6,
+      "summary": {
+        "topology": "The Ruin",
+        "realm": "gloom",
+        "roomCount": 7,
+        "planVerified": true,
+        "piecesResolved": 4,
+        "piecesRequested": 4,
+        "dressingCount": 64,
+        "meshCount": 4,
+        "consoleErrorCount": 6,
+        "breakCount": 0
+      }
+    },
+    {
+      "loopIndex": 3,
+      "cfg": {
+        "loopIndex": 3,
+        "segCount": 8,
+        "realmId": "fantasy",
+        "foes": [
+          "Wolf",
+          "Zombie",
+          "Ape",
+          "Guard",
+          "Knight"
+        ]
+      },
+      "breaks": [],
+      "drive": {
+        "ok": true,
+        "stage": "done",
+        "loopIndex": 3,
+        "topology": "The Figure-8",
+        "segCount": 9,
+        "environment": "dungeon",
+        "nodeId": "dungeon-loop-3",
+        "roomCount": 9,
+        "reachability": {
+          "ok": true,
+          "unreachable": 0
+        },
+        "targetSegNum": 5,
+        "room": {
+          "segNum": 5,
+          "x": 21,
+          "y": 20,
+          "w": 6,
+          "d": 7
+        },
+        "foes": [
+          {
+            "fid": "f1",
+            "name": "Wolf"
+          },
+          {
+            "fid": "f2",
+            "name": "Zombie"
+          },
+          {
+            "fid": "f3",
+            "name": "Ape"
+          },
+          {
+            "fid": "f4",
+            "name": "Guard"
+          },
+          {
+            "fid": "f5",
+            "name": "Knight"
+          }
+        ],
+        "combatGrid": {
+          "bands": [
+            "melee",
+            "near"
+          ],
+          "lanes": [
+            "L",
+            "C"
+          ],
+          "bandCount": 2,
+          "laneCount": 2
+        },
+        "pnCursor": 5
+      },
+      "topology": "The Figure-8",
+      "roomCount": 9,
+      "reachability": {
+        "ok": true,
+        "unreachable": 0
+      },
+      "rendered": {
+        "ok": true,
+        "stage": "setInteriorBoard",
+        "dressingCountFromTray": 72,
+        "meshCount": 4,
+        "piecesRequested": 5,
+        "piecesResolved": 5,
+        "dressingCount": 72
+      },
+      "verbResults": {
+        "hurt": {
+          "ok": true
+        },
+        "down": {
+          "ok": true
+        }
+      },
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 404 (File not found)",
+        "Failed to load resource: the server responded with a status of 404 (File not found)",
+        "Failed to load resource: the server responded with a status of 404 (File not found)",
+        "Failed to load resource: the server responded with a status of 404 (File not found)",
+        "Failed to load resource: the server responded with a status of 404 (File not found)",
+        "Failed to load resource: the server responded with a status of 404 (File not found)"
+      ],
+      "urls404": [
+        "http://127.0.0.1:5211/assets/dressing/fantasy-clutter-rusted-plow.png",
+        "http://127.0.0.1:5211/assets/dressing/fantasy-clutter-lanternhook.png",
+        "http://127.0.0.1:5211/assets/dressing/fantasy-clutter-rubblewall.png",
+        "http://127.0.0.1:5211/assets/dressing/fantasy-flora-ivywall.png",
+        "http://127.0.0.1:5211/assets/dressing/fantasy-flora-mushroomring.png",
+        "http://127.0.0.1:5211/assets/dressing/fantasy-flora-mossboulder.png"
+      ],
+      "benign404Count": 6,
+      "summary": {
+        "topology": "The Figure-8",
+        "realm": "fantasy",
+        "roomCount": 9,
+        "planVerified": true,
+        "piecesResolved": 5,
+        "piecesRequested": 5,
+        "dressingCount": 72,
+        "meshCount": 4,
+        "consoleErrorCount": 6,
+        "breakCount": 0
+      }
+    },
+    {
+      "loopIndex": 4,
+      "cfg": {
+        "loopIndex": 4,
+        "segCount": 10,
+        "realmId": "gloom",
+        "foes": [
+          "Giant Rat",
+          "Spider",
+          "Knight"
+        ]
+      },
+      "breaks": [],
+      "drive": {
+        "ok": true,
+        "stage": "done",
+        "loopIndex": 4,
+        "topology": "The Loop",
+        "segCount": 11,
+        "environment": "dungeon",
+        "nodeId": "dungeon-loop-4",
+        "roomCount": 11,
+        "reachability": {
+          "ok": true,
+          "unreachable": 0
+        },
+        "targetSegNum": 6,
+        "room": {
+          "segNum": 6,
+          "x": 47,
+          "y": 29,
+          "w": 6,
+          "d": 6
+        },
+        "foes": [
+          {
+            "fid": "f1",
+            "name": "Giant Rat"
+          },
+          {
+            "fid": "f2",
+            "name": "Spider"
+          },
+          {
+            "fid": "f3",
+            "name": "Knight"
+          }
+        ],
+        "combatGrid": {
+          "bands": [
+            "melee",
+            "near"
+          ],
+          "lanes": [
+            "L",
+            "C"
+          ],
+          "bandCount": 2,
+          "laneCount": 2
+        },
+        "pnCursor": 6
+      },
+      "topology": "The Loop",
+      "roomCount": 11,
+      "reachability": {
+        "ok": true,
+        "unreachable": 0
+      },
+      "rendered": {
+        "ok": true,
+        "stage": "setInteriorBoard",
+        "dressingCountFromTray": 85,
+        "meshCount": 4,
+        "piecesRequested": 3,
+        "piecesResolved": 3,
+        "dressingCount": 85
+      },
+      "verbResults": {
+        "hurt": {
+          "ok": true
+        },
+        "down": {
+          "ok": true
+        }
+      },
+      "consoleErrors": [],
+      "urls404": [],
+      "benign404Count": 0,
+      "summary": {
+        "topology": "The Loop",
+        "realm": "gloom",
+        "roomCount": 11,
+        "planVerified": true,
+        "piecesResolved": 3,
+        "piecesRequested": 3,
+        "dressingCount": 85,
+        "meshCount": 4,
+        "consoleErrorCount": 0,
+        "breakCount": 0
+      }
+    },
+    {
+      "loopIndex": 5,
+      "cfg": {
+        "loopIndex": 5,
+        "segCount": 7,
+        "realmId": "chrome",
+        "foes": [
+          "Ogre Zombie",
+          "Skeleton",
+          "Zombie",
+          "Guard",
+          "Wolf"
+        ]
+      },
+      "breaks": [],
+      "drive": {
+        "ok": true,
+        "stage": "done",
+        "loopIndex": 5,
+        "topology": "The Ruin",
+        "segCount": 8,
+        "environment": "dungeon",
+        "nodeId": "dungeon-loop-5",
+        "roomCount": 8,
+        "reachability": {
+          "ok": true,
+          "unreachable": 0
+        },
+        "targetSegNum": 5,
+        "room": {
+          "segNum": 5,
+          "x": 29,
+          "y": 8,
+          "w": 6,
+          "d": 6
+        },
+        "foes": [
+          {
+            "fid": "f1",
+            "name": "Ogre Zombie"
+          },
+          {
+            "fid": "f2",
+            "name": "Skeleton"
+          },
+          {
+            "fid": "f3",
+            "name": "Zombie"
+          },
+          {
+            "fid": "f4",
+            "name": "Guard"
+          },
+          {
+            "fid": "f5",
+            "name": "Wolf"
+          }
+        ],
+        "combatGrid": {
+          "bands": [
+            "melee",
+            "near"
+          ],
+          "lanes": [
+            "L",
+            "C"
+          ],
+          "bandCount": 2,
+          "laneCount": 2
+        },
+        "pnCursor": 5
+      },
+      "topology": "The Ruin",
+      "roomCount": 8,
+      "reachability": {
+        "ok": true,
+        "unreachable": 0
+      },
+      "rendered": {
+        "ok": true,
+        "stage": "setInteriorBoard",
+        "dressingCountFromTray": 70,
+        "meshCount": 4,
+        "piecesRequested": 5,
+        "piecesResolved": 5,
+        "dressingCount": 70
+      },
+      "verbResults": {
+        "hurt": {
+          "ok": true
+        },
+        "down": {
+          "ok": true
+        }
+      },
+      "consoleErrors": [],
+      "urls404": [],
+      "benign404Count": 0,
+      "summary": {
+        "topology": "The Ruin",
+        "realm": "chrome",
+        "roomCount": 8,
+        "planVerified": true,
+        "piecesResolved": 5,
+        "piecesRequested": 5,
+        "dressingCount": 70,
+        "meshCount": 4,
+        "consoleErrorCount": 0,
+        "breakCount": 0
+      }
+    }
+  ],
+  "breaks": [],
+  "notes": [
+    "OPEN: hurt/down screenshot PNGs may not visually reflect the standee-verb's terminal frame in this headless capture harness (play() itself, and the underlying scene-graph mutation, are independently proven correct — see shootCanvas()'s header comment in this file for the full triage trail). Not counted as a loop break."
+  ],
+  "boot": {
+    "ok": true,
+    "notes": [
+      "startSession() called"
+    ],
+    "worldId": "mrfj4ra4x6ag3",
+    "worldName": "The Unfinished Town"
+  },
+  "theaterState": {
+    "hasBattleStage": true,
+    "theaterMounted": true,
+    "hasCanvas": true,
+    "hasSetInteriorBoard": true,
+    "hasPlay": true
+  },
+  "contactSheetPath": "/Users/adamstephenson/Desktop/Work/projects/Genesis/.claude/worktrees/agent-aaae9fd83e8d6d1f6/dev/battle-gate/dungeon-loop/contact-sheet.png",
+  "shotCount": 15,
+  "breakCount": 0,
+  "cleanIterations": 5
+}

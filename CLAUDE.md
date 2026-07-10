@@ -51,6 +51,7 @@ so it'll serve the app fine but every DM turn fails as "bridge unreachable." See
 | regenerate the creator spell list | `python3 build/gen-spells-slim.py` |
 | roll old CHANGELOG/NEXT-STEPS entries to their archives (run at session close) | `python3 build/archive-docs.py --check` → if over cap, `--emit` |
 | run a dev DM session (AI DM over the bridge) | `python3 dev/dm-bridge.py` (serves the app **and** the mailbox); then `/loop` watch `.dm/` as the DM — runbook in `docs/DM-BRIDGE.md` |
+| review sprites (tags · heads-line-up scale · pass/fail; writes the overlay directly) | `python3 dev/sprite-review.py` → http://127.0.0.1:5179/ ; "regen registry" in the UI folds rulings into `data/sprite-registry.js` |
 | verify the DM bridge | `python3 dev/verify-bridge.py` (transport+contract) · `node dev/verify-dm-events.mjs` (applyEvent runtime, needs jsdom) |
 | headless test | jsdom: load the real `genesis.html` with all modules in document order, drive the flow, assert. (`npm i jsdom` in a scratch dir, e.g. `~/.genesis-jsdom`; reinstall per environment.) |
 

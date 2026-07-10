@@ -52,7 +52,9 @@ ui-sketches/ivalice-style/assets-iso/extracted/
 # output are not.
 dev/sprite-sheets/incoming/*.png
 dev/sprite-manifests/review/
-assets/sprites/*.png
+# assets/sprites + ui-sketches/sprite-sheets are COMMITTED as of 2026-07-09 (Adam's ruling):
+# the ImageGen source sheets are NOT regenerable (each generation is unique), so both the
+# source corpus and the cut sprites are backed up in git.
 dev/.playtest-stop
 
 # session render outputs (regenerable, not committed)

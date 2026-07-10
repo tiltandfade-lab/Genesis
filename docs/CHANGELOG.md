@@ -8,6 +8,56 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-07-09 (sprite night) — fantasy realm sliced (896 sprites) + review tool + auto-scale + XL regen lane
+
+**Added**
+- **The whole fantasy realm + all PCs cut to production sprites** — 896 PNGs in `assets/sprites/`
+  (510 monsters / 75 NPCs / 75 animals / 20 kids / 216 PCs), sliced from Adam's ImageGen corpus at
+  `ui-sketches/sprite-sheets/` (183 source sheets). Padded sheets (ImageGen fills 5×5 grids) handled
+  by targeted crops; every sheet has a review contact sheet. **Corpus + cut sprites now COMMITTED**
+  (Adam's backup ruling — the "no git backup" risk is closed; `.gitignore` un-ignored them).
+- **`dev/sprite-review.py` + `dev/sprite-review.html`** — the sprite review tool (port 5179): browse
+  every cut sprite w/ registry tags; 7-band head-guide ladder w/ imperial heights (tiny 1′6″ →
+  titanic 36′) + a 6′ vector human silhouette on stage; per-sprite scale slider (0.1–8, titan range);
+  explicit **Save Changes** (no real-time writes; pass/fail fold in unsaved edits); pins; `flagged ⚠`
+  filter; writes `dev/model-qa/sprite-tags-overlay.json` directly (atomic) — no parser round-trips;
+  "regen registry" button folds rulings into `data/sprite-registry.js`.
+- **Auto-scale pass** — heights for all 896 sprites (PC species table deterministic; monsters/NPCs/
+  animals via estimation agents), `scale = head_ft/(6×plane)`: 852 applied, 410 flagged (`⚠` note:
+  height uncertain / art extends above head / clamped). Adam's rulings always win (6 skipped).
+- **Defringe pass in the slicer** (`defringe()` + `--defringe-dir`) — kills the universal magenta
+  halo (edge erode ×2 + edge-band despill; interior purples untouched). All 896 re-written in place.
+- **XL/titan/redo regen lane** (`build/gen-xl-regen-sheets.py`) — Adam's ruling: 9′+ creatures are
+  under-res at 25/sheet. Emits `dev/sprite-manifests/XL-REGEN-PROMPTS.md` (64 paste-ready blocks w/
+  anti-magenta-artifact rider: 24 titan solos ≥24′ · 39 XL 2×2 sheets = 155 creatures 9–24′ · 1 redo
+  sheet = 16 sub-9′ review fails) + `xl-regen-manifest.json` (original slugs — slices overwrite).
+  Tiers derive from Adam's own review-pass scales.
+- **`dev/sprite-manifests/REJECTS.md`** — generated regen shopping list (every `verdict:"fail"`
+  grouped by sheet w/ prompt source + cue + note); served at `/rejects` in the tool.
+
+**Changed**
+- `build/gen-sprite-registry.py` — DEFAULT_MANIFEST flipped fixture → real v2 manifest (the deferred
+  T2-integration flip); overlay now carries `scale`/`verdict`/`note` onto registry entries.
+- `src/ui/theater-boot.js` — billboard height × `entry.scale` (the heads-line-up calibration is
+  LIVE); `spriteEntryFor` skips `verdict:"fail"` (review-failed art falls through to 3D).
+  `verify-theater-sprites.mjs` +2 checks (12/0).
+- `build/slice-sprites.py` — `--manifest-path` override (regen lane); re-cut slugs still fail-ruled
+  print a re-review reminder (never silently cleared).
+
+**Fixed**
+- **Slicer wrote misassigned sprites on count-mismatch** (largest-N selection pulls blobs from
+  anywhere on a padded sheet; fantasy-monsters-21 proved it — tarrasque got invented row-5 art).
+  Fail path now QUARANTINES candidate crops under review/; production dir untouched.
+
+**Adam's review pass (first sitting):** 366 pass / 44 fail (fails mostly magenta bleed on big
+creatures — hence the regen lane).
+
+**Deferred**
+- `item` kind in the v2 parser/registry (13 fantasy item sheets + 571 item cells still unsliced).
+- Interior magenta-bleed auto-fix (legit purple art measures identical to bleed — review catches it).
+- Square-plane aspect: `buildSpriteBillboard` stretches non-square crops; revisit with an
+  aspect-correct plane sized off `tex.image`.
+
 ## 2026-07-09 (night) — Doc auto-archive rule + CI/token-discipline session close
 
 **Added**
@@ -1047,50 +1097,4 @@ verify-theater-figures 38/0, verify-realm-wiring 20/0).
 - **Surface-select wiring** + the **render-style grade** — both ride the `activeRealmsFor` seam now.
 - **Urban/wilderness creature-wiring** (dungeon done; walk.js/wild-walk.js are the follow-up).
 - Text review/reshape of the realm drafts + fold the icons batch into the main bestiary.
-
-## 2026-07-04 (later 2) — THE LIVE-QA ARC: roster completion, the eye reversal, the texture no [Opus]
-
-Continues from the delegation close. Adam ran a live QA review of the master render sheet and the
-in-app roster; this arc is his rulings executed + the bestiary program specced + a texture
-experiment run and rejected. All landed unit-by-unit with per-unit re-gates (verify-theater-figures
-38/38 each), final sweep 92/92 + manifest OK, pushed to origin.
-
-### Added
-- **Race×class matrix COMPLETE — all 72 combos** (18 starter + 54 completion: dwarf/gnome/halfling
-  + half-orc/tiefling/dragonborn × their remaining classes). Authored EYELESS, ranger bows to the
-  D spec. 72-cell `racecls` sheet re-rendered from the integrated tree. verified all 72 import clean.
-- **Bestiary tail wave** (Adam's live-QA nine + a bow fix): rat-swarm rebuilt as 6 mouse bodies
-  (was one big rat via a bad alias), bespoke giant-lizard/ice-mephit/deep-stalker/needle-blight,
-  wolf mouth pass, flaming-skeleton variant (glow-tagged ember accents in the sockets), horse +
-  skeletal-warhorse (fixed the warhorse-skeleton→humanoid alias), prop-table/bench proportion, and
-  the ranger's bow swapped to the D-at-rest primary (string tip-to-tip on the nocks).
-- **BESTIARY-COVERAGE.md** — the model program to close the 381-uncovered gap. Tier-2 cut: 312
-  build-priority (CR≤10) / 69 deferred (CR11+). ~16 real new silhouette bodies after demotions
-  carry the whole CR≤10 tail (the six highest-leverage unlock ~76 creatures); the rest are variants
-  or aliases. §2 is Adam's new-body gate. **35 zero-modeling aliases LANDED** (targets verified
-  present); the wave plan awaits his gate.
-- Three afternoon specs (from the chase-playtest findings + Adam's approval): **CHASE-SOFT-RECALL**
-  (BUILT — escaped significant quarries mint codex handles, turnRecall-proven, 30/30) and
-  **DRESSING-ATMOSPHERE** (BUILT — one air/odor/sound lane per room/leg/segment, 36/36); **CHASE-BITE**
-  drafted SPEC-ONLY for Adam's design pick (flat −2 rider recommended vs adv/dis).
-
-### Changed
-- **Eye standard REVERSED** (Adam: "across the board the eyes are in the wrong place — get rid of
-  them"). Humanoid eye quads stripped corpus-wide (75 files + shared buildHead); owlbear/spider
-  feature-eyes, skull sockets, and closed-helm visor slits kept as the character features they are.
-  Ruling recorded in REFERENCE-DIRECTION. The starter-18 racecls were already swept (verified: a
-  face renders as a blank plane) — a stale "still carry eyes" note was corrected.
-- **Flame glow** refined to additive+translucent (opacity .85, depthWrite off) so fire reads as
-  emitted light, not painted orange. **WHOLE_OBJECT_SCALE 1.2** (adjacency-proven, figures don't
-  touch), **gold PC-disc rim +39% px** (rim-only, never figure tint).
-
-### Deferred / Ruled-out
-- **ChatGPT painted-texture pipeline — RULED A CLEAR FAIL** (Adam). Ran the full round-trip: a
-  25-slot swatch library → 12 creatures wearing the tiles through the real PS1 pass. Bright materials
-  read (troll fur, lava, ghost-vapor, bone) but dark tiles mud out under the dither and the win didn't
-  justify a painted-asset dependency. **Generated grain stays the tier** — reaffirmed under the
-  existing ruling; NEVER wired into the live renderer (the game is unchanged). Dev experiment files
-  kept as documented dead-end evidence.
-- Bestiary build waves (the ~16 new bodies) — await Adam's §2 gate. Grit pick still held at 1/3
-  (zoom crops waiting). CHASE-BITE build awaits the design pick. Env waves W+U still queued.
 

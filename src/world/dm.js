@@ -2050,8 +2050,21 @@ function applyEvent(w,e){
       // over exactly as before this unit).
       const envSeg=(typeof theaterEnvSegmentFor==="function") ? theaterEnvSegmentFor(w) : null;
       const segment=Object.assign({}, envSeg||{}, p.segment||{});
+      // PLACE-GEN.md ADDENDUM §A / §7 unit 11 — GRID-LAW combat derivation. When the current node is
+      // bound to a typed place record (the SAME lookup theaterNodeSourceFor/dmDigestLocationLine already
+      // use: mapOf(w).nodes[id].codexId -> codexGet -> rec.rolled.dims), that record's cell footprint is
+      // EXACT geometry, not a guess — pass it to combatStart as cellDims so it wins over the feet-text
+      // parse. Engine purity: the lookup happens HERE (the call boundary), never inside combat.js — dims
+      // flow IN, same as segment/environment/light already do above. No bound node / no typed record / no
+      // rolled.dims -> cellDims stays undefined and combatStart's existing text-parse path is untouched.
+      let cellDims=null;
+      if(typeof theaterNodeSourceFor==="function"){
+        const placeRec=theaterNodeSourceFor(w, w.currentNodeId);
+        const dims=placeRec&&placeRec.rolled&&placeRec.rolled.dims;
+        if(dims&&dims.w>0&&dims.d>0) cellDims=dims;
+      }
       GS.combat=combatStart({ pc, foes, objectiveRef:p.objectiveRef||null, segment,
-        segmentId:p.segmentId||null, scene:p.scene||null });
+        segmentId:p.segmentId||null, scene:p.scene||null, cellDims });
       // REALM-STORY-WIRING §3: mint/touch codex "creature" records for significant foes — script-owned,
       // fires unconditionally (idempotent no-op for a mook-only fight — codexMintSignificantFoes'
       // own significance guard drops those before ever calling codexAdd).

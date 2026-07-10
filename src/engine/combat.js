@@ -41,16 +41,36 @@ function cmDimsToGrid(dims){
   return { bands, lanes };
 }
 
+/* PLACE-GEN.md ADDENDUM §A / §7 unit 11 — GRID-LAW combat derivation. When a fight's location is a
+   node bound to a typed place record, the record's `rolled.dims` (footprint in 5-ft CELLS — GRID LAW:
+   mint emits `dims:{w,d}` in cells, 1 tile = 1 cell = 5 ft) is EXACT geometry, not a guess: no reason to
+   route it through the feet-text parser above. 1 band = 5 cells deep, 1 lane = 4 cells wide (the
+   ADDENDUM's own arithmetic) — same clamps as cmDimsToGrid (bands 1-4, lanes 1-3) so a cell-derived grid
+   and a text-derived grid are never structurally distinguishable downstream. Pure: {w,d} in, {bands,lanes}
+   counts out, nothing else touched. Small rooms are HONEST — a 4x3-cell diner clamps to 1x1 (everyone in
+   melee); the clamps' floor of 1 is the only floor, there is no padding-up of small spaces to a bigger grid. */
+function cmGridFromCells(dims){
+  if(!dims || !(dims.w > 0) || !(dims.d > 0)) return null;
+  const bands = Math.max(1, Math.min(4, Math.ceil(dims.d / 5)));
+  const lanes = Math.max(1, Math.min(3, Math.ceil(dims.w / 4)));
+  return { bands, lanes };
+}
+
 /* §1 the zone grid for a room/segment: { bands:[...CM_BANDS subset from index 0], lanes:[...CM_LANES
-   subset centered], rows } — derived from cmDimsToGrid, seeded deterministically (same segment id ->
-   same board, per BATTLEMAP.md §1 "placement is deterministic"). No RNG here at all — the shape is a
-   pure function of dims, so determinism is automatic (no seed consumption needed). */
-function cmZoneGrid(dims){
-  const g = cmDimsToGrid(dims);
+   subset centered], rows } — derived from a {bands,lanes} COUNT pair (cmDimsToGrid's text-parse path or
+   cmGridFromCells' cell-geometry path, whichever combatStart's caller resolved), seeded deterministically
+   (same segment id -> same board, per BATTLEMAP.md §1 "placement is deterministic"). No RNG here at all —
+   the shape is a pure function of the counts, so determinism is automatic (no seed consumption needed). */
+function cmZoneGridFromCounts(g){
   const bands = CM_BANDS.slice(0, g.bands);
   // lane subset is CENTERED: 1 lane -> [C]; 2 lanes -> [L,C]... but 3 is the common/full case -> [L,C,R].
   const lanes = g.lanes >= 3 ? CM_LANES.slice() : g.lanes === 2 ? ["L", "C"] : ["C"];
   return { bands, lanes, bandCount: g.bands, laneCount: g.lanes };
+}
+
+/* text-parse path, unchanged in shape/behavior: absent/unparseable dims -> the full 4x3. */
+function cmZoneGrid(dims){
+  return cmZoneGridFromCounts(cmDimsToGrid(dims));
 }
 
 /* clamp a lane string to a valid CM_LANES member (defensive — never invents a 4th lane). */
@@ -747,12 +767,18 @@ function cmPlaceFoeLane(foe, idx, laneSet, seed){
    BATTLEMAP.md §1: `o.segment` (optional) carries the rolled room's {dims, feature, hazard} — the zone
    grid derives from `o.segment.dims` (cmZoneGrid; absent/unparseable dims -> the full 4x3). `o.segmentId`
    (or o.segment.id) seeds the deterministic lane placement — omitted, placement still runs (seeded off
-   an empty string) but won't reproduce identically across two different fights with no id supplied. */
+   an empty string) but won't reproduce identically across two different fights with no id supplied.
+   PLACE-GEN.md ADDENDUM §A / §7 unit 11: `o.cellDims` (optional {w,d} in 5-ft CELLS) wins PRIORITY over
+   `o.segment.dims` text — engine purity means combat.js never reads the codex/w itself, so the caller
+   (world/dm.js's combat_start handler) resolves whether the fight's node is bound to a typed place record
+   and passes the cell footprint IN, same as env/scene data already flows in above. No typed record (or a
+   non-jsdom caller that never passes cellDims) -> the text-parse path is BYTE-IDENTICAL to before this unit. */
 function combatStart(o){
   o = o || {};
   const hint = o.hint || {};
   const segment = o.segment || null;
-  const grid = cmZoneGrid(segment && segment.dims);
+  const cellGrid = o.cellDims ? cmGridFromCells(o.cellDims) : null;
+  const grid = cellGrid ? cmZoneGridFromCounts(cellGrid) : cmZoneGrid(segment && segment.dims);
   const seed = o.segmentId || (segment && segment.id) || "";
   const foes = (o.foes || []).map((f, i) => {
     const foe = cmResolveFoe(f, hint); foe.fid = "f" + (i + 1);

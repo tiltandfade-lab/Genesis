@@ -76,6 +76,7 @@
   <select id="fState">
     <option value="">state: all</option><option value="unreviewed">unreviewed</option>
     <option value="pass">pass</option><option value="fail">fail</option>
+    <option value="flagged">flagged ⚠</option>
   </select>
   <input id="fSearch" type="text" placeholder="search name…" size="16">
   <label style="color:var(--dim);font-size:12px">zoom
@@ -187,7 +188,9 @@ function applyFilters(){
   list = Object.entries(REG)
     .filter(([, e]) => e.status === "cut")
     .filter(([, e]) => (!fr || e.realm === fr) && (!fk || e.kind === fk) && (!fs || sizeOf(e) === fs))
-    .filter(([s]) => !st || (st === "unreviewed" ? stateOf(s) === "unreviewed" : stateOf(s) === st))
+    .filter(([s]) => !st ||
+      (st === "flagged" ? (ovr(s).note || "").startsWith("⚠")
+       : st === "unreviewed" ? stateOf(s) === "unreviewed" : stateOf(s) === st))
     .filter(([s, e]) => !q || e.name.toLowerCase().includes(q) || s.includes(q))
     .map(([slug, e]) => Object.assign({ slug }, e))
     .sort((a, b) => a.sheet === b.sheet ? a.cell - b.cell : a.sheet.localeCompare(b.sheet));

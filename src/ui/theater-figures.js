@@ -680,6 +680,19 @@ const WHOLE_OBJECT_REGISTRY = {
   "prop:shop-counter":    { module: "../../dev/model-qa/creatures/prop-shop-counter.js",    fn: "buildPropShopCounter",      discR: 0.42 },
   "prop:doorframe":       { module: "../../dev/model-qa/creatures/prop-arch.js",            fn: "buildDoorframe",            discR: 0.42 },
   "prop:gate-checkpoint": { module: "../../dev/model-qa/creatures/prop-gate-checkpoint.js", fn: "buildPropGateCheckpoint",   discR: 0.55 },
+  // -------- PLACE-PARTS-WAVE Wave B (P2 pieces, same wave doc) --------
+  "prop:forge-hearth":    { module: "../../dev/model-qa/creatures/prop-pillar.js",           fn: "buildForgeHearth",          discR: 0.42 },
+  "prop:stock-rack":      { module: "../../dev/model-qa/creatures/prop-stock-rack.js",       fn: "buildPropStockRack",        discR: 0.42 },
+  "prop:bandstand":       { module: "../../dev/model-qa/creatures/prop-bandstand.js",        fn: "buildPropBandstand",        discR: 0.68 },
+  "prop:mill-wheel":      { module: "../../dev/model-qa/creatures/prop-mill-wheel.js",       fn: "buildPropMillWheel",        discR: 0.68 },
+  "prop:power-junction":  { module: "../../dev/model-qa/creatures/prop-gears.js",            fn: "buildPowerJunction",        discR: 0.42 },
+  "prop:rail-fence":      { module: "../../dev/model-qa/creatures/prop-rail-fence.js",       fn: "buildPropRailFence",        discR: 0.42 },
+  "prop:chainlink-fence": { module: "../../dev/model-qa/creatures/prop-chainlink-fence.js",  fn: "buildPropChainlinkFence",   discR: 0.42 },
+  "prop:turnstile-bank":  { module: "../../dev/model-qa/creatures/prop-turnstile-bank.js",   fn: "buildPropTurnstileBank",    discR: 0.42 },
+  // -------- PLACE-PARTS-WAVE Wave C (P3 pieces, same wave doc) --------
+  "prop:pew-row":         { module: "../../dev/model-qa/creatures/prop-pew-row.js",          fn: "buildPropPewRow",           discR: 0.42 },
+  "prop:loading-dock":    { module: "../../dev/model-qa/creatures/prop-loading-dock.js",     fn: "buildPropLoadingDock",      discR: 0.68 },
+  "prop:careening-frame": { module: "../../dev/model-qa/creatures/prop-careening-frame.js",  fn: "buildPropCareeningFrame",   discR: 0.68 },
 };
 
 /* NEAREST-SUB (R4): starter table only. Each key is a bestiary id NOT covered above; each value MUST

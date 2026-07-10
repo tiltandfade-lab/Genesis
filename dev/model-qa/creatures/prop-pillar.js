@@ -225,3 +225,106 @@ export function buildBrazier(ox = 0){
 
   baseDisc(ox);
 }
+
+/* ============================== 4. FORGE HEARTH ============================== */
+export function buildForgeHearth(ox = 0){
+  /* ~1×1 cell (1.25u), squat brick/stone hearth block ~1.1u tall.
+     Feature checklist (what the ~450-tri budget buys):
+       - squat brick hearth block (stepped courses, warm-mortar seam shading)
+       - a glowing mouth cut into the front face: pale-hot core (0x9a-0xb0 white-orange) ringed by
+         ember-orange/red — the HIGH-VALUE zone, front-and-center under the 3/4 camera
+       - a stubby chimney stub rising off the back-left corner, soot-streaked up its face
+       - an anvil nub (small iron block + horn stub) sitting beside the hearth mouth, a glowing
+         billet resting on its face (the use-tell payoff — mid-forging)
+       - a coal/ash pile spilling out the mouth lip onto the hearth apron (use-tell: recent work)
+     Use sentence: the smith just pulled a hot billet from the hearth and set it on the anvil —
+     the fire is still roaring in the mouth, ash and coal spilled at the lip, soot climbing the
+     chimney stub. Reads squat/blocky at a squint (brick block + chimney stub silhouette), the
+     glowing mouth is the loud signature feature that survives 1/3-res + dark void. */
+  const H = {
+    brick:0x6b5a4a, brickLt:0x81705d, brickDk:0x4e4137, mortar:0x3c332b,
+    soot:0x2b2622, sootLt:0x3f3833,
+    iron:0x2e2b28, ironLt:0x433f39,
+    coal:0x2a2420, coalLt:0x4a3f36, ember:0xb8471f,
+  };
+  const E = { hot:0xffb37a, hotPale:0xffe0b8, orange:0xe2621f, orangeDk:0xa8380f, red:0x7a2510 };
+
+  const baseY = 0.055;
+
+  /* HEARTH BLOCK — squat stepped brick mass, ~0.62u wide, 0.5u deep, up to ~0.62u tall */
+  block(ox-0.02, -0.02, 0.31, 0.25, baseY,       baseY+0.10, H.brickLt, H.brick,  H.brickDk);  // course 1 (apron)
+  block(ox-0.02, -0.02, 0.27, 0.22, baseY+0.10,  baseY+0.55, H.brickLt, H.brick,  H.brickDk);  // main body
+  block(ox-0.02, -0.02, 0.29, 0.24, baseY+0.55,  baseY+0.63, H.brickDk, H.brickDk,H.mortar);   // cap course (shadowed lintel band)
+
+  /* mortar seam lines (thin dark bands at the course breaks — cheap horizontal reads) */
+  quad(V(ox-0.29,baseY+0.10,0.02), V(ox+0.25,baseY+0.10,0.02), V(ox+0.25,baseY+0.115,0.02), V(ox-0.29,baseY+0.115,0.02), H.mortar, 0.03);
+
+  /* HEARTH MOUTH — carved across the block's near +x/+z corner (NOT the flat +z face) so the glow
+     faces dead-on into the sheet's 3/4 camera (yaw45°/elev35° sits exactly on this diagonal — see
+     mountSheet's cam(45,35,...) in probe-lib.js). Gate fix 2026-07-10: the previous +z-face version
+     was ALSO wound backward — its quads used the mirror of block()'s verified +z-normal vertex
+     order, so it silently back-face-culled from every outside angle (invisible from any camera, not
+     just this one). Rebuilt here with a hand-verified outward normal (cross(tangent,up)=+normal)
+     AND moved onto the corner so it reads square-on instead of glancing. */
+  {
+    const mcx=ox+0.25, mcz=0.20;                 // the main body's +x/+z outer corner (exact edge)
+    const nx=0.7071, nz=0.7071;                  // outward diagonal normal (+x/+z bisector)
+    const tx=0.7071, tz=-0.7071;                 // tangent across the corner (⟂ to the normal)
+    const my0=baseY+0.14, my1=baseY+0.42;
+    const P = (u,d,y)=> V(mcx + tx*u + nx*d, y, mcz + tz*u + nz*d);   // u=across, d=proud-of-corner
+    // BL,BR,TR,TL order — verified: cross(tangent,up) = +normal, so this winding faces outward.
+    const mouthQuad = (hw, ylo, yhi, d, hex, jit) =>
+      quad(P(-hw,d,ylo), P(hw,d,ylo), P(hw,d,yhi), P(-hw,d,yhi), hex, jit);
+    mouthQuad(0.155, my0,       my1,       0.00, H.mortar,   0.02);   // dark recessed jamb (reads as a hole)
+    mouthQuad(0.12,  my0+0.02,  my1-0.02,  0.01, E.orangeDk, 0.02);   // ember-orange ring just inside
+    mouthQuad(0.09,  my0+0.045, my1-0.045, 0.02, E.orange,   0.0);
+    mouthQuad(0.05,  my0+0.06,  my1-0.08,  0.03, E.hotPale,  0.0);    // PALE-HOT CORE — the high-value zone
+    mouthQuad(0.025, my0+0.09,  my1-0.10,  0.04, E.hot,      0.0);
+    // warm rim on the mouth's TOP LIP — a bright strip riding just above the arch so the "lit
+    // forge" reads even at an angle oblique enough to foreshorten the mouth opening itself.
+    mouthQuad(0.17,  my1,       my1+0.025, 0.045, E.hot,     0.03);
+    // GLOW SPILL — pale-hot floor patch in front of the mouth (top-facing quads on the ground),
+    // so the "lit forge" reads from a value cue alone even if the mouth's own faces are shadowed.
+    {
+      const gx=mcx+nx*0.14, gz=mcz+nz*0.14, gy=baseY+0.105;
+      const F = (uu,vv)=> V(gx+tx*uu+nx*vv, gy, gz+tz*uu+nz*vv);
+      quad(F(-0.12,0.08), F(0.12,0.08), F(0.12,-0.07), F(-0.12,-0.07), E.hotPale, 0.04);
+      quad(F(-0.06,0.05), F(0.06,0.05), F(0.06,-0.05), F(-0.06,-0.05), E.hot,     0.03);
+    }
+  }
+
+  /* CHIMNEY STUB — a stubby square flue rising off the back-left corner, soot-streaked */
+  {
+    const cx=ox-0.20, cz=-0.16;
+    block(cx, cz, 0.09, 0.09, baseY+0.63, baseY+1.05, H.brick, H.brickDk, H.mortar);
+    // flue mouth cap (dark)
+    block(cx, cz, 0.075, 0.075, baseY+1.05, baseY+1.10, H.sootLt, H.soot, H.soot);
+    // soot streak down the front (+z) face of the stub onto the body — one clear dark band
+    quad(V(cx-0.05,baseY+1.02,cz+0.09), V(cx+0.05,baseY+1.02,cz+0.09), V(cx+0.04,baseY+0.63,cz+0.11), V(cx-0.04,baseY+0.63,cz+0.11), H.soot, 0.05);
+    quad(V(cx-0.03,baseY+0.65,cz+0.115), V(cx+0.03,baseY+0.65,cz+0.115), V(cx+0.025,baseY+0.20,cz+0.14), V(cx-0.025,baseY+0.20,cz+0.14), H.sootLt, 0.05);
+  }
+
+  /* ANVIL NUB — small iron block + horn stub beside the hearth mouth (+x side), with a glowing
+     billet laid across its face — the use-tell payoff. */
+  {
+    const ax=ox+0.235, az=0.10;
+    block(ax, az, 0.075, 0.11, baseY, baseY+0.16, H.ironLt, H.iron, H.iron);            // waist/base
+    block(ax, az, 0.095, 0.14, baseY+0.16, baseY+0.20, H.ironLt, H.ironLt, H.iron);      // face (lit top-plate)
+    // horn stub tapering off the back (−z) end
+    tube(V(ax, baseY+0.185, az-0.14), V(ax, baseY+0.17, az-0.24), 0.045, 0.015, 5, H.iron, {capA:{hex:H.ironLt}});
+    // glowing billet resting on the face, running toward the hearth mouth
+    quad(V(ax-0.10,baseY+0.205,az-0.02), V(ax-0.10,baseY+0.205,az+0.10), V(ax-0.16,baseY+0.225,az+0.10), V(ax-0.16,baseY+0.225,az-0.02), E.hot, 0.0);
+    quad(V(ax-0.13,baseY+0.215,az+0.02), V(ax-0.13,baseY+0.215,az+0.06), V(ax-0.155,baseY+0.225,az+0.06), V(ax-0.155,baseY+0.225,az+0.02), E.hotPale, 0.0);
+  }
+
+  /* ASH/COAL PILE spilling from the mouth lip onto the apron — cheap low tris, reads as use-tell */
+  {
+    const px=ox-0.03, pz=0.28, py=baseY+0.105;
+    quad(V(px-0.10,py,pz-0.02), V(px+0.09,py,pz-0.02), V(px+0.05,py+0.035,pz+0.05), V(px-0.06,py+0.035,pz+0.05), H.coal, 0.06);
+    quad(V(px-0.04,py+0.03,pz+0.01), V(px+0.03,py+0.03,pz+0.01), V(px+0.01,py+0.05,pz+0.035), V(px-0.02,py+0.05,pz+0.035), H.coalLt, 0.06);
+    // one bright ember catching in the pile
+    quad(V(px-0.01,py+0.033,pz+0.015), V(px+0.015,py+0.033,pz+0.015), V(px+0.005,py+0.045,pz+0.03), V(px+0.005,py+0.045,pz+0.03), H.ember, 0.0);
+  }
+
+  baseDisc(ox);
+}

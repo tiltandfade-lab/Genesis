@@ -168,5 +168,34 @@ check("f6. every prop: model the dressing map emits (24 keys x 3 realms) is regi
 check("f7. prop:doorframe is registry-live (rim-exit consumer pending — registry entry must exist now)",
   registryHas("prop:doorframe"), "prop:doorframe missing from WHOLE_OBJECT_REGISTRY");
 
+// (g) PLACE-PARTS-WAVE Wave B — the P2 pieces are row-wired + registry-live (same discipline as
+// (f); RED-FIRST: proven failing on the pre-wiring tree, green after the Wave B wiring commit).
+console.log("\n(g) PLACE-PARTS-WAVE Wave B pieces — row-wired + registry-live");
+check("g1. frontier Workshop (9) carries prop:forge-hearth (the craft anchor)",
+  modelsAt("frontier", 9).includes("prop:forge-hearth"), JSON.stringify(modelsAt("frontier", 9)));
+check("g2. frontier Storehouse (10) carries prop:stock-rack",
+  modelsAt("frontier", 10).includes("prop:stock-rack"), JSON.stringify(modelsAt("frontier", 10)));
+check("g3. frontier Commons (22) carries prop:bandstand (the town-green centerpiece)",
+  modelsAt("frontier", 22).includes("prop:bandstand"), JSON.stringify(modelsAt("frontier", 22)));
+check("g4. frontier Works (21) carries prop:mill-wheel; chrome Works carries prop:power-junction (realm variants)",
+  modelsAt("frontier", 21).includes("prop:mill-wheel") && modelsAt("chrome", 21).includes("prop:power-junction"),
+  JSON.stringify({ frontier: modelsAt("frontier", 21), chrome: modelsAt("chrome", 21) }));
+check("g5. frontier Wild-margin (20) carries prop:rail-fence; chrome carries prop:chainlink-fence (turf grammar)",
+  modelsAt("frontier", 20).includes("prop:rail-fence") && modelsAt("chrome", 20).includes("prop:chainlink-fence"),
+  JSON.stringify({ frontier: modelsAt("frontier", 20), chrome: modelsAt("chrome", 20) }));
+check("g6. chrome Threshold (13) carries prop:turnstile-bank (the subway-platform reskin)",
+  modelsAt("chrome", 13).includes("prop:turnstile-bank"), JSON.stringify(modelsAt("chrome", 13)));
+
+// (h) PLACE-PARTS-WAVE Wave C — the P3 pieces (RED-FIRST: proven failing pre-wiring, green after).
+// The careening frame gets a registry-liveness check only — High-Seas has no authored skin/rows yet
+// (PLACE-ASSET-QUEUE Part 1c: its row lands with the high-seas skin backfill).
+console.log("\n(h) PLACE-PARTS-WAVE Wave C pieces");
+check("h1. frontier Shrine (6) carries prop:pew-row (the ambient worship row)",
+  modelsAt("frontier", 6).includes("prop:pew-row"), JSON.stringify(modelsAt("frontier", 6)));
+check("h2. frontier Storehouse (10) carries prop:loading-dock",
+  modelsAt("frontier", 10).includes("prop:loading-dock"), JSON.stringify(modelsAt("frontier", 10)));
+check("h3. prop:careening-frame is registry-live (row lands with the high-seas skin backfill)",
+  registryHas("prop:careening-frame"), "prop:careening-frame missing from WHOLE_OBJECT_REGISTRY");
+
 console.log(`\n${pass} passed, ${fail} failed`);
 if (fail > 0) process.exit(1);

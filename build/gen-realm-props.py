@@ -97,6 +97,19 @@ REGISTERED_PROP_SLUGS = {
     "shop-counter",
     "doorframe",
     "gate-checkpoint",
+    # PLACE-PARTS-WAVE Wave B (P2 pieces).
+    "forge-hearth",
+    "stock-rack",
+    "bandstand",
+    "mill-wheel",
+    "power-junction",
+    "rail-fence",
+    "chainlink-fence",
+    "turnstile-bank",
+    # PLACE-PARTS-WAVE Wave C (P3 pieces).
+    "pew-row",
+    "loading-dock",
+    "careening-frame",
 }
 
 

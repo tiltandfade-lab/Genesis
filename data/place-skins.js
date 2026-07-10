@@ -1077,7 +1077,7 @@ const SCENE_DRESSING_BY_ARCHETYPE={
    "Offertory Table",
    "Weeping Font",
    "Guttering Grave-Torch",
-   "Reliquary Crate Stack",
+   "Pew Row",
    "Blood-Slick Altar"
   ],
   "surface": "interior-stone",
@@ -1104,20 +1104,20 @@ const SCENE_DRESSING_BY_ARCHETYPE={
  },
  "9": {
   "propNames": [
+   "Smith's Hearth",
    "Shop Counter",
    "Scrap Heap",
-   "Rust Drum",
-   "Munitions Crate"
+   "Rust Drum"
   ],
   "surface": "interior-wood",
   "light": "lamplit"
  },
  "10": {
   "propNames": [
+   "Stock Shelves",
+   "Loading Dock",
    "Munitions Crate Stack",
-   "Ballast Crate Stack",
-   "Reliquary Crate Stack",
-   "Rust Drum"
+   "Ballast Crate Stack"
   ],
   "surface": "interior-wood",
   "light": "dark"
@@ -1143,6 +1143,7 @@ const SCENE_DRESSING_BY_ARCHETYPE={
  "13": {
   "propNames": [
    "Checkpoint Gate",
+   "Turnstile Row",
    "Rift Grate",
    "Glyph-Warded Grate"
   ],
@@ -1209,8 +1210,9 @@ const SCENE_DRESSING_BY_ARCHETYPE={
  },
  "20": {
   "propNames": [
+   "Fence Run",
+   "Turf-Claim Fence",
    "Refuse Drift",
-   "Cobweb Mass",
    "Cattle Skull Pile"
   ],
   "surface": "open-exterior",
@@ -1219,19 +1221,20 @@ const SCENE_DRESSING_BY_ARCHETYPE={
  "21": {
   "propNames": [
    "Riveted Standpipe Tank",
+   "Mill Wheel",
+   "Power Junction Box",
    "Scrap Heap",
-   "Slag Heap",
-   "Rust Drum"
+   "Slag Heap"
   ],
   "surface": "interior-metal",
   "light": "torchlit"
  },
  "22": {
   "propNames": [
+   "Bandstand Dais",
    "Overflowing Trash Can",
    "Wandering Torch",
-   "Rain Barrel",
-   "Trash Can Row"
+   "Rain Barrel"
   ],
   "surface": "street",
   "light": "daylit"

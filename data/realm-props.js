@@ -489,6 +489,64 @@ const REALM_PROPS={
    "crossRealm": "all",
    "model": "prop:gate-checkpoint",
    "summary": "barrier-arm checkpoint gate beside a sentry shelter"
+  },
+  {
+   "name": "Smith's Hearth",
+   "size": "Medium",
+   "cover": "half",
+   "crossRealm": "all",
+   "model": "prop:forge-hearth",
+   "summary": "squat brick forge hearth, glowing mouth, anvil beside"
+  },
+  {
+   "name": "Stock Shelves",
+   "size": "Medium",
+   "cover": "half",
+   "crossRealm": "all",
+   "model": "prop:stock-rack",
+   "summary": "open-frame goods shelving, slumped sacks, pale jar tier"
+  },
+  {
+   "name": "Bandstand Dais",
+   "size": "Huge",
+   "cover": "half",
+   "crossRealm": "all",
+   "model": "prop:bandstand",
+   "summary": "raised octagon platform, lectern mid-deck"
+  },
+  {
+   "name": "Mill Wheel",
+   "size": "Huge",
+   "cover": "three-quarters",
+   "crossRealm": [
+    "gloom"
+   ],
+   "model": "prop:mill-wheel",
+   "summary": "vertical paddle mill wheel, lower quarter dripping wet"
+  },
+  {
+   "name": "Fence Run",
+   "size": "Small",
+   "cover": "half",
+   "crossRealm": "all",
+   "model": "prop:rail-fence",
+   "summary": "low two-plank fence segment, sun-bleached, sagging"
+  },
+  {
+   "name": "Pew Row",
+   "size": "Medium",
+   "cover": "half",
+   "crossRealm": "all",
+   "model": "prop:pew-row",
+   "summary": "low-backed worship pews, kneeler cushion"
+  },
+  {
+   "name": "Loading Dock",
+   "size": "Huge",
+   "cover": "half",
+   "crossRealm": "all",
+   "model": "prop:loading-dock",
+   "summary": "raised cargo dock lip, roll-door ajar, goods mid-haul"
   }
  ],
  "chrome": [
@@ -930,6 +988,30 @@ const REALM_PROPS={
    "summary": "bulging coolant tank, three-quarters cover",
    "part": "crate",
    "partParams": {}
+  },
+  {
+   "name": "Power Junction Box",
+   "size": "Medium",
+   "cover": "half",
+   "crossRealm": "specific",
+   "model": "prop:power-junction",
+   "summary": "humming junction box, cable tangle, warning-stripe base"
+  },
+  {
+   "name": "Turf-Claim Fence",
+   "size": "Medium",
+   "cover": "half",
+   "crossRealm": "specific",
+   "model": "prop:chainlink-fence",
+   "summary": "sagging chain-link fence segment, claim cloth knotted through"
+  },
+  {
+   "name": "Turnstile Row",
+   "size": "Medium",
+   "cover": "half",
+   "crossRealm": "specific",
+   "model": "prop:turnstile-bank",
+   "summary": "three turnstile rotors, one rotor jammed"
   }
  ],
  "noir": [
@@ -3387,6 +3469,14 @@ const REALM_PROPS={
    "summary": "beached longboat, three-quarters cover",
    "part": "cart",
    "partParams": {}
+  },
+  {
+   "name": "Careening Frame",
+   "size": "Huge",
+   "cover": "three-quarters",
+   "crossRealm": "specific",
+   "model": "prop:careening-frame",
+   "summary": "careening cradle bows, hull rib mid-scrape"
   }
  ],
  "lost-world": [

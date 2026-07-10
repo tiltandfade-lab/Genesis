@@ -370,6 +370,69 @@
     "crossRealm": "all",
     "flavor": "A pale-banded barrier arm frozen half-down beside a guard-stand — somebody controls this gap.",
     "summary": "barrier-arm checkpoint gate beside a sentry shelter"
+   },
+   {
+    "name": "Smith's Hearth",
+    "base": "forge-hearth",
+    "size": "Medium",
+    "cover": "half",
+    "crossRealm": "all",
+    "flavor": "A squat brick hearth still roaring, a hot billet resting on the anvil beside it.",
+    "summary": "squat brick forge hearth, glowing mouth, anvil beside"
+   },
+   {
+    "name": "Stock Shelves",
+    "base": "stock-rack",
+    "size": "Medium",
+    "cover": "half",
+    "crossRealm": "all",
+    "flavor": "An open shelf frame mid-stocked — slumped sacks below, crooked crates, a tidy jar row up top.",
+    "summary": "open-frame goods shelving, slumped sacks, pale jar tier"
+   },
+   {
+    "name": "Bandstand Dais",
+    "base": "bandstand",
+    "size": "Huge",
+    "cover": "half",
+    "crossRealm": "all",
+    "flavor": "A low octagon of foot-worn boards on the green, a crier's lectern waiting mid-platform.",
+    "summary": "raised octagon platform, lectern mid-deck"
+   },
+   {
+    "name": "Mill Wheel",
+    "base": "mill-wheel",
+    "size": "Huge",
+    "cover": "three-quarters",
+    "crossRealm": "gloom",
+    "flavor": "A paddle-wheel turns on its stone housing, the lower quarter dark and dripping.",
+    "summary": "vertical paddle mill wheel, lower quarter dripping wet"
+   },
+   {
+    "name": "Fence Run",
+    "base": "rail-fence",
+    "size": "Small",
+    "cover": "half",
+    "crossRealm": "all",
+    "flavor": "Two sun-bleached rails on leaning fence posts, one rail cracked from years of being sat on.",
+    "summary": "low two-plank fence segment, sun-bleached, sagging"
+   },
+   {
+    "name": "Pew Row",
+    "base": "pew-row",
+    "size": "Medium",
+    "cover": "half",
+    "crossRealm": "all",
+    "flavor": "A low-backed worship bench, its seat rubbed pale by years of sitting, a kneeler cushion left behind.",
+    "summary": "low-backed worship pews, kneeler cushion"
+   },
+   {
+    "name": "Loading Dock",
+    "base": "loading-dock",
+    "size": "Huge",
+    "cover": "half",
+    "crossRealm": "all",
+    "flavor": "A raised dock lip under a half-raised roll-door, goods caught mid-haul on the edge.",
+    "summary": "raised cargo dock lip, roll-door ajar, goods mid-haul"
    }
   ]
  },
@@ -699,6 +762,33 @@
     "crossRealm": "specific",
     "flavor": "A bulging coolant tank ringed with warning glyphs, its gauge pinned deep in the red.",
     "summary": "bulging coolant tank, three-quarters cover"
+   },
+   {
+    "name": "Power Junction Box",
+    "base": "power-junction",
+    "size": "Medium",
+    "cover": "half",
+    "crossRealm": "specific",
+    "flavor": "A boxy junction unit hums under a tangle of drooping cables, one dull indicator lamp alive.",
+    "summary": "humming junction box, cable tangle, warning-stripe base"
+   },
+   {
+    "name": "Turf-Claim Fence",
+    "base": "chainlink-fence",
+    "size": "Medium",
+    "cover": "half",
+    "crossRealm": "specific",
+    "flavor": "Sagging chain-link along the claim line, a strip of gang-color cloth knotted through the wire.",
+    "summary": "sagging chain-link fence segment, claim cloth knotted through"
+   },
+   {
+    "name": "Turnstile Row",
+    "base": "turnstile-bank",
+    "size": "Medium",
+    "cover": "half",
+    "crossRealm": "specific",
+    "flavor": "Three waist-high turnstiles in a row, one rotor frozen mid-turn on a dead ratchet.",
+    "summary": "three turnstile rotors, one rotor jammed"
    }
   ]
  },
@@ -2556,6 +2646,15 @@
     "crossRealm": "specific",
     "flavor": "A clinker longboat hauled up the shingle, oars shipped, a bilge of black water and crabs.",
     "summary": "beached longboat, three-quarters cover"
+   },
+   {
+    "name": "Careening Frame",
+    "base": "careening-frame",
+    "size": "Huge",
+    "cover": "three-quarters",
+    "crossRealm": "specific",
+    "flavor": "Heavy cradle bows hold a hull rib mid-scrape, wedge blocks jammed tight beneath it.",
+    "summary": "careening cradle bows, hull rib mid-scrape"
    }
   ]
  },

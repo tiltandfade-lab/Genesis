@@ -295,21 +295,21 @@ SCENE_DRESSING_BY_ARCHETYPE = {
     # 2 of the 3 authored realms (frontier+gloom; chrome's own altar-base entry, "Terminal Stand",
     # is crossRealm:"specific" and doesn't fold in) — sceneDressingForPlace skips it there, never a
     # hole (unit 8's own discipline, see file header).
-    6: {"propNames": ["Offertory Table", "Weeping Font", "Guttering Grave-Torch", "Reliquary Crate Stack", "Blood-Slick Altar"],
+    6: {"propNames": ["Offertory Table", "Weeping Font", "Guttering Grave-Torch", "Pew Row", "Blood-Slick Altar"],
         "surface": "interior-stone", "light": "torchlit"},                          # Shrine
     7: {"propNames": ["Embalming Table", "Rain Barrel", "Duckboard Walkway"],
         "surface": "interior-wood", "light": "lamplit"},                            # House-of-healing
     8: {"propNames": ["Scrap Heap", "Cinderblock Stack", "Munitions Crate Stack", "Slag Heap"],
         "surface": "interior-metal", "light": "torchlit"},                          # Workplace
-    9: {"propNames": ["Shop Counter", "Scrap Heap", "Rust Drum", "Munitions Crate"],
+    9: {"propNames": ["Smith's Hearth", "Shop Counter", "Scrap Heap", "Rust Drum"],
         "surface": "interior-wood", "light": "lamplit"},                            # Workshop
-    10: {"propNames": ["Munitions Crate Stack", "Ballast Crate Stack", "Reliquary Crate Stack", "Rust Drum"],
+    10: {"propNames": ["Stock Shelves", "Loading Dock", "Munitions Crate Stack", "Ballast Crate Stack"],
          "surface": "interior-wood", "light": "dark"},                              # Storehouse
     11: {"propNames": ["Duckboard Walkway", "Rain Barrel", "Trash Can Row"],
          "surface": "interior-wood", "light": "lamplit"},                           # Lodging
     12: {"propNames": ["Rain Barrel", "Cobweb Mass", "Overflowing Trash Can"],
          "surface": "interior-wood", "light": "dark"},                              # Dwelling
-    13: {"propNames": ["Checkpoint Gate", "Rift Grate", "Glyph-Warded Grate"],
+    13: {"propNames": ["Checkpoint Gate", "Turnstile Row", "Rift Grate", "Glyph-Warded Grate"],
          "surface": "street", "light": "torchlit"},                                 # Threshold
     14: {"propNames": ["Storm Drain Grate", "Coiled Mooring Rope", "Wandering Torch", "Cracked Water Cistern"],
          "surface": "street", "light": "daylit"},                                   # Crossing
@@ -323,11 +323,11 @@ SCENE_DRESSING_BY_ARCHETYPE = {
          "surface": "earth", "light": "moonlit"},                                   # Boneyard
     19: {"propNames": ["Wandering Torch", "Cinderblock Stack", "Storm Drain Grate"],
          "surface": "interior-stone", "light": "torchlit"},                         # Watch-post
-    20: {"propNames": ["Refuse Drift", "Cobweb Mass", "Cattle Skull Pile"],
+    20: {"propNames": ["Fence Run", "Turf-Claim Fence", "Refuse Drift", "Cattle Skull Pile"],
          "surface": "open-exterior", "light": "overcast"},                          # Wild-margin
-    21: {"propNames": ["Riveted Standpipe Tank", "Scrap Heap", "Slag Heap", "Rust Drum"],
+    21: {"propNames": ["Riveted Standpipe Tank", "Mill Wheel", "Power Junction Box", "Scrap Heap", "Slag Heap"],
          "surface": "interior-metal", "light": "torchlit"},                         # Works
-    22: {"propNames": ["Overflowing Trash Can", "Wandering Torch", "Rain Barrel", "Trash Can Row"],
+    22: {"propNames": ["Bandstand Dais", "Overflowing Trash Can", "Wandering Torch", "Rain Barrel"],
          "surface": "street", "light": "daylit"},                                   # Commons
     23: {"propNames": ["Star-Chart Table", "Case-File Desk", "Reliquary Crate Stack"],
          "surface": "interior-stone", "light": "lamplit"},                          # Seat-of-learning

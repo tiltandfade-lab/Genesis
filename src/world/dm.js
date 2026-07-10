@@ -2063,6 +2063,20 @@ function applyEvent(w,e){
         const dims=placeRec&&placeRec.rolled&&placeRec.rolled.dims;
         if(dims&&dims.w>0&&dims.d>0) cellDims=dims;
       }
+      // DUNGEON-GRAPH.md U4 §3 — when the active walk carries a spatial plan (prep.js's
+      // prepAttachSpatialPlan, dungeon-shaped frontiers only), the CURRENT ROOM's real w×d cell
+      // footprint wins over combatStart's own feet-text parse fallback. A bound typed place record
+      // (above) still takes priority when both exist — that's an exact authored GRID-LAW dim, this
+      // one is derived from the room rect the party is literally standing in via the SAME cursor
+      // walkAdvance/theaterEnvSegmentFor already read (pn.cursor.current), through the one lookup
+      // spatialRoomForSeg exposes (prep.js) — no new consumption path, no walkComplete change.
+      if(!cellDims && typeof prepOf==="function" && typeof spatialRoomForSeg==="function"){
+        const P=prepOf(w), awId=P.activeWalkId, pn=awId&&P.nodes&&P.nodes[awId];
+        if(pn&&pn.spatial&&pn.cursor){
+          const room=spatialRoomForSeg(pn, pn.cursor.current);
+          if(room&&room.w>0&&room.d>0) cellDims={ w:room.w, d:room.d };
+        }
+      }
       GS.combat=combatStart({ pc, foes, objectiveRef:p.objectiveRef||null, segment,
         segmentId:p.segmentId||null, scene:p.scene||null, cellDims });
       // REALM-STORY-WIRING §3: mint/touch codex "creature" records for significant foes — script-owned,

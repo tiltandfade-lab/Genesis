@@ -1,0 +1,17 @@
+{
+ "file": "lost-world-solo-v3-11.png",
+ "realm": "lost-world",
+ "gridClass": "solo",
+ "grid": "1 row x 1 column",
+ "chroma": "#FF00FF",
+ "cells": [
+  {
+   "slug": "lost-world-spinosaurus",
+   "label": "spinosaurus",
+   "family": "animals",
+   "sizeBand": "gargantuan",
+   "replaces": "lost-world-wild-animals-2.png|r2c5",
+   "reason": "regen-underres"
+  }
+ ]
+}

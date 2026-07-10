@@ -1,0 +1,123 @@
+sheets: 99   sprites: 2431
+
+== OVERALL ==
+  three-quarter   807  (33%)
+  front           777  (31%)
+  side            579  (23%)
+  icon-flat       103  (4%)
+  high-angle       82  (3%)
+  other            50  (2%)
+  top-down         25  (1%)
+  back              8  (0%)
+
+== BY FAMILY ==
+  animals    (1125): side:501, three-quarter:375, front:119, high-angle:79, other:26, top-down:24, icon-flat:1
+  items      (100): icon-flat:100
+  kids       ( 66): front:37, side:15, three-quarter:12, back:1, other:1
+  monsters   (694): front:365, three-quarter:266, side:33, other:23, icon-flat:2, high-angle:2, back:2, top-down:1
+  npcs       (446): front:256, three-quarter:154, side:30, back:5, high-angle:1
+
+== BY SOURCE ==
+  codex-master (996): front:440, three-quarter:269, side:164, icon-flat:102, other:14, high-angle:4, back:2, top-down:1
+  lane         (1435): three-quarter:538, side:415, front:337, high-angle:78, other:36, top-down:24, back:6, icon-flat:1
+
+== PER SHEET (dominant | breakdown) ==
+  ash-domestic-animals-2.png                    three-quarter | three-quarter:16, side:5, high-angle:2, front:1, top-down:1
+  ash-dungeon-animals-2.png                     three-quarter | three-quarter:7, other:6, top-down:6, side:4, front:2
+  ash-monsters-1-c2.png                         front         | front:13, three-quarter:12
+  ash-monsters-2-c2.png                         three-quarter | three-quarter:14, front:7, side:2, other:1, top-down:1
+  ash-monsters-3-c2.png                         front         | front:14, three-quarter:10, side:1
+  ash-wild-animals-2.png                        three-quarter | three-quarter:17, side:6, front:1, other:1
+  bright-kingdom-domestic-animals-2.png         front         | front:13, side:6, three-quarter:6
+  bright-kingdom-dungeon-animals-2.png          three-quarter | three-quarter:9, front:9, side:7
+  bright-kingdom-wild-animals-2.png             three-quarter | three-quarter:15, front:5, side:5
+  chrome-domestic-animals-2.png                 three-quarter | three-quarter:12, side:8, front:4, top-down:1
+  chrome-dungeon-animals-2.png                  top-down      | three-quarter:8, side:6, top-down:6, front:5
+  chrome-monsters-1-c2.png                      front         | front:18, three-quarter:6, other:1
+  chrome-monsters-2-c2.png                      three-quarter | three-quarter:11, front:10, side:4
+  chrome-monsters-3-c2.png                      front         | front:12, three-quarter:10, side:2, other:1
+  chrome-monsters-4-c2.png                      front         | front:19, three-quarter:4, other:2
+  chrome-monsters-5-c2.png                      front         | front:15, three-quarter:3
+  chrome-npcs-1-c2.png                          front         | front:19, three-quarter:6
+  chrome-npcs-2-c2.png                          front         | front:14, three-quarter:6, side:5
+  chrome-npcs-3-c2.png                          front         | front:15, three-quarter:9, side:1
+  chrome-npcs-4-c2.png                          front         | front:14, three-quarter:11
+  chrome-npcs-5-c2.png                          three-quarter | three-quarter:9, side:7, back:5, front:4
+  chrome-npcs-6-c2.png                          front         | front:15, three-quarter:8, side:2
+  chrome-wild-animals-2.png                     side          | side:10, three-quarter:9, other:3, front:2, top-down:1
+  cosmic-domestic-animals-2.png                 three-quarter | three-quarter:14, side:5, front:5, high-angle:1
+  cosmic-domesticated-animals-01.png            side          | side:18, three-quarter:7
+  cosmic-dungeon-animals-01.png                 side          | side:15, three-quarter:6, front:4
+  cosmic-dungeon-animals-2.png                  side          | side:10, three-quarter:9, front:3, top-down:2, other:1
+  cosmic-expansion-e1-01.png                    front         | front:8, three-quarter:6, other:1
+  cosmic-items-01.png                           icon-flat     | icon-flat:25
+  cosmic-items-02.png                           icon-flat     | icon-flat:25
+  cosmic-kids-01.png                            side          | side:13, front:4, three-quarter:3
+  cosmic-mm-01.png                              front         | front:13, three-quarter:9, other:2, side:1
+  cosmic-mm-02.png                              three-quarter | front:10, three-quarter:10, side:4, other:1
+  cosmic-mm-03.png                              front         | three-quarter:11, front:11, other:1, side:1, back:1
+  cosmic-mm-04.png                              front         | front:18, three-quarter:5, side:2
+  cosmic-mm-05.png                              front         | front:9, three-quarter:6, side:1, icon-flat:1
+  cosmic-npc-01.png                             three-quarter | three-quarter:19, front:5, side:1
+  cosmic-npc-02.png                             three-quarter | three-quarter:14, front:7, side:3, high-angle:1
+  cosmic-npc-03.png                             three-quarter | three-quarter:13, front:7, side:5
+  cosmic-wild-animals-01.png                    side          | side:17, three-quarter:6, front:2
+  cosmic-wild-animals-2.png                     three-quarter | three-quarter:9, side:7, front:7, other:1, top-down:1
+  fantasy-domestic-animals-2.png                side          | side:21, three-quarter:3, top-down:1
+  fantasy-dungeon-animals-2.png                 three-quarter | three-quarter:8, side:6, high-angle:6, other:4, front:1
+  fantasy-wild-animals-2.png                    side          | side:14, three-quarter:10, front:1
+  frontier-domestic-animals-2.png               side          | side:22, three-quarter:3
+  frontier-dungeon-animals-2.png                side          | other:9, side:7, three-quarter:5, high-angle:3, top-down:1
+  frontier-monsters-1-c2.png                    three-quarter | three-quarter:13, front:10, other:1, back:1
+  frontier-monsters-2-c2.png                    three-quarter | three-quarter:19, front:4, other:1, side:1
+  frontier-monsters-3-c2.png                    three-quarter | three-quarter:12, front:10, other:2, side:1
+  frontier-monsters-4-c2.png                    front         | front:15, three-quarter:9, other:1
+  frontier-monsters-5-c2.png                    three-quarter | three-quarter:11, front:9, other:1
+  frontier-npcs-1-c2.png                        three-quarter | three-quarter:21, side:4
+  frontier-npcs-2-c2.png                        three-quarter | three-quarter:21, side:2, front:2
+  frontier-npcs-3-c2.png                        three-quarter | three-quarter:12, front:9
+  frontier-wild-animals-2.png                   three-quarter | three-quarter:15, side:7, high-angle:2, front:1
+  gloom-domestic-animals-2.png                  side          | side:15, three-quarter:7, front:2, high-angle:1
+  gloom-dungeon-animals-2.png                   side          | side:9, high-angle:9, three-quarter:4, front:3
+  gloom-wild-animals-2.png                      side          | side:17, three-quarter:6, high-angle:2
+  high-seas-domestic-animals-2.png              side          | side:15, three-quarter:9, front:1
+  high-seas-domesticated-animals-01.png         side          | side:13, three-quarter:12
+  high-seas-dungeon-animals-01.png              side          | side:12, three-quarter:10, front:3
+  high-seas-dungeon-animals-2.png               side          | side:12, high-angle:7, front:3, three-quarter:2, icon-flat:1
+  high-seas-items-01.png                        icon-flat     | icon-flat:25
+  high-seas-items-02.png                        icon-flat     | icon-flat:25
+  high-seas-kids-01.png                         front         | front:16, three-quarter:7, side:2
+  high-seas-mm-01.png                           front         | front:15, three-quarter:8, side:1, other:1
+  high-seas-mm-02.png                           front         | three-quarter:11, front:11, other:2, side:1
+  high-seas-mm-03.png                           front         | three-quarter:12, front:11, side:1, other:1
+  high-seas-mm-04.png                           front         | front:21, three-quarter:6
+  high-seas-mm-05.png                           front         | front:16, three-quarter:7, side:2
+  high-seas-npc-01.png                          front         | front:25
+  high-seas-npc-02.png                          front         | front:25
+  high-seas-npc-03.png                          front         | front:24, three-quarter:1
+  high-seas-wild-animals-01.png                 side          | side:12, three-quarter:10, front:2, other:1
+  high-seas-wild-animals-2.png                  side          | side:17, front:4, three-quarter:2, high-angle:2
+  lost-world-domestic-animals-2.png             side          | side:16, three-quarter:4, front:3, high-angle:2
+  lost-world-dungeon-animals-2.png              side          | high-angle:10, side:8, three-quarter:5, front:2
+  lost-world-wild-animals-2.png                 side          | side:15, three-quarter:7, high-angle:2, front:1
+  noir-domestic-animals-2.png                   side          | side:15, three-quarter:8, front:1, high-angle:1
+  noir-dungeon-animals-2.png                    high-angle    | high-angle:11, side:11, top-down:2, three-quarter:1
+  noir-wild-animals-2.png                       side          | side:16, three-quarter:5, front:2, high-angle:1, top-down:1
+  suburb-domestic-animals-2.png                 three-quarter | three-quarter:15, side:6, front:3, high-angle:1
+  suburb-dungeon-animals-2.png                  three-quarter | three-quarter:11, high-angle:8, side:5, front:1
+  suburb-wild-animals-2.png                     side          | three-quarter:12, side:12, high-angle:1
+  theater-domestic-animals-2.png                three-quarter | three-quarter:11, side:10, front:2, high-angle:2
+  theater-domesticated-animals-01.png           side          | side:10, front:8, three-quarter:7
+  theater-dungeon-animals-01.png                side          | side:10, front:7, three-quarter:6, top-down:1, high-angle:1
+  theater-dungeon-animals-2.png                 side          | side:16, three-quarter:5, high-angle:3, front:1
+  theater-kids-01.png                           front         | front:17, three-quarter:2, back:1, other:1
+  theater-mm-01.png                             front         | front:15, three-quarter:8, icon-flat:1, side:1
+  theater-mm-02.png                             three-quarter | three-quarter:11, front:10, high-angle:2, side:2
+  theater-mm-03.png                             front         | front:15, three-quarter:9, side:1
+  theater-mm-04.png                             front         | front:15, three-quarter:9, side:1
+  theater-mm-05.png                             front         | front:11, three-quarter:4, side:3, other:3
+  theater-npc-01.png                            front         | front:25
+  theater-npc-02.png                            front         | front:24, three-quarter:1
+  theater-npc-03.png                            front         | front:22, three-quarter:3
+  theater-wild-animals-01.png                   side          | side:11, three-quarter:10, front:4
+  theater-wild-animals-2.png                    side          | side:12, three-quarter:12, high-angle:1

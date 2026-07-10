@@ -1,12 +1,37 @@
 ---
 type: session-handoff
 project: Genesis
-updated: 2026-07-09 (late night)
+updated: 2026-07-10
 ---
 
 # Genesis — Session Hand-off
 
-## ⭐ Latest (2026-07-09, late night) — PLACE-GEN built end-to-end: places are realm-true and render as dioramas [Claude Fable]
+## ⭐ Latest (2026-07-10) — SPRITE-GEN-V2: cleanup, perspective law, V3 wave gated (650 sprites), casting tags [Claude Fable]
+
+The great sprite cleanup after the 2026-07-09 overnight codex blast. **State:** worktrees pruned 21→1
+(only the sprite-gen lane remains, its 59 round-2 sheets still parked there); all 2,431 uncommitted
+sprites surveyed per-cell by vision agents; Adam ruled the laws (now `docs/SPRITE-GEN-V2.md`): eye-level
+perspective (front/side/¾ ok, high-angle/top-down quarantined), grid ladder by size (humanoids always
+4x6), per-realm finish, chroma-key magenta/green, Armed Toons Law. Realm expansions authored + generated:
+cosmic tarot arcana, frontier tribal (dignity register), suburb Amblin/Earthbound, gloom VHS horror,
+bright-kingdom Zelda+Mario armed toons. Adam's codex sessions ran the V3 packets (143/161 sheets before
+his usage limit); our gate passed 142/143 on style; **650 sprites sliced to transparent PNGs at
+`dev/sprite-sheets/incoming/v3/` with sizing (`v3-sizing.json`) and full casting tags (`v3-tags.json`,
+schema = `docs/SPRITE-TAGS.md`: binding/expression-variant/casting laws, castability tiers)**. 78
+off-angle sprites shipped as a CC0 giveaway pack (Desktop zip). Verification: check-manifest OK (no
+modules touched); gates were 11 vision agents + mechanical slicing, zero empty cells.
+
+**Do next (pick up here):**
+1. Adam's 3PM codex window → run `dev/model-qa/regen-v3/round2/` (cosmic-r2 15 sheets, gloom-r2 3,
+   fixes-r2 9); then gate/slice/tag the returns same as this session.
+2. Fold `v3-sizing.json` + `v3-tags.json` into `data/sprite-registry.js` (regenerate, never hand-edit) —
+   includes heads-line-up calibration vs Adam's 32 protected scale rulings.
+3. Retro-tag the committed corpus to the SPRITE-TAGS schema + check ash's committed sheets for the
+   painterly drift Adam remembers (the lane's ash sheets passed clean).
+4. NPC expression pass (expression-variant law wiring) once Adam settles sprite assignments.
+5. Land the sprite lane (claude/sprite-gen-refactor-magenta) LAST per the gen-wave sweep plan.
+
+## 2026-07-09 (late night) — PLACE-GEN built end-to-end: places are realm-true and render as dioramas [Claude Fable]
 
 The whole PLACE-GEN wave landed on `claude/place-generation-a57dd2` (11 units, each a --no-ff merge,
 each orchestrator-re-gated): Place Spine (24 archetypes) + Frontier/Chrome/Gloom skins (PROVISIONAL),

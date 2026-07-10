@@ -1,0 +1,41 @@
+{
+ "file": "lost-world-large-v3-07.png",
+ "realm": "lost-world",
+ "gridClass": "large",
+ "grid": "2 rows x 2 columns",
+ "chroma": "#FF00FF",
+ "cells": [
+  {
+   "slug": "lost-world-archelon-turtle",
+   "label": "archelon turtle",
+   "family": "animals",
+   "sizeBand": "large",
+   "replaces": "lost-world-dungeon-animals-2.png|r2c1",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "lost-world-marine-crocodile",
+   "label": "marine crocodile",
+   "family": "animals",
+   "sizeBand": "large",
+   "replaces": "lost-world-dungeon-animals-2.png|r2c2",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "lost-world-giant-worm",
+   "label": "giant worm",
+   "family": "animals",
+   "sizeBand": "large",
+   "replaces": "lost-world-dungeon-animals-2.png|r4c1",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "lost-world-giant-slug",
+   "label": "giant slug",
+   "family": "animals",
+   "sizeBand": "large",
+   "replaces": "lost-world-dungeon-animals-2.png|r4c2",
+   "reason": "regen-underres"
+  }
+ ]
+}

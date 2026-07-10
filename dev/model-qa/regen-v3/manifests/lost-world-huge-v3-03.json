@@ -1,0 +1,25 @@
+{
+ "file": "lost-world-huge-v3-03.png",
+ "realm": "lost-world",
+ "gridClass": "huge",
+ "grid": "1 row x 2 columns",
+ "chroma": "#FF00FF",
+ "cells": [
+  {
+   "slug": "lost-world-therizinosaurus",
+   "label": "therizinosaurus",
+   "family": "animals",
+   "sizeBand": "huge",
+   "replaces": "lost-world-wild-animals-2.png|r2c4",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "lost-world-carnotaurus",
+   "label": "carnotaurus",
+   "family": "animals",
+   "sizeBand": "huge",
+   "replaces": "lost-world-wild-animals-2.png|r3c1",
+   "reason": "regen-underres"
+  }
+ ]
+}

@@ -1,0 +1,41 @@
+{
+ "file": "frontier-large-v3-14.png",
+ "realm": "frontier",
+ "gridClass": "large",
+ "grid": "2 rows x 2 columns",
+ "chroma": "#FF00FF",
+ "cells": [
+  {
+   "slug": "frontier-headless-horseman",
+   "label": "headless horseman",
+   "family": "monsters",
+   "sizeBand": "large",
+   "replaces": "frontier-monsters-5-c2.png|r2c2",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "frontier-lynch-mob-with-noose-and-torch",
+   "label": "lynch mob with noose and torch",
+   "family": "monsters",
+   "sizeBand": "large",
+   "replaces": "frontier-monsters-5-c2.png|r4c1",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "frontier-reaper-ferryman-in-boat",
+   "label": "reaper ferryman in boat",
+   "family": "monsters",
+   "sizeBand": "large",
+   "replaces": "frontier-monsters-5-c2.png|r4c3",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "frontier-bison",
+   "label": "bison",
+   "family": "animals",
+   "sizeBand": "large",
+   "replaces": "frontier-wild-animals-2.png|r3c2",
+   "reason": "regen-underres"
+  }
+ ]
+}

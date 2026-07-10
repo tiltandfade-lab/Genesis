@@ -1,0 +1,41 @@
+{
+ "file": "cosmic-large-v3-16.png",
+ "realm": "cosmic",
+ "gridClass": "large",
+ "grid": "2 rows x 2 columns",
+ "chroma": "#FF00FF",
+ "cells": [
+  {
+   "slug": "cosmic-shadow-horror-dangling-small-figure",
+   "label": "shadow horror dangling small figure",
+   "family": "monsters",
+   "sizeBand": "large",
+   "replaces": "cosmic-mm-05.png|r2c1",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "cosmic-multi-headed-screaming-mass",
+   "label": "multi-headed screaming mass",
+   "family": "monsters",
+   "sizeBand": "large",
+   "replaces": "cosmic-mm-05.png|r2c4",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "cosmic-winged-cthulhu-brute",
+   "label": "winged cthulhu brute",
+   "family": "monsters",
+   "sizeBand": "large",
+   "replaces": "cosmic-mm-05.png|r3c1",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "cosmic-bear",
+   "label": "bear",
+   "family": "animals",
+   "sizeBand": "large",
+   "replaces": "cosmic-wild-animals-01.png|r3c2",
+   "reason": "regen-underres"
+  }
+ ]
+}

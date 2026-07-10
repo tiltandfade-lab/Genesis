@@ -1,0 +1,41 @@
+{
+ "file": "high-seas-large-v3-12.png",
+ "realm": "high-seas",
+ "gridClass": "large",
+ "grid": "2 rows x 2 columns",
+ "chroma": "#FF00FF",
+ "cells": [
+  {
+   "slug": "high-seas-elk",
+   "label": "elk",
+   "family": "animals",
+   "sizeBand": "large",
+   "replaces": "high-seas-wild-animals-01.png|r5c2",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "high-seas-dolphin",
+   "label": "dolphin",
+   "family": "animals",
+   "sizeBand": "large",
+   "replaces": "high-seas-wild-animals-2.png|r1c3",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "high-seas-manatee",
+   "label": "manatee",
+   "family": "animals",
+   "sizeBand": "large",
+   "replaces": "high-seas-wild-animals-2.png|r1c4",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "high-seas-hammerhead-shark",
+   "label": "hammerhead shark",
+   "family": "animals",
+   "sizeBand": "large",
+   "replaces": "high-seas-wild-animals-2.png|r2c1",
+   "reason": "regen-underres"
+  }
+ ]
+}

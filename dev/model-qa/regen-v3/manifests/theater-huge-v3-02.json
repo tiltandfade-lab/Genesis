@@ -1,0 +1,25 @@
+{
+ "file": "theater-huge-v3-02.png",
+ "realm": "theater",
+ "gridClass": "huge",
+ "grid": "1 row x 2 columns",
+ "chroma": "#FF00FF",
+ "cells": [
+  {
+   "slug": "theater-trebuchet",
+   "label": "trebuchet",
+   "family": "monsters",
+   "sizeBand": "huge",
+   "replaces": "theater-mm-04.png|r1c2",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "theater-moss-mammoth-beast",
+   "label": "moss mammoth beast",
+   "family": "monsters",
+   "sizeBand": "huge",
+   "replaces": "theater-mm-04.png|r2c1",
+   "reason": "regen-underres"
+  }
+ ]
+}

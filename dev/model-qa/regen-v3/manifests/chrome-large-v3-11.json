@@ -1,0 +1,41 @@
+{
+ "file": "chrome-large-v3-11.png",
+ "realm": "chrome",
+ "gridClass": "large",
+ "grid": "2 rows x 2 columns",
+ "chroma": "#00FF00",
+ "cells": [
+  {
+   "slug": "chrome-green-screen-quad-mech",
+   "label": "green-screen quad mech",
+   "family": "monsters",
+   "sizeBand": "large",
+   "replaces": "chrome-monsters-5-c2.png|r4c1",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "chrome-octopus-tentacle-mech",
+   "label": "octopus tentacle mech",
+   "family": "monsters",
+   "sizeBand": "large",
+   "replaces": "chrome-monsters-5-c2.png|r4c2",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "chrome-three-headed-robot-dog-pack",
+   "label": "three-headed robot dog pack",
+   "family": "animals",
+   "sizeBand": "large",
+   "replaces": "chrome-wild-animals-2.png|r1c4",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "chrome-robot-bear",
+   "label": "robot bear",
+   "family": "animals",
+   "sizeBand": "large",
+   "replaces": "chrome-wild-animals-2.png|r4c1",
+   "reason": "regen-underres"
+  }
+ ]
+}

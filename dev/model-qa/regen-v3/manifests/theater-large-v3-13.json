@@ -1,0 +1,41 @@
+{
+ "file": "theater-large-v3-13.png",
+ "realm": "theater",
+ "gridClass": "large",
+ "grid": "2 rows x 2 columns",
+ "chroma": "#FF00FF",
+ "cells": [
+  {
+   "slug": "theater-giant-snake-rearing",
+   "label": "giant snake rearing",
+   "family": "monsters",
+   "sizeBand": "large",
+   "replaces": "theater-mm-03.png|r1c4",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "theater-sabre-cavalry-charge",
+   "label": "sabre cavalry charge",
+   "family": "monsters",
+   "sizeBand": "large",
+   "replaces": "theater-mm-03.png|r1c5",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "theater-artillery-officer-with-cannon",
+   "label": "artillery officer with cannon",
+   "family": "monsters",
+   "sizeBand": "large",
+   "replaces": "theater-mm-03.png|r2c1",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "theater-skull-gas-cloud",
+   "label": "skull gas cloud",
+   "family": "monsters",
+   "sizeBand": "large",
+   "replaces": "theater-mm-03.png|r2c5",
+   "reason": "regen-underres"
+  }
+ ]
+}

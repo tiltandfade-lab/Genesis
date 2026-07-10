@@ -1,0 +1,25 @@
+{
+ "file": "gloom-tiny-v3-05.png",
+ "realm": "gloom",
+ "gridClass": "tiny",
+ "grid": "1 row x 7 columns",
+ "chroma": "#FF00FF",
+ "cells": [
+  {
+   "slug": "gloom-centipede",
+   "label": "centipede",
+   "family": "animals",
+   "sizeBand": "tiny",
+   "replaces": "gloom-dungeon-animals-2.png|r2c5",
+   "reason": "FAIL-adam"
+  },
+  {
+   "slug": "gloom-pale-spider",
+   "label": "pale spider",
+   "family": "animals",
+   "sizeBand": "tiny",
+   "replaces": "gloom-dungeon-animals-2.png|r3c4",
+   "reason": "FAIL-adam"
+  }
+ ]
+}

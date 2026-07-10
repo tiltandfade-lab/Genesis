@@ -1420,21 +1420,21 @@
     },
     {
      "n": 2,
+     "name": "Killer Whale",
+     "slug": "spr-fantasy-killer-whale",
+     "cue": "Huge Beast, Unaligned, CR 3 — signature move: Bite"
+    },
+    {
+     "n": 3,
      "name": "Ridden Wyvern",
      "slug": "spr-fantasy-ridden-wyvern",
      "cue": "CR 8 — signature move: AC"
     },
     {
-     "n": 3,
+     "n": 4,
      "name": "Dao",
      "slug": "spr-fantasy-dao",
      "cue": "Large Elemental (Genie), Neutral, CR 11 — signature move: Multiattack"
-    },
-    {
-     "n": 4,
-     "name": "Animated Rug of Smothering",
-     "slug": "spr-fantasy-animated-rug-of-smothering",
-     "cue": "Large Construct, Unaligned, CR 2 — signature move: Smother"
     }
    ]
   },
@@ -1448,27 +1448,27 @@
    "cells": [
     {
      "n": 1,
+     "name": "Animated Rug of Smothering",
+     "slug": "spr-fantasy-animated-rug-of-smothering",
+     "cue": "Large Construct, Unaligned, CR 2 — signature move: Smother"
+    },
+    {
+     "n": 2,
      "name": "Centaur Trooper",
      "slug": "spr-fantasy-centaur-trooper",
      "cue": "Large Fey, Neutral Good, CR 2 — signature move: Multiattack"
     },
     {
-     "n": 2,
+     "n": 3,
      "name": "Hook Horror",
      "slug": "spr-fantasy-hook-horror",
      "cue": "Large Monstrosity, Neutral, CR 3 — signature move: Multiattack"
     },
     {
-     "n": 3,
+     "n": 4,
      "name": "Horned Devil",
      "slug": "spr-fantasy-horned-devil",
      "cue": "Large Fiend (Devil), Lawful Evil, CR 11 — signature move: Multiattack"
-    },
-    {
-     "n": 4,
-     "name": "Carrion Crawler",
-     "slug": "spr-fantasy-carrion-crawler",
-     "cue": "Large Monstrosity, Unaligned, CR 2 — signature move: Multiattack"
     }
    ]
   },
@@ -1482,27 +1482,27 @@
    "cells": [
     {
      "n": 1,
+     "name": "Carrion Crawler",
+     "slug": "spr-fantasy-carrion-crawler",
+     "cue": "Large Monstrosity, Unaligned, CR 2 — signature move: Multiattack"
+    },
+    {
+     "n": 2,
+     "name": "Yeti",
+     "slug": "spr-fantasy-yeti",
+     "cue": "Large Monstrosity, Chaotic Evil, CR 3 — signature move: Multiattack"
+    },
+    {
+     "n": 3,
      "name": "Swarm of Piranhas",
      "slug": "spr-fantasy-swarm-of-piranhas",
      "cue": "Medium Swarm of Tiny Beasts, Unaligned, CR 1 — signature move: Bites"
     },
     {
-     "n": 2,
+     "n": 4,
      "name": "Green Dragon Wyrmling",
      "slug": "spr-fantasy-green-dragon-wyrmling",
      "cue": "Medium Dragon (Chromatic), Lawful Evil, CR 2 — signature move: Multiattack"
-    },
-    {
-     "n": 3,
-     "name": "Pegasus",
-     "slug": "spr-fantasy-pegasus",
-     "cue": "Large Celestial, Chaotic Good, CR 2 — signature move: Hooves"
-    },
-    {
-     "n": 4,
-     "name": "Drider",
-     "slug": "spr-fantasy-drider",
-     "cue": "Large Monstrosity, Chaotic Evil, CR 6 — signature move: Multiattack"
     }
    ]
   },
@@ -1516,21 +1516,55 @@
    "cells": [
     {
      "n": 1,
+     "name": "Pegasus",
+     "slug": "spr-fantasy-pegasus",
+     "cue": "Large Celestial, Chaotic Good, CR 2 — signature move: Hooves"
+    },
+    {
+     "n": 2,
+     "name": "Drider",
+     "slug": "spr-fantasy-drider",
+     "cue": "Large Monstrosity, Chaotic Evil, CR 6 — signature move: Multiattack"
+    },
+    {
+     "n": 3,
      "name": "White Dragon Wyrmling",
      "slug": "spr-fantasy-white-dragon-wyrmling",
      "cue": "Medium Dragon (Chromatic), Chaotic Evil, CR 13 — signature move: Multiattack"
     },
     {
-     "n": 2,
+     "n": 4,
+     "name": "Ankylosaurus",
+     "slug": "spr-fantasy-ankylosaurus",
+     "cue": "Huge Beast (Dinosaur), Unaligned, CR 3 — signature move: Multiattack"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-xl-35",
+   "realm": "fantasy",
+   "kind": "monster",
+   "sourceFile": "dev/sprite-manifests/XL-REGEN-PROMPTS.md",
+   "sourceSection": "XL sheet 35",
+   "expected": 4,
+   "cells": [
+    {
+     "n": 1,
      "name": "Bronze Dragon Wyrmling",
      "slug": "spr-fantasy-bronze-dragon-wyrmling",
      "cue": "Medium Dragon (Metallic), Lawful Good, CR 2 — signature move: Multiattack"
     },
     {
-     "n": 3,
+     "n": 2,
      "name": "Juvenile Shadow Dragon",
      "slug": "spr-fantasy-juvenile-shadow-dragon",
      "cue": "Medium Dragon, Chaotic Evil, CR 4 — signature move: Multiattack"
+    },
+    {
+     "n": 3,
+     "name": "Lamia",
+     "slug": "spr-fantasy-lamia",
+     "cue": "Large Fiend, Chaotic Evil, CR 4 — signature move: Multiattack"
     },
     {
      "n": 4,
@@ -1541,11 +1575,11 @@
    ]
   },
   {
-   "id": "fantasy-xl-35",
+   "id": "fantasy-xl-36",
    "realm": "fantasy",
    "kind": "monster",
    "sourceFile": "dev/sprite-manifests/XL-REGEN-PROMPTS.md",
-   "sourceSection": "XL sheet 35",
+   "sourceSection": "XL sheet 36",
    "expected": 4,
    "cells": [
     {
@@ -1562,49 +1596,15 @@
     },
     {
      "n": 3,
+     "name": "Gas Spore Fungus",
+     "slug": "spr-fantasy-gas-spore-fungus",
+     "cue": "Large Plant, Unaligned, CR 0.5 — signature move: Tendril"
+    },
+    {
+     "n": 4,
      "name": "Gelatinous Cube",
      "slug": "spr-fantasy-gelatinous-cube",
      "cue": "Large Ooze, Unaligned, CR 2 — signature move: Pseudopod"
-    },
-    {
-     "n": 4,
-     "name": "Water Elemental",
-     "slug": "spr-fantasy-water-elemental",
-     "cue": "Large Elemental, Neutral, CR 5 — signature move: Multiattack"
-    }
-   ]
-  },
-  {
-   "id": "fantasy-xl-36",
-   "realm": "fantasy",
-   "kind": "monster",
-   "sourceFile": "dev/sprite-manifests/XL-REGEN-PROMPTS.md",
-   "sourceSection": "XL sheet 36",
-   "expected": 4,
-   "cells": [
-    {
-     "n": 1,
-     "name": "Troll Amalgam",
-     "slug": "spr-fantasy-troll-amalgam",
-     "cue": "Large Giant, Chaotic Evil, CR 7 — signature move: Multiattack"
-    },
-    {
-     "n": 2,
-     "name": "Stone Golem",
-     "slug": "spr-fantasy-stone-golem",
-     "cue": "Large Construct, Unaligned, CR 10 — signature move: Multiattack"
-    },
-    {
-     "n": 3,
-     "name": "Solar",
-     "slug": "spr-fantasy-solar",
-     "cue": "Large Celestial (Angel), Lawful Good, CR 21 — signature move: Multiattack"
-    },
-    {
-     "n": 4,
-     "name": "Rhinoceros",
-     "slug": "spr-fantasy-rhinoceros",
-     "cue": "Large Beast, Unaligned, CR 2 — signature move: Gore"
     }
    ]
   },
@@ -1618,27 +1618,27 @@
    "cells": [
     {
      "n": 1,
-     "name": "Water Weird",
-     "slug": "spr-fantasy-water-weird",
-     "cue": "Large Elemental, Neutral, CR 3 — signature move: Surge"
+     "name": "Water Elemental",
+     "slug": "spr-fantasy-water-elemental",
+     "cue": "Large Elemental, Neutral, CR 5 — signature move: Multiattack"
     },
     {
      "n": 2,
-     "name": "Ogre Zombie",
-     "slug": "spr-fantasy-ogre-zombie",
-     "cue": "Large Undead, Neutral Evil, CR 2 — signature move: Morningstar"
+     "name": "Troll Amalgam",
+     "slug": "spr-fantasy-troll-amalgam",
+     "cue": "Large Giant, Chaotic Evil, CR 7 — signature move: Multiattack"
     },
     {
      "n": 3,
-     "name": "Gnoll Pack Lord",
-     "slug": "spr-fantasy-gnoll-pack-lord",
-     "cue": "Medium Fiend (Gnoll), Chaotic Evil, CR 2 — signature move: Multiattack"
+     "name": "Stone Golem",
+     "slug": "spr-fantasy-stone-golem",
+     "cue": "Large Construct, Unaligned, CR 10 — signature move: Multiattack"
     },
     {
      "n": 4,
-     "name": "Blue Dragon Wyrmling",
-     "slug": "spr-fantasy-blue-dragon-wyrmling",
-     "cue": "Medium Dragon (Chromatic), Lawful Evil, CR 3 — signature move: Multiattack"
+     "name": "Solar",
+     "slug": "spr-fantasy-solar",
+     "cue": "Large Celestial (Angel), Lawful Good, CR 21 — signature move: Multiattack"
     }
    ]
   },
@@ -1652,27 +1652,27 @@
    "cells": [
     {
      "n": 1,
-     "name": "Silver Dragon Wyrmling",
-     "slug": "spr-fantasy-silver-dragon-wyrmling",
-     "cue": "Medium Dragon (Metallic), Lawful Good, CR 2 — signature move: Multiattack"
+     "name": "Rhinoceros",
+     "slug": "spr-fantasy-rhinoceros",
+     "cue": "Large Beast, Unaligned, CR 2 — signature move: Gore"
     },
     {
      "n": 2,
-     "name": "Black Dragon Wyrmling",
-     "slug": "spr-fantasy-black-dragon-wyrmling",
-     "cue": "Medium Dragon (Chromatic), Chaotic Evil, CR 2 — signature move: Multiattack"
+     "name": "Water Weird",
+     "slug": "spr-fantasy-water-weird",
+     "cue": "Large Elemental, Neutral, CR 3 — signature move: Surge"
     },
     {
      "n": 3,
-     "name": "Brass Dragon Wyrmling",
-     "slug": "spr-fantasy-brass-dragon-wyrmling",
-     "cue": "Medium Dragon (Metallic), Chaotic Good, CR 1 — signature move: Rend"
+     "name": "Ogre Zombie",
+     "slug": "spr-fantasy-ogre-zombie",
+     "cue": "Large Undead, Neutral Evil, CR 2 — signature move: Morningstar"
     },
     {
      "n": 4,
-     "name": "Cambion",
-     "slug": "spr-fantasy-cambion",
-     "cue": "Medium Fiend, Neutral Evil, CR 5 — signature move: Multiattack"
+     "name": "Gnoll Pack Lord",
+     "slug": "spr-fantasy-gnoll-pack-lord",
+     "cue": "Medium Fiend (Gnoll), Chaotic Evil, CR 2 — signature move: Multiattack"
     }
    ]
   },
@@ -1682,25 +1682,3157 @@
    "kind": "monster",
    "sourceFile": "dev/sprite-manifests/XL-REGEN-PROMPTS.md",
    "sourceSection": "XL sheet 39",
-   "expected": 3,
+   "expected": 4,
    "cells": [
     {
      "n": 1,
+     "name": "Blue Dragon Wyrmling",
+     "slug": "spr-fantasy-blue-dragon-wyrmling",
+     "cue": "Medium Dragon (Chromatic), Lawful Evil, CR 3 — signature move: Multiattack"
+    },
+    {
+     "n": 2,
+     "name": "Owlbear",
+     "slug": "spr-fantasy-owlbear",
+     "cue": "Large Monstrosity, Unaligned, CR 3 — signature move: Multiattack"
+    },
+    {
+     "n": 3,
+     "name": "Silver Dragon Wyrmling",
+     "slug": "spr-fantasy-silver-dragon-wyrmling",
+     "cue": "Medium Dragon (Metallic), Lawful Good, CR 2 — signature move: Multiattack"
+    },
+    {
+     "n": 4,
+     "name": "Black Dragon Wyrmling",
+     "slug": "spr-fantasy-black-dragon-wyrmling",
+     "cue": "Medium Dragon (Chromatic), Chaotic Evil, CR 2 — signature move: Multiattack"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-xl-40",
+   "realm": "fantasy",
+   "kind": "monster",
+   "sourceFile": "dev/sprite-manifests/XL-REGEN-PROMPTS.md",
+   "sourceSection": "XL sheet 40",
+   "expected": 4,
+   "cells": [
+    {
+     "n": 1,
+     "name": "Brass Dragon Wyrmling",
+     "slug": "spr-fantasy-brass-dragon-wyrmling",
+     "cue": "Medium Dragon (Metallic), Chaotic Good, CR 1 — signature move: Rend"
+    },
+    {
+     "n": 2,
+     "name": "Cambion",
+     "slug": "spr-fantasy-cambion",
+     "cue": "Medium Fiend, Neutral Evil, CR 5 — signature move: Multiattack"
+    },
+    {
+     "n": 3,
      "name": "Allosaurus",
      "slug": "spr-fantasy-allosaurus",
      "cue": "Large Beast (Dinosaur), Unaligned, CR 2 — signature move: Bite"
     },
     {
-     "n": 2,
+     "n": 4,
      "name": "Giant Elk",
      "slug": "spr-fantasy-giant-elk",
      "cue": "Huge Celestial, Neutral Good, CR 2 — signature move: Ram"
-    },
+    }
+   ]
+  },
+  {
+   "id": "fantasy-xl-41",
+   "realm": "fantasy",
+   "kind": "monster",
+   "sourceFile": "dev/sprite-manifests/XL-REGEN-PROMPTS.md",
+   "sourceSection": "XL sheet 41",
+   "expected": 1,
+   "cells": [
     {
-     "n": 3,
+     "n": 1,
      "name": "Troll",
      "slug": "spr-fantasy-troll",
      "cue": "Large Giant, Chaotic Evil, CR 5 — signature move: Multiattack"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-large-1",
+   "realm": "fantasy",
+   "kind": "mixed",
+   "sourceFile": "dev/sprite-manifests/XL-REGEN-PROMPTS.md",
+   "sourceSection": "Large sheet fantasy-large-1",
+   "expected": 9,
+   "cells": [
+    {
+     "n": 1,
+     "name": "Bone Naga",
+     "slug": "spr-fantasy-bone-naga",
+     "cue": "Large Undead, Neutral Evil, CR 4 — signature move: Multiattack"
+    },
+    {
+     "n": 2,
+     "name": "Giant Octopus",
+     "slug": "spr-fantasy-giant-octopus",
+     "cue": "Large Beast, Unaligned, CR 1 — signature move: Tentacles"
+    },
+    {
+     "n": 3,
+     "name": "Wild animal — A bull elk — antlers full-grown, the season's rut making it reckless",
+     "slug": "spr-fantasy-wild-animal-a-bull-elk-antlers-full-grown-the-season-s-rut-making-it-reckless",
+     "cue": ""
+    },
+    {
+     "n": 4,
+     "name": "Peryton",
+     "slug": "spr-fantasy-peryton",
+     "cue": "Medium Monstrosity, Chaotic Evil, CR 2 — signature move: Multiattack"
+    },
+    {
+     "n": 5,
+     "name": "Displacer Beast",
+     "slug": "spr-fantasy-displacer-beast",
+     "cue": "Large Monstrosity, Lawful Evil, CR 3 — signature move: Multiattack"
+    },
+    {
+     "n": 6,
+     "name": "Red Dragon Wyrmling",
+     "slug": "spr-fantasy-red-dragon-wyrmling",
+     "cue": "Medium Dragon (Chromatic), Chaotic Evil, CR 4 — signature move: Multiattack"
+    },
+    {
+     "n": 7,
+     "name": "Questing Knight",
+     "slug": "spr-fantasy-questing-knight",
+     "cue": "Medium or Small Humanoid, Neutral, CR 8 — signature move: Multiattack"
+    },
+    {
+     "n": 8,
+     "name": "Lizardfolk Geomancer",
+     "slug": "spr-fantasy-lizardfolk-geomancer",
+     "cue": "Medium Elemental, Neutral, CR 2 — signature move: Multiattack"
+    },
+    {
+     "n": 9,
+     "name": "Plesiosaurus",
+     "slug": "spr-fantasy-plesiosaurus",
+     "cue": "Large Beast (Dinosaur), Unaligned, CR 2 — signature move: Bite"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-large-2",
+   "realm": "fantasy",
+   "kind": "mixed",
+   "sourceFile": "dev/sprite-manifests/XL-REGEN-PROMPTS.md",
+   "sourceSection": "Large sheet fantasy-large-2",
+   "expected": 9,
+   "cells": [
+    {
+     "n": 1,
+     "name": "Greater Mimic",
+     "slug": "spr-fantasy-greater-mimic",
+     "cue": "Large Monstrosity (Shapechanger), Neutral, CR 4 — signature move: Multiattack"
+    },
+    {
+     "n": 2,
+     "name": "Host (Goliath)",
+     "slug": "spr-fantasy-host-goliath",
+     "cue": "Controls the space, not the people in it."
+    },
+    {
+     "n": 3,
+     "name": "Druid (Circle Warden)",
+     "slug": "spr-fantasy-druid-circle-warden",
+     "cue": "Medium or Small Humanoid (Druid), Neutral, CR 2 — signature move: Multiattack"
+    },
+    {
+     "n": 4,
+     "name": "Aarakocra Aeromancer",
+     "slug": "spr-fantasy-aarakocra-aeromancer",
+     "cue": "Medium Elemental, Neutral, CR 4 — signature move: Multiattack"
+    },
+    {
+     "n": 5,
+     "name": "Gladiator",
+     "slug": "spr-fantasy-gladiator",
+     "cue": "Medium or Small Humanoid, Neutral, CR 5 — signature move: Multiattack"
+    },
+    {
+     "n": 6,
+     "name": "Chain Devil",
+     "slug": "spr-fantasy-chain-devil",
+     "cue": "Medium Fiend (Devil), Lawful Evil, CR 8 — signature move: Multiattack"
+    },
+    {
+     "n": 7,
+     "name": "Werewolf",
+     "slug": "spr-fantasy-werewolf",
+     "cue": "Medium or Small Monstrosity (Lycanthrope), Chaotic Evil, CR 3 — signature move: Multiattack"
+    },
+    {
+     "n": 8,
+     "name": "Berserker Commander",
+     "slug": "spr-fantasy-berserker-commander",
+     "cue": "Medium or Small Humanoid, Neutral, CR 8 — signature move: Multiattack"
+    },
+    {
+     "n": 9,
+     "name": "Basilisk",
+     "slug": "spr-fantasy-basilisk",
+     "cue": "Medium Monstrosity, Unaligned, CR 3 — signature move: Bite"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-large-3",
+   "realm": "fantasy",
+   "kind": "mixed",
+   "sourceFile": "dev/sprite-manifests/XL-REGEN-PROMPTS.md",
+   "sourceSection": "Large sheet fantasy-large-3",
+   "expected": 9,
+   "cells": [
+    {
+     "n": 1,
+     "name": "Barbed Devil",
+     "slug": "spr-fantasy-barbed-devil",
+     "cue": "Medium Fiend (Devil), Lawful Evil, CR 5 — signature move: Multiattack"
+    },
+    {
+     "n": 2,
+     "name": "Half-Ogre (Ogrillon)",
+     "slug": "spr-fantasy-half-ogre-ogrillon",
+     "cue": "Medium Humanoid (Orc, Giant), Chaotic Evil, CR 1 — signature move: Battleaxe"
+    },
+    {
+     "n": 3,
+     "name": "Servant (Goliath)",
+     "slug": "spr-fantasy-servant-goliath",
+     "cue": "Invisible to the powerful, and so hears every secret."
+    },
+    {
+     "n": 4,
+     "name": "Goliath dockworker (Goliath) — moves cargo alone that takes four other men",
+     "slug": "spr-fantasy-goliath-dockworker-goliath-moves-cargo-alone-that-takes-four-other-men",
+     "cue": ""
+    },
+    {
+     "n": 5,
+     "name": "Camel",
+     "slug": "spr-fantasy-camel",
+     "cue": "Large Beast, Unaligned, CR 0.125 — signature move: Bite"
+    },
+    {
+     "n": 6,
+     "name": "Gnoll Demoniac",
+     "slug": "spr-fantasy-gnoll-demoniac",
+     "cue": "Medium Fiend (Gnoll), Chaotic Evil, CR 8 — signature move: Multiattack"
+    },
+    {
+     "n": 7,
+     "name": "Deva",
+     "slug": "spr-fantasy-deva",
+     "cue": "Medium Celestial (Angel), Lawful Good, CR 10 — signature move: Multiattack"
+    },
+    {
+     "n": 8,
+     "name": "Shadow",
+     "slug": "spr-fantasy-shadow",
+     "cue": "Medium Undead, Chaotic Evil, CR 0.5 — signature move: Strength Drain"
+    },
+    {
+     "n": 9,
+     "name": "Goliath bridge-toll keeper (Goliath) — collects the fee, stops the trouble, rarely needs to try hard",
+     "slug": "spr-fantasy-goliath-bridge-toll-keeper-goliath-collects-the-fee-stops-the-trouble-rarely-needs-to-try-hard",
+     "cue": ""
+    }
+   ]
+  },
+  {
+   "id": "fantasy-large-4",
+   "realm": "fantasy",
+   "kind": "mixed",
+   "sourceFile": "dev/sprite-manifests/XL-REGEN-PROMPTS.md",
+   "sourceSection": "Large sheet fantasy-large-4",
+   "expected": 9,
+   "cells": [
+    {
+     "n": 1,
+     "name": "Smuggler (Goliath)",
+     "slug": "spr-fantasy-smuggler-goliath",
+     "cue": "Hides the cargo; speaks only in euphemism."
+    },
+    {
+     "n": 2,
+     "name": "Bugbear Stalker",
+     "slug": "spr-fantasy-bugbear-stalker",
+     "cue": "Medium Fey (Goblinoid), Chaotic Evil, CR 3 — signature move: Multiattack"
+    },
+    {
+     "n": 3,
+     "name": "Weretiger",
+     "slug": "spr-fantasy-weretiger",
+     "cue": "Medium or Small Monstrosity (Lycanthrope), Neutral, CR 4 — signature move: Multiattack"
+    },
+    {
+     "n": 4,
+     "name": "Yochlol",
+     "slug": "spr-fantasy-yochlol",
+     "cue": "Medium Fiend (Demon), Chaotic Evil, CR 10 — signature move: Multiattack"
+    },
+    {
+     "n": 5,
+     "name": "Archpriest",
+     "slug": "spr-fantasy-archpriest",
+     "cue": "Medium or Small Humanoid (Cleric), Neutral, CR 12 — signature move: Multiattack"
+    },
+    {
+     "n": 6,
+     "name": "Polar Bear",
+     "slug": "spr-fantasy-polar-bear",
+     "cue": "Large Beast, Unaligned, CR 2 — signature move: Multiattack"
+    },
+    {
+     "n": 7,
+     "name": "Flesh Golem",
+     "slug": "spr-fantasy-flesh-golem",
+     "cue": "Medium Construct, Neutral, CR 5 — signature move: Multiattack"
+    },
+    {
+     "n": 8,
+     "name": "Aarakocra Skirmisher",
+     "slug": "spr-fantasy-aarakocra-skirmisher",
+     "cue": "Medium Elemental, Neutral, CR 0.25 — signature move: Talons"
+    },
+    {
+     "n": 9,
+     "name": "Giant Wasp",
+     "slug": "spr-fantasy-giant-wasp",
+     "cue": "Medium Beast, Unaligned, CR 0.5 — signature move: Sting"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-large-5",
+   "realm": "fantasy",
+   "kind": "mixed",
+   "sourceFile": "dev/sprite-manifests/XL-REGEN-PROMPTS.md",
+   "sourceSection": "Large sheet fantasy-large-5",
+   "expected": 9,
+   "cells": [
+    {
+     "n": 1,
+     "name": "Thri-kreen Psion",
+     "slug": "spr-fantasy-thri-kreen-psion",
+     "cue": "Medium Monstrosity, Neutral, CR 3 — signature move: Multiattack"
+    },
+    {
+     "n": 2,
+     "name": "Helmed Horror",
+     "slug": "spr-fantasy-helmed-horror",
+     "cue": "Medium Construct, Neutral, CR 4 — signature move: Multiattack"
+    },
+    {
+     "n": 3,
+     "name": "Werebear",
+     "slug": "spr-fantasy-werebear",
+     "cue": "Medium or Small Monstrosity (Lycanthrope), Neutral Good, CR 5 — signature move: Multiattack"
+    },
+    {
+     "n": 4,
+     "name": "Archdruid",
+     "slug": "spr-fantasy-archdruid",
+     "cue": "(The Archdruid stat block does not appear in the 2024 Monster Manual. The stat block below is retained from the 2014 edition as a campaign reference — treat as non-canonical until a 2024 equivalent is published.), CR 12 — signature move: Spellcasting"
+    },
+    {
+     "n": 5,
+     "name": "Warhorse Skeleton",
+     "slug": "spr-fantasy-warhorse-skeleton",
+     "cue": "Large Undead, Lawful Evil, CR 0.5 — signature move: Hooves"
+    },
+    {
+     "n": 6,
+     "name": "Bulette Pup",
+     "slug": "spr-fantasy-bulette-pup",
+     "cue": "Medium Monstrosity, Unaligned, CR 2 — signature move: Bite"
+    },
+    {
+     "n": 7,
+     "name": "Secret-Eye",
+     "slug": "spr-fantasy-secret-eye",
+     "cue": "Medium Aberration, Neutral Evil, CR 2 — signature move: Multiattack"
+    },
+    {
+     "n": 8,
+     "name": "Couatl",
+     "slug": "spr-fantasy-couatl",
+     "cue": "Medium Celestial, Lawful Good, CR 4 — signature move: Bite"
+    },
+    {
+     "n": 9,
+     "name": "Gray Chaos-Frog",
+     "slug": "spr-fantasy-gray-chaos-frog",
+     "cue": "Medium Aberration, Chaotic Neutral, CR 9 — signature move: Multiattack"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-large-6",
+   "realm": "fantasy",
+   "kind": "mixed",
+   "sourceFile": "dev/sprite-manifests/XL-REGEN-PROMPTS.md",
+   "sourceSection": "Large sheet fantasy-large-6",
+   "expected": 9,
+   "cells": [
+    {
+     "n": 1,
+     "name": "Death Chaos-Frog",
+     "slug": "spr-fantasy-death-chaos-frog",
+     "cue": "Medium Aberration, Chaotic Evil, CR 10 — signature move: Multiattack"
+    },
+    {
+     "n": 2,
+     "name": "Pampered-elite (Goliath)",
+     "slug": "spr-fantasy-pampered-elite-goliath",
+     "cue": "Wealthy, bored, insulated from real consequence."
+    },
+    {
+     "n": 3,
+     "name": "Yuan-ti Malison (Type 3)",
+     "slug": "spr-fantasy-yuan-ti-malison-type-3",
+     "cue": "Medium Monstrosity, Neutral Evil, CR 3 — signature move: Multiattack"
+    },
+    {
+     "n": 4,
+     "name": "Orc Warrior",
+     "slug": "spr-fantasy-orc-warrior",
+     "cue": "Medium Humanoid (Orc), Chaotic Evil, CR 0.5 — signature move: Greataxe"
+    },
+    {
+     "n": 5,
+     "name": "Drowned Husk",
+     "slug": "spr-fantasy-drowned-husk",
+     "cue": "CR 0.25 — signature move: Slam"
+    },
+    {
+     "n": 6,
+     "name": "Salamander Fire Snake",
+     "slug": "spr-fantasy-salamander-fire-snake",
+     "cue": "Medium Elemental, Neutral Evil, CR 1 — signature move: Bite"
+    },
+    {
+     "n": 7,
+     "name": "Erinyes",
+     "slug": "spr-fantasy-erinyes",
+     "cue": "Medium Fiend (Devil), Lawful Evil, CR 12 — signature move: Multiattack"
+    },
+    {
+     "n": 8,
+     "name": "Ultroloth",
+     "slug": "spr-fantasy-ultroloth",
+     "cue": "Medium Fiend (Yugoloth), Neutral Evil, CR 13 — signature move: Multiattack"
+    },
+    {
+     "n": 9,
+     "name": "Brown Bear",
+     "slug": "spr-fantasy-brown-bear",
+     "cue": "Large Beast, Unaligned, CR 1 — signature move: Multiattack"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-large-7",
+   "realm": "fantasy",
+   "kind": "mixed",
+   "sourceFile": "dev/sprite-manifests/XL-REGEN-PROMPTS.md",
+   "sourceSection": "Large sheet fantasy-large-7",
+   "expected": 9,
+   "cells": [
+    {
+     "n": 1,
+     "name": "Bearded Devil",
+     "slug": "spr-fantasy-bearded-devil",
+     "cue": "Medium Fiend (Devil), Lawful Evil, CR 3 — signature move: Multiattack"
+    },
+    {
+     "n": 2,
+     "name": "Half-Dragon",
+     "slug": "spr-fantasy-half-dragon",
+     "cue": "Medium Dragon, Neutral, CR 5 — signature move: Multiattack"
+    },
+    {
+     "n": 3,
+     "name": "Rakshasa",
+     "slug": "spr-fantasy-rakshasa",
+     "cue": "Medium Fiend, Lawful Evil, CR 13 — signature move: Multiattack"
+    },
+    {
+     "n": 4,
+     "name": "Harpy",
+     "slug": "spr-fantasy-harpy",
+     "cue": "Medium Monstrosity, Chaotic Evil, CR 1 — signature move: Multiattack"
+    },
+    {
+     "n": 5,
+     "name": "Cultist Fanatic",
+     "slug": "spr-fantasy-cultist-fanatic",
+     "cue": "Medium or Small Humanoid, Neutral, CR 2 — signature move: Pact Blade"
+    },
+    {
+     "n": 6,
+     "name": "Bugbear Stalker (Strangler)",
+     "slug": "spr-fantasy-bugbear-stalker-strangler",
+     "cue": "Medium Humanoid (Goblinoid), Chaotic Evil, CR 3 — signature move: Multiattack"
+    },
+    {
+     "n": 7,
+     "name": "Death Knight",
+     "slug": "spr-fantasy-death-knight",
+     "cue": "Medium or Small Undead, Chaotic Evil, CR 17 — signature move: Multiattack"
+    },
+    {
+     "n": 8,
+     "name": "Orcish farrier (Orc) — shoes every horse in the valley, feared and respected equally",
+     "slug": "spr-fantasy-orcish-farrier-orc-shoes-every-horse-in-the-valley-feared-and-respected-equally",
+     "cue": ""
+    },
+    {
+     "n": 9,
+     "name": "Swarm of Ravens",
+     "slug": "spr-fantasy-swarm-of-ravens",
+     "cue": "Medium Swarm of Tiny Beasts, Unaligned, CR 0.25 — signature move: Beaks"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-large-8",
+   "realm": "fantasy",
+   "kind": "mixed",
+   "sourceFile": "dev/sprite-manifests/XL-REGEN-PROMPTS.md",
+   "sourceSection": "Large sheet fantasy-large-8",
+   "expected": 9,
+   "cells": [
+    {
+     "n": 1,
+     "name": "Arcanaloth",
+     "slug": "spr-fantasy-arcanaloth",
+     "cue": "Medium Fiend (Yugoloth), Neutral Evil, CR 12 — signature move: Multiattack"
+    },
+    {
+     "n": 2,
+     "name": "Astral Raider Dracomancer",
+     "slug": "spr-fantasy-astral-raider-dracomancer",
+     "cue": "Medium Aberration (Gith), Lawful Evil, CR 16 — signature move: Multiattack"
+    },
+    {
+     "n": 3,
+     "name": "Myconid Sovereign",
+     "slug": "spr-fantasy-myconid-sovereign",
+     "cue": "Large Plant, Lawful Neutral, CR 2 — signature move: Multiattack"
+    },
+    {
+     "n": 4,
+     "name": "Bandit",
+     "slug": "spr-fantasy-bandit",
+     "cue": "Medium or Small Humanoid, Neutral, CR 0.125 — signature move: Scimitar"
+    },
+    {
+     "n": 5,
+     "name": "Clockwork Law-Construct Duodrone",
+     "slug": "spr-fantasy-clockwork-law-construct-duodrone",
+     "cue": "Medium Construct, Lawful Neutral, CR 0.25 — signature move: Multiattack"
+    },
+    {
+     "n": 6,
+     "name": "Draft Horse",
+     "slug": "spr-fantasy-draft-horse",
+     "cue": "Large Beast, Unaligned, CR 0.25 — signature move: Hooves"
+    },
+    {
+     "n": 7,
+     "name": "The Needle Blight",
+     "slug": "spr-fantasy-the-needle-blight",
+     "cue": "Medium Plant, Neutral Evil, CR 0.25 — signature move: Claw"
+    },
+    {
+     "n": 8,
+     "name": "Clockwork Law-Construct Tridrone",
+     "slug": "spr-fantasy-clockwork-law-construct-tridrone",
+     "cue": "Medium Construct, Lawful Neutral, CR 0.5 — signature move: Multiattack"
+    },
+    {
+     "n": 9,
+     "name": "Warhorse",
+     "slug": "spr-fantasy-warhorse",
+     "cue": "Large Beast, Unaligned, CR 0.5 — signature move: Hooves"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-large-9",
+   "realm": "fantasy",
+   "kind": "mixed",
+   "sourceFile": "dev/sprite-manifests/XL-REGEN-PROMPTS.md",
+   "sourceSection": "Large sheet fantasy-large-9",
+   "expected": 9,
+   "cells": [
+    {
+     "n": 1,
+     "name": "Thri-kreen Marauder",
+     "slug": "spr-fantasy-thri-kreen-marauder",
+     "cue": "Medium Monstrosity, Neutral, CR 1 — signature move: Multiattack"
+    },
+    {
+     "n": 2,
+     "name": "Priest",
+     "slug": "spr-fantasy-priest",
+     "cue": "Medium or Small Humanoid (Cleric), Neutral, CR 2 — signature move: Multiattack"
+    },
+    {
+     "n": 3,
+     "name": "Incubus",
+     "slug": "spr-fantasy-incubus",
+     "cue": "Medium Fiend, Neutral Evil, CR 4 — signature move: Multiattack"
+    },
+    {
+     "n": 4,
+     "name": "Orcish caravan blacksmith (Orc) — repairs wagon wheels faster than anyone in three towns",
+     "slug": "spr-fantasy-orcish-caravan-blacksmith-orc-repairs-wagon-wheels-faster-than-anyone-in-three-towns",
+     "cue": ""
+    },
+    {
+     "n": 5,
+     "name": "Deep-Brute",
+     "slug": "spr-fantasy-deep-brute",
+     "cue": "Medium Monstrosity, Chaotic Neutral, CR 2 — signature move: Multiattack"
+    },
+    {
+     "n": 6,
+     "name": "Orc Blind Prophet",
+     "slug": "spr-fantasy-orc-blind-prophet",
+     "cue": "Medium Humanoid (Orc), Chaotic Evil, CR 2 — signature move: Multiattack"
+    },
+    {
+     "n": 7,
+     "name": "Gnoll Warrior",
+     "slug": "spr-fantasy-gnoll-warrior",
+     "cue": "Medium Fiend (Gnoll), Chaotic Evil, CR 0.5 — signature move: Rend"
+    },
+    {
+     "n": 8,
+     "name": "Bog-Twisted Giant Rat",
+     "slug": "spr-fantasy-bog-twisted-giant-rat",
+     "cue": "CR 0.125 — signature move: Bite"
+    },
+    {
+     "n": 9,
+     "name": "Fish-Folk Whip",
+     "slug": "spr-fantasy-fish-folk-whip",
+     "cue": "Medium Aberration, Neutral Evil, CR 1 — signature move: Pincer Staff"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-large-10",
+   "realm": "fantasy",
+   "kind": "mixed",
+   "sourceFile": "dev/sprite-manifests/XL-REGEN-PROMPTS.md",
+   "sourceSection": "Large sheet fantasy-large-10",
+   "expected": 9,
+   "cells": [
+    {
+     "n": 1,
+     "name": "Hell Hound",
+     "slug": "spr-fantasy-hell-hound",
+     "cue": "Medium Fiend, Lawful Evil, CR 3 — signature move: Multiattack"
+    },
+    {
+     "n": 2,
+     "name": "Yuan-ti Malison (Type 1)",
+     "slug": "spr-fantasy-yuan-ti-malison-type-1",
+     "cue": "Medium Monstrosity, Neutral Evil, CR 3 — signature move: Multiattack"
+    },
+    {
+     "n": 3,
+     "name": "Yuan-ti Malison (Type 2)",
+     "slug": "spr-fantasy-yuan-ti-malison-type-2",
+     "cue": "Medium Monstrosity, Neutral Evil, CR 3 — signature move: Multiattack"
+    },
+    {
+     "n": 4,
+     "name": "Gnoll Fang of the Beast",
+     "slug": "spr-fantasy-gnoll-fang-of-the-beast",
+     "cue": "Medium Fiend (Gnoll), Chaotic Evil, CR 4 — signature move: Multiattack"
+    },
+    {
+     "n": 5,
+     "name": "Mezzoloth",
+     "slug": "spr-fantasy-mezzoloth",
+     "cue": "Medium Fiend (Yugoloth), Neutral Evil, CR 5 — signature move: Multiattack"
+    },
+    {
+     "n": 6,
+     "name": "Assassin",
+     "slug": "spr-fantasy-assassin",
+     "cue": "Medium or Small Humanoid, Neutral, CR 8 — signature move: Multiattack"
+    },
+    {
+     "n": 7,
+     "name": "Bandit Courier",
+     "slug": "spr-fantasy-bandit-courier",
+     "cue": "CR 0.5 — signature move: Multiattack"
+    },
+    {
+     "n": 8,
+     "name": "Copper Dragon Wyrmling",
+     "slug": "spr-fantasy-copper-dragon-wyrmling",
+     "cue": "Medium Dragon (Metallic), Chaotic Good, CR 1 — signature move: Rend"
+    },
+    {
+     "n": 9,
+     "name": "Myconid Spore Servant",
+     "slug": "spr-fantasy-myconid-spore-servant",
+     "cue": "Medium or Small Plant, Unaligned, CR 1 — signature move: Slam"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-large-11",
+   "realm": "fantasy",
+   "kind": "mixed",
+   "sourceFile": "dev/sprite-manifests/XL-REGEN-PROMPTS.md",
+   "sourceSection": "Large sheet fantasy-large-11",
+   "expected": 9,
+   "cells": [
+    {
+     "n": 1,
+     "name": "Pirate Admiral",
+     "slug": "spr-fantasy-pirate-admiral",
+     "cue": "Medium or Small Humanoid, Neutral, CR 12 — signature move: Multiattack"
+    },
+    {
+     "n": 2,
+     "name": "Human miller — dust-covered, counts every sack twice",
+     "slug": "spr-fantasy-human-miller-dust-covered-counts-every-sack-twice",
+     "cue": ""
+    },
+    {
+     "n": 3,
+     "name": "Violet Fungus",
+     "slug": "spr-fantasy-violet-fungus",
+     "cue": "Medium Plant, Unaligned, CR 0.25 — signature move: Multiattack"
+    },
+    {
+     "n": 4,
+     "name": "Owlbear Cub",
+     "slug": "spr-fantasy-owlbear-cub",
+     "cue": "Medium Monstrosity, Unaligned, CR 1 — signature move: Multiattack"
+    },
+    {
+     "n": 5,
+     "name": "Poltergeist",
+     "slug": "spr-fantasy-poltergeist",
+     "cue": "Medium or Small Undead, Chaotic Neutral, CR 2 — signature move: Multiattack"
+    },
+    {
+     "n": 6,
+     "name": "Wererat",
+     "slug": "spr-fantasy-wererat",
+     "cue": "Medium or Small Monstrosity (Lycanthrope), Lawful Evil, CR 2 — signature move: Multiattack"
+    },
+    {
+     "n": 7,
+     "name": "Astral Raider Warrior",
+     "slug": "spr-fantasy-astral-raider-warrior",
+     "cue": "Medium Aberration (Gith), Lawful Evil, CR 3 — signature move: Multiattack"
+    },
+    {
+     "n": 8,
+     "name": "Grell",
+     "slug": "spr-fantasy-grell",
+     "cue": "Medium Aberration, Neutral Evil, CR 3 — signature move: Multiattack"
+    },
+    {
+     "n": 9,
+     "name": "Orcish caravan guard — hired muscle with a reputation for actually caring about the cargo",
+     "slug": "spr-fantasy-orcish-caravan-guard-hired-muscle-with-a-reputation-for-actually-caring-about-the-cargo",
+     "cue": ""
+    }
+   ]
+  },
+  {
+   "id": "fantasy-large-12",
+   "realm": "fantasy",
+   "kind": "mixed",
+   "sourceFile": "dev/sprite-manifests/XL-REGEN-PROMPTS.md",
+   "sourceSection": "Large sheet fantasy-large-12",
+   "expected": 9,
+   "cells": [
+    {
+     "n": 1,
+     "name": "Clockwork Law-Construct Monodrone",
+     "slug": "spr-fantasy-clockwork-law-construct-monodrone",
+     "cue": "Medium Construct, Lawful Neutral, CR 0.125 — signature move: Gear"
+    },
+    {
+     "n": 2,
+     "name": "Bugbear Warrior",
+     "slug": "spr-fantasy-bugbear-warrior",
+     "cue": "Medium Humanoid (Goblinoid), Chaotic Evil, CR 2 — signature move: Multiattack"
+    },
+    {
+     "n": 3,
+     "name": "Flaming Skeleton",
+     "slug": "spr-fantasy-flaming-skeleton",
+     "cue": "Medium Undead, Lawful Evil, CR 3 — signature move: Multiattack"
+    },
+    {
+     "n": 4,
+     "name": "Wight",
+     "slug": "spr-fantasy-wight",
+     "cue": "Medium Undead, Neutral Evil, CR 3 — signature move: Multiattack"
+    },
+    {
+     "n": 5,
+     "name": "Azer Pyromancer",
+     "slug": "spr-fantasy-azer-pyromancer",
+     "cue": "Medium Elemental, Lawful Neutral, CR 6 — signature move: Multiattack"
+    },
+    {
+     "n": 6,
+     "name": "The Cultist Roster (Base 2024 Stat Blocks)",
+     "slug": "spr-fantasy-the-cultist-roster-base-2024-stat-blocks",
+     "cue": "CR 0.125 — signature move: Ritual Sickle"
+    },
+    {
+     "n": 7,
+     "name": "Hobgoblin Captain",
+     "slug": "spr-fantasy-hobgoblin-captain",
+     "cue": "Medium Humanoid (Goblinoid), Lawful Evil, CR 3 — signature move: Multiattack"
+    },
+    {
+     "n": 8,
+     "name": "Guard Captain",
+     "slug": "spr-fantasy-guard-captain",
+     "cue": "Medium or Small Humanoid, Neutral, CR 4 — signature move: Multiattack"
+    },
+    {
+     "n": 9,
+     "name": "Galeb Duhr",
+     "slug": "spr-fantasy-galeb-duhr",
+     "cue": "Medium Elemental, Neutral, CR 6 — signature move: Avalanche Slam"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-large-13",
+   "realm": "fantasy",
+   "kind": "mixed",
+   "sourceFile": "dev/sprite-manifests/XL-REGEN-PROMPTS.md",
+   "sourceSection": "Large sheet fantasy-large-13",
+   "expected": 9,
+   "cells": [
+    {
+     "n": 1,
+     "name": "Medusa",
+     "slug": "spr-fantasy-medusa",
+     "cue": "Medium Monstrosity, Lawful Evil, CR 6 — signature move: Multiattack"
+    },
+    {
+     "n": 2,
+     "name": "Death Knight Aspirant",
+     "slug": "spr-fantasy-death-knight-aspirant",
+     "cue": "Medium or Small Undead, Chaotic Evil, CR 11 — signature move: Multiattack"
+    },
+    {
+     "n": 3,
+     "name": "Mind-Thief Arcanist",
+     "slug": "spr-fantasy-mind-thief-arcanist",
+     "cue": "Medium Aberration, Lawful Evil, CR 11 — signature move: Multiattack"
+    },
+    {
+     "n": 4,
+     "name": "Mummy Lord",
+     "slug": "spr-fantasy-mummy-lord",
+     "cue": "Medium or Small Undead (Cleric), Lawful Evil, CR 15 — signature move: Multiattack"
+    },
+    {
+     "n": 5,
+     "name": "Desperate Bandit",
+     "slug": "spr-fantasy-desperate-bandit",
+     "cue": "CR 0.125 — signature move: Scimitar"
+    },
+    {
+     "n": 6,
+     "name": "Mire Creeper",
+     "slug": "spr-fantasy-mire-creeper",
+     "cue": "CR 0.125 — signature move: Blood Drain"
+    },
+    {
+     "n": 7,
+     "name": "Fish-Folk",
+     "slug": "spr-fantasy-fish-folk",
+     "cue": "Medium Aberration, Neutral Evil, CR 0.25 — signature move: Spear"
+    },
+    {
+     "n": 8,
+     "name": "Fish-Folk Monitor",
+     "slug": "spr-fantasy-fish-folk-monitor",
+     "cue": "Medium Aberration, Neutral Evil, CR 3 — signature move: Multiattack"
+    },
+    {
+     "n": 9,
+     "name": "Fiend Cultist",
+     "slug": "spr-fantasy-fiend-cultist",
+     "cue": "Medium or Small Humanoid, Neutral Evil, CR 8 — signature move: Multiattack"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-large-14",
+   "realm": "fantasy",
+   "kind": "mixed",
+   "sourceFile": "dev/sprite-manifests/XL-REGEN-PROMPTS.md",
+   "sourceSection": "Large sheet fantasy-large-14",
+   "expected": 9,
+   "cells": [
+    {
+     "n": 1,
+     "name": "Cipher (Orc)",
+     "slug": "spr-fantasy-cipher-orc",
+     "cue": "Their very presence is the notable thing."
+    },
+    {
+     "n": 2,
+     "name": "Mage",
+     "slug": "spr-fantasy-mage",
+     "cue": "Medium or Small Humanoid (Wizard), Neutral, CR 6 — signature move: Multiattack"
+    },
+    {
+     "n": 3,
+     "name": "Orcish stable hand (Orc) — gentle with horses, terrifying to everyone else",
+     "slug": "spr-fantasy-orcish-stable-hand-orc-gentle-with-horses-terrifying-to-everyone-else",
+     "cue": ""
+    },
+    {
+     "n": 4,
+     "name": "Empyrean Iota",
+     "slug": "spr-fantasy-empyrean-iota",
+     "cue": "Medium Celestial or Fiend (Titan), Neutral, CR 1 — signature move: Otherworldly Strike"
+    },
+    {
+     "n": 5,
+     "name": "Ettercap",
+     "slug": "spr-fantasy-ettercap",
+     "cue": "Medium Monstrosity, Neutral Evil, CR 2 — signature move: Multiattack"
+    },
+    {
+     "n": 6,
+     "name": "Knight",
+     "slug": "spr-fantasy-knight",
+     "cue": "Medium or Small Humanoid, Neutral, CR 3 — signature move: Multiattack"
+    },
+    {
+     "n": 7,
+     "name": "Xorn",
+     "slug": "spr-fantasy-xorn",
+     "cue": "Medium Elemental, Neutral, CR 5 — signature move: Multiattack"
+    },
+    {
+     "n": 8,
+     "name": "Elven ranger's apprentice (Elf) — still learning to read a trail properly",
+     "slug": "spr-fantasy-elven-ranger-s-apprentice-elf-still-learning-to-read-a-trail-properly",
+     "cue": ""
+    },
+    {
+     "n": 9,
+     "name": "Land-worker (Dragonborn)",
+     "slug": "spr-fantasy-land-worker-dragonborn",
+     "cue": "Tied to the land and its seasons; the base everyone eats from."
+    }
+   ]
+  },
+  {
+   "id": "fantasy-large-15",
+   "realm": "fantasy",
+   "kind": "mixed",
+   "sourceFile": "dev/sprite-manifests/XL-REGEN-PROMPTS.md",
+   "sourceSection": "Large sheet fantasy-large-15",
+   "expected": 9,
+   "cells": [
+    {
+     "n": 1,
+     "name": "Tiefling tavern owner (Tiefling) — runs the friendliest bar in a town that fears her kind",
+     "slug": "spr-fantasy-tiefling-tavern-owner-tiefling-runs-the-friendliest-bar-in-a-town-that-fears-her-kind",
+     "cue": ""
+    },
+    {
+     "n": 2,
+     "name": "Sahuagin Priest",
+     "slug": "spr-fantasy-sahuagin-priest",
+     "cue": "Medium Fiend, Lawful Evil, CR 2 — signature move: Multiattack"
+    },
+    {
+     "n": 3,
+     "name": "Swarm of Crawling Claws",
+     "slug": "spr-fantasy-swarm-of-crawling-claws",
+     "cue": "Medium Swarm of Tiny Undead, Neutral Evil, CR 3 — signature move: Swarm of Grasping Hands"
+    },
+    {
+     "n": 4,
+     "name": "Wereboar",
+     "slug": "spr-fantasy-wereboar",
+     "cue": "Medium or Small Monstrosity (Lycanthrope), Neutral Evil, CR 4 — signature move: Multiattack"
+    },
+    {
+     "n": 5,
+     "name": "Hauler (Elf)",
+     "slug": "spr-fantasy-hauler-elf",
+     "cue": "Moves the heavy things; sees everything, is asked nothing."
+    },
+    {
+     "n": 6,
+     "name": "Tiefling fortune-teller's rival (Tiefling) — claims to be the real seer in town",
+     "slug": "spr-fantasy-tiefling-fortune-teller-s-rival-tiefling-claims-to-be-the-real-seer-in-town",
+     "cue": ""
+    },
+    {
+     "n": 7,
+     "name": "Orcish healer — gentle hands, a reputation people are slow to trust",
+     "slug": "spr-fantasy-orcish-healer-gentle-hands-a-reputation-people-are-slow-to-trust",
+     "cue": ""
+    },
+    {
+     "n": 8,
+     "name": "Yuan-ti Infiltrator",
+     "slug": "spr-fantasy-yuan-ti-infiltrator",
+     "cue": "Medium Monstrosity, Neutral Evil, CR 1 — signature move: Multiattack"
+    },
+    {
+     "n": 9,
+     "name": "Elemental Cultist",
+     "slug": "spr-fantasy-elemental-cultist",
+     "cue": "Medium or Small Humanoid, Chaotic Evil, CR 8 — signature move: Multiattack"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-large-16",
+   "realm": "fantasy",
+   "kind": "mixed",
+   "sourceFile": "dev/sprite-manifests/XL-REGEN-PROMPTS.md",
+   "sourceSection": "Large sheet fantasy-large-16",
+   "expected": 9,
+   "cells": [
+    {
+     "n": 1,
+     "name": "Bandit Enforcer",
+     "slug": "spr-fantasy-bandit-enforcer",
+     "cue": "CR 0.5 — signature move: Multiattack"
+    },
+    {
+     "n": 2,
+     "name": "Enforcer (Dragonborn)",
+     "slug": "spr-fantasy-enforcer-dragonborn",
+     "cue": "Authority-adjacent, with limited real power."
+    },
+    {
+     "n": 3,
+     "name": "Recluse (Dragonborn)",
+     "slug": "spr-fantasy-recluse-dragonborn",
+     "cue": "Known of, rarely seen."
+    },
+    {
+     "n": 4,
+     "name": "Human town crier (Human) — announces news, rumor, and the occasional lie for coin",
+     "slug": "spr-fantasy-human-town-crier-human-announces-news-rumor-and-the-occasional-lie-for-coin",
+     "cue": ""
+    },
+    {
+     "n": 5,
+     "name": "Satyr",
+     "slug": "spr-fantasy-satyr",
+     "cue": "Medium Fey, Chaotic Neutral, CR 0.5 — signature move: Hooves"
+    },
+    {
+     "n": 6,
+     "name": "Hobgoblin Iron Shadow",
+     "slug": "spr-fantasy-hobgoblin-iron-shadow",
+     "cue": "Medium Humanoid (Goblinoid), Lawful Evil, CR 2 — signature move: Multiattack"
+    },
+    {
+     "n": 7,
+     "name": "Orc Berserker",
+     "slug": "spr-fantasy-orc-berserker",
+     "cue": "Medium Humanoid (Orc), Chaotic Evil, CR 2 — signature move: Multiattack"
+    },
+    {
+     "n": 8,
+     "name": "Wight Lord",
+     "slug": "spr-fantasy-wight-lord",
+     "cue": "Medium Undead, Neutral Evil, CR 5 — signature move: Multiattack"
+    },
+    {
+     "n": 9,
+     "name": "Fish-Folk Archpriest",
+     "slug": "spr-fantasy-fish-folk-archpriest",
+     "cue": "Medium Aberration, Neutral Evil, CR 6 — signature move: Multiattack"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-large-17",
+   "realm": "fantasy",
+   "kind": "mixed",
+   "sourceFile": "dev/sprite-manifests/XL-REGEN-PROMPTS.md",
+   "sourceSection": "Large sheet fantasy-large-17",
+   "expected": 9,
+   "cells": [
+    {
+     "n": 1,
+     "name": "Death Cultist",
+     "slug": "spr-fantasy-death-cultist",
+     "cue": "Medium or Small Humanoid, Neutral Evil, CR 8 — signature move: Multiattack"
+    },
+    {
+     "n": 2,
+     "name": "Vampire Nightbringer",
+     "slug": "spr-fantasy-vampire-nightbringer",
+     "cue": "Medium or Small Undead, Neutral Evil, CR 8 — signature move: Multiattack"
+    },
+    {
+     "n": 3,
+     "name": "Vampire Umbral Lord",
+     "slug": "spr-fantasy-vampire-umbral-lord",
+     "cue": "Medium or Small Undead, Lawful Evil, CR 15 — signature move: Multiattack"
+    },
+    {
+     "n": 4,
+     "name": "Wild animal — The realm-beast (a locally distinct wild creature, one animal, realm-appropriate)",
+     "slug": "spr-fantasy-wild-animal-the-realm-beast-a-locally-distinct-wild-creature-one-animal-realm-appropriate",
+     "cue": ""
+    },
+    {
+     "n": 5,
+     "name": "Metalworker (Orc)",
+     "slug": "spr-fantasy-metalworker-orc",
+     "cue": "Calloused hands; deals in practical defense."
+    },
+    {
+     "n": 6,
+     "name": "Tiefling street performer (Tiefling) — half the crowd is there for the trick, half for the horror",
+     "slug": "spr-fantasy-tiefling-street-performer-tiefling-half-the-crowd-is-there-for-the-trick-half-for-the-horror",
+     "cue": ""
+    },
+    {
+     "n": 7,
+     "name": "Giant Shark",
+     "slug": "spr-fantasy-giant-shark",
+     "cue": "Huge Beast, Unaligned, CR 5 — signature move: Multiattack"
+    },
+    {
+     "n": 8,
+     "name": "Blind Deep-Stalker",
+     "slug": "spr-fantasy-blind-deep-stalker",
+     "cue": "Medium Aberration, Neutral Evil, CR 0.25 — signature move: Bone Cudgel"
+    },
+    {
+     "n": 9,
+     "name": "Grick",
+     "slug": "spr-fantasy-grick",
+     "cue": "Medium Aberration, Unaligned, CR 2 — signature move: Multiattack"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-large-18",
+   "realm": "fantasy",
+   "kind": "mixed",
+   "sourceFile": "dev/sprite-manifests/XL-REGEN-PROMPTS.md",
+   "sourceSection": "Large sheet fantasy-large-18",
+   "expected": 9,
+   "cells": [
+    {
+     "n": 1,
+     "name": "Spy Master",
+     "slug": "spr-fantasy-spy-master",
+     "cue": "Medium or Small Humanoid, Neutral, CR 10 — signature move: Multiattack"
+    },
+    {
+     "n": 2,
+     "name": "Hobgoblin Soldier",
+     "slug": "spr-fantasy-hobgoblin-soldier",
+     "cue": "Medium Humanoid (Goblinoid), Lawful Evil, CR 0.5 — signature move: Longsword"
+    },
+    {
+     "n": 3,
+     "name": "Scout",
+     "slug": "spr-fantasy-scout",
+     "cue": "Medium or Small Humanoid, Neutral, CR 0.5 — signature move: Multiattack"
+    },
+    {
+     "n": 4,
+     "name": "Giant Crocodile",
+     "slug": "spr-fantasy-giant-crocodile",
+     "cue": "Huge Beast, Unaligned, CR 5 — signature move: Multiattack"
+    },
+    {
+     "n": 5,
+     "name": "Animated Armor",
+     "slug": "spr-fantasy-animated-armor",
+     "cue": "Medium Construct, Unaligned, CR 1 — signature move: Multiattack"
+    },
+    {
+     "n": 6,
+     "name": "Performer (Tiefling)",
+     "slug": "spr-fantasy-performer-tiefling",
+     "cue": "Craves the attention; hides the true feeling under it."
+    },
+    {
+     "n": 7,
+     "name": "Dragonborn ship's purser (Dragonborn) — keeps the manifest honest, mostly",
+     "slug": "spr-fantasy-dragonborn-ship-s-purser-dragonborn-keeps-the-manifest-honest-mostly",
+     "cue": ""
+    },
+    {
+     "n": 8,
+     "name": "Skeleton",
+     "slug": "spr-fantasy-skeleton",
+     "cue": "Medium Undead, Lawful Evil, CR 0.25 — signature move: Shortsword"
+    },
+    {
+     "n": 9,
+     "name": "Zombie Plague Carrier",
+     "slug": "spr-fantasy-zombie-plague-carrier",
+     "cue": "Medium Undead, Neutral Evil, CR 0.5 — signature move: Slam"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-large-19",
+   "realm": "fantasy",
+   "kind": "mixed",
+   "sourceFile": "dev/sprite-manifests/XL-REGEN-PROMPTS.md",
+   "sourceSection": "Large sheet fantasy-large-19",
+   "expected": 9,
+   "cells": [
+    {
+     "n": 1,
+     "name": "Warrior Infantry",
+     "slug": "spr-fantasy-warrior-infantry",
+     "cue": "Medium or Small Humanoid, Neutral, CR 0.125 — signature move: Spear"
+    },
+    {
+     "n": 2,
+     "name": "Scarecrow",
+     "slug": "spr-fantasy-scarecrow",
+     "cue": "Medium Construct, Chaotic Evil, CR 1 — signature move: Fearsome Claw"
+    },
+    {
+     "n": 3,
+     "name": "Ghast (Base)",
+     "slug": "spr-fantasy-ghast-base",
+     "cue": "Medium Undead, Chaotic Evil, CR 2 — signature move: Bite"
+    },
+    {
+     "n": 4,
+     "name": "Giant Seahorse",
+     "slug": "spr-fantasy-giant-seahorse",
+     "cue": "Large Beast, Unaligned, CR 0.5 — signature move: Ram"
+    },
+    {
+     "n": 5,
+     "name": "Sahuagin Warrior",
+     "slug": "spr-fantasy-sahuagin-warrior",
+     "cue": "Medium Fiend, Lawful Evil, CR 0.5 — signature move: Multiattack"
+    },
+    {
+     "n": 6,
+     "name": "Aberrant Cultist",
+     "slug": "spr-fantasy-aberrant-cultist",
+     "cue": "Medium or Small Humanoid, Neutral Evil, CR 8 — signature move: Multiattack"
+    },
+    {
+     "n": 7,
+     "name": "Vampire",
+     "slug": "spr-fantasy-vampire",
+     "cue": "Medium or Small Undead, Lawful Evil, CR 13 — signature move: Multiattack (Vampire Form Only)"
+    },
+    {
+     "n": 8,
+     "name": "Rite-keeper (Orc)",
+     "slug": "spr-fantasy-rite-keeper-orc",
+     "cue": "Maintains the ritual, not the doctrine."
+    },
+    {
+     "n": 9,
+     "name": "Unofficial-power (Elf)",
+     "slug": "spr-fantasy-unofficial-power-elf",
+     "cue": "Power without a title."
+    }
+   ]
+  },
+  {
+   "id": "fantasy-large-20",
+   "realm": "fantasy",
+   "kind": "mixed",
+   "sourceFile": "dev/sprite-manifests/XL-REGEN-PROMPTS.md",
+   "sourceSection": "Large sheet fantasy-large-20",
+   "expected": 9,
+   "cells": [
+    {
+     "n": 1,
+     "name": "Builder (Dragonborn)",
+     "slug": "spr-fantasy-builder-dragonborn",
+     "cue": "Reads every structure out of habit; knows what's load-bearing."
+    },
+    {
+     "n": 2,
+     "name": "Pirate",
+     "slug": "spr-fantasy-pirate",
+     "cue": "Medium or Small Humanoid, Neutral, CR 1 — signature move: Multiattack"
+    },
+    {
+     "n": 3,
+     "name": "Ghast",
+     "slug": "spr-fantasy-ghast",
+     "cue": "Medium Undead, Chaotic Evil, CR 2 — signature move: Bite"
+    },
+    {
+     "n": 4,
+     "name": "Mummy",
+     "slug": "spr-fantasy-mummy",
+     "cue": "Medium or Small Undead, Lawful Evil, CR 3 — signature move: Multiattack"
+    },
+    {
+     "n": 5,
+     "name": "Warrior Veteran",
+     "slug": "spr-fantasy-warrior-veteran",
+     "cue": "Medium or Small Humanoid, Neutral, CR 3 — signature move: Multiattack"
+    },
+    {
+     "n": 6,
+     "name": "Ghast Gravecaller (Spellstitched Elite)",
+     "slug": "spr-fantasy-ghast-gravecaller-spellstitched-elite",
+     "cue": "Medium Undead, Chaotic Evil_ _Gravecallers are ghasts whose flesh has been ritually stitched with glowing abyssal runes, granting them the ability to wield dark magic and call the dead directly from the earth., CR 6 — signature move: Multiattack"
+    },
+    {
+     "n": 7,
+     "name": "Astral Raider Knight",
+     "slug": "spr-fantasy-astral-raider-knight",
+     "cue": "Medium Aberration (Gith), Lawful Evil, CR 8 — signature move: Multiattack"
+    },
+    {
+     "n": 8,
+     "name": "Merfolk Skirmisher",
+     "slug": "spr-fantasy-merfolk-skirmisher",
+     "cue": "Medium Elemental, Neutral, CR 0.125 — signature move: Ocean Spear"
+    },
+    {
+     "n": 9,
+     "name": "Ape",
+     "slug": "spr-fantasy-ape",
+     "cue": "Medium Beast, Unaligned, CR 0.5 — signature move: Multiattack"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-large-21",
+   "realm": "fantasy",
+   "kind": "mixed",
+   "sourceFile": "dev/sprite-manifests/XL-REGEN-PROMPTS.md",
+   "sourceSection": "Large sheet fantasy-large-21",
+   "expected": 9,
+   "cells": [
+    {
+     "n": 1,
+     "name": "Hidden-fanatic (Human)",
+     "slug": "spr-fantasy-hidden-fanatic-human",
+     "cue": "Fanatical devotion behind a mundane face."
+    },
+    {
+     "n": 2,
+     "name": "Human wheelwright (Human) — dark-skinned, third generation in the same shop",
+     "slug": "spr-fantasy-human-wheelwright-human-dark-skinned-third-generation-in-the-same-shop",
+     "cue": ""
+    },
+    {
+     "n": 3,
+     "name": "Bulette",
+     "slug": "spr-fantasy-bulette",
+     "cue": "Large Monstrosity, Unaligned, CR 5 — signature move: Multiattack"
+    },
+    {
+     "n": 4,
+     "name": "Dragonborn temple acolyte, young (Dragonborn) — devout, earnest, still memorizing the rites",
+     "slug": "spr-fantasy-dragonborn-temple-acolyte-young-dragonborn-devout-earnest-still-memorizing-the-rites",
+     "cue": ""
+    },
+    {
+     "n": 5,
+     "name": "Guard",
+     "slug": "spr-fantasy-guard",
+     "cue": "Medium or Small Humanoid, Neutral, CR 0.125 — signature move: Spear"
+    },
+    {
+     "n": 6,
+     "name": "The Twig Blight",
+     "slug": "spr-fantasy-the-twig-blight",
+     "cue": "Small Plant, Neutral Evil, CR 0.125 — signature move: Claw"
+    },
+    {
+     "n": 7,
+     "name": "Succubus",
+     "slug": "spr-fantasy-succubus",
+     "cue": "Medium Fiend, Neutral Evil, CR 4 — signature move: Multiattack"
+    },
+    {
+     "n": 8,
+     "name": "Performer Maestro",
+     "slug": "spr-fantasy-performer-maestro",
+     "cue": "Medium or Small Humanoid, Neutral, CR 6 — signature move: Multiattack"
+    },
+    {
+     "n": 9,
+     "name": "Pirate Captain",
+     "slug": "spr-fantasy-pirate-captain",
+     "cue": "Medium or Small Humanoid, Neutral, CR 6 — signature move: Multiattack"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-large-22",
+   "realm": "fantasy",
+   "kind": "mixed",
+   "sourceFile": "dev/sprite-manifests/XL-REGEN-PROMPTS.md",
+   "sourceSection": "Large sheet fantasy-large-22",
+   "expected": 9,
+   "cells": [
+    {
+     "n": 1,
+     "name": "Zombie",
+     "slug": "spr-fantasy-zombie",
+     "cue": "Medium Undead, Neutral Evil, CR 0.25 — signature move: Slam"
+    },
+    {
+     "n": 2,
+     "name": "Ghoul",
+     "slug": "spr-fantasy-ghoul",
+     "cue": "Medium Undead, Chaotic Evil, CR 1 — signature move: Multiattack"
+    },
+    {
+     "n": 3,
+     "name": "Smoke Mephit",
+     "slug": "spr-fantasy-smoke-mephit",
+     "cue": "Small Elemental, Neutral Evil, CR 0.25 — signature move: Claw"
+    },
+    {
+     "n": 4,
+     "name": "Void-Monk Monk",
+     "slug": "spr-fantasy-void-monk-monk",
+     "cue": "Medium Aberration (Gith), Lawful Neutral, CR 2 — signature move: Multiattack"
+    },
+    {
+     "n": 5,
+     "name": "Commoner",
+     "slug": "spr-fantasy-commoner",
+     "cue": "Medium or Small Humanoid, Neutral, CR 0 — signature move: Club"
+    },
+    {
+     "n": 6,
+     "name": "Archmage",
+     "slug": "spr-fantasy-archmage",
+     "cue": "Medium Humanoid (Wizard), Neutral, CR 12 — signature move: Multiattack"
+    },
+    {
+     "n": 7,
+     "name": "Priest Acolyte",
+     "slug": "spr-fantasy-priest-acolyte",
+     "cue": "Medium or Small Humanoid (Cleric), Neutral, CR 0.25 — signature move: Mace"
+    },
+    {
+     "n": 8,
+     "name": "Riding Horse",
+     "slug": "spr-fantasy-riding-horse",
+     "cue": "Large Beast, Unaligned, CR 0.25 — signature move: Hooves"
+    },
+    {
+     "n": 9,
+     "name": "Steam Mephit",
+     "slug": "spr-fantasy-steam-mephit",
+     "cue": "Small Elemental, Neutral Evil, CR 0.25 — signature move: Claw"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-large-23",
+   "realm": "fantasy",
+   "kind": "mixed",
+   "sourceFile": "dev/sprite-manifests/XL-REGEN-PROMPTS.md",
+   "sourceSection": "Large sheet fantasy-large-23",
+   "expected": 9,
+   "cells": [
+    {
+     "n": 1,
+     "name": "Performer Legend",
+     "slug": "spr-fantasy-performer-legend",
+     "cue": "Medium or Small Humanoid, Neutral, CR 10 — signature move: Multiattack"
+    },
+    {
+     "n": 2,
+     "name": "Maker (Human)",
+     "slug": "spr-fantasy-maker-human",
+     "cue": "Their tools carry their whole history."
+    },
+    {
+     "n": 3,
+     "name": "Human retired soldier, one-armed (Human) — dark-skinned, runs the town's only proper tavern brawl rules",
+     "slug": "spr-fantasy-human-retired-soldier-one-armed-human-dark-skinned-runs-the-town-s-only-proper-tavern-brawl-rules",
+     "cue": ""
+    },
+    {
+     "n": 4,
+     "name": "Dragonborn temple guard — devout, literal-minded, takes the oath seriously",
+     "slug": "spr-fantasy-dragonborn-temple-guard-devout-literal-minded-takes-the-oath-seriously",
+     "cue": ""
+    },
+    {
+     "n": 5,
+     "name": "Elven herbalist (Elf) — sells cures and, quietly, a few curses",
+     "slug": "spr-fantasy-elven-herbalist-elf-sells-cures-and-quietly-a-few-curses",
+     "cue": ""
+    },
+    {
+     "n": 6,
+     "name": "Deep-Brute Thonot",
+     "slug": "spr-fantasy-deep-brute-thonot",
+     "cue": "Medium Monstrosity, Chaotic Neutral, CR 3 — signature move: Multiattack"
+    },
+    {
+     "n": 7,
+     "name": "Lizardfolk Sovereign",
+     "slug": "spr-fantasy-lizardfolk-sovereign",
+     "cue": "Medium Elemental, Neutral, CR 4 — signature move: Multiattack"
+    },
+    {
+     "n": 8,
+     "name": "Tough",
+     "slug": "spr-fantasy-tough",
+     "cue": "Medium or Small Humanoid, Neutral, CR 0.5 — signature move: Mace"
+    },
+    {
+     "n": 9,
+     "name": "Spy",
+     "slug": "spr-fantasy-spy",
+     "cue": "Medium or Small Humanoid, Neutral, CR 1 — signature move: Shortsword"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-large-24",
+   "realm": "fantasy",
+   "kind": "mixed",
+   "sourceFile": "dev/sprite-manifests/XL-REGEN-PROMPTS.md",
+   "sourceSection": "Large sheet fantasy-large-24",
+   "expected": 9,
+   "cells": [
+    {
+     "n": 1,
+     "name": "Void-Monk Zerth",
+     "slug": "spr-fantasy-void-monk-zerth",
+     "cue": "Medium Aberration (Gith), Lawful Neutral, CR 5 — signature move: Multiattack"
+    },
+    {
+     "n": 2,
+     "name": "Bandit Deceiver",
+     "slug": "spr-fantasy-bandit-deceiver",
+     "cue": "Medium or Small Humanoid, Neutral, CR 7 — signature move: Multiattack"
+    },
+    {
+     "n": 3,
+     "name": "Void-Monk Psion",
+     "slug": "spr-fantasy-void-monk-psion",
+     "cue": "Medium Aberration (Gith), Lawful Neutral, CR 12 — signature move: Multiattack"
+    },
+    {
+     "n": 4,
+     "name": "Dryad",
+     "slug": "spr-fantasy-dryad",
+     "cue": "Medium Fey, Neutral, CR 1 — signature move: Multiattack"
+    },
+    {
+     "n": 5,
+     "name": "Outfitter (Elf)",
+     "slug": "spr-fantasy-outfitter-elf",
+     "cue": "Keeps the means of travel and trade running; eyes on the weather."
+    },
+    {
+     "n": 6,
+     "name": "Healer (Human)",
+     "slug": "spr-fantasy-healer-human",
+     "cue": "Trusted, and overburdened by it."
+    },
+    {
+     "n": 7,
+     "name": "Human midwife's apprentice (Human) — dark-skinned, learning the trade from her mother",
+     "slug": "spr-fantasy-human-midwife-s-apprentice-human-dark-skinned-learning-the-trade-from-her-mother",
+     "cue": ""
+    },
+    {
+     "n": 8,
+     "name": "Vampire Spawn",
+     "slug": "spr-fantasy-vampire-spawn",
+     "cue": "Medium or Small Undead, Neutral Evil, CR 5 — signature move: Multiattack"
+    },
+    {
+     "n": 9,
+     "name": "Wraith",
+     "slug": "spr-fantasy-wraith",
+     "cue": "Medium Undead, Neutral Evil, CR 5 — signature move: Life Drain"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-large-25",
+   "realm": "fantasy",
+   "kind": "mixed",
+   "sourceFile": "dev/sprite-manifests/XL-REGEN-PROMPTS.md",
+   "sourceSection": "Large sheet fantasy-large-25",
+   "expected": 9,
+   "cells": [
+    {
+     "n": 1,
+     "name": "Bandit Crime Lord",
+     "slug": "spr-fantasy-bandit-crime-lord",
+     "cue": "Medium or Small Humanoid, Neutral, CR 11 — signature move: Multiattack"
+    },
+    {
+     "n": 2,
+     "name": "Cultist",
+     "slug": "spr-fantasy-cultist",
+     "cue": "Medium or Small Humanoid, Neutral, CR 0.125 — signature move: Ritual Sickle"
+    },
+    {
+     "n": 3,
+     "name": "Performer",
+     "slug": "spr-fantasy-performer",
+     "cue": "Medium or Small Humanoid, Neutral, CR 0.5 — signature move: Shortsword"
+    },
+    {
+     "n": 4,
+     "name": "Road-guard (Elf)",
+     "slug": "spr-fantasy-road-guard-elf",
+     "cue": "Wary of the road; values a good pair of boots."
+    },
+    {
+     "n": 5,
+     "name": "Elven archivist — keeper of a library older than the town around it",
+     "slug": "spr-fantasy-elven-archivist-keeper-of-a-library-older-than-the-town-around-it",
+     "cue": ""
+    },
+    {
+     "n": 6,
+     "name": "Recruiter (Orc)",
+     "slug": "spr-fantasy-recruiter-orc",
+     "cue": "Charisma aimed at the desperate; sells belonging."
+    },
+    {
+     "n": 7,
+     "name": "Outsider (Tiefling)",
+     "slug": "spr-fantasy-outsider-tiefling",
+     "cue": "Chose to stay here; the reasons stay unclear."
+    },
+    {
+     "n": 8,
+     "name": "Darkmantle",
+     "slug": "spr-fantasy-darkmantle",
+     "cue": "Small Aberration, Unaligned, CR 0.5 — signature move: Crush"
+    },
+    {
+     "n": 9,
+     "name": "Noble",
+     "slug": "spr-fantasy-noble",
+     "cue": "Medium or Small Humanoid, Neutral, CR 0.125 — signature move: Rapier"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-large-26",
+   "realm": "fantasy",
+   "kind": "mixed",
+   "sourceFile": "dev/sprite-manifests/XL-REGEN-PROMPTS.md",
+   "sourceSection": "Large sheet fantasy-large-26",
+   "expected": 9,
+   "cells": [
+    {
+     "n": 1,
+     "name": "Bandit Captain",
+     "slug": "spr-fantasy-bandit-captain",
+     "cue": "Medium or Small Humanoid, Neutral, CR 2 — signature move: Multiattack"
+    },
+    {
+     "n": 2,
+     "name": "Feeder (Tiefling)",
+     "slug": "spr-fantasy-feeder-tiefling",
+     "cue": "Up before dawn; holds the neighborhood's gossip."
+    },
+    {
+     "n": 3,
+     "name": "Elven fletcher — every arrow leaves her stall true",
+     "slug": "spr-fantasy-elven-fletcher-every-arrow-leaves-her-stall-true",
+     "cue": ""
+    },
+    {
+     "n": 4,
+     "name": "Doppelganger",
+     "slug": "spr-fantasy-doppelganger",
+     "cue": "Medium Monstrosity, Neutral, CR 3 — signature move: Multiattack"
+    },
+    {
+     "n": 5,
+     "name": "Harpy Matriarch",
+     "slug": "spr-fantasy-harpy-matriarch",
+     "cue": "Medium Monstrosity, Chaotic Evil, CR 3 — signature move: Multiattack"
+    },
+    {
+     "n": 6,
+     "name": "Satyr Revelmaster",
+     "slug": "spr-fantasy-satyr-revelmaster",
+     "cue": "Medium Fey, Chaotic Neutral, CR 6 — signature move: Multiattack"
+    },
+    {
+     "n": 7,
+     "name": "Mind-Thief",
+     "slug": "spr-fantasy-mind-thief",
+     "cue": "Medium Aberration, Lawful Evil, CR 7 — signature move: Tentacles"
+    },
+    {
+     "n": 8,
+     "name": "Tiefling blacksmith's apprentice — still learning, already better than most journeymen",
+     "slug": "spr-fantasy-tiefling-blacksmith-s-apprentice-still-learning-already-better-than-most-journeymen",
+     "cue": ""
+    },
+    {
+     "n": 9,
+     "name": "Secret-scholar (Human)",
+     "slug": "spr-fantasy-secret-scholar-human",
+     "cue": "Hoards the secret knowledge; sees others as material."
+    }
+   ]
+  },
+  {
+   "id": "fantasy-large-27",
+   "realm": "fantasy",
+   "kind": "mixed",
+   "sourceFile": "dev/sprite-manifests/XL-REGEN-PROMPTS.md",
+   "sourceSection": "Large sheet fantasy-large-27",
+   "expected": 9,
+   "cells": [
+    {
+     "n": 1,
+     "name": "Hippopotamus",
+     "slug": "spr-fantasy-hippopotamus",
+     "cue": "Large Beast, Unaligned, CR 4 — signature move: Multiattack"
+    },
+    {
+     "n": 2,
+     "name": "Lich",
+     "slug": "spr-fantasy-lich",
+     "cue": "Medium Undead (Wizard), Neutral Evil, CR 21 — signature move: Multiattack"
+    },
+    {
+     "n": 3,
+     "name": "Human midwife, elderly — delivered half the village, remembers all of it",
+     "slug": "spr-fantasy-human-midwife-elderly-delivered-half-the-village-remembers-all-of-it",
+     "cue": ""
+    },
+    {
+     "n": 4,
+     "name": "Tough Boss",
+     "slug": "spr-fantasy-tough-boss",
+     "cue": "Medium or Small Humanoid, Neutral, CR 4 — signature move: Multiattack"
+    },
+    {
+     "n": 5,
+     "name": "Troglodyte",
+     "slug": "spr-fantasy-troglodyte",
+     "cue": "Medium Monstrosity, Chaotic Evil, CR 0.25 — signature move: Rend"
+    },
+    {
+     "n": 6,
+     "name": "Gargoyle",
+     "slug": "spr-fantasy-gargoyle",
+     "cue": "Medium Elemental, Chaotic Evil, CR 2 — signature move: Multiattack"
+    },
+    {
+     "n": 7,
+     "name": "Goblin Hexer",
+     "slug": "spr-fantasy-goblin-hexer",
+     "cue": "Small Fey (Goblinoid), Chaotic Neutral_ _Rare spellcasters among goblin-kind. They use dark, debilitating magic to control the battlefield while hiding behind their allies., CR 3 — signature move: Multiattack"
+    },
+    {
+     "n": 8,
+     "name": "Magnate (Halfling)",
+     "slug": "spr-fantasy-magnate-halfling",
+     "cue": "Sees every interaction as a transaction."
+    },
+    {
+     "n": 9,
+     "name": "Tiefling fortune-teller — half the town swears by her, half crosses the street",
+     "slug": "spr-fantasy-tiefling-fortune-teller-half-the-town-swears-by-her-half-crosses-the-street",
+     "cue": ""
+    }
+   ]
+  },
+  {
+   "id": "fantasy-large-28",
+   "realm": "fantasy",
+   "kind": "mixed",
+   "sourceFile": "dev/sprite-manifests/XL-REGEN-PROMPTS.md",
+   "sourceSection": "Large sheet fantasy-large-28",
+   "expected": 9,
+   "cells": [
+    {
+     "n": 1,
+     "name": "Winged Kobold (Urd)",
+     "slug": "spr-fantasy-winged-kobold-urd",
+     "cue": "Small Humanoid, Lawful Evil, CR 0.25 — signature move: Dagger"
+    },
+    {
+     "n": 2,
+     "name": "Domestic animal — A single donkey — stubborn, sure-footed, outlives every horse on the property.",
+     "slug": "spr-fantasy-domestic-animal-a-single-donkey-stubborn-sure-footed-outlives-every-horse-on-the-property",
+     "cue": ""
+    },
+    {
+     "n": 3,
+     "name": "Elven scribe (Elf) — copies manuscripts for the town archive, meticulous to a fault",
+     "slug": "spr-fantasy-elven-scribe-elf-copies-manuscripts-for-the-town-archive-meticulous-to-a-fault",
+     "cue": ""
+    },
+    {
+     "n": 4,
+     "name": "Mule",
+     "slug": "spr-fantasy-mule",
+     "cue": "Medium Beast, Unaligned, CR 0.125 — signature move: Hooves"
+    },
+    {
+     "n": 5,
+     "name": "Night Hag",
+     "slug": "spr-fantasy-night-hag",
+     "cue": "Medium Fiend, Neutral Evil, CR 5 — signature move: Multiattack"
+    },
+    {
+     "n": 6,
+     "name": "Saber-Toothed Tiger",
+     "slug": "spr-fantasy-saber-toothed-tiger",
+     "cue": "Large Beast, Unaligned, CR 2 — signature move: Multiattack"
+    },
+    {
+     "n": 7,
+     "name": "Spined Devil",
+     "slug": "spr-fantasy-spined-devil",
+     "cue": "Small Fiend (Devil), Lawful Evil, CR 2 — signature move: Multiattack"
+    },
+    {
+     "n": 8,
+     "name": "Wild animal — A single elk — grazes the tree line at dawn, gone before full light",
+     "slug": "spr-fantasy-wild-animal-a-single-elk-grazes-the-tree-line-at-dawn-gone-before-full-light",
+     "cue": ""
+    },
+    {
+     "n": 9,
+     "name": "Gnomish tinkerer — clockwork contraptions that mostly work",
+     "slug": "spr-fantasy-gnomish-tinkerer-clockwork-contraptions-that-mostly-work",
+     "cue": ""
+    }
+   ]
+  },
+  {
+   "id": "fantasy-large-29",
+   "realm": "fantasy",
+   "kind": "mixed",
+   "sourceFile": "dev/sprite-manifests/XL-REGEN-PROMPTS.md",
+   "sourceSection": "Large sheet fantasy-large-29",
+   "expected": 9,
+   "cells": [
+    {
+     "n": 1,
+     "name": "Jackalwere",
+     "slug": "spr-fantasy-jackalwere",
+     "cue": "Small Fiend, Chaotic Evil, CR 0.5 — signature move: Multiattack"
+    },
+    {
+     "n": 2,
+     "name": "Magma Mephit",
+     "slug": "spr-fantasy-magma-mephit",
+     "cue": "Small Elemental, Neutral Evil, CR 0.5 — signature move: Claw"
+    },
+    {
+     "n": 3,
+     "name": "Lantern-Sage",
+     "slug": "spr-fantasy-lantern-sage",
+     "cue": "Small Aberration, Lawful Good, CR 0.125 — signature move: Tentacle"
+    },
+    {
+     "n": 4,
+     "name": "Cockatrice",
+     "slug": "spr-fantasy-cockatrice",
+     "cue": "Small Monstrosity, Unaligned, CR 0.5 — signature move: Petrifying Bite"
+    },
+    {
+     "n": 5,
+     "name": "Ice Mephit",
+     "slug": "spr-fantasy-ice-mephit",
+     "cue": "Small Elemental, Neutral Evil, CR 0.5 — signature move: Claw"
+    },
+    {
+     "n": 6,
+     "name": "Vampire Familiar",
+     "slug": "spr-fantasy-vampire-familiar",
+     "cue": "Medium or Small Humanoid, Neutral Evil, CR 3 — signature move: Multiattack"
+    },
+    {
+     "n": 7,
+     "name": "Dungeon animal — Sole survivor packhorse — the last of a caravan's animals, malnourished, still saddled",
+     "slug": "spr-fantasy-dungeon-animal-sole-survivor-packhorse-the-last-of-a-caravan-s-animals-malnourished-still-saddled",
+     "cue": ""
+    },
+    {
+     "n": 8,
+     "name": "Ochre Jelly",
+     "slug": "spr-fantasy-ochre-jelly",
+     "cue": "Large Ooze, Unaligned, CR 2 — signature move: Pseudopod"
+    },
+    {
+     "n": 9,
+     "name": "Black Pudding",
+     "slug": "spr-fantasy-black-pudding",
+     "cue": "Large Ooze, Unaligned, CR 4 — signature move: Dissolving Pseudopod"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-large-30",
+   "realm": "fantasy",
+   "kind": "mixed",
+   "sourceFile": "dev/sprite-manifests/XL-REGEN-PROMPTS.md",
+   "sourceSection": "Large sheet fantasy-large-30",
+   "expected": 9,
+   "cells": [
+    {
+     "n": 1,
+     "name": "Bullywug Bog Sage (Mud Lord)",
+     "slug": "spr-fantasy-bullywug-bog-sage-mud-lord",
+     "cue": "Medium Fey, Neutral, CR 4 — signature move: Multiattack"
+    },
+    {
+     "n": 2,
+     "name": "Troll Limb",
+     "slug": "spr-fantasy-troll-limb",
+     "cue": "Small Giant, Chaotic Evil, CR 0.5 — signature move: Rend"
+    },
+    {
+     "n": 3,
+     "name": "Guilt-Stained Vagrant",
+     "slug": "spr-fantasy-guilt-stained-vagrant",
+     "cue": "CR 0 — signature move: Knife"
+    },
+    {
+     "n": 4,
+     "name": "Green Hag",
+     "slug": "spr-fantasy-green-hag",
+     "cue": "Medium Fey, Neutral Evil, CR 3 — signature move: Multiattack"
+    },
+    {
+     "n": 5,
+     "name": "Domestic animal — Working beast (a single ox) — earns its feed, patient, and spooks true.",
+     "slug": "spr-fantasy-domestic-animal-working-beast-a-single-ox-earns-its-feed-patient-and-spooks-true",
+     "cue": ""
+    },
+    {
+     "n": 6,
+     "name": "Azer Sentinel",
+     "slug": "spr-fantasy-azer-sentinel",
+     "cue": "Medium Elemental, Lawful Neutral, CR 2 — signature move: Burning Hammer"
+    },
+    {
+     "n": 7,
+     "name": "Ankheg",
+     "slug": "spr-fantasy-ankheg",
+     "cue": "Large Monstrosity, Unaligned, CR 2 — signature move: Bite"
+    },
+    {
+     "n": 8,
+     "name": "Sea Hag",
+     "slug": "spr-fantasy-sea-hag",
+     "cue": "Medium Fey, Chaotic Evil, CR 2 — signature move: Claw"
+    },
+    {
+     "n": 9,
+     "name": "Psychic Gray Ooze",
+     "slug": "spr-fantasy-psychic-gray-ooze",
+     "cue": "Medium Ooze, Unaligned, CR 1 — signature move: Pseudopod"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-large-31",
+   "realm": "fantasy",
+   "kind": "mixed",
+   "sourceFile": "dev/sprite-manifests/XL-REGEN-PROMPTS.md",
+   "sourceSection": "Large sheet fantasy-large-31",
+   "expected": 4,
+   "cells": [
+    {
+     "n": 1,
+     "name": "Clothier (Dwarf)",
+     "slug": "spr-fantasy-clothier-dwarf",
+     "cue": "Notices the cut and quality of everyone's clothes."
+    },
+    {
+     "n": 2,
+     "name": "Goliath quarry foreman — the only one strong enough to reset a slipped cart alone",
+     "slug": "spr-fantasy-goliath-quarry-foreman-the-only-one-strong-enough-to-reset-a-slipped-cart-alone",
+     "cue": ""
+    },
+    {
+     "n": 3,
+     "name": "Swarm of Stirges",
+     "slug": "spr-fantasy-swarm-of-stirges",
+     "cue": "Medium Swarm of Tiny Monstrosities, Unaligned, CR 2 — signature move: Swarm of Proboscises"
+    },
+    {
+     "n": 4,
+     "name": "Giant Boar",
+     "slug": "spr-fantasy-giant-boar",
+     "cue": "Large Beast, Unaligned, CR 2 — signature move: Gore"
+    }
+   ]
+  },
+  {
+   "id": "pc-large-1",
+   "realm": "pc",
+   "kind": "pc",
+   "sourceFile": "dev/sprite-manifests/XL-REGEN-PROMPTS.md",
+   "sourceSection": "Large sheet pc-large-1",
+   "expected": 9,
+   "cells": [
+    {
+     "n": 1,
+     "name": "Goliath Fighter (Male)",
+     "slug": "spr-pc-goliath-fighter-male",
+     "cue": "braced combat stance, weapon mid-swing, shield up"
+    },
+    {
+     "n": 2,
+     "name": "Goliath Paladin (Female)",
+     "slug": "spr-pc-goliath-paladin-female",
+     "cue": "sword raised in an oath-gesture, holy light along the blade"
+    },
+    {
+     "n": 3,
+     "name": "Goliath Sorcerer (Male)",
+     "slug": "spr-pc-goliath-sorcerer-male",
+     "cue": "wild arcane energy erupting from open palms, hair/robe caught in the surge"
+    },
+    {
+     "n": 4,
+     "name": "Goliath Wizard (Male)",
+     "slug": "spr-pc-goliath-wizard-male",
+     "cue": "mid-spellcast, spellbook in one hand, arcane sigil forming at the other"
+    },
+    {
+     "n": 5,
+     "name": "Goliath Rogue (Male)",
+     "slug": "spr-pc-goliath-rogue-male",
+     "cue": "crouched mid-strike from stealth, dual daggers, sly grin"
+    },
+    {
+     "n": 6,
+     "name": "Goliath Ranger (Male)",
+     "slug": "spr-pc-goliath-ranger-male",
+     "cue": "bow drawn full-pull, aiming, a hunting companion implied at the flank"
+    },
+    {
+     "n": 7,
+     "name": "Goliath Barbarian (Male)",
+     "slug": "spr-pc-goliath-barbarian-male",
+     "cue": "mid-rage, greataxe raised overhead, roaring"
+    },
+    {
+     "n": 8,
+     "name": "Goliath Druid (Male)",
+     "slug": "spr-pc-goliath-druid-male",
+     "cue": "mid-shapeshift or spellcasting, wild energy crackling around raised hands"
+    },
+    {
+     "n": 9,
+     "name": "Goliath Barbarian (Female)",
+     "slug": "spr-pc-goliath-barbarian-female",
+     "cue": "mid-rage, greataxe raised overhead, roaring"
+    }
+   ]
+  },
+  {
+   "id": "pc-large-2",
+   "realm": "pc",
+   "kind": "pc",
+   "sourceFile": "dev/sprite-manifests/XL-REGEN-PROMPTS.md",
+   "sourceSection": "Large sheet pc-large-2",
+   "expected": 9,
+   "cells": [
+    {
+     "n": 1,
+     "name": "Goliath Bard (Male)",
+     "slug": "spr-pc-goliath-bard-male",
+     "cue": "mid-performance, instrument in hand, a spell shimmering off the music"
+    },
+    {
+     "n": 2,
+     "name": "Goliath Warlock (Male)",
+     "slug": "spr-pc-goliath-warlock-male",
+     "cue": "eldritch energy coiling from an outstretched hand, patron's mark glowing"
+    },
+    {
+     "n": 3,
+     "name": "Tiefling Paladin (Male)",
+     "slug": "spr-pc-tiefling-paladin-male",
+     "cue": "sword raised in an oath-gesture, holy light along the blade"
+    },
+    {
+     "n": 4,
+     "name": "Goliath Cleric (Male)",
+     "slug": "spr-pc-goliath-cleric-male",
+     "cue": "channeling divine energy, holy symbol raised, radiant light at the hand"
+    },
+    {
+     "n": 5,
+     "name": "Goliath Sorcerer (Female)",
+     "slug": "spr-pc-goliath-sorcerer-female",
+     "cue": "wild arcane energy erupting from open palms, hair/robe caught in the surge"
+    },
+    {
+     "n": 6,
+     "name": "Tiefling Paladin (Female)",
+     "slug": "spr-pc-tiefling-paladin-female",
+     "cue": "sword raised in an oath-gesture, holy light along the blade"
+    },
+    {
+     "n": 7,
+     "name": "Dragonborn Barbarian (Male)",
+     "slug": "spr-pc-dragonborn-barbarian-male",
+     "cue": "mid-rage, greataxe raised overhead, roaring"
+    },
+    {
+     "n": 8,
+     "name": "Dragonborn Cleric (Female)",
+     "slug": "spr-pc-dragonborn-cleric-female",
+     "cue": "channeling divine energy, holy symbol raised, radiant light at the hand"
+    },
+    {
+     "n": 9,
+     "name": "Orc Ranger (Male)",
+     "slug": "spr-pc-orc-ranger-male",
+     "cue": "bow drawn full-pull, aiming, a hunting companion implied at the flank"
+    }
+   ]
+  },
+  {
+   "id": "pc-large-3",
+   "realm": "pc",
+   "kind": "pc",
+   "sourceFile": "dev/sprite-manifests/XL-REGEN-PROMPTS.md",
+   "sourceSection": "Large sheet pc-large-3",
+   "expected": 9,
+   "cells": [
+    {
+     "n": 1,
+     "name": "Goliath Bard (Female)",
+     "slug": "spr-pc-goliath-bard-female",
+     "cue": "mid-performance, instrument in hand, a spell shimmering off the music"
+    },
+    {
+     "n": 2,
+     "name": "Goliath Ranger (Female)",
+     "slug": "spr-pc-goliath-ranger-female",
+     "cue": "bow drawn full-pull, aiming, a hunting companion implied at the flank"
+    },
+    {
+     "n": 3,
+     "name": "Dragonborn Cleric (Male)",
+     "slug": "spr-pc-dragonborn-cleric-male",
+     "cue": "channeling divine energy, holy symbol raised, radiant light at the hand"
+    },
+    {
+     "n": 4,
+     "name": "Dragonborn Paladin (Male)",
+     "slug": "spr-pc-dragonborn-paladin-male",
+     "cue": "sword raised in an oath-gesture, holy light along the blade"
+    },
+    {
+     "n": 5,
+     "name": "Dragonborn Paladin (Female)",
+     "slug": "spr-pc-dragonborn-paladin-female",
+     "cue": "sword raised in an oath-gesture, holy light along the blade"
+    },
+    {
+     "n": 6,
+     "name": "Orc Sorcerer (Male)",
+     "slug": "spr-pc-orc-sorcerer-male",
+     "cue": "wild arcane energy erupting from open palms, hair/robe caught in the surge"
+    },
+    {
+     "n": 7,
+     "name": "Goliath Fighter (Female)",
+     "slug": "spr-pc-goliath-fighter-female",
+     "cue": "braced combat stance, weapon mid-swing, shield up"
+    },
+    {
+     "n": 8,
+     "name": "Goliath Monk (Male)",
+     "slug": "spr-pc-goliath-monk-male",
+     "cue": "mid-flying-kick or braced martial-arts stance, fists wrapped, focused"
+    },
+    {
+     "n": 9,
+     "name": "Dragonborn Bard (Male)",
+     "slug": "spr-pc-dragonborn-bard-male",
+     "cue": "mid-performance, instrument in hand, a spell shimmering off the music"
+    }
+   ]
+  },
+  {
+   "id": "pc-large-4",
+   "realm": "pc",
+   "kind": "pc",
+   "sourceFile": "dev/sprite-manifests/XL-REGEN-PROMPTS.md",
+   "sourceSection": "Large sheet pc-large-4",
+   "expected": 9,
+   "cells": [
+    {
+     "n": 1,
+     "name": "Dragonborn Ranger (Female)",
+     "slug": "spr-pc-dragonborn-ranger-female",
+     "cue": "bow drawn full-pull, aiming, a hunting companion implied at the flank"
+    },
+    {
+     "n": 2,
+     "name": "Goliath Monk (Female)",
+     "slug": "spr-pc-goliath-monk-female",
+     "cue": "mid-flying-kick or braced martial-arts stance, fists wrapped, focused"
+    },
+    {
+     "n": 3,
+     "name": "Goliath Warlock (Female)",
+     "slug": "spr-pc-goliath-warlock-female",
+     "cue": "eldritch energy coiling from an outstretched hand, patron's mark glowing"
+    },
+    {
+     "n": 4,
+     "name": "Dragonborn Fighter (Male)",
+     "slug": "spr-pc-dragonborn-fighter-male",
+     "cue": "braced combat stance, weapon mid-swing, shield up"
+    },
+    {
+     "n": 5,
+     "name": "Orc Warlock (Male)",
+     "slug": "spr-pc-orc-warlock-male",
+     "cue": "eldritch energy coiling from an outstretched hand, patron's mark glowing"
+    },
+    {
+     "n": 6,
+     "name": "Dragonborn Druid (Male)",
+     "slug": "spr-pc-dragonborn-druid-male",
+     "cue": "mid-shapeshift or spellcasting, wild energy crackling around raised hands"
+    },
+    {
+     "n": 7,
+     "name": "Dragonborn Rogue (Male)",
+     "slug": "spr-pc-dragonborn-rogue-male",
+     "cue": "crouched mid-strike from stealth, dual daggers, sly grin"
+    },
+    {
+     "n": 8,
+     "name": "Goliath Cleric (Female)",
+     "slug": "spr-pc-goliath-cleric-female",
+     "cue": "channeling divine energy, holy symbol raised, radiant light at the hand"
+    },
+    {
+     "n": 9,
+     "name": "Goliath Rogue (Female)",
+     "slug": "spr-pc-goliath-rogue-female",
+     "cue": "crouched mid-strike from stealth, dual daggers, sly grin"
+    }
+   ]
+  },
+  {
+   "id": "pc-large-5",
+   "realm": "pc",
+   "kind": "pc",
+   "sourceFile": "dev/sprite-manifests/XL-REGEN-PROMPTS.md",
+   "sourceSection": "Large sheet pc-large-5",
+   "expected": 9,
+   "cells": [
+    {
+     "n": 1,
+     "name": "Human Barbarian (Female)",
+     "slug": "spr-pc-human-barbarian-female",
+     "cue": "mid-rage, greataxe raised overhead, roaring"
+    },
+    {
+     "n": 2,
+     "name": "Tiefling Wizard (Male)",
+     "slug": "spr-pc-tiefling-wizard-male",
+     "cue": "mid-spellcast, spellbook in one hand, arcane sigil forming at the other"
+    },
+    {
+     "n": 3,
+     "name": "Tiefling Monk (Male)",
+     "slug": "spr-pc-tiefling-monk-male",
+     "cue": "mid-flying-kick or braced martial-arts stance, fists wrapped, focused"
+    },
+    {
+     "n": 4,
+     "name": "Dragonborn Barbarian (Female)",
+     "slug": "spr-pc-dragonborn-barbarian-female",
+     "cue": "mid-rage, greataxe raised overhead, roaring"
+    },
+    {
+     "n": 5,
+     "name": "Dragonborn Fighter (Female)",
+     "slug": "spr-pc-dragonborn-fighter-female",
+     "cue": "braced combat stance, weapon mid-swing, shield up"
+    },
+    {
+     "n": 6,
+     "name": "Goliath Druid (Female)",
+     "slug": "spr-pc-goliath-druid-female",
+     "cue": "mid-shapeshift or spellcasting, wild energy crackling around raised hands"
+    },
+    {
+     "n": 7,
+     "name": "Goliath Wizard (Female)",
+     "slug": "spr-pc-goliath-wizard-female",
+     "cue": "mid-spellcast, spellbook in one hand, arcane sigil forming at the other"
+    },
+    {
+     "n": 8,
+     "name": "Orc Wizard (Male)",
+     "slug": "spr-pc-orc-wizard-male",
+     "cue": "mid-spellcast, spellbook in one hand, arcane sigil forming at the other"
+    },
+    {
+     "n": 9,
+     "name": "Tiefling Sorcerer (Male)",
+     "slug": "spr-pc-tiefling-sorcerer-male",
+     "cue": "wild arcane energy erupting from open palms, hair/robe caught in the surge"
+    }
+   ]
+  },
+  {
+   "id": "pc-large-6",
+   "realm": "pc",
+   "kind": "pc",
+   "sourceFile": "dev/sprite-manifests/XL-REGEN-PROMPTS.md",
+   "sourceSection": "Large sheet pc-large-6",
+   "expected": 9,
+   "cells": [
+    {
+     "n": 1,
+     "name": "Tiefling Barbarian (Male)",
+     "slug": "spr-pc-tiefling-barbarian-male",
+     "cue": "mid-rage, greataxe raised overhead, roaring"
+    },
+    {
+     "n": 2,
+     "name": "Dragonborn Druid (Female)",
+     "slug": "spr-pc-dragonborn-druid-female",
+     "cue": "mid-shapeshift or spellcasting, wild energy crackling around raised hands"
+    },
+    {
+     "n": 3,
+     "name": "Orc Rogue (Male)",
+     "slug": "spr-pc-orc-rogue-male",
+     "cue": "crouched mid-strike from stealth, dual daggers, sly grin"
+    },
+    {
+     "n": 4,
+     "name": "Tiefling Warlock (Male)",
+     "slug": "spr-pc-tiefling-warlock-male",
+     "cue": "eldritch energy coiling from an outstretched hand, patron's mark glowing"
+    },
+    {
+     "n": 5,
+     "name": "Dragonborn Bard (Female)",
+     "slug": "spr-pc-dragonborn-bard-female",
+     "cue": "mid-performance, instrument in hand, a spell shimmering off the music"
+    },
+    {
+     "n": 6,
+     "name": "Dragonborn Monk (Male)",
+     "slug": "spr-pc-dragonborn-monk-male",
+     "cue": "mid-flying-kick or braced martial-arts stance, fists wrapped, focused"
+    },
+    {
+     "n": 7,
+     "name": "Human Barbarian (Male)",
+     "slug": "spr-pc-human-barbarian-male",
+     "cue": "mid-rage, greataxe raised overhead, roaring"
+    },
+    {
+     "n": 8,
+     "name": "Tiefling Rogue (Male)",
+     "slug": "spr-pc-tiefling-rogue-male",
+     "cue": "crouched mid-strike from stealth, dual daggers, sly grin"
+    },
+    {
+     "n": 9,
+     "name": "Orc Barbarian (Male)",
+     "slug": "spr-pc-orc-barbarian-male",
+     "cue": "mid-rage, greataxe raised overhead, roaring"
+    }
+   ]
+  },
+  {
+   "id": "pc-large-7",
+   "realm": "pc",
+   "kind": "pc",
+   "sourceFile": "dev/sprite-manifests/XL-REGEN-PROMPTS.md",
+   "sourceSection": "Large sheet pc-large-7",
+   "expected": 9,
+   "cells": [
+    {
+     "n": 1,
+     "name": "Tiefling Druid (Male)",
+     "slug": "spr-pc-tiefling-druid-male",
+     "cue": "mid-shapeshift or spellcasting, wild energy crackling around raised hands"
+    },
+    {
+     "n": 2,
+     "name": "Tiefling Fighter (Female)",
+     "slug": "spr-pc-tiefling-fighter-female",
+     "cue": "braced combat stance, weapon mid-swing, shield up"
+    },
+    {
+     "n": 3,
+     "name": "Orc Paladin (Male)",
+     "slug": "spr-pc-orc-paladin-male",
+     "cue": "sword raised in an oath-gesture, holy light along the blade"
+    },
+    {
+     "n": 4,
+     "name": "Dragonborn Monk (Female)",
+     "slug": "spr-pc-dragonborn-monk-female",
+     "cue": "mid-flying-kick or braced martial-arts stance, fists wrapped, focused"
+    },
+    {
+     "n": 5,
+     "name": "Orc Ranger (Female)",
+     "slug": "spr-pc-orc-ranger-female",
+     "cue": "bow drawn full-pull, aiming, a hunting companion implied at the flank"
+    },
+    {
+     "n": 6,
+     "name": "Orc Rogue (Female)",
+     "slug": "spr-pc-orc-rogue-female",
+     "cue": "crouched mid-strike from stealth, dual daggers, sly grin"
+    },
+    {
+     "n": 7,
+     "name": "Orc Wizard (Female)",
+     "slug": "spr-pc-orc-wizard-female",
+     "cue": "mid-spellcast, spellbook in one hand, arcane sigil forming at the other"
+    },
+    {
+     "n": 8,
+     "name": "Dragonborn Wizard (Male)",
+     "slug": "spr-pc-dragonborn-wizard-male",
+     "cue": "mid-spellcast, spellbook in one hand, arcane sigil forming at the other"
+    },
+    {
+     "n": 9,
+     "name": "Tiefling Fighter (Male)",
+     "slug": "spr-pc-tiefling-fighter-male",
+     "cue": "braced combat stance, weapon mid-swing, shield up"
+    }
+   ]
+  },
+  {
+   "id": "pc-large-8",
+   "realm": "pc",
+   "kind": "pc",
+   "sourceFile": "dev/sprite-manifests/XL-REGEN-PROMPTS.md",
+   "sourceSection": "Large sheet pc-large-8",
+   "expected": 9,
+   "cells": [
+    {
+     "n": 1,
+     "name": "Elf Rogue (Male)",
+     "slug": "spr-pc-elf-rogue-male",
+     "cue": "crouched mid-strike from stealth, dual daggers, sly grin"
+    },
+    {
+     "n": 2,
+     "name": "Orc Barbarian (Female)",
+     "slug": "spr-pc-orc-barbarian-female",
+     "cue": "mid-rage, greataxe raised overhead, roaring"
+    },
+    {
+     "n": 3,
+     "name": "Dragonborn Ranger (Male)",
+     "slug": "spr-pc-dragonborn-ranger-male",
+     "cue": "bow drawn full-pull, aiming, a hunting companion implied at the flank"
+    },
+    {
+     "n": 4,
+     "name": "Tiefling Sorcerer (Female)",
+     "slug": "spr-pc-tiefling-sorcerer-female",
+     "cue": "wild arcane energy erupting from open palms, hair/robe caught in the surge"
+    },
+    {
+     "n": 5,
+     "name": "Orc Druid (Male)",
+     "slug": "spr-pc-orc-druid-male",
+     "cue": "mid-shapeshift or spellcasting, wild energy crackling around raised hands"
+    },
+    {
+     "n": 6,
+     "name": "Human Fighter (Male)",
+     "slug": "spr-pc-human-fighter-male",
+     "cue": "braced combat stance, weapon mid-swing, shield up"
+    },
+    {
+     "n": 7,
+     "name": "Tiefling Barbarian (Female)",
+     "slug": "spr-pc-tiefling-barbarian-female",
+     "cue": "mid-rage, greataxe raised overhead, roaring"
+    },
+    {
+     "n": 8,
+     "name": "Tiefling Cleric (Female)",
+     "slug": "spr-pc-tiefling-cleric-female",
+     "cue": "channeling divine energy, holy symbol raised, radiant light at the hand"
+    },
+    {
+     "n": 9,
+     "name": "Tiefling Druid (Female)",
+     "slug": "spr-pc-tiefling-druid-female",
+     "cue": "mid-shapeshift or spellcasting, wild energy crackling around raised hands"
+    }
+   ]
+  },
+  {
+   "id": "pc-large-9",
+   "realm": "pc",
+   "kind": "pc",
+   "sourceFile": "dev/sprite-manifests/XL-REGEN-PROMPTS.md",
+   "sourceSection": "Large sheet pc-large-9",
+   "expected": 9,
+   "cells": [
+    {
+     "n": 1,
+     "name": "Dragonborn Wizard (Female)",
+     "slug": "spr-pc-dragonborn-wizard-female",
+     "cue": "mid-spellcast, spellbook in one hand, arcane sigil forming at the other"
+    },
+    {
+     "n": 2,
+     "name": "Elf Rogue (Female)",
+     "slug": "spr-pc-elf-rogue-female",
+     "cue": "crouched mid-strike from stealth, dual daggers, sly grin"
+    },
+    {
+     "n": 3,
+     "name": "Tiefling Warlock (Female)",
+     "slug": "spr-pc-tiefling-warlock-female",
+     "cue": "eldritch energy coiling from an outstretched hand, patron's mark glowing"
+    },
+    {
+     "n": 4,
+     "name": "Tiefling Wizard (Female)",
+     "slug": "spr-pc-tiefling-wizard-female",
+     "cue": "mid-spellcast, spellbook in one hand, arcane sigil forming at the other"
+    },
+    {
+     "n": 5,
+     "name": "Orc Bard (Male)",
+     "slug": "spr-pc-orc-bard-male",
+     "cue": "mid-performance, instrument in hand, a spell shimmering off the music"
+    },
+    {
+     "n": 6,
+     "name": "Orc Cleric (Male)",
+     "slug": "spr-pc-orc-cleric-male",
+     "cue": "channeling divine energy, holy symbol raised, radiant light at the hand"
+    },
+    {
+     "n": 7,
+     "name": "Orc Fighter (Male)",
+     "slug": "spr-pc-orc-fighter-male",
+     "cue": "braced combat stance, weapon mid-swing, shield up"
+    },
+    {
+     "n": 8,
+     "name": "Elf Paladin (Male)",
+     "slug": "spr-pc-elf-paladin-male",
+     "cue": "sword raised in an oath-gesture, holy light along the blade"
+    },
+    {
+     "n": 9,
+     "name": "Elf Barbarian (Female)",
+     "slug": "spr-pc-elf-barbarian-female",
+     "cue": "mid-rage, greataxe raised overhead, roaring"
+    }
+   ]
+  },
+  {
+   "id": "pc-large-10",
+   "realm": "pc",
+   "kind": "pc",
+   "sourceFile": "dev/sprite-manifests/XL-REGEN-PROMPTS.md",
+   "sourceSection": "Large sheet pc-large-10",
+   "expected": 9,
+   "cells": [
+    {
+     "n": 1,
+     "name": "Tiefling Bard (Female)",
+     "slug": "spr-pc-tiefling-bard-female",
+     "cue": "mid-performance, instrument in hand, a spell shimmering off the music"
+    },
+    {
+     "n": 2,
+     "name": "Orc Sorcerer (Female)",
+     "slug": "spr-pc-orc-sorcerer-female",
+     "cue": "wild arcane energy erupting from open palms, hair/robe caught in the surge"
+    },
+    {
+     "n": 3,
+     "name": "Orc Warlock (Female)",
+     "slug": "spr-pc-orc-warlock-female",
+     "cue": "eldritch energy coiling from an outstretched hand, patron's mark glowing"
+    },
+    {
+     "n": 4,
+     "name": "Orc Monk (Male)",
+     "slug": "spr-pc-orc-monk-male",
+     "cue": "mid-flying-kick or braced martial-arts stance, fists wrapped, focused"
+    },
+    {
+     "n": 5,
+     "name": "Elf Barbarian (Male)",
+     "slug": "spr-pc-elf-barbarian-male",
+     "cue": "mid-rage, greataxe raised overhead, roaring"
+    },
+    {
+     "n": 6,
+     "name": "Elf Ranger (Female)",
+     "slug": "spr-pc-elf-ranger-female",
+     "cue": "bow drawn full-pull, aiming, a hunting companion implied at the flank"
+    },
+    {
+     "n": 7,
+     "name": "Human Fighter (Female)",
+     "slug": "spr-pc-human-fighter-female",
+     "cue": "braced combat stance, weapon mid-swing, shield up"
+    },
+    {
+     "n": 8,
+     "name": "Dragonborn Sorcerer (Male)",
+     "slug": "spr-pc-dragonborn-sorcerer-male",
+     "cue": "wild arcane energy erupting from open palms, hair/robe caught in the surge"
+    },
+    {
+     "n": 9,
+     "name": "Dragonborn Warlock (Male)",
+     "slug": "spr-pc-dragonborn-warlock-male",
+     "cue": "eldritch energy coiling from an outstretched hand, patron's mark glowing"
+    }
+   ]
+  },
+  {
+   "id": "pc-large-11",
+   "realm": "pc",
+   "kind": "pc",
+   "sourceFile": "dev/sprite-manifests/XL-REGEN-PROMPTS.md",
+   "sourceSection": "Large sheet pc-large-11",
+   "expected": 9,
+   "cells": [
+    {
+     "n": 1,
+     "name": "Human Rogue (Male)",
+     "slug": "spr-pc-human-rogue-male",
+     "cue": "crouched mid-strike from stealth, dual daggers, sly grin"
+    },
+    {
+     "n": 2,
+     "name": "Tiefling Bard (Male)",
+     "slug": "spr-pc-tiefling-bard-male",
+     "cue": "mid-performance, instrument in hand, a spell shimmering off the music"
+    },
+    {
+     "n": 3,
+     "name": "Tiefling Cleric (Male)",
+     "slug": "spr-pc-tiefling-cleric-male",
+     "cue": "channeling divine energy, holy symbol raised, radiant light at the hand"
+    },
+    {
+     "n": 4,
+     "name": "Elf Paladin (Female)",
+     "slug": "spr-pc-elf-paladin-female",
+     "cue": "sword raised in an oath-gesture, holy light along the blade"
+    },
+    {
+     "n": 5,
+     "name": "Elf Ranger (Male)",
+     "slug": "spr-pc-elf-ranger-male",
+     "cue": "bow drawn full-pull, aiming, a hunting companion implied at the flank"
+    },
+    {
+     "n": 6,
+     "name": "Elf Wizard (Male)",
+     "slug": "spr-pc-elf-wizard-male",
+     "cue": "mid-spellcast, spellbook in one hand, arcane sigil forming at the other"
+    },
+    {
+     "n": 7,
+     "name": "Tiefling Monk (Female)",
+     "slug": "spr-pc-tiefling-monk-female",
+     "cue": "mid-flying-kick or braced martial-arts stance, fists wrapped, focused"
+    },
+    {
+     "n": 8,
+     "name": "Tiefling Rogue (Female)",
+     "slug": "spr-pc-tiefling-rogue-female",
+     "cue": "crouched mid-strike from stealth, dual daggers, sly grin"
+    },
+    {
+     "n": 9,
+     "name": "Dragonborn Rogue (Female)",
+     "slug": "spr-pc-dragonborn-rogue-female",
+     "cue": "crouched mid-strike from stealth, dual daggers, sly grin"
+    }
+   ]
+  },
+  {
+   "id": "pc-large-12",
+   "realm": "pc",
+   "kind": "pc",
+   "sourceFile": "dev/sprite-manifests/XL-REGEN-PROMPTS.md",
+   "sourceSection": "Large sheet pc-large-12",
+   "expected": 9,
+   "cells": [
+    {
+     "n": 1,
+     "name": "Human Ranger (Male)",
+     "slug": "spr-pc-human-ranger-male",
+     "cue": "bow drawn full-pull, aiming, a hunting companion implied at the flank"
+    },
+    {
+     "n": 2,
+     "name": "Elf Warlock (Male)",
+     "slug": "spr-pc-elf-warlock-male",
+     "cue": "eldritch energy coiling from an outstretched hand, patron's mark glowing"
+    },
+    {
+     "n": 3,
+     "name": "Elf Sorcerer (Male)",
+     "slug": "spr-pc-elf-sorcerer-male",
+     "cue": "wild arcane energy erupting from open palms, hair/robe caught in the surge"
+    },
+    {
+     "n": 4,
+     "name": "Orc Druid (Female)",
+     "slug": "spr-pc-orc-druid-female",
+     "cue": "mid-shapeshift or spellcasting, wild energy crackling around raised hands"
+    },
+    {
+     "n": 5,
+     "name": "Dragonborn Sorcerer (Female)",
+     "slug": "spr-pc-dragonborn-sorcerer-female",
+     "cue": "wild arcane energy erupting from open palms, hair/robe caught in the surge"
+    },
+    {
+     "n": 6,
+     "name": "Dragonborn Warlock (Female)",
+     "slug": "spr-pc-dragonborn-warlock-female",
+     "cue": "eldritch energy coiling from an outstretched hand, patron's mark glowing"
+    },
+    {
+     "n": 7,
+     "name": "Tiefling Ranger (Male)",
+     "slug": "spr-pc-tiefling-ranger-male",
+     "cue": "bow drawn full-pull, aiming, a hunting companion implied at the flank"
+    },
+    {
+     "n": 8,
+     "name": "Elf Monk (Male)",
+     "slug": "spr-pc-elf-monk-male",
+     "cue": "mid-flying-kick or braced martial-arts stance, fists wrapped, focused"
+    },
+    {
+     "n": 9,
+     "name": "Orc Cleric (Female)",
+     "slug": "spr-pc-orc-cleric-female",
+     "cue": "channeling divine energy, holy symbol raised, radiant light at the hand"
+    }
+   ]
+  },
+  {
+   "id": "pc-large-13",
+   "realm": "pc",
+   "kind": "pc",
+   "sourceFile": "dev/sprite-manifests/XL-REGEN-PROMPTS.md",
+   "sourceSection": "Large sheet pc-large-13",
+   "expected": 9,
+   "cells": [
+    {
+     "n": 1,
+     "name": "Orc Fighter (Female)",
+     "slug": "spr-pc-orc-fighter-female",
+     "cue": "braced combat stance, weapon mid-swing, shield up"
+    },
+    {
+     "n": 2,
+     "name": "Orc Paladin (Female)",
+     "slug": "spr-pc-orc-paladin-female",
+     "cue": "sword raised in an oath-gesture, holy light along the blade"
+    },
+    {
+     "n": 3,
+     "name": "Human Ranger (Female)",
+     "slug": "spr-pc-human-ranger-female",
+     "cue": "bow drawn full-pull, aiming, a hunting companion implied at the flank"
+    },
+    {
+     "n": 4,
+     "name": "Human Rogue (Female)",
+     "slug": "spr-pc-human-rogue-female",
+     "cue": "crouched mid-strike from stealth, dual daggers, sly grin"
+    },
+    {
+     "n": 5,
+     "name": "Human Monk (Male)",
+     "slug": "spr-pc-human-monk-male",
+     "cue": "mid-flying-kick or braced martial-arts stance, fists wrapped, focused"
+    },
+    {
+     "n": 6,
+     "name": "Elf Fighter (Male)",
+     "slug": "spr-pc-elf-fighter-male",
+     "cue": "braced combat stance, weapon mid-swing, shield up"
+    },
+    {
+     "n": 7,
+     "name": "Elf Warlock (Female)",
+     "slug": "spr-pc-elf-warlock-female",
+     "cue": "eldritch energy coiling from an outstretched hand, patron's mark glowing"
+    },
+    {
+     "n": 8,
+     "name": "Elf Wizard (Female)",
+     "slug": "spr-pc-elf-wizard-female",
+     "cue": "mid-spellcast, spellbook in one hand, arcane sigil forming at the other"
+    },
+    {
+     "n": 9,
+     "name": "Elf Monk (Female)",
+     "slug": "spr-pc-elf-monk-female",
+     "cue": "mid-flying-kick or braced martial-arts stance, fists wrapped, focused"
+    }
+   ]
+  },
+  {
+   "id": "pc-large-14",
+   "realm": "pc",
+   "kind": "pc",
+   "sourceFile": "dev/sprite-manifests/XL-REGEN-PROMPTS.md",
+   "sourceSection": "Large sheet pc-large-14",
+   "expected": 9,
+   "cells": [
+    {
+     "n": 1,
+     "name": "Tiefling Ranger (Female)",
+     "slug": "spr-pc-tiefling-ranger-female",
+     "cue": "bow drawn full-pull, aiming, a hunting companion implied at the flank"
+    },
+    {
+     "n": 2,
+     "name": "Human Bard (Male)",
+     "slug": "spr-pc-human-bard-male",
+     "cue": "mid-performance, instrument in hand, a spell shimmering off the music"
+    },
+    {
+     "n": 3,
+     "name": "Human Paladin (Male)",
+     "slug": "spr-pc-human-paladin-male",
+     "cue": "sword raised in an oath-gesture, holy light along the blade"
+    },
+    {
+     "n": 4,
+     "name": "Human Warlock (Male)",
+     "slug": "spr-pc-human-warlock-male",
+     "cue": "eldritch energy coiling from an outstretched hand, patron's mark glowing"
+    },
+    {
+     "n": 5,
+     "name": "Orc Bard (Female)",
+     "slug": "spr-pc-orc-bard-female",
+     "cue": "mid-performance, instrument in hand, a spell shimmering off the music"
+    },
+    {
+     "n": 6,
+     "name": "Human Paladin (Female)",
+     "slug": "spr-pc-human-paladin-female",
+     "cue": "sword raised in an oath-gesture, holy light along the blade"
+    },
+    {
+     "n": 7,
+     "name": "Elf Sorcerer (Female)",
+     "slug": "spr-pc-elf-sorcerer-female",
+     "cue": "wild arcane energy erupting from open palms, hair/robe caught in the surge"
+    },
+    {
+     "n": 8,
+     "name": "Human Cleric (Male)",
+     "slug": "spr-pc-human-cleric-male",
+     "cue": "channeling divine energy, holy symbol raised, radiant light at the hand"
+    },
+    {
+     "n": 9,
+     "name": "Human Monk (Female)",
+     "slug": "spr-pc-human-monk-female",
+     "cue": "mid-flying-kick or braced martial-arts stance, fists wrapped, focused"
+    }
+   ]
+  },
+  {
+   "id": "pc-large-15",
+   "realm": "pc",
+   "kind": "pc",
+   "sourceFile": "dev/sprite-manifests/XL-REGEN-PROMPTS.md",
+   "sourceSection": "Large sheet pc-large-15",
+   "expected": 9,
+   "cells": [
+    {
+     "n": 1,
+     "name": "Elf Cleric (Male)",
+     "slug": "spr-pc-elf-cleric-male",
+     "cue": "channeling divine energy, holy symbol raised, radiant light at the hand"
+    },
+    {
+     "n": 2,
+     "name": "Orc Monk (Female)",
+     "slug": "spr-pc-orc-monk-female",
+     "cue": "mid-flying-kick or braced martial-arts stance, fists wrapped, focused"
+    },
+    {
+     "n": 3,
+     "name": "Elf Fighter (Female)",
+     "slug": "spr-pc-elf-fighter-female",
+     "cue": "braced combat stance, weapon mid-swing, shield up"
+    },
+    {
+     "n": 4,
+     "name": "Elf Bard (Male)",
+     "slug": "spr-pc-elf-bard-male",
+     "cue": "mid-performance, instrument in hand, a spell shimmering off the music"
+    },
+    {
+     "n": 5,
+     "name": "Elf Druid (Male)",
+     "slug": "spr-pc-elf-druid-male",
+     "cue": "mid-shapeshift or spellcasting, wild energy crackling around raised hands"
+    },
+    {
+     "n": 6,
+     "name": "Human Warlock (Female)",
+     "slug": "spr-pc-human-warlock-female",
+     "cue": "eldritch energy coiling from an outstretched hand, patron's mark glowing"
+    },
+    {
+     "n": 7,
+     "name": "Human Druid (Male)",
+     "slug": "spr-pc-human-druid-male",
+     "cue": "mid-shapeshift or spellcasting, wild energy crackling around raised hands"
+    },
+    {
+     "n": 8,
+     "name": "Elf Cleric (Female)",
+     "slug": "spr-pc-elf-cleric-female",
+     "cue": "channeling divine energy, holy symbol raised, radiant light at the hand"
+    },
+    {
+     "n": 9,
+     "name": "Human Sorcerer (Male)",
+     "slug": "spr-pc-human-sorcerer-male",
+     "cue": "wild arcane energy erupting from open palms, hair/robe caught in the surge"
+    }
+   ]
+  },
+  {
+   "id": "pc-large-16",
+   "realm": "pc",
+   "kind": "pc",
+   "sourceFile": "dev/sprite-manifests/XL-REGEN-PROMPTS.md",
+   "sourceSection": "Large sheet pc-large-16",
+   "expected": 9,
+   "cells": [
+    {
+     "n": 1,
+     "name": "Elf Bard (Female)",
+     "slug": "spr-pc-elf-bard-female",
+     "cue": "mid-performance, instrument in hand, a spell shimmering off the music"
+    },
+    {
+     "n": 2,
+     "name": "Human Druid (Female)",
+     "slug": "spr-pc-human-druid-female",
+     "cue": "mid-shapeshift or spellcasting, wild energy crackling around raised hands"
+    },
+    {
+     "n": 3,
+     "name": "Human Wizard (Male)",
+     "slug": "spr-pc-human-wizard-male",
+     "cue": "mid-spellcast, spellbook in one hand, arcane sigil forming at the other"
+    },
+    {
+     "n": 4,
+     "name": "Elf Druid (Female)",
+     "slug": "spr-pc-elf-druid-female",
+     "cue": "mid-shapeshift or spellcasting, wild energy crackling around raised hands"
+    },
+    {
+     "n": 5,
+     "name": "Human Bard (Female)",
+     "slug": "spr-pc-human-bard-female",
+     "cue": "mid-performance, instrument in hand, a spell shimmering off the music"
+    },
+    {
+     "n": 6,
+     "name": "Human Cleric (Female)",
+     "slug": "spr-pc-human-cleric-female",
+     "cue": "channeling divine energy, holy symbol raised, radiant light at the hand"
+    },
+    {
+     "n": 7,
+     "name": "Human Sorcerer (Female)",
+     "slug": "spr-pc-human-sorcerer-female",
+     "cue": "wild arcane energy erupting from open palms, hair/robe caught in the surge"
+    },
+    {
+     "n": 8,
+     "name": "Human Wizard (Female)",
+     "slug": "spr-pc-human-wizard-female",
+     "cue": "mid-spellcast, spellbook in one hand, arcane sigil forming at the other"
+    },
+    {
+     "n": 9,
+     "name": "Dwarf Paladin (Male)",
+     "slug": "spr-pc-dwarf-paladin-male",
+     "cue": "sword raised in an oath-gesture, holy light along the blade"
+    }
+   ]
+  },
+  {
+   "id": "pc-large-17",
+   "realm": "pc",
+   "kind": "pc",
+   "sourceFile": "dev/sprite-manifests/XL-REGEN-PROMPTS.md",
+   "sourceSection": "Large sheet pc-large-17",
+   "expected": 9,
+   "cells": [
+    {
+     "n": 1,
+     "name": "Dwarf Monk (Male)",
+     "slug": "spr-pc-dwarf-monk-male",
+     "cue": "mid-flying-kick or braced martial-arts stance, fists wrapped, focused"
+    },
+    {
+     "n": 2,
+     "name": "Dwarf Paladin (Female)",
+     "slug": "spr-pc-dwarf-paladin-female",
+     "cue": "sword raised in an oath-gesture, holy light along the blade"
+    },
+    {
+     "n": 3,
+     "name": "Dwarf Fighter (Male)",
+     "slug": "spr-pc-dwarf-fighter-male",
+     "cue": "braced combat stance, weapon mid-swing, shield up"
+    },
+    {
+     "n": 4,
+     "name": "Dwarf Sorcerer (Male)",
+     "slug": "spr-pc-dwarf-sorcerer-male",
+     "cue": "wild arcane energy erupting from open palms, hair/robe caught in the surge"
+    },
+    {
+     "n": 5,
+     "name": "Dwarf Barbarian (Male)",
+     "slug": "spr-pc-dwarf-barbarian-male",
+     "cue": "mid-rage, greataxe raised overhead, roaring"
+    },
+    {
+     "n": 6,
+     "name": "Dwarf Barbarian (Female)",
+     "slug": "spr-pc-dwarf-barbarian-female",
+     "cue": "mid-rage, greataxe raised overhead, roaring"
+    },
+    {
+     "n": 7,
+     "name": "Dwarf Ranger (Male)",
+     "slug": "spr-pc-dwarf-ranger-male",
+     "cue": "bow drawn full-pull, aiming, a hunting companion implied at the flank"
+    },
+    {
+     "n": 8,
+     "name": "Dwarf Rogue (Male)",
+     "slug": "spr-pc-dwarf-rogue-male",
+     "cue": "crouched mid-strike from stealth, dual daggers, sly grin"
+    },
+    {
+     "n": 9,
+     "name": "Dwarf Cleric (Male)",
+     "slug": "spr-pc-dwarf-cleric-male",
+     "cue": "channeling divine energy, holy symbol raised, radiant light at the hand"
+    }
+   ]
+  },
+  {
+   "id": "pc-large-18",
+   "realm": "pc",
+   "kind": "pc",
+   "sourceFile": "dev/sprite-manifests/XL-REGEN-PROMPTS.md",
+   "sourceSection": "Large sheet pc-large-18",
+   "expected": 4,
+   "cells": [
+    {
+     "n": 1,
+     "name": "Dwarf Druid (Male)",
+     "slug": "spr-pc-dwarf-druid-male",
+     "cue": "mid-shapeshift or spellcasting, wild energy crackling around raised hands"
+    },
+    {
+     "n": 2,
+     "name": "Dwarf Druid (Female)",
+     "slug": "spr-pc-dwarf-druid-female",
+     "cue": "mid-shapeshift or spellcasting, wild energy crackling around raised hands"
+    },
+    {
+     "n": 3,
+     "name": "Dwarf Fighter (Female)",
+     "slug": "spr-pc-dwarf-fighter-female",
+     "cue": "braced combat stance, weapon mid-swing, shield up"
+    },
+    {
+     "n": 4,
+     "name": "Dwarf Warlock (Male)",
+     "slug": "spr-pc-dwarf-warlock-male",
+     "cue": "eldritch energy coiling from an outstretched hand, patron's mark glowing"
     }
    ]
   },

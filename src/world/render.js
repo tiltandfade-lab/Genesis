@@ -463,16 +463,16 @@ function theaterHereSourceFor(w){
   // every other field on this object already has). castFrom (theater-data.js) reads these through
   // theaterCastSourceFor below to stage corpse figures; it never reaches into prep/walk itself.
   const reskinEntry=(pn.segments||[]).find(o=>o&&o.ref==="S"+cur)||null;
-  // DUNGEON-GRAPH.md U3 item 2: a walk-with-SpatialPlan (pn.spatialPlan — same prep-node-overlay
+  // DUNGEON-GRAPH.md U3 item 2: a walk-with-SpatialPlan (pn.spatial — same prep-node-overlay
   // home as pn.segments, docs/DUNGEON-GRAPH.md "Shared data shape" header) renders its current room +
   // immediate surroundings as the volumetric standing table instead of the flat combat-zone-grid tray.
-  // No production writer stamps pn.spatialPlan yet (spatializePlan/semanticizePlan -> pn.spatialPlan is
+  // pn.spatial is stamped by prepAttachSpatialPlan (src/world/prep.js, U4) for dungeon-shaped
   // DUNGEON-GRAPH.md U4's "walk binding" job, explicitly out of scope here) — this branch is the
-  // RENDER-SIDE half only, additive and dormant until U4 lands: absent pn.spatialPlan (every walk
+  // RENDER-SIDE half only, additive and dormant until U4 lands: absent pn.spatial (every walk
   // today), theaterHereSourceFor is byte-identical to before this unit (falls through to the existing
   // {kind:"segment"} return below).
-  if(pn.spatialPlan){
-    return { kind:"interior", plan:pn.spatialPlan, focusSegNum:cur, radius:1,
+  if(pn.spatial){
+    return { kind:"interior", plan:pn.spatial, focusSegNum:cur, radius:1,
       env:walk.environment||undefined, realms:realms,
       traces:(reskinEntry&&reskinEntry.traces)||undefined, removed:(reskinEntry&&reskinEntry.removed)||undefined };
   }

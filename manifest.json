@@ -71,6 +71,7 @@
     "src/engine/walk.js",
     "src/engine/walk-archetypes.js",
     "src/engine/dungeon-walk.js",
+    "src/engine/place-spatialize.js",
     "src/engine/wild-walk.js",
     "src/engine/quest-hook.js",
     "src/engine/prep-bundle.js",
@@ -1435,6 +1436,16 @@
         "GS"
       ],
       "desc": "Dungeon walk-roller (docs/SESSION-PREP.md §2). rollDungeonWalk(opts): 12 topologies, depth-budgeted loot, affinity-filtered boss/revelation (by rolled Myth Seed) → dungeon data structure (rooms=nodes, doors=edges). Ported from the Obsidian 'Dungeon Procedure v4.2'. Reuses engine.walk generics. WALK-REFRESH: dwalkOutlandish/dwalkOutlandishAllowed (§2.2, PROVISIONAL null-safe level-gate on the future dungeon-loot-outlandish Band column) + a Strange+ plot-item chance on Discovery rooms (§2.3) + the rolled walk.skin (§3, via rollWalkSkin)."
+    },
+    {
+      "id": "engine.place-spatialize",
+      "path": "src/engine/place-spatialize.js",
+      "type": "logic",
+      "owns": [
+        "spatializePlan",
+        "SPATIAL_CELL"
+      ],
+      "desc": "DUNGEON-GRAPH.md U1 — the spatializer. spatializePlan(segments, topologyName, opts) turns a walk's segment graph (rooms=nodes, exits=edges — the src/engine/walk.js:593-625 shape rollDungeonWalk et al already produce) into a walkable cell-grid SpatialPlan (DUNGEON-GRAPH.md 'Shared data shape': seed/topology/cellW/cellD/cells Uint8Array of SPATIAL_CELL codes VOID|FLOOR|WALL|DOOR|WATER/rooms[]/corridors[]/doors[]/domains[]). Pure engine-layer data code — no w/U/render/DOM. Deterministic: seed hashes opts.walkId (mulberry32, same reference pattern as src/ui/theater-boot.js's) — never Math.random/Date.now un-seeded, so the same walk id reproduces a byte-identical cells buffer. Pipeline: per-topology layout seed (Hub/Stronghold radial, Onion concentric, Loop/Web ring, Branch tree-drift, everything else linear-drift) → room rect placement → AABB separation → corridor carving along EXITS ONLY (never an invented edge) → rasterize (VOID 8-adjacent to FLOOR/DOOR/WATER becomes WALL; corridor/room-perimeter meets become DOOR) → BFS reachability verify from the entry segment's room → on failure, mutate the seed and retry (≤5 more attempts), then honest-fail (throws naming the topology+seed — never a hand-patched plan). Web/Labyrinth Fragment crossing edges are caught generically at corridor-carve time (a corridor whose cells overlap an already-carved corridor's cells gets bridge:true) rather than via a topology-special-cased geometry check. U2 (semantics/scale domains)/U3 (volumetric renderer)/U4 (walk binding) consume this output; out of scope here per spec."
     },
     {
       "id": "engine.wild-walk",

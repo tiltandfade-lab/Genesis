@@ -1094,9 +1094,25 @@ function trayFrom(source, scene, opts){
     const env = source.env || opts.env;
     const realms = source.realms || opts.realms;
     const realmId = source.realmId || (Array.isArray(realms) && realms.length ? realms[0] : undefined);
-    return interiorBuildBoard(source.plan, {
+    // GRAPHICS-ENGINE.md GR2 §D DRESSING SYSTEM — dressPlan (src/engine/place-dressing.js) existed and
+    // was fully verified (dev/verify-dungeon-dressing.mjs) but was NEVER CALLED from this production
+    // render path — the only callers were that harness and the study rig (dev/battle-gate/
+    // capture-interior-study.mjs), a "verify-green-but-not-wired" gap the dungeon-loop-gate (dev/
+    // battle-gate/capture-dungeon-loop.mjs) caught by driving a REAL walk through trayFrom itself.
+    // dressPlan is pure/no-RNG-outside-its-own-seeded-rng and DETERMINISTIC off (plan,opts.walkId)
+    // (falling back to plan.seed — spatializePlan's own walkId-derived seed — when walkId is omitted,
+    // which it is here since trayFrom's source doesn't carry one), so this is a safe additive call: the
+    // returned board is a shallow-extended plan (same cells/rooms/etc. references) with a `dressing`
+    // array threaded onto it, the exact field interiorBuildPieces' sibling (interiorBuildDressing,
+    // src/ui/theater-boot.js) already knows how to mount when present — setInteriorBoard's OWN
+    // dressing-mount branch is used for the first time from a real production render call, not just a
+    // harness/study rig.
+    const dressedPlan = (typeof dressPlan === "function") ? dressPlan(source.plan, { realmId: realmId }) : source.plan;
+    const board = interiorBuildBoard(dressedPlan, {
       env: env, realmId: realmId, focusSegNum: source.focusSegNum, radius: source.radius
     });
+    board.dressing = dressedPlan.dressing || [];
+    return board;
   }
   const segment = source.kind === "interior" ? source.record : source.segment;
   return theaterBoardBuild(segment, scene, opts);

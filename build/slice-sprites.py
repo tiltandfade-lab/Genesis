@@ -46,6 +46,21 @@ Flags:
                    manifest order-matching; the slug is given, not inferred. The slug must
                    exist in manifest.json's "heroes" list (typo guard — a misspelled slug
                    would otherwise silently orphan the sprite).
+  --unmix[=STRENGTH]  SPRITE-RESCUE D1/D3: chroma-unmix interior magenta cast at slice time
+                   (the raw sheet's background is exactly #FF00FF — the cleanest place to
+                   separate art from key). Runs AFTER crop_transparent's keying pass and
+                   BEFORE defringe(), in the sheet path and the --single hero path alike.
+                   Off by default (defringe's 2px edge band is untouched by this flag); the
+                   bare flag means full strength 1.0, or pass a value in [0.0, 1.0]. D2:
+                   never run this blind — the U6 vision triage decides which sprites need
+                   it and at what strength, this flag is the mechanism, not the judgment.
+  --unmix-file     D3 fallback / post-hoc mode: sheet_png is a single ALREADY-CUT sprite
+                   PNG (not a sheet) — unmix it in place at --strength (default 1.0), for
+                   when no verified parent-sheet cell exists to recut from. Mirrors the
+                   --defringe-dir pattern (reinterprets the positional arg) rather than
+                   taking its own path argument.
+  --strength S     unmix strength for --unmix-file (default 1.0). Ignored by --unmix's own
+                   pipeline mode, which takes its strength as `--unmix=S` directly.
 
 Dependency: Pillow (PIL), stdlib otherwise. Not currently a repo-wide dependency (no other
 build/ script uses it, no requirements.txt exists yet) — if `python3 -c "import PIL"` fails
@@ -262,7 +277,7 @@ def assign_row_major(components, row_tolerance_frac=0.5):
     return ordered
 
 
-def crop_transparent(img, item, tolerance, padding):
+def crop_transparent(img, item, tolerance, padding, unmix_strength=None):
     x1, y1, x2, y2 = item["bbox"]
     x1 = max(0, x1 - padding)
     y1 = max(0, y1 - padding)
@@ -276,8 +291,69 @@ def crop_transparent(img, item, tolerance, padding):
             r, g, b, a = px[xx, yy]
             if is_magenta((r, g, b), tolerance):
                 px[xx, yy] = (r, g, b, 0)
+    if unmix_strength is not None:
+        unmix(crop, strength=unmix_strength)
     defringe(crop)
     return crop
+
+
+def _clamp255(v):
+    return max(0, min(255, round(v)))
+
+
+def unmix(crop, margin=30, full_at=230, strength=1.0):
+    """Chroma-unmix interior magenta cast (SPRITE-RESCUE D1, docs/SPRITE-RESCUE.md).
+
+    defringe() above only cleans a 2px edge band BY DESIGN — interior magenta bleed
+    (translucent bodies, membranes, glows the sheet keyed imperfectly) survives untouched.
+    Erasing or despilling those interior pixels would destroy real art (tendrils, wisps);
+    Adam's ruling is fix, don't discard. So this treats each contaminated pixel as an
+    alpha-composite of the real art color OVER the #FF00FF key —
+    `observed = alpha·art + (1-alpha)·magenta` — estimates the magenta fraction from how
+    far the pixel leans magenta, then inverts the compositing math to recover the art
+    color and emits the recovered alpha as real transparency. Contamination becomes
+    intended translucency (grounds: the D1 decision) instead of a wrong color or a hole.
+
+    Per opaque pixel: `m = min(r,b) - g`. At or under `margin` the pixel isn't magenta-cast
+    enough to touch. Otherwise `bgf = min(1, (m-margin)/(full_at-margin)) * strength`
+    estimates the background (magenta) fraction present in the pixel; `alpha' = 1 - bgf` is
+    the recovered opacity. A pixel whose recovered alpha would be near-zero (<=0.04) is all
+    magenta, no art — make it fully transparent rather than divide by a near-zero alpha.
+    Otherwise unmix the art color out of the composite per channel: `r' = clamp((r -
+    bgf*255) / alpha')`, `g' = clamp(g / alpha')` (green isn't part of the key color, so
+    it's just rescaled), `b' = clamp((b - bgf*255) / alpha')`; the pixel's existing alpha
+    is scaled down by `alpha'` (an already-antialiased/translucent pixel stays partially
+    transparent, scaled further by the recovered magenta fraction).
+
+    `strength` (0.0-1.0, D2: the U6 vision triage decides this per-sprite, never run
+    blind) scales how much of the estimated magenta fraction actually gets removed — a
+    soft cast over otherwise-good art takes a partial pass (0.6-0.8) rather than the full
+    1.0 unmix a translucent wisp needs.
+
+    Mutates the RGBA crop in place (defringe's convention)."""
+    px = crop.load()
+    w, h = crop.size
+    span = full_at - margin
+    for yy in range(h):
+        for xx in range(w):
+            r, g, b, a = px[xx, yy]
+            if a == 0:
+                continue
+            m = min(r, b) - g
+            if m <= margin:
+                continue
+            bgf = min(1.0, (m - margin) / span) * strength
+            if bgf <= 0:
+                continue
+            alpha_prime = 1.0 - bgf
+            if alpha_prime <= 0.04:
+                px[xx, yy] = (r, g, b, 0)
+                continue
+            r_prime = _clamp255((r - bgf * 255) / alpha_prime)
+            g_prime = _clamp255(g / alpha_prime)
+            b_prime = _clamp255((b - bgf * 255) / alpha_prime)
+            new_a = _clamp255(a * alpha_prime)
+            px[xx, yy] = (r_prime, g_prime, b_prime, new_a)
 
 
 def defringe(crop, despill=0.25, erode_excess=60, band=2):
@@ -486,7 +562,7 @@ def slice_v2_sheet(args, v2_manifest):
     for i in range(n_match):
         slug = slugs[i]
         item = ordered[i]
-        crop = crop_transparent(img, item, args.tolerance, args.padding)
+        crop = crop_transparent(img, item, args.tolerance, args.padding, args.unmix)
         out_path = os.path.join(out_dir, f"{slug}.png")
         crop.save(out_path)
         crops.append((slug, out_path))
@@ -581,7 +657,7 @@ def slice_single(args, manifest):
 
     os.makedirs(args.out, exist_ok=True)
     item = {"bbox": (x1, y1, x2, y2)}
-    crop = crop_transparent(img, item, args.tolerance, args.padding)
+    crop = crop_transparent(img, item, args.tolerance, args.padding, args.unmix)
     out_path = os.path.join(args.out, f"{slug}.png")
     crop.save(out_path)
     print(f"OK: wrote {out_path} ({crop.width}x{crop.height}, transparent background).")
@@ -610,6 +686,18 @@ def main():
                     help="batch mode: sheet_png is a DIRECTORY of already-cut RGBA sprites; "
                          "apply the defringe pass (halo erode + edge despill) to every PNG "
                          "in place. For sprites cut before defringe existed in the pipeline.")
+    ap.add_argument("--unmix", nargs="?", type=float, const=1.0, default=None,
+                    help="SPRITE-RESCUE D1/D3: chroma-unmix interior magenta cast at slice "
+                         "time (sheet path and --single hero path). Off by default; bare "
+                         "flag = full strength 1.0, or pass a value in [0.0, 1.0]. D2: the "
+                         "U6 vision triage decides which sprites get this, never run blind.")
+    ap.add_argument("--unmix-file", action="store_true",
+                    help="D3 fallback: sheet_png is a single ALREADY-CUT sprite PNG (not a "
+                         "sheet) — unmix it in place at --strength. Mirrors --defringe-dir's "
+                         "arg-reinterpretation pattern.")
+    ap.add_argument("--strength", type=float, default=1.0,
+                    help="unmix strength for --unmix-file (default 1.0). The pipeline "
+                         "--unmix flag takes its own strength as --unmix=S instead.")
     args = ap.parse_args()
 
     if not os.path.exists(args.sheet_png):
@@ -629,6 +717,17 @@ def main():
             if i % 100 == 0 or i == len(names):
                 print(f"  defringed {i}/{len(names)}")
         print(f"OK: defringed {len(names)} sprites in {args.sheet_png}")
+        return
+
+    if args.unmix_file:
+        if os.path.isdir(args.sheet_png):
+            print(f"ERROR: --unmix-file needs a single PNG, got a directory: {args.sheet_png}",
+                  file=sys.stderr)
+            sys.exit(1)
+        im = Image.open(args.sheet_png).convert("RGBA")
+        unmix(im, strength=args.strength)
+        im.save(args.sheet_png)
+        print(f"OK: unmixed {args.sheet_png} in place (strength={args.strength}).")
         return
 
     if args.manifest_v2 is not None:
@@ -675,7 +774,7 @@ def main():
     for i in range(n_match):
         slug = slugs[i]
         item = ordered[i]
-        crop = crop_transparent(img, item, args.tolerance, args.padding)
+        crop = crop_transparent(img, item, args.tolerance, args.padding, args.unmix)
         out_path = os.path.join(out_dir, f"{slug}.png")
         crop.save(out_path)
         crops.append((slug, out_path))

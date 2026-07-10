@@ -122,6 +122,11 @@ const FIXTURE_REGISTRY = {
   "spr-gloom-town-guard": { realm: "gloom", kind: "npc", name: "Town Guard", size: "Medium", status: "cut" },
   "spr-gloom-bog-wyrm": { realm: "gloom", kind: "monster", name: "Bog Wyrm", size: "Gargantuan", status: "cut" },
   "spr-gloom-half-cut-horror": { realm: "gloom", kind: "monster", name: "Half-Cut Horror", size: "Medium", status: "pending" },
+  // Sprite-review overlay keys (dev/sprite-review.py): scale = heads-line-up calibration
+  // multiplier on the billboard plane height; verdict:"fail" = review-failed art that must
+  // fall through to the 3D chain even though its PNG is cut.
+  "spr-gloom-scaled-guard": { realm: "gloom", kind: "npc", name: "Scaled Guard", size: "Medium", status: "cut", scale: 1.5 },
+  "spr-gloom-botched-wretch": { realm: "gloom", kind: "monster", name: "Botched Wretch", size: "Medium", status: "cut", verdict: "fail" },
 };
 
 // The one-off subprocess runner: imports whatever boot module path it's handed (argv[2]) inside a
@@ -155,6 +160,8 @@ try {
   T._spriteTextureCache["spr-gloom-town-guard"] = fakeTexture();
   T._spriteTextureCache["spr-gloom-bog-wyrm"] = fakeTexture();
   T._spriteTextureCache["spr-gloom-half-cut-horror"] = fakeTexture(); // seeded even for the pending entry: proves a bug would render it, not just "no texture yet"
+  T._spriteTextureCache["spr-gloom-scaled-guard"] = fakeTexture();
+  T._spriteTextureCache["spr-gloom-botched-wretch"] = fakeTexture(); // seeded so a fail-verdict render would be a real bug, not a texture miss
 
   const cutFig = T.refFigure.build({ recipeSlug: "grinning-poppet" });
   result.cutIsSprite = !!(cutFig && cutFig.userData && cutFig.userData.sprite === true);
@@ -172,6 +179,14 @@ try {
   const gigFig = T.refFigure.build({ recipeSlug: "bog-wyrm" });
   result.medHeight = medFig.children[0].geometry.parameters.height;
   result.gigHeight = gigFig.children[0].geometry.parameters.height;
+
+  const scaledFig = T.refFigure.build({ recipeSlug: "scaled-guard" });
+  result.scaledHeight = scaledFig && scaledFig.children[0] && scaledFig.children[0].geometry.parameters.height;
+
+  const failFig = T.refFigure.build({ recipeSlug: "botched-wretch" });
+  result.failIsSprite = !!(failFig && failFig.userData && failFig.userData.sprite === true);
+  result.failChildCount = failFig ? failFig.children.length : -1;
+  result.failFallsThrough3D = !result.failIsSprite && result.failChildCount > 1;
 
   T.spriteChannel = false;
   const killedFig = T.refFigure.build({ recipeSlug: "grinning-poppet" });
@@ -234,6 +249,12 @@ if(!green.ok){
   check("(c) Gargantuan billboard plane height >= 4x Medium billboard plane height",
     green.gigHeight >= green.medHeight * 4 - 1e-9,
     `medium=${green.medHeight} gargantuan=${green.gigHeight} ratio=${green.gigHeight / green.medHeight}`);
+  check("(e) overlay scale multiplies the billboard plane height (Medium x1.5 = 1.5x the plain Medium plane)",
+    Math.abs(green.scaledHeight - green.medHeight * 1.5) < 1e-9,
+    `medium=${green.medHeight} scaled=${green.scaledHeight}`);
+  check("(f) verdict:\"fail\" cut entry falls through to the 3D chain (review-failed art never renders)",
+    green.failFallsThrough3D === true,
+    `failIsSprite=${green.failIsSprite} failChildCount=${green.failChildCount}`);
   check("(d) spriteChannel=false forces the 3D chain for a cut-status entry that otherwise resolves as a sprite",
     green.killedIsSprite === false && green.killedChildCount > 1,
     `killedIsSprite=${green.killedIsSprite} killedChildCount=${green.killedChildCount}`);

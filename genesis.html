@@ -1374,6 +1374,12 @@
 <script src="src/engine/death.js"></script>
 <script src="src/engine/hazards.js"></script>
 <script src="src/engine/theater-data.js"></script>
+<!-- DUNGEON-GRAPH.md U3 — the volumetric interior renderer's DATA layer (interiorBuildBoard +
+     INTERIOR_TILE_KITS). Classic script, loaded right after theater-data.js (same "data layer before
+     the GL layer" convention place-spatialize.js -> place-semantics.js -> theater-data.js already
+     keeps). Republishes its two symbols onto `window` for src/ui/theater-boot.js's sealed ES-module
+     scope to read (see that file's window.Theater.setInteriorBoard). -->
+<script src="src/ui/theater-interior.js"></script>
 <script src="src/ui/blockwright.js"></script>
 <script src="src/ui/dice.js"></script>
 <script src="src/ui/oracle.js"></script>

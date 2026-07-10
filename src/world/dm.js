@@ -365,6 +365,43 @@ function combatDigest(w){
   };
 }
 
+/* PLACE-GEN.md ADDENDUM §7 unit 10 — the digest's location LINE gains archetype label + GRID-LAW
+   dims + a compact dressing summary, but ONLY when the current node is bound to a typed place
+   record — the SAME lookup theaterNodeSourceFor (src/world/render.js) uses (mapOf(w).nodes[id]
+   .codexId -> codexGet -> rec.rolled.archetypeKey != null), reused here rather than forked, so
+   "one derivation, prose and tray can never disagree" (the unit's own law) actually holds: this
+   function and trayFrom/theaterNodeBoardBuild read the identical rec.rolled.{archetypeLabel,dims}
+   and the identical sceneDressingForPlace(dressRealm, archetypeKey) prop pool the tray dresses
+   the diorama with (mirrors theaterNodeBoardBuild's own dressRealm fallback chain: hybridProps ‖
+   props ‖ "frontier" — never undefined).
+   BUDGET (digest diet, dev/verify-digest-diet.mjs's discipline extended, not touched): target
+   <=120 B added over the bare nodeName() string for a typed node; ZERO bytes added for an untyped
+   node (no mapOf/codexGet, no bound codexId, no rec.rolled, or archetypeKey==null) — the return is
+   byte-identical to nodeName(w,id) alone in every one of those cases, same total-function/never-a-
+   throw discipline theaterNodeSourceFor itself keeps. Defensive throughout: absent mapOf/codexGet/
+   sceneDressingForPlace (a narrow test harness that doesn't load render.js/place-skins.js) degrades
+   to the bare name, never a throw. */
+function dmDigestLocationLine(w){
+  const base=nodeName(w,w.currentNodeId);
+  if(typeof theaterNodeSourceFor!=="function") return base;
+  const rec=theaterNodeSourceFor(w,w&&w.currentNodeId);
+  if(!rec||!rec.rolled) return base;
+  const label=rec.rolled.archetypeLabel, dims=rec.rolled.dims;
+  if(!label||!dims||!(dims.w>0)||!(dims.d>0)) return base;
+  // GRID LAW (ADDENDUM §A): dims.{w,d} are CELL counts, 1 cell = 5 ft — the digest speaks feet
+  // (player/DM-facing prose unit), the tray speaks cells (theaterNodeBoardBuild's own tile grid).
+  let suffix=label+", "+(dims.w*5)+"x"+(dims.d*5)+" ft";
+  const dressingPtr=rec.dm&&rec.dm.dressing;
+  const dressRealm=(dressingPtr&&(dressingPtr.hybridProps||dressingPtr.props))||"frontier";
+  if(typeof sceneDressingForPlace==="function"){
+    const dressing=sceneDressingForPlace(dressRealm, rec.rolled.archetypeKey);
+    if(dressing&&dressing.light) suffix+=", "+dressing.light;
+    const propNames=(dressing&&Array.isArray(dressing.props))?dressing.props.slice(0,3).map(p=>p&&p.name).filter(Boolean):[];
+    if(propNames.length) suffix+=" ("+propNames.join(", ")+")";
+  }
+  return base+" — "+suffix;
+}
+
 // The digest's top-level shape — the declared twin of dmDigest()'s return literal (every key
 // below is ALWAYS present in the return object; many are null on a common turn). Machine truth
 // for build/gen-dm-contract.py; parity with the live return object is enforced by
@@ -384,7 +421,7 @@ function dmDigest(){
   return {
     worldId:w.id, worldName:w.name,
     clock:{ day:c.day, min:c.min, band:timeOfDay(c.min), exact:fmtTime(c.min), session:w.session||0, knowsTime:!!w.knowsTime },
-    location:nodeName(w,w.currentNodeId),
+    location:dmDigestLocationLine(w),
     setting: foundingTurn ? { name:s.master.name, desc:s.master.desc,
               smell:s.smell.name, sound:s.sound.name, arch:s.arch.name,
               taboo:{name:s.taboo.name,desc:s.taboo.desc},

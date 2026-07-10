@@ -219,10 +219,12 @@ console.log("\n[6 — PRODUCTION WIRING: trayFrom's {kind:\"interior\"} branch a
 {
   let parentCount = "?";
   try {
-    parentCount = execSync('git show HEAD:src/engine/theater-data.js | grep -c "dressPlan(" || true', { cwd: ROOT }).toString().trim();
+    // pinned to the last PRE-fix commit (51b6d85, the GR-wave tip the loop-gate branched from):
+    // a HEAD-relative proof self-invalidates the moment the fix commit lands (caught at re-gate).
+    parentCount = execSync('git show 51b6d85:src/engine/theater-data.js | grep -c "dressPlan(" || true', { cwd: ROOT }).toString().trim();
   } catch (e) { parentCount = "git-unavailable: " + e.message.split("\n")[0]; }
   ok(parentCount === "0" || parentCount.startsWith("git-unavailable"),
-    `RED-FIRST: HEAD's committed theater-data.js had 0 dressPlan( call sites — got "${parentCount}"`);
+    `RED-FIRST: pre-fix theater-data.js (51b6d85) had 0 dressPlan( call sites — got "${parentCount}"`);
 
   // load place-spatialize + place-semantics + place-dressing + theater-interior + theater-data into
   // ONE sandbox (theater-interior.js/theater-data.js are both documented THREE/DOM-free pure data code

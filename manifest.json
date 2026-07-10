@@ -93,6 +93,7 @@
     "src/engine/death.js",
     "src/engine/hazards.js",
     "src/engine/theater-data.js",
+    "src/ui/theater-interior.js",
     "src/ui/blockwright.js",
     "src/ui/dice.js",
     "src/ui/oracle.js",
@@ -2068,9 +2069,24 @@
         "codexHereNowIds",
         "codexOf",
         "codexGetAttitude",
-        "codexAmbientPresenceFor"
+        "codexAmbientPresenceFor",
+        "interiorBuildBoard"
       ],
       "desc": "BATTLE-THEATER T1 (docs/BATTLE-THEATER.md §1/§7) + T1.5 PSX grit pass + PASS 2 archetypes/silhouettes (2026-07-03, \"get the shapes covered\") + MODEL-GRAMMAR G2 §4b shape-hint resolver + REALM-RENDER-STYLE.md v1 (2026-07-05: theaterBoardFrom grades every tile's tint through realmRenderProfile(opts.realms)/gradeColor — data/realms.js, read defensively via typeof guards like PART_NAMES — and passes `realms` through on its return so the GL layer can grade the void/light colors it owns off the identical profile; absent/empty opts.realms is a byte-identical passthrough) — the PURE data layer feeding the three.js battle stage. theaterBoardFrom(segment, scene, opts) re-projects the existing zone grid (reuses engine.combat's cmZoneGrid, never duplicates the dims parse) into a 3x3-tiles-per-zone board: {tiles:[{x,z,h,kind,tint,altTop,zone}], props:[{kind,zone,x,z,level}], grid, env}. opts.env (default \"dungeon\") selects a desaturated-earth THEATER_ENV_PALETTE entry (dungeon/urban/wilderness/breach — theaterPaletteFor) that drives every tint: floor top/side/altTop (world-parity checker alternation on plain floor only), water/scorch hazard tints, elevated accent, cover prop tint. elevZones raise a patch THEATER_STEP; scene.hazardZones tint (and, for water/pit-ish free-text kinds, sink) their patch; scene.cover/scene.zoneCover zones get a cover prop entry. theaterUnitsFrom(combat) reads combat.grid + combat.pc/allies/foes into units[] {id,kind,archetype,x,z,down,fled,silhouette?,weapon} — archetype is a creatureType-x-size(-x-name) -> one of 9 fallback-figure buckets (biped/quadruped/flyer/serpent/swarm/giant/ooze/arachnid/amorphous-horror, theaterArchetypeFor): `giant` type or huge/gargantuan-sized biped-mapped types (minus an animal-shaped name-keyword guard, THEATER_QUAD_WORD_RX) -> giant; a spider-keyword name override (THEATER_ARACHNID_WORD_RX) -> arachnid regardless of type; `ooze` type -> ooze; `aberration` type -> amorphous-horror. PC/allies also carry `silhouette` (theaterClassSilhouetteFor off pcRef.class/a.class -> martial/ranger/caster/cleric) and `weapon` derived from it (theaterWeaponForClass); foes carry `weapon` from a name/action-text keyword scan (theaterWeaponForFoe, THEATER_WEAPON_WORD_RX — \"none\" when no weapon word is found). Multi-occupant zones get a deterministic seeded offset (theaterWithinZoneOffset, same cmSeedHash discipline as combat.js's cmPlaceFoeLane — never Math.random). MODEL-GRAMMAR G2 §4b: resolveShapeHint(shape) validates a DM-authored off-bestiary creature shape hint ({base,size,modules,channels,stance}) against the real part vocabulary (data/model-recipes.js's generated PART_NAMES global — read defensively, never imported, keeping the classic/module boundary one-way) — an unknown base drops to THEATER_SHAPE_FALLBACK_BASE (\"torso-biped\"), an unknown module part or anchor is omitted; every drop is returned in gaps[] for the caller (src/world/codex.js's codexAdd, the sole state owner) to write to the shape-gaps ledger line — this file itself never touches GS/w/U/ledger. Zero DOM/GL — the GL half (src/ui/theater-boot.js, an ES module) only consumes this file's output. Headless-testable (dev/verify-theater-data.mjs, dev/verify-model-grammar.mjs). Added 2026-07-03 (theater-core T1); extended 2026-07-03 (theater-psx-grit T1.5, theater-archetypes-2 pass 2, MODEL-GRAMMAR G2 shape-hint resolver). TABLETOP-UNITS.md §U4 (2026-07-08): castFrom(w,source)->units[] + arrangeTableau(units,arrangement)->units[] — the cast tableau (PC/companions/contacted-here-NPCs/soft-ambients) + the 5-way mechanical arrangement grammar (facing-pair/ring/march/shopfront/vignette), attitude-driven distance/facing inside facing-pair/ring only. Combat's theaterUnitsFrom path is untouched."
+    },
+    {
+      "id": "ui.theater-interior",
+      "path": "src/ui/theater-interior.js",
+      "type": "logic",
+      "owns": [
+        "INTERIOR_TILE_KITS",
+        "interiorBuildBoard",
+        "interiorTileKitFor"
+      ],
+      "callTimeDeps": [
+        "SPATIAL_CELL"
+      ],
+      "desc": "DUNGEON-GRAPH.md U3 — the volumetric interior renderer's DATA layer. Classic script (NOT the ES-module boundary — that stays sealed to src/ui/theater-boot.js), loaded directly after src/engine/theater-data.js. INTERIOR_TILE_KITS: realm tile kits (chrome/gloom/fantasy minimum per law 3) — floor/wall/trim colors, small 0/1 procedural-texture pattern specs, fog color/density; interiorTileKitFor(realmId) resolves one, defaulting cleanly on an unknown/absent realmId (never throws). interiorBuildBoard(plan, opts) turns a U1 spatializePlan()/U2 semanticizePlan() output into plain per-tile-kind INSTANCE-TRANSFORM DATA (no THREE/canvas/DOM — window.Theater.setInteriorBoard, theater-boot.js, is the sole GL consumer): floor slabs, wall PRISMS (real height, scaled by the owning room/corridor's scaleDomain — VOLUMETRIC WALL LAW, never flat planes), doorframes (transition doors squeeze narrower+lower), and deterministic corner pillars for rooms >=6 cells per axis. GRID LAW: 1 SpatialPlan cell = 5 ft = 1 world unit (theaterNodeBoardBuild's own literal-cell convention in theater-data.js, not the cmZoneGrid patch abstraction combat boards use). opts.focusSegNum+opts.radius trim the render to 'current room + immediate surroundings' via the SAME corridor-graph adjacency U1/U2 use (never an invented edge); omitting focusSegNum renders the whole plan (the 80-room draw-call-budget check, and the study card's single-room scenes). Pure: no Math.random/Date.now — same (plan,opts) snapshot always yields byte-identical instance arrays. Depends on SPATIAL_CELL (engine.place-spatialize's global) at call time. Republishes both owned symbols onto `window` (see ref-globals-bridge.js's same convention) so theater-boot.js's sealed ES-module scope can reach them. Walk-consumption wiring (which live segment supplies focusSegNum) is U4's job, out of scope here per spec."
     },
     {
       "id": "ui.blockwright",

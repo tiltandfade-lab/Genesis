@@ -8,26 +8,37 @@
    the camera is pulled TIGHT into the focus room (radius:1, not 2 — the WHOLE-plan-vs-just-this-room
    trim DUNGEON-GRAPH.md U3 item 2 already supports) so wall PRISMS read as unmistakably volumetric
    (thickness/height occluding the room behind); (3) each scene now carries `pieces` — real sprite
-   billboards standing in the room at true scale (chrome Hub: 3 creatures + 1 PC; gloom Spine crypt:
-   ogre-zombie + 2 small undead + 1 PC); (4) shadows are BASELINE ON in every variant (ruling 2 — real
-   PointLights + cast shadows on interiors, no longer a study-only toggle), and the variant sweep drops
-   from 6 to 3 per scene (Adam's ruling: (a) flat, (b) +AO, (d) +fog — banded dropped) for 6 total
-   panels + one contact sheet, not 12.
+   billboards standing in the room at true scale; (4) shadows are BASELINE ON in every variant (ruling
+   2 — real PointLights + cast shadows on interiors, no longer a study-only toggle).
+
+   GR1 PASS (docs/GRAPHICS-ENGINE.md build unit GR1, §E TEXTURE-PER-REALM): Adam's own instruction for
+   this unit's card — "3 realms (chrome/gloom/fantasy) x 2 variants (materials on / old flat, labeled)"
+   — REPLACES the iteration-2 AO/banded sweep entirely (that sweep answered a different taste question,
+   GR3's job when it lands; this card's ONE job is "does GR1's material texture actually read"). SCENES
+   grew from 2 to 3 (added a fantasy Spine crypt scene, reusing the SAME fantasy-tagged sprites U3's own
+   gloom scene already draws from — regen-v3's own "cut" status confirms these at authoring time); the
+   materials-off variant sets `window.Theater.setInteriorVariant({materials:false})` — setInteriorBoard's
+   own GR1 wiring (src/ui/theater-boot.js) reads that flag and drops floorTex/wallTex to `null` (a flat
+   single base-color material, interiorBuildInstancedMesh's own untextured branch) instead of baking a
+   REALM_MATERIALS texture — an honest OLD-FLAT baseline, not a resurrection of the retired pattern
+   texture (which no longer exists in the codebase at all). 6 panels total (3 realms x 2 variants) + one
+   contact sheet.
 
    Sibling of dev/battle-gate/capture-place-tray.mjs — reuses that script's proven server/Chrome/boot
    conventions VERBATIM (see its own header comment for the "why" behind each) rather than
    reinventing them. Trimmed/extended to this unit's own scope: boot into a real session
-   (bootToInSession), build two deterministic SpatialPlans directly via the app's own real global
+   (bootToInSession), build three deterministic SpatialPlans directly via the app's own real global
    functions (spatializePlan/semanticizePlan/interiorBuildBoard — no mocks), attach `pieces` from the
    live sprite registry, push each through window.Theater.setInteriorBoard, sweep
-   window.Theater.setInteriorVariant across the 3 combos, and screenshot each of the resulting 6
-   frames. Honest pixels: no cherry-picking — every variant that renders gets captured and included in
-   the contact sheet, pass or fail. metrics.json also carries the sprite-purity/shadow/pieces audit
-   (window.Theater.interiorPsxAudit / .shadowMapEnabled / .interiorPiecesResolved) dev/verify-dungeon-
-   interior.mjs's browser-mode checks re-assert against a fresh boot.
+   window.Theater.setInteriorVariant across the 2 materials combos, and screenshot each of the
+   resulting 6 frames. Honest pixels: no cherry-picking — every variant that renders gets captured and
+   included in the contact sheet, pass or fail. metrics.json also carries the sprite-purity/shadow/
+   pieces audit (window.Theater.interiorPsxAudit / .shadowMapEnabled / .interiorPiecesResolved) dev/
+   verify-dungeon-interior.mjs's browser-mode checks re-assert against a fresh boot.
 
    Run:  node dev/battle-gate/capture-interior-study.mjs
-   Output: dev/battle-gate/interior-study/{chrome,gloom}-{a,b,d}-*.png + study-card.png + metrics.json */
+   Output: dev/battle-gate/interior-study/{chrome,gloom,fantasy}-{materials-on,materials-off}-*.png +
+   study-card.png + metrics.json */
 
 import { spawn } from "node:child_process";
 import { createRequire } from "node:module";
@@ -252,29 +263,31 @@ async function buildScene(page, { topology, realmId, env, walkId, residents, lig
   }, { topology, realmId, env, walkId, residents, lightProfile, pieces });
 }
 
-// ITERATION 2 (Adam's ruling): shadows are BASELINE ON in every variant now (real PointLights + cast
-// shadows, ruling 2) — the sweep is 3 combos, not 6: (a) flat, (b) +AO, (d) +fog. Banded/quantized
-// lighting is dropped from the taste-gate sweep per Adam's explicit "Adam dropped banded implicitly".
+// GR1 (docs/GRAPHICS-ENGINE.md build unit GR1): Adam's own instruction for this card — "materials on /
+// old flat, labeled" — 2 variants, not the iteration-2 AO/banded sweep (that sweep answered a different
+// taste question; this card's ONE job is proving GR1's material texture actually reads at glance
+// distance). Shadows/AO/banded/fog all stay at setInteriorBoard's own baseline defaults in both
+// variants (ao:false, banded:false, fog defaults on) — `materials` is the ONLY thing that changes.
 const VARIANTS = [
-  { key: "b1-ao-soft", label: "(b1) AO soft (0.55)", flags: { ao: true, aoFactor: 0.55, banded: false, fog: false } },
-  { key: "b2-ao-med", label: "(b2) AO medium (0.40)", flags: { ao: true, aoFactor: 0.40, banded: false, fog: false } },
-  { key: "b3-ao-heavy", label: "(b3) AO heavy (0.25)", flags: { ao: true, aoFactor: 0.25, banded: false, fog: false } },
-  { key: "c1-band-6", label: "(c1) banded 6 steps (subtle)", flags: { ao: false, banded: true, bandedSteps: 6, fog: false } },
-  { key: "c2-band-4", label: "(c2) banded 4 steps", flags: { ao: false, banded: true, bandedSteps: 4, fog: false } },
-  { key: "c3-band-3", label: "(c3) banded 3 steps (hard)", flags: { ao: false, banded: true, bandedSteps: 3, fog: false } },
+  { key: "materials-on", label: "materials ON (GR1)", flags: { materials: true, ao: false, banded: false } },
+  { key: "materials-off", label: "materials OFF (old flat)", flags: { materials: false, ao: false, banded: false } },
 ];
 
-// ITERATION 2, ruling 3: (chrome Hub, lamplit) 3 chrome-ish/fantasy creature sprites + 1 humanoid PC;
-// (gloom Spine crypt, torchlit) ogre-zombie + 2 small undead + 1 humanoid PC. Sprite-registry NAMES
-// (spriteEntryFor's join key) — every one of these confirmed `status:"cut"` in data/sprite-registry.js
-// at authoring time (only the fantasy realm has cut sprites today per SPRITE-TRANSITION's own history;
-// the spec's "3 chrome-ish or fantasy" wording explicitly allows fantasy-tagged sprites in the chrome
-// scene until a chrome-tagged creature wave lands).
+// ITERATION 2, ruling 3 (piece sprites) + GR1 (3rd scene, Adam's own "chrome/gloom/fantasy" card spec):
+// chrome Hub (lamplit), gloom Spine crypt (torchlit), fantasy Spine crypt (torchlit) — sprite-registry
+// NAMES (spriteEntryFor's join key), every one confirmed `status:"cut"` in data/sprite-registry.js at
+// authoring time (only the fantasy realm has cut sprites today per SPRITE-TRANSITION's own history; the
+// chrome scene reuses fantasy-tagged sprites for the same reason iteration 2 already did — no
+// chrome-tagged creature wave exists yet). The new fantasy scene draws from the SAME confirmed-cut
+// fantasy roster the gloom scene already uses (Wolf/Zombie/Ape/Guard), just a different mix, so it
+// needs no new sprite-registry lookups to resolve.
 const SCENES = [
   { key: "chrome", label: "chrome Hub dungeon room", topology: "The Hub", realmId: "chrome", env: "dungeon", walkId: "interior-study-chrome-hub", residents: null, lightProfile: "lamplit",
     pieces: ["Wolf", "Giant Rat", "Spider", "Knight"] },
   { key: "gloom", label: "gloom Spine crypt room", topology: "The Spine", realmId: "gloom", env: "dungeon", walkId: "interior-study-gloom-spine", residents: [{ segNum: 1, scaleVsHuman: 2.5, apex: false }], lightProfile: "torchlit",
     pieces: ["Ogre Zombie", "Skeleton", "Zombie", "Guard"] },
+  { key: "fantasy", label: "fantasy Spine crypt room", topology: "The Spine", realmId: "fantasy", env: "dungeon", walkId: "interior-study-fantasy-spine", residents: null, lightProfile: "torchlit",
+    pieces: ["Wolf", "Zombie", "Ape", "Guard"] },
 ];
 
 async function main() {

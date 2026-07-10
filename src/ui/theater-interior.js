@@ -32,44 +32,207 @@
    (U1/U2's own seeded-RNG discipline); this file adds none of its own (every pillar/wall/door placement
    below is a plain geometric derivation off already-fixed room/cell data). */
 
-// ─── realm tile kits (law 3: chrome/gloom/fantasy minimum; THEATER_ENV_PALETTE reused as the no-kit
-// fallback's neutral base, per the spec's "reuse THEATER_ENV_PALETTE where it fits") ───────────────────
-// floorPattern/wallPattern: small 0/1 grids theater-boot.js turns into a nearestify'd 2-tone procedural
-// canvas texture (two shades of the base color) — this file stays canvas/DOM-free, it only supplies the
-// PATTERN SPEC as plain data, same "data in this file, geometry/GL in theater-boot.js" split as the rest
-// of this module.
+// ─── realm tile kits (law 3: chrome/gloom/fantasy minimum, GR1 extends to all 12 realms below;
+// THEATER_ENV_PALETTE reused as the no-kit fallback's neutral base, per the spec's "reuse
+// THEATER_ENV_PALETTE where it fits") ───────────────────────────────────────────────────────────────
 // DUNGEON-GRAPH.md U3 iteration-2, ruling 2 (real environmental light sources): each kit also names
 // its own light FLAVOR — chrome reads as cool wall-strip/lamp fixtures (an artificial-light realm),
 // gloom/fantasy read as open-flame torches (a pre-industrial realm) — `lightKind` drives which
 // interiorBuildLightMarker shape theater-boot.js builds (lamp = a short horizontal strip; torch = a
 // vertical flame quad), `lightColor`/`lightIntensity` are the PointLight's own color/brightness.
+// floorPattern/wallPattern are RETIRED as of GR1 (docs/GRAPHICS-ENGINE.md build unit GR1, §E TEXTURE-
+// PER-REALM): every kit's floor/wall texture is now a REALM_MATERIALS-driven procedural material
+// painter (src/ui/theater-materials.js's materialTexturePixels, baked into a real CanvasTexture by
+// theater-boot.js's interiorMaterialTexture) — the old 2-tone pattern-grid texture path
+// (interiorPatternTexture) is gone from the wiring below the kits. Kits keep floorColor/wallColor/
+// trimColor (still the flat trim/doorframe/pillar color, and the palette anchor REALM_MATERIALS' own
+// entries paint the material AROUND) + fog + light flavor, unchanged in shape from U3.
 const INTERIOR_TILE_KITS = Object.freeze({
   chrome: Object.freeze({
     realmId: "chrome",
     floorColor: "#8fa6b0", wallColor: "#3d525d", trimColor: "#d8f0f8",
-    floorPattern: [[0, 1], [1, 0]],
-    wallPattern: [[0, 0, 1], [1, 0, 0], [0, 1, 0]],
     fog: Object.freeze({ color: "#0d1518", density: 0.024 }),
     lightKind: "lamp", lightColor: "#bfe8ff", lightIntensity: 1.1
   }),
   gloom: Object.freeze({
     realmId: "gloom",
     floorColor: "#453b4d", wallColor: "#2a222e", trimColor: "#6b5878",
-    floorPattern: [[0, 0], [0, 1]],
-    wallPattern: [[1, 0, 0], [0, 0, 0], [0, 0, 1]],
     fog: Object.freeze({ color: "#0a0710", density: 0.035 }),
     lightKind: "torch", lightColor: "#ff9a44", lightIntensity: 1.3
   }),
   fantasy: Object.freeze({
     realmId: "fantasy",
     floorColor: "#7a6248", wallColor: "#4a3b2c", trimColor: "#c9a85c",
-    floorPattern: [[0, 1], [1, 1]],
-    wallPattern: [[0, 1, 0], [1, 1, 1], [0, 1, 0]],
     fog: Object.freeze({ color: "#120d08", density: 0.024 }),
     lightKind: "torch", lightColor: "#ffb347", lightIntensity: 1.3
+  }),
+  // ─── GR1: the other 9 realms (docs/GRAPHICS-ENGINE.md GR1 acceptance — "cover ALL 12 realms"),
+  // identity colors pulled from each realm's own Setting/Palette lines in
+  // dev/model-qa/regen-v3/<realm>.md (grep'd verbatim at authoring time, cited per kit below) ────────
+  ash: Object.freeze({
+    // regen-v3/ash.md: "volcanic ash wasteland — basalt hide, ember cracks, rust, toxic biolume" /
+    // "grey-ash base with ember orange and toxic green accents"
+    realmId: "ash",
+    floorColor: "#46423d", wallColor: "#2f2c28", trimColor: "#ff6a2e",
+    fog: Object.freeze({ color: "#1a1613", density: 0.03 }),
+    lightKind: "torch", lightColor: "#ff7a3d", lightIntensity: 1.3
+  }),
+  "bright-kingdom": Object.freeze({
+    // regen-v3/bright-kingdom.md: "bright toy kingdom rebuilt in Nintendo-era video-game vocabulary" /
+    // "rich storybook palette with real shadow"
+    realmId: "bright-kingdom",
+    floorColor: "#c9a15c", wallColor: "#8a6d4a", trimColor: "#f4d35e",
+    fog: Object.freeze({ color: "#221a10", density: 0.02 }),
+    lightKind: "torch", lightColor: "#ffcf6b", lightIntensity: 1.2
+  }),
+  cosmic: Object.freeze({
+    // regen-v3/cosmic.md: "midnight cosmic-Egyptian realm — deep navy bodies traced with gold
+    // constellation sigils" / "disciplined navy-and-gold with rich accent color"
+    realmId: "cosmic",
+    floorColor: "#171b33", wallColor: "#10132a", trimColor: "#d4af37",
+    fog: Object.freeze({ color: "#07091a", density: 0.03 }),
+    lightKind: "lamp", lightColor: "#e8c25a", lightIntensity: 1.2
+  }),
+  frontier: Object.freeze({
+    // regen-v3/frontier.md: "wild-west frontier — sun-bleached earth tones, period costume, weathered
+    // wood and leather" / "earthy palette"
+    realmId: "frontier",
+    floorColor: "#a9865c", wallColor: "#7c5f3e", trimColor: "#9c8a63",
+    fog: Object.freeze({ color: "#1c150c", density: 0.022 }),
+    lightKind: "torch", lightColor: "#ffb347", lightIntensity: 1.2
+  }),
+  "high-seas": Object.freeze({
+    // regen-v3/high-seas.md: "drowned age-of-sail realm — brine, barnacle crust, kelp rot, weathered
+    // rope and teal spectral glow" / "muted brine palette with rich teal/brass accents"
+    realmId: "high-seas",
+    floorColor: "#3f4a45", wallColor: "#2a332f", trimColor: "#b08d3e",
+    fog: Object.freeze({ color: "#0a1210", density: 0.032 }),
+    lightKind: "lamp", lightColor: "#6fd9c9", lightIntensity: 1.1
+  }),
+  "lost-world": Object.freeze({
+    // regen-v3/lost-world.md: "prehistoric lost-world jungle — dinosaurs and primeval fauna" / "rich
+    // naturalist jungle palette"
+    realmId: "lost-world",
+    floorColor: "#3d4a2e", wallColor: "#2a3320", trimColor: "#d8c9a3",
+    fog: Object.freeze({ color: "#0f1509", density: 0.028 }),
+    lightKind: "torch", lightColor: "#ffa64d", lightIntensity: 1.2
+  }),
+  noir: Object.freeze({
+    // regen-v3/noir.md: "rain-slick noir port city — sepia and soot, streetlamp monochrome" /
+    // "desaturated sepia-grayscale palette"
+    realmId: "noir",
+    floorColor: "#3a3530", wallColor: "#4a423a", trimColor: "#8a7a63",
+    fog: Object.freeze({ color: "#141210", density: 0.03 }),
+    lightKind: "lamp", lightColor: "#d9c48a", lightIntensity: 1.0
+  }),
+  suburb: Object.freeze({
+    // regen-v3/suburb.md: "uncanny modern suburbia — groomed surfaces hiding menace" / "bright
+    // suburban palette, muted for feral subjects"
+    realmId: "suburb",
+    floorColor: "#cfc7a0", wallColor: "#b8a97e", trimColor: "#7c8a6a",
+    fog: Object.freeze({ color: "#17160f", density: 0.02 }),
+    lightKind: "lamp", lightColor: "#ffcf8a", lightIntensity: 1.0
+  }),
+  theater: Object.freeze({
+    // regen-v3/theater.md: "endless-war theater realm — WWI trench grime, mud, rust, gas-haze,
+    // war-torn cloth" / "narrow mud-olive palette with drab military tones"
+    realmId: "theater",
+    floorColor: "#4a4632", wallColor: "#3a3826", trimColor: "#8a7f5c",
+    fog: Object.freeze({ color: "#141208", density: 0.032 }),
+    lightKind: "torch", lightColor: "#d9a24d", lightIntensity: 1.2
   })
 });
 const INTERIOR_DEFAULT_KIT = "chrome";
+
+/* ─── GR1 — REALM_MATERIALS (docs/GRAPHICS-ENGINE.md §E TEXTURE-PER-REALM) ────────────────────────
+   Per realm x surface (floor/wall/trim) -> {material, grainIntensity}. A SIBLING registry to
+   INTERIOR_TILE_KITS (not folded into the kits themselves) ON PURPOSE: the kit's own floorColor/
+   wallColor/trimColor stay the single source of truth for a realm's palette anchor (realmMaterialFor,
+   below, reads color off the kit) — duplicating color fields onto this registry too would just be a
+   second place for the two to drift out of sync. `material` names one of src/ui/theater-materials.js's
+   MATERIAL_FAMILY entries (stone-course/slab/moss-stone -> "stone" painter family, plank -> "plank",
+   metal-panel -> "metal", everything else -> the generic "mottle" painter) - an unknown/typo'd material
+   string degrades to mottle rather than throwing (interiorTileKitFor's own "never throws" discipline,
+   mirrored here). `grainIntensity` is this surface's own low-contrast band (SUBTLE-TEXTURE LAW: LOW
+   ALWAYS, ~0.08-0.12 below — never the "busy" range). Only floor/wall are actually wired to a baked
+   CanvasTexture this pass (theater-boot.js's floorTex/wallTex path, per GR1's own scope) — trim stays
+   flat-colored (doorframe/pillar instances pass texture:null today, unchanged); trim's entry here is
+   real registry data (truthful, not a stub) for a future GR unit to pick up, not yet GL-wired. */
+const REALM_MATERIALS = Object.freeze({
+  chrome: Object.freeze({
+    floor: Object.freeze({ material: "metal-panel", grainIntensity: 0.09 }),
+    wall: Object.freeze({ material: "metal-panel", grainIntensity: 0.09 }),
+    trim: Object.freeze({ material: "metal-panel", grainIntensity: 0.07 })
+  }),
+  gloom: Object.freeze({
+    floor: Object.freeze({ material: "stone-course", grainIntensity: 0.12 }),
+    wall: Object.freeze({ material: "stone-course", grainIntensity: 0.12 }),
+    trim: Object.freeze({ material: "flesh", grainIntensity: 0.1 })
+  }),
+  fantasy: Object.freeze({
+    floor: Object.freeze({ material: "stone-course", grainIntensity: 0.12 }),
+    wall: Object.freeze({ material: "stone-course", grainIntensity: 0.12 }),
+    trim: Object.freeze({ material: "metal-panel", grainIntensity: 0.1 })
+  }),
+  ash: Object.freeze({
+    floor: Object.freeze({ material: "stone-course", grainIntensity: 0.12 }),
+    wall: Object.freeze({ material: "stone-course", grainIntensity: 0.12 }),
+    trim: Object.freeze({ material: "metal-panel", grainIntensity: 0.1 })
+  }),
+  "bright-kingdom": Object.freeze({
+    floor: Object.freeze({ material: "plank", grainIntensity: 0.1 }),
+    wall: Object.freeze({ material: "stone-course", grainIntensity: 0.1 }),
+    trim: Object.freeze({ material: "metal-panel", grainIntensity: 0.08 })
+  }),
+  cosmic: Object.freeze({
+    floor: Object.freeze({ material: "slab", grainIntensity: 0.08 }),
+    wall: Object.freeze({ material: "stone-course", grainIntensity: 0.1 }),
+    trim: Object.freeze({ material: "metal-panel", grainIntensity: 0.08 })
+  }),
+  frontier: Object.freeze({
+    floor: Object.freeze({ material: "plank", grainIntensity: 0.11 }),
+    wall: Object.freeze({ material: "plank", grainIntensity: 0.11 }),
+    trim: Object.freeze({ material: "metal-panel", grainIntensity: 0.1 })
+  }),
+  "high-seas": Object.freeze({
+    floor: Object.freeze({ material: "plank", grainIntensity: 0.11 }),
+    wall: Object.freeze({ material: "metal-panel", grainIntensity: 0.1 }),
+    trim: Object.freeze({ material: "metal-panel", grainIntensity: 0.09 })
+  }),
+  "lost-world": Object.freeze({
+    floor: Object.freeze({ material: "moss-stone", grainIntensity: 0.12 }),
+    wall: Object.freeze({ material: "stone-course", grainIntensity: 0.12 }),
+    trim: Object.freeze({ material: "bone", grainIntensity: 0.1 })
+  }),
+  noir: Object.freeze({
+    floor: Object.freeze({ material: "asphalt", grainIntensity: 0.1 }),
+    wall: Object.freeze({ material: "stone-course", grainIntensity: 0.1 }),
+    trim: Object.freeze({ material: "metal-panel", grainIntensity: 0.08 })
+  }),
+  suburb: Object.freeze({
+    floor: Object.freeze({ material: "linoleum", grainIntensity: 0.08 }),
+    wall: Object.freeze({ material: "plank", grainIntensity: 0.09 }),
+    trim: Object.freeze({ material: "metal-panel", grainIntensity: 0.08 })
+  }),
+  theater: Object.freeze({
+    floor: Object.freeze({ material: "asphalt", grainIntensity: 0.12 }),
+    wall: Object.freeze({ material: "metal-panel", grainIntensity: 0.12 }),
+    trim: Object.freeze({ material: "bone", grainIntensity: 0.1 })
+  })
+});
+const REALM_MATERIAL_DEFAULT_SURFACE = Object.freeze({ material: "mottle", grainIntensity: 0.1 });
+
+/* realmMaterialFor(realmId, surface) -> {material, grainIntensity, color} — resolves REALM_MATERIALS
+   plus the kit's own color for that surface (floorColor/wallColor/trimColor), defaulting cleanly
+   (never throws, never undefined) on an unknown realm/surface — same total-function discipline
+   interiorTileKitFor already keeps. */
+function realmMaterialFor(realmId, surface) {
+  const kit = interiorTileKitFor(realmId);
+  const realmEntry = REALM_MATERIALS[kit.realmId] || REALM_MATERIALS[INTERIOR_DEFAULT_KIT];
+  const surfEntry = (realmEntry && realmEntry[surface]) || REALM_MATERIAL_DEFAULT_SURFACE;
+  const color = surface === "wall" ? kit.wallColor : surface === "trim" ? kit.trimColor : kit.floorColor;
+  return { material: surfEntry.material, grainIntensity: surfEntry.grainIntensity, color };
+}
 
 /* interiorTileKitFor(realmId) → a kit from INTERIOR_TILE_KITS, defaulting cleanly (never throws, never
    returns undefined) on an unknown/absent realmId — same total-function discipline theaterPaletteFor
@@ -258,7 +421,8 @@ const ITR_PILLAR_MIN_DIM = 6;       // room must be >= this many cells per axis 
 
 /** interiorBuildBoard(plan, opts) → InteriorBoard:
  * { kind:"interior3d", env, realmId, cellSize:1, wallHeightBase, fog:{color,density},
- *   tileKit:{floorColor,wallColor,trimColor,floorPattern,wallPattern},
+ *   tileKit:{floorColor,wallColor,trimColor,
+ *     floorMaterial,wallMaterial,trimMaterial,floorGrain,wallGrain,trimGrain},
  *   instances:{ floor:[{x,z,sx,sy,sz,color}], wall:[...], doorframe:[{...,squeeze}], pillar:[...] },
  *   bounds:{minX,maxX,minZ,maxZ}, meta:{roomCount,floorCount,wallCount,doorCount,pillarCount} }
  * `plan` is a U1 spatializePlan() output, ideally U2-extended (semanticizePlan) for room.scaleDomain/
@@ -353,8 +517,16 @@ function interiorBuildBoard(plan, opts) {
     cellSize: 1,               // GRID LAW: 1 SpatialPlan cell = 5 ft = 1 world unit
     wallHeightBase: ITR_WALL_HEIGHT_BASE,
     fog: kit.fog,
+    // GR1 (docs/GRAPHICS-ENGINE.md §E): floor/wall/trim each carry their own REALM_MATERIALS material+
+    // grain alongside the flat color (theater-boot.js's floorTex/wallTex path bakes the material into a
+    // real CanvasTexture; trim stays flat-colored today — see REALM_MATERIALS' own header note).
     tileKit: { floorColor: kit.floorColor, wallColor: kit.wallColor, trimColor: kit.trimColor,
-      floorPattern: kit.floorPattern, wallPattern: kit.wallPattern },
+      floorMaterial: realmMaterialFor(kit.realmId, "floor").material,
+      wallMaterial: realmMaterialFor(kit.realmId, "wall").material,
+      trimMaterial: realmMaterialFor(kit.realmId, "trim").material,
+      floorGrain: realmMaterialFor(kit.realmId, "floor").grainIntensity,
+      wallGrain: realmMaterialFor(kit.realmId, "wall").grainIntensity,
+      trimGrain: realmMaterialFor(kit.realmId, "trim").grainIntensity },
     instances: { floor: floor, wall: wall, doorframe: doorframe, pillar: pillar },
     lights: lights,
     bounds: { minX: minX, maxX: maxX, minZ: minZ, maxZ: maxZ },
@@ -372,7 +544,9 @@ function interiorBuildBoard(plan, opts) {
   };
 }
 
-// ─── ES-module bridge (see header note) — theater-boot.js reads these two off `window.` ────────────
+// ─── ES-module bridge (see header note) — theater-boot.js reads these off `window.` ─────────────────
 window.INTERIOR_TILE_KITS = INTERIOR_TILE_KITS;
 window.interiorBuildBoard = interiorBuildBoard;
 window.interiorTileKitFor = interiorTileKitFor;
+window.REALM_MATERIALS = REALM_MATERIALS;
+window.realmMaterialFor = realmMaterialFor;

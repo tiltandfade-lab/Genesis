@@ -369,12 +369,14 @@ def load_manifest():
         return json.load(f)
 
 
-def load_v2_manifest():
-    if not os.path.exists(V2_MANIFEST_PATH):
-        print(f"ERROR: v2 manifest not found at {V2_MANIFEST_PATH}. Run "
-              "build/gen-sprite-sheet-manifests.py first.", file=sys.stderr)
+def load_v2_manifest(path=None):
+    path = path or V2_MANIFEST_PATH
+    if not os.path.exists(path):
+        print(f"ERROR: v2 manifest not found at {path}. Run "
+              "build/gen-sprite-sheet-manifests.py first (or gen-xl-regen-sheets.py "
+              "for the XL/redo manifest).", file=sys.stderr)
         sys.exit(1)
-    with open(V2_MANIFEST_PATH) as f:
+    with open(path) as f:
         return json.load(f)
 
 
@@ -522,6 +524,22 @@ def slice_v2_sheet(args, v2_manifest):
         sys.exit(1)
 
     print(f"OK: {len(crops)}/{expect} cells sliced and assigned in row-major order (v2 sheet {sheet['id']}).")
+
+    # Regen-lane honesty: a re-cut slug that still carries verdict:"fail" in the review
+    # overlay stays BLOCKED in the theater (spriteEntryFor skips it) even though its new
+    # art just landed — remind, never silently clear a ruling.
+    overlay_path = os.path.join(ROOT, "dev", "model-qa", "sprite-tags-overlay.json")
+    if os.path.exists(overlay_path):
+        try:
+            with open(overlay_path) as f:
+                ov = json.load(f)
+            still_failed = [s for s, _ in crops if (ov.get(s) or {}).get("verdict") == "fail"]
+            if still_failed:
+                print(f"NOTE: {len(still_failed)} re-cut slug(s) still carry verdict:\"fail\" in the "
+                      f"overlay and will NOT render until re-ruled in the review tool "
+                      f"(python3 dev/sprite-review.py): {still_failed}")
+        except (ValueError, OSError):
+            pass
     sys.exit(0)
 
 
@@ -585,6 +603,9 @@ def main():
     ap.add_argument("--manifest-v2", metavar="SHEET_ID", default=None,
                     help="v2 mode: read dev/sprite-manifests/v2-manifest.json, slice sheet SHEET_ID "
                          "(e.g. gloom-monsters-1) — sheet_num is not used in this mode")
+    ap.add_argument("--manifest-path", metavar="PATH", default=None,
+                    help="override the v2 manifest file (e.g. dev/sprite-manifests/"
+                         "xl-regen-manifest.json for the XL/titan/redo regen lane)")
     ap.add_argument("--defringe-dir", action="store_true",
                     help="batch mode: sheet_png is a DIRECTORY of already-cut RGBA sprites; "
                          "apply the defringe pass (halo erode + edge despill) to every PNG "
@@ -611,7 +632,7 @@ def main():
         return
 
     if args.manifest_v2 is not None:
-        v2_manifest = load_v2_manifest()
+        v2_manifest = load_v2_manifest(args.manifest_path)
         slice_v2_sheet(args, v2_manifest)
         return  # slice_v2_sheet exits
 

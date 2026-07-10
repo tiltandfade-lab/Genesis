@@ -1,0 +1,1840 @@
+{
+ "_generated_by": "SPRITE-RESCUE U6 vision triage (workflow wf_634bfeb9-cb1, 2026-07-09)",
+ "spr-fantasy-aarakocra-aeromancer": {
+  "class": "art",
+  "note": "Purple lightning bolt in hand and small purple/blue gem accents on the collar read as the aeromancer's storm-magic glow \u2014 no hot magenta cast on the feathers or body; feathers stay in a clean blue/white/gold range."
+ },
+ "spr-fantasy-aarakocra-skirmisher": {
+  "class": "art",
+  "note": "Brown/gold/blue eagle-warrior palette with no purple or magenta anywhere in the sprite \u2014 clean."
+ },
+ "spr-fantasy-aberrant-cultist": {
+  "class": "art",
+  "note": "Deep purple robe, hood, and writhing tentacles are the intended eldritch/aberrant palette \u2014 saturated but reads as designed corruption-purple rather than a clashing neon-magenta cast; no isolated hot-pink wisps or edge halos sitting outside the figure's own color scheme."
+ },
+ "spr-fantasy-abominable-yeti": {
+  "class": "art",
+  "note": "White/grey fur monster, no purple or magenta present at all."
+ },
+ "spr-fantasy-adult-black-dragon": {
+  "class": "unmix",
+  "note": "Scattered hot-magenta speckle clusters at the feet, tail-tip, and lower wing edge that clash against the black/violet scale palette \u2014 reads as leaked chroma-key dots rather than intentional glow.",
+  "strength": 0.6
+ },
+ "spr-fantasy-adult-blue-dragon": {
+  "class": "art",
+  "note": "Clean blue-scale/gold-belly dragon with lightning bolts as an intentional breath-weapon effect; no magenta contamination visible."
+ },
+ "spr-fantasy-adult-brass-dragon": {
+  "class": "unmix",
+  "note": "Small hot-pink/magenta speckle cluster near the head crest/horns that doesn't match the warm brass-gold palette \u2014 mild contamination, easy fix.",
+  "strength": 0.4
+ },
+ "spr-fantasy-adult-bronze-dragon": {
+  "class": "unmix",
+  "note": "Similar small magenta speckle fleck on the dorsal ridge just behind the head/neck \u2014 same mild contamination pattern as the brass dragon.",
+  "strength": 0.4
+ },
+ "spr-fantasy-adult-copper-dragon": {
+  "class": "unmix",
+  "note": "Distinct bright magenta blob pooled near the lower legs/tail area, clashing hard against the copper/brown scales \u2014 clear chroma-key leak, not intended effect.",
+  "strength": 0.7
+ },
+ "spr-fantasy-adult-green-dragon": {
+  "class": "unmix",
+  "note": "Small magenta speckle cluster along the dorsal spine near the neck that doesn't belong in the green/gold palette \u2014 moderate contamination.",
+  "strength": 0.5
+ },
+ "spr-fantasy-adult-red-dragon": {
+  "class": "unmix",
+  "note": "ADAM FAILED: magenta blob pooled at the lower legs/tail plus a small fleck on the wing bone tip, both clashing against the red/gold scales. Otherwise the pose, anatomy, and design are solid classic adult-dragon art \u2014 a clean rescue candidate, not a regen.",
+  "strength": 0.7,
+  "fineOtherwise": true
+ },
+ "spr-fantasy-adult-silver-dragon": {
+  "class": "unmix",
+  "note": "Bright magenta blob at the bottom near the legs/tail plus a small mark near the head \u2014 stands out sharply against the white/silver body, clearly a chroma-key leak.",
+  "strength": 0.8
+ },
+ "spr-fantasy-adult-white-dragon": {
+  "class": "unmix",
+  "note": "Magenta patches visible on the upper-left wing membrane and another blob near the lower legs \u2014 clashes badly with the white/pale-grey palette, unambiguous contamination.",
+  "strength": 0.8
+ },
+ "spr-fantasy-air-elemental": {
+  "class": "art",
+  "note": "Whitish/grey wispy, appropriately translucent air-spirit form \u2014 no magenta present; the ghostly diffusion is the intended effect, not a chroma leak."
+ },
+ "spr-fantasy-ancient-black-dragon": {
+  "class": "unmix",
+  "note": "ADAM FAILED: large lavender/hot-magenta translucent patches spread across both wing membranes (reading as near-solid pink in places) plus a magenta blob near the legs \u2014 the wings should be dark/black membrane, not pink. Anatomy and pose are a strong, well-formed ancient-dragon composition otherwise, so this is a rescue candidate rather than a regen.",
+  "strength": 1,
+  "fineOtherwise": true
+ },
+ "spr-fantasy-ancient-blue-dragon": {
+  "class": "unmix",
+  "note": "Speckled hot-pink/magenta pattern scattered across the wing membranes plus a fleck on the tail \u2014 clashes with the blue-scale palette; the wing color should read blue/dark, not pink-speckled.",
+  "strength": 0.8
+ },
+ "spr-fantasy-ancient-brass-dragon": {
+  "class": "unmix",
+  "note": "Coppery-tan dragon reads clean overall, but there's a scatter of small hot-magenta/pink dots along the wing membrane folds and lower body that don't belong to the bronze/tan palette \u2014 classic unkeyed speckle contamination, not a design element. Pose/anatomy/scale detail are solid; this is a rescue candidate.",
+  "strength": 0.6,
+  "fineOtherwise": true
+ },
+ "spr-fantasy-ancient-bronze-dragon": {
+  "class": "unmix",
+  "note": "Same contamination signature as the brass dragon \u2014 small hot-pink/magenta flecks along wing membrane and haunch, clashing with the warm bronze/tan scale palette. Design and pose are otherwise strong; good rescue candidate.",
+  "strength": 0.6,
+  "fineOtherwise": true
+ },
+ "spr-fantasy-ancient-copper-dragon": {
+  "class": "unmix",
+  "note": "Copper/orange dragon with the same recurring hot-magenta speckling on the wing membrane and lower flank \u2014 saturated pink dots that clash with the warm copper tones, reading as leftover chroma-key rather than intended gems or highlights. Anatomy/pose fine, rescue candidate.",
+  "strength": 0.65,
+  "fineOtherwise": true
+ },
+ "spr-fantasy-ancient-green-dragon": {
+  "class": "unmix",
+  "note": "Green dragon, otherwise clean palette, but carries the identical small hot-pink/magenta speckle pattern on the wing membrane seen across the other metallic dragons \u2014 same contamination class, just milder/less visible against the darker green.",
+  "strength": 0.5
+ },
+ "spr-fantasy-ancient-red-dragon": {
+  "class": "unmix",
+  "note": "Red/orange dragon with hot-magenta/pink flecks scattered on the wing membrane and along the tail/haunch \u2014 stands out clashing against the red palette (a true 'purple/red dragon shadow' would sit closer to maroon, not neon pink). Design and pose read well otherwise, rescue candidate.",
+  "strength": 0.65,
+  "fineOtherwise": true
+ },
+ "spr-fantasy-ancient-silver-dragon": {
+  "class": "unmix",
+  "note": "Silver/white dragon with noticeable pink-magenta petal-shaped blotches across both wings \u2014 larger and more visible than the speckling on the other dragons, clearly hot pink rather than an icy-silver design accent. Contamination, moderate strength.",
+  "strength": 0.7
+ },
+ "spr-fantasy-ancient-white-dragon": {
+  "class": "unmix",
+  "note": "White/frost dragon reads mostly clean at this resolution \u2014 icy pale-blue breath cloud looks intentional \u2014 but there's a faint cool-magenta/violet tinge bleeding into the breath mist and along a few scale edges that doesn't match the icy palette; likely the subtler contamination Adam flagged. Design/pose otherwise solid, rescue candidate.",
+  "strength": 0.4,
+  "fineOtherwise": true
+ },
+ "spr-fantasy-animated-rug-of-smothering": {
+  "class": "art",
+  "note": "Ornate carpet-monster with a woven teal/gold/red border pattern; the small violet/magenta dot accents sit at the tassel corners in a way consistent with decorative bead/gem trim on the rug's border design, not contamination. Leaving alone per do-no-harm."
+ },
+ "spr-fantasy-arcanaloth": {
+  "class": "art",
+  "note": "Demon in dark armor with deep red/maroon accents and a subtle warm glow at the cloak hem \u2014 no hot-magenta clash visible; the reds read as intended demonic palette."
+ },
+ "spr-fantasy-arch-hag": {
+  "class": "unmix",
+  "note": "Witch figure has heavy purple shadowing through robe folds and hair that could pass as moldy-witch design, but there are clear hot-magenta streaks bleeding through the robe hem and hair strands that clash with the intended sickly green/yellow-brown palette \u2014 contamination over otherwise-solid pose/anatomy/staff detail. Rescue candidate.",
+  "strength": 0.75,
+  "fineOtherwise": true
+ },
+ "spr-fantasy-archdruid": {
+  "class": "unmix",
+  "note": "Green/brown antlered druid, mostly clean, but the glowing magic-hand and lower robe area carry small hot-magenta/pink blotches (meant to read as nature-magic glow but rendered too saturated-pink to match the earthy palette) rather than a deliberate violet spell-glow \u2014 mild cast.",
+  "strength": 0.45
+ },
+ "spr-fantasy-archelon": {
+  "class": "unmix",
+  "note": "Giant snapping turtle, shell/skin palette is naturalistic browns and olives; small hot-pink/magenta specks are visible along the flipper undersides and shell rim that have no design reason to be there on a turtle \u2014 contamination flecks, moderate.",
+  "strength": 0.5
+ },
+ "spr-fantasy-archmage": {
+  "class": "unmix",
+  "note": "Blue-robed wizard with a blue magical glow (intended) in hand/staff \u2014 but the lower robe hem carries a separate hot-magenta/pink smudge-cast that clashes with the cool blue design rather than reading as part of the arcane glow. Cast contamination on an otherwise-clean figure.",
+  "strength": 0.6
+ },
+ "spr-fantasy-archpriest": {
+  "class": "unmix",
+  "note": "White-and-gold high priest, mostly clean, but the lower robe edges and staff-finial area carry a hot-magenta/pink bleed that doesn't match the intended warm gold/white palette \u2014 reads as chroma cast rather than deliberate rose accent.",
+  "strength": 0.6
+ },
+ "spr-fantasy-astral-raider-dracomancer": {
+  "class": "art",
+  "note": "Dracomancer's violet robe and the purple lightning bolt in hand read as the intended design \u2014 a purple-armored spellcaster with a matching purple arcane effect held tightly in the hand and cohering with the boots/trim. No hot-pink clash separate from the effect; leaving as art per do-no-harm."
+ },
+ "spr-fantasy-astral-raider-knight": {
+  "class": "unmix",
+  "note": "Dark-armored elf knight, mostly clean grays/blacks; the cloak's inner lining and hem carry a soft magenta-pink cast that doesn't match the otherwise cool-metal palette \u2014 mild contamination cast, not a design choice.",
+  "strength": 0.4
+ },
+ "spr-fantasy-astral-raider-warrior": {
+  "class": "unmix",
+  "note": "Tattered cloak bottom-left has a saturated hot magenta/rainbow blob (magenta-cyan-orange smear) that clashes with the otherwise dark leather/steel palette \u2014 reads as chroma-key leak on the torn cloth edge, not intended color.",
+  "strength": 0.7
+ },
+ "spr-fantasy-awakened-shrub": {
+  "class": "art",
+  "note": "All green/brown foliage and bark tones, no magenta present. Clean."
+ },
+ "spr-fantasy-awakened-tree": {
+  "class": "unmix",
+  "note": "Small bright pink/magenta blotch on the left side of the trunk/branch area stands out as a hot, flat color against the desaturated bark greens/browns \u2014 looks like a leftover magenta patch, not a design element.",
+  "strength": 0.5
+ },
+ "spr-fantasy-azer-pyromancer": {
+  "class": "art",
+  "note": "Fire is orange/yellow/red throughout, no pink or magenta hues visible. Clean."
+ },
+ "spr-fantasy-balor": {
+  "class": "unmix",
+  "note": "Overall red demon design and pose are solid; the fiery whip/blade held in the hand has a hot pink-magenta gradient mixed into its orange glow that clashes with the rest of the red/orange fire palette \u2014 a magenta cast on the weapon glow. Design/anatomy otherwise fine.",
+  "strength": 0.6,
+  "fineOtherwise": true
+ },
+ "spr-fantasy-bandit-crime-lord": {
+  "class": "unmix",
+  "note": "Coat and cape are a deep muted purple/burgundy overall (intentional), but the tattered cape edges at the bottom carry a much more saturated hot-pink/magenta streak that doesn't match the coat's desaturated purple \u2014 contamination on the torn fabric edge.",
+  "strength": 0.7
+ },
+ "spr-fantasy-banshee": {
+  "class": "unmix",
+  "note": "Ghostly robed figure and pose read well, but the chest/torso area and robe edges are rendered in near-pure hot magenta rather than a translucent ghostly glow \u2014 classic solid-magenta-body contamination that should become translucent/pale instead. Design otherwise fine.",
+  "strength": 1,
+  "fineOtherwise": true
+ },
+ "spr-fantasy-bearded-devil": {
+  "class": "art",
+  "note": "Solid red skin, no purple or pink contamination visible anywhere on the figure."
+ },
+ "spr-fantasy-behir": {
+  "class": "unmix",
+  "note": "Serpentine body is teal/green with dark scale patterning (intended), but scattered small hot-pink/magenta flecks along the coils and heads look like leftover chroma speckling rather than a deliberate marking pattern.",
+  "strength": 0.4
+ },
+ "spr-fantasy-berserker": {
+  "class": "unmix",
+  "note": "At this resolution the barbarian reads clean \u2014 tan skin, cream torn cloth, brown fur/leather, no obvious hot magenta patch. Given Adam's fail flag there's likely a subtle magenta edge-halo (e.g. around the axe head or cloth tears) too faint to confirm visually here; pose/anatomy/design are solid regardless, so this is a rescue candidate rather than a regen.",
+  "strength": 0.3,
+  "fineOtherwise": true
+ },
+ "spr-fantasy-berserker-commander": {
+  "class": "art",
+  "note": "Warm brown/red leather and skin tones throughout, no magenta contamination visible."
+ },
+ "spr-fantasy-black-pudding": {
+  "class": "unmix",
+  "note": "Body is otherwise a coherent black/dark-brown ooze with an embedded skull (good design), but small hot-pink/magenta specks are scattered across the slime surface that don't belong to a uniform ooze's palette \u2014 chroma speckle contamination.",
+  "strength": 0.6
+ },
+ "spr-fantasy-blind-deep-stalker": {
+  "class": "art",
+  "note": "Pale tan/cream skin with reddish sores and sparse dark hair \u2014 no magenta or pink cast visible."
+ },
+ "spr-fantasy-blob-of-annihilation": {
+  "class": "unmix",
+  "note": "Dark, skull-encrusted void mass is a coherent design, but the interior mouth/maw glow and a small eye-like dot are rendered in flat hot magenta-pink rather than a void/black glow \u2014 reads as chroma-key leak in the translucent mouth area rather than intended coloring.",
+  "strength": 0.7
+ },
+ "spr-fantasy-blue-chaos-frog": {
+  "class": "art",
+  "note": "Blue-grey mottled frog skin, orange eyes, pink tongue (natural frog-tongue color) \u2014 no contamination, all reads as intended."
+ },
+ "spr-fantasy-bone-devil": {
+  "class": "art",
+  "note": "Bone-tan devil with red loincloth/wing membranes and dark wings \u2014 palette is warm red/tan throughout, no magenta cast present."
+ },
+ "spr-fantasy-bone-naga": {
+  "class": "art",
+  "note": "Skeletal naga in bone/tan/brown palette; joints show a warm pinkish-red tint that reads as dried gore/marrow, not hot magenta \u2014 belongs to the design."
+ },
+ "spr-fantasy-brain-crawler": {
+  "class": "art",
+  "note": "Fleshy pink/red brain-mass head and body \u2014 the pink is the intended organic brain-tissue color, no neon magenta clash."
+ },
+ "spr-fantasy-brazen-gorgon": {
+  "class": "unmix",
+  "note": "Bronze/gold medusa is clean overall, but a couple of small saturated magenta dot-accents (shoulder, hip) clash with the metallic palette \u2014 look like leftover keying specks rather than deliberate gems.",
+  "strength": 0.5
+ },
+ "spr-fantasy-bronze-dragon-wyrmling": {
+  "class": "unmix",
+  "note": "Mostly clean bronze/copper dragon; faint hot-pink flecks along the lower wing membrane edge clash with the metallic scale palette \u2014 soft contamination cast, not a design choice.",
+  "strength": 0.5
+ },
+ "spr-fantasy-bugbear-stalker-strangler": {
+  "class": "art",
+  "note": "Brown/tan bugbear holding a garrote with glowing violet orbs at the ends \u2014 the purple glow is a consistent, self-contained magic-weapon light source, reads as intended."
+ },
+ "spr-fantasy-bullywug-warrior": {
+  "class": "art",
+  "note": "Green frog-man with pink/magenta head-feathers and red loincloth \u2014 the pink plumage is a stylized decorative color choice consistent across the headdress, not a random cast."
+ },
+ "spr-fantasy-cambion": {
+  "class": "art",
+  "note": "Deep violet-skinned devil/tiefling with red inner-wing glow \u2014 the purple is the character's intended skin tone, harmonizes with the red accents, not neon/clashing."
+ },
+ "spr-fantasy-chain-devil": {
+  "class": "art",
+  "note": "Red devil wielding chains tipped with glowing purple orbs \u2014 same self-consistent magic-orb glow language as the bugbear's garrote; belongs to the design."
+ },
+ "spr-fantasy-chasme": {
+  "class": "art",
+  "note": "Fly-demon with red/pink fleshy skin and brain-like head \u2014 organic pink/red tones fit the creature's intended grotesque palette."
+ },
+ "spr-fantasy-clawed-drowner": {
+  "class": "art",
+  "note": "Teal/green scaled horror with dark red/magenta glowing joints and head spikes \u2014 reads as bioluminescent wounds/markings consistent with the creature's horror palette, not a stray cast."
+ },
+ "spr-fantasy-cloaker": {
+  "class": "unmix",
+  "note": "Dark purple-black cloak creature with hot magenta smoke wisps trailing from the hem and a magenta-lit mouth interior \u2014 the wisp/tendril bottom reads as saturated near-pure magenta contamination rather than the deep violet used on the rest of the body.",
+  "strength": 0.7
+ },
+ "spr-fantasy-clockwork-law-construct-monodrone": {
+  "class": "art",
+  "note": "Bronze clockwork construct with small pink/teal gem inlays \u2014 the gems are deliberate jewel accents, sized and placed like other construct ornamentation, not a cast."
+ },
+ "spr-fantasy-cloud-giant": {
+  "class": "unmix",
+  "note": "White-grey giant wreathed in mist at the base \u2014 the mist is a fairly saturated hot magenta-purple rather than a soft grey/white storm-cloud tone, and pools most heavily at the translucent smoke edges, the classic contamination carrier.",
+  "strength": 0.6
+ },
+ "spr-fantasy-cockatrice-regent": {
+  "class": "unmix",
+  "note": "Mostly clean gold/bronze cockatrice-dragon; faint pink flecks along the wing membrane edges are a mild cast similar to the bronze dragon wyrmling, not part of the intended plumage/scale palette.",
+  "strength": 0.4
+ },
+ "spr-fantasy-constrictor-snake": {
+  "class": "unmix",
+  "note": "Otherwise clean tan/brown snake with an earthy blotch pattern; a small isolated hot-magenta shape floats near the upper-left (by the tongue), disconnected from the snake's body and palette \u2014 reads as a leftover keying artifact, not art.",
+  "strength": 0.5
+ },
+ "spr-fantasy-couatl": {
+  "class": "art",
+  "note": "Feathered serpent with vivid multicolor plumage including pink/magenta wing and scale accents \u2014 couatls are traditionally rendered iridescent/rainbow, and the magenta here integrates with orange, teal, and gold across the wings rather than isolating as a cast."
+ },
+ "spr-fantasy-crawling-claw": {
+  "class": "unmix",
+  "note": "Fleshy interior of ribcage and finger sinews render as saturated hot-pink/magenta rather than a muted flesh-red \u2014 reads as contamination bleeding through the exposed bone/tendon areas; rest of the bone/flesh palette is naturalistic.",
+  "strength": 0.5
+ },
+ "spr-fantasy-dao": {
+  "class": "art",
+  "note": "Deep indigo-blue skin and smoky violet lower-body wisps are the intended genie palette; smoke trail is a cool blue-violet, not hot magenta. Leave alone."
+ },
+ "spr-fantasy-darkmantle": {
+  "class": "art",
+  "note": "Dark violet-black cave-lurker skin/mantle is a stylized but harmonious design choice, no neon pink cast or halo present."
+ },
+ "spr-fantasy-death-chaos-frog": {
+  "class": "art",
+  "note": "Palette is bronze/red/rust with skull growths; no purple or magenta present at all."
+ },
+ "spr-fantasy-death-cultist": {
+  "class": "art",
+  "note": "Black-and-red robes with orange glow accents on the skull-staff; no magenta contamination visible."
+ },
+ "spr-fantasy-death-knight": {
+  "class": "art",
+  "note": "Black plate armor, deep red-black cloak; ambient wispy fringe is dark grey-black, not magenta. Clean."
+ },
+ "spr-fantasy-death-knight-aspirant": {
+  "class": "art",
+  "note": "Cool blue-violet ambient glow along the cloak/blade edge reads as intentional cold spectral light, harmonizes with the steel-blue armor; not a hot-pink cast."
+ },
+ "spr-fantasy-demilich": {
+  "class": "art",
+  "note": "Purple gems in the crown and dangling purple chain-jewels are a deliberate lich-regalia design choice, consistent saturated jewel-purple rather than clashing neon magenta."
+ },
+ "spr-fantasy-deva": {
+  "class": "art",
+  "note": "White/gold radiant angelic figure with pale halo glow; no magenta or purple contamination anywhere."
+ },
+ "spr-fantasy-displacer-beast": {
+  "class": "art",
+  "note": "Purple-black fur with a violet flame-aura trailing off the back is the classic displacer-beast palette (species is canonically purple); aura reads as a coherent violet flame effect, not a clashing hot-pink halo."
+ },
+ "spr-fantasy-djinni": {
+  "class": "unmix",
+  "note": "Small isolated hot-magenta blob sitting at the hip/tail-smoke junction (right side) stands out as a localized contamination spot against the otherwise cool blue smoke trail; rest of the genie (blue skin, smoke) is intended art.",
+  "strength": 0.35
+ },
+ "spr-fantasy-domestic-animal-a-single-caged-ferret-kit-young-hyperactive-still-learning-the-vermin-catcher-s-trade": {
+  "class": "art",
+  "note": "Small evenly-spaced pink/magenta dots along the cage's crown arch read as a deliberate decorative bead trim (matches the bronze cage's ornamental design), not a random contamination shape."
+ },
+ "spr-fantasy-domestic-animal-a-single-caged-songbird-kept-for-the-sound-of-it-restless-behind-the-wire": {
+  "class": "art",
+  "note": "Same bronze birdcage with matching small pink decorative bead trim along the top arch as the ferret cage \u2014 consistent intentional ornament, not contamination."
+ },
+ "spr-fantasy-domestic-animal-a-single-goat-headstrong-climbs-what-it-shouldn-t-eats-what-it-shouldn-t": {
+  "class": "unmix",
+  "note": "Small saturated hot-pink smudge sits right at the tip of the upper-left horn, clashing with the naturalistic grey-tan horn color elsewhere on the same horn \u2014 reads as a leftover contamination fleck rather than intended shading.",
+  "strength": 0.3
+ },
+ "spr-fantasy-domestic-animal-a-single-goose-from-the-flock-loud-territorial-first-to-mark-a-stranger": {
+  "class": "art",
+  "note": "Clean white/cream goose with orange beak and feet; no magenta or purple present anywhere in the sprite."
+ },
+ "spr-fantasy-domestic-animal-a-single-pig-smarter-than-it-s-given-credit-for-rooting-at-the-fence-line": {
+  "class": "unmix",
+  "note": "The curly tail terminates in a small bright hot-magenta spiral/loop that is far more saturated than the muted dusty-pink pig body \u2014 clashes as a contamination remnant rather than a shading choice; rest of the pig (skin, snout) is naturalistic.",
+  "strength": 0.4
+ },
+ "spr-fantasy-doppelganger": {
+  "class": "art",
+  "note": "Cloaked figure in deep burgundy-purple tattered robe with dark wispy trails; the small orb glowing pink-magenta in his hand reads as an intentional magic-item glow, not a halo leak. Palette is cohesive dark-fantasy purple, not hot-pink contamination."
+ },
+ "spr-fantasy-dracolich": {
+  "class": "unmix",
+  "note": "Skeletal dragon is a strong, readable design (bone-brown/black palette, good silhouette), but hot neon magenta blotches sit on the joints, spine gaps, and rib interior that clash badly with the desaturated bone palette \u2014 reads as chroma bleed, not intended necrotic glow (which would be more uniform/green-violet). Fix the magenta patches and the sprite is fully usable.",
+  "strength": 0.7,
+  "fineOtherwise": true
+ },
+ "spr-fantasy-dragon-turtle": {
+  "class": "unmix",
+  "note": "Design and pose are solid \u2014 good rock-shelled turtle-dragon read, green/brown/stone palette throughout. A soft hot-magenta cast/blob sits under the belly and back-leg shadow area that doesn't belong to the palette; looks like a leaked shadow-key wash rather than art. Fine otherwise.",
+  "strength": 0.6,
+  "fineOtherwise": true
+ },
+ "spr-fantasy-dretch": {
+  "class": "art",
+  "note": "Uniform sickly purple-violet skin tone across the whole body, consistent with canonical dretch coloring (mottled purple demon skin) \u2014 no hot-pink patches or clashing saturation, reads as deliberate palette."
+ },
+ "spr-fantasy-drider": {
+  "class": "art",
+  "note": "Dark drow-purple armor and black spider carapace form a cohesive dark-fantasy palette; no neon magenta patches or halos visible \u2014 the purples are deep/desaturated, belonging to the design."
+ },
+ "spr-fantasy-drowned-husk": {
+  "class": "art",
+  "note": "Bloated green zombie with blue-tinted drip/water effects and reddish wound marks; no magenta contamination visible anywhere on the figure or base."
+ },
+ "spr-fantasy-druid-circle-warden": {
+  "class": "art",
+  "note": "Human druid with wolf, hawk, and bear companions in earthy greens/browns/tans; no magenta present at all \u2014 clean sprite."
+ },
+ "spr-fantasy-dungeon-animal-cave-adapted-spider-pale-eyeless-spins-webs-across-passages-nobody-s-walked-in-years": {
+  "class": "unmix",
+  "note": "Pale, eyeless cave spider is otherwise well-rendered (bone-white/cream carapace, translucent-looking legs), but there are hot magenta-pink patches on top of the abdomen between the leg bases that clash with the pale palette \u2014 reads as chroma showing through a thin/pale area rather than intended coloring.",
+  "strength": 0.7
+ },
+ "spr-fantasy-dungeon-animal-cave-cricket-oversized-chirping-alone-in-the-dark-first-warning-of-the-swarm-nearby": {
+  "class": "unmix",
+  "note": "Mostly clean brown/tan cricket, but there's a faint magenta-pink cast on the front leg joints/tips that doesn't match the insect's otherwise naturalistic coloring \u2014 a mild leaked cast, not central to the sprite.",
+  "strength": 0.35
+ },
+ "spr-fantasy-dungeon-animal-trapped-messenger-pigeon-still-carries-a-note-no-one-living-will-ever-read": {
+  "class": "art",
+  "note": "Gray pigeon with iridescent green/purple sheen on the neck feathers \u2014 this is classic pigeon iridescence, a natural and expected color feature, not contamination. No hot-magenta patches elsewhere."
+ },
+ "spr-fantasy-dust-mephit": {
+  "class": "unmix",
+  "note": "Sandy/dust elemental form and pose read fine (good swirling dust-wraith silhouette with clawed reaching hand), but hot neon magenta patches are scattered prominently through the torso and the swirling dust base \u2014 a dust mephit should be tan/brown/gray, so this is clear, heavy contamination rather than intended color. Would become a translucent dusty form if unmixed.",
+  "strength": 0.9,
+  "fineOtherwise": true
+ },
+ "spr-fantasy-efreeti": {
+  "class": "art",
+  "note": "Fire genie rendered entirely in oranges/reds/blacks with flame wisps; no magenta or pink anywhere in the piece."
+ },
+ "spr-fantasy-elder-deep-thing": {
+  "class": "art",
+  "note": "Cthulhu-esque eldritch horror in deep purple/lavender skin with pinkish tentacle undersides \u2014 reads as a deliberate two-tone cephalopod palette (dark purple hide, lighter pink-flesh tentacle pads), consistent and cohesive rather than a clashing hot-magenta leak."
+ },
+ "spr-fantasy-elemental-cataclysm": {
+  "class": "unmix",
+  "note": "Dramatic rock/fire/lightning elemental scene reads well overall (good rock texture, orange fire, blue lightning), but the lightning and swirling dust/smoke at the base and edges carry a violet-magenta tint that's more saturated/pink than the blue-white electric arcs elsewhere in the piece \u2014 likely a mild chroma cast on the smoke rather than fully intended coloring. Composition and design are otherwise strong.",
+  "strength": 0.4,
+  "fineOtherwise": true
+ },
+ "spr-fantasy-elemental-cultist": {
+  "class": "art",
+  "note": "Red/orange robed fire cultist with matching flame-wreathed hands; palette is fully red/orange/black, no magenta contamination present."
+ },
+ "spr-fantasy-elven-herbalist-elf-sells-cures-and-quietly-a-few-curses": {
+  "class": "art",
+  "note": "Green-robed elf holding a potion bottle and a tiny glowing purple flower/fae-light in the other hand \u2014 the small purple bloom is a deliberate magical accent (fits the 'quietly a few curses' flavor), not a magenta leak; rest of the sprite is clean green/brown/tan."
+ },
+ "spr-fantasy-empyrean": {
+  "class": "unmix",
+  "note": "Gold-armored celestial reads great overall \u2014 pose, armor, halo all solid. But the wingtips and trailing cloak wisps carry raw hot-magenta bleed rather than a controlled gold-to-violet gradient; it clashes as a chroma leak, not a designed color transition. Fixable \u2014 good rescue candidate.",
+  "strength": 0.7,
+  "fineOtherwise": true
+ },
+ "spr-fantasy-empyrean-iota": {
+  "class": "art",
+  "note": "Electric/energy being \u2014 cyan-white-violet glow is a coherent designed palette for a lightning elemental, no clashing hot-pink present."
+ },
+ "spr-fantasy-erinyes": {
+  "class": "art",
+  "note": "Red devil with dark wings; small purple sash/cloth strip at the waist is a deliberate accent color, not saturated magenta \u2014 no contamination visible."
+ },
+ "spr-fantasy-eye-tyrant": {
+  "class": "art",
+  "note": "Beholder's mottled purple-brown hide is the intended skin tone (classic beholder palette) \u2014 desaturated, no hot-magenta cast."
+ },
+ "spr-fantasy-eye-tyrant-zombie": {
+  "class": "art",
+  "note": "Undead beholder with pinkish rot/wound accents on green-brown flesh \u2014 the pink reads as decaying tissue detail consistent with the design, not a magenta halo."
+ },
+ "spr-fantasy-faerie-dragon-youth": {
+  "class": "art",
+  "note": "Clean teal/green/gold dragon, no magenta anywhere in the piece."
+ },
+ "spr-fantasy-fiend-cultist": {
+  "class": "unmix",
+  "note": "Staff-head glow and cloak hem carry saturated hot-magenta flecks/edges that clash with the desaturated purple robe \u2014 reads as chroma-key bleed at the garment edges rather than a designed glow, though the core figure and robe color are fine.",
+  "strength": 0.55
+ },
+ "spr-fantasy-fire-elemental": {
+  "class": "art",
+  "note": "All orange/red flame body, no magenta contamination present."
+ },
+ "spr-fantasy-fire-giant": {
+  "class": "art",
+  "note": "Red-skinned giant with orange fire-sword \u2014 no magenta anywhere."
+ },
+ "spr-fantasy-fish-folk-archpriest": {
+  "class": "art",
+  "note": "Gold/bronze armored fish-folk, no magenta present in the piece."
+ },
+ "spr-fantasy-flameskull": {
+  "class": "art",
+  "note": "Fire-orange skull with small pink-magenta glow in the eye sockets \u2014 reads as an intentional eerie eye-glow accent consistent with a flame skull design, not a contamination cast."
+ },
+ "spr-fantasy-flaming-skeleton": {
+  "class": "art",
+  "note": "Orange/red fire skeleton, clean, no magenta present."
+ },
+ "spr-fantasy-flesh-golem": {
+  "class": "unmix",
+  "note": "Pink/red stitched flesh body is the intended design, but the outstretched hand carries an isolated hot-magenta patch on the fingers that clashes with the rest of the flesh palette \u2014 localized chroma-key leak, not a designed color.",
+  "strength": 0.7
+ },
+ "spr-fantasy-frost-giant": {
+  "class": "art",
+  "note": "Blue-gray/white frost giant, no magenta present."
+ },
+ "spr-fantasy-gas-spore-fungus": {
+  "class": "art",
+  "note": "Deep violet mushroom cap is the intended design (classic beholder-mimic fungus palette), harmonizes with the brown stem and green spore puffs \u2014 not a contamination cast."
+ },
+ "spr-fantasy-ghast-base": {
+  "class": "unmix",
+  "note": "Mostly clean tan/yellow undead figure, but there's a small isolated hot-pink spot/halo artifact on the lower leg that clashes with the desaturated palette \u2014 looks like a residual chroma-key fragment rather than a wound detail.",
+  "strength": 0.5
+ },
+ "spr-fantasy-ghast-gravecaller-spellstitched-elite": {
+  "class": "art",
+  "note": "Purple/violet cloak and dark plum robe folds are cohesive with the elite gravecaller palette; the green spectral glow around the hand is the spell effect. No hot-magenta clash visible \u2014 deep violets belong to the design."
+ },
+ "spr-fantasy-ghost": {
+  "class": "unmix",
+  "note": "Hot neon pink-magenta patches bleed through the translucent robe near the hands and drip down into the trailing chain \u2014 clashes hard against the cool white/gray ghost palette. Pose and silhouette (classic wailing specter with dragging chain) are strong; this is a pure color-contamination fail, good rescue candidate.",
+  "strength": 1,
+  "fineOtherwise": true
+ },
+ "spr-fantasy-giant-axe-beak": {
+  "class": "art",
+  "note": "Clean \u2014 earthy browns/tans, no magenta or purple contamination anywhere on feathers, beak, or talons."
+ },
+ "spr-fantasy-giant-centipede": {
+  "class": "art",
+  "note": "Small violet accent dots along the underside leg joints read as intentional segment coloring (common centipede/leg-marking convention), not hot magenta \u2014 desaturated and consistent, not clashing."
+ },
+ "spr-fantasy-giant-elk": {
+  "class": "unmix",
+  "note": "Majestic golden/white elk design is solid, but the eyes render as flat hot magenta/pink and a few of the scattered body sparkles are the same neon pink rather than the gold/white sparkle tone used elsewhere \u2014 a magenta-cast tell, not an intended eye color choice.",
+  "strength": 0.7,
+  "fineOtherwise": true
+ },
+ "spr-fantasy-giant-squid": {
+  "class": "art",
+  "note": "Deep violet-purple body with darker plum tentacle undersides is a cohesive, harmonized cephalopod palette \u2014 no neon hot-pink clash, reads as intended coloring."
+ },
+ "spr-fantasy-giant-wasp": {
+  "class": "art",
+  "note": "Wings carry a soft translucent pink-purple tint that's consistent membrane rendering, not saturated hot magenta; body colors (black/yellow/orange) are unaffected. Borderline but leaning art per do-no-harm."
+ },
+ "spr-fantasy-glabrezu": {
+  "class": "art",
+  "note": "Red/brown demon skin with small purple prayer-bead-style necklace accent \u2014 the purple is a minor decorative detail, not a magenta cast over the figure."
+ },
+ "spr-fantasy-gnoll-demoniac": {
+  "class": "art",
+  "note": "Brown/red fur and armor, small purple bead necklace accent similar to glabrezu \u2014 decorative, not contamination. No magenta cast on the figure."
+ },
+ "spr-fantasy-gnoll-fang-of-the-beast": {
+  "class": "art",
+  "note": "Clean brown/tan fur and armor, no magenta or stray purple anywhere."
+ },
+ "spr-fantasy-gnomish-clockmaker-gnome-every-clock-in-town-keeps-slightly-different-time-on-purpose": {
+  "class": "art",
+  "note": "Purple gem in the monocle/eyepiece and pocket-watch face is a deliberate jewel-tone detail; rest of palette (green coat, gold trim) is clean."
+ },
+ "spr-fantasy-goblin-hexer": {
+  "class": "art",
+  "note": "Purple arcane glow around the raised hand and staff top is the hexer's spell effect \u2014 consistent saturated magic-purple, matches the 'hexer' concept rather than reading as a magenta leak."
+ },
+ "spr-fantasy-goliath-dockworker-goliath-moves-cargo-alone-that-takes-four-other-men": {
+  "class": "art",
+  "note": "Clean gray skin, brown leather, rope coil \u2014 no magenta or purple anywhere in the sprite."
+ },
+ "spr-fantasy-gorgon": {
+  "class": "unmix",
+  "note": "Strong medusa/gorgon design (snake hair, gold armor, spear) undercut by hot magenta/pink wisps and smoke trailing off the lower hem and skirt edge, clashing against the earthy gold-green palette used everywhere else on the figure.",
+  "strength": 0.7,
+  "fineOtherwise": true
+ },
+ "spr-fantasy-graveyard-revenant": {
+  "class": "unmix",
+  "note": "Hot pink-magenta dripping tendrils hang off the forearms and the prayer-bead chain glows the same neon pink \u2014 clashes against the somber gray/bone/rust revenant palette; reads as chroma-key leak on the tattered wisp edges rather than intended ectoplasm color.",
+  "strength": 0.8
+ },
+ "spr-fantasy-gray-chaos-frog": {
+  "class": "art",
+  "note": "Clean mottled gray/brown toad coloring; red tongue and orange eyes are the only saturated colors, no magenta or purple contamination."
+ },
+ "spr-fantasy-greater-shadow": {
+  "class": "unmix",
+  "note": "Whole wispy body rendered in hot magenta-purple instead of black/dark-grey shadow-stuff; the magenta is saturated neon pink-purple throughout the tendrils and torso mass, clashing badly with what should read as inky shadow. Silhouette, clawed wisp shapes, and glowing white eyes are well-composed and readable \u2014 pose/anatomy is good, this is purely a color-mix problem, a strong rescue candidate.",
+  "strength": 0.9,
+  "fineOtherwise": true
+ },
+ "spr-fantasy-green-chaos-frog": {
+  "class": "unmix",
+  "note": "Body is solid, well-rendered green toad flesh (good design, readable anatomy, nasty teeth/eyes). Contamination is localized: the dorsal spike ridge and a knee patch carry near-pure hot magenta that doesn't match any of the frog's own palette (browns/reds/greens elsewhere) \u2014 reads as chroma-key bleed on the spikes, not an intended color choice.",
+  "strength": 0.6,
+  "fineOtherwise": true
+ },
+ "spr-fantasy-green-dragon-wyrmling": {
+  "class": "art",
+  "note": "Olive/gold dragon scales throughout; a couple tiny purple flecks on the wing membrane are within the muted, desaturated palette of the piece, not hot magenta. No clash \u2014 leave alone."
+ },
+ "spr-fantasy-green-hag": {
+  "class": "art",
+  "note": "Sickly green skin, brown rags, orange-glow staff \u2014 no magenta or purple anywhere in the piece. Clean."
+ },
+ "spr-fantasy-grell": {
+  "class": "unmix",
+  "note": "Fleshy purple-brown body has hot neon-pink vein/highlight lines streaked across the torso and tentacles that are far more saturated than the creature's own dusky purple-brown palette \u2014 reads as a magenta cast bleeding over the sculpt rather than intended veining.",
+  "strength": 0.6
+ },
+ "spr-fantasy-grick-ancient": {
+  "class": "art",
+  "note": "Brown/tan armored worm-maw, deep red mouth interior \u2014 no purple or magenta present at all."
+ },
+ "spr-fantasy-guardian-naga": {
+  "class": "art",
+  "note": "Gold/white temple-guardian armor over a teal snake body; a small pink blossom/flourish at lower-left reads as an intentional decorative accent (temple motif), not a contamination patch \u2014 soft, not hot-magenta, and isolated to one ornamental spot."
+ },
+ "spr-fantasy-gulthias-blight": {
+  "class": "art",
+  "note": "Green/red rotten-plant flesh with red eye-pods \u2014 entirely within an earthy, organic palette. No magenta present."
+ },
+ "spr-fantasy-halfling-innkeeper-knows-every-traveler-s-business-before-they-ve-unpacked": {
+  "class": "art",
+  "note": "Ordinary halfling in muted browns/greys/tan; no purple or magenta anywhere. Clean character art."
+ },
+ "spr-fantasy-haunting-revenant": {
+  "class": "unmix",
+  "note": "Ghostly purple smoke aura around the figure is largely the intended haunting-glow effect, but the wisps at the base and a patch on the shoulder spike into a more saturated hot-magenta that clashes with the rest of the smoke's dustier violet \u2014 a soft cast over otherwise-good ghost-mist art.",
+  "strength": 0.5
+ },
+ "spr-fantasy-hell-hound": {
+  "class": "art",
+  "note": "Black/red/orange flame-wreathed hound; the small pink patch is just the tongue/nose color, consistent with the rest of the fiery but non-purple palette. No contamination."
+ },
+ "spr-fantasy-helmed-horror": {
+  "class": "art",
+  "note": "Red-plumed steel armor over a skeletal frame \u2014 entirely metallics, reds, bone-white. No magenta anywhere."
+ },
+ "spr-fantasy-hezrou": {
+  "class": "unmix",
+  "note": "Grey-purple demon body is fine, but the dripping chain/entrail held in its hand is rendered in a hot saturated pink-magenta that clashes with the demon's dusty grey-violet skin \u2014 reads as chroma leak on the held prop rather than an intended gore color.",
+  "strength": 0.6
+ },
+ "spr-fantasy-hook-horror": {
+  "class": "art",
+  "note": "Insectoid aberration rendered in a consistent deep purple-magenta exoskeleton with matching tentacles and maw \u2014 the color is uniform across the whole body and harmonizes with itself; reads as a deliberate aberration palette (mind-flayer-adjacent), not a contamination cast."
+ },
+ "spr-fantasy-ice-devil": {
+  "class": "art",
+  "note": "Grey-blue devil in dark iron armor; a few small red dots on the torso read as blood/wounds, not magenta. No contamination."
+ },
+ "spr-fantasy-ice-mephit": {
+  "class": "art",
+  "note": "White/pale-blue crystalline ice creature \u2014 entirely cool blue-white palette, no purple or magenta present."
+ },
+ "spr-fantasy-incubus": {
+  "class": "art",
+  "note": "Red-skinned devil with bat wings on flat white bg; no magenta present at all \u2014 clean sprite."
+ },
+ "spr-fantasy-invisible-stalker": {
+  "class": "unmix",
+  "note": "Entire humanoid body rendered as solid hot neon magenta/purple with white crackle lines \u2014 this creature should read as translucent/near-invisible (air elemental distortion), not a solid saturated magenta figure. Classic 'translucent body baked as solid magenta' failure. Pose and silhouette (crouched humanoid, clawed hand, crackling energy lines) are good \u2014 only the fill color is wrong, so this is a strong rescue candidate rather than a regen.",
+  "strength": 1,
+  "fineOtherwise": true
+ },
+ "spr-fantasy-iron-golem": {
+  "class": "art",
+  "note": "Bronze/iron plated golem, brown-orange metal palette; no magenta anywhere (the small white puff by the shoulder is steam/smoke, not contamination)."
+ },
+ "spr-fantasy-juvenile-shadow-dragon": {
+  "class": "art",
+  "note": "Black dragon with deep violet-magenta highlights on wings, spines, and eye \u2014 the purple functions as the shadow-dragon's signature glow/energy color, consistent and harmonizing with the black scales. Reads as intended design, not a clashing cast."
+ },
+ "spr-fantasy-kid-wants-slip-a-message-to-the-one-person-the-family-has-forbidden-them-to-see": {
+  "class": "art",
+  "note": "Kid in green cloak running with a letter; ordinary earth-tone palette, no magenta/purple present at all."
+ },
+ "spr-fantasy-killer-whale": {
+  "class": "unmix",
+  "note": "Orca itself is clean black/white/gray, but the water splash at the base has a saturated hot-magenta/purple blob mixed into what should be white-blue spray \u2014 a contamination cast on the splash effect, not the animal's own coloring.",
+  "strength": 0.6
+ },
+ "spr-fantasy-kraken": {
+  "class": "unmix",
+  "note": "Kraken body and tentacles are a coherent dark teal/black/rust palette; but there's a saturated hot-magenta glow blob at the bottom between the tentacles that doesn't belong to that palette \u2014 reads as a contamination glow left over from the keying, not an intended magic effect.",
+  "strength": 0.6
+ },
+ "spr-fantasy-lacedon-sodden-ghoul": {
+  "class": "unmix",
+  "note": "Ghoul's rotten-flesh palette (sickly green-gray) is good and the wet/dripping-corpse design reads well, but several drip strands and patches on the torso/arms are near-pure hot magenta/pink rather than a dirty-water or bile color \u2014 clashes hard against the desaturated body. Anatomy and pose are fine, so this is a rescue candidate: retint the magenta drips to a translucent murky color and it's usable.",
+  "strength": 0.8,
+  "fineOtherwise": true
+ },
+ "spr-fantasy-lantern-sage": {
+  "class": "art",
+  "note": "Ornate lantern creature with brass/teal lantern body and purple tentacle limbs \u2014 the purple is a consistent, moderately-saturated design color across all the tentacles, not a hot-pink cast; reads as intentional palette choice."
+ },
+ "spr-fantasy-lemure": {
+  "class": "art",
+  "note": "Fleshy imp/lemure rendered in a violet-toned skin with paler drip highlights \u2014 the purple is applied uniformly across skin, horns, and claws (a coherent low-fantasy devil palette) rather than a clashing neon cast on top of a different base color. Kept as intended art per do-no-harm."
+ },
+ "spr-fantasy-lich": {
+  "class": "art",
+  "note": "Lich in deep purple/black robes with gold trim and a green flame orb \u2014 the purple is the robe's material color, dark and richly saturated, consistent with a regal undead design; no hot-magenta clash visible."
+ },
+ "spr-fantasy-lizardfolk-geomancer": {
+  "class": "art",
+  "note": "Lizardfolk in green/gold gear; the hand-held effect blends green into pink/magenta as a stone-magic glow \u2014 reads as an intentional multicolor spell effect rather than contamination, since it's confined to the effect and gradates smoothly rather than sitting as a flat pink cast."
+ },
+ "spr-fantasy-lizardfolk-sovereign": {
+  "class": "art",
+  "note": "Lizardfolk king in red/gold ceremonial garb with a feathered crest; earthy scale tones throughout, no magenta present."
+ },
+ "spr-fantasy-mage": {
+  "class": "art",
+  "note": "Wizard in navy-blue robe with gold trim, holding cyan/white magic orbs \u2014 no magenta or purple contamination visible anywhere."
+ },
+ "spr-fantasy-magma-mephit": {
+  "class": "art",
+  "note": "Fire elemental rendered entirely in reds/oranges/yellows; no magenta present."
+ },
+ "spr-fantasy-manes": {
+  "class": "art",
+  "note": "Small red horned devil, clean red/black palette with no magenta or purple contamination."
+ },
+ "spr-fantasy-manes-vaporspawn": {
+  "class": "unmix",
+  "note": "Whole vapor body renders as a solid hot magenta/pink cloud mass rather than translucent smoke \u2014 near-pure #FF00FF-adjacent pink dominates the torso and swirling tendrils, clashing hard with the darker purple accents. Pose/horns/claws/face read fine; this is a rescue candidate, not a regen.",
+  "strength": 1,
+  "fineOtherwise": true
+ },
+ "spr-fantasy-marid": {
+  "class": "unmix",
+  "note": "Mostly clean blue genie art, but the lower vapor-tail swirl carries a soft hot-pink/magenta cast blended into the blue smoke (bottom-left especially) that doesn't belong to the water-genie palette \u2014 looks like a contamination bleed, not designed foam color.",
+  "strength": 0.6
+ },
+ "spr-fantasy-marilith": {
+  "class": "art",
+  "note": "Purple/magenta is minimal and limited to natural rouge/cheek shading and a warm-toned face; snake tail is olive, robe crimson, hair black \u2014 reads as intended palette, no hot-magenta clash."
+ },
+ "spr-fantasy-medusa": {
+  "class": "art",
+  "note": "Green snake hair, tan skin, olive robe, dark red blood/cape \u2014 no magenta or purple contamination visible anywhere."
+ },
+ "spr-fantasy-merfolk-skirmisher": {
+  "class": "art",
+  "note": "Teal/green scaled merfolk, fully clean palette \u2014 no magenta present."
+ },
+ "spr-fantasy-merfolk-wavebender": {
+  "class": "unmix",
+  "note": "Blue water-mage figure and wave-swirl base carry visible hot-pink/magenta patches mixed into the translucent water and hair that clash with the cool blue palette \u2014 reads as chroma leak inside the wave, not a designed accent. Pose/design otherwise solid, good rescue candidate.",
+  "strength": 0.8,
+  "fineOtherwise": true
+ },
+ "spr-fantasy-metalworker-orc": {
+  "class": "art",
+  "note": "Green orc, brown leather apron and gear \u2014 no purple/magenta anywhere, clean already."
+ },
+ "spr-fantasy-mind-thief": {
+  "class": "art",
+  "note": "Deep violet robe and lavender tentacle-head skin read as the intended illithid palette; edge glow is a soft dark purple that harmonizes rather than a hot-magenta halo."
+ },
+ "spr-fantasy-mind-thief-arcanist": {
+  "class": "art",
+  "note": "Companion piece to mind-thief with the same violet robe/skin design plus a magenta-pink magical fringe along the robe edges \u2014 reads as a matching intentional glow effect for the caster variant rather than contamination, though the fringe saturation is worth a second look if the base mind-thief pair gets touched."
+ },
+ "spr-fantasy-mummy-lord": {
+  "class": "art",
+  "note": "Gold/tan bandages and dark robe with a faint purple undertone at the hem \u2014 consistent low-saturation shadow color, not hot magenta."
+ },
+ "spr-fantasy-myconid-sovereign": {
+  "class": "art",
+  "note": "Brown/tan mushroom-cap fungal palette throughout, including the smaller myconids \u2014 no magenta present."
+ },
+ "spr-fantasy-nalfeshnee": {
+  "class": "art",
+  "note": "Red/orange demon flesh and dark leather \u2014 no purple or magenta contamination visible."
+ },
+ "spr-fantasy-nightmare": {
+  "class": "art",
+  "note": "Black horse with a stylized purple-black ghost-flame mane and tail \u2014 the purple flame is a designed effect (fits the demonic-horse concept), no clashing hot-pink patches."
+ },
+ "spr-fantasy-noble": {
+  "class": "art",
+  "note": "Purple frock coat is ordinary period clothing color, fully solid and coherent with the rest of the outfit \u2014 no magenta contamination."
+ },
+ "spr-fantasy-nycaloth": {
+  "class": "art",
+  "note": "Deep lavender-purple demon skin with bat wings \u2014 consistent, harmonized fiend palette, not a hot-magenta cast."
+ },
+ "spr-fantasy-octopus": {
+  "class": "art",
+  "note": "Warm orange/red cephalopod, no purple or magenta anywhere \u2014 clean already."
+ },
+ "spr-fantasy-ogre-howdah": {
+  "class": "art",
+  "note": "Earth-tone ogre with wood/leather howdah and goblin riders (one green, one purplish-skinned) \u2014 the purple goblin reads as intentional palette variety, no hot-magenta cast or halo anywhere on the figure."
+ },
+ "spr-fantasy-orc-blind-prophet": {
+  "class": "art",
+  "note": "Brown/orange robed orc shaman with skull staff \u2014 no magenta or purple contamination present at all; palette is entirely warm earth tones."
+ },
+ "spr-fantasy-owl": {
+  "class": "art",
+  "note": "Natural brown/tan owl in flight, talons out \u2014 no purple or magenta anywhere, clean sprite."
+ },
+ "spr-fantasy-pegasus": {
+  "class": "art",
+  "note": "Cream/white pegasus with feathered wings \u2014 no magenta contamination, clean natural palette."
+ },
+ "spr-fantasy-performer-legend": {
+  "class": "art",
+  "note": "Bard's cloak, coat lining, feather, and music notes are all a consistent deep purple/magenta motif throughout the figure (not an isolated clashing patch) \u2014 reads as the character's designed 'legendary flourish' color scheme rather than a contamination cast."
+ },
+ "spr-fantasy-performer-tiefling": {
+  "class": "art",
+  "note": "Tiefling's red skin plus a coherent purple robe/vest \u2014 the purple is a normal, desaturated clothing color that harmonizes with the rest of the outfit, no neon-magenta clash."
+ },
+ "spr-fantasy-phase-spider": {
+  "class": "art",
+  "note": "Dark carapace with symmetric pink/violet markings on legs, fangs, and eyes \u2014 reads as an intentional ethereal/ethereal-plane accent pattern for a phase spider, evenly placed rather than a blotchy halo."
+ },
+ "spr-fantasy-piercer": {
+  "class": "unmix",
+  "note": "Fleshy stalactite-mimic body is fine, but the mouth interior and the tips of the trailing tentacles are rendered in a neon hot-magenta that clashes hard against the muted pink/tan flesh tones \u2014 reads as chroma-key contamination on the wet/translucent parts rather than intended color.",
+  "strength": 0.7
+ },
+ "spr-fantasy-pirate-admiral": {
+  "class": "unmix",
+  "note": "Coat and cape hems are tattered with a ghostly wispy edge rendered in hot pink-magenta that clashes with the otherwise black/gold/red pirate palette \u2014 a cast/halo on the frayed-cloth effect, not a designed color.",
+  "strength": 0.6
+ },
+ "spr-fantasy-pit-fiend": {
+  "class": "art",
+  "note": "Entirely red devil with red wings/tail \u2014 no purple or magenta present anywhere in the sprite."
+ },
+ "spr-fantasy-pixie": {
+  "class": "art",
+  "note": "Translucent blue/violet/pink fairy wings and a pink magic-spark trail from her wand \u2014 classic fairy-wing iridescence and spellcraft glow, coherent with the green dress and warm skin tones, not a contamination cast."
+ },
+ "spr-fantasy-pixie-wonderbringer": {
+  "class": "art",
+  "note": "Pink/violet wings, matching pink dress accents, and a sparkle trail from the wand \u2014 the whole palette is built around pink/purple as the design's magic-theme color, consistent and harmonious, not a clashing cast."
+ },
+ "spr-fantasy-planetar": {
+  "class": "unmix",
+  "note": "Solid hot-magenta blotches punch through between the wing feathers and near the shoulder/back \u2014 these are flat, saturated FF00FF-adjacent patches that clash with the gold/white angelic armor and feather palette, clear leftover chroma-key chunks rather than any intended glow.",
+  "strength": 0.9,
+  "fineOtherwise": true
+ },
+ "spr-fantasy-plesiosaurus": {
+  "class": "unmix",
+  "note": "Body and water spray are blue-grey and white/blue as expected, but there's an isolated small hot-magenta blob in the water splash at the lower-left that doesn't belong to the aquatic palette \u2014 a stray contamination fleck rather than a designed color note.",
+  "strength": 0.5
+ },
+ "spr-fantasy-poltergeist": {
+  "class": "unmix",
+  "note": "Ghost's shroud is a believable translucent green/white, but the trailing wisps, chain glow, and bottom tendrils are rendered in a saturated neon pink-magenta that clashes with the sickly green/white ghost palette \u2014 reads as chroma-key cast on the translucent/wispy parts rather than an intended supernatural glow color.",
+  "strength": 0.8
+ },
+ "spr-fantasy-pony": {
+  "class": "art",
+  "note": "Tan/brown pony with a small pink ribbon tied in the mane \u2014 a deliberate decorative accessory, not a contamination cast; rest of the sprite has no magenta at all."
+ },
+ "spr-fantasy-priest": {
+  "class": "art",
+  "note": "White/gold vestments with a deep purple sash/undergarment peeking at the hem \u2014 a deliberate liturgical color accent, not a magenta cast. No hot pink anywhere on the figure."
+ },
+ "spr-fantasy-primeval-owlbear": {
+  "class": "art",
+  "note": "Shaggy brown/tan owlbear; a small pinkish mark on the lower chest reads as a natural scar/wound fleck, not a saturated magenta cast \u2014 too small and desaturated to be contamination."
+ },
+ "spr-fantasy-psychic-gray-ooze": {
+  "class": "unmix",
+  "note": "Gray/violet ooze body is fine, but the tentacle tips and drips carry a hot, over-saturated magenta-pink that clashes with the otherwise muted gray-violet palette \u2014 reads as leaked chroma on the drips rather than an intentional 'psychic glow' (which would sit more purple/lavender, not neon pink).",
+  "strength": 0.5
+ },
+ "spr-fantasy-purple-worm": {
+  "class": "art",
+  "note": "Deep, desaturated purple carapace with a red-pink mouth interior \u2014 exactly the expected purple-worm palette; the purple belongs to the design, no neon magenta anywhere."
+ },
+ "spr-fantasy-red-dragon-wyrmling": {
+  "class": "art",
+  "note": "Entirely red/orange scales, no purple or magenta present at all."
+ },
+ "spr-fantasy-remorhaz": {
+  "class": "unmix",
+  "note": "Icy blue-white worm body has scattered hot-pink/magenta flecks across the scales that don't match a coherent design feature (a remorhaz's heat-glow would be a localized dorsal ridge, not random speckling) \u2014 reads as contamination specks, translucent-ice look should come through clean blue-white.",
+  "strength": 0.6
+ },
+ "spr-fantasy-ridden-wyvern": {
+  "class": "art",
+  "note": "Rider wears a dark, desaturated purple robe/cloak that harmonizes with the muted rust-brown dragon \u2014 intentional costume color, no neon magenta cast on the wyvern's membranes or hide."
+ },
+ "spr-fantasy-roc": {
+  "class": "unmix",
+  "note": "Warm brown/gold/tan plumage overall, but the wing covert patches carry a saturated hot-magenta/pink block that clashes hard with the earthy palette \u2014 reads as a chroma cast on the feather/wing area rather than intended plumage coloring.",
+  "strength": 0.7
+ },
+ "spr-fantasy-roper": {
+  "class": "art",
+  "note": "Rock-textured body with maroon/red-pink flesh visible in cracks and around the maw \u2014 consistent with roper anatomy (exposed inner tissue), desaturated and earthy rather than hot neon magenta."
+ },
+ "spr-fantasy-sahuagin-baron": {
+  "class": "art",
+  "note": "Green/gold scaled humanoid; a small pinkish mark near the shoulder/fin area reads as a natural fin/frill highlight or gem accent, not a saturated cast \u2014 too minor and localized to be contamination."
+ },
+ "spr-fantasy-salamander": {
+  "class": "art",
+  "note": "Fire-elemental humanoid rendered entirely in lava oranges/reds/blacks \u2014 no purple or magenta present."
+ },
+ "spr-fantasy-salamander-fire-snake": {
+  "class": "art",
+  "note": "Coiled fire-snake in fire oranges/reds/yellows only \u2014 no magenta contamination visible."
+ },
+ "spr-fantasy-salamander-inferno-master": {
+  "class": "art",
+  "note": "Fire/lava humanoid, full orange-red-black palette with flame highlights \u2014 no purple or magenta anywhere."
+ },
+ "spr-fantasy-satyr-revelmaster": {
+  "class": "art",
+  "note": "Brown/tan satyr with green foliage accents and a wooden mug \u2014 earthy palette throughout, no magenta cast."
+ },
+ "spr-fantasy-sea-hag": {
+  "class": "unmix",
+  "note": "Green hag skin is fine, but the tattered rags/robe carry a hot magenta-pink staining at the hem and sleeve edges that clashes with the swampy green-gray palette \u2014 reads as a leaked cast on the ragged translucent cloth rather than intended dye color.",
+  "strength": 0.65
+ },
+ "spr-fantasy-seahorse": {
+  "class": "art",
+  "note": "Golden-brown seahorse with a tiny pink cheek spot that reads as a natural marking/blush, not a saturated magenta cast; surrounding bubbles are clean white."
+ },
+ "spr-fantasy-shadow": {
+  "class": "unmix",
+  "note": "Shadow wraith's translucent form is lit by a hot magenta-purple internal glow (chest, lower wisps) that clashes with the inky-black shadow palette \u2014 reads as chroma bleed-through rather than an intended glow color.",
+  "strength": 0.7
+ },
+ "spr-fantasy-shadow-dragon": {
+  "class": "unmix",
+  "note": "Dragon body/scales are a fine deep violet-black (keep), but the wing membranes and throat frill carry a hotter saturated pink-magenta patchiness that doesn't match the rest of the muted violet shading \u2014 translucent membrane contamination.",
+  "strength": 0.5
+ },
+ "spr-fantasy-shambling-mound": {
+  "class": "unmix",
+  "note": "Mostly good green/brown mound with orange highlights; a few small hot-magenta dots scattered on the torso clash sharply with the desaturated organic palette \u2014 likely leaked spore/berry accents, mild cast.",
+  "strength": 0.4
+ },
+ "spr-fantasy-shrieker-fungus": {
+  "class": "art",
+  "note": "Red-capped mushroom body is the intended design; only a couple of tiny pink flecks at the base (root/dirt detail) \u2014 too faint and small to call contamination, leave alone."
+ },
+ "spr-fantasy-silver-dragon-wyrmling": {
+  "class": "unmix",
+  "note": "Dragon is otherwise clean silver/white/tan scale work, but there's a distinct hot-magenta patch under the jaw/throat that doesn't belong to a silver dragon's cool palette \u2014 clear contamination spot, not a design choice.",
+  "strength": 0.8
+ },
+ "spr-fantasy-skeleton": {
+  "class": "unmix",
+  "note": "Bone-white skeleton is fine, but the hip wrap/loincloth and the shield's rim carry a saturated magenta-pink cast that doesn't match the tan leather/bronze shield elsewhere \u2014 cast contamination over the cloth and trim.",
+  "strength": 0.6
+ },
+ "spr-fantasy-skeleton-archer": {
+  "class": "unmix",
+  "note": "Good dynamic archer pose/anatomy; ruined by hot-magenta drips along the tattered waist cloth and a magenta tint bleeding onto the ribcage \u2014 clearly contamination, not intended gore/dye color. Rescue candidate.",
+  "strength": 0.8,
+  "fineOtherwise": true
+ },
+ "spr-fantasy-skeleton-warrior": {
+  "class": "unmix",
+  "note": "Solid sword-and-shield warrior pose; the torso/hem tattered cloth drips hot magenta and the shield rim reads pink instead of bronze/tan \u2014 same contamination pattern as the archer. Rescue candidate.",
+  "strength": 0.8,
+  "fineOtherwise": true
+ },
+ "spr-fantasy-smoke-mephit": {
+  "class": "unmix",
+  "note": "Dark smoke body with glowing yellow eyes is the intended design; small magenta flecks scattered across the smoke wisps clash with the otherwise grey-black palette \u2014 mild leaked contamination, not a deliberate glow color.",
+  "strength": 0.4
+ },
+ "spr-fantasy-solar": {
+  "class": "unmix",
+  "note": "Strong golden-armor angel design with good pose/anatomy; the wing edges are fringed in a hot neon pink-magenta that doesn't match the warm gold/cream feather palette elsewhere \u2014 contamination on the wing membrane edges. Rescue candidate.",
+  "strength": 0.7,
+  "fineOtherwise": true
+ },
+ "spr-fantasy-specter": {
+  "class": "unmix",
+  "note": "Good ghostly hooded wraith pose, appropriately gaunt/translucent-toned; the trailing wisps at the hem and the hands/fingertips carry a hot magenta cast that clashes with the otherwise grey-lavender ghost palette. Rescue candidate.",
+  "strength": 0.75,
+  "fineOtherwise": true
+ },
+ "spr-fantasy-sphinx-of-lore": {
+  "class": "unmix",
+  "note": "Gold/cream sphinx design is intended and mostly clean; there's a small hot-magenta wisp/smudge near the headdress crown that doesn't belong \u2014 minor leaked spot, easy mild fix.",
+  "strength": 0.35
+ },
+ "spr-fantasy-sphinx-of-valor": {
+  "class": "unmix",
+  "note": "Tawny winged-lion sphinx is fine gold/brown design; a small magenta glow blob sits at the base of the sword hilt/blade that doesn't match the bronze/gold accessories \u2014 minor contamination spot.",
+  "strength": 0.35
+ },
+ "spr-fantasy-spirit-naga": {
+  "class": "art",
+  "note": "Deep violet-blue skin, dark purple hair/headdress, and a soft violet mist around the hands are a cohesive intended palette for a spirit naga \u2014 no hot neon magenta clash, this is the design. Leave alone."
+ },
+ "spr-fantasy-sprite": {
+  "class": "art",
+  "note": "Lilac/violet wings, hair, and outfit form a coherent fey color scheme for a sprite/pixie \u2014 soft and harmonizing, not a saturated magenta clash. Leave alone."
+ },
+ "spr-fantasy-spy-master": {
+  "class": "unmix",
+  "note": "Dark hooded rogue with cloak is a solid design; the tattered cloak hem and a smudge at the lower-left carry a hot magenta glow that clashes with the black/brown stealth palette \u2014 cast contamination on the cloak edges.",
+  "strength": 0.6
+ },
+ "spr-fantasy-steam-mephit": {
+  "class": "unmix",
+  "note": "Mostly clean warm-gray/tan steam-elemental palette; a small hot-magenta smudge bleeds at the base of the left fist where the cloud meets the ground \u2014 localized cast, not the design.",
+  "strength": 0.3
+ },
+ "spr-fantasy-stone-giant": {
+  "class": "unmix",
+  "note": "Stone/bronze giant reads fine overall, but the sash/strap flowing off the right shoulder down the arm is rendered in hot neon magenta-pink that clashes with the earthy palette \u2014 reads as contamination on a cloth accent, not an intended dyed garment.",
+  "strength": 0.45
+ },
+ "spr-fantasy-storm-giant": {
+  "class": "art",
+  "note": "Clean blue-gray giant with white-blue lightning arcs around the hammer/head \u2014 the blue is the intended storm-giant palette, no magenta cast visible."
+ },
+ "spr-fantasy-succubus": {
+  "class": "art",
+  "note": "Deep purple/violet skin, wings, and outfit are the intended succubus/demon palette \u2014 desaturated, harmonized, no hot pink clash."
+ },
+ "spr-fantasy-swamp-shadow": {
+  "class": "unmix",
+  "note": "Design (mossy vine humanoid with glowing eyes) is solid; scattered hot-magenta dots/blotches sit on the chest and among the trailing vine tendrils, clashing with the green-brown palette \u2014 contamination, not intended glow spots.",
+  "strength": 0.6,
+  "fineOtherwise": true
+ },
+ "spr-fantasy-swarm-of-bats": {
+  "class": "unmix",
+  "note": "Dark maroon/brown bat swarm is fine as a design; the swarm's center reads as a bright solid neon-magenta core (should be dark negative space between wings, not a hot pink mass) \u2014 clear contamination, not a designed glow.",
+  "strength": 0.8,
+  "fineOtherwise": true
+ },
+ "spr-fantasy-swarm-of-crawling-claws": {
+  "class": "unmix",
+  "note": "Skeletal hands/skulls swarm is well-formed; the ground/base area under and around the mass is a saturated hot-magenta wash rather than dirt or shadow \u2014 contamination bleeding through the gaps and base.",
+  "strength": 0.7
+ },
+ "spr-fantasy-swarm-of-dretches": {
+  "class": "art",
+  "note": "Consistent maroon/red demon-swarm palette throughout, no neon-pink clash visible \u2014 the reds are the intended design."
+ },
+ "spr-fantasy-swarm-of-insects": {
+  "class": "unmix",
+  "note": "Overall blob shape and mandibles read fine as an insect-swarm silhouette; the entire body is heavily speckled with saturated hot-magenta dots that clash badly with the brown/tan insect palette \u2014 pervasive contamination, not intended texture.",
+  "strength": 0.8,
+  "fineOtherwise": true
+ },
+ "spr-fantasy-swarm-of-larvae": {
+  "class": "unmix",
+  "note": "Cream/tan larvae pile is a solid design; a scatter of small hot-magenta specks sits between and on the worm bodies \u2014 mild contamination, easy cast to pull.",
+  "strength": 0.4
+ },
+ "spr-fantasy-swarm-of-lemures": {
+  "class": "art",
+  "note": "Orange/red imp swarm keeps a coherent warm palette throughout, no hot-pink clash detected."
+ },
+ "spr-fantasy-swarm-of-piranhas": {
+  "class": "unmix",
+  "note": "Gray-blue piranha ball is a good design; the negative space between and around the fish is a heavy saturated magenta-purple wash rather than dark water/shadow \u2014 strong contamination filling the gaps.",
+  "strength": 0.8
+ },
+ "spr-fantasy-swarm-of-rats": {
+  "class": "unmix",
+  "note": "Brown rat pile reads well; a cluster of small hot-magenta dots sits in the shadowed center of the pile among the rat bodies \u2014 localized contamination, rest of the sprite is clean.",
+  "strength": 0.5,
+  "fineOtherwise": true
+ },
+ "spr-fantasy-swarm-of-ravens": {
+  "class": "unmix",
+  "note": "Black raven swarm is otherwise clean; a couple of small magenta-pink glints appear near heads/wingtips where eye-shine or feather highlight would be \u2014 likely contamination rather than an intended color accent, but mild.",
+  "strength": 0.3
+ },
+ "spr-fantasy-swarm-of-stirges": {
+  "class": "art",
+  "note": "Reddish-brown stirge swarm with dark speckling (reads as dirt/blood spatter) keeps a coherent muted palette \u2014 no neon-magenta clash."
+ },
+ "spr-fantasy-the-cultist-roster-base-2024-stat-blocks": {
+  "class": "art",
+  "note": "Clean red-and-gold robed cultist figure, no magenta contamination visible anywhere on the sprite."
+ },
+ "spr-fantasy-the-faerie-dragon": {
+  "class": "art",
+  "note": "Iridescent orange-pink-magenta wing membranes are a coherent fae gradient design, blends with the dragon's warm palette; no clashing hot-pink halo or cast anywhere else on the body."
+ },
+ "spr-fantasy-the-vine-blight": {
+  "class": "unmix",
+  "note": "Scattered hot-magenta speckles among the root/vine tangle at the base and mid-body \u2014 pure #FF00FF-adjacent flecks that clash with the green/brown/red mouth palette. Anatomy, pose, and the toothy maw are all good; this is a clean rescue candidate, just needs the stray magenta dots keyed out.",
+  "strength": 0.6,
+  "fineOtherwise": true
+ },
+ "spr-fantasy-thri-kreen-psion": {
+  "class": "art",
+  "note": "Deep violet-purple armor plating and a matching violet psionic glow in the raised hand \u2014 coherent low-saturation purple design throughout, no neon magenta cast or halo."
+ },
+ "spr-fantasy-tiefling-fortune-teller-s-rival-tiefling-claims-to-be-the-real-seer-in-town": {
+  "class": "art",
+  "note": "Deep purple robes and tiefling skin/horns read as intentional design; palette is dark violet/maroon, not hot pink \u2014 no contamination visible."
+ },
+ "spr-fantasy-treant": {
+  "class": "art",
+  "note": "Fully brown/green bark-and-moss palette; no purple or magenta anywhere on the sprite. Clean."
+ },
+ "spr-fantasy-tree-blight": {
+  "class": "unmix",
+  "note": "A solid saturated hot-magenta patch shows through the chest/torso gap (reads like exposed contamination, not a design element) plus small magenta flecks on several branch-tip ends \u2014 clashes hard against the earthy bark/red-eye palette. Pose and grotesque face read well otherwise; good rescue candidate once the magenta is unmixed/keyed.",
+  "strength": 0.75,
+  "fineOtherwise": true
+ },
+ "spr-fantasy-troll-amalgam": {
+  "class": "unmix",
+  "note": "Pink/magenta speckles along the head tendrils and a couple of dots on the shoulder/arm tendril tips \u2014 scattered halo-style contamination on an otherwise tan/red monster palette. Design, musculature, and face are solid; a straightforward rescue.",
+  "strength": 0.6,
+  "fineOtherwise": true
+ },
+ "spr-fantasy-ultroloth": {
+  "class": "art",
+  "note": "Deep violet-purple robes and horned fiend skin with matching dark-purple wings \u2014 coherent fiendish palette, no hot-pink cast or halo."
+ },
+ "spr-fantasy-undead-eye-tyrant": {
+  "class": "art",
+  "note": "Overall lavender/violet undead flesh and tentacles read as intentional (ghostly beholder-undead design); one tiny stray magenta fleck at the tip of a lower-left tentacle is negligible and not worth flagging as contamination \u2014 leave alone per do-no-harm."
+ },
+ "spr-fantasy-unicorn": {
+  "class": "unmix",
+  "note": "Solid hot-magenta/pink blotches saturate the mane and tail and bleed onto a foreleg \u2014 a cream/tan dappled unicorn has no reason to carry neon-pink patches this large and this saturated; reads as contamination over what should be pale mane/tail highlights, not a design choice.",
+  "strength": 0.85
+ },
+ "spr-fantasy-vampire": {
+  "class": "unmix",
+  "note": "A few isolated hot-magenta specks along the cape's tattered lower-right edge and a faint pink tinge on the outstretched hand clash against the black/red/gold palette \u2014 a light cast, not integral to the design. Rest of the figure (face, coat, cape) is clean.",
+  "strength": 0.4
+ },
+ "spr-fantasy-vampire-familiar": {
+  "class": "unmix",
+  "note": "A saturated hot-magenta cast covers the clawed right hand/fingertips, and a small magenta speck sits on the left robe hem \u2014 clashes against the otherwise muted brown/black/grey palette. Rest of the sprite (wings, face, cloak) is clean.",
+  "strength": 0.6
+ },
+ "spr-fantasy-vampire-umbral-lord": {
+  "class": "art",
+  "note": "Magenta/purple embers are woven consistently through the smoky black-and-red umbral aura all around the silhouette \u2014 reads as an intentional particle/ember effect matching the red-trim palette, not an isolated hot-pink clash. Leaving alone per do-no-harm."
+ },
+ "spr-fantasy-violet-fungus": {
+  "class": "art",
+  "note": "Violet fungus caps are exactly the expected design for this creature \u2014 rich purple caps over a tan/brown stalk, no neon-pink clash."
+ },
+ "spr-fantasy-violet-fungus-necrohulk": {
+  "class": "art",
+  "note": "Same violet mushroom-cap design language as the base violet fungus, integrated into the hulking body \u2014 intentional, no contamination."
+ },
+ "spr-fantasy-void-monk-psion": {
+  "class": "art",
+  "note": "Purple psionic energy glowing in both raised fists is the intended psion effect, consistent low-saturation violet against the monk's earthy robes \u2014 no hot-magenta halo or cast."
+ },
+ "spr-fantasy-void-monk-zerth": {
+  "class": "art",
+  "note": "Purple energy orbs in the monk's raised hands and a few dark violet wisps at the robe hem \u2014 this is a void-magic caster, the purple glow is the intended power effect and it's a controlled deep violet, not neon-pink. Leave alone."
+ },
+ "spr-fantasy-vrock": {
+  "class": "art",
+  "note": "Mauve/plum demon hide is the vrock's canonical palette (classic vulture-demon coloring), reads as cohesive flesh tone throughout, no hot-pink clash anywhere."
+ },
+ "spr-fantasy-vulture": {
+  "class": "art",
+  "note": "All brown/tan/cream feather tones, no magenta or pink present anywhere in the sprite. Clean."
+ },
+ "spr-fantasy-warhorse-skeleton": {
+  "class": "unmix",
+  "note": "Small saturated hot-pink/magenta blob on the chest strap area that clashes with the bone-white/rust-leather palette \u2014 reads as a contamination spot, not a design element. Rest of sprite (bone, tack, mane) is clean.",
+  "strength": 0.6
+ },
+ "spr-fantasy-water-elemental": {
+  "class": "unmix",
+  "note": "Scattered hot neon-magenta circular nodules across the torso/limbs clash hard against the cool blue-white translucent body; a couple sit right at the edge of the silhouette like halo leak. Body form itself is fine, just needs the pink dots color-corrected toward the blue family or made translucent.",
+  "strength": 0.7
+ },
+ "spr-fantasy-water-weird": {
+  "class": "unmix",
+  "note": "Same failure mode as water-elemental: hot magenta dots on chest/forearm and a notably saturated magenta glow bleeding around the raised trident/hand at top-left, clashing with the blue-white water form. Pose and silhouette (elemental humanoid rising from water, weapon raised) are good and legible \u2014 this is a color-only rescue candidate, not a redraw.",
+  "strength": 0.8,
+  "fineOtherwise": true
+ },
+ "spr-fantasy-wereboar": {
+  "class": "art",
+  "note": "Brown/tan fur and leather, ivory tusks, no magenta or pink anywhere. Clean."
+ },
+ "spr-fantasy-white-dragon-wyrmling": {
+  "class": "unmix",
+  "note": "A few small hot-pink/magenta specks on the wing membrane clash against the otherwise pale white/ice-blue scale palette \u2014 reads as leaked contamination on the translucent membrane, not intended spotting. Body and wings otherwise clean white.",
+  "strength": 0.6
+ },
+ "spr-fantasy-wight": {
+  "class": "art",
+  "note": "Cloak hem and trailing wisps carry a controlled deep violet-purple glow that reads as intended undead energy (consistent hue, not neon hot-pink), harmonizing with the muted robe palette. Leaving alone per do-no-harm."
+ },
+ "spr-fantasy-wild-animal-a-great-owl-silent-wingbeats-watches-more-than-it-hunts": {
+  "class": "art",
+  "note": "All brown/tan/cream owl plumage, talons a natural dusky tone, no magenta present."
+ },
+ "spr-fantasy-wild-animal-a-wild-turkey-tom-displaying-loud-oblivious-to-anything-hunting-it": {
+  "class": "art",
+  "note": "Brown/bronze feathers, red wattle and pink-toned legs are natural turkey coloring, no magenta contamination visible."
+ },
+ "spr-fantasy-will-o-wisp": {
+  "class": "art",
+  "note": "Blue-white ghostly flame with a skull face; the cool blue-violet glow is the intended wisp color, no hot-pink cast present."
+ },
+ "spr-fantasy-winter-wolf": {
+  "class": "unmix",
+  "note": "A small saturated magenta-pink blob glowing on the front paw clashes with the white/ice-blue fur palette elsewhere \u2014 an isolated contamination spot, easy localized fix; rest of the wolf (fur, frost accents) is clean.",
+  "strength": 0.5
+ },
+ "spr-fantasy-wraith": {
+  "class": "unmix",
+  "note": "The trailing smoke/tendrils enveloping the whole lower body read as solid neon hot-magenta rather than translucent ghostly wisp \u2014 much more saturated and neon than the wight's controlled violet aura, consistent with translucent-body-rendered-solid-magenta contamination. Robe and face are otherwise fine; the tendril mass needs the translucency/color fix.",
+  "strength": 0.75
+ },
+ "spr-fantasy-wyvern": {
+  "class": "art",
+  "note": "Bronze/copper dragon scales throughout, no magenta or pink present anywhere."
+ },
+ "spr-fantasy-yochlol": {
+  "class": "art",
+  "note": "Deep maroon-purple demon flesh is a cohesive, consistent palette across the whole creature (limbs, eyestalks, mouth) \u2014 reads as intended saturated demon-ichor coloring rather than a clashing neon leak; no isolated hot-pink patches breaking the palette."
+ },
+ "spr-fantasy-young-black-dragon": {
+  "class": "art",
+  "note": "Deep black dragon with subtle violet/magenta sparkle particles integrated into the background glow and around the head crest \u2014 matches the mystical, star-flecked art style, no clashing neon-pink contamination on the dragon body itself."
+ },
+ "spr-fantasy-young-blue-dragon": {
+  "class": "art",
+  "note": "Steel-blue dragon, no magenta present anywhere; palette is clean blue/grey metallics."
+ },
+ "spr-fantasy-young-bronze-dragon": {
+  "class": "art",
+  "note": "Bronze/gold dragon, fully clean warm-metal palette, no magenta or pink contamination visible."
+ },
+ "spr-fantasy-young-red-dragon": {
+  "class": "art",
+  "note": "Deep red dragon with warm ember tones; no hot-magenta cast, reads as intended fiery red palette."
+ },
+ "spr-fantasy-young-silver-dragon": {
+  "class": "art",
+  "note": "Silver/white dragon, clean cool-grey palette, no magenta contamination."
+ },
+ "spr-fantasy-young-white-dragon": {
+  "class": "art",
+  "note": "White/frost dragon with cool violet-grey shading integrated into the icy scale palette; no clashing hot-pink present."
+ },
+ "spr-fantasy-yuan-ti-abomination": {
+  "class": "unmix",
+  "note": "Several small saturated hot-pink/magenta circular blotches scattered near the head and tentacle bases \u2014 read as leftover chroma-key dots, not part of the earthy brown/gold/green snake-flesh palette; localized cast, not a solid contaminated body.",
+  "strength": 0.5
+ },
+ "spr-fantasy-yuan-ti-malison-type-1": {
+  "class": "unmix",
+  "note": "One small hot-magenta spot near the shoulder/collar area that clashes with the tan/green scale-and-leather palette \u2014 minor leftover halo dot, rest of the figure is clean.",
+  "strength": 0.35
+ },
+ "spr-fantasy-yuan-ti-malison-type-3": {
+  "class": "unmix",
+  "note": "Bright neon-magenta wispy smoke/glow trailing from the staff-hand channeling effect at lower right \u2014 far more saturated hot-pink than the earthy green/gold robe palette, reads as chroma contamination on what should be a subtler arcane wisp rather than intended design color.",
+  "strength": 0.75
+ },
+ "spr-fantasy-zombie-plague-carrier": {
+  "class": "unmix",
+  "note": "Small round hot-pink/magenta blotches on torso and shoulder are too neon-saturated to match the sickly yellow-green decay palette used everywhere else on the body \u2014 read as leftover chroma spots rather than intentional plague sores.",
+  "strength": 0.5
+ },
+ "spr-pc-dragonborn-barbarian-female": {
+  "class": "art",
+  "note": "Small pink-toned gem/accent on the wrist/glove reads as a single deliberate jewelry highlight, not a scattered contamination artifact; rest of the armor/scale palette (blue-grey, gold) is clean."
+ },
+ "spr-pc-dragonborn-bard-female": {
+  "class": "art",
+  "note": "Purple robe with gold trim and blue lightning-spark magic effects around the harp \u2014 coherent intended palette for a spellcasting bard, no hot-magenta clash."
+ },
+ "spr-pc-dragonborn-bard-male": {
+  "class": "art",
+  "note": "Navy-blue robe and armor with blue electric sparks; no purple/magenta present at all."
+ },
+ "spr-pc-dragonborn-druid-female": {
+  "class": "art",
+  "note": "Green nature-magic flame effects on both hands and earthy leaf/bark robe; no magenta contamination, palette is entirely green/brown/gold."
+ },
+ "spr-pc-dragonborn-druid-male": {
+  "class": "art",
+  "note": "Matching green flame magic and green scale/leather design; clean palette, no magenta."
+ },
+ "spr-pc-dragonborn-monk-female": {
+  "class": "art",
+  "note": "White/tan monk wraps with a deep purple sash as a deliberate design accent \u2014 single coherent color choice, not a scattered contamination cast."
+ },
+ "spr-pc-dragonborn-sorcerer-female": {
+  "class": "art",
+  "note": "Purple robe with gold trim and pale violet arcane smoke rising from raised hands \u2014 coherent purple sorcerer palette, not neon."
+ },
+ "spr-pc-dragonborn-sorcerer-male": {
+  "class": "art",
+  "note": "Deep navy/purple armor with blue-white lightning crackling from both hands \u2014 cool electric magic, no hot-magenta cast."
+ },
+ "spr-pc-dragonborn-warlock-female": {
+  "class": "art",
+  "note": "Red dragonborn in black/red robe holding a small contained magenta-violet eldritch orb in one hand \u2014 classic warlock glow effect, sized and placed like intentional VFX rather than a contamination halo."
+ },
+ "spr-pc-dragonborn-warlock-male": {
+  "class": "art",
+  "note": "Full purple/black dragonborn warlock design (skin, robe, orb all in the same violet family) with a matching purple orb glow \u2014 the palette is unified and intentional, not a clashing pink cast."
+ },
+ "spr-pc-dragonborn-wizard-female": {
+  "class": "art",
+  "note": "Teal robe with a cool blue/white glowing magic circle and book \u2014 no magenta or purple present at all."
+ },
+ "spr-pc-dragonborn-wizard-male": {
+  "class": "art",
+  "note": "Navy/orange robe with the same blue/white magic-circle motif as the female wizard \u2014 clean, no magenta."
+ },
+ "spr-pc-dwarf-bard-male": {
+  "class": "art",
+  "note": "Teal/purple layered coat, lute, orange music notes \u2014 the purple in the coat is a muted plum tone that matches the outfit's cool palette, no hot-pink cast."
+ },
+ "spr-pc-dwarf-cleric-female": {
+  "class": "art",
+  "note": "White/blue vestments with a warm orange-red glowing mace \u2014 no magenta anywhere in the piece."
+ },
+ "spr-pc-dwarf-cleric-male": {
+  "class": "art",
+  "note": "White/gold robes, orange-red glowing mace, small plum-purple cloak visible at the hip \u2014 the purple reads as an intentional cloak-lining color, not contamination."
+ },
+ "spr-pc-dwarf-druid-female": {
+  "class": "art",
+  "note": "Green/brown druid garb with yellow-green wildfire in both hands \u2014 no purple or magenta present."
+ },
+ "spr-pc-dwarf-druid-male": {
+  "class": "art",
+  "note": "Teal/green robe with the same yellow-green flame effect as the female druid \u2014 clean, no magenta."
+ },
+ "spr-pc-dwarf-paladin-female": {
+  "class": "art",
+  "note": "Blue/gold plate armor holding a sword whose blade has a soft pink-white radiant gradient \u2014 reads as an intentional holy-smite glow on the blade edge, not a magenta halo bleeding onto the figure; blade gradient is smooth and centered rather than a clashing rim."
+ },
+ "spr-pc-dwarf-ranger-male": {
+  "class": "art",
+  "note": "Green cloak, brown leathers, drawing a longbow \u2014 earth tones only, no magenta or purple."
+ },
+ "spr-pc-dwarf-sorcerer-male": {
+  "class": "art",
+  "note": "Deep purple robe with matching purple arcane orbs floating above both hands \u2014 palette is unified violet, consistent with a purple-themed sorcerer design rather than a pink contamination cast."
+ },
+ "spr-pc-dwarf-warlock-female": {
+  "class": "art",
+  "note": "Black/plum robe, white dreadlocks, single green eldritch orb in hand \u2014 the robe purple is dark and desaturated (plum, not neon), and the magic itself is green, so no magenta contamination visible."
+ },
+ "spr-pc-dwarf-warlock-male": {
+  "class": "art",
+  "note": "Black/purple robe with one green orb and one violet orb, dual eldritch magic in each hand \u2014 both orbs are contained VFX consistent with a warlock's dual-magic theme; the purple orb is a saturated violet but paired with matching purple robe trim, reading as intentional rather than a rogue magenta cast."
+ },
+ "spr-pc-dwarf-wizard-female": {
+  "class": "art",
+  "note": "Hand-conjured glyph/orb effect is pale lavender-white with soft blue sparkle lines \u2014 a designed arcane-glow effect, not saturated hot magenta. No contamination."
+ },
+ "spr-pc-dwarf-wizard-male": {
+  "class": "art",
+  "note": "Same style arcane glow (pale violet/white swirl) as the female wizard \u2014 intended spell-effect palette, harmonizes with the blue/gold robe."
+ },
+ "spr-pc-elf-barbarian-male": {
+  "class": "art",
+  "note": "All earth tones (bronze skin, tan leather, dark green cloak) \u2014 no purple or magenta anywhere in the sprite."
+ },
+ "spr-pc-elf-bard-female": {
+  "class": "art",
+  "note": "Purple dress/cloak is clearly the intended costume color; one faint small light mote near the lute is pale, not saturated hot pink \u2014 reads as a stray highlight, not contamination."
+ },
+ "spr-pc-elf-cleric-female": {
+  "class": "art",
+  "note": "Green and cream robe, gold sunburst mace-head glowing orange/gold \u2014 no magenta or purple contamination present."
+ },
+ "spr-pc-elf-cleric-male": {
+  "class": "art",
+  "note": "Same green/cream/gold cleric palette as the female version, gold sunburst glow \u2014 clean, no magenta."
+ },
+ "spr-pc-elf-druid-female": {
+  "class": "unmix",
+  "note": "Holds two magic orbs: left hand is desaturated green (fits nature-magic palette), right hand is a solid hot neon magenta orb that clashes hard with the earthy green/gold druid design \u2014 reads as chroma-key leak on what should probably be another nature-toned effect, not intentional dual-color magic.",
+  "strength": 0.85
+ },
+ "spr-pc-elf-druid-male": {
+  "class": "unmix",
+  "note": "Same paired-orb setup as the female druid: left hand green wisps (on-palette), right hand a saturated hot pink/magenta swirl that clashes with the green/gold/brown druid costume \u2014 looks like magenta contamination rather than a deliberate two-tone effect.",
+  "strength": 0.8
+ },
+ "spr-pc-elf-monk-male": {
+  "class": "art",
+  "note": "Orange/blue monk gi, tan skin, white hair \u2014 no purple or magenta present anywhere."
+ },
+ "spr-pc-elf-paladin-female": {
+  "class": "unmix",
+  "note": "Gold/silver armor and sword are otherwise clean, but the sword blade carries a hot pink-magenta rim-light/cast along its edge that clashes with the white-gold holy-knight palette \u2014 reads as a magenta cast rather than an intended pink highlight.",
+  "strength": 0.6
+ },
+ "spr-pc-elf-rogue-female": {
+  "class": "art",
+  "note": "Dark green leather armor, no magenta or purple contamination visible."
+ },
+ "spr-pc-elf-rogue-male": {
+  "class": "art",
+  "note": "Deep purple/violet leather rogue outfit is a coherent, desaturated design choice (matches the dark cloak and boots) \u2014 not a hot neon magenta, reads as intended costume color."
+ },
+ "spr-pc-elf-sorcerer-female": {
+  "class": "art",
+  "note": "Orange-red robe with hands emitting a purple-to-orange gradient flame effect \u2014 a stylized innate-magic glow consistent with a fire/arcane sorcerer theme, not an isolated saturated magenta patch."
+ },
+ "spr-pc-elf-sorcerer-male": {
+  "class": "art",
+  "note": "Blue robe with blue-white electric/lightning effect in the hands \u2014 no magenta present."
+ },
+ "spr-pc-elf-warlock-female": {
+  "class": "art",
+  "note": "Black/purple robe with a pink-magenta glow held in the palm \u2014 plausible as an eldritch patron-energy effect (warlock trope), and it sits coherently against the dark purple costume rather than clashing as an isolated leak; kept as art per do-no-harm."
+ },
+ "spr-pc-elf-warlock-male": {
+  "class": "art",
+  "note": "Black/green/purple robe with a green flame glow and green rune circle in hand \u2014 no magenta contamination, palette is internally consistent."
+ },
+ "spr-pc-elf-wizard-female": {
+  "class": "art",
+  "note": "Deep purple/gold wizard robe is the design; no hot-pink cast anywhere, star-glyph glow is cool blue-white. Clean."
+ },
+ "spr-pc-gnome-barbarian-female": {
+  "class": "art",
+  "note": "Bright pink/magenta hair is a stylistic hair-color choice, not a halo or cast; skin and furs read clean tan/brown with no glow contamination."
+ },
+ "spr-pc-gnome-bard-female": {
+  "class": "art",
+  "note": "Blue hair, purple/gold outfit, soft blue musical-note wisps \u2014 all cool-toned and coherent, no neon magenta present."
+ },
+ "spr-pc-gnome-cleric-female": {
+  "class": "unmix",
+  "note": "White/gold/tan holy garb is clean, but the radiant mace-head glow is a saturated hot pink-magenta that clashes with the warm neutral palette \u2014 reads as leaked chroma on the glow rather than an intended rose-gold radiance. Localized to the glyph glow only.",
+  "strength": 0.55
+ },
+ "spr-pc-gnome-cleric-male": {
+  "class": "unmix",
+  "note": "Same pattern as the female cleric: white/gold robes are fine, but the mace-head radiant burst is neon magenta-pink against a warm neutral outfit \u2014 likely magenta cast on the glow effect, not the intended design color.",
+  "strength": 0.55
+ },
+ "spr-pc-gnome-fighter-female": {
+  "class": "art",
+  "note": "Purple/gold plate armor and pink hair are stylized color choices, no wisps/halos/translucency \u2014 solid, opaque render throughout."
+ },
+ "spr-pc-gnome-paladin-male": {
+  "class": "art",
+  "note": "Blue/gold armor, glowing sword rendered gold-white, no magenta anywhere in the piece."
+ },
+ "spr-pc-gnome-ranger-female": {
+  "class": "art",
+  "note": "Green/brown ranger outfit, blue hair \u2014 earthy palette, no pink/magenta contamination visible."
+ },
+ "spr-pc-gnome-sorcerer-female": {
+  "class": "art",
+  "note": "Purple/burgundy robe matches the two hand-conjured magic orbs (pink-purple arcane glow) \u2014 coherent sorcerer palette, glow color harmonizes with the robe rather than clashing against a neutral base."
+ },
+ "spr-pc-gnome-sorcerer-male": {
+  "class": "art",
+  "note": "Purple robe with matching purple-pink arcane orbs in both hands \u2014 the glow color is the same family as the robe, reads as intentional sorcerous palette, not a magenta leak."
+ },
+ "spr-pc-gnome-warlock-female": {
+  "class": "art",
+  "note": "Black/gold armor with a single purple-magenta eldritch glow in one hand \u2014 classic warlock pact-magic coloring, glow is contained and matches typical warlock design language."
+ },
+ "spr-pc-gnome-warlock-male": {
+  "class": "art",
+  "note": "Dark robes with a glowing magenta-pink heart-shaped chest sigil and matching hand embers \u2014 reads as deliberate pact-magic iconography (warlock chest glyph + eldritch hand glow), coherent with the character concept rather than a stray cast."
+ },
+ "spr-pc-gnome-wizard-female": {
+  "class": "art",
+  "note": "Blue/gold robe with a small blue-purple swirled spell orb \u2014 cool arcane palette, no neon magenta cast on the figure itself."
+ },
+ "spr-pc-gnome-wizard-male": {
+  "class": "art",
+  "note": "Blue robe, book, blue-purple spell orb \u2014 same cool coherent arcane palette as the female wizard, no contamination."
+ },
+ "spr-pc-goliath-barbarian-male": {
+  "class": "art",
+  "note": "Pale gray-blue skin and tan furs/leathers, red tribal paint accents \u2014 no magenta or pink present anywhere in the piece."
+ },
+ "spr-pc-goliath-bard-female": {
+  "class": "art",
+  "note": "Purple-magenta dress with teal glowing jewelry/hair wisps \u2014 the magenta is the dress fabric color (matches trim and jewelry tones), not a stray halo; reads as a designed performer's costume."
+ },
+ "spr-pc-goliath-bard-male": {
+  "class": "art",
+  "note": "Cool blue smoke/wisp effects around head and instrument strings, orange-red lute headstock accent \u2014 no hot magenta present, palette is coherent blue-grey."
+ },
+ "spr-pc-goliath-cleric-female": {
+  "class": "art",
+  "note": "Orange-to-pink sunburst glow on the holy symbol reads as a warm holy-light effect, not neon magenta; rest of figure is cream/gold robe with no contamination."
+ },
+ "spr-pc-goliath-cleric-male": {
+  "class": "art",
+  "note": "Same orange-pink sunburst holy-symbol glow as the female cleric \u2014 intentional divine light effect, no magenta cast on skin or robe."
+ },
+ "spr-pc-goliath-druid-female": {
+  "class": "art",
+  "note": "Green/yellow nature-magic swirls in both hands with a few small pink/violet accent dots and a purple belt gem \u2014 reads as deliberate spellglow palette, not a hot-magenta clash."
+ },
+ "spr-pc-goliath-monk-female": {
+  "class": "art",
+  "note": "Small warm pink-magenta ki glow contained in one fist, paired with orange sash \u2014 looks like an intentional ki-energy color choice, not a contamination cast."
+ },
+ "spr-pc-goliath-paladin-female": {
+  "class": "art",
+  "note": "Sword blade glows pink-orange like a holy/radiant weapon effect against gold-and-blue armor \u2014 coherent design, not a magenta leak."
+ },
+ "spr-pc-goliath-paladin-male": {
+  "class": "art",
+  "note": "Same pink-orange radiant blade glow as the female paladin, consistent armor palette elsewhere, no cast on skin or metal."
+ },
+ "spr-pc-goliath-ranger-female": {
+  "class": "art",
+  "note": "All-green/tan ranger outfit and bow, no purple or magenta anywhere in the sprite."
+ },
+ "spr-pc-goliath-rogue-female": {
+  "class": "art",
+  "note": "Deep violet/plum leather outfit is the intended costume color, desaturated and consistent, not a saturated magenta cast."
+ },
+ "spr-pc-goliath-sorcerer-female": {
+  "class": "art",
+  "note": "Purple robe with cyan-blue arcane flame in both hands \u2014 the purple is fabric design, flame color is blue not magenta."
+ },
+ "spr-pc-goliath-sorcerer-male": {
+  "class": "art",
+  "note": "Dark navy robe with matching cyan-blue flame effects in both hands, no magenta present."
+ },
+ "spr-pc-goliath-warlock-female": {
+  "class": "art",
+  "note": "Purple robe with a soft pink-magenta eldritch glow contained in one raised hand \u2014 fits the warlock patron-glow aesthetic and doesn't spill onto skin/cloth as a cast."
+ },
+ "spr-pc-goliath-warlock-male": {
+  "class": "art",
+  "note": "Dark robe with a green-to-magenta eldritch flame in hand \u2014 the green/pink duotone glow reads as an intentional patron-magic effect, not a contamination halo."
+ },
+ "spr-pc-goliath-wizard-female": {
+  "class": "art",
+  "note": "Purple robe with a blue arcane star-glyph glowing above the palm and a brown spellbook \u2014 palette is coherent, no hot-magenta clash."
+ },
+ "spr-pc-goliath-wizard-male": {
+  "class": "art",
+  "note": "Teal-blue robe with a matching blue arcane star-glyph glow, no purple/magenta contamination at all."
+ },
+ "spr-pc-halfling-bard-female": {
+  "class": "art",
+  "note": "Warm purple dress with a flower accent and blue musical-note motes \u2014 the purple is clothing design, consistent and desaturated, no magenta halo or cast."
+ },
+ "spr-pc-halfling-cleric-female": {
+  "class": "art",
+  "note": "Staff-top sunburst icon is a warm pink-gold radiant glow with white rays, consistent divine/radiant iconography; no clashing hot-magenta on the figure itself."
+ },
+ "spr-pc-halfling-cleric-male": {
+  "class": "art",
+  "note": "Same radiant pink-gold sunburst staff icon as the female cleric variant; reads as the intended divine-glow motif, not contamination."
+ },
+ "spr-pc-halfling-druid-female": {
+  "class": "unmix",
+  "note": "Hand-effect wisps are a saturated hot magenta/pink swirl (with small yellow sparkle) that clashes against the earthy green/brown druid palette \u2014 reads as chroma leak on the spell-effect glow rather than an intentional fey-magic color; figure itself (skin, robes) is clean.",
+  "strength": 0.5
+ },
+ "spr-pc-halfling-druid-male": {
+  "class": "unmix",
+  "note": "Same hot magenta/pink swirl effect on both raised hands as the female variant, clashing with the green forest-toned outfit \u2014 likely magenta contamination on the spell glow, not a deliberate color choice.",
+  "strength": 0.5
+ },
+ "spr-pc-halfling-paladin-female": {
+  "class": "art",
+  "note": "Sword blade carries a pink-magenta radiant glow that matches the game's established divine/radiant weapon-glow language (same family as the cleric staff icon) \u2014 intended, not a cast."
+ },
+ "spr-pc-halfling-paladin-male": {
+  "class": "art",
+  "note": "Same radiant pink glow on the sword blade as the female paladin \u2014 consistent intended divine-weapon effect."
+ },
+ "spr-pc-halfling-ranger-female": {
+  "class": "art",
+  "note": "No magenta or pink present at all \u2014 green/tan ranger outfit, bow and arrow rendered cleanly."
+ },
+ "spr-pc-halfling-ranger-male": {
+  "class": "art",
+  "note": "No magenta present \u2014 clean green/brown ranger palette, bow drawn, nothing to fix."
+ },
+ "spr-pc-halfling-sorcerer-female": {
+  "class": "art",
+  "note": "Deep violet/purple robe is the design's own color (harmonizes with gold trim); hand-flame effect reads blue-violet, not hot neon magenta \u2014 no contamination visible."
+ },
+ "spr-pc-halfling-sorcerer-male": {
+  "class": "art",
+  "note": "Same deep purple robe and blue-violet arcane hand-glow as the female sorcerer \u2014 intended arcane palette, not a magenta cast."
+ },
+ "spr-pc-halfling-warlock-female": {
+  "class": "art",
+  "note": "Deep purple robe with a glowing purple/magenta skull held in hand \u2014 thematically fitting eldritch-pact iconography for a warlock; the purple belongs to the design rather than clashing with it."
+ },
+ "spr-pc-halfling-warlock-male": {
+  "class": "art",
+  "note": "Same purple robe + glowing patron-skull motif as the female warlock \u2014 consistent intended eldritch-purple design language."
+ },
+ "spr-pc-halfling-wizard-female": {
+  "class": "art",
+  "note": "Blue robe with a violet/white arcane sigil circle floating over the open book \u2014 standard arcane-purple spell-circle color, no hot-magenta clash."
+ },
+ "spr-pc-halfling-wizard-male": {
+  "class": "art",
+  "note": "Same blue robe and violet/white arcane circle as the female wizard \u2014 intended design, clean."
+ },
+ "spr-pc-human-bard-female": {
+  "class": "art",
+  "note": "Purple and gold performance dress with no magic-effect overlay \u2014 the purple is straightforward garment color, no magenta contamination present."
+ },
+ "spr-pc-human-cleric-female": {
+  "class": "art",
+  "note": "Same warm pink-gold radiant sunburst staff icon as the halfling clerics \u2014 consistent intended divine-glow iconography, not a chroma leak."
+ },
+ "spr-pc-human-cleric-male": {
+  "class": "unmix",
+  "note": "Holy symbol atop the mace radiates a solid hot magenta sunburst/halo behind the gold cross \u2014 reads as unremoved magenta glow rather than an intentional radiant effect; rest of the sprite (robe, cloak, skin) is clean.",
+  "strength": 0.6
+ },
+ "spr-pc-human-druid-female": {
+  "class": "unmix",
+  "note": "Flame conjured in both hands is orange-yellow at the core but the wispy tendrils curling off it fade into hot neon magenta/pink, clashing with the earthy green-brown palette \u2014 contamination on the flame edges, not the design.",
+  "strength": 0.6
+ },
+ "spr-pc-human-druid-male": {
+  "class": "unmix",
+  "note": "Same flame effect as the female druid: orange core, magenta-pink wisp tendrils above the hands that don't belong to the earthy palette \u2014 halo contamination on the fire effect.",
+  "strength": 0.6
+ },
+ "spr-pc-human-paladin-female": {
+  "class": "unmix",
+  "note": "Sword blade is rendered as a solid hot magenta-to-red gradient blade against silver/gold armor \u2014 clashes hard with the desaturated steel palette; reads as a flame-enchant effect that got contaminated into pure magenta rather than orange/red.",
+  "strength": 0.7
+ },
+ "spr-pc-human-paladin-male": {
+  "class": "unmix",
+  "note": "Same hot-magenta glowing sword blade as the female paladin, clashing with the blue/gold armor \u2014 contamination on what should likely be an orange/red flame-blade effect.",
+  "strength": 0.7
+ },
+ "spr-pc-human-sorcerer-female": {
+  "class": "unmix",
+  "note": "Fire in both hands is orange at the core but the flame wisps trailing upward shift into hot pink/magenta, out of step with the red/gold robe palette \u2014 magenta cast on the fire effect edges.",
+  "strength": 0.6
+ },
+ "spr-pc-human-sorcerer-male": {
+  "class": "unmix",
+  "note": "Same fire-in-hands effect as the female sorcerer: orange core with magenta-pink wisp tendrils bleeding off the top \u2014 contamination on the flame, not the robe/skin/hair which are clean.",
+  "strength": 0.6
+ },
+ "spr-pc-human-warlock-female": {
+  "class": "art",
+  "note": "Deep violet robe and a glowing purple skull familiar/focus in hand \u2014 coherent eldritch warlock palette, the purple is clearly intentional design, not a magenta cast. Leave alone."
+ },
+ "spr-pc-human-warlock-male": {
+  "class": "art",
+  "note": "Same purple robe + glowing purple skull motif as the female warlock \u2014 belongs to the eldritch warlock design language, no hot-magenta clash visible. Leave alone."
+ },
+ "spr-pc-human-wizard-female": {
+  "class": "art",
+  "note": "Blue robe with gold trim; the floating arcane sigil is rendered in cool blue/white with a small violet accent that harmonizes with the design \u2014 no hot magenta contamination present."
+ },
+ "spr-pc-human-wizard-male": {
+  "class": "art",
+  "note": "Same blue robe + arcane circle motif as the female wizard, cool blue/violet palette that reads as intended magic-circle art, not magenta leak."
+ },
+ "spr-pc-orc-bard-female": {
+  "class": "art",
+  "note": "Purple and gold performer's outfit with lute \u2014 a rich but controlled violet/gold costume palette, no hot neon magenta patches or casts visible anywhere on the figure."
+ },
+ "spr-pc-orc-cleric-female": {
+  "class": "unmix",
+  "note": "Mace's holy symbol has the same hot magenta sunburst halo seen on the human cleric \u2014 solid neon pink-magenta ring behind the gold cross, unremoved glow contamination; robe/fur/skin are clean.",
+  "strength": 0.6
+ },
+ "spr-pc-orc-cleric-male": {
+  "class": "unmix",
+  "note": "Same magenta sunburst halo on the mace's holy symbol as the female orc cleric \u2014 contamination on the glow effect only, rest of the sprite reads fine.",
+  "strength": 0.6
+ },
+ "spr-pc-orc-druid-female": {
+  "class": "unmix",
+  "note": "Flame conjured in both hands: orange-green core with magenta-pink wisp tendrils curling off, matching the same contamination pattern seen on the human druids \u2014 clashes with the earthy green palette.",
+  "strength": 0.6
+ },
+ "spr-pc-orc-druid-male": {
+  "class": "unmix",
+  "note": "Same flame-in-hands effect as the female orc druid \u2014 orange core, magenta wisp tendrils bleeding off the top, contamination on the fire effect rather than the character art.",
+  "strength": 0.6
+ },
+ "spr-pc-orc-fighter-male": {
+  "class": "art",
+  "note": "Green orc skin, brown leather/steel armor, no magenta anywhere in the palette \u2014 clean art."
+ },
+ "spr-pc-orc-monk-female": {
+  "class": "art",
+  "note": "Violet loincloth/wraps and orange trim are the intended costume design; no hot pink cast, palette is desaturated and coherent."
+ },
+ "spr-pc-orc-paladin-female": {
+  "class": "art",
+  "note": "Gold/blue-black armor, sword glows warm orange-red not magenta; no contamination visible."
+ },
+ "spr-pc-orc-paladin-male": {
+  "class": "art",
+  "note": "Navy/gold armor with an orange-red glowing blade; no magenta cast or halo."
+ },
+ "spr-pc-orc-ranger-female": {
+  "class": "art",
+  "note": "Brown/orange leather archer outfit, no magenta present at all."
+ },
+ "spr-pc-orc-sorcerer-female": {
+  "class": "art",
+  "note": "Purple-magenta flame effect on both hands reads as an intentional eldritch/arcane fire design element harmonizing with the robe's purple trim and skull motifs, not a contamination cast on the body itself."
+ },
+ "spr-pc-orc-sorcerer-male": {
+  "class": "art",
+  "note": "Same purple flame effect on hands as the female sorcerer \u2014 designed magic glow, matches the character's dark palette, skin/armor otherwise clean."
+ },
+ "spr-pc-orc-warlock-female": {
+  "class": "art",
+  "note": "Purple robe and a small purple energy orb in hand \u2014 classic warlock glow, coherent with the deep-purple costume; no clashing hot-pink halo on the figure."
+ },
+ "spr-pc-orc-warlock-male": {
+  "class": "art",
+  "note": "Purple magic glow beside one hand matches the dark robe's purple accents; body/skin/armor are clean, no magenta contamination."
+ },
+ "spr-pc-orc-wizard-female": {
+  "class": "art",
+  "note": "Dark robe with a blue/white glowing arcane circle \u2014 no magenta present, clean."
+ },
+ "spr-pc-orc-wizard-male": {
+  "class": "art",
+  "note": "Same blue/white arcane circle motif as the female wizard, small lavender sparkle is part of the effect design; no contamination."
+ },
+ "spr-pc-tiefling-barbarian-female": {
+  "class": "art",
+  "note": "Deep red tiefling skin, brown fur/leather, horns and tail \u2014 no magenta or pink cast, clean red is the intended race color."
+ },
+ "spr-pc-tiefling-bard-female": {
+  "class": "art",
+  "note": "Red-pink tiefling skin with a purple robe and gold lute \u2014 the purple is costume, skin tone is a plausible warm tiefling red-pink, no hot-magenta clash."
+ },
+ "spr-pc-tiefling-bard-male": {
+  "class": "unmix",
+  "note": "Skin reads notably more saturated hot pink/magenta than the female bard's warmer red-pink tone, and it clashes slightly against the muted purple robe \u2014 looks like a mild magenta cast sitting on the skin rather than an intentional palette choice; worth a light desaturating unmix pass, not a redo.",
+  "strength": 0.5
+ },
+ "spr-pc-tiefling-cleric-female": {
+  "class": "art",
+  "note": "Warm red-pink tiefling skin, white/gold vestments, orange sunburst holy symbol \u2014 no magenta contamination."
+ },
+ "spr-pc-tiefling-cleric-male": {
+  "class": "art",
+  "note": "Dark red skin and red/gold vestments; the holy-symbol medallion glows pink-magenta but reads as an intentional divine-light color choice (rayed sunburst shape matching the female cleric's symbol, just a different hue), not a contamination halo \u2014 leave alone."
+ },
+ "spr-pc-tiefling-druid-female": {
+  "class": "art",
+  "note": "Deep purple tiefling skin/armor is the design; hand-flame wisps are green and soft violet-pink, both harmonizing stylized magic colors, no hot neon clash."
+ },
+ "spr-pc-tiefling-druid-male": {
+  "class": "art",
+  "note": "Dark purple skin is design; dual hand-flames are green and magenta-pink as an intentional two-tone druidic fire effect, reads as a controlled stylized glow not a contamination cast."
+ },
+ "spr-pc-tiefling-fighter-female": {
+  "class": "art",
+  "note": "Lavender/light-purple tiefling skin, blue-and-gold armor, white hair \u2014 clean palette, no magenta halos or casts anywhere."
+ },
+ "spr-pc-tiefling-monk-female": {
+  "class": "art",
+  "note": "Red-orange tiefling skin and red wrap, warm harmonious palette; no magenta present."
+ },
+ "spr-pc-tiefling-monk-male": {
+  "class": "art",
+  "note": "Red-orange skin, dark red trousers, tan wraps \u2014 no magenta contamination visible."
+ },
+ "spr-pc-tiefling-paladin-female": {
+  "class": "art",
+  "note": "Red skin, gold armor; sword has a pink-magenta holy/radiant glow that looks like an intended weapon-enchant effect, blended smoothly rather than clashing as a flat contamination cast."
+ },
+ "spr-pc-tiefling-paladin-male": {
+  "class": "art",
+  "note": "Blue-purple skin, gold armor, warm orange sword glow \u2014 no magenta issue."
+ },
+ "spr-pc-tiefling-ranger-female": {
+  "class": "art",
+  "note": "Red skin, green cloak/leathers, bow \u2014 earthy ranger palette, no magenta."
+ },
+ "spr-pc-tiefling-ranger-male": {
+  "class": "art",
+  "note": "Purple-blue skin, green cloak, bow \u2014 consistent palette, no magenta contamination."
+ },
+ "spr-pc-tiefling-rogue-female": {
+  "class": "art",
+  "note": "Pinkish-lavender tiefling skin tone with dark leathers and daggers; the pink reads as skin tone/design, not a hot-magenta cast."
+ },
+ "spr-pc-tiefling-sorcerer-female": {
+  "class": "art",
+  "note": "Red skin with warm orange-red fire wisps in both hands \u2014 fire-elemental glow, no magenta present."
+ },
+ "spr-pc-tiefling-sorcerer-male": {
+  "class": "art",
+  "note": "Dark purple-blue skin, black-and-purple robe, purple flame wisps at hands \u2014 arcane purple-fire design is coherent and intentional, no neon clash."
+ },
+ "spr-pc-tiefling-warlock-female": {
+  "class": "art",
+  "note": "Dark red-purple skin, black/red robe with warm fire glow in hands \u2014 coherent warlock palette, no magenta contamination."
+ },
+ "spr-pc-tiefling-warlock-male": {
+  "class": "art",
+  "note": "Purple-blue skin, black/purple robe, glowing violet orb in hand \u2014 deliberate eldritch-glow design, no hot-pink cast or halo contamination."
+ },
+ "spr-pc-tiefling-wizard-female": {
+  "class": "art",
+  "note": "Purple skin, blue-and-gold robe, violet magic sigil floating by hand, book in other \u2014 all purple tones belong to the coherent arcane palette, no magenta contamination."
+ },
+ "spr-pc-tiefling-wizard-male": {
+  "class": "art",
+  "note": "Purple skin, blue-and-gold robe, violet magic sigil, book \u2014 same coherent arcane-purple design as the female wizard, no contamination."
+ }
+}

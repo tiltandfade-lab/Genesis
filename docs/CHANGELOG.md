@@ -52,7 +52,10 @@ re-gated + eyes-on through the real PS1 sheets (`dev/model-qa/sheets/place-parts
 **Verification:** per-unit bakes re-run by the orchestrator (19/19 + donor regressions); red-first
 proofs both directions; check-manifest OK; place-dressing 25/0 · place-tray 19/0 · place-skins 23/0 ·
 theater-figures 40/0 · theater-data 329/0 · realm-wiring 78/0 · tabletop-u1 byte-gate 45/0; full
-verify sweep at close (result in HANDOFF); three contact sheets eyes-on.
+verify sweep at close: ZERO wave-caused failures — the 2 reds are pre-existing/not-mine
+(table-usage-data 384-vs-385 = data/table-usage.js stale on master since the 385-table recompile,
+regenerate at the master merge per worktree law; coherence-dial = N=2000 statistical flake, green
+3/3 on re-run — seeding candidate). Three contact sheets eyes-on.
 
 ## 2026-07-09 (late night) — PLACE-GEN build wave: places are realm-true from birth and render as dioramas
 

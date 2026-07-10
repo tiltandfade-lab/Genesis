@@ -4288,7 +4288,7 @@ function interiorBuildLights(lights, cx, cz){
 // rig's metrics (a piece whose slug doesn't join the registry, or whose texture hasn't loaded yet,
 // silently skips — same total-function/never-throw discipline every other figure resolution in this
 // file keeps).
-function interiorBuildPieces(pieces){
+function interiorBuildPieces(pieces, cx, cz){
   const group = new THREE.Group();
   let resolved = 0;
   (pieces || []).forEach((p) => {
@@ -4299,7 +4299,7 @@ function interiorBuildPieces(pieces){
     });
     const g = buildSpriteBillboard(entry);
     if(!g) return; // texture not loaded yet — falls through, same as every other billboard resolution
-    g.position.set(p.cellX || 0, (base.floor || 0) - 0.4, p.cellY || 0); // -0.4: feet on the y=-0.5 floor plane (mesh.position.y already lifts h/2 inside the group)
+    g.position.set((p.cellX || 0) - (cx || 0), (base.floor || 0) - 0.4, (p.cellY || 0) - (cz || 0)); // origin-shifted like every tile/light (the v3 card bug: raw cell coords rendered pieces outside the fitted frame); -0.4: feet on the y=-0.5 floor plane
     group.add(g);
     resolved++;
   });
@@ -4329,11 +4329,15 @@ function setInteriorBoard(data){
   if(S.renderer) S.renderer.shadowMap.enabled = true;
 
   const b = data.bounds || { minX: 0, maxX: 0, minZ: 0, maxZ: 0 };
-  const cx = (b.minX + b.maxX) / 2, cz = (b.minZ + b.maxZ) / 2;
+  // Camera framing: fit to the FOCUS ROOM when the board carries one (interiorBuildBoard's
+  // focusRect — study card v3 "camera pulled into the room"); neighbors still render, they just
+  // sit outside the fitted frame. Fallback: the whole board footprint, the original behavior.
+  const fit = data.focusRect || b;
+  const cx = (fit.minX + fit.maxX) / 2, cz = (fit.minZ + fit.maxZ) / 2;
   S.boardCenter = new THREE.Vector3(0, 0, 0);
   S.boardOrigin = { cx, cz };
-  S.boardHalfX = (b.maxX - b.minX) / 2 + 1;
-  S.boardHalfZ = (b.maxZ - b.minZ) / 2 + 1;
+  S.boardHalfX = (fit.maxX - fit.minX) / 2 + 2;
+  S.boardHalfZ = (fit.maxZ - fit.minZ) / 2 + 2;
   S.boardHalfExtent = Math.max(S.boardHalfX, S.boardHalfZ);
   S.lastGrid = null; // no band/lane grid on an interior tray — zoneToWorld/zoom-bias callers degrade to their own defaults
 
@@ -4376,7 +4380,27 @@ function setInteriorBoard(data){
       })
     : (data.instances || {});
   const floorMesh = interiorBuildInstancedMesh(inst.floor, cx, cz, floorTex, variant, "floor");
-  const wallMesh = interiorBuildInstancedMesh(inst.wall, cx, cz, wallTex, variant, "wall");
+  // CUTAWAY WALLS (study card v4): when the board frames a focus room, the room's CAMERA-SIDE
+  // perimeter walls drop to knee height so the camera sees INTO the room instead of at the outside
+  // face of a (possibly scale-domain-tall) wall — the standard dungeon-view cutaway. Computed from
+  // the camera yaw AT BUILD TIME (a later user rotate keeps the same cutaway until the next board
+  // build — acceptable v1, noted here on purpose).
+  let wallList = inst.wall;
+  if(data.focusRect){
+    const fr = data.focusRect;
+    const yawNow = (S.rotationStep * 90 * Math.PI) / 180 + (CAM_YAW_OFFSET_DEG * Math.PI) / 180;
+    const dirX = Math.sin(yawNow), dirZ = Math.cos(yawNow);
+    const KNEE = 0.35;
+    wallList = inst.wall.map(function(wi){
+      const inBand = wi.x >= fr.minX - 1 && wi.x <= fr.maxX + 1 && wi.z >= fr.minZ - 1 && wi.z <= fr.maxZ + 1;
+      if(!inBand) return wi;
+      const rx = wi.x - cx, rz = wi.z - cz;
+      if(rx * dirX + rz * dirZ <= 0) return wi;            // far-side walls stay full height
+      if((wi.sy || 1) <= KNEE) return wi;
+      return Object.assign({}, wi, { sy: KNEE });
+    });
+  }
+  const wallMesh = interiorBuildInstancedMesh(wallList, cx, cz, wallTex, variant, "wall");
   const doorMesh = interiorBuildInstancedMesh(inst.doorframe, cx, cz, null, variant, "doorframe");
   const pillarMesh = interiorBuildInstancedMesh(inst.pillar, cx, cz, null, variant, "pillar");
   [floorMesh, wallMesh, doorMesh, pillarMesh].forEach((mesh) => { if(mesh) S.interiorGroup.add(mesh); });
@@ -4393,7 +4417,7 @@ function setInteriorBoard(data){
   // DUNGEON-GRAPH.md U3 iteration-2, ruling 3: creature/PC billboard sprites standing in the room
   // (data.pieces, a plain field the caller sets directly on the board object — independent of
   // interiorBuildBoard, same as data.lightProfile above).
-  const piecesBuilt = interiorBuildPieces(data.pieces);
+  const piecesBuilt = interiorBuildPieces(data.pieces, cx, cz);
   S.interiorGroup.add(piecesBuilt.group);
   S.interiorPiecesResolved = piecesBuilt.resolved;
   S.interiorPiecesRequested = piecesBuilt.requested;

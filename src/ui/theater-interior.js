@@ -358,6 +358,15 @@ function interiorBuildBoard(plan, opts) {
     instances: { floor: floor, wall: wall, doorframe: doorframe, pillar: pillar },
     lights: lights,
     bounds: { minX: minX, maxX: maxX, minZ: minZ, maxZ: maxZ },
+    // camera-framing hint: when a focus room was requested, carry its rect (raw plan cell space —
+    // the same space every instance above uses) so setInteriorBoard can CENTER + FIT the camera on
+    // the room itself instead of the whole kept-neighborhood footprint (study card v3: "camera
+    // pulled into the room").
+    focusRect: (function(){
+      if (opts.focusSegNum == null) return null;
+      const fr = (plan.rooms || []).find(function(r){ return r.segNum === opts.focusSegNum; });
+      return fr ? { minX: fr.x, maxX: fr.x + fr.w - 1, minZ: fr.y, maxZ: fr.y + fr.d - 1 } : null;
+    })(),
     meta: { roomCount: roomCount, floorCount: floor.length, wallCount: wall.length,
       doorCount: doorframe.length, pillarCount: pillar.length, lightCount: lights.length }
   };

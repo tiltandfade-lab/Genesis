@@ -112,7 +112,7 @@ def roll_next_steps(emit):
     oldest = sorted(dated, key=lambda t: (t[0], -t[1]))[:over]
     move_idx = {i for _, i in oldest}
     print(f"NEXT-STEPS.md: {len(dated)} dated Do-next blocks (cap {KEEP_DO_NEXT}) — rolling {over}:")
-    for _, i in sorted(move_idx):
+    for i in sorted(move_idx):
         print("  →", blocks[i].splitlines()[0].strip())
     if emit:
         overflow = [blocks[i] for i in sorted(move_idx)]

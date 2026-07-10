@@ -1,0 +1,843 @@
+{
+  "source": "dev/sprite-manifests/XL-REGEN-PROMPTS.md",
+  "manifest": "dev/sprite-manifests/xl-regen-manifest.json",
+  "count": 64,
+  "totalSprites": 195,
+  "jobs": [
+    {
+      "index": 1,
+      "sheetId": "fantasy-titan-kraken",
+      "expected": 1,
+      "spriteSlugs": [
+        "spr-fantasy-kraken"
+      ],
+      "prompt": "ONE single creature, centered, filling most of the frame, maximum detail. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).\n\n1. **Kraken** — Gargantuan Monstrosity (Titan), Chaotic Evil, CR 23 — signature move: Multiattack — stands ~50 ft tall\n",
+      "incomingPng": "dev/sprite-sheets/incoming/xl-regen/01-fantasy-titan-kraken.png",
+      "sliceCommand": "python3 build/slice-sprites.py dev/sprite-sheets/incoming/xl-regen/01-fantasy-titan-kraken.png --manifest-v2 fantasy-titan-kraken --manifest-path dev/sprite-manifests/xl-regen-manifest.json --review"
+    },
+    {
+      "index": 2,
+      "sheetId": "fantasy-titan-colossus",
+      "expected": 1,
+      "spriteSlugs": [
+        "spr-fantasy-colossus"
+      ],
+      "prompt": "ONE single creature, centered, filling most of the frame, maximum detail. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).\n\n1. **Colossus** — Gargantuan Construct (Titan), Unaligned, CR 25 — signature move: Multiattack — stands ~50 ft tall\n",
+      "incomingPng": "dev/sprite-sheets/incoming/xl-regen/02-fantasy-titan-colossus.png",
+      "sliceCommand": "python3 build/slice-sprites.py dev/sprite-sheets/incoming/xl-regen/02-fantasy-titan-colossus.png --manifest-v2 fantasy-titan-colossus --manifest-path dev/sprite-manifests/xl-regen-manifest.json --review"
+    },
+    {
+      "index": 3,
+      "sheetId": "fantasy-titan-tarrasque",
+      "expected": 1,
+      "spriteSlugs": [
+        "spr-fantasy-tarrasque"
+      ],
+      "prompt": "ONE single creature, centered, filling most of the frame, maximum detail. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).\n\n1. **Tarrasque** — Gargantuan Monstrosity (Titan), Unaligned, CR 30 — signature move: Multiattack — stands ~50 ft tall\n",
+      "incomingPng": "dev/sprite-sheets/incoming/xl-regen/03-fantasy-titan-tarrasque.png",
+      "sliceCommand": "python3 build/slice-sprites.py dev/sprite-sheets/incoming/xl-regen/03-fantasy-titan-tarrasque.png --manifest-v2 fantasy-titan-tarrasque --manifest-path dev/sprite-manifests/xl-regen-manifest.json --review"
+    },
+    {
+      "index": 4,
+      "sheetId": "fantasy-titan-ancient-red-dragon",
+      "expected": 1,
+      "spriteSlugs": [
+        "spr-fantasy-ancient-red-dragon"
+      ],
+      "prompt": "ONE single creature, centered, filling most of the frame, maximum detail. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).\n\n1. **Ancient Red Dragon** — Gargantuan Dragon (Chromatic), Chaotic Evil, CR 24 — signature move: Multiattack — stands ~38 ft tall\n",
+      "incomingPng": "dev/sprite-sheets/incoming/xl-regen/04-fantasy-titan-ancient-red-dragon.png",
+      "sliceCommand": "python3 build/slice-sprites.py dev/sprite-sheets/incoming/xl-regen/04-fantasy-titan-ancient-red-dragon.png --manifest-v2 fantasy-titan-ancient-red-dragon --manifest-path dev/sprite-manifests/xl-regen-manifest.json --review"
+    },
+    {
+      "index": 5,
+      "sheetId": "fantasy-titan-ancient-blue-dragon",
+      "expected": 1,
+      "spriteSlugs": [
+        "spr-fantasy-ancient-blue-dragon"
+      ],
+      "prompt": "ONE single creature, centered, filling most of the frame, maximum detail. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).\n\n1. **Ancient Blue Dragon** — Gargantuan Dragon (Chromatic), Lawful Evil, CR 23 — signature move: Multiattack — stands ~35 ft tall\n",
+      "incomingPng": "dev/sprite-sheets/incoming/xl-regen/05-fantasy-titan-ancient-blue-dragon.png",
+      "sliceCommand": "python3 build/slice-sprites.py dev/sprite-sheets/incoming/xl-regen/05-fantasy-titan-ancient-blue-dragon.png --manifest-v2 fantasy-titan-ancient-blue-dragon --manifest-path dev/sprite-manifests/xl-regen-manifest.json --review"
+    },
+    {
+      "index": 6,
+      "sheetId": "fantasy-titan-ancient-silver-dragon",
+      "expected": 1,
+      "spriteSlugs": [
+        "spr-fantasy-ancient-silver-dragon"
+      ],
+      "prompt": "ONE single creature, centered, filling most of the frame, maximum detail. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).\n\n1. **Ancient Silver Dragon** — Gargantuan Dragon (Metallic), Lawful Good, CR 23 — signature move: Multiattack — stands ~35 ft tall\n",
+      "incomingPng": "dev/sprite-sheets/incoming/xl-regen/06-fantasy-titan-ancient-silver-dragon.png",
+      "sliceCommand": "python3 build/slice-sprites.py dev/sprite-sheets/incoming/xl-regen/06-fantasy-titan-ancient-silver-dragon.png --manifest-v2 fantasy-titan-ancient-silver-dragon --manifest-path dev/sprite-manifests/xl-regen-manifest.json --review"
+    },
+    {
+      "index": 7,
+      "sheetId": "fantasy-titan-ancient-bronze-dragon",
+      "expected": 1,
+      "spriteSlugs": [
+        "spr-fantasy-ancient-bronze-dragon"
+      ],
+      "prompt": "ONE single creature, centered, filling most of the frame, maximum detail. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).\n\n1. **Ancient Bronze Dragon** — Gargantuan Dragon (Metallic), Lawful Good, CR 22 — signature move: Multiattack — stands ~34 ft tall\n",
+      "incomingPng": "dev/sprite-sheets/incoming/xl-regen/07-fantasy-titan-ancient-bronze-dragon.png",
+      "sliceCommand": "python3 build/slice-sprites.py dev/sprite-sheets/incoming/xl-regen/07-fantasy-titan-ancient-bronze-dragon.png --manifest-v2 fantasy-titan-ancient-bronze-dragon --manifest-path dev/sprite-manifests/xl-regen-manifest.json --review"
+    },
+    {
+      "index": 8,
+      "sheetId": "fantasy-titan-ancient-black-dragon",
+      "expected": 1,
+      "spriteSlugs": [
+        "spr-fantasy-ancient-black-dragon"
+      ],
+      "prompt": "ONE single creature, centered, filling most of the frame, maximum detail. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).\n\n1. **Ancient Black Dragon** — Gargantuan Dragon (Chromatic), Chaotic Evil, CR 21 — signature move: Multiattack — stands ~32 ft tall\n",
+      "incomingPng": "dev/sprite-sheets/incoming/xl-regen/08-fantasy-titan-ancient-black-dragon.png",
+      "sliceCommand": "python3 build/slice-sprites.py dev/sprite-sheets/incoming/xl-regen/08-fantasy-titan-ancient-black-dragon.png --manifest-v2 fantasy-titan-ancient-black-dragon --manifest-path dev/sprite-manifests/xl-regen-manifest.json --review"
+    },
+    {
+      "index": 9,
+      "sheetId": "fantasy-titan-ancient-green-dragon",
+      "expected": 1,
+      "spriteSlugs": [
+        "spr-fantasy-ancient-green-dragon"
+      ],
+      "prompt": "ONE single creature, centered, filling most of the frame, maximum detail. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).\n\n1. **Ancient Green Dragon** — Gargantuan Dragon (Chromatic), Lawful Evil, CR 22 — signature move: Multiattack — stands ~32 ft tall\n",
+      "incomingPng": "dev/sprite-sheets/incoming/xl-regen/09-fantasy-titan-ancient-green-dragon.png",
+      "sliceCommand": "python3 build/slice-sprites.py dev/sprite-sheets/incoming/xl-regen/09-fantasy-titan-ancient-green-dragon.png --manifest-v2 fantasy-titan-ancient-green-dragon --manifest-path dev/sprite-manifests/xl-regen-manifest.json --review"
+    },
+    {
+      "index": 10,
+      "sheetId": "fantasy-titan-roc",
+      "expected": 1,
+      "spriteSlugs": [
+        "spr-fantasy-roc"
+      ],
+      "prompt": "ONE single creature, centered, filling most of the frame, maximum detail. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).\n\n1. **Roc** — Gargantuan Monstrosity, Unaligned, CR 11 — signature move: Multiattack — stands ~30 ft tall\n",
+      "incomingPng": "dev/sprite-sheets/incoming/xl-regen/10-fantasy-titan-roc.png",
+      "sliceCommand": "python3 build/slice-sprites.py dev/sprite-sheets/incoming/xl-regen/10-fantasy-titan-roc.png --manifest-v2 fantasy-titan-roc --manifest-path dev/sprite-manifests/xl-regen-manifest.json --review"
+    },
+    {
+      "index": 11,
+      "sheetId": "fantasy-titan-gulthias-blight",
+      "expected": 1,
+      "spriteSlugs": [
+        "spr-fantasy-gulthias-blight"
+      ],
+      "prompt": "ONE single creature, centered, filling most of the frame, maximum detail. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).\n\n1. **Gulthias Blight** — Gargantuan Plant, Neutral Evil, CR 16 — signature move: Multiattack — stands ~30 ft tall\n",
+      "incomingPng": "dev/sprite-sheets/incoming/xl-regen/11-fantasy-titan-gulthias-blight.png",
+      "sliceCommand": "python3 build/slice-sprites.py dev/sprite-sheets/incoming/xl-regen/11-fantasy-titan-gulthias-blight.png --manifest-v2 fantasy-titan-gulthias-blight --manifest-path dev/sprite-manifests/xl-regen-manifest.json --review"
+    },
+    {
+      "index": 12,
+      "sheetId": "fantasy-titan-ancient-copper-dragon",
+      "expected": 1,
+      "spriteSlugs": [
+        "spr-fantasy-ancient-copper-dragon"
+      ],
+      "prompt": "ONE single creature, centered, filling most of the frame, maximum detail. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).\n\n1. **Ancient Copper Dragon** — Gargantuan Dragon (Metallic), Chaotic Good, CR 21 — signature move: Multiattack — stands ~30 ft tall\n",
+      "incomingPng": "dev/sprite-sheets/incoming/xl-regen/12-fantasy-titan-ancient-copper-dragon.png",
+      "sliceCommand": "python3 build/slice-sprites.py dev/sprite-sheets/incoming/xl-regen/12-fantasy-titan-ancient-copper-dragon.png --manifest-v2 fantasy-titan-ancient-copper-dragon --manifest-path dev/sprite-manifests/xl-regen-manifest.json --review"
+    },
+    {
+      "index": 13,
+      "sheetId": "fantasy-titan-elemental-cataclysm",
+      "expected": 1,
+      "spriteSlugs": [
+        "spr-fantasy-elemental-cataclysm"
+      ],
+      "prompt": "ONE single creature, centered, filling most of the frame, maximum detail. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).\n\n1. **Elemental Cataclysm** — Gargantuan Elemental (Titan), Chaotic Neutral, CR 22 — signature move: Multiattack — stands ~30 ft tall\n",
+      "incomingPng": "dev/sprite-sheets/incoming/xl-regen/13-fantasy-titan-elemental-cataclysm.png",
+      "sliceCommand": "python3 build/slice-sprites.py dev/sprite-sheets/incoming/xl-regen/13-fantasy-titan-elemental-cataclysm.png --manifest-v2 fantasy-titan-elemental-cataclysm --manifest-path dev/sprite-manifests/xl-regen-manifest.json --review"
+    },
+    {
+      "index": 14,
+      "sheetId": "fantasy-titan-purple-worm",
+      "expected": 1,
+      "spriteSlugs": [
+        "spr-fantasy-purple-worm"
+      ],
+      "prompt": "ONE single creature, centered, filling most of the frame, maximum detail. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).\n\n1. **Purple Worm** — Gargantuan Monstrosity, Unaligned, CR 15 — signature move: Multiattack — stands ~29 ft tall\n",
+      "incomingPng": "dev/sprite-sheets/incoming/xl-regen/14-fantasy-titan-purple-worm.png",
+      "sliceCommand": "python3 build/slice-sprites.py dev/sprite-sheets/incoming/xl-regen/14-fantasy-titan-purple-worm.png --manifest-v2 fantasy-titan-purple-worm --manifest-path dev/sprite-manifests/xl-regen-manifest.json --review"
+    },
+    {
+      "index": 15,
+      "sheetId": "fantasy-titan-adult-black-dragon",
+      "expected": 1,
+      "spriteSlugs": [
+        "spr-fantasy-adult-black-dragon"
+      ],
+      "prompt": "ONE single creature, centered, filling most of the frame, maximum detail. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).\n\n1. **Adult Black Dragon** — Huge Dragon (Chromatic), Chaotic Evil, CR 14 — signature move: Multiattack — stands ~28 ft tall\n",
+      "incomingPng": "dev/sprite-sheets/incoming/xl-regen/15-fantasy-titan-adult-black-dragon.png",
+      "sliceCommand": "python3 build/slice-sprites.py dev/sprite-sheets/incoming/xl-regen/15-fantasy-titan-adult-black-dragon.png --manifest-v2 fantasy-titan-adult-black-dragon --manifest-path dev/sprite-manifests/xl-regen-manifest.json --review"
+    },
+    {
+      "index": 16,
+      "sheetId": "fantasy-titan-ancient-brass-dragon",
+      "expected": 1,
+      "spriteSlugs": [
+        "spr-fantasy-ancient-brass-dragon"
+      ],
+      "prompt": "ONE single creature, centered, filling most of the frame, maximum detail. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).\n\n1. **Ancient Brass Dragon** — Gargantuan Dragon (Metallic), Chaotic Good, CR 20 — signature move: Multiattack — stands ~28 ft tall\n",
+      "incomingPng": "dev/sprite-sheets/incoming/xl-regen/16-fantasy-titan-ancient-brass-dragon.png",
+      "sliceCommand": "python3 build/slice-sprites.py dev/sprite-sheets/incoming/xl-regen/16-fantasy-titan-ancient-brass-dragon.png --manifest-v2 fantasy-titan-ancient-brass-dragon --manifest-path dev/sprite-manifests/xl-regen-manifest.json --review"
+    },
+    {
+      "index": 17,
+      "sheetId": "fantasy-titan-ancient-white-dragon",
+      "expected": 1,
+      "spriteSlugs": [
+        "spr-fantasy-ancient-white-dragon"
+      ],
+      "prompt": "ONE single creature, centered, filling most of the frame, maximum detail. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).\n\n1. **Ancient White Dragon** — Gargantuan Dragon (Chromatic), Chaotic Evil, CR 20 — signature move: Multiattack — stands ~28 ft tall\n",
+      "incomingPng": "dev/sprite-sheets/incoming/xl-regen/17-fantasy-titan-ancient-white-dragon.png",
+      "sliceCommand": "python3 build/slice-sprites.py dev/sprite-sheets/incoming/xl-regen/17-fantasy-titan-ancient-white-dragon.png --manifest-v2 fantasy-titan-ancient-white-dragon --manifest-path dev/sprite-manifests/xl-regen-manifest.json --review"
+    },
+    {
+      "index": 18,
+      "sheetId": "fantasy-titan-blob-of-annihilation",
+      "expected": 1,
+      "spriteSlugs": [
+        "spr-fantasy-blob-of-annihilation"
+      ],
+      "prompt": "ONE single creature, centered, filling most of the frame, maximum detail. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).\n\n1. **Blob of Annihilation** — Gargantuan Ooze (Titan), Neutral Evil, CR 23 — signature move: Multiattack — stands ~27 ft tall\n",
+      "incomingPng": "dev/sprite-sheets/incoming/xl-regen/18-fantasy-titan-blob-of-annihilation.png",
+      "sliceCommand": "python3 build/slice-sprites.py dev/sprite-sheets/incoming/xl-regen/18-fantasy-titan-blob-of-annihilation.png --manifest-v2 fantasy-titan-blob-of-annihilation --manifest-path dev/sprite-manifests/xl-regen-manifest.json --review"
+    },
+    {
+      "index": 19,
+      "sheetId": "fantasy-titan-shadow-dragon",
+      "expected": 1,
+      "spriteSlugs": [
+        "spr-fantasy-shadow-dragon"
+      ],
+      "prompt": "ONE single creature, centered, filling most of the frame, maximum detail. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).\n\n1. **Shadow Dragon** — Huge or Large Dragon, Chaotic Evil, CR 13 — signature move: Multiattack — stands ~26 ft tall\n",
+      "incomingPng": "dev/sprite-sheets/incoming/xl-regen/19-fantasy-titan-shadow-dragon.png",
+      "sliceCommand": "python3 build/slice-sprites.py dev/sprite-sheets/incoming/xl-regen/19-fantasy-titan-shadow-dragon.png --manifest-v2 fantasy-titan-shadow-dragon --manifest-path dev/sprite-manifests/xl-regen-manifest.json --review"
+    },
+    {
+      "index": 20,
+      "sheetId": "fantasy-titan-haunting-revenant",
+      "expected": 1,
+      "spriteSlugs": [
+        "spr-fantasy-haunting-revenant"
+      ],
+      "prompt": "ONE single creature, centered, filling most of the frame, maximum detail. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).\n\n1. **Haunting Revenant** — Gargantuan Undead, Neutral, CR 10 — signature move: Multiattack — stands ~25 ft tall\n",
+      "incomingPng": "dev/sprite-sheets/incoming/xl-regen/20-fantasy-titan-haunting-revenant.png",
+      "sliceCommand": "python3 build/slice-sprites.py dev/sprite-sheets/incoming/xl-regen/20-fantasy-titan-haunting-revenant.png --manifest-v2 fantasy-titan-haunting-revenant --manifest-path dev/sprite-manifests/xl-regen-manifest.json --review"
+    },
+    {
+      "index": 21,
+      "sheetId": "fantasy-titan-adult-bronze-dragon",
+      "expected": 1,
+      "spriteSlugs": [
+        "spr-fantasy-adult-bronze-dragon"
+      ],
+      "prompt": "ONE single creature, centered, filling most of the frame, maximum detail. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).\n\n1. **Adult Bronze Dragon** — Huge Dragon (Metallic), Lawful Good, CR 15 — signature move: Multiattack — stands ~25 ft tall\n",
+      "incomingPng": "dev/sprite-sheets/incoming/xl-regen/21-fantasy-titan-adult-bronze-dragon.png",
+      "sliceCommand": "python3 build/slice-sprites.py dev/sprite-sheets/incoming/xl-regen/21-fantasy-titan-adult-bronze-dragon.png --manifest-v2 fantasy-titan-adult-bronze-dragon --manifest-path dev/sprite-manifests/xl-regen-manifest.json --review"
+    },
+    {
+      "index": 22,
+      "sheetId": "fantasy-titan-adult-green-dragon",
+      "expected": 1,
+      "spriteSlugs": [
+        "spr-fantasy-adult-green-dragon"
+      ],
+      "prompt": "ONE single creature, centered, filling most of the frame, maximum detail. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).\n\n1. **Adult Green Dragon** — Huge Dragon (Chromatic), Lawful Evil, CR 15 — signature move: Multiattack — stands ~25 ft tall\n",
+      "incomingPng": "dev/sprite-sheets/incoming/xl-regen/22-fantasy-titan-adult-green-dragon.png",
+      "sliceCommand": "python3 build/slice-sprites.py dev/sprite-sheets/incoming/xl-regen/22-fantasy-titan-adult-green-dragon.png --manifest-v2 fantasy-titan-adult-green-dragon --manifest-path dev/sprite-manifests/xl-regen-manifest.json --review"
+    },
+    {
+      "index": 23,
+      "sheetId": "fantasy-titan-adult-blue-dragon",
+      "expected": 1,
+      "spriteSlugs": [
+        "spr-fantasy-adult-blue-dragon"
+      ],
+      "prompt": "ONE single creature, centered, filling most of the frame, maximum detail. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).\n\n1. **Adult Blue Dragon** — Huge Dragon (Chromatic), Lawful Evil, CR 16 — signature move: Multiattack — stands ~24 ft tall\n",
+      "incomingPng": "dev/sprite-sheets/incoming/xl-regen/23-fantasy-titan-adult-blue-dragon.png",
+      "sliceCommand": "python3 build/slice-sprites.py dev/sprite-sheets/incoming/xl-regen/23-fantasy-titan-adult-blue-dragon.png --manifest-v2 fantasy-titan-adult-blue-dragon --manifest-path dev/sprite-manifests/xl-regen-manifest.json --review"
+    },
+    {
+      "index": 24,
+      "sheetId": "fantasy-titan-dragon-turtle",
+      "expected": 1,
+      "spriteSlugs": [
+        "spr-fantasy-dragon-turtle"
+      ],
+      "prompt": "ONE single creature, centered, filling most of the frame, maximum detail. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).\n\n1. **Dragon Turtle** — Gargantuan Dragon, Neutral, CR 17 — signature move: Multiattack — stands ~24 ft tall\n",
+      "incomingPng": "dev/sprite-sheets/incoming/xl-regen/24-fantasy-titan-dragon-turtle.png",
+      "sliceCommand": "python3 build/slice-sprites.py dev/sprite-sheets/incoming/xl-regen/24-fantasy-titan-dragon-turtle.png --manifest-v2 fantasy-titan-dragon-turtle --manifest-path dev/sprite-manifests/xl-regen-manifest.json --review"
+    },
+    {
+      "index": 25,
+      "sheetId": "fantasy-xl-1",
+      "expected": 4,
+      "spriteSlugs": [
+        "spr-fantasy-cloud-giant",
+        "spr-fantasy-treant",
+        "spr-fantasy-adult-white-dragon",
+        "spr-fantasy-behir"
+      ],
+      "prompt": "2x2 grid, 4 cells, one distinct creature per cell, uniform cell size, each creature rendered LARGE — filling its cell, roughly double the detail of a small sprite. Consistent scale across cells. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).\n\n1. **Cloud Giant** — Huge Giant, Neutral, CR 9 — signature move: Multiattack — stands ~24 ft tall\n2. **Treant** — Huge Plant, Chaotic Good, CR 9 — signature move: Multiattack — stands ~24 ft tall\n3. **Adult White Dragon** — Huge Dragon (Chromatic), Chaotic Evil, CR 13 — signature move: Multiattack — stands ~24 ft tall\n4. **Behir** — Huge Monstrosity, Neutral Evil, CR 11 — signature move: Multiattack — stands ~23 ft tall\n",
+      "incomingPng": "dev/sprite-sheets/incoming/xl-regen/25-fantasy-xl-1.png",
+      "sliceCommand": "python3 build/slice-sprites.py dev/sprite-sheets/incoming/xl-regen/25-fantasy-xl-1.png --manifest-v2 fantasy-xl-1 --manifest-path dev/sprite-manifests/xl-regen-manifest.json --review"
+    },
+    {
+      "index": 26,
+      "sheetId": "fantasy-xl-2",
+      "expected": 4,
+      "spriteSlugs": [
+        "spr-fantasy-giant-bat",
+        "spr-fantasy-adult-copper-dragon",
+        "spr-fantasy-adult-silver-dragon",
+        "spr-fantasy-adult-brass-dragon"
+      ],
+      "prompt": "2x2 grid, 4 cells, one distinct creature per cell, uniform cell size, each creature rendered LARGE — filling its cell, roughly double the detail of a small sprite. Consistent scale across cells. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).\n\n1. **Giant Bat** — Large Beast, Unaligned, CR 0.25 — signature move: Bite — stands ~23 ft tall\n2. **Adult Copper Dragon** — Huge Dragon (Metallic), Chaotic Good, CR 14 — signature move: Multiattack — stands ~23 ft tall\n3. **Adult Silver Dragon** — Huge Dragon (Metallic), Lawful Good, CR 16 — signature move: Multiattack — stands ~23 ft tall\n4. **Adult Brass Dragon** — Huge Dragon (Metallic), Chaotic Good, CR 13 — signature move: Multiattack — stands ~22 ft tall\n",
+      "incomingPng": "dev/sprite-sheets/incoming/xl-regen/26-fantasy-xl-2.png",
+      "sliceCommand": "python3 build/slice-sprites.py dev/sprite-sheets/incoming/xl-regen/26-fantasy-xl-2.png --manifest-v2 fantasy-xl-2 --manifest-path dev/sprite-manifests/xl-regen-manifest.json --review"
+    },
+    {
+      "index": 27,
+      "sheetId": "fantasy-xl-3",
+      "expected": 4,
+      "spriteSlugs": [
+        "spr-fantasy-awakened-tree",
+        "spr-fantasy-adult-red-dragon",
+        "spr-fantasy-hydra",
+        "spr-fantasy-giant-owl"
+      ],
+      "prompt": "2x2 grid, 4 cells, one distinct creature per cell, uniform cell size, each creature rendered LARGE — filling its cell, roughly double the detail of a small sprite. Consistent scale across cells. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).\n\n1. **Awakened Tree** — Huge Plant, Neutral, CR 2 — signature move: Slam — stands ~22 ft tall\n2. **Adult Red Dragon** — Huge Dragon (Chromatic), Chaotic Evil, CR 17 — signature move: Multiattack — stands ~22 ft tall\n3. **Hydra** — Huge Monstrosity, Unaligned, CR 8 — signature move: Multiattack — stands ~22 ft tall\n4. **Giant Owl** — Large Celestial, Neutral, CR 0.25 — signature move: Talons — stands ~21 ft tall\n",
+      "incomingPng": "dev/sprite-sheets/incoming/xl-regen/27-fantasy-xl-3.png",
+      "sliceCommand": "python3 build/slice-sprites.py dev/sprite-sheets/incoming/xl-regen/27-fantasy-xl-3.png --manifest-v2 fantasy-xl-3 --manifest-path dev/sprite-manifests/xl-regen-manifest.json --review"
+    },
+    {
+      "index": 28,
+      "sheetId": "fantasy-xl-4",
+      "expected": 4,
+      "spriteSlugs": [
+        "spr-fantasy-storm-giant",
+        "spr-fantasy-giant-squid",
+        "spr-fantasy-remorhaz",
+        "spr-fantasy-cyclops-oracle"
+      ],
+      "prompt": "2x2 grid, 4 cells, one distinct creature per cell, uniform cell size, each creature rendered LARGE — filling its cell, roughly double the detail of a small sprite. Consistent scale across cells. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).\n\n1. **Storm Giant** — Huge Giant, Chaotic Good, CR 13 — signature move: Multiattack — stands ~21 ft tall\n2. **Giant Squid** — Huge Beast, Unaligned, CR 6 — signature move: Multiattack — stands ~21 ft tall\n3. **Remorhaz** — Huge Monstrosity, Unaligned, CR 11 — signature move: Bite — stands ~21 ft tall\n4. **Cyclops Oracle** — Huge Giant, Chaotic Neutral, CR 10 — signature move: Multiattack — stands ~21 ft tall\n",
+      "incomingPng": "dev/sprite-sheets/incoming/xl-regen/28-fantasy-xl-4.png",
+      "sliceCommand": "python3 build/slice-sprites.py dev/sprite-sheets/incoming/xl-regen/28-fantasy-xl-4.png --manifest-v2 fantasy-xl-4 --manifest-path dev/sprite-manifests/xl-regen-manifest.json --review"
+    },
+    {
+      "index": 29,
+      "sheetId": "fantasy-xl-5",
+      "expected": 4,
+      "spriteSlugs": [
+        "spr-fantasy-primeval-owlbear",
+        "spr-fantasy-dire-worg",
+        "spr-fantasy-young-blue-dragon",
+        "spr-fantasy-gold-dragon-roster-5e-2024-mechanics"
+      ],
+      "prompt": "2x2 grid, 4 cells, one distinct creature per cell, uniform cell size, each creature rendered LARGE — filling its cell, roughly double the detail of a small sprite. Consistent scale across cells. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).\n\n1. **Primeval Owlbear** — Huge Monstrosity, Unaligned, CR 7 — signature move: Multiattack — stands ~20 ft tall\n2. **Dire Worg** — Huge Fey, Neutral Evil, CR 10 — signature move: Multiattack — stands ~20 ft tall\n3. **Young Blue Dragon** — Large Dragon (Chromatic), Lawful Evil, CR 9 — signature move: Multiattack — stands ~20 ft tall\n4. **Gold Dragon Roster (5e/2024 Mechanics)** — CR 3 — signature move: Multiattack — stands ~20 ft tall\n",
+      "incomingPng": "dev/sprite-sheets/incoming/xl-regen/29-fantasy-xl-5.png",
+      "sliceCommand": "python3 build/slice-sprites.py dev/sprite-sheets/incoming/xl-regen/29-fantasy-xl-5.png --manifest-v2 fantasy-xl-5 --manifest-path dev/sprite-manifests/xl-regen-manifest.json --review"
+    },
+    {
+      "index": 30,
+      "sheetId": "fantasy-xl-6",
+      "expected": 4,
+      "spriteSlugs": [
+        "spr-fantasy-dracolich",
+        "spr-fantasy-mammoth",
+        "spr-fantasy-hill-giant",
+        "spr-fantasy-fomorian"
+      ],
+      "prompt": "2x2 grid, 4 cells, one distinct creature per cell, uniform cell size, each creature rendered LARGE — filling its cell, roughly double the detail of a small sprite. Consistent scale across cells. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).\n\n1. **Dracolich** — Huge or Gargantuan Undead, Lawful Evil, CR 17 — signature move: Multiattack — stands ~20 ft tall\n2. **Mammoth** — Huge Beast, Unaligned, CR 6 — signature move: Multiattack — stands ~20 ft tall\n3. **Hill Giant** — Huge Giant, Chaotic Evil, CR 5 — signature move: Multiattack — stands ~19 ft tall\n4. **Fomorian** — Huge Giant, Chaotic Evil, CR 8 — signature move: Multiattack — stands ~19 ft tall\n",
+      "incomingPng": "dev/sprite-sheets/incoming/xl-regen/30-fantasy-xl-6.png",
+      "sliceCommand": "python3 build/slice-sprites.py dev/sprite-sheets/incoming/xl-regen/30-fantasy-xl-6.png --manifest-v2 fantasy-xl-6 --manifest-path dev/sprite-manifests/xl-regen-manifest.json --review"
+    },
+    {
+      "index": 31,
+      "sheetId": "fantasy-xl-7",
+      "expected": 4,
+      "spriteSlugs": [
+        "spr-fantasy-archelon",
+        "spr-fantasy-young-silver-dragon",
+        "spr-fantasy-triceratops",
+        "spr-fantasy-stone-giant"
+      ],
+      "prompt": "2x2 grid, 4 cells, one distinct creature per cell, uniform cell size, each creature rendered LARGE — filling its cell, roughly double the detail of a small sprite. Consistent scale across cells. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).\n\n1. **Archelon** — Huge Beast (Dinosaur), Unaligned, CR 4 — signature move: Multiattack — stands ~19 ft tall\n2. **Young Silver Dragon** — Large Dragon (Metallic), Lawful Good, CR 9 — signature move: Multiattack — stands ~19 ft tall\n3. **Triceratops** — Huge Beast (Dinosaur), Unaligned, CR 5 — signature move: Multiattack — stands ~18 ft tall\n4. **Stone Giant** — Huge Giant, Neutral, CR 7 — signature move: Multiattack — stands ~18 ft tall\n",
+      "incomingPng": "dev/sprite-sheets/incoming/xl-regen/31-fantasy-xl-7.png",
+      "sliceCommand": "python3 build/slice-sprites.py dev/sprite-sheets/incoming/xl-regen/31-fantasy-xl-7.png --manifest-v2 fantasy-xl-7 --manifest-path dev/sprite-manifests/xl-regen-manifest.json --review"
+    },
+    {
+      "index": 32,
+      "sheetId": "fantasy-xl-8",
+      "expected": 4,
+      "spriteSlugs": [
+        "spr-fantasy-fire-giant",
+        "spr-fantasy-empyrean",
+        "spr-fantasy-giant-eagle",
+        "spr-fantasy-young-bronze-dragon"
+      ],
+      "prompt": "2x2 grid, 4 cells, one distinct creature per cell, uniform cell size, each creature rendered LARGE — filling its cell, roughly double the detail of a small sprite. Consistent scale across cells. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).\n\n1. **Fire Giant** — Huge Giant, Lawful Evil, CR 9 — signature move: Multiattack — stands ~18 ft tall\n2. **Empyrean** — Huge Celestial or Fiend (Titan), Neutral, CR 23 — signature move: Multiattack — stands ~18 ft tall\n3. **Giant Eagle** — Large Celestial, Neutral Good, CR 1 — signature move: Multiattack — stands ~18 ft tall\n4. **Young Bronze Dragon** — Large Dragon (Metallic), Lawful Good, CR 8 — signature move: Multiattack — stands ~18 ft tall\n",
+      "incomingPng": "dev/sprite-sheets/incoming/xl-regen/32-fantasy-xl-8.png",
+      "sliceCommand": "python3 build/slice-sprites.py dev/sprite-sheets/incoming/xl-regen/32-fantasy-xl-8.png --manifest-v2 fantasy-xl-8 --manifest-path dev/sprite-manifests/xl-regen-manifest.json --review"
+    },
+    {
+      "index": 33,
+      "sheetId": "fantasy-xl-9",
+      "expected": 4,
+      "spriteSlugs": [
+        "spr-fantasy-cyclops-sentry",
+        "spr-fantasy-eye-tyrant",
+        "spr-fantasy-giant-axe-beak",
+        "spr-fantasy-young-black-dragon"
+      ],
+      "prompt": "2x2 grid, 4 cells, one distinct creature per cell, uniform cell size, each creature rendered LARGE — filling its cell, roughly double the detail of a small sprite. Consistent scale across cells. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).\n\n1. **Cyclops Sentry** — Huge Giant, Chaotic Neutral, CR 6 — signature move: Multiattack — stands ~18 ft tall\n2. **Eye-Tyrant** — Large Aberration, Lawful Evil, CR 13 — signature move: Multiattack — stands ~18 ft tall\n3. **Giant Axe Beak** — Huge Monstrosity, Unaligned, CR 5 — signature move: Multiattack — stands ~18 ft tall\n4. **Young Black Dragon** — Large Dragon (Chromatic), Chaotic Evil, CR 7 — signature move: Multiattack — stands ~17 ft tall\n",
+      "incomingPng": "dev/sprite-sheets/incoming/xl-regen/33-fantasy-xl-9.png",
+      "sliceCommand": "python3 build/slice-sprites.py dev/sprite-sheets/incoming/xl-regen/33-fantasy-xl-9.png --manifest-v2 fantasy-xl-9 --manifest-path dev/sprite-manifests/xl-regen-manifest.json --review"
+    },
+    {
+      "index": 34,
+      "sheetId": "fantasy-xl-10",
+      "expected": 4,
+      "spriteSlugs": [
+        "spr-fantasy-bone-devil",
+        "spr-fantasy-marilith",
+        "spr-fantasy-umber-hulk",
+        "spr-fantasy-young-red-dragon"
+      ],
+      "prompt": "2x2 grid, 4 cells, one distinct creature per cell, uniform cell size, each creature rendered LARGE — filling its cell, roughly double the detail of a small sprite. Consistent scale across cells. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).\n\n1. **Bone Devil** — Large Fiend (Devil), Lawful Evil, CR 9 — signature move: Multiattack — stands ~17 ft tall\n2. **Marilith** — Large Fiend (Demon), Chaotic Evil, CR 16 — signature move: Multiattack — stands ~17 ft tall\n3. **Umber Hulk** — Large Monstrosity, Chaotic Evil, CR 5 — signature move: Multiattack — stands ~16 ft tall\n4. **Young Red Dragon** — Large Dragon (Chromatic), Chaotic Evil, CR 10 — signature move: Multiattack — stands ~16 ft tall\n",
+      "incomingPng": "dev/sprite-sheets/incoming/xl-regen/34-fantasy-xl-10.png",
+      "sliceCommand": "python3 build/slice-sprites.py dev/sprite-sheets/incoming/xl-regen/34-fantasy-xl-10.png --manifest-v2 fantasy-xl-10 --manifest-path dev/sprite-manifests/xl-regen-manifest.json --review"
+    },
+    {
+      "index": 35,
+      "sheetId": "fantasy-xl-11",
+      "expected": 4,
+      "spriteSlugs": [
+        "spr-fantasy-chimera",
+        "spr-fantasy-frost-giant",
+        "spr-fantasy-young-copper-dragon",
+        "spr-fantasy-chasme"
+      ],
+      "prompt": "2x2 grid, 4 cells, one distinct creature per cell, uniform cell size, each creature rendered LARGE — filling its cell, roughly double the detail of a small sprite. Consistent scale across cells. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).\n\n1. **Chimera** — Large Monstrosity, Chaotic Evil, CR 6 — signature move: Multiattack — stands ~16 ft tall\n2. **Frost Giant** — Huge Giant, Neutral Evil, CR 8 — signature move: Multiattack — stands ~16 ft tall\n3. **Young Copper Dragon** — Large Dragon (Metallic), Chaotic Good, CR 7 — signature move: Multiattack — stands ~16 ft tall\n4. **Chasme** — Large Fiend (Demon), Chaotic Evil, CR 6 — signature move: Proboscis — stands ~16 ft tall\n",
+      "incomingPng": "dev/sprite-sheets/incoming/xl-regen/35-fantasy-xl-11.png",
+      "sliceCommand": "python3 build/slice-sprites.py dev/sprite-sheets/incoming/xl-regen/35-fantasy-xl-11.png --manifest-v2 fantasy-xl-11 --manifest-path dev/sprite-manifests/xl-regen-manifest.json --review"
+    },
+    {
+      "index": 36,
+      "sheetId": "fantasy-xl-12",
+      "expected": 4,
+      "spriteSlugs": [
+        "spr-fantasy-young-green-dragon",
+        "spr-fantasy-griffon",
+        "spr-fantasy-giant-scorpion",
+        "spr-fantasy-roper"
+      ],
+      "prompt": "2x2 grid, 4 cells, one distinct creature per cell, uniform cell size, each creature rendered LARGE — filling its cell, roughly double the detail of a small sprite. Consistent scale across cells. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).\n\n1. **Young Green Dragon** — Large Dragon (Chromatic), Lawful Evil, CR 8 — signature move: Multiattack — stands ~16 ft tall\n2. **Griffon** — Large Monstrosity, Unaligned, CR 2 — signature move: Multiattack — stands ~16 ft tall\n3. **Giant Scorpion** — Large Beast, Unaligned, CR 3 — signature move: Multiattack — stands ~16 ft tall\n4. **Roper** — Large Aberration, Neutral Evil, CR 5 — signature move: Multiattack — stands ~16 ft tall\n",
+      "incomingPng": "dev/sprite-sheets/incoming/xl-regen/36-fantasy-xl-12.png",
+      "sliceCommand": "python3 build/slice-sprites.py dev/sprite-sheets/incoming/xl-regen/36-fantasy-xl-12.png --manifest-v2 fantasy-xl-12 --manifest-path dev/sprite-manifests/xl-regen-manifest.json --review"
+    },
+    {
+      "index": 37,
+      "sheetId": "fantasy-xl-13",
+      "expected": 4,
+      "spriteSlugs": [
+        "spr-fantasy-sphinx-of-valor",
+        "spr-fantasy-elephant",
+        "spr-fantasy-wyvern",
+        "spr-fantasy-ogre-howdah"
+      ],
+      "prompt": "2x2 grid, 4 cells, one distinct creature per cell, uniform cell size, each creature rendered LARGE — filling its cell, roughly double the detail of a small sprite. Consistent scale across cells. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).\n\n1. **Sphinx of Valor** — Large Celestial, Lawful Neutral, CR 17 — signature move: Multiattack — stands ~16 ft tall\n2. **Elephant** — Huge Beast, Unaligned, CR 4 — signature move: Multiattack — stands ~15 ft tall\n3. **Wyvern** — Large Dragon, Unaligned, CR 6 — signature move: Multiattack — stands ~15 ft tall\n4. **Ogre Howdah** — Large Giant, Chaotic Evil, CR 3 — signature move: Greatclub — stands ~15 ft tall\n",
+      "incomingPng": "dev/sprite-sheets/incoming/xl-regen/37-fantasy-xl-13.png",
+      "sliceCommand": "python3 build/slice-sprites.py dev/sprite-sheets/incoming/xl-regen/37-fantasy-xl-13.png --manifest-v2 fantasy-xl-13 --manifest-path dev/sprite-manifests/xl-regen-manifest.json --review"
+    },
+    {
+      "index": 38,
+      "sheetId": "fantasy-xl-14",
+      "expected": 4,
+      "spriteSlugs": [
+        "spr-fantasy-young-brass-dragon",
+        "spr-fantasy-undead-eye-tyrant",
+        "spr-fantasy-pit-fiend",
+        "spr-fantasy-brazen-gorgon"
+      ],
+      "prompt": "2x2 grid, 4 cells, one distinct creature per cell, uniform cell size, each creature rendered LARGE — filling its cell, roughly double the detail of a small sprite. Consistent scale across cells. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).\n\n1. **Young Brass Dragon** — Large Dragon (Metallic), Chaotic Good, CR 6 — signature move: Multiattack — stands ~15 ft tall\n2. **Undead Eye-Tyrant** — Large Undead (Eye-Tyrant), Lawful Evil, CR 14 — signature move: Multiattack — stands ~15 ft tall\n3. **Pit Fiend** — Large Fiend (Devil), Lawful Evil, CR 20 — signature move: Multiattack — stands ~15 ft tall\n4. **Brazen Gorgon** — Large Construct, Unaligned, CR 9 — signature move: Multiattack — stands ~15 ft tall\n",
+      "incomingPng": "dev/sprite-sheets/incoming/xl-regen/38-fantasy-xl-14.png",
+      "sliceCommand": "python3 build/slice-sprites.py dev/sprite-sheets/incoming/xl-regen/38-fantasy-xl-14.png --manifest-v2 fantasy-xl-14 --manifest-path dev/sprite-manifests/xl-regen-manifest.json --review"
+    },
+    {
+      "index": 39,
+      "sheetId": "fantasy-xl-15",
+      "expected": 4,
+      "spriteSlugs": [
+        "spr-fantasy-nalfeshnee",
+        "spr-fantasy-tyrannosaurus-rex",
+        "spr-fantasy-hippogriff",
+        "spr-fantasy-nycaloth"
+      ],
+      "prompt": "2x2 grid, 4 cells, one distinct creature per cell, uniform cell size, each creature rendered LARGE — filling its cell, roughly double the detail of a small sprite. Consistent scale across cells. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).\n\n1. **Nalfeshnee** — Large Fiend (Demon), Chaotic Evil, CR 13 — signature move: Multiattack — stands ~15 ft tall\n2. **Tyrannosaurus Rex** — Huge Beast (Dinosaur), Unaligned, CR 8 — signature move: Multiattack — stands ~15 ft tall\n3. **Hippogriff** — Large Monstrosity, Unaligned, CR 1 — signature move: Multiattack — stands ~15 ft tall\n4. **Nycaloth** — Large Fiend (Yugoloth), Neutral Evil, CR 9 — signature move: Multiattack — stands ~15 ft tall\n",
+      "incomingPng": "dev/sprite-sheets/incoming/xl-regen/39-fantasy-xl-15.png",
+      "sliceCommand": "python3 build/slice-sprites.py dev/sprite-sheets/incoming/xl-regen/39-fantasy-xl-15.png --manifest-v2 fantasy-xl-15 --manifest-path dev/sprite-manifests/xl-regen-manifest.json --review"
+    },
+    {
+      "index": 40,
+      "sheetId": "fantasy-xl-16",
+      "expected": 4,
+      "spriteSlugs": [
+        "spr-fantasy-fire-elemental",
+        "spr-fantasy-glabrezu",
+        "spr-fantasy-planetar",
+        "spr-fantasy-giant-goat"
+      ],
+      "prompt": "2x2 grid, 4 cells, one distinct creature per cell, uniform cell size, each creature rendered LARGE — filling its cell, roughly double the detail of a small sprite. Consistent scale across cells. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).\n\n1. **Fire Elemental** — Large Elemental, Neutral, CR 5 — signature move: Multiattack — stands ~15 ft tall\n2. **Glabrezu** — Large Fiend (Demon), Chaotic Evil, CR 9 — signature move: Multiattack — stands ~15 ft tall\n3. **Planetar** — Large Celestial (Angel), Lawful Good, CR 16 — signature move: Multiattack — stands ~15 ft tall\n4. **Giant Goat** — Large Beast, Unaligned, CR 0.5 — signature move: Ram — stands ~15 ft tall\n",
+      "incomingPng": "dev/sprite-sheets/incoming/xl-regen/40-fantasy-xl-16.png",
+      "sliceCommand": "python3 build/slice-sprites.py dev/sprite-sheets/incoming/xl-regen/40-fantasy-xl-16.png --manifest-v2 fantasy-xl-16 --manifest-path dev/sprite-manifests/xl-regen-manifest.json --review"
+    },
+    {
+      "index": 41,
+      "sheetId": "fantasy-xl-17",
+      "expected": 4,
+      "spriteSlugs": [
+        "spr-fantasy-hunter-shark",
+        "spr-fantasy-green-chaos-frog",
+        "spr-fantasy-spirit-naga",
+        "spr-fantasy-swarm-of-bats"
+      ],
+      "prompt": "2x2 grid, 4 cells, one distinct creature per cell, uniform cell size, each creature rendered LARGE — filling its cell, roughly double the detail of a small sprite. Consistent scale across cells. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).\n\n1. **Hunter Shark** — Large Beast, Unaligned, CR 2 — signature move: Bite — stands ~14 ft tall\n2. **Green Chaos-Frog** — Large Aberration, Chaotic Neutral, CR 8 — signature move: Multiattack — stands ~14 ft tall\n3. **Spirit Naga** — Large Fiend, Chaotic Evil, CR 8 — signature move: Multiattack — stands ~14 ft tall\n4. **Swarm of Bats** — Large Swarm of Tiny Beasts, Unaligned, CR 0.25 — signature move: Bites — stands ~14 ft tall\n",
+      "incomingPng": "dev/sprite-sheets/incoming/xl-regen/41-fantasy-xl-17.png",
+      "sliceCommand": "python3 build/slice-sprites.py dev/sprite-sheets/incoming/xl-regen/41-fantasy-xl-17.png --manifest-v2 fantasy-xl-17 --manifest-path dev/sprite-manifests/xl-regen-manifest.json --review"
+    },
+    {
+      "index": 42,
+      "sheetId": "fantasy-xl-18",
+      "expected": 4,
+      "spriteSlugs": [
+        "spr-fantasy-guardian-naga",
+        "spr-fantasy-merrow",
+        "spr-fantasy-cockatrice-regent",
+        "spr-fantasy-graveyard-revenant"
+      ],
+      "prompt": "2x2 grid, 4 cells, one distinct creature per cell, uniform cell size, each creature rendered LARGE — filling its cell, roughly double the detail of a small sprite. Consistent scale across cells. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).\n\n1. **Guardian Naga** — Large Celestial, Lawful Good, CR 10 — signature move: Multiattack — stands ~14 ft tall\n2. **Merrow** — Large Monstrosity, Chaotic Evil, CR 2 — signature move: Multiattack — stands ~14 ft tall\n3. **Cockatrice Regent** — Large Monstrosity, Unaligned, CR 8 — signature move: Multiattack — stands ~14 ft tall\n4. **Graveyard Revenant** — Huge Undead, Neutral, CR 7 — signature move: Multiattack — stands ~14 ft tall\n",
+      "incomingPng": "dev/sprite-sheets/incoming/xl-regen/42-fantasy-xl-18.png",
+      "sliceCommand": "python3 build/slice-sprites.py dev/sprite-sheets/incoming/xl-regen/42-fantasy-xl-18.png --manifest-v2 fantasy-xl-18 --manifest-path dev/sprite-manifests/xl-regen-manifest.json --review"
+    },
+    {
+      "index": 43,
+      "sheetId": "fantasy-xl-19",
+      "expected": 4,
+      "spriteSlugs": [
+        "spr-fantasy-tree-blight",
+        "spr-fantasy-abominable-yeti",
+        "spr-fantasy-balor",
+        "spr-fantasy-violet-fungus-necrohulk"
+      ],
+      "prompt": "2x2 grid, 4 cells, one distinct creature per cell, uniform cell size, each creature rendered LARGE — filling its cell, roughly double the detail of a small sprite. Consistent scale across cells. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).\n\n1. **Tree Blight** — Huge Plant, Neutral Evil, CR 7 — signature move: Multiattack — stands ~14 ft tall\n2. **Abominable Yeti** — Huge Monstrosity, Chaotic Evil, CR 9 — signature move: Multiattack — stands ~14 ft tall\n3. **Balor** — Huge Fiend (Demon), Chaotic Evil, CR 19 — signature move: Multiattack — stands ~14 ft tall\n4. **Violet Fungus Necrohulk** — Large Plant, Neutral Evil, CR 7 — signature move: Multiattack — stands ~14 ft tall\n",
+      "incomingPng": "dev/sprite-sheets/incoming/xl-regen/43-fantasy-xl-19.png",
+      "sliceCommand": "python3 build/slice-sprites.py dev/sprite-sheets/incoming/xl-regen/43-fantasy-xl-19.png --manifest-v2 fantasy-xl-19 --manifest-path dev/sprite-manifests/xl-regen-manifest.json --review"
+    },
+    {
+      "index": 44,
+      "sheetId": "fantasy-xl-20",
+      "expected": 4,
+      "spriteSlugs": [
+        "spr-fantasy-hezrou",
+        "spr-fantasy-salamander-inferno-master",
+        "spr-fantasy-clay-golem",
+        "spr-fantasy-sphinx-of-lore"
+      ],
+      "prompt": "2x2 grid, 4 cells, one distinct creature per cell, uniform cell size, each creature rendered LARGE — filling its cell, roughly double the detail of a small sprite. Consistent scale across cells. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).\n\n1. **Hezrou** — Large Fiend (Demon), Chaotic Evil, CR 8 — signature move: Multiattack — stands ~14 ft tall\n2. **Salamander Inferno Master** — Large Elemental, Neutral Evil, CR 15 — signature move: Multiattack — stands ~14 ft tall\n3. **Clay Golem** — Large Construct, Unaligned, CR 9 — signature move: Multiattack — stands ~14 ft tall\n4. **Sphinx of Lore** — Large Celestial, Lawful Neutral, CR 11 — signature move: Multiattack — stands ~14 ft tall\n",
+      "incomingPng": "dev/sprite-sheets/incoming/xl-regen/44-fantasy-xl-20.png",
+      "sliceCommand": "python3 build/slice-sprites.py dev/sprite-sheets/incoming/xl-regen/44-fantasy-xl-20.png --manifest-v2 fantasy-xl-20 --manifest-path dev/sprite-manifests/xl-regen-manifest.json --review"
+    },
+    {
+      "index": 45,
+      "sheetId": "fantasy-xl-21",
+      "expected": 4,
+      "spriteSlugs": [
+        "spr-fantasy-minotaur-skeleton",
+        "spr-fantasy-grick-ancient",
+        "spr-fantasy-giant-vulture",
+        "spr-fantasy-earth-elemental"
+      ],
+      "prompt": "2x2 grid, 4 cells, one distinct creature per cell, uniform cell size, each creature rendered LARGE — filling its cell, roughly double the detail of a small sprite. Consistent scale across cells. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).\n\n1. **Minotaur Skeleton** — Large Undead, Lawful Evil, CR 2 — signature move: Gore — stands ~14 ft tall\n2. **Grick Ancient** — Large Aberration, Unaligned, CR 7 — signature move: Multiattack — stands ~14 ft tall\n3. **Giant Vulture** — Large Monstrosity, Neutral Evil, CR 1 — signature move: Gouge — stands ~14 ft tall\n4. **Earth Elemental** — Large Elemental, Neutral, CR 5 — signature move: Multiattack — stands ~14 ft tall\n",
+      "incomingPng": "dev/sprite-sheets/incoming/xl-regen/45-fantasy-xl-21.png",
+      "sliceCommand": "python3 build/slice-sprites.py dev/sprite-sheets/incoming/xl-regen/45-fantasy-xl-21.png --manifest-v2 fantasy-xl-21 --manifest-path dev/sprite-manifests/xl-regen-manifest.json --review"
+    },
+    {
+      "index": 46,
+      "sheetId": "fantasy-xl-22",
+      "expected": 4,
+      "spriteSlugs": [
+        "spr-fantasy-shield-guardian",
+        "spr-fantasy-sahuagin-baron",
+        "spr-fantasy-blue-chaos-frog",
+        "spr-fantasy-sphinx-of-secrets"
+      ],
+      "prompt": "2x2 grid, 4 cells, one distinct creature per cell, uniform cell size, each creature rendered LARGE — filling its cell, roughly double the detail of a small sprite. Consistent scale across cells. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).\n\n1. **Shield Guardian** — Large Construct, Unaligned, CR 7 — signature move: Multiattack — stands ~14 ft tall\n2. **Sahuagin Baron** — Large Fiend, Lawful Evil, CR 5 — signature move: Multiattack — stands ~13 ft tall\n3. **Blue Chaos-Frog** — Large Aberration, Chaotic Neutral, CR 7 — signature move: Multiattack — stands ~13 ft tall\n4. **Sphinx of Secrets** — Large Celestial, Lawful Neutral, CR 8 — signature move: Multiattack — stands ~13 ft tall\n",
+      "incomingPng": "dev/sprite-sheets/incoming/xl-regen/46-fantasy-xl-22.png",
+      "sliceCommand": "python3 build/slice-sprites.py dev/sprite-sheets/incoming/xl-regen/46-fantasy-xl-22.png --manifest-v2 fantasy-xl-22 --manifest-path dev/sprite-manifests/xl-regen-manifest.json --review"
+    },
+    {
+      "index": 47,
+      "sheetId": "fantasy-xl-23",
+      "expected": 4,
+      "spriteSlugs": [
+        "spr-fantasy-ice-devil",
+        "spr-fantasy-swarm-of-larvae",
+        "spr-fantasy-nightmare",
+        "spr-fantasy-clawed-drowner"
+      ],
+      "prompt": "2x2 grid, 4 cells, one distinct creature per cell, uniform cell size, each creature rendered LARGE — filling its cell, roughly double the detail of a small sprite. Consistent scale across cells. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).\n\n1. **Ice Devil** — Large Fiend (Devil), Lawful Evil, CR 14 — signature move: Multiattack — stands ~13 ft tall\n2. **Swarm of Larvae** — Large Swarm of Medium Fiends, Neutral Evil, CR 1 — signature move: Bites — stands ~13 ft tall\n3. **Nightmare** — Large Fiend, Neutral Evil, CR 3 — signature move: Hooves — stands ~13 ft tall\n4. **Clawed Drowner** — Large Aberration, Chaotic Evil, CR 4 — signature move: Multiattack — stands ~13 ft tall\n",
+      "incomingPng": "dev/sprite-sheets/incoming/xl-regen/47-fantasy-xl-23.png",
+      "sliceCommand": "python3 build/slice-sprites.py dev/sprite-sheets/incoming/xl-regen/47-fantasy-xl-23.png --manifest-v2 fantasy-xl-23 --manifest-path dev/sprite-manifests/xl-regen-manifest.json --review"
+    },
+    {
+      "index": 48,
+      "sheetId": "fantasy-xl-24",
+      "expected": 4,
+      "spriteSlugs": [
+        "spr-fantasy-minotaur-of-the-horned-king",
+        "spr-fantasy-swarm-of-lemures",
+        "spr-fantasy-ettin",
+        "spr-fantasy-axe-beak"
+      ],
+      "prompt": "2x2 grid, 4 cells, one distinct creature per cell, uniform cell size, each creature rendered LARGE — filling its cell, roughly double the detail of a small sprite. Consistent scale across cells. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).\n\n1. **Minotaur of the Horned King** — Large Monstrosity, Chaotic Evil, CR 3 — signature move: Abyssal Glaive — stands ~13 ft tall\n2. **Swarm of Lemures** — Large Swarm of Medium Fiends (Devil), Lawful Evil, CR 3 — signature move: Multiattack — stands ~13 ft tall\n3. **Ettin** — Large Giant, Chaotic Evil, CR 4 — signature move: Multiattack — stands ~13 ft tall\n4. **Axe Beak** — Large Monstrosity, Unaligned, CR 0.25 — signature move: Beak — stands ~13 ft tall\n",
+      "incomingPng": "dev/sprite-sheets/incoming/xl-regen/48-fantasy-xl-24.png",
+      "sliceCommand": "python3 build/slice-sprites.py dev/sprite-sheets/incoming/xl-regen/48-fantasy-xl-24.png --manifest-v2 fantasy-xl-24 --manifest-path dev/sprite-manifests/xl-regen-manifest.json --review"
+    },
+    {
+      "index": 49,
+      "sheetId": "fantasy-xl-25",
+      "expected": 4,
+      "spriteSlugs": [
+        "spr-fantasy-invisible-stalker",
+        "spr-fantasy-manticore",
+        "spr-fantasy-otyugh",
+        "spr-fantasy-unicorn"
+      ],
+      "prompt": "2x2 grid, 4 cells, one distinct creature per cell, uniform cell size, each creature rendered LARGE — filling its cell, roughly double the detail of a small sprite. Consistent scale across cells. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).\n\n1. **Invisible Stalker** — Large Elemental, Neutral, CR 6 — signature move: Multiattack — stands ~13 ft tall\n2. **Manticore** — Large Monstrosity, Lawful Evil, CR 3 — signature move: Multiattack — stands ~13 ft tall\n3. **Otyugh** — Large Aberration, Neutral, CR 5 — signature move: Multiattack — stands ~13 ft tall\n4. **Unicorn** — Large Celestial, Lawful Good, CR 5 — signature move: Multiattack — stands ~13 ft tall\n",
+      "incomingPng": "dev/sprite-sheets/incoming/xl-regen/49-fantasy-xl-25.png",
+      "sliceCommand": "python3 build/slice-sprites.py dev/sprite-sheets/incoming/xl-regen/49-fantasy-xl-25.png --manifest-v2 fantasy-xl-25 --manifest-path dev/sprite-manifests/xl-regen-manifest.json --review"
+    },
+    {
+      "index": 50,
+      "sheetId": "fantasy-xl-26",
+      "expected": 4,
+      "spriteSlugs": [
+        "spr-fantasy-yuan-ti-abomination",
+        "spr-fantasy-red-chaos-frog",
+        "spr-fantasy-shambling-mound",
+        "spr-fantasy-vrock"
+      ],
+      "prompt": "2x2 grid, 4 cells, one distinct creature per cell, uniform cell size, each creature rendered LARGE — filling its cell, roughly double the detail of a small sprite. Consistent scale across cells. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).\n\n1. **Yuan-ti Abomination** — Large Monstrosity, Neutral Evil, CR 7 — signature move: Multiattack — stands ~13 ft tall\n2. **Red Chaos-Frog** — Large Aberration, Chaotic Neutral, CR 5 — signature move: Multiattack — stands ~13 ft tall\n3. **Shambling Mound** — Large Plant, Unaligned, CR 5 — signature move: Multiattack — stands ~13 ft tall\n4. **Vrock** — Large Fiend (Demon), Chaotic Evil, CR 6 — signature move: Multiattack — stands ~13 ft tall\n",
+      "incomingPng": "dev/sprite-sheets/incoming/xl-regen/50-fantasy-xl-26.png",
+      "sliceCommand": "python3 build/slice-sprites.py dev/sprite-sheets/incoming/xl-regen/50-fantasy-xl-26.png --manifest-v2 fantasy-xl-26 --manifest-path dev/sprite-manifests/xl-regen-manifest.json --review"
+    },
+    {
+      "index": 51,
+      "sheetId": "fantasy-xl-27",
+      "expected": 4,
+      "spriteSlugs": [
+        "spr-fantasy-efreeti",
+        "spr-fantasy-salamander",
+        "spr-fantasy-centaur-warden",
+        "spr-fantasy-marid"
+      ],
+      "prompt": "2x2 grid, 4 cells, one distinct creature per cell, uniform cell size, each creature rendered LARGE — filling its cell, roughly double the detail of a small sprite. Consistent scale across cells. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).\n\n1. **Efreeti** — Large Elemental (Genie), Neutral, CR 11 — signature move: Multiattack — stands ~13 ft tall\n2. **Salamander** — Large Elemental, Neutral Evil, CR 5 — signature move: Multiattack — stands ~12 ft tall\n3. **Centaur Warden** — Large Fey, Neutral Good, CR 7 — signature move: Multiattack — stands ~12 ft tall\n4. **Marid** — Large Elemental (Genie), Chaotic Neutral, CR 11 — signature move: Multiattack — stands ~12 ft tall\n",
+      "incomingPng": "dev/sprite-sheets/incoming/xl-regen/51-fantasy-xl-27.png",
+      "sliceCommand": "python3 build/slice-sprites.py dev/sprite-sheets/incoming/xl-regen/51-fantasy-xl-27.png --manifest-v2 fantasy-xl-27 --manifest-path dev/sprite-manifests/xl-regen-manifest.json --review"
+    },
+    {
+      "index": 52,
+      "sheetId": "fantasy-xl-28",
+      "expected": 4,
+      "spriteSlugs": [
+        "spr-fantasy-oni",
+        "spr-fantasy-elk",
+        "spr-fantasy-eye-tyrant-zombie",
+        "spr-fantasy-cloaker"
+      ],
+      "prompt": "2x2 grid, 4 cells, one distinct creature per cell, uniform cell size, each creature rendered LARGE — filling its cell, roughly double the detail of a small sprite. Consistent scale across cells. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).\n\n1. **Oni** — Large Fiend, Lawful Evil, CR 7 — signature move: Multiattack — stands ~12 ft tall\n2. **Elk** — Large Beast, Unaligned, CR 0.25 — signature move: Ram — stands ~12 ft tall\n3. **Eye-Tyrant Zombie** — Large Undead, Neutral Evil, CR 5 — signature move: Multiattack — stands ~12 ft tall\n4. **Cloaker** — Large Aberration, Chaotic Neutral, CR 8 — signature move: Multiattack — stands ~12 ft tall\n",
+      "incomingPng": "dev/sprite-sheets/incoming/xl-regen/52-fantasy-xl-28.png",
+      "sliceCommand": "python3 build/slice-sprites.py dev/sprite-sheets/incoming/xl-regen/52-fantasy-xl-28.png --manifest-v2 fantasy-xl-28 --manifest-path dev/sprite-manifests/xl-regen-manifest.json --review"
+    },
+    {
+      "index": 53,
+      "sheetId": "fantasy-xl-29",
+      "expected": 4,
+      "spriteSlugs": [
+        "spr-fantasy-djinni",
+        "spr-fantasy-young-white-dragon",
+        "spr-fantasy-elder-deep-thing",
+        "spr-fantasy-arch-hag"
+      ],
+      "prompt": "2x2 grid, 4 cells, one distinct creature per cell, uniform cell size, each creature rendered LARGE — filling its cell, roughly double the detail of a small sprite. Consistent scale across cells. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).\n\n1. **Djinni** — Large Elemental (Genie), Neutral, CR 11 — signature move: Multiattack — stands ~12 ft tall\n2. **Young White Dragon** — Large Dragon (Chromatic), Chaotic Evil, CR 13 — signature move: Multiattack — stands ~12 ft tall\n3. **Elder Deep-Thing** — Large Aberration, Lawful Evil, CR 10 — signature move: Multiattack — stands ~12 ft tall\n4. **Arch-hag** — Large Fey, Neutral Evil, CR 21 — signature move: Multiattack — stands ~12 ft tall\n",
+      "incomingPng": "dev/sprite-sheets/incoming/xl-regen/53-fantasy-xl-29.png",
+      "sliceCommand": "python3 build/slice-sprites.py dev/sprite-sheets/incoming/xl-regen/53-fantasy-xl-29.png --manifest-v2 fantasy-xl-29 --manifest-path dev/sprite-manifests/xl-regen-manifest.json --review"
+    },
+    {
+      "index": 54,
+      "sheetId": "fantasy-xl-30",
+      "expected": 4,
+      "spriteSlugs": [
+        "spr-fantasy-giant-ape",
+        "spr-fantasy-swarm-of-dretches",
+        "spr-fantasy-iron-golem",
+        "spr-fantasy-air-elemental"
+      ],
+      "prompt": "2x2 grid, 4 cells, one distinct creature per cell, uniform cell size, each creature rendered LARGE — filling its cell, roughly double the detail of a small sprite. Consistent scale across cells. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).\n\n1. **Giant Ape** — Huge Beast, Unaligned, CR 7 — signature move: Multiattack — stands ~12 ft tall\n2. **Swarm of Dretches** — Large Swarm of Small Fiends (Demon), Chaotic Evil, CR 4 — signature move: Multiattack — stands ~12 ft tall\n3. **Iron Golem** — Large Construct, Unaligned, CR 16 — signature move: Multiattack — stands ~12 ft tall\n4. **Air Elemental** — Large Elemental, Neutral, CR 5 — signature move: Multiattack — stands ~12 ft tall\n",
+      "incomingPng": "dev/sprite-sheets/incoming/xl-regen/54-fantasy-xl-30.png",
+      "sliceCommand": "python3 build/slice-sprites.py dev/sprite-sheets/incoming/xl-regen/54-fantasy-xl-30.png --manifest-v2 fantasy-xl-30 --manifest-path dev/sprite-manifests/xl-regen-manifest.json --review"
+    },
+    {
+      "index": 55,
+      "sheetId": "fantasy-xl-31",
+      "expected": 4,
+      "spriteSlugs": [
+        "spr-fantasy-pteranodon",
+        "spr-fantasy-ridden-wyvern",
+        "spr-fantasy-dao",
+        "spr-fantasy-animated-rug-of-smothering"
+      ],
+      "prompt": "2x2 grid, 4 cells, one distinct creature per cell, uniform cell size, each creature rendered LARGE — filling its cell, roughly double the detail of a small sprite. Consistent scale across cells. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).\n\n1. **Pteranodon** — Medium Beast (Dinosaur), Unaligned, CR 0.25 — signature move: Bite — stands ~12 ft tall\n2. **Ridden Wyvern** — CR 8 — signature move: AC — stands ~11 ft tall\n3. **Dao** — Large Elemental (Genie), Neutral, CR 11 — signature move: Multiattack — stands ~11 ft tall\n4. **Animated Rug of Smothering** — Large Construct, Unaligned, CR 2 — signature move: Smother — stands ~11 ft tall\n",
+      "incomingPng": "dev/sprite-sheets/incoming/xl-regen/55-fantasy-xl-31.png",
+      "sliceCommand": "python3 build/slice-sprites.py dev/sprite-sheets/incoming/xl-regen/55-fantasy-xl-31.png --manifest-v2 fantasy-xl-31 --manifest-path dev/sprite-manifests/xl-regen-manifest.json --review"
+    },
+    {
+      "index": 56,
+      "sheetId": "fantasy-xl-32",
+      "expected": 4,
+      "spriteSlugs": [
+        "spr-fantasy-centaur-trooper",
+        "spr-fantasy-hook-horror",
+        "spr-fantasy-horned-devil",
+        "spr-fantasy-carrion-crawler"
+      ],
+      "prompt": "2x2 grid, 4 cells, one distinct creature per cell, uniform cell size, each creature rendered LARGE — filling its cell, roughly double the detail of a small sprite. Consistent scale across cells. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).\n\n1. **Centaur Trooper** — Large Fey, Neutral Good, CR 2 — signature move: Multiattack — stands ~11 ft tall\n2. **Hook Horror** — Large Monstrosity, Neutral, CR 3 — signature move: Multiattack — stands ~11 ft tall\n3. **Horned Devil** — Large Fiend (Devil), Lawful Evil, CR 11 — signature move: Multiattack — stands ~11 ft tall\n4. **Carrion Crawler** — Large Monstrosity, Unaligned, CR 2 — signature move: Multiattack — stands ~11 ft tall\n",
+      "incomingPng": "dev/sprite-sheets/incoming/xl-regen/56-fantasy-xl-32.png",
+      "sliceCommand": "python3 build/slice-sprites.py dev/sprite-sheets/incoming/xl-regen/56-fantasy-xl-32.png --manifest-v2 fantasy-xl-32 --manifest-path dev/sprite-manifests/xl-regen-manifest.json --review"
+    },
+    {
+      "index": 57,
+      "sheetId": "fantasy-xl-33",
+      "expected": 4,
+      "spriteSlugs": [
+        "spr-fantasy-swarm-of-piranhas",
+        "spr-fantasy-green-dragon-wyrmling",
+        "spr-fantasy-pegasus",
+        "spr-fantasy-drider"
+      ],
+      "prompt": "2x2 grid, 4 cells, one distinct creature per cell, uniform cell size, each creature rendered LARGE — filling its cell, roughly double the detail of a small sprite. Consistent scale across cells. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).\n\n1. **Swarm of Piranhas** — Medium Swarm of Tiny Beasts, Unaligned, CR 1 — signature move: Bites — stands ~11 ft tall\n2. **Green Dragon Wyrmling** — Medium Dragon (Chromatic), Lawful Evil, CR 2 — signature move: Multiattack — stands ~11 ft tall\n3. **Pegasus** — Large Celestial, Chaotic Good, CR 2 — signature move: Hooves — stands ~10 ft tall\n4. **Drider** — Large Monstrosity, Chaotic Evil, CR 6 — signature move: Multiattack — stands ~10 ft tall\n",
+      "incomingPng": "dev/sprite-sheets/incoming/xl-regen/57-fantasy-xl-33.png",
+      "sliceCommand": "python3 build/slice-sprites.py dev/sprite-sheets/incoming/xl-regen/57-fantasy-xl-33.png --manifest-v2 fantasy-xl-33 --manifest-path dev/sprite-manifests/xl-regen-manifest.json --review"
+    },
+    {
+      "index": 58,
+      "sheetId": "fantasy-xl-34",
+      "expected": 4,
+      "spriteSlugs": [
+        "spr-fantasy-white-dragon-wyrmling",
+        "spr-fantasy-bronze-dragon-wyrmling",
+        "spr-fantasy-juvenile-shadow-dragon",
+        "spr-fantasy-ogre"
+      ],
+      "prompt": "2x2 grid, 4 cells, one distinct creature per cell, uniform cell size, each creature rendered LARGE — filling its cell, roughly double the detail of a small sprite. Consistent scale across cells. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).\n\n1. **White Dragon Wyrmling** — Medium Dragon (Chromatic), Chaotic Evil, CR 13 — signature move: Multiattack — stands ~10 ft tall\n2. **Bronze Dragon Wyrmling** — Medium Dragon (Metallic), Lawful Good, CR 2 — signature move: Multiattack — stands ~10 ft tall\n3. **Juvenile Shadow Dragon** — Medium Dragon, Chaotic Evil, CR 4 — signature move: Multiattack — stands ~10 ft tall\n4. **Ogre** — Large Giant, Chaotic Evil, CR 2 — signature move: Greatclub — stands ~10 ft tall\n",
+      "incomingPng": "dev/sprite-sheets/incoming/xl-regen/58-fantasy-xl-34.png",
+      "sliceCommand": "python3 build/slice-sprites.py dev/sprite-sheets/incoming/xl-regen/58-fantasy-xl-34.png --manifest-v2 fantasy-xl-34 --manifest-path dev/sprite-manifests/xl-regen-manifest.json --review"
+    },
+    {
+      "index": 59,
+      "sheetId": "fantasy-xl-35",
+      "expected": 4,
+      "spriteSlugs": [
+        "spr-fantasy-phase-spider",
+        "spr-fantasy-giant-constrictor-snake",
+        "spr-fantasy-gelatinous-cube",
+        "spr-fantasy-water-elemental"
+      ],
+      "prompt": "2x2 grid, 4 cells, one distinct creature per cell, uniform cell size, each creature rendered LARGE — filling its cell, roughly double the detail of a small sprite. Consistent scale across cells. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).\n\n1. **Phase Spider** — Large Monstrosity, Unaligned, CR 3 — signature move: Bite — stands ~10 ft tall\n2. **Giant Constrictor Snake** — Huge Beast, Unaligned, CR 2 — signature move: Multiattack — stands ~10 ft tall\n3. **Gelatinous Cube** — Large Ooze, Unaligned, CR 2 — signature move: Pseudopod — stands ~10 ft tall\n4. **Water Elemental** — Large Elemental, Neutral, CR 5 — signature move: Multiattack — stands ~10 ft tall\n",
+      "incomingPng": "dev/sprite-sheets/incoming/xl-regen/59-fantasy-xl-35.png",
+      "sliceCommand": "python3 build/slice-sprites.py dev/sprite-sheets/incoming/xl-regen/59-fantasy-xl-35.png --manifest-v2 fantasy-xl-35 --manifest-path dev/sprite-manifests/xl-regen-manifest.json --review"
+    },
+    {
+      "index": 60,
+      "sheetId": "fantasy-xl-36",
+      "expected": 4,
+      "spriteSlugs": [
+        "spr-fantasy-troll-amalgam",
+        "spr-fantasy-stone-golem",
+        "spr-fantasy-solar",
+        "spr-fantasy-rhinoceros"
+      ],
+      "prompt": "2x2 grid, 4 cells, one distinct creature per cell, uniform cell size, each creature rendered LARGE — filling its cell, roughly double the detail of a small sprite. Consistent scale across cells. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).\n\n1. **Troll Amalgam** — Large Giant, Chaotic Evil, CR 7 — signature move: Multiattack — stands ~10 ft tall\n2. **Stone Golem** — Large Construct, Unaligned, CR 10 — signature move: Multiattack — stands ~10 ft tall\n3. **Solar** — Large Celestial (Angel), Lawful Good, CR 21 — signature move: Multiattack — stands ~10 ft tall\n4. **Rhinoceros** — Large Beast, Unaligned, CR 2 — signature move: Gore — stands ~10 ft tall\n",
+      "incomingPng": "dev/sprite-sheets/incoming/xl-regen/60-fantasy-xl-36.png",
+      "sliceCommand": "python3 build/slice-sprites.py dev/sprite-sheets/incoming/xl-regen/60-fantasy-xl-36.png --manifest-v2 fantasy-xl-36 --manifest-path dev/sprite-manifests/xl-regen-manifest.json --review"
+    },
+    {
+      "index": 61,
+      "sheetId": "fantasy-xl-37",
+      "expected": 4,
+      "spriteSlugs": [
+        "spr-fantasy-water-weird",
+        "spr-fantasy-ogre-zombie",
+        "spr-fantasy-gnoll-pack-lord",
+        "spr-fantasy-blue-dragon-wyrmling"
+      ],
+      "prompt": "2x2 grid, 4 cells, one distinct creature per cell, uniform cell size, each creature rendered LARGE — filling its cell, roughly double the detail of a small sprite. Consistent scale across cells. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).\n\n1. **Water Weird** — Large Elemental, Neutral, CR 3 — signature move: Surge — stands ~10 ft tall\n2. **Ogre Zombie** — Large Undead, Neutral Evil, CR 2 — signature move: Morningstar — stands ~10 ft tall\n3. **Gnoll Pack Lord** — Medium Fiend (Gnoll), Chaotic Evil, CR 2 — signature move: Multiattack — stands ~9 ft tall\n4. **Blue Dragon Wyrmling** — Medium Dragon (Chromatic), Lawful Evil, CR 3 — signature move: Multiattack — stands ~9 ft tall\n",
+      "incomingPng": "dev/sprite-sheets/incoming/xl-regen/61-fantasy-xl-37.png",
+      "sliceCommand": "python3 build/slice-sprites.py dev/sprite-sheets/incoming/xl-regen/61-fantasy-xl-37.png --manifest-v2 fantasy-xl-37 --manifest-path dev/sprite-manifests/xl-regen-manifest.json --review"
+    },
+    {
+      "index": 62,
+      "sheetId": "fantasy-xl-38",
+      "expected": 4,
+      "spriteSlugs": [
+        "spr-fantasy-silver-dragon-wyrmling",
+        "spr-fantasy-black-dragon-wyrmling",
+        "spr-fantasy-brass-dragon-wyrmling",
+        "spr-fantasy-cambion"
+      ],
+      "prompt": "2x2 grid, 4 cells, one distinct creature per cell, uniform cell size, each creature rendered LARGE — filling its cell, roughly double the detail of a small sprite. Consistent scale across cells. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).\n\n1. **Silver Dragon Wyrmling** — Medium Dragon (Metallic), Lawful Good, CR 2 — signature move: Multiattack — stands ~9 ft tall\n2. **Black Dragon Wyrmling** — Medium Dragon (Chromatic), Chaotic Evil, CR 2 — signature move: Multiattack — stands ~9 ft tall\n3. **Brass Dragon Wyrmling** — Medium Dragon (Metallic), Chaotic Good, CR 1 — signature move: Rend — stands ~9 ft tall\n4. **Cambion** — Medium Fiend, Neutral Evil, CR 5 — signature move: Multiattack — stands ~9 ft tall\n",
+      "incomingPng": "dev/sprite-sheets/incoming/xl-regen/62-fantasy-xl-38.png",
+      "sliceCommand": "python3 build/slice-sprites.py dev/sprite-sheets/incoming/xl-regen/62-fantasy-xl-38.png --manifest-v2 fantasy-xl-38 --manifest-path dev/sprite-manifests/xl-regen-manifest.json --review"
+    },
+    {
+      "index": 63,
+      "sheetId": "fantasy-xl-39",
+      "expected": 3,
+      "spriteSlugs": [
+        "spr-fantasy-allosaurus",
+        "spr-fantasy-giant-elk",
+        "spr-fantasy-troll"
+      ],
+      "prompt": "2x2 grid, 3 cells, one distinct creature per cell, uniform cell size, each creature rendered LARGE — filling its cell, roughly double the detail of a small sprite. Consistent scale across cells. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).\n\n1. **Allosaurus** — Large Beast (Dinosaur), Unaligned, CR 2 — signature move: Bite — stands ~9 ft tall\n2. **Giant Elk** — Huge Celestial, Neutral Good, CR 2 — signature move: Ram — stands ~9 ft tall\n3. **Troll** — Large Giant, Chaotic Evil, CR 5 — signature move: Multiattack — stands ~9 ft tall\n",
+      "incomingPng": "dev/sprite-sheets/incoming/xl-regen/63-fantasy-xl-39.png",
+      "sliceCommand": "python3 build/slice-sprites.py dev/sprite-sheets/incoming/xl-regen/63-fantasy-xl-39.png --manifest-v2 fantasy-xl-39 --manifest-path dev/sprite-manifests/xl-regen-manifest.json --review"
+    },
+    {
+      "index": 64,
+      "sheetId": "fantasy-redo-1",
+      "expected": 16,
+      "spriteSlugs": [
+        "spr-fantasy-gorgon",
+        "spr-fantasy-manes-vaporspawn",
+        "spr-fantasy-the-vine-blight",
+        "spr-fantasy-lacedon-sodden-ghoul",
+        "spr-fantasy-skeleton-archer",
+        "spr-fantasy-banshee",
+        "spr-fantasy-berserker",
+        "spr-fantasy-ghost",
+        "spr-fantasy-skeleton-warrior",
+        "spr-fantasy-dust-mephit",
+        "spr-fantasy-specter",
+        "spr-fantasy-greater-shadow",
+        "spr-fantasy-merfolk-wavebender",
+        "spr-fantasy-swarm-of-rats",
+        "spr-fantasy-swamp-shadow",
+        "spr-fantasy-swarm-of-insects"
+      ],
+      "prompt": "4x4 grid, 16 cells (row-major from the top-left; leave any unused trailing cells as plain flat magenta), one distinct creature per cell, uniform cell size, consistent scale. Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from. Solid flat magenta (#FF00FF) is the BACKGROUND ONLY: absolutely no magenta or pink cast, glow, rim-light, halo, or reflection on the creature itself; no magenta bleed into wing membranes, fur, or translucent parts; crisp hard silhouette edges against the background (no soft anti-aliased fade into the magenta).\n\n1. **Gorgon** — Large Construct, Unaligned, CR 5 — signature move: Gore — stands ~8 ft tall\n2. **Manes Vaporspawn** — Medium Fiend (Demon), Chaotic Evil, CR 1 — signature move: Claw — stands ~8 ft tall\n3. **The Vine Blight** — Medium Plant, Neutral Evil, CR 0.5 — signature move: Constricting Vine — stands ~7 ft tall\n4. **Lacedon (Sodden Ghoul)** — Medium Undead (Aquatic), Chaotic Evil, CR 1 — signature move: Multiattack — stands ~7 ft tall\n5. **Skeleton Archer** — Medium Undead, Lawful Evil, CR 0.5 — signature move: Multiattack — stands ~7 ft tall\n6. **Banshee** — Medium Undead, Chaotic Evil, CR 4 — signature move: Corrupting Touch — stands ~7 ft tall\n7. **Berserker** — Medium or Small Humanoid, Neutral, CR 2 — signature move: Greataxe — stands ~6 ft tall\n8. **Ghost** — Medium Undead, Neutral, CR 4 — signature move: Multiattack — stands ~6 ft tall\n9. **Skeleton Warrior** — Medium Undead, Lawful Evil, CR 1 — signature move: Multiattack — stands ~6 ft tall\n10. **Dust Mephit** — Small Elemental, Neutral Evil, CR 0.5 — signature move: Claw — stands ~6 ft tall\n11. **Specter** — Medium Undead, Chaotic Evil, CR 1 — signature move: Life Drain — stands ~6 ft tall\n12. **Greater Shadow** — Medium Undead, Chaotic Evil, CR 2 — signature move: Multiattack — stands ~6 ft tall\n13. **Merfolk Wavebender** — Medium Elemental, Neutral, CR 6 — signature move: Multiattack — stands ~6 ft tall\n14. **Swarm of Rats** — Medium Swarm of Tiny Beasts, Unaligned, CR 0.25 — signature move: Bites — stands ~5 ft tall\n15. **Swamp Shadow** — CR 0.5 — signature move: Strength Drain — stands ~5 ft tall\n16. **Swarm of Insects** — Medium Swarm of Tiny Beasts, Unaligned, CR 0.5 — signature move: Bites — stands ~3 ft tall\n",
+      "incomingPng": "dev/sprite-sheets/incoming/xl-regen/64-fantasy-redo-1.png",
+      "sliceCommand": "python3 build/slice-sprites.py dev/sprite-sheets/incoming/xl-regen/64-fantasy-redo-1.png --manifest-v2 fantasy-redo-1 --manifest-path dev/sprite-manifests/xl-regen-manifest.json --review"
+    }
+  ]
+}

@@ -1,0 +1,116 @@
+{
+  "rejects": [
+    {
+      "sheetId": "fantasy-xl-1",
+      "incomingPng": "dev/sprite-sheets/incoming/xl-regen/25-fantasy-xl-1.png",
+      "reason": "Bottom-right Behir rendered as multi-headed hydra; one head reads detached/floating from the body. Reject before slicing.",
+      "action": "Regenerate sheet with stricter single-contiguous-body instructions and Behir-specific correction.",
+      "resolved": true,
+      "resolvedBy": "Regenerated and replaced dev/sprite-sheets/incoming/xl-regen/25-fantasy-xl-1.png; Behir now reads as one connected single-headed serpentine body."
+    },
+    {
+      "sheetId": "fantasy-xl-8",
+      "incomingPng": "dev/sprite-sheets/incoming/xl-regen/32-fantasy-xl-8.png",
+      "reason": "Anatomy acceptable but poses read too calm/not scary; XL creatures should snarl, threaten, or look combat-ready at this size.",
+      "action": "Regenerate with aggressive posture/threat-read rider."
+    },
+    {
+      "sheetId": "fantasy-titan-colossus",
+      "reason": "tone audit: too statue-like/calm; needs wrathful battle colossus energy",
+      "action": "Regenerate with scary combat-ready gnarly-metaverse rider before final slicing."
+    },
+    {
+      "sheetId": "fantasy-titan-ancient-blue-dragon",
+      "reason": "tone audit: too posed; needs snarling/lunging threat read",
+      "action": "Regenerate with scary combat-ready gnarly-metaverse rider before final slicing."
+    },
+    {
+      "sheetId": "fantasy-titan-ancient-silver-dragon",
+      "reason": "tone audit: too noble/calm; needs dangerous guardian in action",
+      "action": "Regenerate with scary combat-ready gnarly-metaverse rider before final slicing."
+    },
+    {
+      "sheetId": "fantasy-titan-ancient-bronze-dragon",
+      "reason": "tone audit: too calm; needs attack posture",
+      "action": "Regenerate with scary combat-ready gnarly-metaverse rider before final slicing."
+    },
+    {
+      "sheetId": "fantasy-titan-ancient-black-dragon",
+      "reason": "tone audit: too posed; needs vicious crouch/snarl",
+      "action": "Regenerate with scary combat-ready gnarly-metaverse rider before final slicing."
+    },
+    {
+      "sheetId": "fantasy-titan-roc",
+      "reason": "tone audit: too naturalistic/perched; needs predatory strike",
+      "action": "Regenerate with scary combat-ready gnarly-metaverse rider before final slicing."
+    },
+    {
+      "sheetId": "fantasy-titan-ancient-copper-dragon",
+      "reason": "tone audit: too noble; needs aggressive dragon threat",
+      "action": "Regenerate with scary combat-ready gnarly-metaverse rider before final slicing."
+    },
+    {
+      "sheetId": "fantasy-titan-adult-black-dragon",
+      "reason": "tone audit: too calm; needs vicious combat posture",
+      "action": "Regenerate with scary combat-ready gnarly-metaverse rider before final slicing."
+    },
+    {
+      "sheetId": "fantasy-titan-ancient-brass-dragon",
+      "reason": "tone audit: too posed; needs snarling action",
+      "action": "Regenerate with scary combat-ready gnarly-metaverse rider before final slicing."
+    },
+    {
+      "sheetId": "fantasy-titan-ancient-white-dragon",
+      "reason": "tone audit: too elegant; needs feral icy threat",
+      "action": "Regenerate with scary combat-ready gnarly-metaverse rider before final slicing."
+    },
+    {
+      "sheetId": "fantasy-titan-adult-bronze-dragon",
+      "reason": "tone audit: too posed; needs action threat",
+      "action": "Regenerate with scary combat-ready gnarly-metaverse rider before final slicing."
+    },
+    {
+      "sheetId": "fantasy-titan-adult-blue-dragon",
+      "reason": "tone audit: too posed; needs snarling/lunge",
+      "action": "Regenerate with scary combat-ready gnarly-metaverse rider before final slicing."
+    },
+    {
+      "sheetId": "fantasy-titan-dragon-turtle",
+      "reason": "tone audit: too placid; needs monstrous snapping turtle-dragon threat",
+      "action": "Regenerate with scary combat-ready gnarly-metaverse rider before final slicing."
+    },
+    {
+      "sheetId": "fantasy-xl-1",
+      "reason": "tone audit: passes anatomy after regen but overall tone still mild in some cells; consider stronger battle-read if time",
+      "action": "Regenerate with scary combat-ready gnarly-metaverse rider before final slicing."
+    },
+    {
+      "sheetId": "fantasy-xl-2",
+      "reason": "tone audit: dragon cells read calm; needs stronger threat if time",
+      "action": "Regenerate with scary combat-ready gnarly-metaverse rider before final slicing."
+    },
+    {
+      "sheetId": "fantasy-xl-5",
+      "reason": "tone audit: some cells read clean but not gnarly enough; use as maybe-regenerate if time",
+      "action": "Regenerate with scary combat-ready gnarly-metaverse rider before final slicing."
+    },
+    {
+      "sheetId": "fantasy-xl-7",
+      "reason": "tone audit: some cells read calm/naturalistic; use as maybe-regenerate if time",
+      "action": "Regenerate with scary combat-ready gnarly-metaverse rider before final slicing."
+    },
+    {
+      "sheetId": "fantasy-xl-13",
+      "reason": "margin audit: strong tone, but wyvern/elephant/effects crowd or clip near cell edges; needs visible padding all sides.",
+      "action": "Regenerate with explicit 12-15% magenta margin inside every cell."
+    }
+  ],
+  "notes": [
+    "From job 25 onward, visually QA each generated sheet before accepting: reject detached/floating heads/limbs, wrong creature count, wrong creature identity, non-contiguous body reads, text labels, or non-magenta background artifacts.",
+    "Tone QA added: XL monsters should be threatening/scary/action-ready, not neutral catalog poses. Use snarls, lunges, raised weapons/claws/wings, battle tension, while preserving clean connected anatomy.",
+    "Tone bar reset to regenerated fantasy-xl-8: snarling, attacking, wrathful, predatory, readable silhouettes; avoid chill catalog/coffee-with-this-guy poses.",
+    "User explicitly called out titan revisit too: regenerate titan images flagged by tone audit so solos match new gnarly/action tone bar, not calm posed bestiary art.",
+    "Preserved existing titan solo PNGs under dev/sprite-sheets/incoming/xl-regen-social-alt/ as social/neutral titan alternates before combat-tone regens.",
+    "Margin QA added: accept only sheets where every body/effect fits fully inside its cell with visible magenta padding on all sides; reject clipped wings/tails/breath/weapons/tusks."
+  ]
+}

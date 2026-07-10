@@ -126,7 +126,8 @@
     "scale": 0.417
   },
   "spr-fantasy-ankylosaurus": {
-    "scale": 0.333
+    "scale": 0.57,
+    "verdict": "pass"
   },
   "spr-fantasy-ape": {
     "scale": 0.917
@@ -244,7 +245,8 @@
     "verdict": "pass"
   },
   "spr-fantasy-basilisk": {
-    "scale": 0.5
+    "scale": 1.36,
+    "verdict": "pass"
   },
   "spr-fantasy-bat": {
     "scale": 0.167
@@ -610,19 +612,24 @@
     "verdict": "pass"
   },
   "spr-fantasy-domestic-animal-a-single-donkey-stubborn-sure-footed-outlives-every-horse-on-the-property": {
-    "scale": 0.667
+    "scale": 1.01,
+    "verdict": "pass"
   },
   "spr-fantasy-domestic-animal-a-single-duck-waddling-unbothered-first-to-notice-a-stranger-at-the-water-s-edge": {
-    "scale": 0.167
+    "scale": 0.21,
+    "verdict": "pass"
   },
   "spr-fantasy-domestic-animal-a-single-goat-headstrong-climbs-what-it-shouldn-t-eats-what-it-shouldn-t": {
-    "scale": 0.417
+    "scale": 0.68,
+    "verdict": "pass"
   },
   "spr-fantasy-domestic-animal-a-single-goose-from-the-flock-loud-territorial-first-to-mark-a-stranger": {
-    "scale": 0.44
+    "scale": 0.44,
+    "verdict": "pass"
   },
   "spr-fantasy-domestic-animal-a-single-hunting-hound-lean-nose-down-bred-for-the-chase-and-bored-without-it": {
-    "scale": 0.333
+    "scale": 0.42,
+    "verdict": "pass"
   },
   "spr-fantasy-domestic-animal-a-single-kitten-too-young-to-have-earned-the-barn-cat-s-independence-yet": {
     "note": "⚠ auto-scale (scale clamped): est 0.5′",
@@ -635,16 +642,20 @@
     "verdict": "pass"
   },
   "spr-fantasy-domestic-animal-a-single-pig-smarter-than-it-s-given-credit-for-rooting-at-the-fence-line": {
-    "scale": 0.333
+    "scale": 0.4,
+    "verdict": "pass"
   },
   "spr-fantasy-domestic-animal-a-single-pony-smaller-and-calmer-than-the-war-mule-a-child-s-first-mount": {
-    "scale": 0.583
+    "scale": 0.67,
+    "verdict": "pass"
   },
   "spr-fantasy-domestic-animal-a-single-rabbit-twitchy-kept-for-the-table-or-kept-as-a-pet-never-sure-which": {
-    "scale": 0.133
+    "scale": 0.18,
+    "verdict": "pass"
   },
   "spr-fantasy-domestic-animal-a-single-sheep-from-the-herd-moves-with-the-others-and-its-lone-reluctance-to-follow-is-the-tell": {
-    "scale": 0.54
+    "scale": 0.62,
+    "verdict": "pass"
   },
   "spr-fantasy-domestic-animal-a-single-turkey-puffed-up-and-loud-more-guard-animal-than-anyone-admits": {
     "note": "⚠ auto-scale (art likely extends above head): est 2.5′",
@@ -657,10 +668,12 @@
     "verdict": "pass"
   },
   "spr-fantasy-domestic-animal-barn-cat-owns-the-place-tolerates-the-people-hunts-the-dark-corners": {
-    "scale": 0.33
+    "scale": 0.33,
+    "verdict": "pass"
   },
   "spr-fantasy-domestic-animal-bird-kept-close-a-single-hawk-carries-watches-and-remembers-a-face": {
-    "scale": 0.15
+    "scale": 0.23,
+    "verdict": "pass"
   },
   "spr-fantasy-domestic-animal-half-tamed-wild-thing-comes-to-the-window-never-the-hand-trusts-one-child-and-no-one-else": {
     "note": "⚠ auto-scale (height uncertain): est 1.0′",
@@ -668,7 +681,8 @@
     "verdict": "pass"
   },
   "spr-fantasy-domestic-animal-loyal-dog-bonded-to-one-person-reads-their-mood-before-they-do": {
-    "scale": 0.52
+    "scale": 0.52,
+    "verdict": "pass"
   },
   "spr-fantasy-domestic-animal-old-animal-past-its-working-years-half-blind-and-still-the-first-to-growl-at-the-wrong-thing": {
     "note": "⚠ auto-scale (height uncertain): est 2.0′",
@@ -676,7 +690,8 @@
     "verdict": "pass"
   },
   "spr-fantasy-domestic-animal-stray-belongs-to-no-one-and-everyone-the-street-s-own-alarm-bell": {
-    "scale": 0.53
+    "scale": 0.53,
+    "verdict": "pass"
   },
   "spr-fantasy-domestic-animal-the-realm-beast-the-realm-beast-a-locally-distinct-pet-one-animal-realm-appropriate": {
     "note": "⚠ auto-scale (height uncertain): est 1.5′",
@@ -694,10 +709,12 @@
     "verdict": "pass"
   },
   "spr-fantasy-domestic-animal-working-beast-a-single-ox-earns-its-feed-patient-and-spooks-true": {
-    "scale": 0.91
+    "scale": 0.91,
+    "verdict": "pass"
   },
   "spr-fantasy-doppelganger": {
-    "scale": 0.967
+    "scale": 1.06,
+    "verdict": "pass"
   },
   "spr-fantasy-dracolich": {
     "note": "⚠ auto-scale (height uncertain; art likely extends above head): est 20′",
@@ -805,7 +822,8 @@
     "verdict": "pass"
   },
   "spr-fantasy-dungeon-animal-lost-hunting-hound-a-noble-s-dog-that-wandered-too-far-in-and-never-found-the-way-back-out": {
-    "scale": 0.333
+    "scale": 0.333,
+    "verdict": "pass"
   },
   "spr-fantasy-dungeon-animal-nest-robbing-crow-one-bird-that-s-learned-the-dungeon-s-side-passages-better-than-most-explorers": {
     "note": "⚠ auto-scale (scale clamped): est 0.6′",
@@ -1101,7 +1119,8 @@
     "verdict": "fail"
   },
   "spr-fantasy-giant-fire-beetle": {
-    "scale": 0.25
+    "scale": 0.79,
+    "verdict": "pass"
   },
   "spr-fantasy-giant-frog": {
     "scale": 0.5
@@ -1372,13 +1391,15 @@
     "verdict": "pass"
   },
   "spr-fantasy-hawk": {
-    "scale": 0.333
+    "scale": 0.66,
+    "verdict": "pass"
   },
   "spr-fantasy-healer-human": {
     "scale": 0.967
   },
   "spr-fantasy-hell-hound": {
-    "scale": 0.667
+    "scale": 1.24,
+    "verdict": "pass"
   },
   "spr-fantasy-helmed-horror": {
     "note": "⚠ auto-scale (art likely extends above head): est 6′",
@@ -1466,7 +1487,8 @@
     "verdict": "pass"
   },
   "spr-fantasy-hyena": {
-    "scale": 0.417
+    "scale": 0.75,
+    "verdict": "pass"
   },
   "spr-fantasy-ice-devil": {
     "note": "⚠ auto-scale (height uncertain; art likely extends above head): est 10′",
@@ -1494,7 +1516,8 @@
     "verdict": "fail"
   },
   "spr-fantasy-jackal": {
-    "scale": 0.333
+    "scale": 0.51,
+    "verdict": "pass"
   },
   "spr-fantasy-jackalwere": {
     "note": "⚠ auto-scale (height uncertain): est 3′",
@@ -1647,7 +1670,8 @@
     "verdict": "pass"
   },
   "spr-fantasy-lemure": {
-    "scale": 0.75
+    "scale": 0.75,
+    "verdict": "pass"
   },
   "spr-fantasy-lich": {
     "scale": 0.967
@@ -1656,7 +1680,8 @@
     "scale": 0.333
   },
   "spr-fantasy-lizard": {
-    "scale": 0.167
+    "scale": 0.34,
+    "verdict": "pass"
   },
   "spr-fantasy-lizardfolk-geomancer": {
     "note": "⚠ auto-scale (art likely extends above head): est 6′",
@@ -1798,7 +1823,8 @@
     "verdict": "pass"
   },
   "spr-fantasy-myconid-sprout": {
-    "scale": 0.417
+    "scale": 0.72,
+    "verdict": "pass"
   },
   "spr-fantasy-nalfeshnee": {
     "note": "⚠ auto-scale (height uncertain): est 10′",
@@ -1826,7 +1852,8 @@
     "scale": 0.5
   },
   "spr-fantasy-octopus": {
-    "scale": 0.333
+    "scale": 0.67,
+    "verdict": "pass"
   },
   "spr-fantasy-ogre": {
     "note": "⚠ auto-scale (art likely extends above head): est 9.5′",
@@ -1888,7 +1915,8 @@
     "scale": 0.983
   },
   "spr-fantasy-owl": {
-    "scale": 0.333
+    "scale": 0.72,
+    "verdict": "pass"
   },
   "spr-fantasy-owlbear": {
     "scale": 0.667
@@ -1939,7 +1967,8 @@
     "scale": 0.667
   },
   "spr-fantasy-piranha": {
-    "scale": 0.167
+    "scale": 0.5,
+    "verdict": "pass"
   },
   "spr-fantasy-pirate": {
     "note": "⚠ auto-scale (art likely extends above head): est 5.7′",
@@ -1982,7 +2011,8 @@
     "verdict": "pass"
   },
   "spr-fantasy-polar-bear": {
-    "scale": 0.667
+    "scale": 0.667,
+    "verdict": "pass"
   },
   "spr-fantasy-poltergeist": {
     "note": "⚠ auto-scale (height uncertain; art likely extends above head): est 4′",
@@ -2096,7 +2126,8 @@
     "scale": 0.583
   },
   "spr-fantasy-saber-toothed-tiger": {
-    "scale": 0.417
+    "scale": 0.49,
+    "verdict": "pass"
   },
   "spr-fantasy-sahuagin-baron": {
     "note": "⚠ auto-scale (height uncertain; art likely extends above head): est 8′",
@@ -2696,7 +2727,7 @@
     "scale": 0.75
   },
   "spr-fantasy-will-o-wisp": {
-    "scale": 0.333
+    "verdict": "pass"
   },
   "spr-fantasy-winged-kobold-urd": {
     "note": "⚠ auto-scale (art likely extends above head): est 3′",

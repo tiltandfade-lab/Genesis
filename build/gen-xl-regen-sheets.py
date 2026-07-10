@@ -92,6 +92,29 @@ def style_block(source=STYLE_SOURCE):
     raise SystemExit(f"no 'Style block:' line found in {source}")
 
 
+PALETTE_MARKER = "**Palette law (2026-07-09)**"
+
+
+def palette_law(source=STYLE_SOURCE):
+    """Extract the binding palette-law block (docs/SPRITE-PALETTE.md P1-P5) verbatim from the
+    SAME realm file the style block comes from — regenerated sprites must inherit it or they
+    come back duotone. The block runs from the marker line to the next blank line; the source
+    file's line-wrapping is joined with single spaces (layout, not content). Fails loud if a
+    source file is missing the marker."""
+    block, capturing = [], False
+    with open(source, encoding="utf-8") as f:
+        for line in f:
+            if line.startswith(PALETTE_MARKER):
+                capturing = True
+            if capturing:
+                if not line.strip():
+                    break
+                block.append(line.strip())
+    if not block:
+        raise SystemExit(f"no '{PALETTE_MARKER}' block found in {source}")
+    return " ".join(block)
+
+
 def main():
     reg = load_registry()
     overlay = json.load(open(OVERLAY, encoding="utf-8"))
@@ -99,6 +122,8 @@ def main():
     cues = {c["slug"]: c.get("cue", "") for s in v2["sheets"] for c in s["cells"]}
     style = style_block()
     pc_style = style_block(PC_STYLE_SOURCE)
+    palette = palette_law()
+    pc_palette = palette_law(PC_STYLE_SOURCE)
 
     def eff_ft(slug, e):
         sc = (overlay.get(slug) or {}).get("scale") or 1
@@ -166,7 +191,7 @@ def main():
                                   "cue": cues.get(slug, "")}]})
         md.append(f"### {sid}\n\n```\n"
                   f"ONE single creature, centered, filling most of the frame, maximum detail. "
-                  f"{style} {CLEAN_KEY_RULES}\n\n"
+                  f"{style} {palette} {CLEAN_KEY_RULES}\n\n"
                   f"{cell_line(1, slug, e, ft)}```\n\n")
 
     md.append(f"## XL sheets (2x2 grid, {XL_PER_SHEET} creatures, each rendered LARGE — "
@@ -185,19 +210,19 @@ def main():
                   f"2x2 grid, {len(chunk)} cells, one distinct creature per cell, uniform cell "
                   f"size, each creature rendered LARGE — filling its cell, roughly double the "
                   f"detail of a small sprite. Consistent scale across cells. {style} "
-                  f"{CLEAN_KEY_RULES}\n\n"
+                  f"{palette} {CLEAN_KEY_RULES}\n\n"
                   + "".join(cell_line(n + 1, slug, e, ft) for n, (slug, e, ft) in enumerate(chunk))
                   + "```\n\n")
 
     large_groups = [
-        (large, REALM, "mixed", style, "creature",
+        (large, REALM, "mixed", style, palette, "creature",
          f"## Large 3x3 sheets (5-8 ft) ({LARGE_PER_SHEET} sprites, each rendered LARGE — "
          "~1.7x the detail of a standard 5x5 sheet; fantasy realm, all kinds)\n\n"),
-        (large_pc, "pc", "pc", pc_style, "character",
+        (large_pc, "pc", "pc", pc_style, pc_palette, "character",
          f"## Large 3x3 PC sheets (5-8 ft) ({LARGE_PER_SHEET} player characters per sheet — "
          "pc-characters.md style block, never mixed onto fantasy sheets)\n\n"),
     ]
-    for group, g_realm, g_kind, g_style, noun, heading in large_groups:
+    for group, g_realm, g_kind, g_style, g_palette, noun, heading in large_groups:
         if not group:
             continue
         md.append(heading)
@@ -215,7 +240,7 @@ def main():
                       f"3x3 grid, {len(chunk)} distinct {noun}s, one distinct {noun} per "
                       f"cell, uniform cell size, each {noun} rendered LARGE — filling its "
                       f"cell, roughly 1.7x the detail of a small sprite. Consistent scale "
-                      f"across cells. {g_style} {CLEAN_KEY_RULES}\n\n"
+                      f"across cells. {g_style} {g_palette} {CLEAN_KEY_RULES}\n\n"
                       + "".join(cell_line(n + 1, slug, e, ft) for n, (slug, e, ft) in enumerate(chunk))
                       + "```\n\n")
 
@@ -236,7 +261,7 @@ def main():
                       f"{side}x{side} grid, {len(chunk)} cells (row-major from the top-left; "
                       f"leave any unused trailing cells as plain flat magenta), one distinct "
                       f"creature per cell, uniform cell size, consistent scale. {style} "
-                      f"{CLEAN_KEY_RULES}\n\n"
+                      f"{palette} {CLEAN_KEY_RULES}\n\n"
                       + "".join(cell_line(n + 1, slug, e, ft) for n, (slug, e, ft) in enumerate(chunk))
                       + "```\n\n")
 

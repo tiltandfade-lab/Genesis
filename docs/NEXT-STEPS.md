@@ -185,17 +185,6 @@ L7. ☐ **Regenerate `table-registry.json/.md`** — stale after the rename/new 
    (VISUAL-ASSET-QUEUE) via the same author-only waves.
 4. ☐ **Frontier GLB step-6 wiring** (carried from 2026-07-08).
 
-## Do next (2026-07-09, NPC/monster lane — realm-key expansion)
-
-1. ☑ **REALM-KEY-EXPANSION stat wave — DONE 2026-07-09** (+168 → 1,475 creatures, --check clean,
-   realm-bestiary.js regenerated at the close).
-2. ☐ **Adam per-realm red-pen** of the wave output (entries land PROVISIONAL, same as the base 1,307).
-3. ☐ **Faction-clock specs** — the Pink Cult pressure (suburb) + the gloom demand ladder (feeding
-   clock → active corruption rung); both are engine specs, not bestiary rows.
-4. ☐ **Hoverboard buff proposal** (Dungeon Loot - Outlandish row 16 — Adam ruled it over-nerfed;
-   propose-first, his table).
-5. ☐ Net-new `model:` slugs from the wave → model-foundry queue (models lane).
-
 ## Do next (2026-07-10, SPRITE-GEN-V2 — the V3 wave; laws in docs/SPRITE-GEN-V2.md, tags in docs/SPRITE-TAGS.md)
 
 1. ☑ **Cleanup + survey + laws + V3 generation + gate — DONE 2026-07-10** (worktrees 21→1; 2,431

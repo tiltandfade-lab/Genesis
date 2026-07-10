@@ -18,6 +18,17 @@ just preserves the old ordered-queue framing for anyone reconstructing why a cal
 
 ---
 
+## Do next (2026-07-09, NPC/monster lane — realm-key expansion)
+
+1. ☑ **REALM-KEY-EXPANSION stat wave — DONE 2026-07-09** (+168 → 1,475 creatures, --check clean,
+   realm-bestiary.js regenerated at the close).
+2. ☐ **Adam per-realm red-pen** of the wave output (entries land PROVISIONAL, same as the base 1,307).
+3. ☐ **Faction-clock specs** — the Pink Cult pressure (suburb) + the gloom demand ladder (feeding
+   clock → active corruption rung); both are engine specs, not bestiary rows.
+4. ☐ **Hoverboard buff proposal** (Dungeon Loot - Outlandish row 16 — Adam ruled it over-nerfed;
+   propose-first, his table).
+5. ☐ Net-new `model:` slugs from the wave → model-foundry queue (models lane).
+
 ## Do next (2026-07-09, sprite transition — Adam locked, docs/SPRITE-TRANSITION.md)
 
 1. ☑ **T2 manifest-v2 + slicer** · ☑ **T3 sprite registry** · ☑ **T4 theater billboard channel** —

@@ -2711,6 +2711,11 @@ function figureFor(archetype, seed, tint, silhouette, weapon, recipeSlug, pcReci
           const g = built.group;
           g.userData.interiorTrueScale = true;
           g.userData.interiorHeight = built.height;
+          // BW2-2: the base plinth's radius formula (0.42 x rendered width) needs the sprite's own
+          // rendered WORLD width, not just its height — interiorSpriteBillboard already derives it
+          // (aspect-scaled off the loaded texture), so stash it alongside interiorHeight rather than
+          // re-deriving a second width formula at the setUnits call site.
+          g.userData.interiorWidth = built.width;
           g.userData.interiorFloorFrac = (typeof sEntry.floor === "number") ? sEntry.floor : 0;
           _tallyPath("sprite", sEntry.slug);
           return g;
@@ -2931,24 +2936,179 @@ function addGroundingBlob(group, x, z, y, radius){
   return mesh;
 }
 
-// BEAUTY-WAVE.md VP7 (CONTACT GROUNDING): interior pieces + large dressing cards get the SAME
-// blob-quad convention above (reuse, don't reinvent — same CircleGeometry cache/rotation/no-
-// z-fight discipline) but with the wave's own opacity (0.35, lighter than the tabletop disc-
-// paired blob's 0.55 — this blob stands alone here, no hostility disc above it to read against,
-// so it's tuned softer: "fills the ambient-side contact that shadow maps miss at torch angles,"
-// not a second hard shadow). radius = the piece's own rendered world-space width * 0.4 (a hair
-// under half its footprint — reads as "this card's base," never wider than the card itself);
-// y=-0.495, seated a hair above the y=-0.5 floor plane and a hair below every piece's own floor-
-// contact line (the same z-fight-avoidance margin as the prop blobs at line ~3535/4229).
-const INTERIOR_BLOB_MAT = new THREE.MeshBasicMaterial({
-  color: 0x000000, transparent: true, opacity: 0.35, depthWrite: false
-});
-function addInteriorContactBlob(group, x, z, texWidth){
+// BW2-2 EXPANDED — THE FLOOR CONTACT LAW (Adam's live-play bug report: "that wolf man was halfway in
+// the floor"; the orchestrator's beauty-shot evidence, dev/battle-gate/beauty-shot/vp8-loop-02-hurt.png,
+// named a burial CLASS — bottom-center waist-deep, right-edge buried to the HEAD, small creatures
+// knee-deep, depth varying by creature).
+//
+// MECHANISM (verified against a real mounted scene, dev/verify-bw2-2-floor-contact.mjs): every interior
+// floor tile is an InstancedMesh box whose BOTTOM is pinned to the shared y=-0.5 plane and whose TOP
+// grows UPWARD by the tile's own authored thickness `sy` (interiorBuildInstancedMesh's own position
+// math, ~700 lines up: position.y = sy/2-0.5, so a box spanning [-0.5, -0.5+sy] puts the TOP at
+// sy-0.5 — never at -0.5 itself). theater-interior.js bakes sy per floor cell at ITR_FLOOR_HEIGHT=0.2
+// nominal, then VP3's micro-step channel jitters 5-15% of a room's eligible cells by +/-0.04..0.08 —
+// so the REAL floor surface sits between y=-0.38 and y=-0.22 (nominal -0.3), never at the hardcoded
+// y=-0.5 every piece/unit mount assumed pre-BW2-2. That fixed assumption IS the burial: a standee's
+// feet planted at -0.5 sink `sy` world units (0.12-0.28, nominal 0.2) below the tile it's standing on —
+// a FIXED ABSOLUTE gap that reads as anywhere from an ankle-dip (on a ~2-unit-tall creature) to fully
+// underground (on a ~0.2-0.3-unit-tall creature), exactly the "varying depth by creature" the
+// orchestrator's evidence named. Dressing's OLD hardcoded y=-0.4 (its own comment falsely claimed
+// parity with pieces' -0.5 convention — it was actually 0.1 units HIGHER, and still 0.1 below the true
+// nominal top) split the difference by accident, which is why dressing "looked right" while pieces
+// visibly sank — same bug, smaller symptom.
+//
+// THE LAW: floor top at any (x,z) cell is DERIVED, never hand-tuned — read straight off that cell's own
+// floor instance (`sy`), through the EXACT SAME formula the GL layer already uses to place the tile
+// (top = sy - 0.5). setInteriorBoard builds one lookup (interiorFloorTopMapFrom) off data.instances.floor
+// the moment a board mounts, cached on S.interiorFloorTopMap so setUnits (a later, separate call against
+// the same mounted board) can reuse it without rebuilding. Every mount point below — pieces, combat
+// units, dressing, decals, contact pools, standee bases, the acting ring — reads through
+// interiorFloorTopAt/interiorStandeeContactY: ONE formula, one source of truth, no more per-caller
+// hand-nudged magic numbers.
+const ITR_FLOOR_BASE_Y = -0.5;            // the one fixed plane every floor tile's BOTTOM sits on (shared with interiorBuildInstancedMesh's own y=sy/2-0.5 math, GR4's skirt convention, etc.) — NOT the floor TOP; see the law above.
+const ITR_FLOOR_HEIGHT_FALLBACK = 0.2;    // mirrors theater-interior.js's ITR_FLOOR_HEIGHT default, used ONLY when a cell carries no instance data (this sealed ES-module scope has no import of that const — see the REALM_MATERIALS window-republish note at this file's top; every real floor cell bakes its own `sy`, so this branch is normally dead).
+function interiorFloorTopMapFrom(floorInstances){
+  const map = new Map();
+  (floorInstances || []).forEach((inst) => {
+    if(!inst) return;
+    const sy = (typeof inst.sy === "number" && inst.sy > 0) ? inst.sy : ITR_FLOOR_HEIGHT_FALLBACK;
+    map.set(Math.round(inst.x) + "," + Math.round(inst.z), ITR_FLOOR_BASE_Y + sy);
+  });
+  return map;
+}
+function interiorFloorTopAt(floorTopMap, x, z){
+  const fallback = ITR_FLOOR_BASE_Y + ITR_FLOOR_HEIGHT_FALLBACK;
+  if(!floorTopMap) return fallback;
+  const v = floorTopMap.get(Math.round(x || 0) + "," + Math.round(z || 0));
+  return (typeof v === "number") ? v : fallback;
+}
+
+// BW2-2 — STANDEE BASES: a low plinth cylinder under every interior standee (piece + combat unit),
+// seated flush on the floor top the law above derives. Realm trim color (kit.trimColor — the SAME
+// flat trim the doorframe/pillar instances already use, GR1's palette anchor), darkened for the side
+// wall, lightened for the top face (a real "lit from above" plinth read, not a flat tinted disc — per
+// the mock, ui-sketches/mock-frames/mock-01-gloom-combat.png, whose plinths read as physical stone/wood
+// under both the acting and idle standee). Geometry cache-keyed by rounded radius (most true-scale
+// creatures share a handful of footprints); materials cache-keyed by the realm's own trim hex (one kit
+// per mounted board, so this cache never grows past a handful of entries per session).
+const INTERIOR_BASE_HEIGHT = 0.04;                 // BW2-2 spec: "height ~ 0.04 world units"
+const INTERIOR_BASE_Y_OFFSET = 0.006;              // clears the contact pool's own +0.003 (below) — never z-fights it
+const INTERIOR_BASE_GEO_CACHE = {};
+function interiorBaseGeoFor(radius){
+  const key = radius.toFixed(3);
+  if(!INTERIOR_BASE_GEO_CACHE[key]) INTERIOR_BASE_GEO_CACHE[key] = new THREE.CylinderGeometry(radius, radius, INTERIOR_BASE_HEIGHT, 16);
+  return INTERIOR_BASE_GEO_CACHE[key];
+}
+const INTERIOR_BASE_MAT_CACHE = {};
+function interiorBaseMaterialsFor(trimHex){
+  const key = trimHex || "#8a8478";
+  if(INTERIOR_BASE_MAT_CACHE[key]) return INTERIOR_BASE_MAT_CACHE[key];
+  const c = hexToRGB(key);
+  const sideRGB = scaleRGB(c, 0.55);
+  const topRGB = scaleRGB(c, 1.4);
+  const side = new THREE.MeshLambertMaterial({ color: rgbToHex(sideRGB.r, sideRGB.g, sideRGB.b) });
+  const top = new THREE.MeshLambertMaterial({ color: rgbToHex(topRGB.r, topRGB.g, topRGB.b) });
+  // CylinderGeometry material groups: [0]=side wall, [1]=top cap, [2]=bottom cap — bottom reuses the
+  // darker side tone (flush against the floor, never actually visible from any playable camera angle).
+  const mats = [side, top, side];
+  INTERIOR_BASE_MAT_CACHE[key] = mats;
+  return mats;
+}
+// interiorStandeeContactY: the world Y a standee's own feet-line (its group's local y=0 —
+// buildSpriteBillboardMesh's bottom-anchored convention) must sit at so the sprite reads as STANDING ON
+// its own base's TOP FACE, not the raw floor. A registry floorFrac (a flying/floating creature's
+// ground-contact fraction) still applies ON TOP of this exactly as it did pre-BW2-2 — it now lifts
+// further above the base top instead of the bare -0.5 plane, same relative behavior, corrected origin.
+function interiorStandeeContactY(floorTop){
+  return floorTop + INTERIOR_BASE_Y_OFFSET + INTERIOR_BASE_HEIGHT;
+}
+// buildInteriorBase — one plinth mesh. Added as a CHILD of the standee's own figure group (never a
+// sibling blob-group entry) so BW2-2 item 4 ("the whole miniature-with-base tips as one") falls out of
+// standee-verbs.js's existing ensureWrap() for free: fall-death's first tilt-verb reparents EVERY
+// current child of the figure group into its tilt wrapper, so a base mounted here rides along with the
+// sprite mesh automatically — the blob/pool stays in its own untouched sibling group (added to
+// S.shadowGroup/blobGroup directly, never to this figure), exactly per spec item 4's "the blob stays
+// put." Local position is fixed regardless of floorFrac — the group's own world Y already carries the
+// full contact-line math (interiorStandeeContactY minus floorFrac*height, at the call sites below), so
+// the base's local origin is always "flush under local y=0": the group's local y=0 IS the base's own
+// top face, which is also exactly where a floorFrac=0 sprite's own bottom edge sits (buildSpriteBillboardMesh's
+// mesh.position.y=h/2 convention) — one shared local reference point, no separate bookkeeping.
+function buildInteriorBase(radius, trimHex){
+  const geo = interiorBaseGeoFor(Math.max(0.05, radius || 0.3));
+  const mats = interiorBaseMaterialsFor(trimHex);
+  const mesh = new THREE.Mesh(geo, mats);
+  mesh.position.set(0, -INTERIOR_BASE_HEIGHT / 2, 0);
+  mesh.receiveShadow = true;
+  mesh.castShadow = true;
+  mesh.userData.standeeBase = true; // verify-bw2-2's per-standee base-count check
+  return mesh;
+}
+
+// BW2-2 ADDENDUM (Adam, mid-flight review — "the contact shadow... really sells the illusion"): the
+// contact pool is now a SOFT RADIAL GRADIENT quad (dark center feathering to fully transparent at the
+// rim), replacing VP7's flat hard-edged disc — matches the mock's shadow hugging the acting knight's
+// base. ONE shared gradient CanvasTexture (never a per-standee canvas — the gradient SHAPE is identical
+// everywhere; only the quad's own world-space SCALE differs per standee footprint), linear-filtered
+// (SPRITE PURITY's nearest-only rule guards CHARACTER pixels — buildSpriteBillboardMesh's own header
+// comment names the exemption for exactly this kind of non-character ground shadow/blob quad — a
+// smooth gradient with visible texel edges would read as a rendering bug, not a soft shadow).
+let INTERIOR_POOL_TEXTURE = null;
+function interiorPoolTexture(){
+  if(INTERIOR_POOL_TEXTURE) return INTERIOR_POOL_TEXTURE;
+  const size = 128;
+  const canvas = document.createElement("canvas");
+  canvas.width = size; canvas.height = size;
+  // total-function discipline (every other texture builder in this file — interiorMaterialTexture,
+  // dressingPlaceholderTexture — degrades cleanly rather than throwing): a jsdom harness with no native
+  // `canvas` npm package installed returns ctx===null (a real browser/Chrome, the only place this ever
+  // actually renders, always resolves a working 2D context) — skip the paint rather than crash, and
+  // hand back an untextured (but still valid) CanvasTexture so interiorBuildPieces/setUnits' pool-mount
+  // call sites never need their own null-guard.
+  const ctx = canvas.getContext && canvas.getContext("2d");
+  if(ctx && typeof ctx.createRadialGradient === "function"){
+  const grad = ctx.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2);
+  grad.addColorStop(0, "rgba(0,0,0,0.5)");     // dense core at the base contact line (spec: opacity ~0.5)
+  grad.addColorStop(0.62, "rgba(0,0,0,0.42)"); // core stays dense out to roughly the base's OWN radius (1/1.6 of the pool's total radius)
+  grad.addColorStop(1, "rgba(0,0,0,0)");       // feathers fully transparent at the rim
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, size, size);
+  }
+  const tex = new THREE.CanvasTexture(canvas);
+  tex.minFilter = THREE.LinearFilter; tex.magFilter = THREE.LinearFilter; // deliberately NOT nearestify() — SPRITE PURITY's carve-out for non-character ground shadows
+  INTERIOR_POOL_TEXTURE = tex;
+  return tex;
+}
+const INTERIOR_POOL_GEO_CACHE = {};
+function interiorPoolGeoFor(radius){
+  const key = radius.toFixed(3);
+  if(!INTERIOR_POOL_GEO_CACHE[key]) INTERIOR_POOL_GEO_CACHE[key] = new THREE.PlaneGeometry(radius * 2, radius * 2);
+  return INTERIOR_POOL_GEO_CACHE[key];
+}
+let INTERIOR_POOL_MAT = null;
+function interiorPoolMaterial(){
+  if(!INTERIOR_POOL_MAT){
+    INTERIOR_POOL_MAT = new THREE.MeshBasicMaterial({
+      map: interiorPoolTexture(), transparent: true, depthWrite: false, side: THREE.DoubleSide
+    });
+  }
+  return INTERIOR_POOL_MAT;
+}
+// BEAUTY-WAVE.md VP7 (CONTACT GROUNDING), BW2-2-upgraded: interior pieces + combat units + large
+// dressing cards get one soft contact pool each (reuse, don't reinvent). `texWidth` is the standee/
+// card's own rendered world-space width (radius = texWidth*0.4, unchanged from VP7 — a hair under half
+// its footprint); the POOL itself extends further per the addendum ("feather extends ~1.6x the base
+// radius"). `floorTop` (BW2-2) replaces the old hardcoded y=-0.495 — the pool now seats a hair above
+// THIS cell's own real floor surface (never the bare -0.5 plane), below every base's own +INTERIOR_BASE_Y_OFFSET
+// so the two never z-fight.
+const INTERIOR_POOL_Y_OFFSET = 0.003;
+function addInteriorContactBlob(group, x, z, texWidth, floorTop){
   if(!group) return null;
-  const radius = Math.max(0.05, (texWidth || 1) * 0.4);
-  const mesh = new THREE.Mesh(groundingBlobGeoFor(radius), INTERIOR_BLOB_MAT);
+  const footprint = Math.max(0.05, (texWidth || 1) * 0.4);
+  const poolRadius = footprint * 1.6;
+  const mesh = new THREE.Mesh(interiorPoolGeoFor(poolRadius), interiorPoolMaterial());
   mesh.rotation.x = -Math.PI / 2;
-  mesh.position.set(x, -0.495, z);
+  const y = (typeof floorTop === "number" ? floorTop : ITR_FLOOR_BASE_Y + ITR_FLOOR_HEIGHT_FALLBACK) + INTERIOR_POOL_Y_OFFSET;
+  mesh.position.set(x, y, z);
   mesh.userData.contactBlob = true; // verify-dungeon-interior's per-piece blob-count check
   group.add(mesh);
   return mesh;
@@ -2973,7 +3133,8 @@ function decalGeoFor(radius){
   if(!DECAL_GEO_CACHE[key]) DECAL_GEO_CACHE[key] = new THREE.CircleGeometry(radius, 10);
   return DECAL_GEO_CACHE[key];
 }
-function interiorBuildDecals(decals, cx, cz){
+const INTERIOR_DECAL_Y_OFFSET = 0.010; // BW2-2: relative to THIS cell's own floor top (interiorFloorTopAt), not the bare -0.5 plane — clears the contact-pool layer's own +0.003 offset
+function interiorBuildDecals(decals, cx, cz, floorTopMap){
   const group = new THREE.Group();
   (decals || []).forEach((d) => {
     const color = DECAL_KIND_COLOR[d.kind] || DECAL_KIND_COLOR.impact;
@@ -2982,9 +3143,11 @@ function interiorBuildDecals(decals, cx, cz){
     });
     const mesh = new THREE.Mesh(decalGeoFor(0.32), mat);
     mesh.rotation.x = -Math.PI / 2;
-    // a hair above the floor plane (-0.5) and above the contact-blob layer (-0.495) — visible history
-    // reads ON the floor, never fighting the grounding blob for the same plane.
-    mesh.position.set((d.x || 0) - (cx || 0), -0.49, (d.y || 0) - (cz || 0));
+    // BW2-2: a hair above THIS cell's own real floor top (interiorFloorTopAt), never the bare -0.5
+    // plane the pre-BW2-2 hardcode assumed — visible history reads ON the actual floor surface, still
+    // above the contact-pool layer so the two never fight for the same plane.
+    const floorTop = interiorFloorTopAt(floorTopMap, d.x || 0, d.y || 0);
+    mesh.position.set((d.x || 0) - (cx || 0), floorTop + INTERIOR_DECAL_Y_OFFSET, (d.y || 0) - (cz || 0));
     mesh.userData.decalKind = d.kind || "impact";
     group.add(mesh);
   });
@@ -3092,11 +3255,22 @@ function setActingUnit(idOrIds){
     if(id == null) return;
     const fig = findUnit(id);
     if(!fig) return;
-    const mesh = new THREE.Mesh(actingRingGeoFor(0.6), ACTING_RING_MAT);
+    // BW2-2: an interior true-scale standee's ring relocates to wrap its own BASE rim (slightly
+    // larger radius, same gold) instead of the tabletop's fixed 0.6-radius floor-blob convention below
+    // — the base radius was stamped onto userData at mount time (interiorBuildPieces/setUnits, both
+    // above) specifically for this. A non-interior (tabletop combat) figure carries no
+    // interiorTrueScale flag at all, so it falls through to the exact pre-BW2-2 radius/Y — byte-
+    // identical, untouched.
+    const interiorFig = !!(fig.userData && fig.userData.interiorTrueScale);
+    const ringRadius = interiorFig ? Math.max(0.12, (fig.userData.interiorBaseRadius || 0.3) * 1.2) : 0.6;
+    const mesh = new THREE.Mesh(actingRingGeoFor(ringRadius), ACTING_RING_MAT);
     mesh.rotation.x = -Math.PI / 2;
-    // -0.48: above the grounding blob's -0.495 and below the hostility base disc, per the SAME
-    // layering law addGroundingBlob's header documents ("never fighting it for the same plane").
-    mesh.position.set(0, -0.48, 0);
+    // interior: a hair above local y=0 — which IS the base's own top face / the standee's own
+    // contact line (buildInteriorBase's header explains why local 0 is that shared reference point) —
+    // so the ring reads as wrapping the base rim. tabletop (unchanged): -0.48, above the grounding
+    // blob's -0.495 and below the hostility base disc, per the SAME layering law addGroundingBlob's
+    // header documents ("never fighting it for the same plane").
+    mesh.position.set(0, interiorFig ? 0.003 : -0.48, 0);
     fig.add(mesh);
     S.actingRingMeshes.push(mesh);
     mounted++;
@@ -5057,7 +5231,7 @@ function stopMoteDrift(){
 // "did every piece sprite resolve" on window.Theater for the capture rig's metrics (a piece whose slug
 // doesn't join the registry, or whose texture hasn't loaded yet, silently skips — same total-function/
 // never-throw discipline every other figure resolution in this file keeps).
-function interiorBuildPieces(pieces, cx, cz, wallHeightBase){
+function interiorBuildPieces(pieces, cx, cz, wallHeightBase, floorTopMap, trimColor){
   const group = new THREE.Group();
   // VP7 CONTACT GROUNDING: blobs live in their OWN sibling sub-group, appended to `group` once at
   // the end — NOT interleaved into `group`'s direct children — so existing/other callers walking
@@ -5079,11 +5253,28 @@ function interiorBuildPieces(pieces, cx, cz, wallHeightBase){
     if(!built) return; // texture not loaded yet — falls through, same as every other billboard resolution
     const g = built.group;
     const floorFrac = (typeof base.floor === "number") ? base.floor : 0;
+    const cellX = p.cellX || 0, cellY = p.cellY || 0;
+    // BW2-2: the ground-contact line (image-bottom when floor=0) sits on THIS cell's own real floor
+    // TOP (interiorFloorTopAt — the derived law, never the bare -0.5 plane) plus its own plinth base
+    // (interiorStandeeContactY) — replaces the pre-BW2-2 hardcoded "-0.5 - floorFrac*height" that
+    // assumed every floor tile was paper-thin and sat exactly at y=-0.5 (it doesn't; see this file's
+    // own FLOOR CONTACT LAW header comment a few screens up for the measured burial this caused).
+    const floorTop = interiorFloorTopAt(floorTopMap, cellX, cellY);
+    const contactY = interiorStandeeContactY(floorTop);
     g.position.set(
-      (p.cellX || 0) - (cx || 0),
-      -0.5 - floorFrac * built.height, // the ground-contact line (image-bottom when floor=0) sits on the y=-0.5 floor plane
-      (p.cellY || 0) - (cz || 0) // origin-shifted like every tile/light (the v3 card bug: raw cell coords rendered pieces outside the fitted frame)
+      cellX - (cx || 0),
+      contactY - floorFrac * built.height,
+      cellY - (cz || 0) // origin-shifted like every tile/light (the v3 card bug: raw cell coords rendered pieces outside the fitted frame)
     );
+    // BW2-2 STANDEE BASES: a plinth cylinder under this piece, radius off its own rendered world
+    // width (spec: 0.42x) — added as a CHILD of `g` (see buildInteriorBase's own header for why this
+    // makes fall-death's tip-as-one-group behavior fall out of ensureWrap for free).
+    g.add(buildInteriorBase(built.width * 0.42, trimColor));
+    g.userData.interiorTrueScale = true;
+    g.userData.interiorHeight = built.height;
+    g.userData.interiorWidth = built.width;
+    g.userData.interiorFloorFrac = floorFrac;
+    g.userData.interiorBaseRadius = built.width * 0.42;
     // DUNGEON-GRAPH.md finale-gate finding: a caller may tag an interior piece with the combat foe's
     // own `fid` (o.foes[i].fid, combat.js's combatStart) so play(verb,{who:fid}) — the SAME production
     // standee-verb entry point combat damage already routes through (§A STANDEE VERBS WIRING, this
@@ -5092,13 +5283,14 @@ function interiorBuildPieces(pieces, cx, cz, wallHeightBase){
     // behaves exactly as before.
     if(p.fid != null) g.userData.unitId = String(p.fid);
     group.add(g);
-    // VP7 CONTACT GROUNDING: one blob per piece, at the SAME (x,z) as the piece's own floor-
+    // VP7 CONTACT GROUNDING: one pool per piece, at the SAME (x,z) as the piece's own floor-
     // contact position — added to the sibling `blobGroup` (not as a child of `g`, and not
     // interleaved into `group`'s own direct children) so it survives at a fixed world y even if a
     // caller later re-tweens `g`'s own rotation (e.g. a tipped fall-death card, STANDEE_VERBS'
-    // fall-death — the corpse keeps its ground anchor because the blob isn't parented to the
+    // fall-death — the corpse keeps its ground anchor because the pool isn't parented to the
     // tilting wrapper), and existing callers walking `group.children` in piece order see no change.
-    addInteriorContactBlob(blobGroup, g.position.x, g.position.z, built.width);
+    // BW2-2: seated off THIS cell's own real floor top, not the old hardcoded -0.495.
+    addInteriorContactBlob(blobGroup, g.position.x, g.position.z, built.width, floorTop);
     // VP6 item 1: idle-breathe auto-plays on every living piece the instant it mounts (a fresh
     // fall-death corpse never reaches this — dead pieces are re-mounted by the NEXT setInteriorBoard
     // call with p.fid's own userData never carrying userData.corpse from a torn-down prior group, so
@@ -5217,7 +5409,7 @@ function buildDressingCard(entry){
 // already are (the v3 card bug class this unit's own brief calls out by name: raw cell coords render
 // outside the fitted camera frame — every mount in this function goes through the (cx,cz) subtraction,
 // no exceptions).
-function interiorBuildDressing(dressing, cx, cz){
+function interiorBuildDressing(dressing, cx, cz, floorTopMap){
   const group = new THREE.Group();
   // VP7 CONTACT GROUNDING: same sibling-subgroup convention as interiorBuildPieces' blobGroup
   // (below) — blobs never interleave into `group`'s own direct children.
@@ -5225,14 +5417,19 @@ function interiorBuildDressing(dressing, cx, cz){
   (dressing || []).forEach((d) => {
     if(!d || !d.slug) return;
     const g = buildDressingCard(d);
-    // -0.4: feet on the y=-0.5 floor plane, the SAME convention interiorBuildPieces already
-    // establishes for billboard groups standing in an interior room (that function's own comment).
-    g.position.set((d.x || 0) - (cx || 0), -0.4, (d.y || 0) - (cz || 0));
+    // BW2-2: feet on THIS cell's own real floor top (interiorFloorTopAt — the derived law), replacing
+    // the pre-BW2-2 hardcoded -0.4 (that value's own comment falsely claimed parity with pieces' -0.5
+    // convention — it was actually 0.1 units higher, and still 0.1 below the true nominal floor top;
+    // see this file's FLOOR CONTACT LAW header for the measured numbers). Dressing gets NO plinth base
+    // (per the mock, ui-sketches/mock-frames/mock-01-gloom-combat.png — only combat-representing
+    // standees carry a base; a tombstone/torch/painting sits directly on the floor).
+    const floorTop = interiorFloorTopAt(floorTopMap, d.x || 0, d.y || 0);
+    g.position.set((d.x || 0) - (cx || 0), floorTop, (d.y || 0) - (cz || 0));
     group.add(g);
     // VP7 CONTACT GROUNDING: large dressing cards only (§VP7: "every interior piece + large
     // dressing card") — small/medium cards (crates, wall clutter) stay floater-free by spec.
     if(d.cardKind === "large"){
-      addInteriorContactBlob(blobGroup, g.position.x, g.position.z, dressingCardHeight(d.cardKind));
+      addInteriorContactBlob(blobGroup, g.position.x, g.position.z, dressingCardHeight(d.cardKind), floorTop);
     }
   });
   group.add(blobGroup);
@@ -5494,6 +5691,12 @@ function setInteriorBoard(data){
         pillar: (data.instances && data.instances.pillar || []).map((o) => Object.assign({}, o)),
       }, variant.aoFactor)
     : (data.instances || {});
+  // BW2-2 — THE FLOOR CONTACT LAW: one lookup, built off THIS board's own real floor instances
+  // (inst.floor, post-AO-clone above), cached on S so setUnits (a separate, later call against the
+  // SAME mounted board) can reuse it without rebuilding — see this file's own FLOOR CONTACT LAW header
+  // comment (interiorFloorTopMapFrom/interiorFloorTopAt) for the derivation this replaces the old
+  // hardcoded -0.5/-0.4 assumptions with.
+  S.interiorFloorTopMap = interiorFloorTopMapFrom(inst.floor);
   const floorMesh = interiorBuildInstancedMesh(inst.floor, cx, cz, floorTex, variant, "floor");
   // CUTAWAY WALLS (study card v4): when the board frames a focus room, the room's CAMERA-SIDE
   // perimeter walls drop to knee height so the camera sees INTO the room instead of at the outside
@@ -5544,7 +5747,7 @@ function setInteriorBoard(data){
   // DUNGEON-GRAPH.md U3 iteration-2, ruling 3: creature/PC billboard sprites standing in the room
   // (data.pieces, a plain field the caller sets directly on the board object — independent of
   // interiorBuildBoard, same as data.lightProfile above).
-  const piecesBuilt = interiorBuildPieces(data.pieces, cx, cz, data.wallHeightBase);
+  const piecesBuilt = interiorBuildPieces(data.pieces, cx, cz, data.wallHeightBase, S.interiorFloorTopMap, kit.trimColor);
   S.interiorGroup.add(piecesBuilt.group);
   S.interiorPiecesResolved = piecesBuilt.resolved;
   S.interiorPiecesRequested = piecesBuilt.requested;
@@ -5552,7 +5755,7 @@ function setInteriorBoard(data){
   // GRAPHICS-ENGINE.md GR2 §D: dressing cards (data.dressing, src/engine/place-dressing.js's
   // dressPlan output — a plain field the caller sets directly on the board object, same convention
   // as data.pieces/data.lightProfile above).
-  const dressingGroup = interiorBuildDressing(data.dressing, cx, cz);
+  const dressingGroup = interiorBuildDressing(data.dressing, cx, cz, S.interiorFloorTopMap);
   S.interiorGroup.add(dressingGroup);
   S.interiorDressingCount = (data.dressing || []).length;
   // harness-facing diagnostic (dev/verify-dungeon-dressing.mjs check 4: "render mount... origin-
@@ -5566,7 +5769,7 @@ function setInteriorBoard(data){
   // BEAUTY-WAVE.md VP6 item 4 — VISIBLE HISTORY (render half). data.decals is a plain field the caller
   // sets directly on the board object (same convention as data.pieces/data.dressing above), sourced
   // from src/world/prep.js's spatialDecalsForSeg(pn, segNum) — the persist half.
-  const decalsGroup = interiorBuildDecals(data.decals, cx, cz);
+  const decalsGroup = interiorBuildDecals(data.decals, cx, cz, S.interiorFloorTopMap);
   S.interiorGroup.add(decalsGroup);
   S.interiorDecalCount = (data.decals || []).length;
 
@@ -5905,13 +6108,33 @@ function setUnits(data){
     // x/z already computed at the top of this forEach body (the obliterated branch above returns before
     // here, so this is the same block scope) — reuse them; a second `const x/z` here is a duplicate
     // declaration (a hard SyntaxError that stopped this whole module from parsing).
-    // BEAUTY-WAVE.md VP1b: an interior-true-scale sprite figure's floor-CONTACT line (not y=0, the
-    // tabletop tile-top convention) must sit on the room's y=-0.5 floor plane — the SAME math
-    // interiorBuildPieces already applies to non-combat pieces (this unit's own header note).
+    // BEAUTY-WAVE.md VP1b, BW2-2-corrected: an interior-true-scale sprite figure's floor-CONTACT line
+    // (not y=0, the tabletop tile-top convention) must sit on THIS cell's own real floor top plus its
+    // own plinth base (interiorFloorTopAt/interiorStandeeContactY — the derived FLOOR CONTACT LAW,
+    // this file's own header comment a few thousand lines up) — replaces the pre-BW2-2 hardcoded
+    // "-0.5 - floorFrac*height" that assumed every floor tile sat exactly at y=-0.5 (it doesn't; the
+    // measured burial this caused is what BW2-2 fixes). interiorBuildPieces (non-combat pieces) applies
+    // the SAME law.
     const interiorSpriteFig = !!(figure.userData && figure.userData.interiorTrueScale);
-    const posY = interiorSpriteFig
-      ? (-0.5 - (figure.userData.interiorFloorFrac || 0) * figure.userData.interiorHeight)
-      : 0;
+    let posY = 0;
+    if(interiorSpriteFig){
+      const floorTop = interiorFloorTopAt(S.interiorFloorTopMap, u.x, u.z);
+      const contactY = interiorStandeeContactY(floorTop);
+      posY = contactY - (figure.userData.interiorFloorFrac || 0) * figure.userData.interiorHeight;
+      // BW2-2 STANDEE BASES: a plinth cylinder under this combat standee too (spec: "piece + combat
+      // unit"), same construction/child-of-figure convention interiorBuildPieces uses (buildInteriorBase's
+      // own header explains why this makes fall-death's tip-as-one-group behavior free). Radius off
+      // the sprite's own rendered width (figureFor's interior branch stamps interiorWidth alongside
+      // interiorHeight specifically for this — see that branch's own comment).
+      const baseRadius = (figure.userData.interiorWidth || figure.userData.interiorHeight || 1) * 0.42;
+      figure.add(buildInteriorBase(baseRadius, S.lastBoard && S.lastBoard.tileKit && S.lastBoard.tileKit.trimColor));
+      figure.userData.interiorBaseRadius = baseRadius;
+      // BW2-2: this standee's own soft contact pool (VP7's convention, extended to combat units — the
+      // pre-BW2-2 tabletop hostility-disc/groundingBlob pair further below is UNTOUCHED and stays
+      // buried under the true floor exactly as it already was, harmless/invisible; this pool is the
+      // one that actually reads under an interior standee's base).
+      addInteriorContactBlob(S.shadowGroup, x, z, (figure.userData.interiorWidth || figure.userData.interiorHeight || 1), floorTop);
+    }
     figure.position.set(x, posY, z);
     // P1' WHOLE-OBJECT WIRING (docs/P1-WIRING.md §4 step 6, §3-D1/D2/D8): a whole-object figure
     // (tagged by figureFor) takes a COMPLETELY SEPARATE scale/disc path from the cuboid-recipe math
@@ -6487,15 +6710,21 @@ window.Theater._spriteTextureCache = SPRITE_TEXTURE_CACHE;
 // needs a live WebGLRenderer/scene — see dev/battle-gate/capture-interior-study.mjs for that end). Same
 // read-only-diagnostics spirit as refFigure/_spriteTextureCache above; nothing in product logic calls
 // this from outside interiorBuildPieces's own production call site (setInteriorBoard).
-window.Theater._interiorBuildPiecesForTest = function(pieces, cx, cz, wallHeightBase){
-  return interiorBuildPieces(pieces, cx, cz, wallHeightBase);
+window.Theater._interiorBuildPiecesForTest = function(pieces, cx, cz, wallHeightBase, floorTopMap, trimColor){
+  return interiorBuildPieces(pieces, cx, cz, wallHeightBase, floorTopMap, trimColor);
 };
 
 // BEAUTY-WAVE.md VP7 — TEST-ONLY SEAM, same spirit as _interiorBuildPiecesForTest above: exposes
 // interiorBuildDressing directly so a harness can build dressing cards (small/medium/large) and
 // inspect the resulting contact-blob count without a live WebGLRenderer.
-window.Theater._interiorBuildDressingForTest = function(dressing, cx, cz){
-  return interiorBuildDressing(dressing, cx, cz);
+window.Theater._interiorBuildDressingForTest = function(dressing, cx, cz, floorTopMap){
+  return interiorBuildDressing(dressing, cx, cz, floorTopMap);
+};
+
+// BW2-2 — TEST-ONLY SEAM, same spirit as the two accessors above: exposes interiorBuildDecals directly
+// so a harness can inspect decal mount Y against the derived floor-contact law.
+window.Theater._interiorBuildDecalsForTest = function(decals, cx, cz, floorTopMap){
+  return interiorBuildDecals(decals, cx, cz, floorTopMap);
 };
 
 // BEAUTY-WAVE.md VP1c — TEST-ONLY SEAM, same spirit as the two accessors above: exposes the flat-
@@ -6504,3 +6733,28 @@ window.Theater._interiorBuildDressingForTest = function(dressing, cx, cz){
 window.Theater._unitGroupChildCountForTest = function(){
   return (S.unitGroup && S.unitGroup.children.length) || 0;
 };
+
+// BW2-2 — TEST-ONLY SEAM: exposes the FLOOR CONTACT LAW's raw pieces (the lookup builder/reader, the
+// standee-contact derivation, and every hand-tuned constant it replaces the old per-caller magic
+// numbers with) so a harness can independently recompute the expected Y at any cell without either
+// re-deriving the arithmetic blind or trusting interiorBuildPieces/setUnits as a black box. Same read-
+// only-diagnostics spirit as every other _*ForTest seam above.
+window.Theater._floorContactLawForTest = {
+  interiorFloorTopMapFrom, interiorFloorTopAt, interiorStandeeContactY,
+  ITR_FLOOR_BASE_Y, ITR_FLOOR_HEIGHT_FALLBACK,
+  INTERIOR_BASE_HEIGHT, INTERIOR_BASE_Y_OFFSET, INTERIOR_POOL_Y_OFFSET, INTERIOR_DECAL_Y_OFFSET
+};
+// BW2-2 — TEST-ONLY SEAM: the shared contact-pool gradient texture (the BW2-2 addendum's soft radial
+// shadow) so a harness can sample its pixels and assert center-alpha > edge-alpha without a live
+// WebGLRenderer.
+window.Theater._interiorPoolTextureForTest = function(){ return interiorPoolTexture(); };
+// BW2-2 — TEST-ONLY SEAM: exposes findUnit directly so a harness can inspect a MOUNTED combat unit's
+// live THREE.Group (position/userData/children) after a real setInteriorBoard+setUnits sequence,
+// without a public getter existing anywhere in product code (nothing outside this file's own verb
+// plumbing ever needs a raw handle to a unit's Object3D).
+window.Theater._findUnitForTest = function(id){ return findUnit(id); };
+// BW2-2 — TEST-ONLY SEAM: exposes S.interiorFloorTopMap (the per-cell lookup setInteriorBoard caches)
+// after a real board mount, so a harness can confirm it was actually built+cached from the LIVE board's
+// own instances.floor, not just prove the builder function works in isolation (_floorContactLawForTest
+// above already covers that).
+window.Theater._interiorFloorTopMapForTest = function(){ return S.interiorFloorTopMap || null; };

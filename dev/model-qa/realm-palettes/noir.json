@@ -1,0 +1,111 @@
+{
+  "_generated_by": "build/gen-realm-palettes.py (r2) \u2014 never hand-edit",
+  "realm": "noir",
+  "source": "style-ref+corpus",
+  "paletteSize": 48,
+  "colors": [
+    "#344c57",
+    "#180415",
+    "#2e3647",
+    "#2e2c2e",
+    "#7f7971",
+    "#2f1c22",
+    "#0b0608",
+    "#443e3a",
+    "#201b19",
+    "#505f7d",
+    "#0e0b19",
+    "#352a20",
+    "#940989",
+    "#536d7e",
+    "#ca10ba",
+    "#2c1d16",
+    "#1c0c0b",
+    "#231b3d",
+    "#400d46",
+    "#70177b",
+    "#ac8d63",
+    "#64523b",
+    "#a39b8e",
+    "#524c45",
+    "#430c3c",
+    "#483929",
+    "#030102",
+    "#96784c",
+    "#908068",
+    "#110d0c",
+    "#554534",
+    "#5c0656",
+    "#b5ac9d",
+    "#1a1512",
+    "#f5f2ea",
+    "#a13095",
+    "#60574a",
+    "#c8beb3",
+    "#6f2162",
+    "#5c5b5c",
+    "#e0d8ca",
+    "#3c342d",
+    "#282321",
+    "#290526",
+    "#3f4130",
+    "#717556",
+    "#252b21",
+    "#495642"
+  ],
+  "outline": "tbd",
+  "hueFamilyCoverage": {
+    "0": {
+      "pctOfCorpus": 0.2384,
+      "paletteEntries": 9
+    },
+    "1": {
+      "pctOfCorpus": 0.4982,
+      "paletteEntries": 10
+    },
+    "2": {
+      "pctOfCorpus": 0.0217,
+      "paletteEntries": 2
+    },
+    "3": {
+      "pctOfCorpus": 0.0066,
+      "paletteEntries": 2
+    },
+    "4": {
+      "pctOfCorpus": 0.0046,
+      "paletteEntries": 0
+    },
+    "5": {
+      "pctOfCorpus": 0.0015,
+      "paletteEntries": 0
+    },
+    "6": {
+      "pctOfCorpus": 0.0053,
+      "paletteEntries": 2
+    },
+    "7": {
+      "pctOfCorpus": 0.0068,
+      "paletteEntries": 2
+    },
+    "8": {
+      "pctOfCorpus": 0.0119,
+      "paletteEntries": 2
+    },
+    "9": {
+      "pctOfCorpus": 0.0369,
+      "paletteEntries": 2
+    },
+    "10": {
+      "pctOfCorpus": 0.1174,
+      "paletteEntries": 8
+    },
+    "11": {
+      "pctOfCorpus": 0.0507,
+      "paletteEntries": 3
+    }
+  },
+  "corpusPixelsSampled": 0,
+  "fallbackNotes": [
+    "no cut sprites in registry for this realm yet \u2014 style-ref only"
+  ]
+}

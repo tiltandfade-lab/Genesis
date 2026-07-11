@@ -1,0 +1,111 @@
+{
+  "_generated_by": "build/gen-realm-palettes.py (r2) \u2014 never hand-edit",
+  "realm": "gloom",
+  "source": "style-ref+corpus",
+  "paletteSize": 48,
+  "colors": [
+    "#1f2721",
+    "#14101e",
+    "#222b29",
+    "#0e0e12",
+    "#342827",
+    "#3c2b30",
+    "#56534c",
+    "#405044",
+    "#435651",
+    "#93139a",
+    "#8b8070",
+    "#4f0658",
+    "#373432",
+    "#575b5b",
+    "#720a78",
+    "#5a2553",
+    "#756952",
+    "#171c1e",
+    "#787267",
+    "#c0b3a1",
+    "#191718",
+    "#30383a",
+    "#1a2125",
+    "#111519",
+    "#232b2f",
+    "#656665",
+    "#454540",
+    "#262524",
+    "#17021f",
+    "#3d1c3e",
+    "#020203",
+    "#40342d",
+    "#403c37",
+    "#2f302f",
+    "#2a2a29",
+    "#524a40",
+    "#4c4037",
+    "#1f2527",
+    "#1b0f23",
+    "#221d1e",
+    "#30072d",
+    "#484c4c",
+    "#08060d",
+    "#605141",
+    "#4a4c3e",
+    "#80856b",
+    "#363f32",
+    "#62725a"
+  ],
+  "outline": "full-near-black",
+  "hueFamilyCoverage": {
+    "0": {
+      "pctOfCorpus": 0.1508,
+      "paletteEntries": 3
+    },
+    "1": {
+      "pctOfCorpus": 0.2785,
+      "paletteEntries": 7
+    },
+    "2": {
+      "pctOfCorpus": 0.0374,
+      "paletteEntries": 2
+    },
+    "3": {
+      "pctOfCorpus": 0.0081,
+      "paletteEntries": 2
+    },
+    "4": {
+      "pctOfCorpus": 0.0169,
+      "paletteEntries": 2
+    },
+    "5": {
+      "pctOfCorpus": 0.0379,
+      "paletteEntries": 2
+    },
+    "6": {
+      "pctOfCorpus": 0.1117,
+      "paletteEntries": 5
+    },
+    "7": {
+      "pctOfCorpus": 0.0584,
+      "paletteEntries": 1
+    },
+    "8": {
+      "pctOfCorpus": 0.0507,
+      "paletteEntries": 4
+    },
+    "9": {
+      "pctOfCorpus": 0.1374,
+      "paletteEntries": 6
+    },
+    "10": {
+      "pctOfCorpus": 0.081,
+      "paletteEntries": 2
+    },
+    "11": {
+      "pctOfCorpus": 0.0312,
+      "paletteEntries": 2
+    }
+  },
+  "corpusPixelsSampled": 0,
+  "fallbackNotes": [
+    "no cut sprites in registry for this realm yet \u2014 style-ref only"
+  ]
+}

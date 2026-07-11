@@ -1,0 +1,111 @@
+{
+  "_generated_by": "build/gen-realm-palettes.py (r2) \u2014 never hand-edit",
+  "realm": "ash",
+  "source": "style-ref+corpus",
+  "paletteSize": 48,
+  "colors": [
+    "#151820",
+    "#2e3547",
+    "#1a1525",
+    "#362223",
+    "#0a0608",
+    "#b4a294",
+    "#140c1e",
+    "#552f45",
+    "#3f0b35",
+    "#41342d",
+    "#856e67",
+    "#342d2d",
+    "#9f8677",
+    "#b04198",
+    "#351b37",
+    "#282326",
+    "#851480",
+    "#813e2b",
+    "#0f0b0d",
+    "#39343a",
+    "#b6421b",
+    "#50312c",
+    "#a10ea6",
+    "#240d0e",
+    "#1f1a1c",
+    "#322d22",
+    "#47271f",
+    "#431411",
+    "#020203",
+    "#c317c6",
+    "#601452",
+    "#27082d",
+    "#63096f",
+    "#682118",
+    "#5d4033",
+    "#75853a",
+    "#694f47",
+    "#483f3a",
+    "#d2c8ba",
+    "#646163",
+    "#ef8f2f",
+    "#43094f",
+    "#181213",
+    "#2d1b19",
+    "#635741",
+    "#494f31",
+    "#2f4851",
+    "#517c8a"
+  ],
+  "outline": "tbd",
+  "hueFamilyCoverage": {
+    "0": {
+      "pctOfCorpus": 0.4019,
+      "paletteEntries": 15
+    },
+    "1": {
+      "pctOfCorpus": 0.1054,
+      "paletteEntries": 3
+    },
+    "2": {
+      "pctOfCorpus": 0.0239,
+      "paletteEntries": 2
+    },
+    "3": {
+      "pctOfCorpus": 0.0034,
+      "paletteEntries": 0
+    },
+    "4": {
+      "pctOfCorpus": 0.0039,
+      "paletteEntries": 0
+    },
+    "5": {
+      "pctOfCorpus": 0.0043,
+      "paletteEntries": 0
+    },
+    "6": {
+      "pctOfCorpus": 0.014,
+      "paletteEntries": 2
+    },
+    "7": {
+      "pctOfCorpus": 0.0195,
+      "paletteEntries": 2
+    },
+    "8": {
+      "pctOfCorpus": 0.0326,
+      "paletteEntries": 3
+    },
+    "9": {
+      "pctOfCorpus": 0.1108,
+      "paletteEntries": 6
+    },
+    "10": {
+      "pctOfCorpus": 0.1318,
+      "paletteEntries": 6
+    },
+    "11": {
+      "pctOfCorpus": 0.1486,
+      "paletteEntries": 6
+    }
+  },
+  "corpusPixelsSampled": 0,
+  "fallbackNotes": [
+    "no cut sprites in registry for this realm yet \u2014 style-ref only"
+  ]
+}

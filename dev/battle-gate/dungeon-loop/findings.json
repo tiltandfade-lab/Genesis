@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-11T07:14:38.243Z",
+  "generatedAt": "2026-07-11T07:46:54.451Z",
   "iterations": [
     {
       "loopIndex": 1,
@@ -18,7 +18,7 @@
         "ok": true,
         "stage": "done",
         "loopIndex": 1,
-        "topology": "The Spine",
+        "topology": "The Stronghold",
         "segCount": 5,
         "environment": "dungeon",
         "nodeId": "dungeon-loop-1",
@@ -30,8 +30,8 @@
         "targetSegNum": 3,
         "room": {
           "segNum": 3,
-          "x": 22,
-          "y": 4,
+          "x": 3,
+          "y": 32,
           "w": 4,
           "d": 6
         },
@@ -62,7 +62,7 @@
         },
         "pnCursor": 3
       },
-      "topology": "The Spine",
+      "topology": "The Stronghold",
       "roomCount": 5,
       "reachability": {
         "ok": true,
@@ -71,7 +71,7 @@
       "rendered": {
         "ok": true,
         "stage": "setInteriorBoard",
-        "dressingCountFromTray": 51,
+        "dressingCountFromTray": 54,
         "beatMaxHeight": 0.561,
         "beatFrustumCheck": {
           "corners": [
@@ -145,7 +145,7 @@
         "meshCount": 4,
         "piecesRequested": 3,
         "piecesResolved": 3,
-        "dressingCount": 51
+        "dressingCount": 54
       },
       "bw2CrispChannel": {
         "buffer": {
@@ -163,8 +163,8 @@
         },
         "fps": {
           "samples": 60,
-          "elapsedMs": 368.5,
-          "fps": 162.82225237449117
+          "elapsedMs": 240.89999999850988,
+          "fps": 249.06600249220065
         }
       },
       "verbResults": {
@@ -188,13 +188,13 @@
       ],
       "benign404Count": 4,
       "summary": {
-        "topology": "The Spine",
+        "topology": "The Stronghold",
         "realm": "chrome",
         "roomCount": 5,
         "planVerified": true,
         "piecesResolved": 3,
         "piecesRequested": 3,
-        "dressingCount": 51,
+        "dressingCount": 54,
         "meshCount": 4,
         "consoleErrorCount": 3,
         "breakCount": 0
@@ -368,8 +368,8 @@
         },
         "fps": {
           "samples": 60,
-          "elapsedMs": 495.69999999552965,
-          "fps": 121.04095218991546
+          "elapsedMs": 472.79999999701977,
+          "fps": 126.9035533002923
         }
       },
       "verbResults": {
@@ -415,7 +415,7 @@
         "ok": true,
         "stage": "done",
         "loopIndex": 3,
-        "topology": "The Branch",
+        "topology": "The Ruin",
         "segCount": 9,
         "environment": "dungeon",
         "nodeId": "dungeon-loop-3",
@@ -427,8 +427,8 @@
         "targetSegNum": 5,
         "room": {
           "segNum": 5,
-          "x": 38,
-          "y": 16,
+          "x": 30,
+          "y": 8,
           "w": 6,
           "d": 7
         },
@@ -468,7 +468,7 @@
         },
         "pnCursor": 5
       },
-      "topology": "The Branch",
+      "topology": "The Ruin",
       "roomCount": 9,
       "reachability": {
         "ok": true,
@@ -477,7 +477,7 @@
       "rendered": {
         "ok": true,
         "stage": "setInteriorBoard",
-        "dressingCountFromTray": 101,
+        "dressingCountFromTray": 98,
         "beatMaxHeight": 1.2429999999999999,
         "beatFrustumCheck": {
           "corners": [
@@ -548,10 +548,10 @@
           ],
           "ok": true
         },
-        "meshCount": 5,
+        "meshCount": 4,
         "piecesRequested": 5,
         "piecesResolved": 5,
-        "dressingCount": 101
+        "dressingCount": 98
       },
       "bw2CrispChannel": {
         "buffer": {
@@ -569,8 +569,8 @@
         },
         "fps": {
           "samples": 60,
-          "elapsedMs": 532.2999999970198,
-          "fps": 112.71839188490686
+          "elapsedMs": 470.6000000014901,
+          "fps": 127.4968125792818
         }
       },
       "verbResults": {
@@ -585,14 +585,14 @@
       "urls404": [],
       "benign404Count": 0,
       "summary": {
-        "topology": "The Branch",
+        "topology": "The Ruin",
         "realm": "fantasy",
         "roomCount": 9,
         "planVerified": true,
         "piecesResolved": 5,
         "piecesRequested": 5,
-        "dressingCount": 101,
-        "meshCount": 5,
+        "dressingCount": 98,
+        "meshCount": 4,
         "consoleErrorCount": 0,
         "breakCount": 0
       }
@@ -614,7 +614,7 @@
         "ok": true,
         "stage": "done",
         "loopIndex": 4,
-        "topology": "The Loop",
+        "topology": "The Cascade",
         "segCount": 11,
         "environment": "dungeon",
         "nodeId": "dungeon-loop-4",
@@ -627,7 +627,7 @@
         "room": {
           "segNum": 6,
           "x": 47,
-          "y": 29,
+          "y": 5,
           "w": 6,
           "d": 6
         },
@@ -659,7 +659,7 @@
         },
         "pnCursor": 6
       },
-      "topology": "The Loop",
+      "topology": "The Cascade",
       "roomCount": 11,
       "reachability": {
         "ok": true,
@@ -668,7 +668,7 @@
       "rendered": {
         "ok": true,
         "stage": "setInteriorBoard",
-        "dressingCountFromTray": 116,
+        "dressingCountFromTray": 114,
         "beatMaxHeight": 1.2429999999999999,
         "beatFrustumCheck": {
           "corners": [
@@ -739,10 +739,10 @@
           ],
           "ok": true
         },
-        "meshCount": 5,
+        "meshCount": 4,
         "piecesRequested": 3,
         "piecesResolved": 3,
-        "dressingCount": 116
+        "dressingCount": 114
       },
       "bw2CrispChannel": {
         "buffer": {
@@ -760,8 +760,8 @@
         },
         "fps": {
           "samples": 60,
-          "elapsedMs": 601.8999999985099,
-          "fps": 99.68433294591883
+          "elapsedMs": 426.79999999701977,
+          "fps": 140.5810684171016
         }
       },
       "verbResults": {
@@ -776,14 +776,14 @@
       "urls404": [],
       "benign404Count": 0,
       "summary": {
-        "topology": "The Loop",
+        "topology": "The Cascade",
         "realm": "gloom",
         "roomCount": 11,
         "planVerified": true,
         "piecesResolved": 3,
         "piecesRequested": 3,
-        "dressingCount": 116,
-        "meshCount": 5,
+        "dressingCount": 114,
+        "meshCount": 4,
         "consoleErrorCount": 0,
         "breakCount": 0
       }
@@ -807,7 +807,7 @@
         "ok": true,
         "stage": "done",
         "loopIndex": 5,
-        "topology": "The Branch",
+        "topology": "The Onion",
         "segCount": 8,
         "environment": "dungeon",
         "nodeId": "dungeon-loop-5",
@@ -819,8 +819,8 @@
         "targetSegNum": 5,
         "room": {
           "segNum": 5,
-          "x": 27,
-          "y": 11,
+          "x": 3,
+          "y": 26,
           "w": 6,
           "d": 6
         },
@@ -860,7 +860,7 @@
         },
         "pnCursor": 5
       },
-      "topology": "The Branch",
+      "topology": "The Onion",
       "roomCount": 8,
       "reachability": {
         "ok": true,
@@ -869,7 +869,7 @@
       "rendered": {
         "ok": true,
         "stage": "setInteriorBoard",
-        "dressingCountFromTray": 90,
+        "dressingCountFromTray": 83,
         "beatMaxHeight": 1.903,
         "beatFrustumCheck": {
           "corners": [
@@ -940,10 +940,10 @@
           ],
           "ok": true
         },
-        "meshCount": 5,
+        "meshCount": 4,
         "piecesRequested": 5,
         "piecesResolved": 5,
-        "dressingCount": 90
+        "dressingCount": 83
       },
       "bw2CrispChannel": {
         "buffer": {
@@ -961,8 +961,8 @@
         },
         "fps": {
           "samples": 60,
-          "elapsedMs": 612.7000000029802,
-          "fps": 97.92720744199144
+          "elapsedMs": 434.6000000014901,
+          "fps": 138.0579843529551
         }
       },
       "verbResults": {
@@ -977,14 +977,14 @@
       "urls404": [],
       "benign404Count": 0,
       "summary": {
-        "topology": "The Branch",
+        "topology": "The Onion",
         "realm": "chrome",
         "roomCount": 8,
         "planVerified": true,
         "piecesResolved": 5,
         "piecesRequested": 5,
-        "dressingCount": 90,
-        "meshCount": 5,
+        "dressingCount": 83,
+        "meshCount": 4,
         "consoleErrorCount": 0,
         "breakCount": 0
       }
@@ -999,8 +999,8 @@
     "notes": [
       "startSession() called"
     ],
-    "worldId": "mrg14jcn502g8",
-    "worldName": "Apex Station 4"
+    "worldId": "mrg2a18574fvs",
+    "worldName": "The Cobbled Tannery"
   },
   "theaterState": {
     "hasBattleStage": true,

@@ -8,6 +8,35 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-07-11 — BW3 + THE FULL VISUAL CAMPAIGN CLOSED: three waves in one sitting; the engine converged on the mocks
+
+**The arc.** Adam's mock frames became the reference model; three waves landed end to end:
+BW2 (10 units: crisp channel/PS1 retired game-wide, beat camera, floor contact + bases +
+kilter, occlusion + clip margin, textures + variant roll, value plunge, silhouette + furniture
++ extrusion props, gallery, UI) → BW3 (composer seam byte-identical, light shafts + mote
+coupling, seam-softening, LIT SPRITES + THE BRIGHTNESS LAW, post suite: tilt-shift DoF +
+emissive bloom + filmic grade + the OutputPass sRGB fix). BW4 MOTION & FEEL specced + queued.
+
+**Laws ruled this session (DESIGN registered):** PS1 RETIRED GAME-WIDE · FLOOR CONTACT ·
+OCCLUSION + CLIP MARGIN · PROP PERSPECTIVE (flat art on contextual-depth extrusions,
+edge-sampled sides, tier ladder box/silhouette/card) · THE KILTER · THE BRIGHTNESS LAW
+(full-bright only in full white light) · SPRITE PURITY AMENDMENT (purity = no distortion,
+lighting REQUIRED) · UV MAPPING LAWS (floor 1:1/cell — grout aligns with the combat grid) ·
+COLUMN DEMOTION (furniture is cover) · THE FEEL LAWS (BW4).
+
+**Also:** MOCK-GEN reference loop (PACKET-01 frames = the targets; PACKET-02 textures folded,
+18/18; PACKET-03 flat-props authored + style-rider v2) · grid-snap (spritefusion) proven
+destructive, reconstruction gate kept · corpus unification r2 (hue-safe; r1 reverted at the
+eyes gate) · ROOM-GRAMMAR + BEAUTY-WAVE-4 specced · 6 real pre-existing bugs fixed by
+executors in passing (mote origin-shift, preview importmap, stale shims, kaiju leak).
+
+**Verification at close:** every unit orchestrator re-gated; interior 287/0 · dressing 451/0 ·
+scene-direction 17/0 · floor-contact 48/0 · occlusion 24/0 · silhouette 87/0 · texel 116/0 ·
+shafts 44/0 · seams 146/0 · crisp 37/0 · sprites 12/0 · manifest OK · loop gate 5/5 at every
+landing · fps 124-164 with all passes. Deferred: BW2-4b's quiet camera-key shadow (taste
+call), wall-hang axis 7b (unreproduced), trim GL-wiring, gallery-pass harness side effect,
+GIT-LFS (tomorrow, Adam), audio design night.
+
 ## 2026-07-10 (later night) — THE BEAUTY WAVE EXECUTED: all 11 units + VP8 landed, the diorama transformed
 
 **Context.** Adam delegated the taste verdicts to Fable ("you've been outsmarting me") and said
@@ -996,54 +1025,4 @@ every fault found was a quiet engine *contract seam*, never the narration.**
   deferred to a later design talk, do not act on it.
 
 ---
-
-## 2026-07-05 (later-5) — RUN 2 (SELLA) + FABLE BUG-CLASS SWEEP + THE FIX (13 BUGS CLOSED)
-
-Continued the bridgeless playtest (**Run 2**, Sella Voss, 10 turns), then — on Adam's go — **fixed the
-whole event/codex contract bug-class** the playtests surfaced. Pipeline: Fable specced, Opus executed,
-Opus gated (independent re-run of every gate + a clean-master worktree baseline to prove zero
-regressions). Branch `fix/event-source-enum` (3 commits). **13 bugs closed.**
-
-### Playtest (Run 2 — no engine change; findings only)
-- Ran Sella forward 10 turns (Day 1 → Day 2 midday): T1–T6 the **memoryless-DM-every-turn** codex-survival
-  stress test (Adam's directive), T7+ a **warm persistent DM** (production pattern). **Verdict:** the
-  engine-rolled atoms survive cold-swaps and narrative coherence held remarkably well — the one seam was
-  the DM's *interpreted* notes not persisting (BUG-06c). Save advanced to Day 2 (Run-1 archived
-  `state-run1-close.json`); log `dev/playtest-saves/sella-shimmering-maw/RUN2-LOG.md`.
-- A **Fable-adjudicated same-class sweep** (2 executor sweeps → Fable verified against code) found the
-  visible tip was a class: **BUG-09 (CRITICAL)** — the entire manual inventory panel (×6) + the level-up
-  claim button were dead code (same `source` rejection as BUG-01) — plus BUG-10..13. Filed to
-  `docs/PLAYTEST-BUGS.md` with 3 roots + an observability amplifier.
-
-### Fixed (the fix — `fix/event-source-enum`)
-- **Root A — source-enum drift** (`validateEvent`): replaced the hard-coded `{null,detected,declared}`
-  with the `DM_EVENT_SOURCES` allow-list (`+player,+branch`); a typo'd source still fails loud. **One
-  change closed BUG-01 (roll-branch consequences now apply) + BUG-09 (all 7 player buttons live).**
-- **Root B — payload field-name drift**: a declarative `DM_EVENT_FIELDS` census + `dmFoldPayload`, folded
-  once after `validateEvent` — known aliases rewrite to canonical (`id/faction→clockId`, `by→delta`,
-  `name/text→what`, `epithet→text`, `to→target`); unknown keys **warn + drift-ledger but are never
-  dropped**. Digest clock keys renamed `powers[].id`/`fronts[].id`→`clockId`. Closes BUG-06a/b/c/d, 10, 12.
-- **Root C — codex identity**: an id-less `codex_add` landing on an *established* record is refused
-  (`id-collision`) instead of silently merging (BUG-11/F-07); `codex_update {note}` appends to `dm.notes[]`
-  (BUG-06c); a missing id returns `no-record:<id>` (BUG-13); content merges onto known records drift-ledger.
-- **BUG-08** — the nat-20/1 roll fall-through now clears the persisted `w.dm.rollReq` at all three sites.
-- **The observability amplifier** (why the class was invisible): the probes gained `applyMutates`
-  (demands real state change, not just an ok-flag) + standing `ROOT-A`/`ROOT-B` drift guards, and
-  `verify-roll-branches` gained applied-ok assertions.
-
-### Changed
-- `docs/EVENT-CONTRACT.md` taxonomy rows corrected to the canonical field names + a "Payload aliases &
-  drift-warn" note. `manifest.json` `owns` += `DM_EVENT_SOURCES`, `DM_EVENT_FIELDS`, `dmFoldPayload`.
-
-### Deferred (explicitly out of scope — separate roots, queued)
-- **BUG-02** (world clock never ticks from a DM event), **BUG-03** (digest hides current HP), **BUG-04**
-  (no non-lethal KO), **BUG-05** (`discovery makeNode` doesn't relocate the PC — needs a travel event).
-  **BUG-07** ruled **WAI** (distant_word is anti-invention by design; drift-warn now makes a supplied
-  text loud). F-04 near-name codex twins — noted follow-up.
-
-### Verification
-check-manifest OK; probes flip BUG-01/06a/06b/06c/06d/08/09/10/11/12/13 → resolved, ROOT-A/ROOT-B OK,
-BUG-02/03/04/05/07 unchanged; all green harnesses stay green; the 5 pre-existing red harnesses
-(codex/codex-roll/crit/loadout-mirror/model-grammar) verified **identical to clean master** via worktree
-baseline — zero new regressions.
 

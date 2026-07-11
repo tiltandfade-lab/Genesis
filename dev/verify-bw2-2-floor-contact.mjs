@@ -340,7 +340,7 @@ group("10 — GREEN: interiorBuildPieces mounts EVERY cell through the derived l
     ok(r.contactA > -0.5 && r.contactB > -0.5, `both contact lines sit ABOVE the pre-BW2-2 hardcoded -0.5 (proving the fix, not just a different wrong number)`);
     ok(r.baseCount === 1, `exactly one base mesh per piece (found ${r.baseCount})`);
     ok(Math.abs(r.baseHeight - 0.09) < 1e-9, `base cylinder height ${r.baseHeight} === BW2-2b spec's ~0.09 (bumped from BW2-2's 0.04)`);
-    ok(Math.abs(r.baseRadius - r.spriteWidth * 0.42) < 1e-9, `base radius ${r.baseRadius} === sprite width (${r.spriteWidth}) x 0.42 (spec, unchanged by BW2-2b)`);
+    ok(Math.abs(r.baseRadius - r.spriteWidth * 0.36) < 1e-9, `base radius ${r.baseRadius} === sprite width (${r.spriteWidth}) x 0.36 (BW2-4b item 3: 0.42 -> 0.36, huddle-blob fix)`);
     ok(r.baseMatCount === 3, `base carries 3 materials (CylinderGeometry side/top/bottom groups), found ${r.baseMatCount}`);
     ok(r.baseTopColor !== r.baseSideColor, `base top face color (${r.baseTopColor.toString(16)}) differs from the side wall color (${r.baseSideColor.toString(16)}) — a lit-from-above plinth read, not a flat tint`);
     ok(r.poolCount === 2, `exactly one contact pool per piece — 2 pieces, found ${r.poolCount} pools`);
@@ -523,7 +523,7 @@ async function runRenderCheck(){
       ok(result.figFound, "setUnits mounted a findable unit u1");
       ok(Math.abs(result.figY - result.expectedY) < 1e-9, `combat unit contact Y=${result.figY} matches the law's own derivation (${result.expectedY}) off the LIVE cached floor-top map — not the pre-BW2-2 hardcoded -0.5`);
       ok(result.baseCount === 1, `exactly one base mesh on the combat standee (found ${result.baseCount})`);
-      ok(Math.abs(result.baseRadius - result.spriteWidth * 0.42) < 1e-6, `combat standee base radius (${result.baseRadius}) === its own rendered width (${result.spriteWidth}) x 0.42`);
+      ok(Math.abs(result.baseRadius - result.spriteWidth * 0.36) < 1e-6, `combat standee base radius (${result.baseRadius}) === its own rendered width (${result.spriteWidth}) x 0.36`);
 
       group("21b — GREEN (live values, BW2-2b item 1): under a REAL render pass, the base's world-up stays +Y (outer group rotation.x === 0) while the sprite's inner wrap alone carries the nonzero camera-pitch tilt");
       ok(result.figRotationXBeforeTip === 0, `BEFORE any verb plays, the OUTER group's rotation.x (what the base/ring inherit as plain siblings) is exactly 0 — floor-flat — found ${result.figRotationXBeforeTip}`);

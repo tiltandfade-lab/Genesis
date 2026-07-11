@@ -819,11 +819,11 @@ group("23 — FIXED: interiorBuildPieces sizes through TRUE-SCALE (HUMAN_TRUE_HE
     ok(Math.abs(green.flooredX - 2) <= 0.06 + 1e-9 && Math.abs(green.flooredZ - 3) <= 0.06 + 1e-9,
       `the kilter offset itself stays within the spec's <=6% of a cell bound (dx=${(green.flooredX-2).toFixed(4)}, dz=${(green.flooredZ-3).toFixed(4)})`);
 
-    group("25b — BW2-2b STANDEE BASES: a plinth cylinder under every piece, radius 0.42x rendered width, height ~0.09 (bumped from BW2-2's 0.04)");
+    group("25b — BW2-2b STANDEE BASES: a plinth cylinder under every piece, radius 0.36x rendered width (BW2-4b item 3: reduced ~15% from 0.42 to break the huddle-blob), height ~0.09 (bumped from BW2-2's 0.04)");
     ok(Math.abs(green.medBaseHeight - 0.09) < 1e-9, `medium piece's base cylinder height ${green.medBaseHeight} === BW2-2b's INTERIOR_BASE_HEIGHT (~0.09)`);
-    const expectedBaseRadius = green.medWidth * 0.42;
+    const expectedBaseRadius = green.medWidth * 0.36; // BW2-4b item 3: 0.42 -> 0.36
     ok(Math.abs(green.medBaseRadius - expectedBaseRadius) < 1e-9,
-      `medium piece's base cylinder radius ${green.medBaseRadius} === rendered width (${green.medWidth}) x 0.42 = ${expectedBaseRadius}`);
+      `medium piece's base cylinder radius ${green.medBaseRadius} === rendered width (${green.medWidth}) x 0.36 = ${expectedBaseRadius}`);
 
     group("26 — oversize clamp: wallHeightBase*0.95 cap + qa:oversize-clamped console.warn");
     ok(Math.abs(green.titanHeight - 2.4 * 0.95) < 1e-9, `titan (scaleTrue=100) clamps to wallHeightBase(2.4)*0.95=${2.4 * 0.95} (got ${green.titanHeight})`);

@@ -1189,6 +1189,10 @@ function wholeObjectGeometryFor(key, gray, pieceKind){
    height/colour overrides and channel-tagged GLB materials are deferred tuning knobs, not this unit.
    ============================================================================ */
 const GLB_TARGET_HEIGHT = 1.5;      // module height convention (humanoid.js tops out ~1.475 incl. its baked disc)
+// BEAUTY-WAVE.md VP1: TRUE-SCALE reference height for interior pieces — 5.5ft (the SRD medium-human
+// convention the registry's scaleTrue/scaleVsHuman ratios are already computed against) at
+// cellSize: 1 world unit = 5ft (DUNGEON-GRAPH.md law 1) => 5.5/5 = 1.1 world units.
+const HUMAN_TRUE_HEIGHT = 1.1;
 const GLB_NEUTRAL_COLOR = 0x8a8378; // grit stone-grey for a colourless (near-white/black) GLB material
 const GLB_DESAT_MIX = 0.35;         // fraction each imported colour is pulled toward its own luma
 let _glbLoader = null;
@@ -2547,25 +2551,13 @@ function spriteTextureFor(slug){
    applied per render pass by updateSpriteBillboardYaw() (scheduleRender, below) rather than baked
    here — the group's OWN rotation.y is reset every dirty render, so it never drifts out of sync with
    whichever way setUnits/rotate() last left the camera. */
-function buildSpriteBillboard(entry){
-  const tex = spriteTextureFor(entry.slug);
-  if(!tex) return null; // not loaded yet / failed load -> caller falls through, never rejects
-  // entry.scale = the per-slug heads-line-up calibration from the sprite-review overlay
-  // (dev/sprite-review.py -> sprite-tags-overlay.json -> gen-sprite-registry.py) — crops vary
-  // in headroom/tightness, so the size ladder alone can't make same-size creatures read the
-  // same height.
-  const calib = (typeof entry.scale === "number" && entry.scale > 0) ? entry.scale : 1;
-  // DUNGEON-GRAPH.md law 1 (TRUE-SCALE RENDER LAW): scaleVsHuman (feet/5.5, the real progression-payoff
-  // ratio) wins over the SRD size-CATEGORY ladder (spriteSizeScaleFor) whenever it's present — on either
-  // the registry entry itself (once data/sprite-registry.js's corpus-sizing fold lands, HANDOFF item 2)
-  // or passed straight through on the board piece data (`entry.scaleVsHuman`, a caller-supplied override
-  // — no registry edit required to exercise true scale today). Absent on both -> the old compressed
-  // SRD-category ladder, byte-identical to before this law (the "legacy fallback view only" clause).
-  const sizeMultiplier = (typeof entry.scaleVsHuman === "number" && entry.scaleVsHuman > 0)
-    ? entry.scaleVsHuman
-    : spriteSizeScaleFor(entry.size);
-  const h = sizeMultiplier * GLB_TARGET_HEIGHT * calib;
-  const geo = new THREE.PlaneGeometry(h, h); // square plane; the sprite's own alpha silhouette reads the real shape
+// BEAUTY-WAVE.md VP1: shared billboard-mesh construction, factored out of buildSpriteBillboard so
+// the interior TRUE-SCALE path (interiorSpriteBillboard, below) can build a differently-proportioned
+// (width != height, from the texture's own aspect) plane through the exact same material/shadow
+// setup, rather than forking that logic a second time. w/h are already-final WORLD units; this
+// function does no sizing math of its own.
+function buildSpriteBillboardMesh(tex, w, h, slug){
+  const geo = new THREE.PlaneGeometry(w, h);
   const mat = new THREE.MeshBasicMaterial({
     map: tex, transparent: true, alphaTest: 0.5, side: THREE.DoubleSide, depthWrite: true
   });
@@ -2595,9 +2587,67 @@ function buildSpriteBillboard(entry){
   const g = new THREE.Group();
   g.add(mesh);
   g.userData.sprite = true;
-  g.userData.spriteSlug = entry.slug;
+  g.userData.spriteSlug = slug;
   g.userData.spriteBillboardMesh = mesh; // updateSpriteBillboardYaw's per-frame Y-facing target
   return g;
+}
+
+function buildSpriteBillboard(entry){
+  const tex = spriteTextureFor(entry.slug);
+  if(!tex) return null; // not loaded yet / failed load -> caller falls through, never rejects
+  // entry.scale = the per-slug heads-line-up calibration from the sprite-review overlay
+  // (dev/sprite-review.py -> sprite-tags-overlay.json -> gen-sprite-registry.py) — crops vary
+  // in headroom/tightness, so the size ladder alone can't make same-size creatures read the
+  // same height.
+  const calib = (typeof entry.scale === "number" && entry.scale > 0) ? entry.scale : 1;
+  // DUNGEON-GRAPH.md law 1 (TRUE-SCALE RENDER LAW): scaleVsHuman (feet/5.5, the real progression-payoff
+  // ratio) wins over the SRD size-CATEGORY ladder (spriteSizeScaleFor) whenever it's present — on either
+  // the registry entry itself (once data/sprite-registry.js's corpus-sizing fold lands, HANDOFF item 2)
+  // or passed straight through on the board piece data (`entry.scaleVsHuman`, a caller-supplied override
+  // — no registry edit required to exercise true scale today). Absent on both -> the old compressed
+  // SRD-category ladder, byte-identical to before this law (the "legacy fallback view only" clause).
+  // NOTE (BEAUTY-WAVE.md VP1 OUT OF SCOPE): this is the TABLETOP convention, deliberately untouched —
+  // interior pieces route through interiorSpriteBillboard below, its own TRUE-SCALE sizing.
+  const sizeMultiplier = (typeof entry.scaleVsHuman === "number" && entry.scaleVsHuman > 0)
+    ? entry.scaleVsHuman
+    : spriteSizeScaleFor(entry.size);
+  const h = sizeMultiplier * GLB_TARGET_HEIGHT * calib;
+  return buildSpriteBillboardMesh(tex, h, h, entry.slug); // square plane; the sprite's own alpha silhouette reads the real shape
+}
+
+// BEAUTY-WAVE.md VP1 (the kaiju-scale-bug fix): interior pieces are TRUE-SCALE (cellSize: 1 world
+// unit = 5ft, DUNGEON-GRAPH.md law 1), NOT the tabletop's render-height-multiplier convention above
+// — a medium creature must stand ~1.1 world units tall in a room, not several. Height comes from
+// entry.scaleTrue (the registry fold, feet/5.5) or a caller-supplied scaleVsHuman override, falling
+// back to 1.0 (an undressed human) when neither is present. Width is derived from the loaded
+// texture's own pixel aspect ratio (a sprite crop is rarely square) rather than the tabletop's
+// baked square plane. Returns {group, height} so interiorBuildPieces can floor-offset + wall-clamp
+// without re-deriving the height.
+function interiorSpriteBillboard(entry, wallHeightCap){
+  const tex = spriteTextureFor(entry.slug);
+  if(!tex) return null; // not loaded yet / failed load -> caller falls through, never rejects
+  const scaleTrue = (typeof entry.scaleTrue === "number" && entry.scaleTrue > 0)
+    ? entry.scaleTrue
+    : (typeof entry.scaleVsHuman === "number" && entry.scaleVsHuman > 0)
+      ? entry.scaleVsHuman
+      : 1.0;
+  let h = HUMAN_TRUE_HEIGHT * scaleTrue;
+  let oversizeClamped = false;
+  // Cap render height at the room's wall height * 0.95 (a titanic in a human room is a SCALE-DOMAIN
+  // problem — DUNGEON-GRAPH.md's scale-domain law — not something this renderer should paper over by
+  // clipping through the ceiling).
+  if(typeof wallHeightCap === "number" && wallHeightCap > 0 && h > wallHeightCap){
+    h = wallHeightCap;
+    oversizeClamped = true;
+  }
+  const img = tex.image;
+  const aspect = (img && img.width && img.height) ? (img.width / img.height) : 1;
+  const w = h * aspect;
+  const g = buildSpriteBillboardMesh(tex, w, h, entry.slug);
+  if(oversizeClamped){
+    console.warn("qa: oversize-clamped", entry.slug, "-> capped at wall height", wallHeightCap);
+  }
+  return { group: g, height: h };
 }
 
 function figureFor(archetype, seed, tint, silhouette, weapon, recipeSlug, pcRecipe, kind, className, wholeKeyOverride){
@@ -4378,27 +4428,38 @@ function interiorBuildLights(lights, cx, cz){
 
 // data.pieces -> billboard sprites standing IN the room (DUNGEON-GRAPH.md U3 iteration-2, ruling 3:
 // "creatures render at true scale... standing on the floor"). Each entry {slug, cellX, cellY,
-// scaleVsHuman?} joins the sprite registry via the SAME spriteEntryFor/buildSpriteBillboard path a
-// combat board's units use — no second billboard code path invented. `entry.floor` (when the registry
-// carries it — a future per-slug base-offset field, degrades to 0 today) nudges the sprite's feet up/
-// down off the y=-0.5 floor plane (a flying/floating creature's registry entry can sit its silhouette
-// correctly without this function knowing anything about flight). Returns {group, resolved, requested}
-// so setInteriorBoard can expose "did every piece sprite resolve" on window.Theater for the capture
-// rig's metrics (a piece whose slug doesn't join the registry, or whose texture hasn't loaded yet,
-// silently skips — same total-function/never-throw discipline every other figure resolution in this
-// file keeps).
-function interiorBuildPieces(pieces, cx, cz){
+// scaleVsHuman?} joins the sprite registry, but — BEAUTY-WAVE.md VP1 fix — sizes through
+// interiorSpriteBillboard's OWN true-scale math (HUMAN_TRUE_HEIGHT * scaleTrue), NOT
+// buildSpriteBillboard's tabletop render-height-multiplier convention (the kaiju bug: a medium
+// creature inherited several world units of TABLE height in a room where 1 unit = 5ft). `entry.floor`
+// (the registry's ground-contact-line fraction, up from the image's bottom edge) offsets the quad
+// down so that line — not just the image's bottom pixel row — sits on y=-0.5, the room floor plane
+// (a flying/floating creature's registry entry can sit its silhouette correctly without this function
+// knowing anything about flight). Returns {group, resolved, requested} so setInteriorBoard can expose
+// "did every piece sprite resolve" on window.Theater for the capture rig's metrics (a piece whose slug
+// doesn't join the registry, or whose texture hasn't loaded yet, silently skips — same total-function/
+// never-throw discipline every other figure resolution in this file keeps).
+function interiorBuildPieces(pieces, cx, cz, wallHeightBase){
   const group = new THREE.Group();
   let resolved = 0;
+  // 0.95 * wall height: a titanic-in-a-human-room is a SCALE-DOMAIN problem, not a rendering one —
+  // this cap only keeps a piece from visibly poking through the ceiling.
+  const wallCap = (typeof wallHeightBase === "number" && wallHeightBase > 0) ? wallHeightBase * 0.95 : null;
   (pieces || []).forEach((p) => {
     const base = spriteEntryFor(p.slug);
     if(!base) return;
     const entry = Object.assign({}, base, {
       scaleVsHuman: p.scaleVsHuman != null ? p.scaleVsHuman : base.scaleVsHuman
     });
-    const g = buildSpriteBillboard(entry);
-    if(!g) return; // texture not loaded yet — falls through, same as every other billboard resolution
-    g.position.set((p.cellX || 0) - (cx || 0), (base.floor || 0) - 0.4, (p.cellY || 0) - (cz || 0)); // origin-shifted like every tile/light (the v3 card bug: raw cell coords rendered pieces outside the fitted frame); -0.4: feet on the y=-0.5 floor plane
+    const built = interiorSpriteBillboard(entry, wallCap);
+    if(!built) return; // texture not loaded yet — falls through, same as every other billboard resolution
+    const g = built.group;
+    const floorFrac = (typeof base.floor === "number") ? base.floor : 0;
+    g.position.set(
+      (p.cellX || 0) - (cx || 0),
+      -0.5 - floorFrac * built.height, // the ground-contact line (image-bottom when floor=0) sits on the y=-0.5 floor plane
+      (p.cellY || 0) - (cz || 0) // origin-shifted like every tile/light (the v3 card bug: raw cell coords rendered pieces outside the fitted frame)
+    );
     // DUNGEON-GRAPH.md finale-gate finding: a caller may tag an interior piece with the combat foe's
     // own `fid` (o.foes[i].fid, combat.js's combatStart) so play(verb,{who:fid}) — the SAME production
     // standee-verb entry point combat damage already routes through (§A STANDEE VERBS WIRING, this
@@ -4689,7 +4750,7 @@ function setInteriorBoard(data){
   // DUNGEON-GRAPH.md U3 iteration-2, ruling 3: creature/PC billboard sprites standing in the room
   // (data.pieces, a plain field the caller sets directly on the board object — independent of
   // interiorBuildBoard, same as data.lightProfile above).
-  const piecesBuilt = interiorBuildPieces(data.pieces, cx, cz);
+  const piecesBuilt = interiorBuildPieces(data.pieces, cx, cz, data.wallHeightBase);
   S.interiorGroup.add(piecesBuilt.group);
   S.interiorPiecesResolved = piecesBuilt.resolved;
   S.interiorPiecesRequested = piecesBuilt.requested;
@@ -5422,3 +5483,13 @@ Object.defineProperty(window.Theater, "spriteChannel", {
 // network/file image load ("stub texture loader" per the spec). Nothing in product logic reads or
 // writes this from outside spriteTextureFor — same read-only-diagnostics spirit as window.Theater.stats.
 window.Theater._spriteTextureCache = SPRITE_TEXTURE_CACHE;
+
+// BEAUTY-WAVE.md VP1 — TEST-ONLY SEAM: exposes interiorBuildPieces directly (the true-scale interior
+// piece sizing this unit fixed) so a harness (dev/verify-dungeon-interior.mjs's VP1 checks) can build
+// pieces and inspect the resulting mesh geometry without booting a full setInteriorBoard render (which
+// needs a live WebGLRenderer/scene — see dev/battle-gate/capture-interior-study.mjs for that end). Same
+// read-only-diagnostics spirit as refFigure/_spriteTextureCache above; nothing in product logic calls
+// this from outside interiorBuildPieces's own production call site (setInteriorBoard).
+window.Theater._interiorBuildPiecesForTest = function(pieces, cx, cz, wallHeightBase){
+  return interiorBuildPieces(pieces, cx, cz, wallHeightBase);
+};

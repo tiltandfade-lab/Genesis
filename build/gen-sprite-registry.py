@@ -53,6 +53,18 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DEFAULT_MANIFEST = os.path.join(ROOT, "dev", "sprite-manifests", "v2-manifest.json")
 BESTIARY_DRAFT = os.path.join(ROOT, "dev", "model-qa", "realm-bestiary-draft.json")
 OVERLAY = os.path.join(ROOT, "dev", "model-qa", "sprite-tags-overlay.json")
+# BEAUTY-WAVE.md VP1 (the kaiju-scale-bug fix): TRUE-SCALE sizing sources, folded into
+# feet/scaleTrue below. CORPUS_SIZING keys ARE registry slugs (spr-<realm>-<slug>) — a
+# direct dict join. V3_SIZING keys are "realm/label" (the incoming v3 wave, not yet cut
+# in this repo state) and carry a `replaces` field ("<oldSheetStem>-c<N>.png|r<ROW>c<COL>")
+# pointing at the OLD sheet+grid-cell it supersedes; joined via a 5-column-grid cell-number
+# reconstruction against the registry's own (sheet, cell) pair. Slugs with no resolvable
+# join (uncut v3 waves, or a replaces string that doesn't parse) are skipped — data is
+# never invented (spec's own "else skip uncut slugs" clause).
+CORPUS_SIZING = os.path.join(ROOT, "dev", "model-qa", "corpus-sizing.json")
+V3_SIZING = os.path.join(ROOT, "dev", "sprite-sheets", "incoming", "v3", "v3-sizing.json")
+V3_REPLACES_RE = re.compile(r"^(.*)-c\d+\.png\|r(\d+)c(\d+)$")
+V3_GRID_COLS = 5  # matches the observed 25-cell (5x5) v2-manifest sheet shape
 SPRITES_DIR = os.path.join(ROOT, "assets", "sprites")
 OUT = os.path.join(ROOT, "data", "sprite-registry.js")
 REJECTS = os.path.join(ROOT, "dev", "sprite-manifests", "REJECTS.md")
@@ -108,6 +120,36 @@ def load_bestiary_by_realm():
     return by_realm
 
 
+def load_sizing_sources():
+    """Returns (corpus_sizing_by_slug, v3_by_sheet_cell). corpus_sizing_by_slug keys are
+    registry slugs directly. v3_by_sheet_cell keys are (sheetStem, cellNumber) reconstructed
+    from each v3-sizing.json entry's `replaces` field, values are {feet, scaleVsHuman}."""
+    corpus = load_json(CORPUS_SIZING, default={})
+    v3 = load_json(V3_SIZING, default={})
+    v3_by_sheet_cell = {}
+    for _key, e in v3.items():
+        m = V3_REPLACES_RE.match(e.get("replaces") or "")
+        if not m:
+            continue
+        sheet_stem, row, col = m.group(1), int(m.group(2)), int(m.group(3))
+        n = (row - 1) * V3_GRID_COLS + col
+        if isinstance(e.get("feet"), (int, float)):
+            v3_by_sheet_cell[(sheet_stem, n)] = {"feet": e["feet"], "scaleVsHuman": e.get("scaleVsHuman")}
+    return corpus, v3_by_sheet_cell
+
+
+def sizing_for(slug, sheet, cell, corpus_sizing, v3_by_sheet_cell):
+    """Feet/scaleTrue for a cut slug, per BEAUTY-WAVE.md VP1's fold priority: corpus-sizing.json
+    (direct slug join) first, then the v3-sizing.json replaces-join, else None (skip)."""
+    hit = corpus_sizing.get(slug)
+    if hit and isinstance(hit.get("feet"), (int, float)):
+        return hit["feet"]
+    hit = v3_by_sheet_cell.get((sheet, cell))
+    if hit:
+        return hit["feet"]
+    return None
+
+
 def join_creature(realm, name, bestiary_by_realm):
     realm_idx = bestiary_by_realm.get(realm)
     if not realm_idx:
@@ -149,6 +191,10 @@ def emit_entry(slug, e):
         fields.append("redlined:" + json.dumps(bool(e["redlined"])))
     if e.get("scale") is not None:
         fields.append(f'scale:{json.dumps(e["scale"])}')
+    if e.get("feet") is not None:
+        fields.append(f'feet:{json.dumps(e["feet"])}')
+    if e.get("scaleTrue") is not None:
+        fields.append(f'scaleTrue:{json.dumps(e["scaleTrue"])}')
     if e.get("floor") is not None:
         fields.append(f'floor:{json.dumps(e["floor"])}')
     if e.get("verdict") is not None:
@@ -168,7 +214,11 @@ HEADER = (
     "Join: cell name <-> realm-bestiary-draft.json creature name within the same realm "
     "(exact, then case/punct-insensitive); unjoined cells keep role/cr/type/size/frame:null "
     "and are never dropped. tags default to [realm,kind,role,type,size] lowercased; the "
-    "overlay's tags (when present for a slug) replace the auto set. Regenerate; never hand-edit. */\n"
+    "overlay's tags (when present for a slug) replace the auto set. BEAUTY-WAVE.md VP1: cut "
+    "entries additionally carry feet (real-world height, ft) and scaleTrue (feet/5.5, 2dp) "
+    "folded from dev/model-qa/corpus-sizing.json + dev/sprite-sheets/incoming/v3/v3-sizing.json "
+    "where joinable; the legacy scale field is a SEPARATE tabletop-only calibration, untouched. "
+    "Regenerate; never hand-edit. */\n"
 )
 
 
@@ -177,6 +227,8 @@ def build_registry(manifest_path, check_only=False, overlay_path=OVERLAY, out_pa
     bestiary_by_realm = load_bestiary_by_realm()
     overlay = load_json(overlay_path, default={})
     overlay = {k: v for k, v in overlay.items() if not k.startswith("_")}
+    corpus_sizing, v3_by_sheet_cell = load_sizing_sources()
+    sizing_joined = 0
 
     entries = OrderedDict()
     seen_slugs = {}
@@ -261,11 +313,22 @@ def build_registry(manifest_path, check_only=False, overlay_path=OVERLAY, out_pa
                 entry["note"] = ov["note"].strip()
             if cell.get("cue"):
                 cell_cue[slug] = cell["cue"]
+            # BEAUTY-WAVE.md VP1 registry fold: TRUE-SCALE feet/scaleTrue, cut slugs only
+            # (the kaiju-scale-bug fix's data half — src/ui/theater-boot.js's interior
+            # sizing reads these). scaleTrue = feet / 5.5 (5.5ft = the SRD medium-human
+            # reference height), 2dp.
+            if entry["status"] == "cut":
+                feet = sizing_for(slug, sheet_id, n, corpus_sizing, v3_by_sheet_cell)
+                if isinstance(feet, (int, float)):
+                    entry["feet"] = feet
+                    entry["scaleTrue"] = round(float(feet) / 5.5, 2)
+                    sizing_joined += 1
             entries[slug] = entry
 
     coverage = (monster_joined / monster_total * 100) if monster_total else 100.0
 
     print(f"sheets: {len(manifest.get('sheets', []))}  cells: {len(entries)}")
+    print(f"VP1 sizing fold: {sizing_joined} cut slug(s) got feet/scaleTrue")
     print(f"monster-kind join coverage: {monster_joined}/{monster_total} ({coverage:.1f}%)")
     if warn_unjoined:
         print(f"WARN — {len(warn_unjoined)} unjoined cell(s):")

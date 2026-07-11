@@ -217,6 +217,24 @@ ray TODAY (assert the intersection); after: zero standees occluded across 100 se
 combat fits (raycast assert); stub/fade prisms restore when the sightline clears; budget
 unchanged; determinism; loop gate re-shot + READ (every figure fully visible in all 15 shots).
 
+## THE PROP PERSPECTIVE LAW (Adam 2026-07-11 night — the opposite-perspective cyber screen)
+
+Two prop classes, decided by attachment:
+1. **CAMERA-FACING** (creatures, NPCs, free-standing dressing: trees, gravestones, statues) —
+   ¾ eye-level art, billboarded. Baked perspective is legal because the quad always faces you.
+2. **SURFACE-ATTACHED** (wall: screens/paintings/shelves/sconces · floor: rugs/grates/trapdoors
+   · ceiling) — art must be FLAT (front elevation for wall items, top-down plan for floor
+   items) and mounts as the face of a SHALLOW EXTRUSION prism (relief prop): depth per
+   archetype (painting 0.04 · screen 0.05 · sconce 0.08 · shelf 0.3 · rug 0.01), side faces
+   AUTO-MATERIAL-MATCHED by edge-sampling the art's border pixels (bronze frame → bronze
+   sides, mechanically). The scene's real camera perspectives the volume — baked-angle art can
+   never fight placement again.
+Enforcement: (a) BW2-5 builds `extrusionPropFor(entry)` and wall-hang/floor-lay dressing
+mounts through it; (b) the dressing manifests gain a `facing: front|top|three-quarter` field —
+attached archetypes generate FLAT in every future packet (the dressing-gen prompt clause);
+(c) triage: existing attached-class arrivals whose baked angle fights placement are flagged at
+the fold gate (eyes), reclassified free-standing or re-queued.
+
 ## BW2-6 — THE CONVERGENCE GATE (replaces VP8's caption queue)
 
 Re-shoot the three anchor states on real rolled dungeons with BW2-1..5 on: gloom combat,

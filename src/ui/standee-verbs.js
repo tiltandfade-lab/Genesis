@@ -23,29 +23,37 @@
    below, which documents exactly when it substitutes `mesh.material.map`.
 
    ============================================================================
-   THE COMPOSITION CONTRACT (read before touching rotation math in this file)
+   THE COMPOSITION CONTRACT (read before touching rotation math in this file) — REVISED BW2-2b
    ============================================================================
    updateSpriteBillboardYaw() (theater-boot.js) does, every dirty render, for every group tagged
    userData.sprite (both S.unitGroup children AND interior "pieces" sub-group children):
-       fig.rotation.order = "YXZ"; fig.rotation.y = facing; fig.rotation.x = tilt;
-   That write happens on the OUTER group — the exact object this module receives as
-   `pieceOrUnitGroup`. Two consequences shape this file's design:
+       fig.rotation.order = "YXZ"; fig.rotation.y = facing + kilterRad;
+       const wrap = fig.userData.standeeWrap; if(wrap){ wrap.rotation.x = tilt; } else { fig.rotation.x = tilt; }
+   BW2-2b (docs/BEAUTY-WAVE-2.md, "FLOOR-ALIGNED BASES") split camera-pitch tilt OFF the outer group and
+   onto an INNER wrapper (`fig.userData.standeeWrap`, built EAGERLY by buildSpriteBillboardMesh around
+   just the sprite mesh — never the plinth base/acting ring, which mount as plain SIBLING children of
+   `fig` itself, interiorBuildPieces/setUnits/setActingUnit) — a base inheriting the outer group's own
+   camera tilt was reading as a coin propped on edge instead of a flat mini base. Three consequences
+   shape this file's design:
      1. group.position, group.scale, group.rotation.z, and material.color/opacity are NEVER touched by
         the facing code — verbs are free to animate those fields directly on the outer group with zero
         risk of being stomped (act-attack/move-step's translate, hit-crit's squash-stretch scale,
         hit-damage/heal/buff/debuff's tint pulses all use this path).
-     2. group.rotation.x/y are NOT free — they are re-asserted from `tilt`/`facing` every single dirty
-        frame, so a verb writing them directly loses instantly. fall-death is the one verb in this v1
-        set that needs a rotation the facing code doesn't own (tipping the standee onto the floor
-        plane), so it lazily reparents the mesh into an inner wrapper Group (`ensureWrap`, below) the
-        FIRST time any verb needs it, and animates the WRAPPER's local rotation.x instead. Three.js
-        composes a child's local transform with its parent's world transform automatically — the wrap's
-        tip-rotation and the outer group's camera-tilt/yaw compose exactly as intended, and the outer
-        group's rotation.x/y stay byte-identical to whatever updateSpriteBillboardYaw last wrote,
-        because this module never assigns to them. (Verified by dev/verify-standee-verbs.mjs check 5.)
-   The wrapper is created lazily and reused (group.userData.standeeWrap) rather than unconditionally at
-   buildSpriteBillboard() time, so verbs that never need rotation (the majority of v1) pay zero extra
-   scene-graph depth or reparenting cost.
+     2. group.rotation.y is NOT free — the facing code re-asserts it (camera yaw + this standee's own
+        seeded kilter offset, BW2-2b item 4) every dirty frame, so a verb writing it directly loses
+        instantly. No v1 verb needs to.
+     3. group.rotation.x IS free as of BW2-2b — camera-pitch tilt moved to the inner wrap (above), so
+        the facing code never touches the OUTER group's rotation.x at all anymore. fall-death (the one
+        verb in this v1 set that needs a rotation the facing code doesn't own) writes STRAIGHT to
+        `group.rotation.x` — tipping the outer group tips the base/ring RIGHT ALONG WITH the sprite,
+        since they're all plain siblings of that same group, exactly the "whole miniature-with-base
+        tips as one" physicality the spec calls for, with no reparenting trick needed. (Verified by
+        dev/verify-standee-verbs.mjs's A6/A7 — rewritten for this split.)
+   Pre-BW2-2b, this same field (group.rotation.x) belonged to the facing code, so fall-death instead
+   reparented into a LAZY wrapper (`ensureWrap`) built the first time any verb needed rotation — that
+   function is gone now that verb-tilt has a free field of its own to write to directly; the wrap that
+   remains (`userData.standeeWrap`) is theater-boot.js's own eagerly-built camera-tilt wrapper, not
+   anything this module creates or reparents into.
 
    ============================================================================
    Declarative keyframes, not closures — and why that's a deliberate divergence from theater-verbs.js
@@ -237,21 +245,6 @@ function pushTween(dur, onUpdate, onDone){
   return true;
 }
 
-/* ensureWrap — lazily reparents a standee's mesh into an inner wrapper Group the FIRST time any verb
-   on this group needs local rotation (fall-death only, in v1). Idempotent (group.userData.standeeWrap
-   caches it). See THE COMPOSITION CONTRACT above for why this exists at all. */
-function ensureWrap(group, mesh){
-  if(group.userData.standeeWrap) return group.userData.standeeWrap;
-  if(!_ctx || !_ctx.THREE) return null;
-  const THREE = _ctx.THREE;
-  const wrap = new THREE.Group();
-  const kids = group.children.slice();
-  kids.forEach((c) => { group.remove(c); wrap.add(c); });
-  group.add(wrap);
-  group.userData.standeeWrap = wrap;
-  return wrap;
-}
-
 /* resolveStandee — validates `group` looks like a billboard standee (buildSpriteBillboard's own
    contract: userData.sprite=true + userData.spriteBillboardMesh set, theater-boot.js) and returns the
    working handles a verb needs. Returns null (clean no-op, never throws) for anything else — a whole-
@@ -286,9 +279,12 @@ function runKeyframeVerb(standee, spec, opts){
   const THREE = _ctx.THREE;
   const baseX = group.position.x, baseY = group.position.y, baseZ = group.position.z;
   const baseScaleX = group.scale.x, baseScaleY = group.scale.y, baseScaleZ = group.scale.z;
-  const needsTilt = spec.keyframes.some((k) => k.tiltX !== 0);
-  const wrap = needsTilt ? ensureWrap(group, mesh) : (group.userData.standeeWrap || null);
-  const baseTiltX = wrap ? wrap.rotation.x : 0;
+  // BW2-2b COMPOSITION CONTRACT (see header): group.rotation.x is FREE as of this unit — camera-pitch
+  // tilt lives on the OUTER group's own inner wrap (theater-boot.js's updateSpriteBillboardYaw), never
+  // touched here — so tiltX (fall-death) writes straight to the OUTER group directly. Tipping `group`
+  // tips its base/ring siblings right along with it (the "whole mini as one" physicality), with no
+  // wrapper/reparenting step needed.
+  const baseTiltX = group.rotation.x || 0;
 
   const target = (opts && opts.targetPos && typeof opts.targetPos.x === "number" && typeof opts.targetPos.z === "number")
     ? opts.targetPos : null;
@@ -307,7 +303,7 @@ function runKeyframeVerb(standee, spec, opts){
     // but the field composes correctly if one ever does) gets both contributions, not one clobbering
     // the other.
     group.position.set(baseX + deltaX * s.along + s.jx, baseY + s.dy, baseZ + deltaZ * s.along);
-    if(wrap) wrap.rotation.x = s.tiltX;
+    group.rotation.x = s.tiltX;
     group.scale.set(baseScaleX * s.scale, baseScaleY * s.scale * s.scaleY, baseScaleZ * s.scale);
     if(baseColor && mat.color){
       tintTarget.setHex(s.tintColor);
@@ -328,7 +324,7 @@ function runKeyframeVerb(standee, spec, opts){
     }
     group.position.set(baseX, baseY, baseZ);
     group.scale.set(baseScaleX, baseScaleY, baseScaleZ);
-    if(wrap) wrap.rotation.x = baseTiltX;
+    group.rotation.x = baseTiltX;
     mesh.material = origMat;
     if(mat.dispose) mat.dispose();
     if(typeof opts.onDone === "function") opts.onDone();

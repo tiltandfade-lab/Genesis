@@ -749,10 +749,14 @@ function runVP1Scenario(bootSourceText, runnerSrc, extraArgs){
   }
 }
 
-group("22 — RED-FIRST: pre-fix theater-boot.js (git HEAD, before this unit's edits) built a medium piece's tabletop billboard WELL over 2 world units");
+group("22 — RED-FIRST: pre-fix theater-boot.js (merge-base with master, before this unit's edits) built a medium piece's tabletop billboard WELL over 2 world units");
 {
-  const OLD_SOURCE = execFileSync("git", ["show", "HEAD:src/ui/theater-boot.js"], { cwd: ROOT, encoding: "utf-8" });
-  ok(!OLD_SOURCE.includes("_interiorBuildPiecesForTest"), "sanity: HEAD's theater-boot.js predates this unit's test seam (proves this is really the pre-fix source, not an accidental re-read of the working tree)");
+  // Resolve the pre-fix tip as the merge-base with master (robust to this branch gaining more
+  // commits later) rather than a bare "HEAD", which would start pointing at THIS unit's own fix
+  // commit the moment it lands — silently turning this into a no-op re-read of the working tree.
+  const preFixRef = execFileSync("git", ["merge-base", "HEAD", "master"], { cwd: ROOT, encoding: "utf-8" }).trim();
+  const OLD_SOURCE = execFileSync("git", ["show", `${preFixRef}:src/ui/theater-boot.js`], { cwd: ROOT, encoding: "utf-8" });
+  ok(!OLD_SOURCE.includes("_interiorBuildPiecesForTest"), `sanity: the pre-fix tip (${preFixRef}) theater-boot.js predates this unit's test seam (proves this is really the pre-fix source, not an accidental re-read of the working tree)`);
   const red = runVP1Scenario(OLD_SOURCE, OLD_RUNNER_SRC, []);
   if(!red.ok){
     fail++; console.error("  FAIL: pre-fix scenario threw: " + red.error);

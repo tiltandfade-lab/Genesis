@@ -1,0 +1,111 @@
+{
+  "_generated_by": "build/gen-realm-palettes.py (r2) \u2014 never hand-edit",
+  "realm": "high-seas",
+  "source": "style-ref+corpus",
+  "paletteSize": 48,
+  "colors": [
+    "#293450",
+    "#115a62",
+    "#350733",
+    "#2a4c56",
+    "#4f4136",
+    "#20110f",
+    "#d7e9e0",
+    "#100b0a",
+    "#4a0c58",
+    "#261347",
+    "#362e25",
+    "#37929f",
+    "#57b4bb",
+    "#1d0927",
+    "#142a2e",
+    "#628180",
+    "#99149d",
+    "#841256",
+    "#593a22",
+    "#8b7657",
+    "#c017c1",
+    "#0e1414",
+    "#6a0f7d",
+    "#455149",
+    "#030203",
+    "#130616",
+    "#7752c2",
+    "#343c3c",
+    "#301d19",
+    "#501d33",
+    "#3b6870",
+    "#c85ed7",
+    "#233233",
+    "#163e45",
+    "#b68968",
+    "#8cd3dc",
+    "#75543b",
+    "#0d1e22",
+    "#8fa096",
+    "#1c1f1c",
+    "#d1c199",
+    "#07080a",
+    "#614272",
+    "#5a6759",
+    "#474b36",
+    "#7b835d",
+    "#3b4736",
+    "#324538"
+  ],
+  "outline": "tbd",
+  "hueFamilyCoverage": {
+    "0": {
+      "pctOfCorpus": 0.0977,
+      "paletteEntries": 7
+    },
+    "1": {
+      "pctOfCorpus": 0.0925,
+      "paletteEntries": 3
+    },
+    "2": {
+      "pctOfCorpus": 0.0396,
+      "paletteEntries": 2
+    },
+    "3": {
+      "pctOfCorpus": 0.0309,
+      "paletteEntries": 2
+    },
+    "4": {
+      "pctOfCorpus": 0.0454,
+      "paletteEntries": 2
+    },
+    "5": {
+      "pctOfCorpus": 0.1337,
+      "paletteEntries": 1
+    },
+    "6": {
+      "pctOfCorpus": 0.1988,
+      "paletteEntries": 12
+    },
+    "7": {
+      "pctOfCorpus": 0.057,
+      "paletteEntries": 2
+    },
+    "8": {
+      "pctOfCorpus": 0.0515,
+      "paletteEntries": 2
+    },
+    "9": {
+      "pctOfCorpus": 0.1152,
+      "paletteEntries": 8
+    },
+    "10": {
+      "pctOfCorpus": 0.091,
+      "paletteEntries": 3
+    },
+    "11": {
+      "pctOfCorpus": 0.0468,
+      "paletteEntries": 1
+    }
+  },
+  "corpusPixelsSampled": 0,
+  "fallbackNotes": [
+    "no cut sprites in registry for this realm yet \u2014 style-ref only"
+  ]
+}

@@ -23,7 +23,16 @@ Walk segments outdoors render as dioramas with TERRAIN PLATES instead of room pr
    (REALM_MATERIALS gains `terrain` surfaces: soil/sand/snow/asphalt/boardwalk).
 2. **Horizon:** a backdrop ring of 2-4 distant-silhouette cards (treeline/skyline/
    dunes — a new `horizon` roster in the dressing families, flagships first) +
-   the realm's graded void; skirt law applies to the slab edge.
+   the realm's graded void; skirt law applies to the slab edge. **ART-SOURCE GAP
+   (Fable review 2026-07-10):** `horizon` is NOT in DRESSING-GEN's ~51 sheets — no
+   art is queued. UW1 does NOT block on it: ship a procedural silhouette fallback
+   behind the same seam (`horizonCardFor(realm) || proceduralSilhouette` — seeded
+   dark-value ridge/skyline shapes from the realm palette, the VP6 effect-seam
+   pattern), and queue `horizon` ×3 flagship sheets in the next codex campaign.
+3b. **Weather seam (Fable's §G2 ruling):** exterior atmosphere = the VP6 mote channel
+   extended, not a new system — rain/snow/ash-fall/ember variants as realm-keyed
+   drifting cards over the terrain plate + a realm-sky grade. UW1's executor extends
+   `motes`, never invents a weather engine.
 3. **Big foliage:** exterior dressing rolls denser than interiors (trees/rocks as
    large cards + occasional prism landmarks from REALM_PROPS), same dressPlan seams,
    `location:"exterior"` tags already exist in the manifests.
@@ -65,6 +74,11 @@ The DM's voice gets a face. New art family `portraits`:
 1. **Format:** bust crops (shoulders up), 512px source, realm-styled but CLEANER than
    sprites (portraits may run painterly-pixel hybrid — they're read at full size; the
    50%-zoom law doesn't apply). Chroma-keyed sheets like everything else, 3x3 grids.
+   **NO THIRD STYLE REGISTER (Fable review):** portraits BIND to the realm master
+   palette anchors + the realm's outline law — looser quantization is fine (they may
+   carry more ramp steps than sprites), unanchored is not. A painterly bust in colors
+   the realm doesn't own reads as a different game pasted into the lower third; the
+   portrait prompt clause carries the realm palette + outline treatment.
 2. **Who (flagship first):** every PC ancestry×sex (24 busts, class-agnostic dress) +
    the flagship realms' named-tier NPC roster (~16 busts per flagship realm) + a
    generic-role fallback set per flagship (~8: guard/elder/merchant/priest/child/
@@ -75,9 +89,14 @@ The DM's voice gets a face. New art family `portraits`:
    surface. `guise_swap` swaps portraits too (GUISE law 1: the form set includes faces).
 4. **Presentation:** a dialogue panel over the diorama (lower-third, Ivalice tokens,
    translucent per VP5's language): speaker bust + name chip + the DM's line; the
-   panel is DOM, positioned like VP5's chips, hidden outside dialogue beats. Codex
-   packet: `dev/model-qa/portrait-gen/` (generated like dressing-gen once rosters
-   are red-penned — ~10-12 sheets for the flagship set).
+   panel is DOM, positioned like VP5's chips, hidden outside dialogue beats.
+   **CONTRACT SEAM (Fable review — the spec was silent and an executor would hand-roll
+   it, the HQ2-1 shape):** "dialogue beat" is defined at the contract boundary — a
+   `speaker: <codexNpcId>` field on the DM turn payload, normalized ONCE in
+   `dmFoldPayload`/`DM_EVENT_FIELDS` like every other field; panel shows iff speaker
+   resolves, bust resolves via the codex NPC's `portrait` binding. No handler-side
+   speaker inference. Codex packet: `dev/model-qa/portrait-gen/` (generated like
+   dressing-gen once rosters are red-penned — ~10-12 sheets for the flagship set).
 *Verify:* portrait registry joins (every named-tier flagship NPC resolves a bust or
 falls back to role); expression swap drives off the existing expressionSet field;
 binding — a bust bound to one NPC never appears on another (harness over the casting

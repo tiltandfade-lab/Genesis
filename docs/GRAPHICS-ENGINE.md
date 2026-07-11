@@ -12,6 +12,11 @@ painted cards in 3D space; soft real lighting with cast shadows; theatrical floa
 framing. Genesis renders ITS art (the pixel-sprite corpus, the realm palettes, PS1 grit on
 the WORLD only) through Wildermyth's machine.
 
+**VERDICT-SEAT NOTE (2026-07-10 night):** Adam delegated the remaining taste calls to
+Fable. Laws 2/2b below are now RULED (perspective ~20° ON · dither+snap OFF world);
+the VP0 study card is a confirmation gate read by Fable, escalating to Adam only on
+contradiction. §G is closed below.
+
 ## Why this fits (what today already proved)
 
 The 2026-07-10 dungeon-graph build converged on this grammar independently:
@@ -201,11 +206,16 @@ surface — prompts generate mechanically per SPRITE-GEN-V2 §10 once Adam appro
    no-blank-slots alts, additive fold, chroma per §7.
 Estimated total: ~51 sheets / ~900 cells — the next big codex campaign after round 3.
 
-## §G STILL OPEN FOR ADAM (small, non-blocking)
+## §G — RULED (Fable, delegated verdict seat, 2026-07-10 night; Adam may overrule)
 
-1. Corpse persistence: death verb leaves the card tipped on the floor — forever, or
-   fade after N rounds? (DF-brain says forever; render budget says probably fine.)
-2. Weather/exterior atmosphere (their system was un-researchable): defer to the
-   exterior-walks render pass, or spec a simple realm-sky + drift-particle card layer now?
-3. Blood tone default at the effects layer: full grim (current DM register) with the
-   children carve-out — confirm it applies to VISUALS too.
+1. **Corpse persistence: FOREVER.** The death card stays tipped on the floor — Adam
+   already ruled exactly this for the tabletop ("corpses default-persist, no
+   resurrection", TABLETOP-VISION 2026-07-07); the diorama inherits it. Bounded by
+   encounter size, so no growth problem. A room that remembers its dead is the thesis.
+2. **Weather: DEFERRED to UW1, seam named now.** Exterior atmosphere = the VP6 mote
+   channel extended (rain/snow/ash-fall/ember variants as realm-keyed drifting cards)
+   + a realm-sky grade — spec'd in UNIFICATION-WAVE UW1 §3b. No new system.
+3. **Blood: FULL GRIM applies to visuals.** One tone register across prose and pixels
+   (graphic death is a feature — the standing craft ruling). The children carve-out is
+   MECHANICAL, not interpretive: child-tagged entities never receive blood decals or
+   spatter; impact/dust effects only. Wired into BEAUTY-WAVE VP6 §4.

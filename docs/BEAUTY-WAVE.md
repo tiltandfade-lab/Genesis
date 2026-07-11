@@ -38,9 +38,15 @@ flagships stays queued, not gating.
 ## VP0 — THE TWO-FLAG STUDY CARD (run before everything; Adam's pixel-verdict)
 
 Same seeded gloom+fantasy rooms × four cells: {ortho, perspective ~20° FOV} ×
-{PSX dither+snap ON world, OFF world}. One card, four constructions, Adam picks with
-eyes. His pick locks GRAPHICS-ENGINE 2/2b before VP3/VP4 build on top. (Sprites remain
-PSX-exempt in all cells; tabletop untouched.)
+{PSX dither+snap ON world, OFF world}. **Standees IN FRAME in all four cells** — the
+sprite/world juxtaposition (clean sprites vs dithered walls) is the actual question
+the dither flag turns on; a card without characters can't answer it.
+**VERDICT SEAT (Adam delegated the taste calls 2026-07-10 night):** Fable pre-ruled
+both flags — PERSPECTIVE ~20° · DITHER+SNAP OFF world (grounds in GRAPHICS-ENGINE
+2/2b) — so VP1/VP3/VP4 are un-blocked. The card is now a CONFIRMATION gate, not a
+decision gate: shoot it, Fable reads it with eyes; escalate to Adam only if the
+pixels contradict the pre-registered ruling. (Sprites remain PSX-exempt in all
+cells; tabletop untouched.)
 *Verify:* the four cells are pixel-distinct (pairwise diff > threshold); harnesses
 green under both camera modes (placeCamera math asserted for perspective: action
 cluster fully in frustum).
@@ -98,10 +104,17 @@ sprite, then automatic on every future fold (extends the ADDITIVE FOLD slice ste
    LFS'd). Registry pxHeight fields regenerate.
 5. FLAGSHIPS gate the eyeball pass (fantasy/gloom/chrome contact sheets, READ);
    the other realms process mechanically under the same laws.
-*Verify:* every processed sprite's colors ⊆ its realm palette (exact set check);
-texel targets hit ±10%; alpha byte-identical where no fringe was removed; before/after
-contact sheet per flagship realm READ by the orchestrator + Adam. Mutation: run with
-quantization stubbed → the palette-subset check reds.
+*Verify:* every processed sprite's colors ⊆ its realm palette (exact set check —
+NOTE: this is guaranteed by the process itself, so it only proves the pass RAN;
+it says nothing about quality) **plus the QUALITY-LOSS GATE: per-sprite mean
+perceptual delta (ΔE, CIEDE2000 or Lab-distance) between original and quantized,
+emitted to a report; any sprite over threshold (start ≈ 8.0, tune on the flagship
+eyeball pass) lands on an auto-flag list for EYES — this is the only protection
+the nine non-flagship realms get, since they process mechanically with no eyeball
+pass**; texel targets hit ±10%; alpha byte-identical where no fringe was removed;
+before/after contact sheet per flagship realm READ by the orchestrator + Adam.
+Mutation: run with quantization stubbed → the palette-subset check reds; run with
+a deliberately-degraded palette (8 colors) → the ΔE gate reds.
 
 ## OUTLINE LAW (ruling #5 — per-realm, enforced in prompts + gates + the unification pass)
 
@@ -159,8 +172,13 @@ In `src/ui/theater-interior.js` (all seeded off walkId — determinism law):
    nudge (≤ 6%) + per-CELL micro-jitter (≤ 3%) via the existing per-instance color path
    — kills the single-flat-slab read.
 2. **Micro height steps:** seeded 5-15% of a room's floor cells raise/sink by 0.04-0.08
-   units (sy jitter on floor slabs) — Wildermyth boards are never billiard-flat. Never
-   under a piece/dressing cell (placement queries this), never in the center 2x2.
+   units (sy jitter on floor slabs) — Wildermyth boards are never billiard-flat.
+   **Exclusion covers ALL combat-walkable cells, not just initially-occupied ones** —
+   pieces MOVE (`move-step` walks cells mid-combat); a standee arriving on a raised
+   cell floats/clips at the ankles. Raise only cells the combat grid never routes
+   through (perimeter, wall-adjacent, dressing-blocked), never the center 2x2. (If a
+   later wave wants stepped walkable terrain, standee y must track cell height — a
+   separate unit, out of scope here.)
 3. **Ground-cover patches:** a new low quad-card kind (`cover`: moss/dust/spill decals,
    flat ON the floor +0.01, from a small `cover` roster in the dressing sheets or a
    procedural tint-splat fallback until art lands) — 1-3 seeded patches per room.
@@ -201,7 +219,10 @@ Step 0: grep the battle overlay DOM ids from genesis.html + docs/BATTLE-VISUALS.
    ground-ring glow (reuse blob-quad channel, accent color) — eyes stay on the stage.
 3. **Damage floaters:** hit numbers rise off the standee (a DOM overlay positioned via
    the unit's projected screen position — theater already projects for blob quads) and
-   fade 600ms; kills the need to read HP from cards mid-action.
+   fade 600ms; kills the need to read HP from cards mid-action. NOTE: the 2c framing
+   law moves the camera between beats — either reproject the floater per-frame while
+   alive, or anchor at spawn and rely on the fast fade; never let a floater drift onto
+   the wrong standee after a camera fit.
 4. Typography/skin per the Ivalice bible tokens already in genesis.html's CSS vars.
 5. OUT OF SCOPE: non-combat UI, the creator, menus.
 *Verify:* screenshot gate ONLY (this is design): re-shot loop-gate frames — stage
@@ -224,7 +245,12 @@ the card; Adam gets final eyes.
 4. **VISIBLE HISTORY (ruling #5b):** combat leaves marks — on hit/death, seeded blood/
    scorch decal cards (the VP3 `cover` channel) drop at the event cell and PERSIST in
    the room's dressing record (stamped into pn.spatial.dressing, so the codex place
-   remembers its battles across visits; grim register, children carve-out as ever).
+   remembers its battles across visits; grim register — Fable's §G3 ruling: the tone
+   register is game-wide, one register across prose and pixels; the children carve-out
+   is MECHANICAL: child-tagged entities never receive blood decals/spatter, impact/dust
+   only). **CAP: max 12 decal stamps per room, FIFO** — persistence is the feature,
+   unbounded growth in the place record is not (a grinding room across a whole campaign
+   must not accrete forever).
 5. **Hit effects wiring:** when effects-core art lands (VP2 fold), `hit-damage`/
    `fall-death`/`act-cast` verbs spawn their effect card (oversized 1.5-2×, per
    GRAPHICS-ENGINE §B) at the target; until art lands, a procedural flash-ring quad

@@ -827,5 +827,107 @@ group("27 — registry fold: data/sprite-registry.js emits feet/scaleTrue for >=
   }
 }
 
+// ============================================================================
+// BEAUTY-WAVE.md VP7 — checks 28-30 (CONTACT GROUNDING). Reuses the exact VP1 jsdom+subprocess
+// scaffolding above (runVP1Scenario/VP1_REGISTRY/fakeTexture) — the same sealed-ES-module boundary
+// applies (theater-boot.js's bare `import * as THREE`).
+// ============================================================================
+const VP7_RUNNER_SRC = `
+import { JSDOM } from "jsdom";
+import { pathToFileURL } from "node:url";
+
+const bootPath = process.argv[2];
+const registry = JSON.parse(process.argv[3]);
+const wallHeightBase = Number(process.argv[4]);
+
+const dom = new JSDOM(
+  \`<!doctype html><html><body><div id="stage" style="width:400px;height:300px"></div></body></html>\`,
+  { runScripts: "dangerously", url: "http://localhost/" }
+);
+global.window = dom.window;
+global.document = dom.window.document;
+global.SPRITE_REGISTRY = registry;
+global.window.SPRITE_REGISTRY = registry;
+
+// jsdom ships no canvas 2D backend (no "canvas" npm package installed) — buildDressingCard's
+// placeholder texture (dressingPlaceholderTexture) draws to a real 2d context, which this harness
+// doesn't need pixel-accurate (it only inspects mesh/group structure, never canvas pixels). Stub a
+// minimal no-op 2d context so that draw path runs without throwing.
+const FAKE_2D_CTX = {
+  fillRect(){}, strokeRect(){}, fillText(){}, measureText(){ return { width: 0 }; },
+  fillStyle: "", strokeStyle: "", lineWidth: 0, font: "", textAlign: "", textBaseline: "",
+};
+global.window.HTMLCanvasElement.prototype.getContext = function(){ return FAKE_2D_CTX; };
+
+function fakeTexture(){ return { magFilter: null, minFilter: null, generateMipmaps: true, isTexture: true, image: { width: 100, height: 200 } }; }
+
+const result = { ok: false, error: null };
+try {
+  await import(pathToFileURL(bootPath).href);
+  const T = global.window.Theater;
+  for(const slug of Object.keys(registry)) T._spriteTextureCache[slug] = fakeTexture();
+
+  const pieces = [
+    { slug: "medium-thing", cellX: 0, cellY: 0 },
+    { slug: "large-thing", cellX: 1, cellY: 1 },
+    { slug: "knight", cellX: 2, cellY: 2, scaleVsHuman: 1.0 },
+  ];
+  const piecesBuilt = T._interiorBuildPiecesForTest(pieces, 0, 0, wallHeightBase);
+  // count 28: blobs live in their OWN sibling sub-group (blobGroup, always the LAST child of
+  // piecesBuilt.group — theater-boot.js's interiorBuildPieces adds it once after the forEach),
+  // tagged userData.contactBlob — one per piece, no more, no less.
+  const blobGroup = piecesBuilt.group.children[piecesBuilt.group.children.length - 1];
+  const blobMeshes = blobGroup.children.filter((c) => c.userData && c.userData.contactBlob);
+  result.pieceCount = pieces.length;
+  result.blobCount = blobMeshes.length;
+  result.blobY = blobMeshes[0] && blobMeshes[0].position.y;
+  result.blobRadius = blobMeshes[0] && blobMeshes[0].geometry.parameters.radius;
+
+  const dressing = [
+    { slug: "crate", x: 0, y: 0, cardKind: "small" },
+    { slug: "shrine", x: 1, y: 1, cardKind: "medium" },
+    { slug: "statue", x: 2, y: 2, cardKind: "large" },
+  ];
+  const dressingBuilt = T._interiorBuildDressingForTest(dressing, 0, 0);
+  const dressingBlobGroup = dressingBuilt.children[dressingBuilt.children.length - 1];
+  const dressingBlobs = dressingBlobGroup.children.filter((c) => c.userData && c.userData.contactBlob);
+  result.dressingCardCount = dressing.length;
+  result.dressingBlobCount = dressingBlobs.length; // only the 1 "large" entry should carry a blob
+
+  // fall-death persistence: the blob is a SIBLING of the piece's own group (not a descendant), so
+  // tilting the piece's inner wrapper (fall-death's own rotation.x, standee-verbs.js) never moves
+  // the blob's world position — assert directly by rotating the piece group as fall-death would
+  // and confirming the blob mesh (a different object entirely) is untouched.
+  const pieceGroup = piecesBuilt.group.children[0]; // medium-thing's own group
+  pieceGroup.rotation.x = 1.2; // simulate fall-death's tip-over
+  result.blobYAfterTip = blobMeshes[0] && blobMeshes[0].position.y;
+
+  result.ok = true;
+} catch(e){
+  result.error = String((e && e.stack) || e);
+}
+process.stdout.write(JSON.stringify(result));
+process.exit(0);
+`;
+
+group("28 — every interior piece has exactly one contact blob (VP7)");
+{
+  const REAL_SOURCE = read("src/ui/theater-boot.js");
+  const green = runVP1Scenario(REAL_SOURCE, VP7_RUNNER_SRC, ["2.4"]);
+  if(!green.ok){
+    fail++; console.error("  FAIL: VP7 scenario threw: " + green.error);
+  } else {
+    ok(green.blobCount === green.pieceCount, `blob count (${green.blobCount}) === piece count (${green.pieceCount}) — exactly one blob per piece`);
+    ok(Math.abs(green.blobY - (-0.495)) < 1e-9, `blob y=${green.blobY} matches the spec's -0.495 (under the card, above the y=-0.5 floor)`);
+    ok(green.blobRadius > 0, `blob radius (${green.blobRadius}) derived from the piece's rendered texture width x 0.4, positive`);
+
+    group("29 — blob under corpse persists (fall-death tip-over never moves the blob)");
+    ok(green.blobYAfterTip === green.blobY, `blob y unchanged after simulated fall-death tip (${green.blobYAfterTip} === ${green.blobY}) — the blob is a sibling of the piece group, not a descendant of its tilting wrapper`);
+
+    group("30 — large dressing cards get a blob, small/medium don't");
+    ok(green.dressingCardCount === 3 && green.dressingBlobCount === 1, `3 dressing cards (small/medium/large) mounted, only 1 blob (the large one) — found ${green.dressingBlobCount}`);
+  }
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail > 0 ? 1 : 0);

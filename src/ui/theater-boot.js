@@ -2664,7 +2664,7 @@ function interiorSpriteBillboard(entry, wallHeightCap){
   if(oversizeClamped){
     console.warn("qa: oversize-clamped", entry.slug, "-> capped at wall height", wallHeightCap);
   }
-  return { group: g, height: h };
+  return { group: g, height: h, width: w };
 }
 
 function figureFor(archetype, seed, tint, silhouette, weapon, recipeSlug, pcRecipe, kind, className, wholeKeyOverride){
@@ -2888,6 +2888,29 @@ function addGroundingBlob(group, x, z, y, radius){
   const mesh = new THREE.Mesh(groundingBlobGeoFor(radius), GROUNDING_BLOB_MAT);
   mesh.rotation.x = -Math.PI / 2;
   mesh.position.set(x, y, z);
+  group.add(mesh);
+  return mesh;
+}
+
+// BEAUTY-WAVE.md VP7 (CONTACT GROUNDING): interior pieces + large dressing cards get the SAME
+// blob-quad convention above (reuse, don't reinvent — same CircleGeometry cache/rotation/no-
+// z-fight discipline) but with the wave's own opacity (0.35, lighter than the tabletop disc-
+// paired blob's 0.55 — this blob stands alone here, no hostility disc above it to read against,
+// so it's tuned softer: "fills the ambient-side contact that shadow maps miss at torch angles,"
+// not a second hard shadow). radius = the piece's own rendered world-space width * 0.4 (a hair
+// under half its footprint — reads as "this card's base," never wider than the card itself);
+// y=-0.495, seated a hair above the y=-0.5 floor plane and a hair below every piece's own floor-
+// contact line (the same z-fight-avoidance margin as the prop blobs at line ~3535/4229).
+const INTERIOR_BLOB_MAT = new THREE.MeshBasicMaterial({
+  color: 0x000000, transparent: true, opacity: 0.35, depthWrite: false
+});
+function addInteriorContactBlob(group, x, z, texWidth){
+  if(!group) return null;
+  const radius = Math.max(0.05, (texWidth || 1) * 0.4);
+  const mesh = new THREE.Mesh(groundingBlobGeoFor(radius), INTERIOR_BLOB_MAT);
+  mesh.rotation.x = -Math.PI / 2;
+  mesh.position.set(x, -0.495, z);
+  mesh.userData.contactBlob = true; // verify-dungeon-interior's per-piece blob-count check
   group.add(mesh);
   return mesh;
 }
@@ -4541,6 +4564,12 @@ function interiorBuildLights(lights, cx, cz){
 // never-throw discipline every other figure resolution in this file keeps).
 function interiorBuildPieces(pieces, cx, cz, wallHeightBase){
   const group = new THREE.Group();
+  // VP7 CONTACT GROUNDING: blobs live in their OWN sibling sub-group, appended to `group` once at
+  // the end — NOT interleaved into `group`'s direct children — so existing/other callers walking
+  // `group.children` in piece order (this function's own established contract: "same order as the
+  // pieces array", relied on by dev/verify-dungeon-interior.mjs's VP1 checks) see byte-identical
+  // indices to before this unit.
+  const blobGroup = new THREE.Group();
   let resolved = 0;
   // 0.95 * wall height: a titanic-in-a-human-room is a SCALE-DOMAIN problem, not a rendering one —
   // this cap only keeps a piece from visibly poking through the ceiling.
@@ -4568,8 +4597,16 @@ function interiorBuildPieces(pieces, cx, cz, wallHeightBase){
     // behaves exactly as before.
     if(p.fid != null) g.userData.unitId = String(p.fid);
     group.add(g);
+    // VP7 CONTACT GROUNDING: one blob per piece, at the SAME (x,z) as the piece's own floor-
+    // contact position — added to the sibling `blobGroup` (not as a child of `g`, and not
+    // interleaved into `group`'s own direct children) so it survives at a fixed world y even if a
+    // caller later re-tweens `g`'s own rotation (e.g. a tipped fall-death card, STANDEE_VERBS'
+    // fall-death — the corpse keeps its ground anchor because the blob isn't parented to the
+    // tilting wrapper), and existing callers walking `group.children` in piece order see no change.
+    addInteriorContactBlob(blobGroup, g.position.x, g.position.z, built.width);
     resolved++;
   });
+  group.add(blobGroup);
   return { group, resolved, requested: (pieces || []).length };
 }
 
@@ -4680,6 +4717,9 @@ function buildDressingCard(entry){
 // no exceptions).
 function interiorBuildDressing(dressing, cx, cz){
   const group = new THREE.Group();
+  // VP7 CONTACT GROUNDING: same sibling-subgroup convention as interiorBuildPieces' blobGroup
+  // (below) — blobs never interleave into `group`'s own direct children.
+  const blobGroup = new THREE.Group();
   (dressing || []).forEach((d) => {
     if(!d || !d.slug) return;
     const g = buildDressingCard(d);
@@ -4687,7 +4727,13 @@ function interiorBuildDressing(dressing, cx, cz){
     // establishes for billboard groups standing in an interior room (that function's own comment).
     g.position.set((d.x || 0) - (cx || 0), -0.4, (d.y || 0) - (cz || 0));
     group.add(g);
+    // VP7 CONTACT GROUNDING: large dressing cards only (§VP7: "every interior piece + large
+    // dressing card") — small/medium cards (crates, wall clutter) stay floater-free by spec.
+    if(d.cardKind === "large"){
+      addInteriorContactBlob(blobGroup, g.position.x, g.position.z, dressingCardHeight(d.cardKind));
+    }
   });
+  group.add(blobGroup);
   return group;
 }
 
@@ -5651,4 +5697,11 @@ window.Theater._spriteTextureCache = SPRITE_TEXTURE_CACHE;
 // this from outside interiorBuildPieces's own production call site (setInteriorBoard).
 window.Theater._interiorBuildPiecesForTest = function(pieces, cx, cz, wallHeightBase){
   return interiorBuildPieces(pieces, cx, cz, wallHeightBase);
+};
+
+// BEAUTY-WAVE.md VP7 — TEST-ONLY SEAM, same spirit as _interiorBuildPiecesForTest above: exposes
+// interiorBuildDressing directly so a harness can build dressing cards (small/medium/large) and
+// inspect the resulting contact-blob count without a live WebGLRenderer.
+window.Theater._interiorBuildDressingForTest = function(dressing, cx, cz){
+  return interiorBuildDressing(dressing, cx, cz);
 };

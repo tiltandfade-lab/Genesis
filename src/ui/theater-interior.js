@@ -409,7 +409,20 @@ function itrBuildKeepGrid(plan, keepSet, roomIdx, corridorIdx) {
 // SAME reference PRNG pattern src/engine/place-spatialize.js's own header names ("the same reference
 // pattern src/ui/theater-boot.js's mulberry32 uses") — both functions are plain classic-script globals
 // (place-spatialize.js loads before this file, per manifest.json's loadOrder), no re-implementation.
-const ITR_LIGHT_HEIGHT = { lamp: 1.8, torch: 1.4 };
+// BW2-4 addendum (shadow gate): light height. Torches/lamps used to sit at ~1.4-1.8 — roughly a
+// standee's MID-height, so a standee's cast shadow threw near-HORIZONTALLY and landed on already-dark
+// floor away from the light (invisible — Adam: "I don't think I have seen any cast shadows"). Raised
+// ABOVE standee head height (~1.5 world) so the shadow casts DOWN-and-out onto the LIT pool floor around
+// the figure, where it READS. A wall sconce / hanging lamp sits high anyway, so this also reads truer.
+const ITR_LIGHT_HEIGHT = { lamp: 2.6, torch: 2.5 };
+// BW2-4 THE VALUE PLUNGE (docs/BEAUTY-WAVE-2.md §BW2-4, item 1): torch/lamp pools go SMALL + HOT with a
+// fast physical falloff. Emit an explicit per-kind `distance` (the THREE.PointLight cutoff radius) +
+// `decay` on every light so interiorBuildLights stops falling back to its generic distance:12 default
+// (a 12-unit pool floods a whole room — the "even mid-light" the mocks avoid). A torch pool spanning
+// ~4-5 cells across (mock-01-gloom-combat.png's sconce) wants a cutoff radius near 6 cells with decay 2
+// (most of the illuminance lands within ~1/3 of the cutoff, so the readable hot pool is ~4-5 cells).
+const ITR_LIGHT_DISTANCE = { lamp: 6.5, torch: 6.0 };
+const ITR_LIGHT_DECAY = 2;
 function itrRoomLightCount(room) {
   const area = room.w * room.d;
   if (area < 30) return 1;
@@ -451,6 +464,10 @@ function itrRoomLights(room, plan, kit, dressingByRoom) {
     x: c.x, z: c.y, y: height,
     color: kit.lightColor || "#ff9a44",
     intensity: baseIntensity,
+    // BW2-4 item 1: SMALL + HOT pools — an explicit per-kind cutoff radius + physical decay so
+    // interiorBuildLights renders a ~4-5-cell pool instead of its generic 12-unit room flood.
+    distance: ITR_LIGHT_DISTANCE[kind] != null ? ITR_LIGHT_DISTANCE[kind] : 6.0,
+    decay: ITR_LIGHT_DECAY,
     kind, roomSegNum: room.segNum
   }));
   if (!list.length) return list;
@@ -502,6 +519,34 @@ function itrDarkenHex(hex, factor) {
   const clamp = (x) => (x < 0 ? 0 : x > 255 ? 255 : Math.round(x));
   const r = clamp(((v >> 16) & 255) * factor), g = clamp(((v >> 8) & 255) * factor), b = clamp((v & 255) * factor);
   return "#" + [r, g, b].map((x) => x.toString(16).padStart(2, "0")).join("");
+}
+// ─── BW2-4 THE VALUE PLUNGE (docs/BEAUTY-WAVE-2.md §BW2-4, item 2): the RIM VIGNETTE. A DETERMINISTIC
+// graded darken band that rings the diorama's own outer bounds — floor/wall/pillar/skirt cells fall
+// toward near-black as they approach the void edge (mock-01-gloom-combat.png / mock-01-finale.png: the
+// diorama rim reads near-black, the box you look INTO). This is the outward extension of VP3's 8%
+// per-room perimeter darken (theater-interior.js's ITR_PERIMETER_DARKEN, which only touches a room's
+// OWN edge cells) into a board-wide vignette keyed on distance to the board bounding rect — NOT a
+// screen-space shader (a post-pass over the already-built instance colors, pure function of cell
+// position + bounds, so the determinism law + verify-scene-direction group 7 stay green). Doorframes
+// are EXEMPT: the accent-discipline gate (verify-scene-direction group 5) counts a room's distinct
+// doorframe colors, and a position-dependent darken would multiply kit.trimColor into several variants
+// and trip it — the accent thread is a hue story, not a value story, so it opts out of the vignette.
+const ITR_RIM_BAND = 2.5;   // cells: vignette band width, measured inward from the outer bounds
+const ITR_RIM_MIN = 0.42;   // darkest multiplier, applied to a cell sitting ON the outer bounds edge
+// BW2-4 item 4 (THE VALUE LAW: dark < mid floor < ONE bright): corner PILLARS ship with kit.trimColor
+// (the bright accent hue — gloom #6b5878, fantasy #c9a85c), so mid-room columns read as BRIGHT verticals
+// that fight the standees (round-1 READ: lavender/sand columns, where the mocks keep columns near-black
+// stone). A value-only darken pulls them down toward wall value without touching the geometry builder
+// (BW2-5's COLUMN DEMOTION owns the pillar.push line + shapes; this is purely the VALUE those verticals
+// render at, applied in the same post-pass as the rim vignette). Not a hue change — trimColor's accent
+// hue survives, only its value drops.
+const ITR_PILLAR_VALUE = 0.32;
+// depth = min cells to any of the 4 bounds edges; factor lerps ITR_RIM_MIN (edge) -> 1.0 (>= band in).
+function itrRimFactor(x, z, bounds) {
+  const depth = Math.min(x - bounds.minX, bounds.maxX - x, z - bounds.minZ, bounds.maxZ - z);
+  if (depth >= ITR_RIM_BAND) return 1;
+  const t = Math.max(0, depth) / ITR_RIM_BAND;
+  return ITR_RIM_MIN + (1 - ITR_RIM_MIN) * t;
 }
 // ─── VP4 SCENE ART DIRECTION (docs/BEAUTY-WAVE.md §VP4) — a small color-math toolkit + the
 // SCENE_DIRECTION table itself. dominantHue/accentHue are derived ONCE per realm off the kit's own
@@ -878,6 +923,17 @@ function interiorBuildBoard(plan, opts) {
   const roomCount = keepSet === null ? plan.rooms.length : keepSet.size;
   if (!Number.isFinite(minX)) { minX = 0; maxX = 0; minZ = 0; maxZ = 0; } // degenerate empty-keep guard
   const skirt = itrBuildSkirtRing({ minX: minX, maxX: maxX, minZ: minZ, maxZ: maxZ }, kit);
+
+  // BW2-4 item 2: THE RIM VIGNETTE — graded darken toward the void edge, applied as a deterministic
+  // post-pass over the already-built floor/wall/pillar/skirt colors now that bounds are final. Floors
+  // already carry VP3's own 8% per-room perimeter darken + this unit's valueScript.floor; the vignette
+  // rides ON TOP (a further multiplicative darken, same itrDarkenHex convention every color pass here
+  // uses). Doorframes are deliberately excluded (see itrRimFactor's header — the accent-discipline gate).
+  const rimBounds = { minX: minX, maxX: maxX, minZ: minZ, maxZ: maxZ };
+  floor.forEach((f) => { f.color = itrDarkenHex(f.color, itrRimFactor(f.x, f.z, rimBounds)); });
+  wall.forEach((w) => { w.color = itrDarkenHex(w.color, itrRimFactor(w.x, w.z, rimBounds)); });
+  pillar.forEach((p) => { p.color = itrDarkenHex(p.color, ITR_PILLAR_VALUE * itrRimFactor(p.x, p.z, rimBounds)); });
+  skirt.forEach((s) => { s.color = itrDarkenHex(s.color, itrRimFactor(s.x, s.z, rimBounds)); });
 
   // VP3 GROUND DESIGN item 3: ground-cover patches, a sibling of `instances` (like `skirt` above) —
   // FLOOR ONLY (roomGround's coverCells are drawn exclusively from that room's own FLOOR-code cells,

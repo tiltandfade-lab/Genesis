@@ -266,6 +266,58 @@ function interiorTileKitFor(realmId) {
   return INTERIOR_TILE_KITS[realmId] || INTERIOR_TILE_KITS[INTERIOR_DEFAULT_KIT];
 }
 
+/* ─── BW2-3 MATERIAL TEXEL — REALM_TEXTURES (docs/BEAUTY-WAVE-2.md BW2-3, §1 GENERATED-FIRST) ────────
+   Folded PACKET-02 texture-file pointers per realm x surface, produced by build/fold-textures.py
+   (fold gate: wrap-shift tileability grade -> `wrap`, loose palette bound, contrast cap, integer-ratio
+   resample). Only the three FLAGSHIPS (fantasy/gloom/chrome) carry entries — the 9 non-flagship realms
+   have NO entry, so interiorTextureVariantFor returns null for them and theater-boot's floorTex/wallTex
+   path falls back to the procedural painter (theater-materials.js). The seam is EXACTLY
+   `interiorTextureVariantFor(realm,surface,seed) || <procedural>` (GENERATED-FIRST: file wins, painter
+   backstops).
+
+   THE VARIANT ROLL (Adam 2026-07-11: textures "mechanically created and added to the walk rolls"):
+   every surface value is a variant ARRAY (length 1 today). interiorTextureVariantFor PICKS one seeded
+   per walkId+room (plan.seed + focus segNum) — the SAME deterministic dspHashStr/dspMulberry32 roll
+   every dressing pick uses (DETERMINISM LAW, law 7). A future packet WIDENS a pool by appending a
+   `{file,wrap}` to the array — zero code change, the roll spreads across the new pool automatically.
+   `wrap` is the fold gate's verdict: "repeat" (perfect tile -> RepeatWrapping) or "mirror" (near/poor
+   -> MirroredRepeatWrapping, ping-pong hides the residual seam, per §2b WALLS law). */
+const REALM_TEXTURES = Object.freeze({
+  fantasy: Object.freeze({
+    wall: Object.freeze([Object.freeze({ file: "assets/textures/fantasy-wall-1.png", wrap: "mirror" })]),
+    floor: Object.freeze([Object.freeze({ file: "assets/textures/fantasy-floor-1.png", wrap: "repeat" })]),
+    "floor-alt": Object.freeze([Object.freeze({ file: "assets/textures/fantasy-floor-alt-1.png", wrap: "mirror" })]),
+    trim: Object.freeze([Object.freeze({ file: "assets/textures/fantasy-trim-1.png", wrap: "repeat" })]),
+  }),
+  gloom: Object.freeze({
+    wall: Object.freeze([Object.freeze({ file: "assets/textures/gloom-wall-1.png", wrap: "mirror" })]),
+    floor: Object.freeze([Object.freeze({ file: "assets/textures/gloom-floor-1.png", wrap: "repeat" })]),
+    "floor-alt": Object.freeze([Object.freeze({ file: "assets/textures/gloom-floor-alt-1.png", wrap: "repeat" })]),
+    trim: Object.freeze([Object.freeze({ file: "assets/textures/gloom-trim-1.png", wrap: "repeat" })]),
+  }),
+  chrome: Object.freeze({
+    wall: Object.freeze([Object.freeze({ file: "assets/textures/chrome-wall-1.png", wrap: "repeat" })]),
+    floor: Object.freeze([Object.freeze({ file: "assets/textures/chrome-floor-1.png", wrap: "repeat" })]),
+    "floor-alt": Object.freeze([Object.freeze({ file: "assets/textures/chrome-floor-alt-1.png", wrap: "repeat" })]),
+    trim: Object.freeze([Object.freeze({ file: "assets/textures/chrome-trim-1.png", wrap: "mirror" })]),
+  }),
+});
+
+/* interiorTextureVariantFor(realmId, surface, seedKey) -> {file, wrap} | null. null == "no folded
+   texture for this realm/surface" -> the caller falls back to the procedural painter. Deterministic:
+   the SAME (realm, surface, seedKey) always picks the SAME variant (law 7). seedKey is the caller's
+   walkId+room key (plan.seed + focus segNum). */
+function interiorTextureVariantFor(realmId, surface, seedKey) {
+  const kit = interiorTileKitFor(realmId);
+  const realmEntry = REALM_TEXTURES[kit.realmId];
+  const pool = realmEntry && realmEntry[surface];
+  if (!pool || !pool.length) return null;
+  const seed = dspHashStr("bw2-3-texvariant:" + kit.realmId + ":" + surface + ":" + (seedKey || ""));
+  const rng = dspMulberry32(seed);
+  const chosen = pool[Math.floor(rng() * pool.length) % pool.length];
+  return { file: chosen.file, wrap: chosen.wrap };
+}
+
 // ─── plan indexing helpers (pure, no mutation of the caller's plan) ─────────────────────────────────
 function itrRoomIndex(plan) {
   // per-cell room lookup, built once by rasterizing each room's own rect (cheap: O(total room area),
@@ -587,13 +639,27 @@ function furnitureFor(kind, realm) {
   const k = ITR_FURNITURE_RECIPES[kind] ? kind : "crate";
   return { kind: k, realm: realm || null, prisms: ITR_FURNITURE_RECIPES[k] };
 }
-/* textureFaceFor(realm, face) -> a real PACKET-02 face-texture ref, or null (the seam: PACKET-02's
- * crate-face/cabinet-face/etc. arrivals have NOT landed yet, per docs/BEAUTY-WAVE-2.md BW2-5's own
- * task brief — "wire the seam textureFaceFor(realm, face) || proceduralPanelTexture, the standing
- * fallback pattern"). Always null today; a real registry drops in here with zero caller-side change
- * (the GL layer already reads `textureFaceFor(...) || proceduralPanelTexture(...)`). */
+/* BW2-3 (the PACKET-02 crate-face arrivals landed): map each furnitureFor face LABEL to one of the six
+ * sliced face tiles (build/fold-textures.py: crate-side/crate-top/cabinet-door/panel-vents/panel-glow/
+ * panel-plain). Only the three FLAGSHIPS carry face tiles — a non-flagship realm/unknown face returns
+ * null and the GL half falls back to proceduralPanelTexture (the seam is unchanged). */
+const ITR_FLAGSHIP_FACE_REALMS = Object.freeze({ fantasy: true, gloom: true, chrome: true });
+const ITR_FURNITURE_FACE_TILE = Object.freeze({
+  "crate-body": "crate-side", "crate-lid": "crate-top",
+  "cabinet-body": "panel-vents", "cabinet-door": "cabinet-door", "cabinet-plinth": "panel-plain", "cabinet-cap": "panel-glow",
+  "barrel": "crate-side",
+  "table-top": "crate-top", "table-leg": "panel-plain",
+  "bench-seat": "crate-top", "bench-leg": "panel-plain",
+  "shelf-back": "panel-plain", "shelf-side": "panel-plain", "shelf-board": "crate-top",
+});
+/* textureFaceFor(realm, face) -> a folded PACKET-02 face-texture FILE PATH, or null. theater-boot's
+ * furniturePanelMaterial loads the path (per-face planar, ClampToEdge — §2b FURNITURE law) when
+ * non-null, else falls back to proceduralPanelTexture. */
 function textureFaceFor(realm, face) {
-  return null;
+  if (!ITR_FLAGSHIP_FACE_REALMS[realm]) return null;
+  const tile = ITR_FURNITURE_FACE_TILE[face];
+  if (!tile) return null;
+  return "assets/textures/" + realm + "-face-" + tile + "-1.png";
 }
 // deterministic per-dressing-entry furniture KIND pick (u3-furniture-kind seed) — the dressPlan roll
 // already owns WHICH blocker slug/noun appears (nouns law unchanged); this is a SEPARATE, purely
@@ -959,6 +1025,14 @@ function interiorBuildBoard(plan, opts) {
   const keepSet = itrFocusRoomSet(plan, opts.focusSegNum, radius);
   const kept = itrBuildKeepGrid(plan, keepSet, roomIdx, corridorIdx);
 
+  // BW2-3 MATERIAL TEXEL — resolve the folded PACKET-02 texture-file pointers for this board (THE
+  // VARIANT ROLL: seeded per walkId+room = plan.seed + focus segNum, deterministic). null on a
+  // non-flagship realm -> theater-boot's floorTex/wallTex path uses the procedural painter instead.
+  const texSeedKey = (plan.seed || "") + ":" + (opts.focusSegNum != null ? opts.focusSegNum : "board");
+  const floorTexVar = interiorTextureVariantFor(kit.realmId, "floor", texSeedKey);
+  const wallTexVar = interiorTextureVariantFor(kit.realmId, "wall", texSeedKey);
+  const trimTexVar = interiorTextureVariantFor(kit.realmId, "trim", texSeedKey);
+
   // VP4 (docs/BEAUTY-WAVE.md §VP4): index plan.dressing by room so itrRoomLights can find each room's
   // chosen focal cell without re-scanning the whole array per room. `plan` here IS the dressPlan()
   // output when dressing ran first (theater-data.js's own dressPlan-then-interiorBuildBoard order) —
@@ -1299,7 +1373,13 @@ function interiorBuildBoard(plan, opts) {
       // already keep.
       gradeTint: (kit.grade && kit.grade.tint) || null,
       gradeStrength: (kit.grade && kit.grade.strength) || 0,
-      fogWhisper: (kit.grade && kit.grade.fogWhisper) || 0 },
+      fogWhisper: (kit.grade && kit.grade.fogWhisper) || 0,
+      // BW2-3 MATERIAL TEXEL (GENERATED-FIRST): the folded PACKET-02 texture-file pointers + fold-gate
+      // wrap verdicts, null on a non-flagship realm (theater-boot's floorTex/wallTex path then paints
+      // procedural). floorMaterial/wallMaterial above stay the PROCEDURAL FALLBACK the seam degrades to.
+      floorTextureFile: floorTexVar ? floorTexVar.file : null, floorTextureWrap: floorTexVar ? floorTexVar.wrap : null,
+      wallTextureFile: wallTexVar ? wallTexVar.file : null, wallTextureWrap: wallTexVar ? wallTexVar.wrap : null,
+      trimTextureFile: trimTexVar ? trimTexVar.file : null, trimTextureWrap: trimTexVar ? trimTexVar.wrap : null },
     instances: { floor: floor, wall: wall, doorframe: doorframe, pillar: pillar },
     // GR4 (docs/GRAPHICS-ENGINE.md build unit GR4 STAGE LAW): the edge skirt, computed off the SAME
     // bounds this function already tracked above (no second bounds derivation) — a sibling of
@@ -1340,6 +1420,10 @@ window.interiorBuildBoard = interiorBuildBoard;
 window.interiorTileKitFor = interiorTileKitFor;
 window.REALM_MATERIALS = REALM_MATERIALS;
 window.realmMaterialFor = realmMaterialFor;
+// BW2-3 MATERIAL TEXEL: the folded-texture registry + variant roll (theater-boot reads the picked
+// file/wrap off tileKit; a verify harness reaches the roll itself through these).
+window.REALM_TEXTURES = REALM_TEXTURES;
+window.interiorTextureVariantFor = interiorTextureVariantFor;
 window.SCENE_DIRECTION = SCENE_DIRECTION;
 window.sceneDirectionFor = sceneDirectionFor;
 // BW2-5: the shared prism builders (ROOM-GRAMMAR.md §4 names furnitureFor as its own dependency) +

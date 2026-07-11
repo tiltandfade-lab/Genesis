@@ -5000,6 +5000,12 @@ function interiorBuildInstancedMesh(list, cx, cz, texture, variant, shadowKind){
                             // materials are its WORLD surfaces — gate dither+snap through WORLD_PSX_ENABLED
        worldPsxOverride: (variant && typeof variant.worldPsx === "boolean") ? variant.worldPsx : undefined });
   const mesh = new THREE.InstancedMesh(geo, mat, list.length);
+  // BW2-1b — TEST/DIAGNOSTIC TAG: which instance-kind this mesh is (floor/wall/doorframe/pillar/
+  // skirt) — a plain read-only userData stamp (harmless to production rendering) so a harness can
+  // pick the SOLID kinds (wall/pillar/doorframe) out of S.interiorGroup.children for a real
+  // THREE.Raycaster occlusion check (_interiorRaycastClearForTest, below) without this file needing
+  // to expose the raw mesh references any other way.
+  mesh.userData.interiorKind = shadowKind;
   // DUNGEON-GRAPH.md U3 iteration-2, ruling 2: wall/floor/pillar/doorframe instanced meshes cast AND
   // receive real shadows on an interior board (harmless while renderer.shadowMap.enabled is false on
   // the combat/tabletop path — these flags are simply never consulted there). Floors are the one
@@ -5231,7 +5237,7 @@ function stopMoteDrift(){
 // "did every piece sprite resolve" on window.Theater for the capture rig's metrics (a piece whose slug
 // doesn't join the registry, or whose texture hasn't loaded yet, silently skips — same total-function/
 // never-throw discipline every other figure resolution in this file keeps).
-function interiorBuildPieces(pieces, cx, cz, wallHeightBase, floorTopMap, trimColor){
+function interiorBuildPieces(pieces, cx, cz, wallHeightBase, floorTopMap, trimColor, prismLists){
   const group = new THREE.Group();
   // VP7 CONTACT GROUNDING: blobs live in their OWN sibling sub-group, appended to `group` once at
   // the end — NOT interleaved into `group`'s direct children — so existing/other callers walking
@@ -5261,10 +5267,18 @@ function interiorBuildPieces(pieces, cx, cz, wallHeightBase, floorTopMap, trimCo
     // own FLOOR CONTACT LAW header comment a few screens up for the measured burial this caused).
     const floorTop = interiorFloorTopAt(floorTopMap, cellX, cellY);
     const contactY = interiorStandeeContactY(floorTop);
+    // CLIP MARGIN LAW (Adam addendum, mid-flight on BW2-1b): before the position is committed, test
+    // this standee's own footprint circle (radius = its rendered half-width) against nearby wall/
+    // pillar/doorframe prisms and nudge it clear — cell ownership (cellX/cellY) is UNTOUCHED, this is
+    // a visual mount-position offset only.
+    const clipNudge = itrClipNudgeFor(cellX, cellY, built.width * 0.5, prismLists);
+    if(clipNudge.clamped){
+      console.warn("qa: sprite-oversize", { slug: p.slug, cellX, cellY, rawMagnitude: clipNudge.rawMagnitude, clampedTo: clipNudge.magnitude });
+    }
     g.position.set(
-      cellX - (cx || 0),
+      cellX - (cx || 0) + clipNudge.x,
       contactY - floorFrac * built.height,
-      cellY - (cz || 0) // origin-shifted like every tile/light (the v3 card bug: raw cell coords rendered pieces outside the fitted frame)
+      cellY - (cz || 0) + clipNudge.z // origin-shifted like every tile/light (the v3 card bug: raw cell coords rendered pieces outside the fitted frame)
     );
     // BW2-2 STANDEE BASES: a plinth cylinder under this piece, radius off its own rendered world
     // width (spec: 0.42x) — added as a CHILD of `g` (see buildInteriorBase's own header for why this
@@ -5409,7 +5423,7 @@ function buildDressingCard(entry){
 // already are (the v3 card bug class this unit's own brief calls out by name: raw cell coords render
 // outside the fitted camera frame — every mount in this function goes through the (cx,cz) subtraction,
 // no exceptions).
-function interiorBuildDressing(dressing, cx, cz, floorTopMap){
+function interiorBuildDressing(dressing, cx, cz, floorTopMap, prismLists){
   const group = new THREE.Group();
   // VP7 CONTACT GROUNDING: same sibling-subgroup convention as interiorBuildPieces' blobGroup
   // (below) — blobs never interleave into `group`'s own direct children.
@@ -5424,7 +5438,17 @@ function interiorBuildDressing(dressing, cx, cz, floorTopMap){
     // (per the mock, ui-sketches/mock-frames/mock-01-gloom-combat.png — only combat-representing
     // standees carry a base; a tombstone/torch/painting sits directly on the floor).
     const floorTop = interiorFloorTopAt(floorTopMap, d.x || 0, d.y || 0);
-    g.position.set((d.x || 0) - (cx || 0), floorTop, (d.y || 0) - (cz || 0));
+    // CLIP MARGIN LAW (Adam addendum, mid-flight on BW2-1b), item 2 — LARGE cards only ("every
+    // interior piece + large dressing card" is VP7's own existing large-only carve-out, reused
+    // here): may TOUCH the wall plane (that's the point, dpAdjacentToWall already seeds it there) but
+    // never pass THROUGH it — resolved via the SAME itrClipNudgeFor circle-vs-prism push, radius
+    // inflated by CLIP_DRESSING_EPSILON so the card's own true edge clears the wall face by a hair
+    // (no magnitude cap/warning: a wall-adjacent card's own overlap is always small by construction).
+    let dressNudge = { x: 0, z: 0 };
+    if(d.cardKind === "large"){
+      dressNudge = itrClipNudgeFor((d.x || 0), (d.y || 0), dressingCardHeight(d.cardKind) / 2 + CLIP_DRESSING_EPSILON, prismLists, { maxMag: 1 });
+    }
+    g.position.set((d.x || 0) - (cx || 0) + dressNudge.x, floorTop, (d.y || 0) - (cz || 0) + dressNudge.z);
     group.add(g);
     // VP7 CONTACT GROUNDING: large dressing cards only (§VP7: "every interior piece + large
     // dressing card") — small/medium cards (crates, wall clutter) stay floater-free by spec.
@@ -5522,6 +5546,188 @@ function interiorFitMaxHeightFor(data){
   return tallest > 0 ? tallest : HUMAN_TRUE_HEIGHT;
 }
 
+// ─── BEAUTY-WAVE-2.md BW2-1b (THE OCCLUSION LAW), item 1 — DYNAMIC CUTAWAY for interior columns/
+// pillar prisms. The CUTAWAY WALLS treatment above (study card v4) only ever touched WALL instances;
+// a pillar sitting between the camera and a standee was never adjusted at all — "loop-03's knight
+// behind a pillar," the law the mock itself keeps (ui-sketches/mock-frames/mock-01-gloom-combat.png:
+// no prism ever eats a character). Pure geometry (no THREE) so it's independently testable in a
+// jsdom-only harness with NO live WebGL renderer needed — same "PART A pure math / PART B live-Chrome
+// integration" split dev/verify-bw2-2-floor-contact.mjs's own header already establishes for this
+// file's sealed ES-module boundary.
+
+// standard slab-method ray-SEGMENT (p0->p1, t clamped to [0,1] — a bounded segment, never an
+// infinite ray, since a pillar standing BEHIND the standee from the camera's view must never cut
+// away) vs axis-aligned-box intersection test. A near-zero-length segment on one axis degrades to a
+// point-containment check on that axis rather than dividing by ~0.
+function itrSegmentIntersectsAabb(p0, p1, boxMin, boxMax){
+  let tmin = 0, tmax = 1;
+  const axes = ["x", "y", "z"];
+  for(let i = 0; i < axes.length; i++){
+    const ax = axes[i];
+    const d = p1[ax] - p0[ax];
+    if(Math.abs(d) < 1e-9){
+      if(p0[ax] < boxMin[ax] || p0[ax] > boxMax[ax]) return false;
+      continue;
+    }
+    let t1 = (boxMin[ax] - p0[ax]) / d, t2 = (boxMax[ax] - p0[ax]) / d;
+    if(t1 > t2){ const tmp = t1; t1 = t2; t2 = tmp; }
+    tmin = Math.max(tmin, t1);
+    tmax = Math.min(tmax, t2);
+    if(tmin > tmax) return false;
+  }
+  return true;
+}
+
+// one approximate torso/head sightline TARGET per mounted standee — the SAME true-scale height
+// resolution interiorFitMaxHeightFor (above) already uses (spriteEntryFor's own scaleTrue, or a
+// piece's own scaleVsHuman override), computed independently of texture load state
+// (interiorSpriteBillboard's real geometry isn't built until interiorBuildPieces runs, LATER in
+// setInteriorBoard than this — see that call's own position below) so this never waits on an async
+// texture round-trip. Falls back to a scaleTrue of 1 (HUMAN_TRUE_HEIGHT) for an unresolved slug, same
+// total-function/never-throw discipline every other resolution in this file keeps.
+function itrPieceSightPoints(pieces, cx, cz, floorTopMap){
+  const pts = [];
+  (pieces || []).forEach((p) => {
+    if(!p || !p.slug) return;
+    const base = (typeof spriteEntryFor === "function") ? spriteEntryFor(p.slug) : null;
+    const scaleTrue = (base && typeof base.scaleTrue === "number" && base.scaleTrue > 0) ? base.scaleTrue
+      : (typeof p.scaleVsHuman === "number" && p.scaleVsHuman > 0) ? p.scaleVsHuman : 1;
+    const height = HUMAN_TRUE_HEIGHT * scaleTrue;
+    const cellX = p.cellX || 0, cellY = p.cellY || 0;
+    const floorTop = interiorFloorTopAt(floorTopMap, cellX, cellY);
+    const contactY = interiorStandeeContactY(floorTop);
+    // torso/head midpoint of the standee's own real height — ONE representative point per standee
+    // (not its whole vertical extent) keeps this an O(pillars*pieces) check; a pillar tall enough to
+    // clip a torso-height sightline reads as "in the way" regardless of whether it also clips the
+    // feet or the crown of the head.
+    pts.push({ x: cellX - (cx || 0), y: contactY + height * 0.5, z: cellY - (cz || 0) });
+  });
+  return pts;
+}
+
+// per-pillar-instance boolean mask: true where ANY sight point's segment (real camera world position
+// -> that standee's own torso point) enters the pillar's own world-space box — the SAME box
+// interiorBuildInstancedMesh actually renders (position=(inst.x-cx, sy/2-0.5, inst.z-cz), half-
+// extents (sx/2,sy/2,sz/2), that function's own header note), so a flagged instance is provably the
+// thing the camera would actually see occluding the standee, not an approximation of it.
+function itrPillarCutawayMask(pillarList, cameraPos, sightPoints, cx, cz){
+  const list = pillarList || [];
+  if(!cameraPos || !sightPoints || !sightPoints.length) return list.map(() => false);
+  return list.map((inst) => {
+    const halfX = Math.max(0.01, (inst.sx || 1)) / 2;
+    const halfY = Math.max(0.01, (inst.sy || 1)) / 2;
+    const halfZ = Math.max(0.01, (inst.sz || 1)) / 2;
+    const centerX = (inst.x || 0) - (cx || 0), centerZ = (inst.z || 0) - (cz || 0);
+    const centerY = (inst.sy || 1) / 2 - 0.5;
+    const boxMin = { x: centerX - halfX, y: centerY - halfY, z: centerZ - halfZ };
+    const boxMax = { x: centerX + halfX, y: centerY + halfY, z: centerZ + halfZ };
+    return sightPoints.some((pt) => itrSegmentIntersectsAabb(cameraPos, pt, boxMin, boxMax));
+  });
+}
+
+// stub height for a flagged pillar — "~0.3 wall height, the parapet grammar" (BW2-1b item 1), taken
+// against the BOARD's own nominal wall height (data.wallHeightBase — the un-scaled base a scale-
+// domain-tall room's own pillars are still multiples of, itrWallScale's own convention in
+// theater-interior.js), never a pillar's OWN (possibly already-scaled) height — so a titanic lair's
+// pillar stubs to the SAME absolute knee height a human-scale room's pillar would, matching the wall
+// cutaway's own KNEE constant (above) being absolute, not scale-domain-relative. The 2.4 fallback
+// mirrors theater-interior.js's own ITR_WALL_HEIGHT_BASE (not window-exported — same "two independent
+// constants declaring the same number" mirroring convention src/engine/place-dressing.js's own
+// DP_CAM_YAW_OFFSET_DEG keeps against this file's CAM_YAW_OFFSET_DEG) for a caller (or synthetic test
+// fixture) that omits data.wallHeightBase entirely.
+const ITR_PILLAR_STUB_FRAC = 0.3;
+function itrPillarStubHeight(wallHeightBase){
+  const base = (typeof wallHeightBase === "number" && wallHeightBase > 0) ? wallHeightBase : 2.4;
+  return base * ITR_PILLAR_STUB_FRAC;
+}
+
+// ─── ADDENDUM (Adam, mid-flight on BW2-1b) — THE CLIP MARGIN LAW: "the sprites shouldn't clip
+// through geometry." A standee's own quad footprint must not intersect a neighboring prism's
+// (wall/pillar/doorframe) XZ bounds — a WIDE sprite standing hard against a wall/pillar pokes its own
+// silhouette through the geometry (the treant-against-the-wall bug, loop-03). Modeled as a circle
+// (radius = the sprite's own rendered half-width — a conservative, direction-agnostic footprint,
+// since a camera-facing billboard's silhouette sweeps differently depending on view yaw) vs. each
+// nearby prism's axis-aligned box; any overlap NUDGES the standee's own MOUNT POSITION away from the
+// offending prism (never the geometry, never cell ownership/combat-grid occupancy — a pure visual
+// offset), clamped to CLIP_NUDGE_MAX_FRAC (0.3, "<=30% of a cell" per the GRID LAW's 1-cell=1-world-
+// unit convention) of total push magnitude; a push that would need MORE than that to fully resolve
+// logs a qa: sprite-oversize console warning and applies the CLAMPED nudge instead (never teleports
+// the standee off its own cell). Pure geometry (no THREE) — same jsdom-testable-without-a-renderer
+// discipline this unit's own itrPillarCutawayMask family (above) already established.
+
+// nearest point on an axis-aligned box to (px,pz), clamped per-axis — the standard closest-point
+// primitive every circle-vs-AABB test builds on.
+function itrClosestPointOnAabbXZ(px, pz, box){
+  return { x: Math.max(box.minX, Math.min(px, box.maxX)), z: Math.max(box.minZ, Math.min(pz, box.maxZ)) };
+}
+// circle (center px,pz, radius r) vs one AABB — the push vector that would move the CIRCLE's center
+// just clear of the box, or null when there's no overlap at all. A center exactly inside/on the box
+// (dist===0, the fully-degenerate case) falls back to pushing away from the box's OWN center instead
+// — an arbitrary but fully deterministic direction; never reached by any real mount (a standee's own
+// cell is never a wall/pillar cell to begin with), a defensive floor rather than a path any fixture
+// below actually exercises.
+function itrCircleAabbPushXZ(px, pz, radius, box){
+  const closest = itrClosestPointOnAabbXZ(px, pz, box);
+  let dx = px - closest.x, dz = pz - closest.z;
+  let dist = Math.hypot(dx, dz);
+  if(dist >= radius) return null;
+  if(dist < 1e-6){
+    const boxCx = (box.minX + box.maxX) / 2, boxCz = (box.minZ + box.maxZ) / 2;
+    dx = px - boxCx; dz = pz - boxCz;
+    dist = Math.hypot(dx, dz);
+    if(dist < 1e-6){ dx = 0; dz = 1; dist = 1; }
+  }
+  const overlap = radius - dist;
+  return { x: (dx / dist) * overlap, z: (dz / dist) * overlap };
+}
+// prism boxes (RAW, pre-cx/cz-shift cell space — the SAME space every wall/pillar/doorframe instance
+// list already uses) gathered off one or more instance lists, restricted to instances within `reach`
+// cells of (cellX,cellY) — a cheap spatial prefilter, since a standee/card's own footprint never
+// reaches across an entire large plan.
+function itrNearbyPrismBoxes(instanceLists, cellX, cellY, reach){
+  const boxes = [];
+  (instanceLists || []).forEach((list) => {
+    (list || []).forEach((inst) => {
+      if(!inst) return;
+      if(Math.abs((inst.x || 0) - cellX) > reach || Math.abs((inst.z || 0) - cellY) > reach) return;
+      const halfX = Math.max(0.01, (inst.sx || 1)) / 2, halfZ = Math.max(0.01, (inst.sz || 1)) / 2;
+      boxes.push({
+        minX: (inst.x || 0) - halfX, maxX: (inst.x || 0) + halfX,
+        minZ: (inst.z || 0) - halfZ, maxZ: (inst.z || 0) + halfZ
+      });
+    });
+  });
+  return boxes;
+}
+const CLIP_NUDGE_MAX_FRAC = 0.3;      // "<=30% of a cell" (GRID LAW: 1 cell = 1 world unit)
+// itrClipNudgeFor(cellX, cellY, radius, instanceLists, opts) -> {x,z,magnitude,rawMagnitude,clamped}
+// sums the push vector from EVERY overlapping nearby prism (never just the first hit), then clamps
+// the TOTAL magnitude to opts.maxMag (default CLIP_NUDGE_MAX_FRAC) — opts.reach overrides the spatial
+// prefilter radius (defaults to radius+1, generous enough for any real sprite/card footprint).
+function itrClipNudgeFor(cellX, cellY, radius, instanceLists, opts){
+  opts = opts || {};
+  const reach = opts.reach != null ? opts.reach : radius + 1;
+  const maxMag = opts.maxMag != null ? opts.maxMag : CLIP_NUDGE_MAX_FRAC;
+  const boxes = itrNearbyPrismBoxes(instanceLists, cellX, cellY, reach);
+  let pushX = 0, pushZ = 0;
+  boxes.forEach((box) => {
+    const push = itrCircleAabbPushXZ(cellX, cellY, radius, box);
+    if(push){ pushX += push.x; pushZ += push.z; }
+  });
+  const rawMagnitude = Math.hypot(pushX, pushZ);
+  if(rawMagnitude < 1e-9) return { x: 0, z: 0, magnitude: 0, rawMagnitude: 0, clamped: false };
+  if(rawMagnitude <= maxMag) return { x: pushX, z: pushZ, magnitude: rawMagnitude, rawMagnitude, clamped: false };
+  const scale = maxMag / rawMagnitude;
+  return { x: pushX * scale, z: pushZ * scale, magnitude: maxMag, rawMagnitude, clamped: true };
+}
+// a large dressing card gets a tiny extra epsilon folded into its own footprint radius before the
+// SAME itrClipNudgeFor call — "may TOUCH the wall plane (that's the point) but not pass through it":
+// unlike a standee (which should clear the geometry entirely, clamp-and-warn on failure), a large
+// card is INTENDED to sit flush against a wall — this only stops it clipping THROUGH, with no
+// magnitude cap/warning (a card's own placement is already wall-adjacent by construction, dpAdjacentToWall,
+// so the overlap here is always small).
+const CLIP_DRESSING_EPSILON = 0.02;
+
 function setInteriorBoard(data){
   if(!S.mounted || !data) return;
   // DUNGEON-GRAPH.md U3 render-quality study card: S.interiorVariant (window.Theater.setInteriorVariant,
@@ -5610,6 +5816,19 @@ function setInteriorBoard(data){
   // creature's full intended height even where the render later clips it for ceiling clearance).
   S.interiorFitMaxHeight = interiorFitMaxHeightFor(data);
   S.lastGrid = null; // no band/lane grid on an interior tray — zoneToWorld/zoom-bias callers degrade to their own defaults
+
+  // BEAUTY-WAVE-2.md BW2-1b (THE OCCLUSION LAW), item 1: a PREVIEW placeCamera() call — every input
+  // it reads (S.boardCenter/halfX/halfZ/halfExtent, S.interiorFitMaxHeight, S.rotationStep,
+  // S.zoomLevel=1 just reset above, S.el's own DOM layout, S.camera's own persp/ortho type already
+  // resolved above this line) is already final by this point in the function, and NOTHING between
+  // here and this function's own later, authoritative placeCamera() call (below) changes any of
+  // them — so this early call is a byte-identical, side-effect-free PREVIEW of the real camera
+  // position (idempotent: calling it twice with no state change between calls yields the same
+  // S.camera.position both times), not a second/different fit. It exists only so the CUTAWAY
+  // pillar/wall-adjacent occlusion test below can raycast from the camera's REAL world position
+  // instead of re-deriving a parallel approximation of it.
+  placeCamera();
+  const occlusionCameraPos = S.camera ? { x: S.camera.position.x, y: S.camera.position.y, z: S.camera.position.z } : null;
 
   const env = data.env || THEATER_DEFAULT_ENV_FALLBACK;
   S.env = env;
@@ -5720,7 +5939,35 @@ function setInteriorBoard(data){
   }
   const wallMesh = interiorBuildInstancedMesh(wallList, cx, cz, wallTex, variant, "wall");
   const doorMesh = interiorBuildInstancedMesh(inst.doorframe, cx, cz, null, variant, "doorframe");
-  const pillarMesh = interiorBuildInstancedMesh(inst.pillar, cx, cz, null, variant, "pillar");
+  // BEAUTY-WAVE-2.md BW2-1b (THE OCCLUSION LAW), item 1: DYNAMIC CUTAWAY for pillar prisms — the
+  // CUTAWAY WALLS treatment just above only ever adjusted WALL instances; a pillar between the
+  // camera and a mounted standee was never touched at all. Recomputed every board build (camera
+  // refit, BW2-1's own fitMode changes, AND every standee move-step — a move-step is itself a
+  // data.pieces change that forces a fresh setInteriorBoard call, so "recompute on move-step" falls
+  // out of the existing dirty-key rebuild path for free, no separate hook needed). Per-instance
+  // HEIGHT drop on the SAME InstancedMesh (never a second mesh/draw call — respects U3's own
+  // instancing draw-call budget, "per-instance visibility/height" per the spec's own OUT OF SCOPE-
+  // adjacent instructions) — an offending instance stubs to itrPillarStubHeight's parapet height;
+  // one already at/under that height is left alone (never GROWN by this pass).
+  let pillarList = inst.pillar;
+  if(occlusionCameraPos && pillarList && pillarList.length){
+    const sightPoints = itrPieceSightPoints(data.pieces, cx, cz, S.interiorFloorTopMap);
+    if(sightPoints.length){
+      const mask = itrPillarCutawayMask(pillarList, occlusionCameraPos, sightPoints, cx, cz);
+      const stubH = itrPillarStubHeight(data.wallHeightBase);
+      pillarList = pillarList.map(function(pinst, i){
+        if(!mask[i]) return pinst;
+        if((pinst.sy || 1) <= stubH) return pinst;
+        return Object.assign({}, pinst, { sy: stubH });
+      });
+    }
+  }
+  // BW2-1b — harness diagnostic: the FINAL (post-cutaway) pillar instance list, byte-identical shape
+  // to data.instances.pillar (same length — a stub only rewrites `sy`, never adds/removes an entry,
+  // preserving U3's own draw-call budget) so a harness can assert stub-applied vs full-height per
+  // instance without decomposing InstancedMesh matrices.
+  S.interiorLastPillarList = pillarList;
+  const pillarMesh = interiorBuildInstancedMesh(pillarList, cx, cz, null, variant, "pillar");
   // GR4 (docs/GRAPHICS-ENGINE.md build unit GR4): the diorama edge skirt — data.skirt (src/ui/theater-
   // interior.js's interiorBuildBoard, GR4 addition), a sibling of `instances` (never counted toward the
   // "4 known instance kinds" data-shape check — see that function's own doc comment). Untextured (flat
@@ -5747,15 +5994,29 @@ function setInteriorBoard(data){
   // DUNGEON-GRAPH.md U3 iteration-2, ruling 3: creature/PC billboard sprites standing in the room
   // (data.pieces, a plain field the caller sets directly on the board object — independent of
   // interiorBuildBoard, same as data.lightProfile above).
-  const piecesBuilt = interiorBuildPieces(data.pieces, cx, cz, data.wallHeightBase, S.interiorFloorTopMap, kit.trimColor);
+  // CLIP MARGIN LAW (Adam addendum, mid-flight on BW2-1b): the solid prisms a standee's own footprint
+  // must clear — wallList/pillarList are the SAME post-cutaway lists just mounted above (cutaway only
+  // ever changes a stubbed instance's sy/height, never its sx/sz footprint, so testing against the
+  // post-cutaway lists is byte-identical to testing against the pre-cutaway ones on the XZ axes this
+  // check actually reads).
+  const piecesBuilt = interiorBuildPieces(data.pieces, cx, cz, data.wallHeightBase, S.interiorFloorTopMap, kit.trimColor, [wallList, pillarList, inst.doorframe]);
   S.interiorGroup.add(piecesBuilt.group);
   S.interiorPiecesResolved = piecesBuilt.resolved;
   S.interiorPiecesRequested = piecesBuilt.requested;
+  // BW2-1b — harness-facing diagnostic (mirrors S.interiorDressingWorldPositions, below): one entry
+  // per MOUNTED standee, its REAL world position read straight off the group THREE actually placed
+  // (post CLIP MARGIN nudge) — so an occlusion/clip-margin harness asserts against the mount, never a
+  // parallel formula that could drift from it. piecesBuilt.group's own children are the per-piece
+  // groups (tagged userData.interiorTrueScale, interiorBuildPieces' own convention) FOLLOWED by the
+  // sibling blobGroup (untagged) — filtering on the tag excludes the blob group cleanly.
+  S.interiorPiecesWorldPositions = piecesBuilt.group.children
+    .filter((g) => g.userData && g.userData.interiorTrueScale)
+    .map((g) => ({ x: g.position.x, y: g.position.y, z: g.position.z, height: g.userData.interiorHeight, width: g.userData.interiorWidth, unitId: g.userData.unitId || null }));
 
   // GRAPHICS-ENGINE.md GR2 §D: dressing cards (data.dressing, src/engine/place-dressing.js's
   // dressPlan output — a plain field the caller sets directly on the board object, same convention
   // as data.pieces/data.lightProfile above).
-  const dressingGroup = interiorBuildDressing(data.dressing, cx, cz, S.interiorFloorTopMap);
+  const dressingGroup = interiorBuildDressing(data.dressing, cx, cz, S.interiorFloorTopMap, [wallList, pillarList, inst.doorframe]);
   S.interiorGroup.add(dressingGroup);
   S.interiorDressingCount = (data.dressing || []).length;
   // harness-facing diagnostic (dev/verify-dungeon-dressing.mjs check 4: "render mount... origin-
@@ -6444,6 +6705,34 @@ window.Theater.interiorDressingCount = function(){ return S.interiorDressingCoun
 window.Theater.interiorDecalCount = function(){ return S.interiorDecalCount || 0; }; // VP6 item 4
 window.Theater.interiorMoteCount = function(){ return (S.moteGroup && S.moteGroup.children.length) || 0; }; // VP6 item 3
 window.Theater.interiorDressingWorldPositions = function(){ return S.interiorDressingWorldPositions || []; };
+// BW2-1b — harness-facing diagnostic, same read-only convention as interiorDressingWorldPositions
+// above: one entry per mounted standee's REAL world position (post CLIP MARGIN nudge).
+window.Theater.interiorPiecesWorldPositions = function(){ return S.interiorPiecesWorldPositions || []; };
+// BW2-1b — TEST-ONLY SEAM: the FINAL (post-cutaway) pillar instance list — see S.interiorLastPillarList's
+// own assignment comment in setInteriorBoard for why this proves stub-vs-full-height per instance
+// without decomposing InstancedMesh matrices.
+window.Theater._interiorPillarListForTest = function(){ return S.interiorLastPillarList || []; };
+// BW2-1b — TEST-ONLY SEAM: a REAL THREE.Raycaster occlusion check against the LIVE mounted geometry —
+// casts from the CURRENT S.camera.position toward targetWorldPos, intersects only the SOLID instance
+// kinds (wall/pillar/doorframe — tagged via interiorBuildInstancedMesh's own mesh.userData.interiorKind
+// stamp, above) that sit STRICTLY CLOSER than the target itself (raycaster.far = dist-0.05, so the
+// standee's own base/plinth just past that distance is never mistaken for an occluder of itself).
+// THREE's own InstancedMesh.raycast already resolves per-instance hits (instanceId) — this is the
+// genuine renderer-side "is anything actually in the way" proof BW2-1b's spec calls for, not a
+// re-derivation of the pure math _occlusionLawForTest above already covers.
+window.Theater._interiorRaycastClearForTest = function(targetWorldPos){
+  if(!S.camera || !S.interiorGroup || !targetWorldPos) return null;
+  const camPos = S.camera.position.clone();
+  const target = new THREE.Vector3(targetWorldPos.x, targetWorldPos.y, targetWorldPos.z);
+  const toTarget = target.clone().sub(camPos);
+  const dist = toTarget.length();
+  if(dist < 1e-6) return { clear: true, dist: 0, hits: [] };
+  const dir = toTarget.clone().normalize();
+  const raycaster = new THREE.Raycaster(camPos, dir, 0, Math.max(0, dist - 0.05));
+  const solids = S.interiorGroup.children.filter((m) => m.userData && (m.userData.interiorKind === "wall" || m.userData.interiorKind === "pillar" || m.userData.interiorKind === "doorframe"));
+  const hits = raycaster.intersectObjects(solids, false);
+  return { clear: hits.length === 0, dist, hits: hits.map((h) => ({ kind: h.object.userData.interiorKind, distance: h.distance, instanceId: h.instanceId })) };
+};
 window.Theater.interiorBoardOrigin = function(){ return S.boardOrigin ? { cx: S.boardOrigin.cx, cz: S.boardOrigin.cz } : null; };
 window.Theater.shadowMapEnabled = function(){ return !!(S.renderer && S.renderer.shadowMap.enabled); };
 // dungeon-loop-gate (dev/battle-gate/capture-dungeon-loop.mjs) — a harness-facing read-only accessor,
@@ -6710,15 +6999,15 @@ window.Theater._spriteTextureCache = SPRITE_TEXTURE_CACHE;
 // needs a live WebGLRenderer/scene — see dev/battle-gate/capture-interior-study.mjs for that end). Same
 // read-only-diagnostics spirit as refFigure/_spriteTextureCache above; nothing in product logic calls
 // this from outside interiorBuildPieces's own production call site (setInteriorBoard).
-window.Theater._interiorBuildPiecesForTest = function(pieces, cx, cz, wallHeightBase, floorTopMap, trimColor){
-  return interiorBuildPieces(pieces, cx, cz, wallHeightBase, floorTopMap, trimColor);
+window.Theater._interiorBuildPiecesForTest = function(pieces, cx, cz, wallHeightBase, floorTopMap, trimColor, prismLists){
+  return interiorBuildPieces(pieces, cx, cz, wallHeightBase, floorTopMap, trimColor, prismLists);
 };
 
 // BEAUTY-WAVE.md VP7 — TEST-ONLY SEAM, same spirit as _interiorBuildPiecesForTest above: exposes
 // interiorBuildDressing directly so a harness can build dressing cards (small/medium/large) and
 // inspect the resulting contact-blob count without a live WebGLRenderer.
-window.Theater._interiorBuildDressingForTest = function(dressing, cx, cz, floorTopMap){
-  return interiorBuildDressing(dressing, cx, cz, floorTopMap);
+window.Theater._interiorBuildDressingForTest = function(dressing, cx, cz, floorTopMap, prismLists){
+  return interiorBuildDressing(dressing, cx, cz, floorTopMap, prismLists);
 };
 
 // BW2-2 — TEST-ONLY SEAM, same spirit as the two accessors above: exposes interiorBuildDecals directly
@@ -6758,3 +7047,29 @@ window.Theater._findUnitForTest = function(id){ return findUnit(id); };
 // own instances.floor, not just prove the builder function works in isolation (_floorContactLawForTest
 // above already covers that).
 window.Theater._interiorFloorTopMapForTest = function(){ return S.interiorFloorTopMap || null; };
+
+// BW2-1b — TEST-ONLY SEAM: THE OCCLUSION LAW's own pure geometry (segment-vs-AABB, the per-standee
+// sight-point derivation, the per-pillar-instance cutaway mask, and the stub-height constant/deriver)
+// so a harness can exercise the exact math setInteriorBoard's pillar cutaway pass runs — including a
+// RED-FIRST re-derivation of "this pillar WOULD occlude at full height" — without a live WebGLRenderer
+// (a jsdom import is enough; no GPU/WebGL backend needed for pure-math checks). Same read-only-
+// diagnostics spirit as every other _*ForTest seam above; no product code path reads this object.
+window.Theater._occlusionLawForTest = {
+  itrSegmentIntersectsAabb, itrPieceSightPoints, itrPillarCutawayMask,
+  itrPillarStubHeight, ITR_PILLAR_STUB_FRAC
+};
+// BW2-1b — TEST-ONLY SEAM: the LIVE camera world position setInteriorBoard's own pillar-cutaway pass
+// actually raycasts from (the PREVIEW placeCamera() call's own output, see that call's header
+// comment) — lets a harness assert the mask it gets from _occlusionLawForTest against the SAME
+// position the real mount used, rather than a second camera-position derivation of its own.
+window.Theater._interiorCameraPositionForTest = function(){
+  return S.camera ? { x: S.camera.position.x, y: S.camera.position.y, z: S.camera.position.z } : null;
+};
+
+// CLIP MARGIN LAW (Adam addendum, mid-flight on BW2-1b) — TEST-ONLY SEAM: the pure geometry (circle-
+// vs-AABB push, the nearby-prism-box gatherer, the clamp-and-report nudge deriver) so a harness can
+// exercise the exact math interiorBuildPieces/interiorBuildDressing run, independent of a live mount.
+window.Theater._clipMarginLawForTest = {
+  itrClosestPointOnAabbXZ, itrCircleAabbPushXZ, itrNearbyPrismBoxes, itrClipNudgeFor,
+  CLIP_NUDGE_MAX_FRAC, CLIP_DRESSING_EPSILON
+};

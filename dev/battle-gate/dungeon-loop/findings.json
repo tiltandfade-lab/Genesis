@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-11T04:27:35.569Z",
+  "generatedAt": "2026-07-11T04:56:14.906Z",
   "iterations": [
     {
       "loopIndex": 1,
@@ -18,7 +18,7 @@
         "ok": true,
         "stage": "done",
         "loopIndex": 1,
-        "topology": "The Spine",
+        "topology": "The Stronghold",
         "segCount": 5,
         "environment": "dungeon",
         "nodeId": "dungeon-loop-1",
@@ -30,8 +30,8 @@
         "targetSegNum": 3,
         "room": {
           "segNum": 3,
-          "x": 22,
-          "y": 4,
+          "x": 3,
+          "y": 32,
           "w": 4,
           "d": 6
         },
@@ -62,7 +62,7 @@
         },
         "pnCursor": 3
       },
-      "topology": "The Spine",
+      "topology": "The Stronghold",
       "roomCount": 5,
       "reachability": {
         "ok": true,
@@ -71,7 +71,7 @@
       "rendered": {
         "ok": true,
         "stage": "setInteriorBoard",
-        "dressingCountFromTray": 41,
+        "dressingCountFromTray": 46,
         "beatMaxHeight": 0.561,
         "beatFrustumCheck": {
           "corners": [
@@ -79,80 +79,80 @@
               "x": -0.5,
               "y": 0,
               "z": -0.5,
-              "ndcX": 0.1663296697690639,
-              "ndcY": 0.6664945507454352,
+              "ndcX": 0.1981889136221543,
+              "ndcY": 0.5527174724731055,
               "inFrustum": true
             },
             {
               "x": 1.5,
               "y": 0,
               "z": -0.5,
-              "ndcX": 0.7467077918340772,
-              "ndcY": 0.1100362511502692,
+              "ndcX": 0.9064592128936841,
+              "ndcY": 0.09575417685932786,
               "inFrustum": true
             },
             {
               "x": -0.5,
               "y": 0,
               "z": 2.5,
-              "ndcX": -0.7838822454980267,
-              "ndcY": -0.11551434788968334,
+              "ndcX": -0.9466060769802237,
+              "ndcY": -0.09999510669865133,
               "inFrustum": true
             },
             {
               "x": 1.5,
               "y": 0,
               "z": 2.5,
-              "ndcX": -0.23336208768578404,
-              "ndcY": -0.9350981097305235,
+              "ndcX": -0.2624355648485589,
+              "ndcY": -0.7318912013751129,
               "inFrustum": true
             },
             {
               "x": -0.5,
               "y": 0.561,
               "z": -0.5,
-              "ndcX": 0.17286120124562798,
-              "ndcY": 0.9648340241574018,
+              "ndcX": 0.2045820088350056,
+              "ndcY": 0.8003144558536665,
               "inFrustum": true
             },
             {
               "x": 1.5,
               "y": 0.561,
               "z": -0.5,
-              "ndcX": 0.7803205139459692,
-              "ndcY": 0.4269814749330706,
+              "ndcX": 0.9391929559872098,
+              "ndcY": 0.35643186646318703,
               "inFrustum": true
             },
             {
               "x": -0.5,
               "y": 0.561,
               "z": 2.5,
-              "ndcX": -0.8210082601897553,
-              "ndcY": 0.20727467978758699,
+              "ndcX": -0.982360754705365,
+              "ndcY": 0.16527028780239836,
               "inFrustum": true
             },
             {
               "x": 1.5,
               "y": 0.561,
               "z": 2.5,
-              "ndcX": -0.24642572506167193,
-              "ndcY": -0.599451684282562,
+              "ndcX": -0.27376382261781024,
+              "ndcY": -0.4560176270379504,
               "inFrustum": true
             }
           ],
           "ok": true
         },
-        "meshCount": 5,
+        "meshCount": 4,
         "piecesRequested": 3,
         "piecesResolved": 3,
-        "dressingCount": 41
+        "dressingCount": 46
       },
       "bw2CrispChannel": {
         "buffer": {
-          "drawWidth": 1292,
-          "drawHeight": 786,
-          "cssWidth": 1292,
-          "cssHeight": 786,
+          "drawWidth": 972,
+          "drawHeight": 874,
+          "cssWidth": 972,
+          "cssHeight": 874,
           "psxEnabled": false
         },
         "spriteFilters": {
@@ -163,8 +163,8 @@
         },
         "fps": {
           "samples": 60,
-          "elapsedMs": 156,
-          "fps": 384.61538461538464
+          "elapsedMs": 85.30000000074506,
+          "fps": 703.3997655272676
         }
       },
       "verbResults": {
@@ -188,14 +188,14 @@
       ],
       "benign404Count": 4,
       "summary": {
-        "topology": "The Spine",
+        "topology": "The Stronghold",
         "realm": "chrome",
         "roomCount": 5,
         "planVerified": true,
         "piecesResolved": 3,
         "piecesRequested": 3,
-        "dressingCount": 41,
-        "meshCount": 5,
+        "dressingCount": 46,
+        "meshCount": 4,
         "consoleErrorCount": 3,
         "breakCount": 0
       }
@@ -218,7 +218,7 @@
         "ok": true,
         "stage": "done",
         "loopIndex": 2,
-        "topology": "The Ruin",
+        "topology": "The Hub",
         "segCount": 7,
         "environment": "dungeon",
         "nodeId": "dungeon-loop-2",
@@ -230,8 +230,8 @@
         "targetSegNum": 4,
         "room": {
           "segNum": 4,
-          "x": 21,
-          "y": 12,
+          "x": 3,
+          "y": 25,
           "w": 6,
           "d": 7
         },
@@ -267,7 +267,7 @@
         },
         "pnCursor": 4
       },
-      "topology": "The Ruin",
+      "topology": "The Hub",
       "roomCount": 7,
       "reachability": {
         "ok": true,
@@ -276,7 +276,7 @@
       "rendered": {
         "ok": true,
         "stage": "setInteriorBoard",
-        "dressingCountFromTray": 64,
+        "dressingCountFromTray": 70,
         "beatMaxHeight": 1.903,
         "beatFrustumCheck": {
           "corners": [
@@ -284,7 +284,7 @@
               "x": -2.5,
               "y": 0,
               "z": -1,
-              "ndcX": -0.03273852598961181,
+              "ndcX": -0.04838873372453844,
               "ndcY": 0.4763306019269643,
               "inFrustum": true
             },
@@ -292,7 +292,7 @@
               "x": 2.5,
               "y": 0,
               "z": -1,
-              "ndcX": 0.5609735507111803,
+              "ndcX": 0.829139338175623,
               "ndcY": -0.08485891164674622,
               "inFrustum": true
             },
@@ -300,7 +300,7 @@
               "x": -2.5,
               "y": 0,
               "z": 3,
-              "ndcX": -0.538894313095732,
+              "ndcX": -0.796505420871168,
               "ndcY": 0.0815189679512501,
               "inFrustum": true
             },
@@ -308,7 +308,7 @@
               "x": 2.5,
               "y": 0,
               "z": 3,
-              "ndcX": 0.04251650369191681,
+              "ndcX": 0.06284094087495942,
               "ndcY": -0.6185957120313468,
               "inFrustum": true
             },
@@ -316,7 +316,7 @@
               "x": -2.5,
               "y": 1.903,
               "z": -1,
-              "ndcX": -0.03446284384802998,
+              "ndcX": -0.050937338317608355,
               "ndcY": 0.9103719060994121,
               "inFrustum": true
             },
@@ -324,7 +324,7 @@
               "x": 2.5,
               "y": 1.903,
               "z": -1,
-              "ndcX": 0.5953194766959098,
+              "ndcX": 0.8799038676332148,
               "ndcY": 0.3853336704067676,
               "inFrustum": true
             },
@@ -332,7 +332,7 @@
               "x": -2.5,
               "y": 1.903,
               "z": 3,
-              "ndcX": -0.5705136218966854,
+              "ndcX": -0.8432399108298416,
               "ndcY": 0.5418816248904353,
               "inFrustum": true
             },
@@ -340,7 +340,7 @@
               "x": 2.5,
               "y": 1.903,
               "z": 3,
-              "ndcX": 0.04547111415196402,
+              "ndcX": 0.06720796273954568,
               "ndcY": -0.12200106080035548,
               "inFrustum": true
             }
@@ -350,14 +350,14 @@
         "meshCount": 5,
         "piecesRequested": 4,
         "piecesResolved": 4,
-        "dressingCount": 64
+        "dressingCount": 70
       },
       "bw2CrispChannel": {
         "buffer": {
-          "drawWidth": 1292,
-          "drawHeight": 786,
-          "cssWidth": 1292,
-          "cssHeight": 786,
+          "drawWidth": 972,
+          "drawHeight": 874,
+          "cssWidth": 972,
+          "cssHeight": 874,
           "psxEnabled": false
         },
         "spriteFilters": {
@@ -368,8 +368,8 @@
         },
         "fps": {
           "samples": 60,
-          "elapsedMs": 424.19999999925494,
-          "fps": 141.44271570038987
+          "elapsedMs": 187.5,
+          "fps": 320
         }
       },
       "verbResults": {
@@ -384,13 +384,13 @@
       "urls404": [],
       "benign404Count": 0,
       "summary": {
-        "topology": "The Ruin",
+        "topology": "The Hub",
         "realm": "gloom",
         "roomCount": 7,
         "planVerified": true,
         "piecesResolved": 4,
         "piecesRequested": 4,
-        "dressingCount": 64,
+        "dressingCount": 70,
         "meshCount": 5,
         "consoleErrorCount": 0,
         "breakCount": 0
@@ -415,7 +415,7 @@
         "ok": true,
         "stage": "done",
         "loopIndex": 3,
-        "topology": "The Onion",
+        "topology": "The Stronghold",
         "segCount": 9,
         "environment": "dungeon",
         "nodeId": "dungeon-loop-3",
@@ -427,8 +427,8 @@
         "targetSegNum": 5,
         "room": {
           "segNum": 5,
-          "x": 29,
-          "y": 42,
+          "x": 41,
+          "y": 15,
           "w": 6,
           "d": 7
         },
@@ -468,7 +468,7 @@
         },
         "pnCursor": 5
       },
-      "topology": "The Onion",
+      "topology": "The Stronghold",
       "roomCount": 9,
       "reachability": {
         "ok": true,
@@ -477,7 +477,7 @@
       "rendered": {
         "ok": true,
         "stage": "setInteriorBoard",
-        "dressingCountFromTray": 71,
+        "dressingCountFromTray": 90,
         "beatMaxHeight": 1.2429999999999999,
         "beatFrustumCheck": {
           "corners": [
@@ -485,64 +485,64 @@
               "x": -2.5,
               "y": 0,
               "z": -3,
-              "ndcX": 0.053530896729253534,
-              "ndcY": 0.5551731738637057,
+              "ndcX": 0.07424398666705649,
+              "ndcY": 0.5209548707375271,
               "inFrustum": true
             },
             {
               "x": 2.5,
               "y": 0,
               "z": -3,
-              "ndcX": 0.6745748140348806,
-              "ndcY": 0.05781875104199601,
+              "ndcX": 0.9272714139558093,
+              "ndcY": 0.05377251136039672,
               "inFrustum": true
             },
             {
               "x": -2.5,
               "y": 0,
               "z": 3,
-              "ndcX": -0.6948075790699864,
-              "ndcY": -0.05955292963881971,
+              "ndcX": -0.9530828983797964,
+              "ndcY": -0.05526932051306585,
               "inFrustum": true
             },
             {
               "x": 2.5,
               "y": 0,
               "z": 3,
-              "ndcX": -0.07430806850225351,
-              "ndcY": -0.7706548695182444,
+              "ndcX": -0.10065272263930228,
+              "ndcY": -0.7062595701801652,
               "inFrustum": true
             },
             {
               "x": -2.5,
               "y": 1.2429999999999999,
               "z": -3,
-              "ndcX": 0.05525983819262398,
-              "ndcY": 0.8346996322336738,
+              "ndcX": 0.07648965179354407,
+              "ndcY": 0.7816964898263683,
               "inFrustum": true
             },
             {
               "x": 2.5,
               "y": 1.2429999999999999,
               "z": -3,
-              "ndcX": 0.6996524119596322,
-              "ndcY": 0.36106784327056785,
+              "ndcX": 0.9592475445792741,
+              "ndcY": 0.33492844804379157,
               "inFrustum": true
             },
             {
               "x": -2.5,
               "y": 1.2429999999999999,
               "z": 3,
-              "ndcX": -0.7214417571950911,
-              "ndcY": 0.24864105071154646,
+              "ndcX": -0.9868964351521593,
+              "ndcY": 0.23012192670124268,
               "inFrustum": true
             },
             {
               "x": 2.5,
               "y": 1.2429999999999999,
               "z": 3,
-              "ndcX": -0.07768188851509521,
-              "ndcY": -0.4379054370894451,
+              "ndcX": -0.10482498252632473,
+              "ndcY": -0.3997976396040196,
               "inFrustum": true
             }
           ],
@@ -551,14 +551,14 @@
         "meshCount": 5,
         "piecesRequested": 5,
         "piecesResolved": 5,
-        "dressingCount": 71
+        "dressingCount": 90
       },
       "bw2CrispChannel": {
         "buffer": {
-          "drawWidth": 1292,
-          "drawHeight": 786,
-          "cssWidth": 1292,
-          "cssHeight": 786,
+          "drawWidth": 972,
+          "drawHeight": 874,
+          "cssWidth": 972,
+          "cssHeight": 874,
           "psxEnabled": false
         },
         "spriteFilters": {
@@ -569,8 +569,8 @@
         },
         "fps": {
           "samples": 60,
-          "elapsedMs": 181,
-          "fps": 331.49171270718233
+          "elapsedMs": 316.1000000014901,
+          "fps": 189.81335020473634
         }
       },
       "verbResults": {
@@ -585,13 +585,13 @@
       "urls404": [],
       "benign404Count": 0,
       "summary": {
-        "topology": "The Onion",
+        "topology": "The Stronghold",
         "realm": "fantasy",
         "roomCount": 9,
         "planVerified": true,
         "piecesResolved": 5,
         "piecesRequested": 5,
-        "dressingCount": 71,
+        "dressingCount": 90,
         "meshCount": 5,
         "consoleErrorCount": 0,
         "breakCount": 0
@@ -614,7 +614,7 @@
         "ok": true,
         "stage": "done",
         "loopIndex": 4,
-        "topology": "The Loop",
+        "topology": "The Figure-8",
         "segCount": 11,
         "environment": "dungeon",
         "nodeId": "dungeon-loop-4",
@@ -626,8 +626,8 @@
         "targetSegNum": 6,
         "room": {
           "segNum": 6,
-          "x": 47,
-          "y": 29,
+          "x": 29,
+          "y": 3,
           "w": 6,
           "d": 6
         },
@@ -659,7 +659,7 @@
         },
         "pnCursor": 6
       },
-      "topology": "The Loop",
+      "topology": "The Figure-8",
       "roomCount": 11,
       "reachability": {
         "ok": true,
@@ -668,7 +668,7 @@
       "rendered": {
         "ok": true,
         "stage": "setInteriorBoard",
-        "dressingCountFromTray": 85,
+        "dressingCountFromTray": 87,
         "beatMaxHeight": 1.2429999999999999,
         "beatFrustumCheck": {
           "corners": [
@@ -676,7 +676,7 @@
               "x": -0.5,
               "y": 0,
               "z": -0.5,
-              "ndcX": 3.5552640557095276e-16,
+              "ndcX": 5.254809754316334e-16,
               "ndcY": 0.5378112133520461,
               "inFrustum": true
             },
@@ -684,7 +684,7 @@
               "x": 2.5,
               "y": 0,
               "z": -0.5,
-              "ndcX": 0.5925176357464389,
+              "ndcX": 0.875762644669008,
               "ndcY": -7.646038506407311e-16,
               "inFrustum": true
             },
@@ -692,7 +692,7 @@
               "x": -0.5,
               "y": 0,
               "z": 2.5,
-              "ndcX": -0.5925176357464383,
+              "ndcX": -0.8757626446690071,
               "ndcY": -7.646038506407311e-16,
               "inFrustum": true
             },
@@ -700,7 +700,7 @@
               "x": 2.5,
               "y": 0,
               "z": 2.5,
-              "ndcX": 2.1482809143048157e-16,
+              "ndcX": 3.17523743007821e-16,
               "ndcY": -0.7041110548334798,
               "inFrustum": true
             },
@@ -708,7 +708,7 @@
               "x": -0.5,
               "y": 1.2429999999999999,
               "z": -0.5,
-              "ndcX": 3.7644410898725264e-16,
+              "ndcX": 5.563981028875664e-16,
               "ndcY": 0.98497713840352,
               "inFrustum": true
             },
@@ -716,7 +716,7 @@
               "x": 2.5,
               "y": 1.2429999999999999,
               "z": -0.5,
-              "ndcX": 0.6323609330246118,
+              "ndcX": 0.934652489108336,
               "ndcY": 0.4749055795595074,
               "inFrustum": true
             },
@@ -724,7 +724,7 @@
               "x": -0.5,
               "y": 1.2429999999999999,
               "z": 2.5,
-              "ndcX": -0.6323609330246113,
+              "ndcX": -0.9346524891083352,
               "ndcY": 0.47490557955950746,
               "inFrustum": true
             },
@@ -732,7 +732,7 @@
               "x": 2.5,
               "y": 1.2429999999999999,
               "z": 2.5,
-              "ndcX": 2.316826891424074e-16,
+              "ndcX": 3.4243545225750996e-16,
               "ndcY": -0.2052625687470047,
               "inFrustum": true
             }
@@ -742,14 +742,14 @@
         "meshCount": 5,
         "piecesRequested": 3,
         "piecesResolved": 3,
-        "dressingCount": 85
+        "dressingCount": 87
       },
       "bw2CrispChannel": {
         "buffer": {
-          "drawWidth": 1292,
-          "drawHeight": 786,
-          "cssWidth": 1292,
-          "cssHeight": 786,
+          "drawWidth": 972,
+          "drawHeight": 874,
+          "cssWidth": 972,
+          "cssHeight": 874,
           "psxEnabled": false
         },
         "spriteFilters": {
@@ -760,8 +760,8 @@
         },
         "fps": {
           "samples": 60,
-          "elapsedMs": 222.40000000223517,
-          "fps": 269.7841726591591
+          "elapsedMs": 527.4000000022352,
+          "fps": 113.76564277539953
         }
       },
       "verbResults": {
@@ -776,13 +776,13 @@
       "urls404": [],
       "benign404Count": 0,
       "summary": {
-        "topology": "The Loop",
+        "topology": "The Figure-8",
         "realm": "gloom",
         "roomCount": 11,
         "planVerified": true,
         "piecesResolved": 3,
         "piecesRequested": 3,
-        "dressingCount": 85,
+        "dressingCount": 87,
         "meshCount": 5,
         "consoleErrorCount": 0,
         "breakCount": 0
@@ -807,7 +807,7 @@
         "ok": true,
         "stage": "done",
         "loopIndex": 5,
-        "topology": "The Loop",
+        "topology": "The Labyrinth Fragment",
         "segCount": 8,
         "environment": "dungeon",
         "nodeId": "dungeon-loop-5",
@@ -860,7 +860,7 @@
         },
         "pnCursor": 5
       },
-      "topology": "The Loop",
+      "topology": "The Labyrinth Fragment",
       "roomCount": 8,
       "reachability": {
         "ok": true,
@@ -877,7 +877,7 @@
               "x": -2.5,
               "y": 0,
               "z": -2.5,
-              "ndcX": -6.556883908933924e-16,
+              "ndcX": -9.691313214064358e-16,
               "ndcY": 0.4687316181660428,
               "inFrustum": true
             },
@@ -885,7 +885,7 @@
               "x": 2.5,
               "y": 0,
               "z": -2.5,
-              "ndcX": 0.5636926306594591,
+              "ndcX": 0.8331582373659756,
               "ndcY": 0,
               "inFrustum": true
             },
@@ -893,7 +893,7 @@
               "x": -2.5,
               "y": 0,
               "z": 2.5,
-              "ndcX": -0.5636926306594602,
+              "ndcX": -0.8331582373659774,
               "ndcY": 0,
               "inFrustum": true
             },
@@ -901,7 +901,7 @@
               "x": 2.5,
               "y": 0,
               "z": 2.5,
-              "ndcX": -4.495924389881739e-16,
+              "ndcX": -6.645139986347473e-16,
               "ndcY": -0.6135816510832054,
               "inFrustum": true
             },
@@ -909,7 +909,7 @@
               "x": -2.5,
               "y": 1.903,
               "z": -2.5,
-              "ndcX": -6.862156211730709e-16,
+              "ndcX": -1.014251679538007e-15,
               "ndcY": 0.8676440301032409,
               "inFrustum": true
             },
@@ -917,7 +917,7 @@
               "x": 2.5,
               "y": 1.903,
               "z": -2.5,
-              "ndcX": 0.5936356908197951,
+              "ndcX": 0.8774151707861327,
               "ndcY": 0.43023751130361276,
               "inFrustum": true
             },
@@ -925,7 +925,7 @@
               "x": -2.5,
               "y": 1.903,
               "z": 2.5,
-              "ndcX": -0.5936356908197964,
+              "ndcX": -0.8774151707861347,
               "ndcY": 0.43023751130361276,
               "inFrustum": true
             },
@@ -933,7 +933,7 @@
               "x": 2.5,
               "y": 1.903,
               "z": 2.5,
-              "ndcX": -4.773928234931171e-16,
+              "ndcX": -7.056039794016376e-16,
               "ndcY": -0.15069695914604175,
               "inFrustum": true
             }
@@ -947,10 +947,10 @@
       },
       "bw2CrispChannel": {
         "buffer": {
-          "drawWidth": 1292,
-          "drawHeight": 786,
-          "cssWidth": 1292,
-          "cssHeight": 786,
+          "drawWidth": 972,
+          "drawHeight": 874,
+          "cssWidth": 972,
+          "cssHeight": 874,
           "psxEnabled": false
         },
         "spriteFilters": {
@@ -961,8 +961,8 @@
         },
         "fps": {
           "samples": 60,
-          "elapsedMs": 221.89999999850988,
-          "fps": 270.39206850113976
+          "elapsedMs": 329.6000000014901,
+          "fps": 182.03883495063332
         }
       },
       "verbResults": {
@@ -977,7 +977,7 @@
       "urls404": [],
       "benign404Count": 0,
       "summary": {
-        "topology": "The Loop",
+        "topology": "The Labyrinth Fragment",
         "realm": "chrome",
         "roomCount": 8,
         "planVerified": true,
@@ -999,8 +999,8 @@
     "notes": [
       "startSession() called"
     ],
-    "worldId": "mrfv5rpemv7rd",
-    "worldName": "Old Oak Wharf"
+    "worldId": "mrfw6kcl1ejy9",
+    "worldName": "The Ash-Plaza"
   },
   "theaterState": {
     "hasBattleStage": true,
@@ -1009,7 +1009,7 @@
     "hasSetInteriorBoard": true,
     "hasPlay": true
   },
-  "contactSheetPath": "/Users/adamstephenson/Desktop/Work/projects/Genesis/dev/battle-gate/dungeon-loop/contact-sheet.png",
+  "contactSheetPath": "/Users/adamstephenson/Desktop/Work/projects/Genesis/.claude/worktrees/agent-a8794fb133f42c689/dev/battle-gate/dungeon-loop/contact-sheet.png",
   "shotCount": 15,
   "breakCount": 0,
   "cleanIterations": 5

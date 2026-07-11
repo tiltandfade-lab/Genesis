@@ -787,7 +787,13 @@ console.log("\n=== G5 ROUND-2 finding 2: base disc — circular, under the feet,
   // disc needs a DIFFERENT y to actually peek out as a visible rim rather than being buried under
   // both the tile AND the figure's own disc geometry) — this check's real invariant (x/z never
   // drift) is unchanged by that; only the Y-arg shape gets a wider (still specific) match.
-  const figurePosSet = bootSrc.match(/figure\.position\.set\((x), 0, (z)\)/);
+  // 2026-07-10 BEAUTY-WAVE VP1b: the figure's own Y arg widened from the literal `0` to an
+  // identifier (`posY` — interior-true-scale figures sit on the room floor line; the flat
+  // tabletop path still computes posY=0), the SAME widening the disc's Y already got for discY
+  // below. The check's real invariant (figure and disc wired from identical x/z locals) is
+  // unchanged. Red-first: the old literal-0 pattern matched null against VP1b's source, which
+  // is exactly the failure this fixture update clears.
+  const figurePosSet = bootSrc.match(/figure\.position\.set\((x), (?:-?[\d.]+|[A-Za-z_$][\w$]*), (z)\)/);
   const discPosSet = bootSrc.match(/baseDisc\.position\.set\((x), (?:-?[\d.]+|[A-Za-z_$][\w$]*), (z)\)/);
   check("figure and base disc are positioned from the SAME x/z locals (disc can't drift off the figure's own origin)",
     !!figurePosSet && !!discPosSet && figurePosSet[1] === discPosSet[1] && figurePosSet[2] === discPosSet[2],

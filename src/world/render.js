@@ -611,13 +611,13 @@ function cmbBandTagsHtml(bands){
     return `<span class="stage-band-tag" style="top:${pct}%" data-band="${escHtml(b)}" onclick="cmbZoneInsert('${escHtml(bandLbl)}','C')">${escHtml(bandLbl)}</span>`;
   }).join("");
 }
-function cmbStageOverlay(w,cur,cm,flashed){
+function cmbStageOverlay(w,cur,cm,flashed,roundBoundary){
   const grid=cm.grid||{bands:(typeof CM_BANDS!=="undefined"?CM_BANDS:["melee","near","far","out"]),lanes:(typeof CM_LANES!=="undefined"?CM_LANES:["L","C","R"])};
   const bands=grid.bands||[];
   // INITIATIVE-UI §1: the turn banner rides alongside the band tags at the overlay's top edge — a
   // sibling wrapper (the tags are absolutely positioned by cmbBandTagsHtml's own inline `top`, so this
   // wrapper's flow position is independent of them) so the banner's own CSS controls its position.
-  return `<div class="stage-band-tags" aria-hidden="false">${cmbBandTagsHtml(bands)}</div>${cmbTurnBanner(cm)}`;
+  return `<div class="stage-band-tags" aria-hidden="false">${cmbBandTagsHtml(bands)}</div>${cmbTurnBanner(cm,roundBoundary)}`;
 }
 /* the bottom unit strip — a single row of ≤48px-tall name+HP-pip chips, ONE per combatant, docked to
    the stage's bottom edge (genesis.html's .stage-unit-strip: backdrop-blur, 0.75 opacity per the spec
@@ -641,7 +641,7 @@ function cmbStripChip(name,fid,word,active,flash,isPc){
     <span class="stage-strip-pips">${cmbStripPips(word)}</span>
   </span>`;
 }
-function cmbUnitStripHtml(w,cur,cm,flashed){
+function cmbUnitStripHtml(w,cur,cm,flashed,roundBoundary){
   const sh=cur&&cur.sheet;
   const allyRows=(typeof companionPartyStrip==="function")?companionPartyStrip(w):[];
   const pcActive=!!(cm.side==="pc");
@@ -659,7 +659,10 @@ function cmbUnitStripHtml(w,cur,cm,flashed){
     const word=cmFoeStateWord(f);
     chips.push(cmbStripChip(f.name||"?",f.fid||f.name,word,!pcActive,!!(flashed&&flashed.has(f.fid||f.name)),false));
   });
-  return `<div class="stage-unit-strip" aria-hidden="false">${chips.join("")}</div>`;
+  // BEAUTY-WAVE-4.md MF-4 item 2: "the chip strip pulses once" on a genuine round advance — same
+  // roundBoundary one-shot flag the turn banner's dip-and-return uses (cmbRoundBoundaryFlashed),
+  // threaded down from theaterStageHtml so both fire off the exact same per-pass decision.
+  return `<div class="stage-unit-strip${roundBoundary?' cmb-round-boundary':''}" aria-hidden="false">${chips.join("")}</div>`;
 }
 /* BEAUTY-WAVE VP5 item 2/3 — pushes this render's acting-side selection + any newly-flashed
    combatants' floater text down into the live Theater instance (no-op, safely, when Theater isn't
@@ -693,7 +696,7 @@ function cmbSyncTheaterFx(cm,flashed){
    glyph appended to the banner text itself so it reads at any zoom without a second DOM lookup;
    combatPanel's classic header gets the same text via the same function (§1 "Also rendered in the
    classic combatPanel as text"). */
-function cmbTurnBanner(cm){
+function cmbTurnBanner(cm,isNewRound){
   if(!cm||!cm.active) return "";
   const round=cm.round||1;
   const sideWord=cm.side==="pc"?"YOU ACT":"THEY ACT";
@@ -701,7 +704,33 @@ function cmbTurnBanner(cm){
   // the side named in the spent clause is the FIRST-acting side (the one whose turn already passed
   // this round), never the side currently acting — cm.side!==cm.first means cm.first is the spent one.
   const spentWord=spent?(cm.first==="pc"?" · YOURS SPENT":" · THEIRS SPENT"):"";
-  return `<div class="cmb-turn-banner${spent?' spent':''}" aria-hidden="false">Round ${round} — ${sideWord}${spentWord}</div>`;
+  // BEAUTY-WAVE-4.md MF-4 item 2: a genuine round advance (cmbRoundBoundaryFlashed's one-shot flag,
+  // threaded in by the caller) stamps the dip-and-return class onto THIS render's banner only.
+  return `<div class="cmb-turn-banner${spent?' spent':''}${isNewRound?' cmb-round-boundary':''}" aria-hidden="false">Round ${round} — ${sideWord}${spentWord}</div>`;
+}
+/* BEAUTY-WAVE-4.md MF-4 item 2 (the rhythm layer, "round boundary"): "the ROUND header does a 250ms
+   dip-and-return; the chip strip pulses once." Both are driven off ONE per-pass boolean — "is this
+   render pass the FIRST one to see this round number" — derived the same read-then-overwrite way
+   cmbDamageFlashed (just above) derives its own one-shot flash set: GS.cmbLastRoundSeen holds the last
+   round this function has already seen; a mismatch means this pass is a genuine round ADVANCE (or the
+   very first round of a fresh fight — GS.cmbLastRoundSeen resets to null whenever cm is inactive, see
+   the call sites below), never a same-round re-render (a mid-round side flip changes cm.side, not
+   cm.round, so it never trips this). Caller threads the returned boolean into cmbTurnBanner (the
+   dip) and cmbUnitStripHtml (the pulse) for THIS pass only — a one-shot CSS animation class stamped
+   into freshly-built markup, same "DOM is rebuilt every render, so a class present at creation just
+   plays once and never needs removing" convention cmb-flash already uses (see genesis.html's
+   .cmb-chip.cmb-flash / .stage-strip-chip.cmb-flash rule). Called once per renderer (theaterStageHtml
+   for the stage path, combatPanel for the classic path) — the SAME dual-call-site shape
+   cmbDamageFlashed already has (line ~760 + ~1674), so it carries the identical acceptable risk this
+   file already tolerates: if both the stage AND the classic panel render in one pass, only the first
+   caller sees the true flag. Never mutates for an inactive/absent cm — instead resets the seen-marker
+   so the NEXT fight's round 1 reads as new again. */
+function cmbRoundBoundaryFlashed(cm){
+  if(!cm||!cm.active){ GS.cmbLastRoundSeen=null; return false; }
+  const round=cm.round||1;
+  const isNew=(GS.cmbLastRoundSeen!==round);
+  GS.cmbLastRoundSeen=round;
+  return isNew;
 }
 /* THEATER-ZOOM-SPREAD — the camera-control corner plate (Adam's brief: "⊕/⊖ buttons on... the
    battle-stage overlay (top-right corner plate, pointer-events on, next to a ⟳ rotate button if none
@@ -759,8 +788,11 @@ function theaterStageHtml(w,cur){
   const sh=cur&&cur.sheet;
   const flashed=(typeof cmbDamageFlashed==="function")?cmbDamageFlashed(cm):new Set();
   cmbSyncTheaterFx(cm,flashed); // VP5 items 2/3 — acting-ring + damage-floater side effects (no-op if Theater absent)
-  const overlay=cmbStageOverlay(w,cur,cm,flashed);
-  const strip=cmbUnitStripHtml(w,cur,cm,flashed);
+  // BEAUTY-WAVE-4.md MF-4 item 2: computed ONCE per pass (same convention as `flashed` just above),
+  // threaded into both the banner (dip) and the strip (pulse) below.
+  const roundBoundary=cmbRoundBoundaryFlashed(cm);
+  const overlay=cmbStageOverlay(w,cur,cm,flashed,roundBoundary);
+  const strip=cmbUnitStripHtml(w,cur,cm,flashed,roundBoundary);
   const camControls=cmbStageControls();
   const ds=(sh&&sh.hpCur!=null&&sh.hpCur<=0&&typeof cmDeathSavePips==="function")?cmDeathSavePips(sh):"";
   const conc=(typeof cmConcentrationBadge==="function")?cmConcentrationBadge(sh):"";
@@ -1664,7 +1696,10 @@ function combatPanel(w,cur){
   // INITIATIVE-UI §1/§2: the classic panel gets the SAME turn banner (cmbTurnBanner) the stage-overlay
   // uses, rendered as text right in the header — alongside the pre-existing "went first" line (kept
   // verbatim; the banner is additive, not a replacement).
-  const header=`<div class="cmb-head">${cmbTurnBanner(cm)}<b>Round ${cm.round||1}</b> · ${cm.side==="pc"?"your side acts":"the foes act"}
+  // BEAUTY-WAVE-4.md MF-4 item 2: this call site's OWN roundBoundary read (see cmbRoundBoundaryFlashed's
+  // header for the accepted dual-call-site risk, same shape as cmbDamageFlashed below).
+  const roundBoundary=cmbRoundBoundaryFlashed(cm);
+  const header=`<div class="cmb-head">${cmbTurnBanner(cm,roundBoundary)}<b>Round ${cm.round||1}</b> · ${cm.side==="pc"?"your side acts":"the foes act"}
     ${cm.first?` · <span title="won initiative">${cm.first==="pc"?"you":"the foes"} went first</span>`:""}
     ${tags?`<div class="cmb-scene">${tags}</div>`:""}</div>`;
   const prose=`<div class="cmb-prose" role="status" aria-live="polite">${escHtml(cmbProseSummary(cm))}</div>`;

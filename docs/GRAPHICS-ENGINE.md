@@ -39,11 +39,13 @@ The 2026-07-10 dungeon-graph build converged on this grammar independently:
    Billboards face the camera (yaw + elevation tilt), cast alpha-tested shadows, receive
    none. No shader effects touch character pixels (SPRITE PURITY, ruled today).
 2. **BLOCK LAW.** Architecture is clean prism volumes — few faces, sharp silhouettes.
-   Detail lives in the TEXTURE, not the mesh. **PS1 SCOPE AMENDMENT (Adam 2026-07-10
-   night):** on the diorama/interior channel PS1 survives as PALETTE + POLY DISCIPLINE
-   ONLY — the PSX dither shader and vertex snap come OFF world surfaces (they mush the
-   subtle materials; sprites were already exempt). Pending Adam's pixel-verdict on the
-   VP0 study card; the flat tabletop keeps its current look until then.
+   Detail lives in the TEXTURE, not the mesh. **PS1 RETIRED GAME-WIDE (Adam 2026-07-10
+   night, superseding the earlier channel-scoped amendment):** no low-res framebuffer
+   (PSX_RES_SCALE squeeze — the "mode 7 crust" root cause), no dither, no vertex snap,
+   on ANY channel including the flat tabletop. `psxEnabled` default OFF (dev toggle
+   survives for comparison; machinery deletion rides UW3 cleanup). What survives is no
+   longer PS1: palette discipline (realm-palette law), poly discipline (this block law),
+   nearest-MAG sprite crispness (minFilter Linear kills the shimmer). → BW2-0.
 2b. **CAMERA LAW (Adam 2026-07-10 night, pending VP0 pixels).** Gentle PERSPECTIVE
    (~20° FOV) replaces orthographic on the diorama — parallel lines converging is the
    cheapest depth there is. Standee tilt math carries over.

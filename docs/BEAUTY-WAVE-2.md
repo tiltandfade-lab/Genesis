@@ -91,6 +91,33 @@ Per `mock-01-gloom-combat.png`: every combat standee stands on a physical plinth
 bounds; ring wraps base radius; corpse tip keeps base attached; no z-fight (pixel-scan);
 existing 282+ interior checks green. READ vs the mock.
 
+## BW2-2b — BASES v2 + CONTACT AO (Adam 2026-07-11 night, off the landed BW2-2 frames)
+
+1. **FLOOR-ALIGNED BASES (the bug):** the plinth currently inherits the standee's camera-pitch
+   tilt (it's a child of the figure group that updateSpriteBillboardYaw tilts) — it must lie
+   FLAT on the floor plane like a physical mini base. Move the tilt to the sprite's inner
+   wrapper (the ensureWrap seam standee-verbs already uses); base + pool stay floor-aligned on
+   the group. Fall-death still tips the WHOLE group (mini-with-base as one) — the tilt split is
+   camera-tilt vs verb-tilt, assert both.
+2. **THICKER:** base height 0.04 → ~0.09 (a real plinth, per the mock read).
+3. **TURN GLOW:** when a unit is acting, its BASE ITSELF glows (emissive material swap, accent
+   gold, joins the existing ring — ring + glowing plinth together read "your turn" diegetically).
+4. **THE KILTER (taste ruling — "a figurine placed on that particular 5x5 tile"):** each
+   standee gets a tiny SEEDED placement humanization — yaw jitter ±4°, position jitter ≤6% of
+   cell — so minis read hand-placed, not machine-snapped. Deterministic per walkId+slug;
+   combat-grid cell ownership unchanged (visual offset only).
+5. **CONTACT AO, INTENSIFIED + GENERALIZED:** (a) the base's radial pool darkens (core opacity
+   0.5 → ~0.7, tight to the plinth rim — the mock's "subtle drop shadow on the figurine base"
+   reads MORE than ours); (b) WALL-CONTACT AO — any wall-hung or wall-adjacent dressing card
+   (paintings, the chrome screen, shelves) gets a simulated-AO gradient at its attachment seam
+   (a soft dark band card behind/around the contact edge, same CanvasTexture-gradient channel
+   as the pool). Cheap quads, no SSAO pass.
+*Verify:* base world-up alignment asserted under a tilted camera (base normal = +Y while the
+sprite wrapper tilts); thickness/glow/material asserted; kilter deterministic + bounded + cell
+ownership intact; fall-death integrity re-proven; pool intensity measured (core ≥0.65 alpha);
+wall-contact AO present behind every wall-hang in a seeded room; existing interior/floor-contact
+harnesses green; loop gate 5/5 re-shot + READ vs the gloom mock's bases.
+
 ## BW2-3 — MATERIAL TEXEL (walls and floors that read as masonry)
 
 Per both mocks: wall faces show pixel-art block courses; floors show large stone tiles with

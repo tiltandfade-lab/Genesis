@@ -108,6 +108,22 @@ grout lines; texel density matches the sprite corpus (≈ 36px/ft at capture sca
 2. Texel law: one texel density across a kit, sized so a block course reads at the BW2-1
    camera distance (anchor: measure the gloom mock's brick rows against wall height — ≈ 14
    courses per wall height).
+2b. **UV MAPPING LAWS (Adam 2026-07-11 — "the texture tricks"; what makes ONE 512 sheet serve
+   every room size, per the everything-procedural doctrine):**
+   - **FLOOR: 1 texture tile = 1 grid cell (5ft), 1:1.** RepeatWrapping; repeat = room dims in
+     cells; the grout grid thereby ALIGNS with the combat grid (free legibility).
+   - **WALLS: world-coordinate repeat, never stretch** — vertical at fixed texel (≈14 courses/
+     wall-height), horizontal repeats by wall length; the fold gate grades each arrival:
+     perfect tile → RepeatWrapping, near-tile → MirroredRepeatWrapping (ping-pong hides the seam).
+   - **COLUMNS/PILLARS: per-face planar** from the wall sheet at matching texel (never
+     wrap-stretched around the prism); alternate faces mirrored so adjacent faces never read identical.
+   - **TRIM strips: stretch-to-fit along the run**, clamped vertically (bounded elements are
+     the ONE legal stretch case).
+   - **FURNITURE (ROOM-GRAMMAR's roster): per-face planar, one self-contained face tile per
+     face**; long runs (pew seats) repeat the face tile with mirrored wrapping along the length.
+   - **DOCTRINE (Adam): everything is procedural — only setPiece centerpieces are handcrafted.**
+     These mapping laws are the mechanism: any wall length, any footprint, any furniture size
+     consumes the same small texture set with zero per-room authoring.
 3. Subtle-texture law still binds: low contrast (value jitter caps), never busy under sprites.
 4. Flagships tuned (fantasy/gloom/chrome); other realms inherit mechanically.
 *Verify:* textures deterministic; contrast bounds asserted (max value spread per face);

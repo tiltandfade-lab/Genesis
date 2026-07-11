@@ -115,16 +115,43 @@ Per `mock-01-fantasy-explore.png` (door arches with real depth) + `mock-01-final
 captures (structural asserts + pixel evidence); combat grid respects dais walkability; scale
 domains unaffected; interior harnesses green; READ vs mocks.
 
+## BW2-1b — THE OCCLUSION LAW (Adam 2026-07-10 night: "big columns blocking the characters")
+
+**LAW: nothing renders between the camera and an actor's standee.** The mocks (and Wildermyth)
+never let a column eat a character; our loop frames do (loop-03's knight behind a pillar).
+1. **Dynamic cutaway:** extend the cutaway-walls treatment to interior columns/pillar prisms —
+   any prism whose bounds intersect a camera→standee sightline (test per mounted standee, each
+   camera fit) drops to a stub (≈0.3 wall height, the parapet grammar) or fades to ≤0.25
+   opacity. Recompute on camera refit (BW2-1's fitMode changes) and on standee moves
+   (move-step). Instancing note: per-instance visibility/height on the InstancedMesh, or move
+   offenders to a small dynamic mesh set — respect the draw-call budget.
+2. **Placement bias:** pillar/blocker dressing seeding avoids cells on the camera side of
+   walkable/combat cells (the dressPlan already knows blockers; add the camera-side exclusion
+   band). Seeded, deterministic — the bias is in the roll, the cutaway handles the rest.
+3. OUT OF SCOPE: walls (already cutaway), dressing cards (flat, rarely occlude; skip v1).
+*Verify:* red-first — reproduce a seeded scene where a pillar intersects the camera→standee
+ray TODAY (assert the intersection); after: zero standees occluded across 100 seeded
+combat fits (raycast assert); stub/fade prisms restore when the sightline clears; budget
+unchanged; determinism; loop gate re-shot + READ (every figure fully visible in all 15 shots).
+
 ## BW2-6 — THE CONVERGENCE GATE (replaces VP8's caption queue)
 
 Re-shoot the three anchor states on real rolled dungeons with BW2-1..5 on: gloom combat,
 fantasy exploration, finale staging. Compose per-state triptychs: ENGINE | MOCK. The gate
 question (Adam's eyes): "are we converging?" Any named delta becomes BW3's queue. Full-res
 (BG_SHOT_W/H 1920×1080), standee-height fractions reported on the card.
+**Plus the UPSCALE A/B CARD (Adam's ask):** 3 representative sprites (one crisp, one organic,
+one under-res XL) each shown at beat-camera scale via {nearest, scale2x, xBRZ-if-vendorable}
+side by side — Adam's eyes pick the law. Standing posture until then: nearest at ≥native,
+REGENERATE-at-2× for genuinely under-res art (the XL-lane precedent); algorithmic upscale is
+the fallback, not the fix.
 
 ## Order + vehicles
 
-BW2-1 first (everything else is judged at its camera). BW2-2/3/4/5 parallel after it (all
-worktree-isolated Sonnet; BW2-3 and BW2-4 both touch theater-interior — orchestrator resolves
-at merge, VP-wave precedent). BW2-6 = the orchestrator's own gate shoot. Every unit re-runs
-the loop gate; kill stale capture servers before every shoot (the standing scar).
+BW2-1 first (everything else is judged at its camera). Then BW2-1b/2/3/4/5 parallel
+(worktree-isolated; **model split per Adam 2026-07-10: Sonnet for the mechanical units
+BW2-1/1b/2/5; OPUS for the taste loops BW2-3/BW2-4**, each with an explicit iterate loop:
+shoot → read vs mock → adjust dials → repeat to convergence, ≤5 rounds, every round's frame
+kept as evidence). BW2-3 and BW2-4 both touch theater-interior — orchestrator resolves at
+merge (VP-wave precedent). BW2-6 = the orchestrator's own gate shoot. Every unit re-runs the
+loop gate; kill stale capture servers before every shoot (the standing scar).

@@ -8,6 +8,52 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-07-11 — BW4 MOTION & FEEL: the stills became footage (4 units landed, hit-stop wiring deferred to MF-3b)
+
+**The wave.** BEAUTY-WAVE-4 (docs/BEAUTY-WAVE-4.md) — the space between verbs. Orchestrated as
+4 background Sonnet executors in isolated worktrees, each personally re-gated on its branch tip
+and landed `--no-ff`; MF-1 first (gating — everything is judged through the camera), then
+MF-2/3/4 in parallel off its tip.
+
+**Added.**
+- **MF-1 CAMERA TWEENS** (`c067276a`) — beat/room/move-step camera refits glide position+target
+  over 320ms ease-out instead of snapping; interruptible retarget from the live interpolated
+  pose; player zoom/rotate stay instant (Feel Law 3). Reuses the `S.tweens`/`tickTweens` channel.
+  The executor found+fixed two real interruption bugs (preview `placeCamera` snapping;
+  `drainTweens` force-completing) by capturing the pre-fit pose at the top of `setInteriorBoard`.
+- **MF-4 TURN & ROUND PRESENTATION** (`f606d14b`) — acting-ring 300ms slide between single-actor
+  handoffs (instant path kept for every other shape); round header 250ms dip-and-return + chip
+  strip single pulse off a one-shot `GS.cmbLastRoundSeen` flag (mirrors `cmbDamageFlashed`); VP5
+  damage floater 60ms pop-in scale. Transform/opacity only — no reflow storms.
+- **MF-3 IMPACT FEEL — mechanism** (`3a245c6b`) — hit-stop freeze (attacker+target verb tweens
+  stall `t` at contact; world + camera-pose tween keep ticking, doubly guarded against freezing
+  an `isCameraPoseTween`), directional recoil, crit white-flash + 2px single-bounce camera nudge,
+  fall-death 80ms hold. Freeze resumes start-shifted (no jump).
+- **MF-2 SPAWN/DESPAWN GRACE** (`fa27aff7`) — standee mount 150ms fade + 4% scale settle
+  (base-first); despawn 200ms fade-into-base (base lifts last); seeded ≤400ms dressing/furniture
+  cascade; room-transition 200ms crossfade. New theater-layer ES module `src/ui/spawn-grace.js`.
+
+**Deferred.**
+- **MF-3b (hit-stop production wiring)** — MF-3's hit-stop/recoil/crit-response are built + tested
+  but DORMANT in real play: production plays `hit-damage` (via the `{hurt:"hit-damage"}` remap) so
+  base shake+flash fire, but the hit-stop freeze + recoil are gated on `opts.attackerId` and
+  crit-response on a `hit-crit` verb, neither of which `theaterFxFromLedger`'s hp case emits.
+  Wiring = thread `attackerId` + a crit flag onto the hp ledger event (an EVENT-CONTRACT addition
+  at the `DM_EVENT_FIELDS` boundary) — flagged for Adam's design call. fall-death's hold IS live.
+- **MF-5 feel gate** — the interactive "does it feel like moving miniatures?" play session (Adam
+  at the keyboard) + the instrumented turn-burst, best shot after MF-3b so the burst can show the
+  hit-stop centerpiece. Interim evidence: the loop-gate contact sheet + `loop-01-camera-mid-tween.png`
+  regenerated on the integrated tree, plus the fake-clock harnesses proving every tween curve.
+
+**Fixed.**
+- `verify-mf1-camera-tweens` settle-await 5s→15s (`978d1402`) — MF-1's own on-mount camera tween
+  needs longer to settle on a cold/contended headless Chrome (matched the frustum harness).
+
+**Gates (all personally re-run by the orchestrator, never self-reports).** check-manifest OK;
+verify-mf1 24/0, verify-mf4 36/0, verify-mf3 47/0, verify-mf2 61/0; the integration gate on the
+merged tree (all four MF harnesses + standee 71/0, theater-verbs 100/0, dungeon-interior 287/0);
+loop gate 5/5 clean, fps 72–253.
+
 ## 2026-07-11 — BW3 + THE FULL VISUAL CAMPAIGN CLOSED: three waves in one sitting; the engine converged on the mocks
 
 **The arc.** Adam's mock frames became the reference model; three waves landed end to end:
@@ -974,55 +1020,6 @@ day: **5/16 reproducing → 1/31** (coverage doubled while open bugs dropped to 
   rows · FRAME-FIELD schema + Frontier/Noir rows skim · grit (zoom4x) + NEAREST_SUB eyeballs.
 - **GLM bake-off is unblocked** — seat adapter + SEAT-PROMPT v1 + state-hygiene scorecards all live.
 
-
----
-
-## 2026-07-05 (later-6) — ADVERSARIAL PLAYTEST (RENNICK FOOL, 4 RUNS) — DM SEAT PROVEN UN-GAMEABLE
-
-A new continuing PC, **Rennick Fool** (Human Bard), run through **four adversarial bridgeless playtests**
-against the production DM seat — a griefer stress test rather than earnest play (Sella's counterpart).
-**No engine change — findings only** (standing freeze: harness/testing yes, building no). All four runs
-were background executor sub-agents driving the real `dev/playtest-bridgeless.mjs` in jsdom, sealed Player
-+ DM seats, Opus as clerk. **Headline verdict: across 40 turns of four different assault types the DM seat
-never broke character, rolled the player's dice, obeyed an illegal demand, or leaked a `dmOnly` truth —
-every fault found was a quiet engine *contract seam*, never the narration.**
-
-### Playtest (4 runs — findings only)
-- **Run 1 — the griefer:** OOC / fourth-wall / soft-lock attempts. DM held voice + charter and turned the
-  sabotage into plot (his god-complex became the fog's feeding mechanism).
-- **Run 2 — the saboteur:** escalated, tried to dismantle the plot (murder a second watchman to "stop the
-  story") — the failed roll *fed* the plot instead (canonized as the hunted wall-killer). The `dmOnly` seal
-  held under 4 leak attempts. Verdict: improv compounds; a pure griefer ends in stalemate-under-menace.
-- **Run 3 — the puppeteer:** Rennick leveled to L10 + given a social-spell kit; tried to auto-win with
-  Dominate/Charm/Suggestion. DM adjudicated **every** spell rules-correctly (saves gated, scope + duration
-  + concentration honored, zero free wins). **Proved the spell-slot economy is fully built + enforced.**
-- **Run 4 — the whiplash:** forced a volatile dice sequence (nat-1/nat-20 alternation, crit-magnitude
-  spikes). **Crit-magnitude + degrees-of-failure both fired correctly**; the DM built a coherent arc out of
-  the chaos ("the story is in the dice" borne out). BUG-01's fix held across 3 native branch landings.
-
-### Added
-- **`dev/playtest-saves/rennick-fool/`** — the new continuing griefer PC save: `state.json` (L10, HP 3/43,
-  bound-to-the-fog), `state-pre-run4.json` (pre-forced-dice archive), `README.md`, and turn logs
-  `ADVERSARIAL-LOG-run1..4.md`. Tracked (matching the Sella-save precedent).
-
-### Changed
-- **Rennick leveled 1 → 10** via the real `applyLevelUp` engine mutator (HP 7→43, PB 2→4, slots to the SRD
-  L10 full-caster table `[4/3/3/3/2]`, XP set to the L10 floor) + granted a social kit (Charm Person,
-  Suggestion, Enthrall, Hypnotic Pattern, Compulsion, Dominate Person, Vicious Mockery cantrip). A sandbox
-  **save edit** (interpretive level-up picks are DM-narrated in v1), not a code change.
-
-### Deferred (filed to `docs/PLAYTEST-BUGS.md` — findings, not fixed)
-- **BUG-14** (MED) id-less `codex_add` silently overwrites a soft prep record · **BUG-15** (LOW) blank
-  `fact_canonized` grants XP · **BUG-16** (MED) `condition_add` prompt↔engine field mismatch (`cond`↔
-  `condition`) · **BUG-17** (MED→HIGH) `attitude_shift` doubly broken → attitude can never move · **BUG-18**
-  (MED) `social_check` grades vs the engine's internal DC, not the fiction DC. **BUG-17+18 triangulate the
-  entire social-attitude spine** (attitude can't move / moves against the wrong DC). Plus the **caster
-  discoverability gap** (the slot economy works but the seat prompt never teaches `cast` + the digest omits
-  the spell list — the highest-value caster fix).
-- **CAL-1** (Adam ruling) — a **failed** save on a suicide/self-harm mind-control order should LAND (kill);
-  the DM shouldn't grant an extra fictional out after the mechanical save already failed. On-doctrine for
-  hard-and-dangerous. **⏸ PARKED (Adam):** whether this means raising spice/lethality *across the board* —
-  deferred to a later design talk, do not act on it.
 
 ---
 

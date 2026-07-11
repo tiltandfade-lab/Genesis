@@ -84,7 +84,12 @@ function ensureThreeShim(){
   // (`if package.json exists, return`) would silently keep serving a pre-BW3-0 shim missing these
   // forever on any environment that already had a GLTFLoader-only shim on disk from a prior unit.
   const postDir = join(base, "addons", "postprocessing");
-  const shimVersion = "bw3-0-postprocessing";
+  // BW3-2/3/6 THE POST SUITE: theater-boot.js now ALSO imports UnrealBloomPass + OutputPass from
+  // "three/addons/postprocessing/" — the shim needs a re-export for each (their own transitive deps —
+  // Pass/CopyShader/LuminosityHighPassShader/OutputShader — resolve inside the real vendor/ tree the
+  // re-export points at, so only the two new top-level entry files are added here). Version bumped so
+  // any environment carrying the older bw3-0 shim rewrites instead of 404ing on the two new files.
+  const shimVersion = "bw3-post-suite";
   const versionFile = join(base, ".shim-version");
   if(existsSync(join(base, "package.json")) && existsSync(versionFile) && readFileSync(versionFile, "utf-8").trim() === shimVersion) return;
   mkdirSync(loaderDir, { recursive: true });
@@ -96,6 +101,8 @@ function ensureThreeShim(){
   writeFileSync(join(postDir, "EffectComposer.js"), `export * from "../../../../vendor/three/addons/postprocessing/EffectComposer.js";\n`);
   writeFileSync(join(postDir, "RenderPass.js"), `export * from "../../../../vendor/three/addons/postprocessing/RenderPass.js";\n`);
   writeFileSync(join(postDir, "ShaderPass.js"), `export * from "../../../../vendor/three/addons/postprocessing/ShaderPass.js";\n`);
+  writeFileSync(join(postDir, "UnrealBloomPass.js"), `export * from "../../../../vendor/three/addons/postprocessing/UnrealBloomPass.js";\n`);
+  writeFileSync(join(postDir, "OutputPass.js"), `export * from "../../../../vendor/three/addons/postprocessing/OutputPass.js";\n`);
   writeFileSync(versionFile, shimVersion + "\n");
   console.log("(bootstrap) wrote node_modules/three vendor shim (" + shimVersion + ")");
 }

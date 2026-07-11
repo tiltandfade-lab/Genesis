@@ -95,6 +95,20 @@ import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
 import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
 import { ShaderPass } from "three/addons/postprocessing/ShaderPass.js";
+// BEAUTY-WAVE-3 BW3-3 (docs/BEAUTY-WAVE-3.md, SELECTIVE BLOOM): UnrealBloomPass, threshold-gated so
+// only the brightest EMISSIVE pixels bloom (flame apexes, the BW3-4 fake-volumetric cone apex, chrome
+// glow seams, spell FX) — a lit-but-albedo white sprite stays under threshold (the negative control).
+// Vendored the SAME way as EffectComposer/RenderPass/ShaderPass above (pinned three@0.166.0, the
+// `three/addons/` importmap); its own internal deps (Pass.js FullScreenQuad, CopyShader,
+// LuminosityHighPassShader) are vendored alongside it under the same addons tree.
+import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js";
+// BEAUTY-WAVE-3 THE POST SUITE — the composer's effect passes render into LINEAR intermediate targets
+// (RenderPass writes un-encoded linear; only a direct-to-screen renderer.render applies the sRGB OETF).
+// A custom ShaderPass drawn to screen does NOT re-encode, so without this the graded/blurred frame
+// showed up crushed-dark (round-1/2 failure). OutputPass is three's canonical final pass: it applies
+// the renderer's tone mapping (NoToneMapping here) + the sRGB transfer, so the chain ends correct and
+// matches the direct-render baseline. ALWAYS the last pass in the interior chain.
+import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
 import { playVerb, tickTweens, THEATER_VERBS, theaterFxFromLedger } from "./theater-verbs.js";
 // GRAPHICS-ENGINE Part II §A: the sibling billboard-standee verb library — see that file's header for
 // why it's a separate module from theater-verbs.js (rotation-ownership conflict with
@@ -3646,7 +3660,17 @@ function createTheaterState(){
     // byte-identical to the pre-composer render. addPass/removePass (window.Theater surface, below)
     // are the seam BW3-2/3/6 mount their DoF/bloom/grade passes onto later; this unit adds none itself.
     postChainEnabled: true,
-    composer: null
+    composer: null,
+    // BEAUTY-WAVE-3 BW3-2/3/6 (THE POST SUITE — TILT-SHIFT DoF + SELECTIVE BLOOM + FILMIC GRADE):
+    // the three effect passes, built lazily the first time an interior board mounts (buildPostSuite)
+    // and torn OFF the composer whenever the flat tabletop takes the stage (setBoard) — interior-only,
+    // per the spec (the flat tabletop stays pass-free; it dies at UW3). Held here as a small record so
+    // mount/teardown route through the window.Theater.addPass/removePass seam rather than mutating
+    // composer.passes directly. renderPass is the composer's own scene->buffer pass (the effect passes
+    // read its output); it is added/removed alongside the effects so an interior board's chain is
+    // [render, dof, bloom, grade] and the tabletop's chain is empty (direct render). postSuiteMounted
+    // tracks whether the effect passes are currently attached to S.composer.
+    postSuite: null, postSuiteMounted: false, dofFocusDist: 0, dofFocusNdcY: 0
   };
 }
 
@@ -3759,6 +3783,270 @@ function renderTheaterFrame(){
   } else {
     S.renderer.render(S.scene, S.camera);
   }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════════════════════════
+   BEAUTY-WAVE-3 — THE POST SUITE (BW3-2 TILT-SHIFT DoF · BW3-3 SELECTIVE BLOOM · BW3-6 FILMIC GRADE)
+   docs/BEAUTY-WAVE-3.md. Three effect passes that mount ONTO BW3-0's EffectComposer seam, INTERIOR
+   BOARDS ONLY (the flat tabletop stays pass-free — it dies at UW3). Chain order, each frame:
+       RenderPass  ->  DoF  ->  Bloom  ->  Grade(->screen)
+   Grade LAST so it is judged over the bloomed frame (the spec's own ordering: "grade is judged after
+   bloom"). SUBTLE is the law — every dial below is tuned so the effect is FELT (the photographed-
+   miniature cue, the emissive halo, the realm's mood) but never NAMED as an effect. The dials are the
+   TASTE-iterate surface (Opus loop): change the numbers here, re-shoot, re-read vs the mocks.
+   ══════════════════════════════════════════════════════════════════════════════════════════════ */
+
+// ── TILT-SHIFT DoF dials (BW3-2). Screen-space vertical tilt-shift: a sharp horizontal focal BAND
+// centred on the projected board-centre (the action cluster for a "beat" fit, the room centre for a
+// "room" fit — it TRACKS because S.boardCenter itself moves per fitMode), blur ramping toward the
+// near-foreground (screen bottom, nearer under the elevated camera) and far-background (screen top,
+// farther). This is the classic tilt-shift lens the miniature-photography cue is built on — near/far
+// map DIRECTLY to screen-vertical under a fixed elevation, so a vertical CoC gradient IS a depth
+// gradient here, and it needs no depth buffer (cheaper, robust across ortho AND persp interior cams).
+// UV space: v in [0,1]. FOCUS_HALF = half-height of the fully-sharp band; RAMP = UV distance over
+// which CoC climbs 0->1 past the band; MAX_BLUR = peak sample radius (capped CoC — the whisper cap).
+const DOF_FOCUS_HALF = 0.16;   // fully-sharp band spans ~32% of screen height around the focal row
+const DOF_RAMP = 0.42;         // gentle climb to full blur — no hard focus edge
+const DOF_MAX_BLUR = 0.0055;   // peak CoC radius in UV (~9px at 1600px tall) — a whisper, capped here
+const DOF_STRENGTH = 0.85;     // global master (0 = off); per-realm nudge folds in at mount
+
+// ── SELECTIVE BLOOM dials (BW3-3). UnrealBloomPass is luminance-thresholded: only pixels brighter
+// than THRESHOLD contribute, so with a HIGH threshold the effect is emissive-gated in practice — the
+// additive flame/cone apexes and chrome glow seams push toward 1.0 and bloom; a torch-LIT albedo
+// sprite (readability-floored well under 1.0) stays under threshold and does NOT (the negative
+// control). Built at HALF drawing-buffer resolution (RESOLUTION_SCALE) — the mip blur chain is the
+// pass's cost; halving it keeps fps clear with all three passes live, standard practice, invisible at
+// bloom's soft radius.
+// NOTE (round 3): threshold is in the composer's LINEAR space (bloom runs before OutputPass encodes),
+// where a lit-albedo sprite reads ~0.2-0.4 and an additive flame/cone/glow-seam pushes toward 1.0 —
+// so a mid-high linear threshold is a clean emissive gate (the negative control holds with room).
+const BLOOM_THRESHOLD = 0.68;  // linear luminance gate — emissives clear it, lit albedo does not
+const BLOOM_STRENGTH = 1.15;   // halo intensity — soft, mock-level (the torch/neon glow, not a flare)
+const BLOOM_RADIUS = 0.5;      // spread of the halo (tighter = the wash stays ON the emissive)
+const BLOOM_RESOLUTION_SCALE = 0.5; // half-res bloom chain (fps)
+
+// ── FILMIC GRADE dials (BW3-6). One per-realm post grade: exposure -> ACES filmic tone curve ->
+// contrast (both MONOTONIC, so the VALUE LAW ordering floor<wall<light survives in pixels, not just
+// in the material data verify-scene-direction asserts) -> saturation shape -> per-realm tint wash ->
+// vignette. The per-realm TINT + its strength come from the interior tile kit's OWN authored
+// gradeTint/gradeStrength (theater-interior.js — the SAME data the material grade and the BW2-4b
+// sprite-emissive tint already read), so flagships carry their tuned hue (chrome cool, fantasy warm,
+// gloom cold-violet) and the 9 non-flagship realms inherit whatever their kit authored (or neutral).
+// The existing whisper-fog + vignette-in-render stay UNDER this (they're in the scene; this grades the
+// composited frame on top). GRADE_TINT_SCALE maps kit.gradeStrength (a material-grade strength, ~0.1-
+// 0.3) down to a gentle post wash so the grade doesn't double-hit the already-graded materials.
+// NOTE (round 2): the frame the composer reads is ALREADY the renderer's tone-mapped, sRGB-encoded
+// LDR output — so a full ACES tone curve here (round 1) DOUBLE-tonemapped and crushed the already-dark
+// torch-lit scenes toward black, leaving only the red lantern light (the "everything went red/dark"
+// failure). The grade is now a gentle LDR colour grade: lift-preserving soft contrast + saturation +
+// a capped realm tint wash + a soft vignette. No tone curve. Every luminance stage stays monotonic so
+// the VALUE LAW ordering survives in pixels.
+const GRADE_EXPOSURE = 1.02;   // barely-there lift
+const GRADE_CONTRAST = 1.05;   // very gentle S around mid — a touch of mood, never crushing
+const GRADE_SATURATION = 1.07; // a touch richer, never garish
+const GRADE_TINT_SCALE = 0.45; // kit.gradeStrength -> post-wash amount (gentle, avoids double-grade)
+const GRADE_TINT_MAX = 0.12;   // hard cap on the tint wash so no realm over-tints the frame
+const GRADE_VIGNETTE = 0.20;   // edge darkening depth (the mocks all carry a soft vignette)
+const GRADE_VIGNETTE_INNER = 0.34; // radius (from centre, UV) where the vignette starts
+const GRADE_VIGNETTE_OUTER = 0.92; // radius where it reaches full depth (corners ~0.71 in a wide frame)
+
+// DoF tilt-shift: a Poisson-ish 12-tap disc scaled by a vertical-gradient CoC. Aspect-corrected so the
+// blur disc stays circular on a wide canvas. Sharp inside the focal band, ramping to MAX_BLUR at the
+// screen's near/far edges.
+function makeDofPass(){
+  const shader = {
+    uniforms: {
+      tDiffuse: { value: null },
+      uResolution: { value: new THREE.Vector2(1, 1) },
+      uFocusV: { value: 0.5 },
+      uFocusHalf: { value: DOF_FOCUS_HALF },
+      uRamp: { value: DOF_RAMP },
+      uMaxBlur: { value: DOF_MAX_BLUR },
+      uStrength: { value: DOF_STRENGTH }
+    },
+    vertexShader: `varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }`,
+    fragmentShader: `
+      varying vec2 vUv;
+      uniform sampler2D tDiffuse;
+      uniform vec2 uResolution;
+      uniform float uFocusV, uFocusHalf, uRamp, uMaxBlur, uStrength;
+      void main(){
+        vec4 base = texture2D(tDiffuse, vUv);
+        // CoC from vertical distance to the focal band (near/far == screen bottom/top under the
+        // elevated camera). Capped at 1.0 -> the whisper cap on max blur.
+        float d = abs(vUv.y - uFocusV);
+        float coc = clamp((d - uFocusHalf) / max(uRamp, 1e-4), 0.0, 1.0) * uStrength;
+        if(coc <= 0.001){ gl_FragColor = base; return; }
+        float r = coc * uMaxBlur;
+        float ar = uResolution.x / max(uResolution.y, 1.0); // aspect correct: circular disc
+        // 12-tap disc (unit-circle offsets) + centre.
+        vec2 o[12];
+        o[0]=vec2(0.94,0.0); o[1]=vec2(0.47,0.82); o[2]=vec2(-0.47,0.82); o[3]=vec2(-0.94,0.0);
+        o[4]=vec2(-0.47,-0.82); o[5]=vec2(0.47,-0.82); o[6]=vec2(0.35,0.20); o[7]=vec2(-0.35,0.20);
+        o[8]=vec2(0.0,-0.42); o[9]=vec2(0.0,0.42); o[10]=vec2(0.62,-0.36); o[11]=vec2(-0.62,-0.36);
+        vec4 sum = base;
+        for(int i=0;i<12;i++){
+          vec2 off = vec2(o[i].x / ar, o[i].y) * r;
+          sum += texture2D(tDiffuse, vUv + off);
+        }
+        gl_FragColor = sum / 13.0;
+      }
+    `
+  };
+  const pass = new ShaderPass(shader);
+  pass.__bwName = "dof";
+  return pass;
+}
+
+// Filmic grade: exposure, ACES tone (Narkowicz approx), contrast, saturation, per-realm tint wash,
+// vignette. Every luminance-affecting stage is monotonic so value ordering survives.
+function makeGradePass(){
+  const shader = {
+    uniforms: {
+      tDiffuse: { value: null },
+      uResolution: { value: new THREE.Vector2(1, 1) },
+      uExposure: { value: GRADE_EXPOSURE },
+      uContrast: { value: GRADE_CONTRAST },
+      uSat: { value: GRADE_SATURATION },
+      uTint: { value: new THREE.Color(1, 1, 1) },
+      uTintAmt: { value: 0.0 },
+      uVignette: { value: GRADE_VIGNETTE },
+      uVigInner: { value: GRADE_VIGNETTE_INNER },
+      uVigOuter: { value: GRADE_VIGNETTE_OUTER }
+    },
+    vertexShader: `varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }`,
+    fragmentShader: `
+      varying vec2 vUv;
+      uniform sampler2D tDiffuse;
+      uniform vec2 uResolution;
+      uniform float uExposure, uContrast, uSat, uTintAmt, uVignette, uVigInner, uVigOuter;
+      uniform vec3 uTint;
+      void main(){
+        // The composer buffer is LINEAR. Grade in a PERCEPTUAL (sRGB-ish) space so the dials read
+        // intuitively (a 0.5 pivot really is mid-grey), then hand a linear result back to OutputPass,
+        // which applies the real sRGB OETF at the end of the chain. gamma 2.2 approximation is plenty
+        // for a grade (the display encode is OutputPass's exact job, not this one's).
+        vec3 lin = texture2D(tDiffuse, vUv).rgb;
+        vec3 col = pow(max(lin, 0.0), vec3(1.0 / 2.2)); // linear -> perceptual
+        col *= uExposure;
+        col = clamp((col - 0.5) * uContrast + 0.5, 0.0, 1.0); // gentle S around mid (monotonic)
+        float luma = dot(col, vec3(0.2126, 0.7152, 0.0722));
+        col = mix(vec3(luma), col, uSat);
+        col *= mix(vec3(1.0), uTint, uTintAmt); // per-realm wash (multiplicative — chrome cool, etc.)
+        // soft radial vignette (edge0<edge1 so it's well-defined: 0 at centre -> uVignette at corners)
+        float dist = length(vUv - 0.5);
+        float vig = smoothstep(uVigInner, uVigOuter, dist);
+        col *= (1.0 - uVignette * vig);
+        col = pow(clamp(col, 0.0, 1.0), vec3(2.2)); // perceptual -> linear (OutputPass encodes to sRGB)
+        gl_FragColor = vec4(col, 1.0);
+      }
+    `
+  };
+  const pass = new ShaderPass(shader);
+  pass.__bwName = "grade";
+  return pass;
+}
+
+// Build the three passes once (lazy — needs a live renderer + a sized canvas). Stored on S.postSuite.
+function buildPostSuite(){
+  if(S.postSuite || !S.renderer || !S.composer) return S.postSuite;
+  const size = new THREE.Vector2();
+  S.renderer.getSize(size);
+  const dof = makeDofPass();
+  const bloom = new UnrealBloomPass(
+    new THREE.Vector2(Math.max(1, Math.round(size.x * BLOOM_RESOLUTION_SCALE)),
+                      Math.max(1, Math.round(size.y * BLOOM_RESOLUTION_SCALE))),
+    BLOOM_STRENGTH, BLOOM_RADIUS, BLOOM_THRESHOLD
+  );
+  bloom.__bwName = "bloom";
+  const grade = makeGradePass();
+  const renderPass = new RenderPass(S.scene, S.camera);
+  renderPass.__bwName = "render";
+  const outputPass = new OutputPass();
+  outputPass.__bwName = "output";
+  S.postSuite = { renderPass, dof, bloom, grade, outputPass };
+  return S.postSuite;
+}
+
+// Recompute the DoF focal band from the CURRENT camera fit: project S.boardCenter to NDC and centre
+// the sharp band on its screen-Y. This is what makes focus TRACK fitMode — S.boardCenter is the
+// action-cluster centre in a "beat" fit and the room centre in a "room" fit, so the sharp band lands
+// on whatever the camera framed. Also records the world focus distance (camera->boardCenter) for the
+// determinism/assert surface (window.Theater.dofFocus). Called after placeCamera at mount time.
+function updateDofFocus(){
+  if(!S.postSuite || !S.camera) return;
+  const center = S.boardCenter || new THREE.Vector3(0, 0, 0);
+  S.dofFocusDist = S.camera.position.distanceTo(center);
+  S.camera.updateMatrixWorld();
+  const ndc = center.clone().project(S.camera); // ndc.y in [-1,1]
+  const focusV = THREE.MathUtils.clamp(ndc.y * 0.5 + 0.5, 0.08, 0.92);
+  S.dofFocusNdcY = ndc.y;
+  S.postSuite.dof.uniforms.uFocusV.value = focusV;
+}
+
+// Push the per-realm FILMIC GRADE params from the interior tile kit's authored grade onto the grade
+// pass. Flagships carry their tuned gradeTint/gradeStrength; kits with no grade -> neutral (tint amt
+// 0, still filmic+vignette). rigOn=false (study-rig honest baseline) -> neutral too.
+function updatePostSuiteGrade(kit, rigOn){
+  if(!S.postSuite) return;
+  const g = S.postSuite.grade.uniforms;
+  const hasGrade = rigOn && kit && kit.gradeTint && typeof kit.gradeStrength === "number";
+  if(hasGrade){
+    const tintNum = hexStrToNum(kit.gradeTint);
+    g.uTint.value.setHex(tintNum);
+    g.uTintAmt.value = Math.min(GRADE_TINT_MAX, kit.gradeStrength * GRADE_TINT_SCALE);
+  } else {
+    g.uTint.value.setRGB(1, 1, 1);
+    g.uTintAmt.value = 0.0;
+  }
+}
+
+// Push resolution-dependent uniforms (DoF aspect, grade resolution) after any canvas resize.
+function syncPostSuiteResolution(){
+  if(!S.postSuite || !S.renderer) return;
+  const size = new THREE.Vector2();
+  S.renderer.getSize(size);
+  S.postSuite.dof.uniforms.uResolution.value.set(size.x, size.y);
+  S.postSuite.grade.uniforms.uResolution.value.set(size.x, size.y);
+  if(S.postSuite.bloom && S.postSuite.bloom.setSize){
+    S.postSuite.bloom.setSize(size.x * BLOOM_RESOLUTION_SCALE, size.y * BLOOM_RESOLUTION_SCALE);
+  }
+}
+
+// Mount the post suite onto the composer (interior boards). Idempotent — re-mounting on an interior->
+// interior board swap just refreshes uniforms/focus (the passes stay attached). Adds in chain order
+// [render, dof, bloom, grade] via the addPass seam. renderPass MUST be first so the effects have the
+// scene to read; grade last so EffectComposer flags it renderToScreen.
+function mountPostSuite(kit, rigOn){
+  if(!S.mounted || !S.composer) return;
+  buildPostSuite();
+  if(!S.postSuite) return;
+  // keep the renderPass camera in sync (setInteriorBoard may have swapped ortho<->persp cameras)
+  S.postSuite.renderPass.camera = S.camera;
+  syncPostSuiteResolution();
+  updatePostSuiteGrade(kit, rigOn);
+  updateDofFocus();
+  if(!S.postSuiteMounted){
+    S.composer.addPass(S.postSuite.renderPass);
+    S.composer.addPass(S.postSuite.dof);
+    S.composer.addPass(S.postSuite.bloom);
+    S.composer.addPass(S.postSuite.grade);
+    S.composer.addPass(S.postSuite.outputPass); // ALWAYS last — applies sRGB OETF (see OutputPass import)
+    S.postSuiteMounted = true;
+  }
+}
+
+// Tear the post suite OFF the composer (flat tabletop — the tabletop stays pass-free). Removes via the
+// removePass seam; mirrors THREE's own contract (removePass never disposes a pass — the passes persist
+// on S.postSuite for the next interior board, disposed only at retire()).
+function teardownPostSuite(){
+  if(!S.composer || !S.postSuite || !S.postSuiteMounted) return;
+  S.composer.removePass(S.postSuite.outputPass);
+  S.composer.removePass(S.postSuite.grade);
+  S.composer.removePass(S.postSuite.bloom);
+  S.composer.removePass(S.postSuite.dof);
+  S.composer.removePass(S.postSuite.renderPass);
+  S.postSuiteMounted = false;
 }
 
 /* T1.5 §3 camera fit: frame the board to fill ~80% of the canvas — fit the orthographic camera's
@@ -4582,6 +4870,9 @@ function applyPsxCanvasSize(renderer, canvas, cssW, cssH){
   // from mount() itself, BEFORE the composer is constructed (mount() sizes the canvas first, then
   // builds the composer off the now-correct renderer.getSize()), so this is a no-op that one time.
   if(S.composer) S.composer.setSize(drawW, drawH);
+  // BEAUTY-WAVE-3 THE POST SUITE: keep the DoF aspect uniform, grade resolution, and half-res bloom
+  // chain sized to the same drawing buffer on every resize (no-op when no suite is built yet).
+  syncPostSuiteResolution();
   canvas.style.width = cssW + "px";
   canvas.style.height = cssH + "px";
   canvas.style.imageRendering = S.psxEnabled ? "pixelated" : "auto";
@@ -5009,6 +5300,11 @@ function setBoard(data){
   if(S.fillLight) S.fillLight.intensity = 0.22;
   if(S.interiorCameraKey){ S.interiorCameraKey.intensity = 0; S.interiorCameraKey.castShadow = false; }
   ITR_SPRITE_EMISSIVE_TINT = 0xffffff; // BW2-4b item 1: the realm-grade sprite floor tint is interior-only
+  // BEAUTY-WAVE-3 THE POST SUITE (BW3-2/3/6): the flat tabletop stays pass-free — tear the DoF/bloom/
+  // grade passes off the composer here (setInteriorBoard is the only place they're added; this is the
+  // one place they come off, mirroring the shadowMap/hemi/key restores just above). Direct render
+  // resumes for the tabletop (renderTheaterFrame's empty-composer fallback).
+  teardownPostSuite();
   // BEAUTY-WAVE-2.md BW2-1: the flat tabletop's camera fit carries NO standee-height correction term
   // (placeCamera's own screenHalfHeight addition) — only setInteriorBoard ever computes a nonzero
   // S.interiorFitMaxHeight, so this is the one place it resets back to the tabletop's permanent 0,
@@ -7076,6 +7372,13 @@ function setInteriorBoard(data){
   startMoteDrift();
 
   placeCamera();
+  // BEAUTY-WAVE-3 THE POST SUITE (BW3-2/3/6): mount DoF + selective bloom + filmic grade onto the
+  // composer for this interior board. AFTER the authoritative placeCamera above so updateDofFocus
+  // projects the FINAL camera fit (the focal band tracks beat-vs-room framing). kit + rigOn are this
+  // function's own locals (the tile kit's authored gradeTint/gradeStrength drive the per-realm grade;
+  // rigOn=false drops to a neutral grade for the study-rig's honest baseline). INTERIOR-ONLY — setBoard
+  // (the flat tabletop) tears it back off.
+  mountPostSuite(kit, rigOn);
   markDirty();
 }
 
@@ -7681,6 +7984,16 @@ function retire(){
   // never disposes a pass itself — mirroring THREE's own EffectComposer.removePass contract) UNLESS
   // still attached at retire() time, in which case composer.dispose() only frees ITS OWN two render
   // targets + copyPass, never iterates `passes` — no leak here for a BW3-0-only mount (zero passes).
+  // BEAUTY-WAVE-3 THE POST SUITE: dispose the three effect passes' own GPU resources (ShaderPass
+  // FullScreenQuad materials + UnrealBloomPass's mip render-target chain) at end of life — composer.
+  // dispose() below frees only ITS OWN targets, never the passes it holds, so this is the passes'
+  // symmetric dispose point. Guarded on existence (a mount that never showed an interior board has
+  // no suite).
+  if(S.postSuite){
+    teardownPostSuite();
+    Object.keys(S.postSuite).forEach((k) => { const p = S.postSuite[k]; if(p && p.dispose) p.dispose(); });
+    S.postSuite = null;
+  }
   if(S.composer) S.composer.dispose();
   if(S.renderer){
     S.renderer.dispose();
@@ -7927,6 +8240,50 @@ window.Theater.removePass = function(pass){
 // zero passes" without reaching into module-private `S` directly. _setPostChainEnabledForTest lets a
 // harness flip the flag itself (e.g. to prove flag OFF also forces the direct path even if a later
 // unit has since added passes) — returns the new value, or null pre-mount.
+// BEAUTY-WAVE-3 THE POST SUITE harness seams (read-only + A/B toggles; no product code reads these).
+// _postSuiteForTest exposes the live suite's shape + every taste dial's current value so a capture/
+// verify harness can assert focus-tracking, the bloom threshold, and the per-realm grade without
+// reaching into module-private S. _setSuitePassEnabledForTest toggles ONE effect pass (.enabled) by
+// its __bwName so an on/off A/B card can isolate each effect (dof-only, bloom-only, grade-only) — a
+// disabled pass is skipped by EffectComposer but the chain stays >=1 pass so the composer path (not
+// the direct-render fallback) still runs. dofFocus is the DoF focal-tracking assert surface: the
+// world focus distance (camera->boardCenter) genuinely differs beat-vs-room, so it's directly
+// assertable across fitModes.
+window.Theater._postSuiteForTest = function(){
+  if(!S.postSuite) return { mounted: false, built: false };
+  const ps = S.postSuite;
+  return {
+    built: true,
+    mounted: !!S.postSuiteMounted,
+    passNames: (S.composer && S.composer.passes) ? S.composer.passes.map((p) => p.__bwName || "?") : [],
+    passEnabled: { dof: !!ps.dof.enabled, bloom: !!ps.bloom.enabled, grade: !!ps.grade.enabled },
+    dof: {
+      focusV: ps.dof.uniforms.uFocusV.value,
+      focusDist: S.dofFocusDist,
+      focusNdcY: S.dofFocusNdcY,
+      maxBlur: ps.dof.uniforms.uMaxBlur.value,
+      strength: ps.dof.uniforms.uStrength.value
+    },
+    bloom: { threshold: ps.bloom.threshold, strength: ps.bloom.strength, radius: ps.bloom.radius },
+    grade: {
+      tintAmt: ps.grade.uniforms.uTintAmt.value,
+      tintHex: "#" + ps.grade.uniforms.uTint.value.getHexString(),
+      exposure: ps.grade.uniforms.uExposure.value,
+      vignette: ps.grade.uniforms.uVignette.value
+    }
+  };
+};
+window.Theater._setSuitePassEnabledForTest = function(name, enabled){
+  if(!S.postSuite) return null;
+  const p = S.postSuite[name];
+  if(!p) return null;
+  p.enabled = !!enabled;
+  markDirty();
+  return !!p.enabled;
+};
+window.Theater.dofFocus = function(){
+  return { dist: S.dofFocusDist || 0, ndcY: S.dofFocusNdcY || 0, focusV: S.postSuite ? S.postSuite.dof.uniforms.uFocusV.value : null };
+};
 window.Theater._postChainForTest = function(){
   return {
     enabled: !!S.postChainEnabled,

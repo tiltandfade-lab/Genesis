@@ -4889,6 +4889,22 @@ function setInteriorBoard(data){
   clearGroup(S.tileGroup);
   clearGroup(S.propGroup);
   clearGroup(S.interiorGroup);
+  // BEAUTY-WAVE.md VP1c (THE LOOP-04 KAIJU PROBE, diagnosed this unit): production's own per-render
+  // sync (src/world/render.js theaterStageSync) pushes the FLAT TABLETOP board+units into S.unitGroup/
+  // S.shadowGroup (window.Theater.setBoard + setUnits) on every renderWorld() while GS.combat.active —
+  // and dm.js's combat_start handler calls renderWorld() at the end of its own case. Those units size
+  // through the pre-VP1 render-height-multiplier convention (GLB_TARGET_HEIGHT x entry.scale x
+  // spriteSizeScaleFor), NOT the true-scale math VP1/VP1b gave interior pieces. Neither group was ever
+  // cleared here, so a caller that drives combat_start and then separately mounts an interior tray
+  // (window.Theater.setInteriorBoard — the dungeon-loop gate's own documented allowance, and any future
+  // combat-in-a-room feature) inherited the leftover flat-tabletop meshes standing in the SAME world-
+  // origin neighborhood the interior camera frames — the kaiju towering in the loop-04/05 contact-sheet
+  // frames. An interior tray's creatures are pieces (VP1/VP1b's own true-scale render family); the flat
+  // tabletop unit family must never coexist with it. setBoard already clears these same two groups for
+  // the reverse direction (a tabletop board must not inherit a prior interior tray's leftover pieces);
+  // this is the missing other half.
+  clearGroup(S.unitGroup);
+  clearGroup(S.shadowGroup);
   S.propOccupiedZones = {};
   // DUNGEON-GRAPH.md U3 iteration-2, ruling 2: interior boards get real shadow-mapping — the
   // tabletop/combat path's "no shadow maps" ruling (§2, this file's mount()-time default + setBoard's
@@ -5872,4 +5888,11 @@ window.Theater._interiorBuildPiecesForTest = function(pieces, cx, cz, wallHeight
 // inspect the resulting contact-blob count without a live WebGLRenderer.
 window.Theater._interiorBuildDressingForTest = function(dressing, cx, cz){
   return interiorBuildDressing(dressing, cx, cz);
+};
+
+// BEAUTY-WAVE.md VP1c — TEST-ONLY SEAM, same spirit as the two accessors above: exposes the flat-
+// tabletop unit group's child count so a harness can prove S.unitGroup is empty after
+// setInteriorBoard (the kaiju-leak fix) without a live WebGLRenderer read of the scene graph.
+window.Theater._unitGroupChildCountForTest = function(){
+  return (S.unitGroup && S.unitGroup.children.length) || 0;
 };

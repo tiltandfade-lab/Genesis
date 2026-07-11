@@ -59,6 +59,12 @@ WIRED_REALMS = ["chrome", "gloom", "fantasy"]
 # assets/dressing/<slug>.png by build/slice-dressing-arrivals.py (art-ready), but wiring an
 # interactable-object state channel is a separate, out-of-scope unit — see this run's report.
 FAMILIES = ["flora-dg-01", "clutter-dg-02"]
+# BEAUTY-WAVE VP2b (GALLERY PASS): reclaimed bottom-clipped sprites, framed as wall-hang
+# painting cards by build/gen-gallery-paintings.py into <realm>-painting-dg.json. Loaded
+# separately from FAMILIES (its manifest filename doesn't follow the -dgNN suffix convention)
+# so a realm with zero gallery keepers just has no such file yet — load_realm_cells's existing
+# missing-manifest WARNING already tolerates that, same as any other family.
+PAINTING_FAMILY = "painting-dg"
 
 LIGHT_WORDS = ("lantern", "lamp", "light", "candle", "torch", "glow", "neon")
 LIGHT_ELIGIBLE_PRIMARY = {"focal", "wall-hang", "setPiece"}
@@ -76,7 +82,7 @@ def is_light_affine(cell):
 
 def load_realm_cells(realm):
     cells = []
-    for fam in FAMILIES:
+    for fam in FAMILIES + [PAINTING_FAMILY]:
         path = os.path.join(MANIFEST_DIR, f"{realm}-{fam}.json")
         if not os.path.exists(path):
             print(f"WARNING: {realm}-{fam}.json not found — skipping (partial roster)", file=sys.stderr)
@@ -91,6 +97,10 @@ def js_entry(cell):
     parts = [f'slug: "{cell["slug"]}"', f'primary: "{cell["tags"]["primary"]}"', f'size: "{cell["size"]}"']
     if is_light_affine(cell):
         parts.append("lightAffine: true")
+    # BEAUTY-WAVE VP2b provenance: painting cards (from build/gen-gallery-paintings.py) carry
+    # paintingOf so the DM/codex knows whose portrait hangs on the wall.
+    if cell.get("paintingOf"):
+        parts.append(f'paintingOf: "{cell["paintingOf"]}"')
     return "    Object.freeze({ " + ", ".join(parts) + " }),"
 
 

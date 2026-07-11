@@ -66,10 +66,45 @@
    15. an unknown material name degrades to the mottle painter rather than throwing (interiorTileKitFor/
        realmMaterialFor's own "never throws" discipline, mirrored one layer down).
 
+   BEAUTY-WAVE.md VP1 ADDITIONS (checks 22-27 below) — the kaiju-scale-bug fix: interiorBuildPieces
+   (theater-boot.js) sized creature billboards through the TABLETOP render-height-multiplier
+   convention (spriteSizeScaleFor(size) x GLB_TARGET_HEIGHT x entry.scale) while interior space is
+   TRUE-SCALE (cellSize: 1 world unit = 5ft) — a medium creature inherited several world units of
+   table height instead of ~1.1. theater-boot.js is the sealed ES-module boundary file (import THREE
+   directly), so these checks borrow dev/verify-theater-sprites.mjs's own process-isolated
+   jsdom+vendored-three subprocess pattern (its header comment explains why: loadWholeObjectBuilders'
+   async callback races a shared `global.window` across sequential in-process loads) rather than the
+   vm-sandbox this file uses for the THREE-free data layer above.
+   RED-FIRST (checked 2026-07-10, before this unit's fix): interiorBuildPieces called buildSpriteBillboard
+   directly (`const g = buildSpriteBillboard(entry); ... g.position.set(..., (base.floor||0)-0.4, ...)`) —
+   the SAME tabletop sizing math figureFor() uses for a combat unit. Check 22 proves that TODAY (pre-fix)
+   a medium piece's built height is provably > 2 world units by re-deriving the old formula's own
+   arithmetic (spriteSizeScaleFor("medium")=1 x GLB_TARGET_HEIGHT=1.5 = 1.5 world units MINIMUM before any
+   entry.scale > 1 calibration multiplies it further — already inside "several world units" territory
+   for anything with a >1.33 calibration, and every Large+ creature clears 2 units outright via the SRD
+   size ladder alone), then checks 23-27 assert the FIXED theater-boot.js produces true-scale heights via
+   a live subprocess build of interiorBuildPieces itself.
+   Checks 22-27:
+     22. RED-FIRST — the OLD formula (spriteSizeScaleFor x GLB_TARGET_HEIGHT x calib), independently
+         re-derived here off the size ladder + GLB_TARGET_HEIGHT constants, proves a medium/large piece
+         would have exceeded 2 world units under the pre-fix code path.
+     23. medium piece (scaleTrue=1.0) builds to 1.05-1.15 world units; large (scaleTrue~2.0) to ~2.0-2.4.
+     24. the loop-gate's knight-type piece (scaleVsHuman override, no registry scaleTrue) stays <= 1.3.
+     25. floor-line offset math: a nonzero entry.floor fixture's group.position.y sits at
+         -0.5 - floor*height (the floor-CONTACT line, not the image's raw bottom edge, lands on the
+         y=-0.5 floor plane).
+     26. an oversize piece (scaleTrue forced huge) clamps to wallHeightBase*0.95 and logs
+         "qa: oversize-clamped".
+     27. registry fold — data/sprite-registry.js emits feet/scaleTrue for >= 800 cut slugs (grep count);
+         MUTATION: stubbing the fold's sizing_for() call out of build/gen-sprite-registry.py and
+         regenerating into a scratch --out file reds this same count check, then the real file is
+         restored and re-proven green.
+
    Run:  node dev/verify-dungeon-interior.mjs */
-import { readFileSync } from "node:fs";
+import { readFileSync, writeFileSync, existsSync, mkdirSync, rmSync, symlinkSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { execFileSync } from "node:child_process";
 import vm from "node:vm";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -541,6 +576,253 @@ group("21 — determinism: same (plan,opts) twice -> skirt array byte-identical 
   const boardB = M.interiorBuildBoard(plan2, { realmId: "ash" });
   ok(JSON.stringify(boardA.skirt) === JSON.stringify(boardB.skirt), "skirt array is byte-identical across two independent builds of the same (plan,opts)");
   ok(boardA.skirt.length > 0, "the fixture actually produced skirt instances (a non-vacuous determinism check)");
+}
+
+// ============================================================================
+// BEAUTY-WAVE.md VP1 — checks 22-27 (the kaiju-scale-bug fix). theater-boot.js is the sealed
+// ES-module boundary file (bare `import * as THREE`), so these run through the SAME process-isolated
+// jsdom+vendored-three subprocess pattern dev/verify-theater-sprites.mjs established (its header
+// comment: loadWholeObjectBuilders' async completion callback races a shared `global.window` across
+// sequential in-process loads — each scenario gets its own subprocess).
+// ============================================================================
+const JSDOM_HOME = process.env.JSDOM_HOME || join(process.env.HOME, ".genesis-jsdom");
+
+function ensureThreeShim(){
+  const base = join(ROOT, "node_modules", "three");
+  const loaderDir = join(base, "addons", "loaders");
+  if(existsSync(join(base, "package.json"))) return;
+  mkdirSync(loaderDir, { recursive: true });
+  writeFileSync(join(base, "package.json"),
+    JSON.stringify({ name: "three", version: "0.0.0-vendor-shim", type: "module", main: "./three.module.js" }, null, 2));
+  writeFileSync(join(base, "three.module.js"), `export * from "../../vendor/three/three.module.js";\n`);
+  writeFileSync(join(loaderDir, "GLTFLoader.js"), `export * from "../../../../vendor/three/addons/loaders/GLTFLoader.js";\n`);
+}
+
+function ensureJsdomShim(){
+  const target = join(ROOT, "node_modules", "jsdom");
+  if(existsSync(join(target, "package.json")) || existsSync(target)) return;
+  const real = join(JSDOM_HOME, "node_modules", "jsdom");
+  if(!existsSync(join(real, "package.json"))){
+    throw new Error(`jsdom not found at ${real} — run "npm i jsdom" in ${JSDOM_HOME} first (CLAUDE.md convention)`);
+  }
+  mkdirSync(join(ROOT, "node_modules"), { recursive: true });
+  try {
+    symlinkSync(real, target, "dir");
+  } catch(e){
+    mkdirSync(target, { recursive: true });
+    const pkg = JSON.parse(readFileSync(join(real, "package.json"), "utf-8"));
+    writeFileSync(join(target, "package.json"),
+      JSON.stringify(Object.assign({}, pkg, { main: join(real, pkg.main || "lib/api.js") }), null, 2));
+  }
+}
+
+ensureThreeShim();
+ensureJsdomShim();
+
+// VP1 fixture registry — cut, TRUE-SCALE entries. `medium`/`large` carry entry.scaleTrue (the
+// registry fold this unit adds); `knight` carries NO scaleTrue (simulating a piece the fold hasn't
+// reached yet) and instead relies on a piece-level scaleVsHuman override, same as combat-foe pieces
+// already pass today; `floored` carries a nonzero entry.floor; `oversize` carries a huge scaleTrue to
+// exercise the wall-height clamp. `scaledMedium` mirrors the REAL overlay convention (scale:1.5, seen
+// on live registry entries) — used only by the OLD-source RED-FIRST run below, via the EXISTING
+// refFigure.build seam (byte-identical to what interiorBuildPieces called before this unit's fix).
+const VP1_REGISTRY = {
+  "spr-gloom-medium-thing": { realm: "gloom", kind: "monster", name: "Medium Thing", size: "Medium", status: "cut", scaleTrue: 1.0 },
+  "spr-gloom-large-thing": { realm: "gloom", kind: "monster", name: "Large Thing", size: "Large", status: "cut", scaleTrue: 2.0 },
+  "spr-gloom-knight": { realm: "gloom", kind: "npc", name: "Knight", size: "Medium", status: "cut" },
+  "spr-gloom-floored-thing": { realm: "gloom", kind: "monster", name: "Floored Thing", size: "Medium", status: "cut", scaleTrue: 1.0, floor: 0.1 },
+  "spr-gloom-titan-thing": { realm: "gloom", kind: "monster", name: "Titan Thing", size: "Gargantuan", status: "cut", scaleTrue: 100.0 },
+  "spr-gloom-scaled-medium": { realm: "gloom", kind: "monster", name: "Scaled Medium", size: "Medium", status: "cut", scale: 1.5 },
+};
+
+const NEW_RUNNER_SRC = `
+import { JSDOM } from "jsdom";
+import { pathToFileURL } from "node:url";
+
+const bootPath = process.argv[2];
+const registry = JSON.parse(process.argv[3]);
+const wallHeightBase = Number(process.argv[4]);
+
+const dom = new JSDOM(
+  \`<!doctype html><html><body><div id="stage" style="width:400px;height:300px"></div></body></html>\`,
+  { runScripts: "dangerously", url: "http://localhost/" }
+);
+global.window = dom.window;
+global.document = dom.window.document;
+global.SPRITE_REGISTRY = registry;
+global.window.SPRITE_REGISTRY = registry;
+
+function fakeTexture(){ return { magFilter: null, minFilter: null, generateMipmaps: true, isTexture: true, image: { width: 100, height: 200 } }; }
+
+const warnings = [];
+const origWarn = console.warn;
+console.warn = function(...args){ warnings.push(args.map(String).join(" ")); origWarn.apply(console, args); };
+
+const result = { ok: false, error: null };
+try {
+  await import(pathToFileURL(bootPath).href);
+  const T = global.window.Theater;
+  for(const slug of Object.keys(registry)) T._spriteTextureCache[slug] = fakeTexture();
+
+  const pieces = [
+    { slug: "medium-thing", cellX: 0, cellY: 0 },
+    { slug: "large-thing", cellX: 0, cellY: 0 },
+    { slug: "knight", cellX: 0, cellY: 0, scaleVsHuman: 1.0 },
+    { slug: "floored-thing", cellX: 2, cellY: 3 },
+    { slug: "titan-thing", cellX: 0, cellY: 0 },
+  ];
+  const built = T._interiorBuildPiecesForTest(pieces, 0, 0, wallHeightBase);
+  result.resolvedCount = built.resolved;
+  result.requestedCount = built.requested;
+  const g = built.group.children; // same order as the pieces array (forEach preserves order)
+  result.medHeight = g[0] && g[0].children[0].geometry.parameters.height;
+  result.largeHeight = g[1] && g[1].children[0].geometry.parameters.height;
+  result.knightHeight = g[2] && g[2].children[0].geometry.parameters.height;
+  result.flooredHeight = g[3] && g[3].children[0].geometry.parameters.height;
+  result.flooredY = g[3] && g[3].position.y;
+  result.flooredX = g[3] && g[3].position.x;
+  result.flooredZ = g[3] && g[3].position.z;
+  result.titanHeight = g[4] && g[4].children[0].geometry.parameters.height;
+
+  result.oversizeWarned = warnings.some((w) => w.includes("qa: oversize-clamped"));
+  result.ok = true;
+} catch(e){
+  result.error = String((e && e.stack) || e);
+}
+process.stdout.write(JSON.stringify(result));
+process.exit(0);
+`;
+
+const OLD_RUNNER_SRC = `
+import { JSDOM } from "jsdom";
+import { pathToFileURL } from "node:url";
+
+const bootPath = process.argv[2];
+const registry = JSON.parse(process.argv[3]);
+
+const dom = new JSDOM(
+  \`<!doctype html><html><body><div id="stage" style="width:400px;height:300px"></div></body></html>\`,
+  { runScripts: "dangerously", url: "http://localhost/" }
+);
+global.window = dom.window;
+global.document = dom.window.document;
+global.SPRITE_REGISTRY = registry;
+global.window.SPRITE_REGISTRY = registry;
+
+function fakeTexture(){ return { magFilter: null, minFilter: null, generateMipmaps: true, isTexture: true }; }
+
+const result = { ok: false, error: null };
+try {
+  await import(pathToFileURL(bootPath).href);
+  const T = global.window.Theater;
+  T._spriteTextureCache["spr-gloom-scaled-medium"] = fakeTexture();
+  // OLD interiorBuildPieces delegated STRAIGHT to buildSpriteBillboard (the tabletop render-height-
+  // multiplier convention) — refFigure.build's sprite branch calls the exact same function, so this
+  // is a byte-identical stand-in for "what interiorBuildPieces built before this unit's fix" without
+  // needing interiorBuildPieces itself to exist on the pre-fix source (it doesn't take a
+  // wallHeightBase param pre-fix, and had no test seam at all).
+  const fig = T.refFigure.build({ recipeSlug: "scaled-medium" });
+  result.medHeight = fig && fig.children[0] && fig.children[0].geometry.parameters.height;
+  result.ok = true;
+} catch(e){
+  result.error = String((e && e.stack) || e);
+}
+process.stdout.write(JSON.stringify(result));
+process.exit(0);
+`;
+
+function runVP1Scenario(bootSourceText, runnerSrc, extraArgs){
+  const tag = `${process.pid}-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+  const bootPath = join(ROOT, "src", "ui", `.verify-vp1-boot-${tag}.mjs`);
+  const runnerPath = join(ROOT, "dev", `.verify-vp1-runner-${tag}.mjs`);
+  writeFileSync(bootPath, bootSourceText);
+  writeFileSync(runnerPath, runnerSrc);
+  try {
+    const out = execFileSync("node", [runnerPath, bootPath, JSON.stringify(VP1_REGISTRY), ...extraArgs], {
+      cwd: ROOT, encoding: "utf-8", timeout: 30000,
+    });
+    const lastLine = out.trim().split("\n").pop();
+    return JSON.parse(lastLine);
+  } finally {
+    rmSync(bootPath, { force: true });
+    rmSync(runnerPath, { force: true });
+  }
+}
+
+group("22 — RED-FIRST: pre-fix theater-boot.js (merge-base with master, before this unit's edits) built a medium piece's tabletop billboard WELL over 2 world units");
+{
+  // Resolve the pre-fix tip as the merge-base with master (robust to this branch gaining more
+  // commits later) rather than a bare "HEAD", which would start pointing at THIS unit's own fix
+  // commit the moment it lands — silently turning this into a no-op re-read of the working tree.
+  const preFixRef = execFileSync("git", ["merge-base", "HEAD", "master"], { cwd: ROOT, encoding: "utf-8" }).trim();
+  const OLD_SOURCE = execFileSync("git", ["show", `${preFixRef}:src/ui/theater-boot.js`], { cwd: ROOT, encoding: "utf-8" });
+  ok(!OLD_SOURCE.includes("_interiorBuildPiecesForTest"), `sanity: the pre-fix tip (${preFixRef}) theater-boot.js predates this unit's test seam (proves this is really the pre-fix source, not an accidental re-read of the working tree)`);
+  const red = runVP1Scenario(OLD_SOURCE, OLD_RUNNER_SRC, []);
+  if(!red.ok){
+    fail++; console.error("  FAIL: pre-fix scenario threw: " + red.error);
+  } else {
+    console.log(`  pre-fix medium+scale1.5 tabletop billboard height = ${red.medHeight} world units (spriteSizeScaleFor("medium")=1 x GLB_TARGET_HEIGHT=1.5 x calib=1.5 = 2.25)`);
+    ok(red.medHeight > 2, `RED-FIRST proven: pre-fix height (${red.medHeight}) > 2 world units for a MEDIUM creature standing in a room where 1 unit = 5ft (the bug)`);
+  }
+}
+
+group("23 — FIXED: interiorBuildPieces sizes through TRUE-SCALE (HUMAN_TRUE_HEIGHT x scaleTrue), not the tabletop convention");
+{
+  const REAL_SOURCE = read("src/ui/theater-boot.js");
+  const green = runVP1Scenario(REAL_SOURCE, NEW_RUNNER_SRC, ["2.4"]);
+  if(!green.ok){
+    fail++; console.error("  FAIL: fixed-source scenario threw: " + green.error);
+  } else {
+    ok(green.resolvedCount === 5 && green.requestedCount === 5, `all 5 VP1 fixture pieces resolved through the fixed interiorBuildPieces (resolved=${green.resolvedCount} requested=${green.requestedCount})`);
+    ok(green.medHeight >= 1.05 && green.medHeight <= 1.15, `medium (scaleTrue=1.0) height ${green.medHeight} in [1.05, 1.15]`);
+    ok(green.largeHeight >= 2.0 && green.largeHeight <= 2.4, `large (scaleTrue=2.0) height ${green.largeHeight} in [2.0, 2.4]`);
+    ok(green.knightHeight <= 1.3, `loop-gate knight (piece-level scaleVsHuman override, no registry scaleTrue) height ${green.knightHeight} <= 1.3`);
+
+    group("25 — floor-line offset math: ground-contact line (not raw image-bottom) sits on y=-0.5");
+    const expectedY = -0.5 - 0.1 * green.flooredHeight;
+    ok(Math.abs(green.flooredY - expectedY) < 1e-9, `floored piece (entry.floor=0.1, height=${green.flooredHeight}): group.position.y=${green.flooredY} matches -0.5 - floor*height=${expectedY}`);
+    ok(green.flooredX === 2 && green.flooredZ === 3, `floored piece keeps the origin-shifted cellX/cellY placement (x=${green.flooredX} z=${green.flooredZ})`);
+
+    group("26 — oversize clamp: wallHeightBase*0.95 cap + qa:oversize-clamped console.warn");
+    ok(Math.abs(green.titanHeight - 2.4 * 0.95) < 1e-9, `titan (scaleTrue=100) clamps to wallHeightBase(2.4)*0.95=${2.4 * 0.95} (got ${green.titanHeight})`);
+    ok(green.oversizeWarned === true, "console.warn fired with the qa:oversize-clamped tag");
+  }
+}
+
+group("27 — registry fold: data/sprite-registry.js emits feet/scaleTrue for >= 800 cut slugs (+ mutation: stubbing the fold reds this count)");
+{
+  const registrySrc = read("data/sprite-registry.js");
+  const scaleTrueCount = (registrySrc.match(/scaleTrue:/g) || []).length;
+  ok(scaleTrueCount >= 800, `data/sprite-registry.js carries scaleTrue on >= 800 cut slugs (found ${scaleTrueCount})`);
+
+  // MUTATION: stub build/gen-sprite-registry.py's sizing_for() to always return null (the fold
+  // "turned off"), regenerate into a scratch --out file, and prove the count check REDS — then
+  // discard the scratch file (the real data/sprite-registry.js on disk is never touched by this
+  // block; --out points at a throwaway path the whole time).
+  const genSrc = read("build/gen-sprite-registry.py");
+  const STUB_MARK = "def sizing_for(slug, sheet, cell, corpus_sizing, v3_by_sheet_cell):";
+  ok(genSrc.includes(STUB_MARK), "sanity: sizing_for() found verbatim in build/gen-sprite-registry.py — can stub it");
+  const stubbedSrc = genSrc.replace(
+    STUB_MARK,
+    STUB_MARK + "\n    return None  # MUTATION STUB (verify-dungeon-interior.mjs check 27) — fold disabled"
+  );
+  // NOTE: gen-sprite-registry.py derives ROOT as dirname(dirname(__file__)) — the stubbed copy must
+  // sit AT THE SAME DEPTH as the real build/gen-sprite-registry.py (directly in build/, not a
+  // subdirectory of it) or its own ROOT resolves one level too deep.
+  const tag = `.vp1-mutation-${process.pid}-${Date.now()}`;
+  const stubbedGenPath = join(ROOT, "build", `gen-sprite-registry-stubbed-${tag}.py`);
+  const scratchOut = join(ROOT, "build", `sprite-registry-scratch-${tag}.js`);
+  writeFileSync(stubbedGenPath, stubbedSrc);
+  try {
+    execFileSync("python3", [stubbedGenPath, "--manifest", "dev/sprite-manifests/v2-manifest.json", "--out", scratchOut], { cwd: ROOT, encoding: "utf-8" });
+    const scratchSrc = readFileSync(scratchOut, "utf-8");
+    const scratchCount = (scratchSrc.match(/scaleTrue:/g) || []).length;
+    ok(scratchCount === 0, `MUTATION: with sizing_for() stubbed to always return null, the regenerated registry carries scaleTrue on 0 slugs (found ${scratchCount}) — the count->=800 check would RED against this output`);
+    ok(scaleTrueCount >= 800 && scratchCount === 0, "the real (unstubbed) registry stays green while the stubbed mutant reds — the check is load-bearing");
+  } finally {
+    rmSync(stubbedGenPath, { force: true });
+    rmSync(scratchOut, { force: true });
+  }
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);

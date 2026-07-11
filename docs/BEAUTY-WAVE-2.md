@@ -29,7 +29,31 @@ Reference targets (cite by name in every unit): `mock-01-gloom-combat.png` (the 
 `mock-01-fantasy-explore.png` (exploration register), `mock-01-finale.png` (staging), plus
 camp/death/dialogue/shop/chrome for later UI-state waves.
 
-## BW2-1 — THE BEAT CAMERA (presentation scale; the #1 fix)
+## BW2-0 — THE CRISP CHANNEL (the mode-7 root cause; runs FIRST, found 2026-07-10 night)
+
+Adam: sprites are high-res "and still look super crusty mode 7 style." Diagnosis (verified in
+source): `applyPsxCanvasSize` (theater-boot.js ~:3948) renders the WHOLE theater at
+`PSX_RES_SCALE = 1/3` resolution (`S.psxEnabled` default true) and CSS-stretches ×3 with
+image-rendering:pixelated. Every sprite gets nearest-minified into a third-res buffer then
+chunk-upscaled — double resample = the mode-7 warp/shimmer. Sprites were exempt from the
+dither SHADER (VP0) but nothing is exempt from a low-res framebuffer. Per the standing PS1
+scope amendment (palette+poly ONLY on the diorama), the buffer squeeze comes OFF:
+1. **Interior/diorama channel renders at FULL resolution** — scale 1 (optionally cap at
+   devicePixelRatio ≤ 2 for perf), `image-rendering: auto`. Gate by channel: the flat
+   tabletop KEEPS its PSX buffer until UW3 parity/retirement (its look is its own).
+2. **Sprite texture filtering:** magFilter stays Nearest (crisp when magnified — the pixel-art
+   law); minFilter becomes Linear for sprite billboards (kills residual minification shimmer;
+   NPOT-safe, no mipmap requirement). World-surface textures keep nearest min+mag (their texel
+   is authored; BW2-3 owns their look).
+3. FPS check: full-res render with the instanced kits + ≤8 standees must hold ≥30fps in the
+   loop-gate capture report (the 4-draw-call budget makes this near-certain).
+*Verify:* red-first — assert today the interior canvas drawing-buffer width < its CSS width
+(the 1/3 squeeze, provable); after: buffer == CSS×min(dpr,2) on the interior channel, tabletop
+unchanged (both asserted); sprite min/mag filters asserted per class; loop gate re-shot + READ
+(the crust should visibly die); fps ≥30; check-manifest OK; interior + frustum + theater-sprites
+harnesses green.
+
+## BW2-1 — THE BEAT CAMERA (presentation scale; the #1 fix — presentation SCALE; BW2-0 is the #1 fix for CRISPNESS)
 
 Law 2c exists ("the camera fits the ACTION CLUSTER"), was ruled 2026-07-10, and is not wired.
 1. **Combat beats:** camera fits participants + 1 cell margin (not the room). Target: a medium

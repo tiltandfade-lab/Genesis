@@ -291,6 +291,23 @@ function itrCorridorIndex(plan) {
   return byCell;
 }
 
+// itrRoomRoleNear(x,y,plan,roomIdx) -> the room owning (x,y) itself, or the first 4-neighbor room
+// found (a DOOR/WALL cell sits BETWEEN rooms in roomIdx, never inside one — same gap itrWallScale's
+// own neighbor-scan already bridges for scaleDomain). Returns null off-map/no neighbor (degrades to
+// SCD_DEFAULT_ROLE at the call site, never throws).
+function itrRoomRoleNear(x, y, plan, roomIdx) {
+  const here = roomIdx.get(x + "," + y);
+  if (here) return here;
+  const deltas = [[1, 0], [-1, 0], [0, 1], [0, -1]];
+  for (let i = 0; i < deltas.length; i++) {
+    const nx = x + deltas[i][0], ny = y + deltas[i][1];
+    if (nx < 0 || ny < 0 || nx >= plan.cellW || ny >= plan.cellD) continue;
+    const r = roomIdx.get(nx + "," + ny);
+    if (r) return r;
+  }
+  return null;
+}
+
 function itrDoorIndex(plan) {
   const byCell = new Map();
   (plan.doors || []).forEach((d) => { byCell.set(d.x + "," + d.y, d); });
@@ -416,7 +433,7 @@ function itrRoomLightCandidates(room) {
 // the per-room hash so two rooms with identical rects in DIFFERENT plans never pick the same pattern,
 // while the SAME plan replayed twice (the determinism acceptance every U1-U4 harness checks) always
 // yields byte-identical lights.
-function itrRoomLights(room, plan, kit) {
+function itrRoomLights(room, plan, kit, dressingByRoom) {
   const seed = dspHashStr("u3-light:" + (plan.seed || "") + ":" + room.segNum + ":" + room.x + "," + room.y);
   const rng = dspMulberry32(seed);
   const candidates = itrRoomLightCandidates(room);
@@ -429,12 +446,33 @@ function itrRoomLights(room, plan, kit) {
   const n = Math.min(itrRoomLightCount(room), shuffled.length);
   const kind = kit.lightKind || "torch";
   const height = ITR_LIGHT_HEIGHT[kind] || 1.5;
-  return shuffled.slice(0, n).map((c) => ({
+  const baseIntensity = kit.lightIntensity || 1.2;
+  const list = shuffled.slice(0, n).map((c) => ({
     x: c.x, z: c.y, y: height,
     color: kit.lightColor || "#ff9a44",
-    intensity: kit.lightIntensity || 1.2,
+    intensity: baseIntensity,
     kind, roomSegNum: room.segNum
   }));
+  if (!list.length) return list;
+
+  // VP4 item 2 (key-light-as-composition): the room's BRIGHTEST light (list[0], deterministic — same
+  // seeded slot every replay) relocates adjacent to the room's chosen focal dressing piece
+  // (place-dressing.js's dpPlaceRoom tags exactly one entry per room `.focal = true`) and steps up to
+  // the role's focalLight value; every remaining light in the room dims to <= ITR_FILL_LIGHT_CAP of
+  // the key's own intensity (item 2's "remaining lights dim to fill"). Finale rooms earn +1 key
+  // intensity step on top (item 4's staging law).
+  const sceneDir = sceneDirectionFor(kit.realmId, room.role);
+  let keyIntensity = baseIntensity * sceneDir.valueScript.focalLight;
+  if (room.role === "finale") keyIntensity *= ITR_FINALE_KEY_STEP;
+  const key = list[0];
+  key.intensity = keyIntensity;
+  const roomDress = (dressingByRoom && dressingByRoom.get(room.segNum)) || null;
+  const focalEntry = roomDress ? roomDress.find((d) => d.focal) : null;
+  if (focalEntry) { key.x = focalEntry.x; key.z = focalEntry.y; }
+  for (let i = 1; i < list.length; i++) {
+    list[i].intensity = Math.min(list[i].intensity, keyIntensity * ITR_FILL_LIGHT_CAP);
+  }
+  return list;
 }
 
 const ITR_WALL_HEIGHT_BASE = 2.4;   // world units — taller than GLB_TARGET_HEIGHT (1.5, a human figure)
@@ -465,6 +503,89 @@ function itrDarkenHex(hex, factor) {
   const r = clamp(((v >> 16) & 255) * factor), g = clamp(((v >> 8) & 255) * factor), b = clamp((v & 255) * factor);
   return "#" + [r, g, b].map((x) => x.toString(16).padStart(2, "0")).join("");
 }
+// ─── VP4 SCENE ART DIRECTION (docs/BEAUTY-WAVE.md §VP4) — a small color-math toolkit + the
+// SCENE_DIRECTION table itself. dominantHue/accentHue are derived ONCE per realm off the kit's own
+// wall/trim colors (GR3's "kit carries the final numbers" discipline — never a second hand-authored
+// color source); valueScript is a realm-INDEPENDENT per-role compositional shape (floor < wall <
+// focal light, item 1's painted-scene hierarchy), so every realm inherits the SAME hierarchy tuned to
+// its own role, with finale earning the deepest floor + brightest key (item 4's staging law). ────────
+function itrHexToHsl(hex) {
+  const h = String(hex || "#888888").replace("#", "");
+  const full = h.length === 3 ? h.split("").map((c) => c + c).join("") : h;
+  const n = parseInt(full, 16);
+  const v = Number.isFinite(n) ? n : 0x888888;
+  const r = ((v >> 16) & 255) / 255, g = ((v >> 8) & 255) / 255, b = (v & 255) / 255;
+  const max = Math.max(r, g, b), min = Math.min(r, g, b);
+  let hue = 0; const l = (max + min) / 2; let s = 0;
+  if (max !== min) {
+    const d = max - min;
+    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+    if (max === r) hue = (g - b) / d + (g < b ? 6 : 0);
+    else if (max === g) hue = (b - r) / d + 2;
+    else hue = (r - g) / d + 4;
+    hue *= 60;
+  }
+  return { h: hue, s, l };
+}
+function itrHslToHex(h, s, l) {
+  h = ((h % 360) + 360) % 360;
+  const c = (1 - Math.abs(2 * l - 1)) * s;
+  const x = c * (1 - Math.abs(((h / 60) % 2) - 1));
+  const m = l - c / 2;
+  let r1 = 0, g1 = 0, b1 = 0;
+  if (h < 60) { r1 = c; g1 = x; } else if (h < 120) { r1 = x; g1 = c; }
+  else if (h < 180) { g1 = c; b1 = x; } else if (h < 240) { g1 = x; b1 = c; }
+  else if (h < 300) { r1 = x; b1 = c; } else { r1 = c; b1 = x; }
+  const clamp255 = (v) => Math.max(0, Math.min(255, Math.round((v) * 255)));
+  const r = clamp255(r1 + m), g = clamp255(g1 + m), b = clamp255(b1 + m);
+  return "#" + [r, g, b].map((v) => v.toString(16).padStart(2, "0")).join("");
+}
+function itrHueOfHex(hex) { return itrHexToHsl(hex).h; }
+// itrTintTowardHue(hex, targetHue, strength) — blends hex's OWN hue toward targetHue by `strength`
+// (0..1), keeping the source's own saturation/lightness (ACCENT DISCIPLINE item 3's "tint toward
+// accentHue <= 0.1 strength" — a mood wash, never a color-replace, same low-strength law GR3's own
+// per-realm grade tint already keeps for the void/fog backdrop).
+function itrTintTowardHue(hex, targetHue, strength) {
+  const hsl = itrHexToHsl(hex);
+  let delta = ((targetHue - hsl.h + 540) % 360) - 180; // shortest signed hue-circle distance
+  const newHue = hsl.h + delta * strength;
+  return itrHslToHex(newHue, hsl.s, hsl.l);
+}
+
+const ITR_ACCENT_STRENGTH = 0.1;      // VP4 item 3: "<= 0.1 strength"
+const ITR_FILL_LIGHT_CAP = 0.6;       // VP4 item 2: fill lights dim to <= 60% of key intensity
+const ITR_FINALE_KEY_STEP = 1.15;     // VP4 item 4: finale rooms get +1 key intensity step
+const SCD_DEFAULT_ROLE = "side";
+// valueScript is per-ROLE (not per-realm): floor < wall < focalLight, always — the painted-scene
+// hierarchy VP4 item 1 asks to ASSERT after grade application. finale carries the steepest spread
+// (deepest floor, brightest focal light), matching item 4's staging law.
+const SCD_ROLE_VALUE_SCRIPT = Object.freeze({
+  entrance: Object.freeze({ floor: 0.82, wall: 1.00, focalLight: 1.18 }),
+  path:     Object.freeze({ floor: 0.80, wall: 1.00, focalLight: 1.20 }),
+  side:     Object.freeze({ floor: 0.80, wall: 1.00, focalLight: 1.22 }),
+  pocket:   Object.freeze({ floor: 0.78, wall: 1.00, focalLight: 1.28 }),
+  finale:   Object.freeze({ floor: 0.76, wall: 1.00, focalLight: 1.34 }),
+});
+// SCENE_DIRECTION[realmId][role] = {dominantHue, accentHue, valueScript} — per realm x room ROLE, per
+// the spec's own data shape. dominantHue/accentHue repeat across a realm's own roles (they're the
+// realm's identity anchors, not role-varying), valueScript varies by role (the compositional shape) —
+// built once at load time off INTERIOR_TILE_KITS + SCD_ROLE_VALUE_SCRIPT so every realm's kit stays
+// the single source of truth for its own hues (never a second hand-authored hue table to drift).
+const SCENE_DIRECTION = Object.freeze(Object.keys(INTERIOR_TILE_KITS).reduce((acc, realmId) => {
+  const kit = INTERIOR_TILE_KITS[realmId];
+  const dominantHue = itrHueOfHex(kit.wallColor);
+  const accentHue = itrHueOfHex(kit.trimColor);
+  acc[realmId] = Object.freeze(Object.keys(SCD_ROLE_VALUE_SCRIPT).reduce((racc, role) => {
+    racc[role] = Object.freeze({ dominantHue: dominantHue, accentHue: accentHue, valueScript: SCD_ROLE_VALUE_SCRIPT[role] });
+    return racc;
+  }, {}));
+  return acc;
+}, {}));
+function sceneDirectionFor(realmId, role) {
+  const byRealm = SCENE_DIRECTION[realmId] || SCENE_DIRECTION[INTERIOR_DEFAULT_KIT];
+  return byRealm[role] || byRealm[SCD_DEFAULT_ROLE];
+}
+
 // itrBuildSkirtRing(bounds, kit) -> [{x,z,sx,sy,sz,color}] — one skirt instance per cell on the OUTER
 // ring of the board's own tracked bounding rect (bounds.{minX,maxX,minZ,maxZ}, the SAME object
 // interiorBuildBoard already computes for its own `bounds` field — never a second derivation). A
@@ -607,6 +728,21 @@ function interiorBuildBoard(plan, opts) {
   const keepSet = itrFocusRoomSet(plan, opts.focusSegNum, radius);
   const kept = itrBuildKeepGrid(plan, keepSet, roomIdx, corridorIdx);
 
+  // VP4 (docs/BEAUTY-WAVE.md §VP4): index plan.dressing by room so itrRoomLights can find each room's
+  // chosen focal cell without re-scanning the whole array per room. `plan` here IS the dressPlan()
+  // output when dressing ran first (theater-data.js's own dressPlan-then-interiorBuildBoard order) —
+  // a bare/undressed plan (every verify-dungeon-interior.mjs fixture, and any U1/U2-only caller)
+  // simply carries no `.dressing`, and this degrades to an empty map (no focal relocation, same as
+  // before this unit — total-function discipline, never throws).
+  const dressingByRoom = new Map();
+  if (Array.isArray(plan.dressing)) {
+    plan.dressing.forEach((d) => {
+      if (!dressingByRoom.has(d.roomSegNum)) dressingByRoom.set(d.roomSegNum, []);
+      dressingByRoom.get(d.roomSegNum).push(d);
+    });
+  }
+  const accentedRooms = new Set(); // VP4 item 3: exactly ONE accent thread (doorframe) per room
+
   const idx = (x, y) => y * plan.cellW + x;
   const floor = [], wall = [], doorframe = [], pillar = [];
   let minX = Infinity, maxX = -Infinity, minZ = Infinity, maxZ = -Infinity;
@@ -670,6 +806,11 @@ function interiorBuildBoard(plan, opts) {
           const stepDelta = gd.raised.get(x + "," + y);
           if (stepDelta != null) sy = ITR_FLOOR_HEIGHT + stepDelta;
         }
+        // VP4 item 1: the painted-scene value hierarchy (floor darkest) — applied AFTER the ground-
+        // design tone/jitter above, never replacing it (a further multiplicative darken, same
+        // itrDarkenHex convention that pass already uses).
+        const floorSceneDir = sceneDirectionFor(kit.realmId, room && room.role);
+        color = itrDarkenHex(color, floorSceneDir.valueScript.floor);
         floor.push({ x, z: y, sx: 1, sy, sz: 1, color, scaleDomain: scale });
         track(x, y);
       }
@@ -679,12 +820,26 @@ function interiorBuildBoard(plan, opts) {
         const baseH = ITR_WALL_HEIGHT_BASE * (d ? (d.heightScale || 1.0) : 1.0);
         const h = baseH * (squeeze ? ITR_SQUEEZE_HEIGHT_FRAC : ITR_DOOR_HEIGHT_FRAC);
         const wFrac = squeeze ? ITR_SQUEEZE_WIDTH_FRAC : 0.8;
-        doorframe.push({ x, z: y, sx: wFrac, sy: h, sz: wFrac, color: kit.trimColor, squeeze, transition: !!(d && d.transition) });
+        // VP4 item 3 (accent discipline): exactly ONE accent thread per room — the first doorframe
+        // cell whose neighboring room hasn't been accented yet earns the accentHue tint (<= 0.1
+        // strength, a mood wash never a color-replace); every other doorframe/pillar in the room stays
+        // the kit's own flat trimColor.
+        const doorRoom = itrRoomRoleNear(x, y, plan, roomIdx);
+        let trimColor = kit.trimColor;
+        if (doorRoom && !accentedRooms.has(doorRoom.segNum)) {
+          const doorSceneDir = sceneDirectionFor(kit.realmId, doorRoom.role);
+          trimColor = itrTintTowardHue(kit.trimColor, doorSceneDir.accentHue, ITR_ACCENT_STRENGTH);
+          accentedRooms.add(doorRoom.segNum);
+        }
+        doorframe.push({ x, z: y, sx: wFrac, sy: h, sz: wFrac, color: trimColor, squeeze, transition: !!(d && d.transition) });
         track(x, y);
       } else if (code === SPATIAL_CELL.WALL) {
         const scale = itrWallScale(x, y, plan, roomIdx, corridorIdx);
         const h = ITR_WALL_HEIGHT_BASE * scale;
-        wall.push({ x, z: y, sx: 1, sy: h, sz: 1, color: kit.wallColor, scaleDomain: scale });
+        const wallRoom = itrRoomRoleNear(x, y, plan, roomIdx);
+        const wallSceneDir = sceneDirectionFor(kit.realmId, wallRoom && wallRoom.role);
+        const wallColor = itrDarkenHex(kit.wallColor, wallSceneDir.valueScript.wall);
+        wall.push({ x, z: y, sx: 1, sy: h, sz: 1, color: wallColor, scaleDomain: scale });
         track(x, y);
       }
     }
@@ -717,7 +872,7 @@ function interiorBuildBoard(plan, opts) {
   const lights = [];
   (plan.rooms || []).forEach((r) => {
     if (keepSet !== null && !keepSet.has(r.segNum)) return;
-    itrRoomLights(r, plan, kit).forEach((l) => lights.push(l));
+    itrRoomLights(r, plan, kit, dressingByRoom).forEach((l) => lights.push(l));
   });
 
   const roomCount = keepSet === null ? plan.rooms.length : keepSet.size;
@@ -801,3 +956,5 @@ window.interiorBuildBoard = interiorBuildBoard;
 window.interiorTileKitFor = interiorTileKitFor;
 window.REALM_MATERIALS = REALM_MATERIALS;
 window.realmMaterialFor = realmMaterialFor;
+window.SCENE_DIRECTION = SCENE_DIRECTION;
+window.sceneDirectionFor = sceneDirectionFor;

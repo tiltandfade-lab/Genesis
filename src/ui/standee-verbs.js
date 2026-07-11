@@ -372,18 +372,126 @@ function runGuiseSwap(standee, spec, opts){
 }
 
 /* ============================================================================
+   BEAUTY-WAVE.md VP6 item 1 — IDLE-BREATHE. Deliberately NOT a STANDEE_VERBS registry entry: every
+   other verb in that table is a one-shot beat driven by playStandeeVerb's generic keyframe executor
+   (a discrete combat/action event), while idle-breathe is a CONTINUOUS ambient loop that auto-plays on
+   every living piece for as long as its board stays mounted, gets paused (not cancelled) the instant
+   any other verb plays on the same standee, and resumes afterward — a fundamentally different lifecycle
+   than "play once, revert or persist." Folding it into STANDEE_VERBS would need a `loop:true` special
+   case bolted onto runKeyframeVerb's revert-or-persist binary for a shape that fits neither, and would
+   also break dev/verify-standee-verbs.mjs's existing A1d "no unknown/stray verbs beyond §A's v1 list"
+   completeness check for a verb §A's OWN v1 list never named. So it's its own small state machine below,
+   sharing only the same ctx.tweens ticker (bindStandeeCtx/pushTween, above) every other verb already
+   rides — "the existing tween tick loop" the wider VP6 spec calls for, not a second animation channel.
+
+   ±1.5% scaleY, a 2.4s loop, PHASE-OFFSET per piece by a seeded hash of its own group/seed key (so a
+   room full of standees never breathes in visible unison — dev/verify-vp6-life-pass.mjs's phase-desync
+   check). Corpses (group.userData.corpse, stamped by fall-death below) never breathe — checked both at
+   start (a corpse never gets a fresh cycle) and permanently after any fall-death (stopIdleBreathe with
+   cancel:true, so a resume attempted by a LATER verb's onDone can never restart it).
+   ============================================================================ */
+const IDLE_BREATHE_DUR = 2400;   // ms per full cycle
+const IDLE_BREATHE_AMP = 0.015;  // ±1.5% scaleY
+
+// small deterministic string hash -> [0,1) phase — same "cheap FNV-ish hash, no Math.random" posture
+// every other seeded spot in this codebase uses; a piece's OWN seed key (its slug/id, whatever the
+// caller passes) always yields the SAME phase, so re-mounting the same room doesn't re-roll who's
+// synced with whom.
+function seededPhase(key){
+  let h = 2166136261 >>> 0;
+  const s = String(key == null ? Math.random() : key);
+  for(let i = 0; i < s.length; i++){ h = ((h ^ s.charCodeAt(i)) * 16777619) >>> 0; }
+  return (h >>> 8) / 16777216; // top 24 bits -> [0,1)
+}
+
+/* startIdleBreathe(group, seedKey) — begins (or continues) the loop on a resolved standee. A clean
+   no-op (false) for: no ctx bound, a non-standee group, or a corpse. Idempotent — calling it on an
+   already-breathing standee just returns true without stacking a second cycle. */
+export function startIdleBreathe(group, seedKey){
+  if(!_ctx || !_ctx.tweens) return false;
+  const standee = resolveStandee(group);
+  if(!standee) return false;
+  if(group.userData.corpse) return false; // corpses (fall-death) never breathe — MECHANICAL, checked here too
+  if(group.userData.idleBreatheActive) return true; // already running — no-op, not a stacked second cycle
+  group.userData.idleBreatheActive = true;
+  group.userData.idleBreatheCancel = false;
+  const phase = seededPhase(seedKey != null ? seedKey : group.userData.spriteSlug);
+  runBreatheCycle(standee, phase);
+  return true;
+}
+
+/* one loop cycle. `phaseFrac` in [0,1) is how far INTO the 2.4s cycle this particular cycle should
+   start sampling at (only ever nonzero on the FIRST cycle — the phase-offset itself; every subsequent
+   cycle for the same standee starts fresh at phaseFrac=0, since the desync is "this piece's clock
+   started at a different moment," not "this piece's cycle is a different length"). Modeled as a
+   SHORTER first tween (dur scaled by the remaining fraction of the cycle) whose `update(t)` maps back
+   onto the full [0,1) sine phase — sampleAt(tween, t) in the harness can therefore assert two
+   differently-phased standees show different scaleY at the SAME t without needing real wall-clock
+   timers. */
+function runBreatheCycle(standee, phaseFrac){
+  const { group } = standee;
+  if(!group.userData.idleBreatheActive || group.userData.idleBreatheCancel) return;
+  const baseScaleY = group.scale.y;
+  const remaining = 1 - (phaseFrac || 0);
+  const dur = Math.max(1, IDLE_BREATHE_DUR * remaining);
+  const startFrac = phaseFrac || 0;
+  pushTween(dur, (t) => {
+    const full = startFrac + t * remaining; // 0..1 across the FULL cycle, offset by this piece's phase
+    group.scale.y = baseScaleY * (1 + IDLE_BREATHE_AMP * Math.sin(full * Math.PI * 2));
+  }, () => {
+    group.scale.y = baseScaleY;
+    if(group.userData.idleBreatheActive && !group.userData.idleBreatheCancel){
+      runBreatheCycle(standee, 0); // every subsequent cycle starts at phase 0 — the offset already happened once
+    }
+  });
+}
+
+/* stopIdleBreathe(group, cancel) — pauses the loop (cancel falsy — a verb about to play resumes it
+   afterward) or permanently cancels it (cancel:true — fall-death's corpse carve-out; no later resume
+   attempt can restart it, since playStandeeVerb's own resume() checks idleBreatheCancel is untouched
+   here on purpose — it stays true forever once fall-death sets it). Null-safe. */
+export function stopIdleBreathe(group, cancel){
+  if(!group || !group.userData) return;
+  group.userData.idleBreatheActive = false;
+  if(cancel) group.userData.idleBreatheCancel = true;
+}
+
+/* ============================================================================
    Public dispatch — playStandeeVerb(pieceOrUnitGroup, verbName, opts). See header for the exact
    signature rationale (§A's call shape, ctx bound separately via bindStandeeCtx). Returns false
    (never throws) for: no ctx bound yet, an unresolvable/non-standee group, or an unknown verb name —
    matching theater-verbs.js's playVerb's own null-safety contract exactly.
+
+   VP6 addendum: any OTHER verb (every §A v1 entry) pauses idle-breathe for its own duration if it was
+   running, then resumes it once the verb's tween completes — UNLESS the verb was fall-death, which
+   instead marks the standee a permanent corpse (idle-breathe cancelled for good, per item 1's own
+   "corpses never breathe" rule). "idle-breathe" itself is dispatched to startIdleBreathe directly
+   (opts.seedKey optional), not through the generic keyframe executor (see the block above for why).
    ============================================================================ */
 export function playStandeeVerb(pieceOrUnitGroup, verbName, opts){
   if(!_ctx) return false;
+  if(verbName === "idle-breathe"){
+    return startIdleBreathe(pieceOrUnitGroup, opts && opts.seedKey);
+  }
   const spec = STANDEE_VERBS[verbName];
   if(!spec) return false;
   const standee = resolveStandee(pieceOrUnitGroup);
   if(!standee) return false;
   opts = opts || {};
-  if(spec.special === "guise-swap") return runGuiseSwap(standee, spec, opts);
-  return runKeyframeVerb(standee, spec, opts);
+  const wasBreathing = !!pieceOrUnitGroup.userData.idleBreatheActive;
+  if(wasBreathing) stopIdleBreathe(pieceOrUnitGroup, false); // PAUSE only — resumed below unless fall-death
+  const userOnDone = opts.onDone;
+  const withResume = Object.assign({}, opts, {
+    onDone(){
+      if(typeof userOnDone === "function") userOnDone();
+      if(verbName === "fall-death"){
+        pieceOrUnitGroup.userData.corpse = true;
+        stopIdleBreathe(pieceOrUnitGroup, true); // corpses never breathe again — permanent
+        return;
+      }
+      if(wasBreathing) startIdleBreathe(pieceOrUnitGroup, opts.seedKey); // resume after the other verb
+    }
+  });
+  if(spec.special === "guise-swap") return runGuiseSwap(standee, spec, withResume);
+  return runKeyframeVerb(standee, spec, withResume);
 }

@@ -5018,10 +5018,16 @@ function interiorBuildInstancedMesh(list, cx, cz, texture, variant, shadowKind){
   // instead — its own top face sits flush at y=-0.5 and it extends downward by its own sy, reading as
   // the underside of the floating slab rather than a second floor layer.
   const skirtBand = shadowKind === "skirt";
+  // BEAUTY-WAVE-2.md BW2-5: `yBase` (default 0, so every pre-existing instance renders IDENTICALLY to
+  // before this unit) lets a prism's bottom sit ABOVE the shared floor plane instead of always growing
+  // up off it — arch-header prisms stacking on top of a doorframe, a tapered column's narrower cap.
+  // `ox`/`oz` (also default 0) offset the instance WITHIN its own cell — door-reveal jambs sitting in
+  // the margin beside a narrower frame, sub-cell furniture-assembly prisms.
   list.forEach((inst, i) => {
-    const y = skirtBand ? (-0.5 - (inst.sy || 1) / 2) : ((inst.sy || 1) / 2 - 0.5);
+    const yBase = (typeof inst.yBase === "number") ? inst.yBase : 0;
+    const y = skirtBand ? (-0.5 - (inst.sy || 1) / 2) : (yBase + (inst.sy || 1) / 2 - 0.5);
     m.compose(
-      new THREE.Vector3(inst.x - cx, y, inst.z - cz),
+      new THREE.Vector3((inst.x + (inst.ox || 0)) - cx, y, (inst.z + (inst.oz || 0)) - cz),
       new THREE.Quaternion(),
       new THREE.Vector3(Math.max(0.01, inst.sx || 1), Math.max(0.01, inst.sy || 1), Math.max(0.01, inst.sz || 1))
     );
@@ -5032,6 +5038,53 @@ function interiorBuildInstancedMesh(list, cx, cz, texture, variant, shadowKind){
   mesh.instanceMatrix.needsUpdate = true;
   if(mesh.instanceColor) mesh.instanceColor.needsUpdate = true;
   return mesh;
+}
+
+// BW2-5 THE COLUMN DEMOTION: pillar instances now carry an optional `profile` field (square/round/
+// tapered/broken/tapered-cap — theater-interior.js's own column-roll comment). square/tapered/broken/
+// tapered-cap stay box-based (scale/height differences alone read the profile, same shared box
+// InstancedMesh every other kind already uses); "round" gets a small dedicated CylinderGeometry
+// InstancedMesh instead — columns are now RARE (<=1/room, most rooms earn none), so this NEVER
+// meaningfully grows the draw-call budget dev/verify-dungeon-interior.mjs check 2 guards (that check
+// only asserts board.instances' own KEYS, which this split never touches — it's a pure GL-layer
+// interpretation of the SAME `pillar` array).
+let INTERIOR_CYLINDER_GEO = null;
+function interiorCylinderGeometry(){
+  if(!INTERIOR_CYLINDER_GEO) INTERIOR_CYLINDER_GEO = new THREE.CylinderGeometry(0.5, 0.5, 1, 12);
+  return INTERIOR_CYLINDER_GEO;
+}
+function interiorBuildPillarMeshes(list, cx, cz, variant){
+  const boxList = (list || []).filter((p) => p.profile !== "round");
+  const roundList = (list || []).filter((p) => p.profile === "round");
+  const meshes = [];
+  const boxMesh = interiorBuildInstancedMesh(boxList, cx, cz, null, variant, "pillar");
+  if(boxMesh) meshes.push(boxMesh);
+  if(roundList.length){
+    const geo = interiorCylinderGeometry();
+    const mat = applyPsxShaderTweaks(new THREE.MeshLambertMaterial({ color: 0xffffff }), {
+      banded: !!(variant && variant.banded), bandedSteps: variant && variant.bandedSteps, worldSurface: true,
+      worldPsxOverride: (variant && typeof variant.worldPsx === "boolean") ? variant.worldPsx : undefined
+    });
+    const mesh = new THREE.InstancedMesh(geo, mat, roundList.length);
+    mesh.receiveShadow = true; mesh.castShadow = true;
+    const m = new THREE.Matrix4(); const colorObj = new THREE.Color();
+    roundList.forEach((inst, i) => {
+      const yBase = (typeof inst.yBase === "number") ? inst.yBase : 0;
+      const y = yBase + (inst.sy || 1) / 2 - 0.5;
+      m.compose(
+        new THREE.Vector3((inst.x + (inst.ox || 0)) - cx, y, (inst.z + (inst.oz || 0)) - cz),
+        new THREE.Quaternion(),
+        new THREE.Vector3(Math.max(0.01, inst.sx || 1), Math.max(0.01, inst.sy || 1), Math.max(0.01, inst.sz || 1))
+      );
+      mesh.setMatrixAt(i, m);
+      colorObj.set(inst.color || "#ffffff");
+      mesh.setColorAt(i, colorObj);
+    });
+    mesh.instanceMatrix.needsUpdate = true;
+    if(mesh.instanceColor) mesh.instanceColor.needsUpdate = true;
+    meshes.push(mesh);
+  }
+  return meshes;
 }
 
 /* window.Theater.setInteriorBoard(data) — DUNGEON-GRAPH.md U3's tray-render entry point for a
@@ -5231,7 +5284,7 @@ function stopMoteDrift(){
 // "did every piece sprite resolve" on window.Theater for the capture rig's metrics (a piece whose slug
 // doesn't join the registry, or whose texture hasn't loaded yet, silently skips — same total-function/
 // never-throw discipline every other figure resolution in this file keeps).
-function interiorBuildPieces(pieces, cx, cz, wallHeightBase, floorTopMap, trimColor){
+function interiorBuildPieces(pieces, cx, cz, wallHeightBase, floorTopMap, trimColor, daisTop){
   const group = new THREE.Group();
   // VP7 CONTACT GROUNDING: blobs live in their OWN sibling sub-group, appended to `group` once at
   // the end — NOT interleaved into `group`'s direct children — so existing/other callers walking
@@ -5251,6 +5304,15 @@ function interiorBuildPieces(pieces, cx, cz, wallHeightBase, floorTopMap, trimCo
     });
     const built = interiorSpriteBillboard(entry, wallCap);
     if(!built) return; // texture not loaded yet — falls through, same as every other billboard resolution
+    // BEAUTY-WAVE-2.md BW2-5 item 3: "the boss standee's cell prefers the dais top". An opt-in
+    // mechanism, additive/non-breaking — a piece the caller tags `preferDais:true` with NO explicit
+    // cellX/cellY defaults onto the board's own finale-room dais anchor (data.daisTop, src/ui/theater-
+    // interior.js's itrDaisAnchor) when one exists; every existing caller that sets a real cellX/cellY
+    // (or doesn't tag preferDais at all) behaves exactly as before.
+    if(p.preferDais && p.cellX == null && p.cellY == null && Array.isArray(daisTop) && daisTop.length){
+      const anchor = (p.roomSegNum != null) ? (daisTop.find((d) => d.roomSegNum === p.roomSegNum) || daisTop[0]) : daisTop[0];
+      if(anchor){ p = Object.assign({}, p, { cellX: anchor.x, cellY: anchor.y }); }
+    }
     const g = built.group;
     const floorFrac = (typeof base.floor === "number") ? base.floor : 0;
     const cellX = p.cellX || 0, cellY = p.cellY || 0;
@@ -5405,6 +5467,138 @@ function buildDressingCard(entry){
   return g;
 }
 
+// BEAUTY-WAVE-2.md BW2-5 FURNITURE CHANNEL — "mid-room verticality is FURNITURE, not columns" (the
+// chrome mock's crates/cabinets/machines). Real multi-prism BoxGeometry assemblies (furnitureFor(kind,
+// realm), src/ui/theater-interior.js — the shared builder ROOM-GRAMMAR.md §4 names as its own
+// dependency), textured per PACKET-02's planar-face law (textureFaceFor(realm,face) || the procedural
+// panel fallback below — PACKET-02's crate-face arrivals haven't landed yet).
+const FURNITURE_PANEL_TEXTURE_CACHE = {};
+function proceduralPanelTexture(realm, face, baseColorHex){
+  const key = realm + ":" + face + ":" + baseColorHex;
+  if(FURNITURE_PANEL_TEXTURE_CACHE[key]) return FURNITURE_PANEL_TEXTURE_CACHE[key];
+  const pixels = materialTexturePixels("mottle", baseColorHex, "furniture:" + key, MATERIAL_TEXEL_PX, 0.09);
+  const canvas = document.createElement("canvas");
+  canvas.width = pixels.width; canvas.height = pixels.height;
+  const ctx = canvas.getContext("2d");
+  ctx.putImageData(new ImageData(pixels.data, pixels.width, pixels.height), 0, 0);
+  const tex = new THREE.CanvasTexture(canvas);
+  nearestify(tex);
+  FURNITURE_PANEL_TEXTURE_CACHE[key] = tex;
+  return tex;
+}
+function furniturePanelMaterial(realm, face, baseColorHex){
+  const real = textureFaceFor(realm, face); // PACKET-02 seam — always null today (see its own header)
+  const tex = real || proceduralPanelTexture(realm, face, baseColorHex);
+  return applyPsxShaderTweaks(new THREE.MeshLambertMaterial({ map: tex }), { worldSurface: true });
+}
+function buildFurnitureAssembly(entry){
+  const recipe = furnitureFor(entry.kind, entry.realmId);
+  const kit = INTERIOR_TILE_KITS ? (INTERIOR_TILE_KITS[entry.realmId] || INTERIOR_TILE_KITS.chrome) : null;
+  const baseColorHex = (kit && kit.trimColor) || "#8a7a63";
+  const group = new THREE.Group();
+  recipe.prisms.forEach((p) => {
+    const geo = new THREE.BoxGeometry(Math.max(0.02, p.sx), Math.max(0.02, p.sy), Math.max(0.02, p.sz));
+    const mat = furniturePanelMaterial(entry.realmId, p.face, baseColorHex);
+    const mesh = new THREE.Mesh(geo, mat);
+    mesh.position.set(p.dx || 0, (p.yBase || 0) + p.sy / 2, p.dz || 0);
+    mesh.castShadow = true;
+    mesh.receiveShadow = true;
+    group.add(mesh);
+  });
+  group.userData.furnitureKind = recipe.kind;
+  group.userData.dressingSlug = entry.slug;
+  return group;
+}
+// data.furniture -> group of furniture assemblies, origin-shifted the SAME way every other interior
+// mount already is (cx/cz subtraction) — feet-on-floor via the SAME FLOOR CONTACT LAW every other
+// mount point reads through (interiorFloorTopAt).
+function interiorBuildFurniture(furniture, cx, cz, floorTopMap){
+  const group = new THREE.Group();
+  (furniture || []).forEach((f) => {
+    if(!f || !f.slug) return;
+    const g = buildFurnitureAssembly(f);
+    const floorTop = interiorFloorTopAt(floorTopMap, f.x || 0, f.y || 0);
+    g.position.set((f.x || 0) - (cx || 0), floorTop, (f.y || 0) - (cz || 0));
+    g.userData.dressingSlug = f.slug;
+    group.add(g);
+  });
+  return group;
+}
+
+// ADDENDUM — THE PROP PERSPECTIVE LAW: surface-attached props mount as real SHALLOW-EXTRUSION prisms,
+// wall-LOCKED (never camera-billboarded — that's the whole bug this fixes: a billboard always faces
+// the camera regardless of which wall it's mounted on, so at a fixed isometric angle a "screen" can
+// read backwards). Side/back faces are EDGE-SAMPLED off the SAME art texture's own outermost opaque
+// pixel ring (automatic — no second authored color source), front face is the real dressing art.
+const ITR_EDGE_COLOR_CACHE = {};
+function itrPropEdgeColorFor(slug, tex){
+  if(ITR_EDGE_COLOR_CACHE[slug]) return ITR_EDGE_COLOR_CACHE[slug];
+  let color = "#3a3a3a"; // safe neutral fallback (image not yet loaded / canvas-tainted / degenerate)
+  try {
+    const img = tex && tex.image;
+    if(img && img.width && img.height){
+      const cvs = document.createElement("canvas");
+      cvs.width = img.width; cvs.height = img.height;
+      const cctx = cvs.getContext("2d");
+      cctx.drawImage(img, 0, 0);
+      const data = cctx.getImageData(0, 0, img.width, img.height).data;
+      const margin = Math.max(1, Math.round(Math.min(img.width, img.height) * 0.04));
+      let r = 0, g = 0, b = 0, n = 0;
+      const sample = (x, y) => {
+        if(x < 0 || y < 0 || x >= img.width || y >= img.height) return;
+        const i = (y * img.width + x) * 4;
+        if(data[i + 3] < 40) return; // skip near-transparent — "the outermost OPAQUE ring"
+        r += data[i]; g += data[i + 1]; b += data[i + 2]; n++;
+      };
+      for(let x = 0; x < img.width; x++){ sample(x, margin); sample(x, img.height - 1 - margin); }
+      for(let y = 0; y < img.height; y++){ sample(margin, y); sample(img.width - 1 - margin, y); }
+      if(n > 0){
+        const hx = (v) => Math.round(v).toString(16).padStart(2, "0");
+        color = "#" + hx(r / n) + hx(g / n) + hx(b / n);
+      }
+    }
+  } catch(e) { /* cross-origin/canvas-tainted or not-yet-loaded image — keep the safe fallback */ }
+  ITR_EDGE_COLOR_CACHE[slug] = color;
+  return color;
+}
+// front (+z local) faces AWAY from the wall the prop is mounted on, into the room — "n"/"s"/"e"/"w"
+// names which side the adjacent WALL cell sits on (itrWallSideAt, src/ui/theater-interior.js).
+const ITR_WALL_SIDE_YAW = { n: 0, s: Math.PI, w: -Math.PI / 2, e: Math.PI / 2 };
+function buildExtrusionProp(entry){
+  const tex = dressingTextureFor(entry.slug);
+  const h = dressingCardHeight(entry.cardKind);
+  const depth = Math.max(0.01, entry.depth || 0.05);
+  const geo = new THREE.BoxGeometry(h, h, depth);
+  const sideColorHex = itrPropEdgeColorFor(entry.slug, tex);
+  const frontMat = new THREE.MeshBasicMaterial({ map: tex, transparent: true, alphaTest: 0.5, depthWrite: true });
+  frontMat.userData.psxExempt = true; // SPRITE PURITY — the art face is flat painted art, never PS1-distorted
+  const sideMat = new THREE.MeshLambertMaterial({ color: sideColorHex });
+  // BoxGeometry material-group order: 0:+x 1:-x 2:+y 3:-y 4:+z 5:-z — the art sits on +z (index 4)
+  const mesh = new THREE.Mesh(geo, [sideMat, sideMat, sideMat, sideMat, frontMat, sideMat]);
+  mesh.position.y = h / 2;      // same "bottom edge at group origin" convention buildDressingCard keeps
+  mesh.position.z = depth / 2;  // the -z (BACK) face sits flush on the wall plane; extrudes +z into the room
+  mesh.castShadow = true;
+  mesh.receiveShadow = false;
+  mesh.customDepthMaterial = new THREE.MeshDepthMaterial({ map: tex, alphaTest: 0.5, depthPacking: THREE.RGBADepthPacking });
+  const g = new THREE.Group();
+  g.rotation.y = ITR_WALL_SIDE_YAW[entry.wallSide] || 0;
+  g.add(mesh);
+  g.userData.dressingSlug = entry.slug;
+  g.userData.extrusionProp = true; // deliberately NOT userData.sprite — wall-LOCKED, never camera-billboarded
+  return g;
+}
+function interiorBuildWallProps(wallProps, cx, cz, floorTopMap){
+  const group = new THREE.Group();
+  (wallProps || []).forEach((d) => {
+    if(!d || !d.slug) return;
+    const g = buildExtrusionProp(d);
+    const floorTop = interiorFloorTopAt(floorTopMap, d.x || 0, d.y || 0);
+    g.position.set((d.x || 0) - (cx || 0), floorTop, (d.y || 0) - (cz || 0));
+    group.add(g);
+  });
+  return group;
+}
+
 // data.dressing -> group of dressing card standees, origin-shifted the SAME way tiles/lights/pieces
 // already are (the v3 card bug class this unit's own brief calls out by name: raw cell coords render
 // outside the fitted camera frame — every mount in this function goes through the (cx,cz) subtraction,
@@ -5416,6 +5610,11 @@ function interiorBuildDressing(dressing, cx, cz, floorTopMap){
   const blobGroup = new THREE.Group();
   (dressing || []).forEach((d) => {
     if(!d || !d.slug) return;
+    // BW2-5: blocker-primary entries render as furniture-class volumes (interiorBuildFurniture,
+    // off the sibling data.furniture array) and wall-hang entries as extrusion props
+    // (interiorBuildWallProps, off data.wallProps) — both derived from this SAME dressing roll, so
+    // skip them here to avoid mounting the same entry twice.
+    if(d.primary === "blocker" || d.primary === "wall-hang") return;
     const g = buildDressingCard(d);
     // BW2-2: feet on THIS cell's own real floor top (interiorFloorTopAt — the derived law), replacing
     // the pre-BW2-2 hardcoded -0.4 (that value's own comment falsely claimed parity with pieces' -0.5
@@ -5698,37 +5897,49 @@ function setInteriorBoard(data){
   // hardcoded -0.5/-0.4 assumptions with.
   S.interiorFloorTopMap = interiorFloorTopMapFrom(inst.floor);
   const floorMesh = interiorBuildInstancedMesh(inst.floor, cx, cz, floorTex, variant, "floor");
-  // CUTAWAY WALLS (study card v4): when the board frames a focus room, the room's CAMERA-SIDE
-  // perimeter walls drop to knee height so the camera sees INTO the room instead of at the outside
-  // face of a (possibly scale-domain-tall) wall — the standard dungeon-view cutaway. Computed from
-  // the camera yaw AT BUILD TIME (a later user rotate keeps the same cutaway until the next board
-  // build — acceptable v1, noted here on purpose).
+  // CUTAWAY WALLS (study card v4; BEAUTY-WAVE-2.md BW2-5 item 2 amendment): when the board frames a
+  // focus room, the room's CAMERA-SIDE perimeter walls drop to a PARAPET so the camera sees INTO the
+  // room instead of at the outside face of a (possibly scale-domain-tall) wall — the standard dungeon-
+  // view cutaway. PRE-BW2-5 this dropped every camera-side wall to a FIXED absolute height (KNEE=0.35
+  // world units, ~15% of the base 2.4 wall height) regardless of the room's own (possibly scaled)
+  // wall height — thin enough to read as barely-there rather than "a box you look into" (the finale
+  // mock's parapet rim). BW2-5's amendment: "full walls drop to parapet, never to nothing" — a
+  // PROPORTIONAL fraction (ITR_CUTAWAY_PARAPET_FRAC, ~0.4 of THIS wall's own height, scale-domain and
+  // all) so a scaled lair's parapet scales too, and the rim reads as a real low wall, not a knee-strip.
+  // Computed from the camera yaw AT BUILD TIME (a later user rotate keeps the same cutaway until the
+  // next board build — acceptable v1, noted here on purpose).
+  const ITR_CUTAWAY_PARAPET_FRAC = 0.4; // BW2-5 item 2: "≈0.4 wall height"
   let wallList = inst.wall;
   if(data.focusRect){
     const fr = data.focusRect;
     const yawNow = (S.rotationStep * 90 * Math.PI) / 180 + (CAM_YAW_OFFSET_DEG * Math.PI) / 180;
     const dirX = Math.sin(yawNow), dirZ = Math.cos(yawNow);
-    const KNEE = 0.35;
     wallList = inst.wall.map(function(wi){
       const inBand = wi.x >= fr.minX - 1 && wi.x <= fr.maxX + 1 && wi.z >= fr.minZ - 1 && wi.z <= fr.maxZ + 1;
       if(!inBand) return wi;
       const rx = wi.x - cx, rz = wi.z - cz;
       if(rx * dirX + rz * dirZ <= 0) return wi;            // far-side walls stay full height
-      if((wi.sy || 1) <= KNEE) return wi;
-      return Object.assign({}, wi, { sy: KNEE });
+      const parapetH = (wi.sy || 1) * ITR_CUTAWAY_PARAPET_FRAC;
+      if((wi.sy || 1) <= parapetH) return wi;              // already at/under parapet height — never GROWS a wall
+      return Object.assign({}, wi, { sy: parapetH });
     });
   }
   const wallMesh = interiorBuildInstancedMesh(wallList, cx, cz, wallTex, variant, "wall");
   const doorMesh = interiorBuildInstancedMesh(inst.doorframe, cx, cz, null, variant, "doorframe");
-  const pillarMesh = interiorBuildInstancedMesh(inst.pillar, cx, cz, null, variant, "pillar");
+  // BW2-5 THE COLUMN DEMOTION: pillar instances split by `profile` (round gets its own cylinder mesh) —
+  // see interiorBuildPillarMeshes' own header comment.
+  const pillarMeshes = interiorBuildPillarMeshes(inst.pillar, cx, cz, variant);
   // GR4 (docs/GRAPHICS-ENGINE.md build unit GR4): the diorama edge skirt — data.skirt (src/ui/theater-
   // interior.js's interiorBuildBoard, GR4 addition), a sibling of `instances` (never counted toward the
   // "4 known instance kinds" data-shape check — see that function's own doc comment). Untextured (flat
   // darkened color, same as pillar/doorframe) — a texture would be wasted detail on a band the camera
   // only ever sees edge-on.
   const skirtMesh = interiorBuildInstancedMesh(data.skirt, cx, cz, null, variant, "skirt");
-  [floorMesh, wallMesh, doorMesh, pillarMesh, skirtMesh].forEach((mesh) => { if(mesh) S.interiorGroup.add(mesh); });
-  S.interiorMeshCount = [floorMesh, wallMesh, doorMesh, pillarMesh, skirtMesh].filter(Boolean).length;
+  // BW2-5: furniture-class blocker volumes + wall-hang extrusion props (THE PROP PERSPECTIVE LAW) —
+  // built further below (after dressing) since both read S.interiorFloorTopMap; declared here so the
+  // mesh-count/group-add sweep stays one place. See interiorBuildFurniture/interiorBuildWallProps.
+  [floorMesh, wallMesh, doorMesh, skirtMesh].concat(pillarMeshes).forEach((mesh) => { if(mesh) S.interiorGroup.add(mesh); });
+  S.interiorMeshCount = [floorMesh, wallMesh, doorMesh, skirtMesh].concat(pillarMeshes).filter(Boolean).length;
 
   // DUNGEON-GRAPH.md U3 iteration-2, ruling 2: real environmental light sources (data.lights, emitted
   // by src/ui/theater-interior.js's interiorBuildBoard) — realm-flavored PointLights + their own
@@ -5747,7 +5958,7 @@ function setInteriorBoard(data){
   // DUNGEON-GRAPH.md U3 iteration-2, ruling 3: creature/PC billboard sprites standing in the room
   // (data.pieces, a plain field the caller sets directly on the board object — independent of
   // interiorBuildBoard, same as data.lightProfile above).
-  const piecesBuilt = interiorBuildPieces(data.pieces, cx, cz, data.wallHeightBase, S.interiorFloorTopMap, kit.trimColor);
+  const piecesBuilt = interiorBuildPieces(data.pieces, cx, cz, data.wallHeightBase, S.interiorFloorTopMap, kit.trimColor, data.daisTop);
   S.interiorGroup.add(piecesBuilt.group);
   S.interiorPiecesResolved = piecesBuilt.resolved;
   S.interiorPiecesRequested = piecesBuilt.requested;
@@ -5764,6 +5975,21 @@ function setInteriorBoard(data){
   // parallel formula that could drift from it.
   S.interiorDressingWorldPositions = dressingGroup.children.map((g) => ({
     slug: g.userData && g.userData.dressingSlug, x: g.position.x, y: g.position.y, z: g.position.z
+  }));
+
+  // BEAUTY-WAVE-2.md BW2-5: furniture-class blocker volumes (data.furniture) + wall-hang extrusion
+  // props (data.wallProps, THE PROP PERSPECTIVE LAW) — both siblings of data.dressing, built off the
+  // SAME roll (see interiorBuildDressing's own skip-blocker/wall-hang comment just above).
+  const furnitureGroup = interiorBuildFurniture(data.furniture, cx, cz, S.interiorFloorTopMap);
+  S.interiorGroup.add(furnitureGroup);
+  S.interiorFurnitureCount = (data.furniture || []).length;
+  const wallPropsGroup = interiorBuildWallProps(data.wallProps, cx, cz, S.interiorFloorTopMap);
+  S.interiorGroup.add(wallPropsGroup);
+  S.interiorWallPropsCount = (data.wallProps || []).length;
+  S.interiorWallPropsWorldPositions = wallPropsGroup.children.map((g) => ({
+    slug: g.userData && g.userData.dressingSlug, x: g.position.x, y: g.position.y, z: g.position.z,
+    rotY: g.rotation.y, depth: g.children[0] && g.children[0].geometry && g.children[0].geometry.parameters
+      && g.children[0].geometry.parameters.depth
   }));
 
   // BEAUTY-WAVE.md VP6 item 4 — VISIBLE HISTORY (render half). data.decals is a plain field the caller

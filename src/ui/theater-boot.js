@@ -141,8 +141,8 @@ const PSX_DITHER_AMPLITUDE = 48.0;     // G9 tune 4: Bayer threshold divisor (DI
    surfaces, never add it where the global flags are off. INTERIOR_CAM_MODE picks the interior
    channel's camera type; the tabletop channel (setBoard) always stays 'ortho' regardless of this
    flag — see setBoard/setInteriorBoard's own S.camera assignment below. */
-const WORLD_PSX_ENABLED = true;    // world-surface dither+snap on the interior channel — PRE-VP0 default (ON, matches tabletop)
-const INTERIOR_CAM_MODE = "ortho"; // 'ortho' | 'persp' — PRE-VP0 default (ortho, matches tabletop)
+const WORLD_PSX_ENABLED = false;   // RULED (VERDICT-SEAT, 2026-07-10 night): world-PSX OFF on the interior channel
+const INTERIOR_CAM_MODE = "persp"; // 'ortho' | 'persp' — RULED (VERDICT-SEAT, 2026-07-10 night): ~20deg perspective ON
 const INTERIOR_CAM_FOV_DEG = 20;   // GRAPHICS-ENGINE law 2b: "gentle perspective ~20° FOV"
 
 const CAM_ELEV_DEG = 35;

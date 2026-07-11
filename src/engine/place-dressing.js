@@ -335,14 +335,22 @@ function dpPlaceRoom(room, plan, roster, rng) {
   }
 
   // 2) focal pieces — capped at DRESSING_FOCAL_CAP regardless of the role table's own value.
+  // VP4 (docs/BEAUTY-WAVE.md §VP4, "key-light-as-composition"): tag the room's SINGLE chosen focal
+  // cell so theater-interior.js's itrRoomLights can relocate the key light beside it without
+  // re-deriving "which piece is focal" itself — a setPiece wins over a plain focal (item 4's "finale
+  // rooms get ... the setPiece focal" staging law), else the first focal piece placed this room.
   const focalCount = Math.min(density.focal, DRESSING_FOCAL_CAP);
+  let chosenFocal = null;
   for (let i = 0; i < focalCount; i++) {
     const cell = takeCell(shuffledPlaceable);
     if (!cell) break;
     const entry = dpPickRoster(focalRoster.length ? focalRoster : fillerRoster, rng);
     if (!entry) break;
-    out.push({ slug: entry.slug, x: cell.x, y: cell.y, primary: entry.primary, cardKind: entry.size, roomSegNum: room.segNum });
+    const placed = { slug: entry.slug, x: cell.x, y: cell.y, primary: entry.primary, cardKind: entry.size, roomSegNum: room.segNum };
+    out.push(placed);
+    if (!chosenFocal || (placed.primary === "setPiece" && chosenFocal.primary !== "setPiece")) chosenFocal = placed;
   }
+  if (chosenFocal) chosenFocal.focal = true;
 
   // 3) one blocker, wall-adjacent only (never placed if no wall-adjacent cell remains free).
   if (blockerRoster.length) {

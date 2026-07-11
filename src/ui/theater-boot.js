@@ -109,7 +109,7 @@ import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js"
 // the renderer's tone mapping (NoToneMapping here) + the sRGB transfer, so the chain ends correct and
 // matches the direct-render baseline. ALWAYS the last pass in the interior chain.
 import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
-import { playVerb, tickTweens, THEATER_VERBS, theaterFxFromLedger } from "./theater-verbs.js";
+import { playVerb, tickTweens, THEATER_VERBS, theaterFxFromLedger, standeeVerbForHurt, recoilDirFromPositions } from "./theater-verbs.js";
 // GRAPHICS-ENGINE Part II §A: the sibling billboard-standee verb library — see that file's header for
 // why it's a separate module from theater-verbs.js (rotation-ownership conflict with
 // updateSpriteBillboardYaw, below) and for the ctx-binding contract bindStandeeCtx/playStandeeVerb use.
@@ -7877,11 +7877,29 @@ function play(verb, opts){
   // animation. The skip only ever fires on animation-free turns.
   S.boardKey = null; S.unitsKey = null;
   opts = opts || {};
-  const standeeVerb = STANDEE_VERB_FOR_THEATER_VERB[verb];
+  // MF-3b (BEAUTY-WAVE-4B §C): the ONLY conditional override on top of STANDEE_VERB_FOR_THEATER_VERB's
+  // static map (every non-crit hurt/down call keeps the old mapping). standeeVerbForHurt/
+  // recoilDirFromPositions are PURE functions imported from theater-verbs.js (this file's own GL
+  // surface is browser-smoke-tested only, per its manifest note — factoring the decision/geometry math
+  // out to the already-plain-Node-importable theater-verbs.js is what makes it unit-testable at all,
+  // same spirit as this file's own "expose the pure builder" _*ForTest seams).
+  const standeeVerb = standeeVerbForHurt(verb, opts, STANDEE_VERB_FOR_THEATER_VERB);
   const unit = standeeVerb && opts.who != null ? findUnit(opts.who) : null;
   if(unit && unit.userData && unit.userData.sprite){
     bindStandeeCtx(buildTheaterCtx());
-    const played = playStandeeVerb(unit, standeeVerb, opts);
+    // MF-3b: standee-verbs.js has no ctx.findUnit of its own (its own header says so) — this is the one
+    // place that CAN resolve both the attacker's and the target's live world positions, so it computes
+    // the recoilDir unit vector (target<-attacker) here and threads it alongside attackerId (which
+    // already rides opts unchanged from theaterFxFromLedger). Omitted whenever the attacker doesn't
+    // resolve (not mounted, no attackerId) — recoil then falls back to MF-3's un-biased shake, never a
+    // throw.
+    let standeeOpts = opts;
+    if(opts.attackerId != null && (standeeVerb === "hit-damage" || standeeVerb === "hit-crit")){
+      const attackerUnit = findUnit(opts.attackerId);
+      const dir = attackerUnit ? recoilDirFromPositions(unit.position, attackerUnit.position) : null;
+      if(dir) standeeOpts = Object.assign({}, opts, { recoilDir: dir });
+    }
+    const played = playStandeeVerb(unit, standeeVerb, standeeOpts);
     if(played){
       // VP6 item 5 — hit-effects seam: the two production-wired standee verbs (WIRING LAW's own
       // {hurt:"hit-damage", down:"fall-death"} map, unchanged above) each spawn their effect card at
@@ -7899,7 +7917,15 @@ function play(verb, opts){
     // below rather than silently dropping the animation — matches every other Theater.play null-safety
     // posture in this file (never a hard failure for a missing/late asset).
   }
-  const ok = playVerb(buildTheaterCtx(), verb, opts);
+  // MF-3b: the 3D-figure vHurt path (theater-verbs.js) already reads opts.attackerId for hit-stop
+  // unchanged; its directional recoil takes a separate `recoilFrom` point-ref that resolvePoint
+  // resolves via ctx.findUnit — reuse the same attackerId as recoilFrom rather than duplicating the
+  // position math this file just did for the sprite path above (vHurt already knows how to resolve a
+  // unit id). No-op whenever attackerId is absent or the verb isn't hurt — byte-identical to before.
+  const verbOpts = (verb === "hurt" && opts.attackerId != null && opts.recoilFrom == null)
+    ? Object.assign({}, opts, { recoilFrom: opts.attackerId })
+    : opts;
+  const ok = playVerb(buildTheaterCtx(), verb, verbOpts);
   if(ok) startTweenLoop();
   return ok;
 }

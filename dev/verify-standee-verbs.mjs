@@ -64,6 +64,16 @@ console.log("\n=== PART A — standee-verbs.js as a pure ES module (no DOM) ==="
 
 const modUrl = pathToFileURL(join(ROOT, "src/ui/standee-verbs.js")).href;
 const { STANDEE_VERBS, STANDEE_VERB_NAMES, playStandeeVerb, bindStandeeCtx } = await import(modUrl);
+// MF-3b (BEAUTY-WAVE-4B §C, 2026-07-11): play() now calls two REAL pure helpers imported from
+// theater-verbs.js (standeeVerbForHurt/recoilDirFromPositions — the crit->hit-crit routing decision
+// and the sprite-path recoil geometry) instead of inlining that logic — Part B's source-extraction
+// sandbox below must supply the SAME real functions (not stubs: they're pure/tested-elsewhere-for-real
+// in dev/verify-mf3b-hitstop-wiring.mjs, and this harness's own routing assertions depend on
+// standeeVerbForHurt actually deciding hit-damage/hit-crit correctly) so the extracted play() body
+// resolves them, matching this harness's own "spies for callees, not reimplementations" rule — these
+// aren't reimplementations, they're the real production functions.
+const verbsModUrl = pathToFileURL(join(ROOT, "src/ui/theater-verbs.js")).href;
+const { standeeVerbForHurt, recoilDirFromPositions } = await import(verbsModUrl);
 
 // ----------------------------------------------------------------------------
 // stub scene-graph helpers — same spirit as dev/verify-theater-verbs.mjs's makeStubCtx/makeStubUnit,
@@ -389,6 +399,7 @@ function extractConst(src, name){
     const stubUnitWhole = { userData: { unitId: "f2" } }; // no sprite flag — a whole-object/glb figure
     const factory = new Function(
       "S", "findUnit", "buildTheaterCtx", "playVerb", "playStandeeVerb", "bindStandeeCtx", "startTweenLoop", "spawnEffectCard",
+      "standeeVerbForHurt", "recoilDirFromPositions",
       mapConst + "\n" + playFnSrc + "\nreturn play;"
     );
     const S = { mounted: true, boardKey: "x", unitsKey: "x" };
@@ -403,7 +414,7 @@ function extractConst(src, name){
     const effectCalls = [];
     const spawnEffectCard = (name, x, y, z, oversize) => { effectCalls.push({ name, x, y, z, oversize }); };
     stubUnitSprite.position = { x: 1, y: 2, z: 3 };
-    const play = factory(S, findUnit, buildTheaterCtx, playVerb, playStandeeVerb, bindStandeeCtx, startTweenLoop, spawnEffectCard);
+    const play = factory(S, findUnit, buildTheaterCtx, playVerb, playStandeeVerb, bindStandeeCtx, startTweenLoop, spawnEffectCard, standeeVerbForHurt, recoilDirFromPositions);
 
     play("hurt", { who: "f1", magnitude: 2 });
     check("B1a. play(\"hurt\",{who:sprite-unit}) routes to playStandeeVerb(\"hit-damage\", ...) — the WIRING LAW proof",
@@ -435,7 +446,7 @@ function extractConst(src, name){
 
     calls.standee.length = 0; calls.theater.length = 0;
     const declineStandeeVerb = (unit, verb, opts) => { calls.standee.push({ unit, verb, opts }); return false; }; // decline
-    const playDecline = factory(S, findUnit, buildTheaterCtx, playVerb, declineStandeeVerb, bindStandeeCtx, startTweenLoop, spawnEffectCard);
+    const playDecline = factory(S, findUnit, buildTheaterCtx, playVerb, declineStandeeVerb, bindStandeeCtx, startTweenLoop, spawnEffectCard, standeeVerbForHurt, recoilDirFromPositions);
     playDecline("hurt", { who: "f1" });
     check("B1f. if playStandeeVerb DECLINES (false — e.g. texture not loaded yet), play() falls through to the ordinary playVerb path rather than dropping the animation",
       calls.standee.length === 1 && calls.theater.length === 1 && calls.theater[0].verb === "hurt",

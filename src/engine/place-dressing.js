@@ -169,6 +169,10 @@ const REALM_DRESSING = Object.freeze({
     Object.freeze({ slug: "fantasy-clutter-brokenwheelbarrow", primary: "floor", size: "small" }),
     Object.freeze({ slug: "fantasy-clutter-woodpile-alt", primary: "floor", size: "medium" }),
     Object.freeze({ slug: "fantasy-clutter-brokencart-wheel-alt", primary: "wall-hang", size: "small" }),
+    Object.freeze({ slug: "fantasy-painting-1", primary: "wall-hang", size: "medium", paintingOf: "spr-fantasy-ancient-red-dragon" }),
+    Object.freeze({ slug: "fantasy-painting-2", primary: "wall-hang", size: "medium", paintingOf: "spr-fantasy-colossus" }),
+    Object.freeze({ slug: "fantasy-painting-3", primary: "wall-hang", size: "medium", paintingOf: "spr-fantasy-kraken" }),
+    Object.freeze({ slug: "fantasy-painting-4", primary: "wall-hang", size: "medium", paintingOf: "spr-fantasy-tarrasque" }),
   ]),
 });
 // GENERATED:REALM_DRESSING:END

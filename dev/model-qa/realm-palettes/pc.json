@@ -1,0 +1,109 @@
+{
+  "_generated_by": "build/gen-realm-palettes.py (r2) \u2014 never hand-edit",
+  "realm": "pc",
+  "source": "style-ref+corpus(style borrowed:fantasy)",
+  "paletteSize": 48,
+  "colors": [
+    "#2b292e",
+    "#060208",
+    "#192a1d",
+    "#4e7f98",
+    "#32543a",
+    "#3d335b",
+    "#29453e",
+    "#48796e",
+    "#bf9260",
+    "#81602c",
+    "#020101",
+    "#2f4b5a",
+    "#584d4f",
+    "#7f1978",
+    "#958e9b",
+    "#a9743a",
+    "#201a2f",
+    "#182b44",
+    "#171820",
+    "#325075",
+    "#3b3e42",
+    "#94785e",
+    "#c5aa8e",
+    "#0e0812",
+    "#352a12",
+    "#8e421e",
+    "#db8b2c",
+    "#995b1d",
+    "#e9c587",
+    "#613111",
+    "#4f200d",
+    "#c11fb5",
+    "#493f16",
+    "#1a1310",
+    "#744516",
+    "#6e6874",
+    "#b67217",
+    "#2f0b2e",
+    "#7f1b14",
+    "#4f164c",
+    "#0c0505",
+    "#190705",
+    "#2a1f1b",
+    "#f0e9d9",
+    "#495022",
+    "#7d8a3a",
+    "#25361c",
+    "#456635"
+  ],
+  "outline": "tbd",
+  "hueFamilyCoverage": {
+    "0": {
+      "pctOfCorpus": 0.3683,
+      "paletteEntries": 10
+    },
+    "1": {
+      "pctOfCorpus": 0.255,
+      "paletteEntries": 11
+    },
+    "2": {
+      "pctOfCorpus": 0.0388,
+      "paletteEntries": 2
+    },
+    "3": {
+      "pctOfCorpus": 0.0081,
+      "paletteEntries": 2
+    },
+    "4": {
+      "pctOfCorpus": 0.0067,
+      "paletteEntries": 2
+    },
+    "5": {
+      "pctOfCorpus": 0.0068,
+      "paletteEntries": 2
+    },
+    "6": {
+      "pctOfCorpus": 0.0191,
+      "paletteEntries": 2
+    },
+    "7": {
+      "pctOfCorpus": 0.0307,
+      "paletteEntries": 3
+    },
+    "8": {
+      "pctOfCorpus": 0.0375,
+      "paletteEntries": 2
+    },
+    "9": {
+      "pctOfCorpus": 0.0538,
+      "paletteEntries": 2
+    },
+    "10": {
+      "pctOfCorpus": 0.0718,
+      "paletteEntries": 4
+    },
+    "11": {
+      "pctOfCorpus": 0.1035,
+      "paletteEntries": 1
+    }
+  },
+  "corpusPixelsSampled": 12210,
+  "fallbackNotes": []
+}

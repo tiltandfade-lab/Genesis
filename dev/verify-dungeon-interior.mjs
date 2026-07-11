@@ -675,23 +675,30 @@ try {
   result.resolvedCount = built.resolved;
   result.requestedCount = built.requested;
   const g = built.group.children; // same order as the pieces array (forEach preserves order)
-  result.medHeight = g[0] && g[0].children[0].geometry.parameters.height;
-  result.medWidth = g[0] && g[0].children[0].geometry.parameters.width;
-  result.largeHeight = g[1] && g[1].children[0].geometry.parameters.height;
-  result.knightHeight = g[2] && g[2].children[0].geometry.parameters.height;
-  result.flooredHeight = g[3] && g[3].children[0].geometry.parameters.height;
+  // BW2-2b: children[0] is now each piece's own inner camera-tilt wrap (buildSpriteBillboardMesh's own
+  // header), not the mesh directly — reach the mesh via the stable userData handle.
+  result.medHeight = g[0] && g[0].userData.spriteBillboardMesh.geometry.parameters.height;
+  result.medWidth = g[0] && g[0].userData.spriteBillboardMesh.geometry.parameters.width;
+  result.largeHeight = g[1] && g[1].userData.spriteBillboardMesh.geometry.parameters.height;
+  result.knightHeight = g[2] && g[2].userData.spriteBillboardMesh.geometry.parameters.height;
+  result.flooredHeight = g[3] && g[3].userData.spriteBillboardMesh.geometry.parameters.height;
   result.flooredY = g[3] && g[3].position.y;
   result.flooredX = g[3] && g[3].position.x;
   result.flooredZ = g[3] && g[3].position.z;
-  result.titanHeight = g[4] && g[4].children[0].geometry.parameters.height;
+  // BW2-2b item 4 (THE KILTER): independent re-derivation of the SAME seed key interiorBuildPieces
+  // uses (slug+cell) — flooredX/Z above now carry a tiny seeded offset on top of the raw cell coords,
+  // never an exact integer match anymore.
+  result.flooredKilter = T._kilterForTest("floored-thing:2,3");
+  result.titanHeight = g[4] && g[4].userData.spriteBillboardMesh.geometry.parameters.height;
   // BW2-2: independent-recompute material for check 25 below — the raw FLOOR CONTACT LAW constants
   // (never the law's own functions, so the outer assertion isn't just re-running the code under test).
   result.floorContactLaw = Object.assign({}, T._floorContactLawForTest);
   delete result.floorContactLaw.interiorFloorTopMapFrom; // functions don't JSON-serialize meaningfully — drop, the outer test only wants the numeric constants
   delete result.floorContactLaw.interiorFloorTopAt;
   delete result.floorContactLaw.interiorStandeeContactY;
-  // BW2-2: standee base mesh — children[1] of the piece group (children[0] is the sprite mesh, byte-
-  // identical index to before this unit — the base is APPENDED, never inserted).
+  // BW2-2: standee base mesh — children[1] of the piece group (children[0] is now the sprite's own
+  // inner camera-tilt wrap, BW2-2b — the base is still APPENDED as a plain sibling, never inserted
+  // into the wrap, so the index is unchanged).
   result.medBaseRadius = g[0] && g[0].children[1] && g[0].children[1].geometry.parameters.radiusTop;
   result.medBaseHeight = g[0] && g[0].children[1] && g[0].children[1].geometry.parameters.height;
 
@@ -803,10 +810,17 @@ group("23 — FIXED: interiorBuildPieces sizes through TRUE-SCALE (HUMAN_TRUE_HE
     ok(Math.abs(green.flooredY - expectedY) < 1e-9,
       `floored piece (entry.floor=0.1, height=${green.flooredHeight}): group.position.y=${green.flooredY} matches (floorTop=${fallbackFloorTop} + baseOffset+baseHeight) - floor*height = ${expectedY}`);
     ok(expectedY > -0.5, `RED-FIRST proof: the new contact line (${expectedY}) sits ABOVE the pre-BW2-2 hardcoded -0.5 — the old convention buried every standee by (fallback-derivation) ${(expectedY - (-0.5 - 0.1 * green.flooredHeight)).toFixed(3)} world units`);
-    ok(green.flooredX === 2 && green.flooredZ === 3, `floored piece keeps the origin-shifted cellX/cellY placement (x=${green.flooredX} z=${green.flooredZ})`);
+    // BW2-2b item 4 (THE KILTER): the origin-shifted cellX/cellY placement now carries a tiny seeded
+    // offset on top of the raw integer cell coords — assert against the INDEPENDENTLY re-derived
+    // kilter for this exact seed key, not a bare integer equality.
+    const fk = green.flooredKilter || { dx: 0, dz: 0 };
+    ok(Math.abs(green.flooredX - (2 + fk.dx)) < 1e-9 && Math.abs(green.flooredZ - (3 + fk.dz)) < 1e-9,
+      `floored piece keeps the origin-shifted cellX/cellY placement plus its own seeded kilter offset (x=${green.flooredX} z=${green.flooredZ}, expected 2+${fk.dx}=${2+fk.dx} / 3+${fk.dz}=${3+fk.dz})`);
+    ok(Math.abs(green.flooredX - 2) <= 0.06 + 1e-9 && Math.abs(green.flooredZ - 3) <= 0.06 + 1e-9,
+      `the kilter offset itself stays within the spec's <=6% of a cell bound (dx=${(green.flooredX-2).toFixed(4)}, dz=${(green.flooredZ-3).toFixed(4)})`);
 
-    group("25b — BW2-2 STANDEE BASES: a plinth cylinder under every piece, radius 0.42x rendered width, height ~0.04");
-    ok(Math.abs(green.medBaseHeight - 0.04) < 1e-9, `medium piece's base cylinder height ${green.medBaseHeight} === INTERIOR_BASE_HEIGHT (0.04)`);
+    group("25b — BW2-2b STANDEE BASES: a plinth cylinder under every piece, radius 0.42x rendered width, height ~0.09 (bumped from BW2-2's 0.04)");
+    ok(Math.abs(green.medBaseHeight - 0.09) < 1e-9, `medium piece's base cylinder height ${green.medBaseHeight} === BW2-2b's INTERIOR_BASE_HEIGHT (~0.09)`);
     const expectedBaseRadius = green.medWidth * 0.42;
     ok(Math.abs(green.medBaseRadius - expectedBaseRadius) < 1e-9,
       `medium piece's base cylinder radius ${green.medBaseRadius} === rendered width (${green.medWidth}) x 0.42 = ${expectedBaseRadius}`);
@@ -907,7 +921,12 @@ try {
   for(const slug of Object.keys(registry)) T._spriteTextureCache[slug] = fakeTexture();
   for(const s of scenarios){
     const fig = T.refFigure.build({ recipeSlug: s.recipeSlug, interiorMode: s.interiorMode, wallHeightCap: s.wallHeightCap });
-    const h = fig && fig.children[0] && fig.children[0].geometry.parameters.height;
+    // BW2-2b wraps the sprite mesh in its own inner camera-tilt group (children[0] on current source);
+    // the stable userData handle works identically against BOTH the current source and the pre-VP1b
+    // historical source this same runner also drives (RED-FIRST, below) — that source already tagged
+    // userData.spriteBillboardMesh too (VP1's own convention), just with no wrap around it yet.
+    const mesh = fig && (fig.userData.spriteBillboardMesh || fig.children[0]);
+    const h = mesh && mesh.geometry.parameters.height;
     result.heights.push(h);
   }
   result.ok = true;

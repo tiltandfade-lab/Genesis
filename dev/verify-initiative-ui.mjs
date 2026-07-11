@@ -196,14 +196,16 @@ runRoundTickFixture("enemy");
 {
   const original = read("src/world/render.js");
   // the banner-building CALL SITES this unit adds (cmbStageOverlay's overlay wrapper + combatPanel's
-  // header) — mutate ONLY the interpolated call expressions (${cmbTurnBanner(cm)}) to "" so the banner
-  // never renders, proving assertions 1c-1e / 2a-2g are load-bearing on this exact wiring. Deliberately
-  // NOT a bare `cmbTurnBanner(cm)` substring match — that also matches the function's own declaration
-  // signature (`function cmbTurnBanner(cm){`), which would corrupt the mutated source into a syntax
-  // error rather than a clean behavioral mutation.
-  const marker = "${cmbTurnBanner(cm)}";
+  // header) — mutate ONLY the interpolated call expressions (${cmbTurnBanner(cm,roundBoundary)}) to ""
+  // so the banner never renders, proving assertions 1c-1e / 2a-2g are load-bearing on this exact wiring.
+  // Deliberately NOT a bare `cmbTurnBanner(cm` substring match — that also matches the function's own
+  // declaration signature (`function cmbTurnBanner(cm,isNewRound){`), which would corrupt the mutated
+  // source into a syntax error rather than a clean behavioral mutation. (BEAUTY-WAVE-4.md MF-4 item 2
+  // added the second `roundBoundary` argument to both call sites — this marker was updated to match;
+  // the check's own JOB, "the banner disappears when this exact wiring is stubbed," is unchanged.)
+  const marker = "${cmbTurnBanner(cm,roundBoundary)}";
   if (!original.includes(marker)) {
-    fail++; console.log("  ✗ MUTATION(turn-banner): guard text '${cmbTurnBanner(cm)}' not found verbatim — spec drifted?");
+    fail++; console.log("  ✗ MUTATION(turn-banner): guard text '${cmbTurnBanner(cm,roundBoundary)}' not found verbatim — spec drifted?");
   } else {
     const mutated = original.split(marker).join("");
     const mutSrc = read("tables.js") + "\n;\n" + man.loadOrder.filter((p) => p.endsWith(".js"))

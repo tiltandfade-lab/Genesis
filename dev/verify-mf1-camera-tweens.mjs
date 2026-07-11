@@ -241,7 +241,12 @@ async function main() {
     // on the next fit — the very first-ever fit has no prior pose worth asserting a glide against).
     await page.evaluate((board) => window.Theater.setInteriorVariant({}), null);
     await page.evaluate((board) => window.Theater.setInteriorBoard(board), boards.boardA);
-    await page.waitForFunction(() => window.Theater.tweensLive() === 0, { timeout: 5000 });
+    // MF-1 settle-await: a board mount now fires a 320ms camera-pose tween (MF-1 itself added it — a
+    // pre-MF-1 mount produced NO tween, so tweensLive()===0 was instant and 5s was plenty). That tween
+    // must tick to completion via rAF; on a cold/contended headless Chrome the rAF cadence can stall
+    // past 5s (observed fail/fail/pass races), so this settle wait matches verify-interior-camera-
+    // frustum.mjs's own 15s bump. Behavior is unchanged — only the fixture's wait is loosened.
+    await page.waitForFunction(() => window.Theater.tweensLive() === 0, { timeout: 15000 });
 
     console.log("\n[RED-FIRST — proves the glide is real, not a relabeled snap]");
     // capture the SETTLED pose of board A (what the old, un-tweened placeCamera() would have snapped
@@ -295,7 +300,7 @@ async function main() {
     // tween's t=0.5 pose (mid), never the first tween's original start.
     await restoreRealClock(page);
     await page.evaluate((board) => window.Theater.setInteriorBoard(board), boards.boardA);
-    await page.waitForFunction(() => window.Theater.tweensLive() === 0, { timeout: 5000 });
+    await page.waitForFunction(() => window.Theater.tweensLive() === 0, { timeout: 15000 });
     const retargetBaseline = await camPose(page);
 
     const fakeT1 = 2000000;
@@ -319,7 +324,7 @@ async function main() {
     console.log("\n[GREEN — frustum stays green at every sampled tween frame: t=0/0.25/0.5/0.75/1]");
     await restoreRealClock(page);
     await page.evaluate((board) => window.Theater.setInteriorBoard(board), boards.boardA);
-    await page.waitForFunction(() => window.Theater.tweensLive() === 0, { timeout: 5000 });
+    await page.waitForFunction(() => window.Theater.tweensLive() === 0, { timeout: 15000 });
     const fakeT2 = 3000000;
     await page.evaluate((v) => { window.Date.now = () => v; }, fakeT2);
     await page.evaluate((board) => window.Theater.setInteriorBoard(board), boards.boardB);
@@ -330,7 +335,7 @@ async function main() {
       ok(f.ok === true, `t=${frac}: action cluster stays fully in frustum mid-tween — ${JSON.stringify(f.corners)}`);
     }
     await restoreRealClock(page);
-    await page.waitForFunction(() => window.Theater.tweensLive() === 0, { timeout: 5000 });
+    await page.waitForFunction(() => window.Theater.tweensLive() === 0, { timeout: 15000 });
 
     console.log("\n[GREEN — player zoom/rotation stay DIRECT (Feel Law 3): never routed through the camera tween]");
     const beforeZoom = await camPose(page);
@@ -348,7 +353,7 @@ async function main() {
     // frame pacing) — the tween's own per-frame work (one lerp + one lookAt call) must not be what
     // drags the frame budget under 30fps.
     await page.evaluate((board) => window.Theater.setInteriorBoard(board), boards.boardA);
-    await page.waitForFunction(() => window.Theater.tweensLive() === 0, { timeout: 5000 });
+    await page.waitForFunction(() => window.Theater.tweensLive() === 0, { timeout: 15000 });
     await page.evaluate((board) => window.Theater.setInteriorBoard(board), boards.boardB);
     const fpsResult = await page.evaluate(() => window.Theater.measureRenderFps(40));
     const fps = fpsResult ? fpsResult.fps : 0;

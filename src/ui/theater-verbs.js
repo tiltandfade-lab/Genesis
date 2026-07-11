@@ -865,8 +865,29 @@ export function tickTweens(ctx, nowMs){
   return still.length > 0;
 }
 
+/* MF-3b (BEAUTY-WAVE-4B §C) — two more pure helpers for theater-boot.js's play() dispatch, kept HERE
+   (not in theater-boot.js) so a harness can plain-Node `import` and assert them directly, matching this
+   file's own header claim ("ZERO direct DOM/THREE coupling of their own") — theater-boot.js's GL surface
+   is browser-smoke-tested only (its own manifest note), so anything that needs a jsdom/node unit test
+   has to live on this side of the boundary. */
+// standeeVerbForHurt — a crit hurt routes to the hit-crit standee verb (white-flash + single-bounce
+// camera nudge, per MF-3's own bullet 3) instead of hit-damage; every other verb/opts combination keeps
+// the caller's static map (theater-boot.js's STANDEE_VERB_FOR_THEATER_VERB) untouched.
+function standeeVerbForHurt(verb, opts, staticMap){
+  return (verb === "hurt" && opts && opts.crit) ? "hit-crit" : (staticMap ? staticMap[verb] : undefined);
+}
+// recoilDirFromPositions — the unit vector pointing target<-attacker (world-space {x,z}), or null when
+// either position is missing or the two points coincide (never a throw, never a NaN/zero-length vector).
+function recoilDirFromPositions(targetPos, attackerPos){
+  if(!targetPos || !attackerPos) return null;
+  const dx = targetPos.x - attackerPos.x, dz = targetPos.z - attackerPos.z;
+  const len = Math.hypot(dx, dz);
+  return len > 0 ? { x: dx / len, z: dz / len } : null;
+}
+
 export { freezeTween, applyHitStop, findLatestTweenByUnitId, triggerHitStop, critCameraNudge,
-  IMPACT_PX_UNIT, HIT_STOP_DUR, HIT_STOP_DUR_CRIT, FALL_HOLD_DUR, CRIT_NUDGE_DUR, CRIT_NUDGE_AMP };
+  IMPACT_PX_UNIT, HIT_STOP_DUR, HIT_STOP_DUR_CRIT, FALL_HOLD_DUR, CRIT_NUDGE_DUR, CRIT_NUDGE_AMP,
+  standeeVerbForHurt, recoilDirFromPositions };
 
 /* ============================================================================
    §4 "Existing events need NO new fields — the theater subscribes to the ledger/event stream and maps
@@ -915,7 +936,11 @@ export function theaterFxFromLedger(entry){
     }
     case "hp": {
       if(d.delta >= 0) return null;
-      return { verb: "hurt", opts: { who: d.pc ? "pc" : undefined, magnitude: Math.abs(d.delta) / 4, dropped: !!d.dropped } };
+      // MF-3b (BEAUTY-WAVE-4B): thread attacker/crit through so play() (theater-boot.js) can route a
+      // crit to the hit-crit standee verb and wire MF-3's hit-stop/recoil to a real attacker. d.attacker
+      // is undefined on every hp entry this unit doesn't touch (hazards, pre-MF-3b callers) — the
+      // consumer treats a missing attackerId as "don't fire hit-stop," the pre-existing dormant behavior.
+      return { verb: "hurt", opts: { who: d.pc ? "pc" : undefined, magnitude: Math.abs(d.delta) / 4, dropped: !!d.dropped, attackerId: d.attacker, crit: !!d.crit } };
     }
     default:
       return null;

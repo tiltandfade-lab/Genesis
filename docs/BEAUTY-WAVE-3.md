@@ -27,7 +27,15 @@ to direct rendering when no effect passes are added (screenshot-diff proof). BW3
 their passes onto this seam; without it they have nowhere to live. FPS overhead of the bare
 composer measured and reported (should be ~zero).
 
-## BW3-1 — LIT SPRITES (the #1 fix)
+## BW3-1 — LIT SPRITES (the #1 fix) — PROMOTED FORWARD (2026-07-11: runs as part of BW2-4b,
+## the post-texture polish pass, NOT waiting for the BW3 wave)
+
+Adam confirmed the diagnosis live on the BW2-4 frames ("sprites look very desaturated... will
+work better once sprites have dynamic [lighting]"): scene fog applies to the unlit billboards
+(MeshBasicMaterial fogs by default — verified, no fog exemption exists) so sprites take the
+near-black fog wash by depth while receiving zero torch light — atmosphere's costs, none of
+its benefits. The fix is THIS unit, not a fog exemption (a fog-exempt unlit sprite floats
+worse at distance). BW2-4b tunes the value dials ONCE, against lit sprites.
 
 Billboard material MeshBasic → lit (MeshLambert or a minimal custom Lambert-ish shader):
 receives the hemisphere key, torch PointLights, and the realm grade tint. Alpha-test cutout +

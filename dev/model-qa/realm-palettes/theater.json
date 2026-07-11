@@ -1,0 +1,111 @@
+{
+  "_generated_by": "build/gen-realm-palettes.py (r2) \u2014 never hand-edit",
+  "realm": "theater",
+  "source": "style-ref+corpus",
+  "paletteSize": 48,
+  "colors": [
+    "#fdfdfd",
+    "#241e0f",
+    "#aa6c35",
+    "#fefcfe",
+    "#fef4fd",
+    "#010101",
+    "#1e021f",
+    "#c31abd",
+    "#32052f",
+    "#483918",
+    "#180d05",
+    "#981197",
+    "#110603",
+    "#3b3624",
+    "#0b0804",
+    "#56431c",
+    "#8c7340",
+    "#2f291a",
+    "#1a160a",
+    "#bb8e54",
+    "#6a0f68",
+    "#441c0e",
+    "#31230d",
+    "#4e462f",
+    "#884927",
+    "#582f16",
+    "#6e3e1e",
+    "#fcc3fe",
+    "#fef9fd",
+    "#120210",
+    "#211007",
+    "#2a1809",
+    "#68583b",
+    "#3d2d12",
+    "#4c0b46",
+    "#2a0e15",
+    "#655123",
+    "#070303",
+    "#ddb076",
+    "#fefafe",
+    "#110e07",
+    "#fefcff",
+    "#fffaff",
+    "#7b5f2a",
+    "#212213",
+    "#474929",
+    "#290e14",
+    "#4a4632"
+  ],
+  "outline": "tbd",
+  "hueFamilyCoverage": {
+    "0": {
+      "pctOfCorpus": 0.2777,
+      "paletteEntries": 10
+    },
+    "1": {
+      "pctOfCorpus": 0.5553,
+      "paletteEntries": 18
+    },
+    "2": {
+      "pctOfCorpus": 0.0309,
+      "paletteEntries": 2
+    },
+    "3": {
+      "pctOfCorpus": 0.0023,
+      "paletteEntries": 0
+    },
+    "4": {
+      "pctOfCorpus": 0.002,
+      "paletteEntries": 0
+    },
+    "5": {
+      "pctOfCorpus": 0.0001,
+      "paletteEntries": 0
+    },
+    "6": {
+      "pctOfCorpus": 0.0007,
+      "paletteEntries": 0
+    },
+    "7": {
+      "pctOfCorpus": 0.0001,
+      "paletteEntries": 0
+    },
+    "8": {
+      "pctOfCorpus": 0.004,
+      "paletteEntries": 0
+    },
+    "9": {
+      "pctOfCorpus": 0.0467,
+      "paletteEntries": 2
+    },
+    "10": {
+      "pctOfCorpus": 0.055,
+      "paletteEntries": 6
+    },
+    "11": {
+      "pctOfCorpus": 0.0251,
+      "paletteEntries": 2
+    }
+  },
+  "corpusPixelsSampled": 0,
+  "fallbackNotes": [
+    "no cut sprites in registry for this realm yet \u2014 style-ref only"
+  ]
+}

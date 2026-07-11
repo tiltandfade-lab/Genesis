@@ -603,7 +603,7 @@ try {
   result.tombstoneAOCount = cardTombstone.children.filter((c) => c.userData && c.userData.wallContactAO).length;
   result.statueAOCount = cardStatue.children.filter((c) => c.userData && c.userData.wallContactAO).length;
   const wallPropsBuilt = T._interiorBuildWallPropsForTest(
-    [{ slug: "fantasy-painting-1", primary: "wall-hang", cardKind: "medium", x: 3, y: 0 }], 0, 0, ftMap);
+    [{ slug: "fantasy-painting-1", primary: "wall-hang", cardKind: "medium", x: 3, y: 0 }], 0, 0, floorTopMap);
   const prop = wallPropsBuilt.children[0];
   const paintingAO = prop ? prop.children.filter((c) => c.userData && c.userData.wallContactAO) : [];
   result.paintingAOCount = paintingAO.length;

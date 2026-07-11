@@ -378,23 +378,48 @@ async function renderAndAnimate(page, cfg, driveResult) {
       if (!board || board.kind !== "interior3d") return Object.assign(out, { stage: "trayFrom-wrong-kind", board: board && board.kind });
       out.dressingCountFromTray = (board.dressing || []).length;
 
-      // attach combat foes as pieces, tagged with their real fid (this session's fix) — positioned at
-      // deterministic interior-corner cells of the CURRENT room (same corner-placement convention
-      // capture-interior-study.mjs's piecePositions uses).
+      // attach combat foes as pieces, tagged with their real fid (this session's fix). BEAUTY-WAVE-2.md
+      // BW2-1 (THE BEAT CAMERA): pre-unit this used capture-interior-study.mjs's own corner-spread
+      // piecePositions (dummies at the room's 4 corners) — the right convention for THAT card's job
+      // (prove pieces resolve across the whole room) but the wrong one for a combat beat: real melee
+      // participants cluster together, they don't stand in the room's four corners, and a corner
+      // spread makes the participant CLUSTER nearly as big as the room itself, defeating the beat
+      // camera's whole point (law 2c: fit the ACTION CLUSTER, not the room). huddlePositions below
+      // clusters the foes in a tight melee knot around the room's own center cell instead — this IS
+      // "the combat mount" in today's codebase (see this file's own header note: production still
+      // keeps combat on the flat tabletop; the interior+combat-piece render surface only exists here
+      // and in capture-interior-study.mjs) — so it's the one place a realistic beat demo belongs.
       out.stage = "attach-pieces";
       const room = spatialRoomForSeg(pn, pn.cursor.current);
-      function piecePositions(r, count) {
-        const inX = Math.max(r.x + 1, r.x), inY = Math.max(r.y + 1, r.y);
-        const maxX = Math.max(inX, r.x + r.w - 2), maxY = Math.max(inY, r.y + r.d - 2);
-        return [{ x: inX, y: inY }, { x: maxX, y: inY }, { x: inX, y: maxY }, { x: maxX, y: maxY }, { x: Math.round((inX + maxX) / 2), y: Math.round((inY + maxY) / 2) }].slice(0, count);
+      function huddlePositions(r, count) {
+        const cx = r.x + Math.floor(r.w / 2), cy = r.y + Math.floor(r.d / 2);
+        // a small ring around the center, clamped inside the room's own floor (never the wall cells)
+        // — a real melee knot, 2 cells apart (Medium sprites are ~1.1 world-units wide; 1-cell spacing
+        // visually overlaps them, especially once a Large+ foe true-scales into the same huddle) —
+        // still a tight cluster, nowhere near a room-spanning spread.
+        const offsets = [[0, 0], [2, 0], [0, 2], [-2, 0], [0, -2], [2, 2]];
+        const clampX = (x) => Math.min(r.x + r.w - 2, Math.max(r.x + 1, x));
+        const clampY = (y) => Math.min(r.y + r.d - 2, Math.max(r.y + 1, y));
+        return offsets.slice(0, count).map(([dx, dy]) => ({ x: clampX(cx + dx), y: clampY(cy + dy) }));
       }
-      const positions = piecePositions(room, driveResult.foes.length);
+      const positions = huddlePositions(room, driveResult.foes.length);
       board.pieces = driveResult.foes.map((f, i) => ({
         slug: f.name, fid: f.fid, cellX: positions[i].x, cellY: positions[i].y,
       }));
+      // law 2c: fit the participant cluster (the foes' own cells, the SAME array board.pieces above
+      // was just built from) + 1 cell margin, not the whole room — data.cameraFit is a plain
+      // additive field (setInteriorBoard's own established data.pieces/data.dressing convention).
+      board.cameraFit = { mode: "beat", cells: positions.map((p) => ({ x: p.x, y: p.y })) };
 
       out.stage = "setInteriorBoard";
       window.Theater.setInteriorBoard(board);
+      // BEAUTY-WAVE-2.md BW2-1: a permanent per-iteration law-2c assertion — the beat fit must
+      // actually contain the REAL roster it was just built for (this iteration's own tallest foe,
+      // window.Theater.interiorFitMaxHeight() — a Wolf/Rat/Spider roster and an Ogre-Zombie-mixed
+      // roster need very different headroom, and only the board's OWN computed value is honest about
+      // which this is), not interiorFrustumCheck's generic 1.1 default.
+      out.beatMaxHeight = window.Theater.interiorFitMaxHeight();
+      out.beatFrustumCheck = window.Theater.interiorFrustumCheck(out.beatMaxHeight);
       out.ok = true;
       out.meshCount = window.Theater.interiorMeshCount();
       out.piecesRequested = window.Theater.interiorPiecesRequested();
@@ -478,6 +503,11 @@ async function main() {
       if (rendered.piecesRequested > 0 && rendered.piecesResolved < rendered.piecesRequested) {
         iterFindings.breaks.push({ where: "pieces", detail: `only ${rendered.piecesResolved}/${rendered.piecesRequested} piece sprites resolved` });
         findings.breaks.push({ loopIndex, where: "pieces", detail: `only ${rendered.piecesResolved}/${rendered.piecesRequested} piece sprites resolved`, foes: cfg.foes });
+      }
+
+      if (rendered.beatFrustumCheck && rendered.beatFrustumCheck.ok !== true) {
+        iterFindings.breaks.push({ where: "beat-frustum", detail: `action cluster not fully in frustum (maxHeight=${rendered.beatMaxHeight})` });
+        findings.breaks.push({ loopIndex, where: "beat-frustum", detail: `action cluster not fully in frustum (maxHeight=${rendered.beatMaxHeight})`, foes: cfg.foes });
       }
 
       await sleep(400);

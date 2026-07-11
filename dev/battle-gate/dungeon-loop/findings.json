@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-11T04:56:14.906Z",
+  "generatedAt": "2026-07-11T05:02:14.387Z",
   "iterations": [
     {
       "loopIndex": 1,
@@ -18,7 +18,7 @@
         "ok": true,
         "stage": "done",
         "loopIndex": 1,
-        "topology": "The Stronghold",
+        "topology": "The Convergence",
         "segCount": 5,
         "environment": "dungeon",
         "nodeId": "dungeon-loop-1",
@@ -30,8 +30,8 @@
         "targetSegNum": 3,
         "room": {
           "segNum": 3,
-          "x": 3,
-          "y": 32,
+          "x": 13,
+          "y": 11,
           "w": 4,
           "d": 6
         },
@@ -62,7 +62,7 @@
         },
         "pnCursor": 3
       },
-      "topology": "The Stronghold",
+      "topology": "The Convergence",
       "roomCount": 5,
       "reachability": {
         "ok": true,
@@ -71,7 +71,7 @@
       "rendered": {
         "ok": true,
         "stage": "setInteriorBoard",
-        "dressingCountFromTray": 46,
+        "dressingCountFromTray": 40,
         "beatMaxHeight": 0.561,
         "beatFrustumCheck": {
           "corners": [
@@ -145,7 +145,7 @@
         "meshCount": 4,
         "piecesRequested": 3,
         "piecesResolved": 3,
-        "dressingCount": 46
+        "dressingCount": 40
       },
       "bw2CrispChannel": {
         "buffer": {
@@ -163,8 +163,8 @@
         },
         "fps": {
           "samples": 60,
-          "elapsedMs": 85.30000000074506,
-          "fps": 703.3997655272676
+          "elapsedMs": 361.5,
+          "fps": 165.97510373443984
         }
       },
       "verbResults": {
@@ -188,13 +188,13 @@
       ],
       "benign404Count": 4,
       "summary": {
-        "topology": "The Stronghold",
+        "topology": "The Convergence",
         "realm": "chrome",
         "roomCount": 5,
         "planVerified": true,
         "piecesResolved": 3,
         "piecesRequested": 3,
-        "dressingCount": 46,
+        "dressingCount": 40,
         "meshCount": 4,
         "consoleErrorCount": 3,
         "breakCount": 0
@@ -368,8 +368,8 @@
         },
         "fps": {
           "samples": 60,
-          "elapsedMs": 187.5,
-          "fps": 320
+          "elapsedMs": 193.40000000223517,
+          "fps": 310.23784901399466
         }
       },
       "verbResults": {
@@ -415,7 +415,7 @@
         "ok": true,
         "stage": "done",
         "loopIndex": 3,
-        "topology": "The Stronghold",
+        "topology": "The Hub",
         "segCount": 9,
         "environment": "dungeon",
         "nodeId": "dungeon-loop-3",
@@ -468,7 +468,7 @@
         },
         "pnCursor": 5
       },
-      "topology": "The Stronghold",
+      "topology": "The Hub",
       "roomCount": 9,
       "reachability": {
         "ok": true,
@@ -569,8 +569,8 @@
         },
         "fps": {
           "samples": 60,
-          "elapsedMs": 316.1000000014901,
-          "fps": 189.81335020473634
+          "elapsedMs": 359,
+          "fps": 167.13091922005572
         }
       },
       "verbResults": {
@@ -585,7 +585,7 @@
       "urls404": [],
       "benign404Count": 0,
       "summary": {
-        "topology": "The Stronghold",
+        "topology": "The Hub",
         "realm": "fantasy",
         "roomCount": 9,
         "planVerified": true,
@@ -614,7 +614,7 @@
         "ok": true,
         "stage": "done",
         "loopIndex": 4,
-        "topology": "The Figure-8",
+        "topology": "The Stronghold",
         "segCount": 11,
         "environment": "dungeon",
         "nodeId": "dungeon-loop-4",
@@ -626,8 +626,8 @@
         "targetSegNum": 6,
         "room": {
           "segNum": 6,
-          "x": 29,
-          "y": 3,
+          "x": 42,
+          "y": 17,
           "w": 6,
           "d": 6
         },
@@ -659,7 +659,7 @@
         },
         "pnCursor": 6
       },
-      "topology": "The Figure-8",
+      "topology": "The Stronghold",
       "roomCount": 11,
       "reachability": {
         "ok": true,
@@ -668,7 +668,7 @@
       "rendered": {
         "ok": true,
         "stage": "setInteriorBoard",
-        "dressingCountFromTray": 87,
+        "dressingCountFromTray": 111,
         "beatMaxHeight": 1.2429999999999999,
         "beatFrustumCheck": {
           "corners": [
@@ -739,10 +739,10 @@
           ],
           "ok": true
         },
-        "meshCount": 5,
+        "meshCount": 4,
         "piecesRequested": 3,
         "piecesResolved": 3,
-        "dressingCount": 87
+        "dressingCount": 111
       },
       "bw2CrispChannel": {
         "buffer": {
@@ -760,8 +760,8 @@
         },
         "fps": {
           "samples": 60,
-          "elapsedMs": 527.4000000022352,
-          "fps": 113.76564277539953
+          "elapsedMs": 241.30000000074506,
+          "fps": 248.65312888443736
         }
       },
       "verbResults": {
@@ -776,14 +776,14 @@
       "urls404": [],
       "benign404Count": 0,
       "summary": {
-        "topology": "The Figure-8",
+        "topology": "The Stronghold",
         "realm": "gloom",
         "roomCount": 11,
         "planVerified": true,
         "piecesResolved": 3,
         "piecesRequested": 3,
-        "dressingCount": 87,
-        "meshCount": 5,
+        "dressingCount": 111,
+        "meshCount": 4,
         "consoleErrorCount": 0,
         "breakCount": 0
       }
@@ -807,7 +807,7 @@
         "ok": true,
         "stage": "done",
         "loopIndex": 5,
-        "topology": "The Labyrinth Fragment",
+        "topology": "The Hub",
         "segCount": 8,
         "environment": "dungeon",
         "nodeId": "dungeon-loop-5",
@@ -820,7 +820,7 @@
         "room": {
           "segNum": 5,
           "x": 3,
-          "y": 15,
+          "y": 32,
           "w": 6,
           "d": 6
         },
@@ -860,7 +860,7 @@
         },
         "pnCursor": 5
       },
-      "topology": "The Labyrinth Fragment",
+      "topology": "The Hub",
       "roomCount": 8,
       "reachability": {
         "ok": true,
@@ -869,7 +869,7 @@
       "rendered": {
         "ok": true,
         "stage": "setInteriorBoard",
-        "dressingCountFromTray": 63,
+        "dressingCountFromTray": 78,
         "beatMaxHeight": 1.903,
         "beatFrustumCheck": {
           "corners": [
@@ -940,10 +940,10 @@
           ],
           "ok": true
         },
-        "meshCount": 5,
+        "meshCount": 4,
         "piecesRequested": 5,
         "piecesResolved": 5,
-        "dressingCount": 63
+        "dressingCount": 78
       },
       "bw2CrispChannel": {
         "buffer": {
@@ -961,8 +961,8 @@
         },
         "fps": {
           "samples": 60,
-          "elapsedMs": 329.6000000014901,
-          "fps": 182.03883495063332
+          "elapsedMs": 230.5,
+          "fps": 260.3036876355748
         }
       },
       "verbResults": {
@@ -977,14 +977,14 @@
       "urls404": [],
       "benign404Count": 0,
       "summary": {
-        "topology": "The Labyrinth Fragment",
+        "topology": "The Hub",
         "realm": "chrome",
         "roomCount": 8,
         "planVerified": true,
         "piecesResolved": 5,
         "piecesRequested": 5,
-        "dressingCount": 63,
-        "meshCount": 5,
+        "dressingCount": 78,
+        "meshCount": 4,
         "consoleErrorCount": 0,
         "breakCount": 0
       }
@@ -999,8 +999,8 @@
     "notes": [
       "startSession() called"
     ],
-    "worldId": "mrfw6kcl1ejy9",
-    "worldName": "The Ash-Plaza"
+    "worldId": "mrfwehbpmvd6c",
+    "worldName": "Copper-Vein Hamlet"
   },
   "theaterState": {
     "hasBattleStage": true,
@@ -1009,7 +1009,7 @@
     "hasSetInteriorBoard": true,
     "hasPlay": true
   },
-  "contactSheetPath": "/Users/adamstephenson/Desktop/Work/projects/Genesis/.claude/worktrees/agent-a8794fb133f42c689/dev/battle-gate/dungeon-loop/contact-sheet.png",
+  "contactSheetPath": "/Users/adamstephenson/Desktop/Work/projects/Genesis/.claude/worktrees/agent-a8ad1fe61c15b4350/dev/battle-gate/dungeon-loop/contact-sheet.png",
   "shotCount": 15,
   "breakCount": 0,
   "cleanIterations": 5

@@ -74,6 +74,24 @@ function buildChainFixture(n) {
     light: "normal",
   }));
 }
+// BEAUTY-WAVE-2.md BW2-5 (FINALE DAIS): a finale room's center cells now carry a SECOND, deliberate,
+// much larger floor-height override (ITR_FLOOR_HEIGHT + ITR_DAIS_STEP*{1,2} = up to 0.6) — a real
+// staged platform, not VP3's random micro-jitter. src/engine/place-semantics.js's dsmFindFinale ALWAYS
+// names exactly one finale room per plan (falls back to the deepest room if no segment sets isFinale)
+// — there is no such thing as a "no finale room" SpatialPlan, so checks 2/3 below (scoped to proving
+// VP3's OWN mechanism/the pre-BW2-2 burial diagnosis specifically, both pre-dating BW2-5) filter the
+// finale room's OWN cells out of their measurement instead — isolating VP3's step channel from BW2-5's
+// separate, deliberately-larger dais feature (whose own structural/bound assertions live in
+// dev/verify-bw2-5-silhouette.mjs) without either lying (widening the bound to silently swallow it) or
+// wrongly red-flagging a real, separately-documented feature as a regression here.
+function nonFinaleFloorCells(plan, board) {
+  const finaleRoom = (plan.rooms || []).find((r) => r.role === "finale");
+  if (!finaleRoom) return board.instances.floor; // degenerate/no-role plan — nothing to exclude
+  return board.instances.floor.filter((f) => !(
+    f.x >= finaleRoom.x && f.x < finaleRoom.x + finaleRoom.w &&
+    f.z >= finaleRoom.y && f.z < finaleRoom.y + finaleRoom.d
+  ));
+}
 
 const M = loadDataLayer();
 
@@ -98,7 +116,7 @@ group("2 — MECHANISM: VP3's micro-step channel makes the floor top VARY per ce
     const fixture = buildChainFixture(30);
     const plan = M.semanticizePlan(M.spatializePlan(fixture, "The Spine", { walkId: "bw2-2-variation-" + seed }), fixture, []);
     const board = M.interiorBuildBoard(plan, { realmId: seed % 2 ? "fantasy" : "chrome" });
-    const sys = board.instances.floor.map((f) => f.sy);
+    const sys = nonFinaleFloorCells(plan, board).map((f) => f.sy); // BW2-5: excludes the finale room's own dais cells
     const mn = Math.min(...sys), mx = Math.max(...sys);
     if (mx - mn > 1e-9) { sawVariation = true; sampleMinSy = mn; sampleMaxSy = mx; }
   }
@@ -117,7 +135,7 @@ group("3 — RED-FIRST NUMBERS: re-deriving the pre-BW2-2 mount formula's own ar
   // pre-BW2-2: every standee's feet planted at OLD_Y = -0.5 (floorFrac=0 fixture, the common case).
   // burial = (this cell's real floor top) - OLD_Y = (sy-0.5) - (-0.5) = sy.
   const OLD_Y = -0.5;
-  const burials = board.instances.floor.map((f) => (f.sy - 0.5) - OLD_Y);
+  const burials = nonFinaleFloorCells(plan, board).map((f) => (f.sy - 0.5) - OLD_Y); // BW2-5: excludes the finale room's own dais cells
   ok(burials.every((b) => b > 0), "every cell's pre-BW2-2 burial (floor top minus the old fixed -0.5 mount) is strictly positive");
   ok(Math.min(...burials) >= 0.12 - 1e-9 && Math.max(...burials) <= 0.28 + 1e-9,
     `burial range [${Math.min(...burials).toFixed(3)}, ${Math.max(...burials).toFixed(3)}] matches the diagnosed 0.12-0.28 world-unit band (ITR_FLOOR_HEIGHT 0.2 +/- ITR_STEP_MAX 0.08)`);

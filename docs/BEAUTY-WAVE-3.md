@@ -19,6 +19,14 @@ Purity = ZERO geometric/texel distortion (no dither, no vertex snap, no warp, no
 filters on character pixels). Purity does NOT mean unlit. LIGHTING RESPONSE IS REQUIRED:
 sprites take scene illumination and the realm grade like every other citizen of the diorama.
 
+## BW3-0 — THE COMPOSER SEAM (prerequisite; verified missing 2026-07-11: zero EffectComposer
+## in theater-boot, renderer.render() direct at :3497)
+
+One unit: vendor/wire THREE's EffectComposer + RenderPass behind a flag, output byte-identical
+to direct rendering when no effect passes are added (screenshot-diff proof). BW3-2/3/6 mount
+their passes onto this seam; without it they have nowhere to live. FPS overhead of the bare
+composer measured and reported (should be ~zero).
+
 ## BW3-1 — LIT SPRITES (the #1 fix)
 
 Billboard material MeshBasic → lit (MeshLambert or a minimal custom Lambert-ish shader):

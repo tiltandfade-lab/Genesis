@@ -1,12 +1,46 @@
 ---
 type: session-handoff
 project: Genesis
-updated: 2026-07-10
+updated: 2026-07-11
 ---
 
 # Genesis — Session Hand-off
 
-## ⭐ Latest (2026-07-11) — THE VISUAL CAMPAIGN: BW2+BW3 landed, engine converged on the mocks [Claude Fable]
+## ⭐ Latest (2026-07-11) — BW4 MOTION & FEEL: 4 units landed; hit-stop wiring + play gate open [Claude Opus 4.8, orchestrated]
+
+BEAUTY-WAVE-4 (docs/BEAUTY-WAVE-4.md) executed as 4 background Sonnet executors in isolated
+worktrees, each personally re-gated on its branch tip and landed `--no-ff` to master (pushed).
+MF-1 CAMERA TWEENS first (gating), then MF-2 SPAWN GRACE / MF-3 IMPACT FEEL / MF-4 TURN RHYTHM
+in parallel off its tip. The dungeon's stills became footage: camera refits glide instead of
+snap, minis fade+settle in and out instead of popping, the acting-ring slides between turns, the
+round header dips, floaters land. Master tip after the wave: `fa27aff7` (+ this docs close).
+Details + per-unit SHAs + all re-run gates in CHANGELOG 2026-07-11 (BW4).
+
+**Two things are OPEN (both need Adam):**
+1. **MF-3b — hit-stop production wiring (design call).** MF-3's hit-stop/recoil/crit-response are
+   built + fully tested but DORMANT in real play. Production plays `hit-damage` (via the
+   `{hurt:"hit-damage"}` remap in `theater-boot.js` `play()`), so base shake+flash fire — but the
+   hit-stop freeze + directional recoil are gated on `opts.attackerId`, and crit-response needs a
+   `hit-crit` verb, neither of which `theaterFxFromLedger`'s hp case emits. FIX = thread the
+   attacker id (+ a crit flag) onto the hp ledger event so `play("hurt",{who})` carries
+   `{attackerId, crit}`. That's an EVENT-CONTRACT addition at the `DM_EVENT_FIELDS` boundary —
+   smaller than a strike/hurt remap, no double-fire risk — but it's your event-shape call, not an
+   autonomous improvisation. fall-death's 80ms hold IS already live.
+2. **MF-5 — the feel gate.** The interactive "does it feel like moving miniatures?" play session
+   (you at the keyboard, 3 combat rounds) + the instrumented 10s turn-burst. Best done AFTER MF-3b
+   so the burst can show the hit-stop centerpiece — shooting it now (a) misrepresents the wave and
+   (b) fights a documented capture-tooling limit (screenshots don't reliably reflect mid-tween
+   frames — loop-gate header line 211/678). Interim evidence already committed on the integrated
+   tree: the loop-gate contact sheet + `dev/battle-gate/dungeon-loop/loop-01-camera-mid-tween.png`,
+   plus the fake-clock harnesses that numerically prove every tween curve.
+
+**Do next (pick up here):**
+1. **Decide MF-3b** (event-shape: attacker id onto the hp ledger event), then wire it — that
+   unblocks the felt hit-stop and makes the MF-5 burst worth shooting.
+2. **MF-5 feel gate** — shoot the turn-burst + play 3 rounds; answer the one question.
+3. Everything below (BW2/BW3 close carry-over) still stands.
+
+## Latest (2026-07-11) — THE VISUAL CAMPAIGN: BW2+BW3 landed, engine converged on the mocks [Claude Fable]
 
 Three waves in one sitting, all on master + pushed (tip 127d41d6 + the close). The dungeon
 now renders as a photographed miniature diorama: crisp full-res (PS1 retired game-wide),

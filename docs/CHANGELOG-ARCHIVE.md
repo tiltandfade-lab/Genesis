@@ -14,6 +14,55 @@ to load every session (the live file keeps the newest entries; see the script fo
 Newest-first, same as the live file — the two files read as one continuous history, live file
 first. Read-only record: never hand-edit, never add entries here directly.
 
+## 2026-07-05 (later-6) — ADVERSARIAL PLAYTEST (RENNICK FOOL, 4 RUNS) — DM SEAT PROVEN UN-GAMEABLE
+
+A new continuing PC, **Rennick Fool** (Human Bard), run through **four adversarial bridgeless playtests**
+against the production DM seat — a griefer stress test rather than earnest play (Sella's counterpart).
+**No engine change — findings only** (standing freeze: harness/testing yes, building no). All four runs
+were background executor sub-agents driving the real `dev/playtest-bridgeless.mjs` in jsdom, sealed Player
++ DM seats, Opus as clerk. **Headline verdict: across 40 turns of four different assault types the DM seat
+never broke character, rolled the player's dice, obeyed an illegal demand, or leaked a `dmOnly` truth —
+every fault found was a quiet engine *contract seam*, never the narration.**
+
+### Playtest (4 runs — findings only)
+- **Run 1 — the griefer:** OOC / fourth-wall / soft-lock attempts. DM held voice + charter and turned the
+  sabotage into plot (his god-complex became the fog's feeding mechanism).
+- **Run 2 — the saboteur:** escalated, tried to dismantle the plot (murder a second watchman to "stop the
+  story") — the failed roll *fed* the plot instead (canonized as the hunted wall-killer). The `dmOnly` seal
+  held under 4 leak attempts. Verdict: improv compounds; a pure griefer ends in stalemate-under-menace.
+- **Run 3 — the puppeteer:** Rennick leveled to L10 + given a social-spell kit; tried to auto-win with
+  Dominate/Charm/Suggestion. DM adjudicated **every** spell rules-correctly (saves gated, scope + duration
+  + concentration honored, zero free wins). **Proved the spell-slot economy is fully built + enforced.**
+- **Run 4 — the whiplash:** forced a volatile dice sequence (nat-1/nat-20 alternation, crit-magnitude
+  spikes). **Crit-magnitude + degrees-of-failure both fired correctly**; the DM built a coherent arc out of
+  the chaos ("the story is in the dice" borne out). BUG-01's fix held across 3 native branch landings.
+
+### Added
+- **`dev/playtest-saves/rennick-fool/`** — the new continuing griefer PC save: `state.json` (L10, HP 3/43,
+  bound-to-the-fog), `state-pre-run4.json` (pre-forced-dice archive), `README.md`, and turn logs
+  `ADVERSARIAL-LOG-run1..4.md`. Tracked (matching the Sella-save precedent).
+
+### Changed
+- **Rennick leveled 1 → 10** via the real `applyLevelUp` engine mutator (HP 7→43, PB 2→4, slots to the SRD
+  L10 full-caster table `[4/3/3/3/2]`, XP set to the L10 floor) + granted a social kit (Charm Person,
+  Suggestion, Enthrall, Hypnotic Pattern, Compulsion, Dominate Person, Vicious Mockery cantrip). A sandbox
+  **save edit** (interpretive level-up picks are DM-narrated in v1), not a code change.
+
+### Deferred (filed to `docs/PLAYTEST-BUGS.md` — findings, not fixed)
+- **BUG-14** (MED) id-less `codex_add` silently overwrites a soft prep record · **BUG-15** (LOW) blank
+  `fact_canonized` grants XP · **BUG-16** (MED) `condition_add` prompt↔engine field mismatch (`cond`↔
+  `condition`) · **BUG-17** (MED→HIGH) `attitude_shift` doubly broken → attitude can never move · **BUG-18**
+  (MED) `social_check` grades vs the engine's internal DC, not the fiction DC. **BUG-17+18 triangulate the
+  entire social-attitude spine** (attitude can't move / moves against the wrong DC). Plus the **caster
+  discoverability gap** (the slot economy works but the seat prompt never teaches `cast` + the digest omits
+  the spell list — the highest-value caster fix).
+- **CAL-1** (Adam ruling) — a **failed** save on a suicide/self-harm mind-control order should LAND (kill);
+  the DM shouldn't grant an extra fictional out after the mechanical save already failed. On-doctrine for
+  hard-and-dangerous. **⏸ PARKED (Adam):** whether this means raising spice/lethality *across the board* —
+  deferred to a later design talk, do not act on it.
+
+---
+
 ## 2026-07-05 (later-5) — RUN 2 (SELLA) + FABLE BUG-CLASS SWEEP + THE FIX (13 BUGS CLOSED)
 
 Continued the bridgeless playtest (**Run 2**, Sella Voss, 10 turns), then — on Adam's go — **fixed the

@@ -128,6 +128,23 @@ const PSX_DITHER_AMPLITUDE = 48.0;     // G9 tune 4: Bayer threshold divisor (DI
                                         // 48.0 is one notch weaker (~0.67x amplitude): still visibly
                                         // dithered, no longer mud at low luminance.
 
+/* GRAPHICS-ENGINE.md law 2/2b (VP0 — THE TWO-FLAG STUDY CARD, docs/BEAUTY-WAVE.md): the interior/
+   diorama render channel (setInteriorBoard/interiorBuildInstancedMesh) gets its own two flags,
+   independent of the tabletop's PSX_DITHER_ENABLED/PSX_VERTEX_SNAP_ENABLED above (the flat combat
+   table KEEPS its current look — these never touch it). Fable's pre-ruled VERDICT-SEAT values are
+   {persp, world-PSX off}; this unit lands the SWITCH first with defaults that preserve the PRE-VP0
+   look (byte-identical render until flipped), then a SEPARATE isolated commit flips the two defaults
+   to the ruled values so the flip can be reverted alone if the confirmation card contradicts it.
+   WORLD_PSX_ENABLED guards interiorBuildInstancedMesh's world-surface (floor/wall/doorframe/pillar)
+   materials ONLY — it ANDs with the tabletop's own PSX_DITHER_ENABLED/PSX_VERTEX_SNAP_ENABLED (never
+   overrides them upward), so flipping it off can only ever REMOVE dither/snap from interior world
+   surfaces, never add it where the global flags are off. INTERIOR_CAM_MODE picks the interior
+   channel's camera type; the tabletop channel (setBoard) always stays 'ortho' regardless of this
+   flag — see setBoard/setInteriorBoard's own S.camera assignment below. */
+const WORLD_PSX_ENABLED = false;   // RULED (VERDICT-SEAT, 2026-07-10 night): world-PSX OFF on the interior channel
+const INTERIOR_CAM_MODE = "persp"; // 'ortho' | 'persp' — RULED (VERDICT-SEAT, 2026-07-10 night): ~20deg perspective ON
+const INTERIOR_CAM_FOV_DEG = 20;   // GRAPHICS-ENGINE law 2b: "gentle perspective ~20° FOV"
+
 const CAM_ELEV_DEG = 35;
 // G9 camera-yaw fix (docs/PRE-PLAYTEST-GAUNTLET.md §10b): the board's tile columns are plain
 // axis-aligned boxes (setBoard's BoxGeometry, world X/Z grid) — an isometric/dimetric read is ENTIRELY
@@ -3099,6 +3116,47 @@ function placeCamera(){
   // frustum = the board reads bigger on screen = "zoomed in") — applied here, after the fit itself is
   // computed, so zoom is always relative to "the board's own auto-fit," never an absolute world-unit
   // size that would read inconsistently across different board footprints.
+  // GRAPHICS-ENGINE law 2b/2c (VP0/docs/BEAUTY-WAVE.md): S.camera.isPerspectiveCamera (three.js's own
+  // type flag, set on every PerspectiveCamera instance) is the single source of truth for which fit
+  // math runs — whichever camera object setBoard/setInteriorBoard currently has assigned to S.camera
+  // is the one this function fits+positions, no separate mode variable to keep in sync.
+  const isPersp = !!S.camera.isPerspectiveCamera;
+
+  if(isPersp){
+    // FRAMING LAW 2c: fit the ACTION CLUSTER (participants + margin) fully in frustum. Under a FIXED
+    // FOV, the fit variable is CAMERA DISTANCE, not a frustum half-extent — solve the distance along
+    // each axis that makes the frustum's half-height/half-width (at that distance) equal the board's
+    // own screen-space half-extents at CAM_FIT_MARGIN fill, same containment discipline the ortho
+    // branch already uses (take the LARGER distance so BOTH axes stay contained, never cropped).
+    const fovYRad = (S.camera.fov * Math.PI) / 180;
+    const tanHalfFovY = Math.tan(fovYRad / 2);
+    const distForHeight = (screenHalfHeight / CAM_FIT_MARGIN) / tanHalfFovY;
+    const distForWidth = (screenHalfWidth / (CAM_FIT_MARGIN * Math.max(aspect, 0.0001))) / tanHalfFovY;
+    // half*1.05 floor: guards the degenerate near-zero-elevation/near-zero-footprint case (distForHeight
+    // could otherwise collapse toward 0 and place the camera inside the board) — mirrors the ortho
+    // branch's own `Math.max(half, hx, hz)` floor one function down.
+    const camDist = Math.max(distForHeight, distForWidth, half * 1.05, hx, hz) * (S.zoomLevel || 1);
+    S.viewSize = null; // no orthographic half-height under perspective; harnesses branch on isPerspectiveCamera instead
+
+    const horiz = Math.cos(rad) * camDist;
+    const y = Math.sin(rad) * camDist;
+    const x = Math.sin(yaw) * horiz;
+    const z = Math.cos(yaw) * horiz;
+    S.camera.position.set(x, y, z);
+    S.camera.lookAt(S.boardCenter || new THREE.Vector3(0, 0, 0));
+
+    S.camera.aspect = aspect;
+    S.camera.near = 0.1;
+    S.camera.far = Math.max(100, camDist + FOG_FAR + 20);
+    S.camera.updateProjectionMatrix();
+
+    if(S.scene && S.scene.fog){
+      S.scene.fog.near = camDist * 0.55;
+      S.scene.fog.far = camDist * 1.65;
+    }
+    return;
+  }
+
   const viewSize = fittedViewSize * (S.zoomLevel || 1);
   S.viewSize = viewSize;
 
@@ -3722,7 +3780,25 @@ function applyPsxShaderTweaks(material, opts){
   // gradient rides every prism proportionally). {floor: darkness at the base, range: fraction of
   // local height the fade climbs}.
   const baseAO = opts && opts.baseAO;
-  if(!PSX_DITHER_ENABLED && !PSX_VERTEX_SNAP_ENABLED && !figureAO && !banded && !baseAO) return material;
+  // VP0/GRAPHICS-ENGINE law 2 (docs/BEAUTY-WAVE.md): callers building the interior channel's WORLD
+  // surfaces (interiorBuildInstancedMesh's floor/wall/doorframe/pillar materials — the only call
+  // site that passes this) tag opts.worldSurface. The dither/snap flags become the AND of the global
+  // stretch flags with WORLD_PSX_ENABLED for those materials only — every other call site (tabletop
+  // tiles/props/figures) reads PSX_DITHER_ENABLED/PSX_VERTEX_SNAP_ENABLED exactly as before, untouched.
+  const worldSurface = !!(opts && opts.worldSurface);
+  // worldPsxOverride (study-rig ONLY — dev/battle-gate/capture-two-flag-card.mjs's world-PSX on/off
+  // cells): interiorBuildInstancedMesh threads S.interiorVariant.worldPsx through here so the card
+  // can sweep both states of the flag in one page load without touching the module const. No product
+  // caller ever sets this — it degrades to the module default WORLD_PSX_ENABLED everywhere else.
+  const worldPsxOn = (opts && typeof opts.worldPsxOverride === "boolean") ? opts.worldPsxOverride : WORLD_PSX_ENABLED;
+  const ditherOn = PSX_DITHER_ENABLED && (!worldSurface || worldPsxOn);
+  const snapOn = PSX_VERTEX_SNAP_ENABLED && (!worldSurface || worldPsxOn);
+  // worldSurface materials always fall through to the userData tagging at the bottom (even with
+  // world-PSX off and no other tweak active) — psxApplied/psxWorldSurface record "this is a WORLD
+  // surface material" (the sprite-purity distinction dev/verify-dungeon-interior.mjs's harness checks),
+  // which must stay stable regardless of WORLD_PSX_ENABLED's current value, or a two-flag-card cell
+  // with world-PSX off would look mis-tagged as if it never passed through this function at all.
+  if(!ditherOn && !snapOn && !figureAO && !banded && !baseAO && !worldSurface) return material;
   const priorHook = material.onBeforeCompile;
   // three.js caches compiled programs keyed (in part) on onBeforeCompile.toString() — every call
   // here shares the SAME closure text, so materials whose injected CONSTANTS differ (aoFactor,
@@ -3730,7 +3806,7 @@ function applyPsxShaderTweaks(material, opts){
   // bug). An explicit per-options cache key forces a distinct program per variant.
   material.customProgramCacheKey = function(){
     return "psx:" + JSON.stringify({ f: figureAO, b: banded, s: opts && opts.bandedSteps || 0,
-      a: baseAO ? [baseAO.floor, baseAO.range] : 0, d: PSX_DITHER_ENABLED, v: PSX_VERTEX_SNAP_ENABLED });
+      a: baseAO ? [baseAO.floor, baseAO.range] : 0, d: ditherOn, v: snapOn });
   };
   material.onBeforeCompile = (shader, renderer) => {
     if(typeof priorHook === "function") priorHook(shader, renderer);
@@ -3762,13 +3838,13 @@ function applyPsxShaderTweaks(material, opts){
         "  outgoingLight *= mix(" + aoFloor + ", 1.0, clamp(vBaseY / " + aoRange + ", 0.0, 1.0));\n  #include <opaque_fragment>"
       );
     }
-    if(PSX_DITHER_ENABLED){
+    if(ditherOn){
       shader.fragmentShader = "#define PSX_DITHER\n" + shader.fragmentShader.replace(
         "#include <opaque_fragment>",
         DITHER_GLSL + "\n  #include <opaque_fragment>"
       );
     }
-    if(PSX_VERTEX_SNAP_ENABLED){
+    if(snapOn){
       shader.vertexShader = "#define PSX_VERTEX_SNAP\n" + shader.vertexShader.replace(
         "#include <project_vertex>",
         "#include <project_vertex>\n  " + VERTEX_SNAP_GLSL
@@ -3789,12 +3865,18 @@ function applyPsxShaderTweaks(material, opts){
   // already established.
   if(figureAO || banded){
     material.customProgramCacheKey = () => "psx|" + (figureAO ? "figAO" : "") + (banded ? "banded" : "")
-      + (PSX_DITHER_ENABLED ? "d" : "") + (PSX_VERTEX_SNAP_ENABLED ? "v" : "");
+      + (ditherOn ? "d" : "") + (snapOn ? "v" : "");
   }
-  // TESTABILITY flag only (no runtime behavior reads it) — pairs with buildSpriteBillboard's
+  // TESTABILITY flags only (no runtime behavior reads them) — pairs with buildSpriteBillboard's
   // userData.psxExempt so dev/verify-dungeon-interior.mjs's sprite-purity check can assert wall/tile
   // materials actually got the PSX onBeforeCompile injection while billboard materials never do.
+  // psxWorldDither/psxWorldSnap record the RESOLVED per-material flags (post worldSurface gating) so
+  // a harness can assert "world-PSX off" actually dropped the injection on interior world materials
+  // without needing to re-derive the WORLD_PSX_ENABLED/PSX_*_ENABLED AND logic itself.
   material.userData.psxApplied = true;
+  material.userData.psxWorldSurface = worldSurface;
+  material.userData.psxDitherResolved = ditherOn;
+  material.userData.psxSnapResolved = snapOn;
   return material;
 }
 
@@ -3830,6 +3912,14 @@ function mount(el, opts){
   const camera = new THREE.OrthographicCamera(
     -viewSize * aspect, viewSize * aspect, viewSize, -viewSize, 0.1, 100
   );
+  // VP0/GRAPHICS-ENGINE law 2b (docs/BEAUTY-WAVE.md): a SECOND camera, PerspectiveCamera at
+  // INTERIOR_CAM_FOV_DEG (~20°), built alongside the ortho one at mount() so the interior channel
+  // can flip to it (INTERIOR_CAM_MODE) without ever touching the tabletop's own camera object — the
+  // tabletop channel (setBoard) always assigns S.camera = S.orthoCamera regardless of this flag; only
+  // setInteriorBoard reads INTERIOR_CAM_MODE. placeCamera() below branches on S.camera.isPerspectiveCamera
+  // (three.js's own type flag) rather than a separate mode variable, so whichever camera object is
+  // currently assigned to S.camera is always the one placeCamera fits/positions.
+  const perspCamera = new THREE.PerspectiveCamera(INTERIOR_CAM_FOV_DEG, aspect, 0.1, 100);
 
   // BOARD LIGHTING: the key DirectionalLight stays a soft, fixed fill (keeps every Lambert face from
   // going fully flat/unlit on the shadowed side of a box — it's not the profile's job to replace basic
@@ -3885,6 +3975,8 @@ function mount(el, opts){
   S.renderer = renderer;
   S.scene = scene;
   S.camera = camera;
+  S.orthoCamera = camera;
+  S.perspCamera = perspCamera;
   S.tileGroup = tileGroup;
   S.propGroup = propGroup;
   S.unitGroup = unitGroup;
@@ -3982,6 +4074,11 @@ function setBoard(data){
   // the only place that turns shadow-mapping ON, so this is the one place it turns back off, however
   // many interior trays were mounted in between.
   if(S.renderer) S.renderer.shadowMap.enabled = false;
+  // GRAPHICS-ENGINE law 2b/VP0: the flat tabletop channel ALWAYS renders ortho, regardless of
+  // INTERIOR_CAM_MODE — only setInteriorBoard ever reads that flag. Restoring S.orthoCamera here
+  // mirrors the shadowMap/hemi restores just above/below (setInteriorBoard is the only place that
+  // ever swaps S.camera to the perspective one, so this is the one place it swaps back).
+  if(S.orthoCamera && S.camera !== S.orthoCamera){ S.camera = S.orthoCamera; placeCamera(); }
   // GR3: restore the shared hemisphere key to its authored default whenever a table board mounts —
   // the ONLY place it's ever dimmed is setInteriorBoard's study-rig-only `variant.rig===false` toggle
   // (no product path sets it), same "one place turns it down, this is the one place it turns back up"
@@ -4303,7 +4400,10 @@ function interiorBuildInstancedMesh(list, cx, cz, texture, variant, shadowKind){
   const mat = applyPsxShaderTweaks(new THREE.MeshLambertMaterial(
     texture ? { map: texture } : { color: 0xffffff }
   ), { banded: !!(variant && variant.banded), bandedSteps: variant && variant.bandedSteps,
-       baseAO: (variant && variant.ao && vertical) ? { floor: variant.aoFactor || 0.45, range: 0.22 } : null }); // tight contact band — 0.45 spread read as mush (pixel-diff proved it rendered, eyes said no)
+       baseAO: (variant && variant.ao && vertical) ? { floor: variant.aoFactor || 0.45, range: 0.22 } : null, // tight contact band — 0.45 spread read as mush (pixel-diff proved it rendered, eyes said no)
+       worldSurface: true, // GRAPHICS-ENGINE law 2 (VP0): the interior channel's floor/wall/doorframe/pillar
+                            // materials are its WORLD surfaces — gate dither+snap through WORLD_PSX_ENABLED
+       worldPsxOverride: (variant && typeof variant.worldPsx === "boolean") ? variant.worldPsx : undefined });
   const mesh = new THREE.InstancedMesh(geo, mat, list.length);
   // DUNGEON-GRAPH.md U3 iteration-2, ruling 2: wall/floor/pillar/doorframe instanced meshes cast AND
   // receive real shadows on an interior board (harmless while renderer.shadowMap.enabled is false on
@@ -4600,6 +4700,16 @@ function setInteriorBoard(data){
   const dirtyKey = "interior:" + JSON.stringify(variant) + ":" + JSON.stringify(data);
   if(dirtyKey === S.boardKey){ window.Theater.stats.boardSkips++; return; }
   S.boardKey = dirtyKey;
+  // GRAPHICS-ENGINE law 2b/VP0 (docs/BEAUTY-WAVE.md): the interior channel's own camera-mode switch.
+  // `variant.camMode` (study-rig ONLY — dev/battle-gate/capture-two-flag-card.mjs's ortho/persp cells)
+  // overrides the module default INTERIOR_CAM_MODE for this render only; no product caller ever sets
+  // it, so this degrades to INTERIOR_CAM_MODE everywhere else. setBoard's own S.orthoCamera restore
+  // (above) is the one place that ever swaps back to ortho for the tabletop channel — this is the one
+  // place that ever swaps TO the perspective camera.
+  const camMode = (variant.camMode === "ortho" || variant.camMode === "persp") ? variant.camMode : INTERIOR_CAM_MODE;
+  const wantPersp = camMode === "persp";
+  if(wantPersp && S.perspCamera && S.camera !== S.perspCamera) S.camera = S.perspCamera;
+  else if(!wantPersp && S.orthoCamera && S.camera !== S.orthoCamera) S.camera = S.orthoCamera;
   window.Theater.stats.boardBuilds++;
   drainTweens(S);
   clearGroup(S.fxGroup);
@@ -5397,6 +5507,55 @@ window.Theater.interiorPsxAudit = function(){
   });
   return audit;
 };
+
+// VP0/GRAPHICS-ENGINE law 2/2b (docs/BEAUTY-WAVE.md) — harness-facing read-only diagnostics for the
+// two-flag study card (dev/battle-gate/capture-two-flag-card.mjs), same discipline as interiorPsxAudit
+// just above: no product code reads these, they only expose the live scene-graph/camera state a
+// browser-side harness can't otherwise reach without duplicating this file's own S internals.
+window.Theater.cameraIsPerspective = function(){ return !!(S.camera && S.camera.isPerspectiveCamera); };
+window.Theater.interiorWorldPsxAudit = function(){
+  const audit = { checked: 0, ditherOnCount: 0, snapOnCount: 0 };
+  if(!S.interiorGroup) return audit;
+  S.interiorGroup.traverse((obj) => {
+    if(obj.isInstancedMesh && obj.material && obj.material.userData && obj.material.userData.psxWorldSurface){
+      audit.checked++;
+      if(obj.material.userData.psxDitherResolved) audit.ditherOnCount++;
+      if(obj.material.userData.psxSnapResolved) audit.snapOnCount++;
+    }
+  });
+  return audit;
+};
+
+// GRAPHICS-ENGINE.md law 2c (FRAMING LAW): "during combat beats the camera fits the ACTION CLUSTER
+// ... fully in frustum" — a harness-facing projection check (dev/battle-gate/capture-two-flag-card.mjs
+// / dev/verify-interior-camera-frustum.mjs), same read-only discipline as the audits above. Projects
+// the CURRENT interior board's fitted footprint (its S.boardHalfX/Z half-extents around the origin,
+// at floor y=0 and at a representative "standee head height" y so a standing piece's TOP is checked
+// too, not just its feet) through the LIVE camera (whichever of S.orthoCamera/S.perspCamera is
+// currently assigned) via THREE's own Vector3.project — works identically for either projection type
+// since project() is the camera's own view*projection matrix, not fit-math this file re-derives.
+// Returns each corner's NDC {x,y} plus a rolled-up ok (every corner's x/y both within [-1,1]).
+function interiorFrustumCheck(headHeight){
+  const result = { corners: [], ok: true };
+  if(!S.camera || !S.mounted) { result.ok = false; return result; }
+  const hx = Math.max(2, S.boardHalfX || S.boardHalfExtent || 5);
+  const hz = Math.max(2, S.boardHalfZ || S.boardHalfExtent || 5);
+  const h = (typeof headHeight === "number" && isFinite(headHeight)) ? headHeight : 1.1; // HUMAN_TRUE_HEIGHT-ish default
+  const cx = 0, cz = 0; // S.boardCenter is always (0,0,0) for the interior channel (setInteriorBoard, above)
+  const corners = [
+    [cx - hx, 0, cz - hz], [cx + hx, 0, cz - hz], [cx - hx, 0, cz + hz], [cx + hx, 0, cz + hz],
+    [cx - hx, h, cz - hz], [cx + hx, h, cz - hz], [cx - hx, h, cz + hz], [cx + hx, h, cz + hz]
+  ];
+  S.camera.updateMatrixWorld();
+  corners.forEach(([x, y, z]) => {
+    const v = new THREE.Vector3(x, y, z).project(S.camera);
+    const inFrustum = Math.abs(v.x) <= 1.0001 && Math.abs(v.y) <= 1.0001;
+    if(!inFrustum) result.ok = false;
+    result.corners.push({ x, y, z, ndcX: v.x, ndcY: v.y, inFrustum });
+  });
+  return result;
+}
+window.Theater.interiorFrustumCheck = interiorFrustumCheck;
 
 // TABLETOP-UNITS.md §U1 seam 5 — the boot-preload readiness flag: false until loadWholeObjectBuilders'
 // module-scope onSettled callback (above) fires exactly once. A harness/caller asserting §9.8's warm

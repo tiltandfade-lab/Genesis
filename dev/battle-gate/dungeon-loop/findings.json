@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-10T22:50:55.610Z",
+  "generatedAt": "2026-07-11T00:53:47.468Z",
   "iterations": [
     {
       "loopIndex": 1,
@@ -72,7 +72,7 @@
         "ok": true,
         "stage": "setInteriorBoard",
         "dressingCountFromTray": 40,
-        "meshCount": 3,
+        "meshCount": 4,
         "piecesRequested": 3,
         "piecesResolved": 3,
         "dressingCount": 40
@@ -97,12 +97,12 @@
       "urls404": [
         "http://127.0.0.1:5211/dm/health",
         "http://127.0.0.1:5211/dm/health",
-        "http://127.0.0.1:5211/assets/dressing/chrome-clutter-vendingwreck.png",
         "http://127.0.0.1:5211/assets/dressing/chrome-flora-lightpod.png",
-        "http://127.0.0.1:5211/assets/dressing/chrome-flora-hologram-fern.png",
-        "http://127.0.0.1:5211/assets/dressing/chrome-flora-circuitmoss.png",
+        "http://127.0.0.1:5211/assets/dressing/chrome-clutter-vendingwreck.png",
         "http://127.0.0.1:5211/assets/dressing/chrome-clutter-turnstile.png",
-        "http://127.0.0.1:5211/assets/dressing/chrome-flora-neonbonsai.png"
+        "http://127.0.0.1:5211/assets/dressing/chrome-flora-hologram-fern.png",
+        "http://127.0.0.1:5211/assets/dressing/chrome-flora-neonbonsai.png",
+        "http://127.0.0.1:5211/assets/dressing/chrome-flora-circuitmoss.png"
       ],
       "benign404Count": 8,
       "summary": {
@@ -113,7 +113,7 @@
         "piecesResolved": 3,
         "piecesRequested": 3,
         "dressingCount": 40,
-        "meshCount": 3,
+        "meshCount": 4,
         "consoleErrorCount": 7,
         "breakCount": 0
       }
@@ -136,7 +136,7 @@
         "ok": true,
         "stage": "done",
         "loopIndex": 2,
-        "topology": "The Ruin",
+        "topology": "The Figure-8",
         "segCount": 7,
         "environment": "dungeon",
         "nodeId": "dungeon-loop-2",
@@ -149,7 +149,7 @@
         "room": {
           "segNum": 4,
           "x": 21,
-          "y": 12,
+          "y": 11,
           "w": 6,
           "d": 7
         },
@@ -185,7 +185,7 @@
         },
         "pnCursor": 4
       },
-      "topology": "The Ruin",
+      "topology": "The Figure-8",
       "roomCount": 7,
       "reachability": {
         "ok": true,
@@ -194,11 +194,11 @@
       "rendered": {
         "ok": true,
         "stage": "setInteriorBoard",
-        "dressingCountFromTray": 64,
-        "meshCount": 4,
+        "dressingCountFromTray": 57,
+        "meshCount": 5,
         "piecesRequested": 4,
         "piecesResolved": 4,
-        "dressingCount": 64
+        "dressingCount": 57
       },
       "verbResults": {
         "hurt": {
@@ -226,14 +226,14 @@
       ],
       "benign404Count": 6,
       "summary": {
-        "topology": "The Ruin",
+        "topology": "The Figure-8",
         "realm": "gloom",
         "roomCount": 7,
         "planVerified": true,
         "piecesResolved": 4,
         "piecesRequested": 4,
-        "dressingCount": 64,
-        "meshCount": 4,
+        "dressingCount": 57,
+        "meshCount": 5,
         "consoleErrorCount": 6,
         "breakCount": 0
       }
@@ -257,7 +257,7 @@
         "ok": true,
         "stage": "done",
         "loopIndex": 3,
-        "topology": "The Figure-8",
+        "topology": "The Convergence",
         "segCount": 9,
         "environment": "dungeon",
         "nodeId": "dungeon-loop-3",
@@ -270,7 +270,7 @@
         "room": {
           "segNum": 5,
           "x": 21,
-          "y": 20,
+          "y": 12,
           "w": 6,
           "d": 7
         },
@@ -310,7 +310,7 @@
         },
         "pnCursor": 5
       },
-      "topology": "The Figure-8",
+      "topology": "The Convergence",
       "roomCount": 9,
       "reachability": {
         "ok": true,
@@ -319,11 +319,11 @@
       "rendered": {
         "ok": true,
         "stage": "setInteriorBoard",
-        "dressingCountFromTray": 72,
-        "meshCount": 4,
+        "dressingCountFromTray": 70,
+        "meshCount": 5,
         "piecesRequested": 5,
         "piecesResolved": 5,
-        "dressingCount": 72
+        "dressingCount": 70
       },
       "verbResults": {
         "hurt": {
@@ -342,23 +342,23 @@
         "Failed to load resource: the server responded with a status of 404 (File not found)"
       ],
       "urls404": [
-        "http://127.0.0.1:5211/assets/dressing/fantasy-clutter-rusted-plow.png",
         "http://127.0.0.1:5211/assets/dressing/fantasy-clutter-lanternhook.png",
+        "http://127.0.0.1:5211/assets/dressing/fantasy-flora-mushroomring.png",
         "http://127.0.0.1:5211/assets/dressing/fantasy-clutter-rubblewall.png",
         "http://127.0.0.1:5211/assets/dressing/fantasy-flora-ivywall.png",
-        "http://127.0.0.1:5211/assets/dressing/fantasy-flora-mushroomring.png",
-        "http://127.0.0.1:5211/assets/dressing/fantasy-flora-mossboulder.png"
+        "http://127.0.0.1:5211/assets/dressing/fantasy-flora-mossboulder.png",
+        "http://127.0.0.1:5211/assets/dressing/fantasy-clutter-rusted-plow.png"
       ],
       "benign404Count": 6,
       "summary": {
-        "topology": "The Figure-8",
+        "topology": "The Convergence",
         "realm": "fantasy",
         "roomCount": 9,
         "planVerified": true,
         "piecesResolved": 5,
         "piecesRequested": 5,
-        "dressingCount": 72,
-        "meshCount": 4,
+        "dressingCount": 70,
+        "meshCount": 5,
         "consoleErrorCount": 6,
         "breakCount": 0
       }
@@ -380,7 +380,7 @@
         "ok": true,
         "stage": "done",
         "loopIndex": 4,
-        "topology": "The Loop",
+        "topology": "The Stronghold",
         "segCount": 11,
         "environment": "dungeon",
         "nodeId": "dungeon-loop-4",
@@ -392,8 +392,8 @@
         "targetSegNum": 6,
         "room": {
           "segNum": 6,
-          "x": 47,
-          "y": 29,
+          "x": 42,
+          "y": 17,
           "w": 6,
           "d": 6
         },
@@ -425,7 +425,7 @@
         },
         "pnCursor": 6
       },
-      "topology": "The Loop",
+      "topology": "The Stronghold",
       "roomCount": 11,
       "reachability": {
         "ok": true,
@@ -434,11 +434,11 @@
       "rendered": {
         "ok": true,
         "stage": "setInteriorBoard",
-        "dressingCountFromTray": 85,
-        "meshCount": 4,
+        "dressingCountFromTray": 111,
+        "meshCount": 5,
         "piecesRequested": 3,
         "piecesResolved": 3,
-        "dressingCount": 85
+        "dressingCount": 111
       },
       "verbResults": {
         "hurt": {
@@ -452,14 +452,14 @@
       "urls404": [],
       "benign404Count": 0,
       "summary": {
-        "topology": "The Loop",
+        "topology": "The Stronghold",
         "realm": "gloom",
         "roomCount": 11,
         "planVerified": true,
         "piecesResolved": 3,
         "piecesRequested": 3,
-        "dressingCount": 85,
-        "meshCount": 4,
+        "dressingCount": 111,
+        "meshCount": 5,
         "consoleErrorCount": 0,
         "breakCount": 0
       }
@@ -483,7 +483,7 @@
         "ok": true,
         "stage": "done",
         "loopIndex": 5,
-        "topology": "The Ruin",
+        "topology": "The Branch",
         "segCount": 8,
         "environment": "dungeon",
         "nodeId": "dungeon-loop-5",
@@ -495,8 +495,8 @@
         "targetSegNum": 5,
         "room": {
           "segNum": 5,
-          "x": 29,
-          "y": 8,
+          "x": 27,
+          "y": 11,
           "w": 6,
           "d": 6
         },
@@ -536,7 +536,7 @@
         },
         "pnCursor": 5
       },
-      "topology": "The Ruin",
+      "topology": "The Branch",
       "roomCount": 8,
       "reachability": {
         "ok": true,
@@ -545,11 +545,11 @@
       "rendered": {
         "ok": true,
         "stage": "setInteriorBoard",
-        "dressingCountFromTray": 70,
-        "meshCount": 4,
+        "dressingCountFromTray": 69,
+        "meshCount": 5,
         "piecesRequested": 5,
         "piecesResolved": 5,
-        "dressingCount": 70
+        "dressingCount": 69
       },
       "verbResults": {
         "hurt": {
@@ -563,14 +563,14 @@
       "urls404": [],
       "benign404Count": 0,
       "summary": {
-        "topology": "The Ruin",
+        "topology": "The Branch",
         "realm": "chrome",
         "roomCount": 8,
         "planVerified": true,
         "piecesResolved": 5,
         "piecesRequested": 5,
-        "dressingCount": 70,
-        "meshCount": 4,
+        "dressingCount": 69,
+        "meshCount": 5,
         "consoleErrorCount": 0,
         "breakCount": 0
       }
@@ -585,8 +585,8 @@
     "notes": [
       "startSession() called"
     ],
-    "worldId": "mrfj4ra4x6ag3",
-    "worldName": "The Unfinished Town"
+    "worldId": "mrfnit8r5cknt",
+    "worldName": "The Pilgrim's Ascent"
   },
   "theaterState": {
     "hasBattleStage": true,
@@ -595,7 +595,7 @@
     "hasSetInteriorBoard": true,
     "hasPlay": true
   },
-  "contactSheetPath": "/Users/adamstephenson/Desktop/Work/projects/Genesis/.claude/worktrees/agent-aaae9fd83e8d6d1f6/dev/battle-gate/dungeon-loop/contact-sheet.png",
+  "contactSheetPath": "/Users/adamstephenson/Desktop/Work/projects/Genesis/dev/battle-gate/dungeon-loop/contact-sheet.png",
   "shotCount": 15,
   "breakCount": 0,
   "cleanIterations": 5

@@ -12,7 +12,11 @@
        1-3 FOCAL pieces per room max, filler beyond that — DRESSING_DENSITY_BY_ROLE below);
      - cards land on FLOOR cells only (never DOOR/WALL cells — those codes are never in a room's own
        floor-cell list to begin with) and never inside the room's own combat-space CENTER 2x2 (dpCenter2x2);
-     - BLOCKER cards land within 1 cell of a WALL cell (dpAdjacentToWall);
+     - BLOCKER cards land within 1 cell of a WALL cell (dpAdjacentToWall), BIASED away from the
+       room's own canonical camera-side band (BEAUTY-WAVE-2.md BW2-1b item 2, dpIsCameraSideOfRoom)
+       — never a hard exclusion (a slender room with no far-side wall-adjacent cell free still gets
+       its blocker), just a preferred ordering so a blocker card rarely seeds itself between the
+       default view and the room's own combat space;
      - WALL-HANG cards land adjacent to a wall cell too (the "hang ON the wall" reading);
      - LIGHT-primary cards co-locate with the room's own light seeds — this file independently
        reimplements theater-interior.js's itrRoomLightCandidates/itrRoomLightCount/light-seed formula
@@ -240,6 +244,29 @@ function dpAdjacentToWall(x, y, plan) {
   });
 }
 
+// ─── BEAUTY-WAVE-2.md BW2-1b (THE OCCLUSION LAW), item 2 — PLACEMENT BIAS: mirrors src/ui/theater-
+// boot.js's CAM_YAW_OFFSET_DEG (45deg) at the default rotationStep=0 view — the ONE canonical camera
+// direction dressPlan can reason about at ROLL time (rotation is a later, render-time-only lever;
+// the dynamic pillar/wall cutaway, item 1, is what handles every OTHER rotation the player turns
+// to). Two independent constants declaring the SAME number — same "two independent implementations
+// of the SAME deterministic formula... without an import" ENGINE PURITY LAW discipline
+// dpRoomLightCandidates already keeps mirroring theater-interior.js's itrRoomLightCandidates (this
+// file's own header note).
+const DP_CAM_YAW_OFFSET_DEG = 45;
+const DP_CAM_DIR_X = Math.sin((DP_CAM_YAW_OFFSET_DEG * Math.PI) / 180);
+const DP_CAM_DIR_Z = Math.cos((DP_CAM_YAW_OFFSET_DEG * Math.PI) / 180);
+
+// a cell sits on the CAMERA SIDE of the room's own center (a cheap proxy for "in front of the
+// walkable/combat space, from the canonical viewing angle") when its offset from the room's center
+// projects positive onto the canonical view direction — the SAME rx*dirX+rz*dirZ>0 "near side" test
+// theater-boot.js's own CUTAWAY WALLS section runs against a room's perimeter walls (that file's own
+// header comment), just applied to a candidate DRESSING cell instead of a wall instance.
+function dpIsCameraSideOfRoom(x, y, room) {
+  const centerX = room.x + (room.w - 1) / 2, centerY = room.y + (room.d - 1) / 2;
+  const rx = x - centerX, rz = y - centerY;
+  return (rx * DP_CAM_DIR_X + rz * DP_CAM_DIR_Z) > 0;
+}
+
 // ─── light-seed co-location (independently mirrors theater-interior.js's itrRoomLightCandidates/
 // itrRoomLightCount/itrRoomLights EXACTLY — same candidate list, same count thresholds, same
 // "u3-light:"+seed+":"+segNum+":"+x","+y hash, same seeded Fisher-Yates — so this file's picks land
@@ -320,6 +347,12 @@ function dpPlaceRoom(room, plan, roster, rng) {
 
   const shuffledPlaceable = dpShuffle(placeable, rng);
   const wallAdjacent = dpShuffle(shuffledPlaceable.filter((c) => dpAdjacentToWall(c.x, c.y, plan)), rng);
+  // BW2-1b item 2 (placement bias): the FAR-side subset of wallAdjacent — never on the canonical
+  // camera side of the room's own center (dpIsCameraSideOfRoom, above) — is the blocker step's
+  // PREFERRED candidate list below; a slender/skewed room with no far-side wall-adjacent cell free
+  // still falls back to the full wallAdjacent list (never a stricter placement guarantee than
+  // pre-unit — a blocker still lands, just without the bias, in that degenerate case).
+  const wallAdjacentFarSide = wallAdjacent.filter((c) => !dpIsCameraSideOfRoom(c.x, c.y, room));
 
   // 1) light-primary cards, co-located with the room's own light seeds (never re-derived off
   // shuffledPlaceable — these positions come from dpRoomLightCells, the shared-formula co-location).
@@ -357,8 +390,11 @@ function dpPlaceRoom(room, plan, roster, rng) {
   if (chosenFocal) chosenFocal.focal = true;
 
   // 3) one blocker, wall-adjacent only (never placed if no wall-adjacent cell remains free).
+  // BW2-1b item 2: prefer the FAR-side subset first (never seeds a blocker between the canonical
+  // camera and this room's own combat space) — falls back to the full wallAdjacent list only when
+  // the far side has nothing free, so a blocker still places rather than silently vanishing.
   if (blockerRoster.length) {
-    const cell = takeCell(wallAdjacent);
+    const cell = takeCell(wallAdjacentFarSide) || takeCell(wallAdjacent);
     if (cell) {
       const entry = dpPickRoster(blockerRoster, rng);
       out.push({ slug: entry.slug, x: cell.x, y: cell.y, primary: entry.primary, cardKind: entry.size, roomSegNum: room.segNum });

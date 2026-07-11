@@ -1589,7 +1589,10 @@ const DM_EVENT_SOURCES = ["detected","declared","player","branch"];
    accept fields are tagged (the fold has already dropped anything else); an absent field stays absent
    (never injected as null). Metadata only — the DM contract generator reads accept/alias, ignores num. */
 const DM_EVENT_FIELDS = {
-  hp_changed:        { accept:["delta","crit","meleeAdjacent","nonlethal"], num:["delta"] },
+  // MF-3b (BEAUTY-WAVE-4B, 2026-07-11): `attacker` threads the attacking unit's id (a foe fid, or
+  // "pc") onto the hp ledger entry so the theater layer can wire hit-stop/recoil to the actual
+  // attacker — an id passthrough, never num-coerced. Absent -> hit-stop/recoil stay dormant (graceful).
+  hp_changed:        { accept:["delta","crit","meleeAdjacent","nonlethal","attacker"], num:["delta"] },
   death_save:        { accept:["d20"], num:["d20"] },
   temp_hp:           { accept:["n"], num:["n"] },
   combat_start:      { accept:["foes","objectiveRef","scene","segment","segmentId"] },
@@ -1908,7 +1911,10 @@ function applyEvent(w,e){
       }
       const dmgToHp=(delta<0)?Math.max(0,(-delta)-absorbed):0;   // damage that actually reached HP (post-temp)
       const sign=r.delta>0?"healed "+r.delta:(delta<0?"took "+(-delta)+" damage"+(absorbed?(" ("+absorbed+" soaked by temp HP)"):""):"unchanged");
-      addLedger(w,"outcome",{kind:"hp",pc:t.c.name,delta:r.delta,tempAbsorbed:absorbed,from:r.from,to:r.to,max:r.max,dropped:r.dropped,source:src},
+      // MF-3b: forward attacker/crit onto the ledger entry (both already in `p` — crit via the
+      // pre-existing accept-list entry, attacker via the one just added above) so theaterFxFromLedger's
+      // case "hp" (src/ui/theater-verbs.js) can wire hit-stop/recoil/crit-response to a real attacker.
+      addLedger(w,"outcome",{kind:"hp",pc:t.c.name,delta:r.delta,tempAbsorbed:absorbed,from:r.from,to:r.to,max:r.max,dropped:r.dropped,attacker:p.attacker,crit:p.crit,source:src},
         "✦ "+t.c.name+" "+sign+" — HP "+r.from+"→"+r.to+"/"+r.max+(r.dropped?" (down)":"")+".");
       const out={ok:true,hp:r.to+"/"+r.max,dropped:r.dropped,tempAbsorbed:absorbed};
 
@@ -2292,7 +2298,8 @@ function applyEvent(w,e){
       addLedger(w,"outcome",{kind:"opportunity-attack",foe:foe.name,fid:foe.fid,hit:res.hit,damage:res.damage,
         natural:res.natural,total:res.total,targetAC:res.targetAC,source:src},
         "⚔ "+foe.name+" gets an opportunity attack — "+(res.hit?("hits for "+res.damage+" damage"):"misses")+".");
-      if(res.hit && res.damage>0) applyEvent(w,{type:"hp_changed",payload:{delta:-res.damage,crit:res.crit},source:"detected"});
+      // MF-3b: foe.fid is the acting attacker, genuinely in scope at this resolve site.
+      if(res.hit && res.damage>0) applyEvent(w,{type:"hp_changed",payload:{delta:-res.damage,crit:res.crit,attacker:foe.fid},source:"detected"});
       return Object.assign({ok:true},res);
     }
 
@@ -2402,6 +2409,8 @@ function applyEvent(w,e){
         const r=resolveFall(p.feet);
         addLedger(w,"outcome",{kind:"hazard",pc:t.c.name,hazard:"fall",feet:p.feet,damage:r.total,source:src},
           "☠ "+t.c.name+" falls "+p.feet+" ft — "+r.total+" bludgeoning damage.");
+        // MF-3b honesty ledger: a fall/hazard has no single attacker id in scope — `attacker` stays
+        // unset by design (hit-stop/recoil correctly stay dormant here, per BEAUTY-WAVE-4B §B).
         if(r.total>0) applyEvent(w,{type:"hp_changed",payload:{delta:-r.total},source:"detected"});
         return {ok:true,damage:r.total};
       }
@@ -3059,7 +3068,8 @@ function applyEvent(w,e){
         // BATTLE-THEATER §4 hook site 3a/6: theaterFxFromLedger maps kind:"foe-turn" to `strike` (the
         // foe swinging at the PC — miss=overshoot per §4's letter, same as the PC's own `attack`).
         if(typeof cmTheaterNotify==="function") cmTheaterNotify("foe-turn",{fid:foe.fid,hit:res.hit,crit:res.crit,magnitude:res.magnitude?res.magnitude.magnitude:null});
-        if(res.hit && res.damage>0) applyEvent(w,{type:"hp_changed",payload:{delta:-res.damage,crit:res.crit},source:"detected"});
+        // MF-3b: foe.fid is the acting attacker, genuinely in scope at this resolve site.
+        if(res.hit && res.damage>0) applyEvent(w,{type:"hp_changed",payload:{delta:-res.damage,crit:res.crit,attacker:foe.fid},source:"detected"});
         // a foe crit's magnitude rides crit_outcome too — target:"pc" so a magnitude>=8 killing blow
         // against the PC resolves through the SAME obliteration gate (confirmed down + magnitude>=8).
         if(res.magnitude && typeof applyEvent==="function"){
@@ -3090,7 +3100,8 @@ function applyEvent(w,e){
       // BATTLE-THEATER §4 hook site 3b/6: same mapping as the p.action-bypass path above, for the
       // autoplay resolution branch.
       if(typeof cmTheaterNotify==="function") cmTheaterNotify("foe-turn",{fid:foe.fid,hit:res.hit,crit:res.crit,magnitude:res.magnitude?res.magnitude.magnitude:null});
-      if(res.hit && res.damage>0) applyEvent(w,{type:"hp_changed",payload:{delta:-res.damage,crit:res.crit},source:"detected"});
+      // MF-3b: foe.fid is the acting attacker, genuinely in scope at this resolve site.
+      if(res.hit && res.damage>0) applyEvent(w,{type:"hp_changed",payload:{delta:-res.damage,crit:res.crit,attacker:foe.fid},source:"detected"});
       if(res.magnitude && typeof applyEvent==="function"){
         applyEvent(w, {type:"crit_outcome", payload:Object.assign({target:"pc"}, res.magnitude), source:src});
       }

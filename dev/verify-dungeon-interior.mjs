@@ -676,6 +676,7 @@ try {
   result.requestedCount = built.requested;
   const g = built.group.children; // same order as the pieces array (forEach preserves order)
   result.medHeight = g[0] && g[0].children[0].geometry.parameters.height;
+  result.medWidth = g[0] && g[0].children[0].geometry.parameters.width;
   result.largeHeight = g[1] && g[1].children[0].geometry.parameters.height;
   result.knightHeight = g[2] && g[2].children[0].geometry.parameters.height;
   result.flooredHeight = g[3] && g[3].children[0].geometry.parameters.height;
@@ -683,6 +684,16 @@ try {
   result.flooredX = g[3] && g[3].position.x;
   result.flooredZ = g[3] && g[3].position.z;
   result.titanHeight = g[4] && g[4].children[0].geometry.parameters.height;
+  // BW2-2: independent-recompute material for check 25 below — the raw FLOOR CONTACT LAW constants
+  // (never the law's own functions, so the outer assertion isn't just re-running the code under test).
+  result.floorContactLaw = Object.assign({}, T._floorContactLawForTest);
+  delete result.floorContactLaw.interiorFloorTopMapFrom; // functions don't JSON-serialize meaningfully — drop, the outer test only wants the numeric constants
+  delete result.floorContactLaw.interiorFloorTopAt;
+  delete result.floorContactLaw.interiorStandeeContactY;
+  // BW2-2: standee base mesh — children[1] of the piece group (children[0] is the sprite mesh, byte-
+  // identical index to before this unit — the base is APPENDED, never inserted).
+  result.medBaseRadius = g[0] && g[0].children[1] && g[0].children[1].geometry.parameters.radiusTop;
+  result.medBaseHeight = g[0] && g[0].children[1] && g[0].children[1].geometry.parameters.height;
 
   result.oversizeWarned = warnings.some((w) => w.includes("qa: oversize-clamped"));
   result.ok = true;
@@ -780,10 +791,25 @@ group("23 — FIXED: interiorBuildPieces sizes through TRUE-SCALE (HUMAN_TRUE_HE
     ok(green.largeHeight >= 2.0 && green.largeHeight <= 2.4, `large (scaleTrue=2.0) height ${green.largeHeight} in [2.0, 2.4]`);
     ok(green.knightHeight <= 1.3, `loop-gate knight (piece-level scaleVsHuman override, no registry scaleTrue) height ${green.knightHeight} <= 1.3`);
 
-    group("25 — floor-line offset math: ground-contact line (not raw image-bottom) sits on y=-0.5");
-    const expectedY = -0.5 - 0.1 * green.flooredHeight;
-    ok(Math.abs(green.flooredY - expectedY) < 1e-9, `floored piece (entry.floor=0.1, height=${green.flooredHeight}): group.position.y=${green.flooredY} matches -0.5 - floor*height=${expectedY}`);
+    group("25 — BW2-2 FLOOR CONTACT LAW: ground-contact line (not raw image-bottom) sits on the cell's own derived floor top + its plinth base, never the pre-BW2-2 hardcoded y=-0.5");
+    // independent recompute off the raw exposed constants (never the law's own functions) — this test
+    // seam call passes no floorTopMap, so every cell falls back to ITR_FLOOR_BASE_Y+ITR_FLOOR_HEIGHT_FALLBACK.
+    const law = green.floorContactLaw;
+    ok(law && typeof law.ITR_FLOOR_BASE_Y === "number" && typeof law.INTERIOR_BASE_HEIGHT === "number",
+      "the floor-contact-law constants are exposed on window.Theater._floorContactLawForTest");
+    const fallbackFloorTop = law.ITR_FLOOR_BASE_Y + law.ITR_FLOOR_HEIGHT_FALLBACK;
+    const contactY = fallbackFloorTop + law.INTERIOR_BASE_Y_OFFSET + law.INTERIOR_BASE_HEIGHT;
+    const expectedY = contactY - 0.1 * green.flooredHeight;
+    ok(Math.abs(green.flooredY - expectedY) < 1e-9,
+      `floored piece (entry.floor=0.1, height=${green.flooredHeight}): group.position.y=${green.flooredY} matches (floorTop=${fallbackFloorTop} + baseOffset+baseHeight) - floor*height = ${expectedY}`);
+    ok(expectedY > -0.5, `RED-FIRST proof: the new contact line (${expectedY}) sits ABOVE the pre-BW2-2 hardcoded -0.5 — the old convention buried every standee by (fallback-derivation) ${(expectedY - (-0.5 - 0.1 * green.flooredHeight)).toFixed(3)} world units`);
     ok(green.flooredX === 2 && green.flooredZ === 3, `floored piece keeps the origin-shifted cellX/cellY placement (x=${green.flooredX} z=${green.flooredZ})`);
+
+    group("25b — BW2-2 STANDEE BASES: a plinth cylinder under every piece, radius 0.42x rendered width, height ~0.04");
+    ok(Math.abs(green.medBaseHeight - 0.04) < 1e-9, `medium piece's base cylinder height ${green.medBaseHeight} === INTERIOR_BASE_HEIGHT (0.04)`);
+    const expectedBaseRadius = green.medWidth * 0.42;
+    ok(Math.abs(green.medBaseRadius - expectedBaseRadius) < 1e-9,
+      `medium piece's base cylinder radius ${green.medBaseRadius} === rendered width (${green.medWidth}) x 0.42 = ${expectedBaseRadius}`);
 
     group("26 — oversize clamp: wallHeightBase*0.95 cap + qa:oversize-clamped console.warn");
     ok(Math.abs(green.titanHeight - 2.4 * 0.95) < 1e-9, `titan (scaleTrue=100) clamps to wallHeightBase(2.4)*0.95=${2.4 * 0.95} (got ${green.titanHeight})`);
@@ -1018,7 +1044,13 @@ try {
   result.pieceCount = pieces.length;
   result.blobCount = blobMeshes.length;
   result.blobY = blobMeshes[0] && blobMeshes[0].position.y;
-  result.blobRadius = blobMeshes[0] && blobMeshes[0].geometry.parameters.radius;
+  // BW2-2 addendum: the contact blob is now a soft-gradient PlaneGeometry (radius encoded as half its
+  // width/height, a square quad), not the old flat CircleGeometry — parameters.radius no longer exists.
+  result.blobRadius = blobMeshes[0] && blobMeshes[0].geometry.parameters.width / 2;
+  result.floorContactLaw = Object.assign({}, T._floorContactLawForTest);
+  delete result.floorContactLaw.interiorFloorTopMapFrom;
+  delete result.floorContactLaw.interiorFloorTopAt;
+  delete result.floorContactLaw.interiorStandeeContactY;
 
   const dressing = [
     { slug: "crate", x: 0, y: 0, cardKind: "small" },
@@ -1055,8 +1087,13 @@ group("32 — every interior piece has exactly one contact blob (VP7)");
     fail++; console.error("  FAIL: VP7 scenario threw: " + green.error);
   } else {
     ok(green.blobCount === green.pieceCount, `blob count (${green.blobCount}) === piece count (${green.pieceCount}) — exactly one blob per piece`);
-    ok(Math.abs(green.blobY - (-0.495)) < 1e-9, `blob y=${green.blobY} matches the spec's -0.495 (under the card, above the y=-0.5 floor)`);
-    ok(green.blobRadius > 0, `blob radius (${green.blobRadius}) derived from the piece's rendered texture width x 0.4, positive`);
+    // BW2-2: the pool sits off THIS cell's own real floor top (independent recompute from the raw
+    // exposed constants — no floorTopMap passed in this scenario, so every cell falls back), not the
+    // pre-BW2-2 hardcoded -0.495.
+    const law2 = green.floorContactLaw;
+    const expectedBlobY = (law2.ITR_FLOOR_BASE_Y + law2.ITR_FLOOR_HEIGHT_FALLBACK) + law2.INTERIOR_POOL_Y_OFFSET;
+    ok(Math.abs(green.blobY - expectedBlobY) < 1e-9, `blob y=${green.blobY} matches the FLOOR CONTACT LAW's derived floor top + pool offset (${expectedBlobY}), not the pre-BW2-2 hardcoded -0.495`);
+    ok(green.blobRadius > 0, `blob radius (${green.blobRadius}) derived from the piece's rendered texture width x 0.4 x 1.6 (footprint x feather), positive`);
 
     group("33 — blob under corpse persists (fall-death tip-over never moves the blob)");
     ok(green.blobYAfterTip === green.blobY, `blob y unchanged after simulated fall-death tip (${green.blobYAfterTip} === ${green.blobY}) — the blob is a sibling of the piece group, not a descendant of its tilting wrapper`);

@@ -162,6 +162,15 @@ const CAM_YAW_OFFSET_DEG = 45;
 // rotation step (verify-battle-stage's fixture-2 non-square-room overflow gate, G9 camera-yaw fix,
 // still holds — this only rescales viewSize uniformly, it doesn't touch the yaw-aware footprint math).
 const CAM_FIT_MARGIN = 0.94;
+// BEAUTY-WAVE-2.md BW2-1 (THE BEAT CAMERA): placeCamera's own degenerate-box floor on hx/hz — was a
+// flat 2 for every board (tabletop AND interior). The tabletop's own boards are never intentionally
+// smaller than that, so 2 stays its floor unchanged (OUT OF SCOPE: "the flat tabletop"). The interior
+// channel's "beat"/CLOSE-room fits are DESIGNED to be tight (a small room or a melee huddle IS the
+// point) — a flat 2 silently re-inflated a small room's fit back out no matter how tight
+// INTERIOR_ROOM_FIT_PAD/INTERIOR_BEAT_MARGIN_CELLS were tuned, so the interior channel gets its own,
+// smaller floor (still nonzero — guards the same degenerate near-zero-footprint collapse the
+// tabletop's floor exists for, just at the interior channel's own real scale).
+const INTERIOR_FIT_HALF_FLOOR = 0.75;
 const TILE_SIZE = 1;          // world units per abstract tile (theater-data's x/z are already tile-indexed)
 const TILE_GAP = 0.04;        // thin void seam between tile columns (reads as grid without a wireframe)
 // G5 ROUND-1 (ruling 2): was the flat black blob-shadow's opacity; the base disc that REPLACES it
@@ -3196,6 +3205,17 @@ function createTheaterState(){
     // gets a fresh bias reading, not the previous board's zoom carried over at the wrong scale).
     zoomLevel: 1,
     zoomBiasBandCount: null, // last band-count shape the small-board bias was computed against (setBoard)
+    // BEAUTY-WAVE-2.md BW2-1 (THE BEAT CAMERA): tallest participant's real world height for the
+    // CURRENT board, read by placeCamera's screenHalfHeight term (0 = no correction, the flat
+    // tabletop's own permanent value — setBoard resets this every call; only setInteriorBoard computes
+    // a real number, from data.pieces' true-scale heights).
+    interiorFitMaxHeight: 0,
+    // BEAUTY-WAVE-2.md BW2-1: which channel last mounted a board — setBoard/setInteriorBoard each set
+    // this to their own kind. placeCamera's hx/hz degenerate-box FLOOR is smaller for the interior
+    // channel (its "beat"/CLOSE-room fits are DESIGNED to be tight — a small room or huddle is the
+    // whole point) than the flat tabletop's own floor (untouched: OUT OF SCOPE, that floor's pre-unit
+    // value keeps protecting the combat-zone-grid board exactly as before).
+    isInteriorBoard: false,
     env: null,           // last board's env key — drives void/fog color
     textures: {},         // semantic key -> loaded+cached THREE.Texture (setTextures)
     psxEnabled: true,     // T1.5 preview-only toggle (dev/theater-preview.html's "PSX/clean" button);
@@ -3323,8 +3343,14 @@ function placeCamera(){
   const rad = (CAM_ELEV_DEG * Math.PI) / 180;
   const yaw = (S.rotationStep * 90 * Math.PI) / 180 + (CAM_YAW_OFFSET_DEG * Math.PI) / 180;
 
-  const hx = Math.max(2, S.boardHalfX || S.boardHalfExtent || 5);
-  const hz = Math.max(2, S.boardHalfZ || S.boardHalfExtent || 5);
+  // BEAUTY-WAVE-2.md BW2-1: the degenerate-box floor below is smaller for the interior channel — a
+  // "beat"/CLOSE-room fit is DESIGNED to be tight (a small room or huddle is the whole point), and the
+  // flat tabletop's pre-unit floor (2) was already generous enough that this unit's tighter interior
+  // pads/margins couldn't take effect on a small room/cluster without it. The tabletop's own floor
+  // stays exactly 2 (OUT OF SCOPE: "the flat tabletop" — S.isInteriorBoard is false there, always).
+  const halfFloor = S.isInteriorBoard ? INTERIOR_FIT_HALF_FLOOR : 2;
+  const hx = Math.max(halfFloor, S.boardHalfX || S.boardHalfExtent || 5);
+  const hz = Math.max(halfFloor, S.boardHalfZ || S.boardHalfExtent || 5);
   // Screen-right axis (ground-plane, perpendicular to the camera's horizontal look direction) and the
   // ground-plane component of the screen-up axis (the camera's horizontal look direction itself, whose
   // contribution to screen-vertical is foreshortened by sin(elevation) — see camDist/y below for the
@@ -3332,7 +3358,20 @@ function placeCamera(){
   const cosYaw = Math.cos(yaw), sinYaw = Math.sin(yaw);
   const screenHalfWidth = hx * Math.abs(cosYaw) + hz * Math.abs(sinYaw);
   const screenHalfDepth = hx * Math.abs(sinYaw) + hz * Math.abs(cosYaw);
-  const screenHalfHeight = screenHalfDepth * Math.sin(rad);
+  // BEAUTY-WAVE-2.md BW2-1 (THE BEAT CAMERA): the floor-footprint-only term above (screenHalfDepth *
+  // sin(elevation)) is a fine vertical-coverage PROXY for a generously-padded ROOM fit (the standing
+  // creatures inside it are always much shorter than the room's own half-extent, so the proxy has
+  // slack to spare) — but it contains NO actual standee-height term, so a "beat" fit tight enough to
+  // satisfy law 2c's floor-cluster+1-cell-margin on its own can still crop a tall participant's HEAD
+  // (found live: an Ogre Zombie true-scaling well above HUMAN_TRUE_HEIGHT overflowed a tight beat
+  // frame even though its FLOOR cell was correctly inside the fit). A vertical world-space segment of
+  // height H, viewed from elevation `rad`, projects to a screen-vertical extent of H*cos(rad) (the
+  // complement of updateSpriteBillboardYaw's own tilt-compensation cosine — that function tilts a
+  // BILLBOARD's mesh geometry to counteract this exact foreshortening for the rendered quad; this is
+  // the same relationship applied to the camera's OWN frustum-containment math instead).
+  // S.interiorFitMaxHeight (setInteriorBoard) is the tallest participant's real world height for the
+  // CURRENT board, 0 for the flat tabletop (setBoard resets it) — additive: a 0 term changes nothing.
+  const screenHalfHeight = screenHalfDepth * Math.sin(rad) + (S.interiorFitMaxHeight || 0) * Math.cos(rad);
   // half: the larger of the two screen-space half-extents the fit needs to cover — mirrors the old
   // scalar's role (the single number viewSizeForHeight/Width fit against) but now yaw-aware.
   const half = Math.max(screenHalfWidth, screenHalfHeight);
@@ -3365,6 +3404,37 @@ function placeCamera(){
   // is the one this function fits+positions, no separate mode variable to keep in sync.
   const isPersp = !!S.camera.isPerspectiveCamera;
 
+  // BEAUTY-WAVE-2.md BW2-1 (THE BEAT CAMERA): the screenHalfWidth/Height support-function estimate
+  // above is a fast, CORRECT-FOR-A-ROUGHLY-SQUARE-BOX approximation — every pre-unit caller (a room
+  // rect, or the whole board) stayed square-ish enough (and generously padded enough) that it always
+  // held. A "beat" participant cluster can be ELONGATED (a melee lined up along one axis is a common,
+  // realistic shape) and/or carry a tall outlier (S.interiorFitMaxHeight) — found live: an elongated
+  // beat cluster under-fit even at height 0 (a pre-existing gap in the approximation, just never
+  // exercised by a fit tight enough to expose it before "beat" mode existed). Rather than re-deriving
+  // a closed-form fix for every box shape, verify the SAME 8 corners interiorFrustumCheck itself
+  // checks (world-axis-aligned box at S.boardCenter, half-extents hx/hz, y in
+  // [0, S.interiorFitMaxHeight]) against the camera THIS function is about to commit to, and push it
+  // back (persp: distance: ortho: viewSize) until every corner actually lands inside NDC [-1,1] — a
+  // short fixed-point correction, not a second fit formula. Costs nothing when the estimate already
+  // holds (the common case: room mode, or a compact/square beat cluster) since the loop exits on its
+  // first pass.
+  const fitBoxCx = (S.boardCenter && typeof S.boardCenter.x === "number") ? S.boardCenter.x : 0;
+  const fitBoxCz = (S.boardCenter && typeof S.boardCenter.z === "number") ? S.boardCenter.z : 0;
+  const fitBoxH = S.interiorFitMaxHeight || 0;
+  const fitCorners = [];
+  [-hx, hx].forEach((dx) => [-hz, hz].forEach((dz) => [0, fitBoxH].forEach((dy) => {
+    fitCorners.push(new THREE.Vector3(fitBoxCx + dx, dy, fitBoxCz + dz));
+  })));
+  function worstCornerNdc(){
+    S.camera.updateMatrixWorld();
+    let worst = 0;
+    fitCorners.forEach((p) => {
+      const v = p.clone().project(S.camera);
+      worst = Math.max(worst, Math.abs(v.x), Math.abs(v.y));
+    });
+    return worst;
+  }
+
   if(isPersp){
     // FRAMING LAW 2c: fit the ACTION CLUSTER (participants + margin) fully in frustum. Under a FIXED
     // FOV, the fit variable is CAMERA DISTANCE, not a frustum half-extent — solve the distance along
@@ -3378,18 +3448,41 @@ function placeCamera(){
     // half*1.05 floor: guards the degenerate near-zero-elevation/near-zero-footprint case (distForHeight
     // could otherwise collapse toward 0 and place the camera inside the board) — mirrors the ortho
     // branch's own `Math.max(half, hx, hz)` floor one function down.
-    const camDist = Math.max(distForHeight, distForWidth, half * 1.05, hx, hz) * (S.zoomLevel || 1);
+    let autoFitDist = Math.max(distForHeight, distForWidth, half * 1.05, hx, hz);
     S.viewSize = null; // no orthographic half-height under perspective; harnesses branch on isPerspectiveCamera instead
 
-    const horiz = Math.cos(rad) * camDist;
-    const y = Math.sin(rad) * camDist;
-    const x = Math.sin(yaw) * horiz;
-    const z = Math.cos(yaw) * horiz;
-    S.camera.position.set(x, y, z);
-    S.camera.lookAt(S.boardCenter || new THREE.Vector3(0, 0, 0));
-
+    function placeAt(dist){
+      const horiz = Math.cos(rad) * dist;
+      const y = Math.sin(rad) * dist;
+      const x = Math.sin(yaw) * horiz;
+      const z = Math.cos(yaw) * horiz;
+      S.camera.position.set(x, y, z);
+      S.camera.lookAt(S.boardCenter || new THREE.Vector3(0, 0, 0));
+    }
     S.camera.aspect = aspect;
     S.camera.near = 0.1;
+
+    // exact-containment correction (see this function's own header comment above), run at the
+    // UN-ZOOMED auto-fit distance — THEATER-ZOOM-SPREAD's own manual zoom-in is INTENTIONALLY allowed
+    // to crop past the auto-fit (that's what zooming in means); correcting post-zoom would instead
+    // fight the player's own zoom lever, defeating it. NDC magnitude scales ~1/distance for a fixed
+    // FOV/lookAt, so scaling distance by the worst corner's own overflow converges in a couple of
+    // passes; capped iterations so a pathological/degenerate box can never spin this into a loop.
+    placeAt(autoFitDist);
+    S.camera.far = Math.max(100, autoFitDist + FOG_FAR + 20);
+    S.camera.updateProjectionMatrix();
+    for(let pass = 0; pass < 6; pass++){
+      const worst = worstCornerNdc();
+      if(worst <= 0.999) break;
+      autoFitDist *= worst / 0.999;
+      placeAt(autoFitDist);
+      S.camera.far = Math.max(100, autoFitDist + FOG_FAR + 20);
+      S.camera.updateProjectionMatrix();
+    }
+
+    // NOW apply the player's own zoom multiplier on top of the corrected auto-fit distance.
+    const camDist = autoFitDist * (S.zoomLevel || 1);
+    placeAt(camDist);
     S.camera.far = Math.max(100, camDist + FOG_FAR + 20);
     S.camera.updateProjectionMatrix();
 
@@ -3399,9 +3492,6 @@ function placeCamera(){
     }
     return;
   }
-
-  const viewSize = fittedViewSize * (S.zoomLevel || 1);
-  S.viewSize = viewSize;
 
   // camera distance scales with viewSize so a big board doesn't clip through a fixed-distance camera
   // (T1 used a flat CAM_DIST=26; T1.5 makes it board-relative so the fit holds for any room size).
@@ -3415,12 +3505,37 @@ function placeCamera(){
   S.camera.position.set(x, y, z);
   S.camera.lookAt(S.boardCenter || new THREE.Vector3(0, 0, 0));
 
+  // exact-containment correction (see this function's own header comment above), run at the UN-ZOOMED
+  // auto-fit viewSize first — same "don't fight the player's own zoom lever" discipline the persp
+  // branch's own comment explains. An orthographic camera's NDC framing is governed by left/right/
+  // top/bottom, NOT distance — scale viewSize (and left/right proportionally) by the worst corner's
+  // own overflow instead of moving the camera.
+  let autoFitViewSize = fittedViewSize;
+  S.camera.left = -autoFitViewSize * aspect;
+  S.camera.right = autoFitViewSize * aspect;
+  S.camera.top = autoFitViewSize;
+  S.camera.bottom = -autoFitViewSize;
+  S.camera.far = Math.max(100, camDist + FOG_FAR + 20);
+  S.camera.updateProjectionMatrix();
+  for(let pass = 0; pass < 6; pass++){
+    const worst = worstCornerNdc();
+    if(worst <= 0.999) break;
+    autoFitViewSize *= worst / 0.999;
+    S.camera.left = -autoFitViewSize * aspect;
+    S.camera.right = autoFitViewSize * aspect;
+    S.camera.top = autoFitViewSize;
+    S.camera.bottom = -autoFitViewSize;
+    S.camera.updateProjectionMatrix();
+  }
+
+  // NOW apply the player's own zoom multiplier on top of the corrected auto-fit viewSize.
+  const viewSize = autoFitViewSize * (S.zoomLevel || 1);
   S.camera.left = -viewSize * aspect;
   S.camera.right = viewSize * aspect;
   S.camera.top = viewSize;
   S.camera.bottom = -viewSize;
-  S.camera.far = Math.max(100, camDist + FOG_FAR + 20);
   S.camera.updateProjectionMatrix();
+  S.viewSize = viewSize;
 
   if(S.scene && S.scene.fog){
     // fog distances scale with the fit too, so a huge board's far edge still just "softens" instead
@@ -4359,6 +4474,12 @@ function setBoard(data){
   // (no product path sets it), same "one place turns it down, this is the one place it turns back up"
   // discipline the shadowMap restore just above already keeps.
   if(S.hemiLight) S.hemiLight.intensity = HEMI_INTENSITY_DEFAULT;
+  // BEAUTY-WAVE-2.md BW2-1: the flat tabletop's camera fit carries NO standee-height correction term
+  // (placeCamera's own screenHalfHeight addition) — only setInteriorBoard ever computes a nonzero
+  // S.interiorFitMaxHeight, so this is the one place it resets back to the tabletop's permanent 0,
+  // mirroring the orthoCamera/hemiLight restores just above.
+  S.interiorFitMaxHeight = 0;
+  S.isInteriorBoard = false; // placeCamera's own tabletop-vs-interior half-floor split
   drainTweens(S); // A2: force-complete every live tween BEFORE tearing down the board/FX it may reference
   clearGroup(S.fxGroup); // A2: a new board must never inherit the old board's still-animating debris/glyphs
   S.lastBoard = data; // P1' WHOLE-OBJECT WIRING (§4 step 8): replay target for the async post-load re-render
@@ -5093,6 +5214,92 @@ function interiorBuildDressing(dressing, cx, cz){
   return group;
 }
 
+/* BEAUTY-WAVE-2.md BW2-1 (THE BEAT CAMERA) — law 2c wired: "the camera fits the ACTION CLUSTER"
+   (combat beats) vs. "frame the room but CLOSE" (exploration). Pre-unit, setInteriorBoard's camera
+   fit was ALWAYS the room's own focusRect + a flat 2-world-unit pad, aimed at boardCenter=(0,0,0) —
+   correct for "frame the room" but with too loose a pad to read as CLOSE (measured well under the
+   law's own 12%-of-frame-height floor for a medium standee, dev/battle-gate/capture-beat-camera.mjs's
+   own red-first run), and with NO path at all for "fit the participants, not the room" (combat beats
+   would inherit the identical loose room fit regardless of how few combatants are on screen).
+
+   data.cameraFit is a plain caller-set field (data.pieces/data.dressing/data.lightProfile's own
+   established convention on the board object — no setInteriorBoard signature change):
+     absent / {mode:"room"}  — fit `fit` (the room rect, or the whole board footprint with no focus
+                                room) with INTERIOR_ROOM_FIT_PAD world units of margin, aimed at the
+                                room's own center (boardCenter stays (0,0,0) in the already cx/cz-
+                                shifted coordinate frame every mounted instance uses) — CLOSER than
+                                the pre-unit pad, same shape otherwise.
+     {mode:"beat", cells:[{x,y},...], marginCells?} — fit the PARTICIPANT CLUSTER: the bounding box of
+                                `cells` (raw, PRE-shift cell coordinates — the SAME space data.pieces[
+                                ].cellX/cellY and data.focusRect already use) + marginCells (default
+                                INTERIOR_BEAT_MARGIN_CELLS = 1, law 2c's own "+1 cell margin"), aimed
+                                at the cluster's own center — which may sit off the room's center, so
+                                boardCenter is offset accordingly (still in the cx/cz-shifted frame:
+                                clusterCenter - cx/cz). Falls back to "room" mode if `cells` is
+                                missing/empty (never a thrown/blank fit).
+   Geometry (floor/wall/pieces/dressing mount, all keyed off cx/cz above) is COMPLETELY UNTOUCHED by
+   this — only the CAMERA's aim point and half-extents change. Returns {center, halfX, halfZ}, the
+   exact three fields setInteriorBoard assigns to S.boardCenter/S.boardHalfX/S.boardHalfZ. */
+const INTERIOR_ROOM_FIT_PAD = -0.5;    // world units of margin around the room rect — was a flat "+2"
+const INTERIOR_BEAT_MARGIN_CELLS = 1;  // law 2c: "participants + 1 cell margin"
+function interiorCameraFitFor(cameraFit, fit, cx, cz){
+  const mode = cameraFit && cameraFit.mode === "beat" ? "beat" : "room";
+  if(mode === "beat" && Array.isArray(cameraFit.cells) && cameraFit.cells.length){
+    let minX = Infinity, maxX = -Infinity, minZ = Infinity, maxZ = -Infinity;
+    cameraFit.cells.forEach(function(c){
+      if(!c) return;
+      const px = (typeof c.x === "number") ? c.x : 0;
+      const pz = (typeof c.y === "number") ? c.y : ((typeof c.z === "number") ? c.z : 0);
+      if(px < minX) minX = px; if(px > maxX) maxX = px;
+      if(pz < minZ) minZ = pz; if(pz > maxZ) maxZ = pz;
+    });
+    if(isFinite(minX) && isFinite(maxX) && isFinite(minZ) && isFinite(maxZ)){
+      const margin = (typeof cameraFit.marginCells === "number" && cameraFit.marginCells >= 0)
+        ? cameraFit.marginCells : INTERIOR_BEAT_MARGIN_CELLS;
+      const clusterCx = (minX + maxX) / 2, clusterCz = (minZ + maxZ) / 2;
+      return {
+        center: new THREE.Vector3(clusterCx - cx, 0, clusterCz - cz),
+        halfX: (maxX - minX) / 2 + margin,
+        halfZ: (maxZ - minZ) / 2 + margin
+      };
+    }
+    // cells present but degenerate (every entry missing x/y) — fall through to "room" below rather
+    // than aim at a NaN/zero-size cluster.
+  }
+  return {
+    center: new THREE.Vector3(0, 0, 0),
+    halfX: (fit.maxX - fit.minX) / 2 + INTERIOR_ROOM_FIT_PAD,
+    halfZ: (fit.maxZ - fit.minZ) / 2 + INTERIOR_ROOM_FIT_PAD
+  };
+}
+
+// BEAUTY-WAVE-2.md BW2-1 — see placeCamera's screenHalfHeight comment for the "why". An explicit
+// data.cameraFit.maxHeight (world units) always wins; else the tallest data.pieces entry's real
+// TRUE-SCALE height (spriteEntryFor's scaleTrue, or a piece's own scaleVsHuman override — the SAME
+// resolution order interiorSpriteBillboard uses, just without its wallHeightCap clamp: the fit should
+// reserve room for a creature's full intended height, not the height it gets clipped to for ceiling
+// clearance). Falls back to HUMAN_TRUE_HEIGHT (an undressed-human default, matching every other
+// "no data" default in this render channel) when there are no pieces at all, or none resolve against
+// the sprite registry — never zero (a zero here would silently re-introduce the pre-unit crop bug on
+// the very first board that ever supplies pieces before the registry has loaded).
+function interiorFitMaxHeightFor(data){
+  if(data && data.cameraFit && typeof data.cameraFit.maxHeight === "number" && data.cameraFit.maxHeight > 0){
+    return data.cameraFit.maxHeight;
+  }
+  let tallest = 0;
+  (data && data.pieces || []).forEach(function(p){
+    if(!p || !p.slug) return;
+    const base = (typeof spriteEntryFor === "function") ? spriteEntryFor(p.slug) : null;
+    const scaleTrue = (base && typeof base.scaleTrue === "number" && base.scaleTrue > 0)
+      ? base.scaleTrue
+      : (typeof p.scaleVsHuman === "number" && p.scaleVsHuman > 0) ? p.scaleVsHuman : null;
+    if(scaleTrue == null) return; // unresolved piece (texture/registry not loaded yet) — skip, don't guess
+    const h = HUMAN_TRUE_HEIGHT * scaleTrue;
+    if(h > tallest) tallest = h;
+  });
+  return tallest > 0 ? tallest : HUMAN_TRUE_HEIGHT;
+}
+
 function setInteriorBoard(data){
   if(!S.mounted || !data) return;
   // DUNGEON-GRAPH.md U3 render-quality study card: S.interiorVariant (window.Theater.setInteriorVariant,
@@ -5136,6 +5343,20 @@ function setInteriorBoard(data){
   clearGroup(S.unitGroup);
   clearGroup(S.shadowGroup);
   S.propOccupiedZones = {};
+  // BEAUTY-WAVE-2.md BW2-1 (THE BEAT CAMERA): setInteriorBoard never used to manage S.zoomLevel at
+  // all (only setBoard's own small-board bias ever touched it) — a LATENT gap, harmless before this
+  // unit since the pre-unit fit was always generously padded enough to absorb a stray leftover
+  // zoomLevel from a prior flat-tabletop mount. It stops being harmless now: interiorCameraFitFor's
+  // "beat" fit + placeCamera's own exact-containment correction (this unit) compute a precise
+  // corrected auto-fit distance, and then apply S.zoomLevel ON TOP of it (by design — a PLAYER's own
+  // manual Theater.zoom() call is intentionally allowed to crop past the auto-fit); a stale zoomLevel
+  // inherited from a completely different board (the tabletop's own bias, or a previous interior
+  // board's manual zoom) would silently re-introduce the exact crop this unit fixes. Reset to 1 on
+  // every ACTUAL rebuild (the dirty-key skip above already returns before this line, so a caller
+  // polling the SAME board every render tick never has an in-progress manual zoom reset out from
+  // under it) — mirrors setBoard's own "a fresh board gets a fresh [zoom] reading" convention.
+  S.zoomLevel = 1;
+  S.isInteriorBoard = true; // placeCamera's own tabletop-vs-interior half-floor split
   // DUNGEON-GRAPH.md U3 iteration-2, ruling 2: interior boards get real shadow-mapping — the
   // tabletop/combat path's "no shadow maps" ruling (§2, this file's mount()-time default + setBoard's
   // own explicit restore below) is untouched; this is the ONE place shadow-mapping turns on.
@@ -5147,11 +5368,25 @@ function setInteriorBoard(data){
   // sit outside the fitted frame. Fallback: the whole board footprint, the original behavior.
   const fit = data.focusRect || b;
   const cx = (fit.minX + fit.maxX) / 2, cz = (fit.minZ + fit.maxZ) / 2;
-  S.boardCenter = new THREE.Vector3(0, 0, 0);
   S.boardOrigin = { cx, cz };
-  S.boardHalfX = (fit.maxX - fit.minX) / 2 + 2;
-  S.boardHalfZ = (fit.maxZ - fit.minZ) / 2 + 2;
+  // BEAUTY-WAVE-2.md BW2-1 (THE BEAT CAMERA): the camera-FIT box (what placeCamera sizes/aims at) is
+  // now independent of the geometry-mount origin shift above (cx/cz — untouched, room footprints stay
+  // exactly where they always were, per this unit's own OUT OF SCOPE). data.cameraFit is a plain
+  // caller-set field (data.pieces/data.dressing/data.lightProfile's own convention): absent boards
+  // default to "room" mode, byte-identical in SHAPE to the pre-unit fit (still data.focusRect), just
+  // CLOSER (see interiorCameraFitFor's own header). See that function for "beat" mode.
+  const camFit = interiorCameraFitFor(data.cameraFit, fit, cx, cz);
+  S.boardCenter = camFit.center;
+  S.boardHalfX = camFit.halfX;
+  S.boardHalfZ = camFit.halfZ;
   S.boardHalfExtent = Math.max(S.boardHalfX, S.boardHalfZ);
+  // BEAUTY-WAVE-2.md BW2-1: see placeCamera's own screenHalfHeight comment — the fit above is FLOOR-
+  // footprint-only; this is the standee-height correction term it's missing. An explicit
+  // data.cameraFit.maxHeight wins (a caller who already knows its own roster's tallest piece); else
+  // auto-derived from data.pieces' real true-scale heights (interiorSpriteBillboard's own UNCLAMPED
+  // formula — deliberately ignoring the wall-height clamp, since the fit should account for a
+  // creature's full intended height even where the render later clips it for ceiling clearance).
+  S.interiorFitMaxHeight = interiorFitMaxHeightFor(data);
   S.lastGrid = null; // no band/lane grid on an interior tray — zoneToWorld/zoom-bias callers degrade to their own defaults
 
   const env = data.env || THEATER_DEFAULT_ENV_FALLBACK;
@@ -6024,10 +6259,17 @@ window.Theater.interiorWorldPsxAudit = function(){
 function interiorFrustumCheck(headHeight){
   const result = { corners: [], ok: true };
   if(!S.camera || !S.mounted) { result.ok = false; return result; }
-  const hx = Math.max(2, S.boardHalfX || S.boardHalfExtent || 5);
-  const hz = Math.max(2, S.boardHalfZ || S.boardHalfExtent || 5);
+  // same interior-vs-tabletop floor split placeCamera itself uses — this check must read the SAME
+  // hx/hz placeCamera actually fit to, or it silently re-derives a different (wrong) box.
+  const halfFloor = S.isInteriorBoard ? INTERIOR_FIT_HALF_FLOOR : 2;
+  const hx = Math.max(halfFloor, S.boardHalfX || S.boardHalfExtent || 5);
+  const hz = Math.max(halfFloor, S.boardHalfZ || S.boardHalfExtent || 5);
   const h = (typeof headHeight === "number" && isFinite(headHeight)) ? headHeight : 1.1; // HUMAN_TRUE_HEIGHT-ish default
-  const cx = 0, cz = 0; // S.boardCenter is always (0,0,0) for the interior channel (setInteriorBoard, above)
+  // BEAUTY-WAVE-2.md BW2-1: S.boardCenter is no longer ALWAYS (0,0,0) — "beat" fitMode aims the
+  // camera at the participant cluster's own center, which can sit off the room's center. Read it
+  // live rather than assuming the origin (the pre-unit assumption this comment used to document).
+  const cx = (S.boardCenter && typeof S.boardCenter.x === "number") ? S.boardCenter.x : 0;
+  const cz = (S.boardCenter && typeof S.boardCenter.z === "number") ? S.boardCenter.z : 0;
   const corners = [
     [cx - hx, 0, cz - hz], [cx + hx, 0, cz - hz], [cx - hx, 0, cz + hz], [cx + hx, 0, cz + hz],
     [cx - hx, h, cz - hz], [cx + hx, h, cz - hz], [cx - hx, h, cz + hz], [cx + hx, h, cz + hz]
@@ -6042,6 +6284,26 @@ function interiorFrustumCheck(headHeight){
   return result;
 }
 window.Theater.interiorFrustumCheck = interiorFrustumCheck;
+// BEAUTY-WAVE-2.md BW2-1 — harness-facing read of the CURRENT board's own tallest-participant height
+// correction (S.interiorFitMaxHeight, placeCamera's screenHalfHeight term), so a test can assert
+// frustum containment against the REAL height the fit was actually computed for, rather than
+// interiorFrustumCheck's own generic 1.1 default (which would silently under-check a tall roster).
+window.Theater.interiorFitMaxHeight = function(){ return S.interiorFitMaxHeight || 0; };
+
+// BEAUTY-WAVE-2.md BW2-1 (THE BEAT CAMERA) — harness-facing diagnostic, same read-only discipline as
+// interiorFrustumCheck/cameraIsPerspective above: projects one world-space point through the LIVE
+// camera's view*projection matrix (THREE's own Vector3.project) and returns its NDC {x,y}. Used by
+// dev/battle-gate/capture-beat-camera.mjs purely to locate WHERE on screen a reference standee's
+// top/bottom should land, so that script's own pixel scan knows what row band to search — the actual
+// height measurement is a real pixel read of the rendered frame, not this projection math. No product
+// code path calls this.
+function projectWorldPoint(x, y, z){
+  if(!S.camera || !S.mounted) return null;
+  S.camera.updateMatrixWorld();
+  const v = new THREE.Vector3(x, y, z).project(S.camera);
+  return { ndcX: v.x, ndcY: v.y };
+}
+window.Theater.projectWorldPoint = projectWorldPoint;
 
 // TABLETOP-UNITS.md §U1 seam 5 — the boot-preload readiness flag: false until loadWholeObjectBuilders'
 // module-scope onSettled callback (above) fires exactly once. A harness/caller asserting §9.8's warm

@@ -702,9 +702,17 @@
   .theater-floater-hit{color:var(--blood)}
   .theater-floater-heal{color:var(--grounded)}
   .theater-floater-down{color:var(--blood);font-size:12px;letter-spacing:.08em}
+  /* BEAUTY-WAVE-4.md MF-4 item 3: "damage floaters gain a 60ms pop-in scale (1.15 -> 1.0) — they land,
+     not appear." Folded into this SAME rise keyframe (one `animation` property, not a second one) —
+     the floater's total lifetime is .6s (600ms), so the pop settles by the 10% mark (60ms/600ms). Only
+     the 0%/10% keyframes gain an explicit scale term; the translateY/opacity progression across the
+     rest of the timeline is untouched (still governed by the original from/to pair further down the
+     timeline, just re-expressed as 0%/100% so the added 10% keyframe can slot in between). transform-
+     only, same compositor-path discipline as the rest of this wave. */
   @keyframes theaterFloaterRise{
-    from{opacity:1;transform:translate(-50%,-100%)}
-    to{opacity:0;transform:translate(-50%,-170%)}
+    0%{opacity:1;transform:translate(-50%,-100%) scale(1.15)}
+    10%{opacity:1;transform:translate(-50%,-100%) scale(1)}
+    100%{opacity:0;transform:translate(-50%,-170%) scale(1)}
   }
   @media (max-width:1100px){ .stage-band-tags{top:44px;bottom:60px} .stage-overlay-foot{max-width:55%} }
 
@@ -1042,6 +1050,20 @@
   .cmb-turn-banner.spent{opacity:.72}
   .cmb-head .cmb-turn-banner{display:block;margin-bottom:3px;font-size:10.5px}
   .cmb-turn-spent{color:var(--ink-dim);text-transform:uppercase;letter-spacing:.04em;font-size:11px}
+  /* BEAUTY-WAVE-4.md MF-4 item 2 (the rhythm layer, "round boundary"): "the ROUND header does a 250ms
+     dip-and-return; the chip strip pulses once." One shared class (.cmb-round-boundary), stamped by
+     render.js's cmbRoundBoundaryFlashed ONLY on the render pass that first sees a new cm.round — same
+     one-shot-class-on-fresh-markup convention as .cmb-flash just above (DOM is rebuilt every render, so
+     a class present at element CREATION plays its animation exactly once and needs no manual removal).
+     transform-only (compositor path, no layout/paint-triggering properties) per the spec's "no DOM
+     reflow storms" requirement. */
+  @keyframes cmbRoundDip{0%{transform:translateY(0)}45%{transform:translateY(5px)}100%{transform:translateY(0)}}
+  .cmb-turn-banner.cmb-round-boundary{animation:cmbRoundDip .25s ease-out}
+  @keyframes cmbStripPulseOnce{0%{transform:scale(1)}45%{transform:scale(1.035)}100%{transform:scale(1)}}
+  .stage-unit-strip.cmb-round-boundary{animation:cmbStripPulseOnce .25s ease-out}
+  @media (prefers-reduced-motion: reduce){
+    .cmb-turn-banner.cmb-round-boundary,.stage-unit-strip.cmb-round-boundary{animation:none}
+  }
   /* the overlay-top wrapper: a plain flex column so the band rail keeps its own alignment and the
      banner sits directly under it — no new positioning context, this rides inside .stage-overlay's
      existing column flex (top edge, ahead of .stage-overlay-foot at the bottom). */

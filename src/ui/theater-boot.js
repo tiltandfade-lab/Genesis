@@ -3463,26 +3463,137 @@ function actingRingGeoFor(radius){
   if(!ACTING_RING_GEO_CACHE[key]) ACTING_RING_GEO_CACHE[key] = new THREE.RingGeometry(radius * 0.7, radius, 28);
   return ACTING_RING_GEO_CACHE[key];
 }
+// BEAUTY-WAVE-4.md MF-4 item 1 (the rhythm layer): the acting-ring's own slide duration, same
+// tween-channel discipline as MF-1's placeCameraTweened (reuses mf1EaseOutCubic/mf1Lerp above —
+// they're generic numeric-ease helpers despite the mf1-prefixed name, not camera-specific).
+const MF4_RING_SLIDE_DUR = 300;
+// interior standees wrap their own base rim (radius derived from the stamped base radius); tabletop
+// figures use the fixed 0.6 floor-blob convention. Pulled out of setActingUnit's old inline body so
+// both the slide path and the instant (re)mount path below share one derivation.
+function actingRingRadiusFor(fig){
+  const interiorFig = !!(fig.userData && fig.userData.interiorTrueScale);
+  return interiorFig ? Math.max(0.12, (fig.userData.interiorBaseRadius || 0.3) * 1.2) : 0.6;
+}
+// world-space target for the ring: the fig's own world position plus the SAME fixed local y offset
+// the pre-MF-4 child-of-fig mount used (a hair above local y=0 for an interior standee's base-rim
+// contact line, -0.48 for a tabletop figure — see the original comment preserved on the instant path
+// below). A ring is a flat disc rotated flat (-90° on local X) so it's radially symmetric — reading
+// its position in world space instead of as a fig-child is visually identical as long as the fig
+// itself never scales/tilts off the vertical (true for every figure this renders today), which is
+// exactly what lets the MF-4 slide below move the SAME mesh across two different figures' local
+// frames without a re-parent mid-flight.
+function actingRingWorldPosFor(fig){
+  const interiorFig = !!(fig.userData && fig.userData.interiorTrueScale);
+  const world = new THREE.Vector3();
+  fig.getWorldPosition(world);
+  world.y += interiorFig ? 0.003 : -0.48;
+  return world;
+}
 /* setActingUnit(idOrIds) — takes a single unit id OR an array (COMBAT.md's side-based initiative has
    no single "current actor," only a currently-acting SIDE — the PC is one unit so its turn lights one
    ring, but the foes' turn can mean several live foes could act, so the caller passes every live id on
    the acting side; the existing .cmb-active chip class already does the identical "highlight the whole
    side" thing, this is that same design call applied to standees). id(s)=null/[] clears every ring
-   (between rounds / no fight). Returns the count of rings actually mounted (0 if none resolved). */
+   (between rounds / no fight). Returns the count of rings actually mounted (0 if none resolved).
+
+   BEAUTY-WAVE-4.md MF-4 item 1: "the gold base glow + ring TWEEN between units — a 300ms slide of the
+   ring to the next actor — instead of blinking/teleporting." A clean single-actor-to-single-actor
+   HANDOFF (exactly one previous acting id, exactly one new one, and they differ — the common "whose
+   turn it is" case for the PC or a lone acting foe) now SLIDES the existing ring mesh from the old
+   actor's world position to the new actor's over MF4_RING_SLIDE_DUR ms on the shared S.tweens channel,
+   instead of the old instant remove+recreate. Any other shape — first reveal (0 -> N), a full clear
+   (N -> 0), a multi-unit acting SIDE on either end, or the same id repeated — keeps the pre-MF-4
+   instant behavior verbatim (a slide only reads as "the eye follows whose turn it is" between exactly
+   two rings; interpolating N>1 rings has no single well-defined path and isn't asked for). The base
+   glow itself is NOT slid (a base is a fixed mesh per unit — there's nothing physical to interpolate
+   between two different bases) — it keeps toggling instantly per the existing BW2-2b law; only the
+   one ring object animates. */
 function setActingUnit(idOrIds){
-  (S.actingRingMeshes || []).forEach(function(m){ if(m.parent) m.parent.remove(m); });
-  S.actingRingMeshes = [];
-  // BW2-2b item 3 (TURN GLOW): revert every PREVIOUSLY-glowing base before mounting the new set — same
-  // clear-then-rebuild shape as the ring above, tracked in its own list since a base mesh (unlike the
-  // ring) isn't torn down/recreated each call, only toggled.
+  const ids = idOrIds == null ? [] : (Array.isArray(idOrIds) ? idOrIds : [idOrIds]);
+
+  // cancel any in-flight ring-slide tween first — never two competing slides live at once, same
+  // retarget-not-stack discipline as MF-1's placeCameraTweened cancelling a stale camera-pose tween.
+  if(S.tweens && S.tweens.length){
+    S.tweens = S.tweens.filter((tw) => !(tw && tw.isRingSlideTween));
+  }
+
+  // BW2-2b item 3 (TURN GLOW): revert every PREVIOUSLY-glowing base before mounting the new set —
+  // instant in every case, slide or not (see header above).
   (S.actingGlowBaseMeshes || []).forEach(function(m){ setBaseGlow(m, false); });
   S.actingGlowBaseMeshes = [];
-  const ids = idOrIds == null ? [] : (Array.isArray(idOrIds) ? idOrIds : [idOrIds]);
-  let mounted = 0;
+
+  // resolve the new id set's figs up front — needed both for the slide-eligibility check and the
+  // instant mount loop below.
+  const figsById = {};
   ids.forEach(function(id){
     if(id == null) return;
     const fig = findUnit(id);
-    if(!fig) return;
+    if(fig) figsById[id] = fig;
+  });
+  const newResolvedIds = ids.filter((id) => figsById[id]);
+  const prevIds = S.actingIds || [];
+
+  const canSlide = prevIds.length === 1 && newResolvedIds.length === 1 && prevIds[0] !== newResolvedIds[0]
+    && S.actingRingMeshes && S.actingRingMeshes.length === 1 && S.actingRingMeshes[0].parent;
+
+  if(canSlide){
+    const ringMesh = S.actingRingMeshes[0];
+    const fromWorld = ringMesh.getWorldPosition(new THREE.Vector3());
+    const toFig = figsById[newResolvedIds[0]];
+    const toWorld = actingRingWorldPosFor(toFig);
+    const toRadius = actingRingRadiusFor(toFig);
+    const toInterior = !!(toFig.userData && toFig.userData.interiorTrueScale);
+
+    // detach from the old fig and reparent to the scene root AT its current world position, so the
+    // tween below can move it in pure world space without fighting either fig's local transform.
+    if(ringMesh.parent) ringMesh.parent.remove(ringMesh);
+    ringMesh.position.copy(fromWorld);
+    ringMesh.rotation.x = -Math.PI / 2;
+    S.scene.add(ringMesh);
+
+    if(!S.tweens) S.tweens = [];
+    S.tweens.push({
+      start: Date.now(),
+      dur: MF4_RING_SLIDE_DUR,
+      isRingSlideTween: true,
+      update: (t) => {
+        const e = mf1EaseOutCubic(t);
+        ringMesh.position.set(
+          mf1Lerp(fromWorld.x, toWorld.x, e),
+          mf1Lerp(fromWorld.y, toWorld.y, e),
+          mf1Lerp(fromWorld.z, toWorld.z, e)
+        );
+      },
+      onDone: () => {
+        // dock into the new fig's local frame — matches the instant-mount convention exactly (see the
+        // radius/Y comment on the instant path below), so any later board rebuild sees the same
+        // parented-to-fig shape it always has, slide or not.
+        toFig.add(ringMesh);
+        ringMesh.position.set(0, toInterior ? 0.003 : -0.48, 0);
+        const wantGeo = actingRingGeoFor(toRadius);
+        if(ringMesh.geometry !== wantGeo) ringMesh.geometry = wantGeo;
+      }
+    });
+    markDirty();
+    startTweenLoop();
+
+    // the new actor's base glow mounts instantly (unchanged BW2-2b law) — only the ring itself is
+    // mid-flight this turn.
+    if(toInterior && toFig.userData.standeeBaseMesh){
+      setBaseGlow(toFig.userData.standeeBaseMesh, true);
+      S.actingGlowBaseMeshes.push(toFig.userData.standeeBaseMesh);
+    }
+    S.actingIds = newResolvedIds;
+    return 1;
+  }
+
+  // instant path — byte-identical to the pre-MF-4 behavior, used for first reveal, a full clear, any
+  // multi-unit acting side, or a same-id no-op call.
+  (S.actingRingMeshes || []).forEach(function(m){ if(m.parent) m.parent.remove(m); });
+  S.actingRingMeshes = [];
+  let mounted = 0;
+  newResolvedIds.forEach(function(id){
+    const fig = figsById[id];
     // BW2-2: an interior true-scale standee's ring relocates to wrap its own BASE rim (slightly
     // larger radius, same gold) instead of the tabletop's fixed 0.6-radius floor-blob convention below
     // — the base radius was stamped onto userData at mount time (interiorBuildPieces/setUnits, both
@@ -3490,7 +3601,7 @@ function setActingUnit(idOrIds){
     // interiorTrueScale flag at all, so it falls through to the exact pre-BW2-2 radius/Y — byte-
     // identical, untouched.
     const interiorFig = !!(fig.userData && fig.userData.interiorTrueScale);
-    const ringRadius = interiorFig ? Math.max(0.12, (fig.userData.interiorBaseRadius || 0.3) * 1.2) : 0.6;
+    const ringRadius = actingRingRadiusFor(fig);
     const mesh = new THREE.Mesh(actingRingGeoFor(ringRadius), ACTING_RING_MAT);
     mesh.rotation.x = -Math.PI / 2;
     // interior: a hair above local y=0 — which IS the base's own top face / the standee's own
@@ -3510,6 +3621,7 @@ function setActingUnit(idOrIds){
     }
     mounted++;
   });
+  S.actingIds = newResolvedIds;
   markDirty();
   return mounted;
 }
@@ -8252,6 +8364,23 @@ window.Theater._mf1CameraPoseTweenForTest = function(){
 };
 window.Theater._mf1CameraLookTargetForTest = function(){
   return S.cameraLookTarget ? { x: S.cameraLookTarget.x, y: S.cameraLookTarget.y, z: S.cameraLookTarget.z } : null;
+};
+// BEAUTY-WAVE-4.md MF-4 item 1 — TEST-ONLY SEAM, same {start,dur} convention as MF-1's own
+// _mf1CameraPoseTweenForTest just above (fake Date.now(), then read back the exact live numbers rather
+// than guessing at wall-clock timing).
+window.Theater._mf4RingSlideTweenForTest = function(){
+  const tw = (S.tweens || []).find((t) => t && t.isRingSlideTween);
+  return tw ? { start: tw.start, dur: tw.dur } : null;
+};
+// the acting ring's own CURRENT world position (works whether it's mid-flight, parented to the scene
+// root, or docked as a fig-child — getWorldPosition resolves either case identically), so a harness can
+// sample the slide's start/mid/end without caring which parent it's under at that instant.
+window.Theater._mf4RingWorldPosForTest = function(){
+  const mesh = (S.actingRingMeshes || [])[0];
+  if(!mesh) return null;
+  const world = new THREE.Vector3();
+  mesh.getWorldPosition(world);
+  return { x: world.x, y: world.y, z: world.z };
 };
 
 // DUNGEON-GRAPH.md U3 iteration-2, SPRITE PURITY ruling — a harness-facing diagnostic (dev/verify-

@@ -13,6 +13,14 @@
    fail when the fit is actually broken, so its later green isn't vacuous. Zoom is then reset and the
    REAL assertion (default zoom, both camera modes) runs.
 
+   BEAUTY-WAVE-2.md BW2-1 (THE BEAT CAMERA) EXTENSION: the GREEN section now also runs BOTH
+   data.cameraFit modes ("room" — the default/absent case, byte-identical in shape to the pre-unit
+   fit — and "beat" — data.cameraFit={mode:"beat",cells:[participant cells]}, the new law-2c
+   participant-cluster fit) at each camera mode, asserting the SAME "every action-cluster corner
+   stays in frustum" claim holds for "beat" too — interiorFrustumCheck reads S.boardHalfX/Z/
+   S.boardCenter, which now vary by fitMode, so this is a real assertion on the new code path, not a
+   re-run of the old one under a new label.
+
    Run: node dev/verify-interior-camera-frustum.mjs */
 
 import { spawn } from "node:child_process";
@@ -168,7 +176,7 @@ async function buildScene(page) {
       const pieces = ["Ogre Zombie", "Skeleton", "Zombie", "Guard"];
       const positions = piecePositions(focusRoom, pieces.length);
       board.pieces = pieces.map((slug, i) => ({ slug, cellX: positions[i].x, cellY: positions[i].y }));
-      return { ok: true, board };
+      return { ok: true, board, positions };
     } catch (e) { return { ok: false, error: e.message, stack: e.stack }; }
   });
 }
@@ -192,28 +200,87 @@ async function main() {
     const built = await buildScene(page);
     if (!built.ok) throw new Error("scene build failed: " + built.error);
 
+    // BW2-1: the "beat" board is the SAME room/pieces, plus data.cameraFit fitting those 4 piece
+    // cells (+1 cell margin, law 2c) instead of the whole room — a real second fit shape to assert
+    // frustum containment against, not just a relabeled copy of the room board.
+    const beatBoard = Object.assign({}, built.board, {
+      cameraFit: { mode: "beat", cells: built.positions.map((p) => ({ x: p.x, y: p.y })) }
+    });
+    const boardFor = (fitMode) => (fitMode === "beat" ? beatBoard : built.board);
+
     console.log("\n[RED-FIRST — the frustum check must be able to FAIL before trusting its green]");
     for (const camMode of ["ortho", "persp"]) {
-      await page.evaluate((flags) => window.Theater.setInteriorVariant(flags), { camMode });
-      await page.evaluate((board) => window.Theater.setInteriorBoard(board), built.board);
-      // zoom "in" repeatedly: S.zoomLevel shrinks toward ZOOM_MIN, which placeCamera multiplies its
-      // fit distance/frustum by — the SAME lever both camera branches read (this file's own comment
-      // on the ortho/persp camDist lines), so this is a real stress on the fit, not a synthetic prop.
-      for (let i = 0; i < 12; i++) await page.evaluate(() => window.Theater.zoom(1));
-      const redCheck = await page.evaluate(() => window.Theater.interiorFrustumCheck());
-      ok(redCheck.ok === false, `${camMode}: aggressive zoom-in DOES break the frustum fit (proves the check is load-bearing) — ok=${redCheck.ok}`);
-      // reset zoom back to the board's own auto-fit for the real assertion below.
-      for (let i = 0; i < 12; i++) await page.evaluate(() => window.Theater.zoom(-1));
+      for (const fitMode of ["room", "beat"]) {
+        await page.evaluate((flags) => window.Theater.setInteriorVariant(flags), { camMode });
+        await page.evaluate((board) => window.Theater.setInteriorBoard(board), boardFor(fitMode));
+        // zoom "in" repeatedly: S.zoomLevel shrinks toward ZOOM_MIN, which placeCamera multiplies its
+        // fit distance/frustum by — the SAME lever both camera branches read (this file's own comment
+        // on the ortho/persp camDist lines), so this is a real stress on the fit, not a synthetic prop.
+        for (let i = 0; i < 12; i++) await page.evaluate(() => window.Theater.zoom(1));
+        const redCheck = await page.evaluate(() => window.Theater.interiorFrustumCheck());
+        ok(redCheck.ok === false, `${camMode}/${fitMode}: aggressive zoom-in DOES break the frustum fit (proves the check is load-bearing) — ok=${redCheck.ok}`);
+        // reset zoom back to the board's own auto-fit for the real assertion below.
+        for (let i = 0; i < 12; i++) await page.evaluate(() => window.Theater.zoom(-1));
+      }
     }
 
-    console.log("\n[GREEN — law 2c: the action cluster fits fully in frustum at normal zoom, both camera modes]");
+    console.log("\n[GREEN — law 2c: the action cluster fits fully in frustum at normal zoom, both camera modes x both fitModes]");
+    for (const camMode of ["ortho", "persp"]) {
+      for (const fitMode of ["room", "beat"]) {
+        await page.evaluate((flags) => window.Theater.setInteriorVariant(flags), { camMode });
+        await page.evaluate((board) => window.Theater.setInteriorBoard(board), boardFor(fitMode));
+        // BW2-1: this fixture's own roster includes an Ogre Zombie (Large, real height ~1.9 world
+        // units, well above interiorFrustumCheck's generic 1.1 default) — check against the board's
+        // OWN computed tallest-participant height (window.Theater.interiorFitMaxHeight(), read off the
+        // live S.interiorFitMaxHeight placeCamera actually fit to), not the generic default, so this
+        // assertion is honest about the mixed-size roster it's built from.
+        const maxHeight = await page.evaluate(() => window.Theater.interiorFitMaxHeight());
+        const check = await page.evaluate((h) => window.Theater.interiorFrustumCheck(h), maxHeight);
+        const camIsPersp = await page.evaluate(() => window.Theater.cameraIsPerspective());
+        ok(camIsPersp === (camMode === "persp"), `${camMode}/${fitMode}: camera type resolved correctly (isPerspective=${camIsPersp})`);
+        ok(check.ok === true, `${camMode}/${fitMode}: all 8 action-cluster corner points (headHeight=${maxHeight.toFixed(2)}) project within NDC [-1,1] — ${JSON.stringify(check.corners.filter((c) => !c.inFrustum))}`);
+      }
+    }
+
+    // BW2-1 REGRESSION (found live during this unit's own build): an ELONGATED beat cluster (a melee
+    // lined up along one axis, not a square huddle) carrying a TALL outlier participant broke
+    // containment even at headHeight=0 — a pre-existing gap in placeCamera's screenHalfWidth/Height
+    // support-function estimate (it only ever held for a roughly-square, generously-padded box before
+    // "beat" mode existed to make a tight, possibly-elongated one). Locked in here so it can never
+    // silently regress: a 4-cell-wide x 1-cell-deep cluster (Ogre Zombie + 3 mediums) in a real
+    // (non-clamped, big-enough) room, both camera modes.
+    console.log("\n[REGRESSION — elongated beat cluster + a tall (Large) outlier participant]");
+    const elongated = await page.evaluate(() => {
+      function buildFixture(n) {
+        const ids = Array.from({ length: n }, (_, i) => "s" + (i + 1));
+        const edges = []; for (let i = 1; i < n; i++) edges.push([ids[i - 1], ids[i]]);
+        const adj = {}; ids.forEach((id) => { adj[id] = []; });
+        edges.forEach(([a, b]) => { adj[a].push(b); adj[b].push(a); });
+        const depth = { [ids[0]]: 0 }; const q = [ids[0]]; let head = 0;
+        while (head < q.length) { const cur = q[head++]; (adj[cur] || []).forEach((nb) => { if (depth[nb] == null) { depth[nb] = depth[cur] + 1; q.push(nb); } }); }
+        return ids.map((id, i) => ({ id, num: i + 1, label: id, isFinale: i === n - 1, depth: depth[id] || 0, exits: (adj[id] || []).map((tid) => ({ targetId: tid })), light: "normal" }));
+      }
+      const fixture = buildFixture(14);
+      const plan = spatializePlan(fixture, "The Spine", { walkId: "frustum-gate-elongated" });
+      // the biggest room in this 14-segment fixture (big enough that a 4-cell-wide cluster + margin
+      // isn't clamped against the room's own walls — a clamped cluster would understate this box's
+      // real, intended elongation and mask the regression).
+      const room = plan.rooms.reduce((a, b) => (a.w * a.d > b.w * b.d ? a : b));
+      const board = interiorBuildBoard(plan, { realmId: "gloom", env: "dungeon", focusSegNum: room.segNum, radius: 1 });
+      board.lightProfile = "torchlit";
+      const cx0 = room.x + Math.floor(room.w / 2), cy0 = room.y + Math.floor(room.d / 2);
+      const positions = [[-3, 0], [-1, 0], [1, 0], [3, 0]].map(([dx, dy]) => ({ x: cx0 + dx, y: cy0 + dy }));
+      const foes = ["Ogre Zombie", "Skeleton", "Zombie", "Guard"]; // Large + 3 Medium
+      board.pieces = foes.map((slug, i) => ({ slug, cellX: positions[i].x, cellY: positions[i].y }));
+      board.cameraFit = { mode: "beat", cells: positions.map((p) => ({ x: p.x, y: p.y })) };
+      return { ok: true, board };
+    });
     for (const camMode of ["ortho", "persp"]) {
       await page.evaluate((flags) => window.Theater.setInteriorVariant(flags), { camMode });
-      await page.evaluate((board) => window.Theater.setInteriorBoard(board), built.board);
-      const check = await page.evaluate(() => window.Theater.interiorFrustumCheck());
-      const camIsPersp = await page.evaluate(() => window.Theater.cameraIsPerspective());
-      ok(camIsPersp === (camMode === "persp"), `${camMode}: camera type resolved correctly (isPerspective=${camIsPersp})`);
-      ok(check.ok === true, `${camMode}: all 8 action-cluster corner points project within NDC [-1,1] — ${JSON.stringify(check.corners.filter((c) => !c.inFrustum))}`);
+      await page.evaluate((board) => window.Theater.setInteriorBoard(board), elongated.board);
+      const maxHeight = await page.evaluate(() => window.Theater.interiorFitMaxHeight());
+      const check = await page.evaluate((h) => window.Theater.interiorFrustumCheck(h), maxHeight);
+      ok(check.ok === true, `${camMode}/beat elongated+tall: all 8 corners (headHeight=${maxHeight.toFixed(2)}) project within NDC [-1,1] — ${JSON.stringify(check.corners.filter((c) => !c.inFrustum))}`);
     }
 
     console.log(`\n${pass} passed, ${fail} failed`);

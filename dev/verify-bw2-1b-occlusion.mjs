@@ -57,12 +57,26 @@ const JSDOM_HOME = process.env.JSDOM_HOME || join(process.env.HOME, ".genesis-js
 function ensureThreeShim(){
   const base = join(ROOT, "node_modules", "three");
   const loaderDir = join(base, "addons", "loaders");
-  if(existsSync(join(base, "package.json"))) return;
+  // BEAUTY-WAVE-3 BW3-0 (THE COMPOSER SEAM) — same shim-completeness fix as dev/verify-dungeon-
+  // interior.mjs / dev/verify-theater-sprites.mjs / dev/verify-bw2-2-floor-contact.mjs's own
+  // ensureThreeShim: theater-boot.js now also imports EffectComposer/RenderPass/ShaderPass from
+  // "three/addons/postprocessing/", which the ORIGINAL early-return (`if package.json exists,
+  // return`) would never add on a shim an earlier-running verify-*.mjs already wrote. A version
+  // marker forces a re-write when the shim's own contents are stale.
+  const postDir = join(base, "addons", "postprocessing");
+  const shimVersion = "bw3-0-postprocessing";
+  const versionFile = join(base, ".shim-version");
+  if(existsSync(join(base, "package.json")) && existsSync(versionFile) && readFileSync(versionFile, "utf-8").trim() === shimVersion) return;
   mkdirSync(loaderDir, { recursive: true });
+  mkdirSync(postDir, { recursive: true });
   writeFileSync(join(base, "package.json"),
     JSON.stringify({ name: "three", version: "0.0.0-vendor-shim", type: "module", main: "./three.module.js" }, null, 2));
   writeFileSync(join(base, "three.module.js"), `export * from "../../vendor/three/three.module.js";\n`);
   writeFileSync(join(loaderDir, "GLTFLoader.js"), `export * from "../../../../vendor/three/addons/loaders/GLTFLoader.js";\n`);
+  writeFileSync(join(postDir, "EffectComposer.js"), `export * from "../../../../vendor/three/addons/postprocessing/EffectComposer.js";\n`);
+  writeFileSync(join(postDir, "RenderPass.js"), `export * from "../../../../vendor/three/addons/postprocessing/RenderPass.js";\n`);
+  writeFileSync(join(postDir, "ShaderPass.js"), `export * from "../../../../vendor/three/addons/postprocessing/ShaderPass.js";\n`);
+  writeFileSync(versionFile, shimVersion + "\n");
 }
 function ensureJsdomShim(){
   const target = join(ROOT, "node_modules", "jsdom");

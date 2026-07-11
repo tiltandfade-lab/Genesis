@@ -6,7 +6,39 @@ updated: 2026-07-10
 
 # Genesis — Session Hand-off
 
-## ⭐ Latest (2026-07-10 evening) — WILDERMYTH GRAMMAR built end-to-end; loop gate 5/5 [Claude Fable]
+## ⭐ Latest (2026-07-10 later night) — THE BEAUTY WAVE EXECUTED: 11 units + VP8 on master, pushed [Claude Fable, delegated verdict seat]
+
+Adam handed Fable the taste verdicts and said "orchestrate this wave now." Everything landed on
+master (`0c00ca1c`, pushed): perspective ~20° + clean world (VP0, confirmed on pixels), TRUE
+SCALE everywhere (VP1/VP1b/VP1c — the real kaiju was a LEAK: `setInteriorBoard` never cleared
+the tabletop unitGroup), real dressing art + 4 reclaimed gallery paintings (VP2/VP2b), ground
+design + scene art direction (VP3/VP4, taste-gated card), battle UI off the stage (VP5), the
+life pass w/ persistent battle decals (VP6, cap 12/room, child carve-out mechanical), contact
+blobs (VP7), corpus unified r2 (hue-safe 48-color realm palettes; r1 REVERTED at the eyes gate
+for hue murder — snake/ghost are now permanent regression fixtures), VP8 beauty shot + gap
+caption. §G ruled: corpses forever · weather→UW1 on VP6's motes · blood grim incl. visuals.
+NEW LOOP: MOCK-GEN (dev/model-qa/mock-gen/PACKET-01.md) — ChatGPT as our reference model, 8
+target-frame prompts paste-ready for Adam's codex window; mocks propose, laws dispose.
+Grid-snap (spritefusion) PROVEN unfit for our art — proof cards in the changelog entry.
+
+**Verification:** check-manifest OK · interior 282/0 · dressing 379/0 · scene-direction 17/0 ·
+vp6 49/0 · gallery 22/0 · vp1c 6/0 red-first · full sweep clean except pre-existing
+table-usage-data · loop gate 5/5 re-shot + READ at every landing.
+
+**Do next (pick up here):**
+1. **Adam runs MOCK-GEN PACKET-01** (8 frames) → Fable reads → next-wave specs cite the mocks;
+   VP8's triptych completes. **Adam eyeballs the beauty shots** (dev/battle-gate/beauty-shot/).
+2. **The VP8 gap queue** (CAPTION.md): combat BEAT FRAMING (wire law 2c into the combat camera —
+   the biggest visible win left), light-marker emissive art, gloom/chrome density tune.
+3. **GIT-LFS migration is now URGENT** — GitHub warns on the two 79MB zips (runbook ready;
+   needs Adam: $5 pack + force-push confirm).
+4. **Blender lane un-parking** — Adam is learning to teach Claude modeling; sprite props showed
+   which objects need true volume; 2D corpus = the ref library ([[project-genesis-mock-gen-loop]]).
+5. UNIFICATION-WAVE (UW1-UW4) is next after the mocks inform it; chrome creature sprites +
+   ash re-queue ride the codex rounds; r2's 42 ΔE-flagged sprites await Adam's eyes (report at
+   dev/model-qa/unification-report.json).
+
+## Latest (2026-07-10 evening) — WILDERMYTH GRAMMAR built end-to-end; loop gate 5/5 [Claude Fable]
 
 Branch `claude/genesis-sprite-corpus-tags-edeaac` (pushed; master merge = Adam's call).
 Adam ruled Wildermyth the graphics north star (docs/GRAPHICS-ENGINE.md; DF × Daggerfall ×

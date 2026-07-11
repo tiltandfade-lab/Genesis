@@ -114,6 +114,13 @@ import { playVerb, tickTweens, THEATER_VERBS, theaterFxFromLedger } from "./thea
 // why it's a separate module from theater-verbs.js (rotation-ownership conflict with
 // updateSpriteBillboardYaw, below) and for the ctx-binding contract bindStandeeCtx/playStandeeVerb use.
 import { playStandeeVerb, bindStandeeCtx, STANDEE_VERBS, startIdleBreathe } from "./standee-verbs.js";
+// BEAUTY-WAVE-4.md MF-2 (SPAWN/DESPAWN GRACE): the sibling zero-THREE-coupling tween-producer module —
+// see that file's own header for why mount/despawn/cascade/room-transition tweens live there instead of
+// as closures in this file (unit-testable via a real Node `import`, no jsdom/sandbox needed).
+import {
+  pushMountGrace, pushDespawnGrace, pushScreenFade, seededCascadeDelays,
+  MOUNT_GRACE_DUR, DESPAWN_GRACE_DUR, DRESSING_CASCADE_STEP_MS, DRESSING_CASCADE_CAP_MS, ROOM_TRANSITION_DUR
+} from "./spawn-grace.js";
 import * as Parts from "./theater-parts.js";
 import { resolveWholeObject, loadWholeObjectBuilders, WHOLE_OBJECT_REGISTRY, NEAREST_SUB } from "./theater-figures.js";
 // P1' WHOLE-OBJECT WIRING (docs/P1-WIRING.md §4 step 3): a STATIC import of probe-lib.js itself —
@@ -4520,21 +4527,27 @@ function disposeMeshMaybeShared(mesh){
     if(!sharedMat) mats.forEach(m => m && m.dispose());
   }
 }
+// P1' WHOLE-OBJECT WIRING (§3-D7): a whole-object figure/prop is a THREE.Group wrapper (matching
+// the pre-existing cuboid-figure convention — every archetype builder ALSO returns a Group, not a
+// bare Mesh) holding ONE mesh with a cached/shared geometry+material triple. Traverse into it (one
+// level is sufficient — the wrapper's only child is that one mesh) so the shared-geometry/material
+// skip actually reaches the mesh that carries the tag; a plain cuboid figure's own nested boxes
+// (never tagged shared) still dispose exactly as before via the same traversal. Factored out of
+// clearGroup (BEAUTY-WAVE-4.md MF-2) so a single DETACHED figure — a despawn-grace tween's onLifted,
+// which pulls one child OUT of its group before clearGroup ever sees it (see setUnits' despawn diff) —
+// can dispose itself via the exact same logic, byte-identical to what clearGroup already did per child.
+function disposeGroupChild(child){
+  if(child.geometry || child.material){
+    disposeMeshMaybeShared(child);
+  } else if(child.children && child.children.length){
+    child.traverse(function(n){ if(n.geometry || n.material) disposeMeshMaybeShared(n); });
+  }
+}
 function clearGroup(group){
   if(!group) return;
   while(group.children.length){
     const child = group.children.pop();
-    // P1' WHOLE-OBJECT WIRING (§3-D7): a whole-object figure/prop is a THREE.Group wrapper (matching
-    // the pre-existing cuboid-figure convention — every archetype builder ALSO returns a Group, not a
-    // bare Mesh) holding ONE mesh with a cached/shared geometry+material triple. Traverse into it (one
-    // level is sufficient — the wrapper's only child is that one mesh) so the shared-geometry/material
-    // skip actually reaches the mesh that carries the tag; a plain cuboid figure's own nested boxes
-    // (never tagged shared) still dispose exactly as before via the same traversal.
-    if(child.geometry || child.material){
-      disposeMeshMaybeShared(child);
-    } else if(child.children && child.children.length){
-      child.traverse(function(n){ if(n.geometry || n.material) disposeMeshMaybeShared(n); });
-    }
+    disposeGroupChild(child);
   }
 }
 
@@ -5323,6 +5336,18 @@ function mount(el, opts){
   floaterEl.setAttribute("aria-hidden", "true"); // decorative only — the prose twin carries the words
   el.appendChild(floaterEl);
   S.floaterEl = floaterEl;
+
+  // BEAUTY-WAVE-4.md MF-2 item 4 (ROOM TRANSITION CROSSFADE) — a persistent screen-space overlay,
+  // sibling to the canvas/floaterEl (same re-parent-on-reattach discipline as VP5's floaterEl just
+  // above — see reattach()'s own header). Opacity-only, starts fully transparent; setInteriorBoard's
+  // real board swap snaps it opaque BEFORE the synchronous rebuild and fades it back out AFTER (see
+  // that function's own MF-2 comment for why a single-threaded rebuild needs the opaque snap rather
+  // than a tweened fade-in).
+  const transitionEl = document.createElement("div");
+  transitionEl.className = "theater-transition-layer";
+  transitionEl.setAttribute("aria-hidden", "true");
+  el.appendChild(transitionEl);
+  S.transitionEl = transitionEl;
 
   const scene = new THREE.Scene();
   scene.background = new THREE.Color(VOID_BG);
@@ -6396,6 +6421,77 @@ function stopMoteDrift(){
   if(S.moteRaf != null){ cancelAnimationFrame(S.moteRaf); S.moteRaf = null; }
 }
 
+/* ============================================================================
+   BEAUTY-WAVE-4.md MF-2 — SPAWN/DESPAWN GRACE, the production wiring half. The actual tween MATH lives
+   in src/ui/spawn-grace.js (pushMountGrace/pushDespawnGrace/seededCascadeDelays, imported above) — this
+   section is just the "collect the real THREE handles + call it" glue theater-boot.js's own figures
+   need, mirroring how buildTheaterCtx()/bindStandeeCtx() are the same kind of glue for theater-verbs.js/
+   standee-verbs.js.
+   ============================================================================ */
+
+// mfArtMaterialsOf(group) — every fadeable material under `group`, EXCLUDING any mesh tagged
+// userData.standeeBase (buildInteriorBase's own tag) — the plinth is never faded by mount/despawn
+// grace at all; that's the entire mechanism behind "base at full opacity from t=0" (mount) / "the base
+// lifts LAST" (despawn) — the caller just never routes the base's material into this collection.
+function mfArtMaterialsOf(group){
+  const mats = [];
+  if(!group) return mats;
+  group.traverse(function(n){
+    if(!n.material) return;
+    if(n.userData && n.userData.standeeBase) return;
+    const list = Array.isArray(n.material) ? n.material : [n.material];
+    list.forEach(function(m){ if(m && mats.indexOf(m) < 0) mats.push(m); });
+  });
+  return mats;
+}
+function mfSetMaterialsOpacity(mats, v){
+  mats.forEach(function(m){
+    if(!m.transparent) m.transparent = true;
+    m.opacity = v;
+  });
+}
+// mfMountGraceFor(ctx, group, delayMs?) — MF-2 item 1 (+ item 3's per-piece cascade entry when a
+// caller passes a staggered delayMs). `group`'s CURRENT scale is captured as the resting scale (every
+// other scale-affecting line in this file — figScale/sizeScaleFor/interiorSpriteFig's figScale=1 —
+// has already run by the time a caller invokes this, right after group.add(figure)/group.add(g)), so
+// this never needs to know WHICH figure family it's grazing.
+function mfMountGraceFor(ctx, group, delayMs){
+  const mats = mfArtMaterialsOf(group);
+  if(!mats.length) return false;
+  const baseScale = group.scale.x || 1;
+  const ok = pushMountGrace(ctx, {
+    delayMs: delayMs || 0,
+    setArtOpacity: function(v){ mfSetMaterialsOpacity(mats, v); },
+    setScaleMul: function(mul){ group.scale.setScalar(baseScale * mul); }
+  });
+  if(ok) startTweenLoop(); // this file's own tween-tick rAF loop — every tween producer kicks it explicitly
+  return ok;
+}
+// mfDespawnGraceFor(ctx, group, onLifted) — MF-2 item 2. Fades ONLY the art materials (the base, if
+// any, is excluded by mfArtMaterialsOf above and stays fully visible for the whole 200ms); `onLifted`
+// fires strictly after the fade completes — THE BASE LIFTS LAST, since the caller's onLifted is where
+// the whole assembly (base included) actually leaves the scene (see setUnits' despawn-diff call site).
+function mfDespawnGraceFor(ctx, group, onLifted){
+  const mats = mfArtMaterialsOf(group);
+  const ok = pushDespawnGrace(ctx, {
+    setArtOpacity: function(v){ mfSetMaterialsOpacity(mats, v); },
+    onLifted: onLifted
+  });
+  if(ok) startTweenLoop();
+  return ok;
+}
+// mfCascadeMount(ctx, entries, keyFor) — MF-2 item 3. `entries` is the array of {group,...} records a
+// caller already built (dressing cards / furniture assemblies / room pieces); `keyFor(entry)` resolves
+// each one's stable identity string (the SAME slug+cell identity kilterFor/idle-breathe already key
+// off). Computes the SEEDED stagger once across the whole set (never per-entry, so ranks reflect the
+// full room) and fires one mfMountGraceFor per entry at its own delay.
+function mfCascadeMount(ctx, entries, keyFor){
+  if(!entries || !entries.length) return;
+  const keys = entries.map(keyFor);
+  const delays = seededCascadeDelays(keys, DRESSING_CASCADE_STEP_MS, DRESSING_CASCADE_CAP_MS);
+  entries.forEach(function(entry, i){ mfMountGraceFor(ctx, entry.group, delays[i]); });
+}
+
 // data.pieces -> billboard sprites standing IN the room (DUNGEON-GRAPH.md U3 iteration-2, ruling 3:
 // "creatures render at true scale... standing on the floor"). Each entry {slug, cellX, cellY,
 // scaleVsHuman?} joins the sprite registry, but — BEAUTY-WAVE.md VP1 fix — sizes through
@@ -6421,6 +6517,11 @@ function interiorBuildPieces(pieces, cx, cz, wallHeightBase, floorTopMap, trimCo
   // indices to before this unit.
   const blobGroup = new THREE.Group();
   let resolved = 0;
+  // BEAUTY-WAVE-4.md MF-2 item 3 (DRESSING/FURNITURE CASCADE — pieces are the room's own creatures/
+  // set-pieces, the SAME "the room sets itself" mount reveal the spec names): every piece resolved
+  // this pass is collected here so mfCascadeMount can rank+stagger the whole set ONCE at the end,
+  // rather than each piece guessing its own delay independent of its siblings.
+  const mountEntries = [];
   // 0.95 * wall height: a titanic-in-a-human-room is a SCALE-DOMAIN problem, not a rendering one —
   // this cap only keeps a piece from visibly poking through the ceiling.
   const wallCap = (typeof wallHeightBase === "number" && wallHeightBase > 0) ? wallHeightBase * 0.95 : null;
@@ -6510,9 +6611,13 @@ function interiorBuildPieces(pieces, cx, cz, wallHeightBase, floorTopMap, trimCo
     // lifetime is fall-death's own stopIdleBreathe(...,true) call, not this mount-time start).
     bindStandeeCtx(buildTheaterCtx());
     startIdleBreathe(g, p.slug + ":" + p.cellX + "," + p.cellY);
+    // BEAUTY-WAVE-4.md MF-2 item 3: this piece's own mount-grace entry, keyed the SAME slug+cell
+    // identity kilterFor/idle-breathe already use — staggered below, once every piece has resolved.
+    mountEntries.push({ group: g, key: p.slug + ":" + cellX + "," + cellY });
     resolved++;
   });
   group.add(blobGroup);
+  mfCascadeMount(buildTheaterCtx(), mountEntries, function(entry){ return entry.key; });
   return { group, resolved, requested: (pieces || []).length };
 }
 
@@ -6675,6 +6780,9 @@ function buildFurnitureAssembly(entry){
 // mount point reads through (interiorFloorTopAt).
 function interiorBuildFurniture(furniture, cx, cz, floorTopMap){
   const group = new THREE.Group();
+  // BEAUTY-WAVE-4.md MF-2 item 3: "Dressing/FURNITURE on first room reveal" — furniture assemblies get
+  // the SAME seeded stagger cascade as data.pieces/data.dressing (see mfCascadeMount's own header).
+  const mountEntries = [];
   (furniture || []).forEach((f) => {
     if(!f || !f.slug) return;
     const g = buildFurnitureAssembly(f);
@@ -6682,7 +6790,9 @@ function interiorBuildFurniture(furniture, cx, cz, floorTopMap){
     g.position.set((f.x || 0) - (cx || 0), floorTop, (f.y || 0) - (cz || 0));
     g.userData.dressingSlug = f.slug;
     group.add(g);
+    mountEntries.push({ group: g, key: f.slug + ":" + f.x + "," + f.y });
   });
+  mfCascadeMount(buildTheaterCtx(), mountEntries, function(entry){ return entry.key; });
   return group;
 }
 
@@ -6817,6 +6927,9 @@ function interiorBuildDressing(dressing, cx, cz, floorTopMap, prismLists){
   // VP7 CONTACT GROUNDING: same sibling-subgroup convention as interiorBuildPieces' blobGroup
   // (below) — blobs never interleave into `group`'s own direct children.
   const blobGroup = new THREE.Group();
+  // BEAUTY-WAVE-4.md MF-2 item 3: dressing cards get the SAME seeded stagger cascade as
+  // data.pieces/data.furniture — "the room sets itself" applies to every set-piece family.
+  const mountEntries = [];
   (dressing || []).forEach((d) => {
     if(!d || !d.slug) return;
     // BW2-5: blocker-primary entries render as furniture-class volumes (interiorBuildFurniture,
@@ -6849,8 +6962,10 @@ function interiorBuildDressing(dressing, cx, cz, floorTopMap, prismLists){
     if(d.cardKind === "large"){
       addInteriorContactBlob(blobGroup, g.position.x, g.position.z, dressingCardHeight(d.cardKind), floorTop);
     }
+    mountEntries.push({ group: g, key: d.slug + ":" + d.x + "," + d.y });
   });
   group.add(blobGroup);
+  mfCascadeMount(buildTheaterCtx(), mountEntries, function(entry){ return entry.key; });
   return group;
 }
 
@@ -7179,6 +7294,20 @@ function setInteriorBoard(data){
   const dirtyKey = "interior:" + JSON.stringify(variant) + ":" + JSON.stringify(data);
   if(dirtyKey === S.boardKey){ window.Theater.stats.boardSkips++; return; }
   S.boardKey = dirtyKey;
+  // BEAUTY-WAVE-4.md MF-2 item 4 (ROOM TRANSITION CROSSFADE): only a REAL swap gets the crossfade —
+  // "walk/travel BOARD SWAPS", not this mount's very first room reveal (nothing to hide a cut FROM
+  // yet; the dressing/piece cascade already wired into interiorBuildPieces/Dressing/Furniture is that
+  // first reveal's own "the room sets itself" beat). S.lastBoard is still the PRIOR board here (this
+  // function only overwrites it a few lines down) — truthy iff a board was already showing. The
+  // overlay snaps OPAQUE synchronously, right here, BEFORE drainTweens/clearGroup/rebuild run — this
+  // whole function is single-threaded JS, so no frame is ever painted mid-rebuild; the opaque snap is
+  // what "the rebuild happens under it" means when the rebuild itself is synchronous. The fade back to
+  // transparent (revealing the NEW room) is pushed once the rebuild + camera fit are done, at this
+  // function's own tail below.
+  const isRoomTransition = !!S.lastBoard;
+  if(isRoomTransition && S.transitionEl){
+    S.transitionEl.style.opacity = "1";
+  }
   // GRAPHICS-ENGINE law 2b/VP0 (docs/BEAUTY-WAVE.md): the interior channel's own camera-mode switch.
   // `variant.camMode` (study-rig ONLY — dev/battle-gate/capture-two-flag-card.mjs's ortho/persp cells)
   // overrides the module default INTERIOR_CAM_MODE for this render only; no product caller ever sets
@@ -7623,6 +7752,20 @@ function setInteriorBoard(data){
   // rigOn=false drops to a neutral grade for the study-rig's honest baseline). INTERIOR-ONLY — setBoard
   // (the flat tabletop) tears it back off.
   mountPostSuite(kit, rigOn);
+
+  // BEAUTY-WAVE-4.md MF-2 item 4: the rebuild (everything above) has finished — fade the transition
+  // overlay back to transparent over ROOM_TRANSITION_DUR, revealing the freshly-built room. Skipped on
+  // this mount's first reveal (isRoomTransition false — the overlay was never snapped opaque, so a
+  // fade from 0 would be a harmless no-op anyway, but skipping is the honest "no transition happened"
+  // read for a fresh mount's own instrumentation).
+  if(isRoomTransition && S.transitionEl){
+    pushScreenFade(buildTheaterCtx(), {
+      setOpacity: function(v){ S.transitionEl.style.opacity = String(v); },
+      from: 1, to: 0, dur: ROOM_TRANSITION_DUR
+    });
+    startTweenLoop();
+  }
+
   markDirty();
 }
 
@@ -7833,6 +7976,34 @@ function setUnits(data){
   window.Theater.stats.unitBuilds++;
   drainTweens(S); // A2: force-complete every live tween BEFORE clearGroup disposes the units they close over
   S.lastUnits = data; // P1' WHOLE-OBJECT WIRING (§4 step 8): replay target for the async post-load re-render
+
+  // BEAUTY-WAVE-4.md MF-2 item 2 (DESPAWN GRACE): diff the PREVIOUSLY-known unit ids against this
+  // render's new set BEFORE clearGroup disposes anything — "defeat removal where corpses don't
+  // persist... board changes". A `down` unit is NOT a despawn (it persists + re-renders every frame
+  // per the DEAD-STATE convention); only an id that's genuinely ABSENT from this render counts. The
+  // despawning figure is pulled OUT of S.unitGroup into a transient S.despawnGroup so clearGroup(
+  // S.unitGroup) just below naturally skips it (it's no longer a child by the time that runs) — no
+  // clearGroup change needed. wasKnownUnitIds is captured here (before S.knownUnitIds is overwritten
+  // at this function's end) so the MOUNT half below can tell a genuinely NEW id from a re-render.
+  const wasKnownUnitIds = S.knownUnitIds || new Set();
+  const newUnitIds = new Set((data.units || []).filter((u) => !u.obliterated).map((u) => String(u.id)));
+  wasKnownUnitIds.forEach(function(id){
+    if(newUnitIds.has(id)) return;
+    let fig = null;
+    for(let i = 0; i < S.unitGroup.children.length; i++){
+      const child = S.unitGroup.children[i];
+      if(child.userData && String(child.userData.unitId) === id){ fig = child; break; }
+    }
+    if(!fig) return; // already gone (e.g. a full retire() beat us here) — nothing to grace
+    S.unitGroup.remove(fig);
+    if(!S.despawnGroup){ S.despawnGroup = new THREE.Group(); if(S.scene) S.scene.add(S.despawnGroup); }
+    S.despawnGroup.add(fig);
+    mfDespawnGraceFor(buildTheaterCtx(), fig, function(){
+      if(S.despawnGroup) S.despawnGroup.remove(fig);
+      disposeGroupChild(fig); // THE BASE LIFTS LAST — this runs strictly after the 200ms art fade completes
+    });
+  });
+
   clearGroup(S.unitGroup);
   clearGroup(S.shadowGroup);
   // DEAD-STATE: obliteration markers ride in S.propGroup (swept by setBoard's clearGroup/retire like
@@ -8057,6 +8228,14 @@ function setUnits(data){
     // sync, the tag lives on the object itself exactly where setUnits already iterates it.
     figure.userData.unitId = String(u.id);
     S.unitGroup.add(figure);
+    // BEAUTY-WAVE-4.md MF-2 item 1 (STANDEE MOUNT): only a genuinely NEW arrival plays the mount-in
+    // fade+scale-settle — a unit that was already known last render (an HP tick, a move, any other
+    // field change that forces a rebuild) must NOT replay the fade every frame, which would read as
+    // flicker rather than "arrival". mfArtMaterialsOf excludes any userData.standeeBase-tagged mesh
+    // on its own, so interior standees' plinth base is already "at full opacity from t=0" for free.
+    if(!wasKnownUnitIds.has(String(u.id))){
+      mfMountGraceFor(buildTheaterCtx(), figure, 0);
+    }
 
     // G5 ROUND-1 (ruling 2): the base disc REPLACES the flat black blob-shadow as the hostility
     // signal — a tinted disc/short cylinder under each unit, miniatures-style, matching unitTint's own
@@ -8114,6 +8293,11 @@ function setUnits(data){
     if(groundingBlob && u.fled) groundingBlob.visible = false;
   });
 
+  // BEAUTY-WAVE-4.md MF-2: this render's id set becomes the baseline the NEXT setUnits() call diffs
+  // against for both halves (a still-absent id next time is a despawn; an id absent from THIS set that
+  // reappears later is a fresh mount again).
+  S.knownUnitIds = newUnitIds;
+
   markDirty();
 }
 
@@ -8163,6 +8347,14 @@ function reattach(el){
     S.floaterEl.setAttribute("aria-hidden", "true");
   }
   if(S.floaterEl.parentNode !== el) el.appendChild(S.floaterEl);
+  // MF-2 item 4: the room-transition overlay travels with the canvas too — same reasoning/defensive
+  // re-create as the floater overlay just above.
+  if(!S.transitionEl){
+    S.transitionEl = document.createElement("div");
+    S.transitionEl.className = "theater-transition-layer";
+    S.transitionEl.setAttribute("aria-hidden", "true");
+  }
+  if(S.transitionEl.parentNode !== el) el.appendChild(S.transitionEl);
   S.el = el;
   const w = el.clientWidth || 1, h = el.clientHeight || 1;
   applyPsxCanvasSize(S.renderer, S.renderer.domElement, w, h);

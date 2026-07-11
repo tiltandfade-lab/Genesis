@@ -696,6 +696,14 @@
      mount()/reattach()'s VP5 comments). Anchor-at-spawn, 600ms fade (the AMENDED 2c-framing note: the
      fade is fast enough that a camera fit mid-fade is a non-issue). */
   .theater-floater-layer{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:4}
+  /* BEAUTY-WAVE-4.md MF-2 item 4 — the room-transition to-black/to-fog crossfade overlay, a persistent
+     DOM layer theater-boot.js parents alongside the canvas (same survive-innerHTML-replacement
+     discipline as theater-floater-layer just above; see mount()/reattach()'s own MF-2 comments).
+     Opacity driven directly by pushScreenFade's setOpacity callback (src/ui/spawn-grace.js) — no CSS
+     transition/animation of its own, so a tween retarget (Feel Law 3: input never blocked, a new
+     action cancels the tail) never fights a competing CSS timing function. z-index above the floater
+     layer so a mid-transition floater never bleeds through the fade. */
+  .theater-transition-layer{position:absolute;inset:0;pointer-events:none;background:#000;opacity:0;z-index:5}
   .theater-floater{position:absolute;transform:translate(-50%,-100%);font-family:var(--display);
     font-weight:700;font-size:15px;color:var(--gold-leaf);text-shadow:0 1px 3px rgba(0,0,0,.85);
     white-space:nowrap;animation:theaterFloaterRise .6s ease-out forwards}
@@ -1468,6 +1476,14 @@
      billboard standees have a rotation-ownership conflict 3D figures never had — see standee-verbs.js's
      own header ("THE COMPOSITION CONTRACT") for the full reasoning. -->
 <script type="module" src="src/ui/standee-verbs.js"></script>
+<!-- BEAUTY-WAVE-4.md MF-2 (SPAWN/DESPAWN GRACE): a THIRD sibling module to theater-verbs.js/
+     standee-verbs.js just above (same tag-pairing rationale) — imported by theater-boot.js via a plain
+     ES `import`, and ALSO given its own <script type="module"> tag here so check-manifest.py's
+     module-tag-pairing check is satisfied; browsers dedupe an ES module by URL, so this is a harmless
+     no-op second entry point. Kept as its own file/manifest entry (not a new section in either sibling)
+     since it has ZERO THREE/DOM coupling of its own (every mesh/material handle arrives as a plain
+     setter callback theater-boot.js supplies) — see spawn-grace.js's own header. -->
+<script type="module" src="src/ui/spawn-grace.js"></script>
 <!-- P1' WHOLE-OBJECT WIRING (docs/P1-WIRING.md §2.3/§4 Unit A step 2): the creatureId/class/prop/light
      -> builder registry (dev/model-qa/creatures/) — imported by theater-boot.js (below) via a plain ES
      `import`, and ALSO given its own <script type="module"> tag here so check-manifest.py's module-tag-

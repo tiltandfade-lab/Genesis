@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-11T17:49:57.390Z",
+  "generatedAt": "2026-07-11T18:30:11.974Z",
   "iterations": [
     {
       "loopIndex": 1,
@@ -18,7 +18,7 @@
         "ok": true,
         "stage": "done",
         "loopIndex": 1,
-        "topology": "The Convergence",
+        "topology": "The Hub",
         "segCount": 5,
         "environment": "dungeon",
         "nodeId": "dungeon-loop-1",
@@ -30,8 +30,8 @@
         "targetSegNum": 3,
         "room": {
           "segNum": 3,
-          "x": 13,
-          "y": 11,
+          "x": 3,
+          "y": 32,
           "w": 4,
           "d": 6
         },
@@ -62,7 +62,7 @@
         },
         "pnCursor": 3
       },
-      "topology": "The Convergence",
+      "topology": "The Hub",
       "roomCount": 5,
       "reachability": {
         "ok": true,
@@ -163,8 +163,8 @@
         },
         "fps": {
           "samples": 60,
-          "elapsedMs": 428.1999999997206,
-          "fps": 140.1214385801942
+          "elapsedMs": 236.29999999981374,
+          "fps": 253.9145154466665
         }
       },
       "verbResults": {
@@ -188,7 +188,7 @@
       ],
       "benign404Count": 4,
       "summary": {
-        "topology": "The Convergence",
+        "topology": "The Hub",
         "realm": "chrome",
         "roomCount": 5,
         "planVerified": true,
@@ -218,7 +218,7 @@
         "ok": true,
         "stage": "done",
         "loopIndex": 2,
-        "topology": "The Loop",
+        "topology": "The Hub",
         "segCount": 7,
         "environment": "dungeon",
         "nodeId": "dungeon-loop-2",
@@ -230,8 +230,8 @@
         "targetSegNum": 4,
         "room": {
           "segNum": 4,
-          "x": 7,
-          "y": 6,
+          "x": 3,
+          "y": 25,
           "w": 6,
           "d": 7
         },
@@ -267,7 +267,7 @@
         },
         "pnCursor": 4
       },
-      "topology": "The Loop",
+      "topology": "The Hub",
       "roomCount": 7,
       "reachability": {
         "ok": true,
@@ -276,11 +276,11 @@
       "rendered": {
         "ok": true,
         "stage": "setInteriorBoard",
-        "dressingCountFromTray": 73,
+        "dressingCountFromTray": 90,
         "meshCount": 5,
         "piecesRequested": 4,
         "piecesResolved": 4,
-        "dressingCount": 73,
+        "dressingCount": 90,
         "beatMaxHeight": 1.903,
         "beatFrustumCheck": {
           "corners": [
@@ -368,8 +368,8 @@
         },
         "fps": {
           "samples": 60,
-          "elapsedMs": 367.40000000037253,
-          "fps": 163.3097441479019
+          "elapsedMs": 441.79999999981374,
+          "fps": 135.80805794482865
         }
       },
       "verbResults": {
@@ -384,13 +384,13 @@
       "urls404": [],
       "benign404Count": 0,
       "summary": {
-        "topology": "The Loop",
+        "topology": "The Hub",
         "realm": "gloom",
         "roomCount": 7,
         "planVerified": true,
         "piecesResolved": 4,
         "piecesRequested": 4,
-        "dressingCount": 73,
+        "dressingCount": 90,
         "meshCount": 5,
         "consoleErrorCount": 0,
         "breakCount": 0
@@ -415,7 +415,7 @@
         "ok": true,
         "stage": "done",
         "loopIndex": 3,
-        "topology": "The Web",
+        "topology": "The Convergence",
         "segCount": 9,
         "environment": "dungeon",
         "nodeId": "dungeon-loop-3",
@@ -427,8 +427,8 @@
         "targetSegNum": 5,
         "room": {
           "segNum": 5,
-          "x": 37,
-          "y": 27,
+          "x": 21,
+          "y": 12,
           "w": 6,
           "d": 7
         },
@@ -468,7 +468,7 @@
         },
         "pnCursor": 5
       },
-      "topology": "The Web",
+      "topology": "The Convergence",
       "roomCount": 9,
       "reachability": {
         "ok": true,
@@ -477,11 +477,11 @@
       "rendered": {
         "ok": true,
         "stage": "setInteriorBoard",
-        "dressingCountFromTray": 99,
+        "dressingCountFromTray": 93,
         "meshCount": 4,
         "piecesRequested": 5,
         "piecesResolved": 5,
-        "dressingCount": 99,
+        "dressingCount": 93,
         "beatMaxHeight": 1.2429999999999999,
         "beatFrustumCheck": {
           "corners": [
@@ -569,8 +569,8 @@
         },
         "fps": {
           "samples": 60,
-          "elapsedMs": 434.20000000018626,
-          "fps": 138.1851681252286
+          "elapsedMs": 484,
+          "fps": 123.96694214876032
         }
       },
       "verbResults": {
@@ -585,13 +585,13 @@
       "urls404": [],
       "benign404Count": 0,
       "summary": {
-        "topology": "The Web",
+        "topology": "The Convergence",
         "realm": "fantasy",
         "roomCount": 9,
         "planVerified": true,
         "piecesResolved": 5,
         "piecesRequested": 5,
-        "dressingCount": 99,
+        "dressingCount": 93,
         "meshCount": 4,
         "consoleErrorCount": 0,
         "breakCount": 0
@@ -614,7 +614,7 @@
         "ok": true,
         "stage": "done",
         "loopIndex": 4,
-        "topology": "The Branch",
+        "topology": "The Labyrinth Fragment",
         "segCount": 11,
         "environment": "dungeon",
         "nodeId": "dungeon-loop-4",
@@ -626,8 +626,8 @@
         "targetSegNum": 6,
         "room": {
           "segNum": 6,
-          "x": 58,
-          "y": 27,
+          "x": 47,
+          "y": 29,
           "w": 6,
           "d": 6
         },
@@ -659,7 +659,7 @@
         },
         "pnCursor": 6
       },
-      "topology": "The Branch",
+      "topology": "The Labyrinth Fragment",
       "roomCount": 11,
       "reachability": {
         "ok": true,
@@ -668,11 +668,11 @@
       "rendered": {
         "ok": true,
         "stage": "setInteriorBoard",
-        "dressingCountFromTray": 129,
+        "dressingCountFromTray": 114,
         "meshCount": 4,
         "piecesRequested": 3,
         "piecesResolved": 3,
-        "dressingCount": 129,
+        "dressingCount": 114,
         "beatMaxHeight": 1.2429999999999999,
         "beatFrustumCheck": {
           "corners": [
@@ -760,8 +760,8 @@
         },
         "fps": {
           "samples": 60,
-          "elapsedMs": 399.6999999997206,
-          "fps": 150.1125844384337
+          "elapsedMs": 823.7999999998137,
+          "fps": 72.83321194466323
         }
       },
       "verbResults": {
@@ -776,13 +776,13 @@
       "urls404": [],
       "benign404Count": 0,
       "summary": {
-        "topology": "The Branch",
+        "topology": "The Labyrinth Fragment",
         "realm": "gloom",
         "roomCount": 11,
         "planVerified": true,
         "piecesResolved": 3,
         "piecesRequested": 3,
-        "dressingCount": 129,
+        "dressingCount": 114,
         "meshCount": 4,
         "consoleErrorCount": 0,
         "breakCount": 0
@@ -807,7 +807,7 @@
         "ok": true,
         "stage": "done",
         "loopIndex": 5,
-        "topology": "The Branch",
+        "topology": "The Spine",
         "segCount": 8,
         "environment": "dungeon",
         "nodeId": "dungeon-loop-5",
@@ -819,8 +819,8 @@
         "targetSegNum": 5,
         "room": {
           "segNum": 5,
-          "x": 27,
-          "y": 11,
+          "x": 38,
+          "y": 4,
           "w": 6,
           "d": 6
         },
@@ -860,7 +860,7 @@
         },
         "pnCursor": 5
       },
-      "topology": "The Branch",
+      "topology": "The Spine",
       "roomCount": 8,
       "reachability": {
         "ok": true,
@@ -869,11 +869,11 @@
       "rendered": {
         "ok": true,
         "stage": "setInteriorBoard",
-        "dressingCountFromTray": 90,
-        "meshCount": 5,
+        "dressingCountFromTray": 84,
+        "meshCount": 4,
         "piecesRequested": 5,
         "piecesResolved": 5,
-        "dressingCount": 90,
+        "dressingCount": 84,
         "beatMaxHeight": 1.903,
         "beatFrustumCheck": {
           "corners": [
@@ -961,8 +961,8 @@
         },
         "fps": {
           "samples": 60,
-          "elapsedMs": 441.29999999981374,
-          "fps": 135.96193065947276
+          "elapsedMs": 442.1000000005588,
+          "fps": 135.7159013796068
         }
       },
       "verbResults": {
@@ -977,14 +977,14 @@
       "urls404": [],
       "benign404Count": 0,
       "summary": {
-        "topology": "The Branch",
+        "topology": "The Spine",
         "realm": "chrome",
         "roomCount": 8,
         "planVerified": true,
         "piecesResolved": 5,
         "piecesRequested": 5,
-        "dressingCount": 90,
-        "meshCount": 5,
+        "dressingCount": 84,
+        "meshCount": 4,
         "consoleErrorCount": 0,
         "breakCount": 0
       }
@@ -999,8 +999,8 @@
     "notes": [
       "startSession() called"
     ],
-    "worldId": "mrgntkshvzq3k",
-    "worldName": "Three-Candle Way"
+    "worldId": "mrgp9b3wf7z3j",
+    "worldName": "The Walled Orchard"
   },
   "theaterState": {
     "hasBattleStage": true,
@@ -1009,7 +1009,7 @@
     "hasSetInteriorBoard": true,
     "hasPlay": true
   },
-  "contactSheetPath": "/Users/adamstephenson/Desktop/Work/projects/Genesis/.claude/worktrees/agent-a3e142e0934f260dc/dev/battle-gate/dungeon-loop/contact-sheet.png",
+  "contactSheetPath": "/Users/adamstephenson/Desktop/Work/projects/Genesis/dev/battle-gate/dungeon-loop/contact-sheet.png",
   "shotCount": 16,
   "breakCount": 0,
   "cleanIterations": 5

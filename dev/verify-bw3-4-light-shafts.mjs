@@ -182,6 +182,7 @@ console.log("\n=== ITEM 2 — interiorBuildLights wiring (theater-boot.js source
     extractConstLine(bootSrc, "ITR_LIGHT_CONE_MIN_HEIGHT"),
     (bootSrc.match(/const ITR_LIGHT_CONE_OPACITY = \{[^}]*\};/) || [null])[0],
     extractConstLine(bootSrc, "ITR_LIGHT_RENDER_GAIN"),
+    extractConstLine(bootSrc, "ITR_LIGHT_DISTANCE_CAP"), // BW2-4b item 1: interiorBuildLights now clamps range to this
     extractConstLine(bootSrc, "INTERIOR_SHADOW_CASTER_CAP"),
     extractConstLine(bootSrc, "INTERIOR_SHADOW_MAP_SIZE"),
     (bootSrc.match(/const INTERIOR_LIGHT_CARD = \{[^}]*\};/) || [null])[0],

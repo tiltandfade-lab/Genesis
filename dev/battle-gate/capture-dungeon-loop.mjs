@@ -413,13 +413,13 @@ async function renderAndAnimate(page, cfg, driveResult) {
 
       out.stage = "setInteriorBoard";
       window.Theater.setInteriorBoard(board);
-      // BEAUTY-WAVE-2.md BW2-1: a permanent per-iteration law-2c assertion — the beat fit must
-      // actually contain the REAL roster it was just built for (this iteration's own tallest foe,
-      // window.Theater.interiorFitMaxHeight() — a Wolf/Rat/Spider roster and an Ogre-Zombie-mixed
-      // roster need very different headroom, and only the board's OWN computed value is honest about
-      // which this is), not interiorFrustumCheck's generic 1.1 default.
-      out.beatMaxHeight = window.Theater.interiorFitMaxHeight();
-      out.beatFrustumCheck = window.Theater.interiorFrustumCheck(out.beatMaxHeight);
+      // BEAUTY-WAVE-4.md MF-1 (CAMERA TWEENS): the beat fit's own camera pose now GLIDES over ~320ms
+      // instead of snapping — reading interiorFrustumCheck() synchronously right here (the old
+      // convention) would sample the camera at t=0 (its PRE-fit pose), not the settled fit this
+      // assertion is actually about. The maxHeight/frustum read moves to the caller, AFTER an explicit
+      // settle-await on window.Theater.tweensLive() (see capture-dungeon-loop.mjs's main loop) — this
+      // in-page function stays synchronous (page.evaluate can't easily straddle an async settle poll
+      // and the DOM-thread work above in one call), so the two reads are just relocated, not changed.
       out.ok = true;
       out.meshCount = window.Theater.interiorMeshCount();
       out.piecesRequested = window.Theater.interiorPiecesRequested();
@@ -485,6 +485,22 @@ async function main() {
         continue;
       }
 
+      // BEAUTY-WAVE-4.md MF-1: a MID-TWEEN evidence shot — READ, not gated (per the spec's own
+      // "loop-gate capture gains a mid-tween shot, READ"). Fires on loop 1 only (one example is
+      // enough evidence; every iteration's beat fit tweens the same way, so a second/third mid-tween
+      // shot would just be a re-confirmation, not new information). Taken IMMEDIATELY after
+      // renderAndAnimate's own setInteriorBoard call — before the pieces-resolved poll below has any
+      // chance to sleep long enough for the ~320ms camera-pose tween to settle — so this frame is a
+      // genuine in-flight sample of the glide (camera partway between the previous room's pose and
+      // this one's), never the settled pose the room.png capture further down shows.
+      if (loopIndex === 1) {
+        const midTweenLive = await page.evaluate(() => (window.Theater.tweensLive ? window.Theater.tweensLive() : 0));
+        const midTweenPath = path.join(outDir, `loop-${li}-camera-mid-tween.png`);
+        await shootCanvas(page, midTweenPath);
+        shots.push({ loopIndex, kind: "camera-mid-tween", label: `loop ${li} · MF-1 camera-pose tween in flight (tweensLive=${midTweenLive})`, path: midTweenPath, fileName: path.basename(midTweenPath) });
+        log(`  captured ${path.basename(midTweenPath)} (tweensLive=${midTweenLive}, evidence only — not gated)`);
+      }
+
       // pieces load their textures async (same race capture-interior-study.mjs documents) — poll
       // interiorPiecesResolved() before trusting the count, then screenshot the room.
       if (rendered.piecesRequested > 0) {
@@ -504,6 +520,19 @@ async function main() {
         iterFindings.breaks.push({ where: "pieces", detail: `only ${rendered.piecesResolved}/${rendered.piecesRequested} piece sprites resolved` });
         findings.breaks.push({ loopIndex, where: "pieces", detail: `only ${rendered.piecesResolved}/${rendered.piecesRequested} piece sprites resolved`, foes: cfg.foes });
       }
+
+      // BEAUTY-WAVE-4.md MF-1: settle-await the camera-pose tween (window.Theater.tweensLive()) BEFORE
+      // reading the beat fit's own maxHeight/frustum — see renderAndAnimate's own comment for why this
+      // moved out of that synchronous in-page function. A short cap (the tween is ~320ms) guards
+      // against ever hanging the gate if some future regression left a tween permanently live.
+      await page.waitForFunction(() => !window.Theater || typeof window.Theater.tweensLive !== "function" || window.Theater.tweensLive() === 0, { timeout: 8000 }).catch(() => {});
+      const beatFit = await page.evaluate(() => {
+        const beatMaxHeight = window.Theater.interiorFitMaxHeight();
+        return { beatMaxHeight, beatFrustumCheck: window.Theater.interiorFrustumCheck(beatMaxHeight) };
+      });
+      rendered.beatMaxHeight = beatFit.beatMaxHeight;
+      rendered.beatFrustumCheck = beatFit.beatFrustumCheck;
+      iterFindings.rendered = rendered;
 
       if (rendered.beatFrustumCheck && rendered.beatFrustumCheck.ok !== true) {
         iterFindings.breaks.push({ where: "beat-frustum", detail: `action cluster not fully in frustum (maxHeight=${rendered.beatMaxHeight})` });

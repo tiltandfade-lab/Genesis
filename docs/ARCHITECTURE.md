@@ -247,7 +247,16 @@ reachability verify (reroll ≤5, then honest-fail); deterministic per walkId.
 depth=difficulty bands, SCALE DOMAINS (a big resident's territory builds at its scale;
 prison-rule regrowth; transition/squeeze doors). Consumed by prep (`pn.spatial`), the theater
 interior renderer (volumetric prism InstancedMesh tile kits), and combat cell dims (dm.js).
-**Lives in:** `src/engine/place-{spatialize,semantics}.js`, `src/ui/theater-interior.js`. **Spec:** docs/DUNGEON-GRAPH.md
+The renderer runs the full BEAUTY-WAVE presentation stack (2026-07-10): perspective ~20° camera
++ clean world (PSX = palette/poly only), TRUE-SCALE pieces AND combat standees (feet/scaleTrue
+registry fields; `setInteriorBoard` clears the tabletop unit groups — the kaiju-leak fix), real
+dressing cards (`assets/dressing/`, REALM_DRESSING generated from manifests, incl. reclaimed
+gallery paintings w/ `paintingOf`), VP3 ground design + VP4 SCENE_DIRECTION (value scripts,
+key-light-on-focal), VP6 life pass (idle-breathe, flicker, motes, persistent combat decals
+capped 12/room in `pn.spatial.decals`), VP7 contact blobs, and the VP5 off-stage combat UI
+(chip strip, acting ring, damage floaters). Corpus unified to per-realm 48-color palettes
+(`dev/model-qa/realm-palettes/`, hue-family coverage law).
+**Lives in:** `src/engine/place-{spatialize,semantics}.js`, `src/ui/theater-interior.js`. **Spec:** docs/DUNGEON-GRAPH.md + docs/BEAUTY-WAVE.md
 
 ## World layer (persistent state, flow, and the event surface)
 

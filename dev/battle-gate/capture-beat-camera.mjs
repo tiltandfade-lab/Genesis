@@ -238,6 +238,10 @@ async function mountShootMeasure(page, fx, opts) {
     if (resolved >= requested) break;
     await sleep(150);
   }
+  // BEAUTY-WAVE-4.md MF-1: also settle-await the camera-pose tween (~320ms) explicitly, on top of the
+  // existing idle-breathe/mote buffer — this screenshot is a measured "settled fit" claim, never a
+  // mid-glide frame.
+  await page.waitForFunction(() => !window.Theater || typeof window.Theater.tweensLive !== "function" || window.Theater.tweensLive() === 0, { timeout: 8000 }).catch(() => {});
   await sleep(400); // let idle-breathe / mote/tween settle one frame past mount
 
   const canvasEl = await page.$(".theater-stage-canvas canvas");
@@ -394,11 +398,16 @@ async function main() {
     log("--- determinism: same cameraFit, two independent rebuilds -> byte-identical fit ---");
     const detBoardA = Object.assign({}, fx.board, { pieces: beatPieces, cameraFit, _detNonce: 1 });
     const detBoardB = Object.assign({}, fx.board, { pieces: beatPieces, cameraFit, _detNonce: 2 });
+    // BEAUTY-WAVE-4.md MF-1 (CAMERA TWEENS): the fit's camera pose now GLIDES (~320ms) instead of
+    // snapping — this determinism claim is about the SETTLED fit (byte-identical corners once both
+    // rebuilds land), so wait for window.Theater.tweensLive() to clear before each frustum read,
+    // rather than a flat sleep(200) that used to just barely outrun the old instant-snap.
+    const settle = () => page.waitForFunction(() => !window.Theater || typeof window.Theater.tweensLive !== "function" || window.Theater.tweensLive() === 0, { timeout: 8000 }).catch(() => {});
     await page.evaluate((b) => window.Theater.setInteriorBoard(b), detBoardA);
-    await sleep(200);
+    await settle();
     const cornersA = await page.evaluate(() => window.Theater.interiorFrustumCheck());
     await page.evaluate((b) => window.Theater.setInteriorBoard(b), detBoardB);
-    await sleep(200);
+    await settle();
     const cornersB = await page.evaluate(() => window.Theater.interiorFrustumCheck());
     const deterministic = JSON.stringify(cornersA.corners) === JSON.stringify(cornersB.corners);
     findings.determinism = { ok: deterministic, cornersA: cornersA.corners, cornersB: cornersB.corners };

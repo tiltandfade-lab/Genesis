@@ -188,6 +188,18 @@ const CAM_YAW_OFFSET_DEG = 45;
 // rotation step (verify-battle-stage's fixture-2 non-square-room overflow gate, G9 camera-yaw fix,
 // still holds — this only rescales viewSize uniformly, it doesn't touch the yaw-aware footprint math).
 const CAM_FIT_MARGIN = 0.94;
+// BEAUTY-WAVE-4.md MF-1 (CAMERA TWEENS — the snap killer): every beat/room/move-step camera refit
+// glides position+target over this duration instead of snapping (BW4's 280-350ms band, ease-out).
+// A single fixed value inside the band (not randomized) keeps the motion predictable + fake-clock
+// testable — the SAME number every time a fit fires, matching every other DEFAULT_DUR-style constant
+// in this file/theater-verbs.js. Player zoom()/rotate() calls stay on the plain, instant placeCamera()
+// below (Feel Law 3 — never add lag to player intent); only the programmatic interior board fit
+// (setInteriorBoard's own authoritative placeCamera() call, which also covers move-step refits since
+// a move-step forces a fresh setInteriorBoard rebuild — see that call site's own comment) routes
+// through placeCameraTweened().
+const MF1_CAMERA_TWEEN_DUR = 320;
+const mf1EaseOutCubic = (t) => 1 - Math.pow(1 - t, 3);
+function mf1Lerp(a, b, t){ return a + (b - a) * t; }
 // BEAUTY-WAVE-2.md BW2-1 (THE BEAT CAMERA): placeCamera's own degenerate-box floor on hx/hz — was a
 // flat 2 for every board (tabletop AND interior). The tabletop's own boards are never intentionally
 // smaller than that, so 2 stays its floor unchanged (OUT OF SCOPE: "the flat tabletop"). The interior
@@ -4075,6 +4087,14 @@ function teardownPostSuite(){
    fixture 2 (a non-square 100'x60' room) off the edge of the canvas at some rotation steps. */
 function placeCamera(){
   if(!S.camera) return;
+  // MF-1 (BEAUTY-WAVE-4.md, Feel Law 3 — "input is never blocked by cosmetic motion"): an INSTANT fit
+  // (this function, called directly by zoom()/rotate()/resize/mount/the tabletop's own setBoard) must
+  // always win outright — cancel any in-flight camera-GLIDE tween first so it can't keep overriding
+  // this call's placement on the next tick (placeCameraTweened() itself also calls this function, but
+  // it does its own equivalent filter first — see that function's header — so this is a no-op there).
+  if(S.tweens && S.tweens.length){
+    S.tweens = S.tweens.filter((tw) => !(tw && tw.isCameraPoseTween));
+  }
   const rad = (CAM_ELEV_DEG * Math.PI) / 180;
   const yaw = (S.rotationStep * 90 * Math.PI) / 180 + (CAM_YAW_OFFSET_DEG * Math.PI) / 180;
 
@@ -4225,6 +4245,10 @@ function placeCamera(){
       S.scene.fog.near = camDist * 0.55;
       S.scene.fog.far = camDist * 1.65;
     }
+    // MF-1: keep the tracked "current look target" in sync with wherever this (instant, un-tweened)
+    // fit just pointed the camera — placeCameraTweened() reads this as its start-target on the NEXT
+    // fit, whether or not the intervening calls (zoom/rotate/resize) were themselves tweened.
+    S.cameraLookTarget = (S.boardCenter ? S.boardCenter.clone() : new THREE.Vector3(0, 0, 0));
     return;
   }
 
@@ -4278,6 +4302,90 @@ function placeCamera(){
     S.scene.fog.near = camDist * 0.55;
     S.scene.fog.far = camDist * 1.65;
   }
+  // MF-1: see the perspective branch's own matching line above — keeps the tracked look target
+  // current for placeCameraTweened()'s next start-pose read.
+  S.cameraLookTarget = (S.boardCenter ? S.boardCenter.clone() : new THREE.Vector3(0, 0, 0));
+}
+
+/* BEAUTY-WAVE-4.md MF-1 (CAMERA TWEENS): wraps placeCamera() so a programmatic beat/room/move-step
+   camera refit GLIDES from its current live pose to the new fit's pose over MF1_CAMERA_TWEEN_DUR ms
+   (ease-out), instead of the plain placeCamera()'s instant snap. Reuses the SAME tween channel every
+   other verb/effect animates through (S.tweens / tickTweens, theater-verbs.js) — no second tween
+   system. Only wraps POSITION + LOOK TARGET (the fields BW4's MF-1 names); projection-matrix fields
+   (aspect/fov/near/far/ortho left-right-top-bottom, viewSize/zoom) still apply INSTANTLY as part of
+   computing the new fit's end pose, matching the spec's literal "tween position+target" scope — a
+   full projection tween isn't asked for and isn't attempted here.
+
+   INTERRUPTIBLE RETARGET: if a camera tween is already in flight when a new fit arrives, the new
+   tween starts from the CURRENT INTERPOLATED pose (S.camera.position + S.cameraLookTarget, both kept
+   live by the in-flight tween's own onUpdate every frame) — never a restart from the old tween's
+   original start, and never a snap to its old end. The stale tween is spliced out of S.tweens first so
+   only one camera-pose tween is ever live at a time. */
+function placeCameraTweened(preFit){
+  if(!S.mounted || !S.camera){ placeCamera(); return; }
+
+  // start pose = wherever the camera/look-target ACTUALLY were right before THIS fit's math ran.
+  // `preFit` (an explicit {pos,target} snapshot) is required whenever the caller does its own
+  // preview/idempotent placeCamera() call before this one (setInteriorBoard's OCCLUSION LAW preview,
+  // see its own header) — by the time control reaches here S.camera already sits at what will become
+  // the END pose too, so reading S.camera.position "live" at this point would silently no-op every
+  // fit (found live debugging this unit). Falls back to reading the live pose directly for any future
+  // caller that has no such preview step of its own.
+  const startPos = (preFit && preFit.pos) ? preFit.pos.clone() : S.camera.position.clone();
+  const startTarget = (preFit && preFit.target) ? preFit.target.clone()
+    : (S.cameraLookTarget ? S.cameraLookTarget.clone() : new THREE.Vector3(0, 0, 0));
+
+  // cancel any in-flight camera-pose tween (retarget, not stack) — never two competing camera tweens.
+  if(S.tweens && S.tweens.length){
+    S.tweens = S.tweens.filter((tw) => !(tw && tw.isCameraPoseTween));
+  }
+
+  // let the real fit math run + commit — placeCamera() leaves S.camera at the FINAL end pose (and the
+  // final projection), which is exactly the number this function needs; it's then snapped back to the
+  // start pose below so nothing flashes to the end pose before the tween's first tick.
+  placeCamera();
+  const endPos = S.camera.position.clone();
+  const endTarget = (S.cameraLookTarget ? S.cameraLookTarget.clone() : new THREE.Vector3(0, 0, 0));
+
+  // degenerate/no-op fit (e.g. re-fitting the identical board) — nothing to glide, skip the tween.
+  if(startPos.distanceToSquared(endPos) < 1e-8 && startTarget.distanceToSquared(endTarget) < 1e-8){
+    return;
+  }
+
+  S.camera.position.copy(startPos);
+  S.camera.lookAt(startTarget);
+  S.cameraLookTarget = startTarget.clone();
+
+  if(!S.tweens) S.tweens = [];
+  const tw = {
+    start: Date.now(),
+    dur: MF1_CAMERA_TWEEN_DUR,
+    isCameraPoseTween: true,
+    update: (t) => {
+      const e = mf1EaseOutCubic(t);
+      const px = mf1Lerp(startPos.x, endPos.x, e);
+      const py = mf1Lerp(startPos.y, endPos.y, e);
+      const pz = mf1Lerp(startPos.z, endPos.z, e);
+      S.camera.position.set(px, py, pz);
+      const tx = mf1Lerp(startTarget.x, endTarget.x, e);
+      const ty = mf1Lerp(startTarget.y, endTarget.y, e);
+      const tz = mf1Lerp(startTarget.z, endTarget.z, e);
+      S.camera.lookAt(tx, ty, tz);
+      S.cameraLookTarget = new THREE.Vector3(tx, ty, tz);
+      // keep the DoF focal band (BW3-2) tracking the camera continuously through the glide, not just
+      // its start/end — updateDofFocus no-ops safely if the post suite hasn't mounted yet this call.
+      if(typeof updateDofFocus === "function") updateDofFocus();
+    },
+    onDone: () => {
+      S.camera.position.copy(endPos);
+      S.camera.lookAt(endTarget);
+      S.cameraLookTarget = endTarget.clone();
+      if(typeof updateDofFocus === "function") updateDofFocus();
+    }
+  };
+  S.tweens.push(tw);
+  if(typeof markDirty === "function") markDirty();
+  startTweenLoop();
 }
 
 // P1' WHOLE-OBJECT WIRING (docs/P1-WIRING.md §3-D7): dispose one mesh's geometry+material, UNLESS its
@@ -6939,6 +7047,19 @@ const CLIP_DRESSING_EPSILON = 0.02;
 
 function setInteriorBoard(data){
   if(!S.mounted || !data) return;
+  // BEAUTY-WAVE-4.md MF-1: capture the TRUE live camera pose as the very FIRST thing this function
+  // does — before drainTweens() (a few lines down) gets a chance to force-complete an in-flight
+  // camera-pose tween to ITS end pose. drainTweens' own job is legitimate (force-settle tweens whose
+  // Object3D/material handles are about to be disposed by the clearGroup calls that follow it) — a
+  // camera-pose tween doesn't hold any such handle (it only ever touches the persistent S.camera), so
+  // it's harmless for drainTweens to complete it too, but doing so BEFORE this capture point would
+  // silently defeat MF-1's own "retarget from the CURRENT interpolated pose" contract (found live
+  // debugging this unit: a fit fired mid-glide always re-derived its start from the OLD tween's own
+  // end, never the live mid-flight pose, because drainTweens had already snapped to it by the time the
+  // old capture point — right before the preview placeCamera() call, much later in this function — ever
+  // ran). Captured unconditionally (even on the dirty-key skip path below) — a wasted clone is cheap.
+  const mf1PreFitPos = S.camera ? S.camera.position.clone() : null;
+  const mf1PreFitTarget = S.cameraLookTarget ? S.cameraLookTarget.clone() : null;
   // DUNGEON-GRAPH.md U3 render-quality study card: S.interiorVariant (window.Theater.setInteriorVariant,
   // below) folds into the dirty key so a variant-only change (same board data, different AO/banded/fog
   // flags — exactly what the study rig does per scene) still forces a rebuild instead of skipping.
@@ -7025,6 +7146,13 @@ function setInteriorBoard(data){
   // creature's full intended height even where the render later clips it for ceiling clearance).
   S.interiorFitMaxHeight = interiorFitMaxHeightFor(data);
   S.lastGrid = null; // no band/lane grid on an interior tray — zoneToWorld/zoom-bias callers degrade to their own defaults
+
+  // BEAUTY-WAVE-4.md MF-1: mf1PreFitPos/mf1PreFitTarget (captured at this function's very TOP, before
+  // drainTweens() could force-complete an in-flight camera tween) are what placeCameraTweened() below
+  // uses as its start pose — NOT a fresh read of S.camera here, since the preview placeCamera() call
+  // just below is byte-identical to the authoritative one further down this function (see its own
+  // comment: "idempotent... not a second/different fit") and would already have snapped the camera to
+  // what becomes the "end" pose by the time control reaches past it.
 
   // BEAUTY-WAVE-2.md BW2-1b (THE OCCLUSION LAW), item 1: a PREVIEW placeCamera() call — every input
   // it reads (S.boardCenter/halfX/halfZ/halfExtent, S.interiorFitMaxHeight, S.rotationStep,
@@ -7371,7 +7499,11 @@ function setInteriorBoard(data){
   S.moteGroup = moteGroup;
   startMoteDrift();
 
-  placeCamera();
+  // BEAUTY-WAVE-4.md MF-1: this is the authoritative fit for the interior channel — covers every
+  // beat/room refit AND every move-step (a move-step forces a fresh setInteriorBoard rebuild, so
+  // "recompute on move-step" falls out of this same call path, per the pillar-cutaway comment above).
+  // Tweened (not the plain placeCamera()) so the camera glides instead of snapping (Feel Law 1).
+  placeCameraTweened((mf1PreFitPos && mf1PreFitTarget) ? { pos: mf1PreFitPos, target: mf1PreFitTarget } : null);
   // BEAUTY-WAVE-3 THE POST SUITE (BW3-2/3/6): mount DoF + selective bloom + filmic grade onto the
   // composer for this interior board. AFTER the authoritative placeCamera above so updateDofFocus
   // projects the FINAL camera fit (the focal band tracks beat-vs-room framing). kit + rigOn are this
@@ -8110,6 +8242,17 @@ window.Theater.shadowMapEnabled = function(){ return !!(S.renderer && S.renderer
 // capture rig can poll-until-settled instead of guessing a fixed sleep duration before screenshotting
 // a verb's terminal frame.
 window.Theater.tweensLive = function(){ return (S.tweens && S.tweens.length) || 0; };
+// BEAUTY-WAVE-4.md MF-1 — TEST-ONLY SEAM: the live camera-pose tween's own {start,dur} (Date.now()-
+// timestamped at push, per pushTween's own convention this file's tween shares — see placeCameraTweened's
+// header) so a harness can fake Date.now() and assert exact fake-clock t-fraction math (start/mid/end
+// pose) against a KNOWN elapsed/dur pair, rather than guessing at real wall-clock timing.
+window.Theater._mf1CameraPoseTweenForTest = function(){
+  const tw = (S.tweens || []).find((t) => t && t.isCameraPoseTween);
+  return tw ? { start: tw.start, dur: tw.dur } : null;
+};
+window.Theater._mf1CameraLookTargetForTest = function(){
+  return S.cameraLookTarget ? { x: S.cameraLookTarget.x, y: S.cameraLookTarget.y, z: S.cameraLookTarget.z } : null;
+};
 
 // DUNGEON-GRAPH.md U3 iteration-2, SPRITE PURITY ruling — a harness-facing diagnostic (dev/verify-
 // dungeon-interior.mjs's puppeteer check, dev/battle-gate/capture-interior-study.mjs's metrics) that

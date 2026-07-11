@@ -24,7 +24,15 @@
        same seeded Fisher-Yates) rather than calling into it: ENGINE PURITY LAW (CLAUDE.md/this repo's
        standing discipline) means src/engine/* never reaches into a src/ui/* render module, even a
        DOM-free one — two independent implementations of the SAME deterministic formula over the SAME
-       inputs necessarily agree, byte-for-byte, without an import.
+       inputs necessarily agree, byte-for-byte, without an import;
+     - SEAM-SOFTENING (BW3-5, docs/BEAUTY-WAVE-3.md, "why the wolf room's foliage almost belongs"): a
+       small filler sub-pass, seeded ALONG the wall-base line (RHYTHM-sampled at intervals — dpWallBaseCells/
+       dpAdjacentToDoor/dpAdjacentCellsWithin1/dpRoomColumnCell below), at column feet (dpRoomColumnCell
+       independently mirrors theater-interior.js's own u3-column pillar formula, same ENGINE PURITY LAW
+       discipline as the light-seed co-location above) and furniture feet (adjacent to this room's own
+       blocker/setPiece pieces), and in doorway-adjacent corners — texture for architecture SEAMS, not
+       more floor clutter, bounded by its own DRESSING_DENSITY_BY_ROLE `seam` budget and marked
+       `seam:true, seamKind` on the emitted entry.
 
    REALM_DRESSING is GENERATED (BEAUTY-WAVE.md §VP2, 2026-07-10 — build/gen-realm-dressing.py
    --emit, between the GENERATED:REALM_DRESSING:BEGIN/END markers below; never hand-edit that
@@ -190,12 +198,17 @@ function dressingRosterFor(realmId) {
 // 1-3 focal pieces per room MAX regardless of role — dpPlaceRoom clamps focal to this cap even if a
 // role table entry were ever mistuned above it) ──────────────────────────────────────────────────
 const DRESSING_FOCAL_CAP = 3;
+// `seam` (BW3-5 SEAM-SOFTENING, docs/BEAUTY-WAVE-3.md): the seam-filler sub-pass's OWN density
+// budget — same "entrance sparse -> finale staged" role convention as `filler`, a sibling number
+// not a re-use of `filler` (seam fillers target a different zone — wall-base/column-foot/door-
+// corner — and are bounded independently so a dense room's general clutter budget can't silently
+// starve the seam pass, or vice versa).
 const DRESSING_DENSITY_BY_ROLE = Object.freeze({
-  entrance: Object.freeze({ focal: 1, filler: 1 }),
-  pocket: Object.freeze({ focal: 3, filler: 3 }),
-  finale: Object.freeze({ focal: 3, filler: 5 }),
-  path: Object.freeze({ focal: 2, filler: 2 }),
-  side: Object.freeze({ focal: 2, filler: 2 }),
+  entrance: Object.freeze({ focal: 1, filler: 1, seam: 2 }),
+  pocket: Object.freeze({ focal: 3, filler: 3, seam: 4 }),
+  finale: Object.freeze({ focal: 3, filler: 5, seam: 6 }),
+  path: Object.freeze({ focal: 2, filler: 2, seam: 3 }),
+  side: Object.freeze({ focal: 2, filler: 2, seam: 3 }),
 });
 function dressingDensityFor(role) {
   return DRESSING_DENSITY_BY_ROLE[role] || DRESSING_DENSITY_BY_ROLE.side;
@@ -242,6 +255,67 @@ function dpAdjacentToWall(x, y, plan) {
     if (nx < 0 || ny < 0 || nx >= plan.cellW || ny >= plan.cellD) return false;
     return plan.cells[ny * plan.cellW + nx] === SPATIAL_CELL.WALL;
   });
+}
+
+// ─── BW3-5 SEAM-SOFTENING (docs/BEAUTY-WAVE-3.md unit BW3-5) — helpers for the seam-filler sub-
+// pass added to dpPlaceRoom below. The mock's foliage sits at ARCHITECTURE SEAMS (wall-floor joint,
+// column/furniture feet, doorway-adjacent corners), never mid-floor — this is a texture for seams,
+// not a new clutter budget. ───────────────────────────────────────────────────────────────────────
+function dpAdjacentToDoor(x, y, plan) {
+  const deltas = [[1, 0], [-1, 0], [0, 1], [0, -1]];
+  return deltas.some(([dx, dy]) => {
+    const nx = x + dx, ny = y + dy;
+    if (nx < 0 || ny < 0 || nx >= plan.cellW || ny >= plan.cellD) return false;
+    return plan.cells[ny * plan.cellW + nx] === SPATIAL_CELL.DOOR;
+  });
+}
+
+// the wall-base LINE for a room: its own FLOOR cells that are wall-adjacent, in stable row-major
+// order (dpRoomFloorCells' own order) — a deterministic, roughly-perimeter-following sequence the
+// RHYTHM-style interval sampler below walks across, so sampled fillers spread along the joint
+// instead of clustering wherever the shuffle happened to land.
+function dpWallBaseCells(room, plan) {
+  return dpRoomFloorCells(room, plan).filter((c) => dpAdjacentToWall(c.x, c.y, plan));
+}
+
+// the 4-neighbor FLOOR cells around an arbitrary (x,y) — used to find a "foot" cell beside a column
+// or an already-placed furniture (blocker/setPiece) piece. Never returns a WALL/DOOR/VOID neighbor
+// (FLOOR-cells-only law, same guard as every other placement step in this file).
+function dpAdjacentCellsWithin1(cell, plan) {
+  const deltas = [[1, 0], [-1, 0], [0, 1], [0, -1]];
+  const out = [];
+  deltas.forEach(([dx, dy]) => {
+    const nx = cell.x + dx, ny = cell.y + dy;
+    if (nx < 0 || ny < 0 || nx >= plan.cellW || ny >= plan.cellD) return;
+    if (plan.cells[ny * plan.cellW + nx] === SPATIAL_CELL.FLOOR) out.push({ x: nx, y: ny });
+  });
+  return out;
+}
+
+// mirrors theater-interior.js's OWN u3-column pillar-placement formula (ITR_PILLAR_MIN_DIM=6,
+// ITR_COLUMN_CHANCE=0.14, the SAME 4-corner candidate list, the SAME "u3-column:"+seed+":"+segNum+
+// ":"+x","+y hash) — an INDEPENDENT reimplementation of the SAME deterministic formula over the SAME
+// inputs (this file's header note's own ENGINE PURITY LAW discipline: place-dressing.js never reaches
+// into src/ui/theater-interior.js, even a DOM-free render-data module — two independent
+// implementations of the same formula necessarily agree, byte-for-byte, without an import). Used
+// ONLY to learn WHERE a room's column (if any) will render this seed, so a seam-filler card can sit
+// at its foot; never mutates or duplicates the pillar itself (theater-interior.js still owns
+// rendering it). Runs its own seeded stream, never the caller's `rng` (same convention as
+// dpRoomLightCells above), so this lookup never perturbs the room's own dressing roll order.
+const DP_PILLAR_MIN_DIM = 6;
+const DP_COLUMN_CHANCE = 0.14;
+function dpRoomColumnCell(room, plan) {
+  if (room.w < DP_PILLAR_MIN_DIM || room.d < DP_PILLAR_MIN_DIM) return null;
+  const seed = dspHashStr("u3-column:" + (plan.seed || "") + ":" + room.segNum + ":" + room.x + "," + room.y);
+  const rng = dspMulberry32(seed);
+  if (rng() >= DP_COLUMN_CHANCE) return null; // the common case: no column at all
+  const corners = [
+    { x: room.x + 1, y: room.y + 1 }, { x: room.x + room.w - 2, y: room.y + 1 },
+    { x: room.x + 1, y: room.y + room.d - 2 }, { x: room.x + room.w - 2, y: room.y + room.d - 2 },
+  ].filter((c) => c.x >= 0 && c.y >= 0 && c.x < plan.cellW && c.y < plan.cellD
+    && plan.cells[c.y * plan.cellW + c.x] === SPATIAL_CELL.FLOOR);
+  if (!corners.length) return null;
+  return corners[Math.floor(rng() * corners.length) % corners.length];
 }
 
 // ─── BEAUTY-WAVE-2.md BW2-1b (THE OCCLUSION LAW), item 2 — PLACEMENT BIAS: mirrors src/ui/theater-
@@ -320,7 +394,7 @@ function dpPickRoster(roster, rng) {
 // ─── per-room roll: lights (co-located) -> focal (capped 3) -> blockers (wall-adjacent) ->
 // wall-hangs (wall-adjacent) -> filler (general floor) — fixed order over ONE seeded rng stream so
 // two identical (plan,opts) calls always draw the exact same cells in the exact same sequence. ────
-function dpPlaceRoom(room, plan, roster, rng) {
+function dpPlaceRoom(room, plan, roster, rng, seamRoster) {
   const out = [];
   const floorCells = dpRoomFloorCells(room, plan);
   const centerSet = dpCenter2x2(room);
@@ -422,6 +496,70 @@ function dpPlaceRoom(room, plan, roster, rng) {
     }
   }
 
+  // 6) SEAM-SOFTENING (BW3-5, docs/BEAUTY-WAVE-3.md — "why the wolf room's foliage almost belongs"):
+  // small filler cards seeded ALONG the wall-base line (RHYTHM-sampled at intervals, never every
+  // cell — a texture, not a flood), at column/furniture feet, and in doorway-adjacent corners. This
+  // is composition FOR SEAMS, not more floor clutter: bounded by `density.seam` (role-scaled,
+  // entrance sparse -> finale staged, same convention as `filler` above), and every candidate cell
+  // still comes from `placeable` (FLOOR-only, never this room's own center 2x2 — the SAME CLEAR-law
+  // guard every earlier step already obeys) or from the shared `occupied` set (never double-books a
+  // cell another step already took). `seamRoster` is realm-true filler-shaped entries picked from
+  // the roster that ALREADY EXISTS (primary:"floor" && size:"small" — fantasy grass/roots/moss,
+  // gloom bone-dust/crack/grave clutter, chrome cable/grime/moss slugs read this way by construction,
+  // never an invented slug); dressPlan logs (once, not per-room) and skips this whole sub-pass for a
+  // realm whose roster has none, per the spec's own "log realms whose pools lack fillers rather than
+  // inventing slugs" ruling.
+  const seamBudget = Math.max(0, (density.seam || 0));
+  if (seamRoster && seamRoster.length && seamBudget > 0) {
+    const seamTargets = [];
+
+    // (a) doorway-adjacent corners — a tuft tucked right where the door frame meets the wall face.
+    dpShuffle(placeable.filter((c) => dpAdjacentToDoor(c.x, c.y, plan) && dpAdjacentToWall(c.x, c.y, plan)), rng)
+      .forEach((c) => seamTargets.push({ cell: c, kind: "doorCorner" }));
+
+    // (b) column foot — this room's own column cell, IF the independent column-formula rolls one
+    // for this seed (dpRoomColumnCell, above) — a foot cell adjacent to it, still inside `placeable`.
+    const columnCell = dpRoomColumnCell(room, plan);
+    if (columnCell) {
+      const feet = dpShuffle(dpAdjacentCellsWithin1(columnCell, plan).filter((c) => placeable.some((p) => p.x === c.x && p.y === c.y)), rng);
+      if (feet.length) seamTargets.push({ cell: feet[0], kind: "columnFoot" });
+    }
+
+    // (c) furniture feet — adjacent to THIS room's own already-placed blocker/setPiece pieces (the
+    // furniture channel + large set-dressing, BW2-5) — moss/roots grounding the big prop's base.
+    out.filter((d) => d.primary === "blocker" || d.primary === "setPiece").forEach((d) => {
+      const feet = dpShuffle(dpAdjacentCellsWithin1({ x: d.x, y: d.y }, plan).filter((c) => placeable.some((p) => p.x === c.x && p.y === c.y)), rng);
+      if (feet.length) seamTargets.push({ cell: feet[0], kind: "furnitureFoot" });
+    });
+
+    // (d) wall-base line — RHYTHM-style interval sampling fills whatever budget (a)-(c) left over;
+    // a phase offset (seeded, not always 0) keeps the sampled start from always landing on the same
+    // corner of the room.
+    const remaining = Math.max(0, seamBudget - seamTargets.length);
+    if (remaining > 0) {
+      const wallBase = dpWallBaseCells(room, plan);
+      if (wallBase.length) {
+        const interval = Math.max(1, Math.floor(wallBase.length / remaining));
+        const phase = Math.floor(rng() * interval);
+        for (let i = phase; i < wallBase.length; i += interval) seamTargets.push({ cell: wallBase[i], kind: "wallBase" });
+      }
+    }
+
+    let placedSeam = 0;
+    for (const t of seamTargets) {
+      if (placedSeam >= seamBudget) break;
+      const key = t.cell.x + "," + t.cell.y;
+      if (occupied.has(key)) continue; // another step already took this cell — never double-book
+      occupied.add(key);
+      const entry = dpPickRoster(seamRoster, rng);
+      out.push({
+        slug: entry.slug, x: t.cell.x, y: t.cell.y, primary: entry.primary, cardKind: entry.size,
+        roomSegNum: room.segNum, seam: true, seamKind: t.kind,
+      });
+      placedSeam++;
+    }
+  }
+
   return out;
 }
 
@@ -439,12 +577,22 @@ function dressPlan(plan, opts) {
     throw new Error("dressPlan: plan.rooms[]/plan.cells are required (spatializePlan/semanticizePlan output expected)");
   }
   const roster = dressingRosterFor(opts.realmId);
+  // BW3-5 SEAM-SOFTENING: the seam-filler sub-pass's own roster slice — small floor-primary entries
+  // ALREADY IN the roster (never an invented slug). Computed ONCE per dressPlan call (not per room)
+  // so an empty pool logs exactly once, not once per room.
+  const seamRoster = roster.filter((e) => e.primary === "floor" && e.size === "small");
+  if (!seamRoster.length && typeof console !== "undefined" && console.warn) {
+    console.warn(
+      "dressPlan (BW3-5 seam-softening): realm '" + (opts.realmId != null ? opts.realmId : DRESSING_DEFAULT_REALM) +
+      "' roster has no small floor-primary entries — seam-filler sub-pass skipped for this walk (never inventing a filler slug)."
+    );
+  }
   const fingerprint = opts.walkId != null ? String(opts.walkId) : String(plan.seed || "");
   const dressing = [];
   plan.rooms.forEach((room) => {
     const seed = dspHashStr("u4-dress:" + fingerprint + ":" + room.segNum + ":" + room.x + "," + room.y);
     const rng = dspMulberry32(seed);
-    dpPlaceRoom(room, plan, roster, rng).forEach((d) => dressing.push(d));
+    dpPlaceRoom(room, plan, roster, rng, seamRoster).forEach((d) => dressing.push(d));
   });
   const out = Object.assign({}, plan, { dressing });
   return out;

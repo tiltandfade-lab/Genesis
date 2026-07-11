@@ -6,7 +6,32 @@ updated: 2026-07-10
 
 # Genesis — Session Hand-off
 
-## ⭐ Latest (2026-07-10 later night) — THE BEAUTY WAVE EXECUTED: 11 units + VP8 on master, pushed [Claude Fable, delegated verdict seat]
+## ⭐ Latest (2026-07-11) — THE VISUAL CAMPAIGN: BW2+BW3 landed, engine converged on the mocks [Claude Fable]
+
+Three waves in one sitting, all on master + pushed (tip 127d41d6 + the close). The dungeon
+now renders as a photographed miniature diorama: crisp full-res (PS1 retired game-wide),
+beat-composed camera, true-scale minis on dark kiltered plinths with soft shadow pools,
+LIT SPRITES under THE BRIGHTNESS LAW (full-bright only in full white light), generated
+masonry/wet-tile textures (grout = combat grid), torch cones with drifting motes, seam
+foliage hiding the prism edges, furniture as cover (columns demoted), extrusion wall props,
+tilt-shift DoF + emissive bloom + per-realm filmic grade. The closing frame:
+dev/battle-gate/dungeon-loop/loop-02-room.png — hold it against
+ui-sketches/mock-frames/mock-01-gloom-combat.png.
+
+**Do next (pick up here):**
+1. **BW4 MOTION & FEEL (docs/BEAUTY-WAVE-4.md, SPECCED + queued)** — camera tweens, spawn
+   grace, hit-stop, turn rhythm; MF-5 gate = Adam PLAYS 3 rounds ("does it feel like moving
+   miniatures?").
+2. **Adam:** eyeball the closing frames + the deferred taste calls (camera-key shadow
+   intensity; r2's 42 ΔE-flagged sprites) · run PACKET-03 (flat props, style-rider v2) ·
+   GIT-LFS migration (URGENT — 79MB zips; runbook ready).
+3. **Audio design night** (the biggest unmade polish lever — spec with Adam: sourcing/spend).
+4. Singles queue: texture pop-in ready-gate · prose-twin audit (TEXT-FIRST law vs the new
+   visual nouns) · trim GL-wiring · tier-2 silhouette extruder (BW2-5b, needed for PACKET-03
+   fold) · gallery-pass harness side-effect fix · wall-hang axis 7b if it reproduces.
+5. Then: ROOM-GRAMMAR build · UW1-4 · chrome/gloom creature sprites ride the codex rounds.
+
+## Latest (2026-07-10 later night) — THE BEAUTY WAVE EXECUTED: 11 units + VP8 on master, pushed [Claude Fable, delegated verdict seat]
 
 Adam handed Fable the taste verdicts and said "orchestrate this wave now." Everything landed on
 master (`0c00ca1c`, pushed): perspective ~20° + clean world (VP0, confirmed on pixels), TRUE

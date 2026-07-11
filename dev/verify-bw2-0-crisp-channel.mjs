@@ -98,6 +98,10 @@ function runApplyPsxCanvasSize(fnSrc, { psxEnabled, dpr }){
     S: { psxEnabled },
     window: (typeof dpr === "number") ? { devicePixelRatio: dpr } : undefined,
     PSX_RES_SCALE: 1 / 3,
+    // BW3-2/3/6 THE POST SUITE: applyPsxCanvasSize now also calls syncPostSuiteResolution() (keeps the
+    // DoF/grade/bloom resolution uniforms sized to the drawing buffer on resize) — a no-op stub here
+    // since this harness only exercises the canvas-size math, not the post chain.
+    syncPostSuiteResolution: () => {},
     result: null,
   };
   vm.createContext(sandbox);

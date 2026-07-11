@@ -71,6 +71,22 @@ async function startServer() {
   }
   throw new Error(`no usable port: tried ${PORT_CANDIDATES.join(", ")}`);
 }
+// BEAUTY-WAVE-4.md MF-1 (CAMERA TWEENS): setInteriorBoard's own camera fit now GLIDES (280-350ms,
+// window.Theater.tweensLive() tracks the live count) instead of snapping — this harness's own claim
+// ("the action cluster fits fully in frustum") is about the SETTLED fit, so every check below waits
+// for the glide to finish first (this is the "settle-await" the orchestrator's brief calls for,
+// mirrored from the loop-gate's own capture scripts). MF-1's own verify script (verify-mf1-camera-
+// tweens.mjs) is what actually asserts the frustum holds at EVERY mid-tween sample frame — this file
+// stays scoped to its original pre-existing claim about the final, settled pose.
+async function settleCameraTween(page) {
+  // generous timeout: the tween itself is only ~320ms, but a cold first frame (textures/shaders still
+  // warming up right after boot) can stall the rAF loop's own cadence well past that on a loaded CI
+  // box — this is a settle WAIT, not a duration assertion (verify-mf1-camera-tweens.mjs's own
+  // fake-clock harness is what actually asserts the 280-350ms band), so a generous cap here costs
+  // nothing but a slower run on the rare slow frame.
+  await page.waitForFunction(() => !window.Theater || typeof window.Theater.tweensLive !== "function" || window.Theater.tweensLive() === 0, { timeout: 15000 });
+}
+
 async function launchChrome() {
   const args = ["--headless=new", "--no-sandbox", "--disable-gpu-sandbox", "--use-gl=angle", "--enable-webgl", "--ignore-gpu-blocklist", "--window-size=1200,900"];
   return await puppeteer.launch({ executablePath: CHROME, headless: "new", args, defaultViewport: { width: 1200, height: 900, deviceScaleFactor: 1 } });
@@ -213,6 +229,7 @@ async function main() {
       for (const fitMode of ["room", "beat"]) {
         await page.evaluate((flags) => window.Theater.setInteriorVariant(flags), { camMode });
         await page.evaluate((board) => window.Theater.setInteriorBoard(board), boardFor(fitMode));
+        await settleCameraTween(page);
         // zoom "in" repeatedly: S.zoomLevel shrinks toward ZOOM_MIN, which placeCamera multiplies its
         // fit distance/frustum by — the SAME lever both camera branches read (this file's own comment
         // on the ortho/persp camDist lines), so this is a real stress on the fit, not a synthetic prop.
@@ -229,6 +246,7 @@ async function main() {
       for (const fitMode of ["room", "beat"]) {
         await page.evaluate((flags) => window.Theater.setInteriorVariant(flags), { camMode });
         await page.evaluate((board) => window.Theater.setInteriorBoard(board), boardFor(fitMode));
+        await settleCameraTween(page);
         // BW2-1: this fixture's own roster includes an Ogre Zombie (Large, real height ~1.9 world
         // units, well above interiorFrustumCheck's generic 1.1 default) — check against the board's
         // OWN computed tallest-participant height (window.Theater.interiorFitMaxHeight(), read off the
@@ -278,6 +296,7 @@ async function main() {
     for (const camMode of ["ortho", "persp"]) {
       await page.evaluate((flags) => window.Theater.setInteriorVariant(flags), { camMode });
       await page.evaluate((board) => window.Theater.setInteriorBoard(board), elongated.board);
+      await settleCameraTween(page);
       const maxHeight = await page.evaluate(() => window.Theater.interiorFitMaxHeight());
       const check = await page.evaluate((h) => window.Theater.interiorFrustumCheck(h), maxHeight);
       ok(check.ok === true, `${camMode}/beat elongated+tall: all 8 corners (headHeight=${maxHeight.toFixed(2)}) project within NDC [-1,1] — ${JSON.stringify(check.corners.filter((c) => !c.inFrustum))}`);

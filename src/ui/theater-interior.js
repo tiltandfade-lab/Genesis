@@ -484,15 +484,108 @@ function itrBuildSkirtRing(bounds, kit) {
   return skirt;
 }
 
+// ─── BEAUTY-WAVE VP3 (docs/BEAUTY-WAVE.md §VP3, GROUND DESIGN): floors that read composed, not
+// extruded. All seeded off (plan.seed || opts.walkId derivation the caller already threads through
+// plan.seed — DETERMINISM LAW, this file's own header) via dspHashStr/dspMulberry32, the SAME seeded-
+// RNG convention itrRoomLights already keeps (never Math.random). Four features, all data-only (this
+// file stays THREE/DOM-free per its own header) — the GL layer (theater-boot.js) needs zero new
+// wiring for tone/height/perimeter (they ride the existing floor instance's color/sy fields); the
+// `cover` array is a new sibling of `instances` (like `skirt` above) awaiting its own render pass.
+const ITR_FLOOR_TONE_ROOM_MAX = 0.06;  // per-room floor tone nudge, +/- 6% (spec cap)
+const ITR_FLOOR_TONE_CELL_MAX = 0.03;  // per-cell micro-jitter on top of the room tone, +/- 3% (spec cap)
+const ITR_STEP_FRAC_MIN = 0.05;        // 5-15% of a room's ELIGIBLE floor cells get a micro height step
+const ITR_STEP_FRAC_MAX = 0.15;
+const ITR_STEP_MIN = 0.04;             // sy jitter magnitude, 0.04-0.08 world units (spec)
+const ITR_STEP_MAX = 0.08;
+const ITR_PERIMETER_DARKEN = 0.08;     // perimeter floor cells darken 8% toward the walls
+const ITR_COVER_MIN = 1;               // 1-3 ground-cover patches seeded per room
+const ITR_COVER_MAX = 3;
+const ITR_COVER_FOOTPRINT = 0.6;       // quad-card world-unit footprint (a patch, not a full tile)
+const ITR_COVER_Y_OFFSET = 0.01;       // flat ON the floor, +0.01 above the y=-0.5 plane (no z-fight)
+
+// the room's central 2x2 — NEVER touched by height steps/tone-darken exclusions (the amendment's own
+// words); a small local derivation (not a cross-file call into place-dressing.js's dpCenter2x2) since
+// this file's own DETERMINISM LAW header keeps it dependency-free of the dressing module.
+function itrCenter2x2(room) {
+  const set = new Set();
+  const cx0 = room.x + Math.floor((room.w - 1) / 2);
+  const cz0 = room.y + Math.floor((room.d - 1) / 2);
+  for (let dx = 0; dx <= 1; dx++) {
+    for (let dz = 0; dz <= 1; dz++) set.add((cx0 + dx) + "," + (cz0 + dz));
+  }
+  return set;
+}
+
+// a cell counts as wall-adjacent if any 4-neighbor is a WALL cell OR falls off the plan's own grid
+// (the board edge is a wall boundary too, even with no WALL cell code sitting past it).
+function itrAdjacentToWall(x, y, plan) {
+  return [[1, 0], [-1, 0], [0, 1], [0, -1]].some(([dx, dz]) => {
+    const nx = x + dx, ny = y + dz;
+    if (nx < 0 || ny < 0 || nx >= plan.cellW || ny >= plan.cellD) return true;
+    return plan.cells[ny * plan.cellW + nx] === SPATIAL_CELL.WALL;
+  });
+}
+
+// AMENDED item 2 (docs/BEAUTY-WAVE.md §VP3): the combat grid routes a piece through ANY floor cell
+// that ISN'T perimeter/wall-adjacent/dressing-blocked — pieces MOVE (move-step walks cells mid-combat),
+// so "initially occupied" is the wrong test. Eligible-for-raising = {onEdge, wall-adjacent, dressing-
+// blocked} minus the center 2x2, which is exactly the complement of "cells the combat grid ever routes
+// through" per the amendment's own three-category list — never a routable cell.
+function itrRoomGroundEligible(room, plan) {
+  const center = itrCenter2x2(room);
+  const dressingBlocked = new Set(
+    (plan.dressing || []).filter((d) => d.roomSegNum === room.segNum).map((d) => d.x + "," + d.y)
+  );
+  const cells = [];
+  for (let y = room.y; y < room.y + room.d; y++) {
+    for (let x = room.x; x < room.x + room.w; x++) {
+      if (plan.cells[y * plan.cellW + x] !== SPATIAL_CELL.FLOOR) continue;
+      const key = x + "," + y;
+      if (center.has(key)) continue;
+      const onEdge = x === room.x || x === room.x + room.w - 1 || y === room.y || y === room.y + room.d - 1;
+      if (onEdge || itrAdjacentToWall(x, y, plan) || dressingBlocked.has(key)) cells.push({ x, y });
+    }
+  }
+  return cells;
+}
+
+// deterministic Fisher-Yates off a seeded rng (never Math.random) — same shuffle shape itrRoomLights
+// already keeps, reused verbatim for the ground-design seeded picks below.
+function itrSeededShuffle(list, rng) {
+  const out = list.slice();
+  for (let i = out.length - 1; i > 0; i--) {
+    const j = Math.floor(rng() * (i + 1));
+    const t = out[i]; out[i] = out[j]; out[j] = t;
+  }
+  return out;
+}
+
+// VP2/VP6 seam (the spec's own words): "coverCardFor(...) || proceduralSplat" — until a real `cover`
+// dressing-gen roster lands (moss/dust/spill decal art), every patch falls back to a procedural tint
+// splat off the room's own trim color. `realmId` picks the kit/tint source; `rng` is the room's own
+// seeded stream (never a fresh Math.random draw) so the fallback stays deterministic too.
+function itrCoverCardFor(realmId, rng) {
+  const kit = interiorTileKitFor(realmId);
+  const tint = itrDarkenHex(kit.trimColor, 0.55 + rng() * 0.35);
+  return { slug: null, proc: true, color: tint };
+}
+
 /** interiorBuildBoard(plan, opts) → InteriorBoard:
  * { kind:"interior3d", env, realmId, cellSize:1, wallHeightBase, fog:{color},
  *   tileKit:{floorColor,wallColor,trimColor,
  *     floorMaterial,wallMaterial,trimMaterial,floorGrain,wallGrain,trimGrain,
  *     gradeTint,gradeStrength,fogWhisper},
- *   instances:{ floor:[{x,z,sx,sy,sz,color}], wall:[...], doorframe:[{...,squeeze}], pillar:[...] },
+ *   instances:{ floor:[{x,z,sx,sy,sz,color}] (VP3 GROUND DESIGN: color carries per-room tone +/-6%
+ *     w/ per-cell +/-3% jitter and an 8% perimeter darken baked in; sy carries a +/-0.04-0.08 micro
+ *     height step on 5-15% of eligible cells — perimeter/wall-adjacent/dressing-blocked ONLY, never
+ *     the center 2x2 or any combat-routable cell), wall:[...], doorframe:[{...,squeeze}], pillar:[...] },
  *   skirt:[{x,z,sx,sy,sz,color}] (GR4 — the diorama edge band, a sibling of `instances`, never counted
  *     toward the "4 known instance kinds" data-shape check: it's a separate render channel),
- *   bounds:{minX,maxX,minZ,maxZ}, meta:{roomCount,floorCount,wallCount,doorCount,pillarCount,skirtCount} }
+ *   cover:[{x,z,y,sx,sy,sz,color,slug,proc,roomSegNum}] (VP3 item 3 — ground-cover decal cards, 1-3
+ *     seeded per room, FLOOR cells only, flat +0.01 above the floor plane; another `instances` sibling,
+ *     procedural tint-splat until real cover art lands via itrCoverCardFor's VP2/VP6 seam),
+ *   bounds:{minX,maxX,minZ,maxZ},
+ *   meta:{roomCount,floorCount,wallCount,doorCount,pillarCount,skirtCount,coverCount} }
  * `plan` is a U1 spatializePlan() output, ideally U2-extended (semanticizePlan) for room.scaleDomain/
  * door.transition/door.squeeze — a bare U1 plan degrades cleanly (every room defaults scaleDomain 1.0,
  * every door renders as a normal non-squeeze frame), never throws.
@@ -519,13 +612,65 @@ function interiorBuildBoard(plan, opts) {
   let minX = Infinity, maxX = -Infinity, minZ = Infinity, maxZ = -Infinity;
   const track = (x, z) => { minX = Math.min(minX, x); maxX = Math.max(maxX, x); minZ = Math.min(minZ, z); maxZ = Math.max(maxZ, z); };
 
+  // VP3 GROUND DESIGN (docs/BEAUTY-WAVE.md §VP3): one seeded pass per KEPT room, precomputed BEFORE
+  // the main floor loop below so the loop's own per-cell color/sy math stays a pure lookup (no RNG
+  // consumed inside the double for-loop, keeping the room's own rng stream stable regardless of cell
+  // iteration order — same discipline itrRoomLights already keeps for its own seeded stream).
+  const roomGround = new Map(); // segNum -> { toneDelta, raised:Map(key->deltaSy), coverCells:[{x,y}] }
+  (plan.rooms || []).forEach((r) => {
+    if (keepSet !== null && !keepSet.has(r.segNum)) return;
+    const seed = dspHashStr("u3-ground:" + (plan.seed || "") + ":" + r.segNum + ":" + r.x + "," + r.y);
+    const rng = dspMulberry32(seed);
+    const toneDelta = (rng() * 2 - 1) * ITR_FLOOR_TONE_ROOM_MAX;
+
+    const eligible = itrRoomGroundEligible(r, plan);
+    const shuffledEligible = itrSeededShuffle(eligible, rng);
+    const frac = ITR_STEP_FRAC_MIN + rng() * (ITR_STEP_FRAC_MAX - ITR_STEP_FRAC_MIN);
+    const take = Math.round(shuffledEligible.length * frac);
+    const raised = new Map();
+    shuffledEligible.slice(0, take).forEach((c) => {
+      const mag = ITR_STEP_MIN + rng() * (ITR_STEP_MAX - ITR_STEP_MIN);
+      const sign = rng() < 0.5 ? -1 : 1;
+      raised.set(c.x + "," + c.y, sign * mag);
+    });
+
+    const allFloor = [];
+    for (let y = r.y; y < r.y + r.d; y++) {
+      for (let x = r.x; x < r.x + r.w; x++) {
+        if (plan.cells[y * plan.cellW + x] === SPATIAL_CELL.FLOOR) allFloor.push({ x, y });
+      }
+    }
+    const shuffledFloor = itrSeededShuffle(allFloor, rng);
+    const coverCount = Math.min(shuffledFloor.length, ITR_COVER_MIN + Math.floor(rng() * (ITR_COVER_MAX - ITR_COVER_MIN + 1)));
+    const coverCells = shuffledFloor.slice(0, coverCount);
+
+    roomGround.set(r.segNum, { toneDelta, raised, coverCells });
+  });
+
   for (let y = 0; y < plan.cellD; y++) {
     for (let x = 0; x < plan.cellW; x++) {
       if (!kept[idx(x, y)]) continue;
       const code = plan.cells[idx(x, y)];
       if (code === SPATIAL_CELL.FLOOR || code === SPATIAL_CELL.DOOR || code === SPATIAL_CELL.WATER) {
         const scale = itrCellScale(x, y, roomIdx, corridorIdx);
-        floor.push({ x, z: y, sx: 1, sy: ITR_FLOOR_HEIGHT, sz: 1, color: kit.floorColor, scaleDomain: scale });
+        let color = kit.floorColor;
+        let sy = ITR_FLOOR_HEIGHT;
+        const room = roomIdx.get(x + "," + y);
+        const gd = room && roomGround.get(room.segNum);
+        if (gd) {
+          // per-cell micro-jitter seeded independently of the room's own rng stream (a fresh hash per
+          // x,y) so it never perturbs the room-level draws above regardless of loop iteration order.
+          const cellSeed = dspHashStr("u3-ground-cell:" + (plan.seed || "") + ":" + x + "," + y);
+          const cellRng = dspMulberry32(cellSeed);
+          const cellDelta = (cellRng() * 2 - 1) * ITR_FLOOR_TONE_CELL_MAX;
+          let factor = 1 + gd.toneDelta + cellDelta;
+          const onEdge = x === room.x || x === room.x + room.w - 1 || y === room.y || y === room.y + room.d - 1;
+          if (onEdge) factor *= (1 - ITR_PERIMETER_DARKEN);
+          color = itrDarkenHex(kit.floorColor, factor);
+          const stepDelta = gd.raised.get(x + "," + y);
+          if (stepDelta != null) sy = ITR_FLOOR_HEIGHT + stepDelta;
+        }
+        floor.push({ x, z: y, sx: 1, sy, sz: 1, color, scaleDomain: scale });
         track(x, y);
       }
       if (code === SPATIAL_CELL.DOOR) {
@@ -579,6 +724,24 @@ function interiorBuildBoard(plan, opts) {
   if (!Number.isFinite(minX)) { minX = 0; maxX = 0; minZ = 0; maxZ = 0; } // degenerate empty-keep guard
   const skirt = itrBuildSkirtRing({ minX: minX, maxX: maxX, minZ: minZ, maxZ: maxZ }, kit);
 
+  // VP3 GROUND DESIGN item 3: ground-cover patches, a sibling of `instances` (like `skirt` above) —
+  // FLOOR ONLY (roomGround's coverCells are drawn exclusively from that room's own FLOOR-code cells,
+  // never wall/door/corridor), flat ON the floor at y=-0.5+ITR_COVER_Y_OFFSET (the renderer's "every
+  // column base sits on y=-0.5" convention, theater-boot.js's interiorBuildInstancedMesh header note).
+  const cover = [];
+  for (const [segNum, gd] of roomGround) {
+    gd.coverCells.forEach((c) => {
+      const seed = dspHashStr("u3-cover:" + (plan.seed || "") + ":" + segNum + ":" + c.x + "," + c.y);
+      const rng = dspMulberry32(seed);
+      const card = itrCoverCardFor(kit.realmId, rng);
+      cover.push({
+        x: c.x, z: c.y, y: -0.5 + ITR_COVER_Y_OFFSET,
+        sx: ITR_COVER_FOOTPRINT, sy: 0.02, sz: ITR_COVER_FOOTPRINT,
+        color: card.color, slug: card.slug, proc: !!card.proc, roomSegNum: segNum,
+      });
+    });
+  }
+
   return {
     kind: "interior3d",
     env: env,
@@ -610,6 +773,11 @@ function interiorBuildBoard(plan, opts) {
     // `instances`, not a 5th member of it (see this function's own doc comment on why check 2's "4
     // known instance kinds" data-shape claim is untouched by this addition).
     skirt: skirt,
+    // VP3 GROUND DESIGN item 3: ground-cover decal cards — a sibling of `instances`/`skirt` above,
+    // never a 5th instance kind (same "not counted toward the 4 known kinds" note skirt's own comment
+    // makes) since the GL layer hasn't grown a cover render pass yet (VP2/VP6 will feed real art
+    // through itrCoverCardFor's seam; this wave only proves the DATA channel + the procedural fallback).
+    cover: cover,
     lights: lights,
     bounds: { minX: minX, maxX: maxX, minZ: minZ, maxZ: maxZ },
     // camera-framing hint: when a focus room was requested, carry its rect (raw plan cell space —
@@ -623,7 +791,7 @@ function interiorBuildBoard(plan, opts) {
     })(),
     meta: { roomCount: roomCount, floorCount: floor.length, wallCount: wall.length,
       doorCount: doorframe.length, pillarCount: pillar.length, lightCount: lights.length,
-      skirtCount: skirt.length }
+      skirtCount: skirt.length, coverCount: cover.length }
   };
 }
 

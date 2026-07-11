@@ -113,6 +113,13 @@
    ctx.THREE/ctx.tweens/ctx.markDirty — a strict subset of theater-verbs.js's own ctx contract, so one
    ctx object serves both libraries with no adapter layer needed. */
 
+// BEAUTY-WAVE-4.md MF-3 (2026-07-11, IMPACT FEEL): triggerHitStop/critCameraNudge are the shared
+// hit-stop-freeze/crit-nudge primitives — theater-verbs.js's tickTweens is the ONE ticker draining
+// BOTH modules' tweens (this file's own header: "the SAME ctx.tweens array theater-verbs.js's exported
+// tickTweens drains"), so the freeze/nudge mechanism lives there and is imported here rather than
+// duplicated. No circularity: theater-verbs.js never imports this file.
+import { triggerHitStop, critCameraNudge } from "./theater-verbs.js";
+
 const KF_DEFAULTS = Object.freeze({
   along: 0, dy: 0, jx: 0, tiltX: 0, scale: 1, scaleY: 1, tintMix: 0, tintColor: 0xffffff, opacity: 1
 });
@@ -205,8 +212,14 @@ export const STANDEE_VERBS = Object.freeze({
   // per-pixel luminance desaturation — MeshBasicMaterial.color is a multiplicative tint, not a
   // grayscale filter, and SPRITE PURITY already forbids touching the material's map/shader to do a
   // real desaturate; the tint-blend approximation stays within "tint... on the group's material clone."
+  // MF-3 bullet 4 ("Kill weight," BEAUTY-WAVE-4.md, 2026-07-11): holdMs is an UNCONDITIONAL 80ms
+  // hit-stop hold BEFORE the tip begins — "the beat lands, THEN the mini falls." runKeyframeVerb (below)
+  // grows the pushed tween's total duration by holdMs and remaps t past the hold fraction before
+  // sampling these SAME keyframes unchanged — at t=1 the remap always lands at localT=1 (byte-identical
+  // final tip/desaturate to before this unit), so dev/verify-standee-verbs.mjs's A6/A7/A10 (which only
+  // ever sample update(1)/onDone via runToCompletion) see no regression; only mid-flight timing changes.
   "fall-death": Object.freeze({
-    dur: 480, persist: true,
+    dur: 480, persist: true, holdMs: 80,
     keyframes: [
       kf(0, {}),
       kf(0.6, { tiltX: Math.PI / 2 * 0.75 }),
@@ -238,11 +251,17 @@ export const STANDEE_VERB_NAMES = Object.freeze(Object.keys(STANDEE_VERBS));
 let _ctx = null;
 export function bindStandeeCtx(ctx){ _ctx = ctx || null; }
 
-function pushTween(dur, onUpdate, onDone){
+function pushTween(dur, onUpdate, onDone, meta){
   if(!_ctx || !_ctx.tweens) return false;
-  _ctx.tweens.push({ start: Date.now(), dur: Math.max(1, dur), update: onUpdate, onDone: onDone || null });
+  // BEAUTY-WAVE-4.md MF-3 (2026-07-11): optional `meta` Object.assign'd onto the pushed tween — same
+  // widening theater-verbs.js's own pushTween just gained, so a tag like {unitId} can be stamped here
+  // too (this module's tweens ride the SAME ctx.tweens array theater-verbs.js's tickTweens drains — see
+  // this file's own header — so triggerHitStop's findLatestTweenByUnitId scan finds these just as well).
+  const tw = { start: Date.now(), dur: Math.max(1, dur), update: onUpdate, onDone: onDone || null };
+  if(meta) Object.assign(tw, meta);
+  _ctx.tweens.push(tw);
   if(typeof _ctx.markDirty === "function") _ctx.markDirty();
-  return true;
+  return tw;
 }
 
 /* resolveStandee — validates `group` looks like a billboard standee (buildSpriteBillboard's own
@@ -273,8 +292,11 @@ function cloneMaterialForTween(mesh){
 }
 
 /* runKeyframeVerb — the generic executor every non-special STANDEE_VERBS entry shares (§A's own
-   "phases of translate/rotate/scale/tint/flash" vocabulary, made data). */
-function runKeyframeVerb(standee, spec, opts){
+   "phases of translate/rotate/scale/tint/flash" vocabulary, made data). `verbName` (MF-3 addition) lets
+   this shared executor recognize hit-damage/hit-crit for the hit-stop/nudge hooks below without every
+   OTHER verb (act-attack, heal, buff, ...) needing to opt out individually — a plain string compare, no
+   new dispatch branch in playStandeeVerb. */
+function runKeyframeVerb(standee, spec, opts, verbName){
   const { group, mesh } = standee;
   const THREE = _ctx.THREE;
   const baseX = group.position.x, baseY = group.position.y, baseZ = group.position.z;
@@ -296,13 +318,29 @@ function runKeyframeVerb(standee, spec, opts){
   const baseOpacity = typeof origMat.opacity === "number" ? origMat.opacity : 1;
   const tintTarget = THREE ? new THREE.Color() : null;
 
-  const ok = pushTween(spec.dur, (t) => {
-    const s = sampleKeyframes(spec.keyframes, t);
+  // MF-3 directional recoil (bullet 2): opts.recoilDir {x,z} (a world-space unit vector pointing AWAY
+  // from the attacker — the caller resolves this, since this module has no ctx.findUnit of its own)
+  // biases jx's world contribution instead of the old x-only application. Omitted (every pre-MF-3 call
+  // site) reproduces the OLD behavior byte-for-byte: jxWorldX=s.jx, jxWorldZ=0 (the original had no jx
+  // term on z at all) — zero regression for dev/verify-standee-verbs.mjs.
+  const recoilDir = (opts.recoilDir && typeof opts.recoilDir.x === "number" && typeof opts.recoilDir.z === "number")
+    ? opts.recoilDir : null;
+  // MF-3 bullet 4: an optional per-verb holdMs (fall-death's 80ms) grows the pushed duration and remaps
+  // `t` past the hold fraction before driving the existing keyframe sampling untouched.
+  const holdMs = spec.holdMs || 0;
+  const totalDur = spec.dur + holdMs;
+  const holdFrac = holdMs / totalDur;
+
+  const ok = pushTween(totalDur, (t) => {
+    const localT = t < holdFrac ? 0 : (t - holdFrac) / (1 - holdFrac);
+    const s = sampleKeyframes(spec.keyframes, localT);
     // jx is a LOCAL lateral jitter independent of the target-facing `along` axis (hit-damage/hit-crit's
     // shake has no target at all) — added onto the along-driven X so a verb combining both (none in v1,
     // but the field composes correctly if one ever does) gets both contributions, not one clobbering
     // the other.
-    group.position.set(baseX + deltaX * s.along + s.jx, baseY + s.dy, baseZ + deltaZ * s.along);
+    const jxWorldX = recoilDir ? s.jx * recoilDir.x : s.jx;
+    const jxWorldZ = recoilDir ? s.jx * recoilDir.z : 0;
+    group.position.set(baseX + deltaX * s.along + jxWorldX, baseY + s.dy, baseZ + deltaZ * s.along + jxWorldZ);
     group.rotation.x = s.tiltX;
     group.scale.set(baseScaleX * s.scale, baseScaleY * s.scale * s.scaleY, baseScaleZ * s.scale);
     if(baseColor && mat.color){
@@ -328,8 +366,24 @@ function runKeyframeVerb(standee, spec, opts){
     mesh.material = origMat;
     if(mat.dispose) mat.dispose();
     if(typeof opts.onDone === "function") opts.onDone();
-  });
-  return ok;
+  }, { unitId: opts.who });
+  // MF-3 (bullet 1, opt-in via opts.attackerId — every pre-MF-3 call site omits it, zero regression):
+  // hit-damage/hit-crit freeze themselves + the attacker's own tween (found by unitId tag) at the
+  // contact frame. hit-crit ALSO fires the 2px-equivalent single-bounce camera nudge (bullet 3) — this
+  // one is UNCONDITIONAL (not opts-gated) since it's null-safe/no-op whenever ctx.camera is absent
+  // (every pre-MF-3 stub ctx in dev/verify-standee-verbs.mjs has no `.camera` field at all).
+  if(ok && (verbName === "hit-damage" || verbName === "hit-crit")){
+    if(opts.attackerId != null){
+      triggerHitStop(_ctx, { targetTween: ok, attackerId: opts.attackerId, crit: verbName === "hit-crit" });
+    }
+    if(verbName === "hit-crit"){
+      critCameraNudge(_ctx, { dir: opts.nudgeDir });
+    }
+  }
+  // MF-3 (2026-07-11): pushTween now returns the tween OBJECT (truthy) rather than a bare `true` — see
+  // that function's own header. playStandeeVerb's callers (dev/verify-standee-verbs.mjs) assert a
+  // STRICT `=== true` return, so this coerces back to boolean at the public boundary.
+  return !!ok;
 }
 
 /* guise-swap — crossfade texture + scale to the new form (§A, GUISE G3's verb). The one NAMED exception
@@ -364,7 +418,9 @@ function runGuiseSwap(standee, spec, opts){
     // revert to once a guise transformation completes (mirrors fall-death's persistence rationale).
     if(typeof opts.onDone === "function") opts.onDone();
   });
-  return ok;
+  // MF-3: pushTween returns the tween object now (see its own header) — coerce to strict boolean at
+  // this public boundary, same as runKeyframeVerb above.
+  return !!ok;
 }
 
 /* ============================================================================
@@ -489,5 +545,5 @@ export function playStandeeVerb(pieceOrUnitGroup, verbName, opts){
     }
   });
   if(spec.special === "guise-swap") return runGuiseSwap(standee, spec, withResume);
-  return runKeyframeVerb(standee, spec, withResume);
+  return runKeyframeVerb(standee, spec, withResume, verbName);
 }

@@ -5103,6 +5103,54 @@ function interiorMaterialTexture(material, baseColorHex, seedKey, grainIntensity
   return tex;
 }
 
+// BW2-3 MATERIAL TEXEL (GENERATED-FIRST): the ONE place a folded PACKET-02 texture FILE
+// (assets/textures/*.png, build/fold-textures.py) becomes a THREE.Texture on a world surface —
+// async TextureLoader (image lands later; onLoad -> markDirty replays the render, the SAME pattern
+// dressingTextureFor/loadTextureManifest already keep). NearestFilter min+mag (BW2-0 world-surface
+// law: the texel is AUTHORED, crisp when magnified — the fold resamples the 512 source DOWN to engine
+// texel so on-stage it is a MAGNIFICATION, no minification shimmer). `wrap` + per-surface `repeat` are
+// the §2b UV MAPPING LAWS, applied by the caller. Cached per url+wrap+repeat so the same surface never
+// re-fetches/re-uploads. INTERIOR_FILE_TEX_PENDING lets a capture harness wait for the async decodes.
+let INTERIOR_FILE_TEX_PENDING = 0;
+const INTERIOR_FILE_TEXTURE_CACHE = {};
+function interiorFileTexture(url, wrapMode, repeatX, repeatZ){
+  if(!url) return null;
+  const key = url + ":" + wrapMode + ":" + repeatX + ":" + repeatZ;
+  if(INTERIOR_FILE_TEXTURE_CACHE[key]) return INTERIOR_FILE_TEXTURE_CACHE[key];
+  const wrap = wrapMode === "mirror" ? THREE.MirroredRepeatWrapping
+             : wrapMode === "clamp" ? THREE.ClampToEdgeWrapping
+             : THREE.RepeatWrapping;
+  INTERIOR_FILE_TEX_PENDING++;
+  const tex = textureLoader.load(url,
+    () => { INTERIOR_FILE_TEX_PENDING = Math.max(0, INTERIOR_FILE_TEX_PENDING - 1); markDirty(); },
+    undefined,
+    () => { INTERIOR_FILE_TEX_PENDING = Math.max(0, INTERIOR_FILE_TEX_PENDING - 1); }); // load failure -> drop, painter/flat wins
+  tex.wrapS = wrap; tex.wrapT = wrap;
+  tex.repeat.set(Math.max(0.0001, repeatX || 1), Math.max(0.0001, repeatZ || 1));
+  nearestify(tex);
+  INTERIOR_FILE_TEXTURE_CACHE[key] = tex;
+  return tex;
+}
+
+// BW2-3 §2b UV MAPPING LAWS — per-surface repeat. Every floor/wall/pillar InstancedMesh instance is a
+// 1x1x* box sharing ONE unit-cube geometry (UV 0..1 per face) and ONE material, so texture.repeat is
+// the per-cell tile count:
+//   FLOOR: repeat (1,1) -> exactly ONE texture tile per 5ft cell; the tile's border grout thereby lands
+//     on the cell boundary -> the grout grid ALIGNS with the combat grid (the room shows roomW x roomD
+//     tiles == room cell dims, the spec's "repeat = room dims" expressed per-cell).
+//   WALL: repeat (1, ITR_WALL_COURSE_REPEAT) -> one texture WIDTH per cell (courses continue seamlessly
+//     across adjacent wall cells) and the full texture HEIGHT (~14 authored courses) over the wall
+//     height. (Scale-domain-taller walls stretch the same courses — the pre-existing shared-material
+//     limitation, not introduced here; base-height flagship walls read at fixed texel.)
+//   TRIM: ClampToEdge, repeat (1,1) -> stretch-to-fit along the run (the one legal stretch case, §2b).
+const ITR_WALL_COURSE_REPEAT = 1.0; // vertical wall repeat multiplier — the taste-loop dial to hit 14+/-3 courses
+function interiorSurfaceFileTexture(surface, file, wrap){
+  if(!file) return null;
+  if(surface === "wall") return interiorFileTexture(file, wrap, 1, ITR_WALL_COURSE_REPEAT);
+  if(surface === "trim") return interiorFileTexture(file, "clamp", 1, 1);
+  return interiorFileTexture(file, wrap, 1, 1); // floor (and any other 1:1-per-cell surface)
+}
+
 // unit cube, shared by every InstancedMesh kind below — each instance's own transform (position+scale
 // baked into its matrix) is what gives it its real footprint/height, per VOLUMETRIC WALL LAW (real
 // BoxGeometry with height, never a flat plane) — never re-created per call.
@@ -5131,6 +5179,27 @@ function interiorApplyAODarkening(instances, factor){
     });
   });
   return instances;
+}
+
+// BW2-3 MATERIAL TEXEL — INSTANCE-COLOR NEUTRALIZATION. A floor/wall InstancedMesh multiplies its
+// texture map by each instance's per-cell COLOR (setColorAt). Those colors are the kit's DARK palette
+// anchor (floorColor/wallColor) modulated by the scene value-scripts (BW2-4 rim plunge, VP3 perimeter
+// darken/tone jitter) — perfect for the PROCEDURAL painter, whose texture is a near-flat tint of that
+// same base. But a FOLDED file texture already carries full realm color, so multiplying by the dark
+// base double-darkens it to near-black under the plunged ambient (the gloom R1 read). Fix: convert
+// each per-cell color to a NEUTRAL grey VALUE MULTIPLIER = its luminance RELATIVE to the kit base — so
+// a normal cell reads the texture at full value, while a perimeter/AO-darkened cell still darkens it
+// proportionally (the rim vignette + contact seam survive; only the absolute dark HUE is dropped, which
+// the texture now supplies itself). Pure over the plain instance list (returns a shallow-cloned list).
+function itrNeutralizeInstanceColors(list, baseHex){
+  const base = new THREE.Color(baseHex || "#808080");
+  const baseLum = Math.max(0.02, 0.299 * base.r + 0.587 * base.g + 0.114 * base.b);
+  return (list || []).map(function(inst){
+    const c = new THREE.Color(inst.color || baseHex || "#808080");
+    const lum = 0.299 * c.r + 0.587 * c.g + 0.114 * c.b;
+    const g = Math.max(0, Math.min(1.2, lum / baseLum)); // relative value; >1 clamped so it never blows out
+    return Object.assign({}, inst, { color: "#" + new THREE.Color(g, g, g).getHexString() });
+  });
 }
 
 // one InstancedMesh per tile KIND (floor/wall/doorframe/pillar) — the draw-call budget DUNGEON-GRAPH.md
@@ -5211,15 +5280,18 @@ function interiorCylinderGeometry(){
   if(!INTERIOR_CYLINDER_GEO) INTERIOR_CYLINDER_GEO = new THREE.CylinderGeometry(0.5, 0.5, 1, 12);
   return INTERIOR_CYLINDER_GEO;
 }
-function interiorBuildPillarMeshes(list, cx, cz, variant){
+function interiorBuildPillarMeshes(list, cx, cz, variant, pillarTex){
   const boxList = (list || []).filter((p) => p.profile !== "round");
   const roundList = (list || []).filter((p) => p.profile === "round");
   const meshes = [];
-  const boxMesh = interiorBuildInstancedMesh(boxList, cx, cz, null, variant, "pillar");
+  // BW2-3 §2b COLUMNS: per-face planar from the WALL sheet (pillarTex) — box pillars route it through
+  // interiorBuildInstancedMesh's own map path, round pillars get it below. null on non-flagship/off ->
+  // the pre-BW2-3 flat-colored pillar, unchanged.
+  const boxMesh = interiorBuildInstancedMesh(boxList, cx, cz, pillarTex || null, variant, "pillar");
   if(boxMesh) meshes.push(boxMesh);
   if(roundList.length){
     const geo = interiorCylinderGeometry();
-    const mat = applyPsxShaderTweaks(new THREE.MeshLambertMaterial({ color: 0xffffff }), {
+    const mat = applyPsxShaderTweaks(new THREE.MeshLambertMaterial(pillarTex ? { map: pillarTex } : { color: 0xffffff }), {
       banded: !!(variant && variant.banded), bandedSteps: variant && variant.bandedSteps, worldSurface: true,
       worldPsxOverride: (variant && typeof variant.worldPsx === "boolean") ? variant.worldPsx : undefined
     });
@@ -5731,8 +5803,12 @@ function proceduralPanelTexture(realm, face, baseColorHex){
   return tex;
 }
 function furniturePanelMaterial(realm, face, baseColorHex){
-  const real = textureFaceFor(realm, face); // PACKET-02 seam — always null today (see its own header)
-  const tex = real || proceduralPanelTexture(realm, face, baseColorHex);
+  // BW2-3: textureFaceFor now returns a folded PACKET-02 face-tile FILE PATH (flagships) or null. A
+  // path loads as a per-face planar ClampToEdge texture (§2b FURNITURE law — one self-contained face
+  // tile per face, never wrapped); null falls back to the procedural panel painter. Same seam shape.
+  const faceFile = textureFaceFor(realm, face);
+  const tex = (faceFile ? interiorFileTexture(faceFile, "clamp", 1, 1) : null)
+    || proceduralPanelTexture(realm, face, baseColorHex);
   return applyPsxShaderTweaks(new THREE.MeshLambertMaterial({ map: tex }), { worldSurface: true });
 }
 function buildFurnitureAssembly(entry){
@@ -6372,15 +6448,32 @@ function setInteriorBoard(data){
   // "no texture" branch) so a materials-off shot is an honest OLD-FLAT baseline, not the retired
   // pattern texture (which no longer exists) — product callers never set this flag, so this is a no-op
   // everywhere except the study card.
+  // BW2-3 MATERIAL TEXEL (GENERATED-FIRST seam): a folded PACKET-02 texture FILE (kit.*TextureFile,
+  // chosen by interiorBuildBoard's VARIANT ROLL — flagships only) WINS; the procedural REALM_MATERIALS
+  // painter (interiorMaterialTexture) is the FALLBACK for the 9 non-flagship realms. Exactly
+  // `interiorSurfaceFileTexture(...) || <procedural>`. `variant.materials === false` (study rig) still
+  // drops to null (flat) for an honest OLD-FLAT baseline, ahead of both branches.
   const materialsOn = variant.materials !== false;
   const floorTex = materialsOn
-    ? interiorMaterialTexture(kit.floorMaterial, kit.floorColor, data.realmId + ":floor", kit.floorGrain,
-        Math.max(1, b.maxX - b.minX + 1), Math.max(1, b.maxZ - b.minZ + 1))
+    ? (interiorSurfaceFileTexture("floor", kit.floorTextureFile, kit.floorTextureWrap)
+        || interiorMaterialTexture(kit.floorMaterial, kit.floorColor, data.realmId + ":floor", kit.floorGrain,
+            Math.max(1, b.maxX - b.minX + 1), Math.max(1, b.maxZ - b.minZ + 1)))
     : null;
   const wallTex = materialsOn
-    ? interiorMaterialTexture(kit.wallMaterial, kit.wallColor, data.realmId + ":wall", kit.wallGrain,
-        1, Math.max(1, data.wallHeightBase || 1))
+    ? (interiorSurfaceFileTexture("wall", kit.wallTextureFile, kit.wallTextureWrap)
+        || interiorMaterialTexture(kit.wallMaterial, kit.wallColor, data.realmId + ":wall", kit.wallGrain,
+            1, Math.max(1, data.wallHeightBase || 1)))
     : null;
+  // BW2-3 §2b COLUMNS: pillars take the WALL sheet (per-face planar from the wall texture at matching
+  // texel), null on a non-flagship realm OR materials-off — the pre-BW2-3 flat-colored pillar. (TRIM:
+  // the folded trim strip is registered on the tileKit (kit.trimTextureFile) + REALM_TEXTURES but is
+  // NOT GL-wired this unit — its only candidate geometry today is the BW2-5 arch doorframe, which BW2-4
+  // deliberately plunges to near-black, and a baseboard/cornice STRIP stretched over a big arch prism
+  // reads wrong. Trim awaits a dedicated trim-run geometry, unchanged from the pre-BW2-3 "trim stays
+  // flat, registry data not yet GL-wired" note — the arrival is folded + staged, honest, just not
+  // force-fit onto the wrong surface.)
+  const pillarTex = materialsOn
+    ? interiorSurfaceFileTexture("wall", kit.wallTextureFile, kit.wallTextureWrap) : null;
 
   // study-rig AO variant (b/e/f): darken instance colors at wall-floor seams (interiorApplyAODarkening,
   // above) — operates on a SHALLOW-CLONED instances object so the caller's own `data` (which may be
@@ -6399,7 +6492,12 @@ function setInteriorBoard(data){
   // comment (interiorFloorTopMapFrom/interiorFloorTopAt) for the derivation this replaces the old
   // hardcoded -0.5/-0.4 assumptions with.
   S.interiorFloorTopMap = interiorFloorTopMapFrom(inst.floor);
-  const floorMesh = interiorBuildInstancedMesh(inst.floor, cx, cz, floorTex, variant, "floor");
+  // BW2-3: file-textured surfaces neutralize their per-cell color to a value multiplier (the texture
+  // carries the hue). floorFromFile/wallFromFile track which branch floorTex/wallTex resolved from.
+  const floorFromFile = materialsOn && !!kit.floorTextureFile;
+  const wallFromFile = materialsOn && !!kit.wallTextureFile;
+  const floorList = floorFromFile ? itrNeutralizeInstanceColors(inst.floor, kit.floorColor) : inst.floor;
+  const floorMesh = interiorBuildInstancedMesh(floorList, cx, cz, floorTex, variant, "floor");
   // CUTAWAY WALLS (study card v4; BEAUTY-WAVE-2.md BW2-5 item 2 amendment): when the board frames a
   // focus room, the room's CAMERA-SIDE perimeter walls drop to a PARAPET so the camera sees INTO the
   // room instead of at the outside face of a (possibly scale-domain-tall) wall — the standard dungeon-
@@ -6427,7 +6525,9 @@ function setInteriorBoard(data){
       return Object.assign({}, wi, { sy: parapetH });
     });
   }
-  const wallMesh = interiorBuildInstancedMesh(wallList, cx, cz, wallTex, variant, "wall");
+  const wallMesh = interiorBuildInstancedMesh(
+    wallFromFile ? itrNeutralizeInstanceColors(wallList, kit.wallColor) : wallList,
+    cx, cz, wallTex, variant, "wall");
   // BW2-4 item 2: darken the RENDERED doorframe value (see ITR_SCENE_DOORFRAME_VALUE) off a shallow
   // clone so the caller's own data.instances (cached/replayed) is never mutated — same clone discipline
   // the AO variant path above keeps. rigOn-gated so the study baseline stays honest.
@@ -6465,7 +6565,9 @@ function setInteriorBoard(data){
   S.interiorLastPillarList = pillarList;
   // BW2-5 THE COLUMN DEMOTION: pillar instances split by `profile` (round gets its own cylinder
   // mesh) — fed the POST-CUTAWAY list so BW2-1b's sightline stubs apply to every profile alike.
-  const pillarMeshes = interiorBuildPillarMeshes(pillarList, cx, cz, variant);
+  const pillarMeshes = interiorBuildPillarMeshes(
+    pillarTex ? itrNeutralizeInstanceColors(pillarList, kit.wallColor) : pillarList,
+    cx, cz, variant, pillarTex);
   // GR4 (docs/GRAPHICS-ENGINE.md build unit GR4): the diorama edge skirt — data.skirt (src/ui/theater-
   // interior.js's interiorBuildBoard, GR4 addition), a sibling of `instances` (never counted toward the
   // "4 known instance kinds" data-shape check — see that function's own doc comment). Untextured (flat
@@ -7219,6 +7321,9 @@ window.Theater = {
 // capture/verify harness can assert the InstancedMesh count directly instead of trusting a screenshot.
 // 0 before any setInteriorBoard call (no interior board mounted yet).
 window.Theater.interiorMeshCount = function(){ return S.interiorMeshCount || 0; };
+// BW2-3 MATERIAL TEXEL: how many folded-texture-file decodes are still in flight (async TextureLoader).
+// A capture harness polls this to 0 before screenshotting so the walls/floors are actually painted.
+window.Theater.interiorFileTexPending = function(){ return INTERIOR_FILE_TEX_PENDING || 0; };
 
 // DUNGEON-GRAPH.md U3 iteration-2 diagnostics (same "read-only, harness-facing" discipline as
 // interiorMeshCount just above) — the capture rig's metrics.json needs to confirm every piece sprite

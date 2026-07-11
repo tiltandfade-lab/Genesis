@@ -168,7 +168,11 @@ try {
   result.cutSlug = cutFig && cutFig.userData && cutFig.userData.spriteSlug;
   result.cutHasWholeObjectTag = !!(cutFig && cutFig.userData && cutFig.userData.wholeObject);
   result.cutChildCount = cutFig ? cutFig.children.length : -1;
-  result.cutChildType = cutFig && cutFig.children[0] && cutFig.children[0].geometry && cutFig.children[0].geometry.type;
+  // BW2-2b: children[0] is now the sprite's own inner camera-tilt wrap (buildSpriteBillboardMesh's own
+  // header), not the mesh directly — reach the mesh via the stable userData handle instead of assuming
+  // a fixed children[] depth.
+  result.cutChildType = cutFig && cutFig.userData && cutFig.userData.spriteBillboardMesh
+    && cutFig.userData.spriteBillboardMesh.geometry && cutFig.userData.spriteBillboardMesh.geometry.type;
 
   const pendFig = T.refFigure.build({ recipeSlug: "half-cut-horror" });
   result.pendingIsSprite = !!(pendFig && pendFig.userData && pendFig.userData.sprite === true);
@@ -177,11 +181,12 @@ try {
 
   const medFig = T.refFigure.build({ recipeSlug: "town-guard" });
   const gigFig = T.refFigure.build({ recipeSlug: "bog-wyrm" });
-  result.medHeight = medFig.children[0].geometry.parameters.height;
-  result.gigHeight = gigFig.children[0].geometry.parameters.height;
+  result.medHeight = medFig.userData.spriteBillboardMesh.geometry.parameters.height;
+  result.gigHeight = gigFig.userData.spriteBillboardMesh.geometry.parameters.height;
 
   const scaledFig = T.refFigure.build({ recipeSlug: "scaled-guard" });
-  result.scaledHeight = scaledFig && scaledFig.children[0] && scaledFig.children[0].geometry.parameters.height;
+  result.scaledHeight = scaledFig && scaledFig.userData.spriteBillboardMesh
+    && scaledFig.userData.spriteBillboardMesh.geometry.parameters.height;
 
   const failFig = T.refFigure.build({ recipeSlug: "botched-wretch" });
   result.failIsSprite = !!(failFig && failFig.userData && failFig.userData.sprite === true);

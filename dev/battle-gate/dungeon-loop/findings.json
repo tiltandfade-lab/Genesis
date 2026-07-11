@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-11T01:34:40.631Z",
+  "generatedAt": "2026-07-11T02:13:08.089Z",
   "iterations": [
     {
       "loopIndex": 1,
@@ -18,7 +18,7 @@
         "ok": true,
         "stage": "done",
         "loopIndex": 1,
-        "topology": "The Onion",
+        "topology": "The Web",
         "segCount": 5,
         "environment": "dungeon",
         "nodeId": "dungeon-loop-1",
@@ -30,7 +30,7 @@
         "targetSegNum": 3,
         "room": {
           "segNum": 3,
-          "x": 36,
+          "x": 14,
           "y": 3,
           "w": 4,
           "d": 6
@@ -62,7 +62,7 @@
         },
         "pnCursor": 3
       },
-      "topology": "The Onion",
+      "topology": "The Web",
       "roomCount": 5,
       "reachability": {
         "ok": true,
@@ -86,15 +86,19 @@
         }
       },
       "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 404 (File not found)",
+        "Failed to load resource: the server responded with a status of 404 (File not found)",
         "Failed to load resource: the server responded with a status of 404 (File not found)"
       ],
       "urls404": [
         "http://127.0.0.1:5211/dm/health",
-        "http://127.0.0.1:5211/dm/health"
+        "http://127.0.0.1:5211/dm/health",
+        "http://127.0.0.1:5211/assets/dressing/effect-hit-damage.png",
+        "http://127.0.0.1:5211/assets/dressing/effect-fall-death.png"
       ],
-      "benign404Count": 2,
+      "benign404Count": 4,
       "summary": {
-        "topology": "The Onion",
+        "topology": "The Web",
         "realm": "chrome",
         "roomCount": 5,
         "planVerified": true,
@@ -102,7 +106,7 @@
         "piecesRequested": 3,
         "dressingCount": 40,
         "meshCount": 4,
-        "consoleErrorCount": 1,
+        "consoleErrorCount": 3,
         "breakCount": 0
       }
     },
@@ -124,7 +128,7 @@
         "ok": true,
         "stage": "done",
         "loopIndex": 2,
-        "topology": "The Stronghold",
+        "topology": "The Loop",
         "segCount": 7,
         "environment": "dungeon",
         "nodeId": "dungeon-loop-2",
@@ -136,8 +140,8 @@
         "targetSegNum": 4,
         "room": {
           "segNum": 4,
-          "x": 3,
-          "y": 25,
+          "x": 7,
+          "y": 6,
           "w": 6,
           "d": 7
         },
@@ -173,7 +177,7 @@
         },
         "pnCursor": 4
       },
-      "topology": "The Stronghold",
+      "topology": "The Loop",
       "roomCount": 7,
       "reachability": {
         "ok": true,
@@ -182,11 +186,11 @@
       "rendered": {
         "ok": true,
         "stage": "setInteriorBoard",
-        "dressingCountFromTray": 70,
+        "dressingCountFromTray": 57,
         "meshCount": 5,
         "piecesRequested": 4,
         "piecesResolved": 4,
-        "dressingCount": 70
+        "dressingCount": 57
       },
       "verbResults": {
         "hurt": {
@@ -200,13 +204,13 @@
       "urls404": [],
       "benign404Count": 0,
       "summary": {
-        "topology": "The Stronghold",
+        "topology": "The Loop",
         "realm": "gloom",
         "roomCount": 7,
         "planVerified": true,
         "piecesResolved": 4,
         "piecesRequested": 4,
-        "dressingCount": 70,
+        "dressingCount": 57,
         "meshCount": 5,
         "consoleErrorCount": 0,
         "breakCount": 0
@@ -231,7 +235,7 @@
         "ok": true,
         "stage": "done",
         "loopIndex": 3,
-        "topology": "The Stronghold",
+        "topology": "The Hub",
         "segCount": 9,
         "environment": "dungeon",
         "nodeId": "dungeon-loop-3",
@@ -284,7 +288,7 @@
         },
         "pnCursor": 5
       },
-      "topology": "The Stronghold",
+      "topology": "The Hub",
       "roomCount": 9,
       "reachability": {
         "ok": true,
@@ -311,7 +315,7 @@
       "urls404": [],
       "benign404Count": 0,
       "summary": {
-        "topology": "The Stronghold",
+        "topology": "The Hub",
         "realm": "fantasy",
         "roomCount": 9,
         "planVerified": true,
@@ -340,7 +344,7 @@
         "ok": true,
         "stage": "done",
         "loopIndex": 4,
-        "topology": "The Loop",
+        "topology": "The Labyrinth Fragment",
         "segCount": 11,
         "environment": "dungeon",
         "nodeId": "dungeon-loop-4",
@@ -385,7 +389,7 @@
         },
         "pnCursor": 6
       },
-      "topology": "The Loop",
+      "topology": "The Labyrinth Fragment",
       "roomCount": 11,
       "reachability": {
         "ok": true,
@@ -394,11 +398,11 @@
       "rendered": {
         "ok": true,
         "stage": "setInteriorBoard",
-        "dressingCountFromTray": 85,
+        "dressingCountFromTray": 89,
         "meshCount": 5,
         "piecesRequested": 3,
         "piecesResolved": 3,
-        "dressingCount": 85
+        "dressingCount": 89
       },
       "verbResults": {
         "hurt": {
@@ -412,13 +416,13 @@
       "urls404": [],
       "benign404Count": 0,
       "summary": {
-        "topology": "The Loop",
+        "topology": "The Labyrinth Fragment",
         "realm": "gloom",
         "roomCount": 11,
         "planVerified": true,
         "piecesResolved": 3,
         "piecesRequested": 3,
-        "dressingCount": 85,
+        "dressingCount": 89,
         "meshCount": 5,
         "consoleErrorCount": 0,
         "breakCount": 0
@@ -443,7 +447,7 @@
         "ok": true,
         "stage": "done",
         "loopIndex": 5,
-        "topology": "The Onion",
+        "topology": "The Loop",
         "segCount": 8,
         "environment": "dungeon",
         "nodeId": "dungeon-loop-5",
@@ -456,7 +460,7 @@
         "room": {
           "segNum": 5,
           "x": 3,
-          "y": 26,
+          "y": 15,
           "w": 6,
           "d": 6
         },
@@ -496,7 +500,7 @@
         },
         "pnCursor": 5
       },
-      "topology": "The Onion",
+      "topology": "The Loop",
       "roomCount": 8,
       "reachability": {
         "ok": true,
@@ -505,11 +509,11 @@
       "rendered": {
         "ok": true,
         "stage": "setInteriorBoard",
-        "dressingCountFromTray": 64,
+        "dressingCountFromTray": 63,
         "meshCount": 5,
         "piecesRequested": 5,
         "piecesResolved": 5,
-        "dressingCount": 64
+        "dressingCount": 63
       },
       "verbResults": {
         "hurt": {
@@ -523,13 +527,13 @@
       "urls404": [],
       "benign404Count": 0,
       "summary": {
-        "topology": "The Onion",
+        "topology": "The Loop",
         "realm": "chrome",
         "roomCount": 8,
         "planVerified": true,
         "piecesResolved": 5,
         "piecesRequested": 5,
-        "dressingCount": 64,
+        "dressingCount": 63,
         "meshCount": 5,
         "consoleErrorCount": 0,
         "breakCount": 0
@@ -545,8 +549,8 @@
     "notes": [
       "startSession() called"
     ],
-    "worldId": "mrfozcwkmvg53",
-    "worldName": "The Cobbled Tannery"
+    "worldId": "mrfqcu8h09tyc",
+    "worldName": "The Gravity-Well"
   },
   "theaterState": {
     "hasBattleStage": true,

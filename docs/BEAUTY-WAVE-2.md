@@ -38,20 +38,22 @@ image-rendering:pixelated. Every sprite gets nearest-minified into a third-res b
 chunk-upscaled — double resample = the mode-7 warp/shimmer. Sprites were exempt from the
 dither SHADER (VP0) but nothing is exempt from a low-res framebuffer. Per the standing PS1
 scope amendment (palette+poly ONLY on the diorama), the buffer squeeze comes OFF:
-1. **Interior/diorama channel renders at FULL resolution** — scale 1 (optionally cap at
-   devicePixelRatio ≤ 2 for perf), `image-rendering: auto`. Gate by channel: the flat
-   tabletop KEEPS its PSX buffer until UW3 parity/retirement (its look is its own).
+1. **FULL resolution EVERYWHERE (Adam's mid-wave ruling: PS1 retired game-wide, tabletop
+   included — no legacy-look maintenance on a channel that dies at UW3):** `psxEnabled`
+   default OFF; buffer = CSS × min(devicePixelRatio, 2); `image-rendering: auto`. The dev
+   escape hatch (opts.psx) stays functional for comparison. Dither/vertex-snap defaults go
+   off on ALL channels too; machinery deletion rides UW3 cleanup.
 2. **Sprite texture filtering:** magFilter stays Nearest (crisp when magnified — the pixel-art
    law); minFilter becomes Linear for sprite billboards (kills residual minification shimmer;
    NPOT-safe, no mipmap requirement). World-surface textures keep nearest min+mag (their texel
    is authored; BW2-3 owns their look).
 3. FPS check: full-res render with the instanced kits + ≤8 standees must hold ≥30fps in the
    loop-gate capture report (the 4-draw-call budget makes this near-certain).
-*Verify:* red-first — assert today the interior canvas drawing-buffer width < its CSS width
-(the 1/3 squeeze, provable); after: buffer == CSS×min(dpr,2) on the interior channel, tabletop
-unchanged (both asserted); sprite min/mag filters asserted per class; loop gate re-shot + READ
-(the crust should visibly die); fps ≥30; check-manifest OK; interior + frustum + theater-sprites
-harnesses green.
+*Verify:* red-first — assert at the pinned pre-fix ref the drawing-buffer width < CSS width
+(the 1/3 squeeze, provable); after: buffer == CSS×min(dpr,2) BY DEFAULT on both channels, and
+the explicit psx:true escape hatch still reproduces the squeeze (both asserted); sprite min/mag
+filters asserted per class; loop gate re-shot + READ (the crust should visibly die); fps ≥30;
+check-manifest OK; interior + frustum + theater-sprites harnesses green.
 
 ## BW2-1 — THE BEAT CAMERA (presentation scale; the #1 fix — presentation SCALE; BW2-0 is the #1 fix for CRISPNESS)
 

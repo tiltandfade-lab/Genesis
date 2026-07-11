@@ -235,6 +235,18 @@ attached archetypes generate FLAT in every future packet (the dressing-gen promp
 (c) triage: existing attached-class arrivals whose baked angle fights placement are flagged at
 the fold gate (eyes), reclassified free-standing or re-queued.
 
+**THE EXTRUSION TIER LADDER (Adam's question 2026-07-11: "any sprite or predefined shapes?" —
+answer: ANY sprite, auto-classified; BW2-5 lands tier 1, tiers 2/3 = the follow-up unit):**
+- Tier 1 BOX: bounding-rect thin box, alpha-cut front, edge-sampled sides — for
+  near-rectangular art. Alpha coverage of bbox > ~85% routes here.
+- Tier 2 SILHOUETTE: marching-squares alpha contour → Douglas-Peucker simplify (~30-80 pts,
+  holes supported) → THREE.ExtrudeGeometry, cached per unique prop (~200 tris) — the wreath's
+  actual shape extrudes. Coverage 30-85% routes here. Matters most for deep props (0.25+) and
+  oblique angles; at 0.04 depth box ≈ silhouette visually.
+- Tier 3 CARD: wispy/organic (no meaningful volume boundary) stays an alpha-cut card. Low
+  coverage / high edge complexity routes here.
+No hand-tagging — the classifier measures the sprite.
+
 ## BW2-6 — THE CONVERGENCE GATE (replaces VP8's caption queue)
 
 Re-shoot the three anchor states on real rolled dungeons with BW2-1..5 on: gloom combat,

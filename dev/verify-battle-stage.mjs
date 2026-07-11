@@ -11,6 +11,14 @@
    (.stage-band-rail/.stage-band-row) + pinned combatant chips + the collapsed prose twin. Every other
    assertion is UNCHANGED from the original unit — the structure only legitimately moved for the strip.
 
+   BEAUTY-WAVE VP5 (docs/BEAUTY-WAVE.md §VP5, 2026-07-10) — "get off the stage": the stacked-card band
+   rail (.stage-band-rail/.stage-band-row, one plated row per band each carrying its own chips) is
+   RETIRED in favor of two thinner things — floating band-edge tags (.stage-band-tags/.stage-band-tag,
+   no plate) and a single bottom-docked unit strip (.stage-unit-strip/.stage-strip-chip) carrying every
+   combatant's chip in one row. 2h/2i/2j updated RED-FIRST to the new selectors below (deliberate
+   structure change per the spec, not a silent relaxation — see docs/BEAUTY-WAVE.md §VP5 + CLAUDE.md's
+   "validators preserve the thing's job" discipline).
+
    Checks:
      1. Theater absent (no stub) -> classic layout: no .battle-stage class, no #theaterStage canvas,
         the combat panel renders in .panel-col as it always has (pre-existing behavior unchanged).
@@ -178,12 +186,12 @@ const check = (name, cond, detail = "") =>
     !!(wrap && wrap.querySelector("#theaterStage") && wrap.querySelector(".stage-overlay")));
   check("2e-strip-retired. the old below-canvas zone-grid strip is GONE (.stage-strip no longer renders)",
     !host.querySelector(".chat-col.stage-col .stage-strip"));
-  check("2h. the overlay carries the band-label rail (.stage-band-rail) with at least one band row",
-    !!host.querySelector(".chat-col.stage-col .stage-overlay .stage-band-rail .stage-band-row"));
-  check("2i. band rows carry the distance labels (MELEE/NEAR/etc, from CMB_BAND_LABEL)",
-    /melee/i.test(host.querySelector(".chat-col.stage-col .stage-band-rail")?.textContent || ""));
-  check("2j. combatant chips (foes) render as compact tokens INSIDE the overlay's band rail, not the old grid",
-    !!host.querySelector(".chat-col.stage-col .stage-band-rail .cmb-chip"));
+  check("2h. VP5: the overlay carries floating band-edge tags (.stage-band-tags) with at least one tag",
+    !!host.querySelector(".chat-col.stage-col .stage-overlay .stage-band-tags .stage-band-tag"));
+  check("2i. VP5: band tags carry the distance labels (MELEE/NEAR/etc, from CMB_BAND_LABEL)",
+    /melee/i.test(host.querySelector(".chat-col.stage-col .stage-band-tags")?.textContent || ""));
+  check("2j. VP5: combatant chips (foes) render as compact tokens in the bottom unit strip, not the old grid",
+    !!host.querySelector(".chat-col.stage-col .stage-unit-strip .stage-strip-chip"));
   check("2f. the round/side header renders above the canvas in the stage column",
     !!host.querySelector(".chat-col.stage-col .cmb-head"));
   // TABLETOP-UNITS U2 / TABLETOP-VISION §9.11 (red-first, 2026-07-07): the prose twin used to render

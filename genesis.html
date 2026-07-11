@@ -632,69 +632,58 @@
   .stage-head{padding-right:0}
 
   /* ── The overlay layer (§1 of the rework): HTML/CSS pinned OVER the canvas, not a strip below it.
-     Pointer-events pass through the whole overlay EXCEPT the band rows/chips themselves, so the board
-     underneath stays fully the hero — nothing here should read as a panel competing with the render. */
+     Pointer-events pass through the whole overlay EXCEPT the unit strip/band tags themselves, so the
+     board underneath stays fully the hero — nothing here should read as a panel competing with the render. */
   .stage-overlay{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between;
     padding:10px;pointer-events:none;z-index:2}
   /* THEATER-ZOOM-SPREAD — camera-control corner plate: pinned top-right via its OWN absolute
-     positioning (the overlay's flex column only lays out its top/bottom children — .stage-band-rail
-     top-left, .stage-overlay-foot bottom-right — neither claims this corner). pointer-events:auto so
-     the buttons are clickable through the overlay's own pointer-events:none default (same pattern as
-     .stage-band-row.has-occ / .stage-prose). z-index above the overlay's own z:2 so it never sits
-     under a stray band-row plate at some odd viewport width. */
+     positioning (the overlay's flex column only lays out its top/bottom children — the turn banner
+     top, .stage-bottom-row bottom — neither claims this corner; .stage-band-tags is itself absolute
+     so it never claims flow space either). pointer-events:auto so the buttons are clickable through
+     the overlay's own pointer-events:none default (same pattern as .stage-band-tag / .stage-prose).
+     z-index above the overlay's own z:2 so it never sits under a stray tag/chip at some odd viewport
+     width. */
   .stage-cam-controls{position:absolute;top:10px;right:10px;display:flex;gap:4px;pointer-events:auto;z-index:3}
   .stage-cam-btn{background:rgba(10,9,8,.5);border:1px solid rgba(212,175,110,.24);border-radius:0;
     color:var(--gold-soft);font-size:13px;line-height:1;padding:5px 8px;cursor:pointer;backdrop-filter:blur(1px)}
   .stage-cam-btn:hover{background:rgba(10,9,8,.68);border-color:var(--gold-soft);color:var(--ink)}
-  /* band rail: a THIN RULER along the board's depth edge (left side) — every band always shows its
-     label (the "distance-indicating arena" reads by always being there), but an EMPTY band carries no
-     plate/border of its own, just dim text; only a band with occupants gets the subtle low-opacity
-     plate + chips. Rows hug their own content width (never the rail's max-width) so the ruler stays a
-     thin vertical line of labels, not a wide box. Nearest (melee) pins to the bottom, farthest to the
-     top — mirrors the board's own depth axis. */
-  .stage-band-rail{display:flex;flex-direction:column-reverse;gap:5px;align-self:flex-start;max-width:44%}
-  .stage-band-row{display:flex;align-items:center;gap:6px;width:fit-content}
-  .stage-band-row.has-occ{pointer-events:auto;cursor:pointer;background:rgba(10,9,8,.5);
-    border:1px solid rgba(212,175,110,.24);border-radius:0;padding:2px 7px 2px 5px;backdrop-filter:blur(1px)}
-  .stage-band-row.has-occ:hover{background:rgba(10,9,8,.68);border-color:var(--gold-soft)}
-  .stage-band-lbl{font-family:var(--display);font-size:9px;letter-spacing:.12em;text-transform:uppercase;
-    color:rgba(212,175,110,.5);flex:0 0 auto;white-space:nowrap;padding:1px 0}
-  .stage-band-row.has-occ .stage-band-lbl{color:var(--gold-soft)}
-  .stage-band-elev,.stage-band-hazard{font-size:8.5px}
-  .stage-band-hazard{color:var(--blood)}
-  .stage-band-chips{display:flex;flex-wrap:wrap;gap:3px}
-  /* the chip itself, inside the overlay only — the classic .cmb-chip is a full sidebar-style card (HP
-     bar, icon, big value text, name+state on separate lines); here it collapses to a single-line
-     name+state pill. Scoped overrides only touch the overlay context, the classic combat-panel chip
-     styling is untouched. */
-  .stage-band-chips .cmb-chip{min-width:0;padding:2px 6px;font-size:9.5px;line-height:1.4;
-    background:rgba(20,17,12,.75);border-color:rgba(138,106,36,.3);display:flex;align-items:center;
-    flex-wrap:wrap;column-gap:5px;row-gap:0}
-  /* ROUND 1 fix — chip text was dark-on-dark: --bone (#2b2314) is a "strong emphasis on parchment"
-     token, illegible against this near-black rgba(20,17,12,.75) overlay chip background (worst on the
-     PC chip, which round0's screenshot showed unreadable). --slate-ink (#d8c79a) is the repo's OWN
-     existing light-gold-on-dark token (its :root comment literally says "top bar + scene-header dark
-     strip, and its text" — this chip is exactly that situation), so it reads correctly without
-     inventing a new color. Structure/plate look (squared corners, translucent, layers-not-boxes) is
-     untouched — values-only fix, per the mission brief. */
-  .stage-band-chips .cmb-chip-name{font-size:9.5px;font-weight:600;color:var(--slate-ink)}
-  /* the PC chip keeps its distinct base-scope identity (border-color:var(--gold) + a warm gold-tinted
-     background, .cmb-chip.pc line ~814) even under the uniform near-black overlay background above —
-     a touch brighter name color too (gold-leaf, the "bright leaf" token) so the player's own chip reads
-     as visually distinct from the hostile chips, not just same-color-different-position. */
-  .stage-band-chips .cmb-chip.pc{background:rgba(180,143,60,.22);border-color:var(--gold)}
-  .stage-band-chips .cmb-chip.pc .cmb-chip-name{color:var(--gold-leaf)}
-  .stage-band-chips .cmb-chip-state{font-size:8px;margin:0;letter-spacing:.04em}
-  .stage-band-chips .cmb-chip-cr,.stage-band-chips .cmb-badges{display:none}   /* CR + condition badges: sidebar-tier detail, not overlay-tier */
-  .stage-band-chips .ss-hp{margin:0;flex-basis:100%}
-  .stage-band-chips .ss-hp-head{font-size:9px;gap:4px;color:var(--slate-ink)}
-  .stage-band-chips .ss-hp-lbl{display:none}   /* "Hit Points" wordmark + icon: too heavy for a pinned token */
-  .stage-band-chips .ss-hp-val{font-size:9.5px;color:var(--slate-ink)}
-  .stage-band-chips .ss-hp-bar{height:3px;margin-top:2px}
-  /* the collapsed prose twin + death-saves/concentration — a compact plate pinned bottom-right, never
-     covering the board center. Still role=status/aria-live=polite (BLIND-PLAYABLE untouched); this is
-     a VISUAL compaction only, the screen-reader text is identical to the classic layout's. */
-  .stage-overlay-foot{pointer-events:none;align-self:flex-end;max-width:50%;display:flex;flex-direction:column;
+  /* BEAUTY-WAVE VP5 (docs/BEAUTY-WAVE.md §VP5) — "get off the stage." Replaces the old stacked-card
+     .stage-band-rail (one plated row per band, each carrying its own occupant chips) with two much
+     thinner things: floating band-edge TAGS (no plate, just text, positioned along the depth axis)
+     and a single bottom-docked unit strip carrying every combatant's chip in one row. */
+  .stage-band-tags{position:absolute;left:8px;top:40px;bottom:56px;pointer-events:none;z-index:1}
+  .stage-band-tag{position:absolute;left:0;transform:translateY(-50%);pointer-events:auto;cursor:pointer;
+    font-family:var(--display);font-size:9px;letter-spacing:.14em;text-transform:uppercase;
+    color:rgba(212,175,110,.6);white-space:nowrap;text-shadow:0 1px 2px rgba(0,0,0,.8)}
+  .stage-band-tag:hover{color:var(--gold-soft)}
+  /* the bottom row: unit strip (flex-fills, own scroll if the roster overruns) + the prose/death-save
+     plate, side by side so both sit on the stage's bottom edge without overlapping the strip. */
+  .stage-bottom-row{display:flex;align-items:flex-end;gap:8px;width:100%}
+  /* the strip itself — spec literals: ≤48px tall, backdrop-blur, 0.75 opacity, single row, docked
+     bottom. pointer-events:auto (it's interactive-adjacent — chips carry data-fid for a future tap-
+     to-inspect, harmless today) while the row/tag layers above stay pass-through. */
+  .stage-unit-strip{flex:1 1 auto;display:flex;align-items:center;gap:5px;max-height:48px;
+    overflow-x:auto;overflow-y:hidden;padding:5px 8px;pointer-events:auto;
+    background:rgba(10,9,8,.75);backdrop-filter:blur(4px);border:1px solid rgba(212,175,110,.2)}
+  .stage-strip-chip{display:inline-flex;align-items:center;gap:5px;flex:0 0 auto;padding:2px 7px;
+    background:rgba(20,17,12,.6);border:1px solid rgba(138,106,36,.3);white-space:nowrap}
+  .stage-strip-chip.pc{background:rgba(180,143,60,.22);border-color:var(--gold)}
+  .stage-strip-chip.down{opacity:.5}
+  /* diegetic selection (item 2) — the acting side's chips get a soft gold glow, mirroring the ground-
+     ring glow on their standees (window.Theater.setActingUnit, src/ui/theater-boot.js). */
+  .stage-strip-chip.acting{border-color:var(--gold-soft);box-shadow:0 0 6px rgba(212,175,110,.55)}
+  .stage-strip-name{font-size:10.5px;font-weight:600;color:var(--slate-ink)}
+  .stage-strip-chip.pc .stage-strip-name{color:var(--gold-leaf)}
+  .stage-strip-pips{display:inline-flex;gap:2px}
+  .stage-strip-pip{width:6px;height:6px;border-radius:50%;background:rgba(122,168,116,.85);
+    border:1px solid rgba(0,0,0,.3)}
+  .stage-strip-pip:not(.on){background:transparent;border-color:rgba(138,106,36,.35)}
+  .stage-strip-pip.dead{background:var(--blood);border-color:var(--blood)}
+  /* the collapsed prose twin + death-saves/concentration — a compact plate on the stage's bottom
+     edge, alongside (never behind) the unit strip. Still role=status/aria-live=polite (BLIND-PLAYABLE
+     untouched); this is a VISUAL compaction only, the screen-reader text is identical to the classic
+     layout's. */
+  .stage-overlay-foot{pointer-events:none;flex:0 0 auto;max-width:40%;display:flex;flex-direction:column;
     align-items:flex-end;gap:4px}
   .stage-prose{pointer-events:auto;background:rgba(10,9,8,.5);border:1px solid rgba(212,175,110,.2);
     border-radius:0;padding:3px 8px;font-size:10.5px;line-height:1.35;color:var(--ink-dim);text-align:right;
@@ -702,7 +691,22 @@
   .stage-overlay-foot .cmb-ds{pointer-events:auto;background:rgba(10,9,8,.5);border:1px solid rgba(212,175,110,.2);
     padding:2px 8px;margin:0;font-size:10px}
   .stage-overlay-foot .cmb-conc{pointer-events:auto}
-  @media (max-width:1100px){ .stage-band-rail{max-width:58%} .stage-overlay-foot{max-width:66%} }
+  /* damage floaters (item 3) — a persistent DOM layer theater-boot.js parents alongside the canvas
+     (survives the stage's own innerHTML replacement across renders, same as the canvas itself; see
+     mount()/reattach()'s VP5 comments). Anchor-at-spawn, 600ms fade (the AMENDED 2c-framing note: the
+     fade is fast enough that a camera fit mid-fade is a non-issue). */
+  .theater-floater-layer{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:4}
+  .theater-floater{position:absolute;transform:translate(-50%,-100%);font-family:var(--display);
+    font-weight:700;font-size:15px;color:var(--gold-leaf);text-shadow:0 1px 3px rgba(0,0,0,.85);
+    white-space:nowrap;animation:theaterFloaterRise .6s ease-out forwards}
+  .theater-floater-hit{color:var(--blood)}
+  .theater-floater-heal{color:var(--grounded)}
+  .theater-floater-down{color:var(--blood);font-size:12px;letter-spacing:.08em}
+  @keyframes theaterFloaterRise{
+    from{opacity:1;transform:translate(-50%,-100%)}
+    to{opacity:0;transform:translate(-50%,-170%)}
+  }
+  @media (max-width:1100px){ .stage-band-tags{top:44px;bottom:60px} .stage-overlay-foot{max-width:55%} }
 
   /* ── The Bardo full-bleed stage (docs/TIYL-UI-PORT.md §1) ────────────────────────────────────
      Modeled line-for-line on .wrap.ingame: same full-bleed frame law (no centered container, no

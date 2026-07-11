@@ -827,5 +827,142 @@ group("27 — registry fold: data/sprite-registry.js emits feet/scaleTrue for >=
   }
 }
 
+// BEAUTY-WAVE.md VP1b ADDITIONS (checks 28-31 below) — the combat-standee kaiju-scale defect: VP1
+// (checks 22-27 above) fixed interiorBuildPieces (non-combat pieces) ONLY; combat units mount through
+// a completely different path (setUnits -> figureFor's sprite branch -> buildSpriteBillboard, the
+// tabletop render-height-multiplier convention) that VP1 never touched, so a combat foe standing in a
+// dungeon room still built kaiju-scaled (dev/battle-gate/dungeon-loop/contact-sheet.png loops 04/05).
+// RED-FIRST (checked 2026-07-10 against tip ce609da, the last master tip before this unit's fix — the
+// SAME PINNED-ref discipline check 22 uses and for the identical reason: a derived ref self-invalidates
+// the moment this unit merges into master): `git show ce609da:src/ui/theater-boot.js | grep -c
+// interiorTrueScale` is 0 — figureFor had no interior-aware branch at all, so ANY combat sprite figure,
+// on ANY board (flat tabletop or interior3d alike), always built through the tabletop convention.
+// Checks 28-31:
+//   28. RED-FIRST — pre-fix (ce609da) figureFor (exercised via the EXISTING refFigure.build test seam,
+//       the same entry point setUnits' figureFor call routes every combat unit through) builds a
+//       medium/scale-1.5 combat foe's sprite standee to 2.25 world units regardless of any
+//       interior-intent flag passed in (the flag doesn't exist pre-fix) — provably > 2 world units in
+//       a room where 1 unit = 5ft.
+//   29. FIXED — figureFor's interior branch (refFigure.build({..., interiorMode:true})) sizes THROUGH
+//       interiorSpriteBillboard (HUMAN_TRUE_HEIGHT x scaleTrue) same as VP1's non-combat pieces:
+//       medium (no scaleTrue/scaleVsHuman -> default 1.0) in [1.05,1.15]; large (scaleTrue=2.0) in
+//       [2.0,2.4]; an oversize figure clamps to wallHeightCap.
+//   30. REGRESSION — the SAME recipeSlug through figureFor with interiorMode OMITTED (the flat
+//       TABLETOP combat path) stays BYTE-IDENTICAL to the pre-fix height (2.25) — untouched, per this
+//       unit's own OUT-OF-SCOPE line.
+//   31. WIRING text-scan — setUnits derives interiorMode from the SAME `S.lastBoard.kind ===
+//       "interior3d"` discriminator setInteriorBoard/setBoard already establish, threads it (+
+//       wallHeightCap) into its figureFor call, and the interiorSpriteFig branch sets figScale=1 (never
+//       re-applying FIGURE_SCALE x sizeScaleFor on top of an already-world-unit-baked plane — the
+//       double-scale reproduction of the same kaiju bug one line later).
+const VP1B_RUNNER_SRC = `
+import { JSDOM } from "jsdom";
+import { pathToFileURL } from "node:url";
+
+const bootPath = process.argv[2];
+const registry = JSON.parse(process.argv[3]);
+const scenarios = JSON.parse(process.argv[4]); // [{recipeSlug, interiorMode, wallHeightCap}]
+
+const dom = new JSDOM(
+  \`<!doctype html><html><body><div id="stage" style="width:400px;height:300px"></div></body></html>\`,
+  { runScripts: "dangerously", url: "http://localhost/" }
+);
+global.window = dom.window;
+global.document = dom.window.document;
+global.SPRITE_REGISTRY = registry;
+global.window.SPRITE_REGISTRY = registry;
+
+function fakeTexture(){ return { magFilter: null, minFilter: null, generateMipmaps: true, isTexture: true, image: { width: 100, height: 200 } }; }
+
+const result = { ok: false, error: null, heights: [] };
+try {
+  await import(pathToFileURL(bootPath).href);
+  const T = global.window.Theater;
+  for(const slug of Object.keys(registry)) T._spriteTextureCache[slug] = fakeTexture();
+  for(const s of scenarios){
+    const fig = T.refFigure.build({ recipeSlug: s.recipeSlug, interiorMode: s.interiorMode, wallHeightCap: s.wallHeightCap });
+    const h = fig && fig.children[0] && fig.children[0].geometry.parameters.height;
+    result.heights.push(h);
+  }
+  result.ok = true;
+} catch(e){
+  result.error = String((e && e.stack) || e);
+}
+process.stdout.write(JSON.stringify(result));
+process.exit(0);
+`;
+
+function runVP1bScenario(bootSourceText, scenarios){
+  const tag = `${process.pid}-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+  const bootPath = join(ROOT, "src", "ui", `.verify-vp1b-boot-${tag}.mjs`);
+  const runnerPath = join(ROOT, "dev", `.verify-vp1b-runner-${tag}.mjs`);
+  writeFileSync(bootPath, bootSourceText);
+  writeFileSync(runnerPath, VP1B_RUNNER_SRC);
+  try {
+    const out = execFileSync("node", [runnerPath, bootPath, JSON.stringify(VP1_REGISTRY), JSON.stringify(scenarios)], {
+      cwd: ROOT, encoding: "utf-8", timeout: 30000,
+    });
+    const lastLine = out.trim().split("\n").pop();
+    return JSON.parse(lastLine);
+  } finally {
+    rmSync(bootPath, { force: true });
+    rmSync(runnerPath, { force: true });
+  }
+}
+
+group("28 — RED-FIRST: pre-fix theater-boot.js (pinned ce609da, the last master tip before VP1b) builds a combat-foe sprite standee kaiju-scaled regardless of interior intent");
+{
+  const preFixRef = "ce609da";
+  const OLD_SOURCE = execFileSync("git", ["show", `${preFixRef}:src/ui/theater-boot.js`], { cwd: ROOT, encoding: "utf-8" });
+  ok(!OLD_SOURCE.includes("interiorTrueScale"), `sanity: the pre-fix tip (${preFixRef}) theater-boot.js predates this unit's interior-aware figureFor branch (proves this is really the pre-fix source)`);
+  const red = runVP1bScenario(OLD_SOURCE, [{ recipeSlug: "Scaled Medium", interiorMode: true, wallHeightCap: 2.4 }]);
+  if(!red.ok){
+    fail++; console.error("  FAIL: pre-fix scenario threw: " + red.error);
+  } else {
+    console.log(`  pre-fix combat-foe standee height (interiorMode requested but not honored pre-fix) = ${red.heights[0]} world units`);
+    ok(red.heights[0] > 2, `RED-FIRST proven: pre-fix height (${red.heights[0]}) > 2 world units for a medium combat foe standing in a room where 1 unit = 5ft (the bug — VP1 never touched this path)`);
+  }
+}
+
+group("29 — FIXED: figureFor's interior branch sizes a combat-foe standee THROUGH interiorSpriteBillboard (TRUE-SCALE), reusing VP1's own math");
+{
+  const REAL_SOURCE = read("src/ui/theater-boot.js");
+  const green = runVP1bScenario(REAL_SOURCE, [
+    { recipeSlug: "Scaled Medium", interiorMode: true, wallHeightCap: 2.4 },
+    { recipeSlug: "Large Thing", interiorMode: true, wallHeightCap: 2.4 },
+    { recipeSlug: "Titan Thing", interiorMode: true, wallHeightCap: 2.4 },
+  ]);
+  if(!green.ok){
+    fail++; console.error("  FAIL: fixed-source interior scenario threw: " + green.error);
+  } else {
+    ok(green.heights[0] >= 1.05 && green.heights[0] <= 1.15, `medium combat foe (no scaleTrue -> default 1.0) interior height ${green.heights[0]} in [1.05, 1.15]`);
+    ok(green.heights[1] >= 2.0 && green.heights[1] <= 2.4, `large combat foe (scaleTrue=2.0) interior height ${green.heights[1]} in [2.0, 2.4]`);
+    // NOTE: refFigure.build passes wallHeightCap straight to figureFor -> interiorSpriteBillboard,
+    // which caps at the value it's GIVEN (the *0.95 shave lives in setUnits, computed once off
+    // S.lastBoard.wallHeightBase, before it ever reaches figureFor — check 31's text-scan proves that
+    // wiring). This scenario passes 2.4 as the already-shaved cap, so the expected clamp is 2.4 itself.
+    ok(Math.abs(green.heights[2] - 2.4) < 1e-9, `oversize combat foe (scaleTrue=100) clamps to the given wallHeightCap=2.4 (got ${green.heights[2]})`);
+  }
+
+  group("30 — REGRESSION: the flat TABLETOP combat path (interiorMode omitted) stays byte-identical to the pre-fix height — OUT OF SCOPE line honored");
+  const tabletop = runVP1bScenario(REAL_SOURCE, [{ recipeSlug: "Scaled Medium" }]);
+  if(!tabletop.ok){
+    fail++; console.error("  FAIL: fixed-source tabletop scenario threw: " + tabletop.error);
+  } else {
+    ok(Math.abs(tabletop.heights[0] - 2.25) < 1e-9, `tabletop combat foe (interiorMode omitted) height ${tabletop.heights[0]} === pre-fix 2.25 (spriteSizeScaleFor("medium")=1 x GLB_TARGET_HEIGHT=1.5 x calib=1.5), UNCHANGED by this unit`);
+  }
+}
+
+group("31 — WIRING text-scan: setUnits derives interiorMode from S.lastBoard.kind===\"interior3d\", threads it + wallHeightCap into figureFor, and never double-scales the true-scale plane");
+{
+  const src = read("src/ui/theater-boot.js");
+  ok(/const interiorMode = !!\(S\.lastBoard && S\.lastBoard\.kind === "interior3d"\)/.test(src),
+    "setUnits computes interiorMode off the SAME discriminator setInteriorBoard/setBoard establish (S.lastBoard.kind)");
+  ok(/figureFor\(u\.archetype, seed, tint, u\.silhouette, u\.weapon, u\.recipeSlug, u\.pcRecipe, u\.kind, u\.className, null, interiorMode, wallHeightCap\)/.test(src),
+    "setUnits threads interiorMode + wallHeightCap into its figureFor call site");
+  ok(/\} else if\(interiorSpriteFig\)\{[\s\S]{0,600}?figScale = 1;/.test(src),
+    "the interiorSpriteFig branch sets figScale=1 — no re-applying FIGURE_SCALE x sizeScaleFor on top of the already-world-unit-baked plane (the double-scale reproduction of the kaiju bug)");
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail > 0 ? 1 : 0);

@@ -138,11 +138,121 @@ function fxFor(kind){
    (delegated to this module's own tickTweens, exported below) understands: {start,dur,update,onDone}.
    `start` is stamped at PUSH time (Date.now()) so a verb fired mid-frame doesn't inherit a stale clock.
    --------------------------------------------------------------------------- */
-function pushTween(ctx, dur, onUpdate, onDone){
+/* BEAUTY-WAVE-4.md MF-3 (2026-07-11): `meta` is an optional plain object Object.assign'd onto the
+   pushed tween record (e.g. {unitId} tagging so a LATER hit can locate "the attacker's live tween" —
+   see findLatestTweenByUnitId/triggerHitStop below). Purely additive: every existing call site that
+   omits `meta` gets byte-identical tween objects to before this unit. Returns the pushed tween OBJECT
+   (truthy) instead of a bare `true` — every existing caller only ever did `return pushTween(...)` or
+   `!!pushTween(...)`, both of which stay correct against a truthy object, so this is a safe widening,
+   not a breaking change; the new value lets THIS unit's own verbs (and a future caller) hand the live
+   tween reference to applyHitStop/freezeTween without a second lookup. */
+function pushTween(ctx, dur, onUpdate, onDone, meta){
   if(!ctx || !ctx.tweens) return false;
-  ctx.tweens.push({ start: Date.now(), dur: Math.max(1, dur), update: onUpdate, onDone: onDone || null });
+  const tw = { start: Date.now(), dur: Math.max(1, dur), update: onUpdate, onDone: onDone || null };
+  if(meta) Object.assign(tw, meta);
+  ctx.tweens.push(tw);
   if(typeof ctx.markDirty === "function") ctx.markDirty();
+  return tw;
+}
+
+/* ============================================================================
+   BEAUTY-WAVE-4.md MF-3 — IMPACT FEEL (hit-stop + response). Self-contained primitives, opt-in via new
+   OPTIONAL opts/meta fields only (opts.attackerId, opts.recoilFrom/recoilDir, opts.crit) — no existing
+   call site changes its default output, so dev/verify-theater-verbs.mjs / dev/verify-standee-verbs.mjs
+   stay green unchanged (re-run, not just cited). "px-equivalent" has no prior canonical world-unit
+   mapping anywhere in this codebase (grepped: only docs prose uses the phrase) — IMPACT_PX_UNIT below is
+   THIS unit's own conversion anchor, sized off vHurt's existing 0.06-world-unit jitter amplitude (the
+   only prior "small shake" reference point) reading as roughly a 2px shake at the tabletop's typical fit.
+   ============================================================================ */
+const IMPACT_PX_UNIT = 0.03; // world-units per "px-equivalent" (this unit's own anchor — see header)
+const HIT_STOP_DUR = 60;      // ms, non-crit (BW4 MF-3 spec)
+const HIT_STOP_DUR_CRIT = 90; // ms, crit (BW4 MF-3 spec)
+const FALL_HOLD_DUR = 80;     // ms, fall-death hold-before-tip (BW4 MF-3 spec)
+const CRIT_NUDGE_DUR = 120;   // ms, single-bounce settle (BW4 MF-3 spec)
+const CRIT_NUDGE_AMP = 2 * IMPACT_PX_UNIT; // "2px-equivalent" (BW4 MF-3 spec)
+
+/* freezeTween — stalls ONE tween's `t` fraction at its CURRENT value for `durMs`, then resumes smoothly
+   (tickTweens below does the resume-shift). Never touches a tween already frozen (idempotent re-call —
+   a tween can't be frozen twice into a longer window by accident; the caller decides the ONE window).
+   Fake-clock testable via the optional `nowMs` (defaults to Date.now(), same convention as tickTweens
+   itself taking an explicit nowMs). */
+function freezeTween(tw, durMs, nowMs){
+  if(!tw || tw.__freezeUntil != null) return false;
+  const now = nowMs != null ? nowMs : Date.now();
+  const elapsed = now - tw.start;
+  const t = Math.max(0, Math.min(1, elapsed / tw.dur));
+  tw.__frozenT = t;
+  tw.__freezeUntil = now + Math.max(1, durMs);
   return true;
+}
+
+/* applyHitStop — freezes an explicit LIST of tween references (never "everything live" — the whole
+   point of MF-3's law is the ACTION freezes while the WORLD (motes/flicker — neither of which ever rides
+   ctx.tweens at all, see theater-boot.js's own separate moteRaf/flickerRaf headers — and MF-1's camera-
+   pose tween, which DOES ride this same ctx.tweens array) keeps ticking). Belt-and-suspenders: even if a
+   caller accidentally hands in a camera-pose tween, it's skipped here too (never frozen by this path). */
+function applyHitStop(tweenRefs, durMs, nowMs){
+  const now = nowMs != null ? nowMs : Date.now();
+  let count = 0;
+  (tweenRefs || []).forEach((tw) => {
+    if(!tw || tw.isCameraPoseTween) return;
+    if(freezeTween(tw, durMs, now)) count++;
+  });
+  return count;
+}
+
+/* findLatestTweenByUnitId — the most-recently-pushed LIVE tween tagged with this unitId (pushTween's
+   `meta` param above). Scans from the end since ctx.tweens preserves push order for survivors across
+   tickTweens' own splice-and-rebuild. Returns null for no match (clean no-op upstream). */
+function findLatestTweenByUnitId(tweens, unitId){
+  if(!tweens || unitId == null) return null;
+  for(let i = tweens.length - 1; i >= 0; i--){
+    if(tweens[i] && tweens[i].unitId === unitId) return tweens[i];
+  }
+  return null;
+}
+
+/* triggerHitStop — the MF-3 entry point a hit-resolution call site (or this file's own vHurt) uses to
+   freeze BOTH sides of a hit. `targetTween` is normally the just-pushed hurt/hit-damage tween (handed in
+   directly by the caller, since it already holds the reference); `attackerId`, if given, is resolved
+   against ctx.tweens to find the attacker's own in-flight tween (its lunge/act-attack) and freeze it at
+   ITS current pose too — "at the contact frame" for both sides. A missing/unresolvable attacker is a
+   graceful partial (target-only freeze), never a throw — matches this file's own null-safety posture. */
+function triggerHitStop(ctx, opts){
+  opts = opts || {};
+  const now = opts.nowMs != null ? opts.nowMs : Date.now();
+  const durMs = opts.crit ? HIT_STOP_DUR_CRIT : HIT_STOP_DUR;
+  const refs = [];
+  if(opts.targetTween) refs.push(opts.targetTween);
+  if(ctx && ctx.tweens && opts.attackerId != null){
+    const attackerTw = findLatestTweenByUnitId(ctx.tweens, opts.attackerId);
+    if(attackerTw && attackerTw !== opts.targetTween) refs.push(attackerTw);
+  }
+  return applyHitStop(refs, durMs, now);
+}
+
+/* critCameraNudge — hit-crit's 2px-equivalent single-bounce camera nudge (MF-3 bullet 3). ONE hump
+   (Math.sin(t*PI) rises then falls exactly once across CRIT_NUDGE_DUR — never a repeating shake), never
+   fought against an in-flight MF-1 camera-pose tween: if one is live, this is a clean no-op (settle
+   cleanly per the spec's own wording, rather than two tweens racing to write ctx.camera.position the
+   same frame). Restores the exact base position on completion. */
+function critCameraNudge(ctx, opts, nowMs){
+  if(!ctx || !ctx.camera) return false;
+  if(ctx.tweens && ctx.tweens.some((tw) => tw && tw.isCameraPoseTween)) return false;
+  opts = opts || {};
+  const camera = ctx.camera;
+  const baseX = camera.position.x, baseY = camera.position.y;
+  const dir = (opts.dir && typeof opts.dir.x === "number") ? opts.dir : { x: 0, y: 1 };
+  const amp = opts.amp != null ? opts.amp : CRIT_NUDGE_AMP;
+  const dur = opts.dur != null ? opts.dur : CRIT_NUDGE_DUR;
+  return pushTween(ctx, dur, (t) => {
+    const bounce = Math.sin(Math.max(0, Math.min(1, t)) * Math.PI); // one hump: 0 -> 1 -> 0, never repeats
+    camera.position.x = baseX + dir.x * amp * bounce;
+    camera.position.y = baseY + dir.y * amp * bounce;
+  }, () => {
+    camera.position.x = baseX;
+    camera.position.y = baseY;
+  }, { isCritNudge: true });
 }
 
 const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3);
@@ -215,7 +325,8 @@ function vStrike(ctx, opts){
     const e = out ? easeOutCubic(local) : easeInOutQuad(local);
     obj.position.x = out ? lerp(fromX, peakX, e) : lerp(peakX, fromX, e);
     obj.position.z = out ? lerp(fromZ, peakZ, e) : lerp(peakZ, fromZ, e);
-  }, () => { obj.position.x = fromX; obj.position.z = fromZ; });
+  }, () => { obj.position.x = fromX; obj.position.z = fromZ; },
+  { unitId: opts.who }); // MF-3: tags the attacker's own lunge tween so a later hit can freeze it (triggerHitStop's attackerId lookup)
 }
 
 /* hurt — flash + jitter (§4, damage application). Flashes the figure's material emissive/color toward
@@ -228,6 +339,17 @@ function vHurt(ctx, opts){
   if(!obj) return false;
   const baseX = obj.position.x, baseZ = obj.position.z;
   const amp = 0.06 * Math.max(0.4, Math.min(3, opts.magnitude || 1));
+  // MF-3 directional recoil (bullet 2): opts.recoilFrom (a unit id / zone / point — same resolvePoint
+  // contract every other verb here uses) biases the shake AWAY from the attacker instead of the old
+  // fixed x/x*0.4 mix. Omitted opts.recoilFrom (every pre-MF-3 call site) reproduces the OLD mix
+  // byte-for-byte (biasX=1, biasZ=0.4) — zero behavior change for dev/verify-theater-verbs.mjs.
+  let biasX = 1, biasZ = 0.4;
+  const recoilPt = opts.recoilFrom != null ? resolvePoint(ctx, opts.recoilFrom) : null;
+  if(recoilPt){
+    const dx = baseX - recoilPt.x, dz = baseZ - recoilPt.z;
+    const len = Math.hypot(dx, dz) || 1;
+    biasX = dx / len; biasZ = dz / len;
+  }
   const meshes = [];
   obj.traverse((n) => { if(n.material && n.material.color) meshes.push(n); });
   // A1 (REVIEW-FIXES-0705-VISUAL §W2-A): whole-object figures share ONE material array per opacity
@@ -251,11 +373,11 @@ function vHurt(ctx, opts){
     }
     return m.material;
   });
-  return pushTween(ctx, opts.dur || DEFAULT_DUR.hurt, (t) => {
+  const tw = pushTween(ctx, opts.dur || DEFAULT_DUR.hurt, (t) => {
     const decay = 1 - t;
     const shake = Math.sin(t * Math.PI * 8) * amp * decay;
-    obj.position.x = baseX + shake;
-    obj.position.z = baseZ + shake * 0.4;
+    obj.position.x = baseX + shake * biasX;
+    obj.position.z = baseZ + shake * biasZ;
     const flash = Math.max(0, 1 - t * 2.2); // flashes bright in the first ~45% of the tween, then fades
     tweenMaterials.forEach((mat, i) => {
       const orig = origColors[i];
@@ -270,7 +392,14 @@ function vHurt(ctx, opts){
       m.material = origMaterials[i];
       if(tweenMat !== origMaterials[i] && tweenMat.dispose) tweenMat.dispose();
     });
-  });
+  }, { unitId: opts.who });
+  // MF-3 HIT-STOP (bullet 1): opt-in via opts.attackerId (a NEW optional field — every pre-MF-3 call
+  // site omits it, so this is a clean no-op for them, zero regression risk). Freezes THIS just-pushed
+  // hurt tween + the attacker's own live tween (found by unitId tag) at the contact frame.
+  if(tw && opts.attackerId != null){
+    triggerHitStop(ctx, { targetTween: tw, attackerId: opts.attackerId, crit: !!opts.crit });
+  }
+  return !!tw;
 }
 
 /* down — topple 90deg + desaturate (§4, foe/PC hits 0). A one-way rotate-to-prone + a material
@@ -303,15 +432,27 @@ function vDown(ctx, opts){
       m.material = clone;
     }
   });
-  return pushTween(ctx, opts.dur || DEFAULT_DUR.down, (t) => {
-    const e = easeInOutQuad(t);
+  // MF-3 bullet 4 ("Kill weight"): fall-death/down gains an UNCONDITIONAL 80ms hit-stop hold BEFORE the
+  // tip begins — the beat lands, THEN the mini falls. Modeled as a hold-then-motion remap on the SAME
+  // single tween (not two chained tweens, matching this file's own multi-phase convention — vStrike's
+  // lunge+recoil, vAbsurdity's rift+shake): the pushed duration grows by FALL_HOLD_DUR, and `t` is
+  // remapped past the hold fraction before driving the existing rotate/desaturate math untouched. At
+  // t=1 the remap always lands at localT=1 (fully toppled/gray) — byte-identical FINAL state to before
+  // this unit, so runToCompletion-style tests (which only sample update(1)/onDone) see no regression;
+  // only the mid-flight timing gains the hold.
+  const baseDur = opts.dur || DEFAULT_DUR.down;
+  const totalDur = baseDur + FALL_HOLD_DUR;
+  const holdFrac = FALL_HOLD_DUR / totalDur;
+  return pushTween(ctx, totalDur, (t) => {
+    const localT = t < holdFrac ? 0 : (t - holdFrac) / (1 - holdFrac);
+    const e = easeInOutQuad(localT);
     obj.rotation.z = lerp(fromRot, toRot, e);
     meshes.forEach((m, i) => {
       const orig = origColors[i];
       const gray = orig.r * 0.299 + orig.g * 0.587 + orig.b * 0.114;
       m.material.color.setRGB(lerp(orig.r, gray, e), lerp(orig.g, gray, e), lerp(orig.b, gray, e));
     });
-  });
+  }, null, { unitId: opts.who });
 }
 
 /* cast — rise + orbiting glyph quad (§4, fired by `cast`). Lifts the figure a small hover height and
@@ -676,7 +817,7 @@ const VERB_IMPL = {
 export function playVerb(ctx, verb, opts){
   if(!ctx || !verb) return false;
   opts = opts || {};
-  if(verb.indexOf("fx:") === 0) return vDamageFx(ctx, opts, verb.slice(3));
+  if(verb.indexOf("fx:") === 0) return !!vDamageFx(ctx, opts, verb.slice(3)); // MF-3: pushTween now returns the tween object, not a bare `true` — coerce to strict boolean here same as the VERB_IMPL path below
   const impl = VERB_IMPL[verb];
   if(!impl) return false;
   return !!impl(ctx, opts);
@@ -694,6 +835,21 @@ export function tickTweens(ctx, nowMs){
   const still = [];
   for(let i = 0; i < ctx.tweens.length; i++){
     const tw = ctx.tweens[i];
+    // MF-3 HIT-STOP: a tween frozen by freezeTween/applyHitStop stalls its `t` fraction at the value it
+    // held the instant it was frozen — everything else (untouched tweens: motes/flicker never even ride
+    // this array, and an isCameraPoseTween is simply never handed to applyHitStop) keeps ticking normally
+    // this same pass. Once `now` passes __freezeUntil, `start` is shifted forward by exactly the frozen
+    // window so the tween RESUMES from precisely the pose it was held at, never a jump.
+    if(tw.__freezeUntil != null){
+      if(now < tw.__freezeUntil){
+        try { tw.update(tw.__frozenT); } catch(e) { /* a bad tween never crashes the render loop */ }
+        still.push(tw);
+        continue;
+      }
+      tw.start = now - tw.__frozenT * tw.dur;
+      tw.__freezeUntil = null;
+      tw.__frozenT = null;
+    }
     const elapsed = now - tw.start;
     const t = Math.max(0, Math.min(1, elapsed / tw.dur));
     try { tw.update(t); } catch(e) { /* a bad tween never crashes the render loop */ }
@@ -708,6 +864,9 @@ export function tickTweens(ctx, nowMs){
   if(typeof ctx.markDirty === "function" && still.length) ctx.markDirty();
   return still.length > 0;
 }
+
+export { freezeTween, applyHitStop, findLatestTweenByUnitId, triggerHitStop, critCameraNudge,
+  IMPACT_PX_UNIT, HIT_STOP_DUR, HIT_STOP_DUR_CRIT, FALL_HOLD_DUR, CRIT_NUDGE_DUR, CRIT_NUDGE_AMP };
 
 /* ============================================================================
    §4 "Existing events need NO new fields — the theater subscribes to the ledger/event stream and maps

@@ -1394,7 +1394,7 @@
   "label": "robot cat",
   "family": "animals",
   "sizeBand": "small",
-  "pxHeight": 332,
+  "pxHeight": 321,
   "feet": 2,
   "scaleVsHuman": 0.364,
   "sheet": "chrome-small-v3-13.png",
@@ -1405,18 +1405,21 @@
   "label": "orb robot with antenna",
   "family": "animals",
   "sizeBand": "small",
-  "pxHeight": 337,
+  "pxHeight": 326,
   "feet": 2,
   "scaleVsHuman": 0.364,
   "sheet": "chrome-small-v3-13.png",
   "cellIndex": 1,
-  "replaces": "chrome-domestic-animals-2.png|r4c4"
+  "replaces": "chrome-domestic-animals-2.png|r4c4",
+  "qaFlags": [
+   "static-pose"
+  ]
  },
  "chrome/chrome-small-robot-dog": {
   "label": "small robot dog",
   "family": "animals",
   "sizeBand": "small",
-  "pxHeight": 281,
+  "pxHeight": 242,
   "feet": 2,
   "scaleVsHuman": 0.364,
   "sheet": "chrome-small-v3-13.png",
@@ -1427,18 +1430,21 @@
   "label": "sweeper/brush robot",
   "family": "animals",
   "sizeBand": "small",
-  "pxHeight": 299,
+  "pxHeight": 273,
   "feet": 2,
   "scaleVsHuman": 0.364,
   "sheet": "chrome-small-v3-13.png",
   "cellIndex": 3,
-  "replaces": "chrome-dungeon-animals-2.png|r5c5"
+  "replaces": "chrome-dungeon-animals-2.png|r5c5",
+  "qaFlags": [
+   "static-pose"
+  ]
  },
  "chrome/chrome-robot-macaw": {
   "label": "robot macaw",
   "family": "animals",
   "sizeBand": "small",
-  "pxHeight": 320,
+  "pxHeight": 326,
   "feet": 2,
   "scaleVsHuman": 0.364,
   "sheet": "chrome-small-v3-13.png",
@@ -1449,7 +1455,7 @@
   "label": "serpentine dragon mech",
   "family": "monsters",
   "sizeBand": "gargantuan",
-  "pxHeight": 1285,
+  "pxHeight": 943,
   "feet": 45,
   "scaleVsHuman": 8.182,
   "sheet": "chrome-solo-v3-14.png",
@@ -1460,7 +1466,7 @@
   "label": "robot gecko",
   "family": "animals",
   "sizeBand": "tiny",
-  "pxHeight": 271,
+  "pxHeight": 287,
   "feet": 0.75,
   "scaleVsHuman": 0.136,
   "sheet": "chrome-tiny-v3-15.png",
@@ -1471,7 +1477,7 @@
   "label": "robot mantis",
   "family": "animals",
   "sizeBand": "tiny",
-  "pxHeight": 243,
+  "pxHeight": 414,
   "feet": 0.75,
   "scaleVsHuman": 0.136,
   "sheet": "chrome-tiny-v3-15.png",
@@ -2211,12 +2217,15 @@
   "label": "warrior with spear and star shield",
   "family": "npcs",
   "sizeBand": "medium",
-  "pxHeight": 700,
+  "pxHeight": 836,
   "feet": 5.5,
   "scaleVsHuman": 1.0,
   "sheet": "cosmic-humanoid-v3-05.png",
   "cellIndex": 0,
-  "replaces": "cosmic-npc-03.png|r4c4"
+  "replaces": "cosmic-npc-03.png|r4c4",
+  "qaFlags": [
+   "static-pose"
+  ]
  },
  "cosmic/cosmic-star-scale-crocodile": {
   "label": "star-scale crocodile",

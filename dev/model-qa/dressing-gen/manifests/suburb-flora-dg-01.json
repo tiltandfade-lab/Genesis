@@ -1,0 +1,192 @@
+{
+ "file": "suburb-flora-dg-01.png",
+ "realm": "suburb",
+ "family": "dressing-flora",
+ "grid": "5 rows x 4 columns",
+ "chroma": "#FF00FF",
+ "wave": "dressing-gen",
+ "cells": [
+  {
+   "slug": "suburb-flora-hedgemenace",
+   "label": "perfectly groomed hedge trimmed into an unsettling smiling shape",
+   "tags": {
+    "primary": "focal",
+    "location": "exterior"
+   },
+   "size": "medium"
+  },
+  {
+   "slug": "suburb-flora-lawnpatch",
+   "label": "suspiciously perfect lawn patch, too green, too even",
+   "tags": {
+    "primary": "floor",
+    "location": "exterior"
+   },
+   "size": "small"
+  },
+  {
+   "slug": "suburb-flora-rosebush-bleeding",
+   "label": "manicured rosebush, one bloom weeping something not quite sap",
+   "tags": {
+    "primary": "focal",
+    "location": "exterior"
+   },
+   "size": "small"
+  },
+  {
+   "slug": "suburb-flora-topiary-animal",
+   "label": "topiary shaped like a friendly animal, eyes trimmed a bit too sharp",
+   "tags": {
+    "primary": "setPiece",
+    "location": "exterior"
+   },
+   "size": "large"
+  },
+  {
+   "slug": "suburb-flora-mailboxflowers",
+   "label": "cheerful mailbox flower bed, symmetrical to an unnatural degree",
+   "tags": {
+    "primary": "floor",
+    "location": "exterior"
+   },
+   "size": "small"
+  },
+  {
+   "slug": "suburb-flora-ivyfence",
+   "label": "ivy climbing a white picket fence, growth strangely deliberate",
+   "tags": {
+    "primary": "wall-hang",
+    "location": "exterior"
+   },
+   "size": "medium"
+  },
+  {
+   "slug": "suburb-flora-treehouse-branch",
+   "label": "sturdy oak branch with a rope swing, bark scratched deep",
+   "tags": {
+    "primary": "wall-hang",
+    "location": "exterior"
+   },
+   "size": "medium"
+  },
+  {
+   "slug": "suburb-flora-astroturf-patch",
+   "label": "astroturf patch peeking through where real grass gave up",
+   "tags": {
+    "primary": "floor",
+    "location": "exterior"
+   },
+   "size": "small"
+  },
+  {
+   "slug": "suburb-flora-flowerbed-symmetry",
+   "label": "identical twin flowerbeds flanking a garage door",
+   "tags": {
+    "primary": "floor",
+    "location": "exterior"
+   },
+   "size": "medium"
+  },
+  {
+   "slug": "suburb-flora-dyingpine",
+   "label": "browning ornamental pine, needles falling in a perfect circle",
+   "tags": {
+    "primary": "floor",
+    "location": "exterior"
+   },
+   "size": "medium"
+  },
+  {
+   "slug": "suburb-flora-vine-overgrown-shed",
+   "label": "feral vine growth swallowing an abandoned garden shed",
+   "tags": {
+    "primary": "setPiece",
+    "location": "exterior"
+   },
+   "size": "large"
+  },
+  {
+   "slug": "suburb-flora-cactusgarden-xeriscape",
+   "label": "xeriscaped cactus garden, gravel raked into unnervingly neat lines",
+   "tags": {
+    "primary": "floor",
+    "location": "exterior"
+   },
+   "size": "small"
+  },
+  {
+   "slug": "suburb-flora-hanging-basket",
+   "label": "hanging porch basket, flowers wilted despite daily watering",
+   "tags": {
+    "primary": "wall-hang",
+    "location": "exterior"
+   },
+   "size": "small"
+  },
+  {
+   "slug": "suburb-flora-vegetablepatch-feral",
+   "label": "overgrown vegetable patch, produce swollen wrong-shaped",
+   "tags": {
+    "primary": "floor",
+    "location": "exterior"
+   },
+   "size": "medium"
+  },
+  {
+   "slug": "suburb-flora-sprinkler-mist-grass",
+   "label": "grass patch caught mid-mist under a stuck sprinkler head",
+   "tags": {
+    "primary": "floor",
+    "location": "exterior"
+   },
+   "size": "small"
+  },
+  {
+   "slug": "suburb-flora-cul-de-sac-tree",
+   "label": "identical street tree, one of a perfectly spaced row",
+   "tags": {
+    "primary": "setPiece",
+    "location": "exterior"
+   },
+   "size": "large"
+  },
+  {
+   "slug": "suburb-flora-weed-crackdrive",
+   "label": "weed cluster cracking through a driveway seam",
+   "tags": {
+    "primary": "floor",
+    "location": "exterior"
+   },
+   "size": "small"
+  },
+  {
+   "slug": "suburb-flora-halloweencobweb-real",
+   "label": "synthetic cobweb decoration with something actually living in it",
+   "tags": {
+    "primary": "wall-hang",
+    "location": "exterior"
+   },
+   "size": "small"
+  },
+  {
+   "slug": "suburb-flora-hedgemenace-alt",
+   "label": "ALT of 'perfectly groomed hedge trimmed into an unsettling smiling shape' — different shape/growth/wear, same kind",
+   "tags": {
+    "primary": "focal",
+    "location": "exterior"
+   },
+   "size": "medium",
+   "altOf": "suburb-flora-hedgemenace"
+  },
+  {
+   "slug": "suburb-flora-lawnpatch-alt",
+   "label": "ALT of 'suspiciously perfect lawn patch, too green, too even' — different shape/growth/wear, same kind",
+   "tags": {
+    "primary": "floor",
+    "location": "exterior"
+   },
+   "size": "small",
+   "altOf": "suburb-flora-lawnpatch"
+  }
+ ]
+}

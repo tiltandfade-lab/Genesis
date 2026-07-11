@@ -49,6 +49,11 @@ long quadrupeds/serpents/vehicles → landscape cells.
 - **Every realm EXCEPT suburb and bright-kingdom: "pixelated but realistic"** —
   pixel-art grit, realistic proportions/materials. NOT painterly (ash's current
   defect), not cartoon/toy.
+- **CLEAN-SHAPES AMENDMENT (Adam 2026-07-10 night — the beauty review):** clean value
+  shapes FIRST, grit as seasoning. Dither confined to shadow regions and edges — never
+  mid-tones; large flat value planes carry the form; silhouette-first. Every sheet is
+  JUDGED AT 50% ZOOM (play distance) — grit that reads as noise at half size fails.
+  Grim realms keep more seasoning than bright ones; nobody dithers mid-tones.
 - Suburb + bright-kingdom keep their own stylized look, judged on internal consistency.
 - **Finish law (RULED): per-realm.** Grim realms (theater, gloom, noir, ash, high-seas)
   = grimy dense-dithered finish; brighter realms (fantasy, frontier, lost-world, cosmic)
@@ -158,15 +163,26 @@ Every regen prompt is assembled from these clauses, in this order:
    landscape for long ones. Items/tiny: square cells.
 3. **Perspective clause** — "ground-level/eye-level camera only; front, side, or
    three-quarter views; never high-angle, never top-down; feet on an implied flat
-   ground line, no floor plane."
+   ground line, no floor plane." **BUG COROLLARY (Adam 2026-07-10 PM — the recurring
+   defect):** for insects/bugs/tiny creatures the clause must be spelled out —
+   worm's-eye ground camera at the creature's OWN eye level, side/three-quarter
+   PROFILE, "as if photographed by another bug beside it"; generators otherwise
+   default to looking down at small things. If the back reads more than the side,
+   the angle is wrong.
 4. **Proportion clause** — "realistic proportions; adult humanoids with legs ~half of
    total height; children as realistically-proportioned kids, not chibi."
 5. **Style clause** — "pixelated but realistic" + the realm's finish (grimy-dithered
    for theater/gloom/noir/ash/high-seas; cleaner-crisp allowed for fantasy/frontier/
    lost-world/cosmic) + realm identity line (chrome hyper-neon, cosmic navy-gold, etc.).
    Suburb/bright-kingdom: their own stylized register (bright-kingdom per §4 direction).
-6. **Expression clause** — "readable facial expression on every character at cell
-   resolution; expressive faces are a requirement, not decoration."
+6. **Expression clause (EXPANDED 2026-07-10 PM — the FFVI standard)** — "readable
+   facial expression on every character at cell resolution; expressive faces are a
+   requirement, not decoration. Every CREATURE sells its power and tells its story in
+   one silhouette: pose mid-intent (snarl, coiled to strike, mid-cast, hackles up) and
+   signature effects where they characterize — drool, sparks, smoke, ember glow,
+   dripping venom, crackling energy. No mannequin stillness, no neutral museum poses
+   (constructs/uncanny subjects may be still ON PURPOSE, and it should read as
+   intentional). Touchstone: FFVI-era spritework — maximum character per sprite."
 7. **Palette clause** — the SPRITE-PALETTE richness law for the realm (§5).
 8. **Swarm clause** (when applicable) — "swarms as a mounded pile at eye level, not
    scattered/stacked from above."
@@ -179,11 +195,52 @@ sprites regen at their CORRECT tier; the 548 minor-under-res keeps stay live and
 re-tier opportunistically in later waves. Quarantine (78) exports to its own folder
 with manifest, never deleted.
 
+## 10b. THE ADDITIVE FOLD LAW (Adam 2026-07-10 — how regen arrivals enter the corpus)
+
+Regeneration is ADDITIVE, never destructive. Every arriving sheet goes through the same
+fold, and nothing good is ever lost to a regen:
+
+1. **Gate** — vision agent judges the arrival against the realm style-ref + its manifest
+   (style, grid/roster, perspective, static cells) AND against the art it replaces:
+   every gate records **betterThanOld**. A regen that is mechanically clean but loses
+   detail/dynamism/menace vs the old art is a CONTENT REGRESSION → **reject**: old art
+   stays live, the sheet goes back on the queue with a corrective line (see
+   cosmic-large-v3-09, round 2).
+2. **Slice** — only passing sheets are cut (chroma key → bbox-trim transparent PNGs,
+   chroma kept under alpha); pxHeight re-measured into the sizing file. **DEFRINGE IS
+   A STANDARD SLICE STEP (Adam 2026-07-10 night)** — the unmix/defringe pass (the
+   magenta-lane tech) runs on every cut, not as a rescue: halo pixels read as cutout
+   crust against lit 3D.
+3. **Tag** — mood/pose/qaFlags refreshed on the re-cut sprites; identity tags carry over.
+4. **Relabel-to-art** — when the generated art doesn't match its rostered subject, the
+   display noun follows the ART (overlay `name` override → regenerate the registry;
+   mechanical stats keep flowing from the manifest join). The orphaned ROLE is not
+   deleted — it goes to the next regen pass as a backfill cell. Labels never lie about
+   the art; wants never die, they re-queue.
+5. Quarantined art (off-angle, painterly) is never deleted — it exports to
+   `dev/model-qa/quarantine-pack/<bin>/` with a manifest and ships as a Desktop zip.
+
+## 10c. THE NO-BLANK-SLOTS LAW (Adam 2026-07-10)
+
+A generation is paid for whether the grid is full or not — **every grid slot carries a
+subject**. When a sheet's roster doesn't fill its ladder grid, the empty slots are
+filled with **bonus ALT cells**: ancestry/sex alts of roster NPCs, coat/color alts of
+animals and monsters, palette variants of high-use roles. Alts are marked in the sheet
+manifest (`altOf` + `reason:"alt-bonus"`) so they index like everything else (§8).
+Alts of the same subject share style and silhouette DNA but are NOT expression variants
+(SPRITE-TAGS law 2) — they are different individuals wearing the same role.
+
 ## 11. Still open
 
 1. Adam's final confirmation of §10.
-2. Committed-corpus style check (esp. ash — Adam's painterly impression) before
-   regen-ing anything already live.
+2. ~~Committed-corpus style check (esp. ash)~~ **DONE 2026-07-10**: drift confirmed —
+   the 5 ash-mm sheets conform; the 9 npc/kids/domesticated sheets are strongly
+   painterly → quarantined (`dev/model-qa/quarantine-pack/painterly-ash/`, Desktop zip)
+   and re-queued as **round 3** (`dev/model-qa/regen-v3/round3/`: ash restyle 7 sheets,
+   fantasy backfill+true-forms 2, cosmic-large-09 redo 1 — all with §10c alt fills).
+3. Round-2 remains partially outstanding: cosmic-r2 (15 sheets) + gloom-r2 (3) never
+   arrived; of fixes-r2 only 5 sheets landed (4 folded, cosmic-large-v3-09 rejected
+   per §10b).
 
 ## 12. Survey artifacts
 

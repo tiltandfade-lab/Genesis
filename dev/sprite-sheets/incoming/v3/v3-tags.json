@@ -2568,8 +2568,8 @@
    "props": [
     "antenna"
    ],
-   "mood": "neutral",
-   "pose": "idle",
+   "mood": "warm",
+   "pose": "static",
    "castability": "generic",
    "portability": [
     "chrome"
@@ -2752,7 +2752,7 @@
    "build": "slight",
    "attire": "n-a",
    "props": [],
-   "mood": "neutral",
+   "mood": "calm",
    "pose": "idle",
    "castability": "generic",
    "portability": [
@@ -2796,8 +2796,8 @@
    "build": "slight",
    "attire": "n-a",
    "props": [],
-   "mood": "neutral",
-   "pose": "idle",
+   "mood": "menacing",
+   "pose": "active",
    "castability": "generic",
    "portability": [
     "chrome"
@@ -2966,7 +2966,7 @@
    "build": "slight",
    "attire": "n-a",
    "props": [],
-   "mood": "warm",
+   "mood": "neutral",
    "pose": "idle",
    "castability": "generic",
    "portability": [
@@ -3085,7 +3085,7 @@
     "brushes"
    ],
    "mood": "neutral",
-   "pose": "active",
+   "pose": "static",
    "castability": "generic",
    "portability": [
     "chrome"
@@ -5199,7 +5199,7 @@
     "star shield"
    ],
    "mood": "grim",
-   "pose": "idle",
+   "pose": "static",
    "castability": "generic",
    "portability": [
     "cosmic",

@@ -237,6 +237,18 @@ crowned). The doom clock FIRING sets `w.sundered` (the dark twin — a cautionar
 uncrownable forever). The banner affordance renders from state; the ritual lives in the world layer.
 **Lives in:** `src/engine/crowning.js`. **Spec:** docs/CROWNING-BASTION.md
 
+### Dungeon Graph — spatializer + semantics [2026-07-10]
+**What it is.** Turns a rolled walk's segment graph (segments=rooms, exits=edges, any of the 12
+topologies) into a verified 5-ft cell-grid floor plan (SpatialPlan), then layers meaning on it.
+**How it works.** `spatializePlan(segments, topology, {walkId})` — per-topology layout seed →
+room placement → AABB separation → corridors along real edges only → rasterize → BFS
+reachability verify (reroll ≤5, then honest-fail); deterministic per walkId.
+`semanticizePlan(plan, segments, residents)` — room roles (entrance/finale/path/pocket/side),
+depth=difficulty bands, SCALE DOMAINS (a big resident's territory builds at its scale;
+prison-rule regrowth; transition/squeeze doors). Consumed by prep (`pn.spatial`), the theater
+interior renderer (volumetric prism InstancedMesh tile kits), and combat cell dims (dm.js).
+**Lives in:** `src/engine/place-{spatialize,semantics}.js`, `src/ui/theater-interior.js`. **Spec:** docs/DUNGEON-GRAPH.md
+
 ## World layer (persistent state, flow, and the event surface)
 
 Modules under `src/world/` own the saved universe `U` and mutate it only through their accessors.

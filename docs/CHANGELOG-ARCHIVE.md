@@ -14,6 +14,141 @@ to load every session (the live file keeps the newest entries; see the script fo
 Newest-first, same as the live file — the two files read as one continuous history, live file
 first. Read-only record: never hand-edit, never add entries here directly.
 
+## 2026-07-05 (later-3) — THE DM SEAM: TYPED CONTRACTS + STRUCTURED TELEMETRY
+
+Hardening the one interface where the AI DM meets the deterministic engine — the two production-
+maturity moves Adam named (docs/POSITIONING.md "Immediate"). Branch `feat/dm-seam`; master green
+(check-manifest OK; verify-dm-seam 38/0 + regression verify-dm-events 36/0, verify-roll-branches
+29/0, verify-digest-diet 33/0, verify-combat-lifecycle 52/0, verify-bridge.py 43/0).
+
+### Added
+- **Typed contracts at the seam** (`src/world/dm.js`) — `validateEvent` / `validateTurnResponse`
+  machine-check the two inbound shapes (the DM's typed events; its whole turn response) against
+  docs/EVENT-CONTRACT.md before the engine trusts them, plus JSDoc `@typedef`s for `DMEvent` /
+  `TurnResponse` / `DMTurnTelemetry`. Forward-compatible: an unknown-but-well-formed event type
+  still passes (the switch no-ops it); only malformed *envelopes* are rejected, and never by
+  throwing. `DM_EVENT_TYPES` enumerates the full 87-type vocabulary, held in lockstep with
+  `applyEvent`'s switch by a parity test.
+- **Structured telemetry on the DM seat** — `logDmTurn` records one `DMTurnTelemetry` row per
+  completed turn (latency, lane + model, digest/turn/response bytes, applied event types, mint
+  count, an *estimated* token/$ cost from measured bytes via `dmEstimateCost`/`DM_MODEL_RATES`).
+  Ring-buffered in `GS.dm.telemetry` (cap 200) and shipped to the bridge's new **`POST /telemetry`**
+  sink → `.dm/telemetry.jsonl` (`dev/dm-bridge.py`) — the mailbox-path twin of `seat-costs.jsonl`,
+  filling the gap where loop-era DM turns carried no consolidated cost/latency row.
+- **`docs/POSITIONING.md`** — the career/case-study/ethos artifact (Genesis as an AI-engineer
+  case study; the two-door pitch; the five exhibits; the maturity roadmap). For fall-2026 fundraise
+  or AI-engineer contract conversations.
+- **`dev/verify-dm-seam.mjs`** — 38 assertions incl. a red-first parity + load-bearing mutation check.
+
+### Changed
+- `applyEvent`'s envelope guard now routes through `validateEvent` (was a bare `!w||!e||!e.type`);
+  a malformed event returns `{ok:false, reason:"invalid-envelope", errors:[…]}` instead of throwing.
+- `sendTurn` stashes send-side metrics (`GS.dm.lastTurnMeta`); `applyResponse` closes the telemetry
+  row and validates the response (non-blocking — logs violations, still applies what's valid).
+
+---
+
+## 2026-07-05 (later-2) — TWO CODE-REVIEW WAVES + THE REFERENCE SHELF (Monster Manual & Wiki)
+
+A large orchestrated session. Deep `/code-review` of the accumulated work, all findings repaired
+via background executor waves (personally re-gated + landed), then a new opening-screen reference
+launcher shipped. Everything committed + pushed per-unit; master green (full verify sweep + manifest
+OK); working tree clean.
+
+### Added
+- **The Reference Shelf** (`src/ui/reference-shelf.js`) — an expandable opening-screen launcher
+  (registry + `#refShelf` modal + ARIA/focus-trap + the post-boot re-render law); built so a new
+  app is one registry entry. Spec: docs/REFERENCE-SHELF.md.
+- **Monster Manual** (`src/ui/ref-bestiary.js`, shelf app #1) — a browsable 1817-creature manual
+  (510 regular + 1307 realm) with a lazy live-3D grid (ONE shared offscreen renderer blitting to
+  card canvases), detail viewer, alt-model bullet menu (mechanism-only), reusing the game's figure
+  path via a new additive `Theater.refFigure` seam. Spec: docs/BESTIARY-MANUAL.md.
+- **Wiki** (`src/ui/ref-wiki.js`, shelf app #2) + **`build/gen-wiki.py`** + **`data/wiki.js`** —
+  the in-game design-doc wiki; `gen-wiki.py` compiles **`docs/ARCHITECTURE.md`** (the new 51-system
+  map of the whole machine) → `WIKI_INDEX`, rendered grouped by layer with filter/search/spec links.
+- **`docs/ARCHITECTURE.md`** — the human-readable index of all 51 systems (synthesized from a
+  6-domain systems survey); doubles as the Wiki's compile source.
+- Spec locks: docs/REVIEW-FIXES-0705.md + docs/REVIEW-FIXES-0705-VISUAL.md (the review-fix waves).
+
+### Changed
+- **`genesis-orchestrate` + `genesis-clean-close` skills** hardened with THE STASH LAW (the
+  2026-07-05 stash-spill scare: check `git stash list` at wave start; never bare `pop` on a
+  non-empty stack; retire safety snapshots once landed).
+- **`genesis-clean-close`** now carries a Wiki/ARCHITECTURE coherence sweep (a system add/retire/
+  behavior-change updates ARCHITECTURE.md + recompiles `data/wiki.js` in the same close) — first
+  exercised by this very close (48→51 systems).
+- The realm render-profile **dual-table mirror is dead** (W2-A) — figures/lights/void now grade off
+  the stamped numeric-tint profile (killed the grey-wash bug); the bestiary-resolve loop collapsed
+  to one `bestiaryResolve` + slug index (U6).
+
+### Fixed (from the two review waves — 8 units, all red-first + re-gated)
+- **Wave 1 (monster layer):** U1 flavor payload now surfaces on a foe's FIRST fight (seenCount
+  seeded at mint); U3 pet upkeep/decay actually wired (tend_pet event + rest-gate tick + harm-by-
+  kind — were dead code the harness masked); U4 creature-parley §1 wired (auto-merged levers +
+  parleyAbility); U5 combat action-parse range + two-pass traits-apply (no silent drops) + foe.traits
+  keeps its SRD shape.
+- **Wave 2 (battle-visual arc — never-before-reviewed):** W2-A shared-material clone-for-tween (a
+  hurt no longer greys every co-sharing figure) + tween/FX drain on board swaps + bounded LRU
+  texture cache; W2-B Math.random purged from creature builders (deterministic across sessions).
+- The corpus's lone cuboid: `gloom:grinning-poppet`'s malformed `model` field → clean slug.
+- `.mm-chip` squared-corner invariant (border-radius 6px→0).
+
+### Deferred
+- Wiki per-system detail pages (v1 is index + descriptions); alt-model authoring (mechanism ships,
+  no entry declares `alts` yet); Props & Scenery (the shelf's future app #3); the provenance-audit
+  bespoke-vs-nearest-sub refinement. Adam's standing ledger (PACING-DIALS build, NPC-KNOWLEDGE-GRADES
+  build, REALM-RENDER-STYLE tune) still open.
+
+## 2026-07-05 (later) — THE WAVE'S FOLLOW-ON: Phase 2b, the recovered merge, render grade, parley + anomaly law
+
+Continuation of the monster wave (day-of, after the first close). Everything committed + pushed to origin;
+final sweep 96 harnesses / 0 failed; working tree clean. This arc was messy in flight (a rate-limit storm,
+a lost-then-recovered merge) but landed clean.
+
+**Added**
+- **Phase 2b — the realm creatures reach full parity.** All **1307** realm creatures now carry `traits`
+  (184 traits from a prior theater-session preserved, never overwritten), a spice-graded **d8 `flavorTable`**
+  (variant XOR hook), and their OWN `treasure`/`habitat`/`activity` (frame inheritance was wrong fiction).
+  `build/gen-realm-bestiary.py` extended to emit + `--check` the four fields; `merge-flavor-batches.py` is the
+  fail-loud reconciler (exact-name match, committed-traits precedence, full-coverage gate). `--check` clean 1307/11.
+- **F4 — the flavor-d8 roll at mint** (`monsterRollFlavorD8` + `realmCreatureEntry` in `dm.js`): rolled once at
+  first codex mint, canon-locked beside the custom-d10s; spice-clamped (Grounded rerolls raw 7-8→d6, breach/
+  Strange+ opens the top rows). `verify-flavor-d8.mjs` 15/0 incl. the red-first clamp mutation.
+- **MONSTER-PARLEY + THE ANOMALY LAW** — creatures join the attitude ladder (Beasts roll Animal Handling),
+  recruitment gated at Helpful AND `bondEligible`; the only doors are nat-20 / decisive-lever-at-Friendly /
+  a 3% friendly-spawn; pet/hireling/sidekick tiers; parley-angle hooks; befriended creatures recur via prep.
+  Grind clamps at Friendly — "difficult af" is script-enforced. `verify-monster-parley.mjs` 58/0.
+- **Realm render-style grade v1** — per-realm `sat`/`tint`/`contrast` graded onto tiles, the figure-material
+  funnel, lights/fog/void, and prop fallback off the `activeRealmsFor` seam; 12-swatch review sheet committed
+  for Adam's eye. `verify-theater-data.mjs` 242/0.
+- **Spec locks (build-ready, not yet built):** `MONSTER-FLAVOR-TABLES` (the d8 contract, MM-grounding law),
+  `NPC-KNOWLEDGE-GRADES` (signs→rumor→named ceilings, rolled witness channels, the pitch law inverts — no
+  omniscient NPCs unless rolled), `PACING-DIALS` (octane/lethality/drip + Adam's design-talk rulings §5;
+  player-facing preset picker BANKED §6 — one standard difficulty tuned over weeks of soak first).
+- **Five committed reference page-indexes** (`dev/model-qa/{mm,dmg,phb,tashas,xgte}-page-index.json`), vision-
+  built, cross-mapped, offsets verified; CLAUDE.md gotcha points at them.
+
+**Changed**
+- **The render-profile mirror trap killed** — `data/realms.js` was the source but `theater-boot.js` held a
+  "kept in sync by convention" copy that drifted within hours (shipped a lava-red bright-kingdom). Now
+  `theater-data` stamps the resolved `renderProfile` on the board and the GL layer consumes the stamp; the
+  mirror is fallback-only. bright-kingdom retuned to candy (pastel pink, lifted contrast).
+- **`genesis-orchestrate` skill hardened** with this wave's scars: Workflow-vehicle law (fan-outs > 3 ride
+  Workflow, not loose Agents — the rate-limit root cause), the checkout law, no-subdelegation for leaf agents,
+  panel-zombies-are-cosmetic, dual-table=bug, push-on-land, visual-read.
+
+**Fixed**
+- **The recovered REALM-TRAITS-APPLY merge** (`cmApplyTraits`): originally landed on a stray checked-out
+  branch, lost when that branch was deleted, silently absent from master until a downstream report caught it —
+  recovered from the object store (`cb3e630`) and re-merged with all conflicts resolved (union of the traits-carry
+  + the anomaly-law `stampSpawn` wrapper across the three walk generators + combat.js). Root cause = merging
+  without verifying the main-tree checkout; now the skill's **checkout law**.
+
+**Deferred**
+- NPC-KNOWLEDGE-GRADES build (executor died to the throttle; queued for relaunch) · deep `/code-review` pass
+  (Monday, post-token-refresh) · REALM-RENDER-STYLE fine-tune by eye (§2 warm-brown middle band) · the 11
+  `_review` CR-ceiling flags in the draft JSON (Adam's call) · figure baked-vertex-color grading (render v2).
+
 ## 2026-07-05 — THE MONSTER PRODUCTION WAVE (overnight, Fable orchestrating ~120 background agents)
 
 **Everything landed + pushed to origin; final sweep 94 harnesses / 0 failed.** One night took the

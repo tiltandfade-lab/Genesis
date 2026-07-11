@@ -1,0 +1,201 @@
+{
+ "file": "ash-npc-r3-02.png",
+ "realm": "ash",
+ "grid": "6 rows x 4 columns",
+ "chroma": "#FF00FF",
+ "round": 3,
+ "cells": [
+  {
+   "slug": "ash-believer-in-plain-clothes",
+   "label": "Believer in plain clothes",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "spr-ash-believer-in-plain-clothes",
+   "reason": "restyle-painterly"
+  },
+  {
+   "slug": "ash-warlords-pressgang-boss",
+   "label": "Warlord's press-gang boss",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "spr-ash-warlord-s-press-gang-boss",
+   "reason": "restyle-painterly"
+  },
+  {
+   "slug": "ash-wastelander-from-beyond-the-map",
+   "label": "Wastelander from beyond the map",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "spr-ash-wastelander-from-beyond-the-map",
+   "reason": "restyle-painterly"
+  },
+  {
+   "slug": "ash-bunker-hermit",
+   "label": "Bunker hermit",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "spr-ash-bunker-hermit",
+   "reason": "restyle-painterly"
+  },
+  {
+   "slug": "ash-acting-boss",
+   "label": "Acting boss (the old one didn't come back)",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "spr-ash-acting-boss-the-old-one-didn-t-come-back",
+   "reason": "restyle-painterly"
+  },
+  {
+   "slug": "ash-settlement-fixer",
+   "label": "Settlement fixer",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "spr-ash-settlement-fixer",
+   "reason": "restyle-painterly"
+  },
+  {
+   "slug": "ash-conscript-who-never-shouldve-held",
+   "label": "Conscript who never should've held the rifle",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "spr-ash-conscript-who-never-should-ve-held-the-rifle",
+   "reason": "restyle-painterly"
+  },
+  {
+   "slug": "ash-archivekeeper",
+   "label": "Archive-keeper",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "spr-ash-archive-keeper",
+   "reason": "restyle-painterly"
+  },
+  {
+   "slug": "ash-the-one-who-remembers-before",
+   "label": "The one who remembers before",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "spr-ash-the-one-who-remembers-before",
+   "reason": "restyle-painterly"
+  },
+  {
+   "slug": "ash-scavenger",
+   "label": "Scavenger",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "spr-ash-scavenger",
+   "reason": "restyle-painterly"
+  },
+  {
+   "slug": "ash-warlord",
+   "label": "Warlord",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "spr-ash-warlord",
+   "reason": "restyle-painterly"
+  },
+  {
+   "slug": "ash-vaulthoarder",
+   "label": "Vault-hoarder",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "spr-ash-vault-hoarder",
+   "reason": "restyle-painterly"
+  },
+  {
+   "slug": "ash-wastehealer",
+   "label": "Waste-healer",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "spr-ash-waste-healer",
+   "reason": "restyle-painterly"
+  },
+  {
+   "slug": "ash-cultofthebefore",
+   "label": "Cult-of-the-before",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "spr-ash-cult-of-the-before",
+   "reason": "restyle-painterly"
+  },
+  {
+   "slug": "ash-waterbaron",
+   "label": "Water-baron",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "spr-ash-water-baron",
+   "reason": "restyle-painterly"
+  },
+  {
+   "slug": "ash-radiovoice",
+   "label": "Radio-voice",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "spr-ash-radio-voice",
+   "reason": "restyle-painterly"
+  },
+  {
+   "slug": "ash-markedbytheend",
+   "label": "Marked-by-the-end",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "spr-ash-marked-by-the-end",
+   "reason": "restyle-painterly"
+  },
+  {
+   "slug": "ash-convoyrunner",
+   "label": "Convoy-runner",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "spr-ash-convoy-runner",
+   "reason": "restyle-painterly"
+  },
+  {
+   "slug": "ash-reclaimer",
+   "label": "Reclaimer",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "spr-ash-reclaimer",
+   "reason": "restyle-painterly"
+  },
+  {
+   "slug": "ash-ashtouched-elder-u2014-greycracked-skin",
+   "label": "Ash-touched elder \\u2014 grey-cracked skin from decades in the fallout, runs the settlement's water reclaimer",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "spr-ash-ash-touched-elder-grey-cracked-skin-from-decades-in-the-fallout-runs-the-settlement-s-water-reclaimer",
+   "reason": "restyle-painterly"
+  },
+  {
+   "slug": "ash-rotmarked-scavenger-u2014-patchy-hairless",
+   "label": "Rot-marked scavenger \\u2014 patchy hairless chem-mutation, trusted with the hot zones no one else will enter",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "spr-ash-rot-marked-scavenger-patchy-hairless-chem-mutation-trusted-with-the-hot-zones-no-one-else-will-enter",
+   "reason": "restyle-painterly"
+  },
+  {
+   "slug": "ash-gloweyed-child-u2014-faint-bioluminescent",
+   "label": "Glow-eyed child \\u2014 faint bioluminescent eyes from womb-exposure, born after the fall",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "spr-ash-glow-eyed-child-faint-bioluminescent-eyes-from-womb-exposure-born-after-the-fall",
+   "reason": "restyle-painterly"
+  },
+  {
+   "slug": "ash-twiceskinned-trader-u2014-visibly-regenerating",
+   "label": "Twice-skinned trader \\u2014 visibly regenerating burn scars that never fully close",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "spr-ash-twice-skinned-trader-visibly-regenerating-burn-scars-that-never-fully-close",
+   "reason": "restyle-painterly"
+  },
+  {
+   "slug": "ash-convoy-cook-u2014-darkskinned-sunweathered",
+   "label": "Convoy cook \\u2014 dark-skinned, sun-weathered, feeds whoever's still standing after a raid",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "spr-ash-convoy-cook-dark-skinned-sun-weathered-feeds-whoever-s-still-standing-after-a-raid",
+   "reason": "restyle-painterly"
+  }
+ ]
+}

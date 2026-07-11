@@ -1,0 +1,260 @@
+{
+ "file": "bright-kingdom-objects-dg-03.png",
+ "realm": "bright-kingdom",
+ "family": "objects",
+ "grid": "5 rows x 5 columns",
+ "chroma": "#FF00FF",
+ "wave": "dressing-gen",
+ "cells": [
+  {
+   "slug": "bright-kingdom-obj-door-shut",
+   "label": "door, shut state — in the realm's own material language",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "door",
+   "state": "shut"
+  },
+  {
+   "slug": "bright-kingdom-obj-door-ajar",
+   "label": "door, ajar state — in the realm's own material language",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "door",
+   "state": "ajar"
+  },
+  {
+   "slug": "bright-kingdom-obj-door-open",
+   "label": "door, open state — in the realm's own material language",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "door",
+   "state": "open"
+  },
+  {
+   "slug": "bright-kingdom-obj-door-broken",
+   "label": "door, broken state — in the realm's own material language",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "door",
+   "state": "broken"
+  },
+  {
+   "slug": "bright-kingdom-obj-chest-closed",
+   "label": "chest, closed state — toy-chest with a grinning clasp",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "chest",
+   "state": "closed"
+  },
+  {
+   "slug": "bright-kingdom-obj-chest-open",
+   "label": "chest, open state — toy-chest with a grinning clasp",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "chest",
+   "state": "open"
+  },
+  {
+   "slug": "bright-kingdom-obj-chest-looted",
+   "label": "chest, looted state — toy-chest with a grinning clasp",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "chest",
+   "state": "looted"
+  },
+  {
+   "slug": "bright-kingdom-obj-lever-left",
+   "label": "lever, left state — in the realm's own material language",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "lever",
+   "state": "left"
+  },
+  {
+   "slug": "bright-kingdom-obj-lever-right",
+   "label": "lever, right state — in the realm's own material language",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "lever",
+   "state": "right"
+  },
+  {
+   "slug": "bright-kingdom-obj-shrine-dormant",
+   "label": "shrine, dormant state — in the realm's own material language",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "shrine",
+   "state": "dormant"
+  },
+  {
+   "slug": "bright-kingdom-obj-shrine-lit",
+   "label": "shrine, lit state — in the realm's own material language",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "shrine",
+   "state": "lit"
+  },
+  {
+   "slug": "bright-kingdom-obj-campfire-unlit",
+   "label": "campfire, unlit state — in the realm's own material language",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "campfire",
+   "state": "unlit"
+  },
+  {
+   "slug": "bright-kingdom-obj-campfire-lit",
+   "label": "campfire, lit state — in the realm's own material language",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "campfire",
+   "state": "lit"
+  },
+  {
+   "slug": "bright-kingdom-obj-campfire-dead",
+   "label": "campfire, dead state — in the realm's own material language",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "campfire",
+   "state": "dead"
+  },
+  {
+   "slug": "bright-kingdom-obj-trap-hidden",
+   "label": "trap, hidden state — in the realm's own material language",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "trap",
+   "state": "hidden"
+  },
+  {
+   "slug": "bright-kingdom-obj-trap-sprung",
+   "label": "trap, sprung state — in the realm's own material language",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "trap",
+   "state": "sprung"
+  },
+  {
+   "slug": "bright-kingdom-obj-portal-sealed",
+   "label": "portal, sealed state — storybook mirror-frame portal",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "portal",
+   "state": "sealed"
+  },
+  {
+   "slug": "bright-kingdom-obj-portal-active",
+   "label": "portal, active state — storybook mirror-frame portal",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "portal",
+   "state": "active"
+  },
+  {
+   "slug": "bright-kingdom-obj-container-intact",
+   "label": "container, intact state — in the realm's own material language",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "container",
+   "state": "intact"
+  },
+  {
+   "slug": "bright-kingdom-obj-container-cracked",
+   "label": "container, cracked state — in the realm's own material language",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "container",
+   "state": "cracked"
+  },
+  {
+   "slug": "bright-kingdom-obj-container-broken",
+   "label": "container, broken state — in the realm's own material language",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "container",
+   "state": "broken"
+  },
+  {
+   "slug": "bright-kingdom-obj-door-shut-alt",
+   "label": "ALT of 'door, shut state — in the realm's own material language' — different shape/growth/wear, same kind",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "size": null,
+   "altOf": "bright-kingdom-obj-door-shut"
+  },
+  {
+   "slug": "bright-kingdom-obj-door-ajar-alt",
+   "label": "ALT of 'door, ajar state — in the realm's own material language' — different shape/growth/wear, same kind",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "size": null,
+   "altOf": "bright-kingdom-obj-door-ajar"
+  },
+  {
+   "slug": "bright-kingdom-obj-door-open-alt",
+   "label": "ALT of 'door, open state — in the realm's own material language' — different shape/growth/wear, same kind",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "size": null,
+   "altOf": "bright-kingdom-obj-door-open"
+  },
+  {
+   "slug": "bright-kingdom-obj-door-broken-alt",
+   "label": "ALT of 'door, broken state — in the realm's own material language' — different shape/growth/wear, same kind",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "size": null,
+   "altOf": "bright-kingdom-obj-door-broken"
+  }
+ ]
+}

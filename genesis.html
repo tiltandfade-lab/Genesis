@@ -1352,6 +1352,9 @@
 <script src="src/engine/walk.js"></script>
 <script src="src/engine/walk-archetypes.js"></script>
 <script src="src/engine/dungeon-walk.js"></script>
+<script src="src/engine/place-spatialize.js"></script>
+<script src="src/engine/place-semantics.js"></script>
+<script src="src/engine/place-dressing.js"></script>
 <script src="src/engine/wild-walk.js"></script>
 <script src="src/engine/quest-hook.js"></script>
 <script src="src/engine/prep-bundle.js"></script>
@@ -1372,6 +1375,19 @@
 <script src="src/engine/death.js"></script>
 <script src="src/engine/hazards.js"></script>
 <script src="src/engine/theater-data.js"></script>
+<!-- DUNGEON-GRAPH.md U3 — the volumetric interior renderer's DATA layer (interiorBuildBoard +
+     INTERIOR_TILE_KITS). Classic script, loaded right after theater-data.js (same "data layer before
+     the GL layer" convention place-spatialize.js -> place-semantics.js -> theater-data.js already
+     keeps). Republishes its two symbols onto `window` for src/ui/theater-boot.js's sealed ES-module
+     scope to read (see that file's window.Theater.setInteriorBoard). -->
+<script src="src/ui/theater-interior.js"></script>
+<!-- GR1 (docs/GRAPHICS-ENGINE.md build unit GR1, §E TEXTURE-PER-REALM) — procedural per-realm
+     material CanvasTexture painters (materialTexturePixels). Classic script, loaded right after
+     theater-interior.js (which OWNS REALM_MATERIALS, the registry naming which painter each realm/
+     surface uses) and before theater-boot.js's sealed ES-module scope (the sole GL consumer that turns
+     a painter's pixel buffer into a real THREE.CanvasTexture). Republishes its symbols onto `window`
+     for that scope to read, same convention theater-interior.js's own tag comment documents. -->
+<script src="src/ui/theater-materials.js"></script>
 <script src="src/ui/blockwright.js"></script>
 <script src="src/ui/dice.js"></script>
 <script src="src/ui/oracle.js"></script>
@@ -1417,6 +1433,15 @@
      import, not a second copy of the module. Kept as its own file/manifest entry specifically so this
      unit doesn't collide with parallel units editing theater-boot.js's figure geometry / palette work. -->
 <script type="module" src="src/ui/theater-verbs.js"></script>
+<!-- GRAPHICS-ENGINE Part II §A (docs/GRAPHICS-ENGINE.md): the billboard-standee verb/tween library —
+     a SIBLING module to theater-verbs.js just above (see that file's own tag comment for the pairing-
+     check rationale, identical here) — imported by theater-boot.js (below) via a plain ES `import`, and
+     ALSO given its own <script type="module"> tag here so check-manifest.py's module-tag-pairing check
+     is satisfied; browsers dedupe an ES module by URL, so this is a harmless no-op second entry point.
+     Kept as its own file/manifest entry (not a new section in theater-verbs.js) specifically because
+     billboard standees have a rotation-ownership conflict 3D figures never had — see standee-verbs.js's
+     own header ("THE COMPOSITION CONTRACT") for the full reasoning. -->
+<script type="module" src="src/ui/standee-verbs.js"></script>
 <!-- P1' WHOLE-OBJECT WIRING (docs/P1-WIRING.md §2.3/§4 Unit A step 2): the creatureId/class/prop/light
      -> builder registry (dev/model-qa/creatures/) — imported by theater-boot.js (below) via a plain ES
      `import`, and ALSO given its own <script type="module"> tag here so check-manifest.py's module-tag-

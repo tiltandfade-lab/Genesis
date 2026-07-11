@@ -8,6 +8,94 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-07-10 (late night) — ART DIRECTION CLOSED: 13 rulings, two armed waves, dressing art landing
+
+**Added (specs — build is Adam's word)**
+- docs/BEAUTY-WAVE.md (VP0-VP8 + VP1.5 + VP2b): VP0 two-flag study card (ortho-vs-perspective ×
+  PSX-on/off, Adam's pixel-verdict), VP1 true-scale piece fix + registry sizing fold (the kaiju
+  defect), VP1.5 corpus unification pass (realm master palettes + texel density + defringe, one
+  batch, no codex spend), VP2 dressing fold, VP2b THE GALLERY PASS (clipped/reject sprites → framed
+  realm paintings, paintingOf provenance, mimic-guise legal), VP3 ground design, VP4 scene art
+  direction, VP5 battle-UI redesign, VP6 life pass + visible-history scars, VP7 contact grounding,
+  VP8 the beauty-shot gate (side-by-side vs a real Wildermyth frame).
+- docs/UNIFICATION-WAVE.md (UW1-UW4): ONE CHANNEL (diorama; flat table → legacy → retirement),
+  exterior + settlement dioramas, PORTRAITS (busts w/ 3-expression sets — expressionSet law's
+  production surface — + dialogue lower-third).
+- 13 art-direction rulings registered in DESIGN.md: clean-shapes, PS1-scope-cut, perspective camera,
+  framing law, value law, FLAGSHIP REALMS (fantasy/gloom/chrome; realm = expansion pack, ~6-mo
+  drops), master palettes, texel density, portraits, outline law, defringe-standard, visible history,
+  gallery pass. CLEAN-SHAPES + outline clauses patched into all pending codex packets.
+
+**Added (art)**
+- 25 DRESSING-GEN codex sheets landed + backed up UNGATED (flagships flora/clutter/objects +
+  effects core + all accents + ash). VP2 gate/slice/fold is next session's first move.
+
+## 2026-07-10 (evening) — WILDERMYTH GRAMMAR: engine marriage BUILT + dressing-gen packets + finale loop gate 5/5
+
+**Added**
+- North star: docs/GRAPHICS-ENGINE.md (Part I recipe + Part II research-grounded marriage;
+  Wildermyth research digests committed). Identity: DF sim × Daggerfall breadth × Wildermyth
+  presentation.
+- ENGINE WAVE (all landed, each --no-ff + orchestrator re-gate): STANDEE VERBS
+  (src/ui/standee-verbs.js, 61 checks; combat hurt/down routes sprites); GR2 dressing
+  channel (src/engine/place-dressing.js dressPlan + card render w/ placeholders, 371);
+  GR1 REALM_MATERIALS (12 realms, seeded low-contrast painters, 187); GR3+GR4 hemisphere
+  key + per-realm grade + whisper fog + diorama skirt (254).
+- FINALE LOOP GATE 5/5 (dev/battle-gate/dungeon-loop/): five REAL rolled dungeons
+  (Web/Ruin/Figure-8/Loop topologies, chrome/gloom/fantasy) end-to-end — roll → prep →
+  combat_start → volumetric render → standee verbs — zero fixture, zero breaks. Caught+
+  fixed 2 verify-green-but-not-wired bugs (trayFrom interior never called dressPlan;
+  findUnit blind to interior pieces).
+- Sprite queue: DRESSING-GEN packets (50 sheets/852 cells, flora+clutter+objects×12 +
+  effects core/accents, Wildermyth construction rules in every prompt) + round-3
+  magenta-fails addendum (12 Adam-failed sprites, ANTI-MAGENTA clause).
+- sprite-review floor-line setter; interior camera focusRect + CUTAWAY WALLS; sprite
+  standee tilt (squash killed); SPRITE PURITY (billboards exempt from PSX).
+
+**Known open**
+- Interior PIECE SCALE misreads (mediums render giant in rooms — loop-gate contact sheet);
+  fix rides the registry sizing fold. AO knob off by default (Adam pending final word).
+- Codex waves pending: round-3 + dressing-gen (packets ready, RUN-NOTES order).
+
+## 2026-07-10 (afternoon) — corpus retro-tagged, DUNGEON-GRAPH U1/U2/U4 live, codex packets hardened, floor-line tool
+
+**Added**
+- `dev/model-qa/corpus-tags.json` — casting-grade SPRITE-TAGS for all 896 committed sprites
+  (28 vision agents, text-first/image-wins) + `corpus-sizing.json` (true scale, feet/5.5) +
+  `ash-drift-report.json`. FINDING: sheet fantasy-npcs-2 = systemic label/art misassignment
+  (14/18 mismatches); 13 sprites relabeled-to-art via new overlay `name` override in
+  gen-sprite-registry.py; orphaned roles re-queued.
+- **DUNGEON-GRAPH built (U1/U2/U4)**: `src/engine/place-spatialize.js` (walk graph → verified
+  cell-grid SpatialPlan, 12 topologies, deterministic, 9/9), `src/engine/place-semantics.js`
+  (roles, depth=difficulty bands, SCALE DOMAINS + prison-rule regrowth, 26/26),
+  walk binding in prep.js/dm.js (pn.spatial, cursor→room, combat cellDims from the real room,
+  time-pass repositioning seam, 20/20; fuzz 0, monkey 0-aborted). U3 (volumetric renderer +
+  study card) IN FLIGHT on feat/dungeon-u3-render at close.
+- Specs: docs/DUNGEON-GRAPH.md (SPECCED, anchors verified), docs/GUISE.md (universal
+  sprite-swap: lycanthropes→synths→dragons), docs/GIT-LFS-MIGRATION.md (runbook, Adam priority).
+- Round-3 codex packet (`dev/model-qa/regen-v3/round3/`, 10 sheets/184 cells incl. 46 alt
+  fills) + RUN-NOTES run order; ALL round-2+3 packets hardened: expression fail-check,
+  worm's-eye BUG COROLLARY in every camera line, 3-attempt cap, never-discard-takes,
+  chat-recovery step 0.
+- sprite-review tool: click-to-set FLOOR line (overlay `floor` → registry fold-through).
+
+**Changed**
+- SPRITE-GEN-V2: §10 expression clause → the FFVI EXPRESSIVE CREATURE LAW; new §10b ADDITIVE
+  FOLD LAW + §10c NO-BLANK-SLOTS LAW; perspective clause BUG COROLLARY.
+- Codex round-2 arrivals folded additively: 4 sheets PASS re-sliced (9 sprites);
+  cosmic-large-v3-09 REJECTED (content regression) — old art kept, redo queued.
+- Painterly-ash confirmed (9 npc/kids/animal sheets) → quarantine-pack/painterly-ash + Desktop
+  zip; rosters re-authored under ash grit in round 3.
+
+**Fixed**
+- Recovered this worktree's deleted .git/worktrees admin dir (disk-cleanup collateral).
+- Disk: worktrees pruned 6→3, magenta lane's 58 parked sheets committed+pushed before removal.
+
+**Deferred**
+- U3 gate + task "battle scene in a real dungeon room + loop test" (hands off with U3).
+- Registry sizing fold (corpus-sizing + v3-sizing → sprite-registry), GUISE G1-G4, LFS
+  migration (runbook ready), upscale decision (xBRZ candidate; card on Desktop).
+
 ## 2026-07-10 — SPRITE-GEN-V2: the great sprite cleanup, perspective law, V3 regen wave (650 gated sprites), casting-grade tags
 
 **Added**
@@ -957,139 +1045,4 @@ run surfaced is logged as a future fix, not fixed here.
 - **FIX-C:** action-economy visualization (movement counter + action/bonus icons + movement bar; BG3's
   *system* is a free-to-use convention, its *icon art* is not — render our own). Needs an
   action-economy model underneath first.
-
-## 2026-07-05 (later-3) — THE DM SEAM: TYPED CONTRACTS + STRUCTURED TELEMETRY
-
-Hardening the one interface where the AI DM meets the deterministic engine — the two production-
-maturity moves Adam named (docs/POSITIONING.md "Immediate"). Branch `feat/dm-seam`; master green
-(check-manifest OK; verify-dm-seam 38/0 + regression verify-dm-events 36/0, verify-roll-branches
-29/0, verify-digest-diet 33/0, verify-combat-lifecycle 52/0, verify-bridge.py 43/0).
-
-### Added
-- **Typed contracts at the seam** (`src/world/dm.js`) — `validateEvent` / `validateTurnResponse`
-  machine-check the two inbound shapes (the DM's typed events; its whole turn response) against
-  docs/EVENT-CONTRACT.md before the engine trusts them, plus JSDoc `@typedef`s for `DMEvent` /
-  `TurnResponse` / `DMTurnTelemetry`. Forward-compatible: an unknown-but-well-formed event type
-  still passes (the switch no-ops it); only malformed *envelopes* are rejected, and never by
-  throwing. `DM_EVENT_TYPES` enumerates the full 87-type vocabulary, held in lockstep with
-  `applyEvent`'s switch by a parity test.
-- **Structured telemetry on the DM seat** — `logDmTurn` records one `DMTurnTelemetry` row per
-  completed turn (latency, lane + model, digest/turn/response bytes, applied event types, mint
-  count, an *estimated* token/$ cost from measured bytes via `dmEstimateCost`/`DM_MODEL_RATES`).
-  Ring-buffered in `GS.dm.telemetry` (cap 200) and shipped to the bridge's new **`POST /telemetry`**
-  sink → `.dm/telemetry.jsonl` (`dev/dm-bridge.py`) — the mailbox-path twin of `seat-costs.jsonl`,
-  filling the gap where loop-era DM turns carried no consolidated cost/latency row.
-- **`docs/POSITIONING.md`** — the career/case-study/ethos artifact (Genesis as an AI-engineer
-  case study; the two-door pitch; the five exhibits; the maturity roadmap). For fall-2026 fundraise
-  or AI-engineer contract conversations.
-- **`dev/verify-dm-seam.mjs`** — 38 assertions incl. a red-first parity + load-bearing mutation check.
-
-### Changed
-- `applyEvent`'s envelope guard now routes through `validateEvent` (was a bare `!w||!e||!e.type`);
-  a malformed event returns `{ok:false, reason:"invalid-envelope", errors:[…]}` instead of throwing.
-- `sendTurn` stashes send-side metrics (`GS.dm.lastTurnMeta`); `applyResponse` closes the telemetry
-  row and validates the response (non-blocking — logs violations, still applies what's valid).
-
----
-
-## 2026-07-05 (later-2) — TWO CODE-REVIEW WAVES + THE REFERENCE SHELF (Monster Manual & Wiki)
-
-A large orchestrated session. Deep `/code-review` of the accumulated work, all findings repaired
-via background executor waves (personally re-gated + landed), then a new opening-screen reference
-launcher shipped. Everything committed + pushed per-unit; master green (full verify sweep + manifest
-OK); working tree clean.
-
-### Added
-- **The Reference Shelf** (`src/ui/reference-shelf.js`) — an expandable opening-screen launcher
-  (registry + `#refShelf` modal + ARIA/focus-trap + the post-boot re-render law); built so a new
-  app is one registry entry. Spec: docs/REFERENCE-SHELF.md.
-- **Monster Manual** (`src/ui/ref-bestiary.js`, shelf app #1) — a browsable 1817-creature manual
-  (510 regular + 1307 realm) with a lazy live-3D grid (ONE shared offscreen renderer blitting to
-  card canvases), detail viewer, alt-model bullet menu (mechanism-only), reusing the game's figure
-  path via a new additive `Theater.refFigure` seam. Spec: docs/BESTIARY-MANUAL.md.
-- **Wiki** (`src/ui/ref-wiki.js`, shelf app #2) + **`build/gen-wiki.py`** + **`data/wiki.js`** —
-  the in-game design-doc wiki; `gen-wiki.py` compiles **`docs/ARCHITECTURE.md`** (the new 51-system
-  map of the whole machine) → `WIKI_INDEX`, rendered grouped by layer with filter/search/spec links.
-- **`docs/ARCHITECTURE.md`** — the human-readable index of all 51 systems (synthesized from a
-  6-domain systems survey); doubles as the Wiki's compile source.
-- Spec locks: docs/REVIEW-FIXES-0705.md + docs/REVIEW-FIXES-0705-VISUAL.md (the review-fix waves).
-
-### Changed
-- **`genesis-orchestrate` + `genesis-clean-close` skills** hardened with THE STASH LAW (the
-  2026-07-05 stash-spill scare: check `git stash list` at wave start; never bare `pop` on a
-  non-empty stack; retire safety snapshots once landed).
-- **`genesis-clean-close`** now carries a Wiki/ARCHITECTURE coherence sweep (a system add/retire/
-  behavior-change updates ARCHITECTURE.md + recompiles `data/wiki.js` in the same close) — first
-  exercised by this very close (48→51 systems).
-- The realm render-profile **dual-table mirror is dead** (W2-A) — figures/lights/void now grade off
-  the stamped numeric-tint profile (killed the grey-wash bug); the bestiary-resolve loop collapsed
-  to one `bestiaryResolve` + slug index (U6).
-
-### Fixed (from the two review waves — 8 units, all red-first + re-gated)
-- **Wave 1 (monster layer):** U1 flavor payload now surfaces on a foe's FIRST fight (seenCount
-  seeded at mint); U3 pet upkeep/decay actually wired (tend_pet event + rest-gate tick + harm-by-
-  kind — were dead code the harness masked); U4 creature-parley §1 wired (auto-merged levers +
-  parleyAbility); U5 combat action-parse range + two-pass traits-apply (no silent drops) + foe.traits
-  keeps its SRD shape.
-- **Wave 2 (battle-visual arc — never-before-reviewed):** W2-A shared-material clone-for-tween (a
-  hurt no longer greys every co-sharing figure) + tween/FX drain on board swaps + bounded LRU
-  texture cache; W2-B Math.random purged from creature builders (deterministic across sessions).
-- The corpus's lone cuboid: `gloom:grinning-poppet`'s malformed `model` field → clean slug.
-- `.mm-chip` squared-corner invariant (border-radius 6px→0).
-
-### Deferred
-- Wiki per-system detail pages (v1 is index + descriptions); alt-model authoring (mechanism ships,
-  no entry declares `alts` yet); Props & Scenery (the shelf's future app #3); the provenance-audit
-  bespoke-vs-nearest-sub refinement. Adam's standing ledger (PACING-DIALS build, NPC-KNOWLEDGE-GRADES
-  build, REALM-RENDER-STYLE tune) still open.
-
-## 2026-07-05 (later) — THE WAVE'S FOLLOW-ON: Phase 2b, the recovered merge, render grade, parley + anomaly law
-
-Continuation of the monster wave (day-of, after the first close). Everything committed + pushed to origin;
-final sweep 96 harnesses / 0 failed; working tree clean. This arc was messy in flight (a rate-limit storm,
-a lost-then-recovered merge) but landed clean.
-
-**Added**
-- **Phase 2b — the realm creatures reach full parity.** All **1307** realm creatures now carry `traits`
-  (184 traits from a prior theater-session preserved, never overwritten), a spice-graded **d8 `flavorTable`**
-  (variant XOR hook), and their OWN `treasure`/`habitat`/`activity` (frame inheritance was wrong fiction).
-  `build/gen-realm-bestiary.py` extended to emit + `--check` the four fields; `merge-flavor-batches.py` is the
-  fail-loud reconciler (exact-name match, committed-traits precedence, full-coverage gate). `--check` clean 1307/11.
-- **F4 — the flavor-d8 roll at mint** (`monsterRollFlavorD8` + `realmCreatureEntry` in `dm.js`): rolled once at
-  first codex mint, canon-locked beside the custom-d10s; spice-clamped (Grounded rerolls raw 7-8→d6, breach/
-  Strange+ opens the top rows). `verify-flavor-d8.mjs` 15/0 incl. the red-first clamp mutation.
-- **MONSTER-PARLEY + THE ANOMALY LAW** — creatures join the attitude ladder (Beasts roll Animal Handling),
-  recruitment gated at Helpful AND `bondEligible`; the only doors are nat-20 / decisive-lever-at-Friendly /
-  a 3% friendly-spawn; pet/hireling/sidekick tiers; parley-angle hooks; befriended creatures recur via prep.
-  Grind clamps at Friendly — "difficult af" is script-enforced. `verify-monster-parley.mjs` 58/0.
-- **Realm render-style grade v1** — per-realm `sat`/`tint`/`contrast` graded onto tiles, the figure-material
-  funnel, lights/fog/void, and prop fallback off the `activeRealmsFor` seam; 12-swatch review sheet committed
-  for Adam's eye. `verify-theater-data.mjs` 242/0.
-- **Spec locks (build-ready, not yet built):** `MONSTER-FLAVOR-TABLES` (the d8 contract, MM-grounding law),
-  `NPC-KNOWLEDGE-GRADES` (signs→rumor→named ceilings, rolled witness channels, the pitch law inverts — no
-  omniscient NPCs unless rolled), `PACING-DIALS` (octane/lethality/drip + Adam's design-talk rulings §5;
-  player-facing preset picker BANKED §6 — one standard difficulty tuned over weeks of soak first).
-- **Five committed reference page-indexes** (`dev/model-qa/{mm,dmg,phb,tashas,xgte}-page-index.json`), vision-
-  built, cross-mapped, offsets verified; CLAUDE.md gotcha points at them.
-
-**Changed**
-- **The render-profile mirror trap killed** — `data/realms.js` was the source but `theater-boot.js` held a
-  "kept in sync by convention" copy that drifted within hours (shipped a lava-red bright-kingdom). Now
-  `theater-data` stamps the resolved `renderProfile` on the board and the GL layer consumes the stamp; the
-  mirror is fallback-only. bright-kingdom retuned to candy (pastel pink, lifted contrast).
-- **`genesis-orchestrate` skill hardened** with this wave's scars: Workflow-vehicle law (fan-outs > 3 ride
-  Workflow, not loose Agents — the rate-limit root cause), the checkout law, no-subdelegation for leaf agents,
-  panel-zombies-are-cosmetic, dual-table=bug, push-on-land, visual-read.
-
-**Fixed**
-- **The recovered REALM-TRAITS-APPLY merge** (`cmApplyTraits`): originally landed on a stray checked-out
-  branch, lost when that branch was deleted, silently absent from master until a downstream report caught it —
-  recovered from the object store (`cb3e630`) and re-merged with all conflicts resolved (union of the traits-carry
-  + the anomaly-law `stampSpawn` wrapper across the three walk generators + combat.js). Root cause = merging
-  without verifying the main-tree checkout; now the skill's **checkout law**.
-
-**Deferred**
-- NPC-KNOWLEDGE-GRADES build (executor died to the throttle; queued for relaunch) · deep `/code-review` pass
-  (Monday, post-token-refresh) · REALM-RENDER-STYLE fine-tune by eye (§2 warm-brown middle band) · the 11
-  `_review` CR-ceiling flags in the draft JSON (Adam's call) · figure baked-vertex-color grading (render v2).
 

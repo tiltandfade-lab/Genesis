@@ -1052,19 +1052,31 @@ function theaterNodeBoardBuild(record, realms, env){
    theaterBoardFrom. source.kind selects the origin:
      {kind:"segment", segment}  — an active walk's here-segment (all three envs) — routes through
                                   the SAME room derivation theaterBoardFrom has always used.
-     {kind:"interior", record}  — a minted interior codex record — read the identical defensive way a
-                                  partial/narrow-harness segment already is (an absent dims/feature/
-                                  dressing/light falls through theaterBoardBuild's own total-function
-                                  defaults, never a throw); no render.js caller wires this kind yet
-                                  (a later unit's job) but the shape contract holds today.
+     {kind:"interior", plan}    — DUNGEON-GRAPH.md U3: a walk's volumetric SpatialPlan (U1
+                                  spatializePlan()/U2 semanticizePlan() output) — routed to
+                                  interiorBuildBoard (src/ui/theater-interior.js) instead of
+                                  theaterBoardBuild, producing an {kind:"interior3d", instances:{...}}
+                                  board the GL layer's window.Theater.setInteriorBoard (NOT setBoard)
+                                  consumes (theaterStageSync, src/world/render.js, is the caller that
+                                  tells the two apart by board.kind). source.focusSegNum/source.radius
+                                  thread straight through to interiorBuildBoard's own opts (the
+                                  "current room + immediate surroundings" trim, U3 item 2); absent
+                                  `plan` falls back to the ORIGINAL {kind:"interior", record} branch
+                                  below (a minted interior codex record, read the identical defensive
+                                  way a partial/narrow-harness segment already is — no render.js
+                                  caller wires the record-only form yet, a later unit's job, but the
+                                  shape contract holds today) — this is a pure ADDITIVE branch, never
+                                  a behavior change for any existing {kind:"interior", record} caller.
      {kind:"node", record}      — PLACE-GEN.md ADDENDUM §7 unit 7: a minted, realm-typed place codex
                                   record — theaterNodeBoardBuild, above (GRID LAW footprint, NOT the
                                   cmZoneGrid patch derivation the other kinds use — see that
                                   function's own divergence note).
      {kind:"idle", env, realms} — the empty table (theaterIdleBoardFrom).
-   Same return shape in every branch (below, unchanged) — this is the ONE seam TABLETOP-VISION's
-   tray/idle/combat callers all read through. Pure: the same (source,scene,opts) snapshot always
-   yields an identical board (§9.1). */
+   Same return shape in every branch except the interior+plan one (which is a different render family
+   entirely, by design — see above) — this is the ONE seam TABLETOP-VISION's tray/idle/combat callers
+   all read through. Pure: the same (source,scene,opts) snapshot always yields an identical board
+   (§9.1); interiorBuildBoard (src/ui/theater-interior.js) is itself pure/no-RNG, so this stays true
+   for the plan branch too. */
 function trayFrom(source, scene, opts){
   source = source || {};
   opts = opts || {};
@@ -1077,6 +1089,30 @@ function trayFrom(source, scene, opts){
     const env = source.env || opts.env;
     const realms = source.realms || opts.realms;
     return theaterNodeBoardBuild(source.record, realms, env);
+  }
+  if(source.kind === "interior" && source.plan && typeof interiorBuildBoard === "function"){
+    const env = source.env || opts.env;
+    const realms = source.realms || opts.realms;
+    const realmId = source.realmId || (Array.isArray(realms) && realms.length ? realms[0] : undefined);
+    // GRAPHICS-ENGINE.md GR2 §D DRESSING SYSTEM — dressPlan (src/engine/place-dressing.js) existed and
+    // was fully verified (dev/verify-dungeon-dressing.mjs) but was NEVER CALLED from this production
+    // render path — the only callers were that harness and the study rig (dev/battle-gate/
+    // capture-interior-study.mjs), a "verify-green-but-not-wired" gap the dungeon-loop-gate (dev/
+    // battle-gate/capture-dungeon-loop.mjs) caught by driving a REAL walk through trayFrom itself.
+    // dressPlan is pure/no-RNG-outside-its-own-seeded-rng and DETERMINISTIC off (plan,opts.walkId)
+    // (falling back to plan.seed — spatializePlan's own walkId-derived seed — when walkId is omitted,
+    // which it is here since trayFrom's source doesn't carry one), so this is a safe additive call: the
+    // returned board is a shallow-extended plan (same cells/rooms/etc. references) with a `dressing`
+    // array threaded onto it, the exact field interiorBuildPieces' sibling (interiorBuildDressing,
+    // src/ui/theater-boot.js) already knows how to mount when present — setInteriorBoard's OWN
+    // dressing-mount branch is used for the first time from a real production render call, not just a
+    // harness/study rig.
+    const dressedPlan = (typeof dressPlan === "function") ? dressPlan(source.plan, { realmId: realmId }) : source.plan;
+    const board = interiorBuildBoard(dressedPlan, {
+      env: env, realmId: realmId, focusSegNum: source.focusSegNum, radius: source.radius
+    });
+    board.dressing = dressedPlan.dressing || [];
+    return board;
   }
   const segment = source.kind === "interior" ? source.record : source.segment;
   return theaterBoardBuild(segment, scene, opts);

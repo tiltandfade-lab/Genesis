@@ -89,7 +89,7 @@ import { playVerb, tickTweens, THEATER_VERBS, theaterFxFromLedger } from "./thea
 // GRAPHICS-ENGINE Part II §A: the sibling billboard-standee verb library — see that file's header for
 // why it's a separate module from theater-verbs.js (rotation-ownership conflict with
 // updateSpriteBillboardYaw, below) and for the ctx-binding contract bindStandeeCtx/playStandeeVerb use.
-import { playStandeeVerb, bindStandeeCtx, STANDEE_VERBS } from "./standee-verbs.js";
+import { playStandeeVerb, bindStandeeCtx, STANDEE_VERBS, startIdleBreathe } from "./standee-verbs.js";
 import * as Parts from "./theater-parts.js";
 import { resolveWholeObject, loadWholeObjectBuilders, WHOLE_OBJECT_REGISTRY, NEAREST_SUB } from "./theater-figures.js";
 // P1' WHOLE-OBJECT WIRING (docs/P1-WIRING.md §4 step 3): a STATIC import of probe-lib.js itself —
@@ -2936,6 +2936,111 @@ function addInteriorContactBlob(group, x, z, texWidth){
   return mesh;
 }
 
+// BEAUTY-WAVE.md VP6 item 4 — VISIBLE HISTORY (render half). data.decals mirrors data.dressing/
+// data.pieces (a plain field the caller sets directly on the board object, sourced from
+// src/world/prep.js's spatialDecalsForSeg(pn, segNum) — the PERSIST half lives there, not here; this
+// function only renders whatever decal records that call already returned). Each entry
+// {x,y,kind,roomSegNum} — kind in {blood,scorch,impact,dust} — reuses the SAME flat-ground-quad
+// convention the cover-patch channel established (theater-interior.js's itrCoverCardFor/proceduralSplat
+// seam, VP3 item 3): a colored CircleGeometry card laid flat at the floor plane, no real art needed (the
+// spec's own "VP3's cover channel" instruction — reuse the render idiom, not a new mechanism). No
+// dedicated decal art has landed (assets/dressing has no per-decal slugs), so every decal is currently
+// the procedural tint card — the seam is here (kindColor) the moment real decal art wants to join it.
+const DECAL_KIND_COLOR = {
+  blood: 0x6e1414, scorch: 0x2a2018, impact: 0x8a8478, dust: 0xcfc9a8
+};
+const DECAL_GEO_CACHE = {};
+function decalGeoFor(radius){
+  const key = radius.toFixed(3);
+  if(!DECAL_GEO_CACHE[key]) DECAL_GEO_CACHE[key] = new THREE.CircleGeometry(radius, 10);
+  return DECAL_GEO_CACHE[key];
+}
+function interiorBuildDecals(decals, cx, cz){
+  const group = new THREE.Group();
+  (decals || []).forEach((d) => {
+    const color = DECAL_KIND_COLOR[d.kind] || DECAL_KIND_COLOR.impact;
+    const mat = new THREE.MeshBasicMaterial({
+      color, transparent: true, opacity: 0.6, depthWrite: false, side: THREE.DoubleSide
+    });
+    const mesh = new THREE.Mesh(decalGeoFor(0.32), mat);
+    mesh.rotation.x = -Math.PI / 2;
+    // a hair above the floor plane (-0.5) and above the contact-blob layer (-0.495) — visible history
+    // reads ON the floor, never fighting the grounding blob for the same plane.
+    mesh.position.set((d.x || 0) - (cx || 0), -0.49, (d.y || 0) - (cz || 0));
+    mesh.userData.decalKind = d.kind || "impact";
+    group.add(mesh);
+  });
+  return group;
+}
+
+/* BEAUTY-WAVE.md VP6 item 5 — HIT-EFFECTS SEAM. hit-damage/fall-death (act-cast stays out of scope for
+   THIS unit's production wiring — see below) spawn an effect card at the target: real effects-core art
+   the moment it lands (effectCardFor's own async cache-with-placeholder-replay convention, same idiom
+   as dressingTextureFor/dressingPlaceholderTexture just above) OR a procedural flash-ring quad standing
+   in behind the SAME seam while no art has landed yet (`effectCardFor(name) || proceduralRing`, the
+   spec's own literal words). Oversized 1.5-2x at the target per GRAPHICS-ENGINE §B. Lives in S.fxGroup
+   (already swept every board swap by clearGroup(S.fxGroup) in setInteriorBoard/retire — zero new
+   cleanup bookkeeping needed) and expires via a normal S.tweens entry (the SAME tween array
+   buildTheaterCtx/tickTweens already drain every frame) fading opacity to 0 over EFFECT_CARD_DUR ms,
+   then removing + disposing itself — "assert spawn+expiry" per the spec's own verify line. */
+const EFFECT_CARD_DUR = 420;
+const EFFECT_RING_GEO_CACHE = {};
+function effectRingGeoFor(radius){
+  const key = radius.toFixed(3);
+  if(!EFFECT_RING_GEO_CACHE[key]) EFFECT_RING_GEO_CACHE[key] = new THREE.RingGeometry(radius * 0.55, radius, 20);
+  return EFFECT_RING_GEO_CACHE[key];
+}
+const EFFECT_PROC_COLOR = { "hit-damage": 0xff5040, "fall-death": 0x8a8478, "act-cast": 0x8a6bff };
+// effectCardFor(name) — real effects-core art seam (VP2's fold, GR2 §D-adjacent convention): tries
+// assets/dressing/effect-<name>.png via the SAME async TextureLoader-with-cache pattern as
+// dressingTextureFor, but returns null (not a placeholder) synchronously until a real texture resolves —
+// an absent effect texture is the documented `|| proceduralRing` fallback below, never a labeled
+// placeholder card (a placeholder reads as "art is coming"; a procedural ring reads as "this IS the
+// effect, art will refine it later" — the correct fallback register for a combat-feedback flash).
+function effectCardFor(name){
+  if(!S.effectTexCache) S.effectTexCache = {};
+  const key = "effect:" + name;
+  if(!(key in S.effectTexCache)){
+    S.effectTexCache[key] = null; // pending
+    textureLoader.load(
+      "assets/dressing/effect-" + name + ".png",
+      (tex) => { nearestify(tex); S.effectTexCache[key] = tex; },
+      undefined,
+      () => { S.effectTexCache[key] = false; } // confirmed missing — never retried
+    );
+  }
+  const cached = S.effectTexCache[key];
+  return cached ? cached : null;
+}
+function spawnEffectCard(name, x, y, z, oversize){
+  if(!S.fxGroup) return null;
+  const size = 1 * (oversize || 1.7); // "oversized 1.5-2x" — 1.7 is the seam's own default midpoint
+  const tex = effectCardFor(name);
+  const color = EFFECT_PROC_COLOR[name] || 0xffffff;
+  const mat = new THREE.MeshBasicMaterial({
+    map: tex || null, color: tex ? 0xffffff : color, transparent: true, opacity: 0.95,
+    blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide
+  });
+  const geo = tex ? new THREE.PlaneGeometry(size, size) : effectRingGeoFor(size * 0.5);
+  const mesh = new THREE.Mesh(geo, mat);
+  mesh.rotation.x = -Math.PI / 2;
+  mesh.position.set(x, y, z);
+  mesh.userData.effectCard = name;
+  S.fxGroup.add(mesh);
+  const baseOpacity = mat.opacity;
+  S.tweens.push({
+    start: Date.now(), dur: EFFECT_CARD_DUR,
+    update(t){ mat.opacity = baseOpacity * (1 - t); },
+    onDone(){
+      if(mesh.parent) mesh.parent.remove(mesh);
+      if(mat.dispose) mat.dispose();
+      if(geo && geo.dispose && !tex) { /* cached ring geo — never dispose the shared cache entry */ }
+    }
+  });
+  startTweenLoop();
+  return mesh;
+}
+
 /* BEAUTY-WAVE VP5 item 2 — diegetic selection: "the acting unit's chip highlights AND its standee
    gets a ground-ring glow (reuse the blob-quad channel, accent color)." Same convention as
    addGroundingBlob just above (a flat circle quad, seated at the floor plane) but a thin RING
@@ -3690,20 +3795,41 @@ function mountLightProp(data, cx, cz){
    markDirty() once. Self-stopping: stopLightFlicker (called at the top of every applyLightProfile, and
    from retire()) clears the interval, so a flicker never survives past the profile that requested it or
    past retire(). */
-function startLightFlicker(amplitude){
+// BEAUTY-WAVE.md VP6 item 2 (THE LIFE PASS — torch flicker): interior light sources JOIN this same
+// channel rather than growing a second setInterval — startLightFlicker's third param is an optional
+// list of {pl, marker, baseIntensity, baseOpacity} entries (interiorBuildLights, below, builds these)
+// that the SAME 480ms tick also nudges, at a fixed LOW amplitude (bounded here, never per-call —
+// verify-vp6-life-pass.mjs's "flicker amplitude bound" check reads this const directly) so a torch-lit
+// interior room never reads as more violently flickering than the tabletop `torchlit` profile (0.14)
+// already established. The marker mesh's OWN opacity is nudged by the same delta*0.5 so the visible
+// flame-quad pulses IN SYNC with its light's intensity swing, never independently randomized.
+const INTERIOR_LIGHT_FLICKER_AMPLITUDE = 0.06;
+function startLightFlicker(amplitude, interiorTargets){
   stopLightFlicker();
   const bases = S.pointLights.map(l => l.intensity);
+  S.interiorFlickerTargets = interiorTargets || [];
   S.flickerRaf = setInterval(() => {
-    if(!S.mounted || !S.pointLights.length){ stopLightFlicker(); return; }
-    S.pointLights.forEach((l, i) => {
-      const base = bases[i] != null ? bases[i] : l.intensity;
-      l.intensity = Math.max(0.05, base + (Math.random() * 2 - 1) * amplitude);
+    if(!S.mounted){ stopLightFlicker(); return; }
+    if(S.pointLights.length){
+      S.pointLights.forEach((l, i) => {
+        const base = bases[i] != null ? bases[i] : l.intensity;
+        l.intensity = Math.max(0.05, base + (Math.random() * 2 - 1) * amplitude);
+      });
+    }
+    (S.interiorFlickerTargets || []).forEach((t) => {
+      const delta = (Math.random() * 2 - 1) * t.amplitude;
+      t.pl.intensity = Math.max(0.05, t.baseIntensity + delta);
+      if(t.marker && t.marker.material){
+        t.marker.material.opacity = Math.max(0.2, Math.min(1, t.baseOpacity + delta * 0.5));
+      }
     });
+    if(!S.pointLights.length && !(S.interiorFlickerTargets || []).length){ stopLightFlicker(); return; }
     markDirty();
   }, 480); // ~2x/sec per §2's own cadence note
 }
 function stopLightFlicker(){
   if(S.flickerRaf != null){ clearInterval(S.flickerRaf); S.flickerRaf = null; }
+  S.interiorFlickerTargets = [];
 }
 
 /* §4 texture hooks. TextureLoader is async by nature; loaded textures land in S.textures keyed by
@@ -4650,6 +4776,10 @@ function interiorBuildLights(lights, cx, cz){
   const group = new THREE.Group();
   const assigned = interiorAssignShadowCasters(lights, cx, cz);
   let casters = 0;
+  // VP6 item 2: every interior light source joins the shared flicker channel (startLightFlicker,
+  // above) at INTERIOR_LIGHT_FLICKER_AMPLITUDE — collected here (not started here) so setInteriorBoard
+  // can hand the finished list to ONE startLightFlicker call alongside the board's own S.pointLights.
+  const flickerTargets = [];
   assigned.forEach((light) => {
     const pl = new THREE.PointLight(
       light.color || "#ffbb66",
@@ -4671,8 +4801,101 @@ function interiorBuildLights(lights, cx, cz){
     marker.position.copy(pl.position);
     if(light.kind !== "lamp") marker.position.y -= 0.15; // torch flame sits slightly below its light point (on the sconce)
     group.add(marker);
+    flickerTargets.push({
+      pl, marker,
+      baseIntensity: pl.intensity,
+      baseOpacity: marker.material ? marker.material.opacity : 0.9,
+      amplitude: INTERIOR_LIGHT_FLICKER_AMPLITUDE
+    });
   });
-  return { group, casters };
+  return { group, casters, flickerTargets };
+}
+
+// BEAUTY-WAVE.md VP6 item 3 — AMBIENT MOTES: 4-8 seeded drifting particle cards per room, ember-tinted
+// for torch-lit realms / dust-tinted for lamp-lit ones (kit-driven, no new per-realm authoring table —
+// reused off the SAME `light.kind` field interiorBuildLights already reads), slow vertical drift with
+// wrap-around, additive blending (same "reads bright regardless of ambient" idiom as the light markers
+// just above), tiny (0.05-0.12 world units — a speck, never a readable sprite). Seeded (mulberry32-style
+// hash off a per-room string) so a room's mote field is stable across re-renders of the SAME board data,
+// not re-rolled every frame/rebuild.
+const MOTE_COUNT_MIN = 4, MOTE_COUNT_MAX = 8;
+const MOTE_SIZE_MIN = 0.05, MOTE_SIZE_MAX = 0.12;
+function moteHash32(str){
+  let h = 2166136261 >>> 0;
+  const s = String(str || "");
+  for(let i = 0; i < s.length; i++){ h = Math.imul(h ^ s.charCodeAt(i), 16777619) >>> 0; }
+  return h >>> 0;
+}
+// a tiny deterministic PRNG seeded from moteHash32 — mulberry32, the same shape every other seeded-RNG
+// spot in this codebase already uses (dspHashStr-adjacent convention in theater-interior.js), reimplemented
+// locally rather than imported since this ES module can't reach that classic-script helper.
+function moteRng(seed){
+  let a = seed >>> 0;
+  return function(){
+    a |= 0; a = (a + 0x6D2B79F5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+// ember (torch/lava-flavored) is the default; a room whose lights are ALL "lamp" kind reads dust instead
+// (dry/dusty interiors — lamplit halls, not open flame) — mirrors interiorBuildLightMarker's own
+// isLamp branch rather than inventing a second per-realm classification.
+function interiorMoteKindFor(lights){
+  const list = lights || [];
+  if(list.length && list.every((l) => l.kind === "lamp")) return "dust";
+  return "ember";
+}
+const MOTE_TINT = { ember: 0xffb066, dust: 0xcfc9a8 };
+function interiorBuildMotes(seedStr, bounds, kind){
+  const group = new THREE.Group();
+  const b = bounds || { minX: 0, maxX: 0, minZ: 0, maxZ: 0 };
+  const rng = moteRng(moteHash32(seedStr));
+  const count = MOTE_COUNT_MIN + Math.floor(rng() * (MOTE_COUNT_MAX - MOTE_COUNT_MIN + 1));
+  const color = MOTE_TINT[kind] || MOTE_TINT.ember;
+  const yBottom = -0.2, yTop = 2.2; // a modest drift band above the floor, well under wall-height ceilings
+  for(let i = 0; i < count; i++){
+    const size = MOTE_SIZE_MIN + rng() * (MOTE_SIZE_MAX - MOTE_SIZE_MIN);
+    const geo = new THREE.PlaneGeometry(size, size);
+    const mat = new THREE.MeshBasicMaterial({
+      color, transparent: true, opacity: 0.55, blending: THREE.AdditiveBlending,
+      depthWrite: false, side: THREE.DoubleSide
+    });
+    const mesh = new THREE.Mesh(geo, mat);
+    const x = b.minX + rng() * Math.max(0.01, b.maxX - b.minX);
+    const z = b.minZ + rng() * Math.max(0.01, b.maxZ - b.minZ);
+    const y = yBottom + rng() * (yTop - yBottom);
+    mesh.position.set(x, y, z);
+    mesh.userData.motePiece = true;
+    mesh.userData.driftSpeed = 0.04 + rng() * 0.05; // world units/sec, slow
+    mesh.userData.wrapBottom = yBottom;
+    mesh.userData.wrapTop = yTop;
+    group.add(mesh);
+  }
+  return group;
+}
+// self-stopping rAF drift loop — same dedicated-loop discipline as startLightFlicker's setInterval
+// (a continuous ambient effect, not a one-shot tween), self-stops the instant the mote group is gone
+// (board swap/retire) rather than depending on an external caller to remember to cancel it.
+function startMoteDrift(){
+  if(S.moteRaf) return;
+  let last = (typeof performance !== "undefined" && performance.now) ? performance.now() : Date.now();
+  const step = (now) => {
+    now = now || ((typeof performance !== "undefined" && performance.now) ? performance.now() : Date.now());
+    if(!S.mounted || !S.moteGroup || !S.moteGroup.children.length){ S.moteRaf = null; return; }
+    const dt = Math.min(0.05, (now - last) / 1000);
+    last = now;
+    S.moteGroup.children.forEach((m) => {
+      m.position.y += m.userData.driftSpeed * dt;
+      if(m.position.y > m.userData.wrapTop) m.position.y = m.userData.wrapBottom;
+    });
+    markDirty();
+    S.moteRaf = requestAnimationFrame(step);
+  };
+  S.moteRaf = requestAnimationFrame(step);
+}
+function stopMoteDrift(){
+  if(S.moteRaf != null){ cancelAnimationFrame(S.moteRaf); S.moteRaf = null; }
 }
 
 // data.pieces -> billboard sprites standing IN the room (DUNGEON-GRAPH.md U3 iteration-2, ruling 3:
@@ -4730,6 +4953,13 @@ function interiorBuildPieces(pieces, cx, cz, wallHeightBase){
     // fall-death — the corpse keeps its ground anchor because the blob isn't parented to the
     // tilting wrapper), and existing callers walking `group.children` in piece order see no change.
     addInteriorContactBlob(blobGroup, g.position.x, g.position.z, built.width);
+    // VP6 item 1: idle-breathe auto-plays on every living piece the instant it mounts (a fresh
+    // fall-death corpse never reaches this — dead pieces are re-mounted by the NEXT setInteriorBoard
+    // call with p.fid's own userData never carrying userData.corpse from a torn-down prior group, so
+    // this is a clean re-roll for a genuinely-new mount; a corpse persisting WITHIN one mount's
+    // lifetime is fall-death's own stopIdleBreathe(...,true) call, not this mount-time start).
+    bindStandeeCtx(buildTheaterCtx());
+    startIdleBreathe(g, p.slug + ":" + p.cellX + "," + p.cellY);
     resolved++;
   });
   group.add(blobGroup);
@@ -5028,6 +5258,12 @@ function setInteriorBoard(data){
   S.interiorGroup.add(lightsBuilt.group);
   S.interiorShadowCasterCount = lightsBuilt.casters;
   S.interiorLightCount = (data.lights || []).length;
+  // VP6 item 2: join the interior lights (+ their emissive markers) onto the shared flicker channel —
+  // startLightFlicker tore down any board-level flicker a moment ago (applyLightProfile above always
+  // calls stopLightFlicker first), so this call is the one that actually starts ticking for an interior
+  // board with any lights at all; a light-less room (lightsBuilt.flickerTargets === []) is a clean no-op
+  // (startLightFlicker's own interval self-stops when both lists are empty).
+  if(lightsBuilt.flickerTargets.length) startLightFlicker(INTERIOR_LIGHT_FLICKER_AMPLITUDE, lightsBuilt.flickerTargets);
 
   // DUNGEON-GRAPH.md U3 iteration-2, ruling 3: creature/PC billboard sprites standing in the room
   // (data.pieces, a plain field the caller sets directly on the board object — independent of
@@ -5050,6 +5286,22 @@ function setInteriorBoard(data){
   S.interiorDressingWorldPositions = dressingGroup.children.map((g) => ({
     slug: g.userData && g.userData.dressingSlug, x: g.position.x, y: g.position.y, z: g.position.z
   }));
+
+  // BEAUTY-WAVE.md VP6 item 4 — VISIBLE HISTORY (render half). data.decals is a plain field the caller
+  // sets directly on the board object (same convention as data.pieces/data.dressing above), sourced
+  // from src/world/prep.js's spatialDecalsForSeg(pn, segNum) — the persist half.
+  const decalsGroup = interiorBuildDecals(data.decals, cx, cz);
+  S.interiorGroup.add(decalsGroup);
+  S.interiorDecalCount = (data.decals || []).length;
+
+  // BEAUTY-WAVE.md VP6 item 3 — ambient motes, seeded off this board's own focus rect so re-rendering
+  // the SAME board data yields the SAME mote field (never re-rolled every frame).
+  stopMoteDrift();
+  const moteSeed = "motes:" + (data.realmId || env) + ":" + JSON.stringify(fit);
+  const moteGroup = interiorBuildMotes(moteSeed, b, interiorMoteKindFor(data.lights));
+  S.interiorGroup.add(moteGroup);
+  S.moteGroup = moteGroup;
+  startMoteDrift();
 
   placeCamera();
   markDirty();
@@ -5168,7 +5420,18 @@ function play(verb, opts){
   if(unit && unit.userData && unit.userData.sprite){
     bindStandeeCtx(buildTheaterCtx());
     const played = playStandeeVerb(unit, standeeVerb, opts);
-    if(played){ startTweenLoop(); return true; }
+    if(played){
+      // VP6 item 5 — hit-effects seam: the two production-wired standee verbs (WIRING LAW's own
+      // {hurt:"hit-damage", down:"fall-death"} map, unchanged above) each spawn their effect card at
+      // the target's own resolved world position. act-cast is named in the spec's prose but has no
+      // production theater-verb mapped to it yet (no "cast" entry in STANDEE_VERB_FOR_THEATER_VERB —
+      // the WIRING LAW's "no new event surface" holds), so it is wired at the standee-verb layer only
+      // (playStandeeVerb itself has no effect-spawn hook); this call site fires for the two verbs that
+      // ARE live in production today.
+      spawnEffectCard(standeeVerb, unit.position.x, unit.position.y + 0.6, unit.position.z, 1.7);
+      startTweenLoop();
+      return true;
+    }
     // an unresolvable/decline standee verb (e.g. hurt fired before the sprite texture finished loading,
     // buildSpriteBillboard's own "not loaded yet" miss) falls through to the ordinary 3D-figure verb
     // below rather than silently dropping the animation — matches every other Theater.play null-safety
@@ -5595,6 +5858,7 @@ function retire(){
   if(S.raf) cancelAnimationFrame(S.raf);
   if(S.tweenRaf) cancelAnimationFrame(S.tweenRaf); // T3: stop the verb tween loop too, not just render-on-demand's raf
   stopLightFlicker(); // BOARD LIGHTING: the ~2Hz setInterval flicker tick outlives raf/tweenRaf otherwise
+  stopMoteDrift(); // VP6 item 3: the mote drift rAF chain is its own loop, outlives raf/tweenRaf otherwise
   drainTweens(S); // A2: run every abandoned tween's onDone (restores shared materials etc.) BEFORE any dispose below
   clearGroup(S.tileGroup);
   clearGroup(S.propGroup);
@@ -5678,6 +5942,8 @@ window.Theater.interiorShadowCasterCount = function(){ return S.interiorShadowCa
 // GRAPHICS-ENGINE.md GR2: same read-only harness-facing discipline — how many dressing cards mounted
 // on the last setInteriorBoard call. 0 before any interior board / on a board with no data.dressing.
 window.Theater.interiorDressingCount = function(){ return S.interiorDressingCount || 0; };
+window.Theater.interiorDecalCount = function(){ return S.interiorDecalCount || 0; }; // VP6 item 4
+window.Theater.interiorMoteCount = function(){ return (S.moteGroup && S.moteGroup.children.length) || 0; }; // VP6 item 3
 window.Theater.interiorDressingWorldPositions = function(){ return S.interiorDressingWorldPositions || []; };
 window.Theater.interiorBoardOrigin = function(){ return S.boardOrigin ? { cx: S.boardOrigin.cx, cz: S.boardOrigin.cz } : null; };
 window.Theater.shadowMapEnabled = function(){ return !!(S.renderer && S.renderer.shadowMap.enabled); };

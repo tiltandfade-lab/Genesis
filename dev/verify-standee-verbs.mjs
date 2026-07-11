@@ -367,7 +367,7 @@ function extractConst(src, name){
     const stubUnitSprite = { userData: { unitId: "f1", sprite: true } };
     const stubUnitWhole = { userData: { unitId: "f2" } }; // no sprite flag — a whole-object/glb figure
     const factory = new Function(
-      "S", "findUnit", "buildTheaterCtx", "playVerb", "playStandeeVerb", "bindStandeeCtx", "startTweenLoop",
+      "S", "findUnit", "buildTheaterCtx", "playVerb", "playStandeeVerb", "bindStandeeCtx", "startTweenLoop", "spawnEffectCard",
       mapConst + "\n" + playFnSrc + "\nreturn play;"
     );
     const S = { mounted: true, boardKey: "x", unitsKey: "x" };
@@ -377,7 +377,12 @@ function extractConst(src, name){
     const playStandeeVerb = (unit, verb, opts) => { calls.standee.push({ unit, verb, opts }); return true; };
     const bindStandeeCtx = () => {};
     const startTweenLoop = () => {};
-    const play = factory(S, findUnit, buildTheaterCtx, playVerb, playStandeeVerb, bindStandeeCtx, startTweenLoop);
+    // VP6 item 5's hit-effects seam call — a spy stub here (this harness proves the hurt/down ROUTING
+    // decision, not the effect-card mechanics, which dev/verify-vp6-life-pass.mjs owns).
+    const effectCalls = [];
+    const spawnEffectCard = (name, x, y, z, oversize) => { effectCalls.push({ name, x, y, z, oversize }); };
+    stubUnitSprite.position = { x: 1, y: 2, z: 3 };
+    const play = factory(S, findUnit, buildTheaterCtx, playVerb, playStandeeVerb, bindStandeeCtx, startTweenLoop, spawnEffectCard);
 
     play("hurt", { who: "f1", magnitude: 2 });
     check("B1a. play(\"hurt\",{who:sprite-unit}) routes to playStandeeVerb(\"hit-damage\", ...) — the WIRING LAW proof",
@@ -385,6 +390,10 @@ function extractConst(src, name){
       JSON.stringify(calls.standee));
     check("B1b. a sprite-routed hurt does NOT also fall through to the 3D-figure playVerb path",
       calls.theater.length === 0, JSON.stringify(calls.theater));
+    check("B1b2. VP6 item 5: a successful standee dispatch spawns its hit-effects seam card at the unit's own position",
+      effectCalls.length === 1 && effectCalls[0].name === "hit-damage" && effectCalls[0].x === 1 && effectCalls[0].z === 3,
+      JSON.stringify(effectCalls));
+    effectCalls.length = 0;
 
     calls.standee.length = 0; calls.theater.length = 0;
     play("down", { who: "f1" });
@@ -405,7 +414,7 @@ function extractConst(src, name){
 
     calls.standee.length = 0; calls.theater.length = 0;
     const declineStandeeVerb = (unit, verb, opts) => { calls.standee.push({ unit, verb, opts }); return false; }; // decline
-    const playDecline = factory(S, findUnit, buildTheaterCtx, playVerb, declineStandeeVerb, bindStandeeCtx, startTweenLoop);
+    const playDecline = factory(S, findUnit, buildTheaterCtx, playVerb, declineStandeeVerb, bindStandeeCtx, startTweenLoop, spawnEffectCard);
     playDecline("hurt", { who: "f1" });
     check("B1f. if playStandeeVerb DECLINES (false — e.g. texture not loaded yet), play() falls through to the ordinary playVerb path rather than dropping the animation",
       calls.standee.length === 1 && calls.theater.length === 1 && calls.theater[0].verb === "hurt",

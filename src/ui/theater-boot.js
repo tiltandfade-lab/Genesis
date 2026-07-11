@@ -2892,6 +2892,100 @@ function addGroundingBlob(group, x, z, y, radius){
   return mesh;
 }
 
+/* BEAUTY-WAVE VP5 item 2 — diegetic selection: "the acting unit's chip highlights AND its standee
+   gets a ground-ring glow (reuse the blob-quad channel, accent color)." Same convention as
+   addGroundingBlob just above (a flat circle quad, seated at the floor plane) but a thin RING
+   (inner radius carved out) so it reads as a glow ANNOUNCING the figure rather than a shadow
+   grounding it, and it rides the accent gold rather than near-black. Mounted as a CHILD of the
+   unit's own figure group (not a separate group tracked by world x/z) so it inherits the figure's
+   position/rotation for free and gets swept automatically the instant clearGroup() disposes that
+   figure on the next setUnits() — no separate cleanup bookkeeping needed beyond the one call below
+   that removes the previous ring before adding a new one. */
+const ACTING_RING_MAT = new THREE.MeshBasicMaterial({
+  color: 0xd4af6e, transparent: true, opacity: 0.85, side: THREE.DoubleSide, depthWrite: false
+});
+const ACTING_RING_GEO_CACHE = {};
+function actingRingGeoFor(radius){
+  const key = radius.toFixed(3);
+  if(!ACTING_RING_GEO_CACHE[key]) ACTING_RING_GEO_CACHE[key] = new THREE.RingGeometry(radius * 0.7, radius, 28);
+  return ACTING_RING_GEO_CACHE[key];
+}
+/* setActingUnit(idOrIds) — takes a single unit id OR an array (COMBAT.md's side-based initiative has
+   no single "current actor," only a currently-acting SIDE — the PC is one unit so its turn lights one
+   ring, but the foes' turn can mean several live foes could act, so the caller passes every live id on
+   the acting side; the existing .cmb-active chip class already does the identical "highlight the whole
+   side" thing, this is that same design call applied to standees). id(s)=null/[] clears every ring
+   (between rounds / no fight). Returns the count of rings actually mounted (0 if none resolved). */
+function setActingUnit(idOrIds){
+  (S.actingRingMeshes || []).forEach(function(m){ if(m.parent) m.parent.remove(m); });
+  S.actingRingMeshes = [];
+  const ids = idOrIds == null ? [] : (Array.isArray(idOrIds) ? idOrIds : [idOrIds]);
+  let mounted = 0;
+  ids.forEach(function(id){
+    if(id == null) return;
+    const fig = findUnit(id);
+    if(!fig) return;
+    const mesh = new THREE.Mesh(actingRingGeoFor(0.6), ACTING_RING_MAT);
+    mesh.rotation.x = -Math.PI / 2;
+    // -0.48: above the grounding blob's -0.495 and below the hostility base disc, per the SAME
+    // layering law addGroundingBlob's header documents ("never fighting it for the same plane").
+    mesh.position.set(0, -0.48, 0);
+    fig.add(mesh);
+    S.actingRingMeshes.push(mesh);
+    mounted++;
+  });
+  markDirty();
+  return mounted;
+}
+
+/* BEAUTY-WAVE VP5 item 3 — damage floaters. projectUnit(id) turns a mounted unit's world position
+   into on-screen pixel coordinates (relative to the canvas host), the SAME Vector3.project(camera)
+   math interiorFrustumCheck already uses above, just for one point instead of a room's corners.
+   headHeight defaults to HUMAN_TRUE_HEIGHT-ish (1.1, matching interiorFrustumCheck's own default)
+   so the floater spawns near a standing figure's head, not its feet. */
+function projectUnit(id, headHeight){
+  if(!S.mounted || !S.camera || !S.renderer) return null;
+  const fig = findUnit(id);
+  if(!fig) return null;
+  const h = (typeof headHeight === "number" && isFinite(headHeight)) ? headHeight : 1.1;
+  const world = new THREE.Vector3();
+  fig.getWorldPosition(world);
+  world.y += h;
+  S.camera.updateMatrixWorld();
+  const v = world.clone().project(S.camera);
+  const rect = S.renderer.domElement.getBoundingClientRect();
+  const w = rect.width || S.renderer.domElement.clientWidth || 1;
+  const hgt = rect.height || S.renderer.domElement.clientHeight || 1;
+  const x = (v.x * 0.5 + 0.5) * w;
+  const y = (1 - (v.y * 0.5 + 0.5)) * hgt;
+  const onscreen = v.z < 1 && Math.abs(v.x) <= 1 && Math.abs(v.y) <= 1;
+  return { x, y, onscreen };
+}
+
+/* spawnFloater(id, text, opts) — appends one ephemeral DOM node into S.floaterEl (the persistent
+   overlay div created at mount()/reattach() above, so it survives the host's innerHTML replacement
+   on the NEXT combat re-render same as the canvas does). AMENDED per the VP5 spec's 2c-framing note:
+   "either reproject per-frame while alive, or anchor at spawn and rely on the fast fade; never let a
+   floater drift onto the wrong standee after a camera fit" — this picks anchor-at-spawn (the fade is
+   only 600ms, well inside a single camera-fit beat, so drift risk is negligible and it avoids a
+   per-frame rAF hook keeping a reference to a figure that might get disposed mid-fade). Returns the
+   node (or null if the unit can't be projected — e.g. pre-mount, headless, or off-board). */
+function spawnFloater(id, text, opts){
+  if(!S.floaterEl) return null;
+  const pos = projectUnit(id, opts && opts.headHeight);
+  if(!pos) return null;
+  const el = document.createElement("div");
+  el.className = "theater-floater" + (opts && opts.variant ? (" theater-floater-" + opts.variant) : "");
+  el.style.left = pos.x + "px";
+  el.style.top = pos.y + "px";
+  el.textContent = String(text == null ? "" : text);
+  S.floaterEl.appendChild(el);
+  // fast, deterministic cleanup — no reliance on an animationend listener firing (a re-render that
+  // detaches floaterEl mid-fade must not leak the node or the timer's closure forever).
+  setTimeout(function(){ if(el.parentNode) el.parentNode.removeChild(el); }, 650);
+  return el;
+}
+
 function hashSeed(id){
   let h = 0;
   const s = String(id || "");
@@ -3900,6 +3994,17 @@ function mount(el, opts){
   el.innerHTML = "";
   el.appendChild(renderer.domElement);
   applyPsxCanvasSize(renderer, renderer.domElement, width, height);
+
+  // BEAUTY-WAVE VP5 (docs/BEAUTY-WAVE.md §VP5, item 3) — a persistent DOM overlay for damage
+  // floaters, sibling to the canvas inside the SAME host `el` so it re-parents alongside it via
+  // reattach() below (the host's innerHTML gets replaced wholesale on every combat re-render —
+  // see reattach()'s own header comment — so this div must survive the same way the canvas does,
+  // not be re-created from a template string that would restart/duplicate an in-flight fade).
+  const floaterEl = document.createElement("div");
+  floaterEl.className = "theater-floater-layer";
+  floaterEl.setAttribute("aria-hidden", "true"); // decorative only — the prose twin carries the words
+  el.appendChild(floaterEl);
+  S.floaterEl = floaterEl;
 
   const scene = new THREE.Scene();
   scene.background = new THREE.Color(VOID_BG);
@@ -5344,6 +5449,15 @@ function zoom(dir){
 function reattach(el){
   if(!S.mounted || !S.renderer || !el) return false;
   if(S.renderer.domElement.parentNode !== el) el.appendChild(S.renderer.domElement);
+  // VP5: the floater overlay travels with the canvas — same re-parent, same reasoning (reattach's
+  // own header comment above). Defensive re-create if a pre-VP5 S (or a stub in a headless harness)
+  // never built one.
+  if(!S.floaterEl){
+    S.floaterEl = document.createElement("div");
+    S.floaterEl.className = "theater-floater-layer";
+    S.floaterEl.setAttribute("aria-hidden", "true");
+  }
+  if(S.floaterEl.parentNode !== el) el.appendChild(S.floaterEl);
   S.el = el;
   const w = el.clientWidth || 1, h = el.clientHeight || 1;
   applyPsxCanvasSize(S.renderer, S.renderer.domElement, w, h);
@@ -5593,6 +5707,13 @@ window.Theater.refFigure = {
   build: function(o){ return figureFor(o.archetype, o.seed, o.tint, o.silhouette, o.weapon, o.recipeSlug, null, "foe", null, o.wholeKey); },
   dispose: function(group){ clearGroup(group); }
 };
+
+// BEAUTY-WAVE VP5 — public surface for the battle-UI items 2/3 (ground-ring selection glow, damage
+// floaters). Additive assignments AFTER the window.Theater object-literal above (same placement
+// convention as refFigure just above it) so they aren't clobbered by that literal's own assignment.
+window.Theater.setActingUnit = setActingUnit;
+window.Theater.projectUnit = projectUnit;
+window.Theater.spawnFloater = spawnFloater;
 
 /* UNIT 1 dev A/B toggle: `window.Theater.pixelSkin` (get/set) flips the procedural pixel-skin system
    on/off at runtime, so a visual gate can A/B the textured figures against the pre-Unit-1 flat-color

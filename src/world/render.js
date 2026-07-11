@@ -591,33 +591,99 @@ function theaterStageSync(w,cur){
    over the canvas (no WebGL); pointer-events pass through everywhere except the chips themselves
    (cmbZoneInsert tap-sugar is preserved verbatim). Returns markup only — cmbZoneOccupants/
    cmbClampBand/CMB_BAND_LABEL are the same data path the old grid used, unchanged. */
+/* BEAUTY-WAVE VP5 item 1 (docs/BEAUTY-WAVE.md §VP5) — "get off the stage": this used to build a
+   stacked-card band rail (one plated row per band, each carrying its own occupant chips) pinned
+   top-left. That's replaced by TWO separate, much thinner things: `cmbBandTagsHtml` (small floating
+   text tags at each band's stage edge, no plate/card) and `cmbUnitStripHtml` below (the single slim
+   bottom strip that now carries every combatant's chip, band-agnostic — the strip's job is "who's in
+   this fight," the band tags' job is "how the depth axis reads," and BATTLEMAP's zone grid remains
+   the surface that actually answers "which occupant is in which band" in detail). cmbZoneGridHtml/
+   cmbZoneOccupants (the classic combatPanel's grid) are UNTOUCHED — this function only ever fed the
+   stage overlay, never the classic panel. */
+function cmbBandTagsHtml(bands){
+  if(!bands || !bands.length) return "";
+  const n=bands.length;
+  return bands.map((b,i)=>{
+    // nearest (melee, i=0) pins to the stage's bottom edge, farthest to the top — same depth-axis
+    // mirror the old band rail documented (i=0 -> 100%, i=n-1 -> 0%, evenly spread between).
+    const pct=n>1?Math.round(100-(i/(n-1))*100):100;
+    const bandLbl=CMB_BAND_LABEL[b]||b;
+    return `<span class="stage-band-tag" style="top:${pct}%" data-band="${escHtml(b)}" onclick="cmbZoneInsert('${escHtml(bandLbl)}','C')">${escHtml(bandLbl)}</span>`;
+  }).join("");
+}
 function cmbStageOverlay(w,cur,cm,flashed){
   const grid=cm.grid||{bands:(typeof CM_BANDS!=="undefined"?CM_BANDS:["melee","near","far","out"]),lanes:(typeof CM_LANES!=="undefined"?CM_LANES:["L","C","R"])};
   const bands=grid.bands||[];
+  // INITIATIVE-UI §1: the turn banner rides alongside the band tags at the overlay's top edge — a
+  // sibling wrapper (the tags are absolutely positioned by cmbBandTagsHtml's own inline `top`, so this
+  // wrapper's flow position is independent of them) so the banner's own CSS controls its position.
+  return `<div class="stage-band-tags" aria-hidden="false">${cmbBandTagsHtml(bands)}</div>${cmbTurnBanner(cm)}`;
+}
+/* the bottom unit strip — a single row of ≤48px-tall name+HP-pip chips, ONE per combatant, docked to
+   the stage's bottom edge (genesis.html's .stage-unit-strip: backdrop-blur, 0.75 opacity per the spec
+   literal). Coarse pips only (3-pip fresh/bloodied/down read) — foes never expose a numeric HP (the
+   no-foe-HP-numbers rule, same doctrine cmChipHpBar/cmFoeStateWord already hold elsewhere), the PC's
+   own pips are driven off the same coarse word for one consistent visual grammar across every chip
+   rather than a bar-vs-pips inconsistency. `active` marks the currently-acting SIDE (COMBAT.md's
+   side-based initiative has no single "current actor" — see setActingUnit's own header in
+   theater-boot.js for the identical design call applied to the standee ring) so every chip on that
+   side gets the diegetic highlight together, exactly like the pre-existing cmb-active class already
+   did on the classic grid's chips. */
+function cmbStripPips(word){
+  const n=word==="down"?0:(word==="bloodied"?2:3);
+  let out="";
+  for(let i=0;i<3;i++) out+=`<span class="stage-strip-pip${i<n?" on":""}${word==="down"?" dead":""}"></span>`;
+  return out;
+}
+function cmbStripChip(name,fid,word,active,flash,isPc){
+  return `<span class="stage-strip-chip${isPc?" pc":""}${word==="down"?" down":""}${active?" acting":""}${flash?" cmb-flash":""}" data-fid="${escHtml(fid||"")}">
+    <span class="stage-strip-name">${escHtml(name)}</span>
+    <span class="stage-strip-pips">${cmbStripPips(word)}</span>
+  </span>`;
+}
+function cmbUnitStripHtml(w,cur,cm,flashed){
   const sh=cur&&cur.sheet;
   const allyRows=(typeof companionPartyStrip==="function")?companionPartyStrip(w):[];
-  const scene=cm.scene||{};
-  const hazardZones=(scene.hazardZones||[]).filter(hz=>typeof cmHazardVisible!=="function"||cmHazardVisible(hz));
-  // one row per band, nearest (melee) at the bottom edge of the overlay, farthest at the top — this
-  // mirrors the board's own depth axis (PC's melee range reads as "close to camera").
-  const rows=bands.map(b=>{
-    const lanesInRoom=(grid.lanes||["L","C","R"]);
-    const occ=[].concat(...lanesInRoom.map(lane=>cmbZoneOccupants(cm,b,lane,cur,sh,allyRows,bands,flashed)));
-    const elevAny=lanesInRoom.some(lane=>(typeof cmZoneElev==="function")&&cmZoneElev(cm,b,lane));
-    const hz=hazardZones.find(h=>lanesInRoom.some(lane=>h.zone===(b+":"+lane)));
-    const bandLbl=CMB_BAND_LABEL[b]||b;
-    // empty bands stay in the ruler (the "distance-indicating arena" reads by ALWAYS showing all
-    // bands) but carry NO plate/border of their own — just the thin label, so the overlay stays
-    // near-invisible where nothing occupies it. Only a band with occupants gets the subtle plate.
-    return `<div class="stage-band-row${occ.length?' has-occ':''}" data-band="${b}" onclick="cmbZoneInsert('${escHtml(bandLbl)}','C')">
-      <span class="stage-band-lbl">${escHtml(bandLbl)}${elevAny?' <span class="stage-band-elev" title="elevated">▲</span>':''}${hz?` <span class="stage-band-hazard" title="${escHtml(hz.kind||"hazard")}">☠</span>`:''}</span>
-      ${occ.length?`<span class="stage-band-chips">${occ.join("")}</span>`:""}
-    </div>`;
-  }).join("");
-  // INITIATIVE-UI §1: the turn banner rides alongside the band rail at the overlay's top edge — a
-  // sibling wrapper (not nested inside .stage-band-rail, which is its own column-reverse flex list of
-  // ONLY band rows) so the banner's own CSS controls its position independent of the rail's layout.
-  return `<div class="stage-overlay-top"><div class="stage-band-rail" aria-hidden="false">${rows}</div>${cmbTurnBanner(cm)}</div>`;
+  const pcActive=!!(cm.side==="pc");
+  const chips=[];
+  if(sh){
+    const hpCur=(sh.hpCur==null?sh.hp:sh.hpCur);
+    const word=(hpCur!=null&&hpCur<=0)?"down":((hpCur!=null&&sh.hp&&hpCur<=sh.hp/2)?"bloodied":"fresh");
+    chips.push(cmbStripChip(cur&&cur.name||"you","pc",word,pcActive,!!(flashed&&flashed.has("pc")),true));
+  }
+  (allyRows||[]).forEach(r=>{
+    const word=(r.hp!=null&&r.hp<=0)?"down":"fresh";
+    chips.push(cmbStripChip(r.name,r.fid||r.name,word,pcActive,false,false));
+  });
+  (cm.foes||[]).forEach(f=>{
+    const word=cmFoeStateWord(f);
+    chips.push(cmbStripChip(f.name||"?",f.fid||f.name,word,!pcActive,!!(flashed&&flashed.has(f.fid||f.name)),false));
+  });
+  return `<div class="stage-unit-strip" aria-hidden="false">${chips.join("")}</div>`;
+}
+/* BEAUTY-WAVE VP5 item 2/3 — pushes this render's acting-side selection + any newly-flashed
+   combatants' floater text down into the live Theater instance (no-op, safely, when Theater isn't
+   mounted/available — headless jsdom harnesses stub window.Theater per HANDOFF's own note, and this
+   guards every call). Called once per theaterStageHtml pass, AFTER flashed is computed (so the floater
+   text map GS.cmbFlashDeltas — stamped by cmbDamageFlashed just above — is current for this pass). */
+function cmbSyncTheaterFx(cm,flashed){
+  if(typeof window==="undefined" || !window.Theater) return;
+  const th=window.Theater;
+  if(typeof th.setActingUnit==="function"){
+    const ids=cm.side==="pc" ? ["pc"] : (cm.foes||[]).filter(f=>!f.down&&!f.obliterated).map(f=>f.fid||f.name);
+    th.setActingUnit(ids);
+  }
+  if(flashed && flashed.size && typeof th.spawnFloater==="function"){
+    const deltas=GS.cmbFlashDeltas||{};
+    flashed.forEach(id=>{
+      const text=deltas[id];
+      if(!text) return;
+      let variant="hit";
+      if(id==="pc") variant = text.charAt(0)==="-" ? "hit" : "heal";
+      else if(text==="DOWN"||text==="OBLITERATED") variant="down";
+      th.spawnFloater(id,text,{variant});
+    });
+  }
 }
 /* INITIATIVE-UI §1/§2 (docs/INITIATIVE-UI.md) — the turn banner: a compact plate on the stage overlay
    (top edge, between the band rail and the camera controls; pointer-events:none) reading
@@ -692,7 +758,9 @@ function theaterStageHtml(w,cur){
   // this function no longer stages it at all, to guarantee there is never a duplicate copy.
   const sh=cur&&cur.sheet;
   const flashed=(typeof cmbDamageFlashed==="function")?cmbDamageFlashed(cm):new Set();
+  cmbSyncTheaterFx(cm,flashed); // VP5 items 2/3 — acting-ring + damage-floater side effects (no-op if Theater absent)
   const overlay=cmbStageOverlay(w,cur,cm,flashed);
+  const strip=cmbUnitStripHtml(w,cur,cm,flashed);
   const camControls=cmbStageControls();
   const ds=(sh&&sh.hpCur!=null&&sh.hpCur<=0&&typeof cmDeathSavePips==="function")?cmDeathSavePips(sh):"";
   const conc=(typeof cmConcentrationBadge==="function")?cmConcentrationBadge(sh):"";
@@ -702,7 +770,10 @@ function theaterStageHtml(w,cur){
       <div class="stage-overlay">
         ${camControls}
         ${overlay}
-        <div class="stage-overlay-foot">${ds}${conc?`<div style="margin-top:4px">${conc}</div>`:""}</div>
+        <div class="stage-bottom-row">
+          ${strip}
+          <div class="stage-overlay-foot">${ds}${conc?`<div style="margin-top:4px">${conc}</div>`:""}</div>
+        </div>
       </div>
     </div>`;
 }
@@ -1550,11 +1621,29 @@ function cmbDamageFlashed(cm){
   const prev=GS.cmbLastStates||{};
   const now={};
   const flashed=new Set();
+  // BEAUTY-WAVE VP5 item 3 — alongside the existing coarse-word diff, stash a per-fid FLOATER TEXT
+  // for whatever just flashed: foes stay word-only (no-foe-HP-numbers rule — cmFoeStateWord's own
+  // uppercased word, e.g. "BLOODIED"/"DOWN"), the PC gets its real numeric delta (player-side numbers
+  // are open, per cmAllyChip's own comment on the identical rule). GS.cmbLastPcHpNum is a SECOND
+  // transient field (distinct from cmbLastStates' coarse word) purely so the delta survives a render
+  // pass where the coarse word didn't change but the raw HP did (e.g. 30->28 stays "fresh" both times
+  // but is still a hit worth floating). Read-then-overwrite, same one-shot-per-pass discipline as the
+  // word diff above.
+  const deltas={};
   (cm.foes||[]).forEach(f=>{ const id=f.fid||f.name; const word=cmFoeStateWord(f); now[id]=word;
-    if(prev[id]!=null && prev[id]!==word) flashed.add(id); });
+    if(prev[id]!=null && prev[id]!==word){ flashed.add(id); deltas[id]=word.toUpperCase(); } });
   const pcWord=(cm.pc&&cm.pc.hpCur!=null&&cm.pc.hp)?(cm.pc.hpCur<=0?"down":(cm.pc.hpCur<=cm.pc.hp/2?"bloodied":"fresh")):null;
   if(pcWord!=null){ now.pc=pcWord; if(prev.pc!=null && prev.pc!==pcWord) flashed.add("pc"); }
+  const pcHpNow=cm.pc&&cm.pc.hpCur;
+  const pcHpPrev=GS.cmbLastPcHpNum;
+  if(pcHpNow!=null && pcHpPrev!=null && pcHpNow!==pcHpPrev){
+    flashed.add("pc");
+    const delta=pcHpNow-pcHpPrev;
+    deltas.pc=(delta<0?"":"+")+delta;
+  }
+  if(pcHpNow!=null) GS.cmbLastPcHpNum=pcHpNow;
   GS.cmbLastStates=now;
+  GS.cmbFlashDeltas=deltas;
   return flashed;
 }
 /* A1 diorama toggle — collapsed by default (GS.cmbDioramaOpen undefined/false = closed), flips on

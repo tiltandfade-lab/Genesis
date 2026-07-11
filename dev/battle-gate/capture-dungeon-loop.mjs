@@ -101,7 +101,7 @@ async function startServer() {
   throw new Error(`no usable port: tried ${PORT_CANDIDATES.join(", ")}`);
 }
 
-const SHOT_W = 1600, SHOT_H = 1200;
+const SHOT_W = Number(process.env.BG_SHOT_W) || 1600, SHOT_H = Number(process.env.BG_SHOT_H) || 1200; // BG_SHOT_W/H: VP8 beauty-shot override (1920x1080); default = the standing gate size
 async function launchChrome() {
   const args = ["--headless=new", "--no-sandbox", "--disable-gpu-sandbox", "--use-gl=angle", "--enable-webgl", "--ignore-gpu-blocklist", `--window-size=${SHOT_W},${SHOT_H}`];
   return await puppeteer.launch({ executablePath: CHROME, headless: "new", args, defaultViewport: { width: SHOT_W, height: SHOT_H, deviceScaleFactor: 1 } });

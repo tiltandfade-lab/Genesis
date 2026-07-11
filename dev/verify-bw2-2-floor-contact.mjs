@@ -196,7 +196,7 @@ function ensureThreeShim(){
   // marker file forces a re-write when the shim's own contents are stale, instead of trusting
   // package.json's mere existence as "already complete."
   const postDir = join(base, "addons", "postprocessing");
-  const shimVersion = "bw3-0-postprocessing";
+  const shimVersion = "bw3-post-suite"; // BW3-2/3/6 THE POST SUITE: +UnrealBloomPass +OutputPass (kept in lockstep with dev/verify-theater-sprites.mjs — all shim writers share node_modules/three)
   const versionFile = join(base, ".shim-version");
   if(existsSync(join(base, "package.json")) && existsSync(versionFile) && readFileSync(versionFile, "utf-8").trim() === shimVersion) return;
   mkdirSync(loaderDir, { recursive: true });
@@ -208,6 +208,8 @@ function ensureThreeShim(){
   writeFileSync(join(postDir, "EffectComposer.js"), `export * from "../../../../vendor/three/addons/postprocessing/EffectComposer.js";\n`);
   writeFileSync(join(postDir, "RenderPass.js"), `export * from "../../../../vendor/three/addons/postprocessing/RenderPass.js";\n`);
   writeFileSync(join(postDir, "ShaderPass.js"), `export * from "../../../../vendor/three/addons/postprocessing/ShaderPass.js";\n`);
+  writeFileSync(join(postDir, "UnrealBloomPass.js"), `export * from "../../../../vendor/three/addons/postprocessing/UnrealBloomPass.js";\n`);
+  writeFileSync(join(postDir, "OutputPass.js"), `export * from "../../../../vendor/three/addons/postprocessing/OutputPass.js";\n`);
   writeFileSync(versionFile, shimVersion + "\n");
 }
 function ensureJsdomShim(){

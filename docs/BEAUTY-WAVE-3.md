@@ -48,6 +48,22 @@ cards + extrusion prop faces (the whole cutout family).
 corner (captured, pixel-measured); grade applied (chrome sprite reads cool, fantasy warm);
 no distortion (texel-identical geometry, purity checks stay green); readability floor held.
 
+## BW3-2 / BW3-3 / BW3-6 — BUILT (feat/bw3-pp-post-suite, 2026-07-11)
+
+THE POST SUITE landed as ONE consolidated unit (they share the composer pass chain). In
+`src/ui/theater-boot.js`, mounted INTERIOR-ONLY onto BW3-0's EffectComposer seam, chain order
+`RenderPass -> DoF -> Bloom -> Grade -> OutputPass(sRGB)`; torn off on the flat tabletop (`setBoard`),
+rebuilt on `setInteriorBoard`. (1) DoF = a screen-space tilt-shift ShaderPass (12-tap disc CoC ramping
+from a sharp focal band on the projected `boardCenter` — tracks beat-vs-room), max CoC capped. (2)
+Bloom = threshold-gated `UnrealBloomPass` at half-res (emissive gate holds: flame/cone/glow-seam bloom,
+lit-albedo sprites do not — negative control asserted). (3) Grade = a per-realm filmic ShaderPass
+(gentle contrast/saturation + kit-authored `gradeTint`/`gradeStrength` wash + soft vignette), graded in
+a perceptual space over the linear buffer with `OutputPass` doing the final sRGB encode. All dials are
+named consts at the top of the post-suite block (the taste-iterate surface). Vendored
+`UnrealBloomPass`/`OutputPass` + `LuminosityHighPassShader`/`OutputShader` (pinned three@0.166.0). Gate:
+`dev/battle-gate/capture-post-suite.mjs` (per-effect A/B + focal-tracking / negative-control / grade-
+determinism / fps asserts). fps ~125-165 with all passes live.
+
 ## BW3-2 — TILT-SHIFT DoF (the HD-2D signature)
 
 Subtle depth-of-field: sharp focal plane on the action/focus room, soft blur ramping at

@@ -95,7 +95,13 @@ existing 282+ interior checks green. READ vs the mock.
 
 Per both mocks: wall faces show pixel-art block courses; floors show large stone tiles with
 grout lines; texel density matches the sprite corpus (≈ 36px/ft at capture scale).
-1. Upgrade REALM_MATERIALS' procedural CanvasTextures from grain-tint to REAL courses:
+1. **GENERATED-FIRST (Adam 2026-07-10 night, off the chrome+shop mocks — "all the rich
+   textures on every surface... utilize codex"):** the primary texture source is codex-generated
+   tileable sheets per dev/model-qa/mock-gen/PACKET-02-TEXTURES.md (18 generations: wall/floor/
+   floor-alt/trim/crate-faces × 3 flagships + shared) — fold gate: wrap-shift edge diff
+   (tileability), loose palette bound, contrast cap; fold to assets/textures/ at engine texel
+   (integer-ratio). The procedural painter below remains the FALLBACK (non-flagship realms +
+   until arrivals land). Upgrade the procedural CanvasTextures from grain-tint to REAL courses:
    stone-course (running bond, per-block value jitter ±4%, thin dark grout), floor tile
    (2.5ft tiles, grout + per-tile jitter), plus the existing material kinds (plank/metal)
    getting the same treatment. Nearest-filtered, seeded per walkId (determinism law).
@@ -122,7 +128,15 @@ near-black, fog hugs the void edge.
 capture (rim ≤ 25%, pool peak ≥ 70%); determinism; READ vs mocks — the frame should feel like
 the mock's darkness without losing readability.
 
-## BW2-5 — SILHOUETTE UPGRADES (arches, parapet, dais)
+## BW2-5 — SILHOUETTE UPGRADES (arches, parapet, dais, THE COLUMN DEMOTION)
+
+**COLUMN DEMOTION (Adam 2026-07-10 night: "why are there so many uniform square columns?"):**
+per the chrome mock, mid-room verticality is FURNITURE, not columns — crates, cabinets,
+machines, shelves as cover-height prism assemblies whose faces come from PACKET-02's
+crate-face sheets (realm-true, glow seams on chrome). The dressing roll's `blocker` tag maps
+to furniture-class volumes; bare square columns become a RARE accent (≤1 per room, and varied:
+round/tapered/broken profiles when they do appear). Combat cover semantics unchanged — the
+volume is the cover, whatever it looks like.
 
 Per `mock-01-fantasy-explore.png` (door arches with real depth) + `mock-01-finale.png`
 (parapet rims, dais with steps):

@@ -4257,25 +4257,41 @@ function mountLightProp(data, cx, cz){
 // already established. The marker mesh's OWN opacity is nudged by the same delta*0.5 so the visible
 // flame-quad pulses IN SYNC with its light's intensity swing, never independently randomized.
 const INTERIOR_LIGHT_FLICKER_AMPLITUDE = 0.06;
+// BW3-4 addendum: the per-tick nudge math pulled out to a PURE function (explicit args, no S/closure
+// reads) — same "pure step, thin scheduler wraps it" split VP6's own mote drift already keeps
+// (startMoteDrift's rAF loop vs the per-mote math it runs). Lets a deterministic fake-clock harness
+// drive one tick directly (dev/verify-bw3-4-light-shafts.mjs) without needing S.mounted/a live
+// setInterval, and lets the light-CONE card (this unit) ride the identical delta the marker already
+// does — never a second independently-randomized swing (that would desync the shaft from its own
+// marker/light, the exact "flicker sync" this unit's spec calls for).
+function lightFlickerStep(pointLights, bases, interiorTargets, amplitude){
+  (pointLights || []).forEach((l, i) => {
+    const base = bases[i] != null ? bases[i] : l.intensity;
+    l.intensity = Math.max(0.05, base + (Math.random() * 2 - 1) * amplitude);
+  });
+  (interiorTargets || []).forEach((t) => {
+    const delta = (Math.random() * 2 - 1) * t.amplitude;
+    t.pl.intensity = Math.max(0.05, t.baseIntensity + delta);
+    if(t.marker && t.marker.material){
+      t.marker.material.opacity = Math.max(0.2, Math.min(1, t.baseOpacity + delta * 0.5));
+    }
+    // BW3-4: the light-cone card rides the SAME delta*0.5 swing as the marker above (its own base
+    // opacity is much lower — see ITR_LIGHT_CONE_OPACITY — so this is a proportional nudge off that
+    // lower base, never a re-rolled random of its own); floor-clamped just above zero rather than the
+    // marker's 0.2 (a near-invisible shaft at the bottom of a flicker dip is fine, a near-invisible
+    // marker quad reads as a snuffed-out flame — the two clamps intentionally differ).
+    if(t.cone && t.cone.material){
+      t.cone.material.opacity = Math.max(0.05, Math.min(1, t.baseConeOpacity + delta * 0.5));
+    }
+  });
+}
 function startLightFlicker(amplitude, interiorTargets){
   stopLightFlicker();
   const bases = S.pointLights.map(l => l.intensity);
   S.interiorFlickerTargets = interiorTargets || [];
   S.flickerRaf = setInterval(() => {
     if(!S.mounted){ stopLightFlicker(); return; }
-    if(S.pointLights.length){
-      S.pointLights.forEach((l, i) => {
-        const base = bases[i] != null ? bases[i] : l.intensity;
-        l.intensity = Math.max(0.05, base + (Math.random() * 2 - 1) * amplitude);
-      });
-    }
-    (S.interiorFlickerTargets || []).forEach((t) => {
-      const delta = (Math.random() * 2 - 1) * t.amplitude;
-      t.pl.intensity = Math.max(0.05, t.baseIntensity + delta);
-      if(t.marker && t.marker.material){
-        t.marker.material.opacity = Math.max(0.2, Math.min(1, t.baseOpacity + delta * 0.5));
-      }
-    });
+    lightFlickerStep(S.pointLights, bases, S.interiorFlickerTargets, amplitude);
     if(!S.pointLights.length && !(S.interiorFlickerTargets || []).length){ stopLightFlicker(); return; }
     markDirty();
   }, 480); // ~2x/sec per §2's own cadence note
@@ -5349,6 +5365,72 @@ function interiorBuildLightCard(slug){
   return g;
 }
 
+// BEAUTY-WAVE-3.md BW3-4 — LIGHT SHAFTS: the classic cheap fake-volumetric "god ray" — a single
+// camera-yaw-facing gradient-cone billboard per light, apex at the flame/lamp point, widening
+// DOWNWARD to the room's own floor (interiorFloorTopAt — the derived law, never a bare -0.5 plane),
+// bridging the glow-disc marker to the floor pool the mock (mock-01-fantasy-explore.png) reads as one
+// warm shaft. Cheap quads only: one PlaneGeometry + one CanvasTexture, additive+depthWrite:false (never
+// occludes — the same "additive glow" family the glow disc/light card already are), no ray-marching,
+// no post pass (BW3-0's composer seam is a sibling unit — this stays independent of it, same MeshBasic
+// family as everything else in this render).
+const ITR_LIGHT_CONE_WIDTH_RATIO = 0.55; // base (floor) width as a fraction of the apex->floor height
+const ITR_LIGHT_CONE_MIN_HEIGHT = 0.6;   // guards a degenerate sliver when a light sits almost on the floor
+const ITR_LIGHT_CONE_OPACITY = { lamp: 0.22, torch: 0.3 }; // a whisper — this is atmosphere, not a second light source
+let INTERIOR_CONE_TEXTURE = null;
+// a triangular alpha gradient painted onto a plain rectangle (the fake-cone trick: the QUAD stays a
+// simple billboard, the CONE SHAPE lives entirely in the texture's alpha) — apex at canvas top (y=0,
+// centered), base spanning most of the canvas width at the bottom; a vertical gradient additionally
+// fades the whole shape toward transparent by the floor so the shaft reads as dissipating light, not a
+// hard-edged wedge.
+function interiorConeTexture(){
+  if(INTERIOR_CONE_TEXTURE) return INTERIOR_CONE_TEXTURE;
+  const w = 128, h = 256;
+  const cv = document.createElement("canvas"); cv.width = w; cv.height = h;
+  const ctx = cv.getContext("2d");
+  ctx.clearRect(0, 0, w, h);
+  ctx.beginPath();
+  ctx.moveTo(w / 2, 0);    // apex — the flame/lamp point
+  ctx.lineTo(w * 0.14, h); // floor-pool left edge
+  ctx.lineTo(w * 0.86, h); // floor-pool right edge
+  ctx.closePath();
+  const g = ctx.createLinearGradient(0, 0, 0, h);
+  g.addColorStop(0, "rgba(255,255,255,0.95)");
+  g.addColorStop(0.5, "rgba(255,255,255,0.4)");
+  g.addColorStop(1, "rgba(255,255,255,0)");
+  ctx.fillStyle = g;
+  ctx.fill();
+  const tex = new THREE.CanvasTexture(cv);
+  tex.minFilter = THREE.LinearFilter; tex.magFilter = THREE.LinearFilter; // a soft gradient — never nearest
+  INTERIOR_CONE_TEXTURE = tex;
+  return tex;
+}
+// `height` is the apex->floor world-unit span (interiorBuildLights computes this off the light's own
+// y and interiorFloorTopAt, below) — returns {group, mesh} so the flicker channel can pulse
+// mesh.material.opacity in sync with its light, same contract as interiorBuildGlowDisc.
+function interiorBuildLightCone(light, height){
+  const h = Math.max(ITR_LIGHT_CONE_MIN_HEIGHT, height);
+  const w = h * ITR_LIGHT_CONE_WIDTH_RATIO;
+  const geo = new THREE.PlaneGeometry(w, h);
+  const baseOpacity = ITR_LIGHT_CONE_OPACITY[light.kind] != null ? ITR_LIGHT_CONE_OPACITY[light.kind] : ITR_LIGHT_CONE_OPACITY.torch;
+  const mat = new THREE.MeshBasicMaterial({
+    map: interiorConeTexture(), color: light.color || "#ffbb66",
+    transparent: true, opacity: baseOpacity, blending: THREE.AdditiveBlending,
+    depthWrite: false, side: THREE.DoubleSide
+  });
+  mat.userData.psxExempt = true;
+  const mesh = new THREE.Mesh(geo, mat);
+  // the texture's apex (canvas y=0) maps to the plane's own top edge — shifting the mesh DOWN by
+  // half its height puts that top edge at the group's local origin (where the group gets positioned
+  // to the light's own apex point, below), so the cone's wide base descends from there toward the
+  // floor, never the reverse.
+  mesh.position.y = -h / 2;
+  mesh.castShadow = false; mesh.receiveShadow = false; // a light's own volumetric shaft never shadows itself
+  const group = new THREE.Group();
+  group.add(mesh);
+  group.userData.sprite = true; // camera-yaw-facing billboard, same convention as the glow disc/light card
+  return { group, mesh };
+}
+
 // data.lights -> {group, casters} — builds one THREE.PointLight + one emissive marker mesh per light
 // entry (src/ui/theater-interior.js's interiorBuildBoard emits the plain {x,z,y,color,intensity,kind,
 // roomSegNum} data; this is the ONE place that becomes real THREE objects, same "data in theater-
@@ -5393,6 +5475,16 @@ function interiorBuildLights(lights, cx, cz, realmId, floorTopMap){
     glow.group.position.copy(pl.position);
     if(light.kind !== "lamp") glow.group.position.y -= 0.15; // torch flame sits slightly below its light point (on the sconce)
     group.add(glow.group);
+    // BW3-4 — LIGHT SHAFTS: one cone per light source, apex at the SAME point as the glow disc just
+    // above (so shaft and marker read as one coherent light) — the earlier interiorFloorTopAt call
+    // this unit reads is the SAME derived floor law the light-card branch below already uses, never a
+    // second/parallel floor formula. Its base reaches THIS light's own floor top exactly (the mock's
+    // shaft bridges flame->floor, not flame->some fixed generic drop).
+    const floorTopAtLight = interiorFloorTopAt(floorTopMap, light.x || 0, light.z || 0);
+    const coneHeight = glow.group.position.y - floorTopAtLight;
+    const cone = interiorBuildLightCone(light, coneHeight);
+    cone.group.position.copy(glow.group.position);
+    group.add(cone.group);
     if(cardSlug){
       const card = interiorBuildLightCard(cardSlug);
       const floorTop = interiorFloorTopAt(floorTopMap, light.x || 0, light.z || 0);
@@ -5400,9 +5492,10 @@ function interiorBuildLights(lights, cx, cz, realmId, floorTopMap){
       group.add(card);
     }
     flickerTargets.push({
-      pl, marker: glow.mesh,
+      pl, marker: glow.mesh, cone: cone.mesh,
       baseIntensity: pl.intensity,
       baseOpacity: glow.mesh.material ? glow.mesh.material.opacity : 0.85,
+      baseConeOpacity: cone.mesh.material ? cone.mesh.material.opacity : ITR_LIGHT_CONE_OPACITY.torch,
       amplitude: INTERIOR_LIGHT_FLICKER_AMPLITUDE
     });
   });
@@ -5445,13 +5538,39 @@ function interiorMoteKindFor(lights){
   return "ember";
 }
 const MOTE_TINT = { ember: 0xffb066, dust: 0xcfc9a8 };
-function interiorBuildMotes(seedStr, bounds, kind){
+// BW3-4 — MOTE COUPLING: a room's dust biases toward its own light pools (the mock's warm shaft reads
+// as dust visible IN the light, not scattered evenly through a dark room) — MOTE_POOL_BIAS_FRACTION of
+// spawns land within MOTE_POOL_RADIUS of a (seed-picked, deterministic) light center; the rest spawn
+// uniformly across the room exactly like pre-unit VP6 did. A lightless room (no `lights` arg, or an
+// empty one) degrades to that pre-unit uniform behavior byte-for-byte — see the pools.length guard
+// below, and dev/verify-bw3-4-light-shafts.mjs's own regression check against the pre-unit call shape.
+const MOTE_POOL_BIAS_FRACTION = 0.65;
+const MOTE_POOL_RADIUS = 1.8;
+function interiorBuildMotes(seedStr, bounds, kind, lights, cx, cz){
   const group = new THREE.Group();
   const b = bounds || { minX: 0, maxX: 0, minZ: 0, maxZ: 0 };
+  // BW3-4 COORDINATE FIX: `bounds` (data.bounds) is the board's RAW, pre-origin-shift footprint —
+  // every OTHER piece of interior geometry (floor/wall/light/piece meshes, setInteriorBoard's own
+  // convention throughout this file) mounts at (rawX - cx, rawZ - cz), cx/cz being the camera-fit
+  // rect's own center. The pre-BW3-4 call site here passed raw bounds straight through with NO shift
+  // at all, so the mote field silently floated at a (+cx,+cz) offset from the room it was meant to
+  // dust whenever cx/cz != 0 (any room not centered on the whole-board origin — i.e. almost always on
+  // a real multi-room plan) — invisible or drifting over the WRONG room entirely. Fixed here (this
+  // unit's own pool-bias math needs the SAME coordinate space as `lights` to mean anything: a "bias
+  // toward the pool" that's itself rendered in the wrong place doesn't read as coupling at all).
+  // cx/cz default to 0 so a caller that still omits them (the pre-unit 3-arg call shape) is a clean
+  // no-op shift, byte-identical to the old behavior.
+  const shiftX = cx || 0, shiftZ = cz || 0;
+  const minX = b.minX - shiftX, maxX = b.maxX - shiftX, minZ = b.minZ - shiftZ, maxZ = b.maxZ - shiftZ;
   const rng = moteRng(moteHash32(seedStr));
   const count = MOTE_COUNT_MIN + Math.floor(rng() * (MOTE_COUNT_MAX - MOTE_COUNT_MIN + 1));
   const color = MOTE_TINT[kind] || MOTE_TINT.ember;
   const yBottom = -0.2, yTop = 2.2; // a modest drift band above the floor, well under wall-height ceilings
+  // shifted pool centers — same coordinate space as minX/maxX/minZ/maxZ above (raw light x/z, same
+  // shift applied). An absent/empty `lights` list yields an empty pools array, which the per-mote loop
+  // below treats identically to "no coupling" (the pre-unit uniform spawn).
+  const pools = (lights || []).map((l) => ({ x: (l.x || 0) - shiftX, z: (l.z || 0) - shiftZ }))
+    .filter((p) => Number.isFinite(p.x) && Number.isFinite(p.z));
   for(let i = 0; i < count; i++){
     const size = MOTE_SIZE_MIN + rng() * (MOTE_SIZE_MAX - MOTE_SIZE_MIN);
     const geo = new THREE.PlaneGeometry(size, size);
@@ -5460,8 +5579,21 @@ function interiorBuildMotes(seedStr, bounds, kind){
       depthWrite: false, side: THREE.DoubleSide
     });
     const mesh = new THREE.Mesh(geo, mat);
-    const x = b.minX + rng() * Math.max(0.01, b.maxX - b.minX);
-    const z = b.minZ + rng() * Math.max(0.01, b.maxZ - b.minZ);
+    let x, z;
+    // MOTE COUPLING: pools.length is the ONLY gate — a lightless room never draws the extra rng() call
+    // below, so its rng SEQUENCE (and therefore every downstream x/z/y/size/speed draw) stays exactly
+    // what pre-unit interiorBuildMotes produced for the same seed (short-circuit && never evaluates
+    // the right side when pools.length is 0).
+    if(pools.length && rng() < MOTE_POOL_BIAS_FRACTION){
+      const pool = pools[Math.floor(rng() * pools.length)];
+      const angle = rng() * Math.PI * 2;
+      const r = rng() * MOTE_POOL_RADIUS;
+      x = Math.min(maxX, Math.max(minX, pool.x + Math.cos(angle) * r));
+      z = Math.min(maxZ, Math.max(minZ, pool.z + Math.sin(angle) * r));
+    } else {
+      x = minX + rng() * Math.max(0.01, maxX - minX);
+      z = minZ + rng() * Math.max(0.01, maxZ - minZ);
+    }
     const y = yBottom + rng() * (yTop - yBottom);
     mesh.position.set(x, y, z);
     mesh.userData.motePiece = true;
@@ -6552,9 +6684,13 @@ function setInteriorBoard(data){
 
   // BEAUTY-WAVE.md VP6 item 3 — ambient motes, seeded off this board's own focus rect so re-rendering
   // the SAME board data yields the SAME mote field (never re-rolled every frame).
+  // BW3-4 MOTE COUPLING: data.lights + cx/cz now ride along so interiorBuildMotes can (a) bias spawns
+  // toward the room's own light pools and (b) mount the whole field in the SAME shifted coordinate
+  // space every other piece of interior geometry already uses (see that function's own COORDINATE FIX
+  // comment — the pre-unit call passed raw `b` with no shift at all).
   stopMoteDrift();
   const moteSeed = "motes:" + (data.realmId || env) + ":" + JSON.stringify(fit);
-  const moteGroup = interiorBuildMotes(moteSeed, b, interiorMoteKindFor(data.lights));
+  const moteGroup = interiorBuildMotes(moteSeed, b, interiorMoteKindFor(data.lights), data.lights, cx, cz);
   S.interiorGroup.add(moteGroup);
   S.moteGroup = moteGroup;
   startMoteDrift();
@@ -7618,3 +7754,19 @@ window.Theater._updateSpriteBillboardYawForTest = function(){ updateSpriteBillbo
 // touches the ONE mesh it's handed) without re-deriving either from scratch.
 window.Theater._kilterForTest = function(seedKey){ return kilterFor(seedKey); };
 window.Theater._setBaseGlowForTest = function(mesh, glowing){ return setBaseGlow(mesh, glowing); };
+// BW3-4 — TEST-ONLY SEAMS: same "expose the pure builder, don't require a live mount()" convention as
+// _interiorBuildPiecesForTest above — dev/verify-bw3-4-light-shafts.mjs drives these directly (no
+// WebGL context needed; none of the four touch S.renderer).
+window.Theater._interiorBuildLightsForTest = function(lights, cx, cz, realmId, floorTopMap){
+  return interiorBuildLights(lights, cx, cz, realmId, floorTopMap);
+};
+window.Theater._interiorBuildMotesForTest = function(seedStr, bounds, kind, lights, cx, cz){
+  return interiorBuildMotes(seedStr, bounds, kind, lights, cx, cz);
+};
+window.Theater._interiorBuildLightConeForTest = function(light, height){ return interiorBuildLightCone(light, height); };
+// runs ONE flicker tick synchronously against caller-supplied stand-ins (never S.pointLights/
+// S.interiorFlickerTargets) — a deterministic fake-clock harness drives Math.random itself and reads
+// the result back, rather than racing startLightFlicker's real 480ms setInterval.
+window.Theater._lightFlickerStepForTest = function(pointLights, bases, interiorTargets, amplitude){
+  return lightFlickerStep(pointLights, bases, interiorTargets, amplitude);
+};

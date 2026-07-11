@@ -117,11 +117,13 @@ import { resetGeom as wholeObjectResetGeom, getBuffers as wholeObjectGetBuffers 
 
 /* ============================================================================
    T1.5 tunables. Boolean constants gate the STRETCH items (§ dither / vertex-snap) so a later pass
-   (G9) can flip them without touching call sites — both default OFF (attempted only after the
-   mandatory items are green, per the orchestrator's build order; landed/abandoned status reported
-   at the end of the build). */
-const PSX_DITHER_ENABLED = true;       // stretch: ordered-dither via onBeforeCompile fragment injection
-const PSX_VERTEX_SNAP_ENABLED = true;  // stretch: clip-space vertex quantization via vertex injection
+   (G9) can flip them without touching call sites. BEAUTY-WAVE-2 BW2-0 (Adam 2026-07-10 night,
+   mid-flight ruling: "PS1 is retired as a rendering style everywhere") — both default OFF game-wide
+   now, tabletop included (previously true on the tabletop path; the interior channel's own
+   WORLD_PSX_ENABLED, below, was already ruled off at VP0). Flags stay functional (a future pass can
+   still flip either independently) — only the shipped default changed. */
+const PSX_DITHER_ENABLED = false;      // stretch: ordered-dither via onBeforeCompile fragment injection
+const PSX_VERTEX_SNAP_ENABLED = false; // stretch: clip-space vertex quantization via vertex injection
 const PSX_VERTEX_SNAP_GRID = 96;       // clip-space quantization steps per axis (higher = subtler snap)
 const PSX_DITHER_AMPLITUDE = 48.0;     // G9 tune 4: Bayer threshold divisor (DITHER_GLSL below) — was
                                         // 32.0 (a 1/32 nudge), which mushed the dark end into murk;
@@ -2531,8 +2533,15 @@ function spriteTextureFor(slug){
   textureLoader.load(
     "assets/sprites/" + slug + ".png",
     function(tex){
+      // BEAUTY-WAVE-2 BW2-0: magFilter stays Nearest (crisp when magnified — the pixel-art law, a
+      // creature sprite viewed close must show its authored texel grid, not smoothed mush). minFilter
+      // becomes Linear (was Nearest) — a billboard plane shrinks as it recedes/rotates, and
+      // Nearest-minification is what actually produced the "mode-7" shimmer/warp (nearest-picks a
+      // single aliasing texel per screen pixel instead of blending the covered footprint); Linear
+      // minification kills that without needing mipmaps (NPOT-safe — generateMipmaps stays false,
+      // Linear minFilter doesn't require them, only NearestMipmap*/LinearMipmap* variants do).
       tex.magFilter = THREE.NearestFilter;
-      tex.minFilter = THREE.NearestFilter;
+      tex.minFilter = THREE.LinearFilter;
       tex.generateMipmaps = false;
       SPRITE_TEXTURE_CACHE[slug] = tex;
       if(S.mounted && S.lastUnits){
@@ -3198,9 +3207,12 @@ function createTheaterState(){
     zoomBiasBandCount: null, // last band-count shape the small-board bias was computed against (setBoard)
     env: null,           // last board's env key — drives void/fog color
     textures: {},         // semantic key -> loaded+cached THREE.Texture (setTextures)
-    psxEnabled: true,     // T1.5 preview-only toggle (dev/theater-preview.html's "PSX/clean" button);
-                           // the shipped default is always PSX ON — this only exists so the visual
-                           // gate can A/B the grit pass against the T1 clean baseline in one click.
+    psxEnabled: false,    // BEAUTY-WAVE-2 BW2-0 (Adam 2026-07-10 night, mid-flight ruling): PS1 is
+                           // RETIRED as a rendering style EVERYWHERE — the shipped default is now
+                           // CLEAN (full-res, image-rendering:auto) game-wide, tabletop included.
+                           // The T1.5 preview-only toggle (dev/theater-preview.html's "PSX/clean"
+                           // button, mount()'s opts.psx escape hatch below) still flips this true for
+                           // a dev/nostalgia look — it just no longer starts there.
     // T3 (theater-verbs, §4): fxGroup holds every verb-spawned FX primitive (glyphs, elemental
     // bursts, the absurdity rift) — swept by clearGroup exactly like tiles/props/units on the next
     // setBoard/setUnits/retire, so a verb never leaks geometry across a re-render. tweens is the
@@ -3940,13 +3952,21 @@ function tileMaterialsFor(t, topColorCache, sideColorCache, colorFor){
   return [sideMat, sideMat, topMat, sideMat, sideMat, sideMat];
 }
 
-/* T1.5 PSX low-res: sizes the renderer's DRAWING BUFFER to PSX_RES_SCALE of the element's CSS box,
-   then stretches the canvas back up via CSS width/height + `image-rendering:pixelated` (set once at
-   mount, never re-set per frame). `renderer.setSize(w, h, false)` — the `false` updateStyle arg is
-   the whole trick: it sizes the drawing buffer to the LOW w/h without also writing that low size back
-   onto the canvas's CSS box, so the CSS block below is what actually controls the on-screen size. */
+/* BEAUTY-WAVE-2 BW2-0 (THE CRISP CHANNEL): sizes the renderer's DRAWING BUFFER. Two modes, chosen by
+   S.psxEnabled (module state; false by default everywhere — mount()'s opts.psx escape hatch is the
+   only thing that ever flips it true, a dev/nostalgia toggle, never the shipped default):
+     - CLEAN (psxEnabled false, the default): drawing buffer = CSS box x min(devicePixelRatio, 2) — a
+       normal crisp HiDPI-aware canvas, `image-rendering: auto`. The dpr cap keeps a 3x Retina display
+       from tripling the render cost for no visible gain past 2x.
+     - RETRO (psxEnabled true, opt-in only): drawing buffer = CSS box x PSX_RES_SCALE (1/3) — the
+       original T1.5 low-res-then-CSS-stretch trick, `image-rendering: pixelated`. This is the ONLY
+       place that still produces the low-res squeeze; nothing else in the file downsamples the buffer.
+   `renderer.setSize(w, h, false)` — the `false` updateStyle arg is the whole trick either way: it
+   sizes the drawing buffer to w/h without also writing that size back onto the canvas's CSS box, so
+   the CSS block below is what actually controls the on-screen size. */
 function applyPsxCanvasSize(renderer, canvas, cssW, cssH){
-  const scale = S.psxEnabled ? PSX_RES_SCALE : 1;
+  const dprCap = Math.min((typeof window !== "undefined" && window.devicePixelRatio) || 1, 2);
+  const scale = S.psxEnabled ? PSX_RES_SCALE : dprCap;
   const drawW = Math.max(1, Math.round(cssW * scale));
   const drawH = Math.max(1, Math.round(cssH * scale));
   renderer.setSize(drawW, drawH, false);
@@ -4151,7 +4171,12 @@ function mount(el, opts){
                                      // already-loaded/loading cache across the retire()->fresh-state reset.
   S = createTheaterState();
   if(priorTextures) S.textures = priorTextures;
-  if(opts && opts.psx === false) S.psxEnabled = false; // preview-only escape hatch, default stays ON
+  // BEAUTY-WAVE-2 BW2-0: default is now CLEAN (S.psxEnabled false, createTheaterState's own default),
+  // so the escape hatch is symmetric — `opts.psx === true` is the dev/nostalgia toggle that turns the
+  // retro low-res buffer ON; `opts.psx === false` is a no-op today (kept so any existing caller that
+  // still explicitly passes `psx:false` degrades to the identical byte-for-byte clean behavior it
+  // already got, never a silent regression to worry about at either call site).
+  if(opts && typeof opts.psx === "boolean") S.psxEnabled = opts.psx;
 
   const width = el.clientWidth || 480;
   const height = el.clientHeight || Math.round(width * (9 / 16));
@@ -6009,6 +6034,61 @@ window.Theater.interiorWorldPsxAudit = function(){
       if(obj.material.userData.psxSnapResolved) audit.snapOnCount++;
     }
   });
+  return audit;
+};
+
+// BEAUTY-WAVE-2 BW2-0 (THE CRISP CHANNEL) — harness-facing read-only diagnostics, same family as the
+// audits just above. canvasBufferInfo() exposes the live renderer's actual DRAWING BUFFER size next to
+// the canvas's CSS box (the "1/3 squeeze" this unit's whole diagnosis is about lives entirely in the
+// gap between these two numbers — a capture rig can assert `drawWidth === cssWidth` etc. without
+// needing to duplicate applyPsxCanvasSize's own math). spriteFilterAudit() scans the CURRENTLY mounted
+// scene(s) for billboard sprite materials (userData.sprite on the group, same tag buildSpriteBillboardMesh
+// sets — see that function's own header) and reports each one's live texture magFilter/minFilter, so a
+// harness can assert "mag Nearest, min Linear" against the REAL THREE.Texture objects in the scene
+// graph rather than re-deriving the filter law from source text alone.
+// measureRenderFps(sampleCount) — the loop-gate's own fps evidence (BW2-0 item 3: "full-res render
+// ... must hold >= 30fps"). render-on-demand (this file's own header: "nothing repaints unless
+// setBoard/... markDirty") means the app never runs a steady-state RAF loop to sample from, so this
+// directly times `sampleCount` back-to-back S.renderer.render() calls against the CURRENTLY mounted
+// scene/camera (whatever board/units/pieces a caller already built) and reports the wall-clock cost as
+// fps — the honest proxy for "can this scene sustain >=30fps if it needed to render every frame",
+// exercised at the REAL full-res drawing-buffer size applyPsxCanvasSize just set. Returns null pre-mount.
+window.Theater.measureRenderFps = function(sampleCount){
+  if(!S.mounted || !S.renderer || !S.scene || !S.camera) return null;
+  const n = Math.max(1, sampleCount || 60);
+  const t0 = (typeof performance !== "undefined" ? performance.now() : Date.now());
+  for(let i = 0; i < n; i++) S.renderer.render(S.scene, S.camera);
+  const t1 = (typeof performance !== "undefined" ? performance.now() : Date.now());
+  const elapsedMs = Math.max(1e-6, t1 - t0);
+  return { samples: n, elapsedMs, fps: (n * 1000) / elapsedMs };
+};
+window.Theater.canvasBufferInfo = function(){
+  if(!S.mounted || !S.renderer || !S.el) return null;
+  const canvas = S.renderer.domElement;
+  return {
+    drawWidth: canvas.width, drawHeight: canvas.height,
+    cssWidth: S.el.clientWidth, cssHeight: S.el.clientHeight,
+    psxEnabled: !!S.psxEnabled,
+  };
+};
+window.Theater.spriteFilterAudit = function(){
+  const audit = { checked: 0, magNearestCount: 0, minLinearCount: 0, minNearestCount: 0 };
+  const scanGroup = (group) => {
+    if(!group) return;
+    group.traverse((obj) => {
+      if(obj.userData && obj.userData.sprite && obj.userData.spriteBillboardMesh){
+        const mat = obj.userData.spriteBillboardMesh.material;
+        const tex = mat && mat.map;
+        if(!tex) return;
+        audit.checked++;
+        if(tex.magFilter === THREE.NearestFilter) audit.magNearestCount++;
+        if(tex.minFilter === THREE.LinearFilter) audit.minLinearCount++;
+        if(tex.minFilter === THREE.NearestFilter) audit.minNearestCount++;
+      }
+    });
+  };
+  scanGroup(S.unitGroup);
+  scanGroup(S.interiorGroup);
   return audit;
 };
 

@@ -481,6 +481,35 @@ async function main() {
       }
 
       await sleep(400);
+
+      // BEAUTY-WAVE-2 BW2-0 (THE CRISP CHANNEL) evidence: real live-browser readings off the
+      // CURRENTLY mounted scene (real WebGL, real textures, real >=1 standee count) via the three
+      // test-only accessors this unit added to theater-boot.js — not a synthetic vm re-derivation,
+      // the actual mounted render. canvasBufferInfo proves the drawing buffer == CSS x min(dpr,2) at
+      // FULL res (no 1/3 squeeze in production); spriteFilterAudit proves every live billboard's
+      // texture is mag=Nearest/min=Linear; measureRenderFps proves the full-res render still clears
+      // the >=30fps bar with real instanced kits + pieces on stage (BW2-0 item 3).
+      const bw2 = await page.evaluate(() => ({
+        buffer: window.Theater.canvasBufferInfo(),
+        spriteFilters: window.Theater.spriteFilterAudit(),
+        fps: window.Theater.measureRenderFps(60),
+      }));
+      iterFindings.bw2CrispChannel = bw2;
+      if (bw2.buffer && bw2.buffer.drawWidth !== bw2.buffer.cssWidth) {
+        findings.breaks.push({ loopIndex, where: "bw2-buffer", detail: `drawWidth ${bw2.buffer.drawWidth} != cssWidth ${bw2.buffer.cssWidth} (psxEnabled=${bw2.buffer.psxEnabled})` });
+        iterFindings.breaks.push({ where: "bw2-buffer", detail: bw2.buffer });
+      }
+      if (bw2.spriteFilters && bw2.spriteFilters.checked > 0 &&
+          (bw2.spriteFilters.magNearestCount !== bw2.spriteFilters.checked || bw2.spriteFilters.minLinearCount !== bw2.spriteFilters.checked)) {
+        findings.breaks.push({ loopIndex, where: "bw2-sprite-filter", detail: bw2.spriteFilters });
+        iterFindings.breaks.push({ where: "bw2-sprite-filter", detail: bw2.spriteFilters });
+      }
+      if (bw2.fps && bw2.fps.fps < 30) {
+        findings.breaks.push({ loopIndex, where: "bw2-fps", detail: `${bw2.fps.fps.toFixed(1)}fps < 30` });
+        iterFindings.breaks.push({ where: "bw2-fps", detail: bw2.fps });
+      }
+      log(`  BW2-0: buffer ${bw2.buffer && bw2.buffer.drawWidth}x${bw2.buffer && bw2.buffer.drawHeight} (css ${bw2.buffer && bw2.buffer.cssWidth}x${bw2.buffer && bw2.buffer.cssHeight}) · sprites mag/min ok ${bw2.spriteFilters && bw2.spriteFilters.magNearestCount}/${bw2.spriteFilters && bw2.spriteFilters.minLinearCount} of ${bw2.spriteFilters && bw2.spriteFilters.checked} · fps ${bw2.fps && bw2.fps.fps.toFixed(1)}`);
+
       const roomPath = path.join(outDir, `loop-${li}-room.png`);
       await shootCanvas(page, roomPath);
       shots.push({ loopIndex, kind: "room", label: `loop ${li} · ${drive.topology} · ${cfg.realmId} · ${drive.roomCount} rooms`, path: roomPath, fileName: path.basename(roomPath) });

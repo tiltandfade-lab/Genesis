@@ -18,8 +18,19 @@
      expected/correct state until that parallel asset unit lands). Every env x PSX-state combination
      is reachable in one click each, per the unit's visual-gate requirement. -->
 <script type="importmap">
-{ "imports": { "three": "../vendor/three/three.module.js" } }
+{ "imports": {
+  "three": "../vendor/three/three.module.js",
+  "three/addons/": "../vendor/three/addons/"
+} }
 </script>
+<!-- BEAUTY-WAVE-3 BW3-0 fix (found live verifying the composer seam, pre-existing since T2
+     landed): this page's importmap never gained the "three/addons/" prefix entry genesis.html
+     added alongside GLTFLoader (BATTLE-THEATER.md §7) — theater-boot.js's bare
+     `import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js"` (and now the BW3-0
+     postprocessing imports) have been UNRESOLVABLE from this standalone preview page ever since,
+     failing the whole module load silently (window.Theater never appears; every fixture button
+     hangs on "module still loading" forever) — unrelated to and predating BW3-0's own scope. One-
+     line parity fix with genesis.html's own importmap, nothing else on this page touched. -->
 <style>
   :root{ --ink:#e8e2d0; --stone:#171310; --panel:#24201a; --edge:#4a3f2c; --gold:#c9a24b; --bad:#a8432c; --good:#4a7c4a; }
   *{box-sizing:border-box}

@@ -85,6 +85,16 @@ import * as THREE from "three";
 // three itself. Imported ONLY here (this file is the one ES-module boundary that already owns THREE);
 // theater-figures.js stays THREE-free and receives the parsed scene through dependency injection.
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+// BEAUTY-WAVE-3 BW3-0 (docs/BEAUTY-WAVE-3.md, THE COMPOSER SEAM): EffectComposer/RenderPass/
+// ShaderPass vendored the SAME way GLTFLoader was (vendor/three/README.md's "T3" entry) — same
+// pinned three@0.166.0, same `three/addons/` importmap prefix, same offline/no-CDN law. Imported
+// ONLY here for the identical reason GLTFLoader is: this file is the one ES-module boundary that
+// already owns THREE. RenderPass/ShaderPass aren't constructed by this unit (it adds zero passes —
+// see createTheaterState's own comment on why), but are vendored+imported now so BW3-2/3/6 (the
+// DoF/bloom/grade units that mount real passes onto this seam) don't each need their own vendor step.
+import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
+import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
+import { ShaderPass } from "three/addons/postprocessing/ShaderPass.js";
 import { playVerb, tickTweens, THEATER_VERBS, theaterFxFromLedger } from "./theater-verbs.js";
 // GRAPHICS-ENGINE Part II §A: the sibling billboard-standee verb library — see that file's header for
 // why it's a separate module from theater-verbs.js (rotation-ownership conflict with
@@ -3553,7 +3563,18 @@ function createTheaterState(){
     // low-frequency loop from both the render-on-demand `raf` and the tween `tweenRaf` chains (see that
     // function's own header for why a full-rAF loop would be wasteful for a "flicker ~2x/sec" cadence).
     ambientLight: null, pointLights: [], lightProfileKey: null, flickerRaf: null, keyLight: null, fillLight: null,
-    hemiLight: null // GR3: the shared soft hemisphere key, added once at mount() — see mount()'s own comment
+    hemiLight: null, // GR3: the shared soft hemisphere key, added once at mount() — see mount()'s own comment
+    // BEAUTY-WAVE-3 BW3-0 (docs/BEAUTY-WAVE-3.md, THE COMPOSER SEAM): the postprocessing chain, built
+    // once at mount() (needs a live renderer) and disposed at retire(). Default ON, but the render
+    // call site (renderTheaterFrame, below scheduleRender) only ever calls composer.render() when the
+    // chain actually holds >=1 enabled pass — EffectComposer.render() is a NO-OP over an empty `passes`
+    // array (it never clears or draws the screen on its own), so routing an empty chain through it
+    // would show a blank/stale frame, not a passthrough. Direct renderer.render(scene,camera) IS the
+    // empty-chain path, not a fallback of last resort — that's what makes "flag ON, zero passes"
+    // byte-identical to the pre-composer render. addPass/removePass (window.Theater surface, below)
+    // are the seam BW3-2/3/6 mount their DoF/bloom/grade passes onto later; this unit adds none itself.
+    postChainEnabled: true,
+    composer: null
   };
 }
 
@@ -3646,10 +3667,26 @@ function scheduleRender(){
     S.raf = null;
     if(S.dirty && S.renderer && S.scene && S.camera){
       updateSpriteBillboardYaw();
-      S.renderer.render(S.scene, S.camera);
+      renderTheaterFrame();
       S.dirty = false;
     }
   });
+}
+
+// BEAUTY-WAVE-3 BW3-0 — THE COMPOSER SEAM's one render call site. Both the render-on-demand loop
+// (scheduleRender, above) and the fps harness (measureComposerFps, below near measureRenderFps) draw
+// a frame through this SAME function, so a later BW3 unit mounting a real pass changes behavior
+// everywhere at once, by construction — no second call site to keep in sync.
+// composer.render() only when the chain is ON *and* actually holds >=1 enabled pass; otherwise direct
+// renderer.render(scene,camera) — see createTheaterState's own comment for why an empty composer
+// would show a blank/stale frame rather than a passthrough if called anyway. This is the exact
+// "flag ON, zero passes == byte-identical to pre-composer render" behavior BW3-0 exists to prove.
+function renderTheaterFrame(){
+  if(S.postChainEnabled && S.composer && S.composer.passes && S.composer.passes.length > 0){
+    S.composer.render();
+  } else {
+    S.renderer.render(S.scene, S.camera);
+  }
 }
 
 /* T1.5 §3 camera fit: frame the board to fill ~80% of the canvas — fit the orthographic camera's
@@ -4427,6 +4464,12 @@ function applyPsxCanvasSize(renderer, canvas, cssW, cssH){
   const drawW = Math.max(1, Math.round(cssW * scale));
   const drawH = Math.max(1, Math.round(cssH * scale));
   renderer.setSize(drawW, drawH, false);
+  // BEAUTY-WAVE-3 BW3-0 — keep the composer's two internal WebGLRenderTargets sized to the SAME
+  // drawing-buffer resolution as the renderer itself, on every resize (window resize, PSX-scale
+  // toggle) — not just at mount() time. Guarded on S.composer existing: this function also runs once
+  // from mount() itself, BEFORE the composer is constructed (mount() sizes the canvas first, then
+  // builds the composer off the now-correct renderer.getSize()), so this is a no-op that one time.
+  if(S.composer) S.composer.setSize(drawW, drawH);
   canvas.style.width = cssW + "px";
   canvas.style.height = cssH + "px";
   canvas.style.imageRendering = S.psxEnabled ? "pixelated" : "auto";
@@ -4734,6 +4777,12 @@ function mount(el, opts){
   S.camera = camera;
   S.orthoCamera = camera;
   S.perspCamera = perspCamera;
+  // BEAUTY-WAVE-3 BW3-0 — THE COMPOSER SEAM: built after the renderer's real drawing-buffer size is
+  // set (applyPsxCanvasSize, above) so EffectComposer's own constructor (which reads
+  // renderer.getSize() to size its two internal WebGLRenderTargets) matches the actual resolution
+  // from frame 1, not a stale default. Zero passes added here — renderTheaterFrame (below
+  // scheduleRender) falls back to direct rendering until BW3-2/3/6 add a real pass.
+  S.composer = new EffectComposer(renderer);
   S.tileGroup = tileGroup;
   S.propGroup = propGroup;
   S.unitGroup = unitGroup;
@@ -7396,6 +7445,14 @@ function retire(){
   disposeAuxCaches(); // HOTFIX-QUEUE-2026-07-06 H10: symmetric end-of-life dispose for the floor/disc/blob caches
   disposePixelSkinCache(); // A3: symmetric end-of-life dispose point for the pixel-skin texture cache
   if(S.textures){ Object.keys(S.textures).forEach(k => { const t = S.textures[k]; if(t && t !== "pending" && t.dispose) t.dispose(); }); } // HOTFIX-QUEUE-2026-07-06 H10
+  // BEAUTY-WAVE-3 BW3-0 — symmetric end-of-life dispose for the composer's two WebGLRenderTargets +
+  // its internal copyPass material (EffectComposer.dispose() owns all three), same "one true dispose
+  // point" discipline as disposeWholeObjectCaches/disposeAuxCaches/disposePixelSkinCache above. Any
+  // passes a later BW3 unit added are the CALLER's own dispose responsibility (removePass, below,
+  // never disposes a pass itself — mirroring THREE's own EffectComposer.removePass contract) UNLESS
+  // still attached at retire() time, in which case composer.dispose() only frees ITS OWN two render
+  // targets + copyPass, never iterates `passes` — no leak here for a BW3-0-only mount (zero passes).
+  if(S.composer) S.composer.dispose();
   if(S.renderer){
     S.renderer.dispose();
     if(S.renderer.domElement && S.renderer.domElement.parentNode){
@@ -7579,6 +7636,80 @@ window.Theater.measureRenderFps = function(sampleCount){
   const elapsedMs = Math.max(1e-6, t1 - t0);
   return { samples: n, elapsedMs, fps: (n * 1000) / elapsedMs };
 };
+
+// BEAUTY-WAVE-3 BW3-0 (docs/BEAUTY-WAVE-3.md, THE COMPOSER SEAM) — the production surface BW3-2/3/6
+// mount their DoF/bloom/grade passes onto. Thin delegation to the live S.composer (null pre-mount);
+// both mark the theater dirty so the next scheduleRender actually redraws through the (now-changed)
+// chain — a caller that adds/removes a pass without this would sit on a stale frame until some
+// UNRELATED dirty-triggering call happened to repaint. Returns false pre-mount/no-op, never throws.
+window.Theater.addPass = function(pass){
+  if(!S.mounted || !S.composer || !pass) return false;
+  S.composer.addPass(pass);
+  markDirty();
+  return true;
+};
+window.Theater.removePass = function(pass){
+  if(!S.mounted || !S.composer || !pass) return false;
+  S.composer.removePass(pass);
+  markDirty();
+  return true;
+};
+// _ForTest convention (this file's own established pattern — see _interiorPillarListForTest etc.
+// above): read-only harness seams, no product code reads these. _postChainForTest exposes the live
+// chain's shape (enabled flag + live pass count) so a capture/verify harness can assert "flag ON,
+// zero passes" without reaching into module-private `S` directly. _setPostChainEnabledForTest lets a
+// harness flip the flag itself (e.g. to prove flag OFF also forces the direct path even if a later
+// unit has since added passes) — returns the new value, or null pre-mount.
+window.Theater._postChainForTest = function(){
+  return {
+    enabled: !!S.postChainEnabled,
+    passCount: (S.composer && S.composer.passes) ? S.composer.passes.length : 0,
+    hasComposer: !!S.composer
+  };
+};
+window.Theater._setPostChainEnabledForTest = function(enabled){
+  if(!S.mounted) return null;
+  S.postChainEnabled = !!enabled;
+  markDirty();
+  return S.postChainEnabled;
+};
+// _renderFrameForTest — calls renderTheaterFrame() (scheduleRender's own render call site, the
+// literal function BW3-0 is about) SYNCHRONOUSLY and directly, bypassing the requestAnimationFrame
+// hop scheduleRender normally goes through. A harness needs this because rAF is unreliable to depend
+// on from outside the page (backgrounded/automated tabs can throttle or fully suspend it — found live
+// verifying this exact unit: a headless capture tab's scheduleRender-scheduled repaints never fired
+// at all across a >1s wait, even though markDirty()/S.dirty were set correctly) — this seam removes
+// that timing dependency for a proof that's about WHICH BRANCH ran, not about the rAF plumbing that
+// normally invokes it. Returns false pre-mount, true otherwise; never throws.
+window.Theater._renderFrameForTest = function(){
+  if(!S.mounted) return false;
+  renderTheaterFrame();
+  return true;
+};
+// measureComposerFps(sampleCount) — the BW3-0 companion to measureRenderFps just above: same
+// back-to-back wall-clock timing loop, but routed through a REAL single-RenderPass composer chain
+// (not the permanent empty one this unit ships with) so the number answers "what does routing
+// through EffectComposer's render-target ping-pong actually cost", not "how fast is the no-op empty
+// loop" (which would trivially read ~free and prove nothing). A lone RenderPass has needsSwap=false
+// and renders straight to the canvas when it's the composer's only/last enabled pass (THREE's own
+// EffectComposer.render() sets pass.renderToScreen for the last enabled pass each frame) — so this is
+// the minimum-possible real per-frame cost floor future BW3-2/3/6 passes stack on top of, not a
+// synthetic best case. The probe pass is added+removed+disposed inside this call — it never leaks
+// into the permanent chain measureRenderFps/renderTheaterFrame see afterward. Returns null pre-mount.
+window.Theater.measureComposerFps = function(sampleCount){
+  if(!S.mounted || !S.renderer || !S.scene || !S.camera || !S.composer) return null;
+  const n = Math.max(1, sampleCount || 60);
+  const probePass = new RenderPass(S.scene, S.camera);
+  S.composer.addPass(probePass);
+  const t0 = (typeof performance !== "undefined" ? performance.now() : Date.now());
+  for(let i = 0; i < n; i++) S.composer.render();
+  const t1 = (typeof performance !== "undefined" ? performance.now() : Date.now());
+  S.composer.removePass(probePass);
+  if(probePass.dispose) probePass.dispose();
+  const elapsedMs = Math.max(1e-6, t1 - t0);
+  return { samples: n, elapsedMs, fps: (n * 1000) / elapsedMs };
+};
+
 window.Theater.canvasBufferInfo = function(){
   if(!S.mounted || !S.renderer || !S.el) return null;
   const canvas = S.renderer.domElement;

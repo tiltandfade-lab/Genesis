@@ -341,6 +341,14 @@ function itrWallScale(x, y, plan, roomIdx, corridorIdx) {
   return best;
 }
 
+// bounds-checked raw cell-code lookup — null off-map (never throws), used by the BW2-5 door-reveal
+// axis detection below (itrWallScale already inlines an equivalent scan for its own narrower purpose;
+// this is the general-purpose version).
+function itrCellCodeAt(x, y, plan) {
+  if (x < 0 || y < 0 || x >= plan.cellW || y >= plan.cellD) return null;
+  return plan.cells[y * plan.cellW + x];
+}
+
 // BFS room-adjacency within `radius` hops of `focusSegNum` (via the corridor graph — the exact same
 // edge source U1/U2 use, never an invented adjacency) — "current room + immediate surroundings"
 // (DUNGEON-GRAPH.md U3 item 2). radius<=0 or no focusSegNum given -> null (caller renders the WHOLE
@@ -469,6 +477,15 @@ function itrRoomLights(room, plan, kit, dressingByRoom) {
   const roomDress = (dressingByRoom && dressingByRoom.get(room.segNum)) || null;
   const focalEntry = roomDress ? roomDress.find((d) => d.focal) : null;
   if (focalEntry) { key.x = focalEntry.x; key.z = focalEntry.y; }
+  // BW2-5 item 3: finale rooms' key light prefers the DAIS TOP over a dressing card's cell — the
+  // dressing focal card itself can never sit in the room's own center 2x2 (place-dressing.js's
+  // dpCenter2x2 is a hard, mutation-tested law: dev/verify-dungeon-dressing.mjs check 3), so the
+  // mock's "torchlight hits the boss standing on the dais" read has to come from the LIGHT anchor,
+  // not the dressing anchor. Overrides focalEntry's relocation above on purpose (more specific rule).
+  if (room.role === "finale") {
+    const anchor = itrDaisAnchor(room);
+    key.x = anchor.x; key.z = anchor.y;
+  }
   for (let i = 1; i < list.length; i++) {
     list[i].intensity = Math.min(list[i].intensity, keyIntensity * ITR_FILL_LIGHT_CAP);
   }
@@ -481,6 +498,175 @@ const ITR_DOOR_HEIGHT_FRAC = 0.85;  // a normal doorframe reads slightly lower t
 const ITR_SQUEEZE_HEIGHT_FRAC = 0.5;
 const ITR_SQUEEZE_WIDTH_FRAC = 0.6;
 const ITR_PILLAR_MIN_DIM = 6;       // room must be >= this many cells per axis to earn corner pillars
+
+// ─── BEAUTY-WAVE-2.md BW2-5 (SILHOUETTE UPGRADES): door arches + wall-thickness reveals ────────────
+// "doorframe prisms gain an arch header (2-3 stacked prisms corbelling in)... + visible wall THICKNESS
+// at openings" (mock-01-fantasy-explore.png's doorways read deep). Both features ride the SAME
+// {x,z,sx,sy,sz,color} instance shape every doorframe/wall entry already uses, extended with two
+// OPTIONAL fields (default 0, so every pre-existing instance renders identically to before this unit):
+//   yBase — world-Y the prism's own BOTTOM sits at, above the shared floor plane (lets a prism STACK
+//     on top of another instead of always growing up off y=-0.5 — theater-boot.js's
+//     interiorBuildInstancedMesh, GL layer, reads this).
+//   ox/oz — a world-space offset added to the instance's cell position (lets more than one prism
+//     occupy sub-regions of the SAME 1x1 cell — a jamb reveal sitting in the margin beside a narrower
+//     door frame, or a furniture assembly's several small prisms within one dressing cell).
+const ITR_ARCH_STEP1_HEIGHT = 0.22;      // first corbel step, world units
+const ITR_ARCH_STEP2_HEIGHT = 0.16;      // second (narrower) corbel step, stacked on step 1
+const ITR_ARCH_STEP1_WIDTH_FRAC = 0.92;  // fraction of the door's own wFrac footprint
+const ITR_ARCH_STEP2_WIDTH_FRAC = 0.7;
+
+// ─── BW2-5 THE COLUMN DEMOTION (Adam 2026-07-10 night: "why are there so many uniform square
+// columns?") — bare square columns become a RARE accent (<=1 per room, most rooms earn none at all)
+// and VARIED (square/round/tapered/broken) when they do appear; see the pillar-building block below
+// (interiorBuildBoard) for the seeded roll this replaces the old unconditional 4-corner placement with.
+const ITR_COLUMN_CHANCE = 0.14;
+const ITR_COLUMN_PROFILES = Object.freeze(["square", "round", "tapered", "broken"]);
+
+// ─── BW2-5 FURNITURE CHANNEL — "mid-room verticality is FURNITURE, not columns" (the chrome mock's
+// crates/cabinets/machines). furnitureFor(kind, realm) is the SHARED builder ROOM-GRAMMAR's own §4
+// names as its dependency: a pure-data prism-assembly recipe (2-6 boxes, local offsets `dx`/`dz`
+// (within a 1x1 dressing cell) + `yBase` (stacking height) + a per-face label for the texture seam
+// below) — theater-boot.js turns this into real BoxGeometry meshes, textured per PACKET-02's planar-
+// face law (§2b UV MAPPING LAWS: "FURNITURE: per-face planar, one self-contained face tile per face").
+const ITR_FURNITURE_KINDS = Object.freeze(["crate", "cabinet", "barrel-cluster", "table", "bench", "shelf-unit"]);
+const ITR_FURNITURE_RECIPES = Object.freeze({
+  crate: Object.freeze([
+    { dx: 0, dz: 0, yBase: 0, sx: 0.7, sy: 0.9, sz: 0.7, face: "crate-body" },
+    { dx: 0, dz: 0, yBase: 0.9, sx: 0.76, sy: 0.08, sz: 0.76, face: "crate-lid" },
+  ]),
+  cabinet: Object.freeze([
+    { dx: 0, dz: 0, yBase: 0, sx: 0.7, sy: 0.05, sz: 0.46, face: "cabinet-plinth" },
+    { dx: 0, dz: 0, yBase: 0.05, sx: 0.65, sy: 1.1, sz: 0.42, face: "cabinet-body" },
+    { dx: 0, dz: 0, yBase: 1.15, sx: 0.68, sy: 0.06, sz: 0.44, face: "cabinet-cap" },
+  ]),
+  "barrel-cluster": Object.freeze([
+    { dx: -0.18, dz: -0.1, yBase: 0, sx: 0.35, sy: 0.8, sz: 0.35, face: "barrel" },
+    { dx: 0.18, dz: -0.1, yBase: 0, sx: 0.35, sy: 0.8, sz: 0.35, face: "barrel" },
+    { dx: 0, dz: 0.2, yBase: 0, sx: 0.35, sy: 0.72, sz: 0.35, face: "barrel" },
+  ]),
+  table: Object.freeze([
+    { dx: 0, dz: 0, yBase: 0.75, sx: 0.9, sy: 0.08, sz: 0.6, face: "table-top" },
+    { dx: -0.38, dz: -0.24, yBase: 0, sx: 0.08, sy: 0.75, sz: 0.08, face: "table-leg" },
+    { dx: 0.38, dz: -0.24, yBase: 0, sx: 0.08, sy: 0.75, sz: 0.08, face: "table-leg" },
+    { dx: -0.38, dz: 0.24, yBase: 0, sx: 0.08, sy: 0.75, sz: 0.08, face: "table-leg" },
+    { dx: 0.38, dz: 0.24, yBase: 0, sx: 0.08, sy: 0.75, sz: 0.08, face: "table-leg" },
+  ]),
+  bench: Object.freeze([
+    { dx: 0, dz: 0, yBase: 0.42, sx: 1.0, sy: 0.1, sz: 0.35, face: "bench-seat" },
+    { dx: -0.4, dz: 0, yBase: 0, sx: 0.1, sy: 0.42, sz: 0.3, face: "bench-leg" },
+    { dx: 0.4, dz: 0, yBase: 0, sx: 0.1, sy: 0.42, sz: 0.3, face: "bench-leg" },
+  ]),
+  "shelf-unit": Object.freeze([
+    { dx: 0, dz: -0.3, yBase: 0, sx: 0.85, sy: 1.4, sz: 0.12, face: "shelf-back" },
+    { dx: -0.42, dz: -0.15, yBase: 0, sx: 0.08, sy: 1.4, sz: 0.4, face: "shelf-side" },
+    { dx: 0.42, dz: -0.15, yBase: 0, sx: 0.08, sy: 1.4, sz: 0.4, face: "shelf-side" },
+    { dx: 0, dz: -0.15, yBase: 0.45, sx: 0.8, sy: 0.05, sz: 0.35, face: "shelf-board" },
+    { dx: 0, dz: -0.15, yBase: 0.95, sx: 0.8, sy: 0.05, sz: 0.35, face: "shelf-board" },
+  ]),
+});
+/* furnitureFor(kind, realm) -> {kind, prisms:[{dx,dz,yBase,sx,sy,sz,face}]} — never throws, degrades
+ * to "crate" on an unknown kind (total-function discipline this file keeps everywhere else). */
+function furnitureFor(kind, realm) {
+  const k = ITR_FURNITURE_RECIPES[kind] ? kind : "crate";
+  return { kind: k, realm: realm || null, prisms: ITR_FURNITURE_RECIPES[k] };
+}
+/* textureFaceFor(realm, face) -> a real PACKET-02 face-texture ref, or null (the seam: PACKET-02's
+ * crate-face/cabinet-face/etc. arrivals have NOT landed yet, per docs/BEAUTY-WAVE-2.md BW2-5's own
+ * task brief — "wire the seam textureFaceFor(realm, face) || proceduralPanelTexture, the standing
+ * fallback pattern"). Always null today; a real registry drops in here with zero caller-side change
+ * (the GL layer already reads `textureFaceFor(...) || proceduralPanelTexture(...)`). */
+function textureFaceFor(realm, face) {
+  return null;
+}
+// deterministic per-dressing-entry furniture KIND pick (u3-furniture-kind seed) — the dressPlan roll
+// already owns WHICH blocker slug/noun appears (nouns law unchanged); this is a SEPARATE, purely
+// render-layer roll for the furniture SILHOUETTE that noun renders as, seeded off the entry's own
+// stable identity (room+cell+slug) so the same seed always yields the same furniture kind.
+function itrFurnitureKindFor(seedKey) {
+  const seed = dspHashStr("u3-furniture-kind:" + seedKey);
+  const rng = dspMulberry32(seed);
+  return ITR_FURNITURE_KINDS[Math.floor(rng() * ITR_FURNITURE_KINDS.length) % ITR_FURNITURE_KINDS.length];
+}
+
+// ─── ADDENDUM (Adam, mid-flight, docs/BEAUTY-WAVE-2.md just above BW2-6): THE PROP PERSPECTIVE LAW —
+// "surface-attached props (wall screens/paintings/shelves/sconces, floor rugs/grates) must mount as
+// SHALLOW EXTRUSION prisms, not flat cards — baked-perspective art on a geometry-locked card fights
+// the scene camera" (a wall-hang billboard always rotates to face the CAMERA regardless of which wall
+// it's actually mounted on, so at the fixed isometric angle a "screen" can read backwards/sideways —
+// Adam's own words, "a cyber screen at the exact opposite perspective"). Free-standing dressing
+// (trees/gravestones — primary:"floor"/"focal"/"setPiece") stays billboard/card, unchanged, per the
+// addendum's own instruction — only wall-hang (and any future floor-lay/rug) mounts route through
+// this. extrusionPropFor(entry) is the pure-data half (this file); theater-boot.js's
+// buildExtrusionProp/interiorBuildWallProps is the GL half (real BoxGeometry, front face = the art
+// texture, side/back faces edge-sampled from the SAME art's own border pixels — automatic, no second
+// authored color source).
+const ITR_EXTRUSION_DEPTH_BY_ARCHETYPE = Object.freeze({
+  painting: 0.04, screen: 0.05, sconce: 0.08, shelf: 0.3, rug: 0.01, default: 0.05,
+});
+function itrExtrusionArchetypeFor(entry) {
+  const entrySlug = String((entry && entry.slug) || "");
+  if (/paint/.test(entrySlug)) return "painting";
+  if (/screen|monitor|billboard|hologram|cctv/.test(entrySlug)) return "screen";
+  if (entry && entry.lightAffine) return "sconce";
+  if (/shelf|rack/.test(entrySlug)) return "shelf";
+  if (/rug|runner|carpet/.test(entrySlug)) return "rug";
+  return "default";
+}
+/* extrusionPropFor(entry) -> {archetype, depth} — never throws, degrades to the "default" archetype's
+ * depth (0.05, a thin generic panel) on anything unrecognized. */
+function extrusionPropFor(entry) {
+  const archetype = itrExtrusionArchetypeFor(entry);
+  const depth = (ITR_EXTRUSION_DEPTH_BY_ARCHETYPE[archetype] != null)
+    ? ITR_EXTRUSION_DEPTH_BY_ARCHETYPE[archetype] : ITR_EXTRUSION_DEPTH_BY_ARCHETYPE.default;
+  return { archetype, depth };
+}
+// which side of the cell the adjacent WALL sits on ("n"/"s"/"e"/"w"), or null (an isolated wall-hang
+// with no adjacent WALL cell — rare/degenerate; the GL layer falls back to no rotation rather than
+// throwing). place-dressing.js already guarantees every wall-hang entry is wall-adjacent
+// (dpAdjacentToWall) — this just names WHICH side, off the same plan.cells grid, never a second guess.
+function itrWallSideAt(x, y, plan) {
+  if (itrCellCodeAt(x, y - 1, plan) === SPATIAL_CELL.WALL) return "n";
+  if (itrCellCodeAt(x, y + 1, plan) === SPATIAL_CELL.WALL) return "s";
+  if (itrCellCodeAt(x - 1, y, plan) === SPATIAL_CELL.WALL) return "w";
+  if (itrCellCodeAt(x + 1, y, plan) === SPATIAL_CELL.WALL) return "e";
+  return null;
+}
+
+// ─── BW2-5 FINALE DAIS — "finale rooms get a centered 2-step dais platform... real 0.15-0.25 steps,
+// walkable, combat-grid-aware". Mechanism: THE FLOOR CONTACT LAW (theater-boot.js) already derives
+// every mount point's contact Y straight off the floor cell's own baked `sy` — so raising a finale
+// room's center-cell `sy` for two deliberate ring/top tiers, instead of VP3's random micro-jitter, is
+// ALL that's needed for the dais to read as a real stepped platform AND stay walkable/combat-grid-
+// aware (the cell's own SPATIAL_CELL code never changes — still plain FLOOR, still routable; only its
+// rendered height changes, exactly like VP3's own micro-steps already do for texture, just larger and
+// deliberately shaped here). The room's own reserved CENTER 2x2 (itrCenter2x2 — VP3's own "never
+// touched by height steps" exclusion) is exactly the dais TOP tier: that reservation exists so a
+// deliberate architectural feature like this one can occupy it without fighting VP3's random jitter.
+const ITR_DAIS_STEP = 0.2; // each of the 2 risers, within the spec's own 0.15-0.25 band
+function itrDaisAnchor(room) {
+  // the single canonical "dais top" cell (a stable reference point for the key-light/piece-preference
+  // bias below) — the SAME corner itrCenter2x2 always starts its own 2x2 block from, so it's always
+  // one of the four real dais-top cells the render actually raises.
+  return {
+    x: room.x + Math.max(0, Math.floor((room.w - 2) / 2)),
+    y: room.y + Math.max(0, Math.floor((room.d - 2) / 2)),
+  };
+}
+function itrDaisCellsFor(room) {
+  const top = itrCenter2x2(room);
+  const ring = new Set();
+  top.forEach((key) => {
+    const parts = key.split(",");
+    const cx = parseInt(parts[0], 10), cy = parseInt(parts[1], 10);
+    [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [1, -1], [-1, 1], [-1, -1]].forEach(([dx, dy]) => {
+      const nx = cx + dx, ny = cy + dy;
+      if (nx < room.x || ny < room.y || nx >= room.x + room.w || ny >= room.y + room.d) return;
+      const k = nx + "," + ny;
+      if (!top.has(k)) ring.add(k);
+    });
+  });
+  return { top, ring };
+}
 
 // ─── GR4 (docs/GRAPHICS-ENGINE.md build unit GR4, STAGE LAW): the diorama edge skirt — a darkened
 // realm-tinted prism band ringing the board's own bounding-rect perimeter, 0.4 cells deep, hanging
@@ -783,6 +969,15 @@ function interiorBuildBoard(plan, opts) {
     roomGround.set(r.segNum, { toneDelta, raised, coverCells });
   });
 
+  // BW2-5 item 3: FINALE DAIS — precomputed per finale room (segNum -> {top,ring}), consumed by the
+  // floor loop below to override `sy` on exactly those cells (deliberate architecture, not VP3's
+  // random jitter — see the itrDaisCellsFor/ITR_DAIS_STEP header comment for the full rationale).
+  const daisByRoom = new Map();
+  (plan.rooms || []).forEach((r) => {
+    if (keepSet !== null && !keepSet.has(r.segNum)) return;
+    if (r.role === "finale") daisByRoom.set(r.segNum, itrDaisCellsFor(r));
+  });
+
   for (let y = 0; y < plan.cellD; y++) {
     for (let x = 0; x < plan.cellW; x++) {
       if (!kept[idx(x, y)]) continue;
@@ -805,6 +1000,18 @@ function interiorBuildBoard(plan, opts) {
           color = itrDarkenHex(kit.floorColor, factor);
           const stepDelta = gd.raised.get(x + "," + y);
           if (stepDelta != null) sy = ITR_FLOOR_HEIGHT + stepDelta;
+        }
+        // BW2-5 item 3: the finale dais OVERRIDES whatever VP3 computed above for its own two tiers
+        // (a deliberate platform, not random jitter) — the cell's own code stays plain FLOOR (still
+        // routable/walkable, THE FLOOR CONTACT LAW just reads a taller `sy` here, same as it already
+        // does for any other floor cell).
+        if (room && room.role === "finale") {
+          const dais = daisByRoom.get(room.segNum);
+          if (dais) {
+            const daisKey = x + "," + y;
+            if (dais.top.has(daisKey)) sy = ITR_FLOOR_HEIGHT + ITR_DAIS_STEP * 2;
+            else if (dais.ring.has(daisKey)) sy = ITR_FLOOR_HEIGHT + ITR_DAIS_STEP;
+          }
         }
         // VP4 item 1: the painted-scene value hierarchy (floor darkest) — applied AFTER the ground-
         // design tone/jitter above, never replacing it (a further multiplicative darken, same
@@ -833,6 +1040,62 @@ function interiorBuildBoard(plan, opts) {
         }
         doorframe.push({ x, z: y, sx: wFrac, sy: h, sz: wFrac, color: trimColor, squeeze, transition: !!(d && d.transition) });
         track(x, y);
+
+        // BW2-5 item 1: ARCH HEADER — "doorframe prisms gain an arch header (2-3 stacked prisms
+        // corbelling in)". Plain (non-squeeze) doors only — a squeeze crawl-space reads as a crude
+        // tight passage, never a dressed archway. Two narrowing prisms stack ABOVE the main frame via
+        // `yBase` (this unit's own new field — see the constants block's header comment).
+        if (!squeeze) {
+          doorframe.push({
+            x, z: y, sx: wFrac * ITR_ARCH_STEP1_WIDTH_FRAC, sy: ITR_ARCH_STEP1_HEIGHT,
+            sz: wFrac * ITR_ARCH_STEP1_WIDTH_FRAC, color: trimColor, yBase: h, archStep: 1,
+          });
+          doorframe.push({
+            x, z: y, sx: wFrac * ITR_ARCH_STEP2_WIDTH_FRAC, sy: ITR_ARCH_STEP2_HEIGHT,
+            sz: wFrac * ITR_ARCH_STEP2_WIDTH_FRAC, color: trimColor,
+            yBase: h + ITR_ARCH_STEP1_HEIGHT, archStep: 2,
+          });
+        }
+
+        // BW2-5 item 1: WALL-THICKNESS REVEAL — "visible wall THICKNESS at openings (door reveals —
+        // the mock's doorways read deep)". The door frame's own footprint (wFrac) is narrower than the
+        // full 1x1 cell; the (1-wFrac)/2 margin on either side used to render as pure void (you could
+        // see clean through to whatever sits past the cell edge). Two thin WALL-colored jamb slabs fill
+        // exactly that margin, offset within the cell via the new `ox`/`oz` fields, oriented
+        // PERPENDICULAR to the pierced wall's own run. Axis detection reads the neighboring ROOM's own
+        // RECT EDGE (doorRoom, already resolved above; itrRoomIndex's own rasterization already covers
+        // a room's full footprint INCLUDING its perimeter — a door sitting on that rect's edge column/
+        // row IS the wall it pierces, never "outside" the rect numerically, so this checks WHICH edge,
+        // not inside-vs-outside). Verified against real spatializePlan output — the door cell's own
+        // immediate 4-neighbors are frequently ALL floor-coded (a corridor mouth widening right at the
+        // threshold), so a neighbor-WALL scan measurably missed most real doors; the room rect edge is
+        // the reliable signal. Degrades to no reveal off a room's own edge (rare/degenerate topology,
+        // e.g. an interior door) — never throws.
+        const revealW = (1 - wFrac) / 2;
+        if (revealW > 0.01 && doorRoom) {
+          const onLeftRight = x === doorRoom.x || x === doorRoom.x + doorRoom.w - 1;
+          const onTopBottom = y === doorRoom.y || y === doorRoom.y + doorRoom.d - 1;
+          const revealSceneDir = sceneDirectionFor(kit.realmId, doorRoom.role);
+          const revealColor = itrDarkenHex(kit.wallColor, revealSceneDir.valueScript.wall);
+          // sy = baseH (the FULL, un-fractioned wall height at this cell — same value every real WALL
+          // instance carries, never the door opening's own shorter `h`): dev/verify-dungeon-interior.mjs
+          // check 8 asserts every `wall` array entry sits at exactly the base wall height on a bare
+          // (non-scale-domain) plan — a reveal jamb IS conceptually part of the wall it's cut through
+          // (the wall continues at full height past the door's own lintel), so this is both the
+          // architecturally correct read AND keeps that invariant true.
+          [-1, 1].forEach((sign) => {
+            if (onLeftRight && !onTopBottom) {
+              // the door sits on the room's own LEFT/RIGHT edge column -> it pierces a NORTH-SOUTH-
+              // running wall -> the passage is through x, so the jambs sit at the NORTH/SOUTH (z)
+              // margins, full width (x).
+              wall.push({ x, z: y, sx: 1, sy: baseH, sz: revealW, color: revealColor, scaleDomain: (d ? (d.heightScale || 1.0) : 1.0), oz: sign * (wFrac / 2 + revealW / 2) });
+            } else if (onTopBottom && !onLeftRight) {
+              // the door sits on the room's own TOP/BOTTOM edge row -> it pierces an EAST-WEST-running
+              // wall -> the jambs sit at the LEFT/RIGHT (x) margins, full depth (z).
+              wall.push({ x, z: y, sx: revealW, sy: baseH, sz: 1, color: revealColor, scaleDomain: (d ? (d.heightScale || 1.0) : 1.0), ox: sign * (wFrac / 2 + revealW / 2) });
+            }
+          });
+        }
       } else if (code === SPATIAL_CELL.WALL) {
         const scale = itrWallScale(x, y, plan, roomIdx, corridorIdx);
         const h = ITR_WALL_HEIGHT_BASE * scale;
@@ -845,24 +1108,41 @@ function interiorBuildBoard(plan, opts) {
     }
   }
 
-  // pillars: deterministic corner placement for any KEPT room whose both dims clear ITR_PILLAR_MIN_DIM
-  // — a pure geometric derivation off room rect + scaleDomain, no RNG, no dressing-table roll (that's
-  // a future unit's job; U3's own job is volumetric geometry, not prop variety).
+  // BW2-5 THE COLUMN DEMOTION: pre-unit, this block placed FOUR corner pillars unconditionally in
+  // every room clearing ITR_PILLAR_MIN_DIM, every seed — a pure geometric derivation with no roll at
+  // all, which IS the "why are there so many uniform square columns?" complaint. Now: a seeded roll
+  // per room decides whether it earns a column AT ALL (ITR_COLUMN_CHANCE — most eligible rooms earn
+  // none), and when one lands it's exactly ONE instance (never a 4-corner colonnade — ROOM-GRAMMAR's
+  // later, deliberately-rolled colonnade is a different feature), picked from a VARIED profile set
+  // (square/round/tapered/broken). Seeded off (plan.seed, segNum) — the same dspHashStr/dspMulberry32
+  // reference PRNG this file uses everywhere else (DETERMINISM LAW).
   (plan.rooms || []).forEach((r) => {
     if (keepSet !== null && !keepSet.has(r.segNum)) return;
     if (r.w < ITR_PILLAR_MIN_DIM || r.d < ITR_PILLAR_MIN_DIM) return;
+    const seed = dspHashStr("u3-column:" + (plan.seed || "") + ":" + r.segNum + ":" + r.x + "," + r.y);
+    const rng = dspMulberry32(seed);
+    if (rng() >= ITR_COLUMN_CHANCE) return; // the common case: no column at all
     const h = ITR_WALL_HEIGHT_BASE * (r.scaleDomain || 1.0);
     const corners = [
       { x: r.x + 1, y: r.y + 1 }, { x: r.x + r.w - 2, y: r.y + 1 },
       { x: r.x + 1, y: r.y + r.d - 2 }, { x: r.x + r.w - 2, y: r.y + r.d - 2 },
-    ];
-    corners.forEach((c) => {
-      if (c.x < 0 || c.y < 0 || c.x >= plan.cellW || c.y >= plan.cellD) return;
-      if (!kept[idx(c.x, c.y)]) return;
-      if (plan.cells[idx(c.x, c.y)] !== SPATIAL_CELL.FLOOR) return; // never plant a pillar on a wall/door/void cell
-      pillar.push({ x: c.x, z: c.y, sx: 0.5, sy: h, sz: 0.5, color: kit.trimColor, scaleDomain: r.scaleDomain || 1.0 });
-      track(c.x, c.y);
-    });
+    ].filter((c) => c.x >= 0 && c.y >= 0 && c.x < plan.cellW && c.y < plan.cellD
+      && kept[idx(c.x, c.y)] && plan.cells[idx(c.x, c.y)] === SPATIAL_CELL.FLOOR); // never plant on a wall/door/void cell
+    if (!corners.length) return;
+    const corner = corners[Math.floor(rng() * corners.length) % corners.length];
+    const profile = ITR_COLUMN_PROFILES[Math.floor(rng() * ITR_COLUMN_PROFILES.length) % ITR_COLUMN_PROFILES.length];
+    let sx = 0.5, sz = 0.5, sy = h;
+    if (profile === "round") { sx = 0.45; sz = 0.45; }
+    else if (profile === "tapered") { sx = 0.38; sz = 0.38; }
+    else if (profile === "broken") { sy = h * (0.4 + rng() * 0.3); }
+    pillar.push({ x: corner.x, z: corner.y, sx, sy, sz, color: kit.trimColor, scaleDomain: r.scaleDomain || 1.0, profile });
+    track(corner.x, corner.y);
+    if (profile === "tapered") {
+      // a second, narrower CAP prism stacked on top (via yBase) — the "corbelling in" read a single
+      // box alone can't give; still ONE column (one assembly), per the spec's own <=1/room cap.
+      pillar.push({ x: corner.x, z: corner.y, sx: 0.55, sy: h * 0.08, sz: 0.55, color: kit.trimColor,
+        scaleDomain: r.scaleDomain || 1.0, profile: "tapered-cap", yBase: sy });
+    }
   });
 
   // DUNGEON-GRAPH.md U3 iteration-2, ruling 2: one light list per KEPT room, folded into a single flat
@@ -896,6 +1176,48 @@ function interiorBuildBoard(plan, opts) {
       });
     });
   }
+
+  // BW2-5 THE COLUMN DEMOTION / FURNITURE CHANNEL: the dressPlan `blocker` tag maps to a furniture-
+  // class volume — a sibling of `instances`/`skirt`/`cover` (never a 5th instance kind, same
+  // convention those already establish), built by scanning plan.dressing (already indexed above for
+  // lights) for primary==="blocker" entries. The dressing ROLL still owns which NOUN/slug appears
+  // (nouns law unchanged); this is a separate, purely render-layer pick of the furniture SILHOUETTE
+  // that noun renders as (itrFurnitureKindFor).
+  const furniture = [];
+  // BW2-5 ADDENDUM (THE PROP PERSPECTIVE LAW): wall-hang entries mount as real extrusion prisms
+  // (theater-boot.js's buildExtrusionProp), not flat camera-facing cards — same sibling-array
+  // convention as `furniture` above, built off the SAME plan.dressing scan.
+  const wallProps = [];
+  if (Array.isArray(plan.dressing)) {
+    plan.dressing.forEach((d) => {
+      if (!d) return;
+      const room = roomIdx.get(d.x + "," + d.y);
+      if (keepSet !== null && room && !keepSet.has(room.segNum)) return;
+      if (d.primary === "blocker") {
+        const kind = itrFurnitureKindFor((plan.seed || "") + ":" + d.roomSegNum + ":" + d.x + "," + d.y + ":" + d.slug);
+        furniture.push({ x: d.x, y: d.y, kind, realmId: kit.realmId, slug: d.slug, roomSegNum: d.roomSegNum });
+      } else if (d.primary === "wall-hang") {
+        const info = extrusionPropFor(d);
+        wallProps.push({
+          x: d.x, y: d.y, roomSegNum: d.roomSegNum, slug: d.slug, cardKind: d.cardKind,
+          archetype: info.archetype, depth: info.depth, wallSide: itrWallSideAt(d.x, d.y, plan),
+          paintingOf: d.paintingOf || null,
+        });
+      }
+    });
+  }
+
+  // BW2-5 item 3: the finale dais's own canonical anchor cell, exposed per finale room so a combat/
+  // world-layer caller CAN prefer it for the boss standee's own cell (this render-data layer only
+  // MOUNTS wherever a caller's data.pieces[].cellX/cellY says — it doesn't decide combat placement
+  // itself; this is the mechanism that lets a future/optional caller ask "where's the dais top").
+  const daisTop = [];
+  (plan.rooms || []).forEach((r) => {
+    if (keepSet !== null && !keepSet.has(r.segNum)) return;
+    if (r.role !== "finale") return;
+    const anchor = itrDaisAnchor(r);
+    daisTop.push({ roomSegNum: r.segNum, x: anchor.x, y: anchor.y });
+  });
 
   return {
     kind: "interior3d",
@@ -933,6 +1255,11 @@ function interiorBuildBoard(plan, opts) {
     // makes) since the GL layer hasn't grown a cover render pass yet (VP2/VP6 will feed real art
     // through itrCoverCardFor's seam; this wave only proves the DATA channel + the procedural fallback).
     cover: cover,
+    // BW2-5: furniture-class blocker volumes + wall-hang extrusion props — siblings of `instances`
+    // (never counted toward the "4 known instance kinds" check, same convention skirt/cover establish).
+    furniture: furniture,
+    wallProps: wallProps,
+    daisTop: daisTop,
     lights: lights,
     bounds: { minX: minX, maxX: maxX, minZ: minZ, maxZ: maxZ },
     // camera-framing hint: when a focus room was requested, carry its rect (raw plan cell space —
@@ -946,7 +1273,8 @@ function interiorBuildBoard(plan, opts) {
     })(),
     meta: { roomCount: roomCount, floorCount: floor.length, wallCount: wall.length,
       doorCount: doorframe.length, pillarCount: pillar.length, lightCount: lights.length,
-      skirtCount: skirt.length, coverCount: cover.length }
+      skirtCount: skirt.length, coverCount: cover.length, furnitureCount: furniture.length,
+      wallPropsCount: wallProps.length }
   };
 }
 
@@ -958,3 +1286,12 @@ window.REALM_MATERIALS = REALM_MATERIALS;
 window.realmMaterialFor = realmMaterialFor;
 window.SCENE_DIRECTION = SCENE_DIRECTION;
 window.sceneDirectionFor = sceneDirectionFor;
+// BW2-5: the shared prism builders (ROOM-GRAMMAR.md §4 names furnitureFor as its own dependency) +
+// the column-rarity/dais-anchor helpers a verify harness or a future consuming system may need.
+window.furnitureFor = furnitureFor;
+window.textureFaceFor = textureFaceFor;
+window.extrusionPropFor = extrusionPropFor;
+window.itrFurnitureKindFor = itrFurnitureKindFor;
+window.itrWallSideAt = itrWallSideAt;
+window.itrDaisAnchor = itrDaisAnchor;
+window.itrDaisCellsFor = itrDaisCellsFor;

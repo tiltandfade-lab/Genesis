@@ -1342,8 +1342,8 @@ const HEMI_SKY = 0xfff1dc, HEMI_GROUND = 0x1b2430, HEMI_INTENSITY_DEFAULT = 0.22
 // non-attenuating overhead fill point (intensity 7, decay:0/distance:0 — it floods every floor cell
 // evenly and, worse, erases the torch shadows the addendum wants to READ). The flat tabletop channel
 // (setBoard) is untouched — STAGE_AMBIENT_FLOOR still governs there. Tuned across the BW2-4 iterate loop.
-const ITR_SCENE_AMBIENT = 0.16;      // interior ambient intensity (replaces the 0.65 readability floor here)
-const ITR_SCENE_HEMI = 0.09;         // interior hemisphere key (down from HEMI_INTENSITY_DEFAULT 0.22)
+const ITR_SCENE_AMBIENT = 0.13;      // interior ambient intensity (replaces the 0.65 readability floor here) — BW2-4b: 0.16->0.12 (brightness law: dark-corner floor)
+const ITR_SCENE_HEMI = 0.08;         // interior hemisphere key (down from HEMI_INTENSITY_DEFAULT 0.22)
 const ITR_SCENE_FILL_SCALE = 0.04;   // multiply the profile's overhead (decay:0, non-attenuating) fill point(s). Tuned 0.20->0.10->0.04: the fill was the LAST flattener — it lit central walls/doorframes bright even after ambient/hemi dropped (round-4 diagnostic: killing ambient+hemi alone left them bright). Standees are UNLIT billboards, so cutting fill near-off darkens the Lambert surfaces (walls/doorframes/floor go dark except in torch pools — the mock look) WITHOUT touching character readability. A whisper stays (not 0) so an edge-on wall never reads as a pure-black hole.
 // BW2-4 item 1: the DATA intensity on data.lights (theater-interior.js's itrRoomLights, base
 // kit.lightIntensity ~1.0-1.3 x valueScript.focalLight ~1.2 = ~1.5) encodes the RELATIVE per-room value
@@ -1353,7 +1353,42 @@ const ITR_SCENE_FILL_SCALE = 0.04;   // multiply the profile's overhead (decay:0
 // brightness (a HOT ~4-5-cell pool) while leaving the harness-checked DATA untouched — the same "data
 // carries the relative hierarchy, GL applies the absolute" split the grade rig already keeps. Applied
 // per-light before startLightFlicker so the flicker base captures the gained value.
-const ITR_LIGHT_RENDER_GAIN = 6.5;
+const ITR_LIGHT_RENDER_GAIN = 4.5;
+// BW2-4b CITIZENSHIP — THE BRIGHTNESS LAW (Adam mid-flight: "the sprites still render at full
+// brightness even in the dark, they shouldn't do that unless they are in a full white light...
+// basically outdoor daylight, which does not exist indoors, ever"). Sprites are now LIT
+// (MeshLambertMaterial — buildSpriteBillboardMesh) so their rendered brightness TRACKS the scene.
+// The interior channel over-lights vertical billboards two ways that had to be dropped for the law:
+//   (a) the tabletop key/fill DirectionalLights (mount(): 0.72/0.22, aimed toward the +x/+z quadrant)
+//       hit a camera-facing billboard's normal at N·L~0.6 -> ~0.5 of full-bright everywhere, before
+//       any torch. Dimmed to a WHISPER for the interior channel (setBoard restores the tabletop
+//       values on its own path, mirroring the hemi restore) so the torch PointLights carry the
+//       picture and a dark-corner sprite reads dim, per the mock.
+//   (b) with (a) dropped, a dark-corner sprite would take only ambient(0.16)+hemi(0.09) — legible but
+//       a genuinely dark-albedo creature would crush. ITR_SPRITE_EMISSIVE_FLOOR is an albedo-scaled
+//       emissive floor (emissiveMap = the sprite's own texture) — a fixed dim self-illumination
+//       (the readability floor: silhouette + key features stay legible), NOT a light, so it never
+//       reads as day-lighting. Tuned across the iterate loop against the measured gates:
+//       dark corner <=0.40 of full-bright · torch pool ~0.60-0.85 · nowhere indoors >=0.9.
+const ITR_SCENE_KEY = 0.05;   // tabletop key DirectionalLight, dimmed for the interior channel (mount default 0.72)
+const ITR_SCENE_FILL = 0.02;  // tabletop fill DirectionalLight, dimmed for the interior channel (mount default 0.22)
+const ITR_SPRITE_EMISSIVE_FLOOR = 0.05; // sprite readability floor — emissiveIntensity on the lit billboard's own emissiveMap
+// BW2-4b item 1 — INTERIOR LIGHT RANGE CAP. The torch/lamp PointLights (data.lights, default range 12)
+// spilled far enough that an 8-torch room had NO dark corner — every cell sat in some pool, so a sprite
+// read ~0.7 of full-bright everywhere (the BRIGHTNESS LAW's exact failure). Capping the range tightens
+// each pool to the mock's small hot circle, so the gaps between pools go genuinely dark and a standee
+// standing there reads dim. Pool brightness (near the flame) is untouched — only the far spill is cut.
+const ITR_LIGHT_DISTANCE_CAP = 7;
+// BW2-4b item 2 — THE CAMERA-KEY SHADOW: one soft shadow-casting DirectionalLight from the camera's
+// general direction (interior only). The value-plunge diagnosis proved billboards can't cast a
+// readable shadow off the interior torch POINT lights (edge-on sliver); a broad directional finally
+// gives every standee a real cast shadow on the floor. Intensity a whisper so it doesn't re-flatten
+// the plunge (it lights vertical billboard normals at N·L~0.6, so even 0.14 adds ~0.08 — kept low).
+const ITR_CAMERA_KEY_INTENSITY = 0.10;
+// BW2-4b item 6 — THE GLOOM LIFT: gloom's production frames (loop-02) drown vs fantasy's dark-but-
+// legible reference register. A realm-scoped ambient bump for gloom ONLY (fantasy is the reference —
+// never brightened). Additive to ITR_SCENE_AMBIENT for the gloom realm's interior scene ambient.
+const ITR_GLOOM_AMBIENT_LIFT = 0.05;
 // BW2-4 item 2 (value plunge) — DOORFRAME value darken, GL-side. Doorframes ship with kit.trimColor
 // (the bright accent hue — gloom #6b5878 lum 0.37, gold on others), so a doorway prism renders as a
 // BRIGHT vertical (round-3 READ: a lavender block fighting the standees) where the mocks keep doorways
@@ -1361,7 +1396,11 @@ const ITR_LIGHT_RENDER_GAIN = 6.5;
 // (verify-scene-direction group 5) reads the DATA doorframe colors and pins them to kit.trimColor / the
 // ONE tinted accent per room, so touching the data would trip it. Value-only (a scalar multiply): the
 // accent doorframe's hue survives, only its value drops toward wall value.
-const ITR_SCENE_DOORFRAME_VALUE = 0.25;
+// BW2-4b item 4: raised 0.25 -> 0.55. BW2-4 plunged doorframes to 0.25 of the bright trim accent when the
+// scene was brighter; now that BW2-4b drops the interior ambient/key hard for the BRIGHTNESS LAW, a 0.25
+// doorframe (× dim light × its new wallTex) crushed to a pure-black monolith arch (loop-02/05). 0.55 keeps
+// a DARK textured stone arch — reading as architecture, not a black hole — still below wall value.
+const ITR_SCENE_DOORFRAME_VALUE = 0.70;
 function itrScaleHexValue(hex, f){
   const h = String(hex || "#888888").replace("#", "");
   const full = h.length === 3 ? h.split("").map((c) => c + c).join("") : h;
@@ -2639,11 +2678,36 @@ function spriteTextureFor(slug){
 // (width != height, from the texture's own aspect) plane through the exact same material/shadow
 // setup, rather than forking that logic a second time. w/h are already-final WORLD units; this
 // function does no sizing math of its own.
+// BW2-4b item 1 — LIT SPRITES debug seam: forces the OLD unlit MeshBasic path so the iterate-loop
+// measurement harness can capture a full-bright REFERENCE frame (the 1.0 the BRIGHTNESS LAW measures
+// every lit sprite as a ratio of) from the identical scene. No product caller sets it — toggled only
+// by window.Theater.__setSpriteUnlitDebug (below), and a re-mount rebuilds sprites under the new flag.
+let SPRITE_UNLIT_DEBUG = false;
+// BW2-4b item 1 — REALM GRADE on the sprite floor: the emissive readability floor is tinted toward the
+// current interior realm's grade (chrome cool, fantasy warm, gloom cold-violet) so a lit standee reads
+// the realm even where no nearby torch reaches it (the mock's cool soldiers / warm knights). White (no
+// tint) on the flat tabletop and any realm with no authored grade. setInteriorBoard sets it per board;
+// setBoard resets it to white. A SUBTLE blend (ITR_SPRITE_TINT_STRENGTH) — never a saturated wash.
+let ITR_SPRITE_EMISSIVE_TINT = 0xffffff;
+const ITR_SPRITE_TINT_STRENGTH = 0.5;
 function buildSpriteBillboardMesh(tex, w, h, slug){
   const geo = new THREE.PlaneGeometry(w, h);
-  const mat = new THREE.MeshBasicMaterial({
-    map: tex, transparent: true, alphaTest: 0.5, side: THREE.DoubleSide, depthWrite: true
-  });
+  // BW2-4b item 1 — THE BRIGHTNESS LAW (see ITR_SCENE_KEY/ITR_SPRITE_EMISSIVE_FLOOR): the billboard is
+  // now LIT — a MeshLambertMaterial that RECEIVES the interior hemisphere key + torch PointLights +
+  // the realm-graded ambient, so a sprite beside a torch reads warmer/brighter than the same sprite in
+  // a dark corner (the HD-2D integration trick). SPRITE PURITY holds: this is a LIGHTING response only,
+  // zero geometric/texel distortion (no dither, no vertex-snap — it still never routes through
+  // applyPsxShaderTweaks). emissiveMap = the sprite's own texture at ITR_SPRITE_EMISSIVE_FLOOR gives an
+  // albedo-scaled readability floor so a dark-art creature never crushes to unreadable black, WITHOUT
+  // ever reading as day-lit (emissive is a fixed dim self-illumination, not a light). receiveShadow
+  // stays OFF (U3 ruling: a cast shadow smeared across a flat cutout reads as a bug). The debug flag
+  // (SPRITE_UNLIT_DEBUG) restores the old full-bright MeshBasic for the measurement reference capture.
+  const mat = SPRITE_UNLIT_DEBUG
+    ? new THREE.MeshBasicMaterial({ map: tex, transparent: true, alphaTest: 0.5, side: THREE.DoubleSide, depthWrite: true })
+    : new THREE.MeshLambertMaterial({
+        map: tex, emissiveMap: tex, emissive: ITR_SPRITE_EMISSIVE_TINT, emissiveIntensity: ITR_SPRITE_EMISSIVE_FLOOR,
+        transparent: true, alphaTest: 0.5, side: THREE.DoubleSide, depthWrite: true
+      });
   // DUNGEON-GRAPH.md U3 iteration-2, SPRITE PURITY ruling (Adam 2026-07-10 evening): billboards must
   // carry ZERO PS1 distortion (no dither, no vertex-snap) — a flat-cut 2D sprite reads as a sticker
   // the moment its texel grid wobbles or dithers, unlike a real low-poly mesh where those tricks read
@@ -3055,6 +3119,9 @@ function interiorFloorTopAt(floorTopMap, x, z){
 // creatures share a handful of footprints); materials cache-keyed by the realm's own trim hex (one kit
 // per mounted board, so this cache never grows past a handful of entries per session).
 const INTERIOR_BASE_HEIGHT = 0.09;                 // BW2-2b item 2: 0.04 -> ~0.09 ("a real plinth, per the mock read")
+// BW2-4b item 3 — base radius as a fraction of the standee's rendered width. Was 0.42; reduced ~15%
+// to 0.36 so adjacent bases in a tight melee huddle stop fusing into one big pale pad (the huddle-blob).
+const INTERIOR_BASE_RADIUS_FRAC = 0.36;
 const INTERIOR_BASE_Y_OFFSET = 0.006;              // clears the contact pool's own +0.003 (below) — never z-fights it
 // BW2-2b item 3 (TURN GLOW) — the accent gold every acting standee's ring already uses (ACTING_RING_MAT,
 // below); the base's own top/side materials swap TOWARD this on emissive when a standee is acting, so
@@ -3071,8 +3138,13 @@ function interiorBaseMaterialsFor(trimHex){
   const key = trimHex || "#8a8478";
   if(INTERIOR_BASE_MAT_CACHE[key]) return INTERIOR_BASE_MAT_CACHE[key];
   const c = hexToRGB(key);
-  const sideRGB = scaleRGB(c, 0.55);
-  const topRGB = scaleRGB(c, 1.4);
+  // BW2-4b item 3 — BASE TINT: bases were pale lily-pads (side x0.55 / top x1.4 off the bright trim
+  // accent read as lit stone in noon light). Darkened to realm-trim STONE per the gloom mock — dark
+  // sides, a subtly lighter (not bright) top — so a base reads as shadowed ground, and adjacent bases
+  // fusing in a melee huddle read as one dark shadow-blob rather than a pale pad. Now that sprites +
+  // bases are both LIT and the interior key is a whisper, these multipliers are the base's whole value.
+  const sideRGB = scaleRGB(c, 0.30);
+  const topRGB = scaleRGB(c, 0.62);
   const side = new THREE.MeshLambertMaterial({ color: rgbToHex(sideRGB.r, sideRGB.g, sideRGB.b) });
   const top = new THREE.MeshLambertMaterial({ color: rgbToHex(topRGB.r, topRGB.g, topRGB.b) });
   // CylinderGeometry material groups: [0]=side wall, [1]=top cap, [2]=bottom cap — bottom reuses the
@@ -3562,7 +3634,7 @@ function createTheaterState(){
     // + flickerRaf/flickerRunning drive the flicker tick (tickLightFlicker) — a SEPARATE, cheap-by-design
     // low-frequency loop from both the render-on-demand `raf` and the tween `tweenRaf` chains (see that
     // function's own header for why a full-rAF loop would be wasteful for a "flicker ~2x/sec" cadence).
-    ambientLight: null, pointLights: [], lightProfileKey: null, flickerRaf: null, keyLight: null, fillLight: null,
+    ambientLight: null, pointLights: [], lightProfileKey: null, flickerRaf: null, keyLight: null, fillLight: null, interiorCameraKey: null,
     hemiLight: null, // GR3: the shared soft hemisphere key, added once at mount() — see mount()'s own comment
     // BEAUTY-WAVE-3 BW3-0 (docs/BEAUTY-WAVE-3.md, THE COMPOSER SEAM): the postprocessing chain, built
     // once at mount() (needs a live renderer) and disposed at retire(). Default ON, but the render
@@ -4193,6 +4265,46 @@ function applyLightProfile(key){
   });
 
   if(profile.flicker > 0) startLightFlicker(profile.flicker);
+}
+
+// BW2-4b item 2 — THE CAMERA-KEY SHADOW. One soft shadow-casting DirectionalLight aimed at the interior
+// board center from the CAMERA's general direction (up + toward the camera), created lazily and reused
+// across setInteriorBoard calls (positions/target refreshed each mount, disabled by setBoard on the flat
+// tabletop path). Directional (parallel rays) is the ONLY light geometry that casts a readable billboard
+// shadow — the interior torch PointLights throw an edge-on sliver off a flat cutout (the value-plunge
+// diagnosis). Intensity a whisper (ITR_CAMERA_KEY_INTENSITY) so it never re-flattens the plunge or
+// doubles scene brightness. The billboard's own alpha-tested customDepthMaterial makes the cast shadow
+// take the sprite's real silhouette; the floor/base receiveShadow already. Shadow ortho bounds track the
+// board's fitted half-extent so the map covers the whole framed room at a small fixed cost.
+function mountInteriorCameraKey(cx, cz){
+  if(!S.scene) return;
+  if(!S.interiorCameraKey){
+    const dl = new THREE.DirectionalLight(0xffffff, ITR_CAMERA_KEY_INTENSITY);
+    dl.userData.interiorCameraKey = true;
+    S.scene.add(dl);
+    S.scene.add(dl.target);
+    S.interiorCameraKey = dl;
+  }
+  const dl = S.interiorCameraKey;
+  dl.intensity = ITR_CAMERA_KEY_INTENSITY;
+  // the board geometry is origin-shifted by (cx,cz) at mount, so the framed room center sits at world
+  // ~(0,0,0); aim the target there. Source the light from the camera's own horizontal bearing (so the
+  // cast shadow falls AWAY from the camera, readable behind each standee) lifted high overhead.
+  const camPos = S.camera ? S.camera.position : { x: 6, y: 9, z: 6 };
+  const bearing = Math.hypot(camPos.x, camPos.z) || 1;
+  const ux = camPos.x / bearing, uz = camPos.z / bearing;
+  const reach = Math.max(6, (S.boardHalfExtent || 4) * 2.2);
+  dl.position.set(ux * reach * 0.55, reach, uz * reach * 0.55);
+  dl.target.position.set(0, 0, 0);
+  dl.target.updateMatrixWorld();
+  dl.castShadow = true;
+  const half = Math.max(2, (S.boardHalfExtent || 4) + 1.5);
+  const cam = dl.shadow.camera;
+  cam.left = -half; cam.right = half; cam.top = half; cam.bottom = -half;
+  cam.near = 0.5; cam.far = reach * 2.2;
+  cam.updateProjectionMatrix();
+  dl.shadow.mapSize.set(1024, 1024);
+  dl.shadow.bias = -0.0016;
 }
 
 /* P1' WHOLE-OBJECT WIRING Unit B (docs/P1-WIRING.md §4 Unit B steps 1-3) — lighting-prop anchoring.
@@ -4890,6 +5002,13 @@ function setBoard(data){
   // (no product path sets it), same "one place turns it down, this is the one place it turns back up"
   // discipline the shadowMap restore just above already keeps.
   if(S.hemiLight) S.hemiLight.intensity = HEMI_INTENSITY_DEFAULT;
+  // BW2-4b item 1/2: restore the tabletop key/fill DirectionalLights (setInteriorBoard's BRIGHTNESS-LAW
+  // dim is the only place they drop) and disable the interior camera-key shadow light — same "one place
+  // turns it down, this is the one place it turns back up" discipline as the hemi restore above.
+  if(S.keyLight) S.keyLight.intensity = 0.72;
+  if(S.fillLight) S.fillLight.intensity = 0.22;
+  if(S.interiorCameraKey){ S.interiorCameraKey.intensity = 0; S.interiorCameraKey.castShadow = false; }
+  ITR_SPRITE_EMISSIVE_TINT = 0xffffff; // BW2-4b item 1: the realm-grade sprite floor tint is interior-only
   // BEAUTY-WAVE-2.md BW2-1: the flat tabletop's camera fit carries NO standee-height correction term
   // (placeCamera's own screenHalfHeight addition) — only setInteriorBoard ever computes a nonzero
   // S.interiorFitMaxHeight, so this is the one place it resets back to the tabletop's permanent 0,
@@ -5429,6 +5548,7 @@ function interiorAssignShadowCasters(lights, cx, cz){
 const INTERIOR_LIGHT_CARD = {
   gloom: "gloom-clutter-lanternrust",
   fantasy: "fantasy-clutter-lanternhook",
+  chrome: "chrome-flora-lightpod", // BW2-4b item 5: chrome's folded light-pod card so its cones stand on a real fixture too
 };
 const INTERIOR_LIGHT_CARD_HEIGHT = 1.1; // world units — a small floor lantern, well under standee height
 let INTERIOR_GLOW_TEXTURE = null;
@@ -5450,11 +5570,15 @@ function interiorGlowTexture(){
 // the soft additive glow disc — a camera-facing group (userData.sprite) so updateSpriteBillboardYaw
 // turns it to face the camera; returns {group, mesh} so the flicker channel can pulse mesh.opacity.
 function interiorBuildGlowDisc(light){
-  const size = (light.kind === "lamp" ? 0.5 : 0.6);
+  // BW2-4b item 5 — CONE FIXTURES: the disc was too small/faint to read as a fixture at the cone apex,
+  // so the cones looked like they beamed from bare air. Sized up (0.5/0.6 -> 0.85/1.0) and opacity
+  // raised so a real hot emitter reads at every apex in EVERY realm (a floor light-card, where the realm
+  // has one — INTERIOR_LIGHT_CARD — additionally grounds it, but the apex fixture is this disc).
+  const size = (light.kind === "lamp" ? 0.85 : 1.0);
   const geo = new THREE.PlaneGeometry(size, size);
   const mat = new THREE.MeshBasicMaterial({
     map: interiorGlowTexture(), color: light.color || "#ffbb66",
-    transparent: true, opacity: 0.85, blending: THREE.AdditiveBlending,
+    transparent: true, opacity: 0.95, blending: THREE.AdditiveBlending,
     depthWrite: false, side: THREE.DoubleSide
   });
   mat.userData.psxExempt = true;
@@ -5558,13 +5682,18 @@ function interiorBuildLightCone(light, height){
 // interior.js, GL in theater-boot.js" split the rest of this render already keeps). Shadow-casting
 // lights get a small shadow-map budget (INTERIOR_SHADOW_MAP_SIZE) + a near/far tuned to interior room
 // scale (never the board-wide combat camera's frustum).
-function interiorBuildLights(lights, cx, cz, realmId, floorTopMap){
+function interiorBuildLights(lights, cx, cz, realmId, floorTopMap, pieces){
   const group = new THREE.Group();
   const assigned = interiorAssignShadowCasters(lights, cx, cz);
   let casters = 0;
   // BW2-4 addendum: the realm's floor-standing emitter card (INTERIOR_LIGHT_CARD), or null -> glow-disc
   // only. Kept once per build (not per light) since it's a pure realm lookup.
   const cardSlug = (realmId && INTERIOR_LIGHT_CARD[realmId]) || null;
+  // BW2-4b item 7a — COLLISION: skip the floor light-CARD (a lantern/candle at the light seed) when a
+  // piece already stands on that cell, or the lantern reads mounted above the standee's head. The glow
+  // disc + cone stay (they sit at flame height, above the piece — no collision). Cell keys off the raw
+  // piece cellX/cellY (same space the light x/z uses).
+  const pieceCells = new Set((pieces || []).map((p) => (p.cellX || 0) + "," + (p.cellY || 0)));
   // VP6 item 2: every interior light source joins the shared flicker channel (startLightFlicker,
   // above) at INTERIOR_LIGHT_FLICKER_AMPLITUDE — collected here (not started here) so setInteriorBoard
   // can hand the finished list to ONE startLightFlicker call alongside the board's own S.pointLights.
@@ -5576,7 +5705,9 @@ function interiorBuildLights(lights, cx, cz, realmId, floorTopMap){
       // value; this is the absolute decay-2 pool brightness. Preserves the fill<=60%-of-key ratio (both
       // key and fill are gained equally).
       (light.intensity != null ? light.intensity : 1.2) * ITR_LIGHT_RENDER_GAIN,
-      light.distance != null ? light.distance : 12,
+      // BW2-4b item 1 — LIGHT RANGE CAP: tighten each pool to a small hot circle (the mock read) so the
+      // gaps between torches go genuinely dark (the BRIGHTNESS LAW's dark-corner requirement).
+      Math.min(light.distance != null ? light.distance : 12, ITR_LIGHT_DISTANCE_CAP),
       light.decay != null ? light.decay : 2
     );
     pl.position.set((light.x || 0) - cx, light.y != null ? light.y : 1.4, (light.z || 0) - cz);
@@ -5606,7 +5737,7 @@ function interiorBuildLights(lights, cx, cz, realmId, floorTopMap){
     const cone = interiorBuildLightCone(light, coneHeight);
     cone.group.position.copy(glow.group.position);
     group.add(cone.group);
-    if(cardSlug){
+    if(cardSlug && !pieceCells.has(Math.round(light.x || 0) + "," + Math.round(light.z || 0))){
       const card = interiorBuildLightCard(cardSlug);
       const floorTop = interiorFloorTopAt(floorTopMap, light.x || 0, light.z || 0);
       card.position.set((light.x || 0) - cx, floorTop, (light.z || 0) - cz);
@@ -5796,7 +5927,13 @@ function interiorBuildPieces(pieces, cx, cz, wallHeightBase, floorTopMap, trimCo
     }
     const g = built.group;
     const floorFrac = (typeof base.floor === "number") ? base.floor : 0;
-    const cellX = p.cellX || 0, cellY = p.cellY || 0;
+    // BW2-4b item 7c — BLOCKER-CELL EXCLUSION: shift a piece off any pillar/doorframe cell it landed on
+    // (the loop-05 wolf-on-a-pillar) to the nearest clear cell before any contact/kilter/clip math reads
+    // it. prismLists = [wallList, pillarList, doorframe]; slice(1) drops walls (perimeter, handled by the
+    // clip nudge). Render-only — the caller's combat cell ownership (p.cellX/Y) is never rewritten.
+    const rawCellX = p.cellX || 0, rawCellY = p.cellY || 0;
+    const freeCell = itrBlockerNudgeCell(rawCellX, rawCellY, (prismLists || []).slice(1));
+    const cellX = freeCell.x, cellY = freeCell.y;
     // BW2-2: the ground-contact line (image-bottom when floor=0) sits on THIS cell's own real floor
     // TOP (interiorFloorTopAt — the derived law, never the bare -0.5 plane) plus its own plinth base
     // (interiorStandeeContactY) — replaces the pre-BW2-2 hardcoded "-0.5 - floorFrac*height" that
@@ -5826,14 +5963,14 @@ function interiorBuildPieces(pieces, cx, cz, wallHeightBase, floorTopMap, trimCo
     // (buildSpriteBillboardMesh) so BW2-2b's floor-alignment fix (updateSpriteBillboardYaw) leaves it
     // floor-flat under everyday camera tilt, while still tipping WITH the sprite when fall-death moves
     // `g`'s own rotation.x (see buildInteriorBase's own header for the full mechanism).
-    const baseMesh = buildInteriorBase(built.width * 0.42, trimColor);
+    const baseMesh = buildInteriorBase(built.width * INTERIOR_BASE_RADIUS_FRAC, trimColor);
     g.add(baseMesh);
     g.userData.standeeBaseMesh = baseMesh; // setActingUnit's BW2-2b glow-toggle target
     g.userData.interiorTrueScale = true;
     g.userData.interiorHeight = built.height;
     g.userData.interiorWidth = built.width;
     g.userData.interiorFloorFrac = floorFrac;
-    g.userData.interiorBaseRadius = built.width * 0.42;
+    g.userData.interiorBaseRadius = built.width * INTERIOR_BASE_RADIUS_FRAC;
     // DUNGEON-GRAPH.md finale-gate finding: a caller may tag an interior piece with the combat foe's
     // own `fid` (o.foes[i].fid, combat.js's combatStart) so play(verb,{who:fid}) — the SAME production
     // standee-verb entry point combat damage already routes through (§A STANDEE VERBS WIRING, this
@@ -5946,9 +6083,16 @@ function buildDressingCard(entry){
   const tex = dressingTextureFor(entry.slug);
   const h = dressingCardHeight(entry.cardKind);
   const geo = new THREE.PlaneGeometry(h, h);
-  const mat = new THREE.MeshBasicMaterial({
-    map: tex, transparent: true, alphaTest: 0.5, side: THREE.DoubleSide, depthWrite: true
-  });
+  // BW2-4b item 1 — LIT cutout family: dressing cards RECEIVE the scene like the standee billboards
+  // (same MeshLambert + emissive readability floor, same BRIGHTNESS LAW) so a floor-clutter card in a
+  // dark corner reads dim, not pasted-bright. Purity holds (lighting response only). Debug seam mirrors
+  // the standee's so a full-bright reference frame captures cards unlit too.
+  const mat = SPRITE_UNLIT_DEBUG
+    ? new THREE.MeshBasicMaterial({ map: tex, transparent: true, alphaTest: 0.5, side: THREE.DoubleSide, depthWrite: true })
+    : new THREE.MeshLambertMaterial({
+        map: tex, emissiveMap: tex, emissive: ITR_SPRITE_EMISSIVE_TINT, emissiveIntensity: ITR_SPRITE_EMISSIVE_FLOOR,
+        transparent: true, alphaTest: 0.5, side: THREE.DoubleSide, depthWrite: true
+      });
   mat.userData.psxExempt = true; // SPRITE PURITY — cards are flat painted art, never PS1-distorted
   const mesh = new THREE.Mesh(geo, mat);
   mesh.position.y = h / 2;
@@ -6071,7 +6215,15 @@ function buildExtrusionProp(entry){
   const depth = Math.max(0.01, entry.depth || 0.05);
   const geo = new THREE.BoxGeometry(h, h, depth);
   const sideColorHex = itrPropEdgeColorFor(entry.slug, tex);
-  const frontMat = new THREE.MeshBasicMaterial({ map: tex, transparent: true, alphaTest: 0.5, depthWrite: true });
+  // BW2-4b item 1 — LIT cutout family: the extrusion prop's FRONT (art) face receives the scene too
+  // (the side faces are already MeshLambert), so a wall-hung painting/screen tracks the plunge with its
+  // own edges instead of glowing full-bright off a dark wall. Purity holds (lighting response only).
+  const frontMat = SPRITE_UNLIT_DEBUG
+    ? new THREE.MeshBasicMaterial({ map: tex, transparent: true, alphaTest: 0.5, depthWrite: true })
+    : new THREE.MeshLambertMaterial({
+        map: tex, emissiveMap: tex, emissive: ITR_SPRITE_EMISSIVE_TINT, emissiveIntensity: ITR_SPRITE_EMISSIVE_FLOOR,
+        transparent: true, alphaTest: 0.5, depthWrite: true
+      });
   frontMat.userData.psxExempt = true; // SPRITE PURITY — the art face is flat painted art, never PS1-distorted
   const sideMat = new THREE.MeshLambertMaterial({ color: sideColorHex });
   // BoxGeometry material-group order: 0:+x 1:-x 2:+y 3:-y 4:+z 5:-z — the art sits on +z (index 4)
@@ -6446,6 +6598,41 @@ function itrClipNudgeFor(cellX, cellY, radius, instanceLists, opts){
   const scale = maxMag / rawMagnitude;
   return { x: pushX * scale, z: pushZ * scale, magnitude: maxMag, rawMagnitude, clamped: true };
 }
+// BW2-4b item 7c — BLOCKER-CELL EXCLUSION. A piece whose own cell sits ON a pillar/doorframe prism
+// (the loop-05 wolf-on-a-pillar) reads as standing on top of the column, because its floor-contact
+// samples the FLOOR top of that cell while the prism rises through it. itrClipNudgeFor only pushes a
+// WIDE sprite off geometry it OVERLAPS — a piece centered dead-on a 1x1 pillar cell can still land
+// inside it. This picks the nearest cell whose center is clear of every blocker box (BFS ring, ties
+// broken deterministically by ring order then dx/dz), so piece placement excludes blocker cells
+// outright. blockerLists = the pillar+doorframe prism lists (walls excluded — the clip nudge and the
+// room's own perimeter already keep pieces off wall cells). Returns the ORIGINAL cell when it's clear.
+function itrPointInAnyBox(x, z, boxes){
+  for(let i = 0; i < boxes.length; i++){
+    const b = boxes[i];
+    if(x > b.minX && x < b.maxX && z > b.minZ && z < b.maxZ) return true;
+  }
+  return false;
+}
+function itrBlockerNudgeCell(cellX, cellY, blockerLists){
+  const boxes = itrNearbyPrismBoxes(blockerLists, cellX, cellY, 4);
+  if(!boxes.length || !itrPointInAnyBox(cellX, cellY, boxes)) return { x: cellX, y: cellY };
+  for(let ring = 1; ring <= 4; ring++){
+    let best = null;
+    for(let dy = -ring; dy <= ring; dy++){
+      for(let dx = -ring; dx <= ring; dx++){
+        if(Math.max(Math.abs(dx), Math.abs(dy)) !== ring) continue; // ring shell only
+        const nx = cellX + dx, ny = cellY + dy;
+        if(itrPointInAnyBox(nx, ny, boxes)) continue;
+        const d = dx * dx + dy * dy;
+        if(!best || d < best.d || (d === best.d && (dy < best.dy || (dy === best.dy && dx < best.dx)))){
+          best = { x: nx, y: ny, d, dx, dy };
+        }
+      }
+    }
+    if(best) return { x: best.x, y: best.y };
+  }
+  return { x: cellX, y: cellY }; // fully boxed-in (degenerate) — keep the original rather than fling far
+}
 // a large dressing card gets a tiny extra epsilon folded into its own footprint radius before the
 // SAME itrClipNudgeFor call — "may TOUCH the wall plane (that's the point) but not pass through it":
 // unlike a standee (which should clear the geometry entirely, clamp-and-warn on failure), a large
@@ -6616,9 +6803,38 @@ function setInteriorBoard(data){
   // so the flicker bases (startLightFlicker snapshots S.pointLights[i].intensity) capture the plunged
   // fill, not the pre-plunge value. See ITR_SCENE_* constants (near HEMI_*) for the tuned numbers.
   if(rigOn){
-    if(S.ambientLight) S.ambientLight.intensity = ITR_SCENE_AMBIENT;
+    // BW2-4b item 6 — THE GLOOM LIFT: gloom ONLY gets a small ambient bump (fantasy is the reference
+    // register — never brightened). Every other realm keeps ITR_SCENE_AMBIENT exactly.
+    const gloomLift = (data.realmId === "gloom") ? ITR_GLOOM_AMBIENT_LIFT : 0;
+    if(S.ambientLight) S.ambientLight.intensity = ITR_SCENE_AMBIENT + gloomLift;
     if(S.hemiLight) S.hemiLight.intensity = ITR_SCENE_HEMI;
     (S.pointLights || []).forEach((l) => { l.intensity *= ITR_SCENE_FILL_SCALE; });
+    // BW2-4b item 1 — THE BRIGHTNESS LAW: dim the tabletop key/fill DirectionalLights to a whisper for
+    // the interior channel. They light a camera-facing billboard's normal at N·L~0.6, so at the mount
+    // default (0.72/0.22) a sprite reads ~0.5 of full-bright everywhere BEFORE any torch — "full
+    // brightness even in the dark", the exact thing the law forbids. setBoard restores the tabletop
+    // values on its own path (mirroring the hemi restore just above the shadowMap toggle there).
+    if(S.keyLight) S.keyLight.intensity = ITR_SCENE_KEY;
+    if(S.fillLight) S.fillLight.intensity = ITR_SCENE_FILL;
+    // BW2-4b item 2 — THE CAMERA-KEY SHADOW: mount/refresh one soft shadow-casting DirectionalLight
+    // from the camera's general direction so billboards finally cast a readable shadow on the floor
+    // (the point-light shadow was an edge-on sliver — the value-plunge diagnosis's named fix).
+    mountInteriorCameraKey(cx, cz);
+  }
+  // BW2-4b item 1 — REALM GRADE on the sprite floor: tint the emissive readability floor toward this
+  // realm's grade (kit.gradeTint) at ITR_SPRITE_TINT_STRENGTH so a lit standee reads the realm (chrome
+  // cool, fantasy warm) even out of torch reach. White when the kit carries no grade or the study rig is
+  // off. Set BEFORE interiorBuildPieces below (it bakes the emissive color at material-build time).
+  {
+    const gt = (rigOn && kit.gradeTint) ? hexStrToNum(kit.gradeTint) : null;
+    if(gt == null){ ITR_SPRITE_EMISSIVE_TINT = 0xffffff; }
+    else {
+      const s = ITR_SPRITE_TINT_STRENGTH, inv = 1 - s;
+      const r = Math.round(255 * inv + ((gt >> 16) & 255) * s);
+      const g = Math.round(255 * inv + ((gt >> 8) & 255) * s);
+      const b = Math.round(255 * inv + (gt & 255) * s);
+      ITR_SPRITE_EMISSIVE_TINT = (r << 16) | (g << 8) | b;
+    }
   }
 
   // GR1 (docs/GRAPHICS-ENGINE.md build unit GR1): floor/wall each bake their own REALM_MATERIALS
@@ -6653,8 +6869,11 @@ function setInteriorBoard(data){
   // reads wrong. Trim awaits a dedicated trim-run geometry, unchanged from the pre-BW2-3 "trim stays
   // flat, registry data not yet GL-wired" note — the arrival is folded + staged, honest, just not
   // force-fit onto the wrong surface.)
-  const pillarTex = materialsOn
-    ? interiorSurfaceFileTexture("wall", kit.wallTextureFile, kit.wallTextureWrap) : null;
+  // BW2-4b item 4 — PILLAR TEXTURE: pillars now take the SAME fully-resolved wallTex the walls do
+  // (file texture on flagships, procedural REALM_MATERIALS fallback on the other 9 realms), not the
+  // file-only lookup that left every non-flagship pillar an untextured flat monolith (the loop-05
+  // black-pillar read). "columns take the WALL sheet" (BW2-3 §2b), now on every realm per the UV laws.
+  const pillarTex = materialsOn ? wallTex : null;
 
   // study-rig AO variant (b/e/f): darken instance colors at wall-floor seams (interiorApplyAODarkening,
   // above) — operates on a SHALLOW-CLONED instances object so the caller's own `data` (which may be
@@ -6709,13 +6928,23 @@ function setInteriorBoard(data){
   const wallMesh = interiorBuildInstancedMesh(
     wallFromFile ? itrNeutralizeInstanceColors(wallList, kit.wallColor) : wallList,
     cx, cz, wallTex, variant, "wall");
-  // BW2-4 item 2: darken the RENDERED doorframe value (see ITR_SCENE_DOORFRAME_VALUE) off a shallow
-  // clone so the caller's own data.instances (cached/replayed) is never mutated — same clone discipline
-  // the AO variant path above keeps. rigOn-gated so the study baseline stays honest.
-  const doorList = rigOn
-    ? inst.doorframe.map((d) => Object.assign({}, d, { color: itrScaleHexValue(d.color, ITR_SCENE_DOORFRAME_VALUE) }))
-    : inst.doorframe;
-  const doorMesh = interiorBuildInstancedMesh(doorList, cx, cz, null, variant, "doorframe");
+  // BW2-4b item 4 — DOORFRAME VALUE + TEXTURE. The doorframe ships trimColor as its instance color; a
+  // textured InstancedMesh MULTIPLIES its map by that per-instance color, so a dark trim double-darkened
+  // the wallTex to a pure-black slab (the loop-02 black-monolith arch — the exact bug the WALL
+  // neutralization one section up already solved). When textured, NEUTRALIZE the doorframe color to a
+  // value multiplier (relative to the wall base, same as the wall path) so the arch shows the wall
+  // texture at proper value, THEN apply the recess-darken (ITR_SCENE_DOORFRAME_VALUE) so it reads a
+  // touch darker than the wall — a recessed textured stone arch, per the mock. Untextured (no wallTex)
+  // keeps the old plain trim-value darken. rigOn-gated so the study baseline stays honest.
+  const doorList = wallTex
+    ? itrNeutralizeInstanceColors(inst.doorframe, kit.wallColor).map((d) => Object.assign({}, d, { color: itrScaleHexValue(d.color, ITR_SCENE_DOORFRAME_VALUE) }))
+    : (rigOn ? inst.doorframe.map((d) => Object.assign({}, d, { color: itrScaleHexValue(d.color, ITR_SCENE_DOORFRAME_VALUE) })) : inst.doorframe);
+  // BW2-4b item 4 — DOORFRAME TEXTURE: doorframes carried texture=null (an untextured flat prism), then
+  // the BW2-4 value-plunge darkened them to near-black — the loop-05/loop-02 "black monolith arch". Now
+  // they take the SAME wallTex the walls/pillars do (per-face planar for the vertical prism), with the
+  // darkened-trim instance color kept (NOT neutralized) so the arch reads as textured dark stone with a
+  // whisper of the trim accent hue — the mock's dark textured archway, not a flat black block.
+  const doorMesh = interiorBuildInstancedMesh(doorList, cx, cz, wallTex, variant, "doorframe");
   // BEAUTY-WAVE-2.md BW2-1b (THE OCCLUSION LAW), item 1: DYNAMIC CUTAWAY for pillar prisms — the
   // CUTAWAY WALLS treatment just above only ever adjusted WALL instances; a pillar between the
   // camera and a mounted standee was never touched at all. Recomputed every board build (camera
@@ -6764,7 +6993,7 @@ function setInteriorBoard(data){
   // DUNGEON-GRAPH.md U3 iteration-2, ruling 2: real environmental light sources (data.lights, emitted
   // by src/ui/theater-interior.js's interiorBuildBoard) — realm-flavored PointLights + their own
   // visible emissive markers, capped at INTERIOR_SHADOW_CASTER_CAP shadow-casters.
-  const lightsBuilt = interiorBuildLights(data.lights, cx, cz, data.realmId, S.interiorFloorTopMap);
+  const lightsBuilt = interiorBuildLights(data.lights, cx, cz, data.realmId, S.interiorFloorTopMap, data.pieces);
   S.interiorGroup.add(lightsBuilt.group);
   S.interiorShadowCasterCount = lightsBuilt.casters;
   S.interiorLightCount = (data.lights || []).length;
@@ -7201,7 +7430,7 @@ function setUnits(data){
       // own header explains why this makes fall-death's tip-as-one-group behavior free). Radius off
       // the sprite's own rendered width (figureFor's interior branch stamps interiorWidth alongside
       // interiorHeight specifically for this — see that branch's own comment).
-      const baseRadius = (figure.userData.interiorWidth || figure.userData.interiorHeight || 1) * 0.42;
+      const baseRadius = (figure.userData.interiorWidth || figure.userData.interiorHeight || 1) * INTERIOR_BASE_RADIUS_FRAC;
       const baseMesh = buildInteriorBase(baseRadius, S.lastBoard && S.lastBoard.tileKit && S.lastBoard.tileKit.trimColor);
       figure.add(baseMesh);
       figure.userData.interiorBaseRadius = baseRadius;
@@ -7591,6 +7820,44 @@ window.Theater.interiorPsxAudit = function(){
     }
   });
   return audit;
+};
+
+// BW2-4b item 1 — THE BRIGHTNESS LAW measurement seam (harness-only, no product caller). __setSpriteUnlitDebug
+// flips buildSpriteBillboardMesh back to the old full-bright MeshBasic so a capture harness can mount the
+// SAME board twice (lit vs unlit) and read every sprite's rendered luminance as a ratio of full-bright.
+// __spriteScreenRects projects every mounted sprite billboard's own world box to canvas-pixel space so
+// the harness knows WHERE to sample. Both exist only for dev/battle-gate/capture-lit-sprites.mjs.
+window.Theater.__setSpriteUnlitDebug = function(on){ SPRITE_UNLIT_DEBUG = !!on; };
+window.Theater.__spriteScreenRects = function(){
+  const out = [];
+  if(!S.interiorGroup || !S.camera || !S.renderer) return out;
+  const canvas = S.renderer.domElement;
+  const W = canvas.width, H = canvas.height;
+  const v = new THREE.Vector3();
+  const project = (wx, wy, wz) => {
+    v.set(wx, wy, wz).project(S.camera);
+    return { x: (v.x * 0.5 + 0.5) * W, y: (-v.y * 0.5 + 0.5) * H };
+  };
+  S.interiorGroup.traverse((obj) => {
+    if(!(obj.userData && obj.userData.sprite && obj.userData.spriteBillboardMesh)) return;
+    const wp = new THREE.Vector3();
+    obj.getWorldPosition(wp);
+    const height = obj.userData.interiorHeight || 1.1;
+    const width = obj.userData.interiorWidth || height;
+    const foot = project(wp.x, wp.y, wp.z);
+    const head = project(wp.x, wp.y + height, wp.z);
+    const side = project(wp.x + width * 0.5, wp.y + height * 0.5, wp.z);
+    const mid = project(wp.x, wp.y + height * 0.5, wp.z);
+    const pxH = Math.abs(foot.y - head.y);
+    const pxW = Math.abs(side.x - mid.x) * 2;
+    out.push({
+      slug: obj.userData.spriteSlug || obj.userData.dressingSlug || null,
+      cx: mid.x, cy: (foot.y + head.y) / 2,
+      w: pxW, h: pxH,
+      unlit: !!(obj.userData.spriteBillboardMesh.material && obj.userData.spriteBillboardMesh.material.isMeshBasicMaterial)
+    });
+  });
+  return out;
 };
 
 // VP0/GRAPHICS-ENGINE law 2/2b (docs/BEAUTY-WAVE.md) — harness-facing read-only diagnostics for the

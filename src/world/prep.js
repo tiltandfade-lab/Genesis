@@ -824,6 +824,45 @@ function spatialRoomForSeg(pn, segNum){
   return pn.spatial.rooms.find(r=>r.segNum===segNum) || null;
 }
 
+/* BEAUTY-WAVE.md VP6 item 4 — VISIBLE HISTORY. On hit/death the render layer (src/ui/theater-boot.js's
+   VP6 decal render pass) drops a seeded blood/scorch decal CARD at the event cell; this is the PERSIST
+   half — the codex place remembers its battles across visits, stamped onto the spatial overlay so a
+   room's fight history survives a re-render/re-entry the same way pn.spatial.positions (U4 §4, above)
+   survives one.
+   DEVIATION NOTE (documented, not silent): the VP6 spec text names the persistence field
+   "pn.spatial.dressing" — but that name is ALREADY OWNED by src/engine/place-dressing.js's dressPlan(),
+   whose own header is explicit that its `plan.dressing` output is a PURE, regenerate-every-call
+   derivation (roster cards from REALM_DRESSING, "same (plan,opts) snapshot always yields byte-identical
+   dressing arrays"). Persisting mutable combat-decal state onto that same key would either get silently
+   stomped the next dressPlan() call or corrupt dressPlan's own purity contract depending on call order —
+   a real collision, not a nitpick. This stamps a SIBLING field, `pn.spatial.decals` (keyed by roomSegNum,
+   same "which room" addressing spatialRoomForSeg already uses), keeping both channels honest: dressPlan's
+   output stays pure-regenerated, decals stay persistent-mutated.
+   CAP: max INTERIOR_DECAL_CAP (12) stamps per room, FIFO (oldest evicted first) — persistence is the
+   feature, unbounded growth is not (a grinding room across a whole campaign must not accrete forever).
+   CHILD CARVE-OUT (MECHANICAL, not tone-of-voice): a decal tagged childTagged:true is NEVER stamped as
+   "blood" — silently downgraded to "impact" (dust/scuff, no gore) before it ever reaches the array, so
+   there is no code path where a child-tagged entity's death leaves a blood decal, full stop. */
+const INTERIOR_DECAL_CAP = 12;
+function prepStampInteriorDecal(pn, segNum, decal){
+  if(!pn || !pn.spatial || !decal) return null;
+  pn.spatial.decals = pn.spatial.decals || {};
+  const key = String(segNum);
+  const room = pn.spatial.decals[key] = pn.spatial.decals[key] || [];
+  const stamped = Object.assign({}, decal);
+  if(stamped.childTagged && stamped.kind === "blood") stamped.kind = "impact"; // MECHANICAL carve-out
+  room.push(stamped);
+  while(room.length > INTERIOR_DECAL_CAP) room.shift(); // FIFO — oldest evicted first
+  return stamped;
+}
+/* companion read: every decal stamped for a room, in FIFO (oldest-first) order — the render layer's own
+   consumption point (setInteriorBoard's `data.decals`, sourced by whatever caller resolves the current
+   room's pn before building the board — this file stays render-agnostic, same split as spatialRoomForSeg). */
+function spatialDecalsForSeg(pn, segNum){
+  if(!pn || !pn.spatial || !pn.spatial.decals) return [];
+  return pn.spatial.decals[String(segNum)] || [];
+}
+
 /* U4 §4 — the mechanical repositioning seam (Adam's ruling, docs/DUNGEON-GRAPH.md status line: desired,
    minimal). Board-piece positions live as DATA on the spatial overlay itself: pn.spatial.positions =
    { <pieceId>: {segNum, x, y, isPlayer} } — a per-piece record naming which room it's in and its

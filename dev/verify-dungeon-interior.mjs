@@ -751,10 +751,12 @@ function runVP1Scenario(bootSourceText, runnerSrc, extraArgs){
 
 group("22 — RED-FIRST: pre-fix theater-boot.js (merge-base with master, before this unit's edits) built a medium piece's tabletop billboard WELL over 2 world units");
 {
-  // Resolve the pre-fix tip as the merge-base with master (robust to this branch gaining more
-  // commits later) rather than a bare "HEAD", which would start pointing at THIS unit's own fix
-  // commit the moment it lands — silently turning this into a no-op re-read of the working tree.
-  const preFixRef = execFileSync("git", ["merge-base", "HEAD", "master"], { cwd: ROOT, encoding: "utf-8" }).trim();
+  // The pre-fix source is PINNED to the last master tip before VP1 landed (63d3073). A derived
+  // ref (bare HEAD, or merge-base with master) self-invalidates the moment the unit merges INTO
+  // master — merge-base then resolves to a post-fix commit and the sanity check below reds
+  // (caught live at the 2026-07-10 VP0+VP1 integration gate). A red-first proof is historical
+  // by nature; the pin is the honest fixture.
+  const preFixRef = "63d3073";
   const OLD_SOURCE = execFileSync("git", ["show", `${preFixRef}:src/ui/theater-boot.js`], { cwd: ROOT, encoding: "utf-8" });
   ok(!OLD_SOURCE.includes("_interiorBuildPiecesForTest"), `sanity: the pre-fix tip (${preFixRef}) theater-boot.js predates this unit's test seam (proves this is really the pre-fix source, not an accidental re-read of the working tree)`);
   const red = runVP1Scenario(OLD_SOURCE, OLD_RUNNER_SRC, []);

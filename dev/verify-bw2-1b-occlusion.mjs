@@ -247,9 +247,14 @@ let A = null;
 }
 
 group("2 — GREEN: the SAME pillar stubbed to itrPillarStubHeight's parapet height no longer intersects — the fix genuinely clears the sightline, not just relabels the instance");
+// S-1 UPDATE (docs/DIEGETIC-LIGHT.md; Adam's live steer 2026-07-11): ITR_PILLAR_STUB_FRAC lowered
+// 0.3 -> 0.12 (the KNEE -> ANKLE rename in theater-boot.js) because the OLD 0.72 knee never actually
+// cleared a realistic torso-height sight point (itrPieceSightPoints' own contactY + height*0.5 sits
+// well above 0.72 for a human-scale standee) — this is the exact "columns and walls still obscure
+// figures" bug S-1 fixes, not a re-derivation of the same claim under a new number. 0.288 = 2.4 x 0.12.
 if(A){
-  ok(A.stubClearsSightline === true, `stub height ${A.stubHeight} (0.3 x wallHeightBase 2.4 = 0.72) clears the sightline that the full-height (sy=2.4) box blocked`);
-  ok(Math.abs(A.stubHeight - 0.72) < 1e-9, `stub height is exactly wallHeightBase(2.4) x ITR_PILLAR_STUB_FRAC(0.3) = ${A.stubHeight}`);
+  ok(A.stubClearsSightline === true, `stub height ${A.stubHeight} (0.12 x wallHeightBase 2.4 = 0.288, the S-1 ankle) clears the sightline that the full-height (sy=2.4) box blocked`);
+  ok(Math.abs(A.stubHeight - 0.288) < 1e-9, `stub height is exactly wallHeightBase(2.4) x ITR_PILLAR_STUB_FRAC(0.12, S-1's ankle) = ${A.stubHeight}`);
 }
 
 group("3 — GREEN: itrPillarCutawayMask flags the real occluding pillar instance, and does NOT flag it against an unrelated sightline (no false-positive stubbing of every pillar in a room)");

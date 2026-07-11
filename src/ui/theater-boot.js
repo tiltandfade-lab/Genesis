@@ -7172,6 +7172,12 @@ function itrPillarStubHeight(wallHeightBase){
 // fade path below (itrPillarStubHeight kept as the historical/tested name the BW2-1b harness seam
 // already exposes).
 const itrOcclusionAnkleHeight = itrPillarStubHeight;
+// TEST-ONLY SEAM (dev/verify-occlusion-fade.mjs's own RED-FIRST proof): forces setInteriorBoard's
+// wall/pillar occlusion pass off entirely (both kinds render at their ORIGINAL full height, no ankle
+// stub, no ghost) so a harness can render the "nothing occludes this frame at all" baseline and prove
+// a figure directly behind a full-height occluder genuinely reads occluded BEFORE trusting the fixed
+// (default-on) render's green. No product caller ever sets this — false everywhere except the harness.
+let ITR_OCCLUSION_FADE_DISABLED_FOR_TEST = false;
 // S-1 GHOST OPACITY — Adam's own number ("~5%"): the removed upper portion of an occluding wall/pillar
 // renders at this opacity instead of vanishing outright, so the player can still tell a column/wall is
 // there while the figure behind it reads clearly through it.
@@ -7649,7 +7655,7 @@ function setInteriorBoard(data){
   // removed upper portion (rendered in the separate wallGhostMesh below — its own draw call, only
   // built when at least one wall instance is actually occluding this frame).
   let wallGhostList = [];
-  if(itrSightPoints.length && wallList.length){
+  if(!ITR_OCCLUSION_FADE_DISABLED_FOR_TEST && itrSightPoints.length && wallList.length){
     const wallOcclusionMask = itrPillarCutawayMask(wallList, occlusionCameraPos, itrSightPoints, cx, cz);
     const wallAnkleH = itrOcclusionAnkleHeight(data.wallHeightBase);
     wallList = wallList.map(function(wi, i){
@@ -7698,7 +7704,7 @@ function setInteriorBoard(data){
   // "there" — see pillarGhostMeshes below, its own (small, occlusion-only) draw call.
   let pillarList = inst.pillar;
   let pillarGhostList = [];
-  if(occlusionCameraPos && pillarList && pillarList.length && itrSightPoints.length){
+  if(!ITR_OCCLUSION_FADE_DISABLED_FOR_TEST && occlusionCameraPos && pillarList && pillarList.length && itrSightPoints.length){
     const mask = itrPillarCutawayMask(pillarList, occlusionCameraPos, itrSightPoints, cx, cz);
     const pillarAnkleH = itrOcclusionAnkleHeight(data.wallHeightBase);
     pillarList = pillarList.map(function(pinst, i){
@@ -8635,6 +8641,9 @@ window.Theater._interiorPillarListForTest = function(){ return S.interiorLastPil
 window.Theater._interiorWallListForTest = function(){ return S.interiorLastWallList || []; };
 window.Theater._interiorWallGhostListForTest = function(){ return S.interiorLastWallGhostList || []; };
 window.Theater._interiorPillarGhostListForTest = function(){ return S.interiorLastPillarGhostList || []; };
+// S-1 — TEST-ONLY SEAM: see ITR_OCCLUSION_FADE_DISABLED_FOR_TEST's own declaration comment — flips the
+// whole ankle+ghost pass off for a genuine RED-FIRST baseline render (dev/verify-occlusion-fade.mjs).
+window.Theater._setOcclusionFadeDisabledForTest = function(v){ ITR_OCCLUSION_FADE_DISABLED_FOR_TEST = !!v; };
 // BW2-1b — TEST-ONLY SEAM: a REAL THREE.Raycaster occlusion check against the LIVE mounted geometry —
 // casts from the CURRENT S.camera.position toward targetWorldPos, intersects only the SOLID instance
 // kinds (wall/pillar/doorframe — tagged via interiorBuildInstancedMesh's own mesh.userData.interiorKind

@@ -1,0 +1,156 @@
+{
+ "file": "frontier-clutter-dg-02.png",
+ "realm": "frontier",
+ "family": "dressing-clutter",
+ "grid": "4 rows x 4 columns",
+ "chroma": "#FF00FF",
+ "wave": "dressing-gen",
+ "cells": [
+  {
+   "slug": "frontier-clutter-brokenwagonwheel",
+   "label": "cracked wagon wheel half-sunk in trail dust",
+   "tags": {
+    "primary": "floor",
+    "location": "exterior"
+   },
+   "size": "medium"
+  },
+  {
+   "slug": "frontier-clutter-spentcasing",
+   "label": "scatter of spent brass casings glinting in the dirt",
+   "tags": {
+    "primary": "floor",
+    "location": "both"
+   },
+   "size": "small"
+  },
+  {
+   "slug": "frontier-clutter-hitchpost-rope",
+   "label": "frayed hitching rope coiled at a splintered post",
+   "tags": {
+    "primary": "wall-hang",
+    "location": "exterior"
+   },
+   "size": "small"
+  },
+  {
+   "slug": "frontier-clutter-emptycanteen",
+   "label": "dented tin canteen, cork stopper long gone",
+   "tags": {
+    "primary": "floor",
+    "location": "both"
+   },
+   "size": "small"
+  },
+  {
+   "slug": "frontier-clutter-branding-iron",
+   "label": "cold branding iron leaned against a corral rail",
+   "tags": {
+    "primary": "wall-hang",
+    "location": "exterior"
+   },
+   "size": "small"
+  },
+  {
+   "slug": "frontier-clutter-boothill-marker",
+   "label": "weathered wooden grave marker leaning at the roadside",
+   "tags": {
+    "primary": "setPiece",
+    "location": "exterior"
+   },
+   "size": "small"
+  },
+  {
+   "slug": "frontier-clutter-saddlebag-pile",
+   "label": "dropped saddlebag pile, leather cracked and sun-hardened",
+   "tags": {
+    "primary": "floor",
+    "location": "both"
+   },
+   "size": "medium"
+  },
+  {
+   "slug": "frontier-clutter-driedjerky-rack",
+   "label": "hanging jerky-drying rack, strips long since eaten",
+   "tags": {
+    "primary": "wall-hang",
+    "location": "interior"
+   },
+   "size": "small"
+  },
+  {
+   "slug": "frontier-clutter-brokenspur",
+   "label": "single rusted spur half-buried by drifted sand",
+   "tags": {
+    "primary": "floor",
+    "location": "both"
+   },
+   "size": "small"
+  },
+  {
+   "slug": "frontier-clutter-crackedbarrel",
+   "label": "split rain barrel, staves bowed and leaking dry rot",
+   "tags": {
+    "primary": "floor",
+    "location": "both"
+   },
+   "size": "medium"
+  },
+  {
+   "slug": "frontier-clutter-hayrick",
+   "label": "leaning hay rick, straw scattered by wind",
+   "tags": {
+    "primary": "blocker",
+    "location": "exterior"
+   },
+   "size": "medium"
+  },
+  {
+   "slug": "frontier-clutter-woodplank-stack",
+   "label": "stack of sun-warped fence planks against a wall",
+   "tags": {
+    "primary": "floor",
+    "location": "both"
+   },
+   "size": "medium"
+  },
+  {
+   "slug": "frontier-clutter-oldrope-coil",
+   "label": "coiled dry lariat rope hung on a rusted nail",
+   "tags": {
+    "primary": "wall-hang",
+    "location": "both"
+   },
+   "size": "small"
+  },
+  {
+   "slug": "frontier-clutter-bulletboard",
+   "label": "splintered target board pocked with old bullet holes",
+   "tags": {
+    "primary": "wall-hang",
+    "location": "exterior"
+   },
+   "size": "small"
+  },
+  {
+   "slug": "frontier-clutter-brokenwagonwheel-alt",
+   "label": "ALT of 'cracked wagon wheel half-sunk in trail dust' — different shape/growth/wear, same kind",
+   "tags": {
+    "primary": "floor",
+    "location": "exterior"
+   },
+   "size": "medium",
+   "altOf": "frontier-clutter-brokenwagonwheel"
+  },
+  {
+   "slug": "frontier-clutter-spentcasing-alt",
+   "label": "ALT of 'scatter of spent brass casings glinting in the dirt' — different shape/growth/wear, same kind",
+   "tags": {
+    "primary": "floor",
+    "location": "both"
+   },
+   "size": "small",
+   "altOf": "frontier-clutter-spentcasing"
+  }
+ ]
+}

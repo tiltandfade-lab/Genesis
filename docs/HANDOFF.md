@@ -6,7 +6,76 @@ updated: 2026-07-10
 
 # Genesis — Session Hand-off
 
-## ⭐ Latest (2026-07-10) — SPRITE-GEN-V2: cleanup, perspective law, V3 wave gated (650 sprites), casting tags [Claude Fable]
+## ⭐ Latest (2026-07-10 evening) — WILDERMYTH GRAMMAR built end-to-end; loop gate 5/5 [Claude Fable]
+
+Branch `claude/genesis-sprite-corpus-tags-edeaac` (pushed; master merge = Adam's call).
+Adam ruled Wildermyth the graphics north star (docs/GRAPHICS-ENGINE.md; DF × Daggerfall ×
+Wildermyth). The WHOLE presentation stack landed tonight: standee verbs (hit/death/guise
+tweens wired to combat), dressing roll + card channel (placeholder textures, art-ready
+against dev/model-qa/dressing-gen manifests), REALM_MATERIALS subtle textures (12 realms),
+hemisphere+grade light rig, whisper fog, diorama skirt, cutaway walls, sprite purity,
+standee tilt. FINALE GATE: 5/5 real rolled dungeons render with combat + verbs, zero
+fixtures (contact sheet at dev/battle-gate/dungeon-loop/) — 2 wiring bugs caught+fixed.
+Codex packets READY: regen-v3 round3 (incl. magenta-fails ×12) + DRESSING-GEN (50 sheets).
+
+**Do next (pick up here):**
+1. **THE BEAUTY WAVE is armed (docs/BEAUTY-WAVE.md, VP0-VP8) → then UNIFICATION-WAVE
+   (docs/UNIFICATION-WAVE.md, UW1-UW4).** Art direction is CLOSED (13 rulings in DESIGN.md);
+   everything ahead is execution. Start VP0 (Adam's two pixel-verdicts: perspective-vs-ortho,
+   PSX-dither-on-vs-off) + VP1 (the kaiju piece-scale fix + registry sizing fold — mediums
+   render giant today, contact sheet). Then VP1.5 corpus unification (palettes/texel/defringe,
+   one batch), VP2/VP2b (dressing fold + gallery pass — art is HERE, item 2).
+2. **DRESSING ART STARTED LANDING (2026-07-10 ~20:00)** — 25 dressing-gen sheets committed
+   UNGATED on the branch (`ui-sketches/sprite-sheets/*-dg-*.png`): all 3 FLAGSHIP realms
+   (fantasy/gloom/chrome) have flora+clutter+objects, plus effects core + all 12 accent
+   sheets + ash. **Next session = VP2 + VP2b**: gate → CLEAN-SHAPES/defringe slice per the
+   dressing-gen manifests → write assets/dressing/<slug>.png → extend REALM_DRESSING →
+   re-shoot the loop gate (placeholders fall away). Then the Gallery Pass on any clipped
+   arrivals. Codex still running regen-v3/round3 (magenta-fails etc.) in parallel.
+3. Adam taste calls: AO default (recommend OFF), GRAPHICS-ENGINE §G (corpses persist?,
+   weather, blood visuals), DUNGEON-GRAPH open items.
+4. GIT-LFS migration at the quiet post-merge hour (runbook ready).
+5. GUISE G1-G4 + NPC expression pass; puppet-tier posing law rides round-4 prompts.
+
+## Latest (2026-07-10 afternoon) — corpus retro-tag + DUNGEON-GRAPH U1/U2/U4 + hardened codex packets [Claude Fable]
+
+Branch `claude/genesis-sprite-corpus-tags-edeaac` (pushed; **merge to master = Adam's call**).
+All 896 committed sprites carry casting-grade tags (`dev/model-qa/corpus-tags.json`) + true-scale
+sizing (`corpus-sizing.json`, feet/5.5 — the overlay's old scale is a compressed render scale,
+not comparable for large+). Ash painterly drift CONFIRMED in the 9 committed npc/kids/animal
+sheets (mm sheets clean) → quarantined + re-queued; 13 label/art mismatches relabeled-to-art
+(fantasy-npcs-2 was systemically misassigned), orphan roles re-queued. **DUNGEON-GRAPH is FULLY BUILT
+(U1/U2/U3/U4)**: walk topologies → verified cell-grid floor plans with room roles,
+depth=difficulty, SCALE DOMAINS (docs/DUNGEON-GRAPH.md; place-spatialize 9/9, place-semantics
+26/26, walk-bind 20/20, fuzz/monkey clean). Laws ruled: TRUE-SCALE render, EXPRESSIVE CREATURE
+(FFVI), ADDITIVE FOLD, NO-BLANK-SLOTS, BUG COROLLARY; docs/GUISE.md = universal sprite-swap
+spec. Codex packets (rounds 2+3) hardened for the ~5PM window — `regen-v3/round3/RUN-NOTES.md`
+is the paste order (recovery step 0 first). sprite-review gained the FLOOR-line setter
+(click sprite → overlay `floor` → registry). docs/GIT-LFS-MIGRATION.md = ready runbook.
+
+**Verification:** check-manifest OK; dungeon harnesses 9/26/27/20 + walk-consumption 37 +
+combat-cells 13 + dm-events 70 all green; gauntlet fuzz 0 findings, monkey 0 aborted.
+Known pre-existing red: `verify-table-usage-data.mjs` fails on master too (1 check) — not ours.
+
+**Do next (pick up here):**
+1. **Study-card RE-SHOT then Adam's taste gate** — U3 LANDED (volumetric prisms proven,
+   4-draw-call budget, 27/27; orchestrator caught + fixed the U3↔U4 pn.spatial seam) but the
+   card's fog variants render near-black and gloom is underexposed — recalibrate
+   dev/battle-gate/capture-interior-study.mjs (fog density, gloom exposure, suppress the
+   ambient toast) and re-shoot before Adam picks the finish. THEN the finale: battle scene
+   in a real generated dungeon room at true scale + loop test.
+2. Adam's ~5PM codex window → `regen-v3/round3/RUN-NOTES.md` (recovery first, then round-2
+   remainder, then round-3); gate → slice → tag arrivals per the ADDITIVE FOLD LAW.
+3. Registry sizing fold: corpus-sizing.json + v3-sizing.json + `floor` rulings →
+   regenerate data/sprite-registry.js (never hand-edit); then Adam re-judges the "crusty
+   mediums" in-engine (his ruling: no fails on resolution alone until seen in engine).
+4. GIT-LFS migration at the first quiet post-merge moment (docs/GIT-LFS-MIGRATION.md;
+   needs Adam: $5 LFS pack + force-push confirm).
+5. GUISE G1-G4 + NPC expression pass ride together after sprite assignments settle.
+6. Land the sprite lane (claude/sprite-gen-refactor-magenta, now fully committed) at the
+   gen-wave sweep, per standing plan.
+
+## Latest (2026-07-10) — SPRITE-GEN-V2: cleanup, perspective law, V3 wave gated (650 sprites), casting tags [Claude Fable]
 
 The great sprite cleanup after the 2026-07-09 overnight codex blast. **State:** worktrees pruned 21→1
 (only the sprite-gen lane remains, its 59 round-2 sheets still parked there); all 2,431 uncommitted

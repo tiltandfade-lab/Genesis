@@ -11,7 +11,8 @@
     "verdict": "pass"
   },
   "spr-fantasy-aberrant-cultist": {
-    "scale": 0.967
+    "scale": 0.967,
+    "verdict": "fail"
   },
   "spr-fantasy-abominable-yeti": {
     "scale": 0.778
@@ -126,7 +127,8 @@
     "scale": 0.417
   },
   "spr-fantasy-ankylosaurus": {
-    "scale": 0.333
+    "scale": 0.333,
+    "verdict": "pass"
   },
   "spr-fantasy-ape": {
     "scale": 0.917
@@ -152,7 +154,8 @@
     "verdict": "pass"
   },
   "spr-fantasy-archmage": {
-    "scale": 0.967
+    "scale": 0.967,
+    "verdict": "fail"
   },
   "spr-fantasy-archpriest": {
     "note": "⚠ auto-scale (height uncertain): est 5.8′",
@@ -160,7 +163,8 @@
     "verdict": "pass"
   },
   "spr-fantasy-assassin": {
-    "scale": 0.967
+    "scale": 0.967,
+    "verdict": "pass"
   },
   "spr-fantasy-astral-raider-dracomancer": {
     "note": "⚠ auto-scale (height uncertain): est 6′",
@@ -174,7 +178,7 @@
   },
   "spr-fantasy-astral-raider-warrior": {
     "note": "⚠ auto-scale (height uncertain; art likely extends above head): est 6′",
-    "scale": 1.22,
+    "scale": 1.08,
     "verdict": "pass"
   },
   "spr-fantasy-awakened-shrub": {
@@ -201,10 +205,12 @@
     "scale": 0.833
   },
   "spr-fantasy-baboon": {
-    "scale": 0.417
+    "scale": 0.417,
+    "verdict": "pass"
   },
   "spr-fantasy-badger": {
-    "scale": 0.333
+    "scale": 0.333,
+    "verdict": "pass"
   },
   "spr-fantasy-balor": {
     "note": "⚠ auto-scale (art likely extends above head): est 14′",
@@ -244,10 +250,12 @@
     "verdict": "pass"
   },
   "spr-fantasy-basilisk": {
-    "scale": 0.5
+    "scale": 0.92,
+    "verdict": "pass"
   },
   "spr-fantasy-bat": {
-    "scale": 0.167
+    "scale": 0.167,
+    "verdict": "pass"
   },
   "spr-fantasy-bearded-devil": {
     "note": "⚠ auto-scale (art likely extends above head): est 6.5′",
@@ -277,7 +285,8 @@
     "verdict": "pass"
   },
   "spr-fantasy-black-pudding": {
-    "scale": 0.417
+    "scale": 0.417,
+    "verdict": "pass"
   },
   "spr-fantasy-blind-deep-stalker": {
     "note": "⚠ auto-scale (height uncertain): est 5.5′",
@@ -319,7 +328,8 @@
     "verdict": "pass"
   },
   "spr-fantasy-bone-naga": {
-    "scale": 0.667
+    "scale": 0.667,
+    "verdict": "pass"
   },
   "spr-fantasy-brain-crawler": {
     "note": "⚠ auto-scale (height uncertain; art likely extends above head): est 1.5′",
@@ -363,7 +373,8 @@
     "scale": 1.1
   },
   "spr-fantasy-bulette": {
-    "scale": 0.583
+    "scale": 0.583,
+    "verdict": "pass"
   },
   "spr-fantasy-bulette-pup": {
     "note": "⚠ auto-scale (height uncertain): est 4′",
@@ -392,7 +403,8 @@
     "verdict": "pass"
   },
   "spr-fantasy-cat": {
-    "scale": 0.333
+    "scale": 0.333,
+    "verdict": "pass"
   },
   "spr-fantasy-centaur-trooper": {
     "note": "⚠ auto-scale (art likely extends above head): est 7′",
@@ -456,7 +468,8 @@
     "scale": 0.75
   },
   "spr-fantasy-cloud-giant": {
-    "scale": 1.333
+    "scale": 1.333,
+    "verdict": "fail"
   },
   "spr-fantasy-cockatrice": {
     "note": "⚠ auto-scale (art likely extends above head): est 2.5′",
@@ -464,7 +477,8 @@
     "verdict": "pass"
   },
   "spr-fantasy-cockatrice-regent": {
-    "note": "⚠ auto-scale (height uncertain; art likely extends above head): est 6′",
+    "name": "Drake Regent",
+    "note": "⚠ auto-scale (height uncertain; art likely extends above head): est 6′ | relabel-to-art 2026-07-10 (was: cockatrice regent)",
     "scale": 1.18,
     "verdict": "pass"
   },
@@ -474,7 +488,8 @@
     "verdict": "fail"
   },
   "spr-fantasy-commoner": {
-    "scale": 0.917
+    "scale": 0.917,
+    "verdict": "pass"
   },
   "spr-fantasy-constrictor-snake": {
     "scale": 0.5
@@ -490,10 +505,12 @@
     "verdict": "pass"
   },
   "spr-fantasy-crab": {
-    "scale": 0.167
+    "scale": 0.167,
+    "verdict": "pass"
   },
   "spr-fantasy-crawling-claw": {
-    "scale": 0.2
+    "scale": 0.2,
+    "verdict": "pass"
   },
   "spr-fantasy-crocodile": {
     "scale": 0.208
@@ -592,7 +609,7 @@
   "spr-fantasy-displacer-beast": {
     "note": "⚠ auto-scale (art likely extends above head): est 5′",
     "scale": 0.73,
-    "verdict": "pass"
+    "verdict": "fail"
   },
   "spr-fantasy-djinni": {
     "note": "⚠ auto-scale (height uncertain): est 9′",
@@ -610,19 +627,24 @@
     "verdict": "pass"
   },
   "spr-fantasy-domestic-animal-a-single-donkey-stubborn-sure-footed-outlives-every-horse-on-the-property": {
-    "scale": 0.667
+    "scale": 0.99,
+    "verdict": "pass"
   },
   "spr-fantasy-domestic-animal-a-single-duck-waddling-unbothered-first-to-notice-a-stranger-at-the-water-s-edge": {
-    "scale": 0.167
+    "scale": 0.167,
+    "verdict": "pass"
   },
   "spr-fantasy-domestic-animal-a-single-goat-headstrong-climbs-what-it-shouldn-t-eats-what-it-shouldn-t": {
-    "scale": 0.417
+    "scale": 0.62,
+    "verdict": "pass"
   },
   "spr-fantasy-domestic-animal-a-single-goose-from-the-flock-loud-territorial-first-to-mark-a-stranger": {
-    "scale": 0.44
+    "scale": 0.44,
+    "verdict": "pass"
   },
   "spr-fantasy-domestic-animal-a-single-hunting-hound-lean-nose-down-bred-for-the-chase-and-bored-without-it": {
-    "scale": 0.333
+    "scale": 0.41,
+    "verdict": "pass"
   },
   "spr-fantasy-domestic-animal-a-single-kitten-too-young-to-have-earned-the-barn-cat-s-independence-yet": {
     "note": "⚠ auto-scale (scale clamped): est 0.5′",
@@ -635,16 +657,20 @@
     "verdict": "pass"
   },
   "spr-fantasy-domestic-animal-a-single-pig-smarter-than-it-s-given-credit-for-rooting-at-the-fence-line": {
-    "scale": 0.333
+    "scale": 0.333,
+    "verdict": "pass"
   },
   "spr-fantasy-domestic-animal-a-single-pony-smaller-and-calmer-than-the-war-mule-a-child-s-first-mount": {
-    "scale": 0.583
+    "scale": 0.583,
+    "verdict": "pass"
   },
   "spr-fantasy-domestic-animal-a-single-rabbit-twitchy-kept-for-the-table-or-kept-as-a-pet-never-sure-which": {
-    "scale": 0.133
+    "scale": 0.133,
+    "verdict": "pass"
   },
   "spr-fantasy-domestic-animal-a-single-sheep-from-the-herd-moves-with-the-others-and-its-lone-reluctance-to-follow-is-the-tell": {
-    "scale": 0.54
+    "scale": 0.54,
+    "verdict": "pass"
   },
   "spr-fantasy-domestic-animal-a-single-turkey-puffed-up-and-loud-more-guard-animal-than-anyone-admits": {
     "note": "⚠ auto-scale (art likely extends above head): est 2.5′",
@@ -657,10 +683,12 @@
     "verdict": "pass"
   },
   "spr-fantasy-domestic-animal-barn-cat-owns-the-place-tolerates-the-people-hunts-the-dark-corners": {
-    "scale": 0.33
+    "scale": 0.33,
+    "verdict": "pass"
   },
   "spr-fantasy-domestic-animal-bird-kept-close-a-single-hawk-carries-watches-and-remembers-a-face": {
-    "scale": 0.15
+    "scale": 0.15,
+    "verdict": "pass"
   },
   "spr-fantasy-domestic-animal-half-tamed-wild-thing-comes-to-the-window-never-the-hand-trusts-one-child-and-no-one-else": {
     "note": "⚠ auto-scale (height uncertain): est 1.0′",
@@ -668,7 +696,8 @@
     "verdict": "pass"
   },
   "spr-fantasy-domestic-animal-loyal-dog-bonded-to-one-person-reads-their-mood-before-they-do": {
-    "scale": 0.52
+    "scale": 0.52,
+    "verdict": "pass"
   },
   "spr-fantasy-domestic-animal-old-animal-past-its-working-years-half-blind-and-still-the-first-to-growl-at-the-wrong-thing": {
     "note": "⚠ auto-scale (height uncertain): est 2.0′",
@@ -676,7 +705,8 @@
     "verdict": "pass"
   },
   "spr-fantasy-domestic-animal-stray-belongs-to-no-one-and-everyone-the-street-s-own-alarm-bell": {
-    "scale": 0.53
+    "scale": 0.53,
+    "verdict": "pass"
   },
   "spr-fantasy-domestic-animal-the-realm-beast-the-realm-beast-a-locally-distinct-pet-one-animal-realm-appropriate": {
     "note": "⚠ auto-scale (height uncertain): est 1.5′",
@@ -694,10 +724,12 @@
     "verdict": "pass"
   },
   "spr-fantasy-domestic-animal-working-beast-a-single-ox-earns-its-feed-patient-and-spooks-true": {
-    "scale": 0.91
+    "scale": 0.91,
+    "verdict": "pass"
   },
   "spr-fantasy-doppelganger": {
-    "scale": 0.967
+    "scale": 0.967,
+    "verdict": "pass"
   },
   "spr-fantasy-dracolich": {
     "note": "⚠ auto-scale (height uncertain; art likely extends above head): est 20′",
@@ -718,6 +750,8 @@
     "scale": 1.067
   },
   "spr-fantasy-dragonborn-temple-guard-devout-literal-minded-takes-the-oath-seriously": {
+    "name": "Tiefling Minstrel",
+    "note": "relabel-to-art 2026-07-10 (was: dragonborn temple guard — devout, literal-minded, takes the oath seriously)",
     "scale": 1.117
   },
   "spr-fantasy-dretch": {
@@ -763,7 +797,7 @@
   },
   "spr-fantasy-dungeon-animal-cave-adapted-spider-pale-eyeless-spins-webs-across-passages-nobody-s-walked-in-years": {
     "note": "⚠ auto-scale (scale clamped): est 0.5′",
-    "scale": 0.1,
+    "scale": 1.04,
     "verdict": "pass"
   },
   "spr-fantasy-dungeon-animal-cave-cricket-oversized-chirping-alone-in-the-dark-first-warning-of-the-swarm-nearby": {
@@ -787,7 +821,8 @@
     "verdict": "pass"
   },
   "spr-fantasy-dungeon-animal-feral-falconry-bird-a-hawk-that-escaped-its-jesses-generations-ago-now-hunts-the-tunnels-vermin": {
-    "scale": 0.15
+    "scale": 0.23,
+    "verdict": "pass"
   },
   "spr-fantasy-dungeon-animal-feral-vermin-catcher-once-someone-s-ferret-or-terrier-now-lives-wild-in-the-tunnels-still-killing-rats-out-of-habit": {
     "note": "⚠ auto-scale (height uncertain): est 1.0′",
@@ -805,7 +840,8 @@
     "verdict": "pass"
   },
   "spr-fantasy-dungeon-animal-lost-hunting-hound-a-noble-s-dog-that-wandered-too-far-in-and-never-found-the-way-back-out": {
-    "scale": 0.333
+    "scale": 0.38,
+    "verdict": "pass"
   },
   "spr-fantasy-dungeon-animal-nest-robbing-crow-one-bird-that-s-learned-the-dungeon-s-side-passages-better-than-most-explorers": {
     "note": "⚠ auto-scale (scale clamped): est 0.6′",
@@ -813,10 +849,12 @@
     "verdict": "pass"
   },
   "spr-fantasy-dungeon-animal-scarred-guard-dog-gone-feral-once-trained-to-patrol-these-halls-now-answers-to-no-one": {
-    "scale": 0.333
+    "scale": 0.43,
+    "verdict": "pass"
   },
   "spr-fantasy-dungeon-animal-sole-survivor-packhorse-the-last-of-a-caravan-s-animals-malnourished-still-saddled": {
-    "scale": 0.917
+    "scale": 0.917,
+    "verdict": "pass"
   },
   "spr-fantasy-dungeon-animal-starving-stray-a-cat-or-dog-that-followed-someone-in-and-got-left-behind": {
     "note": "⚠ auto-scale (height uncertain): est 1.5′",
@@ -835,7 +873,7 @@
   },
   "spr-fantasy-dungeon-animal-tunnel-bat-colony-straggler-a-single-bat-that-never-rejoined-the-swarm-clings-alone-near-a-cracked-vent": {
     "note": "⚠ auto-scale (art likely extends above head; scale clamped): est 0.4′",
-    "scale": 0.12,
+    "scale": 0.18,
     "verdict": "pass"
   },
   "spr-fantasy-dungeon-animal-tunnel-blind-mole-huge-clawed-forepaws-displaces-more-earth-than-it-should-be-able-to": {
@@ -849,7 +887,8 @@
     "verdict": "pass"
   },
   "spr-fantasy-dungeon-animal-wrong-place-goat-a-farm-animal-that-fell-through-a-sinkhole-and-somehow-survived-down-here": {
-    "scale": 0.417
+    "scale": 0.8,
+    "verdict": "pass"
   },
   "spr-fantasy-dungeon-animal-wrongly-still-lizard-motionless-so-long-it-s-mistaken-for-a-carving-until-it-isn-t": {
     "note": "⚠ auto-scale (scale clamped): est 0.3′",
@@ -877,7 +916,8 @@
     "scale": 0.733
   },
   "spr-fantasy-eagle": {
-    "scale": 0.333
+    "scale": 0.333,
+    "verdict": "pass"
   },
   "spr-fantasy-earth-elemental": {
     "note": "⚠ auto-scale (art likely extends above head): est 8′",
@@ -993,7 +1033,8 @@
     "verdict": "pass"
   },
   "spr-fantasy-flameskull": {
-    "scale": 0.267
+    "scale": 0.58,
+    "verdict": "pass"
   },
   "spr-fantasy-flaming-skeleton": {
     "note": "⚠ auto-scale (art likely extends above head): est 5.8′",
@@ -1016,7 +1057,8 @@
     "verdict": "pass"
   },
   "spr-fantasy-frog": {
-    "scale": 0.167
+    "scale": 0.167,
+    "verdict": "pass"
   },
   "spr-fantasy-frost-giant": {
     "scale": 0.889
@@ -1060,7 +1102,8 @@
     "scale": 0.833
   },
   "spr-fantasy-giant-ape": {
-    "scale": 0.667
+    "scale": 0.667,
+    "verdict": "pass"
   },
   "spr-fantasy-giant-axe-beak": {
     "note": "⚠ auto-scale (height uncertain; art likely extends above head): est 9′",
@@ -1088,7 +1131,8 @@
     "scale": 0.5
   },
   "spr-fantasy-giant-crocodile": {
-    "scale": 0.278
+    "scale": 0.278,
+    "verdict": "fail"
   },
   "spr-fantasy-giant-eagle": {
     "note": "⚠ auto-scale (art likely extends above head): est 6′",
@@ -1101,7 +1145,8 @@
     "verdict": "fail"
   },
   "spr-fantasy-giant-fire-beetle": {
-    "scale": 0.25
+    "scale": 0.25,
+    "verdict": "pass"
   },
   "spr-fantasy-giant-frog": {
     "scale": 0.5
@@ -1137,7 +1182,8 @@
     "scale": 0.667
   },
   "spr-fantasy-giant-shark": {
-    "scale": 0.333
+    "scale": 0.333,
+    "verdict": "pass"
   },
   "spr-fantasy-giant-spider": {
     "scale": 0.417
@@ -1207,6 +1253,8 @@
     "scale": 0.583
   },
   "spr-fantasy-gnomish-tinkerer-clockwork-contraptions-that-mostly-work": {
+    "name": "Human Tinkerer",
+    "note": "relabel-to-art 2026-07-10 (was: gnomish tinkerer — clockwork contraptions that mostly work)",
     "scale": 0.583
   },
   "spr-fantasy-goat": {
@@ -1246,7 +1294,8 @@
     "scale": 1.267
   },
   "spr-fantasy-gorgon": {
-    "note": "⚠ auto-scale (art likely extends above head): est 8′",
+    "name": "Gilded Medusa",
+    "note": "⚠ auto-scale (art likely extends above head): est 8′ | relabel-to-art 2026-07-10 (was: gorgon)",
     "scale": 0.667,
     "verdict": "fail"
   },
@@ -1289,7 +1338,8 @@
     "verdict": "pass"
   },
   "spr-fantasy-grell": {
-    "note": "⚠ auto-scale (art likely extends above head): est 5′",
+    "name": "Lurking Fiend",
+    "note": "⚠ auto-scale (art likely extends above head): est 5′ | relabel-to-art 2026-07-10 (was: grell)",
     "scale": 1.22,
     "verdict": "pass"
   },
@@ -1372,13 +1422,15 @@
     "verdict": "pass"
   },
   "spr-fantasy-hawk": {
-    "scale": 0.333
+    "scale": 0.59,
+    "verdict": "pass"
   },
   "spr-fantasy-healer-human": {
     "scale": 0.967
   },
   "spr-fantasy-hell-hound": {
-    "scale": 0.667
+    "scale": 0.667,
+    "verdict": "pass"
   },
   "spr-fantasy-helmed-horror": {
     "note": "⚠ auto-scale (art likely extends above head): est 6′",
@@ -1404,7 +1456,8 @@
     "verdict": "pass"
   },
   "spr-fantasy-hippopotamus": {
-    "scale": 0.417
+    "scale": 0.53,
+    "verdict": "pass"
   },
   "spr-fantasy-hired-blade-dwarf": {
     "scale": 0.75
@@ -1438,12 +1491,16 @@
     "scale": 1.25
   },
   "spr-fantasy-human-midwife-elderly-delivered-half-the-village-remembers-all-of-it": {
+    "name": "Village Acolyte",
+    "note": "relabel-to-art 2026-07-10 (was: human midwife, elderly — delivered half the village, remembers all of it)",
     "scale": 0.95
   },
   "spr-fantasy-human-midwife-s-apprentice-human-dark-skinned-learning-the-trade-from-her-mother": {
     "scale": 0.95
   },
   "spr-fantasy-human-miller-dust-covered-counts-every-sack-twice": {
+    "name": "Dragonborn Gate Guard",
+    "note": "relabel-to-art 2026-07-10 (was: human miller — dust-covered, counts every sack twice)",
     "scale": 0.967
   },
   "spr-fantasy-human-retired-soldier-one-armed-human-dark-skinned-runs-the-town-s-only-proper-tavern-brawl-rules": {
@@ -1466,7 +1523,8 @@
     "verdict": "pass"
   },
   "spr-fantasy-hyena": {
-    "scale": 0.417
+    "scale": 0.53,
+    "verdict": "pass"
   },
   "spr-fantasy-ice-devil": {
     "note": "⚠ auto-scale (height uncertain; art likely extends above head): est 10′",
@@ -1494,7 +1552,8 @@
     "verdict": "fail"
   },
   "spr-fantasy-jackal": {
-    "scale": 0.333
+    "scale": 0.42,
+    "verdict": "pass"
   },
   "spr-fantasy-jackalwere": {
     "note": "⚠ auto-scale (height uncertain): est 3′",
@@ -1607,7 +1666,8 @@
     "verdict": "pass"
   },
   "spr-fantasy-killer-whale": {
-    "scale": 0.389
+    "scale": 0.389,
+    "verdict": "fail"
   },
   "spr-fantasy-knight": {
     "note": "⚠ auto-scale (art likely extends above head): est 6′",
@@ -1631,7 +1691,8 @@
     "verdict": "fail"
   },
   "spr-fantasy-lamia": {
-    "scale": 0.583
+    "scale": 0.583,
+    "verdict": "pass"
   },
   "spr-fantasy-land-worker-dragonborn": {
     "scale": 1.1
@@ -1647,7 +1708,8 @@
     "verdict": "pass"
   },
   "spr-fantasy-lemure": {
-    "scale": 0.75
+    "scale": 0.75,
+    "verdict": "pass"
   },
   "spr-fantasy-lich": {
     "scale": 0.967
@@ -1656,7 +1718,8 @@
     "scale": 0.333
   },
   "spr-fantasy-lizard": {
-    "scale": 0.167
+    "scale": 0.167,
+    "verdict": "pass"
   },
   "spr-fantasy-lizardfolk-geomancer": {
     "note": "⚠ auto-scale (art likely extends above head): est 6′",
@@ -1669,7 +1732,8 @@
     "verdict": "pass"
   },
   "spr-fantasy-mage": {
-    "scale": 0.967
+    "scale": 0.967,
+    "verdict": "pass"
   },
   "spr-fantasy-magma-mephit": {
     "note": "⚠ auto-scale (art likely extends above head): est 3′",
@@ -1680,6 +1744,8 @@
     "scale": 0.5
   },
   "spr-fantasy-magnate-halfling": {
+    "name": "Orc Trade Boss",
+    "note": "relabel-to-art 2026-07-10 (was: magnate (halfling))",
     "scale": 0.5
   },
   "spr-fantasy-maker-human": {
@@ -1798,7 +1864,8 @@
     "verdict": "pass"
   },
   "spr-fantasy-myconid-sprout": {
-    "scale": 0.417
+    "scale": 0.417,
+    "verdict": "pass"
   },
   "spr-fantasy-nalfeshnee": {
     "note": "⚠ auto-scale (height uncertain): est 10′",
@@ -1826,7 +1893,8 @@
     "scale": 0.5
   },
   "spr-fantasy-octopus": {
-    "scale": 0.333
+    "scale": 0.333,
+    "verdict": "pass"
   },
   "spr-fantasy-ogre": {
     "note": "⚠ auto-scale (art likely extends above head): est 9.5′",
@@ -1885,13 +1953,17 @@
     "scale": 0.583
   },
   "spr-fantasy-outsider-tiefling": {
+    "name": "Dwarf Fowler",
+    "note": "relabel-to-art 2026-07-10 (was: outsider (tiefling))",
     "scale": 0.983
   },
   "spr-fantasy-owl": {
-    "scale": 0.333
+    "scale": 0.47,
+    "verdict": "pass"
   },
   "spr-fantasy-owlbear": {
-    "scale": 0.667
+    "scale": 0.667,
+    "verdict": "pass"
   },
   "spr-fantasy-owlbear-cub": {
     "note": "⚠ auto-scale (height uncertain): est 4′",
@@ -1899,6 +1971,8 @@
     "verdict": "pass"
   },
   "spr-fantasy-pampered-elite-goliath": {
+    "name": "Human Smith",
+    "note": "relabel-to-art 2026-07-10 (was: pampered-elite (goliath))",
     "scale": 1.25
   },
   "spr-fantasy-panther": {
@@ -1939,7 +2013,8 @@
     "scale": 0.667
   },
   "spr-fantasy-piranha": {
-    "scale": 0.167
+    "scale": 0.3,
+    "verdict": "pass"
   },
   "spr-fantasy-pirate": {
     "note": "⚠ auto-scale (art likely extends above head): est 5.7′",
@@ -1979,22 +2054,23 @@
   "spr-fantasy-plesiosaurus": {
     "note": "⚠ auto-scale (height uncertain): est 6′",
     "scale": 0.71,
-    "verdict": "pass"
+    "verdict": "fail"
   },
   "spr-fantasy-polar-bear": {
-    "scale": 0.667
+    "scale": 0.66,
+    "verdict": "pass"
   },
   "spr-fantasy-poltergeist": {
     "note": "⚠ auto-scale (height uncertain; art likely extends above head): est 4′",
     "scale": 1.22,
-    "verdict": "pass"
+    "verdict": "fail"
   },
   "spr-fantasy-pony": {
     "scale": 0.667
   },
   "spr-fantasy-priest": {
     "note": "⚠ auto-scale (art likely extends above head): est 5.6′",
-    "scale": 1.26,
+    "scale": 1.17,
     "verdict": "pass"
   },
   "spr-fantasy-priest-acolyte": {
@@ -2043,6 +2119,8 @@
     "scale": 1.1
   },
   "spr-fantasy-recruiter-orc": {
+    "name": "Orc Farmer",
+    "note": "relabel-to-art 2026-07-10 (was: recruiter (orc))",
     "scale": 1.067
   },
   "spr-fantasy-red-chaos-frog": {
@@ -2096,7 +2174,8 @@
     "scale": 0.583
   },
   "spr-fantasy-saber-toothed-tiger": {
-    "scale": 0.417
+    "scale": 0.49,
+    "verdict": "pass"
   },
   "spr-fantasy-sahuagin-baron": {
     "note": "⚠ auto-scale (height uncertain; art likely extends above head): est 8′",
@@ -2152,7 +2231,7 @@
   "spr-fantasy-sea-hag": {
     "note": "⚠ auto-scale (art likely extends above head): est 5.3′",
     "scale": 0.883,
-    "verdict": "pass"
+    "verdict": "fail"
   },
   "spr-fantasy-seahorse": {
     "scale": 0.333
@@ -2163,6 +2242,8 @@
     "verdict": "pass"
   },
   "spr-fantasy-secret-scholar-human": {
+    "name": "Tiefling Baker",
+    "note": "relabel-to-art 2026-07-10 (was: secret-scholar (human))",
     "scale": 0.967
   },
   "spr-fantasy-servant-goliath": {
@@ -2192,7 +2273,7 @@
   "spr-fantasy-silver-dragon-wyrmling": {
     "note": "⚠ auto-scale (art likely extends above head): est 5.5′",
     "scale": 1.56,
-    "verdict": "pass"
+    "verdict": "fail"
   },
   "spr-fantasy-skeleton": {
     "scale": 0.917
@@ -2347,7 +2428,7 @@
   "spr-fantasy-swarm-of-stirges": {
     "note": "⚠ auto-scale (height uncertain; art likely extends above head): est 3′",
     "scale": 0.84,
-    "verdict": "pass"
+    "verdict": "fail"
   },
   "spr-fantasy-swarm-of-venomous-snakes": {
     "note": "⚠ auto-scale (height uncertain): est 2′",
@@ -2403,6 +2484,8 @@
     "verdict": "pass"
   },
   "spr-fantasy-tiefling-blacksmith-s-apprentice-still-learning-already-better-than-most-journeymen": {
+    "name": "Tiefling Courier",
+    "note": "relabel-to-art 2026-07-10 (was: tiefling blacksmith's apprentice — still learning, already better than most journeymen)",
     "scale": 0.967
   },
   "spr-fantasy-tiefling-fortune-teller-half-the-town-swears-by-her-half-crosses-the-street": {
@@ -2449,7 +2532,8 @@
     "scale": 0.917
   },
   "spr-fantasy-troll": {
-    "scale": 0.75
+    "scale": 0.75,
+    "verdict": "pass"
   },
   "spr-fantasy-troll-amalgam": {
     "note": "⚠ auto-scale (height uncertain; art likely extends above head): est 10′",
@@ -2519,7 +2603,7 @@
   },
   "spr-fantasy-void-monk-monk": {
     "note": "⚠ auto-scale (height uncertain; art likely extends above head): est 5.8′",
-    "scale": 1.1,
+    "scale": 0.99,
     "verdict": "pass"
   },
   "spr-fantasy-void-monk-psion": {
@@ -2557,7 +2641,8 @@
     "verdict": "pass"
   },
   "spr-fantasy-water-elemental": {
-    "scale": 0.833
+    "scale": 0.833,
+    "verdict": "fail"
   },
   "spr-fantasy-water-weird": {
     "note": "⚠ auto-scale (height uncertain; art likely extends above head): est 8′",
@@ -2696,7 +2781,8 @@
     "scale": 0.75
   },
   "spr-fantasy-will-o-wisp": {
-    "scale": 0.333
+    "scale": 0.4,
+    "verdict": "pass"
   },
   "spr-fantasy-winged-kobold-urd": {
     "note": "⚠ auto-scale (art likely extends above head): est 3′",
@@ -2704,7 +2790,8 @@
     "verdict": "pass"
   },
   "spr-fantasy-winter-wolf": {
-    "scale": 0.458
+    "scale": 0.458,
+    "verdict": "pass"
   },
   "spr-fantasy-wolf": {
     "scale": 0.45
@@ -2728,7 +2815,8 @@
     "verdict": "pass"
   },
   "spr-fantasy-yeti": {
-    "scale": 0.667
+    "scale": 0.667,
+    "verdict": "pass"
   },
   "spr-fantasy-yochlol": {
     "note": "⚠ auto-scale (height uncertain; art likely extends above head): est 6′",

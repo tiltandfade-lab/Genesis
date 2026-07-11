@@ -7,7 +7,23 @@ Instructions for the codex agent. Work through every sheet below IN ORDER, unsup
 For each sheet:
 1. Generate one image using the EXACT prompt in the code block. Do not improvise, reorder, or substitute subjects.
 2. Save the PNG at `ui-sketches/sprite-sheets/<filename>` using the exact filename in the heading.
-3. Check the result: correct sprite count, eye-level camera (no top-down), solid background, no floor planes, no chibi. If wrong, regenerate that sheet ONCE, keep the better attempt, and move on.
+3. Check the result against ALL of these before moving on:
+   a. correct sprite count, solid background, no floor planes, no chibi;
+   b. eye-level camera — and for INSECTS / BUGS / TINY CREATURES this is the rule you
+      always break: the camera sits at the CREATURE'S own eye level, a worm's-eye
+      ground camera looking at it in side or three-quarter PROFILE, as if you are
+      another bug standing next to it. NEVER looking down at it like something on a
+      floor, table, or specimen tray. If you can see the top of its back more than
+      its side, it is WRONG — regenerate;
+   c. EXPRESSION (the FFVI standard): every figure must be EXPRESSING something,
+      energetically — mid-intent pose, face reads, signature effects selling its
+      power. A creature staring blankly at the viewer like it's bombing on stage is
+      a FAIL even if everything else is perfect;
+   d. STYLE matches the realm reference PNG's pixel grain, grit, and palette discipline.
+   If any check fails: regenerate the sheet, up to 3 total attempts, keep the best.
+3b. NEVER DISCARD A RENDER: save every attempt you generate, including rejected ones,
+   as `<filename>-take2.png`, `-take3.png` beside the winner. Rejected takes are
+   harvested later as mood/expression variants — they are paid for, keep them.
 4. STYLE: before the first sheet, open and study the realm's reference image named in this packet — every sheet must match its pixel grain, grit, shading and palette discipline exactly.
 5. Never edit any other files.
 
@@ -15,9 +31,9 @@ For each sheet:
 
 ```
 Create a sprite sheet: a 2 rows x 2 columns grid (big roomy cells) of 4 individual game sprites, evenly spaced, on a solid #FF00FF magenta background filling every non-subject pixel. Canvas orientation: landscape (wider than tall, e.g. 1536x1024).
-Camera: ground-level eye-level view for every sprite - front, side, or three-quarter angle only. NEVER high-angle, NEVER top-down. Each subject stands on an implied flat ground line. No floor plane, no ground shadows, no props, no background scenery, no text or labels.
+Camera: ground-level eye-level view for every sprite - front, side, or three-quarter angle only. NEVER high-angle, NEVER top-down. For any insect, bug, or tiny creature: worm's-eye ground camera at the creature's OWN eye level, side or three-quarter PROFILE — as if photographed by another bug beside it; if the top of its back is more visible than its side, the angle is wrong. Each subject stands on an implied flat ground line. No floor plane, no ground shadows, no props, no background scenery, no text or labels.
 Setting: midnight cosmic-Egyptian realm — deep navy bodies traced with gold constellation sigils, eldritch star-flesh.
-Style: dense gritty dithered pixel art. Realistic proportions and materials - adult humanoids have legs about half their total height; children are realistically proportioned kids, never chibi. Every character face must have a readable expression at sprite size.
+Style: dense gritty dithered pixel art. Realistic proportions and materials - adult humanoids have legs about half their total height; children are realistically proportioned kids, never chibi. Every character face must have a readable expression at sprite size. CLEAN-SHAPES LAW: large flat value planes carry every form; dither only in shadow regions and edges, never mid-tones; silhouette first. The sheet must read clean at 50% zoom.
 Palette: disciplined navy-and-gold with rich accent color where the subject earns it.
 Subjects, one per cell, left to right then top to bottom:
 1. draped spider-limbed horror
@@ -30,9 +46,9 @@ Subjects, one per cell, left to right then top to bottom:
 
 ```
 Create a sprite sheet: a 2 rows x 2 columns grid (big roomy cells) of 4 individual game sprites, evenly spaced, on a solid #FF00FF magenta background filling every non-subject pixel. Canvas orientation: landscape (wider than tall, e.g. 1536x1024).
-Camera: ground-level eye-level view for every sprite - front, side, or three-quarter angle only. NEVER high-angle, NEVER top-down. Each subject stands on an implied flat ground line. No floor plane, no ground shadows, no props, no background scenery, no text or labels.
+Camera: ground-level eye-level view for every sprite - front, side, or three-quarter angle only. NEVER high-angle, NEVER top-down. For any insect, bug, or tiny creature: worm's-eye ground camera at the creature's OWN eye level, side or three-quarter PROFILE — as if photographed by another bug beside it; if the top of its back is more visible than its side, the angle is wrong. Each subject stands on an implied flat ground line. No floor plane, no ground shadows, no props, no background scenery, no text or labels.
 Setting: midnight cosmic-Egyptian realm — deep navy bodies traced with gold constellation sigils, eldritch star-flesh.
-Style: dense gritty dithered pixel art. Realistic proportions and materials - adult humanoids have legs about half their total height; children are realistically proportioned kids, never chibi. Every character face must have a readable expression at sprite size.
+Style: dense gritty dithered pixel art. Realistic proportions and materials - adult humanoids have legs about half their total height; children are realistically proportioned kids, never chibi. Every character face must have a readable expression at sprite size. CLEAN-SHAPES LAW: large flat value planes carry every form; dither only in shadow regions and edges, never mid-tones; silhouette first. The sheet must read clean at 50% zoom.
 Palette: disciplined navy-and-gold with rich accent color where the subject earns it.
 Subjects, one per cell, left to right then top to bottom:
 1. horned beast on throne steps
@@ -45,9 +61,9 @@ Subjects, one per cell, left to right then top to bottom:
 
 ```
 Create a sprite sheet: a 2 rows x 2 columns grid (big roomy cells) of 4 individual game sprites, evenly spaced, on a solid #FF00FF magenta background filling every non-subject pixel. Canvas orientation: landscape (wider than tall, e.g. 1536x1024).
-Camera: ground-level eye-level view for every sprite - front, side, or three-quarter angle only. NEVER high-angle, NEVER top-down. Each subject stands on an implied flat ground line. No floor plane, no ground shadows, no props, no background scenery, no text or labels.
+Camera: ground-level eye-level view for every sprite - front, side, or three-quarter angle only. NEVER high-angle, NEVER top-down. For any insect, bug, or tiny creature: worm's-eye ground camera at the creature's OWN eye level, side or three-quarter PROFILE — as if photographed by another bug beside it; if the top of its back is more visible than its side, the angle is wrong. Each subject stands on an implied flat ground line. No floor plane, no ground shadows, no props, no background scenery, no text or labels.
 Setting: midnight cosmic-Egyptian realm — deep navy bodies traced with gold constellation sigils, eldritch star-flesh.
-Style: dense gritty dithered pixel art. Realistic proportions and materials - adult humanoids have legs about half their total height; children are realistically proportioned kids, never chibi. Every character face must have a readable expression at sprite size.
+Style: dense gritty dithered pixel art. Realistic proportions and materials - adult humanoids have legs about half their total height; children are realistically proportioned kids, never chibi. Every character face must have a readable expression at sprite size. CLEAN-SHAPES LAW: large flat value planes carry every form; dither only in shadow regions and edges, never mid-tones; silhouette first. The sheet must read clean at 50% zoom.
 Palette: disciplined navy-and-gold with rich accent color where the subject earns it.
 Subjects, one per cell, left to right then top to bottom:
 1. armored reptilian beast
@@ -60,9 +76,9 @@ Subjects, one per cell, left to right then top to bottom:
 
 ```
 Create a sprite sheet: a 2 rows x 2 columns grid (big roomy cells) of 4 individual game sprites, evenly spaced, on a solid #FF00FF magenta background filling every non-subject pixel. Canvas orientation: landscape (wider than tall, e.g. 1536x1024).
-Camera: ground-level eye-level view for every sprite - front, side, or three-quarter angle only. NEVER high-angle, NEVER top-down. Each subject stands on an implied flat ground line. No floor plane, no ground shadows, no props, no background scenery, no text or labels.
+Camera: ground-level eye-level view for every sprite - front, side, or three-quarter angle only. NEVER high-angle, NEVER top-down. For any insect, bug, or tiny creature: worm's-eye ground camera at the creature's OWN eye level, side or three-quarter PROFILE — as if photographed by another bug beside it; if the top of its back is more visible than its side, the angle is wrong. Each subject stands on an implied flat ground line. No floor plane, no ground shadows, no props, no background scenery, no text or labels.
 Setting: midnight cosmic-Egyptian realm — deep navy bodies traced with gold constellation sigils, eldritch star-flesh.
-Style: dense gritty dithered pixel art. Realistic proportions and materials - adult humanoids have legs about half their total height; children are realistically proportioned kids, never chibi. Every character face must have a readable expression at sprite size.
+Style: dense gritty dithered pixel art. Realistic proportions and materials - adult humanoids have legs about half their total height; children are realistically proportioned kids, never chibi. Every character face must have a readable expression at sprite size. CLEAN-SHAPES LAW: large flat value planes carry every form; dither only in shadow regions and edges, never mid-tones; silhouette first. The sheet must read clean at 50% zoom.
 Palette: disciplined navy-and-gold with rich accent color where the subject earns it.
 Subjects, one per cell, left to right then top to bottom:
 1. two-headed panther beast
@@ -75,9 +91,9 @@ Subjects, one per cell, left to right then top to bottom:
 
 ```
 Create a sprite sheet: a 2 rows x 2 columns grid (big roomy cells) of 4 individual game sprites, evenly spaced, on a solid #FF00FF magenta background filling every non-subject pixel. Canvas orientation: landscape (wider than tall, e.g. 1536x1024).
-Camera: ground-level eye-level view for every sprite - front, side, or three-quarter angle only. NEVER high-angle, NEVER top-down. Each subject stands on an implied flat ground line. No floor plane, no ground shadows, no props, no background scenery, no text or labels.
+Camera: ground-level eye-level view for every sprite - front, side, or three-quarter angle only. NEVER high-angle, NEVER top-down. For any insect, bug, or tiny creature: worm's-eye ground camera at the creature's OWN eye level, side or three-quarter PROFILE — as if photographed by another bug beside it; if the top of its back is more visible than its side, the angle is wrong. Each subject stands on an implied flat ground line. No floor plane, no ground shadows, no props, no background scenery, no text or labels.
 Setting: midnight cosmic-Egyptian realm — deep navy bodies traced with gold constellation sigils, eldritch star-flesh.
-Style: dense gritty dithered pixel art. Realistic proportions and materials - adult humanoids have legs about half their total height; children are realistically proportioned kids, never chibi. Every character face must have a readable expression at sprite size.
+Style: dense gritty dithered pixel art. Realistic proportions and materials - adult humanoids have legs about half their total height; children are realistically proportioned kids, never chibi. Every character face must have a readable expression at sprite size. CLEAN-SHAPES LAW: large flat value planes carry every form; dither only in shadow regions and edges, never mid-tones; silhouette first. The sheet must read clean at 50% zoom.
 Palette: disciplined navy-and-gold with rich accent color where the subject earns it.
 Subjects, one per cell, left to right then top to bottom:
 1. door-torso armored golem with axe
@@ -90,9 +106,9 @@ Subjects, one per cell, left to right then top to bottom:
 
 ```
 Create a sprite sheet: a 2 rows x 2 columns grid (big roomy cells) of 4 individual game sprites, evenly spaced, on a solid #FF00FF magenta background filling every non-subject pixel. Canvas orientation: landscape (wider than tall, e.g. 1536x1024).
-Camera: ground-level eye-level view for every sprite - front, side, or three-quarter angle only. NEVER high-angle, NEVER top-down. Each subject stands on an implied flat ground line. No floor plane, no ground shadows, no props, no background scenery, no text or labels.
+Camera: ground-level eye-level view for every sprite - front, side, or three-quarter angle only. NEVER high-angle, NEVER top-down. For any insect, bug, or tiny creature: worm's-eye ground camera at the creature's OWN eye level, side or three-quarter PROFILE — as if photographed by another bug beside it; if the top of its back is more visible than its side, the angle is wrong. Each subject stands on an implied flat ground line. No floor plane, no ground shadows, no props, no background scenery, no text or labels.
 Setting: midnight cosmic-Egyptian realm — deep navy bodies traced with gold constellation sigils, eldritch star-flesh.
-Style: dense gritty dithered pixel art. Realistic proportions and materials - adult humanoids have legs about half their total height; children are realistically proportioned kids, never chibi. Every character face must have a readable expression at sprite size.
+Style: dense gritty dithered pixel art. Realistic proportions and materials - adult humanoids have legs about half their total height; children are realistically proportioned kids, never chibi. Every character face must have a readable expression at sprite size. CLEAN-SHAPES LAW: large flat value planes carry every form; dither only in shadow regions and edges, never mid-tones; silhouette first. The sheet must read clean at 50% zoom.
 Palette: disciplined navy-and-gold with rich accent color where the subject earns it.
 Subjects, one per cell, left to right then top to bottom:
 1. fish-troll crouched with spear
@@ -105,9 +121,9 @@ Subjects, one per cell, left to right then top to bottom:
 
 ```
 Create a sprite sheet: a 2 rows x 2 columns grid (big roomy cells) of 4 individual game sprites, evenly spaced, on a solid #FF00FF magenta background filling every non-subject pixel. Canvas orientation: landscape (wider than tall, e.g. 1536x1024).
-Camera: ground-level eye-level view for every sprite - front, side, or three-quarter angle only. NEVER high-angle, NEVER top-down. Each subject stands on an implied flat ground line. No floor plane, no ground shadows, no props, no background scenery, no text or labels.
+Camera: ground-level eye-level view for every sprite - front, side, or three-quarter angle only. NEVER high-angle, NEVER top-down. For any insect, bug, or tiny creature: worm's-eye ground camera at the creature's OWN eye level, side or three-quarter PROFILE — as if photographed by another bug beside it; if the top of its back is more visible than its side, the angle is wrong. Each subject stands on an implied flat ground line. No floor plane, no ground shadows, no props, no background scenery, no text or labels.
 Setting: midnight cosmic-Egyptian realm — deep navy bodies traced with gold constellation sigils, eldritch star-flesh.
-Style: dense gritty dithered pixel art. Realistic proportions and materials - adult humanoids have legs about half their total height; children are realistically proportioned kids, never chibi. Every character face must have a readable expression at sprite size.
+Style: dense gritty dithered pixel art. Realistic proportions and materials - adult humanoids have legs about half their total height; children are realistically proportioned kids, never chibi. Every character face must have a readable expression at sprite size. CLEAN-SHAPES LAW: large flat value planes carry every form; dither only in shadow regions and edges, never mid-tones; silhouette first. The sheet must read clean at 50% zoom.
 Palette: disciplined navy-and-gold with rich accent color where the subject earns it.
 Subjects, one per cell, left to right then top to bottom:
 1. shadow horror dangling small figure
@@ -120,9 +136,9 @@ Subjects, one per cell, left to right then top to bottom:
 
 ```
 Create a sprite sheet: a 2 rows x 2 columns grid (big roomy cells) of 4 individual game sprites, evenly spaced, on a solid #FF00FF magenta background filling every non-subject pixel. Canvas orientation: landscape (wider than tall, e.g. 1536x1024).
-Camera: ground-level eye-level view for every sprite - front, side, or three-quarter angle only. NEVER high-angle, NEVER top-down. Each subject stands on an implied flat ground line. No floor plane, no ground shadows, no props, no background scenery, no text or labels.
+Camera: ground-level eye-level view for every sprite - front, side, or three-quarter angle only. NEVER high-angle, NEVER top-down. For any insect, bug, or tiny creature: worm's-eye ground camera at the creature's OWN eye level, side or three-quarter PROFILE — as if photographed by another bug beside it; if the top of its back is more visible than its side, the angle is wrong. Each subject stands on an implied flat ground line. No floor plane, no ground shadows, no props, no background scenery, no text or labels.
 Setting: midnight cosmic-Egyptian realm — deep navy bodies traced with gold constellation sigils, eldritch star-flesh.
-Style: dense gritty dithered pixel art. Realistic proportions and materials - adult humanoids have legs about half their total height; children are realistically proportioned kids, never chibi. Every character face must have a readable expression at sprite size.
+Style: dense gritty dithered pixel art. Realistic proportions and materials - adult humanoids have legs about half their total height; children are realistically proportioned kids, never chibi. Every character face must have a readable expression at sprite size. CLEAN-SHAPES LAW: large flat value planes carry every form; dither only in shadow regions and edges, never mid-tones; silhouette first. The sheet must read clean at 50% zoom.
 Palette: disciplined navy-and-gold with rich accent color where the subject earns it.
 Subjects, one per cell, left to right then top to bottom:
 1. elk
@@ -135,9 +151,9 @@ Subjects, one per cell, left to right then top to bottom:
 
 ```
 Create a sprite sheet: a 2 rows x 2 columns grid (big roomy cells) of 4 individual game sprites, evenly spaced, on a solid #FF00FF magenta background filling every non-subject pixel. Canvas orientation: landscape (wider than tall, e.g. 1536x1024).
-Camera: ground-level eye-level view for every sprite - front, side, or three-quarter angle only. NEVER high-angle, NEVER top-down. Each subject stands on an implied flat ground line. No floor plane, no ground shadows, no props, no background scenery, no text or labels.
+Camera: ground-level eye-level view for every sprite - front, side, or three-quarter angle only. NEVER high-angle, NEVER top-down. For any insect, bug, or tiny creature: worm's-eye ground camera at the creature's OWN eye level, side or three-quarter PROFILE — as if photographed by another bug beside it; if the top of its back is more visible than its side, the angle is wrong. Each subject stands on an implied flat ground line. No floor plane, no ground shadows, no props, no background scenery, no text or labels.
 Setting: midnight cosmic-Egyptian realm — deep navy bodies traced with gold constellation sigils, eldritch star-flesh.
-Style: dense gritty dithered pixel art. Realistic proportions and materials - adult humanoids have legs about half their total height; children are realistically proportioned kids, never chibi. Every character face must have a readable expression at sprite size.
+Style: dense gritty dithered pixel art. Realistic proportions and materials - adult humanoids have legs about half their total height; children are realistically proportioned kids, never chibi. Every character face must have a readable expression at sprite size. CLEAN-SHAPES LAW: large flat value planes carry every form; dither only in shadow regions and edges, never mid-tones; silhouette first. The sheet must read clean at 50% zoom.
 Palette: disciplined navy-and-gold with rich accent color where the subject earns it.
 Subjects, one per cell, left to right then top to bottom:
 1. gemsbok oryx
@@ -151,9 +167,9 @@ Subjects, one per cell, left to right then top to bottom:
 ```
 Create a sprite sheet: a 2 rows x 4 columns grid (cells wider than tall, room for full body profiles) of 5 individual game sprites, evenly spaced, on a solid #FF00FF magenta background filling every non-subject pixel. Canvas orientation: landscape (wider than tall).
 The last 3 cells of the grid stay empty (pure background).
-Camera: ground-level eye-level view for every sprite - front, side, or three-quarter angle only. NEVER high-angle, NEVER top-down. Each subject stands on an implied flat ground line. No floor plane, no ground shadows, no props, no background scenery, no text or labels.
+Camera: ground-level eye-level view for every sprite - front, side, or three-quarter angle only. NEVER high-angle, NEVER top-down. For any insect, bug, or tiny creature: worm's-eye ground camera at the creature's OWN eye level, side or three-quarter PROFILE — as if photographed by another bug beside it; if the top of its back is more visible than its side, the angle is wrong. Each subject stands on an implied flat ground line. No floor plane, no ground shadows, no props, no background scenery, no text or labels.
 Setting: midnight cosmic-Egyptian realm — deep navy bodies traced with gold constellation sigils, eldritch star-flesh.
-Style: dense gritty dithered pixel art. Realistic proportions and materials - adult humanoids have legs about half their total height; children are realistically proportioned kids, never chibi. Every character face must have a readable expression at sprite size.
+Style: dense gritty dithered pixel art. Realistic proportions and materials - adult humanoids have legs about half their total height; children are realistically proportioned kids, never chibi. Every character face must have a readable expression at sprite size. CLEAN-SHAPES LAW: large flat value planes carry every form; dither only in shadow regions and edges, never mid-tones; silhouette first. The sheet must read clean at 50% zoom.
 Palette: disciplined navy-and-gold with rich accent color where the subject earns it.
 Subjects, one per cell, left to right then top to bottom:
 1. caparisoned saluki dog
@@ -168,9 +184,9 @@ Subjects, one per cell, left to right then top to bottom:
 ```
 Create a sprite sheet: a 3 rows x 5 columns grid (square cells) of 14 individual game sprites, evenly spaced, on a solid #FF00FF magenta background filling every non-subject pixel. Canvas orientation: square (e.g. 1024x1024).
 The last 1 cell of the grid stay empty (pure background).
-Camera: ground-level eye-level view for every sprite - front, side, or three-quarter angle only. NEVER high-angle, NEVER top-down. Each subject stands on an implied flat ground line. No floor plane, no ground shadows, no props, no background scenery, no text or labels.
+Camera: ground-level eye-level view for every sprite - front, side, or three-quarter angle only. NEVER high-angle, NEVER top-down. For any insect, bug, or tiny creature: worm's-eye ground camera at the creature's OWN eye level, side or three-quarter PROFILE — as if photographed by another bug beside it; if the top of its back is more visible than its side, the angle is wrong. Each subject stands on an implied flat ground line. No floor plane, no ground shadows, no props, no background scenery, no text or labels.
 Setting: midnight cosmic-Egyptian realm — deep navy bodies traced with gold constellation sigils, eldritch star-flesh.
-Style: dense gritty dithered pixel art. Realistic proportions and materials - adult humanoids have legs about half their total height; children are realistically proportioned kids, never chibi. Every character face must have a readable expression at sprite size.
+Style: dense gritty dithered pixel art. Realistic proportions and materials - adult humanoids have legs about half their total height; children are realistically proportioned kids, never chibi. Every character face must have a readable expression at sprite size. CLEAN-SHAPES LAW: large flat value planes carry every form; dither only in shadow regions and edges, never mid-tones; silhouette first. The sheet must read clean at 50% zoom.
 Palette: disciplined navy-and-gold with rich accent color where the subject earns it.
 Subjects, one per cell, left to right then top to bottom:
 1. star-marked mongoose
@@ -193,9 +209,9 @@ Subjects, one per cell, left to right then top to bottom:
 
 ```
 Create a sprite sheet: a 1 row x 1 column grid (single subject fills the canvas) of 1 individual game sprites, evenly spaced, on a solid #FF00FF magenta background filling every non-subject pixel. Canvas orientation: whatever orientation fits the subject.
-Camera: ground-level eye-level view for every sprite - front, side, or three-quarter angle only. NEVER high-angle, NEVER top-down. Each subject stands on an implied flat ground line. No floor plane, no ground shadows, no props, no background scenery, no text or labels.
+Camera: ground-level eye-level view for every sprite - front, side, or three-quarter angle only. NEVER high-angle, NEVER top-down. For any insect, bug, or tiny creature: worm's-eye ground camera at the creature's OWN eye level, side or three-quarter PROFILE — as if photographed by another bug beside it; if the top of its back is more visible than its side, the angle is wrong. Each subject stands on an implied flat ground line. No floor plane, no ground shadows, no props, no background scenery, no text or labels.
 Setting: midnight cosmic-Egyptian realm — deep navy bodies traced with gold constellation sigils, eldritch star-flesh.
-Style: dense gritty dithered pixel art. Realistic proportions and materials - adult humanoids have legs about half their total height; children are realistically proportioned kids, never chibi. Every character face must have a readable expression at sprite size.
+Style: dense gritty dithered pixel art. Realistic proportions and materials - adult humanoids have legs about half their total height; children are realistically proportioned kids, never chibi. Every character face must have a readable expression at sprite size. CLEAN-SHAPES LAW: large flat value planes carry every form; dither only in shadow regions and edges, never mid-tones; silhouette first. The sheet must read clean at 50% zoom.
 Palette: disciplined navy-and-gold with rich accent color where the subject earns it.
 Subjects, one per cell, left to right then top to bottom:
 1. city-backed crab crawler
@@ -205,9 +221,9 @@ Subjects, one per cell, left to right then top to bottom:
 
 ```
 Create a sprite sheet: a 1 row x 1 column grid (single subject fills the canvas) of 1 individual game sprites, evenly spaced, on a solid #FF00FF magenta background filling every non-subject pixel. Canvas orientation: whatever orientation fits the subject.
-Camera: ground-level eye-level view for every sprite - front, side, or three-quarter angle only. NEVER high-angle, NEVER top-down. Each subject stands on an implied flat ground line. No floor plane, no ground shadows, no props, no background scenery, no text or labels.
+Camera: ground-level eye-level view for every sprite - front, side, or three-quarter angle only. NEVER high-angle, NEVER top-down. For any insect, bug, or tiny creature: worm's-eye ground camera at the creature's OWN eye level, side or three-quarter PROFILE — as if photographed by another bug beside it; if the top of its back is more visible than its side, the angle is wrong. Each subject stands on an implied flat ground line. No floor plane, no ground shadows, no props, no background scenery, no text or labels.
 Setting: midnight cosmic-Egyptian realm — deep navy bodies traced with gold constellation sigils, eldritch star-flesh.
-Style: dense gritty dithered pixel art. Realistic proportions and materials - adult humanoids have legs about half their total height; children are realistically proportioned kids, never chibi. Every character face must have a readable expression at sprite size.
+Style: dense gritty dithered pixel art. Realistic proportions and materials - adult humanoids have legs about half their total height; children are realistically proportioned kids, never chibi. Every character face must have a readable expression at sprite size. CLEAN-SHAPES LAW: large flat value planes carry every form; dither only in shadow regions and edges, never mid-tones; silhouette first. The sheet must read clean at 50% zoom.
 Palette: disciplined navy-and-gold with rich accent color where the subject earns it.
 Subjects, one per cell, left to right then top to bottom:
 1. cathedral rising from wave
@@ -217,9 +233,9 @@ Subjects, one per cell, left to right then top to bottom:
 
 ```
 Create a sprite sheet: a 1 row x 1 column grid (single subject fills the canvas) of 1 individual game sprites, evenly spaced, on a solid #FF00FF magenta background filling every non-subject pixel. Canvas orientation: whatever orientation fits the subject.
-Camera: ground-level eye-level view for every sprite - front, side, or three-quarter angle only. NEVER high-angle, NEVER top-down. Each subject stands on an implied flat ground line. No floor plane, no ground shadows, no props, no background scenery, no text or labels.
+Camera: ground-level eye-level view for every sprite - front, side, or three-quarter angle only. NEVER high-angle, NEVER top-down. For any insect, bug, or tiny creature: worm's-eye ground camera at the creature's OWN eye level, side or three-quarter PROFILE — as if photographed by another bug beside it; if the top of its back is more visible than its side, the angle is wrong. Each subject stands on an implied flat ground line. No floor plane, no ground shadows, no props, no background scenery, no text or labels.
 Setting: midnight cosmic-Egyptian realm — deep navy bodies traced with gold constellation sigils, eldritch star-flesh.
-Style: dense gritty dithered pixel art. Realistic proportions and materials - adult humanoids have legs about half their total height; children are realistically proportioned kids, never chibi. Every character face must have a readable expression at sprite size.
+Style: dense gritty dithered pixel art. Realistic proportions and materials - adult humanoids have legs about half their total height; children are realistically proportioned kids, never chibi. Every character face must have a readable expression at sprite size. CLEAN-SHAPES LAW: large flat value planes carry every form; dither only in shadow regions and edges, never mid-tones; silhouette first. The sheet must read clean at 50% zoom.
 Palette: disciplined navy-and-gold with rich accent color where the subject earns it.
 Subjects, one per cell, left to right then top to bottom:
 1. pentagonal maw over drowned city
@@ -230,9 +246,9 @@ Subjects, one per cell, left to right then top to bottom:
 ```
 Create a sprite sheet: a 2 rows x 7 columns grid (small square cells) of 13 individual game sprites, evenly spaced, on a solid #FF00FF magenta background filling every non-subject pixel. Canvas orientation: square.
 The last 1 cell of the grid stay empty (pure background).
-Camera: ground-level eye-level view for every sprite - front, side, or three-quarter angle only. NEVER high-angle, NEVER top-down. Each subject stands on an implied flat ground line. No floor plane, no ground shadows, no props, no background scenery, no text or labels.
+Camera: ground-level eye-level view for every sprite - front, side, or three-quarter angle only. NEVER high-angle, NEVER top-down. For any insect, bug, or tiny creature: worm's-eye ground camera at the creature's OWN eye level, side or three-quarter PROFILE — as if photographed by another bug beside it; if the top of its back is more visible than its side, the angle is wrong. Each subject stands on an implied flat ground line. No floor plane, no ground shadows, no props, no background scenery, no text or labels.
 Setting: midnight cosmic-Egyptian realm — deep navy bodies traced with gold constellation sigils, eldritch star-flesh.
-Style: dense gritty dithered pixel art. Realistic proportions and materials - adult humanoids have legs about half their total height; children are realistically proportioned kids, never chibi. Every character face must have a readable expression at sprite size.
+Style: dense gritty dithered pixel art. Realistic proportions and materials - adult humanoids have legs about half their total height; children are realistically proportioned kids, never chibi. Every character face must have a readable expression at sprite size. CLEAN-SHAPES LAW: large flat value planes carry every form; dither only in shadow regions and edges, never mid-tones; silhouette first. The sheet must read clean at 50% zoom.
 Palette: disciplined navy-and-gold with rich accent color where the subject earns it.
 Subjects, one per cell, left to right then top to bottom:
 1. jeweled hedgehog

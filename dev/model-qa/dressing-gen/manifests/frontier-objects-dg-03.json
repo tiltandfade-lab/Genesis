@@ -1,0 +1,260 @@
+{
+ "file": "frontier-objects-dg-03.png",
+ "realm": "frontier",
+ "family": "objects",
+ "grid": "5 rows x 5 columns",
+ "chroma": "#FF00FF",
+ "wave": "dressing-gen",
+ "cells": [
+  {
+   "slug": "frontier-obj-door-shut",
+   "label": "door, shut state — in the realm's own material language",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "door",
+   "state": "shut"
+  },
+  {
+   "slug": "frontier-obj-door-ajar",
+   "label": "door, ajar state — in the realm's own material language",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "door",
+   "state": "ajar"
+  },
+  {
+   "slug": "frontier-obj-door-open",
+   "label": "door, open state — in the realm's own material language",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "door",
+   "state": "open"
+  },
+  {
+   "slug": "frontier-obj-door-broken",
+   "label": "door, broken state — in the realm's own material language",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "door",
+   "state": "broken"
+  },
+  {
+   "slug": "frontier-obj-chest-closed",
+   "label": "chest, closed state — iron-banded strongbox",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "chest",
+   "state": "closed"
+  },
+  {
+   "slug": "frontier-obj-chest-open",
+   "label": "chest, open state — iron-banded strongbox",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "chest",
+   "state": "open"
+  },
+  {
+   "slug": "frontier-obj-chest-looted",
+   "label": "chest, looted state — iron-banded strongbox",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "chest",
+   "state": "looted"
+  },
+  {
+   "slug": "frontier-obj-lever-left",
+   "label": "lever, left state — in the realm's own material language",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "lever",
+   "state": "left"
+  },
+  {
+   "slug": "frontier-obj-lever-right",
+   "label": "lever, right state — in the realm's own material language",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "lever",
+   "state": "right"
+  },
+  {
+   "slug": "frontier-obj-shrine-dormant",
+   "label": "shrine, dormant state — in the realm's own material language",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "shrine",
+   "state": "dormant"
+  },
+  {
+   "slug": "frontier-obj-shrine-lit",
+   "label": "shrine, lit state — in the realm's own material language",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "shrine",
+   "state": "lit"
+  },
+  {
+   "slug": "frontier-obj-campfire-unlit",
+   "label": "campfire, unlit state — trailside cookfire with spit",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "campfire",
+   "state": "unlit"
+  },
+  {
+   "slug": "frontier-obj-campfire-lit",
+   "label": "campfire, lit state — trailside cookfire with spit",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "campfire",
+   "state": "lit"
+  },
+  {
+   "slug": "frontier-obj-campfire-dead",
+   "label": "campfire, dead state — trailside cookfire with spit",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "campfire",
+   "state": "dead"
+  },
+  {
+   "slug": "frontier-obj-trap-hidden",
+   "label": "trap, hidden state — in the realm's own material language",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "trap",
+   "state": "hidden"
+  },
+  {
+   "slug": "frontier-obj-trap-sprung",
+   "label": "trap, sprung state — in the realm's own material language",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "trap",
+   "state": "sprung"
+  },
+  {
+   "slug": "frontier-obj-portal-sealed",
+   "label": "portal, sealed state — in the realm's own material language",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "portal",
+   "state": "sealed"
+  },
+  {
+   "slug": "frontier-obj-portal-active",
+   "label": "portal, active state — in the realm's own material language",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "portal",
+   "state": "active"
+  },
+  {
+   "slug": "frontier-obj-container-intact",
+   "label": "container, intact state — powder keg",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "container",
+   "state": "intact"
+  },
+  {
+   "slug": "frontier-obj-container-cracked",
+   "label": "container, cracked state — powder keg",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "container",
+   "state": "cracked"
+  },
+  {
+   "slug": "frontier-obj-container-broken",
+   "label": "container, broken state — powder keg",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "archetype": "container",
+   "state": "broken"
+  },
+  {
+   "slug": "frontier-obj-door-shut-alt",
+   "label": "ALT of 'door, shut state — in the realm's own material language' — different shape/growth/wear, same kind",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "size": null,
+   "altOf": "frontier-obj-door-shut"
+  },
+  {
+   "slug": "frontier-obj-door-ajar-alt",
+   "label": "ALT of 'door, ajar state — in the realm's own material language' — different shape/growth/wear, same kind",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "size": null,
+   "altOf": "frontier-obj-door-ajar"
+  },
+  {
+   "slug": "frontier-obj-door-open-alt",
+   "label": "ALT of 'door, open state — in the realm's own material language' — different shape/growth/wear, same kind",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "size": null,
+   "altOf": "frontier-obj-door-open"
+  },
+  {
+   "slug": "frontier-obj-door-broken-alt",
+   "label": "ALT of 'door, broken state — in the realm's own material language' — different shape/growth/wear, same kind",
+   "tags": {
+    "primary": "setPiece",
+    "location": "both"
+   },
+   "size": null,
+   "altOf": "frontier-obj-door-broken"
+  }
+ ]
+}

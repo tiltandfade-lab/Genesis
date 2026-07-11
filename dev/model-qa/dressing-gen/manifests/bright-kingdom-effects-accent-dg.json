@@ -1,0 +1,48 @@
+{
+ "file": "bright-kingdom-effects-accent-dg.png",
+ "realm": "bright-kingdom",
+ "family": "effects-accent",
+ "grid": "2 rows x 4 columns",
+ "chroma": "#FF00FF",
+ "wave": "dressing-gen",
+ "cells": [
+  {
+   "slug": "fx-bk-starpop",
+   "label": "storybook star-pop burst, cheerful sparkle"
+  },
+  {
+   "slug": "fx-bk-candyshatter",
+   "label": "candy-glass shatter, colorful shard scatter"
+  },
+  {
+   "slug": "fx-bk-confettiburst",
+   "label": "confetti burst spray, primary-color streamers"
+  },
+  {
+   "slug": "fx-bk-pixieglitter",
+   "label": "pixie glitter trail, twinkling fade"
+  },
+  {
+   "slug": "fx-bk-toygleam",
+   "label": "toy-gleam flash, bright cartoon highlight"
+  },
+  {
+   "slug": "fx-bk-musicnote",
+   "label": "floating music-note pop, jaunty bounce"
+  },
+  {
+   "slug": "fx-bk-starpop-alt",
+   "label": "ALT of 'storybook star-pop burst, cheerful sparkle' — different shape/growth/wear, same kind",
+   "tags": null,
+   "size": null,
+   "altOf": "fx-bk-starpop"
+  },
+  {
+   "slug": "fx-bk-candyshatter-alt",
+   "label": "ALT of 'candy-glass shatter, colorful shard scatter' — different shape/growth/wear, same kind",
+   "tags": null,
+   "size": null,
+   "altOf": "fx-bk-candyshatter"
+  }
+ ]
+}

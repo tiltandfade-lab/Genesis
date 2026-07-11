@@ -1,0 +1,48 @@
+{
+ "file": "suburb-effects-accent-dg.png",
+ "realm": "suburb",
+ "family": "effects-accent",
+ "grid": "2 rows x 4 columns",
+ "chroma": "#FF00FF",
+ "wave": "dressing-gen",
+ "cells": [
+  {
+   "slug": "fx-suburb-sprinklermist",
+   "label": "sprinkler mist burst, sunny droplet spray"
+  },
+  {
+   "slug": "fx-suburb-lawnclippingpuff",
+   "label": "lawn-clipping puff scatter, bright green flecks"
+  },
+  {
+   "slug": "fx-suburb-doorbellchime",
+   "label": "doorbell chime flash, cheerful pastel ping"
+  },
+  {
+   "slug": "fx-suburb-uncannysmile",
+   "label": "uncanny smile-crack overlay, groomed-menace flicker"
+  },
+  {
+   "slug": "fx-suburb-bbqspark",
+   "label": "backyard grill spark-pop, quick orange flare"
+  },
+  {
+   "slug": "fx-suburb-staticbuzz",
+   "label": "static porch-light buzz flicker, insect-swarm hum"
+  },
+  {
+   "slug": "fx-suburb-sprinklermist-alt",
+   "label": "ALT of 'sprinkler mist burst, sunny droplet spray' — different shape/growth/wear, same kind",
+   "tags": null,
+   "size": null,
+   "altOf": "fx-suburb-sprinklermist"
+  },
+  {
+   "slug": "fx-suburb-lawnclippingpuff-alt",
+   "label": "ALT of 'lawn-clipping puff scatter, bright green flecks' — different shape/growth/wear, same kind",
+   "tags": null,
+   "size": null,
+   "altOf": "fx-suburb-lawnclippingpuff"
+  }
+ ]
+}

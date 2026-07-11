@@ -1,0 +1,201 @@
+{
+ "file": "ash-npc-r3-03.png",
+ "realm": "ash",
+ "grid": "6 rows x 4 columns",
+ "chroma": "#FF00FF",
+ "round": 3,
+ "cells": [
+  {
+   "slug": "ash-silverlocked-waterwitch-u2014-an-older",
+   "label": "Silver-locked water-witch \\u2014 an older woman who reads the cracked earth for the next safe well",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "spr-ash-silver-locked-water-witch-an-older-woman-who-reads-the-cracked-earth-for-the-next-safe-well",
+   "reason": "restyle-painterly"
+  },
+  {
+   "slug": "ash-bonepale-forager-u2014-bleached-hair",
+   "label": "Bone-pale forager \\u2014 bleached hair and skin, the settlement's best judge of what's safe to eat",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "spr-ash-bone-pale-forager-bleached-hair-and-skin-the-settlement-s-best-judge-of-what-s-safe-to-eat",
+   "reason": "restyle-painterly"
+  },
+  {
+   "slug": "ash-sundark-caravan-scout-u2014-reads",
+   "label": "Sun-dark caravan scout \\u2014 reads dust trails like a map",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "spr-ash-sun-dark-caravan-scout-reads-dust-trails-like-a-map",
+   "reason": "restyle-painterly"
+  },
+  {
+   "slug": "ash-elderly-bunkerborn-u2014-never-seen",
+   "label": "Elderly bunker-born \\u2014 never seen open sky before the settlement dug out",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "spr-ash-elderly-bunker-born-never-seen-open-sky-before-the-settlement-dug-out",
+   "reason": "restyle-painterly"
+  },
+  {
+   "slug": "ash-broadshouldered-wallcrew-boss-u2014-keeps",
+   "label": "Broad-shouldered wall-crew boss \\u2014 keeps the palisade standing another season",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "spr-ash-broad-shouldered-wall-crew-boss-keeps-the-palisade-standing-another-season",
+   "reason": "restyle-painterly"
+  },
+  {
+   "slug": "ash-young-irradiated-runner-u2014-patchy",
+   "label": "Young irradiated runner \\u2014 patchy hair loss, fast, sent where no one else will go",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "spr-ash-young-irradiated-runner-patchy-hair-loss-fast-sent-where-no-one-else-will-go",
+   "reason": "restyle-painterly"
+  },
+  {
+   "slug": "ash-greybearded-stillmaster-u2014-brews-the",
+   "label": "Grey-bearded still-master \\u2014 brews the settlement's only clean water and its only liquor",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "spr-ash-grey-bearded-still-master-brews-the-settlement-s-only-clean-water-and-its-only-liquor",
+   "reason": "restyle-painterly"
+  },
+  {
+   "slug": "ash-onearmed-veteran-mechanic-u2014-lost",
+   "label": "One-armed veteran mechanic \\u2014 lost the arm to a rig, kept working the same day",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "spr-ash-one-armed-veteran-mechanic-lost-the-arm-to-a-rig-kept-working-the-same-day",
+   "reason": "restyle-painterly"
+  },
+  {
+   "slug": "ash-freckled-teenage-lookout-u2014-youngest",
+   "label": "Freckled teenage lookout \\u2014 youngest on the wall rotation, takes it dead serious",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "spr-ash-freckled-teenage-lookout-youngest-on-the-wall-rotation-takes-it-dead-serious",
+   "reason": "restyle-painterly"
+  },
+  {
+   "slug": "ash-heavyset-grainhoarders-widow-u2014-inherited",
+   "label": "Heavyset grain-hoarder's widow \\u2014 inherited the stockpile, and the target on her back",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "spr-ash-heavyset-grain-hoarder-s-widow-inherited-the-stockpile-and-the-target-on-her-back",
+   "reason": "restyle-painterly"
+  },
+  {
+   "slug": "ash-darkskinned-tunnelcrew-forewoman-u2014-knows",
+   "label": "Dark-skinned tunnel-crew forewoman \\u2014 knows which collapsed streets are still passable",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "spr-ash-dark-skinned-tunnel-crew-forewoman-knows-which-collapsed-streets-are-still-passable",
+   "reason": "restyle-painterly"
+  },
+  {
+   "slug": "ash-pale-chemburned-nurse-u2014-hands",
+   "label": "Pale chem-burned nurse \\u2014 hands scarred from a lab accident, best medic in three settlements",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "spr-ash-pale-chem-burned-nurse-hands-scarred-from-a-lab-accident-best-medic-in-three-settlements",
+   "reason": "restyle-painterly"
+  },
+  {
+   "slug": "ash-short-wiry-scavengeteam-leader-u2014",
+   "label": "Short, wiry scavenge-team leader \\u2014 sends kids out, never goes herself anymore",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "spr-ash-short-wiry-scavenge-team-leader-sends-kids-out-never-goes-herself-anymore",
+   "reason": "restyle-painterly"
+  },
+  {
+   "slug": "ash-elderly-seedvault-keeper-u2014-guards",
+   "label": "Elderly seed-vault keeper \\u2014 guards the last real crop stock like scripture",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "spr-ash-elderly-seed-vault-keeper-guards-the-last-real-crop-stock-like-scripture",
+   "reason": "restyle-painterly"
+  },
+  {
+   "slug": "ash-sunburnt-caravan-driver-u2014-decades",
+   "label": "Sunburnt caravan driver \\u2014 decades on the road, trusts the mule more than most people",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "spr-ash-sunburnt-caravan-driver-decades-on-the-road-trusts-the-mule-more-than-most-people",
+   "reason": "restyle-painterly"
+  },
+  {
+   "slug": "ash-mixedheritage-settlement-council-elder-u2014",
+   "label": "Mixed-heritage settlement council elder \\u2014 mediates every dispute, believed by fewer each year",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "spr-ash-mixed-heritage-settlement-council-elder-mediates-every-dispute-believed-by-fewer-each-year",
+   "reason": "restyle-painterly"
+  },
+  {
+   "slug": "ash-lean-holloweyed-insomniac-watchman-u2014",
+   "label": "Lean, hollow-eyed insomniac watchman \\u2014 hasn't slept right since the last raid",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "spr-ash-lean-hollow-eyed-insomniac-watchman-hasn-t-slept-right-since-the-last-raid",
+   "reason": "restyle-painterly"
+  },
+  {
+   "slug": "ash-stout-blacksmiths-daughter-darkskinned-u2014",
+   "label": "Stout blacksmith's daughter, dark-skinned \\u2014 better at the forge than her father was",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "spr-ash-stout-blacksmith-s-daughter-dark-skinned-better-at-the-forge-than-her-father-was",
+   "reason": "restyle-painterly"
+  },
+  {
+   "slug": "ash-greyhaired-storyteller-u2014-keeps-the",
+   "label": "Grey-haired storyteller \\u2014 keeps the memory of before-the-fall alive for the kids",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "spr-ash-grey-haired-storyteller-keeps-the-memory-of-before-the-fall-alive-for-the-kids",
+   "reason": "restyle-painterly"
+  },
+  {
+   "slug": "ash-young-ashtouched-twins-u2014-one",
+   "label": "Young ash-touched twins \\u2014 one mutated, one not, inseparable regardless",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "spr-ash-young-ash-touched-twins-one-mutated-one-not-inseparable-regardless",
+   "reason": "restyle-painterly"
+  },
+  {
+   "slug": "ash-broad-sunweathered-wallgate-guard-u2014",
+   "label": "Broad, sun-weathered wall-gate guard \\u2014 checks every face twice",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "spr-ash-broad-sun-weathered-wall-gate-guard-checks-every-face-twice",
+   "reason": "restyle-painterly"
+  },
+  {
+   "slug": "ash-elderly-halfblind-radio-operator-u2014",
+   "label": "Elderly, half-blind radio operator \\u2014 still monitors the dead channels out of habit",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "spr-ash-elderly-half-blind-radio-operator-still-monitors-the-dead-channels-out-of-habit",
+   "reason": "restyle-painterly"
+  },
+  {
+   "slug": "ash-darkskinned-heavily-scarred-convoy-captain",
+   "label": "Dark-skinned, heavily scarred convoy captain \\u2014 survived more ambushes than anyone alive",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "spr-ash-dark-skinned-heavily-scarred-convoy-captain-survived-more-ambushes-than-anyone-alive",
+   "reason": "restyle-painterly"
+  },
+  {
+   "slug": "ash-small-quickfingered-lockpicker-u2014-gets",
+   "label": "Small, quick-fingered lock-picker \\u2014 gets the settlement into every sealed vault it finds",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "spr-ash-small-quick-fingered-lock-picker-gets-the-settlement-into-every-sealed-vault-it-finds",
+   "reason": "restyle-painterly"
+  }
+ ]
+}

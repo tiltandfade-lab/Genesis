@@ -1,0 +1,58 @@
+{
+ "file": "effects-core-dg-02.png",
+ "realm": "_effects",
+ "family": "effects-core",
+ "grid": "3 rows x 4 columns",
+ "chroma": "#FF00FF",
+ "wave": "dressing-gen",
+ "cells": [
+  {
+   "slug": "fx-status-sparkburst",
+   "label": "metallic spark burst, scatter shower"
+  },
+  {
+   "slug": "fx-status-healmotes",
+   "label": "rising heal motes, gentle upward drift"
+  },
+  {
+   "slug": "fx-status-shieldshimmer",
+   "label": "shield shimmer dome, hexagonal ripple"
+  },
+  {
+   "slug": "fx-status-poisonbubble",
+   "label": "bubbling poison cloud, sickly rising film"
+  },
+  {
+   "slug": "fx-status-stunstars",
+   "label": "orbiting stun stars, dizzy spin ring"
+  },
+  {
+   "slug": "fx-env-dustkick",
+   "label": "ground dust kick, low drifting cloud"
+  },
+  {
+   "slug": "fx-env-splash",
+   "label": "liquid splash burst, droplet scatter"
+  },
+  {
+   "slug": "fx-env-emberdrift",
+   "label": "drifting ember cinder trail, slow fade"
+  },
+  {
+   "slug": "fx-env-frostburst",
+   "label": "frost crystal burst, radiating rime"
+  },
+  {
+   "slug": "fx-env-debriscloud",
+   "label": "chunky debris cloud, rubble fragments"
+  },
+  {
+   "slug": "fx-env-rippleflash",
+   "label": "ground ripple flash, shockwave ring"
+  },
+  {
+   "slug": "fx-env-shadowpool",
+   "label": "spreading shadow pool, dark bloom underfoot"
+  }
+ ]
+}

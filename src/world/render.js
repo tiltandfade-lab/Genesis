@@ -463,6 +463,18 @@ function theaterHereSourceFor(w){
   // every other field on this object already has). castFrom (theater-data.js) reads these through
   // theaterCastSourceFor below to stage corpse figures; it never reaches into prep/walk itself.
   const reskinEntry=(pn.segments||[]).find(o=>o&&o.ref==="S"+cur)||null;
+  // DUNGEON-GRAPH.md U3 item 2: a walk-with-SpatialPlan (pn.spatial — same prep-node-overlay
+  // home as pn.segments, docs/DUNGEON-GRAPH.md "Shared data shape" header) renders its current room +
+  // immediate surroundings as the volumetric standing table instead of the flat combat-zone-grid tray.
+  // pn.spatial is stamped by prepAttachSpatialPlan (src/world/prep.js, U4) for dungeon-shaped
+  // frontiers at prep time. This branch is the render-side half: absent pn.spatial (non-dungeon
+  // walks), theaterHereSourceFor falls through byte-identical to the existing {kind:"segment"}
+  // return below.
+  if(pn.spatial){
+    return { kind:"interior", plan:pn.spatial, focusSegNum:cur, radius:1,
+      env:walk.environment||undefined, realms:realms,
+      traces:(reskinEntry&&reskinEntry.traces)||undefined, removed:(reskinEntry&&reskinEntry.removed)||undefined };
+  }
   return { kind:"segment", segment:seg, env:walk.environment||undefined, realms:realms,
     traces:(reskinEntry&&reskinEntry.traces)||undefined, removed:(reskinEntry&&reskinEntry.removed)||undefined };
 }
@@ -542,7 +554,16 @@ function theaterStageSync(w,cur){
     const hereSource=theaterHereSourceFor(w);
     if(typeof trayFrom==="function" && typeof window.Theater.setBoard==="function"){
       const board=trayFrom(hereSource,null,{env:hereSource.env,realms:hereSource.realms});
-      window.Theater.setBoard(board);
+      // DUNGEON-GRAPH.md U3: a SpatialPlan-sourced tray (theaterHereSourceFor's {kind:"interior",plan}
+      // branch) comes back shaped {kind:"interior3d",...} — a materially different render family (real
+      // volumetric InstancedMesh geometry, not the flat combat tile-column grid) that the GL layer's
+      // own setInteriorBoard (not setBoard) knows how to build. Every other board kind is byte-
+      // unchanged (still setBoard) — this is a pure additive routing split, not a setBoard rewrite.
+      if(board && board.kind==="interior3d" && typeof window.Theater.setInteriorBoard==="function"){
+        window.Theater.setInteriorBoard(board);
+      } else {
+        window.Theater.setBoard(board);
+      }
     }
     // TABLETOP-UNITS.md §U6: combat_end reverses the unit-source switch — back to castFrom's own
     // tableau (PC/companions/contacted NPCs/blank ambients/corpse traces), arranged per U4's

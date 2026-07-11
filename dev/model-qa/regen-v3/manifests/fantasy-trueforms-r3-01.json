@@ -1,0 +1,41 @@
+{
+ "file": "fantasy-trueforms-r3-01.png",
+ "realm": "fantasy",
+ "grid": "2 rows x 2 columns",
+ "chroma": "#FF00FF",
+ "round": 3,
+ "cells": [
+  {
+   "slug": "fantasy-gorgon-true",
+   "label": "gorgon — the TRUE iron bull, plated metal hide, venting green gas (old cell drew a medusa)",
+   "family": "monsters",
+   "sizeBand": "large",
+   "replaces": null,
+   "reason": "backfill-role"
+  },
+  {
+   "slug": "fantasy-grell-true",
+   "label": "grell — floating brain with a beak and trailing barbed tentacles (the TRUE grell form)",
+   "family": "monsters",
+   "sizeBand": "medium",
+   "replaces": null,
+   "reason": "backfill-role"
+  },
+  {
+   "slug": "fantasy-gorgon-true-alt",
+   "label": "COLOR ALT of the gorgon — blackened obsidian plating, ember gas",
+   "family": "monsters",
+   "sizeBand": "large",
+   "altOf": "fantasy-gorgon-true",
+   "reason": "alt-bonus"
+  },
+  {
+   "slug": "fantasy-grell-true-alt",
+   "label": "COLOR ALT of the grell — pale cave-albino, red-veined",
+   "family": "monsters",
+   "sizeBand": "medium",
+   "altOf": "fantasy-grell-true",
+   "reason": "alt-bonus"
+  }
+ ]
+}

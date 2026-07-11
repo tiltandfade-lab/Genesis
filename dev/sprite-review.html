@@ -33,6 +33,11 @@
             padding:0 40px; }
   .fig { display:flex; flex-direction:column; align-items:center; position:relative; }
   .fig img { image-rendering:pixelated; display:block; }
+  .floorline { position:absolute; left:-10px; right:-10px; height:0;
+    border-top:2px dashed #ff5577; pointer-events:none; z-index:5; }
+  .floorline.faint { border-top-color:rgba(255,85,119,.45); }
+  .floorline span { position:absolute; right:-4px; top:-16px; font-size:10px; color:#ff5577;
+    background:rgba(0,0,0,.55); padding:0 4px; border-radius:3px; white-space:nowrap; }
   .fig .cap { position:absolute; top:100%; font-size:10px; color:var(--dim); white-space:nowrap; padding-top:3px; }
   .fig.current { outline:2px solid var(--accent); outline-offset:6px; border-radius:4px; }
   .fig.pinned img { opacity:.85; }
@@ -98,7 +103,7 @@
       <button id="passBtn" class="pass">PASS (p)</button>
       <button id="failBtn" class="fail">FAIL (f)</button>
       <button id="clearBtn" title="clear verdict">clear</button>
-      <span class="kbd">← → navigate · [ ] scale · s save · p/f verdict · 0 reset</span>
+      <span class="kbd">← → navigate · [ ] scale · s save · p/f verdict · 0 reset · click sprite = set floor · shift-click = clear floor</span>
     </div>
   </div>
   <aside id="info"></aside>
@@ -155,14 +160,22 @@ const guideFor = e => GUIDES.find(g => g.key === (SRD_TO_GUIDE[sizeOf(e)] || "me
 
 let REG = {}, OVERLAY = {}, list = [], idx = 0, medPx = 150;
 let pins = JSON.parse(localStorage.getItem("spritePins") || "[]");
-const PENDING = {}; // slug -> {scale} — unsaved edits; NOTHING writes to disk until Save/Pass/Fail
+const PENDING = {}; // slug -> {scale, floor} — unsaved edits; NOTHING writes to disk until Save/Pass/Fail
 const $ = id => document.getElementById(id);
 const cur = () => list[idx];
 const ovr = slug => OVERLAY[slug] || {};
 const savedScale = slug => (typeof ovr(slug).scale === "number" ? ovr(slug).scale : 1);
 const scaleFor = slug => (PENDING[slug] && typeof PENDING[slug].scale === "number")
   ? PENDING[slug].scale : savedScale(slug);
-const isDirty = slug => !!PENDING[slug] && Math.abs(PENDING[slug].scale - savedScale(slug)) > 1e-9;
+/* floor = ground-contact line, fraction of image height UP from the bottom edge (0 = bottom
+   edge IS the floor). The theater mounts the figurine disc at this line. Set by clicking the
+   current sprite; shift-click clears. */
+const savedFloor = slug => (typeof ovr(slug).floor === "number" ? ovr(slug).floor : 0);
+const floorFor = slug => (PENDING[slug] && typeof PENDING[slug].floor === "number")
+  ? PENDING[slug].floor : savedFloor(slug);
+const isDirty = slug => !!PENDING[slug] &&
+  (Math.abs(scaleFor(slug) - savedScale(slug)) > 1e-9 ||
+   Math.abs(floorFor(slug) - savedFloor(slug)) > 1e-9);
 
 async function load(){
   const r = await fetch("/api/data"); const d = await r.json();
@@ -200,11 +213,27 @@ function applyFilters(){
 
 function figHtml(e, cls){
   const h = Math.round(sizeScale(e) * medPx * scaleFor(e.slug));
+  const fl = floorFor(e.slug);
+  // the floor line rides inside a relative wrap around the img so bottom:px is image-space;
+  // clicking the CURRENT sprite sets it (wired in render(), not inline — needs event coords)
+  const line = cls === "current" || fl > 0
+    ? `<div class="floorline${cls === "current" ? "" : " faint"}" style="bottom:${Math.round(fl * h)}px"><span>floor${fl > 0 ? " " + (fl * 100).toFixed(1) + "%" : ""}</span></div>` : "";
   return `<div class="fig ${cls}" data-slug="${e.slug}">
       ${cls === "pinned" ? `<button class="unpin" onclick="unpin('${e.slug}')">unpin ✕</button>` : ""}
-      <img src="/sprites/${e.slug}.png" style="height:${h}px" draggable="false">
+      <div class="imgwrap" style="position:relative">
+        <img src="/sprites/${e.slug}.png" style="height:${h}px" draggable="false">
+        ${line}
+      </div>
       <span class="cap">${e.name} · ${sizeOf(e)} → ${guideFor(e).key}${scaleFor(e.slug) !== 1 ? " · ×" + scaleFor(e.slug).toFixed(2) : ""}</span>
     </div>`;
+}
+function setFloorFromClick(ev){
+  const e = cur(); if(!e) return;
+  const img = ev.currentTarget;
+  const r = img.getBoundingClientRect();
+  const fl = ev.shiftKey ? 0 : Math.min(0.9, Math.max(0, (r.bottom - ev.clientY) / r.height));
+  PENDING[e.slug] = Object.assign({}, PENDING[e.slug], { scale: scaleFor(e.slug), floor: Math.round(fl * 1e4) / 1e4 });
+  render();
 }
 function render(){
   const stage = $("stage"), lineup = $("lineup"), e = cur();
@@ -229,6 +258,9 @@ function render(){
   const pinned = pins.map(s => REG[s] && Object.assign({ slug: s }, REG[s])).filter(Boolean);
   lineup.innerHTML = refHtml + pinned.map(p => figHtml(p, "pinned")).join("") + (e ? figHtml(e, "current") : "");
   lineup.querySelectorAll(".fig").forEach(n => { n.style.transform = "translateY(0)"; });
+  // click the current sprite = set its floor line at the click; shift-click = clear (bottom edge)
+  const curImg = lineup.querySelector(".fig.current .imgwrap img");
+  if(curImg){ curImg.style.cursor = "crosshair"; curImg.addEventListener("click", setFloorFromClick); }
 
   if(e){
     $("scale").value = scaleFor(e.slug);
@@ -250,7 +282,7 @@ function renderInfo(){
   infoSlug = e.slug;
   $("info").innerHTML = `
     <h2>${e.name}</h2><div class="slug">${e.slug}</div>
-    <p class="verdict ${st}">${st.toUpperCase()}${o.scale ? ` · scale ×${o.scale}` : ""}</p>
+    <p class="verdict ${st}">${st.toUpperCase()}${o.scale ? ` · scale ×${o.scale}` : ""}${floorFor(e.slug) > 0 ? ` · floor ${(floorFor(e.slug) * 100).toFixed(1)}%` : ""}</p>
     <p style="font-size:12px;background:#2c2836;border:1px solid var(--line);border-radius:4px;padding:6px 8px">
       target: <b style="color:var(--accent)">${guideFor(e).key}</b> head line
       (${feetLabel(guideFor(e).mult)} · ${guideFor(e).mult}×${guideFor(e).srd ? " · SRD " + guideFor(e).srd : ""})<br>
@@ -329,6 +361,8 @@ async function saveChanges(){
   const e = cur(); if(!e) return;
   const { set, clear } = metaEdits();
   set.scale = scaleFor(e.slug);
+  const fl = floorFor(e.slug);
+  if(fl > 0) set.floor = fl; else clear.push("floor");
   await patch(e.slug, set, clear);
   delete PENDING[e.slug];
   toast("saved: " + e.name);
@@ -339,6 +373,8 @@ async function verdict(v){
   const { set, clear } = metaEdits();
   set.verdict = v;
   set.scale = scaleFor(e.slug); // fold any unsaved slider position into the ruling
+  const fl = floorFor(e.slug);
+  if(fl > 0) set.floor = fl; else clear.push("floor"); // fold unsaved floor line too
   await patch(e.slug, set, clear);
   delete PENDING[e.slug];
   toast(v.toUpperCase() + ": " + e.name);

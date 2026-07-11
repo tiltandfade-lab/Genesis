@@ -2667,7 +2667,15 @@ function interiorSpriteBillboard(entry, wallHeightCap){
   return { group: g, height: h };
 }
 
-function figureFor(archetype, seed, tint, silhouette, weapon, recipeSlug, pcRecipe, kind, className, wholeKeyOverride){
+// BEAUTY-WAVE.md VP1b (combat-standee true scale, follow-up to VP1): `interiorMode`/`wallHeightCap`
+// are additive optional params — every existing caller (refFigure.build, and setUnits when the
+// mounted board is the flat tabletop) omits them, so this degrades to the byte-identical tabletop
+// buildSpriteBillboard call below. setUnits passes both ONLY when S.lastBoard.kind === "interior3d"
+// (the same discriminator setInteriorBoard/setBoard already establish) — combat foes standing in a
+// dungeon room then size through interiorSpriteBillboard's TRUE-SCALE math (HUMAN_TRUE_HEIGHT x
+// scaleTrue, the SAME function VP1 wired for non-combat interior pieces) instead of inheriting the
+// tabletop's render-height-multiplier convention (the kaiju bug this unit fixes).
+function figureFor(archetype, seed, tint, silhouette, weapon, recipeSlug, pcRecipe, kind, className, wholeKeyOverride, interiorMode, wallHeightCap){
   // SPRITE-TRANSITION T4: the sprite-billboard channel resolves AHEAD of the whole-object/glb/recipe/
   // cuboid chain below (docs/SPRITE-TRANSITION.md T4.1) — creature-kind pieces only (a pc/ally keys
   // off its CLASS, not a bestiary name, so it has no sprite-registry join key at all and always skips
@@ -2678,8 +2686,21 @@ function figureFor(archetype, seed, tint, silhouette, weapon, recipeSlug, pcReci
   if(SPRITE_CHANNEL_ENABLED && kind !== "pc" && kind !== "ally"){
     const sEntry = spriteEntryFor(recipeSlug);
     if(sEntry){
-      const sg = buildSpriteBillboard(sEntry);
-      if(sg){ _tallyPath("sprite", sEntry.slug); return sg; }
+      if(interiorMode){
+        // VP1b: reuse interiorSpriteBillboard/buildSpriteBillboardMesh — never a second sizing formula.
+        const built = interiorSpriteBillboard(sEntry, wallHeightCap);
+        if(built){
+          const g = built.group;
+          g.userData.interiorTrueScale = true;
+          g.userData.interiorHeight = built.height;
+          g.userData.interiorFloorFrac = (typeof sEntry.floor === "number") ? sEntry.floor : 0;
+          _tallyPath("sprite", sEntry.slug);
+          return g;
+        }
+      } else {
+        const sg = buildSpriteBillboard(sEntry);
+        if(sg){ _tallyPath("sprite", sEntry.slug); return sg; }
+      }
     }
   }
   // P1' WHOLE-OBJECT WIRING (docs/P1-WIRING.md §4 step 5): resolved BEFORE the pcRecipe branch — the
@@ -5107,6 +5128,14 @@ function setUnits(data){
 
   const cx = (S.boardOrigin && S.boardOrigin.cx) || 0;
   const cz = (S.boardOrigin && S.boardOrigin.cz) || 0;
+  // BEAUTY-WAVE.md VP1b: the SAME "S.lastBoard.kind === interior3d" discriminator setInteriorBoard/
+  // setBoard already establish (setBoard's flat tabletop board carries no `kind` field at all) — the
+  // FLAT TABLETOP combat path (interiorMode === false here) is untouched, byte-identical to before
+  // this unit (verify-theater-sprites 12/12 is the regression gate for that claim).
+  const interiorMode = !!(S.lastBoard && S.lastBoard.kind === "interior3d");
+  const wallHeightCap = (interiorMode && typeof S.lastBoard.wallHeightBase === "number" && S.lastBoard.wallHeightBase > 0)
+    ? S.lastBoard.wallHeightBase * 0.95
+    : null;
   // G5 ROUND-1 (ruling 2): the base disc geometry is now sized per-UNIT (size-scaled — see the
   // baseDiscGeoFor cache below) rather than one shared geometry at a fixed FIGURE_SCALE radius, since
   // a Small goblin and a Huge ogre now render at different effective scales (ruling 3's SIZE_SCALE)
@@ -5182,11 +5211,18 @@ function setUnits(data){
     // P1' WHOLE-OBJECT WIRING (§2.4): `className` (lowercased pcRef.class/a.class, pc/ally only,
     // stamped by theater-data.js's theaterUnitsFrom) resolves the roster-supersession key BEFORE
     // any of the above — see figureFor's own header comment for the full precedence order.
-    let figure = figureFor(u.archetype, seed, tint, u.silhouette, u.weapon, u.recipeSlug, u.pcRecipe, u.kind, u.className);
+    let figure = figureFor(u.archetype, seed, tint, u.silhouette, u.weapon, u.recipeSlug, u.pcRecipe, u.kind, u.className, null, interiorMode, wallHeightCap);
     // x/z already computed at the top of this forEach body (the obliterated branch above returns before
     // here, so this is the same block scope) — reuse them; a second `const x/z` here is a duplicate
     // declaration (a hard SyntaxError that stopped this whole module from parsing).
-    figure.position.set(x, 0, z);
+    // BEAUTY-WAVE.md VP1b: an interior-true-scale sprite figure's floor-CONTACT line (not y=0, the
+    // tabletop tile-top convention) must sit on the room's y=-0.5 floor plane — the SAME math
+    // interiorBuildPieces already applies to non-combat pieces (this unit's own header note).
+    const interiorSpriteFig = !!(figure.userData && figure.userData.interiorTrueScale);
+    const posY = interiorSpriteFig
+      ? (-0.5 - (figure.userData.interiorFloorFrac || 0) * figure.userData.interiorHeight)
+      : 0;
+    figure.position.set(x, posY, z);
     // P1' WHOLE-OBJECT WIRING (docs/P1-WIRING.md §4 step 6, §3-D1/D2/D8): a whole-object figure
     // (tagged by figureFor) takes a COMPLETELY SEPARATE scale/disc path from the cuboid-recipe math
     // below — D1: applying FIGURE_SCALE x sizeScaleFor on top of the module's own AUTHORED ABSOLUTE
@@ -5211,6 +5247,14 @@ function setUnits(data){
           figure.add(new THREE.Mesh(grayGeo, mats));
         }
       }
+    } else if(interiorSpriteFig){
+      // BEAUTY-WAVE.md VP1b: interiorSpriteBillboard already baked the FINAL true-scale world height
+      // into the plane geometry itself (HUMAN_TRUE_HEIGHT x scaleTrue, wall-capped) — the same
+      // "authored absolute size, scale by 1 alone" discipline the whole-object path documents just
+      // above. Re-applying FIGURE_SCALE x sizeScaleFor here (the tabletop combat convention below)
+      // would double-scale a plane that is already sized in world units, reproducing the kaiju bug
+      // one line later — this is the fix.
+      figScale = 1;
     } else {
       // G5 ROUND-1 (ruling 3): recipe.size (a bestiary/pcRecipe field carried since MODEL-GRAMMAR G2 but
       // never read until now) scales the WHOLE figure group on top of FIGURE_SCALE — one multiply, so a
@@ -5590,7 +5634,10 @@ window.Theater.modelPathReport = function(){
 // whole-object build path (threaded to figureFor's wholeKeyOverride param) — the prove-load / gate
 // entry point for the glb seam, e.g. window.Theater.refFigure.build({ wholeKey: "test:grunt-glb" }).
 window.Theater.refFigure = {
-  build: function(o){ return figureFor(o.archetype, o.seed, o.tint, o.silhouette, o.weapon, o.recipeSlug, null, "foe", null, o.wholeKey); },
+  // BEAUTY-WAVE.md VP1b: `o.interiorMode`/`o.wallHeightCap` are additive test-seam params (every
+  // existing caller omits them, unchanged) that let dev/verify-dungeon-interior.mjs exercise
+  // figureFor's interior-true-scale branch directly, without a full mount()/setUnits() THREE render.
+  build: function(o){ return figureFor(o.archetype, o.seed, o.tint, o.silhouette, o.weapon, o.recipeSlug, null, "foe", null, o.wholeKey, o.interiorMode, o.wallHeightCap); },
   dispose: function(group){ clearGroup(group); }
 };
 

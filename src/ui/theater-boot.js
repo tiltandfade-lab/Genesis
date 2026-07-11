@@ -1324,6 +1324,44 @@ const VOID_BG = 0x0a0908; // matches theater-data's dungeon palette voidTint —
 // on/off toggle (S.interiorVariant.rig, dev/battle-gate/capture-interior-study.mjs's rig-on/rig-off
 // card) both read the SAME authored default, never two numbers that could drift apart.
 const HEMI_SKY = 0xfff1dc, HEMI_GROUND = 0x1b2430, HEMI_INTENSITY_DEFAULT = 0.22;
+// BW2-4 THE VALUE PLUNGE (docs/BEAUTY-WAVE-2.md §BW2-4, item 1): the INTERIOR tray drops its scene-wide
+// fill hard so the torch/lamp PointLights (data.lights) carry the picture — mock-01-gloom-combat.png's
+// near-black rims + small hot pools. These override, for the interior channel ONLY, the three flatteners
+// applyLightProfile installs: (a) ambient floored to STAGE_AMBIENT_FLOOR (0.65) — far too bright, the
+// "even mid-light" the mocks avoid; (b) the shared hemisphere key; (c) the "dark" profile's own
+// non-attenuating overhead fill point (intensity 7, decay:0/distance:0 — it floods every floor cell
+// evenly and, worse, erases the torch shadows the addendum wants to READ). The flat tabletop channel
+// (setBoard) is untouched — STAGE_AMBIENT_FLOOR still governs there. Tuned across the BW2-4 iterate loop.
+const ITR_SCENE_AMBIENT = 0.16;      // interior ambient intensity (replaces the 0.65 readability floor here)
+const ITR_SCENE_HEMI = 0.09;         // interior hemisphere key (down from HEMI_INTENSITY_DEFAULT 0.22)
+const ITR_SCENE_FILL_SCALE = 0.04;   // multiply the profile's overhead (decay:0, non-attenuating) fill point(s). Tuned 0.20->0.10->0.04: the fill was the LAST flattener — it lit central walls/doorframes bright even after ambient/hemi dropped (round-4 diagnostic: killing ambient+hemi alone left them bright). Standees are UNLIT billboards, so cutting fill near-off darkens the Lambert surfaces (walls/doorframes/floor go dark except in torch pools — the mock look) WITHOUT touching character readability. A whisper stays (not 0) so an edge-on wall never reads as a pure-black hole.
+// BW2-4 item 1: the DATA intensity on data.lights (theater-interior.js's itrRoomLights, base
+// kit.lightIntensity ~1.0-1.3 x valueScript.focalLight ~1.2 = ~1.5) encodes the RELATIVE per-room value
+// hierarchy (verify-scene-direction group 2b pins it, so it must not move). But ~1.5 with the new decay:2
+// physical falloff barely reaches the floor 1.4 units below the flame — round-1 READ showed NO torch
+// pool. This render-side gain lifts the interior torch/lamp PointLights to a decay-2-appropriate absolute
+// brightness (a HOT ~4-5-cell pool) while leaving the harness-checked DATA untouched — the same "data
+// carries the relative hierarchy, GL applies the absolute" split the grade rig already keeps. Applied
+// per-light before startLightFlicker so the flicker base captures the gained value.
+const ITR_LIGHT_RENDER_GAIN = 6.5;
+// BW2-4 item 2 (value plunge) — DOORFRAME value darken, GL-side. Doorframes ship with kit.trimColor
+// (the bright accent hue — gloom #6b5878 lum 0.37, gold on others), so a doorway prism renders as a
+// BRIGHT vertical (round-3 READ: a lavender block fighting the standees) where the mocks keep doorways
+// as DARK arches. This darken must live on the GL side, NOT in the data: the accent-discipline gate
+// (verify-scene-direction group 5) reads the DATA doorframe colors and pins them to kit.trimColor / the
+// ONE tinted accent per room, so touching the data would trip it. Value-only (a scalar multiply): the
+// accent doorframe's hue survives, only its value drops toward wall value.
+const ITR_SCENE_DOORFRAME_VALUE = 0.25;
+function itrScaleHexValue(hex, f){
+  const h = String(hex || "#888888").replace("#", "");
+  const full = h.length === 3 ? h.split("").map((c) => c + c).join("") : h;
+  const n = parseInt(full, 16);
+  const v = Number.isFinite(n) ? n : 0x888888;
+  const g = Math.max(0, f);
+  const clamp = (x) => (x < 0 ? 0 : x > 255 ? 255 : Math.round(x));
+  const r = clamp(((v >> 16) & 255) * g), gr = clamp(((v >> 8) & 255) * g), b = clamp((v & 255) * g);
+  return "#" + [r, gr, b].map((x) => x.toString(16).padStart(2, "0")).join("");
+}
 
 // tile kind -> the manifest's semantic texture key it prefers (theaterBoardFrom's kind vocabulary,
 // src/engine/theater-data.js). A kind with no matching manifest entry stays palette-only (the no-
@@ -5238,25 +5276,77 @@ function interiorAssignShadowCasters(lights, cx, cz){
   return (lights || []).map((l, i) => Object.assign({}, l, { castShadow: casterIdx.has(i) }));
 }
 
-// small visible emissive marker mesh at a light's position — Adam's ruling 2 closer: "the source
-// should read as an object, not magic". A torch gets a thin flame-colored quad (billboard-shaped, no
-// camera-facing update needed at study-card distances — a static vertical quad reads fine); a lamp
-// gets a short horizontal strip box (wall-sconce silhouette). Unlit (MeshBasicMaterial) + additive so
-// it reads bright regardless of the room's own light level, same "this surface emits" logic the
-// whole-object flame material (wholeObjectMaterialsFor slot 3, this file's own header note) already
-// established — no new visual language invented here, just reused at interior scale.
-function interiorBuildLightMarker(light){
-  const isLamp = light.kind === "lamp";
-  const geo = isLamp
-    ? new THREE.BoxGeometry(0.5, 0.12, 0.12)
-    : new THREE.PlaneGeometry(0.18, 0.32);
+// BW2-4 addendum (Adam, mid-flight: "I don't think I have seen any... in-world light sources") — THE
+// LIGHT-MARKER SWAP. Adam's ruling 2 asked the source to "read as an object, not magic"; U3's first cut
+// was a bare flame-colored RECTANGLE quad, which reads at board distance as a floating orange rectangle
+// (Adam's complaint). Two replacements, both deterministic (same seeds, no RNG):
+//  (a) EVERY light gets a soft additive GLOW DISC (radial-gradient, not a hard-edged rectangle) at the
+//      flame point — the universal "this point emits" read, and the flicker channel's opacity target.
+//  (b) Realms with a light-primary dressing card (INTERIOR_LIGHT_CARD) additionally get that card
+//      standing self-lit on the floor at the light seed — a lantern/candle OBJECT (mock-01-finale.png
+//      stands floor lanterns exactly this way). Where no card exists, the glow disc alone stands in.
+// A realmId -> floor-standing light-card slug map. Grepped from assets/dressing: gloom/fantasy carry
+// lantern/candle cards today; realms without one fall through to the glow-disc-only path (never a bare
+// rectangle again). The emitter card never casts a shadow (it sits AT the light — a self-shadow on its
+// own pool is degenerate) and is self-lit (MeshBasicMaterial), so it reads at the plunged ambient.
+const INTERIOR_LIGHT_CARD = {
+  gloom: "gloom-clutter-lanternrust",
+  fantasy: "fantasy-clutter-lanternhook",
+};
+const INTERIOR_LIGHT_CARD_HEIGHT = 1.1; // world units — a small floor lantern, well under standee height
+let INTERIOR_GLOW_TEXTURE = null;
+function interiorGlowTexture(){
+  if(INTERIOR_GLOW_TEXTURE) return INTERIOR_GLOW_TEXTURE;
+  const size = 64;
+  const cv = document.createElement("canvas"); cv.width = cv.height = size;
+  const ctx = cv.getContext("2d");
+  const g = ctx.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2);
+  g.addColorStop(0, "rgba(255,255,255,1)");
+  g.addColorStop(0.4, "rgba(255,255,255,0.5)");
+  g.addColorStop(1, "rgba(255,255,255,0)");
+  ctx.fillStyle = g; ctx.fillRect(0, 0, size, size);
+  const tex = new THREE.CanvasTexture(cv);
+  tex.minFilter = THREE.LinearFilter; tex.magFilter = THREE.LinearFilter; // a soft glow — never nearest
+  INTERIOR_GLOW_TEXTURE = tex;
+  return tex;
+}
+// the soft additive glow disc — a camera-facing group (userData.sprite) so updateSpriteBillboardYaw
+// turns it to face the camera; returns {group, mesh} so the flicker channel can pulse mesh.opacity.
+function interiorBuildGlowDisc(light){
+  const size = (light.kind === "lamp" ? 0.5 : 0.6);
+  const geo = new THREE.PlaneGeometry(size, size);
   const mat = new THREE.MeshBasicMaterial({
-    color: light.color || "#ffbb66", transparent: true, opacity: 0.9,
-    blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide
+    map: interiorGlowTexture(), color: light.color || "#ffbb66",
+    transparent: true, opacity: 0.85, blending: THREE.AdditiveBlending,
+    depthWrite: false, side: THREE.DoubleSide
   });
+  mat.userData.psxExempt = true;
   const mesh = new THREE.Mesh(geo, mat);
-  mesh.castShadow = false; mesh.receiveShadow = false; // a light source's own marker never shadows itself
-  return mesh;
+  mesh.castShadow = false; mesh.receiveShadow = false; // a light's own glow never shadows itself
+  const group = new THREE.Group();
+  group.add(mesh);
+  group.userData.sprite = true;
+  return { group, mesh };
+}
+// the floor-standing emitter card (self-lit lantern/candle) — mirrors buildDressingCard's construction
+// (dressingTextureFor's always-available placeholder-or-real join, alpha-cutout, psxExempt) but never
+// casts a shadow (it sits AT its own light) and stands at a fixed small lantern height.
+function interiorBuildLightCard(slug){
+  const tex = dressingTextureFor(slug);
+  const h = INTERIOR_LIGHT_CARD_HEIGHT;
+  const geo = new THREE.PlaneGeometry(h, h);
+  const mat = new THREE.MeshBasicMaterial({
+    map: tex, transparent: true, alphaTest: 0.5, side: THREE.DoubleSide, depthWrite: true
+  });
+  mat.userData.psxExempt = true;
+  const mesh = new THREE.Mesh(geo, mat);
+  mesh.position.y = h / 2;
+  mesh.castShadow = false; mesh.receiveShadow = false;
+  const g = new THREE.Group();
+  g.add(mesh);
+  g.userData.sprite = true;
+  g.userData.dressingSlug = slug;
+  return g;
 }
 
 // data.lights -> {group, casters} — builds one THREE.PointLight + one emissive marker mesh per light
@@ -5265,10 +5355,13 @@ function interiorBuildLightMarker(light){
 // interior.js, GL in theater-boot.js" split the rest of this render already keeps). Shadow-casting
 // lights get a small shadow-map budget (INTERIOR_SHADOW_MAP_SIZE) + a near/far tuned to interior room
 // scale (never the board-wide combat camera's frustum).
-function interiorBuildLights(lights, cx, cz){
+function interiorBuildLights(lights, cx, cz, realmId, floorTopMap){
   const group = new THREE.Group();
   const assigned = interiorAssignShadowCasters(lights, cx, cz);
   let casters = 0;
+  // BW2-4 addendum: the realm's floor-standing emitter card (INTERIOR_LIGHT_CARD), or null -> glow-disc
+  // only. Kept once per build (not per light) since it's a pure realm lookup.
+  const cardSlug = (realmId && INTERIOR_LIGHT_CARD[realmId]) || null;
   // VP6 item 2: every interior light source joins the shared flicker channel (startLightFlicker,
   // above) at INTERIOR_LIGHT_FLICKER_AMPLITUDE — collected here (not started here) so setInteriorBoard
   // can hand the finished list to ONE startLightFlicker call alongside the board's own S.pointLights.
@@ -5276,7 +5369,10 @@ function interiorBuildLights(lights, cx, cz){
   assigned.forEach((light) => {
     const pl = new THREE.PointLight(
       light.color || "#ffbb66",
-      light.intensity != null ? light.intensity : 1.2,
+      // BW2-4 item 1: render-side gain (see ITR_LIGHT_RENDER_GAIN) — the DATA intensity is the relative
+      // value; this is the absolute decay-2 pool brightness. Preserves the fill<=60%-of-key ratio (both
+      // key and fill are gained equally).
+      (light.intensity != null ? light.intensity : 1.2) * ITR_LIGHT_RENDER_GAIN,
       light.distance != null ? light.distance : 12,
       light.decay != null ? light.decay : 2
     );
@@ -5290,14 +5386,23 @@ function interiorBuildLights(lights, cx, cz){
       casters++;
     }
     group.add(pl);
-    const marker = interiorBuildLightMarker(light);
-    marker.position.copy(pl.position);
-    if(light.kind !== "lamp") marker.position.y -= 0.15; // torch flame sits slightly below its light point (on the sconce)
-    group.add(marker);
+    // BW2-4 addendum — THE LIGHT-MARKER SWAP: a soft additive glow disc at the flame point (replaces the
+    // old bare rectangle marker), plus — where the realm has one — a self-lit lantern/candle card
+    // standing on the floor at the light seed. The glow disc is the flicker channel's opacity target.
+    const glow = interiorBuildGlowDisc(light);
+    glow.group.position.copy(pl.position);
+    if(light.kind !== "lamp") glow.group.position.y -= 0.15; // torch flame sits slightly below its light point (on the sconce)
+    group.add(glow.group);
+    if(cardSlug){
+      const card = interiorBuildLightCard(cardSlug);
+      const floorTop = interiorFloorTopAt(floorTopMap, light.x || 0, light.z || 0);
+      card.position.set((light.x || 0) - cx, floorTop, (light.z || 0) - cz);
+      group.add(card);
+    }
     flickerTargets.push({
-      pl, marker,
+      pl, marker: glow.mesh,
       baseIntensity: pl.intensity,
-      baseOpacity: marker.material ? marker.material.opacity : 0.9,
+      baseOpacity: glow.mesh.material ? glow.mesh.material.opacity : 0.85,
       amplitude: INTERIOR_LIGHT_FLICKER_AMPLITUDE
     });
   });
@@ -6245,6 +6350,20 @@ function setInteriorBoard(data){
   // default reads near-black on them — study card v1/v2). Falls back to the standing default.
   applyLightProfile((data.lightProfile && LIGHT_PROFILES[data.lightProfile]) ? data.lightProfile : LIGHT_DEFAULT_PROFILE);
 
+  // BW2-4 THE VALUE PLUNGE (docs/BEAUTY-WAVE-2.md §BW2-4, item 1) — interior scene-wide fill drop.
+  // applyLightProfile just (a) floored ambient to STAGE_AMBIENT_FLOOR, (b) rebuilt the profile's own
+  // overhead fill point(s) into S.pointLights. Both flatten the value structure the mocks avoid and
+  // wash out the torch cast-shadows (addendum: shadows must READ). Drop all three here so the torch/
+  // lamp data.lights carry the scene. Gated behind rigOn so the study-rig's honest "no GR3" baseline
+  // (variant.rig === false) is untouched. MUST run BEFORE interiorBuildLights + startLightFlicker below
+  // so the flicker bases (startLightFlicker snapshots S.pointLights[i].intensity) capture the plunged
+  // fill, not the pre-plunge value. See ITR_SCENE_* constants (near HEMI_*) for the tuned numbers.
+  if(rigOn){
+    if(S.ambientLight) S.ambientLight.intensity = ITR_SCENE_AMBIENT;
+    if(S.hemiLight) S.hemiLight.intensity = ITR_SCENE_HEMI;
+    (S.pointLights || []).forEach((l) => { l.intensity *= ITR_SCENE_FILL_SCALE; });
+  }
+
   // GR1 (docs/GRAPHICS-ENGINE.md build unit GR1): floor/wall each bake their own REALM_MATERIALS
   // painter into a real CanvasTexture (interiorMaterialTexture, above) — replaces the old flat-pattern
   // texture entirely, per GR1's own "replace the current flat/pattern textures" instruction. The study
@@ -6309,7 +6428,13 @@ function setInteriorBoard(data){
     });
   }
   const wallMesh = interiorBuildInstancedMesh(wallList, cx, cz, wallTex, variant, "wall");
-  const doorMesh = interiorBuildInstancedMesh(inst.doorframe, cx, cz, null, variant, "doorframe");
+  // BW2-4 item 2: darken the RENDERED doorframe value (see ITR_SCENE_DOORFRAME_VALUE) off a shallow
+  // clone so the caller's own data.instances (cached/replayed) is never mutated — same clone discipline
+  // the AO variant path above keeps. rigOn-gated so the study baseline stays honest.
+  const doorList = rigOn
+    ? inst.doorframe.map((d) => Object.assign({}, d, { color: itrScaleHexValue(d.color, ITR_SCENE_DOORFRAME_VALUE) }))
+    : inst.doorframe;
+  const doorMesh = interiorBuildInstancedMesh(doorList, cx, cz, null, variant, "doorframe");
   // BEAUTY-WAVE-2.md BW2-1b (THE OCCLUSION LAW), item 1: DYNAMIC CUTAWAY for pillar prisms — the
   // CUTAWAY WALLS treatment just above only ever adjusted WALL instances; a pillar between the
   // camera and a mounted standee was never touched at all. Recomputed every board build (camera
@@ -6356,7 +6481,7 @@ function setInteriorBoard(data){
   // DUNGEON-GRAPH.md U3 iteration-2, ruling 2: real environmental light sources (data.lights, emitted
   // by src/ui/theater-interior.js's interiorBuildBoard) — realm-flavored PointLights + their own
   // visible emissive markers, capped at INTERIOR_SHADOW_CASTER_CAP shadow-casters.
-  const lightsBuilt = interiorBuildLights(data.lights, cx, cz);
+  const lightsBuilt = interiorBuildLights(data.lights, cx, cz, data.realmId, S.interiorFloorTopMap);
   S.interiorGroup.add(lightsBuilt.group);
   S.interiorShadowCasterCount = lightsBuilt.casters;
   S.interiorLightCount = (data.lights || []).length;

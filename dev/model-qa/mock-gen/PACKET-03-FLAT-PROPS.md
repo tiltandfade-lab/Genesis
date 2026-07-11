@@ -32,11 +32,15 @@ only the state differs).
 ## Extrusion depth table — v2 CHUNKED UP (Adam: "if you can't tell that things are being
 ## extruded, make them a little chunkier just for the depth")
 
-thin surface (poster, sigil, stain, rug): 0.02 · framed flat (painting, sign, mirror,
-screen): 0.07 · fixture (sconce, candelabra, keypad, intercom, gauge): 0.14 · shallow
-furniture (notice board, reliquary niche, breaker box): 0.18 · deep wall unit (bookshelf,
-weapon rack, server rack, vending machine, fire cabinet): 0.3-0.35 · floor volume (coffin,
-conveyor, projector puck): 0.15-0.3
+thin surface (poster, sigil, stain, rug, flat sign): 0.02 · framed flat (painting, mirror,
+screen): 0.07 · mounted object (shield, trophy head, crest, plaque): 0.12 · fixture (sconce,
+candelabra, keypad, intercom, gauge): 0.14 · shallow furniture (notice board, reliquary
+niche, breaker box): 0.18 · deep wall unit (bookshelf, weapon rack, server rack, VENDING
+MACHINE — chonky by ruling, fire cabinet): 0.3-0.35 · floor volume (coffin, conveyor,
+projector puck): 0.15-0.3
+CONTEXTUAL BY LAW (Adam 2026-07-11): depth is per-archetype data (`entry.depth`), never a
+global constant — the fold assigns from this table; unknown archetypes get the silhouette
+classifier's class default, flagged for eyes.
 Rule: depth is tuned so the extrusion READS at the beat camera — legibility beats realism;
 if a depth still doesn't read in frames, chunk it again.
 

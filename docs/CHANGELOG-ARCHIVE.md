@@ -14,6 +14,56 @@ to load every session (the live file keeps the newest entries; see the script fo
 Newest-first, same as the live file — the two files read as one continuous history, live file
 first. Read-only record: never hand-edit, never add entries here directly.
 
+## 2026-07-05 (later-5) — RUN 2 (SELLA) + FABLE BUG-CLASS SWEEP + THE FIX (13 BUGS CLOSED)
+
+Continued the bridgeless playtest (**Run 2**, Sella Voss, 10 turns), then — on Adam's go — **fixed the
+whole event/codex contract bug-class** the playtests surfaced. Pipeline: Fable specced, Opus executed,
+Opus gated (independent re-run of every gate + a clean-master worktree baseline to prove zero
+regressions). Branch `fix/event-source-enum` (3 commits). **13 bugs closed.**
+
+### Playtest (Run 2 — no engine change; findings only)
+- Ran Sella forward 10 turns (Day 1 → Day 2 midday): T1–T6 the **memoryless-DM-every-turn** codex-survival
+  stress test (Adam's directive), T7+ a **warm persistent DM** (production pattern). **Verdict:** the
+  engine-rolled atoms survive cold-swaps and narrative coherence held remarkably well — the one seam was
+  the DM's *interpreted* notes not persisting (BUG-06c). Save advanced to Day 2 (Run-1 archived
+  `state-run1-close.json`); log `dev/playtest-saves/sella-shimmering-maw/RUN2-LOG.md`.
+- A **Fable-adjudicated same-class sweep** (2 executor sweeps → Fable verified against code) found the
+  visible tip was a class: **BUG-09 (CRITICAL)** — the entire manual inventory panel (×6) + the level-up
+  claim button were dead code (same `source` rejection as BUG-01) — plus BUG-10..13. Filed to
+  `docs/PLAYTEST-BUGS.md` with 3 roots + an observability amplifier.
+
+### Fixed (the fix — `fix/event-source-enum`)
+- **Root A — source-enum drift** (`validateEvent`): replaced the hard-coded `{null,detected,declared}`
+  with the `DM_EVENT_SOURCES` allow-list (`+player,+branch`); a typo'd source still fails loud. **One
+  change closed BUG-01 (roll-branch consequences now apply) + BUG-09 (all 7 player buttons live).**
+- **Root B — payload field-name drift**: a declarative `DM_EVENT_FIELDS` census + `dmFoldPayload`, folded
+  once after `validateEvent` — known aliases rewrite to canonical (`id/faction→clockId`, `by→delta`,
+  `name/text→what`, `epithet→text`, `to→target`); unknown keys **warn + drift-ledger but are never
+  dropped**. Digest clock keys renamed `powers[].id`/`fronts[].id`→`clockId`. Closes BUG-06a/b/c/d, 10, 12.
+- **Root C — codex identity**: an id-less `codex_add` landing on an *established* record is refused
+  (`id-collision`) instead of silently merging (BUG-11/F-07); `codex_update {note}` appends to `dm.notes[]`
+  (BUG-06c); a missing id returns `no-record:<id>` (BUG-13); content merges onto known records drift-ledger.
+- **BUG-08** — the nat-20/1 roll fall-through now clears the persisted `w.dm.rollReq` at all three sites.
+- **The observability amplifier** (why the class was invisible): the probes gained `applyMutates`
+  (demands real state change, not just an ok-flag) + standing `ROOT-A`/`ROOT-B` drift guards, and
+  `verify-roll-branches` gained applied-ok assertions.
+
+### Changed
+- `docs/EVENT-CONTRACT.md` taxonomy rows corrected to the canonical field names + a "Payload aliases &
+  drift-warn" note. `manifest.json` `owns` += `DM_EVENT_SOURCES`, `DM_EVENT_FIELDS`, `dmFoldPayload`.
+
+### Deferred (explicitly out of scope — separate roots, queued)
+- **BUG-02** (world clock never ticks from a DM event), **BUG-03** (digest hides current HP), **BUG-04**
+  (no non-lethal KO), **BUG-05** (`discovery makeNode` doesn't relocate the PC — needs a travel event).
+  **BUG-07** ruled **WAI** (distant_word is anti-invention by design; drift-warn now makes a supplied
+  text loud). F-04 near-name codex twins — noted follow-up.
+
+### Verification
+check-manifest OK; probes flip BUG-01/06a/06b/06c/06d/08/09/10/11/12/13 → resolved, ROOT-A/ROOT-B OK,
+BUG-02/03/04/05/07 unchanged; all green harnesses stay green; the 5 pre-existing red harnesses
+(codex/codex-roll/crit/loadout-mirror/model-grammar) verified **identical to clean master** via worktree
+baseline — zero new regressions.
+
 ## 2026-07-05 (later-4) — BRIDGELESS PLAYTEST RIG + THE BUGS IT CAUGHT
 
 The AUTOMATED-PLAYTEST Layer-1 loop (AI player × real DM stack × Opus analyst) realized **headless

@@ -14,6 +14,56 @@ to load every session (the live file keeps the newest entries; see the script fo
 Newest-first, same as the live file — the two files read as one continuous history, live file
 first. Read-only record: never hand-edit, never add entries here directly.
 
+## 2026-07-05 (later-4) — BRIDGELESS PLAYTEST RIG + THE BUGS IT CAUGHT
+
+The AUTOMATED-PLAYTEST Layer-1 loop (AI player × real DM stack × Opus analyst) realized **headless
+and bridgeless** — two sealed Sonnet seats (Player + DM) played a full session through the real
+engine loaded in jsdom, Opus as clerk/analyst. First run: **"The Shimmering Maw"**, PC **Sella Voss
+"the Seam"** (Human Rogue/Charlatan) — 12 turns, dawn→dusk, 7 checks, one fight, a complete arc.
+Branch `feat/bridgeless-playtest-rig`. No engine modules changed (check-manifest OK); this is tooling
++ docs + a save. **The point of the exercise was validation, not building** (Adam) — everything the
+run surfaced is logged as a future fix, not fixed here.
+
+### Added
+- **`dev/playtest-bridgeless.mjs`** — the headless bridgeless harness. Loads real `genesis.html` +
+  all manifest modules in jsdom and drives the production seam directly (`dmDigest` / `applyResponse` /
+  `applyEvent` / `dmRollFor` / `resolveBranch` / `bindWorld` / `cgBind`). Stateless per-turn CLI
+  (`init` rolls a world + builds an L1 PC from the player's picks · `digest` · `apply` · `roll` ·
+  `playerview` · `dmstate` · `patch` · `advance`), state persisted to `<dir>/state.json` between turns.
+- **`dev/playtest-bug-probes.mjs`** — the running regression suite for bugs caught in play. One
+  deterministic probe per finding; reports PRESENT/resolved so a landed fix flips its probe and a
+  re-introduced bug trips it. All 8 caught bugs reproduce today; a world-seed VARIETY characterization
+  rides alongside.
+- **`docs/PLAYTEST-BUGS.md`** — the living bug & future-fix ledger (BUG-01…07 + FIX-A/B/C), each with
+  root cause, blast radius, intended fix, and its probe id. The running list Adam asked for.
+- **`dev/playtest-saves/sella-shimmering-maw/`** — Sella preserved (state.json = world + 41 codex
+  records + full transcript; the two-lens report; DM-side board; a README). She continues in run 2.
+
+### Fixed
+- Nothing in the engine (deliberately). The run's job was to *find*, not fix.
+
+### Deferred (→ `docs/PLAYTEST-BUGS.md`, all captured, none built)
+- **BUG-01 (CRITICAL):** roll-branch events silently vanish — `resolveBranch` stamps `source:"branch"`,
+  which last session's DM-Seam `validateEvent` (added in later-3, tests green) now *rejects*, so every
+  branch's HP/clock/codex/epithet effects no-op. Both suites missed it: `verify-roll-branches` asserts
+  the event's *label* (`source==="branch"`), never that state mutated — the mutation-test gap in Adam's
+  own rubric. The headline catch: last session's green merge regressed a shipped feature, and only a
+  model-in-the-loop playtest surfaced it.
+- **BUG-02 (HIGH, hotfix candidate):** no DM event advances the world clock (walk_advance moves a walk
+  cursor; clock lives only in UI `passTime`). Intent: clock always ticks — combat ≥6s/round, distance +
+  hand-waves advance it.
+- **BUG-03/04/05/06/07:** digest ships max HP not current (DM narrates blind to wounds) · no non-lethal
+  KO (0 HP always dies) · `discovery makeNode` doesn't move the PC · event field-names not discoverable
+  from the digest (`clock_advanced` wants `clockId` not `faction`; `epithet_grant` wants `text` not
+  `epithet`) · `distant_word` ignores DM text.
+- **FIX-A:** world-seed variety — ~30 distinct settings/60 rolls with a mild skew; widen/re-weight the
+  `master` table so a fresh game is almost always a new name+context, and build the **bardo
+  reincarnation** repeat path (a chance of waking in the same/an already-explored location — the only
+  intended repeat).
+- **FIX-C:** action-economy visualization (movement counter + action/bonus icons + movement bar; BG3's
+  *system* is a free-to-use convention, its *icon art* is not — render our own). Needs an
+  action-economy model underneath first.
+
 ## 2026-07-05 (later-3) — THE DM SEAM: TYPED CONTRACTS + STRUCTURED TELEMETRY
 
 Hardening the one interface where the AI DM meets the deterministic engine — the two production-

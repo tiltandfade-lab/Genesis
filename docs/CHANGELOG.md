@@ -8,6 +8,57 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-07-10 (later night) — THE BEAUTY WAVE EXECUTED: all 11 units + VP8 landed, the diorama transformed
+
+**Context.** Adam delegated the taste verdicts to Fable ("you've been outsmarting me") and said
+"orchestrate this wave now." One session: spec re-review (6 gaps found+folded), verdicts ruled,
+3 execution stages (2 + 6 + 5 executors, Workflow-throttled, worktree-isolated), every unit
+personally re-gated, every visual gate READ.
+
+**Ruled (delegated verdict seat; DESIGN.md registered)**
+- CAMERA = perspective ~20° ON · PSX dither+snap OFF world (VP0 4-cell card shot WITH standees,
+  confirmed on pixels). §G closed: corpses persist FOREVER · weather defers to UW1 riding VP6's
+  mote channel · blood full-grim applies to visuals, children carve-out MECHANICAL.
+
+**Added**
+- VP0 camera/world-PSX flags + defaults flip; VP1+VP1b TRUE-SCALE (registry feet/scaleTrue on
+  896 slugs; interior pieces + combat standees) · VP2 dressing fold (14 dg sheets → assets/dressing,
+  REALM_DRESSING generated) · VP2b GALLERY PASS (4 paintings reclaimed: dragon/colossus/kraken/
+  tarrasque; one already hangs in a rolled dungeon) · VP3 ground design · VP4 SCENE_DIRECTION
+  (17/0 harness; study card taste-gated: four distinct room moods) · VP5 battle UI off the stage
+  (chip strip, acting ring, floaters) · VP6 life pass (idle-breathe, flicker, motes, VISIBLE
+  HISTORY decals cap 12/room FIFO in pn.spatial.decals, child carve-out mechanical, effect seam)
+  · VP7 contact blobs · VP8 beauty shot (5 full-res frames + gap caption).
+- MOCK-GEN reference-model loop (Adam's idea): dev/model-qa/mock-gen/PACKET-01.md — 8 target-frame
+  prompts, ChatGPT as our own reference model; mocks propose, laws dispose.
+
+**Fixed**
+- **THE KAIJU ROOT CAUSE (VP1c):** three fixes deep — sizing math was never broken; production's
+  theaterStageSync pushed flat-tabletop units into S.unitGroup and `setInteriorBoard` never cleared
+  it, so pre-VP1 kaiju meshes rendered OVER correct interior pieces. Two clearGroup calls, red-first.
+- VP1.5 corpus unification REVERTED at the orchestrator's eyes gate (green snake→brown = hue
+  murder; magenta flecks) and REBUILT as r2: union-histogram palettes w/ hue-family floor (executor
+  self-corrected 2%→0.5% when its own card read caught a second snake), Lab quantize, integer-ratio
+  texel, magenta exclusion. 42 flagged vs r1's 206; snake/ghost regression fixtures now permanent.
+- Sweep fixture drift: VP1's red-first merge-base self-invalidation (pinned 63d3073), model-grammar
+  figure-Y pattern widened for VP1b's posY (x/z-identity invariant intact).
+- **Grid-snap verdict:** Adam's spritefusion-pixel-snapper lead PROVEN DESTRUCTIVE on our art
+  (3-sprite + raw-arrival proof cards; detector locks onto texture rhythm, majority-vote eats
+  sub-cell detail). Kept: the reconstruction-error validity gate as a future slicer option.
+
+**Deferred**
+- VP8 gap queue: combat BEAT FRAMING (law 2c not yet driving the camera), light-marker quads need
+  emissive art, chrome creature sprites (realm dressed but uninhabited), gloom/chrome density tune.
+- GIT-LFS now urgent: GitHub warns on the two 79MB pre-unification zips.
+- Executor scar for the ledger: two narrator-deaths on VP1.5-r2 (zero commits, caught by disk-truth
+  both times; one corrective SendMessage revived it — the babysitting protocol worked).
+
+**Verification.** check-manifest OK · interior 282/0 · dressing 379/0 · scene-direction 17/0 ·
+vp6 49/0 · standee-verbs 69/0 · gallery 22/0 · vp1c-leak 6/0 (red-first) · battle-stage 42/0 ·
+combat suite green · full sweep = only the pre-existing table-usage-data red · loop gate 5/5
+re-shot and READ at every landing (one stale-capture-server incident caught: identical pixels
+to the prior tree = the server was serving stale code; kill-before-capture is now in every prompt).
+
 ## 2026-07-10 (late night) — ART DIRECTION CLOSED: 13 rulings, two armed waves, dressing art landing
 
 **Added (specs — build is Adam's word)**
@@ -995,54 +1046,4 @@ check-manifest OK; probes flip BUG-01/06a/06b/06c/06d/08/09/10/11/12/13 → reso
 BUG-02/03/04/05/07 unchanged; all green harnesses stay green; the 5 pre-existing red harnesses
 (codex/codex-roll/crit/loadout-mirror/model-grammar) verified **identical to clean master** via worktree
 baseline — zero new regressions.
-
-## 2026-07-05 (later-4) — BRIDGELESS PLAYTEST RIG + THE BUGS IT CAUGHT
-
-The AUTOMATED-PLAYTEST Layer-1 loop (AI player × real DM stack × Opus analyst) realized **headless
-and bridgeless** — two sealed Sonnet seats (Player + DM) played a full session through the real
-engine loaded in jsdom, Opus as clerk/analyst. First run: **"The Shimmering Maw"**, PC **Sella Voss
-"the Seam"** (Human Rogue/Charlatan) — 12 turns, dawn→dusk, 7 checks, one fight, a complete arc.
-Branch `feat/bridgeless-playtest-rig`. No engine modules changed (check-manifest OK); this is tooling
-+ docs + a save. **The point of the exercise was validation, not building** (Adam) — everything the
-run surfaced is logged as a future fix, not fixed here.
-
-### Added
-- **`dev/playtest-bridgeless.mjs`** — the headless bridgeless harness. Loads real `genesis.html` +
-  all manifest modules in jsdom and drives the production seam directly (`dmDigest` / `applyResponse` /
-  `applyEvent` / `dmRollFor` / `resolveBranch` / `bindWorld` / `cgBind`). Stateless per-turn CLI
-  (`init` rolls a world + builds an L1 PC from the player's picks · `digest` · `apply` · `roll` ·
-  `playerview` · `dmstate` · `patch` · `advance`), state persisted to `<dir>/state.json` between turns.
-- **`dev/playtest-bug-probes.mjs`** — the running regression suite for bugs caught in play. One
-  deterministic probe per finding; reports PRESENT/resolved so a landed fix flips its probe and a
-  re-introduced bug trips it. All 8 caught bugs reproduce today; a world-seed VARIETY characterization
-  rides alongside.
-- **`docs/PLAYTEST-BUGS.md`** — the living bug & future-fix ledger (BUG-01…07 + FIX-A/B/C), each with
-  root cause, blast radius, intended fix, and its probe id. The running list Adam asked for.
-- **`dev/playtest-saves/sella-shimmering-maw/`** — Sella preserved (state.json = world + 41 codex
-  records + full transcript; the two-lens report; DM-side board; a README). She continues in run 2.
-
-### Fixed
-- Nothing in the engine (deliberately). The run's job was to *find*, not fix.
-
-### Deferred (→ `docs/PLAYTEST-BUGS.md`, all captured, none built)
-- **BUG-01 (CRITICAL):** roll-branch events silently vanish — `resolveBranch` stamps `source:"branch"`,
-  which last session's DM-Seam `validateEvent` (added in later-3, tests green) now *rejects*, so every
-  branch's HP/clock/codex/epithet effects no-op. Both suites missed it: `verify-roll-branches` asserts
-  the event's *label* (`source==="branch"`), never that state mutated — the mutation-test gap in Adam's
-  own rubric. The headline catch: last session's green merge regressed a shipped feature, and only a
-  model-in-the-loop playtest surfaced it.
-- **BUG-02 (HIGH, hotfix candidate):** no DM event advances the world clock (walk_advance moves a walk
-  cursor; clock lives only in UI `passTime`). Intent: clock always ticks — combat ≥6s/round, distance +
-  hand-waves advance it.
-- **BUG-03/04/05/06/07:** digest ships max HP not current (DM narrates blind to wounds) · no non-lethal
-  KO (0 HP always dies) · `discovery makeNode` doesn't move the PC · event field-names not discoverable
-  from the digest (`clock_advanced` wants `clockId` not `faction`; `epithet_grant` wants `text` not
-  `epithet`) · `distant_word` ignores DM text.
-- **FIX-A:** world-seed variety — ~30 distinct settings/60 rolls with a mild skew; widen/re-weight the
-  `master` table so a fresh game is almost always a new name+context, and build the **bardo
-  reincarnation** repeat path (a chance of waking in the same/an already-explored location — the only
-  intended repeat).
-- **FIX-C:** action-economy visualization (movement counter + action/bonus icons + movement bar; BG3's
-  *system* is a free-to-use convention, its *icon art* is not — render our own). Needs an
-  action-economy model underneath first.
 

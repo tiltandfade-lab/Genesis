@@ -18,6 +18,16 @@ just preserves the old ordered-queue framing for anyone reconstructing why a cal
 
 ---
 
+## Do next (2026-07-09, models lane — post-foundry-batch)
+
+1. ☐ **Re-key coverage audit** — once Adam's realm re-keys land, sweep every realm's `model` keys vs
+   the registry; repoint onto the 185-body roster, queue only true silhouette gaps for a wave.
+2. ☐ **Beautification queue** — Adam scans the wave sheets (review Artifact / dev/model-qa/sheets/),
+   names offenders; run them through the second-pass pattern (proven 18/18).
+3. ☐ **Props + NPC set** — the 14 missing prop models and the NPC humanoid expansion
+   (VISUAL-ASSET-QUEUE) via the same author-only waves.
+4. ☐ **Frontier GLB step-6 wiring** (carried from 2026-07-08).
+
 ## Do next (2026-07-09, NPC/monster lane — realm-key expansion)
 
 1. ☑ **REALM-KEY-EXPANSION stat wave — DONE 2026-07-09** (+168 → 1,475 creatures, --check clean,

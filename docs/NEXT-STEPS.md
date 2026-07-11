@@ -175,16 +175,6 @@ L7. ☐ **Regenerate `table-registry.json/.md`** — stale after the rename/new 
 - Then mid-session verbs: ~~Wilderness Encounter port~~ **STALE — the generator IS ported** (`src/engine/wild-walk.js`, all 24 `wilderness-*` tables compiled; prep walks consume it). The real gap was the Travel verb ignoring it → **☑ SPECCED as `docs/TRAVEL-WALKS.md`** (2026-07-01 night: travel becomes the walk). Urban/Dungeon remain callable via prep walks.
 
 
-## Do next (2026-07-09, models lane — post-foundry-batch)
-
-1. ☐ **Re-key coverage audit** — once Adam's realm re-keys land, sweep every realm's `model` keys vs
-   the registry; repoint onto the 185-body roster, queue only true silhouette gaps for a wave.
-2. ☐ **Beautification queue** — Adam scans the wave sheets (review Artifact / dev/model-qa/sheets/),
-   names offenders; run them through the second-pass pattern (proven 18/18).
-3. ☐ **Props + NPC set** — the 14 missing prop models and the NPC humanoid expansion
-   (VISUAL-ASSET-QUEUE) via the same author-only waves.
-4. ☐ **Frontier GLB step-6 wiring** (carried from 2026-07-08).
-
 ## Do next (2026-07-10, SPRITE-GEN-V2 — the V3 wave; laws in docs/SPRITE-GEN-V2.md, tags in docs/SPRITE-TAGS.md)
 
 1. ☑ **Cleanup + survey + laws + V3 generation + gate — DONE 2026-07-10** (worktrees 21→1; 2,431
@@ -214,7 +204,22 @@ L7. ☐ **Regenerate `table-registry.json/.md`** — stale after the rename/new 
    near-black, gloom underexposed, toast bleed) then Adam's taste gate.
 2. ☐ **The finale gate**: roll a dungeon walk, render a battle in a generated room at TRUE
    scale, loop-test the cycle, fix what breaks (Adam's end-of-day target, carried).
-3. ☐ **Registry sizing fold** — corpus-sizing + v3-sizing + floor rulings → regenerate
-   sprite-registry; Adam re-judges under-res mediums IN ENGINE (no resolution-only fails).
+3. ☑ **Registry sizing fold — DONE 2026-07-10 (BEAUTY-WAVE VP1)** — feet/scaleTrue on all 896
+   cut slugs; Adam's in-engine re-judge of mediums still open (beauty shots are the venue).
 4. ☐ **GIT-LFS migration** at the quiet post-merge moment (docs/GIT-LFS-MIGRATION.md).
 5. ☐ **GUISE G1-G4** (docs/GUISE.md) + NPC expression pass, together.
+
+## Do next (2026-07-10 later night, BEAUTY-WAVE CLOSED — the wave landed; what it opened)
+
+1. ☐ **Adam: run MOCK-GEN PACKET-01** (dev/model-qa/mock-gen/PACKET-01.md, 8 frames, paste-ready)
+   → arrivals to ui-sketches/mock-frames/ → Fable reads → next-wave specs cite mocks by name.
+2. ☐ **Adam: eyeball the beauty shots** (dev/battle-gate/beauty-shot/ + CAPTION.md) and the r2
+   ΔE-flag list (42 sprites, dev/model-qa/unification-report.json).
+3. ☐ **BEAT FRAMING** — wire law 2c (camera fits the action cluster) into the combat camera; the
+   biggest visible win left per the VP8 caption.
+4. ☐ **GIT-LFS migration — URGENT** (GitHub warns on the two 79MB zips; runbook ready, needs
+   Adam's $5 pack + force-push confirm).
+5. ☐ **UNIFICATION-WAVE (UW1-UW4)** after the mocks inform it; light-marker emissive art +
+   gloom/chrome density tune ride whichever unit touches that surface first.
+6. ☐ **Blender teaching session** — Adam upskilling to direct Claude; genesis-blender-mcp rig
+   standing; sprite-prop gaps are the first modeling queue.

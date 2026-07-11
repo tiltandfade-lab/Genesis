@@ -207,7 +207,11 @@ try {
   const mountedFig = builtPieces.group.children.find((g) => g.userData && g.userData.interiorTrueScale);
   result.mountedFigX = mountedFig.position.x;
   result.mountedFigZ = mountedFig.position.z;
-  result.expectedNudgeForBuiltWidth = clip.itrClipNudgeFor(5, 5, mountedFig.userData.interiorWidth * 0.5, [wallBoxList]);
+  // INTEGRATION-MERGE: the mount composes kilter (BW2-2b) + clip nudge, and production tests the
+  // nudge AT the kiltered position — re-derive both through the same production seams (kilter seed =
+  // slug+":"+cellX+","+cellY, interiorBuildPieces' own convention).
+  result.kilter = T._kilterForTest("bw2-1b-large:5,5");
+  result.expectedNudgeForBuiltWidth = clip.itrClipNudgeFor(5 + result.kilter.dx, 5 + result.kilter.dz, mountedFig.userData.interiorWidth * 0.5, [wallBoxList]);
 
   result.ok = true;
 } catch(e){ result.error = String((e && e.stack) || e); }
@@ -284,9 +288,14 @@ if(A){
 
 group("14 — WIRING: interiorBuildPieces actually applies the nudge to the mounted standee's position (not just proven in isolation)");
 if(A){
+  // INTEGRATION-MERGE RESCOPE (red-first: went red when BW2-2b's KILTER landed — the mount is now
+  // cell + kilter + nudge, and the nudge itself is tested AT the kiltered position; the 0.04-class
+  // delta this check caught was the kilter working, not the nudge failing). The expected position
+  // re-derives the same seeded kilter via the production seam.
+  const kilt = A.kilter || { dx: 0, dz: 0 };
   const expected = A.expectedNudgeForBuiltWidth;
-  ok(Math.abs(A.mountedFigX - (5 + expected.x)) < 1e-9, `mounted fig X (${A.mountedFigX}) === cellX(5) + its own nudge.x (${expected.x})`);
-  ok(Math.abs(A.mountedFigZ - (5 + expected.z)) < 1e-9, `mounted fig Z (${A.mountedFigZ}) === cellY(5) + its own nudge.z (${expected.z})`);
+  ok(Math.abs(A.mountedFigX - (5 + kilt.dx + expected.x)) < 1e-9, `mounted fig X (${A.mountedFigX}) === cellX(5) + kilter.dx (${kilt.dx}) + nudge.x (${expected.x})`);
+  ok(Math.abs(A.mountedFigZ - (5 + kilt.dz + expected.z)) < 1e-9, `mounted fig Z (${A.mountedFigZ}) === cellY(5) + kilter.dz (${kilt.dz}) + nudge.z (${expected.z})`);
   ok(expected.x !== 0 || expected.z !== 0, "a Large sprite mounted hard against a wall cell DOES get a nonzero nudge (the fix actually fires end-to-end)");
 }
 

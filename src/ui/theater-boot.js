@@ -2620,10 +2620,25 @@ function buildSpriteBillboardMesh(tex, w, h, slug){
     map: tex, alphaTest: 0.5, depthPacking: THREE.RGBADepthPacking
   });
   const g = new THREE.Group();
-  g.add(mesh);
+  // BW2-2b item 1 (FLOOR-ALIGNED BASES — "the bug"): the sprite mesh lives in its OWN inner wrapper,
+  // built EAGERLY here (not lazily on first verb, standee-verbs.js's pre-BW2-2b ensureWrap convention)
+  // so camera-pitch tilt has somewhere to go that ISN'T this outer group `g` the moment a standee
+  // mounts — before this fix, updateSpriteBillboardYaw stamped `fig.rotation.x = tilt` straight onto
+  // `g`, and BW2-2's plinth base (added later as a plain CHILD of `g` — buildInteriorBase's own header)
+  // inherited that tilt with it, reading as a coin propped up on edge instead of a flat mini base. Now
+  // only `wrap` (holding just `mesh`) gets the camera tilt (see updateSpriteBillboardYaw below); a
+  // base/ring mounted as a SIBLING of `wrap` directly on `g` (interiorBuildPieces/setUnits,
+  // setActingUnit) stays floor-flat under `g`'s own yaw-only rotation. `g.userData.standeeWrap` is the
+  // SAME identity key standee-verbs.js's runKeyframeVerb reads/writes — see that file's own updated
+  // COMPOSITION CONTRACT header for the other half of this split (verb-tilt, e.g. fall-death, now
+  // writes `g.rotation.x` directly instead, freed by camera-tilt vacating that field).
+  const wrap = new THREE.Group();
+  wrap.add(mesh);
+  g.add(wrap);
   g.userData.sprite = true;
   g.userData.spriteSlug = slug;
   g.userData.spriteBillboardMesh = mesh; // updateSpriteBillboardYaw's per-frame Y-facing target
+  g.userData.standeeWrap = wrap;
   return g;
 }
 
@@ -2991,8 +3006,12 @@ function interiorFloorTopAt(floorTopMap, x, z){
 // under both the acting and idle standee). Geometry cache-keyed by rounded radius (most true-scale
 // creatures share a handful of footprints); materials cache-keyed by the realm's own trim hex (one kit
 // per mounted board, so this cache never grows past a handful of entries per session).
-const INTERIOR_BASE_HEIGHT = 0.04;                 // BW2-2 spec: "height ~ 0.04 world units"
+const INTERIOR_BASE_HEIGHT = 0.09;                 // BW2-2b item 2: 0.04 -> ~0.09 ("a real plinth, per the mock read")
 const INTERIOR_BASE_Y_OFFSET = 0.006;              // clears the contact pool's own +0.003 (below) — never z-fights it
+// BW2-2b item 3 (TURN GLOW) — the accent gold every acting standee's ring already uses (ACTING_RING_MAT,
+// below); the base's own top/side materials swap TOWARD this on emissive when a standee is acting, so
+// ring + glowing plinth read "your turn" together, diegetically.
+const BASE_GLOW_EMISSIVE_HEX = 0xd4af6e;
 const INTERIOR_BASE_GEO_CACHE = {};
 function interiorBaseGeoFor(radius){
   const key = radius.toFixed(3);
@@ -3023,25 +3042,78 @@ function interiorStandeeContactY(floorTop){
   return floorTop + INTERIOR_BASE_Y_OFFSET + INTERIOR_BASE_HEIGHT;
 }
 // buildInteriorBase — one plinth mesh. Added as a CHILD of the standee's own figure group (never a
-// sibling blob-group entry) so BW2-2 item 4 ("the whole miniature-with-base tips as one") falls out of
-// standee-verbs.js's existing ensureWrap() for free: fall-death's first tilt-verb reparents EVERY
-// current child of the figure group into its tilt wrapper, so a base mounted here rides along with the
-// sprite mesh automatically — the blob/pool stays in its own untouched sibling group (added to
-// S.shadowGroup/blobGroup directly, never to this figure), exactly per spec item 4's "the blob stays
-// put." Local position is fixed regardless of floorFrac — the group's own world Y already carries the
-// full contact-line math (interiorStandeeContactY minus floorFrac*height, at the call sites below), so
-// the base's local origin is always "flush under local y=0": the group's local y=0 IS the base's own
-// top face, which is also exactly where a floorFrac=0 sprite's own bottom edge sits (buildSpriteBillboardMesh's
+// sibling blob-group entry, and — BW2-2b item 1 — never a child of that group's own inner sprite wrap
+// either, see buildSpriteBillboardMesh's own header) so BW2-2's item 4 ("the whole miniature-with-base
+// tips as one") holds WITHOUT any reparenting trick: standee-verbs.js's fall-death now tips the OUTER
+// group's own rotation.x directly (freed by camera-tilt moving to the inner wrap — see
+// updateSpriteBillboardYaw), and a base mounted here as a plain sibling child of that same outer group
+// rides along automatically, exactly like a real miniature-with-base tipping as one rigid piece. The
+// blob/pool stays in its own untouched sibling group (added to S.shadowGroup/blobGroup directly, never
+// to this figure), exactly per spec item 4's "the blob stays put." Local position is fixed regardless
+// of floorFrac — the group's own world Y already carries the full contact-line math
+// (interiorStandeeContactY minus floorFrac*height, at the call sites below), so the base's local origin
+// is always "flush under local y=0": the group's local y=0 IS the base's own top face, which is also
+// exactly where a floorFrac=0 sprite's own bottom edge sits (buildSpriteBillboardMesh's
 // mesh.position.y=h/2 convention) — one shared local reference point, no separate bookkeeping.
 function buildInteriorBase(radius, trimHex){
   const geo = interiorBaseGeoFor(Math.max(0.05, radius || 0.3));
-  const mats = interiorBaseMaterialsFor(trimHex);
+  // BW2-2b item 3 (TURN GLOW): the cache above (interiorBaseMaterialsFor) deliberately shares ONE
+  // material set per realm trim color across every standee mounted from the same board — cheap, and
+  // correct for a static plinth tint. Turning a SINGLE acting standee's base gold via that shared
+  // object would light up every OTHER standee sharing the same trim color too. Clone once per base
+  // mesh here so setActingUnit's glow toggle only ever touches THIS standee's own materials.
+  const mats = interiorBaseMaterialsFor(trimHex).map((m) => m.clone());
   const mesh = new THREE.Mesh(geo, mats);
   mesh.position.set(0, -INTERIOR_BASE_HEIGHT / 2, 0);
   mesh.receiveShadow = true;
   mesh.castShadow = true;
   mesh.userData.standeeBase = true; // verify-bw2-2's per-standee base-count check
   return mesh;
+}
+// setBaseGlow(mesh, glowing) — BW2-2b item 3: toggles the acting-standee "your turn" plinth glow by
+// writing straight to each of the base's own (per-instance-cloned, see buildInteriorBase above)
+// materials' `emissive` channel — MeshLambertMaterial supports emissive self-illumination but has no
+// `emissiveIntensity` knob (that's a MeshStandardMaterial-only field), so a flat on/off hex swap is the
+// whole mechanism; combined with the existing gold acting ring (ACTING_RING_MAT) this reads as "ring +
+// glowing plinth together" per the spec. Null-safe (a non-interior figure has no base mesh at all).
+function setBaseGlow(mesh, glowing){
+  if(!mesh || !mesh.material) return;
+  const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+  mats.forEach((m) => { if(m && m.emissive) m.emissive.setHex(glowing ? BASE_GLOW_EMISSIVE_HEX : 0x000000); });
+}
+
+// BW2-2b item 4 — THE KILTER (Adam's taste ruling: "a figurine placed on that particular 5x5 tile" —
+// minis should read hand-placed, not machine-snapped dead-center on their cell). kilterFor(seedKey)
+// returns a tiny per-standee humanization: yaw jitter +/-4deg (applied to the OUTER group's facing yaw,
+// updateSpriteBillboardYaw's face() above — so the WHOLE mini, base included, sits a hair off-true) and
+// position jitter <=6% of a cell (cellSize=1 world unit, DUNGEON-GRAPH law 1) applied at mount time to
+// the standee's own x/z before it's handed to the contact pool (interiorBuildPieces/setUnits, below) —
+// visual only, COMBAT-GRID CELL OWNERSHIP is untouched (callers key occupancy off the true cell, never
+// off this render-time offset). Deterministic per-standee identity, never Math.random (determinism
+// law) — a cheap FNV-ish string hash, the SAME cadence idle-breathe's own seededPhase (standee-verbs.js)
+// already established for "this piece's own stable identity, independent of wall-clock". Ideally keyed
+// off walkId+slug (the spec's own words) — but trayFrom's interior branch doesn't thread a walkId down
+// to this render layer today (src/engine/theater-data.js's own comment: "opts.walkId... which it is
+// [absent] here"), so this degrades to the SAME slug+cell/unit-id identity idle-breathe already uses;
+// still fully deterministic (the same room re-mounts with the same kilter every time) and re-seeds
+// cleanly the moment a real walkId is threaded through, mirroring dressPlan/spatializePlan's own
+// documented "walkId falling back to X" idiom (src/engine/place-dressing.js, place-spatialize.js).
+const KILTER_YAW_DEG = 4;      // spec: "yaw jitter +/-4deg"
+const KILTER_POS_FRAC = 0.06;  // spec: "position jitter <=6% of cell"
+function kilterFor(seedKey){
+  const s = String(seedKey == null ? "" : seedKey);
+  function fnv(salt){
+    let h = 2166136261 >>> 0;
+    const str = s + salt;
+    for(let i = 0; i < str.length; i++){ h = ((h ^ str.charCodeAt(i)) * 16777619) >>> 0; }
+    return (h >>> 8) / 16777216; // top 24 bits -> [0,1)
+  }
+  const u1 = fnv(":kilter-yaw"), u2 = fnv(":kilter-x"), u3 = fnv(":kilter-z");
+  return {
+    yawDeg: (u1 * 2 - 1) * KILTER_YAW_DEG,
+    dx: (u2 * 2 - 1) * KILTER_POS_FRAC,
+    dz: (u3 * 2 - 1) * KILTER_POS_FRAC
+  };
 }
 
 // BW2-2 ADDENDUM (Adam, mid-flight review — "the contact shadow... really sells the illusion"): the
@@ -3067,8 +3139,13 @@ function interiorPoolTexture(){
   const ctx = canvas.getContext && canvas.getContext("2d");
   if(ctx && typeof ctx.createRadialGradient === "function"){
   const grad = ctx.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2);
-  grad.addColorStop(0, "rgba(0,0,0,0.5)");     // dense core at the base contact line (spec: opacity ~0.5)
-  grad.addColorStop(0.62, "rgba(0,0,0,0.42)"); // core stays dense out to roughly the base's OWN radius (1/1.6 of the pool's total radius)
+  // BW2-2b item 5a (CONTACT AO, INTENSIFIED): core opacity 0.5 -> ~0.7, TIGHT to the plinth rim — Adam's
+  // read: "the mock's subtle drop shadow on the figurine base reads MORE than ours." The core now stays
+  // dense out to a slightly SMALLER fraction of the pool's total radius (0.55 vs the old 0.62) so the
+  // darkest band hugs the base rim more closely before it starts feathering, matching the mock's tighter
+  // shadow silhouette rather than a broad soft wash.
+  grad.addColorStop(0, "rgba(0,0,0,0.7)");     // dense core at the base contact line (BW2-2b: 0.5 -> ~0.7)
+  grad.addColorStop(0.55, "rgba(0,0,0,0.6)");  // core stays dense out to just past the base's OWN radius (tighter than BW2-2's 0.62)
   grad.addColorStop(1, "rgba(0,0,0,0)");       // feathers fully transparent at the rim
   ctx.fillStyle = grad;
   ctx.fillRect(0, 0, size, size);
@@ -3249,6 +3326,11 @@ function actingRingGeoFor(radius){
 function setActingUnit(idOrIds){
   (S.actingRingMeshes || []).forEach(function(m){ if(m.parent) m.parent.remove(m); });
   S.actingRingMeshes = [];
+  // BW2-2b item 3 (TURN GLOW): revert every PREVIOUSLY-glowing base before mounting the new set — same
+  // clear-then-rebuild shape as the ring above, tracked in its own list since a base mesh (unlike the
+  // ring) isn't torn down/recreated each call, only toggled.
+  (S.actingGlowBaseMeshes || []).forEach(function(m){ setBaseGlow(m, false); });
+  S.actingGlowBaseMeshes = [];
   const ids = idOrIds == null ? [] : (Array.isArray(idOrIds) ? idOrIds : [idOrIds]);
   let mounted = 0;
   ids.forEach(function(id){
@@ -3273,6 +3355,13 @@ function setActingUnit(idOrIds){
     mesh.position.set(0, interiorFig ? 0.003 : -0.48, 0);
     fig.add(mesh);
     S.actingRingMeshes.push(mesh);
+    // BW2-2b item 3: the base itself glows gold too (joins the ring, not a replacement) — only an
+    // interior standee HAS a base mesh at all (stamped onto userData at mount time, same discriminator
+    // as the ring radius above); a tabletop figure's own hostility disc/grounding blob are untouched.
+    if(interiorFig && fig.userData.standeeBaseMesh){
+      setBaseGlow(fig.userData.standeeBaseMesh, true);
+      S.actingGlowBaseMeshes.push(fig.userData.standeeBaseMesh);
+    }
     mounted++;
   });
   markDirty();
@@ -3464,7 +3553,32 @@ function updateSpriteBillboardYaw(){
   // screen, no distortion, feet still anchored at the group origin. rotation order YXZ so the
   // pitch rides the yaw.
   const tilt = (CAM_ELEV_DEG * Math.PI) / 180; // top leans AWAY from the camera (standee), not into the floor
-  function face(fig){ fig.rotation.order = "YXZ"; fig.rotation.y = facing; fig.rotation.x = tilt; }
+  // BW2-2b item 1 (FLOOR-ALIGNED BASES): camera-pitch tilt now lands on the standee's INNER wrapper
+  // (g.userData.standeeWrap, built eagerly by buildSpriteBillboardMesh above — holds ONLY the sprite
+  // mesh) instead of the OUTER group `fig` itself. `fig.rotation.x` is deliberately left untouched
+  // here — a plinth base/acting ring mounted as a direct SIBLING child of `fig` (never of the wrap)
+  // then stays floor-flat under `fig`'s own yaw-only rotation, and `fig.rotation.x` is FREE for
+  // standee-verbs.js's verb-tilt (fall-death) to tip the whole mini — base included — as one rigid
+  // body (see that file's runKeyframeVerb). A group whose wrap is missing (defensive — every real
+  // sprite built via buildSpriteBillboardMesh has one) falls back to the pre-BW2-2b behavior on the
+  // OUTER group so nothing silently stops tilting.
+  // BW2-2b item 4 (THE KILTER): a per-standee seeded yaw jitter (kilterFor, below) rides on TOP of the
+  // camera-relative facing yaw, applied to the OUTER group (fig) — so the WHOLE mini (base+sprite)
+  // reads as sitting a hair off-true on its tile, exactly like a hand-placed physical miniature, per
+  // Adam's mock read (ui-sketches/mock-frames/mock-01-gloom-combat.png: the ghost's base sits
+  // perceptibly off-kilter next to the knight's square one).
+  function face(fig){
+    fig.rotation.order = "YXZ";
+    const kilterRad = ((fig.userData.kilterYawDeg || 0) * Math.PI) / 180;
+    fig.rotation.y = facing + kilterRad;
+    const wrap = fig.userData.standeeWrap;
+    if(wrap){
+      wrap.rotation.order = "YXZ";
+      wrap.rotation.x = tilt;
+    } else {
+      fig.rotation.x = tilt;
+    }
+  }
   if(S.unitGroup){
     for(let i = 0; i < S.unitGroup.children.length; i++){
       const fig = S.unitGroup.children[i];
@@ -5332,23 +5446,31 @@ function interiorBuildPieces(pieces, cx, cz, wallHeightBase, floorTopMap, trimCo
     // own FLOOR CONTACT LAW header comment a few screens up for the measured burial this caused).
     const floorTop = interiorFloorTopAt(floorTopMap, cellX, cellY);
     const contactY = interiorStandeeContactY(floorTop);
-    // CLIP MARGIN LAW (Adam addendum, mid-flight on BW2-1b): before the position is committed, test
-    // this standee's own footprint circle (radius = its rendered half-width) against nearby wall/
-    // pillar/doorframe prisms and nudge it clear — cell ownership (cellX/cellY) is UNTOUCHED, this is
-    // a visual mount-position offset only.
-    const clipNudge = itrClipNudgeFor(cellX, cellY, built.width * 0.5, prismLists);
+    // BW2-2b item 4 (THE KILTER) + CLIP MARGIN LAW (BW2-1b addendum), COMPOSED at the integration
+    // merge per the spec's own ordering note ("apply kilter BEFORE his clip check runs"): the kilter
+    // offsets first (hand-placed-mini read), then the clip nudge is tested AT the kiltered position
+    // so a kilter that would push a wide sprite into a wall is corrected by the same pass. Both are
+    // visual offsets only — cell ownership (cellX/cellY) is UNTOUCHED. The contact pool below reads
+    // g.position.x/z directly, so pool/base/sprite all share the final composed offset.
+    const kilter = kilterFor(p.slug + ":" + cellX + "," + cellY);
+    const clipNudge = itrClipNudgeFor(cellX + kilter.dx, cellY + kilter.dz, built.width * 0.5, prismLists);
     if(clipNudge.clamped){
       console.warn("qa: sprite-oversize", { slug: p.slug, cellX, cellY, rawMagnitude: clipNudge.rawMagnitude, clampedTo: clipNudge.magnitude });
     }
     g.position.set(
-      cellX - (cx || 0) + clipNudge.x,
+      cellX - (cx || 0) + kilter.dx + clipNudge.x,
       contactY - floorFrac * built.height,
-      cellY - (cz || 0) + clipNudge.z // origin-shifted like every tile/light (the v3 card bug: raw cell coords rendered pieces outside the fitted frame)
+      cellY - (cz || 0) + kilter.dz + clipNudge.z // origin-shifted like every tile/light (the v3 card bug: raw cell coords rendered pieces outside the fitted frame)
     );
+    g.userData.kilterYawDeg = kilter.yawDeg; // read every frame by updateSpriteBillboardYaw's face()
     // BW2-2 STANDEE BASES: a plinth cylinder under this piece, radius off its own rendered world
-    // width (spec: 0.42x) — added as a CHILD of `g` (see buildInteriorBase's own header for why this
-    // makes fall-death's tip-as-one-group behavior fall out of ensureWrap for free).
-    g.add(buildInteriorBase(built.width * 0.42, trimColor));
+    // width (spec: 0.42x) — added as a CHILD of `g`, a plain SIBLING of `g`'s own inner sprite wrap
+    // (buildSpriteBillboardMesh) so BW2-2b's floor-alignment fix (updateSpriteBillboardYaw) leaves it
+    // floor-flat under everyday camera tilt, while still tipping WITH the sprite when fall-death moves
+    // `g`'s own rotation.x (see buildInteriorBase's own header for the full mechanism).
+    const baseMesh = buildInteriorBase(built.width * 0.42, trimColor);
+    g.add(baseMesh);
+    g.userData.standeeBaseMesh = baseMesh; // setActingUnit's BW2-2b glow-toggle target
     g.userData.interiorTrueScale = true;
     g.userData.interiorHeight = built.height;
     g.userData.interiorWidth = built.width;
@@ -5602,6 +5724,7 @@ function buildExtrusionProp(entry){
   g.add(mesh);
   g.userData.dressingSlug = entry.slug;
   g.userData.extrusionProp = true; // deliberately NOT userData.sprite — wall-LOCKED, never camera-billboarded
+  g.userData.extrusionHeight = h;   // BW2-2b integration: wall-contact AO sizes its halo off this
   return g;
 }
 function interiorBuildWallProps(wallProps, cx, cz, floorTopMap){
@@ -5611,6 +5734,15 @@ function interiorBuildWallProps(wallProps, cx, cz, floorTopMap){
     const g = buildExtrusionProp(d);
     const floorTop = interiorFloorTopAt(floorTopMap, d.x || 0, d.y || 0);
     g.position.set((d.x || 0) - (cx || 0), floorTop, (d.y || 0) - (cz || 0));
+    // BW2-2b item 5b (wired here at the integration merge): WALL-CONTACT AO now attaches to the
+    // EXTRUSION prop, not the old flat wall-hang card — BW2-5 rerouted wall-hangs through this
+    // builder (interiorBuildDressing skips primary:"wall-hang" entirely), which made BW2-2b's
+    // original in-loop AO call dead code. The AO halo mounts as a child of the extrusion group,
+    // sitting a hair behind the prop's back face (the wall plane) so it reads as the seam shadow
+    // hugging where the object meets the wall — exactly the mock's painting vignette, and per the
+    // extrusion addendum's own coordination note ("your extrusion gives that band a real volume
+    // edge to hug").
+    addWallContactAO(g, (g.userData && g.userData.extrusionHeight) || 1, 0.005);
     group.add(g);
   });
   return group;
@@ -5620,6 +5752,36 @@ function interiorBuildWallProps(wallProps, cx, cz, floorTopMap){
 // already are (the v3 card bug class this unit's own brief calls out by name: raw cell coords render
 // outside the fitted camera frame — every mount in this function goes through the (cx,cz) subtraction,
 // no exceptions).
+
+// BW2-2b item 5b — WALL-CONTACT AO. Every wall-hung dressing card (REALM_DRESSING roster entries
+// tagged `primary:"wall-hang"` in src/engine/place-dressing.js — paintings, the chrome broken-screen,
+// wall clutter) gets a soft dark gradient card mounted directly BEHIND its own billboard at the
+// attachment seam, per Adam's read of the mock's painting ("a soft dark vignette hugging the wall
+// around the frame"): "same CanvasTexture-gradient channel as the pool" (the spec's own words) —
+// interiorPoolGeoFor/interiorPoolMaterial ARE that channel, reused verbatim rather than a second
+// texture/material path. The pool rotates that same PlaneGeometry flat (-90 deg on X) to lie on the
+// floor; this quad leaves it in its AUTHORED orientation (facing +Z, buildSpriteBillboard's own
+// convention) and mounts it as a CHILD of the card's own billboard group at a small negative local Z —
+// "behind" the card in the group's own local frame, which rides along with whatever camera-facing
+// yaw+tilt updateSpriteBillboardYaw gives the PARENT group every frame (this AO quad is a grandchild,
+// never independently tagged userData.sprite, so it never gets its own separate facing pass — it just
+// inherits the parent's transform for free, always reading as flush behind the card from every yaw
+// step). Sized larger than the card so it "halos" past the card's own edges rather than reading as a
+// hard-edged rectangle. Cheap: one extra quad per wall-hang, no SSAO pass.
+const WALL_AO_SCALE = 1.6;     // same multiplier as the pool's own feather-extent (footprint x 1.6)
+const WALL_AO_Z_OFFSET = -0.02;
+function addWallContactAO(cardGroup, cardHeight, zOffset){
+  const radius = Math.max(0.05, (cardHeight || 1) * 0.5 * WALL_AO_SCALE);
+  const mesh = new THREE.Mesh(interiorPoolGeoFor(radius), interiorPoolMaterial());
+  // zOffset: flat billboard cards sit at local z=0 with the camera-facing pass yawing the group, so
+  // "behind the card" is NEGATIVE local z (the original -0.02). An EXTRUSION prop's back face sits ON
+  // the wall plane at local z=0 with the room toward +z, so its seam halo must sit a hair in FRONT of
+  // the wall (+0.005) to be visible around the prop's silhouette — the caller picks per mount type.
+  mesh.position.set(0, (cardHeight || 1) / 2, (typeof zOffset === "number") ? zOffset : WALL_AO_Z_OFFSET);
+  mesh.userData.wallContactAO = true; // verify hook — per-wall-hang AO presence/count check
+  cardGroup.add(mesh);
+  return mesh;
+}
 function interiorBuildDressing(dressing, cx, cz, floorTopMap, prismLists){
   const group = new THREE.Group();
   // VP7 CONTACT GROUNDING: same sibling-subgroup convention as interiorBuildPieces' blobGroup
@@ -6551,7 +6713,10 @@ function setUnits(data){
   }));
 
   (data.units || []).forEach(u => {
-    const x = u.x - cx, z = u.z - cz;
+    // BW2-2b item 4 (THE KILTER): `let`, not `const` — an interior-true-scale standee nudges these by
+    // a tiny seeded offset below (kilterFor); the flat tabletop path (interiorSpriteFig false) never
+    // reassigns them, so it stays byte-identical to before this unit.
+    let x = u.x - cx, z = u.z - cz;
 
     // OBLITERATION (the exception per Adam's ruling): no figure, no shadow — a burst+sink FX plays via
     // the `obliterate` stage_fx verb (src/ui/theater-verbs.js) at the moment the flag is set; THIS
@@ -6611,14 +6776,24 @@ function setUnits(data){
       const floorTop = interiorFloorTopAt(S.interiorFloorTopMap, u.x, u.z);
       const contactY = interiorStandeeContactY(floorTop);
       posY = contactY - (figure.userData.interiorFloorFrac || 0) * figure.userData.interiorHeight;
+      // BW2-2b item 4 (THE KILTER): nudge x/z by a tiny seeded offset BEFORE the base/pool/figure
+      // placement below reads them, so base+sprite+pool all pick up the SAME offset consistently
+      // (never a shadow mismatched from its own standee). Keyed off this unit's own stable id — the
+      // combat-path counterpart to interiorBuildPieces' slug+cell identity (see kilterFor's own header
+      // for the walkId/determinism rationale).
+      const kilter = kilterFor("unit:" + u.id);
+      x += kilter.dx; z += kilter.dz;
+      figure.userData.kilterYawDeg = kilter.yawDeg; // read every frame by updateSpriteBillboardYaw's face()
       // BW2-2 STANDEE BASES: a plinth cylinder under this combat standee too (spec: "piece + combat
       // unit"), same construction/child-of-figure convention interiorBuildPieces uses (buildInteriorBase's
       // own header explains why this makes fall-death's tip-as-one-group behavior free). Radius off
       // the sprite's own rendered width (figureFor's interior branch stamps interiorWidth alongside
       // interiorHeight specifically for this — see that branch's own comment).
       const baseRadius = (figure.userData.interiorWidth || figure.userData.interiorHeight || 1) * 0.42;
-      figure.add(buildInteriorBase(baseRadius, S.lastBoard && S.lastBoard.tileKit && S.lastBoard.tileKit.trimColor));
+      const baseMesh = buildInteriorBase(baseRadius, S.lastBoard && S.lastBoard.tileKit && S.lastBoard.tileKit.trimColor);
+      figure.add(baseMesh);
       figure.userData.interiorBaseRadius = baseRadius;
+      figure.userData.standeeBaseMesh = baseMesh; // setActingUnit's BW2-2b glow-toggle target
       // BW2-2: this standee's own soft contact pool (VP7's convention, extended to combat units — the
       // pre-BW2-2 tabletop hostility-disc/groundingBlob pair further below is UNTOUCHED and stays
       // buried under the true floor exactly as it already was, harmless/invisible; this pool is the
@@ -7235,6 +7410,12 @@ window.Theater._interiorBuildPiecesForTest = function(pieces, cx, cz, wallHeight
 // BEAUTY-WAVE.md VP7 — TEST-ONLY SEAM, same spirit as _interiorBuildPiecesForTest above: exposes
 // interiorBuildDressing directly so a harness can build dressing cards (small/medium/large) and
 // inspect the resulting contact-blob count without a live WebGLRenderer.
+// BW2-2b/BW2-5 integration — TEST-ONLY SEAM: wall-hang entries mount through the EXTRUSION path
+// (interiorBuildWallProps) since BW2-5, so the wall-contact AO harness asserts against this builder,
+// not interiorBuildDressing (which skips primary:"wall-hang" entirely).
+window.Theater._interiorBuildWallPropsForTest = function(wallProps, cx, cz, floorTopMap){
+  return interiorBuildWallProps(wallProps, cx, cz, floorTopMap);
+};
 window.Theater._interiorBuildDressingForTest = function(dressing, cx, cz, floorTopMap, prismLists){
   return interiorBuildDressing(dressing, cx, cz, floorTopMap, prismLists);
 };
@@ -7302,3 +7483,13 @@ window.Theater._clipMarginLawForTest = {
   itrClosestPointOnAabbXZ, itrCircleAabbPushXZ, itrNearbyPrismBoxes, itrClipNudgeFor,
   CLIP_NUDGE_MAX_FRAC, CLIP_DRESSING_EPSILON
 };
+// BW2-2b — TEST-ONLY SEAM: runs the real per-frame facing/tilt pass on demand (updateSpriteBillboardYaw
+// is otherwise only ever invoked from inside scheduleRender's requestAnimationFrame callback — a
+// harness that needs a DETERMINISTIC read of "did the camera-tilt vs verb-tilt split apply correctly"
+// without racing a real rAF tick calls this directly instead).
+window.Theater._updateSpriteBillboardYawForTest = function(){ updateSpriteBillboardYaw(); };
+// BW2-2b — TEST-ONLY SEAM: exposes the kilter RNG + the base-glow toggle so a harness can assert
+// determinism/bounds (kilterFor) and the shared-material-isolation property (setBaseGlow only ever
+// touches the ONE mesh it's handed) without re-deriving either from scratch.
+window.Theater._kilterForTest = function(seedKey){ return kilterFor(seedKey); };
+window.Theater._setBaseGlowForTest = function(mesh, glowing){ return setBaseGlow(mesh, glowing); };

@@ -223,8 +223,9 @@ function sampleAt(tween, t) {
 
 // ----------------------------------------------------------------------------
 // A6. fall-death — corpse persists (group still present, no visibility flag flipped false anywhere in
-// this module), rotation tips to the floor plane (PI/2), and the tint desaturates. Runs on the WRAPPER,
-// never the outer group (composition contract — re-checked explicitly in A7 below).
+// this module), rotation tips to the floor plane (PI/2), and the tint desaturates. BW2-2b REVISION: the
+// tip now runs on the OUTER group directly (group.rotation.x — freed by camera-tilt moving to
+// theater-boot.js's own inner wrap), never a lazily-created wrapper — re-checked explicitly in A7 below.
 // ----------------------------------------------------------------------------
 {
   const ctx = stubCtx();
@@ -236,10 +237,10 @@ function sampleAt(tween, t) {
   runToCompletion(ctx.tweens);
   check("A6c. fall-death leaves the group PRESENT (no visible:false anywhere — corpse stays a card)",
     standee.group.visible !== false, standee.group.visible);
-  const wrap = standee.group.userData.standeeWrap;
-  check("A6d. fall-death created a wrapper child group for the tip rotation", !!wrap);
-  check("A6e. fall-death's wrapper rotation.x ends at the floor plane (PI/2)",
-    wrap && Math.abs(wrap.rotation.x - Math.PI/2) < 1e-9, wrap && wrap.rotation.x);
+  check("A6d. BW2-2b: fall-death never creates a userData.standeeWrap of its own (that seam is now theater-boot.js's camera-tilt wrapper, not this module's)",
+    standee.group.userData.standeeWrap === undefined);
+  check("A6e. BW2-2b: fall-death's tip lands on the OUTER group's own rotation.x, reaching the floor plane (PI/2) — tipping `group` tips a base/ring mounted as its sibling right along with it",
+    Math.abs(standee.group.rotation.x - Math.PI/2) < 1e-9, standee.group.rotation.x);
   check("A6f. fall-death desaturates toward gray (tintMix 0.85 toward 0x808080) and PERSISTS (no revert)",
     Math.abs(standee.mesh.material.color.r - (1 + (0.5019607843137255-1)*0.85)) < 1e-6,
     standee.mesh.material.color.r);
@@ -248,26 +249,30 @@ function sampleAt(tween, t) {
 }
 
 // ----------------------------------------------------------------------------
-// A7. TILT-COMPOSITION CONTRACT — the outer group's rotation.x/y (what updateSpriteBillboardYaw owns)
-// is NEVER written by any verb, including fall-death. Simulate the facing code stamping a tilt/yaw onto
-// the outer group BEFORE and AFTER a verb runs; the values must be byte-identical.
+// A7. TILT-COMPOSITION CONTRACT, BW2-2b SPLIT — the outer group's rotation.y (facing yaw, still
+// re-asserted every dirty frame by theater-boot.js's face()) is NEVER written by any verb; rotation.x
+// is FREE as of BW2-2b (camera-pitch tilt moved off it, onto theater-boot.js's own inner wrap) and IS
+// expected to change when fall-death plays — the whole point of the split (item 1: "fall-death still
+// tips the WHOLE group"). Both directions asserted: yaw stays put, tilt moves.
 // ----------------------------------------------------------------------------
 {
   const ctx = stubCtx();
   bindStandeeCtx(ctx);
   const standee = makeStubStandee("tilted");
-  const FAKE_TILT = 0.5236; // ~30deg, an arbitrary non-zero stand-in for CAM_ELEV_DEG's radian value
+  const FAKE_TILT = 0.5236; // ~30deg — an arbitrary non-zero pre-existing rotation.x (e.g. a stray prior verb's leftover, or simply 0 in production)
   const FAKE_YAW = 2.1;
   standee.group.rotation.x = FAKE_TILT;
   standee.group.rotation.y = FAKE_YAW;
   playStandeeVerb(standee.group, "fall-death", {});
   runToCompletion(ctx.tweens);
-  check("A7a. after fall-death completes, the OUTER group's rotation.x is untouched (still the facing tilt)",
-    standee.group.rotation.x === FAKE_TILT, standee.group.rotation.x);
-  check("A7b. after fall-death completes, the OUTER group's rotation.y is untouched (still the facing yaw)",
+  check("A7a. BW2-2b: after fall-death completes, the OUTER group's rotation.x CHANGES to the tip (PI/2) — no longer the pre-verb value, and no longer camera-code-owned",
+    Math.abs(standee.group.rotation.x - Math.PI/2) < 1e-9, standee.group.rotation.x);
+  check("A7b. after fall-death completes, the OUTER group's rotation.y is untouched (still the facing+kilter yaw — a field this module never writes)",
     standee.group.rotation.y === FAKE_YAW, standee.group.rotation.y);
 
-  // same proof for a non-rotation verb (hit-crit) — should trivially hold (never touches rotation at all).
+  // a non-rotation verb (hit-crit) must still never touch rotation.x/y AT ALL — the free-field status
+  // of rotation.x doesn't mean every verb starts writing it, only that fall-death (the one v1 verb with
+  // a tiltX keyframe) now can.
   const ctx2 = stubCtx();
   bindStandeeCtx(ctx2);
   const standee2 = makeStubStandee("tilted2");
@@ -276,6 +281,22 @@ function sampleAt(tween, t) {
   runToCompletion(ctx2.tweens);
   check("A7c. hit-crit never touches the outer group's rotation.x/y either",
     standee2.group.rotation.x === FAKE_TILT && standee2.group.rotation.y === FAKE_YAW);
+}
+
+// ----------------------------------------------------------------------------
+// A10. ⊗ MUTATION-GUARD — prove A7a isn't vacuously true (rotation.x could coincidentally already be
+// PI/2). Start rotation.x at 0 (never PI/2) and confirm fall-death is what MOVES it.
+// ----------------------------------------------------------------------------
+{
+  const ctx = stubCtx();
+  bindStandeeCtx(ctx);
+  const standee = makeStubStandee("mutation-tilt");
+  standee.group.rotation.x = 0;
+  const ok = playStandeeVerb(standee.group, "fall-death", {});
+  check("A10a. (setup) fall-death registers", ok === true);
+  runToCompletion(ctx.tweens);
+  check("A10b. ⊗ MUTATION-GUARD: fall-death DOES move rotation.x from its pre-verb 0 up to PI/2 (proving A7a is load-bearing, not vacuous)",
+    Math.abs(standee.group.rotation.x - Math.PI/2) < 1e-9 && standee.group.rotation.x !== 0, standee.group.rotation.x);
 }
 
 // ----------------------------------------------------------------------------

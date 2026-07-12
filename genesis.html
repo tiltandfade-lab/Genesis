@@ -1460,6 +1460,18 @@
      work never collides with theater-boot.js's figure-composition wiring or the parallel battle-stage
      CSS unit. -->
 <script type="module" src="src/ui/theater-parts.js"></script>
+<!-- GRAPHICS-NORTH-STAR.md STAGE A unit A2 (docs/STAGE-A.md): the ShotPlan/composeShot pure shot
+     planner — NOT yet imported by theater-boot.js (that wiring is A3's job, docs/STAGE-A.md's own
+     "A3 consumes A2" sequencing) — given its own <script type="module"> tag here now so
+     check-manifest.py's module-tag-pairing check (every manifest type:"module" entry needs a real tag)
+     is satisfied ahead of that import landing; browsers dedupe an ES module by URL, so once A3 adds
+     the `import` this tag stays a harmless no-op second entry point, same convention every sibling
+     module tag on this page already documents. Kept as its own file/manifest entry (parallel to
+     theater-verbs.js/theater-figures.js below) specifically so this unit's pure view-composition work
+     never collides with A1/A3/A4's theater-interior.js/theater-boot.js edits. Placed here, BEFORE
+     theater-boot.js's own tag (dependency order — theater-boot.js will `import` this module once A3
+     wires the real camera in). -->
+<script type="module" src="src/ui/theater-shot.js"></script>
 <!-- BATTLE-THEATER T3 (docs/BATTLE-THEATER.md §4): the verb/tween library — imported by theater-boot.js
      (below) via a plain ES `import`, and ALSO given its own <script type="module"> tag here so
      check-manifest.py's module-tag-pairing check (every manifest type:"module" entry needs a real tag)

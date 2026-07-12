@@ -248,6 +248,31 @@ async function clusterFrameOffset(page, pt, fit) {
 async function restoreCombat(page, fx) {
   await page.evaluate((combat) => { GS.combat = combat; }, fx.combat);
 }
+// waits for the board's sprite billboards to actually mount+resolve their textures, then reads the
+// TALLEST mounted sprite's height as a fraction of the canvas DRAWING-BUFFER height via
+// window.Theater.__spriteScreenRects() (the sprite screen-rect diagnostic capture-lit-sprites.mjs
+// already uses — real rendered sprite pixels, not a re-derivation of the fit math). Both pieces in
+// this fixture are MEDIUM standees (Guard + Skeleton, scaleTrue ~1.0), so the tallest rect IS the
+// "medium standee" the Stage-A gate is defined against.
+async function mediumFigureFraction(page, expectPieces) {
+  const deadline = Date.now() + 5000;
+  while (Date.now() < deadline) {
+    const resolved = await page.evaluate(() => (typeof window.Theater.interiorPiecesResolved === "function") ? window.Theater.interiorPiecesResolved() : 0);
+    if (resolved >= expectPieces) break;
+    await sleep(150);
+  }
+  await settleCameraTween(page);
+  await sleep(300);
+  return await page.evaluate(() => {
+    const rects = window.Theater.__spriteScreenRects();
+    const canvas = document.querySelector(".theater-stage-canvas canvas");
+    const bufH = canvas ? canvas.height : 0;
+    if (!bufH || !rects.length) return null;
+    let maxFrac = 0, maxSlug = null;
+    rects.forEach((r) => { const f = r.h / bufH; if (f > maxFrac) { maxFrac = f; maxSlug = r.slug; } });
+    return { maxFrac, maxSlug, count: rects.length, bufH };
+  });
+}
 
 async function main() {
   console.log("[verify-shot-compose]");
@@ -297,6 +322,45 @@ async function main() {
 
       const frustum = await page.evaluate(() => window.Theater.interiorFrustumCheck());
       ok(frustum && frustum.ok === true, "GREEN — the composed fit's own board-box corners still pass interiorFrustumCheck (no clipped geometry)", frustum);
+    }
+
+    console.log("\n=== 1b. RED-FIRST — the composed fit crops TIGHT (medium standee 18-25% frame height) ===");
+    // The Stage-A gate: a medium standee fills 18-25% of frame height, minimal dead frame. Round 1's
+    // full-frustum box rendered the pair at ~13% (LOOSER than focusRect, void-heavy — the coordinator's
+    // read). This section proves the figure-height check is load-bearing (flip the superseded wide box
+    // back on -> below 18% -> RED), then that the shipped action-cluster crop passes (18-25% -> GREEN)
+    // and is TIGHTER than the plain focusRect fit on the SAME fixture.
+    {
+      const EXPECT_PIECES = fx.board.pieces.length; // 2
+
+      // RED baseline: force the superseded wide full-frustum box (test-only seam).
+      await restoreCombat(page, fx);
+      await page.evaluate(() => window.Theater.setInteriorVariant({ shotCompose: true, shotComposeWideBoxForTest: true }));
+      await page.evaluate((board) => window.Theater.setInteriorBoard(board), Object.assign({}, fx.board, { pieces: fx.board.pieces.slice() }));
+      const wide = await mediumFigureFraction(page, EXPECT_PIECES);
+      ok(wide && wide.maxFrac < 0.18,
+        `RED — the superseded wide full-frustum box renders the medium standee BELOW the gate (frac=${wide && wide.maxFrac.toFixed(3)}, gate floor 0.18) — proves the figure-height check is load-bearing`,
+        wide);
+
+      // GREEN: the shipped action-cluster crop (wide flag off).
+      await restoreCombat(page, fx);
+      await page.evaluate(() => window.Theater.setInteriorVariant({ shotCompose: true, shotComposeWideBoxForTest: false }));
+      await page.evaluate((board) => window.Theater.setInteriorBoard(board), Object.assign({}, fx.board, { pieces: fx.board.pieces.slice() }));
+      const composedFrac = await mediumFigureFraction(page, EXPECT_PIECES);
+      ok(composedFrac && composedFrac.maxFrac >= 0.18 && composedFrac.maxFrac <= 0.25,
+        `GREEN — the composed action-cluster crop lands the medium standee inside the Stage-A gate (frac=${composedFrac && composedFrac.maxFrac.toFixed(3)}, gate 0.18-0.25)`,
+        composedFrac);
+
+      // GREEN: tighter than the plain focusRect fit on the SAME fixture.
+      await restoreCombat(page, fx);
+      await page.evaluate(() => window.Theater.setInteriorVariant({ shotCompose: false }));
+      await page.evaluate((board) => window.Theater.setInteriorBoard(board), Object.assign({}, fx.board, { pieces: fx.board.pieces.slice() }));
+      const focusFrac = await mediumFigureFraction(page, EXPECT_PIECES);
+      ok(focusFrac && composedFrac && composedFrac.maxFrac > focusFrac.maxFrac,
+        `GREEN — the composed crop is TIGHTER than the plain focusRect fit (composed ${composedFrac && composedFrac.maxFrac.toFixed(3)} > focusRect ${focusFrac && focusFrac.maxFrac.toFixed(3)})`,
+        { composed: composedFrac && composedFrac.maxFrac, focusRect: focusFrac && focusFrac.maxFrac });
+      // leave the wide-box test flag off for every section that follows.
+      await page.evaluate(() => window.Theater.setInteriorVariant({ shotComposeWideBoxForTest: false }));
     }
 
     console.log("\n=== 2. projector correctness (window.Theater.shotProjectFor) ===");

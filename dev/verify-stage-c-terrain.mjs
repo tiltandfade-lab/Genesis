@@ -1,7 +1,7 @@
 /* Verify STAGE-C C2 — STRUCTURAL TERRAIN (docs/STAGE-C.md C2).
    src/engine/place-spatialize.js's dspParseSideTerrain keyword-scans a walk segment's rolled
-   `side` prose (raised/dais/platform/step-up/elevated/gallery/balcony -> tier +1;
-   sunken/pit/pool/below/lower/recess -> tier -1) into a single per-room terrain patch
+   `side` prose (raised/dais/platform/step-up/elevated/gallery/balcony -> positive tier;
+   sunken/pit/pool/below/lower/recess -> negative tier) into one or more per-room terrain patches
    (rooms[].terrain=[{cells,tier,kind}], the DUNGEON-GRAPH.md U6 shape) and stamps it onto a new
    parallel `plan.tiers` Int8Array (same indexing as `cells`) — behind the shared SPATIAL_SHAPES
    flag (default ON; the same flag C1 added). The render seam (theater-interior.js's
@@ -20,10 +20,10 @@
    Sections:
      0. RED-FIRST (git-show + OFF-flag) proof.
      1. Raised: real table row 108 (Cross-Shaped Hall) "15' x 15' central raised dais (3 ft high)"
-        -> a +1-tier 3x3 patch centered in the room; plan.tiers stamped; SPATIAL_SHAPES OFF -> flat
+        -> a +3-tier 3x3 patch centered in the room; plan.tiers stamped; SPATIAL_SHAPES OFF -> flat
         (no terrain, tiers all zero) — the within-harness A/B red-first proof.
      2. Sunken: real table row 090 (Mid-Size Rotunda) "15' diameter sunken pool in the center
-        (3 ft deep)" -> a -1-tier 3x3 patch centered in the room.
+        (3 ft deep)" -> a -3-tier 3x3 patch centered in the room.
      3. determinism: same walkId run twice -> byte-identical `tiers` buffer + rooms[].terrain.
      4. flat-fallback: missing/garbage/no-keyword `side` -> no terrain, tiers stays all-zero for
         that room, never throws (3 sub-cases: undefined field, empty string, no-keyword prose).
@@ -67,7 +67,8 @@ function loadEngine() {
   vm.runInContext(
     read("src/engine/place-spatialize.js") +
       "\n;this.__spatializePlan=spatializePlan;this.__SPATIAL_CELL=SPATIAL_CELL;" +
-      "this.__dspParseSideTerrain=typeof dspParseSideTerrain!=='undefined'?dspParseSideTerrain:undefined;",
+      "this.__dspParseSideTerrain=typeof dspParseSideTerrain!=='undefined'?dspParseSideTerrain:undefined;" +
+      "this.__dspParseSideTerrains=typeof dspParseSideTerrains!=='undefined'?dspParseSideTerrains:undefined;",
     sandbox,
     { filename: "place-spatialize.js" }
   );
@@ -108,6 +109,7 @@ function chainFixture(list) {
     light: "normal",
     ...(list[i].dims !== undefined ? { dims: list[i].dims } : {}),
     ...(list[i].side !== undefined ? { side: list[i].side } : {}),
+    ...(list[i].areaType !== undefined ? { areaType: list[i].areaType } : {}),
   }));
 }
 
@@ -126,6 +128,11 @@ const ROW_056_CORNER_DAIS = { // row 056, Standard Chamber — "in one corner" l
   dims: "20' x 20' square",
   side: "10' x 10' raised dais in one corner (2 ft high); heavy iron ring set into the dais face.",
 };
+const ROW_101_GRAND_OCTAGON = {
+  areaType: "Grand Octagon",
+  dims: "60' x 60'",
+  side: "30' x 30' sunken central arena (5 ft below the surrounding level); 10' wide raised ring walkway with iron railing.",
+};
 
 function tableCheck() {
   const src = read("Engine/03. _Tables/03. Session Mechanics/Dungeons/Dungeon Area Type.md");
@@ -133,6 +140,7 @@ function tableCheck() {
     row108: /15' x 15' central raised dais \(3 ft high\)/.test(src),
     row090: /15' diameter sunken pool in the center \(3 ft deep\)/.test(src),
     row056: /10' x 10' raised dais in one corner \(2 ft high\)/.test(src),
+    row101: /30' x 30' sunken central arena.*10' wide raised ring walkway/.test(src),
   };
 }
 
@@ -151,17 +159,19 @@ console.log("=== 0. RED-FIRST proof ===");
   check("0b. the exact row 108 clause used below is real table text (not fabricated)", tc.row108);
   check("0c. the exact row 090 clause used below is real table text (not fabricated)", tc.row090);
   check("0d. the exact row 056 clause used below is real table text (not fabricated)", tc.row056);
+  check("0e. the exact row 101 layered-terrain roll used below is real table text", tc.row101);
 }
 
 const eng = loadEngine();
 check("sanity: spatializePlan is a function", typeof eng.spatializePlan === "function");
 check("sanity: dspParseSideTerrain symbol is exposed", typeof eng.__dspParseSideTerrain === "function");
+check("sanity: dspParseSideTerrains symbol is exposed", typeof eng.__dspParseSideTerrains === "function");
 if (typeof eng.spatializePlan !== "function") {
   console.log(`\n${pass} passed, ${fail} failed — spatializePlan not found, cannot run further checks.`);
   process.exit(1);
 }
 
-console.log("\n=== 1. RAISED: row 108 Cross-Shaped Hall -> +1-tier 3x3 patch, centered ===");
+console.log("\n=== 1. RAISED: row 108 Cross-Shaped Hall -> +3-tier 3x3 patch, centered ===");
 let raisedPlanOn, raisedRoomOn;
 {
   const segs = chainFixture([{}, ROW_108_CROSS_HALL]);
@@ -172,9 +182,9 @@ let raisedPlanOn, raisedRoomOn;
   raisedPlanOn = planOn; raisedRoomOn = roomOn;
   check("1a. room sized from dims (50'x50' arms -> 10x10, C1 already covers this, sanity only)",
     !!roomOn && roomOn.w === 10 && roomOn.d === 10, roomOn && `${roomOn.w}x${roomOn.d}`);
-  check("1b. rooms[].terrain carries exactly one +1/'dais' entry",
+  check("1b. rooms[].terrain carries exactly one +3/'dais' entry",
     !!roomOn && Array.isArray(roomOn.terrain) && roomOn.terrain.length === 1 &&
-    roomOn.terrain[0].tier === 1 && roomOn.terrain[0].kind === "dais",
+    roomOn.terrain[0].tier === 3 && roomOn.terrain[0].kind === "dais",
     roomOn && roomOn.terrain);
   check("1c. the patch is exactly 3x3 = 9 cells (15'/5=3, NOT floored to SPATIAL_MIN_CELL=4 — the bug this unit's own dspFeetPairRaw fix caught)",
     !!roomOn && roomOn.terrain[0].cells.length === 9, roomOn && roomOn.terrain[0].cells.length);
@@ -186,8 +196,8 @@ let raisedPlanOn, raisedRoomOn;
     minX === expectMinX && maxX === expectMinX + 2 && minY === expectMinY && maxY === expectMinY + 2,
     { got: { minX, maxX, minY, maxY }, expect: { expectMinX, expectMinY } });
   const idx = (x, y) => y * planOn.cellW + x;
-  check("1e. every patch cell is stamped tier=+1 in plan.tiers",
-    cells.every((c) => planOn.tiers[idx(c.x, c.y)] === 1), cells.map((c) => planOn.tiers[idx(c.x, c.y)]));
+  check("1e. every patch cell is stamped tier=+3 in plan.tiers",
+    cells.every((c) => planOn.tiers[idx(c.x, c.y)] === 3), cells.map((c) => planOn.tiers[idx(c.x, c.y)]));
   let nzTotal = 0;
   for (let i = 0; i < planOn.tiers.length; i++) if (planOn.tiers[i] !== 0) nzTotal++;
   check("1f. exactly 9 nonzero tier cells in the whole plan (no stray stamping outside the patch)", nzTotal === 9, nzTotal);
@@ -204,7 +214,7 @@ let raisedPlanOn, raisedRoomOn;
   eng.SPATIAL_SHAPES = true; // restore default for later checks
 }
 
-console.log("\n=== 2. SUNKEN: row 090 Mid-Size Rotunda -> -1-tier 3x3 patch, centered ===");
+console.log("\n=== 2. SUNKEN: row 090 Mid-Size Rotunda -> -3-tier 3x3 patch, centered ===");
 let sunkenPlanOn, sunkenRoomOn;
 {
   const segs = chainFixture([{}, ROW_090_ROTUNDA_POOL]);
@@ -213,14 +223,14 @@ let sunkenPlanOn, sunkenRoomOn;
   const room = plan.rooms.find((r) => r.segId === "s2");
   sunkenPlanOn = plan; sunkenRoomOn = room;
   check("2a. room sized from dims (30' diameter -> 6x6, C1 sanity)", !!room && room.w === 6 && room.d === 6, room && `${room.w}x${room.d}`);
-  check("2b. rooms[].terrain carries exactly one -1/'pit' entry",
+  check("2b. rooms[].terrain carries exactly one -3/'pit' entry",
     !!room && Array.isArray(room.terrain) && room.terrain.length === 1 &&
-    room.terrain[0].tier === -1 && room.terrain[0].kind === "pit", room && room.terrain);
+    room.terrain[0].tier === -3 && room.terrain[0].kind === "pit", room && room.terrain);
   check("2c. the patch is exactly 3x3 = 9 cells (the diameter-form footprint parse, same as the raised case)",
     !!room && room.terrain[0].cells.length === 9, room && room.terrain[0].cells.length);
   const idx = (x, y) => y * plan.cellW + x;
-  check("2d. every patch cell is stamped tier=-1 in plan.tiers",
-    room.terrain[0].cells.every((c) => plan.tiers[idx(c.x, c.y)] === -1),
+  check("2d. every patch cell is stamped tier=-3 in plan.tiers",
+    room.terrain[0].cells.every((c) => plan.tiers[idx(c.x, c.y)] === -3),
     room.terrain[0].cells.map((c) => plan.tiers[idx(c.x, c.y)]));
 }
 
@@ -280,6 +290,24 @@ console.log("\n=== 5. corner cue + the whole-room-vs-patch clamp fix + absurd-cl
     absurdRoom && { patchCells: absurdRoom.terrain[0].cells.length, roomCells: absurdRoom.w * absurdRoom.d });
 }
 
+console.log("\n=== 5b. MULTI-PATCH: row 101 preserves sunken arena + raised perimeter ring ===");
+{
+  const plan = eng.spatializePlan(chainFixture([{}, ROW_101_GRAND_OCTAGON]), "The Spine", { walkId: "stage-c2-row101" });
+  const room = plan.rooms.find((r) => r.segId === "s2");
+  const arena = room && room.terrain && room.terrain.find((p) => p.tier === -5);
+  const ring = room && room.terrain && room.terrain.find((p) => p.tier === 1 && p.footprint === "ring");
+  check("5d. row 101 emits two canonical terrain patches", !!room && room.terrain.length === 2, room && room.terrain);
+  check("5e. central arena keeps its exact 30'x30' = 6x6 footprint", !!arena && arena.cells.length === 36, arena && arena.cells.length);
+  check("5f. raised walkway is represented as a shaped perimeter ring", !!ring && ring.cells.length > 0 && ring.cells.length < room.cells.length,
+    ring && { ring: ring.cells.length, room: room.cells.length });
+  const idx = (x, y) => y * plan.cellW + x;
+  check("5g. every arena cell preserves the explicit five-foot depth as tier -5", !!arena && arena.cells.every((c) => plan.tiers[idx(c.x, c.y)] === -5));
+  check("5h. every ring cell is tier +1", !!ring && ring.cells.every((c) => plan.tiers[idx(c.x, c.y)] === 1));
+  const arenaKeys = new Set((arena ? arena.cells : []).map((c) => c.x + "," + c.y));
+  check("5i. arena and perimeter ring do not collapse into the same cells",
+    !!ring && ring.cells.every((c) => !arenaKeys.has(c.x + "," + c.y)));
+}
+
 console.log("\n=== 6. RENDER SEAM: interiorBuildBoard folds plan.tiers into floor sy ===");
 {
   const ren = loadRender();
@@ -303,15 +331,15 @@ console.log("\n=== 6. RENDER SEAM: interiorBuildBoard folds plan.tiers into floo
   const daisFloor = board.instances.floor.filter((f) =>
     raisedRoom.terrain[0].cells.some((c) => c.x === f.x && c.y === f.z));
   check("6a. every raised-patch floor instance found on the board", daisFloor.length === 9, daisFloor.length);
-  check("6b. every raised-patch floor cell reads sy = ITR_FLOOR_HEIGHT + 1*ITR_DAIS_STEP",
-    daisFloor.every((f) => Math.abs(f.sy - (ITR_FLOOR_HEIGHT + ITR_DAIS_STEP)) < 1e-9),
+  check("6b. every raised-patch floor cell reads sy = ITR_FLOOR_HEIGHT + 3*ITR_DAIS_STEP",
+    daisFloor.every((f) => Math.abs(f.sy - (ITR_FLOOR_HEIGHT + 3 * ITR_DAIS_STEP)) < 1e-9),
     daisFloor.map((f) => f.sy));
 
   const pitFloor = board.instances.floor.filter((f) =>
     sunkenRoom.terrain[0].cells.some((c) => c.x === f.x && c.y === f.z));
   check("6c. every sunken-patch floor instance found on the board", pitFloor.length === 9, pitFloor.length);
-  check("6d. every sunken-patch floor cell reads sy = ITR_FLOOR_HEIGHT - 1*ITR_DAIS_STEP",
-    pitFloor.every((f) => Math.abs(f.sy - (ITR_FLOOR_HEIGHT - ITR_DAIS_STEP)) < 1e-9),
+  check("6d. every sunken-patch floor cell reads sy = ITR_FLOOR_HEIGHT - 3*ITR_DAIS_STEP",
+    pitFloor.every((f) => Math.abs(f.sy - (ITR_FLOOR_HEIGHT - 3 * ITR_DAIS_STEP)) < 1e-9),
     pitFloor.map((f) => f.sy));
 
   const patchKeySet = new Set(raisedRoom.terrain[0].cells.map((c) => c.x + "," + c.y));
@@ -372,7 +400,7 @@ console.log("\n=== 8. C4 COMPILER: the raised/sunken patches produce real floor 
     return cells;
   }
 
-  const raisedShellCells = shellCellsFor(raisedRoomOn, 1);
+  const raisedShellCells = shellCellsFor(raisedRoomOn, 3);
   const raisedData = compileRoomShellData(raisedShellCells, {});
   check("8a. raised room compiles to 2 floor tiers", raisedData.meta.tierCount === 2, raisedData.meta.tierCount);
   check("8b. raised room has real riser segments (a riser BETWEEN the base floor and the dais)", raisedData.meta.riserSegmentCount > 0, raisedData.meta.riserSegmentCount);
@@ -380,7 +408,7 @@ console.log("\n=== 8. C4 COMPILER: the raised/sunken patches produce real floor 
     Object.keys(raisedData.cellTriangleMap).length === raisedRoomOn.w * raisedRoomOn.d,
     `${Object.keys(raisedData.cellTriangleMap).length} / ${raisedRoomOn.w * raisedRoomOn.d}`);
 
-  const sunkenShellCells = shellCellsFor(sunkenRoomOn, -1);
+  const sunkenShellCells = shellCellsFor(sunkenRoomOn, -3);
   const sunkenData = compileRoomShellData(sunkenShellCells, {});
   check("8d. sunken room ALSO compiles to 2 floor tiers", sunkenData.meta.tierCount === 2, sunkenData.meta.tierCount);
   check("8e. sunken room ALSO has real riser segments", sunkenData.meta.riserSegmentCount > 0, sunkenData.meta.riserSegmentCount);

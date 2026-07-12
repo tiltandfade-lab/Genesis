@@ -36,11 +36,11 @@
         post-tag (none exist pre-tag); the chamfer run's diagonal segments are provably collinear.
     10. ROOT FIX for the dropped-cell bug (the coordinator's own follow-up, same branch): the strict
         point-in-triangle cellTriangleMap loop silently dropped a cell whose center sits exactly on an
-        internal ear-clip diagonal (no triangle STRICTLY contains it). Master's own bare octagon(10,10)
+        internal ear-clip diagonal (no triangle STRICTLY contains it). Pre-fix commit 2b47aee9's bare octagon(10,10)
         drops "2,1" and "4,3" (74/76). The fix is a NEAREST-TRIANGLE FALLBACK by true point-to-triangle
         distance (pointToTriangleDist2) — proven HERE on the BARE (untagged, non-chamfered) path: bare
         octagon 76/76, circle-mode + plain rect full coverage, every cell mapped to a triangle it
-        geometrically lies ON (dist ~0), and a RED-FIRST check of master's own module (74/76) confirming
+        geometrically lies ON (dist ~0), and a RED-FIRST check of the pinned pre-fix module (74/76) confirming
         the pre-existing gap this closes. This is INDEPENDENT of the diagonal chamfer — the chamfer only
         fixed the octagon case incidentally; the fallback fixes ANY shape/fixture (circle-mode cells,
         unlucky rect triangulations, future shapes).
@@ -363,21 +363,22 @@ console.log("\n=== 10. ROOT FIX — the dropped-cell bug, proven on the BARE (no
   check("10e. plain rect(9x7) maps ALL 63 cells (unchanged — the common exact-containment case)",
     Object.keys(rectData.cellTriangleMap).length === rect.length, { mapped: Object.keys(rectData.cellTriangleMap).length, total: rect.length });
 
-  // RED-FIRST against master's OWN theater-room-mesh.js (no STAGE-C3b code at all): the SAME bare
+  // RED-FIRST against the pinned commit immediately before the root fix: the SAME bare
   // octagon fixture drops exactly 2 cells (74/76) there — proving (a) the bug is real + pre-existing,
   // and (b) THIS branch's 76/76 above is the fix landing, not a fixture that never had the gap.
-  let masterMapped = null;
+  const preFixCommit = "2b47aee9";
+  let preFixMapped = null;
   try {
-    const masterSrc = execSync("git show master:src/ui/theater-room-mesh.js", { cwd: ROOT, encoding: "utf-8" });
-    const tmpPath = join(ROOT, "src/ui/_verify-c3b-master-baseline.js");
-    (await import("node:fs")).writeFileSync(tmpPath, masterSrc);
+    const preFixSrc = execSync(`git show ${preFixCommit}:src/ui/theater-room-mesh.js`, { cwd: ROOT, encoding: "utf-8" });
+    const tmpPath = join(ROOT, "src/ui/_verify-c3b-prefixed-baseline.js");
+    (await import("node:fs")).writeFileSync(tmpPath, preFixSrc);
     try {
-      const masterMod = await import(pathToFileURL(tmpPath).href + "?bust=" + Date.now());
-      masterMapped = Object.keys(masterMod.compileRoomShellData(oct, {}).cellTriangleMap).length;
+      const preFixMod = await import(pathToFileURL(tmpPath).href + "?bust=" + Date.now());
+      preFixMapped = Object.keys(preFixMod.compileRoomShellData(oct, {}).cellTriangleMap).length;
     } finally { (await import("node:fs")).unlinkSync(tmpPath); }
-  } catch (e) { masterMapped = null; }
-  check("10f. RED-FIRST: master's OWN bare compile of this exact fixture drops 2 cells (74/76) — confirms the pre-existing bug this fix closes",
-    masterMapped === oct.length - 2, { masterMapped, thisBranchMapped: Object.keys(bareOct.cellTriangleMap).length, total: oct.length });
+  } catch (e) { preFixMapped = null; }
+  check("10f. RED-FIRST: pinned pre-fix bare compile drops 2 cells (74/76) — confirms the historical bug this fix closes",
+    preFixMapped === oct.length - 2, { preFixMapped, thisBranchMapped: Object.keys(bareOct.cellTriangleMap).length, total: oct.length });
 }
 
 console.log("\n=== 11. NO-OP GUARANTEE — L/T/cross (and non-staircase octagons) are byte-identical when tagged ===");

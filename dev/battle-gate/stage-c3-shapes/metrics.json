@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-07-12T21:35:36.619Z",
+  "generatedAt": "2026-07-12T22:24:40.277Z",
   "scenes": {
     "octagon": {
-      "label": "Grand Octagon (row 101, 60'x60')",
+      "label": "Grand Octagon row 101: sunken arena + raised ring",
       "focusAreaType": "Grand Octagon",
       "focusDims": "60' x 60'",
       "built": {
@@ -11,6 +11,20 @@
         "roomCellCount": 120,
         "roomBBoxArea": 144,
         "roomWD": "12x12",
+        "terrain": [
+          {
+            "tier": -5,
+            "kind": "pit",
+            "footprint": "patch",
+            "cellCount": 36
+          },
+          {
+            "tier": 1,
+            "kind": "dais",
+            "footprint": "ring",
+            "cellCount": 60
+          }
+        ],
         "meta": {
           "roomCount": 1,
           "floorCount": 126,
@@ -27,7 +41,7 @@
       },
       "mounted": {
         "ok": true,
-        "meshCount": 5
+        "meshCount": 6
       },
       "frustumOk": true
     },
@@ -41,6 +55,7 @@
         "roomCellCount": 80,
         "roomBBoxArea": 100,
         "roomWD": "10x10",
+        "terrain": [],
         "meta": {
           "roomCount": 1,
           "floorCount": 85,
@@ -71,6 +86,7 @@
         "roomCellCount": 49,
         "roomBBoxArea": 64,
         "roomWD": "8x8",
+        "terrain": [],
         "meta": {
           "roomCount": 1,
           "floorCount": 51,
@@ -98,8 +114,8 @@
     "notes": [
       "startSession() called"
     ],
-    "worldId": "mribbngby4h3k",
-    "worldName": "The Hollowing"
+    "worldId": "mrid2p0f4k0bd",
+    "worldName": "The Ivory Pit"
   },
   "theaterState": {
     "hasBattleStage": true,
@@ -122,7 +138,7 @@
       "fileName": "l-shaped.png"
     }
   ],
-  "contactSheetPath": "/Users/adamstephenson/Desktop/Work/projects/Genesis/.claude/worktrees/agent-a2a99a59af95a2800/dev/battle-gate/stage-c3-shapes/contact-sheet.png",
+  "contactSheetPath": "/Users/adamstephenson/Desktop/Work/projects/Genesis-codex-art-direct/dev/battle-gate/stage-c3-shapes/contact-sheet.png",
   "consoleErrors": [
     "Failed to load resource: the server responded with a status of 404 (File not found)",
     "Failed to load resource: the server responded with a status of 404 (File not found)"

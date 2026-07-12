@@ -3217,6 +3217,20 @@ const TABLE_USAGE = {
     "domain": "World Building / Place Generation",
     "file": "Engine/03. _Tables/01. World Building/Place Generation/Place-Secret.md"
   },
+  "place-spine": {
+    "base": "Place Spine",
+    "cls": "WIRED",
+    "consumers": {
+      "chain": [],
+      "code": [
+        "place-skins.js",
+        "wiki.js"
+      ],
+      "procedure": []
+    },
+    "domain": "Realms / Place Generation",
+    "file": "Engine/03. _Tables/05. Realms/Place Spine.md"
+  },
   "place-traits": {
     "base": "Place Traits",
     "cls": "WIRED",

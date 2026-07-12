@@ -195,8 +195,11 @@ console.log("\n=== ITEM 2 — torch flicker (theater-boot.js source extraction) 
 console.log("\n=== ITEM 3 — ambient motes (theater-boot.js source-extraction sandbox) ===");
 {
   const bootSrc = read("src/ui/theater-boot.js");
-  const fns = ["moteHash32", "moteRng", "interiorMoteKindFor", "interiorBuildMotes"].map((n) => extractFn(bootSrc, n));
-  check("3a-setup. all 4 mote functions extracted from the real source", fns.every(Boolean), fns.map((f) => !!f));
+  // moteSoftTexture + its MOTE_SOFT_TEX cache are the soft-dot-mote helper interiorBuildMotes now
+  // calls (the "floating rhomboid" fix). Extract it too and seed the cache var — headless it hits
+  // the `typeof document === "undefined"` guard and returns null, so the count/bounds asserts hold.
+  const fns = ["moteHash32", "moteRng", "interiorMoteKindFor", "moteSoftTexture", "interiorBuildMotes"].map((n) => extractFn(bootSrc, n));
+  check("3a-setup. all 5 mote functions extracted from the real source", fns.every(Boolean), fns.map((f) => !!f));
   const countMinLine = (bootSrc.match(/const MOTE_COUNT_MIN[^;]+;/) || [null])[0];
   const sizeLine = (bootSrc.match(/const MOTE_SIZE_MIN[^;]+;/) || [null])[0];
   const tintLine = bootSrc.match(/const MOTE_TINT = \{[^}]*\};/);
@@ -215,7 +218,7 @@ console.log("\n=== ITEM 3 — ambient motes (theater-boot.js source-extraction s
   }
 
   if (fns.every(Boolean)) {
-    const src = "const THREE = arguments[0];\n" + countMinLine + "\n" + sizeLine + "\n" + (tintLine ? tintLine[0] : "const MOTE_TINT={};") + "\n"
+    const src = "const THREE = arguments[0];\nlet MOTE_SOFT_TEX=null;\n" + countMinLine + "\n" + sizeLine + "\n" + (tintLine ? tintLine[0] : "const MOTE_TINT={};") + "\n"
       + fns.join("\n") + "\nreturn { interiorBuildMotes, interiorMoteKindFor, moteHash32 };";
     const THREE = makeStubTHREE();
     const factory = new Function(src);

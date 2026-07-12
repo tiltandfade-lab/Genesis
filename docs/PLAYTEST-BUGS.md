@@ -401,6 +401,37 @@ noise on hot-path events — all independently verified). Five non-blocking foll
 
 ---
 
+## 2026-07-12 — Stage-C visual pass observations (SPRITE LANE — Codex's active domain)
+
+Caught by Adam watching a live Stage-C dungeon render (the diorama is reading well; these are the
+remaining sprite-quality snags). **Both belong to the sprite pipeline (Codex's active lane), NOT the
+Stage-C / room-geometry lane.** Noted here per Adam's routing; fix in coordination with that lane.
+
+### BUG-14 · MED · sprite slices carry debris from neighboring sheet sprites
+Some cut sprites (`assets/sprites/<slug>.png`) include a sliver of the adjacent sprite from the source
+sheet. **Root:** `build/slice-sprites.py` finds sprites by connected-components, then crops each to its
+bbox **+ 4px `padding`** (`crop_transparent`, :265-272) and merges boxes within a gap threshold
+(`bbox_distance`, :146/:212). When two sprites sit close on the sheet, the padding overshoots into the
+neighbor, or the merge bridges them → a slice grabs neighbor pixels. **Fix:** tighten per-cell
+isolation — clip each crop to its own grid cell (the manifest already knows the cell grid), and/or
+reduce padding / raise the merge gap — then **re-slice the affected sheets** + regen the registry.
+Claude-actionable (a build-script change), but collides with the sprite lane's uncommitted
+slicer/registry work — serialize.
+
+### BUG-15 · MED · sprites render at low resolution in-engine (crusty)
+Standee billboards read blocky/soft in the interior. **Root is NOT the render filter** — billboards
+deliberately use `NearestFilter` + no mipmaps (the crisp PS1 choice, theater-boot.js:834/889). It's
+that the **source sprites were cut at low pixel resolution** (25-per-sheet cells → small textures),
+which NearestFilter then hard-upscales onto a large on-screen plane. This is the known "crusty
+mediums" / "under-res at 25/sheet" issue. **Real fix = higher-resolution source generation** (the
+XL/titan-regen pattern: fewer sprites per sheet, bigger cells) → re-slice → re-register — needs Adam's
+ImageGen codex window, not a code change. Possible minor render-side contributor: the billboard
+square-plane aspect stretch (CHANGELOG Deferred) — worth a quick theater-boot check but it won't fix
+the fundamental softness. Related: [[project-genesis-sprite-gen-v2]], `docs/SPRITE-GEN-V2.md` §10,
+`dev/sprite-manifests/XL-REGEN-PROMPTS.md`.
+
+---
+
 ## Future features / fixes (design captured, not built)
 
 ### FIX-A · world-seed variety + bardo reincarnation

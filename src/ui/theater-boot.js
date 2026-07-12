@@ -6899,6 +6899,21 @@ function itrPropEdgeColorFor(slug, tex){
 // front (+z local) faces AWAY from the wall the prop is mounted on, into the room — "n"/"s"/"e"/"w"
 // names which side the adjacent WALL cell sits on (itrWallSideAt, src/ui/theater-interior.js).
 const ITR_WALL_SIDE_YAW = { n: 0, s: Math.PI, w: -Math.PI / 2, e: Math.PI / 2 };
+// LIGHT-SIGHT-POLISH.md P-2 — WALL-HANG PLACEMENT FIX. Before this, interiorBuildWallProps mounted
+// every wall-hang extrusion prop at the cell CENTER, at FLOOR level, with no push toward the wall
+// plane — a painting/sconce sat as a small tan box floating mid-room at floor height, showing its
+// edge-sampled tan SIDE faces (the "floating rhomboid" bug). ITR_WALL_SIDE_YAW above already resolves
+// the prop's ROTATION off entry.wallSide (itrWallSideAt, computed once in theater-interior.js off the
+// SpatialPlan's own wall-cell mask — never re-derived here); these two knobs finish the job: lift the
+// mount to wall mid-height, and push the mount point from the cell center onto the actual wall plane.
+// Both named + dialable per the spec's own "Adam dials from the next re-shoot" clause.
+const ITR_WALLHANG_HEIGHT_FRAC = 0.5;  // mount Y = floorTop + wallHeightBase * this fraction (mid-wall)
+const ITR_WALLHANG_WALL_OFFSET = 0.5;  // half a cell (GRID LAW: cellSize=1, theater-interior.js) toward the wall
+const ITR_WALLHANG_FALLBACK_WALL_HEIGHT = 2.4; // mirrors ITR_WALL_HEIGHT_BASE (theater-interior.js) for a caller that omits wallHeightBase
+// unit normal pointing FROM the cell center TOWARD the adjacent wall cell it's keyed off — same
+// plan-x->world-x / plan-y->world-z axis mapping interiorBuildWallProps' own position.set already
+// uses, keyed off the SAME entry.wallSide ITR_WALL_SIDE_YAW reads (one resolution, two consumers).
+const ITR_WALL_SIDE_NORMAL = { n: { x: 0, z: -1 }, s: { x: 0, z: 1 }, w: { x: -1, z: 0 }, e: { x: 1, z: 0 } };
 function buildExtrusionProp(entry){
   const tex = dressingTextureFor(entry.slug);
   const h = dressingCardHeight(entry.cardKind);
@@ -6931,13 +6946,34 @@ function buildExtrusionProp(entry){
   g.userData.extrusionHeight = h;   // BW2-2b integration: wall-contact AO sizes its halo off this
   return g;
 }
-function interiorBuildWallProps(wallProps, cx, cz, floorTopMap){
+function interiorBuildWallProps(wallProps, cx, cz, floorTopMap, wallHeightBase){
   const group = new THREE.Group();
   (wallProps || []).forEach((d) => {
     if(!d || !d.slug) return;
     const g = buildExtrusionProp(d);
     const floorTop = interiorFloorTopAt(floorTopMap, d.x || 0, d.y || 0);
-    g.position.set((d.x || 0) - (cx || 0), floorTop, (d.y || 0) - (cz || 0));
+    // P-2 WALL-HANG PLACEMENT FIX (LIGHT-SIGHT-POLISH.md): buildExtrusionProp's mesh is built so its
+    // BACK face passes through the group's own local origin (mesh.position.z = depth/2, back face at
+    // local z=0) — meaning wherever we place g.position IS the point the back face sits on. Resolve
+    // the wall normal off the SAME entry.wallSide ITR_WALL_SIDE_YAW already rotated the prop with
+    // (itrWallSideAt, computed once in theater-interior.js off the SpatialPlan's own wall-cell mask —
+    // never re-derived/re-guessed here); push that point half a cell toward the wall so the back face
+    // lands ON the wall plane instead of floating at the cell center, and lift it to wall mid-height.
+    const wallNormal = ITR_WALL_SIDE_NORMAL[d.wallSide];
+    if(wallNormal){
+      const wallH = (typeof wallHeightBase === "number" && wallHeightBase > 0) ? wallHeightBase : ITR_WALLHANG_FALLBACK_WALL_HEIGHT;
+      g.position.set(
+        (d.x || 0) - (cx || 0) + wallNormal.x * ITR_WALLHANG_WALL_OFFSET,
+        floorTop + wallH * ITR_WALLHANG_HEIGHT_FRAC,
+        (d.y || 0) - (cz || 0) + wallNormal.z * ITR_WALLHANG_WALL_OFFSET
+      );
+    } else {
+      // degenerate/ambiguous case (itrWallSideAt found no adjacent WALL cell — rare, per its own
+      // comment) — never throw; keep the PRE-FIX placement (floor level, cell center, no push) and
+      // log so it's visible in QA rather than silently producing a still-floating prop.
+      console.warn("qa: wallhang-no-wallside", d.slug, d.x, d.y);
+      g.position.set((d.x || 0) - (cx || 0), floorTop, (d.y || 0) - (cz || 0));
+    }
     // BW2-2b item 5b (wired here at the integration merge): WALL-CONTACT AO now attaches to the
     // EXTRUSION prop, not the old flat wall-hang card — BW2-5 rerouted wall-hangs through this
     // builder (interiorBuildDressing skips primary:"wall-hang" entirely), which made BW2-2b's
@@ -6945,7 +6981,8 @@ function interiorBuildWallProps(wallProps, cx, cz, floorTopMap){
     // sitting a hair behind the prop's back face (the wall plane) so it reads as the seam shadow
     // hugging where the object meets the wall — exactly the mock's painting vignette, and per the
     // extrusion addendum's own coordination note ("your extrusion gives that band a real volume
-    // edge to hug").
+    // edge to hug"). Still valid after the P-2 reposition above: the AO quad is a CHILD of g, mounted
+    // in g's own local space, so it rides along with whatever world position/rotation g now has.
     addWallContactAO(g, (g.userData && g.userData.extrusionHeight) || 1, 0.005);
     group.add(g);
   });
@@ -7862,14 +7899,21 @@ function setInteriorBoard(data){
   const furnitureGroup = interiorBuildFurniture(data.furniture, cx, cz, S.interiorFloorTopMap);
   S.interiorGroup.add(furnitureGroup);
   S.interiorFurnitureCount = (data.furniture || []).length;
-  const wallPropsGroup = interiorBuildWallProps(data.wallProps, cx, cz, S.interiorFloorTopMap);
+  const wallPropsGroup = interiorBuildWallProps(data.wallProps, cx, cz, S.interiorFloorTopMap, data.wallHeightBase);
   S.interiorGroup.add(wallPropsGroup);
   S.interiorWallPropsCount = (data.wallProps || []).length;
-  S.interiorWallPropsWorldPositions = wallPropsGroup.children.map((g) => ({
-    slug: g.userData && g.userData.dressingSlug, x: g.position.x, y: g.position.y, z: g.position.z,
-    rotY: g.rotation.y, depth: g.children[0] && g.children[0].geometry && g.children[0].geometry.parameters
-      && g.children[0].geometry.parameters.depth
-  }));
+  S.interiorWallPropsWorldPositions = wallPropsGroup.children.map((g) => {
+    // P-2 addendum: the wall-contact AO quad is the extrusion group's 2nd child (addWallContactAO adds
+    // it AFTER the art mesh) — surfacing its local z here lets a harness confirm the AO still hugs the
+    // (possibly repositioned) back face without a separate traverse-the-whole-scene seam.
+    const aoChild = g.children.find((c) => c.userData && c.userData.wallContactAO);
+    return {
+      slug: g.userData && g.userData.dressingSlug, x: g.position.x, y: g.position.y, z: g.position.z,
+      rotY: g.rotation.y, depth: g.children[0] && g.children[0].geometry && g.children[0].geometry.parameters
+        && g.children[0].geometry.parameters.depth,
+      aoPresent: !!aoChild, aoZ: aoChild ? aoChild.position.z : null
+    };
+  });
 
   // BEAUTY-WAVE.md VP6 item 4 — VISIBLE HISTORY (render half). data.decals is a plain field the caller
   // sets directly on the board object (same convention as data.pieces/data.dressing above), sourced
@@ -8729,6 +8773,13 @@ window.Theater._interiorShadowCastersForTest = function(){
 };
 window.Theater.interiorMoteCount = function(){ return (S.moteGroup && S.moteGroup.children.length) || 0; }; // VP6 item 3
 window.Theater.interiorDressingWorldPositions = function(){ return S.interiorDressingWorldPositions || []; };
+// LIGHT-SIGHT-POLISH.md P-2 — harness-facing diagnostic, same read-only convention as
+// interiorDressingWorldPositions above: one entry per mounted wall-hang EXTRUSION prop's REAL world
+// position (post placement-fix push-to-wall-plane + mid-height lift), plus its rotY (the resolved
+// wall-normal yaw) and the box's own authored depth (extrusionHeight is on g.userData already, per
+// S.interiorWallPropsWorldPositions' own mapping in setInteriorBoard).
+window.Theater.interiorWallPropsWorldPositions = function(){ return S.interiorWallPropsWorldPositions || []; };
+window.Theater.interiorWallPropsCount = function(){ return S.interiorWallPropsCount || 0; };
 // BW2-1b — harness-facing diagnostic, same read-only convention as interiorDressingWorldPositions
 // above: one entry per mounted standee's REAL world position (post CLIP MARGIN nudge).
 window.Theater.interiorPiecesWorldPositions = function(){ return S.interiorPiecesWorldPositions || []; };
@@ -9241,8 +9292,16 @@ window.Theater._interiorBuildPiecesForTest = function(pieces, cx, cz, wallHeight
 // BW2-2b/BW2-5 integration — TEST-ONLY SEAM: wall-hang entries mount through the EXTRUSION path
 // (interiorBuildWallProps) since BW2-5, so the wall-contact AO harness asserts against this builder,
 // not interiorBuildDressing (which skips primary:"wall-hang" entirely).
-window.Theater._interiorBuildWallPropsForTest = function(wallProps, cx, cz, floorTopMap){
-  return interiorBuildWallProps(wallProps, cx, cz, floorTopMap);
+window.Theater._interiorBuildWallPropsForTest = function(wallProps, cx, cz, floorTopMap, wallHeightBase){
+  return interiorBuildWallProps(wallProps, cx, cz, floorTopMap, wallHeightBase);
+};
+// LIGHT-SIGHT-POLISH.md P-2 — TEST-ONLY SEAM, same "never re-derive blind" spirit as
+// _floorContactLawForTest above: exposes the wall-hang placement law's own real constants (the yaw
+// table rotation reads, the wall-normal table the placement push reads, and the two dialable knobs) so
+// a harness can compute its OWN expected mount point/rotation off the SAME numbers the product code
+// uses, rather than hand-copying magic numbers that could silently drift from the real source.
+window.Theater._wallHangLawForTest = {
+  ITR_WALL_SIDE_YAW, ITR_WALL_SIDE_NORMAL, ITR_WALLHANG_HEIGHT_FRAC, ITR_WALLHANG_WALL_OFFSET
 };
 window.Theater._interiorBuildDressingForTest = function(dressing, cx, cz, floorTopMap, prismLists){
   return interiorBuildDressing(dressing, cx, cz, floorTopMap, prismLists);

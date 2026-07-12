@@ -33,17 +33,17 @@
         keys off the caller's own tag string, not silent footprint re-classification).
      8. check-manifest.py (run live).
      9. DIAGONAL FACES (octagon): a real octagon-chamfer fixture gets genuine 45-degree wall segments
-        post-tag (none exist pre-tag); every one of the input cells still resolves in the cellTriangleMap
-        AND is geometrically CONTAINED in its mapped triangle (the same hit-test proof as circle, extended
-        to octagon) — cell coverage is asserted as bare ⊆ diagonalized (see the PRE-EXISTING BUG note
-        below for why this is "superset", not strict equality, for octagon specifically).
-    10. PRE-EXISTING BUG DISCOVERED (documented honestly, not silently patched): the UNTAGGED/bare
-        compile of a real octagon fixture was ALREADY dropping 2 of its 76 cells from cellTriangleMap
-        before this unit touched anything (confirmed live against `git show master:...theater-room-
-        mesh.js` below) — a latent ear-clip-triangulation/point-in-triangle floating-point edge case,
-        unrelated to STAGE-C3b. This unit's own diagonal chamfering happens to FIX it for this fixture
-        (76/76 mapped+contained) as a side effect, never makes it worse. Flagged via spawn_task for a
-        dedicated fix, not patched here (out of this unit's own render-smoothing scope).
+        post-tag (none exist pre-tag); the chamfer run's diagonal segments are provably collinear.
+    10. ROOT FIX for the dropped-cell bug (the coordinator's own follow-up, same branch): the strict
+        point-in-triangle cellTriangleMap loop silently dropped a cell whose center sits exactly on an
+        internal ear-clip diagonal (no triangle STRICTLY contains it). Master's own bare octagon(10,10)
+        drops "2,1" and "4,3" (74/76). The fix is a NEAREST-TRIANGLE FALLBACK by true point-to-triangle
+        distance (pointToTriangleDist2) — proven HERE on the BARE (untagged, non-chamfered) path: bare
+        octagon 76/76, circle-mode + plain rect full coverage, every cell mapped to a triangle it
+        geometrically lies ON (dist ~0), and a RED-FIRST check of master's own module (74/76) confirming
+        the pre-existing gap this closes. This is INDEPENDENT of the diagonal chamfer — the chamfer only
+        fixed the octagon case incidentally; the fallback fixes ANY shape/fixture (circle-mode cells,
+        unlucky rect triangulations, future shapes).
     11. NO-OP GUARANTEE (L/T/cross, and non-staircase shapes generally): tagging a room 'L'/'T'/'cross'
         — or an octagon fixture whose corners are too small to form a real multi-cell staircase — is
         BYTE-IDENTICAL to the untagged compile of the same cells. This is what makes "diagonal mode"
@@ -68,7 +68,7 @@ const mod = await import(pathToFileURL(join(ROOT, "src/ui/theater-room-mesh.js")
 const {
   compileRoomShellData, unmergedSegments, insetOffset, radialSmoothRing, segmentNormal,
   chamferRunCorners, diagonalizeStaircaseRing,
-  DEFAULT_RADIAL_SMOOTH_BLEND, pointInTriangle2D,
+  DEFAULT_RADIAL_SMOOTH_BLEND, pointInTriangle2D, pointToTriangleDist2,
 } = mod;
 
 console.log("=== 1. STAGE-C3b exports ===");
@@ -76,6 +76,8 @@ check("1a. unmergedSegments exported", typeof unmergedSegments === "function");
 check("1b. insetOffset exported", typeof insetOffset === "function");
 check("1c. radialSmoothRing exported", typeof radialSmoothRing === "function");
 check("1d. DEFAULT_RADIAL_SMOOTH_BLEND is a sane (0,1) fraction", typeof DEFAULT_RADIAL_SMOOTH_BLEND === "number" && DEFAULT_RADIAL_SMOOTH_BLEND > 0 && DEFAULT_RADIAL_SMOOTH_BLEND < 1, DEFAULT_RADIAL_SMOOTH_BLEND);
+check("1e. chamferRunCorners + diagonalizeStaircaseRing exported", typeof chamferRunCorners === "function" && typeof diagonalizeStaircaseRing === "function");
+check("1f. pointToTriangleDist2 exported (the root-fix distance metric)", typeof pointToTriangleDist2 === "function");
 
 console.log("\n=== 2. insetOffset reduces EXACTLY to the original 90-degree sum formula ===");
 {
@@ -313,43 +315,69 @@ console.log("\n=== 9. DIAGONAL FACES — octagon gets real 45-degree wall segmen
     maxRun >= 3, dirCounts);
 }
 
-console.log("\n=== 10. CELL COVERAGE — octagon (bare ⊆ diagonalized; documents a PRE-EXISTING bug, not a regression) ===");
+console.log("\n=== 10. ROOT FIX — the dropped-cell bug, proven on the BARE (non-chamfered) path ===");
 {
+  // The KEY proof: the nearest-triangle fallback (pointToTriangleDist2) fixes the dropped-cell bug at
+  // its ROOT — INDEPENDENT of the diagonal chamfer. Every fixture here is either UNTAGGED (so
+  // diagonalizeStaircaseRing never runs) or circle-mode (which does NOT chamfer), so a full 76/76 (etc.)
+  // coverage here can only come from the fallback itself, never the chamfer.
   const oct = octagonRoom(10, 10);
-  const bare = compileRoomShellData(oct, {});
-  const diag = compileRoomShellData(oct, { smoothShape: "octagon" });
-  const kBare = new Set(Object.keys(bare.cellTriangleMap));
-  const kDiag = new Set(Object.keys(diag.cellTriangleMap));
-  const onlyBare = [...kBare].filter((k) => !kDiag.has(k));
-  check("10a. every cell the BARE compile maps is ALSO mapped by the diagonalized compile (never regresses coverage)",
-    onlyBare.length === 0, onlyBare);
-  // Live-checked against master's own theater-room-mesh.js (not just asserted): the SAME octagon
-  // fixture, compiled with ZERO STAGE-C3b code involved, already drops cells from its own
-  // cellTriangleMap — a pre-existing ear-clip/point-in-triangle floating-point edge case, unrelated to
-  // this unit. Confirms 10a's "onlyBare should be empty" isn't hiding a NEW gap this unit introduced —
-  // the gap already existed before smoothShape existed at all.
-  let masterGapSize = null;
+  const bareOct = compileRoomShellData(oct, {}); // UNTAGGED — the pure axis-aligned staircase, no chamfer
+  check("10a. BARE (untagged) octagon(10,10) maps ALL 76 cells — the exact fixture master drops 2 of (proves the ROOT fix, not the chamfer)",
+    Object.keys(bareOct.cellTriangleMap).length === oct.length, { mapped: Object.keys(bareOct.cellTriangleMap).length, total: oct.length });
+  // and every mapped cell resolves to a triangle the cell center ACTUALLY lies on/in (dist ~0) — a
+  // fallback that mapped cells to arbitrary faraway triangles would be worse than useless for hit-test.
+  const bareAllOnTri = oct.every((c) => {
+    const rec = bareOct.cellTriangleMap[c.x + "," + c.z];
+    if (!rec) return false;
+    const t = rec.triIndex;
+    const i0 = bareOct.floor.indices[t * 3], i1 = bareOct.floor.indices[t * 3 + 1], i2 = bareOct.floor.indices[t * 3 + 2];
+    const p = (i) => ({ x: bareOct.floor.positions[i * 3], z: bareOct.floor.positions[i * 3 + 2] });
+    return pointToTriangleDist2(c.x, c.z, p(i0), p(i1), p(i2)) < 1e-6;
+  });
+  check("10b. every BARE-octagon cell resolves to a triangle it geometrically lies ON (point-to-triangle dist ~0), not a faraway one (proves point-to-triangle distance, not centroid)",
+    bareAllOnTri);
+  // the two specific cells master drops — "2,1" and "4,3" — are now both mapped, and to a triangle they
+  // sit exactly on (the shared internal diagonal). A centroid-distance fallback mis-picked "4,3" to a
+  // triangle 2.1 units off its true edge (see pointToTriangleDist2's own header) — this asserts the
+  // correct one.
+  const dropCellsOk = ["2,1", "4,3"].every((key) => {
+    const rec = bareOct.cellTriangleMap[key];
+    if (!rec) return false;
+    const [cx, cz] = key.split(",").map(Number);
+    const t = rec.triIndex;
+    const i0 = bareOct.floor.indices[t * 3], i1 = bareOct.floor.indices[t * 3 + 1], i2 = bareOct.floor.indices[t * 3 + 2];
+    const p = (i) => ({ x: bareOct.floor.positions[i * 3], z: bareOct.floor.positions[i * 3 + 2] });
+    return pointToTriangleDist2(cx, cz, p(i0), p(i1), p(i2)) < 1e-6;
+  });
+  check("10c. the two cells master DROPS (\"2,1\", \"4,3\") are both mapped to a triangle they lie exactly on", dropCellsOk);
+
+  // circle-mode + plain rect: no cell ever dropped, ANY shape (10d/10e).
+  const circ = circleRoom(10, 10, null);
+  const circData = compileRoomShellData(circ, { smoothShape: "circle" });
+  check("10d. circle-mode(10,10) maps ALL its cells (no drop, curved boundary)",
+    Object.keys(circData.cellTriangleMap).length === circ.length, { mapped: Object.keys(circData.cellTriangleMap).length, total: circ.length });
+  const rect = [];
+  for (let z = 0; z < 7; z++) for (let x = 0; x < 9; x++) rect.push({ x, z, tier: 0 });
+  const rectData = compileRoomShellData(rect, {});
+  check("10e. plain rect(9x7) maps ALL 63 cells (unchanged — the common exact-containment case)",
+    Object.keys(rectData.cellTriangleMap).length === rect.length, { mapped: Object.keys(rectData.cellTriangleMap).length, total: rect.length });
+
+  // RED-FIRST against master's OWN theater-room-mesh.js (no STAGE-C3b code at all): the SAME bare
+  // octagon fixture drops exactly 2 cells (74/76) there — proving (a) the bug is real + pre-existing,
+  // and (b) THIS branch's 76/76 above is the fix landing, not a fixture that never had the gap.
+  let masterMapped = null;
   try {
     const masterSrc = execSync("git show master:src/ui/theater-room-mesh.js", { cwd: ROOT, encoding: "utf-8" });
     const tmpPath = join(ROOT, "src/ui/_verify-c3b-master-baseline.js");
     (await import("node:fs")).writeFileSync(tmpPath, masterSrc);
     try {
       const masterMod = await import(pathToFileURL(tmpPath).href + "?bust=" + Date.now());
-      const masterBare = masterMod.compileRoomShellData(oct, {});
-      masterGapSize = oct.length - Object.keys(masterBare.cellTriangleMap).length;
+      masterMapped = Object.keys(masterMod.compileRoomShellData(oct, {}).cellTriangleMap).length;
     } finally { (await import("node:fs")).unlinkSync(tmpPath); }
-  } catch (e) { masterGapSize = null; }
-  check("10b. master's OWN bare compile of this exact fixture ALSO drops cells from cellTriangleMap (a real pre-existing gap, not introduced by this unit)",
-    masterGapSize !== null && masterGapSize > 0, { masterGapSize, thisBranchBareGap: oct.length - kBare.size });
-  check("10c. this unit's diagonal chamfering FIXES the gap for this fixture (every cell mapped AND geometrically contained)",
-    kDiag.size === oct.length && oct.every((c) => {
-      const rec = diag.cellTriangleMap[c.x + "," + c.z];
-      if (!rec) return false;
-      const t = rec.triIndex;
-      const i0 = diag.floor.indices[t * 3], i1 = diag.floor.indices[t * 3 + 1], i2 = diag.floor.indices[t * 3 + 2];
-      const p = (i) => ({ x: diag.floor.positions[i * 3], z: diag.floor.positions[i * 3 + 2] });
-      return pointInTriangle2D(c.x, c.z, p(i0), p(i1), p(i2));
-    }), { mapped: kDiag.size, total: oct.length });
+  } catch (e) { masterMapped = null; }
+  check("10f. RED-FIRST: master's OWN bare compile of this exact fixture drops 2 cells (74/76) — confirms the pre-existing bug this fix closes",
+    masterMapped === oct.length - 2, { masterMapped, thisBranchMapped: Object.keys(bareOct.cellTriangleMap).length, total: oct.length });
 }
 
 console.log("\n=== 11. NO-OP GUARANTEE — L/T/cross (and non-staircase octagons) are byte-identical when tagged ===");

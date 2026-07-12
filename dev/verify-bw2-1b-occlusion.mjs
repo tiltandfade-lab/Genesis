@@ -391,6 +391,25 @@ async function runRenderChecks(){
     }
     await page.addStyleTag({ content: "#toast,.toast,#bardoCard,#spicePop,#diceOverlay{display:none !important;visibility:hidden !important}" });
 
+    // CAMERA-TWEEN SETTLE (DOORFRAME-OCCLUSION FIX addendum, found live re-gating checks 31/32/35 —
+    // dev/verify-occlusion-fade.mjs's own established convention, copied verbatim): BEAUTY-WAVE-4.md
+    // MF-1 landed AFTER this harness's own PART B was first authored (this file targets BEAUTY-WAVE-2's
+    // BW2-1b) — setInteriorBoard's camera fit now GLIDES (280-350ms) from wherever the camera WAS to
+    // the new fit's target, via placeCameraTweened; S.camera.position sits at the START pose (not the
+    // fitted END pose) until that tween's own onUpdate ticks settle it. Every check below used to read
+    // pillarList/pieces/raycasts SYNCHRONOUSLY, in the SAME page.evaluate as setInteriorBoard itself —
+    // meaning every raycast ran against a STALE, pre-tween camera angle, not the one occlusion classify
+    // itself used (which correctly reads the settled/target position via its own PREVIEW placeCamera()
+    // call, S.occlusionClassifyBearingDeg's own header). Confirmed live (this fix's own report): for a
+    // "beat" fit spanning 4 far corners, the stale start pose and the settled target pose are far enough
+    // apart that a marginal occluder (a doorframe arch-header prism) reads AS occluding from the stale
+    // angle but NOT from the settled one that occlusion classify correctly used to decide it needed no
+    // fade at all — the raycast was proving something that was never true of the settled frame the
+    // player actually sees. `settleCameraTween` runs after every `setInteriorBoard` call below.
+    async function settleCameraTween(){
+      await page.waitForFunction(() => !window.Theater || typeof window.Theater.tweensLive !== "function" || window.Theater.tweensLive() === 0, { timeout: 15000 });
+    }
+
     const mounted = await page.evaluate((registry) => {
       const el = document.createElement("div");
       el.style.width = "1200px"; el.style.height = "900px";
@@ -441,7 +460,7 @@ async function runRenderChecks(){
     }
 
     async function buildSeededScene(seed){
-      return await page.evaluate((walkId) => {
+      await page.evaluate((walkId) => {
         function buildFixture(n){
           const ids = Array.from({ length: n }, (_, i) => "s" + (i + 1));
           const edges = []; for (let i = 1; i < n; i++) edges.push([ids[i - 1], ids[i]]);
@@ -474,10 +493,29 @@ async function runRenderChecks(){
         board.pieces = corners.map((c, i) => ({ slug: slugs[i], cellX: c.x, cellY: c.y }));
         board.cameraFit = { mode: "beat", cells: corners.map((c) => ({ x: c.x, y: c.y })) };
         window.Theater.setInteriorBoard(board);
+        window.__bw2RoomWD = room.w * room.d; // stashed for the settled read below (see settleCameraTween's own header)
+      }, seed);
+      // CAMERA-TWEEN SETTLE — see this function's own header above; the camera fit GLIDES, so every
+      // read below must happen AFTER it settles, not in the same synchronous evaluate as the fit call.
+      await settleCameraTween();
+      return await page.evaluate(() => {
         const pillarList = window.Theater._interiorPillarListForTest();
         const pieces = window.Theater.interiorPiecesWorldPositions();
         const raycasts = pieces.map((p) => window.Theater._interiorRaycastClearForTest({ x: p.x, y: p.y + p.height * 0.5, z: p.z }));
         const meshCount = window.Theater.interiorMeshCount();
+        // DOORFRAME-OCCLUSION FIX addendum (check 34's own budget comparison): a doorframe (or wall/
+        // pillar) ghost overlay is a REAL, intentional extra draw call — built ONLY while at least one
+        // instance of that kind is actually occluding a figure THIS frame (S-1 OCCLUSION FADE's own
+        // header comment in theater-boot.js) — so "occupied" and "cleared" (zero pieces, zero sight
+        // points, guaranteed zero ghosts) legitimately differ by however many ghost KINDS fired, not by
+        // zero. Exposed here (never asserted against in THIS group — check 34 below does the arithmetic)
+        // so a harness can tell "budget grew because occlusion legitimately fired" apart from "budget
+        // grew for no reason".
+        const activeGhostKinds = [
+          window.Theater._interiorWallGhostListForTest().length > 0,
+          window.Theater._interiorPillarGhostListForTest().length > 0,
+          window.Theater._interiorDoorGhostListForTest().length > 0,
+        ].filter(Boolean).length;
         // quad-AABB overlap check (CLIP MARGIN, check 36): none of the mounted pieces' own footprint
         // circle should still overlap a nearby wall/pillar box post-nudge.
         const clip = window.Theater._clipMarginLawForTest;
@@ -487,11 +525,11 @@ async function runRenderChecks(){
           return push.magnitude; // post-mount position re-tested — should already read ~0 (the mount itself applied the resolving nudge)
         });
         return {
-          ok: true, roomWD: room.w * room.d, pillarCount: pillarList.length,
+          ok: true, roomWD: window.__bw2RoomWD, pillarCount: pillarList.length,
           pillarHeights: pillarList.map((p) => p.sy),
-          raycasts, meshCount, pieceCount: pieces.length, overlaps,
+          raycasts, meshCount, pieceCount: pieces.length, overlaps, activeGhostKinds,
         };
-      }, seed);
+      });
     }
 
     group("31 — GREEN: a controlled real-dungeon scene (pieces at the room's own 4 pillar corners) mounts with ZERO occluded standees (real THREE.Raycaster)");
@@ -532,7 +570,7 @@ async function runRenderChecks(){
     // list in the identical order) with ZERO pieces mounted — no sightline exists to test against at
     // all, so itrPillarCutawayMask's own short-circuit ("no sight points -> nothing flagged", this
     // file's own header on that function) guarantees every pillar reports its full, un-stubbed height.
-    const clearedScene = await page.evaluate((walkId) => {
+    await page.evaluate((walkId) => {
       function buildFixture(n){
         const ids = Array.from({ length: n }, (_, i) => "s" + (i + 1));
         const edges = []; for (let i = 1; i < n; i++) edges.push([ids[i - 1], ids[i]]);
@@ -548,12 +586,25 @@ async function runRenderChecks(){
       const board = interiorBuildBoard(plan1, { realmId: "gloom", env: "dungeon", focusSegNum: room.segNum, radius: 1 });
       board.pieces = []; // nobody mounted at all — no sightline to test against, every pillar clears
       window.Theater.setInteriorBoard(board);
+    }, "bw2-1b-restore-seed");
+    // CAMERA-TWEEN SETTLE — see buildSeededScene's own header; consistent discipline even though this
+    // particular board has zero pieces (so occlusion classify is a no-op regardless of camera angle).
+    await settleCameraTween();
+    const clearedScene = await page.evaluate(() => {
       return {
         ok: true,
         pillarHeights: window.Theater._interiorPillarListForTest().map((p) => p.sy),
         meshCount: window.Theater.interiorMeshCount(),
+        // DOORFRAME-OCCLUSION FIX addendum — see buildSeededScene's own comment: with zero pieces
+        // mounted there are zero sight points, so itrPillarCutawayMask/itrOcclusionClassify's own
+        // short-circuit guarantees zero ghost kinds ever fire here — asserted below, not just assumed.
+        activeGhostKinds: [
+          window.Theater._interiorWallGhostListForTest().length > 0,
+          window.Theater._interiorPillarGhostListForTest().length > 0,
+          window.Theater._interiorDoorGhostListForTest().length > 0,
+        ].filter(Boolean).length,
       };
-    }, "bw2-1b-restore-seed");
+    });
     ok(nearScene.ok && clearedScene.ok, "both the occupied and cleared variants of the same room built");
     if(nearScene.ok && clearedScene.ok){
       ok(clearedScene.pillarHeights.length === nearScene.pillarHeights.length, `same pillar COUNT/order (${clearedScene.pillarHeights.length} vs ${nearScene.pillarHeights.length}) — byte-identical plan, cutaway never adds/removes an instance`);
@@ -562,10 +613,11 @@ async function runRenderChecks(){
       ok(clearedScene.pillarHeights.every((h) => h > 0.72 + 1e-6), `every pillar (including any index stubbed while occupied, indices ${JSON.stringify(stubbedInNear)}) reports full height once no standee is mounted — heights: ${JSON.stringify(clearedScene.pillarHeights)}`);
     }
 
-    group("34 — BUDGET UNCHANGED: S.interiorMeshCount + the pillar instance list's own length are IDENTICAL between the occluded (4-corner) and cleared (0-piece) variants of the same room — cutaway is a per-instance transform edit, never a second draw call");
+    group("34 — BUDGET UNCHANGED: S.interiorMeshCount + the pillar instance list's own length are IDENTICAL between the occluded (4-corner) and cleared (0-piece) variants of the same room — cutaway is a per-instance transform edit, never a second draw call (an ACTIVE ghost overlay is the one documented, intentional exception — S-1 OCCLUSION FADE's own header: 'only ever created when at least one instance of that kind is actually occluding a figure this frame' — so the comparison accounts for however many ghost KINDS legitimately fired in the occupied scene, rather than assuming zero)");
     if(nearScene.ok && clearedScene.ok){
       ok(typeof nearScene.meshCount === "number" && nearScene.meshCount > 0, `meshCount is a real positive number (${nearScene.meshCount})`);
-      ok(clearedScene.meshCount === nearScene.meshCount, `structural mesh count identical (${nearScene.meshCount} occupied vs ${clearedScene.meshCount} cleared) — piece count never changes the structural draw-call budget`);
+      ok(clearedScene.activeGhostKinds === 0, `the CLEARED (0-piece) scene fires ZERO ghost kinds — no pieces means no sight points, so nothing can classify as occluding (${clearedScene.activeGhostKinds})`);
+      ok(clearedScene.meshCount === nearScene.meshCount - nearScene.activeGhostKinds, `structural mesh count identical ONCE the occupied scene's own legitimately-active ghost overlays are accounted for (${nearScene.meshCount} occupied [${nearScene.activeGhostKinds} active ghost kind(s)] vs ${clearedScene.meshCount} cleared) — piece count never changes the structural draw-call budget beyond the documented per-kind ghost-overlay exception`);
       ok(clearedScene.pillarHeights.length === nearScene.pillarHeights.length, "pillar instance COUNT identical with/without occlusion firing (asserted again alongside check 33's own count assertion, for the budget claim specifically)");
     }
 

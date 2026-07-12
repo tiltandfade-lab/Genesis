@@ -7647,6 +7647,16 @@ function itrPieceSightPoints(pieces, cx, cz, floorTopMap){
 // interiorBuildInstancedMesh actually renders (position=(inst.x-cx, sy/2-0.5, inst.z-cz), half-
 // extents (sx/2,sy/2,sz/2), that function's own header note), so a flagged instance is provably the
 // thing the camera would actually see occluding the standee, not an approximation of it.
+// DOORFRAME-OCCLUSION FIX: `centerY` now folds in `inst.yBase` (default 0, so every pre-existing
+// zero-yBase caller — every wall instance, and a non-tapered pillar shaft — computes the byte-identical
+// box it always did). Before this fix, centerY was hardcoded to `sy/2-0.5` — correct ONLY for a yBase-0
+// instance; ANY instance with a real yBase (a tapered pillar's own CAP, per THE COLUMN-CAP COLLISION
+// comment above itrOcclusionIdFor — and now BW2-5's doorframe ARCH-HEADER prisms, which stack yBase
+// at/above the door's own height) was tested against a box floating near the FLOOR instead of its true
+// position near the ceiling, so a real near-ceiling occluder could never be flagged (or could be
+// wrongly flagged against an unrelated low sightline). Matches interiorBuildInstancedMesh's own
+// `y = yBase + sy/2 - 0.5` placement formula exactly — this is the SAME box that function renders, not
+// an approximation of it, now true for every yBase too.
 function itrPillarCutawayMask(pillarList, cameraPos, sightPoints, cx, cz){
   const list = pillarList || [];
   if(!cameraPos || !sightPoints || !sightPoints.length) return list.map(() => false);
@@ -7655,7 +7665,8 @@ function itrPillarCutawayMask(pillarList, cameraPos, sightPoints, cx, cz){
     const halfY = Math.max(0.01, (inst.sy || 1)) / 2;
     const halfZ = Math.max(0.01, (inst.sz || 1)) / 2;
     const centerX = (inst.x || 0) - (cx || 0), centerZ = (inst.z || 0) - (cz || 0);
-    const centerY = (inst.sy || 1) / 2 - 0.5;
+    const yBase = (typeof inst.yBase === "number") ? inst.yBase : 0;
+    const centerY = yBase + (inst.sy || 1) / 2 - 0.5;
     const boxMin = { x: centerX - halfX, y: centerY - halfY, z: centerZ - halfZ };
     const boxMax = { x: centerX + halfX, y: centerY + halfY, z: centerZ + halfZ };
     return sightPoints.some((pt) => itrSegmentIntersectsAabb(cameraPos, pt, boxMin, boxMax));
@@ -7774,6 +7785,48 @@ const ITR_OCCLUSION_GHOST_OPACITY = ITR_OCCLUSION_UPPER_OPACITY; // back-compat 
 const ITR_OCCLUSION_FADE_IN_MS = 150;              // 120-180ms band — fades THROUGH quickly
 const ITR_OCCLUSION_FADE_OUT_MS = 220;             // 180-260ms band — restores to opaque more slowly
 const ITR_OCCLUSION_RECLASSIFY_HYSTERESIS_DEG = 3; // 2-4deg band
+// ANKLE-STUB BLOOM FIX (found live re-gating dev/verify-occlusion-fade.mjs's own GREEN check, flagged
+// as a pre-existing defect in that harness's own A4-1 comment above — confirmed pre-existing on master
+// 46289a45 via git-stash bisection, not an A4 regression). The harness comment's own inherited guess
+// ("a bloom/no-shadow-ghost interaction") pointed at the GHOST; live-toggling the REAL mesh objects in
+// a real Chrome render (not just theory) proved that guess wrong and found the ACTUAL seed:
+//   - Hiding the ghost mesh entirely (Object3D.visible=false, not material.visible — materials don't
+//     have that flag) barely moves the sampled color (194 -> 199, if anything WORSE) — the ghost is not
+//     the seed.
+//   - Hiding the SOLID ANKLE STUB (itrSplitOccluderForAnkleGhost's `stub` — the ordinary, fully-opaque,
+//     non-ghost portion below the ankle cut) drops the sample straight back to baseline (dist ~0.03).
+// Root cause: the stub is NEW geometry — before any cut, this exact (x,z,y<ankleH) volume was the lower
+// half of a TALL box's SIDE walls, never a visible top face (buried inside the solid box, y up to 2.4).
+// Cutting the box down to ankleH (0.18) EXPOSES a large, previously-nonexistent horizontal TOP FACE at
+// floor level. This file's torchlit LIGHT_PROFILES point is decay:0 (a flat, NON-attenuating intensity
+// — see applyLightProfile's own header) with no renderer.toneMapping set anywhere in this file (plain
+// clamp, no asymptotic rolloff) — so a favorably-angled face (high N·L to the point light) can carry a
+// raw linear value many multiples over 1.0, comfortably clearing BLOOM_THRESHOLD (0.68, linear, pre-
+// OutputPass — see the SELECTIVE BLOOM dials above) regardless of alpha. The TALL box's own visible
+// faces at a normal/elevated camera angle are mostly SIDE walls (shallower N·L, under threshold, this
+// harness's own RED-state sample reads a moderate 69/255); the SHORT stub, viewed from the same
+// elevated "beat" camera A4's own beat-fit convention uses, exposes far more of its TOP face instead —
+// the newly-uncovered surface that actually trips bloom (confirmed: darkening the stub's own color
+// removes the spike; the ghost's own material color was independently confirmed inert to this, per the
+// bullets above). Root-cause candidates considered (see this unit's own report for the full empirical
+// trail): (a) tone-map/cap the light model globally — rejected as far outside this defect's scope (a
+// lighting-pipeline change, not an occlusion-fade one, with a much larger blast radius); (b) exempt the
+// stub from bloom via a new per-object mask — rejected, no such mechanism exists anywhere in this file
+// (SELECTIVE BLOOM is one global threshold) and inventing one is a bigger change than this needs; (c)
+// darken JUST the stub's own per-instance color, scoped to itrSplitOccluderForAnkleGhost's own `stub`
+// descriptor — the minimal, correct fix: the stub only ever exists as the truncated remainder of an
+// occluding instance (never a normal free-standing wall/pillar), so darkening it can't mismatch any
+// other visible geometry in the room; it directly targets the newly-exposed surface that is the actual
+// bloom seed, using the SAME itrScaleHexValue per-instance-color convention ITR_ROOM_SHELL_RISER_DARKEN
+// already uses one section up (applied to the FIELD `itrSplitOccluderForAnkleGhost` already computes
+// per-instance, not a material/lighting-pipeline change).
+const ITR_OCCLUSION_STUB_DARKEN = 0.05;
+// THE "sy:0 IS UNSET" FOOTGUN — see itrSplitOccluderForAnkleGhost's own header where this is used: a
+// tiny, deliberately-nonzero (truthy) floor for a fully-ghosted instance's own stub height, so it never
+// collides with interiorBuildInstancedMesh's `inst.sy || 1` "unset -> unit box" fallback. Well under
+// that function's own separate `Math.max(0.01, ...)` render-scale floor, which clamps it the rest of
+// the way to a negligible sliver — this constant only needs to stay nonzero, not any particular size.
+const ITR_OCCLUSION_STUB_MIN_HEIGHT = 1e-4;
 
 // camera BEARING (degrees, world-origin-relative — a cheap, deterministic "has the camera meaningfully
 // moved" proxy; pure math, no THREE) — the angle setInteriorBoard's own occlusionCameraPos sits at
@@ -7901,10 +7954,51 @@ const ITR_ROOM_SHELL_RISER_DARKEN = 0.55;
 function itrSplitOccluderForAnkleGhost(inst, ankleH){
   const origYBase = (typeof inst.yBase === "number") ? inst.yBase : 0;
   const fullH = inst.sy || 1;
-  const stubH = Math.min(fullH, ankleH);
-  const stub = Object.assign({}, inst, { yBase: origYBase, sy: stubH });
-  const ghostH = fullH - stubH;
-  const ghost = ghostH > 1e-6 ? Object.assign({}, inst, { yBase: origYBase + stubH, sy: ghostH }) : null;
+  const instTop = origYBase + fullH;
+  // ABSOLUTE-ANKLE-BAND FIX (DOORFRAME OCCLUSION, found live re-gating dev/verify-bw2-1b-occlusion.mjs
+  // --with-render checks 31/32/35): the solid "ankle" band is an ABSOLUTE world-Y range [0, ankleH] —
+  // the true floor up to the true ankle height — NEVER relative to THIS instance's own local origin.
+  // The pre-fix version measured `ankleH` from the instance's own y=0 regardless of where that instance
+  // actually sat (`stubH = Math.min(fullH, ankleH)`), which is correct ONLY for a yBase=0 instance
+  // (every wall, a pillar's own shaft). A stacked prism whose ENTIRE span already sits ABOVE the true
+  // ankle band — a tapered pillar's own CAP (yBase=wallHeightBase, THE COLUMN-CAP COLLISION comment
+  // above itrOcclusionIdFor) or a doorframe's BW2-5 arch-header prisms (yBase near the door's own top,
+  // each prism itself only 0.16-0.22 tall — SHORTER than a typical ankleH) — has NO overlap with [0,
+  // ankleH] at all. The old math still measured the cut from THAT prism's own y=0, so a short prism
+  // whose own height was comparable to or under ankleH kept MOST OR ALL of itself as an opaque "stub"
+  // (min(0.16, 0.18) = 0.16 — the WHOLE prism), defeating the fade for exactly the case this fix wires
+  // in: a real THREE.Raycaster kept hitting the arch-header "stub" (still tagged plain "doorframe", not
+  // "-ghost") even after occlusion classify correctly flagged it as blocking. Clamping the cut to the
+  // instance's own [origYBase, instTop] range (stubTop, below) means a prism entirely above the band
+  // reduces to a near-zero stub (rendered as InstancedMesh's own existing Math.max(0.01,...) scale
+  // floor — negligible, never literally zero-scale) and hands its ENTIRE height to the ghost — no other
+  // caller's math changes: for any yBase=0 instance, stubTop=min(instTop,ankleH) is exactly the old
+  // `Math.min(fullH, ankleH)` result, byte-identical.
+  const stubTop = Math.min(instTop, Math.max(origYBase, ankleH));
+  const trueStubH = Math.max(0, stubTop - origYBase);
+  // THE "sy:0 IS UNSET" FOOTGUN (found live re-gating checks 31/32/35 a SECOND time, after the
+  // ABSOLUTE-ANKLE-BAND fix above still didn't clear them): interiorBuildInstancedMesh's own matrix
+  // math reads `inst.sy || 1` for BOTH the box's scale AND its Y position -- a deliberate "an instance
+  // that never set sy at all defaults to a unit box" convention every OTHER caller in this file relies
+  // on. But `trueStubH` above can be EXACTLY 0 (a prism entirely above the ankle band, the archStep2
+  // case) -- and 0 is JS-falsy, so `0 || 1` silently becomes 1: the "fully ghosted, no stub" instance
+  // rendered as a FULL 1-WORLD-UNIT solid box instead of vanishing, still very much on the sightline
+  // (confirmed live: the raycast kept hitting the exact same instance, at a shifted distance, after the
+  // band fix alone). A tiny nonzero floor (ITR_OCCLUSION_STUB_MIN_HEIGHT, truthy, so `sy || 1` reads it
+  // literally) sidesteps the footgun without changing interiorBuildInstancedMesh's own shared contract --
+  // that function's EXISTING `Math.max(0.01, ...)` scale floor then clamps this sliver to its own
+  // already-negligible render minimum, same as any other tiny instance.
+  const stubH = trueStubH > 1e-6 ? trueStubH : ITR_OCCLUSION_STUB_MIN_HEIGHT;
+  // ANKLE-STUB BLOOM FIX (see ITR_OCCLUSION_STUB_DARKEN's own header, above this file's A4 tunables):
+  // the stub's own per-instance color is darkened here — this is the ONLY place a stub descriptor gets
+  // built, so every occlusion-fade caller (wall/pillar/round-pillar/furniture/doorframe) is covered
+  // without touching any shared material/lighting code. The pre-cut instance's OWN color is left
+  // untouched on `inst` itself (only the derived `stub` descriptor is darkened) — a non-occluding
+  // instance, or the SAME instance before/after it's classified blocking, always renders at its normal
+  // authored color.
+  const stub = Object.assign({}, inst, { yBase: origYBase, sy: stubH, color: itrScaleHexValue(inst.color || "#ffffff", ITR_OCCLUSION_STUB_DARKEN) });
+  const ghostH = instTop - stubTop;
+  const ghost = ghostH > 1e-6 ? Object.assign({}, inst, { yBase: stubTop, sy: ghostH }) : null;
   return { stub, ghost };
 }
 
@@ -8543,17 +8637,58 @@ function setInteriorBoard(data){
   // texture at proper value, THEN apply the recess-darken (ITR_SCENE_DOORFRAME_VALUE) so it reads a
   // touch darker than the wall — a recessed textured stone arch, per the mock. Untextured (no wallTex)
   // keeps the old plain trim-value darken. rigOn-gated so the study baseline stays honest.
-  const doorList = wallTex
+  let doorList = wallTex
     ? itrNeutralizeInstanceColors(inst.doorframe, kit.wallColor).map((d) => Object.assign({}, d, { color: itrScaleHexValue(d.color, ITR_SCENE_DOORFRAME_VALUE) }))
     : (rigOn ? inst.doorframe.map((d) => Object.assign({}, d, { color: itrScaleHexValue(d.color, ITR_SCENE_DOORFRAME_VALUE) })) : inst.doorframe);
+  // DOORFRAME OCCLUSION FIX (found live re-gating dev/verify-bw2-1b-occlusion.mjs --with-render, checks
+  // 31/32/35): doorframes (the main frame body AND BW2-5's own arch-header prisms) were NEVER wired into
+  // the S-1/A4 occlusion classify pass — only wall/pillar/furniture were (this unit's own STAGE-A A4
+  // header comment, several hundred lines up, lists exactly those three). A doorframe is real, permanent
+  // dungeon architecture — connecting-room doorways sit on genuine camera->standee sightlines the same
+  // way a wall or pillar can (confirmed empirically: a real THREE.Raycaster hit two of a real seeded
+  // room's own arch-header prisms, at their true authored width — 0.736/0.56 fractions of the 0.8 base,
+  // a deliberately NARROWING taper per the arch's own build comment above, not an inflated hitbox — on a
+  // real camera->standee sightline from a wide multi-corner "beat" fit). Root cause was a genuine
+  // coverage gap, not a geometry bug: SAME per-instance itrPillarCutawayMask + itrOcclusionClassify +
+  // itrSplitOccluderForAnkleGhost pattern the wall pass above already runs, applied here to `doorList`
+  // (which is ALREADY fully color-resolved by this point — the neutralize/ITR_SCENE_DOORFRAME_VALUE
+  // darken just above — so a stub/ghost split inherits the correct final color directly with no separate
+  // late-color step, unlike wall/pillar's own two-stage pipeline whose neutralize runs AFTER classify).
+  // Each of the door's 1-3 prisms (main body, archStep1, archStep2) classifies independently — the SAME
+  // per-instance-id discipline itrOcclusionIdFor's own yBase-discrimination already established for a
+  // tapered pillar's stacked shaft+cap. This also depends on itrPillarCutawayMask's own yBase fix (see
+  // that function's own header) — without it, the arch-header prisms' near-ceiling boxes would have been
+  // tested as if sitting near the floor, silently missing the exact instances a real sightline hits.
+  let doorGhostList = [];   // flat descriptor list, mirrors S.interiorLastWallGhostList's own shape
+  let doorGhostBuild = [];  // {inst, fadeEntry} pairs — drives the individually-tweened ghost meshes below
+  if(!ITR_OCCLUSION_FADE_DISABLED_FOR_TEST && occlusionCameraPos && doorList.length && itrSightPoints.length){
+    const doorOcclusionMask = itrPillarCutawayMask(doorList, occlusionCameraPos, itrSightPoints, cx, cz);
+    window.__DIAG_doorOcclusionMask = doorOcclusionMask; window.__DIAG_doorList = doorList; window.__DIAG_occlusionCameraPos = occlusionCameraPos; window.__DIAG_itrSightPoints = itrSightPoints; window.__DIAG_cx = cx; window.__DIAG_cz = cz;
+    const doorAnkleH = itrOcclusionAnkleHeight(data.wallHeightBase);
+    doorList = doorList.map(function(di, i){
+      const id = itrOcclusionIdFor("doorframe", di.x, di.z, di.yBase);
+      const entry = itrOcclusionClassify(id, !!doorOcclusionMask[i], occlusionHoldPrior);
+      if(!entry.fading) return di;
+      const split = itrSplitOccluderForAnkleGhost(di, doorAnkleH);
+      if(split.ghost){
+        doorGhostList.push(split.ghost);
+        doorGhostBuild.push({ inst: split.ghost, fadeEntry: entry });
+      }
+      return split.stub;
+    });
+  }
   // BW2-4b item 4 — DOORFRAME TEXTURE: doorframes carried texture=null (an untextured flat prism), then
   // the BW2-4 value-plunge darkened them to near-black — the loop-05/loop-02 "black monolith arch". Now
   // they take the SAME wallTex the walls/pillars do (per-face planar for the vertical prism), with the
   // darkened-trim instance color kept (NOT neutralized) so the arch reads as textured dark stone with a
   // whisper of the trim accent hue — the mock's dark textured archway, not a flat black block.
   const doorMesh = interiorBuildInstancedMesh(doorList, cx, cz, wallTex, variant, "doorframe");
+  // STAGE-A A4: ONE small ghost mesh PER blocking doorframe instance — same "never a big shared material
+  // carrying every ghost of a kind" mandate the wall/pillar ghost builds above already keep.
+  const doorGhostMesh = doorGhostBuild.length ? itrBuildOcclusionGhostMeshes(doorGhostBuild, cx, cz, wallTex, variant, "doorframe") : null;
   // STAGE-A A1 test seams, same convention as S.interiorLastFloorList/WallList/PillarList above.
   S.interiorLastDoorList = doorList;
+  S.interiorLastDoorGhostList = doorGhostList; // S-1/A4 test seam — the separately-drawn doorframe ghosts
   S.interiorLastPortalList = data.portals || [];
 
   // ═══ ROOM-SHELL COMPILER (docs/ROOM-SHELL-COMPILER.md; docs/GRAPHICS-NORTH-STAR.md Stage C unit
@@ -8859,7 +8994,7 @@ function setInteriorBoard(data){
   // both — that would double-render the same surfaces). doorMesh/skirtMesh/portalMesh/pillarMeshes
   // stay unconditional either way (this unit's scope is floor/wall/riser geometry only).
   const itrFloorWallMeshes = (ITR_ROOM_SHELL && roomShellMeshes.length) ? roomShellMeshes : [floorMesh, wallMesh, wallGhostMesh];
-  const itrAllInteriorMeshes = itrFloorWallMeshes.concat([doorMesh, skirtMesh, portalMesh]).concat(pillarMeshes).concat(pillarGhostMeshes);
+  const itrAllInteriorMeshes = itrFloorWallMeshes.concat([doorMesh, doorGhostMesh, skirtMesh, portalMesh]).concat(pillarMeshes).concat(pillarGhostMeshes);
   itrAllInteriorMeshes.forEach((mesh) => { if(mesh) S.interiorGroup.add(mesh); });
   S.interiorMeshCount = itrAllInteriorMeshes.filter(Boolean).length;
 
@@ -9876,6 +10011,7 @@ window.Theater._interiorPillarListForTest = function(){ return S.interiorLastPil
 window.Theater._interiorWallListForTest = function(){ return S.interiorLastWallList || []; };
 window.Theater._interiorWallGhostListForTest = function(){ return S.interiorLastWallGhostList || []; };
 window.Theater._interiorPillarGhostListForTest = function(){ return S.interiorLastPillarGhostList || []; };
+window.Theater._interiorDoorGhostListForTest = function(){ return S.interiorLastDoorGhostList || []; };
 // STAGE-A A1 (docs/STAGE-A.md) — TEST-ONLY SEAMS, same read-only convention as the pillar/wall lists
 // above: the exact per-instance lists the live floorMesh/doorMesh were built from, plus the DARKNESS
 // PORTAL card list (empty unless ITR_ACTIVE_ROOM_ONLY is on and a focus room was requested) — lets

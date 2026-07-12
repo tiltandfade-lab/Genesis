@@ -170,16 +170,23 @@ function rollWildernessWalk(opts){
   for(let i=1;i<=legCount;i++){
     if(biomes){ cur = { biome:biomes[Math.min(i-1,biomes.length-1)], biomeDesc:"" }; }
     else if(i>1 && Math.random()<shiftChance) cur=wwalkBiome(); // the terrain changes underfoot
+    // WDV-2 (docs/WALK-NATIVE-A.md): rollRefs accumulates this leg's graphics-critical provenance
+    // (feature/dressing/signOfPassage — the wilderness field set the spec names, minus `area` which
+    // only the arrival segment carries; `light` is omitted here on purpose because walkRollLight is a
+    // seeded-hash pick over THEATER_LIGHT_TABLE, not a compiled walk table — no {tableId,total} exists
+    // to stamp, per the spec's own "no single table roll" carve-out).
+    const legRollRefs={};
     const [sensory]=walkPick("wilderness-sensory",1);
-    const [feature,featFlavor]=walkPick("wilderness-feature",1,2);
-    const [sign,signEffect]=walkPick("wilderness-sign-of-passage",1,2);
+    const featureR=walkPickStamped("wilderness-feature",1,2); const [feature,featFlavor]=featureR.values; legRollRefs.feature=featureR.source;
+    const signR=walkPickStamped("wilderness-sign-of-passage",1,2); const [sign,signEffect]=signR.values; legRollRefs.signOfPassage=signR.source;
     const [footing]=walkPick("wilderness-footing",1);
     // DRESSING-WIRING.md §"Behavior" 1/2: one dressing roll per LEG — {text,condition} (the shape
     // theaterSegmentFeatureText/theaterPropForText and activeWalkDigest both key off, matching
     // dungeon-walk.js's/walk.js's own dressing rolls added alongside this one). Previously rolled
     // here under a `name` key (wiring-sweep-A) but never joined the theater text pool or the
     // digest — this is the field-shape fix + the actual wiring, not a new roll.
-    const [d1]=walkPick("wilderness-set-dressing",1), [c1]=walkPick("wilderness-set-dressing-condition",1);
+    const d1R=walkPickStamped("wilderness-set-dressing",1); const [d1]=d1R.values; legRollRefs.dressing=d1R.source;
+    const [c1]=walkPick("wilderness-set-dressing-condition",1);
     // DRESSING-ATMOSPHERE.md: one atmo roll per LEG (air/odor/sound, uniform lane pick), same
     // shape/cadence as the dressing roll immediately above.
     const legAtmo=walkRollAtmo("wilderness");
@@ -215,18 +222,23 @@ function rollWildernessWalk(opts){
       interactable, regionEncounter, activeMagic, artFind,
       loot: wwalkLootFor(lootLane, i, false, enc.isEnemy, tier),
       exits:[{ targetId:`l${i+1}`, num:i+1, label:i+1>legCount?"Arrival":"Leg", isFinale:i+1>legCount }],
+      rollRefs:legRollRefs,
     });
   }
 
   // arrival / destination — the site the journey reaches
   const arrNum=legCount+1;
-  const [areaType,dims,side]=walkPick("wilderness-area-type",1,2,3);
-  const [arrFeature,arrFeatFlavor]=walkPick("wilderness-feature",1,2);
+  // WDV-2: rollRefs for the arrival segment — area/feature/dressing (no signOfPassage: arrival never
+  // rolls that table; `light` omitted for the same no-compiled-table reason as the leg loop above).
+  const arrRollRefs={};
+  const areaR=walkPickStamped("wilderness-area-type",1,2,3); const [areaType,dims,side]=areaR.values; arrRollRefs.area=areaR.source;
+  const arrFeatureR=walkPickStamped("wilderness-feature",1,2); const [arrFeature,arrFeatFlavor]=arrFeatureR.values; arrRollRefs.feature=arrFeatureR.source;
   const [arrSensory]=walkPick("wilderness-sensory",1);
   // DRESSING-WIRING.md §"Behavior" 1: arrival carries a `.feature` field the same as every other leg
   // (unlike urban's finale, which carries none) — dressing follows that same precedent rather than
   // treating arrival as feature-less.
-  const [arrDressText]=walkPick("wilderness-set-dressing",1), [arrDressCond]=walkPick("wilderness-set-dressing-condition",1);
+  const arrDressTextR=walkPickStamped("wilderness-set-dressing",1); const [arrDressText]=arrDressTextR.values; arrRollRefs.dressing=arrDressTextR.source;
+  const [arrDressCond]=walkPick("wilderness-set-dressing-condition",1);
   // DRESSING-ATMOSPHERE.md: arrival carries atmo the same as every other leg (mirrors the
   // dressing precedent above — wilderness arrival is not exempted the way urban finales are).
   const arrAtmo=walkRollAtmo("wilderness");
@@ -236,6 +248,7 @@ function rollWildernessWalk(opts){
     areaType, dims, side, feature:{ name:arrFeature, flavor:arrFeatFlavor }, sensory:arrSensory, light:arrLight,
     dressing:{ text:arrDressText, condition:arrDressCond }, atmo:arrAtmo,
     loot: wwalkLootFor(lootLane, arrNum, true, false, tier), exits:[],
+    rollRefs:arrRollRefs,
   });
 
   // linear route edges

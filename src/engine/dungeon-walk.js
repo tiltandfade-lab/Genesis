@@ -106,14 +106,19 @@ const DWALK_GRAPH_BUILDERS = {
 };
 
 // ─── area type (size-preference filtered) ────────────────────────────────────
+// WDV-2 (docs/WALK-NATIVE-A.md) — returns an additive `_roll:{tableId,total,band}` sibling captured
+// off the SAME walkRnd(pool) pick (no second roll); the caller lifts it into segment.rollRefs.area
+// and discards `_roll` from `area` itself, so segment.areaType/dims/side stay byte-identical.
 function dwalkArea(sizePref){
   const rows=walkRows("dungeon-area-type");
-  if(!rows.length) return { areaType:"", dims:"", side:"" };
+  if(!rows.length) return { areaType:"", dims:"", side:"", _roll:null };
   let pool=rows;
   if(sizePref==="small"){ const f=rows.filter(r=>!(/\b[4-9]\d'/.test((r[5]&&r[5][1])||""))); if(f.length>=5) pool=f; }
   else if(sizePref==="medium"){ const f=rows.filter(r=>!(/\b[5-9]\d'/.test((r[5]&&r[5][1])||""))); if(f.length>=5) pool=f; }
-  const c=walkRnd(pool)[5]||[];
-  return { areaType:(c[0]||"").trim(), dims:(c[1]||"").trim(), side:(c[2]||"").trim() };
+  const row=walkRnd(pool);
+  const c=row[5]||[];
+  return { areaType:(c[0]||"").trim(), dims:(c[1]||"").trim(), side:(c[2]||"").trim(),
+           _roll:{ tableId:"dungeon-area-type", total:(typeof row[0]==="number"?row[0]:null), band:row[2]||null } };
 }
 
 // ─── loot (tier+depth budget; boss gets top) ─────────────────────────────────
@@ -532,14 +537,31 @@ function rollDungeonWalk(opts){
     // WIRING-SWEEP-B §10 (docs/WIRING-MAP.md item 20, world.wiring-b): a door-dressing pair
     // (dungeon-door-type + dungeon-door-state) per exit — "doors ARE the edges" (this file's own
     // header comment); additive, null-safe (dwalkDoorRoll degrades independently per half).
-    const exits=(graph.adj[nodeId]||[]).map(t=>({ targetId:t, num:roomNum[t], label:nodeMap[t]?.label||"", isFinale:!!nodeMap[t]?.isFinale,
-      door:(typeof dwalkDoorRoll==="function") ? dwalkDoorRoll() : null }));
+    // WDV-2 (docs/WALK-NATIVE-A.md): rollRefs accumulates this room's graphics-critical provenance
+    // (area/feature/dressing/door/light/object/scene — the dungeon field set the spec names).
+    // `door` is captured off the FIRST exit's roll only (rollRefs is a flat per-room map, one entry
+    // per fieldKey; a room can have several exits/doors, so this is a representative sample, not a
+    // per-exit index — every exit's own door object is untouched either way).
+    const rollRefs={};
+    const exits=(graph.adj[nodeId]||[]).map((t,exitIdx)=>{
+      let door=null;
+      if(typeof dwalkDoorRoll==="function"){
+        if(exitIdx===0){ const doorProv={}; door=dwalkDoorRoll(doorProv); if(doorProv.type) rollRefs.door=doorProv.type; }
+        else door=dwalkDoorRoll();
+      }
+      return { targetId:t, num:roomNum[t], label:nodeMap[t]?.label||"", isFinale:!!nodeMap[t]?.isFinale, door };
+    });
     const area=dwalkArea(sizePref);
-    const [scene]=walkPick("dungeon-scene",1);
-    const [lighting,lightFlavor]=walkPick("dungeon-lighting",1,2);
+    if(area._roll) rollRefs.area=area._roll;
+    const sceneR=walkPickStamped("dungeon-scene",1); const [scene]=sceneR.values; rollRefs.scene=sceneR.source;
+    const lightingR=walkPickStamped("dungeon-lighting",1,2); const [lighting,lightFlavor]=lightingR.values;
+    // WDV-2: dungeon's ONLY compiled table backing the "practical" (light) role — the structured
+    // `light` object below is a seeded-hash THEATER_LIGHT_TABLE pick (theater-data.js), which carries
+    // no {tableId,total} of its own; dungeon-lighting's roll is the honest provenance to stamp here.
+    rollRefs.light=lightingR.source;
     const [sensory]=walkPick("dungeon-sensory",1);
-    const [object,objFlavor]=walkPick("dungeon-interactable-object",1,2);
-    const [feature,featFlavor,featDims]=walkPick("dungeon-feature",1,2,3);
+    const objectR=walkPickStamped("dungeon-interactable-object",1,2); const [object,objFlavor]=objectR.values; rollRefs.object=objectR.source;
+    const featureR=walkPickStamped("dungeon-feature",1,2,3); const [feature,featFlavor,featDims]=featureR.values; rollRefs.feature=featureR.source;
     // DRESSING-WIRING.md §"Behavior" 1: one dressing roll per ROOM — Dungeon Set Dressing (the
     // object/feature line) + Dungeon Set Dressing Condition (the paired variant/condition roll),
     // stored {text,condition} — same shape wild-walk.js's leg loop and walk.js's urban segment
@@ -548,7 +570,8 @@ function rollDungeonWalk(opts){
     // air-currents) is NOT rolled here — DRESSING-WIRING.md's reskin determination wires dungeon
     // walks off Dungeon Set Dressing only (the mega table compiles under generic non-namespaced
     // keys today and stays out of scope for this unit).
-    const [dressText]=walkPick("dungeon-set-dressing",1), [dressCond]=walkPick("dungeon-set-dressing-condition",1);
+    const dressTextR=walkPickStamped("dungeon-set-dressing",1); const [dressText]=dressTextR.values; rollRefs.dressing=dressTextR.source;
+    const [dressCond]=walkPick("dungeon-set-dressing-condition",1);
     // DRESSING-ATMOSPHERE.md: one atmo roll per ROOM (air/odor/sound, uniform lane pick), joining
     // `base` below so EVERY room including the finale carries it (mirrors dressing's own cadence
     // here — no urban-style finale exemption for dungeon rooms).
@@ -563,7 +586,7 @@ function rollDungeonWalk(opts){
                  areaType:area.areaType, dims:area.dims, side:area.side, scene, lighting, lightFlavor, sensory,
                  object:{ name:object, flavor:objFlavor }, feature:{ name:feature, flavor:featFlavor, dims:featDims },
                  dressing:{ text:dressText, condition:dressCond }, atmo,
-                 secret:dwalkSecret() };
+                 secret:dwalkSecret(), rollRefs };
     if(node.isFinale){
       const boss=dwalkBoss(bossAffinity), revelation=dwalkRevelation(revelAffinity);
       const [finaleType,finaleDesc]=walkPick("dungeon-finale-type",1,3), [exitState]=walkPick("dungeon-exit-state",1);

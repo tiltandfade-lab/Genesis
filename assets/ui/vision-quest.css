@@ -201,11 +201,13 @@ body[data-screen="bardo"]{overflow:hidden;background:var(--vq-void)}
   linear-gradient(rgba(235,224,197,.98),rgba(216,199,162,.98)),url("../textures/parchment.jpg") center/cover;
   box-shadow:0 0 0 1px #3a2d15,0 0 80px rgba(202,168,90,.14),var(--vq-shadow);clip-path:polygon(18px 0,calc(100% - 18px) 0,100% 18px,100% calc(100% - 18px),calc(100% - 18px) 100%,18px 100%,0 calc(100% - 18px),0 18px)}
 #levelModal .modal::before{content:"";position:absolute;inset:9px;border:1px solid rgba(132,109,57,.45);pointer-events:none;z-index:2}
+#levelBody{height:100%;min-height:0}
 .level-rite{height:100%;display:flex;flex-direction:column;align-items:stretch;padding:24px 34px 28px;text-align:center}
 .level-rite .level-kicker{margin:0 0 3px;color:#806121}
-.level-crossing{display:flex;justify-content:center;align-items:center;gap:18px;margin:2px 0}
+.level-crossing{position:relative;display:flex;justify-content:center;align-items:center;gap:18px;margin:2px 0}
+.level-crossing::before{content:"";position:absolute;left:50%;top:-18px;bottom:-18px;width:1px;background:linear-gradient(transparent,rgba(128,97,33,.34) 28%,rgba(240,214,138,.85) 50%,rgba(128,97,33,.34) 72%,transparent)}
 .level-number{font:600 clamp(38px,6vw,68px)/1 var(--display);color:#7a6a4d}.level-number.new{color:#715114;text-shadow:0 0 18px rgba(202,168,90,.38)}
-.level-flare{font-size:23px;color:#9b7427;text-shadow:0 0 22px #fff0b1;animation:levelFlare 2s ease-in-out infinite}
+.level-flare{position:relative;z-index:1;padding:2px 5px;font-size:28px;color:#9b7427;text-shadow:0 0 22px #fff0b1;animation:levelFlare 2s ease-in-out infinite}
 @keyframes levelFlare{50%{transform:scale(1.18);filter:brightness(1.35)}}
 .level-rite>h3{font-size:clamp(19px,2vw,27px)!important;color:#4d3b1c!important;margin:5px 0 0!important}
 .level-rite>.bardo-gap{color:#716247;font-size:17px;margin:4px auto 7px;max-width:620px}
@@ -214,7 +216,7 @@ body[data-screen="bardo"]{overflow:hidden;background:var(--vq-void)}
 .level-choices .bardo-opts.grid{grid-template-columns:repeat(auto-fill,minmax(210px,1fr));max-width:none;gap:8px}
 .level-choices .bardo-opt{background:rgba(255,253,242,.42);border-color:rgba(132,109,57,.34);box-shadow:inset 0 0 0 1px rgba(255,255,255,.3)}
 .level-choices .bardo-opt.sel{background:rgba(225,195,112,.32);border-color:#8c6823;box-shadow:inset 4px 0 0 #967026}
-.level-rite>.bardo-nav{flex:0 0 auto;margin:12px 0 0;padding-top:13px;border-top:1px solid rgba(132,109,57,.4)}
+.level-rite>.bardo-nav{position:relative;z-index:3;flex:0 0 auto;margin:12px 0 0;padding-top:13px;border-top:1px solid rgba(132,109,57,.4);background:linear-gradient(transparent,rgba(234,223,197,.98) 18%)}
 .level-rite>.bardo-nav .btn.primary{clip-path:polygon(8px 0,calc(100% - 8px) 0,100% 8px,100% calc(100% - 8px),calc(100% - 8px) 100%,8px 100%,0 calc(100% - 8px),0 8px)}
 
 @media(max-width:1100px){

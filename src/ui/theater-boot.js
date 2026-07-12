@@ -6504,6 +6504,27 @@ const MOTE_TINT = { ember: 0xffb066, dust: 0xcfc9a8 };
 // below, and dev/verify-bw3-4-light-shafts.mjs's own regression check against the pre-unit call shape.
 const MOTE_POOL_BIAS_FRACTION = 0.65;
 const MOTE_POOL_RADIUS = 1.8;
+// SOFT-MOTE TEXTURE (2026-07-11, Adam's "little floating tiny rhomboids" report): a mote was a bare
+// PlaneGeometry with a FLAT MeshBasicMaterial — a hard-edged square that foreshortens into a diamond
+// at the ~20° camera, reading as a floating rhomboid rather than a soft dust speck. A radial-gradient
+// alpha (bright center → transparent edge) makes each mote a soft glowing dot whose foreshortening is
+// imperceptible (a soft blob is a soft blob at any angle). Built once + cached (like every other
+// generated texture in this file); additive blending keeps it a warm glow, not an opaque disc.
+let MOTE_SOFT_TEX = null;
+function moteSoftTexture(){
+  if(MOTE_SOFT_TEX) return MOTE_SOFT_TEX;
+  if(typeof document === "undefined" || !document.createElement) return null; // headless: no canvas, motes stay flat (never rendered there)
+  const S = 64, canvas = document.createElement("canvas");
+  canvas.width = S; canvas.height = S;
+  const ctx = canvas.getContext("2d");
+  const g = ctx.createRadialGradient(S/2, S/2, 0, S/2, S/2, S/2);
+  g.addColorStop(0.0, "rgba(255,255,255,1)");
+  g.addColorStop(0.4, "rgba(255,255,255,0.55)");
+  g.addColorStop(1.0, "rgba(255,255,255,0)");
+  ctx.fillStyle = g; ctx.fillRect(0, 0, S, S);
+  MOTE_SOFT_TEX = new THREE.CanvasTexture(canvas);
+  return MOTE_SOFT_TEX;
+}
 function interiorBuildMotes(seedStr, bounds, kind, lights, cx, cz){
   const group = new THREE.Group();
   const b = bounds || { minX: 0, maxX: 0, minZ: 0, maxZ: 0 };
@@ -6534,7 +6555,8 @@ function interiorBuildMotes(seedStr, bounds, kind, lights, cx, cz){
     const geo = new THREE.PlaneGeometry(size, size);
     const mat = new THREE.MeshBasicMaterial({
       color, transparent: true, opacity: 0.55, blending: THREE.AdditiveBlending,
-      depthWrite: false, side: THREE.DoubleSide
+      depthWrite: false, side: THREE.DoubleSide,
+      map: moteSoftTexture() // soft radial dot, not a hard square (the "floating rhomboid" fix)
     });
     const mesh = new THREE.Mesh(geo, mat);
     let x, z;
@@ -7368,10 +7390,13 @@ const itrOcclusionAnkleHeight = itrPillarStubHeight;
 // a figure directly behind a full-height occluder genuinely reads occluded BEFORE trusting the fixed
 // (default-on) render's green. No product caller ever sets this — false everywhere except the harness.
 let ITR_OCCLUSION_FADE_DISABLED_FOR_TEST = false;
-// S-1 GHOST OPACITY — Adam's own number ("~5%"): the removed upper portion of an occluding wall/pillar
-// renders at this opacity instead of vanishing outright, so the player can still tell a column/wall is
-// there while the figure behind it reads clearly through it.
-const ITR_OCCLUSION_GHOST_OPACITY = 0.05;
+// S-1 GHOST OPACITY — the removed upper portion of an occluding wall/pillar renders at this opacity
+// instead of vanishing outright, so the player can still tell a column/wall is there while the figure
+// behind it reads clearly through it. Adam's original "~5%" (P-3 real demo, 2026-07-11) proved
+// IMPERCEPTIBLE — on/off frames were indistinguishable, the column just vanished, defeating his own
+// "know something's there" intent. Bumped to 0.2 to actually read as a faint presence; still low
+// enough that the figure behind reads clearly. A dial — Adam tunes from the re-shoot.
+const ITR_OCCLUSION_GHOST_OPACITY = 0.2;
 // splits ONE occluding instance into its own SOLID ankle-height STUB (rendered in the normal opaque
 // mesh, unchanged material/shadow behavior — byte-identical to a non-occluding instance except for its
 // shorter sy) + a translucent GHOST spanning from the ankle up to the instance's own full original

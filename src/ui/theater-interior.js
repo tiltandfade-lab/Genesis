@@ -426,6 +426,31 @@ function itrFocusRoomSet(plan, focusSegNum, radius) {
   return keep;
 }
 
+// ─── STAGE-A A1 (docs/STAGE-A.md, docs/GRAPHICS-NORTH-STAR.md §4.3): ONE-ROOM-LITERAL ─────────────────
+// "the active room ALONE owns render geometry" — a doorway becomes a shallow DARKNESS PORTAL, never
+// the adjacent room's own shell. Pre-A1, interiorBuildBoard always ran itrFocusRoomSet(plan,
+// focusSegNum, radius) above, keeping the focus room PLUS `radius` hops of neighbors (a small map
+// overview, not a staged single room). `var` (not `const`) — same classic-script "auto-attaches to
+// window" convention this file's own header documents for function declarations — so a live session
+// or a verify harness can flip it at runtime (`window.ITR_ACTIVE_ROOM_ONLY = false`) for an A/B
+// capture without touching S.boardKey/dirty-key plumbing (theater-boot.js's setInteriorBoard already
+// treats any board-shape change, including a flag-driven one, as a fresh board via its own JSON-diff
+// dirty key). Default ON; OFF restores the pre-A1 multi-room (radius-hop) render byte-for-byte — see
+// itrFocusRoomSet just above, still the ONLY function that computes a neighbor-hop keep set (this
+// unit never edits it, just stops calling it by default).
+var ITR_ACTIVE_ROOM_ONLY = true;
+
+// itrActiveRoomKeepSet(plan, focusSegNum) -> Set([focusSegNum]) | null. Mirrors itrFocusRoomSet's own
+// "never render nothing on a bad focus" degrade: an unrecognized/missing focusSegNum falls back to
+// null (render the WHOLE plan) rather than an empty keep set, and a null focusSegNum (no focus room
+// requested — the 80-room draw-call-budget check, a whole-plan study scene) is also null, same as
+// itrFocusRoomSet's own first line.
+function itrActiveRoomKeepSet(plan, focusSegNum) {
+  if (focusSegNum == null) return null;
+  const exists = (plan.rooms || []).some((r) => r.segNum === focusSegNum);
+  return exists ? new Set([focusSegNum]) : null;
+}
+
 /* core-kept grid: true for a cell inside a kept room's rect, or a corridor cell whose corridor connects
    two kept rooms. `keepSet===null` means "keep everything" (whole-plan mode). */
 function itrBuildKeepGrid(plan, keepSet, roomIdx, corridorIdx) {
@@ -567,6 +592,14 @@ const ITR_DOOR_HEIGHT_FRAC = 0.85;  // a normal doorframe reads slightly lower t
 const ITR_SQUEEZE_HEIGHT_FRAC = 0.5;
 const ITR_SQUEEZE_WIDTH_FRAC = 0.6;
 const ITR_PILLAR_MIN_DIM = 6;       // room must be >= this many cells per axis to earn corner pillars
+
+// STAGE-A A1 — DARKNESS PORTAL cards: a shallow recessed slab standing just past a boundary door's own
+// frame, filling the spot a neighbor room's shell used to occupy. ITR_PORTAL_DEPTH is the card's own
+// thickness (a card, not a wall); ITR_PORTAL_GAP is the extra push beyond the doorframe/reveal jambs
+// before it sits, so the opening reads as a short corridor THROAT (frame, a beat of visible depth, then
+// solid dark) rather than a flat plane flush against the arch.
+const ITR_PORTAL_DEPTH = 0.12;
+const ITR_PORTAL_GAP = 0.15;
 
 // ─── BEAUTY-WAVE-2.md BW2-5 (SILHOUETTE UPGRADES): door arches + wall-thickness reveals ────────────
 // "doorframe prisms gain an arch header (2-3 stacked prisms corbelling in)... + visible wall THICKNESS
@@ -1002,14 +1035,24 @@ function itrCoverCardFor(realmId, rng) {
  *   cover:[{x,z,y,sx,sy,sz,color,slug,proc,roomSegNum}] (VP3 item 3 — ground-cover decal cards, 1-3
  *     seeded per room, FLOOR cells only, flat +0.01 above the floor plane; another `instances` sibling,
  *     procedural tint-splat until real cover art lands via itrCoverCardFor's VP2/VP6 seam),
+ *   portals:[{x,z,ox,oz,sx,sy,sz,color,yBase:0,roomSegNum,neighborSegNum}] (STAGE-A A1 — DARKNESS
+ *     PORTAL cards: another `instances` sibling, one per boundary door whose OTHER side isn't in the
+ *     render keep set — a shallow recessed dark slab standing just past the doorframe, filling the
+ *     spot the neighbor room's own shell used to render. Only populated when ITR_ACTIVE_ROOM_ONLY is
+ *     on (default) AND a focus room was requested; empty array otherwise (whole-plan renders, or the
+ *     flag flipped off for an A/B capture, carry zero portals — every door is a plain open frame,
+ *     same as pre-A1).
  *   bounds:{minX,maxX,minZ,maxZ},
- *   meta:{roomCount,floorCount,wallCount,doorCount,pillarCount,skirtCount,coverCount} }
+ *   meta:{roomCount,floorCount,wallCount,doorCount,pillarCount,skirtCount,coverCount,portalCount} }
  * `plan` is a U1 spatializePlan() output, ideally U2-extended (semanticizePlan) for room.scaleDomain/
  * door.transition/door.squeeze — a bare U1 plan degrades cleanly (every room defaults scaleDomain 1.0,
  * every door renders as a normal non-squeeze frame), never throws.
- * `opts`: { realmId, env, focusSegNum, radius=1 } — focusSegNum+radius trims to "current room +
- * immediate surroundings" (DUNGEON-GRAPH.md U3 item 2); omit focusSegNum to render the WHOLE plan
- * (the 80-room draw-call-budget check, and the study card's single-room scenes).
+ * `opts`: { realmId, env, focusSegNum, radius=1 } — STAGE-A A1: with ITR_ACTIVE_ROOM_ONLY on (default),
+ * focusSegNum alone selects the render keep set ({focusSegNum} exactly — radius is READ but ignored,
+ * kept only so an OFF-flag caller/harness can still request the pre-A1 radius-hop behavior); omit
+ * focusSegNum to render the WHOLE plan (the 80-room draw-call-budget check, and the study card's
+ * whole-plan scenes). ITR_ACTIVE_ROOM_ONLY=false restores the pre-A1 "focusSegNum+radius trims to
+ * current room + immediate surroundings" behavior (DUNGEON-GRAPH.md U3 item 2) byte-for-byte.
  * Pure: same (plan,opts) snapshot always yields byte-identical instance arrays (no RNG). */
 function interiorBuildBoard(plan, opts) {
   opts = opts || {};
@@ -1022,7 +1065,12 @@ function interiorBuildBoard(plan, opts) {
   const roomIdx = itrRoomIndex(plan);
   const corridorIdx = itrCorridorIndex(plan);
   const doorIdx = itrDoorIndex(plan);
-  const keepSet = itrFocusRoomSet(plan, opts.focusSegNum, radius);
+  // STAGE-A A1: the active room ALONE owns render geometry by default — keepSet collapses to
+  // {focusSegNum}, never a radius-hop neighborhood. ITR_ACTIVE_ROOM_ONLY=false is the documented
+  // escape hatch back to the pre-A1 itrFocusRoomSet(plan, focusSegNum, radius) neighbor-hop keep set.
+  const keepSet = ITR_ACTIVE_ROOM_ONLY
+    ? itrActiveRoomKeepSet(plan, opts.focusSegNum)
+    : itrFocusRoomSet(plan, opts.focusSegNum, radius);
   const kept = itrBuildKeepGrid(plan, keepSet, roomIdx, corridorIdx);
 
   // BW2-3 MATERIAL TEXEL — resolve the folded PACKET-02 texture-file pointers for this board (THE
@@ -1050,6 +1098,7 @@ function interiorBuildBoard(plan, opts) {
 
   const idx = (x, y) => y * plan.cellW + x;
   const floor = [], wall = [], doorframe = [], pillar = [];
+  const portals = []; // STAGE-A A1 — DARKNESS PORTAL cards, populated in the DOOR branch below
   let minX = Infinity, maxX = -Infinity, minZ = Infinity, maxZ = -Infinity;
   const track = (x, z) => { minX = Math.min(minX, x); maxX = Math.max(maxX, x); minZ = Math.min(minZ, z); maxZ = Math.max(maxZ, z); };
 
@@ -1151,6 +1200,12 @@ function interiorBuildBoard(plan, opts) {
         // strength, a mood wash never a color-replace); every other doorframe/pillar in the room stays
         // the kit's own flat trimColor.
         const doorRoom = itrRoomRoleNear(x, y, plan, roomIdx);
+        // hoisted so both the wall-thickness reveal block below AND the STAGE-A A1 darkness-portal
+        // block (further below) share the SAME edge-axis detection off doorRoom's own rect — never a
+        // second derivation. See the reveal block's own header comment for the "why room rect edge,
+        // not a neighbor-WALL scan" rationale.
+        const onLeftRight = !!doorRoom && (x === doorRoom.x || x === doorRoom.x + doorRoom.w - 1);
+        const onTopBottom = !!doorRoom && (y === doorRoom.y || y === doorRoom.y + doorRoom.d - 1);
         let trimColor = kit.trimColor;
         if (doorRoom && !accentedRooms.has(doorRoom.segNum)) {
           const doorSceneDir = sceneDirectionFor(kit.realmId, doorRoom.role);
@@ -1192,8 +1247,6 @@ function interiorBuildBoard(plan, opts) {
         // e.g. an interior door) — never throws.
         const revealW = (1 - wFrac) / 2;
         if (revealW > 0.01 && doorRoom) {
-          const onLeftRight = x === doorRoom.x || x === doorRoom.x + doorRoom.w - 1;
-          const onTopBottom = y === doorRoom.y || y === doorRoom.y + doorRoom.d - 1;
           const revealSceneDir = sceneDirectionFor(kit.realmId, doorRoom.role);
           const revealColor = itrDarkenHex(kit.wallColor, revealSceneDir.valueScript.wall);
           // sy = baseH (the FULL, un-fractioned wall height at this cell — same value every real WALL
@@ -1214,6 +1267,38 @@ function interiorBuildBoard(plan, opts) {
               wall.push({ x, z: y, sx: revealW, sy: baseH, sz: 1, color: revealColor, scaleDomain: (d ? (d.heightScale || 1.0) : 1.0), ox: sign * (wFrac / 2 + revealW / 2) });
             }
           });
+        }
+
+        // STAGE-A A1 (docs/STAGE-A.md, docs/GRAPHICS-NORTH-STAR.md §4.3): DARKNESS PORTAL — a boundary
+        // door whose OTHER side (plan.doors' own `betweenSegs`, the corridor-edge room pair U1 already
+        // stamped on this exact cell — never an invented adjacency) is NOT in the render keep set gets
+        // a shallow recessed dark card standing just past its own frame, filling the spot the neighbor
+        // room's shell used to render pre-A1. Gated on ITR_ACTIVE_ROOM_ONLY so the OFF state (the
+        // documented reversibility escape hatch) renders every door as a plain open frame, byte-
+        // identical to pre-A1 (zero portals emitted). Also gated on keepSet!==null (a focus room was
+        // actually requested) — a whole-plan render has no "neighbor" concept to portal away.
+        if (ITR_ACTIVE_ROOM_ONLY && keepSet !== null && doorRoom) {
+          const neighborSeg = ((d && d.betweenSegs) || []).find((s) => s !== doorRoom.segNum);
+          if (neighborSeg == null || !keepSet.has(neighborSeg)) {
+            // outward = away from doorRoom's own center, along whichever axis the door sits on the
+            // rect edge of (same axis detection the reveal block above already shares) — the direction
+            // the corridor throat actually recedes into, not an arbitrary pick.
+            let dirX = 0, dirZ = 0;
+            if (onLeftRight && !onTopBottom) dirX = (x === doorRoom.x) ? -1 : 1;
+            else if (onTopBottom && !onLeftRight) dirZ = (y === doorRoom.y) ? -1 : 1;
+            const push = wFrac / 2 + ITR_PORTAL_DEPTH / 2 + ITR_PORTAL_GAP;
+            portals.push({
+              x, z: y,
+              ox: dirX * push, oz: dirZ * push,
+              sx: dirX !== 0 ? ITR_PORTAL_DEPTH : wFrac,
+              sy: h,
+              sz: dirZ !== 0 ? ITR_PORTAL_DEPTH : wFrac,
+              // the SAME void/backdrop color this realm's fog already reads as (kit.fog.color) — the
+              // card reads as "the same darkness beyond the map edge", not a new invented tone.
+              color: kit.fog.color,
+              roomSegNum: doorRoom.segNum, neighborSegNum: neighborSeg != null ? neighborSeg : null,
+            });
+          }
         }
       } else if (code === SPATIAL_CELL.WALL) {
         const scale = itrWallScale(x, y, plan, roomIdx, corridorIdx);
@@ -1395,6 +1480,10 @@ function interiorBuildBoard(plan, opts) {
     // (never counted toward the "4 known instance kinds" check, same convention skirt/cover establish).
     furniture: furniture,
     wallProps: wallProps,
+    // STAGE-A A1 — DARKNESS PORTAL cards: a sibling of `instances` (same "not a 5th instance kind"
+    // convention skirt/cover/furniture/wallProps already establish above). Empty unless
+    // ITR_ACTIVE_ROOM_ONLY is on AND a focus room was requested (see this function's own doc comment).
+    portals: portals,
     daisTop: daisTop,
     lights: lights,
     bounds: { minX: minX, maxX: maxX, minZ: minZ, maxZ: maxZ },
@@ -1410,7 +1499,7 @@ function interiorBuildBoard(plan, opts) {
     meta: { roomCount: roomCount, floorCount: floor.length, wallCount: wall.length,
       doorCount: doorframe.length, pillarCount: pillar.length, lightCount: lights.length,
       skirtCount: skirt.length, coverCount: cover.length, furnitureCount: furniture.length,
-      wallPropsCount: wallProps.length }
+      wallPropsCount: wallProps.length, portalCount: portals.length }
   };
 }
 

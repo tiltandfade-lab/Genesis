@@ -221,3 +221,67 @@ Estimated total: ~51 sheets / ~900 cells — the next big codex campaign after r
    (graphic death is a feature — the standing craft ruling). The children carve-out is
    MECHANICAL, not interpretive: child-tagged entities never receive blood decals or
    spatter; impact/dust effects only. Wired into BEAUTY-WAVE VP6 §4.
+
+---
+
+# PART III — BW5 SECOND INTEGRATION PASS (render-layer laws; Fable 2026-07-11)
+
+Detail for `docs/BEAUTY-WAVE-5.md` SEAM 0. These EXTEND Parts I–II; where they touch an earlier
+law the amendment is named. (EXTRUSION-MODEL folds HERE per Adam's ruling — no standalone doc.)
+
+## §H THE PROP CONSTRUCTION MODEL — extrude · faced-box · model (folds BW5 S0-4; supersedes §C's flat-card geometry)
+
+**EVERYTHING placed is volumetric** — the flat-card tier is retired for objects and surface-attached
+props (only the sparkle affordance, BW5 IA-4, has no mesh). But "volumetric" resolves to **three
+construction classes, declared per archetype**; a prop is built the cheapest way that reads correctly:
+
+1. **EXTRUDE** — flat / silhouette-defined props (paintings, grates, banners, sconces, levers, small
+   clutter, most surface-attached items). One flat sprite → a **simplified-contour extrusion**:
+   marching-squares alpha contour → **Douglas-Peucker simplification** → ExtrudeGeometry (~200 tris).
+   The jagged pixel boundary is smoothed to a clean polygon BEFORE extruding — this is exactly why a
+   sprite does NOT become 50k faces "just because pixels are crap" (it's the BW2 SILHOUETTE tier;
+   Box/Silhouette/Card is auto-MEASURED from alpha coverage, no hand-tagging). Sides
+   auto-material-match by edge-sampling the art border. Extruded to its depth (below).
+2. **FACED-BOX** — rectilinear multi-face furniture (bed, bench, pew, table, cabinet, cot, sarcophagus,
+   counter, shelf, chest-base). A small parametric box (2–6 prisms) that **WEARS sprite/texture FACES
+   per face** (top / side / front) — you generate the faces and apply them; you do NOT extrude one
+   flat view. **You don't extrude a bed** — a bed is a faced-box wearing a bedding-top + a frame-side
+   sprite. (`furnitureFor(kind,realm)`, ROOM-GRAMMAR §4's poly-furniture roster, the crate-faces
+   pattern — already the engine's furniture channel.)
+3. **MODEL** — bespoke / articulated hero props + set-pieces. The **chest = a faced-box base + a
+   separately-modeled hinged lid** (the lid hinges on the BW4 state-transition tween); portals,
+   complex centerpieces. Whole-object / `theater-parts` path.
+
+**Construction class is an authored per-archetype declaration** (a painting is always EXTRUDE, a
+bench always FACED-BOX) — NOT auto-measured. The auto-measure only picks the EXTRUDE mesh shape.
+
+**Depth (EXTRUDE class) — archetype default + optional per-sprite override.** Each archetype declares
+a default depth (doors/paintings/grates are fine at the class level); an individual sprite MAY carry a
+stored `extrudeDepth` override, tucked ON the sprite object, where it legitimately differs. Authored
+once (a director pass), never re-derived per roll. **This AMENDS the PROP PERSPECTIVE LAW** (BW2):
+from "depth per archetype (fixed table)" → "**archetype default + optional per-sprite stored
+override**." Depth bands (PACKET-03 v2 ladder): thin surface 0.02 · framed flat 0.07 · mounted 0.12 ·
+fixture 0.14 · shallow furniture 0.18 · floor volume 0.15–0.3 · deep wall 0.30–0.35. Flush fixtures
+(grate/vent) at 0.02 — EXCEPT **off-kilter** (spice-band + state, BW5 S0-3): tilted proud (KILTER law).
+
+**§C RECONCILED.** §C's INTERACTIVE OBJECTS keep their state model (`archetype × state`, aspects[]) but
+NOT their "flat sprite card, state = texture-swap" geometry — each object now takes one construction
+class above (door = EXTRUDE leaf; chest = MODEL; container = FACED-BOX; grate/lever = EXTRUDE). State
+selects `slug@state` art. Update §C readers to §H for geometry.
+
+## §I ONE-ROOM RENDER + OCCLUSION-FADE (folds BW5 S0-1 render policy + S0-2)
+
+**ONE-ROOM RENDER LAW.** The `SpatialPlan` graph (DUNGEON-GRAPH) is the LOGIC truth — which rooms
+exist, how they link. The renderer instantiates **only the ACTIVE room** (its tile kit + dressing +
+interactables); neighbor rooms are NOT in the scene graph (no spoiler, no camera spill, budget
+concentrated on one room — Zelda-NES, not Diablo). Movement through a door **transitions** to the
+next room, rebuilt under BW4's MF-2 crossfade. An **archway** connection may show a controlled
+threshold glimpse of the next room (dimmed/static teaser); a **door** may not (connection-point
+contract, DUNGEON-GRAPH). This REFINES U3/U4's whole-plan render to active-room-only.
+
+**OCCLUSION-FADE LAW.** The camera ORBITS the active room — no fixed side. Architecture (walls,
+columns, tall furniture) between the camera and the action cluster **fades to ~5% opacity or demotes
+to a short stem**, restoring on clear. This AMENDS FRAMING LAW 2c (fit the action cluster): with
+one-room render + occlusion-fade, the cluster is always framable. It **RETIRES the placement-time
+camera-side bias** (`dpIsCameraSideOfRoom`) — placement optimizes composition + tactics (BW5 Law 8),
+visibility is the renderer's job. Fade is VIEW-state, not world-state — determinism (Law 7) unaffected.

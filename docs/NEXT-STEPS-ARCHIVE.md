@@ -18,6 +18,84 @@ just preserves the old ordered-queue framing for anyone reconstructing why a cal
 
 ---
 
+## Do next (2026-07-09 overnight — the design session landed; supersedes below)
+
+The accidental design session (see CHANGELOG 2026-07-09): 6 system specs + 6 craft expansions merged
+with Adam's rulings folded; REALM-HOOKS spec landing next. Queue:
+
+**Place-gen riders (2026-07-09 late night — the engine wave LANDED, full sweep green; open items
+carried forward from the archived place-gen lane block):** ① Adam red-pen + P1-wave go/no-go on
+`docs/PLACE-ASSET-QUEUE.md` (the spend gate) · ② Adam craft pass on Place Spine rows + 3 skin labels
++ the 5 upgraded settlement tables (all PROVISIONAL) · ③ interior-gen spec section (DMG14 Appendix A
+chain + Bastion space-bands, realm-skinned) before its build wave · ④ 8 backfill realm skins (craft
+lane) · ⑤ HOOK-WALKS terminus-bias table when that spec locks (the archetypeBias parameter is live).
+
+1. ☐ **Adam (morning): gather the books** into `Reference/` for the Saltmarsh treatment (page index +
+   system gather each — highest-fit first):
+   - **Van Richten's Guide to Ravenloft** → GLOOM (Domains of Dread, horror kits, Darklords)
+   - **Tomb of Annihilation** → LOST WORLD (hexcrawl travel, jungle survival, dino mounts/races)
+   - **Wild Beyond the Witchlight** → BRIGHT-KINGDOM (carnival games, fey bargains)
+   - **Curse of Strahd** → COSMIC (the Tarokka reading — deck-driven prep blueprint)
+   - **Explorer's Guide to Wildemount** → TIYL (the Heroic Chronicle weighted-origin system)
+   - **Descent into Avernus** → CHROME (war machines / vehicle combat)
+   - **Acquisitions Incorporated** → economy (organization/franchise sinks)
+   - **Rime of the Frostmaiden** → wilderness (cold survival, overland dread)
+2. ☐ **Adam: row-level taste passes** on the PROVISIONAL craft (Child Saw d100, the 3 item tables,
+   the 3 realm re-keys) — direction already ruled, rows await his read.
+3. ◐ **Build wave — the spec backlog is deep and Sonnet-ready** (each doc carries numbered units +
+   red-first tests): ☑ **ANIMAL-SOCIAL U1–U6 — BUILT + GATED + MERGED 2026-07-09 night** (CHANGELOG;
+   Opus re-gate caught a real DM_EVENT_TYPES / dm-contract.json / table-usage artifact-drift miss the
+   build self-reported green). ☑ **ANIMAL-SOCIAL-HQ HQ-1..7 — the review fix queue, LANDED 2026-07-09
+   late night** (`docs/ANIMAL-SOCIAL-HQ.md`; /code-review found the wave's verify-green-≠-wired
+   disease — realm skins / class bump / parley routing / predator witness all unwired in production —
+   all wired + gated; the WIRING LAW is now standing acceptance for wiring units: verify checks drive
+   production entry points, never the new function directly). REMAINING, in dependency order →
+   TIYL-WEIGHTED-STARTS → HOOK-WALKS (incl. dungeon-discovery, breach-in-walks, mid-walk entry,
+   8–12 segment law) → GLOOM-KEY U1–U7 → PLACE-GEN U1–U6 → CAMEO-CAST U1–U5 → SHIP-TRAVEL U1–U9 →
+   REALM-HOOKS U1–U6.
+   **⚠ Each remaining spec is still SPEC-not-locked ("awaiting Adam's review") — lock it (resolve its
+   open rulings) before executing, as ANIMAL-SOCIAL was locked before its build.**
+3b. ☑ **Adam rulings from the HQ review — RULED 2026-07-09 late night:** (a) urban→rural tier-0
+   banding — **settlement POPULATION estimates are the intended urban-development signal** ("at some
+   point we need to start estimating populations for the cities and towns … helps me a lot on
+   tabletop when I am creating a map for a town"); the tier-0 lodging fallback STANDS until
+   populations exist. Populations belong to the PLACE-GEN spec's scope when that build wave lands —
+   they'd drive `nodeEnvBand`, place-tier stock, and town-map presentation alike. (b) npc-life stamp
+   — **BUILT as HQ-8, landed 2026-07-09 late night**: the six place-bound npc-life writers
+   (companion desertion/pet-wanders/sidekick-departure/sidekick-death, turn life-event,
+   successor-thread) stamp `nodeId`; backstory seeds / faction-turns / tell-refresh stay
+   location-less by design (a bird must not witness world-gen). Bird's faces-sense is now live in
+   production; herd's `move-zone` movement-sense stays deferred until map-scale movement witnessing
+   has a real source (travel transitions, someday — design question, not a stamp).
+   **Standing note:** `dev/verify-animal-table-fingerprint.mjs` is SUPPOSED
+   to go red under the CRAFT-LANE row pass — that red = re-sync `ANIMAL_ENV_WEIGHTS` +
+   `ANIMAL_KNOWLEDGE_SCOPE` eyes-open, never loosen the tokens.
+4. ☐ **Models-lane handoff** (coordination note, other session): saurian warrior+scholar castes,
+   2-3 rideable dino mounts, Zeal-stratum sentinel, the bat gang, ED-209-class boss, ally-mutant,
+   plus the Shoggoth benchmark's hermetic re-identity ("Unformed of Nun", Adam deferred).
+5. ☐ Standing: playtest + retune (E-PRES curves, hook-walk lengths, ship lethality all
+   "felt-in-play" items); the NPC-lane optional craft (kin rows fold-in).
+
+
+> **Older superseded "Do next" queues (2026-07-03 through 2026-07-08 night) and the long
+> historical build-log block live in [`NEXT-STEPS-ARCHIVE.md`](NEXT-STEPS-ARCHIVE.md) — read-only,
+> not the working queue. This file keeps only the live queue + the still-open roadmap items below.
+
+## Do next (2026-07-10 later night, BEAUTY-WAVE CLOSED — the wave landed; what it opened)
+
+1. ☐ **Adam: run MOCK-GEN PACKET-01** (dev/model-qa/mock-gen/PACKET-01.md, 8 frames, paste-ready)
+   → arrivals to ui-sketches/mock-frames/ → Fable reads → next-wave specs cite mocks by name.
+2. ☐ **Adam: eyeball the beauty shots** (dev/battle-gate/beauty-shot/ + CAPTION.md) and the r2
+   ΔE-flag list (42 sprites, dev/model-qa/unification-report.json).
+3. ☐ **BEAT FRAMING** — wire law 2c (camera fits the action cluster) into the combat camera; the
+   biggest visible win left per the VP8 caption.
+4. ☐ **GIT-LFS migration — URGENT** (GitHub warns on the two 79MB zips; runbook ready, needs
+   Adam's $5 pack + force-push confirm).
+5. ☐ **UNIFICATION-WAVE (UW1-UW4)** after the mocks inform it; light-marker emissive art +
+   gloom/chrome density tune ride whichever unit touches that surface first.
+6. ☐ **Blender teaching session** — Adam upskilling to direct Claude; genesis-blender-mcp rig
+   standing; sprite-prop gaps are the first modeling queue.
+
 ## Do next (2026-07-09, models lane — post-foundry-batch)
 
 1. ☐ **Re-key coverage audit** — once Adam's realm re-keys land, sweep every realm's `model` keys vs

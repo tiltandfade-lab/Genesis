@@ -57,13 +57,28 @@ off A3. Master tip after the wave: `00b775f8`.
   occlusion id aliased them onto one fade-state so the wrong instance faded. Fixed by folding `yBase`
   into `itrOcclusionIdFor`.
 
+**Fixed (occlusion-fade hotfix, same day — merge `07d2f733`).** The two pre-existing render-only
+reds A4 surfaced (both verified pre-existing on master 46289a45, auto-skip in CI) — fixed at the
+root, not masked:
+- Ghost bloom halo: the occlusion ankle-**stub** (no shadow/AO) tripped UnrealBloom in dark rooms →
+  darken JUST the stub's own per-instance color (`itrScaleHexValue`, the `ITR_ROOM_SHELL_RISER_DARKEN`
+  convention), scoped to occluding instances. `verify-occlusion-fade` 39/1 → **40/0**; harness
+  assertion untouched (code-only fix).
+- Doorframe classify gap: doorframes (+ BW2-5 arch-header prisms) were never wired into the occlusion
+  classify pass → wired into the SAME per-instance `itrOcclusionClassify`+ghost pattern. Also found +
+  fixed a real harness bug (checks read raycasts against the stale pre-MF-1-tween camera →
+  `settleCameraTween`) and, after instrumenting 100 seeds (0 over-fires), replaced check 32's unsound
+  seed-lottery `anyFullHeight` with a **constructed control (32b)** — an ON-sightline pillar stubs
+  while a self-checked OFF-sightline control stays full. `verify-bw2-1b --with-render` 39/4 → **49/0**.
+- **Stage-A production diff reviewed clean** (low-effort Opus pass over WDV-1/2 + A3 + A4 + hotfix):
+  no correctness bugs; walk-native project-only law, A3 fallback safety, scratch-camera non-leak, A4
+  determinism all confirmed. Two non-blocking awareness notes on record: `feature` cards fold into the
+  citizens lane as `living:true` (framing-only, never rendered); `walkSceneFrom` re-runs the projector
+  with a single-room plan.
+
 **Deferred.**
 - Codex's WDV-3 (table visual metadata), WDV-4 (overlay/state key unification), WDV-5 (cross-env
   diorama gate) remain as the later walk-native recommendations (`WALK-NATIVE-DIORAMA-CONTRACT.md`).
-- Two pre-existing render-only harness reds surfaced (verified pre-existing on master, auto-skip in
-  CI): the occlusion ghost material's no-AO/no-shadow + bloom interaction in a synthetic dark room
-  (1 pixel check), and a doorframe over-occluding a standee in `verify-bw2-1b --with-render` (checks
-  31/32/35). Follow-up filed; honest-red, not mechanically greened.
 
 **Gates (all personally re-run by the orchestrator).** check-manifest OK; verify-walk-scene 32/0,
 verify-walk-stamped-provenance 34/0, verify-shot-compose 29/0, verify-occlusion-fade (render;

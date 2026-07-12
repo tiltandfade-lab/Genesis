@@ -46,7 +46,8 @@ on master, auto-skip in CI, follow-up filed.
    (footX/Y, worldHeight, plinth/contact-shadow/shader), then Stage C (room-shell polygon rooms,
    the compiler is already landed) / D (stateful nouns) / E (material+light finish).
 4. Carry-overs still stand: MF-3b hit-stop production wiring (Adam's event-shape call) + MF-5 feel
-   gate; the two pre-existing render reds' follow-up.
+   gate. (The two pre-existing occlusion render-reds A4 surfaced are now FIXED + landed —
+   `07d2f733`, ghost-bloom + doorframe classify; Stage-A diff reviewed clean.)
 
 ## Latest (2026-07-11) — BW4 MOTION & FEEL: 4 units landed; hit-stop wiring + play gate open [Claude Opus 4.8, orchestrated]
 

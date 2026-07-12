@@ -248,6 +248,19 @@ async function measure(page, probe, pngB64) {
       const out = { ok: true, W, H, globalMean };
       if (probe.midRoom) out.midRoomLum = patchLum(toScreen(probe.midRoom.x, probe.midRoom.y, 0.35), Math.floor(H * 0.02));
       if (probe.corner) out.cornerLum = patchLum(toScreen(probe.corner.x, probe.corner.y, -0.4), Math.floor(H * 0.02));
+      // LIGHT-CLOSE unit — TORCH HOTSPOT: the room-wide roomMean grid (below) is too coarse to catch a
+      // LOCAL practical blowout sitting between grid points (a torch's own hot pool is small relative to
+      // a whole room) — sample directly at the light's own seed instead, at floor height (0.3, same
+      // convention as the roomMean grid's own sample height) so it reads the glow disc + point-light
+      // pool actually painted on the floor there.
+      if (probe.torch) out.torchFloorLum = patchLum(toScreen(probe.torch.x, probe.torch.z, 0.3), Math.floor(H * 0.03));
+      // a second sample right at the glow-disc's own mount height (light.y - 0.15, the sconce offset
+      // interiorBuildLights applies for a torch-kind light) — a bright/sky-lit realm's own ambient/hemi
+      // can already saturate the FLOOR near a torch (nothing left for a practical to visibly add there),
+      // but the glow disc itself is a distinct additive billboard object floating at head height, well
+      // clear of the floor — its own presence/absence is what actually reads as "a torch orb in a sunlit
+      // room" or not.
+      if (probe.torch) out.torchGlowLum = patchLum(toScreen(probe.torch.x, probe.torch.z, probe.torch.y - 0.15), Math.floor(H * 0.03));
       // roomMean: a grid of sample points across the ROOM'S OWN footprint (probe.bounds), not the
       // whole canvas — the full-canvas mean is dominated by the diorama's void margin (by design
       // near-black regardless of realm, GR4 territory, out of this unit's scope per docs/DIEGETIC-
@@ -533,14 +546,18 @@ async function main() {
     ok(!!cosmicEmitter && cosmicEmitter.kind === "nub", `GREEN: flipping the flag back on + remounting DOES seat a visible emitter nub under cosmic's glow disc (${JSON.stringify(cosmicEmitter)}) — the flag is load-bearing`);
 
     // Full sweep, flag at its real default (on): chrome/gloom/fantasy carry a real dressing card
-    // (INTERIOR_LIGHT_CARD); lost-world/suburb/bright-kingdom/cosmic have none, so they ride the nub.
+    // (INTERIOR_LIGHT_CARD); cosmic (emissive, not bright) has none, so it rides the nub. LIGHT-CLOSE
+    // unit (below, its own group): lost-world/suburb/bright-kingdom are BRIGHT profiles (daylit) — their
+    // practicals (glow + emitter) now SUPPRESS entirely, so their own expectation flips to "none" here
+    // (this is the intentional new state this unit ships, not a regression — LC-1's own RED/GREEN below
+    // proves the suppression is real and reversible).
     const coreRealmChecks = [
       { realmId: "chrome", lightProfile: "torchlit", expectKind: "card" },
       { realmId: "gloom", lightProfile: "torchlit", expectKind: "card" },
       { realmId: "fantasy", lightProfile: "torchlit", expectKind: "card" },
-      { realmId: "lost-world", lightProfile: "daylit", expectKind: "nub" },
-      { realmId: "suburb", lightProfile: "daylit", expectKind: "nub" },
-      { realmId: "bright-kingdom", lightProfile: "daylit", expectKind: "nub" },
+      { realmId: "lost-world", lightProfile: "daylit", expectKind: "none" },
+      { realmId: "suburb", lightProfile: "daylit", expectKind: "none" },
+      { realmId: "bright-kingdom", lightProfile: "daylit", expectKind: "none" },
       { realmId: "cosmic", lightProfile: "voidlit", expectKind: "nub" },
     ];
     for (const cfg of coreRealmChecks) {
@@ -548,9 +565,89 @@ async function main() {
       if (!built.ok) { ok(false, `${cfg.realmId}: scene build failed: ${built.error}`); continue; }
       await mountAndShoot(page, built.board, path.join(outDir, `p1c-${cfg.realmId}-emitter.png`));
       const emitter = await emitterNear(built);
-      ok(!!emitter, `${cfg.realmId}: a visible emitter (card or nub) exists at the glow-disc's light seed (found ${JSON.stringify(emitter)})`);
-      ok(!!emitter && emitter.kind === cfg.expectKind, `${cfg.realmId}: the emitter is the expected kind ("${cfg.expectKind}") — found "${emitter && emitter.kind}"`);
+      if (cfg.expectKind === "none") {
+        ok(!emitter, `${cfg.realmId} (bright profile): NO emitter at the light seed — its torch practical is suppressed (found ${JSON.stringify(emitter)})`);
+      } else {
+        ok(!!emitter, `${cfg.realmId}: a visible emitter (card or nub) exists at the glow-disc's light seed (found ${JSON.stringify(emitter)})`);
+        ok(!!emitter && emitter.kind === cfg.expectKind, `${cfg.realmId}: the emitter is the expected kind ("${cfg.expectKind}") — found "${emitter && emitter.kind}"`);
+      }
     }
+
+    // ================================================================
+    // LIGHT-CLOSE unit — PART A: bright-realm practical suppression (suburb's torch orb no longer
+    // blows out on top of the already-tuned P-1a ambient/hemi/key/fill)
+    // ================================================================
+    group("LC-1 — bright-realm practicals suppress (suburb's torch orb + glow/nub no longer mount; RED-FIRST proves they used to)");
+    // NOTE: suburb's own per-realm sky fill (P-1a) already reads near-white at FLOOR level right around
+    // the torch seed (torchFloorLum stays ~0.99 whether the practical is suppressed or not — the ambient/
+    // hemi alone already saturates that pixel, so the floor sample can't discriminate the torch's own
+    // contribution). The glow disc itself is a DISTINCT additive billboard floating at head height
+    // (torchGlowLum, sampled at the disc's own mount height) — its presence/absence there is what
+    // actually reads as "a torch orb hanging in a sunlit room" or not, so that's the load-bearing sample.
+    const LC1_GLOW_CLIP = 0.85;
+    await page.evaluate(() => window.Theater.setBrightPracticalsSuppressed(false));
+    const lc1RedPng = await mountAndShoot(page, suburbBuilt.board, path.join(outDir, "lc1-suburb-RED-practicals-on.png"));
+    const lc1Red = await measure(page, suburbBuilt.probe, lc1RedPng);
+    ok(lc1Red.ok, "LC-1 RED-baseline frame measured: " + (lc1Red.error || "ok"));
+    const lc1RedGlow = await page.evaluate(() => window.Theater.interiorLightGlowCount());
+    const lc1RedEmitter = await emitterNear(suburbBuilt);
+    console.log(`  suburb daylit, suppression OFF (RED): glowCount=${lc1RedGlow} emitter=${JSON.stringify(lc1RedEmitter)} roomMean=${lc1Red.roomMean != null ? lc1Red.roomMean.toFixed(4) : "n/a"} torchFloorLum=${lc1Red.torchFloorLum != null ? lc1Red.torchFloorLum.toFixed(4) : "n/a"} torchGlowLum=${lc1Red.torchGlowLum != null ? lc1Red.torchGlowLum.toFixed(4) : "n/a"}`);
+    ok(lc1RedGlow > 0, `RED-FIRST: with suppression OFF, suburb's torch glow disc DOES mount (glowCount=${lc1RedGlow}) — the check is load-bearing`);
+    ok(!!lc1RedEmitter, `RED-FIRST: with suppression OFF, suburb's torch DOES seat a visible emitter nub (found ${JSON.stringify(lc1RedEmitter)})`);
+    ok(lc1Red.torchGlowLum != null && lc1Red.torchGlowLum >= LC1_GLOW_CLIP,
+      `RED-FIRST: suburb's torch glow disc DOES read as a blown-out orb at head height (torchGlowLum=${lc1Red.torchGlowLum != null ? lc1Red.torchGlowLum.toFixed(4) : "n/a"} >= ${LC1_GLOW_CLIP}) — the check is load-bearing`);
+
+    await page.evaluate(() => window.Theater.setBrightPracticalsSuppressed(true));
+    const lc1GreenPng = await mountAndShoot(page, suburbBuilt.board, path.join(outDir, "lc1-suburb-GREEN-suppressed.png"));
+    const lc1Green = await measure(page, suburbBuilt.probe, lc1GreenPng);
+    ok(lc1Green.ok, "LC-1 GREEN frame measured: " + (lc1Green.error || "ok"));
+    const lc1GreenGlow = await page.evaluate(() => window.Theater.interiorLightGlowCount());
+    const lc1GreenEmitter = await emitterNear(suburbBuilt);
+    console.log(`  suburb daylit, suppression ON (GREEN, default): glowCount=${lc1GreenGlow} emitter=${JSON.stringify(lc1GreenEmitter)} roomMean=${lc1Green.roomMean != null ? lc1Green.roomMean.toFixed(4) : "n/a"} torchFloorLum=${lc1Green.torchFloorLum != null ? lc1Green.torchFloorLum.toFixed(4) : "n/a"} torchGlowLum=${lc1Green.torchGlowLum != null ? lc1Green.torchGlowLum.toFixed(4) : "n/a"}`);
+    ok(lc1GreenGlow === 0, `GREEN: suppression ON — suburb's torch glow disc no longer mounts (glowCount=${lc1GreenGlow})`);
+    ok(!lc1GreenEmitter, `GREEN: suppression ON — no emitter nub at the torch seed (found ${JSON.stringify(lc1GreenEmitter)})`);
+    ok(lc1Green.torchGlowLum != null && lc1Red.torchGlowLum != null && lc1Green.torchGlowLum < lc1Red.torchGlowLum - 0.05,
+      `GREEN: the head-height orb reads measurably DARKER once suppressed — no more blown-out floating disc (GREEN ${lc1Green.torchGlowLum.toFixed(4)} vs RED ${lc1Red.torchGlowLum.toFixed(4)})`);
+    ok(lc1Green.roomMean != null && lc1Green.roomMean >= 0.05,
+      `the suppression doesn't overcorrect into darkness: suburb's room still reads sky-lit (roomMean=${lc1Green.roomMean != null ? lc1Green.roomMean.toFixed(4) : "n/a"} >= 0.05)`);
+
+    // ================================================================
+    // LIGHT-CLOSE unit — REGRESSION: a torchlit/lamplit realm's practicals are UNAFFECTED (suppression
+    // is bright-profile ONLY) — checked with the suppression flag left at its real default (on, set
+    // just above) so this proves the gate discriminates by profile, not a global kill switch.
+    // ================================================================
+    group("LC-1-regression — gloom (torchlit) keeps its glow disc + emitter card; suppression never touches non-bright realms");
+    await mountAndShoot(page, gloomBuilt.board, path.join(outDir, "lc1-gloom-torchlit-unaffected.png"));
+    const gloomGlowCount = await page.evaluate(() => window.Theater.interiorLightGlowCount());
+    const gloomEmitterStill = await emitterNear(gloomBuilt);
+    ok(gloomGlowCount > 0, `gloom (torchlit) still mounts its glow disc with bright-suppression ON (glowCount=${gloomGlowCount})`);
+    ok(!!gloomEmitterStill && gloomEmitterStill.kind === "card", `gloom (torchlit) still seats its lantern card (found ${JSON.stringify(gloomEmitterStill)}) — suppression is bright-profile only`);
+
+    // ================================================================
+    // LIGHT-CLOSE unit — PART B: cosmic albedo lift (isolated from P-1b's emissive-light toggle via its
+    // own ITR_EMISSIVE_ALBEDO_LIFT_DISABLED_FOR_TEST flag — the emissive ambient/hemi/key/fill stay ON
+    // for BOTH captures here; only the floor/wall GEOMETRY albedo differs)
+    // ================================================================
+    group("LC-2 — cosmic's floor/wall albedo lift clears a legibility floor beyond P-1's own emissive-light plateau (RED-FIRST)");
+    const ALBEDO_LEGIBILITY_FLOOR = 0.06; // clears P-1b's own measured ~0.02 emissive-light-only plateau with real headroom
+    const ALBEDO_IMPROVEMENT_RATIO = 1.3;  // same "clear margin, not marginal" bar as L-4/P-1b
+    await page.evaluate(() => window.Theater.setEmissiveAlbedoLiftDisabledForTest(true));
+    const lc2RedPng = await mountAndShoot(page, cosmicBuilt.board, path.join(outDir, "lc2-cosmic-RED-no-albedo-lift.png"));
+    const lc2Red = await measure(page, cosmicBuilt.probe, lc2RedPng);
+    ok(lc2Red.ok, "LC-2 RED-baseline frame measured: " + (lc2Red.error || "ok"));
+    console.log(`  cosmic voidlit, emissive light ON but albedo lift DISABLED (RED): roomMean=${lc2Red.roomMean != null ? lc2Red.roomMean.toFixed(4) : "n/a"}`);
+    ok(lc2Red.roomMean != null && lc2Red.roomMean < ALBEDO_LEGIBILITY_FLOOR,
+      `RED-FIRST: cosmic's own room stays under the legibility floor with the albedo lift disabled (roomMean=${lc2Red.roomMean != null ? lc2Red.roomMean.toFixed(4) : "n/a"} < ${ALBEDO_LEGIBILITY_FLOOR}) — the check is load-bearing`);
+
+    await page.evaluate(() => window.Theater.setEmissiveAlbedoLiftDisabledForTest(false));
+    const lc2GreenPng = await mountAndShoot(page, cosmicBuilt.board, path.join(outDir, "lc2-cosmic-GREEN-albedo-lifted.png"));
+    const lc2Green = await measure(page, cosmicBuilt.probe, lc2GreenPng);
+    ok(lc2Green.ok, "LC-2 GREEN frame measured: " + (lc2Green.error || "ok"));
+    console.log(`  cosmic voidlit, albedo lift ON (GREEN, default): roomMean=${lc2Green.roomMean != null ? lc2Green.roomMean.toFixed(4) : "n/a"}`);
+    ok(lc2Green.roomMean != null && lc2Red.roomMean != null && lc2Green.roomMean >= lc2Red.roomMean * ALBEDO_IMPROVEMENT_RATIO,
+      `GREEN: the albedo lift alone clears a CLEAR margin over the RED baseline (>= ${ALBEDO_IMPROVEMENT_RATIO}x — ratio=${lc2Red.roomMean ? (lc2Green.roomMean / lc2Red.roomMean).toFixed(2) : "n/a"})`);
+    ok(lc2Green.roomMean != null && lc2Green.roomMean >= ALBEDO_LEGIBILITY_FLOOR,
+      `GREEN: cosmic's room clears the legibility floor (roomMean=${lc2Green.roomMean != null ? lc2Green.roomMean.toFixed(4) : "n/a"} >= ${ALBEDO_LEGIBILITY_FLOOR})`);
 
     console.log(`\n${pass} passed, ${fail} failed`);
     process.exitCode = fail > 0 ? 1 : 0;

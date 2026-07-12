@@ -1472,6 +1472,17 @@
      theater-boot.js's own tag (dependency order — theater-boot.js will `import` this module once A3
      wires the real camera in). -->
 <script type="module" src="src/ui/theater-shot.js"></script>
+<!-- ROOM-SHELL COMPILER (docs/ROOM-SHELL-COMPILER.md; docs/GRAPHICS-NORTH-STAR.md Stage C unit C4) —
+     compiles the active room's cells into a CONTINUOUS shell (one triangulated floor polygon per
+     elevation tier + wall/riser quad-strips from boundary segments, not one InstancedMesh box per
+     cell — the direct fix for "everything reads as a map that would roll in a walk") — imported by
+     theater-boot.js (below) via a plain ES `import` behind the reversible ITR_ROOM_SHELL flag, and
+     ALSO given its own <script type="module"> tag here so check-manifest.py's module-tag-pairing
+     check is satisfied independent of import order. Kept as its own file/manifest entry (parallel to
+     theater-shot.js just above) so this unit's pure geometry-compiler work never collides with
+     parallel units editing theater-boot.js. Placed here, BEFORE theater-boot.js's own tag
+     (dependency order — theater-boot.js `import`s this module directly). -->
+<script type="module" src="src/ui/theater-room-mesh.js"></script>
 <!-- BATTLE-THEATER T3 (docs/BATTLE-THEATER.md §4): the verb/tween library — imported by theater-boot.js
      (below) via a plain ES `import`, and ALSO given its own <script type="module"> tag here so
      check-manifest.py's module-tag-pairing check (every manifest type:"module" entry needs a real tag)

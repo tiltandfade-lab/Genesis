@@ -61,6 +61,14 @@ function extractConstBlock(src, name){
   // from extractConstLine purely for readability at the call site below.
   return extractConstLine(src, name);
 }
+// docs/DIEGETIC-LIGHT.md L-1 — ITR_LIGHT_CONE_ENABLED is a `let` (reversible at runtime via
+// window.Theater.setLightConeEnabled), not a `const` — extractConstLine's regex only matches "const
+// NAME = ...;", so this is the same technique with "let" instead.
+function extractLetLine(src, name){
+  const re = new RegExp("let " + name + "\\s*=\\s*[^;]+;");
+  const m = src.match(re);
+  return m ? m[0] : null;
+}
 
 // ============================================================================
 // STUBS shared by ITEM 1/2 — a minimal real-enough THREE + document, same "just enough to run the
@@ -165,10 +173,23 @@ console.log("\n=== ITEM 1 — light-cone geometry (theater-boot.js source extrac
 }
 
 // ============================================================================
-// ITEM 2 — interiorBuildLights wiring: one cone per light, apex-to-floor math, flicker-target
-// collection (marker+cone riding the same channel).
+// ITEM 2 — interiorBuildLights wiring: one cone per light (WHEN THE L-1 GATE IS ON), apex-to-floor
+// math, flicker-target collection (marker+cone riding the same channel).
+//
+// docs/DIEGETIC-LIGHT.md L-1 (2026-07-11, Adam's ruling, fork F1): the cone mount is now GATED behind
+// ITR_LIGHT_CONE_ENABLED, default OFF ("remove the cone... keep only the emissive flame/glow marker +
+// the point light's real falloff"). RED-FIRST (re-checked live against this branch's own pre-L-1 code,
+// i.e. what this file's assertions looked like before this unit — the exact "6 children" shape below
+// was the ONLY shape that ever existed pre-gate):
+//   `git show cfe622e6:src/ui/theater-boot.js | grep -c ITR_LIGHT_CONE_ENABLED` -> 0 (the gate didn't
+//   exist at all — interiorBuildLights unconditionally mounted a cone per light, exactly the "6
+//   children" shape check 2c below used to assert unconditionally).
+// The RED-FIRST block just below re-proves this dynamically: assembling interiorBuildLights with the
+// gate at its REAL extracted default (false) and asserting the OLD "6 children" claim now FAILS proves
+// this check is load-bearing against the gate, not a stale assertion the source quietly stopped
+// backing. GREEN then re-derives the byte-identical old shape by flipping the SAME extracted flag on.
 // ============================================================================
-console.log("\n=== ITEM 2 — interiorBuildLights wiring (theater-boot.js source extraction) ===");
+console.log("\n=== ITEM 2 — interiorBuildLights wiring, gated cone (theater-boot.js source extraction) ===");
 {
   const fnNames = [
     "interiorConeTexture", "interiorBuildLightCone", "interiorAssignShadowCasters",
@@ -191,25 +212,49 @@ console.log("\n=== ITEM 2 — interiorBuildLights wiring (theater-boot.js source
     extractConstLine(bootSrc, "INTERIOR_LIGHT_FLICKER_AMPLITUDE"),
   ];
   check("2b-setup. all supporting consts present", constLines.every(Boolean), constLines.map((c) => !!c));
+  const coneEnabledLine = extractLetLine(bootSrc, "ITR_LIGHT_CONE_ENABLED");
+  check("2b2-setup. L-1's ITR_LIGHT_CONE_ENABLED gate (a `let`, runtime-reversible) is present", !!coneEnabledLine, coneEnabledLine);
 
-  if(fns.every(Boolean) && constLines.every(Boolean)){
+  if(fns.every(Boolean) && constLines.every(Boolean) && coneEnabledLine){
+    // the gate is declared OUTSIDE the returned factory function body but shared by closure — a
+    // setConeEnabled export lets this sandbox flip the SAME `let` interiorBuildLights itself reads,
+    // exactly like window.Theater.setLightConeEnabled does against the real module scope.
     const src = "const THREE = arguments[0]; const document = arguments[1];\n"
       + "let INTERIOR_CONE_TEXTURE = null; let INTERIOR_GLOW_TEXTURE = null;\n"
+      + coneEnabledLine + "\n"
       + constLines.join("\n") + "\n"
       + fns.join("\n")
-      + "\nreturn { interiorBuildLights };";
+      + "\nreturn { interiorBuildLights, setConeEnabled: function(v){ ITR_LIGHT_CONE_ENABLED = !!v; }, coneEnabled: function(){ return ITR_LIGHT_CONE_ENABLED; } };";
     const factory = new Function(src);
     const THREE = makeStubTHREE();
     const doc = makeFakeDocument();
-    const { interiorBuildLights } = factory(THREE, doc);
+    const mod = factory(THREE, doc);
+    const { interiorBuildLights } = mod;
 
     const torch = { x: 2, z: 3, y: 2.5, color: "#ff9a44", intensity: 1.2, distance: 6, decay: 2, kind: "torch" };
     const lamp = { x: 5, z: 1, y: 2.6, color: "#cfe8ff", intensity: 1.2, distance: 6.5, decay: 2, kind: "lamp" };
+
+    check("2b3-setup. the extracted gate's REAL default is OFF (matches ITR_LIGHT_CONE_ENABLED's own source default)", mod.coneEnabled() === false, mod.coneEnabled());
+
+    // ---- RED-FIRST: the OLD "6 children" claim, run against the gate's REAL default ----
     // realmId=null -> cardSlug resolves null (INTERIOR_LIGHT_CARD lookup misses) -> no light-card
     // children, keeping this sandbox's dependency surface to exactly what's stubbed above.
-    const built = interiorBuildLights([torch, lamp], 0, 0, null, null);
+    const builtOff = interiorBuildLights([torch, lamp], 0, 0, null, null);
+    check("2c-RED. the OLD pre-L-1 claim (\"exactly 6 children\") now FAILS at the gate's real default — proves 2c-GREEN below isn't vacuous",
+      builtOff.group.children.length !== 6, builtOff.group.children.length);
+    check("2c-GREEN. GATE OFF (default): exactly {PointLight, glow} per light, NO cone (2 children x 2 lights = 4)",
+      builtOff.group.children.length === 4, builtOff.group.children.length);
+    check("2c2. GATE OFF: every flickerTarget carries marker but NO cone (never a stale/half-built cone reference)",
+      builtOff.flickerTargets.length === 2 && builtOff.flickerTargets.every((t) => t.marker && !t.cone),
+      JSON.stringify(builtOff.flickerTargets.map((t) => ({ hasMarker: !!t.marker, hasCone: !!t.cone }))));
+    check("2c3. GATE OFF: baseConeOpacity still falls back to ITR_LIGHT_CONE_OPACITY[kind] per light (torch != lamp) even with no cone mesh to read it off",
+      builtOff.flickerTargets[0].baseConeOpacity !== builtOff.flickerTargets[1].baseConeOpacity,
+      JSON.stringify(builtOff.flickerTargets.map((t) => t.baseConeOpacity)));
 
-    check("2c. no light-card realm -> exactly {PointLight, glow, cone} per light (3 children x 2 lights = 6)",
+    // ---- GREEN: flip the SAME gate on -> byte-identical to the old unconditional shape ----
+    mod.setConeEnabled(true);
+    const built = interiorBuildLights([torch, lamp], 0, 0, null, null);
+    check("2c-reversible. GATE ON: reproduces the exact old shape (3 children x 2 lights = 6) — the flag is a true toggle, not a one-way migration",
       built.group.children.length === 6, built.group.children.length);
 
     const torchConeGroup = built.group.children[2];
@@ -217,7 +262,7 @@ console.log("\n=== ITEM 2 — interiorBuildLights wiring (theater-boot.js source
     // floorTopMap=null -> interiorFloorTopAt's own fallback = ITR_FLOOR_BASE_Y + ITR_FLOOR_HEIGHT_FALLBACK = -0.3
     // torch glow sits 0.15 below its light point (the sconce offset) -> apex = 2.5 - 0.15 = 2.35
     // cone height = apex - floorTop = 2.35 - (-0.3) = 2.65
-    check("2d. FLOOR-BRIDGING: the torch cone's height spans EXACTLY apex(=light.y-0.15sconce)->floorTop (never a fixed generic drop)",
+    check("2d. FLOOR-BRIDGING (gate on): the torch cone's height spans EXACTLY apex(=light.y-0.15sconce)->floorTop (never a fixed generic drop)",
       Math.abs(torchConeMesh.geometry.parameters.height - 2.65) < 1e-9, torchConeMesh.geometry.parameters.height);
     check("2e. the cone's group position matches the glow marker's own position (same apex point — shaft and marker read as one light)",
       Math.abs(torchConeGroup.position.y - 2.35) < 1e-9 && torchConeGroup.position.x === 2 && torchConeGroup.position.z === 3,
@@ -235,10 +280,15 @@ console.log("\n=== ITEM 2 — interiorBuildLights wiring (theater-boot.js source
       && built.flickerTargets[1].baseConeOpacity === lampConeMesh.material.opacity);
 
     // MUTATION: a lightless board must not throw and must produce zero cones/targets (proves the
-    // per-light forEach is the source of the count, not a hardcoded "always 6" stub).
+    // per-light forEach is the source of the count, not a hardcoded stub) — checked with the gate ON
+    // (the stricter shape) so a regression that re-hardcodes children can't hide behind gate-off.
     const empty = interiorBuildLights([], 0, 0, null, null);
     check("2i. ⊗ MUTATION: an empty lights array yields zero children / zero flickerTargets (never throws)",
       empty.group.children.length === 0 && empty.flickerTargets.length === 0);
+
+    // reset the shared gate back off — this sandbox's own `let` is scoped to this factory instance only
+    // (never touches the real module), but resetting keeps this block's own local state tidy/explicit.
+    mod.setConeEnabled(false);
   }
 }
 

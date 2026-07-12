@@ -1123,7 +1123,7 @@ function trayFrom(source, scene, opts){
     const projectedDressingRoles = ["centerpiece","feature","interactable","dressing","cover","guise"];
     const projectedDressing = projection ? projection.stageNow.filter(c=>c&&c.slug&&c.position&&projectedDressingRoles.indexOf(c.role)>=0).map(c=>({
       slug:c.slug, x:c.position.x, y:c.position.y, primary:c.centerpiece?"setPiece":"floor",
-      cardKind:c.cardKind||"medium", roomSegNum:source.focusSegNum, sourceRef:c.sourceRef,
+      cardKind:c.cardKind||"medium", renderStrategy:"billboard", roomSegNum:source.focusSegNum, sourceRef:c.sourceRef,
       projected:true, count:c.count, representativeCount:c.representativeCount
     })) : [];
     if(projectedDressing.length){

@@ -1408,11 +1408,13 @@ function interiorBuildBoard(plan, opts) {
       if (keepSet !== null && room && !keepSet.has(room.segNum)) return;
       if (d.primary === "blocker") {
         const kind = itrFurnitureKindFor((plan.seed || "") + ":" + d.roomSegNum + ":" + d.x + "," + d.y + ":" + d.slug);
-        furniture.push({ x: d.x, y: d.y, kind, realmId: kit.realmId, slug: d.slug, roomSegNum: d.roomSegNum });
+        furniture.push({ x: d.x, y: d.y, kind, realmId: kit.realmId, slug: d.slug, roomSegNum: d.roomSegNum,
+          renderStrategy: d.renderStrategy || "full-3d-prop" });
       } else if (d.primary === "wall-hang") {
         const info = extrusionPropFor(d);
         wallProps.push({
           x: d.x, y: d.y, roomSegNum: d.roomSegNum, slug: d.slug, cardKind: d.cardKind,
+          renderStrategy: d.renderStrategy || "extruded-card",
           archetype: info.archetype, depth: info.depth, wallSide: itrWallSideAt(d.x, d.y, plan),
           paintingOf: d.paintingOf || null,
         });

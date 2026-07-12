@@ -14,6 +14,7 @@ per manifest cell, carrying:
     primary   — the manifest cell's tags.primary (focal|floor|wall-hang|blocker|setPiece — the
                 SAME vocabulary dressPlan already switches on, verbatim, no remapping)
     size      — the manifest cell's own `size` (small|medium|large)
+    renderStrategy — derived geometry contract: billboard, extruded-card, or full-3d-prop
     lightAffine (only when true) — this script's OWN classification (the manifest carries no
                 "light" primary tag), not a corpus field: entries with primary in
                 {focal,wall-hang,setPiece} whose slug+label contains a light-fixture word (lantern/
@@ -80,6 +81,15 @@ def is_light_affine(cell):
     return any(w in haystack for w in LIGHT_WORDS)
 
 
+def render_strategy(cell):
+    primary = cell["tags"]["primary"]
+    if primary == "wall-hang":
+        return "extruded-card"
+    if primary == "blocker":
+        return "full-3d-prop"
+    return "billboard"
+
+
 def load_realm_cells(realm):
     cells = []
     for fam in FAMILIES + [PAINTING_FAMILY]:
@@ -94,7 +104,7 @@ def load_realm_cells(realm):
 
 
 def js_entry(cell):
-    parts = [f'slug: "{cell["slug"]}"', f'primary: "{cell["tags"]["primary"]}"', f'size: "{cell["size"]}"']
+    parts = [f'slug: "{cell["slug"]}"', f'primary: "{cell["tags"]["primary"]}"', f'size: "{cell["size"]}"', f'renderStrategy: "{render_strategy(cell)}"']
     if is_light_affine(cell):
         parts.append("lightAffine: true")
     # BEAUTY-WAVE VP2b provenance: painting cards (from build/gen-gallery-paintings.py) carry

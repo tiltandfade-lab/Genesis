@@ -454,6 +454,126 @@ async function main() {
     ok(!!ctrlInList && Math.abs(ctrlInList.sy - 2.4) < 1e-6, `GREEN: the CONTROL pillar (never on any sightline) stays at its FULL original height, sy=${ctrlInList && ctrlInList.sy} — non-occluding geometry is untouched`);
     ok(!ctrlGhost, "GREEN: the CONTROL pillar has NO ghost entry at all — it was never split");
 
+    // ═══ STAGE-A A4 — DYNAMIC OCCLUSION v2 (docs/STAGE-A.md §A4) ═════════════════════════════════
+    const occId = await page.evaluate(({ occCell }) => window.Theater._occlusionIdFor("pillar", occCell.x, occCell.z), { occCell });
+    const ctrlId = await page.evaluate(({ ctrlCell }) => window.Theater._occlusionIdFor("pillar", ctrlCell.x, ctrlCell.z), { ctrlCell });
+
+    // ── (a) RAYCAST proof the mini reads THROUGH the faded blocker — a robust, bloom/pixel-noise-
+    // immune restatement of the same claim the pixel-color GREEN check above attempts: the SAME real
+    // THREE.Raycaster BW2-1b's own GUARD already uses (intersects only the tagged SOLID kinds — a
+    // ghost mesh is deliberately tagged kind+"-ghost", excluded from that set) reads OCCLUDED (RED,
+    // fade disabled — meshDump.raycastAtSamplePoint above already proved this) vs CLEAR (GREEN, fade
+    // enabled) at the EXACT SAME sample point. NOTE (known pre-existing defect, NOT introduced by A4 —
+    // verified via `git stash` against master 46289a45 before any A4 edits landed, same failure):
+    // the pixel-color "GREEN reads closer to baseline than RED" check just above is RED on unmodified
+    // master too (a bloom/no-shadow-ghost interaction makes the un-shadowed ghost material bloom
+    // brighter than the plain baseline, even at low opacity) — flagged separately, out of THIS unit's
+    // scope to fix. The raycast proof below is the mechanism's own ground truth and is unaffected by it.
+    group("A4-1 — RAYCAST (bloom-immune): the mini reads THROUGH the faded blocker");
+    const greenRaycast = await page.evaluate((sp) => window.Theater._interiorRaycastClearForTest(sp), samplePoint);
+    ok(!!meshDump.raycastAtSamplePoint && meshDump.raycastAtSamplePoint.clear === false, `RED-FIRST (re-stated): with fade disabled, the raycast at the sample point is BLOCKED — ${JSON.stringify(meshDump.raycastAtSamplePoint)}`);
+    ok(!!greenRaycast && greenRaycast.clear === true, `GREEN: with fade enabled, the SAME raycast at the SAME sample point is CLEAR (the ghost mesh is tagged "pillar-ghost", excluded from the solid hit-test) — ${JSON.stringify(greenRaycast)}`);
+
+    // ── (b) ONLY the blocking instance fades — non-blockers stay untouched, proven at the MATERIAL
+    // level (not just the instance-descriptor level checks above): the occluding pillar's own live
+    // ghost material(s) read the named upper-opacity const; the control pillar (never on any sightline)
+    // was never classified as blocking at all — no fade-state entry, no material.
+    group("A4-2 — ONLY the blocking instance fades (material-level proof)");
+    const occOpacity = await page.evaluate((id) => window.Theater._occlusionGhostMaterialOpacityForTest(id), occId);
+    const occEntry = await page.evaluate((id) => window.Theater._occlusionFadeEntryForTest(id), occId);
+    const ctrlEntry = await page.evaluate((id) => window.Theater._occlusionFadeEntryForTest(id), ctrlId);
+    const upperOpacity = await page.evaluate(() => window.Theater._occlusionLawForTest.ITR_OCCLUSION_UPPER_OPACITY);
+    ok(!!occEntry && occEntry.blocking === true, `the OCCLUDING pillar's own fade-state entry reads blocking:true — ${JSON.stringify(occEntry)}`);
+    ok(Array.isArray(occOpacity) && occOpacity.length > 0 && occOpacity.every((v) => Math.abs(v - upperOpacity) < 1e-3), `the OCCLUDING pillar's LIVE ghost material opacity settled at the named upper-opacity const (${upperOpacity}) — got ${JSON.stringify(occOpacity)}`);
+    ok(!ctrlEntry || ctrlEntry.blocking === false, `the CONTROL pillar (never on any sightline) was never classified as blocking — ${JSON.stringify(ctrlEntry)}`);
+    const ctrlOpacity = await page.evaluate((id) => window.Theater._occlusionGhostMaterialOpacityForTest(id), ctrlId);
+    ok(ctrlOpacity === null, `the CONTROL pillar has NO live ghost material at all (never split, never faded) — got ${JSON.stringify(ctrlOpacity)}`);
+
+    // ── (c) the fade TWEENS — fake-clock start(t=0)/mid(t~0.5)/end(t=1) are genuinely DISTINCT (a
+    // real interpolation, not a step function). Same fake-clock convention dev/verify-mf1-camera-
+    // tweens.mjs's own setFakeNowAndTick establishes: freeze Date.now() BEFORE the state-changing call
+    // (so the tween's own `start` timestamp is a KNOWN fake value), then pump exactly one real
+    // animation-frame pair per sample so the SAME tickTweens/rAF loop the live app runs reads the
+    // frozen clock at each of the three probe times. A genuinely FRESH board object (never seen by
+    // S.occlusionFadeState before) guarantees a first-ever classify -> a brand-new tween, not a
+    // retarget of the already-settled GREEN tween above.
+    group("A4-3 — TWEEN fake-clock math: start(t=0) / mid(t~0.5) / end(t=1) are distinct, converging to the upper-opacity target");
+    await page.evaluate(() => { window.__a4RealDateNow = Date.now.bind(Date); });
+    const durIn = await page.evaluate(() => window.Theater._occlusionLawForTest.ITR_OCCLUSION_FADE_IN_MS);
+    ok(typeof durIn === "number" && durIn >= 120 && durIn <= 180, `fade-IN duration ${durIn}ms is inside the 120-180ms band`);
+    const freshBoardSrc = buildHandBoardSrc();
+    const t0Fake = 5000000;
+    await page.evaluate((v) => { window.Date.now = () => v; }, t0Fake);
+    const freshOccId = await page.evaluate(({ boardSrc, figCell, slug, occCell, ctrlCell, occSize }) => {
+      window.Theater._setOcclusionFadeDisabledForTest(false);
+      const buildBoard = new Function(boardSrc);
+      const board = buildBoard();
+      board.pieces = [{ slug, cellX: figCell.x, cellY: figCell.z }];
+      board.cameraFit = { mode: "beat", cells: [{ x: figCell.x, y: figCell.z }] };
+      board.instances.pillar = [{ x: occCell.x, z: occCell.z, sx: occSize, sy: 2.4, sz: occSize, color: "#ff0000" }];
+      window.__a4FreshBoard = board;
+      window.Theater.setInteriorBoard(board);
+      return window.Theater._occlusionIdFor("pillar", occCell.x, occCell.z);
+    }, { boardSrc: freshBoardSrc, figCell: FIG_CELL, slug: FIGURE_SLUG, occCell, ctrlCell, occSize: OCC_HALF_EXTENT * 2 });
+    const t0Entry = await page.evaluate((id) => window.Theater._occlusionFadeEntryForTest(id), freshOccId);
+    ok(!!t0Entry && t0Entry.blocking === true, `t=0: the fresh occluder is classified blocking the instant the fit fires (immediately after mount, before any tween tick) — ${JSON.stringify(t0Entry)}`);
+    ok(Math.abs(t0Entry.opacity - 1) < 1e-3, `t=0: opacity is STILL the pre-tween start value (1, fully opaque) — no tick has run yet — got ${t0Entry.opacity}`);
+    await page.evaluate((v) => { window.Date.now = () => v; }, t0Fake + Math.round(durIn * 0.5));
+    await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));
+    const midEntry = await page.evaluate((id) => window.Theater._occlusionFadeEntryForTest(id), freshOccId);
+    await page.evaluate((v) => { window.Date.now = () => v; }, t0Fake + durIn + 50);
+    await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));
+    const endEntry = await page.evaluate((id) => window.Theater._occlusionFadeEntryForTest(id), freshOccId);
+    ok(!!midEntry, `mid-tween entry read (${JSON.stringify(midEntry)})`);
+    ok(!!endEntry, `end-tween entry read (${JSON.stringify(endEntry)})`);
+    if (midEntry && endEntry) {
+      ok(midEntry.opacity < 1 - 1e-3 && midEntry.opacity > endEntry.opacity + 1e-3, `t~0.5: opacity (${midEntry.opacity}) is strictly BETWEEN start (1) and end (${endEntry.opacity}) — a real interpolation, not a step function`);
+      ok(Math.abs(endEntry.opacity - upperOpacity) < 1e-3, `t=1: opacity has converged to the named upper-opacity target (${upperOpacity}) — got ${endEntry.opacity}`);
+    }
+    await page.evaluate(() => { window.Date.now = window.__a4RealDateNow || Date.now; });
+
+    // ── (d) RECLASSIFY HYSTERESIS — holds under a small camera move (no re-flicker), proven two ways:
+    // (i) the PURE decision function directly (the product's own camera only ever moves in discrete
+    // 90-degree rotate() steps or full ShotPlan re-composes — see itrOcclusionNextCommitted's own
+    // header for why the pure math is the more direct proof surface for a genuinely SMALL delta); and
+    // (ii) a LIVE integration check: a same-object replay with the camera bearing UNCHANGED never
+    // disturbs the already-settled fade (no new tween, opacity untouched), while a replay after a real
+    // rotate() (a 90-degree move, far past the hysteresis band) DOES re-anchor the bearing.
+    group("A4-4 — RECLASSIFY HYSTERESIS: pure math");
+    const law = await page.evaluate(() => {
+      const L = window.Theater._occlusionLawForTest;
+      return {
+        heldOnset: L.itrOcclusionNextCommitted(true, false, true, true),   // was NOT blocking, camera barely moved, geometry now says yes -> held false
+        heldOffset: L.itrOcclusionNextCommitted(false, true, true, true),  // WAS blocking, camera barely moved, geometry now says no -> held true
+        freshTakesRaw: L.itrOcclusionNextCommitted(true, false, false, true), // never classified before -> raw wins even though holdPrior=true
+        noHoldTakesRaw: L.itrOcclusionNextCommitted(false, true, true, false), // holdPrior=false -> always raw
+        smallDelta: L.itrOcclusionBearingDeltaDeg(10, 12),
+        largeDelta: L.itrOcclusionBearingDeltaDeg(10, 95),
+        wrapDelta: L.itrOcclusionBearingDeltaDeg(179, -179),
+      };
+    });
+    ok(law.heldOnset === false, `a blocker that just STARTED geometrically occluding is HELD at its prior (not-blocking) state under a small-move hold — got ${law.heldOnset}`);
+    ok(law.heldOffset === true, `a blocker that just STOPPED geometrically occluding is HELD at its prior (blocking) state under a small-move hold — got ${law.heldOffset} (this is the no-flicker guarantee itself)`);
+    ok(law.freshTakesRaw === true, `a brand-new (never-classified) id ignores the hold and takes the raw result — got ${law.freshTakesRaw}`);
+    ok(law.noHoldTakesRaw === false, `with holdPrior=false, the raw result always wins regardless of the prior commitment — got ${law.noHoldTakesRaw}`);
+    ok(law.smallDelta < 3, `a 2-degree bearing delta (${law.smallDelta}) is BELOW the 2-4deg hysteresis band`);
+    ok(law.largeDelta >= 3, `an 85-degree bearing delta (${law.largeDelta}) is ABOVE the hysteresis band`);
+    ok(Math.abs(law.wrapDelta - 2) < 1e-6, `bearing wrap-around: 179 vs -179 is a genuine 2-degree delta (${law.wrapDelta}), never the naive 358`);
+
+    group("A4-5 — RECLASSIFY HYSTERESIS: live integration (same-object replay never flickers; a real rotate DOES re-anchor)");
+    const beforeReplay = await page.evaluate((id) => window.Theater._occlusionFadeEntryForTest(id), freshOccId);
+    const bearingBefore = await page.evaluate(() => window.Theater._occlusionBearingForTest());
+    await page.evaluate(() => window.Theater.setInteriorVariant({})); // same-object replay — camera bearing unchanged
+    await settleCameraTween(page);
+    const afterSameBearingReplay = await page.evaluate((id) => window.Theater._occlusionFadeEntryForTest(id), freshOccId);
+    const bearingAfterHold = await page.evaluate(() => window.Theater._occlusionBearingForTest());
+    ok(!!beforeReplay && !!afterSameBearingReplay && Math.abs(beforeReplay.opacity - afterSameBearingReplay.opacity) < 1e-6 && beforeReplay.blocking === afterSameBearingReplay.blocking, `a same-object replay with the camera bearing UNCHANGED (delta ${Math.abs((bearingAfterHold.camera||0) - (bearingBefore.camera||0)).toFixed(3)} deg) never disturbs the already-settled fade — before ${JSON.stringify(beforeReplay)}, after ${JSON.stringify(afterSameBearingReplay)}`);
+    await page.evaluate(() => window.Theater.rotate());
+    await page.evaluate(() => window.Theater.setInteriorVariant({}));
+    await settleCameraTween(page);
+    const bearingAfterRotate = await page.evaluate(() => window.Theater._occlusionBearingForTest());
+    ok(bearingAfterRotate.anchor !== bearingAfterHold.anchor, `a real 90-degree rotate() DOES move the camera bearing far enough to re-anchor the hysteresis (before ${bearingAfterHold.anchor}, after ${bearingAfterRotate.anchor})`);
+
     // fps gate — measured on the GREEN (fade-active) scene.
     group("PERFORMANCE — fps with the fade active");
     const fpsResult = await page.evaluate(() => window.Theater.measureRenderFps(60));

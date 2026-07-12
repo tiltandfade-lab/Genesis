@@ -156,6 +156,9 @@ try {
   const stubH = law.itrPillarStubHeight(2.4);
   const stubbedBox = { boxMin: { x: -0.5, y: -0.5, z: -0.5 }, boxMax: { x: 0.5, y: stubH - 0.5, z: 0.5 } };
   result.stubHeight = stubH;
+  // STAGE-A A4: the live named const itself (ITR_OCCLUSION_STEM_HEIGHT_U), so the harness's own
+  // assertion never hardcodes a duplicate number that could silently drift from production.
+  result.stemHeightConst = law.ITR_OCCLUSION_STEM_HEIGHT_U;
   result.stubClearsSightline = !law.itrSegmentIntersectsAabb(cameraPos, standeeTarget, stubbedBox.boxMin, stubbedBox.boxMax);
 
   // itrPillarCutawayMask end-to-end: one pillar instance (raw cell coords x=0,z=0,sy=2.4, matching
@@ -251,10 +254,17 @@ group("2 — GREEN: the SAME pillar stubbed to itrPillarStubHeight's parapet hei
 // 0.3 -> 0.12 (the KNEE -> ANKLE rename in theater-boot.js) because the OLD 0.72 knee never actually
 // cleared a realistic torso-height sight point (itrPieceSightPoints' own contactY + height*0.5 sits
 // well above 0.72 for a human-scale standee) — this is the exact "columns and walls still obscure
-// figures" bug S-1 fixes, not a re-derivation of the same claim under a new number. 0.288 = 2.4 x 0.12.
+// figures" bug S-1 fixes, not a re-derivation of the same claim under a new number.
+// STAGE-A A4 UPDATE (docs/STAGE-A.md §A4, 2026-07-12): itrPillarStubHeight now returns a FLAT
+// absolute world-unit constant (ITR_OCCLUSION_STEM_HEIGHT_U, 0.12-0.25u band) instead of
+// wallHeightBase*ITR_PILLAR_STUB_FRAC (0.288 — just outside that band) — see theater-boot.js's own
+// header comment on that const for why a flat constant is the identical practical effect with a
+// cleaner number. This assertion reads the constant LIVE (never a duplicated hardcoded number) so it
+// can never drift from production again.
 if(A){
-  ok(A.stubClearsSightline === true, `stub height ${A.stubHeight} (0.12 x wallHeightBase 2.4 = 0.288, the S-1 ankle) clears the sightline that the full-height (sy=2.4) box blocked`);
-  ok(Math.abs(A.stubHeight - 0.288) < 1e-9, `stub height is exactly wallHeightBase(2.4) x ITR_PILLAR_STUB_FRAC(0.12, S-1's ankle) = ${A.stubHeight}`);
+  const expectedStub = A.stemHeightConst != null ? A.stemHeightConst : 0.18;
+  ok(A.stubClearsSightline === true, `stub height ${A.stubHeight} (ITR_OCCLUSION_STEM_HEIGHT_U, the A4 ankle) clears the sightline that the full-height (sy=2.4) box blocked`);
+  ok(Math.abs(A.stubHeight - expectedStub) < 1e-9, `stub height is exactly ITR_OCCLUSION_STEM_HEIGHT_U (read live off production, ${expectedStub}) = ${A.stubHeight}`);
 }
 
 group("3 — GREEN: itrPillarCutawayMask flags the real occluding pillar instance, and does NOT flag it against an unrelated sightline (no false-positive stubbing of every pillar in a room)");

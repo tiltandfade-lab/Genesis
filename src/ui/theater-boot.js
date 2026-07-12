@@ -5609,6 +5609,13 @@ function mount(el, opts){
   S.interiorDressingCount = 0;
   S.interiorDressingWorldPositions = [];
   S.tweens = [];
+  // STAGE-A A4 — persistent occlusion-fade bookkeeping (id -> {blocking,opacity,materials}) + the
+  // camera-bearing hysteresis anchor, both reset on a fresh mount() the same way S.tweens is just
+  // above; setInteriorBoard's own board-ref check (below) additionally resets these on a genuinely NEW
+  // board object, so a same-object rebuild (rotate()/zoom/variant replay) correctly PRESERVES them.
+  S.occlusionFadeState = new Map();
+  S.occlusionClassifyBearingDeg = null;
+  S.__occlusionFadeBoardRef = null;
   S.rotationStep = 0;
   S.boardCenter = new THREE.Vector3(0, 0, 0);
   S.env = THEATER_DEFAULT_ENV_FALLBACK;
@@ -6220,6 +6227,41 @@ function interiorBuildPillarMeshes(list, cx, cz, variant, pillarTex, ghostOpacit
     meshes.push(mesh);
   }
   return meshes;
+}
+
+// STAGE-A A4 (docs/STAGE-A.md §A4) — DYNAMIC OCCLUSION v2's own "small ghost mesh, never a big shared
+// material" mandate: builds ONE ghost mesh per blocking instance (a 1-item interiorBuildInstancedMesh
+// call, reusing 100% of its texture/AO/shading logic) rather than batching every ghost of a kind into
+// one InstancedMesh at one flat opacity. Stashes the built mesh's own material onto `fadeEntry.materials`
+// so itrOcclusionClassify's live tween can mutate it directly, every tick, with no further rebuild
+// between now and whenever the next setInteriorBoard call replaces this mesh. `entries` is a list of
+// {inst, fadeEntry} pairs (inst = the split-out ghost instance descriptor, fadeEntry = that SAME
+// instance's persistent S.occlusionFadeState entry, already carrying its own live `.opacity`).
+function itrBuildOcclusionGhostMeshes(entries, cx, cz, texture, variant, shadowKind){
+  const group = new THREE.Group();
+  (entries || []).forEach(function(pair){
+    if(!pair || !pair.inst || !pair.fadeEntry) return;
+    const mesh = interiorBuildInstancedMesh([pair.inst], cx, cz, texture, variant, shadowKind, pair.fadeEntry.opacity);
+    if(!mesh) return;
+    pair.fadeEntry.materials = [mesh.material];
+    group.add(mesh);
+  });
+  return group.children.length ? group : null;
+}
+// same per-instance-mesh/per-instance-material contract as itrBuildOcclusionGhostMeshes above, routed
+// through interiorBuildPillarMeshes so a round-profile occluder's own CylinderGeometry ghost gets the
+// identical individually-tweened treatment as a box pillar's (interiorBuildPillarMeshes already splits
+// box vs round internally; a single-instance call here returns exactly one of the two mesh families).
+function itrBuildOcclusionGhostPillarMeshes(entries, cx, cz, variant, pillarTex){
+  const group = new THREE.Group();
+  (entries || []).forEach(function(pair){
+    if(!pair || !pair.inst || !pair.fadeEntry) return;
+    const meshes = interiorBuildPillarMeshes([pair.inst], cx, cz, variant, pillarTex, pair.fadeEntry.opacity);
+    if(!meshes || !meshes.length) return;
+    pair.fadeEntry.materials = meshes.map(function(m){ return m.material; });
+    meshes.forEach(function(m){ group.add(m); });
+  });
+  return group.children.length ? group : null;
 }
 
 /* window.Theater.setInteriorBoard(data) — DUNGEON-GRAPH.md U3's tray-render entry point for a
@@ -7036,35 +7078,58 @@ function furniturePanelMaterial(realm, face, baseColorHex){
     || proceduralPanelTexture(realm, face, baseColorHex);
   return applyPsxShaderTweaks(new THREE.MeshLambertMaterial({ map: tex }), { worldSurface: true });
 }
-function buildFurnitureAssembly(entry){
+// STAGE-A A4 (docs/STAGE-A.md §A4): `fadeOpacity` (optional, a live-interpolated number from a
+// occlusion-fade entry) renders EVERY prism of this ONE furniture piece translucent+depthWrite:false at
+// that opacity, mirroring the wall/pillar ghost treatment's own contract — a whole-assembly fade rather
+// than a stub/ghost height split (furniture has no single "ankle" that means anything across a table/
+// shelf-unit/cabinet's own varied prism heights; the geometric occlusion test itself already only fires
+// when a prism's real AABB actually straddles the sightline, so an untouched, un-tall piece never fades
+// at all — see itrFurnitureOcclusionBoxFor at this file's setInteriorBoard call site). Every existing
+// caller omits the 2nd argument, so `isFading` is false and this function's output is byte-identical to
+// before this unit for every non-A4 caller. furniturePanelMaterial always builds a FRESH material per
+// call (never cached/shared across furniture pieces — see its own header), so mutating one piece's own
+// materials here can never bleed opacity onto an unrelated furniture instance.
+function buildFurnitureAssembly(entry, fadeOpacity){
   const recipe = furnitureFor(entry.kind, entry.realmId);
   const kit = INTERIOR_TILE_KITS ? (INTERIOR_TILE_KITS[entry.realmId] || INTERIOR_TILE_KITS.chrome) : null;
   const baseColorHex = (kit && kit.trimColor) || "#8a7a63";
+  const isFading = typeof fadeOpacity === "number";
   const group = new THREE.Group();
+  const materials = [];
   recipe.prisms.forEach((p) => {
     const geo = new THREE.BoxGeometry(Math.max(0.02, p.sx), Math.max(0.02, p.sy), Math.max(0.02, p.sz));
     const mat = furniturePanelMaterial(entry.realmId, p.face, baseColorHex);
+    if(isFading) Object.assign(mat, { transparent: true, opacity: fadeOpacity, depthWrite: false });
+    materials.push(mat);
     const mesh = new THREE.Mesh(geo, mat);
     mesh.position.set(p.dx || 0, (p.yBase || 0) + p.sy / 2, p.dz || 0);
-    mesh.castShadow = true;
-    mesh.receiveShadow = true;
+    mesh.castShadow = !isFading;
+    mesh.receiveShadow = !isFading;
     group.add(mesh);
   });
   group.userData.furnitureKind = recipe.kind;
   group.userData.dressingSlug = entry.slug;
+  group.userData.occlusionGhost = isFading;
+  group.userData.occlusionMaterials = materials; // interiorBuildFurniture's own fade-entry wiring reads this
   return group;
 }
 // data.furniture -> group of furniture assemblies, origin-shifted the SAME way every other interior
 // mount already is (cx/cz subtraction) — feet-on-floor via the SAME FLOOR CONTACT LAW every other
-// mount point reads through (interiorFloorTopAt).
-function interiorBuildFurniture(furniture, cx, cz, floorTopMap){
+// mount point reads through (interiorFloorTopAt). STAGE-A A4: `classifyFn(f)` (optional) is called once
+// per furniture entry; a non-null return `{opacity}` renders this ONE piece as an occlusion ghost (its
+// own live-tweened opacity), and its built materials are stashed onto the SAME fade-state entry so
+// itrOcclusionClassify's tween can keep mutating them every tick with no further rebuild. Every existing
+// caller omits `classifyFn`, so this degrades to byte-identical pre-A4 rendering (every prism opaque).
+function interiorBuildFurniture(furniture, cx, cz, floorTopMap, classifyFn){
   const group = new THREE.Group();
   // BEAUTY-WAVE-4.md MF-2 item 3: "Dressing/FURNITURE on first room reveal" — furniture assemblies get
   // the SAME seeded stagger cascade as data.pieces/data.dressing (see mfCascadeMount's own header).
   const mountEntries = [];
   (furniture || []).forEach((f) => {
     if(!f || !f.slug) return;
-    const g = buildFurnitureAssembly(f);
+    const fadeEntry = (typeof classifyFn === "function") ? classifyFn(f) : null;
+    const g = buildFurnitureAssembly(f, fadeEntry ? fadeEntry.opacity : undefined);
+    if(fadeEntry) fadeEntry.materials = g.userData.occlusionMaterials;
     const floorTop = interiorFloorTopAt(floorTopMap, f.x || 0, f.y || 0);
     g.position.set((f.x || 0) - (cx || 0), floorTop, (f.y || 0) - (cz || 0));
     g.userData.dressingSlug = f.slug;
@@ -7597,6 +7662,47 @@ function itrPillarCutawayMask(pillarList, cameraPos, sightPoints, cx, cz){
   });
 }
 
+// STAGE-A A4 — furniture's own occlusion AABB: unlike a wall/pillar instance (one box, sx/sy/sz off the
+// instance itself), a furniture piece is a multi-prism assembly (furnitureFor(kind,realm).prisms,
+// theater-interior.js — a pure-data recipe, no THREE) mounted at floorTop. This unions every prism's own
+// local box into ONE world-space AABB for the sightline test — deliberately a single whole-piece box
+// (never per-prism), matching "the blocking INSTANCE" (STAGE-A A4's own wording) being the whole
+// furniture placement, not one drawer/leg/shelf-board of it. Returns null for a slug-less/unresolvable
+// entry (never throws). Pure geometry, no THREE — testable the same jsdom-only way itrSegmentIntersectsAabb
+// itself is.
+function itrFurnitureOcclusionBoxFor(entry, cx, cz, floorTopMap){
+  if(!entry || !entry.slug) return null;
+  const recipe = furnitureFor(entry.kind, entry.realmId);
+  const prisms = (recipe && recipe.prisms) || [];
+  if(!prisms.length) return null;
+  let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity, minZ = Infinity, maxZ = -Infinity;
+  prisms.forEach((p) => {
+    const hx = Math.max(0.01, p.sx || 0) / 2, hy = Math.max(0.01, p.sy || 0) / 2, hz = Math.max(0.01, p.sz || 0) / 2;
+    const pcx = p.dx || 0, pcy = (p.yBase || 0) + hy, pcz = p.dz || 0;
+    minX = Math.min(minX, pcx - hx); maxX = Math.max(maxX, pcx + hx);
+    minY = Math.min(minY, pcy - hy); maxY = Math.max(maxY, pcy + hy);
+    minZ = Math.min(minZ, pcz - hz); maxZ = Math.max(maxZ, pcz + hz);
+  });
+  const floorTop = interiorFloorTopAt(floorTopMap, entry.x || 0, entry.y || 0);
+  const worldX = (entry.x || 0) - (cx || 0), worldZ = (entry.y || 0) - (cz || 0);
+  return {
+    min: { x: worldX + minX, y: floorTop + minY, z: worldZ + minZ },
+    max: { x: worldX + maxX, y: floorTop + maxY, z: worldZ + maxZ }
+  };
+}
+// per-furniture-entry boolean mask, same "does ANY sight point's camera->torso segment enter this
+// instance's own box" contract as itrPillarCutawayMask above, generalized to the unioned furniture AABB
+// itrFurnitureOcclusionBoxFor derives (rather than a flat sx/sy/sz instance field).
+function itrFurnitureOcclusionMask(furniture, cx, cz, floorTopMap, cameraPos, sightPoints){
+  const list = furniture || [];
+  if(!cameraPos || !sightPoints || !sightPoints.length) return list.map(() => false);
+  return list.map((entry) => {
+    const box = itrFurnitureOcclusionBoxFor(entry, cx, cz, floorTopMap);
+    if(!box) return false;
+    return sightPoints.some((pt) => itrSegmentIntersectsAabb(cameraPos, pt, box.min, box.max));
+  });
+}
+
 // stub height for a flagged occluder (pillar OR wall, docs/DIEGETIC-LIGHT.md unit S-1) — was "~0.3
 // wall height, the parapet grammar" (BW2-1b item 1, a KNEE cut); Adam's live steer on S-1 (2026-07-11)
 // lowered this to a genuine ANKLE: the old 0.3 frac (0.72 world units at the 2.4 wallHeightBase
@@ -7614,10 +7720,19 @@ function itrPillarCutawayMask(pillarList, cameraPos, sightPoints, cx, cz){
 // test fixture) that omits data.wallHeightBase entirely. Name kept (itrPillarStubHeight/
 // ITR_PILLAR_STUB_FRAC) for the existing BW2-1b harness's own test seam — see itrOcclusionAnkleHeight
 // alias below, used by the (now shared) wall+pillar S-1 fade path.
+// STAGE-A A4 (docs/STAGE-A.md §A4, 2026-07-12): the solid ankle STEM height is now a flat absolute
+// world-unit constant inside the spec's own 0.12-0.25u band, superseding the wallHeightBase*
+// ITR_PILLAR_STUB_FRAC fraction this comment block above described (0.288u at the 2.4 nominal base —
+// just OUTSIDE the new band). The old fraction's whole rationale was "stub to the SAME absolute ankle
+// height regardless of scale domain" — but wallHeightBase itself already stays ~2.4 (the board's own
+// UNSCALED nominal wall height) across every scale domain, so a flat constant achieves the identical
+// practical effect with a cleaner number inside the tighter A4 band. ITR_PILLAR_STUB_FRAC/
+// wallHeightBase are kept as function-signature/name fossils for the existing harness seam; the
+// returned height no longer actually depends on either.
 const ITR_PILLAR_STUB_FRAC = 0.12;
+const ITR_OCCLUSION_STEM_HEIGHT_U = 0.18; // A4: named const, 0.12-0.25u band — Adam dials from the re-shoot.
 function itrPillarStubHeight(wallHeightBase){
-  const base = (typeof wallHeightBase === "number" && wallHeightBase > 0) ? wallHeightBase : 2.4;
-  return base * ITR_PILLAR_STUB_FRAC;
+  return ITR_OCCLUSION_STEM_HEIGHT_U;
 }
 // S-1 alias — the SAME ankle-height deriver, named for its wider (wall+pillar) role in the occlusion
 // fade path below (itrPillarStubHeight kept as the historical/tested name the BW2-1b harness seam
@@ -7629,13 +7744,134 @@ const itrOcclusionAnkleHeight = itrPillarStubHeight;
 // a figure directly behind a full-height occluder genuinely reads occluded BEFORE trusting the fixed
 // (default-on) render's green. No product caller ever sets this — false everywhere except the harness.
 let ITR_OCCLUSION_FADE_DISABLED_FOR_TEST = false;
-// S-1 GHOST OPACITY — the removed upper portion of an occluding wall/pillar renders at this opacity
-// instead of vanishing outright, so the player can still tell a column/wall is there while the figure
-// behind it reads clearly through it. Adam's original "~5%" (P-3 real demo, 2026-07-11) proved
-// IMPERCEPTIBLE — on/off frames were indistinguishable, the column just vanished, defeating his own
-// "know something's there" intent. Bumped to 0.2 to actually read as a faint presence; still low
-// enough that the figure behind reads clearly. A dial — Adam tunes from the re-shoot.
-const ITR_OCCLUSION_GHOST_OPACITY = 0.2;
+
+// ═══ STAGE-A A4 — DYNAMIC OCCLUSION v2 (docs/STAGE-A.md §A4; docs/WALK-NATIVE-A.md A4) ═══════════
+// Upgrades S-1's flat-opacity ghost (one shared opacity for every ghost of a kind, no animation, no
+// hold before re-classifying) along three axes:
+//  (1) UPPER OPACITY — a named const inside the spec's 0.05-0.10 band (was a flat 0.2, Adam's original
+//      "~5%" P-3 demo call). Still low enough the figure behind reads clearly; still high enough the
+//      column/wall reads as "there, not gone".
+//  (2) PER-INSTANCE TWEEN — each blocking instance gets its OWN opacity, animated on the shared
+//      S.tweens/tickTweens channel (theater-verbs.js — the SAME channel MF-1's camera-pose glide and
+//      every verb/effect tween already rides; never a second hand-rolled rAF loop), persisted across
+//      setInteriorBoard rebuilds in S.occlusionFadeState (Map: id -> {blocking, opacity, materials}).
+//      A re-classify mid-fade INTERRUPTS/RETARGETS from wherever the opacity actually is right now
+//      (the SAME discipline placeCameraTweened's own preFit snapshot keeps for the camera) rather than
+//      snapping or restarting. `materials` is an array (length 1 for a wall/pillar's single ghost
+//      material, length N for a furniture piece's per-prism materials) — the tween mutates every live
+//      material directly each tick; no geometry rebuild is needed between setInteriorBoard calls.
+//  (3) RECLASSIFY HYSTERESIS — a blocker's COMMITTED state only re-evaluates when the camera's own
+//      bearing has moved at least ITR_OCCLUSION_RECLASSIFY_HYSTERESIS_DEG since the last FREE
+//      (non-held) classification pass; a smaller move reuses the prior commit outright, so two
+//      rebuilds whose composed camera drifted a fraction of a degree (theater-shot.js's composeShot
+//      re-picking a marginally different candidate round to round) never flicker an occluder in/out.
+// Blockers ALSO now include tall furniture (data.furniture, BW2-5's own "furniture-class blocker
+// volumes") alongside the wall/pillar instance lists S-1 originally tested — see the ShotPlan-gated
+// occlusionFurnitureOn read at this unit's setInteriorBoard call site (STAGE-A A4: "blockers come from
+// ShotPlan.occlusionTargets, not only original piece cells").
+const ITR_OCCLUSION_UPPER_OPACITY = 0.08;          // 0.05-0.10 band (was flat ITR_OCCLUSION_GHOST_OPACITY=0.2)
+const ITR_OCCLUSION_GHOST_OPACITY = ITR_OCCLUSION_UPPER_OPACITY; // back-compat alias — old name, new value
+const ITR_OCCLUSION_FADE_IN_MS = 150;              // 120-180ms band — fades THROUGH quickly
+const ITR_OCCLUSION_FADE_OUT_MS = 220;             // 180-260ms band — restores to opaque more slowly
+const ITR_OCCLUSION_RECLASSIFY_HYSTERESIS_DEG = 3; // 2-4deg band
+
+// camera BEARING (degrees, world-origin-relative — a cheap, deterministic "has the camera meaningfully
+// moved" proxy; pure math, no THREE) — the angle setInteriorBoard's own occlusionCameraPos sits at
+// around the world origin. Two consecutive builds' bearings differing by less than the hysteresis band
+// above hold the prior classification; a real rotate()-scale move (90 degrees) always exceeds it.
+function itrOcclusionBearingDeg(camPos){
+  if(!camPos) return null;
+  return (Math.atan2(camPos.x, camPos.z) * 180) / Math.PI;
+}
+// shortest unsigned distance between two bearings, wrapped to [0,180] — never the naive difference
+// (which would misjudge e.g. 179 vs -179 as a huge move when it's actually a 2-degree one).
+function itrOcclusionBearingDeltaDeg(a, b){
+  if(a == null || b == null) return Infinity;
+  let d = Math.abs(a - b) % 360;
+  if(d > 180) d = 360 - d;
+  return d;
+}
+// itrOcclusionNextCommitted — the PURE hysteresis decision (no S.*, no THREE): given this rebuild's raw
+// geometric test result, the previously-committed state, and whether this id has ever been classified
+// before, decide the next committed state. `holdPrior` (this rebuild's camera-bearing hold flag)
+// freezes an ALREADY-SEEN id's commitment regardless of the raw result; a brand-new id (never
+// classified before) always takes the raw result fresh — there is no prior commitment to hold onto.
+// Exposed on _occlusionLawForTest so a harness can prove the hysteresis decision directly without
+// needing a live camera to produce a genuinely small bearing delta (the product's own camera only ever
+// moves in discrete 90-degree rotate() steps or full ShotPlan re-composes today — see this unit's own
+// report for why the PURE math is the more direct proof surface here).
+function itrOcclusionNextCommitted(rawBlocking, priorCommitted, everClassified, holdPrior){
+  if(holdPrior && everClassified) return !!priorCommitted;
+  return !!rawBlocking;
+}
+// itrOcclusionClassify(id, rawBlocking, holdPrior) — the STATEFUL half: looks up/creates this id's
+// persistent fade-state entry (S.occlusionFadeState, reset only on a fresh mount() or a genuinely NEW
+// board object — see setInteriorBoard's own board-ref check), applies itrOcclusionNextCommitted, and on
+// a genuine flip (re)targets an opacity tween on the shared S.tweens channel — cancelling (never
+// stacking) any prior tween already live for this SAME id first, the same "retarget, not stack"
+// discipline placeCameraTweened keeps for the camera-pose tween. Returns the live entry ({blocking,
+// opacity, materials}) so the caller can decide whether to render this instance split (stub+ghost) THIS
+// build — `fading` (blocking, OR still easing back up from a fade-out) is the RENDER-time question;
+// `blocking` alone is only the CLASSIFICATION question.
+function itrOcclusionClassify(id, rawBlocking, holdPrior){
+  if(!S.occlusionFadeState) S.occlusionFadeState = new Map();
+  let entry = S.occlusionFadeState.get(id);
+  const everClassified = !!(entry && entry.everClassified);
+  if(!entry){
+    entry = { blocking: false, opacity: 1, materials: null, everClassified: false };
+    S.occlusionFadeState.set(id, entry);
+  }
+  const committed = itrOcclusionNextCommitted(rawBlocking, entry.blocking, everClassified, holdPrior);
+  entry.everClassified = true;
+  if(committed !== entry.blocking){
+    entry.blocking = committed;
+    const target = committed ? ITR_OCCLUSION_UPPER_OPACITY : 1;
+    const dur = committed ? ITR_OCCLUSION_FADE_IN_MS : ITR_OCCLUSION_FADE_OUT_MS;
+    if(!S.tweens) S.tweens = [];
+    S.tweens = S.tweens.filter((tw) => !(tw && tw.isOcclusionFadeTween && tw.occlusionId === id)); // retarget, never stack
+    const startOpacity = entry.opacity;
+    const tw = {
+      start: Date.now(), dur, isOcclusionFadeTween: true, occlusionId: id,
+      update: (t) => {
+        const v = mf1Lerp(startOpacity, target, mf1EaseOutCubic(t));
+        entry.opacity = v;
+        (entry.materials || []).forEach((m) => { if(m) m.opacity = v; });
+      },
+      onDone: () => {
+        entry.opacity = target;
+        (entry.materials || []).forEach((m) => { if(m) m.opacity = target; });
+      }
+    };
+    S.tweens.push(tw);
+    if(typeof markDirty === "function") markDirty();
+    startTweenLoop();
+  }
+  entry.fading = entry.blocking || entry.opacity < 1 - 1e-3;
+  return entry;
+}
+// STAGE-A A4 — the EXACT id string production classification uses (position-rounded, PLUS `yBase` —
+// see below for why). `yBase` defaults 0 so every 2-arg caller (furniture, which never stacks two
+// entries at one cell) keeps its pre-existing id shape untouched.
+//
+// THE COLUMN-CAP COLLISION (found live testing this unit against a real generated dungeon): BW2-5's
+// THE COLUMN DEMOTION stacks a "tapered" column's decorative CAP as a SEPARATE pillar-list instance at
+// the SAME (x,z) as its own shaft (yBase=0 for the shaft, yBase=wallHeightBase for the cap — two real,
+// independent occluder instances at one cell, not one). An id keyed on (kind,x,z) ALONE aliases them
+// onto the SAME S.occlusionFadeState entry; since itrBuildOcclusionGhostPillarMeshes builds+assigns
+// `entry.materials` once per instance IN ORDER, the shaft's own ghost mesh's material reference gets
+// silently OVERWRITTEN by the cap's (built second) — the live tween then only ever mutates the CAP's
+// material, leaving the SHAFT's ghost material frozen at its build-time opacity (1, pre-tick) forever:
+// visually indistinguishable from fully opaque, defeating the fade for exactly the instance actually on
+// the sightline. Reproduced via dev/battle-gate/capture-occlusion-real.mjs's real-dungeon ON/OFF/CONTACT
+// capture (ON read pixel-identical to OFF on a genuine tapered-column room) before this fix; verified
+// fixed after (see this unit's own report for the exact before/after numbers). `yBase` (rounded the
+// same way x/z already are) discriminates the shaft from the cap without needing to know BW2-5's own
+// column-family internals — any two same-cell stacked prisms (a future doorframe-header family too)
+// get their own independent entries the same way.
+function itrOcclusionIdFor(kind, x, z, yBase){
+  const yb = (typeof yBase === "number") ? yBase : 0;
+  return kind + ":" + (Math.round((x || 0) * 1000) / 1000) + "," + (Math.round((z || 0) * 1000) / 1000) + ":" + (Math.round(yb * 1000) / 1000);
+}
 // ROOM-SHELL COMPILER (docs/ROOM-SHELL-COMPILER.md): default ON, reversible — the SAME
 // "let + window.Theater._set*ForTest setter" convention ITR_OCCLUSION_FADE_DISABLED_FOR_TEST just
 // above already established for a live/harness A-B toggle. ON: the active room's floor/wall/riser
@@ -7844,6 +8080,17 @@ function setInteriorBoard(data){
   drainTweens(S);
   clearGroup(S.fxGroup);
   S.lastBoard = data;
+  // STAGE-A A4 — a genuinely NEW board object (not a same-object rebuild: rotate()/zoom/variant-only
+  // replays never change `data`'s own identity, matching setInteriorVariant's own "null S.boardKey,
+  // replay S.lastBoard" trick) clears the persistent occlusion fade state + hysteresis bearing anchor.
+  // Walking into a new room must never inherit a torn-down room's stale fade entries, or hold a
+  // brand-new room's own first classification against an unrelated old bearing. A same-object replay
+  // correctly PRESERVES fade state across the rebuild — exactly what the hysteresis hold needs.
+  if(data !== S.__occlusionFadeBoardRef){
+    S.occlusionFadeState = new Map();
+    S.occlusionClassifyBearingDeg = null;
+    S.__occlusionFadeBoardRef = data;
+  }
   clearGroup(S.tileGroup);
   clearGroup(S.propGroup);
   clearGroup(S.interiorGroup);
@@ -7985,6 +8232,24 @@ function setInteriorBoard(data){
   // instead of re-deriving a parallel approximation of it.
   placeCamera();
   const occlusionCameraPos = S.camera ? { x: S.camera.position.x, y: S.camera.position.y, z: S.camera.position.z } : null;
+  // STAGE-A A4 — the reclassify-hold decision, computed ONCE per rebuild and shared by every kind's
+  // classification pass below (wall/pillar/furniture): a small camera-bearing move since the last FREE
+  // classification holds every already-seen id's prior commitment; the anchor bearing advances on
+  // every NON-held pass (whether or not anything actually flipped this time), so a long slow drift
+  // still eventually re-anchors instead of comparing forever against one stale bearing.
+  const occlusionBearingNow = itrOcclusionBearingDeg(occlusionCameraPos);
+  const occlusionHoldPrior = S.occlusionClassifyBearingDeg != null && occlusionBearingNow != null &&
+    itrOcclusionBearingDeltaDeg(occlusionBearingNow, S.occlusionClassifyBearingDeg) < ITR_OCCLUSION_RECLASSIFY_HYSTERESIS_DEG;
+  if(!occlusionHoldPrior) S.occlusionClassifyBearingDeg = occlusionBearingNow;
+  // STAGE-A A4: blockers now come from ShotPlan.occlusionTargets (docs/STAGE-A.md §A4), not only the
+  // wall/pillar instance lists S-1 originally tested — furniture (tall crates/cabinets/shelf-units,
+  // data.furniture, BW2-5's own "furniture-class blocker volumes") joins the candidate set whenever
+  // THIS shot's own ShotPlan (S.lastShotPlan, A3, set a few lines above this preview fit) actually
+  // classifies furniture as an occlusion kind. Absent a ShotPlan (ITR_SHOT_COMPOSE off, or a narrow
+  // harness that never builds one), furniture blocking stays off — byte-identical to pre-A4 behavior;
+  // wall/pillar classification is unconditional either way (unchanged from S-1).
+  const occlusionShotTargets = (S.lastShotPlan && Array.isArray(S.lastShotPlan.occlusionTargets)) ? S.lastShotPlan.occlusionTargets : null;
+  const occlusionFurnitureOn = !!(occlusionShotTargets && occlusionShotTargets.some(function(t){ return t && t.kind === "furniture"; }));
 
   const env = data.env || THEATER_DEFAULT_ENV_FALLBACK;
   S.env = env;
@@ -8231,14 +8496,24 @@ function setInteriorBoard(data){
   // ankle-height solid stub (rendered here, in the normal opaque wallMesh) + a ~5% ghost of the
   // removed upper portion (rendered in the separate wallGhostMesh below — its own draw call, only
   // built when at least one wall instance is actually occluding this frame).
-  let wallGhostList = [];
+  // STAGE-A A4: the raw mask is UNCHANGED math (itrPillarCutawayMask); what's new is that the split
+  // decision now runs through itrOcclusionClassify (persistent per-id state + hysteresis hold) instead
+  // of splitting on the raw mask directly — `entry.fading` (blocking, or still easing back up from a
+  // fade-out) decides whether THIS build renders the split, not the instantaneous raw test alone.
+  let wallGhostList = [];   // flat descriptor list — S.interiorLastWallGhostList's own established shape
+  let wallGhostBuild = [];  // {inst, fadeEntry} pairs — drives the individually-tweened ghost meshes below
   if(!ITR_OCCLUSION_FADE_DISABLED_FOR_TEST && itrSightPoints.length && wallList.length){
     const wallOcclusionMask = itrPillarCutawayMask(wallList, occlusionCameraPos, itrSightPoints, cx, cz);
     const wallAnkleH = itrOcclusionAnkleHeight(data.wallHeightBase);
     wallList = wallList.map(function(wi, i){
-      if(!wallOcclusionMask[i]) return wi;
+      const id = itrOcclusionIdFor("wall", wi.x, wi.z, wi.yBase);
+      const entry = itrOcclusionClassify(id, !!wallOcclusionMask[i], occlusionHoldPrior);
+      if(!entry.fading) return wi;
       const split = itrSplitOccluderForAnkleGhost(wi, wallAnkleH);
-      if(split.ghost) wallGhostList.push(split.ghost);
+      if(split.ghost){
+        wallGhostList.push(split.ghost);
+        wallGhostBuild.push({ inst: split.ghost, fadeEntry: entry });
+      }
       return split.stub;
     });
   }
@@ -8249,9 +8524,17 @@ function setInteriorBoard(data){
   const wallMesh = interiorBuildInstancedMesh(
     (wallFromFile || applyEmissiveAlbedoLift) ? itrNeutralizeInstanceColors(wallList, kit.wallColor) : wallList,
     cx, cz, wallTex, variant, "wall");
-  const wallGhostMesh = wallGhostList.length ? interiorBuildInstancedMesh(
-    (wallFromFile || applyEmissiveAlbedoLift) ? itrNeutralizeInstanceColors(wallGhostList, kit.wallColor) : wallGhostList,
-    cx, cz, wallTex, variant, "wall", ITR_OCCLUSION_GHOST_OPACITY) : null;
+  // STAGE-A A4: ONE small ghost mesh PER blocking instance (never a big shared material carrying every
+  // ghost of a kind at one flat alpha) — each instance's own live tween mutates ONLY its own material,
+  // so two simultaneously-fading walls at different progress never fight over a shared opacity value.
+  const wallGhostMesh = wallGhostBuild.length ? itrBuildOcclusionGhostMeshes(
+    wallGhostBuild.map(function(pair){
+      return {
+        inst: (wallFromFile || applyEmissiveAlbedoLift) ? itrNeutralizeInstanceColors([pair.inst], kit.wallColor)[0] : pair.inst,
+        fadeEntry: pair.fadeEntry
+      };
+    }),
+    cx, cz, wallTex, variant, "wall") : null;
   // BW2-4b item 4 — DOORFRAME VALUE + TEXTURE. The doorframe ships trimColor as its instance color; a
   // textured InstancedMesh MULTIPLIES its map by that per-instance color, so a dark trim double-darkened
   // the wallTex to a pure-black slab (the loop-02 black-monolith arch — the exact bug the WALL
@@ -8514,14 +8797,20 @@ function setInteriorBoard(data){
   // GHOST of the removed upper portion (itrSplitOccluderForAnkleGhost) so the column still reads as
   // "there" — see pillarGhostMeshes below, its own (small, occlusion-only) draw call.
   let pillarList = inst.pillar;
-  let pillarGhostList = [];
+  let pillarGhostList = [];   // flat descriptor list — S.interiorLastPillarGhostList's own established shape
+  let pillarGhostBuild = [];  // {inst, fadeEntry} pairs — drives the individually-tweened ghost meshes below
   if(!ITR_OCCLUSION_FADE_DISABLED_FOR_TEST && occlusionCameraPos && pillarList && pillarList.length && itrSightPoints.length){
     const mask = itrPillarCutawayMask(pillarList, occlusionCameraPos, itrSightPoints, cx, cz);
     const pillarAnkleH = itrOcclusionAnkleHeight(data.wallHeightBase);
     pillarList = pillarList.map(function(pinst, i){
-      if(!mask[i]) return pinst;
+      const id = itrOcclusionIdFor("pillar", pinst.x, pinst.z, pinst.yBase);
+      const entry = itrOcclusionClassify(id, !!mask[i], occlusionHoldPrior);
+      if(!entry.fading) return pinst;
       const split = itrSplitOccluderForAnkleGhost(pinst, pillarAnkleH);
-      if(split.ghost) pillarGhostList.push(split.ghost);
+      if(split.ghost){
+        pillarGhostList.push(split.ghost);
+        pillarGhostBuild.push({ inst: split.ghost, fadeEntry: entry });
+      }
       return split.stub;
     });
   }
@@ -8530,15 +8819,23 @@ function setInteriorBoard(data){
   // entry, preserving U3's own draw-call budget for the MAIN mesh) so a harness can assert stub-applied
   // vs full-height per instance without decomposing InstancedMesh matrices.
   S.interiorLastPillarList = pillarList;
-  S.interiorLastPillarGhostList = pillarGhostList; // S-1 test seam — the separately-drawn ~5% ghosts
+  S.interiorLastPillarGhostList = pillarGhostList; // S-1 test seam — the separately-drawn ghosts
   // BW2-5 THE COLUMN DEMOTION: pillar instances split by `profile` (round gets its own cylinder
   // mesh) — fed the POST-CUTAWAY list so the sightline stubs apply to every profile alike.
   const pillarMeshes = interiorBuildPillarMeshes(
     pillarTex ? itrNeutralizeInstanceColors(pillarList, kit.wallColor) : pillarList,
     cx, cz, variant, pillarTex);
-  const pillarGhostMeshes = pillarGhostList.length ? interiorBuildPillarMeshes(
-    pillarTex ? itrNeutralizeInstanceColors(pillarGhostList, kit.wallColor) : pillarGhostList,
-    cx, cz, variant, pillarTex, ITR_OCCLUSION_GHOST_OPACITY) : [];
+  // STAGE-A A4: ONE small ghost mesh PER blocking pillar (never a big shared material carrying every
+  // ghost of a kind at one flat alpha) — see itrBuildOcclusionGhostPillarMeshes's own header.
+  const pillarGhostGroup = pillarGhostBuild.length ? itrBuildOcclusionGhostPillarMeshes(
+    pillarGhostBuild.map(function(pair){
+      return {
+        inst: pillarTex ? itrNeutralizeInstanceColors([pair.inst], kit.wallColor)[0] : pair.inst,
+        fadeEntry: pair.fadeEntry
+      };
+    }),
+    cx, cz, variant, pillarTex) : null;
+  const pillarGhostMeshes = pillarGhostGroup ? [pillarGhostGroup] : [];
   // GR4 (docs/GRAPHICS-ENGINE.md build unit GR4): the diorama edge skirt — data.skirt (src/ui/theater-
   // interior.js's interiorBuildBoard, GR4 addition), a sibling of `instances` (never counted toward the
   // "4 known instance kinds" data-shape check — see that function's own doc comment). Untextured (flat
@@ -8628,7 +8925,24 @@ function setInteriorBoard(data){
   // BEAUTY-WAVE-2.md BW2-5: furniture-class blocker volumes (data.furniture) + wall-hang extrusion
   // props (data.wallProps, THE PROP PERSPECTIVE LAW) — both siblings of data.dressing, built off the
   // SAME roll (see interiorBuildDressing's own skip-blocker/wall-hang comment just above).
-  const furnitureGroup = interiorBuildFurniture(data.furniture, cx, cz, S.interiorFloorTopMap);
+  // STAGE-A A4: furniture joins the occlusion candidate set whenever THIS shot's own ShotPlan actually
+  // classifies furniture as a blocker kind (occlusionFurnitureOn, computed once near occlusionCameraPos
+  // above) — the classify callback runs itrFurnitureOcclusionMask's own per-entry AABB test through the
+  // SAME itrOcclusionClassify persistent-state+hysteresis path wall/pillar already use, per instance.
+  let furnitureFadeById = null; // Map(id -> entry), id = itrOcclusionIdFor("furniture", f.x, f.y)
+  if(occlusionFurnitureOn && !ITR_OCCLUSION_FADE_DISABLED_FOR_TEST && occlusionCameraPos && itrSightPoints.length && (data.furniture || []).length){
+    const furnitureMask = itrFurnitureOcclusionMask(data.furniture, cx, cz, S.interiorFloorTopMap, occlusionCameraPos, itrSightPoints);
+    furnitureFadeById = new Map();
+    (data.furniture || []).forEach(function(f, i){
+      const id = itrOcclusionIdFor("furniture", f.x, f.y);
+      furnitureFadeById.set(id, itrOcclusionClassify(id, !!furnitureMask[i], occlusionHoldPrior));
+    });
+  }
+  const furnitureGroup = interiorBuildFurniture(data.furniture, cx, cz, S.interiorFloorTopMap,
+    furnitureFadeById ? function(f){
+      const entry = furnitureFadeById.get(itrOcclusionIdFor("furniture", f.x, f.y));
+      return entry && entry.fading ? entry : null;
+    } : null);
   S.interiorGroup.add(furnitureGroup);
   S.interiorFurnitureCount = (data.furniture || []).length;
   const wallPropsGroup = interiorBuildWallProps(data.wallProps, cx, cz, S.interiorFloorTopMap, data.wallHeightBase);
@@ -9574,6 +9888,32 @@ window.Theater._interiorPortalListForTest = function(){ return S.interiorLastPor
 // S-1 — TEST-ONLY SEAM: see ITR_OCCLUSION_FADE_DISABLED_FOR_TEST's own declaration comment — flips the
 // whole ankle+ghost pass off for a genuine RED-FIRST baseline render (dev/verify-occlusion-fade.mjs).
 window.Theater._setOcclusionFadeDisabledForTest = function(v){ ITR_OCCLUSION_FADE_DISABLED_FOR_TEST = !!v; };
+// STAGE-A A4 — TEST-ONLY SEAMS: read-only access to the persistent per-instance fade state
+// (S.occlusionFadeState) so a harness can prove the TWEEN (fake-clock start/mid/end distinct opacity)
+// and the RECLASSIFY HYSTERESIS (a held id's committed state/opacity are untouched by a small camera
+// move) without decomposing InstancedMesh matrices or a live GL read. `id` is itrOcclusionIdFor's own
+// exact id string — exposed below so a harness never has to duplicate the rounding rule.
+window.Theater._occlusionIdFor = function(kind, x, z, yBase){ return itrOcclusionIdFor(kind, x, z, yBase); };
+window.Theater._occlusionFadeEntryForTest = function(id){
+  const entry = S.occlusionFadeState && S.occlusionFadeState.get(id);
+  return entry ? { blocking: entry.blocking, opacity: entry.opacity, fading: !!entry.fading } : null;
+};
+// the LIVE material.opacity value(s) actually mounted for this id's ghost mesh(es) right now — a
+// stricter proof than reading entry.opacity alone (that number is what the tween WROTE; this reads
+// what the real THREE material objects currently hold, catching any wiring gap between the two).
+window.Theater._occlusionGhostMaterialOpacityForTest = function(id){
+  const entry = S.occlusionFadeState && S.occlusionFadeState.get(id);
+  if(!entry || !entry.materials) return null;
+  return entry.materials.map((m) => (m ? m.opacity : null));
+};
+// the live camera bearing + hysteresis anchor (degrees) — lets a harness assert the RAW bearing math
+// directly against S.occlusionClassifyBearingDeg without re-deriving atan2 itself.
+window.Theater._occlusionBearingForTest = function(){
+  return {
+    camera: itrOcclusionBearingDeg(window.Theater._interiorCameraPositionForTest()),
+    anchor: (S.occlusionClassifyBearingDeg != null) ? S.occlusionClassifyBearingDeg : null
+  };
+};
 // ROOM-SHELL COMPILER — TEST/HARNESS SEAM: flips ITR_ROOM_SHELL live (dev/verify-room-shell-render.mjs's
 // own before[flag off]/after[flag on] A-B capture), same convention as the setter just above.
 window.Theater._setRoomShellEnabled = function(v){ ITR_ROOM_SHELL = !!v; };
@@ -10181,7 +10521,14 @@ window.Theater._occlusionLawForTest = {
   // S-1 OCCLUSION FADE additions: the shared ankle-height alias + the split helper + the ghost-opacity
   // constant, so a harness can re-derive "stub + ghost, contiguous, summing to the original height"
   // without a live mount.
-  itrOcclusionAnkleHeight, itrSplitOccluderForAnkleGhost, ITR_OCCLUSION_GHOST_OPACITY
+  itrOcclusionAnkleHeight, itrSplitOccluderForAnkleGhost, ITR_OCCLUSION_GHOST_OPACITY,
+  // STAGE-A A4 additions: the furniture AABB/mask pair, the pure hysteresis decision + bearing math,
+  // and every new named const — a harness can re-derive the FULL A4 classification decision (raw mask
+  // -> hysteresis-held commit -> upper-opacity/duration targets) without a live mount.
+  itrFurnitureOcclusionBoxFor, itrFurnitureOcclusionMask,
+  itrOcclusionBearingDeg, itrOcclusionBearingDeltaDeg, itrOcclusionNextCommitted, itrOcclusionIdFor,
+  ITR_OCCLUSION_UPPER_OPACITY, ITR_OCCLUSION_FADE_IN_MS, ITR_OCCLUSION_FADE_OUT_MS,
+  ITR_OCCLUSION_RECLASSIFY_HYSTERESIS_DEG, ITR_OCCLUSION_STEM_HEIGHT_U
 };
 // BW2-1b — TEST-ONLY SEAM: the LIVE camera world position setInteriorBoard's own pillar-cutaway pass
 // actually raycasts from (the PREVIEW placeCamera() call's own output, see that call's header

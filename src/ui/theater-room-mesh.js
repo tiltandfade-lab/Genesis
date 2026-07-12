@@ -470,6 +470,35 @@ function pointInTriangle2D(px, pz, a, b, c) {
   return !(hasNeg && hasPos);
 }
 
+// pointToSegmentDist2(px,pz, ax,az, bx,bz) -> squared distance from a point to a line SEGMENT (clamped
+// to the segment's own endpoints) — the primitive the triangle-distance fallback below is built from.
+function pointToSegmentDist2(px, pz, ax, az, bx, bz) {
+  const dx = bx - ax, dz = bz - az;
+  const L2 = dx * dx + dz * dz;
+  let t = L2 > 0 ? ((px - ax) * dx + (pz - az) * dz) / L2 : 0;
+  t = t < 0 ? 0 : (t > 1 ? 1 : t);
+  const cx = ax + t * dx, cz = az + t * dz;
+  return (px - cx) * (px - cx) + (pz - cz) * (pz - cz);
+}
+
+// pointToTriangleDist2(px,pz, a,b,c) -> squared distance from a point to the CLOSEST point of a solid
+// triangle: 0 when the point is inside or exactly on an edge (pointInTriangle2D true), else the min
+// squared distance to its three edges. This is the correct nearest-triangle metric for the dropped-
+// cell fallback (compileRoomShellData's cellTriangleMap loop): a cell center sitting float-epsilon off
+// an internal ear-clip diagonal fails the strict containment test for BOTH triangles sharing it, yet
+// its true point-to-triangle distance to each is ~0 — so this picks a triangle the point ACTUALLY lies
+// on, which a centroid-distance heuristic does NOT (a centroid can be arbitrarily far from a long thin
+// triangle's own shared edge, wrongly ranking an unrelated triangle closer — measured: it mis-picked
+// the octagon(10,10) fixture's "4,3" cell to a triangle 2.1 units off, not the edge-sharing one). Pure,
+// deterministic.
+function pointToTriangleDist2(px, pz, a, b, c) {
+  if (pointInTriangle2D(px, pz, a, b, c)) return 0;
+  const e1 = pointToSegmentDist2(px, pz, a.x, a.z, b.x, b.z);
+  const e2 = pointToSegmentDist2(px, pz, b.x, b.z, c.x, c.z);
+  const e3 = pointToSegmentDist2(px, pz, c.x, c.z, a.x, a.z);
+  return Math.min(e1, e2, e3);
+}
+
 // triangulatePolygon(poly) -> ear-clipping triangulation of a simple CCW polygon (poly: [{x,z}...]) ->
 // Array<[i,j,k]> index triples into `poly`. O(n^2) worst case — fine at room scale (a handful to a few
 // dozen vertices after simplification). Total-function safety net: if a full pass finds no legal ear
@@ -942,14 +971,37 @@ function compileRoomShellData(cells, opts) {
 
     // logical cell<->triangle map (directive step 9): every walkable cell in THIS tier resolves to
     // the floor triangle whose polygon actually contains that cell's own center point.
+    // ROOT FIX (STAGE-C3b, 2026-07-12 — the dropped-cell bug): a strict point-in-triangle test alone
+    // silently DROPPED a cell whose center sits exactly ON (or a float-epsilon off) an internal ear-
+    // clip triangulation diagonal — NO triangle strictly contains it, so the `break` never fired and
+    // the cell got no map entry. Measured live on master: a real octagon(10,10) fixture dropped cells
+    // "2,1" and "4,3" (76 cells -> 74 mapped) — a latent render-layer hit-test gap independent of the
+    // C3b smoothing work (the diagonal chamfer merely fixed the OCTAGON case incidentally). The robust,
+    // shape-agnostic fix: a NEAREST-TRIANGLE FALLBACK by true POINT-TO-TRIANGLE distance. Keep the
+    // strictly-containing triangle when one exists (the common, exact case — behavior unchanged);
+    // otherwise fall back to the triangle whose SOLID-TRIANGLE distance to the cell center is smallest
+    // (pointToTriangleDist2 — 0 when the point is on an edge). Because a dropped cell sits on a shared
+    // internal diagonal, that distance is ~0 for BOTH triangles owning the diagonal, so the fallback
+    // resolves to a triangle the point ACTUALLY lies on (a correct hit-test answer) — NOT the wrong
+    // faraway triangle a centroid-distance heuristic would pick (measured: centroid mis-picked "4,3" to
+    // a triangle 2.1 units off its true edge). Fixed iteration order + strict `<` on the distance =>
+    // deterministic, no RNG, pure. It is now IMPOSSIBLE for a floor cell to be left unmapped, any shape.
     tierCells.forEach((c) => {
+      let contained = -1;
+      let nearestTri = -1, nearestD2 = Infinity;
       for (let t = triStart; t < triStart + triCount; t++) {
         const i0 = floorBuf.indices[t * 3], i1 = floorBuf.indices[t * 3 + 1], i2 = floorBuf.indices[t * 3 + 2];
         const a = { x: floorBuf.positions[i0 * 3], z: floorBuf.positions[i0 * 3 + 2] };
         const b = { x: floorBuf.positions[i1 * 3], z: floorBuf.positions[i1 * 3 + 2] };
         const cc = { x: floorBuf.positions[i2 * 3], z: floorBuf.positions[i2 * 3 + 2] };
-        if (pointInTriangle2D(c.x, c.z, a, b, cc)) { cellTriangleMap[cellKey(c.x, c.z)] = { tier, triIndex: t }; break; }
+        if (pointInTriangle2D(c.x, c.z, a, b, cc)) { contained = t; break; }
+        // running nearest by true solid-triangle distance, computed in the SAME pass so the fallback
+        // costs nothing extra unless the strict test never hits (the rare on-diagonal float case).
+        const d2 = pointToTriangleDist2(c.x, c.z, a, b, cc);
+        if (d2 < nearestD2) { nearestD2 = d2; nearestTri = t; }
       }
+      const resolved = contained >= 0 ? contained : nearestTri;
+      if (resolved >= 0) cellTriangleMap[cellKey(c.x, c.z)] = { tier, triIndex: resolved };
     });
   });
 
@@ -1016,7 +1068,8 @@ export {
   cellKey, buildCellIndex, tierOf, edgeVertsFor, traceTierContour, chainEdgesIntoRings,
   directionOf, mergeKeyFor, findSegmentStart, simplifySegments, unmergedSegments, ringToPolygon, signedArea2D,
   ensureCCW, segmentNormal, insetOffset, insetPolygon, radialSmoothRing,
-  chamferRunCorners, diagonalizeStaircaseRing, pointInTriangle2D, triangulatePolygon, ringPerimeterU,
+  chamferRunCorners, diagonalizeStaircaseRing, pointInTriangle2D, pointToSegmentDist2, pointToTriangleDist2,
+  triangulatePolygon, ringPerimeterU,
   hexToRgb01, polygonBBox, isAxisAlignedRectPolygon, buildAxisGrid, buildFloorGrid,
   compileRoomShellData,
   ROOM_SHELL_TIER_QUANTUM, DEFAULT_WALL_HEIGHT, DEFAULT_BEVEL_WIDTH, DEFAULT_BEVEL_DROP, DEFAULT_UV_DENSITY,

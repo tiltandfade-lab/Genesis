@@ -239,6 +239,24 @@ console.log("\n=== 8. Negative/edge cases ===");
     try { const e = compileRoomShellData([], {}); return e.floor.indices.length === 0 && e.meta.floorCellCount === 0; }
     catch (_e) { return false; }
   })());
+  // NO CELL EVER DROPPED (STAGE-C3b root fix, 2026-07-12): the cellTriangleMap loop's nearest-triangle
+  // fallback (pointToTriangleDist2) guarantees EVERY floor cell resolves, even when its center sits
+  // exactly on an internal ear-clip triangulation diagonal (no triangle STRICTLY contains it). A real
+  // octagon(10,10) fixture (76 cells) was the concrete repro — its "2,1"/"4,3" cells dropped pre-fix
+  // (74/76). This is the untagged/bare compile (NO diagonal chamfer runs), so it proves the fallback
+  // itself, not the chamfer.
+  const octRing = (() => {
+    const w = 10, d = 10, short = 10, k = Math.max(1, Math.floor(short * 0.3)), cells = [];
+    for (let z = 0; z < d; z++) for (let x = 0; x < w; x++) {
+      const cTL = x + z < k, cTR = (w - 1 - x) + z < k, cBL = x + (d - 1 - z) < k, cBR = (w - 1 - x) + (d - 1 - z) < k;
+      if (!(cTL || cTR || cBL || cBR)) cells.push({ x, z, tier: 0 });
+    }
+    return cells;
+  })();
+  const octData = compileRoomShellData(octRing, {});
+  check("8f. BARE octagon(10,10): cellTriangleMap resolves ALL 76 cells (nearest-triangle fallback — no cell dropped on an internal diagonal)",
+    Object.keys(octData.cellTriangleMap).length === octRing.length,
+    { mapped: Object.keys(octData.cellTriangleMap).length, total: octRing.length });
 }
 
 console.log("\n=== 9. check-manifest.py (run live) ===");

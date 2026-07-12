@@ -243,22 +243,33 @@ C3b is a **RENDER-ONLY** refinement inside the C4 compiler (`src/ui/theater-room
   90°/270° grid corner (every pre-C3b shape), and now also correct at the non-right-angle corners the
   radial/diagonal treatments introduce.
 
+### Dropped-cell bug — fixed at root (same branch)
+Discovered (not introduced) during this unit: the C3/C4 compiler's `cellTriangleMap` was silently
+dropping 2 of 76 cells for a real octagon fixture on master, pre-C3b — a latent floating-point edge
+case where a cell center sits exactly on an internal ear-clip triangulation diagonal, so NO triangle
+STRICTLY contains it and the cell got no map entry (a render-layer hit-test gap; combat is unaffected —
+it reads `plan.cells`, never this map). Fixed at ROOT with a **nearest-triangle fallback** in the
+`cellTriangleMap` loop (`compileRoomShellData`): keep the strictly-containing triangle when one exists
+(unchanged common case); otherwise resolve to the triangle with the smallest true point-to-triangle
+distance (`pointToTriangleDist2` — 0 when the point is on an edge). Because the dropped cell lies on a
+shared diagonal, that distance is ~0 for both triangles owning it, so the fallback picks a triangle the
+point actually lies on (a centroid-distance heuristic does NOT — it mis-picked "4,3" to a triangle 2.1
+units off its true edge). It is now impossible for a floor cell to be left unmapped, for ANY shape —
+proven on the BARE (non-chamfered) path (the diagonal chamfer only fixed the octagon case incidentally;
+this fixes circle-mode cells, unlucky rect triangulations, and future shapes too). Pure, deterministic.
+
 ### Known limitations (documented, not silently hidden)
 - `diagonalizeStaircaseRing` does not scan across a ring's own wraparound seam — in the rare worst case
   one of a shape's corners goes un-chamfered rather than mis-chamfered; never a correctness risk.
-- Discovered (not introduced) during this unit: the C3/C4 compiler's `cellTriangleMap` was already
-  silently dropping 2 of 76 cells for a real octagon fixture on master, pre-C3b — a latent ear-clip/
-  point-in-triangle floating-point edge case in the render-layer hit-test map, unrelated to combat (which
-  reads `plan.cells`, never this map). C3b's own diagonal chamfering happens to fix it for that fixture
-  as a side effect; flagged separately for a dedicated fix (spawn_task, not patched in this unit).
 
 ### Verify
-`dev/verify-stage-c3b-circle-smooth.mjs` (38 checks) — cell-map-unchanged (circle: byte-identical;
-octagon: bare ⊆ diagonalized, with the pre-existing gap documented above), door-pin, roundness metric
-(circle avg deviation from ideal radius 0.099→0.006, max 0.131→0.016), determinism, shape-gate, diagonal-
-face existence + collinearity, and the L/T/cross/tiny-octagon no-op guarantee. Full regression re-run
-clean: verify-room-shell 31/0, verify-stage-c-shapes 88/0, verify-stage-c-size 25/0, verify-stage-c-
-terrain 49/0, verify-dungeon-interior 287/0, verify-combat-cells 13/0, verify-dungeon-walkbind 20/0.
+`dev/verify-stage-c3b-circle-smooth.mjs` (43 checks) — cell-map-unchanged (circle byte-identical), door-
+pin, roundness metric (circle avg deviation from ideal radius 0.099→0.006, max 0.131→0.016), determinism,
+shape-gate, diagonal-face existence + collinearity, the ROOT dropped-cell fix (bare octagon 76/76 + red-
+first master 74/76 + circle/rect full coverage), and the L/T/cross/tiny-octagon no-op guarantee.
+`dev/verify-room-shell.mjs` gained check 8f (bare octagon 76/76 coverage). Full regression re-run clean:
+verify-room-shell 32/0, verify-stage-c-shapes 88/0, verify-stage-c-size 25/0, verify-stage-c-terrain 49/0,
+verify-dungeon-interior 287/0, verify-combat-cells 13/0, verify-dungeon-walkbind 20/0.
 Capture: `dev/battle-gate/capture-stage-c3-shapes.mjs` re-shot at `dev/battle-gate/stage-c3-shapes/
 {rotunda,octagon,l-shaped}.png` — rotunda reads as a genuine circle; octagon's corners are flat diagonal
 planes (not stairs); L stays crisp/unchanged.

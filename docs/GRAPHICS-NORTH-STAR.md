@@ -112,7 +112,15 @@ runtime size inference + unresolved fallback scaling.
   full-bright dark-corner sprites across the core-three gallery. **(This absorbs Adam's plumb-line +
   base-placement + cooler-bases asks — task #10 — into the standee contract.)**
 
-### STAGE C — compile real room shells
+### STAGE C — compile real room shells — ✅ BUILT 2026-07-12 (`docs/STAGE-C.md`, master `388a4c7b`)
+> **CLOSED.** C1 size fidelity (rooms honor rolled `dims`) · C2 structural terrain (`side`→dais/pit
+> tiers) · C3 real shapes (`areaType`→octagon/rotunda/L/cross/cave FLOOR cells + exits-from-polygon) ·
+> C3b clean geometry (true 45° octagon diagonals + round rotundas, render-only) + the `cellTriangleMap`
+> dropped-cell root fix. Combat cell grid byte-identical (cells by center-coverage) — the partial/half
+> shaping is wall-mesh only. Deferred: AO-gradient on non-rect floors (Stage E), vertical-stair
+> two-slots. Next graphics waves: Stage D (stateful nouns) / Stage E (material+light, incl. the
+> emissive-masked bloom that retires the occlusion ghost-halo). Stage B (sprite citizenship) overlaps
+> Codex's active sprite lane — coordinate.
 C1 preserve rolled size; C2 structural elevation (dais/pit tiers + darker riser side faces); C3
 polygon room shapes + polygon-derived exit slots (octagon/rotunda/L/cross/cave — BW5); C4 the
 **room-shell compiler** `src/ui/theater-room-mesh.js`: marching-squares/boundary-trace the active

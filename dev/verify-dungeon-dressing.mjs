@@ -114,6 +114,8 @@ ok(typeof M.REALM_DRESSING === "object" && M.REALM_DRESSING, "REALM_DRESSING is 
   ok(roster && roster.every((e) => typeof e.slug === "string" && e.slug.startsWith(realm + "-")),
     `every ${realm} entry's slug is a real "${realm}-..." dressing-gen slug`);
   ok(roster && roster.some((e) => e.lightAffine), `${realm} roster carries at least one lightAffine (light-primary co-location) entry`);
+  ok(roster && roster.every((e) => ["billboard", "extruded-card", "full-3d-prop"].includes(e.renderStrategy)),
+    `${realm} roster entries carry a known renderStrategy`);
 });
 console.log(`  ✓ ${pass} passed so far`);
 
@@ -146,6 +148,9 @@ group("3 — placement laws: FLOOR-only, never center 2x2, blockers wall-adjacen
     dressed.dressing.forEach((d) => {
       const cellCode = dressed.cells[d.y * dressed.cellW + d.x];
       ok(cellCode === M.SPATIAL_CELL.FLOOR, `${realm}: "${d.slug}" @ (${d.x},${d.y}) sits on a FLOOR cell (code ${cellCode})`);
+      const rosterEntry = M.REALM_DRESSING[realm].find((e) => e.slug === d.slug);
+      const expected = rosterEntry ? rosterEntry.renderStrategy : (d.primary === "wall-hang" ? "extruded-card" : d.primary === "blocker" ? "full-3d-prop" : "billboard");
+      ok(d.renderStrategy === expected, `${realm}: "${d.slug}" uses ${expected} strategy (got ${d.renderStrategy})`);
     });
 
     // never-center-2x2, re-derived independently (never trusting dressPlan's own dpCenter2x2 math).

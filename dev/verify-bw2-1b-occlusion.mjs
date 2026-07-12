@@ -391,6 +391,25 @@ async function runRenderChecks(){
     }
     await page.addStyleTag({ content: "#toast,.toast,#bardoCard,#spicePop,#diceOverlay{display:none !important;visibility:hidden !important}" });
 
+    // CAMERA-TWEEN SETTLE (DOORFRAME-OCCLUSION FIX addendum, found live re-gating checks 31/32/35 —
+    // dev/verify-occlusion-fade.mjs's own established convention, copied verbatim): BEAUTY-WAVE-4.md
+    // MF-1 landed AFTER this harness's own PART B was first authored (this file targets BEAUTY-WAVE-2's
+    // BW2-1b) — setInteriorBoard's camera fit now GLIDES (280-350ms) from wherever the camera WAS to
+    // the new fit's target, via placeCameraTweened; S.camera.position sits at the START pose (not the
+    // fitted END pose) until that tween's own onUpdate ticks settle it. Every check below used to read
+    // pillarList/pieces/raycasts SYNCHRONOUSLY, in the SAME page.evaluate as setInteriorBoard itself —
+    // meaning every raycast ran against a STALE, pre-tween camera angle, not the one occlusion classify
+    // itself used (which correctly reads the settled/target position via its own PREVIEW placeCamera()
+    // call, S.occlusionClassifyBearingDeg's own header). Confirmed live (this fix's own report): for a
+    // "beat" fit spanning 4 far corners, the stale start pose and the settled target pose are far enough
+    // apart that a marginal occluder (a doorframe arch-header prism) reads AS occluding from the stale
+    // angle but NOT from the settled one that occlusion classify correctly used to decide it needed no
+    // fade at all — the raycast was proving something that was never true of the settled frame the
+    // player actually sees. `settleCameraTween` runs after every `setInteriorBoard` call below.
+    async function settleCameraTween(){
+      await page.waitForFunction(() => !window.Theater || typeof window.Theater.tweensLive !== "function" || window.Theater.tweensLive() === 0, { timeout: 15000 });
+    }
+
     const mounted = await page.evaluate((registry) => {
       const el = document.createElement("div");
       el.style.width = "1200px"; el.style.height = "900px";
@@ -441,7 +460,7 @@ async function runRenderChecks(){
     }
 
     async function buildSeededScene(seed){
-      return await page.evaluate((walkId) => {
+      await page.evaluate((walkId) => {
         function buildFixture(n){
           const ids = Array.from({ length: n }, (_, i) => "s" + (i + 1));
           const edges = []; for (let i = 1; i < n; i++) edges.push([ids[i - 1], ids[i]]);
@@ -474,10 +493,29 @@ async function runRenderChecks(){
         board.pieces = corners.map((c, i) => ({ slug: slugs[i], cellX: c.x, cellY: c.y }));
         board.cameraFit = { mode: "beat", cells: corners.map((c) => ({ x: c.x, y: c.y })) };
         window.Theater.setInteriorBoard(board);
+        window.__bw2RoomWD = room.w * room.d; // stashed for the settled read below (see settleCameraTween's own header)
+      }, seed);
+      // CAMERA-TWEEN SETTLE — see this function's own header above; the camera fit GLIDES, so every
+      // read below must happen AFTER it settles, not in the same synchronous evaluate as the fit call.
+      await settleCameraTween();
+      return await page.evaluate(() => {
         const pillarList = window.Theater._interiorPillarListForTest();
         const pieces = window.Theater.interiorPiecesWorldPositions();
         const raycasts = pieces.map((p) => window.Theater._interiorRaycastClearForTest({ x: p.x, y: p.y + p.height * 0.5, z: p.z }));
         const meshCount = window.Theater.interiorMeshCount();
+        // DOORFRAME-OCCLUSION FIX addendum (check 34's own budget comparison): a doorframe (or wall/
+        // pillar) ghost overlay is a REAL, intentional extra draw call — built ONLY while at least one
+        // instance of that kind is actually occluding a figure THIS frame (S-1 OCCLUSION FADE's own
+        // header comment in theater-boot.js) — so "occupied" and "cleared" (zero pieces, zero sight
+        // points, guaranteed zero ghosts) legitimately differ by however many ghost KINDS fired, not by
+        // zero. Exposed here (never asserted against in THIS group — check 34 below does the arithmetic)
+        // so a harness can tell "budget grew because occlusion legitimately fired" apart from "budget
+        // grew for no reason".
+        const activeGhostKinds = [
+          window.Theater._interiorWallGhostListForTest().length > 0,
+          window.Theater._interiorPillarGhostListForTest().length > 0,
+          window.Theater._interiorDoorGhostListForTest().length > 0,
+        ].filter(Boolean).length;
         // quad-AABB overlap check (CLIP MARGIN, check 36): none of the mounted pieces' own footprint
         // circle should still overlap a nearby wall/pillar box post-nudge.
         const clip = window.Theater._clipMarginLawForTest;
@@ -487,11 +525,11 @@ async function runRenderChecks(){
           return push.magnitude; // post-mount position re-tested — should already read ~0 (the mount itself applied the resolving nudge)
         });
         return {
-          ok: true, roomWD: room.w * room.d, pillarCount: pillarList.length,
+          ok: true, roomWD: window.__bw2RoomWD, pillarCount: pillarList.length,
           pillarHeights: pillarList.map((p) => p.sy),
-          raycasts, meshCount, pieceCount: pieces.length, overlaps,
+          raycasts, meshCount, pieceCount: pieces.length, overlaps, activeGhostKinds,
         };
-      }, seed);
+      });
     }
 
     group("31 — GREEN: a controlled real-dungeon scene (pieces at the room's own 4 pillar corners) mounts with ZERO occluded standees (real THREE.Raycaster)");
@@ -520,11 +558,122 @@ async function runRenderChecks(){
     ok(seedResults.every((s) => s.ok), "all 100 seeded scenes built + mounted without error");
     ok(totalPieces === 400, `all 400 (100 seeds x 4 pieces) standees actually RESOLVED and mounted (${totalPieces}) — a non-vacuous check (an unresolved piece never reaches the raycast at all)`);
     ok(totalOccluded === 0, `0 of ${totalPieces} mounted standees (across 100 seeds) report a raycast occlusion`);
-    ok(anyFullHeight, "at least one seed's pillar stays FULL height (the law doesn't stub everything indiscriminately)");
-    // anyStub is a bonus signal (not all 100 seeds necessarily need a stubbed pillar to satisfy "zero
-    // occlusion" — a fix that never needs to fire because the corner-pillar/corner-piece geometry
-    // never actually lines up on this particular seed set is still a legitimate green), reported not asserted:
+    // NON-ASSERTED seed-set signals (the SELECTIVITY assertion moved to the constructed control in 32b
+    // below — see its header for why the old `anyFullHeight` assertion here was UNSOUND for this seed
+    // set). Reported for visibility, not gated: across all 100 seeds, columns are RARE (BW2-5 THE
+    // COLUMN DEMOTION: <=1 per room, most rooms earn none) so only a handful of seeds carry any pillar.
     console.log(`  stub fired on at least one of 100 seeds: ${anyStub}`);
+    console.log(`  any pillar >0.72 across all 100 seeds: ${anyFullHeight} (seed-dependent — NOT the selectivity proof; see 32b)`);
+
+    // ── SELECTIVITY, CONSTRUCTED CONTROL (replaces the old `anyFullHeight` seed-lottery assertion) ──
+    // WHY THE OLD ASSERTION WAS UNSOUND FOR THIS SEED SET (diagnosed live via a per-pillar
+    // stub-vs-sightline instrumentation sweep over all 100 seeds — this fix's own report): columns are
+    // RARE here (BW2-5 THE COLUMN DEMOTION: <=1 per room, most rooms earn none) — only 14 of the 100
+    // seeds carry ANY pillar, 18 pillars total. Of those, 14 are genuinely TALL and, under THIS
+    // fixture's own geometry (4 standees at the room's 4 corners + a "beat" camera framing all 4, whose
+    // sightlines fan across the whole room), EVERY ONE lies on at least one corner sightline — so it
+    // correctly stubs. The other 4 are BW2-5 authored-SHORT decorative caps (sy~0.192) that the classify
+    // never touches (post-classify height === raw height). The instrumentation confirmed ZERO genuine
+    // over-firing: not one pillar that the classify actually CUT (sy -> ankle 0.18) was off every
+    // sightline. Net: no tall pillar in this seed set ever stays full, so `anyFullHeight` (which needs a
+    // tall pillar to sit OFF every sightline BY LUCK) is a seed lottery that always loses here — it
+    // proves nothing about selectivity, it only reflects that these particular rooms all-occlude their
+    // rare column. The right proof is DIRECT: put an ON-sightline pillar and an OFF-sightline pillar in
+    // the SAME hand-built room and assert the first stubs while the second stays full. (PART A check 3
+    // already proves this at the pure-math layer; this is its LIVE-renderer twin, independent of the
+    // procedural seed set.)
+    group("32b — SELECTIVITY (constructed control): in one hand-built room, an ON-sightline pillar stubs while an OFF-sightline pillar stays FULL height — the law is scoped to real occluders, not indiscriminate (replaces the seed-lottery anyFullHeight)");
+    const SEL_FIG = { x: 5, z: 5 };
+    // plain 7x7 gloom room + one figure + beat fit on it — the SAME hand-built-board technique
+    // dev/verify-occlusion-fade.mjs uses (bypasses the dungeon generator; deterministic geometry).
+    await page.evaluate(({ fig }) => {
+      const kit = interiorTileKitFor("gloom");
+      const W = 7, D = 7, wallH = 2.4;
+      const floor = [];
+      for (let z = 0; z < D; z++) for (let x = 0; x < W; x++) floor.push({ x, z, sx: 1, sy: 1, sz: 1, color: kit.floorColor });
+      const wall = [];
+      for (let x = -1; x <= W; x++) { wall.push({ x, z: -1, sx: 1, sy: wallH, sz: 1, color: kit.wallColor }); wall.push({ x, z: D, sx: 1, sy: wallH, sz: 1, color: kit.wallColor }); }
+      for (let z = 0; z < D; z++) { wall.push({ x: -1, z, sx: 1, sy: wallH, sz: 1, color: kit.wallColor }); wall.push({ x: W, z, sx: 1, sy: wallH, sz: 1, color: kit.wallColor }); }
+      const board = {
+        kind: "interior3d", env: "dungeon", realmId: "gloom", cellSize: 1, wallHeightBase: wallH,
+        tileKit: { floorColor: kit.floorColor, wallColor: kit.wallColor, trimColor: kit.trimColor,
+          floorMaterial: kit.floorMaterial, wallMaterial: kit.wallMaterial, trimMaterial: kit.trimMaterial,
+          floorGrain: 0, wallGrain: 0, trimGrain: 0, gradeTint: null, gradeStrength: 0, fogWhisper: 0 },
+        instances: { floor, wall, doorframe: [], pillar: [] },
+        bounds: { minX: -1, maxX: W, minZ: -1, maxZ: D },
+        lightProfile: "torchlit",
+        pieces: [{ slug: "bw2-1b-medium", cellX: fig.x, cellY: fig.z }],
+        cameraFit: { mode: "beat", cells: [{ x: fig.x, y: fig.z }] },
+      };
+      window.__selBoard = board; // stashed so the pillar-injection replay below mutates THIS exact object
+      window.Theater.setInteriorBoard(board);
+    }, { fig: SEL_FIG });
+    await settleCameraTween();
+    const selGeo = await page.evaluate(({ fig }) => {
+      const law = window.Theater._occlusionLawForTest;
+      const origin = window.Theater.interiorBoardOrigin();
+      const floorTopMap = window.Theater._interiorFloorTopMapForTest();
+      const sp = law.itrPieceSightPoints([{ slug: "bw2-1b-medium", cellX: fig.x, cellY: fig.z }], origin.cx, origin.cz, floorTopMap);
+      return { cam: window.Theater._interiorCameraPositionForTest(), origin, sight: sp[0], ankleH: law.itrOcclusionAnkleHeight(2.4) };
+    }, { fig: SEL_FIG });
+    ok(!!selGeo.cam && !!selGeo.sight, "constructed control: bare room + figure mounted, real settled camera + sight point resolved");
+    // sweep t along the SETTLED camera->figure segment for a box that genuinely intersects — the SAME
+    // generous-occluder t-sweep dev/verify-occlusion-fade.mjs uses (the narrow interior FOV's valid
+    // occluding window is a thin slice of t near the figure, so a 1.5 half-extent occluder is used).
+    const SEL_OCC_HALF = 1.5;
+    let selOccPos = null;
+    for (let t = 0.999; t >= 0.80; t -= 0.001) {
+      const px = selGeo.cam.x + t * (selGeo.sight.x - selGeo.cam.x);
+      const pz = selGeo.cam.z + t * (selGeo.sight.z - selGeo.cam.z);
+      // eslint-disable-next-line no-await-in-loop
+      const hit = await page.evaluate(({ cam, sight, px, pz, half }) => {
+        const law = window.Theater._occlusionLawForTest;
+        return law.itrSegmentIntersectsAabb(cam, sight, { x: px - half, y: -0.5, z: pz - half }, { x: px + half, y: 1.9, z: pz + half });
+      }, { cam: selGeo.cam, sight: selGeo.sight, px, pz, half: SEL_OCC_HALF });
+      if (hit) { selOccPos = { x: px, z: pz }; break; }
+    }
+    ok(selOccPos != null, "constructed control: found an ON-sightline occluder position via the camera->figure t-sweep (the SAME primitive the production mask uses)");
+    if(selOccPos){
+      const onCell = { x: selOccPos.x + selGeo.origin.cx, z: selOccPos.z + selGeo.origin.cz };
+      const ctrlCell = { x: 1, z: 1 }; // far corner, nowhere near the single camera->figure segment
+      // inject BOTH pillars onto the SAME stashed board object, then force a rebuild (setInteriorVariant
+      // replay — the SAME "mutate instances.pillar in place, null the boardKey, replay S.lastBoard"
+      // trick dev/verify-occlusion-fade.mjs uses to guarantee a genuine re-classify).
+      const selResult = await page.evaluate(({ onCell, ctrlCell, onSize }) => {
+        const board = window.__selBoard;
+        board.instances.pillar = [
+          { x: onCell.x, z: onCell.z, sx: onSize, sy: 2.4, sz: onSize, color: "#808080" },   // ON a sightline
+          { x: ctrlCell.x, z: ctrlCell.z, sx: 1, sy: 2.4, sz: 1, color: "#808080" },          // OFF every sightline
+        ];
+        window.Theater.setInteriorVariant({});
+        const law = window.Theater._occlusionLawForTest;
+        const origin = window.Theater.interiorBoardOrigin();
+        const floorTopMap = window.Theater._interiorFloorTopMapForTest();
+        const cam = window.Theater._interiorCameraPositionForTest();
+        const sp = law.itrPieceSightPoints(board.pieces, origin.cx, origin.cz, floorTopMap);
+        // SELF-CHECK: independently confirm (via the same itrSegmentIntersectsAabb the mask uses) that
+        // the ON pillar really is on a sightline and the CONTROL pillar really is off EVERY sightline —
+        // so the assertion below can never be a false pass from a mis-placed control.
+        function onSightline(cell, half){
+          const cx = origin.cx, cz = origin.cz;
+          const boxMin = { x: cell.x - cx - half, y: -0.5, z: cell.z - cz - half };
+          const boxMax = { x: cell.x - cx + half, y: 1.9, z: cell.z - cz + half };
+          return sp.some((pt) => law.itrSegmentIntersectsAabb(cam, pt, boxMin, boxMax));
+        }
+        const pillarList = window.Theater._interiorPillarListForTest();
+        const onP = pillarList.find((p) => Math.abs(p.x - onCell.x) < 1e-6 && Math.abs(p.z - onCell.z) < 1e-6);
+        const ctrlP = pillarList.find((p) => Math.abs(p.x - ctrlCell.x) < 1e-6 && Math.abs(p.z - ctrlCell.z) < 1e-6);
+        return {
+          onOnSightline: onSightline(onCell, 1.5), ctrlOnSightline: onSightline(ctrlCell, 0.5),
+          onSy: onP ? onP.sy : null, ctrlSy: ctrlP ? ctrlP.sy : null,
+        };
+      }, { onCell, ctrlCell, onSize: SEL_OCC_HALF * 2 });
+      await settleCameraTween();
+      ok(selResult.onOnSightline === true, `constructed control: the ON pillar's box genuinely lies on a camera->figure sightline (self-checked via itrSegmentIntersectsAabb) — ${selResult.onOnSightline}`);
+      ok(selResult.ctrlOnSightline === false, `constructed control: the CONTROL pillar's box lies OFF every sightline (self-checked) — a valid negative control, ${selResult.ctrlOnSightline}`);
+      ok(selResult.onSy != null && selResult.onSy <= selGeo.ankleH + 1e-6, `SELECTIVITY: the ON-sightline pillar STUBS to the ankle height (${selGeo.ankleH.toFixed(3)}), got sy=${selResult.onSy}`);
+      ok(selResult.ctrlSy != null && Math.abs(selResult.ctrlSy - 2.4) < 1e-6, `SELECTIVITY: the OFF-sightline CONTROL pillar in the SAME room stays FULL height (2.4), got sy=${selResult.ctrlSy} — the law is scoped to real occluders, NOT indiscriminate`);
+    }
 
     group("33 — stub RESTORES when the sightline clears: rebuild the IDENTICAL room (same walkId -> byte-identical plan/pillar order) with the corner pieces removed, and confirm any pillar that WAS stubbed reports full height again");
     const nearScene = await buildSeededScene("bw2-1b-restore-seed");
@@ -532,7 +681,7 @@ async function runRenderChecks(){
     // list in the identical order) with ZERO pieces mounted — no sightline exists to test against at
     // all, so itrPillarCutawayMask's own short-circuit ("no sight points -> nothing flagged", this
     // file's own header on that function) guarantees every pillar reports its full, un-stubbed height.
-    const clearedScene = await page.evaluate((walkId) => {
+    await page.evaluate((walkId) => {
       function buildFixture(n){
         const ids = Array.from({ length: n }, (_, i) => "s" + (i + 1));
         const edges = []; for (let i = 1; i < n; i++) edges.push([ids[i - 1], ids[i]]);
@@ -548,12 +697,25 @@ async function runRenderChecks(){
       const board = interiorBuildBoard(plan1, { realmId: "gloom", env: "dungeon", focusSegNum: room.segNum, radius: 1 });
       board.pieces = []; // nobody mounted at all — no sightline to test against, every pillar clears
       window.Theater.setInteriorBoard(board);
+    }, "bw2-1b-restore-seed");
+    // CAMERA-TWEEN SETTLE — see buildSeededScene's own header; consistent discipline even though this
+    // particular board has zero pieces (so occlusion classify is a no-op regardless of camera angle).
+    await settleCameraTween();
+    const clearedScene = await page.evaluate(() => {
       return {
         ok: true,
         pillarHeights: window.Theater._interiorPillarListForTest().map((p) => p.sy),
         meshCount: window.Theater.interiorMeshCount(),
+        // DOORFRAME-OCCLUSION FIX addendum — see buildSeededScene's own comment: with zero pieces
+        // mounted there are zero sight points, so itrPillarCutawayMask/itrOcclusionClassify's own
+        // short-circuit guarantees zero ghost kinds ever fire here — asserted below, not just assumed.
+        activeGhostKinds: [
+          window.Theater._interiorWallGhostListForTest().length > 0,
+          window.Theater._interiorPillarGhostListForTest().length > 0,
+          window.Theater._interiorDoorGhostListForTest().length > 0,
+        ].filter(Boolean).length,
       };
-    }, "bw2-1b-restore-seed");
+    });
     ok(nearScene.ok && clearedScene.ok, "both the occupied and cleared variants of the same room built");
     if(nearScene.ok && clearedScene.ok){
       ok(clearedScene.pillarHeights.length === nearScene.pillarHeights.length, `same pillar COUNT/order (${clearedScene.pillarHeights.length} vs ${nearScene.pillarHeights.length}) — byte-identical plan, cutaway never adds/removes an instance`);
@@ -562,10 +724,11 @@ async function runRenderChecks(){
       ok(clearedScene.pillarHeights.every((h) => h > 0.72 + 1e-6), `every pillar (including any index stubbed while occupied, indices ${JSON.stringify(stubbedInNear)}) reports full height once no standee is mounted — heights: ${JSON.stringify(clearedScene.pillarHeights)}`);
     }
 
-    group("34 — BUDGET UNCHANGED: S.interiorMeshCount + the pillar instance list's own length are IDENTICAL between the occluded (4-corner) and cleared (0-piece) variants of the same room — cutaway is a per-instance transform edit, never a second draw call");
+    group("34 — BUDGET UNCHANGED: S.interiorMeshCount + the pillar instance list's own length are IDENTICAL between the occluded (4-corner) and cleared (0-piece) variants of the same room — cutaway is a per-instance transform edit, never a second draw call (an ACTIVE ghost overlay is the one documented, intentional exception — S-1 OCCLUSION FADE's own header: 'only ever created when at least one instance of that kind is actually occluding a figure this frame' — so the comparison accounts for however many ghost KINDS legitimately fired in the occupied scene, rather than assuming zero)");
     if(nearScene.ok && clearedScene.ok){
       ok(typeof nearScene.meshCount === "number" && nearScene.meshCount > 0, `meshCount is a real positive number (${nearScene.meshCount})`);
-      ok(clearedScene.meshCount === nearScene.meshCount, `structural mesh count identical (${nearScene.meshCount} occupied vs ${clearedScene.meshCount} cleared) — piece count never changes the structural draw-call budget`);
+      ok(clearedScene.activeGhostKinds === 0, `the CLEARED (0-piece) scene fires ZERO ghost kinds — no pieces means no sight points, so nothing can classify as occluding (${clearedScene.activeGhostKinds})`);
+      ok(clearedScene.meshCount === nearScene.meshCount - nearScene.activeGhostKinds, `structural mesh count identical ONCE the occupied scene's own legitimately-active ghost overlays are accounted for (${nearScene.meshCount} occupied [${nearScene.activeGhostKinds} active ghost kind(s)] vs ${clearedScene.meshCount} cleared) — piece count never changes the structural draw-call budget beyond the documented per-kind ghost-overlay exception`);
       ok(clearedScene.pillarHeights.length === nearScene.pillarHeights.length, "pillar instance COUNT identical with/without occlusion firing (asserted again alongside check 33's own count assertion, for the budget claim specifically)");
     }
 

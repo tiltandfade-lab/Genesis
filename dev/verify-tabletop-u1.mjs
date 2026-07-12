@@ -348,7 +348,10 @@ function stubTheater(win, { mountReturns = true } = {}) {
   check("9b. theater-boot.js flips window.Theater.ready = true inside loadWholeObjectBuilders' onSettled callback",
     // tail accepts the optional injected-loader 2nd arg (GLB seam: `}, glbLoadScene);`) — the check's
     // JOB is unchanged: ready=true must sit INSIDE loadWholeObjectBuilders' onSettled callback body.
-    /loadWholeObjectBuilders\(function\(\)\{[\s\S]{0,1500}window\.Theater\.ready\s*=\s*true\s*;[\s\S]{0,140}\}\s*(?:,\s*\w+\s*)?\);/.test(bootSrc));
+    // The head bound is generous (the callback carries large explanatory comment blocks — the replay
+    // discrimination + the readiness rationale — currently ~2.3k chars before ready=true); the real
+    // "inside the callback" guarantee comes from the `}...);` close anchor, not the head distance.
+    /loadWholeObjectBuilders\(function\(\)\{[\s\S]{0,4000}window\.Theater\.ready\s*=\s*true\s*;[\s\S]{0,140}\}\s*(?:,\s*\w+\s*)?\);/.test(bootSrc));
 }
 
 // ============================================================================

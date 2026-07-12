@@ -1087,7 +1087,8 @@
         "delta",
         "crit",
         "meleeAdjacent",
-        "nonlethal"
+        "nonlethal",
+        "attacker"
       ],
       "aliases": {},
       "num": [

@@ -4,9 +4,9 @@
 
 **What this maps:** every compiled table (`tables.json`) → source file → what *triggers* it. The Oracle tab rolls **any** table manually, so "trigger" means an **automatic** call: a generator **procedure**, a **roll-chain**, or **wired code**. Tables with none are **Oracle-only** — authored but not in any flow (wire-up or retire candidates). *Caveat: two unwired tables that cross-link each other read as ⛓ chained.*
 
-**Totals:** 384 tables / 304 files.  
-By table — ▶ procedure: **0** · ⛓ chained: **1** · 🔗 wired: **353** · ⚠️ Oracle-only: **30**.  
-⚠️ Oracle-only source files: **19** of 304.
+**Totals:** 385 tables / 305 files.  
+By table — ▶ procedure: **0** · ⛓ chained: **1** · 🔗 wired: **354** · ⚠️ Oracle-only: **30**.  
+⚠️ Oracle-only source files: **19** of 305.
 
 ---
 
@@ -54,6 +54,9 @@ Authored content not reached by any procedure, chain, or code. Click through to 
 ### Character Genesis / PC Traits
 - [[PC Bond]] — 🔗 **wired in code** — table-atlas.js  *(d100, 100 rows)*
 - [[PC Flaws]] — 🔗 **wired in code** — table-atlas.js  *(d100, 100 rows)*
+
+### Realms / Place Generation
+- [[Place Spine]] — 🔗 **wired in code** — place-skins.js, wiki.js  *(d24, 24 rows)*
 
 ### Session Mechanics
 - [[Chase Complications]] — 🔗 **wired in code** — table-atlas.js  *(d100, 100 rows)*

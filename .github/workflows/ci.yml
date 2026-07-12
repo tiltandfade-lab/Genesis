@@ -67,21 +67,28 @@ jobs:
         env:
           JSDOM_HOME: ${{ github.workspace }}/dev/jsdom-home
         run: |
-          set -e
           fail=0
-          # Excluded: verify-interior-camera-frustum.mjs requires puppeteer-core + a real
-          # headless Chromium (it drives an actual GL render, not a jsdom DOM). CI installs
-          # only jsdom, so it `Cannot find module 'puppeteer-core'` here. Same basis as the
-          # verify-sprite-pipeline.py exclusion above — a render-visual check, not a headless
-          # module test; run it by hand locally. (verify-gallery-pass.mjs is NOT skipped: it
-          # is a jsdom-only dressing/provenance gate that runs clean headless.)
-          skip="dev/verify-interior-camera-frustum.mjs"
+          # Some harnesses need a render/paint toolchain CI deliberately does not install: puppeteer-core
+          # + a real headless Chromium (GL render harnesses), or Pillow/PIL (the gallery-paintings
+          # generator, which is also non-deterministic — its own byte-identical check is flaky, so it must
+          # not gate CI). Rather than hand-maintain an exclusion list (which silently rots the moment a new
+          # such harness lands — the failure mode that let CI pile up red), this loop is DEPENDENCY-AWARE:
+          # a harness that fails *specifically* because one of those deps is missing counts as SKIP, not
+          # FAIL. A harness that fails for any other reason still fails CI. Same spirit as the
+          # verify-sprite-pipeline.py exclusion above — render/paint checks run by hand locally; headless
+          # module tests run here.
           for f in dev/verify-*.mjs; do
-            case " $skip " in *" $f "*) echo "SKIP (needs puppeteer): $f"; continue;; esac
             echo "::group::node $f"
-            if ! node "$f"; then
-              echo "FAILED: $f"
-              fail=1
+            if out=$(node "$f" 2>&1); then
+              echo "$out"
+            else
+              echo "$out"
+              if echo "$out" | grep -qE "puppeteer-core|No module named 'PIL'"; then
+                echo "SKIP (render/paint harness — puppeteer/Pillow unavailable in CI): $f"
+              else
+                echo "FAILED: $f"
+                fail=1
+              fi
             fi
             echo "::endgroup::"
           done

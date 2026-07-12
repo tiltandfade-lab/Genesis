@@ -30,6 +30,57 @@
 
 const SPATIAL_CELL = Object.freeze({ VOID: 0, FLOOR: 1, WALL: 2, DOOR: 3, WATER: 4 });
 
+/* ─── STAGE-C C1 SIZE FIDELITY (docs/STAGE-C.md C1) ────────────────────────────────────────────
+   Reversible flag, `var` (not `const`) — same classic-script "auto-attaches to window" convention
+   src/ui/theater-interior.js's ITR_ACTIVE_ROOM_ONLY documents (a live session or verify harness can
+   flip it at runtime: `window.SPATIAL_SHAPES = false`). Default ON: a segment's rolled `dims` sizes
+   its room footprint. OFF restores the pre-C1 `rng() 4-7` random rect byte-for-byte — see
+   dspBuildPlanOnce's size-assignment loop below, the ONLY call site that reads this flag. */
+var SPATIAL_SHAPES = true;
+
+// Clamp band for a parsed-`dims` footprint (GRID LAW: 1 cell = 5 ft, DUNGEON-GRAPH.md:67).
+// MIN=4 mirrors the pre-existing hard floor dspBuildPlanOnce already applied to EVERY room
+// (`Math.max(4, w)` below, present before C1) — a room under 4 cells/20 ft per axis isn't
+// walkably furnishable, so a tiny rolled dims (e.g. a 10'x10' Small Chamber, 2 cells) is honestly
+// too small to stage and gets floored, same as an unlucky rng() draw always was.
+// MAX=24 is the real ceiling of the "Dungeon Area Type" table's own "Base Dimensions" column
+// (Engine/03. _Tables/03. Session Mechanics/Dungeons/Dungeon Area Type.md) — the largest rolled
+// footprint on that table is row 145's Massive Cavern "50' x 120' irregular" (120'/5 = 24 cells on
+// the long axis); 24 is that exact ceiling with zero slop beyond it, so every legitimate d200 roll
+// fits inside the band untouched while a garbage/absurd dims string (check 4: "500' x 500'") still
+// clamps hard rather than blowing the grid/render/combat cell budgets.
+const SPATIAL_MIN_CELL = 4;
+const SPATIAL_MAX_CELL = 24;
+
+/* dspDimsToCells(dims) -> {wCells,dCells} | null (unparseable/absent -> null, caller falls back
+   to the existing rng() 4-7 draw). Lifted regex from combat.js's cmDimsToGrid (:32, "the FIRST TWO
+   integer feet values in the string win" — `/(\d+)\s*'/g`) but emits GRID-LAW CELLS (feet/5,
+   rounded) instead of combat's clamped band/lane COUNTS; a "diameter" value yields a square bbox
+   (wCells===dCells) per STAGE-C.md C1 step 1. Ordering mirrors cmDimsToGrid's own documented
+   convention verbatim (combat.js:26-27: "order = depth then width, matching the walk tables' 'L x
+   W' convention") — the FIRST feet value becomes dCells (this module's y/depth axis: room.d drives
+   the y-extent at the rasterize loop, ~:304), the SECOND becomes wCells (room.w, the x-extent,
+   ~:305). Verified against 6 real "Dungeon Area Type" table strings incl. a diameter row and two
+   arm-width-parenthetical rows — see dev/verify-stage-c-size.mjs check 5 for the full list + the
+   worked cell math. Pure string parsing: no rng()/Math.random/Date.now, never advances the seed
+   (dspBuildPlanOnce below never lets a parse outcome change the rng() call sequence either). */
+function dspDimsToCells(dims) {
+  const s = String(dims || "");
+  const nums = s.match(/(\d+)\s*'/g);
+  if (!nums || !nums.length) return null;
+  const feet = nums.map((n) => parseInt(n, 10)).filter((n) => Number.isFinite(n) && n > 0);
+  if (!feet.length) return null;
+  const clamp = (c) => Math.max(SPATIAL_MIN_CELL, Math.min(SPATIAL_MAX_CELL, c));
+  if (/diameter/i.test(s)) {
+    const c = clamp(Math.round(feet[0] / 5));
+    return { wCells: c, dCells: c };
+  }
+  if (feet.length < 2) return null; // a single non-diameter feet value isn't a W x D pair
+  const dCells = clamp(Math.round(feet[0] / 5));
+  const wCells = clamp(Math.round(feet[1] / 5));
+  return { wCells, dCells };
+}
+
 // ─── seeded RNG (mulberry32 — same reference pattern as src/ui/theater-boot.js) ──────────────
 function dspHashStr(s) {
   // djb2-ish string hash → unsigned 32-bit int. Pure, deterministic, no Math.random/Date.now.
@@ -272,11 +323,23 @@ function dspBuildPlanOnce(segments, topologyName, opts, seed) {
   const minW = sizeClass.minW || 4, maxW = Math.max(minW, sizeClass.maxW || 7);
   const minD = sizeClass.minD || 4, maxD = Math.max(minD, sizeClass.maxD || 7);
   const sorted = segments.slice().sort((a, b) => a.num - b.num);
-  const sizeOf = {};
+  const sizeOf = {}, dimsRefOf = {};
   sorted.forEach((s) => {
+    // STAGE-C C1: ALWAYS draw the same two rng() numbers here, in the same order, regardless of
+    // SPATIAL_SHAPES or whether `s.dims` parses — this is what "do NOT change the rng call
+    // sequence" (STAGE-C.md C1 step 2) means in practice. Every later rng() consumer in this
+    // function (dspLayoutFor, dspSeparateRooms, corridor width, ...) then sees a byte-identical
+    // draw stream whether a room's footprint ends up parsed-from-dims or fallback-random — the
+    // ONLY thing SPATIAL_SHAPES/a successful parse changes is which w/d values get USED below,
+    // never how many rng() calls happened or in what order.
     const w = minW + Math.floor(rng() * (maxW - minW + 1));
     const d = minD + Math.floor(rng() * (maxD - minD + 1));
-    sizeOf[s.id] = { w: Math.max(4, w), d: Math.max(4, d) };
+    let sz = { w: Math.max(4, w), d: Math.max(4, d) };
+    if (SPATIAL_SHAPES) {
+      const parsed = dspDimsToCells(s.dims);
+      if (parsed) { sz = { w: parsed.wCells, d: parsed.dCells }; dimsRefOf[s.id] = s.dims; }
+    }
+    sizeOf[s.id] = sz;
   });
 
   const anchors = dspLayoutFor(topologyName, sorted, edges, entry, rng);
@@ -288,6 +351,7 @@ function dspBuildPlanOnce(segments, topologyName, opts, seed) {
       segNum: s.num, segId: s.id,
       x: a.ax - sz.w / 2, y: a.ay - sz.d / 2, w: sz.w, d: sz.d,
       depth: s.depth, isFinale: !!s.isFinale, role: null, scaleDomain: 1.0,
+      dimsRef: dimsRefOf[s.id] || null, // STAGE-C C1 step 3: additive provenance, harmless if unused
     };
   });
 

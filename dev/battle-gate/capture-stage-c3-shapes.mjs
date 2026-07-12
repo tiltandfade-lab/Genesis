@@ -173,14 +173,15 @@ async function waitForTheater(page) {
 // REAL areaType/dims string stamped onto the FOCUS segment (s1) so shapeForArchetype/rasterizeShape
 // actually classify + rasterize it as a non-rect shape. s1 carries 2 real segment.exits[] neighbors
 // (s2/s3) so the polygon-boundary door(s) this unit derives are visible in frame too.
-async function buildScene(page, { key, focusAreaType, focusDims, realmId, env, walkId, lightProfile }) {
+async function buildScene(page, { key, focusAreaType, focusDims, focusSide, realmId, env, walkId, lightProfile }) {
   return await page.evaluate((cfg) => {
     try {
       const ids = ["s1", "s2", "s3"];
       const fixture = [
         { id: "s1", num: 1, label: "s1", isFinale: false, depth: 0,
           exits: [{ targetId: "s2" }, { targetId: "s3" }],
-          light: "normal", areaType: cfg.focusAreaType, dims: cfg.focusDims },
+          light: "normal", areaType: cfg.focusAreaType, dims: cfg.focusDims,
+          ...(cfg.focusSide ? { side: cfg.focusSide } : {}) },
         { id: "s2", num: 2, label: "s2", isFinale: false, depth: 1,
           exits: [{ targetId: "s1" }], light: "normal", areaType: "Standard Chamber", dims: "20' x 20' square" },
         { id: "s3", num: 3, label: "s3", isFinale: true, depth: 1,
@@ -196,9 +197,10 @@ async function buildScene(page, { key, focusAreaType, focusDims, realmId, env, w
         ok: true, board, meta: board.meta,
         roomShape: focusRoom.shape, roomCellCount: Array.isArray(focusRoom.cells) ? focusRoom.cells.length : null,
         roomBBoxArea: focusRoom.w * focusRoom.d, roomWD: `${focusRoom.w}x${focusRoom.d}`,
+        terrain: (focusRoom.terrain || []).map((p) => ({ tier: p.tier, kind: p.kind, footprint: p.footprint || "patch", cellCount: p.cells.length })),
       };
     } catch (e) { return { ok: false, error: e.message, stack: e.stack }; }
-  }, { key, focusAreaType, focusDims, realmId, env, walkId, lightProfile });
+  }, { key, focusAreaType, focusDims, focusSide, realmId, env, walkId, lightProfile });
 }
 
 // three real "Dungeon Area Type" table rows (Engine/03. _Tables/03. Session Mechanics/Dungeons/
@@ -214,8 +216,9 @@ async function buildScene(page, { key, focusAreaType, focusDims, realmId, env, w
 // eye to read as "round" rather than "rect with clipped corners" at a glance; row 095/103 give more
 // steps to work with, matching the octagon's own 12x12 scale for a fair, legible comparison.
 const SCENES = [
-  { key: "octagon", label: "Grand Octagon (row 101, 60'x60')", focusAreaType: "Grand Octagon", focusDims: "60' x 60'",
-    realmId: "chrome", env: "dungeon", walkId: "stage-c3-shapes-octagon", lightProfile: "lamplit" },
+  { key: "octagon", label: "Grand Octagon row 101: sunken arena + raised ring", focusAreaType: "Grand Octagon", focusDims: "60' x 60'",
+    focusSide: "30' x 30' sunken central arena (5 ft below the surrounding level); 10' wide raised ring walkway with iron railing.",
+    realmId: "gloom", env: "dungeon", walkId: "stage-c3-shapes-octagon", lightProfile: "lamplit" },
   { key: "rotunda", label: "Grand Rotunda (row 095, 50' diameter)", focusAreaType: "Grand Rotunda", focusDims: "50' diameter",
     realmId: "chrome", env: "dungeon", walkId: "stage-c3-shapes-rotunda", lightProfile: "lamplit" },
   { key: "l-shaped", label: "L-Shaped Chamber (row 103, 40'x40' 15' arms)", focusAreaType: "L-Shaped Chamber", focusDims: "40' x 40' (15' wide arms)",
@@ -250,11 +253,12 @@ async function main() {
       // thing into metrics.json; the PNGs are the actual proof).
       metrics.scenes[scene.key] = {
         label: scene.label, focusAreaType: scene.focusAreaType, focusDims: scene.focusDims,
-        built: { ok: built.ok, error: built.error, roomShape: built.roomShape, roomCellCount: built.roomCellCount, roomBBoxArea: built.roomBBoxArea, roomWD: built.roomWD, meta: built.meta },
+        built: { ok: built.ok, error: built.error, roomShape: built.roomShape, roomCellCount: built.roomCellCount, roomBBoxArea: built.roomBBoxArea, roomWD: built.roomWD, terrain: built.terrain, meta: built.meta },
       };
       if (!built.ok) { metrics.notes.push(`scene ${scene.key} FAILED to build: ${built.error}`); continue; }
       log(`${scene.key}: shape=${built.roomShape} cells=${built.roomCellCount}/${built.roomBBoxArea} (${built.roomWD})`);
       if (built.roomShape === "rect") metrics.notes.push(`scene ${scene.key}: room classified 'rect' — shapeForArchetype/rasterizeShape did NOT fire as expected`);
+      if (scene.key === "octagon" && (!built.terrain || built.terrain.length !== 2)) metrics.notes.push("scene octagon: row 101 did not preserve both structural terrain patches");
 
       // shotCompose OFF (window.Theater.setInteriorVariant, the study-rig's own documented escape
       // hatch — theater-boot.js:9147's header) — ITR_SHOT_COMPOSE's cinematic candidate-picker (tuned

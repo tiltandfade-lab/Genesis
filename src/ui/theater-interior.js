@@ -1027,7 +1027,10 @@ function itrCoverCardFor(realmId, rng) {
  *   instances:{ floor:[{x,z,sx,sy,sz,color}] (VP3 GROUND DESIGN: color carries per-room tone +/-6%
  *     w/ per-cell +/-3% jitter and an 8% perimeter darken baked in; sy carries a +/-0.04-0.08 micro
  *     height step on 5-15% of eligible cells — perimeter/wall-adjacent/dressing-blocked ONLY, never
- *     the center 2x2 or any combat-routable cell), wall:[...], doorframe:[{...,squeeze}], pillar:[...] },
+ *     the center 2x2 or any combat-routable cell; STAGE-C C2 (docs/STAGE-C.md) then folds in
+ *     `plan.tiers[cell]` — a +1/-1 dais/pit tier parsed off the room's own rolled `side` prose —
+ *     as a full ITR_DAIS_STEP shift, overriding VP3's jitter for that cell; the finale-dais block
+ *     runs last and still wins if both apply), wall:[...], doorframe:[{...,squeeze}], pillar:[...] },
  *   skirt:[{x,z,sx,sy,sz,color}] (GR4 — the diorama edge band, a sibling of `instances`, never counted
  *     toward the "4 known instance kinds" data-shape check: it's a separate render channel),
  *   cover:[{x,z,y,sx,sy,sz,color,slug,proc,roomSegNum}] (VP3 item 3 — ground-cover decal cards, 1-3
@@ -1167,6 +1170,18 @@ function interiorBuildBoard(plan, opts) {
           const stepDelta = gd.raised.get(x + "," + y);
           if (stepDelta != null) sy = ITR_FLOOR_HEIGHT + stepDelta;
         }
+        // STAGE-C C2 STRUCTURAL TERRAIN (docs/STAGE-C.md C2): fold in the logical plan's own
+        // per-cell `tiers` buffer (place-spatialize.js's dspParseSideTerrain, stamped from the
+        // rolled segment.side prose) — a +1/-1 tier shifts `sy` by one ITR_DAIS_STEP quantum, the
+        // SAME step size BW2-5's finale dais already uses per ring (so ROOM_SHELL_TIER_QUANTUM,
+        // tuned to that exact step, still resolves this to a clean, DIFFERENT tier bucket than the
+        // room's own baseline — theater-room-mesh.js's own header note). Additive over VP3's jitter
+        // (replaces it outright for a terrain cell, same "deliberate architecture beats random
+        // jitter" precedent BW2-5's dais already set) — and itself gets OVERRIDDEN by the finale-
+        // dais block just below when both apply to the same room, so the finale dais path stays
+        // completely undisturbed (STAGE-C.md C2 step 2's own instruction).
+        const terrainTier = (plan.tiers && typeof plan.tiers[idx(x, y)] === "number") ? plan.tiers[idx(x, y)] : 0;
+        if (terrainTier !== 0) sy = ITR_FLOOR_HEIGHT + terrainTier * ITR_DAIS_STEP;
         // BW2-5 item 3: the finale dais OVERRIDES whatever VP3 computed above for its own two tiers
         // (a deliberate platform, not random jitter) — the cell's own code stays plain FLOOR (still
         // routable/walkable, THE FLOOR CONTACT LAW just reads a taller `sy` here, same as it already

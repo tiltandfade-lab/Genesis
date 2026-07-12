@@ -975,6 +975,24 @@ function itrAdjacentToWall(x, y, plan) {
   });
 }
 
+// itrRoomCellList(room) -> the room's ACTUAL cell set: STAGE-C C3's `room.cells` ([{x,y}] GLOBAL
+// floor cells for a non-rect shape, place-spatialize.js's dspBuildPlanOnce) when present, else the
+// room's bbox rect enumerated on the fly (a pre-C3 plan, SPATIAL_SHAPES off, or any other caller
+// that never stamped `.cells`) — BYTE-IDENTICAL iteration order to the original inline double-loop
+// in that fallback case. The single seam both VP3-ground precompute loops below iterate through, so
+// neither one enumerates a non-rect room's VOID bbox cells (a circle/L/cave room's own missing
+// corners/fringe) as ground-design candidates. Minimal, localized touch — STAGE-C.md C3's own
+// instruction; the AO-gradient/render-shape extension itself stays out of scope (theater-room-
+// mesh.js's isAxisAlignedRectPolygon gate already falls non-rect floors back to flat ear-clip).
+function itrRoomCellList(room) {
+  if (Array.isArray(room.cells) && room.cells.length) return room.cells;
+  const out = [];
+  for (let y = room.y; y < room.y + room.d; y++) {
+    for (let x = room.x; x < room.x + room.w; x++) out.push({ x, y });
+  }
+  return out;
+}
+
 // AMENDED item 2 (docs/BEAUTY-WAVE.md §VP3): the combat grid routes a piece through ANY floor cell
 // that ISN'T perimeter/wall-adjacent/dressing-blocked — pieces MOVE (move-step walks cells mid-combat),
 // so "initially occupied" is the wrong test. Eligible-for-raising = {onEdge, wall-adjacent, dressing-
@@ -986,15 +1004,13 @@ function itrRoomGroundEligible(room, plan) {
     (plan.dressing || []).filter((d) => d.roomSegNum === room.segNum).map((d) => d.x + "," + d.y)
   );
   const cells = [];
-  for (let y = room.y; y < room.y + room.d; y++) {
-    for (let x = room.x; x < room.x + room.w; x++) {
-      if (plan.cells[y * plan.cellW + x] !== SPATIAL_CELL.FLOOR) continue;
-      const key = x + "," + y;
-      if (center.has(key)) continue;
-      const onEdge = x === room.x || x === room.x + room.w - 1 || y === room.y || y === room.y + room.d - 1;
-      if (onEdge || itrAdjacentToWall(x, y, plan) || dressingBlocked.has(key)) cells.push({ x, y });
-    }
-  }
+  itrRoomCellList(room).forEach(({ x, y }) => {
+    if (plan.cells[y * plan.cellW + x] !== SPATIAL_CELL.FLOOR) return;
+    const key = x + "," + y;
+    if (center.has(key)) return;
+    const onEdge = x === room.x || x === room.x + room.w - 1 || y === room.y || y === room.y + room.d - 1;
+    if (onEdge || itrAdjacentToWall(x, y, plan) || dressingBlocked.has(key)) cells.push({ x, y });
+  });
   return cells;
 }
 
@@ -1125,12 +1141,10 @@ function interiorBuildBoard(plan, opts) {
       raised.set(c.x + "," + c.y, sign * mag);
     });
 
-    const allFloor = [];
-    for (let y = r.y; y < r.y + r.d; y++) {
-      for (let x = r.x; x < r.x + r.w; x++) {
-        if (plan.cells[y * plan.cellW + x] === SPATIAL_CELL.FLOOR) allFloor.push({ x, y });
-      }
-    }
+    // STAGE-C C3: iterate the room's ACTUAL cell set (itrRoomCellList, above) rather than its bbox
+    // rect — a non-rect room's own VOID notch/fringe cells never get pushed as cover-placement
+    // candidates. Byte-identical for a rect room (itrRoomCellList's own fallback IS this loop).
+    const allFloor = itrRoomCellList(r).filter(({ x, y }) => plan.cells[y * plan.cellW + x] === SPATIAL_CELL.FLOOR);
     const shuffledFloor = itrSeededShuffle(allFloor, rng);
     const coverCount = Math.min(shuffledFloor.length, ITR_COVER_MIN + Math.floor(rng() * (ITR_COVER_MAX - ITR_COVER_MIN + 1)));
     const coverCells = shuffledFloor.slice(0, coverCount);

@@ -282,6 +282,9 @@ console.log("\n=== 6. candidate-score metrics completeness ===");
   const yaws = candidates.map((c) => c.yaw).sort((a, b) => a - b);
   check("6b. the 4 diagonal yaws are 45/135/225/315 plus the current orbit's own yaw",
     [45, 135, 225, 315].every((y) => yaws.includes(y)));
+  check("6b2. default BEAT candidates target the authored 18-25% medium-figure frame-height band",
+    candidates.every((c) => constraintMediumFigureHeight(c).pass),
+    candidates.map((c) => constraintMediumFigureHeight(c).detail));
   const { metrics } = composeShot(plan, candidates, stubProject);
   check("6c. metrics.candidates has ONE entry per candidate (5)", metrics.candidates.length === candidates.length);
   const TERM_KEYS = ["subject_separation", "primary_threat_visibility", "objective_visibility",
@@ -350,6 +353,10 @@ console.log("\n=== 7. individual term/constraint functions (isolated assertions)
     constraintNeighborRoomAbsent({ activeRoomId: 7, pieces: [{ id: "x", roomSegNum: 9 }], props: [] }).pass === false);
   check("7n. constraintNeighborRoomAbsent PASSES when every tagged piece matches the active room",
     constraintNeighborRoomAbsent({ activeRoomId: 7, pieces: [{ id: "x", roomSegNum: 7 }], props: [] }).pass === true);
+  const edgeCtx = { livingNdc: [{ piece: { id: "edge" }, ndc: { ndcX: 0.82, ndcY: 0 } }] };
+  const edgeCam = { mode: "beat", fov: 21, distance: 19 };
+  check("7p. safe-frame includes figure extent (center inside, visible edge outside -> reject)",
+    constraintSafeFrame(edgeCtx, edgeCam).pass === false);
 }
 
 console.log("\n=== 8. check-manifest.py (run live) ===");

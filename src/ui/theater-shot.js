@@ -94,6 +94,7 @@ const FOV_MIN_DEG = 18, FOV_MAX_DEG = 24;            // "FOV 18-24°"
 const SAFE_FRAME_MARGIN = 0.07;                      // "7% safe frame" — fraction of frame per edge
 const FRAME_SAFE_BOUND = 1 - 2 * SAFE_FRAME_MARGIN;  // NDC |x|/|y| bound a living figure must stay inside
 const MEDIUM_FIGURE_MIN_FRAC = 0.18, MEDIUM_FIGURE_MAX_FRAC = 0.25; // "18-25% of frame height"
+const MEDIUM_FIGURE_TARGET_FRAC = (MEDIUM_FIGURE_MIN_FRAC + MEDIUM_FIGURE_MAX_FRAC) / 2;
 const MEDIUM_FIGURE_WORLD_HEIGHT = 1.5;              // theater-interior.js's own cited human-figure
                                                       // height convention ("1.5, a human figure")
 const FIGURE_WORLD_RADIUS = 0.4;                     // approximate standee footprint radius, world units
@@ -317,7 +318,17 @@ function sharpSubjectsFrom(anchors) {
   if (anchors.objective) list.push("objective");
   return list;
 }
-function distanceFor(stage, fovDeg, zoomLevel) {
+function distanceFor(stage, fovDeg, zoomLevel, mode) {
+  const halfFov = deg2rad(fovDeg) / 2;
+  const zoom = clamp(numOr(zoomLevel, 1), 0.1, 5);
+  // Beat shots crop the room around the encounter. Room-diagonal distance made ordinary 6x6+ rooms
+  // fail the 18-25% medium-figure hard constraint before yaw scoring could matter. Solve directly
+  // for the middle of that authored band; safe-frame and stage-edge checks still reject a bad crop.
+  if (mode === "beat") {
+    const visibleHeight = MEDIUM_FIGURE_WORLD_HEIGHT / MEDIUM_FIGURE_TARGET_FRAC;
+    const base = visibleHeight / (2 * Math.max(0.05, Math.tan(halfFov)));
+    return Math.max(1, base * zoom);
+  }
   const poly = (stage && stage.polygon) || [];
   let radius = 4; // sane default for an empty/degenerate stage — never a zero/NaN distance
   if (poly.length) {
@@ -326,9 +337,8 @@ function distanceFor(stage, fovDeg, zoomLevel) {
     const dz = Math.max.apply(null, zs) - Math.min.apply(null, zs);
     radius = Math.max(1, Math.hypot(dx, dz) / 2);
   }
-  const halfFov = deg2rad(fovDeg) / 2;
   const base = radius / Math.max(0.05, Math.tan(halfFov));
-  return Math.max(1, base * clamp(numOr(zoomLevel, 1), 0.1, 5));
+  return Math.max(1, base * zoom);
 }
 function shotPlanId(tray, combat) {
   const seed = (tray && tray.seed != null) ? tray.seed : ((combat && combat.seed != null) ? combat.seed : 0);
@@ -368,7 +378,7 @@ function shotPlanFrom(tray, combat, viewState) {
     yaw: numOr(viewState.yawDeg, 0),
     pitch, fov,
     target: anchors.actionCenter || { x: 0, z: 0 },
-    distance: distanceFor(stage, fov, viewState.zoomLevel),
+    distance: distanceFor(stage, fov, viewState.zoomLevel, viewState.mode || "beat"),
     sharpSubjects: sharpSubjectsFrom(anchors)
   };
 
@@ -413,8 +423,8 @@ function defaultCameraCandidates(shotPlan, viewState) {
   const target = anchors.actionCenter || { x: 0, z: 0 };
   const pitch = clamp(numOr(viewState.pitchDeg, (PITCH_MIN_DEG + PITCH_MAX_DEG) / 2), PITCH_MIN_DEG, PITCH_MAX_DEG);
   const fov = clamp(numOr(viewState.fovDeg, (FOV_MIN_DEG + FOV_MAX_DEG) / 2), FOV_MIN_DEG, FOV_MAX_DEG);
-  const distance = distanceFor(shotPlan.stage, fov, viewState.zoomLevel);
   const mode = (shotPlan.camera && shotPlan.camera.mode) || viewState.mode || "beat";
+  const distance = distanceFor(shotPlan.stage, fov, viewState.zoomLevel, mode);
   const sharpSubjects = sharpSubjectsFrom(anchors);
   const diagonals = DIAGONAL_YAWS_DEG.map((yaw) => ({ id: "diag-" + yaw, mode, yaw, pitch, fov, target, distance, sharpSubjects }));
   const currentOrbit = { id: "current-orbit", mode, yaw: numOr(viewState.yawDeg, 0), pitch, fov, target, distance, sharpSubjects };
@@ -527,7 +537,7 @@ function scoreTrayEdgeVisibility(ctx) {
   return clamp(visible.length / ctx.stageCornerNdc.length, 0, 1);
 }
 function scoreForegroundDepthLayer(shotPlan, candidate) {
-  const ideal = distanceFor(shotPlan.stage, candidate.fov, 1);
+  const ideal = distanceFor(shotPlan.stage, candidate.fov, 1, candidate.mode);
   if (ideal <= 0) return 0;
   return clamp(1 - Math.abs(candidate.distance - ideal) / ideal, 0, 1);
 }
@@ -571,9 +581,18 @@ function penaltyCompetingBrightSourceCount(shotPlan, candidate, project) {
 }
 
 // ── hard constraints (directive §4.2 — reject a candidate outright) ────────────────────────────
-function constraintSafeFrame(ctx) {
+function constraintSafeFrame(ctx, candidate) {
   const bound = FRAME_SAFE_BOUND;
-  const offenders = ctx.livingNdc.filter((e) => !e.ndc || Math.abs(e.ndc.ndcX) > bound || Math.abs(e.ndc.ndcY) > bound);
+  const cand = normalizeCandidate(candidate);
+  const radiusX = circleRadiusNdcFor(FIGURE_WORLD_RADIUS, cand.fov, cand.distance);
+  // screenHeightFractionFor returns full-screen fraction, which is also the half-extent in NDC
+  // (a 20%-of-screen standee spans 0.4 NDC and extends 0.2 NDC from its center).
+  const radiusY = screenHeightFractionFor(MEDIUM_FIGURE_WORLD_HEIGHT, cand.fov, cand.distance);
+  // The guide applies to the visible standee, not merely its center point. A3 can replace these
+  // medium defaults with each rendered sprite's measured screen rect once the live wiring lands.
+  const offenders = ctx.livingNdc.filter((e) => !e.ndc
+    || Math.abs(e.ndc.ndcX) + radiusX > bound
+    || Math.abs(e.ndc.ndcY) + radiusY > bound);
   return { pass: offenders.length === 0, detail: offenders.map((o) => o.piece.id) };
 }
 function constraintMediumFigureHeight(candidate) {
@@ -625,7 +644,7 @@ function scoreCandidate(shotPlan, candidate, project) {
     - terms.hard_occlusion_area - terms.subject_overlap - terms.clipped_subject_area
     - terms.empty_frame_area - terms.competing_bright_source_count;
   const constraints = {
-    safe_frame: constraintSafeFrame(ctx),
+    safe_frame: constraintSafeFrame(ctx, cand),
     medium_figure_height: constraintMediumFigureHeight(cand),
     primary_overlap: constraintPrimaryOverlap(ctx, cand),
     stage_edge_visible: constraintStageEdgeVisible(ctx, cand),

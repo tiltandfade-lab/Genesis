@@ -311,6 +311,15 @@ async function main() {
     await shootWide(page, path.join(outDir, "after-one-room-wide.png"));
     console.log(`  after (one-room) capture: ${path.join(outDir, "after-one-room.png")} (+ -wide.png)`);
 
+    console.log("\n[FAIL-CLOSED — an explicit stale focus never reveals the whole dungeon]");
+    m = await mountFor(page, 999999, true);
+    if (!m.ok) throw new Error("invalid-focus mount failed: " + m.error);
+    await settleCameraTween(page);
+    counts = await liveCounts(page);
+    ok(m.meta.roomCount === 0, `FAIL-CLOSED: invalid explicit focus keeps zero rooms (got ${m.meta.roomCount})`);
+    ok(counts.floor.length === 0, `FAIL-CLOSED: invalid explicit focus emits zero floor instances (got ${counts.floor.length})`);
+    ok(counts.wall.length === 0, `FAIL-CLOSED: invalid explicit focus emits zero wall instances (got ${counts.wall.length})`);
+
     console.log("\n[FLAG REVERSIBILITY — flipping back to false brings the multi-room render back]");
     m = await mountFor(page, fx.focusSegNum, false);
     if (!m.ok) throw new Error("reversibility mount failed: " + m.error);

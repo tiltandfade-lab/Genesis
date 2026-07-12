@@ -129,6 +129,12 @@ import { resolveWholeObject, loadWholeObjectBuilders, WHOLE_OBJECT_REGISTRY, NEA
 // call site (setInteriorBoard) for the wire-in. compileRoomShell is the thin THREE assembler; this file
 // still owns every material (Stage E's job, not this unit's).
 import { compileRoomShell, ROOM_SHELL_TIER_QUANTUM, segmentNormal } from "./theater-room-mesh.js";
+// GRAPHICS-NORTH-STAR.md STAGE A unit A3 (docs/STAGE-A.md; docs/WALK-NATIVE-A.md A3): the pure shot
+// planner/compositor theater-shot.js's own header flagged this file as the eventual importer ("A3
+// wires the real camera in"). shotPlanFrom/composeShot/defaultCameraCandidates are pure (no THREE, no
+// DOM) — this file supplies the one thing they can't own themselves: a real multi-pose projector (see
+// shotProjectFor, near interiorCameraFitFor below) and the wiring at setInteriorBoard's fit seam.
+import { shotPlanFrom, composeShot, defaultCameraCandidates } from "./theater-shot.js";
 // P1' WHOLE-OBJECT WIRING (docs/P1-WIRING.md §4 step 3): a STATIC import of probe-lib.js itself —
 // every dev/model-qa/creatures/*.js module ALSO imports probe-lib.js by the identical relative
 // specifier (resolved from dev/model-qa/, '../probe-lib.js'), which both Node and browsers resolve
@@ -7365,6 +7371,117 @@ function interiorFitMaxHeightFor(data){
   return tallest > 0 ? tallest : HUMAN_TRUE_HEIGHT;
 }
 
+/* GRAPHICS-NORTH-STAR.md STAGE A unit A3 (docs/STAGE-A.md §A3; docs/WALK-NATIVE-A.md A3) — THE SHOT
+   COMPOSE WIRING. theater-shot.js's ShotPlan/composeShot are pure (no THREE/DOM); this is the one
+   thing they can't own themselves — a real multi-pose projector, and the seam that drives the interior
+   camera fit from the chosen candidate instead of the plain focusRect box.
+
+   ITR_SHOT_COMPOSE (default ON) is this unit's own reversible flag, mirroring theater-interior.js's
+   ITR_ACTIVE_ROOM_ONLY (A1) in NAME/INTENT only — NOT in mechanism. theater-interior.js is a classic
+   <script> (global scope), so `var ITR_ACTIVE_ROOM_ONLY` is directly `window.ITR_ACTIVE_ROOM_ONLY`,
+   flippable from any harness. This file is the ONE sealed ES-module boundary in Genesis (its own
+   header, above) — a top-level `const` here is NOT a `window` property, so a harness can't reach it
+   that way. Every existing study-rig toggle in this exact function already solves that the same way
+   (INTERIOR_CAM_MODE vs. `variant.camMode`, `rigOn` vs. `variant.rig`, a few lines up in
+   setInteriorBoard) — S.interiorVariant / window.Theater.setInteriorVariant() is this file's own
+   established "flip a normally-const render choice at runtime" channel, so ITR_SHOT_COMPOSE follows
+   that precedent: `variant.shotCompose` (boolean) overrides the ITR_SHOT_COMPOSE default when set,
+   exactly like camMode/rigOn do for theirs. */
+const ITR_SHOT_COMPOSE = true;
+
+// shotScratchCamera — ONE lazily-created THREE.PerspectiveCamera, reused across every candidate/point
+// projected (cheap: only its transform+FOV are touched, never attached to S.scene, never rendered
+// through, never visible to any other code). "SCRATCH" per the spec: this is never S.camera.
+let _shotScratchCamera = null;
+function shotScratchCamera(){
+  if(!_shotScratchCamera) _shotScratchCamera = new THREE.PerspectiveCamera(20, 1, 0.05, 4000);
+  return _shotScratchCamera;
+}
+function shotNumOr(v, d){ return (typeof v === "number" && isFinite(v)) ? v : d; }
+// shotCameraAspect — the live canvas aspect when mounted (matches what the REAL camera will render
+// at); a sane fallback otherwise (an unmounted/harness call with no S.el yet).
+function shotCameraAspect(){
+  if(S.el && S.el.clientWidth && S.el.clientHeight) return S.el.clientWidth / Math.max(1, S.el.clientHeight);
+  if(S.camera && S.camera.aspect) return S.camera.aspect;
+  return 16 / 9;
+}
+/* shotProjectFor(cameraPose) -> project(worldPt) -> {ndcX,ndcY}|null — theater-shot.js's own header
+   ("THE PROJECTION CONTRACT") spells out exactly why this must be a MULTI-pose projector: composeShot
+   scores several hypothetical camera poses (4 diagonal yaws + the current orbit) per call, and a single
+   fixed projection through whatever camera is already mounted can't answer "where would this point
+   land under candidate B's pose" without actually moving the live camera there first — an expensive,
+   side-effecting operation a pure caller (and this wiring, which must never perturb what's on screen
+   mid-compose) must never trigger. This positions the SCRATCH camera (never S.camera) per `cameraPose`
+   (the exact `{id,mode,yaw,pitch,fov,target,distance,sharpSubjects}` shape scoreCandidate's own
+   normalizeCandidate produces), updates its matrices, and projects `worldPt` through it — reusing the
+   identical `Vector3.project(camera)` math projectWorldPoint/interiorFrustumCheck already use in this
+   file, just against a camera this function owns instead of the live one. Position math mirrors
+   placeCamera's own yaw/pitch->offset convention (this function's own target-relative orbit, since a
+   candidate's `target` can sit anywhere — placeCamera's version only ever orbits the fixed origin
+   because its own target is always the already cx/cz-shifted S.boardCenter). */
+function shotProjectFor(cameraPose){
+  return function(worldPt){
+    if(!worldPt || !cameraPose) return null;
+    try {
+      const cam = shotScratchCamera();
+      cam.fov = shotNumOr(cameraPose.fov, 20);
+      cam.aspect = shotCameraAspect();
+      cam.near = 0.05;
+      cam.far = 4000;
+      const target = cameraPose.target || { x: 0, z: 0 };
+      const tx = shotNumOr(target.x, 0), ty = shotNumOr(target.y, 0), tz = shotNumOr(target.z, 0);
+      const distance = Math.max(0.1, shotNumOr(cameraPose.distance, 6));
+      const yawRad = (shotNumOr(cameraPose.yaw, 0) * Math.PI) / 180;
+      const pitchRad = (shotNumOr(cameraPose.pitch, 32) * Math.PI) / 180;
+      const horiz = Math.cos(pitchRad) * distance;
+      const height = Math.sin(pitchRad) * distance;
+      cam.position.set(tx + Math.sin(yawRad) * horiz, ty + height, tz + Math.cos(yawRad) * horiz);
+      cam.up.set(0, 1, 0);
+      cam.lookAt(tx, ty, tz);
+      cam.updateProjectionMatrix();
+      cam.updateMatrixWorld(true);
+      const v = new THREE.Vector3(shotNumOr(worldPt.x, 0), shotNumOr(worldPt.y, 0), shotNumOr(worldPt.z, 0)).project(cam);
+      if(!isFinite(v.x) || !isFinite(v.y)) return null;
+      return { ndcX: v.x, ndcY: v.y };
+    } catch(e){ return null; }
+  };
+}
+// shotProjectFor is republished onto window.Theater further down (AFTER the `window.Theater = {...}`
+// object-literal assignment this file makes near its own bottom — every other harness-facing
+// diagnostic in this file, e.g. projectWorldPoint/interiorFrustumCheck, is republished the same way,
+// at that same later point, for the identical reason: window.Theater doesn't exist yet up here).
+// shotProjectTwoArg — the 2-arg adapter theater-shot.js's own composeShot contract actually calls
+// (`project(worldPt, cameraPose)`, one function reused across every candidate — see that file's header
+// "THE PROJECTION CONTRACT"). Trivial curry over shotProjectFor so this file keeps the pose-first
+// naming the spec calls for while still satisfying composeShot's real signature.
+function shotProjectTwoArg(worldPt, cameraPose){ return shotProjectFor(cameraPose)(worldPt); }
+
+// fitFromComposedCamera — converts a composeShot-chosen `camera` (yaw/pitch/fov/target/distance) into
+// the exact {center,halfX,halfZ} shape interiorCameraFitFor already returns (setInteriorBoard assigns
+// it straight to S.boardCenter/S.boardHalfX/S.boardHalfZ either way, so this is a drop-in alternate
+// source for that shape, not a second code path downstream of it). `target` -> `center` (shifted into
+// the SAME cx/cz-local frame every mounted instance uses, mirroring interiorCameraFitFor's own "beat"
+// branch). `distance`+`fov` -> a symmetric half-extent: the visible half-height at the target plane
+// under that distance/FOV (distance*tan(halfFovY) — the exact inverse of theater-shot.js's own
+// distanceFor(), which solves distance FROM a desired visible height/radius the same way), fed back
+// through interiorCameraFitFor's existing consumer (placeCamera's own screenHalfWidth/Height fit
+// math, S.zoomLevel, the exact-containment correction loop) exactly like a "room"/"beat" fit's own
+// halfX/halfZ already are — composeShot's pose is a FRAMING target, not a literal camera transform;
+// interiorCameraFitFor's box is that framing target's box.
+function fitFromComposedCamera(camera, cx, cz){
+  if(!camera) return null;
+  const target = camera.target || { x: 0, z: 0 };
+  const tx = shotNumOr(target.x, 0), tz = shotNumOr(target.z, 0);
+  const fovRad = (shotNumOr(camera.fov, 20) * Math.PI) / 180;
+  const distance = Math.max(0.1, shotNumOr(camera.distance, 6));
+  const halfExtent = Math.max(0.5, distance * Math.tan(fovRad / 2));
+  return {
+    center: new THREE.Vector3(tx - cx, 0, tz - cz),
+    halfX: halfExtent,
+    halfZ: halfExtent
+  };
+}
+
 // ─── BEAUTY-WAVE-2.md BW2-1b (THE OCCLUSION LAW), item 1 — DYNAMIC CUTAWAY for interior columns/
 // pillar prisms. The CUTAWAY WALLS treatment above (study card v4) only ever touched WALL instances;
 // a pillar sitting between the camera and a standee was never adjusted at all — "loop-03's knight
@@ -7743,7 +7860,56 @@ function setInteriorBoard(data){
   // caller-set field (data.pieces/data.dressing/data.lightProfile's own convention): absent boards
   // default to "room" mode, byte-identical in SHAPE to the pre-unit fit (still data.focusRect), just
   // CLOSER (see interiorCameraFitFor's own header). See that function for "beat" mode.
-  const camFit = interiorCameraFitFor(data.cameraFit, fit, cx, cz);
+
+  /* GRAPHICS-NORTH-STAR.md STAGE A unit A3 (docs/STAGE-A.md §A3; docs/WALK-NATIVE-A.md A3): compose
+     the interior camera off the ShotPlan (theater-shot.js) instead of the plain data.cameraFit/
+     focusRect path below, behind ITR_SHOT_COMPOSE (default ON — see that const's own header comment
+     for why it's read off `variant.shotCompose` rather than a bare module flag). shotPlanFrom/
+     composeShot are pure and never touch S.*; this block is the ONLY place their output is allowed to
+     reach the render, and only ever by way of `camFit` below — the EXACT {center,halfX,halfZ} shape
+     interiorCameraFitFor already returns, so every downstream consumer (placeCamera/
+     placeCameraTweened, the exact-containment correction loop, S.zoomLevel) is untouched either way.
+     FALLBACK EVERYWHERE (byte-identical to pre-unit behavior): `camFit` stays null — falling through
+     to the pre-existing `interiorCameraFitFor(data.cameraFit, fit, cx, cz)` call, unchanged — when the
+     flag is off, when shotPlanFrom/composeShot/defaultCameraCandidates aren't loaded (a narrow
+     harness), when composeShot throws, or when EVERY candidate failed its hard constraints
+     (`metrics.allRejected` — composeShot's own header notes it never returns nothing, always
+     best-effort-picking the highest-scoring REJECTED candidate in that case; that best-effort pick is
+     exactly the spec's "no valid candidate" fallback trigger, not a real composed frame worth trusting).
+     S.lastComposedShot/S.lastShotPlan are harness-facing-only reads (republished onto
+     window.Theater.lastComposedShot/lastShotPlan near this file's other diagnostics, below) — no
+     product code reads either field. S.lastComposedShotAttempt/S.lastComposedShotError are the SAME
+     kind of harness-only diagnostic, one level earlier: the RAW composeShot result (even when
+     all-rejected, so a harness can assert the rejection actually happened) and any thrown error
+     message respectively — neither ever influences camFit itself. */
+  const shotComposeOn = (typeof variant.shotCompose === "boolean") ? variant.shotCompose : ITR_SHOT_COMPOSE;
+  let camFit = null;
+  S.lastComposedShot = null;
+  S.lastShotPlan = null;
+  S.lastComposedShotAttempt = null;
+  S.lastComposedShotError = null;
+  if(shotComposeOn && typeof shotPlanFrom === "function" && typeof composeShot === "function" && typeof defaultCameraCandidates === "function"){
+    try {
+      // S.zoomLevel was reset to 1 a few lines above (this function's own "fresh board gets a fresh
+      // zoom reading" convention) and nothing between there and here touches it — passing 1 explicitly
+      // avoids a reader ever wondering whether a stale zoom could sneak into the composed distance and
+      // then get double-applied by placeCamera's own S.zoomLevel multiplier further downstream.
+      const viewState = { yawDeg: (S.rotationStep * 90) + CAM_YAW_OFFSET_DEG, pitchDeg: CAM_ELEV_DEG, zoomLevel: 1 };
+      const shotPlan = shotPlanFrom(data, (typeof GS !== "undefined" && GS && GS.combat) || null, viewState);
+      const candidates = defaultCameraCandidates(shotPlan, viewState);
+      const composed = composeShot(shotPlan, candidates, shotProjectTwoArg);
+      S.lastComposedShotAttempt = composed;
+      if(composed && composed.camera && !(composed.metrics && composed.metrics.allRejected)){
+        const composedFit = fitFromComposedCamera(composed.camera, cx, cz);
+        if(composedFit){
+          camFit = composedFit;
+          S.lastComposedShot = composed;
+          S.lastShotPlan = shotPlan;
+        }
+      }
+    } catch(e){ camFit = null; S.lastComposedShotError = e && e.message ? e.message : String(e); } // any throw -> the exact pre-existing focusRect path below, untouched
+  }
+  if(!camFit) camFit = interiorCameraFitFor(data.cameraFit, fit, cx, cz);
   S.boardCenter = camFit.center;
   S.boardHalfX = camFit.halfX;
   S.boardHalfZ = camFit.halfZ;
@@ -9776,6 +9942,24 @@ function projectWorldPoint(x, y, z){
   return { ndcX: v.x, ndcY: v.y };
 }
 window.Theater.projectWorldPoint = projectWorldPoint;
+
+// GRAPHICS-NORTH-STAR.md STAGE A unit A3 — harness-facing diagnostics for dev/verify-shot-compose.mjs,
+// same read-only discipline as projectWorldPoint/interiorFrustumCheck above. No product code path
+// calls any of these three.
+// shotProjectFor itself: republished here (not at its own definition site, near interiorCameraFitFor)
+// because `window.Theater` doesn't exist yet at that earlier point in module-eval order — see that
+// function's own neighboring comment.
+window.Theater.shotProjectFor = shotProjectFor;
+// the most recently composed {camera,metrics} from setInteriorBoard's own ITR_SHOT_COMPOSE block, or
+// null on a board where compose was off/unavailable/all-rejected (the exact focusRect-fallback cases).
+window.Theater.lastComposedShot = function(){ return S.lastComposedShot || null; };
+// the ShotPlan that produced the above (null under the identical fallback conditions) — lets a harness
+// assert provenance/walkRef/fieldRefs flowed through without re-deriving shotPlanFrom itself.
+window.Theater.lastShotPlan = function(){ return S.lastShotPlan || null; };
+// the RAW composeShot result even when all-rejected (S.lastComposedShot above stays null in that
+// case, by design — it's only ever the ACCEPTED camFit source) and any thrown compose error message.
+window.Theater.lastComposedShotAttempt = function(){ return S.lastComposedShotAttempt || null; };
+window.Theater.lastComposedShotError = function(){ return S.lastComposedShotError || null; };
 
 // TABLETOP-UNITS.md §U1 seam 5 — the boot-preload readiness flag: false until loadWholeObjectBuilders'
 // module-scope onSettled callback (above) fires exactly once. A harness/caller asserting §9.8's warm

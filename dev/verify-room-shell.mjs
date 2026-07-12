@@ -27,6 +27,7 @@
      6. Determinism: the same cells run twice -> byte-identical geometry (JSON deep-equal).
      7. Structural elevation: a 3x3 dais in a 5x5 room produces its own floor tier + exactly 4 riser
         segments (one per side of the square dais), and still resolves all 25 cells.
+     7b. A sunken 3x3 pit does not get covered by the annular base tier (multi-ring hole regression).
      8. Negative/edge cases: an irregular (non-rectangular) footprint still traces to a closed,
         correctly-wound (positive-area) simple polygon; a single-cell room degrades without throwing.
      9. check-manifest.py (run live).
@@ -217,6 +218,33 @@ console.log("\n=== 7. Structural elevation: dais tier + risers ===");
   const jd = compileRoomShellData(jittered, {});
   check("7f. per-cell VP3-style height jitter collapses to a SINGLE tier (no spurious riser fragmentation)",
     jd.meta.tierCount === 1 && jd.meta.riserSegmentCount === 0, jd.meta);
+}
+
+console.log("\n=== 7b. Structural pit: annular upper tier preserves its hole ===");
+{
+  const cells = [];
+  for (let z = 0; z < 7; z++) for (let x = 0; x < 7; x++) {
+    const inPit = x >= 2 && x <= 4 && z >= 2 && z <= 4;
+    cells.push({ x, z, tier: inPit ? -5 : 0, elevationY: inPit ? -1 : 0 });
+  }
+  const data = compileRoomShellData(cells, {});
+  const upper = data.floor.tiers.find((t) => t.tier === 0);
+  let upperCoversPitCenter = false;
+  for (let ti = upper.triStart; ti < upper.triStart + upper.triCount; ti++) {
+    const i0 = data.floor.indices[ti * 3], i1 = data.floor.indices[ti * 3 + 1], i2 = data.floor.indices[ti * 3 + 2];
+    const a = { x: data.floor.positions[i0 * 3], z: data.floor.positions[i0 * 3 + 2] };
+    const b = { x: data.floor.positions[i1 * 3], z: data.floor.positions[i1 * 3 + 2] };
+    const c = { x: data.floor.positions[i2 * 3], z: data.floor.positions[i2 * 3 + 2] };
+    if (pointInTriangle2D(3, 3, a, b, c)) { upperCoversPitCenter = true; break; }
+  }
+  check("7g. upper/base tier has no triangle over the pit center", !upperCoversPitCenter);
+  check("7h. all 49 cells resolve to triangles across both tiers",
+    Object.keys(data.cellTriangleMap).length === 49, Object.keys(data.cellTriangleMap).length);
+  check("7i. planar floor area remains exactly the 49 licensed cells",
+    Math.abs(planarFloorArea(data) - 49) < 1e-6, planarFloorArea(data));
+  check("7j. pit emits real one-world-unit risers",
+    data.risers.segments.length > 0 && data.risers.segments.every((s) => Math.abs(s.height - 1) < 1e-6),
+    data.risers.segments.map((s) => s.height));
 }
 
 console.log("\n=== 8. Negative/edge cases ===");

@@ -699,6 +699,25 @@ function buildFloorGrid(floorBuf, bbox, cellMinX, cellMaxX, cellMinZ, cellMaxZ, 
   return triCount;
 }
 
+// A tier can be annular (a base floor around a pit, or a raised perimeter ring). Ear-clipping each
+// traced ring as an independent simple polygon fills the hole and places an occluding floor over the
+// lower tier. For any tier with multiple boundary rings, emit one coplanar quad per actual tier cell.
+// This remains a single material/mesh surface, preserves world UVs and exact logical coverage, and is
+// deliberately used only where the simple-polygon path cannot represent topology with holes.
+function buildFloorCells(floorBuf, tierCells, elevationY, uvDensity, colorAt) {
+  (tierCells || []).forEach((c) => {
+    const x0 = c.x - 0.5, x1 = c.x + 0.5, z0 = c.z - 0.5, z1 = c.z + 0.5;
+    const rgb = colorAt ? hexToRgb01(colorAt(c.x, c.z)) : null;
+    const r = rgb ? rgb.r : 1, g = rgb ? rgb.g : 1, b = rgb ? rgb.b : 1;
+    const iA = pushVert(floorBuf, x0, elevationY, z0, 0, 1, 0, x0 * uvDensity, z0 * uvDensity, r, g, b);
+    const iB = pushVert(floorBuf, x1, elevationY, z0, 0, 1, 0, x1 * uvDensity, z0 * uvDensity, r, g, b);
+    const iC = pushVert(floorBuf, x1, elevationY, z1, 0, 1, 0, x1 * uvDensity, z1 * uvDensity, r, g, b);
+    const iD = pushVert(floorBuf, x0, elevationY, z1, 0, 1, 0, x0 * uvDensity, z1 * uvDensity, r, g, b);
+    pushTri(floorBuf, iA, iD, iC);
+    pushTri(floorBuf, iA, iC, iB);
+  });
+}
+
 /* compileRoomShellData(cells, opts) — the top-level pure orchestrator; directive steps 1-9 end to end,
    returns a plain-data bundle (no THREE):
    {
@@ -810,6 +829,8 @@ function compileRoomShellData(cells, opts) {
     const rawEdges = traceTierContour(tierCells, allIndex, tier);
     const rings = chainEdgesIntoRings(rawEdges);
     const triStart = floorBuf.indices.length / 3;
+    const complexTier = rings.length > 1;
+    if (complexTier) buildFloorCells(floorBuf, tierCells, elevationY, uvDensity, floorColorAt);
 
     rings.forEach((ring) => {
       // STAGE-C3b: "radial" mode (circle/ellipse) needs FULL per-cell-edge boundary resolution
@@ -857,11 +878,11 @@ function compileRoomShellData(cells, opts) {
       // every existing pure-core test) falls straight back to the original single-polygon ear-clip,
       // byte-identical to before this unit.
       const rectBBox = floorColorAt ? isAxisAlignedRectPolygon(inset) : null;
-      if (rectBBox) {
+      if (!complexTier && rectBBox) {
         buildFloorGrid(floorBuf, rectBBox,
           Math.round(rectBBox.minX), Math.round(rectBBox.maxX), Math.round(rectBBox.minZ), Math.round(rectBBox.maxZ),
           elevationY, uvDensity, floorColorAt);
-      } else {
+      } else if (!complexTier) {
         const baseIdx = floorBuf.positions.length / 3;
         inset.forEach((v) => {
           pushVert(floorBuf, v.x, elevationY, v.z, 0, 1, 0, v.x * uvDensity, v.z * uvDensity);
@@ -906,10 +927,12 @@ function compileRoomShellData(cells, opts) {
           // BRIGHTNESS-REGRESSION FIX: tint the threshold flush with the SAME nearby floor color the
           // bevel ribbon below uses, so a doorway's own flush quad doesn't read as a bright untinted
           // notch inside an otherwise-darkened perimeter.
-          pushQuad(floorBuf, trueA, flushInnerA, flushInnerB, trueB, { x: 0, y: 1, z: 0 },
-            { u: trueA.x * uvDensity, v: trueA.z * uvDensity }, { u: flushInnerA.x * uvDensity, v: flushInnerA.z * uvDensity },
-            { u: flushInnerB.x * uvDensity, v: flushInnerB.z * uvDensity }, { u: trueB.x * uvDensity, v: trueB.z * uvDensity },
-            floorColorAt ? hexToRgb01(nearestFloorColor(seg)) : null);
+          if (!complexTier) {
+            pushQuad(floorBuf, trueA, flushInnerA, flushInnerB, trueB, { x: 0, y: 1, z: 0 },
+              { u: trueA.x * uvDensity, v: trueA.z * uvDensity }, { u: flushInnerA.x * uvDensity, v: flushInnerA.z * uvDensity },
+              { u: flushInnerB.x * uvDensity, v: flushInnerB.z * uvDensity }, { u: trueB.x * uvDensity, v: trueB.z * uvDensity },
+              floorColorAt ? hexToRgb01(nearestFloorColor(seg)) : null);
+          }
           return;
         }
 
@@ -930,15 +953,17 @@ function compileRoomShellData(cells, opts) {
         // grid's own outer row already carries — otherwise this thin strip (right where the OLD per-
         // cell darkening used to read DARKEST of all, wall-adjacent) would render as a bright untinted
         // seam ringing an otherwise-darkened floor.
-        pushQuad(floorBuf, outerA, innerA, innerB, outerB, { x: 0, y: 1, z: 0 },
-          { u: outerA.x * uvDensity, v: outerA.z * uvDensity }, { u: innerA.x * uvDensity, v: innerA.z * uvDensity },
-          { u: innerB.x * uvDensity, v: innerB.z * uvDensity }, { u: outerB.x * uvDensity, v: outerB.z * uvDensity },
-          floorColorAt ? hexToRgb01(nearestFloorColor(seg)) : null);
-        bevelTriCount += 2;
+        if (!complexTier) {
+          pushQuad(floorBuf, outerA, innerA, innerB, outerB, { x: 0, y: 1, z: 0 },
+            { u: outerA.x * uvDensity, v: outerA.z * uvDensity }, { u: innerA.x * uvDensity, v: innerA.z * uvDensity },
+            { u: innerB.x * uvDensity, v: innerB.z * uvDensity }, { u: outerB.x * uvDensity, v: outerB.z * uvDensity },
+            floorColorAt ? hexToRgb01(nearestFloorColor(seg)) : null);
+          bevelTriCount += 2;
+        }
 
         if (seg.kind === "wall") {
           const h = wallHeightForSegment({ a: seg.a, b: seg.b, mid: { x: (seg.a.x + seg.b.x) / 2, z: (seg.a.z + seg.b.z) / 2 }, kind: "wall", tier });
-          const baseY = elevationY - bevelDrop;
+          const baseY = elevationY - (complexTier ? 0 : bevelDrop);
           const wallColor = wallColorForSegment ? hexToRgb01(wallColorForSegment({ a: seg.a, b: seg.b, mid: { x: (seg.a.x + seg.b.x) / 2, z: (seg.a.z + seg.b.z) / 2 }, kind: "wall", tier })) : null;
           const p0 = { x: seg.a.x, y: baseY, z: seg.a.z };
           const p1 = { x: seg.b.x, y: baseY, z: seg.b.z };

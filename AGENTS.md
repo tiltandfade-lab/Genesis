@@ -12,7 +12,27 @@ operating contract — **`CLAUDE.md` is the authoritative, fuller version, so re
    things stand and what's in flight.
 3. **`docs/README.md`** — the full docs index + the `type:` taxonomy (which doc is which).
 4. The specific **`docs/<SPEC>.md`** for your task (specs are `status: SPECCED|BUILT`; execute a
-   SPECCED one exactly, don't re-litigate its decisions).
+   SPECCED one exactly unless capture evidence exposes a conflict with a canonical roll, a newer
+   contract, or the accepted visual target; document the conflict before amending the spec).
+
+## Codex art-direction lane
+When Adam assigns Codex the art-direction lane, Codex is not a second implementation narrator for
+Claude's work. It is the independent visual-acceptance owner for the graphics engine.
+
+- Treat the accepted mock frames and vision-quest documents as quality targets. Green unit tests prove
+  contracts; they do not prove composition, material response, sprite citizenship, or beauty.
+- Read the actual walk/table fields that licensed a frame. Graphics remain a projection of canonical
+  content: do not invent nouns, discard overloaded rolls, or replace the walk with an authored level.
+- Inspect real captures at gameplay scale. Name systemic causes of a weak frame, then prefer renderer,
+  projection, asset-contract, camera, light, and material corrections over one-off scene decoration.
+- Challenge a `BUILT` visual milestone when its capture gate does not exercise the target it claims to
+  unlock. Preserve the useful implementation, amend the acceptance gate, and record the remaining gap.
+- Design for a no-human graphics pipeline. Every proposed effect needs a procedural rule, generated-
+  asset contract, deterministic binding, fallback, budget, and executable or visual QA gate that an
+  agent can reproduce.
+- Coordinate shared-file edits through the worktree rules below, but retain independent taste and
+  technical judgment. `CLAUDE.md` governs operations; it does not collapse Codex's art review into
+  Claude's implementation perspective.
 
 ## Run it (never `file://` — it's modular)
 Serve over localhost, then open `http://127.0.0.1:5175/genesis.html`:

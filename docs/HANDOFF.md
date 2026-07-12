@@ -29,9 +29,10 @@ dungeon-interior 287/0, combat-cells 13/0, walkbind 20/0, spatialize 9/0, check-
 5/5 per unit; captures READ (clean octagon diagonals, round rotunda, L notch).
 
 **Do next (pick up here):**
-1. **Stage D (stateful nouns)** or **Stage E (material+light finish, incl. the emissive-masked bloom
-   that properly retires the occlusion ghost-halo the hotfix minimally patched)** — the remaining
-   GRAPHICS-NORTH-STAR waves. Stage B (sprite citizenship) overlaps Codex's active sprite lane — coordinate.
+1. **Read `docs/STAGE-C-ART-DIRECTION-REVIEW.md` before the next graphics wave.** Wave C's geometry is
+   retained, but its bare-shell capture was not a frame-12/19 art gate. The review repairs canonical
+   row-101 multi-patch terrain and makes Stage B sprite citizenship + semantic construction resolution
+   prerequisites for integrated beauty; do not jump directly to post/light polish.
 2. **Sprite lane (Codex):** BUG-14 (slice debris — `slice-sprites.py` padding/merge) + BUG-15 (crusty
    in-engine resolution — needs higher-res ImageGen regen); the figurine-life-pass + map vision-quest
    (`docs/vision-quests/`) are Codex's queued directives.

@@ -481,7 +481,9 @@ function renderLevelUp(){
     ? `<div class="bardo-dienote" style="margin-top:2px">Gained: ${gained.map(escHtml).join(" · ")}</div>` : "";
 
   host.innerHTML=
-    `<h3>Level ${p.from} → ${p.to}</h3>`+
-    `<div class="bardo-gap" style="margin-bottom:4px">${escHtml((luCtx().c||{}).name||"The soul")} grows stronger. Your numbers have already risen; now choose what you've learned.</div>`+
-    gainLine + body + nav;
+    `<div class="level-rite"><div class="level-kicker">Ascension Rite</div>`+
+    `<div class="level-crossing"><span class="level-number old">${p.from}</span><span class="level-flare">✦</span><span class="level-number new">${p.to}</span></div>`+
+    `<h3>${escHtml((luCtx().c||{}).name||"The soul")} comes into their power</h3>`+
+    `<div class="bardo-gap">Your numbers have already risen. Now name what the journey taught you.</div>`+
+    `${gainLine}<div class="level-choices">${body}</div>${nav}</div>`;
 }

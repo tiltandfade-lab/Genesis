@@ -245,7 +245,13 @@ async function main() {
 
     for (const scene of SCENES) {
       const built = await buildScene(page, scene);
-      metrics.scenes[scene.key] = { label: scene.label, focusAreaType: scene.focusAreaType, focusDims: scene.focusDims, built };
+      // metrics carries only the SUMMARY fields (built.board itself is the full mesh-instance
+      // payload — thousands of floor/wall/door instance entries — no reason to serialize the whole
+      // thing into metrics.json; the PNGs are the actual proof).
+      metrics.scenes[scene.key] = {
+        label: scene.label, focusAreaType: scene.focusAreaType, focusDims: scene.focusDims,
+        built: { ok: built.ok, error: built.error, roomShape: built.roomShape, roomCellCount: built.roomCellCount, roomBBoxArea: built.roomBBoxArea, roomWD: built.roomWD, meta: built.meta },
+      };
       if (!built.ok) { metrics.notes.push(`scene ${scene.key} FAILED to build: ${built.error}`); continue; }
       log(`${scene.key}: shape=${built.roomShape} cells=${built.roomCellCount}/${built.roomBBoxArea} (${built.roomWD})`);
       if (built.roomShape === "rect") metrics.notes.push(`scene ${scene.key}: room classified 'rect' — shapeForArchetype/rasterizeShape did NOT fire as expected`);

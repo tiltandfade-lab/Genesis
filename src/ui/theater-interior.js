@@ -441,14 +441,12 @@ function itrFocusRoomSet(plan, focusSegNum, radius) {
 var ITR_ACTIVE_ROOM_ONLY = true;
 
 // itrActiveRoomKeepSet(plan, focusSegNum) -> Set([focusSegNum]) | null. Mirrors itrFocusRoomSet's own
-// "never render nothing on a bad focus" degrade: an unrecognized/missing focusSegNum falls back to
-// null (render the WHOLE plan) rather than an empty keep set, and a null focusSegNum (no focus room
-// requested — the 80-room draw-call-budget check, a whole-plan study scene) is also null, same as
-// itrFocusRoomSet's own first line.
+// A missing focusSegNum preserves the explicit whole-plan study/harness path (`null`). An explicit but
+// unknown focus fails CLOSED to an empty set so stale room state can never reveal the whole dungeon.
 function itrActiveRoomKeepSet(plan, focusSegNum) {
   if (focusSegNum == null) return null;
   const exists = (plan.rooms || []).some((r) => r.segNum === focusSegNum);
-  return exists ? new Set([focusSegNum]) : null;
+  return exists ? new Set([focusSegNum]) : new Set();
 }
 
 /* core-kept grid: true for a cell inside a kept room's rect, or a corridor cell whose corridor connects

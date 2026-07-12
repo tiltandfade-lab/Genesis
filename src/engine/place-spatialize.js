@@ -26,7 +26,15 @@
    never a hand-patched plan).
 
    Internal helpers are `dsp`-prefixed (mirrors the `dwalk`-prefix convention in
-   src/engine/dungeon-walk.js) so nothing here collides with another module's globals. */
+   src/engine/dungeon-walk.js) so nothing here collides with another module's globals.
+
+   STAGE-C (docs/STAGE-C.md, 2026-07-12): C1 SIZE FIDELITY sizes a room's footprint off the rolled
+   `segment.dims` (dspDimsToCells) instead of a blind rng() 4-7 draw. C2 STRUCTURAL TERRAIN
+   (dspParseSideTerrain) keyword-scans `segment.side` into a per-room dais/pit elevation patch,
+   stamped onto a parallel `tiers` buffer (SAME shape/indexing as `cells`) the render seam
+   (theater-interior.js's interiorBuildBoard) folds into floor height. Both live behind the shared
+   `SPATIAL_SHAPES` flag (default ON); rooms stay rectangular (C3 REAL SHAPES, queued, is what
+   makes them not). */
 
 const SPATIAL_CELL = Object.freeze({ VOID: 0, FLOOR: 1, WALL: 2, DOOR: 3, WATER: 4 });
 
@@ -64,21 +72,164 @@ const SPATIAL_MAX_CELL = 24;
    arm-width-parenthetical rows — see dev/verify-stage-c-size.mjs check 5 for the full list + the
    worked cell math. Pure string parsing: no rng()/Math.random/Date.now, never advances the seed
    (dspBuildPlanOnce below never lets a parse outcome change the rng() call sequence either). */
-function dspDimsToCells(dims) {
-  const s = String(dims || "");
+// dspFeetPairRaw(s) -> {wCells,dCells} | null — the shared, UNCLAMPED half of the feet-string
+// parse (STAGE-C C2 addendum, 2026-07-12): lifted out of dspDimsToCells so a caller sizing a whole
+// ROOM (which must respect the [SPATIAL_MIN_CELL,SPATIAL_MAX_CELL] furnishability band) and a
+// caller sizing a small sub-room TERRAIN PATCH (dspParseSideTerrain below — a 15'x15' dais patch
+// is honestly 3 cells, and forcing it up to the room's own SPATIAL_MIN_CELL=4 floor would silently
+// inflate a "3x3 patch" roll into a wrong 4x4 one) can apply their OWN clamp band over the same
+// parse. No behavior change to dspDimsToCells itself — it still applies the identical
+// [SPATIAL_MIN_CELL,SPATIAL_MAX_CELL] clamp it always has, just via this shared core.
+function dspFeetPairRaw(s) {
   const nums = s.match(/(\d+)\s*'/g);
   if (!nums || !nums.length) return null;
   const feet = nums.map((n) => parseInt(n, 10)).filter((n) => Number.isFinite(n) && n > 0);
   if (!feet.length) return null;
-  const clamp = (c) => Math.max(SPATIAL_MIN_CELL, Math.min(SPATIAL_MAX_CELL, c));
   if (/diameter/i.test(s)) {
-    const c = clamp(Math.round(feet[0] / 5));
+    const c = Math.round(feet[0] / 5);
     return { wCells: c, dCells: c };
   }
   if (feet.length < 2) return null; // a single non-diameter feet value isn't a W x D pair
-  const dCells = clamp(Math.round(feet[0] / 5));
-  const wCells = clamp(Math.round(feet[1] / 5));
-  return { wCells, dCells };
+  return { dCells: Math.round(feet[0] / 5), wCells: Math.round(feet[1] / 5) };
+}
+
+/* dspDimsToCells(dims) -> {wCells,dCells} | null (unparseable/absent -> null, caller falls back
+   to the existing rng() 4-7 draw). Lifted regex from combat.js's cmDimsToGrid (:32, "the FIRST TWO
+   integer feet values in the string win" — `/(\d+)\s*'/g`) but emits GRID-LAW CELLS (feet/5,
+   rounded) instead of combat's clamped band/lane COUNTS; a "diameter" value yields a square bbox
+   (wCells===dCells) per STAGE-C.md C1 step 1. Ordering mirrors cmDimsToGrid's own documented
+   convention verbatim (combat.js:26-27: "order = depth then width, matching the walk tables' 'L x
+   W' convention") — the FIRST feet value becomes dCells (this module's y/depth axis: room.d drives
+   the y-extent at the rasterize loop, ~:304), the SECOND becomes wCells (room.w, the x-extent,
+   ~:305). Verified against 6 real "Dungeon Area Type" table strings incl. a diameter row and two
+   arm-width-parenthetical rows — see dev/verify-stage-c-size.mjs check 5 for the full list + the
+   worked cell math. Pure string parsing: no rng()/Math.random/Date.now, never advances the seed
+   (dspBuildPlanOnce below never lets a parse outcome change the rng() call sequence either). */
+function dspDimsToCells(dims) {
+  const raw = dspFeetPairRaw(String(dims || ""));
+  if (!raw) return null;
+  const clamp = (c) => Math.max(SPATIAL_MIN_CELL, Math.min(SPATIAL_MAX_CELL, c));
+  return { wCells: clamp(raw.wCells), dCells: clamp(raw.dCells) };
+}
+
+/* ─── STAGE-C C2 STRUCTURAL TERRAIN (docs/STAGE-C.md C2) ────────────────────────────────────────
+   `segment.side` ("Side Area & Structural Features", the d200 table's 3rd column) is prose that
+   today is rendered narratively but never reaches the grid — a "15' x 15' central raised dais"
+   never becomes real geometry. This keyword-scans that prose into a single per-room elevation-
+   tier PATCH (the DUNGEON-GRAPH.md U6 `terrain:[{cells,tier,kind}]` shape) + stamps the tier onto
+   a parallel per-cell buffer (`tiers`, alongside `cells`) the render seam folds in. Prose parsing
+   only — never rejects an incongruous roll, never mutates the segment, never calls rng()/
+   Math.random()/Date.now() (this module's own DETERMINISM LAW, header comment above): corner/wall
+   disambiguation below uses a SEPARATE hash chain (dspTerrainSeedHash, keyed off this build's own
+   `seed` + the segment's num + "side") that never touches the shared mulberry32 `rng` stream
+   dspBuildPlanOnce's other draws depend on — the call-count/order those draws see is byte-
+   identical whether or not a room's `side` string parses, mirroring C1's own "do NOT change the
+   rng call sequence" law for `dims`. */
+
+// tier +1 (raised architecture) vs tier -1 (sunken architecture) keyword sets, verbatim off
+// STAGE-C.md C2 step 1's own list. \b-bounded so e.g. "lower" never matches inside "flower", and
+// \w* lets a keyword's own inflection (recessed, elevating, ...) still match its stem.
+const DSP_TERRAIN_RAISE_RE = /\b(raised|dais|platforms?|step[- ]?up|elevated|elevating|gallery|balcon\w*)\b/i;
+const DSP_TERRAIN_SINK_RE = /\b(sunken|pits?|pools?|below|lower|recess\w*)\b/i;
+
+// dspTerrainSeedHash(seed, segNum) -> a stable per-room hash, DELIBERATELY a second, independent
+// hash chain off dspHashStr (not the shared `rng`) — see this section's header note. Used only to
+// disambiguate an AMBIGUOUS location cue ("in one corner" doesn't say which of 4; "along the wall"
+// doesn't say which of 4) deterministically without an extra rng() draw.
+function dspTerrainSeedHash(seed, segNum) {
+  return dspHashStr(String(seed) + ":" + String(segNum) + ":side");
+}
+
+/* dspParseSideTerrain(side, room, seed) -> {cells:[{x,y}...], tier:+1|-1, kind:'dais'|'pit'} | null.
+   Missing/unparseable/no-elevation-keyword `side` -> null (flat room, no terrain — never throws).
+   Algorithm (STAGE-C.md C2 step 1):
+     1. find the FIRST elevation keyword (raise or sink) by string position — if a side rolls both
+        (a real table row can, e.g. row 101 Grand Octagon's "sunken central arena... raised ring
+        walkway") the earlier-mentioned feature wins; this wave emits exactly one terrain patch per
+        room (the DUNGEON-GRAPH shape is an array for future multi-patch rooms, C3+).
+     2. isolate the ';'-delimited CLAUSE the keyword's own match falls inside (the table's own prose
+        convention: one clause = one structural feature, later clauses are flavor/dressing text) and
+        parse ITS footprint via the already-lifted dspDimsToCells (feet-with-apostrophe pairs or a
+        "N' diameter" -> a square patch; the table's own "(N ft high/deep)" height clause never has
+        an apostrophe, so it never pollutes the footprint parse). Unparseable footprint (present
+        keyword, absent/odd dims) falls back to a sane default 3x3 patch rather than dropping the
+        feature entirely — still fully deterministic, no rng().
+     3. clamp the patch to fit inside the room's own w x d bbox (a patch can never exceed its room).
+     4. resolve a LOCATION for the patch off the same clause's own cue words: "corner" -> one of the
+        room's 4 corners (dspTerrainSeedHash picks which); "wall" -> centered along one of the 4
+        walls (same hash picks which side); anything else (incl. "central"/"center", the common
+        case) -> centered in the room. Every branch re-clamps into the room bbox as a final guard. */
+function dspParseSideTerrain(side, room, seed) {
+  if (!room || typeof room.x !== "number" || typeof room.w !== "number") return null;
+  const s = String(side || "").trim();
+  if (!s) return null;
+
+  const raiseM = s.match(DSP_TERRAIN_RAISE_RE);
+  const sinkM = s.match(DSP_TERRAIN_SINK_RE);
+  let tier, kind, matchIndex;
+  if (raiseM && (!sinkM || raiseM.index <= sinkM.index)) { tier = 1; kind = "dais"; matchIndex = raiseM.index; }
+  else if (sinkM) { tier = -1; kind = "pit"; matchIndex = sinkM.index; }
+  else return null; // no elevation keyword at all -> flat room, no terrain
+
+  // isolate the ';'-delimited clause the matched keyword falls inside.
+  const clauses = s.split(";");
+  let clause = clauses[0], cursor = 0;
+  for (let i = 0; i < clauses.length; i++) {
+    const end = cursor + clauses[i].length;
+    if (matchIndex >= cursor && matchIndex <= end) { clause = clauses[i]; break; }
+    cursor = end + 1; // +1 accounts for the ';' the split consumed
+  }
+
+  // dspFeetPairRaw, NOT dspDimsToCells — a terrain patch has no furnishability floor the way a
+  // whole ROOM does (dspDimsToCells's own SPATIAL_MIN_CELL=4 clamp is right for sizing a room, but
+  // would silently inflate a legit "15'x15'" (3x3) dais patch up to 4x4). Only the room's own bbox
+  // (below) and a floor of 1 bound a patch's size.
+  const footprint = dspFeetPairRaw(clause) || dspFeetPairRaw(s);
+  const DSP_TERRAIN_DEFAULT_PATCH = 3; // a keyword matched but no parseable footprint (rare) -> a sane 3x3, never dropped
+  let pw = footprint ? footprint.wCells : DSP_TERRAIN_DEFAULT_PATCH;
+  let pd = footprint ? footprint.dCells : DSP_TERRAIN_DEFAULT_PATCH;
+  // clamp to [1, SPATIAL_MAX_CELL] first (a garbage/absurd clause, e.g. "500' x 500'", still can't
+  // blow the grid), THEN to the room's own bbox — a terrain patch can never exceed its own room.
+  pw = Math.max(1, Math.min(pw, SPATIAL_MAX_CELL));
+  pd = Math.max(1, Math.min(pd, SPATIAL_MAX_CELL));
+  pw = Math.max(1, Math.min(pw, room.w));
+  pd = Math.max(1, Math.min(pd, room.d));
+
+  const isCorner = /\bcorner\b/i.test(clause) || /\bcorner\b/i.test(s);
+  const isWall = /\bwall\b/i.test(clause) || /\bwall\b/i.test(s);
+  const hash = dspTerrainSeedHash(seed, room.segNum);
+  let ox, oy;
+  if (isCorner) {
+    const corners = [
+      { ox: room.x, oy: room.y },
+      { ox: room.x + room.w - pw, oy: room.y },
+      { ox: room.x, oy: room.y + room.d - pd },
+      { ox: room.x + room.w - pw, oy: room.y + room.d - pd },
+    ];
+    const chosen = corners[hash % corners.length];
+    ox = chosen.ox; oy = chosen.oy;
+  } else if (isWall) {
+    const sides = [
+      { ox: room.x + Math.floor((room.w - pw) / 2), oy: room.y },                       // north
+      { ox: room.x + Math.floor((room.w - pw) / 2), oy: room.y + room.d - pd },         // south
+      { ox: room.x, oy: room.y + Math.floor((room.d - pd) / 2) },                       // west
+      { ox: room.x + room.w - pw, oy: room.y + Math.floor((room.d - pd) / 2) },         // east
+    ];
+    const chosen = sides[hash % sides.length];
+    ox = chosen.ox; oy = chosen.oy;
+  } else {
+    // default (incl. "central"/"in the center"/no cue at all): centered.
+    ox = room.x + Math.floor((room.w - pw) / 2);
+    oy = room.y + Math.floor((room.d - pd) / 2);
+  }
+  ox = Math.max(room.x, Math.min(ox, room.x + room.w - pw));
+  oy = Math.max(room.y, Math.min(oy, room.y + room.d - pd));
+
+  const cells = [];
+  for (let yy = oy; yy < oy + pd; yy++) {
+    for (let xx = ox; xx < ox + pw; xx++) cells.push({ x: xx, y: yy });
+  }
+  return { cells, tier, kind };
 }
 
 // ─── seeded RNG (mulberry32 — same reference pattern as src/ui/theater-boot.js) ──────────────
@@ -352,6 +503,7 @@ function dspBuildPlanOnce(segments, topologyName, opts, seed) {
       x: a.ax - sz.w / 2, y: a.ay - sz.d / 2, w: sz.w, d: sz.d,
       depth: s.depth, isFinale: !!s.isFinale, role: null, scaleDomain: 1.0,
       dimsRef: dimsRefOf[s.id] || null, // STAGE-C C1 step 3: additive provenance, harmless if unused
+      terrain: null, // STAGE-C C2: [{cells,tier,kind}] | null — populated below when segment.side parses
     };
   });
 
@@ -371,6 +523,26 @@ function dspBuildPlanOnce(segments, topologyName, opts, seed) {
       }
     }
   });
+
+  // STAGE-C C2 STRUCTURAL TERRAIN (docs/STAGE-C.md C2): parse each room's own segment.side into at
+  // most one terrain patch + stamp its tier onto a parallel `tiers` buffer (SAME shape/indexing as
+  // `cells`, default 0 everywhere = flat). Additive only — never touches `cells`' own SPATIAL_CELL
+  // code, so a dais/pit cell stays exactly as walkable/routable/BFS-reachable as it always was; the
+  // render seam (interiorBuildBoard, theater-interior.js) is the only consumer of `tiers`. Behind
+  // the shared SPATIAL_SHAPES flag: OFF restores byte-identical pre-C2 behavior (tiers stays
+  // all-zero, no room gets `.terrain`).
+  const tiers = new Int8Array(cellW * cellD);
+  if (SPATIAL_SHAPES) {
+    rooms.forEach((r) => {
+      const seg = byId[r.segId];
+      const terrain = dspParseSideTerrain(seg && seg.side, r, seed);
+      if (!terrain) return;
+      r.terrain = [terrain]; // DUNGEON-GRAPH.md U6 shape: rooms[].terrain = [{cells,tier,kind}]
+      terrain.cells.forEach((c) => {
+        if (c.x >= 0 && c.y >= 0 && c.x < cellW && c.y < cellD) tiers[idx(c.x, c.y)] = terrain.tier;
+      });
+    });
+  }
 
   const roomBySeg = {}; rooms.forEach((r) => { roomBySeg[r.segId] = r; });
 
@@ -458,7 +630,7 @@ function dspBuildPlanOnce(segments, topologyName, opts, seed) {
 
   const domains = [{ scale: 1.0, segNums: rooms.map((r) => r.segNum), transitions: [] }];
 
-  return { seed, topology: topologyName, cellW, cellD, cells, rooms, corridors, doors, domains };
+  return { seed, topology: topologyName, cellW, cellD, cells, tiers, rooms, corridors, doors, domains };
 }
 
 /** spatializePlan(segments, topologyName, opts) → SpatialPlan (docs/DUNGEON-GRAPH.md

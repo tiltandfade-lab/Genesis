@@ -195,3 +195,81 @@ primary surface (`place-spatialize.js`) is NOT in Codex's lane — prefer keepin
 After C3: re-shoot + READ the octagon/rotunda/L captures + frame `12`/`19` approximations; run the plan/
 combat/interior regression suite; `/genesis-clean-close` (mark Stage C complete in GRAPHICS-NORTH-STAR;
 tick DUNGEON-GRAPH U6 RM-1/2/3; note the AO-gradient + vertical-stair follow-ons).
+
+---
+
+## C3b — CIRCLE/ELLIPSE ROUNDING + DIAGONAL WALL FACES (render-only refinement, off C3 tip)
+
+Landed 2026-07-12 (`feat/stage-c3b-circle-smooth`), directly following C3's own close: the rotunda/oval
+read at ~10 cells across was a chunky rounded-square staircase, not a crisp circle — Adam ruled land C3
+first, then a refinement pass. Mid-session Adam broadened the ask: not just circle smoothing but real
+DIAGONAL wall faces on octagon/L/T/cross staircase runs (the tabletop-miniature/FFT diagonal-wall look).
+
+**This amends C3's own "smoothing the staircased contour... the compiler's bevel already softens it"
+out-of-scope note (C3 §Out of scope) and its "we do not build true curved geometry" decision** — C3b
+supersedes those TWO specific lines for the RENDER layer only; every other C3 decision (shape lives in
+the LOGICAL plan, staircased orthogonal cell rasterization, prose parsing) is unchanged and still governs
+`place-spatialize.js`.
+
+**Hard constraint (unchanged from C3): the LOGICAL cell grid never moves.** `place-spatialize.js` is
+untouched by C3b entirely — `rooms[].cells`/`plan.cells` stay the exact staircased-orthogonal footprint
+C3 rasterizes; combat/placement/pathing/determinism read that grid and never see a curve or a diagonal.
+C3b is a **RENDER-ONLY** refinement inside the C4 compiler (`src/ui/theater-room-mesh.js`).
+
+### What changed
+- `theater-interior.js`'s `interiorBuildBoard` grew one additive sibling field next to `focusRect`:
+  `activeRoomShape` — the active room's own STAGE-C C3 `shape` tag, or null.
+- `theater-boot.js` forwards `data.activeRoomShape` verbatim as `compileRoomShell(...).smoothShape`.
+- `theater-room-mesh.js` (the C4 compiler) dispatches on that tag, per ring, into one of two render-only
+  treatments (or neither):
+  - **`circle`/`ellipse` → "radial" mode** (`radialSmoothRing`): the ring's boundary trades simplify's
+    collapsed straight runs for full per-cell-edge resolution (`unmergedSegments`), then every non-door
+    vertex is pulled `DEFAULT_RADIAL_SMOOTH_BLEND` (0.88, tuned — 1.0 read as a disconnected "vector
+    ellipse pasted over the floor") of the way toward the ellipse fitted to that ring's own bbox. Door-
+    adjacent vertices are PINNED (corridor throat never drifts off the logical door cell).
+  - **`octagon`/`L`/`T`/`cross` → "diagonal" mode** (`diagonalizeStaircaseRing` / `chamferRunCorners`):
+    detects REAL multi-cell staircase runs (≥3 consecutive alternating-perpendicular unit segments — an
+    octagon's own chamfered corner) and chamfers every internal corner via the two adjacent edges' own
+    MIDPOINTS — a provable identity: consecutive edge-midpoints of a perfect unit staircase are exactly
+    COLLINEAR, so the whole run reads as one flat 45° face. Safe by construction: the chamfer's distance
+    from any owning cell's own center is a fixed 0.5/√2≈0.354 world units, comfortably inside that cell's
+    floor area (never risks a cell losing its containing triangle). L/T/cross structurally never contain
+    a qualifying run (their rasterization is a single right-angle quadrant/band subtraction, not a
+    staircase) — the detector is a safety-net inclusion for them, a proven no-op (byte-identical to
+    untagged), not new geometry.
+  - `rect`/`cave`/anything else/unset → the ORIGINAL simplify path, byte-identical to pre-C3b.
+- `insetPolygon`'s corner-bevel math generalized from a 90°-only sum shortcut to an exact 2D miter-join
+  solve (`insetOffset`, Cramer's rule) — algebraically proven byte-identical to the old formula at every
+  90°/270° grid corner (every pre-C3b shape), and now also correct at the non-right-angle corners the
+  radial/diagonal treatments introduce.
+
+### Dropped-cell bug — fixed at root (same branch)
+Discovered (not introduced) during this unit: the C3/C4 compiler's `cellTriangleMap` was silently
+dropping 2 of 76 cells for a real octagon fixture on master, pre-C3b — a latent floating-point edge
+case where a cell center sits exactly on an internal ear-clip triangulation diagonal, so NO triangle
+STRICTLY contains it and the cell got no map entry (a render-layer hit-test gap; combat is unaffected —
+it reads `plan.cells`, never this map). Fixed at ROOT with a **nearest-triangle fallback** in the
+`cellTriangleMap` loop (`compileRoomShellData`): keep the strictly-containing triangle when one exists
+(unchanged common case); otherwise resolve to the triangle with the smallest true point-to-triangle
+distance (`pointToTriangleDist2` — 0 when the point is on an edge). Because the dropped cell lies on a
+shared diagonal, that distance is ~0 for both triangles owning it, so the fallback picks a triangle the
+point actually lies on (a centroid-distance heuristic does NOT — it mis-picked "4,3" to a triangle 2.1
+units off its true edge). It is now impossible for a floor cell to be left unmapped, for ANY shape —
+proven on the BARE (non-chamfered) path (the diagonal chamfer only fixed the octagon case incidentally;
+this fixes circle-mode cells, unlucky rect triangulations, and future shapes too). Pure, deterministic.
+
+### Known limitations (documented, not silently hidden)
+- `diagonalizeStaircaseRing` does not scan across a ring's own wraparound seam — in the rare worst case
+  one of a shape's corners goes un-chamfered rather than mis-chamfered; never a correctness risk.
+
+### Verify
+`dev/verify-stage-c3b-circle-smooth.mjs` (43 checks) — cell-map-unchanged (circle byte-identical), door-
+pin, roundness metric (circle avg deviation from ideal radius 0.099→0.006, max 0.131→0.016), determinism,
+shape-gate, diagonal-face existence + collinearity, the ROOT dropped-cell fix (bare octagon 76/76 + red-
+first master 74/76 + circle/rect full coverage), and the L/T/cross/tiny-octagon no-op guarantee.
+`dev/verify-room-shell.mjs` gained check 8f (bare octagon 76/76 coverage). Full regression re-run clean:
+verify-room-shell 32/0, verify-stage-c-shapes 88/0, verify-stage-c-size 25/0, verify-stage-c-terrain 49/0,
+verify-dungeon-interior 287/0, verify-combat-cells 13/0, verify-dungeon-walkbind 20/0.
+Capture: `dev/battle-gate/capture-stage-c3-shapes.mjs` re-shot at `dev/battle-gate/stage-c3-shapes/
+{rotunda,octagon,l-shaped}.png` — rotunda reads as a genuine circle; octagon's corners are flat diagonal
+planes (not stairs); L stays crisp/unchanged.

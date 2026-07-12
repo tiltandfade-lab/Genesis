@@ -8886,9 +8886,15 @@ function setInteriorBoard(data){
       if(!cnt) return "#ffffff";
       return "#" + new THREE.Color(sr / cnt, sg / cnt, sb / cnt).getHexString();
     };
+    // STAGE-C3b (docs/STAGE-C.md C3b addendum): `data.activeRoomShape` is theater-interior.js's own
+    // sibling of `focusRect` (interiorBuildBoard's own `plan.rooms.find` lookup) — the active room's
+    // STAGE-C C3 `shape` tag, forwarded VERBATIM. compileRoomShellData itself decides what (if
+    // anything) to do with it: 'circle'/'ellipse' round the boundary, 'octagon'/'L'/'T'/'cross' chamfer
+    // any real staircase run into a diagonal face, 'rect'/'cave'/null take the untouched simplify path
+    // — see theater-room-mesh.js's own `opts.smoothShape` doc for the full per-tag behavior.
     const shell = compileRoomShell(shellCells, {
       wallHeight: roomWallHeight, wallHeightForSegment, uvDensity: ITR_ROOM_SHELL_UV_DENSITY,
-      floorColorAt, wallColorForSegment,
+      floorColorAt, wallColorForSegment, smoothShape: data.activeRoomShape,
     });
     if(shell.floorGeometry){
       const m = new THREE.Mesh(shell.floorGeometry, floorMat);

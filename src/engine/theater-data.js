@@ -1136,6 +1136,14 @@ function trayFrom(source, scene, opts){
     board.dressing = dressedPlan.dressing || [];
     board.projection = projection;
     board.activeRoomId = source.focusSegNum != null ? source.focusSegNum : null;
+    // WALK-NATIVE-A.md WDV-1 — the anti-drift boundary: stamps board.walkScene (additive; never
+    // replaces board.projection, which A3 and back-compat callers still read). Pure/no-RNG, same
+    // (source,scene,opts) snapshot -> byte-identical walkScene.
+    const walkScene = (typeof walkSceneFrom === "function" && source.segment) ? walkSceneFrom({walkId:
+      source.record?.id ?? source.walkId ?? null, walk:source.walk||null, segment:source.segment,
+      overlay:source.overlay||null, spatialRoom:(source.plan?.rooms||[]).find(r=>r.segNum===source.focusSegNum)||null,
+      live:{combat:opts?.combat||null, viewState:null}}) : null;
+    board.walkScene = walkScene;
     return board;
   }
   const segment = source.kind === "interior" ? source.record : source.segment;

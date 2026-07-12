@@ -1443,11 +1443,77 @@ const ITR_GLOOM_AMBIENT_LIFT = 0.05;
 // group 16 pins exactly one HemisphereLight built in mount(); this only re-drives that SAME shared
 // S.hemiLight's intensity higher for these three profiles, same mechanism ITR_SCENE_HEMI already uses).
 const ITR_BRIGHT_PROFILES = new Set(["daylit", "overcast", "moonlit"]);
-const ITR_BRIGHT_SCENE_AMBIENT = 1.1;     // vs ITR_SCENE_AMBIENT 0.13 — a sunlit room reads lit throughout, not pooled
-const ITR_BRIGHT_SCENE_HEMI = 0.9;        // vs ITR_SCENE_HEMI 0.08 — the sky IS the fill for these realms
-const ITR_BRIGHT_SCENE_FILL_SCALE = 1.0;  // vs ITR_SCENE_FILL_SCALE 0.04 — sun/moon overhead fill stays FULL, never dimmed to a torch-era whisper
-const ITR_BRIGHT_SCENE_KEY = 0.9;         // vs ITR_SCENE_KEY 0.05 — tabletop key DirectionalLight, restored toward daylight (above mount's own 0.72 tabletop default — some realms' dark-albedo materials, e.g. lost-world's jungle-shadow palette, need real headroom to actually read bright)
-const ITR_BRIGHT_SCENE_FILL = 0.55;       // vs ITR_SCENE_FILL 0.02
+// docs/LIGHT-SIGHT-POLISH.md P-1 problem 1 (Adam's re-shoot: suburb daylit "nuclear bomb") — PER-REALM
+// BRIGHT FILL. The single global ITR_BRIGHT_SCENE_* block above (now ITR_BRIGHT_REALM_FILL_DEFAULT,
+// below) was tuned so lost-world's DARK jungle-shadow albedo (floorColor #3d4a2e/wallColor #2a3320,
+// luminance ~0.23) would actually read sunlit — but the SAME numbers, applied to a realm with a much
+// lighter kit (suburb floorColor #cfc7a0/wallColor #b8a97e, luminance ~0.72), blow straight past white.
+// Fix: key the bright-fill numbers on data.realmId, not just on "is this a bright profile" — an
+// explicit, dial-able per-realm table (predictable — Adam retunes ONE realm's row, never a formula)
+// wins when present; a realm with no explicit row falls back to a luminance-derived scale of the
+// DEFAULT (a brighter kit needs proportionally LESS added fill to reach the same "reads sunlit" result
+// a dark kit needs a lot of).
+const ITR_BRIGHT_REALM_FILL_DEFAULT = Object.freeze({
+  ambient: 1.1, hemi: 0.9, fillScale: 1.0, key: 0.9, fill: 0.55
+});
+// Explicit per-realm rows — reversible taste values Adam dials directly from the next re-shoot.
+// lost-world keeps the ORIGINAL numbers verbatim (L-4's own headline assertion in
+// dev/verify-diegetic-light.mjs is pinned to this realm at these exact values — re-run that group
+// before retuning this row). suburb/bright-kingdom get a gentler set tuned to their lighter kits (their
+// scale below is the same luminance-fallback math, pre-computed and pinned explicit so the numbers are
+// dial-able and don't silently drift if the kit's authored floor/wall color ever changes).
+const ITR_BRIGHT_REALM_FILL = Object.freeze({
+  "lost-world": Object.freeze({ ambient: 1.1, hemi: 0.9, fillScale: 1.0, key: 0.9, fill: 0.55 }),
+  suburb: Object.freeze({ ambient: 0.22, hemi: 0.18, fillScale: 1.0, key: 0.18, fill: 0.11 }),
+  "bright-kingdom": Object.freeze({ ambient: 0.28, hemi: 0.23, fillScale: 1.0, key: 0.23, fill: 0.14 })
+});
+// the luminance anchor: lost-world's OWN floor/wall albedo average (Rec.601 luma) — the DEFAULT numbers
+// above are authored AT this anchor, so a realm at this exact luminance gets scale=1 (byte-identical to
+// the pre-P-1 global numbers); a brighter kit scales its fill down from there. Never recomputed live off
+// INTERIOR_TILE_KITS (that table can gain/lose entries) — a fixed named constant, same "reversible taste
+// value" discipline as every other number in this file.
+const ITR_BRIGHT_FILL_DARK_REF_LUM = 0.23;
+const ITR_BRIGHT_FILL_MIN_SCALE = 0.3; // floor: even an extremely bright, unlisted kit still gets SOME added daylight fill, never near-zero
+// realmId -> {ambient,hemi,fillScale,key,fill}: the explicit table above wins; otherwise scale
+// ITR_BRIGHT_REALM_FILL_DEFAULT down by how much brighter this realm's OWN tileKit (floor/wall albedo
+// average) reads than the lost-world anchor. `kit` is the CALLER's already-resolved data.tileKit (the
+// same object setInteriorBoard already has in scope as `kit` — never re-derived from a second lookup).
+// P-1 TEST-ONLY SEAM (mirrors ITR_LIGHT_CONE_ENABLED's own reversible-flag convention): forces
+// itrBrightRealmFillFor to ALWAYS return the single DEFAULT row — the exact pre-P-1 "one global
+// bright-fill set applied to every realm alike" behavior — regardless of realmId/kit. Lets a harness
+// reproduce the original suburb-blows-out regression on demand (RED-FIRST: prove it really did clip
+// under lost-world's own numbers), then clear the flag to prove the real per-realm table fixes it.
+let ITR_BRIGHT_REALM_FILL_FORCE_DEFAULT_FOR_TEST = false;
+function itrBrightRealmFillFor(realmId, kit){
+  if(ITR_BRIGHT_REALM_FILL_FORCE_DEFAULT_FOR_TEST) return ITR_BRIGHT_REALM_FILL_DEFAULT;
+  const explicit = realmId && ITR_BRIGHT_REALM_FILL[realmId];
+  if(explicit) return explicit;
+  const floorLum = kit && kit.floorColor ? lumaOf(hexToRGB(hexStrToNum(kit.floorColor))) : ITR_BRIGHT_FILL_DARK_REF_LUM;
+  const wallLum = kit && kit.wallColor ? lumaOf(hexToRGB(hexStrToNum(kit.wallColor))) : ITR_BRIGHT_FILL_DARK_REF_LUM;
+  const lum = Math.max(0.02, (floorLum + wallLum) / 2);
+  const scale = Math.max(ITR_BRIGHT_FILL_MIN_SCALE, Math.min(1, ITR_BRIGHT_FILL_DARK_REF_LUM / lum));
+  const d = ITR_BRIGHT_REALM_FILL_DEFAULT;
+  return { ambient: d.ambient * scale, hemi: d.hemi * scale, fillScale: d.fillScale, key: d.key * scale, fill: d.fill * scale };
+}
+// docs/LIGHT-SIGHT-POLISH.md P-1 problem 2 (Adam's re-shoot: cosmic voidlit "invisible") — COSMIC
+// EMISSIVE FILL. voidlit isn't in ITR_BRIGHT_PROFILES (it's not daylight), so it fell through to the
+// dim single-torch dungeon numbers (ITR_SCENE_*) — tuned for a crypt where a torch carries the room;
+// cosmic has no torch, so it read as pure void. Its own distinct legibility path: dim + COOL (voidlit's
+// authored ambient/point colors, LIGHT_PROFILES above, are already the purple-violet cosmic hue — this
+// only raises their INTENSITY, same "color stays authored, intensity is the dial" discipline the
+// STAGE_AMBIENT_FLOOR readability floor already keeps), well under the sunlit ITR_BRIGHT_* numbers so it
+// never reads as daylight.
+const ITR_EMISSIVE_PROFILES = new Set(["voidlit"]);
+const ITR_EMISSIVE_SCENE_AMBIENT = 0.5;    // vs ITR_SCENE_AMBIENT 0.13 / ITR_BRIGHT_REALM_FILL_DEFAULT.ambient 1.1 — meaningfully lit, well under daylight
+const ITR_EMISSIVE_SCENE_HEMI = 0.42;      // vs ITR_SCENE_HEMI 0.08 / bright 0.9
+const ITR_EMISSIVE_SCENE_FILL_SCALE = 0.7; // vs ITR_SCENE_FILL_SCALE 0.04 — voidlit's own authored purple point carries more of the read than a torch-era whisper would
+const ITR_EMISSIVE_SCENE_KEY = 0.3;        // vs ITR_SCENE_KEY 0.05 / bright 0.9 — a faint star-key, well under the sunlit realms
+const ITR_EMISSIVE_SCENE_FILL = 0.18;      // vs ITR_SCENE_FILL 0.02 / bright 0.55
+// P-1 TEST-ONLY SEAM (same convention as ITR_BRIGHT_REALM_FILL_FORCE_DEFAULT_FOR_TEST just above): forces
+// the emissive branch OFF so voidlit falls back through to the dim single-torch dungeon numbers — the
+// exact pre-P-1 "cosmic reads near-black" behavior — letting a harness reproduce that RED baseline on
+// demand, then clear the flag to prove the emissive path fixes it.
+let ITR_EMISSIVE_FILL_DISABLED_FOR_TEST = false;
 // BW2-4 item 2 (value plunge) — DOORFRAME value darken, GL-side. Doorframes ship with kit.trimColor
 // (the bright accent hue — gloom #6b5878 lum 0.37, gold on others), so a doorway prism renders as a
 // BRIGHT vertical (round-3 READ: a lavender block fighting the standees) where the mocks keep doorways
@@ -6198,6 +6264,32 @@ function interiorBuildLightCard(slug){
   g.add(mesh);
   g.userData.sprite = true;
   g.userData.dressingSlug = slug;
+  g.userData.lightEmitterMarker = "card"; // P-1 problem 3 test-facing tag — see _interiorLightEmittersForTest
+  return g;
+}
+
+// docs/LIGHT-SIGHT-POLISH.md P-1 problem 3 (Adam's re-shoot: "the glow disc floats with no source" —
+// the cone is gone (ITR_LIGHT_CONE_ENABLED default false) and only chrome/gloom/fantasy carry a real
+// INTERIOR_LIGHT_CARD dressing card, so every OTHER realm's additive glow disc hung in mid-air with no
+// visible origin object). Every light with no card now additionally mounts a tiny self-lit EMITTER NUB —
+// a small sconce/brazier stub, tinted to the light's own color, standing at floor level under the glow
+// — so the source always reads as an OBJECT, not bare air. Needs no per-realm art (a plain low-poly
+// stub, same MeshBasicMaterial/psxExempt family as the glow disc/cone), so it covers every realm
+// automatically, present or future. Reversible: flip ITR_LIGHT_EMITTER_NUB_ENABLED (mirrors the L-1 cone
+// gate's own convention) or call window.Theater.setLightEmitterNubEnabled(v) at runtime.
+let ITR_LIGHT_EMITTER_NUB_ENABLED = true;
+const ITR_LIGHT_EMITTER_NUB_RADIUS = 0.16; // world units — a small stub, well under a standee's own scale
+const ITR_LIGHT_EMITTER_NUB_HEIGHT = 0.3;
+function interiorBuildLightEmitterNub(light){
+  const geo = new THREE.CylinderGeometry(ITR_LIGHT_EMITTER_NUB_RADIUS * 0.7, ITR_LIGHT_EMITTER_NUB_RADIUS, ITR_LIGHT_EMITTER_NUB_HEIGHT, 8);
+  const mat = new THREE.MeshBasicMaterial({ color: light.color || "#ffbb66" });
+  mat.userData.psxExempt = true;
+  const mesh = new THREE.Mesh(geo, mat);
+  mesh.position.y = ITR_LIGHT_EMITTER_NUB_HEIGHT / 2;
+  mesh.castShadow = false; mesh.receiveShadow = false; // a light's own tiny fixture never shadows itself (same discipline as the glow disc/card)
+  const g = new THREE.Group();
+  g.add(mesh);
+  g.userData.lightEmitterMarker = "nub"; // test-facing tag — see _interiorLightEmittersForTest
   return g;
 }
 
@@ -6341,11 +6433,20 @@ function interiorBuildLights(lights, cx, cz, realmId, floorTopMap, pieces){
       cone.group.position.copy(glow.group.position);
       group.add(cone.group);
     }
-    if(cardSlug && !pieceCells.has(Math.round(light.x || 0) + "," + Math.round(light.z || 0))){
-      const card = interiorBuildLightCard(cardSlug);
-      const floorTop = interiorFloorTopAt(floorTopMap, light.x || 0, light.z || 0);
-      card.position.set((light.x || 0) - cx, floorTop, (light.z || 0) - cz);
-      group.add(card);
+    if(!pieceCells.has(Math.round(light.x || 0) + "," + Math.round(light.z || 0))){
+      if(cardSlug){
+        const card = interiorBuildLightCard(cardSlug);
+        const floorTop = interiorFloorTopAt(floorTopMap, light.x || 0, light.z || 0);
+        card.position.set((light.x || 0) - cx, floorTop, (light.z || 0) - cz);
+        group.add(card);
+      } else if(ITR_LIGHT_EMITTER_NUB_ENABLED){
+        // P-1 problem 3 — no dressing card for this realm: seat a tiny self-lit emitter nub instead so
+        // the glow disc still reads as coming FROM something, same collision guard as the card branch.
+        const nub = interiorBuildLightEmitterNub(light);
+        const floorTop = interiorFloorTopAt(floorTopMap, light.x || 0, light.z || 0);
+        nub.position.set((light.x || 0) - cx, floorTop, (light.z || 0) - cz);
+        group.add(nub);
+      }
     }
     const fallbackConeOpacity = ITR_LIGHT_CONE_OPACITY[light.kind] != null ? ITR_LIGHT_CONE_OPACITY[light.kind] : ITR_LIGHT_CONE_OPACITY.torch;
     flickerTargets.push({
@@ -7569,25 +7670,35 @@ function setInteriorBoard(data){
   // so the flicker bases (startLightFlicker snapshots S.pointLights[i].intensity) capture the plunged
   // fill, not the pre-plunge value. See ITR_SCENE_* constants (near HEMI_*) for the tuned numbers.
   if(rigOn){
-    // docs/DIEGETIC-LIGHT.md L-4 — BRIGHT-REALM HEMISPHERE: daylit/overcast/moonlit are the sun/moon/
-    // sky's OWN diegetic reach — they get the brighter ITR_BRIGHT_SCENE_* numbers instead of the dim
-    // single-torch dungeon model below (this is the "daylit lost-world reads darker than a torchlit
-    // crypt" inversion Adam caught; S.lightProfileKey is set a moment ago by applyLightProfile above).
+    // docs/DIEGETIC-LIGHT.md L-4 / docs/LIGHT-SIGHT-POLISH.md P-1 — BRIGHT-REALM HEMISPHERE: daylit/
+    // overcast/moonlit are the sun/moon/sky's OWN diegetic reach — they get a per-realm bright-fill row
+    // (ITR_BRIGHT_REALM_FILL / itrBrightRealmFillFor, above) instead of the dim single-torch dungeon
+    // model below (this is the "daylit lost-world reads darker than a torchlit crypt" inversion Adam
+    // caught; S.lightProfileKey is set a moment ago by applyLightProfile above). P-1's own fix: this used
+    // to be ONE global set of numbers (tuned for lost-world's dark jungle albedo) applied to every bright
+    // realm alike — suburb's much lighter kit blew out under lost-world's numbers. Now keyed on
+    // data.realmId, with a luminance-derived fallback for any realm with no explicit row.
     const isBrightRealm = ITR_BRIGHT_PROFILES.has(S.lightProfileKey);
+    // docs/LIGHT-SIGHT-POLISH.md P-1 problem 2 — cosmic's voidlit gets its OWN dim/cool/legible path
+    // (ITR_EMISSIVE_SCENE_*, above), distinct from both the dim dungeon default and the sunlit numbers.
+    const isEmissiveRealm = !isBrightRealm && !ITR_EMISSIVE_FILL_DISABLED_FOR_TEST && ITR_EMISSIVE_PROFILES.has(S.lightProfileKey);
+    const brightFill = isBrightRealm ? itrBrightRealmFillFor(data.realmId, kit) : null;
     // BW2-4b item 6 — THE GLOOM LIFT: gloom ONLY gets a small ambient bump (fantasy is the reference
-    // register — never brightened). Every other realm keeps ITR_SCENE_AMBIENT exactly.
+    // register — never brightened). Every other non-bright/non-emissive realm keeps ITR_SCENE_AMBIENT
+    // exactly.
     const gloomLift = (data.realmId === "gloom") ? ITR_GLOOM_AMBIENT_LIFT : 0;
-    if(S.ambientLight) S.ambientLight.intensity = isBrightRealm ? ITR_BRIGHT_SCENE_AMBIENT : (ITR_SCENE_AMBIENT + gloomLift);
-    if(S.hemiLight) S.hemiLight.intensity = isBrightRealm ? ITR_BRIGHT_SCENE_HEMI : ITR_SCENE_HEMI;
-    (S.pointLights || []).forEach((l) => { l.intensity *= isBrightRealm ? ITR_BRIGHT_SCENE_FILL_SCALE : ITR_SCENE_FILL_SCALE; });
+    if(S.ambientLight) S.ambientLight.intensity = isBrightRealm ? brightFill.ambient : isEmissiveRealm ? ITR_EMISSIVE_SCENE_AMBIENT : (ITR_SCENE_AMBIENT + gloomLift);
+    if(S.hemiLight) S.hemiLight.intensity = isBrightRealm ? brightFill.hemi : isEmissiveRealm ? ITR_EMISSIVE_SCENE_HEMI : ITR_SCENE_HEMI;
+    (S.pointLights || []).forEach((l) => { l.intensity *= isBrightRealm ? brightFill.fillScale : isEmissiveRealm ? ITR_EMISSIVE_SCENE_FILL_SCALE : ITR_SCENE_FILL_SCALE; });
     // BW2-4b item 1 — THE BRIGHTNESS LAW: dim the tabletop key/fill DirectionalLights to a whisper for
     // the interior channel. They light a camera-facing billboard's normal at N·L~0.6, so at the mount
     // default (0.72/0.22) a sprite reads ~0.5 of full-bright everywhere BEFORE any torch — "full
     // brightness even in the dark", the exact thing the law forbids. setBoard restores the tabletop
     // values on its own path (mirroring the hemi restore just above the shadowMap toggle there).
-    // L-4: bright realms restore these MOST of the way toward that tabletop default (sunlit, not dim).
-    if(S.keyLight) S.keyLight.intensity = isBrightRealm ? ITR_BRIGHT_SCENE_KEY : ITR_SCENE_KEY;
-    if(S.fillLight) S.fillLight.intensity = isBrightRealm ? ITR_BRIGHT_SCENE_FILL : ITR_SCENE_FILL;
+    // L-4/P-1: bright realms restore these MOST of the way toward that tabletop default (sunlit, not
+    // dim, and scaled per-realm); cosmic gets a faint star-key, well under the bright numbers.
+    if(S.keyLight) S.keyLight.intensity = isBrightRealm ? brightFill.key : isEmissiveRealm ? ITR_EMISSIVE_SCENE_KEY : ITR_SCENE_KEY;
+    if(S.fillLight) S.fillLight.intensity = isBrightRealm ? brightFill.fill : isEmissiveRealm ? ITR_EMISSIVE_SCENE_FILL : ITR_SCENE_FILL;
     // BW2-4b item 2 — camera-key: mount/refresh the soft fill DirectionalLight from the camera's general
     // direction (L-2: no longer a shadow source by default — see ITR_CAMERA_KEY_CASTS_SHADOW).
     mountInteriorCameraKey(cx, cz);
@@ -8705,6 +8816,29 @@ window.Theater.interiorDecalCount = function(){ return S.interiorDecalCount || 0
 window.Theater.interiorLightConeCount = function(){ return S.interiorLightConeCount || 0; };
 window.Theater.setLightConeEnabled = function(v){ ITR_LIGHT_CONE_ENABLED = !!v; };
 window.Theater.lightConeEnabled = function(){ return !!ITR_LIGHT_CONE_ENABLED; };
+// docs/LIGHT-SIGHT-POLISH.md P-1 problem 3 — harness-facing diagnostic + runtime toggle, same
+// convention as the cone gate just above: every mounted light-emitter marker (card OR nub) in the
+// CURRENT interior scene graph, tagged by userData.lightEmitterMarker (see interiorBuildLightCard /
+// interiorBuildLightEmitterNub), so a harness can assert "every glow disc has a visible emitter
+// underneath it" directly against the live scene rather than trusting a screenshot alone.
+window.Theater._interiorLightEmittersForTest = function(){
+  const out = [];
+  if(S.interiorGroup){
+    S.interiorGroup.traverse((obj) => {
+      if(obj.userData && obj.userData.lightEmitterMarker){
+        out.push({ x: obj.position.x, y: obj.position.y, z: obj.position.z, kind: obj.userData.lightEmitterMarker });
+      }
+    });
+  }
+  return out;
+};
+window.Theater.setLightEmitterNubEnabled = function(v){ ITR_LIGHT_EMITTER_NUB_ENABLED = !!v; };
+window.Theater.lightEmitterNubEnabled = function(){ return !!ITR_LIGHT_EMITTER_NUB_ENABLED; };
+// P-1 problem 1/2 TEST-ONLY SEAMS — runtime toggles for the two RED-FIRST override flags declared
+// alongside ITR_BRIGHT_REALM_FILL/ITR_EMISSIVE_PROFILES above (same reversible-flag convention as every
+// other test seam on this surface).
+window.Theater.setBrightRealmFillForceDefaultForTest = function(v){ ITR_BRIGHT_REALM_FILL_FORCE_DEFAULT_FOR_TEST = !!v; };
+window.Theater.setEmissiveFillDisabledForTest = function(v){ ITR_EMISSIVE_FILL_DISABLED_FOR_TEST = !!v; };
 // docs/DIEGETIC-LIGHT.md L-2 — harness-facing diagnostics + runtime toggle for the camera-key shadow
 // retirement: the camera-key light's own current {position,castShadow,intensity} (null pre-mount), a
 // setter mirroring setLightConeEnabled's convention above, and the LIVE shadow-casting point light(s)

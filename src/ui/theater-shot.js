@@ -185,6 +185,13 @@ function pickPrimaryThreat(foes) {
 // ── anchor resolution (directive §3's weighted encounter cluster) ──────────────────────────────
 function objectiveFrom(tray) {
   if (!tray) return null;
+  const projected = tray.projection && Array.isArray(tray.projection.stageNow) ? tray.projection.stageNow : [];
+  const projectedCenterpiece = projected.find((c) => c && c.centerpiece && c.position);
+  if (projectedCenterpiece) {
+    const cs = numOr(tray.cellSize, 1);
+    return { x:numOr(projectedCenterpiece.position.x,0)*cs, z:numOr(projectedCenterpiece.position.y,0)*cs,
+      roomSegNum:tray.activeRoomId, sourceRef:projectedCenterpiece.sourceRef||null };
+  }
   // interior3d finale rooms carry a canonical dais anchor (theater-interior.js's daisTop) — the
   // closest thing the current tree has to a "centerpiece/objective cell" (BW5's construction-class
   // taxonomy formalizes a real objective/centerpiece flag in a later stage; this reads what exists
@@ -270,6 +277,15 @@ function piecesFromUnits(units) {
     living: !u.down && !u.fled && !u.obliterated
   }));
 }
+function piecesFromProjection(tray) {
+  const projected = tray && tray.projection && Array.isArray(tray.projection.stageNow) ? tray.projection.stageNow : [];
+  const cs = numOr(tray && tray.cellSize, 1);
+  return projected.filter((c) => c && c.role === "cast" && c.position).map((c) => ({
+    id:"card:"+c.id, kind:"cast", x:numOr(c.position.x,0)*cs, z:numOr(c.position.y,0)*cs,
+    roomSegNum:tray.activeRoomId, sourceRef:c.sourceRef||null, living:true,
+    count:c.count||1, representativeCount:c.representativeCount||1, groupFootprint:c.groupFootprint||null
+  }));
+}
 function propsFromTray(tray) {
   if (!tray) return [];
   if (tray.kind === "interior3d") {
@@ -278,11 +294,19 @@ function propsFromTray(tray) {
     // this surfaces what interiorBuildBoard already computed rather than inventing a second one).
     const furniture = Array.isArray(tray.furniture) ? tray.furniture : [];
     const cs = numOr(tray.cellSize, 1);
-    return furniture.map((f, i) => ({
+    const out = furniture.map((f, i) => ({
       id: "furniture:" + i, kind: f.kind || "furniture",
       x: numOr(f.x, 0) * cs, z: numOr(f.z, 0) * cs,
       roomSegNum: (f.roomSegNum != null ? f.roomSegNum : null)
     }));
+    const projected = tray.projection && Array.isArray(tray.projection.stageNow) ? tray.projection.stageNow : [];
+    projected.forEach((c) => {
+      if (!c || !c.position || c.role === "cast") return;
+      out.push({ id:"card:"+c.id, kind:c.role||"card", x:numOr(c.position.x,0)*cs,
+        z:numOr(c.position.y,0)*cs, roomSegNum:tray.activeRoomId, sourceRef:c.sourceRef||null,
+        count:c.count||1, representativeCount:c.representativeCount||1 });
+    });
+    return out;
   }
   const raw = Array.isArray(tray.props) ? tray.props : [];
   return raw.map((p, i) => {
@@ -364,21 +388,23 @@ function shotPlanFrom(tray, combat, viewState) {
   if (anchors.objective) noteProvenance("objective", "state", null);
   if (anchors.focalLight) noteProvenance("focalLight", "state", null);
 
-  const pieces = piecesFromUnits(units);
+  const pieces = piecesFromUnits(units).concat(piecesFromProjection(tray));
+  pieces.filter((p)=>p.sourceRef).forEach((p)=>noteProvenance(p.id,"walk-card",p.sourceRef));
   const props = propsFromTray(tray);
-  props.forEach((p) => noteProvenance(p.id, "state", null));
+  props.forEach((p) => noteProvenance(p.id, p.sourceRef?"walk-card":"state", p.sourceRef||null));
 
   const lightRig = lightRigFromTray(tray, anchors.actionCenter);
   const occlusionTargets = occlusionTargetsFromTray(tray);
 
   const pitch = clamp(numOr(viewState.pitchDeg, (PITCH_MIN_DEG + PITCH_MAX_DEG) / 2), PITCH_MIN_DEG, PITCH_MAX_DEG);
   const fov = clamp(numOr(viewState.fovDeg, (FOV_MIN_DEG + FOV_MAX_DEG) / 2), FOV_MIN_DEG, FOV_MAX_DEG);
+  const defaultMode = tray.projection && tray.projection.explicitDeal && tray.projection.density === "overloaded" ? "room" : "beat";
   const camera = {
-    mode: viewState.mode || "beat",
+    mode: viewState.mode || defaultMode,
     yaw: numOr(viewState.yawDeg, 0),
     pitch, fov,
     target: anchors.actionCenter || { x: 0, z: 0 },
-    distance: distanceFor(stage, fov, viewState.zoomLevel, viewState.mode || "beat"),
+    distance: distanceFor(stage, fov, viewState.zoomLevel, viewState.mode || defaultMode),
     sharpSubjects: sharpSubjectsFrom(anchors)
   };
 
@@ -396,6 +422,7 @@ function shotPlanFrom(tray, combat, viewState) {
     anchors,
     pieces,
     props,
+    walkProjection: tray.projection || null,
     // Stage D (BEAUTY-WAVE-5's broad state primitive + the object-state registry) is the owner of
     // interactables/traces; Stage E owns condition-decal overlays. No producer in the current tree
     // stamps any of the three yet, so they stay real (never-undefined) empty arrays — the SHAPE is

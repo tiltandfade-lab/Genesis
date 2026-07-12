@@ -149,3 +149,63 @@ HANDOFF item 2). GUISE (docs/GUISE.md) rides the same fold.
 2. Scale-domain transitions — squeeze rooms as player-visible fiction (crawl on hands
    and knees into the great hall) or pure geometry?
 3. Build authorization + ordering vs the sprite-lane merge and round-3 codex wave.
+
+---
+
+## BW5 extensions (Fable 2026-07-11 — `docs/BEAUTY-WAVE-5.md` SEAM 0 + SEAM 2)
+
+Grounded in the 2e *Dungeon Builder's Guidebook* (`Reference/`), which conceives a dungeon as a
+graph of self-contained tiles that agree only at typed connection points — the paper form of the
+one-room-render architecture (GRAPHICS-ENGINE §I).
+
+### Law 7 — THE CONNECTION-POINT CONTRACT
+
+A room must be **renderable ALONE yet graph-valid** (one-room render). The minimal data is a typed
+connection SLOT on each room boundary, mirroring the book's `✿`/stair grammar:
+- **`same-level` slots** — `door | archway | hallway`. **Archway grants a threshold GLIMPSE** (the
+  renderer may show a dimmed/static teaser of the next room at that opening); `door` does not
+  (opaque until crossed). The distinction is a real discovery-pacing lever, not cosmetic.
+- **`vertical` slots** — `stair-up | stair-down | stair-both`. **A stair is TWO slots** (the level
+  above AND below), per the book (p34).
+- **Per-room `axis: plan | elevation`** — vertical rooms (shafts, chasms, waterfalls) are
+  cross-sections that do NOT obey floor-plan edge logic; the flag orients camera + geometry.
+Slots resolve at load: both sides of a graph edge must agree on the slot kind (else carve a doorway
+or dead-end it — the book's "end the geomorph where it meets" rule). Doors already exist as `DOOR`
+cells and `dungeon-door-type/-state` rolls — the contract just types them.
+
+### SpatialPlan shape — BW5 additions
+
+```
+rooms: [{ …existing…,
+          shape: 'rect'|'hex'|'circle'|'octagon'|'L'|'cross'|'cave',  // U6 (was: rect | ellipse flag)
+          axis:  'plan'|'elevation',                                   // Law 7
+          slots: [{ side|arc, kind:'door'|'archway'|'hallway'|'stair-up'|'stair-down'|'stair-both',
+                    toSeg }],                                          // Law 7 — exits derived FROM the shape
+          terrain: [{ cells, tier:+1|-1|0, kind:'dais'|'pit'|'ledge'|'blind' }] }]  // U6/RM-2
+```
+
+### U6 — REAL ROOM SHAPES (folds BW5 SEAM 2: RM-1/RM-2/RM-3)
+
+`spatializePlan` currently ignores the rolled `Dungeon Area Type` (d200) and draws a random 4–7 cell
+rectangle (the caller passes no `sizeClass`). This unit makes the rolled shape reach the grid:
+- **RM-1 SIZE FIDELITY** — parse `dwalkArea`'s `dims` string → a real `sizeClass` into
+  `spatializePlan` (a "40′ octagon" stops boxing to an unrelated 25×30). Cheap first cut; rooms stay
+  rectangular.
+- **RM-2 STRUCTURAL TERRAIN** — wire the d200 "Side Area & Structural Features" into the cell grid as
+  **elevation tiers** (dais +1, pit/sunken −1, ledge/blind) — the seam where "beautiful rooms" and
+  tactical fun are the SAME fix; terrain informs interactable placement (shrine on the dais, trap on
+  the pit approach) and BFS must stay reachable across tiers.
+- **RM-3 REAL SHAPES** — lift the book's **Table 11f** menu (hexagon/circle/octagon/triangle/L/cross/
+  cave) and **derive exit slots FROM the polygon faces** ("shape and connectivity are one decision":
+  hexagon→6 faces, octagon→8, circle→continuous periphery, single-entrance→vault). This is the
+  never-built `ellipse flag` generalized; the polygon-exit rule is what makes it affordable.
+- **Free variety (book permutations):** rotation/mirror on placed rooms (Table 11c) + the "invasion"
+  re-skin (temple→goblin warren) — Genesis's realm/skin seams already carry both.
+
+*Acceptance:* rolled dims → matching footprint (±0 on the size class) across 100 seeds; a rotunda/
+octagon roll renders as that shape with exits on its faces, never a box; terrain tiers render at
+height and stay BFS-reachable; determinism (Law from GRAPHICS-ENGINE §7) preserved. *Red-first:* feed
+a "30′ diameter Rotunda" roll today, assert it renders as an unrelated rectangle.
+
+*(The book's ASSEMBLY-coherence mechanics — escalating-bias convergence, distance-decay pruning,
+spine-first — are a separate GENERATOR v2 pass, flagged in BW5, NOT part of U6.)*

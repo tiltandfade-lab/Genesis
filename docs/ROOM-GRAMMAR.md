@@ -6,6 +6,10 @@ columns in patterns, braziers in pairs near corners/walkways, torches evenly spa
 corners in patterns, benches/pews rollable as simple polys, shops easy because constrained.
 Builds AFTER BEAUTY-WAVE-2; consumes PACKET-02 textures + BW2-5's furniture channel.)
 
+**SCHEDULED (2026-07-11): PROMOTED into BEAUTY-WAVE-5 as unit IA-3 (the placement/composition
+engine the interactable pass runs on). This doc is the detail; `docs/BEAUTY-WAVE-5.md` is the
+wave home + sequencing. Build it there — do not build independently.**
+
 ## The law
 
 **The roll owns the nouns; the GRAMMAR owns the arrangement.** dressPlan keeps rolling WHAT

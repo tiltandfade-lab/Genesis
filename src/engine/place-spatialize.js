@@ -32,9 +32,13 @@
    `segment.dims` (dspDimsToCells) instead of a blind rng() 4-7 draw. C2 STRUCTURAL TERRAIN
    (dspParseSideTerrain) keyword-scans `segment.side` into a per-room dais/pit elevation patch,
    stamped onto a parallel `tiers` buffer (SAME shape/indexing as `cells`) the render seam
-   (theater-interior.js's interiorBuildBoard) folds into floor height. Both live behind the shared
-   `SPATIAL_SHAPES` flag (default ON); rooms stay rectangular (C3 REAL SHAPES, queued, is what
-   makes them not). */
+   (theater-interior.js's interiorBuildBoard) folds into floor height. C3 REAL SHAPES
+   (shapeForArchetype/rasterizeShape) substring-classifies `segment.areaType` into a `shape` tag
+   (rect/circle/octagon/ellipse/L/T/cross/cave) and rasterizes a non-rect room's ACTUAL footprint
+   (rooms[].shape/rooms[].cells) instead of a filled rect, deriving door cells FROM the shape's own
+   polygon boundary (dspRoomDoorAnchor/dspChooseDoorCell) instead of a corridor-crosses-a-rectangle
+   test. All three live behind the shared `SPATIAL_SHAPES` flag (default ON; OFF is byte-identical
+   pre-C1 behavior for every room). */
 
 const SPATIAL_CELL = Object.freeze({ VOID: 0, FLOOR: 1, WALL: 2, DOOR: 3, WATER: 4 });
 
@@ -232,6 +236,229 @@ function dspParseSideTerrain(side, room, seed) {
   return { cells, tier, kind };
 }
 
+/* ─── STAGE-C C3 REAL SHAPES (docs/STAGE-C.md C3) ───────────────────────────────────────────────
+   `segment.areaType` ("Dungeon Area Type" table's own d200 NAME column, e.g. "Grand Octagon",
+   "Mid-Size Rotunda", "L-Shaped Chamber") today only decorates prose — the room itself always
+   rasterizes as a filled rectangle (C1's own real w x d bbox, but still a RECT). This substring-
+   classifies the archetype NAME into a `shape` tag, then rasterizes that shape's cells inside the
+   C1 bbox as a STAIRCASED ORTHOGONAL approximation (the landed C4 room-shell compiler already
+   traces + bevels an arbitrary orthogonal contour — see docs/ROOM-SHELL-COMPILER.md — so no curved
+   geometry is needed here), and derives door cells FROM the polygon's own boundary faces instead of
+   the old "corridor path crosses a rectangle" test. Prose/name classification only — never rolls,
+   never rejects an incongruous roll, never calls rng()/Math.random()/Date.now() (this module's own
+   DETERMINISM LAW): shape rasterization + door-face selection both use dspHashStr-derived stable
+   hashes (dspShapeCellHash01/dspChooseDoorCell below), a SEPARATE chain off this build's own `seed`
+   — same discipline as C2's own dspTerrainSeedHash — never the shared mulberry32 `rng` stream
+   dspBuildPlanOnce's other draws depend on. A `rect` archetype (the "else" branch, or SPATIAL_SHAPES
+   OFF) takes the EXACT pre-C3 code path in dspBuildPlanOnce (full-rect fill + the original
+   dspExitDoorCell/dspEntryDoorCell corridor-crossing door test) — byte-identical, regression-safe. */
+
+// shapeForArchetype(areaType) -> 'rect'|'circle'|'octagon'|'ellipse'|'L'|'T'|'cross'|'cave'
+// (DUNGEON-GRAPH.md U6 enum). Ordered substring rules, first match wins — order only matters where
+// a name could plausibly hit two rules at once (none do in the real table today, verified against
+// every row of Engine/03. _Tables/03. Session Mechanics/Dungeons/Dungeon Area Type.md), so this is
+// a flat first-match scan, not a priority ladder. \b-bounded so e.g. "Crossing" (a room name on the
+// real table, row 184) never matches the cross-hall rule the way an un-bounded "cross" substring
+// would.
+const SPATIAL_SHAPE_RULES = [
+  { re: /\b(rotunda|round)\b/i, shape: "circle" },
+  { re: /\boctagon\w*/i, shape: "octagon" },
+  { re: /\boval\b/i, shape: "ellipse" },
+  { re: /\bl-shaped\b/i, shape: "L" },
+  { re: /\bt-shaped\b/i, shape: "T" },
+  { re: /\bcross\b/i, shape: "cross" },
+  { re: /\b(cave|cavern\w*|natural|fissure|chasm|lava)\b/i, shape: "cave" },
+];
+function shapeForArchetype(areaType) {
+  const s = String(areaType || "");
+  for (let i = 0; i < SPATIAL_SHAPE_RULES.length; i++) {
+    if (SPATIAL_SHAPE_RULES[i].re.test(s)) return SPATIAL_SHAPE_RULES[i].shape;
+  }
+  return "rect";
+}
+
+// dspShapeCellHash01(seed, tag, x, y) -> a stable [0,1) float, DELIBERATELY its own hash chain
+// (never the shared `rng` stream — see this section's header note). Used by the cave shape's
+// per-cell noise threshold.
+function dspShapeCellHash01(seed, tag, x, y) {
+  return (dspHashStr(String(seed) + ":" + tag + ":" + x + "," + y) % 100000) / 100000;
+}
+
+// dspForceCenterCore(included, w, d) -> mutates `included` (a flat w*d boolean array, row-major
+// y*w+x) so the room's own geometric center 2x2 block is ALWAYS included, regardless of shape. Pure
+// safety net: an L/T/cross's corner-subtraction (or an unlucky cave noise draw) can otherwise land
+// the room's center — where dspBuildPlanOnce's own entry-room BFS start point AND theater-
+// interior.js's itrCenter2x2/itrDaisCellsFor (the dais-anchor convention, SAME floor((w-2)/2) corner
+// this mirrors) both expect real floor — on a VOID cell. A union-only op (never removes a cell), so
+// it can't disconnect anything it's applied to; algebraically floor(w/2)/floor(d/2) (the reachability
+// BFS's own start-cell formula) always falls inside this 2x2 block for any w,d >= 1 (verified for
+// both odd/even w,d in dev/verify-stage-c-shapes.mjs).
+function dspForceCenterCore(included, w, d) {
+  const cx0 = Math.max(0, Math.floor((w - 2) / 2));
+  const cy0 = Math.max(0, Math.floor((d - 2) / 2));
+  for (let yy = cy0; yy < Math.min(d, cy0 + 2); yy++) {
+    for (let xx = cx0; xx < Math.min(w, cx0 + 2); xx++) included[yy * w + xx] = true;
+  }
+}
+
+/* rasterizeShape(shape, wCells, dCells, seed) -> flat boolean array (row-major y*wCells+x, length
+   wCells*dCells) marking which LOCAL cells are FLOOR for `shape` inside a wCells x dCells bbox — a
+   STAIRCASED ORTHOGONAL approximation per shape (STAGE-C.md C3 step 2):
+     circle/ellipse: radial inclusion test on cell centers vs the bbox's own half-extents (a circle
+       is just the square-bbox special case of the same formula — no separate branch needed).
+     octagon: chamfer all 4 corners by a fixed fraction of the shorter side -> an 8-face boundary
+       (4 axis-aligned edges + 4 diagonal chamfers), clamped so the chamfer never eats a whole edge.
+     L: subtract ONE bbox quadrant (which quadrant is picked by a stable per-room hash, never rng()).
+     T: a full-width crossbar band + a centered stem band (subtracts the two bottom corners).
+     cross: a centered horizontal band UNION a centered vertical band (subtracts all 4 corners).
+     cave: a solid guaranteed core (r <= 0.55) union a per-cell hash-noise fringe (0.55 < r <= 1.10),
+       then a flood-fill FROM THE CENTER over the candidate set keeps only cells actually reachable
+       from it — guarantees a single CONNECTED irregular blob (never an isolated island the caller's
+       BFS reachability verify would flag as unreachable FLOOR).
+     rect (or any unrecognized tag): every cell — the full bbox, for direct unit-testing symmetry;
+       dspBuildPlanOnce itself never calls this for a 'rect' room (it keeps the original full-rect
+       fill code path unchanged, see this section's header note).
+   Every branch finishes through dspForceCenterCore (see its own header) as a uniform safety net. */
+function rasterizeShape(shape, wCells, dCells, seed) {
+  const w = Math.max(1, wCells | 0), d = Math.max(1, dCells | 0);
+  const included = new Array(w * d).fill(false);
+  const hw = w / 2, hd = d / 2;
+
+  if (shape === "circle" || shape === "ellipse") {
+    for (let y = 0; y < d; y++) {
+      for (let x = 0; x < w; x++) {
+        const nx = (x + 0.5 - hw) / hw, ny = (y + 0.5 - hd) / hd;
+        if (nx * nx + ny * ny <= 1.0) included[y * w + x] = true;
+      }
+    }
+  } else if (shape === "octagon") {
+    const short = Math.min(w, d);
+    const k = Math.max(1, Math.min(Math.floor(short * 0.3), Math.floor((short - 2) / 2) || 1));
+    for (let y = 0; y < d; y++) {
+      for (let x = 0; x < w; x++) {
+        const cornerTL = x + y < k;
+        const cornerTR = (w - 1 - x) + y < k;
+        const cornerBL = x + (d - 1 - y) < k;
+        const cornerBR = (w - 1 - x) + (d - 1 - y) < k;
+        if (!(cornerTL || cornerTR || cornerBL || cornerBR)) included[y * w + x] = true;
+      }
+    }
+  } else if (shape === "L") {
+    const splitX = Math.round(w / 2), splitY = Math.round(d / 2);
+    const orient = dspHashStr(String(seed) + ":Lquadrant") % 4; // which quadrant is REMOVED
+    for (let y = 0; y < d; y++) {
+      for (let x = 0; x < w; x++) {
+        const inTL = x < splitX && y < splitY, inTR = x >= splitX && y < splitY;
+        const inBL = x < splitX && y >= splitY, inBR = x >= splitX && y >= splitY;
+        const removed = (orient === 0 && inBR) || (orient === 1 && inBL) || (orient === 2 && inTR) || (orient === 3 && inTL);
+        if (!removed) included[y * w + x] = true;
+      }
+    }
+  } else if (shape === "T") {
+    const barH = Math.max(1, Math.round(d * 0.35));
+    const stemW = Math.max(1, Math.min(w, Math.round(w * 0.35)));
+    const stemX0 = Math.floor((w - stemW) / 2);
+    for (let y = 0; y < d; y++) {
+      for (let x = 0; x < w; x++) {
+        if (y < barH || (x >= stemX0 && x < stemX0 + stemW)) included[y * w + x] = true;
+      }
+    }
+  } else if (shape === "cross") {
+    const bandW = Math.max(1, Math.min(w, Math.round(w * 0.4)));
+    const bandD = Math.max(1, Math.min(d, Math.round(d * 0.4)));
+    const bx0 = Math.floor((w - bandW) / 2), by0 = Math.floor((d - bandD) / 2);
+    for (let y = 0; y < d; y++) {
+      for (let x = 0; x < w; x++) {
+        if ((x >= bx0 && x < bx0 + bandW) || (y >= by0 && y < by0 + bandD)) included[y * w + x] = true;
+      }
+    }
+  } else if (shape === "cave") {
+    const candidate = new Array(w * d).fill(false);
+    for (let y = 0; y < d; y++) {
+      for (let x = 0; x < w; x++) {
+        const nx = (x + 0.5 - hw) / hw, ny = (y + 0.5 - hd) / hd;
+        const r = Math.sqrt(nx * nx + ny * ny);
+        const noise = dspShapeCellHash01(seed, "cave", x, y);
+        const threshold = 0.55 + noise * 0.55;
+        if (r <= threshold) candidate[y * w + x] = true;
+      }
+    }
+    // flood-fill from the bbox center over `candidate` -> guarantees ONE connected component (never
+    // an isolated noise-included island the caller's BFS reachability verify would choke on).
+    const cx = Math.min(w - 1, Math.floor(w / 2)), cy = Math.min(d - 1, Math.floor(d / 2));
+    if (candidate[cy * w + cx]) {
+      const seen = new Array(w * d).fill(false);
+      const q = [[cx, cy]]; seen[cy * w + cx] = true;
+      let head = 0;
+      while (head < q.length) {
+        const [qx, qy] = q[head++];
+        included[qy * w + qx] = true;
+        [[1, 0], [-1, 0], [0, 1], [0, -1]].forEach(([dx, dy]) => {
+          const nx2 = qx + dx, ny2 = qy + dy;
+          if (nx2 < 0 || ny2 < 0 || nx2 >= w || ny2 >= d) return;
+          const ii = ny2 * w + nx2;
+          if (!seen[ii] && candidate[ii]) { seen[ii] = true; q.push([nx2, ny2]); }
+        });
+      }
+    }
+  } else {
+    // 'rect' or an unrecognized tag: the full bbox.
+    included.fill(true);
+  }
+
+  dspForceCenterCore(included, w, d);
+  return included;
+}
+
+// dspBoundaryCellsFor(room) -> the subset of room.cells (GLOBAL {x,y} coords) that sit on the
+// room's own polygon boundary — a FLOOR cell with at least one 4-neighbor NOT in the room's own
+// cell set (either a VOID notch within the bbox, or simply outside it). This is the "polygon face"
+// door cells are chosen FROM (STAGE-C.md C3 step 3), replacing the old corridor-crosses-a-rectangle
+// test for any non-rect room.
+function dspBoundaryCellsFor(room) {
+  const cells = room.cells || [];
+  const set = new Set(cells.map((c) => c.x + "," + c.y));
+  return cells.filter((c) => {
+    return [[1, 0], [-1, 0], [0, 1], [0, -1]].some(([dx, dy]) => !set.has((c.x + dx) + "," + (c.y + dy)));
+  });
+}
+
+// dspChooseDoorCell(room, targetPoint, seed, tag) -> the room's own boundary cell NEAREST
+// `targetPoint` (the other room's center — a deterministic geometric choice: the door should face
+// the room it connects to), stable-hash tie-broken (dspHashStr chain, never rng()) on an exact
+// distance tie. Falls back to the room's own bbox center if `room.cells`/boundary is somehow empty
+// (never happens given dspForceCenterCore + a non-empty shape, but a safe non-throw fallback).
+function dspChooseDoorCell(room, targetPoint, seed, tag) {
+  const boundary = dspBoundaryCellsFor(room);
+  if (!boundary.length) {
+    return { x: room.x + Math.floor(room.w / 2), y: room.y + Math.floor(room.d / 2) };
+  }
+  let bestDist = Infinity, ties = [];
+  boundary.forEach((c) => {
+    const dx = c.x - targetPoint.x, dy = c.y - targetPoint.y;
+    const dist = dx * dx + dy * dy;
+    if (dist < bestDist - 1e-9) { bestDist = dist; ties = [c]; }
+    else if (Math.abs(dist - bestDist) <= 1e-9) ties.push(c);
+  });
+  if (ties.length === 1) return ties[0];
+  ties.sort((a, b) => a.x - b.x || a.y - b.y); // deterministic order before the hash pick
+  const h = dspHashStr(String(seed) + ":" + tag);
+  return ties[h % ties.length];
+}
+
+// dspRoomDoorAnchor(room, other, seed) -> the {x,y} point dspLShapedPathPts routes a corridor
+// to/from for this room. A rect room (shape==='rect'|null/undefined, incl. every room when
+// SPATIAL_SHAPES is off) returns its own bbox center — BYTE-IDENTICAL to the pre-C3 code (the old
+// dspLShapedPath computed exactly this from the room object inline); a non-rect room returns a real
+// polygon-boundary door cell instead (dspChooseDoorCell above).
+function dspRoomDoorAnchor(room, other, seed) {
+  if (!room.shape || room.shape === "rect" || !Array.isArray(room.cells) || !room.cells.length) {
+    return { x: room.x + Math.floor(room.w / 2), y: room.y + Math.floor(room.d / 2) };
+  }
+  const target = { x: other.x + Math.floor(other.w / 2), y: other.y + Math.floor(other.d / 2) };
+  return dspChooseDoorCell(room, target, seed, "door:" + room.segNum + ">" + other.segNum);
+}
+
 // ─── seeded RNG (mulberry32 — same reference pattern as src/ui/theater-boot.js) ──────────────
 function dspHashStr(s) {
   // djb2-ish string hash → unsigned 32-bit int. Pure, deterministic, no Math.random/Date.now.
@@ -409,9 +636,13 @@ function dspNormalizeRooms(rooms, padding) {
 // ─── corridor carving (EXITS ONLY — never an invented edge) ─────────────────────────────────
 function dspInRect(c, r) { return c.x >= r.x && c.x < r.x + r.w && c.y >= r.y && c.y < r.y + r.d; }
 
-function dspLShapedPath(ra, rb) {
-  const ax = ra.x + Math.floor(ra.w / 2), ay = ra.y + Math.floor(ra.d / 2);
-  const bx = rb.x + Math.floor(rb.w / 2), by = rb.y + Math.floor(rb.d / 2);
+// dspLShapedPathPts(pa, pb) -> the raw points-based core (STAGE-C C3): an L-bend path from point
+// `pa` to point `pb` (horizontal leg first, then vertical), guaranteed path[0]===pa (exactly) and
+// path[last]===pb (exactly) — the property C3's door-anchor wiring below depends on (a non-rect
+// room's own chosen boundary door cell IS the path's own start/end point, no separate crossing-
+// search needed on that side, see dspRoomDoorAnchor's header).
+function dspLShapedPathPts(pa, pb) {
+  const ax = pa.x, ay = pa.y, bx = pb.x, by = pb.y;
   const path = [];
   const stepX = bx >= ax ? 1 : -1;
   for (let x = ax; x !== bx; x += stepX) path.push({ x, y: ay });
@@ -420,6 +651,16 @@ function dspLShapedPath(ra, rb) {
   for (let y = ay; y !== by; y += stepY) path.push({ x: bx, y });
   path.push({ x: bx, y: by });
   return path;
+}
+
+// dspLShapedPath(ra, rb) -> BYTE-IDENTICAL to the pre-C3 code: an L-bend path between the two
+// rooms' own bbox centers. Kept as a thin wrapper over dspLShapedPathPts (its own centers-from-
+// room-objects computation, unchanged) for any direct caller (dev/*.mjs harnesses) that still
+// expects the (room,room) signature.
+function dspLShapedPath(ra, rb) {
+  const pa = { x: ra.x + Math.floor(ra.w / 2), y: ra.y + Math.floor(ra.d / 2) };
+  const pb = { x: rb.x + Math.floor(rb.w / 2), y: rb.y + Math.floor(rb.d / 2) };
+  return dspLShapedPathPts(pa, pb);
 }
 
 function dspDedupe(path) {
@@ -474,7 +715,7 @@ function dspBuildPlanOnce(segments, topologyName, opts, seed) {
   const minW = sizeClass.minW || 4, maxW = Math.max(minW, sizeClass.maxW || 7);
   const minD = sizeClass.minD || 4, maxD = Math.max(minD, sizeClass.maxD || 7);
   const sorted = segments.slice().sort((a, b) => a.num - b.num);
-  const sizeOf = {}, dimsRefOf = {};
+  const sizeOf = {}, dimsRefOf = {}, shapeOf = {};
   sorted.forEach((s) => {
     // STAGE-C C1: ALWAYS draw the same two rng() numbers here, in the same order, regardless of
     // SPATIAL_SHAPES or whether `s.dims` parses — this is what "do NOT change the rng call
@@ -489,6 +730,10 @@ function dspBuildPlanOnce(segments, topologyName, opts, seed) {
     if (SPATIAL_SHAPES) {
       const parsed = dspDimsToCells(s.dims);
       if (parsed) { sz = { w: parsed.wCells, d: parsed.dCells }; dimsRefOf[s.id] = s.dims; }
+      // STAGE-C C3: shape classification is pure string work off `s.areaType` — never touches rng()
+      // (same "never change the call sequence" law C1's own comment states above), independent of
+      // whether `s.dims` itself parsed.
+      shapeOf[s.id] = shapeForArchetype(s.areaType);
     }
     sizeOf[s.id] = sz;
   });
@@ -504,6 +749,8 @@ function dspBuildPlanOnce(segments, topologyName, opts, seed) {
       depth: s.depth, isFinale: !!s.isFinale, role: null, scaleDomain: 1.0,
       dimsRef: dimsRefOf[s.id] || null, // STAGE-C C1 step 3: additive provenance, harmless if unused
       terrain: null, // STAGE-C C2: [{cells,tier,kind}] | null — populated below when segment.side parses
+      shape: shapeOf[s.id] || null, // STAGE-C C3: 'rect'|'circle'|'octagon'|'ellipse'|'L'|'T'|'cross'|'cave'|null
+      cells: null, // STAGE-C C3: [{x,y}] GLOBAL floor cells for this room — populated below
     };
   });
 
@@ -516,12 +763,33 @@ function dspBuildPlanOnce(segments, topologyName, opts, seed) {
   const cells = new Uint8Array(cellW * cellD);
   const idx = (x, y) => y * cellW + x;
 
+  // STAGE-C C3 REAL SHAPES: a `shape` other than 'rect' rasterizes its OWN footprint (rasterizeShape,
+  // this section's header note) inside the room's C1 bbox instead of filling the whole rect; a 'rect'
+  // shape (or SPATIAL_SHAPES off, where r.shape is always null) takes the ORIGINAL full-rect fill
+  // loop unchanged — byte-identical cells-buffer output for every rect room, every SPATIAL_SHAPES-off
+  // plan.
   rooms.forEach((r) => {
-    for (let yy = r.y; yy < r.y + r.d; yy++) {
-      for (let xx = r.x; xx < r.x + r.w; xx++) {
-        if (xx >= 0 && yy >= 0 && xx < cellW && yy < cellD) cells[idx(xx, yy)] = SPATIAL_CELL.FLOOR;
+    const roomCells = [];
+    if (r.shape && r.shape !== "rect") {
+      const localIncluded = rasterizeShape(r.shape, r.w, r.d, seed + ":shape:" + r.segNum);
+      for (let ly = 0; ly < r.d; ly++) {
+        for (let lx = 0; lx < r.w; lx++) {
+          if (!localIncluded[ly * r.w + lx]) continue;
+          const xx = r.x + lx, yy = r.y + ly;
+          roomCells.push({ x: xx, y: yy });
+          if (xx >= 0 && yy >= 0 && xx < cellW && yy < cellD) cells[idx(xx, yy)] = SPATIAL_CELL.FLOOR;
+        }
       }
+    } else {
+      for (let yy = r.y; yy < r.y + r.d; yy++) {
+        for (let xx = r.x; xx < r.x + r.w; xx++) {
+          roomCells.push({ x: xx, y: yy });
+          if (xx >= 0 && yy >= 0 && xx < cellW && yy < cellD) cells[idx(xx, yy)] = SPATIAL_CELL.FLOOR;
+        }
+      }
+      if (SPATIAL_SHAPES) r.shape = "rect"; // stamp the tag even for the rect/default path (additive)
     }
+    if (SPATIAL_SHAPES) r.cells = roomCells; // additive; stays null when SPATIAL_SHAPES is off
   });
 
   // STAGE-C C2 STRUCTURAL TERRAIN (docs/STAGE-C.md C2): parse each room's own segment.side into at
@@ -551,7 +819,16 @@ function dspBuildPlanOnce(segments, topologyName, opts, seed) {
     const ra = roomBySeg[aId], rb = roomBySeg[bId];
     if (!ra || !rb) return;
     const width = 1 + (rng() < 0.15 ? 1 : 0); // width 1-2 cells, seeded
-    const path = dspLShapedPath(ra, rb);
+
+    // STAGE-C C3: dspRoomDoorAnchor returns a room's own bbox center for a rect room (BYTE-
+    // IDENTICAL to the pre-C3 `dspLShapedPath(ra,rb)` call this replaces — both compute the exact
+    // same two points) or a real polygon-boundary cell for a non-rect room (the "exit derived FROM
+    // the polygon face" STAGE-C.md C3 step 3 calls for). dspLShapedPathPts guarantees
+    // path[0]===anchorA and path[last]===anchorB exactly, so a non-rect room's door cell IS its own
+    // anchor — no separate crossing-search needed on that side.
+    const anchorA = dspRoomDoorAnchor(ra, rb, seed);
+    const anchorB = dspRoomDoorAnchor(rb, ra, seed);
+    const path = dspLShapedPathPts(anchorA, anchorB);
     const widened = dspWidenPath(path, width);
     const cellKeySet = new Set(widened.map((c) => c.x + "," + c.y));
 
@@ -571,15 +848,19 @@ function dspBuildPlanOnce(segments, topologyName, opts, seed) {
       }
     });
 
-    const doorA = dspExitDoorCell(path, ra);
-    const doorB = dspEntryDoorCell(path, rb);
+    // rect room (or SPATIAL_SHAPES off, where .shape stays null so this test is always false) keeps
+    // the ORIGINAL corridor-crosses-the-rectangle search; a non-rect room's door is its own anchor.
+    const doorA = (ra.shape && ra.shape !== "rect") ? anchorA : dspExitDoorCell(path, ra);
+    const doorB = (rb.shape && rb.shape !== "rect") ? anchorB : dspEntryDoorCell(path, rb);
     if (doorA && doorA.x >= 0 && doorA.y >= 0 && doorA.x < cellW && doorA.y < cellD) {
       cells[idx(doorA.x, doorA.y)] = SPATIAL_CELL.DOOR;
-      doors.push({ x: doorA.x, y: doorA.y, betweenSegs: [ra.segNum, rb.segNum], heightScale: 1.0 });
+      // STAGE-C C3: `toSeg` binds this door to the segment.exits[] edge it serves (the segment this
+      // door LEADS TO from ra's side) — additive alongside the pre-existing `betweenSegs` pair.
+      doors.push({ x: doorA.x, y: doorA.y, betweenSegs: [ra.segNum, rb.segNum], toSeg: rb.segNum, heightScale: 1.0 });
     }
     if (doorB && doorB.x >= 0 && doorB.y >= 0 && doorB.x < cellW && doorB.y < cellD) {
       cells[idx(doorB.x, doorB.y)] = SPATIAL_CELL.DOOR;
-      doors.push({ x: doorB.x, y: doorB.y, betweenSegs: [ra.segNum, rb.segNum], heightScale: 1.0 });
+      doors.push({ x: doorB.x, y: doorB.y, betweenSegs: [ra.segNum, rb.segNum], toSeg: ra.segNum, heightScale: 1.0 });
     }
 
     corridors.push({ fromSeg: ra.segNum, toSeg: rb.segNum, cells: widened, width, bridge });

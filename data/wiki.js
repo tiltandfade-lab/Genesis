@@ -433,6 +433,17 @@ const WIKI_INDEX = [
     "spec": "docs/BATTLE-THEATER.md"
   },
   {
+    "system": "Walk-Native Projection Boundary (`walkSceneFrom`)",
+    "slug": "walk-native-projection-boundary-walkscenefrom",
+    "layer": "UI & Battle Theater",
+    "whatItIs": "Codex's anti-drift boundary (2026-07-12): the guarantee that the graphics layer *projects* the stored walk and never *generates* it. Classifies every rolled walk fact into visual roles with field provenance so a sighted player can never see a noun the DM digest can't support, and the renderer can never erase or reroll a rolled fact.",
+    "howItWorks": "`walkSceneFrom({walkId,walk,segment,overlay,spatialRoom,live})` emits a `WalkScene` envelope — structure/connection/surface/practical/citizen/interactable/dressing/condition/atmosphere/ hidden/trace lanes, each entry carrying a `sourceRef {walkId,segmentNum,fieldPath,tableId,roll}`. It **wraps** the card-dealer (`walkSceneProjectionFrom`) for cast/interactable/dressing/hidden cards and adds the structural/environmental classification the dealer ignores; atmo stays prose-only, hidden stays reveal-gated. Pure — no THREE/DOM/RNG/world-writes; `trayFrom` stamps `board.walkScene` (additive), and the ShotPlan consumes it (provenance + anchors). `walkPickStamped` + `segment.rollRefs` (byte-additive) preserve a fact's table origin. Never rolls, rejects, or rewrites a field.",
+    "livesIn": [
+      "src/engine/walk-scene.js` (+ `place-projection.js` dealer; `walk.js`/`dungeon-walk.js`/`wild-walk.js` rollRefs)"
+    ],
+    "spec": "docs/WALK-NATIVE-A.md"
+  },
+  {
     "system": "Theater Renderer (three.js boot / stage)",
     "slug": "theater-renderer-three-js-boot-stage",
     "layer": "UI & Battle Theater",

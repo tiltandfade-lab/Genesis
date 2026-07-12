@@ -1,7 +1,10 @@
 # STAGE A — stop producing map overviews (GRAPHICS-NORTH-STAR wave 1)
 
 type: system-spec
-status: SPECCED (Opus 4.8, 2026-07-11 — Adam committed to Stage A as the next graphics wave. The
+status: BUILT (2026-07-12 — A1 + room-shell compiler landed 2026-07-11; A3 (WalkScene-fed, per
+`docs/WALK-NATIVE-A.md`) + A4 landed 2026-07-12 on master `00b775f8`. A2's ShotPlan is now wired
+and live. Stage A CLOSED. See CHANGELOG 2026-07-12.)
+history: SPECCED (Opus 4.8, 2026-07-11 — Adam committed to Stage A as the next graphics wave. The
 first + highest-leverage stage of docs/GRAPHICS-NORTH-STAR.md, per Codex's directive §7 Stage A.
 Grounded against the current tree; execute exactly.)
 

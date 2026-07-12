@@ -8,6 +8,70 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-07-12 — WALK-NATIVE BOUNDARY + STAGE A CLOSED: the composed camera goes live (4 units, orchestrated)
+
+**The wave.** `docs/WALK-NATIVE-A.md` — Adam ruled "build Codex's walk-native boundary first, then
+A3." Executes Codex's walk-native amendment (`WALK-NATIVE-DIORAMA-CONTRACT.md`) as the prerequisite
+to wiring the dormant A2 ShotPlan, then closes GRAPHICS-NORTH-STAR Stage A. Four background Sonnet
+executors in isolated worktrees, each personally re-gated on its branch tip (captures READ by the
+orchestrator, never self-report) and landed `--no-ff`; WDV-1 ∥ WDV-2 first, then A3 off WDV-1, A4
+off A3. Master tip after the wave: `00b775f8`.
+
+**Added.**
+- **WDV-1 `walkSceneFrom`** (new pure module `src/engine/walk-scene.js`, owns `walkSceneFrom`) —
+  Codex's anti-drift boundary: consumes the stored walk + active segment + overlay + spatial + live
+  state and classifies every walk fact into visual roles (structure/connection/surface/practical/
+  citizen/interactable/dressing/condition/atmosphere/hidden/trace) each with field provenance
+  (`sourceRef {walkId,segmentNum,fieldPath,tableId,roll}`). **Wraps** the existing card-dealer
+  (`walkSceneProjectionFrom`) — never re-deals or re-rolls. `trayFrom` stamps `board.walkScene`
+  (additive; `board.projection` kept). Pure — no THREE/DOM/RNG/world-writes. 32/0, three checks
+  (provenance completeness / atmo isolation / hidden gating) red-first proven; raw-immutability +
+  determinism + graph-fidelity green.
+- **WDV-2 stamped provenance** — `walkPickStamped(tableId,...cols)` + a `segment.rollRefs` sibling
+  map on the graphics-critical tables (area/feature/dressing/door/light/object/scene/sceneFrame/
+  signOfPassage). Byte-additive: every existing field shape identical (the same single roll is
+  reused, no second roll). Optional `provOut` params on `dwalkDoorRoll`/`walkPickInteractable` for
+  door/interactable provenance. 34/0, byte-compat red-first proven.
+- **A3 shot-compose** — **the composed camera is now live in production.** `setInteriorBoard` builds
+  `shotPlanFrom` + `composeShot` and drives the composed camera behind `ITR_SHOT_COMPOSE` (default
+  ON, focusRect fallback). New scratch-`THREE.Camera` 2-arg projector (`shotProjectFor`) for
+  composeShot's multi-pose scoring. `shotPlanFrom` consumes `tray.walkScene` for anchors/provenance
+  (+ `walkRef/segmentRef/fieldRefs/register` on the ShotPlan). Framing crops to the action cluster
+  via the `interiorCameraFitFor` beat branch — medium standee **0.208** frame height (Stage-A gate
+  0.18–0.25), tighter than the focusRect fit's 0.134. 29/0 incl. a red-first figure-height check.
+- **A4 dynamic occlusion v2** — blockers from the live `ShotPlan.occlusionTargets` (walls/pillars/
+  furniture); per-instance ghost + own material (never a shared batch); named consts (upper opacity
+  **0.08** [0.05–0.10], stem **0.18u** [0.12–0.25], fades 150/220ms, hysteresis 3°) replacing the
+  flat 0.2; tween on the MF-1 channel; interruption-safe retargeting + reclassify hold.
+
+**Changed.**
+- Stage A is CLOSED: the interior no longer fits the raw room rect — it composes on the action
+  cluster and occludes dynamically. Frames `04`/`11` approximated, read as staged encounters.
+
+**Fixed.**
+- **A3 round-1 framing regression, caught at the capture gate** — the first A3 build re-centered the
+  cluster but zoomed *wider* (medium standee ~0.13, void-heavy). The orchestrator read the PNG,
+  flagged it, and a bounded corrective (`fitFromComposedShot` crops the action-cluster extent via the
+  proven beat branch instead of the composed camera's full frustum half-height) landed it at 0.208.
+- **A4 tapered-column occlusion aliasing** — a column's shaft + cap share one `(x,z)` cell; the
+  occlusion id aliased them onto one fade-state so the wrong instance faded. Fixed by folding `yBase`
+  into `itrOcclusionIdFor`.
+
+**Deferred.**
+- Codex's WDV-3 (table visual metadata), WDV-4 (overlay/state key unification), WDV-5 (cross-env
+  diorama gate) remain as the later walk-native recommendations (`WALK-NATIVE-DIORAMA-CONTRACT.md`).
+- Two pre-existing render-only harness reds surfaced (verified pre-existing on master, auto-skip in
+  CI): the occlusion ghost material's no-AO/no-shadow + bloom interaction in a synthetic dark room
+  (1 pixel check), and a doorframe over-occluding a standee in `verify-bw2-1b --with-render` (checks
+  31/32/35). Follow-up filed; honest-red, not mechanically greened.
+
+**Gates (all personally re-run by the orchestrator).** check-manifest OK; verify-walk-scene 32/0,
+verify-walk-stamped-provenance 34/0, verify-shot-compose 29/0, verify-occlusion-fade (render;
+1 pre-existing pixel red), verify-theater-shot **107/0** (94 + 13 new WalkScene checks),
+verify-dungeon-interior 287/0, verify-mf1-camera-tweens 24/0, verify-interior-camera-frustum 14/0,
+verify-walk-card-projection 29/0, verify-bw2-1b (jsdom) 24/0. Capture PNGs READ: A3 after-composed
+reads as a staged diorama (void gone); A4 on/off shows the pillar fade to reveal the standee behind.
+
 ## 2026-07-11 — BW4 MOTION & FEEL: the stills became footage (4 units landed, hit-stop wiring deferred to MF-3b)
 
 **The wave.** BEAUTY-WAVE-4 (docs/BEAUTY-WAVE-4.md) — the space between verbs. Orchestrated as
@@ -948,78 +1012,4 @@ correctly STOPPED twice — relaunched clean), zero integration conflicts across
   dedup unified), shared `setEq` harness helper, TERRAIN_OPS derived, dead aliases/params/EXPOSE
   names retired. Perf batch: legacyDigest scan shared, vault names cached at write, harness
   boot-once (verify-item-legacy 22 boots → 1).
-
-## 2026-07-07 — THE 24-HOUR PRODUCTION RUN — the entire spec batch BUILT; a world can now FINISH
-
-Adam extended Fable 24 hours and authorized production ("you oversee and contract opus and sonnet").
-Fable orchestrated ~40 executors (Sonnet/Opus, worktree-isolated, Workflow-throttled) through the
-genesis-orchestrate pipeline: **8 gated integration landings on master, every unit of the 2026-07-06
-spec batch built**, every landing personally re-gated (full 100+-harness sweep on the exact
-integration tree, fuzz/monkey gauntlets, diff reads, --no-ff, pushed). Playtest bug probes over the
-day: **5/16 reproducing → 1/31** (coverage doubled while open bugs dropped to one).
-
-### Added
-- **THE ENDING (`ced366b`)** — the Crowning/Sundering/Bastion/heirloom chain (C1→C2→B1→B2,
-  `src/engine/crowning.js` + `src/world/crowning-ritual.js` + `data/crown-legend.js`): Doom-front
-  flagged at genesis (external-always), crown eligibility DETECTED (Doom closed + L10 + un-sundered),
-  the ritual seals a crowned world as a legend object feeding `U.legends` → Distant Word in other
-  worlds, the PC retires to the Wandering Souls, the Sundering seals a doom-fired world as a
-  cautionary legend, `bastion_claim` (either-gate price, one per world) unparks ITEM-LEGACY's
-  `cached` vault, and a new soul's origin roll can draw a crowned vault's heirloom via a cross-world
-  `item_claimed` pair. Harnesses: crowning 19/0 · bastion 13/0 · heirloom 8/0. Legend rows PROVISIONAL
-  (Adam's craft pass).
-- **THE CONTRACT SPINE (`e4c7634`)** — `build/gen-dm-contract.py` → `dm-contract.json` (96 events,
-  the single machine truth; both seat prompts generator-spliced; three-way drift guard
-  `verify-dm-contract.mjs` 111/111) · SOCIAL-SPINE S1/S2/S3/S5 (BUG-17/18/03 FIXED, caster
-  discoverability CLOSED, CAL-1 seat line live) · TRANSITION-CONTRACT (advance_clock/move_node/
-  start_walk/travel_start/knockout; BUG-02/04/05 closed; rests tick the clock) · DETECTED-EVENTS
-  DE-1..5 (restRiders unification, concentration auto-break, slot folding, morale sweep, walk-orphan
-  close).
-- **State-hygiene eval harness (`b2bacfd`)** — `dev/state-eval/`: 12 golden fixtures + 4 negative
-  controls, per-provider scorecards (the GLM bake-off is now runnable on state hygiene, not vibes),
-  digest byte budgets as a scored dimension.
-- **Table Atlas (`a0d0d77`)** — Reference Shelf app #3 over all 453 tables (family/wiring/spice-band
-  nav, live roll counts via the `compiled.js` tally seam); machine-readable usage-audit split; found
-  + fixed the audit generator scanning its own output and archive ids overwriting 13 live tables.
-- **Scene-Risk + Item-Legacy + Seat adapter (`c142f5e`)** — the fairness contract stamped on every
-  walk (deadly-untelegraphed validates RED); the death-loot loop (corpse stamping, scavenge teeth,
-  recovery hooks, `item_claimed`, a live `claimCorpse` fidelity fix); `/seat` as the true Genesis-
-  shape adapter (bridge 64/0, incl. a real incremental-read latency fix).
-- **Wave 1b (`ec91cad`)** — table lint gating `compile-tables.py --emit` (checks 6-10, baseline
-  ratchet, 41 family seed tags, 3 Fork→Commitment promotions) · TAROT-2 (Major schema, op vocabulary,
-  `tarot_landed` receipt telemetry, minors tone/handle) · THEATER-NEXT (`terrain_change`, screenshot
-  gates, dirty-key setBoard/setUnits) · BESTIARY-DASHBOARD (coverage strip, QA-gap filters,
-  edit-target bundles).
-- **Wave 0 hotfixes (`0d75a58`)** — H1-H10: IDB world-resurrection dead, vObliterate/vFlee shared-
-  material clone guard, string-payload coercion (dmNum + drift ledger), GS.combat/chase reset on
-  world entry, /seat origin pin, BUG-01-class harness hardening across 7 files, seat conversation-
-  state ×4, EVENT-CONTRACT 23-event repair, check-manifest blind spots closed (orphans now ERROR,
-  loadOrder sequence checked), theater cache disposal.
-
-### Changed
-- **THE SPICY WORLD (`211508d`)** — baseline 25/25/25/17/8 (was 66/20/9/4/1) as a band-first roll
-  layer over region tiers; zero authored rows changed; `walk.spiceTier` sizes the DM's connective-
-  weirdness license; `fraySpiceFloor` retired; supersession notes across all 9 legacy docs.
-- TIER-SCOPE plateau ruling amended per Adam Q1 (the Crowning is real; plateau stays default).
-- Census-style harness asserts (tarot 13d, dm-contract B1/B3/E1, durability items-count) refreshed
-  to mutual-equality/no-dupes form — the event registry and digest legitimately grow every wave.
-
-### Fixed
-- `claimCorpse` base/ench/codexId fidelity (found by ITEM-LEGACY's build) · stale verify fixtures
-  (durability 123→128, economy-sinks mutation anchor onto restRiders) · `.obsidian/` untracked.
-
-### Ledger (new, carried forward)
-- **Founding-turn digest blows its 32KB budget** (~31KB codex session-prep dump) — filed by the
-  state-eval harness as a digest-diet bug, NOT budget-inflated. Fix candidate: prep-slice the
-  founding codex dump.
-- **3 flaky harnesses need RNG seeding** (verify-plot-recurrence, verify-detected-events,
-  verify-scene-risk — unseeded statistical checks; each reds CI ~1%/run).
-- **Monkey watchdog-stalemate balance class** (40-round fights: Lizardfolk Geomancer, Green Dragon
-  Wyrmling) — monster-AI/statline review item.
-- **Adam's craft queue:** table rows against the LIVE linter · tarot Major card text · Legend-table
-  rows · FRAME-FIELD schema + Frontier/Noir rows skim · grit (zoom4x) + NEAREST_SUB eyeballs.
-- **GLM bake-off is unblocked** — seat adapter + SEAT-PROMPT v1 + state-hygiene scorecards all live.
-
-
----
 

@@ -411,6 +411,21 @@ hash-scattered deterministically from the dressing pools) / interior (shape-rese
 classic-script, jsdom-testable with zero GL coupling.
 **Lives in:** `src/engine/theater-data.js`. **Spec:** docs/BATTLE-THEATER.md
 
+### Walk-Native Projection Boundary (`walkSceneFrom`)
+**What it is.** Codex's anti-drift boundary (2026-07-12): the guarantee that the graphics layer
+*projects* the stored walk and never *generates* it. Classifies every rolled walk fact into visual
+roles with field provenance so a sighted player can never see a noun the DM digest can't support, and
+the renderer can never erase or reroll a rolled fact.
+**How it works.** `walkSceneFrom({walkId,walk,segment,overlay,spatialRoom,live})` emits a `WalkScene`
+envelope — structure/connection/surface/practical/citizen/interactable/dressing/condition/atmosphere/
+hidden/trace lanes, each entry carrying a `sourceRef {walkId,segmentNum,fieldPath,tableId,roll}`. It
+**wraps** the card-dealer (`walkSceneProjectionFrom`) for cast/interactable/dressing/hidden cards and
+adds the structural/environmental classification the dealer ignores; atmo stays prose-only, hidden
+stays reveal-gated. Pure — no THREE/DOM/RNG/world-writes; `trayFrom` stamps `board.walkScene`
+(additive), and the ShotPlan consumes it (provenance + anchors). `walkPickStamped` + `segment.rollRefs`
+(byte-additive) preserve a fact's table origin. Never rolls, rejects, or rewrites a field.
+**Lives in:** `src/engine/walk-scene.js` (+ `place-projection.js` dealer; `walk.js`/`dungeon-walk.js`/`wild-walk.js` rollRefs). **Spec:** docs/WALK-NATIVE-A.md
+
 ### Theater Renderer (three.js boot / stage)
 **What it is.** Genesis's one ES-module boundary — a WebGL battle stage with an FFT-style camera,
 PS1-grit shading, and a narrow `window.Theater` API.
@@ -634,7 +649,7 @@ expandable shelf, built so a new app is one registry entry.
 
 ---
 
-*61 systems indexed. When you add or materially change a system, add/update its entry here and
+*63 systems indexed. When you add or materially change a system, add/update its entry here and
 recompile the Wiki — this file is the source of truth the in-game Wiki renders.*
 
 ### Table Atlas

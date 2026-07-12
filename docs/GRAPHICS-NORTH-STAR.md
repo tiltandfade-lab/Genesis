@@ -78,7 +78,13 @@ objective visual gates (§ below). New modules register in `manifest.json`; run 
 each edit. **Do not hide any of this inside `theater-boot.js` — it already carries too many policy
 constants** (directive §9). New data contracts get focused modules.
 
-### STAGE A — stop producing map overviews (the immediate wave; highest leverage)
+### STAGE A — stop producing map overviews (the immediate wave; highest leverage) — ✅ BUILT 2026-07-12
+> **CLOSED (master `00b775f8`).** A1 one-room-literal + the room-shell compiler (Stage C4, pulled
+> forward) landed 2026-07-11; A2 ShotPlan built same day but was DORMANT (no caller). 2026-07-12 the
+> walk-native boundary (`walkSceneFrom`, per Codex's amendment) + A3 (wires the ShotPlan, composed
+> camera live, WalkScene-fed) + A4 (dynamic occlusion v2) landed — `docs/WALK-NATIVE-A.md`,
+> CHANGELOG 2026-07-12. The interior now composes on the action cluster (medium standee 0.208 frame
+> height) and occludes dynamically. Next graphics wave = **Stage B (sprite citizenship)**.
 1. **A1 one-room-literal** — the ACTIVE room alone owns render geometry; a doorway is a shallow
    darkness portal / corridor throat / glimpse card, never the neighbor room shell. (theater-interior:
    replace the neighbor keep-set with active-room-only render data.)

@@ -2111,13 +2111,15 @@ function renderLedger(w,list){
 function renderStart(){
   const host=document.getElementById("startView");if(!host)return;
   const n=Object.keys((typeof U!=="undefined"&&U.worlds)||{}).length;
-  host.innerHTML=`<div class="parchment startpage">
+  host.innerHTML=`<div class="startpage">
+    <div class="start-kicker">A world waits to be remembered</div>
     <img class="start-wordmark" src="assets/title/genesis.png" alt="GENESIS">
-    <div class="gem-rule"></div>
-    <div class="bardo-guide" style="font-style:italic;max-width:30em">Roll the world into being, and let the tale unfold — a boundless journey guided by an AI Dungeon Master.</div>
-    <div class="bardo-nav" style="margin-top:8px"><button class="btn primary" onclick="newWorld()">✦ Begin ✦</button></div>
-    ${n?`<div style="margin-top:10px"><button class="btn ghost sm" onclick="showTab('universe')">↩ return to your worlds (${n})</button></div>`:""}
-    ${typeof referenceShelfSectionHTML!=="undefined"?referenceShelfSectionHTML():""}
+    <div class="start-rule"><span>✦</span></div>
+    <div class="start-decree">Roll a soul into being. Remember a life. Wake in a world that did not exist until you arrived.</div>
+    <div class="start-actions"><button class="btn primary start-begin" onclick="newWorld()"><span>Begin a New Genesis</span><small>Enter the soul-forge</small></button>
+      ${n?`<button class="btn ghost start-continue" onclick="showTab('universe')"><span>Continue the Chronicle</span><small>${n} persistent world${n===1?'':'s'}</small></button>`:""}</div>
+    <div class="start-foot">Worlds persist. Choices become canon. The dice are yours.</div>
+    <div class="start-utilities">${typeof referenceShelfSectionHTML!=="undefined"?referenceShelfSectionHTML():""}</div>
   </div>`;}
 
 function renderShelf(){
@@ -2144,9 +2146,10 @@ function renderShelf(){
   // DURABILITY-TRIO.md §1: a shelf-level Import link (the ⚙ Menu's export/import only shows inside an
   // active world — this is the one spot reachable with zero worlds forged / no session live).
   const importLink=`<div style="grid-column:1/-1;text-align:right;margin-bottom:4px"><span class="iact" onclick="document.getElementById('importUniverseInput').click()">⇧ Import a Genesis export…</span></div>`;
-  shelf.innerHTML=importLink+cards+`<div class="forge" onclick="newWorld()"><div class="plus">+</div><div>Forge a new world</div></div>`+soulsHTML();
+  const atlasHead=`<div class="atlas-head"><div><div class="atlas-kicker">The Atlas of Lives</div><h1>Your Worlds</h1></div><p>Every place below remembers what happened there.</p></div>`;
+  shelf.innerHTML=atlasHead+importLink+cards+`<div class="forge" onclick="newWorld()"><div class="plus">+</div><div>Forge a new world</div></div>`+soulsHTML();
   if(!ids.length){
-    shelf.innerHTML=importLink+`<div class="forge" onclick="newWorld()" style="grid-column:1/-1;min-height:200px">
+    shelf.innerHTML=atlasHead+importLink+`<div class="forge" onclick="newWorld()" style="grid-column:1/-1;min-height:200px">
       <div class="plus">✦</div><div>Forge your first world</div>
       <div style="font-size:16px;color:var(--ink-dim);max-width:300px;text-align:center">Roll a world into being. It will persist here forever — across sessions, across characters — until you choose to destroy it.</div></div>`+soulsHTML();
   }

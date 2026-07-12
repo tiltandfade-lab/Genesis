@@ -8635,7 +8635,19 @@ loadWholeObjectBuilders(function(){
     // async-loaded whole-object models actually mount. Null both keys immediately before the two
     // re-calls so the dirty-key skip never dedupes this deliberate same-payload re-render away.
     S.boardKey = null; S.unitsKey = null;
-    if(S.lastBoard) setBoard(S.lastBoard);
+    // DISCRIMINATE ON BOARD KIND before replaying (mirrors the other replay sites — line ~2712's
+    // ensureWrap callback, ~6753, ~7936's setInteriorVariant): S.lastBoard is a SHARED field set by
+    // BOTH setBoard (flat tabletop/combat: tiles/props/grid) and setInteriorBoard (interior3d:
+    // instances/bounds/wallHeightBase). Feeding an interior3d board through the flat setBoard() here
+    // silently corrupts the live scene — setBoard restores S.orthoCamera (killing the perspective
+    // interior camera), turns shadowMap off, resets hemi/key/fill to tabletop defaults, and derives a
+    // bogus fit off the mismatched data shape. This fires once, module-scope, a few hundred ms after
+    // load, so an interior view open at that moment silently breaks its camera/lighting. Route each
+    // board kind to its own renderer, exactly like every other replay call site in this file.
+    if(S.lastBoard){
+      if(S.lastBoard.kind === "interior3d") setInteriorBoard(S.lastBoard);
+      else setBoard(S.lastBoard);
+    }
     if(S.lastUnits) setUnits(S.lastUnits);
   }
   // TABLETOP-UNITS.md §U1 seam 5 / TABLETOP-VISION §9.8 (perf budget, "builders preloaded"): flip the

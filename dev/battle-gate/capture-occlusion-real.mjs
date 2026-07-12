@@ -433,6 +433,17 @@ async function main() {
     });
     await settleCameraTween(page);
     await waitPieceResolved();
+    const onDebug = await page.evaluate(({ rebuiltPillar, sightPoint }) => {
+      const id = window.Theater._occlusionIdFor("pillar", rebuiltPillar.x, rebuiltPillar.z);
+      return {
+        id, entry: window.Theater._occlusionFadeEntryForTest(id),
+        matOpacity: window.Theater._occlusionGhostMaterialOpacityForTest(id),
+        raycast: window.Theater._interiorRaycastClearForTest(sightPoint),
+        pillarList: window.Theater._interiorPillarListForTest(),
+        pillarGhostList: window.Theater._interiorPillarGhostListForTest(),
+      };
+    }, { rebuiltPillar: built.rebuiltPillar, sightPoint: guard.sightPoint });
+    console.log("  DEBUG A4 ON state:", JSON.stringify(onDebug));
     const on = await shootAndSample("on", guard.sightPoint);
     ok(!!on.sample, `ON screenshot sampled at mini's screen rect (${JSON.stringify(on.sample)})`);
     metrics.on = { shotPath: on.shotPath, sample: on.sample };

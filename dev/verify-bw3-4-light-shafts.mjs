@@ -215,6 +215,10 @@ console.log("\n=== ITEM 2 — interiorBuildLights wiring, gated cone (theater-bo
     extractConstLine(bootSrc, "INTERIOR_LIGHT_FLICKER_AMPLITUDE"),
     extractConstLine(bootSrc, "ITR_LIGHT_EMITTER_NUB_RADIUS"), // P-1: the card-less-light emitter nub dims
     extractConstLine(bootSrc, "ITR_LIGHT_EMITTER_NUB_HEIGHT"),
+    // LIGHT-CLOSE unit: interiorBuildLights now also reads ITR_BRIGHT_PRACTICAL_INTENSITY_SCALE (the
+    // bright/sky-lit practical dim-to factor) — a `const`, injected here like every other supporting
+    // const on this list.
+    extractConstLine(bootSrc, "ITR_BRIGHT_PRACTICAL_INTENSITY_SCALE"),
   ];
   check("2b-setup. all supporting consts present", constLines.every(Boolean), constLines.map((c) => !!c));
   const coneEnabledLine = extractLetLine(bootSrc, "ITR_LIGHT_CONE_ENABLED");
@@ -223,8 +227,14 @@ console.log("\n=== ITEM 2 — interiorBuildLights wiring, gated cone (theater-bo
   // the cone gate) to decide whether a card-less light gets a self-lit emitter nub — inject it too.
   const nubEnabledLine = extractLetLine(bootSrc, "ITR_LIGHT_EMITTER_NUB_ENABLED");
   check("2b4-setup. P-1's ITR_LIGHT_EMITTER_NUB_ENABLED gate is present", !!nubEnabledLine, nubEnabledLine);
+  // LIGHT-CLOSE unit: interiorBuildLights now also reads ITR_BRIGHT_SUPPRESS_PRACTICALS (a `let`,
+  // runtime-reversible like the cone/nub gates above) to decide whether a bright/sky-lit profile's
+  // torch/lamp practicals (glow disc + emitter nub + the point light's own hot pool) suppress — inject
+  // it too, same convention.
+  const brightSuppressLine = extractLetLine(bootSrc, "ITR_BRIGHT_SUPPRESS_PRACTICALS");
+  check("2b5-setup. LIGHT-CLOSE's ITR_BRIGHT_SUPPRESS_PRACTICALS gate is present", !!brightSuppressLine, brightSuppressLine);
 
-  if(fns.every(Boolean) && constLines.every(Boolean) && coneEnabledLine && nubEnabledLine){
+  if(fns.every(Boolean) && constLines.every(Boolean) && coneEnabledLine && nubEnabledLine && brightSuppressLine){
     // the gate is declared OUTSIDE the returned factory function body but shared by closure — a
     // setConeEnabled export lets this sandbox flip the SAME `let` interiorBuildLights itself reads,
     // exactly like window.Theater.setLightConeEnabled does against the real module scope.
@@ -232,9 +242,10 @@ console.log("\n=== ITEM 2 — interiorBuildLights wiring, gated cone (theater-bo
       + "let INTERIOR_CONE_TEXTURE = null; let INTERIOR_GLOW_TEXTURE = null;\n"
       + coneEnabledLine + "\n"
       + nubEnabledLine + "\n"
+      + brightSuppressLine + "\n"
       + constLines.join("\n") + "\n"
       + fns.join("\n")
-      + "\nreturn { interiorBuildLights, setConeEnabled: function(v){ ITR_LIGHT_CONE_ENABLED = !!v; }, coneEnabled: function(){ return ITR_LIGHT_CONE_ENABLED; }, setNubEnabled: function(v){ ITR_LIGHT_EMITTER_NUB_ENABLED = !!v; } };";
+      + "\nreturn { interiorBuildLights, setConeEnabled: function(v){ ITR_LIGHT_CONE_ENABLED = !!v; }, coneEnabled: function(){ return ITR_LIGHT_CONE_ENABLED; }, setNubEnabled: function(v){ ITR_LIGHT_EMITTER_NUB_ENABLED = !!v; }, setBrightSuppressPracticals: function(v){ ITR_BRIGHT_SUPPRESS_PRACTICALS = !!v; }, brightSuppressPracticals: function(){ return ITR_BRIGHT_SUPPRESS_PRACTICALS; }, ITR_LIGHT_RENDER_GAIN: ITR_LIGHT_RENDER_GAIN, ITR_BRIGHT_PRACTICAL_INTENSITY_SCALE: ITR_BRIGHT_PRACTICAL_INTENSITY_SCALE };";
     const factory = new Function(src);
     const THREE = makeStubTHREE();
     const doc = makeFakeDocument();
@@ -300,6 +311,54 @@ console.log("\n=== ITEM 2 — interiorBuildLights wiring, gated cone (theater-bo
     const empty = interiorBuildLights([], 0, 0, null, null);
     check("2i. ⊗ MUTATION: an empty lights array yields zero children / zero flickerTargets (never throws)",
       empty.group.children.length === 0 && empty.flickerTargets.length === 0);
+
+    // ---- LIGHT-CLOSE unit — bright-realm practical suppression (the 7th `isBrightRealm` param) ----
+    // Cone AND nub both stay off for this sub-block (same isolation spirit as ITEM 2's cone-focused
+    // body above) so the child count stays exactly {PointLight, glow} per non-suppressed light — the
+    // nub's OWN suppression already shares the identical `!suppressPractical` guard in the real source
+    // (see interiorBuildLights) and has its own dedicated coverage in verify-diegetic-light.mjs.
+    mod.setConeEnabled(false);
+    mod.setNubEnabled(false);
+    check("2j-setup. the extracted gate's REAL default is ON (matches ITR_BRIGHT_SUPPRESS_PRACTICALS' own source default)",
+      mod.brightSuppressPracticals() === true, mod.brightSuppressPracticals());
+
+    // isBrightRealm=false (a torchlit/lamplit realm) — practicals mount exactly as before this unit,
+    // regardless of the suppression gate's own value (proves suppression is bright-profile ONLY).
+    const notBright = interiorBuildLights([torch], 0, 0, null, null, [], false);
+    check("2j. isBrightRealm=false: the practical (glow + real hot-pool PointLight) mounts unaffected — {PointLight, glow} = 2 children",
+      notBright.group.children.length === 2 && notBright.flickerTargets.length === 1 && notBright.flickerTargets[0].pl.intensity > 0,
+      JSON.stringify({ children: notBright.group.children.length, targets: notBright.flickerTargets.length, intensity: notBright.flickerTargets[0] && notBright.flickerTargets[0].pl.intensity }));
+
+    // isBrightRealm=true + the gate at its real default (on) — RED-FIRST: prove the OLD "practical always
+    // mounts" shape actually changes for a bright realm (not vacuously already 0/2 for some other reason).
+    const bright = interiorBuildLights([torch], 0, 0, null, null, [], true);
+    check("2k-RED. the notBright shape above does NOT vacuously match a bright realm's own shape (proves 2k-GREEN below is a real change, not a no-op)",
+      bright.group.children.length !== notBright.group.children.length || bright.flickerTargets.length !== notBright.flickerTargets.length,
+      JSON.stringify({ bright: bright.group.children.length, notBright: notBright.group.children.length }));
+    check("2k-GREEN. isBrightRealm=true (gate on, default): NO glow disc, NO nub, and the PointLight itself is suppressed to ITR_BRIGHT_PRACTICAL_INTENSITY_SCALE — 1 child (the dimmed PointLight only), zero flickerTargets",
+      bright.group.children.length === 1 && bright.flickerTargets.length === 0,
+      JSON.stringify({ children: bright.group.children.length, targets: bright.flickerTargets.length }));
+    const brightPl = bright.group.children[0];
+    check("2l. the suppressed PointLight's own intensity actually scaled DOWN by ITR_BRIGHT_PRACTICAL_INTENSITY_SCALE (never just a zero-children illusion with a still-hot light)",
+      brightPl.intensity === torch.intensity * mod.ITR_LIGHT_RENDER_GAIN * mod.ITR_BRIGHT_PRACTICAL_INTENSITY_SCALE,
+      JSON.stringify({ actual: brightPl.intensity, expected: torch.intensity * mod.ITR_LIGHT_RENDER_GAIN * mod.ITR_BRIGHT_PRACTICAL_INTENSITY_SCALE }));
+
+    // reversibility: flip the SAME extracted gate off -> a bright realm's lights mount exactly like
+    // notBright above (the flag is a true toggle, not a one-way migration).
+    mod.setBrightSuppressPracticals(false);
+    const brightGateOff = interiorBuildLights([torch], 0, 0, null, null, [], true);
+    check("2m-reversible. GATE OFF: a bright realm's practicals mount unaffected again (byte-identical shape to isBrightRealm=false)",
+      brightGateOff.group.children.length === notBright.group.children.length && brightGateOff.flickerTargets.length === notBright.flickerTargets.length,
+      JSON.stringify({ children: brightGateOff.group.children.length, targets: brightGateOff.flickerTargets.length }));
+    mod.setBrightSuppressPracticals(true);
+
+    // per-light escape hatch: `light.forceVisiblePractical` keeps a single light's practical mounted
+    // even under a bright, suppression-on profile (a future realm declaring a genuine outdoor source).
+    const campfire = Object.assign({}, torch, { forceVisiblePractical: true });
+    const forced = interiorBuildLights([campfire], 0, 0, null, null, [], true);
+    check("2n. light.forceVisiblePractical=true escapes bright-profile suppression even with the gate on (glow mounts, PointLight stays full-intensity) — 2 children",
+      forced.group.children.length === 2 && forced.flickerTargets.length === 1,
+      JSON.stringify({ children: forced.group.children.length, targets: forced.flickerTargets.length }));
 
     // reset the shared gate back off — this sandbox's own `let` is scoped to this factory instance only
     // (never touches the real module), but resetting keeps this block's own local state tidy/explicit.

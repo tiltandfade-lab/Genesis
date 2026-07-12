@@ -1514,6 +1514,58 @@ const ITR_EMISSIVE_SCENE_FILL = 0.18;      // vs ITR_SCENE_FILL 0.02 / bright 0.
 // exact pre-P-1 "cosmic reads near-black" behavior — letting a harness reproduce that RED baseline on
 // demand, then clear the flag to prove the emissive path fixes it.
 let ITR_EMISSIVE_FILL_DISABLED_FOR_TEST = false;
+
+// ─── LIGHT-CLOSE unit (2026-07-11, docs/GRAPHICS-NORTH-STAR.md task #16 + Adam's re-shoot feedback:
+// suburb "still blows out" / cosmic "near-black") — CLOSE THE LIGHTING LOOP ──────────────────────────
+// PART A — BRIGHT-REALM PRACTICAL SUPPRESSION. P-1 (above) already gave daylit/overcast/moonlit their
+// own sky hemisphere+fill — the sun/sky IS their diegetic source. But interiorBuildLights (below) still
+// mounted the SAME torch/lamp practicals (an additive glow disc, an emitter nub, a real hot-pool
+// PointLight) at every light seed regardless of profile, so a sunlit room ALSO carried a blown-out
+// torch orb nobody asked for — directive §4.7's "never leave a floating glow disc as the source" cuts
+// both ways: a bright/sky-lit realm's ONLY source is the sky, so a torch practical there reads as a
+// second, uncredited light (and the point light's own hot pool clips). Gate: flip
+// ITR_BRIGHT_SUPPRESS_PRACTICALS to false (or window.Theater.setBrightPracticalsSuppressed(v)) to
+// restore torch practicals in bright realms too — reversible, same convention as ITR_LIGHT_CONE_ENABLED.
+let ITR_BRIGHT_SUPPRESS_PRACTICALS = true;
+// torch/lamp PointLight intensity multiplier when suppressed — 0: the sky hemisphere/fill (P-1, above)
+// carries the room alone, never a second light source. A light entry can opt out per-instance via
+// `light.forceVisiblePractical` (interiorBuildLights, below) — a future realm declaring a genuinely
+// diegetic OUTDOOR local source (a campfire) even under a bright profile; no light sets this today, so
+// every bright-profile light suppresses uniformly.
+const ITR_BRIGHT_PRACTICAL_INTENSITY_SCALE = 0;
+
+// PART B — COSMIC ALBEDO LIFT. voidlit's own ITR_EMISSIVE_SCENE_* numbers just above already pushed
+// cosmic's LIGHT as far as it profitably goes, but rendered value is (light * surface albedo): cosmic's
+// AUTHORED tileKit floor/wall albedo (INTERIOR_TILE_KITS.cosmic, src/ui/theater-interior.js —
+// floorColor #171b33 / wallColor #10132a, Adam's own regen-v3-sourced palette, never hand-edited here)
+// is such a dark navy that even a bright light multiplies down to near-zero — the "plateau" Adam saw.
+// A RENDER-TIME fix instead, applied in setInteriorBoard (grep floorColorForRender/wallColorForRender):
+// TWO parts, both gated on the emissive/voidlit path only. (1) THE FORMAT FIX — the biggest single gain:
+// every non-flagship realm's procedural floor/wall renders as RAW ABSOLUTE per-cell colors (theater-
+// interior.js's own itrDarkenHex output) multiplied straight against an ALSO-dark procedural texture —
+// two dark numbers multiplied crush toward zero (the plateau). Flagship realms (chrome/gloom/fantasy,
+// file-textured) never hit this: their per-cell colors already run through itrNeutralizeInstanceColors,
+// re-expressing them as a relative VALUE MULTIPLIER (~0.3-1.2) against the realm's own base tone, so the
+// TEXTURE carries the absolute value and the instance color only modulates it. Routing cosmic's floor/
+// wall through that SAME neutralization (never touching the from-file branch's own semantics) alone
+// measured a >=5x roomMean gain — no lift multiplier needed to prove that part. (2) THE LIFT — a small,
+// named, additional brightening on TOP of the format fix: the PROCEDURAL texture painter
+// (interiorMaterialTexture) bakes its pixels directly off the baseColorHex it's handed, so lifting THAT
+// argument (reusing itrScaleHexValue, the doorframe-darken helper below, factor > 1 here) lifts the
+// material itself — scales every channel together so navy stays navy (hue survives, nothing washes
+// toward gray/white), never re-applied to the (already-neutralized, ratio-based) instance colors, so the
+// two parts never double-compound. Pillars automatically inherit both for free: they already reuse
+// wallTex + neutralize their own instance colors against kit.wallColor (BW2-4b item 4), unchanged by
+// this unit. Named + dial-able; every other realm's rendering is byte-identical to before this unit.
+const ITR_EMISSIVE_ALBEDO_LIFT = 1.2;
+// P-1 TEST-ONLY SEAM (same convention as ITR_BRIGHT_REALM_FILL_FORCE_DEFAULT_FOR_TEST /
+// ITR_EMISSIVE_FILL_DISABLED_FOR_TEST, above): forces the albedo lift OFF so cosmic's floor/wall render
+// off its RAW authored albedo even on the emissive path — lets a harness isolate the lift's OWN
+// contribution (independent of the emissive ambient/hemi/key/fill toggle those two flags already gate)
+// and reproduce the pre-lift "plateau" RED baseline on demand, then clear the flag to prove the lift
+// fixes it.
+let ITR_EMISSIVE_ALBEDO_LIFT_DISABLED_FOR_TEST = false;
+
 // BW2-4 item 2 (value plunge) — DOORFRAME value darken, GL-side. Doorframes ship with kit.trimColor
 // (the bright accent hue — gloom #6b5878 lum 0.37, gold on others), so a doorway prism renders as a
 // BRIGHT vertical (round-3 READ: a lavender block fighting the standees) where the mocks keep doorways
@@ -6373,10 +6425,11 @@ function interiorBuildLightCone(light, height){
 // interior.js, GL in theater-boot.js" split the rest of this render already keeps). Shadow-casting
 // lights get a small shadow-map budget (INTERIOR_SHADOW_MAP_SIZE) + a near/far tuned to interior room
 // scale (never the board-wide combat camera's frustum).
-function interiorBuildLights(lights, cx, cz, realmId, floorTopMap, pieces){
+function interiorBuildLights(lights, cx, cz, realmId, floorTopMap, pieces, isBrightRealm){
   const group = new THREE.Group();
   const assigned = interiorAssignShadowCasters(lights, cx, cz);
   let casters = 0;
+  let glowCount = 0;
   // BW2-4 addendum: the realm's floor-standing emitter card (INTERIOR_LIGHT_CARD), or null -> glow-disc
   // only. Kept once per build (not per light) since it's a pure realm lookup.
   const cardSlug = (realmId && INTERIOR_LIGHT_CARD[realmId]) || null;
@@ -6390,19 +6443,30 @@ function interiorBuildLights(lights, cx, cz, realmId, floorTopMap, pieces){
   // can hand the finished list to ONE startLightFlicker call alongside the board's own S.pointLights.
   const flickerTargets = [];
   assigned.forEach((light) => {
+    // LIGHT-CLOSE unit (docs/GRAPHICS-NORTH-STAR.md task #16 / directive §4.7 "never leave a floating
+    // glow disc as the source"): daylit/overcast/moonlit are the SKY's own diegetic reach (P-1's
+    // ITR_BRIGHT_REALM_FILL hemisphere/fill, applied by setInteriorBoard) — a torch/lamp practical in
+    // THAT room reads as a second, uncredited light source (and blows out — Adam's "nuclear bomb").
+    // `isBrightRealm` is the CALLER's own classification (setInteriorBoard, off ITR_BRIGHT_PROFILES) —
+    // interiorBuildLights stays a pure function of its arguments, same discipline as `realmId`/`pieces`.
+    // `light.forceVisiblePractical` is a per-light escape hatch for a future realm declaring a
+    // genuinely diegetic OUTDOOR local source (a campfire) even under a bright profile; no light sets
+    // it today, so every bright-profile light suppresses uniformly.
+    const suppressPractical = !!isBrightRealm && ITR_BRIGHT_SUPPRESS_PRACTICALS && !light.forceVisiblePractical;
     const pl = new THREE.PointLight(
       light.color || "#ffbb66",
       // BW2-4 item 1: render-side gain (see ITR_LIGHT_RENDER_GAIN) — the DATA intensity is the relative
       // value; this is the absolute decay-2 pool brightness. Preserves the fill<=60%-of-key ratio (both
-      // key and fill are gained equally).
-      (light.intensity != null ? light.intensity : 1.2) * ITR_LIGHT_RENDER_GAIN,
+      // key and fill are gained equally). LIGHT-CLOSE: a suppressed practical scales toward
+      // ITR_BRIGHT_PRACTICAL_INTENSITY_SCALE (0 by default) — the sky fill carries the room instead.
+      (light.intensity != null ? light.intensity : 1.2) * ITR_LIGHT_RENDER_GAIN * (suppressPractical ? ITR_BRIGHT_PRACTICAL_INTENSITY_SCALE : 1),
       // BW2-4b item 1 — LIGHT RANGE CAP: tighten each pool to a small hot circle (the mock read) so the
       // gaps between torches go genuinely dark (the BRIGHTNESS LAW's dark-corner requirement).
       Math.min(light.distance != null ? light.distance : 12, ITR_LIGHT_DISTANCE_CAP),
       light.decay != null ? light.decay : 2
     );
     pl.position.set((light.x || 0) - cx, light.y != null ? light.y : 1.4, (light.z || 0) - cz);
-    if(light.castShadow){
+    if(light.castShadow && !suppressPractical){
       pl.castShadow = true;
       pl.shadow.mapSize.set(INTERIOR_SHADOW_MAP_SIZE, INTERIOR_SHADOW_MAP_SIZE);
       pl.shadow.camera.near = 0.1;
@@ -6414,26 +6478,32 @@ function interiorBuildLights(lights, cx, cz, realmId, floorTopMap, pieces){
     // BW2-4 addendum — THE LIGHT-MARKER SWAP: a soft additive glow disc at the flame point (replaces the
     // old bare rectangle marker), plus — where the realm has one — a self-lit lantern/candle card
     // standing on the floor at the light seed. The glow disc is the flicker channel's opacity target.
-    const glow = interiorBuildGlowDisc(light);
-    glow.group.position.copy(pl.position);
-    if(light.kind !== "lamp") glow.group.position.y -= 0.15; // torch flame sits slightly below its light point (on the sconce)
-    group.add(glow.group);
+    // LIGHT-CLOSE: suppressed for bright/sky-lit profiles (above) — a sunlit room has no torch orb.
+    const glow = suppressPractical ? null : interiorBuildGlowDisc(light);
+    if(glow){
+      glow.group.position.copy(pl.position);
+      if(light.kind !== "lamp") glow.group.position.y -= 0.15; // torch flame sits slightly below its light point (on the sconce)
+      group.add(glow.group);
+      glowCount++;
+    }
     // BW3-4 — LIGHT SHAFTS: one cone per light source, apex at the SAME point as the glow disc just
     // above (so shaft and marker read as one coherent light) — the earlier interiorFloorTopAt call
     // this unit reads is the SAME derived floor law the light-card branch below already uses, never a
     // second/parallel floor formula. Its base reaches THIS light's own floor top exactly (the mock's
     // shaft bridges flame->floor, not flame->some fixed generic drop).
     // L-1 (DIEGETIC-LIGHT.md): gated — the cone only mounts (and only joins the flicker channel) when
-    // ITR_LIGHT_CONE_ENABLED is true. Off by default: the glow disc + light-card + the point light's
-    // own falloff carry the "where light comes from" read on their own.
+    // ITR_LIGHT_CONE_ENABLED is true AND there's a marker to bridge from (LIGHT-CLOSE: `glow` is null
+    // exactly when suppressed, so this is also the cone's own suppression gate — never a floating shaft
+    // with no marker at its apex). The glow disc + light-card + the point light's own falloff carry the
+    // "where light comes from" read on their own.
     const floorTopAtLight = interiorFloorTopAt(floorTopMap, light.x || 0, light.z || 0);
-    const coneHeight = glow.group.position.y - floorTopAtLight;
-    const cone = ITR_LIGHT_CONE_ENABLED ? interiorBuildLightCone(light, coneHeight) : null;
+    const coneHeight = glow ? (glow.group.position.y - floorTopAtLight) : 0;
+    const cone = (ITR_LIGHT_CONE_ENABLED && glow) ? interiorBuildLightCone(light, coneHeight) : null;
     if(cone){
       cone.group.position.copy(glow.group.position);
       group.add(cone.group);
     }
-    if(!pieceCells.has(Math.round(light.x || 0) + "," + Math.round(light.z || 0))){
+    if(!suppressPractical && !pieceCells.has(Math.round(light.x || 0) + "," + Math.round(light.z || 0))){
       if(cardSlug){
         const card = interiorBuildLightCard(cardSlug);
         const floorTop = interiorFloorTopAt(floorTopMap, light.x || 0, light.z || 0);
@@ -6448,16 +6518,21 @@ function interiorBuildLights(lights, cx, cz, realmId, floorTopMap, pieces){
         group.add(nub);
       }
     }
-    const fallbackConeOpacity = ITR_LIGHT_CONE_OPACITY[light.kind] != null ? ITR_LIGHT_CONE_OPACITY[light.kind] : ITR_LIGHT_CONE_OPACITY.torch;
-    flickerTargets.push({
-      pl, marker: glow.mesh, cone: cone ? cone.mesh : null,
-      baseIntensity: pl.intensity,
-      baseOpacity: glow.mesh.material ? glow.mesh.material.opacity : 0.85,
-      baseConeOpacity: (cone && cone.mesh.material) ? cone.mesh.material.opacity : fallbackConeOpacity,
-      amplitude: INTERIOR_LIGHT_FLICKER_AMPLITUDE
-    });
+    // LIGHT-CLOSE: a suppressed practical never joins the flicker channel (nothing to flicker — the
+    // marker's gone and lightFlickerStep's own 0.05 intensity floor would otherwise re-introduce a
+    // faint-but-nonzero torch flutter on a light that's supposed to read as OFF).
+    if(!suppressPractical){
+      const fallbackConeOpacity = ITR_LIGHT_CONE_OPACITY[light.kind] != null ? ITR_LIGHT_CONE_OPACITY[light.kind] : ITR_LIGHT_CONE_OPACITY.torch;
+      flickerTargets.push({
+        pl, marker: glow.mesh, cone: cone ? cone.mesh : null,
+        baseIntensity: pl.intensity,
+        baseOpacity: glow.mesh.material ? glow.mesh.material.opacity : 0.85,
+        baseConeOpacity: (cone && cone.mesh.material) ? cone.mesh.material.opacity : fallbackConeOpacity,
+        amplitude: INTERIOR_LIGHT_FLICKER_AMPLITUDE
+      });
+    }
   });
-  return { group, casters, flickerTargets };
+  return { group, casters, flickerTargets, glowCount };
 }
 
 // BEAUTY-WAVE.md VP6 item 3 — AMBIENT MOTES: 4-8 seeded drifting particle cards per room, ember-tinted
@@ -7723,6 +7798,30 @@ function setInteriorBoard(data){
   // default reads near-black on them — study card v1/v2). Falls back to the standing default.
   applyLightProfile((data.lightProfile && LIGHT_PROFILES[data.lightProfile]) ? data.lightProfile : LIGHT_DEFAULT_PROFILE);
 
+  // LIGHT-CLOSE unit (2026-07-11) — hoisted OUTSIDE `if(rigOn)` below: the fill-number override
+  // (rigOn-gated, unchanged) AND two NEW consumers that must see the SAME classification regardless of
+  // the study-rig flag — interiorBuildLights' bright-practical suppression (its own call site, below)
+  // and the cosmic albedo lift (floor/wall instance-color construction, further below) — both need
+  // isBrightRealm/isEmissiveRealm even on a rigOn===false capture. S.lightProfileKey is already final
+  // (set a moment ago by applyLightProfile above).
+  // docs/DIEGETIC-LIGHT.md L-4 / docs/LIGHT-SIGHT-POLISH.md P-1 — BRIGHT-REALM HEMISPHERE: daylit/
+  // overcast/moonlit are the sun/moon/sky's OWN diegetic reach — they get a per-realm bright-fill row
+  // (ITR_BRIGHT_REALM_FILL / itrBrightRealmFillFor, above) instead of the dim single-torch dungeon
+  // model below (this is the "daylit lost-world reads darker than a torchlit crypt" inversion Adam
+  // caught). P-1's own fix: this used to be ONE global set of numbers (tuned for lost-world's dark
+  // jungle albedo) applied to every bright realm alike — suburb's much lighter kit blew out under
+  // lost-world's numbers. Now keyed on data.realmId, with a luminance-derived fallback for any realm
+  // with no explicit row.
+  const isBrightRealm = ITR_BRIGHT_PROFILES.has(S.lightProfileKey);
+  // docs/LIGHT-SIGHT-POLISH.md P-1 problem 2 — cosmic's voidlit gets its OWN dim/cool/legible path
+  // (ITR_EMISSIVE_SCENE_*, above), distinct from both the dim dungeon default and the sunlit numbers.
+  const isEmissiveRealm = !isBrightRealm && !ITR_EMISSIVE_FILL_DISABLED_FOR_TEST && ITR_EMISSIVE_PROFILES.has(S.lightProfileKey);
+  // LIGHT-CLOSE — COSMIC ALBEDO LIFT gate: a SEPARATE test-only flag from the emissive-light toggle
+  // just above (ITR_EMISSIVE_ALBEDO_LIFT_DISABLED_FOR_TEST, near ITR_EMISSIVE_ALBEDO_LIFT) so a harness
+  // can isolate the geometry-albedo lift's OWN contribution to roomMean, independent of the ambient/
+  // hemi/key/fill numbers ITR_EMISSIVE_FILL_DISABLED_FOR_TEST already gates.
+  const applyEmissiveAlbedoLift = isEmissiveRealm && !ITR_EMISSIVE_ALBEDO_LIFT_DISABLED_FOR_TEST;
+
   // BW2-4 THE VALUE PLUNGE (docs/BEAUTY-WAVE-2.md §BW2-4, item 1) — interior scene-wide fill drop.
   // applyLightProfile just (a) floored ambient to STAGE_AMBIENT_FLOOR, (b) rebuilt the profile's own
   // overhead fill point(s) into S.pointLights. Both flatten the value structure the mocks avoid and
@@ -7732,18 +7831,6 @@ function setInteriorBoard(data){
   // so the flicker bases (startLightFlicker snapshots S.pointLights[i].intensity) capture the plunged
   // fill, not the pre-plunge value. See ITR_SCENE_* constants (near HEMI_*) for the tuned numbers.
   if(rigOn){
-    // docs/DIEGETIC-LIGHT.md L-4 / docs/LIGHT-SIGHT-POLISH.md P-1 — BRIGHT-REALM HEMISPHERE: daylit/
-    // overcast/moonlit are the sun/moon/sky's OWN diegetic reach — they get a per-realm bright-fill row
-    // (ITR_BRIGHT_REALM_FILL / itrBrightRealmFillFor, above) instead of the dim single-torch dungeon
-    // model below (this is the "daylit lost-world reads darker than a torchlit crypt" inversion Adam
-    // caught; S.lightProfileKey is set a moment ago by applyLightProfile above). P-1's own fix: this used
-    // to be ONE global set of numbers (tuned for lost-world's dark jungle albedo) applied to every bright
-    // realm alike — suburb's much lighter kit blew out under lost-world's numbers. Now keyed on
-    // data.realmId, with a luminance-derived fallback for any realm with no explicit row.
-    const isBrightRealm = ITR_BRIGHT_PROFILES.has(S.lightProfileKey);
-    // docs/LIGHT-SIGHT-POLISH.md P-1 problem 2 — cosmic's voidlit gets its OWN dim/cool/legible path
-    // (ITR_EMISSIVE_SCENE_*, above), distinct from both the dim dungeon default and the sunlit numbers.
-    const isEmissiveRealm = !isBrightRealm && !ITR_EMISSIVE_FILL_DISABLED_FOR_TEST && ITR_EMISSIVE_PROFILES.has(S.lightProfileKey);
     const brightFill = isBrightRealm ? itrBrightRealmFillFor(data.realmId, kit) : null;
     // BW2-4b item 6 — THE GLOOM LIFT: gloom ONLY gets a small ambient bump (fantasy is the reference
     // register — never brightened). Every other non-bright/non-emissive realm keeps ITR_SCENE_AMBIENT
@@ -7795,14 +7882,21 @@ function setInteriorBoard(data){
   // `interiorSurfaceFileTexture(...) || <procedural>`. `variant.materials === false` (study rig) still
   // drops to null (flat) for an honest OLD-FLAT baseline, ahead of both branches.
   const materialsOn = variant.materials !== false;
+  // LIGHT-CLOSE — COSMIC ALBEDO LIFT (ITR_EMISSIVE_ALBEDO_LIFT, near ITR_EMISSIVE_SCENE_* above): the
+  // procedural texture painter (interiorMaterialTexture) bakes pixels directly off its baseColorHex
+  // argument, so lifting the base HERE — before it's ever painted — lifts the material itself. Only the
+  // emissive/voidlit path's floor/wall base color is ever touched; every other realm's floorColorForRender/
+  // wallColorForRender is byte-identical to kit.floorColor/kit.wallColor.
+  const floorColorForRender = applyEmissiveAlbedoLift ? itrScaleHexValue(kit.floorColor, ITR_EMISSIVE_ALBEDO_LIFT) : kit.floorColor;
+  const wallColorForRender = applyEmissiveAlbedoLift ? itrScaleHexValue(kit.wallColor, ITR_EMISSIVE_ALBEDO_LIFT) : kit.wallColor;
   const floorTex = materialsOn
     ? (interiorSurfaceFileTexture("floor", kit.floorTextureFile, kit.floorTextureWrap)
-        || interiorMaterialTexture(kit.floorMaterial, kit.floorColor, data.realmId + ":floor", kit.floorGrain,
+        || interiorMaterialTexture(kit.floorMaterial, floorColorForRender, data.realmId + ":floor", kit.floorGrain,
             Math.max(1, b.maxX - b.minX + 1), Math.max(1, b.maxZ - b.minZ + 1)))
     : null;
   const wallTex = materialsOn
     ? (interiorSurfaceFileTexture("wall", kit.wallTextureFile, kit.wallTextureWrap)
-        || interiorMaterialTexture(kit.wallMaterial, kit.wallColor, data.realmId + ":wall", kit.wallGrain,
+        || interiorMaterialTexture(kit.wallMaterial, wallColorForRender, data.realmId + ":wall", kit.wallGrain,
             1, Math.max(1, data.wallHeightBase || 1)))
     : null;
   // BW2-3 §2b COLUMNS: pillars take the WALL sheet (per-face planar from the wall texture at matching
@@ -7846,7 +7940,17 @@ function setInteriorBoard(data){
   // carries the hue). floorFromFile/wallFromFile track which branch floorTex/wallTex resolved from.
   const floorFromFile = materialsOn && !!kit.floorTextureFile;
   const wallFromFile = materialsOn && !!kit.wallTextureFile;
-  const floorList = floorFromFile ? itrNeutralizeInstanceColors(inst.floor, kit.floorColor) : inst.floor;
+  // LIGHT-CLOSE — COSMIC ALBEDO LIFT: the procedural (non-file) floor list carries RAW baked absolute
+  // colors (theater-interior.js's own itrDarkenHex passes off the AUTHORED kit.floorColor) — multiplied
+  // straight against floorTex, which now paints at the LIFTED floorColorForRender above. Route them
+  // through the SAME itrNeutralizeInstanceColors the from-file branch already uses, referenced against
+  // the ORIGINAL (un-lifted) kit.floorColor — this re-expresses each cell's raw color as a per-cell
+  // VALUE MULTIPLIER (its own tone/jitter/darkening, clamped ~1.2) relative to the realm's own base tone,
+  // so the lift lives ENTIRELY in the (already-lifted) texture and never double-applies. Never touched
+  // on a non-emissive realm — floorList stays exactly `inst.floor`, byte-identical to before this unit.
+  const floorList = (floorFromFile || applyEmissiveAlbedoLift)
+    ? itrNeutralizeInstanceColors(inst.floor, kit.floorColor)
+    : inst.floor;
   const floorMesh = interiorBuildInstancedMesh(floorList, cx, cz, floorTex, variant, "floor");
   // STAGE-A A1 test seam, mirrors S.interiorLastWallList/S.interiorLastPillarList's own convention —
   // the exact per-instance list the live floorMesh was built from (dev/verify-active-room-only.mjs
@@ -7901,11 +8005,13 @@ function setInteriorBoard(data){
   }
   S.interiorLastWallList = wallList; // S-1 test seam, mirrors S.interiorLastPillarList's own convention
   S.interiorLastWallGhostList = wallGhostList;
+  // LIGHT-CLOSE — COSMIC ALBEDO LIFT: same "the lift lives in the texture, instances become a relative
+  // value multiplier" mechanism as the floor list above (never a double-apply).
   const wallMesh = interiorBuildInstancedMesh(
-    wallFromFile ? itrNeutralizeInstanceColors(wallList, kit.wallColor) : wallList,
+    (wallFromFile || applyEmissiveAlbedoLift) ? itrNeutralizeInstanceColors(wallList, kit.wallColor) : wallList,
     cx, cz, wallTex, variant, "wall");
   const wallGhostMesh = wallGhostList.length ? interiorBuildInstancedMesh(
-    wallFromFile ? itrNeutralizeInstanceColors(wallGhostList, kit.wallColor) : wallGhostList,
+    (wallFromFile || applyEmissiveAlbedoLift) ? itrNeutralizeInstanceColors(wallGhostList, kit.wallColor) : wallGhostList,
     cx, cz, wallTex, variant, "wall", ITR_OCCLUSION_GHOST_OPACITY) : null;
   // BW2-4b item 4 — DOORFRAME VALUE + TEXTURE. The doorframe ships trimColor as its instance color; a
   // textured InstancedMesh MULTIPLIES its map by that per-instance color, so a dark trim double-darkened
@@ -7990,7 +8096,9 @@ function setInteriorBoard(data){
   // DUNGEON-GRAPH.md U3 iteration-2, ruling 2: real environmental light sources (data.lights, emitted
   // by src/ui/theater-interior.js's interiorBuildBoard) — realm-flavored PointLights + their own
   // visible emissive markers, capped at INTERIOR_SHADOW_CASTER_CAP shadow-casters.
-  const lightsBuilt = interiorBuildLights(data.lights, cx, cz, data.realmId, S.interiorFloorTopMap, data.pieces);
+  // LIGHT-CLOSE: isBrightRealm (hoisted above) tells interiorBuildLights whether THIS board's profile
+  // is a bright/sky-lit one, so it can suppress torch/lamp practicals at the light seeds (§4.7).
+  const lightsBuilt = interiorBuildLights(data.lights, cx, cz, data.realmId, S.interiorFloorTopMap, data.pieces, isBrightRealm);
   S.interiorGroup.add(lightsBuilt.group);
   S.interiorShadowCasterCount = lightsBuilt.casters;
   S.interiorLightCount = (data.lights || []).length;
@@ -7998,6 +8106,9 @@ function setInteriorBoard(data){
   // above: how many light-shaft cones actually mounted this call (0 whenever ITR_LIGHT_CONE_ENABLED is
   // false, since interiorBuildLights skips both the mount AND the flickerTargets.cone assignment then).
   S.interiorLightConeCount = lightsBuilt.flickerTargets.filter((t) => t.cone).length;
+  // LIGHT-CLOSE — harness diagnostic, same convention: how many glow discs actually mounted this call
+  // (0 for every light on a bright/sky-lit profile once ITR_BRIGHT_SUPPRESS_PRACTICALS suppresses them).
+  S.interiorLightGlowCount = lightsBuilt.glowCount;
   // VP6 item 2: join the interior lights (+ their emissive markers) onto the shared flicker channel —
   // startLightFlicker tore down any board-level flicker a moment ago (applyLightProfile above always
   // calls stopLightFlicker first), so this call is the one that actually starts ticking for an interior
@@ -8897,6 +9008,14 @@ window.Theater.interiorDecalCount = function(){ return S.interiorDecalCount || 0
 window.Theater.interiorLightConeCount = function(){ return S.interiorLightConeCount || 0; };
 window.Theater.setLightConeEnabled = function(v){ ITR_LIGHT_CONE_ENABLED = !!v; };
 window.Theater.lightConeEnabled = function(){ return !!ITR_LIGHT_CONE_ENABLED; };
+// LIGHT-CLOSE unit — harness-facing diagnostic + runtime toggle, same convention as the cone gate just
+// above: how many glow discs actually mounted on the last setInteriorBoard call (0 for a bright/sky-lit
+// profile once suppressed), plus a setter mirroring setLightConeEnabled's own reversibility so a
+// harness (or Adam, from the console) can flip ITR_BRIGHT_SUPPRESS_PRACTICALS and remount to prove the
+// suppression is load-bearing, not merely assumed.
+window.Theater.interiorLightGlowCount = function(){ return S.interiorLightGlowCount || 0; };
+window.Theater.setBrightPracticalsSuppressed = function(v){ ITR_BRIGHT_SUPPRESS_PRACTICALS = !!v; };
+window.Theater.brightPracticalsSuppressed = function(){ return !!ITR_BRIGHT_SUPPRESS_PRACTICALS; };
 // docs/LIGHT-SIGHT-POLISH.md P-1 problem 3 — harness-facing diagnostic + runtime toggle, same
 // convention as the cone gate just above: every mounted light-emitter marker (card OR nub) in the
 // CURRENT interior scene graph, tagged by userData.lightEmitterMarker (see interiorBuildLightCard /
@@ -8920,6 +9039,10 @@ window.Theater.lightEmitterNubEnabled = function(){ return !!ITR_LIGHT_EMITTER_N
 // other test seam on this surface).
 window.Theater.setBrightRealmFillForceDefaultForTest = function(v){ ITR_BRIGHT_REALM_FILL_FORCE_DEFAULT_FOR_TEST = !!v; };
 window.Theater.setEmissiveFillDisabledForTest = function(v){ ITR_EMISSIVE_FILL_DISABLED_FOR_TEST = !!v; };
+// LIGHT-CLOSE unit — same reversible-flag convention, isolates the COSMIC ALBEDO LIFT's own
+// contribution from the emissive-light toggle just above (ITR_EMISSIVE_ALBEDO_LIFT_DISABLED_FOR_TEST,
+// near ITR_EMISSIVE_ALBEDO_LIFT).
+window.Theater.setEmissiveAlbedoLiftDisabledForTest = function(v){ ITR_EMISSIVE_ALBEDO_LIFT_DISABLED_FOR_TEST = !!v; };
 // docs/DIEGETIC-LIGHT.md L-2 — harness-facing diagnostics + runtime toggle for the camera-key shadow
 // retirement: the camera-key light's own current {position,castShadow,intensity} (null pre-mount), a
 // setter mirroring setLightConeEnabled's convention above, and the LIVE shadow-casting point light(s)
@@ -9567,8 +9690,8 @@ window.Theater._setBaseGlowForTest = function(mesh, glowing){ return setBaseGlow
 // BW3-4 — TEST-ONLY SEAMS: same "expose the pure builder, don't require a live mount()" convention as
 // _interiorBuildPiecesForTest above — dev/verify-bw3-4-light-shafts.mjs drives these directly (no
 // WebGL context needed; none of the four touch S.renderer).
-window.Theater._interiorBuildLightsForTest = function(lights, cx, cz, realmId, floorTopMap){
-  return interiorBuildLights(lights, cx, cz, realmId, floorTopMap);
+window.Theater._interiorBuildLightsForTest = function(lights, cx, cz, realmId, floorTopMap, pieces, isBrightRealm){
+  return interiorBuildLights(lights, cx, cz, realmId, floorTopMap, pieces, isBrightRealm);
 };
 window.Theater._interiorBuildMotesForTest = function(seedStr, bounds, kind, lights, cx, cz){
   return interiorBuildMotes(seedStr, bounds, kind, lights, cx, cz);

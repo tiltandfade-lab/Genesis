@@ -375,13 +375,21 @@ function campCookingRoll(){
 /* dwalkDoorRoll() — one dungeon-door-type + dungeon-door-state pair for a room's exit ("doors ARE
    the edges" per dungeon-walk.js's own header comment) — additive dressing alongside the exit's
    existing {targetId,num,label,isFinale} shape. Returns {type:{name,desc}, state:{name,desc}} (each
-   half independently null-safe if its table isn't compiled). */
-function dwalkDoorRoll(){
+   half independently null-safe if its table isn't compiled).
+   WDV-2 (docs/WALK-NATIVE-A.md) — optional `provOut`: when passed, stamped with the SAME rollTable()
+   calls' {tableId,total,band} under `.type`/`.state` — rollTable() already returns a real dice total
+   (compiled.js), so this is a zero-cost capture, no second roll. Return shape unchanged; existing
+   zero-arg callers unaffected. */
+function dwalkDoorRoll(provOut){
   const t=(typeof rollTable==="function") ? rollTable("dungeon-door-type") : null;
   const s=(typeof rollTable==="function") ? rollTable("dungeon-door-state") : null;
   if(!t) console.warn("[wiring-b] dungeon-door-type not compiled — door dressing skipped (null-safe)");
   if(!s) console.warn("[wiring-b] dungeon-door-state not compiled — door dressing skipped (null-safe)");
   const tc=t?(t.cells||[]):[], sc=s?(s.cells||[]):[];
+  if(provOut){
+    if(t) provOut.type={ tableId:"dungeon-door-type", total:t.total, band:t.band||null };
+    if(s) provOut.state={ tableId:"dungeon-door-state", total:s.total, band:s.band||null };
+  }
   return {
     type:  t?{ name:tc[0]||t.text||"", desc:tc[1]||"" }:null,
     state: s?{ name:sc[0]||s.text||"", desc:sc[1]||"" }:null,

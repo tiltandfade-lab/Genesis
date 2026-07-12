@@ -151,6 +151,24 @@ function walkPick(id, ...cols){
   const cells=walkRnd(rows)[5]||[];
   return cols.map(i => (cells[i-1]||"").trim());
 }
+/* WALK-NATIVE-A WDV-2 (docs/WALK-NATIVE-A.md, contract §3) — ADDITIVE stamped-roll sibling of
+   walkPick: same single walkRnd() row pick (never rolls twice for a field), but also hands back
+   the row's table origin — `total` = the picked row's own die-range low bound (row[0], an integer;
+   the compiled row IS the [lo,hi] bucket a real total in that range would have landed in — walkPick's
+   selection is uniform-by-row, not a literal weighted dice total, so this is the honest recoverable
+   provenance value) and `band` = row[2] (the row's own spice band) when the table carries one, else
+   null. `values` is byte-identical to what `walkPick(id,...cols)` would return for the same cols —
+   callers may swap `walkPick(...)` for `walkPickStamped(...).values` with zero behavior change. */
+function walkPickStamped(id, ...cols){
+  const rows=walkRows(id);
+  if(!rows.length) return { values: cols.map(()=> ""), source:{ tableId:id, total:null, band:null } };
+  const row=walkRnd(rows);
+  const cells=row[5]||[];
+  return {
+    values: cols.map(i => (cells[i-1]||"").trim()),
+    source: { tableId:id, total:(typeof row[0]==="number"?row[0]:null), band:row[2]||null },
+  };
+}
 // DRESSING-ATMOSPHERE.md: the mega tables' air/odor/sound lanes, one per env, keyed to their
 // EXACT compiled table ids (verified against tables.js — no recompile needed for this unit).
 // A separate `atmo` field, NOT folded into the existing sensory walkPick (that roll is untouched).
@@ -348,8 +366,13 @@ function walkEncounter(topo, threat, tier, opts){
 }
 
 // ─── scene frame (single d400) ───────────────────────────────────────────────
-function walkSceneFrame(encType){
-  const [frame,dims,tactical]=walkPick("urban-scene-frame",1,2,3);
+// WDV-2: optional `provOut` — when passed, stamped with this same walkPickStamped() row's
+// {tableId,total,band} under `.sceneFrame` (additive; existing zero-arg callers untouched, and the
+// return value's own shape — null | {frame,dims,tactical,detail} | {frame,dims,detail} — is unchanged).
+function walkSceneFrame(encType, provOut){
+  const r=walkPickStamped("urban-scene-frame",1,2,3);
+  const [frame,dims,tactical]=r.values;
+  if(provOut) provOut.sceneFrame=r.source;
   if(!frame) return null;
   if(WALK_FRAME_FULL.indexOf(encType)>=0) return { frame, dims, tactical, detail:"full" };
   if(WALK_FRAME_LIGHT.indexOf(encType)>=0) return { frame, dims, detail:"light" };
@@ -592,18 +615,28 @@ function rollUrbanWalk(opts){
     const node=nodeMap[nodeId], num=segNum[nodeId];
     const exits=(graph.adj[nodeId]||[]).map(t=>({ targetId:t, num:segNum[t], label:nodeMap[t]?.label||"", isFinale:!!nodeMap[t]?.isFinale }));
     if(node.isFinale){
-      const frame=walkSceneFrame("Enemy"); // finales always get a full frame
+      // WDV-2: provOut captures the same walkSceneFrame() row-pick's {tableId,total,band} without a
+      // second roll — finale segments carry the scene frame under `finale.sceneFrame`, not top-level,
+      // but rollRefs stays keyed by the plain fieldKey "sceneFrame" (contract §3's flat sibling map).
+      const finaleRollRefs={};
+      const frame=walkSceneFrame("Enemy", finaleRollRefs); // finales always get a full frame
       const light=walkRollLight("urban", nodeId+":light", "");
       return { id:nodeId, num, label:node.label, isFinale:true, depth:depth[nodeId], exits, light,
-               finale:walkFinale(node,resolved,threat,catalyst,tier,frame,tarot), loot:walkLootFor(num,depth[nodeId],true,false) };
+               finale:walkFinale(node,resolved,threat,catalyst,tier,frame,tarot), loot:walkLootFor(num,depth[nodeId],true,false),
+               rollRefs:finaleRollRefs };
     }
     const sub=walkSubTable(node.label, used);
     const encounter=walkEncounter(resolved, threat, tier, {realms:activeRealms});
-    const sceneFrame=walkSceneFrame(encounter.type);
+    // WDV-2: rollRefs accumulates this segment's graphics-critical provenance (sceneFrame, dressing,
+    // interactable — the urban field set per docs/WALK-NATIVE-A.md WDV-2; `light` is omitted here on
+    // purpose because walkRollLight is a seeded-hash pick over THEATER_LIGHT_TABLE, not a compiled
+    // walk table — no {tableId,total} exists to stamp, per the spec's own "no single table roll" carve-out).
+    const rollRefs={};
+    const sceneFrame=walkSceneFrame(encounter.type, rollRefs);
     // WIRING-SWEEP-A §7 (docs/WIRING-MAP.md item 9): urban-interactable-object — the same segment
     // object lane dungeon-walk.js already wires for dungeons. Null-safe (wiring-a.js absent/table
     // uncompiled → null, byte-identical to before this unit).
-    const interactable=(typeof walkPickInteractable==="function") ? walkPickInteractable("urban") : null;
+    const interactable=(typeof walkPickInteractable==="function") ? walkPickInteractable("urban", rollRefs) : null;
     // WIRING-SWEEP-B §3 (docs/WIRING-MAP.md item 12, world.wiring-b): urban-background-event — the
     // dispatch map's third leg (catalyst=plot ignition, spectacle=set-piece, background-event=
     // undirected ambience), chance-gated. Null-safe.
@@ -613,7 +646,9 @@ function rollUrbanWalk(opts){
     // dungeon-walk.js's room loop and wild-walk.js's leg loop use). Finale segments are skipped —
     // they already carry no `.feature` field either (see this file's own note below on `sub`), so
     // dressing follows that same established asymmetry rather than inventing a finale-only lane.
-    const [dressText]=walkPick("urban-set-dressing",1), [dressCond]=walkPick("urban-set-dressing-condition",1);
+    const dressTextR=walkPickStamped("urban-set-dressing",1); const [dressText]=dressTextR.values;
+    rollRefs.dressing=dressTextR.source;
+    const [dressCond]=walkPick("urban-set-dressing-condition",1);
     // DRESSING-ATMOSPHERE.md: one atmo roll per SEGMENT (air/odor/sound, uniform lane pick),
     // same finale asymmetry as dressing above — finale segments return early and carry neither.
     const atmo=walkRollAtmo("urban");
@@ -625,7 +660,8 @@ function rollUrbanWalk(opts){
     return { id:nodeId, num, label:node.label, isFinale:false, depth:depth[nodeId], exits, light,
              segType:sub?sub.segType:null, description:sub?sub.description:null, transition:sub?sub.transition:null, encounter, sceneFrame,
              dressing:{ text:dressText, condition:dressCond }, atmo,
-             interactable, backgroundEvent, loot:walkLootFor(num,depth[nodeId],false,encounter.isEnemy) };
+             interactable, backgroundEvent, loot:walkLootFor(num,depth[nodeId],false,encounter.isEnemy),
+             rollRefs };
   }).sort((a,b)=>a.num-b.num);
 
   // dedup edges for the sub-map

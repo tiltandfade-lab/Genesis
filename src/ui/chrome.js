@@ -2,6 +2,7 @@
    Carved from genesis.html monolith on 2026-06-20 (Pass 5, logic-by-domain). Classic <script>, shared global scope. */
 
 function showTab(t){
+  document.body.dataset.screen=t;
   document.querySelectorAll(".panel").forEach(p=>p.classList.remove("active"));
   document.querySelectorAll(".rail button").forEach(b=>b.classList.remove("active"));
   document.getElementById("panel-"+t).classList.add("active");

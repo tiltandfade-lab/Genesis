@@ -119,8 +119,8 @@ function dspDimsToCells(dims) {
 /* ─── STAGE-C C2 STRUCTURAL TERRAIN (docs/STAGE-C.md C2) ────────────────────────────────────────
    `segment.side` ("Side Area & Structural Features", the d200 table's 3rd column) is prose that
    today is rendered narratively but never reaches the grid — a "15' x 15' central raised dais"
-   never becomes real geometry. This keyword-scans that prose into a single per-room elevation-
-   tier PATCH (the DUNGEON-GRAPH.md U6 `terrain:[{cells,tier,kind}]` shape) + stamps the tier onto
+   never becomes real geometry. This keyword-scans that prose into per-room elevation-tier PATCHES
+   (the DUNGEON-GRAPH.md U6 `terrain:[{cells,tier,kind}]` shape) + stamps the tiers onto
    a parallel per-cell buffer (`tiers`, alongside `cells`) the render seam folds in. Prose parsing
    only — never rejects an incongruous roll, never mutates the segment, never calls rng()/
    Math.random()/Date.now() (this module's own DETERMINISM LAW, header comment above): corner/wall
@@ -144,51 +144,77 @@ function dspTerrainSeedHash(seed, segNum) {
   return dspHashStr(String(seed) + ":" + String(segNum) + ":side");
 }
 
-/* dspParseSideTerrain(side, room, seed) -> {cells:[{x,y}...], tier:+1|-1, kind:'dais'|'pit'} | null.
+/* dspParseSideTerrain(side, room, seed) -> {cells:[{x,y}...], tier:signed one-foot quanta, kind:'dais'|'pit'} | null.
    Missing/unparseable/no-elevation-keyword `side` -> null (flat room, no terrain — never throws).
-   Algorithm (STAGE-C.md C2 step 1):
-     1. find the FIRST elevation keyword (raise or sink) by string position — if a side rolls both
-        (a real table row can, e.g. row 101 Grand Octagon's "sunken central arena... raised ring
-        walkway") the earlier-mentioned feature wins; this wave emits exactly one terrain patch per
-        room (the DUNGEON-GRAPH shape is an array for future multi-patch rooms, C3+).
-     2. isolate the ';'-delimited CLAUSE the keyword's own match falls inside (the table's own prose
-        convention: one clause = one structural feature, later clauses are flavor/dressing text) and
-        parse ITS footprint via the already-lifted dspDimsToCells (feet-with-apostrophe pairs or a
+   Algorithm (STAGE-C.md C2 step 1 + art-direction amendment):
+     1. split the side roll into ';'-delimited clauses and parse each independently; prose order is
+        retained so a later patch wins only where its cells genuinely overlap an earlier patch.
+     2. find the first elevation keyword within each clause and parse that clause's footprint via the
+        already-lifted feet parser (feet-with-apostrophe pairs or a
         "N' diameter" -> a square patch; the table's own "(N ft high/deep)" height clause never has
         an apostrophe, so it never pollutes the footprint parse). Unparseable footprint (present
         keyword, absent/odd dims) falls back to a sane default 3x3 patch rather than dropping the
         feature entirely — still fully deterministic, no rng().
-     3. clamp the patch to fit inside the room's own w x d bbox (a patch can never exceed its room).
-     4. resolve a LOCATION for the patch off the same clause's own cue words: "corner" -> one of the
+        A ring clause treats its dimension as width and expands inward from the shaped room boundary.
+     3. clamp every patch to fit inside the room's own w x d bbox (a patch can never exceed its room).
+     4. resolve a LOCATION for a non-ring patch off the same clause's cue words: "corner" -> one of the
         room's 4 corners (dspTerrainSeedHash picks which); "wall" -> centered along one of the 4
         walls (same hash picks which side); anything else (incl. "central"/"center", the common
         case) -> centered in the room. Every branch re-clamps into the room bbox as a final guard. */
-function dspParseSideTerrain(side, room, seed) {
+function dspParseSideTerrainClause(clause, room, seed, clauseIndex) {
   if (!room || typeof room.x !== "number" || typeof room.w !== "number") return null;
-  const s = String(side || "").trim();
+  const s = String(clause || "").trim();
   if (!s) return null;
 
   const raiseM = s.match(DSP_TERRAIN_RAISE_RE);
   const sinkM = s.match(DSP_TERRAIN_SINK_RE);
-  let tier, kind, matchIndex;
-  if (raiseM && (!sinkM || raiseM.index <= sinkM.index)) { tier = 1; kind = "dais"; matchIndex = raiseM.index; }
-  else if (sinkM) { tier = -1; kind = "pit"; matchIndex = sinkM.index; }
+  let tier, kind;
+  if (raiseM && (!sinkM || raiseM.index <= sinkM.index)) { tier = 1; kind = "dais"; }
+  else if (sinkM) { tier = -1; kind = "pit"; }
   else return null; // no elevation keyword at all -> flat room, no terrain
 
-  // isolate the ';'-delimited clause the matched keyword falls inside.
-  const clauses = s.split(";");
-  let clause = clauses[0], cursor = 0;
-  for (let i = 0; i < clauses.length; i++) {
-    const end = cursor + clauses[i].length;
-    if (matchIndex >= cursor && matchIndex <= end) { clause = clauses[i]; break; }
-    cursor = end + 1; // +1 accounts for the ';' the split consumed
+  // One tier quantum is one rendered foot (ITR_DAIS_STEP=0.2 world units; GRID LAW is 5 ft/unit).
+  // Horizontal footprints use apostrophes, so an explicit `N ft high/deep/below/step` cannot be
+  // mistaken for width. Clamp malformed extremes to two grid units (10 ft).
+  const verticalM = s.match(/\b(\d+)\s*ft\s*(?:high|deep|below|step(?:ped)?(?:\s*up|\s*down)?)/i);
+  if (verticalM) tier *= Math.max(1, Math.min(10, parseInt(verticalM[1], 10)));
+
+  // Ring features are widths, not W x D footprints. Preserve them as perimeter cells so rolls such
+  // as Grand Octagon row 101 can carry both the central arena and its raised surrounding walkway.
+  if (/\bring\b/i.test(s)) {
+    const widthMatch = s.match(/(\d+)\s*'/);
+    const widthCells = Math.max(1, Math.min(SPATIAL_MAX_CELL,
+      widthMatch ? Math.round(parseInt(widthMatch[1], 10) / 5) : 1));
+    const allowed = Array.isArray(room.cells) && room.cells.length ? room.cells : (function(){
+      const out = [];
+      for (let yy = room.y; yy < room.y + room.d; yy++) {
+        for (let xx = room.x; xx < room.x + room.w; xx++) out.push({ x: xx, y: yy });
+      }
+      return out;
+    })();
+    const allowedKeys = new Set(allowed.map((c) => c.x + "," + c.y));
+    let frontier = allowed.filter((c) =>
+      !allowedKeys.has((c.x - 1) + "," + c.y) || !allowedKeys.has((c.x + 1) + "," + c.y) ||
+      !allowedKeys.has(c.x + "," + (c.y - 1)) || !allowedKeys.has(c.x + "," + (c.y + 1)));
+    const ringKeys = new Set(frontier.map((c) => c.x + "," + c.y));
+    for (let band = 1; band < widthCells; band++) {
+      const next = [];
+      frontier.forEach((c) => {
+        [[-1,0],[1,0],[0,-1],[0,1]].forEach((d) => {
+          const x = c.x + d[0], y = c.y + d[1], key = x + "," + y;
+          if (allowedKeys.has(key) && !ringKeys.has(key)) { ringKeys.add(key); next.push({ x, y }); }
+        });
+      });
+      frontier = next;
+    }
+    return { cells: allowed.filter((c) => ringKeys.has(c.x + "," + c.y)), tier, kind, footprint: "ring" };
   }
 
   // dspFeetPairRaw, NOT dspDimsToCells — a terrain patch has no furnishability floor the way a
   // whole ROOM does (dspDimsToCells's own SPATIAL_MIN_CELL=4 clamp is right for sizing a room, but
   // would silently inflate a legit "15'x15'" (3x3) dais patch up to 4x4). Only the room's own bbox
   // (below) and a floor of 1 bound a patch's size.
-  const footprint = dspFeetPairRaw(clause) || dspFeetPairRaw(s);
+  const footprint = dspFeetPairRaw(s);
   const DSP_TERRAIN_DEFAULT_PATCH = 3; // a keyword matched but no parseable footprint (rare) -> a sane 3x3, never dropped
   let pw = footprint ? footprint.wCells : DSP_TERRAIN_DEFAULT_PATCH;
   let pd = footprint ? footprint.dCells : DSP_TERRAIN_DEFAULT_PATCH;
@@ -199,9 +225,9 @@ function dspParseSideTerrain(side, room, seed) {
   pw = Math.max(1, Math.min(pw, room.w));
   pd = Math.max(1, Math.min(pd, room.d));
 
-  const isCorner = /\bcorner\b/i.test(clause) || /\bcorner\b/i.test(s);
-  const isWall = /\bwall\b/i.test(clause) || /\bwall\b/i.test(s);
-  const hash = dspTerrainSeedHash(seed, room.segNum);
+  const isCorner = /\bcorner\b/i.test(s);
+  const isWall = /\bwall\b/i.test(s);
+  const hash = dspTerrainSeedHash(seed, String(room.segNum) + ":" + String(clauseIndex || 0));
   let ox, oy;
   if (isCorner) {
     const corners = [
@@ -234,6 +260,18 @@ function dspParseSideTerrain(side, room, seed) {
     for (let xx = ox; xx < ox + pw; xx++) cells.push({ x: xx, y: yy });
   }
   return { cells, tier, kind };
+}
+
+// A side-area roll can license several simultaneous structural facts. Parse each semicolon-delimited
+// table clause independently and preserve all elevation features in narrative order. The singular
+// helper remains as a compatibility seam for older harnesses/callers and returns the first patch.
+function dspParseSideTerrains(side, room, seed) {
+  const s = String(side || "").trim();
+  if (!s) return [];
+  return s.split(";").map((clause, i) => dspParseSideTerrainClause(clause, room, seed, i)).filter(Boolean);
+}
+function dspParseSideTerrain(side, room, seed) {
+  return dspParseSideTerrains(side, room, seed)[0] || null;
 }
 
 /* ─── STAGE-C C3 REAL SHAPES (docs/STAGE-C.md C3) ───────────────────────────────────────────────
@@ -792,8 +830,8 @@ function dspBuildPlanOnce(segments, topologyName, opts, seed) {
     if (SPATIAL_SHAPES) r.cells = roomCells; // additive; stays null when SPATIAL_SHAPES is off
   });
 
-  // STAGE-C C2 STRUCTURAL TERRAIN (docs/STAGE-C.md C2): parse each room's own segment.side into at
-  // most one terrain patch + stamp its tier onto a parallel `tiers` buffer (SAME shape/indexing as
+  // STAGE-C C2 STRUCTURAL TERRAIN (docs/STAGE-C.md C2): parse each room's own segment.side into
+  // structural terrain patches + stamp their tiers onto a parallel `tiers` buffer (SAME shape/indexing as
   // `cells`, default 0 everywhere = flat). Additive only — never touches `cells`' own SPATIAL_CELL
   // code, so a dais/pit cell stays exactly as walkable/routable/BFS-reachable as it always was; the
   // render seam (interiorBuildBoard, theater-interior.js) is the only consumer of `tiers`. Behind
@@ -803,12 +841,12 @@ function dspBuildPlanOnce(segments, topologyName, opts, seed) {
   if (SPATIAL_SHAPES) {
     rooms.forEach((r) => {
       const seg = byId[r.segId];
-      const terrain = dspParseSideTerrain(seg && seg.side, r, seed);
-      if (!terrain) return;
-      r.terrain = [terrain]; // DUNGEON-GRAPH.md U6 shape: rooms[].terrain = [{cells,tier,kind}]
-      terrain.cells.forEach((c) => {
-        if (c.x >= 0 && c.y >= 0 && c.x < cellW && c.y < cellD) tiers[idx(c.x, c.y)] = terrain.tier;
-      });
+      const terrain = dspParseSideTerrains(seg && seg.side, r, seed);
+      if (!terrain.length) return;
+      r.terrain = terrain; // DUNGEON-GRAPH.md U6 shape: rooms[].terrain = [{cells,tier,kind}]
+      terrain.forEach((patch) => patch.cells.forEach((c) => {
+        if (c.x >= 0 && c.y >= 0 && c.x < cellW && c.y < cellD) tiers[idx(c.x, c.y)] = patch.tier;
+      }));
     });
   }
 

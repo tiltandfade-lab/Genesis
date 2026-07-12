@@ -108,8 +108,9 @@ pits from the roll instead of only the VP3 jitter + finale dais.
 
 ### Behavior
 1. A `parseSideTerrain(side, room)` (in place-spatialize.js or a small pure helper): keyword-scan the
-   prose (raised/dais/platform/step-up/elevated/gallery/balcony → tier **+1**; sunken/pit/pool/below/
-   lower/recess → tier **−1**; else 0), pull the footprint (`N' x N'` / `N' diameter` → cell extent)
+   prose (raised/dais/platform/step-up/elevated/gallery/balcony → positive tier; sunken/pit/pool/below/
+   lower/recess → negative tier; else 0), preserve an explicit `N ft high/deep/below/step` as N one-foot
+   tier quanta (unstated magnitude defaults to one), pull the footprint (`N' x N'` / `N' diameter` → cell extent)
    and location cue (central / one corner / along a wall) → a `terrain:[{cells:[{x,y}...], tier, kind}]`
    entry on the room (the DUNGEON-GRAPH U6 shape). Deterministic placement of the terrain patch (a
    stable hash of `walkId+segNum+"side"`, never `rng()` at a new call site that shifts the seed stream).
@@ -117,6 +118,10 @@ pits from the roll instead of only the VP3 jitter + finale dais.
    reads), so `interiorBuildBoard`/the theater-boot shellCell builder (:8706, currently `tier` from VP3
    `sy` only) folds `side` tiers in. Do NOT disturb the finale-dais path (itrDaisCellsFor) — additive.
 3. Behind `SPATIAL_SHAPES` (shared flag). Missing/unparseable `side` → no terrain (flat room), never throw.
+4. A roll may contain multiple structural clauses. Preserve every independently parseable elevation
+   feature in `rooms[].terrain` in prose order; later clauses win only on cells that truly overlap.
+   Perimeter/ring clauses use their stated width and the room's real shape boundary. In particular,
+   Dungeon Area Type row 101 must produce both its 30' x 30' sunken arena and its 10' raised ring.
 
 ### Out of scope (C2)
 Non-rect shapes (C3); the AO-gradient fast-path extension (note it — the compiler's grid-tessellation
@@ -197,7 +202,8 @@ localized; serialize the master merge (`git fetch && git merge origin/master` be
 primary surface (`place-spatialize.js`) is NOT in Codex's lane — prefer keeping changes there.
 
 ## Wave close
-After C3: re-shoot + READ the octagon/rotunda/L captures + frame `12`/`19` approximations; run the plan/
+After C3: re-shoot + READ the octagon/rotunda/L captures + frame `12`/`19` approximations; at least one
+capture must exercise the real structural `side` roll rather than a bare shell fixture. Run the plan/
 combat/interior regression suite; `/genesis-clean-close` (mark Stage C complete in GRAPHICS-NORTH-STAR;
 tick DUNGEON-GRAPH U6 RM-1/2/3; note the AO-gradient + vertical-stair follow-ons).
 

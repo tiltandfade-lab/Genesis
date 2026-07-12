@@ -12,7 +12,13 @@ jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
+      # fetch-depth: 0 = full history. Two harnesses (verify-bw2-0-crisp-channel,
+      # verify-bw2-2-floor-contact) do `git show <old-commit>:file` to compare against
+      # historical revisions; the default shallow (depth-1) checkout omits those commits
+      # and the git show throws. Full history is what the harnesses assume.
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       # No npm cache: the only lock file (dev/jsdom-home/package-lock.json) is gitignored,
       # and setup-node hard-fails when cache-dependency-path doesn't exist at checkout.
@@ -63,7 +69,15 @@ jobs:
         run: |
           set -e
           fail=0
+          # Excluded: verify-interior-camera-frustum.mjs requires puppeteer-core + a real
+          # headless Chromium (it drives an actual GL render, not a jsdom DOM). CI installs
+          # only jsdom, so it `Cannot find module 'puppeteer-core'` here. Same basis as the
+          # verify-sprite-pipeline.py exclusion above — a render-visual check, not a headless
+          # module test; run it by hand locally. (verify-gallery-pass.mjs is NOT skipped: it
+          # is a jsdom-only dressing/provenance gate that runs clean headless.)
+          skip="dev/verify-interior-camera-frustum.mjs"
           for f in dev/verify-*.mjs; do
+            case " $skip " in *" $f "*) echo "SKIP (needs puppeteer): $f"; continue;; esac
             echo "::group::node $f"
             if ! node "$f"; then
               echo "FAILED: $f"

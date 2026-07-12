@@ -6278,16 +6278,21 @@ function interiorGlowTexture(){
 }
 // the soft additive glow disc — a camera-facing group (userData.sprite) so updateSpriteBillboardYaw
 // turns it to face the camera; returns {group, mesh} so the flicker channel can pulse mesh.opacity.
+// GLOW DISC SIZE/OPACITY (2026-07-12, Adam "I'm looking right at orbs"): the disc was sized UP
+// (0.5/0.6 -> 0.85/1.0) + opacity 0.95 by BW2-4b so it read as the apex fixture of a light CONE. The
+// cone was KILLED in DIEGETIC-LIGHT (ITR_LIGHT_CONE_ENABLED=false) — so an oversized near-opaque
+// additive plane was left floating with no cone, reading as a big glowing ORB. Shrunk back to a tight
+// flame-glow: the emitter NUB (interiorBuildLightEmitterNub, P-1) is the visible physical source now;
+// this disc is just the flame's hot halo, not the source itself. Named + dial-able.
+const ITR_GLOW_DISC_SIZE = 0.42;         // torch/fire; a tight flame glow, not a cell-wide orb
+const ITR_GLOW_DISC_SIZE_LAMP = 0.36;    // lamps read a hair smaller/cooler
+const ITR_GLOW_DISC_OPACITY = 0.6;       // softer than the old cone-apex 0.95
 function interiorBuildGlowDisc(light){
-  // BW2-4b item 5 — CONE FIXTURES: the disc was too small/faint to read as a fixture at the cone apex,
-  // so the cones looked like they beamed from bare air. Sized up (0.5/0.6 -> 0.85/1.0) and opacity
-  // raised so a real hot emitter reads at every apex in EVERY realm (a floor light-card, where the realm
-  // has one — INTERIOR_LIGHT_CARD — additionally grounds it, but the apex fixture is this disc).
-  const size = (light.kind === "lamp" ? 0.85 : 1.0);
+  const size = (light.kind === "lamp" ? ITR_GLOW_DISC_SIZE_LAMP : ITR_GLOW_DISC_SIZE);
   const geo = new THREE.PlaneGeometry(size, size);
   const mat = new THREE.MeshBasicMaterial({
     map: interiorGlowTexture(), color: light.color || "#ffbb66",
-    transparent: true, opacity: 0.95, blending: THREE.AdditiveBlending,
+    transparent: true, opacity: ITR_GLOW_DISC_OPACITY, blending: THREE.AdditiveBlending,
     depthWrite: false, side: THREE.DoubleSide
   });
   mat.userData.psxExempt = true;

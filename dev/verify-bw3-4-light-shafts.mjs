@@ -83,6 +83,7 @@ function makeStubTHREE(){
   return {
     Group: function(){ return { children: [], userData: {}, position: makeVec3(0, 0, 0), add(o){ this.children.push(o); return this; } }; },
     PlaneGeometry: function(w, h){ return { parameters: { width: w, height: h } }; },
+    CylinderGeometry: function(rTop, rBottom, h, seg){ return { parameters: { radiusTop: rTop, radiusBottom: rBottom, height: h, radialSegments: seg } }; }, // P-1 emitter nub
     MeshBasicMaterial: function(opts){ return Object.assign({ userData: {} }, opts); },
     Mesh: function(geo, mat){ return { geometry: geo, material: mat, userData: {}, position: makeVec3(0, 0, 0), castShadow: false, receiveShadow: false }; },
     CanvasTexture: function(cv){ return { isTexture: true, _cv: cv }; },
@@ -193,10 +194,12 @@ console.log("\n=== ITEM 2 — interiorBuildLights wiring, gated cone (theater-bo
 {
   const fnNames = [
     "interiorConeTexture", "interiorBuildLightCone", "interiorAssignShadowCasters",
-    "interiorGlowTexture", "interiorBuildGlowDisc", "interiorFloorTopAt", "interiorBuildLights"
+    "interiorGlowTexture", "interiorBuildGlowDisc", "interiorFloorTopAt",
+    "interiorBuildLightEmitterNub", // P-1: interiorBuildLights now mounts a nub for card-less lights
+    "interiorBuildLights"
   ];
   const fns = fnNames.map((n) => extractFn(bootSrc, n));
-  check("2a-setup. all 7 dependencies extracted from the real source", fns.every(Boolean), fnNames.filter((_, i) => !fns[i]));
+  check("2a-setup. all dependencies extracted from the real source", fns.every(Boolean), fnNames.filter((_, i) => !fns[i]));
 
   const constLines = [
     extractConstLine(bootSrc, "ITR_LIGHT_CONE_WIDTH_RATIO"),
@@ -210,25 +213,37 @@ console.log("\n=== ITEM 2 — interiorBuildLights wiring, gated cone (theater-bo
     extractConstLine(bootSrc, "ITR_FLOOR_BASE_Y"),
     extractConstLine(bootSrc, "ITR_FLOOR_HEIGHT_FALLBACK"),
     extractConstLine(bootSrc, "INTERIOR_LIGHT_FLICKER_AMPLITUDE"),
+    extractConstLine(bootSrc, "ITR_LIGHT_EMITTER_NUB_RADIUS"), // P-1: the card-less-light emitter nub dims
+    extractConstLine(bootSrc, "ITR_LIGHT_EMITTER_NUB_HEIGHT"),
   ];
   check("2b-setup. all supporting consts present", constLines.every(Boolean), constLines.map((c) => !!c));
   const coneEnabledLine = extractLetLine(bootSrc, "ITR_LIGHT_CONE_ENABLED");
   check("2b2-setup. L-1's ITR_LIGHT_CONE_ENABLED gate (a `let`, runtime-reversible) is present", !!coneEnabledLine, coneEnabledLine);
+  // P-1: interiorBuildLights now reads ITR_LIGHT_EMITTER_NUB_ENABLED (a `let`, runtime-reversible like
+  // the cone gate) to decide whether a card-less light gets a self-lit emitter nub — inject it too.
+  const nubEnabledLine = extractLetLine(bootSrc, "ITR_LIGHT_EMITTER_NUB_ENABLED");
+  check("2b4-setup. P-1's ITR_LIGHT_EMITTER_NUB_ENABLED gate is present", !!nubEnabledLine, nubEnabledLine);
 
-  if(fns.every(Boolean) && constLines.every(Boolean) && coneEnabledLine){
+  if(fns.every(Boolean) && constLines.every(Boolean) && coneEnabledLine && nubEnabledLine){
     // the gate is declared OUTSIDE the returned factory function body but shared by closure — a
     // setConeEnabled export lets this sandbox flip the SAME `let` interiorBuildLights itself reads,
     // exactly like window.Theater.setLightConeEnabled does against the real module scope.
     const src = "const THREE = arguments[0]; const document = arguments[1];\n"
       + "let INTERIOR_CONE_TEXTURE = null; let INTERIOR_GLOW_TEXTURE = null;\n"
       + coneEnabledLine + "\n"
+      + nubEnabledLine + "\n"
       + constLines.join("\n") + "\n"
       + fns.join("\n")
-      + "\nreturn { interiorBuildLights, setConeEnabled: function(v){ ITR_LIGHT_CONE_ENABLED = !!v; }, coneEnabled: function(){ return ITR_LIGHT_CONE_ENABLED; } };";
+      + "\nreturn { interiorBuildLights, setConeEnabled: function(v){ ITR_LIGHT_CONE_ENABLED = !!v; }, coneEnabled: function(){ return ITR_LIGHT_CONE_ENABLED; }, setNubEnabled: function(v){ ITR_LIGHT_EMITTER_NUB_ENABLED = !!v; } };";
     const factory = new Function(src);
     const THREE = makeStubTHREE();
     const doc = makeFakeDocument();
     const mod = factory(THREE, doc);
+    // P-1: this ITEM tests the CONE gate specifically — a card-less light's emitter nub is a separate
+    // (also-new) child that would confound the exact per-light child counts below. Disable it here so
+    // the counts stay pure {PointLight, glow} ± cone (the nub has its own coverage in verify-diegetic-
+    // light.mjs P-1c). Same isolation spirit as P-1a's lights:[] variant.
+    mod.setNubEnabled(false);
     const { interiorBuildLights } = mod;
 
     const torch = { x: 2, z: 3, y: 2.5, color: "#ff9a44", intensity: 1.2, distance: 6, decay: 2, kind: "torch" };
@@ -383,8 +398,8 @@ console.log("\n=== ITEM 3 — flicker sync (theater-boot.js source extraction, f
 // ============================================================================
 console.log("\n=== ITEM 4 — mote coupling (theater-boot.js source-extraction sandbox) ===");
 {
-  const fns = ["moteHash32", "moteRng", "interiorMoteKindFor", "interiorBuildMotes"].map((n) => extractFn(bootSrc, n));
-  check("4a-setup. all 4 mote functions extracted from the real source", fns.every(Boolean));
+  const fns = ["moteHash32", "moteRng", "interiorMoteKindFor", "moteSoftTexture", "interiorBuildMotes"].map((n) => extractFn(bootSrc, n));
+  check("4a-setup. all mote functions extracted from the real source", fns.every(Boolean));
   const countMinLine = (bootSrc.match(/const MOTE_COUNT_MIN[^;]+;/) || [null])[0];
   const sizeLine = (bootSrc.match(/const MOTE_SIZE_MIN[^;]+;/) || [null])[0];
   const tintLine = bootSrc.match(/const MOTE_TINT = \{[^}]*\};/);
@@ -404,7 +419,10 @@ console.log("\n=== ITEM 4 — mote coupling (theater-boot.js source-extraction s
   }
 
   if(fns.every(Boolean) && countMinLine && sizeLine && biasFractionLine && radiusLine){
-    const src = "const THREE = arguments[0];\n" + countMinLine + "\n" + sizeLine + "\n"
+    // P-1/mote-softdot: interiorBuildMotes now calls moteSoftTexture(), which reads a module-scope
+    // `let MOTE_SOFT_TEX` cache and returns null under headless (no `document`) — declare the cache so
+    // the extracted function resolves; it short-circuits to null before ever touching CanvasTexture.
+    const src = "const THREE = arguments[0];\nlet MOTE_SOFT_TEX = null;\n" + countMinLine + "\n" + sizeLine + "\n"
       + (tintLine ? tintLine[0] : "const MOTE_TINT={};") + "\n" + biasFractionLine + "\n" + radiusLine + "\n"
       + fns.join("\n") + "\nreturn { interiorBuildMotes, interiorMoteKindFor, moteHash32 };";
     const THREE = makeStubTHREE();

@@ -5972,13 +5972,20 @@ function itrNeutralizeInstanceColors(list, baseHex){
 // tile-column math a few hundred lines up (mesh.position.y = h/2-0.5 -> every column's base sits on the
 // SAME y=-0.5 floor plane): here that's y = sy/2 - 0.5. `variant.banded` (study rig only) routes through
 // applyPsxShaderTweaks' quantized-lighting injection.
-function interiorBuildInstancedMesh(list, cx, cz, texture, variant, shadowKind){
+function interiorBuildInstancedMesh(list, cx, cz, texture, variant, shadowKind, ghostOpacity){
   if(!list || !list.length) return null;
   const geo = interiorUnitBoxGeometry();
   const vertical = shadowKind === "wall" || shadowKind === "pillar" || shadowKind === "doorframe";
-  const mat = applyPsxShaderTweaks(new THREE.MeshLambertMaterial(
-    texture ? { map: texture } : { color: 0xffffff }
-  ), { banded: !!(variant && variant.banded), bandedSteps: variant && variant.bandedSteps,
+  // S-1 OCCLUSION FADE (docs/DIEGETIC-LIGHT.md): a caller passing a numeric `ghostOpacity` wants THIS
+  // mesh built as the translucent GHOST overlay for an already-ankle-stubbed occluder list (see
+  // itrSplitOccluderForAnkleGhost) rather than the normal opaque mesh — every existing call site never
+  // passes a 7th argument, so `isGhost` is false and this function's behavior is byte-identical to
+  // before this unit for every non-S-1 caller.
+  const isGhost = typeof ghostOpacity === "number";
+  const matBase = texture ? { map: texture } : { color: 0xffffff };
+  if(isGhost) Object.assign(matBase, { transparent: true, opacity: ghostOpacity, depthWrite: false });
+  const mat = applyPsxShaderTweaks(new THREE.MeshLambertMaterial(matBase), {
+       banded: !!(variant && variant.banded), bandedSteps: variant && variant.bandedSteps,
        baseAO: (variant && variant.ao && vertical) ? { floor: variant.aoFactor || 0.45, range: 0.22 } : null, // tight contact band — 0.45 spread read as mush (pixel-diff proved it rendered, eyes said no)
        worldSurface: true, // GRAPHICS-ENGINE law 2 (VP0): the interior channel's floor/wall/doorframe/pillar
                             // materials are its WORLD surfaces — gate dither+snap through WORLD_PSX_ENABLED
@@ -5988,19 +5995,19 @@ function interiorBuildInstancedMesh(list, cx, cz, texture, variant, shadowKind){
   // skirt) — a plain read-only userData stamp (harmless to production rendering) so a harness can
   // pick the SOLID kinds (wall/pillar/doorframe) out of S.interiorGroup.children for a real
   // THREE.Raycaster occlusion check (_interiorRaycastClearForTest, below) without this file needing
-  // to expose the raw mesh references any other way.
-  mesh.userData.interiorKind = shadowKind;
+  // to expose the raw mesh references any other way. S-1: a ghost overlay is tagged kind+"-ghost" —
+  // deliberately NOT one of the solid tags _interiorRaycastClearForTest filters on, since a translucent
+  // ghost is exactly the geometry that should read as "sightline clear" now.
+  mesh.userData.interiorKind = isGhost ? (shadowKind + "-ghost") : shadowKind;
   // DUNGEON-GRAPH.md U3 iteration-2, ruling 2: wall/floor/pillar/doorframe instanced meshes cast AND
   // receive real shadows on an interior board (harmless while renderer.shadowMap.enabled is false on
   // the combat/tabletop path — these flags are simply never consulted there). Floors are the one
   // exception on cast: a floor slab casting onto itself/adjacent floor cells buys nothing and only
-  // costs shadow-map budget, so floors receive-only, everything else casts+receives.
-  // GR4 (docs/GRAPHICS-ENGINE.md build unit GR4): the skirt band hangs BELOW the floor, entirely out of
-  // camera-visible contact with anything else on stage — it neither casts (nothing above it to shadow)
-  // nor receives (nothing would ever cast onto the underside of the tray) a shadow, keeping it free
-  // (never added to the shadow-map budget INTERIOR_SHADOW_CASTER_CAP already governs).
-  mesh.receiveShadow = shadowKind !== "skirt";
-  mesh.castShadow = shadowKind !== "floor" && shadowKind !== "skirt";
+  // costs shadow-map budget, so floors receive-only, everything else casts+receives. S-1: a ghost
+  // overlay (~5% opacity) neither casts nor receives — a near-invisible slab throwing/catching a full
+  // shadow would read as a visual bug, not atmosphere.
+  mesh.receiveShadow = isGhost ? false : (shadowKind !== "skirt");
+  mesh.castShadow = isGhost ? false : (shadowKind !== "floor" && shadowKind !== "skirt");
   const m = new THREE.Matrix4();
   const colorObj = new THREE.Color();
   // GR4: every OTHER kind grows UP off the shared y=-0.5 floor plane (position.y = sy/2-0.5, this
@@ -6043,23 +6050,28 @@ function interiorCylinderGeometry(){
   if(!INTERIOR_CYLINDER_GEO) INTERIOR_CYLINDER_GEO = new THREE.CylinderGeometry(0.5, 0.5, 1, 12);
   return INTERIOR_CYLINDER_GEO;
 }
-function interiorBuildPillarMeshes(list, cx, cz, variant, pillarTex){
+function interiorBuildPillarMeshes(list, cx, cz, variant, pillarTex, ghostOpacity){
   const boxList = (list || []).filter((p) => p.profile !== "round");
   const roundList = (list || []).filter((p) => p.profile === "round");
   const meshes = [];
   // BW2-3 §2b COLUMNS: per-face planar from the WALL sheet (pillarTex) — box pillars route it through
   // interiorBuildInstancedMesh's own map path, round pillars get it below. null on non-flagship/off ->
   // the pre-BW2-3 flat-colored pillar, unchanged.
-  const boxMesh = interiorBuildInstancedMesh(boxList, cx, cz, pillarTex || null, variant, "pillar");
+  const boxMesh = interiorBuildInstancedMesh(boxList, cx, cz, pillarTex || null, variant, "pillar", ghostOpacity);
   if(boxMesh) meshes.push(boxMesh);
   if(roundList.length){
     const geo = interiorCylinderGeometry();
-    const mat = applyPsxShaderTweaks(new THREE.MeshLambertMaterial(pillarTex ? { map: pillarTex } : { color: 0xffffff }), {
+    // S-1 OCCLUSION FADE: same ghost-overlay convention interiorBuildInstancedMesh's own box path uses
+    // — round pillars are rare (<=1/room) but must fade too when they're the occluder.
+    const isGhost = typeof ghostOpacity === "number";
+    const roundMatBase = pillarTex ? { map: pillarTex } : { color: 0xffffff };
+    if(isGhost) Object.assign(roundMatBase, { transparent: true, opacity: ghostOpacity, depthWrite: false });
+    const mat = applyPsxShaderTweaks(new THREE.MeshLambertMaterial(roundMatBase), {
       banded: !!(variant && variant.banded), bandedSteps: variant && variant.bandedSteps, worldSurface: true,
       worldPsxOverride: (variant && typeof variant.worldPsx === "boolean") ? variant.worldPsx : undefined
     });
     const mesh = new THREE.InstancedMesh(geo, mat, roundList.length);
-    mesh.receiveShadow = true; mesh.castShadow = true;
+    mesh.receiveShadow = !isGhost; mesh.castShadow = !isGhost;
     const m = new THREE.Matrix4(); const colorObj = new THREE.Color();
     roundList.forEach((inst, i) => {
       const yBase = (typeof inst.yBase === "number") ? inst.yBase : 0;
@@ -7186,20 +7198,57 @@ function itrPillarCutawayMask(pillarList, cameraPos, sightPoints, cx, cz){
   });
 }
 
-// stub height for a flagged pillar — "~0.3 wall height, the parapet grammar" (BW2-1b item 1), taken
-// against the BOARD's own nominal wall height (data.wallHeightBase — the un-scaled base a scale-
-// domain-tall room's own pillars are still multiples of, itrWallScale's own convention in
-// theater-interior.js), never a pillar's OWN (possibly already-scaled) height — so a titanic lair's
-// pillar stubs to the SAME absolute knee height a human-scale room's pillar would, matching the wall
-// cutaway's own KNEE constant (above) being absolute, not scale-domain-relative. The 2.4 fallback
-// mirrors theater-interior.js's own ITR_WALL_HEIGHT_BASE (not window-exported — same "two independent
-// constants declaring the same number" mirroring convention src/engine/place-dressing.js's own
-// DP_CAM_YAW_OFFSET_DEG keeps against this file's CAM_YAW_OFFSET_DEG) for a caller (or synthetic test
-// fixture) that omits data.wallHeightBase entirely.
-const ITR_PILLAR_STUB_FRAC = 0.3;
+// stub height for a flagged occluder (pillar OR wall, docs/DIEGETIC-LIGHT.md unit S-1) — was "~0.3
+// wall height, the parapet grammar" (BW2-1b item 1, a KNEE cut); Adam's live steer on S-1 (2026-07-11)
+// lowered this to a genuine ANKLE: the old 0.3 frac (0.72 world units at the 2.4 wallHeightBase
+// default) never actually cleared a torso-height sight point (itrPieceSightPoints' own contactY +
+// height*0.5 — at HUMAN_TRUE_HEIGHT=1.1/scaleTrue=1 that's contactY+0.55, well above the old stub's
+// own box-top of ~0.22) — the exact bug Adam's report named ("columns and walls still obscure
+// figures"). 0.12 (~0.29 world units at the 2.4 default) sits low enough to clear any realistic
+// standee's torso point. Taken against the BOARD's own nominal wall height (data.wallHeightBase — the
+// un-scaled base a scale-domain-tall room's own pillars/walls are still multiples of, itrWallScale's
+// own convention in theater-interior.js), never an instance's OWN (possibly already-scaled) height —
+// so a titanic lair's occluder stubs to the SAME absolute ankle height a human-scale room's would. The
+// 2.4 fallback mirrors theater-interior.js's own ITR_WALL_HEIGHT_BASE (not window-exported — same "two
+// independent constants declaring the same number" mirroring convention src/engine/place-dressing.js's
+// own DP_CAM_YAW_OFFSET_DEG keeps against this file's CAM_YAW_OFFSET_DEG) for a caller (or synthetic
+// test fixture) that omits data.wallHeightBase entirely. Name kept (itrPillarStubHeight/
+// ITR_PILLAR_STUB_FRAC) for the existing BW2-1b harness's own test seam — see itrOcclusionAnkleHeight
+// alias below, used by the (now shared) wall+pillar S-1 fade path.
+const ITR_PILLAR_STUB_FRAC = 0.12;
 function itrPillarStubHeight(wallHeightBase){
   const base = (typeof wallHeightBase === "number" && wallHeightBase > 0) ? wallHeightBase : 2.4;
   return base * ITR_PILLAR_STUB_FRAC;
+}
+// S-1 alias — the SAME ankle-height deriver, named for its wider (wall+pillar) role in the occlusion
+// fade path below (itrPillarStubHeight kept as the historical/tested name the BW2-1b harness seam
+// already exposes).
+const itrOcclusionAnkleHeight = itrPillarStubHeight;
+// TEST-ONLY SEAM (dev/verify-occlusion-fade.mjs's own RED-FIRST proof): forces setInteriorBoard's
+// wall/pillar occlusion pass off entirely (both kinds render at their ORIGINAL full height, no ankle
+// stub, no ghost) so a harness can render the "nothing occludes this frame at all" baseline and prove
+// a figure directly behind a full-height occluder genuinely reads occluded BEFORE trusting the fixed
+// (default-on) render's green. No product caller ever sets this — false everywhere except the harness.
+let ITR_OCCLUSION_FADE_DISABLED_FOR_TEST = false;
+// S-1 GHOST OPACITY — Adam's own number ("~5%"): the removed upper portion of an occluding wall/pillar
+// renders at this opacity instead of vanishing outright, so the player can still tell a column/wall is
+// there while the figure behind it reads clearly through it.
+const ITR_OCCLUSION_GHOST_OPACITY = 0.05;
+// splits ONE occluding instance into its own SOLID ankle-height STUB (rendered in the normal opaque
+// mesh, unchanged material/shadow behavior — byte-identical to a non-occluding instance except for its
+// shorter sy) + a translucent GHOST spanning from the ankle up to the instance's own full original
+// height (rendered in a separate ITR_OCCLUSION_GHOST_OPACITY overlay mesh, its own draw call — only
+// built at all when at least one instance of that kind is actually occluding this frame). Preserves
+// any pre-existing yBase (a stacked doorframe-header prism's own base offset, BW2-5) rather than
+// assuming 0, so the stub/ghost pair is contiguous at whatever height the instance actually starts at.
+function itrSplitOccluderForAnkleGhost(inst, ankleH){
+  const origYBase = (typeof inst.yBase === "number") ? inst.yBase : 0;
+  const fullH = inst.sy || 1;
+  const stubH = Math.min(fullH, ankleH);
+  const stub = Object.assign({}, inst, { yBase: origYBase, sy: stubH });
+  const ghostH = fullH - stubH;
+  const ghost = ghostH > 1e-6 ? Object.assign({}, inst, { yBase: origYBase + stubH, sy: ghostH }) : null;
+  return { stub, ghost };
 }
 
 // ─── ADDENDUM (Adam, mid-flight on BW2-1b) — THE CLIP MARGIN LAW: "the sprites shouldn't clip
@@ -7614,6 +7663,12 @@ function setInteriorBoard(data){
   // comment (interiorFloorTopMapFrom/interiorFloorTopAt) for the derivation this replaces the old
   // hardcoded -0.5/-0.4 assumptions with.
   S.interiorFloorTopMap = interiorFloorTopMapFrom(inst.floor);
+  // S-1 OCCLUSION FADE (docs/DIEGETIC-LIGHT.md) — sight points computed ONCE here (needs
+  // S.interiorFloorTopMap, just set above) and shared by BOTH the wall-occlusion and pillar-occlusion
+  // masks below; BW2-1b's own pillar-only cutaway used to compute this locally further down this
+  // function — hoisted so walls (which never got a sightline-based treatment at all before S-1, only
+  // the unconditional focusRect parapet below) get the identical treatment.
+  const itrSightPoints = occlusionCameraPos ? itrPieceSightPoints(data.pieces, cx, cz, S.interiorFloorTopMap) : [];
   // BW2-3: file-textured surfaces neutralize their per-cell color to a value multiplier (the texture
   // carries the hue). floorFromFile/wallFromFile track which branch floorTex/wallTex resolved from.
   const floorFromFile = materialsOn && !!kit.floorTextureFile;
@@ -7647,9 +7702,34 @@ function setInteriorBoard(data){
       return Object.assign({}, wi, { sy: parapetH });
     });
   }
+  // S-1 OCCLUSION FADE (docs/DIEGETIC-LIGHT.md) — separate concern from the focusRect PARAPET just
+  // above (that's whole-room camera-side framing, unconditional on any actual figure; this is
+  // per-figure sightline occlusion, the SAME itrPillarCutawayMask segment-vs-AABB test the pillar path
+  // below already used, generalized to walls — which never got a sightline-based treatment before this
+  // unit). Runs against wallList AFTER the parapet (so an already-parapetted near wall's smaller box is
+  // what's actually tested); any instance whose box sits on a camera->figure segment gets split into an
+  // ankle-height solid stub (rendered here, in the normal opaque wallMesh) + a ~5% ghost of the
+  // removed upper portion (rendered in the separate wallGhostMesh below — its own draw call, only
+  // built when at least one wall instance is actually occluding this frame).
+  let wallGhostList = [];
+  if(!ITR_OCCLUSION_FADE_DISABLED_FOR_TEST && itrSightPoints.length && wallList.length){
+    const wallOcclusionMask = itrPillarCutawayMask(wallList, occlusionCameraPos, itrSightPoints, cx, cz);
+    const wallAnkleH = itrOcclusionAnkleHeight(data.wallHeightBase);
+    wallList = wallList.map(function(wi, i){
+      if(!wallOcclusionMask[i]) return wi;
+      const split = itrSplitOccluderForAnkleGhost(wi, wallAnkleH);
+      if(split.ghost) wallGhostList.push(split.ghost);
+      return split.stub;
+    });
+  }
+  S.interiorLastWallList = wallList; // S-1 test seam, mirrors S.interiorLastPillarList's own convention
+  S.interiorLastWallGhostList = wallGhostList;
   const wallMesh = interiorBuildInstancedMesh(
     wallFromFile ? itrNeutralizeInstanceColors(wallList, kit.wallColor) : wallList,
     cx, cz, wallTex, variant, "wall");
+  const wallGhostMesh = wallGhostList.length ? interiorBuildInstancedMesh(
+    wallFromFile ? itrNeutralizeInstanceColors(wallGhostList, kit.wallColor) : wallGhostList,
+    cx, cz, wallTex, variant, "wall", ITR_OCCLUSION_GHOST_OPACITY) : null;
   // BW2-4b item 4 — DOORFRAME VALUE + TEXTURE. The doorframe ships trimColor as its instance color; a
   // textured InstancedMesh MULTIPLIES its map by that per-instance color, so a dark trim double-darkened
   // the wallTex to a pure-black slab (the loop-02 black-monolith arch — the exact bug the WALL
@@ -7667,39 +7747,44 @@ function setInteriorBoard(data){
   // darkened-trim instance color kept (NOT neutralized) so the arch reads as textured dark stone with a
   // whisper of the trim accent hue — the mock's dark textured archway, not a flat black block.
   const doorMesh = interiorBuildInstancedMesh(doorList, cx, cz, wallTex, variant, "doorframe");
-  // BEAUTY-WAVE-2.md BW2-1b (THE OCCLUSION LAW), item 1: DYNAMIC CUTAWAY for pillar prisms — the
-  // CUTAWAY WALLS treatment just above only ever adjusted WALL instances; a pillar between the
-  // camera and a mounted standee was never touched at all. Recomputed every board build (camera
-  // refit, BW2-1's own fitMode changes, AND every standee move-step — a move-step is itself a
-  // data.pieces change that forces a fresh setInteriorBoard call, so "recompute on move-step" falls
-  // out of the existing dirty-key rebuild path for free, no separate hook needed). Per-instance
-  // HEIGHT drop on the SAME InstancedMesh (never a second mesh/draw call — respects U3's own
-  // instancing draw-call budget, "per-instance visibility/height" per the spec's own OUT OF SCOPE-
-  // adjacent instructions) — an offending instance stubs to itrPillarStubHeight's parapet height;
-  // one already at/under that height is left alone (never GROWN by this pass).
+  // BEAUTY-WAVE-2.md BW2-1b (THE OCCLUSION LAW), item 1, superseded by docs/DIEGETIC-LIGHT.md unit S-1
+  // (Adam's live steer, 2026-07-11): DYNAMIC CUTAWAY for pillar prisms — a pillar between the camera
+  // and a mounted standee. Recomputed every board build (camera refit, BW2-1's own fitMode changes,
+  // AND every standee move-step — a move-step is itself a data.pieces change that forces a fresh
+  // setInteriorBoard call, so "recompute on move-step" falls out of the existing dirty-key rebuild
+  // path for free, no separate hook needed). WAS a pure height stub to a KNEE (ITR_PILLAR_STUB_FRAC's
+  // old 0.3 — Adam's own bug report: "columns and walls still obscure figures" — the old knee (0.72
+  // world units at the 2.4 default) sat BELOW a typical torso sight point, so it never actually
+  // cleared the sightline it claimed to). NOW: an offending instance drops to a genuinely-low ANKLE
+  // stub (itrOcclusionAnkleHeight, same shared deriver the wall path above now also uses) PLUS a ~5%
+  // GHOST of the removed upper portion (itrSplitOccluderForAnkleGhost) so the column still reads as
+  // "there" — see pillarGhostMeshes below, its own (small, occlusion-only) draw call.
   let pillarList = inst.pillar;
-  if(occlusionCameraPos && pillarList && pillarList.length){
-    const sightPoints = itrPieceSightPoints(data.pieces, cx, cz, S.interiorFloorTopMap);
-    if(sightPoints.length){
-      const mask = itrPillarCutawayMask(pillarList, occlusionCameraPos, sightPoints, cx, cz);
-      const stubH = itrPillarStubHeight(data.wallHeightBase);
-      pillarList = pillarList.map(function(pinst, i){
-        if(!mask[i]) return pinst;
-        if((pinst.sy || 1) <= stubH) return pinst;
-        return Object.assign({}, pinst, { sy: stubH });
-      });
-    }
+  let pillarGhostList = [];
+  if(!ITR_OCCLUSION_FADE_DISABLED_FOR_TEST && occlusionCameraPos && pillarList && pillarList.length && itrSightPoints.length){
+    const mask = itrPillarCutawayMask(pillarList, occlusionCameraPos, itrSightPoints, cx, cz);
+    const pillarAnkleH = itrOcclusionAnkleHeight(data.wallHeightBase);
+    pillarList = pillarList.map(function(pinst, i){
+      if(!mask[i]) return pinst;
+      const split = itrSplitOccluderForAnkleGhost(pinst, pillarAnkleH);
+      if(split.ghost) pillarGhostList.push(split.ghost);
+      return split.stub;
+    });
   }
   // BW2-1b — harness diagnostic: the FINAL (post-cutaway) pillar instance list, byte-identical shape
-  // to data.instances.pillar (same length — a stub only rewrites `sy`, never adds/removes an entry,
-  // preserving U3's own draw-call budget) so a harness can assert stub-applied vs full-height per
-  // instance without decomposing InstancedMesh matrices.
+  // to data.instances.pillar (same length — a stub only rewrites `sy`/`yBase`, never adds/removes an
+  // entry, preserving U3's own draw-call budget for the MAIN mesh) so a harness can assert stub-applied
+  // vs full-height per instance without decomposing InstancedMesh matrices.
   S.interiorLastPillarList = pillarList;
+  S.interiorLastPillarGhostList = pillarGhostList; // S-1 test seam — the separately-drawn ~5% ghosts
   // BW2-5 THE COLUMN DEMOTION: pillar instances split by `profile` (round gets its own cylinder
-  // mesh) — fed the POST-CUTAWAY list so BW2-1b's sightline stubs apply to every profile alike.
+  // mesh) — fed the POST-CUTAWAY list so the sightline stubs apply to every profile alike.
   const pillarMeshes = interiorBuildPillarMeshes(
     pillarTex ? itrNeutralizeInstanceColors(pillarList, kit.wallColor) : pillarList,
     cx, cz, variant, pillarTex);
+  const pillarGhostMeshes = pillarGhostList.length ? interiorBuildPillarMeshes(
+    pillarTex ? itrNeutralizeInstanceColors(pillarGhostList, kit.wallColor) : pillarGhostList,
+    cx, cz, variant, pillarTex, ITR_OCCLUSION_GHOST_OPACITY) : [];
   // GR4 (docs/GRAPHICS-ENGINE.md build unit GR4): the diorama edge skirt — data.skirt (src/ui/theater-
   // interior.js's interiorBuildBoard, GR4 addition), a sibling of `instances` (never counted toward the
   // "4 known instance kinds" data-shape check — see that function's own doc comment). Untextured (flat
@@ -7709,8 +7794,13 @@ function setInteriorBoard(data){
   // BW2-5: furniture-class blocker volumes + wall-hang extrusion props (THE PROP PERSPECTIVE LAW) —
   // built further below (after dressing) since both read S.interiorFloorTopMap; declared here so the
   // mesh-count/group-add sweep stays one place. See interiorBuildFurniture/interiorBuildWallProps.
-  [floorMesh, wallMesh, doorMesh, skirtMesh].concat(pillarMeshes).forEach((mesh) => { if(mesh) S.interiorGroup.add(mesh); });
-  S.interiorMeshCount = [floorMesh, wallMesh, doorMesh, skirtMesh].concat(pillarMeshes).filter(Boolean).length;
+  // S-1 OCCLUSION FADE: the ghost overlays (wallGhostMesh, pillarGhostMeshes) are ADDITIONAL draw
+  // calls over the pre-S-1 budget — only ever created when at least one instance of that kind is
+  // actually occluding a figure this frame (both are null/empty otherwise, so a board with no
+  // occlusion in play costs exactly what it did before this unit).
+  const itrAllInteriorMeshes = [floorMesh, wallMesh, wallGhostMesh, doorMesh, skirtMesh].concat(pillarMeshes).concat(pillarGhostMeshes);
+  itrAllInteriorMeshes.forEach((mesh) => { if(mesh) S.interiorGroup.add(mesh); });
+  S.interiorMeshCount = itrAllInteriorMeshes.filter(Boolean).length;
 
   // DUNGEON-GRAPH.md U3 iteration-2, ruling 2: real environmental light sources (data.lights, emitted
   // by src/ui/theater-interior.js's interiorBuildBoard) — realm-flavored PointLights + their own
@@ -8634,6 +8724,17 @@ window.Theater.interiorPiecesWorldPositions = function(){ return S.interiorPiece
 // own assignment comment in setInteriorBoard for why this proves stub-vs-full-height per instance
 // without decomposing InstancedMesh matrices.
 window.Theater._interiorPillarListForTest = function(){ return S.interiorLastPillarList || []; };
+// S-1 OCCLUSION FADE — TEST-ONLY SEAMS: the post-cutaway WALL list (S.interiorLastWallList, wall's
+// own peer to interiorLastPillarList — no such seam existed pre-S-1 since walls never had a per-
+// figure sightline cutaway at all) + the separately-drawn ~5% GHOST lists for both kinds (the removed
+// upper portions), so a harness can assert "ankle stub present + ghost present" per occluding
+// instance without decomposing InstancedMesh matrices.
+window.Theater._interiorWallListForTest = function(){ return S.interiorLastWallList || []; };
+window.Theater._interiorWallGhostListForTest = function(){ return S.interiorLastWallGhostList || []; };
+window.Theater._interiorPillarGhostListForTest = function(){ return S.interiorLastPillarGhostList || []; };
+// S-1 — TEST-ONLY SEAM: see ITR_OCCLUSION_FADE_DISABLED_FOR_TEST's own declaration comment — flips the
+// whole ankle+ghost pass off for a genuine RED-FIRST baseline render (dev/verify-occlusion-fade.mjs).
+window.Theater._setOcclusionFadeDisabledForTest = function(v){ ITR_OCCLUSION_FADE_DISABLED_FOR_TEST = !!v; };
 // BW2-1b — TEST-ONLY SEAM: a REAL THREE.Raycaster occlusion check against the LIVE mounted geometry —
 // casts from the CURRENT S.camera.position toward targetWorldPos, intersects only the SOLID instance
 // kinds (wall/pillar/doorframe — tagged via interiorBuildInstancedMesh's own mesh.userData.interiorKind
@@ -9181,7 +9282,11 @@ window.Theater._interiorFloorTopMapForTest = function(){ return S.interiorFloorT
 // diagnostics spirit as every other _*ForTest seam above; no product code path reads this object.
 window.Theater._occlusionLawForTest = {
   itrSegmentIntersectsAabb, itrPieceSightPoints, itrPillarCutawayMask,
-  itrPillarStubHeight, ITR_PILLAR_STUB_FRAC
+  itrPillarStubHeight, ITR_PILLAR_STUB_FRAC,
+  // S-1 OCCLUSION FADE additions: the shared ankle-height alias + the split helper + the ghost-opacity
+  // constant, so a harness can re-derive "stub + ghost, contiguous, summing to the original height"
+  // without a live mount.
+  itrOcclusionAnkleHeight, itrSplitOccluderForAnkleGhost, ITR_OCCLUSION_GHOST_OPACITY
 };
 // BW2-1b — TEST-ONLY SEAM: the LIVE camera world position setInteriorBoard's own pillar-cutaway pass
 // actually raycasts from (the PREVIEW placeCamera() call's own output, see that call's header

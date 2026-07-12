@@ -75,6 +75,23 @@ SHEET DISCIPLINE:
 - keep weapons, tails, wings, horns, and other extremities inside the cell;
 - preserve consistent scale and baseline.
 
+### Preferred production layout: 1 × 4
+
+The strongest mature results came from a horizontal 1 × 4 strip rather than a crowded multi-row matrix. Use one figure per generous cell for production-style references. The extra breathing room protects silhouette clarity, keeps proportions adult, and fits the game’s narrow figurine bases. Multi-row sheets are acceptable for mood boards, but should not be the default generation format.
+
+Avoid shoulder-to-shoulder poster lineups. Leave room for weapons, tails, wings, horns, cloaks, and asymmetrical silhouettes.
+
+### Per-cell aspect rule: 4 × 6 portrait
+
+The horizontal strip is not permission to squash the subjects. Each sprite cell should be treated as a fixed **4:6 portrait cell**, repeated four times across the sheet. The full sheet may therefore be approximately 16:6, but ImageGen must be told the cell ratio explicitly.
+
+- feet sit near a shared lower baseline;
+- the head has room above it;
+- tall humanoids and salamanders retain their vertical proportions;
+- tails and weapons may use the lower/side padding without shortening the body;
+- smaller creatures remain shorter by anatomy, not because the canvas forces them down;
+- the beaver mentor may be shorter and broader naturally, while the salamander brothers should read as tall upright adult martial artists.
+
 BACKGROUND:
 - use a perfectly flat solid #00ff00 chroma-key background for this exploratory variant;
 - do not use the key color anywhere in the subject;

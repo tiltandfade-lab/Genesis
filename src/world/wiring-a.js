@@ -379,14 +379,20 @@ const WALK_INTERACTABLE_TABLE={ urban:"urban-interactable-object", wilderness:"w
    tags. Mislabeling c[1] (a Primary tag like "Hazard"/"Clue") as `flavor` reads as prose to any
    consumer expecting dungeon/wilderness's descriptive shape. So: urban returns `flavor:null` (no
    fabricated prose) plus the tags verbatim (`tag`, `tag2`, `signal`, `visibility`, `tone`) for a
-   tag-aware DM/UI to use instead; wilderness is unchanged. */
-function walkPickInteractable(envKind){
+   tag-aware DM/UI to use instead; wilderness is unchanged.
+   WDV-2 (docs/WALK-NATIVE-A.md) — optional `provOut`: when passed, stamped with this same
+   walkRnd()-picked row's {tableId,total,band} under `.interactable` — no second roll, and the
+   returned interactable object's own shape is untouched (additive param, existing zero-arg callers
+   unaffected). */
+function walkPickInteractable(envKind, provOut){
   const id=WALK_INTERACTABLE_TABLE[envKind];
   if(!id) return null;
   const rows=(typeof walkRows==="function") ? walkRows(id) : [];
   if(!rows.length){ console.warn("[wiring-a] "+id+" not compiled — interactable skipped (null-safe)"); return null; }
-  const c=(typeof walkRnd==="function") ? (walkRnd(rows)[5]||[]) : (rows[0][5]||[]);
+  const row=(typeof walkRnd==="function") ? walkRnd(rows) : rows[0];
+  const c=row[5]||[];
   const name=(c[0]||"").trim();
+  if(provOut) provOut.interactable={ tableId:id, total:(typeof row[0]==="number"?row[0]:null), band:row[2]||null };
   if(envKind==="urban"){
     return { name, flavor:null,
       tag:(c[1]||"").trim(), tag2:(c[2]||"").trim(),

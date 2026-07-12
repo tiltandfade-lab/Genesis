@@ -219,6 +219,11 @@ console.log("\n=== ITEM 2 — interiorBuildLights wiring, gated cone (theater-bo
     // bright/sky-lit practical dim-to factor) — a `const`, injected here like every other supporting
     // const on this list.
     extractConstLine(bootSrc, "ITR_BRIGHT_PRACTICAL_INTENSITY_SCALE"),
+    // GLOW-DISC SHRINK unit: interiorBuildGlowDisc now reads these named size/opacity consts (the disc
+    // shrank to a flame-glow after the cone was removed) — inject them like every other supporting const.
+    extractConstLine(bootSrc, "ITR_GLOW_DISC_SIZE"),
+    extractConstLine(bootSrc, "ITR_GLOW_DISC_SIZE_LAMP"),
+    extractConstLine(bootSrc, "ITR_GLOW_DISC_OPACITY"),
   ];
   check("2b-setup. all supporting consts present", constLines.every(Boolean), constLines.map((c) => !!c));
   const coneEnabledLine = extractLetLine(bootSrc, "ITR_LIGHT_CONE_ENABLED");

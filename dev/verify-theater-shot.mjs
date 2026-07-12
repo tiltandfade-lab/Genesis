@@ -373,5 +373,95 @@ console.log("\n=== 8. check-manifest.py (run live) ===");
     !/theater-shot/.test(out.split("\n").filter((l) => l.includes("ERROR")).join("\n")));
 }
 
+console.log("\n=== 9. A3 — WalkScene consumption (docs/WALK-NATIVE-A.md A3 / contract §10) ===");
+{
+  // A minimal, hand-built WalkScene-shaped fixture (walk-scene.js's own return shape) carrying a
+  // citizen, an interactable, and a centerpiece-flagged structure entry — each at a DIFFERENT
+  // position than the tray.projection.stageNow fallback below, so "which source actually got read"
+  // is a real, provable fact, not an assumption.
+  const walkScene = {
+    walkRef: { id: "walk-9", environment: "dungeon", topology: "spine" },
+    segmentRef: { id: "seg-9", num: 3, label: "The Crypt" },
+    register: { setup: "haunting", skin: "gloom", spiceTier: 2, posture: "tense", depth: 3, isFinale: false },
+    structure: [{ role: "structure", sourceRef: { walkId: "walk-9", segmentNum: 3, fieldPath: "finale", tableId: "T1", roll: 12, overlayRef: null },
+      id: "obj-1", centerpiece: true, position: { x: 5, y: 5 } }],
+    citizens: [
+      { role: "citizen", sourceRef: { walkId: "walk-9", segmentNum: 3, fieldPath: "S3.cast1", tableId: "T2", roll: 8, overlayRef: null },
+        id: "cast-1", position: { x: 1, y: 1 } },
+      { role: "citizen", sourceRef: { walkId: "walk-9", segmentNum: 3, fieldPath: "S3.reserve1", tableId: null, roll: null, overlayRef: null },
+        id: "reserve-1", position: { x: 9, y: 9 }, deferred: true }
+    ],
+    interactables: [{ role: "interactable", sourceRef: { walkId: "walk-9", segmentNum: 3, fieldPath: "S3.lever", tableId: "T3", roll: 4, overlayRef: null },
+      id: "lever-1", position: { x: 2, y: 6 } }],
+    dressing: [], conditions: [], connections: [], atmosphere: [], traces: [], removals: [], hidden: [],
+    fieldRefs: [
+      { walkId: "walk-9", segmentNum: 3, fieldPath: "finale", tableId: "T1", roll: 12, overlayRef: null },
+      { walkId: "walk-9", segmentNum: 3, fieldPath: "S3.cast1", tableId: "T2", roll: 8, overlayRef: null },
+      { walkId: "walk-9", segmentNum: 3, fieldPath: "S3.reserve1", tableId: null, roll: null, overlayRef: null },
+      { walkId: "walk-9", segmentNum: 3, fieldPath: "S3.lever", tableId: "T3", roll: 4, overlayRef: null }
+    ]
+  };
+  // the projection fallback carries a DIFFERENT centerpiece/cast position — proves preference, not
+  // just presence (a bug that read BOTH sources and happened to prefer projection would still pass a
+  // weaker "walkScene fields exist somewhere" check but fail this one).
+  const projectionFallback = {
+    stageNow: [
+      { id: "proj-cp", role: "centerpiece", centerpiece: true, position: { x: 50, y: 50 }, sourceRef: "S3.projFallbackCenterpiece" },
+      { id: "proj-cast", role: "cast", position: { x: 60, y: 60 }, sourceRef: "S3.projFallbackCast" }
+    ]
+  };
+  const trayWithWalkScene = { kind: "interior3d", cellSize: 1, activeRoomId: 3, walkScene, projection: projectionFallback,
+    bounds: { minX: 0, maxX: 10, minZ: 0, maxZ: 10 }, instances: {}, furniture: [], lights: [] };
+  const trayNoWalkScene = { kind: "interior3d", cellSize: 1, activeRoomId: 3, walkScene: null, projection: projectionFallback,
+    bounds: { minX: 0, maxX: 10, minZ: 0, maxZ: 10 }, instances: {}, furniture: [], lights: [] };
+
+  const planWith = shotPlanFrom(trayWithWalkScene, null, {});
+  const planWithout = shotPlanFrom(trayNoWalkScene, null, {});
+
+  check("9a. RED-FIRST — absent tray.walkScene: objective anchor falls back to tray.projection (x=50)",
+    !!planWithout.anchors.objective && planWithout.anchors.objective.x === 50,
+    planWithout.anchors.objective);
+  check("9b. present tray.walkScene: objective anchor is read from walkScene.structure (x=5), NOT the projection fallback",
+    !!planWith.anchors.objective && planWith.anchors.objective.x === 5,
+    planWith.anchors.objective);
+  check("9c. objective sourceRef is the WalkScene's own rich shape (fieldPath 'finale'), not a flat projection string",
+    planWith.anchors.objective && planWith.anchors.objective.sourceRef && planWith.anchors.objective.sourceRef.fieldPath === "finale",
+    planWith.anchors.objective && planWith.anchors.objective.sourceRef);
+
+  check("9d. RED-FIRST — absent tray.walkScene: cast piece falls back to tray.projection (x=60)",
+    planWithout.pieces.some((p) => p.kind === "cast" && p.x === 60), planWithout.pieces);
+  check("9e. present tray.walkScene: cast piece is read from walkScene.citizens (x=1), NOT the projection fallback",
+    planWith.pieces.some((p) => p.kind === "cast" && p.x === 1), planWith.pieces);
+  check("9f. the DEFERRED (reserve-lane) citizen is excluded — never staged as a visible piece",
+    !planWith.pieces.some((p) => p.x === 9 && p.z === 9), planWith.pieces);
+
+  check("9g. present tray.walkScene: the interactable prop is read from walkScene.interactables (x=2)",
+    planWith.props.some((p) => p.x === 2 && p.z === 6), planWith.props);
+  check("9h. present tray.walkScene: the centerpiece structure entry is NOT double-counted as a prop (objectiveFrom already owns it)",
+    !planWith.props.some((p) => p.x === 5 && p.z === 5), planWith.props);
+
+  check("9i. ShotPlan.walkRef/segmentRef/register are carried straight through when tray.walkScene is present",
+    planWith.walkRef && planWith.walkRef.id === "walk-9" && planWith.segmentRef && planWith.segmentRef.num === 3
+      && planWith.register && planWith.register.skin === "gloom",
+    { walkRef: planWith.walkRef, segmentRef: planWith.segmentRef, register: planWith.register });
+  check("9j. ShotPlan.fieldRefs mirrors walkScene.fieldRefs verbatim (4 entries)",
+    Array.isArray(planWith.fieldRefs) && planWith.fieldRefs.length === 4, planWith.fieldRefs);
+  check("9k. absent tray.walkScene: walkRef/segmentRef/register are null, fieldRefs is []",
+    planWithout.walkRef === null && planWithout.segmentRef === null && planWithout.register === null
+      && Array.isArray(planWithout.fieldRefs) && planWithout.fieldRefs.length === 0,
+    { walkRef: planWithout.walkRef, segmentRef: planWithout.segmentRef, register: planWithout.register, fieldRefs: planWithout.fieldRefs });
+  check("9l. provenance carries walk-scene-sourced entries (one per fieldRefs item) when present",
+    planWith.provenance.some((p) => p.source === "walk-scene"), planWith.provenance.filter((p) => p.source === "walk-scene"));
+
+  // existing top-level keys are untouched (STAGE-A.md's own "enrich, don't restructure" clause) —
+  // every key present before this unit is still present, still the same TYPE, in both trays.
+  const priorKeys = ["id", "seed", "realmId", "environment", "activeRoomId", "stage", "anchors", "pieces",
+    "props", "walkProjection", "interactables", "overlays", "traces", "lightRig", "camera",
+    "occlusionTargets", "postProfile", "provenance"];
+  check("9m. every pre-A3 top-level ShotPlan key is still present (enrich, don't restructure)",
+    priorKeys.every((k) => Object.prototype.hasOwnProperty.call(planWith, k)),
+    priorKeys.filter((k) => !Object.prototype.hasOwnProperty.call(planWith, k)));
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 if (fail > 0) process.exit(1);

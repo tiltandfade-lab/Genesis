@@ -256,7 +256,7 @@ key-light-on-focal), VP6 life pass (idle-breathe, flicker, motes, persistent com
 capped 12/room in `pn.spatial.decals`), VP7 contact blobs, and the VP5 off-stage combat UI
 (chip strip, acting ring, damage floaters). Corpus unified to per-realm 48-color palettes
 (`dev/model-qa/realm-palettes/`, hue-family coverage law).
-**Lives in:** `src/engine/place-{spatialize,semantics}.js`, `src/ui/theater-interior.js`. **Spec:** docs/DUNGEON-GRAPH.md + docs/BEAUTY-WAVE.md
+**Lives in:** `src/engine/place-{spatialize,semantics}.js`, `src/ui/theater-interior.js` (interior beauty pass: docs/BEAUTY-WAVE.md). **Spec:** docs/DUNGEON-GRAPH.md
 
 ## World layer (persistent state, flow, and the event surface)
 

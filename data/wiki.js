@@ -265,11 +265,11 @@ const WIKI_INDEX = [
     "slug": "dungeon-graph-spatializer-semantics-2026-07-10",
     "layer": "Engine layer",
     "whatItIs": "Turns a rolled walk's segment graph (segments=rooms, exits=edges, any of the 12 topologies) into a verified 5-ft cell-grid floor plan (SpatialPlan), then layers meaning on it.",
-    "howItWorks": "`spatializePlan(segments, topology, {walkId})` — per-topology layout seed → room placement → AABB separation → corridors along real edges only → rasterize → BFS reachability verify (reroll ≤5, then honest-fail); deterministic per walkId. `semanticizePlan(plan, segments, residents)` — room roles (entrance/finale/path/pocket/side), depth=difficulty bands, SCALE DOMAINS (a big resident's territory builds at its scale; prison-rule regrowth; transition/squeeze doors). Consumed by prep (`pn.spatial`), the theater interior renderer (volumetric prism InstancedMesh tile kits), and combat cell dims (dm.js).",
+    "howItWorks": "`spatializePlan(segments, topology, {walkId})` — per-topology layout seed → room placement → AABB separation → corridors along real edges only → rasterize → BFS reachability verify (reroll ≤5, then honest-fail); deterministic per walkId. `semanticizePlan(plan, segments, residents)` — room roles (entrance/finale/path/pocket/side), depth=difficulty bands, SCALE DOMAINS (a big resident's territory builds at its scale; prison-rule regrowth; transition/squeeze doors). Consumed by prep (`pn.spatial`), the theater interior renderer (volumetric prism InstancedMesh tile kits), and combat cell dims (dm.js). The renderer runs the full BEAUTY-WAVE presentation stack (2026-07-10): perspective ~20° camera + clean world (PSX = palette/poly only), TRUE-SCALE pieces AND combat standees (feet/scaleTrue registry fields; `setInteriorBoard` clears the tabletop unit groups — the kaiju-leak fix), real dressing cards (`assets/dressing/`, REALM_DRESSING generated from manifests, incl. reclaimed gallery paintings w/ `paintingOf`), VP3 ground design + VP4 SCENE_DIRECTION (value scripts, key-light-on-focal), VP6 life pass (idle-breathe, flicker, motes, persistent combat decals capped 12/room in `pn.spatial.decals`), VP7 contact blobs, and the VP5 off-stage combat UI (chip strip, acting ring, damage floaters). Corpus unified to per-realm 48-color palettes (`dev/model-qa/realm-palettes/`, hue-family coverage law).",
     "livesIn": [
       "src/engine/place-{spatialize",
       "semantics}.js",
-      "src/ui/theater-interior.js"
+      "src/ui/theater-interior.js` (interior beauty pass: docs/BEAUTY-WAVE.md)"
     ],
     "spec": "docs/DUNGEON-GRAPH.md"
   },

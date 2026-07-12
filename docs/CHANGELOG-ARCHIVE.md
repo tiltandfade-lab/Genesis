@@ -14,6 +14,37 @@ to load every session (the live file keeps the newest entries; see the script fo
 Newest-first, same as the live file — the two files read as one continuous history, live file
 first. Read-only record: never hand-edit, never add entries here directly.
 
+## 2026-07-07 (later) — HQ2: the code-review fix wave — all 22 findings closed
+
+The production run's own high-effort review (8 angles, 32 agents, 22 verified findings) became
+HOTFIX-QUEUE-2026-07-07 and was built the same day: 13 executors (one raced the spec landing and
+correctly STOPPED twice — relaunched clean), zero integration conflicts across 7 branches.
+
+### Fixed
+- **The coercion seam closed at the boundary (HQ2-1 + top-up):** per-field `num:` tags on 24
+  events in `DM_EVENT_FIELDS`, `dmNum` applied once in `dmFoldPayload`, 5 hand-called sites + 4
+  ad-hoc coercions retired. Flagship reds now guards: `clock_advanced delta:"-1"` moves the clock
+  BACKWARD (was silently +1); `grapple bonus:"2"` totals 19 (was string-concat "172");
+  `item_changed gold:"-50"` charges (was silently dropped). The top-up executor REFUSED two spec
+  tags with grounds (`choice_logged.weight` is categorical — tagging would zero major-choice XP;
+  `condition_add.ttl` is object-shaped) — the anti-over-ratchet law enforced by an executor a day
+  after it was written; spec corrected.
+- **koCheckWake lives inside advanceClock** (was 3 of 16 clock sites — a KO'd PC now wakes on
+  every path incl. the UI rest button) · terrain collapse gets mechanical teeth on ground zones ·
+  prep_contact merges pcMoveTo's result · seat unwind handles post-assistant-push throws ·
+  rollTableAtBand tallies GS.tableRolls (the Atlas sees the spicy world's primary roll path) ·
+  the heirloom echo is two-sided (destination world mints the codex record).
+- **Four flaky harnesses RNG-seeded** (plot-recurrence, detected-events, scene-risk, death-saves
+  — 50× deterministic at the default seed; CI never reds on statistics again).
+- **The founding digest diet:** 36,187 → 7,006 bytes (codex founding slice = contacted/nearby
+  only); state-eval budget run is green for the first time.
+
+### Changed
+- Cleanup batch: shared `walkResolveSkinAndSpice` (×3 rollers), `spellListsOf` (×4 merge sites,
+  dedup unified), shared `setEq` harness helper, TERRAIN_OPS derived, dead aliases/params/EXPOSE
+  names retired. Perf batch: legacyDigest scan shared, vault names cached at write, harness
+  boot-once (verify-item-legacy 22 boots → 1).
+
 ## 2026-07-07 — THE 24-HOUR PRODUCTION RUN — the entire spec batch BUILT; a world can now FINISH
 
 Adam extended Fable 24 hours and authorized production ("you oversee and contract opus and sonnet").

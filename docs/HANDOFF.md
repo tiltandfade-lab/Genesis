@@ -6,7 +6,40 @@ updated: 2026-07-11
 
 # Genesis — Session Hand-off
 
-## ⭐ Latest (2026-07-12) — WALK-NATIVE BOUNDARY + STAGE A CLOSED: the composed camera is live [Claude Opus 4.8, orchestrated]
+## ⭐ Latest (2026-07-12, later) — STAGE C: REAL ROOM SHAPES — rooms stop being rectangles [Claude Opus 4.8, orchestrated]
+
+GRAPHICS-NORTH-STAR Stage C (`docs/STAGE-C.md`) — consume the walk's rolled `areaType/dims/side` (which
+`spatializePlan` was discarding) into real room geometry feeding the landed C4 room-shell compiler.
+Four stacked units, each personally re-gated (harnesses + captures READ + loop gate on real dungeons),
+landed `--no-ff`. **Master tip: `388a4c7b`.**
+
+**What shipped (all on master + pushed):**
+- **C1 size fidelity** — rooms honor the rolled `dims` (feet/5), not random 4–7. Behind `SPATIAL_SHAPES`.
+- **C2 structural terrain** — `side` prose → dais/pit tiers → the compiler's riser render.
+- **C3 real shapes** — `areaType` → octagon/rotunda/oval/L/T/cross/cave FLOOR cells + exits-from-polygon.
+- **C3b clean geometry + root fix** (Adam's "half shapes" catch) — render-only: circle/ellipse pulled
+  round (deviation ~15× better), octagon/L/cross chamfered to true 45° diagonal faces; PLUS the
+  pre-existing `cellTriangleMap` dropped-cell bug fixed at root (nearest-triangle fallback, bare
+  octagon 76/76 vs 74/76). Logical cell grid byte-identical across all shapes — **combat untouched**.
+- **Codex sprite-strategy landed** (`74848a3a`, Adam-directed, verified green first) + **`AGENTS.md`**
+  (Codex onboarding front door).
+
+**Verification:** verify-stage-c-{size 25,terrain 49,shapes 88,c3b 43}/0, room-shell 32/0,
+dungeon-interior 287/0, combat-cells 13/0, walkbind 20/0, spatialize 9/0, check-manifest OK; loop gate
+5/5 per unit; captures READ (clean octagon diagonals, round rotunda, L notch).
+
+**Do next (pick up here):**
+1. **Stage D (stateful nouns)** or **Stage E (material+light finish, incl. the emissive-masked bloom
+   that properly retires the occlusion ghost-halo the hotfix minimally patched)** — the remaining
+   GRAPHICS-NORTH-STAR waves. Stage B (sprite citizenship) overlaps Codex's active sprite lane — coordinate.
+2. **Sprite lane (Codex):** BUG-14 (slice debris — `slice-sprites.py` padding/merge) + BUG-15 (crusty
+   in-engine resolution — needs higher-res ImageGen regen); the figurine-life-pass + map vision-quest
+   (`docs/vision-quests/`) are Codex's queued directives.
+3. Deferred Stage-C follow-ons: AO-gradient on non-rect floors (Stage E material concern), vertical
+   stair two-slot connections, corridor-L-bend-through-notch edge case (`docs/STAGE-C.md` C3 notes).
+4. Carry-overs still stand: MF-3b hit-stop wiring + MF-5 feel gate (walk-native/Stage-A blocks below).
+
+## Latest (2026-07-12) — WALK-NATIVE BOUNDARY + STAGE A CLOSED: the composed camera is live [Claude Opus 4.8, orchestrated]
 
 Codex reviewed the last A-wave and delivered the **walk-native amendment**
 (`ui-sketches/mock-frames/vq-battle-scenes/WALK-NATIVE-DIORAMA-CONTRACT.md`): the walk is the content

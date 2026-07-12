@@ -1,7 +1,12 @@
 # STAGE C — polygon room shells (GRAPHICS-NORTH-STAR wave 3)
 
 type: system-spec
-status: SPECCED (Opus 4.8, 2026-07-12 — Adam confirmed Stage C as the next graphics wave after Stage A
+status: BUILT (2026-07-12 — C1/C2/C3 + the C3b clean-geometry refinement (Adam's "half shapes" catch)
++ the cellTriangleMap root fix all landed on master `388a4c7b`. Rooms render as real octagons (clean
+45° diagonals), round rotundas, L/cross/cave, from the rolled areaType/dims/side; combat cell grid
+untouched. See CHANGELOG 2026-07-12 (later). Deferred: AO-gradient on non-rect floors (Stage E),
+vertical-stair two-slots, corridor-L-bend-through-notch.)
+history: SPECCED (Opus 4.8, 2026-07-12 — Adam confirmed Stage C as the next graphics wave after Stage A
 closed. Consumes the walk's rolled `areaType/dims/side` (today discarded) into real room geometry that
 feeds the already-landed room-shell compiler. Grounded against the 2026-07-12 tree; every anchor
 grepped live. Follows the RM-1/2/3 decomposition already specced in `docs/DUNGEON-GRAPH.md` U6 +

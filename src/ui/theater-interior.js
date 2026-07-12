@@ -1517,6 +1517,19 @@ function interiorBuildBoard(plan, opts) {
     // density signal for ShotPlan/debugging; concealed payloads never reach this board.
     projection: opts.projection || null,
     activeRoomId: opts.focusSegNum != null ? opts.focusSegNum : null,
+    // STAGE-C3b (docs/STAGE-C.md C3b addendum, circle/ellipse render refinement): the active room's
+    // own `shape` tag (STAGE-C C3's shapeForArchetype enum — 'rect'|'circle'|'octagon'|'ellipse'|'L'|
+    // 'T'|'cross'|'cave'), or null when no focus room / a pre-C3 plan carries no `.shape`. Sibling of
+    // `focusRect` immediately below (same `plan.rooms.find` lookup, just reading a different field) —
+    // theater-boot.js's room-shell compile step reads this to gate the RENDER-ONLY radial smoothing
+    // pass (theater-room-mesh.js's compileRoomShellData `opts.smoothShape`) onto circle/ellipse rooms
+    // only. Purely additive: never changes `plan.cells`/`rooms[].cells` (the LOGICAL grid combat/
+    // placement/pathing read) — see STAGE-C.md's own C3b note on why this stays render-side.
+    activeRoomShape: (function(){
+      if (opts.focusSegNum == null) return null;
+      const fr = (plan.rooms || []).find(function(r){ return r.segNum === opts.focusSegNum; });
+      return (fr && fr.shape) || null;
+    })(),
     daisTop: daisTop,
     lights: lights,
     bounds: { minX: minX, maxX: maxX, minZ: minZ, maxZ: maxZ },

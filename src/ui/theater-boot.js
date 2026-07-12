@@ -7456,30 +7456,66 @@ function shotProjectFor(cameraPose){
 // naming the spec calls for while still satisfying composeShot's real signature.
 function shotProjectTwoArg(worldPt, cameraPose){ return shotProjectFor(cameraPose)(worldPt); }
 
-// fitFromComposedCamera — converts a composeShot-chosen `camera` (yaw/pitch/fov/target/distance) into
-// the exact {center,halfX,halfZ} shape interiorCameraFitFor already returns (setInteriorBoard assigns
-// it straight to S.boardCenter/S.boardHalfX/S.boardHalfZ either way, so this is a drop-in alternate
-// source for that shape, not a second code path downstream of it). `target` -> `center` (shifted into
-// the SAME cx/cz-local frame every mounted instance uses, mirroring interiorCameraFitFor's own "beat"
-// branch). `distance`+`fov` -> a symmetric half-extent: the visible half-height at the target plane
-// under that distance/FOV (distance*tan(halfFovY) — the exact inverse of theater-shot.js's own
-// distanceFor(), which solves distance FROM a desired visible height/radius the same way), fed back
-// through interiorCameraFitFor's existing consumer (placeCamera's own screenHalfWidth/Height fit
-// math, S.zoomLevel, the exact-containment correction loop) exactly like a "room"/"beat" fit's own
-// halfX/halfZ already are — composeShot's pose is a FRAMING target, not a literal camera transform;
-// interiorCameraFitFor's box is that framing target's box.
-function fitFromComposedCamera(camera, cx, cz){
+/* fitFromComposedShot — converts a composed shot into the exact {center,halfX,halfZ} shape
+   interiorCameraFitFor already returns (setInteriorBoard assigns it straight to
+   S.boardCenter/S.boardHalfX/S.boardHalfZ either way, so this is a drop-in alternate source for that
+   shape, not a second code path downstream of it).
+
+   ROUND 2 FIX (coordinator read of the after-composed capture): the earlier version derived the box
+   half-extent from the composed camera's OWN `distance*tan(fovY/2)` — the full frustum half-height at
+   the target plane, i.e. the WHOLE framed region. Re-fitting THAT box back through placeCamera (which
+   fits a floor box to ~94% of frame, on the 45°-yawed footprint whose screen projection is ~1.41x
+   wider, taking the LARGER of the width/height axes) reproduced a WIDE view and dropped a medium
+   standee to ~13% of frame height — LOOSER than the plain focusRect fit and void-heavy, failing the
+   Stage-A gate ("medium standee 18-25% frame height, minimal dead frame"). The distance→box conversion
+   was the lossy step: composeShot's chosen distance already validated the figure at 18-25% for ITS
+   pose, but placeCamera's box-fit doesn't reproduce that pose from a full-frustum box.
+
+   The fix frames the ACTUAL ACTION-CLUSTER EXTENT instead — the participant/piece positions the
+   ShotPlan already carries — by REUSING interiorCameraFitFor's own "beat" branch, the exact tight-crop
+   path dev/battle-gate/capture-beat-camera.mjs already proved lands a medium standee >=18% frame
+   height. composeShot still runs and still governs the fallback (its metrics.allRejected -> focusRect,
+   below) and still records its chosen pose/metrics for the harness — it just no longer sizes the box
+   from a full-frustum distance; the cluster's own extent (+ the beat margin) sizes it, faithfully
+   reproducing the tight framing composeShot's medium-figure constraint had validated.
+
+   Cells come from the ShotPlan's LIVING pieces (combat units + staged cast cards — all carry
+   living:true, and x/z in the SAME raw pre-shift cell frame `fit`/cx/cz use). Absent any (a pure
+   environment tray with no encounter), falls back to the resolved anchors (player/threat/objective);
+   absent even those, returns null so the caller drops to the plain focusRect room fit. */
+function fitFromComposedShot(shotPlan, fit, cx, cz){
+  if(!shotPlan) return null;
+  const cells = [];
+  (shotPlan.pieces || []).forEach(function(p){
+    if(p && p.living && typeof p.x === "number" && typeof p.z === "number") cells.push({ x: p.x, y: p.z });
+  });
+  if(!cells.length){
+    const a = shotPlan.anchors || {};
+    [a.player, a.primaryThreat, a.objective].forEach(function(an){
+      if(an && typeof an.x === "number" && typeof an.z === "number") cells.push({ x: an.x, y: an.z });
+    });
+  }
+  if(!cells.length) return null; // no action cluster -> the caller's focusRect room fallback fires
+  // interiorCameraFitFor's beat branch never reads `fit` when cells are present+finite; passing the
+  // real `fit` only feeds its internal degenerate-cells fallback, so this is safe either way.
+  return interiorCameraFitFor({ mode: "beat", cells: cells }, fit, cx, cz);
+}
+
+// STAGE-A A3 — TEST-ONLY SEAM (default OFF): the SUPERSEDED full-frustum box (halfExtent =
+// distance*tan(fovY/2), the whole framed region) the round-1 build shipped and the coordinator's own
+// after-composed read flagged as too WIDE (medium standee dropped to ~13% frame height, void-heavy).
+// Kept ONLY so dev/verify-shot-compose.mjs can flip `variant.shotComposeWideBoxForTest` on for a
+// GENUINE, reproducible RED-FIRST baseline of the figure-height check (proving that check catches the
+// loose framing), then flip it off (the default) for the tight, gate-passing green. No product caller
+// ever sets that flag — production always takes fitFromComposedShot's action-cluster crop above.
+function fitFromComposedCameraWideForTest(camera, cx, cz){
   if(!camera) return null;
   const target = camera.target || { x: 0, z: 0 };
   const tx = shotNumOr(target.x, 0), tz = shotNumOr(target.z, 0);
   const fovRad = (shotNumOr(camera.fov, 20) * Math.PI) / 180;
   const distance = Math.max(0.1, shotNumOr(camera.distance, 6));
   const halfExtent = Math.max(0.5, distance * Math.tan(fovRad / 2));
-  return {
-    center: new THREE.Vector3(tx - cx, 0, tz - cz),
-    halfX: halfExtent,
-    halfZ: halfExtent
-  };
+  return { center: new THREE.Vector3(tx - cx, 0, tz - cz), halfX: halfExtent, halfZ: halfExtent };
 }
 
 // ─── BEAUTY-WAVE-2.md BW2-1b (THE OCCLUSION LAW), item 1 — DYNAMIC CUTAWAY for interior columns/
@@ -7866,8 +7902,10 @@ function setInteriorBoard(data){
      focusRect path below, behind ITR_SHOT_COMPOSE (default ON — see that const's own header comment
      for why it's read off `variant.shotCompose` rather than a bare module flag). shotPlanFrom/
      composeShot are pure and never touch S.*; this block is the ONLY place their output is allowed to
-     reach the render, and only ever by way of `camFit` below — the EXACT {center,halfX,halfZ} shape
-     interiorCameraFitFor already returns, so every downstream consumer (placeCamera/
+     reach the render, and only ever by way of `camFit` below (via fitFromComposedShot — see its own
+     header for why the fit frames the action-cluster EXTENT, reusing interiorCameraFitFor's proven
+     beat crop, rather than the composed camera's full-frustum distance) — the EXACT {center,halfX,
+     halfZ} shape interiorCameraFitFor already returns, so every downstream consumer (placeCamera/
      placeCameraTweened, the exact-containment correction loop, S.zoomLevel) is untouched either way.
      FALLBACK EVERYWHERE (byte-identical to pre-unit behavior): `camFit` stays null — falling through
      to the pre-existing `interiorCameraFitFor(data.cameraFit, fit, cx, cz)` call, unchanged — when the
@@ -7900,7 +7938,12 @@ function setInteriorBoard(data){
       const composed = composeShot(shotPlan, candidates, shotProjectTwoArg);
       S.lastComposedShotAttempt = composed;
       if(composed && composed.camera && !(composed.metrics && composed.metrics.allRejected)){
-        const composedFit = fitFromComposedCamera(composed.camera, cx, cz);
+        // production: the action-cluster crop (fitFromComposedShot). Test-only: the superseded wide
+        // full-frustum box, only when a harness flips variant.shotComposeWideBoxForTest for its own
+        // figure-height RED-FIRST baseline (see fitFromComposedCameraWideForTest's header).
+        const composedFit = variant.shotComposeWideBoxForTest
+          ? fitFromComposedCameraWideForTest(composed.camera, cx, cz)
+          : fitFromComposedShot(shotPlan, fit, cx, cz);
         if(composedFit){
           camFit = composedFit;
           S.lastComposedShot = composed;

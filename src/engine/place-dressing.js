@@ -5,7 +5,7 @@
    the data half; src/ui/theater-boot.js's setInteriorBoard mounts a `dressingGroup` off its output
    — see that file's own header comment for the render half).
 
-   dressPlan(plan, opts) → plan.dressing = [{slug, x, y, primary, cardKind, roomSegNum, lightAffine}]:
+   dressPlan(plan, opts) → plan.dressing = [{slug, x, y, primary, cardKind, renderStrategy, roomSegNum, lightAffine}]:
    a seeded per-room prop/foliage placement pass over a spatializePlan()/semanticizePlan() output,
    per the spec's own rules —
      - density by room.role (Wildermyth density rule: entrance sparse, pocket dense, finale staged,
@@ -69,122 +69,122 @@
 // GENERATED:REALM_DRESSING:BEGIN — python3 build/gen-realm-dressing.py --emit
 const REALM_DRESSING = Object.freeze({
   chrome: Object.freeze([
-    Object.freeze({ slug: "chrome-flora-cableplanter", primary: "floor", size: "medium" }),
-    Object.freeze({ slug: "chrome-flora-neonbonsai", primary: "focal", size: "small", lightAffine: true }),
-    Object.freeze({ slug: "chrome-flora-hologram-fern", primary: "wall-hang", size: "small" }),
-    Object.freeze({ slug: "chrome-flora-antennagrass", primary: "floor", size: "small" }),
-    Object.freeze({ slug: "chrome-flora-solarvine", primary: "wall-hang", size: "medium" }),
-    Object.freeze({ slug: "chrome-flora-datamoss", primary: "wall-hang", size: "small", lightAffine: true }),
-    Object.freeze({ slug: "chrome-flora-scraptree", primary: "setPiece", size: "large" }),
-    Object.freeze({ slug: "chrome-flora-neonlily", primary: "focal", size: "small", lightAffine: true }),
-    Object.freeze({ slug: "chrome-flora-wireweed", primary: "floor", size: "small" }),
-    Object.freeze({ slug: "chrome-flora-lightpod", primary: "focal", size: "medium", lightAffine: true }),
-    Object.freeze({ slug: "chrome-flora-fiberreed", primary: "blocker", size: "medium" }),
-    Object.freeze({ slug: "chrome-flora-circuitmoss", primary: "floor", size: "small" }),
-    Object.freeze({ slug: "chrome-flora-vendingivy", primary: "wall-hang", size: "small" }),
-    Object.freeze({ slug: "chrome-flora-hazardfern", primary: "floor", size: "small" }),
-    Object.freeze({ slug: "chrome-flora-drone-hive", primary: "focal", size: "small" }),
-    Object.freeze({ slug: "chrome-flora-billboardvine", primary: "setPiece", size: "large" }),
-    Object.freeze({ slug: "chrome-flora-steamvent-moss", primary: "floor", size: "small" }),
-    Object.freeze({ slug: "chrome-flora-glasscoral", primary: "focal", size: "medium" }),
-    Object.freeze({ slug: "chrome-flora-cableplanter-alt", primary: "floor", size: "medium" }),
-    Object.freeze({ slug: "chrome-flora-neonbonsai-alt", primary: "focal", size: "small", lightAffine: true }),
-    Object.freeze({ slug: "chrome-clutter-brokenscreen", primary: "wall-hang", size: "small" }),
-    Object.freeze({ slug: "chrome-clutter-cablesnarl", primary: "floor", size: "medium" }),
-    Object.freeze({ slug: "chrome-clutter-drone-husk", primary: "floor", size: "small" }),
-    Object.freeze({ slug: "chrome-clutter-neonshard", primary: "floor", size: "small" }),
-    Object.freeze({ slug: "chrome-clutter-vendingwreck", primary: "setPiece", size: "medium" }),
-    Object.freeze({ slug: "chrome-clutter-circuitscrap", primary: "floor", size: "small" }),
-    Object.freeze({ slug: "chrome-clutter-antennastack", primary: "wall-hang", size: "small" }),
-    Object.freeze({ slug: "chrome-clutter-batterypack", primary: "floor", size: "medium" }),
-    Object.freeze({ slug: "chrome-clutter-signfragment", primary: "floor", size: "medium" }),
-    Object.freeze({ slug: "chrome-clutter-cctv-eye", primary: "wall-hang", size: "small" }),
-    Object.freeze({ slug: "chrome-clutter-coolantstain", primary: "floor", size: "small" }),
-    Object.freeze({ slug: "chrome-clutter-crateseal", primary: "floor", size: "small" }),
-    Object.freeze({ slug: "chrome-clutter-turnstile", primary: "blocker", size: "medium" }),
-    Object.freeze({ slug: "chrome-clutter-keyboardpile", primary: "floor", size: "small" }),
-    Object.freeze({ slug: "chrome-clutter-brokenscreen-alt", primary: "wall-hang", size: "small" }),
-    Object.freeze({ slug: "chrome-clutter-cablesnarl-alt", primary: "floor", size: "medium" }),
+    Object.freeze({ slug: "chrome-flora-cableplanter", primary: "floor", size: "medium", renderStrategy: "billboard" }),
+    Object.freeze({ slug: "chrome-flora-neonbonsai", primary: "focal", size: "small", renderStrategy: "billboard", lightAffine: true }),
+    Object.freeze({ slug: "chrome-flora-hologram-fern", primary: "wall-hang", size: "small", renderStrategy: "extruded-card" }),
+    Object.freeze({ slug: "chrome-flora-antennagrass", primary: "floor", size: "small", renderStrategy: "billboard" }),
+    Object.freeze({ slug: "chrome-flora-solarvine", primary: "wall-hang", size: "medium", renderStrategy: "extruded-card" }),
+    Object.freeze({ slug: "chrome-flora-datamoss", primary: "wall-hang", size: "small", renderStrategy: "extruded-card", lightAffine: true }),
+    Object.freeze({ slug: "chrome-flora-scraptree", primary: "setPiece", size: "large", renderStrategy: "billboard" }),
+    Object.freeze({ slug: "chrome-flora-neonlily", primary: "focal", size: "small", renderStrategy: "billboard", lightAffine: true }),
+    Object.freeze({ slug: "chrome-flora-wireweed", primary: "floor", size: "small", renderStrategy: "billboard" }),
+    Object.freeze({ slug: "chrome-flora-lightpod", primary: "focal", size: "medium", renderStrategy: "billboard", lightAffine: true }),
+    Object.freeze({ slug: "chrome-flora-fiberreed", primary: "blocker", size: "medium", renderStrategy: "full-3d-prop" }),
+    Object.freeze({ slug: "chrome-flora-circuitmoss", primary: "floor", size: "small", renderStrategy: "billboard" }),
+    Object.freeze({ slug: "chrome-flora-vendingivy", primary: "wall-hang", size: "small", renderStrategy: "extruded-card" }),
+    Object.freeze({ slug: "chrome-flora-hazardfern", primary: "floor", size: "small", renderStrategy: "billboard" }),
+    Object.freeze({ slug: "chrome-flora-drone-hive", primary: "focal", size: "small", renderStrategy: "billboard" }),
+    Object.freeze({ slug: "chrome-flora-billboardvine", primary: "setPiece", size: "large", renderStrategy: "billboard" }),
+    Object.freeze({ slug: "chrome-flora-steamvent-moss", primary: "floor", size: "small", renderStrategy: "billboard" }),
+    Object.freeze({ slug: "chrome-flora-glasscoral", primary: "focal", size: "medium", renderStrategy: "billboard" }),
+    Object.freeze({ slug: "chrome-flora-cableplanter-alt", primary: "floor", size: "medium", renderStrategy: "billboard" }),
+    Object.freeze({ slug: "chrome-flora-neonbonsai-alt", primary: "focal", size: "small", renderStrategy: "billboard", lightAffine: true }),
+    Object.freeze({ slug: "chrome-clutter-brokenscreen", primary: "wall-hang", size: "small", renderStrategy: "extruded-card" }),
+    Object.freeze({ slug: "chrome-clutter-cablesnarl", primary: "floor", size: "medium", renderStrategy: "billboard" }),
+    Object.freeze({ slug: "chrome-clutter-drone-husk", primary: "floor", size: "small", renderStrategy: "billboard" }),
+    Object.freeze({ slug: "chrome-clutter-neonshard", primary: "floor", size: "small", renderStrategy: "billboard" }),
+    Object.freeze({ slug: "chrome-clutter-vendingwreck", primary: "setPiece", size: "medium", renderStrategy: "billboard" }),
+    Object.freeze({ slug: "chrome-clutter-circuitscrap", primary: "floor", size: "small", renderStrategy: "billboard" }),
+    Object.freeze({ slug: "chrome-clutter-antennastack", primary: "wall-hang", size: "small", renderStrategy: "extruded-card" }),
+    Object.freeze({ slug: "chrome-clutter-batterypack", primary: "floor", size: "medium", renderStrategy: "billboard" }),
+    Object.freeze({ slug: "chrome-clutter-signfragment", primary: "floor", size: "medium", renderStrategy: "billboard" }),
+    Object.freeze({ slug: "chrome-clutter-cctv-eye", primary: "wall-hang", size: "small", renderStrategy: "extruded-card" }),
+    Object.freeze({ slug: "chrome-clutter-coolantstain", primary: "floor", size: "small", renderStrategy: "billboard" }),
+    Object.freeze({ slug: "chrome-clutter-crateseal", primary: "floor", size: "small", renderStrategy: "billboard" }),
+    Object.freeze({ slug: "chrome-clutter-turnstile", primary: "blocker", size: "medium", renderStrategy: "full-3d-prop" }),
+    Object.freeze({ slug: "chrome-clutter-keyboardpile", primary: "floor", size: "small", renderStrategy: "billboard" }),
+    Object.freeze({ slug: "chrome-clutter-brokenscreen-alt", primary: "wall-hang", size: "small", renderStrategy: "extruded-card" }),
+    Object.freeze({ slug: "chrome-clutter-cablesnarl-alt", primary: "floor", size: "medium", renderStrategy: "billboard" }),
   ]),
   gloom: Object.freeze([
-    Object.freeze({ slug: "gloom-flora-deadhedge", primary: "blocker", size: "medium" }),
-    Object.freeze({ slug: "gloom-flora-cattails", primary: "floor", size: "medium" }),
-    Object.freeze({ slug: "gloom-flora-wiltrose", primary: "focal", size: "small" }),
-    Object.freeze({ slug: "gloom-flora-mournvine", primary: "wall-hang", size: "medium" }),
-    Object.freeze({ slug: "gloom-flora-bonelichen", primary: "wall-hang", size: "small" }),
-    Object.freeze({ slug: "gloom-flora-driedwreath", primary: "focal", size: "small" }),
-    Object.freeze({ slug: "gloom-flora-witheredwillow", primary: "setPiece", size: "large" }),
-    Object.freeze({ slug: "gloom-flora-graveturf", primary: "floor", size: "small" }),
-    Object.freeze({ slug: "gloom-flora-mossgrave", primary: "floor", size: "small" }),
-    Object.freeze({ slug: "gloom-flora-thornbriar", primary: "blocker", size: "medium" }),
-    Object.freeze({ slug: "gloom-flora-driedivy", primary: "wall-hang", size: "medium" }),
-    Object.freeze({ slug: "gloom-flora-nightshade", primary: "floor", size: "small" }),
-    Object.freeze({ slug: "gloom-flora-rootcrack", primary: "floor", size: "small" }),
-    Object.freeze({ slug: "gloom-flora-witherstalk", primary: "floor", size: "small" }),
-    Object.freeze({ slug: "gloom-flora-mournbell", primary: "focal", size: "small" }),
-    Object.freeze({ slug: "gloom-flora-fungalcrust", primary: "wall-hang", size: "small" }),
-    Object.freeze({ slug: "gloom-flora-deadorchard", primary: "setPiece", size: "large" }),
-    Object.freeze({ slug: "gloom-flora-mourningfern", primary: "floor", size: "small" }),
-    Object.freeze({ slug: "gloom-flora-deadhedge-alt", primary: "blocker", size: "medium" }),
-    Object.freeze({ slug: "gloom-flora-cattails-alt", primary: "floor", size: "medium" }),
-    Object.freeze({ slug: "gloom-clutter-brokentombstone", primary: "setPiece", size: "medium" }),
-    Object.freeze({ slug: "gloom-clutter-funeralbell", primary: "floor", size: "medium" }),
-    Object.freeze({ slug: "gloom-clutter-bonepile", primary: "floor", size: "small" }),
-    Object.freeze({ slug: "gloom-clutter-coffinlid", primary: "wall-hang", size: "medium" }),
-    Object.freeze({ slug: "gloom-clutter-mourningveil", primary: "wall-hang", size: "small" }),
-    Object.freeze({ slug: "gloom-clutter-candlewax-pool", primary: "floor", size: "small" }),
-    Object.freeze({ slug: "gloom-clutter-shovelstuck", primary: "focal", size: "small" }),
-    Object.freeze({ slug: "gloom-clutter-urnshard", primary: "floor", size: "small" }),
-    Object.freeze({ slug: "gloom-clutter-ironfence-gap", primary: "blocker", size: "medium" }),
-    Object.freeze({ slug: "gloom-clutter-driedwreathpile", primary: "floor", size: "small" }),
-    Object.freeze({ slug: "gloom-clutter-lanternrust", primary: "wall-hang", size: "small", lightAffine: true }),
-    Object.freeze({ slug: "gloom-clutter-coffinnail-scatter", primary: "floor", size: "small" }),
-    Object.freeze({ slug: "gloom-clutter-mausoleumdoor-shard", primary: "setPiece", size: "medium" }),
-    Object.freeze({ slug: "gloom-clutter-shroudrag", primary: "wall-hang", size: "small" }),
-    Object.freeze({ slug: "gloom-clutter-brokentombstone-alt", primary: "setPiece", size: "medium" }),
-    Object.freeze({ slug: "gloom-clutter-funeralbell-alt", primary: "floor", size: "medium" }),
+    Object.freeze({ slug: "gloom-flora-deadhedge", primary: "blocker", size: "medium", renderStrategy: "full-3d-prop" }),
+    Object.freeze({ slug: "gloom-flora-cattails", primary: "floor", size: "medium", renderStrategy: "billboard" }),
+    Object.freeze({ slug: "gloom-flora-wiltrose", primary: "focal", size: "small", renderStrategy: "billboard" }),
+    Object.freeze({ slug: "gloom-flora-mournvine", primary: "wall-hang", size: "medium", renderStrategy: "extruded-card" }),
+    Object.freeze({ slug: "gloom-flora-bonelichen", primary: "wall-hang", size: "small", renderStrategy: "extruded-card" }),
+    Object.freeze({ slug: "gloom-flora-driedwreath", primary: "focal", size: "small", renderStrategy: "billboard" }),
+    Object.freeze({ slug: "gloom-flora-witheredwillow", primary: "setPiece", size: "large", renderStrategy: "billboard" }),
+    Object.freeze({ slug: "gloom-flora-graveturf", primary: "floor", size: "small", renderStrategy: "billboard" }),
+    Object.freeze({ slug: "gloom-flora-mossgrave", primary: "floor", size: "small", renderStrategy: "billboard" }),
+    Object.freeze({ slug: "gloom-flora-thornbriar", primary: "blocker", size: "medium", renderStrategy: "full-3d-prop" }),
+    Object.freeze({ slug: "gloom-flora-driedivy", primary: "wall-hang", size: "medium", renderStrategy: "extruded-card" }),
+    Object.freeze({ slug: "gloom-flora-nightshade", primary: "floor", size: "small", renderStrategy: "billboard" }),
+    Object.freeze({ slug: "gloom-flora-rootcrack", primary: "floor", size: "small", renderStrategy: "billboard" }),
+    Object.freeze({ slug: "gloom-flora-witherstalk", primary: "floor", size: "small", renderStrategy: "billboard" }),
+    Object.freeze({ slug: "gloom-flora-mournbell", primary: "focal", size: "small", renderStrategy: "billboard" }),
+    Object.freeze({ slug: "gloom-flora-fungalcrust", primary: "wall-hang", size: "small", renderStrategy: "extruded-card" }),
+    Object.freeze({ slug: "gloom-flora-deadorchard", primary: "setPiece", size: "large", renderStrategy: "billboard" }),
+    Object.freeze({ slug: "gloom-flora-mourningfern", primary: "floor", size: "small", renderStrategy: "billboard" }),
+    Object.freeze({ slug: "gloom-flora-deadhedge-alt", primary: "blocker", size: "medium", renderStrategy: "full-3d-prop" }),
+    Object.freeze({ slug: "gloom-flora-cattails-alt", primary: "floor", size: "medium", renderStrategy: "billboard" }),
+    Object.freeze({ slug: "gloom-clutter-brokentombstone", primary: "setPiece", size: "medium", renderStrategy: "billboard" }),
+    Object.freeze({ slug: "gloom-clutter-funeralbell", primary: "floor", size: "medium", renderStrategy: "billboard" }),
+    Object.freeze({ slug: "gloom-clutter-bonepile", primary: "floor", size: "small", renderStrategy: "billboard" }),
+    Object.freeze({ slug: "gloom-clutter-coffinlid", primary: "wall-hang", size: "medium", renderStrategy: "extruded-card" }),
+    Object.freeze({ slug: "gloom-clutter-mourningveil", primary: "wall-hang", size: "small", renderStrategy: "extruded-card" }),
+    Object.freeze({ slug: "gloom-clutter-candlewax-pool", primary: "floor", size: "small", renderStrategy: "billboard" }),
+    Object.freeze({ slug: "gloom-clutter-shovelstuck", primary: "focal", size: "small", renderStrategy: "billboard" }),
+    Object.freeze({ slug: "gloom-clutter-urnshard", primary: "floor", size: "small", renderStrategy: "billboard" }),
+    Object.freeze({ slug: "gloom-clutter-ironfence-gap", primary: "blocker", size: "medium", renderStrategy: "full-3d-prop" }),
+    Object.freeze({ slug: "gloom-clutter-driedwreathpile", primary: "floor", size: "small", renderStrategy: "billboard" }),
+    Object.freeze({ slug: "gloom-clutter-lanternrust", primary: "wall-hang", size: "small", renderStrategy: "extruded-card", lightAffine: true }),
+    Object.freeze({ slug: "gloom-clutter-coffinnail-scatter", primary: "floor", size: "small", renderStrategy: "billboard" }),
+    Object.freeze({ slug: "gloom-clutter-mausoleumdoor-shard", primary: "setPiece", size: "medium", renderStrategy: "billboard" }),
+    Object.freeze({ slug: "gloom-clutter-shroudrag", primary: "wall-hang", size: "small", renderStrategy: "extruded-card" }),
+    Object.freeze({ slug: "gloom-clutter-brokentombstone-alt", primary: "setPiece", size: "medium", renderStrategy: "billboard" }),
+    Object.freeze({ slug: "gloom-clutter-funeralbell-alt", primary: "floor", size: "medium", renderStrategy: "billboard" }),
   ]),
   fantasy: Object.freeze([
-    Object.freeze({ slug: "fantasy-flora-oak", primary: "setPiece", size: "large" }),
-    Object.freeze({ slug: "fantasy-flora-fern", primary: "floor", size: "small" }),
-    Object.freeze({ slug: "fantasy-flora-ivywall", primary: "wall-hang", size: "medium" }),
-    Object.freeze({ slug: "fantasy-flora-mushroomring", primary: "focal", size: "small" }),
-    Object.freeze({ slug: "fantasy-flora-brambleblocker", primary: "blocker", size: "medium" }),
-    Object.freeze({ slug: "fantasy-flora-wildflowerpatch", primary: "floor", size: "small" }),
-    Object.freeze({ slug: "fantasy-flora-willowdrape", primary: "setPiece", size: "large" }),
-    Object.freeze({ slug: "fantasy-flora-mossboulder", primary: "floor", size: "medium" }),
-    Object.freeze({ slug: "fantasy-flora-cattailreed", primary: "floor", size: "medium" }),
-    Object.freeze({ slug: "fantasy-flora-vinelattice", primary: "wall-hang", size: "medium" }),
-    Object.freeze({ slug: "fantasy-flora-thistlecluster", primary: "floor", size: "small" }),
-    Object.freeze({ slug: "fantasy-flora-herbbundle", primary: "wall-hang", size: "small" }),
-    Object.freeze({ slug: "fantasy-flora-toadstool", primary: "focal", size: "small" }),
-    Object.freeze({ slug: "fantasy-flora-birchgrove", primary: "floor", size: "medium" }),
-    Object.freeze({ slug: "fantasy-flora-rootarch", primary: "setPiece", size: "large" }),
-    Object.freeze({ slug: "fantasy-flora-lilypad", primary: "floor", size: "small" }),
-    Object.freeze({ slug: "fantasy-flora-honeycomb-nook", primary: "focal", size: "small" }),
-    Object.freeze({ slug: "fantasy-flora-hedgerow", primary: "blocker", size: "medium" }),
-    Object.freeze({ slug: "fantasy-flora-oak-alt", primary: "setPiece", size: "large" }),
-    Object.freeze({ slug: "fantasy-flora-fern-alt", primary: "floor", size: "small" }),
-    Object.freeze({ slug: "fantasy-clutter-woodpile", primary: "floor", size: "medium" }),
-    Object.freeze({ slug: "fantasy-clutter-brokencart-wheel", primary: "wall-hang", size: "small" }),
-    Object.freeze({ slug: "fantasy-clutter-hayloose", primary: "floor", size: "small" }),
-    Object.freeze({ slug: "fantasy-clutter-potteryshard", primary: "floor", size: "small" }),
-    Object.freeze({ slug: "fantasy-clutter-rusted-plow", primary: "setPiece", size: "medium" }),
-    Object.freeze({ slug: "fantasy-clutter-lanternhook", primary: "wall-hang", size: "small", lightAffine: true }),
-    Object.freeze({ slug: "fantasy-clutter-firewoodstack", primary: "floor", size: "small" }),
-    Object.freeze({ slug: "fantasy-clutter-tornbanner", primary: "wall-hang", size: "medium" }),
-    Object.freeze({ slug: "fantasy-clutter-shieldwall-fragment", primary: "floor", size: "small" }),
-    Object.freeze({ slug: "fantasy-clutter-rubblewall", primary: "blocker", size: "medium" }),
-    Object.freeze({ slug: "fantasy-clutter-emptybarrel", primary: "floor", size: "medium" }),
-    Object.freeze({ slug: "fantasy-clutter-tackleheap", primary: "floor", size: "small" }),
-    Object.freeze({ slug: "fantasy-clutter-candlestub", primary: "wall-hang", size: "small", lightAffine: true }),
-    Object.freeze({ slug: "fantasy-clutter-brokenwheelbarrow", primary: "floor", size: "small" }),
-    Object.freeze({ slug: "fantasy-clutter-woodpile-alt", primary: "floor", size: "medium" }),
-    Object.freeze({ slug: "fantasy-clutter-brokencart-wheel-alt", primary: "wall-hang", size: "small" }),
-    Object.freeze({ slug: "fantasy-painting-1", primary: "wall-hang", size: "medium", paintingOf: "spr-fantasy-ancient-red-dragon" }),
-    Object.freeze({ slug: "fantasy-painting-2", primary: "wall-hang", size: "medium", paintingOf: "spr-fantasy-colossus" }),
-    Object.freeze({ slug: "fantasy-painting-3", primary: "wall-hang", size: "medium", paintingOf: "spr-fantasy-kraken" }),
-    Object.freeze({ slug: "fantasy-painting-4", primary: "wall-hang", size: "medium", paintingOf: "spr-fantasy-tarrasque" }),
+    Object.freeze({ slug: "fantasy-flora-oak", primary: "setPiece", size: "large", renderStrategy: "billboard" }),
+    Object.freeze({ slug: "fantasy-flora-fern", primary: "floor", size: "small", renderStrategy: "billboard" }),
+    Object.freeze({ slug: "fantasy-flora-ivywall", primary: "wall-hang", size: "medium", renderStrategy: "extruded-card" }),
+    Object.freeze({ slug: "fantasy-flora-mushroomring", primary: "focal", size: "small", renderStrategy: "billboard" }),
+    Object.freeze({ slug: "fantasy-flora-brambleblocker", primary: "blocker", size: "medium", renderStrategy: "full-3d-prop" }),
+    Object.freeze({ slug: "fantasy-flora-wildflowerpatch", primary: "floor", size: "small", renderStrategy: "billboard" }),
+    Object.freeze({ slug: "fantasy-flora-willowdrape", primary: "setPiece", size: "large", renderStrategy: "billboard" }),
+    Object.freeze({ slug: "fantasy-flora-mossboulder", primary: "floor", size: "medium", renderStrategy: "billboard" }),
+    Object.freeze({ slug: "fantasy-flora-cattailreed", primary: "floor", size: "medium", renderStrategy: "billboard" }),
+    Object.freeze({ slug: "fantasy-flora-vinelattice", primary: "wall-hang", size: "medium", renderStrategy: "extruded-card" }),
+    Object.freeze({ slug: "fantasy-flora-thistlecluster", primary: "floor", size: "small", renderStrategy: "billboard" }),
+    Object.freeze({ slug: "fantasy-flora-herbbundle", primary: "wall-hang", size: "small", renderStrategy: "extruded-card" }),
+    Object.freeze({ slug: "fantasy-flora-toadstool", primary: "focal", size: "small", renderStrategy: "billboard" }),
+    Object.freeze({ slug: "fantasy-flora-birchgrove", primary: "floor", size: "medium", renderStrategy: "billboard" }),
+    Object.freeze({ slug: "fantasy-flora-rootarch", primary: "setPiece", size: "large", renderStrategy: "billboard" }),
+    Object.freeze({ slug: "fantasy-flora-lilypad", primary: "floor", size: "small", renderStrategy: "billboard" }),
+    Object.freeze({ slug: "fantasy-flora-honeycomb-nook", primary: "focal", size: "small", renderStrategy: "billboard" }),
+    Object.freeze({ slug: "fantasy-flora-hedgerow", primary: "blocker", size: "medium", renderStrategy: "full-3d-prop" }),
+    Object.freeze({ slug: "fantasy-flora-oak-alt", primary: "setPiece", size: "large", renderStrategy: "billboard" }),
+    Object.freeze({ slug: "fantasy-flora-fern-alt", primary: "floor", size: "small", renderStrategy: "billboard" }),
+    Object.freeze({ slug: "fantasy-clutter-woodpile", primary: "floor", size: "medium", renderStrategy: "billboard" }),
+    Object.freeze({ slug: "fantasy-clutter-brokencart-wheel", primary: "wall-hang", size: "small", renderStrategy: "extruded-card" }),
+    Object.freeze({ slug: "fantasy-clutter-hayloose", primary: "floor", size: "small", renderStrategy: "billboard" }),
+    Object.freeze({ slug: "fantasy-clutter-potteryshard", primary: "floor", size: "small", renderStrategy: "billboard" }),
+    Object.freeze({ slug: "fantasy-clutter-rusted-plow", primary: "setPiece", size: "medium", renderStrategy: "billboard" }),
+    Object.freeze({ slug: "fantasy-clutter-lanternhook", primary: "wall-hang", size: "small", renderStrategy: "extruded-card", lightAffine: true }),
+    Object.freeze({ slug: "fantasy-clutter-firewoodstack", primary: "floor", size: "small", renderStrategy: "billboard" }),
+    Object.freeze({ slug: "fantasy-clutter-tornbanner", primary: "wall-hang", size: "medium", renderStrategy: "extruded-card" }),
+    Object.freeze({ slug: "fantasy-clutter-shieldwall-fragment", primary: "floor", size: "small", renderStrategy: "billboard" }),
+    Object.freeze({ slug: "fantasy-clutter-rubblewall", primary: "blocker", size: "medium", renderStrategy: "full-3d-prop" }),
+    Object.freeze({ slug: "fantasy-clutter-emptybarrel", primary: "floor", size: "medium", renderStrategy: "billboard" }),
+    Object.freeze({ slug: "fantasy-clutter-tackleheap", primary: "floor", size: "small", renderStrategy: "billboard" }),
+    Object.freeze({ slug: "fantasy-clutter-candlestub", primary: "wall-hang", size: "small", renderStrategy: "extruded-card", lightAffine: true }),
+    Object.freeze({ slug: "fantasy-clutter-brokenwheelbarrow", primary: "floor", size: "small", renderStrategy: "billboard" }),
+    Object.freeze({ slug: "fantasy-clutter-woodpile-alt", primary: "floor", size: "medium", renderStrategy: "billboard" }),
+    Object.freeze({ slug: "fantasy-clutter-brokencart-wheel-alt", primary: "wall-hang", size: "small", renderStrategy: "extruded-card" }),
+    Object.freeze({ slug: "fantasy-painting-1", primary: "wall-hang", size: "medium", renderStrategy: "extruded-card", paintingOf: "spr-fantasy-ancient-red-dragon" }),
+    Object.freeze({ slug: "fantasy-painting-2", primary: "wall-hang", size: "medium", renderStrategy: "extruded-card", paintingOf: "spr-fantasy-colossus" }),
+    Object.freeze({ slug: "fantasy-painting-3", primary: "wall-hang", size: "medium", renderStrategy: "extruded-card", paintingOf: "spr-fantasy-kraken" }),
+    Object.freeze({ slug: "fantasy-painting-4", primary: "wall-hang", size: "medium", renderStrategy: "extruded-card", paintingOf: "spr-fantasy-tarrasque" }),
   ]),
 });
 // GENERATED:REALM_DRESSING:END
@@ -192,6 +192,15 @@ const DRESSING_DEFAULT_REALM = "chrome"; // matches theater-interior.js's INTERI
 
 function dressingRosterFor(realmId) {
   return REALM_DRESSING[realmId] || REALM_DRESSING[DRESSING_DEFAULT_REALM];
+}
+
+// Explicit geometry seam: the render layer consumes this field and never infers geometry from a
+// filename. Legacy/projected entries degrade to the strategy implied by the existing primary tag.
+function dressingRenderStrategyFor(entry) {
+  if (entry && entry.renderStrategy) return entry.renderStrategy;
+  if (entry && entry.primary === "wall-hang") return "extruded-card";
+  if (entry && entry.primary === "blocker") return "full-3d-prop";
+  return "billboard";
 }
 
 // ─── density by room role (Wildermyth density rule: entrance sparse / pocket dense / finale staged,
@@ -441,7 +450,7 @@ function dpPlaceRoom(room, plan, roster, rng, seamRoster) {
       if (plan.cells[cell.y * plan.cellW + cell.x] !== SPATIAL_CELL.FLOOR) return;
       occupied.add(key);
       const entry = dpPickRoster(lightRoster, rng);
-      out.push({ slug: entry.slug, x: cell.x, y: cell.y, primary: "light", cardKind: entry.size, roomSegNum: room.segNum, lightAffine: true });
+      out.push({ slug: entry.slug, x: cell.x, y: cell.y, primary: "light", cardKind: entry.size, renderStrategy: dressingRenderStrategyFor(entry), roomSegNum: room.segNum, lightAffine: true });
     });
   }
 
@@ -457,7 +466,7 @@ function dpPlaceRoom(room, plan, roster, rng, seamRoster) {
     if (!cell) break;
     const entry = dpPickRoster(focalRoster.length ? focalRoster : fillerRoster, rng);
     if (!entry) break;
-    const placed = { slug: entry.slug, x: cell.x, y: cell.y, primary: entry.primary, cardKind: entry.size, roomSegNum: room.segNum };
+    const placed = { slug: entry.slug, x: cell.x, y: cell.y, primary: entry.primary, cardKind: entry.size, renderStrategy: dressingRenderStrategyFor(entry), roomSegNum: room.segNum };
     out.push(placed);
     if (!chosenFocal || (placed.primary === "setPiece" && chosenFocal.primary !== "setPiece")) chosenFocal = placed;
   }
@@ -471,7 +480,7 @@ function dpPlaceRoom(room, plan, roster, rng, seamRoster) {
     const cell = takeCell(wallAdjacentFarSide) || takeCell(wallAdjacent);
     if (cell) {
       const entry = dpPickRoster(blockerRoster, rng);
-      out.push({ slug: entry.slug, x: cell.x, y: cell.y, primary: entry.primary, cardKind: entry.size, roomSegNum: room.segNum });
+      out.push({ slug: entry.slug, x: cell.x, y: cell.y, primary: entry.primary, cardKind: entry.size, renderStrategy: dressingRenderStrategyFor(entry), roomSegNum: room.segNum });
     }
   }
 
@@ -482,7 +491,7 @@ function dpPlaceRoom(room, plan, roster, rng, seamRoster) {
       const cell = takeCell(wallAdjacent);
       if (!cell) break;
       const entry = dpPickRoster(wallHangRoster, rng);
-      out.push({ slug: entry.slug, x: cell.x, y: cell.y, primary: entry.primary, cardKind: entry.size, roomSegNum: room.segNum });
+      out.push({ slug: entry.slug, x: cell.x, y: cell.y, primary: entry.primary, cardKind: entry.size, renderStrategy: dressingRenderStrategyFor(entry), roomSegNum: room.segNum });
     }
   }
 
@@ -492,7 +501,7 @@ function dpPlaceRoom(room, plan, roster, rng, seamRoster) {
       const cell = takeCell(shuffledPlaceable);
       if (!cell) break;
       const entry = dpPickRoster(fillerRoster, rng);
-      out.push({ slug: entry.slug, x: cell.x, y: cell.y, primary: entry.primary, cardKind: entry.size, roomSegNum: room.segNum });
+      out.push({ slug: entry.slug, x: cell.x, y: cell.y, primary: entry.primary, cardKind: entry.size, renderStrategy: dressingRenderStrategyFor(entry), roomSegNum: room.segNum });
     }
   }
 
@@ -554,6 +563,7 @@ function dpPlaceRoom(room, plan, roster, rng, seamRoster) {
       const entry = dpPickRoster(seamRoster, rng);
       out.push({
         slug: entry.slug, x: t.cell.x, y: t.cell.y, primary: entry.primary, cardKind: entry.size,
+        renderStrategy: dressingRenderStrategyFor(entry),
         roomSegNum: room.segNum, seam: true, seamKind: t.kind,
       });
       placedSeam++;
@@ -563,7 +573,7 @@ function dpPlaceRoom(room, plan, roster, rng, seamRoster) {
   return out;
 }
 
-/** dressPlan(plan, opts) → plan.dressing = [{slug, x, y, primary, cardKind, roomSegNum, lightAffine?}]
+/** dressPlan(plan, opts) → plan.dressing = [{slug, x, y, primary, cardKind, renderStrategy, roomSegNum, lightAffine?}]
  * `plan` is a spatializePlan()/semanticizePlan() output (a bare U1 plan degrades cleanly — every
  * room.role defaults to null, which falls through dressingDensityFor's own `|| DENSITY.side`
  * fallback, same total-function/never-throw discipline theater-interior.js keeps).

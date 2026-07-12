@@ -1418,10 +1418,36 @@ const ITR_LIGHT_DISTANCE_CAP = 7;
 // gives every standee a real cast shadow on the floor. Intensity a whisper so it doesn't re-flatten
 // the plunge (it lights vertical billboard normals at N·L~0.6, so even 0.14 adds ~0.08 — kept low).
 const ITR_CAMERA_KEY_INTENSITY = 0.10;
+// docs/DIEGETIC-LIGHT.md L-2 — DIEGETIC SHADOWS (Adam's ruling 2026-07-11: "shadows react to the
+// diegetic sources, not the ambient/fill"). The camera-key light above was built as a workaround for
+// point-light shadows reading as an edge-on sliver off a flat billboard (BW2-4b item 2's own diagnosis,
+// comment above) — but a camera-aimed shadow is precisely the non-diegetic model the doctrine retires.
+// interiorBuildLights (below) already casts real shadows FROM the room's own diegetic point lights
+// (interiorAssignShadowCasters caps the nearest few); this flag just stops the camera-key from ALSO
+// contributing a shadow, so the diegetic torch/lamp is the only shadow source. Default false = retired.
+// Reversible in one line for the re-shoot: flip this literal, or call
+// window.Theater.setCameraKeyCastsShadow(true) at runtime (mirrors the L-1 cone gate's own convention).
+// The camera-key LIGHT itself (a whisper fill, ITR_CAMERA_KEY_INTENSITY) stays mounted either way — only
+// its shadow-casting is gated.
+let ITR_CAMERA_KEY_CASTS_SHADOW = false;
 // BW2-4b item 6 — THE GLOOM LIFT: gloom's production frames (loop-02) drown vs fantasy's dark-but-
 // legible reference register. A realm-scoped ambient bump for gloom ONLY (fantasy is the reference —
 // never brightened). Additive to ITR_SCENE_AMBIENT for the gloom realm's interior scene ambient.
 const ITR_GLOOM_AMBIENT_LIFT = 0.05;
+// docs/DIEGETIC-LIGHT.md L-4 — BRIGHT-REALM HEMISPHERE (fixes the daylit-lost-world-darker-than-a-
+// torchlit-crypt inversion Adam caught). daylit/overcast/moonlit are realms whose diegetic source IS
+// the sun/moon/overcast sky itself — they should NOT ride the dim single-torch dungeon numbers above
+// (ITR_SCENE_AMBIENT/HEMI/KEY/FILL, tuned for a crypt with a torch as its only light). This is the
+// SAME rigOn override seam (setInteriorBoard, below) branching on S.lightProfileKey, just with its own
+// brighter named constants — never a new HemisphereLight construction (verify-dungeon-interior.mjs
+// group 16 pins exactly one HemisphereLight built in mount(); this only re-drives that SAME shared
+// S.hemiLight's intensity higher for these three profiles, same mechanism ITR_SCENE_HEMI already uses).
+const ITR_BRIGHT_PROFILES = new Set(["daylit", "overcast", "moonlit"]);
+const ITR_BRIGHT_SCENE_AMBIENT = 1.1;     // vs ITR_SCENE_AMBIENT 0.13 — a sunlit room reads lit throughout, not pooled
+const ITR_BRIGHT_SCENE_HEMI = 0.9;        // vs ITR_SCENE_HEMI 0.08 — the sky IS the fill for these realms
+const ITR_BRIGHT_SCENE_FILL_SCALE = 1.0;  // vs ITR_SCENE_FILL_SCALE 0.04 — sun/moon overhead fill stays FULL, never dimmed to a torch-era whisper
+const ITR_BRIGHT_SCENE_KEY = 0.9;         // vs ITR_SCENE_KEY 0.05 — tabletop key DirectionalLight, restored toward daylight (above mount's own 0.72 tabletop default — some realms' dark-albedo materials, e.g. lost-world's jungle-shadow palette, need real headroom to actually read bright)
+const ITR_BRIGHT_SCENE_FILL = 0.55;       // vs ITR_SCENE_FILL 0.02
 // BW2-4 item 2 (value plunge) — DOORFRAME value darken, GL-side. Doorframes ship with kit.trimColor
 // (the bright accent hue — gloom #6b5878 lum 0.37, gold on others), so a doorway prism renders as a
 // BRIGHT vertical (round-3 READ: a lavender block fighting the standees) where the mocks keep doorways
@@ -4652,9 +4678,14 @@ function gradeColorLocal(hex, profile){
    (applyLightProfile) — a flat, non-attenuating light rather than physically-correct falloff, since
    the board is small/fixed-size and a decaying point light would need per-profile distance tuning to
    read consistently; decay:0 makes the intensity number alone predictable board-to-board. */
+// docs/DIEGETIC-LIGHT.md L-3 / FORK F2 (Adam's ruling 2026-07-11): every profile's authored ambient
+// dropped ~35% (the F2 band's midpoint) — "ambient is only enough to make out figures; beyond a
+// source's reach it's dark, and darkness is a gameplay element." The diegetic point(s) below are now
+// the read, not the ambient wash. Values are reversible for the re-shoot: each intensity is commented
+// with its pre-DIEGETIC-LIGHT number so Adam can dial any one back individually.
 const LIGHT_PROFILES = {
   dark: {
-    ambient: { color: 0x8fa8c8, intensity: 0.38 },
+    ambient: { color: 0x8fa8c8, intensity: 0.25 }, // was 0.38
     // ARENA round 3 (2026-07-04): dark was the only ambient-only profile left after the readability
     // floor landed, and it still read as a flat near-black sheet — ambient alone gives Lambert
     // materials zero directionality, so tile/figure facets all shade identically. ONE dim point
@@ -4666,7 +4697,7 @@ const LIGHT_PROFILES = {
     flicker: 0
   },
   torchlit: {
-    ambient: { color: 0x4a3826, intensity: 0.32 },
+    ambient: { color: 0x4a3826, intensity: 0.21 }, // was 0.32
     points: [ { color: 0xffa04a, intensity: 18, pos: { x: 0, y: 2.2, z: 0.6 } } ],
     flicker: 0.14
   },
@@ -4675,42 +4706,44 @@ const LIGHT_PROFILES = {
     // column geometry from the fixed top-down-ish camera (tiles sit roughly y:[-0.5, +0.5+height]), so
     // this reads as a low glow seeping up AT floor level rather than truly under it: still visibly the
     // lowest/reddest point of any profile, but actually contributes light to the scene.
-    ambient: { color: 0x3a1c14, intensity: 0.3 },
+    ambient: { color: 0x3a1c14, intensity: 0.2 }, // was 0.3
     points: [ { color: 0xff5522, intensity: 22, pos: { x: 0, y: 0.15, z: 0 } } ],
     flicker: 0.18
   },
   "fungal-glow": {
-    ambient: { color: 0x3a5a3a, intensity: 0.42 },
+    ambient: { color: 0x3a5a3a, intensity: 0.27 }, // was 0.42
     points: [ { color: 0x7fdc6a, intensity: 9, pos: { x: 0.4, y: 1.0, z: 0.4 } } ],
     flicker: 0.05
   },
   "magic-glow": {
-    ambient: { color: 0x4048a0, intensity: 0.4 },
+    ambient: { color: 0x4048a0, intensity: 0.26 }, // was 0.4
     points: [ { color: 0x8a6bff, intensity: 14, pos: { x: -0.3, y: 1.6, z: 0.2 } } ],
     flicker: 0.06
   },
   lamplit: {
-    ambient: { color: 0x40382a, intensity: 0.34 },
+    ambient: { color: 0x40382a, intensity: 0.22 }, // was 0.34
     points: [ { color: 0xffcf8a, intensity: 16, pos: { x: 0, y: 2.4, z: -0.5 } } ],
     flicker: 0.1
   },
   moonlit: {
-    ambient: { color: 0x8fa0c8, intensity: 0.55 },
+    ambient: { color: 0x8fa0c8, intensity: 0.36 }, // was 0.55
     points: [ { color: 0xaebfe8, intensity: 8, pos: { x: 0.5, y: 3, z: -0.5 } } ],
     flicker: 0
   },
   daylit: {
-    ambient: { color: 0xd8dce0, intensity: 0.85 },
+    // L-4: daylit/overcast/moonlit additionally get a brighter hemisphere override on interior boards
+    // (ITR_BRIGHT_PROFILES, applied in setInteriorBoard) — the sun/moon/sky IS their diegetic source.
+    ambient: { color: 0xd8dce0, intensity: 0.55 }, // was 0.85
     points: [ { color: 0xfff2d8, intensity: 9, pos: { x: 0.4, y: 3, z: -0.4 } } ],
     flicker: 0
   },
   overcast: {
-    ambient: { color: 0xa8adb5, intensity: 0.6 },
+    ambient: { color: 0xa8adb5, intensity: 0.39 }, // was 0.6
     points: [],
     flicker: 0
   },
   voidlit: {
-    ambient: { color: 0x5a3a6e, intensity: 0.3 },
+    ambient: { color: 0x5a3a6e, intensity: 0.2 }, // was 0.3
     points: [ { color: 0x9a5ad0, intensity: 11, pos: { x: 0, y: 1.2, z: 0 } } ],
     flicker: 0.08
   }
@@ -4724,7 +4757,9 @@ const LIGHT_DEFAULT_PROFILE = "dark";
 // LIGHT_PROFILES' authored mood values themselves. Round 3: 0.55 → 0.65 — the round-2 gate judged
 // the arena still too dim at 0.55 (the near-black void background is unlit BY DESIGN and dilutes the
 // canvas mean, so the lit-surface floor carries the whole readability load).
-const STAGE_AMBIENT_FLOOR = 0.65;
+// docs/DIEGETIC-LIGHT.md L-3 (2026-07-11): dropped ~35% alongside the profile values above, same F2
+// ruling — "ambient is only enough to make out figures", not a guaranteed-bright floor. 0.65 -> 0.42.
+const STAGE_AMBIENT_FLOOR = 0.42; // was 0.65
 function lightProfileFor(key){
   return LIGHT_PROFILES[key] || LIGHT_PROFILES[LIGHT_DEFAULT_PROFILE];
 }
@@ -4818,7 +4853,10 @@ function mountInteriorCameraKey(cx, cz){
   dl.position.set(ux * reach * 0.55, reach, uz * reach * 0.55);
   dl.target.position.set(0, 0, 0);
   dl.target.updateMatrixWorld();
-  dl.castShadow = true;
+  // L-2 (DIEGETIC-LIGHT.md): the camera-key no longer contributes a shadow by default — the room's own
+  // diegetic point light(s) are the shadow source (interiorBuildLights' castShadow assignment, below).
+  // See ITR_CAMERA_KEY_CASTS_SHADOW's own header comment for the reversible toggle.
+  dl.castShadow = ITR_CAMERA_KEY_CASTS_SHADOW;
   const half = Math.max(2, (S.boardHalfExtent || 4) + 1.5);
   const cam = dl.shadow.camera;
   cam.left = -half; cam.right = half; cam.top = half; cam.bottom = -half;
@@ -6162,6 +6200,14 @@ function interiorBuildLightCard(slug){
 const ITR_LIGHT_CONE_WIDTH_RATIO = 0.55; // base (floor) width as a fraction of the apex->floor height
 const ITR_LIGHT_CONE_MIN_HEIGHT = 0.6;   // guards a degenerate sliver when a light sits almost on the floor
 const ITR_LIGHT_CONE_OPACITY = { lamp: 0.22, torch: 0.3 }; // a whisper — this is atmosphere, not a second light source
+// docs/DIEGETIC-LIGHT.md L-1 — CONE GATE (Adam's ruling 2026-07-11, fork F1): the volumetric god-ray
+// cone reads as a magic beam, not a diegetic point light's real falloff — "remove the cone behind a
+// reversible flag... keep only the emissive flame/glow marker + the point light's real falloff."
+// Defaults OFF. interiorBuildLightCone itself is UNTOUCHED (still callable, still under test via
+// window.Theater._interiorBuildLightConeForTest) — only its MOUNT call site in interiorBuildLights
+// (below) is gated. Reversible in one line for the re-shoot: flip this literal, or call
+// window.Theater.setLightConeEnabled(true) at runtime.
+let ITR_LIGHT_CONE_ENABLED = false;
 let INTERIOR_CONE_TEXTURE = null;
 // a triangular alpha gradient painted onto a plain rectangle (the fake-cone trick: the QUAD stays a
 // simple billboard, the CONE SHAPE lives entirely in the texture's alpha) — apex at canvas top (y=0,
@@ -6273,22 +6319,28 @@ function interiorBuildLights(lights, cx, cz, realmId, floorTopMap, pieces){
     // this unit reads is the SAME derived floor law the light-card branch below already uses, never a
     // second/parallel floor formula. Its base reaches THIS light's own floor top exactly (the mock's
     // shaft bridges flame->floor, not flame->some fixed generic drop).
+    // L-1 (DIEGETIC-LIGHT.md): gated — the cone only mounts (and only joins the flicker channel) when
+    // ITR_LIGHT_CONE_ENABLED is true. Off by default: the glow disc + light-card + the point light's
+    // own falloff carry the "where light comes from" read on their own.
     const floorTopAtLight = interiorFloorTopAt(floorTopMap, light.x || 0, light.z || 0);
     const coneHeight = glow.group.position.y - floorTopAtLight;
-    const cone = interiorBuildLightCone(light, coneHeight);
-    cone.group.position.copy(glow.group.position);
-    group.add(cone.group);
+    const cone = ITR_LIGHT_CONE_ENABLED ? interiorBuildLightCone(light, coneHeight) : null;
+    if(cone){
+      cone.group.position.copy(glow.group.position);
+      group.add(cone.group);
+    }
     if(cardSlug && !pieceCells.has(Math.round(light.x || 0) + "," + Math.round(light.z || 0))){
       const card = interiorBuildLightCard(cardSlug);
       const floorTop = interiorFloorTopAt(floorTopMap, light.x || 0, light.z || 0);
       card.position.set((light.x || 0) - cx, floorTop, (light.z || 0) - cz);
       group.add(card);
     }
+    const fallbackConeOpacity = ITR_LIGHT_CONE_OPACITY[light.kind] != null ? ITR_LIGHT_CONE_OPACITY[light.kind] : ITR_LIGHT_CONE_OPACITY.torch;
     flickerTargets.push({
-      pl, marker: glow.mesh, cone: cone.mesh,
+      pl, marker: glow.mesh, cone: cone ? cone.mesh : null,
       baseIntensity: pl.intensity,
       baseOpacity: glow.mesh.material ? glow.mesh.material.opacity : 0.85,
-      baseConeOpacity: cone.mesh.material ? cone.mesh.material.opacity : ITR_LIGHT_CONE_OPACITY.torch,
+      baseConeOpacity: (cone && cone.mesh.material) ? cone.mesh.material.opacity : fallbackConeOpacity,
       amplitude: INTERIOR_LIGHT_FLICKER_AMPLITUDE
     });
   });
@@ -7468,22 +7520,27 @@ function setInteriorBoard(data){
   // so the flicker bases (startLightFlicker snapshots S.pointLights[i].intensity) capture the plunged
   // fill, not the pre-plunge value. See ITR_SCENE_* constants (near HEMI_*) for the tuned numbers.
   if(rigOn){
+    // docs/DIEGETIC-LIGHT.md L-4 — BRIGHT-REALM HEMISPHERE: daylit/overcast/moonlit are the sun/moon/
+    // sky's OWN diegetic reach — they get the brighter ITR_BRIGHT_SCENE_* numbers instead of the dim
+    // single-torch dungeon model below (this is the "daylit lost-world reads darker than a torchlit
+    // crypt" inversion Adam caught; S.lightProfileKey is set a moment ago by applyLightProfile above).
+    const isBrightRealm = ITR_BRIGHT_PROFILES.has(S.lightProfileKey);
     // BW2-4b item 6 — THE GLOOM LIFT: gloom ONLY gets a small ambient bump (fantasy is the reference
     // register — never brightened). Every other realm keeps ITR_SCENE_AMBIENT exactly.
     const gloomLift = (data.realmId === "gloom") ? ITR_GLOOM_AMBIENT_LIFT : 0;
-    if(S.ambientLight) S.ambientLight.intensity = ITR_SCENE_AMBIENT + gloomLift;
-    if(S.hemiLight) S.hemiLight.intensity = ITR_SCENE_HEMI;
-    (S.pointLights || []).forEach((l) => { l.intensity *= ITR_SCENE_FILL_SCALE; });
+    if(S.ambientLight) S.ambientLight.intensity = isBrightRealm ? ITR_BRIGHT_SCENE_AMBIENT : (ITR_SCENE_AMBIENT + gloomLift);
+    if(S.hemiLight) S.hemiLight.intensity = isBrightRealm ? ITR_BRIGHT_SCENE_HEMI : ITR_SCENE_HEMI;
+    (S.pointLights || []).forEach((l) => { l.intensity *= isBrightRealm ? ITR_BRIGHT_SCENE_FILL_SCALE : ITR_SCENE_FILL_SCALE; });
     // BW2-4b item 1 — THE BRIGHTNESS LAW: dim the tabletop key/fill DirectionalLights to a whisper for
     // the interior channel. They light a camera-facing billboard's normal at N·L~0.6, so at the mount
     // default (0.72/0.22) a sprite reads ~0.5 of full-bright everywhere BEFORE any torch — "full
     // brightness even in the dark", the exact thing the law forbids. setBoard restores the tabletop
     // values on its own path (mirroring the hemi restore just above the shadowMap toggle there).
-    if(S.keyLight) S.keyLight.intensity = ITR_SCENE_KEY;
-    if(S.fillLight) S.fillLight.intensity = ITR_SCENE_FILL;
-    // BW2-4b item 2 — THE CAMERA-KEY SHADOW: mount/refresh one soft shadow-casting DirectionalLight
-    // from the camera's general direction so billboards finally cast a readable shadow on the floor
-    // (the point-light shadow was an edge-on sliver — the value-plunge diagnosis's named fix).
+    // L-4: bright realms restore these MOST of the way toward that tabletop default (sunlit, not dim).
+    if(S.keyLight) S.keyLight.intensity = isBrightRealm ? ITR_BRIGHT_SCENE_KEY : ITR_SCENE_KEY;
+    if(S.fillLight) S.fillLight.intensity = isBrightRealm ? ITR_BRIGHT_SCENE_FILL : ITR_SCENE_FILL;
+    // BW2-4b item 2 — camera-key: mount/refresh the soft fill DirectionalLight from the camera's general
+    // direction (L-2: no longer a shadow source by default — see ITR_CAMERA_KEY_CASTS_SHADOW).
     mountInteriorCameraKey(cx, cz);
   }
   // BW2-4b item 1 — REALM GRADE on the sprite floor: tint the emissive readability floor toward this
@@ -7662,6 +7719,10 @@ function setInteriorBoard(data){
   S.interiorGroup.add(lightsBuilt.group);
   S.interiorShadowCasterCount = lightsBuilt.casters;
   S.interiorLightCount = (data.lights || []).length;
+  // L-1 (DIEGETIC-LIGHT.md) harness diagnostic, same read-only convention as interiorShadowCasterCount
+  // above: how many light-shaft cones actually mounted this call (0 whenever ITR_LIGHT_CONE_ENABLED is
+  // false, since interiorBuildLights skips both the mount AND the flickerTargets.cone assignment then).
+  S.interiorLightConeCount = lightsBuilt.flickerTargets.filter((t) => t.cone).length;
   // VP6 item 2: join the interior lights (+ their emissive markers) onto the shared flicker channel —
   // startLightFlicker tore down any board-level flicker a moment ago (applyLightProfile above always
   // calls stopLightFlicker first), so this call is the one that actually starts ticking for an interior
@@ -8534,6 +8595,36 @@ window.Theater.interiorShadowCasterCount = function(){ return S.interiorShadowCa
 // on the last setInteriorBoard call. 0 before any interior board / on a board with no data.dressing.
 window.Theater.interiorDressingCount = function(){ return S.interiorDressingCount || 0; };
 window.Theater.interiorDecalCount = function(){ return S.interiorDecalCount || 0; }; // VP6 item 4
+// docs/DIEGETIC-LIGHT.md L-1 — harness-facing diagnostic + runtime toggle, same read-only/reversible
+// convention as the study-rig's materials-on/off flag: how many light-shaft cones mounted on the last
+// setInteriorBoard call (0 with the gate at its default-off), plus a runtime setter so a harness (or
+// Adam, from the console) can flip ITR_LIGHT_CONE_ENABLED without editing source and remount to prove
+// the flag is reversible.
+window.Theater.interiorLightConeCount = function(){ return S.interiorLightConeCount || 0; };
+window.Theater.setLightConeEnabled = function(v){ ITR_LIGHT_CONE_ENABLED = !!v; };
+window.Theater.lightConeEnabled = function(){ return !!ITR_LIGHT_CONE_ENABLED; };
+// docs/DIEGETIC-LIGHT.md L-2 — harness-facing diagnostics + runtime toggle for the camera-key shadow
+// retirement: the camera-key light's own current {position,castShadow,intensity} (null pre-mount), a
+// setter mirroring setLightConeEnabled's convention above, and the LIVE shadow-casting point light(s)
+// actually mounted in the current interior scene graph (isPointLight is the real THREE.PointLight
+// marker — no separate userData tagging needed) so a harness can assert the shadow source sits at a
+// KNOWN diegetic light's own position, not the camera's.
+window.Theater._interiorCameraKeyForTest = function(){
+  const dl = S.interiorCameraKey;
+  if(!dl) return null;
+  return { x: dl.position.x, y: dl.position.y, z: dl.position.z, castShadow: !!dl.castShadow, intensity: dl.intensity };
+};
+window.Theater.setCameraKeyCastsShadow = function(v){ ITR_CAMERA_KEY_CASTS_SHADOW = !!v; };
+window.Theater.cameraKeyCastsShadow = function(){ return !!ITR_CAMERA_KEY_CASTS_SHADOW; };
+window.Theater._interiorShadowCastersForTest = function(){
+  const out = [];
+  if(S.interiorGroup){
+    S.interiorGroup.traverse((obj) => {
+      if(obj.isPointLight) out.push({ x: obj.position.x, y: obj.position.y, z: obj.position.z, castShadow: !!obj.castShadow, intensity: obj.intensity });
+    });
+  }
+  return out;
+};
 window.Theater.interiorMoteCount = function(){ return (S.moteGroup && S.moteGroup.children.length) || 0; }; // VP6 item 3
 window.Theater.interiorDressingWorldPositions = function(){ return S.interiorDressingWorldPositions || []; };
 // BW2-1b — harness-facing diagnostic, same read-only convention as interiorDressingWorldPositions
@@ -8565,6 +8656,19 @@ window.Theater._interiorRaycastClearForTest = function(targetWorldPos){
   return { clear: hits.length === 0, dist, hits: hits.map((h) => ({ kind: h.object.userData.interiorKind, distance: h.distance, instanceId: h.instanceId })) };
 };
 window.Theater.interiorBoardOrigin = function(){ return S.boardOrigin ? { cx: S.boardOrigin.cx, cz: S.boardOrigin.cz } : null; };
+// docs/DIEGETIC-LIGHT.md L-3/L-4 — harness-facing diagnostic: the CURRENT scene-wide light values the
+// rigOn override block (setInteriorBoard) actually landed on, plus the resolved profile key, so a
+// harness (or Adam, dialing from the console) can read the live numbers directly instead of trusting a
+// pixel measurement alone to prove which branch (dim dungeon vs ITR_BRIGHT_SCENE_*) fired.
+window.Theater._interiorSceneLightsForTest = function(){
+  return {
+    profileKey: S.lightProfileKey || null,
+    ambient: S.ambientLight ? S.ambientLight.intensity : null,
+    hemi: S.hemiLight ? S.hemiLight.intensity : null,
+    key: S.keyLight ? S.keyLight.intensity : null,
+    fill: S.fillLight ? S.fillLight.intensity : null,
+  };
+};
 window.Theater.shadowMapEnabled = function(){ return !!(S.renderer && S.renderer.shadowMap.enabled); };
 // dungeon-loop-gate (dev/battle-gate/capture-dungeon-loop.mjs) — a harness-facing read-only accessor,
 // same family as the interior* diagnostics above: how many verb tweens (play()'s own S.tweens, the

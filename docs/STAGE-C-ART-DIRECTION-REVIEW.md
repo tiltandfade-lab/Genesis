@@ -137,6 +137,74 @@ new outline but still reads as one repeated floor field. Stage E must derive mat
 space, not one texture per cell. The room-shell compiler should provide world position, tier, boundary
 distance, curvature/edge class, and semantic surface id to the material layer.
 
+### P1: compiled walls are surfaces, not architectural volumes
+
+The room-shell compiler currently emits one vertical quad per wall segment. Even at full height, this
+reads as a paper face: there is no outer face, top cap, end cap, footing, or visible thickness. When
+occlusion shortens that quad to an ankle stem, the tray loses the substantial capped parapet silhouette
+visible in the mock frames.
+
+Build **C4.1 wall volumes** before final material work:
+
+```js
+wallSegment = {
+  a, b,
+  inwardNormal,
+  thickness: 0.22,       // realm/material profile, normally 0.15-0.32u
+  fullHeight: 2.4,
+  stemHeight: 0.28,      // persistent cutaway/parapet body, normally 0.22-0.40u
+  capHeight: 0.06,
+  mountSlots: [],
+  sourceRef
+}
+```
+
+Compile separate but perfectly aligned geometry groups:
+
+1. `wall-stem`: inner/outer faces, top cap, end caps, footing; always opaque and collision-valid.
+2. `wall-upper`: inner/outer faces and caps from stem to full height; independently fadeable per segment.
+3. `wall-trim`: optional generated base/cornice/profile sweep; same occlusion group as its owner.
+4. `wall-mounts`: doors, switches, sconces, shelves, signs, traps; parented to the segment and its
+   inward-facing mount plane, never positioned as free-floating world objects.
+
+Do not make every room canonically ankle-high. The far wall and side walls should usually remain full
+height. The near wall becomes the attractive low capped tray edge only when it actually intersects a
+camera-to-subject ray. Use the existing ShotPlan occlusion targets plus segment/ray intersection, not
+screen side alone:
+
+- wall does not block a required subject -> full wall visible;
+- upper wall blocks a required subject -> fade/remove only `wall-upper`, retain opaque capped stem;
+- camera moves and no longer blocks -> restore upper with current hysteresis/tween;
+- a roll explicitly licenses ruined/low/partition walls -> canonical full height may itself be low;
+- mechanics, collision, apertures, and wall-mounted state read the logical full segment, never opacity.
+
+A wall-mounted objective is a camera-composition constraint. `composeShot` should penalize candidates
+that place its owning wall between camera and action. If every candidate fails, rotate/orbit or frame a
+closer wall-facing shot; do not detach the switch from the wall to keep it visible. Ordinary mounts fade
+with their owning upper section when hidden and return with it. This preserves the physical truth needed
+for switches, sconces, murder holes, doors, destructible cover, climbing, breaches, and secret panels.
+
+### P0: floating glow discs are still production behavior
+
+`theater-boot.js` explicitly creates `interiorBuildGlowDisc`: a camera-facing additive plane at each
+PointLight. Its comments acknowledge the orb failure and only reduce the size. Existing light tests then
+pin the disc as expected behavior. A small floating orb is still a floating orb.
+
+Promote **E0 visible practicals** ahead of broad Stage E:
+
+1. Add `fixtureId`, `mount: floor|wall|ceiling`, `wallSegmentId`, and `emitterLocal` to each light record.
+2. Resolve a realm fixture recipe from the licensed lighting roll: candle/lantern/sconce/brazier/lamp,
+   with a deterministic generic fixture for underspecified rolls.
+3. Build physical fixture geometry or a shallow/extruded generated asset at the mount point.
+4. Give only the flame/bulb/crystal submesh emissive material; attach the PointLight to `emitterLocal`.
+5. Disable glow-disc creation by default. Keep it only behind an explicit diagnostics flag.
+6. In Stage E post, selectively bloom the emissive submesh. Diffuse walls and sprites never enter bloom.
+7. Parent wall practicals to `wall-mounts`, so cutaway and occlusion cannot leave them floating.
+8. Replace tests that require `glowCount > 0` with fixture/emitter co-location, visible-source, clipping,
+   and single-dominant-practical assertions.
+
+Until E0 lands, no capture containing glow discs should be accepted as a beauty gate.
+
 ## No-Human Production Contract
 
 There is no artist fixing an alpha fringe, moving a foot anchor, sculpting a missing prop, or relighting a
@@ -207,14 +275,15 @@ The generator should output a manifest entry, not just a PNG:
 
 1. **C2.1 layered terrain correction**: landed on this review branch; preserve row 101 completely.
 2. **B1-B4 sprite citizenship**: metadata, alpha/anchor fold, physical standee renderer, matrix gallery.
-3. **D0 semantic construction resolver**: replace role-only billboards and random furniture substitution.
-4. **D1 procedural prop grammar**: core structural/dressing noun classes with truthful fallbacks.
-5. **D2 stateful keystone slice**: door, lever, chest, fire, shrine, portal, trap, persistent traces.
-6. **C-art integrated fixtures**: exact frame-12/frame-19 walk-derived scenes through production `trayFrom`.
-7. **E1 materials**: world-space PBR shell/prop system, tier/riser/boundary response, realm families.
-8. **E2 light rigs**: visible practical hierarchy, shadow budget, sprite/world readability balance.
-9. **E3 post**: emissive bloom, depth-aware focus, restrained grade/vignette/dither.
-10. **Promotion gate**: compare integrated captures at desktop and mobile gameplay size; require provenance,
+3. **C4.1 wall volumes**: capped thick stems + independently occluded upper bodies + real mount slots.
+4. **E0 visible practicals**: physical fixtures and emissive submeshes; glow-disc billboard disabled.
+5. **D0 semantic construction resolver**: replace role-only billboards and random furniture substitution.
+6. **D1 procedural prop grammar**: core structural/dressing noun classes with truthful fallbacks.
+7. **D2 stateful keystone slice**: door, lever, chest, fire, shrine, portal, trap, persistent traces.
+8. **C-art integrated fixtures**: exact frame-12/frame-19 walk-derived scenes through production `trayFrom`.
+9. **E1 materials**: world-space PBR shell/prop system, tier/riser/boundary response, realm families.
+10. **E2 light rigs/post**: practical hierarchy, shadow budget, emissive bloom, depth focus, grade/dither.
+11. **Promotion gate**: compare integrated captures at desktop and mobile gameplay size; require provenance,
     pixel metrics, sprite metrics, camera metrics, performance, and human art-direction read.
 
 ## Acceptance Metrics

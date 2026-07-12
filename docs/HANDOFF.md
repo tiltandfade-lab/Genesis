@@ -32,7 +32,8 @@ dungeon-interior 287/0, combat-cells 13/0, walkbind 20/0, spatialize 9/0, check-
 1. **Read `docs/STAGE-C-ART-DIRECTION-REVIEW.md` before the next graphics wave.** Wave C's geometry is
    retained, but its bare-shell capture was not a frame-12/19 art gate. The review repairs canonical
    row-101 multi-patch terrain and makes Stage B sprite citizenship + semantic construction resolution
-   prerequisites for integrated beauty; do not jump directly to post/light polish.
+   prerequisites for integrated beauty. Immediate additions: C4.1 thick capped wall volumes with
+   segment-level cutaways, then E0 physical light fixtures with the floating glow-disc path disabled.
 2. **Sprite lane (Codex):** BUG-14 (slice debris — `slice-sprites.py` padding/merge) + BUG-15 (crusty
    in-engine resolution — needs higher-res ImageGen regen); the figurine-life-pass + map vision-quest
    (`docs/vision-quests/`) are Codex's queued directives.

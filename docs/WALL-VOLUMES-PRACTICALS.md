@@ -133,6 +133,35 @@ single two-triangle plane. Reproduce today's look exactly (near wall = low cappe
 walls = full height) by mapping the existing static parapet decision to *show-or-hide the upper per
 segment*. **No material/PBR/AO/bloom work** — walls stay `MeshLambertMaterial`. See frame 01.
 
+### Phase 0 — octagon contour miter correction (Codex diagnosis, 2026-07-12; MUST land first, gated on its own)
+
+The thick-wall compiler builds inner/outer/cap from the segment CONTOUR, so a contour dogleg is
+inherited and amplified by the volumes. C4.1a therefore fixes the contour FIRST.
+
+**Bug:** `chamferRunCorners` (`theater-room-mesh.js:409-417`) builds the correct collinear 45°
+midpoint diagonal, but lines 413/415 leave a short **axis-aligned half-edge stub** at each end of the
+run — the visible S/dogleg where the diagonal meets the straight wall (admitted in the header comment
+:407-408). `diagonalizeStaircaseRing` (:434-462) also skips the ring wraparound seam (:431-433), so a
+corner can be left un-mitered.
+
+**Fix (render-only):** each octagon corner renders as ONE continuous 45° plane cleanly mitered into
+the adjacent straight walls — extend the diagonal to its miter intersection with the neighbor straight
+lines, trim/extend those neighbors to meet it (endpoint-continuous, zero axis-aligned stubs), and
+handle the wraparound seam so no corner is left un-mitered. Preserve logical cells, door placement
+(door/riser stay hard run-breaks), combat geometry, and `cellTriangleMap`; the miter fills the outer
+notch (contour moves OUTWARD = adds floor only), so every cell center must still resolve inside a
+containing triangle (`dev/verify-stage-c3b-circle-smooth.mjs` stays green).
+
+**Test (red-first, its own gate before volumes):** assert COMPLETE face straightness + endpoint
+continuity — each corner a single straight 45° segment with NO adjacent axis-aligned stub, contour
+endpoint-continuous with zero degenerate stub segments, clean miter at each junction. Prove the
+CURRENT `chamferRunCorners` output fails these (stub segments exist) before the fix. Add a zoomed
+octagon-corner render capture (orchestrator READS it for straightness).
+
+**Then Phase 1+ (below):** build inner/outer/cap off THIS corrected contour so all three share it;
+offset the outer face via the module's existing `insetPolygon`/`insetOffset` miter math so the offset
+stays continuous through the 45° miter vertices (no re-introduced stub on outer face or cap).
+
 ### Files + functions to touch
 
 1. `src/ui/theater-room-mesh.js` — `compileRoomShellData` **:731** (wall branch **:964-974**),

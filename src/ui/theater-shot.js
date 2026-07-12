@@ -182,9 +182,32 @@ function pickPrimaryThreat(foes) {
   return best;
 }
 
+// ── WALK-NATIVE-A.md A3 / contract §10 — WalkScene consumption ─────────────────────────────────
+// walkSceneLane(tray, lane) -> the named WalkScene lane array (citizens/interactables/structure/
+// dressing/connections/conditions/...), or [] when tray.walkScene is absent (idle/node/segment
+// trays never carry one — WDV-1 stamps board.walkScene only off the "interior" trayFrom branch).
+// Every entry that reaches these lanes already carries the richer WalkScene sourceRef shape
+// ({walkId,segmentNum,fieldPath,tableId,roll,overlayRef}, walk-scene.js's own wsSourceRef) instead
+// of place-projection's flatter card.sourceRef — preferring these lanes is what "provenance where
+// present" (contract §10) means in practice: the SAME anchor/piece/prop, a strictly better-resolved
+// sourceRef, no shape change.
+function walkSceneLane(tray, lane) {
+  const ws = tray && tray.walkScene;
+  return (ws && Array.isArray(ws[lane])) ? ws[lane] : [];
+}
 // ── anchor resolution (directive §3's weighted encounter cluster) ──────────────────────────────
 function objectiveFrom(tray) {
   if (!tray) return null;
+  const cs0 = numOr(tray.cellSize, 1);
+  // contract §10: prefer tray.walkScene.structure (centerpiece/feature/objective cards fold here when
+  // card.centerpiece is true — walk-scene.js's own wsCardLaneKey) over the flatter tray.projection
+  // fallback below. Same shape/positions as the projection branch (position is inherited verbatim from
+  // the dealt card either way) — only the sourceRef richness and the lane it's read from differ.
+  const walkCenterpiece = walkSceneLane(tray, "structure").find((e) => e && e.centerpiece && e.position);
+  if (walkCenterpiece) {
+    return { x: numOr(walkCenterpiece.position.x, 0) * cs0, z: numOr(walkCenterpiece.position.y, 0) * cs0,
+      roomSegNum: tray.activeRoomId, sourceRef: walkCenterpiece.sourceRef || null };
+  }
   const projected = tray.projection && Array.isArray(tray.projection.stageNow) ? tray.projection.stageNow : [];
   const projectedCenterpiece = projected.find((c) => c && c.centerpiece && c.position);
   if (projectedCenterpiece) {
@@ -278,8 +301,23 @@ function piecesFromUnits(units) {
   }));
 }
 function piecesFromProjection(tray) {
-  const projected = tray && tray.projection && Array.isArray(tray.projection.stageNow) ? tray.projection.stageNow : [];
   const cs = numOr(tray && tray.cellSize, 1);
+  // contract §10: prefer tray.walkScene.citizens (cast/guise cards, plus non-centerpiece feature cards
+  // that WDV-1's own wsCardLaneKey folds into this same lane — walk-scene.js's own header calls that
+  // "a disguised creature keeps its identity" / centerpiece-flag rule) over tray.projection.stageNow.
+  // `deferred:true` entries are WDV-1's reserve-lane fold (contract §8.3's staging reserve — a card
+  // rolled but NOT yet placed on stage) and are excluded here exactly like piecesFromProjection's own
+  // pre-existing stageNow-only read already excluded reserve (that array was never consulted at all).
+  // Gate on tray.walkScene PRESENCE, not lane length — an empty citizens[] (a real, valid "no cast in
+  // this room" WalkScene) must return [] here, never silently fall through to the projection fallback.
+  if (tray && tray.walkScene) {
+    return walkSceneLane(tray, "citizens").filter((c) => c && c.position && !c.deferred).map((c) => ({
+      id:"card:"+(c.id!=null?c.id:"citizen"), kind:"cast", x:numOr(c.position.x,0)*cs, z:numOr(c.position.y,0)*cs,
+      roomSegNum:tray.activeRoomId, sourceRef:c.sourceRef||null, living:true,
+      count:c.count||1, representativeCount:c.representativeCount||1, groupFootprint:c.groupFootprint||null
+    }));
+  }
+  const projected = tray && tray.projection && Array.isArray(tray.projection.stageNow) ? tray.projection.stageNow : [];
   return projected.filter((c) => c && c.role === "cast" && c.position).map((c) => ({
     id:"card:"+c.id, kind:"cast", x:numOr(c.position.x,0)*cs, z:numOr(c.position.y,0)*cs,
     roomSegNum:tray.activeRoomId, sourceRef:c.sourceRef||null, living:true,
@@ -299,6 +337,23 @@ function propsFromTray(tray) {
       x: numOr(f.x, 0) * cs, z: numOr(f.z, 0) * cs,
       roomSegNum: (f.roomSegNum != null ? f.roomSegNum : null)
     }));
+    // contract §10: prefer tray.walkScene.interactables (+ the sibling dealt-card lanes WDV-1 folds
+    // non-cast content into — dressing/cover, connections, conditions, and non-centerpiece structure
+    // cards; walk-scene.js's own wsCardLaneKey/WS_LANE_ROLE, mirrored here) over the flatter
+    // tray.projection.stageNow "everything but cast" read below. Gate on tray.walkScene PRESENCE, not
+    // combined-lane length, so a real "nothing dealt beyond furniture" WalkScene correctly yields no
+    // extra dealt-card props instead of silently falling through to the projection fallback.
+    if (tray.walkScene) {
+      ["structure", "interactables", "dressing", "connections", "conditions"].forEach((lane) => {
+        walkSceneLane(tray, lane).forEach((c) => {
+          if (!c || !c.position || c.deferred || c.centerpiece) return; // centerpiece -> objectiveFrom already
+          out.push({ id:"card:"+(c.id!=null?c.id:lane), kind:c.role||lane, x:numOr(c.position.x,0)*cs,
+            z:numOr(c.position.y,0)*cs, roomSegNum:tray.activeRoomId, sourceRef:c.sourceRef||null,
+            count:c.count||1, representativeCount:c.representativeCount||1 });
+        });
+      });
+      return out;
+    }
     const projected = tray.projection && Array.isArray(tray.projection.stageNow) ? tray.projection.stageNow : [];
     projected.forEach((c) => {
       if (!c || !c.position || c.role === "cast") return;
@@ -412,12 +467,29 @@ function shotPlanFrom(tray, combat, viewState) {
   // shape has no room-id field today — see this unit's report). Absent -> null, never guessed.
   const activeRoomId = (tray.activeRoomId != null) ? tray.activeRoomId : null;
 
+  // WALK-NATIVE-A.md A3 / contract §10 "ShotPlan Amendment": walkRef/segmentRef/fieldRefs/register are
+  // additive top-level keys carried straight through from tray.walkScene when WDV-1 stamped one (the
+  // "interior" trayFrom branch always does; idle/node/segment trays never carry a walkScene, so these
+  // stay null/[] there — the SAME absent/present split every other WalkScene read in this file already
+  // gates on). fieldRefs also folds into `provenance` below (one more provenance entry per WalkScene
+  // fact, tagged "walk-scene" so it's distinguishable from the "walk-card"/"combat-unit"/"state"
+  // sources already noted above) — the flat index of every fact WDV-1 actually classified, not just
+  // the subset this file happened to turn into an anchor/piece/prop.
+  const ws = tray.walkScene || null;
+  if (ws) {
+    (ws.fieldRefs || []).forEach((ref, i) => { if (ref) noteProvenance("walkScene:" + i, "walk-scene", ref); });
+  }
+
   return {
     id: shotPlanId(tray, combat),
     seed: (tray.seed != null ? tray.seed : ((combat && combat.seed != null) ? combat.seed : null)),
     realmId: tray.realmId || null,
     environment: tray.env || null,
     activeRoomId,
+    walkRef: ws ? (ws.walkRef || null) : null,
+    segmentRef: ws ? (ws.segmentRef || null) : null,
+    fieldRefs: ws ? (ws.fieldRefs || []) : [],
+    register: ws ? (ws.register || null) : null,
     stage,
     anchors,
     pieces,

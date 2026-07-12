@@ -8663,7 +8663,6 @@ function setInteriorBoard(data){
   let doorGhostBuild = [];  // {inst, fadeEntry} pairs — drives the individually-tweened ghost meshes below
   if(!ITR_OCCLUSION_FADE_DISABLED_FOR_TEST && occlusionCameraPos && doorList.length && itrSightPoints.length){
     const doorOcclusionMask = itrPillarCutawayMask(doorList, occlusionCameraPos, itrSightPoints, cx, cz);
-    window.__DIAG_doorOcclusionMask = doorOcclusionMask; window.__DIAG_doorList = doorList; window.__DIAG_occlusionCameraPos = occlusionCameraPos; window.__DIAG_itrSightPoints = itrSightPoints; window.__DIAG_cx = cx; window.__DIAG_cz = cz;
     const doorAnkleH = itrOcclusionAnkleHeight(data.wallHeightBase);
     doorList = doorList.map(function(di, i){
       const id = itrOcclusionIdFor("doorframe", di.x, di.z, di.yBase);

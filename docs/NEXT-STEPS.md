@@ -18,12 +18,24 @@ The running execution order. `DESIGN.md` holds the *what* and *why*; this holds 
 roll into `NEXT-STEPS-ARCHIVE.md` via `python3 build/archive-docs.py --emit`. Standing plan
 sections (tracks/layers/etc.) are never auto-archived.
 
-## Do next (2026-07-12 — GRAPHICS-NORTH-STAR: Stage A CLOSED; walk-native boundary landed)
+## Do next (2026-07-12 — GRAPHICS-NORTH-STAR: Stage A + Stage C CLOSED; Stage D/E next)
 
-Codex's A→B graphics program (`docs/GRAPHICS-NORTH-STAR.md`) — **Stage A is BUILT** (master `00b775f8`,
-CHANGELOG 2026-07-12). The composed camera is live: the interior composes on the action cluster + occludes
-dynamically, fed through Codex's walk-native anti-drift boundary (`walkSceneFrom`). Sequenced by Adam's
-ruling: build the boundary first (WDV-1/2), then wire A3, then A4.
+Codex's A→B graphics program (`docs/GRAPHICS-NORTH-STAR.md`) — **Stage A BUILT** (walk-native boundary +
+composed camera + occlusion, master `00b775f8`) **and Stage C BUILT** (real room shapes — octagon/rotunda/
+L from the rolled `areaType/dims/side`, shape render-decoupled from the whole-cell combat grid; master
+`388a4c7b`, CHANGELOG 2026-07-12 later). Rooms no longer read as maps — by framing (A) AND geometry (C).
+
+**Next graphics waves:** ☐ **Stage D** (stateful nouns — door→room transition keystone, levers/chests) ·
+☐ **Stage E** (material+light finish — LIGHT_RIG_PROFILES + PBR shells + emissive-masked bloom, which
+also properly retires the occlusion ghost-halo the hotfix minimally patched + the AO-gradient on non-rect
+floors Stage C deferred). ☐ **Stage B** (sprite citizenship) overlaps Codex's active sprite lane —
+coordinate. Stage-C deferrals: vertical-stair two-slots, corridor-L-bend-through-notch edge case.
+**Sprite lane (Codex):** BUG-14 (slice debris) + BUG-15 (crusty res — ImageGen regen); figurine-life +
+map vision-quest (`docs/vision-quests/`).
+
+--- (historical, Stage A build order below) ---
+
+Sequenced by Adam's ruling: build the boundary first (WDV-1/2), then wire A3, then A4.
 
 1. ☑ **WDV-1 `walkSceneFrom`** — the walk-native boundary (`src/engine/walk-scene.js`); `board.walkScene`. 32/0.
 2. ☑ **WDV-2 stamped provenance** — `walkPickStamped` + `segment.rollRefs`, byte-additive. 34/0.

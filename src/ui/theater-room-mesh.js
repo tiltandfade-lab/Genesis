@@ -348,23 +348,144 @@ function ringPerimeterU(segments) {
 }
 
 // ── mesh-buffer accumulator: a tiny shared helper so floor/wall/riser each build their own flat
-// positions/normals/uvs/indices arrays with one consistent running-vertex-count convention. ──────────
-function makeBuffer() { return { positions: [], normals: [], uvs: [], indices: [] }; }
-function pushVert(buf, x, y, z, nx, ny, nz, u, v) {
+// positions/normals/uvs/indices/colors arrays with one consistent running-vertex-count convention.
+// `colors` (GRAPHICS-NORTH-STAR.md Stage E's own "vertex/AO perimeter darkening", pulled forward into
+// THIS unit's fix — docs/ROOM-SHELL-COMPILER.md's brightness-regression close) is a per-vertex RGB
+// TINT multiplier (1,1,1 = untinted, the default for every caller that never supplies a color — so
+// every PRE-EXISTING call site in this file stays byte-identical unless it explicitly opts in). ──────
+function makeBuffer() { return { positions: [], normals: [], uvs: [], colors: [], indices: [] }; }
+function pushVert(buf, x, y, z, nx, ny, nz, u, v, r, g, b) {
   buf.positions.push(x, y, z);
   buf.normals.push(nx, ny, nz);
   buf.uvs.push(u, v);
+  buf.colors.push(typeof r === "number" ? r : 1, typeof g === "number" ? g : 1, typeof b === "number" ? b : 1);
   return (buf.positions.length / 3) - 1;
 }
 function pushTri(buf, i0, i1, i2) { buf.indices.push(i0, i1, i2); }
-function pushQuad(buf, p0, p1, p2, p3, n, uv0, uv1, uv2, uv3) {
-  // p0..p3 in order around the quad (p0->p1->p2->p3->p0); n = {x,y,z} shared face normal.
-  const i0 = pushVert(buf, p0.x, p0.y, p0.z, n.x, n.y, n.z, uv0.u, uv0.v);
-  const i1 = pushVert(buf, p1.x, p1.y, p1.z, n.x, n.y, n.z, uv1.u, uv1.v);
-  const i2 = pushVert(buf, p2.x, p2.y, p2.z, n.x, n.y, n.z, uv2.u, uv2.v);
-  const i3 = pushVert(buf, p3.x, p3.y, p3.z, n.x, n.y, n.z, uv3.u, uv3.v);
+function pushQuad(buf, p0, p1, p2, p3, n, uv0, uv1, uv2, uv3, color) {
+  // p0..p3 in order around the quad (p0->p1->p2->p3->p0); n = {x,y,z} shared face normal. `color`
+  // (optional {r,g,b} in 0..1) is a single FLAT tint shared by all 4 corners — every existing bevel/
+  // door/wall/riser quad is one uniform material patch, never a gradient within itself (the gradient
+  // lives in the floor's own grid tessellation, below); omitted -> white (1,1,1), unchanged from before
+  // this unit.
+  const r = color ? color.r : 1, g = color ? color.g : 1, b = color ? color.b : 1;
+  const i0 = pushVert(buf, p0.x, p0.y, p0.z, n.x, n.y, n.z, uv0.u, uv0.v, r, g, b);
+  const i1 = pushVert(buf, p1.x, p1.y, p1.z, n.x, n.y, n.z, uv1.u, uv1.v, r, g, b);
+  const i2 = pushVert(buf, p2.x, p2.y, p2.z, n.x, n.y, n.z, uv2.u, uv2.v, r, g, b);
+  const i3 = pushVert(buf, p3.x, p3.y, p3.z, n.x, n.y, n.z, uv3.u, uv3.v, r, g, b);
   pushTri(buf, i0, i1, i2);
   pushTri(buf, i0, i2, i3);
+}
+
+// hexToRgb01(hex) -> {r,g,b} in 0..1 — the pure-core-safe hex parser (this file stays THREE-free
+// above the assembler divider; theater-interior.js's itrDarkenHex parses hex the same way, no THREE
+// needed for this). Falls back to white (untinted) on a missing/malformed hex, never throws.
+function hexToRgb01(hex) {
+  const h = String(hex || "#ffffff").replace("#", "");
+  const full = h.length === 3 ? h.split("").map((c) => c + c).join("") : h;
+  const n = parseInt(full, 16);
+  const v = Number.isFinite(n) ? n : 0xffffff;
+  return { r: ((v >> 16) & 255) / 255, g: ((v >> 8) & 255) / 255, b: (v & 255) / 255 };
+}
+
+// polygonBBox(poly) -> the axis-aligned bounding box + its own area (width*depth) — the "is this
+// polygon secretly just a rectangle" test below compares THIS against the polygon's own shoelace area.
+function polygonBBox(poly) {
+  let minX = Infinity, maxX = -Infinity, minZ = Infinity, maxZ = -Infinity;
+  poly.forEach((p) => {
+    if (p.x < minX) minX = p.x; if (p.x > maxX) maxX = p.x;
+    if (p.z < minZ) minZ = p.z; if (p.z > maxZ) maxZ = p.z;
+  });
+  return { minX, maxX, minZ, maxZ, area: (maxX - minX) * (maxZ - minZ) };
+}
+
+// isAxisAlignedRectPolygon(poly) -> the polygon's own bbox when `poly`'s shoelace area equals its
+// bbox's area (i.e. it fills its own bounding box exactly — a plain axis-aligned rectangle, TOLERANT
+// of extra COLLINEAR vertices along one side, e.g. a wall run a door segment split into wall-door-wall
+// — those still trace a rectangle, just with more than 4 polygon points on that one side), else null.
+// THIS is the gate for the floor's own grid-tessellation path below: "today's RECTANGULAR cell rooms"
+// (ROOM-SHELL-COMPILER.md's own stated scope) — an irregular/L-shaped footprint degrades to the plain
+// ear-clip triangulation (untouched, no vertex-color gradient), never mis-grids a non-rectangular room.
+function isAxisAlignedRectPolygon(poly) {
+  if (!poly || poly.length < 4) return null;
+  const bbox = polygonBBox(poly);
+  if (!(bbox.area > 1e-9)) return null;
+  const area = Math.abs(signedArea2D(poly));
+  if (Math.abs(area - bbox.area) > 1e-6) return null;
+  return bbox;
+}
+
+// buildAxisGrid(bboxMin, bboxMax, cellMin, cellMax) -> {coords, cellsTouching} — one grid LINE per
+// actual cell boundary along one axis: the two OUTER lines sit at the true (possibly bevel-inset)
+// bbox edges (bordered by exactly ONE cell, `cellsTouching` = [cellMin]/[cellMax]); every INTERIOR
+// line sits at a cell-to-cell boundary (c+0.5, bordered by BOTH neighboring cells, `cellsTouching` =
+// [c, c+1] — a 2-way average at that seam, the smooth-blend half of the "no per-cell hard edge" law).
+// `cellMin`/`cellMax` are recovered by the caller via Math.round(bbox.minX/maxX) — bevelWidth (default
+// 0.06) is far smaller than the 0.5 half-cell margin, so rounding the inset bbox edge always recovers
+// the TRUE cell index reliably.
+// DOUBLE-RESOLUTION AMENDMENT (measured, docs/ROOM-SHELL-COMPILER.md brightness-close): a grid with
+// ONLY boundary-line vertices bilinearly BLENDS every cell's own color with its neighbors' even at
+// that cell's own CENTER (a quad's midpoint = the average of its 4 corners) — diluting a strongly
+// darkened corner cell toward its brighter neighbors right at the exact point the diegetic-light gate
+// samples. Adding a CELL-CENTER line (weight = that cell alone, no blending) between every pair of
+// boundary lines fixes this: interpolation stays smooth across the seam between two cells (the
+// boundary vertex is still a 2-cell average — "no visible per-cell wall"), but the cell's own CENTER
+// now resolves to its true, unblended tone (a "hat" profile per cell) — verified against the per-cell
+// InstancedMesh path directly (this unit's own before/after luminance table).
+function buildAxisGrid(bboxMin, bboxMax, cellMin, cellMax) {
+  const coords = [bboxMin];
+  const cellsTouching = [[cellMin]];
+  for (let c = cellMin; c <= cellMax; c++) {
+    coords.push(c); cellsTouching.push([c]);
+    if (c < cellMax) { coords.push(c + 0.5); cellsTouching.push([c, c + 1]); }
+  }
+  coords.push(bboxMax);
+  cellsTouching.push([cellMax]);
+  return { coords, cellsTouching };
+}
+
+// buildFloorGrid(floorBuf, bbox, cellMinX, cellMaxX, cellMinZ, cellMaxZ, elevationY, uvDensity,
+// colorAt) — the floor MAIN BODY's grid-tessellated alternative to a single flat ear-clipped polygon,
+// used ONLY when the caller supplies a real `colorAt(x,z)->hex` (opt-in — every existing pure-core
+// test never passes this, so their geometry/triangle-count stays byte-identical). One grid quad per
+// actual floor CELL (not sub-cell — "low-frequency", never VP3's per-cell jitter), each of its 4
+// corners' own vertex color BILINEARLY averaged from the 1-4 real cells meeting at that corner (via
+// buildAxisGrid's own cellsTouching) — this is what lets the SAME uniform texture/material read a real
+// smooth AO/perimeter gradient (dark at the room's own edges, full value mid-room) across ONE
+// continuous surface, with zero visible per-cell seam (BW2-3's own map-feel law, unbroken: texture and
+// SHADING both stay continuous, only the underlying vertex density grew for lighting's sake). Winding:
+// reversed-cyclic (A,D,C)+(A,C,B) per corner order A(i,j) B(i+1,j) C(i+1,j+1) D(i,j+1) — the SAME +Y
+// fix this file's own ear-clip path already documents (verified against this exact corner layout by
+// right-hand-rule cross product on a concrete unit-square fixture).
+function buildFloorGrid(floorBuf, bbox, cellMinX, cellMaxX, cellMinZ, cellMaxZ, elevationY, uvDensity, colorAt) {
+  const xAxis = buildAxisGrid(bbox.minX, bbox.maxX, cellMinX, cellMaxX);
+  const zAxis = buildAxisGrid(bbox.minZ, bbox.maxZ, cellMinZ, cellMaxZ);
+  const nx = xAxis.coords.length, nz = zAxis.coords.length;
+  const vertIdx = [];
+  for (let j = 0; j < nz; j++) {
+    const row = [];
+    for (let i = 0; i < nx; i++) {
+      const x = xAxis.coords[i], z = zAxis.coords[j];
+      let rs = 0, gs = 0, bs = 0, cnt = 0;
+      xAxis.cellsTouching[i].forEach((cx) => zAxis.cellsTouching[j].forEach((cz) => {
+        const rgb = hexToRgb01(colorAt(cx, cz));
+        rs += rgb.r; gs += rgb.g; bs += rgb.b; cnt++;
+      }));
+      const r = cnt ? rs / cnt : 1, g = cnt ? gs / cnt : 1, b = cnt ? bs / cnt : 1;
+      row.push(pushVert(floorBuf, x, elevationY, z, 0, 1, 0, x * uvDensity, z * uvDensity, r, g, b));
+    }
+    vertIdx.push(row);
+  }
+  let triCount = 0;
+  for (let j = 0; j < nz - 1; j++) {
+    for (let i = 0; i < nx - 1; i++) {
+      const iA = vertIdx[j][i], iB = vertIdx[j][i + 1], iC = vertIdx[j + 1][i + 1], iD = vertIdx[j + 1][i];
+      pushTri(floorBuf, iA, iD, iC);
+      pushTri(floorBuf, iA, iC, iB);
+      triCount += 2;
+    }
+  }
+  return triCount;
 }
 
 /* compileRoomShellData(cells, opts) — the top-level pure orchestrator; directive steps 1-9 end to end,
@@ -385,6 +506,31 @@ function compileRoomShellData(cells, opts) {
   const wallHeight = typeof opts.wallHeight === "number" ? opts.wallHeight : DEFAULT_WALL_HEIGHT;
   const wallHeightForSegment = typeof opts.wallHeightForSegment === "function"
     ? opts.wallHeightForSegment : function () { return wallHeight; };
+  // BRIGHTNESS-REGRESSION FIX (docs/ROOM-SHELL-COMPILER.md close, 2026-07-12): optional per-cell/
+  // per-segment COLOR sources — omitted by every existing pure-core test, so their output stays byte-
+  // identical (white/untinted) unless a caller explicitly opts in. `floorColorAt(x,z)->hex` is the
+  // SAME already-computed per-cell tone (theater-boot.js's own floorList[].color: VP3 tone/jitter/
+  // perimeter-darken + valueScript + rim-vignette, whatever the per-cell InstancedMesh path already
+  // used as its own instance-color tint) — reused here as a VERTEX color instead of a per-box one, so
+  // the compiled shell's rendered brightness actually matches the per-cell path it replaced (the
+  // regression the integration gate caught: a uniform-brightness compiled floor with none of that
+  // darkening broke the diegetic-lighting model's far-corner/falloff/anti-clip reads).
+  // `wallColorForSegment(segMeta)->hex` is the analogous per-SEGMENT tint (theater-boot.js averages
+  // the bordering wall cells' own colors for that segment) — flat per segment (walls don't need a
+  // gradient; they're already at the room's own edge by definition).
+  const floorColorAt = typeof opts.floorColorAt === "function" ? opts.floorColorAt : null;
+  const wallColorForSegment = typeof opts.wallColorForSegment === "function" ? opts.wallColorForSegment : null;
+  // nearestFloorColor(seg) -> the hex color of the floor cell just INSIDE this boundary segment (walks
+  // 0.5 world units along the segment's own inward normal from its midpoint, then rounds to the
+  // nearest cell center) — used to tint the BEVEL RIBBON + DOOR THRESHOLD quads so the floor's own
+  // darkening reaches all the way to the true wall/aperture edge (no bright untinted seam right where
+  // the old per-cell darkening used to read darkest of all).
+  function nearestFloorColor(seg) {
+    if (!floorColorAt) return null;
+    const n = segmentNormal(seg);
+    const midX = (seg.a.x + seg.b.x) / 2, midZ = (seg.a.z + seg.b.z) / 2;
+    return floorColorAt(Math.round(midX + n.x * 0.5), Math.round(midZ + n.z * 0.5));
+  }
 
   // sort once, canonically (z then x), so every downstream Map insertion order (byTier grouping,
   // tierIndex, therefore the raw boundary-edge array traceTierContour builds) is a pure function of
@@ -443,24 +589,38 @@ function compileRoomShellData(cells, opts) {
 
       const widthForSegment = (seg) => (seg.kind === "door" ? 0 : bevelWidth);
       const inset = insetPolygon(poly, segments, widthForSegment);
-      const tris = triangulatePolygon(inset);
 
       // FLOOR — main flat body, the inset polygon (leaves room for the bevel ribbon outside it),
       // at this tier's own elevation. World-aligned UV = world (x,z) directly (directive step 8):
       // identical formula for every vertex regardless of which tier/triangle it's part of.
-      const baseIdx = floorBuf.positions.length / 3;
-      inset.forEach((v) => {
-        pushVert(floorBuf, v.x, elevationY, v.z, 0, 1, 0, v.x * uvDensity, v.z * uvDensity);
-      });
-      // WINDING: triangulatePolygon emits (iPrev,iCur,iNext) for a polygon that's CCW in the (x,z)
-      // shoelace sense (ensureCCW's own convention) — verified (right-hand-rule cross product) that
-      // THIS winding's geometric normal points -Y, the OPPOSITE of the floor's own explicit +Y-up
-      // normal attribute. Emitting (iPrev,iNext,iCur) instead (j/k swapped) flips it to match — a real,
-      // screenshot-caught bug (MeshLambertMaterial defaulted FrontSide-only, so the floor rendered
-      // fully culled/invisible before DoubleSide masked it into merely wrong-shaded; this fixes the
-      // actual root cause rather than leaning on DoubleSide alone). 2D containment (pointInTriangle2D)
-      // and area (shoelace) are winding-agnostic, so this never touches cellTriangleMap correctness.
-      tris.forEach(([i, j, k]) => pushTri(floorBuf, baseIdx + i, baseIdx + k, baseIdx + j));
+      // BRIGHTNESS-REGRESSION FIX: when the caller supplies floorColorAt AND this ring's own inset
+      // polygon fills its own bounding box exactly (isAxisAlignedRectPolygon — "today's RECTANGULAR
+      // cell rooms", this unit's whole stated scope), tessellate a per-cell GRID instead of one flat
+      // ear-clipped polygon, so a real per-vertex AO/perimeter gradient (buildFloorGrid's own header)
+      // can ride the SAME continuous surface/texture. Any other shape (L-room, no colorAt supplied —
+      // every existing pure-core test) falls straight back to the original single-polygon ear-clip,
+      // byte-identical to before this unit.
+      const rectBBox = floorColorAt ? isAxisAlignedRectPolygon(inset) : null;
+      if (rectBBox) {
+        buildFloorGrid(floorBuf, rectBBox,
+          Math.round(rectBBox.minX), Math.round(rectBBox.maxX), Math.round(rectBBox.minZ), Math.round(rectBBox.maxZ),
+          elevationY, uvDensity, floorColorAt);
+      } else {
+        const baseIdx = floorBuf.positions.length / 3;
+        inset.forEach((v) => {
+          pushVert(floorBuf, v.x, elevationY, v.z, 0, 1, 0, v.x * uvDensity, v.z * uvDensity);
+        });
+        // WINDING: triangulatePolygon emits (iPrev,iCur,iNext) for a polygon that's CCW in the (x,z)
+        // shoelace sense (ensureCCW's own convention) — verified (right-hand-rule cross product) that
+        // THIS winding's geometric normal points -Y, the OPPOSITE of the floor's own explicit +Y-up
+        // normal attribute. Emitting (iPrev,iNext,iCur) instead (j/k swapped) flips it to match — a real,
+        // screenshot-caught bug (MeshLambertMaterial defaulted FrontSide-only, so the floor rendered
+        // fully culled/invisible before DoubleSide masked it into merely wrong-shaded; this fixes the
+        // actual root cause rather than leaning on DoubleSide alone). 2D containment (pointInTriangle2D)
+        // and area (shoelace) are winding-agnostic, so this never touches cellTriangleMap correctness.
+        const tris = triangulatePolygon(inset);
+        tris.forEach(([i, j, k]) => pushTri(floorBuf, baseIdx + i, baseIdx + k, baseIdx + j));
+      }
 
       // U for wall/riser/bevel vertical surfaces: one continuous arc-length walk around THIS ring
       // (directive step 8's vertical-surface case).
@@ -487,9 +647,13 @@ function compileRoomShellData(cells, opts) {
           // WINDING: reversed cyclic order (keep trueA first) — same +Y-normal fix as the main body
           // triangulation above; this quad shares the identical a->b/inward-normal convention that
           // produces a -Y-facing winding otherwise.
+          // BRIGHTNESS-REGRESSION FIX: tint the threshold flush with the SAME nearby floor color the
+          // bevel ribbon below uses, so a doorway's own flush quad doesn't read as a bright untinted
+          // notch inside an otherwise-darkened perimeter.
           pushQuad(floorBuf, trueA, flushInnerA, flushInnerB, trueB, { x: 0, y: 1, z: 0 },
             { u: trueA.x * uvDensity, v: trueA.z * uvDensity }, { u: flushInnerA.x * uvDensity, v: flushInnerA.z * uvDensity },
-            { u: flushInnerB.x * uvDensity, v: flushInnerB.z * uvDensity }, { u: trueB.x * uvDensity, v: trueB.z * uvDensity });
+            { u: flushInnerB.x * uvDensity, v: flushInnerB.z * uvDensity }, { u: trueB.x * uvDensity, v: trueB.z * uvDensity },
+            floorColorAt ? hexToRgb01(nearestFloorColor(seg)) : null);
           return;
         }
 
@@ -506,20 +670,26 @@ function compileRoomShellData(cells, opts) {
         // WINDING: reversed cyclic order (keep outerA first) — same fix as the main body/door-filler
         // quads above (verified via right-hand-rule cross product against the +Y normal on a concrete
         // fixture; this exact quad shape/point order otherwise winds -Y-facing).
+        // BRIGHTNESS-REGRESSION FIX: tint the bevel ribbon with the SAME nearby floor color the main
+        // grid's own outer row already carries — otherwise this thin strip (right where the OLD per-
+        // cell darkening used to read DARKEST of all, wall-adjacent) would render as a bright untinted
+        // seam ringing an otherwise-darkened floor.
         pushQuad(floorBuf, outerA, innerA, innerB, outerB, { x: 0, y: 1, z: 0 },
           { u: outerA.x * uvDensity, v: outerA.z * uvDensity }, { u: innerA.x * uvDensity, v: innerA.z * uvDensity },
-          { u: innerB.x * uvDensity, v: innerB.z * uvDensity }, { u: outerB.x * uvDensity, v: outerB.z * uvDensity });
+          { u: innerB.x * uvDensity, v: innerB.z * uvDensity }, { u: outerB.x * uvDensity, v: outerB.z * uvDensity },
+          floorColorAt ? hexToRgb01(nearestFloorColor(seg)) : null);
         bevelTriCount += 2;
 
         if (seg.kind === "wall") {
           const h = wallHeightForSegment({ a: seg.a, b: seg.b, mid: { x: (seg.a.x + seg.b.x) / 2, z: (seg.a.z + seg.b.z) / 2 }, kind: "wall", tier });
           const baseY = elevationY - bevelDrop;
+          const wallColor = wallColorForSegment ? hexToRgb01(wallColorForSegment({ a: seg.a, b: seg.b, mid: { x: (seg.a.x + seg.b.x) / 2, z: (seg.a.z + seg.b.z) / 2 }, kind: "wall", tier })) : null;
           const p0 = { x: seg.a.x, y: baseY, z: seg.a.z };
           const p1 = { x: seg.b.x, y: baseY, z: seg.b.z };
           const p2 = { x: seg.b.x, y: baseY + h, z: seg.b.z };
           const p3 = { x: seg.a.x, y: baseY + h, z: seg.a.z };
           pushQuad(wallBuf, p0, p1, p2, p3, { x: n.x, y: 0, z: n.z },
-            { u: u0, v: 0 }, { u: u1, v: 0 }, { u: u1, v: h }, { u: u0, v: h });
+            { u: u0, v: 0 }, { u: u1, v: 0 }, { u: u1, v: h }, { u: u0, v: h }, wallColor);
           wallSegmentsOut.push({ a: seg.a, b: seg.b, tier, height: h });
         } else if (seg.kind === "riser") {
           // built ONCE per physical riser edge — the lower tier's own pass owns the quad (tier ===
@@ -557,9 +727,9 @@ function compileRoomShellData(cells, opts) {
   });
 
   return {
-    floor: { positions: floorBuf.positions, normals: floorBuf.normals, uvs: floorBuf.uvs, indices: floorBuf.indices, tiers: floorTierMeta, bevelTriCount },
-    walls: { positions: wallBuf.positions, normals: wallBuf.normals, uvs: wallBuf.uvs, indices: wallBuf.indices, segments: wallSegmentsOut },
-    risers: { positions: riserBuf.positions, normals: riserBuf.normals, uvs: riserBuf.uvs, indices: riserBuf.indices, segments: riserSegmentsOut },
+    floor: { positions: floorBuf.positions, normals: floorBuf.normals, uvs: floorBuf.uvs, colors: floorBuf.colors, indices: floorBuf.indices, tiers: floorTierMeta, bevelTriCount },
+    walls: { positions: wallBuf.positions, normals: wallBuf.normals, uvs: wallBuf.uvs, colors: wallBuf.colors, indices: wallBuf.indices, segments: wallSegmentsOut },
+    risers: { positions: riserBuf.positions, normals: riserBuf.normals, uvs: riserBuf.uvs, colors: riserBuf.colors, indices: riserBuf.indices, segments: riserSegmentsOut },
     apertures: aperturesOut,
     cellTriangleMap,
     meta: {
@@ -582,6 +752,11 @@ function bufferGeometryFrom(buf) {
   geo.setAttribute("position", new THREE.Float32BufferAttribute(buf.positions, 3));
   geo.setAttribute("normal", new THREE.Float32BufferAttribute(buf.normals, 3));
   geo.setAttribute("uv", new THREE.Float32BufferAttribute(buf.uvs, 2));
+  // BRIGHTNESS-REGRESSION FIX: the per-vertex AO/perimeter tint (white/1,1,1 when the caller never
+  // supplied a color source — pushVert/pushQuad's own default) — the caller's material needs
+  // `vertexColors: true` for this to have any visible effect; theater-boot.js's own room-shell
+  // floor/wall material construction is the one place that flag gets set.
+  geo.setAttribute("color", new THREE.Float32BufferAttribute(buf.colors, 3));
   geo.setIndex(buf.indices);
   return geo;
 }
@@ -614,6 +789,7 @@ export {
   cellKey, buildCellIndex, tierOf, edgeVertsFor, traceTierContour, chainEdgesIntoRings,
   directionOf, mergeKeyFor, findSegmentStart, simplifySegments, ringToPolygon, signedArea2D,
   ensureCCW, segmentNormal, insetPolygon, pointInTriangle2D, triangulatePolygon, ringPerimeterU,
+  hexToRgb01, polygonBBox, isAxisAlignedRectPolygon, buildAxisGrid, buildFloorGrid,
   compileRoomShellData,
   ROOM_SHELL_TIER_QUANTUM, DEFAULT_WALL_HEIGHT, DEFAULT_BEVEL_WIDTH, DEFAULT_BEVEL_DROP, DEFAULT_UV_DENSITY,
   // THREE assembler (theater-boot.js's own import surface)

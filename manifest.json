@@ -74,6 +74,7 @@
     "src/engine/place-spatialize.js",
     "src/engine/place-semantics.js",
     "src/engine/place-projection.js",
+    "src/engine/walk-scene.js",
     "src/engine/place-dressing.js",
     "src/engine/wild-walk.js",
     "src/engine/quest-hook.js",
@@ -1469,6 +1470,15 @@
         "walkSceneProjectionFrom"
       ],
       "desc": "Walk-native card projection boundary. walkSceneProjectionFrom(walk,segment,plan,opts) consumes an optional walk.deck assignment record and walk.secretNetwork, then emits deterministic stageNow/narrateNow/reserve lanes for one active room. Mechanical citizens stage before decoration; empty encounter rooms receive extra visual capacity; groups retain canonical count while exposing a bounded representativeCount; concealed cards and secret connections emit no player projection until noticed/revealed. The returned player shape carries source references and authored visual bindings only, never hidden payload prose. Pure engine data code with no RNG, world writes, DOM, or renderer calls."
+    },
+    {
+      "id": "engine.walk-scene",
+      "path": "src/engine/walk-scene.js",
+      "type": "logic",
+      "owns": [
+        "walkSceneFrom"
+      ],
+      "desc": "docs/WALK-NATIVE-A.md WDV-1 — the anti-drift boundary between the stored walk and the graphics engine (ui-sketches/mock-frames/vq-battle-scenes/WALK-NATIVE-DIORAMA-CONTRACT.md). walkSceneFrom({walkId,walk,segment,overlay,spatialRoom,live}) WRAPS walkSceneProjectionFrom (engine.place-projection) for cast/interactable/dressing/hidden cards — never re-deals or re-rolls — and ADDS the structure/connection/surface/practical/condition/atmosphere classification of the raw walk/segment fields the dealer ignores (areaType/dims/side, exits+door state, biome/skin register, light sources, dressing.condition, sensory/atmo prose, reveal-gated secret/loot/artFind). Every WalkScene entry is {role,sourceRef,...roleFields}; sourceRef={walkId,segmentNum,fieldPath,tableId,roll,overlayRef} with tableId/roll populated opportunistically off segment.rollRefs (WDV-2) and null otherwise. Pure engine data code with no THREE, DOM, RNG, or world writes; never mutates its inputs."
     },
     {
       "id": "engine.place-dressing",

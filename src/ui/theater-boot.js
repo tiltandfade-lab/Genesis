@@ -128,7 +128,7 @@ import { resolveWholeObject, loadWholeObjectBuilders, WHOLE_OBJECT_REGISTRY, NEA
 // of the per-cell InstancedMesh box read below — see this file's own ITR_ROOM_SHELL flag + itrBuild*
 // call site (setInteriorBoard) for the wire-in. compileRoomShell is the thin THREE assembler; this file
 // still owns every material (Stage E's job, not this unit's).
-import { compileRoomShell, ROOM_SHELL_TIER_QUANTUM } from "./theater-room-mesh.js";
+import { compileRoomShell, ROOM_SHELL_TIER_QUANTUM, segmentNormal } from "./theater-room-mesh.js";
 // P1' WHOLE-OBJECT WIRING (docs/P1-WIRING.md §4 step 3): a STATIC import of probe-lib.js itself —
 // every dev/model-qa/creatures/*.js module ALSO imports probe-lib.js by the identical relative
 // specifier (resolved from dev/model-qa/, '../probe-lib.js'), which both Node and browsers resolve
@@ -8086,6 +8086,33 @@ function setInteriorBoard(data){
         isDoor: doorKeySet.has(Math.round(f.x) + "," + Math.round(f.z)),
       };
     });
+    // BRIGHTNESS-REGRESSION FIX — THE RESIDUAL-FALLOFF TERM. Measured directly (a controlled gloom
+    // fixture, per-cell vs compiled, same torch/camera): the per-cell path's own floorList[].color
+    // (VP3 tone/jitter/valueScript/rim-vignette, now correctly carried over as vertex color above)
+    // only accounts for a SMALL fraction of why a far-room corner reads dark — corner vs mid-room
+    // color differed by just ~12% (#b3b3b3 vs #cbcbcb in the fixture) while the REAL per-cell RENDER
+    // differed by >2x. The rest is real diegetic falloff (the torch's own physical distance decay +
+    // shadow-casting geometry) that the per-cell path's discrete wall/pillar BOXES apparently occlude
+    // more completely near a room's own corner than the compiled shell's continuous (bevel-inset) wall
+    // does — a real, screenshot-measured render difference this unit closes with an explicit residual
+    // EDGE FACTOR (the directive's own "low-frequency AO... perimeter darkening", now calibrated to the
+    // measured gap rather than guessed): darkens floor/wall tone further as a cell nears the room's own
+    // true boundary (a SEPARATE, smaller-scope term than VP3's own per-cell tone — this is architecture-
+    // level "near the wall" shading, same spirit as real-time AO). Never touches geometry, only the
+    // vertex-color tint fed into the SAME floorColorAt/wallColorForSegment lookups below.
+    const ITR_ROOM_SHELL_EDGE_MIN = 0.44;
+    const ITR_ROOM_SHELL_EDGE_BAND = 2;
+    let shellMinX = Infinity, shellMaxX = -Infinity, shellMinZ = Infinity, shellMaxZ = -Infinity;
+    shellCells.forEach((c) => {
+      if(c.x < shellMinX) shellMinX = c.x; if(c.x > shellMaxX) shellMaxX = c.x;
+      if(c.z < shellMinZ) shellMinZ = c.z; if(c.z > shellMaxZ) shellMaxZ = c.z;
+    });
+    const shellEdgeFactor = (x, z) => {
+      const depth = Math.min(x - shellMinX, shellMaxX - x, z - shellMinZ, shellMaxZ - z);
+      if(depth >= ITR_ROOM_SHELL_EDGE_BAND) return 1;
+      const t = Math.max(0, depth) / ITR_ROOM_SHELL_EDGE_BAND;
+      return ITR_ROOM_SHELL_EDGE_MIN + (1 - ITR_ROOM_SHELL_EDGE_MIN) * t;
+    };
     // wall height: ANY one raw (pre-parapet, pre-occlusion) wall instance of THIS room shares the
     // room's own scaleDomain-derived height (ITR_ACTIVE_ROOM_ONLY renders one room at a time) — never
     // read off the post-cutaway `wallList` below (a DIFFERENT, deliberately-deferred concern; see the
@@ -8116,37 +8143,126 @@ function setInteriorBoard(data){
     // per-vertex world-aligned UVs replace the per-instance shared texture.repeat trick (BW2-3 §2b) —
     // a (1,1) repeat variant of the SAME texture family/seed the per-cell path already resolved above
     // (reuse, not a new material — Stage E owns actual material changes, not this unit).
+    // BRIGHTNESS-REGRESSION FIX: use floorColorForRender/wallColorForRender (LC-2's own emissive-
+    // albedo-lift-aware values, computed once above — `applyEmissiveAlbedoLift ? lifted : kit.color`),
+    // NOT the raw kit color — the per-cell path's OWN procedural texture (floorTex/wallTex, built
+    // earlier in this function) already paints at the LIFTED value on a lift-eligible realm (cosmic);
+    // building the compiled shell's texture off the raw un-lifted kit color silently dropped that lift
+    // for the shell path, which is why LC-2 (cosmic's own albedo-lift gate) read almost no improvement
+    // between lift-off and lift-on until this fix.
     const roomShellFloorTex = materialsOn
       ? (interiorSurfaceFileTexture("floor", kit.floorTextureFile, kit.floorTextureWrap)
-          || interiorMaterialTexture(kit.floorMaterial, kit.floorColor, data.realmId + ":floor:shell", kit.floorGrain, 1, 1))
+          || interiorMaterialTexture(kit.floorMaterial, floorColorForRender, data.realmId + ":floor:shell", kit.floorGrain, 1, 1))
       : null;
     const roomShellWallTex = materialsOn
       ? (interiorSurfaceFileTexture("wall", kit.wallTextureFile, kit.wallTextureWrap)
-          || interiorMaterialTexture(kit.wallMaterial, kit.wallColor, data.realmId + ":wall:shell", kit.wallGrain, 1, 1))
+          || interiorMaterialTexture(kit.wallMaterial, wallColorForRender, data.realmId + ":wall:shell", kit.wallGrain, 1, 1))
       : null;
     const shellPsxOpts = { worldSurface: true, worldPsxOverride: (variant && typeof variant.worldPsx === "boolean") ? variant.worldPsx : undefined };
+    // BRIGHTNESS-REGRESSION FIX (docs/ROOM-SHELL-COMPILER.md close, 2026-07-12): the integration gate
+    // (dev/verify-diegetic-light.mjs) caught the compiled shell rendering uniformly too bright — it
+    // dropped VP3's own per-cell floor/wall tone entirely (room tone/jitter/perimeter-darken/
+    // valueScript/rim-vignette AND, on the emissive realm, the albedo-lift mode-switch below).
+    // interiorBuildInstancedMesh's OWN matBase is ALWAYS white (`texture ? {map:texture} :
+    // {color:0xffffff}` — texture or no texture, file or procedural, EVERY per-cell caller stays
+    // white-base) — 100% of the tone comes from the per-instance COLOR multiplying whatever's there.
+    // An EARLIER pass of this fix tried giving the compiled material a flat kit-color BASE for non-
+    // file realms (a guess at "reproducing a double multiply") — that was wrong: it created a hard
+    // multiplicative CEILING no vertex tint could lift past, which is exactly what silently capped
+    // LC-2's own albedo-lift ratio near 1.1x regardless of how strong the lift was pushed (verified:
+    // even a 100x lift only moved cosmic's roomMean from 0.023 to 0.026 — proof the ceiling, not the
+    // lift math, was the bug). The correct fix: white base ALWAYS (matching per-cell exactly), and
+    // the per-VERTEX tint carries floorList's/wallList's OWN already-computed per-cell `.color` value
+    // verbatim (whichever branch that realm's per-cell path already resolved — RAW absolute when
+    // !fromFile && !lift, NEUTRALIZED relative when fromFile || lift; see floorList's own definition
+    // above) — never re-derived here. The emissive-albedo LIFT itself lives entirely in the TEXTURE
+    // argument (floorColorForRender/wallColorForRender, above), matching the per-cell path's own
+    // documented law. Verified: with this model, `node dev/verify-diegetic-light.mjs` after temporarily
+    // forcing ITR_ROOM_SHELL=false (the per-cell path) passes 60/0 including LC-2's own 4.45x ratio —
+    // confirming the gate itself is satisfiable and the compiled-shell numbers below are being chased
+    // against a real, achievable target, not a moving one.
+    // floorLiftOrFile/wallLiftOrFile: the EXACT same branch condition floorList/wallList already use
+    // to decide raw-absolute vs neutralized-relative — hoisted here (before the materials) because the
+    // material base color needs it too (see ITR_ROOM_SHELL_RAW_COMPENSATION below): a lift-eligible or
+    // file-textured realm (gloom, cosmic) stays WHITE base (verified: LC-2 hits 3.40x there — any flat
+    // kit-color base creates a hard multiplicative CEILING no vertex tint can lift past, which is what
+    // silently capped LC-2's own ratio near 1.1x on an earlier pass of this fix). Only the plain RAW-
+    // ABSOLUTE branch (suburb/bright-kingdom/most non-flagship realms — no file, no lift) gets the
+    // compensation, since THAT'S the branch measured to still read too bright otherwise (see below).
+    const floorLiftOrFile = floorFromFile || applyEmissiveAlbedoLift;
+    const wallLiftOrFile = wallFromFile || applyEmissiveAlbedoLift;
+    // RAW-ABSOLUTE PROCEDURAL COMPENSATION (measured, suburb/bright-kingdom): even with the vertex
+    // tint byte-identical to the per-cell path's own instance color, a realm on the RAW-ABSOLUTE
+    // branch still reads measurably brighter compiled than per-cell (suburb daylit ambient-only:
+    // roomMax 0.993/clippedFraction 0.41 vs the per-cell target 0.974/0.03) — the residual traces to
+    // the procedural canvas texture itself (roomShellFloorTex, a SEPARATELY-keyed ":shell" variant at
+    // repeat (1,1)) sampling measurably brighter on average than the per-cell path's own differently-
+    // keyed/-repeated texture, a real texture-generation quirk, not a math error in the tint chain. A
+    // material-base multiplier (not just a vertex one — verified a vertex-only version of this same
+    // compensation barely moved suburb's numbers, since the bright texture dominates) closes it; tuned
+    // against the real gate (suburb/bright-kingdom clip checks), never guessed. NEVER applied on the
+    // fromFile/lift branch (see the header comment above — that's what broke LC-2 the first time).
+    const ITR_ROOM_SHELL_RAW_COMPENSATION = 0.98;
     const floorMat = applyPsxShaderTweaks(new THREE.MeshLambertMaterial(Object.assign(
-      roomShellFloorTex ? { map: roomShellFloorTex } : { color: kit.floorColor || "#888888" },
-      { side: THREE.DoubleSide })), shellPsxOpts);
-    // when TEXTURED, leave color at material default WHITE (matches interiorBuildInstancedMesh's own
-    // matBase convention one section up — texture:{map:texture} carries NO color key, so the shared
-    // InstancedMesh material tints white and the per-cell VALUE comes from each instance's own
-    // itrDarkenHex-scaled color instead). Setting color:kit.wallColor here UNCONDITIONALLY (an early
-    // bug this comment replaces) double-darkened the texture (kit.wallColor tint × the texture's own
-    // already-dark albedo), crushing the compiled wall toward black — a real, screenshot-caught
-    // regression, not a taste call. Only the UNTEXTURED (materials-off study baseline) branch uses the
-    // flat kit color, exactly like the floor material just above.
-    const wallBaseColor = roomShellWallTex ? "#ffffff" : (kit.wallColor || "#888888");
+      roomShellFloorTex ? { map: roomShellFloorTex } : {},
+      { color: floorLiftOrFile ? "#ffffff" : itrScaleHexValue(kit.floorColor || "#888888", ITR_ROOM_SHELL_RAW_COMPENSATION), vertexColors: true, side: THREE.DoubleSide })), shellPsxOpts);
+    const wallBaseColor = wallLiftOrFile ? "#ffffff" : itrScaleHexValue(kit.wallColor || "#888888", ITR_ROOM_SHELL_RAW_COMPENSATION);
     const wallMat = applyPsxShaderTweaks(new THREE.MeshLambertMaterial(Object.assign(
-      roomShellWallTex ? { map: roomShellWallTex } : {}, { color: wallBaseColor, side: THREE.DoubleSide })), shellPsxOpts);
+      roomShellWallTex ? { map: roomShellWallTex } : {}, { color: wallBaseColor, vertexColors: true, side: THREE.DoubleSide })), shellPsxOpts);
     // directive step 7 — risers are a deliberately DARKER material variant, darkened relative to
-    // whatever the wall's OWN base tone is (white-when-textured or kit.wallColor-when-flat) — never a
-    // second, independent darken stacked on top of the wall's already-textured value.
+    // whatever the wall's OWN base tone is above — never a second, independent darken stacked on the
+    // wall's already-tinted value. Risers don't (yet) carry their own vertex-color gradient (out of
+    // THIS fix's measured scope — no failing gate check reads riser luminance), so `vertexColors:true`
+    // here is a no-op today (every riser vertex defaults white) but kept for consistency/future AO.
     const riserMat = applyPsxShaderTweaks(new THREE.MeshLambertMaterial(Object.assign(
       roomShellWallTex ? { map: roomShellWallTex } : {},
-      { color: itrScaleHexValue(wallBaseColor, ITR_ROOM_SHELL_RISER_DARKEN), side: THREE.DoubleSide })), shellPsxOpts);
+      { color: itrScaleHexValue(wallBaseColor, ITR_ROOM_SHELL_RISER_DARKEN), vertexColors: true, side: THREE.DoubleSide })), shellPsxOpts);
+    // floorColorAt/wallColorForSegment: reuse floorList's/wallList's OWN per-cell `.color` value
+    // VERBATIM (never re-derived) — floorList is built earlier in this function by the SAME fromFile-
+    // or-lift branch the per-cell floorMesh already consumes, so the compiled shell inherits whichever
+    // representation (raw-absolute or neutralized-relative) that realm's per-cell path actually uses,
+    // with zero risk of the two paths drifting onto different conventions. `shellEdgeFactor` (defined
+    // above, off the room's own true bounds) is an ADDITIONAL low-frequency darken this unit adds on
+    // top — measured against the per-cell path directly (a controlled gloom fixture, torch 2 cells off
+    // room center): the compiled far-corner floor luminance needed this extra term to fall in the same
+    // band as the per-cell path's own (both floorList's color AND real point-light falloff alone left
+    // a real but insufficient gap — see this unit's own report for the measured before/after numbers).
+    // The RAW-ABSOLUTE procedural compensation lives in the MATERIAL base color above (floorMat/
+    // wallMat), not here — a vertex-only version of the same compensation barely moved suburb's own
+    // numbers (the bright procedural texture dominates), so it needs to multiply the whole pipeline.
+    const shellFloorColorIndex = new Map();
+    (floorList || []).forEach((f) => shellFloorColorIndex.set(Math.round(f.x) + "," + Math.round(f.z), f.color || "#ffffff"));
+    const floorColorAt = (x, z) => itrScaleHexValue(shellFloorColorIndex.get(x + "," + z) || "#ffffff", shellEdgeFactor(x, z));
+    const wallColorSourceList = wallLiftOrFile ? itrNeutralizeInstanceColors(inst.wall, kit.wallColor) : inst.wall;
+    const shellWallColorIndex = new Map();
+    (wallColorSourceList || []).forEach((w) => shellWallColorIndex.set(Math.round(w.x) + "," + Math.round(w.z), w.color || "#ffffff"));
+    // a compiled wall SEGMENT can span several original wall cells (that's the whole point of
+    // simplification) — sample one point per cell-width along the segment's own length, each stepped
+    // HALF a unit OUTWARD (opposite the segment's own inward normal) to land on the actual wall-cell
+    // ring (one unit-grid ring outside the floor boundary, same spacing convention as the floor
+    // cells), then average — a flat per-segment tint (walls don't need an interior gradient; they
+    // already sit at the room's own edge by construction).
+    const wallColorForSegment = (segMeta) => {
+      const n = segmentNormal({ a: segMeta.a, b: segMeta.b });
+      const dx = segMeta.b.x - segMeta.a.x, dz = segMeta.b.z - segMeta.a.z;
+      const steps = Math.max(1, Math.round(Math.hypot(dx, dz)));
+      let sr = 0, sg = 0, sb = 0, cnt = 0;
+      for(let s = 0; s < steps; s++){
+        const t = (s + 0.5) / steps;
+        const px = segMeta.a.x + dx * t, pz = segMeta.a.z + dz * t;
+        const wx = Math.round(px - n.x * 0.5), wz = Math.round(pz - n.z * 0.5);
+        const rawHex = shellWallColorIndex.get(wx + "," + wz);
+        if(rawHex){
+          const c = new THREE.Color(itrScaleHexValue(rawHex, shellEdgeFactor(wx, wz)));
+          sr += c.r; sg += c.g; sb += c.b; cnt++;
+        }
+      }
+      if(!cnt) return "#ffffff";
+      return "#" + new THREE.Color(sr / cnt, sg / cnt, sb / cnt).getHexString();
+    };
     const shell = compileRoomShell(shellCells, {
       wallHeight: roomWallHeight, wallHeightForSegment, uvDensity: ITR_ROOM_SHELL_UV_DENSITY,
+      floorColorAt, wallColorForSegment,
     });
     if(shell.floorGeometry){
       const m = new THREE.Mesh(shell.floorGeometry, floorMat);

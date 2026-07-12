@@ -28,6 +28,13 @@
         (14/0), verify-active-room-only.mjs (19/0), check-manifest.py OK.
      8. VISUAL GATE: before (flag off, per-cell prisms) / after (flag on, compiled shell) screenshots
         for a gloom room and a chrome room.
+     9. SAME-BAND LUMINANCE (docs/ROOM-SHELL-COMPILER.md's brightness-regression close, 2026-07-12):
+        the compiled shell's own mid-room AND far-corner floor luminance sit in the SAME band as the
+        per-cell path it replaced — a real Chrome pixel-sample comparison (dev/verify-diegetic-light.mjs's
+        own L-3 fixture/probe convention: a torch 2 cells off room center, a corner probe near the room's
+        own true corner), on the SAME mounted board, per-cell (flag off) vs compiled (flag on). Load-
+        bearing: this is the concrete regression guard for the exact bug the integration gate caught
+        (a compiled shell rendering uniformly too bright, blowing past the readability floor at range).
 
    Run:  node dev/verify-room-shell-render.mjs */
 
@@ -204,6 +211,88 @@ function luma(hex) {
   return 0.2126 * r + 0.7152 * g + 0.0722 * b;
 }
 
+// SAME-BAND LUMINANCE (check 9) — mountLitFixture/measurePatchLuminance mirror dev/verify-diegetic-
+// light.mjs's own L-3 buildScene/measure() convention VERBATIM (spine+pocket room graph, biggest room
+// focused, ONE controlled torch 2 cells off room center, corner probe 1 cell in from the room's own
+// true corner) so this check's numbers are directly comparable to that gate's own thresholds — this
+// harness is the "can't silently regress again" guard for the exact bug L-3 catches.
+async function mountLitFixture(page, { realmId, roomShellOn }) {
+  return await page.evaluate((args) => {
+    try {
+      window.Theater._setRoomShellEnabled(args.roomShellOn);
+      const nSpine = 7, nPockets = 2;
+      const ids = Array.from({ length: nSpine }, (_, i) => "s" + (i + 1));
+      const segs = ids.map((id, i) => ({
+        id, num: i + 1, label: id, isFinale: i === nSpine - 1, depth: i,
+        exits: [i > 0 ? { targetId: ids[i - 1] } : null, i < nSpine - 1 ? { targetId: ids[i + 1] } : null].filter(Boolean),
+        light: "normal",
+      }));
+      for (let p = 0; p < nPockets; p++) {
+        const parentIdx = 1 + (p % (nSpine - 2 > 0 ? nSpine - 2 : 1));
+        const pid = "p" + (p + 1);
+        segs.push({ id: pid, num: nSpine + p + 1, label: pid, isFinale: false, depth: segs[parentIdx].depth + 1, exits: [{ targetId: segs[parentIdx].id }] });
+        segs[parentIdx].exits.push({ targetId: pid });
+      }
+      const plan = spatializePlan(segs, "Room Shell Luminance Band", { walkId: "room-shell-lum:" + args.realmId });
+      const semPlan = semanticizePlan(plan, segs, []);
+      const focusRoom = semPlan.rooms.reduce((a, b) => (a.w * a.d > b.w * b.d ? a : b));
+      const board = interiorBuildBoard(semPlan, { realmId: args.realmId, env: "dungeon", focusSegNum: focusRoom.segNum, radius: 1 });
+      board.lightProfile = "torchlit";
+      const cx0 = focusRoom.x + Math.floor(focusRoom.w / 2), cy0 = focusRoom.y + Math.floor(focusRoom.d / 2);
+      const tx = cx0 + 2, tz = cy0;
+      const midX = cx0 + 1, midZ = cy0;
+      const cornerX = focusRoom.x + 1, cornerZ = focusRoom.y + 1;
+      board.lights = [{ x: tx, z: tz, y: 2.2, color: "#ff9a44", intensity: 1.4, distance: 6, decay: 2, kind: "torch", roomSegNum: focusRoom.segNum }];
+      board.pieces = [{ slug: "Guard", cellX: midX, cellY: midZ }];
+      board.cameraFit = { mode: "room" };
+      board._verifyNonce = Math.random() + ":" + Date.now();
+      window.Theater.setInteriorBoard(board);
+      return { ok: true, probe: { midRoom: { x: midX, y: midZ }, corner: { x: cornerX, y: cornerZ } } };
+    } catch (e) { return { ok: false, error: e.message, stack: e.stack }; }
+  }, { realmId, roomShellOn });
+}
+async function shootBase64(page) {
+  const canvasEl = await page.$(".theater-stage-canvas canvas");
+  return canvasEl ? await canvasEl.screenshot({ encoding: "base64" }) : await page.screenshot({ encoding: "base64" });
+}
+async function measurePatchLuminance(page, probe, pngB64) {
+  return await page.evaluate(({ probe, pngB64 }) => new Promise((resolveOuter) => {
+    function lum(r, g, b) { return (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255; }
+    const img = new Image();
+    img.onload = () => {
+      const W = img.naturalWidth, H = img.naturalHeight;
+      const c2 = document.createElement("canvas"); c2.width = W; c2.height = H;
+      const ctx = c2.getContext("2d");
+      ctx.drawImage(img, 0, 0, W, H);
+      let data;
+      try { data = ctx.getImageData(0, 0, W, H).data; } catch (e) { return resolveOuter({ ok: false, error: "getImageData: " + e.message }); }
+      const origin = window.Theater.interiorBoardOrigin ? window.Theater.interiorBoardOrigin() : null;
+      const cx = origin ? origin.cx : 0, cz = origin ? origin.cz : 0;
+      function toScreen(cellX, cellY, worldY) {
+        const p = window.Theater.projectWorldPoint(cellX - cx, worldY, cellY - cz);
+        if (!p) return null;
+        return { sx: Math.round((p.ndcX * 0.5 + 0.5) * W), sy: Math.round((1 - (p.ndcY * 0.5 + 0.5)) * H) };
+      }
+      function patchLum(scr, rad) {
+        if (!scr) return null;
+        let s = 0, cnt = 0;
+        for (let dy = -rad; dy <= rad; dy++) for (let dx = -rad; dx <= rad; dx++) {
+          const x = scr.sx + dx, y = scr.sy + dy;
+          if (x < 0 || y < 0 || x >= W || y >= H) continue;
+          const i = (y * W + x) * 4; s += lum(data[i], data[i + 1], data[i + 2]); cnt++;
+        }
+        return cnt ? s / cnt : null;
+      }
+      const out = { ok: true };
+      if (probe.midRoom) out.midRoomLum = patchLum(toScreen(probe.midRoom.x, probe.midRoom.y, 0.35), Math.floor(H * 0.02));
+      if (probe.corner) out.cornerLum = patchLum(toScreen(probe.corner.x, probe.corner.y, -0.4), Math.floor(H * 0.02));
+      resolveOuter(out);
+    };
+    img.onerror = () => resolveOuter({ ok: false, error: "png decode failed" });
+    img.src = "data:image/png;base64," + pngB64;
+  }), { probe, pngB64 });
+}
+
 async function main() {
   console.log("[verify-room-shell-render] docs/ROOM-SHELL-COMPILER.md — the compiled shell, live GL-layer proof");
   const outDir = path.join(__dirname, "room-shell-shots");
@@ -304,6 +393,38 @@ async function main() {
     await settleCameraTween(page); await sleep(300);
     await shoot(page, path.join(outDir, "chrome-after-shell.png"));
     console.log(`  chrome before/after: ${path.join(outDir, "chrome-before-percell.png")} / chrome-after-shell.png`);
+
+    console.log("\n=== 9. SAME-BAND LUMINANCE — compiled floor's mid-room/far-corner match the per-cell path ===");
+    // load-bearing regression guard: this is a real Chrome pixel-sample comparison of the SAME board,
+    // per-cell (flag off) vs compiled (flag on) — the concrete "can't silently regress again" check
+    // for the exact bug the integration gate caught (docs/ROOM-SHELL-COMPILER.md's brightness close).
+    const READABILITY_FLOOR = 0.12; // matches dev/verify-diegetic-light.mjs's own L-3 constant
+    const SAME_BAND_TOLERANCE = 0.06; // absolute luminance units either side of the per-cell reading
+    const perCellLit = await mountLitFixture(page, { realmId: "gloom", roomShellOn: false });
+    if (!perCellLit.ok) throw new Error("per-cell lit fixture mount failed: " + perCellLit.error);
+    await settleCameraTween(page); await sleep(500);
+    const perCellPng = await shootBase64(page);
+    const perCellLum = await measurePatchLuminance(page, perCellLit.probe, perCellPng);
+    ok(perCellLum.ok, "9a. per-cell lit fixture measured: " + (perCellLum.error || "ok"));
+
+    const compiledLit = await mountLitFixture(page, { realmId: "gloom", roomShellOn: true });
+    if (!compiledLit.ok) throw new Error("compiled lit fixture mount failed: " + compiledLit.error);
+    await settleCameraTween(page); await sleep(500);
+    const compiledPng = await shootBase64(page);
+    const compiledLum = await measurePatchLuminance(page, compiledLit.probe, compiledPng);
+    ok(compiledLum.ok, "9b. compiled lit fixture measured: " + (compiledLum.error || "ok"));
+
+    console.log(`  per-cell:  midRoom=${perCellLum.midRoomLum != null ? perCellLum.midRoomLum.toFixed(3) : "n/a"} corner=${perCellLum.cornerLum != null ? perCellLum.cornerLum.toFixed(3) : "n/a"}`);
+    console.log(`  compiled:  midRoom=${compiledLum.midRoomLum != null ? compiledLum.midRoomLum.toFixed(3) : "n/a"} corner=${compiledLum.cornerLum != null ? compiledLum.cornerLum.toFixed(3) : "n/a"}`);
+
+    ok(compiledLum.cornerLum != null && compiledLum.cornerLum < READABILITY_FLOOR,
+      `9c. compiled far-corner luminance (${compiledLum.cornerLum != null ? compiledLum.cornerLum.toFixed(3) : "n/a"}) stays BELOW the readability floor ${READABILITY_FLOOR} (darkness at range survives the compiler)`);
+    ok(compiledLum.midRoomLum != null && compiledLum.midRoomLum >= READABILITY_FLOOR,
+      `9d. compiled mid-room luminance (${compiledLum.midRoomLum != null ? compiledLum.midRoomLum.toFixed(3) : "n/a"}) stays >= the readability floor ${READABILITY_FLOOR} (legible near the light)`);
+    ok(perCellLum.cornerLum != null && compiledLum.cornerLum != null && Math.abs(compiledLum.cornerLum - perCellLum.cornerLum) <= SAME_BAND_TOLERANCE,
+      `9e. SAME BAND: compiled far-corner (${compiledLum.cornerLum != null ? compiledLum.cornerLum.toFixed(3) : "n/a"}) sits within ${SAME_BAND_TOLERANCE} of the per-cell path's own far-corner (${perCellLum.cornerLum != null ? perCellLum.cornerLum.toFixed(3) : "n/a"}) — the concrete regression guard`);
+    ok(perCellLum.midRoomLum != null && compiledLum.midRoomLum != null && Math.abs(compiledLum.midRoomLum - perCellLum.midRoomLum) <= SAME_BAND_TOLERANCE,
+      `9f. SAME BAND: compiled mid-room (${compiledLum.midRoomLum != null ? compiledLum.midRoomLum.toFixed(3) : "n/a"}) sits within ${SAME_BAND_TOLERANCE} of the per-cell path's own mid-room (${perCellLum.midRoomLum != null ? perCellLum.midRoomLum.toFixed(3) : "n/a"})`);
 
     // leave the page in the DEFAULT (on) state.
     await page.evaluate(() => { window.Theater._setRoomShellEnabled(true); });

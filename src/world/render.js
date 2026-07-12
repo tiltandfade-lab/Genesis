@@ -441,6 +441,20 @@ function theaterNodeSourceFor(w,nodeId){
   return rec;
 }
 
+/* GUISE.md bridge: the walk card keeps only entityRef; the canonical forms remain on the codex
+   entity. Snapshot them read-only for the pure projection boundary. G1 is not built yet, so today's
+   records normally yield undefined and legacy rendering remains unchanged. */
+function theaterGuiseSnapshotFor(w,walk){
+  if(typeof codexGet!=="function"||!walk||!walk.deck||!Array.isArray(walk.deck.cards)) return undefined;
+  const out={};
+  walk.deck.cards.forEach(card=>{
+    if(!card||card.entityRef==null||out[card.entityRef]) return;
+    const rec=codexGet(w,card.entityRef);
+    if(rec&&rec.guise) out[card.entityRef]=rec.guise;
+  });
+  return Object.keys(out).length?out:undefined;
+}
+
 function theaterHereSourceFor(w){
   const realms=(typeof theaterActiveRealmsFor==="function")?theaterActiveRealmsFor(w):[];
   const hasWalkSeam=(typeof prepOf==="function"&&typeof walkOfFrontier==="function");
@@ -471,7 +485,9 @@ function theaterHereSourceFor(w){
   // walks), theaterHereSourceFor falls through byte-identical to the existing {kind:"segment"}
   // return below.
   if(pn.spatial){
-    return { kind:"interior", plan:pn.spatial, focusSegNum:cur, radius:1,
+    return { kind:"interior", plan:pn.spatial, walk:walk, segment:seg, overlay:reskinEntry,
+      guiseByEntityId:theaterGuiseSnapshotFor(w,walk),
+      focusSegNum:cur, radius:1,
       env:walk.environment||undefined, realms:realms,
       traces:(reskinEntry&&reskinEntry.traces)||undefined, removed:(reskinEntry&&reskinEntry.removed)||undefined };
   }
@@ -489,7 +505,7 @@ function theaterHereSourceFor(w){
    nothing to generalize. shopOpen mirrors the SAME GS fields open_shop (dm.js) stamps. */
 function theaterCastSourceFor(w,hereSource){
   const P=(typeof prepOf==="function")?prepOf(w):null;
-  const walking=!!(hereSource&&hereSource.kind==="segment");
+  const walking=!!(hereSource&&(hereSource.kind==="segment"||hereSource.kind==="interior"));
   const hereNodeId=(P&&P.activeWalkId)||(w&&w.currentNodeId)||null;
   const shopOpen=!!(GS.gamePanel==="shop"&&GS.activeShopId);
   return { hereNodeId:hereNodeId, walking:walking, shopOpen:shopOpen,

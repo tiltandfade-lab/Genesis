@@ -1107,11 +1107,35 @@ function trayFrom(source, scene, opts){
     // src/ui/theater-boot.js) already knows how to mount when present — setInteriorBoard's OWN
     // dressing-mount branch is used for the first time from a real production render call, not just a
     // harness/study rig.
-    const dressedPlan = (typeof dressPlan === "function") ? dressPlan(source.plan, { realmId: realmId }) : source.plan;
+    const projection = (typeof walkSceneProjectionFrom === "function" && source.segment)
+      ? walkSceneProjectionFrom(source.walk||null, source.segment, source.plan, {
+          overlay:source.overlay||null, viewer:"player", guiseByEntityId:source.guiseByEntityId||null
+        })
+      : null;
+    let dressedPlan = (typeof dressPlan === "function") ? dressPlan(source.plan, { realmId: realmId }) : source.plan;
+    // Explicit walk deals own room density. In an overloaded dealt scene, retain only the strongest
+    // incidental dressing beat before adding authored projected citizens; mandatory cards never enter
+    // this decorative filter. Legacy walks have explicitDeal:false and remain byte-compatible.
+    if(projection && projection.explicitDeal && projection.density === "overloaded" && Array.isArray(dressedPlan.dressing)){
+      const keep = dressedPlan.dressing.filter(d=>d&&d.lightAffine).slice(0,1);
+      dressedPlan = Object.assign({}, dressedPlan, { dressing:keep });
+    }
+    const projectedDressingRoles = ["centerpiece","feature","interactable","dressing","cover","guise"];
+    const projectedDressing = projection ? projection.stageNow.filter(c=>c&&c.slug&&c.position&&projectedDressingRoles.indexOf(c.role)>=0).map(c=>({
+      slug:c.slug, x:c.position.x, y:c.position.y, primary:c.centerpiece?"setPiece":"floor",
+      cardKind:c.cardKind||"medium", roomSegNum:source.focusSegNum, sourceRef:c.sourceRef,
+      projected:true, count:c.count, representativeCount:c.representativeCount
+    })) : [];
+    if(projectedDressing.length){
+      dressedPlan = Object.assign({}, dressedPlan, { dressing:(dressedPlan.dressing||[]).concat(projectedDressing) });
+    }
     const board = interiorBuildBoard(dressedPlan, {
-      env: env, realmId: realmId, focusSegNum: source.focusSegNum, radius: source.radius
+      env: env, realmId: realmId, focusSegNum: source.focusSegNum, radius: source.radius,
+      projection:projection
     });
     board.dressing = dressedPlan.dressing || [];
+    board.projection = projection;
+    board.activeRoomId = source.focusSegNum != null ? source.focusSegNum : null;
     return board;
   }
   const segment = source.kind === "interior" ? source.record : source.segment;

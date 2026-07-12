@@ -18,68 +18,76 @@ The running execution order. `DESIGN.md` holds the *what* and *why*; this holds 
 roll into `NEXT-STEPS-ARCHIVE.md` via `python3 build/archive-docs.py --emit`. Standing plan
 sections (tracks/layers/etc.) are never auto-archived.
 
-## Do next (2026-07-09 overnight — the design session landed; supersedes below)
+## Do next (2026-07-11 — VISUAL CAMPAIGN CONTINUATION: BW4 → BW5, registered)
 
-The accidental design session (see CHANGELOG 2026-07-09): 6 system specs + 6 craft expansions merged
-with Adam's rulings folded; REALM-HOOKS spec landing next. Queue:
+BW2/BW3 landed (CHANGELOG); the campaign continues with two waves, in order. Build unauthorized until
+Adam says go — BW4 lands first.
 
-**Place-gen riders (2026-07-09 late night — the engine wave LANDED, full sweep green; open items
-carried forward from the archived place-gen lane block):** ① Adam red-pen + P1-wave go/no-go on
-`docs/PLACE-ASSET-QUEUE.md` (the spend gate) · ② Adam craft pass on Place Spine rows + 3 skin labels
-+ the 5 upgraded settlement tables (all PROVISIONAL) · ③ interior-gen spec section (DMG14 Appendix A
-chain + Bastion space-bands, realm-skinned) before its build wave · ④ 8 backfill realm skins (craft
-lane) · ⑤ HOOK-WALKS terminus-bias table when that spec locks (the archetypeBias parameter is live).
+1. ☐ **BW4 — MOTION & FEEL** (`docs/BEAUTY-WAVE-4.md`, SPECCED). Runs FIRST — pure motion mechanism on
+   the already-wired tween channels: camera tweens (MF-1) · spawn/despawn grace (MF-2) · hit-stop
+   (MF-3) · turn/round rhythm (MF-4) · the feel gate (MF-5). Independent of BW5; MF-2's room crossfade
+   is exactly what BW5's one-room render rides.
+2. ☐ **BW5 — THE SECOND INTEGRATION PASS** (`docs/BEAUTY-WAVE-5.md`, SPECCED + registered in DESIGN).
+   Close the roll→render gap. Order: **SEAM 0** (the stage — one-room render + occlusion-fade + the
+   broad state primitive + the prop construction model; detail in GRAPHICS-ENGINE §H/§I, DUNGEON-GRAPH
+   Law 7/U6) → **SEAM 1** (interactables; the DOORS-FIRST keystone slice proves the whole stack) →
+   **SEAM 2** (rooms) ∥ **SEAM 3** (materials/conditions). **CORE-3 scope** (fantasy/gloom/chrome);
+   other realms parked as expansion.
+   - **Adam (ImageGen):** the core-3 execute packets — PACKET-07 core-variants · 05 condition-decals ·
+     06 arch-materials · 08 furniture-faces (+ PACKET-04 cross-usable subset). Index:
+     `dev/model-qa/mock-gen/PACKET-WAVES.md`. Wiring these needs the one-time code touches each packet's
+     "Return handling" lists (fold-textures slice path, REALM_TEXTURES appends, CONDITION_DECALS +
+     ARCH_MATERIAL_TEXTURES lookups) — BW5 SEAM 3 build units.
+   - **Build-time details left thin on purpose** (settle when their unit builds): S0-3 state-primitive
+     schema · IA-2 cache home in `world.state`.
 
-1. ☐ **Adam (morning): gather the books** into `Reference/` for the Saltmarsh treatment (page index +
-   system gather each — highest-fit first):
-   - **Van Richten's Guide to Ravenloft** → GLOOM (Domains of Dread, horror kits, Darklords)
-   - **Tomb of Annihilation** → LOST WORLD (hexcrawl travel, jungle survival, dino mounts/races)
-   - **Wild Beyond the Witchlight** → BRIGHT-KINGDOM (carnival games, fey bargains)
-   - **Curse of Strahd** → COSMIC (the Tarokka reading — deck-driven prep blueprint)
-   - **Explorer's Guide to Wildemount** → TIYL (the Heroic Chronicle weighted-origin system)
-   - **Descent into Avernus** → CHROME (war machines / vehicle combat)
-   - **Acquisitions Incorporated** → economy (organization/franchise sinks)
-   - **Rime of the Frostmaiden** → wilderness (cold survival, overland dread)
-2. ☐ **Adam: row-level taste passes** on the PROVISIONAL craft (Child Saw d100, the 3 item tables,
-   the 3 realm re-keys) — direction already ruled, rows await his read.
-3. ◐ **Build wave — the spec backlog is deep and Sonnet-ready** (each doc carries numbered units +
-   red-first tests): ☑ **ANIMAL-SOCIAL U1–U6 — BUILT + GATED + MERGED 2026-07-09 night** (CHANGELOG;
-   Opus re-gate caught a real DM_EVENT_TYPES / dm-contract.json / table-usage artifact-drift miss the
-   build self-reported green). ☑ **ANIMAL-SOCIAL-HQ HQ-1..7 — the review fix queue, LANDED 2026-07-09
-   late night** (`docs/ANIMAL-SOCIAL-HQ.md`; /code-review found the wave's verify-green-≠-wired
-   disease — realm skins / class bump / parley routing / predator witness all unwired in production —
-   all wired + gated; the WIRING LAW is now standing acceptance for wiring units: verify checks drive
-   production entry points, never the new function directly). REMAINING, in dependency order →
-   TIYL-WEIGHTED-STARTS → HOOK-WALKS (incl. dungeon-discovery, breach-in-walks, mid-walk entry,
-   8–12 segment law) → GLOOM-KEY U1–U7 → PLACE-GEN U1–U6 → CAMEO-CAST U1–U5 → SHIP-TRAVEL U1–U9 →
-   REALM-HOOKS U1–U6.
-   **⚠ Each remaining spec is still SPEC-not-locked ("awaiting Adam's review") — lock it (resolve its
-   open rulings) before executing, as ANIMAL-SOCIAL was locked before its build.**
-3b. ☑ **Adam rulings from the HQ review — RULED 2026-07-09 late night:** (a) urban→rural tier-0
-   banding — **settlement POPULATION estimates are the intended urban-development signal** ("at some
-   point we need to start estimating populations for the cities and towns … helps me a lot on
-   tabletop when I am creating a map for a town"); the tier-0 lodging fallback STANDS until
-   populations exist. Populations belong to the PLACE-GEN spec's scope when that build wave lands —
-   they'd drive `nodeEnvBand`, place-tier stock, and town-map presentation alike. (b) npc-life stamp
-   — **BUILT as HQ-8, landed 2026-07-09 late night**: the six place-bound npc-life writers
-   (companion desertion/pet-wanders/sidekick-departure/sidekick-death, turn life-event,
-   successor-thread) stamp `nodeId`; backstory seeds / faction-turns / tell-refresh stay
-   location-less by design (a bird must not witness world-gen). Bird's faces-sense is now live in
-   production; herd's `move-zone` movement-sense stays deferred until map-scale movement witnessing
-   has a real source (travel transitions, someday — design question, not a stamp).
-   **Standing note:** `dev/verify-animal-table-fingerprint.mjs` is SUPPOSED
-   to go red under the CRAFT-LANE row pass — that red = re-sync `ANIMAL_ENV_WEIGHTS` +
-   `ANIMAL_KNOWLEDGE_SCOPE` eyes-open, never loosen the tokens.
-4. ☐ **Models-lane handoff** (coordination note, other session): saurian warrior+scholar castes,
-   2-3 rideable dino mounts, Zeal-stratum sentinel, the bat gang, ED-209-class boss, ally-mutant,
-   plus the Shoggoth benchmark's hermetic re-identity ("Unformed of Nun", Adam deferred).
-5. ☐ Standing: playtest + retune (E-PRES curves, hook-walk lengths, ship lethality all
-   "felt-in-play" items); the NPC-lane optional craft (kin rows fold-in).
+## Open threads — carried forward (STANDING section; never auto-archived)
 
+Live work that currently lives inside dated `## Do next` blocks and would be LOST when those blocks
+hit the 4-block archive cap (`build/archive-docs.py` rolls the oldest dated block; the 2026-07-09
+block is next). Consolidated here so it survives the roll. Loot / Track B / starting-state /
+change-over-time items already sit in their own standing sections below — safe, not repeated here.
+When a thread lands, tick it here; when a whole lane is folded into a newer spec, say so and point.
 
-> **Older superseded "Do next" queues (2026-07-03 through 2026-07-08 night) and the long
-> historical build-log block live in [`NEXT-STEPS-ARCHIVE.md`](NEXT-STEPS-ARCHIVE.md) — read-only,
-> not the working queue. This file keeps only the live queue + the still-open roadmap items below.
+**The Sonnet-ready spec build wave** — each is SPEC-not-locked; **lock its open rulings before
+executing** (as ANIMAL-SOCIAL was). ANIMAL-SOCIAL + PLACE-GEN already LANDED. In dependency order:
+`TIYL-WEIGHTED-STARTS → HOOK-WALKS` (dungeon-discovery · breach-in-walks · mid-walk entry · 8–12
+segment law; `hookWalkMint` not built) `→ GLOOM-KEY U1–U7 → CAMEO-CAST U1–U5 → SHIP-TRAVEL U1–U9 →
+REALM-HOOKS U1–U6`.
+
+**Adam's hands (content / taste):**
+- ☐ **Gather the books** into `Reference/` (Saltmarsh treatment, highest-fit first): Van Richten's→GLOOM ·
+  Tomb of Annihilation→LOST-WORLD · Wild Beyond the Witchlight→BRIGHT-KINGDOM · Curse of Strahd→COSMIC ·
+  Explorer's Guide to Wildemount→TIYL · Descent into Avernus→CHROME · Acquisitions Inc→economy ·
+  Rime of the Frostmaiden→wilderness.
+- ☐ **Row-level taste passes** on PROVISIONAL craft: Child Saw d100 · the 3 item tables · the 3 realm re-keys.
+- ☐ **Place-gen riders:** PLACE-ASSET-QUEUE red-pen (the spend gate) · Place Spine + 3 skin labels + 5
+  settlement tables craft pass · interior-gen spec section (DMG14 App-A + Bastion bands, realm-skinned) ·
+  8 backfill realm skins · HOOK-WALKS terminus-bias table when that spec locks.
+
+**Models lane (other session):** saurian warrior+scholar castes · 2–3 rideable dino mounts · Zeal
+sentinel · bat gang · ED-209-class boss · ally-mutant · Shoggoth "Unformed of Nun" re-identity (deferred).
+
+**Sprite lane (SPRITE-GEN-V2):** round-2/3 gen remainder · registry fold-in (v3-sizing/v3-tags →
+`data/sprite-registry.js`) · NPC expression pass (after Adam settles assignments) · **land the sprite
+lane** (`claude/sprite-gen-refactor-magenta`, 23 commits + parked sheets) at the gen-wave sweep · XL/titan
+regen (64 sheets, `XL-REGEN-PROMPTS.md`) · fantasy review pass (486 unreviewed, `sprite-review.py` :5179) ·
+item-kind rider (571 item cells skipped by the v2 parser).
+
+**Dungeon-graph / render lane:** re-shoot the U3 study card (fog near-black, gloom underexposed, toast
+bleed) → Adam taste gate · **the finale gate** (roll a dungeon walk → render a battle in a generated
+room at true scale → loop-test the cycle) · GUISE G1–G4 + NPC expression.
+
+**Visual-campaign follow-ons** (most now folds into BW4/BW5 — see those docs): eyeball the beauty shots +
+the r2 ΔE-flag list (42 sprites, `unification-report.json`) · UNIFICATION-WAVE UW1–UW4 (after the mocks) ·
+Blender teaching session (Adam upskilling to direct modeling). **SUPERSEDED:** BEAT FRAMING / camera law 2c
+is now folded into BW5 (GRAPHICS-ENGINE §I: occlusion-fade + one-room orbit camera).
+
+**⚠ GIT-LFS MIGRATION — URGENT** (`docs/GIT-LFS-MIGRATION.md`): GitHub warns on the two 79MB zips; needs
+Adam's $5 pack + a force-push confirm; do at a quiet post-merge moment.
+
+**Standing:** playtest + retune (E-PRES curves, hook-walk lengths, ship lethality — all felt-in-play);
+the NPC-lane optional craft (kin rows fold-in).
 
 ## Design lock — ☑ done (2026-06-18)
 Spice = emergent · Fragment oracle = default · AI DM narrates · visible transition-based clock · World State Ledger = all change-over-time · primitive node-graph map. All recorded in `DESIGN.md` Locked decisions (2026-06-18).
@@ -209,17 +217,19 @@ L7. ☐ **Regenerate `table-registry.json/.md`** — stale after the rename/new 
 4. ☐ **GIT-LFS migration** at the quiet post-merge moment (docs/GIT-LFS-MIGRATION.md).
 5. ☐ **GUISE G1-G4** (docs/GUISE.md) + NPC expression pass, together.
 
-## Do next (2026-07-10 later night, BEAUTY-WAVE CLOSED — the wave landed; what it opened)
+## Do next (2026-07-11, BW4 MOTION & FEEL LANDED — the wave opened two Adam-gated items)
 
-1. ☐ **Adam: run MOCK-GEN PACKET-01** (dev/model-qa/mock-gen/PACKET-01.md, 8 frames, paste-ready)
-   → arrivals to ui-sketches/mock-frames/ → Fable reads → next-wave specs cite mocks by name.
-2. ☐ **Adam: eyeball the beauty shots** (dev/battle-gate/beauty-shot/ + CAPTION.md) and the r2
-   ΔE-flag list (42 sprites, dev/model-qa/unification-report.json).
-3. ☐ **BEAT FRAMING** — wire law 2c (camera fits the action cluster) into the combat camera; the
-   biggest visible win left per the VP8 caption.
-4. ☐ **GIT-LFS migration — URGENT** (GitHub warns on the two 79MB zips; runbook ready, needs
-   Adam's $5 pack + force-push confirm).
-5. ☐ **UNIFICATION-WAVE (UW1-UW4)** after the mocks inform it; light-marker emissive art +
-   gloom/chrome density tune ride whichever unit touches that surface first.
-6. ☐ **Blender teaching session** — Adam upskilling to direct Claude; genesis-blender-mcp rig
-   standing; sprite-prop gaps are the first modeling queue.
+BW4's 4 buildable units are on master + pushed (camera tweens, spawn grace, hit-stop mechanism,
+turn rhythm — details in CHANGELOG 2026-07-11 BW4, HANDOFF top). Two open, both need Adam:
+
+1. ☐ **MF-3b — hit-stop production wiring (Adam's event-shape call).** Hit-stop/recoil/crit are
+   built+tested but DORMANT: production plays `hit-damage` (base shake+flash) but never passes
+   `opts.attackerId` (gates the freeze+recoil) nor emits `hit-crit` (gates crit-response). FIX =
+   thread `attackerId` + a crit flag onto the hp ledger event (EVENT-CONTRACT addition at the
+   `DM_EVENT_FIELDS` boundary). Smaller than a strike/hurt remap, no double-fire risk. fall-death
+   hold is already live.
+2. ☐ **MF-5 — the feel gate.** Play 3 combat rounds ("does it feel like moving miniatures?") +
+   the instrumented 10s turn-burst. Best AFTER MF-3b (so the burst shows hit-stop) and mind the
+   documented capture-vs-tween screenshot limit. Interim evidence committed: the loop-gate
+   contact sheet + `loop-01-camera-mid-tween.png` + the fake-clock tween-curve harnesses.
+3. ☐ Then the BW2/BW3 carry-over below (PACKET-01 mocks, beauty-shot eyeball, GIT-LFS, UW1-4).

@@ -129,6 +129,11 @@ only happen at merge-to-master, which is git's ordinary 3-way merge, not a surpr
 ## Docs (all in `docs/`; only `README.md` + `table-registry.md` stay at repo root)
 
 - `docs/HANDOFF.md` — read first; current state + what's next.
+- Graphics vision implementation note: `ui-sketches/mock-frames/vq-battle-scenes/CLAUDE-IMPLEMENTATION-HANDOFF.md`
+  — the no-human-production bridge from the 20 VQ battle frames to the current theater engine.
+- Walk-native graphics contract: `ui-sketches/mock-frames/vq-battle-scenes/WALK-NATIVE-DIORAMA-CONTRACT.md`
+- Walk-wide card dealing, empty-room staging, lore spines, and secret networks: `docs/WALK-CARD-DEALING.md`
+  — the walk segment stays canonical; dioramas are field-provenanced visual projections.
 - `docs/DESIGN.md` — the locked-decision registry (the index; specs hold detail).
 - `docs/NEXT-STEPS.md` — ordered build plan; "Do next" at the bottom.
 - `docs/README.md` — full docs index + the `type:` taxonomy.

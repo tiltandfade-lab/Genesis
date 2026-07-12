@@ -6,6 +6,11 @@ status: SPECCED (2026-07-04; Adam: "go ahead and spec out the micro-prop wave"; 
 QUEUED BEHIND the env waves — do not build from this doc until the director schedules it)
 ```
 
+**PARTIALLY SUPERSEDED (2026-07-11) by `docs/BEAUTY-WAVE-5.md`:** the 3D-micro-model geometry in
+this doc predates the flat objects-dg-03 art and is superseded by BW5's flat-art render path
+(unit IA-4). What SURVIVES and folds into BW5 unit IA-1 is the d100-noun → archetype MAPPING (the
+module table below). Do not build the geometry approach here; read it for the noun coverage.
+
 ## Source
 
 The per-room/per-leg interactable-object tables (dungeon-interactable-object d100 rolls every

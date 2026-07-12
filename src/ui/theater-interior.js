@@ -1045,7 +1045,7 @@ function itrCoverCardFor(realmId, rng) {
  * `plan` is a U1 spatializePlan() output, ideally U2-extended (semanticizePlan) for room.scaleDomain/
  * door.transition/door.squeeze — a bare U1 plan degrades cleanly (every room defaults scaleDomain 1.0,
  * every door renders as a normal non-squeeze frame), never throws.
- * `opts`: { realmId, env, focusSegNum, radius=1 } — STAGE-A A1: with ITR_ACTIVE_ROOM_ONLY on (default),
+ * `opts`: { realmId, env, focusSegNum, radius=1, projection? } — STAGE-A A1: with ITR_ACTIVE_ROOM_ONLY on (default),
  * focusSegNum alone selects the render keep set ({focusSegNum} exactly — radius is READ but ignored,
  * kept only so an OFF-flag caller/harness can still request the pre-A1 radius-hop behavior); omit
  * focusSegNum to render the WHOLE plan (the 80-room draw-call-budget check, and the study card's
@@ -1482,6 +1482,10 @@ function interiorBuildBoard(plan, opts) {
     // convention skirt/cover/furniture/wallProps already establish above). Empty unless
     // ITR_ACTIVE_ROOM_ONLY is on AND a focus room was requested (see this function's own doc comment).
     portals: portals,
+    // Walk-card projection is already player-safe at this boundary. Carry its source references and
+    // density signal for ShotPlan/debugging; concealed payloads never reach this board.
+    projection: opts.projection || null,
+    activeRoomId: opts.focusSegNum != null ? opts.focusSegNum : null,
     daisTop: daisTop,
     lights: lights,
     bounds: { minX: minX, maxX: maxX, minZ: minZ, maxZ: maxZ },

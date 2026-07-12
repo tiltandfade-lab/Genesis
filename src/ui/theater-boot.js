@@ -123,6 +123,12 @@ import {
 } from "./spawn-grace.js";
 import * as Parts from "./theater-parts.js";
 import { resolveWholeObject, loadWholeObjectBuilders, WHOLE_OBJECT_REGISTRY, NEAREST_SUB } from "./theater-figures.js";
+// ROOM-SHELL COMPILER (docs/ROOM-SHELL-COMPILER.md; docs/GRAPHICS-NORTH-STAR.md Stage C unit C4): the
+// active room's cells compiled into a CONTINUOUS shell (floor polygon + wall/riser quad-strips) instead
+// of the per-cell InstancedMesh box read below — see this file's own ITR_ROOM_SHELL flag + itrBuild*
+// call site (setInteriorBoard) for the wire-in. compileRoomShell is the thin THREE assembler; this file
+// still owns every material (Stage E's job, not this unit's).
+import { compileRoomShell, ROOM_SHELL_TIER_QUANTUM, segmentNormal } from "./theater-room-mesh.js";
 // P1' WHOLE-OBJECT WIRING (docs/P1-WIRING.md §4 step 3): a STATIC import of probe-lib.js itself —
 // every dev/model-qa/creatures/*.js module ALSO imports probe-lib.js by the identical relative
 // specifier (resolved from dev/model-qa/, '../probe-lib.js'), which both Node and browsers resolve
@@ -7477,6 +7483,25 @@ let ITR_OCCLUSION_FADE_DISABLED_FOR_TEST = false;
 // "know something's there" intent. Bumped to 0.2 to actually read as a faint presence; still low
 // enough that the figure behind reads clearly. A dial — Adam tunes from the re-shoot.
 const ITR_OCCLUSION_GHOST_OPACITY = 0.2;
+// ROOM-SHELL COMPILER (docs/ROOM-SHELL-COMPILER.md): default ON, reversible — the SAME
+// "let + window.Theater._set*ForTest setter" convention ITR_OCCLUSION_FADE_DISABLED_FOR_TEST just
+// above already established for a live/harness A-B toggle. ON: the active room's floor/wall/riser
+// come from compileRoomShell(...) (a continuous compiled shell) instead of the per-cell
+// interiorBuildInstancedMesh floor/wall pass below. OFF: byte-identical to pre-this-unit rendering —
+// the documented escape hatch during migration (ROOM-SHELL-COMPILER.md's own "keep the old path
+// behind a diagnostic flag" instruction, mirroring A1's ITR_ACTIVE_ROOM_ONLY reversibility).
+let ITR_ROOM_SHELL = true;
+// world units per texture repeat for the compiled shell's own vertex UVs (theater-room-mesh.js's
+// DEFAULT_UV_DENSITY=1 mirrors this — kept as a SEPARATE named constant here, not an import, since the
+// pure module stays decoupled from this file's own material-building code; see the wire-in call site).
+const ITR_ROOM_SHELL_UV_DENSITY = 1;
+// mirrors ITR_CUTAWAY_PARAPET_FRAC (the per-cell path's own constant, declared at its own call site
+// below) — a SEPARATE named copy (not a shared const) because the compiled-shell wire-in and the
+// per-cell path are two independent code paths that happen to want the same fraction today.
+const ITR_ROOM_SHELL_PARAPET_FRAC = 0.4;
+// riser side faces read as a DELIBERATELY DARKER material variant (directive step 7) — same value-
+// multiply convention ITR_SCENE_DOORFRAME_VALUE already uses one section up, applied via itrScaleHexValue.
+const ITR_ROOM_SHELL_RISER_DARKEN = 0.55;
 // splits ONE occluding instance into its own SOLID ankle-height STUB (rendered in the normal opaque
 // mesh, unchanged material/shadow behavior — byte-identical to a non-occluding instance except for its
 // shorter sy) + a translucent GHOST spanning from the ankle up to the instance's own full original
@@ -8038,6 +8063,235 @@ function setInteriorBoard(data){
   // STAGE-A A1 test seams, same convention as S.interiorLastFloorList/WallList/PillarList above.
   S.interiorLastDoorList = doorList;
   S.interiorLastPortalList = data.portals || [];
+
+  // ═══ ROOM-SHELL COMPILER (docs/ROOM-SHELL-COMPILER.md; docs/GRAPHICS-NORTH-STAR.md Stage C unit
+  // C4) — compiles the active room's own floor cells into a CONTINUOUS shell (one triangulated floor
+  // polygon per elevation tier + wall/riser quad-strips from boundary segments) instead of the per-
+  // cell floorMesh/wallMesh InstancedMesh pair above, when ITR_ROOM_SHELL is on (default). Built
+  // straight off `floorList`/`inst.doorframe` — the SAME data interiorBuildBoard already produced;
+  // this unit never re-reads plan.cells, per the spec's own "keep interiorBuildBoard as the data
+  // producer, the compiler is render-only" instruction. Pillars/doorframe/skirt/portals/dressing/
+  // lights/standees below are UNTOUCHED (they still read S.interiorFloorTopMap, built earlier off
+  // `inst.floor` regardless of this flag).
+  let roomShellMeshes = [];
+  S.interiorLastRoomShell = null;
+  if(ITR_ROOM_SHELL && floorList && floorList.length){
+    const doorKeySet = new Set((inst.doorframe || []).map((d) => Math.round(d.x) + "," + Math.round(d.z)));
+    const shellCells = floorList.map((f) => {
+      const sy = (typeof f.sy === "number" && f.sy > 0) ? f.sy : ITR_FLOOR_HEIGHT_FALLBACK;
+      return {
+        x: Math.round(f.x), z: Math.round(f.z),
+        tier: Math.round(sy / ROOM_SHELL_TIER_QUANTUM),
+        elevationY: ITR_FLOOR_BASE_Y + sy,
+        isDoor: doorKeySet.has(Math.round(f.x) + "," + Math.round(f.z)),
+      };
+    });
+    // BRIGHTNESS-REGRESSION FIX — THE RESIDUAL-FALLOFF TERM. Measured directly (a controlled gloom
+    // fixture, per-cell vs compiled, same torch/camera): the per-cell path's own floorList[].color
+    // (VP3 tone/jitter/valueScript/rim-vignette, now correctly carried over as vertex color above)
+    // only accounts for a SMALL fraction of why a far-room corner reads dark — corner vs mid-room
+    // color differed by just ~12% (#b3b3b3 vs #cbcbcb in the fixture) while the REAL per-cell RENDER
+    // differed by >2x. The rest is real diegetic falloff (the torch's own physical distance decay +
+    // shadow-casting geometry) that the per-cell path's discrete wall/pillar BOXES apparently occlude
+    // more completely near a room's own corner than the compiled shell's continuous (bevel-inset) wall
+    // does — a real, screenshot-measured render difference this unit closes with an explicit residual
+    // EDGE FACTOR (the directive's own "low-frequency AO... perimeter darkening", now calibrated to the
+    // measured gap rather than guessed): darkens floor/wall tone further as a cell nears the room's own
+    // true boundary (a SEPARATE, smaller-scope term than VP3's own per-cell tone — this is architecture-
+    // level "near the wall" shading, same spirit as real-time AO). Never touches geometry, only the
+    // vertex-color tint fed into the SAME floorColorAt/wallColorForSegment lookups below.
+    const ITR_ROOM_SHELL_EDGE_MIN = 0.44;
+    const ITR_ROOM_SHELL_EDGE_BAND = 2;
+    let shellMinX = Infinity, shellMaxX = -Infinity, shellMinZ = Infinity, shellMaxZ = -Infinity;
+    shellCells.forEach((c) => {
+      if(c.x < shellMinX) shellMinX = c.x; if(c.x > shellMaxX) shellMaxX = c.x;
+      if(c.z < shellMinZ) shellMinZ = c.z; if(c.z > shellMaxZ) shellMaxZ = c.z;
+    });
+    const shellEdgeFactor = (x, z) => {
+      const depth = Math.min(x - shellMinX, shellMaxX - x, z - shellMinZ, shellMaxZ - z);
+      if(depth >= ITR_ROOM_SHELL_EDGE_BAND) return 1;
+      const t = Math.max(0, depth) / ITR_ROOM_SHELL_EDGE_BAND;
+      return ITR_ROOM_SHELL_EDGE_MIN + (1 - ITR_ROOM_SHELL_EDGE_MIN) * t;
+    };
+    // wall height: ANY one raw (pre-parapet, pre-occlusion) wall instance of THIS room shares the
+    // room's own scaleDomain-derived height (ITR_ACTIVE_ROOM_ONLY renders one room at a time) — never
+    // read off the post-cutaway `wallList` below (a DIFFERENT, deliberately-deferred concern; see the
+    // parapet callback's own comment for what IS carried over and what isn't).
+    const roomWallHeight = (inst.wall && inst.wall.length && typeof inst.wall[0].sy === "number")
+      ? inst.wall[0].sy : (data.wallHeightBase || 2.4);
+    // PARAPET PARITY: reapplies the SAME camera-facing cutaway the per-cell path computes above
+    // (BW2-5 item 2) per COMPILED SEGMENT, so the compiled shell doesn't regress "camera sees into the
+    // room" — the one piece of the existing per-cell view-dependent machinery this unit carries
+    // forward. S-1's PER-FIGURE sightline occlusion ankle-stub/ghost-fade is NOT yet integrated with
+    // the compiled wall (a deliberately scoped gap for a fast-follow — see this unit's own report);
+    // the compiled wall renders at full (parapet-cut) height regardless of figure occlusion.
+    let parapetDirX = 0, parapetDirZ = 0, parapetFr = null;
+    if(data.focusRect){
+      parapetFr = data.focusRect;
+      const yawNow = (S.rotationStep * 90 * Math.PI) / 180 + (CAM_YAW_OFFSET_DEG * Math.PI) / 180;
+      parapetDirX = Math.sin(yawNow); parapetDirZ = Math.cos(yawNow);
+    }
+    const wallHeightForSegment = (segMeta) => {
+      if(!parapetFr) return roomWallHeight;
+      const mx = segMeta.mid.x, mz = segMeta.mid.z;
+      const inBand = mx >= parapetFr.minX - 1 && mx <= parapetFr.maxX + 1 && mz >= parapetFr.minZ - 1 && mz <= parapetFr.maxZ + 1;
+      if(!inBand) return roomWallHeight;
+      const rx = mx - cx, rz = mz - cz;
+      if(rx * parapetDirX + rz * parapetDirZ <= 0) return roomWallHeight; // far-side segment stays full height
+      return roomWallHeight * ITR_ROOM_SHELL_PARAPET_FRAC;
+    };
+    // per-vertex world-aligned UVs replace the per-instance shared texture.repeat trick (BW2-3 §2b) —
+    // a (1,1) repeat variant of the SAME texture family/seed the per-cell path already resolved above
+    // (reuse, not a new material — Stage E owns actual material changes, not this unit).
+    // BRIGHTNESS-REGRESSION FIX: use floorColorForRender/wallColorForRender (LC-2's own emissive-
+    // albedo-lift-aware values, computed once above — `applyEmissiveAlbedoLift ? lifted : kit.color`),
+    // NOT the raw kit color — the per-cell path's OWN procedural texture (floorTex/wallTex, built
+    // earlier in this function) already paints at the LIFTED value on a lift-eligible realm (cosmic);
+    // building the compiled shell's texture off the raw un-lifted kit color silently dropped that lift
+    // for the shell path, which is why LC-2 (cosmic's own albedo-lift gate) read almost no improvement
+    // between lift-off and lift-on until this fix.
+    const roomShellFloorTex = materialsOn
+      ? (interiorSurfaceFileTexture("floor", kit.floorTextureFile, kit.floorTextureWrap)
+          || interiorMaterialTexture(kit.floorMaterial, floorColorForRender, data.realmId + ":floor:shell", kit.floorGrain, 1, 1))
+      : null;
+    const roomShellWallTex = materialsOn
+      ? (interiorSurfaceFileTexture("wall", kit.wallTextureFile, kit.wallTextureWrap)
+          || interiorMaterialTexture(kit.wallMaterial, wallColorForRender, data.realmId + ":wall:shell", kit.wallGrain, 1, 1))
+      : null;
+    const shellPsxOpts = { worldSurface: true, worldPsxOverride: (variant && typeof variant.worldPsx === "boolean") ? variant.worldPsx : undefined };
+    // BRIGHTNESS-REGRESSION FIX (docs/ROOM-SHELL-COMPILER.md close, 2026-07-12): the integration gate
+    // (dev/verify-diegetic-light.mjs) caught the compiled shell rendering uniformly too bright — it
+    // dropped VP3's own per-cell floor/wall tone entirely (room tone/jitter/perimeter-darken/
+    // valueScript/rim-vignette AND, on the emissive realm, the albedo-lift mode-switch below).
+    // interiorBuildInstancedMesh's OWN matBase is ALWAYS white (`texture ? {map:texture} :
+    // {color:0xffffff}` — texture or no texture, file or procedural, EVERY per-cell caller stays
+    // white-base) — 100% of the tone comes from the per-instance COLOR multiplying whatever's there.
+    // An EARLIER pass of this fix tried giving the compiled material a flat kit-color BASE for non-
+    // file realms (a guess at "reproducing a double multiply") — that was wrong: it created a hard
+    // multiplicative CEILING no vertex tint could lift past, which is exactly what silently capped
+    // LC-2's own albedo-lift ratio near 1.1x regardless of how strong the lift was pushed (verified:
+    // even a 100x lift only moved cosmic's roomMean from 0.023 to 0.026 — proof the ceiling, not the
+    // lift math, was the bug). The correct fix: white base ALWAYS (matching per-cell exactly), and
+    // the per-VERTEX tint carries floorList's/wallList's OWN already-computed per-cell `.color` value
+    // verbatim (whichever branch that realm's per-cell path already resolved — RAW absolute when
+    // !fromFile && !lift, NEUTRALIZED relative when fromFile || lift; see floorList's own definition
+    // above) — never re-derived here. The emissive-albedo LIFT itself lives entirely in the TEXTURE
+    // argument (floorColorForRender/wallColorForRender, above), matching the per-cell path's own
+    // documented law. Verified: with this model, `node dev/verify-diegetic-light.mjs` after temporarily
+    // forcing ITR_ROOM_SHELL=false (the per-cell path) passes 60/0 including LC-2's own 4.45x ratio —
+    // confirming the gate itself is satisfiable and the compiled-shell numbers below are being chased
+    // against a real, achievable target, not a moving one.
+    // floorLiftOrFile/wallLiftOrFile: the EXACT same branch condition floorList/wallList already use
+    // to decide raw-absolute vs neutralized-relative — hoisted here (before the materials) because the
+    // material base color needs it too (see ITR_ROOM_SHELL_RAW_COMPENSATION below): a lift-eligible or
+    // file-textured realm (gloom, cosmic) stays WHITE base (verified: LC-2 hits 3.40x there — any flat
+    // kit-color base creates a hard multiplicative CEILING no vertex tint can lift past, which is what
+    // silently capped LC-2's own ratio near 1.1x on an earlier pass of this fix). Only the plain RAW-
+    // ABSOLUTE branch (suburb/bright-kingdom/most non-flagship realms — no file, no lift) gets the
+    // compensation, since THAT'S the branch measured to still read too bright otherwise (see below).
+    const floorLiftOrFile = floorFromFile || applyEmissiveAlbedoLift;
+    const wallLiftOrFile = wallFromFile || applyEmissiveAlbedoLift;
+    // RAW-ABSOLUTE PROCEDURAL COMPENSATION (measured, suburb/bright-kingdom): even with the vertex
+    // tint byte-identical to the per-cell path's own instance color, a realm on the RAW-ABSOLUTE
+    // branch still reads measurably brighter compiled than per-cell (suburb daylit ambient-only:
+    // roomMax 0.993/clippedFraction 0.41 vs the per-cell target 0.974/0.03) — the residual traces to
+    // the procedural canvas texture itself (roomShellFloorTex, a SEPARATELY-keyed ":shell" variant at
+    // repeat (1,1)) sampling measurably brighter on average than the per-cell path's own differently-
+    // keyed/-repeated texture, a real texture-generation quirk, not a math error in the tint chain. A
+    // material-base multiplier (not just a vertex one — verified a vertex-only version of this same
+    // compensation barely moved suburb's numbers, since the bright texture dominates) closes it; tuned
+    // against the real gate (suburb/bright-kingdom clip checks), never guessed. NEVER applied on the
+    // fromFile/lift branch (see the header comment above — that's what broke LC-2 the first time).
+    const ITR_ROOM_SHELL_RAW_COMPENSATION = 0.98;
+    const floorMat = applyPsxShaderTweaks(new THREE.MeshLambertMaterial(Object.assign(
+      roomShellFloorTex ? { map: roomShellFloorTex } : {},
+      { color: floorLiftOrFile ? "#ffffff" : itrScaleHexValue(kit.floorColor || "#888888", ITR_ROOM_SHELL_RAW_COMPENSATION), vertexColors: true, side: THREE.DoubleSide })), shellPsxOpts);
+    const wallBaseColor = wallLiftOrFile ? "#ffffff" : itrScaleHexValue(kit.wallColor || "#888888", ITR_ROOM_SHELL_RAW_COMPENSATION);
+    const wallMat = applyPsxShaderTweaks(new THREE.MeshLambertMaterial(Object.assign(
+      roomShellWallTex ? { map: roomShellWallTex } : {}, { color: wallBaseColor, vertexColors: true, side: THREE.DoubleSide })), shellPsxOpts);
+    // directive step 7 — risers are a deliberately DARKER material variant, darkened relative to
+    // whatever the wall's OWN base tone is above — never a second, independent darken stacked on the
+    // wall's already-tinted value. Risers don't (yet) carry their own vertex-color gradient (out of
+    // THIS fix's measured scope — no failing gate check reads riser luminance), so `vertexColors:true`
+    // here is a no-op today (every riser vertex defaults white) but kept for consistency/future AO.
+    const riserMat = applyPsxShaderTweaks(new THREE.MeshLambertMaterial(Object.assign(
+      roomShellWallTex ? { map: roomShellWallTex } : {},
+      { color: itrScaleHexValue(wallBaseColor, ITR_ROOM_SHELL_RISER_DARKEN), vertexColors: true, side: THREE.DoubleSide })), shellPsxOpts);
+    // floorColorAt/wallColorForSegment: reuse floorList's/wallList's OWN per-cell `.color` value
+    // VERBATIM (never re-derived) — floorList is built earlier in this function by the SAME fromFile-
+    // or-lift branch the per-cell floorMesh already consumes, so the compiled shell inherits whichever
+    // representation (raw-absolute or neutralized-relative) that realm's per-cell path actually uses,
+    // with zero risk of the two paths drifting onto different conventions. `shellEdgeFactor` (defined
+    // above, off the room's own true bounds) is an ADDITIONAL low-frequency darken this unit adds on
+    // top — measured against the per-cell path directly (a controlled gloom fixture, torch 2 cells off
+    // room center): the compiled far-corner floor luminance needed this extra term to fall in the same
+    // band as the per-cell path's own (both floorList's color AND real point-light falloff alone left
+    // a real but insufficient gap — see this unit's own report for the measured before/after numbers).
+    // The RAW-ABSOLUTE procedural compensation lives in the MATERIAL base color above (floorMat/
+    // wallMat), not here — a vertex-only version of the same compensation barely moved suburb's own
+    // numbers (the bright procedural texture dominates), so it needs to multiply the whole pipeline.
+    const shellFloorColorIndex = new Map();
+    (floorList || []).forEach((f) => shellFloorColorIndex.set(Math.round(f.x) + "," + Math.round(f.z), f.color || "#ffffff"));
+    const floorColorAt = (x, z) => itrScaleHexValue(shellFloorColorIndex.get(x + "," + z) || "#ffffff", shellEdgeFactor(x, z));
+    const wallColorSourceList = wallLiftOrFile ? itrNeutralizeInstanceColors(inst.wall, kit.wallColor) : inst.wall;
+    const shellWallColorIndex = new Map();
+    (wallColorSourceList || []).forEach((w) => shellWallColorIndex.set(Math.round(w.x) + "," + Math.round(w.z), w.color || "#ffffff"));
+    // a compiled wall SEGMENT can span several original wall cells (that's the whole point of
+    // simplification) — sample one point per cell-width along the segment's own length, each stepped
+    // HALF a unit OUTWARD (opposite the segment's own inward normal) to land on the actual wall-cell
+    // ring (one unit-grid ring outside the floor boundary, same spacing convention as the floor
+    // cells), then average — a flat per-segment tint (walls don't need an interior gradient; they
+    // already sit at the room's own edge by construction).
+    const wallColorForSegment = (segMeta) => {
+      const n = segmentNormal({ a: segMeta.a, b: segMeta.b });
+      const dx = segMeta.b.x - segMeta.a.x, dz = segMeta.b.z - segMeta.a.z;
+      const steps = Math.max(1, Math.round(Math.hypot(dx, dz)));
+      let sr = 0, sg = 0, sb = 0, cnt = 0;
+      for(let s = 0; s < steps; s++){
+        const t = (s + 0.5) / steps;
+        const px = segMeta.a.x + dx * t, pz = segMeta.a.z + dz * t;
+        const wx = Math.round(px - n.x * 0.5), wz = Math.round(pz - n.z * 0.5);
+        const rawHex = shellWallColorIndex.get(wx + "," + wz);
+        if(rawHex){
+          const c = new THREE.Color(itrScaleHexValue(rawHex, shellEdgeFactor(wx, wz)));
+          sr += c.r; sg += c.g; sb += c.b; cnt++;
+        }
+      }
+      if(!cnt) return "#ffffff";
+      return "#" + new THREE.Color(sr / cnt, sg / cnt, sb / cnt).getHexString();
+    };
+    const shell = compileRoomShell(shellCells, {
+      wallHeight: roomWallHeight, wallHeightForSegment, uvDensity: ITR_ROOM_SHELL_UV_DENSITY,
+      floorColorAt, wallColorForSegment,
+    });
+    if(shell.floorGeometry){
+      const m = new THREE.Mesh(shell.floorGeometry, floorMat);
+      m.position.set(-cx, 0, -cz);
+      m.receiveShadow = true;
+      m.userData.interiorKind = "room-shell-floor";
+      roomShellMeshes.push(m);
+    }
+    if(shell.wallGeometry){
+      const m = new THREE.Mesh(shell.wallGeometry, wallMat);
+      m.position.set(-cx, 0, -cz);
+      m.castShadow = true; m.receiveShadow = true;
+      m.userData.interiorKind = "room-shell-wall";
+      roomShellMeshes.push(m);
+    }
+    if(shell.riserGeometry){
+      const m = new THREE.Mesh(shell.riserGeometry, riserMat);
+      m.position.set(-cx, 0, -cz);
+      m.castShadow = true; m.receiveShadow = true;
+      m.userData.interiorKind = "room-shell-riser";
+      roomShellMeshes.push(m);
+    }
+    // diagnostics + the logical cell<->triangle map (directive step 9) — dev/verify-room-shell-
+    // render.mjs's own primitive-count/bevel/riser assertions read this, never decomposing geometry.
+    S.interiorLastRoomShell = {
+      meta: shell.meta, cellTriangleMap: shell.cellTriangleMap, apertures: shell.apertures,
+      wallSegments: shell.wallSegments, riserSegments: shell.riserSegments, floorTiers: shell.floorTiers,
+    };
+  }
   // BEAUTY-WAVE-2.md BW2-1b (THE OCCLUSION LAW), item 1, superseded by docs/DIEGETIC-LIGHT.md unit S-1
   // (Adam's live steer, 2026-07-11): DYNAMIC CUTAWAY for pillar prisms — a pillar between the camera
   // and a mounted standee. Recomputed every board build (camera refit, BW2-1's own fitMode changes,
@@ -8094,7 +8348,12 @@ function setInteriorBoard(data){
   // calls over the pre-S-1 budget — only ever created when at least one instance of that kind is
   // actually occluding a figure this frame (both are null/empty otherwise, so a board with no
   // occlusion in play costs exactly what it did before this unit).
-  const itrAllInteriorMeshes = [floorMesh, wallMesh, wallGhostMesh, doorMesh, skirtMesh, portalMesh].concat(pillarMeshes).concat(pillarGhostMeshes);
+  // ROOM-SHELL COMPILER: when ITR_ROOM_SHELL is on and a shell actually compiled, the continuous
+  // floor/wall/riser meshes REPLACE the per-cell floorMesh/wallMesh/wallGhostMesh pair above (never
+  // both — that would double-render the same surfaces). doorMesh/skirtMesh/portalMesh/pillarMeshes
+  // stay unconditional either way (this unit's scope is floor/wall/riser geometry only).
+  const itrFloorWallMeshes = (ITR_ROOM_SHELL && roomShellMeshes.length) ? roomShellMeshes : [floorMesh, wallMesh, wallGhostMesh];
+  const itrAllInteriorMeshes = itrFloorWallMeshes.concat([doorMesh, skirtMesh, portalMesh]).concat(pillarMeshes).concat(pillarGhostMeshes);
   itrAllInteriorMeshes.forEach((mesh) => { if(mesh) S.interiorGroup.add(mesh); });
   S.interiorMeshCount = itrAllInteriorMeshes.filter(Boolean).length;
 
@@ -9106,6 +9365,36 @@ window.Theater._interiorPortalListForTest = function(){ return S.interiorLastPor
 // S-1 — TEST-ONLY SEAM: see ITR_OCCLUSION_FADE_DISABLED_FOR_TEST's own declaration comment — flips the
 // whole ankle+ghost pass off for a genuine RED-FIRST baseline render (dev/verify-occlusion-fade.mjs).
 window.Theater._setOcclusionFadeDisabledForTest = function(v){ ITR_OCCLUSION_FADE_DISABLED_FOR_TEST = !!v; };
+// ROOM-SHELL COMPILER — TEST/HARNESS SEAM: flips ITR_ROOM_SHELL live (dev/verify-room-shell-render.mjs's
+// own before[flag off]/after[flag on] A-B capture), same convention as the setter just above.
+window.Theater._setRoomShellEnabled = function(v){ ITR_ROOM_SHELL = !!v; };
+window.Theater._roomShellEnabled = function(){ return ITR_ROOM_SHELL; };
+// the compiled shell's own last-build diagnostics (geometry meta + logical cell<->triangle map) — null
+// whenever ITR_ROOM_SHELL is off or the active room has no compiled cells yet.
+window.Theater._interiorRoomShellForTest = function(){ return S.interiorLastRoomShell || null; };
+// ROOM-SHELL COMPILER — TEST SEAM: per-mesh primitive counts straight off the LIVE mounted
+// S.interiorGroup, tagged by each mesh's own userData.interiorKind stamp (interiorBuildInstancedMesh's
+// plain kind string for the per-cell path; "room-shell-floor/wall/riser" for the compiled path, set at
+// this file's own wire-in call site). `count` is the InstancedMesh instance count for the per-cell
+// kinds (the concrete O(cells) figure dev/verify-room-shell-render.mjs compares against the compiled
+// path's O(segments) triangle count) or 1 for an ordinary (non-instanced) Mesh.
+window.Theater._interiorGroupMeshInfoForTest = function(){
+  if(!S.interiorGroup) return [];
+  return S.interiorGroup.children.map((m) => ({
+    kind: (m.userData && m.userData.interiorKind) || null,
+    isInstanced: !!(m.isInstancedMesh),
+    count: m.isInstancedMesh ? m.count : 1,
+    triangleCount: (m.geometry && m.geometry.index) ? m.geometry.index.count / 3 : null,
+    colorHex: (m.material && !Array.isArray(m.material) && m.material.color) ? "#" + m.material.color.getHexString() : null,
+    // mapInfo: whether this mesh's own material texture has actually finished loading (the room-shell
+    // path's own file-texture branch loads async via THREE.TextureLoader) — a harness/console check
+    // that a "flat, no visible pattern" render is a genuine bug and not just a load-timing race.
+    mapInfo: (m.material && !Array.isArray(m.material) && m.material.map) ? {
+      hasImage: !!m.material.map.image, complete: !!(m.material.map.image && m.material.map.image.complete !== false),
+      repeat: [m.material.map.repeat.x, m.material.map.repeat.y],
+    } : null,
+  }));
+};
 // BW2-1b — TEST-ONLY SEAM: a REAL THREE.Raycaster occlusion check against the LIVE mounted geometry —
 // casts from the CURRENT S.camera.position toward targetWorldPos, intersects only the SOLID instance
 // kinds (wall/pillar/doorframe — tagged via interiorBuildInstancedMesh's own mesh.userData.interiorKind

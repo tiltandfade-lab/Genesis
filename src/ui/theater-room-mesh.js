@@ -42,6 +42,16 @@
        uvDensity: world units per texture repeat (default 1 — "ONE texture tile per 5ft cell", matching
          BW2-3 §2b's existing floor convention, but genuinely continuous here since UV = world position
          rather than a per-instance-shared repeat multiplier).
+       smoothShape: the STAGE-C C3 shapeForArchetype tag (STAGE-C3b, docs/STAGE-C.md's own C3b
+         addendum — undefined/'rect'/'cave' = OFF, the original simplify path). 'circle'/'ellipse' ->
+         every non-door boundary vertex is pulled toward the ellipse fitted to that ring's own bbox
+         (radialSmoothRing), so the shell reads as a curve instead of C3's staircase. 'octagon'/'L'/
+         'T'/'cross' -> real multi-cell staircase runs (an octagon's own chamfered corners; L/T/cross
+         structurally never have one) get chamfered into a flat 45-degree diagonal face
+         (diagonalizeStaircaseRing) instead of staying axis-aligned stairs. RENDER-ONLY either way:
+         never reads/touches `cells` beyond what every other shape already does; `plan.cells`/
+         `rooms[].cells` (combat/placement/pathing) are untouched by this option existing at all.
+       radialSmoothBlend: 0..1 override for DEFAULT_RADIAL_SMOOTH_BLEND ("radial" mode only, test-only knob).
      }
    Returns a plain-data bundle (positions/normals/uvs/indices per surface class + the logical map) —
    see this file's own header on `compileRoomShellData`'s return shape below.
@@ -73,6 +83,19 @@ const DEFAULT_WALL_HEIGHT = 2.4; // mirrors theater-interior.js's ITR_WALL_HEIGH
 const DEFAULT_BEVEL_WIDTH = 0.06;
 const DEFAULT_BEVEL_DROP = 0.03;
 const DEFAULT_UV_DENSITY = 1;
+// STAGE-C3b (docs/STAGE-C.md C3b addendum — the circle/ellipse render-refinement pass that follows
+// C3's own "staircased orthogonal approximation" ruling): how far a circle/ellipse room's own boundary
+// vertex gets pulled, per tier ring, from its raw grid-staircase position toward the ideal ellipse
+// fitted to THAT ring's own bbox (radialSmoothRing, below) — 0 = untouched staircase, 1 = the vertex
+// lands exactly ON the ideal ellipse. Tuned (not guessed): 1.0 was tried first and rejected — it reads
+// as a mathematically PERFECT ellipse with zero relationship to the underlying cell footprint (every
+// tier's ring, including a tiny 3-cell dais, snaps to a suspiciously smooth curve regardless of scale),
+// which stopped reading as "an architectural room" and started reading as a vector-art ellipse pasted
+// over the floor. 0.88 keeps the curve doing essentially all of the rounding work (the staircase read
+// is gone) while leaving a small, deliberate residual tie back to the actual rasterized footprint —
+// see dev/verify-stage-c3b-circle-smooth.mjs's own roundness-metric before/after for the measured gap
+// this closes, and this unit's own report for the visual comparison.
+const DEFAULT_RADIAL_SMOOTH_BLEND = 0.88;
 
 function cellKey(x, z) { return x + "," + z; }
 
@@ -227,6 +250,17 @@ function finishSegment(a, b, meta) {
   return seg;
 }
 
+// unmergedSegments(ring) -> simplifySegments' own NO-MERGE sibling: one segment per RAW cell-edge,
+// in the ring's own already-deterministic walk order (chainEdgesIntoRings always starts a ring from
+// the lowest-sorted unused raw edge — see compileRoomShellData's own cell-sort comment — so this needs
+// no findSegmentStart equivalent; there's no merge boundary to normalize). STAGE-C3b's own smoothing
+// pass (radialSmoothRing, below) wants FULL cell-boundary vertex density on a circle/ellipse ring —
+// simplifySegments' collinear-run collapse would otherwise leave long straight chords (e.g. the flat
+// top of a wide circle) that a 2-endpoint pull toward the ideal ellipse can't bow outward mid-chord.
+function unmergedSegments(ring) {
+  return ring.map((e) => finishSegment(e.a, e.b, e));
+}
+
 // ringToPolygon(segments) -> ordered [{x,z}...] vertex loop (segment[i].b === segment[i+1].a by
 // construction, so the polygon is just each segment's own start point, in order).
 function ringToPolygon(segments) { return segments.map((s) => s.a); }
@@ -263,11 +297,33 @@ function segmentNormal(seg) {
   return { x: -dz / len, z: dx / len };
 }
 
-// insetPolygon(poly, segments, widthForSegment) -> a per-vertex inward offset, exact (no miter-length
-// correction needed) because every corner this module ever produces is a 90 or 270 degree grid corner:
-// summing the two adjacent edges' own (orthogonal, unit-length) inward normals lands exactly on the
-// correct diagonal inset point. `widthForSegment(seg)` returns 0 for a door segment (the aperture stays
-// flush — no bevel lip across a doorway) and `bevelWidth` for wall/riser segments.
+// insetOffset(pn, pw, nn, nw) -> the vertex displacement solving the exact 2D miter join: d such that
+// d·pn = pw AND d·nn = nw (the shared vertex moves inward by pw along the PREV segment's own normal
+// and nw along the NEXT segment's own normal, simultaneously). Solved via Cramer's rule on the 2x2
+// system (D = pn×nn, the 2D cross product of the two unit normals):
+//   dx = (pw*nn.z - nw*pn.z) / D,  dz = (pn.x*nw - nn.x*pw) / D
+// At a 90-degree grid corner (pn⊥nn, so pn·nn=0, D=±1) this reduces to EXACTLY the module's original
+// `pn*pw + nn*nw` sum (verified algebraically: D=1 case gives dx=pw*nn.z-nw*pn.z, which for an
+// orthonormal pair equals pn.x*pw+nn.x*nw) — every existing rect/octagon/L/T/cross/cave fixture (all
+// still traced on 90/270-degree grid corners) is BYTE-IDENTICAL to before this helper existed. It only
+// diverges — correctly — at the near-straight (large-obtuse-angle) corners STAGE-C3b's own unmerged,
+// radially-smoothed circle/ellipse rings introduce, where the old sum formula over-inset by up to ~2x
+// (two nearly-parallel unit normals summing toward 2x magnitude instead of the correct ~1x for a
+// nearly-flat run). `D` near zero (truly parallel adjacent normals — a straight run, or two segments
+// of DIFFERING width that happen to share one direction, an existing-but-rare case e.g. a wall run
+// unmerged straight into a same-direction riser run) falls back to the original sum, the same
+// approximation this module always made for that shape.
+function insetOffset(pn, pw, nn, nw) {
+  const D = pn.x * nn.z - pn.z * nn.x;
+  if (Math.abs(D) < 1e-9) return { x: pn.x * pw + nn.x * nw, z: pn.z * pw + nn.z * nw };
+  return { x: (pw * nn.z - nw * pn.z) / D, z: (pn.x * nw - nn.x * pw) / D };
+}
+
+// insetPolygon(poly, segments, widthForSegment) -> a per-vertex inward offset via insetOffset (above)
+// — an exact miter join for ANY corner angle (not just the 90/270-degree grid corners this module used
+// to assume; see insetOffset's own header for the byte-identical-at-90-degrees proof). `widthForSegment
+// (seg)` returns 0 for a door segment (the aperture stays flush — no bevel lip across a doorway) and
+// `bevelWidth` for wall/riser segments.
 function insetPolygon(poly, segments, widthForSegment) {
   const n = poly.length;
   return poly.map((v, i) => {
@@ -275,8 +331,134 @@ function insetPolygon(poly, segments, widthForSegment) {
     const nextSeg = segments[i];
     const pn = segmentNormal(prevSeg), nn = segmentNormal(nextSeg);
     const pw = widthForSegment(prevSeg), nw = widthForSegment(nextSeg);
-    return { x: v.x + pn.x * pw + nn.x * nw, z: v.z + pn.z * pw + nn.z * nw };
+    const off = insetOffset(pn, pw, nn, nw);
+    return { x: v.x + off.x, z: v.z + off.z };
   });
+}
+
+// radialSmoothRing(poly, segments, blend) -> STAGE-C3b's own render-only rounding pass: pulls every
+// NON-door-adjacent vertex `blend` of the way from its raw grid-staircase position toward the ideal
+// ellipse fitted to THIS ring's own bbox (cx/cz = bbox center, rx/rz = bbox half-extents — "the bbox
+// half-extents give you the ideal radius", per this unit's own directive). Door-adjacent vertices
+// (either endpoint of a 'door' segment) are PINNED (never moved) so the aperture stays exactly where
+// dspBuildPlanOnce's own polygon-face door placement (STAGE-C.md C3 step 3) put it — a corridor still
+// meets the room at the true logical door cell, never drifting off it for a cosmetic curve. Purely a
+// vertex-position nudge on the RETURNED polygon/segments; the `cells` this ring was traced from (and
+// therefore `plan.cells`/`rooms[].cells`, the combat/placement/pathing grid) are never read or mutated
+// here — this function doesn't even see the cell set, only the already-traced boundary.
+function radialSmoothRing(poly, segments, blend) {
+  const n = poly.length;
+  if (n < 3 || !(blend > 0)) return { poly, segments };
+  const bbox = polygonBBox(poly);
+  const cx = (bbox.minX + bbox.maxX) / 2, cz = (bbox.minZ + bbox.maxZ) / 2;
+  const rx = (bbox.maxX - bbox.minX) / 2, rz = (bbox.maxZ - bbox.minZ) / 2;
+  if (!(rx > 1e-6) || !(rz > 1e-6)) return { poly, segments }; // degenerate ring (a 1-wide sliver) — leave untouched
+  const pinned = new Array(n).fill(false);
+  segments.forEach((s, i) => {
+    if (s.kind === "door") { pinned[i] = true; pinned[(i + 1) % n] = true; }
+  });
+  const smoothPoly = poly.map((v, i) => {
+    if (pinned[i]) return v;
+    const nx = (v.x - cx) / rx, nz = (v.z - cz) / rz;
+    const len = Math.hypot(nx, nz) || 1;
+    const idealX = cx + (nx / len) * rx, idealZ = cz + (nz / len) * rz;
+    return { x: v.x + (idealX - v.x) * blend, z: v.z + (idealZ - v.z) * blend };
+  });
+  const smoothSegments = segments.map((s, i) => Object.assign({}, s, { a: smoothPoly[i], b: smoothPoly[(i + 1) % n] }));
+  return { poly: smoothPoly, segments: smoothSegments };
+}
+
+// ── STAGE-C3b SCOPE EXPANSION (Adam's own direction, same session): DIAGONAL WALL FACES for the
+// staircased archetypes that have a genuine multi-cell straight-line approximation baked into their
+// rasterization (octagon's own chamfered corners — rasterizeShape's `cornerTL/TR/BL/BR` bands, a
+// classic unit "Bresenham" staircase) — vs. rounding a circle/ellipse's own true CURVE (radialSmoothRing,
+// above). L/T/cross are funneled through this SAME path too (see diagonalizeStaircaseRing's own gate
+// below) — their rasterization is a single right-angle quadrant/band subtraction with NO multi-cell
+// staircase in it at all, so the run-detector below finds nothing to chamfer and they stay byte-
+// identical/crisp automatically; this is a safety-net inclusion, not new geometry for those shapes.
+
+function midpointOf(a, b) { return { x: (a.x + b.x) / 2, z: (a.z + b.z) / 2 }; }
+function segLen2D(s) { return Math.hypot(s.b.x - s.a.x, s.b.z - s.a.z); }
+function perpendicularUnit(d1, d2) { return Math.abs(d1.dx * d2.dx + d1.dz * d2.dz) < 1e-6; }
+
+/* chamferRunCorners(run) -> run: >=3 consecutive UNIT 'wall' segments whose directions strictly
+   alternate between two perpendicular unit vectors (a genuine multi-step staircase — see
+   diagonalizeStaircaseRing's own run-detection, below, for what qualifies). Replaces every INTERNAL
+   corner (between run[i] and run[i+1]) with a diagonal connecting the two adjacent edges' own
+   MIDPOINTS, instead of routing through the original sharp grid corner.
+
+   WHY MIDPOINTS, AND WHY THIS IS SAFE (derived + checked, not guessed):
+   Chamfering a SINGLE unit-cell corner by cutting from one adjacent edge's midpoint to the other's
+   is a fixed 0.5x0.5-leg right-triangle clip. For ANY unit cell, the perpendicular distance from that
+   cell's own CENTER to its own corner-chamfer line is exactly 0.5/sqrt(2) ≈ 0.354 world units — a
+   universal constant of the construction, independent of position or which of the 4 corners — so a
+   convex (outward-bulging) stairstep corner's chamfer can only ever clip AWAY the cell's own outer
+   0.354-radius corner sliver, nowhere near its center; a concave (inward-notched) corner's identical
+   construction ADDS a sliver of floor into the void notch instead of removing anything. Every included
+   cell along a chamfered run therefore keeps a real, comfortable margin inside the resulting floor
+   polygon — this unit's own dev/verify-stage-c3b-circle-smooth.mjs checks this directly (every cell's
+   OWN center still resolves inside a real containing triangle post-chamfer, not just "a map key
+   exists").
+   WHY IT READS AS ONE STRAIGHT DIAGONAL: for a perfect 1-cell-per-step staircase (exactly what
+   unmergedSegments hands this function — every segment here is unit length by construction), chaining
+   consecutive edge-MIDPOINTS together is a provable geometric identity: they are EXACTLY COLLINEAR
+   (verified algebraically in this unit's own report, and empirically by the harness's own direction-
+   consistency check on the resulting diagonal segments) — so the whole run reads as one flat 45-degree
+   face, not a finer zigzag. Only the run's own two UNCHAMFERED endpoints (where it meets the
+   surrounding non-staircase wall, not internal to the run) keep a short axis-aligned half-edge stub. */
+function chamferRunCorners(run) {
+  const n = run.length;
+  const mids = run.map((s) => midpointOf(s.a, s.b));
+  const out = [];
+  out.push({ a: run[0].a, b: mids[0], kind: "wall", tier: run[0].tier });
+  for (let i = 0; i < n - 1; i++) out.push({ a: mids[i], b: mids[i + 1], kind: "wall", tier: run[i].tier });
+  out.push({ a: mids[n - 1], b: run[n - 1].b, kind: "wall", tier: run[n - 1].tier });
+  return out;
+}
+
+/* diagonalizeStaircaseRing(poly, segments) -> STAGE-C3b's diagonal-face sibling of radialSmoothRing:
+   scans `segments` (already unmergedSegments' full per-cell-edge resolution) for maximal RUNS of >=3
+   consecutive unit 'wall' segments whose directions strictly alternate between two perpendicular unit
+   vectors (a real multi-cell staircase — e.g. an octagon's own chamfered corner, rasterizeShape's
+   `octagon` branch) and replaces each qualifying run with chamferRunCorners (above). A run shorter
+   than 3 segments — a single ordinary 90-degree turn (an L/T/cross room's own genuine architectural
+   corner, OR a degenerate 1-cell octagon chamfer indistinguishable from one without extra shape
+   metadata) — is intentionally left UNTOUCHED, crisp: this is the scoping rule that keeps L/T/cross
+   (and small octagon corners) reading exactly as before (Adam's own "octagon and L read great"
+   baseline), while a REAL multi-cell staircase run gets the diagonal treatment. Door/riser segments
+   are hard run-breaks (a run never spans across an aperture or an elevation change) — mirrors
+   radialSmoothRing's own door-pin discipline (a door's own two boundary segments are never touched).
+   SCOPED LIMITATION (documented, not a correctness risk): does not scan across the ring's own
+   wraparound seam — in the worst case this leaves ONE of a shape's corners un-chamfered rather than
+   mis-chamfering geometry (this unit's own report notes it; a fast-follow could special-case it). */
+function diagonalizeStaircaseRing(poly, segments) {
+  const n = segments.length;
+  const out = [];
+  let i = 0;
+  while (i < n) {
+    const cur = segments[i];
+    if (cur.kind !== "wall" || Math.abs(segLen2D(cur) - 1) > 1e-6) { out.push(cur); i++; continue; }
+    const dirA = directionOf(cur);
+    let dirB = null;
+    let j = i + 1;
+    while (j < n) {
+      const nxt = segments[j];
+      if (nxt.kind !== "wall" || Math.abs(segLen2D(nxt) - 1) > 1e-6) break;
+      const d = directionOf(nxt);
+      const wantA = ((j - i) % 2 === 0);
+      if (wantA) {
+        if (Math.abs(d.dx - dirA.dx) > 1e-6 || Math.abs(d.dz - dirA.dz) > 1e-6) break;
+      } else if (dirB === null) {
+        if (!perpendicularUnit(dirA, d)) break;
+        dirB = d;
+      } else if (Math.abs(d.dx - dirB.dx) > 1e-6 || Math.abs(d.dz - dirB.dz) > 1e-6) break;
+      j++;
+    }
+    const runLen = j - i;
+    if (runLen >= 3 && dirB) { out.push(...chamferRunCorners(segments.slice(i, j))); i = j; }
+    else { out.push(cur); i++; }
+  }
+  return { poly: ringToPolygon(out), segments: out };
 }
 
 function pointInTriangle2D(px, pz, a, b, c) {
@@ -286,6 +468,35 @@ function pointInTriangle2D(px, pz, a, b, c) {
   const hasNeg = (d1 < 0) || (d2 < 0) || (d3 < 0);
   const hasPos = (d1 > 0) || (d2 > 0) || (d3 > 0);
   return !(hasNeg && hasPos);
+}
+
+// pointToSegmentDist2(px,pz, ax,az, bx,bz) -> squared distance from a point to a line SEGMENT (clamped
+// to the segment's own endpoints) — the primitive the triangle-distance fallback below is built from.
+function pointToSegmentDist2(px, pz, ax, az, bx, bz) {
+  const dx = bx - ax, dz = bz - az;
+  const L2 = dx * dx + dz * dz;
+  let t = L2 > 0 ? ((px - ax) * dx + (pz - az) * dz) / L2 : 0;
+  t = t < 0 ? 0 : (t > 1 ? 1 : t);
+  const cx = ax + t * dx, cz = az + t * dz;
+  return (px - cx) * (px - cx) + (pz - cz) * (pz - cz);
+}
+
+// pointToTriangleDist2(px,pz, a,b,c) -> squared distance from a point to the CLOSEST point of a solid
+// triangle: 0 when the point is inside or exactly on an edge (pointInTriangle2D true), else the min
+// squared distance to its three edges. This is the correct nearest-triangle metric for the dropped-
+// cell fallback (compileRoomShellData's cellTriangleMap loop): a cell center sitting float-epsilon off
+// an internal ear-clip diagonal fails the strict containment test for BOTH triangles sharing it, yet
+// its true point-to-triangle distance to each is ~0 — so this picks a triangle the point ACTUALLY lies
+// on, which a centroid-distance heuristic does NOT (a centroid can be arbitrarily far from a long thin
+// triangle's own shared edge, wrongly ranking an unrelated triangle closer — measured: it mis-picked
+// the octagon(10,10) fixture's "4,3" cell to a triangle 2.1 units off, not the edge-sharing one). Pure,
+// deterministic.
+function pointToTriangleDist2(px, pz, a, b, c) {
+  if (pointInTriangle2D(px, pz, a, b, c)) return 0;
+  const e1 = pointToSegmentDist2(px, pz, a.x, a.z, b.x, b.z);
+  const e2 = pointToSegmentDist2(px, pz, b.x, b.z, c.x, c.z);
+  const e3 = pointToSegmentDist2(px, pz, c.x, c.z, a.x, a.z);
+  return Math.min(e1, e2, e3);
 }
 
 // triangulatePolygon(poly) -> ear-clipping triangulation of a simple CCW polygon (poly: [{x,z}...]) ->
@@ -520,6 +731,26 @@ function compileRoomShellData(cells, opts) {
   // gradient; they're already at the room's own edge by definition).
   const floorColorAt = typeof opts.floorColorAt === "function" ? opts.floorColorAt : null;
   const wallColorForSegment = typeof opts.wallColorForSegment === "function" ? opts.wallColorForSegment : null;
+  // STAGE-C3b: `opts.smoothShape` — the STAGE-C C3 `shapeForArchetype` tag straight off the active
+  // room's `rooms[].shape` (theater-boot.js threads it through unchanged) — picks a per-ring render
+  // treatment by MODE:
+  //   'circle'/'ellipse' -> "radial"   (radialSmoothRing: bow the boundary into a true curve)
+  //   'octagon'/'L'/'T'/'cross' -> "diagonal" (diagonalizeStaircaseRing: chamfer real multi-cell
+  //      staircase runs into a flat 45-degree face; L/T/cross structurally never HAVE a qualifying
+  //      run — see diagonalizeStaircaseRing's own header — so this is a safety-net inclusion, not new
+  //      geometry, for those two tags; only 'octagon' actually produces one in practice today)
+  //   anything else (undefined/null/'rect'/'cave') -> null (the ORIGINAL simplifySegments path,
+  //      byte-identical to before this unit — every existing pure-core test never sets this option;
+  //      'cave' is deliberately excluded — an irregular noise blob should stay organically rough, not
+  //      diagonal-faceted).
+  // `opts.radialSmoothBlend` overrides DEFAULT_RADIAL_SMOOTH_BLEND (test-only knob — production
+  // callers never set it); irrelevant to "diagonal" mode (chamferRunCorners has no blend parameter —
+  // it's a fixed, provably-safe geometric construction, not a tunable nudge).
+  const smoothShapeTag = opts.smoothShape || null;
+  const smoothMode = (smoothShapeTag === "circle" || smoothShapeTag === "ellipse") ? "radial"
+    : (smoothShapeTag === "octagon" || smoothShapeTag === "L" || smoothShapeTag === "T" || smoothShapeTag === "cross") ? "diagonal"
+    : null;
+  const radialSmoothBlend = typeof opts.radialSmoothBlend === "number" ? opts.radialSmoothBlend : DEFAULT_RADIAL_SMOOTH_BLEND;
   // nearestFloorColor(seg) -> the hex color of the floor cell just INSIDE this boundary segment (walks
   // 0.5 world units along the segment's own inward normal from its midpoint, then rounds to the
   // nearest cell center) — used to tint the BEVEL RIBBON + DOOR THRESHOLD quads so the floor's own
@@ -581,10 +812,35 @@ function compileRoomShellData(cells, opts) {
     const triStart = floorBuf.indices.length / 3;
 
     rings.forEach((ring) => {
-      let segments = simplifySegments(ring);
+      // STAGE-C3b: "radial" mode (circle/ellipse) needs FULL per-cell-edge boundary resolution
+      // (unmergedSegments, no collinear-run collapse) — radialSmoothRing bows a flat multi-cell run
+      // into a curve, and a single 2-endpoint chord under-represents that (see radialSmoothRing's own
+      // header). "diagonal" mode does NOT: simplifySegments already NEVER merges two consecutive edges
+      // of differing direction — by definition, a genuine alternating staircase run has no two
+      // consecutive same-direction edges, so it survives simplify() as individual unit segments
+      // already, right alongside its neighboring straight runs correctly merged. Routing 'diagonal'
+      // mode through simplifySegments (not unmergedSegments) means an L/T/cross tag (or a too-small
+      // octagon chamfer that never clears diagonalizeStaircaseRing's own 3-segment run threshold) with
+      // NO qualifying staircase is BYTE-IDENTICAL to the untagged/off path — diagonalizeStaircaseRing
+      // becomes a pure no-op rather than needlessly fragmenting every straight wall into unit quads.
+      let segments = (smoothMode === "radial") ? unmergedSegments(ring) : simplifySegments(ring);
       let poly = ringToPolygon(segments);
       const fixed = ensureCCW(poly, segments);
       poly = fixed.poly; segments = fixed.segments;
+      if (smoothMode === "radial") {
+        // render-only: pulls THIS ring's own vertices toward the ellipse fitted to its own bbox,
+        // door-adjacent vertices pinned — see radialSmoothRing's own header. Never touches `cells`/
+        // `tierCells`/`allIndex` (the logical grid this ring was traced from), only the local poly/
+        // segments arrays about to feed the floor triangulation + wall/riser quads below.
+        const smoothed = radialSmoothRing(poly, segments, radialSmoothBlend);
+        poly = smoothed.poly; segments = smoothed.segments;
+      } else if (smoothMode === "diagonal") {
+        // render-only: chamfers only the REAL multi-cell staircase runs this ring's own boundary
+        // contains into a flat diagonal face — see diagonalizeStaircaseRing's own header. Same "never
+        // touches the logical cell set" guarantee as the radial path.
+        const diagonalized = diagonalizeStaircaseRing(poly, segments);
+        poly = diagonalized.poly; segments = diagonalized.segments;
+      }
       if (poly.length < 3) return;
 
       const widthForSegment = (seg) => (seg.kind === "door" ? 0 : bevelWidth);
@@ -715,14 +971,37 @@ function compileRoomShellData(cells, opts) {
 
     // logical cell<->triangle map (directive step 9): every walkable cell in THIS tier resolves to
     // the floor triangle whose polygon actually contains that cell's own center point.
+    // ROOT FIX (STAGE-C3b, 2026-07-12 — the dropped-cell bug): a strict point-in-triangle test alone
+    // silently DROPPED a cell whose center sits exactly ON (or a float-epsilon off) an internal ear-
+    // clip triangulation diagonal — NO triangle strictly contains it, so the `break` never fired and
+    // the cell got no map entry. Measured live on master: a real octagon(10,10) fixture dropped cells
+    // "2,1" and "4,3" (76 cells -> 74 mapped) — a latent render-layer hit-test gap independent of the
+    // C3b smoothing work (the diagonal chamfer merely fixed the OCTAGON case incidentally). The robust,
+    // shape-agnostic fix: a NEAREST-TRIANGLE FALLBACK by true POINT-TO-TRIANGLE distance. Keep the
+    // strictly-containing triangle when one exists (the common, exact case — behavior unchanged);
+    // otherwise fall back to the triangle whose SOLID-TRIANGLE distance to the cell center is smallest
+    // (pointToTriangleDist2 — 0 when the point is on an edge). Because a dropped cell sits on a shared
+    // internal diagonal, that distance is ~0 for BOTH triangles owning the diagonal, so the fallback
+    // resolves to a triangle the point ACTUALLY lies on (a correct hit-test answer) — NOT the wrong
+    // faraway triangle a centroid-distance heuristic would pick (measured: centroid mis-picked "4,3" to
+    // a triangle 2.1 units off its true edge). Fixed iteration order + strict `<` on the distance =>
+    // deterministic, no RNG, pure. It is now IMPOSSIBLE for a floor cell to be left unmapped, any shape.
     tierCells.forEach((c) => {
+      let contained = -1;
+      let nearestTri = -1, nearestD2 = Infinity;
       for (let t = triStart; t < triStart + triCount; t++) {
         const i0 = floorBuf.indices[t * 3], i1 = floorBuf.indices[t * 3 + 1], i2 = floorBuf.indices[t * 3 + 2];
         const a = { x: floorBuf.positions[i0 * 3], z: floorBuf.positions[i0 * 3 + 2] };
         const b = { x: floorBuf.positions[i1 * 3], z: floorBuf.positions[i1 * 3 + 2] };
         const cc = { x: floorBuf.positions[i2 * 3], z: floorBuf.positions[i2 * 3 + 2] };
-        if (pointInTriangle2D(c.x, c.z, a, b, cc)) { cellTriangleMap[cellKey(c.x, c.z)] = { tier, triIndex: t }; break; }
+        if (pointInTriangle2D(c.x, c.z, a, b, cc)) { contained = t; break; }
+        // running nearest by true solid-triangle distance, computed in the SAME pass so the fallback
+        // costs nothing extra unless the strict test never hits (the rare on-diagonal float case).
+        const d2 = pointToTriangleDist2(c.x, c.z, a, b, cc);
+        if (d2 < nearestD2) { nearestD2 = d2; nearestTri = t; }
       }
+      const resolved = contained >= 0 ? contained : nearestTri;
+      if (resolved >= 0) cellTriangleMap[cellKey(c.x, c.z)] = { tier, triIndex: resolved };
     });
   });
 
@@ -787,11 +1066,14 @@ function compileRoomShell(cells, opts) {
 export {
   // pure core (dev/verify-room-shell.mjs's own direct import surface)
   cellKey, buildCellIndex, tierOf, edgeVertsFor, traceTierContour, chainEdgesIntoRings,
-  directionOf, mergeKeyFor, findSegmentStart, simplifySegments, ringToPolygon, signedArea2D,
-  ensureCCW, segmentNormal, insetPolygon, pointInTriangle2D, triangulatePolygon, ringPerimeterU,
+  directionOf, mergeKeyFor, findSegmentStart, simplifySegments, unmergedSegments, ringToPolygon, signedArea2D,
+  ensureCCW, segmentNormal, insetOffset, insetPolygon, radialSmoothRing,
+  chamferRunCorners, diagonalizeStaircaseRing, pointInTriangle2D, pointToSegmentDist2, pointToTriangleDist2,
+  triangulatePolygon, ringPerimeterU,
   hexToRgb01, polygonBBox, isAxisAlignedRectPolygon, buildAxisGrid, buildFloorGrid,
   compileRoomShellData,
   ROOM_SHELL_TIER_QUANTUM, DEFAULT_WALL_HEIGHT, DEFAULT_BEVEL_WIDTH, DEFAULT_BEVEL_DROP, DEFAULT_UV_DENSITY,
+  DEFAULT_RADIAL_SMOOTH_BLEND,
   // THREE assembler (theater-boot.js's own import surface)
   compileRoomShell,
 };

@@ -123,6 +123,12 @@ import {
 } from "./spawn-grace.js";
 import * as Parts from "./theater-parts.js";
 import { resolveWholeObject, loadWholeObjectBuilders, WHOLE_OBJECT_REGISTRY, NEAREST_SUB } from "./theater-figures.js";
+// ROOM-SHELL COMPILER (docs/ROOM-SHELL-COMPILER.md; docs/GRAPHICS-NORTH-STAR.md Stage C unit C4): the
+// active room's cells compiled into a CONTINUOUS shell (floor polygon + wall/riser quad-strips) instead
+// of the per-cell InstancedMesh box read below — see this file's own ITR_ROOM_SHELL flag + itrBuild*
+// call site (setInteriorBoard) for the wire-in. compileRoomShell is the thin THREE assembler; this file
+// still owns every material (Stage E's job, not this unit's).
+import { compileRoomShell, ROOM_SHELL_TIER_QUANTUM } from "./theater-room-mesh.js";
 // P1' WHOLE-OBJECT WIRING (docs/P1-WIRING.md §4 step 3): a STATIC import of probe-lib.js itself —
 // every dev/model-qa/creatures/*.js module ALSO imports probe-lib.js by the identical relative
 // specifier (resolved from dev/model-qa/, '../probe-lib.js'), which both Node and browsers resolve
@@ -7477,6 +7483,25 @@ let ITR_OCCLUSION_FADE_DISABLED_FOR_TEST = false;
 // "know something's there" intent. Bumped to 0.2 to actually read as a faint presence; still low
 // enough that the figure behind reads clearly. A dial — Adam tunes from the re-shoot.
 const ITR_OCCLUSION_GHOST_OPACITY = 0.2;
+// ROOM-SHELL COMPILER (docs/ROOM-SHELL-COMPILER.md): default ON, reversible — the SAME
+// "let + window.Theater._set*ForTest setter" convention ITR_OCCLUSION_FADE_DISABLED_FOR_TEST just
+// above already established for a live/harness A-B toggle. ON: the active room's floor/wall/riser
+// come from compileRoomShell(...) (a continuous compiled shell) instead of the per-cell
+// interiorBuildInstancedMesh floor/wall pass below. OFF: byte-identical to pre-this-unit rendering —
+// the documented escape hatch during migration (ROOM-SHELL-COMPILER.md's own "keep the old path
+// behind a diagnostic flag" instruction, mirroring A1's ITR_ACTIVE_ROOM_ONLY reversibility).
+let ITR_ROOM_SHELL = true;
+// world units per texture repeat for the compiled shell's own vertex UVs (theater-room-mesh.js's
+// DEFAULT_UV_DENSITY=1 mirrors this — kept as a SEPARATE named constant here, not an import, since the
+// pure module stays decoupled from this file's own material-building code; see the wire-in call site).
+const ITR_ROOM_SHELL_UV_DENSITY = 1;
+// mirrors ITR_CUTAWAY_PARAPET_FRAC (the per-cell path's own constant, declared at its own call site
+// below) — a SEPARATE named copy (not a shared const) because the compiled-shell wire-in and the
+// per-cell path are two independent code paths that happen to want the same fraction today.
+const ITR_ROOM_SHELL_PARAPET_FRAC = 0.4;
+// riser side faces read as a DELIBERATELY DARKER material variant (directive step 7) — same value-
+// multiply convention ITR_SCENE_DOORFRAME_VALUE already uses one section up, applied via itrScaleHexValue.
+const ITR_ROOM_SHELL_RISER_DARKEN = 0.55;
 // splits ONE occluding instance into its own SOLID ankle-height STUB (rendered in the normal opaque
 // mesh, unchanged material/shadow behavior — byte-identical to a non-occluding instance except for its
 // shorter sy) + a translucent GHOST spanning from the ankle up to the instance's own full original
@@ -8038,6 +8063,119 @@ function setInteriorBoard(data){
   // STAGE-A A1 test seams, same convention as S.interiorLastFloorList/WallList/PillarList above.
   S.interiorLastDoorList = doorList;
   S.interiorLastPortalList = data.portals || [];
+
+  // ═══ ROOM-SHELL COMPILER (docs/ROOM-SHELL-COMPILER.md; docs/GRAPHICS-NORTH-STAR.md Stage C unit
+  // C4) — compiles the active room's own floor cells into a CONTINUOUS shell (one triangulated floor
+  // polygon per elevation tier + wall/riser quad-strips from boundary segments) instead of the per-
+  // cell floorMesh/wallMesh InstancedMesh pair above, when ITR_ROOM_SHELL is on (default). Built
+  // straight off `floorList`/`inst.doorframe` — the SAME data interiorBuildBoard already produced;
+  // this unit never re-reads plan.cells, per the spec's own "keep interiorBuildBoard as the data
+  // producer, the compiler is render-only" instruction. Pillars/doorframe/skirt/portals/dressing/
+  // lights/standees below are UNTOUCHED (they still read S.interiorFloorTopMap, built earlier off
+  // `inst.floor` regardless of this flag).
+  let roomShellMeshes = [];
+  S.interiorLastRoomShell = null;
+  if(ITR_ROOM_SHELL && floorList && floorList.length){
+    const doorKeySet = new Set((inst.doorframe || []).map((d) => Math.round(d.x) + "," + Math.round(d.z)));
+    const shellCells = floorList.map((f) => {
+      const sy = (typeof f.sy === "number" && f.sy > 0) ? f.sy : ITR_FLOOR_HEIGHT_FALLBACK;
+      return {
+        x: Math.round(f.x), z: Math.round(f.z),
+        tier: Math.round(sy / ROOM_SHELL_TIER_QUANTUM),
+        elevationY: ITR_FLOOR_BASE_Y + sy,
+        isDoor: doorKeySet.has(Math.round(f.x) + "," + Math.round(f.z)),
+      };
+    });
+    // wall height: ANY one raw (pre-parapet, pre-occlusion) wall instance of THIS room shares the
+    // room's own scaleDomain-derived height (ITR_ACTIVE_ROOM_ONLY renders one room at a time) — never
+    // read off the post-cutaway `wallList` below (a DIFFERENT, deliberately-deferred concern; see the
+    // parapet callback's own comment for what IS carried over and what isn't).
+    const roomWallHeight = (inst.wall && inst.wall.length && typeof inst.wall[0].sy === "number")
+      ? inst.wall[0].sy : (data.wallHeightBase || 2.4);
+    // PARAPET PARITY: reapplies the SAME camera-facing cutaway the per-cell path computes above
+    // (BW2-5 item 2) per COMPILED SEGMENT, so the compiled shell doesn't regress "camera sees into the
+    // room" — the one piece of the existing per-cell view-dependent machinery this unit carries
+    // forward. S-1's PER-FIGURE sightline occlusion ankle-stub/ghost-fade is NOT yet integrated with
+    // the compiled wall (a deliberately scoped gap for a fast-follow — see this unit's own report);
+    // the compiled wall renders at full (parapet-cut) height regardless of figure occlusion.
+    let parapetDirX = 0, parapetDirZ = 0, parapetFr = null;
+    if(data.focusRect){
+      parapetFr = data.focusRect;
+      const yawNow = (S.rotationStep * 90 * Math.PI) / 180 + (CAM_YAW_OFFSET_DEG * Math.PI) / 180;
+      parapetDirX = Math.sin(yawNow); parapetDirZ = Math.cos(yawNow);
+    }
+    const wallHeightForSegment = (segMeta) => {
+      if(!parapetFr) return roomWallHeight;
+      const mx = segMeta.mid.x, mz = segMeta.mid.z;
+      const inBand = mx >= parapetFr.minX - 1 && mx <= parapetFr.maxX + 1 && mz >= parapetFr.minZ - 1 && mz <= parapetFr.maxZ + 1;
+      if(!inBand) return roomWallHeight;
+      const rx = mx - cx, rz = mz - cz;
+      if(rx * parapetDirX + rz * parapetDirZ <= 0) return roomWallHeight; // far-side segment stays full height
+      return roomWallHeight * ITR_ROOM_SHELL_PARAPET_FRAC;
+    };
+    // per-vertex world-aligned UVs replace the per-instance shared texture.repeat trick (BW2-3 §2b) —
+    // a (1,1) repeat variant of the SAME texture family/seed the per-cell path already resolved above
+    // (reuse, not a new material — Stage E owns actual material changes, not this unit).
+    const roomShellFloorTex = materialsOn
+      ? (interiorSurfaceFileTexture("floor", kit.floorTextureFile, kit.floorTextureWrap)
+          || interiorMaterialTexture(kit.floorMaterial, kit.floorColor, data.realmId + ":floor:shell", kit.floorGrain, 1, 1))
+      : null;
+    const roomShellWallTex = materialsOn
+      ? (interiorSurfaceFileTexture("wall", kit.wallTextureFile, kit.wallTextureWrap)
+          || interiorMaterialTexture(kit.wallMaterial, kit.wallColor, data.realmId + ":wall:shell", kit.wallGrain, 1, 1))
+      : null;
+    const shellPsxOpts = { worldSurface: true, worldPsxOverride: (variant && typeof variant.worldPsx === "boolean") ? variant.worldPsx : undefined };
+    const floorMat = applyPsxShaderTweaks(new THREE.MeshLambertMaterial(Object.assign(
+      roomShellFloorTex ? { map: roomShellFloorTex } : { color: kit.floorColor || "#888888" },
+      { side: THREE.DoubleSide })), shellPsxOpts);
+    // when TEXTURED, leave color at material default WHITE (matches interiorBuildInstancedMesh's own
+    // matBase convention one section up — texture:{map:texture} carries NO color key, so the shared
+    // InstancedMesh material tints white and the per-cell VALUE comes from each instance's own
+    // itrDarkenHex-scaled color instead). Setting color:kit.wallColor here UNCONDITIONALLY (an early
+    // bug this comment replaces) double-darkened the texture (kit.wallColor tint × the texture's own
+    // already-dark albedo), crushing the compiled wall toward black — a real, screenshot-caught
+    // regression, not a taste call. Only the UNTEXTURED (materials-off study baseline) branch uses the
+    // flat kit color, exactly like the floor material just above.
+    const wallBaseColor = roomShellWallTex ? "#ffffff" : (kit.wallColor || "#888888");
+    const wallMat = applyPsxShaderTweaks(new THREE.MeshLambertMaterial(Object.assign(
+      roomShellWallTex ? { map: roomShellWallTex } : {}, { color: wallBaseColor, side: THREE.DoubleSide })), shellPsxOpts);
+    // directive step 7 — risers are a deliberately DARKER material variant, darkened relative to
+    // whatever the wall's OWN base tone is (white-when-textured or kit.wallColor-when-flat) — never a
+    // second, independent darken stacked on top of the wall's already-textured value.
+    const riserMat = applyPsxShaderTweaks(new THREE.MeshLambertMaterial(Object.assign(
+      roomShellWallTex ? { map: roomShellWallTex } : {},
+      { color: itrScaleHexValue(wallBaseColor, ITR_ROOM_SHELL_RISER_DARKEN), side: THREE.DoubleSide })), shellPsxOpts);
+    const shell = compileRoomShell(shellCells, {
+      wallHeight: roomWallHeight, wallHeightForSegment, uvDensity: ITR_ROOM_SHELL_UV_DENSITY,
+    });
+    if(shell.floorGeometry){
+      const m = new THREE.Mesh(shell.floorGeometry, floorMat);
+      m.position.set(-cx, 0, -cz);
+      m.receiveShadow = true;
+      m.userData.interiorKind = "room-shell-floor";
+      roomShellMeshes.push(m);
+    }
+    if(shell.wallGeometry){
+      const m = new THREE.Mesh(shell.wallGeometry, wallMat);
+      m.position.set(-cx, 0, -cz);
+      m.castShadow = true; m.receiveShadow = true;
+      m.userData.interiorKind = "room-shell-wall";
+      roomShellMeshes.push(m);
+    }
+    if(shell.riserGeometry){
+      const m = new THREE.Mesh(shell.riserGeometry, riserMat);
+      m.position.set(-cx, 0, -cz);
+      m.castShadow = true; m.receiveShadow = true;
+      m.userData.interiorKind = "room-shell-riser";
+      roomShellMeshes.push(m);
+    }
+    // diagnostics + the logical cell<->triangle map (directive step 9) — dev/verify-room-shell-
+    // render.mjs's own primitive-count/bevel/riser assertions read this, never decomposing geometry.
+    S.interiorLastRoomShell = {
+      meta: shell.meta, cellTriangleMap: shell.cellTriangleMap, apertures: shell.apertures,
+      wallSegments: shell.wallSegments, riserSegments: shell.riserSegments, floorTiers: shell.floorTiers,
+    };
+  }
   // BEAUTY-WAVE-2.md BW2-1b (THE OCCLUSION LAW), item 1, superseded by docs/DIEGETIC-LIGHT.md unit S-1
   // (Adam's live steer, 2026-07-11): DYNAMIC CUTAWAY for pillar prisms — a pillar between the camera
   // and a mounted standee. Recomputed every board build (camera refit, BW2-1's own fitMode changes,
@@ -8094,7 +8232,12 @@ function setInteriorBoard(data){
   // calls over the pre-S-1 budget — only ever created when at least one instance of that kind is
   // actually occluding a figure this frame (both are null/empty otherwise, so a board with no
   // occlusion in play costs exactly what it did before this unit).
-  const itrAllInteriorMeshes = [floorMesh, wallMesh, wallGhostMesh, doorMesh, skirtMesh, portalMesh].concat(pillarMeshes).concat(pillarGhostMeshes);
+  // ROOM-SHELL COMPILER: when ITR_ROOM_SHELL is on and a shell actually compiled, the continuous
+  // floor/wall/riser meshes REPLACE the per-cell floorMesh/wallMesh/wallGhostMesh pair above (never
+  // both — that would double-render the same surfaces). doorMesh/skirtMesh/portalMesh/pillarMeshes
+  // stay unconditional either way (this unit's scope is floor/wall/riser geometry only).
+  const itrFloorWallMeshes = (ITR_ROOM_SHELL && roomShellMeshes.length) ? roomShellMeshes : [floorMesh, wallMesh, wallGhostMesh];
+  const itrAllInteriorMeshes = itrFloorWallMeshes.concat([doorMesh, skirtMesh, portalMesh]).concat(pillarMeshes).concat(pillarGhostMeshes);
   itrAllInteriorMeshes.forEach((mesh) => { if(mesh) S.interiorGroup.add(mesh); });
   S.interiorMeshCount = itrAllInteriorMeshes.filter(Boolean).length;
 
@@ -9106,6 +9249,36 @@ window.Theater._interiorPortalListForTest = function(){ return S.interiorLastPor
 // S-1 — TEST-ONLY SEAM: see ITR_OCCLUSION_FADE_DISABLED_FOR_TEST's own declaration comment — flips the
 // whole ankle+ghost pass off for a genuine RED-FIRST baseline render (dev/verify-occlusion-fade.mjs).
 window.Theater._setOcclusionFadeDisabledForTest = function(v){ ITR_OCCLUSION_FADE_DISABLED_FOR_TEST = !!v; };
+// ROOM-SHELL COMPILER — TEST/HARNESS SEAM: flips ITR_ROOM_SHELL live (dev/verify-room-shell-render.mjs's
+// own before[flag off]/after[flag on] A-B capture), same convention as the setter just above.
+window.Theater._setRoomShellEnabled = function(v){ ITR_ROOM_SHELL = !!v; };
+window.Theater._roomShellEnabled = function(){ return ITR_ROOM_SHELL; };
+// the compiled shell's own last-build diagnostics (geometry meta + logical cell<->triangle map) — null
+// whenever ITR_ROOM_SHELL is off or the active room has no compiled cells yet.
+window.Theater._interiorRoomShellForTest = function(){ return S.interiorLastRoomShell || null; };
+// ROOM-SHELL COMPILER — TEST SEAM: per-mesh primitive counts straight off the LIVE mounted
+// S.interiorGroup, tagged by each mesh's own userData.interiorKind stamp (interiorBuildInstancedMesh's
+// plain kind string for the per-cell path; "room-shell-floor/wall/riser" for the compiled path, set at
+// this file's own wire-in call site). `count` is the InstancedMesh instance count for the per-cell
+// kinds (the concrete O(cells) figure dev/verify-room-shell-render.mjs compares against the compiled
+// path's O(segments) triangle count) or 1 for an ordinary (non-instanced) Mesh.
+window.Theater._interiorGroupMeshInfoForTest = function(){
+  if(!S.interiorGroup) return [];
+  return S.interiorGroup.children.map((m) => ({
+    kind: (m.userData && m.userData.interiorKind) || null,
+    isInstanced: !!(m.isInstancedMesh),
+    count: m.isInstancedMesh ? m.count : 1,
+    triangleCount: (m.geometry && m.geometry.index) ? m.geometry.index.count / 3 : null,
+    colorHex: (m.material && !Array.isArray(m.material) && m.material.color) ? "#" + m.material.color.getHexString() : null,
+    // mapInfo: whether this mesh's own material texture has actually finished loading (the room-shell
+    // path's own file-texture branch loads async via THREE.TextureLoader) — a harness/console check
+    // that a "flat, no visible pattern" render is a genuine bug and not just a load-timing race.
+    mapInfo: (m.material && !Array.isArray(m.material) && m.material.map) ? {
+      hasImage: !!m.material.map.image, complete: !!(m.material.map.image && m.material.map.image.complete !== false),
+      repeat: [m.material.map.repeat.x, m.material.map.repeat.y],
+    } : null,
+  }));
+};
 // BW2-1b — TEST-ONLY SEAM: a REAL THREE.Raycaster occlusion check against the LIVE mounted geometry —
 // casts from the CURRENT S.camera.position toward targetWorldPos, intersects only the SOLID instance
 // kinds (wall/pillar/doorframe — tagged via interiorBuildInstancedMesh's own mesh.userData.interiorKind

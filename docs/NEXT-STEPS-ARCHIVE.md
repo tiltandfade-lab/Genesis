@@ -18,6 +18,18 @@ just preserves the old ordered-queue framing for anyone reconstructing why a cal
 
 ---
 
+## Do next (2026-07-10 PM, DUNGEON-GRAPH — spec docs/DUNGEON-GRAPH.md; U1/U2/U4 LANDED on the session branch)
+
+1. ☑ **U3 gated + LANDED 2026-07-10 PM** (27/27, prisms + 4-draw-call budget proven; U3↔U4
+   pn.spatial seam caught+fixed at re-gate). ☐ Remaining: RE-SHOOT the study card (fog
+   near-black, gloom underexposed, toast bleed) then Adam's taste gate.
+2. ☐ **The finale gate**: roll a dungeon walk, render a battle in a generated room at TRUE
+   scale, loop-test the cycle, fix what breaks (Adam's end-of-day target, carried).
+3. ☑ **Registry sizing fold — DONE 2026-07-10 (BEAUTY-WAVE VP1)** — feet/scaleTrue on all 896
+   cut slugs; Adam's in-engine re-judge of mediums still open (beauty shots are the venue).
+4. ☐ **GIT-LFS migration** at the quiet post-merge moment (docs/GIT-LFS-MIGRATION.md).
+5. ☐ **GUISE G1-G4** (docs/GUISE.md) + NPC expression pass, together.
+
 ## Do next (2026-07-09 overnight — the design session landed; supersedes below)
 
 The accidental design session (see CHANGELOG 2026-07-09): 6 system specs + 6 craft expansions merged

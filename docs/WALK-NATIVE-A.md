@@ -1,7 +1,9 @@
 # WALK-NATIVE-A — the walk-native boundary, then A3/A4 (GRAPHICS-NORTH-STAR Stage A close)
 
 type: system-spec
-status: SPECCED (Opus 4.8, 2026-07-12 — Adam ruled "build Codex's boundary first, then A3." Executes
+status: BUILT (2026-07-12 — all 4 units landed on master `00b775f8`, orchestrated + personally
+re-gated; see CHANGELOG 2026-07-12. WDV-3/4/5 remain as Codex's later recommendations.)
+history: SPECCED (Opus 4.8, 2026-07-12 — Adam ruled "build Codex's boundary first, then A3." Executes
 Codex's walk-native amendment (`ui-sketches/mock-frames/vq-battle-scenes/WALK-NATIVE-DIORAMA-CONTRACT.md`)
 as the prerequisite to wiring the dormant A2 ShotPlan. Grounded against the 2026-07-12 tree — every
 anchor below was grepped live; the stale ones from older notes are corrected inline.)

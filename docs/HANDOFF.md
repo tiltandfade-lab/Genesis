@@ -6,7 +6,49 @@ updated: 2026-07-11
 
 # Genesis — Session Hand-off
 
-## ⭐ Latest (2026-07-11) — BW4 MOTION & FEEL: 4 units landed; hit-stop wiring + play gate open [Claude Opus 4.8, orchestrated]
+## ⭐ Latest (2026-07-12) — WALK-NATIVE BOUNDARY + STAGE A CLOSED: the composed camera is live [Claude Opus 4.8, orchestrated]
+
+Codex reviewed the last A-wave and delivered the **walk-native amendment**
+(`ui-sketches/mock-frames/vq-battle-scenes/WALK-NATIVE-DIORAMA-CONTRACT.md`): the walk is the content
+spine; every graphics layer after the stored walk is a *projection* that may frame/light/occlude but
+may never roll, reject, or rewrite a rolled field. Adam ruled **build that boundary first, then wire
+A3.** Executed as `docs/WALK-NATIVE-A.md` — 4 background Sonnet executors, worktree-isolated, each
+personally re-gated (captures READ, never self-report), landed `--no-ff`. Master tip: `00b775f8`.
+
+**What shipped (all on master + pushed):**
+- **WDV-1 `walkSceneFrom`** (`src/engine/walk-scene.js`) — the anti-drift boundary. Classifies every
+  walk fact into visual roles with field provenance; wraps the card-dealer (never re-rolls);
+  `trayFrom` stamps `board.walkScene`. Pure/no-RNG. 32/0 (3 checks red-first).
+- **WDV-2 stamped provenance** — `walkPickStamped` + `segment.rollRefs` on graphics-critical tables;
+  byte-additive (existing field shapes identical). 34/0.
+- **A3 shot-compose** — **the composed camera is now live in production.** `setInteriorBoard` builds
+  `shotPlanFrom`+`composeShot` and drives the composed camera behind `ITR_SHOT_COMPOSE` (focusRect
+  fallback); scratch-`THREE.Camera` 2-arg projector; consumes `tray.walkScene`. Crops to the action
+  cluster — medium standee 0.208 frame height (gate 0.18–0.25). Round-1 zoomed too wide → caught at
+  the capture gate, corrected. 29/0.
+- **A4 dynamic occlusion v2** — blockers from the live `ShotPlan.occlusionTargets`; per-instance
+  ghost fade, named consts, tween + hysteresis. Fixed a tapered-column aliasing bug it found live.
+
+**Verification:** check-manifest OK; walk-scene 32/0, stamped 34/0, shot-compose 29/0,
+theater-shot 107/0, dungeon-interior 287/0, mf1 24/0, frustum 14/0, walk-card-projection 29/0,
+bw2-1b(jsdom) 24/0; **integrated loop gate 5/5 clean, 0 breaks, fps 197–277**. Captures READ: A3
+after-composed reads as a staged diorama; A4 on/off shows the pillar fade to reveal the standee.
+Two pre-existing render-only reds (bloom/ghost pixel check; bw2-1b doorframe) verified pre-existing
+on master, auto-skip in CI, follow-up filed.
+
+**Do next (pick up here):**
+1. **Adam: eyeball the Stage-A frames** — `dev/battle-gate/shot-compose/after-composed.png` (the
+   composed diorama) + the A4 occlusion on/off + the loop contact sheet. Dial the named consts if
+   wanted: `ITR_OCCLUSION_UPPER_OPACITY`/`STEM_HEIGHT_U`, the compose framing target.
+2. **Codex's remaining walk-native units** (his recommendation, deferred): WDV-3 table visual
+   metadata, WDV-4 overlay/state key unification, WDV-5 cross-env diorama gate.
+3. **Stage B (sprite citizenship)** is the next GRAPHICS-NORTH-STAR wave — the standee contract
+   (footX/Y, worldHeight, plinth/contact-shadow/shader), then Stage C (room-shell polygon rooms,
+   the compiler is already landed) / D (stateful nouns) / E (material+light finish).
+4. Carry-overs still stand: MF-3b hit-stop production wiring (Adam's event-shape call) + MF-5 feel
+   gate; the two pre-existing render reds' follow-up.
+
+## Latest (2026-07-11) — BW4 MOTION & FEEL: 4 units landed; hit-stop wiring + play gate open [Claude Opus 4.8, orchestrated]
 
 BEAUTY-WAVE-4 (docs/BEAUTY-WAVE-4.md) executed as 4 background Sonnet executors in isolated
 worktrees, each personally re-gated on its branch tip and landed `--no-ff` to master (pushed).

@@ -18,6 +18,28 @@ The running execution order. `DESIGN.md` holds the *what* and *why*; this holds 
 roll into `NEXT-STEPS-ARCHIVE.md` via `python3 build/archive-docs.py --emit`. Standing plan
 sections (tracks/layers/etc.) are never auto-archived.
 
+## Do next (2026-07-12 — GRAPHICS-NORTH-STAR: Stage A CLOSED; walk-native boundary landed)
+
+Codex's A→B graphics program (`docs/GRAPHICS-NORTH-STAR.md`) — **Stage A is BUILT** (master `00b775f8`,
+CHANGELOG 2026-07-12). The composed camera is live: the interior composes on the action cluster + occludes
+dynamically, fed through Codex's walk-native anti-drift boundary (`walkSceneFrom`). Sequenced by Adam's
+ruling: build the boundary first (WDV-1/2), then wire A3, then A4.
+
+1. ☑ **WDV-1 `walkSceneFrom`** — the walk-native boundary (`src/engine/walk-scene.js`); `board.walkScene`. 32/0.
+2. ☑ **WDV-2 stamped provenance** — `walkPickStamped` + `segment.rollRefs`, byte-additive. 34/0.
+3. ☑ **A3 shot-compose** — ShotPlan wired, composed camera live, WalkScene-fed. 29/0. (Round-1 framing
+   regression caught at the capture gate + corrected.)
+4. ☑ **A4 dynamic occlusion v2** — live `ShotPlan.occlusionTargets`, per-instance ghost fade + hysteresis.
+5. ☐ **Adam eyeballs the Stage-A frames** (`dev/battle-gate/shot-compose/after-composed.png`, the A4
+   on/off, the loop contact sheet); dial the named consts if wanted.
+6. ☐ **Stage B — sprite citizenship** is the next graphics wave (the §4.5 standee contract: footX/Y,
+   worldHeight, plinth/contact-shadow/explicit shader, in-engine acceptance gallery). Then C (polygon
+   rooms — the shell compiler is landed) / D (stateful nouns) / E (material+light finish).
+7. ☐ **Codex's remaining walk-native units** (deferred, his recommendation): WDV-3 table visual metadata,
+   WDV-4 overlay/state key unification, WDV-5 cross-env diorama gate.
+8. ☐ Follow-up: the two pre-existing render-only reds (occlusion ghost bloom/AO pixel check; bw2-1b
+   doorframe over-occlusion) — render-only, auto-skip in CI.
+
 ## Do next (2026-07-11 — VISUAL CAMPAIGN CONTINUATION: BW4 → BW5, registered)
 
 BW2/BW3 landed (CHANGELOG); the campaign continues with two waves, in order. Build unauthorized until
@@ -204,18 +226,6 @@ L7. ☐ **Regenerate `table-registry.json/.md`** — stale after the rename/new 
    `claude/fantasy-sprite-slicing-fc3187`. **Fantasy review pass** — 486 unreviewed in
    `dev/sprite-review.py` (:5179), `flagged ⚠` filter first. **Item kind rider** — add `item`
    to the v2 parser/registry (571 item cells skipped).
-
-## Do next (2026-07-10 PM, DUNGEON-GRAPH — spec docs/DUNGEON-GRAPH.md; U1/U2/U4 LANDED on the session branch)
-
-1. ☑ **U3 gated + LANDED 2026-07-10 PM** (27/27, prisms + 4-draw-call budget proven; U3↔U4
-   pn.spatial seam caught+fixed at re-gate). ☐ Remaining: RE-SHOOT the study card (fog
-   near-black, gloom underexposed, toast bleed) then Adam's taste gate.
-2. ☐ **The finale gate**: roll a dungeon walk, render a battle in a generated room at TRUE
-   scale, loop-test the cycle, fix what breaks (Adam's end-of-day target, carried).
-3. ☑ **Registry sizing fold — DONE 2026-07-10 (BEAUTY-WAVE VP1)** — feet/scaleTrue on all 896
-   cut slugs; Adam's in-engine re-judge of mediums still open (beauty shots are the venue).
-4. ☐ **GIT-LFS migration** at the quiet post-merge moment (docs/GIT-LFS-MIGRATION.md).
-5. ☐ **GUISE G1-G4** (docs/GUISE.md) + NPC expression pass, together.
 
 ## Do next (2026-07-11, BW4 MOTION & FEEL LANDED — the wave opened two Adam-gated items)
 

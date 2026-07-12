@@ -7848,6 +7848,10 @@ function setInteriorBoard(data){
   const wallFromFile = materialsOn && !!kit.wallTextureFile;
   const floorList = floorFromFile ? itrNeutralizeInstanceColors(inst.floor, kit.floorColor) : inst.floor;
   const floorMesh = interiorBuildInstancedMesh(floorList, cx, cz, floorTex, variant, "floor");
+  // STAGE-A A1 test seam, mirrors S.interiorLastWallList/S.interiorLastPillarList's own convention —
+  // the exact per-instance list the live floorMesh was built from (dev/verify-active-room-only.mjs
+  // reads this to assert no floor instance falls inside a non-kept neighbor room's rect).
+  S.interiorLastFloorList = floorList;
   // CUTAWAY WALLS (study card v4; BEAUTY-WAVE-2.md BW2-5 item 2 amendment): when the board frames a
   // focus room, the room's CAMERA-SIDE perimeter walls drop to a PARAPET so the camera sees INTO the
   // room instead of at the outside face of a (possibly scale-domain-tall) wall — the standard dungeon-
@@ -7920,6 +7924,9 @@ function setInteriorBoard(data){
   // darkened-trim instance color kept (NOT neutralized) so the arch reads as textured dark stone with a
   // whisper of the trim accent hue — the mock's dark textured archway, not a flat black block.
   const doorMesh = interiorBuildInstancedMesh(doorList, cx, cz, wallTex, variant, "doorframe");
+  // STAGE-A A1 test seams, same convention as S.interiorLastFloorList/WallList/PillarList above.
+  S.interiorLastDoorList = doorList;
+  S.interiorLastPortalList = data.portals || [];
   // BEAUTY-WAVE-2.md BW2-1b (THE OCCLUSION LAW), item 1, superseded by docs/DIEGETIC-LIGHT.md unit S-1
   // (Adam's live steer, 2026-07-11): DYNAMIC CUTAWAY for pillar prisms — a pillar between the camera
   // and a mounted standee. Recomputed every board build (camera refit, BW2-1's own fitMode changes,
@@ -7964,6 +7971,11 @@ function setInteriorBoard(data){
   // darkened color, same as pillar/doorframe) — a texture would be wasted detail on a band the camera
   // only ever sees edge-on.
   const skirtMesh = interiorBuildInstancedMesh(data.skirt, cx, cz, null, variant, "skirt");
+  // STAGE-A A1 (docs/STAGE-A.md): DARKNESS PORTAL cards — data.portals (src/ui/theater-interior.js's
+  // interiorBuildBoard, A1 addition), a sibling of `instances` same as skirt just above (never counted
+  // toward the "4 known instance kinds" data-shape check). Untextured flat dark slab (the card IS a
+  // flat void-color read, not a surface that wants grain) — null texture, same convention skirt uses.
+  const portalMesh = interiorBuildInstancedMesh(data.portals, cx, cz, null, variant, "portal");
   // BW2-5: furniture-class blocker volumes + wall-hang extrusion props (THE PROP PERSPECTIVE LAW) —
   // built further below (after dressing) since both read S.interiorFloorTopMap; declared here so the
   // mesh-count/group-add sweep stays one place. See interiorBuildFurniture/interiorBuildWallProps.
@@ -7971,7 +7983,7 @@ function setInteriorBoard(data){
   // calls over the pre-S-1 budget — only ever created when at least one instance of that kind is
   // actually occluding a figure this frame (both are null/empty otherwise, so a board with no
   // occlusion in play costs exactly what it did before this unit).
-  const itrAllInteriorMeshes = [floorMesh, wallMesh, wallGhostMesh, doorMesh, skirtMesh].concat(pillarMeshes).concat(pillarGhostMeshes);
+  const itrAllInteriorMeshes = [floorMesh, wallMesh, wallGhostMesh, doorMesh, skirtMesh, portalMesh].concat(pillarMeshes).concat(pillarGhostMeshes);
   itrAllInteriorMeshes.forEach((mesh) => { if(mesh) S.interiorGroup.add(mesh); });
   S.interiorMeshCount = itrAllInteriorMeshes.filter(Boolean).length;
 
@@ -8954,6 +8966,15 @@ window.Theater._interiorPillarListForTest = function(){ return S.interiorLastPil
 window.Theater._interiorWallListForTest = function(){ return S.interiorLastWallList || []; };
 window.Theater._interiorWallGhostListForTest = function(){ return S.interiorLastWallGhostList || []; };
 window.Theater._interiorPillarGhostListForTest = function(){ return S.interiorLastPillarGhostList || []; };
+// STAGE-A A1 (docs/STAGE-A.md) — TEST-ONLY SEAMS, same read-only convention as the pillar/wall lists
+// above: the exact per-instance lists the live floorMesh/doorMesh were built from, plus the DARKNESS
+// PORTAL card list (empty unless ITR_ACTIVE_ROOM_ONLY is on and a focus room was requested) — lets
+// dev/verify-active-room-only.mjs assert "no floor/wall/doorframe instance falls inside a non-kept
+// neighbor room's rect" and "one portal card per boundary door" without decomposing InstancedMesh
+// matrices.
+window.Theater._interiorFloorListForTest = function(){ return S.interiorLastFloorList || []; };
+window.Theater._interiorDoorListForTest = function(){ return S.interiorLastDoorList || []; };
+window.Theater._interiorPortalListForTest = function(){ return S.interiorLastPortalList || []; };
 // S-1 — TEST-ONLY SEAM: see ITR_OCCLUSION_FADE_DISABLED_FOR_TEST's own declaration comment — flips the
 // whole ankle+ghost pass off for a genuine RED-FIRST baseline render (dev/verify-occlusion-fade.mjs).
 window.Theater._setOcclusionFadeDisabledForTest = function(v){ ITR_OCCLUSION_FADE_DISABLED_FOR_TEST = !!v; };

@@ -10,6 +10,23 @@ and reconciliation with the specs already in flight. The directive is the source
 Read with: the directive (above), the 20 frames in that folder, `GRAPHICS-ENGINE.md`,
 `BEAUTY-WAVE-5.md`, `DIEGETIC-LIGHT.md`, `LIGHT-SIGHT-POLISH.md`, `TABLETOP-VISION.md`.
 
+## Walk-native amendment (2026-07-12)
+
+The **walk is the content spine**. The graphics program is not a second scene generator and may not
+supplant the book-derived spark-table method. A canonical scene begins as:
+
+`walk setup + active segment + pn.segments overlay + live combat/codex state`.
+
+`pn.spatial`, the room shell, the tray, and `ShotPlan` are successively more visual projections of
+that record. They may position, frame, light, occlude, and choose a construction class for nouns the
+walk licensed. They may not roll replacement content, reject an incongruous roll, or silently rewrite a
+field. "Sparse" means selective **visual objectification**: an unrendered rolled field remains canonical
+on the segment and may enter a walk-backed **staging reserve** for later narration or projection. The
+reserve is an index over source fields, not a second source of truth and not a discard pile.
+
+Detailed contract and current dungeon/urban/wilderness field map:
+`ui-sketches/mock-frames/vq-battle-scenes/WALK-NATIVE-DIORAMA-CONTRACT.md`.
+
 ## The diagnosis (why the current battle view reads as a 1990s map)
 Not polygon count. Per the directive §2: (1) rooms are **cell-prisms** — a rasterized plan rendered
 as unit boxes, so the square-cell origin always shows; (2) the camera **fits geometry, not a
@@ -31,7 +48,7 @@ orbit/zoom. It carries: `stage` (polygon, floorLevels, wallSegments, apertures, 
 `anchors` (player, primaryThreat, objective, focalLight, actionCenter), `pieces/props/interactables/
 overlays/traces`, `lightRig`, `camera` (mode beat|room|boss, yaw/pitch/fov/target/distance,
 sharpSubjects), `occlusionTargets`, `postProfile`, and `provenance` (every staged noun mapped to the
-state/roll/codex/combat/trace that licensed it). This makes the camera, curation, lighting,
+state/roll/codex/combat/trace that licensed it). This makes the camera, visual projection, lighting,
 occlusion, and TESTS all agree about what the frame is *about*. **New module `src/ui/theater-shot.js`.**
 
 ## Reconciliation with the specs already in flight (important — some get re-scoped)
@@ -105,10 +122,12 @@ D1 fold core-three object generation into a state registry (BW5 construction cla
 / EXTRUDE); D2 ship **door→room transition first** (the keystone slice); D3 lever/chest/fire/shrine/
 portal/container/trap; D4 extend `theater-verbs.js` for object-state + persistent-trace + terrain-
 change visual verbs (§4.10). State comes from game data; animation is a view projection; revisit
-rebuilds to the same terminal visual state. Plus the **curation pass** (§4.11): a deterministic
-curator with the room budgets (ordinary 0-3 props, dressed 3-6, boss 2-5 + exactly one centerpiece);
-gameplay citizens (doors/combatants/objective/hazards/traces) don't consume the decorative budget;
-overflow → the non-canonical cache.
+rebuilds to the same terminal visual state. Plus the **walk visual-projection pass** (§4.11,
+walk-native amendment): a deterministic field-to-visual compiler with room budgets (ordinary 0-3
+props, dressed 3-6, boss 2-5 + at most one visually dominant centerpiece). Gameplay citizens
+(doors/combatants/objective/hazards/traces) do not consume the decorative budget. Fields over the
+visual budget remain on the canonical walk segment and enter the source-referenced staging reserve;
+nothing is discarded, rerolled, or made invisible to the DM.
 - **Gate:** frames `13`, `15`, `20` rebuild correctly from saved state.
 
 ### STAGE E — material and light finish
@@ -158,7 +177,7 @@ requeue with the failed criterion added) → in-engine QA (§5.5 render matrix b
 The VQ PNGs are references for the assembler, **never runtime backgrounds** (§5.2, §10).
 
 ## The practical north star (directive §11)
-`state+rolls → curated active-room tray → polygonal shell + physical citizens → shot plan centered on
+`walk setup+segment+overlay+live state → projected active-room tray → polygonal shell + physical citizens → shot plan centered on
 the action → one visible light story → stable standees with bases/contact/shadows → restrained depth-
 aware finish → automated capture+promotion gates.`
 

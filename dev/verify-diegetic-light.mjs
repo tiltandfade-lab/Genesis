@@ -258,17 +258,24 @@ async function measure(page, probe, pngB64) {
         const b = probe.bounds;
         const rad = Math.floor(H * 0.015);
         const steps = 6;
-        let s = 0, cnt = 0;
+        // P-1 problem 1 (docs/LIGHT-SIGHT-POLISH.md) — CLIPPING: roomMean alone can't tell "evenly
+        // bright" from "half the room is pinned at pure white" (both can average the same). roomMax +
+        // roomClippedFraction (the share of the SAME grid samples at/above a near-white threshold) give
+        // the harness a real clipping read, independent of the plain mean the L-4 headline already uses.
+        const CLIP_THRESHOLD = 0.97;
+        let s = 0, cnt = 0, maxLum = 0, clipped = 0;
         for (let i = 0; i < steps; i++) {
           for (let j = 0; j < steps; j++) {
             const fx = b.minX + (b.maxX - b.minX) * (i + 0.5) / steps;
             const fz = b.minZ + (b.maxZ - b.minZ) * (j + 0.5) / steps;
             const l = patchLum(toScreen(fx, fz, 0.3), rad);
-            if (l != null) { s += l; cnt++; }
+            if (l != null) { s += l; cnt++; if (l > maxLum) maxLum = l; if (l >= CLIP_THRESHOLD) clipped++; }
           }
         }
         out.roomMean = cnt ? s / cnt : null;
         out.roomSamples = cnt;
+        out.roomMax = cnt ? maxLum : null;
+        out.roomClippedFraction = cnt ? clipped / cnt : null;
       }
       resolveOuter(out);
     };
@@ -410,6 +417,140 @@ async function main() {
       `HEADLINE: daylit lost-world's OWN ROOM reads brighter (roomMean=${daylitMeasured.roomMean != null ? daylitMeasured.roomMean.toFixed(4) : "n/a"}) than the torchlit gloom crypt's (roomMean=${gloomMeasured.roomMean != null ? gloomMeasured.roomMean.toFixed(4) : "n/a"}) — the inversion is gone`);
     ok(gloomMeasured.roomMean != null && daylitMeasured.roomMean != null && daylitMeasured.roomMean >= gloomMeasured.roomMean * 1.3,
       `the margin is CLEAR, not marginal: daylit room >= 1.3x the torchlit crypt room's mean (ratio=${gloomMeasured.roomMean ? (daylitMeasured.roomMean / gloomMeasured.roomMean).toFixed(2) : "n/a"})`);
+
+    // ================================================================
+    // P-1 problem 1 — PER-REALM BRIGHT FILL (suburb daylit no longer clips)
+    // ================================================================
+    group("P-1a — suburb daylit no longer blows out (RED-FIRST: prove it clipped under the old one-size numbers)");
+    const CLIP_MAX = 0.97, CLIP_FRACTION_GATE = 0.15;
+    const suburbBuilt = await buildScene(page, { realmId: "suburb", lightProfile: "daylit", walkId: "diegetic-suburb-p1" });
+    if (!suburbBuilt.ok) throw new Error("suburb scene build failed: " + suburbBuilt.error);
+    // AMBIENT-ONLY variant: buildScene always injects ONE controlled torch (a fixed, un-scaled point
+    // light — L-2/L-3's own shadow-caster fixture) so its own close-range hot pool would confound THIS
+    // group's claim, which is about the SCENE-WIDE ambient/hemi/key/fill read Adam actually complained
+    // about ("nuclear bomb"), not torch-adjacent falloff (a separate, pre-existing, realm-agnostic
+    // system this unit doesn't touch). Same board/geometry, lights stripped.
+    const suburbAmbientBoard = Object.assign({}, suburbBuilt.board, { lights: [] });
+
+    await page.evaluate(() => window.Theater.setBrightRealmFillForceDefaultForTest(true));
+    const suburbRedPng = await mountAndShoot(page, suburbAmbientBoard, path.join(outDir, "p1a-suburb-daylit-RED-forced-default.png"));
+    const suburbRed = await measure(page, suburbBuilt.probe, suburbRedPng);
+    ok(suburbRed.ok, "suburb RED-baseline frame measured: " + (suburbRed.error || "ok"));
+    console.log(`  suburb daylit, FORCED to the old global bright-fill numbers: roomMean=${suburbRed.roomMean != null ? suburbRed.roomMean.toFixed(4) : "n/a"} roomMax=${suburbRed.roomMax != null ? suburbRed.roomMax.toFixed(4) : "n/a"} clippedFraction=${suburbRed.roomClippedFraction != null ? suburbRed.roomClippedFraction.toFixed(2) : "n/a"}`);
+    ok(suburbRed.roomMax != null && suburbRed.roomMax >= CLIP_MAX && suburbRed.roomClippedFraction >= CLIP_FRACTION_GATE,
+      `RED-FIRST: suburb's own room DOES clip under lost-world's global bright-fill numbers (roomMax=${suburbRed.roomMax != null ? suburbRed.roomMax.toFixed(4) : "n/a"} >= ${CLIP_MAX}, clippedFraction=${suburbRed.roomClippedFraction != null ? suburbRed.roomClippedFraction.toFixed(2) : "n/a"} >= ${CLIP_FRACTION_GATE}) — the check is load-bearing (proves the regression is real, not assumed)`);
+
+    await page.evaluate(() => window.Theater.setBrightRealmFillForceDefaultForTest(false));
+    const suburbGreenPng = await mountAndShoot(page, suburbAmbientBoard, path.join(outDir, "p1a-suburb-daylit-GREEN-per-realm.png"));
+    const suburbGreen = await measure(page, suburbBuilt.probe, suburbGreenPng);
+    ok(suburbGreen.ok, "suburb GREEN frame measured: " + (suburbGreen.error || "ok"));
+    const suburbLights = await page.evaluate(() => window.Theater._interiorSceneLightsForTest());
+    console.log(`  suburb daylit, PER-REALM fill (${JSON.stringify(suburbLights)}): roomMean=${suburbGreen.roomMean != null ? suburbGreen.roomMean.toFixed(4) : "n/a"} roomMax=${suburbGreen.roomMax != null ? suburbGreen.roomMax.toFixed(4) : "n/a"} clippedFraction=${suburbGreen.roomClippedFraction != null ? suburbGreen.roomClippedFraction.toFixed(2) : "n/a"}`);
+    ok(suburbGreen.roomMax != null && suburbGreen.roomMax < CLIP_MAX && suburbGreen.roomClippedFraction < CLIP_FRACTION_GATE,
+      `GREEN: with the real per-realm fill, suburb no longer clips (roomMax=${suburbGreen.roomMax != null ? suburbGreen.roomMax.toFixed(4) : "n/a"} < ${CLIP_MAX}, clippedFraction=${suburbGreen.roomClippedFraction != null ? suburbGreen.roomClippedFraction.toFixed(2) : "n/a"} < ${CLIP_FRACTION_GATE})`);
+    ok(suburbGreen.roomMean != null && suburbGreen.roomMean >= 0.05,
+      `the fix doesn't overcorrect into darkness: suburb's room still reads lit (roomMean=${suburbGreen.roomMean != null ? suburbGreen.roomMean.toFixed(4) : "n/a"} >= 0.05)`);
+
+    // lost-world's OWN row is untouched by the per-realm table (L-4's headline numbers above already
+    // prove this — daylitLights === {ambient:1.1,hemi:0.9,key:0.9,fill:0.55}, byte-identical to the
+    // pre-P-1 global constants); re-assert here so this group carries its own complete before/after
+    // story without relying on group ordering.
+    ok(daylitLights.ambient === 1.1 && daylitLights.hemi === 0.9 && daylitLights.key === 0.9 && daylitLights.fill === 0.55,
+      `lost-world daylit keeps the ORIGINAL bright-fill numbers untouched (${JSON.stringify(daylitLights)})`);
+
+    // bright-kingdom is the THIRD named bright-set realm (docs/LIGHT-SIGHT-POLISH.md P-1 decisions) —
+    // same claim as suburb (a lighter kit gets a gentler row), checked GREEN-only here since the RED
+    // mechanism (setBrightRealmFillForceDefaultForTest) is already proven load-bearing on suburb above.
+    const bkBuilt = await buildScene(page, { realmId: "bright-kingdom", lightProfile: "daylit", walkId: "diegetic-bk-p1" });
+    if (!bkBuilt.ok) throw new Error("bright-kingdom scene build failed: " + bkBuilt.error);
+    const bkAmbientBoard = Object.assign({}, bkBuilt.board, { lights: [] });
+    const bkPng = await mountAndShoot(page, bkAmbientBoard, path.join(outDir, "p1a-bright-kingdom-daylit-GREEN-per-realm.png"));
+    const bkGreen = await measure(page, bkBuilt.probe, bkPng);
+    ok(bkGreen.ok, "bright-kingdom frame measured: " + (bkGreen.error || "ok"));
+    const bkLights = await page.evaluate(() => window.Theater._interiorSceneLightsForTest());
+    console.log(`  bright-kingdom daylit, PER-REALM fill (${JSON.stringify(bkLights)}): roomMean=${bkGreen.roomMean != null ? bkGreen.roomMean.toFixed(4) : "n/a"} roomMax=${bkGreen.roomMax != null ? bkGreen.roomMax.toFixed(4) : "n/a"} clippedFraction=${bkGreen.roomClippedFraction != null ? bkGreen.roomClippedFraction.toFixed(2) : "n/a"}`);
+    ok(bkGreen.roomMax != null && bkGreen.roomMax < CLIP_MAX && bkGreen.roomClippedFraction < CLIP_FRACTION_GATE,
+      `bright-kingdom's per-realm row doesn't clip either (roomMax=${bkGreen.roomMax != null ? bkGreen.roomMax.toFixed(4) : "n/a"} < ${CLIP_MAX}, clippedFraction=${bkGreen.roomClippedFraction != null ? bkGreen.roomClippedFraction.toFixed(2) : "n/a"} < ${CLIP_FRACTION_GATE})`);
+
+    // ================================================================
+    // P-1 problem 2 — COSMIC EMISSIVE FILL (voidlit legibility)
+    // ================================================================
+    group("P-1b — cosmic voidlit becomes legible (RED-FIRST: prove it was near-black under the plain dungeon numbers)");
+    // cosmic's own tileKit (floorColor #171b33/wallColor #10132a) is an unusually dark navy — even a
+    // generous emissive fill lands at a low ABSOLUTE roomMean (its albedo just doesn't reflect much),
+    // so an absolute floor tuned by eye would either be unreachable or too close to run-to-run room-
+    // geometry noise (buildScene's spatializePlan isn't perfectly deterministic run-to-run — observed
+    // roomMean drift for a nominally-identical config across dev iterations). The robust claim, same
+    // convention as L-4's own headline ("clear margin, not marginal", >= 1.3x): compare emissive-ON
+    // against emissive-OFF on the EXACT SAME mounted board (geometry/camera held fixed within this one
+    // run), not against a fixed absolute number.
+    const COSMIC_NEAR_BLACK_CAP = 0.05; // RED must land under this — "near-black", the literal complaint
+    const COSMIC_IMPROVEMENT_RATIO = 1.3; // GREEN must clear RED by at least this multiple — L-4's own bar
+    const cosmicBuilt = await buildScene(page, { realmId: "cosmic", lightProfile: "voidlit", walkId: "diegetic-cosmic-p1" });
+    if (!cosmicBuilt.ok) throw new Error("cosmic scene build failed: " + cosmicBuilt.error);
+
+    await page.evaluate(() => window.Theater.setEmissiveFillDisabledForTest(true));
+    const cosmicRedPng = await mountAndShoot(page, cosmicBuilt.board, path.join(outDir, "p1b-cosmic-voidlit-RED-no-emissive.png"));
+    const cosmicRed = await measure(page, cosmicBuilt.probe, cosmicRedPng);
+    ok(cosmicRed.ok, "cosmic RED-baseline frame measured: " + (cosmicRed.error || "ok"));
+    console.log(`  cosmic voidlit, emissive path DISABLED (falls to the plain dungeon numbers): roomMean=${cosmicRed.roomMean != null ? cosmicRed.roomMean.toFixed(4) : "n/a"}`);
+    ok(cosmicRed.roomMean != null && cosmicRed.roomMean < COSMIC_NEAR_BLACK_CAP,
+      `RED-FIRST: cosmic's own room DOES read near-black without its emissive path (roomMean=${cosmicRed.roomMean != null ? cosmicRed.roomMean.toFixed(4) : "n/a"} < ${COSMIC_NEAR_BLACK_CAP}) — the check is load-bearing`);
+
+    await page.evaluate(() => window.Theater.setEmissiveFillDisabledForTest(false));
+    const cosmicGreenPng = await mountAndShoot(page, cosmicBuilt.board, path.join(outDir, "p1b-cosmic-voidlit-GREEN-emissive.png"));
+    const cosmicGreen = await measure(page, cosmicBuilt.probe, cosmicGreenPng);
+    ok(cosmicGreen.ok, "cosmic GREEN frame measured: " + (cosmicGreen.error || "ok"));
+    const cosmicLights = await page.evaluate(() => window.Theater._interiorSceneLightsForTest());
+    console.log(`  cosmic voidlit, emissive path ON (${JSON.stringify(cosmicLights)}): roomMean=${cosmicGreen.roomMean != null ? cosmicGreen.roomMean.toFixed(4) : "n/a"}`);
+    ok(cosmicGreen.roomMean != null && cosmicRed.roomMean != null && cosmicGreen.roomMean > cosmicRed.roomMean,
+      `GREEN: cosmic's own room reads brighter with the emissive path on (roomMean ${cosmicGreen.roomMean != null ? cosmicGreen.roomMean.toFixed(4) : "n/a"} > RED ${cosmicRed.roomMean != null ? cosmicRed.roomMean.toFixed(4) : "n/a"})`);
+    ok(cosmicGreen.roomMean != null && cosmicRed.roomMean != null && cosmicGreen.roomMean >= cosmicRed.roomMean * COSMIC_IMPROVEMENT_RATIO,
+      `the improvement is CLEAR, not marginal: emissive-on room >= ${COSMIC_IMPROVEMENT_RATIO}x the disabled baseline (ratio=${cosmicRed.roomMean ? (cosmicGreen.roomMean / cosmicRed.roomMean).toFixed(2) : "n/a"})`);
+
+    // ================================================================
+    // P-1 problem 3 — SEAT THE GLOW (every core realm gets a visible emitter under its glow disc)
+    // ================================================================
+    group("P-1c — every core realm's glow disc has a visible emitter under it (RED-FIRST via the nub flag)");
+    const EMIT_EPS = 0.05;
+    async function emitterNear(built) {
+      const origin = await page.evaluate(() => window.Theater.interiorBoardOrigin());
+      const emitters = await page.evaluate(() => window.Theater._interiorLightEmittersForTest());
+      const ex = built.probe.torch.x - origin.cx, ez = built.probe.torch.z - origin.cz;
+      return emitters.find((e) => Math.abs(e.x - ex) < EMIT_EPS && Math.abs(e.z - ez) < EMIT_EPS) || null;
+    }
+
+    // RED-FIRST on a NUB realm (cosmic has no INTERIOR_LIGHT_CARD entry — this is the exact "glow floats
+    // with no source" bug Adam saw): flip the nub flag off, prove the emitter really does disappear.
+    await page.evaluate(() => window.Theater.setLightEmitterNubEnabled(false));
+    await mountAndShoot(page, cosmicBuilt.board, path.join(outDir, "p1c-cosmic-RED-nub-disabled.png"));
+    const cosmicNoEmitter = await emitterNear(cosmicBuilt);
+    ok(!cosmicNoEmitter, `RED-FIRST: with the emitter-nub flag off, cosmic's glow disc has NOTHING mounted at its light seed (found ${JSON.stringify(cosmicNoEmitter)}) — reproduces "the glow disc floats with no source"`);
+
+    await page.evaluate(() => window.Theater.setLightEmitterNubEnabled(true));
+    await mountAndShoot(page, cosmicBuilt.board, path.join(outDir, "p1c-cosmic-GREEN-nub-enabled.png"));
+    const cosmicEmitter = await emitterNear(cosmicBuilt);
+    ok(!!cosmicEmitter && cosmicEmitter.kind === "nub", `GREEN: flipping the flag back on + remounting DOES seat a visible emitter nub under cosmic's glow disc (${JSON.stringify(cosmicEmitter)}) — the flag is load-bearing`);
+
+    // Full sweep, flag at its real default (on): chrome/gloom/fantasy carry a real dressing card
+    // (INTERIOR_LIGHT_CARD); lost-world/suburb/bright-kingdom/cosmic have none, so they ride the nub.
+    const coreRealmChecks = [
+      { realmId: "chrome", lightProfile: "torchlit", expectKind: "card" },
+      { realmId: "gloom", lightProfile: "torchlit", expectKind: "card" },
+      { realmId: "fantasy", lightProfile: "torchlit", expectKind: "card" },
+      { realmId: "lost-world", lightProfile: "daylit", expectKind: "nub" },
+      { realmId: "suburb", lightProfile: "daylit", expectKind: "nub" },
+      { realmId: "bright-kingdom", lightProfile: "daylit", expectKind: "nub" },
+      { realmId: "cosmic", lightProfile: "voidlit", expectKind: "nub" },
+    ];
+    for (const cfg of coreRealmChecks) {
+      const built = await buildScene(page, { realmId: cfg.realmId, lightProfile: cfg.lightProfile, walkId: "diegetic-p1c-" + cfg.realmId });
+      if (!built.ok) { ok(false, `${cfg.realmId}: scene build failed: ${built.error}`); continue; }
+      await mountAndShoot(page, built.board, path.join(outDir, `p1c-${cfg.realmId}-emitter.png`));
+      const emitter = await emitterNear(built);
+      ok(!!emitter, `${cfg.realmId}: a visible emitter (card or nub) exists at the glow-disc's light seed (found ${JSON.stringify(emitter)})`);
+      ok(!!emitter && emitter.kind === cfg.expectKind, `${cfg.realmId}: the emitter is the expected kind ("${cfg.expectKind}") — found "${emitter && emitter.kind}"`);
+    }
 
     console.log(`\n${pass} passed, ${fail} failed`);
     process.exitCode = fail > 0 ? 1 : 0;

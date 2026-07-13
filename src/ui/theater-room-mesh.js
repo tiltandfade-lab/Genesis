@@ -89,6 +89,26 @@
 // drives every function below directly against a fixture cell set, RED-FIRST, no browser needed).
 // ════════════════════════════════════════════════════════════════════════════════════════════════
 
+// UNIT G2 (docs/GEOMETRY-OSS-INTEGRATION.md §15, §17.5) — the PolygonKernel adapter (G1,
+// src/ui/geometry/polygon-kernel.js) is imported here, at the top of the PURE core, because using it
+// stays pure (no THREE/DOM/window, no Math.random/Date.now — see that module's own header): it is
+// composed into the floor pipeline below exactly like any other pure helper this file already calls
+// (insetPolygon, triangulatePolygon, etc.), never crossing the "THREE ASSEMBLER" divider further down.
+// This import adds ZERO behavior change on its own — it is inert until ROOM_SHELL_POLYGON_KERNEL (or
+// an explicit opts.roomShellPolygonKernel) selects "oss"/"oss-compare" below.
+import * as PolygonKernel from "./geometry/polygon-kernel.js";
+
+// ROOM_SHELL_POLYGON_KERNEL — the §15 migration switch: "legacy" (DEFAULT, current production output,
+// byte-identical) | "oss-compare" (render legacy, compute both, emit parity diagnostics) | "oss"
+// (render the PolygonKernel floor path). NEVER flip this default — promotion is a separate, later,
+// explicitly-gated decision (§15's own 10-step promotion sequence), not something this unit performs.
+// theater-boot.js owns its own copy of this same three-value switch (a `let` near ITR_ROOM_SHELL,
+// test-seam-settable via window.Theater._setRoomShellPolygonKernel) and threads it through as
+// opts.roomShellPolygonKernel on every compileRoomShell(...) call; this exported constant is the
+// canonical default a caller falls back to when it omits the option entirely (dev/verify-room-shell.mjs
+// fixtures, any bare compileRoomShellData(cells) call with no opts).
+const ROOM_SHELL_POLYGON_KERNEL = "legacy";
+
 // ROOM_SHELL_TIER_QUANTUM: quantizes a cell's own floor height into a discrete tier id. Chosen so
 // VP3's per-cell jitter (theater-interior.js ITR_STEP_MIN/MAX = 0.04-0.08 world units either side of
 // the ITR_FLOOR_HEIGHT=0.2 nominal, i.e. real sy in [0.12,0.28]) ALWAYS rounds to the SAME tier bucket
@@ -1122,6 +1142,266 @@ function buildFloorCells(floorBuf, tierCells, elevationY, uvDensity, colorAt) {
   });
 }
 
+// ── UNIT G2 (docs/GEOMETRY-OSS-INTEGRATION.md §7, §15, §17.5) — PolygonKernel floor integration ──
+// Everything in this section is pure and INERT in "legacy" mode (compileRoomShellData's default):
+// none of these functions are ever called unless opts.roomShellPolygonKernel resolves to "oss" or
+// "oss-compare". They exist to replace exactly two things for "oss" mode, and nothing else:
+//   1. ring TOPOLOGY discovery (traceTierContour+chainEdgesIntoRings, naive raw-edge walking) ->
+//      unionCellRects (a real, vetted boolean-union library) — this is what corrects F11's diagonal-
+//      vertex-pinch polygon/hole undercount and row-101's (F18) annular hole/ring topology.
+//   2. floor-body TRIANGULATION (triangulatePolygon + bridgeHoleIntoOuter's hand-rolled hole bridge)
+//      -> triangulateSurface (Earcut, native holes) — this is what corrects F08/B09's degenerate
+//      door-adjacent triangles.
+// Everything ELSE in the per-ring loop (simplifySegments/unmergedSegments, diagonalizeStaircaseRing,
+// radialSmoothRing, insetPolygon, the bevel ribbon, the door-threshold flush quad, buildWallBox, the
+// riser quad, mount slots) is completely UNCHANGED code, reused verbatim for oss mode too — this
+// section's job is only to hand that unchanged code the SAME shape of input (a raw kind-tagged unit-
+// edge ring) it already consumes, sourced from the kernel instead of chainEdgesIntoRings.
+
+// unitStepClassifyRing(ring, allIndex, tier) -> {raw, diagnostics}. `ring`: a CLOSED-topology, OPEN
+// (no repeated closing point), already-canonicalized polygon ring straight off PolygonKernel
+// (unionCellRects' own output convention: outer CCW, hole CW, axis-aligned, unit-grid-cornered,
+// collinear runs already merged into single long edges — proven empirically against this exact
+// vendored kernel, see this unit's own report). Because the kernel merges collinear straight runs
+// (a 3-cell corridor union comes back as ONE 4-vertex rectangle, not 3 unit squares' worth of raw
+// edges), a ring edge here can span several world units — this function "un-collapses" each edge back
+// into unit-length steps and classifies EACH step exactly the way traceTierContour does (same
+// neighbor-lookup, same wall/door/riser rule), so a door cell sitting mid-run — or a riser boundary
+// whose neighbor tier changes partway along an otherwise-straight run — still yields its own distinct
+// raw edge, never silently merged away by the kernel's purely geometric union (the kernel has no
+// concept of "door"/"tier" at all; that classification is strictly this adapter's own responsibility,
+// per docs/GEOMETRY-OSS-INTEGRATION.md §9's "aperture ownership is preserved before collinear
+// simplification"). Uses `segmentNormal` on each UNIT sub-edge (not the merged edge) — segmentNormal's
+// own "interior on the left of CCW travel" convention holds for BOTH an outer ring (CCW) and a hole
+// ring (CW) here, because Genesis's own outer-CCW/hole-CW convention is chosen precisely so "left of
+// travel" always points toward the tier's own filled material on either ring kind (verified
+// algebraically against a concrete hole fixture in this unit's own report — never assumed).
+function unitStepClassifyRing(ring, allIndex, tier) {
+  const raw = [];
+  const diagnostics = [];
+  const n = ring.length;
+  for (let i = 0; i < n; i++) {
+    const a = ring[i], b = ring[(i + 1) % n];
+    const dx = b.x - a.x, dz = b.z - a.z;
+    const len = Math.hypot(dx, dz);
+    if (!(len > 1e-9)) continue; // degenerate edge (shouldn't survive kernel canonicalization) — skip, never crash
+    const steps = Math.max(1, Math.round(len));
+    const ux = dx / steps, uz = dz / steps;
+    for (let s = 0; s < steps; s++) {
+      const subA = { x: a.x + ux * s, z: a.z + uz * s };
+      const subB = { x: a.x + ux * (s + 1), z: a.z + uz * (s + 1) };
+      const midX = (subA.x + subB.x) / 2, midZ = (subA.z + subB.z) / 2;
+      const nrm = segmentNormal({ a: subA, b: subB });
+      const insideKey = cellKey(Math.round(midX + nrm.x * 0.5), Math.round(midZ + nrm.z * 0.5));
+      const outsideKey = cellKey(Math.round(midX - nrm.x * 0.5), Math.round(midZ - nrm.z * 0.5));
+      const insideCell = allIndex.get(insideKey);
+      const outsideCell = allIndex.get(outsideKey);
+      if (!outsideCell) {
+        raw.push({ a: subA, b: subB, kind: (insideCell && insideCell.isDoor) ? "door" : "wall", tier });
+      } else {
+        const nTier = tierOf(outsideCell);
+        if (nTier !== tier) {
+          raw.push({ a: subA, b: subB, kind: "riser", loTier: Math.min(tier, nTier), hiTier: Math.max(tier, nTier) });
+        } else {
+          // defensive-only: a correctly-unioned single-tier boundary edge should never border another
+          // cell of the SAME tier (that would be an interior edge, not a boundary one) — recorded as a
+          // diagnostic rather than silently misclassified or thrown, per this module's own never-throw
+          // discipline; treated as a wall (the conservative, always-solid choice) so geometry stays
+          // watertight even if this branch is ever actually hit by a real fixture.
+          diagnostics.push({
+            level: "warn", typed: "unexpected-same-tier-boundary", tier,
+            message: `tier ${tier} boundary edge at (${midX.toFixed(2)},${midZ.toFixed(2)}) borders another cell of the SAME tier — treated as wall`,
+          });
+          raw.push({ a: subA, b: subB, kind: "wall", tier });
+        }
+      }
+    }
+  }
+  return { raw, diagnostics };
+}
+
+// deriveKernelRingsForTier(tierCells, allIndex, tier, kernelApi) -> {rings, diagnostics}. Replaces
+// traceTierContour+chainEdgesIntoRings for oss mode: unions this tier's own cells via the kernel (the
+// robust topology fix for F11/row-101), then re-derives a kind-tagged raw-edge ring (via
+// unitStepClassifyRing, above) for the OUTER ring and EVERY hole of every resulting polygon — flattened
+// into the exact same `Array<Array<edge>>` shape chainEdgesIntoRings already returns, so the entire
+// existing `rings.forEach(...)` loop in compileRoomShellData (simplify/smooth/inset/bevel/wall/riser/
+// mount-slot emission) runs UNCHANGED against either source.
+function deriveKernelRingsForTier(tierCells, allIndex, tier, kernelApi) {
+  const cellsXZ = tierCells.map((c) => ({ x: c.x, z: c.z }));
+  const union = kernelApi.unionCellRects(cellsXZ);
+  const diagnostics = (union.diagnostics.issues || []).map((issue) => Object.assign({ tier }, issue));
+  const rings = [];
+  union.polygons.forEach((poly) => {
+    const outerC = unitStepClassifyRing(poly.outer, allIndex, tier);
+    diagnostics.push(...outerC.diagnostics);
+    if (outerC.raw.length) rings.push(outerC.raw);
+    (poly.holes || []).forEach((hole) => {
+      const holeC = unitStepClassifyRing(hole, allIndex, tier);
+      diagnostics.push(...holeC.diagnostics);
+      if (holeC.raw.length) rings.push(holeC.raw);
+    });
+  });
+  return { rings, diagnostics, unionDiagnostics: union.diagnostics };
+}
+
+// validateRenderTransform(prePoly, postPoly, postSegments, opts) -> {valid, reasons}. §7.3's own
+// validation gate for a render-only transform (diagonalizeStaircaseRing/radialSmoothRing) applied to a
+// kernel-sourced ring, in oss mode ONLY (legacy mode never calls this — it always applies the transform
+// unconditionally, unchanged). Checks: degenerate/zero-area result, winding inversion, declared
+// area-drift tolerance, ring self-intersection/pinch (via the kernel's own validateSurface), AND §7.3's
+// own named "a wall segment shorter than the minimum cap/miter requirement" case — a real, measured
+// defect this check exists specifically to catch: diagonalizeStaircaseRing's own chamfer-miter can
+// leave a very short residual segment immediately adjacent to a door boundary (measured live on the
+// F08 fixture's own octagon+door: a 0.085-world-unit segment, well under 2x the default 0.06 bevel
+// width), which downstream insetPolygon then collapses into a genuinely degenerate (repeated-vertex)
+// bevel-ribbon quad — this is the actual root cause of the "F08 degenerate door-adjacent triangle"
+// class this unit's own charter statement names, not the old ear-clip triangulator (the kernel's own
+// triangulateSurface diagnostics confirm ZERO degenerate/reversed triangles in the MAIN FLOOR BODY on
+// every affected fixture; see this unit's own report). A too-short segment fails this check and the
+// caller falls back to the untransformed contour for the WHOLE ring, which removes the short residual
+// (the untransformed grid-staircase boundary never produces a segment shorter than 1 world unit).
+// SCOPED, documented gap: this checks ONE ring in isolation — it does not check hole-escape or
+// hole/outer-contact (those need the ring's sibling holes/outer for context, not available at this
+// per-ring call site). On any failure the caller keeps the PRE-transform (already kernel-topology-
+// correct, still CCW-normalized) ring and records a diagnostic — "fall back to the untransformed
+// normalized contour", per §7.3, never malformed geometry pushed downstream.
+const DEFAULT_RENDER_TRANSFORM_AREA_TOLERANCE = 0.2; // 20% — generous by design; diagonalize/radial are SUPPOSED to move area (chamfer cuts corners, radial rounds them) — this catches a transform gone badly wrong, not ordinary smoothing.
+function validateRenderTransform(prePoly, postPoly, postSegments, opts) {
+  const tolerance = typeof (opts && opts.renderTransformAreaTolerance) === "number" ? opts.renderTransformAreaTolerance : DEFAULT_RENDER_TRANSFORM_AREA_TOLERANCE;
+  const bevelWidth = typeof (opts && opts.bevelWidth) === "number" ? opts.bevelWidth : DEFAULT_BEVEL_WIDTH;
+  const minSegmentLength = Math.max(1e-6, 2 * bevelWidth);
+  const reasons = [];
+  if (!postPoly || postPoly.length < 3) {
+    reasons.push("degenerate-post-transform-ring");
+    return { valid: false, reasons };
+  }
+  const preArea = Math.abs(signedArea2D(prePoly));
+  const postArea = Math.abs(signedArea2D(postPoly));
+  if (!(postArea > 1e-9)) reasons.push("zero-area-post-transform");
+  else if (preArea > 1e-9 && Math.abs(postArea - preArea) / preArea > tolerance) reasons.push(`area-drift-exceeds-tolerance(${tolerance})`);
+  if (signedArea2D(postPoly) < 0) reasons.push("winding-inversion");
+  (postSegments || []).forEach((seg) => {
+    if (seg.kind === "door") return; // a door's own aperture span is legitimately its own segment length, never chamfered
+    if (segLen2D(seg) < minSegmentLength) reasons.push(`segment-shorter-than-cap-miter-minimum(${minSegmentLength})`);
+  });
+  const check = PolygonKernel.validateSurface({ outer: postPoly, holes: [] });
+  if (!check.valid) reasons.push("kernel-validateSurface-invalid:" + JSON.stringify(check.issues));
+  // MEASURED FINDING (this unit's own report, F08-octagon-diagonal-doorway): the exact bevel-inset
+  // miter join (insetOffset/insetPolygon, unchanged shared code this unit does not redesign) can place
+  // an inset vertex through a near-degenerate solve at a SHARP corner where an octagon chamfer's own
+  // diagonal meets a door's own zero-width neighbor — producing a self-intersecting/near-coincident
+  // inset ring that then feeds a genuinely degenerate bevel-ribbon or door-threshold quad downstream.
+  // Since insetPolygon/insetOffset are NOT this unit's to redesign (§17.5's own "preserve the bevel/
+  // inset... logic"), this validates their OUTPUT instead — the same self-intersection/degenerate-ring
+  // check applied to postPoly above, applied here to the INSET polygon the wall/bevel/door-threshold
+  // emission is about to consume, so a bad miter join falls back to the untransformed contour (whose
+  // grid-staircase corners never produce this failure mode) rather than shipping a degenerate quad.
+  if (reasons.length === 0) {
+    const widthForSegment = (seg) => (seg.kind === "door" ? 0 : bevelWidth);
+    const insetPreview = insetPolygon(postPoly, postSegments, widthForSegment);
+    const insetCheck = PolygonKernel.validateSurface({ outer: insetPreview, holes: [] });
+    if (!insetCheck.valid) reasons.push("inset-polygon-invalid:" + JSON.stringify(insetCheck.issues));
+  }
+  return { valid: reasons.length === 0, reasons };
+}
+
+// groupInsetsForKernelTriangulation(outers, holes) -> Array<{outer,holes}> — the oss-mode sibling of
+// bridgePolygonWithHoles (above): assigns each hole's own (already bevel-inset) polygon to whichever
+// outer inset polygon actually contains it, via the SAME polygonContainsPoint containment test
+// bridgePolygonWithHoles already uses — but returns GROUPED polygons for triangulateSurface (which
+// triangulates holes natively via Earcut) instead of hand-bridging a thin corridor into one simple
+// polygon. A tier with zero outers (should never happen for a tier with real area) falls back to
+// treating every ring as its own independent outer, mirroring bridgePolygonWithHoles's own fallback —
+// never silently drops geometry.
+function groupInsetsForKernelTriangulation(outers, holes) {
+  if (!outers.length) return holes.map((h) => ({ outer: h, holes: [] }));
+  const groups = outers.map((o) => ({ outer: o, holes: [] }));
+  holes.forEach((hole) => {
+    if (hole.length < 3) return;
+    let targetIdx = 0;
+    for (let i = 0; i < outers.length; i++) {
+      if (polygonContainsPoint(outers[i], hole[0])) { targetIdx = i; break; }
+    }
+    groups[targetIdx].holes.push(hole);
+  });
+  return groups;
+}
+
+// ── parity-diagnostic helpers (oss-compare mode, §15's own semantic-invariant list: area; polygon/
+// hole count; covered canonical cells; aperture intervals; wall boundary length; tier ownership;
+// triangle validity; output bounds — "the compare mode must compare semantic invariants, not raw
+// vertex order"). Pure, read-only over compileRoomShellData's own already-built plain-data bundle. ──
+
+function floorAreaOfBundle(data) {
+  let area = 0;
+  const idx = data.floor.indices, pos = data.floor.positions;
+  for (let i = 0; i < idx.length; i += 3) {
+    const a = idx[i] * 3, b = idx[i + 1] * 3, c = idx[i + 2] * 3;
+    area += Math.abs((pos[b] - pos[a]) * (pos[c + 2] - pos[a + 2]) - (pos[c] - pos[a]) * (pos[b + 2] - pos[a + 2])) / 2;
+  }
+  return area;
+}
+function floorBoundsOfBundle(data) {
+  let minX = Infinity, minZ = Infinity, maxX = -Infinity, maxZ = -Infinity;
+  const pos = data.floor.positions;
+  for (let i = 0; i < pos.length; i += 3) {
+    const x = pos[i], z = pos[i + 2];
+    if (x < minX) minX = x; if (x > maxX) maxX = x;
+    if (z < minZ) minZ = z; if (z > maxZ) maxZ = z;
+  }
+  return { minX, minZ, maxX, maxZ };
+}
+function triangleValidityOfBundle(data) {
+  let degenerate = 0, nonFinite = 0;
+  const idx = data.floor.indices, pos = data.floor.positions;
+  for (let i = 0; i < idx.length; i += 3) {
+    const a = idx[i] * 3, b = idx[i + 1] * 3, c = idx[i + 2] * 3;
+    const ax = pos[a], az = pos[a + 2], bx = pos[b], bz = pos[b + 2], cx = pos[c], cz = pos[c + 2];
+    if (![ax, az, bx, bz, cx, cz].every(Number.isFinite)) { nonFinite++; continue; }
+    const area2 = Math.abs((bx - ax) * (cz - az) - (cx - ax) * (bz - az));
+    if (!(area2 > 1e-9)) degenerate++;
+  }
+  return { triangleCount: idx.length / 3, degenerate, nonFinite };
+}
+
+// buildParityDiagnostics(legacyData, ossData, cells) -> a single structured per-room parity record
+// (§15/§16's own capture-report shape informs the field names, though this is the pure-math record,
+// not the render capture sidecar). `divergent` is a single roll-up boolean the caller can log/gate on;
+// the sub-records are what let a human (or a future R4-style regression) see WHERE legacy and oss
+// disagree — this is deliberately the row-101/F08/F11 SURFACE where a real divergence is expected and
+// desired (oss correcting a legacy defect), not a bug in this diagnostic itself.
+function buildParityDiagnostics(legacyData, ossData, cells) {
+  const legacyArea = floorAreaOfBundle(legacyData), ossArea = floorAreaOfBundle(ossData);
+  const legacyTiers = (legacyData.floor.tiers || []).map((t) => t.tier).sort((a, b) => a - b);
+  const ossTiers = (ossData.floor.tiers || []).map((t) => t.tier).sort((a, b) => a - b);
+  const legacyCells = Object.keys(legacyData.cellTriangleMap || {}).sort();
+  const ossCells = Object.keys(ossData.cellTriangleMap || {}).sort();
+  const cellCoverageMatches = legacyCells.length === ossCells.length && legacyCells.every((k, i) => k === ossCells[i]);
+  const legacyBounds = floorBoundsOfBundle(legacyData), ossBounds = floorBoundsOfBundle(ossData);
+  const legacyTri = triangleValidityOfBundle(legacyData), ossTri = triangleValidityOfBundle(ossData);
+  const segLen = (w) => Math.hypot(w.b.x - w.a.x, w.b.z - w.a.z);
+  const legacyWallLen = (legacyData.walls.segments || []).reduce((s, w) => s + segLen(w), 0);
+  const ossWallLen = (ossData.walls.segments || []).reduce((s, w) => s + segLen(w), 0);
+  const legacyApertureCount = (legacyData.apertures || []).length;
+  const ossApertureCount = (ossData.apertures || []).length;
+  const areaDelta = ossArea - legacyArea;
+  const tierOwnershipMatches = JSON.stringify(legacyTiers) === JSON.stringify(ossTiers);
+  const apertureCountMatches = legacyApertureCount === ossApertureCount;
+  const areaWithinTolerance = legacyArea <= 1e-9 || Math.abs(areaDelta) <= Math.max(1e-6, legacyArea * 0.05);
+  return {
+    roomCellCount: (cells || []).length,
+    area: { legacy: legacyArea, oss: ossArea, delta: areaDelta, deltaPct: legacyArea > 1e-9 ? areaDelta / legacyArea : null },
+    tierOwnership: { legacy: legacyTiers, oss: ossTiers, matches: tierOwnershipMatches },
+    coveredCells: { legacy: legacyCells.length, oss: ossCells.length, matches: cellCoverageMatches },
+    apertures: { legacy: legacyApertureCount, oss: ossApertureCount, matches: apertureCountMatches },
+    wallBoundaryLength: { legacy: legacyWallLen, oss: ossWallLen, delta: ossWallLen - legacyWallLen },
+    triangleValidity: { legacy: legacyTri, oss: ossTri },
+    bounds: { legacy: legacyBounds, oss: ossBounds },
+    divergent: !cellCoverageMatches || !tierOwnershipMatches || !apertureCountMatches || !areaWithinTolerance || ossTri.degenerate > 0 || ossTri.nonFinite > 0,
+  };
+}
+
 /* compileRoomShellData(cells, opts) — the top-level pure orchestrator; directive steps 1-9 end to end,
    returns a plain-data bundle (no THREE):
    {
@@ -1134,6 +1414,40 @@ function buildFloorCells(floorBuf, tierCells, elevationY, uvDensity, colorAt) {
    } */
 function compileRoomShellData(cells, opts) {
   opts = opts || {};
+
+  // UNIT G2 (§15) — the migration switch. Resolves to "legacy" for anything except the two literal
+  // opt-in strings, so a caller that omits the option (every existing production call site and every
+  // pre-G2 test) takes EXACTLY the pre-G2 code path below — no new branch is ever entered, and the
+  // returned bundle carries no new keys (see the `if (kernelMode !== "legacy")` guards at the very end
+  // of this function). This is what makes "the DEFAULT render stays byte-identical" a property of the
+  // code, not just a promise: every single new branch this unit adds is gated on `kernelMode === "oss"`
+  // (or the oss-compare block below), never on absence-of-guard.
+  const kernelMode = (opts.roomShellPolygonKernel === "oss" || opts.roomShellPolygonKernel === "oss-compare")
+    ? opts.roomShellPolygonKernel
+    : (opts.roomShellPolygonKernel === "legacy" ? "legacy" : ROOM_SHELL_POLYGON_KERNEL);
+
+  // "oss-compare": render legacy (the real returned geometry — §15's own "render legacy, compute
+  // both"), but ALSO run the oss path purely for its diagnostic value, and attach the resulting
+  // parity record to the (otherwise byte-identical-to-legacy) returned bundle as `.parityDiagnostics`.
+  // Two full compiles per call — acceptable: this mode is a migration/stabilization-window diagnostic,
+  // never the render-critical path (that's plain "legacy" today, "oss" only after an explicit later
+  // promotion this unit does not perform). If the oss path itself throws, that failure is captured as
+  // a diagnostic rather than breaking the (legacy, always-correct) render this mode promises.
+  if (kernelMode === "oss-compare") {
+    const legacyResult = compileRoomShellData(cells, Object.assign({}, opts, { roomShellPolygonKernel: "legacy" }));
+    let ossResult = null, ossThrew = null;
+    try {
+      ossResult = compileRoomShellData(cells, Object.assign({}, opts, { roomShellPolygonKernel: "oss" }));
+    } catch (e) {
+      ossThrew = String((e && e.stack) || e);
+    }
+    legacyResult.parityDiagnostics = ossResult
+      ? buildParityDiagnostics(legacyResult, ossResult, cells)
+      : { error: "oss path threw during oss-compare", detail: ossThrew };
+    legacyResult.ossDiagnostics = ossResult ? (ossResult.ossDiagnostics || []) : [];
+    return legacyResult;
+  }
+
   const bevelWidth = typeof opts.bevelWidth === "number" ? opts.bevelWidth : DEFAULT_BEVEL_WIDTH;
   const bevelDrop = typeof opts.bevelDrop === "number" ? opts.bevelDrop : DEFAULT_BEVEL_DROP;
   const uvDensity = typeof opts.uvDensity === "number" ? opts.uvDensity : DEFAULT_UV_DENSITY;
@@ -1252,12 +1566,29 @@ function compileRoomShellData(cells, opts) {
   const riserBuf = makeBuffer();
   const riserSegmentsOut = [];
   const aperturesOut = [];
+  // UNIT G2: oss-mode-only diagnostics accumulator (§7.2/§7.3 fallback records, kernel union issues).
+  // Stays an empty array and is NEVER attached to the returned bundle in "legacy" mode — see the
+  // `if (kernelMode !== "legacy")` guard at this function's own return statement, below.
+  const ossDiagnosticsOut = [];
 
   tiers.forEach((tier) => {
     const tierCells = byTier.get(tier);
     const elevationY = tierHeights[tier];
-    const rawEdges = traceTierContour(tierCells, allIndex, tier);
-    const rings = chainEdgesIntoRings(rawEdges);
+    // UNIT G2 (§15, §17.5): ring TOPOLOGY source. "legacy" keeps the original raw-edge walk
+    // (traceTierContour -> chainEdgesIntoRings), byte-identical. "oss" replaces it with the
+    // PolygonKernel union (deriveKernelRingsForTier, above) — the fix for F11's diagonal-vertex-pinch
+    // undercount and row-101's (F18) annular hole/ring topology. Either way, `rings` ends up the exact
+    // same shape (Array<Array<{a,b,kind,tier|loTier,hiTier}>>) the rest of this per-tier block already
+    // consumes — every line below this is unaware of which source produced it.
+    let rings;
+    if (kernelMode === "oss") {
+      const derived = deriveKernelRingsForTier(tierCells, allIndex, tier, PolygonKernel);
+      rings = derived.rings;
+      if (derived.diagnostics.length) ossDiagnosticsOut.push(...derived.diagnostics);
+    } else {
+      const rawEdges = traceTierContour(tierCells, allIndex, tier);
+      rings = chainEdgesIntoRings(rawEdges);
+    }
     const triStart = floorBuf.indices.length / 3;
     const complexTier = rings.length > 1;
     // C4.1c PART 2 — a complex (multi-ring) tier tagged with a real smoothMode (diagonal/radial)
@@ -1267,17 +1598,23 @@ function compileRoomShellData(cells, opts) {
     // it" — an untagged/'rect'/'cave' complex tier (smoothMode === null, e.g. today's BW2-5 finale
     // dais ring) stays on buildFloorCells, byte-identical to before this unit.
     const hollowFloorMode = complexTier && smoothMode !== null;
-    if (complexTier && !hollowFloorMode) buildFloorCells(floorBuf, tierCells, elevationY, uvDensity, floorColorAt);
+    // UNIT G2: "oss" mode ALWAYS triangulates the floor body through the kernel at tier-end (below,
+    // replacing triangulatePolygon/bridgeHoleIntoOuter AND buildFloorCells uniformly — §17.5's own
+    // "replace floor triangulation with Earcut in oss mode"), so it never takes the legacy
+    // buildFloorCells branch here. "legacy" mode is completely unchanged (byte-identical guard).
+    if (kernelMode !== "oss" && complexTier && !hollowFloorMode) buildFloorCells(floorBuf, tierCells, elevationY, uvDensity, floorColorAt);
     // floorDetailOn: the bevel ribbon + door-threshold flush quad (both per-segment perimeter strips
     // that attach to whatever floor body this tier ends up with) run whenever the floor actually gets
     // a real mitered/rounded body — every simple tier (always did) PLUS a complex tier now that
     // hollowFloorMode gives it one too. Stays OFF for the untagged complex-tier/buildFloorCells path
-    // (byte-identical to before this unit).
-    const floorDetailOn = !complexTier || hollowFloorMode;
-    // ringFloorParts: collected only in hollowFloorMode — each ring's own final (mitered/rounded,
-    // bevel-inset) polygon + its NATURAL pre-ensureCCW winding sign (outer vs hole classification,
-    // below) — the floor body itself is built ONCE for the whole tier, after every ring's own
-    // wall/riser/bevel/door geometry has already been emitted by the loop below.
+    // (byte-identical to before this unit). "oss" mode always gets a real mitered/rounded body (kernel
+    // triangulation, tier-end, below), so it's unconditionally on.
+    const floorDetailOn = kernelMode === "oss" ? true : (!complexTier || hollowFloorMode);
+    // ringFloorParts: each ring's own final (mitered/rounded, bevel-inset) polygon + its NATURAL
+    // pre-ensureCCW winding sign (outer vs hole classification, below) — the floor body itself is
+    // built ONCE for the whole tier, after every ring's own wall/riser/bevel/door geometry has already
+    // been emitted by the loop below. Legacy mode collects only in hollowFloorMode (unchanged); "oss"
+    // mode collects unconditionally (every ring, always — §17.5's own uniform kernel-triangulation path).
     const ringFloorParts = [];
 
     rings.forEach((ring) => {
@@ -1309,13 +1646,27 @@ function compileRoomShellData(cells, opts) {
         // `tierCells`/`allIndex` (the logical grid this ring was traced from), only the local poly/
         // segments arrays about to feed the floor triangulation + wall/riser quads below.
         const smoothed = radialSmoothRing(poly, segments, radialSmoothBlend);
-        poly = smoothed.poly; segments = smoothed.segments;
+        // UNIT G2 (§7.3): oss mode validates the transform result before accepting it — legacy mode
+        // is completely unchanged (unconditional accept, exactly as before this unit).
+        if (kernelMode === "oss") {
+          const v = validateRenderTransform(poly, smoothed.poly, smoothed.segments, opts);
+          if (v.valid) { poly = smoothed.poly; segments = smoothed.segments; }
+          else ossDiagnosticsOut.push({ level: "warn", typed: "render-transform-fallback", tier, transformKind: "radial-smooth", reasons: v.reasons });
+        } else {
+          poly = smoothed.poly; segments = smoothed.segments;
+        }
       } else if (smoothMode === "diagonal") {
         // render-only: chamfers only the REAL multi-cell staircase runs this ring's own boundary
         // contains into a flat diagonal face — see diagonalizeStaircaseRing's own header. Same "never
         // touches the logical cell set" guarantee as the radial path.
         const diagonalized = diagonalizeStaircaseRing(poly, segments);
-        poly = diagonalized.poly; segments = diagonalized.segments;
+        if (kernelMode === "oss") {
+          const v = validateRenderTransform(poly, diagonalized.poly, diagonalized.segments, opts);
+          if (v.valid) { poly = diagonalized.poly; segments = diagonalized.segments; }
+          else ossDiagnosticsOut.push({ level: "warn", typed: "render-transform-fallback", tier, transformKind: "diagonalize", reasons: v.reasons });
+        } else {
+          poly = diagonalized.poly; segments = diagonalized.segments;
+        }
       }
       if (poly.length < 3) return;
 
@@ -1332,10 +1683,12 @@ function compileRoomShellData(cells, opts) {
       // can ride the SAME continuous surface/texture. Any other shape (L-room, no colorAt supplied —
       // every existing pure-core test) falls straight back to the original single-polygon ear-clip,
       // byte-identical to before this unit.
-      if (hollowFloorMode) {
-        // C4.1c PART 2: don't triangulate THIS ring's own inset alone (an inner hole ring has no
-        // floor of its own — it's a hole cut OUT of the tier) — collect it, the whole tier's floor
-        // gets built ONCE after every ring here has contributed its own inset + winding sign (below).
+      if (kernelMode === "oss" || hollowFloorMode) {
+        // C4.1c PART 2 / UNIT G2: don't triangulate THIS ring's own inset alone (an inner hole ring
+        // has no floor of its own — it's a hole cut OUT of the tier) — collect it, the whole tier's
+        // floor gets built ONCE after every ring here has contributed its own inset + winding sign
+        // (below). "oss" mode always collects (kernel triangulation is uniform, §17.5); legacy mode
+        // collects only in hollowFloorMode (unchanged).
         ringFloorParts.push({ inset, rawArea: ringRawArea });
       } else {
         const rectBBox = floorColorAt ? isAxisAlignedRectPolygon(inset) : null;
@@ -1528,7 +1881,7 @@ function compileRoomShellData(cells, opts) {
       });
     });
 
-    if (hollowFloorMode && ringFloorParts.length) {
+    if (kernelMode !== "oss" && hollowFloorMode && ringFloorParts.length) {
       // C4.1c PART 2: classify each ring's own inset by its natural pre-ensureCCW winding — an
       // outer boundary (rawArea > 0) is a filled region; a hole (rawArea <= 0) is carved OUT of
       // whichever outer ring's polygon actually contains it (bridgePolygonWithHoles, above) — then
@@ -1560,6 +1913,64 @@ function compileRoomShellData(cells, opts) {
         });
       } else {
         buildFloorCells(floorBuf, tierCells, elevationY, uvDensity, floorColorAt);
+      }
+    }
+
+    // UNIT G2 (§17.5): "oss" mode's own uniform tier-end triangulation — REPLACES the ear-clip +
+    // C4.1c hand-rolled hole-bridging above with the kernel's Earcut (triangulateSurface, outer +
+    // holes natively, no bridge corridor needed). Runs for EVERY oss-mode tier (simple or complex —
+    // §17.5's own "replace floor triangulation with Earcut in oss mode" is unconditional), grouping
+    // each ring's own bevel-inset polygon into {outer,holes} sets via groupInsetsForKernelTriangulation
+    // (the non-bridging sibling of bridgePolygonWithHoles, above) before handing them to the kernel.
+    if (kernelMode === "oss" && ringFloorParts.length) {
+      const outers = ringFloorParts.filter((p) => p.rawArea > 0).map((p) => p.inset);
+      const holes = ringFloorParts.filter((p) => p.rawArea <= 0).map((p) => p.inset);
+      const groups = groupInsetsForKernelTriangulation(outers, holes);
+      let triResult = null, triOk = false, triThrew = null;
+      try {
+        triResult = PolygonKernel.triangulateSurface({ polygons: groups });
+        const hasErrorIssue = (triResult.diagnostics.issues || []).some((i) => i.level === "error");
+        // MEASURED (this unit's own report, F18-row101-exact-canonical tier 2, the octagon-chamfered
+        // outer ring around the sunken arena): Earcut can legitimately emit a SMALL number of
+        // zero-area triangles at a near-collinear boundary vertex (here: exactly 1 of 36, from the
+        // diagonalized octagon chamfer) even when every upstream ring/inset passed validateSurface
+        // cleanly — a zero-area triangle contributes no visible geometry and doesn't corrupt the mesh
+        // (unlike a REVERSED triangle, a real backwards-normal visual defect, or a hard error
+        // diagnostic). Gating the whole tier's fallback on zeroAreaTriangles too would silently
+        // discard row-101's own correctly-recovered annular hole over one harmless sliver — gate only
+        // on the two invariants that actually indicate broken geometry.
+        triOk = !hasErrorIssue && triResult.indices.length > 0 && triResult.diagnostics.reversedTriangles === 0;
+      } catch (e) {
+        triThrew = String((e && e.stack) || e);
+      }
+      if (triOk) {
+        const baseIdx = floorBuf.positions.length / 3;
+        triResult.vertices.forEach((v) => {
+          const rgb = floorColorAt ? hexToRgb01(floorColorAt(Math.round(v.x), Math.round(v.z))) : null;
+          pushVert(floorBuf, v.x, elevationY, v.z, 0, 1, 0, v.x * uvDensity, v.z * uvDensity, rgb ? rgb.r : 1, rgb ? rgb.g : 1, rgb ? rgb.b : 1);
+        });
+        // WINDING: PolygonKernel's own triangulateSurface, fed a CCW outer, is measured (this unit's
+        // own report) to emit the SAME "-Y facing" raw index order triangulatePolygon does above — the
+        // identical (i,j,k)->(i,k,j) swap is required to match this floor's explicit +Y-up normal.
+        for (let ti = 0; ti < triResult.indices.length; ti += 3) {
+          pushTri(floorBuf, baseIdx + triResult.indices[ti], baseIdx + triResult.indices[ti + 2], baseIdx + triResult.indices[ti + 1]);
+        }
+        ossDiagnosticsOut.push({
+          level: "info", typed: "oss-triangulation-ok", tier, triangleCount: triResult.indices.length / 3,
+          zeroAreaTriangles: triResult.diagnostics.zeroAreaTriangles, // recorded, never silenced — see this branch's own triOk comment
+        });
+      } else {
+        // FALLBACK (§15): "if Earcut fails unexpectedly, emit diagnostics and use the validated legacy
+        // triangulator only during the stabilization window... never render an empty room silently."
+        // buildFloorCells is the always-correct universal fallback (works for any topology, no
+        // ear-clip/bridge assumptions) — the SAME one legacy's own hollow-floor safety net falls back
+        // to above.
+        buildFloorCells(floorBuf, tierCells, elevationY, uvDensity, floorColorAt);
+        ossDiagnosticsOut.push({
+          level: "error", typed: "oss-triangulation-fallback", tier,
+          message: "kernel triangulateSurface failed validation for this tier; fell back to buildFloorCells",
+          issues: triResult ? triResult.diagnostics.issues : [], threw: triThrew,
+        });
       }
     }
 
@@ -1602,7 +2013,12 @@ function compileRoomShellData(cells, opts) {
     });
   });
 
-  return {
+  // UNIT G2: assemble the return bundle. In "legacy" mode this object has EXACTLY the same keys/
+  // values it always did — `ossDiagnosticsOut` is only ever non-empty when kernelMode !== "legacy"
+  // (every push site above is itself gated on kernelMode), and the field is only ATTACHED to the
+  // bundle below when kernelMode !== "legacy" too, so a legacy caller's `JSON.stringify(result)` is
+  // byte-identical to before this unit existed.
+  const resultBundle = {
     floor: { positions: floorBuf.positions, normals: floorBuf.normals, uvs: floorBuf.uvs, colors: floorBuf.colors, indices: floorBuf.indices, tiers: floorTierMeta, bevelTriCount },
     // DEPRECATED — stem INNER FACE ONLY (C4.1a); use wallStem/wallUpper/wallTrim for new code. Kept so
     // a pre-C4.1a reader of `.walls` geometry never hard-breaks. `.walls.segments` (a/b/tier/height
@@ -1629,6 +2045,8 @@ function compileRoomShellData(cells, opts) {
       riserSegmentCount: riserSegmentsOut.length,
     },
   };
+  if (kernelMode !== "legacy") resultBundle.ossDiagnostics = ossDiagnosticsOut;
+  return resultBundle;
 }
 
 // ════════════════════════════════════════════════════════════════════════════════════════════════
@@ -1683,6 +2101,11 @@ function compileRoomShell(cells, opts) {
     wallSegments: data.walls.segments,
     riserSegments: data.risers.segments,
     meta: Object.assign({}, data.meta, { bevelTriCount: data.floor.bevelTriCount }),
+    // UNIT G2: null in "legacy" mode (data.parityDiagnostics/data.ossDiagnostics are only ever set by
+    // compileRoomShellData when kernelMode !== "legacy" — see that function's own return-assembly
+    // comment), so this adds two always-present-but-usually-null keys, never a legacy value change.
+    parityDiagnostics: data.parityDiagnostics || null,
+    ossDiagnostics: data.ossDiagnostics || null,
   };
 }
 
@@ -1706,6 +2129,10 @@ export {
   DEFAULT_RADIAL_SMOOTH_BLEND,
   DEFAULT_WALL_THICKNESS, DEFAULT_WALL_STEM_HEIGHT, DEFAULT_WALL_CAP_HEIGHT, DEFAULT_WALL_CAP_OVERHANG,
   DEFAULT_WALL_FOOTING, DEFAULT_WALL_MOUNT_EYE_HEIGHT,
+  // UNIT G2 — PolygonKernel floor integration (dev/verify-room-shell-oss.mjs's own direct import surface)
+  ROOM_SHELL_POLYGON_KERNEL, unitStepClassifyRing, deriveKernelRingsForTier, validateRenderTransform,
+  DEFAULT_RENDER_TRANSFORM_AREA_TOLERANCE, groupInsetsForKernelTriangulation, buildParityDiagnostics,
+  floorAreaOfBundle, floorBoundsOfBundle, triangleValidityOfBundle,
   // THREE assembler (theater-boot.js's own import surface)
   compileRoomShell,
 };

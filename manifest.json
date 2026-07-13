@@ -2379,6 +2379,8 @@
         "*radialSmoothRing",
         "*chamferRunCorners",
         "*diagonalizeStaircaseRing",
+        "*findDiagonalSafeStart",
+        "*lineIntersect2D",
         "*pointInTriangle2D",
         "*pointToSegmentDist2",
         "*pointToTriangleDist2",

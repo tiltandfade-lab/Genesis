@@ -1,0 +1,295 @@
+{
+  "generatedAt": "2026-07-13T02:40:18.964Z",
+  "fixtureId": "octagon-row101",
+  "expectedLabel": "golden",
+  "actualLabel": "mutated-shift",
+  "sameEnvironment": true,
+  "sameEnvironmentReasons": [],
+  "crossGpuPolicyActive": false,
+  "strictDiagnosticMode": false,
+  "expectedEnv": {
+    "generatedAt": "2026-07-13T02:39:57.552Z",
+    "label": "golden",
+    "captureWidth": 1280,
+    "captureHeight": 960,
+    "captureDpr": 1,
+    "canvasBackingSize": {
+      "width": 652,
+      "height": 699,
+      "clientWidth": 652,
+      "clientHeight": 699
+    },
+    "glInfo": {
+      "ok": true,
+      "version": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+      "shadingLanguageVersion": "WebGL GLSL ES 3.00 (OpenGL ES GLSL ES 3.0 Chromium)",
+      "vendor": "WebKit",
+      "renderer": "WebKit WebGL",
+      "unmaskedVendor": "Google Inc. (Intel)",
+      "unmaskedRenderer": "ANGLE (Intel, ANGLE Metal Renderer: Intel(R) Iris(TM) Plus Graphics 645, Unspecified Version)"
+    },
+    "browserVersion": "Chrome/150.0.7871.115",
+    "chromeExecutable": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+    "node": "v22.15.0",
+    "platform": "darwin x64 24.6.0",
+    "gitCommit": "701415faa6bc27eb89063c2a1020d44f51994f7c",
+    "gitBranch": "research/r4-capture-regression",
+    "fixture": {
+      "key": "octagon-row101",
+      "label": "Grand Octagon row 101: sunken arena + raised ring",
+      "focusAreaType": "Grand Octagon",
+      "focusDims": "60' x 60'",
+      "focusSide": "30' x 30' sunken central arena (5 ft below the surrounding level); 10' wide raised ring walkway with iron railing.",
+      "realmId": "gloom",
+      "env": "dungeon",
+      "walkId": "graphics-regression-r4-octagon",
+      "lightProfile": "lamplit"
+    },
+    "pixelmatchVersion": "7.2.0",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (File not found)",
+      "Failed to load resource: the server responded with a status of 404 (File not found)"
+    ]
+  },
+  "actualEnv": {
+    "generatedAt": "2026-07-13T02:39:57.552Z",
+    "label": "golden",
+    "captureWidth": 1280,
+    "captureHeight": 960,
+    "captureDpr": 1,
+    "canvasBackingSize": {
+      "width": 652,
+      "height": 699,
+      "clientWidth": 652,
+      "clientHeight": 699
+    },
+    "glInfo": {
+      "ok": true,
+      "version": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+      "shadingLanguageVersion": "WebGL GLSL ES 3.00 (OpenGL ES GLSL ES 3.0 Chromium)",
+      "vendor": "WebKit",
+      "renderer": "WebKit WebGL",
+      "unmaskedVendor": "Google Inc. (Intel)",
+      "unmaskedRenderer": "ANGLE (Intel, ANGLE Metal Renderer: Intel(R) Iris(TM) Plus Graphics 645, Unspecified Version)"
+    },
+    "browserVersion": "Chrome/150.0.7871.115",
+    "chromeExecutable": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+    "node": "v22.15.0",
+    "platform": "darwin x64 24.6.0",
+    "gitCommit": "701415faa6bc27eb89063c2a1020d44f51994f7c",
+    "gitBranch": "research/r4-capture-regression",
+    "fixture": {
+      "key": "octagon-row101",
+      "label": "Grand Octagon row 101: sunken arena + raised ring",
+      "focusAreaType": "Grand Octagon",
+      "focusDims": "60' x 60'",
+      "focusSide": "30' x 30' sunken central arena (5 ft below the surrounding level); 10' wide raised ring walkway with iron railing.",
+      "realmId": "gloom",
+      "env": "dungeon",
+      "walkId": "graphics-regression-r4-octagon",
+      "lightProfile": "lamplit"
+    },
+    "pixelmatchVersion": "7.2.0",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (File not found)",
+      "Failed to load resource: the server responded with a status of 404 (File not found)"
+    ]
+  },
+  "expectedStructural": {
+    "roomShape": "octagon",
+    "roomCellCount": 120,
+    "roomBBoxArea": 144,
+    "roomW": 12,
+    "roomD": 12,
+    "terrain": [
+      {
+        "tier": -5,
+        "kind": "pit",
+        "footprint": "patch",
+        "cellCount": 36
+      },
+      {
+        "tier": 1,
+        "kind": "dais",
+        "footprint": "ring",
+        "cellCount": 60
+      }
+    ],
+    "meshCount": 41,
+    "moteCount": 7,
+    "frustumOk": false,
+    "boardMeta": {
+      "roomCount": 1,
+      "floorCount": 126,
+      "wallCount": 59,
+      "doorCount": 6,
+      "pillarCount": 0,
+      "lightCount": 3,
+      "skirtCount": 52,
+      "coverCount": 1,
+      "furnitureCount": 0,
+      "wallPropsCount": 0,
+      "portalCount": 2
+    }
+  },
+  "actualStructural": {
+    "roomShape": "octagon",
+    "roomCellCount": 120,
+    "roomBBoxArea": 144,
+    "roomW": 12,
+    "roomD": 12,
+    "terrain": [
+      {
+        "tier": -5,
+        "kind": "pit",
+        "footprint": "patch",
+        "cellCount": 36
+      },
+      {
+        "tier": 1,
+        "kind": "dais",
+        "footprint": "ring",
+        "cellCount": 60
+      }
+    ],
+    "meshCount": 41,
+    "moteCount": 7,
+    "frustumOk": false,
+    "boardMeta": {
+      "roomCount": 1,
+      "floorCount": 126,
+      "wallCount": 59,
+      "doorCount": 6,
+      "pillarCount": 0,
+      "lightCount": 3,
+      "skirtCount": 52,
+      "coverCount": 1,
+      "furnitureCount": 0,
+      "wallPropsCount": 0,
+      "portalCount": 2
+    }
+  },
+  "regions": [
+    {
+      "id": "board-silhouette",
+      "label": "whole octagon board footprint against the void background",
+      "rect": [
+        30,
+        80,
+        590,
+        560
+      ],
+      "threshold": 0.1,
+      "maxRatio": 0.01,
+      "thresholdSameEnv": 0.1,
+      "maxRatioSameEnv": 0.01,
+      "mismatchedPixels": 663,
+      "totalPixels": 330400,
+      "ratio": 0.0020066585956416464,
+      "sizeMismatch": false,
+      "pass": true,
+      "antialiasPolicy": "includeAA:false (pixelmatch AA-pixel exclusion, docs S3.8 antialias policy)"
+    },
+    {
+      "id": "floor-topology",
+      "label": "floor plane incl. the zig-zag sunken-arena/dais boundary line (row 101's two structural terrain patches)",
+      "rect": [
+        100,
+        220,
+        420,
+        200
+      ],
+      "threshold": 0.08,
+      "maxRatio": 0.01,
+      "thresholdSameEnv": 0.08,
+      "maxRatioSameEnv": 0.01,
+      "mismatchedPixels": 159,
+      "totalPixels": 84000,
+      "ratio": 0.001892857142857143,
+      "sizeMismatch": false,
+      "pass": true,
+      "antialiasPolicy": "includeAA:false (pixelmatch AA-pixel exclusion, docs S3.8 antialias policy)"
+    },
+    {
+      "id": "wall-stem-silhouette",
+      "label": "back wall run + the doorway stem jutting up from it (octagon wall segment + door frame)",
+      "rect": [
+        250,
+        85,
+        220,
+        150
+      ],
+      "threshold": 0.08,
+      "maxRatio": 0.01,
+      "thresholdSameEnv": 0.08,
+      "maxRatioSameEnv": 0.01,
+      "mismatchedPixels": 1012,
+      "totalPixels": 33000,
+      "ratio": 0.030666666666666665,
+      "sizeMismatch": false,
+      "pass": false,
+      "antialiasPolicy": "includeAA:false (pixelmatch AA-pixel exclusion, docs S3.8 antialias policy)"
+    },
+    {
+      "id": "practical-fixture-region",
+      "label": "the motivated wall-mounted light emitter (torch/lamp glow against the wall face)",
+      "rect": [
+        350,
+        120,
+        80,
+        100
+      ],
+      "threshold": 0.12,
+      "maxRatio": 0.03,
+      "thresholdSameEnv": 0.12,
+      "maxRatioSameEnv": 0.03,
+      "mismatchedPixels": 365,
+      "totalPixels": 8000,
+      "ratio": 0.045625,
+      "sizeMismatch": false,
+      "pass": false,
+      "antialiasPolicy": "includeAA:false (pixelmatch AA-pixel exclusion, docs S3.8 antialias policy)"
+    },
+    {
+      "id": "subject-readability-region",
+      "label": "open floor patch near the entry threshold where a PC/monster token would read against the floor material -- also the region nearest the ambient-mote field, so it carries the widest tolerance (see capture-regions.mjs's 'NOT FULLY FROZEN' note on mote drift)",
+      "rect": [
+        160,
+        330,
+        260,
+        110
+      ],
+      "threshold": 0.1,
+      "maxRatio": 0.03,
+      "thresholdSameEnv": 0.1,
+      "maxRatioSameEnv": 0.03,
+      "mismatchedPixels": 0,
+      "totalPixels": 28600,
+      "ratio": 0,
+      "sizeMismatch": false,
+      "pass": true,
+      "antialiasPolicy": "includeAA:false (pixelmatch AA-pixel exclusion, docs S3.8 antialias policy)"
+    },
+    {
+      "id": "lower-wall-stem-silhouette",
+      "label": "the second wall/doorway stem assembly at the bottom of frame (a different wall run than wall-stem-silhouette, for a second silhouette data point)",
+      "rect": [
+        150,
+        400,
+        260,
+        220
+      ],
+      "threshold": 0.08,
+      "maxRatio": 0.01,
+      "thresholdSameEnv": 0.08,
+      "maxRatioSameEnv": 0.01,
+      "mismatchedPixels": 0,
+      "totalPixels": 57200,
+      "ratio": 0,
+      "sizeMismatch": false,
+      "pass": true,
+      "antialiasPolicy": "includeAA:false (pixelmatch AA-pixel exclusion, docs S3.8 antialias policy)"
+    }
+  ],
+  "verdict": "RED"
+}

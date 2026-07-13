@@ -1,0 +1,54 @@
+{
+  "generatedAt": "2026-07-13T02:40:19.407Z",
+  "allPass": true,
+  "results": [
+    {
+      "label": "capture golden",
+      "exitCode": 0,
+      "expectExit": 0,
+      "pass": true
+    },
+    {
+      "label": "capture rerun (stability check)",
+      "exitCode": 0,
+      "expectExit": 0,
+      "pass": true
+    },
+    {
+      "label": "LAYER 1 structural: golden vs G0 truth (expect GREEN)",
+      "exitCode": 0,
+      "expectExit": 0,
+      "pass": true
+    },
+    {
+      "label": "LAYER 2 pixel: rerun vs golden, unchanged recapture (expect GREEN)",
+      "exitCode": 0,
+      "expectExit": 0,
+      "pass": true
+    },
+    {
+      "label": "mutate: one-pixel flip inside practical-fixture-region",
+      "exitCode": 0,
+      "expectExit": 0,
+      "pass": true
+    },
+    {
+      "label": "LAYER 2 pixel: one-pixel mutation vs golden, --strict zero-tolerance (expect RED)",
+      "exitCode": 1,
+      "expectExit": 1,
+      "pass": true
+    },
+    {
+      "label": "mutate: 6px topology shift inside wall-stem-silhouette",
+      "exitCode": 0,
+      "expectExit": 0,
+      "pass": true
+    },
+    {
+      "label": "LAYER 2 pixel: small-topology shift vs golden, PRODUCTION thresholds (expect RED)",
+      "exitCode": 1,
+      "expectExit": 1,
+      "pass": true
+    }
+  ]
+}

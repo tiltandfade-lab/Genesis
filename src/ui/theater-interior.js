@@ -525,6 +525,65 @@ function itrRoomLightCandidates(room) {
   }
   return pts.length ? pts : [{ x: room.x, y: room.y }];
 }
+// ─── E0 — VISIBLE PRACTICALS (docs/WALL-VOLUMES-PRACTICALS.md) ────────────────────────────────────
+// Every light record additionally carries a resolved physical FIXTURE spec: the noun a C4.1a wall
+// mount slot or the floor-top can seat something real onto, instead of a floating glow disc. Pure
+// data: `fixtureId` + `mount` ("floor"|"wall" — "ceiling" DEFERRED, an open-top diorama has nothing to
+// hang a lamp from) + a fixture-LOCAL `emitterLocal` point (the flame/bulb/crystal center).
+// `emitterLocal` is AUTHORITATIVE: theater-boot.js's fixture-body builder places its own emissive
+// submesh at exactly this point (never a second, independently-guessed height), so PointLight/emitter
+// co-location holds by construction. `ownerSegIndex` stays null here — this module has no wall
+// geometry (no mount-slot data reaches itrRoomLights); theater-boot.js resolves it against
+// S.interiorLastRoomShell.mountSlots at render time (the spec's own "Seam for wall mounts").
+//
+// FIXTURE-RESOLUTION DATA GAP (documented deviation from the spec's literal table): the spec keys
+// fixture choice off (realm, LIGHT PROFILE KEYWORD, kind) — "light profile keyword" being
+// THEATER_LIGHT_TABLE's rolled vocabulary (torchlit/lamplit/dark/magic-glow/... — engine.theater-data,
+// stamped on the WALK SEGMENT by walk.js's walkRollLight as `.light = {profile,rolled,overridden}`).
+// That roll is never threaded onto plan.rooms/SpatialPlan today (grepped: no `.light` reader anywhere
+// in place-spatialize.js/place-semantics.js/theater-interior.js) — a pre-existing gap this unit does
+// not own or attempt to close. `kind` (kit.lightKind, "torch"|"lamp") is the closest available proxy:
+// it already encodes the SAME torchlit/lamplit axis THEATER_LIGHT_KEYWORD_RULES maps those exact words
+// to. Fixture resolution below therefore keys off (realmId, kind) plus a per-light SEEDED alternation
+// (dspHashStr/dspMulberry32, never Math.random) standing in for the profile's own finer-grained texture
+// (e.g. gloom's "ambient/dark" candle-cluster row, which has no separate per-light signal to key off).
+// Authority order #1 (project stored fields, never re-roll) is respected: nothing here calls
+// theaterRollLight — it simply has no per-light roll to read yet.
+const ITR_FIXTURE_RECIPES = Object.freeze({
+  "sconce-iron":     Object.freeze({ mount: "wall",  emitterLocal: Object.freeze({ x: 0, y: 0.05, z: 0.16 }) }),
+  "sconce-torch":    Object.freeze({ mount: "wall",  emitterLocal: Object.freeze({ x: 0, y: 0.08, z: 0.18 }) }),
+  "bracket-generic": Object.freeze({ mount: "wall",  emitterLocal: Object.freeze({ x: 0, y: 0.03, z: 0.12 }) }),
+  "brazier-low":     Object.freeze({ mount: "floor", emitterLocal: Object.freeze({ x: 0, y: 0.32, z: 0 }) }),
+  "candle-cluster":  Object.freeze({ mount: "floor", emitterLocal: Object.freeze({ x: 0, y: 0.28, z: 0.02 }) }),
+  "lantern-handled": Object.freeze({ mount: "floor", emitterLocal: Object.freeze({ x: 0, y: 0.30, z: 0 }) }),
+  "crystal-faceted": Object.freeze({ mount: "floor", emitterLocal: Object.freeze({ x: 0, y: 0.30, z: 0 }) }),
+  "lamp-post":       Object.freeze({ mount: "floor", emitterLocal: Object.freeze({ x: 0, y: 0.90, z: 0 }) }),
+});
+// deterministic (roomSegNum + light index) seeded pick per realm family — WALL-VOLUMES-PRACTICALS.md
+// §E0's own resolution table (see the gap note above for the kind-as-profile-proxy simplification).
+function itrFixtureIdFor(realmId, kind, rng) {
+  const r = rng();
+  if (realmId === "gloom") {
+    if (r < 0.45) return "sconce-iron";
+    if (r < 0.85) return "brazier-low";
+    return "candle-cluster";
+  }
+  if (realmId === "fantasy") {
+    return r < 0.65 ? "sconce-torch" : "lantern-handled";
+  }
+  if (realmId === "chrome") return "crystal-faceted";
+  // default bucket (the other 9 realms): a wall bracket, floor lamp-post is the render-layer's own
+  // defensive fallback when no mount-slot data resolves near this light (interiorBuildLights).
+  return "bracket-generic";
+}
+function itrFixtureFor(room, plan, kit, kind, i) {
+  const seedKey = "u3-fixture:" + (plan.seed || "") + ":" + room.segNum + ":" + i;
+  const rng = dspMulberry32(dspHashStr(seedKey));
+  const fixtureId = itrFixtureIdFor(kit.realmId, kind, rng);
+  const recipe = ITR_FIXTURE_RECIPES[fixtureId] || ITR_FIXTURE_RECIPES["lamp-post"];
+  return { fixtureId, mount: recipe.mount, emitterLocal: recipe.emitterLocal, sourceRef: seedKey };
+}
+
 // per-room deterministic light list — `plan.seed` (U1's own stored seed, always present) folded into
 // the per-room hash so two rooms with identical rects in DIFFERENT plans never pick the same pattern,
 // while the SAME plan replayed twice (the determinism acceptance every U1-U4 harness checks) always
@@ -543,16 +602,22 @@ function itrRoomLights(room, plan, kit, dressingByRoom) {
   const kind = kit.lightKind || "torch";
   const height = ITR_LIGHT_HEIGHT[kind] || 1.5;
   const baseIntensity = kit.lightIntensity || 1.2;
-  const list = shuffled.slice(0, n).map((c) => ({
-    x: c.x, z: c.y, y: height,
-    color: kit.lightColor || "#ff9a44",
-    intensity: baseIntensity,
-    // BW2-4 item 1: SMALL + HOT pools — an explicit per-kind cutoff radius + physical decay so
-    // interiorBuildLights renders a ~4-5-cell pool instead of its generic 12-unit room flood.
-    distance: ITR_LIGHT_DISTANCE[kind] != null ? ITR_LIGHT_DISTANCE[kind] : 6.0,
-    decay: ITR_LIGHT_DECAY,
-    kind, roomSegNum: room.segNum
-  }));
+  const list = shuffled.slice(0, n).map((c, i) => {
+    // E0 — VISIBLE PRACTICALS: resolve this light's own physical fixture (see the header block above).
+    const fx = itrFixtureFor(room, plan, kit, kind, i);
+    return {
+      x: c.x, z: c.y, y: height,
+      color: kit.lightColor || "#ff9a44",
+      intensity: baseIntensity,
+      // BW2-4 item 1: SMALL + HOT pools — an explicit per-kind cutoff radius + physical decay so
+      // interiorBuildLights renders a ~4-5-cell pool instead of its generic 12-unit room flood.
+      distance: ITR_LIGHT_DISTANCE[kind] != null ? ITR_LIGHT_DISTANCE[kind] : 6.0,
+      decay: ITR_LIGHT_DECAY,
+      kind, roomSegNum: room.segNum,
+      fixtureId: fx.fixtureId, mount: fx.mount, ownerSegIndex: null,
+      emitterLocal: fx.emitterLocal, sourceRef: fx.sourceRef,
+    };
+  });
   if (!list.length) return list;
 
   // VP4 item 2 (key-light-as-composition): the room's BRIGHTEST light (list[0], deterministic — same

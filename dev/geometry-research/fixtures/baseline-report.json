@@ -1,0 +1,781 @@
+{
+  "generatedAt": "2026-07-13T02:24:32.669Z",
+  "masterSha": "9134f0e2943757112da688922e75f4038b7d0de4",
+  "adapter": "legacy(compileRoomShellData)",
+  "invariants": [
+    "determinism-shuffled-input",
+    "union-area-matches-independent-truth",
+    "tier-area-matches-independent-truth",
+    "polygon-hole-count-matches-independent-truth",
+    "ring-simplicity-no-self-intersection",
+    "triangle-validity-no-degenerate-no-nan",
+    "cell-triangle-map-totality",
+    "canonical-cells-unmutated",
+    "malformed-input-no-throw"
+  ],
+  "fixtures": {
+    "F01-one-cell": {
+      "mergeBlocker": false,
+      "knownRed": null,
+      "results": {
+        "malformed-input-no-throw": true,
+        "canonical-cells-unmutated": true,
+        "determinism-shuffled-input": true,
+        "union-area-matches-independent-truth": true,
+        "tier-area-matches-independent-truth": true,
+        "polygon-hole-count-matches-independent-truth": true,
+        "ring-simplicity-no-self-intersection": true,
+        "triangle-validity-no-degenerate-no-nan": true,
+        "cell-triangle-map-totality": true
+      }
+    },
+    "F02-2x2-rect": {
+      "mergeBlocker": false,
+      "knownRed": null,
+      "results": {
+        "malformed-input-no-throw": true,
+        "canonical-cells-unmutated": true,
+        "determinism-shuffled-input": true,
+        "union-area-matches-independent-truth": true,
+        "tier-area-matches-independent-truth": true,
+        "polygon-hole-count-matches-independent-truth": true,
+        "ring-simplicity-no-self-intersection": true,
+        "triangle-validity-no-degenerate-no-nan": true,
+        "cell-triangle-map-totality": true
+      }
+    },
+    "F03-long-corridor": {
+      "mergeBlocker": false,
+      "knownRed": null,
+      "results": {
+        "malformed-input-no-throw": true,
+        "canonical-cells-unmutated": true,
+        "determinism-shuffled-input": true,
+        "union-area-matches-independent-truth": true,
+        "tier-area-matches-independent-truth": true,
+        "polygon-hole-count-matches-independent-truth": true,
+        "ring-simplicity-no-self-intersection": true,
+        "triangle-validity-no-degenerate-no-nan": true,
+        "cell-triangle-map-totality": true
+      }
+    },
+    "F04-concave-L": {
+      "mergeBlocker": false,
+      "knownRed": null,
+      "results": {
+        "malformed-input-no-throw": true,
+        "canonical-cells-unmutated": true,
+        "determinism-shuffled-input": true,
+        "union-area-matches-independent-truth": true,
+        "tier-area-matches-independent-truth": true,
+        "polygon-hole-count-matches-independent-truth": true,
+        "ring-simplicity-no-self-intersection": true,
+        "triangle-validity-no-degenerate-no-nan": true,
+        "cell-triangle-map-totality": true
+      }
+    },
+    "F05-T-room": {
+      "mergeBlocker": false,
+      "knownRed": null,
+      "results": {
+        "malformed-input-no-throw": true,
+        "canonical-cells-unmutated": true,
+        "determinism-shuffled-input": true,
+        "union-area-matches-independent-truth": true,
+        "tier-area-matches-independent-truth": true,
+        "polygon-hole-count-matches-independent-truth": true,
+        "ring-simplicity-no-self-intersection": true,
+        "triangle-validity-no-degenerate-no-nan": true,
+        "cell-triangle-map-totality": true
+      }
+    },
+    "F06-cross-room": {
+      "mergeBlocker": false,
+      "knownRed": null,
+      "results": {
+        "malformed-input-no-throw": true,
+        "canonical-cells-unmutated": true,
+        "determinism-shuffled-input": true,
+        "union-area-matches-independent-truth": true,
+        "tier-area-matches-independent-truth": true,
+        "polygon-hole-count-matches-independent-truth": true,
+        "ring-simplicity-no-self-intersection": true,
+        "triangle-validity-no-degenerate-no-nan": true,
+        "cell-triangle-map-totality": true
+      }
+    },
+    "F07-chamfered-octagon": {
+      "mergeBlocker": true,
+      "knownRed": null,
+      "results": {
+        "malformed-input-no-throw": true,
+        "canonical-cells-unmutated": true,
+        "determinism-shuffled-input": true,
+        "union-area-matches-independent-truth": true,
+        "tier-area-matches-independent-truth": true,
+        "polygon-hole-count-matches-independent-truth": true,
+        "ring-simplicity-no-self-intersection": true,
+        "triangle-validity-no-degenerate-no-nan": true,
+        "cell-triangle-map-totality": true
+      }
+    },
+    "F08-octagon-diagonal-doorway": {
+      "mergeBlocker": true,
+      "knownRed": null,
+      "results": {
+        "malformed-input-no-throw": true,
+        "canonical-cells-unmutated": true,
+        "determinism-shuffled-input": true,
+        "union-area-matches-independent-truth": true,
+        "tier-area-matches-independent-truth": true,
+        "polygon-hole-count-matches-independent-truth": true,
+        "ring-simplicity-no-self-intersection": true,
+        "triangle-validity-no-degenerate-no-nan": false,
+        "cell-triangle-map-totality": true
+      }
+    },
+    "F09a-rotunda-raw": {
+      "mergeBlocker": false,
+      "knownRed": null,
+      "results": {
+        "malformed-input-no-throw": true,
+        "canonical-cells-unmutated": true,
+        "determinism-shuffled-input": true,
+        "union-area-matches-independent-truth": true,
+        "tier-area-matches-independent-truth": true,
+        "polygon-hole-count-matches-independent-truth": true,
+        "ring-simplicity-no-self-intersection": true,
+        "triangle-validity-no-degenerate-no-nan": true,
+        "cell-triangle-map-totality": true
+      }
+    },
+    "F09b-rotunda-smoothed": {
+      "mergeBlocker": false,
+      "knownRed": null,
+      "results": {
+        "malformed-input-no-throw": true,
+        "canonical-cells-unmutated": true,
+        "determinism-shuffled-input": true,
+        "union-area-matches-independent-truth": true,
+        "tier-area-matches-independent-truth": true,
+        "polygon-hole-count-matches-independent-truth": true,
+        "ring-simplicity-no-self-intersection": true,
+        "triangle-validity-no-degenerate-no-nan": true,
+        "cell-triangle-map-totality": true
+      }
+    },
+    "F10-ellipse-unequal-axes": {
+      "mergeBlocker": false,
+      "knownRed": null,
+      "results": {
+        "malformed-input-no-throw": true,
+        "canonical-cells-unmutated": true,
+        "determinism-shuffled-input": true,
+        "union-area-matches-independent-truth": true,
+        "tier-area-matches-independent-truth": true,
+        "polygon-hole-count-matches-independent-truth": true,
+        "ring-simplicity-no-self-intersection": true,
+        "triangle-validity-no-degenerate-no-nan": true,
+        "cell-triangle-map-totality": true
+      }
+    },
+    "F11-cave-noisy-boundary": {
+      "mergeBlocker": false,
+      "knownRed": null,
+      "results": {
+        "malformed-input-no-throw": true,
+        "canonical-cells-unmutated": true,
+        "determinism-shuffled-input": true,
+        "union-area-matches-independent-truth": true,
+        "tier-area-matches-independent-truth": true,
+        "polygon-hole-count-matches-independent-truth": false,
+        "ring-simplicity-no-self-intersection": true,
+        "triangle-validity-no-degenerate-no-nan": true,
+        "cell-triangle-map-totality": true
+      }
+    },
+    "F12-neck-two-lobes": {
+      "mergeBlocker": false,
+      "knownRed": null,
+      "results": {
+        "malformed-input-no-throw": true,
+        "canonical-cells-unmutated": true,
+        "determinism-shuffled-input": true,
+        "union-area-matches-independent-truth": true,
+        "tier-area-matches-independent-truth": true,
+        "polygon-hole-count-matches-independent-truth": true,
+        "ring-simplicity-no-self-intersection": true,
+        "triangle-validity-no-degenerate-no-nan": true,
+        "cell-triangle-map-totality": true
+      }
+    },
+    "F13-corner-touch": {
+      "mergeBlocker": false,
+      "knownRed": null,
+      "results": {
+        "malformed-input-no-throw": true,
+        "canonical-cells-unmutated": true,
+        "determinism-shuffled-input": true,
+        "union-area-matches-independent-truth": true,
+        "tier-area-matches-independent-truth": true,
+        "polygon-hole-count-matches-independent-truth": true,
+        "ring-simplicity-no-self-intersection": true,
+        "triangle-validity-no-degenerate-no-nan": true,
+        "cell-triangle-map-totality": true
+      }
+    },
+    "F14-two-islands": {
+      "mergeBlocker": false,
+      "knownRed": null,
+      "results": {
+        "malformed-input-no-throw": true,
+        "canonical-cells-unmutated": true,
+        "determinism-shuffled-input": true,
+        "union-area-matches-independent-truth": true,
+        "tier-area-matches-independent-truth": true,
+        "polygon-hole-count-matches-independent-truth": true,
+        "ring-simplicity-no-self-intersection": true,
+        "triangle-validity-no-degenerate-no-nan": true,
+        "cell-triangle-map-totality": true
+      }
+    },
+    "F15-donut-one-hole": {
+      "mergeBlocker": true,
+      "knownRed": null,
+      "results": {
+        "malformed-input-no-throw": true,
+        "canonical-cells-unmutated": true,
+        "determinism-shuffled-input": true,
+        "union-area-matches-independent-truth": true,
+        "tier-area-matches-independent-truth": true,
+        "polygon-hole-count-matches-independent-truth": true,
+        "ring-simplicity-no-self-intersection": true,
+        "triangle-validity-no-degenerate-no-nan": true,
+        "cell-triangle-map-totality": true
+      }
+    },
+    "F16-outer-two-holes": {
+      "mergeBlocker": false,
+      "knownRed": null,
+      "results": {
+        "malformed-input-no-throw": true,
+        "canonical-cells-unmutated": true,
+        "determinism-shuffled-input": true,
+        "union-area-matches-independent-truth": true,
+        "tier-area-matches-independent-truth": true,
+        "polygon-hole-count-matches-independent-truth": true,
+        "ring-simplicity-no-self-intersection": true,
+        "triangle-validity-no-degenerate-no-nan": true,
+        "cell-triangle-map-totality": true
+      }
+    },
+    "F17-nested-ring-sunken-arena": {
+      "mergeBlocker": true,
+      "knownRed": null,
+      "results": {
+        "malformed-input-no-throw": true,
+        "canonical-cells-unmutated": true,
+        "determinism-shuffled-input": true,
+        "union-area-matches-independent-truth": true,
+        "tier-area-matches-independent-truth": true,
+        "polygon-hole-count-matches-independent-truth": true,
+        "ring-simplicity-no-self-intersection": true,
+        "triangle-validity-no-degenerate-no-nan": true,
+        "cell-triangle-map-totality": true
+      }
+    },
+    "F18-row101-exact-canonical": {
+      "mergeBlocker": true,
+      "knownRed": {
+        "adapter": "productionShellCells",
+        "reason": "row-101 RED-FIRST: theater-boot.js:8888 `const sy = (typeof f.sy === 'number' && f.sy > 0) ? f.sy : ITR_FLOOR_HEIGHT_FALLBACK;` discards any NEGATIVE f.sy (a legitimately sunken tile) and falls back to the flat floor height — the arena patch's real sy=-0.8 never survives this guard, so the production shellCells builder emits the arena at the SAME quantized tier as the baseline floor (tier=1, not the true tier=-4), collapsing the sunken arena into the surrounding floor. See dev/verify-geometry-fixtures.mjs's productionShellCellsAdapter for the live reproduction."
+      },
+      "results": {
+        "malformed-input-no-throw": true,
+        "canonical-cells-unmutated": true,
+        "determinism-shuffled-input": true,
+        "union-area-matches-independent-truth": false,
+        "tier-area-matches-independent-truth": false,
+        "polygon-hole-count-matches-independent-truth": false,
+        "ring-simplicity-no-self-intersection": true,
+        "triangle-validity-no-degenerate-no-nan": true,
+        "cell-triangle-map-totality": true
+      },
+      "productionShellCellsAdapter": {
+        "note": "row-101 RED-FIRST: theater-boot.js:8888 `const sy = (typeof f.sy === 'number' && f.sy > 0) ? f.sy : ITR_FLOOR_HEIGHT_FALLBACK;` discards any NEGATIVE f.sy (a legitimately sunken tile) and falls back to the flat floor height — the arena patch's real sy=-0.8 never survives this guard, so the production shellCells builder emits the arena at the SAME quantized tier as the baseline floor (tier=1, not the true tier=-4), collapsing the sunken arena into the surrounding floor. See dev/verify-geometry-fixtures.mjs's productionShellCellsAdapter for the live reproduction.",
+        "red": true
+      }
+    },
+    "F19-dais-two-levels": {
+      "mergeBlocker": false,
+      "knownRed": null,
+      "results": {
+        "malformed-input-no-throw": true,
+        "canonical-cells-unmutated": true,
+        "determinism-shuffled-input": true,
+        "union-area-matches-independent-truth": true,
+        "tier-area-matches-independent-truth": true,
+        "polygon-hole-count-matches-independent-truth": true,
+        "ring-simplicity-no-self-intersection": true,
+        "triangle-validity-no-degenerate-no-nan": true,
+        "cell-triangle-map-totality": true
+      }
+    },
+    "F20-pit-at-wall": {
+      "mergeBlocker": false,
+      "knownRed": null,
+      "results": {
+        "malformed-input-no-throw": true,
+        "canonical-cells-unmutated": true,
+        "determinism-shuffled-input": true,
+        "union-area-matches-independent-truth": true,
+        "tier-area-matches-independent-truth": true,
+        "polygon-hole-count-matches-independent-truth": true,
+        "ring-simplicity-no-self-intersection": true,
+        "triangle-validity-no-degenerate-no-nan": true,
+        "cell-triangle-map-totality": true
+      }
+    },
+    "F21-duplicate-cell-input": {
+      "mergeBlocker": false,
+      "knownRed": null,
+      "results": {
+        "malformed-input-no-throw": true,
+        "canonical-cells-unmutated": true,
+        "determinism-shuffled-input": true,
+        "union-area-matches-independent-truth": true,
+        "tier-area-matches-independent-truth": true,
+        "polygon-hole-count-matches-independent-truth": true,
+        "ring-simplicity-no-self-intersection": true,
+        "triangle-validity-no-degenerate-no-nan": true,
+        "cell-triangle-map-totality": true
+      }
+    },
+    "F22-shuffled-order-x100": {
+      "mergeBlocker": true,
+      "knownRed": null,
+      "results": {
+        "malformed-input-no-throw": true,
+        "canonical-cells-unmutated": true,
+        "determinism-shuffled-input": true,
+        "union-area-matches-independent-truth": true,
+        "tier-area-matches-independent-truth": true,
+        "polygon-hole-count-matches-independent-truth": true,
+        "ring-simplicity-no-self-intersection": true,
+        "triangle-validity-no-degenerate-no-nan": true,
+        "cell-triangle-map-totality": true
+      }
+    },
+    "F23-wide-aperture-adjacent-doors": {
+      "mergeBlocker": false,
+      "knownRed": null,
+      "results": {
+        "malformed-input-no-throw": true,
+        "canonical-cells-unmutated": true,
+        "determinism-shuffled-input": true,
+        "union-area-matches-independent-truth": true,
+        "tier-area-matches-independent-truth": true,
+        "polygon-hole-count-matches-independent-truth": true,
+        "ring-simplicity-no-self-intersection": true,
+        "triangle-validity-no-degenerate-no-nan": true,
+        "cell-triangle-map-totality": true
+      }
+    },
+    "F24-door-at-concave-corner": {
+      "mergeBlocker": false,
+      "knownRed": null,
+      "results": {
+        "malformed-input-no-throw": true,
+        "canonical-cells-unmutated": true,
+        "determinism-shuffled-input": true,
+        "union-area-matches-independent-truth": true,
+        "tier-area-matches-independent-truth": true,
+        "polygon-hole-count-matches-independent-truth": true,
+        "ring-simplicity-no-self-intersection": true,
+        "triangle-validity-no-degenerate-no-nan": true,
+        "cell-triangle-map-totality": true
+      }
+    },
+    "F25-tiny-room-canonical-minimum": {
+      "mergeBlocker": false,
+      "knownRed": null,
+      "results": {
+        "malformed-input-no-throw": true,
+        "canonical-cells-unmutated": true,
+        "determinism-shuffled-input": true,
+        "union-area-matches-independent-truth": true,
+        "tier-area-matches-independent-truth": true,
+        "polygon-hole-count-matches-independent-truth": true,
+        "ring-simplicity-no-self-intersection": true,
+        "triangle-validity-no-degenerate-no-nan": true,
+        "cell-triangle-map-totality": true
+      }
+    },
+    "F26a-malformed-empty": {
+      "malformed": true,
+      "results": {
+        "malformed-input-no-throw": true,
+        "canonical-cells-unmutated": true,
+        "diagnostic-or-fallback-present": true
+      },
+      "mergeBlocker": false
+    },
+    "F26b-malformed-nan-coord": {
+      "malformed": true,
+      "results": {
+        "malformed-input-no-throw": true,
+        "canonical-cells-unmutated": true,
+        "diagnostic-or-fallback-present": true
+      },
+      "mergeBlocker": false
+    },
+    "F26c-malformed-non-numeric-tier": {
+      "malformed": true,
+      "results": {
+        "malformed-input-no-throw": true,
+        "canonical-cells-unmutated": true,
+        "diagnostic-or-fallback-present": false
+      },
+      "mergeBlocker": false
+    },
+    "F27-large-room-near-max": {
+      "mergeBlocker": false,
+      "knownRed": null,
+      "results": {
+        "malformed-input-no-throw": true,
+        "canonical-cells-unmutated": true,
+        "determinism-shuffled-input": true,
+        "union-area-matches-independent-truth": true,
+        "tier-area-matches-independent-truth": true,
+        "polygon-hole-count-matches-independent-truth": true,
+        "ring-simplicity-no-self-intersection": true,
+        "triangle-validity-no-degenerate-no-nan": true,
+        "cell-triangle-map-totality": true
+      }
+    },
+    "F28-overloaded-scene-geometry-unchanged": {
+      "mergeBlocker": false,
+      "knownRed": null,
+      "results": {
+        "malformed-input-no-throw": true,
+        "canonical-cells-unmutated": true,
+        "determinism-shuffled-input": true,
+        "union-area-matches-independent-truth": true,
+        "tier-area-matches-independent-truth": true,
+        "polygon-hole-count-matches-independent-truth": true,
+        "ring-simplicity-no-self-intersection": true,
+        "triangle-validity-no-degenerate-no-nan": true,
+        "cell-triangle-map-totality": true
+      }
+    },
+    "B01-convex-45-corner": {
+      "mergeBlocker": false,
+      "knownRed": null,
+      "results": {
+        "malformed-input-no-throw": true,
+        "canonical-cells-unmutated": true,
+        "determinism-shuffled-input": true,
+        "union-area-matches-independent-truth": true,
+        "tier-area-matches-independent-truth": true,
+        "polygon-hole-count-matches-independent-truth": true,
+        "ring-simplicity-no-self-intersection": true,
+        "triangle-validity-no-degenerate-no-nan": true,
+        "cell-triangle-map-totality": true
+      }
+    },
+    "B02-acute-corner-near-miter-limit": {
+      "mergeBlocker": false,
+      "knownRed": null,
+      "results": {
+        "malformed-input-no-throw": true,
+        "canonical-cells-unmutated": true,
+        "determinism-shuffled-input": true,
+        "union-area-matches-independent-truth": true,
+        "tier-area-matches-independent-truth": true,
+        "polygon-hole-count-matches-independent-truth": true,
+        "ring-simplicity-no-self-intersection": true,
+        "triangle-validity-no-degenerate-no-nan": true,
+        "cell-triangle-map-totality": true
+      }
+    },
+    "B03-concave-90-corner": {
+      "mergeBlocker": false,
+      "knownRed": null,
+      "results": {
+        "malformed-input-no-throw": true,
+        "canonical-cells-unmutated": true,
+        "determinism-shuffled-input": true,
+        "union-area-matches-independent-truth": true,
+        "tier-area-matches-independent-truth": true,
+        "polygon-hole-count-matches-independent-truth": true,
+        "ring-simplicity-no-self-intersection": true,
+        "triangle-validity-no-degenerate-no-nan": true,
+        "cell-triangle-map-totality": true
+      }
+    },
+    "B04-concave-45-notch": {
+      "mergeBlocker": false,
+      "knownRed": null,
+      "results": {
+        "malformed-input-no-throw": true,
+        "canonical-cells-unmutated": true,
+        "determinism-shuffled-input": true,
+        "union-area-matches-independent-truth": true,
+        "tier-area-matches-independent-truth": true,
+        "polygon-hole-count-matches-independent-truth": true,
+        "ring-simplicity-no-self-intersection": true,
+        "triangle-validity-no-degenerate-no-nan": true,
+        "cell-triangle-map-totality": true
+      }
+    },
+    "B05-alternating-cave-boundary": {
+      "mergeBlocker": false,
+      "knownRed": null,
+      "results": {
+        "malformed-input-no-throw": true,
+        "canonical-cells-unmutated": true,
+        "determinism-shuffled-input": true,
+        "union-area-matches-independent-truth": true,
+        "tier-area-matches-independent-truth": true,
+        "polygon-hole-count-matches-independent-truth": false,
+        "ring-simplicity-no-self-intersection": true,
+        "triangle-validity-no-degenerate-no-nan": true,
+        "cell-triangle-map-totality": true
+      }
+    },
+    "B06-doorway-centered-straight-wall": {
+      "mergeBlocker": false,
+      "knownRed": null,
+      "results": {
+        "malformed-input-no-throw": true,
+        "canonical-cells-unmutated": true,
+        "determinism-shuffled-input": true,
+        "union-area-matches-independent-truth": true,
+        "tier-area-matches-independent-truth": true,
+        "polygon-hole-count-matches-independent-truth": true,
+        "ring-simplicity-no-self-intersection": true,
+        "triangle-validity-no-degenerate-no-nan": true,
+        "cell-triangle-map-totality": true
+      }
+    },
+    "B07-doorway-diagonal-to-straight-join": {
+      "mergeBlocker": false,
+      "knownRed": null,
+      "results": {
+        "malformed-input-no-throw": true,
+        "canonical-cells-unmutated": true,
+        "determinism-shuffled-input": true,
+        "union-area-matches-independent-truth": true,
+        "tier-area-matches-independent-truth": true,
+        "polygon-hole-count-matches-independent-truth": true,
+        "ring-simplicity-no-self-intersection": true,
+        "triangle-validity-no-degenerate-no-nan": true,
+        "cell-triangle-map-totality": true
+      }
+    },
+    "B08-two-apertures-narrow-pier": {
+      "mergeBlocker": false,
+      "knownRed": null,
+      "results": {
+        "malformed-input-no-throw": true,
+        "canonical-cells-unmutated": true,
+        "determinism-shuffled-input": true,
+        "union-area-matches-independent-truth": true,
+        "tier-area-matches-independent-truth": true,
+        "polygon-hole-count-matches-independent-truth": true,
+        "ring-simplicity-no-self-intersection": true,
+        "triangle-validity-no-degenerate-no-nan": true,
+        "cell-triangle-map-totality": true
+      }
+    },
+    "B09-full-width-open-edge": {
+      "mergeBlocker": false,
+      "knownRed": null,
+      "results": {
+        "malformed-input-no-throw": true,
+        "canonical-cells-unmutated": true,
+        "determinism-shuffled-input": true,
+        "union-area-matches-independent-truth": true,
+        "tier-area-matches-independent-truth": true,
+        "polygon-hole-count-matches-independent-truth": true,
+        "ring-simplicity-no-self-intersection": true,
+        "triangle-validity-no-degenerate-no-nan": false,
+        "cell-triangle-map-totality": true
+      }
+    },
+    "B10-sconce-beside-aperture": {
+      "mergeBlocker": false,
+      "knownRed": null,
+      "results": {
+        "malformed-input-no-throw": true,
+        "canonical-cells-unmutated": true,
+        "determinism-shuffled-input": true,
+        "union-area-matches-independent-truth": true,
+        "tier-area-matches-independent-truth": true,
+        "polygon-hole-count-matches-independent-truth": true,
+        "ring-simplicity-no-self-intersection": true,
+        "triangle-validity-no-degenerate-no-nan": true,
+        "cell-triangle-map-totality": true
+      }
+    },
+    "B11-octagon-minimum-size": {
+      "mergeBlocker": false,
+      "knownRed": null,
+      "results": {
+        "malformed-input-no-throw": true,
+        "canonical-cells-unmutated": true,
+        "determinism-shuffled-input": true,
+        "union-area-matches-independent-truth": true,
+        "tier-area-matches-independent-truth": true,
+        "polygon-hole-count-matches-independent-truth": true,
+        "ring-simplicity-no-self-intersection": true,
+        "triangle-validity-no-degenerate-no-nan": true,
+        "cell-triangle-map-totality": true
+      }
+    },
+    "B12-octagon-grand-room-size": {
+      "mergeBlocker": false,
+      "knownRed": null,
+      "results": {
+        "malformed-input-no-throw": true,
+        "canonical-cells-unmutated": true,
+        "determinism-shuffled-input": true,
+        "union-area-matches-independent-truth": true,
+        "tier-area-matches-independent-truth": true,
+        "polygon-hole-count-matches-independent-truth": true,
+        "ring-simplicity-no-self-intersection": true,
+        "triangle-validity-no-degenerate-no-nan": true,
+        "cell-triangle-map-totality": true
+      }
+    },
+    "B13-annular-railing-around-pit": {
+      "mergeBlocker": false,
+      "knownRed": null,
+      "results": {
+        "malformed-input-no-throw": true,
+        "canonical-cells-unmutated": true,
+        "determinism-shuffled-input": true,
+        "union-area-matches-independent-truth": true,
+        "tier-area-matches-independent-truth": true,
+        "polygon-hole-count-matches-independent-truth": true,
+        "ring-simplicity-no-self-intersection": true,
+        "triangle-validity-no-degenerate-no-nan": true,
+        "cell-triangle-map-totality": true
+      }
+    },
+    "B14-multiple-disconnected-tier-islands": {
+      "mergeBlocker": false,
+      "knownRed": null,
+      "results": {
+        "malformed-input-no-throw": true,
+        "canonical-cells-unmutated": true,
+        "determinism-shuffled-input": true,
+        "union-area-matches-independent-truth": true,
+        "tier-area-matches-independent-truth": true,
+        "polygon-hole-count-matches-independent-truth": true,
+        "ring-simplicity-no-self-intersection": true,
+        "triangle-validity-no-degenerate-no-nan": true,
+        "cell-triangle-map-totality": true
+      }
+    },
+    "B15a-translated-far-positive": {
+      "mergeBlocker": false,
+      "knownRed": null,
+      "results": {
+        "malformed-input-no-throw": true,
+        "canonical-cells-unmutated": true,
+        "determinism-shuffled-input": true,
+        "union-area-matches-independent-truth": true,
+        "tier-area-matches-independent-truth": true,
+        "polygon-hole-count-matches-independent-truth": true,
+        "ring-simplicity-no-self-intersection": true,
+        "triangle-validity-no-degenerate-no-nan": true,
+        "cell-triangle-map-totality": true
+      }
+    },
+    "B15b-translated-far-negative": {
+      "mergeBlocker": false,
+      "knownRed": null,
+      "results": {
+        "malformed-input-no-throw": true,
+        "canonical-cells-unmutated": true,
+        "determinism-shuffled-input": true,
+        "union-area-matches-independent-truth": true,
+        "tier-area-matches-independent-truth": true,
+        "polygon-hole-count-matches-independent-truth": true,
+        "ring-simplicity-no-self-intersection": true,
+        "triangle-validity-no-degenerate-no-nan": true,
+        "cell-triangle-map-totality": true
+      }
+    },
+    "B16-shuffled-octagon-x100": {
+      "mergeBlocker": false,
+      "knownRed": null,
+      "results": {
+        "malformed-input-no-throw": true,
+        "canonical-cells-unmutated": true,
+        "determinism-shuffled-input": true,
+        "union-area-matches-independent-truth": true,
+        "tier-area-matches-independent-truth": true,
+        "polygon-hole-count-matches-independent-truth": true,
+        "ring-simplicity-no-self-intersection": true,
+        "triangle-validity-no-degenerate-no-nan": true,
+        "cell-triangle-map-totality": true
+      }
+    },
+    "B17-tiny-wall-thickness": {
+      "mergeBlocker": false,
+      "knownRed": null,
+      "results": {
+        "malformed-input-no-throw": true,
+        "canonical-cells-unmutated": true,
+        "determinism-shuffled-input": true,
+        "union-area-matches-independent-truth": true,
+        "tier-area-matches-independent-truth": true,
+        "polygon-hole-count-matches-independent-truth": true,
+        "ring-simplicity-no-self-intersection": true,
+        "triangle-validity-no-degenerate-no-nan": true,
+        "cell-triangle-map-totality": true
+      }
+    },
+    "B18-max-wall-thickness": {
+      "mergeBlocker": false,
+      "knownRed": null,
+      "results": {
+        "malformed-input-no-throw": true,
+        "canonical-cells-unmutated": true,
+        "determinism-shuffled-input": true,
+        "union-area-matches-independent-truth": true,
+        "tier-area-matches-independent-truth": true,
+        "polygon-hole-count-matches-independent-truth": true,
+        "ring-simplicity-no-self-intersection": true,
+        "triangle-validity-no-degenerate-no-nan": true,
+        "cell-triangle-map-totality": true
+      }
+    },
+    "B19-malformed-self-touching-bowtie": {
+      "malformed": true,
+      "results": {
+        "malformed-input-no-throw": true,
+        "canonical-cells-unmutated": true,
+        "diagnostic-or-fallback-present": false
+      },
+      "mergeBlocker": false
+    },
+    "B20-s-hook-octagon-regression-capture": {
+      "mergeBlocker": false,
+      "knownRed": null,
+      "results": {
+        "malformed-input-no-throw": true,
+        "canonical-cells-unmutated": true,
+        "determinism-shuffled-input": true,
+        "union-area-matches-independent-truth": true,
+        "tier-area-matches-independent-truth": true,
+        "polygon-hole-count-matches-independent-truth": true,
+        "ring-simplicity-no-self-intersection": true,
+        "triangle-validity-no-degenerate-no-nan": true,
+        "cell-triangle-map-totality": true
+      }
+    }
+  }
+}

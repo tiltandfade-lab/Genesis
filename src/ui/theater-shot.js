@@ -107,6 +107,16 @@ const SHOT_ZONE_PATCH = 3;                           // mirrors theater-data.js'
 const THIRDS_POINTS = [
   { x: -1 / 3, y: -1 / 3 }, { x: 1 / 3, y: -1 / 3 }, { x: -1 / 3, y: 1 / 3 }, { x: 1 / 3, y: 1 / 3 }
 ];
+// docs/WALL-VOLUMES-PRACTICALS.md Unit C4.1b — wall-upper occlusion tunables. Kept as local literals
+// (this file stays decoupled from theater-room-mesh.js's own THREE-touching export surface, same
+// discipline DEFAULT_WALL_HEIGHT's header comment already documents for a sibling module) rather than
+// imported — a caller that built the real shell with a DIFFERENT stemHeight/wallHeight passes its own
+// values through wallUpperBlockingSet's opts; these are only the fallback when it doesn't.
+const OCCLUSION_DEFAULT_STEM_HEIGHT = 0.28;   // mirrors theater-room-mesh.js's DEFAULT_WALL_STEM_HEIGHT
+const OCCLUSION_DEFAULT_WALL_HEIGHT = 2.4;    // mirrors theater-room-mesh.js's DEFAULT_WALL_HEIGHT
+const OCCLUSION_SUBJECT_EYE_HEIGHT = 1.2;     // world Y used for a subject anchor that only carries {x,z}
+                                               // (every ShotPlan anchor today) — a torso/eye-level proxy,
+                                               // not a per-creature true height (Stage A doesn't carry one).
 
 // ── zone/world resolution (the "combat" contract's raw-shape fallback, see header) ─────────────
 function zoneWorldPos(band, lane, grid) {
@@ -206,14 +216,16 @@ function objectiveFrom(tray) {
   const walkCenterpiece = walkSceneLane(tray, "structure").find((e) => e && e.centerpiece && e.position);
   if (walkCenterpiece) {
     return { x: numOr(walkCenterpiece.position.x, 0) * cs0, z: numOr(walkCenterpiece.position.y, 0) * cs0,
-      roomSegNum: tray.activeRoomId, sourceRef: walkCenterpiece.sourceRef || null };
+      roomSegNum: tray.activeRoomId, sourceRef: walkCenterpiece.sourceRef || null,
+      mountImportant: !!walkCenterpiece.mountImportant };
   }
   const projected = tray.projection && Array.isArray(tray.projection.stageNow) ? tray.projection.stageNow : [];
   const projectedCenterpiece = projected.find((c) => c && c.centerpiece && c.position);
   if (projectedCenterpiece) {
     const cs = numOr(tray.cellSize, 1);
     return { x:numOr(projectedCenterpiece.position.x,0)*cs, z:numOr(projectedCenterpiece.position.y,0)*cs,
-      roomSegNum:tray.activeRoomId, sourceRef:projectedCenterpiece.sourceRef||null };
+      roomSegNum:tray.activeRoomId, sourceRef:projectedCenterpiece.sourceRef||null,
+      mountImportant: !!projectedCenterpiece.mountImportant };
   }
   // interior3d finale rooms carry a canonical dais anchor (theater-interior.js's daisTop) — the
   // closest thing the current tree has to a "centerpiece/objective cell" (BW5's construction-class
@@ -222,7 +234,8 @@ function objectiveFrom(tray) {
   if (Array.isArray(tray.daisTop) && tray.daisTop.length) {
     const d = tray.daisTop[0];
     const cs = numOr(tray.cellSize, 1);
-    return { x: numOr(d.x, 0) * cs, z: numOr(d.y != null ? d.y : d.z, 0) * cs, roomSegNum: (d.roomSegNum != null ? d.roomSegNum : null) };
+    return { x: numOr(d.x, 0) * cs, z: numOr(d.y != null ? d.y : d.z, 0) * cs, roomSegNum: (d.roomSegNum != null ? d.roomSegNum : null),
+      mountImportant: !!d.mountImportant };
   }
   // a grid-board prop explicitly flagged as the room's centerpiece (no current producer stamps this
   // either — kept as a real, checked branch so the day a curation pass (Stage D §4.11) starts
@@ -231,7 +244,11 @@ function objectiveFrom(tray) {
   const centerpiece = props.find((p) => p && (p.centerpiece === true || p.role === "centerpiece"));
   if (centerpiece) {
     const pos = worldPosFromEntry(centerpiece, tray.grid);
-    if (pos) return { x: pos.x, z: pos.z, roomSegNum: null };
+    // C4.1b (docs/WALL-VOLUMES-PRACTICALS.md): `mountImportant` — an objective whose visibility is
+    // camera-scoring-worthy (composeShot's penaltyHardOcclusionArea reads this). No current producer
+    // stamps it either (same "kept as a real, checked branch" convention as the rest of this
+    // function) — a wall-mounted objective card sets it once Stage D's curation pass exists.
+    if (pos) return { x: pos.x, z: pos.z, roomSegNum: null, mountImportant: !!centerpiece.mountImportant };
   }
   return null;
 }
@@ -640,11 +657,120 @@ function scoreForegroundDepthLayer(shotPlan, candidate) {
   if (ideal <= 0) return 0;
   return clamp(1 - Math.abs(candidate.distance - ideal) / ideal, 0, 1);
 }
-// penaltyHardOcclusionArea — A4 (dynamic occlusion v2) is the owner of real blocker-vs-sightline
-// geometry; this file's occlusionTargets carry positions only (no wall-thickness/ray-intersection
-// test lives here). The TERM is wired into scoring now (never omitted from the formula) so A4 only
-// has to supply the number, not invent the slot in the total/metrics shape.
-function penaltyHardOcclusionArea(shotPlan, candidate, project) { return 0; }
+// ── C4.1b (docs/WALL-VOLUMES-PRACTICALS.md) — the real ray-vs-segment blocking test ────────────
+// candidateCameraWorldPos(cameraLike) -> {x,y,z} | null. Accepts EITHER a concrete world position
+// (the runtime shape setInteriorBoard already computes off S.camera, `{x,y,z}`) OR a composeShot
+// candidate descriptor (`{yaw,pitch,distance,target}` — normalizeCandidate's own shape), so ONE
+// helper (wallUpperBlockingSet, below) serves both the live render and candidate scoring, per this
+// unit's own "expose a pure helper for both scoring and runtime" instruction. The candidate-descriptor
+// branch mirrors theater-boot.js's shotProjectFor EXACTLY (same yaw/pitch/distance -> orbit-position
+// formula, verified against that function's own live math) — an approximation-of-a-hypothetical-pose
+// for RELATIVE candidate comparison, same convention every other scoring term in this file already
+// uses (circleRadiusNdcFor etc. never mount a real THREE camera either).
+function candidateCameraWorldPos(cameraLike) {
+  if (!cameraLike) return null;
+  if (typeof cameraLike.x === "number" && typeof cameraLike.z === "number" && typeof cameraLike.y === "number") {
+    return { x: cameraLike.x, y: cameraLike.y, z: cameraLike.z };
+  }
+  const target = cameraLike.target || { x: 0, z: 0 };
+  const tx = numOr(target.x, 0), ty = numOr(target.y, 0), tz = numOr(target.z, 0);
+  const distance = Math.max(0.1, numOr(cameraLike.distance, 6));
+  const yawRad = deg2rad(numOr(cameraLike.yaw, 0));
+  const pitchRad = deg2rad(numOr(cameraLike.pitch, 32));
+  const horiz = Math.cos(pitchRad) * distance;
+  const height = Math.sin(pitchRad) * distance;
+  return { x: tx + Math.sin(yawRad) * horiz, y: ty + height, z: tz + Math.cos(yawRad) * horiz };
+}
+// segment2DIntersectFraction — standard 2D segment/segment intersection (p+t*r vs q+u*s), returning
+// the two parametric fractions {t,u} or null when parallel (the only degenerate case; a caller checks
+// 0<t<1 / 0<=u<=1 itself so this stays a pure, unclamped math primitive other checks can reuse).
+function segment2DIntersectFraction(p, r, q, s) {
+  const denom = r.x * s.z - r.z * s.x;
+  if (Math.abs(denom) < 1e-9) return null;
+  const qpx = q.x - p.x, qpz = q.z - p.z;
+  const t = (qpx * s.z - qpz * s.x) / denom;
+  const u = (qpx * r.z - qpz * r.x) / denom;
+  return { t, u };
+}
+// wallUpperBlockingSet({camera, subjects, wallSegments, stemHeight}) -> Set<ownerSegIndex>.
+// `camera`: a world position {x,y,z} OR a candidate descriptor (see candidateCameraWorldPos above).
+// `subjects`: [{id,x,z,y?}] — a subject missing `y` defaults to OCCLUSION_SUBJECT_EYE_HEIGHT.
+// `wallSegments`: [{a:{x,z}, b:{x,z}, height}], INDEX = ownerSegIndex (theater-room-mesh.js's own
+// compileRoomShell `wallSegments` shape — the runtime caller passes S.interiorLastRoomShell.wallSegments
+// verbatim; a caller without a compiled shell, i.e. composeShot's scoring path, passes an adapted list —
+// see penaltyHardOcclusionArea below). `stemHeight` (default OCCLUSION_DEFAULT_STEM_HEIGHT) is the
+// always-opaque stem's own top — a segment whose wall height doesn't clear it has no upper volume at
+// all and is never a candidate member.
+//
+// Geometry: the wall segment's UPPER volume is treated as a zero-thickness vertical plane along its
+// own a->b centerline (walls are thin, ~0.2-0.3u, well under the typical camera/subject separation this
+// test runs at — a deliberate simplification consistent with every other approximate term in this
+// file, not a box/thickness-exact intersection). A segment is blocking iff the camera->subject 2D ray
+// crosses that centerline STRICTLY before reaching the subject (0<t<1), WITHIN the segment's own span
+// (0<=u<=1), AND the ray's height at that crossing falls inside [stemHeight, segment.height] — below
+// stemHeight is the stem's own always-opaque business (not this function's concern: the ray couldn't
+// have reached the subject at all in that case, structurally, regardless of camera), above the
+// segment's own height is open air over the top of a shorter wall (never blocking).
+function wallUpperBlockingSet(opts) {
+  opts = opts || {};
+  const blocking = new Set();
+  const camPos = candidateCameraWorldPos(opts.camera);
+  const subjects = (Array.isArray(opts.subjects) ? opts.subjects : []).filter(Boolean);
+  const wallSegments = Array.isArray(opts.wallSegments) ? opts.wallSegments : [];
+  if (!camPos || !subjects.length || !wallSegments.length) return blocking;
+  const stemHeight = numOr(opts.stemHeight, OCCLUSION_DEFAULT_STEM_HEIGHT);
+  wallSegments.forEach((seg, idx) => {
+    if (!seg || !seg.a || !seg.b) return;
+    const wallTop = numOr(seg.height, OCCLUSION_DEFAULT_WALL_HEIGHT);
+    if (wallTop <= stemHeight + 1e-9) return; // no upper volume on this segment at all
+    const s = { x: seg.b.x - seg.a.x, z: seg.b.z - seg.a.z };
+    for (let i = 0; i < subjects.length; i++) {
+      const subj = subjects[i];
+      const subjY = typeof subj.y === "number" ? subj.y : OCCLUSION_SUBJECT_EYE_HEIGHT;
+      const r = { x: subj.x - camPos.x, z: subj.z - camPos.z };
+      const hit = segment2DIntersectFraction(camPos, r, seg.a, s);
+      if (!hit) continue;
+      if (hit.t <= 1e-6 || hit.t >= 1 - 1e-6 || hit.u < 0 || hit.u > 1) continue;
+      const y = camPos.y + hit.t * (subjY - camPos.y);
+      if (y > stemHeight && y <= wallTop) { blocking.add(idx); break; }
+    }
+  });
+  return blocking;
+}
+// wallSegmentsFromStageInstances — adapts ShotPlan.stage.wallSegments (per-cell box instances,
+// {id,x,z,sx,sy,sz} — stageFromTray's own shape, positions only) into wallUpperBlockingSet's
+// {a,b,height} contract for composeShot's scoring path, which never has the compiled room-shell
+// (that's built later, inside setInteriorBoard, off the SAME camera composition this scores — see
+// this unit's own report). Each box instance becomes a short segment along its own footprint diagonal
+// — a coarse per-cell stand-in, not the true merged boundary segment a real shell would emit, but
+// sufficient for a RELATIVE candidate-vs-candidate occlusion comparison (the only thing this scoring
+// term needs); the runtime path (wallUpperBlockingSet fed real S.interiorLastRoomShell.wallSegments)
+// is the exact/authoritative one.
+function wallSegmentsFromStageInstances(instances) {
+  return (instances || []).filter(Boolean).map((w) => {
+    const hx = numOr(w.sx, 1) / 2, hz = numOr(w.sz, 1) / 2;
+    return { a: { x: numOr(w.x, 0) - hx, z: numOr(w.z, 0) - hz }, b: { x: numOr(w.x, 0) + hx, z: numOr(w.z, 0) + hz },
+      height: numOr(w.sy, OCCLUSION_DEFAULT_WALL_HEIGHT) };
+  });
+}
+// penaltyHardOcclusionArea — real ray-vs-segment blocking, replacing the former 0-stub. Only ever
+// non-zero when the ShotPlan actually flags an objective `mountImportant` (composeShot's own
+// candidate-scoring hook per this unit's behavior item 7: "penalize candidates that place a
+// wall-mounted objective's owning segment between camera and action"); an objective present but not
+// flagged important, or no objective at all, costs nothing — this term never invents pressure toward
+// an objective nobody asked the camera to protect.
+function penaltyHardOcclusionArea(shotPlan, candidate, project) {
+  const objective = shotPlan && shotPlan.anchors && shotPlan.anchors.objective;
+  if (!objective || !objective.mountImportant) return 0;
+  const wallSegments = wallSegmentsFromStageInstances(shotPlan.stage && shotPlan.stage.wallSegments);
+  if (!wallSegments.length) return 0;
+  const blocking = wallUpperBlockingSet({
+    camera: candidate,
+    subjects: [{ id: "objective", x: objective.x, z: objective.z, y: OCCLUSION_SUBJECT_EYE_HEIGHT }],
+    wallSegments
+  });
+  return blocking.size > 0 ? 1 : 0;
+}
 function penaltySubjectOverlap(ctx, candidate) {
   if (!ctx.playerNdc || !ctx.threatNdc) return 0;
   const r = circleRadiusNdcFor(FIGURE_WORLD_RADIUS, candidate.fov, candidate.distance);
@@ -791,6 +917,10 @@ export {
   constraintSafeFrame, constraintMediumFigureHeight, constraintPrimaryOverlap,
   constraintStageEdgeVisible, constraintNeighborRoomAbsent,
   circleOverlapFraction, screenHeightFractionFor, circleRadiusNdcFor,
+  // C4.1b (docs/WALL-VOLUMES-PRACTICALS.md) — wall-upper occlusion: the pure ray-vs-segment blocking
+  // test, usable by both composeShot's own scoring AND theater-boot.js's runtime tween wiring.
+  wallUpperBlockingSet, candidateCameraWorldPos, segment2DIntersectFraction, wallSegmentsFromStageInstances,
+  OCCLUSION_DEFAULT_STEM_HEIGHT, OCCLUSION_DEFAULT_WALL_HEIGHT, OCCLUSION_SUBJECT_EYE_HEIGHT,
   DIAGONAL_YAWS_DEG, PITCH_MIN_DEG, PITCH_MAX_DEG, FOV_MIN_DEG, FOV_MAX_DEG,
   SAFE_FRAME_MARGIN, FRAME_SAFE_BOUND, MEDIUM_FIGURE_MIN_FRAC, MEDIUM_FIGURE_MAX_FRAC,
   MEDIUM_FIGURE_WORLD_HEIGHT, FIGURE_WORLD_RADIUS, PRIMARY_OVERLAP_MAX, SHOT_ZONE_PATCH

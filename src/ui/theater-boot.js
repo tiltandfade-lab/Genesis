@@ -134,7 +134,12 @@ import { compileRoomShell, ROOM_SHELL_TIER_QUANTUM, segmentNormal } from "./thea
 // wires the real camera in"). shotPlanFrom/composeShot/defaultCameraCandidates are pure (no THREE, no
 // DOM) — this file supplies the one thing they can't own themselves: a real multi-pose projector (see
 // shotProjectFor, near interiorCameraFitFor below) and the wiring at setInteriorBoard's fit seam.
-import { shotPlanFrom, composeShot, defaultCameraCandidates } from "./theater-shot.js";
+import {
+  shotPlanFrom, composeShot, defaultCameraCandidates,
+  // C4.1b (docs/WALL-VOLUMES-PRACTICALS.md) — the pure ray-vs-segment blocking test setInteriorBoard's
+  // wall-upper occlusion pass wires into the existing itrOcclusionClassify tween engine, below.
+  wallUpperBlockingSet, OCCLUSION_SUBJECT_EYE_HEIGHT
+} from "./theater-shot.js";
 // P1' WHOLE-OBJECT WIRING (docs/P1-WIRING.md §4 step 3): a STATIC import of probe-lib.js itself —
 // every dev/model-qa/creatures/*.js module ALSO imports probe-lib.js by the identical relative
 // specifier (resolved from dev/model-qa/, '../probe-lib.js'), which both Node and browsers resolve
@@ -5111,7 +5116,17 @@ function lightFlickerStep(pointLights, bases, interiorTargets, amplitude){
     const delta = (Math.random() * 2 - 1) * t.amplitude;
     t.pl.intensity = Math.max(0.05, t.baseIntensity + delta);
     if(t.marker && t.marker.material){
-      t.marker.material.opacity = Math.max(0.2, Math.min(1, t.baseOpacity + delta * 0.5));
+      // E0 — VISIBLE PRACTICALS: a fixture's own emitter submesh (t.emissiveFlicker, WALL-VOLUMES-
+      // PRACTICALS.md §E0's "collect flicker on the emitter submesh's material — emissiveIntensity
+      // pulse") flickers its EMISSIVE INTENSITY, never opacity — a solid, opaque flame/bulb/crystal
+      // fading transparent reads as ghosting, not guttering. The legacy additive-glow-disc marker
+      // (only reachable behind ITR_GLOW_DISC_DIAGNOSTIC now) keeps its own original opacity-pulse
+      // contract, untouched, for whichever diagnostic capture still mounts it.
+      if(t.emissiveFlicker){
+        t.marker.material.emissiveIntensity = Math.max(0, t.baseEmissiveIntensity + delta * 1.5);
+      } else {
+        t.marker.material.opacity = Math.max(0.2, Math.min(1, t.baseOpacity + delta * 0.5));
+      }
     }
     // BW3-4: the light-cone card rides the SAME delta*0.5 swing as the marker above (its own base
     // opacity is much lower — see ITR_LIGHT_CONE_OPACITY — so this is a proportional nudge off that
@@ -6341,6 +6356,13 @@ function interiorGlowTexture(){
 const ITR_GLOW_DISC_SIZE = 0.42;         // torch/fire; a tight flame glow, not a cell-wide orb
 const ITR_GLOW_DISC_SIZE_LAMP = 0.36;    // lamps read a hair smaller/cooler
 const ITR_GLOW_DISC_OPACITY = 0.6;       // softer than the old cone-apex 0.95
+// E0 — VISIBLE PRACTICALS (docs/WALL-VOLUMES-PRACTICALS.md): every light now resolves a real physical
+// FIXTURE (interiorBuildFixtureGroup, below) whose own emitter submesh is the visible source — the
+// floating additive disc this function builds is retired from the production path. Kept ONLY for a
+// future diagnostic capture, gated behind this flag (default OFF, reversible at runtime via
+// window.Theater.setGlowDiscDiagnosticForTest, same convention as ITR_LIGHT_CONE_ENABLED). glowCount
+// stays 0 in production either way (interiorBuildLights below never increments it when this is false).
+let ITR_GLOW_DISC_DIAGNOSTIC = false;
 function interiorBuildGlowDisc(light){
   const size = (light.kind === "lamp" ? ITR_GLOW_DISC_SIZE_LAMP : ITR_GLOW_DISC_SIZE);
   const geo = new THREE.PlaneGeometry(size, size);
@@ -6478,25 +6500,171 @@ function interiorBuildLightCone(light, height){
   return { group, mesh };
 }
 
-// data.lights -> {group, casters} — builds one THREE.PointLight + one emissive marker mesh per light
-// entry (src/ui/theater-interior.js's interiorBuildBoard emits the plain {x,z,y,color,intensity,kind,
-// roomSegNum} data; this is the ONE place that becomes real THREE objects, same "data in theater-
-// interior.js, GL in theater-boot.js" split the rest of this render already keeps). Shadow-casting
-// lights get a small shadow-map budget (INTERIOR_SHADOW_MAP_SIZE) + a near/far tuned to interior room
-// scale (never the board-wide combat camera's frustum).
-function interiorBuildLights(lights, cx, cz, realmId, floorTopMap, pieces, isBrightRealm){
+// ════════════════════════════════════════════════════════════════════════════════════════════════
+// E0 — VISIBLE PRACTICALS (docs/WALL-VOLUMES-PRACTICALS.md): a small deterministic recipe grammar —
+// cylinders/cups/handles/brackets/wax columns/faceted crystals — one entry per fixtureId
+// (src/ui/theater-interior.js's own ITR_FIXTURE_RECIPES names, kept in sync by convention, same
+// one-way classic/ES-module boundary discipline the light-profile vocabulary already uses). Every
+// recipe returns BODY parts (plain primitives, MeshLambertMaterial, NEVER emissive/bloom) plus the ONE
+// emissive EMITTER submesh — built and POSITIONED at the light record's own `emitterLocal` (never a
+// second, independently-guessed height), so the PointLight (also mounted at `emitterLocal`, below) and
+// the emitter submesh's bounds agree BY CONSTRUCTION, not by two authors' numbers happening to match.
+// ════════════════════════════════════════════════════════════════════════════════════════════════
+const ITR_FIXTURE_BODY_PARTS = {
+  "sconce-iron": (el) => [
+    { geo: () => new THREE.BoxGeometry(0.05, 0.05, Math.max(0.05, el.z * 0.85)), pos: [0, el.y * 0.4, el.z * 0.42] },
+    { geo: () => new THREE.CylinderGeometry(0.05, 0.07, 0.05, 8), pos: [0, el.y * 0.9 + 0.02, el.z] },
+  ],
+  "sconce-torch": (el) => [
+    { geo: () => new THREE.BoxGeometry(0.055, 0.055, Math.max(0.06, el.z * 0.85)), pos: [0, el.y * 0.35, el.z * 0.42] },
+    { geo: () => new THREE.CylinderGeometry(0.055, 0.08, 0.06, 8), pos: [0, el.y * 0.85, el.z] },
+  ],
+  "bracket-generic": (el) => [
+    { geo: () => new THREE.BoxGeometry(0.045, 0.045, Math.max(0.05, el.z * 0.85)), pos: [0, el.y * 0.4, el.z * 0.42] },
+    { geo: () => new THREE.SphereGeometry(0.045, 6, 5), pos: [0, el.y * 0.9, el.z] },
+  ],
+  "brazier-low": (el) => [
+    { geo: () => new THREE.CylinderGeometry(0.22, 0.13, 0.12, 10), pos: [0, el.y * 0.55, 0] },
+    { geo: () => new THREE.CylinderGeometry(0.02, 0.02, Math.max(0.08, el.y * 0.5), 5), pos: [0.13, el.y * 0.22, 0.08] },
+    { geo: () => new THREE.CylinderGeometry(0.02, 0.02, Math.max(0.08, el.y * 0.5), 5), pos: [-0.13, el.y * 0.22, 0.08] },
+    { geo: () => new THREE.CylinderGeometry(0.02, 0.02, Math.max(0.08, el.y * 0.5), 5), pos: [0, el.y * 0.22, -0.15] },
+  ],
+  "candle-cluster": (el) => [
+    { geo: () => new THREE.CylinderGeometry(0.032, 0.036, Math.max(0.1, el.y * 0.85), 7), pos: [0, el.y * 0.42, 0] },
+    { geo: () => new THREE.CylinderGeometry(0.028, 0.032, Math.max(0.08, el.y * 0.62), 7), pos: [0.06, el.y * 0.30, 0.03] },
+    { geo: () => new THREE.CylinderGeometry(0.028, 0.032, Math.max(0.09, el.y * 0.70), 7), pos: [-0.05, el.y * 0.34, -0.04] },
+  ],
+  "lantern-handled": (el) => [
+    { geo: () => new THREE.CylinderGeometry(0.09, 0.09, Math.max(0.12, el.y * 0.9), 8), pos: [0, el.y * 0.5, 0] },
+    { geo: () => new THREE.TorusGeometry(0.08, 0.012, 6, 12), pos: [0, el.y * 0.98, 0], rotX: Math.PI / 2 },
+  ],
+  "crystal-faceted": (el) => [
+    { geo: () => new THREE.CylinderGeometry(0.08, 0.11, Math.max(0.05, el.y * 0.4), 6), pos: [0, el.y * 0.2, 0] },
+  ],
+  "lamp-post": (el) => [
+    { geo: () => new THREE.CylinderGeometry(0.03, 0.045, Math.max(0.2, el.y * 0.92), 8), pos: [0, el.y * 0.46, 0] },
+  ],
+};
+const ITR_FIXTURE_EMITTER_GEO = {
+  "sconce-iron": () => new THREE.ConeGeometry(0.04, 0.11, 6),
+  "sconce-torch": () => new THREE.ConeGeometry(0.045, 0.13, 6),
+  "bracket-generic": () => new THREE.SphereGeometry(0.05, 6, 5),
+  "brazier-low": () => new THREE.ConeGeometry(0.09, 0.22, 7),
+  "candle-cluster": () => new THREE.ConeGeometry(0.03, 0.09, 6),
+  "lantern-handled": () => new THREE.SphereGeometry(0.06, 7, 6),
+  "crystal-faceted": () => new THREE.OctahedronGeometry(0.16),
+  "lamp-post": () => new THREE.SphereGeometry(0.09, 8, 6),
+};
+// MeshStandard/PBR materials are out of E0's scope (WALL-VOLUMES-PRACTICALS.md Decisions: "No bloom
+// mask... No MeshStandard/PBR materials"). MeshLambertMaterial is NOT a PBR material but DOES support
+// `.emissive`/`.emissiveIntensity` (three.js's classic, non-physically-based emissive term) — that's
+// the material this file already uses for every other body surface (walls/floor/props), so the emitter
+// submesh stays in the SAME material family as its own fixture body, just with emissive lit on.
+// tuned so the emitter's own pixel clears UnrealBloomPass's 0.68 linear threshold (bright.png/frame 03's
+// "only the emitter glows" read) regardless of ambient darkness. Round 1 shipped at 2.4 — a live capture
+// (dev/battle-gate/capture-practicals.mjs) showed the halo swallowing the smaller fixture bodies (candle/
+// crystal) into a soft orb rather than a legible object with a tight hot core; dropped to 1.6 (still >=2x
+// the 0.68 gate with real headroom) without touching the bloom pass itself (strength/radius/threshold stay
+// out of scope, per the spec's own "no bloom mask" decision).
+const ITR_FIXTURE_EMISSIVE_INTENSITY = 1.6;
+let ITR_FIXTURE_BODY_MATERIAL_CACHE = null;
+function interiorFixtureBodyMaterial(){
+  if(!ITR_FIXTURE_BODY_MATERIAL_CACHE){
+    ITR_FIXTURE_BODY_MATERIAL_CACHE = new THREE.MeshLambertMaterial({ color: "#33302a" });
+  }
+  return ITR_FIXTURE_BODY_MATERIAL_CACHE;
+}
+function interiorFixtureEmitterMaterial(color){
+  const mat = new THREE.MeshLambertMaterial({ color: "#000000" });
+  mat.emissive = new THREE.Color(color || "#ffbb66");
+  mat.emissiveIntensity = ITR_FIXTURE_EMISSIVE_INTENSITY;
+  mat.userData.psxExempt = true; // never PSX-shader-tweaked (dither/vertex-snap) — same exemption every self-lit marker in this file already carries
+  return mat;
+}
+// light -> {group, emitter}. `group` sits in MOUNT-LOCAL space (its own local origin IS the mount
+// anchor — floor-top point or wall-slot point, positioned by the caller); `emitter` is the ONE named
+// emissive submesh, positioned at exactly `light.emitterLocal` within that local frame. An unknown/
+// missing fixtureId (a bare test literal, a future data gap) never throws — falls back to the
+// default-bucket family for the requested mount, same defensive posture as the rest of this renderer.
+function interiorBuildFixtureGroup(light){
+  const wantWall = light.mount === "wall";
+  const fixtureId = (light.fixtureId && ITR_FIXTURE_BODY_PARTS[light.fixtureId]) ? light.fixtureId
+    : (wantWall ? "bracket-generic" : "lamp-post");
+  const el = light.emitterLocal || (wantWall ? { x: 0, y: 0.05, z: 0.14 } : { x: 0, y: 0.5, z: 0 });
+  const group = new THREE.Group();
+  const bodyMat = interiorFixtureBodyMaterial();
+  const parts = ITR_FIXTURE_BODY_PARTS[fixtureId](el) || [];
+  parts.forEach((part) => {
+    const mesh = new THREE.Mesh(part.geo(), bodyMat);
+    mesh.position.set(part.pos[0], part.pos[1], part.pos[2]);
+    if(part.rotX) mesh.rotation.x = part.rotX;
+    mesh.castShadow = true; mesh.receiveShadow = true;
+    group.add(mesh);
+  });
+  const emitterGeoFn = ITR_FIXTURE_EMITTER_GEO[fixtureId] || ITR_FIXTURE_EMITTER_GEO["lamp-post"];
+  const emitter = new THREE.Mesh(emitterGeoFn(), interiorFixtureEmitterMaterial(light.color));
+  emitter.name = "emitter";
+  emitter.userData.fixtureEmitter = true;
+  emitter.position.set(el.x || 0, el.y || 0, el.z || 0);
+  emitter.castShadow = false; emitter.receiveShadow = false; // a fixture's own flame/bulb never shadows itself, same discipline the old glow disc/nub kept
+  group.add(emitter);
+  group.userData.interiorFixture = true;
+  group.userData.fixtureId = fixtureId;
+  group.userData.emitterMesh = emitter; // direct-access seam (no traversal needed) — also findable via child.name === "emitter"
+  return { group, emitter };
+}
+// nearest C4.1a mount slot (by XZ distance) to (x,z) — "the segment closest to the light's own (x,z)"
+// per WALL-VOLUMES-PRACTICALS.md §E0. `wallMountData` is {mountSlots, wallSegments}; absent/empty
+// (ITR_ROOM_SHELL off, or a room with zero wall segments) returns null — the caller's own defensive
+// degrade-to-floor path.
+function interiorNearestWallMountSlot(wallMountData, x, z){
+  const slots = wallMountData && wallMountData.mountSlots;
+  if(!slots || !slots.length) return null;
+  let best = null, bestD2 = Infinity;
+  for(let i = 0; i < slots.length; i++){
+    const s = slots[i];
+    const dx = s.worldPos.x - x, dz = s.worldPos.z - z;
+    const d2 = dx * dx + dz * dz;
+    if(d2 < bestD2){ bestD2 = d2; best = s; }
+  }
+  return best;
+}
+// resolves a light's own fixture placement: wall-mount snaps to its nearest C4.1a slot (world position
+// + inward normal, so orientation can never disagree with the wall itself); a wall-mount with no slot
+// data DEGRADES to a floor mount at the light's own (x,z), logged once (WALL-VOLUMES-PRACTICALS.md
+// §E0's own defensive contract — "floor fixtures work even if C4.1a mount data is absent").
+function interiorResolveFixturePlacement(light, cx, cz, floorTopMap, wallMountData){
+  if(light.mount === "wall"){
+    const slot = interiorNearestWallMountSlot(wallMountData, light.x || 0, light.z || 0);
+    if(slot){
+      return {
+        mount: "wall", ownerSegIndex: slot.ownerSegIndex,
+        pos: { x: slot.worldPos.x - cx, y: slot.worldPos.y, z: slot.worldPos.z - cz },
+        normal: slot.normal,
+      };
+    }
+    if(typeof console !== "undefined" && console.warn){
+      console.warn("[interiorBuildLights] wall-mount fixture had no mount slot data — degrading to floor:", light.fixtureId, light.roomSegNum);
+    }
+  }
+  const floorTop = interiorFloorTopAt(floorTopMap, light.x || 0, light.z || 0);
+  return { mount: "floor", ownerSegIndex: null, pos: { x: (light.x || 0) - cx, y: floorTop, z: (light.z || 0) - cz }, normal: null };
+}
+
+// data.lights -> {group, casters} — builds one THREE.PointLight + one physical FIXTURE (E0, above) per
+// light entry (src/ui/theater-interior.js's interiorBuildBoard emits the plain {x,z,y,color,intensity,
+// kind,roomSegNum,fixtureId,mount,emitterLocal,...} data; this is the ONE place that becomes real THREE
+// objects, same "data in theater-interior.js, GL in theater-boot.js" split the rest of this render
+// already keeps). Shadow-casting lights get a small shadow-map budget (INTERIOR_SHADOW_MAP_SIZE) + a
+// near/far tuned to interior room scale (never the board-wide combat camera's frustum). `wallMountData`
+// ({mountSlots, wallSegments}, C4.1a's own S.interiorLastRoomShell output) is OPTIONAL — a wall-mount
+// fixture with no slot data degrades to floor (interiorResolveFixturePlacement, above), so floor
+// practicals work even on a pre-C4.1a call site or a shell-less board.
+function interiorBuildLights(lights, cx, cz, realmId, floorTopMap, pieces, isBrightRealm, wallMountData){
   const group = new THREE.Group();
   const assigned = interiorAssignShadowCasters(lights, cx, cz);
   let casters = 0;
   let glowCount = 0;
-  // BW2-4 addendum: the realm's floor-standing emitter card (INTERIOR_LIGHT_CARD), or null -> glow-disc
-  // only. Kept once per build (not per light) since it's a pure realm lookup.
-  const cardSlug = (realmId && INTERIOR_LIGHT_CARD[realmId]) || null;
-  // BW2-4b item 7a — COLLISION: skip the floor light-CARD (a lantern/candle at the light seed) when a
-  // piece already stands on that cell, or the lantern reads mounted above the standee's head. The glow
-  // disc + cone stay (they sit at flame height, above the piece — no collision). Cell keys off the raw
-  // piece cellX/cellY (same space the light x/z uses).
-  const pieceCells = new Set((pieces || []).map((p) => (p.cellX || 0) + "," + (p.cellY || 0)));
   // VP6 item 2: every interior light source joins the shared flicker channel (startLightFlicker,
   // above) at INTERIOR_LIGHT_FLICKER_AMPLITUDE — collected here (not started here) so setInteriorBoard
   // can hand the finished list to ONE startLightFlicker call alongside the board's own S.pointLights.
@@ -6512,6 +6680,29 @@ function interiorBuildLights(lights, cx, cz, realmId, floorTopMap, pieces, isBri
     // genuinely diegetic OUTDOOR local source (a campfire) even under a bright profile; no light sets
     // it today, so every bright-profile light suppresses uniformly.
     const suppressPractical = !!isBrightRealm && ITR_BRIGHT_SUPPRESS_PRACTICALS && !light.forceVisiblePractical;
+
+    // E0 — resolve WHERE the fixture physically stands: a wall mount snaps to its nearest C4.1a mount
+    // slot (world position + inward normal, so it can never disagree with the wall itself); a floor
+    // mount stands on the floor-top at the light's own (x,z). A wall request with no slot data
+    // degrades to floor (logged once inside the resolver).
+    const placement = interiorResolveFixturePlacement(light, cx, cz, floorTopMap, wallMountData);
+    const fixture = interiorBuildFixtureGroup(light);
+    fixture.group.position.set(placement.pos.x, placement.pos.y, placement.pos.z);
+    if(placement.mount === "wall" && placement.normal){
+      fixture.group.rotation.y = Math.atan2(placement.normal.x, placement.normal.z);
+    }
+    fixture.group.userData.mount = placement.mount;
+    fixture.group.userData.ownerSegIndex = placement.ownerSegIndex;
+    // render-time resolution written back onto the render layer's OWN light copy (interiorAssignShadow
+    // Casters already returns a shallow per-light copy, never the original theater-interior.js record —
+    // itrRoomLights' own `ownerSegIndex: null` doc comment names this exact seam) — a harness can read
+    // either this field or fixture.group.userData.ownerSegIndex.
+    light.ownerSegIndex = placement.ownerSegIndex;
+
+    // the PointLight mounts as a CHILD of the fixture group at the group-LOCAL emitterLocal — world
+    // position = group transform × emitterLocal (WALL-VOLUMES-PRACTICALS.md §E0), so it can never sit
+    // anywhere but exactly where the fixture's own visible emitter submesh is.
+    const el = light.emitterLocal || { x: 0, y: 0, z: 0 };
     const pl = new THREE.PointLight(
       light.color || "#ffbb66",
       // BW2-4 item 1: render-side gain (see ITR_LIGHT_RENDER_GAIN) — the DATA intensity is the relative
@@ -6524,7 +6715,7 @@ function interiorBuildLights(lights, cx, cz, realmId, floorTopMap, pieces, isBri
       Math.min(light.distance != null ? light.distance : 12, ITR_LIGHT_DISTANCE_CAP),
       light.decay != null ? light.decay : 2
     );
-    pl.position.set((light.x || 0) - cx, light.y != null ? light.y : 1.4, (light.z || 0) - cz);
+    pl.position.set(el.x || 0, el.y || 0, el.z || 0);
     if(light.castShadow && !suppressPractical){
       pl.castShadow = true;
       pl.shadow.mapSize.set(INTERIOR_SHADOW_MAP_SIZE, INTERIOR_SHADOW_MAP_SIZE);
@@ -6533,59 +6724,48 @@ function interiorBuildLights(lights, cx, cz, realmId, floorTopMap, pieces, isBri
       pl.shadow.bias = -0.002;
       casters++;
     }
-    group.add(pl);
-    // BW2-4 addendum — THE LIGHT-MARKER SWAP: a soft additive glow disc at the flame point (replaces the
-    // old bare rectangle marker), plus — where the realm has one — a self-lit lantern/candle card
-    // standing on the floor at the light seed. The glow disc is the flicker channel's opacity target.
-    // LIGHT-CLOSE: suppressed for bright/sky-lit profiles (above) — a sunlit room has no torch orb.
-    const glow = suppressPractical ? null : interiorBuildGlowDisc(light);
-    if(glow){
-      glow.group.position.copy(pl.position);
-      if(light.kind !== "lamp") glow.group.position.y -= 0.15; // torch flame sits slightly below its light point (on the sconce)
-      group.add(glow.group);
+    fixture.group.add(pl);
+
+    // §E0 Decisions — "keep the fixture in bright realms, drop only the glow": the fixture BODY always
+    // mounts (a suppressed practical still reads as a real, unlit object); only the emitter's own
+    // emissive brightness suppresses.
+    fixture.emitter.material.emissiveIntensity = suppressPractical ? 0 : ITR_FIXTURE_EMISSIVE_INTENSITY;
+    group.add(fixture.group);
+
+    // DIAGNOSTIC-ONLY glow disc (ITR_GLOW_DISC_DIAGNOSTIC, default false — see that flag's own header
+    // note) — the production path never mounts it; glowCount stays 0. Rides the SAME fixture-group
+    // transform (added as its child at the emitter-local point) so it never needs a second world-space
+    // position derivation.
+    if(ITR_GLOW_DISC_DIAGNOSTIC && !suppressPractical){
+      const glow = interiorBuildGlowDisc(light);
+      glow.group.position.set(el.x || 0, el.y || 0, el.z || 0);
+      fixture.group.add(glow.group);
       glowCount++;
     }
-    // BW3-4 — LIGHT SHAFTS: one cone per light source, apex at the SAME point as the glow disc just
-    // above (so shaft and marker read as one coherent light) — the earlier interiorFloorTopAt call
-    // this unit reads is the SAME derived floor law the light-card branch below already uses, never a
-    // second/parallel floor formula. Its base reaches THIS light's own floor top exactly (the mock's
-    // shaft bridges flame->floor, not flame->some fixed generic drop).
-    // L-1 (DIEGETIC-LIGHT.md): gated — the cone only mounts (and only joins the flicker channel) when
-    // ITR_LIGHT_CONE_ENABLED is true AND there's a marker to bridge from (LIGHT-CLOSE: `glow` is null
-    // exactly when suppressed, so this is also the cone's own suppression gate — never a floating shaft
-    // with no marker at its apex). The glow disc + light-card + the point light's own falloff carry the
-    // "where light comes from" read on their own.
+
+    // BW3-4 — LIGHT SHAFTS (unrelated to E0, left wired but still gated OFF by default —
+    // ITR_LIGHT_CONE_ENABLED): bridges from the SAME apex the fixture's own emitter now sits at (world
+    // position, since the cone is added to the top-level `group`, not the fixture group) down to the
+    // room's floor top — never a second/parallel floor formula.
+    const emitterWorldPos = { x: placement.pos.x + (el.x || 0), y: placement.pos.y + (el.y || 0), z: placement.pos.z + (el.z || 0) };
     const floorTopAtLight = interiorFloorTopAt(floorTopMap, light.x || 0, light.z || 0);
-    const coneHeight = glow ? (glow.group.position.y - floorTopAtLight) : 0;
-    const cone = (ITR_LIGHT_CONE_ENABLED && glow) ? interiorBuildLightCone(light, coneHeight) : null;
+    const coneHeight = emitterWorldPos.y - floorTopAtLight;
+    const cone = (ITR_LIGHT_CONE_ENABLED && !suppressPractical) ? interiorBuildLightCone(light, coneHeight) : null;
     if(cone){
-      cone.group.position.copy(glow.group.position);
+      cone.group.position.set(emitterWorldPos.x, emitterWorldPos.y, emitterWorldPos.z);
       group.add(cone.group);
     }
-    if(!suppressPractical && !pieceCells.has(Math.round(light.x || 0) + "," + Math.round(light.z || 0))){
-      if(cardSlug){
-        const card = interiorBuildLightCard(cardSlug);
-        const floorTop = interiorFloorTopAt(floorTopMap, light.x || 0, light.z || 0);
-        card.position.set((light.x || 0) - cx, floorTop, (light.z || 0) - cz);
-        group.add(card);
-      } else if(ITR_LIGHT_EMITTER_NUB_ENABLED){
-        // P-1 problem 3 — no dressing card for this realm: seat a tiny self-lit emitter nub instead so
-        // the glow disc still reads as coming FROM something, same collision guard as the card branch.
-        const nub = interiorBuildLightEmitterNub(light);
-        const floorTop = interiorFloorTopAt(floorTopMap, light.x || 0, light.z || 0);
-        nub.position.set((light.x || 0) - cx, floorTop, (light.z || 0) - cz);
-        group.add(nub);
-      }
-    }
+
     // LIGHT-CLOSE: a suppressed practical never joins the flicker channel (nothing to flicker — the
-    // marker's gone and lightFlickerStep's own 0.05 intensity floor would otherwise re-introduce a
+    // emitter's gone dark and lightFlickerStep's own floor would otherwise re-introduce a
     // faint-but-nonzero torch flutter on a light that's supposed to read as OFF).
     if(!suppressPractical){
       const fallbackConeOpacity = ITR_LIGHT_CONE_OPACITY[light.kind] != null ? ITR_LIGHT_CONE_OPACITY[light.kind] : ITR_LIGHT_CONE_OPACITY.torch;
       flickerTargets.push({
-        pl, marker: glow.mesh, cone: cone ? cone.mesh : null,
+        pl, marker: fixture.emitter, cone: cone ? cone.mesh : null,
+        emissiveFlicker: true, // E0 — pulse the emitter's OWN emissiveIntensity, not a disc's opacity (see lightFlickerStep)
         baseIntensity: pl.intensity,
-        baseOpacity: glow.mesh.material ? glow.mesh.material.opacity : 0.85,
+        baseEmissiveIntensity: ITR_FIXTURE_EMISSIVE_INTENSITY,
         baseConeOpacity: (cone && cone.mesh.material) ? cone.mesh.material.opacity : fallbackConeOpacity,
         amplitude: INTERIOR_LIGHT_FLICKER_AMPLITUDE
       });
@@ -8752,31 +8932,17 @@ function setInteriorBoard(data){
     // forward. S-1's PER-FIGURE sightline occlusion ankle-stub/ghost-fade is NOT yet integrated with
     // the compiled wall (a deliberately scoped gap for a fast-follow — see this unit's own report);
     // the compiled wall renders at full (parapet-cut) height regardless of figure occlusion.
-    let parapetDirX = 0, parapetDirZ = 0, parapetFr = null;
-    if(data.focusRect){
-      parapetFr = data.focusRect;
-      const yawNow = (S.rotationStep * 90 * Math.PI) / 180 + (CAM_YAW_OFFSET_DEG * Math.PI) / 180;
-      parapetDirX = Math.sin(yawNow); parapetDirZ = Math.cos(yawNow);
-    }
     // wallHeightForSegment: C4.1a retires this as the parapet-cut mechanism — every segment now gets
     // its own real full STRUCTURAL height (roomWallHeight); kept accepted by the compiler for a future
     // genuine structural variance (a licensed low/ruined wall roll), never a camera-driven cut.
     const wallHeightForSegment = () => roomWallHeight;
-    // upperVisibleForSegment: the SAME near/far test the old wallHeightForSegment squash used, now a
-    // plain BOOLEAN (near-side, in-band -> hide the upper; else show it) — reproduces today's look (near
-    // wall = capped tray-edge stem, far/side walls = full height) as a per-segment MESH-level visibility
-    // toggle (see the assembler block below), never fed into the compiler itself: the compiler always
-    // builds EVERY segment's own upper geometry (so C4.1b's later camera-relative fade can flip a
-    // segment back on/off — or tween its opacity — without forcing a full shell recompile).
-    const upperVisibleForSegment = (segMeta) => {
-      if(!parapetFr) return true;
-      const mx = segMeta.mid.x, mz = segMeta.mid.z;
-      const inBand = mx >= parapetFr.minX - 1 && mx <= parapetFr.maxX + 1 && mz >= parapetFr.minZ - 1 && mz <= parapetFr.maxZ + 1;
-      if(!inBand) return true;
-      const rx = mx - cx, rz = mz - cz;
-      if(rx * parapetDirX + rz * parapetDirZ <= 0) return true; // far-side segment stays fully visible
-      return false; // near-side, in-band -> hide the upper (the capped-stem tray edge)
-    };
+    // C4.1b (docs/WALL-VOLUMES-PRACTICALS.md): the C4.1a static near/far-yaw `upperVisibleForSegment`
+    // predicate (a whole-room-band test keyed only on S.rotationStep) is RETIRED here — replaced by a
+    // real camera-to-subject ray test against each segment's own upper volume, computed below once
+    // `shell.wallSegments` exists (wallUpperRawBlocking) and applied per-mesh through the existing
+    // itrOcclusionClassify tween engine at the assembler block. No compiler-level omission changes:
+    // the compiler still builds EVERY segment's own upper geometry unconditionally (unchanged from
+    // C4.1a) — this unit only changes how the ALREADY-BUILT upper mesh's opacity is driven.
     // per-vertex world-aligned UVs replace the per-instance shared texture.repeat trick (BW2-3 §2b) —
     // a (1,1) repeat variant of the SAME texture family/seed the per-cell path already resolved above
     // (reuse, not a new material — Stage E owns actual material changes, not this unit).
@@ -8911,6 +9077,27 @@ function setInteriorBoard(data){
       wallHeight: roomWallHeight, wallHeightForSegment, uvDensity: ITR_ROOM_SHELL_UV_DENSITY,
       floorColorAt, wallColorForSegment, smoothShape: data.activeRoomShape,
     });
+    // C4.1b (docs/WALL-VOLUMES-PRACTICALS.md): the REQUIRED subject set for the wall-upper ray test —
+    // player/primaryThreat/objective/focalLight, straight off THIS build's own ShotPlan anchors (the
+    // SAME anchors the camera composition a few hundred lines up this function already scored against
+    // — never re-derived here). ShotPlan anchors carry only ground-plane {x,z} (no per-creature true
+    // height) — OCCLUSION_SUBJECT_EYE_HEIGHT is the SAME torso/eye-level proxy theater-shot.js's own
+    // scoring path (penaltyHardOcclusionArea) uses, so runtime and scoring never drift onto two
+    // different subject-height conventions. The spec's 4th required subject ("focal interaction") has
+    // no dedicated ShotPlan anchor yet — focalLight (the dominant practical, the closest existing
+    // analog) stands in until a real one exists; absent a ShotPlan entirely (shotCompose off, or a
+    // narrow harness), subjects stays empty and every upper segment simply reads full/opaque — an
+    // honest "nothing known to protect visibility of" degrade, matching occlusionFurnitureOn's own
+    // ShotPlan-gated convention a few hundred lines up.
+    const wallOcclusionAnchors = S.lastShotPlan ? S.lastShotPlan.anchors : null;
+    const wallOcclusionSubjects = wallOcclusionAnchors
+      ? ["player", "primaryThreat", "objective", "focalLight"]
+          .map((k) => wallOcclusionAnchors[k]).filter(Boolean)
+          .map((a) => ({ x: a.x, z: a.z, y: OCCLUSION_SUBJECT_EYE_HEIGHT }))
+      : [];
+    const wallUpperRawBlocking = wallUpperBlockingSet({
+      camera: occlusionCameraPos, subjects: wallOcclusionSubjects, wallSegments: shell.wallSegments
+    });
     if(shell.floorGeometry){
       const m = new THREE.Mesh(shell.floorGeometry, floorMat);
       m.position.set(-cx, 0, -cz);
@@ -8930,23 +9117,46 @@ function setInteriorBoard(data){
       wallStemMesh.userData.interiorKind = "room-shell-wall-stem";
       roomShellMeshes.push(wallStemMesh);
     }
-    // per-segment mid (world x,z) lookup off shell.wallSegments (the SAME a/b/tier/height metadata list
-    // `mountSlots`/wallUpperMeshes key their own ownerSegIndex against) — used only to re-derive the
-    // segMeta upperVisibleForSegment expects (mid.x/mid.z), never to rebuild geometry.
+    // C4.1b (docs/WALL-VOLUMES-PRACTICALS.md): per-segment mid (world x,z) lookup off shell.wallSegments
+    // (the SAME a/b/tier/height metadata list `mountSlots`/wallUpperMeshes key their own ownerSegIndex
+    // against) — used to build this segment's persistent occlusion-fade id, never to rebuild geometry.
     const wallUpperMeshList = [];
     (shell.wallUpperMeshes || []).forEach((entry) => {
       if(!entry.geometry) return;
-      const m = new THREE.Mesh(entry.geometry, wallMat);
+      // C4.1b: each upper mesh gets its OWN cloned material — never the shared `wallMat` the stem/trim
+      // meshes use. Independent per-segment opacity is the entire point of C4.1a's own "one mesh per
+      // segment" decision (theater-boot.js:8907's own comment); sharing `wallMat` here would make
+      // itrOcclusionClassify's tween mutate EVERY upper/stem/trim mesh's opacity at once instead of
+      // just this one segment's. `transparent:true` is set unconditionally (not only while fading) —
+      // the live tween (S.tweens/tickTweens) mutates this exact material's opacity BETWEEN board
+      // rebuilds with no further material swap, so it must already be capable of rendering translucent
+      // the instant a fade starts, not just after the next rebuild happens to notice it. A plain
+      // opacity-only material change — no PBR/bloom work, per this unit's own scope.
+      const upperMat = wallMat.clone();
+      upperMat.transparent = true;
+      const m = new THREE.Mesh(entry.geometry, upperMat);
       m.position.set(-cx, 0, -cz);
       m.castShadow = true; m.receiveShadow = true;
       m.userData.interiorKind = "room-shell-wall-upper";
       m.userData.ownerSegIndex = entry.ownerSegIndex;
       const ownerSeg = shell.wallSegments[entry.ownerSegIndex];
-      const segMeta = ownerSeg ? { a: ownerSeg.a, b: ownerSeg.b, mid: { x: (ownerSeg.a.x + ownerSeg.b.x) / 2, z: (ownerSeg.a.z + ownerSeg.b.z) / 2 }, kind: "wall", tier: ownerSeg.tier } : null;
-      // C4.1a: a hard visibility toggle reproducing today's static near/far look (the SAME test the old
-      // squashed-height wallHeightForSegment used) — C4.1b (a later unit) swaps this for a tweened
-      // opacity driven off the existing itrOcclusionClassify engine; this mesh's geometry never changes.
-      m.visible = segMeta ? upperVisibleForSegment(segMeta) : true;
+      const mid = ownerSeg ? { x: (ownerSeg.a.x + ownerSeg.b.x) / 2, z: (ownerSeg.a.z + ownerSeg.b.z) / 2 } : { x: 0, z: 0 };
+      // C4.1b: camera-relative per-segment fade — REPLACES C4.1a's static near/far `.visible` toggle.
+      // `id` is keyed on the segment's own world midpoint (itrOcclusionIdFor's established position-
+      // keyed convention every other occluder kind already uses, e.g. "wall"/"doorframe"/"furniture"
+      // above) so the SAME physical wall keeps its persistent fade-state entry across a rebuild even if
+      // compileRoomShellData's own segment array order ever shifts. `rawBlocking` comes straight from
+      // wallUpperRawBlocking (computed once per rebuild, above, off THIS build's real camera position +
+      // required subjects) — itrOcclusionClassify applies the SAME hysteresis+tween engine the wall/
+      // pillar/door/furniture occlusion passes already use (docs/WALL-VOLUMES-PRACTICALS.md C4.1b's own
+      // "reuse itrOcclusionClassify" decision). `.visible` stays permanently true — only opacity ever
+      // changes (this unit's own "never toggle .visible hard once tweening" rule); the stem mesh (built
+      // above, untouched) never enters this classify pass at all, so it can never fade.
+      const id = itrOcclusionIdFor("wall-upper", mid.x, mid.z);
+      const fadeEntry = itrOcclusionClassify(id, wallUpperRawBlocking.has(entry.ownerSegIndex), occlusionHoldPrior);
+      fadeEntry.materials = [upperMat];
+      upperMat.opacity = fadeEntry.opacity;
+      m.visible = true;
       roomShellMeshes.push(m);
       wallUpperMeshList.push({ mesh: m, ownerSegIndex: entry.ownerSegIndex });
     });
@@ -9056,10 +9266,17 @@ function setInteriorBoard(data){
 
   // DUNGEON-GRAPH.md U3 iteration-2, ruling 2: real environmental light sources (data.lights, emitted
   // by src/ui/theater-interior.js's interiorBuildBoard) — realm-flavored PointLights + their own
-  // visible emissive markers, capped at INTERIOR_SHADOW_CASTER_CAP shadow-casters.
+  // visible physical FIXTURES (E0, WALL-VOLUMES-PRACTICALS.md), capped at INTERIOR_SHADOW_CASTER_CAP
+  // shadow-casters.
   // LIGHT-CLOSE: isBrightRealm (hoisted above) tells interiorBuildLights whether THIS board's profile
   // is a bright/sky-lit one, so it can suppress torch/lamp practicals at the light seeds (§4.7).
-  const lightsBuilt = interiorBuildLights(data.lights, cx, cz, data.realmId, S.interiorFloorTopMap, data.pieces, isBrightRealm);
+  // E0 — Seam for wall mounts: thread C4.1a's own mount-slot data (S.interiorLastRoomShell, built by
+  // the shell block above) in so a wall-mount light can snap to its nearest slot; absent (ITR_ROOM_SHELL
+  // off, or a shell that produced zero slots) degrades every wall-mount fixture to floor, defensively.
+  const wallMountData = S.interiorLastRoomShell
+    ? { mountSlots: S.interiorLastRoomShell.mountSlots, wallSegments: S.interiorLastRoomShell.wallSegments }
+    : null;
+  const lightsBuilt = interiorBuildLights(data.lights, cx, cz, data.realmId, S.interiorFloorTopMap, data.pieces, isBrightRealm, wallMountData);
   S.interiorGroup.add(lightsBuilt.group);
   S.interiorShadowCasterCount = lightsBuilt.casters;
   S.interiorLightCount = (data.lights || []).length;
@@ -10012,6 +10229,35 @@ window.Theater._interiorLightEmittersForTest = function(){
 };
 window.Theater.setLightEmitterNubEnabled = function(v){ ITR_LIGHT_EMITTER_NUB_ENABLED = !!v; };
 window.Theater.lightEmitterNubEnabled = function(){ return !!ITR_LIGHT_EMITTER_NUB_ENABLED; };
+// E0 — VISIBLE PRACTICALS (docs/WALL-VOLUMES-PRACTICALS.md): same reversible-flag convention as every
+// gate above — flips ITR_GLOW_DISC_DIAGNOSTIC so a harness can prove the production glowCount===0 claim
+// is load-bearing (flip true, remount, glowCount moves) rather than vacuously zero for some other reason.
+window.Theater.setGlowDiscDiagnosticForTest = function(v){ ITR_GLOW_DISC_DIAGNOSTIC = !!v; };
+window.Theater.glowDiscDiagnosticEnabled = function(){ return !!ITR_GLOW_DISC_DIAGNOSTIC; };
+// E0 — harness-facing diagnostic, same convention as _interiorLightEmittersForTest just above but for
+// the NEW fixture system: every mounted fixture's own emitter submesh (userData.fixtureEmitter, set by
+// interiorBuildFixtureGroup) in the CURRENT interior scene graph, at its WORLD position — so a harness
+// can assert "every PointLight resolves exactly one visible fixture, emitter co-located" directly
+// against the live scene rather than trusting a screenshot alone.
+window.Theater._interiorFixtureEmittersForTest = function(){
+  const out = [];
+  if(S.interiorGroup){
+    S.interiorGroup.traverse((obj) => {
+      if(obj.userData && obj.userData.fixtureEmitter){
+        const wp = obj.getWorldPosition ? obj.getWorldPosition(new THREE.Vector3()) : obj.position;
+        const parent = obj.parent || {};
+        out.push({
+          x: wp.x, y: wp.y, z: wp.z,
+          fixtureId: parent.userData ? parent.userData.fixtureId : undefined,
+          mount: parent.userData ? parent.userData.mount : undefined,
+          ownerSegIndex: parent.userData ? parent.userData.ownerSegIndex : undefined,
+          emissiveIntensity: obj.material ? obj.material.emissiveIntensity : undefined,
+        });
+      }
+    });
+  }
+  return out;
+};
 // P-1 problem 1/2 TEST-ONLY SEAMS — runtime toggles for the two RED-FIRST override flags declared
 // alongside ITR_BRIGHT_REALM_FILL/ITR_EMISSIVE_PROFILES above (same reversible-flag convention as every
 // other test seam on this surface).
@@ -10034,11 +10280,20 @@ window.Theater._interiorCameraKeyForTest = function(){
 };
 window.Theater.setCameraKeyCastsShadow = function(v){ ITR_CAMERA_KEY_CASTS_SHADOW = !!v; };
 window.Theater.cameraKeyCastsShadow = function(){ return !!ITR_CAMERA_KEY_CASTS_SHADOW; };
+// E0 — VISIBLE PRACTICALS: every PointLight now mounts as a CHILD of its own fixture group (positioned
+// at the group-LOCAL emitterLocal, WALL-VOLUMES-PRACTICALS.md §E0), not a direct top-level `group`
+// child at world-relative coordinates the way it did pre-E0 — so `obj.position` alone is no longer the
+// light's effective world position for a wall-mount fixture (whose group itself carries a real
+// position+rotation). getWorldPosition (walks the ancestor chain) is now the only correct read.
 window.Theater._interiorShadowCastersForTest = function(){
   const out = [];
   if(S.interiorGroup){
+    const wp = new THREE.Vector3();
     S.interiorGroup.traverse((obj) => {
-      if(obj.isPointLight) out.push({ x: obj.position.x, y: obj.position.y, z: obj.position.z, castShadow: !!obj.castShadow, intensity: obj.intensity });
+      if(obj.isPointLight){
+        obj.getWorldPosition(wp);
+        out.push({ x: wp.x, y: wp.y, z: wp.z, castShadow: !!obj.castShadow, intensity: obj.intensity });
+      }
     });
   }
   return out;
@@ -10729,6 +10984,67 @@ window.Theater._occlusionLawForTest = {
 window.Theater._interiorCameraPositionForTest = function(){
   return S.camera ? { x: S.camera.position.x, y: S.camera.position.y, z: S.camera.position.z, zoom: S.camera.zoom } : null;
 };
+// GRAPHICS PRODUCTION RESEARCH WAVE — DEV/HARNESS ONLY. Candidate profilers and offline reference
+// renderers need the exact live scene rather than a lossy reconstruction. This returns references,
+// not a serializable public API; no production caller may depend on it. The JSON-safe sibling is the
+// durable measurement surface for capture gates and deliberately reports unique resources separately
+// from draw submissions (an atlas can lower texture count without lowering mesh submissions).
+window.Theater._graphicsResearchContextForTest = function(){
+  return {
+    scene: S.scene, camera: S.camera, renderer: S.renderer, composer: S.composer,
+    interiorGroup: S.interiorGroup, postSuite: S.postSuite
+  };
+};
+window.Theater._graphicsResearchInventoryForTest = function(){
+  const materials = new Map(), textures = new Map(), objectKinds = {}, materialTypes = {};
+  let objects = 0, meshes = 0, instancedMeshes = 0, sprites = 0;
+  let transparentMaterials = 0, alphaTestMaterials = 0, additiveMaterials = 0;
+  const visitMaterial = function(m){
+    if(!m || materials.has(m.uuid)) return;
+    materials.set(m.uuid, m);
+    const type = m.type || "Material";
+    materialTypes[type] = (materialTypes[type] || 0) + 1;
+    if(m.transparent) transparentMaterials++;
+    if((m.alphaTest || 0) > 0) alphaTestMaterials++;
+    if(m.blending === THREE.AdditiveBlending) additiveMaterials++;
+    Object.keys(m).forEach(function(k){
+      const v = m[k];
+      if(v && v.isTexture && v.uuid) textures.set(v.uuid, v);
+    });
+  };
+  if(S.scene) S.scene.traverse(function(obj){
+    objects++;
+    const kind = obj.type || "Object3D";
+    objectKinds[kind] = (objectKinds[kind] || 0) + 1;
+    if(obj.isMesh) meshes++;
+    if(obj.isInstancedMesh) instancedMeshes++;
+    if(obj.isSprite || (obj.userData && obj.userData.sprite)) sprites++;
+    const list = Array.isArray(obj.material) ? obj.material : [obj.material];
+    list.forEach(visitMaterial);
+    if(obj.customDepthMaterial) visitMaterial(obj.customDepthMaterial);
+    if(obj.customDistanceMaterial) visitMaterial(obj.customDistanceMaterial);
+  });
+  const info = S.renderer && S.renderer.info;
+  return {
+    mounted: !!S.mounted, interior: !!S.isInteriorBoard,
+    scene: { objects, meshes, instancedMeshes, sprites, objectKinds },
+    resources: {
+      materials: materials.size, textures: textures.size, materialTypes,
+      transparentMaterials, alphaTestMaterials, additiveMaterials
+    },
+    renderer: info ? {
+      calls: info.render.calls, triangles: info.render.triangles, points: info.render.points,
+      lines: info.render.lines, geometries: info.memory.geometries, textures: info.memory.textures,
+      programs: info.programs ? info.programs.length : null, frame: info.render.frame
+    } : null,
+    post: S.postSuite ? {
+      mounted: !!S.postSuiteMounted,
+      dof: !!(S.postSuite.dofPass && S.postSuite.dofPass.enabled),
+      bloom: !!(S.postSuite.bloomPass && S.postSuite.bloomPass.enabled),
+      grade: !!(S.postSuite.gradePass && S.postSuite.gradePass.enabled)
+    } : null
+  };
+};
 // C4.1a — TEST-ONLY SEAM: the write-sibling of _interiorCameraPositionForTest above. No production
 // caller ever moves the camera off placeCamera's own 4-yaw/fixed-elevation grid (see this file's own
 // CAM_YAW_OFFSET_DEG/CAM_ELEV_DEG convention) — a capture-gate harness needs a real GRAZING low-angle
@@ -10786,8 +11102,8 @@ window.Theater._setBaseGlowForTest = function(mesh, glowing){ return setBaseGlow
 // BW3-4 — TEST-ONLY SEAMS: same "expose the pure builder, don't require a live mount()" convention as
 // _interiorBuildPiecesForTest above — dev/verify-bw3-4-light-shafts.mjs drives these directly (no
 // WebGL context needed; none of the four touch S.renderer).
-window.Theater._interiorBuildLightsForTest = function(lights, cx, cz, realmId, floorTopMap, pieces, isBrightRealm){
-  return interiorBuildLights(lights, cx, cz, realmId, floorTopMap, pieces, isBrightRealm);
+window.Theater._interiorBuildLightsForTest = function(lights, cx, cz, realmId, floorTopMap, pieces, isBrightRealm, wallMountData){
+  return interiorBuildLights(lights, cx, cz, realmId, floorTopMap, pieces, isBrightRealm, wallMountData);
 };
 window.Theater._interiorBuildMotesForTest = function(seedStr, bounds, kind, lights, cx, cz){
   return interiorBuildMotes(seedStr, bounds, kind, lights, cx, cz);

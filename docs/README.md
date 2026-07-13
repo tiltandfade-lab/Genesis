@@ -142,6 +142,9 @@ Adam) can jump straight to the right doc instead of grepping/reading its way the
 
 **Research / exploration** — thinking not yet promoted to normative spec.
 
+- `EXTRUDED-SPRITE-PROP-LIBRARY.md` — production plan for the realm-specific prop bank: generated
+  silhouettes/faces/motifs routed through EXTRUDE, FACED_BOX, or MODEL; compiler, registry, QA,
+  no-human workflow, and ES-0 through ES-5 rollout. (2026-07-12)
 - `OFFLINE-ART-FOUNDRY-RESEARCH.md` — executable Kenney/OSS audit and the deterministic donor-parts
   grammar: 49-pack census, 13-pack shortlist, prop IR, geometry/texture gates, and OF-1–OF-6 plan.
 - `FABLE-DEV-TOOLS.md` — rough future-tool queue: Table Atlas, NPC Library, Town Builder, and

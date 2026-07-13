@@ -866,20 +866,27 @@ function naiveRunOffset(points, thickness) {
   return out;
 }
 
-/** offsetOneRun(points, thickness, scale, miterLimit, closed) -> {outerPoints, diagnostics} for ONE
-    run. `closed` (default false): a run with NO aperture/riser break anywhere on its owning ring at all
-    (a fully solid boundary, e.g. a windowless octagon) has no true jamb endpoint to butt-cap against —
-    the caller passes `closed:true` and `points` WITHOUT a repeated closing point (matching every other
-    ring convention in this module, §5.3), and this offsets the WHOLE RING as one closed Clipper2 polygon
-    (EndType.Polygon) instead of an open Butt path, so the wraparound corner gets a real miter too
-    (exactly Strategy A's whole-ring technique, dev/geometry-research/bakeoff/wall-backends.mjs — proven
-    cornerJoinsUnclaimed=0 on every non-door fixture the bakeoff tested — legitimate here specifically
-    BECAUSE there is no aperture anywhere on this ring to make Strategy A's own door-adjacency failure
-    mode possible). A closed-ring Clipper2 Polygon offset already returns ONLY the one wanted (outward)
-    side directly — no inner/outer side-classification is needed the way the open-run Butt case requires.
+/** offsetOneRun(points, thickness, scale, miterLimit, closed, miterOnly) -> {outerPoints, edges, corners,
+    diagnostics} for ONE run. `closed` (default false): a run with NO aperture/riser break anywhere on
+    its owning ring at all (a fully solid boundary, e.g. a windowless octagon) has no true jamb endpoint
+    to butt-cap against — the caller passes `closed:true` and `points` WITHOUT a repeated closing point
+    (matching every other ring convention in this module, §5.3), and this offsets the WHOLE RING as one
+    closed Clipper2 polygon (EndType.Polygon) instead of an open Butt path, so the wraparound corner gets
+    a real miter (or bevel) too (exactly Strategy A's whole-ring technique,
+    dev/geometry-research/bakeoff/wall-backends.mjs — proven cornerJoinsUnclaimed=0 on every non-door
+    fixture the bakeoff tested — legitimate here specifically BECAUSE there is no aperture anywhere on
+    this ring to make Strategy A's own door-adjacency failure mode possible). A closed-ring Clipper2
+    Polygon offset already returns ONLY the one wanted (outward) side directly — no inner/outer side-
+    classification is needed the way the open-run Butt case requires. `miterOnly` (default false, NEVER
+    set by production code — theater-room-mesh.js never passes it) forces even a legitimate ring-adjacent
+    Clipper2 bevel to degrade the run, reproducing this function's OWN pre-G3-acute-bevel behavior on
+    purpose; it exists ONLY as a negative control so dev/verify-wall-runs-oss-fuzz.mjs can still prove the
+    harness detects the old defect shape if it ever reappears (docs/STAGE-G3-WALL-RUNS.md's acceptance
+    gate requires a red-first proof survive the fix, not just a green result).
 
     Algorithm for the open (run) case (docs/STAGE-G3-WALL-RUNS.md's own "offset each complete run with
-    Clipper2… every interior corner within that run receives a true joined miter"):
+    Clipper2… every interior corner within that run receives a true joined miter (miter for ordinary
+    corners under a strict limit; bevel for acute/unstable)"):
       1. Offset the WHOLE run as one open Clipper2 path (EndType.Butt — no cap overshoot past the run's
          own true endpoints, §8's "butt/square jamb termination, no bridging the opening"). This is what
          gives INTERIOR corners a real single-point miter join (unlike a naive per-segment offset, which
@@ -890,21 +897,38 @@ function naiveRunOffset(points, thickness) {
          own naive outward offset (Strategy A's own matching technique — reused here scoped to a SINGLE
          run, where it is unambiguous by construction: no door/other-run edges ever compete for a match,
          which is exactly what made whole-ring Strategy A's source match rate degrade to 33-60% near
-         doors and this run-scoped version doesn't inherit).
-      3. Chain the K matched edges in original segment order: if edge[j]'s "B" endpoint coincides with
-         edge[j+1]'s "A" endpoint within epsilon, that shared point IS the true joined miter (join gap
-         0). If it doesn't (a genuine bevel/round injection from an acute corner beyond miterLimit, or a
-         matching failure), the WHOLE RUN falls back to naiveRunOffset (never a partial/mixed result) —
-         recorded as `degraded:true` with a reason, never silently hidden. The `closed` case follows the
-         SAME matching/chaining logic, just against every one of the ring's K segments (K === points.length,
-         no separate endpoint) with the join check wrapping from segment K-1 back to segment 0 too. */
-function offsetOneRun(points, thickness, scale, miterLimit, closed) {
+         doors and this run-scoped version doesn't inherit). Each matched edge also records its OWN ring
+         vertex indices (aIdx/bIdx) — the structural handle step 3 needs to tell a bevel from a defect.
+      3. Chain the K matched edges in original segment order. For interior join j (between matched edge j
+         and matched edge j+1): if edge[j]'s "B" endpoint coincides with edge[j+1]'s "A" endpoint within
+         epsilon, that shared point IS a true joined MITER (join gap 0). If it doesn't, Clipper2's ring is
+         still ONE CONTINUOUS PATH — check whether edge[j]'s "B" ring vertex and edge[j+1]'s "A" ring
+         vertex are directly ring-adjacent (exactly one ring edge apart, either winding direction). If so,
+         that ring edge IS the BEVEL Clipper2 injected when the true miter apex exceeded miterLimit — a
+         legitimate joined corner, not a gap (docs/STAGE-G3-WALL-RUNS.md's own "bevel for acute/unstable"
+         branch), and both of its endpoints are kept as distinct points, classified `bevel`. Only a join
+         that is NEITHER coincident NOR ring-adjacent (or `miterOnly`, the negative-control override) is a
+         genuine discontinuity — THAT degrades the WHOLE RUN to naiveRunOffset (never a partial/mixed
+         result), recorded as `degraded:true` with a reason, never silently hidden. The `closed` case
+         follows the SAME matching/chaining/classification logic, just against every one of the ring's K
+         segments (K === points.length, no separate endpoint) with the join check wrapping from segment
+         K-1 back to segment 0 too.
+      4. Provenance: `edges[j]` (the matched outerA/outerB for source segment j) is ALWAYS 1:1 with source
+         segment j, whether its neighboring joins are miter or bevel — a bevel corner's own two points are
+         owned by exactly the two segments that share it (edges[j].outerB and edges[j+1].outerA), the
+         same "owned by its adjacent segments" provenance rule a miter vertex already had. `outerPoints`
+         is the flattened outer contour for callers that just want the shape: it collapses two edges'
+         touching endpoints into ONE point at a miter join (byte-identical to this function's own pre-G3-
+         acute-bevel output whenever every corner in the run is a miter) and keeps BOTH points at a bevel
+         join (`outerPoints.length` can now exceed `points.length` — one extra vertex per bevel corner). */
+function offsetOneRun(points, thickness, scale, miterLimit, closed, miterOnly) {
   const K = closed ? points.length : points.length - 1; // segment count
   const minPts = closed ? 3 : 2;
+  const emptyShape = { edges: null, corners: [] };
   if (points.length < minPts || !(thickness > 0)) {
     return {
-      outerPoints: points.map((p) => ({ x: p.x, z: p.z })),
-      diagnostics: { matchedSegments: 0, totalSegments: Math.max(0, K), joinGapCount: 0, maxJoinGap: 0, degraded: true, reason: `run has fewer than ${minPts} points or non-positive thickness` },
+      outerPoints: points.map((p) => ({ x: p.x, z: p.z })), ...emptyShape,
+      diagnostics: { matchedSegments: 0, totalSegments: Math.max(0, K), joinGapCount: 0, maxJoinGap: 0, degraded: true, reason: `run has fewer than ${minPts} points or non-positive thickness`, bevelCount: 0, maxBevelGap: 0 },
     };
   }
   let offsetPaths;
@@ -915,8 +939,8 @@ function offsetOneRun(points, thickness, scale, miterLimit, closed) {
       : Clipper2.inflatePaths([path], Math.round(thickness * scale), Clipper2.JoinType.Miter, Clipper2.EndType.Butt, miterLimit);
   } catch (e) {
     return {
-      outerPoints: naiveRunOffset(closed ? points.concat([points[0]]) : points, thickness).slice(0, points.length),
-      diagnostics: { matchedSegments: 0, totalSegments: K, joinGapCount: 0, maxJoinGap: 0, degraded: true, reason: `Clipper2 inflatePaths threw: ${String((e && e.message) || e)}` },
+      outerPoints: naiveRunOffset(closed ? points.concat([points[0]]) : points, thickness).slice(0, points.length), ...emptyShape,
+      diagnostics: { matchedSegments: 0, totalSegments: K, joinGapCount: 0, maxJoinGap: 0, degraded: true, reason: `Clipper2 inflatePaths threw: ${String((e && e.message) || e)}`, bevelCount: 0, maxBevelGap: 0 },
     };
   }
   const fallbackOuter = () => closed
@@ -931,12 +955,13 @@ function offsetOneRun(points, thickness, scale, miterLimit, closed) {
     // fixture this spec covers already sit at spatially distinct expected positions and never contend
     // for the same best match in practice.)
     return {
-      outerPoints: fallbackOuter(),
-      diagnostics: { matchedSegments: 0, totalSegments: K, joinGapCount: 0, maxJoinGap: 0, degraded: true, reason: "empty or under-shaped Clipper2 offset result" },
+      outerPoints: fallbackOuter(), ...emptyShape,
+      diagnostics: { matchedSegments: 0, totalSegments: K, joinGapCount: 0, maxJoinGap: 0, degraded: true, reason: "empty or under-shaped Clipper2 offset result", bevelCount: 0, maxBevelGap: 0 },
     };
   }
   const ring = offsetPaths[0].map((p) => fromClipperPoint(p, scale));
-  const ringEdges = ring.map((a, i) => ({ a, b: ring[(i + 1) % ring.length] }));
+  const ringLen = ring.length;
+  const ringEdges = ring.map((a, i) => ({ a, b: ring[(i + 1) % ringLen], ei: i }));
   const matchedEdges = new Array(K).fill(null);
   for (let j = 0; j < K; j++) {
     const a = points[j], b = points[(j + 1) % points.length];
@@ -972,59 +997,97 @@ function offsetOneRun(points, thickness, scale, miterLimit, closed) {
     if (!best) continue; // leaves matchedEdges[j] null -> degrade below
     // nearest-endpoint pairing (dev/geometry-research/bakeoff/wall-backends.mjs Strategy B's own proven
     // technique) — unambiguous because outerA/outerB of a thin offset rectangle are NOT equidistant from
-    // an arbitrary target the way both corners are from the segment midpoint.
+    // an arbitrary target the way both corners are from the segment midpoint. aIdx/bIdx record which
+    // RING vertex each became — the join-classification step below needs the actual ring topology, not
+    // just the point values, to tell a legitimate bevel edge from a genuine discontinuity.
     const dA = Math.hypot(best.e.a.x - expA.x, best.e.a.z - expA.z);
     const dB = Math.hypot(best.e.b.x - expA.x, best.e.b.z - expA.z);
-    matchedEdges[j] = dA <= dB ? { outerA: best.e.a, outerB: best.e.b } : { outerA: best.e.b, outerB: best.e.a };
+    const bIdx = (best.e.ei + 1) % ringLen;
+    matchedEdges[j] = dA <= dB
+      ? { outerA: best.e.a, outerB: best.e.b, aIdx: best.e.ei, bIdx }
+      : { outerA: best.e.b, outerB: best.e.a, aIdx: bIdx, bIdx: best.e.ei };
   }
   const matchedCount = matchedEdges.filter(Boolean).length;
   if (matchedCount < K) {
     return {
-      outerPoints: fallbackOuter(),
-      diagnostics: { matchedSegments: matchedCount, totalSegments: K, joinGapCount: 0, maxJoinGap: 0, degraded: true, reason: `only ${matchedCount}/${K} segments matched a Clipper2 offset edge` },
+      outerPoints: fallbackOuter(), edges: null, corners: [],
+      diagnostics: { matchedSegments: matchedCount, totalSegments: K, joinGapCount: 0, maxJoinGap: 0, degraded: true, reason: `only ${matchedCount}/${K} segments matched a Clipper2 offset edge`, bevelCount: 0, maxBevelGap: 0 },
     };
   }
-  const outerPoints = new Array(points.length);
-  let joinGapCount = 0, maxJoinGap = 0;
+
   const joinChecks = closed ? K : K - 1; // open run: K-1 interior joins; closed ring: K joins (incl. wraparound)
+  const corners = [];
+  let defectAt = -1, defectGap = 0, defectReason = "";
   for (let j = 0; j < joinChecks; j++) {
     const cur = matchedEdges[j], next = matchedEdges[(j + 1) % K];
     const gap = Math.hypot(cur.outerB.x - next.outerA.x, cur.outerB.z - next.outerA.z);
-    if (gap > maxJoinGap) maxJoinGap = gap;
-    if (gap > 1e-6) joinGapCount++;
+    if (gap <= 1e-6) { corners.push({ at: j, type: "miter", gap: 0 }); continue; }
+    // Not coincident. Clipper2's own ring is ONE CONTINUOUS PATH — when the true miter apex exceeds
+    // miterLimit, Clipper2 replaces it with a short BEVEL EDGE directly connecting the two offset lines'
+    // own termination points, which are EXACTLY cur.outerB and next.outerA. Detecting this structurally
+    // (are these two ring vertices directly adjacent — exactly one ring edge apart?) rather than by
+    // distance alone is what lets a legitimate "bevel for acute/unstable corners" join survive instead of
+    // being treated as the SAME failure mode as a genuine unmatched discontinuity — nothing else in the
+    // ring can sit between two truly-adjacent matched edges' own endpoints by construction.
+    const ringAdjacent = !miterOnly &&
+      (next.aIdx === (cur.bIdx + 1) % ringLen || next.aIdx === (cur.bIdx - 1 + ringLen) % ringLen);
+    if (ringAdjacent) { corners.push({ at: j, type: "bevel", gap, bevelNear: cur.outerB, bevelFar: next.outerA }); continue; }
+    defectAt = j; defectGap = gap;
+    defectReason = miterOnly
+      ? `interior join ${j} is a real Clipper2 miter-limit bevel injection (gap=${gap.toFixed(6)}) but miterOnly forces it to degrade anyway — reproduces this function's PRE-G3-acute-bevel behavior on purpose (negative control only, never used by production code)`
+      : `interior join ${j} is neither a coincident miter point nor a ring-adjacent Clipper2 bevel edge (gap=${gap.toFixed(6)}) — a genuine discontinuity`;
+    break;
   }
-  if (joinGapCount > 0) {
-    // a genuine miter-limit bevel (or other join defect) — the run offset a clean single-side chain per
-    // segment, but at least one interior join didn't land on one shared point. §STAGE-G3-WALL-RUNS.md's
-    // bar is ZERO unclaimed/ungapped joins, so this run degrades to the naive fallback rather than
-    // silently reporting a "matched" run that still has a gap.
+  if (defectAt >= 0) {
     return {
-      outerPoints: fallbackOuter(),
-      diagnostics: { matchedSegments: matchedCount, totalSegments: K, joinGapCount, maxJoinGap, degraded: true, reason: "one or more interior joins exceeded epsilon (likely a miter-limit bevel injection)" },
+      outerPoints: fallbackOuter(), edges: null, corners: [],
+      diagnostics: { matchedSegments: matchedCount, totalSegments: K, joinGapCount: 1, maxJoinGap: defectGap, degraded: true, reason: defectReason, bevelCount: 0, maxBevelGap: 0 },
     };
   }
-  if (closed) {
-    for (let j = 0; j < K; j++) outerPoints[j] = matchedEdges[j].outerA;
-  } else {
-    outerPoints[0] = matchedEdges[0].outerA;
-    for (let j = 0; j < K; j++) outerPoints[j + 1] = matchedEdges[j].outerB;
+  const bevelCount = corners.filter((c) => c.type === "bevel").length;
+  const maxBevelGap = corners.reduce((m, c) => (c.type === "bevel" ? Math.max(m, c.gap) : m), 0);
+
+  // Flattened outer contour: walk every source segment's own outerA/outerB in order, collapsing an
+  // (epsilon-coincident) miter join down to ONE point and keeping BOTH points at a bevel join (the corner
+  // is closed by the bevel edge itself, not by a shared vertex). Reduces to this function's own pre-G3-
+  // acute-bevel single-chain output exactly when every join is a miter (bevelCount === 0) — byte-
+  // identical for every ordinary-corner run; only a run with a genuine acute/unstable corner ever grows
+  // past `points.length`.
+  const rawChain = [];
+  for (let j = 0; j < K; j++) { rawChain.push(matchedEdges[j].outerA); rawChain.push(matchedEdges[j].outerB); }
+  const outerPoints = [rawChain[0]];
+  for (let i = 1; i < rawChain.length; i++) {
+    const p = rawChain[i], q = outerPoints[outerPoints.length - 1];
+    if (Math.hypot(p.x - q.x, p.z - q.z) > 1e-6) outerPoints.push(p);
+  }
+  if (closed && outerPoints.length > 1) {
+    const first = outerPoints[0], last = outerPoints[outerPoints.length - 1];
+    if (Math.hypot(first.x - last.x, first.z - last.z) <= 1e-6) outerPoints.pop();
   }
   return {
     outerPoints,
-    diagnostics: { matchedSegments: matchedCount, totalSegments: K, joinGapCount: 0, maxJoinGap: 0, degraded: false, reason: null },
+    edges: matchedEdges,
+    corners,
+    diagnostics: { matchedSegments: matchedCount, totalSegments: K, joinGapCount: 0, maxJoinGap: 0, degraded: false, reason: null, bevelCount, maxBevelGap },
   };
 }
 
-/** offsetRuns(runs, options) -> {results:[{outerPoints,diagnostics}, ...], diagnostics:{...summary}}.
-    `runs`: Array<{points: Array<{x,z}>}> — each a maximal contiguous solid-wall boundary run (the
-    caller splits at aperture/riser/open hard breaks; §STAGE-G3-WALL-RUNS.md steps 1/3/4). `options`:
-    {thickness (required, world units, >0), scale (CLIPPER_SCALE, default DEFAULT_CLIPPER_SCALE),
-    miterLimit (default DEFAULT_MITER_LIMIT)}. `results[i].outerPoints.length === runs[i].points.length`
-    ALWAYS (1:1 correspondence with the run's own inner points — §8's "preserve source provenance…
-    carry ownership forward from the original inner segments", never a rediscovered/projected count) —
-    a run whose Clipper2 offset can't be cleanly matched 1:1 (an acute-corner bevel injection, or a
-    Clipper2 failure) degrades that ONE run to the plain per-segment offset (naiveRunOffset) rather than
-    ever guessing or dropping geometry, and reports this via `results[i].diagnostics.degraded`. Never
+/** offsetRuns(runs, options) -> {results:[{outerPoints,edges,corners,diagnostics}, ...],
+    diagnostics:{...summary}}. `runs`: Array<{points: Array<{x,z}>}> — each a maximal contiguous
+    solid-wall boundary run (the caller splits at aperture/riser/open hard breaks;
+    §STAGE-G3-WALL-RUNS.md steps 1/3/4). `options`: {thickness (required, world units, >0), scale
+    (CLIPPER_SCALE, default DEFAULT_CLIPPER_SCALE), miterLimit (default DEFAULT_MITER_LIMIT), miterOnly
+    (default false — negative-control only, see offsetOneRun's own header; never set by
+    theater-room-mesh.js)}. `results[i].edges.length === runs[i].points.length - (closed?0:1)` (segment
+    count) ALWAYS when not degraded — 1:1 correspondence with the run's own source SEGMENTS (§8's
+    "preserve source provenance… carry ownership forward from the original inner segments", never a
+    rediscovered/projected count), whether a segment's own neighboring corner resolved to a miter or a
+    bevel. `results[i].outerPoints` is the flattened contour derived from those same edges (one point per
+    miter join, two per bevel join — see offsetOneRun) and `results[i].corners` classifies every interior
+    join as `miter`/`bevel`. A run whose Clipper2 offset can't be cleanly matched 1:1, or whose join is a
+    genuine discontinuity (neither a coincident miter nor a ring-adjacent bevel), degrades that ONE run to
+    the plain per-segment offset (naiveRunOffset) rather than ever guessing or dropping geometry, and
+    reports this via `results[i].diagnostics.degraded` (`edges`/`corners` are then `null`/`[]`). Never
     throws — a malformed `runs`/`options` input returns an empty-results typed diagnostic. */
 export function offsetRuns(runs, options = {}) {
   try {
@@ -1034,16 +1097,17 @@ export function offsetRuns(runs, options = {}) {
     const thickness = typeof options.thickness === "number" ? options.thickness : NaN;
     const scale = Number.isInteger(options.scale) && options.scale > 0 ? options.scale : DEFAULT_CLIPPER_SCALE;
     const miterLimit = typeof options.miterLimit === "number" ? options.miterLimit : DEFAULT_MITER_LIMIT;
+    const miterOnly = !!options.miterOnly;
     if (!(thickness > 0)) {
-      return { results: runs.map(() => ({ outerPoints: [], diagnostics: { matchedSegments: 0, totalSegments: 0, joinGapCount: 0, maxJoinGap: 0, degraded: true, reason: "options.thickness must be a positive number" } })), diagnostics: { totalRuns: runs.length, degradedRuns: runs.length, totalJoinGapCount: 0, issues: [{ level: "error", typed: "malformed-input", message: "offsetRuns: options.thickness must be a positive number" }] } };
+      return { results: runs.map(() => ({ outerPoints: [], edges: null, corners: [], diagnostics: { matchedSegments: 0, totalSegments: 0, joinGapCount: 0, maxJoinGap: 0, degraded: true, reason: "options.thickness must be a positive number", bevelCount: 0, maxBevelGap: 0 } })), diagnostics: { totalRuns: runs.length, degradedRuns: runs.length, totalJoinGapCount: 0, issues: [{ level: "error", typed: "malformed-input", message: "offsetRuns: options.thickness must be a positive number" }] } };
     }
     const results = runs.map((run) => {
       const closed = !!(run && run.closed);
       const minPts = closed ? 3 : 2;
       if (!run || !isRingLike(run.points) || run.points.length < minPts) {
-        return { outerPoints: (run && Array.isArray(run.points)) ? run.points.map((p) => ({ x: p.x, z: p.z })) : [], diagnostics: { matchedSegments: 0, totalSegments: 0, joinGapCount: 0, maxJoinGap: 0, degraded: true, reason: `run.points is missing or has fewer than ${minPts} valid {x,z} points` } };
+        return { outerPoints: (run && Array.isArray(run.points)) ? run.points.map((p) => ({ x: p.x, z: p.z })) : [], edges: null, corners: [], diagnostics: { matchedSegments: 0, totalSegments: 0, joinGapCount: 0, maxJoinGap: 0, degraded: true, reason: `run.points is missing or has fewer than ${minPts} valid {x,z} points`, bevelCount: 0, maxBevelGap: 0 } };
       }
-      return offsetOneRun(run.points, thickness, scale, miterLimit, closed);
+      return offsetOneRun(run.points, thickness, scale, miterLimit, closed, miterOnly);
     });
     const degradedRuns = results.filter((r) => r.diagnostics.degraded).length;
     const totalJoinGapCount = results.reduce((s, r) => s + (r.diagnostics.joinGapCount || 0), 0);
@@ -1056,8 +1120,8 @@ export function offsetRuns(runs, options = {}) {
 /** wallOffset(run, options) -> convenience single-run wrapper over offsetRuns (§17.6's "add an
     offsetRuns/wallOffset method" — this IS that method; wallOffset is the one-run ergonomic entry
     point theater-room-mesh.js's own per-run loop calls, offsetRuns is the batch primitive it wraps).
-    Returns the SAME {outerPoints, diagnostics} shape as one offsetRuns() result element. */
+    Returns the SAME {outerPoints,edges,corners,diagnostics} shape as one offsetRuns() result element. */
 export function wallOffset(run, options = {}) {
   const { results } = offsetRuns([run], options);
-  return results[0] || { outerPoints: [], diagnostics: { matchedSegments: 0, totalSegments: 0, joinGapCount: 0, maxJoinGap: 0, degraded: true, reason: "wallOffset: offsetRuns returned no result" } };
+  return results[0] || { outerPoints: [], edges: null, corners: [], diagnostics: { matchedSegments: 0, totalSegments: 0, joinGapCount: 0, maxJoinGap: 0, degraded: true, reason: "wallOffset: offsetRuns returned no result", bevelCount: 0, maxBevelGap: 0 } };
 }

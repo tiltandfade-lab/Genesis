@@ -19,7 +19,7 @@ reach the visual target. Read it before this handoff's historical graphics queue
 
 Codex researches, Claude orchestrates ([[project-genesis-graphics-convergence]]). The execution
 spine is `docs/GRAPHICS-CONVERGENCE-PLAN.md` (composes the 3 research waves → phased waves on the
-C0–C8 ladder). **Master tip after the run: `b391d1c5` (+ G3 in flight + this docs close).** Every
+C0–C8 ladder). **Master tip after the run: `4da62a9d`.** Every
 unit personally re-gated (harnesses re-run by me, captures READ, never self-report), landed `--no-ff`.
 
 **Landed (all on master + pushed):**
@@ -38,10 +38,13 @@ unit personally re-gated (harnesses re-run by me, captures READ, never self-repo
   — **G1 PolygonKernel** (`src/ui/geometry/polygon-kernel.js` + vendored earcut/polygon-clipping;
   fixes all 7 legacy floor defects, 0 regressions) · **G2 floor integration** (oss path unions +
   triangulates-with-holes via the kernel; row-101 recovers 3 tiers with a real hole; F08/F11 corrected).
-- **G3 wall-runs IN FLIGHT** — SOL's ruling locked as `docs/STAGE-G3-WALL-RUNS.md`: aperture-delimited
-  contiguous solid-wall runs → Clipper2 offset per run (true joined miters) → butt/square jamb
-  termination → provenance from inner segments+run intervals → stem/cap/footing/trim from one contour.
-  **Retire the bespoke miter ONLY when the run-based impl hits 100% provenance + zero unintended joins.**
+- **G3 wall-runs LANDED (oss-compare)** — SOL's ruling (`docs/STAGE-G3-WALL-RUNS.md`): vendored
+  clipper2-ts + the oss wall path offsets each aperture-delimited run (true joined miters, butt/square
+  jambs, one run contour for stem/cap/footing/trim). Re-gate: corner gap **0.3111u → 0** at stem/cap/
+  footing separately, **100% provenance, 0 unintended joins** (verify-wall-runs-oss 71/0); legacy
+  byte-identical. **The bespoke miter is retained (default legacy) until Adam flips** — the retirement
+  gate is met on the acceptance fixtures (not exhaustively fuzzed; capture framing was default room-fit,
+  not the literal outside-low grazing angle — a follow-up to expose a capture camera-override seam).
 
 **⭐ TWO MORNING DECISIONS FOR ADAM (both change the DEFAULT render — deliberately NOT made autonomously):**
 1. **negative-`sy` default fix** — `theater-boot.js:8888` `f.sy > 0` discards a sunken tile's negative
@@ -59,8 +62,9 @@ runs (see G3 above). Also flagged the wrong "never a gap" comment at `theater-ro
 **Do next (pick up here):**
 1. **Read `docs/GRAPHICS-CONVERGENCE-CHARTER.md` (governing) + `docs/GRAPHICS-CONVERGENCE-PLAN.md`
    (spine) + `docs/STAGE-G3-WALL-RUNS.md` (G3 design).** Make the two morning decisions above.
-2. Check G3's landed state (`git log`, `docs/STAGE-G3-WALL-RUNS.md` acceptance): if it hit the bar it
-   landed oss-compare; if not, the bespoke miter is still live and G3 needs another pass.
+2. G1/G2/G3 are all LANDED (oss-compare, default legacy). Before flipping the default `legacy → oss`:
+   optionally broaden G3's fuzz beyond the acceptance fixtures + shoot a proper outside-low grazing
+   capture to eyeball the corner-gap closure; then flip + hold one stabilization wave (OSS §15).
 3. Phase 3 (visual production, GP-2..4: path-traced oracle → materials/UV → distribution/atlas →
    oracle-driven raster upgrades) rides on the stable geometry. R5 prop-foundry + Codex's
    offline-art-foundry/EXTRUDED-SPRITE-PROP-LIBRARY feed it.

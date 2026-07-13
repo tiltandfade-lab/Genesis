@@ -1,0 +1,623 @@
+{
+  "schema": "genesis.flat-prop-regeneration-queue.v1",
+  "pilotRealms": [
+    "fantasy"
+  ],
+  "deferredRealms": [
+    "gloom",
+    "chrome"
+  ],
+  "generationUnit": "ONE_ASSET_PER_MODEL_CALL",
+  "artStyle": "MATURE_FACETED_LOW_POLY",
+  "count": 32,
+  "assets": [
+    {
+      "queueId": "flat-001",
+      "sourceId": "fantasy:item:26",
+      "realm": "fantasy",
+      "name": "Book",
+      "sourceReferenceArt": null,
+      "referenceUse": "semantic/material reference only; do not preserve its perspective",
+      "outputProjection": "FLAT_ORTHOGRAPHIC",
+      "status": "QUEUED",
+      "prompt": "Use case: stylized-concept\nAsset type: source sprite for deterministic shallow 3D extrusion\nSubject: Book\nRealm art direction: fantasy\nProjection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.\nComposition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.\nGeometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.\nLighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.\nBackdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.\nStyle: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.\nAvoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.",
+      "qa": {
+        "singleComponent": null,
+        "flatProjection": null,
+        "noVisibleTop": null,
+        "noVisibleSide": null,
+        "uniformKey": null,
+        "edgeDespill": null
+      }
+    },
+    {
+      "queueId": "flat-002",
+      "sourceId": "fantasy:item:39",
+      "realm": "fantasy",
+      "name": "Case, Map or Scroll",
+      "sourceReferenceArt": null,
+      "referenceUse": "semantic/material reference only; do not preserve its perspective",
+      "outputProjection": "FLAT_ORTHOGRAPHIC",
+      "status": "QUEUED",
+      "prompt": "Use case: stylized-concept\nAsset type: source sprite for deterministic shallow 3D extrusion\nSubject: Case, Map or Scroll\nRealm art direction: fantasy\nProjection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.\nComposition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.\nGeometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.\nLighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.\nBackdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.\nStyle: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.\nAvoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.",
+      "qa": {
+        "singleComponent": null,
+        "flatProjection": null,
+        "noVisibleTop": null,
+        "noVisibleSide": null,
+        "uniformKey": null,
+        "edgeDespill": null
+      }
+    },
+    {
+      "queueId": "flat-003",
+      "sourceId": "fantasy:item:81",
+      "realm": "fantasy",
+      "name": "Hunting Trap",
+      "sourceReferenceArt": null,
+      "referenceUse": "semantic/material reference only; do not preserve its perspective",
+      "outputProjection": "FLAT_ORTHOGRAPHIC",
+      "status": "QUEUED",
+      "prompt": "Use case: stylized-concept\nAsset type: source sprite for deterministic shallow 3D extrusion\nSubject: Hunting Trap\nRealm art direction: fantasy\nProjection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.\nComposition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.\nGeometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.\nLighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.\nBackdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.\nStyle: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.\nAvoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.",
+      "qa": {
+        "singleComponent": null,
+        "flatProjection": null,
+        "noVisibleTop": null,
+        "noVisibleSide": null,
+        "uniformKey": null,
+        "edgeDespill": null
+      }
+    },
+    {
+      "queueId": "flat-004",
+      "sourceId": "fantasy:item:103",
+      "realm": "fantasy",
+      "name": "Map",
+      "sourceReferenceArt": null,
+      "referenceUse": "semantic/material reference only; do not preserve its perspective",
+      "outputProjection": "FLAT_ORTHOGRAPHIC",
+      "status": "QUEUED",
+      "prompt": "Use case: stylized-concept\nAsset type: source sprite for deterministic shallow 3D extrusion\nSubject: Map\nRealm art direction: fantasy\nProjection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.\nComposition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.\nGeometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.\nLighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.\nBackdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.\nStyle: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.\nAvoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.",
+      "qa": {
+        "singleComponent": null,
+        "flatProjection": null,
+        "noVisibleTop": null,
+        "noVisibleSide": null,
+        "uniformKey": null,
+        "edgeDespill": null
+      }
+    },
+    {
+      "queueId": "flat-005",
+      "sourceId": "fantasy:item:143",
+      "realm": "fantasy",
+      "name": "Shield",
+      "sourceReferenceArt": null,
+      "referenceUse": "semantic/material reference only; do not preserve its perspective",
+      "outputProjection": "FLAT_ORTHOGRAPHIC",
+      "status": "QUEUED",
+      "prompt": "Use case: stylized-concept\nAsset type: source sprite for deterministic shallow 3D extrusion\nSubject: Shield\nRealm art direction: fantasy\nProjection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.\nComposition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.\nGeometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.\nLighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.\nBackdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.\nStyle: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.\nAvoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.",
+      "qa": {
+        "singleComponent": null,
+        "flatProjection": null,
+        "noVisibleTop": null,
+        "noVisibleSide": null,
+        "uniformKey": null,
+        "edgeDespill": null
+      }
+    },
+    {
+      "queueId": "flat-006",
+      "sourceId": "fantasy:item:154",
+      "realm": "fantasy",
+      "name": "Spell Scroll (Cantrip)",
+      "sourceReferenceArt": null,
+      "referenceUse": "semantic/material reference only; do not preserve its perspective",
+      "outputProjection": "FLAT_ORTHOGRAPHIC",
+      "status": "QUEUED",
+      "prompt": "Use case: stylized-concept\nAsset type: source sprite for deterministic shallow 3D extrusion\nSubject: Spell Scroll (Cantrip)\nRealm art direction: fantasy\nProjection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.\nComposition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.\nGeometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.\nLighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.\nBackdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.\nStyle: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.\nAvoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.",
+      "qa": {
+        "singleComponent": null,
+        "flatProjection": null,
+        "noVisibleTop": null,
+        "noVisibleSide": null,
+        "uniformKey": null,
+        "edgeDespill": null
+      }
+    },
+    {
+      "queueId": "flat-007",
+      "sourceId": "fantasy:item:155",
+      "realm": "fantasy",
+      "name": "Spell Scroll (Level 1)",
+      "sourceReferenceArt": null,
+      "referenceUse": "semantic/material reference only; do not preserve its perspective",
+      "outputProjection": "FLAT_ORTHOGRAPHIC",
+      "status": "QUEUED",
+      "prompt": "Use case: stylized-concept\nAsset type: source sprite for deterministic shallow 3D extrusion\nSubject: Spell Scroll (Level 1)\nRealm art direction: fantasy\nProjection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.\nComposition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.\nGeometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.\nLighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.\nBackdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.\nStyle: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.\nAvoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.",
+      "qa": {
+        "singleComponent": null,
+        "flatProjection": null,
+        "noVisibleTop": null,
+        "noVisibleSide": null,
+        "uniformKey": null,
+        "edgeDespill": null
+      }
+    },
+    {
+      "queueId": "flat-008",
+      "sourceId": "fantasy:item:181",
+      "realm": "fantasy",
+      "name": "Animated Shield",
+      "sourceReferenceArt": null,
+      "referenceUse": "semantic/material reference only; do not preserve its perspective",
+      "outputProjection": "FLAT_ORTHOGRAPHIC",
+      "status": "QUEUED",
+      "prompt": "Use case: stylized-concept\nAsset type: source sprite for deterministic shallow 3D extrusion\nSubject: Animated Shield\nRealm art direction: fantasy\nProjection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.\nComposition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.\nGeometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.\nLighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.\nBackdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.\nStyle: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.\nAvoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.",
+      "qa": {
+        "singleComponent": null,
+        "flatProjection": null,
+        "noVisibleTop": null,
+        "noVisibleSide": null,
+        "uniformKey": null,
+        "edgeDespill": null
+      }
+    },
+    {
+      "queueId": "flat-009",
+      "sourceId": "fantasy:item:187",
+      "realm": "fantasy",
+      "name": "Arrow-Catching Shield",
+      "sourceReferenceArt": null,
+      "referenceUse": "semantic/material reference only; do not preserve its perspective",
+      "outputProjection": "FLAT_ORTHOGRAPHIC",
+      "status": "QUEUED",
+      "prompt": "Use case: stylized-concept\nAsset type: source sprite for deterministic shallow 3D extrusion\nSubject: Arrow-Catching Shield\nRealm art direction: fantasy\nProjection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.\nComposition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.\nGeometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.\nLighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.\nBackdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.\nStyle: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.\nAvoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.",
+      "qa": {
+        "singleComponent": null,
+        "flatProjection": null,
+        "noVisibleTop": null,
+        "noVisibleSide": null,
+        "uniformKey": null,
+        "edgeDespill": null
+      }
+    },
+    {
+      "queueId": "flat-010",
+      "sourceId": "fantasy:item:274",
+      "realm": "fantasy",
+      "name": "Luck Blade",
+      "sourceReferenceArt": null,
+      "referenceUse": "semantic/material reference only; do not preserve its perspective",
+      "outputProjection": "FLAT_ORTHOGRAPHIC",
+      "status": "QUEUED",
+      "prompt": "Use case: stylized-concept\nAsset type: source sprite for deterministic shallow 3D extrusion\nSubject: Luck Blade\nRealm art direction: fantasy\nProjection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.\nComposition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.\nGeometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.\nLighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.\nBackdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.\nStyle: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.\nAvoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.",
+      "qa": {
+        "singleComponent": null,
+        "flatProjection": null,
+        "noVisibleTop": null,
+        "noVisibleSide": null,
+        "uniformKey": null,
+        "edgeDespill": null
+      }
+    },
+    {
+      "queueId": "flat-011",
+      "sourceId": "fantasy:item:348",
+      "realm": "fantasy",
+      "name": "Sentinel Shield",
+      "sourceReferenceArt": null,
+      "referenceUse": "semantic/material reference only; do not preserve its perspective",
+      "outputProjection": "FLAT_ORTHOGRAPHIC",
+      "status": "QUEUED",
+      "prompt": "Use case: stylized-concept\nAsset type: source sprite for deterministic shallow 3D extrusion\nSubject: Sentinel Shield\nRealm art direction: fantasy\nProjection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.\nComposition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.\nGeometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.\nLighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.\nBackdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.\nStyle: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.\nAvoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.",
+      "qa": {
+        "singleComponent": null,
+        "flatProjection": null,
+        "noVisibleTop": null,
+        "noVisibleSide": null,
+        "uniformKey": null,
+        "edgeDespill": null
+      }
+    },
+    {
+      "queueId": "flat-012",
+      "sourceId": "fantasy:item:349",
+      "realm": "fantasy",
+      "name": "Shield of Missile Attraction",
+      "sourceReferenceArt": null,
+      "referenceUse": "semantic/material reference only; do not preserve its perspective",
+      "outputProjection": "FLAT_ORTHOGRAPHIC",
+      "status": "QUEUED",
+      "prompt": "Use case: stylized-concept\nAsset type: source sprite for deterministic shallow 3D extrusion\nSubject: Shield of Missile Attraction\nRealm art direction: fantasy\nProjection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.\nComposition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.\nGeometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.\nLighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.\nBackdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.\nStyle: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.\nAvoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.",
+      "qa": {
+        "singleComponent": null,
+        "flatProjection": null,
+        "noVisibleTop": null,
+        "noVisibleSide": null,
+        "uniformKey": null,
+        "edgeDespill": null
+      }
+    },
+    {
+      "queueId": "flat-013",
+      "sourceId": "fantasy:item:350",
+      "realm": "fantasy",
+      "name": "Shield of the Cavalier",
+      "sourceReferenceArt": null,
+      "referenceUse": "semantic/material reference only; do not preserve its perspective",
+      "outputProjection": "FLAT_ORTHOGRAPHIC",
+      "status": "QUEUED",
+      "prompt": "Use case: stylized-concept\nAsset type: source sprite for deterministic shallow 3D extrusion\nSubject: Shield of the Cavalier\nRealm art direction: fantasy\nProjection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.\nComposition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.\nGeometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.\nLighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.\nBackdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.\nStyle: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.\nAvoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.",
+      "qa": {
+        "singleComponent": null,
+        "flatProjection": null,
+        "noVisibleTop": null,
+        "noVisibleSide": null,
+        "uniformKey": null,
+        "edgeDespill": null
+      }
+    },
+    {
+      "queueId": "flat-014",
+      "sourceId": "fantasy:item:351",
+      "realm": "fantasy",
+      "name": "Shield, +1, +2, or +3",
+      "sourceReferenceArt": null,
+      "referenceUse": "semantic/material reference only; do not preserve its perspective",
+      "outputProjection": "FLAT_ORTHOGRAPHIC",
+      "status": "QUEUED",
+      "prompt": "Use case: stylized-concept\nAsset type: source sprite for deterministic shallow 3D extrusion\nSubject: Shield, +1, +2, or +3\nRealm art direction: fantasy\nProjection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.\nComposition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.\nGeometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.\nLighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.\nBackdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.\nStyle: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.\nAvoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.",
+      "qa": {
+        "singleComponent": null,
+        "flatProjection": null,
+        "noVisibleTop": null,
+        "noVisibleSide": null,
+        "uniformKey": null,
+        "edgeDespill": null
+      }
+    },
+    {
+      "queueId": "flat-015",
+      "sourceId": "fantasy:item:354",
+      "realm": "fantasy",
+      "name": "Spell Scroll",
+      "sourceReferenceArt": null,
+      "referenceUse": "semantic/material reference only; do not preserve its perspective",
+      "outputProjection": "FLAT_ORTHOGRAPHIC",
+      "status": "QUEUED",
+      "prompt": "Use case: stylized-concept\nAsset type: source sprite for deterministic shallow 3D extrusion\nSubject: Spell Scroll\nRealm art direction: fantasy\nProjection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.\nComposition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.\nGeometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.\nLighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.\nBackdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.\nStyle: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.\nAvoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.",
+      "qa": {
+        "singleComponent": null,
+        "flatProjection": null,
+        "noVisibleTop": null,
+        "noVisibleSide": null,
+        "uniformKey": null,
+        "edgeDespill": null
+      }
+    },
+    {
+      "queueId": "flat-016",
+      "sourceId": "fantasy:item:355",
+      "realm": "fantasy",
+      "name": "Spellguard Shield",
+      "sourceReferenceArt": null,
+      "referenceUse": "semantic/material reference only; do not preserve its perspective",
+      "outputProjection": "FLAT_ORTHOGRAPHIC",
+      "status": "QUEUED",
+      "prompt": "Use case: stylized-concept\nAsset type: source sprite for deterministic shallow 3D extrusion\nSubject: Spellguard Shield\nRealm art direction: fantasy\nProjection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.\nComposition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.\nGeometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.\nLighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.\nBackdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.\nStyle: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.\nAvoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.",
+      "qa": {
+        "singleComponent": null,
+        "flatProjection": null,
+        "noVisibleTop": null,
+        "noVisibleSide": null,
+        "uniformKey": null,
+        "edgeDespill": null
+      }
+    },
+    {
+      "queueId": "flat-017",
+      "sourceId": "fantasy:object:fantasy-obj-door-shut",
+      "realm": "fantasy",
+      "name": "door, shut state \u2014 banded oak plank door",
+      "sourceReferenceArt": "assets/dressing/fantasy-obj-door-shut.png",
+      "referenceUse": "semantic/material reference only; do not preserve its perspective",
+      "outputProjection": "FLAT_ORTHOGRAPHIC",
+      "status": "QUEUED",
+      "prompt": "Use case: stylized-concept\nAsset type: source sprite for deterministic shallow 3D extrusion\nSubject: door, shut state \u2014 banded oak plank door\nRealm art direction: fantasy\nProjection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.\nComposition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.\nGeometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.\nLighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.\nBackdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.\nStyle: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.\nAvoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.",
+      "qa": {
+        "singleComponent": null,
+        "flatProjection": null,
+        "noVisibleTop": null,
+        "noVisibleSide": null,
+        "uniformKey": null,
+        "edgeDespill": null
+      }
+    },
+    {
+      "queueId": "flat-018",
+      "sourceId": "fantasy:object:fantasy-obj-door-ajar",
+      "realm": "fantasy",
+      "name": "door, ajar state \u2014 banded oak plank door",
+      "sourceReferenceArt": "assets/dressing/fantasy-obj-door-ajar.png",
+      "referenceUse": "semantic/material reference only; do not preserve its perspective",
+      "outputProjection": "FLAT_ORTHOGRAPHIC",
+      "status": "QUEUED",
+      "prompt": "Use case: stylized-concept\nAsset type: source sprite for deterministic shallow 3D extrusion\nSubject: door, ajar state \u2014 banded oak plank door\nRealm art direction: fantasy\nProjection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.\nComposition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.\nGeometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.\nLighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.\nBackdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.\nStyle: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.\nAvoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.",
+      "qa": {
+        "singleComponent": null,
+        "flatProjection": null,
+        "noVisibleTop": null,
+        "noVisibleSide": null,
+        "uniformKey": null,
+        "edgeDespill": null
+      }
+    },
+    {
+      "queueId": "flat-019",
+      "sourceId": "fantasy:object:fantasy-obj-door-open",
+      "realm": "fantasy",
+      "name": "door, open state \u2014 banded oak plank door",
+      "sourceReferenceArt": "assets/dressing/fantasy-obj-door-open.png",
+      "referenceUse": "semantic/material reference only; do not preserve its perspective",
+      "outputProjection": "FLAT_ORTHOGRAPHIC",
+      "status": "QUEUED",
+      "prompt": "Use case: stylized-concept\nAsset type: source sprite for deterministic shallow 3D extrusion\nSubject: door, open state \u2014 banded oak plank door\nRealm art direction: fantasy\nProjection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.\nComposition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.\nGeometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.\nLighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.\nBackdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.\nStyle: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.\nAvoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.",
+      "qa": {
+        "singleComponent": null,
+        "flatProjection": null,
+        "noVisibleTop": null,
+        "noVisibleSide": null,
+        "uniformKey": null,
+        "edgeDespill": null
+      }
+    },
+    {
+      "queueId": "flat-020",
+      "sourceId": "fantasy:object:fantasy-obj-door-broken",
+      "realm": "fantasy",
+      "name": "door, broken state \u2014 banded oak plank door",
+      "sourceReferenceArt": "assets/dressing/fantasy-obj-door-broken.png",
+      "referenceUse": "semantic/material reference only; do not preserve its perspective",
+      "outputProjection": "FLAT_ORTHOGRAPHIC",
+      "status": "QUEUED",
+      "prompt": "Use case: stylized-concept\nAsset type: source sprite for deterministic shallow 3D extrusion\nSubject: door, broken state \u2014 banded oak plank door\nRealm art direction: fantasy\nProjection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.\nComposition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.\nGeometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.\nLighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.\nBackdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.\nStyle: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.\nAvoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.",
+      "qa": {
+        "singleComponent": null,
+        "flatProjection": null,
+        "noVisibleTop": null,
+        "noVisibleSide": null,
+        "uniformKey": null,
+        "edgeDespill": null
+      }
+    },
+    {
+      "queueId": "flat-021",
+      "sourceId": "fantasy:object:fantasy-obj-lever-left",
+      "realm": "fantasy",
+      "name": "lever, left state \u2014 in the realm's own material language",
+      "sourceReferenceArt": "assets/dressing/fantasy-obj-lever-left.png",
+      "referenceUse": "semantic/material reference only; do not preserve its perspective",
+      "outputProjection": "FLAT_ORTHOGRAPHIC",
+      "status": "QUEUED",
+      "prompt": "Use case: stylized-concept\nAsset type: source sprite for deterministic shallow 3D extrusion\nSubject: lever, left state \u2014 in the realm's own material language\nRealm art direction: fantasy\nProjection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.\nComposition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.\nGeometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.\nLighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.\nBackdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.\nStyle: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.\nAvoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.",
+      "qa": {
+        "singleComponent": null,
+        "flatProjection": null,
+        "noVisibleTop": null,
+        "noVisibleSide": null,
+        "uniformKey": null,
+        "edgeDespill": null
+      }
+    },
+    {
+      "queueId": "flat-022",
+      "sourceId": "fantasy:object:fantasy-obj-lever-right",
+      "realm": "fantasy",
+      "name": "lever, right state \u2014 in the realm's own material language",
+      "sourceReferenceArt": "assets/dressing/fantasy-obj-lever-right.png",
+      "referenceUse": "semantic/material reference only; do not preserve its perspective",
+      "outputProjection": "FLAT_ORTHOGRAPHIC",
+      "status": "QUEUED",
+      "prompt": "Use case: stylized-concept\nAsset type: source sprite for deterministic shallow 3D extrusion\nSubject: lever, right state \u2014 in the realm's own material language\nRealm art direction: fantasy\nProjection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.\nComposition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.\nGeometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.\nLighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.\nBackdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.\nStyle: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.\nAvoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.",
+      "qa": {
+        "singleComponent": null,
+        "flatProjection": null,
+        "noVisibleTop": null,
+        "noVisibleSide": null,
+        "uniformKey": null,
+        "edgeDespill": null
+      }
+    },
+    {
+      "queueId": "flat-023",
+      "sourceId": "fantasy:object:fantasy-obj-trap-hidden",
+      "realm": "fantasy",
+      "name": "trap, hidden state \u2014 in the realm's own material language",
+      "sourceReferenceArt": "assets/dressing/fantasy-obj-trap-hidden.png",
+      "referenceUse": "semantic/material reference only; do not preserve its perspective",
+      "outputProjection": "FLAT_ORTHOGRAPHIC",
+      "status": "QUEUED",
+      "prompt": "Use case: stylized-concept\nAsset type: source sprite for deterministic shallow 3D extrusion\nSubject: trap, hidden state \u2014 in the realm's own material language\nRealm art direction: fantasy\nProjection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.\nComposition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.\nGeometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.\nLighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.\nBackdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.\nStyle: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.\nAvoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.",
+      "qa": {
+        "singleComponent": null,
+        "flatProjection": null,
+        "noVisibleTop": null,
+        "noVisibleSide": null,
+        "uniformKey": null,
+        "edgeDespill": null
+      }
+    },
+    {
+      "queueId": "flat-024",
+      "sourceId": "fantasy:object:fantasy-obj-trap-sprung",
+      "realm": "fantasy",
+      "name": "trap, sprung state \u2014 in the realm's own material language",
+      "sourceReferenceArt": "assets/dressing/fantasy-obj-trap-sprung.png",
+      "referenceUse": "semantic/material reference only; do not preserve its perspective",
+      "outputProjection": "FLAT_ORTHOGRAPHIC",
+      "status": "QUEUED",
+      "prompt": "Use case: stylized-concept\nAsset type: source sprite for deterministic shallow 3D extrusion\nSubject: trap, sprung state \u2014 in the realm's own material language\nRealm art direction: fantasy\nProjection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.\nComposition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.\nGeometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.\nLighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.\nBackdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.\nStyle: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.\nAvoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.",
+      "qa": {
+        "singleComponent": null,
+        "flatProjection": null,
+        "noVisibleTop": null,
+        "noVisibleSide": null,
+        "uniformKey": null,
+        "edgeDespill": null
+      }
+    },
+    {
+      "queueId": "flat-025",
+      "sourceId": "fantasy:object:fantasy-obj-door-shut-alt",
+      "realm": "fantasy",
+      "name": "ALT of 'door, shut state \u2014 banded oak plank door' \u2014 different shape/growth/wear, same kind",
+      "sourceReferenceArt": "assets/dressing/fantasy-obj-door-shut-alt.png",
+      "referenceUse": "semantic/material reference only; do not preserve its perspective",
+      "outputProjection": "FLAT_ORTHOGRAPHIC",
+      "status": "QUEUED",
+      "prompt": "Use case: stylized-concept\nAsset type: source sprite for deterministic shallow 3D extrusion\nSubject: ALT of 'door, shut state \u2014 banded oak plank door' \u2014 different shape/growth/wear, same kind\nRealm art direction: fantasy\nProjection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.\nComposition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.\nGeometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.\nLighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.\nBackdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.\nStyle: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.\nAvoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.",
+      "qa": {
+        "singleComponent": null,
+        "flatProjection": null,
+        "noVisibleTop": null,
+        "noVisibleSide": null,
+        "uniformKey": null,
+        "edgeDespill": null
+      }
+    },
+    {
+      "queueId": "flat-026",
+      "sourceId": "fantasy:object:fantasy-obj-door-ajar-alt",
+      "realm": "fantasy",
+      "name": "ALT of 'door, ajar state \u2014 banded oak plank door' \u2014 different shape/growth/wear, same kind",
+      "sourceReferenceArt": "assets/dressing/fantasy-obj-door-ajar-alt.png",
+      "referenceUse": "semantic/material reference only; do not preserve its perspective",
+      "outputProjection": "FLAT_ORTHOGRAPHIC",
+      "status": "QUEUED",
+      "prompt": "Use case: stylized-concept\nAsset type: source sprite for deterministic shallow 3D extrusion\nSubject: ALT of 'door, ajar state \u2014 banded oak plank door' \u2014 different shape/growth/wear, same kind\nRealm art direction: fantasy\nProjection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.\nComposition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.\nGeometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.\nLighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.\nBackdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.\nStyle: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.\nAvoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.",
+      "qa": {
+        "singleComponent": null,
+        "flatProjection": null,
+        "noVisibleTop": null,
+        "noVisibleSide": null,
+        "uniformKey": null,
+        "edgeDespill": null
+      }
+    },
+    {
+      "queueId": "flat-027",
+      "sourceId": "fantasy:object:fantasy-obj-door-open-alt",
+      "realm": "fantasy",
+      "name": "ALT of 'door, open state \u2014 banded oak plank door' \u2014 different shape/growth/wear, same kind",
+      "sourceReferenceArt": "assets/dressing/fantasy-obj-door-open-alt.png",
+      "referenceUse": "semantic/material reference only; do not preserve its perspective",
+      "outputProjection": "FLAT_ORTHOGRAPHIC",
+      "status": "QUEUED",
+      "prompt": "Use case: stylized-concept\nAsset type: source sprite for deterministic shallow 3D extrusion\nSubject: ALT of 'door, open state \u2014 banded oak plank door' \u2014 different shape/growth/wear, same kind\nRealm art direction: fantasy\nProjection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.\nComposition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.\nGeometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.\nLighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.\nBackdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.\nStyle: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.\nAvoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.",
+      "qa": {
+        "singleComponent": null,
+        "flatProjection": null,
+        "noVisibleTop": null,
+        "noVisibleSide": null,
+        "uniformKey": null,
+        "edgeDespill": null
+      }
+    },
+    {
+      "queueId": "flat-028",
+      "sourceId": "fantasy:object:fantasy-obj-door-broken-alt",
+      "realm": "fantasy",
+      "name": "ALT of 'door, broken state \u2014 banded oak plank door' \u2014 different shape/growth/wear, same kind",
+      "sourceReferenceArt": "assets/dressing/fantasy-obj-door-broken-alt.png",
+      "referenceUse": "semantic/material reference only; do not preserve its perspective",
+      "outputProjection": "FLAT_ORTHOGRAPHIC",
+      "status": "QUEUED",
+      "prompt": "Use case: stylized-concept\nAsset type: source sprite for deterministic shallow 3D extrusion\nSubject: ALT of 'door, broken state \u2014 banded oak plank door' \u2014 different shape/growth/wear, same kind\nRealm art direction: fantasy\nProjection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.\nComposition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.\nGeometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.\nLighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.\nBackdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.\nStyle: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.\nAvoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.",
+      "qa": {
+        "singleComponent": null,
+        "flatProjection": null,
+        "noVisibleTop": null,
+        "noVisibleSide": null,
+        "uniformKey": null,
+        "edgeDespill": null
+      }
+    },
+    {
+      "queueId": "flat-029",
+      "sourceId": "fantasy:dressing:fantasy-painting-1",
+      "realm": "fantasy",
+      "name": "fantasy painting 1",
+      "sourceReferenceArt": "assets/dressing/fantasy-painting-1.png",
+      "referenceUse": "semantic/material reference only; do not preserve its perspective",
+      "outputProjection": "FLAT_ORTHOGRAPHIC",
+      "status": "QUEUED",
+      "prompt": "Use case: stylized-concept\nAsset type: source sprite for deterministic shallow 3D extrusion\nSubject: fantasy painting 1\nRealm art direction: fantasy\nProjection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.\nComposition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.\nGeometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.\nLighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.\nBackdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.\nStyle: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.\nAvoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.",
+      "qa": {
+        "singleComponent": null,
+        "flatProjection": null,
+        "noVisibleTop": null,
+        "noVisibleSide": null,
+        "uniformKey": null,
+        "edgeDespill": null
+      }
+    },
+    {
+      "queueId": "flat-030",
+      "sourceId": "fantasy:dressing:fantasy-painting-2",
+      "realm": "fantasy",
+      "name": "fantasy painting 2",
+      "sourceReferenceArt": "assets/dressing/fantasy-painting-2.png",
+      "referenceUse": "semantic/material reference only; do not preserve its perspective",
+      "outputProjection": "FLAT_ORTHOGRAPHIC",
+      "status": "QUEUED",
+      "prompt": "Use case: stylized-concept\nAsset type: source sprite for deterministic shallow 3D extrusion\nSubject: fantasy painting 2\nRealm art direction: fantasy\nProjection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.\nComposition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.\nGeometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.\nLighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.\nBackdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.\nStyle: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.\nAvoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.",
+      "qa": {
+        "singleComponent": null,
+        "flatProjection": null,
+        "noVisibleTop": null,
+        "noVisibleSide": null,
+        "uniformKey": null,
+        "edgeDespill": null
+      }
+    },
+    {
+      "queueId": "flat-031",
+      "sourceId": "fantasy:dressing:fantasy-painting-3",
+      "realm": "fantasy",
+      "name": "fantasy painting 3",
+      "sourceReferenceArt": "assets/dressing/fantasy-painting-3.png",
+      "referenceUse": "semantic/material reference only; do not preserve its perspective",
+      "outputProjection": "FLAT_ORTHOGRAPHIC",
+      "status": "QUEUED",
+      "prompt": "Use case: stylized-concept\nAsset type: source sprite for deterministic shallow 3D extrusion\nSubject: fantasy painting 3\nRealm art direction: fantasy\nProjection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.\nComposition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.\nGeometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.\nLighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.\nBackdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.\nStyle: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.\nAvoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.",
+      "qa": {
+        "singleComponent": null,
+        "flatProjection": null,
+        "noVisibleTop": null,
+        "noVisibleSide": null,
+        "uniformKey": null,
+        "edgeDespill": null
+      }
+    },
+    {
+      "queueId": "flat-032",
+      "sourceId": "fantasy:dressing:fantasy-painting-4",
+      "realm": "fantasy",
+      "name": "fantasy painting 4",
+      "sourceReferenceArt": "assets/dressing/fantasy-painting-4.png",
+      "referenceUse": "semantic/material reference only; do not preserve its perspective",
+      "outputProjection": "FLAT_ORTHOGRAPHIC",
+      "status": "QUEUED",
+      "prompt": "Use case: stylized-concept\nAsset type: source sprite for deterministic shallow 3D extrusion\nSubject: fantasy painting 4\nRealm art direction: fantasy\nProjection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.\nComposition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.\nGeometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.\nLighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.\nBackdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.\nStyle: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.\nAvoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.",
+      "qa": {
+        "singleComponent": null,
+        "flatProjection": null,
+        "noVisibleTop": null,
+        "noVisibleSide": null,
+        "uniformKey": null,
+        "edgeDespill": null
+      }
+    }
+  ]
+}

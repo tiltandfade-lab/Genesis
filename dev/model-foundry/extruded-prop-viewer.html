@@ -1,0 +1,32 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Genesis Extruded Prop Proof</title>
+<style>
+  html,body{margin:0;width:1200px;height:900px;overflow:hidden;background:#161519}
+  #stage{display:none}#grid{display:grid;grid-template-columns:repeat(3,400px);grid-auto-rows:300px}
+  .cell{width:400px;height:300px;background:#242128;border:1px solid #3d3842;box-sizing:border-box;overflow:hidden}
+  .cell img{display:block;width:400px;height:264px}.label{color:#f0e5d4;font:14px Arial;background:#121114;
+  padding:7px 9px;height:36px;box-sizing:border-box;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+</style>
+<canvas id="stage" width="400" height="264"></canvas><div id="grid"></div>
+<script type="importmap">{"imports":{"three":"/vendor/three/three.module.js","three/addons/":"/vendor/three/addons/"}}</script>
+<script type="module">
+import * as THREE from "/vendor/three/three.module.js";
+import {GLTFLoader} from "/vendor/three/addons/loaders/GLTFLoader.js";
+const renderer=new THREE.WebGLRenderer({canvas:document.querySelector('#stage'),antialias:true,preserveDrawingBuffer:true});
+renderer.setSize(400,264,false);renderer.setPixelRatio(1);renderer.outputColorSpace=THREE.SRGBColorSpace;
+const loader=new GLTFLoader();
+const load=url=>new Promise((resolve,reject)=>loader.load(url,resolve,undefined,reject));
+function viewFor(gltf){
+ const scene=new THREE.Scene();scene.background=new THREE.Color(0x242128);scene.add(new THREE.HemisphereLight(0xffedcf,0x303b52,1.8));
+ const key=new THREE.DirectionalLight(0xffdfba,3);key.position.set(3,5,4);scene.add(key);
+ const rim=new THREE.DirectionalLight(0x85b6ff,1.2);rim.position.set(-4,2,-3);scene.add(rim);
+ const group=gltf.scene;const box=new THREE.Box3().setFromObject(group),center=box.getCenter(new THREE.Vector3()),size=box.getSize(new THREE.Vector3());
+ group.position.sub(center);group.position.y+=size.y/2;group.rotation.y=-.48;scene.add(group);
+ const floor=new THREE.Mesh(new THREE.PlaneGeometry(3,3),new THREE.MeshStandardMaterial({color:0x3b3740,roughness:1}));floor.rotation.x=-Math.PI/2;scene.add(floor);
+ const max=Math.max(size.x,size.y,size.z,.01),cam=new THREE.OrthographicCamera(-1,1,.75,-.75,.01,100);cam.position.set(2.6,2.1,3.4).normalize().multiplyScalar(max*3.2);cam.lookAt(0,size.y*.38,0);cam.zoom=1.18/max;cam.updateProjectionMatrix();return{scene,cam};
+}
+window.renderProof=async entries=>{const grid=document.querySelector('#grid');grid.textContent='';
+ for(let i=0;i<entries.length;i++){const v=viewFor(await load('/'+entries[i].output));renderer.render(v.scene,v.cam);const cell=document.createElement('div');cell.className='cell';const image=document.createElement('img');image.src=renderer.domElement.toDataURL('image/png');const l=document.createElement('div');l.className='label';l.textContent=`${entries[i].realm} / ${entries[i].id} · ${entries[i].faces} faces · depth ${entries[i].depth}`;cell.append(image,l);grid.appendChild(cell)}
+ await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));return true;};window.__ready=true;
+</script>

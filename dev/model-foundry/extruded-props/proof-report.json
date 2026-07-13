@@ -1,0 +1,370 @@
+{
+  "schema": "genesis.extruded-prop-proof.v1",
+  "classification": "FAILED_LEGACY_SOURCE_DIAGNOSTIC: backend is not production-selected",
+  "legacyPerspectiveOverride": true,
+  "coreRealms": [
+    "fantasy",
+    "gloom",
+    "chrome"
+  ],
+  "technicalCompiled": 9,
+  "routerRejected": 3,
+  "visualVerdict": "FAIL",
+  "runtimeAdmittedCount": 0,
+  "allCompiledReload": true,
+  "allCompiledWinding": true,
+  "faceBudgetPassCount": 8,
+  "proof": [
+    {
+      "id": "shield",
+      "art": "assets/icons/shield.png",
+      "realm": "fantasy",
+      "expected": "EXTRUDE",
+      "depth": 0.09,
+      "status": "TECHNICAL_ONLY",
+      "technicalStatus": "COMPILED",
+      "visualStatus": "QA_PENDING",
+      "runtimeAdmitted": false,
+      "output": "dev/model-foundry/extruded-props/glb/fantasy-shield.glb",
+      "sourceSha256": "1251bf464659a4d899d343c8696278fee9fd01477cb8e83d3995a2e8fb294788",
+      "outputSha256": "d40e6d76541985ddd887859376820d0bc276fb0d4e06a90101967abd8fb71970",
+      "vertices": 194,
+      "faces": 384,
+      "withinProofFaceBudget": true,
+      "watertight": true,
+      "windingConsistent": true,
+      "bounds": [
+        [
+          -0.426282,
+          0.0,
+          0.0
+        ],
+        [
+          0.426282,
+          1.0,
+          0.09
+        ]
+      ],
+      "rawContourCount": 1,
+      "sourceComponentCount": 1,
+      "compiledComponentCount": 1,
+      "maskPixels": 14099,
+      "reloadGeometryCount": 2
+    },
+    {
+      "id": "key",
+      "art": "assets/icons/key.png",
+      "realm": "fantasy",
+      "expected": "EXTRUDE",
+      "depth": 0.055,
+      "status": "TECHNICAL_ONLY",
+      "technicalStatus": "COMPILED",
+      "visualStatus": "QA_PENDING",
+      "runtimeAdmitted": false,
+      "output": "dev/model-foundry/extruded-props/glb/fantasy-key.glb",
+      "sourceSha256": "07762769651966de39712ee012b57a394734b06f3f225a780a69c28b99ba0c65",
+      "outputSha256": "008b6326d835626f198ae413f174b94d8d06318b0089e09c2d74095fbc5c58bd",
+      "vertices": 178,
+      "faces": 352,
+      "withinProofFaceBudget": true,
+      "watertight": true,
+      "windingConsistent": true,
+      "bounds": [
+        [
+          -0.468085,
+          0.0,
+          0.0
+        ],
+        [
+          0.468085,
+          1.0,
+          0.055
+        ]
+      ],
+      "rawContourCount": 1,
+      "sourceComponentCount": 1,
+      "compiledComponentCount": 1,
+      "maskPixels": 7212,
+      "reloadGeometryCount": 2
+    },
+    {
+      "id": "sign",
+      "art": "assets/dressing/chrome-clutter-signfragment.png",
+      "realm": "chrome",
+      "expected": "EXTRUDE",
+      "depth": 0.06,
+      "status": "TECHNICAL_ONLY",
+      "technicalStatus": "COMPILED",
+      "visualStatus": "QA_PENDING",
+      "runtimeAdmitted": false,
+      "output": "dev/model-foundry/extruded-props/glb/chrome-sign.glb",
+      "sourceSha256": "099fd7e31558f67b75b123c165e335ea2a36dea5fdfbc2f1db526b37fc75adda",
+      "outputSha256": "a856c85ab225e9ceea590ebf605df5186676aba3882abb0d866b276ae6b4be4a",
+      "vertices": 332,
+      "faces": 680,
+      "withinProofFaceBudget": true,
+      "watertight": false,
+      "windingConsistent": true,
+      "bounds": [
+        [
+          -0.819767,
+          0.0,
+          0.0
+        ],
+        [
+          0.819767,
+          1.0,
+          0.06
+        ]
+      ],
+      "rawContourCount": 8,
+      "sourceComponentCount": 1,
+      "compiledComponentCount": 1,
+      "maskPixels": 32964,
+      "reloadGeometryCount": 2
+    },
+    {
+      "id": "grate",
+      "art": "assets/dressing/fantasy-obj-trap-hidden.png",
+      "realm": "fantasy",
+      "expected": "EXTRUDE",
+      "depth": 0.025,
+      "status": "TECHNICAL_ONLY",
+      "technicalStatus": "COMPILED",
+      "visualStatus": "QA_PENDING",
+      "runtimeAdmitted": false,
+      "output": "dev/model-foundry/extruded-props/glb/fantasy-grate.glb",
+      "sourceSha256": "3d06bed941cdb7df39a7de9368789fdbf76057f2be2ac64d8f240097fa1e71a4",
+      "outputSha256": "6f9fce4cf6cdf3eaa51c1b98516e4e50946a6c8545c8ac6a08b0f57634498f61",
+      "vertices": 184,
+      "faces": 364,
+      "withinProofFaceBudget": true,
+      "watertight": true,
+      "windingConsistent": true,
+      "bounds": [
+        [
+          -0.873134,
+          0.0,
+          0.0
+        ],
+        [
+          0.873134,
+          1.0,
+          0.025
+        ]
+      ],
+      "rawContourCount": 1,
+      "sourceComponentCount": 1,
+      "compiledComponentCount": 1,
+      "maskPixels": 20666,
+      "reloadGeometryCount": 2
+    },
+    {
+      "id": "lever",
+      "art": "assets/dressing/gloom-obj-lever-left.png",
+      "realm": "gloom",
+      "expected": "EXTRUDE",
+      "depth": 0.14,
+      "status": "TECHNICAL_ONLY",
+      "technicalStatus": "COMPILED",
+      "visualStatus": "QA_PENDING",
+      "runtimeAdmitted": false,
+      "output": "dev/model-foundry/extruded-props/glb/gloom-lever.glb",
+      "sourceSha256": "79400c03a38275f4b7063758607610e8c732c71323257377e23cfc361e6e076e",
+      "outputSha256": "eac1a0636924a81194df05504be37ea01a2feee5d228b5bf6a17d4b128cc2eb2",
+      "vertices": 182,
+      "faces": 360,
+      "withinProofFaceBudget": true,
+      "watertight": true,
+      "windingConsistent": true,
+      "bounds": [
+        [
+          -0.554745,
+          0.0,
+          0.0
+        ],
+        [
+          0.554745,
+          1.0,
+          0.14
+        ]
+      ],
+      "rawContourCount": 1,
+      "sourceComponentCount": 1,
+      "compiledComponentCount": 1,
+      "maskPixels": 11283,
+      "reloadGeometryCount": 2
+    },
+    {
+      "id": "relief",
+      "art": "assets/dressing/fantasy-painting-1.png",
+      "realm": "fantasy",
+      "expected": "EXTRUDE",
+      "depth": 0.07,
+      "status": "TECHNICAL_ONLY",
+      "technicalStatus": "COMPILED",
+      "visualStatus": "QA_PENDING",
+      "runtimeAdmitted": false,
+      "output": "dev/model-foundry/extruded-props/glb/fantasy-relief.glb",
+      "sourceSha256": "0d48089b511dfd211ab865ea302608887f29efc62f803b025a734f234c757e39",
+      "outputSha256": "57698aa760c56f504fd604d48ac439982fb65dfdd5c70e6dc70423de95409b84",
+      "vertices": 8,
+      "faces": 12,
+      "withinProofFaceBudget": true,
+      "watertight": true,
+      "windingConsistent": true,
+      "bounds": [
+        [
+          -0.5,
+          0.0,
+          0.0
+        ],
+        [
+          0.5,
+          1.0,
+          0.07
+        ]
+      ],
+      "rawContourCount": 1,
+      "sourceComponentCount": 1,
+      "compiledComponentCount": 1,
+      "maskPixels": 65536,
+      "reloadGeometryCount": 2
+    },
+    {
+      "id": "door",
+      "art": "assets/dressing/chrome-obj-door-shut.png",
+      "realm": "chrome",
+      "expected": "EXTRUDE",
+      "depth": 0.12,
+      "status": "TECHNICAL_ONLY",
+      "technicalStatus": "COMPILED",
+      "visualStatus": "QA_PENDING",
+      "runtimeAdmitted": false,
+      "output": "dev/model-foundry/extruded-props/glb/chrome-door.glb",
+      "sourceSha256": "f1ea26adb213327ac5ee1906697638980c48b99c9e3c11040bab9f25c22d60f4",
+      "outputSha256": "9e038965150f0304e9a79bc1efd3145d0a3b61b06d7eba5bf2490fb38d228744",
+      "vertices": 90,
+      "faces": 176,
+      "withinProofFaceBudget": true,
+      "watertight": true,
+      "windingConsistent": true,
+      "bounds": [
+        [
+          -0.537572,
+          0.0,
+          0.0
+        ],
+        [
+          0.537572,
+          1.0,
+          0.12
+        ]
+      ],
+      "rawContourCount": 1,
+      "sourceComponentCount": 1,
+      "compiledComponentCount": 1,
+      "maskPixels": 28743,
+      "reloadGeometryCount": 2
+    },
+    {
+      "id": "wreath",
+      "art": "assets/dressing/gloom-flora-driedwreath.png",
+      "realm": "gloom",
+      "expected": "EXTRUDE",
+      "depth": 0.07,
+      "status": "TECHNICAL_ONLY",
+      "technicalStatus": "COMPILED",
+      "visualStatus": "QA_PENDING",
+      "runtimeAdmitted": false,
+      "output": "dev/model-foundry/extruded-props/glb/gloom-wreath.glb",
+      "sourceSha256": "3ca301d98a85eeb676ac478f3201633be7aaeec672094e899cbf79d1406c13fd",
+      "outputSha256": "d784490ef56846d9818944787f6e3425f26c6988746467d408002014fc587634",
+      "vertices": 630,
+      "faces": 1260,
+      "withinProofFaceBudget": false,
+      "watertight": true,
+      "windingConsistent": true,
+      "bounds": [
+        [
+          -0.368627,
+          0.0,
+          0.0
+        ],
+        [
+          0.368627,
+          1.0,
+          0.07
+        ]
+      ],
+      "rawContourCount": 2,
+      "sourceComponentCount": 2,
+      "compiledComponentCount": 1,
+      "maskPixels": 31012,
+      "reloadGeometryCount": 2
+    },
+    {
+      "id": "screen",
+      "art": "assets/dressing/chrome-clutter-brokenscreen.png",
+      "realm": "chrome",
+      "expected": "EXTRUDE",
+      "depth": 0.07,
+      "status": "TECHNICAL_ONLY",
+      "technicalStatus": "COMPILED",
+      "visualStatus": "QA_PENDING",
+      "runtimeAdmitted": false,
+      "output": "dev/model-foundry/extruded-props/glb/chrome-screen.glb",
+      "sourceSha256": "7af845e987e07e043ad37870044885c251b9766f9523283809e8c88a8d91dd7f",
+      "outputSha256": "10d686bfb25e1cc012369d333b5e500297c7e3361043285793babec633f1a874",
+      "vertices": 330,
+      "faces": 668,
+      "withinProofFaceBudget": true,
+      "watertight": true,
+      "windingConsistent": true,
+      "bounds": [
+        [
+          -0.607798,
+          0.0,
+          0.0
+        ],
+        [
+          0.607798,
+          1.0,
+          0.07
+        ]
+      ],
+      "rawContourCount": 7,
+      "sourceComponentCount": 3,
+      "compiledComponentCount": 1,
+      "maskPixels": 42972,
+      "reloadGeometryCount": 2
+    },
+    {
+      "id": "crate",
+      "art": "assets/dressing/fantasy-obj-container-intact.png",
+      "realm": "fantasy",
+      "expected": "FACED_BOX",
+      "negative": true,
+      "status": "ROUTER_REJECTED",
+      "reason": "FACED_BOX required; single extrusion forbidden"
+    },
+    {
+      "id": "urn",
+      "art": "assets/dressing/gloom-clutter-urnshard.png",
+      "realm": "gloom",
+      "expected": "MODEL_LATHE",
+      "negative": true,
+      "status": "ROUTER_REJECTED",
+      "reason": "MODEL_LATHE required; single extrusion forbidden"
+    },
+    {
+      "id": "barrel",
+      "art": "assets/dressing/fantasy-clutter-emptybarrel.png",
+      "realm": "fantasy",
+      "expected": "FACED_BOX",
+      "negative": true,
+      "status": "ROUTER_REJECTED",
+      "reason": "FACED_BOX required; single extrusion forbidden"
+    }
+  ]
+}

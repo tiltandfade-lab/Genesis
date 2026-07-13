@@ -18,10 +18,9 @@ G0's 52 hand-authored golden fixtures (`dev/geometry-research/fixtures/`).
 - **Negative control:** two REQUIRED red-first demonstrations, both included:
   1. `redfirst-faulty-adapter.mjs` — the property suite run against two deliberately broken adapters
      (`faulty-adapter.mjs`), proving the suite actually detects injected defects.
-  2. `negative-sy-drive.mjs` — the tiers-heavy band driven at the known negative-`sy` production defect
-     (`theater-boot.js:8888`), showing fast-check finds and shrinks a minimal case, confirmed outside
-     fast-check, and promotes it as a regression fixture. **This unit does not fix the defect** — it
-     proves and promotes it, per the explicit orchestrator instruction.
+  2. `negative-sy-drive.mjs` — the tiers-heavy band driven through the retired positive-only predicate,
+     showing fast-check still finds and shrinks the defect, then proving the same minimal case and the
+     promoted fixture are green through the live finite-signed production boundary.
 
 ## Files
 
@@ -156,10 +155,9 @@ Run it yourself: `node redfirst-faulty-adapter.mjs` (exits 0 iff both faults wer
 
 ## REQUIRED negative control #2 — negative-`sy` drive (`negative-sy-drive.mjs`)
 
-Drives the `tiers-heavy` band (via its `sunken` slot) at `theater-boot.js:8888`'s known defect (a
-negative `sy` silently falls back to the flat floor height, so a sunken tier collapses onto the
-baseline tier — the same defect class G0's `F18-row101-exact-canonical` fixture proves on ONE
-hand-authored shape). fast-check found and shrank an INDEPENDENT minimal case:
+Drives the `tiers-heavy` band (via its `sunken` slot) at an injected copy of the retired positive-only
+predicate. fast-check still finds and shrinks the independent minimal case; the script then requires
+that exact case and the promoted fixture to pass through the live finite-signed production boundary:
 
 ```
 === driving tiers-heavy toward the negative-sy defect (seed=400003, numRuns=500) ===
@@ -170,12 +168,12 @@ hand-authored shape). fast-check found and shrank an INDEPENDENT minimal case:
 === confirming outside fast-check (deterministic one-case replay) ===
   reproduced outside fast-check: true
 
-  promoted: geo-regression-be825c9cc76b
-NEGATIVE CONTROL #2 HOLDS.
+  production fix preserves shrunk case: true
+  promoted fixture geo-regression-be825c9cc76b is GREEN: true
+NEGATIVE CONTROL + PROMOTION HOLD.
 ```
 
-Run it yourself: `node negative-sy-drive.mjs`. **This does not fix `theater-boot.js:8888`** — it proves
-and promotes, per the explicit instruction that R2 only proves+promotes this defect.
+Run it yourself: `node negative-sy-drive.mjs`.
 
 ## Promoted regressions (`regressions/`)
 
@@ -185,19 +183,18 @@ to reproduce OUTSIDE fast-check before being written (§5.4 step 3):
 
 | id | property | what it proves |
 | --- | --- | --- |
-| `geo-regression-be825c9cc76b` | `sunken-tier-survives-production-guard` | **REQUIRED**: the negative-`sy` sunken-tier-collapse defect, minimal 17-cell case, independent of G0's row-101 fixture |
+| `geo-regression-be825c9cc76b` | `sunken-tier-survives-production-guard` | **FIXED/REQUIRED**: minimal 17-cell negative-`sy` case is green through production; old predicate stays red-first |
 | `geo-regression-0965fc745dcf` | `union-idempotent` | **bonus**: concave/branching cell sets don't dedupe under full input duplication (a plain filled rectangle DOES dedupe correctly under the same duplication — this is topology-triggered) |
 | `geo-regression-5f69b811eb7b` | `all-vertices-finite` | **bonus**: a single `tier:NaN` cell produces NaN floor vertex coordinates with zero diagnostics and no thrown error — worse than a clean crash |
 
-All three replay consistently (still RED, as expected for an unfixed defect) via `run-fuzz.mjs`'s own
-promoted-regression replay step — see its `=== promoted regression replay ===` section. One replay
+The negative-`sy` fixture is green through `negative-sy-drive.mjs`; the other known-red fixtures remain
+documented by `run-fuzz.mjs`'s promoted-regression replay step. One replay
 subtlety, documented rather than hidden: JSON has no `NaN` literal, so a promoted `tier:NaN` case
 round-trips through JSON as `tier:null`; `run-fuzz.mjs`'s replay step rehydrates `null` back to `NaN`
 before re-running (the one value this program's own invalid-input generator ever produces for `tier`).
 
-None of these three defects were fixed by this unit — R2's job is proving and promoting, never fixing
-production code, per this unit's own explicit scope and `CLAUDE.md`'s "propose + archive before any
-destructive edit" discipline extended to production geometry code.
+The negative-`sy` defect was fixed by a later production promotion; the remaining fixtures retain
+their original R2 research status.
 
 ## Flagged ambiguities (for the orchestrator)
 

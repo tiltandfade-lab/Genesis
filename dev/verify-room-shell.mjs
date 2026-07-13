@@ -135,15 +135,94 @@ console.log("\n=== 3. Floor triangulation covers the full walkable polygon ===")
   check("3b. area check still holds with a door notch present", Math.abs(planarFloorArea(withDoor) - 30) < 1e-6, planarFloorArea(withDoor));
 }
 
-console.log("\n=== 4. World-UVs continuous across two adjacent (non-seam) wall segments ===");
+console.log("\n=== 4-red. LIVE RED-FIRST: wall VOLUME geometry did not exist at the C4.1a base commit ===");
+{
+  // C4.1a base commit (this unit's branch point, `feat/wall-volumes-geo` off master) — same "import the
+  // OLD file straight off git and run today's assertion against it" pattern Section 0 already
+  // establishes for the whole module's own existence; here it proves the SPECIFIC claim check 4a below
+  // makes (wallStem carries real volume geometry, not a single quad) is genuinely new.
+  const C41A_BASE_COMMIT = "76ccfc51";
+  const tmpPath = join(ROOT, "dev", ".tmp-red-c41a-base-theater-room-mesh.mjs");
+  let baseHadWallStem = null, baseWallsQuadCount = null, err = null;
+  try {
+    const oldSrc = execSync(`git show ${C41A_BASE_COMMIT}:src/ui/theater-room-mesh.js`, { cwd: ROOT, encoding: "utf-8" });
+    const { writeFileSync, unlinkSync } = await import("node:fs");
+    writeFileSync(tmpPath, oldSrc);
+    try {
+      const oldMod = await import(pathToFileURL(tmpPath).href + "?red=" + Date.now());
+      const oldData = oldMod.compileRoomShellData(rectRoom(6, 4), {});
+      baseHadWallStem = Object.prototype.hasOwnProperty.call(oldData, "wallStem");
+      baseWallsQuadCount = oldData.walls.positions.length / 3 / 4;
+    } finally {
+      unlinkSync(tmpPath);
+    }
+  } catch (e) {
+    err = String(e && e.message || e);
+  }
+  check("4-red-a. RED proof: at the C4.1a base commit, compileRoomShellData's return has NO `wallStem` bundle at all",
+    baseHadWallStem === false, { baseHadWallStem, err });
+  check("4-red-b. RED proof: at the base commit the ONLY wall geometry (`.walls`) is exactly 1 quad per segment " +
+    "(the single-two-triangle-plane limitation frame 01's acceptance criterion retires)",
+    baseWallsQuadCount === 4, baseWallsQuadCount);
+  // GREEN: the exact same assertion against TODAY's module (re-run fresh below in section 4 proper)
+  // now finds a real `wallStem` bundle with real volume geometry — the before/after pair this unit's
+  // RED-FIRST discipline asks for.
+  const todayData = compileRoomShellData(rectRoom(6, 4), {});
+  check("4-red-c. GREEN: today's compileRoomShellData DOES return a `wallStem` bundle",
+    Object.prototype.hasOwnProperty.call(todayData, "wallStem") && todayData.wallStem.segments.length === 4);
+}
+
+console.log("\n=== 4. World-UVs continuous across two adjacent (non-seam) wall segments; C4.1a wall VOLUMES ===");
 {
   const data = compileRoomShellData(rectRoom(6, 4), {});
-  // walk the wall buffer's own quads (4 verts each, in emission order) and check the U value at the
-  // END of segment i matches the U at the START of segment i+1 (a real adjacency check, not a
-  // position-keyed global grouping — that would also flag the one expected ring-closure seam).
-  const w = data.walls;
-  const quadCount = w.positions.length / 3 / 4;
-  check("4a. exactly 4 wall quads emitted", quadCount === 4, quadCount);
+  // C4.1a (docs/WALL-VOLUMES-PRACTICALS.md) landed real wall VOLUME geometry (stem+upper+trim, each a
+  // capped box with inner/outer/cap/footing/end-cap faces) — the old check 4a ("exactly 4 wall quads
+  // emitted", one flat two-triangle plane per segment) is RETIRED as a claim about the module's own
+  // real wall geometry: `data.walls` is now explicitly the DEPRECATED back-compat bundle (stem INNER
+  // FACE ONLY, kept so a pre-C4.1a reader never hard-breaks — see theater-room-mesh.js's own `.walls`
+  // header comment) and legitimately STILL measures 4 quads (one per segment) by design, not by defect.
+  // RED-FIRST (checked live): asserting the OLD claim — "the wall geometry IS just one quad per
+  // segment, nothing more" — against `data.wallStem` (the real new stem-volume bundle) fails, because
+  // wallStem carries far more than a single quad per segment (inner+outer+cap-top+cap-lips+2 end
+  // caps+footing-top+footing-face = 9 quads/segment at these opts). This is the concrete "single
+  // two-triangle plane" claim this unit's own frame-01 acceptance criterion retires.
+  const w = data.walls; // deprecated legacy bundle — intentionally still 1 quad/segment, see above
+  const legacyQuadCount = w.positions.length / 3 / 4;
+  check("4a-legacy. the DEPRECATED `.walls` bundle still carries exactly 1 quad per segment (back-compat, by design)",
+    legacyQuadCount === 4, legacyQuadCount);
+  const stemVertsPerSegment = data.wallStem.positions.length / 3 / data.wallStem.segments.length;
+  check("4a. ⊗ RED-FIRST retired: the real wallStem volume is NOT a single quad — each of the 4 wall segments' " +
+    "own stem carries >=8 quads' worth of verts (32) — inner+outer+cap(top+2 lips)+2 endCaps+footing(top+face), " +
+    "not the old plane's 4 (this exact assertion against `.walls`, the pre-C4.1a shape, would read 4 -> RED)",
+    stemVertsPerSegment >= 32, stemVertsPerSegment);
+  check("4a-upper. every one of the 4 (default all-visible) segments also has its OWN upper-volume entry",
+    data.wallUpper.segments.length === 4, data.wallUpper.segments.length);
+  check("4a-cap. the stem volume's own top-cap face resolves as a near-horizontal (|ny|>=0.99) triangle set",
+    (() => {
+      const idx = data.wallStem.indices, nrm = data.wallStem.normals;
+      for (let t = 0; t < idx.length / 3; t++) {
+        const i0 = idx[t * 3];
+        if (Math.abs(nrm[i0 * 3 + 1]) >= 0.99) return true;
+      }
+      return false;
+    })());
+  check("4a-thick. wallStem's own outer-face verts sit `wallThickness` away from the matching inner-face verts",
+    (() => {
+      const p = data.wallStem.positions;
+      // the inner face is the FIRST quad pushed per segment (buildWallBox's own emission order) —
+      // verts 0,1 are innerA/innerB @ stemBaseY; the outer face is the SECOND quad, verts 4,5 =
+      // outerB/outerA @ stemBaseY (buildWallBox reverses a/b for the outer face's own winding).
+      const vpsFloats = (data.wallStem.positions.length / data.wallStem.segments.length); // floats per segment
+      const seg0InnerA = { x: p[0], z: p[2] };
+      const seg0OuterB = { x: p[4 * 3 + 0], z: p[4 * 3 + 2] }; // 2nd quad (outer), vertex index 4 = outerB
+      const seg0InnerB = { x: p[3], z: p[5] };
+      const dist = Math.hypot(seg0OuterB.x - seg0InnerB.x, seg0OuterB.z - seg0InnerB.z);
+      return Math.abs(dist - 0.22) < 1e-6; // DEFAULT_WALL_THICKNESS
+    })());
+  // walk the LEGACY wall buffer's own quads (still the stem inner-face run, continuous arc-length U —
+  // the UV-continuity INTENT this check has always proven survives C4.1a unchanged) and check the U
+  // value at the END of segment i matches the U at the START of segment i+1.
+  const quadCount = legacyQuadCount;
   let continuous = true;
   const detail = [];
   for (let i = 0; i < quadCount - 1; i++) {
@@ -159,6 +238,8 @@ console.log("\n=== 4. World-UVs continuous across two adjacent (non-seam) wall s
   const uEndOfLast = w.uvs[((quadCount - 1) * 4 + 1) * 2];
   check("4c. the ring-closure seam exists exactly once (last segment's end U is the full perimeter length, not wrapped to 0)",
     uEndOfLast > 1e-6 && Math.abs(uEndOfLast - (2 * (6 + 4))) < 1e-6, uEndOfLast);
+  check("4d. door/aperture assertions untouched — a doorless room still has zero apertures (regression guard)",
+    compileRoomShellData(rectRoom(6, 4), {}).apertures.length === 0);
 }
 
 console.log("\n=== 5. Cell<->triangle map resolves every walkable cell ===");

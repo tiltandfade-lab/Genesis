@@ -139,8 +139,8 @@ export function productionShellCellsAdapter(scenario) {
     sy: c.sourceRef && typeof c.sourceRef.rawSy === "number" ? c.sourceRef.rawSy : undefined,
   }));
   const shellCells = floorList.map((f) => {
-    // theater-boot.js:8888, VERBATIM — the known defect under negative-control test:
-    const sy = (typeof f.sy === "number" && f.sy > 0) ? f.sy : ITR_FLOOR_HEIGHT_FALLBACK;
+    // theater-boot.js, VERBATIM — finite signed elevations survive; only invalid/missing values fall back.
+    const sy = (typeof f.sy === "number" && Number.isFinite(f.sy)) ? f.sy : ITR_FLOOR_HEIGHT_FALLBACK;
     return {
       x: Math.round(f.x), z: Math.round(f.z),
       tier: Math.round(sy / ROOM_SHELL_TIER_QUANTUM),
@@ -157,9 +157,23 @@ export function productionShellCellsAdapter(scenario) {
   return { shellCells, data, threw };
 }
 
+/** positiveOnlyShellCellsAdapter retains the retired predicate solely as R2's load-bearing red-first
+    control. Production must never call this adapter. */
+export function positiveOnlyShellCellsAdapter(scenario) {
+  const floorList = scenario.cells.map((c) => ({
+    x: c.x, z: c.z,
+    sy: c.sourceRef && typeof c.sourceRef.rawSy === "number" ? c.sourceRef.rawSy : undefined,
+  }));
+  const shellCells = floorList.map((f) => {
+    const sy = (typeof f.sy === "number" && f.sy > 0) ? f.sy : ITR_FLOOR_HEIGHT_FALLBACK;
+    return { x: Math.round(f.x), z: Math.round(f.z), tier: Math.round(sy / ROOM_SHELL_TIER_QUANTUM), elevationY: ITR_FLOOR_BASE_Y + sy, isDoor: false };
+  });
+  let data, threw = null;
+  try { data = compileRoomShellData(shellCells, scenario.renderShape === "octagon" ? { smoothShape: "octagon" } : {}); }
+  catch (e) { threw = String((e && e.stack) || e); }
+  return { shellCells, data, threw };
+}
+
 export const PRODUCTION_SY_GUARD_NOTE =
-  "theater-boot.js:8888 `const sy = (typeof f.sy === 'number' && f.sy > 0) ? f.sy : ITR_FLOOR_HEIGHT_FALLBACK;` " +
-  "discards any NEGATIVE f.sy (a legitimately sunken tile) and falls back to the flat floor height — a cell " +
-  "whose real elevation is BELOW the room's baseline collapses onto the SAME quantized tier as the " +
-  "surrounding floor. Same defect G0's F18-row101-exact-canonical negative control proves; R2's job is to " +
-  "show fast-check finds and SHRINKS a minimal case of it, independent of the hand-authored row-101 fixture.";
+  "the production shellCells boundary accepts every finite signed f.sy via Number.isFinite; the " +
+  "retired f.sy > 0 predicate is retained only in positiveOnlyShellCellsAdapter as the red-first control.";

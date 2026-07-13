@@ -35,7 +35,8 @@
      5. Full-width open edge (one wall entirely a door) — the remaining 3-sided open run's 2 interior
         corners land at 0; both its own endpoints are plain jambs.
      6. Cap continuity and footing continuity measured SEPARATELY from the stem outer face (not just
-        inferred) — dedicated checks against capOutA/capOutB and footOutA/footOutB.
+        inferred) — dedicated checks against BOTH cap lips (capIn + capOut) and footOut. Measuring only
+        capOut is insufficient: the pre-review G3 path left a triangular top-cap hole at capIn.
      7. 100% source/aperture provenance — every wall segment across every fixture above resolves a
         non-null, non-degraded outByIndex entry (an all-degraded fallback would still be "correct" but
         would mean the run-offset path never actually engaged — this proves it did).
@@ -108,8 +109,10 @@ const rect = [seg(0, 0, 4, 0), seg(4, 0, 4, 3), seg(4, 3, 0, 3), seg(0, 3, 0, 0)
     const cur = result.outByIndex[i], next = result.outByIndex[(i + 1) % 4];
     check(`1b. oss STEM corner ${i} gap 0`, cur && next && dist(cur.outerB, next.outerA) < EPS,
       cur && next && dist(cur.outerB, next.outerA));
-    check(`1c. oss CAP corner ${i} gap 0`, cur && next && dist(cur.capOutB, next.capOutA) < EPS,
+    check(`1c. oss CAP OUTER corner ${i} gap 0`, cur && next && dist(cur.capOutB, next.capOutA) < EPS,
       cur && next && dist(cur.capOutB, next.capOutA));
+    check(`1c2. oss CAP INNER corner ${i} gap 0`, cur && next && dist(cur.capInB, next.capInA) < EPS,
+      cur && next && dist(cur.capInB, next.capInA));
     check(`1d. oss FOOTING corner ${i} gap 0`, cur && next && dist(cur.footOutB, next.footOutA) < EPS,
       cur && next && dist(cur.footOutB, next.footOutA));
   }
@@ -121,17 +124,19 @@ const octPts = [{ x: 1, z: 0 }, { x: 3, z: 0 }, { x: 4, z: 1 }, { x: 4, z: 3 }, 
 const oct = octPts.map((p, i) => { const q = octPts[(i + 1) % octPts.length]; return seg(p.x, p.z, q.x, q.z); });
 {
   const { result } = run("octagon", oct);
-  let maxStemGap = 0, maxCapGap = 0, maxFootGap = 0;
+  let maxStemGap = 0, maxCapOutGap = 0, maxCapInGap = 0, maxFootGap = 0;
   for (let i = 0; i < oct.length; i++) {
     const cur = result.outByIndex[i], next = result.outByIndex[(i + 1) % oct.length];
     if (!cur || !next) continue;
     maxStemGap = Math.max(maxStemGap, dist(cur.outerB, next.outerA));
-    maxCapGap = Math.max(maxCapGap, dist(cur.capOutB, next.capOutA));
+    maxCapOutGap = Math.max(maxCapOutGap, dist(cur.capOutB, next.capOutA));
+    maxCapInGap = Math.max(maxCapInGap, dist(cur.capInB, next.capInA));
     maxFootGap = Math.max(maxFootGap, dist(cur.footOutB, next.footOutA));
   }
   check("2a. octagon: every corner resolved (no null outByIndex entry)", result.outByIndex.every(Boolean));
   check("2b. octagon: max STEM corner gap across all 8 corners is 0", maxStemGap < EPS, maxStemGap);
-  check("2c. octagon: max CAP corner gap across all 8 corners is 0", maxCapGap < EPS, maxCapGap);
+  check("2c. octagon: max CAP OUTER corner gap across all 8 corners is 0", maxCapOutGap < EPS, maxCapOutGap);
+  check("2c2. octagon: max CAP INNER corner gap across all 8 corners is 0", maxCapInGap < EPS, maxCapInGap);
   check("2d. octagon: max FOOTING corner gap across all 8 corners is 0", maxFootGap < EPS, maxFootGap);
   check("2e. octagon: zero degraded runs", !result.diagnostics.some((d) => d.degraded), result.diagnostics);
 }
@@ -150,7 +155,8 @@ const doorRect = [
   interiorPairs.forEach(([a, b]) => {
     const cur = result.outByIndex[a], next = result.outByIndex[b];
     check(`3a. doorRect interior corner ${a}->${b}: stem gap 0`, cur && next && dist(cur.outerB, next.outerA) < EPS);
-    check(`3b. doorRect interior corner ${a}->${b}: cap gap 0`, cur && next && dist(cur.capOutB, next.capOutA) < EPS);
+    check(`3b. doorRect interior corner ${a}->${b}: outer-cap gap 0`, cur && next && dist(cur.capOutB, next.capOutA) < EPS);
+    check(`3b2. doorRect interior corner ${a}->${b}: inner-cap gap 0`, cur && next && dist(cur.capInB, next.capInA) < EPS);
     check(`3c. doorRect interior corner ${a}->${b}: footing gap 0`, cur && next && dist(cur.footOutB, next.footOutA) < EPS);
   });
   // jamb check: run endpoints (idx2's own "A" end, idx0's own "B" end) must equal the PLAIN per-segment
@@ -219,9 +225,11 @@ const openEdge = [seg(0, 0, 4, 0, "door"), seg(4, 0, 4, 3), seg(4, 3, 0, 3), seg
 // 2c/2d, 3b/3c) already do this per-corner; this block cross-checks the AGGREGATE claim numerically. ═══
 {
   const { result } = run("rect-recheck", rect);
-  const capOK = [0, 1, 2, 3].every((i) => dist(result.outByIndex[i].capOutB, result.outByIndex[(i + 1) % 4].capOutA) < EPS);
+  const capOutOK = [0, 1, 2, 3].every((i) => dist(result.outByIndex[i].capOutB, result.outByIndex[(i + 1) % 4].capOutA) < EPS);
+  const capInOK = [0, 1, 2, 3].every((i) => dist(result.outByIndex[i].capInB, result.outByIndex[(i + 1) % 4].capInA) < EPS);
   const footOK = [0, 1, 2, 3].every((i) => dist(result.outByIndex[i].footOutB, result.outByIndex[(i + 1) % 4].footOutA) < EPS);
-  check("6a. cap continuity verified independently of stem continuity", capOK);
+  check("6a. cap OUTER continuity verified independently of stem continuity", capOutOK);
+  check("6a2. cap INNER continuity verified independently (no triangular top-cap hole)", capInOK);
   check("6b. footing continuity verified independently of stem continuity", footOK);
 }
 

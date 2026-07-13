@@ -77,6 +77,7 @@ Adam) can jump straight to the right doc instead of grepping/reading its way the
 - `BATTLEMAP.md` — the 12-zone battlemap: spoken moves, an honest diorama; structure build-ready, art awaits the STYLE-PROBES verdict (2026-07-01).
 - `STAGE-C-ART-DIRECTION-REVIEW.md` — independent visual acceptance of Wave C: canonical multi-patch terrain correction, sprite/prop architecture findings, no-human production contract, and the ordered route from debug shells to frames 12/19 (2026-07-12).
 - `GRAPHICS-PRODUCTION-RESEARCH-WAVE.md` — executable no-human graphics research wave: path-traced oracle, UV unwrap, atlases, GPU telemetry, seeded visual distribution, transparency classification, and Claude's multi-agent execution gates (2026-07-12).
+- `PHASE-3-DIRECTOR-BRIEF.md` — (`type: orchestration-plan`) Fable's handoff into Phase 3: the landed `legacy→oss` geometry flip + stabilization evidence, a linked path to the full Codex plugin-rec suite + plan, the GP-2..4 terrain, the oracle/spend calls that are Fable's, and Claude's smallest-correction-first recommendation (2026-07-13).
 - `BLOCKWRIGHT.md` — the procedural visual layer — blocky, untextured, fast, no art assets; build-ready (2026-07-01).
 - `BREACH.md` — the Breach & the Nightmare — the bell-curve skin, and where the world gets thin; batch-3 unit (2026-07-02).
 - `COMBAT-LIFECYCLE.md` — the missing seam between the built combat stack and live play — built (2026-07-03).

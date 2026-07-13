@@ -142,6 +142,8 @@ Adam) can jump straight to the right doc instead of grepping/reading its way the
 
 **Research / exploration** — thinking not yet promoted to normative spec.
 
+- `OFFLINE-ART-FOUNDRY-RESEARCH.md` — executable Kenney/OSS audit and the deterministic donor-parts
+  grammar: 49-pack census, 13-pack shortlist, prop IR, geometry/texture gates, and OF-1–OF-6 plan.
 - `FABLE-DEV-TOOLS.md` — rough future-tool queue: Table Atlas, NPC Library, Town Builder, and
   Building Builder as read-only authoring instruments first, source-safe editors later.
 - `STARTING-STATE-MODELS.md` — starting-state design research.

@@ -28,6 +28,10 @@ Set `GENESIS_OFFLINE_ART_TOOLS` to use another dependency root. Results default 
 These probes measure technical and compositional properties. They do not autonomously accept art.
 Taste-bearing conclusions still require reading the generated overlays and comparison images.
 
+This directory is a Python/image research lab, not the shared JavaScript dependency authority.
+`dev/geometry-tools/pins.json` and `dev/geometry-tools/LEDGER.md` own geometry/glTF package pins and
+the R0-R9 execution path in `docs/GRAPHICS-CONVERGENCE-PLAN.md` owns global ordering.
+
 `kenney_catalog_audit.py` is intentionally a scratch fetcher, not an asset installer. It records
 official source URLs, declared license, archive license evidence, versions, hashes, and contents.
 It never writes under `assets/`. A reviewed donor manifest must select exact files before any

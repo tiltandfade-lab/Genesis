@@ -305,7 +305,15 @@ anthropomorphism; PCs add exact loadout + class cues + neutral-ready pose.
 | spr-fantasy-shield-guardian | Large construct, shield guardian, rune-keyed slab body, amulet socket glowing faint — verb: INTERPOSES |
 | spr-fantasy-guardian-naga | Large monstrosity, guardian naga, hooded serpent risen to speak, temple-jewelry verdigris — verb: WARNS |
 
-## LANE 6 — state-family kits (contract B, §4.1 component kits — the props handoff's in-game sample)
+## LANE 6 — state-family kits: FILL-IN ONLY (contract B, §4.1 — the resumed KIT LANE, P3-K)
+
+> **2026-07-13 amendment (Adam's ruling: the kit lane runs separate from the figure lanes and is
+> never preempted by them).** Eleven kit/prop source sheets ALREADY EXIST with alpha passes at
+> `fantasy-pilot/raw-sheets/` on `codex/extruded-prop-pilot` — switch kit (4 parts), two door
+> kits, floor-trap kit, wall-trap flat-props, shrine/portal components, chest, container,
+> practical light, banner/sign, portables. **Do not regenerate those.** This lane's slots are the
+> FILL-IN budget for what K1's crop/component-fit QA rejects — the arched-door frame/leaf
+> mismatch is the one known reject today. Generate a slot below only when K1 rejects its sheet.
 
 Compile from §7 (master prop prompt) + §4.1 kit contracts. GREEN #00FF00 chroma. Strict front
 elevation, components isolated and separable, NEVER preassembled:

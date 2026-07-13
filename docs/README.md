@@ -75,6 +75,7 @@ Adam) can jump straight to the right doc instead of grepping/reading its way the
 - `BATTLE-VISUALS.md` — making the fight worth looking at — Phase A build-ready, Phase B is the style-probe session, Phase C is T6 (2026-07-03).
 - `BATTLEMAP.md` — the 12-zone battlemap: spoken moves, an honest diorama; structure build-ready, art awaits the STYLE-PROBES verdict (2026-07-01).
 - `STAGE-C-ART-DIRECTION-REVIEW.md` — independent visual acceptance of Wave C: canonical multi-patch terrain correction, sprite/prop architecture findings, no-human production contract, and the ordered route from debug shells to frames 12/19 (2026-07-12).
+- `GRAPHICS-PRODUCTION-RESEARCH-WAVE.md` — executable no-human graphics research wave: path-traced oracle, UV unwrap, atlases, GPU telemetry, seeded visual distribution, transparency classification, and Claude's multi-agent execution gates (2026-07-12).
 - `BLOCKWRIGHT.md` — the procedural visual layer — blocky, untextured, fast, no art assets; build-ready (2026-07-01).
 - `BREACH.md` — the Breach & the Nightmare — the bell-curve skin, and where the world gets thin; batch-3 unit (2026-07-02).
 - `COMBAT-LIFECYCLE.md` — the missing seam between the built combat stack and live play — built (2026-07-03).

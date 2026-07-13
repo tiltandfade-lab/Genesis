@@ -527,97 +527,87 @@ async function main() {
       `the improvement is CLEAR, not marginal: emissive-on room >= ${COSMIC_IMPROVEMENT_RATIO}x the disabled baseline (ratio=${cosmicRed.roomMean ? (cosmicGreen.roomMean / cosmicRed.roomMean).toFixed(2) : "n/a"})`);
 
     // ================================================================
-    // P-1 problem 3 — SEAT THE GLOW (every core realm gets a visible emitter under its glow disc)
+    // P-1 problem 3, REWRITTEN for docs/WALL-VOLUMES-PRACTICALS.md Unit E0 (2026-07-12) — WHY: the
+    // old card/nub emitter system (INTERIOR_LIGHT_CARD / interiorBuildLightEmitterNub /
+    // _interiorLightEmittersForTest) is retired — interiorBuildLights now mounts ONE physical FIXTURE
+    // per light unconditionally (interiorBuildFixtureGroup), tagged fixtureEmitter and reachable via the
+    // new _interiorFixtureEmittersForTest() seam. "Seat the glow" becomes "every light has a real
+    // fixture body + emitter" (always true now, not a per-realm card/nub lookup that could miss).
     // ================================================================
-    group("P-1c — every core realm's glow disc has a visible emitter under it (RED-FIRST via the nub flag)");
+    group("P-1c — every light resolves a real physical fixture with a visible emitter (RED-FIRST: the OLD card/nub seam is retired)");
     const EMIT_EPS = 0.05;
-    async function emitterNear(built) {
+    async function fixtureEmitterNear(built) {
       const origin = await page.evaluate(() => window.Theater.interiorBoardOrigin());
-      const emitters = await page.evaluate(() => window.Theater._interiorLightEmittersForTest());
+      const emitters = await page.evaluate(() => window.Theater._interiorFixtureEmittersForTest());
       const ex = built.probe.torch.x - origin.cx, ez = built.probe.torch.z - origin.cz;
       return emitters.find((e) => Math.abs(e.x - ex) < EMIT_EPS && Math.abs(e.z - ez) < EMIT_EPS) || null;
     }
 
-    // RED-FIRST on a NUB realm (cosmic has no INTERIOR_LIGHT_CARD entry — this is the exact "glow floats
-    // with no source" bug Adam saw): flip the nub flag off, prove the emitter really does disappear.
-    await page.evaluate(() => window.Theater.setLightEmitterNubEnabled(false));
-    await mountAndShoot(page, cosmicBuilt.board, path.join(outDir, "p1c-cosmic-RED-nub-disabled.png"));
-    const cosmicNoEmitter = await emitterNear(cosmicBuilt);
-    ok(!cosmicNoEmitter, `RED-FIRST: with the emitter-nub flag off, cosmic's glow disc has NOTHING mounted at its light seed (found ${JSON.stringify(cosmicNoEmitter)}) — reproduces "the glow disc floats with no source"`);
+    // RED-FIRST: the OLD card/nub seam (_interiorLightEmittersForTest) now finds NOTHING — proves the
+    // old system is genuinely retired from the production build path, not just unused-but-still-wired.
+    await mountAndShoot(page, cosmicBuilt.board, path.join(outDir, "p1c-cosmic-RED-old-seam-empty.png"));
+    const cosmicOldSeam = await page.evaluate(() => window.Theater._interiorLightEmittersForTest());
+    ok(Array.isArray(cosmicOldSeam) && cosmicOldSeam.length === 0, `RED-FIRST: the OLD card/nub seam (_interiorLightEmittersForTest) returns EMPTY now (found ${JSON.stringify(cosmicOldSeam)}) — the old marker system is retired, not merely dormant`);
 
-    await page.evaluate(() => window.Theater.setLightEmitterNubEnabled(true));
-    await mountAndShoot(page, cosmicBuilt.board, path.join(outDir, "p1c-cosmic-GREEN-nub-enabled.png"));
-    const cosmicEmitter = await emitterNear(cosmicBuilt);
-    ok(!!cosmicEmitter && cosmicEmitter.kind === "nub", `GREEN: flipping the flag back on + remounting DOES seat a visible emitter nub under cosmic's glow disc (${JSON.stringify(cosmicEmitter)}) — the flag is load-bearing`);
+    // GREEN: the NEW fixture-emitter seam finds a real, physical fixture at the same light seed.
+    const cosmicEmitter = await fixtureEmitterNear(cosmicBuilt);
+    ok(!!cosmicEmitter, `GREEN: the NEW _interiorFixtureEmittersForTest() DOES find a real fixture emitter at cosmic's light seed (${JSON.stringify(cosmicEmitter)}) — E0's own "every light gets a fixture" replaces the old per-realm card/nub lookup`);
+    ok(!!cosmicEmitter && cosmicEmitter.emissiveIntensity > 0, `cosmic (non-bright): the fixture's emitter is actually GLOWING (emissiveIntensity=${cosmicEmitter && cosmicEmitter.emissiveIntensity})`);
 
-    // Full sweep, flag at its real default (on): chrome/gloom/fantasy carry a real dressing card
-    // (INTERIOR_LIGHT_CARD); cosmic (emissive, not bright) has none, so it rides the nub. LIGHT-CLOSE
-    // unit (below, its own group): lost-world/suburb/bright-kingdom are BRIGHT profiles (daylit) — their
-    // practicals (glow + emitter) now SUPPRESS entirely, so their own expectation flips to "none" here
-    // (this is the intentional new state this unit ships, not a regression — LC-1's own RED/GREEN below
-    // proves the suppression is real and reversible).
+    // Full sweep, at production defaults: EVERY realm/profile now resolves a fixture — chrome/gloom/
+    // fantasy/cosmic (non-bright) glow; lost-world/suburb/bright-kingdom (bright/daylit) keep the SAME
+    // physical fixture body (§E0 "keep the fixture, drop the glow") but its emitter goes dark
+    // (emissiveIntensity===0) — never "no fixture at all" the way the old system went to nothing.
     const coreRealmChecks = [
-      { realmId: "chrome", lightProfile: "torchlit", expectKind: "card" },
-      { realmId: "gloom", lightProfile: "torchlit", expectKind: "card" },
-      { realmId: "fantasy", lightProfile: "torchlit", expectKind: "card" },
-      { realmId: "lost-world", lightProfile: "daylit", expectKind: "none" },
-      { realmId: "suburb", lightProfile: "daylit", expectKind: "none" },
-      { realmId: "bright-kingdom", lightProfile: "daylit", expectKind: "none" },
-      { realmId: "cosmic", lightProfile: "voidlit", expectKind: "nub" },
+      { realmId: "chrome", lightProfile: "torchlit", bright: false },
+      { realmId: "gloom", lightProfile: "torchlit", bright: false },
+      { realmId: "fantasy", lightProfile: "torchlit", bright: false },
+      { realmId: "lost-world", lightProfile: "daylit", bright: true },
+      { realmId: "suburb", lightProfile: "daylit", bright: true },
+      { realmId: "bright-kingdom", lightProfile: "daylit", bright: true },
+      { realmId: "cosmic", lightProfile: "voidlit", bright: false },
     ];
     for (const cfg of coreRealmChecks) {
       const built = await buildScene(page, { realmId: cfg.realmId, lightProfile: cfg.lightProfile, walkId: "diegetic-p1c-" + cfg.realmId });
       if (!built.ok) { ok(false, `${cfg.realmId}: scene build failed: ${built.error}`); continue; }
       await mountAndShoot(page, built.board, path.join(outDir, `p1c-${cfg.realmId}-emitter.png`));
-      const emitter = await emitterNear(built);
-      if (cfg.expectKind === "none") {
-        ok(!emitter, `${cfg.realmId} (bright profile): NO emitter at the light seed — its torch practical is suppressed (found ${JSON.stringify(emitter)})`);
+      const emitter = await fixtureEmitterNear(built);
+      ok(!!emitter, `${cfg.realmId}: a real fixture emitter exists at the light seed (bright realms keep the fixture BODY too — found ${JSON.stringify(emitter)})`);
+      if (cfg.bright) {
+        ok(!!emitter && emitter.emissiveIntensity === 0, `${cfg.realmId} (bright profile): the fixture's emitter is DARK (emissiveIntensity=0) — suppressed, but the physical object is still there`);
       } else {
-        ok(!!emitter, `${cfg.realmId}: a visible emitter (card or nub) exists at the glow-disc's light seed (found ${JSON.stringify(emitter)})`);
-        ok(!!emitter && emitter.kind === cfg.expectKind, `${cfg.realmId}: the emitter is the expected kind ("${cfg.expectKind}") — found "${emitter && emitter.kind}"`);
+        ok(!!emitter && emitter.emissiveIntensity > 0, `${cfg.realmId} (non-bright): the fixture's emitter is GLOWING (emissiveIntensity=${emitter && emitter.emissiveIntensity})`);
       }
     }
 
     // ================================================================
-    // LIGHT-CLOSE unit — PART A: bright-realm practical suppression (suburb's torch orb no longer
-    // blows out on top of the already-tuned P-1a ambient/hemi/key/fill)
+    // LIGHT-CLOSE unit — PART A, REWRITTEN for E0 — bright-realm practical suppression. WHY: glowCount
+    // is now 0 in EVERY production capture (the glow disc is diagnostics-only, ITR_GLOW_DISC_DIAGNOSTIC),
+    // so the old "glowCount>0 (RED) -> glowCount===0 (GREEN)" proof no longer distinguishes suppressed
+    // from unsuppressed — that signal moved to the FIXTURE's own emitter emissiveIntensity (glowDiscDiagnosticEnabled
+    // stays OFF throughout this group, matching the real production path a player actually sees).
     // ================================================================
-    group("LC-1 — bright-realm practicals suppress (suburb's torch orb + glow/nub no longer mount; RED-FIRST proves they used to)");
-    // NOTE: suburb's own per-realm sky fill (P-1a) already reads near-white at FLOOR level right around
-    // the torch seed (torchFloorLum stays ~0.99 whether the practical is suppressed or not — the ambient/
-    // hemi alone already saturates that pixel, so the floor sample can't discriminate the torch's own
-    // contribution). The glow disc itself is a DISTINCT additive billboard floating at head height
-    // (torchGlowLum, sampled at the disc's own mount height) — its presence/absence there is what
-    // actually reads as "a torch orb hanging in a sunlit room" or not, so that's the load-bearing sample.
-    // GLOW-DISC SHRINK (2026-07-12): the glow disc was shrunk game-wide (cone removed → it was oversized),
-    // so an un-suppressed disc now reads ~0.74 (a visible flame-glow), not the old ~0.85+ blown orb. The
-    // load-bearing "suppression works" proof is glowCount>0 (line ~595) + the RED>GREEN delta (line ~610);
-    // this sample just confirms the un-suppressed glow is meaningfully VISIBLE (present, not the suppressed
-    // dark), so the threshold drops from the stale "blown-orb" 0.85 to a "clearly visible glow" floor.
-    const LC1_GLOW_CLIP = 0.4;
+    group("LC-1 — bright-realm practicals suppress (suburb's fixture emitter goes dark; RED-FIRST proves it used to glow)");
+    ok((await page.evaluate(() => window.Theater.glowDiscDiagnosticEnabled())) === false, "sanity: ITR_GLOW_DISC_DIAGNOSTIC stays at its real production default (off) throughout this group");
     await page.evaluate(() => window.Theater.setBrightPracticalsSuppressed(false));
     const lc1RedPng = await mountAndShoot(page, suburbBuilt.board, path.join(outDir, "lc1-suburb-RED-practicals-on.png"));
     const lc1Red = await measure(page, suburbBuilt.probe, lc1RedPng);
     ok(lc1Red.ok, "LC-1 RED-baseline frame measured: " + (lc1Red.error || "ok"));
-    const lc1RedGlow = await page.evaluate(() => window.Theater.interiorLightGlowCount());
-    const lc1RedEmitter = await emitterNear(suburbBuilt);
-    console.log(`  suburb daylit, suppression OFF (RED): glowCount=${lc1RedGlow} emitter=${JSON.stringify(lc1RedEmitter)} roomMean=${lc1Red.roomMean != null ? lc1Red.roomMean.toFixed(4) : "n/a"} torchFloorLum=${lc1Red.torchFloorLum != null ? lc1Red.torchFloorLum.toFixed(4) : "n/a"} torchGlowLum=${lc1Red.torchGlowLum != null ? lc1Red.torchGlowLum.toFixed(4) : "n/a"}`);
-    ok(lc1RedGlow > 0, `RED-FIRST: with suppression OFF, suburb's torch glow disc DOES mount (glowCount=${lc1RedGlow}) — the check is load-bearing`);
-    ok(!!lc1RedEmitter, `RED-FIRST: with suppression OFF, suburb's torch DOES seat a visible emitter nub (found ${JSON.stringify(lc1RedEmitter)})`);
-    ok(lc1Red.torchGlowLum != null && lc1Red.torchGlowLum >= LC1_GLOW_CLIP,
-      `RED-FIRST: suburb's torch glow disc DOES read as a visible flame-glow at head height (torchGlowLum=${lc1Red.torchGlowLum != null ? lc1Red.torchGlowLum.toFixed(4) : "n/a"} >= ${LC1_GLOW_CLIP}) — the check is load-bearing`);
+    const lc1RedGlowCount = await page.evaluate(() => window.Theater.interiorLightGlowCount());
+    const lc1RedEmitter = await fixtureEmitterNear(suburbBuilt);
+    console.log(`  suburb daylit, suppression OFF (RED): glowCount=${lc1RedGlowCount} emitter=${JSON.stringify(lc1RedEmitter)} roomMean=${lc1Red.roomMean != null ? lc1Red.roomMean.toFixed(4) : "n/a"}`);
+    ok(lc1RedGlowCount === 0, `glowCount stays 0 in production regardless of suppression state (glowCount=${lc1RedGlowCount}) — the diagnostics-only disc is not the suppression signal anymore`);
+    ok(!!lc1RedEmitter, `RED-FIRST: with suppression OFF, suburb's torch DOES seat a real fixture (found ${JSON.stringify(lc1RedEmitter)})`);
+    ok(!!lc1RedEmitter && lc1RedEmitter.emissiveIntensity > 0, `RED-FIRST: suburb's torch fixture emitter DOES glow (emissiveIntensity=${lc1RedEmitter && lc1RedEmitter.emissiveIntensity}) — the check below is load-bearing, not vacuous`);
 
     await page.evaluate(() => window.Theater.setBrightPracticalsSuppressed(true));
     const lc1GreenPng = await mountAndShoot(page, suburbBuilt.board, path.join(outDir, "lc1-suburb-GREEN-suppressed.png"));
     const lc1Green = await measure(page, suburbBuilt.probe, lc1GreenPng);
     ok(lc1Green.ok, "LC-1 GREEN frame measured: " + (lc1Green.error || "ok"));
-    const lc1GreenGlow = await page.evaluate(() => window.Theater.interiorLightGlowCount());
-    const lc1GreenEmitter = await emitterNear(suburbBuilt);
-    console.log(`  suburb daylit, suppression ON (GREEN, default): glowCount=${lc1GreenGlow} emitter=${JSON.stringify(lc1GreenEmitter)} roomMean=${lc1Green.roomMean != null ? lc1Green.roomMean.toFixed(4) : "n/a"} torchFloorLum=${lc1Green.torchFloorLum != null ? lc1Green.torchFloorLum.toFixed(4) : "n/a"} torchGlowLum=${lc1Green.torchGlowLum != null ? lc1Green.torchGlowLum.toFixed(4) : "n/a"}`);
-    ok(lc1GreenGlow === 0, `GREEN: suppression ON — suburb's torch glow disc no longer mounts (glowCount=${lc1GreenGlow})`);
-    ok(!lc1GreenEmitter, `GREEN: suppression ON — no emitter nub at the torch seed (found ${JSON.stringify(lc1GreenEmitter)})`);
-    ok(lc1Green.torchGlowLum != null && lc1Red.torchGlowLum != null && lc1Green.torchGlowLum < lc1Red.torchGlowLum - 0.05,
-      `GREEN: the head-height orb reads measurably DARKER once suppressed — no more blown-out floating disc (GREEN ${lc1Green.torchGlowLum.toFixed(4)} vs RED ${lc1Red.torchGlowLum.toFixed(4)})`);
+    const lc1GreenEmitter = await fixtureEmitterNear(suburbBuilt);
+    console.log(`  suburb daylit, suppression ON (GREEN, default): emitter=${JSON.stringify(lc1GreenEmitter)} roomMean=${lc1Green.roomMean != null ? lc1Green.roomMean.toFixed(4) : "n/a"}`);
+    ok(!!lc1GreenEmitter, `GREEN: the fixture's own BODY is still there (§E0 "keep the fixture, drop the glow") — found ${JSON.stringify(lc1GreenEmitter)}`);
+    ok(!!lc1GreenEmitter && lc1GreenEmitter.emissiveIntensity === 0, `GREEN: suppression ON — the fixture's emitter is now DARK (emissiveIntensity=${lc1GreenEmitter && lc1GreenEmitter.emissiveIntensity}), never a floating orb`);
     ok(lc1Green.roomMean != null && lc1Green.roomMean >= 0.05,
       `the suppression doesn't overcorrect into darkness: suburb's room still reads sky-lit (roomMean=${lc1Green.roomMean != null ? lc1Green.roomMean.toFixed(4) : "n/a"} >= 0.05)`);
 
@@ -626,12 +616,10 @@ async function main() {
     // is bright-profile ONLY) — checked with the suppression flag left at its real default (on, set
     // just above) so this proves the gate discriminates by profile, not a global kill switch.
     // ================================================================
-    group("LC-1-regression — gloom (torchlit) keeps its glow disc + emitter card; suppression never touches non-bright realms");
+    group("LC-1-regression — gloom (torchlit) keeps its fixture emitter glowing; suppression never touches non-bright realms");
     await mountAndShoot(page, gloomBuilt.board, path.join(outDir, "lc1-gloom-torchlit-unaffected.png"));
-    const gloomGlowCount = await page.evaluate(() => window.Theater.interiorLightGlowCount());
-    const gloomEmitterStill = await emitterNear(gloomBuilt);
-    ok(gloomGlowCount > 0, `gloom (torchlit) still mounts its glow disc with bright-suppression ON (glowCount=${gloomGlowCount})`);
-    ok(!!gloomEmitterStill && gloomEmitterStill.kind === "card", `gloom (torchlit) still seats its lantern card (found ${JSON.stringify(gloomEmitterStill)}) — suppression is bright-profile only`);
+    const gloomEmitterStill = await fixtureEmitterNear(gloomBuilt);
+    ok(!!gloomEmitterStill && gloomEmitterStill.emissiveIntensity > 0, `gloom (torchlit) still glows with bright-suppression ON (found ${JSON.stringify(gloomEmitterStill)}) — suppression is bright-profile only`);
 
     // ================================================================
     // LIGHT-CLOSE unit — PART B: cosmic albedo lift (isolated from P-1b's emissive-light toggle via its

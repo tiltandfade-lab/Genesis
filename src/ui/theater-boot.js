@@ -8115,12 +8115,19 @@ function itrOcclusionIdFor(kind, x, z, yBase){
 let ITR_ROOM_SHELL = true;
 // UNIT G2 (docs/GEOMETRY-OSS-INTEGRATION.md §15) — theater-boot.js's own copy of the
 // legacy|oss-compare|oss migration switch, threaded through to compileRoomShell(...) below as
-// opts.roomShellPolygonKernel. DEFAULT "legacy" — NEVER flip this default; theater-room-mesh.js's own
-// compileRoomShellData already defaults to "legacy" independently (ROOM_SHELL_POLYGON_KERNEL), so this
-// constant is theater-boot.js's own explicit pass-through, not a second source of truth for the
-// default value itself. Test-seam-settable via window.Theater._setRoomShellPolygonKernel, mirroring
-// _setRoomShellEnabled just above.
-let ROOM_SHELL_POLYGON_KERNEL_FLAG = "legacy";
+// opts.roomShellPolygonKernel. This is the PRODUCTION render default (setInteriorBoard's build at the
+// roomShellPolygonKernel pass-through below reads it). FLIPPED "legacy" -> "oss" 2026-07-13 (§15
+// promotion step 8) after the full pre-flip evidence packet came back sound: verify-wall-runs-oss 92/0
+// (corner gap 0 at stem/cap/footing, both cap lips, 100% provenance), verify-wall-runs-oss-fuzz over
+// 5000 randomized rooms (zero join-gap, full segment provenance, acute-bevel contract + red-first
+// negative control), verify-geometry-fixtures 28/0 (7 legacy defects fixed, 0 regressions), the
+// outside-low grazing capture (oss closes the corner with a continuous mitered cap lip), the
+// product-camera integrated capture (oss ≡ legacy at the player-visible shot), and the perf receipt
+// (draw calls Δ0, triangles Δ-286 i.e. CHEAPER, geometries/programs Δ0, textures +2 one-time).
+// The legacy path is RETAINED for the §15 step-9 stabilization hold: theater-room-mesh.js's module
+// ROOM_SHELL_POLYGON_KERNEL stays "legacy" (the bare-call fallback + dev-harness default), and this
+// flag is still test-seam-settable back to "legacy"/"oss-compare" via _setRoomShellPolygonKernel.
+let ROOM_SHELL_POLYGON_KERNEL_FLAG = "oss";
 // world units per texture repeat for the compiled shell's own vertex UVs (theater-room-mesh.js's
 // DEFAULT_UV_DENSITY=1 mirrors this — kept as a SEPARATE named constant here, not an import, since the
 // pure module stays decoupled from this file's own material-building code; see the wire-in call site).

@@ -413,11 +413,25 @@ function midpointOf(a, b) { return { x: (a.x + b.x) / 2, z: (a.z + b.z) / 2 }; }
 function segLen2D(s) { return Math.hypot(s.b.x - s.a.x, s.b.z - s.a.z); }
 function perpendicularUnit(d1, d2) { return Math.abs(d1.dx * d2.dx + d1.dz * d2.dz) < 1e-6; }
 
-/* chamferRunCorners(run) -> run: >=3 consecutive UNIT 'wall' segments whose directions strictly
-   alternate between two perpendicular unit vectors (a genuine multi-step staircase — see
-   diagonalizeStaircaseRing's own run-detection, below, for what qualifies). Replaces every INTERNAL
-   corner (between run[i] and run[i+1]) with a diagonal connecting the two adjacent edges' own
-   MIDPOINTS, instead of routing through the original sharp grid corner.
+// lineIntersect2D(p1, d1, p2, d2) -> the point where the INFINITE line through p1 (direction d1) meets
+// the infinite line through p2 (direction d2), or null when the lines are parallel/degenerate (a
+// genuinely synthetic fixture no real rasterized room produces — chamferRunCorners' own caller falls
+// back to the pre-miter endpoint rather than silently dropping geometry when this returns null).
+function lineIntersect2D(p1, d1, p2, d2) {
+  const denom = d1.dx * d2.dz - d1.dz * d2.dx;
+  if (Math.abs(denom) < 1e-9) return null;
+  const dx = p2.x - p1.x, dz = p2.z - p1.z;
+  const t = (dx * d2.dz - dz * d2.dx) / denom;
+  return { x: p1.x + d1.dx * t, z: p1.z + d1.dz * t };
+}
+
+/* chamferRunCorners(run, prevSeg, nextSeg) -> run: >=3 consecutive UNIT 'wall' segments whose
+   directions strictly alternate between two perpendicular unit vectors (a genuine multi-step staircase
+   — see diagonalizeStaircaseRing's own run-detection, below, for what qualifies). Replaces every
+   INTERNAL corner (between run[i] and run[i+1]) with a diagonal connecting the two adjacent edges' own
+   MIDPOINTS, instead of routing through the original sharp grid corner. `prevSeg`/`nextSeg` (the ring's
+   own straight-wall segments immediately BEFORE/AFTER this run — null when unavailable) let the
+   diagonal chain MITER cleanly into them (see PHASE 0 below) instead of stopping at a stub.
 
    WHY MIDPOINTS, AND WHY THIS IS SAFE (derived + checked, not guessed):
    Chamfering a SINGLE unit-cell corner by cutting from one adjacent edge's midpoint to the other's
@@ -436,45 +450,99 @@ function perpendicularUnit(d1, d2) { return Math.abs(d1.dx * d2.dx + d1.dz * d2.
    consecutive edge-MIDPOINTS together is a provable geometric identity: they are EXACTLY COLLINEAR
    (verified algebraically in this unit's own report, and empirically by the harness's own direction-
    consistency check on the resulting diagonal segments) — so the whole run reads as one flat 45-degree
-   face, not a finer zigzag. Only the run's own two UNCHAMFERED endpoints (where it meets the
-   surrounding non-staircase wall, not internal to the run) keep a short axis-aligned half-edge stub. */
-function chamferRunCorners(run) {
+   face, not a finer zigzag.
+
+   PHASE 0 FIX (docs/WALL-VOLUMES-PRACTICALS.md coordination note, 2026-07-12 — Codex diagnosis): the
+   run's own two UNCHAMFERED endpoints used to keep a short AXIS-ALIGNED half-edge stub (run[0].a ->
+   mids[0], mids[n-1] -> run[n-1].b) — a visible dogleg where the diagonal met the neighboring straight
+   wall through TWO bends instead of one clean miter. Fixed by EXTENDING the diagonal's own line (through
+   mids[0]/mids[n-1], direction proven collinear above) out to its intersection with `prevSeg`'s /
+   `nextSeg`'s own line (lineIntersect2D, above — an exact 2D line-line solve, the SAME kind of exact
+   construction insetOffset already uses for the floor bevel's own miter join) and TRIMMING the neighbor
+   segment's own shared endpoint to that SAME point (the caller, diagonalizeStaircaseRing, applies that
+   trim to prevSeg/nextSeg — this function only computes and returns it). The result: [straight, TRIMMED]
+   -> [one straight 45-degree diagonal, now reaching all the way to the miter] -> [straight, TRIMMED],
+   meeting at clean single-bend vertices — no intermediate axis-aligned stub anywhere. This MOVES the
+   contour strictly OUTWARD in the trimmed span (the diagonal at 45 degrees reaches farther from the
+   room's own center than the old axis-aligned stub did over the same span) — it can only ADD floor
+   area, never clip a cell, preserving every existing containment guarantee above. Falls back to the
+   OLD stub endpoint when no `prevSeg`/`nextSeg` is supplied or the lines are parallel/degenerate (never
+   silently drops geometry). */
+function chamferRunCorners(run, prevSeg, nextSeg) {
   const n = run.length;
   const mids = run.map((s) => midpointOf(s.a, s.b));
+  const diagDir = directionOf({ a: mids[0], b: mids[n - 1] });
+
+  const prevDir = prevSeg ? directionOf(prevSeg) : null;
+  const startMiter = (prevSeg && prevDir) ? lineIntersect2D(mids[0], diagDir, prevSeg.a, prevDir) : null;
+  const diagStart = startMiter || run[0].a;
+
+  const nextDir = nextSeg ? directionOf(nextSeg) : null;
+  const endMiter = (nextSeg && nextDir) ? lineIntersect2D(mids[n - 1], diagDir, nextSeg.a, nextDir) : null;
+  const diagEnd = endMiter || run[n - 1].b;
+
   const out = [];
-  out.push({ a: run[0].a, b: mids[0], kind: "wall", tier: run[0].tier });
+  out.push({ a: diagStart, b: mids[0], kind: "wall", tier: run[0].tier });
   for (let i = 0; i < n - 1; i++) out.push({ a: mids[i], b: mids[i + 1], kind: "wall", tier: run[i].tier });
-  out.push({ a: mids[n - 1], b: run[n - 1].b, kind: "wall", tier: run[n - 1].tier });
-  return out;
+  out.push({ a: mids[n - 1], b: diagEnd, kind: "wall", tier: run[n - 1].tier });
+  // trimmedPrevB/trimmedNextA: null when no miter was computed — the caller then leaves prevSeg/nextSeg
+  // untouched (the pre-Phase-0 fallback shape, still geometrically valid, just the old dogleg).
+  return { segments: out, trimmedPrevB: startMiter, trimmedNextA: endMiter };
+}
+
+// findDiagonalSafeStart(segments) -> the index of the first segment GUARANTEED not part of any
+// staircase run (not "wall", or not unit length) — PHASE 0's wraparound fix: rotating the scan to start
+// here means a run can never need to "wrap" past the array end back to index 0 for its own continuation
+// (index 0 itself can never be mid-run after this rotation), so diagonalizeStaircaseRing's single
+// forward pass sees every run as ONE contiguous slice even when the room's own raw boundary trace
+// happened to start mid-corner. Falls back to 0 (unrotated) for the degenerate all-unit-wall ring no
+// real rasterized room produces (never infinite-loops or throws).
+function findDiagonalSafeStart(segments) {
+  for (let i = 0; i < segments.length; i++) {
+    const s = segments[i];
+    if (s.kind !== "wall" || Math.abs(segLen2D(s) - 1) > 1e-6) return i;
+  }
+  return 0;
 }
 
 /* diagonalizeStaircaseRing(poly, segments) -> STAGE-C3b's diagonal-face sibling of radialSmoothRing:
    scans `segments` (already unmergedSegments' full per-cell-edge resolution) for maximal RUNS of >=3
    consecutive unit 'wall' segments whose directions strictly alternate between two perpendicular unit
    vectors (a real multi-cell staircase — e.g. an octagon's own chamfered corner, rasterizeShape's
-   `octagon` branch) and replaces each qualifying run with chamferRunCorners (above). A run shorter
-   than 3 segments — a single ordinary 90-degree turn (an L/T/cross room's own genuine architectural
-   corner, OR a degenerate 1-cell octagon chamfer indistinguishable from one without extra shape
-   metadata) — is intentionally left UNTOUCHED, crisp: this is the scoping rule that keeps L/T/cross
-   (and small octagon corners) reading exactly as before (Adam's own "octagon and L read great"
-   baseline), while a REAL multi-cell staircase run gets the diagonal treatment. Door/riser segments
-   are hard run-breaks (a run never spans across an aperture or an elevation change) — mirrors
-   radialSmoothRing's own door-pin discipline (a door's own two boundary segments are never touched).
-   SCOPED LIMITATION (documented, not a correctness risk): does not scan across the ring's own
-   wraparound seam — in the worst case this leaves ONE of a shape's corners un-chamfered rather than
-   mis-chamfering geometry (this unit's own report notes it; a fast-follow could special-case it). */
+   `octagon` branch) and replaces each qualifying run with chamferRunCorners (above), MITERING it into
+   its own straight-wall neighbors (PHASE 0, chamferRunCorners' own header). A run shorter than 3
+   segments — a single ordinary 90-degree turn (an L/T/cross room's own genuine architectural corner, OR
+   a degenerate 1-cell octagon chamfer indistinguishable from one without extra shape metadata) — is
+   intentionally left UNTOUCHED, crisp: this is the scoping rule that keeps L/T/cross (and small octagon
+   corners) reading exactly as before (Adam's own "octagon and L read great" baseline), while a REAL
+   multi-cell staircase run gets the diagonal treatment. Door/riser segments are hard run-breaks (a run
+   never spans across an aperture or an elevation change) — mirrors radialSmoothRing's own door-pin
+   discipline (a door's own two boundary segments are never touched).
+   PHASE 0: the ring's own array-wraparound seam is now handled (findDiagonalSafeStart, above) — a
+   corner landing exactly at the raw trace's own start index chamfers as ONE clean run, not two
+   truncated fragments (the prior "SCOPED LIMITATION", closed). */
 function diagonalizeStaircaseRing(poly, segments) {
-  const n = segments.length;
+  const startIdx = findDiagonalSafeStart(segments);
+  const rotated = startIdx === 0 ? segments.slice() : segments.slice(startIdx).concat(segments.slice(0, startIdx));
+  const n = rotated.length;
   const out = [];
+  // anyChamfered: NO-OP GUARANTEE (L/T/cross, a too-small octagon chamfer) — the rotation above is
+  // needed ONLY to correctly scan a run that straddles the array seam; when this ring never actually
+  // qualifies a single run (every segment falls through to the plain `else` push below), the rotation
+  // would otherwise still be an OBSERVABLE reordering of `segments`' own output order relative to the
+  // untagged path (which never rotates at all) — breaking "tagged with no real chamfer -> byte-
+  // identical to untagged". Tracked so the final return can bypass the rotated/rebuilt result entirely
+  // and hand back the ORIGINAL (poly, segments) unchanged whenever nothing was actually chamfered.
+  let anyChamfered = false;
   let i = 0;
   while (i < n) {
-    const cur = segments[i];
+    const cur = rotated[i];
     if (cur.kind !== "wall" || Math.abs(segLen2D(cur) - 1) > 1e-6) { out.push(cur); i++; continue; }
     const dirA = directionOf(cur);
     let dirB = null;
     let j = i + 1;
     while (j < n) {
-      const nxt = segments[j];
+      const nxt = rotated[j];
       if (nxt.kind !== "wall" || Math.abs(segLen2D(nxt) - 1) > 1e-6) break;
       const d = directionOf(nxt);
       const wantA = ((j - i) % 2 === 0);
@@ -487,9 +555,33 @@ function diagonalizeStaircaseRing(poly, segments) {
       j++;
     }
     const runLen = j - i;
-    if (runLen >= 3 && dirB) { out.push(...chamferRunCorners(segments.slice(i, j))); i = j; }
-    else { out.push(cur); i++; }
+    if (runLen >= 3 && dirB) {
+      anyChamfered = true;
+      // prevSeg: the ring's own straight-wall neighbor already pushed to `out` (findDiagonalSafeStart
+      // guarantees i>0 whenever a run starts, so out is never empty here). nextSeg: the ring's own
+      // straight-wall neighbor still ahead in `rotated` — or, when the run reaches the literal array
+      // end (j===n), the rotation-start segment itself (out[0]) via the ring's own wraparound, since
+      // findDiagonalSafeStart guarantees rotated[0] can never be mid-run.
+      const prevSeg = out[out.length - 1];
+      const nextSeg = j < n ? rotated[j] : rotated[0];
+      const chamfered = chamferRunCorners(rotated.slice(i, j), prevSeg, nextSeg);
+      if (chamfered.trimmedPrevB) {
+        out[out.length - 1] = Object.assign({}, prevSeg, { b: chamfered.trimmedPrevB });
+      }
+      out.push(...chamfered.segments);
+      if (chamfered.trimmedNextA) {
+        if (j < n) {
+          rotated[j] = Object.assign({}, rotated[j], { a: chamfered.trimmedNextA });
+        } else if (out.length) {
+          // wraparound: nextSeg IS out[0] (already pushed) — trim that already-emitted copy directly,
+          // since `rotated[0]` itself is no longer read again this pass.
+          out[0] = Object.assign({}, out[0], { a: chamfered.trimmedNextA });
+        }
+      }
+      i = j;
+    } else { out.push(cur); i++; }
   }
+  if (!anyChamfered) return { poly, segments }; // NO-OP GUARANTEE — see the header comment above.
   return { poly: ringToPolygon(out), segments: out };
 }
 
@@ -1364,7 +1456,8 @@ export {
   cellKey, buildCellIndex, tierOf, edgeVertsFor, traceTierContour, chainEdgesIntoRings,
   directionOf, mergeKeyFor, findSegmentStart, simplifySegments, unmergedSegments, ringToPolygon, signedArea2D,
   ensureCCW, segmentNormal, insetOffset, insetPolygon, radialSmoothRing,
-  chamferRunCorners, diagonalizeStaircaseRing, pointInTriangle2D, pointToSegmentDist2, pointToTriangleDist2,
+  chamferRunCorners, diagonalizeStaircaseRing, findDiagonalSafeStart, lineIntersect2D,
+  pointInTriangle2D, pointToSegmentDist2, pointToTriangleDist2,
   triangulatePolygon, ringPerimeterU,
   hexToRgb01, polygonBBox, isAxisAlignedRectPolygon, buildAxisGrid, buildFloorGrid,
   // C4.1a wall-volume geometry (dev/verify-wall-volumes.mjs's own direct import surface)

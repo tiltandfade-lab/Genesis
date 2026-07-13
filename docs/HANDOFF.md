@@ -15,6 +15,57 @@ Graphics work must preserve canonical cards and no-human production while taking
 reach the visual target. Read it before this handoff's historical graphics queue, then read
 `docs/GRAPHICS-PRODUCTION-RESEARCH-WAVE.md` for evaluated tools and executable research gates.
 
+## ⭐ Latest (2026-07-13, overnight) — GRAPHICS CONVERGENCE: wall-volumes wave + Phase 0/1/2 geometry [Claude Opus 4.8, orchestrated]
+
+Codex researches, Claude orchestrates ([[project-genesis-graphics-convergence]]). The execution
+spine is `docs/GRAPHICS-CONVERGENCE-PLAN.md` (composes the 3 research waves → phased waves on the
+C0–C8 ladder). **Master tip after the run: `b391d1c5` (+ G3 in flight + this docs close).** Every
+unit personally re-gated (harnesses re-run by me, captures READ, never self-report), landed `--no-ff`.
+
+**Landed (all on master + pushed):**
+- **Wall-volumes wave** — C4.1a wall volumes + Adam's Phase-0 octagon miter · C4.1b segment
+  ray-occlusion · E0 physical practicals (glow-disc retired) · C4.1c floor+riser congruence.
+- **Phase 0 instrumentation (dev-only)** — R0 pinned tool bootstrap (`dev/geometry-tools/`,
+  `~/.genesis-geometry-tools`) · G0 52 ground-truth fixtures + injected-adapter harness
+  (`dev/verify-geometry-fixtures.mjs`; row-101 sunken-collapse red-first) · R2 fast-check fuzz ·
+  R3 webgl-lint/Spector diagnostics · R4 pixelmatch capture-regression · GP-1 GPU telemetry +
+  material census.
+- **Phase 1** — R1 four-path bakeoff → **ruling** (`dev/geometry-research/bakeoff/ruling.json`):
+  floors = **polygon-clipping + Earcut**; walls = **clipper2-ts Strategy-A offset**; clipper2
+  booleans + its CDT triangulator **rejected** (CDT silently returns wrong geometry, reproduced).
+  Found a real production defect: per-segment outer-wall math gaps ~**0.31u at ordinary 90° corners**.
+- **Phase 2 (behind `ROOM_SHELL_POLYGON_KERNEL = legacy|oss-compare|oss`, DEFAULT legacy/byte-identical)**
+  — **G1 PolygonKernel** (`src/ui/geometry/polygon-kernel.js` + vendored earcut/polygon-clipping;
+  fixes all 7 legacy floor defects, 0 regressions) · **G2 floor integration** (oss path unions +
+  triangulates-with-holes via the kernel; row-101 recovers 3 tiers with a real hole; F08/F11 corrected).
+- **G3 wall-runs IN FLIGHT** — SOL's ruling locked as `docs/STAGE-G3-WALL-RUNS.md`: aperture-delimited
+  contiguous solid-wall runs → Clipper2 offset per run (true joined miters) → butt/square jamb
+  termination → provenance from inner segments+run intervals → stem/cap/footing/trim from one contour.
+  **Retire the bespoke miter ONLY when the run-based impl hits 100% provenance + zero unintended joins.**
+
+**⭐ TWO MORNING DECISIONS FOR ADAM (both change the DEFAULT render — deliberately NOT made autonomously):**
+1. **negative-`sy` default fix** — `theater-boot.js:8888` `f.sy > 0` discards a sunken tile's negative
+   sy, so sunken arenas don't render sunken. Fix = `Number.isFinite(f.sy)`. G0 encoded it red-first;
+   R2 promoted `geo-regression-be825c9cc76b`. It's in the tier-height domain you parked + changes the
+   default, so it waits for your eyes (+ the independent-riser static/dynamic work rides the same seam).
+2. **Flip the geometry default `legacy` → `oss`** — after the G2 (+ G3) gate is green and one
+   stabilization hold (OSS §15 rollout). Currently everything is `oss-compare` only; the default is
+   untouched.
+
+**GPT 5.6 SOL** ruled the wall-miter question (adopted): the ~0.31u gap is a *real visible* defect
+(caps don't hide it — cap/footing inherit the per-segment construction); design = aperture-delimited
+runs (see G3 above). Also flagged the wrong "never a gap" comment at `theater-room-mesh.js:904` (G3 fixes it).
+
+**Do next (pick up here):**
+1. **Read `docs/GRAPHICS-CONVERGENCE-CHARTER.md` (governing) + `docs/GRAPHICS-CONVERGENCE-PLAN.md`
+   (spine) + `docs/STAGE-G3-WALL-RUNS.md` (G3 design).** Make the two morning decisions above.
+2. Check G3's landed state (`git log`, `docs/STAGE-G3-WALL-RUNS.md` acceptance): if it hit the bar it
+   landed oss-compare; if not, the bespoke miter is still live and G3 needs another pass.
+3. Phase 3 (visual production, GP-2..4: path-traced oracle → materials/UV → distribution/atlas →
+   oracle-driven raster upgrades) rides on the stable geometry. R5 prop-foundry + Codex's
+   offline-art-foundry/EXTRUDED-SPRITE-PROP-LIBRARY feed it.
+4. Everything below this block is the pre-convergence history.
+
 ## ⭐ Latest (2026-07-12, later) — STAGE C: REAL ROOM SHAPES — rooms stop being rectangles [Claude Opus 4.8, orchestrated]
 
 GRAPHICS-NORTH-STAR Stage C (`docs/STAGE-C.md`) — consume the walk's rolled `areaType/dims/side` (which

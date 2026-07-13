@@ -134,7 +134,12 @@ import { compileRoomShell, ROOM_SHELL_TIER_QUANTUM, segmentNormal } from "./thea
 // wires the real camera in"). shotPlanFrom/composeShot/defaultCameraCandidates are pure (no THREE, no
 // DOM) — this file supplies the one thing they can't own themselves: a real multi-pose projector (see
 // shotProjectFor, near interiorCameraFitFor below) and the wiring at setInteriorBoard's fit seam.
-import { shotPlanFrom, composeShot, defaultCameraCandidates } from "./theater-shot.js";
+import {
+  shotPlanFrom, composeShot, defaultCameraCandidates,
+  // C4.1b (docs/WALL-VOLUMES-PRACTICALS.md) — the pure ray-vs-segment blocking test setInteriorBoard's
+  // wall-upper occlusion pass wires into the existing itrOcclusionClassify tween engine, below.
+  wallUpperBlockingSet, OCCLUSION_SUBJECT_EYE_HEIGHT
+} from "./theater-shot.js";
 // P1' WHOLE-OBJECT WIRING (docs/P1-WIRING.md §4 step 3): a STATIC import of probe-lib.js itself —
 // every dev/model-qa/creatures/*.js module ALSO imports probe-lib.js by the identical relative
 // specifier (resolved from dev/model-qa/, '../probe-lib.js'), which both Node and browsers resolve
@@ -8752,31 +8757,17 @@ function setInteriorBoard(data){
     // forward. S-1's PER-FIGURE sightline occlusion ankle-stub/ghost-fade is NOT yet integrated with
     // the compiled wall (a deliberately scoped gap for a fast-follow — see this unit's own report);
     // the compiled wall renders at full (parapet-cut) height regardless of figure occlusion.
-    let parapetDirX = 0, parapetDirZ = 0, parapetFr = null;
-    if(data.focusRect){
-      parapetFr = data.focusRect;
-      const yawNow = (S.rotationStep * 90 * Math.PI) / 180 + (CAM_YAW_OFFSET_DEG * Math.PI) / 180;
-      parapetDirX = Math.sin(yawNow); parapetDirZ = Math.cos(yawNow);
-    }
     // wallHeightForSegment: C4.1a retires this as the parapet-cut mechanism — every segment now gets
     // its own real full STRUCTURAL height (roomWallHeight); kept accepted by the compiler for a future
     // genuine structural variance (a licensed low/ruined wall roll), never a camera-driven cut.
     const wallHeightForSegment = () => roomWallHeight;
-    // upperVisibleForSegment: the SAME near/far test the old wallHeightForSegment squash used, now a
-    // plain BOOLEAN (near-side, in-band -> hide the upper; else show it) — reproduces today's look (near
-    // wall = capped tray-edge stem, far/side walls = full height) as a per-segment MESH-level visibility
-    // toggle (see the assembler block below), never fed into the compiler itself: the compiler always
-    // builds EVERY segment's own upper geometry (so C4.1b's later camera-relative fade can flip a
-    // segment back on/off — or tween its opacity — without forcing a full shell recompile).
-    const upperVisibleForSegment = (segMeta) => {
-      if(!parapetFr) return true;
-      const mx = segMeta.mid.x, mz = segMeta.mid.z;
-      const inBand = mx >= parapetFr.minX - 1 && mx <= parapetFr.maxX + 1 && mz >= parapetFr.minZ - 1 && mz <= parapetFr.maxZ + 1;
-      if(!inBand) return true;
-      const rx = mx - cx, rz = mz - cz;
-      if(rx * parapetDirX + rz * parapetDirZ <= 0) return true; // far-side segment stays fully visible
-      return false; // near-side, in-band -> hide the upper (the capped-stem tray edge)
-    };
+    // C4.1b (docs/WALL-VOLUMES-PRACTICALS.md): the C4.1a static near/far-yaw `upperVisibleForSegment`
+    // predicate (a whole-room-band test keyed only on S.rotationStep) is RETIRED here — replaced by a
+    // real camera-to-subject ray test against each segment's own upper volume, computed below once
+    // `shell.wallSegments` exists (wallUpperRawBlocking) and applied per-mesh through the existing
+    // itrOcclusionClassify tween engine at the assembler block. No compiler-level omission changes:
+    // the compiler still builds EVERY segment's own upper geometry unconditionally (unchanged from
+    // C4.1a) — this unit only changes how the ALREADY-BUILT upper mesh's opacity is driven.
     // per-vertex world-aligned UVs replace the per-instance shared texture.repeat trick (BW2-3 §2b) —
     // a (1,1) repeat variant of the SAME texture family/seed the per-cell path already resolved above
     // (reuse, not a new material — Stage E owns actual material changes, not this unit).
@@ -8911,6 +8902,27 @@ function setInteriorBoard(data){
       wallHeight: roomWallHeight, wallHeightForSegment, uvDensity: ITR_ROOM_SHELL_UV_DENSITY,
       floorColorAt, wallColorForSegment, smoothShape: data.activeRoomShape,
     });
+    // C4.1b (docs/WALL-VOLUMES-PRACTICALS.md): the REQUIRED subject set for the wall-upper ray test —
+    // player/primaryThreat/objective/focalLight, straight off THIS build's own ShotPlan anchors (the
+    // SAME anchors the camera composition a few hundred lines up this function already scored against
+    // — never re-derived here). ShotPlan anchors carry only ground-plane {x,z} (no per-creature true
+    // height) — OCCLUSION_SUBJECT_EYE_HEIGHT is the SAME torso/eye-level proxy theater-shot.js's own
+    // scoring path (penaltyHardOcclusionArea) uses, so runtime and scoring never drift onto two
+    // different subject-height conventions. The spec's 4th required subject ("focal interaction") has
+    // no dedicated ShotPlan anchor yet — focalLight (the dominant practical, the closest existing
+    // analog) stands in until a real one exists; absent a ShotPlan entirely (shotCompose off, or a
+    // narrow harness), subjects stays empty and every upper segment simply reads full/opaque — an
+    // honest "nothing known to protect visibility of" degrade, matching occlusionFurnitureOn's own
+    // ShotPlan-gated convention a few hundred lines up.
+    const wallOcclusionAnchors = S.lastShotPlan ? S.lastShotPlan.anchors : null;
+    const wallOcclusionSubjects = wallOcclusionAnchors
+      ? ["player", "primaryThreat", "objective", "focalLight"]
+          .map((k) => wallOcclusionAnchors[k]).filter(Boolean)
+          .map((a) => ({ x: a.x, z: a.z, y: OCCLUSION_SUBJECT_EYE_HEIGHT }))
+      : [];
+    const wallUpperRawBlocking = wallUpperBlockingSet({
+      camera: occlusionCameraPos, subjects: wallOcclusionSubjects, wallSegments: shell.wallSegments
+    });
     if(shell.floorGeometry){
       const m = new THREE.Mesh(shell.floorGeometry, floorMat);
       m.position.set(-cx, 0, -cz);
@@ -8930,23 +8942,46 @@ function setInteriorBoard(data){
       wallStemMesh.userData.interiorKind = "room-shell-wall-stem";
       roomShellMeshes.push(wallStemMesh);
     }
-    // per-segment mid (world x,z) lookup off shell.wallSegments (the SAME a/b/tier/height metadata list
-    // `mountSlots`/wallUpperMeshes key their own ownerSegIndex against) — used only to re-derive the
-    // segMeta upperVisibleForSegment expects (mid.x/mid.z), never to rebuild geometry.
+    // C4.1b (docs/WALL-VOLUMES-PRACTICALS.md): per-segment mid (world x,z) lookup off shell.wallSegments
+    // (the SAME a/b/tier/height metadata list `mountSlots`/wallUpperMeshes key their own ownerSegIndex
+    // against) — used to build this segment's persistent occlusion-fade id, never to rebuild geometry.
     const wallUpperMeshList = [];
     (shell.wallUpperMeshes || []).forEach((entry) => {
       if(!entry.geometry) return;
-      const m = new THREE.Mesh(entry.geometry, wallMat);
+      // C4.1b: each upper mesh gets its OWN cloned material — never the shared `wallMat` the stem/trim
+      // meshes use. Independent per-segment opacity is the entire point of C4.1a's own "one mesh per
+      // segment" decision (theater-boot.js:8907's own comment); sharing `wallMat` here would make
+      // itrOcclusionClassify's tween mutate EVERY upper/stem/trim mesh's opacity at once instead of
+      // just this one segment's. `transparent:true` is set unconditionally (not only while fading) —
+      // the live tween (S.tweens/tickTweens) mutates this exact material's opacity BETWEEN board
+      // rebuilds with no further material swap, so it must already be capable of rendering translucent
+      // the instant a fade starts, not just after the next rebuild happens to notice it. A plain
+      // opacity-only material change — no PBR/bloom work, per this unit's own scope.
+      const upperMat = wallMat.clone();
+      upperMat.transparent = true;
+      const m = new THREE.Mesh(entry.geometry, upperMat);
       m.position.set(-cx, 0, -cz);
       m.castShadow = true; m.receiveShadow = true;
       m.userData.interiorKind = "room-shell-wall-upper";
       m.userData.ownerSegIndex = entry.ownerSegIndex;
       const ownerSeg = shell.wallSegments[entry.ownerSegIndex];
-      const segMeta = ownerSeg ? { a: ownerSeg.a, b: ownerSeg.b, mid: { x: (ownerSeg.a.x + ownerSeg.b.x) / 2, z: (ownerSeg.a.z + ownerSeg.b.z) / 2 }, kind: "wall", tier: ownerSeg.tier } : null;
-      // C4.1a: a hard visibility toggle reproducing today's static near/far look (the SAME test the old
-      // squashed-height wallHeightForSegment used) — C4.1b (a later unit) swaps this for a tweened
-      // opacity driven off the existing itrOcclusionClassify engine; this mesh's geometry never changes.
-      m.visible = segMeta ? upperVisibleForSegment(segMeta) : true;
+      const mid = ownerSeg ? { x: (ownerSeg.a.x + ownerSeg.b.x) / 2, z: (ownerSeg.a.z + ownerSeg.b.z) / 2 } : { x: 0, z: 0 };
+      // C4.1b: camera-relative per-segment fade — REPLACES C4.1a's static near/far `.visible` toggle.
+      // `id` is keyed on the segment's own world midpoint (itrOcclusionIdFor's established position-
+      // keyed convention every other occluder kind already uses, e.g. "wall"/"doorframe"/"furniture"
+      // above) so the SAME physical wall keeps its persistent fade-state entry across a rebuild even if
+      // compileRoomShellData's own segment array order ever shifts. `rawBlocking` comes straight from
+      // wallUpperRawBlocking (computed once per rebuild, above, off THIS build's real camera position +
+      // required subjects) — itrOcclusionClassify applies the SAME hysteresis+tween engine the wall/
+      // pillar/door/furniture occlusion passes already use (docs/WALL-VOLUMES-PRACTICALS.md C4.1b's own
+      // "reuse itrOcclusionClassify" decision). `.visible` stays permanently true — only opacity ever
+      // changes (this unit's own "never toggle .visible hard once tweening" rule); the stem mesh (built
+      // above, untouched) never enters this classify pass at all, so it can never fade.
+      const id = itrOcclusionIdFor("wall-upper", mid.x, mid.z);
+      const fadeEntry = itrOcclusionClassify(id, wallUpperRawBlocking.has(entry.ownerSegIndex), occlusionHoldPrior);
+      fadeEntry.materials = [upperMat];
+      upperMat.opacity = fadeEntry.opacity;
+      m.visible = true;
       roomShellMeshes.push(m);
       wallUpperMeshList.push({ mesh: m, ownerSegIndex: entry.ownerSegIndex });
     });

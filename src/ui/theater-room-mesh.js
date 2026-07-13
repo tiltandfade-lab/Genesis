@@ -52,6 +52,25 @@
          never reads/touches `cells` beyond what every other shape already does; `plan.cells`/
          `rooms[].cells` (combat/placement/pathing) are untouched by this option existing at all.
        radialSmoothBlend: 0..1 override for DEFAULT_RADIAL_SMOOTH_BLEND ("radial" mode only, test-only knob).
+       wallThickness: number — inward-normal-relative extrusion depth of the wall's own outer face,
+         i.e. how far the outer face sits OUTSIDE (away from the room interior from) the inner face
+         (default 0.22, realm/material band 0.15-0.32).
+       wallStemHeight: number — the persistent capped-stem body height, always emitted opaque regardless
+         of camera (default 0.28, band 0.22-0.40).
+       wallCapHeight: number — top-cap slab thickness, at both the stem's own top AND the upper's own
+         top when visible (default 0.06).
+       wallCapOverhang: number — cap projection past each face (inner and outer) per side (default
+         0.035, band 0.025-0.06).
+       wallFooting: number — base-course skirt projection past the outer face, STEM band only (default
+         0.06, band 0.04-0.10).
+       wallTrim: boolean — emit baseCourse+cornice trim ribbons (default true); false -> `wallTrim` in
+         the return bundle is null.
+       upperVisibleForSegment(segMeta) -> boolean — OPTIONAL per-segment show/hide for the UPPER band
+         (default () => true, every segment's upper renders). REPLACES wallHeightForSegment's old role
+         as the camera-relative parapet-cut mechanism: a hidden segment renders its full-thickness
+         capped STEM only (no squashed-height quad) — see this file's own C4.1a wall-branch comment.
+         Pure module: no camera concept crosses into this file: the caller (theater-boot.js) resolves
+         its own near/far test and hands back a plain boolean per segment.
      }
    Returns a plain-data bundle (positions/normals/uvs/indices per surface class + the logical map) —
    see this file's own header on `compileRoomShellData`'s return shape below.
@@ -96,6 +115,19 @@ const DEFAULT_UV_DENSITY = 1;
 // see dev/verify-stage-c3b-circle-smooth.mjs's own roundness-metric before/after for the measured gap
 // this closes, and this unit's own report for the visual comparison.
 const DEFAULT_RADIAL_SMOOTH_BLEND = 0.88;
+
+// ── C4.1a WALL VOLUME GEOMETRY (docs/WALL-VOLUMES-PRACTICALS.md, Unit C4.1a) — every boundary wall
+// segment becomes a heavy architectural volume (capped stem + independently-hideable upper + optional
+// trim + inner-face mount slots) instead of a single two-triangle plane. Defaults per the spec's own
+// "Suggested initial dimensions at one world unit = five feet" table; all overridable per-opts, all
+// PURE (no camera/THREE concept below this line — the near/far show-or-hide decision is a caller-
+// supplied BOOLEAN predicate, `opts.upperVisibleForSegment`, never computed here).
+const DEFAULT_WALL_THICKNESS = 0.22;      // 0.15-0.32 realm/material band
+const DEFAULT_WALL_STEM_HEIGHT = 0.28;    // 0.22-0.40 band — the persistent capped-stem body height
+const DEFAULT_WALL_CAP_HEIGHT = 0.06;     // top-cap slab thickness
+const DEFAULT_WALL_CAP_OVERHANG = 0.035;  // 0.025-0.06 band — cap projection past each face per side
+const DEFAULT_WALL_FOOTING = 0.06;        // 0.04-0.10 band — base-course projection past the outer face
+const DEFAULT_WALL_MOUNT_EYE_HEIGHT = 1.4; // world Y of a default inner-face mount slot ("eye-height band")
 
 function cellKey(x, z) { return x + "," + z; }
 
@@ -381,11 +413,25 @@ function midpointOf(a, b) { return { x: (a.x + b.x) / 2, z: (a.z + b.z) / 2 }; }
 function segLen2D(s) { return Math.hypot(s.b.x - s.a.x, s.b.z - s.a.z); }
 function perpendicularUnit(d1, d2) { return Math.abs(d1.dx * d2.dx + d1.dz * d2.dz) < 1e-6; }
 
-/* chamferRunCorners(run) -> run: >=3 consecutive UNIT 'wall' segments whose directions strictly
-   alternate between two perpendicular unit vectors (a genuine multi-step staircase — see
-   diagonalizeStaircaseRing's own run-detection, below, for what qualifies). Replaces every INTERNAL
-   corner (between run[i] and run[i+1]) with a diagonal connecting the two adjacent edges' own
-   MIDPOINTS, instead of routing through the original sharp grid corner.
+// lineIntersect2D(p1, d1, p2, d2) -> the point where the INFINITE line through p1 (direction d1) meets
+// the infinite line through p2 (direction d2), or null when the lines are parallel/degenerate (a
+// genuinely synthetic fixture no real rasterized room produces — chamferRunCorners' own caller falls
+// back to the pre-miter endpoint rather than silently dropping geometry when this returns null).
+function lineIntersect2D(p1, d1, p2, d2) {
+  const denom = d1.dx * d2.dz - d1.dz * d2.dx;
+  if (Math.abs(denom) < 1e-9) return null;
+  const dx = p2.x - p1.x, dz = p2.z - p1.z;
+  const t = (dx * d2.dz - dz * d2.dx) / denom;
+  return { x: p1.x + d1.dx * t, z: p1.z + d1.dz * t };
+}
+
+/* chamferRunCorners(run, prevSeg, nextSeg) -> run: >=3 consecutive UNIT 'wall' segments whose
+   directions strictly alternate between two perpendicular unit vectors (a genuine multi-step staircase
+   — see diagonalizeStaircaseRing's own run-detection, below, for what qualifies). Replaces every
+   INTERNAL corner (between run[i] and run[i+1]) with a diagonal connecting the two adjacent edges' own
+   MIDPOINTS, instead of routing through the original sharp grid corner. `prevSeg`/`nextSeg` (the ring's
+   own straight-wall segments immediately BEFORE/AFTER this run — null when unavailable) let the
+   diagonal chain MITER cleanly into them (see PHASE 0 below) instead of stopping at a stub.
 
    WHY MIDPOINTS, AND WHY THIS IS SAFE (derived + checked, not guessed):
    Chamfering a SINGLE unit-cell corner by cutting from one adjacent edge's midpoint to the other's
@@ -404,45 +450,99 @@ function perpendicularUnit(d1, d2) { return Math.abs(d1.dx * d2.dx + d1.dz * d2.
    consecutive edge-MIDPOINTS together is a provable geometric identity: they are EXACTLY COLLINEAR
    (verified algebraically in this unit's own report, and empirically by the harness's own direction-
    consistency check on the resulting diagonal segments) — so the whole run reads as one flat 45-degree
-   face, not a finer zigzag. Only the run's own two UNCHAMFERED endpoints (where it meets the
-   surrounding non-staircase wall, not internal to the run) keep a short axis-aligned half-edge stub. */
-function chamferRunCorners(run) {
+   face, not a finer zigzag.
+
+   PHASE 0 FIX (docs/WALL-VOLUMES-PRACTICALS.md coordination note, 2026-07-12 — Codex diagnosis): the
+   run's own two UNCHAMFERED endpoints used to keep a short AXIS-ALIGNED half-edge stub (run[0].a ->
+   mids[0], mids[n-1] -> run[n-1].b) — a visible dogleg where the diagonal met the neighboring straight
+   wall through TWO bends instead of one clean miter. Fixed by EXTENDING the diagonal's own line (through
+   mids[0]/mids[n-1], direction proven collinear above) out to its intersection with `prevSeg`'s /
+   `nextSeg`'s own line (lineIntersect2D, above — an exact 2D line-line solve, the SAME kind of exact
+   construction insetOffset already uses for the floor bevel's own miter join) and TRIMMING the neighbor
+   segment's own shared endpoint to that SAME point (the caller, diagonalizeStaircaseRing, applies that
+   trim to prevSeg/nextSeg — this function only computes and returns it). The result: [straight, TRIMMED]
+   -> [one straight 45-degree diagonal, now reaching all the way to the miter] -> [straight, TRIMMED],
+   meeting at clean single-bend vertices — no intermediate axis-aligned stub anywhere. This MOVES the
+   contour strictly OUTWARD in the trimmed span (the diagonal at 45 degrees reaches farther from the
+   room's own center than the old axis-aligned stub did over the same span) — it can only ADD floor
+   area, never clip a cell, preserving every existing containment guarantee above. Falls back to the
+   OLD stub endpoint when no `prevSeg`/`nextSeg` is supplied or the lines are parallel/degenerate (never
+   silently drops geometry). */
+function chamferRunCorners(run, prevSeg, nextSeg) {
   const n = run.length;
   const mids = run.map((s) => midpointOf(s.a, s.b));
+  const diagDir = directionOf({ a: mids[0], b: mids[n - 1] });
+
+  const prevDir = prevSeg ? directionOf(prevSeg) : null;
+  const startMiter = (prevSeg && prevDir) ? lineIntersect2D(mids[0], diagDir, prevSeg.a, prevDir) : null;
+  const diagStart = startMiter || run[0].a;
+
+  const nextDir = nextSeg ? directionOf(nextSeg) : null;
+  const endMiter = (nextSeg && nextDir) ? lineIntersect2D(mids[n - 1], diagDir, nextSeg.a, nextDir) : null;
+  const diagEnd = endMiter || run[n - 1].b;
+
   const out = [];
-  out.push({ a: run[0].a, b: mids[0], kind: "wall", tier: run[0].tier });
+  out.push({ a: diagStart, b: mids[0], kind: "wall", tier: run[0].tier });
   for (let i = 0; i < n - 1; i++) out.push({ a: mids[i], b: mids[i + 1], kind: "wall", tier: run[i].tier });
-  out.push({ a: mids[n - 1], b: run[n - 1].b, kind: "wall", tier: run[n - 1].tier });
-  return out;
+  out.push({ a: mids[n - 1], b: diagEnd, kind: "wall", tier: run[n - 1].tier });
+  // trimmedPrevB/trimmedNextA: null when no miter was computed — the caller then leaves prevSeg/nextSeg
+  // untouched (the pre-Phase-0 fallback shape, still geometrically valid, just the old dogleg).
+  return { segments: out, trimmedPrevB: startMiter, trimmedNextA: endMiter };
+}
+
+// findDiagonalSafeStart(segments) -> the index of the first segment GUARANTEED not part of any
+// staircase run (not "wall", or not unit length) — PHASE 0's wraparound fix: rotating the scan to start
+// here means a run can never need to "wrap" past the array end back to index 0 for its own continuation
+// (index 0 itself can never be mid-run after this rotation), so diagonalizeStaircaseRing's single
+// forward pass sees every run as ONE contiguous slice even when the room's own raw boundary trace
+// happened to start mid-corner. Falls back to 0 (unrotated) for the degenerate all-unit-wall ring no
+// real rasterized room produces (never infinite-loops or throws).
+function findDiagonalSafeStart(segments) {
+  for (let i = 0; i < segments.length; i++) {
+    const s = segments[i];
+    if (s.kind !== "wall" || Math.abs(segLen2D(s) - 1) > 1e-6) return i;
+  }
+  return 0;
 }
 
 /* diagonalizeStaircaseRing(poly, segments) -> STAGE-C3b's diagonal-face sibling of radialSmoothRing:
    scans `segments` (already unmergedSegments' full per-cell-edge resolution) for maximal RUNS of >=3
    consecutive unit 'wall' segments whose directions strictly alternate between two perpendicular unit
    vectors (a real multi-cell staircase — e.g. an octagon's own chamfered corner, rasterizeShape's
-   `octagon` branch) and replaces each qualifying run with chamferRunCorners (above). A run shorter
-   than 3 segments — a single ordinary 90-degree turn (an L/T/cross room's own genuine architectural
-   corner, OR a degenerate 1-cell octagon chamfer indistinguishable from one without extra shape
-   metadata) — is intentionally left UNTOUCHED, crisp: this is the scoping rule that keeps L/T/cross
-   (and small octagon corners) reading exactly as before (Adam's own "octagon and L read great"
-   baseline), while a REAL multi-cell staircase run gets the diagonal treatment. Door/riser segments
-   are hard run-breaks (a run never spans across an aperture or an elevation change) — mirrors
-   radialSmoothRing's own door-pin discipline (a door's own two boundary segments are never touched).
-   SCOPED LIMITATION (documented, not a correctness risk): does not scan across the ring's own
-   wraparound seam — in the worst case this leaves ONE of a shape's corners un-chamfered rather than
-   mis-chamfering geometry (this unit's own report notes it; a fast-follow could special-case it). */
+   `octagon` branch) and replaces each qualifying run with chamferRunCorners (above), MITERING it into
+   its own straight-wall neighbors (PHASE 0, chamferRunCorners' own header). A run shorter than 3
+   segments — a single ordinary 90-degree turn (an L/T/cross room's own genuine architectural corner, OR
+   a degenerate 1-cell octagon chamfer indistinguishable from one without extra shape metadata) — is
+   intentionally left UNTOUCHED, crisp: this is the scoping rule that keeps L/T/cross (and small octagon
+   corners) reading exactly as before (Adam's own "octagon and L read great" baseline), while a REAL
+   multi-cell staircase run gets the diagonal treatment. Door/riser segments are hard run-breaks (a run
+   never spans across an aperture or an elevation change) — mirrors radialSmoothRing's own door-pin
+   discipline (a door's own two boundary segments are never touched).
+   PHASE 0: the ring's own array-wraparound seam is now handled (findDiagonalSafeStart, above) — a
+   corner landing exactly at the raw trace's own start index chamfers as ONE clean run, not two
+   truncated fragments (the prior "SCOPED LIMITATION", closed). */
 function diagonalizeStaircaseRing(poly, segments) {
-  const n = segments.length;
+  const startIdx = findDiagonalSafeStart(segments);
+  const rotated = startIdx === 0 ? segments.slice() : segments.slice(startIdx).concat(segments.slice(0, startIdx));
+  const n = rotated.length;
   const out = [];
+  // anyChamfered: NO-OP GUARANTEE (L/T/cross, a too-small octagon chamfer) — the rotation above is
+  // needed ONLY to correctly scan a run that straddles the array seam; when this ring never actually
+  // qualifies a single run (every segment falls through to the plain `else` push below), the rotation
+  // would otherwise still be an OBSERVABLE reordering of `segments`' own output order relative to the
+  // untagged path (which never rotates at all) — breaking "tagged with no real chamfer -> byte-
+  // identical to untagged". Tracked so the final return can bypass the rotated/rebuilt result entirely
+  // and hand back the ORIGINAL (poly, segments) unchanged whenever nothing was actually chamfered.
+  let anyChamfered = false;
   let i = 0;
   while (i < n) {
-    const cur = segments[i];
+    const cur = rotated[i];
     if (cur.kind !== "wall" || Math.abs(segLen2D(cur) - 1) > 1e-6) { out.push(cur); i++; continue; }
     const dirA = directionOf(cur);
     let dirB = null;
     let j = i + 1;
     while (j < n) {
-      const nxt = segments[j];
+      const nxt = rotated[j];
       if (nxt.kind !== "wall" || Math.abs(segLen2D(nxt) - 1) > 1e-6) break;
       const d = directionOf(nxt);
       const wantA = ((j - i) % 2 === 0);
@@ -455,9 +555,33 @@ function diagonalizeStaircaseRing(poly, segments) {
       j++;
     }
     const runLen = j - i;
-    if (runLen >= 3 && dirB) { out.push(...chamferRunCorners(segments.slice(i, j))); i = j; }
-    else { out.push(cur); i++; }
+    if (runLen >= 3 && dirB) {
+      anyChamfered = true;
+      // prevSeg: the ring's own straight-wall neighbor already pushed to `out` (findDiagonalSafeStart
+      // guarantees i>0 whenever a run starts, so out is never empty here). nextSeg: the ring's own
+      // straight-wall neighbor still ahead in `rotated` — or, when the run reaches the literal array
+      // end (j===n), the rotation-start segment itself (out[0]) via the ring's own wraparound, since
+      // findDiagonalSafeStart guarantees rotated[0] can never be mid-run.
+      const prevSeg = out[out.length - 1];
+      const nextSeg = j < n ? rotated[j] : rotated[0];
+      const chamfered = chamferRunCorners(rotated.slice(i, j), prevSeg, nextSeg);
+      if (chamfered.trimmedPrevB) {
+        out[out.length - 1] = Object.assign({}, prevSeg, { b: chamfered.trimmedPrevB });
+      }
+      out.push(...chamfered.segments);
+      if (chamfered.trimmedNextA) {
+        if (j < n) {
+          rotated[j] = Object.assign({}, rotated[j], { a: chamfered.trimmedNextA });
+        } else if (out.length) {
+          // wraparound: nextSeg IS out[0] (already pushed) — trim that already-emitted copy directly,
+          // since `rotated[0]` itself is no longer read again this pass.
+          out[0] = Object.assign({}, out[0], { a: chamfered.trimmedNextA });
+        }
+      }
+      i = j;
+    } else { out.push(cur); i++; }
   }
+  if (!anyChamfered) return { poly, segments }; // NO-OP GUARANTEE — see the header comment above.
   return { poly: ringToPolygon(out), segments: out };
 }
 
@@ -586,6 +710,122 @@ function pushQuad(buf, p0, p1, p2, p3, n, uv0, uv1, uv2, uv3, color) {
   const i3 = pushVert(buf, p3.x, p3.y, p3.z, n.x, n.y, n.z, uv3.u, uv3.v, r, g, b);
   pushTri(buf, i0, i1, i2);
   pushTri(buf, i0, i2, i3);
+}
+
+// pushWallVerticalFace(buf, aBottom, bBottom, aTop, bTop, normal, u0, u1, v0, v1, color) — a thin
+// wrapper over pushQuad for the common "vertical band between two world points at two heights" shape
+// every wall-volume face (inner/outer/cap-lip/end-cap/footing-face) reduces to; keeps the a->b->bTop->
+// aTop winding + uv0..uv3 assembly in exactly ONE place so every C4.1a face shares the same convention.
+function pushWallVerticalFace(buf, aBottom, bBottom, aTop, bTop, normal, u0, u1, v0, v1, color) {
+  pushQuad(buf, aBottom, bBottom, bTop, aTop, normal,
+    { u: u0, v: v0 }, { u: u1, v: v0 }, { u: u1, v: v1 }, { u: u0, v: v1 }, color);
+}
+
+/* buildWallBox(buf, p) — C4.1a's core primitive: pushes ONE vertical architectural band [p.yBase,p.yTop]
+   of a wall segment into `buf` as a real capped box (inner face, outer face, an overhanging top-cap
+   slab, two end caps closing the box's own thickness cross-section, and an optional footing skirt at
+   the base) — replacing the old "one two-triangle plane" wall quad. Pure geometry, no THREE/camera.
+
+   p: { innerA, innerB, outerA, outerB — {x,z} world points (outer = inner offset -n*wallThickness,
+         computed by the caller so this function stays a dumb box-builder), n — inward unit normal,
+         tX, tZ — unit tangent (b-a direction), yBase, yTop — the band's own vertical extent, capHeight,
+         capOverhang, footing (0 = no footing skirt — only the STEM band gets one), color, u0, u1 (this
+         segment's own ring-perimeter arc-length span, reused verbatim as the vertical faces' own U),
+         uvDensity (world-unit texture repeat, for the two horizontal faces: cap top + footing ledge) }
+
+   SCOPING SIMPLIFICATION (documented, not a defect — C4.1a's own "a few long quads" mandate, no exact
+   corner miter chased): each segment's own end caps are built independently of its ring neighbors (no
+   shared-corner miter solve, unlike insetOffset's exact 2D miter for the FLOOR bevel) — at a real 90-
+   degree room corner this can leave a hair of overlap between two adjacent segments' own outer-corner
+   geometry, never a gap (gap would be the visually-worse failure mode; overlap is invisible at capture
+   distance and this module's own docs/WALL-VOLUMES-PRACTICALS.md scope note explicitly defers exact
+   miter joins). */
+function buildWallBox(buf, p) {
+  const { innerA, innerB, outerA, outerB, n, tX, tZ, yBase, yTop, capHeight, capOverhang, footing, color, u0, u1, uvDensity } = p;
+  const h = yTop - yBase;
+  // inner face — faces the room interior, normal = n (the SAME a->b/n convention the pre-C4.1a single
+  // wall quad already used, so a visible-upper segment's inner face at [stemHeight,wallHeight] reads
+  // identically to the old full-height quad's own upper portion).
+  pushWallVerticalFace(buf,
+    { x: innerA.x, y: yBase, z: innerA.z }, { x: innerB.x, y: yBase, z: innerB.z },
+    { x: innerA.x, y: yTop, z: innerA.z }, { x: innerB.x, y: yTop, z: innerB.z },
+    { x: n.x, y: 0, z: n.z }, u0, u1, 0, h, color);
+  // outer face — faces away from the room (the NEW C4.1a surface no single-quad wall ever had), normal
+  // = -n; a/b reversed so the quad's own winding faces outward (mirrors ensureCCW's own "reverse both
+  // in lockstep" convention this file already uses for a CW-traced ring).
+  pushWallVerticalFace(buf,
+    { x: outerB.x, y: yBase, z: outerB.z }, { x: outerA.x, y: yBase, z: outerA.z },
+    { x: outerB.x, y: yTop, z: outerB.z }, { x: outerA.x, y: yTop, z: outerA.z },
+    { x: -n.x, y: 0, z: -n.z }, u1, u0, 0, h, color);
+  // top cap — a slab overhanging capOverhang past BOTH inner and outer faces, capHeight thick, closed
+  // by a horizontal top face (the |ny|~=1 silhouette-producing surface frame 01 calls "visible wall
+  // thickness at the top") plus two vertical lip faces so the overhang itself has real depth, not a
+  // zero-thickness flap.
+  const capInA = { x: innerA.x + n.x * capOverhang, z: innerA.z + n.z * capOverhang };
+  const capInB = { x: innerB.x + n.x * capOverhang, z: innerB.z + n.z * capOverhang };
+  const capOutA = { x: outerA.x - n.x * capOverhang, z: outerA.z - n.z * capOverhang };
+  const capOutB = { x: outerB.x - n.x * capOverhang, z: outerB.z - n.z * capOverhang };
+  const capTopY = yTop + capHeight;
+  pushQuad(buf,
+    { x: capOutA.x, y: capTopY, z: capOutA.z }, { x: capOutB.x, y: capTopY, z: capOutB.z },
+    { x: capInB.x, y: capTopY, z: capInB.z }, { x: capInA.x, y: capTopY, z: capInA.z },
+    { x: 0, y: 1, z: 0 },
+    { u: capOutA.x * uvDensity, v: capOutA.z * uvDensity }, { u: capOutB.x * uvDensity, v: capOutB.z * uvDensity },
+    { u: capInB.x * uvDensity, v: capInB.z * uvDensity }, { u: capInA.x * uvDensity, v: capInA.z * uvDensity }, color);
+  pushWallVerticalFace(buf, // cap's own outward lip (closes the overhang's outward edge)
+    { x: outerB.x, y: yTop, z: outerB.z }, { x: outerA.x, y: yTop, z: outerA.z },
+    { x: capOutB.x, y: capTopY, z: capOutB.z }, { x: capOutA.x, y: capTopY, z: capOutA.z },
+    { x: -n.x, y: 0, z: -n.z }, u1, u0, 0, capHeight, color);
+  pushWallVerticalFace(buf, // cap's own inward lip
+    { x: innerA.x, y: yTop, z: innerA.z }, { x: innerB.x, y: yTop, z: innerB.z },
+    { x: capInA.x, y: capTopY, z: capInA.z }, { x: capInB.x, y: capTopY, z: capInB.z },
+    { x: n.x, y: 0, z: n.z }, u0, u1, 0, capHeight, color);
+  // end caps — close the box's own thickness cross-section at BOTH 'a' and 'b' (frame 01's "exposed
+  // ends"): every wall segment gets both unconditionally (see this function's own header for why no
+  // neighbor-aware skip is needed post-simplification — a door-adjacent end IS the jamb face).
+  pushWallVerticalFace(buf,
+    { x: outerA.x, y: yBase, z: outerA.z }, { x: innerA.x, y: yBase, z: innerA.z },
+    { x: outerA.x, y: yTop, z: outerA.z }, { x: innerA.x, y: yTop, z: innerA.z },
+    { x: -tX, y: 0, z: -tZ }, 0, 1, 0, h, color);
+  pushWallVerticalFace(buf,
+    { x: innerB.x, y: yBase, z: innerB.z }, { x: outerB.x, y: yBase, z: outerB.z },
+    { x: innerB.x, y: yTop, z: innerB.z }, { x: outerB.x, y: yTop, z: outerB.z },
+    { x: tX, y: 0, z: tZ }, 0, 1, 0, h, color);
+  // footing skirt — a projecting ledge courses OUT past the outer face at the band's own base (only
+  // ever passed a nonzero `footing` for the STEM band; the upper band never re-foots itself).
+  if (footing > 0) {
+    const footOutA = { x: outerA.x - n.x * footing, z: outerA.z - n.z * footing };
+    const footOutB = { x: outerB.x - n.x * footing, z: outerB.z - n.z * footing };
+    const footH = Math.min(capHeight, h);
+    pushQuad(buf, // top ledge (horizontal)
+      { x: footOutB.x, y: yBase, z: footOutB.z }, { x: footOutA.x, y: yBase, z: footOutA.z },
+      { x: outerA.x, y: yBase, z: outerA.z }, { x: outerB.x, y: yBase, z: outerB.z },
+      { x: 0, y: 1, z: 0 },
+      { u: footOutB.x * uvDensity, v: footOutB.z * uvDensity }, { u: footOutA.x * uvDensity, v: footOutA.z * uvDensity },
+      { u: outerA.x * uvDensity, v: outerA.z * uvDensity }, { u: outerB.x * uvDensity, v: outerB.z * uvDensity }, color);
+    pushWallVerticalFace(buf, // the footing's own outward kick face
+      { x: footOutB.x, y: yBase - footH, z: footOutB.z }, { x: footOutA.x, y: yBase - footH, z: footOutA.z },
+      { x: footOutB.x, y: yBase, z: footOutB.z }, { x: footOutA.x, y: yBase, z: footOutA.z },
+      { x: -n.x, y: 0, z: -n.z }, u1, u0, 0, footH, color);
+  }
+}
+
+// sliceBufferForSegment(buf, segRef) -> a standalone {positions,normals,uvs,colors,indices} bundle for
+// ONE wall segment's own vertex range out of a larger shared buffer (segRef: {vertStart,vertCount,
+// idxStart,idxCount}, stamped per-segment by compileRoomShellData's own wallUpper emission below).
+// Indices are re-based (- vertStart) so the slice is immediately BufferGeometry-ready on its own — this
+// is what lets compileRoomShell hand C4.1a's "one geometry per wall segment" preference (spec's own
+// per-segment-upper-mesh decision, for an independent per-segment show/hide handle) a real standalone
+// geometry per segment without a second THREE-aware pass. Pure array slicing, no THREE.
+function sliceBufferForSegment(buf, segRef) {
+  const { vertStart, vertCount, idxStart, idxCount } = segRef;
+  return {
+    positions: buf.positions.slice(vertStart * 3, (vertStart + vertCount) * 3),
+    normals: buf.normals.slice(vertStart * 3, (vertStart + vertCount) * 3),
+    uvs: buf.uvs.slice(vertStart * 2, (vertStart + vertCount) * 2),
+    colors: buf.colors.slice(vertStart * 3, (vertStart + vertCount) * 3),
+    indices: buf.indices.slice(idxStart, idxStart + idxCount).map((i) => i - vertStart),
+  };
 }
 
 // hexToRgb01(hex) -> {r,g,b} in 0..1 — the pure-core-safe hex parser (this file stays THREE-free
@@ -736,6 +976,20 @@ function compileRoomShellData(cells, opts) {
   const wallHeight = typeof opts.wallHeight === "number" ? opts.wallHeight : DEFAULT_WALL_HEIGHT;
   const wallHeightForSegment = typeof opts.wallHeightForSegment === "function"
     ? opts.wallHeightForSegment : function () { return wallHeight; };
+  // C4.1a — wall VOLUME dimensions (all overridable; defaults per docs/WALL-VOLUMES-PRACTICALS.md's own
+  // "suggested initial dimensions at 1 world unit = 5ft" table). `upperVisibleForSegment` REPLACES
+  // wallHeightForSegment's old role as the parapet-cut mechanism: it's a plain BOOLEAN (show/hide the
+  // upper band), not a height fraction, so a "cut" near wall renders a full-thickness capped STEM
+  // instead of a squashed thin quad — wallHeightForSegment itself stays available for genuine
+  // structural height variance (a licensed low/ruined wall roll), never camera-driven cuts.
+  const wallThickness = typeof opts.wallThickness === "number" ? opts.wallThickness : DEFAULT_WALL_THICKNESS;
+  const wallStemHeight = typeof opts.wallStemHeight === "number" ? opts.wallStemHeight : DEFAULT_WALL_STEM_HEIGHT;
+  const wallCapHeight = typeof opts.wallCapHeight === "number" ? opts.wallCapHeight : DEFAULT_WALL_CAP_HEIGHT;
+  const wallCapOverhang = typeof opts.wallCapOverhang === "number" ? opts.wallCapOverhang : DEFAULT_WALL_CAP_OVERHANG;
+  const wallFooting = typeof opts.wallFooting === "number" ? opts.wallFooting : DEFAULT_WALL_FOOTING;
+  const wallTrimOn = typeof opts.wallTrim === "boolean" ? opts.wallTrim : true;
+  const upperVisibleForSegment = typeof opts.upperVisibleForSegment === "function"
+    ? opts.upperVisibleForSegment : function () { return true; };
   // BRIGHTNESS-REGRESSION FIX (docs/ROOM-SHELL-COMPILER.md close, 2026-07-12): optional per-cell/
   // per-segment COLOR sources — omitted by every existing pure-core test, so their output stays byte-
   // identical (white/untinted) unless a caller explicitly opts in. `floorColorAt(x,z)->hex` is the
@@ -817,8 +1071,20 @@ function compileRoomShellData(cells, opts) {
   const cellTriangleMap = {};
   let bevelTriCount = 0;
 
+  // C4.1a: `wallBuf`/`wallSegmentsOut` is now the DEPRECATED legacy `.walls` bundle — kept populated
+  // (stem INNER FACE ONLY, see the wall branch below) purely so a pre-C4.1a reader of `.walls` doesn't
+  // hard-break; new code should read `wallStem`/`wallUpper`/`wallTrim` below instead. `wallSegmentsOut`
+  // itself (the a/b/tier/height METADATA list, not geometry) is unchanged and still shared as the
+  // `ownerSegIndex` cross-reference every new bundle below keys off.
   const wallBuf = makeBuffer();
   const wallSegmentsOut = [];
+  const wallStemBuf = makeBuffer();
+  const wallStemSegmentsOut = [];
+  const wallUpperBuf = makeBuffer();
+  const wallUpperSegmentsOut = [];
+  const wallTrimBuf = wallTrimOn ? makeBuffer() : null;
+  const wallTrimSegmentsOut = wallTrimOn ? [] : null;
+  const mountSlotsOut = [];
   const riserBuf = makeBuffer();
   const riserSegmentsOut = [];
   const aperturesOut = [];
@@ -962,16 +1228,87 @@ function compileRoomShellData(cells, opts) {
         }
 
         if (seg.kind === "wall") {
-          const h = wallHeightForSegment({ a: seg.a, b: seg.b, mid: { x: (seg.a.x + seg.b.x) / 2, z: (seg.a.z + seg.b.z) / 2 }, kind: "wall", tier });
+          // C4.1a — WALL VOLUME (docs/WALL-VOLUMES-PRACTICALS.md Unit C4.1a): a heavy architectural
+          // volume (capped stem + independently-hideable upper + optional trim + inner-face mount
+          // slots), not a single two-triangle plane. `h` stays wallHeightForSegment's own result — a
+          // legitimate STRUCTURAL full height (a licensed low/ruined wall roll), never a camera-driven
+          // cut; the camera-relative near/far show-or-hide now flows through `upperVisibleForSegment`
+          // (a boolean predicate) instead of squashing this number.
+          const segMeta = { a: seg.a, b: seg.b, mid: { x: (seg.a.x + seg.b.x) / 2, z: (seg.a.z + seg.b.z) / 2 }, kind: "wall", tier };
+          const h = wallHeightForSegment(segMeta);
           const baseY = elevationY - (complexTier ? 0 : bevelDrop);
-          const wallColor = wallColorForSegment ? hexToRgb01(wallColorForSegment({ a: seg.a, b: seg.b, mid: { x: (seg.a.x + seg.b.x) / 2, z: (seg.a.z + seg.b.z) / 2 }, kind: "wall", tier })) : null;
-          const p0 = { x: seg.a.x, y: baseY, z: seg.a.z };
-          const p1 = { x: seg.b.x, y: baseY, z: seg.b.z };
-          const p2 = { x: seg.b.x, y: baseY + h, z: seg.b.z };
-          const p3 = { x: seg.a.x, y: baseY + h, z: seg.a.z };
-          pushQuad(wallBuf, p0, p1, p2, p3, { x: n.x, y: 0, z: n.z },
-            { u: u0, v: 0 }, { u: u1, v: 0 }, { u: u1, v: h }, { u: u0, v: h }, wallColor);
+          const wallColor = wallColorForSegment ? hexToRgb01(wallColorForSegment(segMeta)) : null;
+          const tangent = directionOf(seg);
+          const innerA = { x: seg.a.x, z: seg.a.z };
+          const innerB = { x: seg.b.x, z: seg.b.z };
+          // outer face = inner face extruded AWAY from the room interior (opposite the inward normal
+          // `n`) — grows the wall's own thickness into the "solid rock" beyond the boundary rather than
+          // eating into the licensed floor footprint; mount slots (below) stay on the INNER face, so
+          // this choice never moves a fixture's own anchor point.
+          const outerA = { x: innerA.x - n.x * wallThickness, z: innerA.z - n.z * wallThickness };
+          const outerB = { x: innerB.x - n.x * wallThickness, z: innerB.z - n.z * wallThickness };
+
+          const ownerSegIndex = wallSegmentsOut.length;
           wallSegmentsOut.push({ a: seg.a, b: seg.b, tier, height: h });
+
+          // ── STEM — always opaque, always emitted, the persistent capped tray-edge body ──
+          const stemBaseY = baseY, stemTopY = baseY + wallStemHeight;
+          buildWallBox(wallStemBuf, {
+            innerA, innerB, outerA, outerB, n, tX: tangent.dx, tZ: tangent.dz,
+            yBase: stemBaseY, yTop: stemTopY, capHeight: wallCapHeight, capOverhang: wallCapOverhang,
+            footing: wallFooting, color: wallColor, u0, u1, uvDensity,
+          });
+          wallStemSegmentsOut.push({ ownerSegIndex, tier });
+          // DEPRECATED legacy `.walls` bundle — stem INNER FACE ONLY (see wallBuf's own header comment
+          // above), so a pre-C4.1a reader of `.walls` geometry degrades to a short capped-tray-edge
+          // quad instead of hard-breaking; `wallSegmentsOut`'s own a/b/height metadata is UNCHANGED
+          // (still the full structural height `h`, not the stem height) for readers that only ever
+          // consumed `.walls.segments`, not its geometry.
+          pushWallVerticalFace(wallBuf,
+            { x: innerA.x, y: stemBaseY, z: innerA.z }, { x: innerB.x, y: stemBaseY, z: innerB.z },
+            { x: innerA.x, y: stemTopY, z: innerA.z }, { x: innerB.x, y: stemTopY, z: innerB.z },
+            { x: n.x, y: 0, z: n.z }, u0, u1, 0, wallStemHeight, wallColor);
+
+          // ── UPPER — conditional, per-segment (C4.1b's future fade handle) ──
+          const upperVisible = upperVisibleForSegment(segMeta);
+          const upperHeight = Math.max(0, h - wallStemHeight);
+          if (upperVisible && upperHeight > 1e-9) {
+            const vertStart = wallUpperBuf.positions.length / 3, idxStart = wallUpperBuf.indices.length;
+            buildWallBox(wallUpperBuf, {
+              innerA, innerB, outerA, outerB, n, tX: tangent.dx, tZ: tangent.dz,
+              yBase: stemTopY, yTop: baseY + h, capHeight: wallCapHeight, capOverhang: wallCapOverhang,
+              footing: 0, color: wallColor, u0, u1, uvDensity,
+            });
+            const vertCount = wallUpperBuf.positions.length / 3 - vertStart;
+            const idxCount = wallUpperBuf.indices.length - idxStart;
+            wallUpperSegmentsOut.push({ ownerSegIndex, tier, vertStart, vertCount, idxStart, idxCount });
+          }
+
+          // ── TRIM — optional, cosmetic base-course + cornice ribbons ──
+          if (wallTrimOn) {
+            const trimHeight = Math.min(0.05, wallStemHeight * 0.25);
+            const trimProud = wallCapOverhang * 0.5;
+            const trimOuterA = { x: outerA.x - n.x * trimProud, z: outerA.z - n.z * trimProud };
+            const trimOuterB = { x: outerB.x - n.x * trimProud, z: outerB.z - n.z * trimProud };
+            pushWallVerticalFace(wallTrimBuf, // baseCourse — at the footing line
+              { x: trimOuterA.x, y: stemBaseY, z: trimOuterA.z }, { x: trimOuterB.x, y: stemBaseY, z: trimOuterB.z },
+              { x: trimOuterA.x, y: stemBaseY + trimHeight, z: trimOuterA.z }, { x: trimOuterB.x, y: stemBaseY + trimHeight, z: trimOuterB.z },
+              { x: -n.x, y: 0, z: -n.z }, u0, u1, 0, trimHeight, wallColor);
+            pushWallVerticalFace(wallTrimBuf, // cornice — at the stem/upper seam
+              { x: trimOuterA.x, y: stemTopY - trimHeight / 2, z: trimOuterA.z }, { x: trimOuterB.x, y: stemTopY - trimHeight / 2, z: trimOuterB.z },
+              { x: trimOuterA.x, y: stemTopY + trimHeight / 2, z: trimOuterA.z }, { x: trimOuterB.x, y: stemTopY + trimHeight / 2, z: trimOuterB.z },
+              { x: -n.x, y: 0, z: -n.z }, u0, u1, 0, trimHeight, wallColor);
+            wallTrimSegmentsOut.push({ ownerSegIndex, tier });
+          }
+
+          // ── MOUNT SLOT(s) — inner-face candidate transforms, DATA only (E0 consumes them) ──
+          mountSlotsOut.push({
+            slotId: "wall-slot-" + ownerSegIndex + "-mid",
+            ownerSegIndex, u: 0.5,
+            worldPos: { x: (seg.a.x + seg.b.x) / 2, y: elevationY + DEFAULT_WALL_MOUNT_EYE_HEIGHT, z: (seg.a.z + seg.b.z) / 2 },
+            normal: { x: n.x, y: 0, z: n.z },
+            tangent: { x: tangent.dx, y: 0, z: tangent.dz },
+          });
         } else if (seg.kind === "riser") {
           // built ONCE per physical riser edge — the lower tier's own pass owns the quad (tier ===
           // seg.loTier); the higher tier's own pass over this SAME edge still ran the bevel ribbon
@@ -1032,7 +1369,21 @@ function compileRoomShellData(cells, opts) {
 
   return {
     floor: { positions: floorBuf.positions, normals: floorBuf.normals, uvs: floorBuf.uvs, colors: floorBuf.colors, indices: floorBuf.indices, tiers: floorTierMeta, bevelTriCount },
+    // DEPRECATED — stem INNER FACE ONLY (C4.1a); use wallStem/wallUpper/wallTrim for new code. Kept so
+    // a pre-C4.1a reader of `.walls` geometry never hard-breaks. `.walls.segments` (a/b/tier/height
+    // metadata, NOT geometry) is unchanged and shared as the ownerSegIndex cross-reference below.
     walls: { positions: wallBuf.positions, normals: wallBuf.normals, uvs: wallBuf.uvs, colors: wallBuf.colors, indices: wallBuf.indices, segments: wallSegmentsOut },
+    // C4.1a — the real wall VOLUME bundles (docs/WALL-VOLUMES-PRACTICALS.md). wallStem: one merged,
+    // always-opaque bundle. wallUpper: one merged buffer, but each `segments[i]` additionally carries
+    // {vertStart,vertCount,idxStart,idxCount} so compileRoomShell can slice out a STANDALONE per-segment
+    // geometry (sliceBufferForSegment) — the spec's own "prefer per-segment upper meshes" choice, the
+    // independent per-segment show/hide handle C4.1b's future occlusion fade needs. A hidden segment
+    // (upperVisibleForSegment -> false, or zero remaining height) simply has NO entry in
+    // wallUpper.segments. wallTrim: null when opts.wallTrim===false.
+    wallStem: { positions: wallStemBuf.positions, normals: wallStemBuf.normals, uvs: wallStemBuf.uvs, colors: wallStemBuf.colors, indices: wallStemBuf.indices, segments: wallStemSegmentsOut },
+    wallUpper: { positions: wallUpperBuf.positions, normals: wallUpperBuf.normals, uvs: wallUpperBuf.uvs, colors: wallUpperBuf.colors, indices: wallUpperBuf.indices, segments: wallUpperSegmentsOut },
+    wallTrim: wallTrimOn ? { positions: wallTrimBuf.positions, normals: wallTrimBuf.normals, uvs: wallTrimBuf.uvs, colors: wallTrimBuf.colors, indices: wallTrimBuf.indices, segments: wallTrimSegmentsOut } : null,
+    mountSlots: mountSlotsOut,
     risers: { positions: riserBuf.positions, normals: riserBuf.normals, uvs: riserBuf.uvs, colors: riserBuf.colors, indices: riserBuf.indices, segments: riserSegmentsOut },
     apertures: aperturesOut,
     cellTriangleMap,
@@ -1075,9 +1426,21 @@ function bufferGeometryFrom(buf) {
    THREE.Mesh with whatever floor/wall material it already resolved (materials/textures unchanged). */
 function compileRoomShell(cells, opts) {
   const data = compileRoomShellData(cells, opts);
+  // C4.1a: one standalone THREE.BufferGeometry per wall-upper segment (sliceBufferForSegment, the pure
+  // slicer above) — the caller (theater-boot.js) builds one THREE.Mesh per entry so each segment gets
+  // its own independent visibility/opacity handle (C4.1a: hard .visible toggle; C4.1b: tweened opacity).
+  const wallUpperMeshes = (data.wallUpper.segments || []).map((seg) => ({
+    ownerSegIndex: seg.ownerSegIndex, tier: seg.tier,
+    geometry: bufferGeometryFrom(sliceBufferForSegment(data.wallUpper, seg)),
+  }));
   return {
     floorGeometry: data.floor.indices.length ? bufferGeometryFrom(data.floor) : null,
+    // DEPRECATED — stem inner-face-only geometry; see compileRoomShellData's own `.walls` comment.
     wallGeometry: data.walls.indices.length ? bufferGeometryFrom(data.walls) : null,
+    wallStemGeometry: data.wallStem.indices.length ? bufferGeometryFrom(data.wallStem) : null,
+    wallUpperMeshes, // [{ownerSegIndex, tier, geometry}] — per-segment, C4.1a's own preferred shape
+    wallTrimGeometry: (data.wallTrim && data.wallTrim.indices.length) ? bufferGeometryFrom(data.wallTrim) : null,
+    mountSlots: data.mountSlots,
     riserGeometry: data.risers.indices.length ? bufferGeometryFrom(data.risers) : null,
     cellTriangleMap: data.cellTriangleMap,
     apertures: data.apertures,
@@ -1093,12 +1456,17 @@ export {
   cellKey, buildCellIndex, tierOf, edgeVertsFor, traceTierContour, chainEdgesIntoRings,
   directionOf, mergeKeyFor, findSegmentStart, simplifySegments, unmergedSegments, ringToPolygon, signedArea2D,
   ensureCCW, segmentNormal, insetOffset, insetPolygon, radialSmoothRing,
-  chamferRunCorners, diagonalizeStaircaseRing, pointInTriangle2D, pointToSegmentDist2, pointToTriangleDist2,
+  chamferRunCorners, diagonalizeStaircaseRing, findDiagonalSafeStart, lineIntersect2D,
+  pointInTriangle2D, pointToSegmentDist2, pointToTriangleDist2,
   triangulatePolygon, ringPerimeterU,
   hexToRgb01, polygonBBox, isAxisAlignedRectPolygon, buildAxisGrid, buildFloorGrid,
+  // C4.1a wall-volume geometry (dev/verify-wall-volumes.mjs's own direct import surface)
+  pushWallVerticalFace, buildWallBox, sliceBufferForSegment,
   compileRoomShellData,
   ROOM_SHELL_TIER_QUANTUM, DEFAULT_WALL_HEIGHT, DEFAULT_BEVEL_WIDTH, DEFAULT_BEVEL_DROP, DEFAULT_UV_DENSITY,
   DEFAULT_RADIAL_SMOOTH_BLEND,
+  DEFAULT_WALL_THICKNESS, DEFAULT_WALL_STEM_HEIGHT, DEFAULT_WALL_CAP_HEIGHT, DEFAULT_WALL_CAP_OVERHANG,
+  DEFAULT_WALL_FOOTING, DEFAULT_WALL_MOUNT_EYE_HEIGHT,
   // THREE assembler (theater-boot.js's own import surface)
   compileRoomShell,
 };

@@ -13,7 +13,8 @@
    Checks:
      1. RED (flag off): per-cell "wall" InstancedMesh renders with instance count === board's own
         wall-cell count; no "room-shell-*" kind present.
-     2. GREEN (flag on, default): "room-shell-wall" mesh renders; its own wall-SEGMENT count (from
+     2. GREEN (flag on, default): "room-shell-wall-stem" mesh renders (C4.1a wall volume — the retired
+        single "room-shell-wall" split into stem/upper/trim); its own wall-SEGMENT count (from
         window.Theater._interiorRoomShellForTest().meta) is far smaller than the per-cell wall count —
         O(boundary segments), not O(wall cells). No "wall"/"floor" per-cell kind present (replaced, not
         double-rendered).
@@ -327,9 +328,12 @@ async function main() {
     m = await mountFixture(page, { realmId: "gloom", roomCount: 1, focusIdx: 0, roomShellOn: true });
     if (!m.ok) throw new Error("GREEN mount failed: " + m.error);
     await settleCameraTween(page); await sleep(300);
-    const shellWall = m.meshInfo.find((x) => x.kind === "room-shell-wall");
+    // C4.1a: the single "room-shell-wall" mesh was retired for a wall VOLUME — an always-opaque
+    // "room-shell-wall-stem" mesh (+ per-segment "room-shell-wall-upper" + optional "-trim"). The
+    // stem is the direct successor here (always built). Segment count still comes from m.shell.meta.
+    const shellWall = m.meshInfo.find((x) => x.kind === "room-shell-wall-stem");
     const shellFloor = m.meshInfo.find((x) => x.kind === "room-shell-floor");
-    ok(!!shellWall, "2a. GREEN: room-shell-wall mesh present");
+    ok(!!shellWall, "2a. GREEN: room-shell-wall-stem mesh present");
     ok(!!shellFloor, "2b. GREEN: room-shell-floor mesh present");
     ok(!m.meshInfo.some((x) => x.kind === "wall" || x.kind === "floor"), "2c. GREEN: per-cell floor/wall meshes ABSENT (replaced, not double-rendered)");
     const wallSegCount = m.shell && m.shell.meta && m.shell.meta.wallSegmentCount;

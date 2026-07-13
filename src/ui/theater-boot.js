@@ -7937,10 +7937,11 @@ let ITR_ROOM_SHELL = true;
 // DEFAULT_UV_DENSITY=1 mirrors this — kept as a SEPARATE named constant here, not an import, since the
 // pure module stays decoupled from this file's own material-building code; see the wire-in call site).
 const ITR_ROOM_SHELL_UV_DENSITY = 1;
-// mirrors ITR_CUTAWAY_PARAPET_FRAC (the per-cell path's own constant, declared at its own call site
-// below) — a SEPARATE named copy (not a shared const) because the compiled-shell wire-in and the
-// per-cell path are two independent code paths that happen to want the same fraction today.
-const ITR_ROOM_SHELL_PARAPET_FRAC = 0.4;
+// C4.1a (docs/WALL-VOLUMES-PRACTICALS.md): the compiled shell's near/far parapet cut is no longer a
+// HEIGHT FRACTION (ITR_ROOM_SHELL_PARAPET_FRAC, retired — grepped: no other reader) — the wall is now a
+// real capped-stem VOLUME, so "cut" means hide the segment's own UPPER mesh outright (a boolean), never
+// squash its height. See the wallHeightForSegment/upperVisibleForSegment split at this unit's own
+// setInteriorBoard call site below.
 // riser side faces read as a DELIBERATELY DARKER material variant (directive step 7) — same value-
 // multiply convention ITR_SCENE_DOORFRAME_VALUE already uses one section up, applied via itrScaleHexValue.
 const ITR_ROOM_SHELL_RISER_DARKEN = 0.55;
@@ -8757,14 +8758,24 @@ function setInteriorBoard(data){
       const yawNow = (S.rotationStep * 90 * Math.PI) / 180 + (CAM_YAW_OFFSET_DEG * Math.PI) / 180;
       parapetDirX = Math.sin(yawNow); parapetDirZ = Math.cos(yawNow);
     }
-    const wallHeightForSegment = (segMeta) => {
-      if(!parapetFr) return roomWallHeight;
+    // wallHeightForSegment: C4.1a retires this as the parapet-cut mechanism — every segment now gets
+    // its own real full STRUCTURAL height (roomWallHeight); kept accepted by the compiler for a future
+    // genuine structural variance (a licensed low/ruined wall roll), never a camera-driven cut.
+    const wallHeightForSegment = () => roomWallHeight;
+    // upperVisibleForSegment: the SAME near/far test the old wallHeightForSegment squash used, now a
+    // plain BOOLEAN (near-side, in-band -> hide the upper; else show it) — reproduces today's look (near
+    // wall = capped tray-edge stem, far/side walls = full height) as a per-segment MESH-level visibility
+    // toggle (see the assembler block below), never fed into the compiler itself: the compiler always
+    // builds EVERY segment's own upper geometry (so C4.1b's later camera-relative fade can flip a
+    // segment back on/off — or tween its opacity — without forcing a full shell recompile).
+    const upperVisibleForSegment = (segMeta) => {
+      if(!parapetFr) return true;
       const mx = segMeta.mid.x, mz = segMeta.mid.z;
       const inBand = mx >= parapetFr.minX - 1 && mx <= parapetFr.maxX + 1 && mz >= parapetFr.minZ - 1 && mz <= parapetFr.maxZ + 1;
-      if(!inBand) return roomWallHeight;
+      if(!inBand) return true;
       const rx = mx - cx, rz = mz - cz;
-      if(rx * parapetDirX + rz * parapetDirZ <= 0) return roomWallHeight; // far-side segment stays full height
-      return roomWallHeight * ITR_ROOM_SHELL_PARAPET_FRAC;
+      if(rx * parapetDirX + rz * parapetDirZ <= 0) return true; // far-side segment stays fully visible
+      return false; // near-side, in-band -> hide the upper (the capped-stem tray edge)
     };
     // per-vertex world-aligned UVs replace the per-instance shared texture.repeat trick (BW2-3 §2b) —
     // a (1,1) repeat variant of the SAME texture family/seed the per-cell path already resolved above
@@ -8892,6 +8903,10 @@ function setInteriorBoard(data){
     // anything) to do with it: 'circle'/'ellipse' round the boundary, 'octagon'/'L'/'T'/'cross' chamfer
     // any real staircase run into a diagonal face, 'rect'/'cave'/null take the untouched simplify path
     // — see theater-room-mesh.js's own `opts.smoothShape` doc for the full per-tag behavior.
+    // C4.1a: the compiler always builds EVERY segment's own upper geometry (upperVisibleForSegment is
+    // NOT threaded into the compiler call here — see this unit's own comment at that const's
+    // declaration above for why); the compiler's `opts.upperVisibleForSegment` stays available for a
+    // genuine STRUCTURAL omission a future caller might license, never this camera-driven one.
     const shell = compileRoomShell(shellCells, {
       wallHeight: roomWallHeight, wallHeightForSegment, uvDensity: ITR_ROOM_SHELL_UV_DENSITY,
       floorColorAt, wallColorForSegment, smoothShape: data.activeRoomShape,
@@ -8903,12 +8918,45 @@ function setInteriorBoard(data){
       m.userData.interiorKind = "room-shell-floor";
       roomShellMeshes.push(m);
     }
-    if(shell.wallGeometry){
-      const m = new THREE.Mesh(shell.wallGeometry, wallMat);
+    // C4.1a WALL VOLUME meshes (docs/WALL-VOLUMES-PRACTICALS.md) — REPLACE the old single wallGeometry
+    // mesh (deprecated stem-inner-face-only bundle at shell.wallGeometry, left unconsumed here so it
+    // never double-renders against the real stem mesh below) with three real bodies: an always-opaque
+    // STEM, one independently-visible UPPER mesh per wall segment, and an optional TRIM mesh.
+    let wallStemMesh = null;
+    if(shell.wallStemGeometry){
+      wallStemMesh = new THREE.Mesh(shell.wallStemGeometry, wallMat);
+      wallStemMesh.position.set(-cx, 0, -cz);
+      wallStemMesh.castShadow = true; wallStemMesh.receiveShadow = true;
+      wallStemMesh.userData.interiorKind = "room-shell-wall-stem";
+      roomShellMeshes.push(wallStemMesh);
+    }
+    // per-segment mid (world x,z) lookup off shell.wallSegments (the SAME a/b/tier/height metadata list
+    // `mountSlots`/wallUpperMeshes key their own ownerSegIndex against) — used only to re-derive the
+    // segMeta upperVisibleForSegment expects (mid.x/mid.z), never to rebuild geometry.
+    const wallUpperMeshList = [];
+    (shell.wallUpperMeshes || []).forEach((entry) => {
+      if(!entry.geometry) return;
+      const m = new THREE.Mesh(entry.geometry, wallMat);
       m.position.set(-cx, 0, -cz);
       m.castShadow = true; m.receiveShadow = true;
-      m.userData.interiorKind = "room-shell-wall";
+      m.userData.interiorKind = "room-shell-wall-upper";
+      m.userData.ownerSegIndex = entry.ownerSegIndex;
+      const ownerSeg = shell.wallSegments[entry.ownerSegIndex];
+      const segMeta = ownerSeg ? { a: ownerSeg.a, b: ownerSeg.b, mid: { x: (ownerSeg.a.x + ownerSeg.b.x) / 2, z: (ownerSeg.a.z + ownerSeg.b.z) / 2 }, kind: "wall", tier: ownerSeg.tier } : null;
+      // C4.1a: a hard visibility toggle reproducing today's static near/far look (the SAME test the old
+      // squashed-height wallHeightForSegment used) — C4.1b (a later unit) swaps this for a tweened
+      // opacity driven off the existing itrOcclusionClassify engine; this mesh's geometry never changes.
+      m.visible = segMeta ? upperVisibleForSegment(segMeta) : true;
       roomShellMeshes.push(m);
+      wallUpperMeshList.push({ mesh: m, ownerSegIndex: entry.ownerSegIndex });
+    });
+    let wallTrimMesh = null;
+    if(shell.wallTrimGeometry){
+      wallTrimMesh = new THREE.Mesh(shell.wallTrimGeometry, wallMat);
+      wallTrimMesh.position.set(-cx, 0, -cz);
+      wallTrimMesh.castShadow = true; wallTrimMesh.receiveShadow = true;
+      wallTrimMesh.userData.interiorKind = "room-shell-wall-trim";
+      roomShellMeshes.push(wallTrimMesh);
     }
     if(shell.riserGeometry){
       const m = new THREE.Mesh(shell.riserGeometry, riserMat);
@@ -8919,9 +8967,12 @@ function setInteriorBoard(data){
     }
     // diagnostics + the logical cell<->triangle map (directive step 9) — dev/verify-room-shell-
     // render.mjs's own primitive-count/bevel/riser assertions read this, never decomposing geometry.
+    // C4.1a additions: wallStemMesh/wallUpperMeshes/wallTrimMesh/mountSlots — E0 (a later unit) parents
+    // wall-mounted fixtures to `mountSlots`; C4.1b re-targets `wallUpperMeshes[].mesh`'s own opacity.
     S.interiorLastRoomShell = {
       meta: shell.meta, cellTriangleMap: shell.cellTriangleMap, apertures: shell.apertures,
       wallSegments: shell.wallSegments, riserSegments: shell.riserSegments, floorTiers: shell.floorTiers,
+      wallStemMesh, wallUpperMeshes: wallUpperMeshList, wallTrimMesh, mountSlots: shell.mountSlots,
     };
   }
   // BEAUTY-WAVE-2.md BW2-1b (THE OCCLUSION LAW), item 1, superseded by docs/DIEGETIC-LIGHT.md unit S-1
@@ -10676,7 +10727,43 @@ window.Theater._occlusionLawForTest = {
 // comment) — lets a harness assert the mask it gets from _occlusionLawForTest against the SAME
 // position the real mount used, rather than a second camera-position derivation of its own.
 window.Theater._interiorCameraPositionForTest = function(){
-  return S.camera ? { x: S.camera.position.x, y: S.camera.position.y, z: S.camera.position.z } : null;
+  return S.camera ? { x: S.camera.position.x, y: S.camera.position.y, z: S.camera.position.z, zoom: S.camera.zoom } : null;
+};
+// C4.1a — TEST-ONLY SEAM: the write-sibling of _interiorCameraPositionForTest above. No production
+// caller ever moves the camera off placeCamera's own 4-yaw/fixed-elevation grid (see this file's own
+// CAM_YAW_OFFSET_DEG/CAM_ELEV_DEG convention) — a capture-gate harness needs a real GRAZING low-angle
+// shot (dev/battle-gate/capture-wall-volumes.mjs's own acceptance: "inner face + cap + outer face all
+// resolve") that no product camera pose ever produces, so this exposes a direct pose override for that
+// one purpose. `zoomMultiplier` (optional) also scales `camera.zoom`; the board's interior camera is
+// PERSPECTIVE (confirmed live), so ordinary distance-from-target already drives close-up framing — the
+// zoom knob is a secondary lever, kept for completeness. Returns false (no-op) before any board mounts
+// a camera. Three defensive measures below (tween-cancel / composer renderPass re-sync / a forced
+// synchronous render) each close a REAL staleness risk for a pose set between board mounts — none of
+// them turned out to be THE reason an early pass of the capture-gate harness kept reading a stale
+// frame; that root cause was a `elementHandle.screenshot()`-on-WebGL-canvas quirk in headless Chrome,
+// fixed on the HARNESS side by switching to a full-page screenshot (see capture-wall-volumes.mjs's own
+// `shoot()`). Kept here anyway because they are each independently correct.
+window.Theater._setInteriorCameraPoseForTest = function(pos, lookAt, zoomMultiplier){
+  if(!S.camera) return false;
+  // cancel any in-flight camera-pose GLIDE tween (placeCameraTweened's own MF1_CAMERA_TWEEN_DUR
+  // convention) — otherwise tickTweens would overwrite S.camera.position/lookAt toward the glide's OWN
+  // end pose on a subsequent rAF tick, retargeting this override out from under a caller that expects
+  // it to hold.
+  if(S.tweens && S.tweens.length) S.tweens = S.tweens.filter((tw) => !(tw && tw.isCameraPoseTween));
+  if(pos) S.camera.position.set(pos.x, pos.y, pos.z);
+  if(lookAt) S.camera.lookAt(lookAt.x, lookAt.y, lookAt.z);
+  if(typeof zoomMultiplier === "number" && typeof S.camera.zoom === "number") S.camera.zoom = S.camera.zoom * zoomMultiplier;
+  if(typeof S.camera.updateProjectionMatrix === "function") S.camera.updateProjectionMatrix();
+  // mountPostSuite (this file, above) only re-syncs S.postSuite.renderPass.camera at BOARD-MOUNT time —
+  // a pose override that happens BETWEEN mounts needs the same re-sync here, or the composer's own
+  // cached RenderPass camera reference would go stale against this new pose on the next composited frame.
+  if(S.postSuite && S.postSuite.renderPass) S.postSuite.renderPass.camera = S.camera;
+  // force an IMMEDIATE synchronous render (bypassing markDirty's own rAF scheduling) — a caller that
+  // reads pixels right after this call shouldn't depend on rAF timing (unreliable from a backgrounded/
+  // automated tab — see _renderFrameForTest's own header, same rationale).
+  try { renderTheaterFrame(); } catch(e) {}
+  markDirty();
+  return true;
 };
 
 // CLIP MARGIN LAW (Adam addendum, mid-flight on BW2-1b) — TEST-ONLY SEAM: the pure geometry (circle-

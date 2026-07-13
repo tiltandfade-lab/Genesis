@@ -1381,7 +1381,33 @@ function triangleValidityOfBundle(data) {
 // the sub-records are what let a human (or a future R4-style regression) see WHERE legacy and oss
 // disagree — this is deliberately the row-101/F08/F11 SURFACE where a real divergence is expected and
 // desired (oss correcting a legacy defect), not a bug in this diagnostic itself.
-function buildParityDiagnostics(legacyData, ossData, cells) {
+// UNIT G3 (§17.6, docs/STAGE-G3-WALL-RUNS.md's own "oss-compare parity diagnostics: legacy vs oss wall
+// outer-corner gap... provenance match rate, unintended-join count") — summarizes the "wall-run-offset"
+// typed entries computeOssWallOuterOffsets already pushes into ossDiagnosticsOut (present on `ossData.
+// ossDiagnostics` for any non-"legacy" compile) into ONE aggregate record. `legacyFormulaGapAt90deg` is
+// the deterministic, wallThickness-only constant the R1 bakeoff measured and dev/verify-wall-runs-oss.mjs
+// independently reproduces (wallThickness*sqrt(2) — invariant across every room using this thickness;
+// re-deriving it per-room from wallSegmentsOut would require reconstructing ring adjacency this bundle
+// doesn't preserve, for no additional truth this closed-form doesn't already carry).
+function wallCornerGapDiagnostics(ossData, wallThickness) {
+  const entries = (ossData && Array.isArray(ossData.ossDiagnostics) ? ossData.ossDiagnostics : []).filter((d) => d.typed === "wall-run-offset");
+  const totalSegments = entries.reduce((s, e) => s + (e.segmentCount || 0), 0);
+  const matchedSegments = entries.reduce((s, e) => s + (e.matchedSegments || 0), 0);
+  const degradedRuns = entries.filter((e) => e.degraded).length;
+  const unintendedJoinCount = entries.reduce((s, e) => s + (e.joinGapCount || 0), 0);
+  const maxJoinGap = entries.reduce((m, e) => Math.max(m, e.maxJoinGap || 0), 0);
+  return {
+    legacyFormulaGapAt90deg: wallThickness * Math.SQRT2,
+    runsConsidered: entries.length,
+    degradedRuns,
+    provenanceMatchRate: totalSegments > 0 ? matchedSegments / totalSegments : null,
+    unintendedJoinCount,
+    ossMaxCornerGap: maxJoinGap,
+    barMet: entries.length > 0 && degradedRuns === 0 && unintendedJoinCount === 0 && matchedSegments === totalSegments,
+  };
+}
+
+function buildParityDiagnostics(legacyData, ossData, cells, wallThickness) {
   const legacyArea = floorAreaOfBundle(legacyData), ossArea = floorAreaOfBundle(ossData);
   const legacyTiers = (legacyData.floor.tiers || []).map((t) => t.tier).sort((a, b) => a - b);
   const ossTiers = (ossData.floor.tiers || []).map((t) => t.tier).sort((a, b) => a - b);
@@ -1408,6 +1434,7 @@ function buildParityDiagnostics(legacyData, ossData, cells) {
     wallBoundaryLength: { legacy: legacyWallLen, oss: ossWallLen, delta: ossWallLen - legacyWallLen },
     triangleValidity: { legacy: legacyTri, oss: ossTri },
     bounds: { legacy: legacyBounds, oss: ossBounds },
+    wallCornerGap: wallCornerGapDiagnostics(ossData, typeof wallThickness === "number" ? wallThickness : DEFAULT_WALL_THICKNESS),
     divergent: !cellCoverageMatches || !tierOwnershipMatches || !apertureCountMatches || !areaWithinTolerance || ossTri.degenerate > 0 || ossTri.nonFinite > 0,
   };
 }
@@ -1544,8 +1571,9 @@ function compileRoomShellData(cells, opts) {
     } catch (e) {
       ossThrew = String((e && e.stack) || e);
     }
+    const wallThicknessForDiag = typeof opts.wallThickness === "number" ? opts.wallThickness : DEFAULT_WALL_THICKNESS;
     legacyResult.parityDiagnostics = ossResult
-      ? buildParityDiagnostics(legacyResult, ossResult, cells)
+      ? buildParityDiagnostics(legacyResult, ossResult, cells, wallThicknessForDiag)
       : { error: "oss path threw during oss-compare", detail: ossThrew };
     legacyResult.ossDiagnostics = ossResult ? (ossResult.ossDiagnostics || []) : [];
     return legacyResult;

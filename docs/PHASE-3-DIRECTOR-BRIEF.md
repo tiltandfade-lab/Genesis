@@ -145,3 +145,28 @@ especially, since it overlaps Codex's art-foundry and may be cheaper to inherit 
 
 If you agree, these two are spec-ready to fan out immediately; if you'd rather set the oracle direction
 first, everything waits on that with no wasted work.
+
+---
+
+## 6. "Not rebuilding the wheel" — OSS adoption findings (2026-07-13 research pass)
+
+A three-agent research pass (reference data · three.js graphics · procgen/infra) asked whether Genesis is
+reinventing anything a mature public repo already solves. **Headline: mostly no.** The non-obvious infra
+wins are already adopted (IndexedDB via `store.js`/`FOREVER-STORAGE.md`; vendored earcut/polygon-clipping/
+clipper2; the Codex graphics pin-table), and the deliberately-bespoke systems are correct-by-design — keep
+them: **script-owns-rolls** (so `rpg-dice-roller` would fork the pipeline), **no-stored-terrain** (so
+mapgen4/donjon assume state `SPATIAL-MODEL.md` forbids), **band×lane combat** (so `rot.js` FOV/pathfinding
+has nothing to map to), and `postprocessing` was already *correctly rejected* (swapping a working DoF/bloom/
+grade chain is pure risk). Four genuine finds surfaced — the first two are Phase-3 graphics, in your lane:
+
+| # | Adopt | What / where it lands | License | Owner |
+|---|---|---|---|---|
+| **1** | **`@three.ez/instanced-mesh`** | **The big one — fold into GP-3/R3 before speccing bespoke.** R3 "Phase B" sprite-atlas instancing (per-instance transform/UV-rect/tint/opacity/visibility + alpha-tested depth + LOD + frustum cull + BVH raycast) is scoped **fully bespoke + unbuilt** (`GRAPHICS-PRODUCTION-RESEARCH-WAVE.md §4.3`). potpack packs the atlas layout; **nothing pinned RENDERS it** — this library is exactly that seam, solved. Narrower alt: `three-instanced-uniforms-mesh` (Troika) if only per-instance UV-rect/tint/opacity is wanted. | MIT | **Fable — Phase 3** |
+| **2** | **Open5e `srd-2024` dataset** ([open5e/open5e-api](https://github.com/open5e/open5e-api), `data/v2/wizards-of-the-coast/srd-2024/`) | Build-time **cross-check** for the PDF-parsed `Reference/SRD-Data/` — spell count matches exactly (339, validates the parse), and it can catch 5.2.1 errata + backfill structured fields (`saving_throw_ability`, `damage_roll`, `shape_type`) currently parsed from prose. A `build/sync-open5e.py` validator, **not** a replacement. **Filter strictly to `document=srd-2024`** (the repo aggregates CC-BY + OGL + ORC); **avoid 5etools-derived sets** (Product Identity); **skip 5e-bits/dnd5eapi** (still 2014 SRD 5.1 — would regress rules). | CC-BY-4.0 (matches `docs/ATTRIBUTION.md`) | data lane (non-graphics) |
+| **3** | **AgX tone-curve** | **Free** — already inside vendored `three@0.166`. Port just the tone-curve math into the existing per-realm grade pass (BW3-6 `makeGradePass`) for cleaner highlight rolloff on bloom-heavy emissive (chrome glow, flame apex). **Don't** touch `renderer.toneMapping`/`NoToneMapping` — that fights the per-realm-grade architecture. | MIT (three core) | Fable — Phase 3 (GP-4 grade) |
+| **4** | **Dedup the test-seed PRNG** | Free hygiene: three copies of a seeded RNG (2× `mulberry32` + 1 divergent LCG) across `dev/gauntlet-monkey.mjs:51`, `dev/gauntlet-fuzz-events.mjs:54`, `dev/verify-u6-determinism.mjs:32` → extract one `dev/lib/prng.mjs`. Silent-drift risk between harnesses; ~5-min dev-only cleanup. | n/a (8-line fn) | any wave |
+
+Explicitly **skip** (researched + ruled out): pmndrs `postprocessing` (rejected), IBL/PMREM (no PBR materials
+in production), particle libs (v1 rules them out), soft-shadow libs (shadows disabled on the tabletop path),
+WebGPU/TSL migration (charter forbids without a forcing bottleneck), `graphology` (~100× overkill for 6–20-node
+topologies). Full per-item evidence + URLs are in this session's research transcript.

@@ -155,6 +155,57 @@ sheet personally), vision-scan the contact sheets to draft overlay tags, hand Ad
 list. THIS is the taste gate before mass slicing. Also amend REALM-KEY-EXPANSION-STATS-SPEC §5:
 net-new `model:` slugs → sprite asks, not foundry asks.
 
+## Deferred follow-up — faction palette swaps (recorded 2026-07-13; not scheduled)
+
+Humanoid/NPC sprites may wear a faction's primary, secondary, and insignia colors without minting a
+new sprite for every faction. This is a **selective palette swap**, not `material.color` over the whole
+billboard: a whole-sprite tint also recolors skin, hair, weapons, and authored effects, so it remains a
+status/lighting treatment only and is not the faction-livery solution.
+
+### Asset and data contract
+
+- A palette-capable sprite keeps its ordinary authored albedo at `assets/sprites/<slug>.png` and may
+  add `assets/sprites/<slug>.faction-mask.png`. The mask's R/G/B channels mean
+  `factionPrimary` / `factionSecondary` / `factionAccent`; black means preserve the albedo exactly.
+  Overlapping weights blend, but production masks should normally assign one channel per pixel.
+- The three slots apply to clothing, banners, shields, plumes, badges, and other declared livery only.
+  Skin, hair, creature anatomy, ordinary metal/leather, magic, and transparent edge pixels must remain
+  black in the mask. The source sprite's alpha stays authoritative.
+- `SPRITE_REGISTRY` records mask availability/slot coverage as generated metadata; it never embeds a
+  faction's colors in the reusable sprite record. The rendered NPC supplies a canonical faction id,
+  and that faction record resolves the three hex colors. No faction or missing colors means unmodified
+  base art.
+- New prompt/slicing work should prefer standardized livery regions that the pipeline can turn into a
+  deterministic mask. Existing sprites receive a one-time automated candidate-mask pass plus the same
+  fail-loud visual review discipline as alpha, feet, and scale. Runtime ImageGen is never required.
+
+### Runtime path
+
+For the current individual-PNG renderer, the simple first implementation is an offscreen-canvas bake:
+load albedo + mask, preserve each masked pixel's authored luminance/value and shading, replace only its
+masked hue/chroma from the resolved faction slot, create a `CanvasTexture`, then pass it through the
+existing lit standee material unchanged. Cache by
+`<slug>|<primary>|<secondary>|<accent>` and dispose through the sprite-texture cache lifecycle. The
+recolor cost is paid once per distinct sprite/palette combination, not per frame or per NPC.
+
+A shader implementation may replace the canvas bake later if atlasing, animation, or variant volume
+makes texture duplication material. It must accept the same albedo/mask/three-color contract, preserve
+the existing Lambert light response, emissive readability floor, alpha test, color-management path,
+and sprite-purity rules. The asset/data contract must not depend on which renderer path wins.
+
+### Fallbacks and acceptance
+
+If a mask is absent or rejected, render the unmodified sprite and communicate allegiance through an
+existing faction-colored plinth/ring or a separate badge/sash/standard overlay; never guess garment
+pixels from arbitrary baked art at runtime. Regenerate the sprite only when faction livery is intrinsic
+to that unique character's design, not merely a reusable affiliation.
+
+The implementation gate needs a matrix containing pale/dark skin, hair adjacent to clothing, metal,
+translucency, anti-aliased edges, primary/secondary/accent overlap, neutral/no-faction fallback, and two
+NPC instances sharing one source sprite under different palettes. Passing means only declared livery
+changes, authored value/shading survives, no fringe or skin contamination appears at gameplay scale,
+and the cache produces one texture per unique key rather than one per instance.
+
 ## Integration order
 T2 → T3 (re-run real generation) → T4, integrated on a temp branch, full verify-*.mjs sweep +
 check-manifest on the integrated tree, then --no-ff merges. T1 rides the same close.

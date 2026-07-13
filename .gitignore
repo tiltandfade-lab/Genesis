@@ -12,6 +12,13 @@ node_modules/
 # .github/workflows/ci.yml. Never committed; a fresh checkout has neither.
 dev/jsdom-home/
 
+# Geometry-research tool bootstrap (docs/GEOMETRY-ACCELERATION-TOOLCHAIN.md S11/S13.3) — the
+# scratch tool home itself lives outside the repo at $GEOMETRY_TOOLS_HOME (default
+# ~/.genesis-geometry-tools), never here. The one thing that could land inside the repo tree is the
+# regenerate-on-every-run smoke receipt; never commit it, regenerate with
+# node dev/geometry-tools/smoke-imports.mjs instead.
+dev/geometry-tools/smoke-receipt.json
+
 # Claude Code machine-local settings (per-machine permission allowlist etc.).
 # A shared .claude/settings.json, if ever added, stays trackable.
 .claude/settings.local.json

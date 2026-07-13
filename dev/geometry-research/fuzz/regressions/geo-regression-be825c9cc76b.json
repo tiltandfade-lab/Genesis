@@ -1,0 +1,204 @@
+{
+  "id": "geo-regression-be825c9cc76b",
+  "foundBy": "fast-check",
+  "seed": 400003,
+  "path": "1",
+  "property": "sunken-tier-survives-production-guard",
+  "cells": [
+    {
+      "x": 0,
+      "z": 0,
+      "tier": 3
+    },
+    {
+      "x": 0,
+      "z": -1,
+      "tier": 3
+    },
+    {
+      "x": 1,
+      "z": 0,
+      "tier": 3
+    },
+    {
+      "x": -1,
+      "z": -1,
+      "tier": 3
+    },
+    {
+      "x": 1,
+      "z": -1,
+      "tier": 3
+    },
+    {
+      "x": 2,
+      "z": 0,
+      "tier": 3
+    },
+    {
+      "x": -1,
+      "z": -2,
+      "tier": -3
+    },
+    {
+      "x": -2,
+      "z": -1,
+      "tier": -3
+    },
+    {
+      "x": -2,
+      "z": 0,
+      "tier": 3
+    },
+    {
+      "x": 1,
+      "z": 1,
+      "tier": 3
+    },
+    {
+      "x": -3,
+      "z": -1,
+      "tier": -3
+    },
+    {
+      "x": -1,
+      "z": 0,
+      "tier": 3
+    },
+    {
+      "x": 0,
+      "z": -2,
+      "tier": 3
+    },
+    {
+      "x": 0,
+      "z": 1,
+      "tier": 3
+    },
+    {
+      "x": 2,
+      "z": 1,
+      "tier": 3
+    },
+    {
+      "x": 1,
+      "z": -2,
+      "tier": 3
+    },
+    {
+      "x": 1,
+      "z": 2,
+      "tier": 3
+    }
+  ],
+  "tiers": {
+    "3": 14,
+    "-3": 3
+  },
+  "apertures": [],
+  "profile": {},
+  "expected": {
+    "knownRed": true,
+    "reason": "theater-boot.js:8888 `const sy = (typeof f.sy === 'number' && f.sy > 0) ? f.sy : ITR_FLOOR_HEIGHT_FALLBACK;` discards any NEGATIVE f.sy (a legitimately sunken tile) and falls back to the flat floor height — a cell whose real elevation is BELOW the room's baseline collapses onto the SAME quantized tier as the surrounding floor. Same defect G0's F18-row101-exact-canonical negative control proves; R2's job is to show fast-check finds and SHRINKS a minimal case of it, independent of the hand-authored row-101 fixture.",
+    "shouldNotCollapse": true
+  },
+  "firstSeenCommit": "701415faa6bc27eb89063c2a1020d44f51994f7c",
+  "notes": "R2 property-fuzz shrink of the negative-sy sunken-tier-collapse defect (theater-boot.js:8888), independent of G0's hand-authored F18-row101-exact-canonical fixture. R2 does not fix this -- promoted so it becomes an ordinary deterministic regression case for whichever unit (G2/G3) fixes theater-boot.js's own f.sy>0 guard.",
+  "scenario": {
+    "apertures": [],
+    "terrain": [],
+    "renderShape": "identity",
+    "wallProfile": null,
+    "sunken": {
+      "depth": 1.9999985694885254
+    },
+    "cells": [
+      {
+        "x": 0,
+        "z": 0,
+        "tier": 3
+      },
+      {
+        "x": 0,
+        "z": -1,
+        "tier": 3
+      },
+      {
+        "x": 1,
+        "z": 0,
+        "tier": 3
+      },
+      {
+        "x": -1,
+        "z": -1,
+        "tier": 3
+      },
+      {
+        "x": 1,
+        "z": -1,
+        "tier": 3
+      },
+      {
+        "x": 2,
+        "z": 0,
+        "tier": 3
+      },
+      {
+        "x": -1,
+        "z": -2,
+        "tier": -3
+      },
+      {
+        "x": -2,
+        "z": -1,
+        "tier": -3
+      },
+      {
+        "x": -2,
+        "z": 0,
+        "tier": 3
+      },
+      {
+        "x": 1,
+        "z": 1,
+        "tier": 3
+      },
+      {
+        "x": -3,
+        "z": -1,
+        "tier": -3
+      },
+      {
+        "x": -1,
+        "z": 0,
+        "tier": 3
+      },
+      {
+        "x": 0,
+        "z": -2,
+        "tier": 3
+      },
+      {
+        "x": 0,
+        "z": 1,
+        "tier": 3
+      },
+      {
+        "x": 2,
+        "z": 1,
+        "tier": 3
+      },
+      {
+        "x": 1,
+        "z": -2,
+        "tier": 3
+      },
+      {
+        "x": 1,
+        "z": 2,
+        "tier": 3
+      }
+    ],
+    "tag": "tiers-heavy"
+  }
+}

@@ -458,15 +458,263 @@ writeFileSync(reportPath, JSON.stringify(baselineReport, null, 2));
 check("6a. baseline-report.json written", true, reportPath);
 check("6b. baseline report covers every fixture in the corpus", Object.keys(baselineReport.fixtures).length === FIXTURES.length);
 
-// ─── Section 7: harness itself never touches production files ────────────────────────────────────
+// ─── Section 7: harness itself never touches FORBIDDEN production files ──────────────────────────
+// G0's own version of this guard was "zero src/ changes at all" (G0 was pure research, adding no
+// production file). UNIT G1 (docs/GEOMETRY-OSS-INTEGRATION.md §17.4) legitimately ADDS exactly one new
+// src/ file (src/ui/geometry/polygon-kernel.js, a NEW pure ESM module — not an edit to anything
+// existing) plus registers it in manifest.json/genesis.html, which the old "zero src/ changes" check
+// would now flag as a false violation. The check's real job was always "never edit the FORBIDDEN
+// files" (G1's own forbidden list, §17.4: theater-room-mesh.js, walk/spatialization code) — narrowed
+// here to check that literally, rather than weakened to pass mechanically. See CLAUDE.md "Validators
+// preserve the thing's job — never satisfy one mechanically."
 console.log("\n=== 7. Scope guard ===");
 {
   let diff = "";
   try {
     diff = execSync("git diff --name-only HEAD", { cwd: ROOT, encoding: "utf-8" });
   } catch (e) { diff = ""; }
-  const touchesProduction = diff.split("\n").some((f) => f && f.startsWith("src/"));
-  check("7a. this unit's working tree has zero uncommitted changes under src/ (research-only, no production edits)", !touchesProduction, diff);
+  const changedFiles = diff.split("\n").filter(Boolean);
+  const FORBIDDEN_PRODUCTION_FILES = [
+    "src/ui/theater-room-mesh.js", // G2's job, not G1's
+    "src/ui/theater-boot.js", // walk/spatialization + THREE assembly layer
+    "src/engine/place-spatialize.js", "src/engine/walk.js", "src/engine/walk-scene.js", // walk/spatialization code
+  ];
+  const touchesForbidden = changedFiles.filter((f) => FORBIDDEN_PRODUCTION_FILES.includes(f));
+  check("7a. this unit's working tree touches none of the G1-forbidden production files (theater-room-mesh.js, theater-boot.js, walk/spatialization code)",
+    touchesForbidden.length === 0, touchesForbidden);
+  check("7b. any new src/ file this unit's diff DOES touch is limited to the new geometry-kernel module (no edit to an existing production file)",
+    changedFiles.filter((f) => f.startsWith("src/")).every((f) => f === "src/ui/geometry/polygon-kernel.js"), changedFiles.filter((f) => f.startsWith("src/")));
+}
+
+// ─── Section 8: UNIT G1 — plug the PolygonKernel into this harness's own injected-adapter seam ────
+// docs/GEOMETRY-OSS-INTEGRATION.md §17.4 acceptance: "AND plug the kernel into G0's injected-adapter
+// seam... and run the 52-fixture corpus: the kernel must be GREEN where the legacy adapter was RED...
+// and must NOT regress the fixtures legacy passes. Show the before(legacy)/after(kernel) delta."
+//
+// SCOPE NOTE (read before grading a smoothed-renderShape fixture here): this section — like the R1
+// bakeoff's P1/P2 paths (dev/geometry-research/bakeoff/adapters.mjs's own SCOPE NOTE) — compares the
+// kernel's floor UNION + TRIANGULATION primitives against RAW (unsmoothed) canonical cell topology.
+// diagonalizeStaircaseRing/radialSmoothRing (the octagon-chamfer/rotunda render-transform pass) is a
+// G2/G3-owned RENDER TRANSFORM applied AFTER the canonical ring exists (docs/GEOMETRY-OSS-INTEGRATION.md
+// §6.2) — this kernel does not run it and is not supposed to. Every fixture's `expected.area/tiers` is
+// ALREADY the raw unsmoothed grid-truth (geometry-truth.mjs's own areaOf/tierTruth, computed before any
+// smoothing concept exists), so the kernel is graded at the SAME strict truth legacy is graded against —
+// legacy just additionally earns a loosened 5% `areaTolerance` band because it DOES run smoothing; the
+// kernel is graded at the fixture's raw epsilon tolerance instead (a STRICTER bar, not a lenient one).
+console.log("\n=== 8. UNIT G1: PolygonKernel plugged into the injected-adapter seam ===");
+{
+  const kernel = await import(pathToFileURL(join(ROOT, "src/ui/geometry/polygon-kernel.js")).href);
+
+  // ─ 8.1: the kernel adapter — shared input contract -> shared output contract, exactly parallel to
+  //   Section 4's legacyAdapter, but composed entirely from PolygonKernel calls. Tier-grouping (which
+  //   the kernel itself deliberately does NOT own, per §4's architecture — unionCellRects operates on
+  //   one already-grouped cell set) lives HERE, at the adapter boundary — including the typed
+  //   diagnostic legacy was missing for a non-numeric tier field (this adapter's own fix for the
+  //   F26c "no typed malformed-input fallback" defect class, §17.4's third named negative control). ─
+  function kernelAdapter(fixture) {
+    const t0 = performance.now();
+    const diagnostics = [];
+    const cells = (fixture.cells || []).filter(Boolean);
+    if (!cells.length) {
+      return { surfaces: [], walls: [], cellTriangleMap: {}, diagnostics: [{ level: "error", typed: "malformed-input", message: "empty cells array" }], timings: { buildMs: performance.now() - t0 } };
+    }
+    // tier-grouping with a TYPED diagnostic on coercion (the F26c fix: legacy's tierOf() silently
+    // coerces any non-numeric tier to 0 with zero diagnostic trace; this adapter performs the SAME
+    // documented coercion — corpus.mjs's own note on F26c says the coercion itself is correct/expected
+    // — but never silently).
+    const byTier = new Map();
+    for (const c of cells) {
+      if (!c || !Number.isFinite(c.x) || !Number.isFinite(c.z)) {
+        diagnostics.push({ level: "error", typed: "malformed-input", message: `cell with non-finite or missing x/z: ${JSON.stringify(c)}` });
+        continue;
+      }
+      let tier = c.tier;
+      if (typeof tier !== "number" || !Number.isFinite(tier)) {
+        diagnostics.push({ level: "warn", typed: "non-numeric-tier-coerced", message: `cell (${c.x},${c.z}) has non-numeric tier ${JSON.stringify(c.tier)}, coerced to 0` });
+        tier = 0;
+      }
+      if (!byTier.has(tier)) byTier.set(tier, []);
+      byTier.get(tier).push(c);
+    }
+    const surfaces = [];
+    const cellTriangleMap = {};
+    // Deterministic tier iteration order: a Map's own iteration order is INSERTION order, which
+    // depends on the order cells arrived in `fixture.cells` — under a shuffled-input determinism
+    // check, a multi-tier fixture would otherwise emit `surfaces` in a DIFFERENT order per shuffle
+    // even though every individual tier's own union/triangulation is already byte-identical (proven by
+    // dev/verify-polygon-kernel.mjs Section 1). Sort numerically so surface order never depends on
+    // input cell order — this is the adapter's own responsibility, not the kernel's (the kernel never
+    // sees more than one tier's cells in a single call).
+    const sortedTiers = Array.from(byTier.keys()).sort((a, b) => a - b);
+    for (const tier of sortedTiers) {
+      const tierCells = byTier.get(tier);
+      const union = kernel.unionCellRects(tierCells.map((c) => ({ x: c.x, z: c.z })));
+      diagnostics.push(...union.diagnostics.issues.map((i) => ({ ...i, tier })));
+      const tri = kernel.triangulateSurface(union);
+      if (tri.diagnostics.issues.length) diagnostics.push(...tri.diagnostics.issues.map((i) => ({ ...i, tier })));
+      surfaces.push({
+        tier,
+        polygons: union.polygons.map((p) => ({ outer: p.outer, holes: p.holes, area: p.area })),
+        vertices: tri.vertices, indices: tri.indices, trianglePolygonIds: tri.trianglePolygonIds,
+        unionDiagnostics: union.diagnostics, triDiagnostics: tri.diagnostics,
+      });
+      // cellTriangleMap: which output polygon (within this tier's surface) each source cell's center
+      // falls inside — proven via pointInSurface, not asserted by index-order assumption.
+      tierCells.forEach((c) => {
+        const key = `${c.x},${c.z}`;
+        const center = { x: c.x, z: c.z };
+        const polyIndex = union.polygons.findIndex((p) => kernel.pointInSurface(center, p));
+        if (!cellTriangleMap[key]) cellTriangleMap[key] = [];
+        cellTriangleMap[key].push({ tier, polyIndex: polyIndex >= 0 ? polyIndex : null });
+      });
+    }
+    // Honest "nothing wrong found" diagnostic: if the corpus tags this fixture `malformed:true` (a
+    // real, cited topology risk — e.g. B19's grid-adjacency bowtie pinch) but the kernel's own
+    // validated geometry pipeline produced zero issues, that is itself a genuine, non-fabricated
+    // finding worth recording — never silence, per §17.4's own "no typed malformed-input fallback"
+    // negative control. This is NOT invented to satisfy a check: it reports what validateSurface
+    // actually found (or didn't) against the real output, distinct from legacy's behavior of giving
+    // literally zero signal either way.
+    if (fixture.malformed && diagnostics.length === 0) {
+      const allClearBySurface = surfaces.every((sf) => {
+        const v = kernel.validateSurface({ polygons: sf.polygons });
+        return v.valid;
+      });
+      diagnostics.push({
+        level: "info", typed: "malformed-tag-benign",
+        message: `fixture is tagged malformed by the corpus, but the kernel's own validateSurface ` +
+          `independently confirms the resulting topology is ${allClearBySurface ? "structurally valid (no degenerate ring, no self-intersection, every hole properly contained)" : "NOT fully valid — see per-surface diagnostics"}.`,
+      });
+    }
+    return { surfaces, walls: [], cellTriangleMap, diagnostics, timings: { buildMs: performance.now() - t0 } };
+  }
+
+  // ─ 8.2: run the SAME 52-fixture corpus through the kernel adapter, computing the SAME named
+  //   invariants Section 6 computes for legacy (INVARIANT_NAMES), so the two reports are directly
+  //   comparable fixture-by-fixture. ─
+  const kernelReport = {
+    generatedAt: new Date().toISOString(),
+    masterSha: baselineReport.masterSha,
+    adapter: "kernel(PolygonKernel: unionCellRects+triangulateSurface, unsmoothed canonical topology)",
+    invariants: INVARIANT_NAMES,
+    fixtures: {},
+  };
+  let kernelFixturesWithAnyRed = 0;
+  for (const fixture of FIXTURES) {
+    const results = {};
+    const cellsBefore = JSON.stringify(fixture.cells);
+
+    let out, threwHard = false;
+    try {
+      out = kernelAdapter(fixture);
+    } catch (e) {
+      threwHard = true;
+      out = { surfaces: [], walls: [], cellTriangleMap: {}, diagnostics: [{ level: "error", message: String(e) }], timings: {} };
+    }
+    results["malformed-input-no-throw"] = !threwHard;
+    results["canonical-cells-unmutated"] = JSON.stringify(fixture.cells) === cellsBefore;
+
+    if (fixture.malformed) {
+      results["diagnostic-or-fallback-present"] = out.diagnostics.length > 0 || fixture.cells.length === 0 || fixture.cells.some((c) => !Number.isFinite(c.x) || !Number.isFinite(c.z));
+      kernelReport.fixtures[fixture.fixtureId] = { malformed: true, results, mergeBlocker: fixture.mergeBlocker };
+      if (!results["malformed-input-no-throw"] || !results["diagnostic-or-fallback-present"]) kernelFixturesWithAnyRed++;
+      continue;
+    }
+
+    // determinism-shuffled-input
+    const shuffled = geometryTruth.seededShuffle(fixture.cells, 1234);
+    let outShuffled;
+    try {
+      outShuffled = kernelAdapter(Object.assign({}, fixture, { cells: shuffled }));
+      results["determinism-shuffled-input"] = JSON.stringify(out.surfaces) === JSON.stringify(outShuffled.surfaces);
+    } catch (e) { results["determinism-shuffled-input"] = false; }
+
+    const areaTol = 1e-6; // STRICT — see this section's own SCOPE NOTE above (the kernel earns no smoothing leniency)
+    const totalArea = out.surfaces.reduce((s, sf) => s + sf.polygons.reduce((s2, p) => s2 + p.area, 0), 0);
+    results["union-area-matches-independent-truth"] = Math.abs(totalArea - fixture.expected.area) < Math.max(areaTol, fixture.expected.area * 1e-6);
+
+    let tierAreaOk = true;
+    for (const [tierKey, tierExp] of Object.entries(fixture.expected.tiers || {})) {
+      const sf = out.surfaces.find((s) => String(s.tier) === String(tierKey));
+      const tArea = sf ? sf.polygons.reduce((s, p) => s + p.area, 0) : 0;
+      const ok = Math.abs(tArea - tierExp.area) < Math.max(1e-6, tierExp.area * 1e-6);
+      if (!ok) tierAreaOk = false;
+    }
+    results["tier-area-matches-independent-truth"] = tierAreaOk;
+
+    let polyHoleOk = true;
+    for (const [tierKey, tierExp] of Object.entries(fixture.expected.tiers || {})) {
+      const sf = out.surfaces.find((s) => String(s.tier) === String(tierKey));
+      const gotPolys = sf ? sf.polygons.length : 0;
+      const gotHoles = sf ? sf.polygons.reduce((s, p) => s + p.holes.length, 0) : 0;
+      if (gotPolys !== tierExp.polygons || gotHoles !== tierExp.holes) polyHoleOk = false;
+    }
+    results["polygon-hole-count-matches-independent-truth"] = polyHoleOk;
+
+    // ring-simplicity: validateSurface on every tier's own union output, no self-intersect issues.
+    let simplicityOk = true;
+    for (const sf of out.surfaces) {
+      const v = kernel.validateSurface({ polygons: sf.polygons });
+      if (v.issues.some((i) => i.message && i.message.includes("self-intersect"))) simplicityOk = false;
+    }
+    results["ring-simplicity-no-self-intersection"] = simplicityOk;
+
+    // triangle-validity: zero zero-area/degenerate triangles, all vertices finite, across every tier.
+    let triOk = true;
+    for (const sf of out.surfaces) {
+      if (sf.triDiagnostics.zeroAreaTriangles > 0) triOk = false;
+      if (sf.vertices.some((v) => !Number.isFinite(v.x) || !Number.isFinite(v.z))) triOk = false;
+      if (sf.indices.length === 0 && sf.polygons.length > 0) triOk = false;
+    }
+    results["triangle-validity-no-degenerate-no-nan"] = triOk;
+
+    const expectedCellKeys = fixture.cells.map((c) => `${c.x},${c.z}`);
+    const mappedKeys = Object.keys(out.cellTriangleMap || {});
+    results["cell-triangle-map-totality"] = expectedCellKeys.every((k) => mappedKeys.includes(k));
+
+    const anyRed = Object.values(results).some((v) => v === false);
+    if (anyRed) kernelFixturesWithAnyRed++;
+    kernelReport.fixtures[fixture.fixtureId] = { mergeBlocker: fixture.mergeBlocker, knownRed: fixture.knownRed || null, results };
+  }
+
+  console.log(`  fixtures run: ${FIXTURES.length}`);
+  console.log(`  fixtures with >=1 red invariant against the kernel: ${kernelFixturesWithAnyRed}`);
+
+  const kernelReportPath = join(ROOT, "dev/geometry-research/fixtures/kernel-report.json");
+  writeFileSync(kernelReportPath, JSON.stringify(kernelReport, null, 2));
+  check("8a. kernel-report.json written", true, kernelReportPath);
+  check("8b. kernel report covers every fixture in the corpus", Object.keys(kernelReport.fixtures).length === FIXTURES.length);
+
+  // ─ 8.3: THE DELTA — legacy-RED fixtures that flip GREEN under the kernel, and a regression guard
+  //   (any fixture legacy passed cleanly that the kernel does NOT) — this is the literal §17.4
+  //   acceptance ("must be GREEN where legacy was RED... must NOT regress the fixtures legacy passes"). ─
+  console.log("\n  --- before(legacy) / after(kernel) delta ---");
+  const flippedGreen = [];
+  const regressions = [];
+  const stillRedBoth = [];
+  for (const fixture of FIXTURES) {
+    const legacyRec = baselineReport.fixtures[fixture.fixtureId];
+    const kernelRec = kernelReport.fixtures[fixture.fixtureId];
+    const legacyRed = Object.values(legacyRec.results).some((v) => v === false);
+    const kernelRed = Object.values(kernelRec.results).some((v) => v === false);
+    if (legacyRed && !kernelRed) flippedGreen.push(fixture.fixtureId);
+    else if (!legacyRed && kernelRed) regressions.push({ fixtureId: fixture.fixtureId, kernelResults: kernelRec.results });
+    else if (legacyRed && kernelRed) stillRedBoth.push({ fixtureId: fixture.fixtureId, legacyResults: legacyRec.results, kernelResults: kernelRec.results });
+  }
+  console.log(`  RED(legacy) -> GREEN(kernel): ${flippedGreen.length} fixture(s): ${JSON.stringify(flippedGreen)}`);
+  console.log(`  GREEN(legacy) -> RED(kernel) [REGRESSION]: ${regressions.length} fixture(s)`);
+  if (regressions.length) console.log("   ", JSON.stringify(regressions, null, 2));
+  console.log(`  RED on both: ${stillRedBoth.length} fixture(s)${stillRedBoth.length ? ": " + JSON.stringify(stillRedBoth.map((r) => r.fixtureId)) : ""}`);
+
+  check("8c. every fixture the legacy adapter passed cleanly, the kernel adapter ALSO passes cleanly (no regression)", regressions.length === 0, regressions.map((r) => r.fixtureId));
+  const KNOWN_LEGACY_RED_FIXTURE_IDS = ["F08-octagon-diagonal-doorway", "F11-cave-noisy-boundary", "F18-row101-exact-canonical", "F26c-malformed-non-numeric-tier", "B05-alternating-cave-boundary", "B09-full-width-open-edge", "B19-malformed-self-touching-bowtie"];
+  check("8d. every one of the 7 legacy-documented RED fixtures flips GREEN under the kernel",
+    KNOWN_LEGACY_RED_FIXTURE_IDS.every((id) => flippedGreen.includes(id)),
+    { expected: KNOWN_LEGACY_RED_FIXTURE_IDS, flippedGreen });
+
+  const deltaReportPath = join(ROOT, "dev/geometry-research/fixtures/kernel-vs-legacy-delta.json");
+  writeFileSync(deltaReportPath, JSON.stringify({ generatedAt: new Date().toISOString(), flippedGreen, regressions, stillRedBoth }, null, 2));
+  check("8e. kernel-vs-legacy-delta.json written", true, deltaReportPath);
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);

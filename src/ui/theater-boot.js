@@ -3292,7 +3292,7 @@ function interiorFloorTopMapFrom(floorInstances){
   const map = new Map();
   (floorInstances || []).forEach((inst) => {
     if(!inst) return;
-    const sy = (typeof inst.sy === "number" && inst.sy > 0) ? inst.sy : ITR_FLOOR_HEIGHT_FALLBACK;
+    const sy = (typeof inst.sy === "number" && Number.isFinite(inst.sy)) ? inst.sy : ITR_FLOOR_HEIGHT_FALLBACK;
     map.set(Math.round(inst.x) + "," + Math.round(inst.z), ITR_FLOOR_BASE_Y + sy);
   });
   return map;
@@ -8893,7 +8893,7 @@ function setInteriorBoard(data){
   if(ITR_ROOM_SHELL && floorList && floorList.length){
     const doorKeySet = new Set((inst.doorframe || []).map((d) => Math.round(d.x) + "," + Math.round(d.z)));
     const shellCells = floorList.map((f) => {
-      const sy = (typeof f.sy === "number" && f.sy > 0) ? f.sy : ITR_FLOOR_HEIGHT_FALLBACK;
+      const sy = (typeof f.sy === "number" && Number.isFinite(f.sy)) ? f.sy : ITR_FLOOR_HEIGHT_FALLBACK;
       return {
         x: Math.round(f.x), z: Math.round(f.z),
         tier: Math.round(sy / ROOM_SHELL_TIER_QUANTUM),

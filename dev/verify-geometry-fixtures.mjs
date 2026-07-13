@@ -46,7 +46,7 @@ console.log("  Negative control: F18-row101-exact-canonical (see Section 5)\n");
 // ─── Section 0: load fixture corpus + independent truth helpers ─────────────────────────────────
 const geometryTruth = await import(pathToFileURL(join(ROOT, "dev/geometry-research/fixtures/geometry-truth.mjs")).href);
 const corpus = await import(pathToFileURL(join(ROOT, "dev/geometry-research/fixtures/corpus.mjs")).href);
-const { FIXTURES, MERGE_BLOCKER_IDS, ROW101_SUNKEN_COLLAPSE_NOTE } = corpus;
+const { FIXTURES, MERGE_BLOCKER_IDS } = corpus;
 const { areaOf, connectedComponents, countHoles } = geometryTruth;
 
 console.log("=== 0. Corpus integrity ===");
@@ -197,8 +197,8 @@ function mapRenderShapeToSmoothShape(renderShape) {
   return null; // identity/cave/unset -> no render smoothing
 }
 
-// ─── Section 4b: the PRODUCTION-FAITHFUL shellCells adapter — ONLY for the row-101 negative control ─
-// EXACT replica of theater-boot.js:8887-8895's real shellCells builder (the code path
+// ─── Section 4b: the PRODUCTION-FAITHFUL shellCells adapter + retained red-first control ───────────
+// EXACT replica of theater-boot.js's real shellCells builder (the code path
 // interiorBuildBoard's own ROOM-SHELL COMPILER step feeds compileRoomShellData in production), copied
 // verbatim rather than imported (that code lives inside a ~11,000-line non-exported closure — see this
 // unit's own report for why direct import isn't reachable). Constants below are copied from their real
@@ -214,8 +214,8 @@ function productionShellCellsAdapter(fixture) {
   // the one place this harness populates it — see corpus.mjs).
   const floorList = fixture.cells.map((c) => ({ x: c.x, z: c.z, sy: c.sourceRef && typeof c.sourceRef.rawSy === "number" ? c.sourceRef.rawSy : undefined }));
   const shellCells = floorList.map((f) => {
-    // theater-boot.js:8888, VERBATIM:
-    const sy = (typeof f.sy === "number" && f.sy > 0) ? f.sy : ITR_FLOOR_HEIGHT_FALLBACK;
+    // theater-boot.js, VERBATIM: finite signed elevations are valid; only missing/NaN/Infinity fall back.
+    const sy = (typeof f.sy === "number" && Number.isFinite(f.sy)) ? f.sy : ITR_FLOOR_HEIGHT_FALLBACK;
     return {
       x: Math.round(f.x), z: Math.round(f.z),
       tier: Math.round(sy / ROOM_SHELL_TIER_QUANTUM),
@@ -227,8 +227,20 @@ function productionShellCellsAdapter(fixture) {
   return { shellCells, data };
 }
 
-// ─── Section 5: THE NEGATIVE CONTROL — row-101 sunken-arena collapse, RED-FIRST ──────────────────
-console.log("\n=== 5. NEGATIVE CONTROL (RED-FIRST): row-101 sunken arena through the production shellCells path ===");
+// The PRE-FIX predicate is retained only as an injected negative control. This keeps G0's red-first
+// proof load-bearing after promotion: the old guard must still collapse row 101, while the real
+// production-faithful adapter must now preserve it.
+function positiveOnlyShellCellsAdapter(fixture) {
+  const floorList = fixture.cells.map((c) => ({ x: c.x, z: c.z, sy: c.sourceRef && typeof c.sourceRef.rawSy === "number" ? c.sourceRef.rawSy : undefined }));
+  const shellCells = floorList.map((f) => {
+    const sy = (typeof f.sy === "number" && f.sy > 0) ? f.sy : ITR_FLOOR_HEIGHT_FALLBACK;
+    return { x: Math.round(f.x), z: Math.round(f.z), tier: Math.round(sy / ROOM_SHELL_TIER_QUANTUM), elevationY: ITR_FLOOR_BASE_Y + sy, isDoor: false };
+  });
+  return { shellCells, data: compileRoomShellData(shellCells, fixture.renderShape === "octagon" ? { smoothShape: "octagon" } : {}) };
+}
+
+// ─── Section 5: promoted regression — row-101 sunken arena now survives production ───────────────
+console.log("\n=== 5. PROMOTED REGRESSION: row-101 sunken arena survives the production shellCells path ===");
 {
   const row101 = corpus.FIXTURES_BY_ID.get("F18-row101-exact-canonical");
   check("5-sanity: row-101 fixture found", !!row101);
@@ -243,33 +255,50 @@ console.log("\n=== 5. NEGATIVE CONTROL (RED-FIRST): row-101 sunken arena through
     !!legacyArenaSurface && !!legacyFloorSurface && legacyArenaTier < legacyFloorTier,
     { arenaFound: !!legacyArenaSurface, floorFound: !!legacyFloorSurface });
 
-  // 5b. RED: through the PRODUCTION-FAITHFUL shellCells adapter (replicating theater-boot.js's own
-  // f.sy>0 guard), every arena cell's raw sy=-0.8 is discarded and falls back to the flat floor height
-  // (0.2) — the arena collapses into the SAME quantized tier as the surrounding floor.
+  const taggedCells = (mapped) => ({
+    arena: mapped.shellCells.filter((c) => {
+      const src = row101.cells.find((rc) => rc.x === c.x && rc.z === c.z);
+      return src && src.sourceRef && src.sourceRef.patch === "arena";
+    }),
+    baseline: mapped.shellCells.filter((c) => {
+      const src = row101.cells.find((rc) => rc.x === c.x && rc.z === c.z);
+      return src && src.sourceRef && src.sourceRef.patch === "baseline";
+    }),
+  });
+
+  // 5b remains the RED-FIRST negative control, but it is now explicitly injected rather than a copy
+  // of live production behavior.
+  const old = positiveOnlyShellCellsAdapter(row101);
+  const oldTagged = taggedCells(old);
+  const oldArenaTiers = new Set(oldTagged.arena.map((c) => c.tier));
+  const oldBaselineTiers = new Set(oldTagged.baseline.map((c) => c.tier));
+  const oldCollapsed = oldArenaTiers.size === 1 && oldBaselineTiers.size === 1 &&
+    Array.from(oldArenaTiers)[0] === Array.from(oldBaselineTiers)[0];
+  check("5b. RED-FIRST control: the retired positive-only predicate still collapses raw sy=-0.8 onto the baseline tier",
+    oldCollapsed, { arenaTiers: Array.from(oldArenaTiers), baselineTiers: Array.from(oldBaselineTiers) });
+
+  // 5c/5d are the promoted production regression: signed finite sy must survive all the way into the
+  // compiled tier/elevation bundle.
   const prod = productionShellCellsAdapter(row101);
-  const arenaCellsProd = prod.shellCells.filter((c) => {
-    const src = row101.cells.find((rc) => rc.x === c.x && rc.z === c.z);
-    return src && src.sourceRef && src.sourceRef.patch === "arena";
-  });
-  const baselineCellsProd = prod.shellCells.filter((c) => {
-    const src = row101.cells.find((rc) => rc.x === c.x && rc.z === c.z);
-    return src && src.sourceRef && src.sourceRef.patch === "baseline";
-  });
+  const prodTagged = taggedCells(prod);
+  const arenaCellsProd = prodTagged.arena;
+  const baselineCellsProd = prodTagged.baseline;
   const arenaTiersProd = new Set(arenaCellsProd.map((c) => c.tier));
   const baselineTiersProd = new Set(baselineCellsProd.map((c) => c.tier));
-  const arenaCollapsedIntoFloor = arenaTiersProd.size === 1 && baselineTiersProd.size === 1 &&
-    Array.from(arenaTiersProd)[0] === Array.from(baselineTiersProd)[0];
-  check("5b. ⊗ RED: through the PRODUCTION-FAITHFUL shellCells path (theater-boot.js's real f.sy>0 guard, replicated verbatim), the arena's real sy=-0.8 is discarded and its quantized tier COLLAPSES onto the SAME tier as the baseline floor",
-    arenaCollapsedIntoFloor, { arenaTiers: Array.from(arenaTiersProd), baselineTiers: Array.from(baselineTiersProd) });
+  const arenaDistinct = arenaTiersProd.size === 1 && baselineTiersProd.size === 1 &&
+    Array.from(arenaTiersProd)[0] !== Array.from(baselineTiersProd)[0];
+  check("5c. production preserves the arena's signed tier (-4), distinct from baseline tier (1)",
+    arenaDistinct && Array.from(arenaTiersProd)[0] === -4 && Array.from(baselineTiersProd)[0] === 1,
+    { arenaTiers: Array.from(arenaTiersProd), baselineTiers: Array.from(baselineTiersProd) });
 
   const prodTierCount = new Set(prod.shellCells.map((c) => c.tier)).size;
-  check("5c. ⊗ RED, restated at the compiled-geometry level: compileRoomShellData over the PRODUCTION-FAITHFUL shellCells only sees 2 distinct tiers (baseline+ring), never the true 3 (arena/baseline/ring) — the expected truth (F18's own `expected.tiers` has 3 keys: -4, 1, 2) FAILS against this path",
-    prod.data.meta.tierCount < Object.keys(row101.expected.tiers).length,
-    { productionTierCount: prod.data.meta.tierCount, expectedTierCount: Object.keys(row101.expected.tiers).length });
+  const arenaElevations = new Set(arenaCellsProd.map((c) => c.elevationY));
+  check("5d. production compile sees all 3 tiers and preserves the arena elevation at -1.3",
+    prod.data.meta.tierCount === Object.keys(row101.expected.tiers).length && arenaElevations.size === 1 && Math.abs(Array.from(arenaElevations)[0] + 1.3) < 1e-9,
+    { productionTierCount: prod.data.meta.tierCount, expectedTierCount: Object.keys(row101.expected.tiers).length, arenaElevations: Array.from(arenaElevations) });
 
-  console.log("  →", ROW101_SUNKEN_COLLAPSE_NOTE);
-  check("5d. this IS the required negative control: at least one fixture (F18) is RED against a real, cited, still-live production defect (theater-boot.js:8888), not a fixed/historical one",
-    arenaCollapsedIntoFloor && prod.data.meta.tierCount < Object.keys(row101.expected.tiers).length);
+  check("5e. promoted regression is load-bearing: old predicate RED, live production GREEN",
+    oldCollapsed && arenaDistinct && prodTierCount === 3);
 }
 
 // ─── Section 6: corpus-wide baseline run over the legacy adapter (the honest incumbent baseline) ──
@@ -443,10 +472,10 @@ for (const fixture of FIXTURES) {
   };
 }
 
-// row-101's own production-path red is recorded separately (it uses a DIFFERENT adapter, not legacy)
+// Row 101's production-path promotion is recorded separately (it uses a different adapter, not legacy).
 baselineReport.fixtures["F18-row101-exact-canonical"].productionShellCellsAdapter = {
-  note: ROW101_SUNKEN_COLLAPSE_NOTE,
-  red: true,
+  note: "signed finite sy survives the production shellCells boundary; the retired positive-only predicate remains the injected red-first control",
+  red: false,
 };
 
 console.log(`  fixtures run: ${FIXTURES.length}`);

@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-13T04:13:35.831Z",
+  "generatedAt": "2026-07-13T04:13:36.060Z",
   "masterSha": "0e109a8c4e7d2d3e530fca135e7f870eaf8f9583",
-  "adapter": "legacy(compileRoomShellData)",
+  "adapter": "kernel(PolygonKernel: unionCellRects+triangulateSurface, unsmoothed canonical topology)",
   "invariants": [
     "determinism-shuffled-input",
     "union-area-matches-independent-truth",
@@ -130,7 +130,7 @@
         "tier-area-matches-independent-truth": true,
         "polygon-hole-count-matches-independent-truth": true,
         "ring-simplicity-no-self-intersection": true,
-        "triangle-validity-no-degenerate-no-nan": false,
+        "triangle-validity-no-degenerate-no-nan": true,
         "cell-triangle-map-totality": true
       }
     },
@@ -188,7 +188,7 @@
         "determinism-shuffled-input": true,
         "union-area-matches-independent-truth": true,
         "tier-area-matches-independent-truth": true,
-        "polygon-hole-count-matches-independent-truth": false,
+        "polygon-hole-count-matches-independent-truth": true,
         "ring-simplicity-no-self-intersection": true,
         "triangle-validity-no-degenerate-no-nan": true,
         "cell-triangle-map-totality": true
@@ -294,16 +294,12 @@
         "malformed-input-no-throw": true,
         "canonical-cells-unmutated": true,
         "determinism-shuffled-input": true,
-        "union-area-matches-independent-truth": false,
-        "tier-area-matches-independent-truth": false,
-        "polygon-hole-count-matches-independent-truth": false,
+        "union-area-matches-independent-truth": true,
+        "tier-area-matches-independent-truth": true,
+        "polygon-hole-count-matches-independent-truth": true,
         "ring-simplicity-no-self-intersection": true,
         "triangle-validity-no-degenerate-no-nan": true,
         "cell-triangle-map-totality": true
-      },
-      "productionShellCellsAdapter": {
-        "note": "row-101 RED-FIRST: theater-boot.js:8888 `const sy = (typeof f.sy === 'number' && f.sy > 0) ? f.sy : ITR_FLOOR_HEIGHT_FALLBACK;` discards any NEGATIVE f.sy (a legitimately sunken tile) and falls back to the flat floor height — the arena patch's real sy=-0.8 never survives this guard, so the production shellCells builder emits the arena at the SAME quantized tier as the baseline floor (tier=1, not the true tier=-4), collapsing the sunken arena into the surrounding floor. See dev/verify-geometry-fixtures.mjs's productionShellCellsAdapter for the live reproduction.",
-        "red": true
       }
     },
     "F19-dais-two-levels": {
@@ -434,7 +430,7 @@
       "results": {
         "malformed-input-no-throw": true,
         "canonical-cells-unmutated": true,
-        "diagnostic-or-fallback-present": false
+        "diagnostic-or-fallback-present": true
       },
       "mergeBlocker": false
     },
@@ -537,7 +533,7 @@
         "determinism-shuffled-input": true,
         "union-area-matches-independent-truth": true,
         "tier-area-matches-independent-truth": true,
-        "polygon-hole-count-matches-independent-truth": false,
+        "polygon-hole-count-matches-independent-truth": true,
         "ring-simplicity-no-self-intersection": true,
         "triangle-validity-no-degenerate-no-nan": true,
         "cell-triangle-map-totality": true
@@ -599,7 +595,7 @@
         "tier-area-matches-independent-truth": true,
         "polygon-hole-count-matches-independent-truth": true,
         "ring-simplicity-no-self-intersection": true,
-        "triangle-validity-no-degenerate-no-nan": false,
+        "triangle-validity-no-degenerate-no-nan": true,
         "cell-triangle-map-totality": true
       }
     },
@@ -758,7 +754,7 @@
       "results": {
         "malformed-input-no-throw": true,
         "canonical-cells-unmutated": true,
-        "diagnostic-or-fallback-present": false
+        "diagnostic-or-fallback-present": true
       },
       "mergeBlocker": false
     },

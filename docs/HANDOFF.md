@@ -85,10 +85,14 @@ runs (see G3 above). Also flagged the wrong "never a gap" comment at `theater-ro
    (outside-low grazing — oss closes the corner). If a real defect shows, `_setRoomShellPolygonKernel`
    reverts the flag; the legacy path is fully retained. When the hold passes clean, do §15 step 10
    (remove the legacy triangulation path) as its own unit.
-3. **Phase 3 (visual production, GP-2..4)** now rides on the stable, flipped geometry: path-traced
-   oracle + xatlas UV → Poisson distribution/atlases → oracle-driven raster corrections + semantic
-   materials + VFX. Gated on Codex research (offline-art-foundry/EXTRUDED-SPRITE-PROP-LIBRARY) + the
-   charter's tool-adoption + spend gates — scope with Adam before fanning the wave.
+3. **Phase 3 (visual production, GP-2..4) is Fable's to direct** — read
+   **`docs/PHASE-3-DIRECTOR-BRIEF.md`** first (the handoff: flip-evidence artifacts, the full Codex
+   plugin-rec suite + plan with links, the GP-2..4 terrain, the oracle/spend calls that are Fable's, and
+   Claude's smallest-correction-first recommendation). It rides on the stable, flipped geometry:
+   path-traced oracle + xatlas UV → Poisson distribution/atlases → oracle-driven raster corrections +
+   semantic materials + VFX. Gated on Codex research (offline-art-foundry/EXTRUDED-SPRITE-PROP-LIBRARY) +
+   the charter's tool-adoption + spend gates. No-spend slices (Poisson scatter, depth audit) are
+   spec-ready to fan immediately if Fable green-lights.
 4. Everything below this block is the pre-convergence history.
 
 ## ⭐ Latest (2026-07-12, later) — STAGE C: REAL ROOM SHAPES — rooms stop being rectangles [Claude Opus 4.8, orchestrated]

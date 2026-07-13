@@ -8,11 +8,15 @@
    degraded/unintended wall join. A fixed seed makes failures reproducible and fast-check's normal
    shrink path produces a small room when the property fails.
 
-   A truly acute hand-authored contour is retained as an explicit promotion blocker. G3's contract
-   calls for a bevel at acute/unstable corners; the current kernel instead degrades the whole run to
-   the legacy per-segment offset when Clipper2 injects that bevel. This harness expects to SEE that
-   red condition until the bevel contour is represented end-to-end. It therefore exits green while
-   reporting DEFAULT FLIP: HOLD, in the same red-first style as the geometry fuzz corpus.
+   A truly acute hand-authored contour is retained as a dedicated fixture. G3's contract calls for a
+   bevel at acute/unstable corners; polygon-kernel.js's offsetOneRun now KEEPS that Clipper2-injected
+   bevel (ring-adjacency detection distinguishes a legitimate bevel edge from a genuine discontinuity —
+   docs/STAGE-G3-WALL-RUNS.md's own "bevel for acute/unstable" branch) instead of discarding the whole
+   run to the legacy per-segment offset. The acute check below now asserts the GREEN condition (bevel
+   kept, zero degrade, classified `bevel`) — see the negative control immediately after it, which proves
+   this harness still DETECTS the old defect shape: calling PolygonKernel.wallOffset with the explicit
+   `miterOnly` escape hatch (offsetOneRun's own negative-control-only parameter, never set by production
+   code) reproduces the PRE-FIX behavior on the identical fixture and must still show red.
 
    Run: node dev/verify-wall-runs-oss-fuzz.mjs */
 
@@ -89,13 +93,26 @@ const acute = [
 ];
 const acuteResult = computeOssWallOuterOffsets(acute, DEFAULT_WALL_THICKNESS,
   DEFAULT_WALL_CAP_OVERHANG, DEFAULT_WALL_FOOTING, PK);
-const acuteRed = acuteResult.diagnostics.some((d) => d.degraded && d.joinGapCount > 0 &&
-  /miter-limit bevel/.test(d.reason || ""));
-check("RED-FIRST: a truly acute corner exposes the current bevel-to-legacy fallback", acuteRed,
-  acuteResult.diagnostics);
+const acuteWallDiags = acuteResult.diagnostics.filter((d) => d.typed === "wall-run-offset");
+const acuteGreen = acuteWallDiags.length > 0 && acuteWallDiags.every((d) => !d.degraded && d.joinGapCount === 0)
+  && acuteWallDiags.some((d) => d.bevelCount > 0) && (acuteResult.bevels || []).length > 0;
+check("GREEN: a truly acute corner keeps its Clipper2 bevel (no degrade to the legacy fallback)", acuteGreen,
+  { diagnostics: acuteResult.diagnostics, bevels: acuteResult.bevels });
+
+// NEGATIVE CONTROL — reproduce the PRE-FIX behavior on the IDENTICAL fixture via offsetOneRun's own
+// `miterOnly` escape hatch (never set by production code — computeOssWallOuterOffsets/theater-room-
+// mesh.js never pass it) and confirm the harness still recognizes that shape as broken. This is what
+// proves the GREEN check above is measuring a real fix, not a harness that stopped looking.
+const acutePoints = acute.map((s) => ({ x: s.a.x, z: s.a.z }));
+const preFixResult = PK.wallOffset({ points: acutePoints, closed: true },
+  { thickness: DEFAULT_WALL_THICKNESS, miterOnly: true });
+const acuteRedControl = preFixResult.diagnostics.degraded && preFixResult.diagnostics.joinGapCount > 0 &&
+  /miter-limit bevel/.test(preFixResult.diagnostics.reason || "");
+check("RED-FIRST negative control: miterOnly reproduces the OLD bevel-to-legacy fallback on the same fixture",
+  acuteRedControl, preFixResult.diagnostics);
 
 console.log(`\n${pass} passed, ${fail} failed`);
-console.log(acuteRed
-  ? "DEFAULT FLIP: HOLD — production-shaped rooms are stabilized, but G3's acute-corner bevel contract is not implemented."
-  : "DEFAULT FLIP: acute blocker retired; reassess after controlled visual capture.");
+console.log(acuteGreen
+  ? "DEFAULT FLIP: acute-corner bevel contract implemented (kept, not discarded) — production-shaped rooms stay stabilized; reassess the legacy->oss default after a controlled visual capture."
+  : "DEFAULT FLIP: HOLD — production-shaped rooms are stabilized, but G3's acute-corner bevel contract is not implemented.");
 if (fail) process.exitCode = 1;

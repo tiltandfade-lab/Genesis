@@ -1,0 +1,2911 @@
+{
+  "schema": "genesis.kenney-donor-admission.v1",
+  "policy": "Candidates only. Runtime admission requires canonical render and semantic review.",
+  "candidateCount": 149,
+  "candidates": [
+    {
+      "path": "assets/models/kenney-building-kit/wall-corner-column-small.glb",
+      "pack": "kenney-building-kit",
+      "name": "wall-corner-column-small.glb",
+      "sha256": "df87b34452da8178d6b73877e1351f467b1d9ffdd86e0f1235573ba247fdc7ea",
+      "role": "architecture",
+      "family": "wall-column",
+      "modifiers": [
+        "corner",
+        "small"
+      ],
+      "faces": 32,
+      "extents": [
+        1.075,
+        2.4,
+        1.077742
+      ],
+      "admissionClass": "DIRECT_MODULATED",
+      "intendedPart": "architecture/wall-column",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-building-kit/wall-corner-column.glb",
+      "pack": "kenney-building-kit",
+      "name": "wall-corner-column.glb",
+      "sha256": "41a014fe20aebd2ee7d5e162680d129c4ec8c7ff4cad8dc9a4a793ace597239c",
+      "role": "architecture",
+      "family": "wall-column",
+      "modifiers": [
+        "corner"
+      ],
+      "faces": 32,
+      "extents": [
+        2.075,
+        2.4,
+        2.075
+      ],
+      "admissionClass": "DIRECT_MODULATED",
+      "intendedPart": "architecture/wall-column",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-building-kit/wall-corner-column-bottom.glb",
+      "pack": "kenney-building-kit",
+      "name": "wall-corner-column-bottom.glb",
+      "sha256": "f1b05f555041c45b36c489be280d27c88e0e38773701c54f42641ef39de57565",
+      "role": "architecture",
+      "family": "wall-column-bottom",
+      "modifiers": [
+        "corner"
+      ],
+      "faces": 60,
+      "extents": [
+        2.125,
+        2.4,
+        2.125
+      ],
+      "admissionClass": "DIRECT_MODULATED",
+      "intendedPart": "architecture/wall-column-bottom",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-building-kit/wall-corner-column-small-bottom.glb",
+      "pack": "kenney-building-kit",
+      "name": "wall-corner-column-small-bottom.glb",
+      "sha256": "6631fcce3338bc9e2be2cce0b802c96612bd6fe26a1d44e71d70f0c56a25d8f9",
+      "role": "architecture",
+      "family": "wall-column-bottom",
+      "modifiers": [
+        "corner",
+        "small"
+      ],
+      "faces": 60,
+      "extents": [
+        1.125,
+        2.4,
+        1.125
+      ],
+      "admissionClass": "DIRECT_MODULATED",
+      "intendedPart": "architecture/wall-column-bottom",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-building-kit/wall-doorway-round.glb",
+      "pack": "kenney-building-kit",
+      "name": "wall-doorway-round.glb",
+      "sha256": "4ab09a9817ec7400a5b3b3724c0612f3935a2aeb925f2cbdffdd7e403814d413",
+      "role": "architecture",
+      "family": "wall-doorway",
+      "modifiers": [
+        "round"
+      ],
+      "faces": 164,
+      "extents": [
+        0.2,
+        2.4,
+        2.0
+      ],
+      "admissionClass": "DIRECT_MODULATED",
+      "intendedPart": "architecture/wall-doorway",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-building-kit/wall-doorway-square.glb",
+      "pack": "kenney-building-kit",
+      "name": "wall-doorway-square.glb",
+      "sha256": "5fc3ab4d17545ffcca24d73a77589d6f4816d2bd21b29614be3e0819c97f0410",
+      "role": "architecture",
+      "family": "wall-doorway",
+      "modifiers": [
+        "square"
+      ],
+      "faces": 64,
+      "extents": [
+        0.2,
+        2.4,
+        2.0
+      ],
+      "admissionClass": "DIRECT_MODULATED",
+      "intendedPart": "architecture/wall-doorway",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-building-kit/wall-window-round.glb",
+      "pack": "kenney-building-kit",
+      "name": "wall-window-round.glb",
+      "sha256": "90152d5acc8c1dfdeb5fb175fce3fa174f4279265140a2d0c2c59cd5099550b2",
+      "role": "architecture",
+      "family": "wall-window",
+      "modifiers": [
+        "round"
+      ],
+      "faces": 216,
+      "extents": [
+        0.2,
+        2.4,
+        2.0
+      ],
+      "admissionClass": "DIRECT_MODULATED",
+      "intendedPart": "architecture/wall-window",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-building-kit/wall-window-square.glb",
+      "pack": "kenney-building-kit",
+      "name": "wall-window-square.glb",
+      "sha256": "099d332de4c632cb03692140f9a4004b5d6508cea6a7e3a80268564976cc8b7e",
+      "role": "architecture",
+      "family": "wall-window",
+      "modifiers": [
+        "square"
+      ],
+      "faces": 98,
+      "extents": [
+        0.2,
+        2.4,
+        2.0
+      ],
+      "admissionClass": "DIRECT_MODULATED",
+      "intendedPart": "architecture/wall-window",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-building-kit/wall-window-round-detailed.glb",
+      "pack": "kenney-building-kit",
+      "name": "wall-window-round-detailed.glb",
+      "sha256": "e3ec8623a825c91bc2669e66d3db7abaa099867641ef48329afb64ddf63dd1c8",
+      "role": "architecture",
+      "family": "wall-window-detailed",
+      "modifiers": [
+        "round"
+      ],
+      "faces": 290,
+      "extents": [
+        0.2,
+        2.4,
+        2.0
+      ],
+      "admissionClass": "DIRECT_MODULATED",
+      "intendedPart": "architecture/wall-window-detailed",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-building-kit/wall-window-square-detailed.glb",
+      "pack": "kenney-building-kit",
+      "name": "wall-window-square-detailed.glb",
+      "sha256": "5ae5b2636977c0d7fb4943853356ee11bb4e5dbfaf699b40a389366271669caa",
+      "role": "architecture",
+      "family": "wall-window-detailed",
+      "modifiers": [
+        "square"
+      ],
+      "faces": 130,
+      "extents": [
+        0.2,
+        2.4,
+        2.0
+      ],
+      "admissionClass": "DIRECT_MODULATED",
+      "intendedPart": "architecture/wall-window-detailed",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-castle-kit/bridge-straight-pillar.glb",
+      "pack": "kenney-castle-kit",
+      "name": "bridge-straight-pillar.glb",
+      "sha256": "c85521e13dcf55ba8d015a04bbdbd0f063c31d01befb69a7c9fb097d128f195b",
+      "role": "architecture",
+      "family": "bridge-pillar",
+      "modifiers": [
+        "straight"
+      ],
+      "faces": 156,
+      "extents": [
+        0.93,
+        1.176,
+        0.93
+      ],
+      "admissionClass": "DIRECT_MODULATED",
+      "intendedPart": "architecture/bridge-pillar",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-castle-kit/wall-narrow-stairs.glb",
+      "pack": "kenney-castle-kit",
+      "name": "wall-narrow-stairs.glb",
+      "sha256": "51672d47bb3cec6f190334fcb29c3c2f464f605b85f5e13b918e868d72c632e7",
+      "role": "architecture",
+      "family": "wall-stairs",
+      "modifiers": [
+        "narrow"
+      ],
+      "faces": 262,
+      "extents": [
+        0.965,
+        1.31,
+        1.0
+      ],
+      "admissionClass": "DIRECT_MODULATED",
+      "intendedPart": "architecture/wall-stairs",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-castle-kit/wall-narrow-stairs-rail.glb",
+      "pack": "kenney-castle-kit",
+      "name": "wall-narrow-stairs-rail.glb",
+      "sha256": "d1791d278f01ad436c7062f9807e6280f11070c47cbb40567ea280c859fe3a72",
+      "role": "architecture",
+      "family": "wall-stairs-rail",
+      "modifiers": [
+        "narrow"
+      ],
+      "faces": 430,
+      "extents": [
+        0.995,
+        1.448292,
+        1.034254
+      ],
+      "admissionClass": "DIRECT_MODULATED",
+      "intendedPart": "architecture/wall-stairs-rail",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-fantasy-town-kit/wall-wood-door.glb",
+      "pack": "kenney-fantasy-town-kit",
+      "name": "wall-wood-door.glb",
+      "sha256": "2aa4e982fcb6434be4e6051fcee7972799ff5350a3f36ca8bf71530b84608123",
+      "role": "architecture",
+      "family": "wall-door",
+      "modifiers": [
+        "wood"
+      ],
+      "faces": 376,
+      "extents": [
+        0.1,
+        1.0,
+        1.0
+      ],
+      "admissionClass": "DIRECT_MODULATED",
+      "intendedPart": "architecture/wall-door",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-fantasy-town-kit/wall-doorway-base.glb",
+      "pack": "kenney-fantasy-town-kit",
+      "name": "wall-doorway-base.glb",
+      "sha256": "4e2629d59e471e96c6661e29044cd32567191745671d00d75666328b2c7e1a05",
+      "role": "architecture",
+      "family": "wall-doorway",
+      "modifiers": [
+        "base"
+      ],
+      "faces": 64,
+      "extents": [
+        0.1,
+        1.0,
+        1.0
+      ],
+      "admissionClass": "DIRECT_MODULATED",
+      "intendedPart": "architecture/wall-doorway",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-fantasy-town-kit/wall-doorway-round.glb",
+      "pack": "kenney-fantasy-town-kit",
+      "name": "wall-doorway-round.glb",
+      "sha256": "773ccde0f2b39d7fa61e5093fc4f11b137732a5becbe278c9dae03917895fe98",
+      "role": "architecture",
+      "family": "wall-doorway",
+      "modifiers": [
+        "round"
+      ],
+      "faces": 172,
+      "extents": [
+        0.1,
+        1.0,
+        1.0
+      ],
+      "admissionClass": "DIRECT_MODULATED",
+      "intendedPart": "architecture/wall-doorway",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-fantasy-town-kit/wall-window-round.glb",
+      "pack": "kenney-fantasy-town-kit",
+      "name": "wall-window-round.glb",
+      "sha256": "ec911d8b3bd041ff46d5f5b21a04c2e1bcd006c51262866da94dc24a2c21e41c",
+      "role": "architecture",
+      "family": "wall-window",
+      "modifiers": [
+        "round"
+      ],
+      "faces": 278,
+      "extents": [
+        0.1,
+        1.0,
+        1.0
+      ],
+      "admissionClass": "DIRECT_MODULATED",
+      "intendedPart": "architecture/wall-window",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-fantasy-town-kit/wall-window-small.glb",
+      "pack": "kenney-fantasy-town-kit",
+      "name": "wall-window-small.glb",
+      "sha256": "44516aac3d06ee8d2694cfd57d0c6e1e27ca2d0bc45b738ea1f0d1821da10110",
+      "role": "architecture",
+      "family": "wall-window",
+      "modifiers": [
+        "small"
+      ],
+      "faces": 102,
+      "extents": [
+        0.1,
+        1.0,
+        1.0
+      ],
+      "admissionClass": "DIRECT_MODULATED",
+      "intendedPart": "architecture/wall-window",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-fantasy-town-kit/wall-wood-window-glass.glb",
+      "pack": "kenney-fantasy-town-kit",
+      "name": "wall-wood-window-glass.glb",
+      "sha256": "e0bb383a908d473181ad89ad7c676a0632f7ecd0f23e5f912216391d3e62bb69",
+      "role": "architecture",
+      "family": "wall-window-glass",
+      "modifiers": [
+        "wood"
+      ],
+      "faces": 122,
+      "extents": [
+        0.1,
+        1.0,
+        1.0
+      ],
+      "admissionClass": "DIRECT_MODULATED",
+      "intendedPart": "architecture/wall-window-glass",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-fantasy-town-kit/wall-wood-window-shutters.glb",
+      "pack": "kenney-fantasy-town-kit",
+      "name": "wall-wood-window-shutters.glb",
+      "sha256": "c45a63690760cd5de3842ffbe222092e8cd483524679c4ba92fef4d1e52f7248",
+      "role": "architecture",
+      "family": "wall-window-shutters",
+      "modifiers": [
+        "wood"
+      ],
+      "faces": 122,
+      "extents": [
+        0.1,
+        1.0,
+        1.0
+      ],
+      "admissionClass": "DIRECT_MODULATED",
+      "intendedPart": "architecture/wall-window-shutters",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-furniture-kit/wallDoorwayWide.glb",
+      "pack": "kenney-furniture-kit",
+      "name": "wallDoorwayWide.glb",
+      "sha256": "877af5b239f31f12027e3cec92aa26e97d511e1ae8673a8e3d7d13302d33edf3",
+      "role": "architecture",
+      "family": "wall-doorway",
+      "modifiers": [
+        "wide"
+      ],
+      "faces": 60,
+      "extents": [
+        1.0,
+        1.289532,
+        0.0891
+      ],
+      "admissionClass": "DIRECT_MODULATED",
+      "intendedPart": "architecture/wall-doorway",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-retro-fantasy-kit/wall-paint-door.glb",
+      "pack": "kenney-retro-fantasy-kit",
+      "name": "wall-paint-door.glb",
+      "sha256": "be96197815b44a77784c801aa31da3f3cead90421a98a88ade49913e36c056e4",
+      "role": "architecture",
+      "family": "wall-door",
+      "modifiers": [
+        "paint"
+      ],
+      "faces": 56,
+      "extents": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "admissionClass": "DIRECT_MODULATED",
+      "intendedPart": "architecture/wall-door",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-retro-fantasy-kit/wall-fortified-paint-door.glb",
+      "pack": "kenney-retro-fantasy-kit",
+      "name": "wall-fortified-paint-door.glb",
+      "sha256": "4b438acd5fa09b34d586e617c83abcdf4994eeec88fbb4b08514472e00c2c52b",
+      "role": "architecture",
+      "family": "wall-fortified-door",
+      "modifiers": [
+        "paint"
+      ],
+      "faces": 136,
+      "extents": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "admissionClass": "DIRECT_MODULATED",
+      "intendedPart": "architecture/wall-fortified-door",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-retro-fantasy-kit/wall-fortified-paint-window.glb",
+      "pack": "kenney-retro-fantasy-kit",
+      "name": "wall-fortified-paint-window.glb",
+      "sha256": "917294aac583fc9aecde43786f495d813318b3c455ae7a484eaebf25e2e6bb5d",
+      "role": "architecture",
+      "family": "wall-fortified-window",
+      "modifiers": [
+        "paint"
+      ],
+      "faces": 136,
+      "extents": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "admissionClass": "DIRECT_MODULATED",
+      "intendedPart": "architecture/wall-fortified-window",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-retro-fantasy-kit/wall-pane-paint-door.glb",
+      "pack": "kenney-retro-fantasy-kit",
+      "name": "wall-pane-paint-door.glb",
+      "sha256": "e4747b074a98377c7bceeb6343f7f5c1476d119c7774e3ab10faf390e1321b0d",
+      "role": "architecture",
+      "family": "wall-pane-door",
+      "modifiers": [
+        "paint"
+      ],
+      "faces": 28,
+      "extents": [
+        1.0,
+        1.0,
+        0.05
+      ],
+      "admissionClass": "DIRECT_MODULATED",
+      "intendedPart": "architecture/wall-pane-door",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-retro-fantasy-kit/wall-pane-wood-door.glb",
+      "pack": "kenney-retro-fantasy-kit",
+      "name": "wall-pane-wood-door.glb",
+      "sha256": "05957d9111312cd9c4aa595b630fae6ac9d40077abf258e0cf33e5c9a7459d00",
+      "role": "architecture",
+      "family": "wall-pane-door",
+      "modifiers": [
+        "wood"
+      ],
+      "faces": 36,
+      "extents": [
+        1.0,
+        1.0,
+        0.05
+      ],
+      "admissionClass": "DIRECT_MODULATED",
+      "intendedPart": "architecture/wall-pane-door",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-retro-fantasy-kit/wall-pane-painted-wood-door.glb",
+      "pack": "kenney-retro-fantasy-kit",
+      "name": "wall-pane-painted-wood-door.glb",
+      "sha256": "da9b80bce4217cf3cdc13b2ffb3c364def54276e6a1a1311a0433a4ec34be604",
+      "role": "architecture",
+      "family": "wall-pane-painted-door",
+      "modifiers": [
+        "wood"
+      ],
+      "faces": 36,
+      "extents": [
+        1.0,
+        1.0,
+        0.05
+      ],
+      "admissionClass": "DIRECT_MODULATED",
+      "intendedPart": "architecture/wall-pane-painted-door",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-retro-fantasy-kit/wall-pane-painted-wood-window.glb",
+      "pack": "kenney-retro-fantasy-kit",
+      "name": "wall-pane-painted-wood-window.glb",
+      "sha256": "52c0ed9db5f9534e4e7b2421169c3c4673f0e117afaf4aba2864bc5f115a9bbb",
+      "role": "architecture",
+      "family": "wall-pane-painted-window",
+      "modifiers": [
+        "wood"
+      ],
+      "faces": 44,
+      "extents": [
+        1.0,
+        1.0,
+        0.05
+      ],
+      "admissionClass": "DIRECT_MODULATED",
+      "intendedPart": "architecture/wall-pane-painted-window",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-retro-fantasy-kit/wall-pane-paint-window.glb",
+      "pack": "kenney-retro-fantasy-kit",
+      "name": "wall-pane-paint-window.glb",
+      "sha256": "87c8ebce400f833ff818d369932d47afde123de4ad183959660e68d6b6850943",
+      "role": "architecture",
+      "family": "wall-pane-window",
+      "modifiers": [
+        "paint"
+      ],
+      "faces": 40,
+      "extents": [
+        1.0,
+        1.0,
+        0.05
+      ],
+      "admissionClass": "DIRECT_MODULATED",
+      "intendedPart": "architecture/wall-pane-window",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-retro-fantasy-kit/wall-pane-wood-window.glb",
+      "pack": "kenney-retro-fantasy-kit",
+      "name": "wall-pane-wood-window.glb",
+      "sha256": "77f9e703339bf5ae0ca4e5cce90c2de416a7bfa2095873a95e9bb56aaeb73c05",
+      "role": "architecture",
+      "family": "wall-pane-window",
+      "modifiers": [
+        "wood"
+      ],
+      "faces": 44,
+      "extents": [
+        1.0,
+        1.0,
+        0.05
+      ],
+      "admissionClass": "DIRECT_MODULATED",
+      "intendedPart": "architecture/wall-pane-window",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-retro-fantasy-kit/wall-paint-window.glb",
+      "pack": "kenney-retro-fantasy-kit",
+      "name": "wall-paint-window.glb",
+      "sha256": "6b476b0fe360fbf78a6067c3a1d6619db212ebf261971b1395259ebb5208604b",
+      "role": "architecture",
+      "family": "wall-window",
+      "modifiers": [
+        "paint"
+      ],
+      "faces": 64,
+      "extents": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "admissionClass": "DIRECT_MODULATED",
+      "intendedPart": "architecture/wall-window",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-castle-kit/wall-doorway.glb",
+      "pack": "kenney-castle-kit",
+      "name": "wall-doorway.glb",
+      "sha256": "8daf5cccceace888d51d74b0e0254e192004faf926e07f1b28e94191879af3a6",
+      "role": "architecture",
+      "family": "wall-doorway",
+      "modifiers": [],
+      "faces": 500,
+      "extents": [
+        0.5,
+        1.31,
+        1.0
+      ],
+      "admissionClass": "DIRECT_MODULATED",
+      "intendedPart": "architecture/wall-doorway",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-castle-kit/wall-pillar.glb",
+      "pack": "kenney-castle-kit",
+      "name": "wall-pillar.glb",
+      "sha256": "22d359abfaa3cf3dc5a2fece09a108024a07a4e263b21a4a0689da0e630699ed",
+      "role": "architecture",
+      "family": "wall-pillar",
+      "modifiers": [],
+      "faces": 186,
+      "extents": [
+        1.0,
+        1.31,
+        1.0
+      ],
+      "admissionClass": "DIRECT_MODULATED",
+      "intendedPart": "architecture/wall-pillar",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-fantasy-town-kit/wall-door.glb",
+      "pack": "kenney-fantasy-town-kit",
+      "name": "wall-door.glb",
+      "sha256": "79b2d40db110ca96a6e77d4261da665fdf8c68f4c20c2afef5bce1c28ad72857",
+      "role": "architecture",
+      "family": "wall-door",
+      "modifiers": [],
+      "faces": 376,
+      "extents": [
+        0.1,
+        1.0,
+        1.0
+      ],
+      "admissionClass": "DIRECT_MODULATED",
+      "intendedPart": "architecture/wall-door",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-fantasy-town-kit/wall-window-glass.glb",
+      "pack": "kenney-fantasy-town-kit",
+      "name": "wall-window-glass.glb",
+      "sha256": "b0d666b1850d0b92734bdea736a062b4424fd909d13495f4a73719eb51bb41f4",
+      "role": "architecture",
+      "family": "wall-window-glass",
+      "modifiers": [],
+      "faces": 178,
+      "extents": [
+        0.1,
+        1.0,
+        1.0
+      ],
+      "admissionClass": "DIRECT_MODULATED",
+      "intendedPart": "architecture/wall-window-glass",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-fantasy-town-kit/wall-window-shutters.glb",
+      "pack": "kenney-fantasy-town-kit",
+      "name": "wall-window-shutters.glb",
+      "sha256": "58a641a03fc4a5a225663969cc257fcf4f2fc63c199b4aca16b612142ff9eed0",
+      "role": "architecture",
+      "family": "wall-window-shutters",
+      "modifiers": [],
+      "faces": 286,
+      "extents": [
+        0.175,
+        1.0,
+        1.0
+      ],
+      "admissionClass": "DIRECT_MODULATED",
+      "intendedPart": "architecture/wall-window-shutters",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-furniture-kit/cabinetBedDrawerTable.glb",
+      "pack": "kenney-furniture-kit",
+      "name": "cabinetBedDrawerTable.glb",
+      "sha256": "fec6271639df5aff9f8ac75d6679385eab2abb7c8d2f51abeba3ed689ddb6f0d",
+      "role": "furniture",
+      "family": "cabinet-bed-drawer-table",
+      "modifiers": [],
+      "faces": 140,
+      "extents": [
+        0.266,
+        0.2632,
+        0.2173
+      ],
+      "admissionClass": "CHASSIS",
+      "intendedPart": "furniture/cabinet-bed-drawer-table",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-furniture-kit/benchCushionLow.glb",
+      "pack": "kenney-furniture-kit",
+      "name": "benchCushionLow.glb",
+      "sha256": "d1fac209eae2ea7393beefa4932dacb54d500e8f9932a1b17d2a842527df1b2c",
+      "role": "furniture",
+      "family": "bench-cushion",
+      "modifiers": [
+        "low"
+      ],
+      "faces": 138,
+      "extents": [
+        0.42,
+        0.2,
+        0.22
+      ],
+      "admissionClass": "CHASSIS",
+      "intendedPart": "furniture/bench-cushion",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-furniture-kit/chairModernFrameCushion.glb",
+      "pack": "kenney-furniture-kit",
+      "name": "chairModernFrameCushion.glb",
+      "sha256": "fd3351b077cafbd54224e20fa7a3a1b4a4304019cf44c25a6e7709ad71b852b8",
+      "role": "furniture",
+      "family": "chair-modern-cushion",
+      "modifiers": [
+        "frame"
+      ],
+      "faces": 284,
+      "extents": [
+        0.2,
+        0.46,
+        0.2
+      ],
+      "admissionClass": "CHASSIS",
+      "intendedPart": "furniture/chair-modern-cushion",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-furniture-kit/kitchenCabinetCornerInner.glb",
+      "pack": "kenney-furniture-kit",
+      "name": "kitchenCabinetCornerInner.glb",
+      "sha256": "8d1b69e63048424a0559d1e5c77427fab9021def7dea74cf1c4d3d8ce16e6e69",
+      "role": "furniture",
+      "family": "kitchen-cabinet",
+      "modifiers": [
+        "corner",
+        "inner"
+      ],
+      "faces": 54,
+      "extents": [
+        0.46,
+        0.45,
+        0.46
+      ],
+      "admissionClass": "CHASSIS",
+      "intendedPart": "furniture/kitchen-cabinet",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-furniture-kit/kitchenCabinetCornerRound.glb",
+      "pack": "kenney-furniture-kit",
+      "name": "kitchenCabinetCornerRound.glb",
+      "sha256": "333ab73202cb87b76d4ff94939038dcaf315eda55285bdbeba20d255da488e97",
+      "role": "furniture",
+      "family": "kitchen-cabinet",
+      "modifiers": [
+        "corner",
+        "round"
+      ],
+      "faces": 194,
+      "extents": [
+        0.45,
+        0.45,
+        0.45
+      ],
+      "admissionClass": "CHASSIS",
+      "intendedPart": "furniture/kitchen-cabinet",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-furniture-kit/kitchenCabinetUpperCorner.glb",
+      "pack": "kenney-furniture-kit",
+      "name": "kitchenCabinetUpperCorner.glb",
+      "sha256": "b23551ff585b5b804cf3ec0fe046b7bc1e84a387021e3cdb01c93add56444e8d",
+      "role": "furniture",
+      "family": "kitchen-cabinet-upper",
+      "modifiers": [
+        "corner"
+      ],
+      "faces": 204,
+      "extents": [
+        0.215,
+        0.39,
+        0.21
+      ],
+      "admissionClass": "CHASSIS",
+      "intendedPart": "furniture/kitchen-cabinet-upper",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-furniture-kit/kitchenCabinetUpperDouble.glb",
+      "pack": "kenney-furniture-kit",
+      "name": "kitchenCabinetUpperDouble.glb",
+      "sha256": "7b2abd976f2e8f1727d6ba23490aaf5fe18db9c5ac66e729ef6fe8de835c039e",
+      "role": "furniture",
+      "family": "kitchen-cabinet-upper",
+      "modifiers": [
+        "double"
+      ],
+      "faces": 234,
+      "extents": [
+        0.43,
+        0.39,
+        0.22
+      ],
+      "admissionClass": "CHASSIS",
+      "intendedPart": "furniture/kitchen-cabinet-upper",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-furniture-kit/tableRound.glb",
+      "pack": "kenney-furniture-kit",
+      "name": "tableRound.glb",
+      "sha256": "f8daea9124a542a00b7bdacfddac82dc468573d43e44d7b54dd6316e9695754b",
+      "role": "furniture",
+      "family": "table",
+      "modifiers": [
+        "round"
+      ],
+      "faces": 80,
+      "extents": [
+        0.69282,
+        0.366734,
+        0.8
+      ],
+      "admissionClass": "CHASSIS",
+      "intendedPart": "furniture/table",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-furniture-kit/tableCoffeeSquare.glb",
+      "pack": "kenney-furniture-kit",
+      "name": "tableCoffeeSquare.glb",
+      "sha256": "bcc81d8919a3af9141c9c93b4520106dd0a90a7144346cd87928014018aac816",
+      "role": "furniture",
+      "family": "table-coffee",
+      "modifiers": [
+        "square"
+      ],
+      "faces": 124,
+      "extents": [
+        0.4,
+        0.23,
+        0.4
+      ],
+      "admissionClass": "CHASSIS",
+      "intendedPart": "furniture/table-coffee",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-furniture-kit/tableCoffeeGlassSquare.glb",
+      "pack": "kenney-furniture-kit",
+      "name": "tableCoffeeGlassSquare.glb",
+      "sha256": "e4a7ebef6ad0dbafee629df78b0edd88433a1059c4dd5fb3d70304ba2f71b945",
+      "role": "furniture",
+      "family": "table-coffee-glass",
+      "modifiers": [
+        "square"
+      ],
+      "faces": 140,
+      "extents": [
+        0.4,
+        0.23,
+        0.4
+      ],
+      "admissionClass": "CHASSIS",
+      "intendedPart": "furniture/table-coffee-glass",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-fantasy-town-kit/stall-bench.glb",
+      "pack": "kenney-fantasy-town-kit",
+      "name": "stall-bench.glb",
+      "sha256": "5a4b379488241394916991c4b482ec4863c05bb548ca8751f5c3935f1f6e5b9c",
+      "role": "furniture",
+      "family": "stall-bench",
+      "modifiers": [],
+      "faces": 180,
+      "extents": [
+        0.26,
+        0.225501,
+        0.94
+      ],
+      "admissionClass": "CHASSIS",
+      "intendedPart": "furniture/stall-bench",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-furniture-kit/bathroomCabinet.glb",
+      "pack": "kenney-furniture-kit",
+      "name": "bathroomCabinet.glb",
+      "sha256": "9db540227acaaedbbadc6a085f4a00460b73944e608afaad4770e53238a3b7f8",
+      "role": "furniture",
+      "family": "bathroom-cabinet",
+      "modifiers": [],
+      "faces": 64,
+      "extents": [
+        0.23,
+        0.39,
+        0.13
+      ],
+      "admissionClass": "CHASSIS",
+      "intendedPart": "furniture/bathroom-cabinet",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-furniture-kit/bathroomCabinetDrawer.glb",
+      "pack": "kenney-furniture-kit",
+      "name": "bathroomCabinetDrawer.glb",
+      "sha256": "f32d09c6dab20fe823d238310f75ce81f24e893a91c2078b12efd3f7fe6c6b10",
+      "role": "furniture",
+      "family": "bathroom-cabinet-drawer",
+      "modifiers": [],
+      "faces": 508,
+      "extents": [
+        0.43,
+        0.471758,
+        0.32
+      ],
+      "admissionClass": "CHASSIS",
+      "intendedPart": "furniture/bathroom-cabinet-drawer",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-furniture-kit/bench.glb",
+      "pack": "kenney-furniture-kit",
+      "name": "bench.glb",
+      "sha256": "ba05a6d23a5a5a44da016757632070e47ff7587ce10e2f6d6d52328b4cf5489b",
+      "role": "furniture",
+      "family": "bench",
+      "modifiers": [],
+      "faces": 170,
+      "extents": [
+        0.4,
+        0.47,
+        0.2
+      ],
+      "admissionClass": "CHASSIS",
+      "intendedPart": "furniture/bench",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-furniture-kit/benchCushion.glb",
+      "pack": "kenney-furniture-kit",
+      "name": "benchCushion.glb",
+      "sha256": "5186ad938f8b9eff255361fd1fdc48a81f08c318161cde27c93753ab95a2d354",
+      "role": "furniture",
+      "family": "bench-cushion",
+      "modifiers": [],
+      "faces": 196,
+      "extents": [
+        0.4,
+        0.46,
+        0.2
+      ],
+      "admissionClass": "CHASSIS",
+      "intendedPart": "furniture/bench-cushion",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-furniture-kit/cabinetBed.glb",
+      "pack": "kenney-furniture-kit",
+      "name": "cabinetBed.glb",
+      "sha256": "b651fafb9e2c8e4adcb8cad3d10dc94404b46fe039b26e66b2c9020df4e5301d",
+      "role": "furniture",
+      "family": "cabinet-bed",
+      "modifiers": [],
+      "faces": 72,
+      "extents": [
+        0.266,
+        0.2332,
+        0.215
+      ],
+      "admissionClass": "CHASSIS",
+      "intendedPart": "furniture/cabinet-bed",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-furniture-kit/cabinetBedDrawer.glb",
+      "pack": "kenney-furniture-kit",
+      "name": "cabinetBedDrawer.glb",
+      "sha256": "e3dfd2e120af3d4d29b66509e317452cd15bd3f57ac8945575462c582adc6de8",
+      "role": "furniture",
+      "family": "cabinet-bed-drawer",
+      "modifiers": [],
+      "faces": 182,
+      "extents": [
+        0.266,
+        0.2632,
+        0.2173
+      ],
+      "admissionClass": "CHASSIS",
+      "intendedPart": "furniture/cabinet-bed-drawer",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-furniture-kit/cabinetTelevision.glb",
+      "pack": "kenney-furniture-kit",
+      "name": "cabinetTelevision.glb",
+      "sha256": "811719593d676ff76f7b5904d52c845ce0396af2bc9a6a2636c4818ead320b99",
+      "role": "furniture",
+      "family": "cabinet-television",
+      "modifiers": [],
+      "faces": 154,
+      "extents": [
+        0.8,
+        0.31,
+        0.25
+      ],
+      "admissionClass": "CHASSIS",
+      "intendedPart": "furniture/cabinet-television",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-furniture-kit/cabinetTelevisionDoors.glb",
+      "pack": "kenney-furniture-kit",
+      "name": "cabinetTelevisionDoors.glb",
+      "sha256": "8959347bfe26b1ac7e44c476f05789466bb84bcd2ad8b0fb40286005399bfcfc",
+      "role": "furniture",
+      "family": "cabinet-television-doors",
+      "modifiers": [],
+      "faces": 210,
+      "extents": [
+        0.8,
+        0.31,
+        0.26
+      ],
+      "admissionClass": "CHASSIS",
+      "intendedPart": "furniture/cabinet-television-doors",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-furniture-kit/chair.glb",
+      "pack": "kenney-furniture-kit",
+      "name": "chair.glb",
+      "sha256": "c8a11eec93e89e31250ba91afc1b8d56c3bec7ae86640fd1239f595ff4180883",
+      "role": "furniture",
+      "family": "chair",
+      "modifiers": [],
+      "faces": 170,
+      "extents": [
+        0.2,
+        0.47,
+        0.2
+      ],
+      "admissionClass": "CHASSIS",
+      "intendedPart": "furniture/chair",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-retro-fantasy-kit/detail-barrel.glb",
+      "pack": "kenney-retro-fantasy-kit",
+      "name": "detail-barrel.glb",
+      "sha256": "4262d0d3c8ac39bc10c0bb96e9b687d3bd1cc4a79df12b86fef37ebfd24fbb1b",
+      "role": "container",
+      "family": "barrel",
+      "modifiers": [
+        "detail"
+      ],
+      "faces": 120,
+      "extents": [
+        0.246,
+        0.3,
+        0.246
+      ],
+      "admissionClass": "CHASSIS",
+      "intendedPart": "container/barrel",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-retro-fantasy-kit/detail-crate-small.glb",
+      "pack": "kenney-retro-fantasy-kit",
+      "name": "detail-crate-small.glb",
+      "sha256": "ddccb76012c324378aaae1f6372de626b84411d70c602a240de46d5b3c014d59",
+      "role": "container",
+      "family": "crate",
+      "modifiers": [
+        "detail",
+        "small"
+      ],
+      "faces": 24,
+      "extents": [
+        0.2,
+        0.2,
+        0.2
+      ],
+      "admissionClass": "CHASSIS",
+      "intendedPart": "container/crate",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-retro-fantasy-kit/detail-crate.glb",
+      "pack": "kenney-retro-fantasy-kit",
+      "name": "detail-crate.glb",
+      "sha256": "45f31f44bb71d111c99e87176688db1954d8b6c12f96fd357a20cfc499de3d77",
+      "role": "container",
+      "family": "crate",
+      "modifiers": [
+        "detail"
+      ],
+      "faces": 24,
+      "extents": [
+        0.3,
+        0.3,
+        0.3
+      ],
+      "admissionClass": "CHASSIS",
+      "intendedPart": "container/crate",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-retro-fantasy-kit/detail-crate-ropes.glb",
+      "pack": "kenney-retro-fantasy-kit",
+      "name": "detail-crate-ropes.glb",
+      "sha256": "88408437f365a77e9a3dcd287893f2ebd16d1a5719fbf4309f9b6f53fbc8e31f",
+      "role": "container",
+      "family": "crate-ropes",
+      "modifiers": [
+        "detail"
+      ],
+      "faces": 88,
+      "extents": [
+        0.3,
+        0.3,
+        0.3
+      ],
+      "admissionClass": "CHASSIS",
+      "intendedPart": "container/crate-ropes",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-survival-kit/barrel-open.glb",
+      "pack": "kenney-survival-kit",
+      "name": "barrel-open.glb",
+      "sha256": "f24ab1c5ab3685fc758f7e7298bf4f255f039fc6dfc7463711fbe90c4c011a41",
+      "role": "container",
+      "family": "barrel",
+      "modifiers": [
+        "open"
+      ],
+      "faces": 380,
+      "extents": [
+        0.2365,
+        0.344,
+        0.2365
+      ],
+      "admissionClass": "CHASSIS",
+      "intendedPart": "container/barrel",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-food-kit/barrel.glb",
+      "pack": "kenney-food-kit",
+      "name": "barrel.glb",
+      "sha256": "da46fd63ab9d1f1a57ea0ef022c8ecea6d9651810975e1f4723b0047b1ffee4d",
+      "role": "container",
+      "family": "barrel",
+      "modifiers": [],
+      "faces": 308,
+      "extents": [
+        0.76,
+        0.678906,
+        0.678906
+      ],
+      "admissionClass": "CHASSIS",
+      "intendedPart": "container/barrel",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-pirate-kit/barrel.glb",
+      "pack": "kenney-pirate-kit",
+      "name": "barrel.glb",
+      "sha256": "7616dedf7c1023afa6ecd3c52a4609460aae0e582dee14e60ec5e47c1174793b",
+      "role": "container",
+      "family": "barrel",
+      "modifiers": [],
+      "faces": 148,
+      "extents": [
+        1.336098,
+        1.229143,
+        1.336098
+      ],
+      "admissionClass": "CHASSIS",
+      "intendedPart": "container/barrel",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-pirate-kit/chest.glb",
+      "pack": "kenney-pirate-kit",
+      "name": "chest.glb",
+      "sha256": "26d26c4c032a12320fe05b5005a72eba96db7167db0d35873639a4b7dcc06bcb",
+      "role": "container",
+      "family": "chest",
+      "modifiers": [],
+      "faces": 232,
+      "extents": [
+        1.275,
+        1.1475,
+        1.275
+      ],
+      "admissionClass": "CHASSIS",
+      "intendedPart": "container/chest",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-pirate-kit/crate.glb",
+      "pack": "kenney-pirate-kit",
+      "name": "crate.glb",
+      "sha256": "b525674e07c8b83667512a8dd93be0d7684358347d0e64d2bb16b156ac382ed1",
+      "role": "container",
+      "family": "crate",
+      "modifiers": [],
+      "faces": 76,
+      "extents": [
+        1.078,
+        0.77,
+        1.309
+      ],
+      "admissionClass": "CHASSIS",
+      "intendedPart": "container/crate",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-pirate-kit/crate-bottles.glb",
+      "pack": "kenney-pirate-kit",
+      "name": "crate-bottles.glb",
+      "sha256": "8412a3d3dc00a81ac61f0975682ef9f08288bee5c5eb783b09dbc1144e655302",
+      "role": "container",
+      "family": "crate-bottles",
+      "modifiers": [],
+      "faces": 572,
+      "extents": [
+        1.078,
+        1.056861,
+        1.309
+      ],
+      "admissionClass": "CHASSIS",
+      "intendedPart": "container/crate-bottles",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-retro-fantasy-kit/pulley-crate.glb",
+      "pack": "kenney-retro-fantasy-kit",
+      "name": "pulley-crate.glb",
+      "sha256": "63a6f00bf6ebd39a70b1e79bdfebdb4a1849d87826a4f0f516b9a55063b92870",
+      "role": "container",
+      "family": "pulley-crate",
+      "modifiers": [],
+      "faces": 172,
+      "extents": [
+        0.367423,
+        1.0,
+        0.733712
+      ],
+      "admissionClass": "CHASSIS",
+      "intendedPart": "container/pulley-crate",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-survival-kit/barrel.glb",
+      "pack": "kenney-survival-kit",
+      "name": "barrel.glb",
+      "sha256": "3a0d12f6bdd1badd361f64ce0fbbf878a4ccfc2de8ff1ac4ed4c1aea2a9ee04a",
+      "role": "container",
+      "family": "barrel",
+      "modifiers": [],
+      "faces": 412,
+      "extents": [
+        0.2365,
+        0.344,
+        0.2365
+      ],
+      "admissionClass": "CHASSIS",
+      "intendedPart": "container/barrel",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-survival-kit/chest.glb",
+      "pack": "kenney-survival-kit",
+      "name": "chest.glb",
+      "sha256": "84b03023e425cc1f96c6d0b0f352608be9e8e01b112790e6b00b8651bf84379b",
+      "role": "container",
+      "family": "chest",
+      "modifiers": [],
+      "faces": 322,
+      "extents": [
+        0.2604,
+        0.257191,
+        0.272025
+      ],
+      "admissionClass": "CHASSIS",
+      "intendedPart": "container/chest",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-factory-kit/box-large.glb",
+      "pack": "kenney-factory-kit",
+      "name": "box-large.glb",
+      "sha256": "f5c7a7b4d7ec48c2695dc5241d62a38dbb54b487e6be0f089548582c91bacdfd",
+      "role": "container",
+      "family": "box",
+      "modifiers": [
+        "large"
+      ],
+      "faces": 70,
+      "extents": [
+        1.1,
+        0.55,
+        1.0
+      ],
+      "admissionClass": "CHASSIS",
+      "intendedPart": "container/box",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-factory-kit/box-long.glb",
+      "pack": "kenney-factory-kit",
+      "name": "box-long.glb",
+      "sha256": "6a6d7bfed3058809a9833606a6a3e78a156b6f3d898fba59fc054c62b5499c94",
+      "role": "container",
+      "family": "box",
+      "modifiers": [
+        "long"
+      ],
+      "faces": 70,
+      "extents": [
+        1.1,
+        0.55,
+        0.5
+      ],
+      "admissionClass": "CHASSIS",
+      "intendedPart": "container/box",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-furniture-kit/cardboardBoxClosed.glb",
+      "pack": "kenney-furniture-kit",
+      "name": "cardboardBoxClosed.glb",
+      "sha256": "4af079dca52960912764574950f0549ff2ae1224b3db1528718629473a2d5d81",
+      "role": "container",
+      "family": "cardboard-box",
+      "modifiers": [
+        "closed"
+      ],
+      "faces": 60,
+      "extents": [
+        0.2125,
+        0.281,
+        0.2125
+      ],
+      "admissionClass": "CHASSIS",
+      "intendedPart": "container/cardboard-box",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-building-kit/detail-pipe.glb",
+      "pack": "kenney-building-kit",
+      "name": "detail-pipe.glb",
+      "sha256": "d380dc7c5b7960ad537633bede26420ca311afa7b453827bf9e4032ca52d724f",
+      "role": "mechanism",
+      "family": "pipe",
+      "modifiers": [
+        "detail"
+      ],
+      "faces": 60,
+      "extents": [
+        0.43416,
+        0.42768,
+        0.43416
+      ],
+      "admissionClass": "PART_DONOR",
+      "intendedPart": "mechanism/pipe",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-factory-kit/lever-double.glb",
+      "pack": "kenney-factory-kit",
+      "name": "lever-double.glb",
+      "sha256": "b14d1fc30f29a8e8dc56dae7b20a8a988be5155bafcddc726cd8c8ebf0bbe5b9",
+      "role": "mechanism",
+      "family": "lever",
+      "modifiers": [
+        "double"
+      ],
+      "faces": 118,
+      "extents": [
+        0.54,
+        0.375,
+        0.54
+      ],
+      "admissionClass": "PART_DONOR",
+      "intendedPart": "mechanism/lever",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-factory-kit/pipe-large-long.glb",
+      "pack": "kenney-factory-kit",
+      "name": "pipe-large-long.glb",
+      "sha256": "8e6650cc662695c28fffb1ffa10f190255f7d9c6c1d4a2a48d375e9bbb89b04f",
+      "role": "mechanism",
+      "family": "pipe",
+      "modifiers": [
+        "large",
+        "long"
+      ],
+      "faces": 292,
+      "extents": [
+        2.0,
+        1.0,
+        1.0
+      ],
+      "admissionClass": "PART_DONOR",
+      "intendedPart": "mechanism/pipe",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-factory-kit/pipe-large.glb",
+      "pack": "kenney-factory-kit",
+      "name": "pipe-large.glb",
+      "sha256": "e30500f8ec6dc1fcc04c350ff9ecfd06470ec73e70d53b7b3b571031f30a3311",
+      "role": "mechanism",
+      "family": "pipe",
+      "modifiers": [
+        "large"
+      ],
+      "faces": 248,
+      "extents": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "admissionClass": "PART_DONOR",
+      "intendedPart": "mechanism/pipe",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-factory-kit/pipe-large-bend.glb",
+      "pack": "kenney-factory-kit",
+      "name": "pipe-large-bend.glb",
+      "sha256": "e234cba2e29bd825b9acdab56c0ff36504a6ceea4c74b21dafbbd98e84bb793b",
+      "role": "mechanism",
+      "family": "pipe-bend",
+      "modifiers": [
+        "large"
+      ],
+      "faces": 448,
+      "extents": [
+        1.9,
+        1.000239,
+        1.9
+      ],
+      "admissionClass": "PART_DONOR",
+      "intendedPart": "mechanism/pipe-bend",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-factory-kit/pipe-large-bump.glb",
+      "pack": "kenney-factory-kit",
+      "name": "pipe-large-bump.glb",
+      "sha256": "f83d9ac33597436be322c29c0aea5b6a927232e4937e5d693855650f0872dad6",
+      "role": "mechanism",
+      "family": "pipe-bump",
+      "modifiers": [
+        "large"
+      ],
+      "faces": 296,
+      "extents": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "admissionClass": "PART_DONOR",
+      "intendedPart": "mechanism/pipe-bump",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-factory-kit/pipe-large-cross.glb",
+      "pack": "kenney-factory-kit",
+      "name": "pipe-large-cross.glb",
+      "sha256": "ef4b61ed5171edb416d56266f847a95bfeba73e17e12f239b28084446b55c948",
+      "role": "mechanism",
+      "family": "pipe-cross",
+      "modifiers": [
+        "large"
+      ],
+      "faces": 472,
+      "extents": [
+        2.0,
+        2.0,
+        1.0
+      ],
+      "admissionClass": "PART_DONOR",
+      "intendedPart": "mechanism/pipe-cross",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-factory-kit/pipe-large-curve.glb",
+      "pack": "kenney-factory-kit",
+      "name": "pipe-large-curve.glb",
+      "sha256": "5da8bbe6f74293df2cc57e743eeea0aee3e831531af1841aad0a49d47d1e1638",
+      "role": "mechanism",
+      "family": "pipe-curve",
+      "modifiers": [
+        "large"
+      ],
+      "faces": 332,
+      "extents": [
+        1.502082,
+        1.000239,
+        1.246447
+      ],
+      "admissionClass": "PART_DONOR",
+      "intendedPart": "mechanism/pipe-curve",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-factory-kit/pipe-glass-large-long.glb",
+      "pack": "kenney-factory-kit",
+      "name": "pipe-glass-large-long.glb",
+      "sha256": "f063ce07616575b9dd155a963327d883c11526ef680483ac0b0d6b1848771e92",
+      "role": "mechanism",
+      "family": "pipe-glass",
+      "modifiers": [
+        "large",
+        "long"
+      ],
+      "faces": 160,
+      "extents": [
+        2.0,
+        1.0,
+        1.0
+      ],
+      "admissionClass": "PART_DONOR",
+      "intendedPart": "mechanism/pipe-glass",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-factory-kit/pipe-glass-large.glb",
+      "pack": "kenney-factory-kit",
+      "name": "pipe-glass-large.glb",
+      "sha256": "85ba4f7f8cbcddf6fe4376a16622145a1aed0a59fefc8c1348ce039c63fab6fa",
+      "role": "mechanism",
+      "family": "pipe-glass",
+      "modifiers": [
+        "large"
+      ],
+      "faces": 160,
+      "extents": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "admissionClass": "PART_DONOR",
+      "intendedPart": "mechanism/pipe-glass",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-factory-kit/pipe-glass-large-bend.glb",
+      "pack": "kenney-factory-kit",
+      "name": "pipe-glass-large-bend.glb",
+      "sha256": "821d5ce62e358f19d3a2397d0023c4e7e3586184479ea76316b522f2d2da67cb",
+      "role": "mechanism",
+      "family": "pipe-glass-bend",
+      "modifiers": [
+        "large"
+      ],
+      "faces": 448,
+      "extents": [
+        1.9,
+        1.000239,
+        1.9
+      ],
+      "admissionClass": "PART_DONOR",
+      "intendedPart": "mechanism/pipe-glass-bend",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-factory-kit/pipe-glass-large-bump.glb",
+      "pack": "kenney-factory-kit",
+      "name": "pipe-glass-large-bump.glb",
+      "sha256": "a4b154d3d7a9d8cebd5f059acd6eaf419365d2b749f91fae44327e2e2044d70e",
+      "role": "mechanism",
+      "family": "pipe-glass-bump",
+      "modifiers": [
+        "large"
+      ],
+      "faces": 256,
+      "extents": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "admissionClass": "PART_DONOR",
+      "intendedPart": "mechanism/pipe-glass-bump",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-factory-kit/pipe-glass-large-cross.glb",
+      "pack": "kenney-factory-kit",
+      "name": "pipe-glass-large-cross.glb",
+      "sha256": "e374ad00e809b33dd7ba77dcb77432a1b67c20207616fdd558854f07a6a9ed7c",
+      "role": "mechanism",
+      "family": "pipe-glass-cross",
+      "modifiers": [
+        "large"
+      ],
+      "faces": 384,
+      "extents": [
+        2.0,
+        2.0,
+        1.0
+      ],
+      "admissionClass": "PART_DONOR",
+      "intendedPart": "mechanism/pipe-glass-cross",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-factory-kit/pipe-glass-large-curve.glb",
+      "pack": "kenney-factory-kit",
+      "name": "pipe-glass-large-curve.glb",
+      "sha256": "d055d697d4e60fa977142e830571f9cb00c4f4ce5f8454c26a4d1811738ed11e",
+      "role": "mechanism",
+      "family": "pipe-glass-curve",
+      "modifiers": [
+        "large"
+      ],
+      "faces": 288,
+      "extents": [
+        1.502082,
+        1.000239,
+        1.246447
+      ],
+      "admissionClass": "PART_DONOR",
+      "intendedPart": "mechanism/pipe-glass-curve",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-factory-kit/pipe-glass-large-junction.glb",
+      "pack": "kenney-factory-kit",
+      "name": "pipe-glass-large-junction.glb",
+      "sha256": "6455bb9205f590fa95c91e6da8a3d8a01ffaeaaa84a3ff89251412af835a61e4",
+      "role": "mechanism",
+      "family": "pipe-glass-junction",
+      "modifiers": [
+        "large"
+      ],
+      "faces": 276,
+      "extents": [
+        2.055635,
+        2.055635,
+        1.0
+      ],
+      "admissionClass": "PART_DONOR",
+      "intendedPart": "mechanism/pipe-glass-junction",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-factory-kit/pipe-glass-large-side.glb",
+      "pack": "kenney-factory-kit",
+      "name": "pipe-glass-large-side.glb",
+      "sha256": "93391765c8b2e2df5f09dccbae1d7fccca7cc322e62b4d96c186369df9ca0974",
+      "role": "mechanism",
+      "family": "pipe-glass-side",
+      "modifiers": [
+        "large"
+      ],
+      "faces": 276,
+      "extents": [
+        2.0,
+        1.5,
+        1.0
+      ],
+      "admissionClass": "PART_DONOR",
+      "intendedPart": "mechanism/pipe-glass-side",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-furniture-kit/lampRoundTable.glb",
+      "pack": "kenney-furniture-kit",
+      "name": "lampRoundTable.glb",
+      "sha256": "75bb644caaa3da003b4fcad7a931722dd61cd2858aab70cf660021d5061fa1b2",
+      "role": "practical-light",
+      "family": "lamp-table",
+      "modifiers": [
+        "round"
+      ],
+      "faces": 76,
+      "extents": [
+        0.152039,
+        0.31425,
+        0.17556
+      ],
+      "admissionClass": "DIRECT_MODULATED",
+      "intendedPart": "practical-light/lamp-table",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-furniture-kit/lampSquareTable.glb",
+      "pack": "kenney-furniture-kit",
+      "name": "lampSquareTable.glb",
+      "sha256": "70ec9211af336b1ef3b4da32590b8737b4facf219348c22e6533a1e898cdb13d",
+      "role": "practical-light",
+      "family": "lamp-table",
+      "modifiers": [
+        "square"
+      ],
+      "faces": 60,
+      "extents": [
+        0.12,
+        0.29,
+        0.12
+      ],
+      "admissionClass": "DIRECT_MODULATED",
+      "intendedPart": "practical-light/lamp-table",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-furniture-kit/lampWall.glb",
+      "pack": "kenney-furniture-kit",
+      "name": "lampWall.glb",
+      "sha256": "a9679ecd3be05731846f22ade97c37069598ca7a06dd9319f50230e63a1ea83c",
+      "role": "practical-light",
+      "family": "lamp-wall",
+      "modifiers": [],
+      "faces": 42,
+      "extents": [
+        0.226635,
+        0.0928,
+        0.150336
+      ],
+      "admissionClass": "DIRECT_MODULATED",
+      "intendedPart": "practical-light/lamp-wall",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-furniture-kit/lampSquareCeiling.glb",
+      "pack": "kenney-furniture-kit",
+      "name": "lampSquareCeiling.glb",
+      "sha256": "57066be51583d83ae60071e8179af275189cb2911ecb9fc24953bb930c8bf118",
+      "role": "practical-light",
+      "family": "lamp-ceiling",
+      "modifiers": [
+        "square"
+      ],
+      "faces": 60,
+      "extents": [
+        0.12,
+        0.23,
+        0.12
+      ],
+      "admissionClass": "DIRECT_MODULATED",
+      "intendedPart": "practical-light/lamp-ceiling",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-furniture-kit/lampRoundFloor.glb",
+      "pack": "kenney-furniture-kit",
+      "name": "lampRoundFloor.glb",
+      "sha256": "50fe1b5b588edf15bfa9cc880f71a02a4fda6036350b24733d0ef4de5cc5e908",
+      "role": "practical-light",
+      "family": "lamp-floor",
+      "modifiers": [
+        "round"
+      ],
+      "faces": 76,
+      "extents": [
+        0.152039,
+        0.86,
+        0.17556
+      ],
+      "admissionClass": "DIRECT_MODULATED",
+      "intendedPart": "practical-light/lamp-floor",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-furniture-kit/lampSquareFloor.glb",
+      "pack": "kenney-furniture-kit",
+      "name": "lampSquareFloor.glb",
+      "sha256": "6466993748d8e184de9ec5b6b0af613867c50c0ce320d1898b1db9e4c27c2561",
+      "role": "practical-light",
+      "family": "lamp-floor",
+      "modifiers": [
+        "square"
+      ],
+      "faces": 60,
+      "extents": [
+        0.12,
+        0.86,
+        0.12
+      ],
+      "admissionClass": "DIRECT_MODULATED",
+      "intendedPart": "practical-light/lamp-floor",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-fantasy-town-kit/lantern.glb",
+      "pack": "kenney-fantasy-town-kit",
+      "name": "lantern.glb",
+      "sha256": "f270637e3083d6e84a30626ee05df2b09597a642985a7f5c3e4ab5bb1c7a8d55",
+      "role": "practical-light",
+      "family": "lantern",
+      "modifiers": [],
+      "faces": 158,
+      "extents": [
+        0.216448,
+        1.556,
+        0.22432
+      ],
+      "admissionClass": "DIRECT_MODULATED",
+      "intendedPart": "practical-light/lantern",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-nature-kit/cliff_blockHalf_rock.glb",
+      "pack": "kenney-nature-kit",
+      "name": "cliff_blockHalf_rock.glb",
+      "sha256": "a3d29368524dd6968d5920f1aba2bdf6e6d189ccc60123f5d036c56653c31c5e",
+      "role": "wilderness",
+      "family": "cliff-block-rock",
+      "modifiers": [
+        "half"
+      ],
+      "faces": 12,
+      "extents": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "admissionClass": "DIRECT_MODULATED",
+      "intendedPart": "wilderness/cliff-block-rock",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-nature-kit/cliff_blockSlopeHalfWalls_rock.glb",
+      "pack": "kenney-nature-kit",
+      "name": "cliff_blockSlopeHalfWalls_rock.glb",
+      "sha256": "95a25398990b978071d461998c442c034feb517ecea6538e88ed2ee957a2c3e6",
+      "role": "wilderness",
+      "family": "cliff-block-slope-walls-rock",
+      "modifiers": [
+        "half"
+      ],
+      "faces": 106,
+      "extents": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "admissionClass": "DIRECT_MODULATED",
+      "intendedPart": "wilderness/cliff-block-slope-walls-rock",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-nature-kit/cliff_cornerInnerLarge_rock.glb",
+      "pack": "kenney-nature-kit",
+      "name": "cliff_cornerInnerLarge_rock.glb",
+      "sha256": "03b7038dfc6449f646e789819014f3a26548a64ef42d028979c00df949c5d49f",
+      "role": "wilderness",
+      "family": "cliff-rock",
+      "modifiers": [
+        "corner",
+        "inner",
+        "large"
+      ],
+      "faces": 44,
+      "extents": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "admissionClass": "DIRECT_MODULATED",
+      "intendedPart": "wilderness/cliff-rock",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-nature-kit/cliff_cornerInnerTop_rock.glb",
+      "pack": "kenney-nature-kit",
+      "name": "cliff_cornerInnerTop_rock.glb",
+      "sha256": "2eab4f506d45ee35da03da6ab222d90108c96b267edc8d969262a4c7a42008f9",
+      "role": "wilderness",
+      "family": "cliff-rock",
+      "modifiers": [
+        "corner",
+        "inner",
+        "top"
+      ],
+      "faces": 89,
+      "extents": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "admissionClass": "DIRECT_MODULATED",
+      "intendedPart": "wilderness/cliff-rock",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-nature-kit/cliff_stepsCornerInner_rock.glb",
+      "pack": "kenney-nature-kit",
+      "name": "cliff_stepsCornerInner_rock.glb",
+      "sha256": "e076973baeedd79dc24fe90610978cde5805d04bc629b9034b4bb34d80ded6af",
+      "role": "wilderness",
+      "family": "cliff-steps-rock",
+      "modifiers": [
+        "corner",
+        "inner"
+      ],
+      "faces": 213,
+      "extents": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "admissionClass": "DIRECT_MODULATED",
+      "intendedPart": "wilderness/cliff-steps-rock",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-nature-kit/cliff_stepsCorner_rock.glb",
+      "pack": "kenney-nature-kit",
+      "name": "cliff_stepsCorner_rock.glb",
+      "sha256": "5a44b8d6be16b43e007818bb55e9558aac980caae30b6b3dfb20a24c6cc7d5d3",
+      "role": "wilderness",
+      "family": "cliff-steps-rock",
+      "modifiers": [
+        "corner"
+      ],
+      "faces": 245,
+      "extents": [
+        1.05,
+        1.0,
+        1.05
+      ],
+      "admissionClass": "DIRECT_MODULATED",
+      "intendedPart": "wilderness/cliff-steps-rock",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-nature-kit/cliff_waterfallTop_rock.glb",
+      "pack": "kenney-nature-kit",
+      "name": "cliff_waterfallTop_rock.glb",
+      "sha256": "c5f7b299f3a8ec16c138bd962eace461f06a882f3614c396d3ba8020f1a8bbe6",
+      "role": "wilderness",
+      "family": "cliff-waterfall-rock",
+      "modifiers": [
+        "top"
+      ],
+      "faces": 60,
+      "extents": [
+        1.0,
+        1.0,
+        0.2685
+      ],
+      "admissionClass": "DIRECT_MODULATED",
+      "intendedPart": "wilderness/cliff-waterfall-rock",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-nature-kit/cliff_blockCave_rock.glb",
+      "pack": "kenney-nature-kit",
+      "name": "cliff_blockCave_rock.glb",
+      "sha256": "2c373a596840a4f3bffa1aba7a93d7da9d2aa1dded54f7a9966e4e4b3fce7d43",
+      "role": "wilderness",
+      "family": "cliff-block-cave-rock",
+      "modifiers": [],
+      "faces": 56,
+      "extents": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "admissionClass": "DIRECT_MODULATED",
+      "intendedPart": "wilderness/cliff-block-cave-rock",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-nature-kit/cliff_blockQuarter_rock.glb",
+      "pack": "kenney-nature-kit",
+      "name": "cliff_blockQuarter_rock.glb",
+      "sha256": "748f3f4c8695e46567819f3ae73ba53bbc7db827254bc68f9fca27f01f481666",
+      "role": "wilderness",
+      "family": "cliff-block-quarter-rock",
+      "modifiers": [],
+      "faces": 12,
+      "extents": [
+        1.0,
+        0.25,
+        1.0
+      ],
+      "admissionClass": "DIRECT_MODULATED",
+      "intendedPart": "wilderness/cliff-block-quarter-rock",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-nature-kit/cliff_block_rock.glb",
+      "pack": "kenney-nature-kit",
+      "name": "cliff_block_rock.glb",
+      "sha256": "2f31de8502288d6adcdae4d5605cfe65d4bcd4369dd0decd116c2615b9d3d01f",
+      "role": "wilderness",
+      "family": "cliff-block-rock",
+      "modifiers": [],
+      "faces": 12,
+      "extents": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "admissionClass": "DIRECT_MODULATED",
+      "intendedPart": "wilderness/cliff-block-rock",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-nature-kit/cliff_blockSlope_rock.glb",
+      "pack": "kenney-nature-kit",
+      "name": "cliff_blockSlope_rock.glb",
+      "sha256": "82fe2e0477c7ce2c5994435f44074022cb2a36f56ff40bd34598cbfc87286885",
+      "role": "wilderness",
+      "family": "cliff-block-slope-rock",
+      "modifiers": [],
+      "faces": 70,
+      "extents": [
+        1.2,
+        1.0,
+        1.0
+      ],
+      "admissionClass": "DIRECT_MODULATED",
+      "intendedPart": "wilderness/cliff-block-slope-rock",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-nature-kit/cliff_blockSlopeWalls_rock.glb",
+      "pack": "kenney-nature-kit",
+      "name": "cliff_blockSlopeWalls_rock.glb",
+      "sha256": "055776add47ad3a13c53900a728ace7533c02f7afa27fdb57557ca117d44a55d",
+      "role": "wilderness",
+      "family": "cliff-block-slope-walls-rock",
+      "modifiers": [],
+      "faces": 106,
+      "extents": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "admissionClass": "DIRECT_MODULATED",
+      "intendedPart": "wilderness/cliff-block-slope-walls-rock",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-nature-kit/cliff_cave_rock.glb",
+      "pack": "kenney-nature-kit",
+      "name": "cliff_cave_rock.glb",
+      "sha256": "2d83296b0166ad0e980152ad4f45b4e45349e932a6b6c2adbe7eb606a6472d8d",
+      "role": "wilderness",
+      "family": "cliff-cave-rock",
+      "modifiers": [],
+      "faces": 64,
+      "extents": [
+        1.0,
+        1.0,
+        0.1685
+      ],
+      "admissionClass": "DIRECT_MODULATED",
+      "intendedPart": "wilderness/cliff-cave-rock",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-nature-kit/cliff_waterfall_rock.glb",
+      "pack": "kenney-nature-kit",
+      "name": "cliff_waterfall_rock.glb",
+      "sha256": "08063b24498cae385c204e9038a72f0dd438fdfa29ecf106a0df5e656b7edff6",
+      "role": "wilderness",
+      "family": "cliff-waterfall-rock",
+      "modifiers": [],
+      "faces": 34,
+      "extents": [
+        1.0,
+        1.0,
+        0.1685
+      ],
+      "admissionClass": "DIRECT_MODULATED",
+      "intendedPart": "wilderness/cliff-waterfall-rock",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-castle-kit/tree-large.glb",
+      "pack": "kenney-castle-kit",
+      "name": "tree-large.glb",
+      "sha256": "a72a7c237857a9fb04d51b05e3513e97a4d5d5572a709b3251f96b5bffd0a5ab",
+      "role": "wilderness",
+      "family": "tree",
+      "modifiers": [
+        "large"
+      ],
+      "faces": 229,
+      "extents": [
+        0.888665,
+        1.8492,
+        0.889782
+      ],
+      "admissionClass": "DIRECT_MODULATED",
+      "intendedPart": "wilderness/tree",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-castle-kit/tree-small.glb",
+      "pack": "kenney-castle-kit",
+      "name": "tree-small.glb",
+      "sha256": "ad5b2d7225241eb0599dbc7f1a9f9c39915be56ccccf88ad091bc9c1b4334034",
+      "role": "wilderness",
+      "family": "tree",
+      "modifiers": [
+        "small"
+      ],
+      "faces": 164,
+      "extents": [
+        0.738055,
+        1.3492,
+        0.72
+      ],
+      "admissionClass": "DIRECT_MODULATED",
+      "intendedPart": "wilderness/tree",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-fantasy-town-kit/rock-large.glb",
+      "pack": "kenney-fantasy-town-kit",
+      "name": "rock-large.glb",
+      "sha256": "425bea0dd3c8d9198a067a2faad1df8860c5b9eb53560ce5c67347a79852b9d1",
+      "role": "wilderness",
+      "family": "rock",
+      "modifiers": [
+        "large"
+      ],
+      "faces": 200,
+      "extents": [
+        1.670019,
+        1.1628,
+        1.548562
+      ],
+      "admissionClass": "DIRECT_MODULATED",
+      "intendedPart": "wilderness/rock",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-fantasy-town-kit/rock-small.glb",
+      "pack": "kenney-fantasy-town-kit",
+      "name": "rock-small.glb",
+      "sha256": "2f2ca3e9970124b81bde77cec3b1a337410a5c76336ce5dec5760aff1b415316",
+      "role": "wilderness",
+      "family": "rock",
+      "modifiers": [
+        "small"
+      ],
+      "faces": 128,
+      "extents": [
+        0.998311,
+        1.02,
+        1.32627
+      ],
+      "admissionClass": "DIRECT_MODULATED",
+      "intendedPart": "wilderness/rock",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-fantasy-town-kit/tree-high-round.glb",
+      "pack": "kenney-fantasy-town-kit",
+      "name": "tree-high-round.glb",
+      "sha256": "7f372e338cbf5514a41e8d2afda81acd67277a4c5ad4e6e35a9acfa4a6e3bc4b",
+      "role": "wilderness",
+      "family": "tree",
+      "modifiers": [
+        "high",
+        "round"
+      ],
+      "faces": 126,
+      "extents": [
+        1.018584,
+        2.75064,
+        1.018584
+      ],
+      "admissionClass": "DIRECT_MODULATED",
+      "intendedPart": "wilderness/tree",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-fantasy-town-kit/tree-high.glb",
+      "pack": "kenney-fantasy-town-kit",
+      "name": "tree-high.glb",
+      "sha256": "2dbb718a81d9c3697c069495f58840f6c2002c8cdd13388be560c2199f6d03e7",
+      "role": "wilderness",
+      "family": "tree",
+      "modifiers": [
+        "high"
+      ],
+      "faces": 200,
+      "extents": [
+        1.023,
+        2.972761,
+        1.023
+      ],
+      "admissionClass": "DIRECT_MODULATED",
+      "intendedPart": "wilderness/tree",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-fantasy-town-kit/tree-high-crooked.glb",
+      "pack": "kenney-fantasy-town-kit",
+      "name": "tree-high-crooked.glb",
+      "sha256": "a9af8768a5328c62694a42f67858a88eea974ad4540c5c3c54a7a70fdead7505",
+      "role": "wilderness",
+      "family": "tree-crooked",
+      "modifiers": [
+        "high"
+      ],
+      "faces": 210,
+      "extents": [
+        1.023,
+        2.97258,
+        1.023
+      ],
+      "admissionClass": "DIRECT_MODULATED",
+      "intendedPart": "wilderness/tree-crooked",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-nature-kit/cliff_cornerInnerLarge_stone.glb",
+      "pack": "kenney-nature-kit",
+      "name": "cliff_cornerInnerLarge_stone.glb",
+      "sha256": "3f8956c7c3c9cad4a93d54f9fed1aac138e32767b3d1811ca0056331007237bf",
+      "role": "wilderness",
+      "family": "cliff",
+      "modifiers": [
+        "corner",
+        "inner",
+        "large",
+        "stone"
+      ],
+      "faces": 44,
+      "extents": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "admissionClass": "DIRECT_MODULATED",
+      "intendedPart": "wilderness/cliff",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-fantasy-town-kit/blade.glb",
+      "pack": "kenney-fantasy-town-kit",
+      "name": "blade.glb",
+      "sha256": "ef54ee87322191f18f7bf93d065add896fc584578c4c913eb99ea0bb18495a14",
+      "role": "tool-weapon",
+      "family": "blade",
+      "modifiers": [],
+      "faces": 180,
+      "extents": [
+        0.111,
+        2.0,
+        0.430375
+      ],
+      "admissionClass": "PART_DONOR",
+      "intendedPart": "tool-weapon/blade",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-pirate-kit/cannon.glb",
+      "pack": "kenney-pirate-kit",
+      "name": "cannon.glb",
+      "sha256": "b2ea71475fa52de312a0fe3fb9085e1a3f83f9e6bb167668fb62f71383cbc41a",
+      "role": "tool-weapon",
+      "family": "cannon",
+      "modifiers": [],
+      "faces": 232,
+      "extents": [
+        1.402375,
+        1.054662,
+        1.925
+      ],
+      "admissionClass": "PART_DONOR",
+      "intendedPart": "tool-weapon/cannon",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-pirate-kit/cannon-ball.glb",
+      "pack": "kenney-pirate-kit",
+      "name": "cannon-ball.glb",
+      "sha256": "8d60d9f56df1bf118d3c589bc14a1b37d21b7834ecb9541b7840a4e8200797e6",
+      "role": "tool-weapon",
+      "family": "cannon-ball",
+      "modifiers": [],
+      "faces": 48,
+      "extents": [
+        0.637208,
+        0.67,
+        0.551838
+      ],
+      "admissionClass": "PART_DONOR",
+      "intendedPart": "tool-weapon/cannon-ball",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-pirate-kit/cannon-mobile.glb",
+      "pack": "kenney-pirate-kit",
+      "name": "cannon-mobile.glb",
+      "sha256": "0e8ae9889b35bb43c0da779a7eed3c2a7a204b80350516f7c4ad523a550d8867",
+      "role": "tool-weapon",
+      "family": "cannon-mobile",
+      "modifiers": [],
+      "faces": 472,
+      "extents": [
+        1.67875,
+        1.379662,
+        1.925
+      ],
+      "admissionClass": "PART_DONOR",
+      "intendedPart": "tool-weapon/cannon-mobile",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-pirate-kit/tool-paddle.glb",
+      "pack": "kenney-pirate-kit",
+      "name": "tool-paddle.glb",
+      "sha256": "2a387ead62c44ec4218d664582a956f92a66b3c7db168d68394ccfabefae58b8",
+      "role": "tool-weapon",
+      "family": "tool-paddle",
+      "modifiers": [],
+      "faces": 60,
+      "extents": [
+        0.657831,
+        2.349127,
+        0.207531
+      ],
+      "admissionClass": "PART_DONOR",
+      "intendedPart": "tool-weapon/tool-paddle",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-pirate-kit/tool-shovel.glb",
+      "pack": "kenney-pirate-kit",
+      "name": "tool-shovel.glb",
+      "sha256": "b468372526e419c712f50b824eff50d6e7838de646eaa5a6aacfc4dcdfcfa265",
+      "role": "tool-weapon",
+      "family": "tool-shovel",
+      "modifiers": [],
+      "faces": 168,
+      "extents": [
+        0.657831,
+        2.349127,
+        0.2829
+      ],
+      "admissionClass": "PART_DONOR",
+      "intendedPart": "tool-weapon/tool-shovel",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-survival-kit/tool-axe.glb",
+      "pack": "kenney-survival-kit",
+      "name": "tool-axe.glb",
+      "sha256": "de5c6cc51cdb5bcfad8bd7128b7ff0e37a34e6f4f8deddec82bb8634c25cc20d",
+      "role": "tool-weapon",
+      "family": "tool-axe",
+      "modifiers": [],
+      "faces": 84,
+      "extents": [
+        0.114486,
+        0.256,
+        0.030927
+      ],
+      "admissionClass": "PART_DONOR",
+      "intendedPart": "tool-weapon/tool-axe",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-survival-kit/tool-axe-upgraded.glb",
+      "pack": "kenney-survival-kit",
+      "name": "tool-axe-upgraded.glb",
+      "sha256": "18ffed02c818a25bc0a87609ccebdf3c55e238131efa2c50bdd6991fc6a2d8f2",
+      "role": "tool-weapon",
+      "family": "tool-axe-upgraded",
+      "modifiers": [],
+      "faces": 140,
+      "extents": [
+        0.146633,
+        0.256,
+        0.04
+      ],
+      "admissionClass": "PART_DONOR",
+      "intendedPart": "tool-weapon/tool-axe-upgraded",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-survival-kit/tool-hammer.glb",
+      "pack": "kenney-survival-kit",
+      "name": "tool-hammer.glb",
+      "sha256": "9b27f03c26dabd49a7ea358615e63fe65e1c3d0157887d4ee1ecdfa1f0e688f3",
+      "role": "tool-weapon",
+      "family": "tool-hammer",
+      "modifiers": [],
+      "faces": 52,
+      "extents": [
+        0.09,
+        0.15348,
+        0.04
+      ],
+      "admissionClass": "PART_DONOR",
+      "intendedPart": "tool-weapon/tool-hammer",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-survival-kit/tool-hammer-upgraded.glb",
+      "pack": "kenney-survival-kit",
+      "name": "tool-hammer-upgraded.glb",
+      "sha256": "68a3d4330b79e027d0667e6426d4999fd0b818b84514ea0f3f76e7efaa5e7d57",
+      "role": "tool-weapon",
+      "family": "tool-hammer-upgraded",
+      "modifiers": [],
+      "faces": 80,
+      "extents": [
+        0.1161,
+        0.184571,
+        0.0516
+      ],
+      "admissionClass": "PART_DONOR",
+      "intendedPart": "tool-weapon/tool-hammer-upgraded",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-castle-kit/flag-banner-long.glb",
+      "pack": "kenney-castle-kit",
+      "name": "flag-banner-long.glb",
+      "sha256": "e6a4433f5770b9fc31bf67d72424a877d5c010486d5b7373ce7af900566827e4",
+      "role": "sign-dressing",
+      "family": "flag-banner",
+      "modifiers": [
+        "long"
+      ],
+      "faces": 68,
+      "extents": [
+        0.04,
+        2.17,
+        0.63
+      ],
+      "admissionClass": "PART_DONOR",
+      "intendedPart": "sign-dressing/flag-banner",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-castle-kit/flag-banner-short.glb",
+      "pack": "kenney-castle-kit",
+      "name": "flag-banner-short.glb",
+      "sha256": "9561b6afd1d551199d02f520d31eab46dbff137eef4f9aa13f12e311b588fbd7",
+      "role": "sign-dressing",
+      "family": "flag-banner",
+      "modifiers": [
+        "short"
+      ],
+      "faces": 68,
+      "extents": [
+        0.04,
+        0.78,
+        0.63
+      ],
+      "admissionClass": "PART_DONOR",
+      "intendedPart": "sign-dressing/flag-banner",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-fantasy-town-kit/banner-green.glb",
+      "pack": "kenney-fantasy-town-kit",
+      "name": "banner-green.glb",
+      "sha256": "5c9a1bb7d564270306fe438fd4a141fc6de0d102b355bbd1d2710249c489868a",
+      "role": "sign-dressing",
+      "family": "banner-green",
+      "modifiers": [],
+      "faces": 102,
+      "extents": [
+        0.05,
+        0.839351,
+        0.5
+      ],
+      "admissionClass": "PART_DONOR",
+      "intendedPart": "sign-dressing/banner-green",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-fantasy-town-kit/banner-red.glb",
+      "pack": "kenney-fantasy-town-kit",
+      "name": "banner-red.glb",
+      "sha256": "4e4a83de16e5979d2b34bb206d3bf3703a9039711bc658b37e3738d43090703d",
+      "role": "sign-dressing",
+      "family": "banner-red",
+      "modifiers": [],
+      "faces": 98,
+      "extents": [
+        0.05,
+        0.839351,
+        0.5
+      ],
+      "admissionClass": "PART_DONOR",
+      "intendedPart": "sign-dressing/banner-red",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-furniture-kit/tableCloth.glb",
+      "pack": "kenney-furniture-kit",
+      "name": "tableCloth.glb",
+      "sha256": "64de52b5c4370724c29feefd68a65b157c55c88592e2096987bbce007ae80bcb",
+      "role": "sign-dressing",
+      "family": "table-cloth",
+      "modifiers": [],
+      "faces": 144,
+      "extents": [
+        0.841488,
+        0.326734,
+        0.447373
+      ],
+      "admissionClass": "PART_DONOR",
+      "intendedPart": "sign-dressing/table-cloth",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-furniture-kit/tableCrossCloth.glb",
+      "pack": "kenney-furniture-kit",
+      "name": "tableCrossCloth.glb",
+      "sha256": "3c16b86cdf9a9a82b80b97611030a1da2ed2e9e977ac76457e09a1547b0cebbc",
+      "role": "sign-dressing",
+      "family": "table-cross-cloth",
+      "modifiers": [],
+      "faces": 202,
+      "extents": [
+        0.85212,
+        0.347413,
+        0.447373
+      ],
+      "admissionClass": "PART_DONOR",
+      "intendedPart": "sign-dressing/table-cross-cloth",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-nature-kit/sign.glb",
+      "pack": "kenney-nature-kit",
+      "name": "sign.glb",
+      "sha256": "c658c21672ecd63c5d3e53f06f875d68e6509edb1ab7e3b75374df7c61e7dd0c",
+      "role": "sign-dressing",
+      "family": "sign",
+      "modifiers": [],
+      "faces": 44,
+      "extents": [
+        0.3,
+        0.408771,
+        0.07
+      ],
+      "admissionClass": "PART_DONOR",
+      "intendedPart": "sign-dressing/sign",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-castle-kit/flag-wide.glb",
+      "pack": "kenney-castle-kit",
+      "name": "flag-wide.glb",
+      "sha256": "74e94f48dffb40aca288676191265523c3e752aef40b868bfa3a51394083519b",
+      "role": "sign-dressing",
+      "family": "flag",
+      "modifiers": [
+        "wide"
+      ],
+      "faces": 256,
+      "extents": [
+        0.106376,
+        0.865614,
+        0.546876
+      ],
+      "admissionClass": "PART_DONOR",
+      "intendedPart": "sign-dressing/flag",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-brick-kit/none-hq-plate-corner.glb",
+      "pack": "kenney-brick-kit",
+      "name": "none-hq-plate-corner.glb",
+      "sha256": "be151986aa200cd7a472e2422e3412eea5f292d96da95699b9b87b7304ba2fad",
+      "role": "food",
+      "family": "none-plate",
+      "modifiers": [
+        "corner",
+        "hq"
+      ],
+      "faces": 32,
+      "extents": [
+        0.159,
+        0.032,
+        0.158
+      ],
+      "admissionClass": "DIRECT_MODULATED",
+      "intendedPart": "food/none-plate",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-brick-kit/none-lq-plate-corner.glb",
+      "pack": "kenney-brick-kit",
+      "name": "none-lq-plate-corner.glb",
+      "sha256": "81506342e2c0ce8c0579c8368614e20ff9fdbbf5a6995ad52b620156bc9eb24e",
+      "role": "food",
+      "family": "none-plate",
+      "modifiers": [
+        "corner",
+        "lq"
+      ],
+      "faces": 20,
+      "extents": [
+        0.159,
+        0.032,
+        0.158
+      ],
+      "admissionClass": "DIRECT_MODULATED",
+      "intendedPart": "food/none-plate",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-brick-kit/none-hq-plate-1x1-round.glb",
+      "pack": "kenney-brick-kit",
+      "name": "none-hq-plate-1x1-round.glb",
+      "sha256": "543b0c9adcb160660c3b785878d9c0b4ad3bb7243b77af7e04c7962f61e7468a",
+      "role": "food",
+      "family": "none-plate-1x1",
+      "modifiers": [
+        "hq",
+        "round"
+      ],
+      "faces": 76,
+      "extents": [
+        0.0795,
+        0.032,
+        0.0795
+      ],
+      "admissionClass": "DIRECT_MODULATED",
+      "intendedPart": "food/none-plate-1x1",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-brick-kit/none-hq-plate-1x1.glb",
+      "pack": "kenney-brick-kit",
+      "name": "none-hq-plate-1x1.glb",
+      "sha256": "c5593129aa9c44769b9cd975379596dfbe0d6dc74badd5d2cf900b4237dc36e8",
+      "role": "food",
+      "family": "none-plate-1x1",
+      "modifiers": [
+        "hq"
+      ],
+      "faces": 20,
+      "extents": [
+        0.0795,
+        0.032,
+        0.079
+      ],
+      "admissionClass": "DIRECT_MODULATED",
+      "intendedPart": "food/none-plate-1x1",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-brick-kit/none-hq-plate-1x2.glb",
+      "pack": "kenney-brick-kit",
+      "name": "none-hq-plate-1x2.glb",
+      "sha256": "96628075401639ca3116937dc733441ea1bfc7eed01447f70df55a4827ce3192",
+      "role": "food",
+      "family": "none-plate-1x2",
+      "modifiers": [
+        "hq"
+      ],
+      "faces": 20,
+      "extents": [
+        0.159,
+        0.032,
+        0.079
+      ],
+      "admissionClass": "DIRECT_MODULATED",
+      "intendedPart": "food/none-plate-1x2",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-brick-kit/none-lq-plate-1x2.glb",
+      "pack": "kenney-brick-kit",
+      "name": "none-lq-plate-1x2.glb",
+      "sha256": "e54e3abcdc85d323c85f6534c601076b3a44210109e4ea143f282bd357db72e3",
+      "role": "food",
+      "family": "none-plate-1x2",
+      "modifiers": [
+        "lq"
+      ],
+      "faces": 12,
+      "extents": [
+        0.159,
+        0.032,
+        0.079
+      ],
+      "admissionClass": "DIRECT_MODULATED",
+      "intendedPart": "food/none-plate-1x2",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-brick-kit/none-hq-plate-1x4.glb",
+      "pack": "kenney-brick-kit",
+      "name": "none-hq-plate-1x4.glb",
+      "sha256": "6adc805e4f3863d561521463cae9aa6f6f40b5adca3441abe17602c0992a453e",
+      "role": "food",
+      "family": "none-plate-1x4",
+      "modifiers": [
+        "hq"
+      ],
+      "faces": 20,
+      "extents": [
+        0.318,
+        0.032,
+        0.079
+      ],
+      "admissionClass": "DIRECT_MODULATED",
+      "intendedPart": "food/none-plate-1x4",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-brick-kit/none-lq-plate-1x4.glb",
+      "pack": "kenney-brick-kit",
+      "name": "none-lq-plate-1x4.glb",
+      "sha256": "bb8b2e8272d6c93fc6ed83054749e5579f0782c803c98a301638faf0f1adc1f3",
+      "role": "food",
+      "family": "none-plate-1x4",
+      "modifiers": [
+        "lq"
+      ],
+      "faces": 12,
+      "extents": [
+        0.318,
+        0.032,
+        0.079
+      ],
+      "admissionClass": "DIRECT_MODULATED",
+      "intendedPart": "food/none-plate-1x4",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-factory-kit/structure-doorway-wide.glb",
+      "pack": "kenney-factory-kit",
+      "name": "structure-doorway-wide.glb",
+      "sha256": "588655c5594b55d6f715ca6251febb18f9636f6804e0e193e31d68643e7b2107",
+      "role": "other",
+      "family": "structure-doorway",
+      "modifiers": [
+        "wide"
+      ],
+      "faces": 46,
+      "extents": [
+        2.0,
+        3.0,
+        2.0
+      ],
+      "admissionClass": "DIRECT_MODULATED",
+      "intendedPart": "other/structure-doorway",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-fantasy-town-kit/fountain-corner-inner-square.glb",
+      "pack": "kenney-fantasy-town-kit",
+      "name": "fountain-corner-inner-square.glb",
+      "sha256": "76c96385cddbe153a75088d717f63624ac5e1dd948e84f6ae540140d23825ec2",
+      "role": "other",
+      "family": "fountain",
+      "modifiers": [
+        "corner",
+        "inner",
+        "square"
+      ],
+      "faces": 46,
+      "extents": [
+        1.0,
+        0.28,
+        1.0
+      ],
+      "admissionClass": "DIRECT_MODULATED",
+      "intendedPart": "other/fountain",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-fantasy-town-kit/fountain-corner-inner.glb",
+      "pack": "kenney-fantasy-town-kit",
+      "name": "fountain-corner-inner.glb",
+      "sha256": "d92a3d5aa8e5fd8dd3c4b1349171b549c57b6fe7e49e3c4776ad5d0106ec37ee",
+      "role": "other",
+      "family": "fountain",
+      "modifiers": [
+        "corner",
+        "inner"
+      ],
+      "faces": 146,
+      "extents": [
+        1.0,
+        0.28,
+        1.0
+      ],
+      "admissionClass": "DIRECT_MODULATED",
+      "intendedPart": "other/fountain",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-furniture-kit/doorwayOpen.glb",
+      "pack": "kenney-furniture-kit",
+      "name": "doorwayOpen.glb",
+      "sha256": "cf05e165ea26dbbeaab4dc6296c143ef5f5a001e2ab5af9cd4fd65739408317e",
+      "role": "other",
+      "family": "doorway",
+      "modifiers": [
+        "open"
+      ],
+      "faces": 28,
+      "extents": [
+        0.486,
+        1.009532,
+        0.0891
+      ],
+      "admissionClass": "DIRECT_MODULATED",
+      "intendedPart": "other/doorway",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-survival-kit/structure-metal-doorway.glb",
+      "pack": "kenney-survival-kit",
+      "name": "structure-metal-doorway.glb",
+      "sha256": "c91e83d64cc0991e73758fe722618e07b0c282894f7a3f4b9040209a6d006b9e",
+      "role": "other",
+      "family": "structure-doorway",
+      "modifiers": [
+        "metal"
+      ],
+      "faces": 160,
+      "extents": [
+        0.53543,
+        0.517467,
+        0.088905
+      ],
+      "admissionClass": "DIRECT_MODULATED",
+      "intendedPart": "other/structure-doorway",
+      "reviewStatus": "CANDIDATE"
+    },
+    {
+      "path": "assets/models/kenney-building-kit/barricade-doorway-a.glb",
+      "pack": "kenney-building-kit",
+      "name": "barricade-doorway-a.glb",
+      "sha256": "0d8bc73f2cf7912b6a60affaa706c99774af7cb72c15f91dfd66870a5bf2add0",
+      "role": "other",
+      "family": "barricade-doorway",
+      "modifiers": [],
+      "faces": 64,
+      "extents": [
+        0.075,
+        1.460181,
+        1.255797
+      ],
+      "admissionClass": "DIRECT_MODULATED",
+      "intendedPart": "other/barricade-doorway",
+      "reviewStatus": "CANDIDATE"
+    }
+  ]
+}

@@ -1,0 +1,69 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Genesis Kenney Canonical Renderer</title>
+<style>
+  html, body { margin: 0; width: 1280px; height: 1000px; overflow: hidden; background: #171619; }
+  #stage { display: none; }
+  #grid { display:grid; grid-template-columns:repeat(5,256px); grid-auto-rows:250px; }
+  .cell { width:256px;height:250px;background:#211f24;border:1px solid #39353d;box-sizing:border-box;overflow:hidden }
+  .cell img { display:block;width:256px;height:222px }
+  .label { height:28px;padding:5px 7px;box-sizing:border-box;overflow:hidden;white-space:nowrap;
+    text-overflow:ellipsis;color:#e8e1d5;font:12px Arial,sans-serif;background:#111013 }
+</style>
+<canvas id="stage" width="256" height="222"></canvas><div id="grid"></div>
+<script type="importmap">{"imports":{"three":"/vendor/three/three.module.js","three/addons/":"/vendor/three/addons/"}}</script>
+<script type="module">
+  import * as THREE from "/vendor/three/three.module.js";
+  import { GLTFLoader } from "/vendor/three/addons/loaders/GLTFLoader.js";
+
+  const renderer = new THREE.WebGLRenderer({canvas: document.querySelector("#stage"), antialias: true, alpha: false, preserveDrawingBuffer:true});
+  renderer.setSize(256, 222, false);
+  renderer.setPixelRatio(1);
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+  renderer.shadowMap.enabled = true;
+  const loader = new GLTFLoader();
+  const clay = new THREE.MeshStandardMaterial({color: 0xb8a78e, roughness: .72, metalness: .04});
+
+  function load(url) {
+    return new Promise((resolve, reject) => loader.load(url, resolve, undefined, reject));
+  }
+
+  function sceneFor(gltf) {
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x211f24);
+    scene.add(new THREE.HemisphereLight(0xf2e5cf, 0x252b38, 1.7));
+    const key = new THREE.DirectionalLight(0xffead0, 2.8); key.position.set(4, 6, 5); scene.add(key);
+    const rim = new THREE.DirectionalLight(0x9bbde0, 1.0); rim.position.set(-4, 2, -3); scene.add(rim);
+    const group = gltf.scene;
+    group.traverse(node => { if (node.isMesh) { node.material = clay; node.castShadow = true; node.receiveShadow = true; } });
+    const box = new THREE.Box3().setFromObject(group);
+    const center = box.getCenter(new THREE.Vector3());
+    const size = box.getSize(new THREE.Vector3());
+    group.position.sub(center);
+    group.rotation.y = -Math.PI * .18;
+    group.rotation.x = Math.PI * .03;
+    scene.add(group);
+    const maxDim = Math.max(size.x, size.y, size.z, .001);
+    const camera = new THREE.OrthographicCamera(-1, 1, .86, -.86, .01, 100);
+    camera.position.set(2.7, 2.15, 3.3).normalize().multiplyScalar(maxDim * 2.8);
+    camera.lookAt(0, 0, 0);
+    camera.zoom = 1.25 / maxDim;
+    camera.updateProjectionMatrix();
+    return {scene, camera};
+  }
+
+  window.renderBatch = async entries => {
+    const grid = document.querySelector("#grid"); grid.textContent = "";
+    const failures = [];
+    for (let i = 0; i < 20; i++) {
+      const cell=document.createElement("div");cell.className="cell";
+      const image=document.createElement("img"),label=document.createElement("div");label.className="label";
+      if(entries[i]){try{const view=sceneFor(await load("/"+entries[i].path));renderer.render(view.scene,view.camera);image.src=renderer.domElement.toDataURL("image/jpeg",.9)}
+      catch(error){failures.push({path:entries[i].path,error:String(error)})}label.textContent=entries[i].name}
+      cell.append(image,label);grid.appendChild(cell);
+    }
+    await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+    return failures;
+  };
+  window.__ready = true;
+</script>

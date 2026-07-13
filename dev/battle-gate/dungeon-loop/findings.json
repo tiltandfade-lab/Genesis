@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-11T18:30:11.974Z",
+  "generatedAt": "2026-07-13T22:29:20.724Z",
   "iterations": [
     {
       "loopIndex": 1,
@@ -18,7 +18,7 @@
         "ok": true,
         "stage": "done",
         "loopIndex": 1,
-        "topology": "The Hub",
+        "topology": "The Onion",
         "segCount": 5,
         "environment": "dungeon",
         "nodeId": "dungeon-loop-1",
@@ -30,10 +30,10 @@
         "targetSegNum": 3,
         "room": {
           "segNum": 3,
-          "x": 3,
-          "y": 32,
+          "x": 41,
+          "y": 3,
           "w": 4,
-          "d": 6
+          "d": 4
         },
         "foes": [
           {
@@ -51,18 +51,17 @@
         ],
         "combatGrid": {
           "bands": [
-            "melee",
-            "near"
+            "melee"
           ],
           "lanes": [
             "C"
           ],
-          "bandCount": 2,
+          "bandCount": 1,
           "laneCount": 1
         },
         "pnCursor": 3
       },
-      "topology": "The Hub",
+      "topology": "The Onion",
       "roomCount": 5,
       "reachability": {
         "ok": true,
@@ -71,11 +70,11 @@
       "rendered": {
         "ok": true,
         "stage": "setInteriorBoard",
-        "dressingCountFromTray": 54,
-        "meshCount": 4,
+        "dressingCountFromTray": 49,
+        "meshCount": 11,
         "piecesRequested": 3,
         "piecesResolved": 3,
-        "dressingCount": 54,
+        "dressingCount": 49,
         "beatMaxHeight": 0.561,
         "beatFrustumCheck": {
           "corners": [
@@ -83,64 +82,64 @@
               "x": -0.5,
               "y": 0,
               "z": -0.5,
-              "ndcX": 0.1981889136221543,
-              "ndcY": 0.5527174724731055,
+              "ndcX": 0,
+              "ndcY": 0.5654491313473785,
               "inFrustum": true
             },
             {
               "x": 1.5,
               "y": 0,
               "z": -0.5,
-              "ndcX": 0.9064592128936841,
-              "ndcY": 0.09575417685932786,
+              "ndcX": 0.9454026156177492,
+              "ndcY": 6.60323647926639e-16,
               "inFrustum": true
             },
             {
               "x": -0.5,
               "y": 0,
-              "z": 2.5,
-              "ndcX": -0.9466060769802237,
-              "ndcY": -0.09999510669865133,
+              "z": 1.5,
+              "ndcX": -0.9454026156177492,
+              "ndcY": 7.015938759220539e-16,
               "inFrustum": true
             },
             {
               "x": 1.5,
               "y": 0,
-              "z": 2.5,
-              "ndcX": -0.2624355648485589,
-              "ndcY": -0.7318912013751129,
+              "z": 1.5,
+              "ndcX": 0,
+              "ndcY": -0.7587807657081828,
               "inFrustum": true
             },
             {
               "x": -0.5,
               "y": 0.561,
               "z": -0.5,
-              "ndcX": 0.2045820088350056,
-              "ndcY": 0.8003144558536665,
+              "ndcX": 0,
+              "ndcY": 0.8871430261016044,
               "inFrustum": true
             },
             {
               "x": 1.5,
               "y": 0.561,
               "z": -0.5,
-              "ndcX": 0.9391929559872098,
-              "ndcY": 0.35643186646318703,
+              "ndcX": 0.9902879636118352,
+              "ndcY": 0.3440434761031282,
               "inFrustum": true
             },
             {
               "x": -0.5,
               "y": 0.561,
-              "z": 2.5,
-              "ndcX": -0.982360754705365,
-              "ndcY": 0.16527028780239836,
+              "z": 1.5,
+              "ndcX": -0.9902879636118352,
+              "ndcY": 0.3440434761031282,
               "inFrustum": true
             },
             {
               "x": 1.5,
               "y": 0.561,
-              "z": 2.5,
-              "ndcX": -0.27376382261781024,
-              "ndcY": -0.4560176270379504,
+              "z": 1.5,
+              "ndcX": 0,
+              "ndcY": -0.39515393016202116,
               "inFrustum": true
             }
           ],
@@ -163,8 +162,8 @@
         },
         "fps": {
           "samples": 60,
-          "elapsedMs": 236.29999999981374,
-          "fps": 253.9145154466665
+          "elapsedMs": 985.1999999880791,
+          "fps": 60.90133983021315
         }
       },
       "verbResults": {
@@ -188,14 +187,14 @@
       ],
       "benign404Count": 4,
       "summary": {
-        "topology": "The Hub",
+        "topology": "The Onion",
         "realm": "chrome",
         "roomCount": 5,
         "planVerified": true,
         "piecesResolved": 3,
         "piecesRequested": 3,
-        "dressingCount": 54,
-        "meshCount": 4,
+        "dressingCount": 49,
+        "meshCount": 11,
         "consoleErrorCount": 3,
         "breakCount": 0
       }
@@ -231,9 +230,9 @@
         "room": {
           "segNum": 4,
           "x": 3,
-          "y": 25,
-          "w": 6,
-          "d": 7
+          "y": 30,
+          "w": 10,
+          "d": 4
         },
         "foes": [
           {
@@ -255,15 +254,15 @@
         ],
         "combatGrid": {
           "bands": [
-            "melee",
-            "near"
+            "melee"
           ],
           "lanes": [
             "L",
-            "C"
+            "C",
+            "R"
           ],
-          "bandCount": 2,
-          "laneCount": 2
+          "bandCount": 1,
+          "laneCount": 3
         },
         "pnCursor": 4
       },
@@ -276,76 +275,76 @@
       "rendered": {
         "ok": true,
         "stage": "setInteriorBoard",
-        "dressingCountFromTray": 90,
-        "meshCount": 5,
+        "dressingCountFromTray": 84,
+        "meshCount": 11,
         "piecesRequested": 4,
         "piecesResolved": 4,
-        "dressingCount": 90,
+        "dressingCount": 84,
         "beatMaxHeight": 1.903,
         "beatFrustumCheck": {
           "corners": [
             {
               "x": -2.5,
               "y": 0,
-              "z": -1,
-              "ndcX": -0.04838873372453844,
-              "ndcY": 0.4763306019269643,
+              "z": -0.5,
+              "ndcX": -0.34507576581947597,
+              "ndcY": 0.45383301932916914,
               "inFrustum": true
             },
             {
-              "x": 2.5,
+              "x": 3.5,
               "y": 0,
-              "z": -1,
-              "ndcX": 0.829139338175623,
-              "ndcY": -0.08485891164674622,
+              "z": -0.5,
+              "ndcX": 0.825260687601023,
+              "ndcY": -0.2713393598491444,
               "inFrustum": true
             },
             {
               "x": -2.5,
               "y": 0,
-              "z": 3,
-              "ndcX": -0.796505420871168,
-              "ndcY": 0.0815189679512501,
+              "z": 1.5,
+              "ndcX": -0.7299887043823724,
+              "ndcY": 0.24001466532958002,
               "inFrustum": true
             },
             {
-              "x": 2.5,
+              "x": 3.5,
               "y": 0,
-              "z": 3,
-              "ndcX": 0.06284094087495942,
-              "ndcY": -0.6185957120313468,
+              "z": 1.5,
+              "ndcX": 0.44143664181485237,
+              "ndcY": -0.580563875650919,
               "inFrustum": true
             },
             {
               "x": -2.5,
               "y": 1.903,
-              "z": -1,
-              "ndcX": -0.050937338317608355,
-              "ndcY": 0.9103719060994121,
+              "z": -0.5,
+              "ndcX": -0.36471202420287674,
+              "ndcY": 0.9198204910022076,
               "inFrustum": true
             },
             {
-              "x": 2.5,
+              "x": 3.5,
               "y": 1.903,
-              "z": -1,
-              "ndcX": 0.8799038676332148,
-              "ndcY": 0.3853336704067676,
+              "z": -0.5,
+              "ndcX": 0.8820474776009498,
+              "ndcY": 0.24225088581351142,
               "inFrustum": true
             },
             {
               "x": -2.5,
               "y": 1.903,
-              "z": 3,
-              "ndcX": -0.8432399108298416,
-              "ndcY": 0.5418816248904353,
+              "z": 1.5,
+              "ndcX": -0.7740706700854196,
+              "ndcY": 0.7216124309158957,
               "inFrustum": true
             },
             {
-              "x": 2.5,
+              "x": 3.5,
               "y": 1.903,
-              "z": 3,
-              "ndcX": 0.06720796273954568,
-              "ndcY": -0.12200106080035548,
+              "z": 1.5,
+              "ndcX": 0.47408963806022025,
+              "ndcY": -0.05134032000300531,
               "inFrustum": true
             }
           ],
@@ -368,8 +367,8 @@
         },
         "fps": {
           "samples": 60,
-          "elapsedMs": 441.79999999981374,
-          "fps": 135.80805794482865
+          "elapsedMs": 554.2999999821186,
+          "fps": 108.24463287377876
         }
       },
       "verbResults": {
@@ -390,8 +389,8 @@
         "planVerified": true,
         "piecesResolved": 4,
         "piecesRequested": 4,
-        "dressingCount": 90,
-        "meshCount": 5,
+        "dressingCount": 84,
+        "meshCount": 11,
         "consoleErrorCount": 0,
         "breakCount": 0
       }
@@ -415,7 +414,7 @@
         "ok": true,
         "stage": "done",
         "loopIndex": 3,
-        "topology": "The Convergence",
+        "topology": "The Spine",
         "segCount": 9,
         "environment": "dungeon",
         "nodeId": "dungeon-loop-3",
@@ -427,10 +426,10 @@
         "targetSegNum": 5,
         "room": {
           "segNum": 5,
-          "x": 21,
-          "y": 12,
-          "w": 6,
-          "d": 7
+          "x": 37,
+          "y": 4,
+          "w": 12,
+          "d": 6
         },
         "foes": [
           {
@@ -461,14 +460,15 @@
           ],
           "lanes": [
             "L",
-            "C"
+            "C",
+            "R"
           ],
           "bandCount": 2,
-          "laneCount": 2
+          "laneCount": 3
         },
         "pnCursor": 5
       },
-      "topology": "The Convergence",
+      "topology": "The Spine",
       "roomCount": 9,
       "reachability": {
         "ok": true,
@@ -477,76 +477,76 @@
       "rendered": {
         "ok": true,
         "stage": "setInteriorBoard",
-        "dressingCountFromTray": 93,
-        "meshCount": 4,
+        "dressingCountFromTray": 80,
+        "meshCount": 12,
         "piecesRequested": 5,
         "piecesResolved": 5,
-        "dressingCount": 93,
+        "dressingCount": 80,
         "beatMaxHeight": 1.2429999999999999,
         "beatFrustumCheck": {
           "corners": [
             {
               "x": -2.5,
               "y": 0,
-              "z": -3,
-              "ndcX": 0.07424398666705649,
-              "ndcY": 0.5209548707375271,
+              "z": -2.5,
+              "ndcX": -0.09238996882611687,
+              "ndcY": 0.5334775228999677,
               "inFrustum": true
             },
             {
-              "x": 2.5,
+              "x": 3.5,
               "y": 0,
-              "z": -3,
-              "ndcX": 0.9272714139558093,
-              "ndcY": 0.05377251136039672,
+              "z": -2.5,
+              "ndcX": 0.9639166720537038,
+              "ndcY": -0.043575552589470934,
               "inFrustum": true
             },
             {
               "x": -2.5,
               "y": 0,
-              "z": 3,
-              "ndcX": -0.9530828983797964,
-              "ndcY": -0.05526932051306585,
+              "z": 2.5,
+              "ndcX": -0.9436262663853339,
+              "ndcY": 0.042658289028315095,
               "inFrustum": true
             },
             {
-              "x": 2.5,
+              "x": 3.5,
               "y": 0,
-              "z": 3,
-              "ndcX": -0.10065272263930228,
-              "ndcY": -0.7062595701801652,
+              "z": 2.5,
+              "ndcX": 0.1254016025784196,
+              "ndcY": -0.7240930715879887,
               "inFrustum": true
             },
             {
               "x": -2.5,
               "y": 1.2429999999999999,
-              "z": -3,
-              "ndcX": 0.07648965179354407,
-              "ndcY": 0.7816964898263683,
+              "z": -2.5,
+              "ndcX": -0.09526000964420266,
+              "ndcY": 0.7965647894717135,
               "inFrustum": true
             },
             {
-              "x": 2.5,
+              "x": 3.5,
               "y": 1.2429999999999999,
-              "z": -3,
-              "ndcX": 0.9592475445792741,
-              "ndcY": 0.33492844804379157,
+              "z": -2.5,
+              "ndcX": 0.99894800442616,
+              "ndcY": 0.24324223883489307,
               "inFrustum": true
             },
             {
               "x": -2.5,
               "y": 1.2429999999999999,
-              "z": 3,
-              "ndcX": -0.9868964351521593,
-              "ndcY": 0.23012192670124268,
+              "z": 2.5,
+              "ndcX": -0.9771726416131775,
+              "ndcY": 0.3262895970010737,
               "inFrustum": true
             },
             {
-              "x": 2.5,
+              "x": 3.5,
               "y": 1.2429999999999999,
-              "z": 3,
-              "ndcX": -0.10482498252632473,
-              "ndcY": -0.3997976396040196,
+              "z": 2.5,
+              "ndcX": 0.13074837909390893,
+              "ndcY": -0.4166140294061472,
               "inFrustum": true
             }
           ],
@@ -569,8 +569,8 @@
         },
         "fps": {
           "samples": 60,
-          "elapsedMs": 484,
-          "fps": 123.96694214876032
+          "elapsedMs": 352.7000000178814,
+          "fps": 170.11624609287804
         }
       },
       "verbResults": {
@@ -585,14 +585,14 @@
       "urls404": [],
       "benign404Count": 0,
       "summary": {
-        "topology": "The Convergence",
+        "topology": "The Spine",
         "realm": "fantasy",
         "roomCount": 9,
         "planVerified": true,
         "piecesResolved": 5,
         "piecesRequested": 5,
-        "dressingCount": 93,
-        "meshCount": 4,
+        "dressingCount": 80,
+        "meshCount": 12,
         "consoleErrorCount": 0,
         "breakCount": 0
       }
@@ -614,7 +614,7 @@
         "ok": true,
         "stage": "done",
         "loopIndex": 4,
-        "topology": "The Labyrinth Fragment",
+        "topology": "The Figure-8",
         "segCount": 11,
         "environment": "dungeon",
         "nodeId": "dungeon-loop-4",
@@ -626,10 +626,10 @@
         "targetSegNum": 6,
         "room": {
           "segNum": 6,
-          "x": 47,
-          "y": 29,
-          "w": 6,
-          "d": 6
+          "x": 31,
+          "y": 3,
+          "w": 7,
+          "d": 5
         },
         "foes": [
           {
@@ -647,19 +647,18 @@
         ],
         "combatGrid": {
           "bands": [
-            "melee",
-            "near"
+            "melee"
           ],
           "lanes": [
             "L",
             "C"
           ],
-          "bandCount": 2,
+          "bandCount": 1,
           "laneCount": 2
         },
         "pnCursor": 6
       },
-      "topology": "The Labyrinth Fragment",
+      "topology": "The Figure-8",
       "roomCount": 11,
       "reachability": {
         "ok": true,
@@ -669,7 +668,7 @@
         "ok": true,
         "stage": "setInteriorBoard",
         "dressingCountFromTray": 114,
-        "meshCount": 4,
+        "meshCount": 22,
         "piecesRequested": 3,
         "piecesResolved": 3,
         "dressingCount": 114,
@@ -677,67 +676,67 @@
         "beatFrustumCheck": {
           "corners": [
             {
-              "x": -0.5,
+              "x": -1,
               "y": 0,
-              "z": -0.5,
-              "ndcX": 5.254809754316334e-16,
-              "ndcY": 0.5378112133520461,
+              "z": -1,
+              "ndcX": -0.13965399278542748,
+              "ndcY": 0.537717993860485,
               "inFrustum": true
             },
             {
-              "x": 2.5,
+              "x": 3,
               "y": 0,
-              "z": -0.5,
-              "ndcX": 0.875762644669008,
-              "ndcY": -7.646038506407311e-16,
+              "z": -1,
+              "ndcX": 0.929077464663322,
+              "ndcY": -0.06930295607250718,
               "inFrustum": true
             },
             {
-              "x": -0.5,
+              "x": -1,
               "y": 0,
-              "z": 2.5,
-              "ndcX": -0.8757626446690071,
-              "ndcY": -7.646038506407311e-16,
+              "z": 2,
+              "ndcX": -0.9004019326967978,
+              "ndcY": 0.06716395345128721,
               "inFrustum": true
             },
             {
-              "x": 2.5,
+              "x": 3,
               "y": 0,
-              "z": 2.5,
-              "ndcX": 3.17523743007821e-16,
-              "ndcY": -0.7041110548334798,
+              "z": 2,
+              "ndcX": 0.1854888220828263,
+              "ndcY": -0.7141985367161638,
               "inFrustum": true
             },
             {
-              "x": -0.5,
+              "x": -1,
               "y": 1.2429999999999999,
-              "z": -0.5,
-              "ndcX": 5.563981028875664e-16,
-              "ndcY": 0.98497713840352,
+              "z": -1,
+              "ndcX": -0.14667455686278863,
+              "ndcY": 0.9362630298933087,
               "inFrustum": true
             },
             {
-              "x": 2.5,
+              "x": 3,
               "y": 1.2429999999999999,
-              "z": -0.5,
-              "ndcX": 0.934652489108336,
-              "ndcY": 0.4749055795595074,
+              "z": -1,
+              "ndcX": 0.9836524446312565,
+              "ndcY": 0.3607337531137295,
               "inFrustum": true
             },
             {
-              "x": -0.5,
+              "x": -1,
               "y": 1.2429999999999999,
-              "z": 2.5,
-              "ndcX": -0.9346524891083352,
-              "ndcY": 0.47490557955950746,
+              "z": 2,
+              "ndcX": -0.9515672769610135,
+              "ndcY": 0.4909282865866474,
               "inFrustum": true
             },
             {
-              "x": 2.5,
+              "x": 3,
               "y": 1.2429999999999999,
-              "z": 2.5,
-              "ndcX": 3.4243545225750996e-16,
-              "ndcY": -0.2052625687470047,
+              "z": 2,
+              "ndcX": 0.19808173005663926,
+              "ndcY": -0.26096270183337594,
               "inFrustum": true
             }
           ],
@@ -760,8 +759,8 @@
         },
         "fps": {
           "samples": 60,
-          "elapsedMs": 823.7999999998137,
-          "fps": 72.83321194466323
+          "elapsedMs": 477.89999997615814,
+          "fps": 125.54927809791448
         }
       },
       "verbResults": {
@@ -776,14 +775,14 @@
       "urls404": [],
       "benign404Count": 0,
       "summary": {
-        "topology": "The Labyrinth Fragment",
+        "topology": "The Figure-8",
         "realm": "gloom",
         "roomCount": 11,
         "planVerified": true,
         "piecesResolved": 3,
         "piecesRequested": 3,
         "dressingCount": 114,
-        "meshCount": 4,
+        "meshCount": 22,
         "consoleErrorCount": 0,
         "breakCount": 0
       }
@@ -819,10 +818,10 @@
         "targetSegNum": 5,
         "room": {
           "segNum": 5,
-          "x": 38,
-          "y": 4,
-          "w": 6,
-          "d": 6
+          "x": 48,
+          "y": 6,
+          "w": 5,
+          "d": 4
         },
         "foes": [
           {
@@ -848,14 +847,13 @@
         ],
         "combatGrid": {
           "bands": [
-            "melee",
-            "near"
+            "melee"
           ],
           "lanes": [
             "L",
             "C"
           ],
-          "bandCount": 2,
+          "bandCount": 1,
           "laneCount": 2
         },
         "pnCursor": 5
@@ -869,76 +867,76 @@
       "rendered": {
         "ok": true,
         "stage": "setInteriorBoard",
-        "dressingCountFromTray": 84,
-        "meshCount": 4,
+        "dressingCountFromTray": 79,
+        "meshCount": 19,
         "piecesRequested": 5,
         "piecesResolved": 5,
-        "dressingCount": 84,
+        "dressingCount": 79,
         "beatMaxHeight": 1.903,
         "beatFrustumCheck": {
           "corners": [
             {
-              "x": -2.5,
+              "x": -2,
               "y": 0,
-              "z": -2.5,
-              "ndcX": -9.691313214064358e-16,
-              "ndcY": 0.4687316181660428,
+              "z": -1.5,
+              "ndcX": -0.09016205037187977,
+              "ndcY": 0.4025946071232767,
               "inFrustum": true
             },
             {
-              "x": 2.5,
+              "x": 2,
               "y": 0,
-              "z": -2.5,
-              "ndcX": 0.8331582373659756,
-              "ndcY": 0,
+              "z": -1.5,
+              "ndcX": 0.7138437917791198,
+              "ndcY": -0.06505059607884711,
               "inFrustum": true
             },
             {
-              "x": -2.5,
+              "x": -2,
               "y": 0,
-              "z": 2.5,
-              "ndcX": -0.8331582373659774,
-              "ndcY": 0,
+              "z": 1.5,
+              "ndcX": -0.6911985943415965,
+              "ndcY": 0.06298700232262373,
               "inFrustum": true
             },
             {
-              "x": 2.5,
+              "x": 2,
               "y": 0,
-              "z": 2.5,
-              "ndcX": -6.645139986347473e-16,
-              "ndcY": -0.6135816510832054,
+              "z": 1.5,
+              "ndcX": 0.11309323989824986,
+              "ndcY": -0.5049877226320907,
               "inFrustum": true
             },
             {
-              "x": -2.5,
+              "x": -2,
               "y": 1.903,
-              "z": -2.5,
-              "ndcX": -1.014251679538007e-15,
-              "ndcY": 0.8676440301032409,
+              "z": -1.5,
+              "ndcX": -0.09536768530057727,
+              "ndcY": 0.8934711474529591,
               "inFrustum": true
             },
             {
-              "x": 2.5,
+              "x": 2,
               "y": 1.903,
-              "z": -2.5,
-              "ndcX": 0.8774151707861327,
-              "ndcY": 0.43023751130361276,
+              "z": -1.5,
+              "ndcX": 0.7608151346660635,
+              "ndcY": 0.4636163000339638,
               "inFrustum": true
             },
             {
-              "x": -2.5,
+              "x": -2,
               "y": 1.903,
-              "z": 2.5,
-              "ndcX": -0.8774151707861347,
-              "ndcY": 0.43023751130361276,
+              "z": 1.5,
+              "ndcX": -0.7351453379664935,
+              "ndcY": 0.5819574439094505,
               "inFrustum": true
             },
             {
-              "x": 2.5,
+              "x": 2,
               "y": 1.903,
-              "z": 2.5,
-              "ndcX": -7.056039794016376e-16,
-              "ndcY": -0.15069695914604175,
+              "z": 1.5,
+              "ndcX": 0.12140559389551002,
+              "ndcY": 0.05320383006087554,
               "inFrustum": true
             }
           ],
@@ -961,8 +959,8 @@
         },
         "fps": {
           "samples": 60,
-          "elapsedMs": 442.1000000005588,
-          "fps": 135.7159013796068
+          "elapsedMs": 369.90000000596046,
+          "fps": 162.20600161944628
         }
       },
       "verbResults": {
@@ -983,8 +981,8 @@
         "planVerified": true,
         "piecesResolved": 5,
         "piecesRequested": 5,
-        "dressingCount": 84,
-        "meshCount": 4,
+        "dressingCount": 79,
+        "meshCount": 19,
         "consoleErrorCount": 0,
         "breakCount": 0
       }
@@ -999,8 +997,8 @@
     "notes": [
       "startSession() called"
     ],
-    "worldId": "mrgp9b3wf7z3j",
-    "worldName": "The Walled Orchard"
+    "worldId": "mrjson5pr1g7c",
+    "worldName": "Wind-Break Village"
   },
   "theaterState": {
     "hasBattleStage": true,

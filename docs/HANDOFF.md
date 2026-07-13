@@ -46,18 +46,25 @@ unit personally re-gated (harnesses re-run by me, captures READ, never self-repo
   gate is met on the acceptance fixtures (not exhaustively fuzzed; capture framing was default room-fit,
   not the literal outside-low grazing angle — a follow-up to expose a capture camera-override seam).
 
-**⭐ DECISION STATUS (updated 2026-07-13 after Adam's review + SOL/Codex code review):**
+**⭐ DECISION STATUS (updated 2026-07-13 — BOTH RESOLVED):**
 1. **negative-`sy`: APPROVED + LANDED** (`a2080059`) — `theater-boot.js:8896` is now
    `Number.isFinite(f.sy)`; signed finite heights survive floor-contact mapping + tier compilation.
    G0 stays red-first vs the retired predicate; R2's `geo-regression-be825c9cc76b` green. The
    independent-riser static/dynamic work still rides this seam (parked for Codex's riser research).
-2. **Flip the geometry default `legacy` → `oss`: STILL HELD (Adam's call).** The two blockers found in
-   code review are now FIXED + landed: (a) G3's inner cap lip triangular hole (`c6a3bbb7`,
-   verify-wall-runs-oss 71→81→**92**, both lips); (b) the **acute-corner bevel contract** (`6a340793`)
-   — acute corners now keep the Clipper2 bevel (gap 0 on stem/capIn/capOut/footing, 100% provenance)
-   instead of discarding to the gapping legacy fallback; the fuzz acute check is red→green with a
-   `miterOnly` negative control. **Remaining before the flip: a controlled outside-low visual capture
-   sign-off + one stabilization hold (OSS §15).** Everything is still `oss-compare`; default untouched.
+2. **Flip the geometry default `legacy` → `oss`: DONE — LANDED 2026-07-13 (`feat/geometry-oss-flip`).**
+   Adam **delegated the flip verdict to Claude conditional on sound pre-flip evidence.** Claude ran the
+   pre-flip wave and found F1 (outside-low grazing capture) + F2 (5000-room gap+provenance fuzz) ALREADY
+   built + green (re-gated personally); the only real gap was OSS §15 steps 6–7, filled by new
+   `dev/capture-oss-integrated.mjs`. **Evidence sound on all three axes** → flipped production
+   `ROOM_SHELL_POLYGON_KERNEL_FLAG` (theater-boot.js) `legacy`→`oss`. Numeric: wall-runs-oss 92/0, fuzz
+   5000 rooms, fixtures 28/0 (7 defects fixed, 0 regressions), parity 48/0. Visual: outside-low grazing
+   oss closes the corner (continuous mitered cap lip); product-camera integrated oss ≡ legacy. Perf:
+   draw calls Δ0, triangles Δ−286 (oss cheaper), geometries/programs Δ0, textures +2 one-time. **Full
+   197-harness sweep: only 4 reds, ALL verified pre-existing on master** (verify-{room-shell-render,
+   diegetic-light,occlusion-fade,gallery-pass} — render-flake/CI-auto-skip, fail identically pre-flip).
+   **Now in the §15 step-9 stabilization hold:** legacy path RETAINED (module const
+   `ROOM_SHELL_POLYGON_KERNEL` stays `legacy` as bare-call/dev fallback; flag seam-settable back). Step
+   10 (remove legacy) waits until no rollback-worthy defect appears.
 
 **Re-gate lesson banked (2026-07-13):** a geometry gate accepted two false-greens I should have
 caught — a harness that measured only the OUTER cap lip (inner-lip hole survived) and "before/after"
@@ -71,13 +78,17 @@ runs (see G3 above). Also flagged the wrong "never a gap" comment at `theater-ro
 
 **Do next (pick up here):**
 1. **Read `docs/GRAPHICS-CONVERGENCE-CHARTER.md` (governing) + `docs/GRAPHICS-CONVERGENCE-PLAN.md`
-   (spine) + `docs/STAGE-G3-WALL-RUNS.md` (G3 design).** Make the two morning decisions above.
-2. G1/G2/G3 are all LANDED (oss-compare, default legacy). Before flipping the default `legacy → oss`:
-   optionally broaden G3's fuzz beyond the acceptance fixtures + shoot a proper outside-low grazing
-   capture to eyeball the corner-gap closure; then flip + hold one stabilization wave (OSS §15).
-3. Phase 3 (visual production, GP-2..4: path-traced oracle → materials/UV → distribution/atlas →
-   oracle-driven raster upgrades) rides on the stable geometry. R5 prop-foundry + Codex's
-   offline-art-foundry/EXTRUDED-SPRITE-PROP-LIBRARY feed it.
+   (spine).** Both morning decisions are RESOLVED (see DECISION STATUS above) — the geometry default
+   is now `oss` in production; we are in the §15 stabilization hold.
+2. **Stabilization hold (§15 step 9) — watch for rollback-worthy defects in live/loop play under oss.**
+   Adam: eyeball `dev/oss-integrated-shots/` (product-camera legacy vs oss ≡) + `dev/wall-runs-oss-shots/`
+   (outside-low grazing — oss closes the corner). If a real defect shows, `_setRoomShellPolygonKernel`
+   reverts the flag; the legacy path is fully retained. When the hold passes clean, do §15 step 10
+   (remove the legacy triangulation path) as its own unit.
+3. **Phase 3 (visual production, GP-2..4)** now rides on the stable, flipped geometry: path-traced
+   oracle + xatlas UV → Poisson distribution/atlases → oracle-driven raster corrections + semantic
+   materials + VFX. Gated on Codex research (offline-art-foundry/EXTRUDED-SPRITE-PROP-LIBRARY) + the
+   charter's tool-adoption + spend gates — scope with Adam before fanning the wave.
 4. Everything below this block is the pre-convergence history.
 
 ## ⭐ Latest (2026-07-12, later) — STAGE C: REAL ROOM SHAPES — rooms stop being rectangles [Claude Opus 4.8, orchestrated]

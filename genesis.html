@@ -1486,6 +1486,16 @@
      parallel units editing theater-boot.js. Placed here, BEFORE theater-boot.js's own tag
      (dependency order — theater-boot.js `import`s this module directly). -->
 <script type="module" src="src/ui/theater-room-mesh.js"></script>
+<!-- UNIT G1 (docs/GEOMETRY-OSS-INTEGRATION.md §17.4): the PolygonKernel adapter — pure ESM wrapper
+     around the R1-selected polygon-clipping+Earcut stack (vendor/polygon-clipping/, vendor/earcut/),
+     THREE-free, no production caller yet (G2 wires it into theater-room-mesh.js's floor pipeline). Given
+     its own <script type="module"> tag here so check-manifest.py's module-tag-pairing check is
+     satisfied ahead of that wiring, same convention every ES-module-island sibling on this page already
+     documents; browsers dedupe an ES module by URL, so once G2 adds the `import` this tag stays a
+     harmless no-op second entry point. Placed here, alongside theater-room-mesh.js (the file it will be
+     imported by), so this unit's pure geometry-kernel work never collides with parallel units editing
+     theater-boot.js. -->
+<script type="module" src="src/ui/geometry/polygon-kernel.js"></script>
 <!-- BATTLE-THEATER T3 (docs/BATTLE-THEATER.md §4): the verb/tween library — imported by theater-boot.js
      (below) via a plain ES `import`, and ALSO given its own <script type="module"> tag here so
      check-manifest.py's module-tag-pairing check (every manifest type:"module" entry needs a real tag)

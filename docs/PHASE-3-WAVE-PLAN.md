@@ -94,9 +94,24 @@ path)** as its own unit.
   first, 2-minute eyeball rule, then 4 disjoint parallel lanes over the priority queue. Admission
   machinery per FACETED-SPRITE-ART-MIGRATION (blind judge; `in-game-pass` required; legacy
   fallback retained). Fantasy only until the pilot passes + Adam expands.
-- **Faceted props pilot (Codex lane, PAUSED FOR REVIEW):** next step is the 6–8 asset in-game
-  Fantasy room sample per `HANDOFF-FACETED-FANTASY-PILOT.md` — the acceptance image, not more
-  icons. PACKET-F1 Lane 6 generates its missing sources.
+- **P3-K — THE KIT LANE (resumed 2026-07-13; Adam's ruling: runs SEPARATE from and is never
+  preempted by the figure lanes).** The component-kit work (props broken into functional parts)
+  stalled when figure sheets took over the pilot ledger — 11 kit/prop source sheets are already
+  banked WITH alpha passes on `codex/extruded-prop-pilot` (`fantasy-pilot/raw-sheets/`: 4-part
+  switch kit · arched + rectangular door kits · floor-trap kit · wall-trap flat-props ·
+  shrine/portal components · chest faced-box · container · practical light · banner/sign ·
+  portable items), all at "candidate for cleanup/cropping". Continuation, in order:
+  **K1** crop + component QA the 11 banked sheets per production plan §4.1/§9 Steps E–H (a kit
+  passes only on component FIT — the leaf must fit the frame aperture at authored scale); regen
+  only what K1 rejects (the arched-door mismatch is the known reject; PACKET-F1 Lane 6 is the
+  fill-in budget, not a fresh generation pass).
+  **K2** deterministic assembly per §4 construction routing (extrusion for true front elevations;
+  faced-box/lathe/procedural for chest/container/fixtures — never contour-extrude those).
+  **K3** the acceptance image: one deterministic in-engine Fantasy room capture, licensed by a
+  real Walk fixture, containing the 6–8 asset sample (door state-pair, lever state-pair, shield,
+  tablet, floor trap plate, banner, faced-box chest, physical practical) — Adam's yes/no:
+  "a beautiful physical diorama, or 2D icons pushed into 3D space?"
+  **K4** only after K3 passes: the 32-candidate flat-prop queue, then the realm-expansion gate.
 - **Kenney donor lane (Codex research → orchestrated integration):** corpus banked+pushed on
   `codex/kenney-mesh-audit` (1,752 GLBs CC0, census 1752/0, 149-candidate admission manifest).
   Path: Codex finishes contact sheets → Adam red-pens the 149 → **reskin pipeline** (procedural

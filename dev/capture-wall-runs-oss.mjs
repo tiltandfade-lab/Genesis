@@ -4,11 +4,10 @@
    CAPTURE script, matching §16's "the coordinator must actually inspect the PNGs" requirement. Boots
    the real in-session interior board (same conventions as dev/verify-room-shell-render.mjs), forces
    ROOM_SHELL_POLYGON_KERNEL="oss" via the live test seam (window.Theater._setRoomShellPolygonKernel),
-   mounts a rectangular room with a centered door under the "dark" (flattest/most neutral) light
-   profile, positions the live THREE camera OUTSIDE the room at a LOW angle looking back at one of its
-   corners (via window.Theater._graphicsResearchContextForTest()'s real scene/camera references — no
-   production camera-fit mode does this by itself, so this script drives it directly), forces a render,
-   and screenshots the canvas. Captures BOTH "legacy" and "oss" for the SAME fixture + camera so the
+   mounts one stripped rectangular room under the neutral daylit profile, positions the live THREE
+   camera OUTSIDE the room at a LOW grazing angle looking along a wall into one of its corners via the
+   existing _setInteriorCameraPoseForTest seam, forces a render, and screenshots the composited page.
+   Captures BOTH "legacy" and "oss" from the SAME serialized board + exact camera pose so the
    orchestrator can compare the corner directly; committed default captures (any existing capture in
    dev/*-shots/) stay legacy/untouched — this writes to its OWN new directory only.
 
@@ -139,42 +138,91 @@ async function waitForTheater(page) {
   return state;
 }
 
-async function mountAndFrame(page, kernelMode) {
-  return await page.evaluate((kernelMode) => {
+async function buildControlledFixture(page) {
+  return await page.evaluate(() => {
+    try {
+      const fixture = [{ id: "s1", num: 1, label: "s1", isFinale: false, depth: 0, exits: [], light: "normal" }];
+      const plan = spatializePlan(fixture, "G3 Wall Runs", { walkId: "g3-wall-runs:controlled-v2" });
+      const focusRoom = plan.rooms[0];
+      const board = interiorBuildBoard(plan, { realmId: "gloom", env: "dungeon", focusSegNum: focusRoom.segNum, radius: 1 });
+      // Strip every scene-dependent decoration channel. The comparison is wall construction, so the
+      // board must not inherit a random character, dressing card, light card, furniture, or portal.
+      board.instances.pillar = [];
+      board.instances.doorframe = [];
+      board.pieces = [];
+      board.cover = [];
+      board.furniture = [];
+      board.wallProps = [];
+      board.portals = [];
+      board.lights = [];
+      board.lightProfile = "daylit";
+      board.cameraFit = { mode: "room" };
+      board._verifyNonce = "g3-controlled-fixture";
+      return { ok: true, board, room: { x: focusRoom.x, z: focusRoom.y, w: focusRoom.w, d: focusRoom.d } };
+    } catch (e) { return { ok: false, error: e.message, stack: e.stack }; }
+  });
+}
+
+async function mountAndFrame(page, kernelMode, sourceBoard, pose) {
+  return await page.evaluate((kernelMode, sourceBoard, pose) => {
     try {
       window.Theater._setRoomShellPolygonKernel(kernelMode);
       window.Theater._setRoomShellEnabled(true);
-      const ids = ["s1"];
-      const fixture = [{ id: "s1", num: 1, label: "s1", isFinale: false, depth: 0, exits: [], light: "normal" }];
-      const plan = spatializePlan(fixture, "G3 Wall Runs", { walkId: "g3-wall-runs:" + kernelMode });
-      const focusRoom = plan.rooms[0];
-      const board = interiorBuildBoard(plan, { realmId: "gloom", env: "dungeon", focusSegNum: focusRoom.segNum, radius: 1 });
-      board.lightProfile = "daylit"; // neutral/bright-even profile — legible geometry over mood lighting for this capture
-      board.cameraFit = { mode: "room" };
-      board._verifyNonce = Math.random() + ":" + Date.now();
+      const board = (typeof structuredClone === "function") ? structuredClone(sourceBoard) : JSON.parse(JSON.stringify(sourceBoard));
+      board._verifyNonce = "g3-controlled-fixture:" + kernelMode;
       window.Theater.setInteriorBoard(board);
-      // NOTE: a direct camera.position.set() here (attempted, then reverted — see this unit's own
-      // session notes) does NOT stick: the interior board's own camera-fit is a continuously-applied
-      // follow, not a one-shot tween, and re-asserts its own fit position every frame regardless of a
-      // manual override from outside that loop. This capture therefore uses the PRODUCT'S OWN default
-      // room-fit framing (the same 3/4 overhead angle every other room-shell capture in this repo uses)
-      // rather than a literal "outside-low" angle this session did not find a real seam to drive.
-      const cx = focusRoom.x, cz = focusRoom.y, w = focusRoom.w, d = focusRoom.d;
       const shell = window.Theater._interiorRoomShellForTest();
       return {
         ok: true, kernel: window.Theater._roomShellPolygonKernel(),
-        room: { x: cx, z: cz, w, d },
         shellMeta: shell && shell.meta ? shell.meta : null, // plain-data subset only — the full shell
         // record can carry large typed arrays that don't round-trip cleanly through puppeteer's
         // structured-clone boundary; `.meta` is a small plain-data summary (segment/aperture counts).
+        poseSet: pose ? window.Theater._setInteriorCameraPoseForTest(pose.pos, pose.look) : null,
       };
     } catch (e) { return { ok: false, error: e.message, stack: e.stack }; }
-  }, kernelMode);
+  }, kernelMode, sourceBoard, pose);
 }
 
 async function shoot(page, outPath) {
-  const canvasEl = await page.$(".theater-stage-canvas canvas");
-  if (canvasEl) await canvasEl.screenshot({ path: outPath }); else await page.screenshot({ path: outPath });
+  // Canvas element screenshots can return a stale pre-pose WebGL buffer in headless Chrome. The
+  // page-level CDP path captures the actual composited frame after the double-rAF wait below. Clip
+  // that page screenshot to the canvas's live bounds so unrelated UI transitions cannot differ.
+  const canvas = await page.$(".theater-stage-canvas canvas");
+  const box = canvas && await canvas.boundingBox();
+  if (!box) throw new Error("theater canvas has no page bounding box");
+  await page.screenshot({ path: outPath, clip: {
+    x: Math.max(0, box.x), y: Math.max(0, box.y), width: box.width, height: box.height,
+  } });
+}
+
+async function waitForRepaint(page) {
+  await page.evaluate(() => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+}
+
+async function outsideLowCornerPose(page) {
+  return await page.evaluate(() => {
+    const shell = window.Theater._interiorRoomShellForTest && window.Theater._interiorRoomShellForTest();
+    const origin = window.Theater.interiorBoardOrigin && window.Theater.interiorBoardOrigin();
+    const segs = shell && shell.wallSegments;
+    if (!origin || !segs || segs.length < 2) return null;
+    let pick = null;
+    for (let i = 0; i < segs.length; i++) {
+      const a = segs[i], b = segs[(i + 1) % segs.length];
+      const joined = Math.hypot(a.b.x - b.a.x, a.b.z - b.a.z) < 1e-6;
+      const len = Math.hypot(a.b.x - a.a.x, a.b.z - a.a.z);
+      if (joined && len >= 2) { pick = a; break; }
+    }
+    if (!pick) return null;
+    const dx = pick.b.x - pick.a.x, dz = pick.b.z - pick.a.z;
+    const len = Math.hypot(dx, dz) || 1;
+    const t = { x: dx / len, z: dz / len };
+    const inward = { x: -dz / len, z: dx / len };
+    const corner = { x: pick.b.x - origin.cx, z: pick.b.z - origin.cz };
+    return {
+      pos: { x: corner.x - inward.x * 4.5 - t.x * 5.5, y: 0.16, z: corner.z - inward.z * 4.5 - t.z * 5.5 },
+      look: { x: corner.x - inward.x * 0.18, y: 0.34, z: corner.z - inward.z * 0.18 },
+    };
+  });
 }
 
 (async () => {
@@ -186,26 +234,40 @@ async function shoot(page, outPath) {
     const page = await browser.newPage();
     page.on("pageerror", (e) => console.log("  [pageerror]", e.message));
     await page.goto(BASE + "/genesis.html", { waitUntil: "networkidle0", timeout: 30000 });
+    await page.addStyleTag({ content: "#toast,.toast,#bardoCard,#spicePop,#diceOverlay{display:none !important;visibility:hidden !important}" });
     const bootRes = await bootToInSession(page);
     if (!bootRes.ok) { console.log("BOOT FAILED:", JSON.stringify(bootRes)); process.exitCode = 1; return; }
     const theaterState = await waitForTheater(page);
     if (!theaterState.hasSetInteriorBoard) { console.log("THEATER NOT READY:", JSON.stringify(theaterState)); process.exitCode = 1; return; }
 
+    const fixture = await buildControlledFixture(page);
+    if (!fixture.ok) { console.log("FIXTURE BUILD FAILED:", JSON.stringify(fixture)); process.exitCode = 1; return; }
+    await page.evaluate(() => { window.Theater.setInteriorVariant({ shotCompose: false }); });
+
+    let pose = null;
     for (const kernelMode of ["legacy", "oss"]) {
       let res;
       try {
-        res = await mountAndFrame(page, kernelMode);
+        res = await mountAndFrame(page, kernelMode, fixture.board, pose);
       } catch (e) {
         console.log(`MOUNT THREW (${kernelMode}):`, e && e.message, e && e.stack);
         process.exitCode = 1; continue;
       }
       if (!res || !res.ok) { console.log(`MOUNT FAILED (${kernelMode}):`, JSON.stringify(res)); process.exitCode = 1; continue; }
       try { await page.waitForFunction(() => !window.Theater || typeof window.Theater.tweensLive !== "function" || window.Theater.tweensLive() === 0, { timeout: 8000 }); } catch (e) { /* fall through with whatever frame is current */ }
-      await sleep(300);
+      if (!pose) pose = await outsideLowCornerPose(page);
+      if (!pose) { console.log("POSE DERIVATION FAILED"); process.exitCode = 1; continue; }
+      const poseState = await page.evaluate((p) => {
+        const set = window.Theater._setInteriorCameraPoseForTest(p.pos, p.look);
+        return { set, camera: window.Theater._interiorCameraPositionForTest() };
+      }, pose);
+      await waitForRepaint(page);
+      await sleep(150);
       const outPath = path.join(OUT_DIR, `wall-corner-${kernelMode}.png`);
       await shoot(page, outPath);
-      console.log(`  wrote ${outPath} (kernel=${res.kernel}, room=${JSON.stringify(res.room)})`);
+      console.log(`  wrote ${outPath} (kernel=${res.kernel}, room=${JSON.stringify(fixture.room)})`);
       console.log(`    shell meta: ${JSON.stringify(res.shellMeta)}`);
+      console.log(`    controlled pose: ${JSON.stringify(poseState)}`);
     }
     console.log("\nCaptures written to", OUT_DIR);
   } finally {

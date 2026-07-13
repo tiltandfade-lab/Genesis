@@ -916,10 +916,10 @@ function pushWallVerticalFace(buf, aBottom, bBottom, aTop, bTop, normal, u0, u1,
          capOverhang, footing (0 = no footing skirt — only the STEM band gets one), color, u0, u1 (this
          segment's own ring-perimeter arc-length span, reused verbatim as the vertical faces' own U),
          uvDensity (world-unit texture repeat, for the two horizontal faces: cap top + footing ledge),
-         capOutA, capOutB, footOutA, footOutB — OPTIONAL explicit outer-lip point overrides (UNIT G3,
+         capInA, capInB, capOutA, capOutB, footOutA, footOutB — OPTIONAL explicit lip point overrides (UNIT G3,
          docs/STAGE-G3-WALL-RUNS.md's "build the stem, upper, cap, footing, and trim from the SAME run
          contour"). When omitted (every legacy call site, byte-identical), derived internally exactly as
-         before (outerA/outerB offset by n*capOverhang / n*footing). When supplied (the oss wall-run
+         before (innerA/innerB and outerA/outerB offset by n*capOverhang / n*footing). When supplied (the oss wall-run
          path only), used VERBATIM instead — this is what lets a run-mitered corner's cap/footing outer
          lip ALSO land on one shared point instead of re-introducing the corner-gap defect one dimension
          out (a plain per-segment n*capOverhang offset would still gap at a corner even after outerA/
@@ -932,7 +932,7 @@ function pushWallVerticalFace(buf, aBottom, bBottom, aTop, bTop, normal, u0, u1,
    bevel) — at a real 90-degree room corner this leaves a measured ~0.31-world-unit GAP (not overlap —
    docs/STAGE-G3-WALL-RUNS.md's own ruling corrects this file's earlier, wrong, claim that it was an
    invisible overlap) between two adjacent segments' own independently-computed outer-corner geometry
-   UNLESS the caller supplies pre-mitered outerA/outerB/capOutA/capOutB/footOutA/footOutB (the oss wall-
+   UNLESS the caller supplies pre-mitered outerA/outerB/capInA/capInB/capOutA/capOutB/footOutA/footOutB (the oss wall-
    run path, compileRoomShellData's own kernelMode==="oss" branch, below). */
 function buildWallBox(buf, p) {
   const { innerA, innerB, outerA, outerB, n, tX, tZ, yBase, yTop, capHeight, capOverhang, footing, color, u0, u1, uvDensity } = p;
@@ -955,8 +955,8 @@ function buildWallBox(buf, p) {
   // by a horizontal top face (the |ny|~=1 silhouette-producing surface frame 01 calls "visible wall
   // thickness at the top") plus two vertical lip faces so the overhang itself has real depth, not a
   // zero-thickness flap.
-  const capInA = { x: innerA.x + n.x * capOverhang, z: innerA.z + n.z * capOverhang };
-  const capInB = { x: innerB.x + n.x * capOverhang, z: innerB.z + n.z * capOverhang };
+  const capInA = p.capInA || { x: innerA.x + n.x * capOverhang, z: innerA.z + n.z * capOverhang };
+  const capInB = p.capInB || { x: innerB.x + n.x * capOverhang, z: innerB.z + n.z * capOverhang };
   const capOutA = p.capOutA || { x: outerA.x - n.x * capOverhang, z: outerA.z - n.z * capOverhang };
   const capOutB = p.capOutB || { x: outerB.x - n.x * capOverhang, z: outerB.z - n.z * capOverhang };
   const capTopY = yTop + capHeight;
@@ -1466,6 +1466,11 @@ function computeOssWallOuterOffsets(segments, wallThickness, wallCapOverhang, wa
   const diagnostics = [];
   if (!n) return { outByIndex, diagnostics };
   const capRatio = wallThickness > 0 ? (wallThickness + wallCapOverhang) / wallThickness : 1;
+  // A cap projects on BOTH sides of the wall. The original G3 path joined only the outer lip; the
+  // inner lip still used buildWallBox's legacy per-segment normal offset, leaving a triangular hole
+  // in the cap top while the harness reported "cap continuity" from capOut alone. Reflect the joined
+  // outer-miter vector through the source corner to derive the matching joined inner lip.
+  const capInRatio = wallThickness > 0 ? -wallCapOverhang / wallThickness : 0;
   const footRatio = wallThickness > 0 ? (wallThickness + wallFooting) / wallThickness : 1;
   // trimProud matches the wall branch's own `wallCapOverhang * 0.5` formula exactly (kept in sync here
   // rather than threaded as a 5th parameter, since it's a fixed derivation of capOverhang, not an
@@ -1481,6 +1486,8 @@ function computeOssWallOuterOffsets(segments, wallThickness, wallCapOverhang, wa
       const vecB = { x: outerB.x - innerB.x, z: outerB.z - innerB.z };
       outByIndex[segIdx] = {
         outerA, outerB,
+        capInA: { x: innerA.x + vecA.x * capInRatio, z: innerA.z + vecA.z * capInRatio },
+        capInB: { x: innerB.x + vecB.x * capInRatio, z: innerB.z + vecB.z * capInRatio },
         capOutA: { x: innerA.x + vecA.x * capRatio, z: innerA.z + vecA.z * capRatio },
         capOutB: { x: innerB.x + vecB.x * capRatio, z: innerB.z + vecB.z * capRatio },
         footOutA: { x: innerA.x + vecA.x * footRatio, z: innerA.z + vecA.z * footRatio },
@@ -1960,6 +1967,7 @@ function compileRoomShellData(cells, opts) {
             innerA, innerB, outerA, outerB, n, tX: tangent.dx, tZ: tangent.dz,
             yBase: stemBaseY, yTop: stemTopY, capHeight: wallCapHeight, capOverhang: wallCapOverhang,
             footing: wallFooting, color: wallColor, u0, u1, uvDensity,
+            capInA: ossOuter && ossOuter.capInA, capInB: ossOuter && ossOuter.capInB,
             capOutA: ossOuter && ossOuter.capOutA, capOutB: ossOuter && ossOuter.capOutB,
             footOutA: ossOuter && ossOuter.footOutA, footOutB: ossOuter && ossOuter.footOutB,
           });
@@ -1983,6 +1991,7 @@ function compileRoomShellData(cells, opts) {
               innerA, innerB, outerA, outerB, n, tX: tangent.dx, tZ: tangent.dz,
               yBase: stemTopY, yTop: baseY + h, capHeight: wallCapHeight, capOverhang: wallCapOverhang,
               footing: 0, color: wallColor, u0, u1, uvDensity,
+              capInA: ossOuter && ossOuter.capInA, capInB: ossOuter && ossOuter.capInB,
               capOutA: ossOuter && ossOuter.capOutA, capOutB: ossOuter && ossOuter.capOutB,
             });
             const vertCount = wallUpperBuf.positions.length / 3 - vertStart;

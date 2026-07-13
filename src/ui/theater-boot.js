@@ -8113,6 +8113,14 @@ function itrOcclusionIdFor(kind, x, z, yBase){
 // the documented escape hatch during migration (ROOM-SHELL-COMPILER.md's own "keep the old path
 // behind a diagnostic flag" instruction, mirroring A1's ITR_ACTIVE_ROOM_ONLY reversibility).
 let ITR_ROOM_SHELL = true;
+// UNIT G2 (docs/GEOMETRY-OSS-INTEGRATION.md §15) — theater-boot.js's own copy of the
+// legacy|oss-compare|oss migration switch, threaded through to compileRoomShell(...) below as
+// opts.roomShellPolygonKernel. DEFAULT "legacy" — NEVER flip this default; theater-room-mesh.js's own
+// compileRoomShellData already defaults to "legacy" independently (ROOM_SHELL_POLYGON_KERNEL), so this
+// constant is theater-boot.js's own explicit pass-through, not a second source of truth for the
+// default value itself. Test-seam-settable via window.Theater._setRoomShellPolygonKernel, mirroring
+// _setRoomShellEnabled just above.
+let ROOM_SHELL_POLYGON_KERNEL_FLAG = "legacy";
 // world units per texture repeat for the compiled shell's own vertex UVs (theater-room-mesh.js's
 // DEFAULT_UV_DENSITY=1 mirrors this — kept as a SEPARATE named constant here, not an import, since the
 // pure module stays decoupled from this file's own material-building code; see the wire-in call site).
@@ -9076,6 +9084,9 @@ function setInteriorBoard(data){
     const shell = compileRoomShell(shellCells, {
       wallHeight: roomWallHeight, wallHeightForSegment, uvDensity: ITR_ROOM_SHELL_UV_DENSITY,
       floorColorAt, wallColorForSegment, smoothShape: data.activeRoomShape,
+      // UNIT G2: the migration switch pass-through — default "legacy", test-seam-settable via
+      // window.Theater._setRoomShellPolygonKernel (see that setter's own comment, below).
+      roomShellPolygonKernel: ROOM_SHELL_POLYGON_KERNEL_FLAG,
     });
     // C4.1b (docs/WALL-VOLUMES-PRACTICALS.md): the REQUIRED subject set for the wall-upper ray test —
     // player/primaryThreat/objective/focalLight, straight off THIS build's own ShotPlan anchors (the
@@ -9183,6 +9194,10 @@ function setInteriorBoard(data){
       meta: shell.meta, cellTriangleMap: shell.cellTriangleMap, apertures: shell.apertures,
       wallSegments: shell.wallSegments, riserSegments: shell.riserSegments, floorTiers: shell.floorTiers,
       wallStemMesh, wallUpperMeshes: wallUpperMeshList, wallTrimMesh, mountSlots: shell.mountSlots,
+      // UNIT G2 — null except in oss-compare/oss mode (see compileRoomShellData's own return-assembly
+      // comment); exposed here so dev/verify-room-shell-oss.mjs can read live parity diagnostics off
+      // window.Theater._interiorRoomShellForTest() the same way every other room-shell test seam does.
+      parityDiagnostics: shell.parityDiagnostics, ossDiagnostics: shell.ossDiagnostics,
     };
   }
   // BEAUTY-WAVE-2.md BW2-1b (THE OCCLUSION LAW), item 1, superseded by docs/DIEGETIC-LIGHT.md unit S-1
@@ -10365,6 +10380,15 @@ window.Theater._occlusionBearingForTest = function(){
 // own before[flag off]/after[flag on] A-B capture), same convention as the setter just above.
 window.Theater._setRoomShellEnabled = function(v){ ITR_ROOM_SHELL = !!v; };
 window.Theater._roomShellEnabled = function(){ return ITR_ROOM_SHELL; };
+// UNIT G2 — TEST/HARNESS SEAM: flips the ROOM_SHELL_POLYGON_KERNEL migration switch live
+// (dev/verify-room-shell-oss.mjs's own forced-"oss" capture; dev/battle-gate/capture-stage-c3-shapes.mjs
+// when run with the flag forced). Rejects anything but the three literal values, falling back to
+// "legacy" — mirrors compileRoomShellData's own resolution rule, so this test seam can never leave the
+// live app in an unrecognized kernel mode.
+window.Theater._setRoomShellPolygonKernel = function(v){
+  ROOM_SHELL_POLYGON_KERNEL_FLAG = (v === "oss" || v === "oss-compare") ? v : "legacy";
+};
+window.Theater._roomShellPolygonKernel = function(){ return ROOM_SHELL_POLYGON_KERNEL_FLAG; };
 // the compiled shell's own last-build diagnostics (geometry meta + logical cell<->triangle map) — null
 // whenever ITR_ROOM_SHELL is off or the active room has no compiled cells yet.
 window.Theater._interiorRoomShellForTest = function(){ return S.interiorLastRoomShell || null; };

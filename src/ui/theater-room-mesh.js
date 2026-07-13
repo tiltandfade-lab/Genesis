@@ -467,7 +467,19 @@ function lineIntersect2D(p1, d1, p2, d2) {
    room's own center than the old axis-aligned stub did over the same span) — it can only ADD floor
    area, never clip a cell, preserving every existing containment guarantee above. Falls back to the
    OLD stub endpoint when no `prevSeg`/`nextSeg` is supplied or the lines are parallel/degenerate (never
-   silently drops geometry). */
+   silently drops geometry).
+
+   C4.1c PART 1 (docs/STAGE-C4.1c-FLOOR-CONGRUENCE.md): `run` is no longer guaranteed all-'wall' —
+   diagonalizeStaircaseRing now also qualifies real multi-cell 'riser' staircase runs (a tier
+   boundary IS architecturally a wall). `chamferMetaFor(seg)` carries each run segment's own kind
+   forward onto the emitted diagonal chain — `tier` for a wall run, `loTier`/`hiTier` for a riser
+   run (so the caller's `tier === seg.loTier` riser-quad-ownership test, and the riser's own
+   loY/hiY height lookup, still resolve correctly post-chamfer) — never a mix within one run (the
+   caller only ever hands this function a same-family run; see diagonalizeStaircaseRing's own
+   run-qualification). */
+function chamferMetaFor(seg) {
+  return seg.kind === "riser" ? { kind: "riser", loTier: seg.loTier, hiTier: seg.hiTier } : { kind: "wall", tier: seg.tier };
+}
 function chamferRunCorners(run, prevSeg, nextSeg) {
   const n = run.length;
   const mids = run.map((s) => midpointOf(s.a, s.b));
@@ -482,16 +494,31 @@ function chamferRunCorners(run, prevSeg, nextSeg) {
   const diagEnd = endMiter || run[n - 1].b;
 
   const out = [];
-  out.push({ a: diagStart, b: mids[0], kind: "wall", tier: run[0].tier });
-  for (let i = 0; i < n - 1; i++) out.push({ a: mids[i], b: mids[i + 1], kind: "wall", tier: run[i].tier });
-  out.push({ a: mids[n - 1], b: diagEnd, kind: "wall", tier: run[n - 1].tier });
+  out.push(Object.assign({ a: diagStart, b: mids[0] }, chamferMetaFor(run[0])));
+  for (let i = 0; i < n - 1; i++) out.push(Object.assign({ a: mids[i], b: mids[i + 1] }, chamferMetaFor(run[i])));
+  out.push(Object.assign({ a: mids[n - 1], b: diagEnd }, chamferMetaFor(run[n - 1])));
   // trimmedPrevB/trimmedNextA: null when no miter was computed — the caller then leaves prevSeg/nextSeg
   // untouched (the pre-Phase-0 fallback shape, still geometrically valid, just the old dogleg).
   return { segments: out, trimmedPrevB: startMiter, trimmedNextA: endMiter };
 }
 
+// diagonalRunQualifies(seg) -> true when `seg` can ever be PART of a chamferable staircase run: unit
+// length, AND kind 'wall' OR 'riser' (C4.1c PART 1 — a tier boundary is architecturally a wall too;
+// 'door' segments never qualify, staying hard run-breaks per this file's own door-pin convention).
+function diagonalRunQualifies(seg) {
+  return (seg.kind === "wall" || seg.kind === "riser") && Math.abs(segLen2D(seg) - 1) < 1e-6;
+}
+// diagonalSameRunFamily(a, b) -> true when `a`/`b` may chamfer together in ONE run: same `kind`, and
+// for 'riser' ALSO the same {loTier,hiTier} pair (C4.1c PART 1's own "never merge risers spanning
+// different tier pairs" guard — a riser between tier 0/1 never merges into a run with a riser between
+// tier 1/2, even if both happen to be unit-length and alternate direction).
+function diagonalSameRunFamily(a, b) {
+  if (a.kind !== b.kind) return false;
+  return a.kind !== "riser" || (a.loTier === b.loTier && a.hiTier === b.hiTier);
+}
+
 // findDiagonalSafeStart(segments) -> the index of the first segment GUARANTEED not part of any
-// staircase run (not "wall", or not unit length) — PHASE 0's wraparound fix: rotating the scan to start
+// staircase run (fails diagonalRunQualifies) — PHASE 0's wraparound fix: rotating the scan to start
 // here means a run can never need to "wrap" past the array end back to index 0 for its own continuation
 // (index 0 itself can never be mid-run after this rotation), so diagonalizeStaircaseRing's single
 // forward pass sees every run as ONE contiguous slice even when the room's own raw boundary trace
@@ -499,25 +526,27 @@ function chamferRunCorners(run, prevSeg, nextSeg) {
 // real rasterized room produces (never infinite-loops or throws).
 function findDiagonalSafeStart(segments) {
   for (let i = 0; i < segments.length; i++) {
-    const s = segments[i];
-    if (s.kind !== "wall" || Math.abs(segLen2D(s) - 1) > 1e-6) return i;
+    if (!diagonalRunQualifies(segments[i])) return i;
   }
   return 0;
 }
 
 /* diagonalizeStaircaseRing(poly, segments) -> STAGE-C3b's diagonal-face sibling of radialSmoothRing:
    scans `segments` (already unmergedSegments' full per-cell-edge resolution) for maximal RUNS of >=3
-   consecutive unit 'wall' segments whose directions strictly alternate between two perpendicular unit
-   vectors (a real multi-cell staircase — e.g. an octagon's own chamfered corner, rasterizeShape's
-   `octagon` branch) and replaces each qualifying run with chamferRunCorners (above), MITERING it into
-   its own straight-wall neighbors (PHASE 0, chamferRunCorners' own header). A run shorter than 3
-   segments — a single ordinary 90-degree turn (an L/T/cross room's own genuine architectural corner, OR
-   a degenerate 1-cell octagon chamfer indistinguishable from one without extra shape metadata) — is
-   intentionally left UNTOUCHED, crisp: this is the scoping rule that keeps L/T/cross (and small octagon
-   corners) reading exactly as before (Adam's own "octagon and L read great" baseline), while a REAL
-   multi-cell staircase run gets the diagonal treatment. Door/riser segments are hard run-breaks (a run
-   never spans across an aperture or an elevation change) — mirrors radialSmoothRing's own door-pin
-   discipline (a door's own two boundary segments are never touched).
+   consecutive unit 'wall' OR 'riser' segments whose directions strictly alternate between two
+   perpendicular unit vectors (a real multi-cell staircase — e.g. an octagon's own chamfered corner,
+   rasterizeShape's `octagon` branch, OR C4.1c PART 1's own tier-boundary riser staircase — the SAME
+   annular tier's inner ring following that same octagon flow) and replaces each qualifying run with
+   chamferRunCorners (above), MITERING it into its own straight neighbors (PHASE 0, chamferRunCorners'
+   own header). A run shorter than 3 segments — a single ordinary 90-degree turn (an L/T/cross room's
+   own genuine architectural corner, OR a degenerate 1-cell octagon chamfer indistinguishable from one
+   without extra shape metadata) — is intentionally left UNTOUCHED, crisp: this is the scoping rule
+   that keeps L/T/cross (and small octagon corners) reading exactly as before (Adam's own "octagon and
+   L read great" baseline), while a REAL multi-cell staircase run gets the diagonal treatment. Door
+   segments are ALWAYS hard run-breaks (a run never spans across an aperture); a 'wall' run and a
+   'riser' run (or two risers of differing {loTier,hiTier}) never merge into each other's run either
+   (diagonalSameRunFamily, above) — mirrors radialSmoothRing's own door-pin discipline (a door's own
+   two boundary segments are never touched).
    PHASE 0: the ring's own array-wraparound seam is now handled (findDiagonalSafeStart, above) — a
    corner landing exactly at the raw trace's own start index chamfers as ONE clean run, not two
    truncated fragments (the prior "SCOPED LIMITATION", closed). */
@@ -537,13 +566,13 @@ function diagonalizeStaircaseRing(poly, segments) {
   let i = 0;
   while (i < n) {
     const cur = rotated[i];
-    if (cur.kind !== "wall" || Math.abs(segLen2D(cur) - 1) > 1e-6) { out.push(cur); i++; continue; }
+    if (!diagonalRunQualifies(cur)) { out.push(cur); i++; continue; }
     const dirA = directionOf(cur);
     let dirB = null;
     let j = i + 1;
     while (j < n) {
       const nxt = rotated[j];
-      if (nxt.kind !== "wall" || Math.abs(segLen2D(nxt) - 1) > 1e-6) break;
+      if (!diagonalRunQualifies(nxt) || !diagonalSameRunFamily(cur, nxt)) break;
       const d = directionOf(nxt);
       const wantA = ((j - i) % 2 === 0);
       if (wantA) {
@@ -659,6 +688,141 @@ function triangulatePolygon(poly) {
   }
   if (idxs.length === 3) tris.push([idxs[0], idxs[1], idxs[2]]);
   return tris;
+}
+
+// ── C4.1c PART 2 (docs/STAGE-C4.1c-FLOOR-CONGRUENCE.md) — HOLE-BRIDGING for an annular (complex,
+// multi-ring) tier's floor, e.g. a raised perimeter ring tier that carves a sunken arena hole out of
+// its own middle. Decisions: "keep triangulatePolygon the single ear-clip; bridge holes into the
+// outer loop rather than maintain a second triangulation path" — every function below only ever
+// PREPARES a single simple (possibly "weakly simple", i.e. touching itself at a thin bridge) polygon
+// for the SAME triangulatePolygon above; no new triangulator. ──────────────────────────────────────
+
+// polygonContainsPoint(poly, pt) -> standard even-odd ray-casting point-in-polygon test. Used ONLY to
+// decide which OUTER ring a given hole ring belongs to when a tier has more than one outer boundary
+// loop (e.g. this unit's own row-101 fixture pre-fix state, where a since-fixed upstream bug once
+// left two disjoint same-tier islands) — never used for the cellTriangleMap containment guarantee
+// itself (that stays pointInTriangle2D/pointToTriangleDist2 against the final real triangles, entirely
+// unchanged by this addition).
+function polygonContainsPoint(poly, pt) {
+  let inside = false;
+  for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+    const xi = poly[i].x, zi = poly[i].z, xj = poly[j].x, zj = poly[j].z;
+    const intersect = ((zi > pt.z) !== (zj > pt.z)) && (pt.x < ((xj - xi) * (pt.z - zi)) / (zj - zi) + xi);
+    if (intersect) inside = !inside;
+  }
+  return inside;
+}
+
+// segCross/segmentsProperlyIntersect/bridgeVisible — a plain segment-segment PROPER-crossing test
+// (shared-endpoint touches don't count) used only to pick a hole-bridge anchor pair that doesn't cut
+// across the outer boundary or the hole's own boundary (bridgeHoleIntoOuter's own visibility check).
+function segCross(o, a, b) { return (a.x - o.x) * (b.z - o.z) - (a.z - o.z) * (b.x - o.x); }
+function segmentsProperlyIntersect(p1, p2, p3, p4) {
+  const d1 = segCross(p3, p4, p1), d2 = segCross(p3, p4, p2);
+  const d3 = segCross(p1, p2, p3), d4 = segCross(p1, p2, p4);
+  return ((d1 > 0 && d2 < 0) || (d1 < 0 && d2 > 0)) && ((d3 > 0 && d4 < 0) || (d3 < 0 && d4 > 0));
+}
+function bridgeVisible(a, b, poly, skipIdx) {
+  const n = poly.length;
+  for (let i = 0; i < n; i++) {
+    const j = (i + 1) % n;
+    if (i === skipIdx || j === skipIdx) continue;
+    if (segmentsProperlyIntersect(a, b, poly[i], poly[j])) return false;
+  }
+  return true;
+}
+// HOLE_BRIDGE_EPS — the perpendicular separation between a bridge's own "entry" edge (outer vertex ->
+// hole vertex) and its "return" edge (hole vertex -> outer vertex), so the two bridge edges are a
+// real (if hair-thin) two-sided corridor rather than one exactly-duplicated zero-width slit. Purely a
+// numerical-robustness device for the ear-clip below (an EXACT duplicate point pair defeats
+// triangulatePolygon's own "does any other vertex sit inside this candidate ear" containment test,
+// which treats an on-edge/on-vertex point as contained — see this unit's own report for the measured
+// failure) — 1e-4 world units (~0.02 real inches, 1 world unit = 5 ft) is far below anything visible.
+const HOLE_BRIDGE_EPS = 1e-4;
+
+// bridgeHoleIntoOuter(outerPoly, holePolyRaw) -> splices `holePolyRaw` (a hole inside `outerPoly`, ANY
+// winding on input — normalized here) into `outerPoly`'s own boundary via a thin two-edge bridge (the
+// standard "polygon-with-a-hole -> one ear-clippable simple polygon" technique: connect the hole's own
+// rightmost vertex to a mutually-visible outer vertex), so the caller can hand the RESULT straight to
+// triangulatePolygon. Never mutates its inputs. Total-function: returns `outerPoly` unchanged on a
+// degenerate (<3-vertex) input rather than throwing.
+function bridgeHoleIntoOuter(outerPoly, holePolyRaw) {
+  const n = outerPoly.length;
+  let hole = holePolyRaw.slice();
+  if (n < 3 || hole.length < 3) return outerPoly;
+  // a hole ring must wind OPPOSITE the (CCW) outer for a correct polygon-with-hole fill — force it,
+  // regardless of whatever winding it arrived in (this file's own ring-processing loop always hands
+  // every ring through ensureCCW first, so both outer and hole insets arrive CCW/positive-area here).
+  if (signedArea2D(hole) > 0) hole = hole.slice().reverse();
+  const m = hole.length;
+
+  // bridge anchor: the hole's own rightmost vertex (max x, tie-break max z) — the classic "a hole's
+  // rightmost point always sees SOME point of the enclosing boundary to its own east" construction,
+  // guaranteeing a real (non-crossing) bridge exists for any simple polygon-with-hole.
+  let hIdx = 0;
+  for (let i = 1; i < m; i++) {
+    if (hole[i].x > hole[hIdx].x || (hole[i].x === hole[hIdx].x && hole[i].z > hole[hIdx].z)) hIdx = i;
+  }
+  const H = hole[hIdx];
+  const order = outerPoly.map((_, i) => i).sort((a, b) => {
+    const da = (outerPoly[a].x - H.x) * (outerPoly[a].x - H.x) + (outerPoly[a].z - H.z) * (outerPoly[a].z - H.z);
+    const db = (outerPoly[b].x - H.x) * (outerPoly[b].x - H.x) + (outerPoly[b].z - H.z) * (outerPoly[b].z - H.z);
+    return da - db;
+  });
+  let oIdx = order.length ? order[0] : 0;
+  for (let k = 0; k < order.length; k++) {
+    const cand = order[k];
+    const O = outerPoly[cand];
+    if (!bridgeVisible(H, O, outerPoly, cand)) continue;
+    if (!bridgeVisible(H, O, hole, hIdx)) continue;
+    oIdx = cand;
+    break;
+  }
+  const O = outerPoly[oIdx];
+
+  // HOLE_BRIDGE_EPS-separated "return" copies of O/H (see that constant's own header) — the entry
+  // edge (O -> H, exact) and the return edge (H2 -> O2, offset) form a real thin corridor instead of
+  // one exactly-duplicated slit.
+  const dx = O.x - H.x, dz = O.z - H.z, len = Math.hypot(dx, dz) || 1;
+  const px = -dz / len, pz = dx / len; // unit perpendicular to the bridge direction
+  const O2 = { x: O.x - px * HOLE_BRIDGE_EPS, z: O.z - pz * HOLE_BRIDGE_EPS };
+  const H2 = { x: H.x - px * HOLE_BRIDGE_EPS, z: H.z - pz * HOLE_BRIDGE_EPS };
+
+  const rotatedHole = hole.slice(hIdx).concat(hole.slice(0, hIdx)); // starts at H exactly
+  const result = [];
+  for (let i = 0; i <= oIdx; i++) result.push(outerPoly[i]);
+  rotatedHole.forEach((v) => result.push(v)); // H -> ... -> (hole vertex just before H again)
+  result.push(H2);
+  result.push(O2);
+  for (let i = oIdx + 1; i < n; i++) result.push(outerPoly[i]);
+  return result;
+}
+
+// bridgePolygonWithHoles(outerInsets, holeInsets) -> Array<poly> — sequentially bridges every hole
+// (from `holeInsets`) into whichever outer polygon (from `outerInsets`) actually contains it, then
+// returns the resulting list of (possibly hole-bridged) simple polygons, one per outer. A tier with
+// zero outers (should never happen for a tier with real area — see this unit's own report) falls back
+// to treating every ring as its own independent outer rather than dropping geometry.
+function bridgePolygonWithHoles(outerInsets, holeInsets) {
+  if (!outerInsets.length) return holeInsets.slice();
+  const bridged = outerInsets.map((p) => p.slice());
+  holeInsets.forEach((hole) => {
+    if (hole.length < 3) return;
+    let targetIdx = 0;
+    for (let i = 0; i < bridged.length; i++) {
+      if (polygonContainsPoint(bridged[i], hole[0])) { targetIdx = i; break; }
+    }
+    bridged[targetIdx] = bridgeHoleIntoOuter(bridged[targetIdx], hole);
+  });
+  return bridged;
+}
+
+// triangleHasPositiveArea(poly, tri) -> true when the [i,j,k] triangle index-triple (into `poly`) has
+// a strictly positive signed area — the correct CCW winding this file's floor triangles always carry.
+// Used only as validateHollowFloorTriangulation's own per-triangle safety check, below.
+function triangleHasPositiveArea(poly, tri) {
+  const a = poly[tri[0]], b = poly[tri[1]], c = poly[tri[2]];
+  return ((b.x - a.x) * (c.z - a.z) - (b.z - a.z) * (c.x - a.x)) > 1e-9;
 }
 
 // ringPerimeterU(segments) -> [{u0,u1}, ...] parallel to `segments`: a running world-distance ("arc
@@ -1096,7 +1260,25 @@ function compileRoomShellData(cells, opts) {
     const rings = chainEdgesIntoRings(rawEdges);
     const triStart = floorBuf.indices.length / 3;
     const complexTier = rings.length > 1;
-    if (complexTier) buildFloorCells(floorBuf, tierCells, elevationY, uvDensity, floorColorAt);
+    // C4.1c PART 2 — a complex (multi-ring) tier tagged with a real smoothMode (diagonal/radial)
+    // triangulates its floor from the SAME mitered/rounded ring contours the walls use (hole-bridged
+    // polygon-with-holes, below) instead of the old buildFloorCells per-cell stairstep fallback.
+    // Decisions: "retire buildFloorCells for smoothMode diagonal/radial only... rect default keeps
+    // it" — an untagged/'rect'/'cave' complex tier (smoothMode === null, e.g. today's BW2-5 finale
+    // dais ring) stays on buildFloorCells, byte-identical to before this unit.
+    const hollowFloorMode = complexTier && smoothMode !== null;
+    if (complexTier && !hollowFloorMode) buildFloorCells(floorBuf, tierCells, elevationY, uvDensity, floorColorAt);
+    // floorDetailOn: the bevel ribbon + door-threshold flush quad (both per-segment perimeter strips
+    // that attach to whatever floor body this tier ends up with) run whenever the floor actually gets
+    // a real mitered/rounded body — every simple tier (always did) PLUS a complex tier now that
+    // hollowFloorMode gives it one too. Stays OFF for the untagged complex-tier/buildFloorCells path
+    // (byte-identical to before this unit).
+    const floorDetailOn = !complexTier || hollowFloorMode;
+    // ringFloorParts: collected only in hollowFloorMode — each ring's own final (mitered/rounded,
+    // bevel-inset) polygon + its NATURAL pre-ensureCCW winding sign (outer vs hole classification,
+    // below) — the floor body itself is built ONCE for the whole tier, after every ring's own
+    // wall/riser/bevel/door geometry has already been emitted by the loop below.
+    const ringFloorParts = [];
 
     rings.forEach((ring) => {
       // STAGE-C3b: "radial" mode (circle/ellipse) needs FULL per-cell-edge boundary resolution
@@ -1112,6 +1294,13 @@ function compileRoomShellData(cells, opts) {
       // becomes a pure no-op rather than needlessly fragmenting every straight wall into unit quads.
       let segments = (smoothMode === "radial") ? unmergedSegments(ring) : simplifySegments(ring);
       let poly = ringToPolygon(segments);
+      // C4.1c PART 2: capture this ring's own NATURAL winding (its raw signed area BEFORE ensureCCW
+      // forces it positive) — the deterministic signal, fixed by traceTierContour/edgeVertsFor's own
+      // directed-edge construction (not an artifact of which raw edge the tracer happened to start
+      // from — rotation never reverses a chain), that tells a tier's TRUE outer boundary (natural
+      // CCW/positive raw area) apart from an inner hole boundary (natural CW/negative raw area, e.g.
+      // the riser ring facing a sunken arena carved out of a raised tier's own middle).
+      const ringRawArea = signedArea2D(poly);
       const fixed = ensureCCW(poly, segments);
       poly = fixed.poly; segments = fixed.segments;
       if (smoothMode === "radial") {
@@ -1143,26 +1332,33 @@ function compileRoomShellData(cells, opts) {
       // can ride the SAME continuous surface/texture. Any other shape (L-room, no colorAt supplied —
       // every existing pure-core test) falls straight back to the original single-polygon ear-clip,
       // byte-identical to before this unit.
-      const rectBBox = floorColorAt ? isAxisAlignedRectPolygon(inset) : null;
-      if (!complexTier && rectBBox) {
-        buildFloorGrid(floorBuf, rectBBox,
-          Math.round(rectBBox.minX), Math.round(rectBBox.maxX), Math.round(rectBBox.minZ), Math.round(rectBBox.maxZ),
-          elevationY, uvDensity, floorColorAt);
-      } else if (!complexTier) {
-        const baseIdx = floorBuf.positions.length / 3;
-        inset.forEach((v) => {
-          pushVert(floorBuf, v.x, elevationY, v.z, 0, 1, 0, v.x * uvDensity, v.z * uvDensity);
-        });
-        // WINDING: triangulatePolygon emits (iPrev,iCur,iNext) for a polygon that's CCW in the (x,z)
-        // shoelace sense (ensureCCW's own convention) — verified (right-hand-rule cross product) that
-        // THIS winding's geometric normal points -Y, the OPPOSITE of the floor's own explicit +Y-up
-        // normal attribute. Emitting (iPrev,iNext,iCur) instead (j/k swapped) flips it to match — a real,
-        // screenshot-caught bug (MeshLambertMaterial defaulted FrontSide-only, so the floor rendered
-        // fully culled/invisible before DoubleSide masked it into merely wrong-shaded; this fixes the
-        // actual root cause rather than leaning on DoubleSide alone). 2D containment (pointInTriangle2D)
-        // and area (shoelace) are winding-agnostic, so this never touches cellTriangleMap correctness.
-        const tris = triangulatePolygon(inset);
-        tris.forEach(([i, j, k]) => pushTri(floorBuf, baseIdx + i, baseIdx + k, baseIdx + j));
+      if (hollowFloorMode) {
+        // C4.1c PART 2: don't triangulate THIS ring's own inset alone (an inner hole ring has no
+        // floor of its own — it's a hole cut OUT of the tier) — collect it, the whole tier's floor
+        // gets built ONCE after every ring here has contributed its own inset + winding sign (below).
+        ringFloorParts.push({ inset, rawArea: ringRawArea });
+      } else {
+        const rectBBox = floorColorAt ? isAxisAlignedRectPolygon(inset) : null;
+        if (!complexTier && rectBBox) {
+          buildFloorGrid(floorBuf, rectBBox,
+            Math.round(rectBBox.minX), Math.round(rectBBox.maxX), Math.round(rectBBox.minZ), Math.round(rectBBox.maxZ),
+            elevationY, uvDensity, floorColorAt);
+        } else if (!complexTier) {
+          const baseIdx = floorBuf.positions.length / 3;
+          inset.forEach((v) => {
+            pushVert(floorBuf, v.x, elevationY, v.z, 0, 1, 0, v.x * uvDensity, v.z * uvDensity);
+          });
+          // WINDING: triangulatePolygon emits (iPrev,iCur,iNext) for a polygon that's CCW in the (x,z)
+          // shoelace sense (ensureCCW's own convention) — verified (right-hand-rule cross product) that
+          // THIS winding's geometric normal points -Y, the OPPOSITE of the floor's own explicit +Y-up
+          // normal attribute. Emitting (iPrev,iNext,iCur) instead (j/k swapped) flips it to match — a real,
+          // screenshot-caught bug (MeshLambertMaterial defaulted FrontSide-only, so the floor rendered
+          // fully culled/invisible before DoubleSide masked it into merely wrong-shaded; this fixes the
+          // actual root cause rather than leaning on DoubleSide alone). 2D containment (pointInTriangle2D)
+          // and area (shoelace) are winding-agnostic, so this never touches cellTriangleMap correctness.
+          const tris = triangulatePolygon(inset);
+          tris.forEach(([i, j, k]) => pushTri(floorBuf, baseIdx + i, baseIdx + k, baseIdx + j));
+        }
       }
 
       // U for wall/riser/bevel vertical surfaces: one continuous arc-length walk around THIS ring
@@ -1193,7 +1389,7 @@ function compileRoomShellData(cells, opts) {
           // BRIGHTNESS-REGRESSION FIX: tint the threshold flush with the SAME nearby floor color the
           // bevel ribbon below uses, so a doorway's own flush quad doesn't read as a bright untinted
           // notch inside an otherwise-darkened perimeter.
-          if (!complexTier) {
+          if (floorDetailOn) {
             pushQuad(floorBuf, trueA, flushInnerA, flushInnerB, trueB, { x: 0, y: 1, z: 0 },
               { u: trueA.x * uvDensity, v: trueA.z * uvDensity }, { u: flushInnerA.x * uvDensity, v: flushInnerA.z * uvDensity },
               { u: flushInnerB.x * uvDensity, v: flushInnerB.z * uvDensity }, { u: trueB.x * uvDensity, v: trueB.z * uvDensity },
@@ -1219,7 +1415,7 @@ function compileRoomShellData(cells, opts) {
         // grid's own outer row already carries — otherwise this thin strip (right where the OLD per-
         // cell darkening used to read DARKEST of all, wall-adjacent) would render as a bright untinted
         // seam ringing an otherwise-darkened floor.
-        if (!complexTier) {
+        if (floorDetailOn) {
           pushQuad(floorBuf, outerA, innerA, innerB, outerB, { x: 0, y: 1, z: 0 },
             { u: outerA.x * uvDensity, v: outerA.z * uvDensity }, { u: innerA.x * uvDensity, v: innerA.z * uvDensity },
             { u: innerB.x * uvDensity, v: innerB.z * uvDensity }, { u: outerB.x * uvDensity, v: outerB.z * uvDensity },
@@ -1236,7 +1432,11 @@ function compileRoomShellData(cells, opts) {
           // (a boolean predicate) instead of squashing this number.
           const segMeta = { a: seg.a, b: seg.b, mid: { x: (seg.a.x + seg.b.x) / 2, z: (seg.a.z + seg.b.z) / 2 }, kind: "wall", tier };
           const h = wallHeightForSegment(segMeta);
-          const baseY = elevationY - (complexTier ? 0 : bevelDrop);
+          // C4.1c: the wall's own base sits BELOW elevationY by bevelDrop whenever a real bevel
+          // ribbon exists to meet it (floorDetailOn — every simple tier, PLUS a hollow-floor complex
+          // tier now that it gets a real bevel too), else flush with the flat buildFloorCells top
+          // (the untagged complex-tier path, unchanged).
+          const baseY = elevationY - (floorDetailOn ? bevelDrop : 0);
           const wallColor = wallColorForSegment ? hexToRgb01(wallColorForSegment(segMeta)) : null;
           const tangent = directionOf(seg);
           const innerA = { x: seg.a.x, z: seg.a.z };
@@ -1327,6 +1527,41 @@ function compileRoomShellData(cells, opts) {
         }
       });
     });
+
+    if (hollowFloorMode && ringFloorParts.length) {
+      // C4.1c PART 2: classify each ring's own inset by its natural pre-ensureCCW winding — an
+      // outer boundary (rawArea > 0) is a filled region; a hole (rawArea <= 0) is carved OUT of
+      // whichever outer ring's polygon actually contains it (bridgePolygonWithHoles, above) — then
+      // ear-clip each resulting (possibly hole-bridged) simple polygon via the SAME triangulatePolygon
+      // a simple tier's own floor body already uses.
+      const outers = ringFloorParts.filter((p) => p.rawArea > 0).map((p) => p.inset);
+      const holes = ringFloorParts.filter((p) => p.rawArea <= 0).map((p) => p.inset);
+      const bridgedPolys = bridgePolygonWithHoles(outers, holes);
+      // SAFETY NET (never sacrifice containment/correct winding for congruence): a bridged polygon
+      // is, in the rare pathological case (a perfectly axis/diagonal-symmetric hole whose bridge
+      // anchor lands exactly collinear with an unrelated vertex — measured in this unit's own report,
+      // never hit by any real octagon/rotunda fixture this file's own harnesses exercise), capable of
+      // tripping the ear-clip's unsafe last-resort fallback into a wrongly-wound triangle. Validate
+      // every triangle of every bridged polygon actually has the correct positive (CCW) winding
+      // before committing any of them; if even one doesn't, this tier falls back to the OLD, always-
+      // correct buildFloorCells stairstep rather than ship broken/backwards floor geometry — a
+      // congruence regression for that one tier, never a correctness one.
+      const trisPerPoly = bridgedPolys.map((op) => (op.length >= 3 ? triangulatePolygon(op) : []));
+      const allValid = bridgedPolys.every((op, i) => trisPerPoly[i].every((tri) => triangleHasPositiveArea(op, tri)));
+      if (allValid) {
+        bridgedPolys.forEach((op, i) => {
+          const tris = trisPerPoly[i];
+          if (!tris.length) return;
+          const baseIdx = floorBuf.positions.length / 3;
+          op.forEach((v) => pushVert(floorBuf, v.x, elevationY, v.z, 0, 1, 0, v.x * uvDensity, v.z * uvDensity));
+          // WINDING: same (iPrev,iCur,iNext) -> (iPrev,iNext,iCur) j/k swap as the simple-tier ear-clip
+          // above (triangulatePolygon's own CCW-input/-Y-normal quirk — see that branch's own header).
+          tris.forEach(([i2, j2, k2]) => pushTri(floorBuf, baseIdx + i2, baseIdx + k2, baseIdx + j2));
+        });
+      } else {
+        buildFloorCells(floorBuf, tierCells, elevationY, uvDensity, floorColorAt);
+      }
+    }
 
     const triCount = floorBuf.indices.length / 3 - triStart;
     floorTierMeta.push({ tier, elevationY, triStart, triCount });
@@ -1456,10 +1691,14 @@ export {
   cellKey, buildCellIndex, tierOf, edgeVertsFor, traceTierContour, chainEdgesIntoRings,
   directionOf, mergeKeyFor, findSegmentStart, simplifySegments, unmergedSegments, ringToPolygon, signedArea2D,
   ensureCCW, segmentNormal, insetOffset, insetPolygon, radialSmoothRing,
-  chamferRunCorners, diagonalizeStaircaseRing, findDiagonalSafeStart, lineIntersect2D,
+  chamferRunCorners, chamferMetaFor, diagonalizeStaircaseRing, diagonalRunQualifies, diagonalSameRunFamily,
+  findDiagonalSafeStart, lineIntersect2D,
   pointInTriangle2D, pointToSegmentDist2, pointToTriangleDist2,
   triangulatePolygon, ringPerimeterU,
-  hexToRgb01, polygonBBox, isAxisAlignedRectPolygon, buildAxisGrid, buildFloorGrid,
+  hexToRgb01, polygonBBox, isAxisAlignedRectPolygon, buildAxisGrid, buildFloorGrid, buildFloorCells,
+  // C4.1c PART 2 hole-bridging (dev/verify-floor-congruence.mjs's own direct import surface)
+  polygonContainsPoint, segmentsProperlyIntersect, bridgeVisible, bridgeHoleIntoOuter,
+  bridgePolygonWithHoles, triangleHasPositiveArea, HOLE_BRIDGE_EPS,
   // C4.1a wall-volume geometry (dev/verify-wall-volumes.mjs's own direct import surface)
   pushWallVerticalFace, buildWallBox, sliceBufferForSegment,
   compileRoomShellData,

@@ -1004,6 +1004,43 @@ function buildWallBox(buf, p) {
   }
 }
 
+/* buildBevelBridgeParams(cornerPoint, outA, outB) -> buildWallBox params for the small notch-filling box
+   a G3 ACUTE corner needs (docs/STAGE-G3-WALL-RUNS.md's "bevel for acute/unstable" branch). At an
+   ordinary MITER corner, segment j's own outerB and segment j+1's own outerA already coincide (one
+   shared point) — buildWallBox's own unconditional per-segment end caps land back-to-back on that single
+   point and close the corner with no extra geometry needed (the SAME redundant-but-harmless coincident-
+   face pattern every existing miter corner already relies on). At a BEVEL corner they are instead the
+   two DISTINCT endpoints of the short bevel edge Clipper2 injected (offsetOneRun's own ring-adjacency
+   detection, polygon-kernel.js) — leaving a real notch between segment j's own end cap (which reaches
+   only to outA.outerB) and segment j+1's own end cap (which reaches only to outB.outerA) UNLESS a third,
+   tiny box bridges exactly that gap. This is that box's own params.
+
+   `cornerPoint` — the shared, UNOFFSET inner vertex (segments[segA].b === segments[segB].a); both ends
+   of the bridge's own degenerate zero-length "inner" edge (a bevel is purely an OUTER-face phenomenon —
+   the inner boundary never moves, so the bridge's inner face is a zero-area filler, harmless). `outA`/
+   `outB` — the computeOssWallOuterOffsets `outByIndex` entries for the two neighbor segments (segA,
+   segB). The bridge's own cap/foot/trim lip points are NOT recomputed — they are outA's own B-side
+   points and outB's own A-side points VERBATIM, because outA.capOutB (etc.) was already derived as
+   `innerB(segA) + (outerB(segA)-innerB(segA)) * capRatio`, and innerB(segA) === cornerPoint === innerA
+   (segB) — i.e. outA.capOutB IS ALREADY the bridge's own capOutA, scaled from the identical corner point
+   along the identical vector. Reusing it verbatim (rather than a second independent offset) is what
+   keeps the cap/foot lips watertight through the notch on every band, matching the stem's own bevel edge
+   exactly instead of merely approximating it. */
+function buildBevelBridgeParams(cornerPoint, outA, outB) {
+  const innerPt = { x: cornerPoint.x, z: cornerPoint.z };
+  const dx = outB.outerA.x - outA.outerB.x, dz = outB.outerA.z - outA.outerB.z;
+  const len = Math.hypot(dx, dz) || 1;
+  const tX = dx / len, tZ = dz / len;
+  const n = { x: -tZ, z: tX }; // same 90-degree rotation segmentNormal/runLeftNormal already use
+  return {
+    innerA: innerPt, innerB: innerPt, outerA: outA.outerB, outerB: outB.outerA, n, tX, tZ,
+    capInA: outA.capInB, capInB: outB.capInA,
+    capOutA: outA.capOutB, capOutB: outB.capOutA,
+    footOutA: outA.footOutB, footOutB: outB.footOutA,
+    trimOutA: outA.trimOutB, trimOutB: outB.trimOutA,
+  };
+}
+
 // sliceBufferForSegment(buf, segRef) -> a standalone {positions,normals,uvs,colors,indices} bundle for
 // ONE wall segment's own vertex range out of a larger shared buffer (segRef: {vertStart,vertCount,
 // idxStart,idxCount}, stamped per-segment by compileRoomShellData's own wallUpper emission below).
@@ -1464,7 +1501,14 @@ function computeOssWallOuterOffsets(segments, wallThickness, wallCapOverhang, wa
   const n = segments.length;
   const outByIndex = new Array(n).fill(null);
   const diagnostics = [];
-  if (!n) return { outByIndex, diagnostics };
+  // UNIT G3 ACUTE-BEVEL — `bevels`: {segA,segB} pairs (GLOBAL `segments` indices) for every interior
+  // join PolygonKernel classified `bevel` rather than `miter` (a genuine Clipper2 miter-limit bevel edge,
+  // docs/STAGE-G3-WALL-RUNS.md's own "bevel for acute/unstable corners" branch) — segA's own outByIndex
+  // .outerB and segB's own outByIndex.outerA are the bevel edge's two DISTINCT endpoints; the caller
+  // (compileRoomShellData's oss wall-run path) bridges the resulting notch with one small extra wall box
+  // per band via buildBevelBridgeParams. Always empty outside oss mode / on every ordinary-corner run.
+  const bevels = [];
+  if (!n) return { outByIndex, diagnostics, bevels };
   const capRatio = wallThickness > 0 ? (wallThickness + wallCapOverhang) / wallThickness : 1;
   // A cap projects on BOTH sides of the wall. The original G3 path joined only the outer lip; the
   // inner lip still used buildWallBox's legacy per-segment normal offset, leaving a triangular hole
@@ -1477,10 +1521,10 @@ function computeOssWallOuterOffsets(segments, wallThickness, wallCapOverhang, wa
   // independent knob any caller has ever varied).
   const trimRatio = wallThickness > 0 ? (wallThickness + wallCapOverhang * 0.5) / wallThickness : 1;
 
-  function applyRun(runIndices, outerPoints, runDiag, runLabel) {
+  function applyRun(runIndices, edges, corners, runDiag, runLabel) {
     runIndices.forEach((segIdx, k) => {
       const seg = segments[segIdx];
-      const outerA = outerPoints[k], outerB = outerPoints[k + 1];
+      const { outerA, outerB } = edges[k];
       const innerA = seg.a, innerB = seg.b;
       const vecA = { x: outerA.x - innerA.x, z: outerA.z - innerA.z };
       const vecB = { x: outerB.x - innerB.x, z: outerB.z - innerB.z };
@@ -1496,11 +1540,16 @@ function computeOssWallOuterOffsets(segments, wallThickness, wallCapOverhang, wa
         trimOutB: { x: innerB.x + vecB.x * trimRatio, z: innerB.z + vecB.z * trimRatio },
       };
     });
+    (corners || []).forEach((c) => {
+      if (c.type !== "bevel") return;
+      bevels.push({ segA: runIndices[c.at], segB: runIndices[(c.at + 1) % runIndices.length] });
+    });
     diagnostics.push({
       level: runDiag.degraded ? "warn" : "info", typed: "wall-run-offset", run: runLabel,
       segmentCount: runIndices.length, matchedSegments: runDiag.matchedSegments,
       joinGapCount: runDiag.joinGapCount, maxJoinGap: runDiag.maxJoinGap,
       degraded: runDiag.degraded, reason: runDiag.reason,
+      bevelCount: runDiag.bevelCount || 0, maxBevelGap: runDiag.maxBevelGap || 0,
     });
   }
 
@@ -1508,10 +1557,9 @@ function computeOssWallOuterOffsets(segments, wallThickness, wallCapOverhang, wa
   if (!hasNonWall) {
     const points = segments.map((s) => ({ x: s.a.x, z: s.a.z }));
     const result = kernelApi.wallOffset({ points, closed: true }, { thickness: wallThickness });
-    const wrapped = result.outerPoints.length ? result.outerPoints.concat([result.outerPoints[0]]) : [];
-    if (wrapped.length === n + 1) applyRun(segments.map((_, i) => i), wrapped, result.diagnostics, "closed-ring");
-    else diagnostics.push({ level: "warn", typed: "wall-run-offset", run: "closed-ring", segmentCount: n, matchedSegments: 0, joinGapCount: 0, maxJoinGap: 0, degraded: true, reason: "closed-ring offsetRuns returned an unusable point count" });
-    return { outByIndex, diagnostics };
+    if (result.edges && result.edges.length === n) applyRun(segments.map((_, i) => i), result.edges, result.corners, result.diagnostics, "closed-ring");
+    else diagnostics.push({ level: "warn", typed: "wall-run-offset", run: "closed-ring", segmentCount: n, matchedSegments: 0, joinGapCount: 0, maxJoinGap: 0, degraded: true, reason: "closed-ring offsetRuns returned an unusable edge count" });
+    return { outByIndex, diagnostics, bevels };
   }
 
   const firstBreak = segments.findIndex((s) => s.kind !== "wall");
@@ -1524,10 +1572,10 @@ function computeOssWallOuterOffsets(segments, wallThickness, wallCapOverhang, wa
     const points = [{ x: first.a.x, z: first.a.z }];
     currentRun.forEach((idx) => points.push({ x: segments[idx].b.x, z: segments[idx].b.z }));
     const result = kernelApi.wallOffset({ points }, { thickness: wallThickness });
-    if (result.outerPoints.length === currentRun.length + 1) {
-      applyRun(currentRun.slice(), result.outerPoints, result.diagnostics, `open-run@${currentRun[0]}`);
+    if (result.edges && result.edges.length === currentRun.length) {
+      applyRun(currentRun.slice(), result.edges, result.corners, result.diagnostics, `open-run@${currentRun[0]}`);
     } else {
-      diagnostics.push({ level: "warn", typed: "wall-run-offset", run: `open-run@${currentRun[0]}`, segmentCount: currentRun.length, matchedSegments: 0, joinGapCount: 0, maxJoinGap: 0, degraded: true, reason: "open-run offsetRuns returned an unusable point count" });
+      diagnostics.push({ level: "warn", typed: "wall-run-offset", run: `open-run@${currentRun[0]}`, segmentCount: currentRun.length, matchedSegments: 0, joinGapCount: 0, maxJoinGap: 0, degraded: true, reason: "open-run offsetRuns returned an unusable edge count" });
     }
     currentRun = [];
   };
@@ -1536,7 +1584,7 @@ function computeOssWallOuterOffsets(segments, wallThickness, wallCapOverhang, wa
     else flushRun();
   });
   flushRun();
-  return { outByIndex, diagnostics };
+  return { outByIndex, diagnostics, bevels };
 }
 
 /* compileRoomShellData(cells, opts) — the top-level pure orchestrator; directive steps 1-9 end to end,
@@ -1814,9 +1862,11 @@ function compileRoomShellData(cells, opts) {
       // transform automatically instead of duplicating that logic. Inert (empty map, zero cost beyond an
       // array alloc) outside "oss" mode.
       let ossWallOuterByIndex = null;
+      let ossWallBevels = [];
       if (kernelMode === "oss") {
         const wallRunResult = computeOssWallOuterOffsets(segments, wallThickness, wallCapOverhang, wallFooting, PolygonKernel);
         ossWallOuterByIndex = wallRunResult.outByIndex;
+        ossWallBevels = wallRunResult.bevels || [];
         if (wallRunResult.diagnostics.length) ossDiagnosticsOut.push(...wallRunResult.diagnostics);
       }
 
@@ -2043,6 +2093,53 @@ function compileRoomShellData(cells, opts) {
           }
         }
       });
+
+      // UNIT G3 ACUTE-BEVEL (docs/STAGE-G3-WALL-RUNS.md's own "bevel for acute/unstable" branch) — a
+      // corner computeOssWallOuterOffsets classified 'bevel' left segA's own end cap and segB's own
+      // start cap reaching two DISTINCT outer points (the bevel edge's own two ends) instead of one
+      // shared miter vertex — bridge that notch with one small extra wall box per band, built from the
+      // SAME lip points those two segments already computed (buildBevelBridgeParams's own header). Runs
+      // AFTER the segment loop above (so every real segment's own wallUpperSegmentsOut vertStart/
+      // vertCount slice is already captured before any bridge geometry is appended to the shared
+      // buffers) — inert (empty list, zero cost) outside "oss" mode and on every fixture with no acute
+      // corner at all (every production-shaped room the fuzz corpus generates).
+      if (kernelMode === "oss" && ossWallBevels.length) {
+        ossWallBevels.forEach(({ segA, segB }) => {
+          const outA = ossWallOuterByIndex[segA], outB = ossWallOuterByIndex[segB];
+          const segRefA = segments[segA], segRefB = segments[segB];
+          if (!outA || !outB || !segRefA || !segRefB || segRefA.kind !== "wall" || segRefB.kind !== "wall") return;
+          const bridge = buildBevelBridgeParams(segRefA.b, outA, outB);
+          const segMetaA = { a: segRefA.a, b: segRefA.b, mid: { x: (segRefA.a.x + segRefA.b.x) / 2, z: (segRefA.a.z + segRefA.b.z) / 2 }, kind: "wall", tier };
+          const h = wallHeightForSegment(segMetaA);
+          const baseY = elevationY - (floorDetailOn ? bevelDrop : 0);
+          const wallColor = wallColorForSegment ? hexToRgb01(wallColorForSegment(segMetaA)) : null;
+          const bu0 = arcU[segA] ? arcU[segA].u1 : 0, bu1 = arcU[segB] ? arcU[segB].u0 : bu0;
+          const stemBaseY = baseY, stemTopY = baseY + wallStemHeight;
+          buildWallBox(wallStemBuf, Object.assign({}, bridge, {
+            yBase: stemBaseY, yTop: stemTopY, capHeight: wallCapHeight, capOverhang: wallCapOverhang,
+            footing: wallFooting, color: wallColor, u0: bu0, u1: bu1, uvDensity,
+          }));
+          const upperVisible = upperVisibleForSegment(segMetaA);
+          const upperHeight = Math.max(0, h - wallStemHeight);
+          if (upperVisible && upperHeight > 1e-9) {
+            buildWallBox(wallUpperBuf, Object.assign({}, bridge, {
+              yBase: stemTopY, yTop: baseY + h, capHeight: wallCapHeight, capOverhang: wallCapOverhang,
+              footing: 0, color: wallColor, u0: bu0, u1: bu1, uvDensity,
+            }));
+          }
+          if (wallTrimOn) {
+            const trimHeight = Math.min(0.05, wallStemHeight * 0.25);
+            pushWallVerticalFace(wallTrimBuf, // baseCourse
+              { x: bridge.trimOutA.x, y: stemBaseY, z: bridge.trimOutA.z }, { x: bridge.trimOutB.x, y: stemBaseY, z: bridge.trimOutB.z },
+              { x: bridge.trimOutA.x, y: stemBaseY + trimHeight, z: bridge.trimOutA.z }, { x: bridge.trimOutB.x, y: stemBaseY + trimHeight, z: bridge.trimOutB.z },
+              { x: -bridge.n.x, y: 0, z: -bridge.n.z }, bu0, bu1, 0, trimHeight, wallColor);
+            pushWallVerticalFace(wallTrimBuf, // cornice
+              { x: bridge.trimOutA.x, y: stemTopY - trimHeight / 2, z: bridge.trimOutA.z }, { x: bridge.trimOutB.x, y: stemTopY - trimHeight / 2, z: bridge.trimOutB.z },
+              { x: bridge.trimOutA.x, y: stemTopY + trimHeight / 2, z: bridge.trimOutA.z }, { x: bridge.trimOutB.x, y: stemTopY + trimHeight / 2, z: bridge.trimOutB.z },
+              { x: -bridge.n.x, y: 0, z: -bridge.n.z }, bu0, bu1, 0, trimHeight, wallColor);
+          }
+        });
+      }
     });
 
     if (kernelMode !== "oss" && hollowFloorMode && ringFloorParts.length) {
@@ -2298,7 +2395,7 @@ export {
   DEFAULT_RENDER_TRANSFORM_AREA_TOLERANCE, groupInsetsForKernelTriangulation, buildParityDiagnostics,
   floorAreaOfBundle, floorBoundsOfBundle, triangleValidityOfBundle,
   // UNIT G3 — aperture-delimited-run wall offsetting (dev/verify-wall-runs-oss.mjs's own direct import surface)
-  computeOssWallOuterOffsets,
+  computeOssWallOuterOffsets, buildBevelBridgeParams,
   // THREE assembler (theater-boot.js's own import surface)
   compileRoomShell,
 };

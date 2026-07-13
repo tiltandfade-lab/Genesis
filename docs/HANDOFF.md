@@ -6,6 +6,15 @@ updated: 2026-07-11
 
 # Genesis — Session Hand-off
 
+## Graphics authority — read before the next visual unit
+
+`docs/GRAPHICS-CONVERGENCE-CHARTER.md` is now the governing graphics doctrine. It locks the protected
+walk/table core, defines the graphics engine as a provenance-preserving visual compiler, names the
+eight capabilities required to reach the approved mockups, and supplies the C0-C8 convergence ladder.
+Graphics work must preserve canonical cards and no-human production while taking the time required to
+reach the visual target. Read it before this handoff's historical graphics queue, then read
+`docs/GRAPHICS-PRODUCTION-RESEARCH-WAVE.md` for evaluated tools and executable research gates.
+
 ## ⭐ Latest (2026-07-12, later) — STAGE C: REAL ROOM SHAPES — rooms stop being rectangles [Claude Opus 4.8, orchestrated]
 
 GRAPHICS-NORTH-STAR Stage C (`docs/STAGE-C.md`) — consume the walk's rolled `areaType/dims/side` (which

@@ -1,0 +1,21 @@
+{
+  "schema": "genesis.graphics-research-toolchain.v1",
+  "installRootDefault": "/private/tmp/genesis-graphics-research-tools",
+  "packages": {
+    "three": "0.166.0",
+    "three-gpu-pathtracer": "0.0.23",
+    "three-mesh-bvh": "0.7.4",
+    "xatlas-web": "0.1.0",
+    "xatlas-three": "0.2.1",
+    "stats-gl": "4.2.3",
+    "potpack": "2.1.0",
+    "poisson-disk-sampling": "2.3.1",
+    "three-wboit": "1.0.15",
+    "sharp": "0.35.3"
+  },
+  "policy": {
+    "runtimeDependencies": false,
+    "pinExactVersions": true,
+    "productionImportMapChanges": false
+  }
+}

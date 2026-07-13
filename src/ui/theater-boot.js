@@ -10984,6 +10984,67 @@ window.Theater._occlusionLawForTest = {
 window.Theater._interiorCameraPositionForTest = function(){
   return S.camera ? { x: S.camera.position.x, y: S.camera.position.y, z: S.camera.position.z, zoom: S.camera.zoom } : null;
 };
+// GRAPHICS PRODUCTION RESEARCH WAVE — DEV/HARNESS ONLY. Candidate profilers and offline reference
+// renderers need the exact live scene rather than a lossy reconstruction. This returns references,
+// not a serializable public API; no production caller may depend on it. The JSON-safe sibling is the
+// durable measurement surface for capture gates and deliberately reports unique resources separately
+// from draw submissions (an atlas can lower texture count without lowering mesh submissions).
+window.Theater._graphicsResearchContextForTest = function(){
+  return {
+    scene: S.scene, camera: S.camera, renderer: S.renderer, composer: S.composer,
+    interiorGroup: S.interiorGroup, postSuite: S.postSuite
+  };
+};
+window.Theater._graphicsResearchInventoryForTest = function(){
+  const materials = new Map(), textures = new Map(), objectKinds = {}, materialTypes = {};
+  let objects = 0, meshes = 0, instancedMeshes = 0, sprites = 0;
+  let transparentMaterials = 0, alphaTestMaterials = 0, additiveMaterials = 0;
+  const visitMaterial = function(m){
+    if(!m || materials.has(m.uuid)) return;
+    materials.set(m.uuid, m);
+    const type = m.type || "Material";
+    materialTypes[type] = (materialTypes[type] || 0) + 1;
+    if(m.transparent) transparentMaterials++;
+    if((m.alphaTest || 0) > 0) alphaTestMaterials++;
+    if(m.blending === THREE.AdditiveBlending) additiveMaterials++;
+    Object.keys(m).forEach(function(k){
+      const v = m[k];
+      if(v && v.isTexture && v.uuid) textures.set(v.uuid, v);
+    });
+  };
+  if(S.scene) S.scene.traverse(function(obj){
+    objects++;
+    const kind = obj.type || "Object3D";
+    objectKinds[kind] = (objectKinds[kind] || 0) + 1;
+    if(obj.isMesh) meshes++;
+    if(obj.isInstancedMesh) instancedMeshes++;
+    if(obj.isSprite || (obj.userData && obj.userData.sprite)) sprites++;
+    const list = Array.isArray(obj.material) ? obj.material : [obj.material];
+    list.forEach(visitMaterial);
+    if(obj.customDepthMaterial) visitMaterial(obj.customDepthMaterial);
+    if(obj.customDistanceMaterial) visitMaterial(obj.customDistanceMaterial);
+  });
+  const info = S.renderer && S.renderer.info;
+  return {
+    mounted: !!S.mounted, interior: !!S.isInteriorBoard,
+    scene: { objects, meshes, instancedMeshes, sprites, objectKinds },
+    resources: {
+      materials: materials.size, textures: textures.size, materialTypes,
+      transparentMaterials, alphaTestMaterials, additiveMaterials
+    },
+    renderer: info ? {
+      calls: info.render.calls, triangles: info.render.triangles, points: info.render.points,
+      lines: info.render.lines, geometries: info.memory.geometries, textures: info.memory.textures,
+      programs: info.programs ? info.programs.length : null, frame: info.render.frame
+    } : null,
+    post: S.postSuite ? {
+      mounted: !!S.postSuiteMounted,
+      dof: !!(S.postSuite.dofPass && S.postSuite.dofPass.enabled),
+      bloom: !!(S.postSuite.bloomPass && S.postSuite.bloomPass.enabled),
+      grade: !!(S.postSuite.gradePass && S.postSuite.gradePass.enabled)
+    } : null
+  };
+};
 // C4.1a — TEST-ONLY SEAM: the write-sibling of _interiorCameraPositionForTest above. No production
 // caller ever moves the camera off placeCamera's own 4-yaw/fixed-elevation grid (see this file's own
 // CAM_YAW_OFFSET_DEG/CAM_ELEV_DEG convention) — a capture-gate harness needs a real GRAZING low-angle

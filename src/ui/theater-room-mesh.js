@@ -915,15 +915,25 @@ function pushWallVerticalFace(buf, aBottom, bBottom, aTop, bTop, normal, u0, u1,
          tX, tZ — unit tangent (b-a direction), yBase, yTop — the band's own vertical extent, capHeight,
          capOverhang, footing (0 = no footing skirt — only the STEM band gets one), color, u0, u1 (this
          segment's own ring-perimeter arc-length span, reused verbatim as the vertical faces' own U),
-         uvDensity (world-unit texture repeat, for the two horizontal faces: cap top + footing ledge) }
+         uvDensity (world-unit texture repeat, for the two horizontal faces: cap top + footing ledge),
+         capOutA, capOutB, footOutA, footOutB — OPTIONAL explicit outer-lip point overrides (UNIT G3,
+         docs/STAGE-G3-WALL-RUNS.md's "build the stem, upper, cap, footing, and trim from the SAME run
+         contour"). When omitted (every legacy call site, byte-identical), derived internally exactly as
+         before (outerA/outerB offset by n*capOverhang / n*footing). When supplied (the oss wall-run
+         path only), used VERBATIM instead — this is what lets a run-mitered corner's cap/footing outer
+         lip ALSO land on one shared point instead of re-introducing the corner-gap defect one dimension
+         out (a plain per-segment n*capOverhang offset would still gap at a corner even after outerA/
+         outerB themselves were corrected to a true miter — capOutA/capOutB/footOutA/footOutB let the
+         caller hand this function an already-corner-correct lip point instead). }
 
-   SCOPING SIMPLIFICATION (documented, not a defect — C4.1a's own "a few long quads" mandate, no exact
-   corner miter chased): each segment's own end caps are built independently of its ring neighbors (no
-   shared-corner miter solve, unlike insetOffset's exact 2D miter for the FLOOR bevel) — at a real 90-
-   degree room corner this can leave a hair of overlap between two adjacent segments' own outer-corner
-   geometry, never a gap (gap would be the visually-worse failure mode; overlap is invisible at capture
-   distance and this module's own docs/WALL-VOLUMES-PRACTICALS.md scope note explicitly defers exact
-   miter joins). */
+   SCOPING SIMPLIFICATION (documented — C4.1a's own "a few long quads" mandate, no exact corner miter
+   chased BY THIS FUNCTION ITSELF): each segment's own end caps are built independently of its ring
+   neighbors (no shared-corner miter solve here, unlike insetOffset's exact 2D miter for the FLOOR
+   bevel) — at a real 90-degree room corner this leaves a measured ~0.31-world-unit GAP (not overlap —
+   docs/STAGE-G3-WALL-RUNS.md's own ruling corrects this file's earlier, wrong, claim that it was an
+   invisible overlap) between two adjacent segments' own independently-computed outer-corner geometry
+   UNLESS the caller supplies pre-mitered outerA/outerB/capOutA/capOutB/footOutA/footOutB (the oss wall-
+   run path, compileRoomShellData's own kernelMode==="oss" branch, below). */
 function buildWallBox(buf, p) {
   const { innerA, innerB, outerA, outerB, n, tX, tZ, yBase, yTop, capHeight, capOverhang, footing, color, u0, u1, uvDensity } = p;
   const h = yTop - yBase;
@@ -947,8 +957,8 @@ function buildWallBox(buf, p) {
   // zero-thickness flap.
   const capInA = { x: innerA.x + n.x * capOverhang, z: innerA.z + n.z * capOverhang };
   const capInB = { x: innerB.x + n.x * capOverhang, z: innerB.z + n.z * capOverhang };
-  const capOutA = { x: outerA.x - n.x * capOverhang, z: outerA.z - n.z * capOverhang };
-  const capOutB = { x: outerB.x - n.x * capOverhang, z: outerB.z - n.z * capOverhang };
+  const capOutA = p.capOutA || { x: outerA.x - n.x * capOverhang, z: outerA.z - n.z * capOverhang };
+  const capOutB = p.capOutB || { x: outerB.x - n.x * capOverhang, z: outerB.z - n.z * capOverhang };
   const capTopY = yTop + capHeight;
   pushQuad(buf,
     { x: capOutA.x, y: capTopY, z: capOutA.z }, { x: capOutB.x, y: capTopY, z: capOutB.z },
@@ -978,8 +988,8 @@ function buildWallBox(buf, p) {
   // footing skirt — a projecting ledge courses OUT past the outer face at the band's own base (only
   // ever passed a nonzero `footing` for the STEM band; the upper band never re-foots itself).
   if (footing > 0) {
-    const footOutA = { x: outerA.x - n.x * footing, z: outerA.z - n.z * footing };
-    const footOutB = { x: outerB.x - n.x * footing, z: outerB.z - n.z * footing };
+    const footOutA = p.footOutA || { x: outerA.x - n.x * footing, z: outerA.z - n.z * footing };
+    const footOutB = p.footOutB || { x: outerB.x - n.x * footing, z: outerB.z - n.z * footing };
     const footH = Math.min(capHeight, h);
     pushQuad(buf, // top ledge (horizontal)
       { x: footOutB.x, y: yBase, z: footOutB.z }, { x: footOutA.x, y: yBase, z: footOutA.z },
@@ -1402,6 +1412,99 @@ function buildParityDiagnostics(legacyData, ossData, cells) {
   };
 }
 
+// ── UNIT G3 (docs/GEOMETRY-OSS-INTEGRATION.md §8, §17.6, docs/STAGE-G3-WALL-RUNS.md) — the oss wall-run
+// outer-offset path. INERT in "legacy"/"oss-compare"'s own rendered branch — only called from the
+// kernelMode==="oss" branch of the per-ring wall loop, below. Splits a ring's own final `segments` array
+// (already simplified/diagonalized/radial-smoothed — whatever "final" means for THIS ring, exactly the
+// same array the legacy per-segment offset already consumes) into maximal contiguous 'wall'-kind runs,
+// offsets each run ONCE through PolygonKernel.wallOffset (a true run-wide Clipper2 miter, §8's "every
+// interior corner within that run receives a true joined miter"), and returns a per-segment-index map of
+// {outerA,outerB,capOutA,capOutB,footOutA,footOutB} for buildWallBox to consume VERBATIM (§8's "build the
+// stem, upper, cap, footing, and trim from the SAME run contour" — capOutA/footOutA etc. are derived by
+// scaling the ALREADY-mitered outerA vector from its own inner vertex by (thickness+capOverhang)/
+// thickness or (thickness+wallFooting)/thickness respectively; at an interior run corner this keeps the
+// cap/footing lip on the SAME bisector ray the stem's own miter already resolved, so they land on one
+// shared point too instead of re-introducing the corner-gap defect one dimension further out. At a run
+// ENDPOINT (jamb, no corner), the "miter vector" is just the plain perpendicular offset, so scaling it
+// this way reduces to the ordinary butt-jamb cap/footing extension — no special-case needed).
+// A door/riser/open edge is a hard break between runs (never bridged, §9's own aperture law); a ring
+// with NO non-wall segment at all (fully solid, no aperture anywhere) is offset as ONE CLOSED run
+// (PolygonKernel.wallOffset's own `closed:true` mode — the wraparound corner needs a real miter too,
+// and there is no aperture on this ring to make that ambiguous the way a whole-ring offset would be on
+// an aperture-bearing ring, docs/GEOMETRY-OSS-INTEGRATION.md §17.6's own note on Strategy A's door-
+// adjacency failure).
+function computeOssWallOuterOffsets(segments, wallThickness, wallCapOverhang, wallFooting, kernelApi) {
+  const n = segments.length;
+  const outByIndex = new Array(n).fill(null);
+  const diagnostics = [];
+  if (!n) return { outByIndex, diagnostics };
+  const capRatio = wallThickness > 0 ? (wallThickness + wallCapOverhang) / wallThickness : 1;
+  const footRatio = wallThickness > 0 ? (wallThickness + wallFooting) / wallThickness : 1;
+  // trimProud matches the wall branch's own `wallCapOverhang * 0.5` formula exactly (kept in sync here
+  // rather than threaded as a 5th parameter, since it's a fixed derivation of capOverhang, not an
+  // independent knob any caller has ever varied).
+  const trimRatio = wallThickness > 0 ? (wallThickness + wallCapOverhang * 0.5) / wallThickness : 1;
+
+  function applyRun(runIndices, outerPoints, runDiag, runLabel) {
+    runIndices.forEach((segIdx, k) => {
+      const seg = segments[segIdx];
+      const outerA = outerPoints[k], outerB = outerPoints[k + 1];
+      const innerA = seg.a, innerB = seg.b;
+      const vecA = { x: outerA.x - innerA.x, z: outerA.z - innerA.z };
+      const vecB = { x: outerB.x - innerB.x, z: outerB.z - innerB.z };
+      outByIndex[segIdx] = {
+        outerA, outerB,
+        capOutA: { x: innerA.x + vecA.x * capRatio, z: innerA.z + vecA.z * capRatio },
+        capOutB: { x: innerB.x + vecB.x * capRatio, z: innerB.z + vecB.z * capRatio },
+        footOutA: { x: innerA.x + vecA.x * footRatio, z: innerA.z + vecA.z * footRatio },
+        footOutB: { x: innerB.x + vecB.x * footRatio, z: innerB.z + vecB.z * footRatio },
+        trimOutA: { x: innerA.x + vecA.x * trimRatio, z: innerA.z + vecA.z * trimRatio },
+        trimOutB: { x: innerB.x + vecB.x * trimRatio, z: innerB.z + vecB.z * trimRatio },
+      };
+    });
+    diagnostics.push({
+      level: runDiag.degraded ? "warn" : "info", typed: "wall-run-offset", run: runLabel,
+      segmentCount: runIndices.length, matchedSegments: runDiag.matchedSegments,
+      joinGapCount: runDiag.joinGapCount, maxJoinGap: runDiag.maxJoinGap,
+      degraded: runDiag.degraded, reason: runDiag.reason,
+    });
+  }
+
+  const hasNonWall = segments.some((s) => s.kind !== "wall");
+  if (!hasNonWall) {
+    const points = segments.map((s) => ({ x: s.a.x, z: s.a.z }));
+    const result = kernelApi.wallOffset({ points, closed: true }, { thickness: wallThickness });
+    const wrapped = result.outerPoints.length ? result.outerPoints.concat([result.outerPoints[0]]) : [];
+    if (wrapped.length === n + 1) applyRun(segments.map((_, i) => i), wrapped, result.diagnostics, "closed-ring");
+    else diagnostics.push({ level: "warn", typed: "wall-run-offset", run: "closed-ring", segmentCount: n, matchedSegments: 0, joinGapCount: 0, maxJoinGap: 0, degraded: true, reason: "closed-ring offsetRuns returned an unusable point count" });
+    return { outByIndex, diagnostics };
+  }
+
+  const firstBreak = segments.findIndex((s) => s.kind !== "wall");
+  const order = [];
+  for (let k = 0; k < n; k++) order.push((firstBreak + 1 + k) % n);
+  let currentRun = [];
+  const flushRun = () => {
+    if (!currentRun.length) return;
+    const first = segments[currentRun[0]];
+    const points = [{ x: first.a.x, z: first.a.z }];
+    currentRun.forEach((idx) => points.push({ x: segments[idx].b.x, z: segments[idx].b.z }));
+    const result = kernelApi.wallOffset({ points }, { thickness: wallThickness });
+    if (result.outerPoints.length === currentRun.length + 1) {
+      applyRun(currentRun.slice(), result.outerPoints, result.diagnostics, `open-run@${currentRun[0]}`);
+    } else {
+      diagnostics.push({ level: "warn", typed: "wall-run-offset", run: `open-run@${currentRun[0]}`, segmentCount: currentRun.length, matchedSegments: 0, joinGapCount: 0, maxJoinGap: 0, degraded: true, reason: "open-run offsetRuns returned an unusable point count" });
+    }
+    currentRun = [];
+  };
+  order.forEach((idx) => {
+    if (segments[idx].kind === "wall") currentRun.push(idx);
+    else flushRun();
+  });
+  flushRun();
+  return { outByIndex, diagnostics };
+}
+
 /* compileRoomShellData(cells, opts) — the top-level pure orchestrator; directive steps 1-9 end to end,
    returns a plain-data bundle (no THREE):
    {
@@ -1670,6 +1773,18 @@ function compileRoomShellData(cells, opts) {
       }
       if (poly.length < 3) return;
 
+      // UNIT G3 (§17.6, docs/STAGE-G3-WALL-RUNS.md) — the oss wall-run outer offset. Computed against
+      // THIS ring's own FINAL `segments` (post simplify/diagonalize/radial-smooth, identical to what the
+      // legacy per-segment offset below already consumes) — so it inherits every existing shape
+      // transform automatically instead of duplicating that logic. Inert (empty map, zero cost beyond an
+      // array alloc) outside "oss" mode.
+      let ossWallOuterByIndex = null;
+      if (kernelMode === "oss") {
+        const wallRunResult = computeOssWallOuterOffsets(segments, wallThickness, wallCapOverhang, wallFooting, PolygonKernel);
+        ossWallOuterByIndex = wallRunResult.outByIndex;
+        if (wallRunResult.diagnostics.length) ossDiagnosticsOut.push(...wallRunResult.diagnostics);
+      }
+
       const widthForSegment = (seg) => (seg.kind === "door" ? 0 : bevelWidth);
       const inset = insetPolygon(poly, segments, widthForSegment);
 
@@ -1798,8 +1913,15 @@ function compileRoomShellData(cells, opts) {
           // `n`) — grows the wall's own thickness into the "solid rock" beyond the boundary rather than
           // eating into the licensed floor footprint; mount slots (below) stay on the INNER face, so
           // this choice never moves a fixture's own anchor point.
-          const outerA = { x: innerA.x - n.x * wallThickness, z: innerA.z - n.z * wallThickness };
-          const outerB = { x: innerB.x - n.x * wallThickness, z: innerB.z - n.z * wallThickness };
+          // UNIT G3: "oss" mode substitutes the run-mitered outer/cap/footing points computed above
+          // (ossWallOuterByIndex[i]) whenever this segment landed a clean run offset; a segment that
+          // degraded (see computeOssWallOuterOffsets' own diagnostics) falls through to the SAME plain
+          // per-segment formula legacy always used — never a hole, never thrown geometry. "legacy" mode
+          // never enters this branch (ossWallOuterByIndex is null), so it is BYTE IDENTICAL to before
+          // this unit.
+          const ossOuter = ossWallOuterByIndex ? ossWallOuterByIndex[i] : null;
+          const outerA = ossOuter ? ossOuter.outerA : { x: innerA.x - n.x * wallThickness, z: innerA.z - n.z * wallThickness };
+          const outerB = ossOuter ? ossOuter.outerB : { x: innerB.x - n.x * wallThickness, z: innerB.z - n.z * wallThickness };
 
           const ownerSegIndex = wallSegmentsOut.length;
           wallSegmentsOut.push({ a: seg.a, b: seg.b, tier, height: h });
@@ -1810,6 +1932,8 @@ function compileRoomShellData(cells, opts) {
             innerA, innerB, outerA, outerB, n, tX: tangent.dx, tZ: tangent.dz,
             yBase: stemBaseY, yTop: stemTopY, capHeight: wallCapHeight, capOverhang: wallCapOverhang,
             footing: wallFooting, color: wallColor, u0, u1, uvDensity,
+            capOutA: ossOuter && ossOuter.capOutA, capOutB: ossOuter && ossOuter.capOutB,
+            footOutA: ossOuter && ossOuter.footOutA, footOutB: ossOuter && ossOuter.footOutB,
           });
           wallStemSegmentsOut.push({ ownerSegIndex, tier });
           // DEPRECATED legacy `.walls` bundle — stem INNER FACE ONLY (see wallBuf's own header comment
@@ -1831,6 +1955,7 @@ function compileRoomShellData(cells, opts) {
               innerA, innerB, outerA, outerB, n, tX: tangent.dx, tZ: tangent.dz,
               yBase: stemTopY, yTop: baseY + h, capHeight: wallCapHeight, capOverhang: wallCapOverhang,
               footing: 0, color: wallColor, u0, u1, uvDensity,
+              capOutA: ossOuter && ossOuter.capOutA, capOutB: ossOuter && ossOuter.capOutB,
             });
             const vertCount = wallUpperBuf.positions.length / 3 - vertStart;
             const idxCount = wallUpperBuf.indices.length - idxStart;
@@ -1841,8 +1966,10 @@ function compileRoomShellData(cells, opts) {
           if (wallTrimOn) {
             const trimHeight = Math.min(0.05, wallStemHeight * 0.25);
             const trimProud = wallCapOverhang * 0.5;
-            const trimOuterA = { x: outerA.x - n.x * trimProud, z: outerA.z - n.z * trimProud };
-            const trimOuterB = { x: outerB.x - n.x * trimProud, z: outerB.z - n.z * trimProud };
+            // UNIT G3: same substitution as the stem's own capOutA/footOutA — a corner-mitered trim lip
+            // in oss mode, plain per-segment offset (byte-identical) in legacy.
+            const trimOuterA = (ossOuter && ossOuter.trimOutA) || { x: outerA.x - n.x * trimProud, z: outerA.z - n.z * trimProud };
+            const trimOuterB = (ossOuter && ossOuter.trimOutB) || { x: outerB.x - n.x * trimProud, z: outerB.z - n.z * trimProud };
             pushWallVerticalFace(wallTrimBuf, // baseCourse — at the footing line
               { x: trimOuterA.x, y: stemBaseY, z: trimOuterA.z }, { x: trimOuterB.x, y: stemBaseY, z: trimOuterB.z },
               { x: trimOuterA.x, y: stemBaseY + trimHeight, z: trimOuterA.z }, { x: trimOuterB.x, y: stemBaseY + trimHeight, z: trimOuterB.z },
@@ -2133,6 +2260,8 @@ export {
   ROOM_SHELL_POLYGON_KERNEL, unitStepClassifyRing, deriveKernelRingsForTier, validateRenderTransform,
   DEFAULT_RENDER_TRANSFORM_AREA_TOLERANCE, groupInsetsForKernelTriangulation, buildParityDiagnostics,
   floorAreaOfBundle, floorBoundsOfBundle, triangleValidityOfBundle,
+  // UNIT G3 — aperture-delimited-run wall offsetting (dev/verify-wall-runs-oss.mjs's own direct import surface)
+  computeOssWallOuterOffsets,
   // THREE assembler (theater-boot.js's own import surface)
   compileRoomShell,
 };

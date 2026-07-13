@@ -5,6 +5,7 @@ status: RESEARCH COMPLETE 2026-07-12; implementation waves SPECCED, not started
 created: 2026-07-12
 related:
   - "[[GRAPHICS-CONVERGENCE-CHARTER]]"
+  - "[[GRAPHICS-CONVERGENCE-PLAN]]"
   - "[[MODEL-GRAMMAR]]"
   - "[[TABLETOP-VISION]]"
   - "[[GRAPHICS-PRODUCTION-RESEARCH-WAVE]]"
@@ -241,8 +242,25 @@ table becomes a browser/runtime dependency by implication.
 
 ## 7. Implementation waves
 
-These waves are ordered. Parallel agents may research separate packs, but they must not invent
-incompatible schemas or merge competing asset roots.
+These waves are the **prop-foundry subtrack**, not a second global graphics roadmap.
+`GRAPHICS-CONVERGENCE-PLAN.md` remains the execution spine and owns global order. Map this subtrack
+onto it as follows:
+
+| foundry wave | convergence-plan owner |
+| --- | --- |
+| OF-1 source manifest | may proceed offline after R0; informs R5/R8 fixtures |
+| OF-2 normalization | R8 glTF pipeline |
+| OF-3 parts/sockets/modulation | R5/G6 prop-foundry bakeoff, after R1 selects geometry ownership |
+| OF-4 prop compiler | selected R5/G6 backend, integrated only after its bakeoff gate |
+| OF-5 surfaces/UV | GP-2 and GP-4 |
+| OF-6 distribution/gallery/convergence | GP-3 and GP-4 |
+
+`dev/geometry-tools/pins.json` and `LEDGER.md` are authoritative for shared JavaScript geometry and
+glTF dependencies. This lab's `toolchain.json` records the Python/image candidates exercised by
+these probes; it must not repin packages owned by the geometry or graphics-research ledgers.
+
+Within that execution spine, the foundry waves remain ordered. Parallel agents may research
+separate packs, but they must not invent incompatible schemas or merge competing asset roots.
 
 ### OF-1: reproducible source cache and donor manifest
 

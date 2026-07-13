@@ -69,6 +69,13 @@ function extractLetLine(src, name){
   const m = src.match(re);
   return m ? m[0] : null;
 }
+// E0 — extracts a multi-line `const NAME = { ... };` object-literal block (the fixture recipe grammar's
+// own ITR_FIXTURE_BODY_PARTS/ITR_FIXTURE_EMITTER_GEO tables) verbatim from the real source.
+function extractObjBlock(src, name){
+  const re = new RegExp("const " + name + " = \\{[\\s\\S]*?\\n\\};");
+  const m = src.match(re);
+  return m ? m[0] : null;
+}
 
 // ============================================================================
 // STUBS shared by ITEM 1/2 — a minimal real-enough THREE + document, same "just enough to run the
@@ -80,12 +87,23 @@ function makeVec3(x, y, z){
     copy(o){ this.x = o.x; this.y = o.y; this.z = o.z; return this; } };
 }
 function makeStubTHREE(){
+  function Group(){
+    const g = { children: [], userData: {}, position: makeVec3(0, 0, 0), rotation: { x: 0, y: 0, z: 0 },
+      add(o){ o.parent = g; this.children.push(o); return this; } };
+    return g;
+  }
+  function geo(kind){ return function(...args){ return { kind, args }; }; } // marker-only stub — this file never reads .parameters off these (Box/Sphere/Torus/Octahedron/Cone), unlike Cylinder/Plane above
   return {
-    Group: function(){ return { children: [], userData: {}, position: makeVec3(0, 0, 0), add(o){ this.children.push(o); return this; } }; },
+    Group,
     PlaneGeometry: function(w, h){ return { parameters: { width: w, height: h } }; },
     CylinderGeometry: function(rTop, rBottom, h, seg){ return { parameters: { radiusTop: rTop, radiusBottom: rBottom, height: h, radialSegments: seg } }; }, // P-1 emitter nub
+    // E0 — the fixture recipe grammar's own additional primitives (body + emitter shapes).
+    BoxGeometry: geo("box"), SphereGeometry: geo("sphere"), TorusGeometry: geo("torus"),
+    OctahedronGeometry: geo("octahedron"), ConeGeometry: geo("cone"),
     MeshBasicMaterial: function(opts){ return Object.assign({ userData: {} }, opts); },
-    Mesh: function(geo, mat){ return { geometry: geo, material: mat, userData: {}, position: makeVec3(0, 0, 0), castShadow: false, receiveShadow: false }; },
+    MeshLambertMaterial: function(opts){ return Object.assign({ userData: {}, isLambert: true }, opts); },
+    Color: function(hex){ return { hex, isColor: true }; },
+    Mesh: function(geo, mat){ return { geometry: geo, material: mat, userData: {}, name: "", position: makeVec3(0, 0, 0), rotation: { x: 0, y: 0, z: 0 }, castShadow: false, receiveShadow: false }; },
     CanvasTexture: function(cv){ return { isTexture: true, _cv: cv }; },
     PointLight: function(color, intensity, distance, decay){
       return { color, intensity, distance, decay, position: makeVec3(0, 0, 0), castShadow: false,
@@ -175,27 +193,29 @@ console.log("\n=== ITEM 1 — light-cone geometry (theater-boot.js source extrac
 
 // ============================================================================
 // ITEM 2 — interiorBuildLights wiring: one cone per light (WHEN THE L-1 GATE IS ON), apex-to-floor
-// math, flicker-target collection (marker+cone riding the same channel).
+// math, flicker-target collection.
 //
-// docs/DIEGETIC-LIGHT.md L-1 (2026-07-11, Adam's ruling, fork F1): the cone mount is now GATED behind
-// ITR_LIGHT_CONE_ENABLED, default OFF ("remove the cone... keep only the emissive flame/glow marker +
-// the point light's real falloff"). RED-FIRST (re-checked live against this branch's own pre-L-1 code,
-// i.e. what this file's assertions looked like before this unit — the exact "6 children" shape below
-// was the ONLY shape that ever existed pre-gate):
-//   `git show cfe622e6:src/ui/theater-boot.js | grep -c ITR_LIGHT_CONE_ENABLED` -> 0 (the gate didn't
-//   exist at all — interiorBuildLights unconditionally mounted a cone per light, exactly the "6
-//   children" shape check 2c below used to assert unconditionally).
-// The RED-FIRST block just below re-proves this dynamically: assembling interiorBuildLights with the
-// gate at its REAL extracted default (false) and asserting the OLD "6 children" claim now FAILS proves
-// this check is load-bearing against the gate, not a stale assertion the source quietly stopped
-// backing. GREEN then re-derives the byte-identical old shape by flipping the SAME extracted flag on.
+// REWRITTEN for docs/WALL-VOLUMES-PRACTICALS.md Unit E0 (2026-07-12) — WHY: interiorBuildLights no
+// longer mounts a bare {PointLight, glow-disc} pair per light; every light now resolves ONE physical
+// FIXTURE GROUP (interiorBuildFixtureGroup) that nests the PointLight + emitter submesh INSIDE it, so
+// the old "N children per light == N sibling meshes at the top level" claim (the `{PointLight, glow}`
+// child-count checks this ITEM used to assert) no longer holds — it's now `{fixtureGroup}` per light,
+// with `{PointLight, emitter}` nested inside. The diagnostics-only glow disc (ITR_GLOW_DISC_DIAGNOSTIC,
+// default off) is ALSO nested inside the fixture group when enabled, never a top-level sibling. The
+// light-cone (BW3-4, unrelated to E0, still gated off by default) stays a TOP-LEVEL sibling, unchanged.
+// RED-FIRST (re-checked live against tip 8b1e9826, the master commit this branch forked from — C4.1a's
+// own landed tip, before E0's edits existed):
+//   `git show 8b1e9826:src/ui/theater-boot.js | grep -c interiorBuildFixtureGroup` -> 0
+// The block below re-proves this dynamically: the OLD "{PointLight, glow} = 2 children per light" claim
+// now FAILS (every light is 1 top-level child, the fixture group) — proving the NEW claim isn't vacuous.
 // ============================================================================
-console.log("\n=== ITEM 2 — interiorBuildLights wiring, gated cone (theater-boot.js source extraction) ===");
+console.log("\n=== ITEM 2 — interiorBuildLights wiring, E0 fixtures + gated cone (theater-boot.js source extraction) ===");
 {
   const fnNames = [
     "interiorConeTexture", "interiorBuildLightCone", "interiorAssignShadowCasters",
     "interiorGlowTexture", "interiorBuildGlowDisc", "interiorFloorTopAt",
-    "interiorBuildLightEmitterNub", // P-1: interiorBuildLights now mounts a nub for card-less lights
+    "interiorFixtureBodyMaterial", "interiorFixtureEmitterMaterial", "interiorBuildFixtureGroup",
+    "interiorNearestWallMountSlot", "interiorResolveFixturePlacement",
     "interiorBuildLights"
   ];
   const fns = fnNames.map((n) => extractFn(bootSrc, n));
@@ -209,12 +229,9 @@ console.log("\n=== ITEM 2 — interiorBuildLights wiring, gated cone (theater-bo
     extractConstLine(bootSrc, "ITR_LIGHT_DISTANCE_CAP"), // BW2-4b item 1: interiorBuildLights now clamps range to this
     extractConstLine(bootSrc, "INTERIOR_SHADOW_CASTER_CAP"),
     extractConstLine(bootSrc, "INTERIOR_SHADOW_MAP_SIZE"),
-    (bootSrc.match(/const INTERIOR_LIGHT_CARD = \{[^}]*\};/) || [null])[0],
     extractConstLine(bootSrc, "ITR_FLOOR_BASE_Y"),
     extractConstLine(bootSrc, "ITR_FLOOR_HEIGHT_FALLBACK"),
     extractConstLine(bootSrc, "INTERIOR_LIGHT_FLICKER_AMPLITUDE"),
-    extractConstLine(bootSrc, "ITR_LIGHT_EMITTER_NUB_RADIUS"), // P-1: the card-less-light emitter nub dims
-    extractConstLine(bootSrc, "ITR_LIGHT_EMITTER_NUB_HEIGHT"),
     // LIGHT-CLOSE unit: interiorBuildLights now also reads ITR_BRIGHT_PRACTICAL_INTENSITY_SCALE (the
     // bright/sky-lit practical dim-to factor) — a `const`, injected here like every other supporting
     // const on this list.
@@ -224,129 +241,138 @@ console.log("\n=== ITEM 2 — interiorBuildLights wiring, gated cone (theater-bo
     extractConstLine(bootSrc, "ITR_GLOW_DISC_SIZE"),
     extractConstLine(bootSrc, "ITR_GLOW_DISC_SIZE_LAMP"),
     extractConstLine(bootSrc, "ITR_GLOW_DISC_OPACITY"),
+    // E0 — the fixture recipe grammar's own supporting data/const.
+    extractConstLine(bootSrc, "ITR_FIXTURE_EMISSIVE_INTENSITY"),
   ];
-  check("2b-setup. all supporting consts present", constLines.every(Boolean), constLines.map((c) => !!c));
+  const partsBlock = extractObjBlock(bootSrc, "ITR_FIXTURE_BODY_PARTS");
+  const emitterGeoBlock = extractObjBlock(bootSrc, "ITR_FIXTURE_EMITTER_GEO");
+  check("2b-setup. all supporting consts present", constLines.every(Boolean) && !!partsBlock && !!emitterGeoBlock, constLines.map((c) => !!c));
   const coneEnabledLine = extractLetLine(bootSrc, "ITR_LIGHT_CONE_ENABLED");
   check("2b2-setup. L-1's ITR_LIGHT_CONE_ENABLED gate (a `let`, runtime-reversible) is present", !!coneEnabledLine, coneEnabledLine);
-  // P-1: interiorBuildLights now reads ITR_LIGHT_EMITTER_NUB_ENABLED (a `let`, runtime-reversible like
-  // the cone gate) to decide whether a card-less light gets a self-lit emitter nub — inject it too.
-  const nubEnabledLine = extractLetLine(bootSrc, "ITR_LIGHT_EMITTER_NUB_ENABLED");
-  check("2b4-setup. P-1's ITR_LIGHT_EMITTER_NUB_ENABLED gate is present", !!nubEnabledLine, nubEnabledLine);
   // LIGHT-CLOSE unit: interiorBuildLights now also reads ITR_BRIGHT_SUPPRESS_PRACTICALS (a `let`,
-  // runtime-reversible like the cone/nub gates above) to decide whether a bright/sky-lit profile's
-  // torch/lamp practicals (glow disc + emitter nub + the point light's own hot pool) suppress — inject
-  // it too, same convention.
+  // runtime-reversible like the cone gate above) to decide whether a bright/sky-lit profile's
+  // torch/lamp practicals (the fixture's own emitter emissive intensity + the point light's own hot
+  // pool) suppress — inject it too, same convention.
   const brightSuppressLine = extractLetLine(bootSrc, "ITR_BRIGHT_SUPPRESS_PRACTICALS");
   check("2b5-setup. LIGHT-CLOSE's ITR_BRIGHT_SUPPRESS_PRACTICALS gate is present", !!brightSuppressLine, brightSuppressLine);
+  // E0 — the diagnostics-only glow-disc gate (default off, production glowCount stays 0).
+  const glowDiagLine = extractLetLine(bootSrc, "ITR_GLOW_DISC_DIAGNOSTIC");
+  check("2b6-setup. E0's ITR_GLOW_DISC_DIAGNOSTIC gate is present", !!glowDiagLine, glowDiagLine);
 
-  if(fns.every(Boolean) && constLines.every(Boolean) && coneEnabledLine && nubEnabledLine && brightSuppressLine){
-    // the gate is declared OUTSIDE the returned factory function body but shared by closure — a
-    // setConeEnabled export lets this sandbox flip the SAME `let` interiorBuildLights itself reads,
-    // exactly like window.Theater.setLightConeEnabled does against the real module scope.
+  if(fns.every(Boolean) && constLines.every(Boolean) && partsBlock && emitterGeoBlock && coneEnabledLine && brightSuppressLine && glowDiagLine){
+    // the gates are declared OUTSIDE the returned factory function body but shared by closure — the
+    // setter exports let this sandbox flip the SAME `let`s interiorBuildLights itself reads, exactly
+    // like window.Theater.setLightConeEnabled/etc. do against the real module scope.
     const src = "const THREE = arguments[0]; const document = arguments[1];\n"
-      + "let INTERIOR_CONE_TEXTURE = null; let INTERIOR_GLOW_TEXTURE = null;\n"
+      + "let INTERIOR_CONE_TEXTURE = null; let INTERIOR_GLOW_TEXTURE = null; let ITR_FIXTURE_BODY_MATERIAL_CACHE = null;\n"
       + coneEnabledLine + "\n"
-      + nubEnabledLine + "\n"
       + brightSuppressLine + "\n"
-      + constLines.join("\n") + "\n"
+      + glowDiagLine + "\n"
+      + constLines.join("\n") + "\n" + partsBlock + "\n" + emitterGeoBlock + "\n"
       + fns.join("\n")
-      + "\nreturn { interiorBuildLights, setConeEnabled: function(v){ ITR_LIGHT_CONE_ENABLED = !!v; }, coneEnabled: function(){ return ITR_LIGHT_CONE_ENABLED; }, setNubEnabled: function(v){ ITR_LIGHT_EMITTER_NUB_ENABLED = !!v; }, setBrightSuppressPracticals: function(v){ ITR_BRIGHT_SUPPRESS_PRACTICALS = !!v; }, brightSuppressPracticals: function(){ return ITR_BRIGHT_SUPPRESS_PRACTICALS; }, ITR_LIGHT_RENDER_GAIN: ITR_LIGHT_RENDER_GAIN, ITR_BRIGHT_PRACTICAL_INTENSITY_SCALE: ITR_BRIGHT_PRACTICAL_INTENSITY_SCALE };";
+      + "\nreturn { interiorBuildLights, setConeEnabled: function(v){ ITR_LIGHT_CONE_ENABLED = !!v; }, coneEnabled: function(){ return ITR_LIGHT_CONE_ENABLED; }, setBrightSuppressPracticals: function(v){ ITR_BRIGHT_SUPPRESS_PRACTICALS = !!v; }, brightSuppressPracticals: function(){ return ITR_BRIGHT_SUPPRESS_PRACTICALS; }, setGlowDiagnostic: function(v){ ITR_GLOW_DISC_DIAGNOSTIC = !!v; }, ITR_LIGHT_RENDER_GAIN: ITR_LIGHT_RENDER_GAIN, ITR_BRIGHT_PRACTICAL_INTENSITY_SCALE: ITR_BRIGHT_PRACTICAL_INTENSITY_SCALE };";
     const factory = new Function(src);
     const THREE = makeStubTHREE();
     const doc = makeFakeDocument();
     const mod = factory(THREE, doc);
-    // P-1: this ITEM tests the CONE gate specifically — a card-less light's emitter nub is a separate
-    // (also-new) child that would confound the exact per-light child counts below. Disable it here so
-    // the counts stay pure {PointLight, glow} ± cone (the nub has its own coverage in verify-diegetic-
-    // light.mjs P-1c). Same isolation spirit as P-1a's lights:[] variant.
-    mod.setNubEnabled(false);
     const { interiorBuildLights } = mod;
 
-    const torch = { x: 2, z: 3, y: 2.5, color: "#ff9a44", intensity: 1.2, distance: 6, decay: 2, kind: "torch" };
-    const lamp = { x: 5, z: 1, y: 2.6, color: "#cfe8ff", intensity: 1.2, distance: 6.5, decay: 2, kind: "lamp" };
+    // real production-shaped records (fixtureId/mount/emitterLocal, as itrRoomLights actually stamps
+    // them) — a bare pre-E0 literal is covered separately below (2o, defensive-fallback coverage).
+    // `torch` uses lamp-post's own (taller) emitterLocal.y=0.90 so its bridged cone height clears
+    // ITR_LIGHT_CONE_MIN_HEIGHT (0.6) UNCLAMPED — proves the real bridging formula, not just the floor.
+    // `lamp` uses a shorter emitterLocal.y=0.30, deliberately landing UNDER the 0.6 floor — E0's own
+    // floor-hugging fixture heights mean the min-height clamp is now the COMMON case for floor
+    // practicals, a real (documented) consequence worth asserting explicitly, not silently glossing.
+    const torch = { x: 2, z: 3, y: 2.5, color: "#ff9a44", intensity: 1.2, distance: 6, decay: 2, kind: "torch", fixtureId: "lamp-post", mount: "floor", emitterLocal: { x: 0, y: 0.90, z: 0 } };
+    const lamp = { x: 5, z: 1, y: 2.6, color: "#cfe8ff", intensity: 1.2, distance: 6.5, decay: 2, kind: "lamp", fixtureId: "lantern-handled", mount: "floor", emitterLocal: { x: 0, y: 0.30, z: 0 } };
 
     check("2b3-setup. the extracted gate's REAL default is OFF (matches ITR_LIGHT_CONE_ENABLED's own source default)", mod.coneEnabled() === false, mod.coneEnabled());
 
-    // ---- RED-FIRST: the OLD "6 children" claim, run against the gate's REAL default ----
-    // realmId=null -> cardSlug resolves null (INTERIOR_LIGHT_CARD lookup misses) -> no light-card
-    // children, keeping this sandbox's dependency surface to exactly what's stubbed above.
+    // ---- RED-FIRST: the OLD "{PointLight,glow} = 2 children per light" claim ----
     const builtOff = interiorBuildLights([torch, lamp], 0, 0, null, null);
-    check("2c-RED. the OLD pre-L-1 claim (\"exactly 6 children\") now FAILS at the gate's real default — proves 2c-GREEN below isn't vacuous",
-      builtOff.group.children.length !== 6, builtOff.group.children.length);
-    check("2c-GREEN. GATE OFF (default): exactly {PointLight, glow} per light, NO cone (2 children x 2 lights = 4)",
-      builtOff.group.children.length === 4, builtOff.group.children.length);
-    check("2c2. GATE OFF: every flickerTarget carries marker but NO cone (never a stale/half-built cone reference)",
+    check("2c-RED. the OLD pre-E0 claim (\"4 top-level children for 2 lights — {PointLight,glow} each\") now FAILS — proves 2c-GREEN below isn't vacuous",
+      builtOff.group.children.length !== 4, builtOff.group.children.length);
+    check("2c-GREEN. E0: exactly ONE top-level child per light (its own fixture GROUP, nesting {PointLight, emitter} inside) — 2 lights = 2 top-level children",
+      builtOff.group.children.length === 2, builtOff.group.children.length);
+    check("2c2. every top-level child IS a fixture group carrying exactly one PointLight + one named 'emitter' child nested inside",
+      builtOff.group.children.every((fg) => fg.children.some((c) => c.color !== undefined && c.intensity !== undefined) && fg.children.some((c) => c.name === "emitter")),
+      JSON.stringify(builtOff.group.children.map((fg) => fg.children.map((c) => c.name || "PointLight"))));
+    check("2c3. GATE OFF (default): NO cone mesh anywhere — flickerTargets carry a marker (the emitter) but no cone",
       builtOff.flickerTargets.length === 2 && builtOff.flickerTargets.every((t) => t.marker && !t.cone),
       JSON.stringify(builtOff.flickerTargets.map((t) => ({ hasMarker: !!t.marker, hasCone: !!t.cone }))));
-    check("2c3. GATE OFF: baseConeOpacity still falls back to ITR_LIGHT_CONE_OPACITY[kind] per light (torch != lamp) even with no cone mesh to read it off",
+    check("2c4. GATE OFF: baseConeOpacity still falls back to ITR_LIGHT_CONE_OPACITY[kind] per light (torch != lamp) even with no cone mesh to read it off",
       builtOff.flickerTargets[0].baseConeOpacity !== builtOff.flickerTargets[1].baseConeOpacity,
       JSON.stringify(builtOff.flickerTargets.map((t) => t.baseConeOpacity)));
 
-    // ---- GREEN: flip the SAME gate on -> byte-identical to the old unconditional shape ----
+    // ---- GREEN: flip the cone gate on -> ONE extra TOP-LEVEL sibling per light (the cone itself is
+    // still a top-level group, never nested in the fixture — only the fixture's OWN internals changed).
     mod.setConeEnabled(true);
     const built = interiorBuildLights([torch, lamp], 0, 0, null, null);
-    check("2c-reversible. GATE ON: reproduces the exact old shape (3 children x 2 lights = 6) — the flag is a true toggle, not a one-way migration",
-      built.group.children.length === 6, built.group.children.length);
+    check("2c-reversible. GATE ON: each light now contributes 2 top-level children (fixture group + cone group) — 2 lights = 4",
+      built.group.children.length === 4, built.group.children.length);
 
-    const torchConeGroup = built.group.children[2];
+    const torchConeGroup = built.group.children[1];
     const torchConeMesh = torchConeGroup.children[0];
     // floorTopMap=null -> interiorFloorTopAt's own fallback = ITR_FLOOR_BASE_Y + ITR_FLOOR_HEIGHT_FALLBACK = -0.3
-    // torch glow sits 0.15 below its light point (the sconce offset) -> apex = 2.5 - 0.15 = 2.35
-    // cone height = apex - floorTop = 2.35 - (-0.3) = 2.65
-    check("2d. FLOOR-BRIDGING (gate on): the torch cone's height spans EXACTLY apex(=light.y-0.15sconce)->floorTop (never a fixed generic drop)",
-      Math.abs(torchConeMesh.geometry.parameters.height - 2.65) < 1e-9, torchConeMesh.geometry.parameters.height);
-    check("2e. the cone's group position matches the glow marker's own position (same apex point — shaft and marker read as one light)",
-      Math.abs(torchConeGroup.position.y - 2.35) < 1e-9 && torchConeGroup.position.x === 2 && torchConeGroup.position.z === 3,
+    // E0 — the cone now bridges from the FIXTURE's own physical emitter world position (floorTop + its
+    // own emitterLocal.y), not the old abstract "light.y - 0.15 sconce offset" head-height apex:
+    // torch (lamp-post, el.y=0.90): emitterWorldY = -0.3 + 0.90 = 0.60  ->  coneHeight = 0.60 - (-0.3) = 0.90 (clears the 0.6 MIN_HEIGHT floor, unclamped)
+    check("2d. FLOOR-BRIDGING (gate on): the torch cone's height spans EXACTLY the fixture's own physical emitter height -> floorTop, UNCLAMPED (never a fixed generic drop, never the old head-height apex)",
+      Math.abs(torchConeMesh.geometry.parameters.height - 0.90) < 1e-9, torchConeMesh.geometry.parameters.height);
+    check("2e. the cone's group position matches the fixture's own emitter WORLD position (same apex point — shaft and fixture read as one light)",
+      Math.abs(torchConeGroup.position.y - 0.60) < 1e-9 && torchConeGroup.position.x === 2 && torchConeGroup.position.z === 3,
       JSON.stringify(torchConeGroup.position));
 
-    const lampConeGroup = built.group.children[5];
+    const lampConeGroup = built.group.children[3];
     const lampConeMesh = lampConeGroup.children[0];
-    // lamp carries NO sconce offset -> apex = 2.6; cone height = 2.6 - (-0.3) = 2.9
-    check("2f. a LAMP light (no sconce offset) spans apex(=light.y)->floorTop", Math.abs(lampConeMesh.geometry.parameters.height - 2.9) < 1e-9, lampConeMesh.geometry.parameters.height);
+    // lamp (lantern-handled, el.y=0.30): raw coneHeight = 0.00 - (-0.3) = 0.30, UNDER the 0.6 floor —
+    // clamps up to ITR_LIGHT_CONE_MIN_HEIGHT. A documented E0 consequence: floor-hugging fixture heights
+    // make the min-height clamp the COMMON case for floor practicals now, not the rare edge case it
+    // guarded against pre-E0 (when apexes sat near head height).
+    check("2f. a SHORTER fixture's own raw bridged height (0.30) is UNDER ITR_LIGHT_CONE_MIN_HEIGHT and clamps to 0.6 — the floor-guard is load-bearing far more often post-E0",
+      Math.abs(lampConeMesh.geometry.parameters.height - 0.6) < 1e-9, lampConeMesh.geometry.parameters.height);
 
-    check("2g. flickerTargets carries exactly one entry per light, each wiring BOTH marker and cone",
-      built.flickerTargets.length === 2 && built.flickerTargets.every((t) => t.marker && t.cone), JSON.stringify(built.flickerTargets.map((t) => ({ hasMarker: !!t.marker, hasCone: !!t.cone }))));
+    check("2g. flickerTargets carries exactly one entry per light, each wiring BOTH marker (the fixture's own emitter) and cone",
+      built.flickerTargets.length === 2 && built.flickerTargets.every((t) => t.marker && t.marker.name === "emitter" && t.cone), JSON.stringify(built.flickerTargets.map((t) => ({ hasMarker: !!t.marker, hasCone: !!t.cone }))));
     check("2h. each flickerTarget's baseConeOpacity matches its own cone mesh's built opacity",
       built.flickerTargets[0].baseConeOpacity === torchConeMesh.material.opacity
       && built.flickerTargets[1].baseConeOpacity === lampConeMesh.material.opacity);
 
-    // MUTATION: a lightless board must not throw and must produce zero cones/targets (proves the
-    // per-light forEach is the source of the count, not a hardcoded stub) — checked with the gate ON
+    // MUTATION: a lightless board must not throw and must produce zero fixtures/cones/targets (proves
+    // the per-light forEach is the source of the count, not a hardcoded stub) — checked with the gate ON
     // (the stricter shape) so a regression that re-hardcodes children can't hide behind gate-off.
     const empty = interiorBuildLights([], 0, 0, null, null);
     check("2i. ⊗ MUTATION: an empty lights array yields zero children / zero flickerTargets (never throws)",
       empty.group.children.length === 0 && empty.flickerTargets.length === 0);
 
     // ---- LIGHT-CLOSE unit — bright-realm practical suppression (the 7th `isBrightRealm` param) ----
-    // Cone AND nub both stay off for this sub-block (same isolation spirit as ITEM 2's cone-focused
-    // body above) so the child count stays exactly {PointLight, glow} per non-suppressed light — the
-    // nub's OWN suppression already shares the identical `!suppressPractical` guard in the real source
-    // (see interiorBuildLights) and has its own dedicated coverage in verify-diegetic-light.mjs.
+    // E0's own Decision ("keep the fixture, drop the glow") means the TOP-LEVEL child count no longer
+    // distinguishes suppressed vs unsuppressed (the fixture group mounts either way) — the real signal
+    // moved INSIDE the fixture (emitter emissiveIntensity, flickerTargets membership, PointLight
+    // intensity). Deeper coverage of this exact scenario lives in dev/verify-visible-practicals.mjs
+    // (checks 23-24); this ITEM keeps just enough non-vacuous coverage to prove the shape actually
+    // changed from the old behavior, not a silent no-op.
     mod.setConeEnabled(false);
-    mod.setNubEnabled(false);
     check("2j-setup. the extracted gate's REAL default is ON (matches ITR_BRIGHT_SUPPRESS_PRACTICALS' own source default)",
       mod.brightSuppressPracticals() === true, mod.brightSuppressPracticals());
 
-    // isBrightRealm=false (a torchlit/lamplit realm) — practicals mount exactly as before this unit,
-    // regardless of the suppression gate's own value (proves suppression is bright-profile ONLY).
     const notBright = interiorBuildLights([torch], 0, 0, null, null, [], false);
-    check("2j. isBrightRealm=false: the practical (glow + real hot-pool PointLight) mounts unaffected — {PointLight, glow} = 2 children",
-      notBright.group.children.length === 2 && notBright.flickerTargets.length === 1 && notBright.flickerTargets[0].pl.intensity > 0,
+    check("2j. isBrightRealm=false: the practical mounts unaffected — 1 fixture group, 1 flickerTarget, a full-intensity PointLight",
+      notBright.group.children.length === 1 && notBright.flickerTargets.length === 1 && notBright.flickerTargets[0].pl.intensity > 0,
       JSON.stringify({ children: notBright.group.children.length, targets: notBright.flickerTargets.length, intensity: notBright.flickerTargets[0] && notBright.flickerTargets[0].pl.intensity }));
 
-    // isBrightRealm=true + the gate at its real default (on) — RED-FIRST: prove the OLD "practical always
-    // mounts" shape actually changes for a bright realm (not vacuously already 0/2 for some other reason).
     const bright = interiorBuildLights([torch], 0, 0, null, null, [], true);
-    check("2k-RED. the notBright shape above does NOT vacuously match a bright realm's own shape (proves 2k-GREEN below is a real change, not a no-op)",
-      bright.group.children.length !== notBright.group.children.length || bright.flickerTargets.length !== notBright.flickerTargets.length,
-      JSON.stringify({ bright: bright.group.children.length, notBright: notBright.group.children.length }));
-    check("2k-GREEN. isBrightRealm=true (gate on, default): NO glow disc, NO nub, and the PointLight itself is suppressed to ITR_BRIGHT_PRACTICAL_INTENSITY_SCALE — 1 child (the dimmed PointLight only), zero flickerTargets",
+    check("2k-RED. the OLD 'suppression drops the top-level child count' claim no longer holds — E0 keeps the fixture body either way (still 1 top-level child), proving 2k-GREEN below tests the REAL new signal, not a stale count",
+      bright.group.children.length === notBright.group.children.length, JSON.stringify({ bright: bright.group.children.length, notBright: notBright.group.children.length }));
+    check("2k-GREEN. isBrightRealm=true (gate on, default): the fixture body STILL mounts (§E0 'keep the fixture, drop the glow'), but zero flickerTargets and the PointLight itself is suppressed",
       bright.group.children.length === 1 && bright.flickerTargets.length === 0,
       JSON.stringify({ children: bright.group.children.length, targets: bright.flickerTargets.length }));
-    const brightPl = bright.group.children[0];
-    check("2l. the suppressed PointLight's own intensity actually scaled DOWN by ITR_BRIGHT_PRACTICAL_INTENSITY_SCALE (never just a zero-children illusion with a still-hot light)",
-      brightPl.intensity === torch.intensity * mod.ITR_LIGHT_RENDER_GAIN * mod.ITR_BRIGHT_PRACTICAL_INTENSITY_SCALE,
-      JSON.stringify({ actual: brightPl.intensity, expected: torch.intensity * mod.ITR_LIGHT_RENDER_GAIN * mod.ITR_BRIGHT_PRACTICAL_INTENSITY_SCALE }));
+    const brightPl = bright.group.children[0].children.find((c) => c.color !== undefined && c.intensity !== undefined);
+    const brightEmitter = bright.group.children[0].children.find((c) => c.name === "emitter");
+    check("2l. the suppressed PointLight's own intensity actually scaled DOWN by ITR_BRIGHT_PRACTICAL_INTENSITY_SCALE, AND the emitter's own emissiveIntensity dropped to 0 (never just a zero-flicker illusion with a still-hot/still-glowing fixture)",
+      brightPl.intensity === torch.intensity * mod.ITR_LIGHT_RENDER_GAIN * mod.ITR_BRIGHT_PRACTICAL_INTENSITY_SCALE && brightEmitter.material.emissiveIntensity === 0,
+      JSON.stringify({ actualIntensity: brightPl.intensity, expectedIntensity: torch.intensity * mod.ITR_LIGHT_RENDER_GAIN * mod.ITR_BRIGHT_PRACTICAL_INTENSITY_SCALE, emissiveIntensity: brightEmitter.material.emissiveIntensity }));
 
     // reversibility: flip the SAME extracted gate off -> a bright realm's lights mount exactly like
     // notBright above (the flag is a true toggle, not a one-way migration).
@@ -361,9 +387,16 @@ console.log("\n=== ITEM 2 — interiorBuildLights wiring, gated cone (theater-bo
     // even under a bright, suppression-on profile (a future realm declaring a genuine outdoor source).
     const campfire = Object.assign({}, torch, { forceVisiblePractical: true });
     const forced = interiorBuildLights([campfire], 0, 0, null, null, [], true);
-    check("2n. light.forceVisiblePractical=true escapes bright-profile suppression even with the gate on (glow mounts, PointLight stays full-intensity) — 2 children",
-      forced.group.children.length === 2 && forced.flickerTargets.length === 1,
+    check("2n. light.forceVisiblePractical=true escapes bright-profile suppression even with the gate on (fixture mounts, PointLight stays full-intensity, joins the flicker channel) — 1 top-level child",
+      forced.group.children.length === 1 && forced.flickerTargets.length === 1,
       JSON.stringify({ children: forced.group.children.length, targets: forced.flickerTargets.length }));
+
+    // E0 — a bare pre-E0-shaped light record (no fixtureId/mount/emitterLocal) must never throw; it
+    // degrades to the default-bucket fixture family (defensive fallback, interiorBuildFixtureGroup).
+    const bareLight = { x: 0, z: 0, y: 2.5, color: "#ffbb66", intensity: 1, distance: 6, decay: 2, kind: "lamp" };
+    let bareThrew = false;
+    try { interiorBuildLights([bareLight], 0, 0, null, null); } catch (e) { bareThrew = true; }
+    check("2o. a bare pre-E0 light literal (missing fixtureId/mount/emitterLocal) never throws (defensive fallback)", !bareThrew);
 
     // reset the shared gate back off — this sandbox's own `let` is scoped to this factory instance only
     // (never touches the real module), but resetting keeps this block's own local state tidy/explicit.

@@ -60,7 +60,7 @@ const check = (name, cond, detail = "") =>
   cond ? (pass++, console.log("  ✓", name)) : (fail++, console.log("  ✗", name, "—", JSON.stringify(detail)));
 
 const mesh = await import(pathToFileURL(join(ROOT, "src/ui/theater-room-mesh.js")).href);
-const { computeOssWallOuterOffsets, segmentNormal, compileRoomShellData, DEFAULT_WALL_THICKNESS, DEFAULT_WALL_CAP_OVERHANG, DEFAULT_WALL_FOOTING } = mesh;
+const { computeOssWallOuterOffsets, segmentNormal, compileRoomShellData, buildBevelBridgeParams, DEFAULT_WALL_THICKNESS, DEFAULT_WALL_CAP_OVERHANG, DEFAULT_WALL_FOOTING } = mesh;
 const PK = await import(pathToFileURL(join(ROOT, "src/ui/geometry/polygon-kernel.js")).href);
 
 check("0a. computeOssWallOuterOffsets is exported and callable", typeof computeOssWallOuterOffsets === "function");
@@ -139,6 +139,64 @@ const oct = octPts.map((p, i) => { const q = octPts[(i + 1) % octPts.length]; re
   check("2c2. octagon: max CAP INNER corner gap across all 8 corners is 0", maxCapInGap < EPS, maxCapInGap);
   check("2d. octagon: max FOOTING corner gap across all 8 corners is 0", maxFootGap < EPS, maxFootGap);
   check("2e. octagon: zero degraded runs", !result.diagnostics.some((d) => d.degraded), result.diagnostics);
+}
+
+// ═══ Fixture 2b: ACUTE corner (closed 3-segment "sliver" ring, beyond DEFAULT_MITER_LIMIT) — UNIT G3
+// ACUTE-BEVEL. docs/STAGE-G3-WALL-RUNS.md's own "bevel for acute/unstable corners" branch: Clipper2
+// injects a real bevel EDGE (not a shared miter point) at each of this ring's own acute apexes.
+// offsetOneRun keeps it (ring-adjacency detection) instead of discarding the whole run to the legacy
+// per-segment fallback; computeOssWallOuterOffsets reports it via `bevels`; theater-room-mesh.js's
+// buildBevelBridgeParams supplies the small notch-filling box every band (stem/cap-in/cap-out/footing)
+// needs to stay watertight through the corner. ═══
+const acuteTri = [seg(0, 0, 6, 0), seg(6, 0, 0.2, 0.2), seg(0.2, 0.2, 0, 0)];
+{
+  const { result, segments } = run("acuteTri", acuteTri);
+  const wallDiags = result.diagnostics.filter((d) => d.typed === "wall-run-offset");
+  check("2b-a. acuteTri: zero degraded runs (bevel kept, never discarded to the legacy fallback)",
+    wallDiags.length > 0 && wallDiags.every((d) => !d.degraded), wallDiags);
+  check("2b-b. acuteTri: 100% source provenance (every wall segment resolved)", result.outByIndex.every(Boolean));
+  check("2b-c. acuteTri: 0 unintended joins (every reported diagnostics.joinGapCount is 0)",
+    wallDiags.every((d) => d.joinGapCount === 0), wallDiags);
+  const bevels = result.bevels || [];
+  check("2b-d. acuteTri: at least one corner classified 'bevel' (this ring is genuinely acute)", bevels.length > 0, bevels);
+  check("2b-e. acuteTri: matchedSegments === segmentCount on every run (nothing silently unmatched)",
+    wallDiags.every((d) => d.matchedSegments === d.segmentCount), wallDiags);
+
+  bevels.forEach(({ segA, segB }) => {
+    const outA = result.outByIndex[segA], outB = result.outByIndex[segB];
+    const cornerPoint = segments[segA].b; // === segments[segB].a — the shared, unoffset inner vertex
+    const bridge = buildBevelBridgeParams(cornerPoint, outA, outB);
+    // "real gap 0" — the bridge's own outer endpoints are the SAME points (not independently
+    // recomputed/approximated ones) segA/segB already resolved, on every band: stem, BOTH cap lips
+    // (capIn and capOut — the pre-review G3 path's own false-green left capIn un-joined), and footing.
+    check(`2b-f. bevel ${segA}->${segB}: STEM contour continuous (bridge.outerA==segA.outerB, bridge.outerB==segB.outerA)`,
+      dist(bridge.outerA, outA.outerB) < EPS && dist(bridge.outerB, outB.outerA) < EPS);
+    check(`2b-g. bevel ${segA}->${segB}: CAP OUTER lip continuous`,
+      dist(bridge.capOutA, outA.capOutB) < EPS && dist(bridge.capOutB, outB.capOutA) < EPS);
+    check(`2b-h. bevel ${segA}->${segB}: CAP INNER lip continuous`,
+      dist(bridge.capInA, outA.capInB) < EPS && dist(bridge.capInB, outB.capInA) < EPS);
+    check(`2b-i. bevel ${segA}->${segB}: FOOTING lip continuous`,
+      dist(bridge.footOutA, outA.footOutB) < EPS && dist(bridge.footOutB, outB.footOutA) < EPS);
+    // sanity: the bridge's own INNER edge is genuinely degenerate (zero-length — a bevel never moves the
+    // inner boundary) while its OUTER edge is a real, non-degenerate bevel edge (not accidentally zero).
+    check(`2b-j. bevel ${segA}->${segB}: inner edge degenerate (zero length), outer edge real (nonzero length)`,
+      dist(bridge.innerA, bridge.innerB) < EPS && dist(bridge.outerA, bridge.outerB) > EPS);
+  });
+
+  // integration: compileRoomShellData still compiles this whole-tier "oss" path cleanly with the bridge
+  // pass wired in (no throw, finite output) — the acute triangle isn't reachable through the grid-cell
+  // shape generator, but this confirms the render loop's own bevel-bridge branch doesn't corrupt an
+  // ordinary compile when it's simply never triggered (zero bevels in a real grid room today).
+  const cells = rectCellsForAcute();
+  function rectCellsForAcute() {
+    const c = [];
+    for (let z = 0; z < 5; z++) for (let x = 0; x < 6; x++) c.push({ x, z, tier: 0 });
+    return c;
+  }
+  let compiledOk = false, compileThrew = null;
+  try { compiledOk = !!compileRoomShellData(cells, { roomShellPolygonKernel: "oss" }); } catch (e) { compileThrew = e; }
+  check("2b-k. compileRoomShellData still compiles cleanly in oss mode with the bevel-bridge branch wired in",
+    compiledOk && !compileThrew, compileThrew && String(compileThrew));
 }
 
 // ═══ Fixture 3: centered door (one open run wrapping 3 corners) ═══

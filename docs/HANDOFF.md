@@ -46,14 +46,24 @@ unit personally re-gated (harnesses re-run by me, captures READ, never self-repo
   gate is met on the acceptance fixtures (not exhaustively fuzzed; capture framing was default room-fit,
   not the literal outside-low grazing angle — a follow-up to expose a capture camera-override seam).
 
-**⭐ TWO MORNING DECISIONS FOR ADAM (both change the DEFAULT render — deliberately NOT made autonomously):**
-1. **negative-`sy` default fix** — `theater-boot.js:8888` `f.sy > 0` discards a sunken tile's negative
-   sy, so sunken arenas don't render sunken. Fix = `Number.isFinite(f.sy)`. G0 encoded it red-first;
-   R2 promoted `geo-regression-be825c9cc76b`. It's in the tier-height domain you parked + changes the
-   default, so it waits for your eyes (+ the independent-riser static/dynamic work rides the same seam).
-2. **Flip the geometry default `legacy` → `oss`** — after the G2 (+ G3) gate is green and one
-   stabilization hold (OSS §15 rollout). Currently everything is `oss-compare` only; the default is
-   untouched.
+**⭐ DECISION STATUS (updated 2026-07-13 after Adam's review + SOL/Codex code review):**
+1. **negative-`sy`: APPROVED + LANDED** (`a2080059`) — `theater-boot.js:8896` is now
+   `Number.isFinite(f.sy)`; signed finite heights survive floor-contact mapping + tier compilation.
+   G0 stays red-first vs the retired predicate; R2's `geo-regression-be825c9cc76b` green. The
+   independent-riser static/dynamic work still rides this seam (parked for Codex's riser research).
+2. **Flip the geometry default `legacy` → `oss`: STILL HELD (Adam's call).** The two blockers found in
+   code review are now FIXED + landed: (a) G3's inner cap lip triangular hole (`c6a3bbb7`,
+   verify-wall-runs-oss 71→81→**92**, both lips); (b) the **acute-corner bevel contract** (`6a340793`)
+   — acute corners now keep the Clipper2 bevel (gap 0 on stem/capIn/capOut/footing, 100% provenance)
+   instead of discarding to the gapping legacy fallback; the fuzz acute check is red→green with a
+   `miterOnly` negative control. **Remaining before the flip: a controlled outside-low visual capture
+   sign-off + one stabilization hold (OSS §15).** Everything is still `oss-compare`; default untouched.
+
+**Re-gate lesson banked (2026-07-13):** a geometry gate accepted two false-greens I should have
+caught — a harness that measured only the OUTER cap lip (inner-lip hole survived) and "before/after"
+captures that were different scene content, not one serialized board/outside-low. Now standard in
+re-gating: verify a symmetric structure's BOTH sides, and confirm captures share scene+camera+light+crop
+before trusting a visual delta.
 
 **GPT 5.6 SOL** ruled the wall-miter question (adopted): the ~0.31u gap is a *real visible* defect
 (caps don't hide it — cap/footing inherit the per-segment construction); design = aperture-delimited

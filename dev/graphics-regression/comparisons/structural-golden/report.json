@@ -1,0 +1,39 @@
+{
+  "generatedAt": "2026-07-13T02:40:16.848Z",
+  "captureLabel": "golden",
+  "truthSource": "dev/geometry-research/fixtures/row101-live-dump.json",
+  "structuralSource": "dev/graphics-regression/captures/golden/structural.json",
+  "checks": [
+    {
+      "field": "shape vs roomShape",
+      "pass": true,
+      "truth": "octagon",
+      "captured": "octagon"
+    },
+    {
+      "field": "cellCount vs roomCellCount",
+      "pass": true,
+      "truth": 120,
+      "captured": 120
+    },
+    {
+      "field": "w vs roomW",
+      "pass": true,
+      "truth": 12,
+      "captured": 12
+    },
+    {
+      "field": "d vs roomD",
+      "pass": true,
+      "truth": 12,
+      "captured": 12
+    },
+    {
+      "field": "terrain patch count",
+      "pass": true,
+      "truth": "2 (sunken pit + raised dais ring, row 101's structural signature)",
+      "captured": 2
+    }
+  ],
+  "verdict": "GREEN"
+}

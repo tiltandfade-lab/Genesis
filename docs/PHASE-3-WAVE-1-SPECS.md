@@ -239,7 +239,15 @@ E0's fixture authoring (only its fade-with-wall behavior).
 
 ---
 
-## W0-a — MF-3b hit-stop production wiring  ·  branch `feat/w0a-mf3b-hitstop`  ·  SUB-WAVE 2 (after P3-1d)
+## W0-a — MF-3b hit-stop production wiring  ·  ~~branch `feat/w0a-mf3b-hitstop`~~  ·  ✅ ALREADY LANDED
+
+> **STRUCK 2026-07-13 — no work needed.** MF-3b was already wired in BW4B (commit `17474b45`,
+> 2026-07-11), which landed AFTER the handoff that flagged it open — so the wave plan listed a
+> unit that had already shipped. Verified on master: `dm.js:1595` `hp_changed` carries `crit` +
+> `attacker`; `theater-verbs.js:943` (`theaterFxFromLedger` hp case — note it lives in
+> theater-verbs.js, not theater-boot.js as the anchor below guessed) emits `attackerId`/`crit`;
+> `standee-verbs.js:400` consumes them; `verify-mf3b-hitstop-wiring.mjs` 35/0; dm-contract clean.
+> Left below for the record; do not re-dispatch.
 
 ### Context
 MF-3's hit-stop/recoil/crit-response are built + tested but DORMANT: production plays `hit-damage`

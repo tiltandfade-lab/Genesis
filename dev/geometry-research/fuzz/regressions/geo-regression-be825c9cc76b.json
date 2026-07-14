@@ -1,0 +1,204 @@
+{
+  "id": "geo-regression-be825c9cc76b",
+  "foundBy": "fast-check",
+  "seed": 400003,
+  "path": "1",
+  "property": "sunken-tier-survives-production-guard",
+  "cells": [
+    {
+      "x": 0,
+      "z": 0,
+      "tier": 3
+    },
+    {
+      "x": 0,
+      "z": -1,
+      "tier": 3
+    },
+    {
+      "x": 1,
+      "z": 0,
+      "tier": 3
+    },
+    {
+      "x": -1,
+      "z": -1,
+      "tier": 3
+    },
+    {
+      "x": 1,
+      "z": -1,
+      "tier": 3
+    },
+    {
+      "x": 2,
+      "z": 0,
+      "tier": 3
+    },
+    {
+      "x": -1,
+      "z": -2,
+      "tier": -3
+    },
+    {
+      "x": -2,
+      "z": -1,
+      "tier": -3
+    },
+    {
+      "x": -2,
+      "z": 0,
+      "tier": 3
+    },
+    {
+      "x": 1,
+      "z": 1,
+      "tier": 3
+    },
+    {
+      "x": -3,
+      "z": -1,
+      "tier": -3
+    },
+    {
+      "x": -1,
+      "z": 0,
+      "tier": 3
+    },
+    {
+      "x": 0,
+      "z": -2,
+      "tier": 3
+    },
+    {
+      "x": 0,
+      "z": 1,
+      "tier": 3
+    },
+    {
+      "x": 2,
+      "z": 1,
+      "tier": 3
+    },
+    {
+      "x": 1,
+      "z": -2,
+      "tier": 3
+    },
+    {
+      "x": 1,
+      "z": 2,
+      "tier": 3
+    }
+  ],
+  "tiers": {
+    "3": 14,
+    "-3": 3
+  },
+  "apertures": [],
+  "profile": {},
+  "expected": {
+    "knownRed": false,
+    "reason": "fixed: the production shellCells boundary accepts every finite signed f.sy; the old positive-only predicate remains an injected red-first control",
+    "shouldNotCollapse": true
+  },
+  "firstSeenCommit": "701415faa6bc27eb89063c2a1020d44f51994f7c",
+  "notes": "R2 property-fuzz shrink of the negative-sy sunken-tier-collapse defect, independent of G0's hand-authored F18-row101 fixture. Promoted regression is now green through production; the retired predicate remains the red-first control.",
+  "scenario": {
+    "apertures": [],
+    "terrain": [],
+    "renderShape": "identity",
+    "wallProfile": null,
+    "sunken": {
+      "depth": 1.9999985694885254
+    },
+    "cells": [
+      {
+        "x": 0,
+        "z": 0,
+        "tier": 3
+      },
+      {
+        "x": 0,
+        "z": -1,
+        "tier": 3
+      },
+      {
+        "x": 1,
+        "z": 0,
+        "tier": 3
+      },
+      {
+        "x": -1,
+        "z": -1,
+        "tier": 3
+      },
+      {
+        "x": 1,
+        "z": -1,
+        "tier": 3
+      },
+      {
+        "x": 2,
+        "z": 0,
+        "tier": 3
+      },
+      {
+        "x": -1,
+        "z": -2,
+        "tier": -3
+      },
+      {
+        "x": -2,
+        "z": -1,
+        "tier": -3
+      },
+      {
+        "x": -2,
+        "z": 0,
+        "tier": 3
+      },
+      {
+        "x": 1,
+        "z": 1,
+        "tier": 3
+      },
+      {
+        "x": -3,
+        "z": -1,
+        "tier": -3
+      },
+      {
+        "x": -1,
+        "z": 0,
+        "tier": 3
+      },
+      {
+        "x": 0,
+        "z": -2,
+        "tier": 3
+      },
+      {
+        "x": 0,
+        "z": 1,
+        "tier": 3
+      },
+      {
+        "x": 2,
+        "z": 1,
+        "tier": 3
+      },
+      {
+        "x": 1,
+        "z": -2,
+        "tier": 3
+      },
+      {
+        "x": 1,
+        "z": 2,
+        "tier": 3
+      }
+    ],
+    "tag": "tiers-heavy"
+  }
+}

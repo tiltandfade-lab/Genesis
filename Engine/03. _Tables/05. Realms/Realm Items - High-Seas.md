@@ -1,0 +1,80 @@
+---
+id: realm-items-high-seas
+type: table
+domain: Session Mechanics / Realms
+status: source
+table_class: Commitment
+player_facing: reveal
+voice_critical: true
+table_family: item
+row_contract: enforced
+remembers: item
+---
+
+#realm-items-high-seas
+> **PROVISIONAL — Adam skim pending.** The HIGH SEAS realm's item universe (docs/BREACH.md §2d,
+> BATCH3-GUARDRAILS.md J2 restructure). **Re-authored 2026-07-03 to ADAM-REVIEW-2 §3/§3b**
+> (doers-only — pointers extracted to `docs/REALM-PLOT-ITEMS-PARKED.md`; coherence laws: wired
+> physics only, cross-breach R1s, no undefined referents, Volatile = live-danger items; the
+> five cross-realm clone rows this table shared with Cosmic/Noir were re-authored as HIGH-SEAS
+> originals — Cosmic/Noir kept the native versions). d50; breach draws inside a
+> `high-seas`-tagged walk roll THIS table; legacy Outlandish d300 stays the
+> anachronism-intrusion grab-bag. Register per J3b: Age of sail — salt, debt-to-the-crew, and a
+> horizon that keeps its own counsel. Every item names its FRAME (existing `data/items.js` id);
+> none invented. **Band shares run hotter than H2's baseline by construction** (see Frontier's
+> frontmatter). Rank ladders sit on enchanted + signature rows; reality-breaking rungs floor at
+> L9. d50, Commitment ceiling.
+
+| d50 | Band | Item | Frame | Ranks | Note |
+|---|---|---|---|---|---|
+| 1 | Grounded | A ship's bell, cracked, salvage-grade. | bell | | Rings flat but rings. Hung on a line across a hatch or trail, it's a serviceable alarm. |
+| 2 | Grounded | A barnacle-crusted lockbox, hinges stiff but sound. | robe | | Waterproof once oiled. Whatever you stow inside rides dry through a full swamping. |
+| 3 | Grounded | A fisherman's oilskin coat, patched, smells permanently of brine. | robe | | Waterproof. Two hours bailing in it beats four hours wet. |
+| 4 | Grounded | A brass sextant, functional, case velvet worn through. | robe | | Sight the noon sun and you know your latitude — which, on open water, is worth more than gold. |
+| 5 | Grounded | A coil of fishing net, mended more than original. | net | | Functional. An evening's cast feeds four, water permitting. |
+| 6 | Grounded | A boat hook, iron, pitted with rust despite obvious recent use. | quarterstaff | | 1d6 bludgeoning; advantage on checks to grapple or board a hull. |
+| 7 | Grounded | A ship's log, salt-warped, mostly routine entries. | book | | Documents a mundane voyage: cargo, weather, crew complaints. Reads like honest work because it was. |
+| 8 | Grounded | A tin of ship's biscuit, hard as the deck planking. | robe | | Food for 4 days. Softens if soaked in grog first. |
+| 9 | Grounded | A coil of tarred rope, 50 ft, smells strongly of pitch. | rope | | Standard rigging rope. Holds a knot better than untarred line. |
+| 10 | Grounded | A captain's spyglass, one lens scratched, still serviceable. | spyglass | | Doubles effective sight range in clear weather. |
+| 11 | Grounded | A boarding axe, salt-pitted, edge kept honest. | handaxe | | 1d6 slashing; doubles as a climbing hook on hull or rigging (advantage on the check). |
+| 12 | Grounded | A pair of sea boots, salt-stained white at the cuffs. | leather armor | | Waterproof to the ankle. Grip well on wet decking. |
+| 13 | Textured | A bosun's whistle, silver, chain intact. | robe | | Its calls cut any storm: orders reach every ear on the ship regardless of din, and on watch with it, allies in earshot can't be surprised. |
+| 14 | Textured | A current tide almanac for this coast, printed, dog-eared. | robe | | Plan by it: advantage on any check timed to the tides — harbor runs, cave mouths, mudflat crossings. |
+| 15 | Textured | A merchant company's letter of marque, expired, seal impressive. | robe | | Flown, harbors treat you as licensed (advantage on port-entry checks) — until someone reads the date (DC 13 per port), at which point it's piracy, in writing, with your flag on it. |
+| 16 | Textured | A sea anchor, canvas and hoop, lines whipped neat. | robe | | Deployed: a ship rides out a storm bow-to-wind; a small boat stops drifting entirely. |
+| 17 | Textured | A jar of lamp oil pressed from something deep — it burns underwater. | robe | | Coats a blade (+1 fire damage for a scene) or fills a lantern that works submerged, four hours a fill. |
+| 18 | Textured | A pressed sailor's discharge papers, forged competently, one detail slightly wrong. | paper | | Passes a tired harbor clerk (DC 11). A captain who's actually looking is another matter (DC 16). |
+| 19 | Textured | A captured privateer's flag, folded, powder-scorched at one corner. | robe | | Flown: merchant ships strike their colors without a fight (DC 13 morale against your bluffed tonnage). Two navies shoot it on sight. Choose your water. |
+| 20 | Textured | A diving bell weight-harness, straps re-stitched. | robe | | Walk a harbor bottom for ten minutes per dip, surface crew on the line. Two crew minimum, and they will want shares. |
+| 21 | Strange | "The Quartermaster's Dice" — bone, worn smooth, always fair in one specific way. | robe | R1(L1) rolled over loot, they land showing each hand's fair share — arguing past them takes DC 14 Cha · R2(L6) once per voyage, rolled before a plan: a plain omen, profit or loss | They slide off a cheat's hand rather than roll. |
+| 22 | Strange | A fiddle, weathered, strings new, that plays sea-legs into a crew. | robe | | One shanty (ten minutes): the crew works as one — for the next group task (rowing, hauling, reefing), everyone counts as proficient. |
+| 23 | Strange | A tide pool in a sealed jar that never evaporates. | robe | | The water in it matches the sea's mood wherever you are: glass-calm means safe passage; it chops six hours before a storm; it freezes solid only for the unnatural. |
+| 24 | Strange | A ship's figurehead, salvaged, carved eyes bright. | robe | | Mounted at the bow: the ship cannot be surprised in fog or darkness — the figurehead watches, and the helmsman learns to feel it. Dismounted, it does nothing, pointedly. |
+| 25 | Volatile | A becalming charm — a knot of pale hair and ribbon, found nailed to the mast. | robe | | While it stays nailed: your ship's weather is always calm. No storms. No swells. No wind. Pried loose: the weather resumes in full — including one honest storm the calm was holding off, within the week. |
+| 26 | Volatile | A powder keg, bone-dry, stamped with the armory brand of a navy that wants it back. | robe | | Lit, one-round fuse: 8d6 fire, 30 ft. Naval inspectors know the brand on sight, and possession is a hanging offense in their ports. It is also, inconveniently, the best powder money can't buy. |
+| 27 | Mythic | **The thing the Company can't afford you to find — roll d4:** **1.** The last uncorrupted chart of the true trade routes, before the Company redrew the seas to suit its ledgers. **2.** The crew-book of `[the region's fallen power]`'s flagship — every name signed, every share of the last great haul still owed. **3.** The founding harbor-bell of `[this settlement]`, cast the day the first ship came home safe. **4.** The true log of the horizon-line, in which is written every ship that ever sailed past the charts' edge and what answered them — with one blank page, dated, waiting for a ship not yet launched. | robe | **1.** R1(L9) sailing by it: safe passage through any charted hazard, once per voyage · R2(L12) claiming it publicly and sailing the true routes openly, once: the old lanes reopen permanently, and the region's whole trade network redraws around them **2.** R1(L9) reading a name aloud summons that sailor's honest ghost to answer one question — once per voyage · R2(L12) paying out the old shares in full to the heirs the book names, once: the drowned crew's debt settles, and every port in `[the region]` honors your flag as a captain who pays the dead **3.** R1(L9) rung from your deck: one voyage's fog and foul weather clears straight to safe anchor — once per voyage · R2(L12) rung in `[this settlement]`'s own harbor with the whole port listening, once: every ship the town ever lost comes home — and the map's coast redraws around the fleet that, impossibly, returns **4.** R1(L9) reading it tells you truthfully what lies one day's sail past any charted edge — once per voyage · R2(L12) sailing the blank page's course, once: past the horizon and back, returning with a wonder from beyond the map — and the charts redraw, permanently, to include the water you proved | DM: the Company, the navies, and every port's harbormaster count as interested parties — word of these moves faction clocks. |
+| 28 | Grounded | A ship's carpenter's toolkit, half complete, missing exactly the tool needed for the current repair. | carpenter's tools | | Repairs minor hull damage in a few hours — the missing tool improvised with ten extra minutes of swearing. |
+| 29 | Grounded | A cask of ship's grog, three-quarters full, rationed by the quartermaster's own hand. | robe | | A round for the crew buys goodwill; a round too many buys a fight. Both are purchases. |
+| 30 | Grounded | A signal flag set, faded, missing two flags from the standard code. | robe | | Signals most standard messages between ships in sight. "Plague" and "surrender" require creativity. |
+| 31 | Grounded | A ship's cat's collar, small brass bell attached. | robe | | Worn on a belt, the crew treats you as marginally luckier than you've earned. The cat itself was last seen three ports ago and is presumed thriving. |
+| 32 | Grounded | A coil of oiled canvas, patch-grade, enough for one sail repair. | robe | | Patches a torn sail well enough to finish a voyage. |
+| 33 | Grounded | A cutlass, well-used, notches filed smooth on the cutting side. | shortsword | | 1d6 slashing, finesse. A working blade, not a trophy. |
+| 34 | Textured | A whaler's harpoon, line-eye intact, shaft scarred. | handaxe | | 1d8 piercing, thrown 30 ft. With rope bent on, a hit means the target tows you or your boat — or you reel it in (opposed Strength). |
+| 35 | Textured | The pilot's charts for `[this settlement]`'s harbor — the real ones, sandbars and all. | robe | | Enter or leave the harbor at night, in fog, at any tide — no pilot's fee, no scratch. Harbormasters consider these charts theirs. |
+| 36 | Textured | A pair of storm lanterns, gimbaled, glass thick as a thumb. | lantern, hooded | | Stay lit through anything the sea sends. Hung fore and aft, ships can hold formation through a whole gale. |
+| 37 | Textured | **Enchanted** — "The Wrecker's Compass" — brass, waterproof, needle black. | robe | R1(L1) points to the nearest wreck — sunken hull, drowned cargo, or structure the sea took · R2(L6) also ranks the cargo's worth, roughly, by how hard the needle pulls | The needle pulls through hulls, decks, and charts alike. |
+| 38 | Textured | **Enchanted** — "The First Mate's Knots" — a cord of nine knots, tar-dark, tied by someone patient. | robe | R1(L1) untie one knot: the next ten minutes of wind favor your sail — a small boat gains half again its pace, a ship +10 ft · R2(L6) untie three at once: one gust — knock a Medium creature prone at 30 ft, or fill the sails for one round of ramming speed | It reknots itself at dawn, up to nine. It has never explained the tenth fray. |
+| 39 | Textured | **Enchanted** — "The Whaler's Coat" — oiled canvas, heavy, never quite dry all the way through. | robe | R1(L1) resistance to cold damage while worn · R2(L6) you float — always, even unconscious, even in armor | It smells, faintly and permanently, of a whale that got away. |
+| 40 | Strange | **Enchanted** — "The Middle-Watch Hourglass" — ship's glass, sand pale as bone, runs exactly one watch. | robe | R1(L1) whoever turns it stays awake and sharp through their whole watch — no fatigue, no drowse · R2(L6) once per night the sand runs fast on its own: something is approaching the ship, and the minutes the glass stole are the minutes you have | The sand runs uphill in the bottom bulb's last inch. Watch it sometime. |
+| 41 | Strange | **Enchanted** — "The Crow's-Nest Eye" — a scrimshaw monocular, carved with a lidless eye. | goggles of night | R1(L1) triple sight range; read a flag at the horizon · R2(L6) once per day, one look straight through weather — fog, rain, and spray don't block that look | The scrimshaw eye is always slightly wet. |
+| 42 | Strange | **Enchanted** — "The Barnacle Crown" — a circlet, crusted, that fits like it was grown to the wearer's skull. | robe | R1(L1) breathe water as easily as air, indefinitely · R2(L6) understand and be understood by aquatic creatures of Intelligence 4 or higher | Barnacles do not grow in circles. These did. |
+| 43 | Strange | **Enchanted** — "The Galley Pot That Feeds the Watch" — black iron, ladle chained to the handle. | robe | R1(L1) whatever goes in stretches: one ration becomes a full watch's dinner, feeds six · R2(L6) once per week it serves the meal the crew needs: everyone who shares it loses one level of exhaustion | The ladle counts heads on its own. Stowaways get found at dinner. |
+| 44 | Strange | **Enchanted** — "The Drowned Choirmaster's Whistle" — carved from something bone-pale, that carries oddly far over water. | robe | R1(L1) signals audibly across any distance of open water, storm or calm · R2(L7) once per week, the signal calms rough water in a 100 ft radius for ten minutes | Bone-pale, warm, and it floats. Everything about it says keep it on a lanyard. |
+| 45 | Strange | **Signature** — "The Captain's Wheel-Charm" — a small brass fitting, mounted on any helm it's given to. | robe | R1(L1) the ship it's mounted on never founders from weather alone · R2(L6) the ship gains +10 ft speed under sail · R3(L9) once per voyage, outrun any single pursuing vessel regardless of relative speed | Every helm it's mounted to develops the same faint, steady hum. |
+| 46 | Strange | **Signature** — "The Drydock's Anchor" — rust-black, oversized, that has never once dragged. | robe | R1(L1) holds a ship fast through any storm, once dropped · R2(L6) raise and drop it as a bonus action rather than the usual labor · R3(L9) once per voyage, it can hold fast something OTHER than a ship — a door, a gate, a retreating tide | The chain sings, faintly, right before a storm arrives. |
+| 47 | Strange | **Signature** — "The Articles of the Free Wind" — ship's articles on sailcloth vellum, terms fair, signatures old. | robe | R1(L1) a crewman signed aboard your ship cannot bring themselves to break the articles' terms — no mutiny, no theft from shares · R2(L6) once per voyage, put one new term to an honest vote; passed, it binds like the rest · R3(L9) invoked at a parley between crews, once per voyage: both sides are bound to the parley's outcome as if they'd signed | The signatures never fade. The margins are full of thumbprints, some very old, one webbed. |
+| 48 | Volatile | **Signature** — "The Kraken's Bell" — a ship's bell, black with age, that rings itself once at every dusk spent at sea. | bell | R1(L1) rung BY HAND: ask the water one question per voyage; the deep answers honestly. But each dusk self-ring marks the ship's position for the thing below — by the third consecutive dusk aboard the same ship, it surfaces to look (one apex encounter; huntRules) · R2(L9) rung by hand as it surfaces, once: it recognizes the ringer, and departs | Two ships' names are engraved inside the lip. Neither sailed home. The bell did. |
+| 49 | Grounded | **Consumable** — A small cask of ship's grog, three servings. | robe | | One dose: advantage on the next save against fear; DC 10 Con save or one level of exhaustion after. |
+| 50 | Grounded | **Consumable** — A packet of dried salt fish, keeps for a full voyage. | robe | | Food for 2 days. An acquired taste nobody in the party has acquired yet. |
+^realm-items-high-seas

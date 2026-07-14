@@ -1,0 +1,24 @@
+{
+  "mode": "one-pixel",
+  "sourceLabel": "golden",
+  "outLabel": "mutated-one-pixel",
+  "fixtureId": "octagon-row101",
+  "regionId": "practical-fixture-region",
+  "appliedAt": "2026-07-13T02:40:17.782Z",
+  "pixel": {
+    "x": 390,
+    "y": 170,
+    "before": [
+      24,
+      16,
+      18,
+      255
+    ],
+    "after": [
+      255,
+      0,
+      255,
+      255
+    ]
+  }
+}

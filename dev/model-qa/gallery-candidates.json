@@ -1,0 +1,160 @@
+{
+  "_comment": "BEAUTY-WAVE VP2b gallery-candidates \u2014 bottom-clipped sprite/reject-take detector output. `verdict` is null until the human eyeball cull sets it to keep|reject; cullNote records why. Regenerate detection with python3 build/detect-gallery-candidates.py --emit (this OVERWRITES verdicts \u2014 cull AFTER the final regen, or preserve verdicts across reruns by hand before landing).",
+  "threshold": 0.3,
+  "candidates": [
+    {
+      "path": "assets/sprites/spr-fantasy-ancient-red-dragon.png",
+      "slug": "spr-fantasy-ancient-red-dragon",
+      "realm": "fantasy",
+      "source": "corpus",
+      "width": 231,
+      "height": 210,
+      "bottomClipFraction": 0.593,
+      "verdict": "keep",
+      "cullNote": "single-subject full-body creature art, genuinely bottom-clipped (feet/tail run off canvas), fantasy realm is wired for interior dressing \u2014 good painting subject."
+    },
+    {
+      "path": "assets/sprites/spr-fantasy-colossus.png",
+      "slug": "spr-fantasy-colossus",
+      "realm": "fantasy",
+      "source": "corpus",
+      "width": 236,
+      "height": 218,
+      "bottomClipFraction": 0.708,
+      "verdict": "keep",
+      "cullNote": "single-subject full-body creature art, genuinely bottom-clipped (feet/tail run off canvas), fantasy realm is wired for interior dressing \u2014 good painting subject."
+    },
+    {
+      "path": "assets/sprites/spr-fantasy-kraken.png",
+      "slug": "spr-fantasy-kraken",
+      "realm": "fantasy",
+      "source": "corpus",
+      "width": 235,
+      "height": 214,
+      "bottomClipFraction": 0.911,
+      "verdict": "keep",
+      "cullNote": "single-subject full-body creature art, genuinely bottom-clipped (feet/tail run off canvas), fantasy realm is wired for interior dressing \u2014 good painting subject."
+    },
+    {
+      "path": "assets/sprites/spr-fantasy-tarrasque.png",
+      "slug": "spr-fantasy-tarrasque",
+      "realm": "fantasy",
+      "source": "corpus",
+      "width": 246,
+      "height": 215,
+      "bottomClipFraction": 0.484,
+      "verdict": "keep",
+      "cullNote": "single-subject full-body creature art, genuinely bottom-clipped (feet/tail run off canvas), fantasy realm is wired for interior dressing \u2014 good painting subject."
+    },
+    {
+      "path": "dev/model-qa/quarantine-pack/high-angle/frontier-earwig.png",
+      "slug": "frontier-earwig",
+      "realm": "frontier",
+      "source": "quarantine",
+      "width": 274,
+      "height": 298,
+      "bottomClipFraction": 0.456,
+      "verdict": "reject",
+      "cullNote": "realm 'frontier' has no INTERIOR_TILE_KITS entry (unwired) \u2014 registering a painting here would be dead data per gen-realm-dressing.py scope; also multi-subject composite sprite SHEET (swarm/group art), not a single framed portrait \u2014 the detector caught the sheet composite edge, not a genuine clipped figure; false positive for gallery framing."
+    },
+    {
+      "path": "dev/model-qa/quarantine-pack/high-angle/suburb-black-snake-coiled.png",
+      "slug": "suburb-black-snake-coiled",
+      "realm": "suburb",
+      "source": "quarantine",
+      "width": 189,
+      "height": 253,
+      "bottomClipFraction": 0.397,
+      "verdict": "reject",
+      "cullNote": "realm 'suburb' has no INTERIOR_TILE_KITS entry (unwired) \u2014 registering a painting here would be dead data per gen-realm-dressing.py scope; also multi-subject composite sprite SHEET (swarm/group art), not a single framed portrait \u2014 the detector caught the sheet composite edge, not a genuine clipped figure; false positive for gallery framing."
+    },
+    {
+      "path": "dev/model-qa/quarantine-pack/other/cosmic-flying-eye-fish-swarm.png",
+      "slug": "cosmic-flying-eye-fish-swarm",
+      "realm": "cosmic",
+      "source": "quarantine",
+      "width": 228,
+      "height": 343,
+      "bottomClipFraction": 0.364,
+      "verdict": "reject",
+      "cullNote": "realm 'cosmic' has no INTERIOR_TILE_KITS entry (unwired) \u2014 registering a painting here would be dead data per gen-realm-dressing.py scope; also multi-subject composite sprite SHEET (swarm/group art), not a single framed portrait \u2014 the detector caught the sheet composite edge, not a genuine clipped figure; false positive for gallery framing."
+    },
+    {
+      "path": "dev/model-qa/quarantine-pack/other/frontier-fire-elemental.png",
+      "slug": "frontier-fire-elemental",
+      "realm": "frontier",
+      "source": "quarantine",
+      "width": 272,
+      "height": 308,
+      "bottomClipFraction": 0.331,
+      "verdict": "reject",
+      "cullNote": "realm 'frontier' has no INTERIOR_TILE_KITS entry (unwired) \u2014 registering a painting here would be dead data per gen-realm-dressing.py scope; also multi-subject composite sprite SHEET (swarm/group art), not a single framed portrait \u2014 the detector caught the sheet composite edge, not a genuine clipped figure; false positive for gallery framing."
+    },
+    {
+      "path": "dev/model-qa/quarantine-pack/other/frontier-flies-group.png",
+      "slug": "frontier-flies-group",
+      "realm": "frontier",
+      "source": "quarantine",
+      "width": 192,
+      "height": 307,
+      "bottomClipFraction": 0.75,
+      "verdict": "reject",
+      "cullNote": "realm 'frontier' has no INTERIOR_TILE_KITS entry (unwired) \u2014 registering a painting here would be dead data per gen-realm-dressing.py scope; also multi-subject composite sprite SHEET (swarm/group art), not a single framed portrait \u2014 the detector caught the sheet composite edge, not a genuine clipped figure; false positive for gallery framing."
+    },
+    {
+      "path": "dev/model-qa/quarantine-pack/other/frontier-moths-group.png",
+      "slug": "frontier-moths-group",
+      "realm": "frontier",
+      "source": "quarantine",
+      "width": 275,
+      "height": 296,
+      "bottomClipFraction": 0.52,
+      "verdict": "reject",
+      "cullNote": "realm 'frontier' has no INTERIOR_TILE_KITS entry (unwired) \u2014 registering a painting here would be dead data per gen-realm-dressing.py scope; also multi-subject composite sprite SHEET (swarm/group art), not a single framed portrait \u2014 the detector caught the sheet composite edge, not a genuine clipped figure; false positive for gallery framing."
+    },
+    {
+      "path": "dev/model-qa/quarantine-pack/other/frontier-rabbit-swarm.png",
+      "slug": "frontier-rabbit-swarm",
+      "realm": "frontier",
+      "source": "quarantine",
+      "width": 215,
+      "height": 309,
+      "bottomClipFraction": 0.344,
+      "verdict": "reject",
+      "cullNote": "realm 'frontier' has no INTERIOR_TILE_KITS entry (unwired) \u2014 registering a painting here would be dead data per gen-realm-dressing.py scope; also multi-subject composite sprite SHEET (swarm/group art), not a single framed portrait \u2014 the detector caught the sheet composite edge, not a genuine clipped figure; false positive for gallery framing."
+    },
+    {
+      "path": "dev/model-qa/quarantine-pack/other/frontier-silverfish-group.png",
+      "slug": "frontier-silverfish-group",
+      "realm": "frontier",
+      "source": "quarantine",
+      "width": 200,
+      "height": 268,
+      "bottomClipFraction": 0.525,
+      "verdict": "reject",
+      "cullNote": "realm 'frontier' has no INTERIOR_TILE_KITS entry (unwired) \u2014 registering a painting here would be dead data per gen-realm-dressing.py scope; also multi-subject composite sprite SHEET (swarm/group art), not a single framed portrait \u2014 the detector caught the sheet composite edge, not a genuine clipped figure; false positive for gallery framing."
+    },
+    {
+      "path": "dev/model-qa/quarantine-pack/other/high-seas-water-vortex-elemental-with-debris.png",
+      "slug": "high-seas-water-vortex-elemental-with-debris",
+      "realm": "high-seas",
+      "source": "quarantine",
+      "width": 262,
+      "height": 376,
+      "bottomClipFraction": 0.542,
+      "verdict": "reject",
+      "cullNote": "realm 'high-seas' has no INTERIOR_TILE_KITS entry (unwired) \u2014 registering a painting here would be dead data per gen-realm-dressing.py scope; also multi-subject composite sprite SHEET (swarm/group art), not a single framed portrait \u2014 the detector caught the sheet composite edge, not a genuine clipped figure; false positive for gallery framing."
+    },
+    {
+      "path": "dev/model-qa/quarantine-pack/top-down/frontier-moth.png",
+      "slug": "frontier-moth",
+      "realm": "frontier",
+      "source": "quarantine",
+      "width": 272,
+      "height": 269,
+      "bottomClipFraction": 0.467,
+      "verdict": "reject",
+      "cullNote": "realm 'frontier' has no INTERIOR_TILE_KITS entry (unwired) \u2014 registering a painting here would be dead data per gen-realm-dressing.py scope; also multi-subject composite sprite SHEET (swarm/group art), not a single framed portrait \u2014 the detector caught the sheet composite edge, not a genuine clipped figure; false positive for gallery framing."
+    }
+  ]
+}

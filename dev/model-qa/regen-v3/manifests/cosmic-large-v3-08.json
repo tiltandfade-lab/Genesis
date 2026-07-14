@@ -1,0 +1,41 @@
+{
+ "file": "cosmic-large-v3-08.png",
+ "realm": "cosmic",
+ "gridClass": "large",
+ "grid": "2 rows x 2 columns",
+ "chroma": "#FF00FF",
+ "cells": [
+  {
+   "slug": "cosmic-spectral-star-horse",
+   "label": "spectral star horse",
+   "family": "monsters",
+   "sizeBand": "large",
+   "replaces": "cosmic-mm-01.png|r3c1",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "cosmic-tentacle-mound-with-doorway",
+   "label": "tentacle mound with doorway",
+   "family": "monsters",
+   "sizeBand": "large",
+   "replaces": "cosmic-mm-01.png|r3c2",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "cosmic-cube-headed-stone-golem",
+   "label": "cube-headed stone golem",
+   "family": "monsters",
+   "sizeBand": "large",
+   "replaces": "cosmic-mm-01.png|r3c4",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "cosmic-mound-of-mouths",
+   "label": "mound of mouths",
+   "family": "monsters",
+   "sizeBand": "large",
+   "replaces": "cosmic-mm-01.png|r4c2",
+   "reason": "regen-underres"
+  }
+ ]
+}

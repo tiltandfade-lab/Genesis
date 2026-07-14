@@ -1,0 +1,17 @@
+{
+ "file": "high-seas-solo-v3-19.png",
+ "realm": "high-seas",
+ "gridClass": "solo",
+ "grid": "1 row x 1 column",
+ "chroma": "#FF00FF",
+ "cells": [
+  {
+   "slug": "high-seas-two-headed-sea-serpent",
+   "label": "two-headed sea serpent",
+   "family": "monsters",
+   "sizeBand": "gargantuan",
+   "replaces": "high-seas-mm-05.png|r1c5",
+   "reason": "regen-underres"
+  }
+ ]
+}

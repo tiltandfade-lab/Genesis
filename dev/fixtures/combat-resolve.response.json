@@ -1,0 +1,18 @@
+{
+  "turnId": "fixture-combat-resolve",
+  "narration": "The board snaps. You drop a hand-span into the mud and both voices stop dead. A trapdoor bangs open above and a wiry eel-fisher comes down the ladder with a gutting-knife already out, eyes wild — he swings before he even sees what you are. It is short and ugly: you turn the knife on its owner, and he folds into the black water and does not come up. Above, the second one has gone silent. The oilcloth bundle sits abandoned on the planking, dripping.",
+  "events": [
+    { "type": "encounter_resolved",
+      "payload": { "foes": [{ "cr": "1/8", "victimClass": "civilian" }], "method": "combat", "objectiveRef": "ledger-was-taken", "outcome": "won" },
+      "source": "declared", "ledgerRefs": [] },
+    { "type": "kill",
+      "payload": { "victimClass": "civilian", "factionId": "eel-fishers" },
+      "source": "declared", "ledgerRefs": [] },
+    { "type": "adjudication",
+      "payload": { "situation": "PC killed a panicking villager who attacked first", "ruling": "self-defense, but a civilian death the village will remember; eel-fishers turn hostile toward the PC", "precedentId": "civilian-death-saltmarsh" },
+      "source": "declared", "ledgerRefs": [] }
+  ],
+  "rollRequest": null,
+  "ask": null,
+  "dmNotes": "Narrated FROM the player's 7 (a failure — the board snaps, surprise lost). victimClass civilian, not monster — DIFFICULTY would note a killing that wasn't a foe-of-the-world."
+}

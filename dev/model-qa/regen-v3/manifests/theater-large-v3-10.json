@@ -1,0 +1,41 @@
+{
+ "file": "theater-large-v3-10.png",
+ "realm": "theater",
+ "gridClass": "large",
+ "grid": "2 rows x 2 columns",
+ "chroma": "#FF00FF",
+ "cells": [
+  {
+   "slug": "theater-saddled-horse",
+   "label": "saddled horse",
+   "family": "animals",
+   "sizeBand": "large",
+   "replaces": "theater-dungeon-animals-01.png|r4c3",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "theater-gas-cloud-wraith",
+   "label": "gas cloud wraith",
+   "family": "monsters",
+   "sizeBand": "large",
+   "replaces": "theater-mm-01.png|r1c5",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "theater-walker-turret-machine",
+   "label": "walker turret machine",
+   "family": "monsters",
+   "sizeBand": "large",
+   "replaces": "theater-mm-01.png|r4c2",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "theater-cavalryman-on-horse",
+   "label": "cavalryman on horse",
+   "family": "monsters",
+   "sizeBand": "large",
+   "replaces": "theater-mm-01.png|r4c4",
+   "reason": "regen-underres"
+  }
+ ]
+}

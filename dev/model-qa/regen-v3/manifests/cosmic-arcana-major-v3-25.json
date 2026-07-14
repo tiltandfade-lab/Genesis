@@ -1,0 +1,135 @@
+{
+ "file": "cosmic-arcana-major-v3-25.png",
+ "realm": "cosmic",
+ "gridClass": "arcana-major",
+ "grid": "5 rows x 4 columns",
+ "chroma": "#FF00FF",
+ "cells": [
+  {
+   "slug": "cosmic-the-fool",
+   "label": "The Fool - barefoot wanderer mid-step off a starry cliff edge, knapsack on a stick, small dog snapping at his heels",
+   "family": "arcana",
+   "sizeBand": "medium",
+   "reason": "expansion-arcana"
+  },
+  {
+   "slug": "cosmic-the-magician",
+   "label": "The Magician - robed conjurer, one arm raised to the stars and one pointing to the ground, infinity halo, wand cup sword and coin floating around him",
+   "family": "arcana",
+   "sizeBand": "medium",
+   "reason": "expansion-arcana"
+  },
+  {
+   "slug": "cosmic-the-high-priestess",
+   "label": "The High Priestess - veiled seer enthroned between one black and one white pillar, crescent-moon crown, scroll in lap",
+   "family": "arcana",
+   "sizeBand": "medium",
+   "reason": "expansion-arcana"
+  },
+  {
+   "slug": "cosmic-the-empress",
+   "label": "The Empress - crowned matron on a cushioned throne amid golden wheat, heart-shaped shield",
+   "family": "arcana",
+   "sizeBand": "medium",
+   "reason": "expansion-arcana"
+  },
+  {
+   "slug": "cosmic-the-emperor",
+   "label": "The Emperor - armored patriarch on a ram-horned stone throne, ankh scepter",
+   "family": "arcana",
+   "sizeBand": "medium",
+   "reason": "expansion-arcana"
+  },
+  {
+   "slug": "cosmic-the-hierophant",
+   "label": "The Hierophant - triple-crowned priest with raised blessing hand, two crossed golden keys at his feet",
+   "family": "arcana",
+   "sizeBand": "medium",
+   "reason": "expansion-arcana"
+  },
+  {
+   "slug": "cosmic-the-lovers",
+   "label": "The Lovers - man and woman standing beneath a winged sun-angel",
+   "family": "arcana",
+   "sizeBand": "medium",
+   "reason": "expansion-arcana"
+  },
+  {
+   "slug": "cosmic-strength",
+   "label": "Strength - calm woman gently closing a lion's jaws with bare hands, infinity halo",
+   "family": "arcana",
+   "sizeBand": "medium",
+   "reason": "expansion-arcana"
+  },
+  {
+   "slug": "cosmic-the-hermit",
+   "label": "The Hermit - hooded grey elder on a peak holding up a lantern with a six-pointed star inside",
+   "family": "arcana",
+   "sizeBand": "medium",
+   "reason": "expansion-arcana"
+  },
+  {
+   "slug": "cosmic-justice",
+   "label": "Justice - enthroned figure with upraised double-edged sword and hanging scales, red robe",
+   "family": "arcana",
+   "sizeBand": "medium",
+   "reason": "expansion-arcana"
+  },
+  {
+   "slug": "cosmic-the-hanged-man",
+   "label": "The Hanged Man - serene figure hanging upside-down by one ankle from a living tree beam, golden halo",
+   "family": "arcana",
+   "sizeBand": "medium",
+   "reason": "expansion-arcana"
+  },
+  {
+   "slug": "cosmic-temperance",
+   "label": "Temperance - winged angel pouring glowing starlight between two cups, one foot on land one in water",
+   "family": "arcana",
+   "sizeBand": "medium",
+   "reason": "expansion-arcana"
+  },
+  {
+   "slug": "cosmic-the-devil",
+   "label": "The Devil - horned goat-demon squatting on a black plinth, inverted pentagram on brow, two small chained figures",
+   "family": "arcana",
+   "sizeBand": "medium",
+   "reason": "expansion-arcana"
+  },
+  {
+   "slug": "cosmic-the-star",
+   "label": "The Star - kneeling maiden pouring two jugs of starwater under one huge eight-pointed gold star",
+   "family": "arcana",
+   "sizeBand": "medium",
+   "reason": "expansion-arcana"
+  },
+  {
+   "slug": "cosmic-the-moon",
+   "label": "The Moon - pale sorceress with a crescent face-moon staff, twin hounds howling at her feet, crayfish at the hem of her robe",
+   "family": "arcana",
+   "sizeBand": "medium",
+   "reason": "expansion-arcana"
+  },
+  {
+   "slug": "cosmic-the-sun",
+   "label": "The Sun - radiant laughing child rider on a white horse carrying an orange banner, sunflower crown",
+   "family": "arcana",
+   "sizeBand": "medium",
+   "reason": "expansion-arcana"
+  },
+  {
+   "slug": "cosmic-judgement",
+   "label": "Judgement - stern angel blowing a long gold trumpet, small rising figures reaching up around the hem",
+   "family": "arcana",
+   "sizeBand": "medium",
+   "reason": "expansion-arcana"
+  },
+  {
+   "slug": "cosmic-the-world",
+   "label": "The World - dancer wreathed in a laurel ring holding two wands, poised mid-step",
+   "family": "arcana",
+   "sizeBand": "medium",
+   "reason": "expansion-arcana"
+  }
+ ]
+}

@@ -1,0 +1,49 @@
+{
+ "file": "gloom-medium-beast-v3-03.png",
+ "realm": "gloom",
+ "gridClass": "medium-beast",
+ "grid": "2 rows x 4 columns",
+ "chroma": "#FF00FF",
+ "cells": [
+  {
+   "slug": "gloom-mite-swarm",
+   "label": "mite swarm",
+   "family": "animals",
+   "sizeBand": "medium",
+   "replaces": "gloom-dungeon-animals-2.png|r2c1",
+   "reason": "FAIL-adam"
+  },
+  {
+   "slug": "gloom-roach-swarm",
+   "label": "roach swarm",
+   "family": "animals",
+   "sizeBand": "medium",
+   "replaces": "gloom-dungeon-animals-2.png|r2c2",
+   "reason": "FAIL-adam"
+  },
+  {
+   "slug": "gloom-silverfish-swarm",
+   "label": "silverfish swarm",
+   "family": "animals",
+   "sizeBand": "medium",
+   "replaces": "gloom-dungeon-animals-2.png|r4c2",
+   "reason": "FAIL-adam"
+  },
+  {
+   "slug": "gloom-skeletal-dog",
+   "label": "skeletal dog",
+   "family": "animals",
+   "sizeBand": "medium",
+   "replaces": "gloom-dungeon-animals-2.png|r5c1",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "gloom-fly-swarm",
+   "label": "fly swarm",
+   "family": "animals",
+   "sizeBand": "medium",
+   "replaces": "gloom-dungeon-animals-2.png|r5c2",
+   "reason": "FAIL-adam"
+  }
+ ]
+}

@@ -1,0 +1,359 @@
+{
+  "generatedAt": "2026-07-04T04:04:44.118Z",
+  "notes": [],
+  "consoleErrors": {
+    "stage": [
+      "[1440] Failed to load resource: the server responded with a status of 404 (File not found)",
+      "[1440] Failed to load resource: the server responded with a status of 404 (File not found)"
+    ],
+    "classic": [
+      "[classic] Failed to load resource: the server responded with a status of 404 (File not found)"
+    ],
+    "explore": [
+      "[explore-page2] Failed to load resource: the server responded with a status of 404 (File not found)"
+    ]
+  },
+  "explore": {
+    "pageScroll": {
+      "scrollHeight": 900,
+      "innerHeight": 900,
+      "equal": true,
+      "delta": 0
+    },
+    "hasIngame": true,
+    "hasBattleStage": false
+  },
+  "stageWaitFinal": {
+    "ready": true,
+    "state": {
+      "hasBattleStage": true,
+      "theaterMounted": true,
+      "hasCanvas": true
+    },
+    "health": {
+      "meanLum": 20.271922743055132,
+      "errorsCount": 2,
+      "hasCanvas": true
+    }
+  },
+  "angleUsed": "default-angle",
+  "theaterMounted": true,
+  "canvasConfirmedNonBlank": true,
+  "stage1440": {
+    "theaterStageWrap": {
+      "rect": {
+        "x": 279,
+        "y": 86.75,
+        "width": 814,
+        "height": 657,
+        "top": 86.75,
+        "left": 279,
+        "right": 1093,
+        "bottom": 743.75
+      },
+      "heightPctVh": 73
+    },
+    "theaterStageCanvas": {
+      "clientRect": {
+        "x": 280,
+        "y": 87.75,
+        "width": 812,
+        "height": 655,
+        "top": 87.75,
+        "left": 280,
+        "right": 1092,
+        "bottom": 742.75
+      },
+      "backingWidth": 271,
+      "backingHeight": 218,
+      "clientAspect": 1.2396946564885496,
+      "backingAspect": 1.2431192660550459,
+      "aspectDelta": 0.0034246095664962617
+    },
+    "canvasWrapRect": {
+      "x": 279,
+      "y": 86.75,
+      "width": 814,
+      "height": 657,
+      "top": 86.75,
+      "left": 279,
+      "right": 1093,
+      "bottom": 743.75
+    },
+    "stageFeedCol": {
+      "rect": {
+        "x": 1126,
+        "y": 14,
+        "width": 300,
+        "height": 872,
+        "top": 14,
+        "left": 1126,
+        "right": 1426,
+        "bottom": 886
+      },
+      "width": 300
+    },
+    "gameHasPanel": true,
+    "gameClassList": [
+      "game",
+      "has-panel",
+      "battle-stage"
+    ],
+    "feedText": {
+      "dmTxt": null,
+      "dmRoll": null,
+      "dmWho": null
+    },
+    "feedTextRailWidth": null,
+    "estCharsPerLine": null,
+    "overflowingDescendants": [
+      {
+        "tag": "DIV",
+        "cls": "scene-plaque",
+        "scrollWidth": 151,
+        "clientWidth": 93
+      }
+    ],
+    "composer": {
+      "dmInputRect": {
+        "x": 1172.796875,
+        "y": 822,
+        "width": 206.40625,
+        "height": 48,
+        "top": 822,
+        "left": 1172.796875,
+        "right": 1379.203125,
+        "bottom": 870
+      },
+      "dmInputMarginInline": {
+        "margin-inline-start": "28.8px",
+        "margin-inline-end": "28.8px",
+        "margin-left": "28.8px",
+        "margin-right": "28.8px"
+      },
+      "textareaRect": {
+        "x": 1173.796875,
+        "y": 823,
+        "width": 144.40625,
+        "height": 46,
+        "top": 823,
+        "left": 1173.796875,
+        "right": 1318.203125,
+        "bottom": 869
+      },
+      "textareaFontSize": {
+        "font-size": "18px"
+      },
+      "buttonRect": {
+        "x": 1318.203125,
+        "y": 823,
+        "width": 60,
+        "height": 46,
+        "top": 823,
+        "left": 1318.203125,
+        "right": 1378.203125,
+        "bottom": 869
+      },
+      "buttonFontSize": {
+        "font-size": "19px"
+      },
+      "buttonPadding": {
+        "padding": "0px 20px"
+      },
+      "buttonWidthPctOfDmInput": 29.06888720666162,
+      "fitsOneRow": true,
+      "bottomVsViewport": 30,
+      "clipped": false
+    },
+    "pageScroll": {
+      "scrollHeight": 900,
+      "innerHeight": 900,
+      "equal": true,
+      "delta": 0
+    },
+    "bandRail": {
+      "rowCount": 4,
+      "hasOccCount": 2
+    }
+  },
+  "stage1280": {
+    "stageFeedColWidth": 300,
+    "pageScroll": {
+      "scrollHeight": 800,
+      "innerHeight": 800,
+      "equal": true,
+      "delta": 0
+    },
+    "composerClipped": false
+  },
+  "classic": {
+    "arenaHttpStatus": {
+      "status": 200,
+      "ok": true
+    },
+    "cmbGridArenaRect": {
+      "x": 1096,
+      "y": 154.25,
+      "width": 307,
+      "height": 366.5
+    },
+    "pageScroll": {
+      "scrollHeight": 900,
+      "innerHeight": 900,
+      "equal": true,
+      "delta": 0
+    }
+  },
+  "bootReport": {
+    "captures": [
+      {
+        "name": "explore-1440.png",
+        "ok": true,
+        "path": "/Users/adamstephenson/Desktop/Work/projects/Genesis/.claude/worktrees/agent-aa2e7653a8f6dd99a/dev/battle-gate/round0/explore-1440.png",
+        "bytes": 4426136
+      },
+      {
+        "name": "stage-1440.png",
+        "ok": true,
+        "path": "/Users/adamstephenson/Desktop/Work/projects/Genesis/.claude/worktrees/agent-aa2e7653a8f6dd99a/dev/battle-gate/round0/stage-1440.png",
+        "bytes": 2889326
+      },
+      {
+        "name": "stage-right-rail.png",
+        "ok": true,
+        "path": "/Users/adamstephenson/Desktop/Work/projects/Genesis/.claude/worktrees/agent-aa2e7653a8f6dd99a/dev/battle-gate/round0/stage-right-rail.png",
+        "size": 1004449,
+        "box": {
+          "x": 1126,
+          "y": 14,
+          "height": 872,
+          "width": 300
+        }
+      },
+      {
+        "name": "stage-composer.png",
+        "ok": true,
+        "path": "/Users/adamstephenson/Desktop/Work/projects/Genesis/.claude/worktrees/agent-aa2e7653a8f6dd99a/dev/battle-gate/round0/stage-composer.png",
+        "size": 34475,
+        "box": {
+          "x": 1172.796875,
+          "y": 822,
+          "height": 48,
+          "width": 206.40625
+        }
+      },
+      {
+        "name": "stage-1280.png",
+        "ok": true,
+        "path": "/Users/adamstephenson/Desktop/Work/projects/Genesis/.claude/worktrees/agent-aa2e7653a8f6dd99a/dev/battle-gate/round0/stage-1280.png",
+        "bytes": 2546540
+      },
+      {
+        "name": "classic-fallback.png",
+        "ok": true,
+        "path": "/Users/adamstephenson/Desktop/Work/projects/Genesis/.claude/worktrees/agent-aa2e7653a8f6dd99a/dev/battle-gate/round0/classic-fallback.png",
+        "bytes": 4441692
+      }
+    ],
+    "bootNotes": [
+      {
+        "phase": "creation-to-in-session",
+        "ok": true,
+        "notes": [
+          "startBardo() called",
+          "bardo walk finished after 22 steps, GS.BARDO.i=23",
+          "bardoFound/bardoWake called",
+          "showTab('world') called"
+        ],
+        "worldId": "mr5u9b95lz8iq",
+        "worldName": "The Shimmering Maw",
+        "pcName": "Gate Harness Test Soul"
+      },
+      {
+        "phase": "combat_start",
+        "ok": true,
+        "raw": {
+          "ok": true,
+          "combat": {
+            "round": 1,
+            "first": "pc",
+            "foes": [
+              {
+                "fid": "f1",
+                "name": "Goblin",
+                "band": "near",
+                "lane": "C"
+              },
+              {
+                "fid": "f2",
+                "name": "Goblin",
+                "band": "near",
+                "lane": "C"
+              },
+              {
+                "fid": "f3",
+                "name": "Wolf",
+                "band": "near",
+                "lane": "R"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "phase": "creation-to-in-session-classic-page",
+        "ok": true,
+        "notes": [
+          "startBardo() called",
+          "bardo walk finished after 22 steps, GS.BARDO.i=23",
+          "bardoFound/bardoWake called",
+          "showTab('world') called"
+        ],
+        "worldId": "mr5u9hebapgnx",
+        "worldName": "Slate-Roof Rise",
+        "pcName": "Gate Harness Test Soul"
+      },
+      {
+        "phase": "disable-theater",
+        "ok": true
+      },
+      {
+        "phase": "combat_start-classic",
+        "ok": true,
+        "raw": {
+          "ok": true,
+          "combat": {
+            "round": 1,
+            "first": "enemy",
+            "foes": [
+              {
+                "fid": "f1",
+                "name": "Goblin",
+                "band": "near",
+                "lane": "R"
+              },
+              {
+                "fid": "f2",
+                "name": "Goblin",
+                "band": "near",
+                "lane": "C"
+              },
+              {
+                "fid": "f3",
+                "name": "Wolf",
+                "band": "near",
+                "lane": "R"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "phase": "arena-png-fetch-check",
+        "status": 200,
+        "ok": true
+      }
+    ],
+    "blockers": []
+  }
+}

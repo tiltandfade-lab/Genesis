@@ -1,0 +1,10 @@
+{
+  "rule": "All decal patches must read as flat direct-on orthographic overlays with no perspective, foreshortening, visible thickness, or side faces.",
+  "flagged": [
+    { "kind": "grime", "original": "shared-grime-decal-set-2", "replacement": "shared-grime-decal-set-4", "reason": "surface-like plank/brick forms and a corner-plane read; set-3 was also rejected for retaining surface-like forms" },
+    { "kind": "crack", "original": "shared-crack-decal-set-2", "replacement": "shared-crack-decal-set-3", "reason": "raised masonry/heaved-slab geometry with visible depth" },
+    { "kind": "scorch", "original": "shared-scorch-decal-set-2", "replacement": "shared-scorch-decal-set-3", "reason": "chunky raised rock/lava-like forms" },
+    { "kind": "wear", "original": "shared-wear-decal-set-2", "replacement": "shared-wear-decal-set-3", "status": "still-perspective-flagged", "reason": "original had receding road/brick surface perspective; replacement retains a minor directional-plane read" }
+  ],
+  "acceptedFlat": ["moss", "water", "rust", "cobweb", "blood"]
+}

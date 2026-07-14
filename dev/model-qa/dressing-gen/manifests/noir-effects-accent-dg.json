@@ -1,0 +1,48 @@
+{
+ "file": "noir-effects-accent-dg.png",
+ "realm": "noir",
+ "family": "effects-accent",
+ "grid": "2 rows x 4 columns",
+ "chroma": "#FF00FF",
+ "wave": "dressing-gen",
+ "cells": [
+  {
+   "slug": "fx-noir-muzzleflash",
+   "label": "muzzle flash burst, high-contrast monochrome flare"
+  },
+  {
+   "slug": "fx-noir-rainsplash",
+   "label": "rain-slick splash spray, sepia droplet fan"
+  },
+  {
+   "slug": "fx-noir-cigarettesmoke",
+   "label": "curling cigarette-smoke wisp, slow monochrome drift"
+  },
+  {
+   "slug": "fx-noir-flashbulbpop",
+   "label": "press flashbulb pop, stark white flash"
+  },
+  {
+   "slug": "fx-noir-neonflicker",
+   "label": "flickering neon-sign glow burst, red streetlight tint"
+  },
+  {
+   "slug": "fx-noir-shatterglass",
+   "label": "shattering glass burst, sepia-toned shard spray"
+  },
+  {
+   "slug": "fx-noir-muzzleflash-alt",
+   "label": "ALT of 'muzzle flash burst, high-contrast monochrome flare' — different shape/growth/wear, same kind",
+   "tags": null,
+   "size": null,
+   "altOf": "fx-noir-muzzleflash"
+  },
+  {
+   "slug": "fx-noir-rainsplash-alt",
+   "label": "ALT of 'rain-slick splash spray, sepia droplet fan' — different shape/growth/wear, same kind",
+   "tags": null,
+   "size": null,
+   "altOf": "fx-noir-rainsplash"
+  }
+ ]
+}

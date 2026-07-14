@@ -1,0 +1,25 @@
+{
+ "file": "fantasy-small-v3-03.png",
+ "realm": "fantasy",
+ "gridClass": "small",
+ "grid": "1 row x 5 columns",
+ "chroma": "#FF00FF",
+ "cells": [
+  {
+   "slug": "fantasy-maggot-pile",
+   "label": "maggot pile",
+   "family": "animals",
+   "sizeBand": "small",
+   "replaces": "fantasy-dungeon-animals-2.png|r1c2",
+   "reason": "FAIL-adam"
+  },
+  {
+   "slug": "fantasy-earthworm-mass",
+   "label": "earthworm mass",
+   "family": "animals",
+   "sizeBand": "small",
+   "replaces": "fantasy-dungeon-animals-2.png|r5c4",
+   "reason": "FAIL-adam"
+  }
+ ]
+}

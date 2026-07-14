@@ -1,0 +1,192 @@
+{
+ "file": "high-seas-flora-dg-01.png",
+ "realm": "high-seas",
+ "family": "dressing-flora",
+ "grid": "5 rows x 4 columns",
+ "chroma": "#FF00FF",
+ "wave": "dressing-gen",
+ "cells": [
+  {
+   "slug": "hs-flora-kelptangle",
+   "label": "thick kelp tangle draped over a barnacled beam",
+   "tags": {
+    "primary": "wall-hang",
+    "location": "both"
+   },
+   "size": "medium"
+  },
+  {
+   "slug": "hs-flora-barnacle-cluster",
+   "label": "barnacle crust cluster climbing a mooring post",
+   "tags": {
+    "primary": "wall-hang",
+    "location": "both"
+   },
+   "size": "small"
+  },
+  {
+   "slug": "hs-flora-seagrass",
+   "label": "drifting seagrass tuft rooted in wet planking",
+   "tags": {
+    "primary": "floor",
+    "location": "interior"
+   },
+   "size": "small"
+  },
+  {
+   "slug": "hs-flora-corallump",
+   "label": "brine-eaten coral lump, teal-glowing at the fractures",
+   "tags": {
+    "primary": "focal",
+    "location": "both"
+   },
+   "size": "medium"
+  },
+  {
+   "slug": "hs-flora-rottedrope-vine",
+   "label": "rotted rope vine coiled and slick with algae",
+   "tags": {
+    "primary": "blocker",
+    "location": "interior"
+   },
+   "size": "medium"
+  },
+  {
+   "slug": "hs-flora-anemone-bloom",
+   "label": "pale anemone bloom pulsing faint teal in tidewater",
+   "tags": {
+    "primary": "focal",
+    "location": "exterior"
+   },
+   "size": "small"
+  },
+  {
+   "slug": "hs-flora-driftwood-snag",
+   "label": "barnacled driftwood snag half-buried in wet sand",
+   "tags": {
+    "primary": "floor",
+    "location": "exterior"
+   },
+   "size": "medium"
+  },
+  {
+   "slug": "hs-flora-mussel-clump",
+   "label": "dense mussel shell clump crusting a hull plank",
+   "tags": {
+    "primary": "wall-hang",
+    "location": "exterior"
+   },
+   "size": "small"
+  },
+  {
+   "slug": "hs-flora-ghostweed",
+   "label": "pale spectral seaweed drifting despite no current",
+   "tags": {
+    "primary": "floor",
+    "location": "interior"
+   },
+   "size": "small"
+  },
+  {
+   "slug": "hs-flora-crabgrass-tidepool",
+   "label": "salt-hardy crabgrass ringing a shallow tidepool",
+   "tags": {
+    "primary": "floor",
+    "location": "exterior"
+   },
+   "size": "small"
+  },
+  {
+   "slug": "hs-flora-barnaclemast",
+   "label": "broken mast stump entirely crusted in barnacle growth",
+   "tags": {
+    "primary": "setPiece",
+    "location": "exterior"
+   },
+   "size": "large"
+  },
+  {
+   "slug": "hs-flora-driftweed-net",
+   "label": "drift-weed tangled in a rotted fishing net",
+   "tags": {
+    "primary": "wall-hang",
+    "location": "both"
+   },
+   "size": "medium"
+  },
+  {
+   "slug": "hs-flora-brinemoss",
+   "label": "brine-slick moss coating a lower deck plank",
+   "tags": {
+    "primary": "floor",
+    "location": "interior"
+   },
+   "size": "small"
+  },
+  {
+   "slug": "hs-flora-teal-coralbranch",
+   "label": "teal-glowing coral branch jutting from a wrecked hull",
+   "tags": {
+    "primary": "focal",
+    "location": "both"
+   },
+   "size": "medium"
+  },
+  {
+   "slug": "hs-flora-seaoat-tuft",
+   "label": "salt-bleached sea oat tuft bending in the brine wind",
+   "tags": {
+    "primary": "floor",
+    "location": "exterior"
+   },
+   "size": "small"
+  },
+  {
+   "slug": "hs-flora-tanglekelp-arch",
+   "label": "kelp strand arching between two mooring posts",
+   "tags": {
+    "primary": "setPiece",
+    "location": "exterior"
+   },
+   "size": "large"
+  },
+  {
+   "slug": "hs-flora-glowplankton-pool",
+   "label": "tidepool faintly lit by drifting bioluminescent plankton",
+   "tags": {
+    "primary": "focal",
+    "location": "exterior"
+   },
+   "size": "small"
+  },
+  {
+   "slug": "hs-flora-rot-lilypad",
+   "label": "brine-rotted lily-pad-like algae mat afloat in a bilge pool",
+   "tags": {
+    "primary": "floor",
+    "location": "interior"
+   },
+   "size": "small"
+  },
+  {
+   "slug": "hs-flora-kelptangle-alt",
+   "label": "ALT of 'thick kelp tangle draped over a barnacled beam' — different shape/growth/wear, same kind",
+   "tags": {
+    "primary": "wall-hang",
+    "location": "both"
+   },
+   "size": "medium",
+   "altOf": "hs-flora-kelptangle"
+  },
+  {
+   "slug": "hs-flora-barnacle-cluster-alt",
+   "label": "ALT of 'barnacle crust cluster climbing a mooring post' — different shape/growth/wear, same kind",
+   "tags": {
+    "primary": "wall-hang",
+    "location": "both"
+   },
+   "size": "small",
+   "altOf": "hs-flora-barnacle-cluster"
+  }
+ ]
+}

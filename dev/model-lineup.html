@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Model Lineup — MODEL-QA blind-recognition capture rig</title>
+<!-- dev/model-lineup.html — the MODEL-QA CAPTURE RIG fixture page (docs/MODEL-GRAMMAR.md §7b: the
+     blind-recognition gate). Loads the REAL theater modules (src/engine/theater-data.js +
+     src/ui/theater-boot.js/theater-parts.js/theater-verbs.js) over localhost and renders the
+     procedural creature figures the way the in-game battle theater does — SAME camera
+     (theater-boot.js's placeCamera: orthographic, 35° elevation, 45° dimetric yaw, board-fit),
+     SAME recipe->figure pipeline (figureFor -> buildFigureFromRecipe).
+
+     ⚠ file:// CANNOT WORK: three.js resolves the bare "three" specifier through the <script
+     type="importmap"> below, and ES-module scripts (the boot module) are blocked by the browser's
+     same-origin/module rules on the file: scheme — a double-click shows a blank page. The Claude
+     app's preview panel can't run it either (no ES modules / no WebGL there) — the page detects
+     both and shows a self-help panel (showEnvHelp) with the fix instead of a dead status line.
+     Serve over localhost in a REAL browser:
+         double-click ~/Desktop/Launchers/Open Model QA.command   (serves 5179 + opens Chrome)
+         # or by hand:
+         cd <repo> && python3 -m http.server 5179
+         # -> http://127.0.0.1:5179/dev/model-lineup.html?sheet=1&named=1
+     (The headless capture driver uses 5178; Adam's manual-viewing launcher uses 5179; NEVER 5175 —
+     a live DM bridge may be on 5175; do not disturb it.)
+
+     MODES (all driven by URL query params; parsed in the inline script at the bottom):
+       ?sheet=N&per=25&set=top100   GRID MODE — a 5x5 grid of solo figures, one per top100 cell,
+                                     each labeled ONLY with a coordinate key (A1..E5) for BLIND
+                                     judging (never the creature name). Deterministic: same URL ->
+                                     same figures in the same cells (the order is top100.json's own
+                                     weight-sorted slug order, sliced by sheet page). `per` cells per
+                                     sheet (default 25 = a 5x5 grid); `set` = the creature set file
+                                     (top100 -> dev/model-qa/top100.json).
+       ?named=1  (grid modifier)    NAMED MODE — the SAME grid WITH creature-name labels under each
+                                     cell. This is Adam's contact sheet (§7b step 5).
+       ?slug=<slug>&yaw=0|90|180|270  SOLO MODE — one figure large, at the requested yaw (0/90/180/
+                                     270° dimetric steps). e.g. ?slug=goblin-warrior&yaw=90
+       ?grip=<archetype-or-class>   GRIP MODE — a close-up on the hands/weapon anchor, for judging
+                                     "is the weapon actually held?" Accepts the 9 fixed archetypes
+                                     (biped/quadruped/flyer/serpent/swarm/giant/ooze/arachnid/
+                                     amorphous-horror) AND the 3 PC loadout fixtures
+                                     (fighter-greatsword / ranger-bow / wizard-staff — built through
+                                     the real loadout-mirror path, pcRecipeFrom). Two angles are shown
+                                     side by side. Also accepts a raw bestiary slug for a grip read of
+                                     any specific creature.
+       ?set=pilot  (grid modifier)  PILOT SET — loads dev/model-qa/pilot.json, the STANDING ~16-figure
+                                     approval lineup (REFERENCE-DIRECTION.md "The approval flow"): one
+                                     4x4 sheet (per/cols default from the json's own grid field). Cells
+                                     may be bestiary slugs OR {loadout:"fighter-greatsword"}-style PC
+                                     fixtures — loadout cells render the FULL gold PC figure through
+                                     the real pcRecipeFrom loadout-mirror.
+       ?scene=marsh|dungeon|camp    SCENE MODE — environment beauty shots: a real multi-zone board
+                                     through the theater's own board-builder path (theaterBoardFrom)
+                                     with textured tiles, keyword-derived props, a forced light
+                                     profile, and 1-2 figures for scale. Pure CAPTURE mode — composes
+                                     only features the theater already supports (envs, hazard sinks,
+                                     THEATER_PROP_KEYWORD_RULES, LIGHT_PROFILES); no renderer features
+                                     invented here.
+
+     TEXTURES (the round-1 palette-only fix): at init the rig fetches assets/textures-psx/
+     manifest.json ITSELF, warms the image cache, and hands RESOLVED absolute paths to the public
+     Theater.setTextures API BEFORE any setBoard call. Two-layer cause of the round-1 404/palette
+     miss: (1) the capture worktree predated the texture gap-fill merge, so the manifest didn't
+     exist at that root; (2) even with the file present, setBoard builds tile materials AT CALL
+     TIME — a texture resolving later only repaints the same untextured materials (the live game
+     re-calls setBoard on every combat event, so textures pop in there; this rig calls setBoard
+     once per capture, so it must WAIT for the loads first — hence the explicit warmup instead of
+     relying on the boot module's own async fetchDefaultTextureManifest). #rig-status + the
+     window.__rigTextures global record textures ON/OFF so every capture logs which state it shot.
+
+     STATUS LINE: every mode writes a machine-readable <div id="rig-status" data-ready> line the
+     headless capture driver (dev/model-qa/capture.mjs) polls to know the render finished (all cells
+     painted / the solo figure mounted) before it screenshots — so a capture never races the async
+     module load or the sequential per-cell render. -->
+<script type="importmap">
+{ "imports": { "three": "../vendor/three/three.module.js" } }
+</script>
+<style>
+  :root{
+    --ink:#e8e2d0; --stone:#0c0a08; --panel:#17130f; --edge:#3a3226; --gold:#c9a24b;
+    --muted:#8a8172; --cell-bg:#000;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--stone);color:var(--ink);
+    font:13px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+  #rig-root{padding:14px}
+  h1{font-size:15px;margin:0 0 2px;font-weight:600}
+  .sub{color:var(--muted);margin:0 0 12px;font-size:11px}
+  #rig-status{font-size:11px;color:var(--muted);margin:0 0 12px;font-family:ui-monospace,Menlo,monospace}
+  #rig-status[data-ready]{color:#4a7c4a}
+  #rig-status[data-error]{color:#a8432c}
+
+  /* GRID MODE — --cols set inline by runGrid (5 for top100 sheets, 4 for the pilot set) */
+  .grid{display:grid;gap:8px;grid-template-columns:repeat(var(--cols,5),1fr);max-width:1180px}
+  .cell{background:var(--panel);border:1px solid var(--edge);border-radius:6px;overflow:hidden;
+    display:flex;flex-direction:column}
+  .cell .shot{width:100%;aspect-ratio:1/1;background:var(--cell-bg);display:block}
+  .cell .key{font-family:ui-monospace,Menlo,monospace;font-weight:600;color:var(--gold);
+    padding:4px 6px 2px;font-size:12px;letter-spacing:.04em}
+  .cell .nm{padding:0 6px 5px;color:var(--muted);font-size:10.5px;line-height:1.25;min-height:14px}
+  .cell.blind .nm{display:none}
+  .cell.blind{}
+  .cell.err .shot{outline:2px solid #a8432c;outline-offset:-2px}
+
+  /* SOLO + GRIP + SCENE MODE */
+  .solo-wrap{display:flex;flex-wrap:wrap;gap:16px;align-items:flex-start}
+  .solo-stage{background:#000;border:1px solid var(--edge);border-radius:8px;overflow:hidden}
+  .solo-stage.big{width:560px;height:560px}
+  .solo-stage.grip{width:420px;height:420px}
+  .solo-stage.scene{width:960px;height:540px}  /* 16:9 environment beauty shot */
+  .cap{color:var(--muted);font-size:11px;margin-top:5px;font-family:ui-monospace,Menlo,monospace}
+  .colblock{display:flex;flex-direction:column}
+</style>
+</head>
+<body>
+<div id="rig-root">
+  <h1 id="rig-title">Model Lineup</h1>
+  <p class="sub" id="rig-sub">MODEL-QA capture rig — docs/MODEL-GRAMMAR.md §7b. Serve over localhost (file:// shows blank).</p>
+  <div id="rig-status">booting…</div>
+  <div id="rig-body"></div>
+</div>
+
+<!-- A single hidden scratch stage the GRID mode mounts window.Theater onto, one cell at a time
+     (window.Theater is a module-level singleton — a re-mount retire()s the prior instance, so only
+     ONE live WebGL context ever exists; each cell's frame is snapshotted to a data-URL <img>, which
+     holds no context). SOLO/GRIP modes mount directly into visible stages instead. -->
+<div id="scratch-stage" style="position:absolute;left:-99999px;top:0;width:512px;height:512px"></div>
+
+<!-- The classic <script> chain the theater-data layer needs (mirrors dev/theater-preview.html /
+     genesis.html document order) — state, tables, bestiary, items, recipes+overrides, engine core,
+     combat, then the theater-data pure layer. -->
+<script src="../src/state.js"></script>
+<script src="../tables.js"></script>
+<script src="../data/bestiary.js"></script>
+<script src="../data/items.js"></script>
+<script src="../data/model-recipes.js"></script>
+<script src="../data/model-recipe-overrides.js"></script>
+<script src="../src/engine/core.js"></script>
+<script src="../src/engine/combat.js"></script>
+<script src="../src/engine/theater-data.js"></script>
+<!-- the ES-module boundary: theater-verbs.js then theater-boot.js (boot imports both verbs + parts;
+     the extra verbs tag mirrors genesis.html and is harmlessly deduped by URL). window.Theater is
+     attached asynchronously — the rig's own init polls for it. -->
+<script type="module" src="../src/ui/theater-verbs.js"></script>
+<script type="module" src="../src/ui/theater-boot.js"></script>
+
+<script>
+(function(){
+  "use strict";
+  var statusEl = document.getElementById("rig-status");
+  var bodyEl = document.getElementById("rig-body");
+  var titleEl = document.getElementById("rig-title");
+  var subEl = document.getElementById("rig-sub");
+  var scratch = document.getElementById("scratch-stage");
+
+  // ---- console-error tally (a capture reads this to know if the render was clean) -------------
+  var consoleErrorCount = 0;
+  var origErr = window.console.error;
+  window.console.error = function(){ consoleErrorCount++; origErr.apply(window.console, arguments); };
+  window.__rigErrors = function(){ return consoleErrorCount; };
+
+  // ---- URL params -----------------------------------------------------------------------------
+  var q = new URLSearchParams(location.search);
+  var MODE_SLUG = q.get("slug");
+  var MODE_GRIP = q.get("grip");
+  var MODE_SCENE = q.get("scene");
+  var SHEET = parseInt(q.get("sheet") || "1", 10) || 1;
+  var PER = parseInt(q.get("per") || "25", 10) || 25;
+  var PER_EXPLICIT = q.has("per");   // pilot.json's own grid field only fills in when ?per= is absent
+  var COLS = parseInt(q.get("cols") || "5", 10) || 5;
+  var COLS_EXPLICIT = q.has("cols");
+  var SET = q.get("set") || "top100";
+  var NAMED = q.get("named") === "1";
+  var YAW = parseInt(q.get("yaw") || "0", 10) || 0;
+
+  // ---- texture state (see the TEXTURES header note): warmed at init, reported on every status ---
+  var texState = { on: false, keys: 0 };
+  window.__rigTextures = texState;
+
+  function setStatus(msg, opts){
+    statusEl.textContent = msg;
+    if(opts && opts.ready){ statusEl.setAttribute("data-ready",""); } else { statusEl.removeAttribute("data-ready"); }
+    if(opts && opts.error){ statusEl.setAttribute("data-error",""); } else { statusEl.removeAttribute("data-error"); }
+  }
+
+  // ---- environment self-help (Adam hit "window.Theater never attached" inside the Claude app's
+  //      preview panel — this page fundamentally can't run there: it needs ES modules AND WebGL,
+  //      which file:// and app-preview webviews don't provide). Three distinguishable failures:
+  //        "file"   — opened via file:// (deterministic: ES modules never load off the file: scheme)
+  //        "import" — served, but the theater module never attached (a webview/app preview that
+  //                   blocks module scripts, or a server not rooted at the repo -> importmap 404s)
+  //        "nogl"   — the module DID load, but WebGL is unavailable in this environment
+  function supportsWebGLProbe(){
+    try{
+      var c = document.createElement("canvas");
+      return !!(window.WebGLRenderingContext && (c.getContext("webgl") || c.getContext("experimental-webgl")));
+    }catch(e){ return false; }
+  }
+  function showEnvHelp(reason){
+    var why = {
+      file: "You opened this via file:// — the browser never loads ES modules (the three.js theater boot) off the file: scheme, so nothing can render.",
+      "import": "The theater module never attached. This usually means an app-preview/webview that can't run ES-module scripts, or a server that isn't serving the REPO ROOT (so ../vendor/three/… and ../src/… 404).",
+      nogl: "The theater module loaded, but WebGL is unavailable in this environment (app previews and some embedded webviews disable it). The figures are WebGL renders — they need a real browser."
+    }[reason] || "The theater could not start here.";
+    setStatus("environment can't run the rig (" + reason + ") — see the panel below", {error:true});
+    var p = document.createElement("div");
+    p.style.cssText = "max-width:720px;background:var(--panel);border:1px solid var(--edge);border-radius:8px;padding:14px 16px;font-size:12.5px;line-height:1.6";
+    p.innerHTML =
+      "<div style='font-weight:600;font-size:14px;margin-bottom:6px'>This page needs a real browser over localhost</div>" +
+      "<div style='color:var(--muted);margin-bottom:10px'>" + why + "</div>" +
+      "<div style='margin-bottom:6px'>Easiest: double-click <code>~/Desktop/Launchers/Open Model QA.command</code> (serves port 5179 and opens Chrome).</div>" +
+      "<div style='margin-bottom:4px'>Or by hand:</div>" +
+      "<pre style='background:#000;border-radius:6px;padding:8px 10px;overflow-x:auto;margin:0 0 8px'>cd &lt;repo&gt; &amp;&amp; python3 -m http.server 5179\n# then open:\nhttp://127.0.0.1:5179/dev/model-lineup.html?sheet=1&amp;named=1</pre>" +
+      "<div style='color:var(--muted)'>diagnostics: url=<code>" + location.protocol + "//" + (location.host || "(no host)") + location.pathname + "</code> · module=" +
+      ((window.Theater && typeof window.Theater.mount === "function") ? "loaded" : "NOT loaded") + " · webgl=" + (supportsWebGLProbe() ? "available" : "unavailable") + "</div>";
+    bodyEl.innerHTML = "";
+    bodyEl.appendChild(p);
+  }
+
+  // ---- wait for the ES-module boot to attach window.Theater -----------------------------------
+  function whenTheaterReady(cb){
+    if(location.protocol === "file:"){ showEnvHelp("file"); return; }
+    var tries = 0;
+    (function poll(){
+      if(window.Theater && typeof window.Theater.mount === "function"){
+        if(!supportsWebGLProbe()){ showEnvHelp("nogl"); return; }
+        cb(); return;
+      }
+      if(++tries > 200){ showEnvHelp("import"); return; }
+      setTimeout(poll, 25);
+    })();
+  }
+
+  // ---- coordinate keys A1.. (row-major: row letter, column 1..cols) — the judge only needs a
+  //      STABLE unique key; left-to-right/top-to-bottom is the natural contact-sheet reading order.
+  //      `cols` is the sheet's own column count (5 for top100 sheets, 4 for the pilot set). ----
+  function cellKey(idx, cols){
+    var rows = "ABCDEFGH";
+    var r = Math.floor(idx / cols);
+    var c = idx % cols;
+    return rows.charAt(r) + (c + 1);
+  }
+
+  // ---- TEXTURE WARMUP (the round-1 palette-only fix — see the TEXTURES header note) ------------
+  // Fetches the manifest at its real repo location, resolves each entry to an ABSOLUTE url (so the
+  // page's own /dev/ path depth can never skew resolution), warms the HTTP cache with a plain fetch
+  // per image, then hands the resolved map to the public Theater.setTextures API (safe pre-mount;
+  // the boot module caches textures across every subsequent mount/retire cycle). Only after the
+  // settle delay does the rig start rendering — so every setBoard call builds TEXTURED materials.
+  // A missing manifest (or any fetch failure) degrades to palette-only with texState.on=false —
+  // the round-1 baseline, never an error.
+  var TEX_RESERVED = { "_comment": 1, "alternates": 1 };
+  function warmTextures(done){
+    var manifestUrl;
+    try{ manifestUrl = new URL("../assets/textures-psx/manifest.json", location.href).href; }
+    catch(e){ done(); return; }
+    fetch(manifestUrl, { cache: "no-store" })
+      .then(function(r){ return (r && r.ok) ? r.json() : null; })
+      .then(function(json){
+        if(!json || typeof json !== "object"){ done(); return; }
+        var keys = Object.keys(json).filter(function(k){
+          return !TEX_RESERVED[k] && typeof json[k] === "string";
+        });
+        if(!keys.length){ done(); return; }
+        var resolved = {};
+        keys.forEach(function(k){ resolved[k] = new URL(json[k], manifestUrl).href; });
+        // warm the image cache so THREE.TextureLoader's own async loads complete fast + reliably
+        Promise.all(keys.map(function(k){
+          return fetch(resolved[k]).then(function(r){ return r.ok ? r.blob() : null; }).catch(function(){ return null; });
+        })).then(function(){
+          window.Theater.setTextures(resolved);
+          // give TextureLoader a beat to decode from the warm cache before the first setBoard
+          setTimeout(function(){
+            texState.on = true; texState.keys = keys.length;
+            done();
+          }, 500);
+        });
+      })
+      .catch(function(){ done(); });
+  }
+  function texLabel(){ return texState.on ? ("textures ON (" + texState.keys + " keys)") : "textures OFF (palette-only)"; }
+
+  // ---- build a minimal SOLO board: one flat 3x3-patch zone so a single figure fills the frame ---
+  // (theaterBoardFrom sizes the camera fit to the board's footprint; a single-zone board => the
+  //  figure reads large. A 2-band-ish tiny room keeps the FFT tile grammar visible under the feet
+  //  — the "neutral ground disc" the spec asks for is the figure's own base disc, drawn by
+  //  setUnits; the tile patch is the neutral ground it stands on.)
+  function soloBoard(env){
+    var segment = { id: "qa-solo", dims: "20' x 20'" };  // 20'x20' => a single 3x3-tile zone (cmZoneGrid),
+                                                          // one figure dead-center filling the frame — the
+                                                          // "neutral ground disc" the spec asks for.
+    var scene = { cover:{}, hazards:[], hazardZones:[], elevZones:[], zoneCover:{}, exits:[] };
+    var board = theaterBoardFrom(segment, scene, { env: env || "dungeon" });
+    // force a plain, well-lit profile so the QA judge sees the SHAPE, not mood lighting — "dark" is
+    // the ambient-only profile with the coolest neutral fill; use "lamplit" for a touch more form
+    // definition on the figure without coloring it hard. Keep it consistent across every capture.
+    board.light = { profile: "lamplit", rolled: board.light && board.light.rolled, overridden: true };
+    return board;
+  }
+
+  // one foe unit at the board's center zone, recipe-driven off a real bestiary slug.
+  function soloFoeUnits(slug, name, creatureType, size){
+    var grid = cmZoneGrid("20' x 20'");
+    var band = (grid.bands && grid.bands[0]) || "melee";
+    var lane = (grid.lanes && grid.lanes[Math.floor((grid.lanes.length||1)/2)]) || "C";
+    var combatLike = {
+      grid: grid,
+      pc: null, pcRef: {}, allies: [],
+      foes: [ { fid: slug || "solo", band: band, lane: lane, creatureType: creatureType || "humanoid",
+                size: size || null, name: name || slug, statId: slug || null, actions: [] } ]
+    };
+    return theaterUnitsFrom(combatLike);
+  }
+
+  // ---- BESTIARY lookups (for creatureType/size/name off a slug) --------------------------------
+  function bestiaryEntry(slug){
+    return (typeof BESTIARY !== "undefined" && BESTIARY[slug]) ? BESTIARY[slug] : null;
+  }
+  function typeOf(entry){ return (entry && entry.tags && entry.tags.type) || (entry && entry.typeline) || "humanoid"; }
+
+  // =============================================================================================
+  // GRID MODE — sequential per-cell capture-to-image
+  // =============================================================================================
+  function runGrid(list, gridOpts){
+    var cols = (gridOpts && gridOpts.cols) || COLS;
+    var per = (gridOpts && gridOpts.per) || PER;
+    titleEl.textContent = "Model Lineup — sheet " + SHEET + " · " + SET + (NAMED ? " · NAMED" : " · BLIND");
+    subEl.textContent = (NAMED
+      ? "Adam's contact sheet: each cell labeled with its creature name. (§7b step 5)"
+      : "BLIND judging sheet: cells keyed by coordinate only — never the creature name. (docs/MODEL-GRAMMAR.md §7b)")
+      + "  ·  " + texLabel();
+
+    var start = (SHEET - 1) * per;
+    var page = list.slice(start, start + per);
+    if(!page.length){ setStatus("sheet " + SHEET + " is empty (only " + Math.ceil(list.length/per) + " sheets exist for " + list.length + " creatures)", {error:true}); return; }
+
+    // build the grid DOM up front (all cells present so the page height is stable for the capture)
+    var grid = document.createElement("div");
+    grid.className = "grid";
+    grid.style.setProperty("--cols", String(cols));
+    var cells = page.map(function(item, i){
+      var cell = document.createElement("div");
+      cell.className = "cell" + (NAMED ? "" : " blind");
+      var img = document.createElement("img");
+      img.className = "shot";
+      img.alt = "";
+      var keyEl = document.createElement("div");
+      keyEl.className = "key";
+      keyEl.textContent = cellKey(i, cols);
+      var nmEl = document.createElement("div");
+      nmEl.className = "nm";
+      nmEl.textContent = item.name || item.slug || item.loadout;
+      cell.appendChild(img);
+      cell.appendChild(keyEl);
+      cell.appendChild(nmEl);
+      grid.appendChild(cell);
+      return { cell: cell, img: img, item: item, key: cellKey(i, cols) };
+    });
+    bodyEl.appendChild(grid);
+
+    // expose the key map for the capture driver to persist into key.json. A PC loadout cell (the
+    // pilot set's fighter/ranger/wizard fixtures) records slug "loadout:<key>" so the judge key
+    // stays one flat shape.
+    window.__rigKeyMap = cells.map(function(c){
+      var slug = c.item.slug || ("loadout:" + c.item.loadout);
+      return { sheet: SHEET, cell: c.key, slug: slug, name: c.item.name || slug };
+    });
+
+    // sequential render: mount the singleton on the scratch stage, render ONE figure, snapshot to
+    // the cell's <img>, retire, next. requestAnimationFrame between cells lets the GL frame flush
+    // before toDataURL reads it. A cell is either a bestiary slug (foe path, recipe-driven) or a
+    // {loadout} PC fixture (the real pcRecipeFrom loadout-mirror path, full gold figure).
+    var idx = 0;
+    function renderNext(){
+      if(idx >= cells.length){
+        setStatus("grid ready — " + cells.length + " cells rendered, sheet " + SHEET + "/" + Math.ceil(list.length/per) + ", " + texLabel() + ", consoleErrors=" + consoleErrorCount, {ready:true});
+        return;
+      }
+      var c = cells[idx];
+      setStatus("rendering cell " + c.key + " (" + (idx+1) + "/" + cells.length + ") — " + (c.item.slug || c.item.loadout));
+      var entry = bestiaryEntry(c.item.slug);
+      var ok = window.Theater.mount(scratch, { psx: true });
+      if(!ok){
+        c.cell.classList.add("err");
+        setStatus("Theater.mount() returned false (no WebGL?) at cell " + c.key, {error:true});
+        // keep going so the sheet still assembles the rest
+        idx++; requestAnimationFrame(renderNext); return;
+      }
+      try{
+        window.Theater.setBoard(soloBoard("dungeon"));
+        if(c.item.loadout && PC_LOADOUT_FIXTURE[c.item.loadout]){
+          window.Theater.setUnits(gripUnitsForLoadout(c.item.loadout));
+        } else {
+          window.Theater.setUnits(soloFoeUnits(c.item.slug, c.item.name, typeOf(entry), c.item.size || (entry && entry.size)));
+        }
+        // U7-lite (Adam 2026-07-03: "battle minis render at ~2x screen size... QA framing follows
+        // gameplay"): zoom the per-cell camera 2 steps (1.25^2 ≈ 1.56x) so the captured figure reads
+        // at roughly the size players actually see it on the stage, not a distant ~100px speck. This
+        // is a QA-framing change only (the lineup page) — the in-game default framing rides its own
+        // knob (theater-boot's DEFAULT_FIGURE_ZOOM_STEPS).
+        window.Theater.zoom(1); window.Theater.zoom(1);
+      }catch(e){
+        c.cell.classList.add("err");
+        origErr("cell " + c.key + " (" + (c.item.slug || c.item.loadout) + ") render threw:", e);
+      }
+      // two rAFs: one to let setUnits' markDirty schedule the render, one to let it actually paint,
+      // then snapshot. (render-on-demand means the frame lands on the NEXT rAF after markDirty.)
+      requestAnimationFrame(function(){
+        requestAnimationFrame(function(){
+          try{
+            var canvas = scratch.querySelector("canvas");
+            c.img.src = canvas ? canvas.toDataURL("image/png") : "";
+          }catch(e){ origErr("toDataURL failed at cell " + c.key, e); c.cell.classList.add("err"); }
+          window.Theater.retire();
+          idx++;
+          renderNext();
+        });
+      });
+    }
+    renderNext();
+  }
+
+  // =============================================================================================
+  // SOLO MODE — one figure large at a chosen yaw
+  // =============================================================================================
+  function runSolo(){
+    var slug = MODE_SLUG;
+    var entry = bestiaryEntry(slug);
+    titleEl.textContent = "Solo — " + slug + " · yaw " + YAW + "°";
+    subEl.textContent = entry ? (entry.name + " · CR " + entry.cr + " · " + (entry.size||"?") + " " + typeOf(entry)) : ("(no bestiary entry for '" + slug + "' — rendering a generic figure)");
+
+    var wrap = document.createElement("div"); wrap.className = "solo-wrap";
+    var col = document.createElement("div"); col.className = "colblock";
+    var stage = document.createElement("div"); stage.className = "solo-stage big";
+    var cap = document.createElement("div"); cap.className = "cap"; cap.textContent = "yaw " + YAW + "° · " + slug;
+    col.appendChild(stage); col.appendChild(cap); wrap.appendChild(col);
+    bodyEl.appendChild(wrap);
+
+    var ok = window.Theater.mount(stage, { psx: true });
+    if(!ok){ setStatus("Theater.mount() returned false (no WebGL?)", {error:true}); return; }
+    window.Theater.setBoard(soloBoard("dungeon"));
+    window.Theater.setUnits(soloFoeUnits(slug, entry && entry.name, typeOf(entry), entry && entry.size));
+    // apply yaw via rotate() in 90° steps (0/90/180/270 -> 0..3 steps)
+    var steps = Math.round((((YAW % 360) + 360) % 360) / 90);
+    for(var s=0; s<steps; s++){ window.Theater.rotate(); }
+    requestAnimationFrame(function(){ requestAnimationFrame(function(){
+      setStatus("solo ready — " + slug + " @ yaw " + YAW + "°, " + texLabel() + ", consoleErrors=" + consoleErrorCount, {ready:true});
+    });});
+  }
+
+  // =============================================================================================
+  // GRIP MODE — close-up on hands/weapon anchor, two angles
+  // =============================================================================================
+  // the 9 fixed archetypes render as a generic FOE of a creatureType that maps to that archetype
+  // (theaterArchetypeFor); the 3 PC loadout fixtures render through the real loadout-mirror
+  // (pcRecipeFrom) by handing theaterUnitsFrom a pcRef with an equipped/inventory sheet.
+  var ARCHETYPE_FIXTURE = {
+    biped:            { creatureType: "humanoid",   size: "medium", name: "Biped",            weaponName: "Longsword" },
+    quadruped:        { creatureType: "beast",      size: "medium", name: "Quadruped" },
+    flyer:            { creatureType: "dragon",     size: "medium", name: "Flyer" },
+    serpent:          { creatureType: "monstrosity",size: "large",  name: "Serpent" },
+    swarm:            { creatureType: "swarm",      size: "medium", name: "Swarm" },
+    giant:            { creatureType: "giant",      size: "huge",   name: "Giant" },
+    ooze:             { creatureType: "ooze",       size: "medium", name: "Ooze" },
+    arachnid:         { creatureType: "beast",      size: "large",  name: "Giant Spider" }, // name triggers arachnid
+    "amorphous-horror":{ creatureType:"aberration", size: "large",  name: "Amorphous Horror" }
+  };
+  // PC loadout fixtures — className + equipped sheet feed pcRecipeFrom (the loadout mirror).
+  var PC_LOADOUT_FIXTURE = {
+    "fighter-greatsword": { className: "Fighter", weapon: "Greatsword", armor: "Chain Mail" },
+    "ranger-bow":         { className: "Ranger",  weapon: "Longbow" },
+    "wizard-staff":       { className: "Wizard",  weapon: "Quarterstaff" }
+  };
+
+  function gripUnitsForArchetype(key){
+    var fx = ARCHETYPE_FIXTURE[key];
+    var grid = cmZoneGrid("20' x 20'");
+    var band = (grid.bands && grid.bands[0]) || "melee";
+    var lane = (grid.lanes && grid.lanes[Math.floor((grid.lanes.length||1)/2)]) || "C";
+    var actions = fx.weaponName ? [{ name: fx.weaponName }] : [];
+    var combatLike = {
+      grid: grid, pc: null, pcRef: {}, allies: [],
+      foes: [ { fid: "grip", band: band, lane: lane, creatureType: fx.creatureType, size: fx.size,
+                name: fx.name, statId: null, actions: actions } ]
+    };
+    return theaterUnitsFrom(combatLike);
+  }
+  function gripUnitsForLoadout(key){
+    var fx = PC_LOADOUT_FIXTURE[key];
+    var grid = cmZoneGrid("20' x 20'");
+    var band = (grid.bands && grid.bands[0]) || "melee";
+    var lane = (grid.lanes && grid.lanes[Math.floor((grid.lanes.length||1)/2)]) || "C";
+    var inv = [{ id: "w", name: fx.weapon }];
+    var equipped = { mainHand: "w", offHand: null, armor: null };
+    if(fx.armor){ inv.push({ id: "a", name: fx.armor }); equipped.armor = "a"; }
+    var combatLike = {
+      grid: grid,
+      pc: { band: band, lane: lane, down: false },
+      pcRef: { creatureType: "humanoid", class: fx.className, equipped: equipped, inventory: inv },
+      allies: [], foes: []
+    };
+    return theaterUnitsFrom(combatLike);
+  }
+  function gripUnitsForSlug(slug){
+    var entry = bestiaryEntry(slug);
+    return soloFoeUnits(slug, entry && entry.name, typeOf(entry), entry && entry.size);
+  }
+
+  function runGrip(){
+    var key = MODE_GRIP;
+    var isArch = !!ARCHETYPE_FIXTURE[key];
+    var isPc = !!PC_LOADOUT_FIXTURE[key];
+    var label = isArch ? ("archetype: " + key) : isPc ? ("loadout: " + key + " (" + PC_LOADOUT_FIXTURE[key].className + " / " + PC_LOADOUT_FIXTURE[key].weapon + ")") : ("slug: " + key);
+    titleEl.textContent = "Grip — " + key;
+    subEl.textContent = "Weapon-anchor close-up (does the weapon read as HELD?) · " + label + " · two angles";
+
+    // two angles: yaw 0 and yaw 90 (a front-ish and a 3/4 read of the hand)
+    var angles = [0, 90];
+    var wrap = document.createElement("div"); wrap.className = "solo-wrap";
+    bodyEl.appendChild(wrap);
+    var stages = angles.map(function(a){
+      var col = document.createElement("div"); col.className = "colblock";
+      var stage = document.createElement("div"); stage.className = "solo-stage grip";
+      var cap = document.createElement("div"); cap.className = "cap"; cap.textContent = "yaw " + a + "° · " + key;
+      col.appendChild(stage); col.appendChild(cap); wrap.appendChild(col);
+      return { stage: stage, yaw: a };
+    });
+
+    function unitsFor(){
+      if(isArch) return gripUnitsForArchetype(key);
+      if(isPc) return gripUnitsForLoadout(key);
+      return gripUnitsForSlug(key);
+    }
+
+    // GRIP mode needs a CLOSE camera. The theater has no "zoom to hands" API, but Theater.zoom(1)
+    // steps the ortho frustum tighter; step in a few times so the figure's upper body/hands fill the
+    // grip stage. Each stage is its own sequential mount (singleton), snapshot to a data-URL <img>
+    // overlaid on the stage so both angles persist for the capture.
+    var i = 0;
+    function renderStage(){
+      if(i >= stages.length){
+        setStatus("grip ready — " + key + " (" + stages.length + " angles), " + texLabel() + ", consoleErrors=" + consoleErrorCount, {ready:true});
+        return;
+      }
+      var st = stages[i];
+      var ok = window.Theater.mount(scratch, { psx: true });
+      if(!ok){ setStatus("Theater.mount() false (no WebGL?)", {error:true}); return; }
+      window.Theater.setBoard(soloBoard("dungeon"));
+      window.Theater.setUnits(unitsFor());
+      var steps = Math.round(st.yaw / 90);
+      for(var s=0;s<steps;s++){ window.Theater.rotate(); }
+      // zoom in for the grip close-up (3 steps ~ 1.25^3 ≈ 1.95x tighter)
+      window.Theater.zoom(1); window.Theater.zoom(1); window.Theater.zoom(1);
+      requestAnimationFrame(function(){ requestAnimationFrame(function(){
+        var canvas = scratch.querySelector("canvas");
+        var img = document.createElement("img");
+        img.style.width = "100%"; img.style.height = "100%"; img.style.display = "block";
+        try{ img.src = canvas ? canvas.toDataURL("image/png") : ""; }catch(e){ origErr("grip toDataURL", e); }
+        st.stage.innerHTML = ""; st.stage.appendChild(img);
+        window.Theater.retire();
+        i++; renderStage();
+      });});
+    }
+    renderStage();
+  }
+
+  // =============================================================================================
+  // SCENE MODE — environment beauty shots (REFERENCE-DIRECTION.md "environment rides every
+  // approval round"). Each key is a full board fixture composed ONLY of features the theater
+  // already supports: theaterBoardFrom's env palettes + hazard water-sinks, the G4 prop keyword
+  // rules (cover text -> real prop parts), LIGHT_PROFILES keys, and 1-2 units for scale. The
+  // cover strings below are chosen to hit specific THEATER_PROP_KEYWORD_RULES entries — noted
+  // per line so a rule rename shows up as an obvious break here, not silent prop loss.
+  // =============================================================================================
+  var SCENES = {
+    marsh: {
+      label: "Marsh — wet-mud ground, stilt-hut vibe, dusk",
+      env: "wilderness",
+      light: "moonlit",                        // the dusk-ish read: overcast tested too murky for a
+                                                // beauty shot (ambient-only over dark wilderness tops);
+                                                // moonlit's blue point light keeps it dusk while legible
+      segment: { id: "qa-scene-marsh", dims: "100' x 60' irregular",
+                 feature: { name: "a drowned crossing", flavor: "black water between hummocks of moss" } },
+      scene: {
+        cover: {
+          "near:L": "a lean-to on stilts above the water",   // -> tent-canopy (lean-to rule)
+          "far:R": "a hollow log slick with moss",           // -> tree-bare (hollow log rule)
+          "melee:R": "hanging vines and tangled roots"        // -> vine-tangle
+        },
+        hazards: ["black bog water"],
+        hazardZones: [
+          { zone: "near:C", kind: "flooded channel", revealed: true },   // water sink
+          { zone: "far:L", kind: "bog water", revealed: true },          // water sink
+          { zone: "out:C", kind: "swamp pool", revealed: true }          // water sink
+        ],
+        elevZones: ["melee:L"], zoneCover: {}, exits: []
+      },
+      units: [
+        { kind: "pc", className: "Fighter", weapon: "Longsword", band: "melee", lane: "C" },
+        { kind: "foe", slug: "giant-lizard", band: "near", lane: "R" }
+      ]
+    },
+    dungeon: {
+      label: "Dungeon — flagstone, pillar + rubble, lamplit",
+      env: "dungeon",
+      light: "lamplit",
+      segment: { id: "qa-scene-dungeon", dims: "60' x 60'",
+                 feature: { name: "a collapsed gallery", flavor: "dust hangs in the lamplight" } },
+      scene: {
+        cover: {
+          "near:L": "a broken pillar, toppled and crumbling",   // -> pillar-broken (intact:false)
+          "far:R": "loose stone and a scree of rubble",          // -> rubble-scatter
+          "far:L": "a stone sarcophagus, lid ajar"               // -> coffin-slab
+        },
+        hazards: [], hazardZones: [],
+        elevZones: ["far:C"], zoneCover: {}, exits: []
+      },
+      units: [
+        { kind: "pc", className: "Fighter", weapon: "Longsword", band: "melee", lane: "C" },
+        { kind: "foe", slug: "skeleton", band: "near", lane: "C" }
+      ]
+    },
+    camp: {
+      label: "Camp — dirt and moss, crates + canopy, warm firelight",
+      env: "wilderness",
+      light: "torchlit",                       // the warm flickering profile — reads as a campfire
+      segment: { id: "qa-scene-camp", dims: "60' x 60'",
+                 feature: { name: "a roadside camp", flavor: "embers banked low against the dark" } },
+      scene: {
+        cover: {
+          "near:L": "a patched tent canopy strung between poles",  // -> tent-canopy
+          "near:R": "a stack of barrels and a keg",                 // -> crate (round)
+          "far:L": "an overturned cart, one wheel gone"             // -> cart (tilt)
+        },
+        hazards: [], hazardZones: [],
+        elevZones: [], zoneCover: {}, exits: []
+      },
+      units: [
+        { kind: "pc", className: "Fighter", weapon: "Longsword", band: "melee", lane: "C" },
+        { kind: "foe", slug: "bandit", band: "near", lane: "C" }
+      ]
+    }
+  };
+
+  function sceneUnits(fx, dims){
+    var grid = cmZoneGrid(dims);
+    var pcFx = null, foes = [];
+    (fx.units || []).forEach(function(u){
+      if(u.kind === "pc"){ pcFx = u; return; }
+      var entry = bestiaryEntry(u.slug);
+      foes.push({ fid: u.slug, band: u.band, lane: u.lane,
+        creatureType: typeOf(entry), size: entry && entry.size, name: (entry && entry.name) || u.slug,
+        statId: u.slug, actions: [] });
+    });
+    var combatLike = { grid: grid, allies: [], foes: foes, pc: null, pcRef: {} };
+    if(pcFx){
+      combatLike.pc = { band: pcFx.band, lane: pcFx.lane, down: false };
+      combatLike.pcRef = { creatureType: "humanoid", class: pcFx.className,
+        equipped: { mainHand: "w", offHand: null, armor: null },
+        inventory: [{ id: "w", name: pcFx.weapon || "Longsword" }] };
+    }
+    return theaterUnitsFrom(combatLike);
+  }
+
+  function runScene(){
+    var key = MODE_SCENE;
+    var fx = SCENES[key];
+    if(!fx){ setStatus("unknown scene '" + key + "' — known: " + Object.keys(SCENES).join(", "), {error:true}); return; }
+    titleEl.textContent = "Scene — " + key;
+    subEl.textContent = fx.label + " · env=" + fx.env + " · light=" + fx.light + " · " + texLabel();
+
+    var wrap = document.createElement("div"); wrap.className = "solo-wrap";
+    var col = document.createElement("div"); col.className = "colblock";
+    var stage = document.createElement("div"); stage.className = "solo-stage scene";
+    var cap = document.createElement("div"); cap.className = "cap";
+    cap.textContent = key + " · " + fx.env + " · " + fx.light + " · yaw " + YAW + "°";
+    col.appendChild(stage); col.appendChild(cap); wrap.appendChild(col);
+    bodyEl.appendChild(wrap);
+
+    var ok = window.Theater.mount(stage, { psx: true });
+    if(!ok){ setStatus("Theater.mount() returned false (no WebGL?)", {error:true}); return; }
+    var board = theaterBoardFrom(fx.segment, fx.scene, { env: fx.env });
+    board.light = { profile: fx.light, rolled: board.light && board.light.rolled, overridden: true };
+    // BEAUTY-SHOT PROP SCALE (pure data, fixture-side): the part library authors props at raw
+    // sub-tile size (a crate is 0.5 world units, a tent canopy 0.39) while figures render at 1.5x —
+    // at the board-fit camera a raw prop is ~15px of brown-on-brown, effectively invisible (this is
+    // exactly what round-1b's first scene captures showed). In-game prop scale is a model-wave
+    // question, not this fixture's; for the APPROVAL shots we pass partParams.scale (the parameter
+    // theater-data's own keyword rules already emit, honored group-level by setBoard) so a prop
+    // reads at roughly figure scale. Only props with a derived part get bumped — the generic cover
+    // column is left exactly as in-game.
+    (board.props || []).forEach(function(p){
+      if(!p.part) return;
+      var existing = (p.partParams && p.partParams.scale) || 1;
+      p.partParams = Object.assign({}, p.partParams, { scale: existing * 2.4 });
+    });
+    window.Theater.setBoard(board);
+    window.Theater.setUnits(sceneUnits(fx, fx.segment.dims));
+    var steps = Math.round((((YAW % 360) + 360) % 360) / 90);
+    for(var s = 0; s < steps; s++){ window.Theater.rotate(); }
+    requestAnimationFrame(function(){ requestAnimationFrame(function(){
+      // stash a same-frame canvas snapshot for the capture driver's blank-detection probe — a WebGL
+      // canvas's drawing buffer isn't preserved after present, so sampling the live canvas later
+      // reads black even when the compositor shows a full scene (round-1b's meanLum=0 false alarm).
+      try{
+        var cnv = stage.querySelector("canvas");
+        if(cnv){
+          var probe = document.createElement("img");
+          probe.id = "scene-probe";
+          probe.style.cssText = "position:absolute;left:-9999px;top:0;width:64px";
+          probe.src = cnv.toDataURL("image/png");
+          document.body.appendChild(probe);
+        }
+      }catch(e){}
+      setStatus("scene ready — " + key + " (" + board.tiles.length + " tiles, " + board.props.length +
+        " props, light=" + board.light.profile + "), " + texLabel() + ", consoleErrors=" + consoleErrorCount, {ready:true});
+    });});
+  }
+
+  // =============================================================================================
+  // set loading + dispatch
+  // =============================================================================================
+  function loadSet(cb){
+    if(SET === "pilot"){
+      // the STANDING approval lineup (REFERENCE-DIRECTION.md "The approval flow") — hand-authored
+      // pilot.json; its own grid field supplies per/cols unless the URL overrides them explicitly.
+      fetch("model-qa/pilot.json", { cache: "no-store" })
+        .then(function(r){ if(!r.ok) throw new Error("pilot.json fetch " + r.status); return r.json(); })
+        .then(function(j){
+          var list = j.cells || [];
+          var cols = COLS_EXPLICIT ? COLS : ((j.grid && j.grid.cols) || 4);
+          var per = PER_EXPLICIT ? PER : list.length;
+          cb(list, { cols: cols, per: per });
+        })
+        .catch(function(e){ setStatus("could not load dev/model-qa/pilot.json: " + e.message, {error:true}); });
+    } else if(SET === "top100"){
+      fetch("model-qa/top100.json", { cache: "no-store" })
+        .then(function(r){ if(!r.ok) throw new Error("top100.json fetch " + r.status); return r.json(); })
+        .then(function(j){
+          var list = (j.detail && j.detail.length) ? j.detail : (j.slugs || []).map(function(s){ return { slug:s, name:s }; });
+          cb(list, { cols: COLS, per: PER });
+        })
+        .catch(function(e){ setStatus("could not load dev/model-qa/top100.json: " + e.message + " — run `node dev/model-qa/gen-top100.mjs` first", {error:true}); });
+    } else {
+      // "all" -> every bestiary slug in id order
+      var list = Object.keys(typeof BESTIARY!=="undefined"?BESTIARY:{}).map(function(id){ return { slug:id, name: BESTIARY[id].name, size: BESTIARY[id].size }; });
+      cb(list, { cols: COLS, per: PER });
+    }
+  }
+
+  whenTheaterReady(function(){
+    setStatus("warming textures…");
+    warmTextures(function(){
+      if(MODE_SCENE){ runScene(); return; }
+      if(MODE_SLUG){ runSolo(); return; }
+      if(MODE_GRIP){ runGrip(); return; }
+      // default: grid mode
+      loadSet(function(list, gridOpts){ runGrid(list, gridOpts); });
+    });
+  });
+})();
+</script>
+</body>
+</html>

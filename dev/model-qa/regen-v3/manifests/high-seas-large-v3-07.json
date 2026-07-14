@@ -1,0 +1,41 @@
+{
+ "file": "high-seas-large-v3-07.png",
+ "realm": "high-seas",
+ "gridClass": "large",
+ "grid": "2 rows x 2 columns",
+ "chroma": "#FF00FF",
+ "cells": [
+  {
+   "slug": "high-seas-ox-bull-with-blanket",
+   "label": "ox/bull with blanket",
+   "family": "animals",
+   "sizeBand": "large",
+   "replaces": "high-seas-domesticated-animals-01.png|r1c2",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "high-seas-donkey",
+   "label": "donkey",
+   "family": "animals",
+   "sizeBand": "large",
+   "replaces": "high-seas-domesticated-animals-01.png|r5c1",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "high-seas-gaunt-saddled-horse",
+   "label": "gaunt saddled horse",
+   "family": "animals",
+   "sizeBand": "large",
+   "replaces": "high-seas-dungeon-animals-01.png|r4c3",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "high-seas-shark",
+   "label": "shark",
+   "family": "monsters",
+   "sizeBand": "large",
+   "replaces": "high-seas-mm-01.png|r1c4",
+   "reason": "regen-underres"
+  }
+ ]
+}

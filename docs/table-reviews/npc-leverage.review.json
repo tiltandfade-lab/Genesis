@@ -1,0 +1,8 @@
+{
+ "meta": {
+  "table": "npc-leverage",
+  "reviewed": "2026-07-08 — right-skew d100 handles, Adam-APPROVED (land now, SECOND PASS after playtest). Exempt lever atom.",
+  "open_note": "Second pass focuses on the personal 1-60 band (archetype load). World-scale 89-100 = ~12% accidental custody (tightenable to ~8). Rolled independent of role (incongruity = feature)."
+ },
+ "rows": {}
+}

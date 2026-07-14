@@ -1,0 +1,41 @@
+{
+ "file": "theater-large-v3-08.png",
+ "realm": "theater",
+ "gridClass": "large",
+ "grid": "2 rows x 2 columns",
+ "chroma": "#FF00FF",
+ "cells": [
+  {
+   "slug": "theater-draped-water-buffalo",
+   "label": "draped water buffalo",
+   "family": "animals",
+   "sizeBand": "large",
+   "replaces": "theater-domestic-animals-2.png|r1c2",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "theater-camel",
+   "label": "camel",
+   "family": "animals",
+   "sizeBand": "large",
+   "replaces": "theater-domestic-animals-2.png|r1c3",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "theater-yak",
+   "label": "yak",
+   "family": "animals",
+   "sizeBand": "large",
+   "replaces": "theater-domestic-animals-2.png|r2c1",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "theater-zebu-ox",
+   "label": "zebu ox",
+   "family": "animals",
+   "sizeBand": "large",
+   "replaces": "theater-domestic-animals-2.png|r2c3",
+   "reason": "regen-underres"
+  }
+ ]
+}

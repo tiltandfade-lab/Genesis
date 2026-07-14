@@ -1,0 +1,17 @@
+{
+ "file": "theater-solo-v3-21.png",
+ "realm": "theater",
+ "gridClass": "solo",
+ "grid": "1 row x 1 column",
+ "chroma": "#FF00FF",
+ "cells": [
+  {
+   "slug": "theater-walking-machine-city-beast",
+   "label": "walking machine-city beast",
+   "family": "monsters",
+   "sizeBand": "titanic",
+   "replaces": "theater-mm-04.png|r5c2",
+   "reason": "regen-underres"
+  }
+ ]
+}

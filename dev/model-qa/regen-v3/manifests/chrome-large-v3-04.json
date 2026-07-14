@@ -1,0 +1,41 @@
+{
+ "file": "chrome-large-v3-04.png",
+ "realm": "chrome",
+ "gridClass": "large",
+ "grid": "2 rows x 2 columns",
+ "chroma": "#00FF00",
+ "cells": [
+  {
+   "slug": "chrome-quad-cargo-mech-beast",
+   "label": "quad cargo mech beast",
+   "family": "monsters",
+   "sizeBand": "large",
+   "replaces": "chrome-monsters-1-c2.png|r1c5",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "chrome-humanoid-battle-mech",
+   "label": "humanoid battle mech",
+   "family": "monsters",
+   "sizeBand": "large",
+   "replaces": "chrome-monsters-1-c2.png|r4c5",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "chrome-round-core-dial-mech",
+   "label": "round-core dial mech",
+   "family": "monsters",
+   "sizeBand": "large",
+   "replaces": "chrome-monsters-1-c2.png|r5c2",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "chrome-mangler-roller-machine",
+   "label": "mangler roller machine",
+   "family": "monsters",
+   "sizeBand": "large",
+   "replaces": "chrome-monsters-2-c2.png|r3c5",
+   "reason": "regen-underres"
+  }
+ ]
+}

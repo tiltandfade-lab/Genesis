@@ -1,0 +1,1014 @@
+{
+  "generatedAt": "2026-07-13T22:29:20.724Z",
+  "iterations": [
+    {
+      "loopIndex": 1,
+      "cfg": {
+        "loopIndex": 1,
+        "segCount": 4,
+        "realmId": "chrome",
+        "foes": [
+          "Wolf",
+          "Giant Rat",
+          "Spider"
+        ]
+      },
+      "breaks": [],
+      "drive": {
+        "ok": true,
+        "stage": "done",
+        "loopIndex": 1,
+        "topology": "The Onion",
+        "segCount": 5,
+        "environment": "dungeon",
+        "nodeId": "dungeon-loop-1",
+        "roomCount": 5,
+        "reachability": {
+          "ok": true,
+          "unreachable": 0
+        },
+        "targetSegNum": 3,
+        "room": {
+          "segNum": 3,
+          "x": 41,
+          "y": 3,
+          "w": 4,
+          "d": 4
+        },
+        "foes": [
+          {
+            "fid": "f1",
+            "name": "Wolf"
+          },
+          {
+            "fid": "f2",
+            "name": "Giant Rat"
+          },
+          {
+            "fid": "f3",
+            "name": "Spider"
+          }
+        ],
+        "combatGrid": {
+          "bands": [
+            "melee"
+          ],
+          "lanes": [
+            "C"
+          ],
+          "bandCount": 1,
+          "laneCount": 1
+        },
+        "pnCursor": 3
+      },
+      "topology": "The Onion",
+      "roomCount": 5,
+      "reachability": {
+        "ok": true,
+        "unreachable": 0
+      },
+      "rendered": {
+        "ok": true,
+        "stage": "setInteriorBoard",
+        "dressingCountFromTray": 49,
+        "meshCount": 11,
+        "piecesRequested": 3,
+        "piecesResolved": 3,
+        "dressingCount": 49,
+        "beatMaxHeight": 0.561,
+        "beatFrustumCheck": {
+          "corners": [
+            {
+              "x": -0.5,
+              "y": 0,
+              "z": -0.5,
+              "ndcX": 0,
+              "ndcY": 0.5654491313473785,
+              "inFrustum": true
+            },
+            {
+              "x": 1.5,
+              "y": 0,
+              "z": -0.5,
+              "ndcX": 0.9454026156177492,
+              "ndcY": 6.60323647926639e-16,
+              "inFrustum": true
+            },
+            {
+              "x": -0.5,
+              "y": 0,
+              "z": 1.5,
+              "ndcX": -0.9454026156177492,
+              "ndcY": 7.015938759220539e-16,
+              "inFrustum": true
+            },
+            {
+              "x": 1.5,
+              "y": 0,
+              "z": 1.5,
+              "ndcX": 0,
+              "ndcY": -0.7587807657081828,
+              "inFrustum": true
+            },
+            {
+              "x": -0.5,
+              "y": 0.561,
+              "z": -0.5,
+              "ndcX": 0,
+              "ndcY": 0.8871430261016044,
+              "inFrustum": true
+            },
+            {
+              "x": 1.5,
+              "y": 0.561,
+              "z": -0.5,
+              "ndcX": 0.9902879636118352,
+              "ndcY": 0.3440434761031282,
+              "inFrustum": true
+            },
+            {
+              "x": -0.5,
+              "y": 0.561,
+              "z": 1.5,
+              "ndcX": -0.9902879636118352,
+              "ndcY": 0.3440434761031282,
+              "inFrustum": true
+            },
+            {
+              "x": 1.5,
+              "y": 0.561,
+              "z": 1.5,
+              "ndcX": 0,
+              "ndcY": -0.39515393016202116,
+              "inFrustum": true
+            }
+          ],
+          "ok": true
+        }
+      },
+      "bw2CrispChannel": {
+        "buffer": {
+          "drawWidth": 972,
+          "drawHeight": 874,
+          "cssWidth": 972,
+          "cssHeight": 874,
+          "psxEnabled": false
+        },
+        "spriteFilters": {
+          "checked": 3,
+          "magNearestCount": 3,
+          "minLinearCount": 3,
+          "minNearestCount": 0
+        },
+        "fps": {
+          "samples": 60,
+          "elapsedMs": 985.1999999880791,
+          "fps": 60.90133983021315
+        }
+      },
+      "verbResults": {
+        "hurt": {
+          "ok": true
+        },
+        "down": {
+          "ok": true
+        }
+      },
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 404 (File not found)",
+        "Failed to load resource: the server responded with a status of 404 (File not found)",
+        "Failed to load resource: the server responded with a status of 404 (File not found)"
+      ],
+      "urls404": [
+        "http://127.0.0.1:5211/dm/health",
+        "http://127.0.0.1:5211/dm/health",
+        "http://127.0.0.1:5211/assets/dressing/effect-hit-damage.png",
+        "http://127.0.0.1:5211/assets/dressing/effect-fall-death.png"
+      ],
+      "benign404Count": 4,
+      "summary": {
+        "topology": "The Onion",
+        "realm": "chrome",
+        "roomCount": 5,
+        "planVerified": true,
+        "piecesResolved": 3,
+        "piecesRequested": 3,
+        "dressingCount": 49,
+        "meshCount": 11,
+        "consoleErrorCount": 3,
+        "breakCount": 0
+      }
+    },
+    {
+      "loopIndex": 2,
+      "cfg": {
+        "loopIndex": 2,
+        "segCount": 6,
+        "realmId": "gloom",
+        "foes": [
+          "Ogre Zombie",
+          "Skeleton",
+          "Zombie",
+          "Guard"
+        ]
+      },
+      "breaks": [],
+      "drive": {
+        "ok": true,
+        "stage": "done",
+        "loopIndex": 2,
+        "topology": "The Hub",
+        "segCount": 7,
+        "environment": "dungeon",
+        "nodeId": "dungeon-loop-2",
+        "roomCount": 7,
+        "reachability": {
+          "ok": true,
+          "unreachable": 0
+        },
+        "targetSegNum": 4,
+        "room": {
+          "segNum": 4,
+          "x": 3,
+          "y": 30,
+          "w": 10,
+          "d": 4
+        },
+        "foes": [
+          {
+            "fid": "f1",
+            "name": "Ogre Zombie"
+          },
+          {
+            "fid": "f2",
+            "name": "Skeleton"
+          },
+          {
+            "fid": "f3",
+            "name": "Zombie"
+          },
+          {
+            "fid": "f4",
+            "name": "Guard"
+          }
+        ],
+        "combatGrid": {
+          "bands": [
+            "melee"
+          ],
+          "lanes": [
+            "L",
+            "C",
+            "R"
+          ],
+          "bandCount": 1,
+          "laneCount": 3
+        },
+        "pnCursor": 4
+      },
+      "topology": "The Hub",
+      "roomCount": 7,
+      "reachability": {
+        "ok": true,
+        "unreachable": 0
+      },
+      "rendered": {
+        "ok": true,
+        "stage": "setInteriorBoard",
+        "dressingCountFromTray": 84,
+        "meshCount": 11,
+        "piecesRequested": 4,
+        "piecesResolved": 4,
+        "dressingCount": 84,
+        "beatMaxHeight": 1.903,
+        "beatFrustumCheck": {
+          "corners": [
+            {
+              "x": -2.5,
+              "y": 0,
+              "z": -0.5,
+              "ndcX": -0.34507576581947597,
+              "ndcY": 0.45383301932916914,
+              "inFrustum": true
+            },
+            {
+              "x": 3.5,
+              "y": 0,
+              "z": -0.5,
+              "ndcX": 0.825260687601023,
+              "ndcY": -0.2713393598491444,
+              "inFrustum": true
+            },
+            {
+              "x": -2.5,
+              "y": 0,
+              "z": 1.5,
+              "ndcX": -0.7299887043823724,
+              "ndcY": 0.24001466532958002,
+              "inFrustum": true
+            },
+            {
+              "x": 3.5,
+              "y": 0,
+              "z": 1.5,
+              "ndcX": 0.44143664181485237,
+              "ndcY": -0.580563875650919,
+              "inFrustum": true
+            },
+            {
+              "x": -2.5,
+              "y": 1.903,
+              "z": -0.5,
+              "ndcX": -0.36471202420287674,
+              "ndcY": 0.9198204910022076,
+              "inFrustum": true
+            },
+            {
+              "x": 3.5,
+              "y": 1.903,
+              "z": -0.5,
+              "ndcX": 0.8820474776009498,
+              "ndcY": 0.24225088581351142,
+              "inFrustum": true
+            },
+            {
+              "x": -2.5,
+              "y": 1.903,
+              "z": 1.5,
+              "ndcX": -0.7740706700854196,
+              "ndcY": 0.7216124309158957,
+              "inFrustum": true
+            },
+            {
+              "x": 3.5,
+              "y": 1.903,
+              "z": 1.5,
+              "ndcX": 0.47408963806022025,
+              "ndcY": -0.05134032000300531,
+              "inFrustum": true
+            }
+          ],
+          "ok": true
+        }
+      },
+      "bw2CrispChannel": {
+        "buffer": {
+          "drawWidth": 972,
+          "drawHeight": 874,
+          "cssWidth": 972,
+          "cssHeight": 874,
+          "psxEnabled": false
+        },
+        "spriteFilters": {
+          "checked": 4,
+          "magNearestCount": 4,
+          "minLinearCount": 4,
+          "minNearestCount": 0
+        },
+        "fps": {
+          "samples": 60,
+          "elapsedMs": 554.2999999821186,
+          "fps": 108.24463287377876
+        }
+      },
+      "verbResults": {
+        "hurt": {
+          "ok": true
+        },
+        "down": {
+          "ok": true
+        }
+      },
+      "consoleErrors": [],
+      "urls404": [],
+      "benign404Count": 0,
+      "summary": {
+        "topology": "The Hub",
+        "realm": "gloom",
+        "roomCount": 7,
+        "planVerified": true,
+        "piecesResolved": 4,
+        "piecesRequested": 4,
+        "dressingCount": 84,
+        "meshCount": 11,
+        "consoleErrorCount": 0,
+        "breakCount": 0
+      }
+    },
+    {
+      "loopIndex": 3,
+      "cfg": {
+        "loopIndex": 3,
+        "segCount": 8,
+        "realmId": "fantasy",
+        "foes": [
+          "Wolf",
+          "Zombie",
+          "Ape",
+          "Guard",
+          "Knight"
+        ]
+      },
+      "breaks": [],
+      "drive": {
+        "ok": true,
+        "stage": "done",
+        "loopIndex": 3,
+        "topology": "The Spine",
+        "segCount": 9,
+        "environment": "dungeon",
+        "nodeId": "dungeon-loop-3",
+        "roomCount": 9,
+        "reachability": {
+          "ok": true,
+          "unreachable": 0
+        },
+        "targetSegNum": 5,
+        "room": {
+          "segNum": 5,
+          "x": 37,
+          "y": 4,
+          "w": 12,
+          "d": 6
+        },
+        "foes": [
+          {
+            "fid": "f1",
+            "name": "Wolf"
+          },
+          {
+            "fid": "f2",
+            "name": "Zombie"
+          },
+          {
+            "fid": "f3",
+            "name": "Ape"
+          },
+          {
+            "fid": "f4",
+            "name": "Guard"
+          },
+          {
+            "fid": "f5",
+            "name": "Knight"
+          }
+        ],
+        "combatGrid": {
+          "bands": [
+            "melee",
+            "near"
+          ],
+          "lanes": [
+            "L",
+            "C",
+            "R"
+          ],
+          "bandCount": 2,
+          "laneCount": 3
+        },
+        "pnCursor": 5
+      },
+      "topology": "The Spine",
+      "roomCount": 9,
+      "reachability": {
+        "ok": true,
+        "unreachable": 0
+      },
+      "rendered": {
+        "ok": true,
+        "stage": "setInteriorBoard",
+        "dressingCountFromTray": 80,
+        "meshCount": 12,
+        "piecesRequested": 5,
+        "piecesResolved": 5,
+        "dressingCount": 80,
+        "beatMaxHeight": 1.2429999999999999,
+        "beatFrustumCheck": {
+          "corners": [
+            {
+              "x": -2.5,
+              "y": 0,
+              "z": -2.5,
+              "ndcX": -0.09238996882611687,
+              "ndcY": 0.5334775228999677,
+              "inFrustum": true
+            },
+            {
+              "x": 3.5,
+              "y": 0,
+              "z": -2.5,
+              "ndcX": 0.9639166720537038,
+              "ndcY": -0.043575552589470934,
+              "inFrustum": true
+            },
+            {
+              "x": -2.5,
+              "y": 0,
+              "z": 2.5,
+              "ndcX": -0.9436262663853339,
+              "ndcY": 0.042658289028315095,
+              "inFrustum": true
+            },
+            {
+              "x": 3.5,
+              "y": 0,
+              "z": 2.5,
+              "ndcX": 0.1254016025784196,
+              "ndcY": -0.7240930715879887,
+              "inFrustum": true
+            },
+            {
+              "x": -2.5,
+              "y": 1.2429999999999999,
+              "z": -2.5,
+              "ndcX": -0.09526000964420266,
+              "ndcY": 0.7965647894717135,
+              "inFrustum": true
+            },
+            {
+              "x": 3.5,
+              "y": 1.2429999999999999,
+              "z": -2.5,
+              "ndcX": 0.99894800442616,
+              "ndcY": 0.24324223883489307,
+              "inFrustum": true
+            },
+            {
+              "x": -2.5,
+              "y": 1.2429999999999999,
+              "z": 2.5,
+              "ndcX": -0.9771726416131775,
+              "ndcY": 0.3262895970010737,
+              "inFrustum": true
+            },
+            {
+              "x": 3.5,
+              "y": 1.2429999999999999,
+              "z": 2.5,
+              "ndcX": 0.13074837909390893,
+              "ndcY": -0.4166140294061472,
+              "inFrustum": true
+            }
+          ],
+          "ok": true
+        }
+      },
+      "bw2CrispChannel": {
+        "buffer": {
+          "drawWidth": 972,
+          "drawHeight": 874,
+          "cssWidth": 972,
+          "cssHeight": 874,
+          "psxEnabled": false
+        },
+        "spriteFilters": {
+          "checked": 5,
+          "magNearestCount": 5,
+          "minLinearCount": 5,
+          "minNearestCount": 0
+        },
+        "fps": {
+          "samples": 60,
+          "elapsedMs": 352.7000000178814,
+          "fps": 170.11624609287804
+        }
+      },
+      "verbResults": {
+        "hurt": {
+          "ok": true
+        },
+        "down": {
+          "ok": true
+        }
+      },
+      "consoleErrors": [],
+      "urls404": [],
+      "benign404Count": 0,
+      "summary": {
+        "topology": "The Spine",
+        "realm": "fantasy",
+        "roomCount": 9,
+        "planVerified": true,
+        "piecesResolved": 5,
+        "piecesRequested": 5,
+        "dressingCount": 80,
+        "meshCount": 12,
+        "consoleErrorCount": 0,
+        "breakCount": 0
+      }
+    },
+    {
+      "loopIndex": 4,
+      "cfg": {
+        "loopIndex": 4,
+        "segCount": 10,
+        "realmId": "gloom",
+        "foes": [
+          "Giant Rat",
+          "Spider",
+          "Knight"
+        ]
+      },
+      "breaks": [],
+      "drive": {
+        "ok": true,
+        "stage": "done",
+        "loopIndex": 4,
+        "topology": "The Figure-8",
+        "segCount": 11,
+        "environment": "dungeon",
+        "nodeId": "dungeon-loop-4",
+        "roomCount": 11,
+        "reachability": {
+          "ok": true,
+          "unreachable": 0
+        },
+        "targetSegNum": 6,
+        "room": {
+          "segNum": 6,
+          "x": 31,
+          "y": 3,
+          "w": 7,
+          "d": 5
+        },
+        "foes": [
+          {
+            "fid": "f1",
+            "name": "Giant Rat"
+          },
+          {
+            "fid": "f2",
+            "name": "Spider"
+          },
+          {
+            "fid": "f3",
+            "name": "Knight"
+          }
+        ],
+        "combatGrid": {
+          "bands": [
+            "melee"
+          ],
+          "lanes": [
+            "L",
+            "C"
+          ],
+          "bandCount": 1,
+          "laneCount": 2
+        },
+        "pnCursor": 6
+      },
+      "topology": "The Figure-8",
+      "roomCount": 11,
+      "reachability": {
+        "ok": true,
+        "unreachable": 0
+      },
+      "rendered": {
+        "ok": true,
+        "stage": "setInteriorBoard",
+        "dressingCountFromTray": 114,
+        "meshCount": 22,
+        "piecesRequested": 3,
+        "piecesResolved": 3,
+        "dressingCount": 114,
+        "beatMaxHeight": 1.2429999999999999,
+        "beatFrustumCheck": {
+          "corners": [
+            {
+              "x": -1,
+              "y": 0,
+              "z": -1,
+              "ndcX": -0.13965399278542748,
+              "ndcY": 0.537717993860485,
+              "inFrustum": true
+            },
+            {
+              "x": 3,
+              "y": 0,
+              "z": -1,
+              "ndcX": 0.929077464663322,
+              "ndcY": -0.06930295607250718,
+              "inFrustum": true
+            },
+            {
+              "x": -1,
+              "y": 0,
+              "z": 2,
+              "ndcX": -0.9004019326967978,
+              "ndcY": 0.06716395345128721,
+              "inFrustum": true
+            },
+            {
+              "x": 3,
+              "y": 0,
+              "z": 2,
+              "ndcX": 0.1854888220828263,
+              "ndcY": -0.7141985367161638,
+              "inFrustum": true
+            },
+            {
+              "x": -1,
+              "y": 1.2429999999999999,
+              "z": -1,
+              "ndcX": -0.14667455686278863,
+              "ndcY": 0.9362630298933087,
+              "inFrustum": true
+            },
+            {
+              "x": 3,
+              "y": 1.2429999999999999,
+              "z": -1,
+              "ndcX": 0.9836524446312565,
+              "ndcY": 0.3607337531137295,
+              "inFrustum": true
+            },
+            {
+              "x": -1,
+              "y": 1.2429999999999999,
+              "z": 2,
+              "ndcX": -0.9515672769610135,
+              "ndcY": 0.4909282865866474,
+              "inFrustum": true
+            },
+            {
+              "x": 3,
+              "y": 1.2429999999999999,
+              "z": 2,
+              "ndcX": 0.19808173005663926,
+              "ndcY": -0.26096270183337594,
+              "inFrustum": true
+            }
+          ],
+          "ok": true
+        }
+      },
+      "bw2CrispChannel": {
+        "buffer": {
+          "drawWidth": 972,
+          "drawHeight": 874,
+          "cssWidth": 972,
+          "cssHeight": 874,
+          "psxEnabled": false
+        },
+        "spriteFilters": {
+          "checked": 3,
+          "magNearestCount": 3,
+          "minLinearCount": 3,
+          "minNearestCount": 0
+        },
+        "fps": {
+          "samples": 60,
+          "elapsedMs": 477.89999997615814,
+          "fps": 125.54927809791448
+        }
+      },
+      "verbResults": {
+        "hurt": {
+          "ok": true
+        },
+        "down": {
+          "ok": true
+        }
+      },
+      "consoleErrors": [],
+      "urls404": [],
+      "benign404Count": 0,
+      "summary": {
+        "topology": "The Figure-8",
+        "realm": "gloom",
+        "roomCount": 11,
+        "planVerified": true,
+        "piecesResolved": 3,
+        "piecesRequested": 3,
+        "dressingCount": 114,
+        "meshCount": 22,
+        "consoleErrorCount": 0,
+        "breakCount": 0
+      }
+    },
+    {
+      "loopIndex": 5,
+      "cfg": {
+        "loopIndex": 5,
+        "segCount": 7,
+        "realmId": "chrome",
+        "foes": [
+          "Ogre Zombie",
+          "Skeleton",
+          "Zombie",
+          "Guard",
+          "Wolf"
+        ]
+      },
+      "breaks": [],
+      "drive": {
+        "ok": true,
+        "stage": "done",
+        "loopIndex": 5,
+        "topology": "The Spine",
+        "segCount": 8,
+        "environment": "dungeon",
+        "nodeId": "dungeon-loop-5",
+        "roomCount": 8,
+        "reachability": {
+          "ok": true,
+          "unreachable": 0
+        },
+        "targetSegNum": 5,
+        "room": {
+          "segNum": 5,
+          "x": 48,
+          "y": 6,
+          "w": 5,
+          "d": 4
+        },
+        "foes": [
+          {
+            "fid": "f1",
+            "name": "Ogre Zombie"
+          },
+          {
+            "fid": "f2",
+            "name": "Skeleton"
+          },
+          {
+            "fid": "f3",
+            "name": "Zombie"
+          },
+          {
+            "fid": "f4",
+            "name": "Guard"
+          },
+          {
+            "fid": "f5",
+            "name": "Wolf"
+          }
+        ],
+        "combatGrid": {
+          "bands": [
+            "melee"
+          ],
+          "lanes": [
+            "L",
+            "C"
+          ],
+          "bandCount": 1,
+          "laneCount": 2
+        },
+        "pnCursor": 5
+      },
+      "topology": "The Spine",
+      "roomCount": 8,
+      "reachability": {
+        "ok": true,
+        "unreachable": 0
+      },
+      "rendered": {
+        "ok": true,
+        "stage": "setInteriorBoard",
+        "dressingCountFromTray": 79,
+        "meshCount": 19,
+        "piecesRequested": 5,
+        "piecesResolved": 5,
+        "dressingCount": 79,
+        "beatMaxHeight": 1.903,
+        "beatFrustumCheck": {
+          "corners": [
+            {
+              "x": -2,
+              "y": 0,
+              "z": -1.5,
+              "ndcX": -0.09016205037187977,
+              "ndcY": 0.4025946071232767,
+              "inFrustum": true
+            },
+            {
+              "x": 2,
+              "y": 0,
+              "z": -1.5,
+              "ndcX": 0.7138437917791198,
+              "ndcY": -0.06505059607884711,
+              "inFrustum": true
+            },
+            {
+              "x": -2,
+              "y": 0,
+              "z": 1.5,
+              "ndcX": -0.6911985943415965,
+              "ndcY": 0.06298700232262373,
+              "inFrustum": true
+            },
+            {
+              "x": 2,
+              "y": 0,
+              "z": 1.5,
+              "ndcX": 0.11309323989824986,
+              "ndcY": -0.5049877226320907,
+              "inFrustum": true
+            },
+            {
+              "x": -2,
+              "y": 1.903,
+              "z": -1.5,
+              "ndcX": -0.09536768530057727,
+              "ndcY": 0.8934711474529591,
+              "inFrustum": true
+            },
+            {
+              "x": 2,
+              "y": 1.903,
+              "z": -1.5,
+              "ndcX": 0.7608151346660635,
+              "ndcY": 0.4636163000339638,
+              "inFrustum": true
+            },
+            {
+              "x": -2,
+              "y": 1.903,
+              "z": 1.5,
+              "ndcX": -0.7351453379664935,
+              "ndcY": 0.5819574439094505,
+              "inFrustum": true
+            },
+            {
+              "x": 2,
+              "y": 1.903,
+              "z": 1.5,
+              "ndcX": 0.12140559389551002,
+              "ndcY": 0.05320383006087554,
+              "inFrustum": true
+            }
+          ],
+          "ok": true
+        }
+      },
+      "bw2CrispChannel": {
+        "buffer": {
+          "drawWidth": 972,
+          "drawHeight": 874,
+          "cssWidth": 972,
+          "cssHeight": 874,
+          "psxEnabled": false
+        },
+        "spriteFilters": {
+          "checked": 5,
+          "magNearestCount": 5,
+          "minLinearCount": 5,
+          "minNearestCount": 0
+        },
+        "fps": {
+          "samples": 60,
+          "elapsedMs": 369.90000000596046,
+          "fps": 162.20600161944628
+        }
+      },
+      "verbResults": {
+        "hurt": {
+          "ok": true
+        },
+        "down": {
+          "ok": true
+        }
+      },
+      "consoleErrors": [],
+      "urls404": [],
+      "benign404Count": 0,
+      "summary": {
+        "topology": "The Spine",
+        "realm": "chrome",
+        "roomCount": 8,
+        "planVerified": true,
+        "piecesResolved": 5,
+        "piecesRequested": 5,
+        "dressingCount": 79,
+        "meshCount": 19,
+        "consoleErrorCount": 0,
+        "breakCount": 0
+      }
+    }
+  ],
+  "breaks": [],
+  "notes": [
+    "OPEN: hurt/down screenshot PNGs may not visually reflect the standee-verb's terminal frame in this headless capture harness (play() itself, and the underlying scene-graph mutation, are independently proven correct — see shootCanvas()'s header comment in this file for the full triage trail). Not counted as a loop break."
+  ],
+  "boot": {
+    "ok": true,
+    "notes": [
+      "startSession() called"
+    ],
+    "worldId": "mrjson5pr1g7c",
+    "worldName": "Wind-Break Village"
+  },
+  "theaterState": {
+    "hasBattleStage": true,
+    "theaterMounted": true,
+    "hasCanvas": true,
+    "hasSetInteriorBoard": true,
+    "hasPlay": true
+  },
+  "contactSheetPath": "/Users/adamstephenson/Desktop/Work/projects/Genesis/dev/battle-gate/dungeon-loop/contact-sheet.png",
+  "shotCount": 16,
+  "breakCount": 0,
+  "cleanIterations": 5
+}

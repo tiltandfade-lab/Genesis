@@ -1,0 +1,118 @@
+{
+  "generatedAt": "2026-07-12T17:36:07.920Z",
+  "notes": [],
+  "search": {
+    "ok": true,
+    "attempt": 14,
+    "walkId": "p3-occlusion-real-search:14",
+    "seed": 877507127,
+    "room": {
+      "segNum": 1,
+      "x": 3,
+      "y": 6,
+      "w": 8,
+      "d": 6
+    },
+    "pillar": {
+      "x": 4,
+      "z": 7,
+      "sx": 0.38,
+      "sy": 2.4,
+      "sz": 0.38,
+      "profile": "tapered"
+    },
+    "miniCell": {
+      "x": 5,
+      "z": 8
+    },
+    "rotationStep": 2,
+    "triedSeeds": 15
+  },
+  "built": {
+    "ok": true,
+    "pillarIdx": 0,
+    "rebuiltPillar": {
+      "x": 4,
+      "z": 7,
+      "sy": 2.4,
+      "profile": "tapered"
+    }
+  },
+  "pieceState": {
+    "resolved": 1,
+    "requested": 1
+  },
+  "guard": {
+    "origin": {
+      "cx": 6.5,
+      "cz": 8.5
+    },
+    "sightPoint": {
+      "x": -1.5,
+      "y": 0.3460000000000001,
+      "z": -0.5
+    },
+    "raycast": {
+      "clear": false,
+      "dist": 9.345177503071099,
+      "hits": [
+        {
+          "kind": "pillar",
+          "distance": 7.385492567178862,
+          "instanceId": 0
+        }
+      ]
+    },
+    "cam": {
+      "x": -6.174769960565487,
+      "y": 6.114522711610338,
+      "z": -6.17476996056549
+    }
+  },
+  "off": {
+    "shotPath": "/Users/adamstephenson/Desktop/Work/projects/Genesis/.claude/worktrees/agent-ae7ddba6efb5e50a4/dev/battle-gate/occlusion-real/off.png",
+    "sample": {
+      "r": 63.992592592592594,
+      "g": 42.944197530864194,
+      "b": 18.94814814814815,
+      "sx": 599,
+      "sy": 376,
+      "n": 2025
+    }
+  },
+  "on": {
+    "shotPath": "/Users/adamstephenson/Desktop/Work/projects/Genesis/.claude/worktrees/agent-ae7ddba6efb5e50a4/dev/battle-gate/occlusion-real/on.png",
+    "sample": {
+      "r": 84.02222222222223,
+      "g": 53.552592592592596,
+      "b": 25.643950617283952,
+      "sx": 599,
+      "sy": 376,
+      "n": 2025
+    }
+  },
+  "fps": {
+    "samples": 60,
+    "elapsedMs": 38,
+    "fps": 1578.9473684210527
+  },
+  "contact": {
+    "shotPath": "/Users/adamstephenson/Desktop/Work/projects/Genesis/.claude/worktrees/agent-ae7ddba6efb5e50a4/dev/battle-gate/occlusion-real/contact.png",
+    "sample": {
+      "r": 85.40987654320988,
+      "g": 54.25876543209876,
+      "b": 26.133827160493826,
+      "sx": 599,
+      "sy": 376,
+      "n": 2025
+    }
+  },
+  "deltas": {
+    "onVsContact": 1.6322510901816405,
+    "offVsContact": 25.26565814463343,
+    "onVsOff": 23.6338291351936
+  },
+  "consoleErrors": [],
+  "pass": 13,
+  "fail": 0
+}

@@ -1,0 +1,1099 @@
+{
+ "sheets": [
+  {
+   "file": "frontier-npcs-1-c2.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [],
+   "palette": "narrow",
+   "lighting": "ambient",
+   "note": "Townsfolk set is exemplary \u2014 consistent scale, realistic proportions, tight earth palette, clean pixel grain across all 25 cells."
+  },
+  {
+   "file": "frontier-domestic-animals-2.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [],
+   "palette": "narrow",
+   "lighting": "ambient",
+   "note": "Coherent earth-toned livestock set with realistic anatomy and visible pixel dither throughout; sits well in frontier."
+  },
+  {
+   "file": "frontier-dungeon-animals-2.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [
+    {
+     "cell": "r1c4",
+     "reason": "soft cast shadow, slightly smoother shading"
+    }
+   ],
+   "palette": "narrow",
+   "lighting": "ambient",
+   "note": "Vermin set is uniformly gritty pixel work with naturalistic proportions; one toad reads a touch softer but stays in family."
+  },
+  {
+   "file": "frontier-monsters-1-c2.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [],
+   "palette": "rich",
+   "lighting": "rim",
+   "note": "Dense high-detail pixel grit, realistic figures; spectral blues and fire emissives are subject glow, not a style break."
+  },
+  {
+   "file": "frontier-monsters-2-c2.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [],
+   "palette": "ok",
+   "lighting": "ambient",
+   "note": "NPC-adjacent horror set is stylistically uniform \u2014 gritty dithered pixels, realistic proportions, muted frontier browns."
+  },
+  {
+   "file": "frontier-monsters-3-c2.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [],
+   "palette": "ok",
+   "lighting": "rim",
+   "note": "Coherent gritty pixel work; elemental/spectral cells carry emissive rim glow but share the same pixel grain as the rest."
+  },
+  {
+   "file": "frontier-monsters-4-c2.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [],
+   "palette": "narrow",
+   "lighting": "rim",
+   "note": "Conforms, but detail density is extreme and values very dark \u2014 silhouettes get muddy at sprite scale even though the style law is met."
+  },
+  {
+   "file": "frontier-monsters-5-c2.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [],
+   "palette": "ok",
+   "lighting": "ambient",
+   "note": "Uniform gritty pixel style, realistic figures; only 21 cells populated (last row has a single sprite)."
+  },
+  {
+   "file": "frontier-npcs-2-c2.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [],
+   "palette": "narrow",
+   "lighting": "ambient",
+   "note": "Same house style as npcs-1; period costume detail rendered in coherent dithered pixels, no soft-brush drift."
+  },
+  {
+   "file": "frontier-npcs-3-c2.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [],
+   "palette": "narrow",
+   "lighting": "ambient",
+   "note": "Coherent with the other NPC sheets; 21 cells populated. Fortune-teller's purple robe is the only saturated note and still on-style."
+  },
+  {
+   "file": "frontier-wild-animals-2.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [],
+   "palette": "ok",
+   "lighting": "ambient",
+   "note": "Naturalistic fauna with crisp pixel dither; colorful songbirds are species-true color, not a style deviation."
+  },
+  {
+   "file": "fantasy-domestic-animals-2.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [],
+   "palette": "ok",
+   "lighting": "ambient",
+   "note": "Matches the frontier animal house style exactly \u2014 realistic proportions, clean pixel grain, muted naturalistic color."
+  },
+  {
+   "file": "fantasy-dungeon-animals-2.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [],
+   "palette": "narrow",
+   "lighting": "ambient",
+   "note": "Pale cave-critter palette is deliberate and coherent; consistent grit and anatomy across all 25 cells."
+  },
+  {
+   "file": "fantasy-wild-animals-2.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [],
+   "palette": "ok",
+   "lighting": "ambient",
+   "note": "Uniform naturalistic pixel style; kingfisher's bright plumage is species-accurate, no painterly or cartoon drift."
+  },
+  {
+   "file": "chrome-npcs-1-c2.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [
+    {
+     "cell": "r4c2",
+     "reason": "idol sprite brighter anime-neon flavor"
+    }
+   ],
+   "palette": "rich",
+   "lighting": "ambient",
+   "note": "Working-class cyberpunk civilians with holo-screen neon accents; realistic proportions throughout, the holo-idol pops brighter but reads intentional."
+  },
+  {
+   "file": "chrome-domestic-animals-2.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [
+    {
+     "cell": "r1c2",
+     "reason": "rounded toy-like chibi cat-bot"
+    },
+    {
+     "cell": "r4c4",
+     "reason": "simplified cute sphere-bot, low grit"
+    }
+   ],
+   "palette": "rich",
+   "lighting": "ambient",
+   "note": "Coherent gunmetal mech-pet set with neon accent lights; solidly chrome apart from two cuter simplified bots."
+  },
+  {
+   "file": "chrome-dungeon-animals-2.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [
+    {
+     "cell": "r1c5",
+     "reason": "cute mascot-style dog-bot"
+    },
+    {
+     "cell": "r5c4",
+     "reason": "simplified cartoon walking bot"
+    },
+    {
+     "cell": "r5c5",
+     "reason": "toy-like sweeper bot"
+    }
+   ],
+   "palette": "ok",
+   "lighting": "ambient",
+   "note": "Gritty robo-vermin swarms read chrome, but several small service-bots drift toward clean mascot cartooning and the palette sits mostly in flat gunmetal with sparse neon."
+  },
+  {
+   "file": "chrome-monsters-1-c2.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [],
+   "palette": "rich",
+   "lighting": "rim",
+   "note": "Excellent chrome coherence \u2014 heavy machine grit, bio-mech horror, strong neon emissives (glitch ghost and data-wraith are intentional digital-entity styling)."
+  },
+  {
+   "file": "chrome-monsters-2-c2.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [],
+   "palette": "rich",
+   "lighting": "ambient",
+   "note": "Uniformly gritty cyber-horror pixel work with neon accents; fully on-law."
+  },
+  {
+   "file": "chrome-monsters-3-c2.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [],
+   "palette": "rich",
+   "lighting": "rim",
+   "note": "Strong sheet \u2014 biomech monsters, neon slime/plasma emissives, consistent pixel grit throughout."
+  },
+  {
+   "file": "chrome-monsters-4-c2.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [],
+   "palette": "rich",
+   "lighting": "ambient",
+   "note": "Dense boss-tier machines with heavy detail and neon glow; the most coherent chrome monster sheet."
+  },
+  {
+   "file": "chrome-monsters-5-c2.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [],
+   "palette": "ok",
+   "lighting": "ambient",
+   "note": "Undead-machine set is coherent and gritty but leans darker/less neon than sibling monster sheets; 7 empty cells (18 sprites)."
+  },
+  {
+   "file": "chrome-npcs-2-c2.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [],
+   "palette": "ok",
+   "lighting": "ambient",
+   "note": "Coherent trench-coat street cast; grounded dark palette with cyan/pink holo accents \u2014 slightly muted for chrome but consistent."
+  },
+  {
+   "file": "chrome-npcs-3-c2.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [],
+   "palette": "ok",
+   "lighting": "ambient",
+   "note": "Everyday-life chrome NPCs (cook, janitor, medic) with realistic bodies and restrained neon; coherent with npcs-1/2."
+  },
+  {
+   "file": "chrome-npcs-4-c2.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [],
+   "palette": "rich",
+   "lighting": "ambient",
+   "note": "Wasteland-punk and plague-crow gangs; row 2's UV face-paint neon is loud but intentional chrome flavor, grit and proportions stay realistic."
+  },
+  {
+   "file": "chrome-npcs-5-c2.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [],
+   "palette": "ok",
+   "lighting": "ambient",
+   "note": "Scavenger/smith cast in rusted metals with circuit-glow accents; mostly back/side poses, coherent and on-law though less neon-forward."
+  },
+  {
+   "file": "chrome-npcs-6-c2.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [
+    {
+     "cell": "r1c1",
+     "reason": "anthro gator slightly softer rendering"
+    }
+   ],
+   "palette": "ok",
+   "lighting": "ambient",
+   "note": "Mixed anthro-animal and armored-trooper NPCs; anthro row reads a touch softer but stays within pixel grit, armor rows are exemplary."
+  },
+  {
+   "file": "chrome-wild-animals-2.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [
+    {
+     "cell": "r4c5",
+     "reason": "macaw natural-colored, barely mechanized"
+    },
+    {
+     "cell": "r2c1",
+     "reason": "mantis mostly organic, low chrome"
+    }
+   ],
+   "palette": "rich",
+   "lighting": "ambient",
+   "note": "Plated mech-fauna set is coherent; a couple of specimens (macaw, mantis) read near-organic against the otherwise armored menagerie."
+  },
+  {
+   "file": "high-seas-mm-01.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [],
+   "palette": "ok",
+   "lighting": "rim",
+   "note": "Grim drowned-pirate monster set with realistic anatomy, heavy pixel grit, and coherent teal spectral glows."
+  },
+  {
+   "file": "high-seas-domesticated-animals-01.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [],
+   "palette": "ok",
+   "lighting": "ambient",
+   "note": "Dense-dithered gritty pixel animals with realistic anatomy and barnacle/teal salvage dressing \u2014 squarely on-law and realm-coherent."
+  },
+  {
+   "file": "high-seas-dungeon-animals-01.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [],
+   "palette": "narrow",
+   "lighting": "ambient",
+   "note": "Drowned-vermin set holds one murky grey-green pixel-grit voice throughout; strong realm coherence."
+  },
+  {
+   "file": "high-seas-items-01.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [],
+   "palette": "ok",
+   "lighting": "ambient",
+   "note": "Weathered nautical item icons with convincing rust/verdigris/rope materials in consistent pixel grit."
+  },
+  {
+   "file": "high-seas-items-02.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [],
+   "palette": "ok",
+   "lighting": "ambient",
+   "note": "Matches items-01 exactly in grit, materials, and teal-brass palette; small local lantern/hourglass glows are fine."
+  },
+  {
+   "file": "high-seas-kids-01.png",
+   "style": "cartoon",
+   "conforms": false,
+   "outlierCells": [],
+   "palette": "narrow",
+   "lighting": "flat",
+   "note": "Whole sheet is chibi/anime kids \u2014 big heads, huge eyes, soft flat shading \u2014 pixelated but not realistic proportions, so it breaks the law even though it is internally consistent."
+  },
+  {
+   "file": "high-seas-mm-02.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [],
+   "palette": "narrow",
+   "lighting": "ambient",
+   "note": "Rot-and-kelp humanoids in one consistent murky pixel-grit voice; fully on-law."
+  },
+  {
+   "file": "high-seas-mm-03.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [],
+   "palette": "narrow",
+   "lighting": "ambient",
+   "note": "Consistent with mm-01/02 \u2014 realistic proportions, encrusted materials, no soft-brush or cartoon drift."
+  },
+  {
+   "file": "high-seas-mm-04.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [],
+   "palette": "narrow",
+   "lighting": "rim",
+   "note": "Bosses/eldritch set stays in the same gritty pixel voice with teal spectral rim glows; coherent."
+  },
+  {
+   "file": "high-seas-mm-05.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [],
+   "palette": "narrow",
+   "lighting": "ambient",
+   "note": "Sea-monster set matches the mm family; realistic creature anatomy under uniform grit."
+  },
+  {
+   "file": "high-seas-npc-01.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [],
+   "palette": "ok",
+   "lighting": "ambient",
+   "note": "Working-port townsfolk with realistic proportions and weathered cloth/leather; consistent with the mm/item sheets."
+  },
+  {
+   "file": "high-seas-npc-02.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [],
+   "palette": "ok",
+   "lighting": "ambient",
+   "note": "Same voice as npc-01; realistic figures, muted brine palette, no painterly or cartoon drift."
+  },
+  {
+   "file": "high-seas-npc-03.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [],
+   "palette": "ok",
+   "lighting": "ambient",
+   "note": "Coherent with the other npc sheets; dense pixel grit and realistic anatomy throughout."
+  },
+  {
+   "file": "high-seas-wild-animals-01.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [],
+   "palette": "ok",
+   "lighting": "ambient",
+   "note": "Cleaner, brighter classic pixel-art than the grimy -01 monster/domestic sheets (little grime dressing), but proportions and materials stay realistic \u2014 on-law, mildly divergent in finish."
+  },
+  {
+   "file": "high-seas-domestic-animals-2.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [],
+   "palette": "rich",
+   "lighting": "flat",
+   "note": "Worktree -2 sheet is visibly cleaner/brighter flat-shaded pixel art than the root -01 domesticated sheet's dithered grime \u2014 still realistic proportions so it conforms, but the two generations don't match each other."
+  },
+  {
+   "file": "high-seas-dungeon-animals-2.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [],
+   "palette": "narrow",
+   "lighting": "flat",
+   "note": "Clean pale tidepool-critter pixel art with realistic anatomy; conforms, but far cleaner/less rotted than the root dungeon-animals-01 sheet \u2014 a visible cross-generation style gap."
+  },
+  {
+   "file": "high-seas-wild-animals-2.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [],
+   "palette": "ok",
+   "lighting": "flat",
+   "note": "Naturalist pelagic set in clean outlined pixel art with accurate species anatomy; conforms, and matches the other -2 worktree sheets rather than the grittier root -01 family."
+  },
+  {
+   "file": "cosmic-mm-01.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [],
+   "palette": "narrow",
+   "lighting": "ambient",
+   "note": "Dense dark eldritch pixel work, uniformly on-law; navy+gold discipline is tight."
+  },
+  {
+   "file": "cosmic-domesticated-animals-01.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [],
+   "palette": "narrow",
+   "lighting": "ambient",
+   "note": "Very coherent midnight-navy animals with gold constellation sigils; realistic anatomy under clean pixel grit."
+  },
+  {
+   "file": "cosmic-dungeon-animals-01.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [
+    {
+     "cell": "r5c2",
+     "reason": "naturalistic yellow canary breaks motif"
+    },
+    {
+     "cell": "r5c4",
+     "reason": "plain naturalistic pigeon coloring"
+    }
+   ],
+   "palette": "ok",
+   "lighting": "ambient",
+   "note": "Gritty realistic vermin fit the law; a few bottom-row cells drop the cosmic navy-gold treatment for plain naturalism (palette, not style, drift)."
+  },
+  {
+   "file": "cosmic-expansion-e1-01.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [],
+   "palette": "ok",
+   "lighting": "ambient",
+   "note": "Egyptian-cosmic monsters in dense detailed pixel work; fully on-law with strong realm identity."
+  },
+  {
+   "file": "cosmic-items-01.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [
+    {
+     "cell": "r5c5",
+     "reason": "glowing meteorite painterly bloom effect"
+    }
+   ],
+   "palette": "ok",
+   "lighting": "ambient",
+   "note": "Chunky readable item icons with realistic materials; coherent with the realm."
+  },
+  {
+   "file": "cosmic-items-02.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [
+    {
+     "cell": "r5c3",
+     "reason": "soft glow rope painterly halo"
+    }
+   ],
+   "palette": "ok",
+   "lighting": "ambient",
+   "note": "Consistent with items-01; realistic material rendering under pixel grit."
+  },
+  {
+   "file": "cosmic-kids-01.png",
+   "style": "cartoon",
+   "conforms": false,
+   "outlierCells": [],
+   "palette": "narrow",
+   "lighting": "flat",
+   "note": "Whole sheet reads as soft anime/chibi cel-shading \u2014 big heads, smooth faces, minimal pixel grit; the clearest law-breaker in the cosmic set."
+  },
+  {
+   "file": "cosmic-mm-02.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [
+    {
+     "cell": "r1c4",
+     "reason": "translucent magenta-bleed figure artifact"
+    }
+   ],
+   "palette": "narrow",
+   "lighting": "ambient",
+   "note": "On-law and coherent with mm-01; one cell shows background-magenta bleeding through a translucent body."
+  },
+  {
+   "file": "cosmic-mm-03.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [],
+   "palette": "narrow",
+   "lighting": "ambient",
+   "note": "Coherent with the mm set; realistic monstrous anatomy, crisp pixel edges."
+  },
+  {
+   "file": "cosmic-mm-04.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [],
+   "palette": "narrow",
+   "lighting": "ambient",
+   "note": "Extremely dense detail borders on noisy but stays pixel-real; strongest gothic-cosmic identity of the set."
+  },
+  {
+   "file": "cosmic-mm-05.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [
+    {
+     "cell": "r2c3",
+     "reason": "pure particle nebula, no form"
+    }
+   ],
+   "palette": "ok",
+   "lighting": "ambient",
+   "note": "On-law; yellow-robed King-in-Yellow cells add welcome palette variety without style drift."
+  },
+  {
+   "file": "cosmic-npc-01.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [],
+   "palette": "narrow",
+   "lighting": "ambient",
+   "note": "Realistic human proportions, robed navy-gold townsfolk; exemplary law compliance."
+  },
+  {
+   "file": "cosmic-npc-02.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [
+    {
+     "cell": "r2c4",
+     "reason": "starfield-body translucency reads painterly"
+    }
+   ],
+   "palette": "narrow",
+   "lighting": "ambient",
+   "note": "Coherent with npc-01; one star-flesh figure is soft/glowy but thematically deliberate."
+  },
+  {
+   "file": "cosmic-npc-03.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [],
+   "palette": "narrow",
+   "lighting": "ambient",
+   "note": "Matches the other npc sheets cell-for-cell in technique and palette."
+  },
+  {
+   "file": "cosmic-wild-animals-01.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [
+    {
+     "cell": "r2c5",
+     "reason": "naturalistic red fox coloring"
+    },
+    {
+     "cell": "r3c5",
+     "reason": "second naturalistic fox, cuter proportions"
+    }
+   ],
+   "palette": "ok",
+   "lighting": "ambient",
+   "note": "On-law realistic fauna; a few naturalistic-colored cells (foxes, goat, heron) loosen the navy-gold motif slightly."
+  },
+  {
+   "file": "cosmic-domestic-animals-2.png",
+   "style": "mixed",
+   "conforms": false,
+   "outlierCells": [
+    {
+     "cell": "r1c4",
+     "reason": "cute big-eyed kitten, toy-like"
+    },
+    {
+     "cell": "r5c4",
+     "reason": "cartoon kitten face, cel-soft"
+    },
+    {
+     "cell": "r5c5",
+     "reason": "toy-cute cartoon cow proportions"
+    },
+    {
+     "cell": "r5c3",
+     "reason": "cutesy cartoon ducklings"
+    }
+   ],
+   "palette": "rich",
+   "lighting": "ambient",
+   "note": "Visibly drifts from the root -01 sheets: warmer naturalistic colors, ornate gold tack/cages, and several cute-cartoon cells soften the pixel-realistic law."
+  },
+  {
+   "file": "cosmic-dungeon-animals-2.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [
+    {
+     "cell": "r5c5",
+     "reason": "cute cartoon white kitten"
+    },
+    {
+     "cell": "r3c1",
+     "reason": "stylized skull-critter, odd anatomy"
+    }
+   ],
+   "palette": "ok",
+   "lighting": "ambient",
+   "note": "Mostly on-law pale-vermin work; paler bone palette differs from root dungeon-01's black-navy but technique matches, save one cute-kitten cell."
+  },
+  {
+   "file": "cosmic-wild-animals-2.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [
+    {
+     "cell": "r5c2",
+     "reason": "bright naturalistic bee-eaters coloring"
+    },
+    {
+     "cell": "r5c5",
+     "reason": "naturalistic ibises break motif"
+    }
+   ],
+   "palette": "rich",
+   "lighting": "ambient",
+   "note": "Technique matches root wild-01 but palette is markedly richer/more naturalistic (zebras, lion, teal birds) \u2014 a visible palette drift from the -01 navy-gold discipline, style itself on-law."
+  },
+  {
+   "file": "theater-mm-01.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [],
+   "palette": "narrow",
+   "lighting": "ambient",
+   "note": "Trench-zombie/soldier monsters in dense gritty pixel rendering; textbook theater style."
+  },
+  {
+   "file": "theater-domesticated-animals-01.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [],
+   "palette": "narrow",
+   "lighting": "ambient",
+   "note": "Gritty mud-toned pixel-realistic livestock, fully on-realm for theater's trench-war grime."
+  },
+  {
+   "file": "theater-dungeon-animals-01.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [],
+   "palette": "narrow",
+   "lighting": "ambient",
+   "note": "Mangy, wounded vermin in the same gritty pixel-real idiom; strong realm coherence."
+  },
+  {
+   "file": "theater-kids-01.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [],
+   "palette": "narrow",
+   "lighting": "ambient",
+   "note": "Ragged wartime children, realistic proportions and drab olive palette; coherent with the NPC sheets (bottom row empty cells)."
+  },
+  {
+   "file": "theater-mm-02.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [
+    [
+     "r1c5",
+     "muzzle-flash smoke reads softer"
+    ]
+   ],
+   "palette": "narrow",
+   "lighting": "ambient",
+   "note": "Coherent grim WWI-gothic set; smoke/gas-cloud cells go slightly painterly but stay within the pixel grid."
+  },
+  {
+   "file": "theater-mm-03.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [],
+   "palette": "narrow",
+   "lighting": "ambient",
+   "note": "Heavy-detail pixel-realistic war machines and brutes; ghost cell (r4c4) is a deliberate palette accent, same render style."
+  },
+  {
+   "file": "theater-mm-04.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [],
+   "palette": "narrow",
+   "lighting": "ambient",
+   "note": "Consistent with mm-01/02/03; blue spectral figures (r2c3, r4c3, r5c3) are palette accents, not style breaks."
+  },
+  {
+   "file": "theater-mm-05.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [],
+   "palette": "narrow",
+   "lighting": "ambient",
+   "note": "Same gritty idiom; several empty cells (r4c4-r4c5, all of r5) but rendered cells fully coherent."
+  },
+  {
+   "file": "theater-npc-01.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [],
+   "palette": "narrow",
+   "lighting": "ambient",
+   "note": "Drab-olive wartime civilians/soldiers, realistic anatomy, uniform grit; exemplary realm coherence."
+  },
+  {
+   "file": "theater-npc-02.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [],
+   "palette": "narrow",
+   "lighting": "ambient",
+   "note": "Matches npc-01 exactly in palette and rendering; strong internal consistency."
+  },
+  {
+   "file": "theater-npc-03.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [],
+   "palette": "narrow",
+   "lighting": "ambient",
+   "note": "Same NPC idiom continued; no drift across the three NPC sheets."
+  },
+  {
+   "file": "theater-wild-animals-01.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [],
+   "palette": "ok",
+   "lighting": "ambient",
+   "note": "Naturalist pixel-real wildlife, slightly wider natural palette than the human sheets but still muted and on-realm."
+  },
+  {
+   "file": "theater-domestic-animals-2.png",
+   "style": "cartoon",
+   "conforms": false,
+   "outlierCells": [],
+   "palette": "rich",
+   "lighting": "flat",
+   "note": "Worktree sheet clearly diverges from root -01: clean bright storybook pixel art (ornate red/gold saddle blankets, gold cage, cheery rooster/koi) with cute proportions and zero grit \u2014 reads cartoon-clean, not theater's mud-toned pixel-realism."
+  },
+  {
+   "file": "theater-dungeon-animals-2.png",
+   "style": "cartoon",
+   "conforms": false,
+   "outlierCells": [
+    [
+     "r1c5",
+     "fez-wearing circus monkey"
+    ],
+    [
+     "r4c1",
+     "circus seal balancing ball"
+    ],
+    [
+     "r5c1",
+     "star-blanket parade tortoise"
+    ]
+   ],
+   "palette": "ok",
+   "lighting": "flat",
+   "note": "Worktree sheet is clean, saturated, whimsical pixel art (glowing bugs, gold cage, circus props) \u2014 a visible style break from the root dungeon-animals-01 mangy grit."
+  },
+  {
+   "file": "theater-wild-animals-2.png",
+   "style": "mixed",
+   "conforms": false,
+   "outlierCells": [],
+   "palette": "ok",
+   "lighting": "flat",
+   "note": "Worktree sheet keeps realistic naturalist proportions but renders far cleaner and brighter (white rabbit/ermine, flat unshadowed cells) than root wild-animals-01's textured grime \u2014 closer to field-guide pixel art than theater's pixel-realistic grit."
+  },
+  {
+   "file": "noir-wild-animals-2.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [],
+   "palette": "narrow",
+   "lighting": "ambient",
+   "note": "Urban-coastal wildlife in disciplined desaturated realism; strongest coherence of the twelve sheets."
+  },
+  {
+   "file": "bright-kingdom-domestic-animals-2.png",
+   "style": "cartoon",
+   "conforms": true,
+   "outlierCells": [
+    {
+     "cell": "r5c3",
+     "reason": "flat geometric origami, no toy texture"
+    }
+   ],
+   "palette": "rich",
+   "lighting": "flat",
+   "note": "Internally consistent wind-up-toy cartoon set, allowed for this realm, but it skews heavily saccharine (balloons, teacups, party hats, popcorn bunny) with the only menace being the uniform uncanny toothy grins \u2014 no real adventurous edge."
+  },
+  {
+   "file": "bright-kingdom-dungeon-animals-2.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [
+    {
+     "cell": "r5c5",
+     "reason": "smooth cartoon balloon-dog rendering"
+    }
+   ],
+   "palette": "ok",
+   "lighting": "ambient",
+   "note": "Gritty decayed-toy pixel-realism (rat king, button-eye rabbit, rotting teddy) gives bright-kingdom genuine menace here \u2014 strong counterweight to the carebear domestic sheet, though the two sheets read as different realms."
+  },
+  {
+   "file": "bright-kingdom-wild-animals-2.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [
+    {
+     "cell": "r3c1",
+     "reason": "flat pastel moth, minimal texture"
+    }
+   ],
+   "palette": "rich",
+   "lighting": "ambient",
+   "note": "Realistically rendered fauna with enchanted-forest accretions (wicker fox, fairy-light stag, crystal antlers) \u2014 whimsical but not carebear; sits closer to the pixel-realistic law than the cartoon domestic sheet, so realm-internal style splits across sheets."
+  },
+  {
+   "file": "lost-world-domestic-animals-2.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [],
+   "palette": "rich",
+   "lighting": "ambient",
+   "note": "Exemplary pixel-realistic jungle/prehistoric set with consistent grain, natural materials, and believable proportions throughout."
+  },
+  {
+   "file": "lost-world-dungeon-animals-2.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [],
+   "palette": "narrow",
+   "lighting": "ambient",
+   "note": "Cohesive bone-pale cave-fauna monochrome, pixel-realistic textures throughout; the deliberately narrow bleached palette reads as a strong realm signature rather than a defect."
+  },
+  {
+   "file": "lost-world-wild-animals-2.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [],
+   "palette": "rich",
+   "lighting": "ambient",
+   "note": "Dinosaur roster is uniformly pixel-realistic with earthy naturalist coloring and consistent dithered shading \u2014 fully on-law."
+  },
+  {
+   "file": "noir-domestic-animals-2.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [],
+   "palette": "narrow",
+   "lighting": "ambient",
+   "note": "Sepia-desaturated pet-shop fauna, realistic proportions and fine dither grain \u2014 the monochrome noir treatment is applied evenly to every cell."
+  },
+  {
+   "file": "noir-dungeon-animals-2.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [],
+   "palette": "narrow",
+   "lighting": "ambient",
+   "note": "Vermin sheet holds the noir grayscale law perfectly; realistic insect anatomy and consistent grime, no stylized drift."
+  },
+  {
+   "file": "suburb-domestic-animals-2.png",
+   "style": "mixed",
+   "conforms": true,
+   "outlierCells": [
+    {
+     "cell": "r3c1",
+     "reason": "glassy rendered fishbowl, softer shading"
+    }
+   ],
+   "palette": "rich",
+   "lighting": "ambient",
+   "note": "Clean cute-pet-catalog look (slightly softened, bright, groomed) is internally consistent and within suburb's stylized allowance, though noticeably cuter than the realm's gritty dungeon sheet."
+  },
+  {
+   "file": "suburb-dungeon-animals-2.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [],
+   "palette": "ok",
+   "lighting": "ambient",
+   "note": "Mangy chained dog, rat king, and the glowing-eyed pet carrier give suburb real menace in a consistent gritty pixel-realistic register \u2014 coherent with suburb-wild, contrasting the cuter domestic sheet."
+  },
+  {
+   "file": "suburb-wild-animals-2.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [],
+   "palette": "ok",
+   "lighting": "ambient",
+   "note": "Backyard fauna in even naturalist pixel-realism with muted suburban-woods palette; fully internally consistent."
+  },
+  {
+   "file": "ash-monsters-1-c2.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [],
+   "palette": "ok",
+   "lighting": "rim",
+   "note": "Strongest sheet \u2014 heavy pixel dithering, rust/rot materials, realistic proportions; the c2 regen fully lands the pixelated-but-realistic law."
+  },
+  {
+   "file": "ash-domestic-animals-2.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [
+    {
+     "pos": "r2c2",
+     "why": "moth cluster softer, less dithered"
+    },
+    {
+     "pos": "r3c1",
+     "why": "grub rendering slightly smooth-shaded"
+    }
+   ],
+   "palette": "ok",
+   "lighting": "rim",
+   "note": "Dense dithered pixel grit with realistic animal anatomy plus ember/biolume accents \u2014 coherent ash mutation language across the sheet."
+  },
+  {
+   "file": "ash-dungeon-animals-2.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [
+    {
+     "pos": "r3c3",
+     "why": "gnat swarm wings smooth, low grit"
+    },
+    {
+     "pos": "r4c1",
+     "why": "falling creature loose, sketchier rendering"
+    }
+   ],
+   "palette": "narrow",
+   "lighting": "ambient",
+   "note": "Pale bone/parchment vermin in consistent dithered pixel style; palette is cramped but intentionally so, coherent with ash."
+  },
+  {
+   "file": "ash-monsters-2-c2.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [
+    {
+     "pos": "r4c5",
+     "why": "skeleton's cyan aura painterly wisps"
+    }
+   ],
+   "palette": "ok",
+   "lighting": "rim",
+   "note": "Coherent with monsters-1-c2 \u2014 gritty dithered wasteland figures, orange/toxic accent glows used sparingly."
+  },
+  {
+   "file": "ash-monsters-3-c2.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [
+    {
+     "pos": "r3c5",
+     "why": "spectral figure soft glow halo"
+    },
+    {
+     "pos": "r3c2",
+     "why": "purple carapace reads slightly airbrushed"
+    }
+   ],
+   "palette": "ok",
+   "lighting": "rim",
+   "note": "Consistent heavy-grit pixel work; a couple of energy/spectral effects drift toward soft-brush glow but bodies stay pixelated."
+  },
+  {
+   "file": "ash-wild-animals-2.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [
+    {
+     "pos": "r4c3",
+     "why": "burrowing dust plume smooth-painted"
+    }
+   ],
+   "palette": "narrow",
+   "lighting": "rim",
+   "note": "Basalt-hide fauna with magma-crack accents, uniform dithering and realistic silhouettes \u2014 tight realm coherence, palette deliberately cramped grey/orange."
+  },
+  {
+   "file": "gloom-domestic-animals-2.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [],
+   "palette": "narrow",
+   "lighting": "flat",
+   "note": "Clean, disciplined pixel art with realistic proportions and desaturated funeral palette; crisper and flatter-lit than ash but fully within the law."
+  },
+  {
+   "file": "gloom-dungeon-animals-2.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [
+    {
+     "pos": "r5c1",
+     "why": "skeletal dog looser, sketchy edges"
+    }
+   ],
+   "palette": "narrow",
+   "lighting": "ambient",
+   "note": "Bone-and-ash vermin in consistent crisp pixel rendering; coheres with gloom-domestic's desaturated register."
+  },
+  {
+   "file": "gloom-wild-animals-2.png",
+   "style": "pixel-realistic",
+   "conforms": true,
+   "outlierCells": [],
+   "palette": "narrow",
+   "lighting": "flat",
+   "note": "Highly uniform naturalist pixel work \u2014 realistic wildlife silhouettes, muted grey-brown palette, no painterly or cartoon drift anywhere on the sheet."
+  }
+ ]
+}

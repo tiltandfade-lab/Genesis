@@ -1,0 +1,706 @@
+{
+ "sprites": [
+  {
+   "file": "other/high-seas-falcon-in-flight.png",
+   "realm": "high-seas",
+   "family": "animals",
+   "label": "falcon in flight",
+   "view": "other",
+   "sizeBand": "small",
+   "source": "high-seas-wild-animals-01.png|r5c4"
+  },
+  {
+   "file": "icon-flat/theater-barbed-wire-tangle.png",
+   "realm": "theater",
+   "family": "monsters",
+   "label": "barbed wire tangle",
+   "view": "icon-flat",
+   "sizeBand": "medium",
+   "source": "theater-mm-01.png|r2c1"
+  },
+  {
+   "file": "other/chrome-orange-energy-vortex-sphere.png",
+   "realm": "chrome",
+   "family": "monsters",
+   "label": "orange energy vortex sphere",
+   "view": "other",
+   "sizeBand": "medium",
+   "source": "chrome-monsters-1-c2.png|r5c5"
+  },
+  {
+   "file": "other/chrome-floating-spiked-mine-cluster.png",
+   "realm": "chrome",
+   "family": "monsters",
+   "label": "floating spiked mine cluster",
+   "view": "other",
+   "sizeBand": "medium",
+   "source": "chrome-monsters-3-c2.png|r3c5"
+  },
+  {
+   "file": "other/chrome-black-hole-vortex.png",
+   "realm": "chrome",
+   "family": "monsters",
+   "label": "black hole vortex",
+   "view": "other",
+   "sizeBand": "huge",
+   "source": "chrome-monsters-4-c2.png|r5c3"
+  },
+  {
+   "file": "other/chrome-small-drone-swarm.png",
+   "realm": "chrome",
+   "family": "monsters",
+   "label": "small drone swarm",
+   "view": "other",
+   "sizeBand": "medium",
+   "source": "chrome-monsters-4-c2.png|r5c5"
+  },
+  {
+   "file": "other/chrome-small-bird-swarm.png",
+   "realm": "chrome",
+   "family": "animals",
+   "label": "small bird swarm",
+   "view": "other",
+   "sizeBand": "medium",
+   "source": "chrome-wild-animals-2.png|r2c3"
+  },
+  {
+   "file": "other/chrome-moth-swarm.png",
+   "realm": "chrome",
+   "family": "animals",
+   "label": "moth swarm",
+   "view": "other",
+   "sizeBand": "medium",
+   "source": "chrome-wild-animals-2.png|r3c3"
+  },
+  {
+   "file": "top-down/chrome-dragonfly-swarm.png",
+   "realm": "chrome",
+   "family": "animals",
+   "label": "dragonfly swarm",
+   "view": "top-down",
+   "sizeBand": "medium",
+   "source": "chrome-wild-animals-2.png|r5c2"
+  },
+  {
+   "file": "other/chrome-firefly-swarm.png",
+   "realm": "chrome",
+   "family": "animals",
+   "label": "firefly swarm",
+   "view": "other",
+   "sizeBand": "medium",
+   "source": "chrome-wild-animals-2.png|r5c4"
+  },
+  {
+   "file": "other/cosmic-shattered-geometric-shard-entity.png",
+   "realm": "cosmic",
+   "family": "monsters",
+   "label": "shattered geometric shard entity",
+   "view": "other",
+   "sizeBand": "medium",
+   "source": "cosmic-mm-01.png|r1c4"
+  },
+  {
+   "file": "other/cosmic-shattered-mask-card-swarm.png",
+   "realm": "cosmic",
+   "family": "monsters",
+   "label": "shattered-mask card swarm",
+   "view": "other",
+   "sizeBand": "medium",
+   "source": "cosmic-mm-01.png|r5c4"
+  },
+  {
+   "file": "other/cosmic-star-mite-swarm-cluster.png",
+   "realm": "cosmic",
+   "family": "monsters",
+   "label": "star-mite swarm cluster",
+   "view": "other",
+   "sizeBand": "medium",
+   "source": "cosmic-mm-02.png|r5c1"
+  },
+  {
+   "file": "other/cosmic-flying-eye-fish-swarm.png",
+   "realm": "cosmic",
+   "family": "monsters",
+   "label": "flying eye-fish swarm",
+   "view": "other",
+   "sizeBand": "medium",
+   "source": "cosmic-mm-03.png|r2c1"
+  },
+  {
+   "file": "icon-flat/cosmic-nebula-sigil-burst.png",
+   "realm": "cosmic",
+   "family": "monsters",
+   "label": "nebula sigil burst",
+   "view": "icon-flat",
+   "sizeBand": "medium",
+   "source": "cosmic-mm-05.png|r2c3"
+  },
+  {
+   "file": "high-angle/cosmic-woman-sleeping-in-star-bed.png",
+   "realm": "cosmic",
+   "family": "npcs",
+   "label": "woman sleeping in star bed",
+   "view": "high-angle",
+   "sizeBand": "medium",
+   "source": "cosmic-npc-02.png|r4c3"
+  },
+  {
+   "file": "high-angle/gloom-black-beetle.png",
+   "realm": "gloom",
+   "family": "animals",
+   "label": "black beetle",
+   "view": "high-angle",
+   "sizeBand": "tiny",
+   "source": "gloom-dungeon-animals-2.png|r1c3"
+  },
+  {
+   "file": "high-angle/gloom-spotted-beetle.png",
+   "realm": "gloom",
+   "family": "animals",
+   "label": "spotted beetle",
+   "view": "high-angle",
+   "sizeBand": "tiny",
+   "source": "gloom-dungeon-animals-2.png|r4c4"
+  },
+  {
+   "file": "high-angle/gloom-moth-butterfly-swarm.png",
+   "realm": "gloom",
+   "family": "animals",
+   "label": "moth/butterfly swarm",
+   "view": "high-angle",
+   "sizeBand": "medium",
+   "source": "gloom-wild-animals-2.png|r2c2"
+  },
+  {
+   "file": "high-angle/gloom-fly-swarm.png",
+   "realm": "gloom",
+   "family": "animals",
+   "label": "fly swarm",
+   "view": "high-angle",
+   "sizeBand": "medium",
+   "source": "gloom-wild-animals-2.png|r4c5"
+  },
+  {
+   "file": "icon-flat/high-seas-cowrie-shell.png",
+   "realm": "high-seas",
+   "family": "animals",
+   "label": "cowrie shell",
+   "view": "icon-flat",
+   "sizeBand": "tiny",
+   "source": "high-seas-dungeon-animals-2.png|r4c3"
+  },
+  {
+   "file": "high-angle/lost-world-coiled-anaconda.png",
+   "realm": "lost-world",
+   "family": "animals",
+   "label": "coiled anaconda",
+   "view": "high-angle",
+   "sizeBand": "large",
+   "source": "lost-world-domestic-animals-2.png|r5c3"
+  },
+  {
+   "file": "high-angle/lost-world-axolotl-swarm.png",
+   "realm": "lost-world",
+   "family": "animals",
+   "label": "axolotl swarm",
+   "view": "high-angle",
+   "sizeBand": "medium",
+   "source": "lost-world-dungeon-animals-2.png|r2c5"
+  },
+  {
+   "file": "high-angle/lost-world-leech-swarm.png",
+   "realm": "lost-world",
+   "family": "animals",
+   "label": "leech swarm",
+   "view": "high-angle",
+   "sizeBand": "medium",
+   "source": "lost-world-dungeon-animals-2.png|r3c1"
+  },
+  {
+   "file": "high-angle/lost-world-pale-crayfish-swarm.png",
+   "realm": "lost-world",
+   "family": "animals",
+   "label": "pale crayfish swarm",
+   "view": "high-angle",
+   "sizeBand": "medium",
+   "source": "lost-world-dungeon-animals-2.png|r3c2"
+  },
+  {
+   "file": "high-angle/lost-world-shrimp-swarm.png",
+   "realm": "lost-world",
+   "family": "animals",
+   "label": "shrimp swarm",
+   "view": "high-angle",
+   "sizeBand": "medium",
+   "source": "lost-world-dungeon-animals-2.png|r3c3"
+  },
+  {
+   "file": "high-angle/lost-world-silverfish-swarm.png",
+   "realm": "lost-world",
+   "family": "animals",
+   "label": "silverfish swarm",
+   "view": "high-angle",
+   "sizeBand": "medium",
+   "source": "lost-world-dungeon-animals-2.png|r3c5"
+  },
+  {
+   "file": "high-angle/lost-world-blind-cave-eels.png",
+   "realm": "lost-world",
+   "family": "animals",
+   "label": "blind cave eels",
+   "view": "high-angle",
+   "sizeBand": "small",
+   "source": "lost-world-dungeon-animals-2.png|r5c1"
+  },
+  {
+   "file": "high-angle/lost-world-midge-swarm.png",
+   "realm": "lost-world",
+   "family": "animals",
+   "label": "midge swarm",
+   "view": "high-angle",
+   "sizeBand": "medium",
+   "source": "lost-world-dungeon-animals-2.png|r5c3"
+  },
+  {
+   "file": "high-angle/lost-world-dragonflies.png",
+   "realm": "lost-world",
+   "family": "animals",
+   "label": "dragonflies",
+   "view": "high-angle",
+   "sizeBand": "tiny",
+   "source": "lost-world-wild-animals-2.png|r5c2"
+  },
+  {
+   "file": "top-down/noir-flying-squirrel-gliding.png",
+   "realm": "noir",
+   "family": "animals",
+   "label": "flying squirrel gliding",
+   "view": "top-down",
+   "sizeBand": "tiny",
+   "source": "noir-wild-animals-2.png|r5c4"
+  },
+  {
+   "file": "high-angle/suburb-fly-swarm.png",
+   "realm": "suburb",
+   "family": "animals",
+   "label": "fly swarm",
+   "view": "high-angle",
+   "sizeBand": "small",
+   "source": "suburb-dungeon-animals-2.png|r1c1"
+  },
+  {
+   "file": "high-angle/suburb-black-snake-coiled.png",
+   "realm": "suburb",
+   "family": "animals",
+   "label": "black snake coiled",
+   "view": "high-angle",
+   "sizeBand": "small",
+   "source": "suburb-dungeon-animals-2.png|r4c1"
+  },
+  {
+   "file": "high-angle/suburb-bee-swarm.png",
+   "realm": "suburb",
+   "family": "animals",
+   "label": "bee swarm",
+   "view": "high-angle",
+   "sizeBand": "small",
+   "source": "suburb-wild-animals-2.png|r5c2"
+  },
+  {
+   "file": "high-angle/theater-bee-swarm-cluster.png",
+   "realm": "theater",
+   "family": "animals",
+   "label": "bee swarm cluster",
+   "view": "high-angle",
+   "sizeBand": "small",
+   "source": "theater-domestic-animals-2.png|r5c2"
+  },
+  {
+   "file": "high-angle/theater-red-mite-pile.png",
+   "realm": "theater",
+   "family": "animals",
+   "label": "red mite pile",
+   "view": "high-angle",
+   "sizeBand": "small",
+   "source": "theater-domestic-animals-2.png|r5c4"
+  },
+  {
+   "file": "high-angle/theater-fireflies.png",
+   "realm": "theater",
+   "family": "animals",
+   "label": "fireflies",
+   "view": "high-angle",
+   "sizeBand": "tiny",
+   "source": "theater-dungeon-animals-2.png|r3c2"
+  },
+  {
+   "file": "high-angle/theater-cave-harvestman.png",
+   "realm": "theater",
+   "family": "animals",
+   "label": "cave harvestman",
+   "view": "high-angle",
+   "sizeBand": "tiny",
+   "source": "theater-dungeon-animals-2.png|r4c5"
+  },
+  {
+   "file": "high-angle/theater-gnat-swarm.png",
+   "realm": "theater",
+   "family": "animals",
+   "label": "gnat swarm",
+   "view": "high-angle",
+   "sizeBand": "small",
+   "source": "theater-wild-animals-2.png|r4c1"
+  },
+  {
+   "file": "top-down/ash-moth-swarm.png",
+   "realm": "ash",
+   "family": "animals",
+   "label": "moth swarm",
+   "view": "top-down",
+   "sizeBand": "small",
+   "source": "ash-domestic-animals-2.png|r2c2"
+  },
+  {
+   "file": "high-angle/ash-grub-in-dish.png",
+   "realm": "ash",
+   "family": "animals",
+   "label": "grub in dish",
+   "view": "high-angle",
+   "sizeBand": "tiny",
+   "source": "ash-domestic-animals-2.png|r3c1"
+  },
+  {
+   "file": "high-angle/ash-fish-in-basin.png",
+   "realm": "ash",
+   "family": "animals",
+   "label": "fish in basin",
+   "view": "high-angle",
+   "sizeBand": "tiny",
+   "source": "ash-domestic-animals-2.png|r3c3"
+  },
+  {
+   "file": "other/ash-firefly-swarm.png",
+   "realm": "ash",
+   "family": "animals",
+   "label": "firefly swarm",
+   "view": "other",
+   "sizeBand": "small",
+   "source": "ash-dungeon-animals-2.png|r1c3"
+  },
+  {
+   "file": "other/ash-mosquito-swarm.png",
+   "realm": "ash",
+   "family": "animals",
+   "label": "mosquito swarm",
+   "view": "other",
+   "sizeBand": "small",
+   "source": "ash-dungeon-animals-2.png|r3c3"
+  },
+  {
+   "file": "other/ash-cable-nest-egg-mass.png",
+   "realm": "ash",
+   "family": "animals",
+   "label": "cable-nest egg mass",
+   "view": "other",
+   "sizeBand": "small",
+   "source": "ash-dungeon-animals-2.png|r3c5"
+  },
+  {
+   "file": "other/ash-falling-rodent.png",
+   "realm": "ash",
+   "family": "animals",
+   "label": "falling rodent",
+   "view": "other",
+   "sizeBand": "tiny",
+   "source": "ash-dungeon-animals-2.png|r4c1"
+  },
+  {
+   "file": "other/ash-pile-of-grubs.png",
+   "realm": "ash",
+   "family": "animals",
+   "label": "pile of grubs",
+   "view": "other",
+   "sizeBand": "small",
+   "source": "ash-dungeon-animals-2.png|r5c2"
+  },
+  {
+   "file": "other/ash-gliding-flying-squirrel.png",
+   "realm": "ash",
+   "family": "animals",
+   "label": "gliding flying squirrel",
+   "view": "other",
+   "sizeBand": "tiny",
+   "source": "ash-dungeon-animals-2.png|r5c3"
+  },
+  {
+   "file": "top-down/ash-large-moth.png",
+   "realm": "ash",
+   "family": "animals",
+   "label": "large moth",
+   "view": "top-down",
+   "sizeBand": "small",
+   "source": "ash-dungeon-animals-2.png|r5c5"
+  },
+  {
+   "file": "other/ash-mosquito-swarm-2.png",
+   "realm": "ash",
+   "family": "monsters",
+   "label": "mosquito swarm",
+   "view": "other",
+   "sizeBand": "small",
+   "source": "ash-monsters-2-c2.png|r3c4"
+  },
+  {
+   "file": "top-down/ash-heaped-beetle-swarm.png",
+   "realm": "ash",
+   "family": "monsters",
+   "label": "heaped beetle swarm",
+   "view": "top-down",
+   "sizeBand": "medium",
+   "source": "ash-monsters-2-c2.png|r3c5"
+  },
+  {
+   "file": "other/ash-eagle-soaring.png",
+   "realm": "ash",
+   "family": "animals",
+   "label": "eagle soaring",
+   "view": "other",
+   "sizeBand": "small",
+   "source": "ash-wild-animals-2.png|r4c5"
+  },
+  {
+   "file": "high-angle/cosmic-scorpion-in-basket.png",
+   "realm": "cosmic",
+   "family": "animals",
+   "label": "scorpion in basket",
+   "view": "high-angle",
+   "sizeBand": "tiny",
+   "source": "cosmic-domestic-animals-2.png|r3c3"
+  },
+  {
+   "file": "other/cosmic-wasp-group.png",
+   "realm": "cosmic",
+   "family": "animals",
+   "label": "wasp group",
+   "view": "other",
+   "sizeBand": "tiny",
+   "source": "cosmic-dungeon-animals-2.png|r4c2"
+  },
+  {
+   "file": "other/cosmic-locust-swarm.png",
+   "realm": "cosmic",
+   "family": "animals",
+   "label": "locust swarm",
+   "view": "other",
+   "sizeBand": "small",
+   "source": "cosmic-wild-animals-2.png|r3c2"
+  },
+  {
+   "file": "top-down/fantasy-moth.png",
+   "realm": "fantasy",
+   "family": "animals",
+   "label": "moth",
+   "view": "top-down",
+   "sizeBand": "tiny",
+   "source": "fantasy-domestic-animals-2.png|r3c1"
+  },
+  {
+   "file": "high-angle/fantasy-giant-beetle-isopod.png",
+   "realm": "fantasy",
+   "family": "animals",
+   "label": "giant beetle/isopod",
+   "view": "high-angle",
+   "sizeBand": "small",
+   "source": "fantasy-dungeon-animals-2.png|r1c4"
+  },
+  {
+   "file": "high-angle/fantasy-gray-woodlouse.png",
+   "realm": "fantasy",
+   "family": "animals",
+   "label": "gray woodlouse",
+   "view": "high-angle",
+   "sizeBand": "tiny",
+   "source": "fantasy-dungeon-animals-2.png|r4c3"
+  },
+  {
+   "file": "other/frontier-wasps-group.png",
+   "realm": "frontier",
+   "family": "animals",
+   "label": "wasps group",
+   "view": "other",
+   "sizeBand": "tiny",
+   "source": "frontier-dungeon-animals-2.png|r2c4"
+  },
+  {
+   "file": "top-down/frontier-moth.png",
+   "realm": "frontier",
+   "family": "animals",
+   "label": "moth",
+   "view": "top-down",
+   "sizeBand": "tiny",
+   "source": "frontier-dungeon-animals-2.png|r3c2"
+  },
+  {
+   "file": "other/frontier-silverfish-group.png",
+   "realm": "frontier",
+   "family": "animals",
+   "label": "silverfish group",
+   "view": "other",
+   "sizeBand": "tiny",
+   "source": "frontier-dungeon-animals-2.png|r3c5"
+  },
+  {
+   "file": "other/frontier-flies-group.png",
+   "realm": "frontier",
+   "family": "animals",
+   "label": "flies group",
+   "view": "other",
+   "sizeBand": "tiny",
+   "source": "frontier-dungeon-animals-2.png|r4c1"
+  },
+  {
+   "file": "high-angle/frontier-earwig.png",
+   "realm": "frontier",
+   "family": "animals",
+   "label": "earwig",
+   "view": "high-angle",
+   "sizeBand": "tiny",
+   "source": "frontier-dungeon-animals-2.png|r4c3"
+  },
+  {
+   "file": "other/frontier-moths-group.png",
+   "realm": "frontier",
+   "family": "animals",
+   "label": "moths group",
+   "view": "other",
+   "sizeBand": "tiny",
+   "source": "frontier-dungeon-animals-2.png|r4c4"
+  },
+  {
+   "file": "other/frontier-snails-group.png",
+   "realm": "frontier",
+   "family": "animals",
+   "label": "snails group",
+   "view": "other",
+   "sizeBand": "tiny",
+   "source": "frontier-dungeon-animals-2.png|r4c5"
+  },
+  {
+   "file": "other/frontier-earthworm-mass.png",
+   "realm": "frontier",
+   "family": "animals",
+   "label": "earthworm mass",
+   "view": "other",
+   "sizeBand": "small",
+   "source": "frontier-dungeon-animals-2.png|r5c4"
+  },
+  {
+   "file": "high-angle/frontier-tarantula.png",
+   "realm": "frontier",
+   "family": "animals",
+   "label": "tarantula",
+   "view": "high-angle",
+   "sizeBand": "tiny",
+   "source": "frontier-wild-animals-2.png|r4c4"
+  },
+  {
+   "file": "high-angle/frontier-scorpion.png",
+   "realm": "frontier",
+   "family": "animals",
+   "label": "scorpion",
+   "view": "high-angle",
+   "sizeBand": "tiny",
+   "source": "frontier-wild-animals-2.png|r4c5"
+  },
+  {
+   "file": "other/frontier-dust-devil-with-eyes.png",
+   "realm": "frontier",
+   "family": "monsters",
+   "label": "dust devil with eyes",
+   "view": "other",
+   "sizeBand": "large",
+   "source": "frontier-monsters-1-c2.png|r2c3"
+  },
+  {
+   "file": "other/frontier-rabbit-swarm.png",
+   "realm": "frontier",
+   "family": "monsters",
+   "label": "rabbit swarm",
+   "view": "other",
+   "sizeBand": "medium",
+   "source": "frontier-monsters-2-c2.png|r2c1"
+  },
+  {
+   "file": "other/frontier-ghost-wisp.png",
+   "realm": "frontier",
+   "family": "monsters",
+   "label": "ghost wisp",
+   "view": "other",
+   "sizeBand": "small",
+   "source": "frontier-monsters-3-c2.png|r1c1"
+  },
+  {
+   "file": "other/frontier-fire-elemental.png",
+   "realm": "frontier",
+   "family": "monsters",
+   "label": "fire elemental",
+   "view": "other",
+   "sizeBand": "large",
+   "source": "frontier-monsters-3-c2.png|r2c2"
+  },
+  {
+   "file": "other/frontier-ember-serpent.png",
+   "realm": "frontier",
+   "family": "monsters",
+   "label": "ember serpent",
+   "view": "other",
+   "sizeBand": "large",
+   "source": "frontier-monsters-4-c2.png|r1c1"
+  },
+  {
+   "file": "other/frontier-dust-devil-with-face.png",
+   "realm": "frontier",
+   "family": "monsters",
+   "label": "dust devil with face",
+   "view": "other",
+   "sizeBand": "large",
+   "source": "frontier-monsters-5-c2.png|r4c2"
+  },
+  {
+   "file": "other/high-seas-water-vortex-elemental-with-debris.png",
+   "realm": "high-seas",
+   "family": "monsters",
+   "label": "water vortex elemental with debris",
+   "view": "other",
+   "sizeBand": "large",
+   "source": "high-seas-mm-01.png|r4c2"
+  },
+  {
+   "file": "other/high-seas-bloated-floating-corpse.png",
+   "realm": "high-seas",
+   "family": "monsters",
+   "label": "bloated floating corpse",
+   "view": "other",
+   "sizeBand": "medium",
+   "source": "high-seas-mm-02.png|r3c1"
+  },
+  {
+   "file": "other/high-seas-seabird-flock.png",
+   "realm": "high-seas",
+   "family": "monsters",
+   "label": "seabird flock",
+   "view": "other",
+   "sizeBand": "small",
+   "source": "high-seas-mm-02.png|r5c2"
+  },
+  {
+   "file": "other/high-seas-waterspout-ghost-with-ship-wheel.png",
+   "realm": "high-seas",
+   "family": "monsters",
+   "label": "waterspout ghost with ship wheel",
+   "view": "other",
+   "sizeBand": "large",
+   "source": "high-seas-mm-03.png|r5c2"
+  }
+ ]
+}

@@ -1,0 +1,41 @@
+{
+ "file": "frontier-large-v3-07.png",
+ "realm": "frontier",
+ "gridClass": "large",
+ "grid": "2 rows x 2 columns",
+ "chroma": "#FF00FF",
+ "cells": [
+  {
+   "slug": "frontier-black-bull",
+   "label": "black bull",
+   "family": "animals",
+   "sizeBand": "large",
+   "replaces": "frontier-domestic-animals-2.png|r2c4",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "frontier-hereford-cow",
+   "label": "hereford cow",
+   "family": "animals",
+   "sizeBand": "large",
+   "replaces": "frontier-domestic-animals-2.png|r3c1",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "frontier-camel",
+   "label": "camel",
+   "family": "animals",
+   "sizeBand": "large",
+   "replaces": "frontier-domestic-animals-2.png|r4c1",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "frontier-brown-horse",
+   "label": "brown horse",
+   "family": "animals",
+   "sizeBand": "large",
+   "replaces": "frontier-domestic-animals-2.png|r4c4",
+   "reason": "regen-underres"
+  }
+ ]
+}

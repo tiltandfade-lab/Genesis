@@ -1,0 +1,28 @@
+{
+  "id": "05-morale",
+  "kind": "morale",
+  "description": "A foe's morale breaks and it flees — DM narrates the flee-trigger and stops at the handoff (does not decide the PC's pursuit for them).",
+  "turn": {
+    "action": "I roll damage against the last bandit.",
+    "rolls": [ { "label": "Damage", "total": 9 } ]
+  },
+  "digest": {
+    "location": "Saltmarsh Shrine",
+    "pc": { "class": "Cleric", "level": 3, "hp": "14/24" }
+  },
+  "response": {
+    "narration": "Nine lands hard — he staggers, drops his blade, and something in his face gives out. He turns and bolts for the flooded transept, splashing, not looking back. He waits for you to decide what happens next.",
+    "events": [ { "type": "clock_advanced", "payload": { "clockId": "tide-wardens", "delta": 1 }, "source": "declared", "ledgerRefs": [] } ],
+    "rollRequest": null,
+    "ask": null,
+    "dmNotes": "morale break narrated; pursuit is the player's call, not assumed"
+  },
+  "expect": {
+    "neverRollsPlayerDice": true,
+    "narratesFromRolls": true,
+    "noCoaching": true,
+    "budget": true,
+    "secondPersonPcOnly": true,
+    "honorsBindingMechanics": true
+  }
+}

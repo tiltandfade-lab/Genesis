@@ -1,0 +1,121 @@
+{
+ "file": "gloom-horror-monsters-v3-07.png",
+ "realm": "gloom",
+ "gridClass": "horror-monsters",
+ "grid": "4 rows x 4 columns",
+ "chroma": "#FF00FF",
+ "cells": [
+  {
+   "slug": "gloom-pumpkin-headed-vengeance-demon",
+   "label": "pumpkin-headed vengeance demon, tall gaunt limbs and a wet grin, summoned wrong",
+   "family": "monsters",
+   "sizeBand": "medium",
+   "reason": "expansion-vhs-horror"
+  },
+  {
+   "slug": "gloom-murderous-little-cobbler-fae-in-a-green-coat-and",
+   "label": "murderous little cobbler-fae in a green coat and buckled hat, counting gold, straight razor out",
+   "family": "monsters",
+   "sizeBand": "medium",
+   "reason": "expansion-vhs-horror"
+  },
+  {
+   "slug": "gloom-hook-handed-mirror-legend-in-a-fur-lined-coat",
+   "label": "hook-handed mirror legend in a fur-lined coat, wreathed in bees",
+   "family": "monsters",
+   "sizeBand": "medium",
+   "reason": "expansion-vhs-horror"
+  },
+  {
+   "slug": "gloom-drowned-boy-grown-huge-in-a-hockey-mask",
+   "label": "drowned boy grown huge in a hockey mask, machete dragging",
+   "family": "monsters",
+   "sizeBand": "medium",
+   "reason": "expansion-vhs-horror"
+  },
+  {
+   "slug": "gloom-dream-stalker-in-a-striped-sweater-and-fedora",
+   "label": "dream-stalker in a striped sweater and fedora, razor glove flexing",
+   "family": "monsters",
+   "sizeBand": "medium",
+   "reason": "expansion-vhs-horror"
+  },
+  {
+   "slug": "gloom-silent-shape-in-coveralls-and-a-pale-blank-mask",
+   "label": "silent shape in coveralls and a pale blank mask, kitchen knife at his side",
+   "family": "monsters",
+   "sizeBand": "medium",
+   "reason": "expansion-vhs-horror"
+  },
+  {
+   "slug": "gloom-pin-studded-pale-ascetic-in-black-leather-robes",
+   "label": "pin-studded pale ascetic in black leather robes, holding a puzzle box",
+   "family": "monsters",
+   "sizeBand": "medium",
+   "reason": "expansion-vhs-horror"
+  },
+  {
+   "slug": "gloom-possessed-ginger-doll-in-overalls-with-a-kitchen",
+   "label": "possessed ginger doll in overalls with a kitchen knife",
+   "family": "monsters",
+   "sizeBand": "medium",
+   "reason": "expansion-vhs-horror"
+  },
+  {
+   "slug": "gloom-white-eyed-cackling-deadite-corpse",
+   "label": "white-eyed cackling deadite corpse, wrong joints",
+   "family": "monsters",
+   "sizeBand": "medium",
+   "reason": "expansion-vhs-horror"
+  },
+  {
+   "slug": "gloom-sewer-clown-with-a-red-balloon-and-too-many-teet",
+   "label": "sewer clown with a red balloon and too many teeth",
+   "family": "monsters",
+   "sizeBand": "medium",
+   "reason": "expansion-vhs-horror"
+  },
+  {
+   "slug": "gloom-corn-cult-child-preacher-with-a-sickle-and-a-con",
+   "label": "corn-cult child preacher with a sickle and a congregation stare",
+   "family": "monsters",
+   "sizeBand": "medium",
+   "reason": "expansion-vhs-horror"
+  },
+  {
+   "slug": "gloom-scarecrow-slasher-pulled-loose-from-its-frame",
+   "label": "scarecrow slasher pulled loose from its frame, baling hooks for hands",
+   "family": "monsters",
+   "sizeBand": "medium",
+   "reason": "expansion-vhs-horror"
+  },
+  {
+   "slug": "gloom-teen-vampire-gang-leader",
+   "label": "teen vampire gang leader, half-shifted, leather jacket and wild grin",
+   "family": "monsters",
+   "sizeBand": "medium",
+   "reason": "expansion-vhs-horror"
+  },
+  {
+   "slug": "gloom-wolfman-mid-transformation",
+   "label": "wolfman mid-transformation, shirt tearing, jaw pushing forward",
+   "family": "monsters",
+   "sizeBand": "medium",
+   "reason": "expansion-vhs-horror"
+  },
+  {
+   "slug": "gloom-fly-headed-scientist-hybrid-in-a-ruined-lab-coat",
+   "label": "fly-headed scientist hybrid in a ruined lab coat",
+   "family": "monsters",
+   "sizeBand": "medium",
+   "reason": "expansion-vhs-horror"
+  },
+  {
+   "slug": "gloom-re-animated-corpse-jerking-upright",
+   "label": "re-animated corpse jerking upright, glowing green serum syringe in its neck",
+   "family": "monsters",
+   "sizeBand": "medium",
+   "reason": "expansion-vhs-horror"
+  }
+ ]
+}

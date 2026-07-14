@@ -1,0 +1,48 @@
+{
+ "file": "theater-effects-accent-dg.png",
+ "realm": "theater",
+ "family": "effects-accent",
+ "grid": "2 rows x 4 columns",
+ "chroma": "#FF00FF",
+ "wave": "dressing-gen",
+ "cells": [
+  {
+   "slug": "fx-th-shellburst",
+   "label": "artillery shell burst, mud-olive smoke bloom"
+  },
+  {
+   "slug": "fx-th-gashaze",
+   "label": "drifting gas-haze cloud, sickly yellow-green roll"
+  },
+  {
+   "slug": "fx-th-shrapnelspray",
+   "label": "shrapnel spray scatter, jagged metal fan"
+  },
+  {
+   "slug": "fx-th-tracerarc",
+   "label": "tracer-round arc streak, dim ember trail"
+  },
+  {
+   "slug": "fx-th-mudkick",
+   "label": "heavy mud kickup spray, churned trench scatter"
+  },
+  {
+   "slug": "fx-th-whistleflash",
+   "label": "trench-whistle signal flash, sharp attention flare"
+  },
+  {
+   "slug": "fx-th-shellburst-alt",
+   "label": "ALT of 'artillery shell burst, mud-olive smoke bloom' — different shape/growth/wear, same kind",
+   "tags": null,
+   "size": null,
+   "altOf": "fx-th-shellburst"
+  },
+  {
+   "slug": "fx-th-gashaze-alt",
+   "label": "ALT of 'drifting gas-haze cloud, sickly yellow-green roll' — different shape/growth/wear, same kind",
+   "tags": null,
+   "size": null,
+   "altOf": "fx-th-gashaze"
+  }
+ ]
+}

@@ -1,0 +1,32 @@
+---
+id: giant-goat
+type: creature
+domain: Monsters & Enemies
+status: source
+cr: "1/2"
+role: brute
+habitat: [mountain, hill]
+treasure: none
+activity: [day]
+faction_fit: [beast-den, none]
+---
+
+*p. 357 MM 2024*
+
+### Giant Goat
+
+_Large Beast, Unaligned_
+
+- **Armor Class:** 11
+- **Initiative:** +1 (11)
+- **Hit Points:** 19 (3d10 + 3)
+- **Speed:** 40 ft., Climb 30 ft.
+- **STR:** 17 (+3) | **DEX:** 13 (+1) | **CON:** 12 (+1) | **INT:** 3 (-4) | **WIS:** 12 (+1) | **CHA:** 6 (-2)
+- **Skills:** Perception +3
+- **Senses:** Darkvision 60 ft.; Passive Perception 13
+- **Languages:** None
+- **Challenge:** 1/2 (100 XP) | **Proficiency Bonus:** +2
+
+**Actions**
+
+- **Ram.** Melee Attack Roll: +5, reach 5 ft. Hit: 6 (1d6 + 3) Bludgeoning damage. If the target is a Large or smaller creature and the goat moved 20+ feet straight toward it immediately before the hit, the target takes an extra 5 (2d4) Bludgeoning damage and has the Prone condition.

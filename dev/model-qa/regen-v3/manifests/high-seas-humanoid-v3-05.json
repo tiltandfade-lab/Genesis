@@ -1,0 +1,65 @@
+{
+ "file": "high-seas-humanoid-v3-05.png",
+ "realm": "high-seas",
+ "gridClass": "humanoid",
+ "grid": "2 rows x 4 columns",
+ "chroma": "#FF00FF",
+ "cells": [
+  {
+   "slug": "high-seas-girl-hands-on-hips",
+   "label": "girl hands on hips",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "high-seas-kids-01.png|r5c5",
+   "reason": "regen-style"
+  },
+  {
+   "slug": "high-seas-naval-officer-pointing-blade",
+   "label": "naval officer pointing blade",
+   "family": "monsters",
+   "sizeBand": "medium",
+   "replaces": "high-seas-mm-01.png|r3c2",
+   "reason": "regen-shortleg"
+  },
+  {
+   "slug": "high-seas-rope-slung-pirate-with-bottle",
+   "label": "rope-slung pirate with bottle",
+   "family": "monsters",
+   "sizeBand": "medium",
+   "replaces": "high-seas-mm-02.png|r3c2",
+   "reason": "regen-shortleg"
+  },
+  {
+   "slug": "high-seas-blacksmith-with-hammer-and-anvil",
+   "label": "blacksmith with hammer and anvil",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "high-seas-npc-01.png|r2c2",
+   "reason": "regen-shortleg"
+  },
+  {
+   "slug": "high-seas-striped-shirt-sailor-with-tankard",
+   "label": "striped-shirt sailor with tankard",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "high-seas-npc-01.png|r4c2",
+   "reason": "regen-shortleg"
+  },
+  {
+   "slug": "high-seas-guard-in-armor-with-polearm",
+   "label": "guard in armor with polearm",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "high-seas-npc-01.png|r4c3",
+   "reason": "regen-shortleg"
+  },
+  {
+   "slug": "high-seas-harpooneer-with-harpoon-shouldered",
+   "label": "harpooneer with harpoon shouldered",
+   "family": "npcs",
+   "sizeBand": "medium",
+   "replaces": "high-seas-npc-03.png|r4c4",
+   "reason": "regen-shortleg"
+  }
+ ]
+}

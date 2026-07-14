@@ -1,0 +1,17 @@
+{
+ "file": "cosmic-solo-v3-21.png",
+ "realm": "cosmic",
+ "gridClass": "solo",
+ "grid": "1 row x 1 column",
+ "chroma": "#FF00FF",
+ "cells": [
+  {
+   "slug": "cosmic-city-backed-crab-crawler",
+   "label": "city-backed crab crawler",
+   "family": "monsters",
+   "sizeBand": "gargantuan",
+   "replaces": "cosmic-mm-04.png|r4c1",
+   "reason": "regen-underres"
+  }
+ ]
+}

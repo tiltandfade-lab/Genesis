@@ -1,0 +1,41 @@
+{
+ "file": "cosmic-large-v3-07.png",
+ "realm": "cosmic",
+ "gridClass": "large",
+ "grid": "2 rows x 2 columns",
+ "chroma": "#FF00FF",
+ "cells": [
+  {
+   "slug": "cosmic-saddled-horse-grazing",
+   "label": "saddled horse grazing",
+   "family": "animals",
+   "sizeBand": "large",
+   "replaces": "cosmic-dungeon-animals-01.png|r4c3",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "cosmic-impossible-penrose-cube",
+   "label": "impossible Penrose cube",
+   "family": "monsters",
+   "sizeBand": "large",
+   "replaces": "cosmic-expansion-e1-01.png|r4c1",
+   "reason": "FAIL-adam"
+  },
+  {
+   "slug": "cosmic-eye-maw-quadruped-beast",
+   "label": "eye-maw quadruped beast",
+   "family": "monsters",
+   "sizeBand": "large",
+   "replaces": "cosmic-mm-01.png|r1c5",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "cosmic-many-eyed-tentacle-mound",
+   "label": "many-eyed tentacle mound",
+   "family": "monsters",
+   "sizeBand": "large",
+   "replaces": "cosmic-mm-01.png|r2c2",
+   "reason": "regen-underres"
+  }
+ ]
+}

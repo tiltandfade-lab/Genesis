@@ -1,0 +1,48 @@
+{
+ "file": "lost-world-effects-accent-dg.png",
+ "realm": "lost-world",
+ "family": "effects-accent",
+ "grid": "2 rows x 4 columns",
+ "chroma": "#FF00FF",
+ "wave": "dressing-gen",
+ "cells": [
+  {
+   "slug": "fx-lw-roarshock",
+   "label": "primal roar shockwave, ground-rattle ring"
+  },
+  {
+   "slug": "fx-lw-sporecloud",
+   "label": "jungle spore cloud burst, thick green haze"
+  },
+  {
+   "slug": "fx-lw-mudsplat",
+   "label": "heavy mud splat spray, primeval muck scatter"
+  },
+  {
+   "slug": "fx-lw-tarbubble",
+   "label": "tar-pit bubble burst, thick black pop"
+  },
+  {
+   "slug": "fx-lw-fernwhip",
+   "label": "whipping fern-frond lash, jungle green streak"
+  },
+  {
+   "slug": "fx-lw-birdscatter",
+   "label": "startled prehistoric bird-scatter burst, feather flurry"
+  },
+  {
+   "slug": "fx-lw-roarshock-alt",
+   "label": "ALT of 'primal roar shockwave, ground-rattle ring' — different shape/growth/wear, same kind",
+   "tags": null,
+   "size": null,
+   "altOf": "fx-lw-roarshock"
+  },
+  {
+   "slug": "fx-lw-sporecloud-alt",
+   "label": "ALT of 'jungle spore cloud burst, thick green haze' — different shape/growth/wear, same kind",
+   "tags": null,
+   "size": null,
+   "altOf": "fx-lw-sporecloud"
+  }
+ ]
+}

@@ -1,0 +1,17 @@
+{
+ "file": "cosmic-solo-v3-22.png",
+ "realm": "cosmic",
+ "gridClass": "solo",
+ "grid": "1 row x 1 column",
+ "chroma": "#FF00FF",
+ "cells": [
+  {
+   "slug": "cosmic-cathedral-rising-from-wave",
+   "label": "cathedral rising from wave",
+   "family": "monsters",
+   "sizeBand": "gargantuan",
+   "replaces": "cosmic-mm-04.png|r4c3",
+   "reason": "regen-underres"
+  }
+ ]
+}

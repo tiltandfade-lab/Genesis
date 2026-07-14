@@ -1,0 +1,33 @@
+{
+ "file": "fantasy-magenta-fails-r3-03.png",
+ "realm": "fantasy",
+ "grid": "1 row x 3 columns",
+ "chroma": "#FF00FF",
+ "round": 3,
+ "cells": [
+  {
+   "slug": "fantasy-cloud-giant",
+   "label": "Cloud Giant",
+   "family": "monsters",
+   "sizeBand": "huge",
+   "replaces": "spr-fantasy-cloud-giant",
+   "reason": "regen-magenta-leak"
+  },
+  {
+   "slug": "fantasy-giant-crocodile",
+   "label": "Giant Crocodile",
+   "family": "monsters",
+   "sizeBand": "huge",
+   "replaces": "spr-fantasy-giant-crocodile",
+   "reason": "regen-magenta-leak"
+  },
+  {
+   "slug": "fantasy-killer-whale",
+   "label": "Killer Whale",
+   "family": "monsters",
+   "sizeBand": "huge",
+   "replaces": "spr-fantasy-killer-whale",
+   "reason": "regen-magenta-leak"
+  }
+ ]
+}

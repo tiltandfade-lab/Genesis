@@ -1,0 +1,93 @@
+{
+ "file": "suburb-enemies-v3-04.png",
+ "realm": "suburb",
+ "gridClass": "expansion-monsters",
+ "grid": "3 rows x 4 columns",
+ "chroma": "#00FF00",
+ "cells": [
+  {
+   "slug": "suburb-g-man-in-a-black-suit-and-dead-eyes-briefcase-in",
+   "label": "G-man in a black suit and dead eyes, briefcase in one hand, taser in the other",
+   "family": "monsters",
+   "sizeBand": "medium",
+   "reason": "expansion-amblin"
+  },
+  {
+   "slug": "suburb-hazmat-agent-with-a-cattle-prod-and-a-specimen-j",
+   "label": "hazmat agent with a cattle prod and a specimen jar",
+   "family": "monsters",
+   "sizeBand": "medium",
+   "reason": "expansion-amblin"
+  },
+  {
+   "slug": "suburb-pastel-robed-hoa-cultist-holding-a-flaming-citat",
+   "label": "pastel-robed HOA cultist holding a flaming citation",
+   "family": "monsters",
+   "sizeBand": "medium",
+   "reason": "expansion-amblin"
+  },
+  {
+   "slug": "suburb-doppelganger-neighbor-waving-smile-too-wide-by-t",
+   "label": "doppelganger neighbor waving, smile too wide by three teeth",
+   "family": "monsters",
+   "sizeBand": "medium",
+   "reason": "expansion-amblin"
+  },
+  {
+   "slug": "suburb-static-faced-figure-in-a-cardigan-head-replaced-",
+   "label": "static-faced figure in a cardigan, head replaced by a hissing TV",
+   "family": "monsters",
+   "sizeBand": "medium",
+   "reason": "expansion-amblin"
+  },
+  {
+   "slug": "suburb-milk-carton-ghost",
+   "label": "milk-carton ghost - translucent missing kid flickering like bad VHS",
+   "family": "monsters",
+   "sizeBand": "medium",
+   "reason": "expansion-amblin"
+  },
+  {
+   "slug": "suburb-garden-gnome-trio-come-alive-with-hedge-shears-a",
+   "label": "garden gnome trio come alive with hedge shears and trowels",
+   "family": "monsters",
+   "sizeBand": "medium",
+   "reason": "expansion-amblin"
+  },
+  {
+   "slug": "suburb-rabid-poodle-with-a-chewed-through-leash-foam-an",
+   "label": "rabid poodle with a chewed-through leash, foam and show-cut fur",
+   "family": "monsters",
+   "sizeBand": "medium",
+   "reason": "expansion-amblin"
+  },
+  {
+   "slug": "suburb-raccoon-pack-moving-as-one-hunched-mass-with-glo",
+   "label": "raccoon pack moving as one hunched mass with glowing eyes",
+   "family": "monsters",
+   "sizeBand": "medium",
+   "reason": "expansion-amblin"
+  },
+  {
+   "slug": "suburb-basement-crawler",
+   "label": "basement crawler - pale long-limbed thing that lives under the house",
+   "family": "monsters",
+   "sizeBand": "medium",
+   "reason": "expansion-amblin"
+  },
+  {
+   "slug": "suburb-power-line-crackler",
+   "label": "power-line crackler - a spirit of arcing electricity in a man shape",
+   "family": "monsters",
+   "sizeBand": "medium",
+   "reason": "expansion-amblin"
+  },
+  {
+   "slug": "suburb-sentient-kudzu-mass-dragging-a-lawn-flamingo",
+   "label": "sentient kudzu mass dragging a lawn flamingo",
+   "family": "monsters",
+   "sizeBand": "medium",
+   "reason": "expansion-amblin"
+  }
+ ]
+}

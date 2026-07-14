@@ -1,0 +1,421 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Genesis — sprite review</title>
+<style>
+  :root { --bg:#15131a; --panel:#201d27; --line:#39343f; --tx:#e8e4da; --dim:#9a93a5;
+          --pass:#5dbb63; --fail:#e05252; --accent:#c9a227; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--tx); font:14px/1.45 -apple-system, "Segoe UI", sans-serif;
+         display:flex; flex-direction:column; height:100vh; overflow:hidden; }
+  header { display:flex; gap:10px; align-items:center; padding:8px 12px; background:var(--panel);
+           border-bottom:1px solid var(--line); flex-wrap:wrap; }
+  header select, header input[type=text] { background:var(--bg); color:var(--tx); border:1px solid var(--line);
+           border-radius:4px; padding:4px 6px; }
+  .progress { margin-left:auto; color:var(--dim); font-size:12px; white-space:nowrap; }
+  button { background:#2c2836; color:var(--tx); border:1px solid var(--line); border-radius:4px;
+           padding:4px 10px; cursor:pointer; }
+  button:hover { border-color:var(--accent); }
+  button.pass { background:#1e3320; border-color:var(--pass); }
+  button.fail { background:#3a1f1f; border-color:var(--fail); }
+  button.dirty { background:#3a3212; border-color:var(--accent); color:var(--accent); font-weight:600; }
+  main { flex:1; display:flex; min-height:0; }
+  #stageWrap { flex:1; display:flex; flex-direction:column; min-width:0; }
+  #stage { flex:1; position:relative; overflow-x:auto; overflow-y:hidden;
+           background:linear-gradient(#181521,#1d1927); }
+  #ground { position:absolute; left:0; right:0; border-top:2px solid #6b5f3f; }
+  .guide { position:absolute; left:0; right:0; border-top:1px dashed rgba(200,180,120,.35); font-size:10px;
+           color:rgba(200,180,120,.6); }
+  .guide span { position:sticky; left:4px; background:rgba(21,19,26,.7); padding:0 4px; }
+  .guide.active { border-top:2px dashed var(--accent); color:var(--accent); font-weight:600; z-index:2; }
+  #lineup { position:absolute; left:0; bottom:0; top:0; display:flex; align-items:flex-end; gap:28px;
+            padding:0 40px; }
+  .fig { display:flex; flex-direction:column; align-items:center; position:relative; }
+  .fig img { image-rendering:pixelated; display:block; }
+  .floorline { position:absolute; left:-10px; right:-10px; height:0;
+    border-top:2px dashed #ff5577; pointer-events:none; z-index:5; }
+  .floorline.faint { border-top-color:rgba(255,85,119,.45); }
+  .floorline span { position:absolute; right:-4px; top:-16px; font-size:10px; color:#ff5577;
+    background:rgba(0,0,0,.55); padding:0 4px; border-radius:3px; white-space:nowrap; }
+  .fig .cap { position:absolute; top:100%; font-size:10px; color:var(--dim); white-space:nowrap; padding-top:3px; }
+  .fig.current { outline:2px solid var(--accent); outline-offset:6px; border-radius:4px; }
+  .fig.pinned img { opacity:.85; }
+  .fig.ref svg { height:100%; display:block; }
+  .fig .unpin { position:absolute; top:-22px; font-size:10px; }
+  #controls { display:flex; gap:14px; align-items:center; padding:8px 12px; background:var(--panel);
+              border-top:1px solid var(--line); flex-wrap:wrap; }
+  #controls input[type=range] { width:260px; }
+  #scaleVal { width:56px; background:var(--bg); color:var(--tx); border:1px solid var(--line);
+              border-radius:4px; padding:3px 5px; }
+  aside { width:300px; background:var(--panel); border-left:1px solid var(--line); padding:12px;
+          overflow-y:auto; }
+  aside h2 { font-size:15px; margin:0 0 2px; }
+  aside .slug { color:var(--dim); font-size:11px; word-break:break-all; }
+  dl { display:grid; grid-template-columns:auto 1fr; gap:2px 10px; font-size:12px; margin:10px 0; }
+  dt { color:var(--dim); } dd { margin:0; }
+  .chips { display:flex; flex-wrap:wrap; gap:4px; margin:4px 0 10px; }
+  .chip { background:#2c2836; border:1px solid var(--line); border-radius:10px; padding:1px 8px; font-size:11px; }
+  aside textarea, aside input[type=text] { width:100%; background:var(--bg); color:var(--tx);
+          border:1px solid var(--line); border-radius:4px; padding:5px; font:12px inherit; }
+  .verdict { font-weight:600; }
+  .verdict.pass { color:var(--pass); } .verdict.fail { color:var(--fail); }
+  #rail { display:flex; gap:6px; overflow-x:auto; padding:8px 12px; background:#141218;
+          border-top:1px solid var(--line); min-height:86px; }
+  .thumb { position:relative; flex:0 0 auto; width:64px; height:64px; background:#221f2a; border:1px solid var(--line);
+           border-radius:4px; cursor:pointer; display:flex; align-items:flex-end; justify-content:center; }
+  .thumb img { max-width:60px; max-height:60px; image-rendering:pixelated; }
+  .thumb.current { border-color:var(--accent); }
+  .thumb .dot { position:absolute; top:2px; right:2px; width:8px; height:8px; border-radius:50%; }
+  .dot.pass { background:var(--pass); } .dot.fail { background:var(--fail); }
+  .kbd { color:var(--dim); font-size:11px; margin-left:auto; }
+  #toast { position:fixed; bottom:110px; right:320px; background:#2c2836; border:1px solid var(--accent);
+           border-radius:4px; padding:6px 12px; opacity:0; transition:opacity .2s; pointer-events:none; }
+</style>
+</head>
+<body>
+<header>
+  <select id="fRealm"></select>
+  <select id="fKind"></select>
+  <select id="fSize"></select>
+  <select id="fState">
+    <option value="">state: all</option><option value="unreviewed">unreviewed</option>
+    <option value="pass">pass</option><option value="fail">fail</option>
+    <option value="flagged">flagged ⚠</option>
+  </select>
+  <input id="fSearch" type="text" placeholder="search name…" size="16">
+  <label style="color:var(--dim);font-size:12px">zoom
+    <input id="zoom" type="range" min="30" max="320" value="150" style="width:110px;vertical-align:middle"></label>
+  <button id="regen" title="fold the overlay into data/sprite-registry.js + refresh REJECTS.md">regen registry</button>
+  <a href="/rejects" target="_blank" style="color:var(--fail);font-size:12px" title="dev/sprite-manifests/REJECTS.md — the regen shopping list">rejects ↗</a>
+  <span class="progress" id="progress"></span>
+</header>
+<main>
+  <div id="stageWrap">
+    <div id="stage"><div id="lineup"></div></div>
+    <div id="controls">
+      <button id="prev">◀</button><button id="next">▶</button>
+      <label>scale <input id="scale" type="range" min="0.1" max="8" step="0.01" value="1"></label>
+      <input id="scaleVal" type="text" value="1.00">
+      <button id="reset1" title="reset to 1.0">1.0</button>
+      <button id="pin">pin ⇩</button>
+      <button id="saveBtn" title="write scale + tags + note to the overlay">SAVE (s)</button>
+      <button id="passBtn" class="pass">PASS (p)</button>
+      <button id="failBtn" class="fail">FAIL (f)</button>
+      <button id="clearBtn" title="clear verdict">clear</button>
+      <span class="kbd">← → navigate · [ ] scale · s save · p/f verdict · 0 reset · click sprite = set floor · shift-click = clear floor</span>
+    </div>
+  </div>
+  <aside id="info"></aside>
+</main>
+<div id="rail"></div>
+<div id="toast"></div>
+<script>
+"use strict";
+/* Billboard math mirror — MUST match theater-boot.js: plane height =
+   spriteSizeScaleFor(size) * GLB_TARGET_HEIGHT * (entry.scale||1). Here MED px stands in for
+   GLB_TARGET_HEIGHT, so what lines up in this tool lines up on the stage. */
+const SIZE_SCALE = { tiny:0.5, small:1, medium:1, large:2, huge:3, gargantuan:4 };
+const sizeOf = e => (e.size || "medium").toLowerCase();
+const sizeScale = e => SIZE_SCALE[sizeOf(e)] ?? 1;
+
+/* GUIDE LADDER — art-height targets (where the HEAD should land), distinct from the plane
+   math above: SRD Small shares Medium's 1x plane, so a Small creature's head belongs LOWER
+   inside that plane (0.75x). These calibrate the sprite's DEFAULT size — the game can re-cast
+   any sprite as a giant/tiny variant later by rendering it at a different tier. `titanic` is
+   reserved headroom (no SRD size maps there yet). */
+/* Head-height in feet: medium head = 6 ft (a human), everything else scales off that. */
+const GUIDES = [
+  { key:"tiny",     mult:0.25, srd:"Tiny" },
+  { key:"small",    mult:0.75, srd:"Small" },
+  { key:"medium",   mult:1,    srd:"Medium" },
+  { key:"large",    mult:2,    srd:"Large" },
+  { key:"x-large",  mult:3,    srd:"Huge" },
+  { key:"gigantic", mult:4,    srd:"Gargantuan" },
+  { key:"titanic",  mult:6,    srd:null },
+];
+const MEDIUM_FT = 6;
+function feetLabel(mult){
+  const ft = mult * MEDIUM_FT, whole = Math.floor(ft), inches = Math.round((ft - whole) * 12);
+  return inches ? `${whole}′${inches}″` : `${whole}′`;
+}
+
+/* 6′ human reference silhouette — vector (not a sprite PNG) so the crown of the head sits
+   EXACTLY at the medium guide line; ~7.5-head standing proportions. Always on stage. */
+const REF_SILHOUETTE = `
+<svg viewBox="0 0 36 100" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMax meet">
+  <g fill="rgba(160,150,175,0.45)">
+    <ellipse cx="18" cy="6.7" rx="5.6" ry="6.7"/>
+    <rect x="15.4" y="12.5" width="5.2" height="4"/>
+    <path d="M8.5 18 Q18 14.5 27.5 18 L26.5 44 Q18 47 9.5 44 Z"/>
+    <path d="M8.7 19.5 Q5.5 21 5 26 L3.4 44 Q3.2 47 5.6 47.4 Q7.8 47.6 8.2 44.8 L10.4 27 Z"/>
+    <path d="M27.3 19.5 Q30.5 21 31 26 L32.6 44 Q32.8 47 30.4 47.4 Q28.2 47.6 27.8 44.8 L25.6 27 Z"/>
+    <path d="M9.5 44 L26.5 44 L26 56 L18.8 56 L18.8 96 Q18.8 99 16 99 L12.6 99 Q11.2 99 11.4 96.5 L13.4 56.2 L10 56 Z"/>
+    <path d="M26 56 L25.9 56 L24.6 96 Q24.5 99 21.9 99 L18.9 99 L18.8 56 Z" opacity="0.85"/>
+  </g>
+</svg>`;
+const SRD_TO_GUIDE = { tiny:"tiny", small:"small", medium:"medium", large:"large",
+                       huge:"x-large", gargantuan:"gigantic" };
+const guideFor = e => GUIDES.find(g => g.key === (SRD_TO_GUIDE[sizeOf(e)] || "medium"));
+
+let REG = {}, OVERLAY = {}, list = [], idx = 0, medPx = 150;
+let pins = JSON.parse(localStorage.getItem("spritePins") || "[]");
+const PENDING = {}; // slug -> {scale, floor} — unsaved edits; NOTHING writes to disk until Save/Pass/Fail
+const $ = id => document.getElementById(id);
+const cur = () => list[idx];
+const ovr = slug => OVERLAY[slug] || {};
+const savedScale = slug => (typeof ovr(slug).scale === "number" ? ovr(slug).scale : 1);
+const scaleFor = slug => (PENDING[slug] && typeof PENDING[slug].scale === "number")
+  ? PENDING[slug].scale : savedScale(slug);
+/* floor = ground-contact line, fraction of image height UP from the bottom edge (0 = bottom
+   edge IS the floor). The theater mounts the figurine disc at this line. Set by clicking the
+   current sprite; shift-click clears. */
+const savedFloor = slug => (typeof ovr(slug).floor === "number" ? ovr(slug).floor : 0);
+const floorFor = slug => (PENDING[slug] && typeof PENDING[slug].floor === "number")
+  ? PENDING[slug].floor : savedFloor(slug);
+const isDirty = slug => !!PENDING[slug] &&
+  (Math.abs(scaleFor(slug) - savedScale(slug)) > 1e-9 ||
+   Math.abs(floorFor(slug) - savedFloor(slug)) > 1e-9);
+
+async function load(){
+  const r = await fetch("/api/data"); const d = await r.json();
+  if(d.error){ alert(d.error); return; }
+  REG = d.registry; OVERLAY = d.overlay;
+  const cutEntries = Object.entries(REG).filter(([,e]) => e.status === "cut");
+  fillFilter("fRealm", "realm", cutEntries.map(([,e]) => e.realm));
+  fillFilter("fKind", "kind", cutEntries.map(([,e]) => e.kind));
+  fillFilter("fSize", "size", cutEntries.map(([,e]) => sizeOf(e)));
+  applyFilters();
+}
+function fillFilter(id, label, vals){
+  const sel = $(id), keep = sel.value;
+  sel.innerHTML = `<option value="">${label}: all</option>` +
+    [...new Set(vals)].sort().map(v => `<option>${v}</option>`).join("");
+  sel.value = keep;
+}
+function stateOf(slug){ return ovr(slug).verdict || "unreviewed"; }
+function applyFilters(){
+  const fr = $("fRealm").value, fk = $("fKind").value, fs = $("fSize").value,
+        st = $("fState").value, q = $("fSearch").value.toLowerCase();
+  const curSlug = cur() && cur().slug;
+  list = Object.entries(REG)
+    .filter(([, e]) => e.status === "cut")
+    .filter(([, e]) => (!fr || e.realm === fr) && (!fk || e.kind === fk) && (!fs || sizeOf(e) === fs))
+    .filter(([s]) => !st ||
+      (st === "flagged" ? (ovr(s).note || "").startsWith("⚠")
+       : st === "unreviewed" ? stateOf(s) === "unreviewed" : stateOf(s) === st))
+    .filter(([s, e]) => !q || e.name.toLowerCase().includes(q) || s.includes(q))
+    .map(([slug, e]) => Object.assign({ slug }, e))
+    .sort((a, b) => a.sheet === b.sheet ? a.cell - b.cell : a.sheet.localeCompare(b.sheet));
+  idx = Math.max(0, list.findIndex(e => e.slug === curSlug));
+  render();
+}
+
+function figHtml(e, cls){
+  const h = Math.round(sizeScale(e) * medPx * scaleFor(e.slug));
+  const fl = floorFor(e.slug);
+  // the floor line rides inside a relative wrap around the img so bottom:px is image-space;
+  // clicking the CURRENT sprite sets it (wired in render(), not inline — needs event coords)
+  const line = cls === "current" || fl > 0
+    ? `<div class="floorline${cls === "current" ? "" : " faint"}" style="bottom:${Math.round(fl * h)}px"><span>floor${fl > 0 ? " " + (fl * 100).toFixed(1) + "%" : ""}</span></div>` : "";
+  return `<div class="fig ${cls}" data-slug="${e.slug}">
+      ${cls === "pinned" ? `<button class="unpin" onclick="unpin('${e.slug}')">unpin ✕</button>` : ""}
+      <div class="imgwrap" style="position:relative">
+        <img src="/sprites/${e.slug}.png" style="height:${h}px" draggable="false">
+        ${line}
+      </div>
+      <span class="cap">${e.name} · ${sizeOf(e)} → ${guideFor(e).key}${scaleFor(e.slug) !== 1 ? " · ×" + scaleFor(e.slug).toFixed(2) : ""}</span>
+    </div>`;
+}
+function setFloorFromClick(ev){
+  const e = cur(); if(!e) return;
+  const img = ev.currentTarget;
+  const r = img.getBoundingClientRect();
+  const fl = ev.shiftKey ? 0 : Math.min(0.9, Math.max(0, (r.bottom - ev.clientY) / r.height));
+  PENDING[e.slug] = Object.assign({}, PENDING[e.slug], { scale: scaleFor(e.slug), floor: Math.round(fl * 1e4) / 1e4 });
+  render();
+}
+function render(){
+  const stage = $("stage"), lineup = $("lineup"), e = cur();
+  const groundY = 46; // px above the stage bottom, room for captions
+  stage.querySelectorAll(".guide,#ground").forEach(n => n.remove());
+  const g = document.createElement("div"); g.id = "ground"; g.style.bottom = groundY + "px"; stage.appendChild(g);
+  const curGuide = e && guideFor(e);
+  for(const gd of GUIDES){
+    const gl = document.createElement("div");
+    const isCur = curGuide && gd.key === curGuide.key;
+    gl.className = "guide" + (isCur ? " active" : "");
+    gl.style.bottom = (groundY + gd.mult * medPx) + "px";
+    gl.innerHTML = `<span>${gd.key} head · ${feetLabel(gd.mult)} · ${gd.mult}×${gd.srd ? " · SRD " + gd.srd : " · reserved"}${isCur ? " ◀ TARGET" : ""}</span>`;
+    stage.appendChild(gl);
+  }
+  lineup.style.bottom = groundY + "px"; lineup.style.top = "auto"; lineup.style.height = "0";
+  lineup.style.alignItems = "flex-end"; lineup.style.position = "absolute";
+  const refHtml = `<div class="fig ref" title="6′ human reference — head exactly on the medium line">
+      <div style="height:${medPx}px;display:flex;align-items:flex-end">${REF_SILHOUETTE}</div>
+      <span class="cap">6′ ref</span>
+    </div>`;
+  const pinned = pins.map(s => REG[s] && Object.assign({ slug: s }, REG[s])).filter(Boolean);
+  lineup.innerHTML = refHtml + pinned.map(p => figHtml(p, "pinned")).join("") + (e ? figHtml(e, "current") : "");
+  lineup.querySelectorAll(".fig").forEach(n => { n.style.transform = "translateY(0)"; });
+  // click the current sprite = set its floor line at the click; shift-click = clear (bottom edge)
+  const curImg = lineup.querySelector(".fig.current .imgwrap img");
+  if(curImg){ curImg.style.cursor = "crosshair"; curImg.addEventListener("click", setFloorFromClick); }
+
+  if(e){
+    $("scale").value = scaleFor(e.slug);
+    $("scaleVal").value = scaleFor(e.slug).toFixed(2);
+    const dirty = isDirty(e.slug);
+    $("saveBtn").classList.toggle("dirty", dirty);
+    $("saveBtn").textContent = dirty ? "SAVE (s) ●" : "SAVE (s)";
+  }
+  renderInfo(); renderRail(); renderProgress();
+}
+let infoSlug = null;
+function renderInfo(){
+  const e = cur();
+  if(!e){ $("info").innerHTML = "<p>No sprites match the filter.</p>"; infoSlug = null; return; }
+  const o = ovr(e.slug), st = stateOf(e.slug);
+  // same sprite re-rendering (slider move etc.) — keep any in-progress tag/note typing
+  const keepTags = infoSlug === e.slug && $("ovTags") ? $("ovTags").value : null;
+  const keepNote = infoSlug === e.slug && $("ovNote") ? $("ovNote").value : null;
+  infoSlug = e.slug;
+  $("info").innerHTML = `
+    <h2>${e.name}</h2><div class="slug">${e.slug}</div>
+    <p class="verdict ${st}">${st.toUpperCase()}${o.scale ? ` · scale ×${o.scale}` : ""}${floorFor(e.slug) > 0 ? ` · floor ${(floorFor(e.slug) * 100).toFixed(1)}%` : ""}</p>
+    <p style="font-size:12px;background:#2c2836;border:1px solid var(--line);border-radius:4px;padding:6px 8px">
+      target: <b style="color:var(--accent)">${guideFor(e).key}</b> head line
+      (${feetLabel(guideFor(e).mult)} · ${guideFor(e).mult}×${guideFor(e).srd ? " · SRD " + guideFor(e).srd : ""})<br>
+      <span style="color:var(--dim)">calibrates this sprite's DEFAULT size — the game can
+      re-cast it as a giant or tiny variant at another tier.</span></p>
+    <dl>
+      <dt>realm</dt><dd>${e.realm}</dd><dt>kind</dt><dd>${e.kind}</dd>
+      <dt>size</dt><dd>${e.size || "— (renders medium)"}</dd>
+      <dt>role</dt><dd>${e.role ?? "—"}</dd><dt>CR</dt><dd>${e.cr ?? "—"}</dd>
+      <dt>type</dt><dd>${e.type ?? "—"}</dd><dt>frame</dt><dd>${e.frame ?? "—"}</dd>
+      <dt>sheet</dt><dd>${e.sheet} · cell ${e.cell}</dd>
+    </dl>
+    <div style="color:var(--dim);font-size:12px">tags (registry)</div>
+    <div class="chips">${(e.tags || []).map(t => `<span class="chip">${t}</span>`).join("")}</div>
+    <div style="color:var(--dim);font-size:12px">overlay tags (comma-sep — replaces auto set)</div>
+    <input type="text" id="ovTags" value="${(o.tags || []).join(", ")}" placeholder="(inherit auto tags)">
+    <div style="color:var(--dim);font-size:12px;margin-top:8px">note</div>
+    <textarea id="ovNote" rows="2" placeholder="why it failed / what to redo…">${o.note || ""}</textarea>
+    <button style="margin-top:6px" onclick="saveChanges()">save changes</button>`;
+  if(keepTags !== null) $("ovTags").value = keepTags;
+  if(keepNote !== null) $("ovNote").value = keepNote;
+}
+function renderRail(){
+  $("rail").innerHTML = list.map((e, i) => `
+    <div class="thumb ${i === idx ? "current" : ""}" onclick="go(${i})" title="${e.name}">
+      <img src="/sprites/${e.slug}.png" loading="lazy">
+      ${stateOf(e.slug) !== "unreviewed" ? `<span class="dot ${stateOf(e.slug)}"></span>` : ""}
+    </div>`).join("");
+  const c = $("rail").querySelector(".current");
+  if(c) c.scrollIntoView({ block: "nearest", inline: "center" });
+}
+function renderProgress(){
+  const all = Object.entries(REG).filter(([, e]) => e.status === "cut");
+  const done = all.filter(([s]) => stateOf(s) !== "unreviewed").length;
+  const failN = all.filter(([s]) => stateOf(s) === "fail").length;
+  $("progress").textContent =
+    `filter: ${idx + 1}/${list.length} · reviewed ${done}/${all.length} (${failN} fail)`;
+}
+
+async function post(url, body){
+  const r = await fetch(url, { method: "POST", body: JSON.stringify(body) });
+  const d = await r.json();
+  if(!r.ok || d.error){ toast("ERROR: " + (d.error || r.status)); throw new Error(d.error); }
+  return d;
+}
+async function patch(slug, set, clear){
+  const d = await post("/api/overlay", { slug, set, clear });
+  if(Object.keys(d.entry).length) OVERLAY[slug] = d.entry; else delete OVERLAY[slug];
+}
+function toast(msg){
+  const t = $("toast"); t.textContent = msg; t.style.opacity = 1;
+  clearTimeout(t._h); t._h = setTimeout(() => t.style.opacity = 0, 1400);
+}
+
+function setScale(v){
+  const e = cur(); if(!e) return;
+  v = Math.min(8, Math.max(0.1, v)); // wide on purpose — calibrate true titan/speck sizes here; the game can cap at render time
+  PENDING[e.slug] = { scale: v }; // local only — Save/Pass/Fail commit it
+  render();
+}
+function metaEdits(){
+  // tags/note straight from the inputs — committed by Save/Pass/Fail alongside the scale
+  const set = {}, clear = [];
+  const tagsEl = $("ovTags"), noteEl = $("ovNote");
+  if(tagsEl){
+    const tags = tagsEl.value.split(",").map(s => s.trim()).filter(Boolean);
+    if(tags.length) set.tags = tags; else clear.push("tags");
+  }
+  if(noteEl){
+    const note = noteEl.value.trim();
+    if(note) set.note = note; else clear.push("note");
+  }
+  return { set, clear };
+}
+async function saveChanges(){
+  const e = cur(); if(!e) return;
+  const { set, clear } = metaEdits();
+  set.scale = scaleFor(e.slug);
+  const fl = floorFor(e.slug);
+  if(fl > 0) set.floor = fl; else clear.push("floor");
+  await patch(e.slug, set, clear);
+  delete PENDING[e.slug];
+  toast("saved: " + e.name);
+  render();
+}
+async function verdict(v){
+  const e = cur(); if(!e) return;
+  const { set, clear } = metaEdits();
+  set.verdict = v;
+  set.scale = scaleFor(e.slug); // fold any unsaved slider position into the ruling
+  const fl = floorFor(e.slug);
+  if(fl > 0) set.floor = fl; else clear.push("floor"); // fold unsaved floor line too
+  await patch(e.slug, set, clear);
+  delete PENDING[e.slug];
+  toast(v.toUpperCase() + ": " + e.name);
+  if(idx < list.length - 1) go(idx + 1); else render();
+}
+function go(i){ idx = Math.min(list.length - 1, Math.max(0, i)); render(); }
+function pinCur(){ const e = cur(); if(e && !pins.includes(e.slug)){ pins.push(e.slug); persistPins(); render(); } }
+function unpin(slug){ pins = pins.filter(s => s !== slug); persistPins(); render(); }
+function persistPins(){ localStorage.setItem("spritePins", JSON.stringify(pins)); }
+
+["fRealm","fKind","fSize","fState"].forEach(id => $(id).onchange = applyFilters);
+$("fSearch").oninput = applyFilters;
+$("zoom").oninput = e => { medPx = +e.target.value; render(); };
+$("prev").onclick = () => go(idx - 1); $("next").onclick = () => go(idx + 1);
+$("scale").oninput = e => setScale(parseFloat(e.target.value));
+$("scaleVal").onchange = e => setScale(parseFloat(e.target.value) || 1);
+$("reset1").onclick = () => setScale(1);
+$("pin").onclick = pinCur;
+$("saveBtn").onclick = saveChanges;
+$("passBtn").onclick = () => verdict("pass");
+$("failBtn").onclick = () => verdict("fail");
+$("clearBtn").onclick = async () => { const e = cur(); if(e){ await patch(e.slug, null, ["verdict"]); toast("verdict cleared"); render(); } };
+$("regen").onclick = async () => {
+  $("regen").disabled = true;
+  try { const d = await post("/api/regen", {}); toast(d.ok ? "registry regenerated" : "regen FAILED"); }
+  finally { $("regen").disabled = false; }
+};
+document.addEventListener("keydown", ev => {
+  if(/INPUT|TEXTAREA/.test(document.activeElement.tagName)) return;
+  if(ev.key === "ArrowLeft") go(idx - 1);
+  else if(ev.key === "ArrowRight") go(idx + 1);
+  else if(ev.key === "p") verdict("pass");
+  else if(ev.key === "f") verdict("fail");
+  else if(ev.key === "s") saveChanges();
+  else if(ev.key === "[") setScale(parseFloat($("scale").value) - 0.05);
+  else if(ev.key === "]") setScale(parseFloat($("scale").value) + 0.05);
+  else if(ev.key === "0") setScale(1);
+  else return;
+  ev.preventDefault();
+});
+load();
+</script>
+</body>
+</html>

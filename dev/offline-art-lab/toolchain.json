@@ -1,0 +1,32 @@
+{
+  "schema": "genesis.offline-art-foundry.v1",
+  "scratchRootDefault": "/private/tmp/genesis-offline-art-tools",
+  "pythonPackages": {
+    "trimesh": "4.12.2",
+    "opencv-python-headless": "4.12.0.88",
+    "scikit-image": "0.24.0"
+  },
+  "runtimePolicy": {
+    "loadedByGame": false,
+    "mayEditWalkFacts": false,
+    "mayEditProductionAssets": false,
+    "headlessRequired": true,
+    "exactPinsRequired": true
+  },
+  "candidateRulings": {
+    "trimesh": "ADOPT_SPIKE",
+    "opencv": "ADOPT_NARROW",
+    "texture-synthesis": "DEFER_ARCHIVED_PINNED_CLI_ONLY",
+    "material-maker": "DEFER_UNTIL_HEADLESS_MACOS_PROOF",
+    "rembg": "ADOPT_SPRITE_NEGATIVE_CONTROL_ONLY",
+    "real-esrgan": "DEFER_UNTIL_SPRITE_REGEN_AB_TEST",
+    "triposr": "OPTIONAL_REMOTE_OR_NVIDIA_LAB_SPIKE",
+    "trellis": "DEFER_HARDWARE_MISMATCH",
+    "trellis2": "DEFER_HARDWARE_MISMATCH",
+    "hunyuan3d2": "REJECT_LICENSE_COMPLEXITY",
+    "lpips": "DEFER_NOT_A_MOCK_CONVERGENCE_SCORE",
+    "piq": "DEFER_HEAVY_METRICS_NOT_AUTHORITY",
+    "fast-noise-lite": "ADOPT_BUILD_TIME_NOISE_PRIMITIVE",
+    "kenney-3d": "ADOPT_AS_CC0_DONOR_GRAMMAR_NOT_RUNTIME_DUMP"
+  }
+}

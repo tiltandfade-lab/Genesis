@@ -1,0 +1,41 @@
+{
+ "file": "cosmic-large-v3-14.png",
+ "realm": "cosmic",
+ "gridClass": "large",
+ "grid": "2 rows x 2 columns",
+ "chroma": "#FF00FF",
+ "cells": [
+  {
+   "slug": "cosmic-door-torso-armored-golem-with-axe",
+   "label": "door-torso armored golem with axe",
+   "family": "monsters",
+   "sizeBand": "large",
+   "replaces": "cosmic-mm-04.png|r2c4",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "cosmic-winged-dragon-man-with-standard",
+   "label": "winged dragon-man with standard",
+   "family": "monsters",
+   "sizeBand": "large",
+   "replaces": "cosmic-mm-04.png|r2c5",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "cosmic-wheel-of-bodies-with-central-eye",
+   "label": "wheel of bodies with central eye",
+   "family": "monsters",
+   "sizeBand": "large",
+   "replaces": "cosmic-mm-04.png|r4c2",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "cosmic-boiling-mass-of-faces",
+   "label": "boiling mass of faces",
+   "family": "monsters",
+   "sizeBand": "large",
+   "replaces": "cosmic-mm-04.png|r4c5",
+   "reason": "regen-underres"
+  }
+ ]
+}

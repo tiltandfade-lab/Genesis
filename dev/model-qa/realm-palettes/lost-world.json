@@ -1,0 +1,111 @@
+{
+  "_generated_by": "build/gen-realm-palettes.py (r2) \u2014 never hand-edit",
+  "realm": "lost-world",
+  "source": "style-ref+corpus",
+  "paletteSize": 48,
+  "colors": [
+    "#13121b",
+    "#57857c",
+    "#943b1f",
+    "#1b202a",
+    "#930f91",
+    "#364054",
+    "#2c082b",
+    "#0f0b1a",
+    "#660d72",
+    "#a615b9",
+    "#e2bd62",
+    "#1f1b13",
+    "#632315",
+    "#454d48",
+    "#c017b6",
+    "#23485b",
+    "#4c0e43",
+    "#1c0e0c",
+    "#2c2416",
+    "#dbc099",
+    "#535c20",
+    "#624f28",
+    "#c58736",
+    "#5d6757",
+    "#20272a",
+    "#050305",
+    "#f3e5c2",
+    "#381711",
+    "#7a7d32",
+    "#5c8389",
+    "#8a734c",
+    "#9d3d63",
+    "#0e0a0b",
+    "#352e21",
+    "#5b4d3a",
+    "#b3652b",
+    "#6a0e65",
+    "#75461f",
+    "#44321b",
+    "#583c20",
+    "#8f622b",
+    "#353636",
+    "#eabb27",
+    "#6c6627",
+    "#35472d",
+    "#293b2d",
+    "#4b6c52",
+    "#324d48"
+  ],
+  "outline": "tbd",
+  "hueFamilyCoverage": {
+    "0": {
+      "pctOfCorpus": 0.1973,
+      "paletteEntries": 6
+    },
+    "1": {
+      "pctOfCorpus": 0.4801,
+      "paletteEntries": 15
+    },
+    "2": {
+      "pctOfCorpus": 0.0849,
+      "paletteEntries": 2
+    },
+    "3": {
+      "pctOfCorpus": 0.0131,
+      "paletteEntries": 2
+    },
+    "4": {
+      "pctOfCorpus": 0.0071,
+      "paletteEntries": 2
+    },
+    "5": {
+      "pctOfCorpus": 0.0107,
+      "paletteEntries": 2
+    },
+    "6": {
+      "pctOfCorpus": 0.0272,
+      "paletteEntries": 3
+    },
+    "7": {
+      "pctOfCorpus": 0.0175,
+      "paletteEntries": 2
+    },
+    "8": {
+      "pctOfCorpus": 0.0152,
+      "paletteEntries": 2
+    },
+    "9": {
+      "pctOfCorpus": 0.0406,
+      "paletteEntries": 2
+    },
+    "10": {
+      "pctOfCorpus": 0.0623,
+      "paletteEntries": 6
+    },
+    "11": {
+      "pctOfCorpus": 0.044,
+      "paletteEntries": 2
+    }
+  },
+  "corpusPixelsSampled": 0,
+  "fallbackNotes": [
+    "no cut sprites in registry for this realm yet \u2014 style-ref only"
+  ]
+}

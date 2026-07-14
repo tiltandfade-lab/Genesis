@@ -1,0 +1,25 @@
+{
+ "file": "high-seas-huge-v3-01.png",
+ "realm": "high-seas",
+ "gridClass": "huge",
+ "grid": "1 row x 2 columns",
+ "chroma": "#FF00FF",
+ "cells": [
+  {
+   "slug": "high-seas-octopus-grappling-drowned-victims",
+   "label": "octopus grappling drowned victims",
+   "family": "monsters",
+   "sizeBand": "huge",
+   "replaces": "high-seas-mm-01.png|r2c3",
+   "reason": "regen-underres"
+  },
+  {
+   "slug": "high-seas-multi-headed-sea-hydra",
+   "label": "multi-headed sea hydra",
+   "family": "monsters",
+   "sizeBand": "huge",
+   "replaces": "high-seas-mm-01.png|r5c2",
+   "reason": "regen-underres"
+  }
+ ]
+}

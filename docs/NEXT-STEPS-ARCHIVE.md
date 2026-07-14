@@ -18,6 +18,29 @@ just preserves the old ordered-queue framing for anyone reconstructing why a cal
 
 ---
 
+## Do next (2026-07-11 — VISUAL CAMPAIGN CONTINUATION: BW4 → BW5, registered)
+
+BW2/BW3 landed (CHANGELOG); the campaign continues with two waves, in order. Build unauthorized until
+Adam says go — BW4 lands first.
+
+1. ☐ **BW4 — MOTION & FEEL** (`docs/BEAUTY-WAVE-4.md`, SPECCED). Runs FIRST — pure motion mechanism on
+   the already-wired tween channels: camera tweens (MF-1) · spawn/despawn grace (MF-2) · hit-stop
+   (MF-3) · turn/round rhythm (MF-4) · the feel gate (MF-5). Independent of BW5; MF-2's room crossfade
+   is exactly what BW5's one-room render rides.
+2. ☐ **BW5 — THE SECOND INTEGRATION PASS** (`docs/BEAUTY-WAVE-5.md`, SPECCED + registered in DESIGN).
+   Close the roll→render gap. Order: **SEAM 0** (the stage — one-room render + occlusion-fade + the
+   broad state primitive + the prop construction model; detail in GRAPHICS-ENGINE §H/§I, DUNGEON-GRAPH
+   Law 7/U6) → **SEAM 1** (interactables; the DOORS-FIRST keystone slice proves the whole stack) →
+   **SEAM 2** (rooms) ∥ **SEAM 3** (materials/conditions). **CORE-3 scope** (fantasy/gloom/chrome);
+   other realms parked as expansion.
+   - **Adam (ImageGen):** the core-3 execute packets — PACKET-07 core-variants · 05 condition-decals ·
+     06 arch-materials · 08 furniture-faces (+ PACKET-04 cross-usable subset). Index:
+     `dev/model-qa/mock-gen/PACKET-WAVES.md`. Wiring these needs the one-time code touches each packet's
+     "Return handling" lists (fold-textures slice path, REALM_TEXTURES appends, CONDITION_DECALS +
+     ARCH_MATERIAL_TEXTURES lookups) — BW5 SEAM 3 build units.
+   - **Build-time details left thin on purpose** (settle when their unit builds): S0-3 state-primitive
+     schema · IA-2 cache home in `world.state`.
+
 ## Do next (2026-07-11, BW4 MOTION & FEEL LANDED — the wave opened two Adam-gated items)
 
 BW4's 4 buildable units are on master + pushed (camera tweens, spawn grace, hit-stop mechanism,

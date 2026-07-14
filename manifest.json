@@ -76,6 +76,7 @@
     "src/engine/place-projection.js",
     "src/engine/walk-scene.js",
     "src/engine/place-dressing.js",
+    "src/engine/place-distribution.js",
     "src/engine/wild-walk.js",
     "src/engine/quest-hook.js",
     "src/engine/prep-bundle.js",
@@ -1496,6 +1497,16 @@
         "REALM_DRESSING"
       ],
       "desc": "GRAPHICS-ENGINE.md Part II §D DRESSING SYSTEM, build unit GR2 (data half) — the props+foliage card placement pass, layered on U1/U2's SpatialPlan. dressPlan(plan, opts) extends a spatializePlan()/semanticizePlan() output (never mutates it) with plan.dressing=[{slug,x,y,primary,cardKind,roomSegNum,lightAffine?}]: a seeded per-room roll (opts.walkId, falling back to plan.seed) picking card entries off the REALM_DRESSING stub registry (~6 real dressing-gen-manifest slugs per supported interior realm — chrome/gloom/fantasy, the same 3 kits src/ui/theater-interior.js's INTERIOR_TILE_KITS ships) per room.role density (Wildermyth rule: entrance sparse/pocket dense/finale staged, 1-3 focal pieces per room max, filler beyond), placed on FLOOR cells only, never the room's own combat-space center 2x2, blockers/wall-hangs constrained to wall-adjacent cells, light-primary cards co-located with the room's real light seeds (independently reimplements theater-interior.js's light-candidate formula rather than importing it — engine-layer purity: src/engine/* never calls into src/ui/*). Depends on SPATIAL_CELL/dspHashStr/dspMulberry32 (engine.place-spatialize's globals) — must load after it. Pure engine-layer data code, no THREE/DOM/render, no Math.random (fully deterministic function of its inputs). The render half (src/ui/theater-boot.js's setInteriorBoard dressingGroup) mounts plan.dressing as upright billboard cards against a placeholder label-card texture until DRESSING-GEN's real assets/dressing/<slug>.png art lands — zero code change on that swap."
+    },
+    {
+      "id": "engine.place-distribution",
+      "path": "src/engine/place-distribution.js",
+      "type": "logic",
+      "owns": [
+        "placeDistribute",
+        "ROOM_PLACE_DISTRIBUTE"
+      ],
+      "desc": "PHASE-3-WAVE-1-SPECS.md unit P3-1a (GP-3a Poisson visual realization), source of truth docs/GRAPHICS-PRODUCTION-RESEARCH-WAVE.md §6. placeDistribute(dressedPlan, opts) runs AFTER dressPlan + projected-canonical-card concatenation are frozen (the seam in src/engine/theater-data.js's trayFrom, right after the projectedDressing concat block and right before interiorBuildBoard) and repositions ONLY already-selected incidental floor-primary filler dressing inside its own room's legal region (FLOOR cells minus the room's center 2x2 CLEAR, its column cell, anchor-occupied cells, and door+apron cells) — it never moves a canonical anchor (focal/setPiece/blocker/wall-hang/light), never adds/removes a dressing entry, and never consumes the noun-selection RNG stream: every realized entry seeds its own independent mulberry32 stream off hash('place-realize:v1:'+walkId+':'+roomSegNum+':'+(sourceRef||slug+':'+originalOrdinal)), reusing engine.place-spatialize's dspHashStr/dspMulberry32 globals and engine.place-dressing's dpCenter2x2/dpRoomColumnCell/dpAdjacentToWall globals (must load after both — see manifest loadOrder / genesis.html script order: place-spatialize.js -> place-semantics.js -> place-dressing.js -> place-distribution.js -> theater-data.js). ROOM_PLACE_DISTRIBUTE (module-level const, default false) is the legacy/oss-style staging flag theater-data.js's trayFrom guards its call on — OFF keeps every render byte-identical to pre-this-unit (mirrors ROOM_SHELL_POLYGON_KERNEL's legacy/oss staging discipline); flipping it ON in production is a separate follow-up unit. Pure engine-layer data code, no THREE/DOM/render, no Math.random/Date.now outside its own seeded streams."
     },
     {
       "id": "engine.wild-walk",

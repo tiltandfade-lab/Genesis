@@ -1,0 +1,36 @@
+{
+  "runtimeAdmitted": false,
+  "sheets": [
+    {
+      "file": "spr-fantasy-black-dragon-wyrmling-blue-dragon-wyrmling-candidate-001.png",
+      "callId": "exec-46159384-5792-4ca2-ae38-9b64977e5851",
+      "cells": [
+        "spr-fantasy-black-dragon-wyrmling",
+        "spr-fantasy-blue-dragon-wyrmling"
+      ]
+    },
+    {
+      "file": "spr-fantasy-green-dragon-wyrmling-candidate-001.png",
+      "callId": "exec-1782449d-0ba6-48c0-a020-a983f36f98b4",
+      "cells": [
+        "spr-fantasy-green-dragon-wyrmling"
+      ]
+    },
+    {
+      "file": "spr-fantasy-brass-dragon-wyrmling-bronze-dragon-wyrmling-candidate-001.png",
+      "callId": "exec-711e5af4-3a76-4480-b04c-8e8fd6a477e1",
+      "cells": [
+        "spr-fantasy-brass-dragon-wyrmling",
+        "spr-fantasy-bronze-dragon-wyrmling"
+      ]
+    },
+    {
+      "file": "spr-fantasy-copper-dragon-wyrmling-gold-dragon-wyrmling-candidate-001.png",
+      "callId": "exec-97c41586-5a83-4ddc-bb7e-de0ec1762899",
+      "cells": [
+        "spr-fantasy-copper-dragon-wyrmling",
+        "spr-fantasy-gold-dragon-wyrmling"
+      ]
+    }
+  ]
+}

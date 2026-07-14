@@ -1,0 +1,75 @@
+{
+  "runtimeAdmitted": false,
+  "sheets": [
+    {
+      "file": "spr-fantasy-ancient-black-dragon-candidate-001.png",
+      "callId": "exec-ee11beee-a53a-49f6-9c0b-98fdae431c4c",
+      "cells": [
+        "spr-fantasy-ancient-black-dragon"
+      ]
+    },
+    {
+      "file": "spr-fantasy-ancient-blue-dragon-candidate-001.png",
+      "callId": "exec-04d4d109-2fe0-482c-9eda-68cbccd76350",
+      "cells": [
+        "spr-fantasy-ancient-blue-dragon"
+      ]
+    },
+    {
+      "file": "spr-fantasy-ancient-green-dragon-candidate-001.png",
+      "callId": "exec-855488dc-6a5c-4a85-99ec-08d1254c242a",
+      "cells": [
+        "spr-fantasy-ancient-green-dragon"
+      ]
+    },
+    {
+      "file": "spr-fantasy-ancient-red-dragon-candidate-001.png",
+      "callId": "exec-79b9f1d7-2807-4b94-a868-b76806ae5438",
+      "cells": [
+        "spr-fantasy-ancient-red-dragon"
+      ]
+    },
+    {
+      "file": "spr-fantasy-ancient-white-dragon-candidate-001.png",
+      "callId": "exec-9a48e285-5aa4-4dd3-90c7-e8c8734f3a5b",
+      "cells": [
+        "spr-fantasy-ancient-white-dragon"
+      ]
+    },
+    {
+      "file": "spr-fantasy-ancient-brass-dragon-candidate-001.png",
+      "callId": "exec-048b1339-437f-4581-8492-a0177f35ad3d",
+      "cells": [
+        "spr-fantasy-ancient-brass-dragon"
+      ]
+    },
+    {
+      "file": "spr-fantasy-ancient-bronze-dragon-candidate-001.png",
+      "callId": "exec-0ee152ae-9d4c-4e35-bd5a-81a566e25a50",
+      "cells": [
+        "spr-fantasy-ancient-bronze-dragon"
+      ]
+    },
+    {
+      "file": "spr-fantasy-ancient-copper-dragon-candidate-001.png",
+      "callId": "exec-93c1981d-90d6-40cc-a0c8-9bfc399657ad",
+      "cells": [
+        "spr-fantasy-ancient-copper-dragon"
+      ]
+    },
+    {
+      "file": "spr-fantasy-ancient-silver-dragon-candidate-001.png",
+      "callId": "exec-9328d693-43a9-412c-a2d7-b726ee2dfcd2",
+      "cells": [
+        "spr-fantasy-ancient-silver-dragon"
+      ]
+    },
+    {
+      "file": "spr-fantasy-ancient-gold-dragon-candidate-001.png",
+      "callId": "exec-1feb09bb-de22-4ff3-9fcd-444f3497e83d",
+      "cells": [
+        "spr-fantasy-ancient-gold-dragon"
+      ]
+    }
+  ]
+}

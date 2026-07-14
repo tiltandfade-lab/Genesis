@@ -1,0 +1,68 @@
+{
+  "runtimeAdmitted": false,
+  "sheets": [
+    {
+      "file": "spr-fantasy-adult-blue-dragon-candidate-001.png",
+      "callId": "exec-12125f5f-38e5-4cb6-adba-9a925013555c",
+      "cells": [
+        "spr-fantasy-adult-blue-dragon"
+      ]
+    },
+    {
+      "file": "spr-fantasy-adult-green-dragon-candidate-001.png",
+      "callId": "exec-2b6834d8-3a77-4336-984f-7b672c3797a1",
+      "cells": [
+        "spr-fantasy-adult-green-dragon"
+      ]
+    },
+    {
+      "file": "spr-fantasy-adult-red-dragon-candidate-001.png",
+      "callId": "exec-a0471e5f-926e-4e6a-ac8c-f94fc8ac46e2",
+      "cells": [
+        "spr-fantasy-adult-red-dragon"
+      ]
+    },
+    {
+      "file": "spr-fantasy-adult-white-dragon-candidate-001.png",
+      "callId": "exec-52037673-ceb9-4a3c-93ef-087d0ab8da80",
+      "cells": [
+        "spr-fantasy-adult-white-dragon"
+      ]
+    },
+    {
+      "file": "spr-fantasy-adult-brass-dragon-candidate-001.png",
+      "callId": "exec-67cd0594-04c8-4990-bc91-6ced661a3f2e",
+      "cells": [
+        "spr-fantasy-adult-brass-dragon"
+      ]
+    },
+    {
+      "file": "spr-fantasy-adult-bronze-dragon-candidate-001.png",
+      "callId": "exec-b3fdbc7e-dbc9-45fd-b4ea-6909f8185077",
+      "cells": [
+        "spr-fantasy-adult-bronze-dragon"
+      ]
+    },
+    {
+      "file": "spr-fantasy-adult-copper-dragon-candidate-001.png",
+      "callId": "exec-58564b06-f335-4ec2-9b6e-66aa1efc5f69",
+      "cells": [
+        "spr-fantasy-adult-copper-dragon"
+      ]
+    },
+    {
+      "file": "spr-fantasy-adult-silver-dragon-candidate-001.png",
+      "callId": "exec-dee968b4-3eac-4ccb-b01c-31f308cc2154",
+      "cells": [
+        "spr-fantasy-adult-silver-dragon"
+      ]
+    },
+    {
+      "file": "spr-fantasy-adult-gold-dragon-candidate-001.png",
+      "callId": "exec-1e0410b1-2466-481e-a263-36488f301d4a",
+      "cells": [
+        "spr-fantasy-adult-gold-dragon"
+      ]
+    }
+  ]
+}

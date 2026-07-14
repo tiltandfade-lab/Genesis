@@ -1,0 +1,75 @@
+{
+  "runtimeAdmitted": false,
+  "sheets": [
+    {
+      "file": "spr-fantasy-young-black-dragon-candidate-001.png",
+      "callId": "exec-253aed8a-03d5-4173-9024-9671de6a7756",
+      "cells": [
+        "spr-fantasy-young-black-dragon"
+      ]
+    },
+    {
+      "file": "spr-fantasy-young-gold-dragon-candidate-001.png",
+      "callId": "exec-57d75c03-d847-409a-8282-e2311182d4ca",
+      "cells": [
+        "spr-fantasy-young-gold-dragon"
+      ]
+    },
+    {
+      "file": "spr-fantasy-juvenile-shadow-dragon-candidate-001.png",
+      "callId": "exec-fde524f1-c180-48b6-9d48-bab18296b28b",
+      "cells": [
+        "spr-fantasy-juvenile-shadow-dragon"
+      ]
+    },
+    {
+      "file": "spr-fantasy-wyvern-candidate-001.png",
+      "callId": "exec-38a7a038-4002-4cb5-97e1-613cdedc8cdc",
+      "cells": [
+        "spr-fantasy-wyvern"
+      ]
+    },
+    {
+      "file": "spr-fantasy-ridden-wyvern-candidate-001.png",
+      "callId": "exec-f86e80bb-1207-4c4f-b628-847e35a33234",
+      "cells": [
+        "spr-fantasy-ridden-wyvern"
+      ]
+    },
+    {
+      "file": "spr-fantasy-half-dragon-candidate-001.png",
+      "callId": "exec-a5555bc2-42ab-4e28-8e14-316bcae33ba2",
+      "cells": [
+        "spr-fantasy-half-dragon"
+      ]
+    },
+    {
+      "file": "spr-fantasy-faerie-dragon-youth-candidate-001.png",
+      "callId": "exec-5d3c2f7f-5c0e-47ca-8a0f-872b2e21a0de",
+      "cells": [
+        "spr-fantasy-faerie-dragon-youth"
+      ]
+    },
+    {
+      "file": "spr-fantasy-dracolich-candidate-001.png",
+      "callId": "exec-d968afc8-e8c3-4073-b9bc-d22241b97f9c",
+      "cells": [
+        "spr-fantasy-dracolich"
+      ]
+    },
+    {
+      "file": "spr-fantasy-behir-candidate-001.png",
+      "callId": "exec-e6da17db-bbaf-4ec5-9c51-77a9ab7afd6d",
+      "cells": [
+        "spr-fantasy-behir"
+      ]
+    },
+    {
+      "file": "spr-fantasy-dragon-turtle-candidate-001.png",
+      "callId": "exec-ff64b277-c63b-4509-a317-90927f0e7509",
+      "cells": [
+        "spr-fantasy-dragon-turtle"
+      ]
+    }
+  ]
+}

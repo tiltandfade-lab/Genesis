@@ -6,21 +6,21 @@ for every sheet.
 Rules — these are the whole job:
 1. For each sheet section IN ORDER: submit ONE image-generation call consisting of the
    PASTE BLOCK below with [N] and [N x 887] filled in from that sheet's header, followed
-   by that sheet's numbered cell list. Nothing added, nothing substituted, no subjects
-   invented. EXCEPTION for sheets whose ids start with fx-: use the effects contract
-   noted in the sheet's own section instead of the magenta figure block (hybrid
-   faceted+glow, single-frame, black/alpha key); shared-*-decal sheets stay magenta-key
-   top-down.
+   by that sheet's numbered cell list. The paste block is VERBATIM LAW (STYLE-CANON.md) —
+   do not reword, trim, or summarize any sentence of it. Nothing added, nothing
+   substituted, no subjects invented. EXCEPTION for sheets whose ids start with fx-:
+   use the effects contract noted in the sheet's own section (hybrid faceted+glow,
+   single-frame, black/alpha key); shared-*-decal sheets stay magenta-key top-down.
 2. Create a fresh directory named r9-returns/ before the first call. It must start
    EMPTY — if it already contains files, STOP and report that instead of generating.
    Save each result IMMEDIATELY as r9-returns/raw-figures/<first-cell-id>-candidate-001.png.
 3. After each save, RE-OPEN the saved file and verify: correct cell count, all four
-   corners #FF00FF (for magenta sheets), no figure touching any image edge, every tail
-   ends in exactly ONE tip, wyverns bipedal, correct limb counts — AND the tone gates:
-   realistic horror dark-fantasy, naturalistic slightly-elongated proportions; if a figure
-   reads chibi, cute, bright-saturated, or cartoon-MMO, it is OFF-MODEL: re-roll once,
-   then mark FAILED. Do NOT substitute a different subject and do NOT rename another
-   file to fill the slot.
+   corners #FF00FF (for magenta sheets), no figure touching an edge, every tail ends in
+   exactly ONE tip, correct limb counts — AND the style laws: lanky house bias, COMPACT
+   forward-facing support region (a wide sprawling stance is OFF-MODEL), adult register.
+   If a figure reads chibi, cute, wide-based, bright-saturated, or cartoon-MMO: re-roll
+   once, then mark FAILED. Do NOT substitute a different subject and do NOT rename
+   another file to fill the slot.
 4. Append one JSON row per call to r9-returns/provenance/r9-generation-calls.json:
    {"file": "...", "callId": "...", "cells": ["..."]} — written at save time, not
    reconstructed later.
@@ -28,47 +28,53 @@ Rules — these are the whole job:
    deliverable; committing happens elsewhere.
 6. Your final report is only trusted if it matches the directory exactly. Report:
    sheets attempted, sheets saved, sheets FAILED (with reasons), and the full filename
-   list. "Generated 20, saved 17, 3 failed" is a good report. A report claiming more
-   than the directory holds will be treated as fabricated — the last run's reports were
-   audited file-by-file and the fabrications were found.
+   list. A report claiming more than the directory holds will be treated as fabricated —
+   the last run's reports were audited file-by-file and the fabrications were found.
 
-=== PASTE BLOCK (use in every call, fill [N] and [N x 887]) ===
+=== PASTE BLOCK (VERBATIM LAW — use in every call, fill [N] and [N x 887]) ===
 
 > Render a character sprite sheet as a single image: a horizontal strip of **[N] equal vertical
-> cells**, total canvas **[N×887]×1774** (each cell 887×1774, a 4:8 portrait). Solid flat magenta
-> **#FF00FF** background in every cell — no gradient, no vignette, no scene, no pedestal or base,
-> no cast shadow on the ground, no washed-out pink and no darkened purple: pure #FF00FF to the
-> corners. One figure per cell, hard invisible cell boundaries, nothing crossing between cells,
-> no shared props. Each figure **fully inside its cell with clear margin on all four sides — the
-> complete body, head to toe, weapon tips and wingtips and tail included; nothing may touch or
-> clip the image edge.** Consistent scale across cells (heads line up); orthographic-leaning 3/4
-> view; every figure in an expressive mid-action pose that captures its essence — mid-lunge,
-> mid-cast, braced, snarling — never a T-pose or idle stand.
+> cells**, total canvas **[N×887]×1774** (each cell 887×1774, a vertical 4:8 frame). One figure
+> per cell, hard invisible cell boundaries, nothing crossing between cells, no shared props.
+> Consistent scale across cells (heads line up); no two figures share a stance.
 >
-> Art style: **crisp, hard-edged TRIANGULATED low-poly faceting** — the entire surface of every
-> figure reads as flat triangular planes, like a faceted 3D sculpture; painterly texture and
-> material detail live ON the facet planes, never dissolving them. No smooth organic rendering,
-> no photoreal, no pixel-art, no soft/mushy half-faceting — if a face, hair, or fabric area goes
-> smooth, the render is off-model.
+> Visual language: mature, restrained, frightening where canonically appropriate — realistic
+> dark-fantasy horror with a stylized triangulated low-poly twist. Large-faceted polygonal
+> Dungeons & Dragons fantasy. Use fewer, larger, anatomy- and construction-aligned
+> triangular planes. Use smaller facets only around face, eyes, joints, and critical equipment
+> landmarks. Believable weight, wear, materials, and adult visual seriousness. This is not World
+> of Warcraft, not Baldur's Gate 3 cinematic glamour, not an MMO promotional render, a mobile
+> game, a collectible toy, or a cartoon mascot. The house silhouette bias is lanky: longer limbs,
+> rawboned frames, weight carried in posture not bulk; a heavy body must belong to a life that
+> could actually produce one.
 >
-> Tone is **realistic horror dark-fantasy**: grim, weathered, unsettling; muted desaturated
-> palette of earth, bone, ash, rust, and shadow with at most one controlled accent color per
-> figure — never bright saturated hero-fantasy colors. Proportions are **naturalistic and
-> slightly elongated** — adult head-to-body ratio around 1:7 to 1:8, lean gaunt silhouettes,
-> long limbs and fingers; monsters read as disturbing and anatomically plausible, not cute or
-> heroic. HARD NEGATIVE GATES (any of these is an automatic off-model reject): no chibi or
-> oversized heads, no stubby limbs, no oversized cartoon weapons or pauldrons, no
-> stylized-MMO/action-RPG cartoon look (nothing resembling World of Warcraft, Torchlight,
-> Hearthstone, Fortnite, or mobile-game art), no cute/juvenile/big-eyed faces, no candy
-> saturation, no thick outlines, no glossy toy-plastic sheen. Do not imitate any specific
-> commercial game's promotional art style either — this is its own grounded horror-naturalism
-> expressed through the faceted geometry.
+> Pose/expression: each figure holds a controlled orthographic front-three-quarter figurine pose
+> expressing its listed VERB through center of gravity, spine, head angle, gaze, limbs, and
+> negative space. Support region: compact, generally forward-facing — never a wide sprawling
+> stance; tails wrap tight, wings furl, legs gather. Keep every pose mechanically usable as a
+> standee.
 >
-> Anatomy is strict: **exactly one tail with exactly one tip** on any tailed creature — no
-> forked, mirrored, doubled, or floating tail segments; correct limb counts (wyverns are BIPEDAL
-> — two legs plus wings; nagas have no arms; no fifth leg, no third wing); tails and wings
-> connect to the body at one continuous, plausible joint. The figures, left to right:
-> **[numbered cell list from the batch doc]**
+> Projection/framing: orthographic front-three-quarter, no lens distortion, full body and every
+> extremity visible in its cell, shared ground line, generous padding, no crop. No scenery, floor
+> plane, cast shadow, contact shadow, atmosphere, spell effect, unrelated prop, text, border,
+> label, or watermark. Do not paint a base or shadow into the source.
+>
+> Backdrop: perfectly flat solid magenta #FF00FF chroma-key background, completely uniform with
+> no gradient, texture, reflection, floor, horizon, or lighting variation. Do not use magenta in
+> the figure. Crisp separated edges.
+>
+> Anatomy is strict: exactly one tail with exactly one tip on any tailed creature — no forked,
+> mirrored, doubled, or floating tail segments; correct limb counts (wyverns are BIPEDAL — two
+> legs plus wings; no fifth leg, no third wing); tails and wings connect to the body at one
+> continuous, plausible joint.
+>
+> Avoid: fake pixel art, voxel art, micro-triangulation, cracked-glass pattern, random polygon
+> noise, chibi proportions, cute mascot treatment, rubber anatomy, inflated muscles, oversized
+> shoulders, oversized hands/boots/weapons/teeth, candy saturation, glossy plastic, friendly
+> monster grin, generic hero pose, theme-park fantasy, sanitized horror, cosplay cleanliness,
+> baked rim light, and poster scene.
+>
+> The figures, left to right: **[numbered cell list from the batch doc]**
 
 === YOUR SHEETS, IN ORDER ===
 

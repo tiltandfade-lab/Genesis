@@ -5,14 +5,39 @@
 (same branch — §6.8 figure master prompt, §6.9 QA, §7 prop prompt, §9 per-sheet sequence).
 This packet COMPILES those laws into paste-ready parallel lanes; it authors no new law.
 
-**Scope lock:** FANTASY ONLY. One identity per generation call. Every output is a *candidate*
-(`runtimeAdmitted:false`) — generation never implies admission. Save returns under
+**Scope lock:** FANTASY ONLY. One identity per CELL (an identity never spans cells); sheets carry
+multiple cells per the §0 sheet-economy law. Every output is a *candidate* (`runtimeAdmitted:false`)
+— generation never implies admission. Save returns under
 `dev/model-foundry/faceted-regeneration-production/fantasy-pilot/raw-figures/` with the
 established `<slug>-candidate-NNN.png` naming, and record the generation call id per Step A.
 
 **Chroma rule (§7.1):** flat uniform **magenta #FF00FF** background for figures, unless the
 identity canonically contains magenta/pink — then use **green #00FF00**. Never both. The chroma
 color must not appear anywhere in the figure. No gradient, floor, horizon, or lighting variation.
+
+---
+
+## §0 — ART DIRECTION RULINGS (Adam, 2026-07-13 — binding over every lane and every future wave)
+
+1. **Silhouette law.** Wide VARIETY of silhouettes across a wave — but the house bias is
+   **lanky**: longer limbs, rawboned frames, weight carried in posture not bulk. Girth is
+   **diegetic, never default**: a heavy body must belong to a life that could actually produce
+   one — nobility, faction bosses, chefs, innkeepers, moneylenders. (This is a style law about
+   world-logic, not body avoidance — when the situation supports it, commit to it fully.)
+2. **Base law.** Creatures and animals build on a **compact, generally forward-facing support
+   region** — never a wide sprawling stance. Tails wrap tight, wings furl, legs gather. The
+   figure must sit a standee base without the silhouette fighting it.
+3. **Style zone.** Adult register, always. **Realistic fantasy horror with a stylized
+   triangulated low-poly twist.** NOT World of Warcraft styling; NOT Baldur's Gate 3 cinematic
+   glamour. The exemplar corpus: the approved anchor returns +
+   `faceted-extrusion-proof/fantasy-shield-v4.png` on `codex/extruded-prop-pilot`.
+4. **Expression law.** Varied expression AND pose across every wave — no two figures on a sheet
+   share a stance; tension and personality over pantomime.
+5. **Sheet-economy law (supersedes the migration doc's one-identity-per-CALL, Adam's ruling).**
+   Large/Huge creatures = **1 per sheet** · Medium = **2 per sheet** · Small/Tiny = **4 per
+   sheet**. Every figure cell is a **vertical 4:8 frame**. Same category and register per sheet
+   (never mix beasts with NPCs, monsters with children). Items/props: packer's judgment —
+   sheet efficiency is crucial. Odd remainders ride alone rather than cross categories.
 
 ---
 
@@ -33,6 +58,9 @@ Codex windows.
 
 ## LANE 1 — THE ANCHOR FIVE (run each prompt TWICE → 2 candidates per identity)
 
+> Anchors deliberately IGNORE the §0 sheet-economy law — one identity per call here. They decide
+> the language; economy starts at Lanes 2–5.
+
 ### 1A — humanoid anchor: bandit enforcer
 
 ```text
@@ -40,25 +68,28 @@ Use case: stylized-concept
 Asset type: Genesis MONSTER standee source art
 
 Primary request: Create exactly one full-body bandit enforcer. Canonical facts: Medium humanoid,
-adult human, heavy build gone slightly to seed, hired muscle for a road gang, studded leather over
-a padded jack, iron-shod club and a knife at the belt, knuckles scarred, nose long-broken.
+adult human, tall rangy rawboned build — power in reach and posture, not bulk — hired muscle for a
+road gang, studded leather over a padded jack, iron-shod club and a knife at the belt, knuckles
+scarred, nose long-broken.
 Personality/behavior verb: LOOMS. Signature silhouette feature: the club resting across one
 shoulder, head tilted down toward the viewer. Preserve these exact identity landmarks: studded
 leather, iron-shod club, broken nose.
 
-Visual language: mature, restrained, frightening where canonically appropriate, large-faceted
-polygonal Dungeons & Dragons fantasy. Use fewer, larger, anatomy- and construction-aligned
+Visual language: mature, restrained, frightening where canonically appropriate — realistic
+dark-fantasy horror with a stylized triangulated low-poly twist. Large-faceted polygonal
+Dungeons & Dragons fantasy. Use fewer, larger, anatomy- and construction-aligned
 triangular planes. Use smaller facets only around face, eyes, joints, and critical equipment
 landmarks. Believable weight, wear, materials, and adult visual seriousness. This is not World of
-Warcraft, an MMO promotional render, a mobile game, a collectible toy, or a cartoon mascot.
+Warcraft, not Baldur's Gate 3 cinematic glamour, not an MMO promotional render, a mobile game, a
+collectible toy, or a cartoon mascot.
 
 Pose/expression: a controlled orthographic front-three-quarter figurine pose expressing LOOMS
 through center of gravity, spine, head angle, gaze, limbs, and negative space. Combat behavior:
-intimidation before violence; he wants you to back down. Support region: both boots planted wide.
-Keep the pose mechanically usable as a standee.
+intimidation before violence; he wants you to back down. Support region: compact, boots at
+shoulder width, facing forward. Keep the pose mechanically usable as a standee.
 
-Projection/framing: orthographic front-three-quarter, no lens distortion, full body and every
-extremity visible, shared ground line, generous padding, no crop. No scenery, floor plane, cast
+Projection/framing: orthographic front-three-quarter, no lens distortion, VERTICAL 4:8 frame,
+full body and every extremity visible, shared ground line, generous padding, no crop. No scenery, floor plane, cast
 shadow, contact shadow, atmosphere, spell effect, unrelated prop, text, border, label, or watermark.
 
 Geometry ownership: the source owns identity, silhouette, polygonal material/albedo regions, wear,
@@ -89,8 +120,9 @@ half-raised. Species locomotion: quadruped stalk, weight low over the forequarte
 behavior verb: STALKS. Signature silhouette feature: the lowered head below the shoulder line,
 hackles up. Preserve these exact identity landmarks: torn ear, frayed rope collar, visible ribs.
 
-Visual language: mature, restrained, frightening where canonically appropriate, large-faceted
-polygonal Dungeons & Dragons fantasy. Use fewer, larger, anatomy- and construction-aligned
+Visual language: mature, restrained, frightening where canonically appropriate — realistic
+dark-fantasy horror with a stylized triangulated low-poly twist. Large-faceted polygonal
+Dungeons & Dragons fantasy. Use fewer, larger, anatomy- and construction-aligned
 triangular planes. Use smaller facets only around the face, eyes, joints, and the collar. True
 canine anatomy — no anthropomorphism. Believable weight, wear, and adult visual seriousness. This
 is not a cartoon mascot, a toy, or a friendly pet illustration.
@@ -99,8 +131,8 @@ Pose/expression: a controlled orthographic front-three-quarter figurine pose exp
 one forepaw mid-step, head low, gaze locked on the viewer. All four paws' support region compact.
 Keep the pose mechanically usable as a standee.
 
-Projection/framing: orthographic front-three-quarter, no lens distortion, full body and every
-extremity visible, shared ground line, generous padding, no crop. No scenery, floor plane, cast
+Projection/framing: orthographic front-three-quarter, no lens distortion, VERTICAL 4:8 frame,
+full body and every extremity visible, shared ground line, generous padding, no crop. No scenery, floor plane, cast
 shadow, contact shadow, atmosphere, unrelated prop, text, border, label, or watermark.
 
 Geometry ownership: the source owns identity, silhouette, polygonal material/albedo regions, wear,
@@ -129,18 +161,20 @@ behavior verb: HOLDS THE LINE. Signature silhouette feature: the split kite shie
 guard, sword low in second position. Preserve these exact identity landmarks: dented full plate,
 split kite shield, scorched tabard strips.
 
-Visual language: mature, restrained, frightening where canonically appropriate, large-faceted
-polygonal Dungeons & Dragons fantasy. Use fewer, larger, anatomy- and construction-aligned
+Visual language: mature, restrained, frightening where canonically appropriate — realistic
+dark-fantasy horror with a stylized triangulated low-poly twist. Large-faceted polygonal
+Dungeons & Dragons fantasy. Use fewer, larger, anatomy- and construction-aligned
 triangular planes. Use smaller facets only around the skull, eye sockets, joints, and armor
 junctions. Believable weight, wear, materials, and adult visual seriousness. This is not World of
-Warcraft, an MMO promotional render, a mobile game, a collectible toy, or a cartoon mascot.
+Warcraft, not Baldur's Gate 3 cinematic glamour, not an MMO promotional render, a mobile game, a
+collectible toy, or a cartoon mascot.
 
 Pose/expression: a controlled orthographic front-three-quarter figurine pose expressing HOLDS THE
 LINE — weight centered, shield presented, utterly still. Support region: both sabatons planted at
 shoulder width. Keep the pose mechanically usable as a standee.
 
-Projection/framing: orthographic front-three-quarter, no lens distortion, full body and every
-extremity visible, shared ground line, generous padding, no crop. No scenery, floor plane, cast
+Projection/framing: orthographic front-three-quarter, no lens distortion, VERTICAL 4:8 frame,
+full body and every extremity visible, shared ground line, generous padding, no crop. No scenery, floor plane, cast
 shadow, contact shadow, atmosphere, spell effect, unrelated prop, text, border, label, or watermark.
 
 Geometry ownership: the source owns identity, silhouette, polygonal material/albedo regions, wear,
@@ -171,11 +205,13 @@ mechanism: the skull face reads as already dead. Personality/behavior verb: COIL
 silhouette feature: the forward-swept horns over a lowered, level head. Preserve these exact
 identity landmarks: forward-swept horns, skull-like face, acid-etched jaw.
 
-Visual language: mature, restrained, frightening where canonically appropriate, large-faceted
-polygonal Dungeons & Dragons fantasy. Use fewer, larger, anatomy- and construction-aligned
+Visual language: mature, restrained, frightening where canonically appropriate — realistic
+dark-fantasy horror with a stylized triangulated low-poly twist. Large-faceted polygonal
+Dungeons & Dragons fantasy. Use fewer, larger, anatomy- and construction-aligned
 triangular planes across the body and wing membranes. Use smaller facets only around the face,
 eyes, horn bases, claws, and jaw. Believable mass and wet-swamp wear. This is not World of
-Warcraft, an MMO promotional render, a collectible toy, or a cartoon mascot.
+Warcraft, not Baldur's Gate 3 cinematic glamour, not an MMO promotional render, a collectible
+toy, or a cartoon mascot.
 
 Pose/expression: a controlled orthographic front-three-quarter figurine pose expressing COILS —
 weight gathered over the haunches, head low and level, wings half-furled, tail wrapped tight to
@@ -183,8 +219,8 @@ keep the silhouette compact around the support region. Keep the pose mechanicall
 standee.
 
 Projection/framing: orthographic front-three-quarter, no lens distortion, full body and every
-extremity visible including wingtips and tail, shared ground line, generous padding, no crop. Use
-4:8 framing if needed for the wing height. No scenery, floor plane, cast shadow, contact shadow,
+extremity visible including wingtips and tail, shared ground line, generous padding, no crop.
+VERTICAL 4:8 frame. No scenery, floor plane, cast shadow, contact shadow,
 water, atmosphere, spell effect, text, border, label, or watermark.
 
 Geometry ownership: the source owns identity, silhouette, polygonal material/albedo regions, wear,
@@ -233,15 +269,23 @@ game loot.
 
 ## MASTER TEMPLATE FOR LANES 2–5
 
-Each lane below is a list of identities. For each identity, compile ONE call from
+Each lane below lists identities and a SHEET PLAN. For each SHEET, compile ONE call from
 `FACETED-ART-REGENERATION-PRODUCTION-PLAN.md` §6.8 (the same template Lane 1's prompts are
-compiled from — copy any Lane-1 prompt and swap the bracketed content) using the lane table's
-fields. One identity per call. Category insertion requirements (§6.8): monsters add combat
+compiled from — copy any Lane-1 prompt and swap the bracketed content), describing every cell's
+identity from the lane table. Per the §0 sheet-economy law: Medium = 2 vertical 4:8 cells
+side-by-side, Small = 4 cells in a 2×2 grid, Large/Huge = the whole sheet; add to each multi-cell
+prompt: "Render [N] SEPARATE figures in [N] equal vertical 4:8 cells, hard cell boundaries, no
+overlap, no shared props, one identity per cell, shared ground line per row, varied poses — no
+two figures share a stance." Category insertion requirements (§6.8): monsters add combat
 behavior + horror mechanism + support region; NPCs add social attitude + occupation + practical
 carried objects + restrained noncombat pose; animals add locomotion + true scale + no
 anthropomorphism; PCs add exact loadout + class cues + neutral-ready pose.
 
-## LANE 2 — undead wave (monsters)
+## LANE 2 — undead wave (monsters) — 7 calls
+
+**Sheet plan:** S1 skeleton + skeleton-warrior · S2 skeleton-archer + flaming-skeleton ·
+S3 zombie + zombie-plague-carrier · S4 minotaur-skeleton (L, solo) · S5 warhorse-skeleton (L,
+solo) · S6 ogre-zombie (L, solo) · S7 eye-tyrant-zombie (L, solo).
 
 | slug | identity seed (fill §6.8 brackets from this) |
 |---|---|
@@ -256,7 +300,11 @@ anthropomorphism; PCs add exact loadout + class cues + neutral-ready pose.
 | spr-fantasy-ogre-zombie | Large undead, ogre corpse gone grey, dragging a splintered club — verb: DRAGS |
 | spr-fantasy-eye-tyrant-zombie | Large undead aberration, rotting eye tyrant, dead stalks trailing, central eye clouded — verb: DRIFTS |
 
-## LANE 3 — goblinoid + kobold wave (monsters)
+## LANE 3 — goblinoid + kobold wave (monsters) — 4 calls
+
+**Sheet plan:** S1 (2×2 smalls) goblin-warrior + goblin-minion + goblin-hexer +
+goblin-cutter-minion · S2 (smalls, 3-cell remainder) goblin-boss + kobold + winged-kobold-urd ·
+S3 hobgoblin-soldier + hobgoblin-captain · S4 hobgoblin-iron-shadow (odd Medium, solo).
 
 | slug | identity seed |
 |---|---|
@@ -271,7 +319,12 @@ anthropomorphism; PCs add exact loadout + class cues + neutral-ready pose.
 | spr-fantasy-kobold | Small humanoid, kobold skirmisher, sling and scavenged buckler — verb: SCURRIES |
 | spr-fantasy-winged-kobold-urd | Small humanoid, winged kobold, ragged bat wings half-spread, rock clutched — verb: STOOPS |
 
-## LANE 4 — bandit + cultist wave (mixed monster/NPC register)
+## LANE 4 — bandit + cultist wave (mixed monster/NPC register) — 6 calls
+
+**Sheet plan:** S1 bandit + desperate-bandit · S2 bandit-captain + bandit-deceiver ·
+S3 bandit-courier + bandit-crime-lord · S4 cultist + cultist-fanatic · S5 death-cultist +
+fiend-cultist · S6 elemental-cultist + aberrant-cultist. (§0 girth note: the crime-lord is a
+legitimate diegetic-heavy candidate — a life of taking a cut supports it; the rest stay lanky.)
 
 | slug | identity seed |
 |---|---|
@@ -288,7 +341,14 @@ anthropomorphism; PCs add exact loadout + class cues + neutral-ready pose.
 | spr-fantasy-elemental-cultist | Medium humanoid, elemental cultist, robe hems singed/soaked in opposition — verb: CHANNELS |
 | spr-fantasy-aberrant-cultist | Medium humanoid, aberrant cultist, too many joints in one hand, eye-sigil vestments — verb: LISTENS-TO-NOTHING |
 
-## LANE 5 — guards, faces + beasts (NPC register + animals)
+## LANE 5 — guards, faces + beasts (NPC register + animals) — 8 calls
+
+**Sheet plan:** S1 guard + guard-captain · S2 road-guard-elf + dwarven-town-guard-captain ·
+S3 dragonborn-temple-guard + enforcer-dragonborn · S4 orc-caravan-guard + orc-blacksmith
+(§0 girth note: the blacksmith carries real trade-built mass — commit to it) · S5 orc-healer
+(odd Medium, solo) · S6 giant-wolf-spider (beast — never sheet-shared with NPCs; legs GATHERED,
+compact forward-facing support per §0) · S7 shield-guardian (L, solo) · S8 guardian-naga (L,
+solo — coils stacked tight, not spread).
 
 | slug | identity seed |
 |---|---|
@@ -301,7 +361,7 @@ anthropomorphism; PCs add exact loadout + class cues + neutral-ready pose.
 | spr-fantasy-orcish-caravan-guard-hired-muscle-with-a-reputation-for-actually-caring-about-the-cargo | Medium humanoid NPC, orc caravan guard, patched wagon-crew gear, cargo hook — verb: SHOULDERS |
 | spr-fantasy-orcish-caravan-blacksmith-orc-repairs-wagon-wheels-faster-than-anyone-in-three-towns | Medium humanoid NPC, orc blacksmith, scorched apron, wheel-hammer — verb: SIZES-UP-THE-JOB |
 | spr-fantasy-orcish-healer-gentle-hands-a-reputation-people-are-slow-to-trust | Medium humanoid NPC, orc healer, herb satchel, careful hands — verb: TENDS |
-| spr-fantasy-giant-wolf-spider | Medium beast, giant wolf spider, low wide stance, eye cluster catching light — verb: FREEZES-THEN-RUSHES |
+| spr-fantasy-giant-wolf-spider | Medium beast, giant wolf spider, legs gathered under the body in a coiled crouch (compact support, §0 base law), eye cluster catching light — verb: FREEZES-THEN-RUSHES |
 | spr-fantasy-shield-guardian | Large construct, shield guardian, rune-keyed slab body, amulet socket glowing faint — verb: INTERPOSES |
 | spr-fantasy-guardian-naga | Large monstrosity, guardian naga, hooded serpent risen to speak, temple-jewelry verdigris — verb: WARNS |
 

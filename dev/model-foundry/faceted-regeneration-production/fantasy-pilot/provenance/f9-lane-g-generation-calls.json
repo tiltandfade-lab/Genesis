@@ -1,0 +1,46 @@
+{
+  "runtimeAdmitted": false,
+  "packet": "PACKET-F9.md",
+  "lane": "F9-G",
+  "outputs": [
+    {
+      "file": "raw-figures/spr-fantasy-ankylosaurus-candidate-001.png",
+      "callId": "call_QcRVWMijQ0IPPW9dvbAGwTXs",
+      "cells": [
+        "spr-fantasy-ankylosaurus"
+      ]
+    },
+    {
+      "file": "raw-figures/spr-fantasy-triceratops-candidate-001.png",
+      "callId": "call_QcRVWMijQ0IPPW9dvbAGwTXs",
+      "cells": [
+        "spr-fantasy-triceratops"
+      ]
+    },
+    {
+      "file": "raw-figures/spr-fantasy-tyrannosaurus-rex-candidate-001.png",
+      "callId": "call_QcRVWMijQ0IPPW9dvbAGwTXs",
+      "cells": [
+        "spr-fantasy-tyrannosaurus-rex"
+      ]
+    },
+    {
+      "file": "raw-figures/spr-fantasy-allosaurus-candidate-001.png",
+      "callId": "call_QcRVWMijQ0IPPW9dvbAGwTXs",
+      "cells": [
+        "spr-fantasy-allosaurus"
+      ]
+    },
+    {
+      "file": "raw-figures/spr-fantasy-pteranodon-candidate-001.png",
+      "callId": "call_QcRVWMijQ0IPPW9dvbAGwTXs",
+      "cells": [
+        "spr-fantasy-pteranodon"
+      ]
+    }
+  ],
+  "notes": [
+    "Generation-only raw candidates; no alpha cleanup, slicing, compilation, admission, or game-data edits performed.",
+    "Nested built-in generation calls were orchestrated by the outer runner call; distinct nested identifiers were not exposed by the tool return."
+  ]
+}

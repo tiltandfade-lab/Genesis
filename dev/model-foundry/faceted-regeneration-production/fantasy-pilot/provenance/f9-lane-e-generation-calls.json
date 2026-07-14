@@ -1,0 +1,43 @@
+{
+  "runtimeAdmitted": false,
+  "packet": "PACKET-F9.md",
+  "lane": "F9-E",
+  "outputs": [
+    {
+      "file": "raw-figures/spr-fantasy-bat-raven-owl-hawk-candidate-001.png",
+      "callId": "call_QcRVWMijQ0IPPW9dvbAGwTXs",
+      "cells": [
+        "spr-fantasy-bat",
+        "spr-fantasy-raven",
+        "spr-fantasy-owl",
+        "spr-fantasy-hawk"
+      ]
+    },
+    {
+      "file": "raw-figures/spr-fantasy-blood-hawk-eagle-candidate-001.png",
+      "callId": "call_QcRVWMijQ0IPPW9dvbAGwTXs",
+      "cells": [
+        "spr-fantasy-blood-hawk",
+        "spr-fantasy-eagle"
+      ]
+    },
+    {
+      "file": "raw-figures/spr-fantasy-vulture-candidate-001.png",
+      "callId": "call_QcRVWMijQ0IPPW9dvbAGwTXs",
+      "cells": [
+        "spr-fantasy-vulture"
+      ]
+    },
+    {
+      "file": "raw-figures/spr-fantasy-axe-beak-candidate-001.png",
+      "callId": "call_QcRVWMijQ0IPPW9dvbAGwTXs",
+      "cells": [
+        "spr-fantasy-axe-beak"
+      ]
+    }
+  ],
+  "notes": [
+    "Generation-only raw candidates; no alpha cleanup, slicing, compilation, admission, or game-data edits performed.",
+    "Nested built-in generation calls were orchestrated by the outer runner call; distinct nested identifiers were not exposed by the tool return."
+  ]
+}

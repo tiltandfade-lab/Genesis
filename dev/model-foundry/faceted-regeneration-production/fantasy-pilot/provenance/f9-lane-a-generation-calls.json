@@ -1,0 +1,82 @@
+{
+  "runtimeAdmitted": false,
+  "packet": "PACKET-F9.md",
+  "lane": "F9-A",
+  "outputs": [
+    {
+      "file": "raw-figures/spr-fantasy-black-bear-candidate-001.png",
+      "callId": "call_hvZzdRJXna9xhmXZwBn3IdSv",
+      "cells": [
+        "spr-fantasy-black-bear"
+      ]
+    },
+    {
+      "file": "raw-figures/spr-fantasy-brown-bear-candidate-001.png",
+      "callId": "call_QcRVWMijQ0IPPW9dvbAGwTXs",
+      "cells": [
+        "spr-fantasy-brown-bear"
+      ]
+    },
+    {
+      "file": "raw-figures/spr-fantasy-polar-bear-candidate-001.png",
+      "callId": "call_QcRVWMijQ0IPPW9dvbAGwTXs",
+      "cells": [
+        "spr-fantasy-polar-bear"
+      ]
+    },
+    {
+      "file": "raw-figures/spr-fantasy-lion-candidate-001.png",
+      "callId": "call_QcRVWMijQ0IPPW9dvbAGwTXs",
+      "cells": [
+        "spr-fantasy-lion"
+      ]
+    },
+    {
+      "file": "raw-figures/spr-fantasy-tiger-candidate-001.png",
+      "callId": "call_QcRVWMijQ0IPPW9dvbAGwTXs",
+      "cells": [
+        "spr-fantasy-tiger"
+      ]
+    },
+    {
+      "file": "raw-figures/spr-fantasy-saber-toothed-tiger-candidate-001.png",
+      "callId": "call_QcRVWMijQ0IPPW9dvbAGwTXs",
+      "cells": [
+        "spr-fantasy-saber-toothed-tiger"
+      ]
+    },
+    {
+      "file": "raw-figures/spr-fantasy-worg-candidate-001.png",
+      "callId": "call_QcRVWMijQ0IPPW9dvbAGwTXs",
+      "cells": [
+        "spr-fantasy-worg"
+      ]
+    },
+    {
+      "file": "raw-figures/spr-fantasy-dire-worg-candidate-001.png",
+      "callId": "call_QcRVWMijQ0IPPW9dvbAGwTXs",
+      "cells": [
+        "spr-fantasy-dire-worg"
+      ]
+    },
+    {
+      "file": "raw-figures/spr-fantasy-panther-hyena-candidate-001.png",
+      "callId": "call_QcRVWMijQ0IPPW9dvbAGwTXs",
+      "cells": [
+        "spr-fantasy-panther",
+        "spr-fantasy-hyena"
+      ]
+    },
+    {
+      "file": "raw-figures/spr-fantasy-jackal-candidate-001.png",
+      "callId": "call_QcRVWMijQ0IPPW9dvbAGwTXs",
+      "cells": [
+        "spr-fantasy-jackal"
+      ]
+    }
+  ],
+  "notes": [
+    "Generation-only raw candidates; no alpha cleanup, slicing, compilation, admission, or game-data edits performed.",
+    "Nested built-in generation calls were orchestrated by the outer runner call; distinct nested identifiers were not exposed by the tool return."
+  ]
+}

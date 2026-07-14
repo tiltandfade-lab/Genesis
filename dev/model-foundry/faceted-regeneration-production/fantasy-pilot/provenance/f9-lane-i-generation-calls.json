@@ -1,0 +1,58 @@
+{
+  "runtimeAdmitted": false,
+  "packet": "PACKET-F9.md",
+  "lane": "F9-I",
+  "outputs": [
+    {
+      "file": "raw-figures/spr-fantasy-swarm-of-bats-swarm-of-ravens-candidate-001.png",
+      "callId": "call_QcRVWMijQ0IPPW9dvbAGwTXs",
+      "cells": [
+        "spr-fantasy-swarm-of-bats",
+        "spr-fantasy-swarm-of-ravens"
+      ]
+    },
+    {
+      "file": "raw-figures/spr-fantasy-swarm-of-rats-swarm-of-insects-candidate-001.png",
+      "callId": "call_QcRVWMijQ0IPPW9dvbAGwTXs",
+      "cells": [
+        "spr-fantasy-swarm-of-rats",
+        "spr-fantasy-swarm-of-insects"
+      ]
+    },
+    {
+      "file": "raw-figures/spr-fantasy-swarm-of-piranhas-swarm-of-venomous-snakes-candidate-001.png",
+      "callId": "call_QcRVWMijQ0IPPW9dvbAGwTXs",
+      "cells": [
+        "spr-fantasy-swarm-of-piranhas",
+        "spr-fantasy-swarm-of-venomous-snakes"
+      ]
+    },
+    {
+      "file": "raw-figures/spr-fantasy-swarm-of-dretches-swarm-of-lemures-candidate-001.png",
+      "callId": "call_QcRVWMijQ0IPPW9dvbAGwTXs",
+      "cells": [
+        "spr-fantasy-swarm-of-dretches",
+        "spr-fantasy-swarm-of-lemures"
+      ]
+    },
+    {
+      "file": "raw-figures/spr-fantasy-swarm-of-crawling-claws-swarm-of-larvae-candidate-001.png",
+      "callId": "call_QcRVWMijQ0IPPW9dvbAGwTXs",
+      "cells": [
+        "spr-fantasy-swarm-of-crawling-claws",
+        "spr-fantasy-swarm-of-larvae"
+      ]
+    },
+    {
+      "file": "raw-figures/spr-fantasy-swarm-of-stirges-candidate-001.png",
+      "callId": "call_QcRVWMijQ0IPPW9dvbAGwTXs",
+      "cells": [
+        "spr-fantasy-swarm-of-stirges"
+      ]
+    }
+  ],
+  "notes": [
+    "Generation-only raw candidates; no alpha cleanup, slicing, compilation, admission, or game-data edits performed.",
+    "Nested built-in generation calls were orchestrated by the outer runner call; distinct nested identifiers were not exposed by the tool return."
+  ]
+}

@@ -15,7 +15,42 @@ Graphics work must preserve canonical cards and no-human production while taking
 reach the visual target. Read it before this handoff's historical graphics queue, then read
 `docs/GRAPHICS-PRODUCTION-RESEARCH-WAVE.md` for evaluated tools and executable research gates.
 
-## ⭐ Latest (2026-07-13, overnight) — GRAPHICS CONVERGENCE: wall-volumes wave + Phase 0/1/2 geometry [Claude Opus 4.8, orchestrated]
+## ⭐ Latest (2026-07-14) — PHASE-3 WAVE-1 complete + repo migrated to the Work Drive [Claude Opus 4.8, orchestrated]
+
+Phase-3 Wave-1 (the no-spend visual wave) executed as background worktree-isolated Sonnet executors,
+each personally re-gated (harnesses re-run by me, visual units' PNGs READ, never self-report), landed
+`--no-ff`. **Master tip: `a23d2eb2`, pushed.** Full per-unit detail + SHAs in CHANGELOG 2026-07-14.
+
+**Landed (all on master + pushed):**
+- **P3-1d diorama cutaway restoration** — the headline: compiled rooms read as OPEN dioramas again,
+  not closed boxes (fixes the C4.1b regression). Camera-side wall-upper suppression via
+  `itrOcclusionClassify`; occlusion subjects extended to all mounted figures (cap 24).
+- **E0-1 wall-fixture occlusion-fade** — wall practicals fade with their occluded wall (grew from a
+  P3-1d finding Adam relayed).
+- **P3-1a Poisson dressing** (flag-off, byte-identical), **W0-c Open5e validator**, **P3-1e eyeball
+  fixtures**, **P3-1b depth audit** (empty defect table — renderer transparency clean).
+- **W0-a struck** — MF-3b hit-stop already shipped in BW4B (`17474b45`).
+
+**Infra (this session):**
+- **Repo migrated off the 97%-full boot drive → an APFS sparsebundle on the Work Drive** at
+  `/Volumes/Genesis/Genesis` (exFAT drive, but the sparsebundle gives full journaling/symlinks/exec
+  bits). All branches + Cowork memory carried over; launchers + `launch.json` rerouted; verified green.
+  **New ritual: mount the drive (the sparsebundle) before a session; open in `/Volumes/Genesis/Genesis`.**
+- **CI scoped to master + PRs** — a blanket `on: push` had turned a `git push --all` backup into a
+  ~100-run failure-email flood; fixed + cleaned up 81 junk origin branches.
+
+**Do next (pick up here):**
+1. **P3-2 Stage B (sprite citizenship) is TEED UP** — `docs/PHASE-3-WAVE-2-SPECS.md` (B1 registry
+   contract → B2 physical standee ∥ B3 acceptance gallery → B4 kill size-inference). **GATED on
+   sprite-QA coordination:** B1 regenerates `data/sprite-registry.js`, which a live sprite-QA session
+   also writes — fire B1 only after QA's registry regen lands on master (Adam signals).
+2. **Then the Phase-3 spine:** P3-3 (AgX filmic tone-curve + depth corrections + D0 semantic
+   construction) → Stage D (stateful nouns / interactables, `BEAUTY-WAVE-5`) → Stage E (PBR
+   materials + light rig + emissive bloom that retires the ghost-halo).
+3. Polish waves standing (SPECCED, independent): UNIFICATION-WAVE, ENV-WAVES, POLISH-WAVE-1.
+4. Everything below this block is prior-session history.
+
+## Latest (2026-07-13, overnight) — GRAPHICS CONVERGENCE: wall-volumes wave + Phase 0/1/2 geometry [Claude Opus 4.8, orchestrated]
 
 Codex researches, Claude orchestrates ([[project-genesis-graphics-convergence]]). The execution
 spine is `docs/GRAPHICS-CONVERGENCE-PLAN.md` (composes the 3 research waves → phased waves on the

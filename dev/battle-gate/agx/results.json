@@ -1,0 +1,263 @@
+{
+  "generatedBy": "capture-agx-ab.mjs",
+  "generatedAt": "2026-07-14T21:12:20.973Z",
+  "fixtures": {
+    "tiered-room": {
+      "ok": true,
+      "label": "Tiered room (dais+pit, terrain-fixture prose)",
+      "meta": {
+        "ok": true,
+        "room": {
+          "x": 3,
+          "z": 3,
+          "w": 5,
+          "d": 6,
+          "segNum": 1
+        }
+      },
+      "tonemaps": {
+        "none": {
+          "changed": false,
+          "tonemap": "none",
+          "grade": {
+            "tintAmt": 0.054,
+            "tintHex": "#6b5878",
+            "exposure": 1.02,
+            "vignette": 0.2
+          },
+          "camPos": {
+            "x": 8.109657838075876,
+            "y": 8.030531882318508,
+            "z": 8.109657838075877,
+            "zoom": 1
+          }
+        },
+        "agx": {
+          "changed": true,
+          "tonemap": "agx",
+          "grade": {
+            "tintAmt": 0.054,
+            "tintHex": "#6b5878",
+            "exposure": 1.02,
+            "vignette": 0.2
+          },
+          "camPos": {
+            "x": 8.109657838075876,
+            "y": 8.030531882318508,
+            "z": 8.109657838075877,
+            "zoom": 1
+          }
+        }
+      },
+      "sameSceneAssertion": {
+        "camMatch": true,
+        "camNone": {
+          "x": 8.109657838075876,
+          "y": 8.030531882318508,
+          "z": 8.109657838075877,
+          "zoom": 1
+        },
+        "camAgx": {
+          "x": 8.109657838075876,
+          "y": 8.030531882318508,
+          "z": 8.109657838075877,
+          "zoom": 1
+        }
+      }
+    },
+    "aperture-room": {
+      "ok": true,
+      "label": "Aperture-heavy room (4-door hub)",
+      "meta": {
+        "ok": true,
+        "apertureCount": 3,
+        "room": {
+          "x": 3,
+          "z": 14,
+          "w": 4,
+          "d": 4,
+          "segNum": 1
+        }
+      },
+      "tonemaps": {
+        "none": {
+          "changed": false,
+          "tonemap": "none",
+          "grade": {
+            "tintAmt": 0.036000000000000004,
+            "tintHex": "#bfe8ff",
+            "exposure": 1.02,
+            "vignette": 0.2
+          },
+          "camPos": {
+            "x": 5.983622594874264,
+            "y": 5.925240371337303,
+            "z": 5.983622594874265,
+            "zoom": 1
+          }
+        },
+        "agx": {
+          "changed": true,
+          "tonemap": "agx",
+          "grade": {
+            "tintAmt": 0.036000000000000004,
+            "tintHex": "#bfe8ff",
+            "exposure": 1.02,
+            "vignette": 0.2
+          },
+          "camPos": {
+            "x": 5.983622594874264,
+            "y": 5.925240371337303,
+            "z": 5.983622594874265,
+            "zoom": 1
+          }
+        }
+      },
+      "sameSceneAssertion": {
+        "camMatch": true,
+        "camNone": {
+          "x": 5.983622594874264,
+          "y": 5.925240371337303,
+          "z": 5.983622594874265,
+          "zoom": 1
+        },
+        "camAgx": {
+          "x": 5.983622594874264,
+          "y": 5.925240371337303,
+          "z": 5.983622594874265,
+          "zoom": 1
+        }
+      }
+    },
+    "dressed-room": {
+      "ok": true,
+      "label": "Dressed room (production trayFrom)",
+      "meta": {
+        "ok": true,
+        "room": {
+          "x": 3,
+          "z": 3,
+          "w": 4,
+          "d": 5,
+          "segNum": 1
+        },
+        "dressingCount": 9,
+        "furnitureCount": 1,
+        "lightsCount": 1
+      },
+      "tonemaps": {
+        "none": {
+          "changed": false,
+          "tonemap": "none",
+          "grade": {
+            "tintAmt": 0.03150000000000001,
+            "tintHex": "#ffb347",
+            "exposure": 1.02,
+            "vignette": 0.2
+          },
+          "camPos": {
+            "x": 6.692301009274801,
+            "y": 6.627004208331038,
+            "z": 6.692301009274802,
+            "zoom": 1
+          }
+        },
+        "agx": {
+          "changed": true,
+          "tonemap": "agx",
+          "grade": {
+            "tintAmt": 0.03150000000000001,
+            "tintHex": "#ffb347",
+            "exposure": 1.02,
+            "vignette": 0.2
+          },
+          "camPos": {
+            "x": 6.692301009274801,
+            "y": 6.627004208331038,
+            "z": 6.692301009274802,
+            "zoom": 1
+          }
+        }
+      },
+      "sameSceneAssertion": {
+        "camMatch": true,
+        "camNone": {
+          "x": 6.692301009274801,
+          "y": 6.627004208331038,
+          "z": 6.692301009274802,
+          "zoom": 1
+        },
+        "camAgx": {
+          "x": 6.692301009274801,
+          "y": 6.627004208331038,
+          "z": 6.692301009274802,
+          "zoom": 1
+        }
+      }
+    },
+    "loop-room": {
+      "ok": true,
+      "label": "Loop room (3-room cycle, closing aperture)",
+      "meta": {
+        "ok": true,
+        "apertureCount": 3,
+        "room": {
+          "x": 3,
+          "z": 5,
+          "w": 4,
+          "d": 7,
+          "segNum": 1
+        }
+      },
+      "tonemaps": {
+        "none": {
+          "changed": false,
+          "tonemap": "none",
+          "grade": {
+            "tintAmt": 0.027,
+            "tintHex": "#f4d35e",
+            "exposure": 1.02,
+            "vignette": 0.2
+          },
+          "camPos": {
+            "x": 8.13581271565272,
+            "y": 8.056431566676684,
+            "z": 8.13581271565272,
+            "zoom": 1
+          }
+        },
+        "agx": {
+          "changed": true,
+          "tonemap": "agx",
+          "grade": {
+            "tintAmt": 0.027,
+            "tintHex": "#f4d35e",
+            "exposure": 1.02,
+            "vignette": 0.2
+          },
+          "camPos": {
+            "x": 8.13581271565272,
+            "y": 8.056431566676684,
+            "z": 8.13581271565272,
+            "zoom": 1
+          }
+        }
+      },
+      "sameSceneAssertion": {
+        "camMatch": true,
+        "camNone": {
+          "x": 8.13581271565272,
+          "y": 8.056431566676684,
+          "z": 8.13581271565272,
+          "zoom": 1
+        },
+        "camAgx": {
+          "x": 8.13581271565272,
+          "y": 8.056431566676684,
+          "z": 8.13581271565272,
+          "zoom": 1
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,221 @@
+{
+  "generatedBy": "capture-eyeball-fixtures.mjs",
+  "generatedAt": "2026-07-14T03:26:30.311Z",
+  "fixtures": {
+    "tiered-room": {
+      "ok": true,
+      "label": "Tiered room (dais+pit, terrain-fixture prose)",
+      "meta": {
+        "ok": true,
+        "room": {
+          "x": 3,
+          "z": 3,
+          "w": 5,
+          "d": 6,
+          "segNum": 1
+        },
+        "terrain": [
+          {
+            "kind": "dais",
+            "tier": 2,
+            "cellCount": 9
+          },
+          {
+            "kind": "pit",
+            "tier": -2,
+            "cellCount": 4
+          }
+        ],
+        "tierCellsNonZero": 13
+      },
+      "kernels": {
+        "legacy": {
+          "kernel": "legacy",
+          "shellMeta": {
+            "floorCellCount": 30,
+            "tierCount": 3,
+            "wallSegmentCount": 8,
+            "riserSegmentCount": 5,
+            "bevelTriCount": 36
+          },
+          "camPos": {
+            "x": 8.109657838075876,
+            "y": 8.030531882318508,
+            "z": 8.109657838075877,
+            "zoom": 1
+          },
+          "camSettled": true
+        },
+        "oss": {
+          "kernel": "oss",
+          "shellMeta": {
+            "floorCellCount": 30,
+            "tierCount": 3,
+            "wallSegmentCount": 8,
+            "riserSegmentCount": 5,
+            "bevelTriCount": 36
+          },
+          "camPos": {
+            "x": 8.109657838075876,
+            "y": 8.030531882318508,
+            "z": 8.109657838075877,
+            "zoom": 1
+          },
+          "camSettled": true
+        }
+      },
+      "sameSceneAssertion": {
+        "boardsIdentical": true,
+        "camMatch": true,
+        "camLegacy": {
+          "x": 8.109657838075876,
+          "y": 8.030531882318508,
+          "z": 8.109657838075877,
+          "zoom": 1
+        },
+        "camOss": {
+          "x": 8.109657838075876,
+          "y": 8.030531882318508,
+          "z": 8.109657838075877,
+          "zoom": 1
+        }
+      }
+    },
+    "aperture-room": {
+      "ok": true,
+      "label": "Aperture-heavy room (4-door hub)",
+      "meta": {
+        "ok": true,
+        "apertureCount": 3,
+        "room": {
+          "x": 3,
+          "z": 16,
+          "w": 6,
+          "d": 5,
+          "segNum": 1
+        }
+      },
+      "kernels": {
+        "legacy": {
+          "kernel": "legacy",
+          "shellMeta": {
+            "floorCellCount": 30,
+            "tierCount": 1,
+            "wallSegmentCount": 5,
+            "riserSegmentCount": 0,
+            "bevelTriCount": 10
+          },
+          "camPos": {
+            "x": 8.109657838075876,
+            "y": 8.030531882318508,
+            "z": 8.109657838075877,
+            "zoom": 1
+          },
+          "camSettled": true
+        },
+        "oss": {
+          "kernel": "oss",
+          "shellMeta": {
+            "floorCellCount": 30,
+            "tierCount": 1,
+            "wallSegmentCount": 5,
+            "riserSegmentCount": 0,
+            "bevelTriCount": 10
+          },
+          "camPos": {
+            "x": 8.109657838075876,
+            "y": 8.030531882318508,
+            "z": 8.109657838075877,
+            "zoom": 1
+          },
+          "camSettled": true
+        }
+      },
+      "sameSceneAssertion": {
+        "boardsIdentical": true,
+        "camMatch": true,
+        "camLegacy": {
+          "x": 8.109657838075876,
+          "y": 8.030531882318508,
+          "z": 8.109657838075877,
+          "zoom": 1
+        },
+        "camOss": {
+          "x": 8.109657838075876,
+          "y": 8.030531882318508,
+          "z": 8.109657838075877,
+          "zoom": 1
+        }
+      }
+    },
+    "dressed-room": {
+      "ok": true,
+      "label": "Dressed room (production trayFrom)",
+      "meta": {
+        "ok": true,
+        "room": {
+          "x": 3,
+          "z": 3,
+          "w": 4,
+          "d": 5,
+          "segNum": 1
+        },
+        "dressingCount": 8,
+        "furnitureCount": 1,
+        "lightsCount": 1
+      },
+      "kernels": {
+        "legacy": {
+          "kernel": "legacy",
+          "shellMeta": {
+            "floorCellCount": 20,
+            "tierCount": 1,
+            "wallSegmentCount": 4,
+            "riserSegmentCount": 0,
+            "bevelTriCount": 8
+          },
+          "camPos": {
+            "x": 6.692301009274801,
+            "y": 6.627004208331038,
+            "z": 6.692301009274802,
+            "zoom": 1
+          },
+          "camSettled": true
+        },
+        "oss": {
+          "kernel": "oss",
+          "shellMeta": {
+            "floorCellCount": 20,
+            "tierCount": 1,
+            "wallSegmentCount": 4,
+            "riserSegmentCount": 0,
+            "bevelTriCount": 8
+          },
+          "camPos": {
+            "x": 6.692301009274801,
+            "y": 6.627004208331038,
+            "z": 6.692301009274802,
+            "zoom": 1
+          },
+          "camSettled": true
+        }
+      },
+      "sameSceneAssertion": {
+        "boardsIdentical": true,
+        "camMatch": true,
+        "camLegacy": {
+          "x": 6.692301009274801,
+          "y": 6.627004208331038,
+          "z": 6.692301009274802,
+          "zoom": 1
+        },
+        "camOss": {
+          "x": 6.692301009274801,
+          "y": 6.627004208331038,
+          "z": 6.692301009274802,
+          "zoom": 1
+        }
+      }
+    }
+  }
+}

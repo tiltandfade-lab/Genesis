@@ -6571,17 +6571,38 @@ const ITR_FIXTURE_EMITTER_GEO = {
 // out of scope, per the spec's own "no bloom mask" decision).
 const ITR_FIXTURE_EMISSIVE_INTENSITY = 1.6;
 let ITR_FIXTURE_BODY_MATERIAL_CACHE = null;
-function interiorFixtureBodyMaterial(){
+// E0-1 (docs/PHASE-3-WAVE-1-SPECS.md): `wantWall` (true for a fixture whose OWN light.mount ===
+// "wall", regardless of whether placement later degrades to floor for lack of C4.1a slot data —
+// see interiorResolveFixturePlacement) gets a CLONED, non-shared body material so its opacity can
+// be tweened independently, joining its owning wall segment's occlusion-fade `fadeEntry.materials`
+// (wired at the interiorBuildLights call site in setInteriorBoard, below). Every non-wall fixture
+// keeps returning the ONE shared cached material — no perf regression for the common (floor-mount)
+// case, which never needs independent per-fixture fading. `transparent = true` on the clone so the
+// live occlusion tween (itrOcclusionClassify) can actually show fractional opacity the instant a
+// fade starts, same discipline the wall-upper mesh materials already follow (see wallUpperMeshList's
+// own `upperMat.transparent = true`, further below).
+function interiorFixtureBodyMaterial(wantWall){
   if(!ITR_FIXTURE_BODY_MATERIAL_CACHE){
     ITR_FIXTURE_BODY_MATERIAL_CACHE = new THREE.MeshLambertMaterial({ color: "#33302a" });
   }
+  if(wantWall){
+    const clone = ITR_FIXTURE_BODY_MATERIAL_CACHE.clone();
+    clone.transparent = true;
+    return clone;
+  }
   return ITR_FIXTURE_BODY_MATERIAL_CACHE;
 }
-function interiorFixtureEmitterMaterial(color){
+function interiorFixtureEmitterMaterial(color, wantWall){
   const mat = new THREE.MeshLambertMaterial({ color: "#000000" });
   mat.emissive = new THREE.Color(color || "#ffbb66");
   mat.emissiveIntensity = ITR_FIXTURE_EMISSIVE_INTENSITY;
   mat.userData.psxExempt = true; // never PSX-shader-tweaked (dither/vertex-snap) — same exemption every self-lit marker in this file already carries
+  // E0-1: a wall-mount fixture's emitter joins its owning wall segment's occlusion-fade
+  // `fadeEntry.materials` (interiorBuildLights, below) — `transparent` must already be true so the
+  // live tween can show fractional opacity the instant a fade starts, same reasoning
+  // interiorFixtureBodyMaterial's own wall-clone branch documents. A non-wall fixture's emitter is
+  // never appended to any fadeEntry, so it stays opaque (unchanged behavior).
+  if(wantWall) mat.transparent = true;
   return mat;
 }
 // light -> {group, emitter}. `group` sits in MOUNT-LOCAL space (its own local origin IS the mount
@@ -6595,7 +6616,7 @@ function interiorBuildFixtureGroup(light){
     : (wantWall ? "bracket-generic" : "lamp-post");
   const el = light.emitterLocal || (wantWall ? { x: 0, y: 0.05, z: 0.14 } : { x: 0, y: 0.5, z: 0 });
   const group = new THREE.Group();
-  const bodyMat = interiorFixtureBodyMaterial();
+  const bodyMat = interiorFixtureBodyMaterial(wantWall);
   const parts = ITR_FIXTURE_BODY_PARTS[fixtureId](el) || [];
   parts.forEach((part) => {
     const mesh = new THREE.Mesh(part.geo(), bodyMat);
@@ -6605,7 +6626,7 @@ function interiorBuildFixtureGroup(light){
     group.add(mesh);
   });
   const emitterGeoFn = ITR_FIXTURE_EMITTER_GEO[fixtureId] || ITR_FIXTURE_EMITTER_GEO["lamp-post"];
-  const emitter = new THREE.Mesh(emitterGeoFn(), interiorFixtureEmitterMaterial(light.color));
+  const emitter = new THREE.Mesh(emitterGeoFn(), interiorFixtureEmitterMaterial(light.color, wantWall));
   emitter.name = "emitter";
   emitter.userData.fixtureEmitter = true;
   emitter.position.set(el.x || 0, el.y || 0, el.z || 0);
@@ -6614,7 +6635,11 @@ function interiorBuildFixtureGroup(light){
   group.userData.interiorFixture = true;
   group.userData.fixtureId = fixtureId;
   group.userData.emitterMesh = emitter; // direct-access seam (no traversal needed) — also findable via child.name === "emitter"
-  return { group, emitter };
+  // E0-1: `bodyMat` (a per-fixture clone when `wantWall`, else the shared cache — see
+  // interiorFixtureBodyMaterial above) + `wantWall` ride along on the return so interiorBuildLights
+  // (the only caller) can register this fixture's materials against its owning wall segment's
+  // occlusion-fade entry without re-deriving anything or traversing the group.
+  return { group, emitter, bodyMat, wantWall };
 }
 // nearest C4.1a mount slot (by XZ distance) to (x,z) — "the segment closest to the light's own (x,z)"
 // per WALL-VOLUMES-PRACTICALS.md §E0. `wallMountData` is {mountSlots, wallSegments}; absent/empty
@@ -6672,6 +6697,15 @@ function interiorBuildLights(lights, cx, cz, realmId, floorTopMap, pieces, isBri
   // above) at INTERIOR_LIGHT_FLICKER_AMPLITUDE — collected here (not started here) so setInteriorBoard
   // can hand the finished list to ONE startLightFlicker call alongside the board's own S.pointLights.
   const flickerTargets = [];
+  // E0-1 (docs/PHASE-3-WAVE-1-SPECS.md): one entry per fixture that actually LANDED on a real wall
+  // segment ({ownerSegIndex, materials: [bodyClone, emitterMat]}) — collected here (pure, no S.*
+  // access — interiorBuildLights stays a function of its own arguments, same discipline flickerTargets
+  // above already keeps) so the interiorBuildLights call site in setInteriorBoard (the one place that
+  // ALSO has wallUpperMeshList/fadeEntry in scope) can append them into the SAME segment's occlusion-
+  // fade entry. A fixture whose wall-mount request degraded to floor (no C4.1a slot data) never gets an
+  // ownerSegIndex here, so it's simply never registered — the resolver's own defensive floor-degrade
+  // stays untouched.
+  const wallFixtureFadeTargets = [];
   assigned.forEach((light) => {
     // LIGHT-CLOSE unit (docs/GRAPHICS-NORTH-STAR.md task #16 / directive §4.7 "never leave a floating
     // glow disc as the source"): daylit/overcast/moonlit are the SKY's own diegetic reach (P-1's
@@ -6701,6 +6735,19 @@ function interiorBuildLights(lights, cx, cz, realmId, floorTopMap, pieces, isBri
     // itrRoomLights' own `ownerSegIndex: null` doc comment names this exact seam) — a harness can read
     // either this field or fixture.group.userData.ownerSegIndex.
     light.ownerSegIndex = placement.ownerSegIndex;
+
+    // E0-1: a fixture that actually LANDED on a real wall segment (placement.mount === "wall" AND a
+    // real ownerSegIndex — the degrade-to-floor path above sets ownerSegIndex null, which this guard
+    // excludes) registers its own [bodyClone, emitterMat] pair for the call site to append into that
+    // segment's occlusion-fade `fadeEntry.materials`. `fixture.bodyMat` is already the per-fixture
+    // clone (not the shared cache) whenever `fixture.wantWall` is true, which it always is here since
+    // wantWall only ever reads light.mount — the same field that just resolved to a real wall segment.
+    if(placement.mount === "wall" && placement.ownerSegIndex != null){
+      wallFixtureFadeTargets.push({
+        ownerSegIndex: placement.ownerSegIndex,
+        materials: [fixture.bodyMat, fixture.emitter.material]
+      });
+    }
 
     // the PointLight mounts as a CHILD of the fixture group at the group-LOCAL emitterLocal — world
     // position = group transform × emitterLocal (WALL-VOLUMES-PRACTICALS.md §E0), so it can never sit
@@ -6774,7 +6821,7 @@ function interiorBuildLights(lights, cx, cz, realmId, floorTopMap, pieces, isBri
       });
     }
   });
-  return { group, casters, flickerTargets, glowCount };
+  return { group, casters, flickerTargets, glowCount, wallFixtureFadeTargets };
 }
 
 // BEAUTY-WAVE.md VP6 item 3 — AMBIENT MOTES: 4-8 seeded drifting particle cards per room, ember-tinted
@@ -9214,7 +9261,11 @@ function setInteriorBoard(data){
       upperMat.opacity = fadeEntry.opacity;
       m.visible = true;
       roomShellMeshes.push(m);
-      wallUpperMeshList.push({ mesh: m, ownerSegIndex: entry.ownerSegIndex });
+      // E0-1: `fadeEntry` rides along too — the interiorBuildLights call site (below, same function
+      // scope) appends each wall-mounted fixture's own [bodyClone, emitterMat] into this EXACT entry's
+      // `.materials` array so a fixture tweens in lockstep with the wall segment it's mounted on,
+      // never a second/parallel opacity source.
+      wallUpperMeshList.push({ mesh: m, ownerSegIndex: entry.ownerSegIndex, fadeEntry });
     });
     let wallTrimMesh = null;
     if(shell.wallTrimGeometry){
@@ -9340,6 +9391,28 @@ function setInteriorBoard(data){
   S.interiorGroup.add(lightsBuilt.group);
   S.interiorShadowCasterCount = lightsBuilt.casters;
   S.interiorLightCount = (data.lights || []).length;
+  // E0-1 (docs/PHASE-3-WAVE-1-SPECS.md) — WALL-FIXTURE OCCLUSION-FADE LINKAGE: this is the ONE call
+  // site with BOTH the just-built wall fixtures (lightsBuilt.wallFixtureFadeTargets) AND the per-
+  // segment fadeEntry map (S.interiorLastRoomShell.wallUpperMeshes, built by the room-shell block
+  // above — same ownerSegIndex convention) in scope. For each wall-mounted fixture, find its owning
+  // segment's ALREADY-CREATED fadeEntry and APPEND (never overwrite — the wall segment's own upper
+  // mesh material already occupies `fadeEntry.materials`) the fixture's [bodyClone, emitterMat] pair,
+  // syncing them to the entry's CURRENT opacity immediately (not just on the next tween tick) so a
+  // fixture built mid-fade never floats at opacity 1 for one frame. A fixture whose ownerSegIndex has
+  // no matching entry (a room-shell-less board, or ITR_ROOM_SHELL off) is simply not registered — the
+  // spec's own defensive "unaffected" case.
+  const wallUpperFadeEntries = (S.interiorLastRoomShell && S.interiorLastRoomShell.wallUpperMeshes) || [];
+  (lightsBuilt.wallFixtureFadeTargets || []).forEach((target) => {
+    const owner = wallUpperFadeEntries.find((e) => e.ownerSegIndex === target.ownerSegIndex);
+    if(!owner || !owner.fadeEntry) return;
+    const fadeEntry = owner.fadeEntry;
+    if(!fadeEntry.materials) fadeEntry.materials = [];
+    target.materials.forEach((mat) => {
+      if(!mat) return;
+      fadeEntry.materials.push(mat);
+      mat.opacity = fadeEntry.opacity;
+    });
+  });
   // L-1 (DIEGETIC-LIGHT.md) harness diagnostic, same read-only convention as interiorShadowCasterCount
   // above: how many light-shaft cones actually mounted this call (0 whenever ITR_LIGHT_CONE_ENABLED is
   // false, since interiorBuildLights skips both the mount AND the flickerTargets.cone assignment then).

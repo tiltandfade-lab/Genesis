@@ -3508,6 +3508,183 @@ function addInteriorContactBlob(group, x, z, texWidth, floorTop){
   return mesh;
 }
 
+// docs/STAGE-D-WAVE-SPECS.md D4 — DOORS-FIRST render keystone (BEAUTY-WAVE-5.md IA-4, "doors ship
+// first"). data.interactables mirrors data.dressing/data.pieces (a plain field the caller sets
+// directly on the board object — src/engine/theater-data.js's trayFrom, D2's bindWalkInteractables +
+// D3's applyRoomGrammar chain). D4's OWN scope is the door archetype only (BW5's own ruling — every
+// other archetype's render rides D5, after Adam's taste gate); a non-door entry or an unplaced
+// `reserve:true` entry (Law 5's staging reserve — narration-only, never a phantom mesh) is a
+// documented no-op here, never a crash.
+//
+// EXTRUDE construction class (GRAPHICS-ENGINE.md §H / BW5 IA-4): a real extrusion at the entry's
+// authored `extrudeDepth` (D1's registry field) — never a flat quad. The wall APERTURE at every DOOR
+// cell is already excluded from the solid wall fill (theater-room-mesh.js's own shell.apertures —
+// "door segments — no quad, kept for portal-card alignment"); this unit shapes what fills that
+// opening to the rolled door's own silhouette: an "arch"/"gothic"/"pointed"/"ogee"/"vault" keyword in
+// the door's rolled name/flavor (itrDoorIsArched) gets an arched top (itrDoorShape's absarc half-
+// circle), everything else a plain rectangular leaf — BW5's "arched door -> arched opening, never a
+// flat quad" law, scoped honestly to the ONE archetype this wave ships.
+//
+// STATE (D0 S0-3/Law 6 — "a door swings, never a teleport"): shut/ajar/open read as an increasing
+// swing angle about the leaf's OWN vertical centerline (a documented simplification of a true edge-
+// hinge — this render channel has no per-door hinge-side geometry fact to pivot on yet; the swing
+// is real, continuous, and tween-driven either way, never a snap); broken tilts forward about its
+// own base edge (itrDoorShape's y=0 floor edge) plus a small KILTER-style deterministic jitter
+// (kilterFor, this file's own THE KILTER convention, reused rather than reinvented) so a broken door
+// reads as fallen/off-kilter, never randomly per render.
+const ITR_DOOR_ARCH_KEYWORDS = Object.freeze(["arch", "gothic", "pointed", "ogee", "vault"]);
+function itrDoorIsArched(entry){
+  const text = ((entry && entry.name) || "") + " " + ((entry && entry.flavor) || "");
+  const low = text.toLowerCase();
+  return ITR_DOOR_ARCH_KEYWORDS.some((k) => low.indexOf(k) >= 0);
+}
+const ITR_DOOR_WIDTH = 0.9;    // world units — a single-leaf door, referenced to the ~1.5u humanoid scale (GRAPHICS-ENGINE §H)
+const ITR_DOOR_HEIGHT = 1.9;   // world units — clears a standing humanoid with headroom under a typical wallHeightBase
+const ITR_DOOR_FALLBACK_DEPTH = 0.32; // D1's own registry value for every realm's door@* rows (data/interactables.js) — used only if extrudeDepth is somehow absent
+function itrDoorShape(arched){
+  const w = ITR_DOOR_WIDTH, h = ITR_DOOR_HEIGHT;
+  const shape = new THREE.Shape();
+  const straightH = arched ? h * 0.72 : h;
+  shape.moveTo(-w / 2, 0);
+  shape.lineTo(-w / 2, straightH);
+  if(arched){
+    shape.absarc(0, straightH, w / 2, Math.PI, 0, true); // the arched top — a real half-circle, never a flat quad
+  } else {
+    shape.lineTo(w / 2, straightH);
+  }
+  shape.lineTo(w / 2, 0);
+  shape.lineTo(-w / 2, 0);
+  return shape;
+}
+// state -> swing angle about the leaf's own vertical centerline (degrees). `null` (broken) means "not
+// a swing state" — handled separately below via the tip-forward transform.
+const ITR_DOOR_SWING_DEG = Object.freeze({ shut: 0, ajar: 40, open: 85 });
+function itrDoorStateColor(state){
+  switch(state){
+    case "open": return 0x8a6a42;
+    case "ajar": return 0x9a7a52;
+    case "broken": return 0x4a3a2a;
+    default: return 0x6a4a2e; // shut
+  }
+}
+// one hinge-group-plus-leaf-mesh assembly per placed door entry. `hinge` carries the cell position +
+// the corridor-axis orientation (perpendicular to the wall the door interrupts); `leaf` (its one
+// child) carries the state pose — swing about Y for shut/ajar/open, tip-forward about X for broken.
+// Returns null for anything this unit doesn't render (reserve entries, missing coordinates).
+function interiorBuildInteractableDoorMesh(entry, cx, cz, floorTopMap){
+  if(!entry || entry.reserve || entry.x == null || entry.y == null) return null;
+  const extrudeDepth = (typeof entry.extrudeDepth === "number" && entry.extrudeDepth > 0) ? entry.extrudeDepth : ITR_DOOR_FALLBACK_DEPTH;
+  const arched = itrDoorIsArched(entry);
+  const shape = itrDoorShape(arched);
+  const geo = new THREE.ExtrudeGeometry(shape, { depth: extrudeDepth, bevelEnabled: false, curveSegments: 10 });
+  geo.translate(0, 0, -extrudeDepth / 2); // center the extrusion depth on the aperture plane
+  const mat = new THREE.MeshLambertMaterial({ color: itrDoorStateColor(entry.state), transparent: true, opacity: 1 });
+  const leaf = new THREE.Mesh(geo, mat);
+  leaf.castShadow = true; leaf.receiveShadow = true;
+  leaf.userData = { isDoorLeaf: true };
+
+  // corridor-axis orientation: floor on BOTH the east and west neighbor cells means the corridor runs
+  // east-west, so the wall (and the door filling it) plane runs north-south — rotate the default
+  // (north-south-spanning) leaf 90 degrees. Degrades to the default orientation (never throws) when
+  // floorTopMap can't resolve either axis (a harness board with no floor instances at all).
+  const rx = Math.round(entry.x), ry = Math.round(entry.y);
+  const ew = !!(floorTopMap && floorTopMap.has((rx - 1) + "," + ry) && floorTopMap.has((rx + 1) + "," + ry));
+
+  const hinge = new THREE.Group();
+  const floorTop = interiorFloorTopAt(floorTopMap, entry.x, entry.y);
+  hinge.position.set((entry.x || 0) - (cx || 0), floorTop, (entry.y || 0) - (cz || 0));
+  hinge.rotation.y = ew ? Math.PI / 2 : 0;
+
+  if(entry.state === "broken"){
+    // KILTER-style deterministic tilt (never a random per-render jitter, this file's own THE KILTER
+    // convention reused rather than reinvented) — a broken door tips forward off its own base edge.
+    const k = kilterFor("d4-door-broken:" + (entry.sourceRef || ""));
+    leaf.rotation.x = (55 + k.yawDeg * 3.5) * Math.PI / 180; // ~48-62deg tip, deterministic per sourceRef
+    leaf.position.y -= 0.1; // a broken leaf sags off true floor contact
+  } else {
+    const swingDeg = ITR_DOOR_SWING_DEG[entry.state];
+    leaf.rotation.y = (typeof swingDeg === "number" ? swingDeg : 0) * Math.PI / 180;
+  }
+
+  hinge.add(leaf);
+  hinge.userData = { kind: "interactable", archetype: "door", sourceRef: entry.sourceRef, state: entry.state, slug: entry.slug, leaf: leaf, arched: arched };
+  return hinge;
+}
+// door-swing tween duration — BW4's own 280-350ms "glide, never snap" band (placeCameraTweened's
+// header comment names the same band for the camera-pose glide; this reuses it rather than a new
+// magic number for the door channel).
+const ITR_DOOR_SWING_TWEEN_MS = 320;
+// `entry.state` -> the leaf-local rotation this render channel considers "at rest" for that state —
+// the SAME pose interiorBuildInteractableDoorMesh assigns a freshly-built leaf, factored out so the
+// diff/tween path (below) can compute a FROM pose and a TO pose on the SAME axis convention.
+function itrDoorRestPose(state, sourceRef){
+  if(state === "broken"){
+    const k = kilterFor("d4-door-broken:" + (sourceRef || ""));
+    return { axis: "x", rad: (55 + k.yawDeg * 3.5) * Math.PI / 180 };
+  }
+  const swingDeg = ITR_DOOR_SWING_DEG[state];
+  return { axis: "y", rad: (typeof swingDeg === "number" ? swingDeg : 0) * Math.PI / 180 };
+}
+/* interiorBuildInteractables(interactables, cx, cz, floorTopMap) -> {group, bySourceRef}. Builds one
+   door assembly per placed (non-reserve) door entry (D4's own scope — see header above) and DIFFS
+   against S.interiorDoorStateBySourceRef (the previous render's per-sourceRef state) so a real
+   state_transition (a door's state actually changing between two renders of the SAME sourceRef)
+   animates its swing/tip-forward pose via the BW4 tween channel (S.tweens/tickTweens,
+   theater-verbs.js) instead of snapping — D0 Law 6, "never a teleport". A brand-new sourceRef (never
+   seen before this walk) or an unchanged state mounts directly at its rest pose — only a REAL
+   transition earns a tween, mirroring MF-2's own "only a genuinely new arrival plays the mount-in
+   grace" discipline. */
+function interiorBuildInteractables(interactables, cx, cz, floorTopMap){
+  const group = new THREE.Group();
+  const bySourceRef = {};
+  const prevStates = S.interiorDoorStateBySourceRef || {};
+  const nextStates = {};
+  (interactables || []).forEach((entry) => {
+    if(!entry || entry.archetype !== "door") return; // D4 SCOPE: doors ship first (BW5 IA-4) — other archetypes render in D5
+    const hinge = interiorBuildInteractableDoorMesh(entry, cx, cz, floorTopMap);
+    if(!hinge) return;
+    const sourceRef = entry.sourceRef;
+    nextStates[sourceRef] = entry.state;
+    const prevState = prevStates[sourceRef];
+    if(prevState != null && prevState !== entry.state){
+      // a REAL state_transition since the last render of this exact door — glide, never snap.
+      const leaf = hinge.userData.leaf;
+      const from = itrDoorRestPose(prevState, sourceRef);
+      const to = itrDoorRestPose(entry.state, sourceRef);
+      if(from.axis === "x") leaf.rotation.x = from.rad; else leaf.rotation.y = from.rad;
+      if(!S.tweens) S.tweens = [];
+      S.tweens.push({
+        start: Date.now(),
+        dur: ITR_DOOR_SWING_TWEEN_MS,
+        isDoorStateTween: true,
+        doorSourceRef: sourceRef,
+        update: (t) => {
+          const e = (typeof mf1EaseOutCubic === "function") ? mf1EaseOutCubic(t) : t;
+          if(from.axis === to.axis){
+            const val = from.rad + (to.rad - from.rad) * e;
+            if(to.axis === "x"){ leaf.rotation.x = val; leaf.rotation.y = 0; }
+            else { leaf.rotation.y = val; leaf.rotation.x = 0; }
+          } else {
+            // crossing families (a swing state <-> broken) — blend both axes down/up across the tween
+            // rather than a mid-flight axis pop, still never a snap.
+            leaf.rotation.x = (from.axis === "x" ? from.rad : 0) + ((to.axis === "x" ? to.rad : 0) - (from.axis === "x" ? from.rad : 0)) * e;
+            leaf.rotation.y = (from.axis === "y" ? from.rad : 0) + ((to.axis === "y" ? to.rad : 0) - (from.axis === "y" ? from.rad : 0)) * e;
+          }
+        },
+        onDone: () => {
+          if(to.axis === "x"){ leaf.rotation.x = to.rad; leaf.rotation.y = 0; }
+          else { leaf.rotation.y = to.rad; leaf.rotation.x = 0; }
+        }
+      });
+    }
+    group.add(hinge);
+    bySourceRef[sourceRef] = hinge;
+  });
+  S.interiorDoorStateBySourceRef = nextStates;
+  group.userData = { bySourceRef: bySourceRef };
+  return group;
+}
+
 // BEAUTY-WAVE.md VP6 item 4 — VISIBLE HISTORY (render half). data.decals mirrors data.dressing/
 // data.pieces (a plain field the caller sets directly on the board object, sourced from
 // src/world/prep.js's spatialDecalsForSeg(pn, segNum) — the PERSIST half lives there, not here; this
@@ -5754,6 +5931,9 @@ function mount(el, opts){
   S.interiorMeshCount = 0;
   S.interiorDressingCount = 0;
   S.interiorDressingWorldPositions = [];
+  // D4 — per-sourceRef door state from the PREVIOUS render, reset on a fresh mount() same as
+  // S.occlusionFadeState below (a brand-new session must never inherit a stale sourceRef's state).
+  S.interiorDoorStateBySourceRef = {};
   S.tweens = [];
   // STAGE-A A4 — persistent occlusion-fade bookkeeping (id -> {blocking,opacity,materials}) + the
   // camera-bearing hysteresis anchor, both reset on a fresh mount() the same way S.tweens is just
@@ -9630,6 +9810,54 @@ function setInteriorBoard(data){
     };
   });
 
+  // docs/STAGE-D-WAVE-SPECS.md D4 — data.interactables is a plain field the caller sets directly on
+  // the board object (src/engine/theater-data.js's trayFrom — same convention as data.pieces/
+  // data.dressing/data.wallProps above). D4 scope: door archetype only (see
+  // interiorBuildInteractables' own header for the full render-keystone contract).
+  const interactablesGroup = interiorBuildInteractables(data.interactables, cx, cz, S.interiorFloorTopMap);
+  S.interiorGroup.add(interactablesGroup);
+  // D4 — E0-1 FADE COMPLIANCE (the SAME append-never-overwrite pattern the wall-fixture block above
+  // uses, docs/PHASE-3-WAVE-1-SPECS.md E0-1): a door on an occlusion-suppressed wall segment fades
+  // WITH that segment. Each mounted door leaf's material joins the fadeEntry of the wall segment
+  // whose midpoint is nearest the door's own world position (the wall run its aperture interrupts —
+  // shell.wallSegments carries no per-door ownerSegIndex, so nearest-midpoint is this layer's honest
+  // ownership stand-in, same class of geometric stand-in rgDoorApronCells already documents). Opacity
+  // syncs immediately so a door built mid-fade never floats opaque against a ghosted wall. A board
+  // with no room shell (wallUpperFadeEntries empty / ITR_ROOM_SHELL off) registers nothing — E0-1's
+  // own defensive "unaffected" case.
+  if(wallUpperFadeEntries.length){
+    interactablesGroup.children.forEach((hinge) => {
+      const leaf = hinge.userData && hinge.userData.leaf;
+      if(!leaf || !leaf.material) return;
+      const doorPlanX = hinge.position.x + cx, doorPlanZ = hinge.position.z + cz;
+      let owner = null, bestDist = Infinity;
+      wallUpperFadeEntries.forEach((e) => {
+        const seg = S.interiorLastRoomShell && S.interiorLastRoomShell.wallSegments && S.interiorLastRoomShell.wallSegments[e.ownerSegIndex];
+        if(!seg) return;
+        const mx = (seg.a.x + seg.b.x) / 2, mz = (seg.a.z + seg.b.z) / 2;
+        const d = Math.abs(mx - doorPlanX) + Math.abs(mz - doorPlanZ);
+        if(d < bestDist){ bestDist = d; owner = e; }
+      });
+      if(!owner || !owner.fadeEntry) return;
+      if(!owner.fadeEntry.materials) owner.fadeEntry.materials = [];
+      owner.fadeEntry.materials.push(leaf.material);
+      leaf.material.opacity = owner.fadeEntry.opacity;
+    });
+  }
+  S.interiorInteractablesCount = (data.interactables || []).filter((e) => e && e.archetype === "door" && !e.reserve).length;
+  // harness-facing diagnostic (dev/verify-d4-doors.mjs), same convention as
+  // S.interiorDressingWorldPositions above: one entry per MOUNTED door, its REAL world position/state
+  // read straight off the group THREE actually placed, never a parallel formula that could drift.
+  S.interiorInteractablesWorldPositions = interactablesGroup.children.map((hinge) => ({
+    sourceRef: hinge.userData && hinge.userData.sourceRef,
+    archetype: hinge.userData && hinge.userData.archetype,
+    state: hinge.userData && hinge.userData.state,
+    arched: hinge.userData && hinge.userData.arched,
+    x: hinge.position.x, y: hinge.position.y, z: hinge.position.z,
+    leafRotY: hinge.userData && hinge.userData.leaf && hinge.userData.leaf.rotation.y,
+    leafRotX: hinge.userData && hinge.userData.leaf && hinge.userData.leaf.rotation.x
+  }));
+
   // BEAUTY-WAVE.md VP6 item 4 — VISIBLE HISTORY (render half). data.decals is a plain field the caller
   // sets directly on the board object (same convention as data.pieces/data.dressing above), sourced
   // from src/world/prep.js's spatialDecalsForSeg(pn, segNum) — the persist half.
@@ -11233,6 +11461,20 @@ window.Theater._interiorBuildDressingForTest = function(dressing, cx, cz, floorT
 window.Theater._interiorBuildDecalsForTest = function(decals, cx, cz, floorTopMap){
   return interiorBuildDecals(decals, cx, cz, floorTopMap);
 };
+
+// docs/STAGE-D-WAVE-SPECS.md D4 — TEST-ONLY SEAM, same spirit as the accessors above: exposes
+// interiorBuildInteractables + its shape/pose helpers directly so dev/verify-d4-doors.mjs can drive
+// the door render channel (aperture silhouette, per-state pose, state-transition tween) without a
+// live GL mount. Resetting S.interiorDoorStateBySourceRef is exposed too — a harness that wants an
+// isolated "first projection ever" run (no inherited diff state from an earlier check in the same
+// process) can call it explicitly rather than reaching into S directly.
+window.Theater._interiorBuildInteractablesForTest = function(interactables, cx, cz, floorTopMap){
+  return interiorBuildInteractables(interactables, cx, cz, floorTopMap);
+};
+window.Theater._itrDoorShapeForTest = function(arched){ return itrDoorShape(arched); };
+window.Theater._itrDoorIsArchedForTest = function(entry){ return itrDoorIsArched(entry); };
+window.Theater._itrDoorRestPoseForTest = function(state, sourceRef){ return itrDoorRestPose(state, sourceRef); };
+window.Theater._resetInteriorDoorStateForTest = function(){ S.interiorDoorStateBySourceRef = {}; };
 
 // BEAUTY-WAVE.md VP1c — TEST-ONLY SEAM, same spirit as the two accessors above: exposes the flat-
 // tabletop unit group's child count so a harness can prove S.unitGroup is empty after

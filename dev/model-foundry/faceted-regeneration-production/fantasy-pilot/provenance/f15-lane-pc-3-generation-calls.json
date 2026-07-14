@@ -1,0 +1,101 @@
+{
+  "runtimeAdmitted": false,
+  "sheets": [
+    {
+      "file": "spr-pc-tiefling-barbarian-candidate-001.png",
+      "callId": "exec-e5afb328-7818-463d-aa7a-0e13d0933665",
+      "cells": [
+        "spr-pc-tiefling-barbarian-female",
+        "spr-pc-tiefling-barbarian-male"
+      ]
+    },
+    {
+      "file": "spr-pc-tiefling-cleric-candidate-001.png",
+      "callId": "exec-f7be43bd-5b04-485b-870b-c8d709d76670",
+      "cells": [
+        "spr-pc-tiefling-cleric-female",
+        "spr-pc-tiefling-cleric-male"
+      ]
+    },
+    {
+      "file": "spr-pc-tiefling-bard-candidate-001.png",
+      "callId": "exec-6ebec099-68de-4777-85ce-4e06529f19f1",
+      "cells": [
+        "spr-pc-tiefling-bard-female",
+        "spr-pc-tiefling-bard-male"
+      ]
+    },
+    {
+      "file": "spr-pc-tiefling-druid-candidate-001.png",
+      "callId": "exec-572f73cb-2e9e-4d64-948f-f095574f25db",
+      "cells": [
+        "spr-pc-tiefling-druid-female",
+        "spr-pc-tiefling-druid-male"
+      ]
+    },
+    {
+      "file": "spr-pc-tiefling-fighter-candidate-001.png",
+      "callId": "exec-3d0ee016-9651-432e-8f2f-5ab2cdc1d962",
+      "cells": [
+        "spr-pc-tiefling-fighter-female",
+        "spr-pc-tiefling-fighter-male"
+      ]
+    },
+    {
+      "file": "spr-pc-tiefling-monk-candidate-001.png",
+      "callId": "exec-8701b0f0-8b3e-42b6-920c-ffcf0506c4cd",
+      "cells": [
+        "spr-pc-tiefling-monk-female",
+        "spr-pc-tiefling-monk-male"
+      ]
+    },
+    {
+      "file": "spr-pc-tiefling-paladin-candidate-001.png",
+      "callId": "exec-cecf7536-408c-490d-9cd2-8580c3ce62e5",
+      "cells": [
+        "spr-pc-tiefling-paladin-female",
+        "spr-pc-tiefling-paladin-male"
+      ]
+    },
+    {
+      "file": "spr-pc-tiefling-ranger-candidate-001.png",
+      "callId": "exec-541f6151-88a4-469e-8b9b-5450dfd7c849",
+      "cells": [
+        "spr-pc-tiefling-ranger-female",
+        "spr-pc-tiefling-ranger-male"
+      ]
+    },
+    {
+      "file": "spr-pc-tiefling-rogue-candidate-001.png",
+      "callId": "exec-381decda-0048-4cc8-a7cb-e72b4e0d8121",
+      "cells": [
+        "spr-pc-tiefling-rogue-female",
+        "spr-pc-tiefling-rogue-male"
+      ]
+    },
+    {
+      "file": "spr-pc-tiefling-warlock-candidate-001.png",
+      "callId": "exec-8f6cd2b5-b88b-480f-b626-1be6b74703a2",
+      "cells": [
+        "spr-pc-tiefling-warlock-female",
+        "spr-pc-tiefling-warlock-male"
+      ]
+    },
+    {
+      "file": "spr-pc-tiefling-sorcerer-candidate-001.png",
+      "callId": "exec-c416b986-12d0-4a77-b261-902c3fa3fd49",
+      "cells": [
+        "spr-pc-tiefling-sorcerer-female",
+        "spr-pc-tiefling-sorcerer-male"
+      ]
+    },
+    {
+      "file": "spr-pc-tiefling-wizard-candidate-001.png",
+      "callId": "exec-c61099e3-10b9-4d6d-b372-bb363b29026f",
+      "cells": [
+        "spr-pc-tiefling-wizard-female",
+        "spr-pc-tiefling-wizard-male"
+      ]
+    }
+  ]
+}

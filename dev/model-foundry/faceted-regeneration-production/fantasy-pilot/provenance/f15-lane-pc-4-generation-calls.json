@@ -1,0 +1,125 @@
+{
+  "runtimeAdmitted": false,
+  "sheets": [
+    {
+      "file": "spr-pc-halfling-barbarian-candidate-001.png",
+      "callId": "exec-f6c02095-c99f-4e2c-ad08-9c51d6cb4d8c",
+      "cells": [
+        "spr-pc-halfling-barbarian-female",
+        "spr-pc-halfling-barbarian-male",
+        "spr-pc-gnome-barbarian-female",
+        "spr-pc-gnome-barbarian-male"
+      ]
+    },
+    {
+      "file": "spr-pc-halfling-bard-candidate-001.png",
+      "callId": "exec-2dad9184-1426-49b7-b9f7-134cf21d9aa2",
+      "cells": [
+        "spr-pc-halfling-bard-female",
+        "spr-pc-halfling-bard-male",
+        "spr-pc-gnome-bard-female",
+        "spr-pc-gnome-bard-male"
+      ]
+    },
+    {
+      "file": "spr-pc-halfling-cleric-candidate-001.png",
+      "callId": "exec-0116a956-95a4-4b1d-b3e9-ffdb7a85914c",
+      "cells": [
+        "spr-pc-halfling-cleric-female",
+        "spr-pc-halfling-cleric-male",
+        "spr-pc-gnome-cleric-female",
+        "spr-pc-gnome-cleric-male"
+      ]
+    },
+    {
+      "file": "spr-pc-halfling-druid-candidate-001.png",
+      "callId": "exec-d0666571-71f1-41cb-a0d8-de16d5cb14ba",
+      "cells": [
+        "spr-pc-halfling-druid-female",
+        "spr-pc-halfling-druid-male",
+        "spr-pc-gnome-druid-female",
+        "spr-pc-gnome-druid-male"
+      ]
+    },
+    {
+      "file": "spr-pc-halfling-fighter-candidate-001.png",
+      "callId": "exec-e9f6867c-c408-484f-a2ef-9480369dfbd3",
+      "cells": [
+        "spr-pc-halfling-fighter-female",
+        "spr-pc-halfling-fighter-male",
+        "spr-pc-gnome-fighter-female",
+        "spr-pc-gnome-fighter-male"
+      ]
+    },
+    {
+      "file": "spr-pc-halfling-monk-candidate-001.png",
+      "callId": "exec-d9b6b999-ff19-4806-9e45-6085d663e680",
+      "cells": [
+        "spr-pc-halfling-monk-female",
+        "spr-pc-halfling-monk-male",
+        "spr-pc-gnome-monk-female",
+        "spr-pc-gnome-monk-male"
+      ]
+    },
+    {
+      "file": "spr-pc-halfling-paladin-candidate-001.png",
+      "callId": "exec-2cd17632-9360-4782-8544-b1937240046f",
+      "cells": [
+        "spr-pc-halfling-paladin-female",
+        "spr-pc-halfling-paladin-male",
+        "spr-pc-gnome-paladin-female",
+        "spr-pc-gnome-paladin-male"
+      ]
+    },
+    {
+      "file": "spr-pc-halfling-ranger-candidate-001.png",
+      "callId": "exec-b9810334-0866-4b51-bee7-c37b17ced1a9",
+      "cells": [
+        "spr-pc-halfling-ranger-female",
+        "spr-pc-halfling-ranger-male",
+        "spr-pc-gnome-ranger-female",
+        "spr-pc-gnome-ranger-male"
+      ]
+    },
+    {
+      "file": "spr-pc-halfling-rogue-candidate-001.png",
+      "callId": "exec-97c5d994-429e-4fab-8168-a9b2758e3789",
+      "cells": [
+        "spr-pc-halfling-rogue-female",
+        "spr-pc-halfling-rogue-male",
+        "spr-pc-gnome-rogue-female",
+        "spr-pc-gnome-rogue-male"
+      ]
+    },
+    {
+      "file": "spr-pc-halfling-sorcerer-candidate-001.png",
+      "callId": "exec-6d6f947e-0415-4d2d-bd23-c1fc0fdf4f4b",
+      "cells": [
+        "spr-pc-halfling-sorcerer-female",
+        "spr-pc-halfling-sorcerer-male",
+        "spr-pc-gnome-sorcerer-female",
+        "spr-pc-gnome-sorcerer-male"
+      ]
+    },
+    {
+      "file": "spr-pc-halfling-warlock-candidate-001.png",
+      "callId": "exec-f422625d-dbae-448b-9ce1-e6448f14e585",
+      "cells": [
+        "spr-pc-halfling-warlock-female",
+        "spr-pc-halfling-warlock-male",
+        "spr-pc-gnome-warlock-female",
+        "spr-pc-gnome-warlock-male"
+      ]
+    },
+    {
+      "file": "spr-pc-halfling-wizard-candidate-001.png",
+      "callId": "exec-11ca4d56-7e45-4a11-b55c-93425f3fac60",
+      "cells": [
+        "spr-pc-halfling-wizard-female",
+        "spr-pc-halfling-wizard-male",
+        "spr-pc-gnome-wizard-female",
+        "spr-pc-gnome-wizard-male"
+      ]
+    }
+  ]
+}

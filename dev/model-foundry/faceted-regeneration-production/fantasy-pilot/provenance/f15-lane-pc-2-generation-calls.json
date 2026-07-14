@@ -1,0 +1,293 @@
+{
+  "runtimeAdmitted": false,
+  "sheets": [
+    {
+      "file": "spr-pc-orc-barbarian-candidate-001.png",
+      "callId": "exec-2088dd11-5a84-4fab-a08e-72e93d0079ab",
+      "cells": [
+        "spr-pc-orc-barbarian-female",
+        "spr-pc-orc-barbarian-male"
+      ]
+    },
+    {
+      "file": "spr-pc-orc-bard-candidate-001.png",
+      "callId": "exec-f5450ec1-614f-4b05-9a07-2c152d12190a",
+      "cells": [
+        "spr-pc-orc-bard-female",
+        "spr-pc-orc-bard-male"
+      ]
+    },
+    {
+      "file": "spr-pc-orc-cleric-candidate-001.png",
+      "callId": "exec-511c4e6d-7c5b-47aa-8fe6-c7114b2f8d39",
+      "cells": [
+        "spr-pc-orc-cleric-female",
+        "spr-pc-orc-cleric-male"
+      ]
+    },
+    {
+      "file": "spr-pc-orc-druid-candidate-001.png",
+      "callId": "exec-d0924808-0775-46a2-a7be-babc6442d51c",
+      "cells": [
+        "spr-pc-orc-druid-female",
+        "spr-pc-orc-druid-male"
+      ]
+    },
+    {
+      "file": "spr-pc-orc-fighter-candidate-001.png",
+      "callId": "exec-b571b185-1b16-43c8-935a-5d9f9a6a5e94",
+      "cells": [
+        "spr-pc-orc-fighter-female",
+        "spr-pc-orc-fighter-male"
+      ]
+    },
+    {
+      "file": "spr-pc-orc-monk-candidate-001.png",
+      "callId": "exec-23455cac-6afa-446a-a572-7b65ba88668b",
+      "cells": [
+        "spr-pc-orc-monk-female",
+        "spr-pc-orc-monk-male"
+      ]
+    },
+    {
+      "file": "spr-pc-orc-paladin-candidate-001.png",
+      "callId": "exec-77aef5ef-30d4-4e2d-b5a0-4b809bdc5177",
+      "cells": [
+        "spr-pc-orc-paladin-female",
+        "spr-pc-orc-paladin-male"
+      ]
+    },
+    {
+      "file": "spr-pc-orc-ranger-candidate-001.png",
+      "callId": "exec-9039cf53-ed48-4e3d-bb1e-1fc9076dc433",
+      "cells": [
+        "spr-pc-orc-ranger-female",
+        "spr-pc-orc-ranger-male"
+      ]
+    },
+    {
+      "file": "spr-pc-orc-rogue-candidate-001.png",
+      "callId": "exec-59020a93-4a5e-49c8-bdf7-d5766aa16af4",
+      "cells": [
+        "spr-pc-orc-rogue-female",
+        "spr-pc-orc-rogue-male"
+      ]
+    },
+    {
+      "file": "spr-pc-orc-sorcerer-candidate-001.png",
+      "callId": "exec-24ed6c66-a818-4295-bad1-294a7ae889e5",
+      "cells": [
+        "spr-pc-orc-sorcerer-female",
+        "spr-pc-orc-sorcerer-male"
+      ]
+    },
+    {
+      "file": "spr-pc-orc-warlock-candidate-001.png",
+      "callId": "exec-b5de405e-4f39-4d3b-94dd-f3acb17cb7cc",
+      "cells": [
+        "spr-pc-orc-warlock-female",
+        "spr-pc-orc-warlock-male"
+      ]
+    },
+    {
+      "file": "spr-pc-orc-wizard-candidate-001.png",
+      "callId": "exec-e3b3b730-7e65-47a2-a652-31917222bb26",
+      "cells": [
+        "spr-pc-orc-wizard-female",
+        "spr-pc-orc-wizard-male"
+      ]
+    },
+    {
+      "file": "spr-pc-goliath-barbarian-candidate-001.png",
+      "callId": "exec-e5ca37ec-f0e2-40ac-8dbd-40061d419b3e",
+      "cells": [
+        "spr-pc-goliath-barbarian-female",
+        "spr-pc-goliath-barbarian-male"
+      ]
+    },
+    {
+      "file": "spr-pc-goliath-bard-candidate-001.png",
+      "callId": "exec-1adfc504-ea8f-4e69-9568-0c377e682272",
+      "cells": [
+        "spr-pc-goliath-bard-female",
+        "spr-pc-goliath-bard-male"
+      ]
+    },
+    {
+      "file": "spr-pc-goliath-cleric-candidate-001.png",
+      "callId": "exec-0d0b94af-6831-4467-aa8a-f9dc467ce709",
+      "cells": [
+        "spr-pc-goliath-cleric-female",
+        "spr-pc-goliath-cleric-male"
+      ]
+    },
+    {
+      "file": "spr-pc-goliath-druid-candidate-001.png",
+      "callId": "exec-302f4f95-13c3-49fd-935b-376c5b42f7fa",
+      "cells": [
+        "spr-pc-goliath-druid-female",
+        "spr-pc-goliath-druid-male"
+      ]
+    },
+    {
+      "file": "spr-pc-goliath-fighter-candidate-001.png",
+      "callId": "exec-73a72408-eb6c-4460-b8ef-536e181e4579",
+      "cells": [
+        "spr-pc-goliath-fighter-female",
+        "spr-pc-goliath-fighter-male"
+      ]
+    },
+    {
+      "file": "spr-pc-goliath-monk-candidate-001.png",
+      "callId": "exec-3c3b5b7f-8d2d-4cd6-b50d-41c012a1cfef",
+      "cells": [
+        "spr-pc-goliath-monk-female",
+        "spr-pc-goliath-monk-male"
+      ]
+    },
+    {
+      "file": "spr-pc-goliath-paladin-candidate-001.png",
+      "callId": "exec-34fcae1c-6377-46d8-86d1-d5d6b351dae5",
+      "cells": [
+        "spr-pc-goliath-paladin-female",
+        "spr-pc-goliath-paladin-male"
+      ]
+    },
+    {
+      "file": "spr-pc-goliath-ranger-candidate-001.png",
+      "callId": "exec-9b6be06b-1d3f-497b-a834-ff5ce81fbb69",
+      "cells": [
+        "spr-pc-goliath-ranger-female",
+        "spr-pc-goliath-ranger-male"
+      ]
+    },
+    {
+      "file": "spr-pc-goliath-rogue-candidate-001.png",
+      "callId": "exec-8926dae7-1d9b-4dd2-977a-42b576faf5bd",
+      "cells": [
+        "spr-pc-goliath-rogue-female",
+        "spr-pc-goliath-rogue-male"
+      ]
+    },
+    {
+      "file": "spr-pc-goliath-sorcerer-candidate-001.png",
+      "callId": "exec-e7062457-77da-411f-93e8-056c4499f4a5",
+      "cells": [
+        "spr-pc-goliath-sorcerer-female",
+        "spr-pc-goliath-sorcerer-male"
+      ]
+    },
+    {
+      "file": "spr-pc-goliath-warlock-candidate-001.png",
+      "callId": "exec-8c741c17-20ca-42dd-a60b-619952893398",
+      "cells": [
+        "spr-pc-goliath-warlock-female",
+        "spr-pc-goliath-warlock-male"
+      ]
+    },
+    {
+      "file": "spr-pc-goliath-wizard-candidate-001.png",
+      "callId": "exec-ae717469-8f0b-4c77-8651-a9f4a5704a24",
+      "cells": [
+        "spr-pc-goliath-wizard-female",
+        "spr-pc-goliath-wizard-male"
+      ]
+    },
+    {
+      "file": "spr-pc-dragonborn-barbarian-candidate-001.png",
+      "callId": "exec-381ec034-7636-4694-b1f1-931c393116a3",
+      "cells": [
+        "spr-pc-dragonborn-barbarian-female",
+        "spr-pc-dragonborn-barbarian-male"
+      ]
+    },
+    {
+      "file": "spr-pc-dragonborn-bard-candidate-001.png",
+      "callId": "exec-4ac925eb-e94e-455e-9d0e-189105f71364",
+      "cells": [
+        "spr-pc-dragonborn-bard-female",
+        "spr-pc-dragonborn-bard-male"
+      ]
+    },
+    {
+      "file": "spr-pc-dragonborn-cleric-candidate-001.png",
+      "callId": "exec-42050ec9-01ad-41e0-a574-4075bd7ff5bd",
+      "cells": [
+        "spr-pc-dragonborn-cleric-female",
+        "spr-pc-dragonborn-cleric-male"
+      ]
+    },
+    {
+      "file": "spr-pc-dragonborn-druid-candidate-001.png",
+      "callId": "exec-4863fb80-d136-4f98-ab29-110376acefde",
+      "cells": [
+        "spr-pc-dragonborn-druid-female",
+        "spr-pc-dragonborn-druid-male"
+      ]
+    },
+    {
+      "file": "spr-pc-dragonborn-fighter-candidate-001.png",
+      "callId": "exec-89f4d5ae-f57f-47ed-b869-56ec9d753414",
+      "cells": [
+        "spr-pc-dragonborn-fighter-female",
+        "spr-pc-dragonborn-fighter-male"
+      ]
+    },
+    {
+      "file": "spr-pc-dragonborn-monk-candidate-001.png",
+      "callId": "exec-228413f7-fdb8-4b07-9f8b-a62287ff264b",
+      "cells": [
+        "spr-pc-dragonborn-monk-female",
+        "spr-pc-dragonborn-monk-male"
+      ]
+    },
+    {
+      "file": "spr-pc-dragonborn-ranger-candidate-001.png",
+      "callId": "exec-14185ba3-98d1-4686-9f0b-41998072b4bb",
+      "cells": [
+        "spr-pc-dragonborn-ranger-female",
+        "spr-pc-dragonborn-ranger-male"
+      ]
+    },
+    {
+      "file": "spr-pc-dragonborn-paladin-candidate-001.png",
+      "callId": "exec-d2124eee-088c-4f2c-a9b8-e0b6439a1b84",
+      "cells": [
+        "spr-pc-dragonborn-paladin-female",
+        "spr-pc-dragonborn-paladin-male"
+      ]
+    },
+    {
+      "file": "spr-pc-dragonborn-rogue-candidate-001.png",
+      "callId": "exec-1201c25a-3a90-43c5-b78d-7be3a8e86dd7",
+      "cells": [
+        "spr-pc-dragonborn-rogue-female",
+        "spr-pc-dragonborn-rogue-male"
+      ]
+    },
+    {
+      "file": "spr-pc-dragonborn-sorcerer-candidate-001.png",
+      "callId": "exec-f139a859-a855-493a-8f06-046897e463d6",
+      "cells": [
+        "spr-pc-dragonborn-sorcerer-female",
+        "spr-pc-dragonborn-sorcerer-male"
+      ]
+    },
+    {
+      "file": "spr-pc-dragonborn-warlock-candidate-001.png",
+      "callId": "exec-51f3ef52-4eee-4489-b7f5-5aae264ea078",
+      "cells": [
+        "spr-pc-dragonborn-warlock-female",
+        "spr-pc-dragonborn-warlock-male"
+      ]
+    },
+    {
+      "file": "spr-pc-dragonborn-wizard-candidate-001.png",
+      "callId": "exec-cc48a3b9-5443-41ea-bfe2-3c8b1acb1961",
+      "cells": [
+        "spr-pc-dragonborn-wizard-female",
+        "spr-pc-dragonborn-wizard-male"
+      ]
+    }
+  ]
+}

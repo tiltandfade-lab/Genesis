@@ -5,11 +5,17 @@ rule before firing — not repeated here) and the compile template in
 `FACETED-ART-REGENERATION-PRODUCTION-PLAN.md` §6.8. This packet authors no new law. It pushes
 past the priority queue (F1+F2) into the broad bestiary for a high-volume parallel run.
 
-**Same discipline as F2 (do not regress):** full `spr-fantasy-` slug in filenames · per-slug
-candidate numbering from 001 (no lane-global counter) · magenta **#FF00FF** chroma for every
-figure here · one identity per CELL · every output a candidate (`runtimeAdmitted:false`) · saved
-to `.../fantasy-pilot/raw-figures/` with the call id recorded · **per-lane provenance JSON** at
-`.../fantasy-pilot/provenance/<lane>-generation-calls.json` (never append to the shared AUDIT.md).
+## DISCIPLINE (identical across all F-packets; F1 audit lessons baked in)
+1. **Filenames:** full slug incl. `spr-fantasy-` prefix; multi-cell sheets join their cell slugs. Candidates numbered **per-slug from 001** (never a lane-global counter — F1 lanes 3–5 collided).
+2. **Provenance:** per-lane JSON at `fantasy-pilot/provenance/<packet>-<lane>-generation-calls.json` (packet prefix mandatory, e.g. `f8-lane-u-…` — bare lane names collide across packets) (file / callId / cells). Never append to the shared AUDIT.md.
+3. **Chroma:** flat uniform magenta **#FF00FF**; the chroma color must never appear IN a figure (F1 shipped a magenta-tinted shoe). No gradient, floor, shadow, or horizon.
+4. **Crop:** generous padding — weapon tips, tails, stalks, wingtips, feet WELL inside the frame. Near-edge extremities were F1's most common defect.
+5. **Cells:** exactly N figures in N equal vertical 4:8 cells, hard boundaries, no overlap, no shared props, varied poses — no two share a stance. Odd-remainder cells stay pure chroma.
+6. **Props:** exactly ONE of each carried item (F1 produced a doubled kite shield).
+7. **Faces/finish:** grounded, weathered, adult — no BG3-glamour prettiness (F1 lane-4 drift), no MMO gloss, no candy saturation.
+8. **§0 laws:** lanky house bias, girth only when diegetic; COMPACT forward-facing support — wings half-furl, tails/coils wrap tight, legs gather (F1's spider and 3 of 4 dragon candidates failed this); adult register; realistic dark-fantasy horror with a stylized triangulated low-poly twist.
+9. **No VFX in sources:** fire/frost/shadow read as faceted MATERIAL, never a particle plume (F1's flaming-skeleton oversprayed its silhouette).
+10. Every output is a candidate — `runtimeAdmitted:false`; save to `fantasy-pilot/raw-figures/`; record every generation call id.
 
 **Compile each sheet from the §6.8 template** exactly as F1 did — copy any F1 Lane-1 prompt and
 swap the bracketed identity from the seed tables below. Category insertion (§6.8): **monsters**
@@ -171,12 +177,41 @@ Mixed registers/sizes — keep each family on its own sheets.
 True beasts, true canonical anatomy, no anthropomorphism, compact forward-facing support (§0
 base law — legs gather, no wide sprawl; the giant-spider especially). Size varies per animal.
 
-`giant-` set: rat (S) · bat (L) · spider (L) · boar (L) · crab (L) · frog (M) · toad (L) ·
-centipede (M) · scorpion (L) · wasp (M) · weasel (M) · lizard (L) · owl (L) · elk (H) ·
-vulture (M) · eagle (L) · constrictor-snake (H) · ape (H) · badger (M) · goat (M) · crocodile (H)
-· shark (H) · octopus (L) · squid (H) · seahorse (L) · axe-beak (L) · hyena (M) · fire-beetle (S).
-Slugs are `spr-fantasy-giant-<name>` (e.g. `spr-fantasy-giant-spider`). Pair by size per the
-economy; keep aquatic vs land grouping sensible on a sheet.
+(`spr-fantasy-giant-wolf-spider` is F1 lane 5 — do not regenerate; its Step-E HOLD calls for a
+tighter legs-gathered regen, handled at F1 follow-up, not here.)
+
+| slug | size | seed — verb |
+|---|---|---|
+| spr-fantasy-giant-rat | S | dog-sized rat, mangy patchy hide, naked tail wrapped close. verb: SWARMS-BOLD. |
+| spr-fantasy-giant-bat | L | wolf-sized bat, wings furled tight (§0), ears vast, fang underbite. verb: DROPS-FROM-DARK. |
+| spr-fantasy-giant-spider | L | horse-sized web-spider, legs GATHERED under the body (F1 lesson), pale joint bands. verb: DESCENDS-SILENT. |
+| spr-fantasy-giant-boar | L | cart-sized boar, tusks like plow blades, bristle ridge. verb: GORES-THROUGH. |
+| spr-fantasy-giant-crab | L | man-sized crab, one oversized crusher claw held close, barnacled shell. verb: CLAMPS. |
+| spr-fantasy-giant-frog | M | dog-sized frog, wet mottled hide, throat sac half-swelled. verb: GULPS-WHOLE. |
+| spr-fantasy-giant-toad | L | pony-sized toad, warted hide, heavy squat mass. verb: SWALLOWS. |
+| spr-fantasy-giant-centipede | M | arm-thick centipede coiled compact (§0), lacquered segments, venom forcipules. verb: RIPPLES-FORWARD. |
+| spr-fantasy-giant-scorpion | L | horse-sized scorpion, claws in, stinger arched over the back (inside frame, rule 4). verb: PINS-THEN-STINGS. |
+| spr-fantasy-giant-wasp | M | dog-sized wasp, wings folded flat, stinger sheathed, oil-sheen chitin. verb: HARRIES. |
+| spr-fantasy-giant-weasel | M | hound-sized weasel, low serpentine body, blood-tipped muzzle. verb: SLIPS-AND-BITES. |
+| spr-fantasy-giant-lizard | L | horse-sized lizard, splayed climb-ready claws gathered under (§0), dewlap. verb: CLINGS-ANYWHERE. |
+| spr-fantasy-giant-owl | L | man-tall owl, wings furled like a cloak, dish face locked on viewer. verb: REGARDS. |
+| spr-fantasy-giant-elk | H | tree-tall elk, cathedral antler spread kept inside frame (rule 4), dignified. verb: BARS-THE-ROAD. |
+| spr-fantasy-giant-vulture | M | man-sized vulture, bare boiled-looking neck, hunched fold of wings. verb: WAITS-ON-DEATH. |
+| spr-fantasy-giant-eagle | L | rider-sized eagle, wings furled, hooked beak, talons planted. verb: MEASURES-THE-DIVE. |
+| spr-fantasy-giant-constrictor-snake | H | tree-thick serpent, coils stacked in a compact tower (§0), head risen from center. verb: ENCIRCLES. |
+| spr-fantasy-giant-ape | H | house-tall ape, knuckle-planted stance, silver-scarred back. verb: BEATS-THE-GROUND. |
+| spr-fantasy-giant-badger | M | boar-sized badger, digging claws, striped war-mask face. verb: UNEARTHS. |
+| spr-fantasy-giant-goat | M | horse-sized goat, ram-curl horns, cliff-scarred hide. verb: RAMS. |
+| spr-fantasy-giant-crocodile | H | wagon-long crocodile, tail curled alongside (§0), armored scute rows. verb: DEATH-ROLLS. |
+| spr-fantasy-giant-shark | H | boat-sized shark, mid-glide arc as its standee pose, scarred gill flank. verb: CIRCLES-BENEATH. |
+| spr-fantasy-giant-octopus | L | man-sized octopus, arms coiled under in a compact crown (§0), one appraising eye. verb: ENVELOPS. |
+| spr-fantasy-giant-squid | H | ship-menace squid, tentacles gathered to a tapered column (§0), hooked clubs tucked. verb: DRAGS-UNDER. |
+| spr-fantasy-giant-seahorse | L | rider-sized seahorse, armored ring segments, tail coiled to a tight anchor curl. verb: HOLDS-CURRENT. |
+| spr-fantasy-giant-axe-beak | L | horse-tall flightless bird, cleaver beak, runner's legs. verb: RUNS-DOWN. |
+| spr-fantasy-giant-hyena | M | pony-sized hyena, sloped back, bone-cracking jaw agape. verb: LAUGHS-CLOSING. |
+| spr-fantasy-giant-fire-beetle | S | dog-sized beetle, glowing thorax glands as faceted MATERIAL (rule 9, no glow VFX). verb: TRUNDLES-LIT. |
+
+Pair by size per the economy; keep aquatic vs land grouping sensible on a sheet.
 
 ---
 

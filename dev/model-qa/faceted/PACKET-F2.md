@@ -13,13 +13,17 @@ repeated here.
 `dev/model-foundry/faceted-regeneration-production/fantasy-pilot/raw-figures/` with the
 `<slug>-candidate-NNN.png` naming, and record the generation call id per Step A.
 
-**Naming discipline (F1 lesson — do not repeat the drift):** use the FULL packet slug with the
-`spr-fantasy-` prefix in the filename (F1 lanes 3–5 dropped it — don't). For a multi-cell sheet,
-join the cell slugs (e.g. `spr-fantasy-wolf-winter-wolf-candidate-001.png`). **Number candidates
-per-slug from 001** (like F1 lanes 1–2), NOT a lane-global running counter (F1 lanes 3–5 collided
-020–027 across lanes). Keep a provenance file per lane at
-`fantasy-pilot/provenance/<lane>-generation-calls.json` — do NOT append to the shared `AUDIT.md`
-(F1 lane 3 did; it's fragile).
+## DISCIPLINE (identical across all F-packets; F1 audit lessons baked in)
+1. **Filenames:** full slug incl. `spr-fantasy-` prefix; multi-cell sheets join their cell slugs (e.g. `spr-fantasy-wolf-winter-wolf-candidate-001.png`). Candidates numbered **per-slug from 001** (never a lane-global counter — F1 lanes 3–5 collided).
+2. **Provenance:** per-lane JSON at `fantasy-pilot/provenance/<packet>-<lane>-generation-calls.json` (packet prefix mandatory, e.g. `f8-lane-u-…` — bare lane names collide across packets) (file / callId / cells). Never append to the shared AUDIT.md.
+3. **Chroma:** flat uniform magenta **#FF00FF**; the chroma color must never appear IN a figure (F1 shipped a magenta-tinted shoe). No gradient, floor, shadow, or horizon.
+4. **Crop:** generous padding — weapon tips, tails, stalks, wingtips, feet WELL inside the frame. Near-edge extremities were F1's most common defect.
+5. **Cells:** exactly N figures in N equal vertical 4:8 cells, hard boundaries, no overlap, no shared props, varied poses — no two share a stance. Odd-remainder cells stay pure chroma.
+6. **Props:** exactly ONE of each carried item (F1 produced a doubled kite shield).
+7. **Faces/finish:** grounded, weathered, adult — no BG3-glamour prettiness (F1 lane-4 drift), no MMO gloss, no candy saturation.
+8. **§0 laws:** lanky house bias, girth only when diegetic; COMPACT forward-facing support — wings half-furl, tails/coils wrap tight, legs gather (F1's spider and 3 of 4 dragon candidates failed this); adult register; realistic dark-fantasy horror with a stylized triangulated low-poly twist.
+9. **No VFX in sources:** fire/frost/shadow read as faceted MATERIAL, never a particle plume (F1's flaming-skeleton oversprayed its silhouette).
+10. Every output is a candidate — `runtimeAdmitted:false`; save to `fantasy-pilot/raw-figures/`; record every generation call id.
 
 **Chroma:** magenta **#FF00FF** for all figures in this packet. (No identity here canonically
 contains magenta.)
@@ -65,7 +69,9 @@ wings half-furled, tail wrapped tight around the support region, head low and le
 | spr-fantasy-young-copper-dragon | metallic trickster dragon, ruddy copper scales, backswept horns and a mischievous jaw, coiled ready-to-spring haunches. verb: SET-TO-BOLT. |
 
 **Sheet plan A:** S1 red · S2 blue · S3 green · S4 white · S5 silver · S6 bronze · S7 brass ·
-S8 copper. (young-black-dragon is the F1 anchor — already done; do not regenerate.)
+S8 copper. (ERRATUM fixed 2026-07-13: an earlier draft claimed young-black-dragon was the F1
+anchor — F1's anchor is the ADULT black dragon. `spr-fantasy-young-black-dragon` is a distinct
+sprite and rides in **PACKET-F5 Lane S** with the other remaining dragon tiers.)
 
 ## LANE B — wyrmlings + off-type dragons (mixed size) — 6 calls
 

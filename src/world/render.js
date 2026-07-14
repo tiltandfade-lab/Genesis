@@ -485,9 +485,16 @@ function theaterHereSourceFor(w){
   // walks), theaterHereSourceFor falls through byte-identical to the existing {kind:"segment"}
   // return below.
   if(pn.spatial){
+    // docs/STAGE-D-WAVE-SPECS.md D4 JOB 2: `walkId`(=id, the active frontier/map-node id) + `prepNode`
+    // (=pn, the SAME live w.prep.nodes[id] object D0's dmFindInteractable already indexes by
+    // sourceRef) ride through to trayFrom exactly the way `plan:pn.spatial` already does — no new
+    // prep-node convention invented, just one more live sub-reference handed to the render seam. This
+    // file still never WRITES prep state itself; trayFrom's own reconciliation
+    // (trayReconcileInteractableState, src/engine/theater-data.js) is the one place that mutates
+    // prepNode.interactables[], and only to stamp/read back state bookkeeping, never a narrative fact.
     return { kind:"interior", plan:pn.spatial, walk:walk, segment:seg, overlay:reskinEntry,
       guiseByEntityId:theaterGuiseSnapshotFor(w,walk),
-      focusSegNum:cur, radius:1,
+      focusSegNum:cur, radius:1, walkId:id, prepNode:pn,
       env:walk.environment||undefined, realms:realms,
       traces:(reskinEntry&&reskinEntry.traces)||undefined, removed:(reskinEntry&&reskinEntry.removed)||undefined };
   }

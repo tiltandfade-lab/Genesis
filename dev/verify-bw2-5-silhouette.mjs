@@ -45,6 +45,12 @@
         EXACTLY the 4 known kinds (floor/wall/doorframe/pillar) on an 80-room plan — re-proven here
         since this unit added 3 new SIBLING arrays (furniture/wallProps/daisTop) that must never leak
         into `instances` itself.
+    13. D4d (docs/STAGE-D-WAVE-SPECS.md) DOORFRAME MASS FIX: every plain-frame doorframe prism (jamb
+        or header, archStep==null) is slim on at least one axis (min(sx,sz) <= the named
+        ITR_JAMB_WIDTH_FRAC-scale slim budget) — never a wFrac x wFrac column on BOTH axes at once
+        (the pre-fix shape, RED-FIRST-proven against 2045dbcc: every plain-frame instance measured
+        sx=sz=0.8). The aperture cross-section between the two jambs (the gap the D4 leaf fills)
+        stays >= half the aperture's own width, i.e. genuinely open, not merely "technically nonzero".
 
    Run:  node dev/verify-bw2-5-silhouette.mjs */
 import { readFileSync } from "node:fs";
@@ -114,13 +120,25 @@ function fullPlan(fixture, walkId, realmId) {
 
 group("1 — ARCH HEADER: non-squeeze doors gain 2 stacked doorframe prisms (yBase>0); squeeze doors gain none");
 {
+  // D4d (docs/STAGE-D-WAVE-SPECS.md) sync note: pre-D4d, a plain door emitted exactly ONE non-arch
+  // doorframe prism (the solid wFrac x wFrac box), so counting non-arch prisms WAS counting doors.
+  // D4d splits that single box into 3 prisms per door (2 jambs + 1 header, tagged `jamb`/`header`,
+  // neither carrying archStep) — a raw prism count now over-counts doors 3x. RED-FIRST proof (run
+  // against this same fixture, post-D4d, pre-this-sync): the old `!d.squeeze && d.archStep == null`
+  // filter counted 54 prisms for 18 real doors, so `archSteps.length === plainDoors.length*2` (36 ===
+  // 108) failed — a false regression signal, not a real one (still exactly 2 arch steps per real
+  // door). Fixed by counting DISTINCT door CELLS (unique x,z among plain-frame prisms) instead of
+  // raw prism instances — never weakened: still asserts the exact "2 arch steps per non-squeeze
+  // door, 0 for squeeze" property, just counted honestly against the new multi-prism-per-door shape.
   const plan = fullPlan(buildChainFixture(10), "bw2-5-arch", "fantasy");
   const board = M.interiorBuildBoard(plan, { realmId: "fantasy" });
-  const plainDoors = board.instances.doorframe.filter((d) => !d.squeeze && d.archStep == null);
+  const plainFramePrisms = board.instances.doorframe.filter((d) => !d.squeeze && d.archStep == null);
+  const plainDoorCells = new Set(plainFramePrisms.map((d) => d.x + "," + d.z));
   const archSteps = board.instances.doorframe.filter((d) => d.archStep != null);
-  ok(plainDoors.length > 0, "at least one plain door instance exists");
+  ok(plainFramePrisms.length > 0, "at least one plain door frame prism exists");
+  ok(plainDoorCells.size > 0, "at least one distinct plain door cell exists");
   ok(archSteps.length > 0, "at least one arch-header prism exists");
-  ok(archSteps.length === plainDoors.length * 2, `every plain door earns exactly 2 arch-header prisms (${archSteps.length} steps / ${plainDoors.length} doors)`);
+  ok(archSteps.length === plainDoorCells.size * 2, `every plain door CELL earns exactly 2 arch-header prisms (${archSteps.length} steps / ${plainDoorCells.size} door cells)`);
   ok(archSteps.every((a) => typeof a.yBase === "number" && a.yBase > 0), "every arch-header prism carries yBase>0 (stacked ABOVE the main frame)");
   const step1 = archSteps.filter((a) => a.archStep === 1), step2 = archSteps.filter((a) => a.archStep === 2);
   ok(step1.length > 0 && step2.length > 0, "both corbel steps (1 and 2) are present");
@@ -294,6 +312,46 @@ group("12 — REGRESSION: board.instances still emits EXACTLY the 4 known kinds 
     `exactly the 4 known kinds present (got: ${kinds.join(",")}) — furniture/wallProps/daisTop stay SIBLINGS, never leak into instances`);
   ok(Array.isArray(board.furniture) && Array.isArray(board.wallProps) && Array.isArray(board.daisTop),
     "furniture/wallProps/daisTop are present as top-level sibling arrays");
+}
+
+group("13 — D4d DOORFRAME MASS FIX: plain-frame prisms are slim (never a wFrac x wFrac column); aperture stays open between jambs");
+{
+  // Named slim budget: a jamb post is <= ~0.15 cell wide (spec); the header's own slim (depth) axis
+  // rides on revealW + a small proud lip, always << the aperture's own wFrac span for any realistic
+  // door. SLIM_BUDGET here is deliberately generous (0.2, above the 0.15 jamb spec but far below the
+  // pre-fix 0.8 column) so this check keys on "is it a column" (both axes wide), not on the exact
+  // jamb-width tuning number (that's ITR_JAMB_WIDTH_FRAC's own job, asserted implicitly by the header
+  // check below reading the real wFrac span).
+  const SLIM_BUDGET = 0.2;
+  const plan = fullPlan(buildChainFixture(10), "d4d-slim-budget", "fantasy");
+  const board = M.interiorBuildBoard(plan, { realmId: "fantasy" });
+  const plainFramePrisms = board.instances.doorframe.filter((d) => !d.squeeze && d.archStep == null);
+  ok(plainFramePrisms.length > 0, "at least one plain-frame prism exists");
+  const columns = plainFramePrisms.filter((f) => Math.min(f.sx, f.sz) > SLIM_BUDGET);
+  ok(columns.length === 0, `NO plain-frame prism is a column on both axes (${columns.length}/${plainFramePrisms.length} exceed the ${SLIM_BUDGET} slim budget on both sx and sz)`);
+  ok(plainFramePrisms.every((f) => f.jamb || f.header), "every plain-frame prism is tagged jamb or header (never an untagged solid box)");
+
+  // aperture cross-section: per door cell, the two jambs' own combined footprint (aperture width -
+  // 2x jamb width) must leave a real open gap, not a sliver — the D4 leaf fills exactly this gap.
+  const byCell = new Map();
+  plainFramePrisms.forEach((f) => {
+    const key = f.x + "," + f.z;
+    if (!byCell.has(key)) byCell.set(key, []);
+    byCell.get(key).push(f);
+  });
+  let checkedCells = 0;
+  byCell.forEach((prisms) => {
+    const jambs = prisms.filter((p) => p.jamb);
+    const header = prisms.find((p) => p.header);
+    if (jambs.length !== 2 || !header) return;
+    const apertureWidth = Math.max(header.sx, header.sz); // the header's own wFrac-bearing dimension
+    const jambWidth = Math.max(jambs[0].sx, jambs[0].sz) === apertureWidth
+      ? Math.min(jambs[0].sx, jambs[0].sz) : Math.max(jambs[0].sx, jambs[0].sz);
+    const openGap = apertureWidth - 2 * jambWidth;
+    ok(openGap >= apertureWidth * 0.5, `door cell aperture gap (${openGap.toFixed(3)}) is >= half the aperture width (${apertureWidth.toFixed(3)}) — genuinely open, not a sliver`);
+    checkedCells++;
+  });
+  ok(checkedCells > 0, `at least one door cell's aperture cross-section was checked (${checkedCells} checked)`);
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);

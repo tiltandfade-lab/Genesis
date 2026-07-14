@@ -680,6 +680,32 @@ const ITR_ARCH_STEP2_HEIGHT = 0.16;      // second (narrower) corbel step, stack
 const ITR_ARCH_STEP1_WIDTH_FRAC = 0.92;  // fraction of the door's own wFrac footprint
 const ITR_ARCH_STEP2_WIDTH_FRAC = 0.7;
 
+// ─── docs/STAGE-D-WAVE-SPECS.md D4d — DOORFRAME MASS FIX (Adam's "big ass column" ruling: "there's
+// a big ass column right in front of the door, so I can't really even see it"). The pre-unit frame
+// was a SINGLE solid wFrac x wFrac x h box (the full aperture footprint fraction in BOTH cell axes)
+// sitting square in the doorway cell — a stone column, not a frame, permanently occluding the D4
+// leaf that fills this exact cell (proven RED against the landed geometry: every plain-frame
+// instance measured sx=sz=0.8, both axes far over any slim-frame budget). A real doorframe reads as
+// two slim JAMB POSTS (one on each side of the aperture's own WIDTH axis) plus a HEADER/lintel
+// spanning between them, both hugging the WALL PLANE (thin along the passage/depth axis — the SAME
+// axis the wall-thickness reveal jambs already occupy) — never filling the passage axis at all.
+// Named budgets:
+//   ITR_JAMB_WIDTH_FRAC — each jamb post's width across the aperture span, a cell fraction (spec:
+//     "<= ~0.15 cell each").
+//   ITR_FRAME_PROUD — how far the frame proudly sits past the wall's own cut thickness (the SAME
+//     revealW the wall-thickness-reveal block below already computes) into the room — a shallow
+//     lip, never a second wall. Frame depth = revealW + ITR_FRAME_PROUD (spec: "frame depth <= the
+//     wall thickness + a small proud reveal"), so a squeeze door's own (wider) reveal margin still
+//     yields a proportionally thin — never a thick — frame.
+//   ITR_HEADER_HEIGHT — the lintel band's own height, stacked ABOVE the jambs' full h-tall span
+//     (yBase=h, exactly where the arch-corbel steps used to start) so the jambs' own [0,h] range —
+//     the D4 leaf's full clear opening — stays COMPLETELY unobstructed between them. The arch-corbel
+//     steps (non-squeeze doors only, below) shift up by this same amount so they keep corbelling IN
+//     from the header's own footprint, never the old wide column's.
+const ITR_JAMB_WIDTH_FRAC = 0.12;
+const ITR_FRAME_PROUD = 0.05;
+const ITR_HEADER_HEIGHT = 0.14;
+
 // ─── BW2-5 THE COLUMN DEMOTION (Adam 2026-07-10 night: "why are there so many uniform square
 // columns?") — bare square columns become a RARE accent (<=1 per room, most rooms earn none at all)
 // and VARIED (square/round/tapered/broken) when they do appear; see the pillar-building block below
@@ -1287,6 +1313,10 @@ function interiorBuildBoard(plan, opts) {
         const baseH = ITR_WALL_HEIGHT_BASE * (d ? (d.heightScale || 1.0) : 1.0);
         const h = baseH * (squeeze ? ITR_SQUEEZE_HEIGHT_FRAC : ITR_DOOR_HEIGHT_FRAC);
         const wFrac = squeeze ? ITR_SQUEEZE_WIDTH_FRAC : 0.8;
+        // hoisted (D4d): the wall-thickness reveal block below already derives this as "the wall's
+        // own cut thickness at the opening" — the D4d frame block just below needs the SAME number
+        // (frame depth rides on top of it) so it's computed ONCE here rather than twice.
+        const revealW = (1 - wFrac) / 2;
         // VP4 item 3 (accent discipline): exactly ONE accent thread per room — the first doorframe
         // cell whose neighboring room hasn't been accented yet earns the accentHue tint (<= 0.1
         // strength, a mood wash never a color-replace); every other doorframe/pillar in the room stays
@@ -1304,22 +1334,46 @@ function interiorBuildBoard(plan, opts) {
           trimColor = itrTintTowardHue(kit.trimColor, doorSceneDir.accentHue, ITR_ACCENT_STRENGTH);
           accentedRooms.add(doorRoom.segNum);
         }
-        doorframe.push({ x, z: y, sx: wFrac, sy: h, sz: wFrac, color: trimColor, squeeze, transition: !!(d && d.transition) });
+
+        // D4d — DOORFRAME MASS FIX (replaces the old single wFrac x wFrac SOLID box). widthAxisIsZ
+        // picks which cell axis the aperture's own WIDTH spans (jambs offset along it) vs. which axis
+        // is the passage/depth direction (the frame's own slim axis) — reusing the SAME onLeftRight/
+        // onTopBottom edge read the wall-thickness reveal block below already derives, never a second
+        // derivation. Defaults TRUE (aperture spans z, passage along x) for the rare/degenerate case
+        // (doorRoom unresolved, or an interior door not on any room-rect edge) — the SAME "never
+        // throws, degrades safely" precedent the reveal block below documents for its own axis read.
+        const widthAxisIsZ = !(onTopBottom && !onLeftRight);
+        const frameDepth = revealW + ITR_FRAME_PROUD; // hugs the wall plane: wall's own cut thickness + a small proud lip
+        const jambOffset = wFrac / 2 - ITR_JAMB_WIDTH_FRAC / 2; // jamb's OUTER edge lands flush with the aperture edge (== the old box's own edge)
+        [-1, 1].forEach((sign) => {
+          doorframe.push(widthAxisIsZ
+            ? { x, z: y, sx: frameDepth, sy: h, sz: ITR_JAMB_WIDTH_FRAC, color: trimColor, squeeze, transition: !!(d && d.transition), oz: sign * jambOffset, jamb: true }
+            : { x, z: y, sx: ITR_JAMB_WIDTH_FRAC, sy: h, sz: frameDepth, color: trimColor, squeeze, transition: !!(d && d.transition), ox: sign * jambOffset, jamb: true });
+        });
+        // header/lintel: spans the FULL aperture width (same outer span the two jambs bracket) at the
+        // SAME slim depth, stacked ABOVE the jambs' own [0,h] span (yBase=h) — so that entire span,
+        // the D4 leaf's full clear opening, stays completely open between the jambs (nothing but the
+        // two slim posts occupies it).
+        doorframe.push(widthAxisIsZ
+          ? { x, z: y, sx: frameDepth, sy: ITR_HEADER_HEIGHT, sz: wFrac, color: trimColor, squeeze, transition: !!(d && d.transition), yBase: h, header: true }
+          : { x, z: y, sx: wFrac, sy: ITR_HEADER_HEIGHT, sz: frameDepth, color: trimColor, squeeze, transition: !!(d && d.transition), yBase: h, header: true });
         track(x, y);
 
         // BW2-5 item 1: ARCH HEADER — "doorframe prisms gain an arch header (2-3 stacked prisms
         // corbelling in)". Plain (non-squeeze) doors only — a squeeze crawl-space reads as a crude
-        // tight passage, never a dressed archway. Two narrowing prisms stack ABOVE the main frame via
-        // `yBase` (this unit's own new field — see the constants block's header comment).
+        // tight passage, never a dressed archway. Two narrowing prisms stack ABOVE the D4d header (its
+        // own yBase shifted up by ITR_HEADER_HEIGHT so the corbels keep narrowing IN from the header's
+        // own slim footprint, never the old wide column's) via `yBase` (BW2-5's own field — see the
+        // constants block's header comment).
         if (!squeeze) {
           doorframe.push({
             x, z: y, sx: wFrac * ITR_ARCH_STEP1_WIDTH_FRAC, sy: ITR_ARCH_STEP1_HEIGHT,
-            sz: wFrac * ITR_ARCH_STEP1_WIDTH_FRAC, color: trimColor, yBase: h, archStep: 1,
+            sz: wFrac * ITR_ARCH_STEP1_WIDTH_FRAC, color: trimColor, yBase: h + ITR_HEADER_HEIGHT, archStep: 1,
           });
           doorframe.push({
             x, z: y, sx: wFrac * ITR_ARCH_STEP2_WIDTH_FRAC, sy: ITR_ARCH_STEP2_HEIGHT,
             sz: wFrac * ITR_ARCH_STEP2_WIDTH_FRAC, color: trimColor,
-            yBase: h + ITR_ARCH_STEP1_HEIGHT, archStep: 2,
+            yBase: h + ITR_HEADER_HEIGHT + ITR_ARCH_STEP1_HEIGHT, archStep: 2,
           });
         }
 
@@ -1337,7 +1391,6 @@ function interiorBuildBoard(plan, opts) {
         // threshold), so a neighbor-WALL scan measurably missed most real doors; the room rect edge is
         // the reliable signal. Degrades to no reveal off a room's own edge (rare/degenerate topology,
         // e.g. an interior door) — never throws.
-        const revealW = (1 - wFrac) / 2;
         if (revealW > 0.01 && doorRoom) {
           const revealSceneDir = sceneDirectionFor(kit.realmId, doorRoom.role);
           const revealColor = itrDarkenHex(kit.wallColor, revealSceneDir.valueScript.wall);

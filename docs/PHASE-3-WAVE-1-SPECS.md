@@ -239,7 +239,15 @@ E0's fixture authoring (only its fade-with-wall behavior).
 
 ---
 
-## W0-a — MF-3b hit-stop production wiring  ·  branch `feat/w0a-mf3b-hitstop`  ·  SUB-WAVE 2 (after P3-1d)
+## W0-a — MF-3b hit-stop production wiring  ·  ~~branch `feat/w0a-mf3b-hitstop`~~  ·  ✅ ALREADY LANDED
+
+> **STRUCK 2026-07-13 — no work needed.** MF-3b was already wired in BW4B (commit `17474b45`,
+> 2026-07-11), which landed AFTER the handoff that flagged it open — so the wave plan listed a
+> unit that had already shipped. Verified on master: `dm.js:1595` `hp_changed` carries `crit` +
+> `attacker`; `theater-verbs.js:943` (`theaterFxFromLedger` hp case — note it lives in
+> theater-verbs.js, not theater-boot.js as the anchor below guessed) emits `attackerId`/`crit`;
+> `standee-verbs.js:400` consumes them; `verify-mf3b-hitstop-wiring.mjs` 35/0; dm-contract clean.
+> Left below for the record; do not re-dispatch.
 
 ### Context
 MF-3's hit-stop/recoil/crit-response are built + tested but DORMANT: production plays `hit-damage`
@@ -307,3 +315,55 @@ not a code fix).
 
 ### Out of scope
 Any product-code change; judging the captures (that's Adam's taste gate); geometry-kernel changes.
+
+---
+
+## E0-1 — Wall-fixture occlusion-fade linkage  ·  branch `feat/e0-1-fixture-fade`  ·  SUB-WAVE 2 (after P3-1d)
+
+### Context (the gap P3-1d widened, flagged out-of-scope by P3-1d itself)
+Wall-mounted E0 practicals (torches/lamps from `interiorBuildFixtureGroup`, `theater-boot.js:6589`)
+never fade in lockstep with their owning wall segment's occlusion opacity tween. When P3-1d suppresses
+a camera-side wall's upper band to near-invisible, a torch mounted on that segment keeps rendering
+fully lit — it floats against a faded/near-gone wall. This predates P3-1d (C4.1b never wired it), but
+P3-1d's WIDER suppression coverage makes the gap far more likely to manifest on screen.
+
+Root cause: (1) the fixture BODY material (`interiorFixtureBodyMaterial`, `theater-boot.js:6571`)
+returns ONE shared `THREE.MeshLambertMaterial` cached in `ITR_FIXTURE_BODY_MATERIAL_CACHE` (:6570)
+across every fixture — mutating its opacity to match one segment's fade would wrongly fade ALL
+fixtures, so it cannot be pushed into a segment's `fadeEntry.materials` as-is. (2) The emitter material
+IS per-fixture (`interiorFixtureEmitterMaterial`, :6577) but its only suppression today is the
+`suppressPractical`/`isBrightRealm` gate (:6682) — never tied to wall occlusion state.
+
+### Decision (do not re-litigate)
+Give wall-mounted fixtures a NON-SHARED body material (clone per fixture whose `light.mount === "wall"`
+— non-wall fixtures keep the shared cache, no perf regression for the common case), then APPEND both
+that fixture's body-clone + emitter materials into the SAME `ownerSegIndex` `wallUpperMeshList`
+`fadeEntry` P3-1d builds (`theater-boot.js:9179-9217`; the `fadeEntry` is created at :9212 via
+`itrOcclusionClassify(id, wallUpperRawBlocking.has(entry.ownerSegIndex), …)`). APPEND — never
+overwrite: the wall segment's own upper mesh material already occupies `fadeEntry.materials` (see how
+`fadeEntry.materials` is populated for the instanced/pillar meshes at :6261/:6276). Wire this where
+`interiorBuildLights` is called (grep the call site — it shifted post-P3-1d), where both the fixtures
+and the per-segment `wallUpperMeshList`/`fadeEntry` map are in scope. Materials appended must be
+`transparent=true` so opacity tweening actually shows.
+
+### Files & functions (all `src/ui/theater-boot.js` — locate FRESH; P3-1d shifted line numbers)
+`interiorFixtureBodyMaterial`/`ITR_FIXTURE_BODY_MATERIAL_CACHE` (per-wall-mount clone path, keep shared
+cache for non-wall) · `interiorBuildFixtureGroup` (`wantWall`/`light.mount==="wall"` at :6590/:6637 —
+surface body+emitter materials + owning wall `segIndex`) · the `interiorBuildLights` call site (append
+each wall fixture's [bodyClone, emitterMat] into its `ownerSegIndex` `fadeEntry.materials`; a fixture on
+a segment with no fadeEntry is simply not registered — unaffected).
+
+### Verification
+- ⊗ RED FIRST: a torch on a `wallUpperRawBlocking`-suppressed segment has its body+emitter opacity
+  driven toward the segment's fade opacity (< 1) — fails before the wiring (stays 1), passes after.
+- Isolation proof (proves the shared-material bug is truly fixed, not papered over): assert in ONE
+  scene that (a) a fixture on a suppressed segment fades, (b) a fixture on a NON-suppressed segment
+  stays fully lit, (c) a fixture elsewhere does NOT fade as a side effect of one segment's fade.
+- Re-run green: `dev/verify-theater-shot.mjs`, `dev/verify-wall-occlusion.mjs`, `dev/verify-p3-1d-cutaway.mjs`,
+  `dev/verify-dungeon-interior.mjs`, `check-manifest.py`.
+- Visual: re-shoot a fixture-on-suppressed-near-wall scene and READ the PNG — the torch dims with its
+  wall, never floats lit.
+
+### Out of scope
+Which segments suppress (P3-1d); the bright-realm `suppressPractical` gate (unchanged — composes with
+this); cone/glow-disc fading unless trivially in the same fadeEntry; non-wall fixtures (keep shared cache).

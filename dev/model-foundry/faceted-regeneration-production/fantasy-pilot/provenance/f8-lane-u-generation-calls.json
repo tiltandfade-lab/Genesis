@@ -1,0 +1,17 @@
+{
+  "runtimeAdmitted": false,
+  "sheets": [
+    {"file":"spr-fantasy-mind-thief-spr-fantasy-mind-thief-arcanist-candidate-001.png","callId":"recovered-built-in-return-01","cells":["spr-fantasy-mind-thief","spr-fantasy-mind-thief-arcanist"]},
+    {"file":"spr-fantasy-deep-brute-spr-fantasy-deep-brute-thonot-candidate-001.png","callId":"recovered-built-in-return-02","cells":["spr-fantasy-deep-brute","spr-fantasy-deep-brute-thonot"]},
+    {"file":"spr-fantasy-void-monk-monk-spr-fantasy-void-monk-psion-candidate-001.png","callId":"recovered-built-in-return-03","cells":["spr-fantasy-void-monk-monk","spr-fantasy-void-monk-psion"]},
+    {"file":"spr-fantasy-grell-spr-fantasy-secret-eye-candidate-001.png","callId":"recovered-built-in-return-04","cells":["spr-fantasy-grell","spr-fantasy-secret-eye"]},
+    {"file":"spr-fantasy-void-monk-zerth-candidate-001.png","callId":"recovered-built-in-return-05","cells":["spr-fantasy-void-monk-zerth"]},
+    {"file":"spr-fantasy-blind-deep-stalker-candidate-001.png","callId":"recovered-built-in-return-06","cells":["spr-fantasy-blind-deep-stalker"]},
+    {"file":"spr-fantasy-piercer-candidate-001.png","callId":"recovered-built-in-return-07","cells":["spr-fantasy-piercer"]},
+    {"file":"spr-fantasy-elder-deep-thing-candidate-001.png","callId":"recovered-built-in-return-08","cells":["spr-fantasy-elder-deep-thing"]},
+    {"file":"spr-fantasy-roper-candidate-001.png","callId":"recovered-built-in-return-09","cells":["spr-fantasy-roper"]},
+    {"file":"spr-fantasy-umber-hulk-candidate-001.png","callId":"recovered-built-in-return-10","cells":["spr-fantasy-umber-hulk"]},
+    {"file":"spr-fantasy-hook-horror-candidate-001.png","callId":"recovered-built-in-return-11","cells":["spr-fantasy-hook-horror"]},
+    {"file":"spr-fantasy-blob-of-annihilation-candidate-001.png","callId":"recovered-built-in-return-12","cells":["spr-fantasy-blob-of-annihilation"]}
+  ]
+}

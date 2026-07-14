@@ -838,3 +838,218 @@ Notes:
 - Excellent face character, ancestry diversity, and mature civilian tone.
 - Generated as a tall vertical sheet with tighter inter-sprite spacing than requested; slice with caution or
   regenerate if automated segmentation is brittle.
+
+### `raw-figures/fantasy-assassin-scout-candidate-012.png`
+
+Source: built-in image generation call `call_EfQRTP2iRtTNCMiNNZJeXnaR`.
+
+Requested sprites:
+
+- `spr-fantasy-assassin`
+- `spr-fantasy-scout`
+
+Audit verdict: candidate.
+
+Alpha sheet: `alpha-figures/fantasy-assassin-scout-candidate-012-alpha.png`
+
+Notes:
+
+- Good pose/gaze variety: assassin is direct and still; scout is alert without becoming a pinup or scenery piece.
+- Scout bow remains close/vertical enough for slicing.
+
+### `raw-figures/fantasy-dungeon-animals-audit-013.png`
+
+Source: built-in image generation call `call_FtYy2fq0g2BQ3zyx0axa5xWM`.
+
+Requested sprites:
+
+- `spr-fantasy-giant-rat`
+- `spr-fantasy-giant-spider`
+- `spr-fantasy-dire-wolf`
+- `spr-fantasy-black-bear`
+
+Audit verdict: visual candidate / runtime-shape audit.
+
+Alpha sheet: `alpha-figures/fantasy-dungeon-animals-audit-013-alpha.png`
+
+Notes:
+
+- Excellent faceted animal material and scary creature personality.
+- True animal silhouettes are naturally wide; treat as style proof and slicing source, then scale or regenerate
+  per creature if 1x1 base fit is too broad.
+
+### `raw-figures/fantasy-kobold-bugbear-candidate-013.png`
+
+Source: built-in image generation call `call_1O1wcO6eP6AtgiEwdMJgD1zx`.
+
+Requested sprites:
+
+- `spr-fantasy-kobold`
+- `spr-fantasy-kobold-inventor`
+- `spr-fantasy-bugbear-stalker`
+- `spr-fantasy-bugbear-warrior`
+
+Audit verdict: partial candidate; bugbear weapon audit.
+
+Alpha sheet: `alpha-figures/fantasy-kobold-bugbear-candidate-013-alpha.png`
+
+Notes:
+
+- Kobold and kobold inventor are good: small, wiry, and not cute.
+- Bugbear stalker is useful.
+- Bugbear warrior's low oversized weapon has odd geometry; keep as salvage/reference only. Prefer
+  `fantasy-bugbear-repair-candidate-014` for warrior replacement direction.
+
+### `raw-figures/fantasy-ogre-troll-candidate-014.png`
+
+Source: built-in image generation call `call_GQ5cdyZYPNF7KJoNaH6kIwjL`.
+
+Requested sprites:
+
+- `spr-fantasy-ogre`
+- `spr-fantasy-troll`
+
+Audit verdict: candidate.
+
+Alpha sheet: `alpha-figures/fantasy-ogre-troll-candidate-014-alpha.png`
+
+Notes:
+
+- Strong big-monster contrast: ogre heavy, troll lanky/predatory.
+- Both remain front-readable and characterful.
+
+### `raw-figures/fantasy-bugbear-repair-candidate-014.png`
+
+Source: built-in image generation call `call_QlnWF85ntZAcAvHGx6GdtJS6`.
+
+Requested sprites:
+
+- `spr-fantasy-bugbear-stalker` alt
+- `spr-fantasy-bugbear-stalker-strangler`
+- `spr-fantasy-bugbear-warrior` repair
+
+Audit verdict: preferred bugbear candidate.
+
+Alpha sheet: `alpha-figures/fantasy-bugbear-repair-candidate-014-alpha.png`
+
+Notes:
+
+- Repairs the odd-weapon issue from the prior bugbear sheet.
+- Strangler is compact and expressive; warrior weapon is simple and close-held.
+
+### `raw-figures/fantasy-orc-roles-candidate-015.png`
+
+Source: built-in image generation call `call_btflSqCCFRZ95pFhai8rHkmb`.
+
+Requested sprites:
+
+- `spr-fantasy-orc-warrior`
+- `spr-fantasy-orc-berserker`
+- `spr-fantasy-metalworker-orc`
+- `spr-fantasy-orc-blind-prophet`
+
+Audit verdict: candidate with base-fit caution.
+
+Alpha sheet: `alpha-figures/fantasy-orc-roles-candidate-015-alpha.png`
+
+Notes:
+
+- No wagon-wheel or background contamination; this fixes the earlier blacksmith sheet failure mode.
+- Some weapons/staff elements are wide or tall; measure during slicing.
+
+### `raw-figures/fantasy-town-workers-audit-016.png`
+
+Source: built-in image generation call `call_g91dPHo4zGDyjOfBU2O89uQq`.
+
+Requested sprites:
+
+- `spr-fantasy-clothier-dwarf`
+- `spr-fantasy-halfling-farmer-dark-skinned-tends-the-best-soil-in-the-valley`
+- `spr-fantasy-human-wheelwright-human-dark-skinned-third-generation-in-the-same-shop`
+- `spr-fantasy-elven-scribe-elf-copies-manuscripts-for-the-town-archive-meticulous-to-a-fault`
+
+Audit verdict: candidate/audit.
+
+Alpha sheet: `alpha-figures/fantasy-town-workers-audit-016-alpha.png`
+
+Notes:
+
+- Strong town-worker tone, good tools, no wagon-wheel contamination.
+- Farmer may not read as clearly halfling-scale; regenerate halfling-specific replacement if exact ancestry/height
+  is required.
+
+### `raw-figures/fantasy-kid-wants-variety-candidate-016.png`
+
+Source: built-in image generation call `call_LR6o8CLGajkhrQjlrUdcihlV`.
+
+Requested roles:
+
+- kid wants to warn someone
+- kid wants to find the dog that did not come home
+- kid wants to keep a secret
+- kid wants to prove they are not a baby
+
+Audit verdict: candidate.
+
+Alpha sheet: `alpha-figures/fantasy-kid-wants-variety-candidate-016-alpha.png`
+
+Notes:
+
+- Good expression and pose variety; avoids identical off-camera longing.
+- Child designs remain grounded rather than chibi/cute mascot.
+
+### `raw-figures/fantasy-domestic-animals-candidate-017.png`
+
+Source: built-in image generation call `call_glCrNKFyUvjVVENmlQQS1xEk`.
+
+Requested sprites:
+
+- barn cat
+- vermin-catcher ferret
+- loud turkey
+- calm pony
+
+Audit verdict: candidate.
+
+Alpha sheet: `alpha-figures/fantasy-domestic-animals-candidate-017-alpha.png`
+
+Notes:
+
+- Clean domestic animal style proof without cute drift.
+- Pony is slightly side-oriented but true-shape acceptable.
+
+### `raw-figures/fantasy-owlbear-primeval-candidate-018.png`
+
+Source: built-in image generation call `call_4Z7jA5pZXNUMmEQukkMOd6FL`.
+
+Requested sprites:
+
+- `spr-fantasy-owlbear`
+- `spr-fantasy-primeval-owlbear`
+
+Audit verdict: strong candidate.
+
+Alpha sheet: `alpha-figures/fantasy-owlbear-primeval-candidate-018-alpha.png`
+
+Notes:
+
+- Strong faceted horror identity; not cute.
+- Large/ornate enough that final close inspection may prefer one-per-sheet variants, but this two-up is usable.
+
+### `raw-figures/fantasy-spider-monsters-audit-018.png`
+
+Source: built-in image generation call `call_UwVSaQeZxnokA3J3SPUYQvvS`.
+
+Requested sprites:
+
+- `spr-fantasy-phase-spider`
+- `spr-fantasy-giant-wolf-spider`
+
+Audit verdict: visual candidate / width audit.
+
+Alpha sheet: `alpha-figures/fantasy-spider-monsters-audit-018-alpha.png`
+
+Notes:
+
+- Strong spider material and monster identity.
+- True spider shapes are wide; review per-creature base fit before runtime slicing.

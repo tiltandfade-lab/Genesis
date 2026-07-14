@@ -737,6 +737,43 @@ function wallUpperBlockingSet(opts) {
   });
   return blocking;
 }
+// P3-1d (docs/PHASE-3-WAVE-1-SPECS.md P3-1d) — wallUpperCameraSideBlockingSet({focusRect, wallSegments,
+// cx, cz, yawDeg, margin}) -> Set<ownerSegIndex>. Restores BW2-5's WHOLE-ROOM camera-side upper-band
+// suppression, retired by C4.1b (git 8d1b94f5) when it replaced the static near/far-yaw
+// `upperVisibleForSegment` predicate with the exclusive-anchor ray-fade (wallUpperBlockingSet, above).
+// Reproduces that EXACT retired geometry test — a segment whose world midpoint sits inside the active
+// room's `focusRect` (inflated by `margin`) AND on the camera-facing (near) side of the room center
+// drops its upper volume, regardless of whether any specific subject's sightline actually crosses it —
+// now expressed as a pure Set-returning sibling of wallUpperBlockingSet so theater-boot.js's runtime
+// wiring can OR the two treatments together (P3-1d Decision item 2: "the two treatments coexist").
+// `focusRect`: {minX,maxX,minZ,maxZ} (data.focusRect's own shape). `wallSegments`: same
+// {a:{x,z},b:{x,z}} list wallUpperBlockingSet takes, INDEX = ownerSegIndex. `cx,cz`: the room's own
+// world-space center (the SAME values setInteriorBoard already computes its shell/instances against).
+// `yawDeg`: the current camera yaw in degrees (S.rotationStep*90 + CAM_YAW_OFFSET_DEG, computed by the
+// caller — this function stays DOM/THREE-free, never reads S itself). `margin` defaults to
+// OCCLUSION_CAMERA_SIDE_BAND_MARGIN (the retired predicate's own "+1 world unit" band inflation).
+const OCCLUSION_CAMERA_SIDE_BAND_MARGIN = 1; // world units — retired upperVisibleForSegment's own band inflation
+function wallUpperCameraSideBlockingSet(opts) {
+  opts = opts || {};
+  const blocking = new Set();
+  const fr = opts.focusRect;
+  const wallSegments = Array.isArray(opts.wallSegments) ? opts.wallSegments : [];
+  if (!fr || !wallSegments.length) return blocking;
+  const cx = numOr(opts.cx, 0), cz = numOr(opts.cz, 0);
+  const margin = numOr(opts.margin, OCCLUSION_CAMERA_SIDE_BAND_MARGIN);
+  const yawRad = deg2rad(numOr(opts.yawDeg, 0));
+  const dirX = Math.sin(yawRad), dirZ = Math.cos(yawRad);
+  wallSegments.forEach((seg, idx) => {
+    if (!seg || !seg.a || !seg.b) return;
+    const mx = (seg.a.x + seg.b.x) / 2, mz = (seg.a.z + seg.b.z) / 2;
+    const inBand = mx >= fr.minX - margin && mx <= fr.maxX + margin && mz >= fr.minZ - margin && mz <= fr.maxZ + margin;
+    if (!inBand) return; // outside the active room's own band — never suppressed by this test
+    const rx = mx - cx, rz = mz - cz;
+    if (rx * dirX + rz * dirZ <= 0) return; // far-side segment — stays fully visible (BW2-5 semantics)
+    blocking.add(idx);
+  });
+  return blocking;
+}
 // wallSegmentsFromStageInstances — adapts ShotPlan.stage.wallSegments (per-cell box instances,
 // {id,x,z,sx,sy,sz} — stageFromTray's own shape, positions only) into wallUpperBlockingSet's
 // {a,b,height} contract for composeShot's scoring path, which never has the compiled room-shell
@@ -921,6 +958,9 @@ export {
   // test, usable by both composeShot's own scoring AND theater-boot.js's runtime tween wiring.
   wallUpperBlockingSet, candidateCameraWorldPos, segment2DIntersectFraction, wallSegmentsFromStageInstances,
   OCCLUSION_DEFAULT_STEM_HEIGHT, OCCLUSION_DEFAULT_WALL_HEIGHT, OCCLUSION_SUBJECT_EYE_HEIGHT,
+  // P3-1d (docs/PHASE-3-WAVE-1-SPECS.md) — restored camera-side upper-band suppression, the pure
+  // sibling of wallUpperBlockingSet theater-boot.js ORs into the same raw-blocking set.
+  wallUpperCameraSideBlockingSet, OCCLUSION_CAMERA_SIDE_BAND_MARGIN,
   DIAGONAL_YAWS_DEG, PITCH_MIN_DEG, PITCH_MAX_DEG, FOV_MIN_DEG, FOV_MAX_DEG,
   SAFE_FRAME_MARGIN, FRAME_SAFE_BOUND, MEDIUM_FIGURE_MIN_FRAC, MEDIUM_FIGURE_MAX_FRAC,
   MEDIUM_FIGURE_WORLD_HEIGHT, FIGURE_WORLD_RADIUS, PRIMARY_OVERLAP_MAX, SHOT_ZONE_PATCH

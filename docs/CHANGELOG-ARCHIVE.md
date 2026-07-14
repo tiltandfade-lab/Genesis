@@ -14,6 +14,54 @@ to load every session (the live file keeps the newest entries; see the script fo
 Newest-first, same as the live file — the two files read as one continuous history, live file
 first. Read-only record: never hand-edit, never add entries here directly.
 
+## 2026-07-08 — TABLETOP pre-alpha BUILT: 5 of 7 units on master (overnight unattended build)
+
+Adam un-gated the TABLETOP build (`docs/TABLETOP-UNITS.md` U1–U7) for an overnight unattended
+run — Fable planned + launched Wave 1, Opus took over as boss at the model handoff and gated +
+landed the rest. Five `--no-ff` merges on master, all pushed: `22673a3` (U1+U2) → `7bdf51f`
+(U3) → `c06350a` (U4) → `4bac31f` (U6). Every landing personally re-gated by Opus (check-manifest
++ the unit harness + the full ~120-file `dev/verify-*.mjs` sweep at zero RED), never on executor
+self-report. Full detail: `docs/OVERNIGHT-REPORT-2026-07-08.md`.
+
+**Added**
+- **U1 — trayFrom + the Standing Table** (`src/engine/theater-data.js`): the theater is now the
+  permanent center stage (empty table under realm light when idle, the here-segment's tray when
+  walking, combat unchanged). `theaterBoardFrom` became a one-line wrapper over `trayFrom`;
+  combat parity is fixture-proven (`dev/fixtures/tabletop-u1-board.json` byte-gate).
+- **U2 — the 3-column shell + ARIA** (`render.js`, `dice.js`, `genesis.html`): stage-mode is the
+  standing layout (left status / center stage / right feed+composer), collapsible, all-keyboard;
+  `.dm-feed` `role="log"`, the battle prose twin moved OUTSIDE the aria-hidden stage subtree.
+- **U3 — blank-piece fallback + ambient presence** (`theater-figures.js`, `codex.js`, `dm.js`):
+  `blank:figure`/`blank:prop` bottom the resolve chain (never-null for figure/prop); soft ambient
+  NPCs surface as an aggregate digest presence line via the one shared `codexAmbientPresenceFor`.
+- **U4 — cast tableau + arrangement grammar** (`theater-data.js`): `castFrom` + pure
+  `arrangeTableau` (facing-pair/ring/march/shopfront/vignette), mechanical selection, one
+  attitude→placement table.
+- **U6 — combat reconfigure/relax + tray persistence** (`theater-data.js`, `dm.js`, `render.js`):
+  `combat_start` reconfigures the standing tray into lanes with NO remount/retire; `combat_end`
+  relaxes back to the tableau + stages corpse traces; §9.10 dedup (one noun → one piece);
+  serialize/reload tray-hash persistence. Also **wired `castFrom` into `theaterStageSync`** (the
+  gap U4 left) and **fixed a real cross-fight `fid` collision** (a second fight in a room no longer
+  drops its corpses as false dupes).
+
+**Changed**
+- `docs/DIRECTION.md` §4: recorded Adam's 2026-07-07 verbal BUILD un-gate for the tabletop
+  pre-alpha (supersedes the soak-gate for U1–U7 only; no other subsystem un-gated).
+
+**Deferred / Parked**
+- **U5 (overlay lanes) + U7 (harness pack) PARKED** on a genuine corpse-channel design fork:
+  U5 and U6 built incompatible corpse plumbing (U5 `board.corpses`/`statId` refs that collide for
+  same-type foes; U6 `castFrom` corpse-units/collision-safe `fid`). U6's landed as canonical; U5's
+  separable ambient-overlays rescope to a morning "U5′" rebased on U6, then U7 runs on the full
+  U1–U6 tree. Needs Adam's corpse-channel ratification. Branch `feat/tabletop-u5-overlays`
+  (`f229cf8`) preserved + pushed.
+- **ES-module migration** still deferred (Fable's call, ratified in effect): a mid-run migration
+  would have invalidated U3–U6's `file:line` spec anchors unattended; U3–U6 didn't need it.
+
+**Flagged for design review** (not blockers): `engine.theater-data` (L1) now calls up into
+`world.prep`/`world.codex` (WARN-level, spec-named) — dependency direction worth a look; U4's
+`theaterCastPcRefFrom` duplicates dm.js's PC-ref construction to avoid more coupling.
+
 ## 2026-07-07 (night) — TABLETOP-VISION: the visual end-state locked in the final Fable window
 
 Adam's remaining Fable hours (his last — the window closes for good) spent design-locking the

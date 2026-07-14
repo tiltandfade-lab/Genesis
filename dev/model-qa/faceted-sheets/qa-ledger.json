@@ -1,0 +1,2585 @@
+{
+ "F10/spr-fantasy-adult-black-dragon-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F10/spr-fantasy-adult-black-dragon-candidate-002.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F10/spr-fantasy-adult-black-dragon-candidate-003.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F10/spr-fantasy-adult-black-dragon-candidate-004.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F10/spr-fantasy-arch-hag-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "style-drift:photoreal"
+  ]
+ },
+ "F10/spr-fantasy-awakened-shrub__spr-fantasy-the-twig-blight-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "note:4-cell sheet with only top 2 cells populated; bottom 2 cells empty magenta"
+  ]
+ },
+ "F10/spr-fantasy-awakened-tree-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F10/spr-fantasy-azer-pyromancer__spr-fantasy-azer-sentinel-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "bg-rekey:pale-pink",
+   "note:sentinel's shield nearly touches right cell edge (very tight margin)"
+  ]
+ },
+ "F10/spr-fantasy-bandit-enforcer-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F10/spr-fantasy-bandit-enforcer-candidate-002.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F10/spr-fantasy-bandit-enforcer-candidate-003.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "style-drift:soft-facet"
+  ]
+ },
+ "F10/spr-fantasy-bandit-enforcer-candidate-004.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "style-drift:soft-facet"
+  ]
+ },
+ "F10/spr-fantasy-black-pudding-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F10/spr-fantasy-blue-chaos-frog-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F10/spr-fantasy-colossus-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F10/spr-fantasy-dao-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F10/spr-fantasy-djinni-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F10/spr-fantasy-dryad__spr-fantasy-blink-dog-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F10/spr-fantasy-efreeti-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F10/spr-fantasy-elemental-cataclysm-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F10/spr-fantasy-eye-tyrant-zombie-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F10/spr-fantasy-galeb-duhr__spr-fantasy-gargoyle-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F10/spr-fantasy-gas-spore-fungus-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F10/spr-fantasy-gray-chaos-frog__spr-fantasy-death-chaos-frog-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F10/spr-fantasy-green-chaos-frog-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F10/spr-fantasy-green-hag__spr-fantasy-sea-hag-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F10/spr-fantasy-gulthias-blight-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F10/spr-fantasy-helmed-horror__spr-fantasy-scarecrow-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F10/spr-fantasy-homunculus-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "style-drift:smooth"
+  ]
+ },
+ "F10/spr-fantasy-invisible-stalker-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F10/spr-fantasy-magmin-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F10/spr-fantasy-marid-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F10/spr-fantasy-minotaur-skeleton-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F10/spr-fantasy-mire-creeper-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F10/spr-fantasy-myconid-adult__spr-fantasy-myconid-spore-servant-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F10/spr-fantasy-myconid-sovereign-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "style-drift:smooth"
+  ]
+ },
+ "F10/spr-fantasy-myconid-sprout-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "style-drift:smooth"
+  ]
+ },
+ "F10/spr-fantasy-ochre-jelly-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F10/spr-fantasy-ogre-zombie-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F10/spr-fantasy-ornate-heraldic-shield-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "style-drift:smooth",
+   "bg:scene/other",
+   "note:green chroma background instead of magenta"
+  ]
+ },
+ "F10/spr-fantasy-ornate-heraldic-shield-candidate-002.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "style-drift:smooth",
+   "bg:scene/other",
+   "note:green chroma background instead of magenta"
+  ]
+ },
+ "F10/spr-fantasy-ornate-heraldic-shield-candidate-003.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "style-drift:smooth",
+   "bg:scene/other",
+   "note:green chroma background instead of magenta"
+  ]
+ },
+ "F10/spr-fantasy-ornate-heraldic-shield-candidate-004.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "style-drift:smooth",
+   "bg:scene/other",
+   "note:green chroma background instead of magenta"
+  ]
+ },
+ "F10/spr-fantasy-pixie__spr-fantasy-pixie-wonderbringer__spr-fantasy-sprite-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "style-drift:soft-facet",
+   "bg-rekey:pale-pink"
+  ]
+ },
+ "F10/spr-fantasy-red-chaos-frog-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F10/spr-fantasy-salamander-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F10/spr-fantasy-salamander-fire-snake-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F10/spr-fantasy-salamander-inferno-master-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F10/spr-fantasy-scarred-feral-guard-dog-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F10/spr-fantasy-scarred-feral-guard-dog-candidate-002.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F10/spr-fantasy-scarred-feral-guard-dog-candidate-003.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F10/spr-fantasy-scarred-feral-guard-dog-candidate-004.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F10/spr-fantasy-shambling-mound-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F10/spr-fantasy-shrieker-fungus__spr-fantasy-violet-fungus-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F10/spr-fantasy-skeleton-archer-flaming-skeleton-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F10/spr-fantasy-skeleton-skeleton-warrior-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F10/spr-fantasy-the-needle-blight__spr-fantasy-the-vine-blight-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "bg-rekey:dark-magenta"
+  ]
+ },
+ "F10/spr-fantasy-treant-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F10/spr-fantasy-tree-blight-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F10/spr-fantasy-undead-knight-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F10/spr-fantasy-undead-knight-candidate-002.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F10/spr-fantasy-undead-knight-candidate-003.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F10/spr-fantasy-undead-knight-candidate-004.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F10/spr-fantasy-violet-fungus-necrohulk-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "style-drift:smooth"
+  ]
+ },
+ "F10/spr-fantasy-warhorse-skeleton-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F10/spr-fantasy-water-weird-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F10/spr-fantasy-xorn-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F10/spr-fantasy-zombie-zombie-plague-carrier-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F11/spr-fantasy-aarakocra-skirmisher-spr-fantasy-aarakocra-aeromancer-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "bg-rekey:dark-magenta"
+  ]
+ },
+ "F11/spr-fantasy-adult-black-dragon-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F11/spr-fantasy-adult-black-dragon-candidate-002.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F11/spr-fantasy-adult-black-dragon-candidate-003.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F11/spr-fantasy-adult-black-dragon-candidate-004.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F11/spr-fantasy-archdruid-spr-fantasy-druid-circle-warden-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F11/spr-fantasy-assassin-spr-fantasy-scout-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F11/spr-fantasy-astral-raider-dracomancer-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F11/spr-fantasy-astral-raider-warrior-spr-fantasy-astral-raider-knight-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F11/spr-fantasy-bandit-enforcer-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F11/spr-fantasy-bandit-enforcer-candidate-002.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F11/spr-fantasy-bandit-enforcer-candidate-003.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F11/spr-fantasy-bandit-enforcer-candidate-004.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F11/spr-fantasy-berserker-spr-fantasy-berserker-commander-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "bg-rekey:pale-pink"
+  ]
+ },
+ "F11/spr-fantasy-bullywug-warrior-spr-fantasy-bullywug-bog-sage-mud-lord-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F11/spr-fantasy-commoner-spr-fantasy-noble-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "bg:white"
+  ]
+ },
+ "F11/spr-fantasy-eye-tyrant-zombie-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F11/spr-fantasy-fish-folk-monitor-spr-fantasy-fish-folk-archpriest-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "bg-rekey:dark-magenta"
+  ]
+ },
+ "F11/spr-fantasy-fish-folk-spr-fantasy-fish-folk-whip-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "bg-rekey:dark-magenta"
+  ]
+ },
+ "F11/spr-fantasy-gladiator-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F11/spr-fantasy-jackalwere-spr-fantasy-wererat-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F11/spr-fantasy-knight-spr-fantasy-questing-knight-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F11/spr-fantasy-mage-spr-fantasy-archmage-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "bg:white"
+  ]
+ },
+ "F11/spr-fantasy-minotaur-skeleton-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F11/spr-fantasy-ogre-zombie-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F11/spr-fantasy-ornate-heraldic-shield-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "style-drift:smooth",
+   "bg:scene/other"
+  ]
+ },
+ "F11/spr-fantasy-ornate-heraldic-shield-candidate-002.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "style-drift:smooth",
+   "bg:scene/other"
+  ]
+ },
+ "F11/spr-fantasy-ornate-heraldic-shield-candidate-003.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "style-drift:smooth",
+   "bg:scene/other"
+  ]
+ },
+ "F11/spr-fantasy-ornate-heraldic-shield-candidate-004.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "style-drift:smooth",
+   "bg:scene/other"
+  ]
+ },
+ "F11/spr-fantasy-performer-maestro-spr-fantasy-performer-tiefling-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F11/spr-fantasy-performer-spr-fantasy-performer-legend-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F11/spr-fantasy-pirate-admiral-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F11/spr-fantasy-pirate-spr-fantasy-pirate-captain-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "bg-rekey:dark-magenta"
+  ]
+ },
+ "F11/spr-fantasy-priest-acolyte-spr-fantasy-lantern-sage-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "bg:white"
+  ]
+ },
+ "F11/spr-fantasy-priest-spr-fantasy-archpriest-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F11/spr-fantasy-scarred-feral-guard-dog-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F11/spr-fantasy-scarred-feral-guard-dog-candidate-002.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F11/spr-fantasy-scarred-feral-guard-dog-candidate-003.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F11/spr-fantasy-scarred-feral-guard-dog-candidate-004.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F11/spr-fantasy-skeleton-archer-flaming-skeleton-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F11/spr-fantasy-skeleton-skeleton-warrior-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F11/spr-fantasy-spy-spr-fantasy-spy-master-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F11/spr-fantasy-thri-kreen-marauder-spr-fantasy-thri-kreen-psion-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F11/spr-fantasy-tough-spr-fantasy-tough-boss-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "bg-rekey:dark-magenta"
+  ]
+ },
+ "F11/spr-fantasy-undead-knight-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F11/spr-fantasy-undead-knight-candidate-002.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F11/spr-fantasy-undead-knight-candidate-003.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F11/spr-fantasy-undead-knight-candidate-004.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F11/spr-fantasy-warhorse-skeleton-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F11/spr-fantasy-warrior-infantry-spr-fantasy-warrior-veteran-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "bg-rekey:pale-pink"
+  ]
+ },
+ "F11/spr-fantasy-wereboar-spr-fantasy-werebear-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "cropped",
+   "note:wereboar's hammer haft clipped flat by left image edge"
+  ]
+ },
+ "F11/spr-fantasy-weretiger-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F11/spr-fantasy-zombie-zombie-plague-carrier-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F12/spr-fantasy-builder-dragonborn-land-worker-dragonborn-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "cropped",
+   "note:builder's brick tray clipped by left image edge"
+  ]
+ },
+ "F12/spr-fantasy-clothier-dwarf-wild-provider-dwarf-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F12/spr-fantasy-destitute-halfling-magnate-halfling-remedy-maker-halfling-thief-halfling-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "bg-rekey:pale-pink"
+  ]
+ },
+ "F12/spr-fantasy-dragonborn-ship-s-purser-temple-acolyte-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "cropped",
+   "note:both figures' tails clipped at outer cell edges"
+  ]
+ },
+ "F12/spr-fantasy-dwarven-brewer-the-tavern-s-actual-reason-for-existing-dwarven-brewery-heiress-dwarf-runs-the-family-business-better-than-her-father-did-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F12/spr-fantasy-dwarven-forge-master-three-generations-of-the-same-smithy-soot-in-every-crease-dwarven-mine-assayer-dwarf-judges-ore-quality-by-weight-and-smell-alone-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F12/spr-fantasy-elven-archivist-keeper-of-a-library-older-than-the-town-around-it-elven-scribe-elf-copies-manuscripts-for-the-town-archive-meticulous-to-a-fault-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "bg-rekey:dark-magenta"
+  ]
+ },
+ "F12/spr-fantasy-elven-fletcher-every-arrow-leaves-her-stall-true-elven-ranger-s-apprentice-elf-still-learning-to-read-a-trail-properly-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "bg-rekey:pale-pink"
+  ]
+ },
+ "F12/spr-fantasy-elven-herbalist-elf-sells-cures-and-quietly-a-few-curses-hauler-elf-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "cropped",
+   "bg:white",
+   "note:hauler's carry-pole and right crate clipped by right image edge"
+  ]
+ },
+ "F12/spr-fantasy-gnomish-alchemist-clockmaker-tinkerer-delver-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "bg:white"
+  ]
+ },
+ "F12/spr-fantasy-goliath-bridge-toll-keeper-dockworker-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "bg-rekey:dark-magenta"
+  ]
+ },
+ "F12/spr-fantasy-goliath-quarry-foreman-servant-goliath-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F12/spr-fantasy-guilt-stained-vagrant-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F12/spr-fantasy-halfling-farmer-innkeeper-messenger-runner-roadside-chef-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F12/spr-fantasy-healer-human-maker-human-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F12/spr-fantasy-hidden-fanatic-human-secret-scholar-human-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "bg-rekey:pale-pink"
+  ]
+ },
+ "F12/spr-fantasy-hired-blade-dwarf-stand-in-dwarf-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F12/spr-fantasy-host-goliath-pampered-elite-goliath-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "style-drift:soft-facet",
+   "bg-rekey:pale-pink"
+  ]
+ },
+ "F12/spr-fantasy-human-midwife-elderly-delivered-half-the-village-remembers-all-of-it-human-midwife-s-apprentice-human-dark-skinned-learning-the-trade-from-her-mother-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "bg-rekey:pale-pink"
+  ]
+ },
+ "F12/spr-fantasy-human-miller-dust-covered-counts-every-sack-twice-human-wheelwright-human-dark-skinned-third-generation-in-the-same-shop-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F12/spr-fantasy-human-retired-soldier-one-armed-human-dark-skinned-runs-the-town-s-only-proper-tavern-brawl-rules-human-town-crier-human-announces-news-rumor-and-the-occasional-lie-for-coin-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F12/spr-fantasy-misfit-outlaw-trader-gnome-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "bg-rekey:pale-pink"
+  ]
+ },
+ "F12/spr-fantasy-outfitter-elf-unofficial-power-elf-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "bg-rekey:pale-pink"
+  ]
+ },
+ "F12/spr-fantasy-outsider-tiefling-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F12/spr-fantasy-recluse-dragonborn-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F12/spr-fantasy-smuggler-goliath-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "note:detached crate lid floats beside the crate; reads slightly odd"
+  ]
+ },
+ "F12/spr-fantasy-tiefling-blacksmith-apprentice-street-performer-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F12/spr-fantasy-tiefling-fortune-teller-rival-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "bg:white"
+  ]
+ },
+ "F12/spr-fantasy-tiefling-tavern-owner-feeder-tiefling-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F13/spr-fantasy-domestic-animal-barn-cat-bird-kept-wild-thing-stray-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F13/spr-fantasy-domestic-animal-donkey-hunting-hound-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F13/spr-fantasy-domestic-animal-goat-goose-peacock-turkey-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "cropped",
+   "bg:white",
+   "note:goat clipped by left image edge; turkey tail fan clipped by right image edge"
+  ]
+ },
+ "F13/spr-fantasy-domestic-animal-old-animal-the-town-s-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F13/spr-fantasy-domestic-animal-pig-pony-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F13/spr-fantasy-domestic-animal-rabbit-turtle-vermin-catcher-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F13/spr-fantasy-domestic-animal-realm-beast-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F13/spr-fantasy-domestic-animal-sheep-loyal-dog-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F13/spr-fantasy-domestic-animal-vermin-catcher-caged-songbird-duck-kitten-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F13/spr-fantasy-domestic-animal-working-beast-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F13/spr-fantasy-dungeon-animal-canary-cave-rat-salamander-cricket-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "cropped",
+   "note:birdcage clipped at left image edge; cricket hind leg clipped at right image edg"
+  ]
+ },
+ "F13/spr-fantasy-dungeon-animal-chained-beast-hunting-hound-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F13/spr-fantasy-dungeon-animal-lone-rat-still-lizard-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "anatomy:minor:lizard tail forks into two flat blade-like tips behind right hind foot (right ce"
+  ]
+ },
+ "F13/spr-fantasy-dungeon-animal-messenger-pigeon-tunnel-bat-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F13/spr-fantasy-dungeon-animal-ordinary-animal-adapted-spider-falconry-bird-vermin-catcher-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "bg-rekey:pale-pink",
+   "note:falcon and polecat bodies slightly overlap the thin cell-divider lines"
+  ]
+ },
+ "F13/spr-fantasy-dungeon-animal-packhorse-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F13/spr-fantasy-dungeon-animal-tamed-thing-starving-stray-adapted-snake-blind-mole-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "bg-rekey:pale-pink"
+  ]
+ },
+ "F13/spr-fantasy-dungeon-animal-well-fish-startled-bird-moss-grazer-nest-robbing-crow-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F13/spr-fantasy-dungeon-animal-wrong-place-goat-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F13/spr-fantasy-wild-animal-a-lynx-kitten-peregrine-falcon-red-fox-kit-watcher-hawk-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "cropped",
+   "bg-rekey:pale-pink",
+   "note:lynx kitten tail tip touches top edge; hawk perch rock clipped at bottom edge"
+  ]
+ },
+ "F13/spr-fantasy-wild-animal-badger-great-owl-a-heron-stalks-single-goose-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "note:all four creatures mounted on statue pedestal bases"
+  ]
+ },
+ "F13/spr-fantasy-wild-animal-black-bear-mountain-goat-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "cropped",
+   "bg:white",
+   "note:mountain goat's rock outcrop clipped at right image edge"
+  ]
+ },
+ "F13/spr-fantasy-wild-animal-bull-elk-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F13/spr-fantasy-wild-animal-old-solitary-boar-realm-beast-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F13/spr-fantasy-wild-animal-single-deer-single-vulture-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F13/spr-fantasy-wild-animal-single-elk-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "note:elk stands on statue-style display base"
+  ]
+ },
+ "F13/spr-fantasy-wild-animal-the-elder-of-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F13/spr-fantasy-wild-animal-wild-boar-ambush-lynx-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "note:both figures on statue-style display bases"
+  ]
+ },
+ "F13/spr-fantasy-wild-animal-wild-turkey-badger-fringe-fox-river-otter-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "bg-rekey:pale-pink",
+   "note:all four on pedestal bases; otter tail slightly crosses cell divider"
+  ]
+ },
+ "F14/spr-fantasy-kid-wants-believed-chosen-feed-eavesdrops-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F14/spr-fantasy-kid-wants-dog-return-hoard-little-one-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F14/spr-fantasy-kid-wants-pretty-thing-secret-old-joke-home-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F14/spr-fantasy-kid-wants-prove-put-back-locked-place-message-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "bg-rekey:pale-pink"
+  ]
+ },
+ "F14/spr-fantasy-kid-wants-watch-coin-warn-friend-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F15/spr-pc-dragonborn-barbarian-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "style-drift:soft-facet"
+  ]
+ },
+ "F15/spr-pc-dragonborn-bard-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "style-drift:photoreal"
+  ]
+ },
+ "F15/spr-pc-dragonborn-cleric-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F15/spr-pc-dragonborn-druid-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "style-drift:photoreal"
+  ]
+ },
+ "F15/spr-pc-dragonborn-fighter-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F15/spr-pc-dragonborn-monk-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F15/spr-pc-dragonborn-paladin-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "style-drift:photoreal",
+   "cropped",
+   "note:left figure's sword tip clipped by left edge"
+  ]
+ },
+ "F15/spr-pc-dragonborn-ranger-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F15/spr-pc-dragonborn-rogue-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "style-drift:smooth",
+   "cropped",
+   "bg-rekey:pale-pink",
+   "note:left figure's dagger blade clipped by left edge"
+  ]
+ },
+ "F15/spr-pc-dragonborn-sorcerer-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "bg:white"
+  ]
+ },
+ "F15/spr-pc-dragonborn-warlock-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "bg-rekey:dark-magenta"
+  ]
+ },
+ "F15/spr-pc-dragonborn-wizard-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "style-drift:photoreal"
+  ]
+ },
+ "F15/spr-pc-dwarf-barbarian-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "style-drift:photoreal"
+  ]
+ },
+ "F15/spr-pc-dwarf-bard-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F15/spr-pc-dwarf-cleric-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F15/spr-pc-dwarf-druid-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F15/spr-pc-dwarf-fighter-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "style-drift:soft-facet"
+  ]
+ },
+ "F15/spr-pc-dwarf-monk-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F15/spr-pc-dwarf-paladin-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "bg-rekey:pale-pink",
+   "note:faint green halo around right figure silhouette"
+  ]
+ },
+ "F15/spr-pc-dwarf-ranger-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F15/spr-pc-dwarf-rogue-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "bg-rekey:pale-pink"
+  ]
+ },
+ "F15/spr-pc-dwarf-sorcerer-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F15/spr-pc-dwarf-warlock-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F15/spr-pc-dwarf-wizard-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F15/spr-pc-elf-barbarian-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F15/spr-pc-elf-bard-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F15/spr-pc-elf-cleric-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "bg-rekey:pale-pink"
+  ]
+ },
+ "F15/spr-pc-elf-druid-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F15/spr-pc-elf-fighter-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "bg-rekey:pale-pink"
+  ]
+ },
+ "F15/spr-pc-elf-monk-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F15/spr-pc-elf-paladin-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F15/spr-pc-elf-ranger-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F15/spr-pc-elf-rogue-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F15/spr-pc-elf-sorcerer-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F15/spr-pc-elf-warlock-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F15/spr-pc-elf-wizard-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F15/spr-pc-goliath-barbarian-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "bg-rekey:pale-pink"
+  ]
+ },
+ "F15/spr-pc-goliath-bard-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "bg-rekey:pale-pink"
+  ]
+ },
+ "F15/spr-pc-goliath-cleric-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F15/spr-pc-goliath-druid-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F15/spr-pc-goliath-fighter-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "bg-rekey:pale-pink"
+  ]
+ },
+ "F15/spr-pc-goliath-monk-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "bg-rekey:dark-magenta"
+  ]
+ },
+ "F15/spr-pc-goliath-paladin-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "bg-rekey:pale-pink"
+  ]
+ },
+ "F15/spr-pc-goliath-ranger-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "cropped",
+   "bg-rekey:dark-magenta",
+   "note:female's sword blade appears clipped at left image edge"
+  ]
+ },
+ "F15/spr-pc-goliath-rogue-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "bg-rekey:pale-pink"
+  ]
+ },
+ "F15/spr-pc-goliath-sorcerer-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F15/spr-pc-goliath-warlock-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "bg-rekey:dark-magenta"
+  ]
+ },
+ "F15/spr-pc-goliath-wizard-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "bg:white"
+  ]
+ },
+ "F15/spr-pc-halfling-barbarian-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "style-drift:painterly"
+  ]
+ },
+ "F15/spr-pc-halfling-bard-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "style-drift:soft-facet"
+  ]
+ },
+ "F15/spr-pc-halfling-cleric-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "style-drift:painterly",
+   "note:bottom-left cell holds a giant wrench, odd prop for cleric"
+  ]
+ },
+ "F15/spr-pc-halfling-druid-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "style-drift:painterly",
+   "cropped",
+   "note:top-right cell staff tip touches/clips top image edge"
+  ]
+ },
+ "F15/spr-pc-halfling-fighter-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "style-drift:painterly"
+  ]
+ },
+ "F15/spr-pc-halfling-monk-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "style-drift:painterly"
+  ]
+ },
+ "F15/spr-pc-halfling-paladin-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "style-drift:soft-facet"
+  ]
+ },
+ "F15/spr-pc-halfling-ranger-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "style-drift:painterly"
+  ]
+ },
+ "F15/spr-pc-halfling-rogue-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "style-drift:painterly"
+  ]
+ },
+ "F15/spr-pc-halfling-sorcerer-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "style-drift:soft-facet",
+   "note:bottom cells hold giant wrenches, odd prop for sorcerer"
+  ]
+ },
+ "F15/spr-pc-halfling-warlock-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "style-drift:soft-facet",
+   "note:artificer-like props (compass boxes, giant scissors in bottom-left cell)"
+  ]
+ },
+ "F15/spr-pc-halfling-wizard-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "style-drift:painterly"
+  ]
+ },
+ "F15/spr-pc-human-barbarian-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "bg-rekey:pale-pink"
+  ]
+ },
+ "F15/spr-pc-human-bard-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F15/spr-pc-human-cleric-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F15/spr-pc-human-druid-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "bg-rekey:pale-pink"
+  ]
+ },
+ "F15/spr-pc-human-fighter-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "bg-rekey:pale-pink"
+  ]
+ },
+ "F15/spr-pc-human-monk-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "bg-rekey:pale-pink"
+  ]
+ },
+ "F15/spr-pc-human-paladin-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F15/spr-pc-human-ranger-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F15/spr-pc-human-rogue-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F15/spr-pc-human-sorcerer-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F15/spr-pc-human-warlock-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F15/spr-pc-human-wizard-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F15/spr-pc-orc-barbarian-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F15/spr-pc-orc-bard-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F15/spr-pc-orc-cleric-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "style-drift:smooth"
+  ]
+ },
+ "F15/spr-pc-orc-druid-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "bg-rekey:pale-pink"
+  ]
+ },
+ "F15/spr-pc-orc-fighter-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F15/spr-pc-orc-monk-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "cropped",
+   "note:male's bandaged forearm clipped by right edge"
+  ]
+ },
+ "F15/spr-pc-orc-paladin-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "cropped",
+   "note:female's armored boot toe clipped by left edge"
+  ]
+ },
+ "F15/spr-pc-orc-ranger-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "style-drift:smooth"
+  ]
+ },
+ "F15/spr-pc-orc-rogue-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "style-drift:smooth"
+  ]
+ },
+ "F15/spr-pc-orc-sorcerer-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F15/spr-pc-orc-warlock-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "style-drift:photoreal",
+   "bg:white"
+  ]
+ },
+ "F15/spr-pc-orc-wizard-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "cropped",
+   "note:male's sleeve/shoulder and book clipped by right edge"
+  ]
+ },
+ "F15/spr-pc-tiefling-barbarian-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "style-drift:photoreal",
+   "bg-rekey:pale-pink"
+  ]
+ },
+ "F15/spr-pc-tiefling-bard-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "style-drift:painterly"
+  ]
+ },
+ "F15/spr-pc-tiefling-cleric-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F15/spr-pc-tiefling-druid-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F15/spr-pc-tiefling-fighter-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "style-drift:painterly"
+  ]
+ },
+ "F15/spr-pc-tiefling-monk-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "style-drift:photoreal",
+   "cropped",
+   "note:male's bandaged forearm clipped by right edge"
+  ]
+ },
+ "F15/spr-pc-tiefling-paladin-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "style-drift:painterly"
+  ]
+ },
+ "F15/spr-pc-tiefling-ranger-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "style-drift:soft-facet"
+  ]
+ },
+ "F15/spr-pc-tiefling-rogue-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "style-drift:painterly",
+   "bg-rekey:pale-pink"
+  ]
+ },
+ "F15/spr-pc-tiefling-sorcerer-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F15/spr-pc-tiefling-warlock-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "style-drift:painterly",
+   "note:mismatched footwear on both figures (boot + dress shoe/heel)"
+  ]
+ },
+ "F15/spr-pc-tiefling-wizard-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "style-drift:painterly",
+   "bg-rekey:dark-magenta"
+  ]
+ },
+ "F2/spr-fantasy-dire-wolf-winter-wolf-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "bg-rekey:dark-magenta"
+  ]
+ },
+ "F2/spr-fantasy-kobold-inventor-halfling-orchard-keeper-elderly-halfling-knows-every-tree-in-the-grove-by-name-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "style-drift:soft-facet"
+  ]
+ },
+ "F2/spr-fantasy-orc-blind-prophet-rite-keeper-orc-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F2/spr-fantasy-orc-warrior-orc-berserker-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "bg-rekey:pale-pink"
+  ]
+ },
+ "F2/spr-fantasy-orcish-stable-hand-orc-gentle-with-horses-terrifying-to-everyone-else-orcish-farrier-orc-shoes-every-horse-in-the-valley-feared-and-respected-equally-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "bg-rekey:dark-magenta",
+   "note:stable-hand cell shows horse head only, neck terminates abruptly behind figure ("
+  ]
+ },
+ "F2/spr-fantasy-recruiter-orc-metalworker-orc-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F2/spr-fantasy-red-dragon-wyrmling-white-dragon-wyrmling-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "cropped",
+   "bg-rekey:pale-pink",
+   "note:red wyrmling's left wingtip clipped at left image edge; white wyrmling's right w"
+  ]
+ },
+ "F2/spr-fantasy-shadow-dragon-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "anatomy:minor:detached wispy fin floating beside left foreleg, attached only by faint smoke at"
+  ]
+ },
+ "F2/spr-fantasy-silver-dragon-wyrmling-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F2/spr-fantasy-the-pseudodragon-the-faerie-dragon-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "bg-rekey:dark-magenta"
+  ]
+ },
+ "F2/spr-fantasy-werewolf-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F2/spr-fantasy-wild-animal-a-lone-timber-wolf-pup-not-yet-part-of-any-pack-still-learning-to-hunt-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F2/spr-fantasy-wolf-wild-animal-territory-wolf-holds-a-stretch-of-ground-and-knows-every-crossing-of-it-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "bg-rekey:pale-pink"
+  ]
+ },
+ "F2/spr-fantasy-young-blue-dragon-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F2/spr-fantasy-young-brass-dragon-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F2/spr-fantasy-young-bronze-dragon-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F2/spr-fantasy-young-copper-dragon-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F2/spr-fantasy-young-green-dragon-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F2/spr-fantasy-young-red-dragon-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F2/spr-fantasy-young-silver-dragon-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F2/spr-fantasy-young-white-dragon-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F3/exec-3edd92c0-6772-49b0-bcf6-390624c0843a.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F3/exec-44ae3737-b533-4511-967d-980e589d3b2d.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F3/exec-72395760-e742-42a4-bac7-93a024bcf9fb.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F3/exec-77f9d40c-1d95-4523-b6ca-16ec0230b13c.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F3/exec-b50f25f2-7d67-4f43-a7df-3d041eff6130.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F3/exec-cae47e2b-b081-4ae0-ab58-3d7616c43e0e.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F3/exec-d14db8c5-0345-41c7-aee9-2c98b2f725fd.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F3/exec-d25c7eab-1ab2-4079-aeca-8a85a56ef37f.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F3/exec-f2aff764-a8c3-4e62-94e7-2a2441e44c51.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F4/fx-ash-ashcloud-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F4/fx-ash-basaltcrack-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "note:content reads as green bioluminescent crystal burst, not a basalt crack; possibl"
+  ]
+ },
+ "F4/fx-ash-biolumeflash-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "note:content reads as orange lava/basalt crack, not a biolume flash; possibly swapped"
+  ]
+ },
+ "F4/fx-ash-embergout-alt-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F4/fx-ash-embergout-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F4/fx-ash-rustflake-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F4/fx-ash-toxicburst-alt-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "note:palette reads fire-orange, not toxic"
+  ]
+ },
+ "F4/fx-ash-toxicburst-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "note:palette reads holy-gold, not toxic; horizontal flare streaks touch left/right ed"
+  ]
+ },
+ "F4/fx-cosmic-constellationburst-alt-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "note:reads as fiery rock explosion, not cosmic constellation"
+  ]
+ },
+ "F4/fx-cosmic-constellationburst-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F4/fx-cosmic-nebulaflash-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "note:reads as green leaf burst, not cosmic nebula (looks like a leafburst asset)"
+  ]
+ },
+ "F4/fx-cosmic-sandveil-alt-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "note:gold star mandala, no sand character"
+  ]
+ },
+ "F4/fx-cosmic-sandveil-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "note:ice-blue crystal burst, not sand palette"
+  ]
+ },
+ "F4/fx-cosmic-scarabswirl-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "style-drift:photoreal",
+   "note:creature sprite in fx slot, magenta bg instead of dark fx bg"
+  ]
+ },
+ "F4/fx-cosmic-sigilbloom-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "style-drift:photoreal",
+   "note:creature sprite in fx slot, magenta bg instead of dark fx bg"
+  ]
+ },
+ "F4/fx-cosmic-voidrip-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "style-drift:photoreal",
+   "note:creature sprite in fx slot, magenta bg instead of dark fx bg"
+  ]
+ },
+ "F4/fx-env-debriscloud-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "note:troll character sprite in fx slot, not an effect"
+  ]
+ },
+ "F4/fx-env-dustkick-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "note:verdigris dragon creature sprite in fx slot, not an effect"
+  ]
+ },
+ "F4/fx-env-emberdrift-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "note:two-cell orc character sheet in fx slot, not an effect"
+  ]
+ },
+ "F4/fx-env-frostburst-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "note:ice dragon creature sprite in fx slot, not an effect"
+  ]
+ },
+ "F4/fx-env-rippleflash-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "note:robed patriarch character sprite in fx slot, not an effect"
+  ]
+ },
+ "F4/fx-env-shadowpool-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "note:orc warrior character sprite in fx slot, not an effect"
+  ]
+ },
+ "F4/fx-env-splash-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "note:shadow dragon creature sprite in fx slot, not an effect"
+  ]
+ },
+ "F4/fx-fantasy-emberrune-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "note:two-headed ettin creature sprite in fx slot, not an effect"
+  ]
+ },
+ "F4/fx-fantasy-featherdrift-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "note:ogre creature sprite in fx slot, not an effect"
+  ]
+ },
+ "F4/fx-fantasy-frostshard-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "note:frost giant character sprite in fx slot, not an effect"
+  ]
+ },
+ "F4/fx-fantasy-holyglow-alt-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "note:obsidian/lava dwarf character sprite in fx slot, not an effect"
+  ]
+ },
+ "F4/fx-fantasy-holyglow-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "note:stone giant character sprite in fx slot, not an effect"
+  ]
+ },
+ "F4/fx-fantasy-leafburst-alt-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "note:ogre creature sprite in fx slot, not an effect"
+  ]
+ },
+ "F4/fx-fantasy-leafburst-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "note:stone golem creature sprite in fx slot, not an effect"
+  ]
+ },
+ "F4/fx-fantasy-mossbloom-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "note:blood-red crystal spatter, not moss palette (looks like an ichorspatter asset)"
+  ]
+ },
+ "F4/fx-gloom-bonedust-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "note:golden arrow/dart streak, no bone-dust character"
+  ]
+ },
+ "F4/fx-gloom-graveglow-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "note:orange fire palette, not gloom/grave palette"
+  ]
+ },
+ "F4/fx-gloom-ichorspatter-alt-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "note:mossy green crystal burst, not ichor (looks like a mossbloom asset)"
+  ]
+ },
+ "F4/fx-gloom-ichorspatter-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "note:golden faceted feathers, not ichor (looks like a featherdrift asset)"
+  ]
+ },
+ "F4/fx-gloom-mournvapor-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F4/fx-gloom-vhstear-alt-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "note:golden gem sparkle, no VHS/glitch character"
+  ]
+ },
+ "F4/fx-gloom-vhstear-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "note:green orb burst, no VHS/glitch character"
+  ]
+ },
+ "F4/fx-gloom-witherpulse-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F4/fx-impact-blunt-star-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "note:green dragon creature sprite in fx slot, not an impact effect"
+  ]
+ },
+ "F4/fx-impact-crush-shatter-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "bg-rekey:dark-magenta",
+   "note:content mismatch: two faceted wolves on magenta, not an impact FX on dark bg"
+  ]
+ },
+ "F4/fx-impact-pierce-glint-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "note:content mismatch: werewolf creature sprite, not an impact FX on dark bg"
+  ]
+ },
+ "F4/fx-impact-slash-arc-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "note:content mismatch: copper-toned dragon, not a slash FX on dark bg"
+  ]
+ },
+ "F4/fx-impact-slash-heavy-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "note:content mismatch: gold frilled dragon, not a slash FX on dark bg"
+  ]
+ },
+ "F4/fx-magic-bolthead-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "bg-rekey:dark-magenta",
+   "note:content mismatch: 2-cell creature sheet (gargoyle cat + faerie dragon), not a ma"
+  ]
+ },
+ "F4/fx-magic-burstring-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "bg-rekey:pale-pink",
+   "note:content mismatch: 2-cell orc warrior sheet, not a magic FX"
+  ]
+ },
+ "F4/fx-magic-castcircle-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "note:content mismatch: young wolf/coyote creature sprite, not a cast-circle FX"
+  ]
+ },
+ "F4/fx-magic-orbcharge-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "note:content mismatch: 2-cell orc shaman/priest sheet, not an orb-charge FX"
+  ]
+ },
+ "F4/fx-magic-sigilflash-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "note:content mismatch: silver faceted dragon, not a sigil-flash FX"
+  ]
+ },
+ "F4/fx-status-bloodspatter-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "bg-rekey:dark-magenta",
+   "note:content mismatch: 2-cell orc civilian sheet (horse handler + farrier), not a sta"
+  ]
+ },
+ "F4/fx-status-healmotes-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "note:content mismatch: navy faceted dragon, not a heal-motes FX"
+  ]
+ },
+ "F4/fx-status-poisonbubble-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "bg-rekey:pale-pink",
+   "note:content mismatch: 2-cell grey wolf sheet, not a poison-bubble FX"
+  ]
+ },
+ "F4/fx-status-shieldshimmer-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "note:content mismatch: red/black faceted dragon, not a shield-shimmer FX"
+  ]
+ },
+ "F4/fx-status-smokepuff-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "cropped",
+   "bg-rekey:pale-pink",
+   "note:content mismatch: 2-cell wyrmling sheet (red + white), not a smoke-puff FX; wing"
+  ]
+ },
+ "F4/fx-status-sparkburst-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "note:content mismatch: silver faceted dragon, not a spark-burst FX"
+  ]
+ },
+ "F4/fx-status-stunstars-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "note:content mismatch: 2-cell sheet (kobold tinkerer + gnome herbalist), not a stun-s"
+  ]
+ },
+ "F4/shared-blood-decal-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "note:content mismatch: navy faceted dragon, not a blood decal; pixel-duplicate of F5/"
+  ]
+ },
+ "F4/shared-cobweb-decal-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "note:content mismatch: gold faceted dragon, not a cobweb decal"
+  ]
+ },
+ "F4/shared-crack-decal-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "note:content mismatch: green faceted dragon, not a crack decal; pixel-duplicate of F5"
+  ]
+ },
+ "F4/shared-grime-decal-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "style-drift:smooth",
+   "note:content mismatch: gold dragon, not a grime decal; pixel-duplicate of F5/spr-fant"
+  ]
+ },
+ "F4/shared-moss-decal-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "note:content mismatch: white faceted dragon, not a moss decal; pixel-duplicate of F5/"
+  ]
+ },
+ "F4/shared-rust-decal-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "note:content mismatch: 2-cell wyrmling sheet (black dripping + blue lightning), not a"
+  ]
+ },
+ "F4/shared-scorch-decal-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "style-drift:photoreal",
+   "note:content mismatch: black dragon, not a scorch decal"
+  ]
+ },
+ "F4/shared-water-decal-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "note:content mismatch: green faceted dragon, not a water decal"
+  ]
+ },
+ "F4/shared-wear-decal-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "note:content mismatch: bronze faceted dragon with tattered wings, not a wear decal"
+  ]
+ },
+ "F5/spr-fantasy-adult-blue-dragon-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "note:pixel-duplicate of F4/shared-blood-decal-candidate-001"
+  ]
+ },
+ "F5/spr-fantasy-adult-brass-dragon-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F5/spr-fantasy-adult-bronze-dragon-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "style-drift:smooth"
+  ]
+ },
+ "F5/spr-fantasy-adult-copper-dragon-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "style-drift:smooth"
+  ]
+ },
+ "F5/spr-fantasy-adult-gold-dragon-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "style-drift:smooth",
+   "note:pixel-duplicate of F4/shared-grime-decal-candidate-001"
+  ]
+ },
+ "F5/spr-fantasy-adult-green-dragon-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "note:pixel-duplicate of F4/shared-crack-decal-candidate-001"
+  ]
+ },
+ "F5/spr-fantasy-adult-red-dragon-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F5/spr-fantasy-adult-silver-dragon-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "style-drift:smooth"
+  ]
+ },
+ "F5/spr-fantasy-adult-white-dragon-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "note:pixel-duplicate of F4/shared-moss-decal-candidate-001"
+  ]
+ },
+ "F5/spr-fantasy-ancient-black-dragon-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "style-drift:photoreal"
+  ]
+ },
+ "F5/spr-fantasy-ancient-blue-dragon-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "anatomy:major:tail terminates in two separate tapering tips at bottom-center: left coil ends i"
+  ]
+ },
+ "F5/spr-fantasy-ancient-brass-dragon-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F5/spr-fantasy-ancient-bronze-dragon-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F5/spr-fantasy-ancient-copper-dragon-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F5/spr-fantasy-ancient-gold-dragon-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F5/spr-fantasy-ancient-green-dragon-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "style-drift:soft-facet"
+  ]
+ },
+ "F5/spr-fantasy-ancient-red-dragon-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F5/spr-fantasy-ancient-silver-dragon-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F5/spr-fantasy-ancient-white-dragon-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "anatomy:major:tail duplicated/mirrored: two separate spiked tail tips converge at bottom cente"
+  ]
+ },
+ "F5/spr-fantasy-behir-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F5/spr-fantasy-black-dragon-wyrmling-blue-dragon-wyrmling-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F5/spr-fantasy-brass-dragon-wyrmling-bronze-dragon-wyrmling-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "cropped",
+   "note:bronze wyrmling's right wing cut off by right image edge (confirmed by border-pi"
+  ]
+ },
+ "F5/spr-fantasy-copper-dragon-wyrmling-gold-dragon-wyrmling-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "bg:white"
+  ]
+ },
+ "F5/spr-fantasy-dracolich-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F5/spr-fantasy-dragon-turtle-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "style-drift:soft-facet"
+  ]
+ },
+ "F5/spr-fantasy-faerie-dragon-youth-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F5/spr-fantasy-green-dragon-wyrmling-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F5/spr-fantasy-half-dragon-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "style-drift:painterly"
+  ]
+ },
+ "F5/spr-fantasy-juvenile-shadow-dragon-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "note:upright humanoid biped stance, unusual anatomy for a dragon"
+  ]
+ },
+ "F5/spr-fantasy-ridden-wyvern-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "anatomy:major:wyvern drawn with four legs (two forelegs plus two hind legs) \u2014 wyverns are bipe",
+   "note:four legs on a wyvern (should be two-legged); saddle present but no rider"
+  ]
+ },
+ "F5/spr-fantasy-wyvern-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "anatomy:major:wyvern drawn with four legs (four clawed feet on the ground plus separate wings)",
+   "note:four legs on a wyvern (should be two-legged)"
+  ]
+ },
+ "F5/spr-fantasy-young-black-dragon-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "style-drift:soft-facet"
+  ]
+ },
+ "F5/spr-fantasy-young-gold-dragon-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F6/spr-fantasy-bone-naga-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "anatomy:major:four arms: extra smaller skeletal arm pair emerging at waist below the main pair",
+   "note:humanoid torso with four skeletal arms holding a staff \u2014 off-spec anatomy for a "
+  ]
+ },
+ "F6/spr-fantasy-clawed-drowner-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F6/spr-fantasy-crawling-claw-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "style-drift:soft-facet",
+   "bg:white"
+  ]
+ },
+ "F6/spr-fantasy-death-knight-spr-fantasy-death-knight-aspirant-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "style-drift:painterly",
+   "bg:white"
+  ]
+ },
+ "F6/spr-fantasy-demilich-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F6/spr-fantasy-ghast-base-spr-fantasy-ghast-gravecaller-spellstitched-elite-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F6/spr-fantasy-ghost-spr-fantasy-specter-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F6/spr-fantasy-ghoul-spr-fantasy-ghast-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F6/spr-fantasy-graveyard-revenant-spr-fantasy-haunting-revenant-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "style-drift:photoreal",
+   "bg:scene/other"
+  ]
+ },
+ "F6/spr-fantasy-lacedon-sodden-ghoul-spr-fantasy-drowned-husk-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "bg-rekey:pale-pink"
+  ]
+ },
+ "F6/spr-fantasy-lich-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F6/spr-fantasy-mummy-spr-fantasy-mummy-lord-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "style-drift:photoreal"
+  ]
+ },
+ "F6/spr-fantasy-poltergeist-spr-fantasy-swamp-shadow-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "bg:scene/other"
+  ]
+ },
+ "F6/spr-fantasy-shadow-spr-fantasy-greater-shadow-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "bg:white"
+  ]
+ },
+ "F6/spr-fantasy-wight-spr-fantasy-wight-lord-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "style-drift:photoreal"
+  ]
+ },
+ "F6/spr-fantasy-will-o-wisp-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F6/spr-fantasy-wraith-spr-fantasy-banshee-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F7/spr-fantasy-balor-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F7/spr-fantasy-blue-dragon-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "anatomy:major:tail duplicated/mirrored: coil from the left ends in a smooth tapered tip and co"
+  ]
+ },
+ "F7/spr-fantasy-brass-dragon-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "anatomy:major:two tail tips: left coil ends in an upcurved hook point at lower left, second bl"
+  ]
+ },
+ "F7/spr-fantasy-cloud-giant-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F7/spr-fantasy-deva-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F7/spr-fantasy-dragon-whelp-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F7/spr-fantasy-erinyes-barbed-devil-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F7/spr-fantasy-fire-giant-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "note:subject reads as winged draconic knight, not a fire giant"
+  ]
+ },
+ "F7/spr-fantasy-frost-giant-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F7/spr-fantasy-glabrezu-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F7/spr-fantasy-green-dragon-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F7/spr-fantasy-hill-giant-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "style-drift:photoreal"
+  ]
+ },
+ "F7/spr-fantasy-imp-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F7/spr-fantasy-marilith-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F7/spr-fantasy-red-dragon-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F7/spr-fantasy-solar-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F7/spr-fantasy-stone-giant-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F7/spr-fantasy-storm-giant-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F7/spr-fantasy-white-dragon-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F8/spr-fantasy-blind-deep-stalker-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F8/spr-fantasy-blob-of-annihilation-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "note:content mismatch: two dwarf NPCs, not a blob of annihilation"
+  ]
+ },
+ "F8/spr-fantasy-deep-brute-spr-fantasy-deep-brute-thonot-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "note:content mismatch: single gray dragon instead of expected deep-brute two-cell pai"
+  ]
+ },
+ "F8/spr-fantasy-elder-deep-thing-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "note:content mismatch: werewolf figure, not an elder deep thing aberration"
+  ]
+ },
+ "F8/spr-fantasy-eye-tyrant-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F8/spr-fantasy-grell-spr-fantasy-secret-eye-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "note:content mismatch: fx-style green crystal burst on black background, no creatures"
+  ]
+ },
+ "F8/spr-fantasy-hook-horror-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "note:content mismatch: human gladiator with trident and net, not a hook horror"
+  ]
+ },
+ "F8/spr-fantasy-mind-thief-spr-fantasy-mind-thief-arcanist-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "bg-rekey:pale-pink",
+   "note:content mismatch: 4-cell sheet of small animals (caged ferret, caged bird, duck,"
+  ]
+ },
+ "F8/spr-fantasy-piercer-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "note:content mismatch: harnessed draft horse, not a piercer"
+  ]
+ },
+ "F8/spr-fantasy-roper-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "note:content mismatch: 4-cell sheet of small animals (caged canary, rat, axolotl, cri"
+  ]
+ },
+ "F8/spr-fantasy-umber-hulk-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "note:content mismatch: six-winged angel figure (apparent duplicate of F7 solar), not "
+  ]
+ },
+ "F8/spr-fantasy-void-monk-monk-spr-fantasy-void-monk-psion-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "note:content mismatch: filename says void-monk figures but sheet shows fish/songbird/"
+  ]
+ },
+ "F8/spr-fantasy-void-monk-zerth-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "note:content mismatch: filename says void-monk zerth but image shows two ranger/arche"
+  ]
+ },
+ "F9/spr-fantasy-allosaurus-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F9/spr-fantasy-ankylosaurus-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F9/spr-fantasy-ape-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F9/spr-fantasy-archelon-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F9/spr-fantasy-axe-beak-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F9/spr-fantasy-baboon-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F9/spr-fantasy-bat-raven-owl-hawk-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "bg:white"
+  ]
+ },
+ "F9/spr-fantasy-black-bear-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F9/spr-fantasy-blood-hawk-eagle-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "bg-rekey:pale-pink",
+   "note:4-cell sheet with only 2 birds; cells 3-4 empty; both figures sit small and low "
+  ]
+ },
+ "F9/spr-fantasy-boar-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F9/spr-fantasy-bog-twisted-giant-rat-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F9/spr-fantasy-brown-bear-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F9/spr-fantasy-camel-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F9/spr-fantasy-constrictor-snake-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F9/spr-fantasy-crab-seahorse-piranha-octopus-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "bg-rekey:pale-pink"
+  ]
+ },
+ "F9/spr-fantasy-crocodile-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F9/spr-fantasy-deer-goat-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "bg-rekey:pale-pink"
+  ]
+ },
+ "F9/spr-fantasy-dire-worg-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F9/spr-fantasy-draft-horse-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F9/spr-fantasy-elephant-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F9/spr-fantasy-elk-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F9/spr-fantasy-frog-lizard-scorpion-spider-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F9/spr-fantasy-giant-venomous-snake-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F9/spr-fantasy-hippopotamus-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F9/spr-fantasy-hunter-shark-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F9/spr-fantasy-jackal-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F9/spr-fantasy-killer-whale-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F9/spr-fantasy-lion-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F9/spr-fantasy-mammoth-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F9/spr-fantasy-mastiff-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F9/spr-fantasy-panther-hyena-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "bg:white"
+  ]
+ },
+ "F9/spr-fantasy-plesiosaurus-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F9/spr-fantasy-polar-bear-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F9/spr-fantasy-pony-mule-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "bg-rekey:dark-magenta"
+  ]
+ },
+ "F9/spr-fantasy-pteranodon-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F9/spr-fantasy-rat-cat-weasel-badger-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "bg-rekey:pale-pink"
+  ]
+ },
+ "F9/spr-fantasy-reef-shark-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F9/spr-fantasy-rhinoceros-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F9/spr-fantasy-riding-horse-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F9/spr-fantasy-saber-toothed-tiger-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "note:includes second animal (prey carcass) under the tiger; may complicate single-spr"
+  ]
+ },
+ "F9/spr-fantasy-swarm-of-bats-swarm-of-ravens-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F9/spr-fantasy-swarm-of-crawling-claws-swarm-of-larvae-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F9/spr-fantasy-swarm-of-dretches-swarm-of-lemures-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F9/spr-fantasy-swarm-of-piranhas-swarm-of-venomous-snakes-candidate-001.png": {
+  "verdict": "REVIEW",
+  "reasons": [
+   "bg-rekey:pale-pink"
+  ]
+ },
+ "F9/spr-fantasy-swarm-of-rats-swarm-of-insects-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F9/spr-fantasy-swarm-of-stirges-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F9/spr-fantasy-tiger-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F9/spr-fantasy-triceratops-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F9/spr-fantasy-tyrannosaurus-rex-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F9/spr-fantasy-venomous-snake-flying-snake-candidate-001.png": {
+  "verdict": "REDO",
+  "reasons": [
+   "anatomy:minor:4-cell sheet with only 2 cells populated: right two cells are empty (both snake ",
+   "bg:scene/other",
+   "note:4-cell sheet with only 2 cells populated; cells 3 and 4 empty magenta"
+  ]
+ },
+ "F9/spr-fantasy-vulture-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F9/spr-fantasy-warhorse-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ },
+ "F9/spr-fantasy-worg-candidate-001.png": {
+  "verdict": "ADMIT-CANDIDATE",
+  "reasons": []
+ }
+}

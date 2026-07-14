@@ -1,0 +1,9 @@
+{
+  "runtimeAdmitted": false,
+  "sheets": [
+    {"file":"spr-fantasy-green-hag__spr-fantasy-sea-hag-candidate-001.png","callId":"exec-a08e8bf8-7afe-422d-8d31-b386c5289242","cells":["spr-fantasy-green-hag","spr-fantasy-sea-hag"]},
+    {"file":"spr-fantasy-dryad__spr-fantasy-blink-dog-candidate-001.png","callId":"exec-fa0cb635-b0d8-4bb8-9a55-b35f4455bfc7","cells":["spr-fantasy-dryad","spr-fantasy-blink-dog"]},
+    {"file":"spr-fantasy-arch-hag-candidate-001.png","callId":"exec-69960a88-8fe2-4f6b-8180-8b00e43c098d","cells":["spr-fantasy-arch-hag"]},
+    {"file":"spr-fantasy-pixie__spr-fantasy-pixie-wonderbringer__spr-fantasy-sprite-candidate-001.png","callId":"exec-2ee2b751-c887-436d-9841-5d12d2b1faa1","cells":["spr-fantasy-pixie","spr-fantasy-pixie-wonderbringer","spr-fantasy-sprite"]}
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "runtimeAdmitted": false,
+  "sheets": [
+    {"file":"spr-fantasy-myconid-adult__spr-fantasy-myconid-spore-servant-candidate-001.png","callId":"exec-e30a1233-ccf3-4867-a9c6-3d7edc64e1e5","cells":["spr-fantasy-myconid-adult","spr-fantasy-myconid-spore-servant"]},
+    {"file":"spr-fantasy-shrieker-fungus__spr-fantasy-violet-fungus-candidate-001.png","callId":"exec-9900cded-a0b5-4ce0-aad1-85c3f3be6315","cells":["spr-fantasy-shrieker-fungus","spr-fantasy-violet-fungus"]},
+    {"file":"spr-fantasy-myconid-sprout-candidate-001.png","callId":"exec-85ef7f6f-dbe8-46d9-b121-432960791a99","cells":["spr-fantasy-myconid-sprout"]},
+    {"file":"spr-fantasy-myconid-sovereign-candidate-001.png","callId":"exec-cec4ea54-311e-4a55-a025-b9323a798c16","cells":["spr-fantasy-myconid-sovereign"]},
+    {"file":"spr-fantasy-violet-fungus-necrohulk-candidate-001.png","callId":"exec-d9a57fbb-f5ff-4daa-987a-01b68ae1931d","cells":["spr-fantasy-violet-fungus-necrohulk"]},
+    {"file":"spr-fantasy-gas-spore-fungus-candidate-001.png","callId":"exec-baa15619-f5d2-4277-b373-c54fd6bf7019","cells":["spr-fantasy-gas-spore-fungus"]}
+  ]
+}

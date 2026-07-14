@@ -210,7 +210,15 @@ function makeStubTHREE() {
     BoxGeometry: geo("box"), CylinderGeometry: geo("cylinder"), SphereGeometry: geo("sphere"),
     TorusGeometry: geo("torus"), OctahedronGeometry: geo("octahedron"), ConeGeometry: geo("cone"),
     PlaneGeometry: geo("plane"),
-    MeshLambertMaterial: function (opts) { return Object.assign({ userData: {}, isLambert: true }, opts); },
+    // E0-1 (docs/PHASE-3-WAVE-1-SPECS.md): interiorFixtureBodyMaterial now calls `.clone()` on the
+    // shared cache for wall-mounted fixtures (a real THREE.Material method) — this stub needs one too,
+    // returning a distinct object (never the same reference) so PART B's wall-fixture checks below
+    // still exercise the real per-fixture-clone code path instead of throwing.
+    MeshLambertMaterial: function (opts) {
+      const mat = Object.assign({ userData: {}, isLambert: true }, opts);
+      mat.clone = function () { return Object.assign({}, mat, { clone: mat.clone }); };
+      return mat;
+    },
     MeshBasicMaterial: function (opts) { return Object.assign({ userData: {} }, opts); },
     Color: function (hex) { return { hex, isColor: true }; },
     CanvasTexture: function (cv) { return { isTexture: true, _cv: cv }; },

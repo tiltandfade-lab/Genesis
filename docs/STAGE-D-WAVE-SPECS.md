@@ -287,3 +287,32 @@ broken-variant study card (one per variant, same scene/camera) READ + described 
 ### Out of scope
 New contract states; registry/data changes; other archetypes' break-variants (pattern generalizes
 at D5); doorframe-mass fix (the standing BW2-5 finding, own unit); physics debris.
+
+---
+
+## D4d — Doorframe mass fix (Adam's "big ass column" ruling)  ·  branch `fix/d4d-doorframe-mass`
+
+### Context (D4b's confirmed diagnosis)
+The BW2-5 doorframe/arch-header assembly (`src/ui/theater-interior.js`) is a solid box near-filling
+the cell (`wFrac=0.8` in BOTH x and z, plus 2 stacked corbel prisms) — it reads as a stone column
+standing in front of the leaf, on EVERY door in the game. Adam: "there's a big ass column right in
+front of the door, so I can't really even see it."
+
+### Decision
+A doorframe reads as a FRAME: two slim jamb posts + a header/lintel spanning them, hugging the wall
+plane — never a freestanding column mass. Slim the assembly: jamb posts ≤ ~0.15 cell wide each,
+frame depth ≤ the wall thickness + a small proud reveal (named consts), header spans the aperture,
+corbels (if kept) scale to the header, aperture interior FULLY open (the D4 leaf is what fills it).
+Arched doors keep their arched header silhouette. Preserve the frame's existing material/texture
+hookups. This is render-geometry only — no cell/logic change.
+
+### Verification
+⊗ RED FIRST: frame-assembly bounding footprint ≤ the named slim budget (fails on the landed
+wFrac=0.8 box); aperture cross-section unobstructed between jambs. Re-run:
+`verify-bw2-5-silhouette` (the unit that owns this geometry — sync its fixtures red-first if the
+slimmer frame legitimately changes them, never weaken), `verify-dungeon-interior` (287),
+`verify-theater-shot` (107), `verify-d4-doors` (current count), `check-manifest`. Visual: re-shoot
+the D4 door study card — the leaf must now be the visually dominant element at the doorway; READ it.
+
+### Out of scope
+Leaf/variant work (D4c); wall thickness itself; the kit-lane door art.

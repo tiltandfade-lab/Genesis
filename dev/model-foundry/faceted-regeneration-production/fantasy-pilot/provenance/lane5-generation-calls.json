@@ -1,0 +1,73 @@
+{
+  "packet": "dev/model-qa/faceted/PACKET-F1.md",
+  "lane": "LANE 5 - guards, faces + beasts",
+  "date": "2026-07-13",
+  "runtimeAdmitted": false,
+  "chroma": "#FF00FF",
+  "outputs": [
+    {
+      "file": "raw-figures/fantasy-guard-captain-watch-candidate-020.png",
+      "callId": "call_nk7c9z3l48hGFX8PTSt5uGWz",
+      "cells": [
+        "spr-fantasy-guard",
+        "spr-fantasy-guard-captain"
+      ]
+    },
+    {
+      "file": "raw-figures/fantasy-roadguard-elf-dwarf-captain-candidate-021.png",
+      "callId": "call_HluE0QLYttR8IFvThyHu1H96",
+      "cells": [
+        "spr-fantasy-road-guard-elf",
+        "spr-fantasy-dwarven-town-guard-captain-elderly-dwarf-decades-on-the-wall-trusted-by-everyone"
+      ]
+    },
+    {
+      "file": "raw-figures/fantasy-dragonborn-temple-enforcer-candidate-022.png",
+      "callId": "call_gwre21CYaYdPEoBcSMRUlQGy",
+      "cells": [
+        "spr-fantasy-dragonborn-temple-guard-devout-literal-minded-takes-the-oath-seriously",
+        "spr-fantasy-enforcer-dragonborn"
+      ]
+    },
+    {
+      "file": "raw-figures/fantasy-orc-caravan-blacksmith-candidate-023.png",
+      "callId": "call_VBf074mcD2tjrozdo3eCGUnq",
+      "cells": [
+        "spr-fantasy-orcish-caravan-guard-hired-muscle-with-a-reputation-for-actually-caring-about-the-cargo",
+        "spr-fantasy-orcish-caravan-blacksmith-orc-repairs-wagon-wheels-faster-than-anyone-in-three-towns"
+      ]
+    },
+    {
+      "file": "raw-figures/fantasy-orc-healer-candidate-024.png",
+      "callId": "call_xVL4kGpRoIv9SqKphH24lToF",
+      "cells": [
+        "spr-fantasy-orcish-healer-gentle-hands-a-reputation-people-are-slow-to-trust"
+      ]
+    },
+    {
+      "file": "raw-figures/fantasy-giant-wolf-spider-candidate-025.png",
+      "callId": "call_25vISo35wIZuOq2U90dt0CTJ",
+      "cells": [
+        "spr-fantasy-giant-wolf-spider"
+      ]
+    },
+    {
+      "file": "raw-figures/fantasy-shield-guardian-candidate-026.png",
+      "callId": "call_NKmSkk9pnoKaV7t7uxbPgwp2",
+      "cells": [
+        "spr-fantasy-shield-guardian"
+      ]
+    },
+    {
+      "file": "raw-figures/fantasy-guardian-naga-candidate-027.png",
+      "callId": "call_nCLL6OY0H7xu4ldZlt7xjCKV",
+      "cells": [
+        "spr-fantasy-guardian-naga"
+      ]
+    }
+  ],
+  "notes": [
+    "Generation-only candidates; no cleanup, alpha, isolated QA, integrated QA, or runtime admission performed.",
+    "Visual QA flags from generation pass: spider support may be broad; shield guardian feet are close to crop edge; orc blacksmith mass should be checked for trade-built seriousness rather than caricature."
+  ]
+}

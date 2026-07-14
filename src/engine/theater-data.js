@@ -1048,6 +1048,43 @@ function theaterNodeBoardBuild(record, realms, env){
   };
 }
 
+/* docs/STAGE-D-WAVE-SPECS.md D4 JOB 2 — the persisted-state seam. `prepNode` is the SAME live
+   w.prep.nodes[<activeWalkId>] object D0's dmFindInteractable (src/world/dm.js) indexes by
+   sourceRef to find-and-mutate a placed entity's `.state` across turns (a state_transition event
+   writes straight onto the matched `pn.interactables[]` record). D2's bindWalkInteractables and D3's
+   applyRoomGrammar stay PURE re-derivable projections of (plan,walk,opts) — their own header
+   docstrings flag this exact reconciliation as the deliberately-unsettled gap ("PERSISTENCE GAP",
+   walk-interactables.js) and hand it to D4.
+   ONE STORE: `prepNode.interactables[]` (dmFindInteractable's own read shape) holds ONLY minimal
+   identity+state records — {sourceRef, archetype, state} — never a second content record (Law 5:
+   the walk segment stays canon; this store is bookkeeping, not a noun). `interactables` (the fresh
+   D2+D3 projection, called anew every render) is mutated IN PLACE per entry:
+     - a sourceRef with NO existing record gets one stamped (first projection ever seen this walk);
+     - a sourceRef ALREADY on record has its entry's own `.state` field overwritten with the
+       PERSISTED state — so a door opened by a state_transition last turn reads open again on every
+       later re-derivation of the same plan, instead of reverting to its rolled starting state.
+   `prepNode` absent (no active walk / harness calling trayFrom stand-alone) is a graceful no-op —
+   the fresh projection's own rolled starting states pass through untouched, same degrade posture
+   D0's own dmFindInteractable/dmArchetypeStates already keep. */
+function trayReconcileInteractableState(prepNode, interactables){
+  if(!prepNode || !Array.isArray(interactables) || !interactables.length) return interactables;
+  const store = Array.isArray(prepNode.interactables) ? prepNode.interactables : (prepNode.interactables = []);
+  const bySourceRef = {};
+  store.forEach((rec) => { if(rec && rec.sourceRef != null) bySourceRef[rec.sourceRef] = rec; });
+  interactables.forEach((entry) => {
+    if(!entry || entry.sourceRef == null) return;
+    const persisted = bySourceRef[entry.sourceRef];
+    if(persisted){
+      entry.state = persisted.state;
+    } else {
+      const rec = { sourceRef: entry.sourceRef, archetype: entry.archetype, state: entry.state };
+      store.push(rec);
+      bySourceRef[entry.sourceRef] = rec;
+    }
+  });
+  return interactables;
+}
+
 /* TABLETOP-UNITS.md §U1 — trayFrom(source, scene, opts): the Standing Table generalization of
    theaterBoardFrom. source.kind selects the origin:
      {kind:"segment", segment}  — an active walk's here-segment (all three envs) — routes through
@@ -1139,11 +1176,45 @@ function trayFrom(source, scene, opts){
         focusSegNum: source.focusSegNum
       });
     }
+    // docs/STAGE-D-WAVE-SPECS.md D4 JOB 1 — THE WIRING LAW: D2 (bindWalkInteractables) and D3
+    // (applyRoomGrammar) verified green on their own harnesses but had NO production caller before
+    // this unit (their own header docstrings flag exactly this gap). This IS that caller. Runs off
+    // `dressedPlan` (dressPlan only ADDS a `.dressing` field — plan.cells/rooms/doors are the SAME
+    // geometry `source.plan` already carries), so calling this after the dressing block above is a
+    // pure code-ordering convenience, not a placement dependency: BW5 IA-3's "interactables place
+    // BEFORE decorative dressing" is a LOGICAL ordering (interactables read room geometry directly,
+    // never dressing's own picks — D2/D3's own header notes), which already holds regardless of
+    // where in this function the call sits. A plan/walk with no rolled interactable candidates (the
+    // common case for every walk built before D2/D3 existed) degrades to `interactables:[]` — the
+    // SAME empty-input byte-identical-render proof D3's own header keeps (dev/verify-d4-doors.mjs
+    // check 4).
+    let interactablePlan = dressedPlan;
+    if(typeof bindWalkInteractables === "function" && dressedPlan && Array.isArray(dressedPlan.rooms) && dressedPlan.rooms.length && dressedPlan.cells){
+      interactablePlan = bindWalkInteractables(dressedPlan, source.walk || null, { realmId: realmId, walkId: source.walkId });
+      if(typeof applyRoomGrammar === "function"){
+        interactablePlan = applyRoomGrammar(interactablePlan, { walkId: source.walkId });
+      }
+    }
+    let interactables = interactablePlan.interactables || [];
+    // D4 JOB 2 — THE PERSISTED-STATE SEAM: `source.prepNode` is the SAME live w.prep.nodes[<id>]
+    // object D0's dmFindInteractable (src/world/dm.js) indexes by sourceRef — theaterHereSourceFor
+    // (src/world/render.js) hands it straight through, exactly the way it already hands through
+    // pn.spatial as `source.plan` (no new prep-node convention invented). bindWalkInteractables/
+    // applyRoomGrammar stay pure re-derivable projections (their own documented "PERSISTENCE GAP");
+    // this reconciles the one real store dmFindInteractable reads against the fresh projection: a
+    // sourceRef seen for the first time gets a minimal identity+state record STAMPED into the prep
+    // node; a sourceRef already on record has its PERSISTED state WIN over the freshly rolled
+    // starting state (a door opened by a state_transition last turn stays open on re-derivation).
+    if(interactables.length && typeof trayReconcileInteractableState === "function"){
+      interactables = trayReconcileInteractableState(source.prepNode || null, interactables);
+    }
+    dressedPlan = Object.assign({}, dressedPlan, { interactables: interactables });
     const board = interiorBuildBoard(dressedPlan, {
       env: env, realmId: realmId, focusSegNum: source.focusSegNum, radius: source.radius,
       projection:projection
     });
     board.dressing = dressedPlan.dressing || [];
+    board.interactables = dressedPlan.interactables || [];
     board.projection = projection;
     board.activeRoomId = source.focusSegNum != null ? source.focusSegNum : null;
     // WALK-NATIVE-A.md WDV-1 — the anti-drift boundary: stamps board.walkScene (additive; never

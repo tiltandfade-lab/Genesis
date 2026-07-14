@@ -7,7 +7,7 @@
    dev/verify-walk-binding.mjs / dev/verify-dungeon-dressing.mjs already use).
 
    RED-FIRST (this unit's own task brief): master tip 41c569da (pre-D3) has no
-   src/engine/room-grammar.js at all — `git show master:src/engine/room-grammar.js` must fail.
+   src/engine/room-grammar.js at all — `git show 41c569da:src/engine/room-grammar.js` (the pinned pre-D3 master tip) must fail — pinned, not "master", so the check stays true after D3 merges (the standing pinned-red-first-refs scar).
    Check 0 is the harness-side proof. Checks 1/3/5 below additionally red-first PROVE the specific
    defect each primitive fixes: a hand-built "raw D2 seed placement" fixture that (1) is NOT spaced
    at a uniform cadence, (3) is NOT mirrored across the door axis, (5) DOES sit on a CLEAR cell —
@@ -132,12 +132,12 @@ console.log("=== RED-FIRST: master (41c569da) has no src/engine/room-grammar.js 
 {
   let redOut = null;
   try {
-    redOut = execSync("git show master:src/engine/room-grammar.js", { cwd: ROOT, stdio: ["ignore", "pipe", "pipe"] }).toString();
+    redOut = execSync("git show 41c569da:src/engine/room-grammar.js", { cwd: ROOT, stdio: ["ignore", "pipe", "pipe"] }).toString();
   } catch (e) {
     redOut = "MISSING: " + e.message.split("\n")[0];
   }
   ok(/MISSING|fatal|does not exist|exists on disk, but not in/.test(redOut) || redOut === null,
-    "RED-FIRST: master has no room-grammar.js (git show fails)", redOut && redOut.slice(0, 160));
+    "RED-FIRST: pre-D3 master (41c569da) has no room-grammar.js (git show fails)", redOut && redOut.slice(0, 160));
 }
 
 group("1 — RHYTHM: non-uniform seed -> uniform cadence, no orphan gap");

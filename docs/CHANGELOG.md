@@ -8,6 +8,66 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-07-13 (later) — OSS adoption research pass + Phase-3 brief + oss stabilization evidence
+
+Closed out the geometry-flip session. Adam asked whether Genesis is "rebuilding the wheel" on open-source;
+answered with a three-agent research pass (reference data · three.js graphics · procgen/infra).
+
+**Added.**
+- **`docs/PHASE-3-DIRECTOR-BRIEF.md`** — Fable's handoff into Phase 3 (flip evidence, a linked path to the
+  full Codex plugin-rec suite + plan, GP-2..4 terrain, the oracle/spend calls that are his, and a
+  smallest-correction-first recommendation). Now with a **§6 OSS-adoption findings** table folded in.
+- **Loop-gate captures regenerated under the oss default** (`dev/battle-gate/dungeon-loop/`) — 5 real
+  dungeons + combat, 5/5 clean, 0 breaks; the committed evidence for the §15 stabilization hold. (The
+  oss PNGs are notably *smaller* than the legacy ones they replace — consistent with the Δ−286-triangle
+  perf finding.)
+
+**Findings (headline: mostly NOT rebuilding the wheel).** Genesis already adopted the non-obvious infra
+(IndexedDB via `store.js`; vendored earcut/polygon-clipping/clipper2; the Codex graphics pin-table), and its
+bespoke systems are correct-by-design (script-owns-rolls, no-stored-terrain, band×lane combat; `postprocessing`
+already correctly rejected). Four genuine adoption candidates surfaced, detailed in the brief §6:
+(1) **`@three.ez/instanced-mesh`** (MIT) for the unbuilt/bespoke R3 sprite-atlas instancing — the big one,
+Fable's Phase-3 call; (2) **Open5e `srd-2024`** (CC-BY-4.0) as a build-time cross-check for the PDF-parsed
+`Reference/SRD-Data/`; (3) **AgX tone-curve** (free, already in vendored three) for the grade pass;
+(4) dedup a triplicated test-seed PRNG into `dev/lib/prng.mjs`.
+
+**Deferred.** Fable weighs in on Phase 3, potentially expands/orchestrates the next waves. All four adoption
+candidates are recommendations, not decisions.
+
+## 2026-07-13 — GEOMETRY DEFAULT FLIPPED legacy→oss (§15 step 8) + stabilization hold opened (orchestrated)
+
+Adam **delegated the flip verdict to Claude conditional on sound pre-flip evidence** ("run the pre-flip
+evidence wave, then if evidence is sound, authorize the flip, and continue fleshing out all visual
+engine changes as specified"). Branch `feat/geometry-oss-flip`, landed `--no-ff`, gates re-run by me.
+
+**Changed.**
+- **`ROOM_SHELL_POLYGON_KERNEL_FLAG` (theater-boot.js) `legacy`→`oss`** — production now renders the
+  PolygonKernel floor + aperture-delimited wall-run path (G1/G2/G3). The module-level
+  `ROOM_SHELL_POLYGON_KERNEL` const (theater-room-mesh.js) **stays `legacy`** as the bare-call/dev
+  fallback, retaining the legacy path for the §15 step-9 stabilization hold; the flag is still
+  seam-settable back via `window.Theater._setRoomShellPolygonKernel`.
+
+**Added.**
+- **`dev/capture-oss-integrated.mjs`** — filled OSS §15 promotion steps 6–7 (the only genuine pre-flip
+  gap; F1 outside-low grazing capture + F2 5000-room gap/provenance fuzz already existed and re-gated
+  green). Boots a real in-session room, mounts it under legacy then oss at the product camera, reads
+  `renderer.info` full-chain draw submissions + resource census. Output committed to
+  `dev/oss-integrated-shots/` for review.
+
+**Evidence (all re-run/read by me).** Numeric: verify-wall-runs-oss **92/0** (corner gap 0 at
+stem/cap/footing, both cap lips, 100% provenance), verify-wall-runs-oss-fuzz over **5000 randomized
+rooms** (zero join-gap, full segment provenance, acute-bevel + red-first negative control),
+verify-geometry-fixtures **28/0** (7 legacy defects fixed, 0 regressions), room-shell parity **48/0**.
+Visual: outside-low grazing — oss closes the corner with a continuous mitered cap lip; product-camera
+integrated — oss ≡ legacy at the player-visible shot. Perf: draw calls **Δ0**, triangles **Δ−286**
+(oss cheaper), geometries/programs **Δ0**, textures **+2** one-time. **Full 197-harness sweep: 4 reds,
+ALL verified pre-existing on master** (verify-{room-shell-render,diegetic-light,occlusion-fade,
+gallery-pass} — render-flake/CI-auto-skip, fail identically pre-flip). check-manifest OK.
+
+**Deferred.** §15 step 10 (remove the legacy triangulation path) waits until the stabilization hold
+passes with no rollback-worthy defect. Phase 3 (GP-2..4 visual production) now rides on the flipped
+geometry, gated on Codex research + charter tool-adoption/spend gates.
+
 ## 2026-07-13 (overnight) — GRAPHICS CONVERGENCE: wall-volumes wave + Phase 0/1/2 geometry (orchestrated)
 
 Codex researches, Claude orchestrates (`docs/GRAPHICS-CONVERGENCE-CHARTER.md` governs; execution spine
@@ -941,93 +1001,4 @@ self-report. Full detail: `docs/OVERNIGHT-REPORT-2026-07-08.md`.
 **Flagged for design review** (not blockers): `engine.theater-data` (L1) now calls up into
 `world.prep`/`world.codex` (WARN-level, spec-named) — dependency direction worth a look; U4's
 `theaterCastPcRefFrom` duplicates dm.js's PC-ref construction to avoid more coupling.
-
-## 2026-07-07 (night) — TABLETOP-VISION: the visual end-state locked in the final Fable window
-
-Adam's remaining Fable hours (his last — the window closes for good) spent design-locking the
-graphics engine's destination, then hardening it. Four --no-ff merges on master, all pushed:
-`9ee28ca` (the spec + census) → `4a125b6` (Fable self-attack, 7 fixes) → `2041750` (independent
-Opus skeptic adjudicated, 4 survivors) → `301f5ee` (Adam's post-pass rulings) → this sweep.
-
-**Added**
-- `docs/TABLETOP-VISION.md` — the game as a tabletop of miniatures: three laws (state-only
-  staging via capture-not-origin / miniature ontology / the invisible hand IS the DM), 9-class
-  piece taxonomy, two-rule registry schema (footprint+sockets locked, archetype × realm tags
-  free), tray grammar (pure projection; combat reconfigures the one tray; sources = walk
-  segment | interior | node | overland), centerpiece law off existing feature/interactable
-  rolls (effectDie never auto-stages; secrets stage on reveal), two-lane overlays (rolled
-  ambient + event-earned traces), blank-meeple fallback tied to codex softness, V1–V6 layer
-  map (V6 select→kitbash→generate, extended to whole scenes), 3-column shell with ARIA
-  contract, pre-alpha cut = V1+V2+shell, 11 binding acceptance gates, Sonnet unit queue U1–U7.
-- `docs/reference/TERRAIN-CENSUS-2026-07-07.md` — 8-system commercial terrain survey
-  (Dwarven Forge → OpenLOCK) behind the taxonomy: tray/template convention, ~10–15 shape
-  classes per biome, props-carry-identity, skins-over-geometry, the packaging model.
-
-**Changed**
-- DIRECTION §3.4 amended: Adam exempted the tabletop SPEC from the moratorium (build still
-  §4 soak-gated). DESIGN.md gained the dated decision line; DESIGN-GUIDE T6 marked
-  superseded-in-sequence (theater = V0, built + frozen; ES-module trigger moves to V1);
-  NEXT-STEPS gained item 6 (the post-soak tabletop queue); docs/README.md indexed both docs.
-- Session ops: created the parallel craft worktree `~/Desktop/Work/projects/Genesis-craft`
-  (branch `feat/craft-pass-2`) for the Codex tables lane with a steward-session contract.
-
-**Fixed (in the spec, by adversarial passes — before any executor could inherit them)**
-- §0.1 re-grounded capture-not-origin (Charter §8.5 inventions were unstageable as written) ·
-  ambient blank-meeple parity hole (co-location rule: digest rises to match the table) ·
-  proposal/disposal reconciliation (no resurrected encounters; corpse = default disposition) ·
-  "(walk rolls are seeded)" corrected — walk RNG is raw Math.random() persisted once ·
-  aria-hidden center would have muted the dice overlay's live region (gate §9.11) · gate §9.3
-  retargeted to digest-VISIBLE refs · SPEED rule-1 inference-cost declaration added.
-
-**Deferred**
-- The entire BUILD (U1–U7 + asset packs) — post-soak by DIRECTION §4, per design. HANDOFF's
-  ≤3-entry diet is over budget again; next clean-close trims it.
-
-## 2026-07-07 (evening) — HQ3: the marathon's fix queue BUILT the same day it was found
-
-The 11-set/110-turn background playtest marathon (see dev/playtest-0707/, seat 4.96/5,
-injection+fuzz sweeps clean) produced 20 findings → 4 Sonnet-ready specs + HOTFIX-QUEUE-2026-07-07-
-MARATHON.md → Adam approved the ledger defaults → 3 Workflow waves (11 executors) built all 16
-units, orchestrator-re-gated per branch and per integration tree.
-
-### Added
-- **Hit-dice short rests** (`rest {kind:"short", spendHitDice:N}`, pool on the sheet + digest) —
-  the 5e incremental heal finally exists; long rest regains ⌊level/2⌋.
-- **`pendingSituation`** — severe/interrupted rest-risks ride the next digest as a first-class
-  obligation the memoryless seat must honor (ack-cleared on the answering turn).
-- **Durable marks** (`sheet.marks[]` unified object shape; `mark_added`/`mark_removed` events,
-  PROMPT_TAUGHT) — a ruined hand survives a seat swap now.
-- **`pc.gold` + `pc.concentration {…expiresInMin}`** in the digest; concentration now EXPIRES
-  (parsed spell durations, clock tick hook, long-rest clear).
-- Harness: `advance --toClock/--toBand` absolute set (backward allowed); crit fall-throughs persist
-  to `w.dm.pendingRoll` across process boundaries; `digest` no longer eats a mid-roll rollReq.
-
-### Changed
-- **Encounter XP is a win reward:** empty-foes fallback killed, `ENCOUNTER_OUTCOME_MULT` gates the
-  CR-less fallback by outcome; downed foes always pay (fled-and-collect / lose-and-collect closed).
-- **Interrupted long rests burn a rolled 2–6h**, not the full 8; a second long rest inside 24h
-  restores nothing (`no-benefit-24h`).
-- **Codex `dm.notes[]` are stamped objects** ({text,day,min,supersedes?}), digest slice newest-first
-  with a 6-note budget + count rollup; seat rule: prose relationship shifts MUST fire attitude_shift.
-- Branch `social_check` grades off the LIVE d20 (resolveBranch overrides the authored literal).
-- Bundle gear (Ball Bearings/Caltrops) weighs its bag total — the Burglar's Pack drops 2039.5→41.5 lb
-  and a fresh rogue can pick up loot again; over-capacity + cannot-afford refusals surface as drift
-  ledger lines the seat can see.
-- Triage: negation-scoped combat-verb guard ("I do NOT attack" no longer buys the deep lane).
-
-### Fixed
-- Three stale validator pins converted to floors/shape-tolerant reads at integration (durability's
-  items-count pin, tiyl's string-mark shape, CONTRACT-1's 87-example pin) — validators keep their
-  jobs, don't re-break on legitimate growth.
-- B1 executor deviation caught at the orchestrator gate: outcome multiplier was wiping earned
-  kill-XP on non-win outcomes; corrected to gate only the fallback (spec ledger #2), harness check
-  flipped to assert the right law.
-
-Verification: every branch re-gated (check-manifest + unit harnesses + diff reads), integration
-trees swept in full (0 failures), fuzz 510 calls/98 events/0 findings, monkey 12/12 lives/0 aborted,
-dm-contract 113/113 @ 98 events. 11 --no-ff unit merges + 1 integration merge + 4 fix merges, all
-pushed.
-
----
-
 

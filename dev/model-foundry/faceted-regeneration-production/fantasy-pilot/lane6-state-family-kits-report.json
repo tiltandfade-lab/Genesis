@@ -1,0 +1,197 @@
+{
+  "lane": "PACKET-F1 Lane 6 - state-family kits",
+  "date": "2026-07-13",
+  "scope": "Fantasy raw component generation sheets only",
+  "authority": [
+    "dev/model-qa/faceted/PACKET-F1.md",
+    "docs/FACETED-SPRITE-ART-MIGRATION.md",
+    "dev/model-foundry/FACETED-ART-REGENERATION-PRODUCTION-PLAN.md"
+  ],
+  "generator": "built-in image_gen",
+  "promptVersion": "FACETED-ART-REGENERATION-PRODUCTION-PLAN.md section 7 master prop prompt",
+  "runtimeAdmitted": false,
+  "counts": {
+    "generationSheetAttempts": 10,
+    "generatedComponentCount": 18,
+    "sourceTechnicalPass": 0,
+    "compiledCount": 0,
+    "isolatedVisualPass": 0,
+    "integratedInGamePass": 0,
+    "runtimeAdmittedCount": 0,
+    "rejectedCount": 10
+  },
+  "retrySummary": {
+    "candidate002PromptChange": "Stricter CSS-flat chroma wording, no grid lines, rectangular door fit, no rod/pole, flatter albedo/projection language.",
+    "candidate002PixelGate": "All candidate-002 sheets still have non-uniform green borders, so Step E remains red before cleanup.",
+    "candidate002Verdict": "REJECT_SOURCE"
+  },
+  "retryCandidates": [
+    {
+      "slug": "fantasy-lane6-banded-oak-door-kit",
+      "attempt": 2,
+      "rawPath": "dev/model-foundry/faceted-regeneration-production/fantasy-pilot/raw-sheets/fantasy-lane6-banded-oak-door-kit-candidate-002.png",
+      "sourceCallId": "call_YpposVeSfaYCWXOlC8FpYKFA",
+      "rawSha256": "a9cde13d49189b33bca489a22ed2ea5ae3860f29d9c333de444ff9105fd6f8d0",
+      "dimensions": [1774, 887],
+      "stepEVerdict": "REJECT_SOURCE",
+      "rejectionReasons": [
+        "background border has 149 sampled colors instead of uniform #00FF00",
+        "visually stronger rectangular frame/leaf fit than candidate 001, but source gate still blocks cleanup"
+      ],
+      "runtimeAdmitted": false
+    },
+    {
+      "slug": "fantasy-lane6-wall-lever-kit",
+      "attempt": 2,
+      "rawPath": "dev/model-foundry/faceted-regeneration-production/fantasy-pilot/raw-sheets/fantasy-lane6-wall-lever-kit-candidate-002.png",
+      "sourceCallId": "call_h8QE4xl0Uxa6REKOZzRXhS47",
+      "rawSha256": "13439e6e621034aecf3a3f6ef7c4698c651b1840dc27233524b8b656ad0156d2",
+      "dimensions": [1254, 1254],
+      "stepEVerdict": "REJECT_SOURCE",
+      "rejectionReasons": [
+        "background border has 154 sampled colors instead of uniform #00FF00",
+        "grid-line contamination from candidate 001 is fixed, but technical chroma gate still blocks cleanup"
+      ],
+      "runtimeAdmitted": false
+    },
+    {
+      "slug": "fantasy-lane6-painted-dragon-tablet",
+      "attempt": 2,
+      "rawPath": "dev/model-foundry/faceted-regeneration-production/fantasy-pilot/raw-sheets/fantasy-lane6-painted-dragon-tablet-candidate-002.png",
+      "sourceCallId": "call_rB4qsHgjabjOc3kgibVS3AfY",
+      "rawSha256": "bf1be24ac9df55c13077cbd818f6fac0bc64e69c05d07bff890f2a92ba9e292c",
+      "dimensions": [1024, 1536],
+      "stepEVerdict": "REJECT_SOURCE",
+      "rejectionReasons": [
+        "background border has 123 sampled colors instead of uniform #00FF00",
+        "portrait is flatter than candidate 001, but border/chroma and edge relief still need review"
+      ],
+      "runtimeAdmitted": false
+    },
+    {
+      "slug": "fantasy-lane6-torn-war-banner",
+      "attempt": 2,
+      "rawPath": "dev/model-foundry/faceted-regeneration-production/fantasy-pilot/raw-sheets/fantasy-lane6-torn-war-banner-candidate-002.png",
+      "sourceCallId": "call_hpPSATPraQ6IvwqkLjQT0o7G",
+      "rawSha256": "68db6ae2e3fad2d101f3a8a0b6d47a38453b5180e148609e70ccf051eab9049d",
+      "dimensions": [1024, 1536],
+      "stepEVerdict": "REJECT_SOURCE",
+      "rejectionReasons": [
+        "background border has 133 sampled colors instead of uniform #00FF00",
+        "top rod/pole from candidate 001 is removed, but the source gate still blocks cleanup"
+      ],
+      "runtimeAdmitted": false
+    },
+    {
+      "slug": "fantasy-lane6-floor-trap-plate",
+      "attempt": 2,
+      "rawPath": "dev/model-foundry/faceted-regeneration-production/fantasy-pilot/raw-sheets/fantasy-lane6-floor-trap-plate-candidate-002.png",
+      "sourceCallId": "call_ANmFHikKgbaps9Gsdx9VJHzQ",
+      "rawSha256": "d7466acf8b8411291fe6bbf200eded55bf49abc7e9459db099ba2fb443779fc4",
+      "dimensions": [1254, 1254],
+      "stepEVerdict": "REJECT_SOURCE",
+      "rejectionReasons": [
+        "background border has 115 sampled colors instead of uniform #00FF00",
+        "still reads as a physically bordered tile more than a flat DECAL source"
+      ],
+      "runtimeAdmitted": false
+    }
+  ],
+  "candidates": [
+    {
+      "slug": "fantasy-lane6-banded-oak-door-kit",
+      "semanticName": "Banded oak door kit",
+      "assemblyKit": "door-kit",
+      "mount": "wall",
+      "componentManifest": ["door-frame-front", "door-leaf-front"],
+      "classificationReason": "Door state family splits permanent frame and hinge-rotated leaf; runtime owns hinge, depth, and states.",
+      "rawPath": "dev/model-foundry/faceted-regeneration-production/fantasy-pilot/raw-sheets/fantasy-lane6-banded-oak-door-kit-candidate-001.png",
+      "sourceCallId": "call_prMHJJkqPO1bNNZ2ecWsP0hv",
+      "rawSha256": "fb20b46c024d05f7cabb429363bef01c881daed867938aa111aff82497fb3605",
+      "dimensions": [1774, 887],
+      "stepEVerdict": "REJECT_SOURCE",
+      "rejectionReasons": [
+        "background is not perfectly uniform green",
+        "leaf silhouette does not obviously fit the frame aperture because arch profiles differ",
+        "front-elevation source includes strong painted depth cues"
+      ],
+      "runtimeAdmitted": false
+    },
+    {
+      "slug": "fantasy-lane6-wall-lever-kit",
+      "semanticName": "Wall lever kit",
+      "assemblyKit": "wall-lever-kit",
+      "mount": "wall",
+      "componentManifest": ["switch-base", "switch-lever", "axle-collar", "indicator-gem"],
+      "classificationReason": "Lever state family splits base, arm, collar, and indicator; runtime owns pivot and left/right rotations.",
+      "rawPath": "dev/model-foundry/faceted-regeneration-production/fantasy-pilot/raw-sheets/fantasy-lane6-wall-lever-kit-candidate-001.png",
+      "sourceCallId": "call_DRlmW7H26aD7KiiEm0zKiqnS",
+      "rawSha256": "444d71069ced42cb103d4fc23221886212b8c72a4bc2a6db552a93c5f042e492",
+      "dimensions": [1254, 1254],
+      "stepEVerdict": "REJECT_SOURCE",
+      "rejectionReasons": [
+        "background is not perfectly uniform green",
+        "non-chroma white grid lines contaminate the sheet",
+        "lever grip reads more like a separate handle object than a lever arm"
+      ],
+      "runtimeAdmitted": false
+    },
+    {
+      "slug": "fantasy-lane6-painted-dragon-tablet",
+      "semanticName": "Painted dragon tablet",
+      "assemblyKit": null,
+      "mount": "wall",
+      "componentManifest": ["painted-dragon-tablet-front"],
+      "classificationReason": "Single wall-mounted relief/portrait tablet; runtime owns thickness and mount.",
+      "rawPath": "dev/model-foundry/faceted-regeneration-production/fantasy-pilot/raw-sheets/fantasy-lane6-painted-dragon-tablet-candidate-001.png",
+      "sourceCallId": "call_vD2QBgBCGeSQxXpGu4s9qDIn",
+      "rawSha256": "03fcb3c17640b2beb59fe2f54b53afbf91aea4ac12f81628d377b6c87066fd16",
+      "dimensions": [1122, 1402],
+      "stepEVerdict": "REJECT_SOURCE",
+      "rejectionReasons": [
+        "background is not perfectly uniform green",
+        "strong painted relief and lighting cues risk double perspective",
+        "green appears inside hanging holes and needs aperture-specific cleanup review"
+      ],
+      "runtimeAdmitted": false
+    },
+    {
+      "slug": "fantasy-lane6-torn-war-banner",
+      "semanticName": "Torn war banner",
+      "assemblyKit": null,
+      "mount": "wall",
+      "componentManifest": ["torn-war-banner-front"],
+      "classificationReason": "Single cloth wall-hang source; runtime owns mount depth and wall placement.",
+      "rawPath": "dev/model-foundry/faceted-regeneration-production/fantasy-pilot/raw-sheets/fantasy-lane6-torn-war-banner-candidate-001.png",
+      "sourceCallId": "call_gALrVlRoPo3PLL7EbsK7lvDJ",
+      "rawSha256": "eea902fbddc1026bbb0ef9ced7f70ae03c9e28e084ca4a16a2367477dd954cf3",
+      "dimensions": [1024, 1536],
+      "stepEVerdict": "REJECT_SOURCE",
+      "rejectionReasons": [
+        "background is not perfectly uniform green",
+        "includes a top rod/pole despite the lane requiring a single wall-hang source",
+        "strong dark top fold reads as directional shadow baked into the source"
+      ],
+      "runtimeAdmitted": false
+    },
+    {
+      "slug": "fantasy-lane6-floor-trap-plate",
+      "semanticName": "Floor trap plate",
+      "assemblyKit": null,
+      "mount": "floor",
+      "componentManifest": ["floor-trap-plate-top"],
+      "classificationReason": "Single horizontal trap plate source; runtime owns floor placement and any physical rim/depth.",
+      "rawPath": "dev/model-foundry/faceted-regeneration-production/fantasy-pilot/raw-sheets/fantasy-lane6-floor-trap-plate-candidate-001.png",
+      "sourceCallId": "call_DTkTrTzDifzN6H6JDx3wmHWu",
+      "rawSha256": "05cd521a94df5a5e8833027d41b399075e289c1f53dad3f356b599fc44668797",
+      "dimensions": [1254, 1254],
+      "stepEVerdict": "REJECT_SOURCE",
+      "rejectionReasons": [
+        "background is not perfectly uniform green",
+        "plate has strong painted bevel/thickness cues despite DECAL/top-projection routing",
+        "edge shadows make the source read as an extruded tile rather than a flat trap-plate decal"
+      ],
+      "runtimeAdmitted": false
+    }
+  ]
+}

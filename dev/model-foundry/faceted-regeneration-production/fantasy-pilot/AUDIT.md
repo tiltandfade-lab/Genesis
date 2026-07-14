@@ -18,6 +18,94 @@ Standing audit rules:
 - Generation sheet positions are disposable. Cropping and deterministic assembly own all placement.
 - `runtimeAdmitted` remains false for every candidate here.
 
+### PACKET-F1 Lane 6 raw run (2026-07-13)
+
+Source packet: `dev/model-qa/faceted/PACKET-F1.md`, Lane 6.
+
+Report: `lane6-state-family-kits-report.json`
+
+Audit verdict: generation complete, source gate red. Keep as raw evidence and prompt-calibration
+material; do not crop, compile, or treat any of these as component-kit technical passes.
+
+- `raw-sheets/fantasy-lane6-banded-oak-door-kit-candidate-001.png`
+  - Source: built-in image generation call `call_prMHJJkqPO1bNNZ2ecWsP0hv`.
+  - Requested components: empty banded-oak door frame plus matching isolated leaf.
+  - Raw SHA-256: `fb20b46c024d05f7cabb429363bef01c881daed867938aa111aff82497fb3605`.
+  - Step E verdict: `REJECT_SOURCE`.
+  - Notes: strong material/style candidate, but the green background is not perfectly uniform, the arch
+    profiles do not obviously mate, and the source has strong painted depth cues.
+
+- `raw-sheets/fantasy-lane6-wall-lever-kit-candidate-001.png`
+  - Source: built-in image generation call `call_DRlmW7H26aD7KiiEm0zKiqnS`.
+  - Requested components: base plate, lever arm, axle collar, indicator gem.
+  - Raw SHA-256: `444d71069ced42cb103d4fc23221886212b8c72a4bc2a6db552a93c5f042e492`.
+  - Step E verdict: `REJECT_SOURCE`.
+  - Notes: components are isolated and visually useful, but the sheet includes non-chroma white grid lines,
+    background variation, and a lever component that reads closer to a handle object than a lever arm.
+
+- `raw-sheets/fantasy-lane6-painted-dragon-tablet-candidate-001.png`
+  - Source: built-in image generation call `call_vD2QBgBCGeSQxXpGu4s9qDIn`.
+  - Requested component: single wall-mounted painted dragon tablet.
+  - Raw SHA-256: `03fcb3c17640b2beb59fe2f54b53afbf91aea4ac12f81628d377b6c87066fd16`.
+  - Step E verdict: `REJECT_SOURCE`.
+  - Notes: excellent identity read, but the background is not flat-uniform and the relief/lighting cues need
+    art review before any extrusion route; green holes also need aperture-specific cleanup review.
+
+- `raw-sheets/fantasy-lane6-torn-war-banner-candidate-001.png`
+  - Source: built-in image generation call `call_gALrVlRoPo3PLL7EbsK7lvDJ`.
+  - Requested component: single torn war banner wall-hang.
+  - Raw SHA-256: `eea902fbddc1026bbb0ef9ced7f70ae03c9e28e084ca4a16a2367477dd954cf3`.
+  - Step E verdict: `REJECT_SOURCE`.
+  - Notes: strong cloth silhouette and heraldry, but it includes a top rod/pole, non-uniform background, and
+    baked fold shadow. This fails the single wall-hang source contract.
+
+- `raw-sheets/fantasy-lane6-floor-trap-plate-candidate-001.png`
+  - Source: built-in image generation call `call_DTkTrTzDifzN6H6JDx3wmHWu`.
+  - Requested component: single horizontal floor trap plate top-projection.
+  - Raw SHA-256: `05cd521a94df5a5e8833027d41b399075e289c1f53dad3f356b599fc44668797`.
+  - Step E verdict: `REJECT_SOURCE`.
+  - Notes: strong dungeon-floor identity, but the source reads as a beveled/extruded tile with edge shadows
+    rather than a flat DECAL/top-projection source, and the green background is not perfectly uniform.
+
+#### Candidate-002 retry summary
+
+Prompt change: stricter CSS-flat chroma language, no separator lines, rectangular door-fit instruction,
+no rod/pole for the banner, and flatter albedo/projection language for wall/tablet/floor sources.
+
+Audit verdict: retry generated better visual directions, but all five are still `REJECT_SOURCE` because
+the border pixel gate found non-uniform green on every sheet. Do not chroma-clean or compile these
+without an explicit art/technical override.
+
+- `raw-sheets/fantasy-lane6-banded-oak-door-kit-candidate-002.png`
+  - Source: built-in image generation call `call_YpposVeSfaYCWXOlC8FpYKFA`.
+  - Raw SHA-256: `a9cde13d49189b33bca489a22ed2ea5ae3860f29d9c333de444ff9105fd6f8d0`.
+  - Border pixel gate: 149 sampled border colors.
+  - Notes: stronger rectangular frame/leaf match than candidate 001, still red on flat-chroma.
+
+- `raw-sheets/fantasy-lane6-wall-lever-kit-candidate-002.png`
+  - Source: built-in image generation call `call_h8QE4xl0Uxa6REKOZzRXhS47`.
+  - Raw SHA-256: `13439e6e621034aecf3a3f6ef7c4698c651b1840dc27233524b8b656ad0156d2`.
+  - Border pixel gate: 154 sampled border colors.
+  - Notes: grid-line contamination fixed; still red on flat-chroma.
+
+- `raw-sheets/fantasy-lane6-painted-dragon-tablet-candidate-002.png`
+  - Source: built-in image generation call `call_rB4qsHgjabjOc3kgibVS3AfY`.
+  - Raw SHA-256: `bf1be24ac9df55c13077cbd818f6fac0bc64e69c05d07bff890f2a92ba9e292c`.
+  - Border pixel gate: 123 sampled border colors.
+  - Notes: flatter portrait read than candidate 001; still red on flat-chroma and needs edge-relief review.
+
+- `raw-sheets/fantasy-lane6-torn-war-banner-candidate-002.png`
+  - Source: built-in image generation call `call_hpPSATPraQ6IvwqkLjQT0o7G`.
+  - Raw SHA-256: `68db6ae2e3fad2d101f3a8a0b6d47a38453b5180e148609e70ccf051eab9049d`.
+  - Border pixel gate: 133 sampled border colors.
+  - Notes: top rod/pole removed; still red on flat-chroma.
+
+- `raw-sheets/fantasy-lane6-floor-trap-plate-candidate-002.png`
+  - Source: built-in image generation call `call_ANmFHikKgbaps9Gsdx9VJHzQ`.
+  - Raw SHA-256: `d7466acf8b8411291fe6bbf200eded55bf49abc7e9459db099ba2fb443779fc4`.
+  - Border pixel gate: 115 sampled border colors.
+  - Notes: still reads as a physically bordered tile more than a flat DECAL source.
+
 ## Raw Sheets
 
 Alpha cleanup pass:

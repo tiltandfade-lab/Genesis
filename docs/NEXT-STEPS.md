@@ -18,6 +18,22 @@ The running execution order. `DESIGN.md` holds the *what* and *why*; this holds 
 roll into `NEXT-STEPS-ARCHIVE.md` via `python3 build/archive-docs.py --emit`. Standing plan
 sections (tracks/layers/etc.) are never auto-archived.
 
+## Do next (2026-07-14 evening — THE LEDGER ORDERS THE WAVES; Stage D + AgX + doors + PLAY-LENS landed)
+
+Evening block landed (master `67566b6a`): ☑ Stage D D0–D4 (stateful nouns end-to-end) · ☑ AgX
+FLIPPED LIVE · ☑ door package (D4b hinge/apron, D4c broken variants, D4d slim frames) · ☑ PLAY-LENS
+PL-1 rig + PL-2 ledger (`dev/play-lens/ledger.md`). **Adam delegated autonomous execution in the
+ledger order; P3-2 auto-fires when sprite-QA lands on master; ENV = wire + draft looks, cards at
+his return.**
+
+1. ◐ **QUICK-FIX WAVE** (ledger P0: rat casting bug · vanishing PC token · unanchored door leaves ·
+   wireframe fallback · degenerate arrival · tray head-clip).
+2. ☐ **ENV/EXTERIOR WAVE** — travel terrain + light-profile wiring (daytime) + the town tray.
+3. ☐ **Stage E** — exposure floor + emissive-masked bloom.
+4. ☐ Combat-in-room (S0-1 slice) + staging beats. Then D5 archetypes (gated on the door card pass).
+5. ☐ P3-2 Stage B — AUTO-FIRES on sprite-QA registry landing. PL-1b rig improvements ride the next
+   lens run; the lens re-runs after EVERY landed wave (standing law).
+
 ## Do next (2026-07-14 — PHASE-3 WAVE-1 CLOSED; Stage B teed up, gated on sprite-QA)
 
 Phase-3 Wave-1 landed (master `a23d2eb2`, CHANGELOG 2026-07-14): ☑ P3-1a Poisson (flag-off) ·
@@ -70,29 +86,6 @@ Sequenced by Adam's ruling: build the boundary first (WDV-1/2), then wire A3, th
    WDV-4 overlay/state key unification, WDV-5 cross-env diorama gate.
 8. ☐ Follow-up: the two pre-existing render-only reds (occlusion ghost bloom/AO pixel check; bw2-1b
    doorframe over-occlusion) — render-only, auto-skip in CI.
-
-## Do next (2026-07-11 — VISUAL CAMPAIGN CONTINUATION: BW4 → BW5, registered)
-
-BW2/BW3 landed (CHANGELOG); the campaign continues with two waves, in order. Build unauthorized until
-Adam says go — BW4 lands first.
-
-1. ☐ **BW4 — MOTION & FEEL** (`docs/BEAUTY-WAVE-4.md`, SPECCED). Runs FIRST — pure motion mechanism on
-   the already-wired tween channels: camera tweens (MF-1) · spawn/despawn grace (MF-2) · hit-stop
-   (MF-3) · turn/round rhythm (MF-4) · the feel gate (MF-5). Independent of BW5; MF-2's room crossfade
-   is exactly what BW5's one-room render rides.
-2. ☐ **BW5 — THE SECOND INTEGRATION PASS** (`docs/BEAUTY-WAVE-5.md`, SPECCED + registered in DESIGN).
-   Close the roll→render gap. Order: **SEAM 0** (the stage — one-room render + occlusion-fade + the
-   broad state primitive + the prop construction model; detail in GRAPHICS-ENGINE §H/§I, DUNGEON-GRAPH
-   Law 7/U6) → **SEAM 1** (interactables; the DOORS-FIRST keystone slice proves the whole stack) →
-   **SEAM 2** (rooms) ∥ **SEAM 3** (materials/conditions). **CORE-3 scope** (fantasy/gloom/chrome);
-   other realms parked as expansion.
-   - **Adam (ImageGen):** the core-3 execute packets — PACKET-07 core-variants · 05 condition-decals ·
-     06 arch-materials · 08 furniture-faces (+ PACKET-04 cross-usable subset). Index:
-     `dev/model-qa/mock-gen/PACKET-WAVES.md`. Wiring these needs the one-time code touches each packet's
-     "Return handling" lists (fold-textures slice path, REALM_TEXTURES appends, CONDITION_DECALS +
-     ARCH_MATERIAL_TEXTURES lookups) — BW5 SEAM 3 build units.
-   - **Build-time details left thin on purpose** (settle when their unit builds): S0-3 state-primitive
-     schema · IA-2 cache home in `world.state`.
 
 ## Open threads — carried forward (STANDING section; never auto-archived)
 

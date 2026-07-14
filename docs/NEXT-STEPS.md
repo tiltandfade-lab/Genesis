@@ -18,6 +18,25 @@ The running execution order. `DESIGN.md` holds the *what* and *why*; this holds 
 roll into `NEXT-STEPS-ARCHIVE.md` via `python3 build/archive-docs.py --emit`. Standing plan
 sections (tracks/layers/etc.) are never auto-archived.
 
+## Do next (2026-07-14 — PHASE-3 WAVE-1 CLOSED; Stage B teed up, gated on sprite-QA)
+
+Phase-3 Wave-1 landed (master `a23d2eb2`, CHANGELOG 2026-07-14): ☑ P3-1a Poisson (flag-off) ·
+☑ P3-1b depth audit (empty defect table) · ☑ W0-c Open5e validator · ☑ **P3-1d diorama cutaway
+restore** (rooms open again) · ☑ **E0-1 wall-fixture fade** · ☑ P3-1e eyeball fixtures · ⏹ W0-a
+struck (MF-3b already in BW4B). Repo migrated to `/Volumes/Genesis/Genesis` (APFS sparsebundle);
+CI scoped to master+PRs.
+
+**Next, in order:**
+1. ☐ **P3-2 Stage B — sprite citizenship** (`docs/PHASE-3-WAVE-2-SPECS.md`, B1–B4). **GATED:** B1
+   regenerates `sprite-registry.js`; a live sprite-QA session also writes it — fire B1 only after
+   QA's regen lands on master (Adam signals). B2/B3/B4 don't touch the registry.
+2. ☐ **P3-3** — AgX filmic tone-curve into `makeGradePass` + depth-state corrections + D0 semantic
+   construction (core-three).
+3. ☐ **Stage D** (stateful nouns / interactables, `BEAUTY-WAVE-5`, doors-first keystone) → ☐ **Stage E**
+   (PBR materials + `LIGHT_RIG_PROFILES` + emissive bloom, retires the occlusion ghost-halo).
+4. ☐ Standing polish waves (SPECCED): UNIFICATION-WAVE · ENV-WAVES · POLISH-WAVE-1.
+5. ☐ W0-b PRNG dedup (deferred — re-scope: surface is 20+ harnesses, not 3).
+
 ## Do next (2026-07-12 — GRAPHICS-NORTH-STAR: Stage A + Stage C CLOSED; Stage D/E next)
 
 Codex's A→B graphics program (`docs/GRAPHICS-NORTH-STAR.md`) — **Stage A BUILT** (walk-native boundary +
@@ -216,23 +235,6 @@ L7. ☐ **Regenerate `table-registry.json/.md`** — stale after the rename/new 
 - O3. ☐ **Carry the sensory-first ordering** from `_START_New World` into how the opening is *presented* (place before powers).
 - Then mid-session verbs: ~~Wilderness Encounter port~~ **STALE — the generator IS ported** (`src/engine/wild-walk.js`, all 24 `wilderness-*` tables compiled; prep walks consume it). The real gap was the Travel verb ignoring it → **☑ SPECCED as `docs/TRAVEL-WALKS.md`** (2026-07-01 night: travel becomes the walk). Urban/Dungeon remain callable via prep walks.
 
-
-## Do next (2026-07-11, BW4 MOTION & FEEL LANDED — the wave opened two Adam-gated items)
-
-BW4's 4 buildable units are on master + pushed (camera tweens, spawn grace, hit-stop mechanism,
-turn rhythm — details in CHANGELOG 2026-07-11 BW4, HANDOFF top). Two open, both need Adam:
-
-1. ☐ **MF-3b — hit-stop production wiring (Adam's event-shape call).** Hit-stop/recoil/crit are
-   built+tested but DORMANT: production plays `hit-damage` (base shake+flash) but never passes
-   `opts.attackerId` (gates the freeze+recoil) nor emits `hit-crit` (gates crit-response). FIX =
-   thread `attackerId` + a crit flag onto the hp ledger event (EVENT-CONTRACT addition at the
-   `DM_EVENT_FIELDS` boundary). Smaller than a strike/hurt remap, no double-fire risk. fall-death
-   hold is already live.
-2. ☐ **MF-5 — the feel gate.** Play 3 combat rounds ("does it feel like moving miniatures?") +
-   the instrumented 10s turn-burst. Best AFTER MF-3b (so the burst shows hit-stop) and mind the
-   documented capture-vs-tween screenshot limit. Interim evidence committed: the loop-gate
-   contact sheet + `loop-01-camera-mid-tween.png` + the fake-clock tween-curve harnesses.
-3. ☐ Then the BW2/BW3 carry-over below (PACKET-01 mocks, beauty-shot eyeball, GIT-LFS, UW1-4).
 
 ## Do next (2026-07-13, PHASE 3 DIRECTION SET — docs/PHASE-3-WAVE-PLAN.md is the queue)
 

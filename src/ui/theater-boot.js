@@ -4159,7 +4159,11 @@ const GRADE_VIGNETTE_OUTER = 0.92; // radius where it reaches full depth (corner
 //     before the perceptual-space grade math (exposure/contrast/sat/tint/vignette) — "tonemap before
 //     grade," matching a standard filmic pipeline's ordering. Adam's taste gate (the A/B in
 //     dev/battle-gate/agx/) decides whether this ever becomes the default; this unit only wires it.
-const GRADE_TONEMAP = "none"; // "none" | "agx" — default OFF, flips only on Adam's explicit taste call
+// `let`, not `const` — window.Theater._setGradeTonemapForTest (below, mirrors the
+// _setRoomShellPolygonKernel test-seam convention) needs to reassign this in-process so an A/B
+// capture harness can flip "none"<->"agx" without a source edit between runs. Product code never
+// writes this; only the test seam does.
+let GRADE_TONEMAP = "none"; // "none" | "agx" — default OFF, flips only on Adam's explicit taste call
 
 // AgX tone-mapping GLSL — VERBATIM port from three.js r166 (three@0.166.1,
 // node_modules/three/src/renderers/shaders/ShaderChunk/tonemapping_pars_fragment.glsl.js's
@@ -4279,6 +4283,72 @@ function makeDofPass(){
 // nothing inserted, which is what makes the byte-identical claim safe to make.
 function makeGradePass(){
   const isAgx = GRADE_TONEMAP === "agx";
+  // TWO FULLY SEPARATE literals (not one template with inline ${isAgx?...:""} ternaries) — a ternary
+  // that resolves to "" still leaves behind the literal's own surrounding newline/indentation at that
+  // slot, so the "none" string would carry a stray blank line the pre-P3-3a source never had: close,
+  // but not the byte-identical claim this unit's spec (docs/PHASE-3-AGX-SPEC.md) and flag actually
+  // promise. FS_NONE below is a verbatim, uneditable copy of the fragment shader as it existed before
+  // this unit (verify-agx-tonecurve.mjs diffs it character-for-character against
+  // `git show <master>:src/ui/theater-boot.js`) — do not "clean up" or reformat it.
+  const FS_NONE = `
+      varying vec2 vUv;
+      uniform sampler2D tDiffuse;
+      uniform vec2 uResolution;
+      uniform float uExposure, uContrast, uSat, uTintAmt, uVignette, uVigInner, uVigOuter;
+      uniform vec3 uTint;
+      void main(){
+        // The composer buffer is LINEAR. Grade in a PERCEPTUAL (sRGB-ish) space so the dials read
+        // intuitively (a 0.5 pivot really is mid-grey), then hand a linear result back to OutputPass,
+        // which applies the real sRGB OETF at the end of the chain. gamma 2.2 approximation is plenty
+        // for a grade (the display encode is OutputPass's exact job, not this one's).
+        vec3 lin = texture2D(tDiffuse, vUv).rgb;
+        vec3 col = pow(max(lin, 0.0), vec3(1.0 / 2.2)); // linear -> perceptual
+        col *= uExposure;
+        col = clamp((col - 0.5) * uContrast + 0.5, 0.0, 1.0); // gentle S around mid (monotonic)
+        float luma = dot(col, vec3(0.2126, 0.7152, 0.0722));
+        col = mix(vec3(luma), col, uSat);
+        col *= mix(vec3(1.0), uTint, uTintAmt); // per-realm wash (multiplicative — chrome cool, etc.)
+        // soft radial vignette (edge0<edge1 so it's well-defined: 0 at centre -> uVignette at corners)
+        float dist = length(vUv - 0.5);
+        float vig = smoothstep(uVigInner, uVigOuter, dist);
+        col *= (1.0 - uVignette * vig);
+        col = pow(clamp(col, 0.0, 1.0), vec3(2.2)); // perceptual -> linear (OutputPass encodes to sRGB)
+        gl_FragColor = vec4(col, 1.0);
+      }
+    `;
+  // FS_AGX: the SAME shader body, with AGX_TONEMAP_GLSL declared once above main() and one extra line
+  // (AgXToneMapping(lin), right after the texture read) inserted before the perceptual grade math —
+  // "tonemap before grade." The old `col *= uExposure;` line is dropped here (not just commented) since
+  // AgXToneMapping already applies uExposure itself, three's own convention (see AGX_TONEMAP_GLSL's
+  // header comment) — applying it twice would double-expose.
+  const FS_AGX = `
+      varying vec2 vUv;
+      uniform sampler2D tDiffuse;
+      uniform vec2 uResolution;
+      uniform float uExposure, uContrast, uSat, uTintAmt, uVignette, uVigInner, uVigOuter;
+      uniform vec3 uTint;
+      ${AGX_TONEMAP_GLSL}
+      void main(){
+        // The composer buffer is LINEAR. Grade in a PERCEPTUAL (sRGB-ish) space so the dials read
+        // intuitively (a 0.5 pivot really is mid-grey), then hand a linear result back to OutputPass,
+        // which applies the real sRGB OETF at the end of the chain. gamma 2.2 approximation is plenty
+        // for a grade (the display encode is OutputPass's exact job, not this one's).
+        vec3 lin = texture2D(tDiffuse, vUv).rgb;
+        lin = AgXToneMapping(lin); // P3-3a: filmic shoulder — tonemap BEFORE the perceptual grade math
+        vec3 col = pow(max(lin, 0.0), vec3(1.0 / 2.2)); // linear -> perceptual
+        // exposure already applied inside AgXToneMapping (its own uExposure multiply, three's own convention)
+        col = clamp((col - 0.5) * uContrast + 0.5, 0.0, 1.0); // gentle S around mid (monotonic)
+        float luma = dot(col, vec3(0.2126, 0.7152, 0.0722));
+        col = mix(vec3(luma), col, uSat);
+        col *= mix(vec3(1.0), uTint, uTintAmt); // per-realm wash (multiplicative — chrome cool, etc.)
+        // soft radial vignette (edge0<edge1 so it's well-defined: 0 at centre -> uVignette at corners)
+        float dist = length(vUv - 0.5);
+        float vig = smoothstep(uVigInner, uVigOuter, dist);
+        col *= (1.0 - uVignette * vig);
+        col = pow(clamp(col, 0.0, 1.0), vec3(2.2)); // perceptual -> linear (OutputPass encodes to sRGB)
+        gl_FragColor = vec4(col, 1.0);
+      }
+    `;
   const shader = {
     uniforms: {
       tDiffuse: { value: null },
@@ -4293,34 +4363,7 @@ function makeGradePass(){
       uVigOuter: { value: GRADE_VIGNETTE_OUTER }
     },
     vertexShader: `varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }`,
-    fragmentShader: `
-      varying vec2 vUv;
-      uniform sampler2D tDiffuse;
-      uniform vec2 uResolution;
-      uniform float uExposure, uContrast, uSat, uTintAmt, uVignette, uVigInner, uVigOuter;
-      uniform vec3 uTint;
-      ${isAgx ? AGX_TONEMAP_GLSL : ""}
-      void main(){
-        // The composer buffer is LINEAR. Grade in a PERCEPTUAL (sRGB-ish) space so the dials read
-        // intuitively (a 0.5 pivot really is mid-grey), then hand a linear result back to OutputPass,
-        // which applies the real sRGB OETF at the end of the chain. gamma 2.2 approximation is plenty
-        // for a grade (the display encode is OutputPass's exact job, not this one's).
-        vec3 lin = texture2D(tDiffuse, vUv).rgb;
-        ${isAgx ? "lin = AgXToneMapping(lin); // P3-3a: filmic shoulder — tonemap BEFORE the perceptual grade math" : ""}
-        vec3 col = pow(max(lin, 0.0), vec3(1.0 / 2.2)); // linear -> perceptual
-        ${isAgx ? "// exposure already applied inside AgXToneMapping (its own uExposure multiply, three's own convention)" : "col *= uExposure;"}
-        col = clamp((col - 0.5) * uContrast + 0.5, 0.0, 1.0); // gentle S around mid (monotonic)
-        float luma = dot(col, vec3(0.2126, 0.7152, 0.0722));
-        col = mix(vec3(luma), col, uSat);
-        col *= mix(vec3(1.0), uTint, uTintAmt); // per-realm wash (multiplicative — chrome cool, etc.)
-        // soft radial vignette (edge0<edge1 so it's well-defined: 0 at centre -> uVignette at corners)
-        float dist = length(vUv - 0.5);
-        float vig = smoothstep(uVigInner, uVigOuter, dist);
-        col *= (1.0 - uVignette * vig);
-        col = pow(clamp(col, 0.0, 1.0), vec3(2.2)); // perceptual -> linear (OutputPass encodes to sRGB)
-        gl_FragColor = vec4(col, 1.0);
-      }
-    `
+    fragmentShader: isAgx ? FS_AGX : FS_NONE
   };
   const pass = new ShaderPass(shader);
   pass.__bwName = "grade";
@@ -10859,6 +10902,46 @@ window.Theater._setSuitePassEnabledForTest = function(name, enabled){
   markDirty();
   return !!p.enabled;
 };
+// P3-3a TEST/HARNESS SEAM — mirrors the _setRoomShellPolygonKernel convention: flips the
+// GRADE_TONEMAP module `let` live, in-process, so dev/battle-gate/agx/capture-agx-ab.mjs can shoot
+// the SAME mounted board twice ("none" then "agx") differing ONLY by this flag. GRADE_TONEMAP is
+// read once, at makeGradePass() CALL time (it compiles the AgX GLSL into the shader source string,
+// not a runtime uniform branch — see makeGradePass's own comment), so merely reassigning the
+// variable does nothing to an already-compiled grade pass: this seam rebuilds the grade ShaderPass
+// and — if a post suite is already mounted on the live composer — swaps the new pass in at the SAME
+// composer.passes ARRAY INDEX the old one held (a direct in-place `passes[idx] = fresh` splice,
+// deliberately NOT EffectComposer.removePass/insertPass — this file already reads/writes
+// S.composer.passes directly elsewhere (see buildPostSuite's own comment), and a plain index swap
+// needs no assumption about which composer methods a given three revision exposes), preserving chain
+// order [render, dof, bloom, grade, output]. The live per-realm tint/tintAmt and the current canvas
+// uResolution are copied from the old pass's uniforms onto the new one so the swap is invisible to
+// everything except the tonemap curve itself (no re-derivation of kit/rigOn needed — the old pass's
+// uniforms already ARE that resolved state). Returns {changed, tonemap}; a no-op (changed:false) if
+// the requested value is already active.
+window.Theater._setGradeTonemapForTest = function(v){
+  const next = (v === "agx") ? "agx" : "none";
+  if(next === GRADE_TONEMAP) return { changed: false, tonemap: GRADE_TONEMAP };
+  GRADE_TONEMAP = next;
+  if(S.postSuite){
+    const old = S.postSuite.grade;
+    const fresh = makeGradePass();
+    if(old && old.uniforms){
+      fresh.uniforms.uResolution.value.copy(old.uniforms.uResolution.value);
+      fresh.uniforms.uTint.value.copy(old.uniforms.uTint.value);
+      fresh.uniforms.uTintAmt.value = old.uniforms.uTintAmt.value;
+      fresh.enabled = old.enabled;
+    }
+    if(S.composer && S.composer.passes && old){
+      const idx = S.composer.passes.indexOf(old);
+      if(idx !== -1) S.composer.passes[idx] = fresh;
+    }
+    if(old && old.dispose) old.dispose();
+    S.postSuite.grade = fresh;
+  }
+  markDirty();
+  return { changed: true, tonemap: GRADE_TONEMAP };
+};
+window.Theater._gradeTonemapForTest = function(){ return GRADE_TONEMAP; };
 window.Theater.dofFocus = function(){
   return { dist: S.dofFocusDist || 0, ndcY: S.dofFocusNdcY || 0, focusV: S.postSuite ? S.postSuite.dof.uniforms.uFocusV.value : null };
 };

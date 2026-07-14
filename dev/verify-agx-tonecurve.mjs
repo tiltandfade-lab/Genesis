@@ -45,12 +45,19 @@ const check = (name, cond, detail = "") =>
   cond ? (pass++, console.log("  ✓", name)) : (fail++, console.log("  ✗", name, "—", JSON.stringify(detail)));
 
 console.log("=== CHARTER STATEMENT ===");
-console.log("  Convergence rung: filmic shoulder now EXISTS behind GRADE_TONEMAP, default OFF (flip is Adam's taste call)");
+console.log("  Convergence rung: filmic shoulder LIVE — GRADE_TONEMAP default \"agx\" (Adam's 2026-07-14 ruling); \"none\" = the provably-intact pre-AgX look");
 console.log("  Canonical contracts preserved: real makeGradePass, extracted verbatim, executed (not re-implemented)");
 console.log("  Classification: 0-2 pure-Node vm sandbox (source/string proofs); 3 real GPU render (puppeteer+WebGL)");
 console.log("  Negative control: 3a is RED-FIRST — flag \"none\" hard-clips, proving the pre-unit gap is real\n");
 
-const MASTER_REF = "master";
+// FIXTURE SYNC 2026-07-14 (red-first: 0c/0d/1a/1b went red the moment the AgX unit MERGED — a
+// moving `master` baseline contains the unit itself, so "master had no GRADE_TONEMAP" and
+// "none ≡ master's shader" both self-invalidate on landing). Pinned to the last PRE-AgX master
+// (074cf05d, the Stage-D tip the unit branched from) — the same `git show <old-commit>:file`
+// convention verify-bw2-0-crisp-channel uses (and why CI checks out full history). The checks'
+// MEANING is preserved forever: the unit introduced these symbols, and "none" reproduces the
+// pre-AgX look byte-for-byte.
+const MASTER_REF = "074cf05d";
 const NEW_SOURCE = read("src/ui/theater-boot.js");
 const OLD_SOURCE = execFileSync("git", ["show", `${MASTER_REF}:src/ui/theater-boot.js`], { cwd: ROOT, encoding: "utf-8", maxBuffer: 1024 * 1024 * 64 });
 
@@ -86,8 +93,12 @@ function extractTemplateAfter(src, marker) {
 // ─── Section 0: module surface ────────────────────────────────────────────────────────────────────
 console.log("=== 0. Module surface ===");
 {
-  check("0a. GRADE_TONEMAP is declared `let` (not `const`) — the test seam needs to reassign it", /let GRADE_TONEMAP = "none";/.test(NEW_SOURCE));
-  check("0b. GRADE_TONEMAP default is exactly \"none\"", /let GRADE_TONEMAP = "none";/.test(NEW_SOURCE));
+  // FIXTURE SYNC 2026-07-14 (red-first: 0a/0b went red on the default flip commit): Adam ruled the
+  // A/B ("agx looks awesome") — the production default is now "agx". The none≡master byte proof
+  // (1a/1b) is UNAFFECTED: the sandbox runner pins GRADE_TONEMAP="none" itself, independent of the
+  // production default, so the pre-AgX look remains provably intact behind the seam.
+  check("0a. GRADE_TONEMAP is declared `let` (not `const`) — the test seam needs to reassign it", /let GRADE_TONEMAP = "(none|agx)";/.test(NEW_SOURCE));
+  check("0b. GRADE_TONEMAP default is exactly \"agx\" (Adam's 2026-07-14 taste ruling)", /let GRADE_TONEMAP = "agx";/.test(NEW_SOURCE));
   check("0c. master had no GRADE_TONEMAP at all (this is a genuinely new unit, not a re-run)", !OLD_SOURCE.includes("GRADE_TONEMAP"));
   check("0d. master had no AGX_TONEMAP_GLSL / AgXToneMapping at all", !OLD_SOURCE.includes("AGX_TONEMAP_GLSL") && !OLD_SOURCE.includes("AgXToneMapping"));
   check("0e. new source DOES carry AGX_TONEMAP_GLSL + the AgXToneMapping GLSL function", NEW_SOURCE.includes("AGX_TONEMAP_GLSL") && /vec3 AgXToneMapping\( vec3 color \)/.test(NEW_SOURCE));
@@ -222,7 +233,8 @@ process.exit(fail ? 1 : 0);
 function makeGradePassRunner(src) {
   const gradeConstNames = ["GRADE_EXPOSURE", "GRADE_CONTRAST", "GRADE_SATURATION", "GRADE_VIGNETTE", "GRADE_VIGNETTE_INNER", "GRADE_VIGNETTE_OUTER"];
   const constDecls = gradeConstNames.map((n) => `const ${n} = ${extractConst(src, n)};`).join("\n");
-  const letMatch = src.match(/let GRADE_TONEMAP = "none";/);
+  // (default-agnostic since the 2026-07-14 flip — the sandbox pins its own "none" below either way)
+  const letMatch = src.match(/let GRADE_TONEMAP = "(none|agx)";/);
   if (!letMatch) throw new Error("GRADE_TONEMAP let-declaration not found");
   const agxGlslMatch = src.match(/const AGX_TONEMAP_GLSL = `[\s\S]*?`;/);
   if (!agxGlslMatch) throw new Error("AGX_TONEMAP_GLSL not found");

@@ -838,3 +838,77 @@ Notes:
 - Excellent face character, ancestry diversity, and mature civilian tone.
 - Generated as a tall vertical sheet with tighter inter-sprite spacing than requested; slice with caution or
   regenerate if automated segmentation is brittle.
+
+### `raw-figures/fantasy-goblin-warrior-minion-hexer-cutter-candidate-020.png`
+
+Source: built-in image generation call `call_2e7R5ZS30m44Rz11vspyygAg`.
+
+Requested sprites:
+
+- `spr-fantasy-goblin-warrior`
+- `spr-fantasy-goblin-minion`
+- `spr-fantasy-goblin-hexer`
+- `spr-fantasy-goblin-cutter-minion`
+
+Audit verdict: raw candidate.
+
+Notes:
+
+- Good response to the Lane 3 lanky-goblin brief: wiry, adult, unpleasant, and not cute.
+- Four-cell layout has clean gutters and varied poses.
+- Cutter and warrior both carry long blades/spears near the cell edges; slice QA should check crop padding before alpha cleanup.
+- Runtime admission remains false.
+
+### `raw-figures/fantasy-goblin-boss-kobold-urd-candidate-021.png`
+
+Source: built-in image generation call `call_qd8RzgBSd3jZwQU6rL81Li9f`.
+
+Requested sprites:
+
+- `spr-fantasy-goblin-boss`
+- `spr-fantasy-kobold`
+- `spr-fantasy-winged-kobold-urd`
+
+Audit verdict: raw candidate with boss-body caveat.
+
+Notes:
+
+- The three-cell remainder shape landed correctly: fourth cell is empty chroma only.
+- Kobold and urd are compact, readable, and mechanically plausible for standees.
+- Goblin boss is broader/heavier than the house goblin bias, but the command role and cuirass can plausibly support it; keep for review, not admission.
+- Runtime admission remains false.
+
+### `raw-figures/fantasy-hobgoblin-soldier-captain-candidate-022.png`
+
+Source: built-in image generation call `call_dTsEcgMUV1NCLD4WdZWgmNIK`.
+
+Requested sprites:
+
+- `spr-fantasy-hobgoblin-soldier`
+- `spr-fantasy-hobgoblin-captain`
+
+Audit verdict: raw candidate with crop caution.
+
+Notes:
+
+- Strong disciplined hobgoblin military read; mature faceted armor and cloth language.
+- Soldier shield and captain sword/cape establish distinct silhouettes.
+- Sheet is tall and close-cropped at the bottom edges; slice QA must verify feet/weapon tips survive.
+- Runtime admission remains false.
+
+### `raw-figures/fantasy-hobgoblin-iron-shadow-candidate-023.png`
+
+Source: built-in image generation call `call_xxB6JsZ8pGdMqvYAJjpAiUHb`.
+
+Requested sprite:
+
+- `spr-fantasy-hobgoblin-iron-shadow`
+
+Audit verdict: raw candidate with crop caution.
+
+Notes:
+
+- Strong iron-shadow identity: lean, disciplined, wrapped, and restrained rather than flashy.
+- Pose is standee-usable and compact enough for a Medium figure.
+- Framing is close at the toes; verify content bounds before alpha cleanup.
+- Runtime admission remains false.

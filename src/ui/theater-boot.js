@@ -3580,6 +3580,147 @@ function itrDoorBrokenTipRad(sourceRef){
   const k = kilterFor("d4-door-broken:" + (sourceRef || ""));
   return (ITR_DOOR_BROKEN_TIP_BASE_DEG + k.yawDeg * ITR_DOOR_BROKEN_TIP_JITTER_MULT) * Math.PI / 180;
 }
+
+// docs/STAGE-D-WAVE-SPECS.md D4c — BROKEN-DOOR VARIANT FAMILY (Adam's design ruling 2026-07-14:
+// "Ideally a broken door would have a few states: one just like that, flopped onto the ground;
+// another broken into bits; and another broken partially on the hinge — still hanging onto one bit
+// of hinge but not the full hinge."). LOCKED ARCHITECTURE: these are three visual VARIANTS within
+// the single `broken` CONTRACT state — NOT new states. D0's event contract, D1's registry state
+// lists, and dm-contract stay byte-untouched (INTERACTABLE_ARCHETYPE_STATES.door is still
+// shut·ajar·open·broken, data/interactables.js unchanged) — the variant is a pure render-layer
+// pick, the same class of "no rolled fact exists yet, so this hash-pick stands in for one" seam
+// itrDoorHingeSign already documents for hinge SIDE.
+//
+// itrDoorSeedUnit factors out the ONE inlined FNV-1a hash loop kilterFor/itrDoorHingeSign each
+// already carry their own private copy of — D4c needs several independent uniform [0,1) draws per
+// door (variant pick, hanging's two angle bands, every shard's placement/size/yaw) and re-inlining
+// that same 4-line loop that many times would be pure duplication noise, not a new convention.
+// kilterFor and itrDoorHingeSign are left byte-untouched (D4b's already-tested code, not D4c's to
+// rewrite) — this is purely additive.
+function itrDoorSeedUnit(seedKey){
+  const s = String(seedKey == null ? "" : seedKey);
+  let h = 2166136261 >>> 0;
+  for(let i = 0; i < s.length; i++){ h = ((h ^ s.charCodeAt(i)) * 16777619) >>> 0; }
+  return (h >>> 8) / 16777216; // top 24 bits -> [0,1)
+}
+// uniform thirds, deterministic per sourceRef (never Math.random) — the SAME sourceRef always
+// resolves the SAME variant; a different sourceRef may resolve any of the other two.
+const ITR_DOOR_BROKEN_VARIANTS = Object.freeze(["flopped", "hanging", "shattered"]);
+// test-seam override (mirrors GRADE_TONEMAP/window.Theater._setGradeTonemapForTest's own convention,
+// below in this file) — null means "use the real hash pick"; a study-card capture or a verify
+// harness can pin one variant for a controlled A/B/C frame without needing to brute-force a
+// hash-matching sourceRef first.
+let ITR_DOOR_BROKEN_VARIANT_FORCE_FOR_TEST = null;
+function itrDoorBrokenVariantFor(sourceRef){
+  if(ITR_DOOR_BROKEN_VARIANT_FORCE_FOR_TEST) return ITR_DOOR_BROKEN_VARIANT_FORCE_FOR_TEST;
+  const u = itrDoorSeedUnit("d4c-broken-variant:" + String(sourceRef == null ? "" : sourceRef));
+  const idx = Math.min(ITR_DOOR_BROKEN_VARIANTS.length - 1, Math.floor(u * ITR_DOOR_BROKEN_VARIANTS.length));
+  return ITR_DOOR_BROKEN_VARIANTS[idx];
+}
+
+// HANGING variant: the leaf stays attached at ONE hinge point, torn off the other — a partial swing
+// about the hinge-edge Y axis (the surviving hinge lets it swing partway) PLUS a droop about the
+// leaf's own DEPTH axis (Z, the extrudeDepth direction — "roll", top hinge torn so the top corner
+// leans out and down: rotating about Z through the leaf's own origin, which sits at y=0 the base of
+// the hinge edge, both swings the top corner outward in X and lowers it in Y as the angle grows).
+// Named angle bands per the ruling ("~15-30deg" swing, "~18-28deg" roll) — each shard/door draw is
+// its own independent itrDoorSeedUnit pull, seeded per sourceRef so it never varies at draw time.
+// Leaf.position is left UNTOUCHED (same edgeX/0 rest every swing state already uses) — the surviving
+// hinge point (the geometry's own local origin, D4b's hinge-edge invariant) never leaves jamb
+// contact, and never lifts off true floor contact either (it sits at the same floor-level y=0 every
+// non-lifted state already does).
+const ITR_DOOR_HANGING_SWING_MIN_DEG = 15;
+const ITR_DOOR_HANGING_SWING_MAX_DEG = 30;
+const ITR_DOOR_HANGING_DROOP_MIN_DEG = 18;
+const ITR_DOOR_HANGING_DROOP_MAX_DEG = 28;
+function itrDoorHangingSwingRad(sourceRef){
+  const u = itrDoorSeedUnit("d4c-hanging-swing:" + (sourceRef || ""));
+  const deg = ITR_DOOR_HANGING_SWING_MIN_DEG + u * (ITR_DOOR_HANGING_SWING_MAX_DEG - ITR_DOOR_HANGING_SWING_MIN_DEG);
+  return deg * Math.PI / 180;
+}
+function itrDoorHangingDroopRad(sourceRef){
+  const u = itrDoorSeedUnit("d4c-hanging-droop:" + (sourceRef || ""));
+  const deg = ITR_DOOR_HANGING_DROOP_MIN_DEG + u * (ITR_DOOR_HANGING_DROOP_MAX_DEG - ITR_DOOR_HANGING_DROOP_MIN_DEG);
+  return deg * Math.PI / 180;
+}
+
+// SHATTERED variant: the leaf mesh is replaced by 3-5 flat seeded shards (no physics — a static
+// seeded scatter, the same "deterministic, never Math.random" law every other D4/D4b/D4c pick
+// already follows). Shard descriptors are computed in the HINGE GROUP's own local frame (the same
+// frame the leaf itself is authored in) so world placement automatically respects the door's own
+// corridor-axis orientation (hinge.rotation.y, set by the caller) — no separate east/west branch
+// needed here. Shape construction reuses the SAME Shape+ExtrudeGeometry "EXTRUDE construction class"
+// (GRAPHICS-ENGINE.md Section H) itrDoorShape/the leaf itself already use — never a new primitive.
+const ITR_DOOR_SHATTER_MIN_COUNT = 3;    // ruling: "3-5 seeded flat shards"
+const ITR_DOOR_SHATTER_MAX_COUNT = 5;
+const ITR_DOOR_SHATTER_CELL = 1.0;       // world units per cell — DUNGEON-GRAPH law 1 cellSize, kilterFor's own header convention
+const ITR_DOOR_SHATTER_APRON_CELLS = 1;  // ruling: "within the door cell UNION its 1-cell apron"
+const ITR_DOOR_SHATTER_CLEAR_LANE = 0.30; // world units either side of the aperture centerline kept shard-free — "aperture fully open" read honestly, never cluttered
+const ITR_DOOR_SHATTER_SIZE_MIN = 0.16;
+const ITR_DOOR_SHATTER_SIZE_MAX = 0.30;
+const ITR_DOOR_SHATTER_THICKNESS = 0.03; // "flat" shard — a thin extrusion, never a slab
+const ITR_DOOR_SHATTER_JITTER_FRAC = 0.6; // per-corner jitter (fraction of half-size) — an irregular quad, never a perfect square
+function itrDoorShatterCount(sourceRef){
+  const u = itrDoorSeedUnit("d4c-shatter-count:" + (sourceRef || ""));
+  const span = ITR_DOOR_SHATTER_MAX_COUNT - ITR_DOOR_SHATTER_MIN_COUNT;
+  return ITR_DOOR_SHATTER_MIN_COUNT + Math.min(span, Math.floor(u * (span + 1)));
+}
+// one descriptor per shard: local (x,z) center, a full seeded yaw, and a seeded size. x is biased
+// OUT of the aperture's own clear lane (never blocking the walk-through center); z is biased toward
+// the threshold (door cell) rather than spread evenly out to the far apron edge (Math.pow(u,0.6)
+// skews the draw low) — "threshold-biased" per the ruling.
+function itrDoorShatterShards(sourceRef){
+  const count = itrDoorShatterCount(sourceRef);
+  const shards = [];
+  for(let i = 0; i < count; i++){
+    const seedBase = "d4c-shard:" + (sourceRef || "") + ":" + i;
+    const uX = itrDoorSeedUnit(seedBase + ":x");
+    const uZ = itrDoorSeedUnit(seedBase + ":z");
+    const uYaw = itrDoorSeedUnit(seedBase + ":yaw");
+    const uSize = itrDoorSeedUnit(seedBase + ":size");
+    let x = (uX - 0.5) * ITR_DOOR_SHATTER_CELL;
+    if(Math.abs(x) < ITR_DOOR_SHATTER_CLEAR_LANE){
+      x = x < 0 ? -ITR_DOOR_SHATTER_CLEAR_LANE : ITR_DOOR_SHATTER_CLEAR_LANE;
+    }
+    const zSpan = ITR_DOOR_SHATTER_CELL * (1 + ITR_DOOR_SHATTER_APRON_CELLS);
+    const z = -ITR_DOOR_SHATTER_CELL / 2 + Math.pow(uZ, 0.6) * zSpan;
+    const yawRad = uYaw * Math.PI * 2;
+    const size = ITR_DOOR_SHATTER_SIZE_MIN + uSize * (ITR_DOOR_SHATTER_SIZE_MAX - ITR_DOOR_SHATTER_SIZE_MIN);
+    shards.push({ x, z, yawRad, size, seedBase });
+  }
+  return shards;
+}
+function itrDoorShatterShapeFor(seedBase, size){
+  const shape = new THREE.Shape();
+  const corners = [{ ax: -0.5, ay: -0.5 }, { ax: 0.5, ay: -0.5 }, { ax: 0.5, ay: 0.5 }, { ax: -0.5, ay: 0.5 }];
+  corners.forEach((c, i) => {
+    const jx = (itrDoorSeedUnit(seedBase + ":c" + i + ":jx") - 0.5) * ITR_DOOR_SHATTER_JITTER_FRAC;
+    const jy = (itrDoorSeedUnit(seedBase + ":c" + i + ":jy") - 0.5) * ITR_DOOR_SHATTER_JITTER_FRAC;
+    const px = (c.ax + jx) * size, py = (c.ay + jy) * size;
+    if(i === 0) shape.moveTo(px, py); else shape.lineTo(px, py);
+  });
+  return shape;
+}
+// GROUNDED, flat: the shape is authored in local XY exactly like the leaf's own shape (itrDoorShape)
+// — rotation.x=-PI/2 lays that plane down onto the floor (the extrude depth, formerly the leaf's
+// horizontal thickness, becomes the shard's vertical thickness), then rotation.z applies the shard's
+// own seeded yaw about what is now the vertical axis (three.js's default intrinsic 'XYZ' Euler order
+// applies Z last, about the body's already-rotated frame — so this yaws around true world-up, not
+// the original local Z). position.y is the SAME ITR_DOOR_BROKEN_GROUND_CLEARANCE hair-above-floor
+// idiom the flopped variant already uses — grounded, never embedded, never floating.
+function itrDoorBuildShatterShardMesh(shardDesc, color){
+  const shape = itrDoorShatterShapeFor(shardDesc.seedBase, shardDesc.size);
+  const geo = new THREE.ExtrudeGeometry(shape, { depth: ITR_DOOR_SHATTER_THICKNESS, bevelEnabled: false, curveSegments: 1 });
+  const mat = new THREE.MeshLambertMaterial({ color, transparent: true, opacity: 1 });
+  const mesh = new THREE.Mesh(geo, mat);
+  mesh.castShadow = true; mesh.receiveShadow = true;
+  mesh.userData = { isDoorShard: true };
+  mesh.rotation.x = -Math.PI / 2;
+  mesh.rotation.z = shardDesc.yawRad;
+  mesh.position.set(shardDesc.x, ITR_DOOR_BROKEN_GROUND_CLEARANCE, shardDesc.z);
+  return mesh;
+}
+
 function itrDoorStateColor(state){
   switch(state){
     case "open": return 0x8a6a42;
@@ -3644,24 +3785,38 @@ function interiorBuildInteractableDoorMesh(entry, cx, cz, floorTopMap){
   hinge.position.set((entry.x || 0) - (cx || 0), floorTop, (entry.y || 0) - (cz || 0));
   hinge.rotation.y = ew ? Math.PI / 2 : 0;
 
+  // D4c: rest pose (rotation only) comes from the ONE shared pose function itrDoorRestPose — the
+  // tween path (interiorBuildInteractables, below) computes its FROM/TO the same way, so a fresh
+  // mount and a tween's settled endpoint are always the identical pose (never two formulas that
+  // could drift apart).
+  const pose = itrDoorRestPose(entry.state, entry.sourceRef);
+  leaf.rotation.x = pose.rotX; leaf.rotation.y = pose.rotY; leaf.rotation.z = pose.rotZ;
+  let shards = null;
   if(entry.state === "broken"){
-    // D4b ruling 2: DETACHED + GROUNDED — a near-flat forward tip (itrDoorBrokenTipRad, 78-90deg,
-    // KILTER-seeded per sourceRef) about the leaf's own base edge (y=0, unaffected by the hinge-edge
-    // x-translate above), with a computed Y-lift so its lowest point sits in true floor contact
-    // instead of the old fixed "-0.1 sag" (which is exactly what read as a mid-air diagonal slab).
-    const tipRad = itrDoorBrokenTipRad(entry.sourceRef);
-    leaf.rotation.x = tipRad;
-    // at rotation.x=tipRad, a vertex at local (x, y=0, z=+extrudeDepth/2) maps to world-relative
-    // y' = -[extrudeDepth/2]*sin(tipRad) — the leaf's own lowest point pre-lift. Lifting by that exact
-    // magnitude (plus a hair of clearance) grounds it precisely, never a magic constant.
-    leaf.position.y = (extrudeDepth / 2) * Math.sin(tipRad) + ITR_DOOR_BROKEN_GROUND_CLEARANCE;
-  } else {
-    const swingDeg = ITR_DOOR_SWING_DEG[entry.state];
-    leaf.rotation.y = (typeof swingDeg === "number" ? swingDeg : 0) * Math.PI / 180;
+    if(pose.variant === "flopped"){
+      // D4b ruling 2: DETACHED + GROUNDED — a near-flat forward tip (itrDoorBrokenTipRad, 78-90deg,
+      // KILTER-seeded per sourceRef) about the leaf's own base edge (y=0, unaffected by the hinge-
+      // edge x-translate above), with a computed Y-lift so its lowest point sits in true floor
+      // contact instead of the old fixed "-0.1 sag" (which is exactly what read as a mid-air
+      // diagonal slab). at rotation.x=tipRad, a vertex at local (x, y=0, z=+extrudeDepth/2) maps to
+      // world-relative y' = -[extrudeDepth/2]*sin(tipRad) — the leaf's own lowest point pre-lift.
+      // Lifting by that exact magnitude (plus a hair of clearance) grounds it precisely, never a
+      // magic constant. (D4c: byte-preserved verbatim — this IS the landed D4b pose.)
+      leaf.position.y = (extrudeDepth / 2) * Math.sin(pose.rotX) + ITR_DOOR_BROKEN_GROUND_CLEARANCE;
+    } else if(pose.variant === "shattered"){
+      // the leaf is replaced, not merely posed — hide it (never remove it: the E0-1 fade-compliance
+      // pass and the BW4 tween channel below both key off hinge.userData.leaf existing) and mount
+      // the seeded shard scatter instead.
+      leaf.visible = false;
+      shards = itrDoorShatterShards(entry.sourceRef).map((desc) => itrDoorBuildShatterShardMesh(desc, itrDoorStateColor("broken")));
+    }
+    // hanging: no position/visibility change at all — leaf.position stays at its untouched swing
+    // rest (edgeX, 0), the surviving hinge point never leaving jamb contact or true floor contact.
   }
 
   hinge.add(leaf);
-  hinge.userData = { kind: "interactable", archetype: "door", sourceRef: entry.sourceRef, state: entry.state, slug: entry.slug, leaf: leaf, arched: arched, hingeSign: hingeSign };
+  if(shards) shards.forEach((m) => hinge.add(m));
+  hinge.userData = { kind: "interactable", archetype: "door", sourceRef: entry.sourceRef, state: entry.state, slug: entry.slug, leaf: leaf, arched: arched, hingeSign: hingeSign, brokenVariant: pose.variant, shards: shards };
   return hinge;
 }
 // door-swing tween duration — BW4's own 280-350ms "glide, never snap" band (placeCameraTweened's
@@ -3670,13 +3825,28 @@ function interiorBuildInteractableDoorMesh(entry, cx, cz, floorTopMap){
 const ITR_DOOR_SWING_TWEEN_MS = 320;
 // `entry.state` -> the leaf-local rotation this render channel considers "at rest" for that state —
 // the SAME pose interiorBuildInteractableDoorMesh assigns a freshly-built leaf, factored out so the
-// diff/tween path (below) can compute a FROM pose and a TO pose on the SAME axis convention.
+// diff/tween path (below) can compute a FROM pose and a TO pose on the SAME convention. D4c: returns
+// a full {rotX,rotY,rotZ} triple (rather than D4b's single {axis,rad}) since the hanging variant
+// needs TWO simultaneous rotation components (a Y swing plus a Z droop) — a single-axis pose shape
+// can no longer describe every variant. `variant` is the resolved broken-variant (null for every
+// non-broken state) — the ONE place both interiorBuildInteractableDoorMesh's direct-build path and
+// interiorBuildInteractables' tween path learn which variant a given sourceRef resolves to, so they
+// never disagree.
 function itrDoorRestPose(state, sourceRef){
   if(state === "broken"){
-    return { axis: "x", rad: itrDoorBrokenTipRad(sourceRef) };
+    const variant = itrDoorBrokenVariantFor(sourceRef);
+    if(variant === "hanging"){
+      return { rotX: 0, rotY: itrDoorHangingSwingRad(sourceRef), rotZ: itrDoorHangingDroopRad(sourceRef), variant: variant };
+    }
+    // flopped AND shattered's TWEEN TARGET share the identical tip-forward rotation — shattered's
+    // leaf tweens down exactly like flopped (a plausible "falling apart" motion), and the tween's
+    // onDone (interiorBuildInteractables, below) performs the actual leaf-to-shards swap once the
+    // fall completes, rather than needing a second, incompatible pose shape for the one variant with
+    // no meaningful "at-rest leaf rotation" of its own.
+    return { rotX: itrDoorBrokenTipRad(sourceRef), rotY: 0, rotZ: 0, variant: variant };
   }
   const swingDeg = ITR_DOOR_SWING_DEG[state];
-  return { axis: "y", rad: (typeof swingDeg === "number" ? swingDeg : 0) * Math.PI / 180 };
+  return { rotX: 0, rotY: (typeof swingDeg === "number" ? swingDeg : 0) * Math.PI / 180, rotZ: 0, variant: null };
 }
 /* interiorBuildInteractables(interactables, cx, cz, floorTopMap) -> {group, bySourceRef}. Builds one
    door assembly per placed (non-reserve) door entry (D4's own scope — see header above) and DIFFS
@@ -3704,7 +3874,18 @@ function interiorBuildInteractables(interactables, cx, cz, floorTopMap){
       const leaf = hinge.userData.leaf;
       const from = itrDoorRestPose(prevState, sourceRef);
       const to = itrDoorRestPose(entry.state, sourceRef);
-      if(from.axis === "x") leaf.rotation.x = from.rad; else leaf.rotation.y = from.rad;
+      leaf.rotation.x = from.rotX; leaf.rotation.y = from.rotY; leaf.rotation.z = from.rotZ;
+      // D4c: if this transition LANDS on the shattered variant, the fresh build above (entry.state
+      // is already "broken" by the time interiorBuildInteractableDoorMesh ran) already mounted the
+      // TERMINAL shattered visuals (leaf hidden + shards seeded at rest) — undo that here so the
+      // tween has an actual leaf to animate falling, then redo it in onDone once the fall completes.
+      // itrDoorShatterShards is a pure function of sourceRef, so a live break and a freshly-rendered
+      // break still converge on the IDENTICAL final shard scatter either way.
+      if(entry.state === "broken" && to.variant === "shattered" && hinge.userData.shards){
+        hinge.userData.shards.forEach((m) => hinge.remove(m));
+        hinge.userData.shards = null;
+        leaf.visible = true;
+      }
       if(!S.tweens) S.tweens = [];
       S.tweens.push({
         start: Date.now(),
@@ -3713,20 +3894,22 @@ function interiorBuildInteractables(interactables, cx, cz, floorTopMap){
         doorSourceRef: sourceRef,
         update: (t) => {
           const e = (typeof mf1EaseOutCubic === "function") ? mf1EaseOutCubic(t) : t;
-          if(from.axis === to.axis){
-            const val = from.rad + (to.rad - from.rad) * e;
-            if(to.axis === "x"){ leaf.rotation.x = val; leaf.rotation.y = 0; }
-            else { leaf.rotation.y = val; leaf.rotation.x = 0; }
-          } else {
-            // crossing families (a swing state <-> broken) — blend both axes down/up across the tween
-            // rather than a mid-flight axis pop, still never a snap.
-            leaf.rotation.x = (from.axis === "x" ? from.rad : 0) + ((to.axis === "x" ? to.rad : 0) - (from.axis === "x" ? from.rad : 0)) * e;
-            leaf.rotation.y = (from.axis === "y" ? from.rad : 0) + ((to.axis === "y" ? to.rad : 0) - (from.axis === "y" ? from.rad : 0)) * e;
-          }
+          // D4c: itrDoorRestPose now returns a full {rotX,rotY,rotZ} triple (never a single {axis,
+          // rad}) — every variant (including hanging's simultaneous Y+Z) interpolates the same way,
+          // no more axis-family branching needed.
+          leaf.rotation.x = from.rotX + (to.rotX - from.rotX) * e;
+          leaf.rotation.y = from.rotY + (to.rotY - from.rotY) * e;
+          leaf.rotation.z = from.rotZ + (to.rotZ - from.rotZ) * e;
         },
         onDone: () => {
-          if(to.axis === "x"){ leaf.rotation.x = to.rad; leaf.rotation.y = 0; }
-          else { leaf.rotation.y = to.rad; leaf.rotation.x = 0; }
+          leaf.rotation.x = to.rotX; leaf.rotation.y = to.rotY; leaf.rotation.z = to.rotZ;
+          if(entry.state === "broken" && to.variant === "shattered"){
+            leaf.visible = false;
+            const shards = itrDoorShatterShards(sourceRef).map((desc) => itrDoorBuildShatterShardMesh(desc, itrDoorStateColor("broken")));
+            shards.forEach((m) => hinge.add(m));
+            hinge.userData.shards = shards;
+          }
+          hinge.userData.brokenVariant = (entry.state === "broken") ? to.variant : null;
         }
       });
     }
@@ -9908,7 +10091,10 @@ function setInteriorBoard(data){
     arched: hinge.userData && hinge.userData.arched,
     x: hinge.position.x, y: hinge.position.y, z: hinge.position.z,
     leafRotY: hinge.userData && hinge.userData.leaf && hinge.userData.leaf.rotation.y,
-    leafRotX: hinge.userData && hinge.userData.leaf && hinge.userData.leaf.rotation.x
+    leafRotX: hinge.userData && hinge.userData.leaf && hinge.userData.leaf.rotation.x,
+    // D4c additive diagnostics — never consumed by anything pre-D4c, safe to extend.
+    brokenVariant: hinge.userData && hinge.userData.brokenVariant,
+    shardCount: (hinge.userData && hinge.userData.shards) ? hinge.userData.shards.length : 0
   }));
 
   // BEAUTY-WAVE.md VP6 item 4 — VISIBLE HISTORY (render half). data.decals is a plain field the caller
@@ -11529,6 +11715,19 @@ window.Theater._itrDoorIsArchedForTest = function(entry){ return itrDoorIsArched
 window.Theater._itrDoorRestPoseForTest = function(state, sourceRef){ return itrDoorRestPose(state, sourceRef); };
 window.Theater._itrDoorHingeSignForTest = function(sourceRef){ return itrDoorHingeSign(sourceRef); };
 window.Theater._resetInteriorDoorStateForTest = function(){ S.interiorDoorStateBySourceRef = {}; };
+// D4c test seam (mirrors _setGradeTonemapForTest's own convention above): pin the broken-variant
+// pick for every door regardless of sourceRef — a controlled A/B/C study-card capture (or a verify
+// harness) can force each of "flopped"/"hanging"/"shattered" without brute-forcing a hash-matching
+// sourceRef. Any other value (including null/undefined) clears the override and restores the real
+// per-sourceRef hash pick.
+window.Theater._setBrokenDoorVariantForTest = function(v){
+  ITR_DOOR_BROKEN_VARIANT_FORCE_FOR_TEST = (v === "flopped" || v === "hanging" || v === "shattered") ? v : null;
+};
+window.Theater._brokenDoorVariantForTest = function(sourceRef){ return itrDoorBrokenVariantFor(sourceRef); };
+// D4c diagnostic accessor (mirrors _interiorFloorListForTest's own convention) — exposes the
+// mounted-door world-position/state diagnostic (S.interiorInteractablesWorldPositions, extended
+// with brokenVariant/shardCount above) for capture-script/harness reads.
+window.Theater._interiorInteractablesWorldPositionsForTest = function(){ return S.interiorInteractablesWorldPositions || []; };
 
 // BEAUTY-WAVE.md VP1c — TEST-ONLY SEAM, same spirit as the two accessors above: exposes the flat-
 // tabletop unit group's child count so a harness can prove S.unitGroup is empty after

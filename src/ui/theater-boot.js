@@ -4145,6 +4145,82 @@ const GRADE_VIGNETTE = 0.20;   // edge darkening depth (the mocks all carry a so
 const GRADE_VIGNETTE_INNER = 0.34; // radius (from centre, UV) where the vignette starts
 const GRADE_VIGNETTE_OUTER = 0.92; // radius where it reaches full depth (corners ~0.71 in a wide frame)
 
+// P3-3a (docs/PHASE-3-AGX-SPEC.md): the grade above never had a tone-mapping curve — a linear clamp
+// (the `clamp(...,0.0,1.0)` in the contrast line below) is the only thing standing between a hot
+// highlight and a hard-clipped white, which is what "no renderer.toneMapping set anywhere" (this
+// file's own T1 comment, ~theater-boot.js:8032) actually costs: no shoulder, no filmic roll-off.
+// GRADE_TONEMAP gates a real curve into the grade pass (NOT renderer.toneMapping — the spec is
+// explicit that the tonemap belongs inside the existing grade-pass pipeline, not the renderer, so it
+// stays inside the one post-process seam this file already owns).
+//   "none" (DEFAULT) -> current look, byte-identical: makeGradePass's fragment shader compiles to
+//     the EXACT same source string as before this unit (see the ternary in makeGradePass below) —
+//     no branch, no dead code, nothing for the GLSL compiler to even see differently.
+//   "agx"  -> compiles in AGX_TONEMAP_GLSL and calls AgXToneMapping(lin) right after the texture read,
+//     before the perceptual-space grade math (exposure/contrast/sat/tint/vignette) — "tonemap before
+//     grade," matching a standard filmic pipeline's ordering. Adam's taste gate (the A/B in
+//     dev/battle-gate/agx/) decides whether this ever becomes the default; this unit only wires it.
+const GRADE_TONEMAP = "none"; // "none" | "agx" — default OFF, flips only on Adam's explicit taste call
+
+// AgX tone-mapping GLSL — VERBATIM port from three.js r166 (three@0.166.1,
+// node_modules/three/src/renderers/shaders/ShaderChunk/tonemapping_pars_fragment.glsl.js's
+// `AgXToneMapping` + `agxDefaultContrastApprox` + the rec2020<->linear-sRGB matrices), including the
+// r161 gamut-mapping fix (the final `clamp(color, 0.0, 1.0)` — pre-r161 AgX could leave saturated
+// primaries out of range post-outset-matrix; r161 added this clamp as the gamut fix). Do NOT hand-
+// approximate this curve — every constant below is copied byte-for-byte from that three.js source
+// file. `uExposure` is the same uniform already declared in makeGradePass's shader (three's own chunk
+// reads a same-purpose global `toneMappingExposure` uniform, not a function parameter — mirrored here
+// for the same reason: the exposure multiply is the curve's own entry point, not the caller's).
+const AGX_TONEMAP_GLSL = `
+  const mat3 AGX_LINEAR_SRGB_TO_LINEAR_REC2020 = mat3(
+    vec3( 0.6274, 0.0691, 0.0164 ),
+    vec3( 0.3293, 0.9195, 0.0880 ),
+    vec3( 0.0433, 0.0113, 0.8956 )
+  );
+  const mat3 AGX_LINEAR_REC2020_TO_LINEAR_SRGB = mat3(
+    vec3( 1.6605, - 0.1246, - 0.0182 ),
+    vec3( - 0.5876, 1.1329, - 0.1006 ),
+    vec3( - 0.0728, - 0.0083, 1.1187 )
+  );
+  vec3 agxDefaultContrastApprox( vec3 x ) {
+    vec3 x2 = x * x;
+    vec3 x4 = x2 * x2;
+    return + 15.5 * x4 * x2
+      - 40.14 * x4 * x
+      + 31.96 * x4
+      - 6.868 * x2 * x
+      + 0.4298 * x2
+      + 0.1191 * x
+      - 0.00232;
+  }
+  vec3 AgXToneMapping( vec3 color ) {
+    const mat3 AgXInsetMatrix = mat3(
+      vec3( 0.856627153315983, 0.137318972929847, 0.11189821299995 ),
+      vec3( 0.0951212405381588, 0.761241990602591, 0.0767994186031903 ),
+      vec3( 0.0482516061458583, 0.101439036467562, 0.811302368396859 )
+    );
+    const mat3 AgXOutsetMatrix = mat3(
+      vec3( 1.1271005818144368, - 0.1413297634984383, - 0.14132976349843826 ),
+      vec3( - 0.11060664309660323, 1.157823702216272, - 0.11060664309660294 ),
+      vec3( - 0.016493938717834573, - 0.016493938717834257, 1.2519364065950405 )
+    );
+    const float AgxMinEv = - 12.47393;  // log2( pow( 2, LOG2_MIN=-10.0 ) * MIDDLE_GRAY=0.18 )
+    const float AgxMaxEv = 4.026069;    // log2( pow( 2, LOG2_MAX=+6.5 ) * MIDDLE_GRAY=0.18 )
+    color *= uExposure;
+    color = AGX_LINEAR_SRGB_TO_LINEAR_REC2020 * color;
+    color = AgXInsetMatrix * color;
+    color = max( color, 1e-10 ); // avoid 0 or negative numbers for log2
+    color = log2( color );
+    color = ( color - AgxMinEv ) / ( AgxMaxEv - AgxMinEv );
+    color = clamp( color, 0.0, 1.0 );
+    color = agxDefaultContrastApprox( color ); // sigmoid
+    color = AgXOutsetMatrix * color;
+    color = pow( max( vec3( 0.0 ), color ), vec3( 2.2 ) ); // linearize
+    color = AGX_LINEAR_REC2020_TO_LINEAR_SRGB * color;
+    color = clamp( color, 0.0, 1.0 ); // r161 gamut-mapping fix — simple clamp
+    return color;
+  }
+`;
+
 // DoF tilt-shift: a Poisson-ish 12-tap disc scaled by a vertical-gradient CoC. Aspect-corrected so the
 // blur disc stays circular on a wide canvas. Sharp inside the focal band, ramping to MAX_BLUR at the
 // screen's near/far edges.
@@ -4195,7 +4271,14 @@ function makeDofPass(){
 
 // Filmic grade: exposure, ACES tone (Narkowicz approx), contrast, saturation, per-realm tint wash,
 // vignette. Every luminance-affecting stage is monotonic so value ordering survives.
+// P3-3a: GRADE_TONEMAP gates AGX_TONEMAP_GLSL into the fragment shader AT COMPILE TIME (a JS-string
+// branch, not a runtime `if` — mirrors the ROOM_SHELL_POLYGON_KERNEL/ROOM_PLACE_DISTRIBUTE staging
+// discipline). When GRADE_TONEMAP is "none" every one of the isAgx-gated template slots below expands
+// to the empty string, so the compiled shader source is the SAME program that shipped before this
+// unit — "none" is not "agx with a flag check that happens to no-op," it is the original shader with
+// nothing inserted, which is what makes the byte-identical claim safe to make.
 function makeGradePass(){
+  const isAgx = GRADE_TONEMAP === "agx";
   const shader = {
     uniforms: {
       tDiffuse: { value: null },
@@ -4216,14 +4299,16 @@ function makeGradePass(){
       uniform vec2 uResolution;
       uniform float uExposure, uContrast, uSat, uTintAmt, uVignette, uVigInner, uVigOuter;
       uniform vec3 uTint;
+      ${isAgx ? AGX_TONEMAP_GLSL : ""}
       void main(){
         // The composer buffer is LINEAR. Grade in a PERCEPTUAL (sRGB-ish) space so the dials read
         // intuitively (a 0.5 pivot really is mid-grey), then hand a linear result back to OutputPass,
         // which applies the real sRGB OETF at the end of the chain. gamma 2.2 approximation is plenty
         // for a grade (the display encode is OutputPass's exact job, not this one's).
         vec3 lin = texture2D(tDiffuse, vUv).rgb;
+        ${isAgx ? "lin = AgXToneMapping(lin); // P3-3a: filmic shoulder — tonemap BEFORE the perceptual grade math" : ""}
         vec3 col = pow(max(lin, 0.0), vec3(1.0 / 2.2)); // linear -> perceptual
-        col *= uExposure;
+        ${isAgx ? "// exposure already applied inside AgXToneMapping (its own uExposure multiply, three's own convention)" : "col *= uExposure;"}
         col = clamp((col - 0.5) * uContrast + 0.5, 0.0, 1.0); // gentle S around mid (monotonic)
         float luma = dot(col, vec3(0.2126, 0.7152, 0.0722));
         col = mix(vec3(luma), col, uSat);

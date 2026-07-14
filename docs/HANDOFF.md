@@ -15,7 +15,38 @@ Graphics work must preserve canonical cards and no-human production while taking
 reach the visual target. Read it before this handoff's historical graphics queue, then read
 `docs/GRAPHICS-PRODUCTION-RESEARCH-WAVE.md` for evaluated tools and executable research gates.
 
-## ⭐ Latest (2026-07-14) — PHASE-3 WAVE-1 complete + repo migrated to the Work Drive [Claude Opus 4.8, orchestrated]
+## ⭐ Latest (2026-07-14, evening) — STAGE D + AgX LIVE + doors + PLAY-LENS: the ledger now orders the waves [Claude Opus 4.8, orchestrated]
+
+The evening block (CHANGELOG 2026-07-14 later, master `67566b6a`, pushed): **Stage D STATEFUL NOUNS
+complete** (state primitive → interactables registry → walk binding → ROOM-GRAMMAR → the doors-first
+keystone: shaped-aperture stateful doors, persisted across re-derivation, crossfade walk-through),
+**AgX flipped live** (Adam: "agx looks awesome"), **the door package** per Adam's live rulings
+(hinge-edge axis · broken-variant family flopped/hanging/shattered · slim frames — the "big ass
+column" is dead · the production door-apron dressing bug fixed), and **PLAY-LENS** — Adam's
+directive made real: the bot plays a full 14-leg session, 26 captures, 3-auditor vision pass →
+**`dev/play-lens/ledger.md`** (BROKEN/UGLY/MISSING/WORKING, ranked).
+
+**THE LEDGER IS NOW THE WAVE-ORDERING INSTRUMENT** (standing law in docs/PLAY-LENS.md; re-run after
+every landed visual wave; WORKING entries are a protected regression set).
+
+**Adam's standing delegations (2026-07-14 evening):** work autonomously through the ledger order;
+**P3-2 AUTO-FIRES when the sprite-QA registry regen lands on master**; ENV/EXTERIOR = wire + draft
+looks with capture cards for his return red-pen (no mock gate needed pre-build).
+
+**Do next (pick up here — the ledger order):**
+1. **QUICK-FIX WAVE (ledger P0 #1–6):** Giant-Rat-as-robed-humanoid casting bug (every combat frame) ·
+   PC token vanishes from the combat board after round 1 · door leaves unanchored in real rolled rooms
+   (study card clean, production not — check post-D4c/D4d) · unshaded wireframe mesh in the settlement
+   tray · walk_complete arrival renders as an ellipse on black · tray camera clips the PC's head.
+2. **ENV/EXTERIOR WAVE** (the biggest MISSING mass): travel-leg terrain (all 6 legs are an empty
+   plane), light-profile WIRING outside interiors (daylit≡moonlit≡overcast today — "we don't even
+   have daytime" is measured), the town tray (no compositional settlement tray exists).
+3. **Stage E** exposure floor + emissive-masked bloom (crushed blacks + blown whites, high frequency).
+4. Combat-in-room (BW5 S0-1 slice) + staging beats (rest/shop/complete all render the idle pedestal).
+5. PL-1b rig improvements ride the next lens run (bot fights; transition camera; shop-panel capture).
+6. Everything below this block is prior history (the morning's Wave-1 + migration block next).
+
+## Latest (2026-07-14) — PHASE-3 WAVE-1 complete + repo migrated to the Work Drive [Claude Opus 4.8, orchestrated]
 
 Phase-3 Wave-1 (the no-spend visual wave) executed as background worktree-isolated Sonnet executors,
 each personally re-gated (harnesses re-run by me, visual units' PNGs READ, never self-report), landed

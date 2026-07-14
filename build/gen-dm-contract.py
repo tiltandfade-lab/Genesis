@@ -143,6 +143,8 @@ EXAMPLES = {
     "job_accept": {"postingId": "job-2"},
     # CROWNING-BASTION.md §7.B1.1 — the bastion claim (EITHER-gated: a closed front OR gold, Q5).
     "bastion_claim": {"nodeId": "n-4", "name": "Halewatch Keep", "note": "founded on the old signal tower"},
+    # D0 (STAGE-D-WAVE-SPECS.md) — the state primitive's transition event; BW5 S0-3/Law 6.
+    "state_transition": {"entityRef": "door-3", "to": "open", "cause": "the party heaves it wide"},
 }
 
 # VALUE_NOTES — the 9 original traps (§2) plus HQ3-C1/C3's rest nuance (2026-07-07). Keyed

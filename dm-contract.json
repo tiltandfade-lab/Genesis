@@ -1714,6 +1714,24 @@
         }
       }
     },
+    "state_transition": {
+      "fields": [
+        "entityRef",
+        "from",
+        "to",
+        "cause"
+      ],
+      "aliases": {},
+      "num": [],
+      "example": {
+        "type": "state_transition",
+        "payload": {
+          "entityRef": "door-3",
+          "to": "open",
+          "cause": "the party heaves it wide"
+        }
+      }
+    },
     "tarot_landed": {
       "fields": [
         "via",

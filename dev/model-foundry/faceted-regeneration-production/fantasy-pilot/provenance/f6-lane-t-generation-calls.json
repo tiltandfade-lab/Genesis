@@ -1,0 +1,9 @@
+{
+  "runtimeAdmitted": false,
+  "sheets": [
+    {"file":"spr-fantasy-ghoul-spr-fantasy-ghast-candidate-001.png","callId":"exec-1dfa4343-6fe0-465c-aad3-cccbe5e58952","cells":["spr-fantasy-ghoul","spr-fantasy-ghast"]},
+    {"file":"spr-fantasy-ghast-base-spr-fantasy-ghast-gravecaller-spellstitched-elite-candidate-001.png","callId":"exec-9da88d2d-2abb-443c-b447-cd42ef089c44","cells":["spr-fantasy-ghast-base","spr-fantasy-ghast-gravecaller-spellstitched-elite"]},
+    {"file":"spr-fantasy-lacedon-sodden-ghoul-spr-fantasy-drowned-husk-candidate-001.png","callId":"exec-a0bcb340-cb37-42b8-8bb0-4fed16cb62a3","cells":["spr-fantasy-lacedon-sodden-ghoul","spr-fantasy-drowned-husk"]},
+    {"file":"spr-fantasy-clawed-drowner-candidate-001.png","callId":"exec-a98e2550-fc71-421c-994c-db519a29ae97","cells":["spr-fantasy-clawed-drowner"]}
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "runtimeAdmitted": false,
+  "sheets": [
+    {"file":"spr-fantasy-ghost-spr-fantasy-specter-candidate-001.png","callId":"exec-a85955fd-b04e-44e9-b147-c4a855725434","cells":["spr-fantasy-ghost","spr-fantasy-specter"]},
+    {"file":"spr-fantasy-wraith-spr-fantasy-banshee-candidate-001.png","callId":"exec-f7a7e234-2721-462e-a490-312e02a0467b","cells":["spr-fantasy-wraith","spr-fantasy-banshee"]},
+    {"file":"spr-fantasy-poltergeist-spr-fantasy-swamp-shadow-candidate-001.png","callId":"exec-b511706e-de5a-42c5-9a56-f8037166ec95","cells":["spr-fantasy-poltergeist","spr-fantasy-swamp-shadow"]},
+    {"file":"spr-fantasy-shadow-spr-fantasy-greater-shadow-candidate-001.png","callId":"exec-5689da28-cb09-4bf5-a805-d13953f445c7","cells":["spr-fantasy-shadow","spr-fantasy-greater-shadow"]},
+    {"file":"spr-fantasy-will-o-wisp-candidate-001.png","callId":"exec-a78fd72d-0615-4a30-89f3-b7b57005194a","cells":["spr-fantasy-will-o-wisp"]}
+  ]
+}

@@ -243,3 +243,47 @@ every state legible at a glance; this goes back to Adam's taste gate.
 ### Out of scope
 Door art/texture (kit/Kenney lane); other archetypes (D5, still gated on the re-shot card); the
 persisted-state/wiring machinery (landed, untouched).
+
+---
+
+## D4c — Broken-door variant family (Adam's design ruling 2026-07-14)  ·  branch `feat/d4c-broken-variants`
+
+### Adam's ruling (verbatim design; do not re-litigate)
+"Ideally a broken door would have a few states: one just like that, flopped onto the ground;
+another broken into bits; and another broken partially on the hinge — still hanging onto one bit
+of hinge but not the full hinge."
+
+### Decision (the architecture call, locked)
+These are **visual VARIANTS within the single `broken` contract state** — NOT new states. The
+event contract (`state_transition`, D0) and the registry state lists (D1) stay byte-untouched;
+`INTERACTABLE_ARCHETYPE_STATES.door` remains `shut·ajar·open·broken`. The renderer picks the
+variant deterministically per sourceRef (FNV-1a hash, the `itrDoorHingeSign`/`kilterFor`
+convention — never Math.random): `flopped` | `hanging` | `shattered`, uniform thirds.
+
+### The three variants (all in `interiorBuildInteractableDoorMesh`'s broken branch, theater-boot.js)
+- **flopped** — the LANDED D4b pose verbatim (tip 78–90°, grounded at the threshold). Variant 1,
+  already Adam-approved; byte-preserve it.
+- **hanging** — the leaf still attached at ONE hinge point, torn off the other: rotated partway
+  about the hinge-edge Y axis (~15–30°) AND drooped about its depth axis (~18–28° roll, top hinge
+  torn ⇒ leans out and down), min corner grounded or near-grounded; visibly still touching the
+  jamb at the surviving hinge. Named consts for both angle bands.
+- **shattered** — the leaf replaced by 3–5 flat shards (irregular quads/triangles derived from the
+  leaf silhouette, same material/color family), scattered GROUNDED within the door cell ∪ its
+  1-cell apron (seeded positions/yaws, threshold-biased), plus the aperture fully open. Shard
+  count/spread named consts. No physics — seeded static scatter.
+### Tween note
+A live `state_transition` → broken tweens to the SAME variant the hash picks for that sourceRef
+(rest pose and tween target computed by one shared function — extend `itrDoorRestPose`).
+
+### Verification (extend `dev/verify-d4-doors.mjs`)
+⊗ RED FIRST: three fixture doors with hash-distinct sourceRefs resolve three DIFFERENT broken
+variants (fails on the landed single-pose build). Per-variant: flopped byte-identical to D4b's
+pose for a fixed sourceRef; hanging keeps hinge-jamb contact (hinge-edge vertex within contact
+distance of the jamb) + is not fully grounded flat; shattered shards all grounded, all within
+door cell ∪ apron, count in band, deterministic across two builds. Contract untouched: registry
+state list byte-identical, dm-contract regen no-op. Re-run the D4 suite + captures: a 3-frame
+broken-variant study card (one per variant, same scene/camera) READ + described honestly.
+
+### Out of scope
+New contract states; registry/data changes; other archetypes' break-variants (pattern generalizes
+at D5); doorframe-mass fix (the standing BW2-5 finding, own unit); physics debris.

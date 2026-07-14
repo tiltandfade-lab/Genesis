@@ -14,7 +14,8 @@ contract below, it supersedes the figure chroma/framing rules for this packet on
 **Every output is a candidate (`runtimeAdmitted:false`).** Save VFX under
 `dev/model-foundry/faceted-regeneration-production/fantasy-pilot/raw-effects/` and decals under
 `.../raw-decals/`, `<name>-candidate-NNN.png`, per-slug numbering from 001, call id recorded,
-per-lane provenance JSON. **Keep the existing asset names** so returns are drop-in replacements
+per-lane provenance JSON at `fantasy-pilot/provenance/<packet>-<lane>-generation-calls.json`
+(packet prefix mandatory, e.g. `f4-lane-m-…` — bare lane names collide across packets). **Keep the existing asset names** so returns are drop-in replacements
 (e.g. `fx-impact-slash-arc-candidate-001.png` → replaces `assets/dressing/fx-impact-slash-arc.png`).
 
 ## Background / key (technical — matches how VFX composite, NOT magenta figures)

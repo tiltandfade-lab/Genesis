@@ -1,0 +1,53 @@
+{
+  "runtimeAdmitted": false,
+  "packet": "PACKET-F9.md",
+  "lane": "F9-D",
+  "outputs": [
+    {
+      "file": "raw-figures/spr-fantasy-rat-cat-weasel-badger-candidate-001.png",
+      "callId": "call_QcRVWMijQ0IPPW9dvbAGwTXs",
+      "cells": [
+        "spr-fantasy-rat",
+        "spr-fantasy-cat",
+        "spr-fantasy-weasel",
+        "spr-fantasy-badger"
+      ]
+    },
+    {
+      "file": "raw-figures/spr-fantasy-frog-lizard-scorpion-spider-candidate-001.png",
+      "callId": "call_QcRVWMijQ0IPPW9dvbAGwTXs",
+      "cells": [
+        "spr-fantasy-frog",
+        "spr-fantasy-lizard",
+        "spr-fantasy-scorpion",
+        "spr-fantasy-spider"
+      ]
+    },
+    {
+      "file": "raw-figures/spr-fantasy-venomous-snake-flying-snake-candidate-001.png",
+      "callId": "call_QcRVWMijQ0IPPW9dvbAGwTXs",
+      "cells": [
+        "spr-fantasy-venomous-snake",
+        "spr-fantasy-flying-snake"
+      ]
+    },
+    {
+      "file": "raw-figures/spr-fantasy-giant-venomous-snake-candidate-001.png",
+      "callId": "call_QcRVWMijQ0IPPW9dvbAGwTXs",
+      "cells": [
+        "spr-fantasy-giant-venomous-snake"
+      ]
+    },
+    {
+      "file": "raw-figures/spr-fantasy-constrictor-snake-candidate-001.png",
+      "callId": "call_QcRVWMijQ0IPPW9dvbAGwTXs",
+      "cells": [
+        "spr-fantasy-constrictor-snake"
+      ]
+    }
+  ],
+  "notes": [
+    "Generation-only raw candidates; no alpha cleanup, slicing, compilation, admission, or game-data edits performed.",
+    "Nested built-in generation calls were orchestrated by outer call_QcRVWMijQ0IPPW9dvbAGwTXs; the tool return exposed no distinct nested call identifiers."
+  ]
+}

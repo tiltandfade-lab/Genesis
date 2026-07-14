@@ -1,0 +1,32 @@
+{
+  "runtimeAdmitted": false,
+  "packet": "PACKET-F9.md",
+  "lane": "F9-H",
+  "outputs": [
+    {
+      "file": "raw-figures/spr-fantasy-ape-candidate-001.png",
+      "callId": "call_QcRVWMijQ0IPPW9dvbAGwTXs",
+      "cells": [
+        "spr-fantasy-ape"
+      ]
+    },
+    {
+      "file": "raw-figures/spr-fantasy-baboon-candidate-001.png",
+      "callId": "call_QcRVWMijQ0IPPW9dvbAGwTXs",
+      "cells": [
+        "spr-fantasy-baboon"
+      ]
+    },
+    {
+      "file": "raw-figures/spr-fantasy-bog-twisted-giant-rat-candidate-001.png",
+      "callId": "call_QcRVWMijQ0IPPW9dvbAGwTXs",
+      "cells": [
+        "spr-fantasy-bog-twisted-giant-rat"
+      ]
+    }
+  ],
+  "notes": [
+    "Generation-only raw candidates; no alpha cleanup, slicing, compilation, admission, or game-data edits performed.",
+    "Nested built-in generation calls were orchestrated by outer call_QcRVWMijQ0IPPW9dvbAGwTXs; the tool return exposed no distinct nested call identifiers."
+  ]
+}

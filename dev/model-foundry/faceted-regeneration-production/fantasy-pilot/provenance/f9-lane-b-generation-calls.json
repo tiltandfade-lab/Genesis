@@ -1,0 +1,40 @@
+{
+  "runtimeAdmitted": false,
+  "packet": "PACKET-F9.md",
+  "lane": "F9-B",
+  "outputs": [
+    {
+      "file": "raw-figures/spr-fantasy-elk-candidate-001.png",
+      "callId": "call_QcRVWMijQ0IPPW9dvbAGwTXs",
+      "cells": [
+        "spr-fantasy-elk"
+      ]
+    },
+    {
+      "file": "raw-figures/spr-fantasy-camel-candidate-001.png",
+      "callId": "call_QcRVWMijQ0IPPW9dvbAGwTXs",
+      "cells": [
+        "spr-fantasy-camel"
+      ]
+    },
+    {
+      "file": "raw-figures/spr-fantasy-deer-goat-candidate-001.png",
+      "callId": "call_QcRVWMijQ0IPPW9dvbAGwTXs",
+      "cells": [
+        "spr-fantasy-deer",
+        "spr-fantasy-goat"
+      ]
+    },
+    {
+      "file": "raw-figures/spr-fantasy-boar-candidate-001.png",
+      "callId": "call_QcRVWMijQ0IPPW9dvbAGwTXs",
+      "cells": [
+        "spr-fantasy-boar"
+      ]
+    }
+  ],
+  "notes": [
+    "Generation-only raw candidates; no alpha cleanup, slicing, compilation, admission, or game-data edits performed.",
+    "Nested built-in generation calls were orchestrated by outer call_QcRVWMijQ0IPPW9dvbAGwTXs; the tool return exposed no distinct nested call identifiers."
+  ]
+}

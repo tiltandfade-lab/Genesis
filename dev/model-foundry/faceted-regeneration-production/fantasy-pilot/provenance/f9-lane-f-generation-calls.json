@@ -1,0 +1,70 @@
+{
+  "runtimeAdmitted": false,
+  "packet": "PACKET-F9.md",
+  "lane": "F9-F",
+  "outputs": [
+    {
+      "file": "raw-figures/spr-fantasy-crab-seahorse-piranha-octopus-candidate-001.png",
+      "callId": "call_QcRVWMijQ0IPPW9dvbAGwTXs",
+      "cells": [
+        "spr-fantasy-crab",
+        "spr-fantasy-seahorse",
+        "spr-fantasy-piranha",
+        "spr-fantasy-octopus"
+      ]
+    },
+    {
+      "file": "raw-figures/spr-fantasy-reef-shark-candidate-001.png",
+      "callId": "call_QcRVWMijQ0IPPW9dvbAGwTXs",
+      "cells": [
+        "spr-fantasy-reef-shark"
+      ]
+    },
+    {
+      "file": "raw-figures/spr-fantasy-hunter-shark-candidate-001.png",
+      "callId": "call_QcRVWMijQ0IPPW9dvbAGwTXs",
+      "cells": [
+        "spr-fantasy-hunter-shark"
+      ]
+    },
+    {
+      "file": "raw-figures/spr-fantasy-hippopotamus-candidate-001.png",
+      "callId": "call_QcRVWMijQ0IPPW9dvbAGwTXs",
+      "cells": [
+        "spr-fantasy-hippopotamus"
+      ]
+    },
+    {
+      "file": "raw-figures/spr-fantasy-crocodile-candidate-001.png",
+      "callId": "call_QcRVWMijQ0IPPW9dvbAGwTXs",
+      "cells": [
+        "spr-fantasy-crocodile"
+      ]
+    },
+    {
+      "file": "raw-figures/spr-fantasy-plesiosaurus-candidate-001.png",
+      "callId": "call_QcRVWMijQ0IPPW9dvbAGwTXs",
+      "cells": [
+        "spr-fantasy-plesiosaurus"
+      ]
+    },
+    {
+      "file": "raw-figures/spr-fantasy-killer-whale-candidate-001.png",
+      "callId": "call_QcRVWMijQ0IPPW9dvbAGwTXs",
+      "cells": [
+        "spr-fantasy-killer-whale"
+      ]
+    },
+    {
+      "file": "raw-figures/spr-fantasy-archelon-candidate-001.png",
+      "callId": "call_QcRVWMijQ0IPPW9dvbAGwTXs",
+      "cells": [
+        "spr-fantasy-archelon"
+      ]
+    }
+  ],
+  "notes": [
+    "Generation-only raw candidates; no alpha cleanup, slicing, compilation, admission, or game-data edits performed.",
+    "Nested built-in generation calls were orchestrated by outer call_QcRVWMijQ0IPPW9dvbAGwTXs; the tool return exposed no distinct nested call identifiers."
+  ]
+}

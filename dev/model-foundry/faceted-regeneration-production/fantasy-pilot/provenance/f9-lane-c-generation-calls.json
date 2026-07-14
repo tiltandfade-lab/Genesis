@@ -1,0 +1,68 @@
+{
+  "runtimeAdmitted": false,
+  "packet": "PACKET-F9.md",
+  "lane": "F9-C",
+  "outputs": [
+    {
+      "file": "raw-figures/spr-fantasy-draft-horse-candidate-001.png",
+      "callId": "call_QcRVWMijQ0IPPW9dvbAGwTXs",
+      "cells": [
+        "spr-fantasy-draft-horse"
+      ]
+    },
+    {
+      "file": "raw-figures/spr-fantasy-riding-horse-candidate-001.png",
+      "callId": "call_QcRVWMijQ0IPPW9dvbAGwTXs",
+      "cells": [
+        "spr-fantasy-riding-horse"
+      ]
+    },
+    {
+      "file": "raw-figures/spr-fantasy-warhorse-candidate-001.png",
+      "callId": "call_QcRVWMijQ0IPPW9dvbAGwTXs",
+      "cells": [
+        "spr-fantasy-warhorse"
+      ]
+    },
+    {
+      "file": "raw-figures/spr-fantasy-rhinoceros-candidate-001.png",
+      "callId": "call_QcRVWMijQ0IPPW9dvbAGwTXs",
+      "cells": [
+        "spr-fantasy-rhinoceros"
+      ]
+    },
+    {
+      "file": "raw-figures/spr-fantasy-elephant-candidate-001.png",
+      "callId": "call_QcRVWMijQ0IPPW9dvbAGwTXs",
+      "cells": [
+        "spr-fantasy-elephant"
+      ]
+    },
+    {
+      "file": "raw-figures/spr-fantasy-mammoth-candidate-001.png",
+      "callId": "call_QcRVWMijQ0IPPW9dvbAGwTXs",
+      "cells": [
+        "spr-fantasy-mammoth"
+      ]
+    },
+    {
+      "file": "raw-figures/spr-fantasy-pony-mule-candidate-001.png",
+      "callId": "call_QcRVWMijQ0IPPW9dvbAGwTXs",
+      "cells": [
+        "spr-fantasy-pony",
+        "spr-fantasy-mule"
+      ]
+    },
+    {
+      "file": "raw-figures/spr-fantasy-mastiff-candidate-001.png",
+      "callId": "call_QcRVWMijQ0IPPW9dvbAGwTXs",
+      "cells": [
+        "spr-fantasy-mastiff"
+      ]
+    }
+  ],
+  "notes": [
+    "Generation-only raw candidates; no alpha cleanup, slicing, compilation, admission, or game-data edits performed.",
+    "Nested built-in generation calls were orchestrated by the outer runner call; distinct nested identifiers were not exposed by the tool return."
+  ]
+}

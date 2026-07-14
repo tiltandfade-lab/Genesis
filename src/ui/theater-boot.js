@@ -138,7 +138,10 @@ import {
   shotPlanFrom, composeShot, defaultCameraCandidates,
   // C4.1b (docs/WALL-VOLUMES-PRACTICALS.md) — the pure ray-vs-segment blocking test setInteriorBoard's
   // wall-upper occlusion pass wires into the existing itrOcclusionClassify tween engine, below.
-  wallUpperBlockingSet, OCCLUSION_SUBJECT_EYE_HEIGHT
+  wallUpperBlockingSet, OCCLUSION_SUBJECT_EYE_HEIGHT,
+  // P3-1d (docs/PHASE-3-WAVE-1-SPECS.md) — the restored camera-side upper-band suppression, OR'd into
+  // the same raw-blocking set the ray test above populates.
+  wallUpperCameraSideBlockingSet
 } from "./theater-shot.js";
 // P1' WHOLE-OBJECT WIRING (docs/P1-WIRING.md §4 step 3): a STATIC import of probe-lib.js itself —
 // every dev/model-qa/creatures/*.js module ALSO imports probe-lib.js by the identical relative
@@ -9108,14 +9111,49 @@ function setInteriorBoard(data){
     // honest "nothing known to protect visibility of" degrade, matching occlusionFurnitureOn's own
     // ShotPlan-gated convention a few hundred lines up.
     const wallOcclusionAnchors = S.lastShotPlan ? S.lastShotPlan.anchors : null;
-    const wallOcclusionSubjects = wallOcclusionAnchors
+    const wallOcclusionAnchorSubjects = wallOcclusionAnchors
       ? ["player", "primaryThreat", "objective", "focalLight"]
           .map((k) => wallOcclusionAnchors[k]).filter(Boolean)
           .map((a) => ({ x: a.x, z: a.z, y: OCCLUSION_SUBJECT_EYE_HEIGHT }))
       : [];
-    const wallUpperRawBlocking = wallUpperBlockingSet({
+    // P3-1d (docs/PHASE-3-WAVE-1-SPECS.md P3-1d): extend the ray-test subject list beyond the 4
+    // required ShotPlan anchors to EVERY mounted figure (data.pieces — the SAME source
+    // itrPieceSightPoints reads, raw world {cellX,cellY}, matching wallSegments'/occlusionCameraPos's
+    // own raw-world coordinate frame — never the cx/cz-offset frame itrPieceSightPoints itself returns).
+    // Anchor subjects come first and are never dropped by the cap (they're required by C4.1b's own
+    // decision); only the ADDITIONAL non-anchor figures are capped. No-silent-caps law: log once per
+    // build when a room's mounted-figure count actually exceeds the cap.
+    const OCCLUSION_SUBJECT_CAP = 24; // perf cap on non-anchor occlusion ray-test subjects per board build
+    const mountedFigureSubjects = (data.pieces || [])
+      .filter((p) => p && p.slug)
+      .map((p) => ({ x: p.cellX || 0, z: p.cellY || 0, y: OCCLUSION_SUBJECT_EYE_HEIGHT }));
+    if(mountedFigureSubjects.length > OCCLUSION_SUBJECT_CAP){
+      console.warn("[wallUpperOcclusion] mounted-figure subjects", mountedFigureSubjects.length,
+        "exceed OCCLUSION_SUBJECT_CAP", OCCLUSION_SUBJECT_CAP, "— truncating (no silent cap)");
+    }
+    const wallOcclusionSubjects = wallOcclusionAnchorSubjects.concat(
+      mountedFigureSubjects.slice(0, OCCLUSION_SUBJECT_CAP)
+    );
+    const wallUpperRayBlocking = wallUpperBlockingSet({
       camera: occlusionCameraPos, subjects: wallOcclusionSubjects, wallSegments: shell.wallSegments
     });
+    // P3-1d: restore BW2-5's whole-room CAMERA-SIDE upper-band suppression, retired by C4.1b when it
+    // replaced C4.1a's static near/far-yaw `upperVisibleForSegment` (see git 8d1b94f5) with the
+    // exclusive-anchor ray-fade above. wallUpperCameraSideBlockingSet (theater-shot.js, pure) reproduces
+    // that EXACT retired geometry test — camera-side segments within the active room's band drop opaque
+    // upper volume regardless of any specific occluded subject — keyed on shell.wallSegments' own
+    // indices (ownerSegIndex) so it composes with the C4.1b ray-fade above rather than replacing it: a
+    // segment fades if EITHER test flags it (camera-side band suppression ∪ specific-occluder ray
+    // test). The compiler's `upperVisibleForSegment` seam (declared, unused, above) stays untouched —
+    // this is render-time suppression of an already-built mesh's opacity, never compiler-level geometry
+    // omission.
+    const wallUpperCameraSideBlocking = wallUpperCameraSideBlockingSet({
+      focusRect: data.focusRect, wallSegments: shell.wallSegments, cx, cz,
+      yawDeg: (S.rotationStep * 90) + CAM_YAW_OFFSET_DEG
+    });
+    // wallUpperRawBlocking: the UNION consumed by the assembler block below — a segment fades if either
+    // treatment says so (P3-1d Decision item 2: "the two treatments coexist").
+    const wallUpperRawBlocking = new Set([...wallUpperRayBlocking, ...wallUpperCameraSideBlocking]);
     if(shell.floorGeometry){
       const m = new THREE.Mesh(shell.floorGeometry, floorMat);
       m.position.set(-cx, 0, -cz);

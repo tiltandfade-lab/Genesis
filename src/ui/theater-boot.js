@@ -3526,12 +3526,18 @@ function addInteriorContactBlob(group, x, z, texWidth, floorTop){
 // flat quad" law, scoped honestly to the ONE archetype this wave ships.
 //
 // STATE (D0 S0-3/Law 6 — "a door swings, never a teleport"): shut/ajar/open read as an increasing
-// swing angle about the leaf's OWN vertical centerline (a documented simplification of a true edge-
-// hinge — this render channel has no per-door hinge-side geometry fact to pivot on yet; the swing
-// is real, continuous, and tween-driven either way, never a snap); broken tilts forward about its
-// own base edge (itrDoorShape's y=0 floor edge) plus a small KILTER-style deterministic jitter
-// (kilterFor, this file's own THE KILTER convention, reused rather than reinvented) so a broken door
-// reads as fallen/off-kilter, never randomly per render.
+// swing angle about a FIXED VERTICAL AXIS AT ONE JAMB EDGE (docs/STAGE-D-WAVE-SPECS.md D4b ruling 3,
+// "a door opens on hinges... that axis usually isn't the center of the door" — retires D4's own
+// centerline-pivot simplification, Adam's taste-gate FAIL). The hinge side is picked once per door
+// via a deterministic hash off `sourceRef` (itrDoorHingeSign, below) — SEAM: there is still no rolled
+// hinge-side fact in D1's interactables registry, so this hash-pick stands in for one until a real
+// fact exists; the SAME sourceRef always resolves the SAME side, a different sourceRef may resolve
+// the other. The swing is real, continuous, and tween-driven either way, never a snap. Broken tilts
+// forward (near-flat, DETACHED+GROUNDED per ruling 2 — never the old ~50deg mid-air diagonal read)
+// about its own base edge (itrDoorShape's y=0 floor edge) plus a small KILTER-style deterministic
+// jitter (kilterFor, this file's own THE KILTER convention, reused rather than reinvented) so a broken
+// door reads as fallen/off-kilter, never randomly per render — and a computed Y-lift (derived from
+// the tip angle + extrudeDepth, never a magic sag) keeps its lowest point in true floor contact.
 const ITR_DOOR_ARCH_KEYWORDS = Object.freeze(["arch", "gothic", "pointed", "ogee", "vault"]);
 function itrDoorIsArched(entry){
   const text = ((entry && entry.name) || "") + " " + ((entry && entry.flavor) || "");
@@ -3556,9 +3562,24 @@ function itrDoorShape(arched){
   shape.lineTo(-w / 2, 0);
   return shape;
 }
-// state -> swing angle about the leaf's own vertical centerline (degrees). `null` (broken) means "not
-// a swing state" — handled separately below via the tip-forward transform.
-const ITR_DOOR_SWING_DEG = Object.freeze({ shut: 0, ajar: 40, open: 85 });
+// state -> swing angle about the leaf's own HINGE axis (degrees, docs/STAGE-D-WAVE-SPECS.md D4b
+// ruling 3: "ajar≈20-25°, open≈100-110° (swung toward the wall, leaf face visible edge-on to the
+// aperture)"). `null` (broken) means "not a swing state" — handled separately below via the
+// tip-forward transform.
+const ITR_DOOR_SWING_AJAR_DEG = 22;   // ruling 3 range 20-25deg
+const ITR_DOOR_SWING_OPEN_DEG = 105;  // ruling 3 range 100-110deg
+const ITR_DOOR_SWING_DEG = Object.freeze({ shut: 0, ajar: ITR_DOOR_SWING_AJAR_DEG, open: ITR_DOOR_SWING_OPEN_DEG });
+// D4b ruling 2: broken must read as DETACHED and GROUNDED (leaning/flat at the threshold — min-Y in
+// floor contact), never the old ~48-62deg mid-air diagonal slab. Base tip 84deg +/- a 6deg KILTER-
+// style jitter (kilterFor's own +/-4deg yaw spread * this multiplier) keeps the range 78-90deg —
+// capped at <=90 so the grounding-lift formula below (which assumes cos(tip)>=0) stays valid.
+const ITR_DOOR_BROKEN_TIP_BASE_DEG = 84;
+const ITR_DOOR_BROKEN_TIP_JITTER_MULT = 1.5;
+const ITR_DOOR_BROKEN_GROUND_CLEARANCE = 0.01; // a hair above true floor contact — same "just above, never embedded" idiom as INTERIOR_DECAL_Y_OFFSET
+function itrDoorBrokenTipRad(sourceRef){
+  const k = kilterFor("d4-door-broken:" + (sourceRef || ""));
+  return (ITR_DOOR_BROKEN_TIP_BASE_DEG + k.yawDeg * ITR_DOOR_BROKEN_TIP_JITTER_MULT) * Math.PI / 180;
+}
 function itrDoorStateColor(state){
   switch(state){
     case "open": return 0x8a6a42;
@@ -3567,19 +3588,47 @@ function itrDoorStateColor(state){
     default: return 0x6a4a2e; // shut
   }
 }
+// HINGE SIDE (D4b ruling 3): deterministic per sourceRef — a hash-pick of one jamb, since D1's
+// interactables registry carries no rolled hinge-side fact yet (documented SEAM: the moment one
+// exists, this resolves it instead of hashing). +1 -> the leaf's local origin (post geo-translate,
+// interiorBuildInteractableDoorMesh below) sits at the LEFT jamb (world x=-ITR_DOOR_WIDTH/2 off the
+// door cell's own center) and the leaf swings toward +x; -1 -> the RIGHT jamb, swinging toward -x.
+// Same FNV-1a seeded-hash convention as kilterFor (never Math.random) — the SAME sourceRef always
+// resolves the SAME side; a different sourceRef may resolve the other.
+function itrDoorHingeSign(sourceRef){
+  const s = "d4b-hinge:" + String(sourceRef == null ? "" : sourceRef);
+  let h = 2166136261 >>> 0;
+  for(let i = 0; i < s.length; i++){ h = ((h ^ s.charCodeAt(i)) * 16777619) >>> 0; }
+  const u = (h >>> 8) / 16777216; // top 24 bits -> [0,1)
+  return u < 0.5 ? 1 : -1;
+}
 // one hinge-group-plus-leaf-mesh assembly per placed door entry. `hinge` carries the cell position +
 // the corridor-axis orientation (perpendicular to the wall the door interrupts); `leaf` (its one
 // child) carries the state pose — swing about Y for shut/ajar/open, tip-forward about X for broken.
-// Returns null for anything this unit doesn't render (reserve entries, missing coordinates).
+// D4b ruling 3: the leaf's GEOMETRY is translated so its own local origin sits at the hinge jamb edge
+// (never the shape's centerline), and `leaf.position.x` is offset by that same edge so the physical
+// hinge point lands at the correct jamb — rotation.y then genuinely pivots about that fixed jamb
+// point (the far edge sweeps; the hinge-edge vertex column never moves), instead of the retired D4
+// centerline spin. Returns null for anything this unit doesn't render (reserve entries, missing
+// coordinates).
 function interiorBuildInteractableDoorMesh(entry, cx, cz, floorTopMap){
   if(!entry || entry.reserve || entry.x == null || entry.y == null) return null;
   const extrudeDepth = (typeof entry.extrudeDepth === "number" && entry.extrudeDepth > 0) ? entry.extrudeDepth : ITR_DOOR_FALLBACK_DEPTH;
   const arched = itrDoorIsArched(entry);
   const shape = itrDoorShape(arched);
+  // HINGE-EDGE AXIS (D4b ruling 3): itrDoorShape's own footprint is symmetric about x=0 (the
+  // centerline) — geo.translate shifts that local origin OFF the centerline and onto whichever jamb
+  // edge (x=-w/2 or x=+w/2) itrDoorHingeSign picks for this sourceRef, so the mesh's own local (0,0,0)
+  // IS the hinge point. `edgeX` is that jamb's ORIGINAL (pre-translate) x — leaf.position.x is set to
+  // it below so the physical hinge still lands at the correct world offset from the door cell's
+  // center (unchanged from D4: at rest (rotation=0) the leaf occupies the exact same span as before).
+  const hingeSign = itrDoorHingeSign(entry.sourceRef);
+  const edgeX = hingeSign > 0 ? -ITR_DOOR_WIDTH / 2 : ITR_DOOR_WIDTH / 2;
   const geo = new THREE.ExtrudeGeometry(shape, { depth: extrudeDepth, bevelEnabled: false, curveSegments: 10 });
-  geo.translate(0, 0, -extrudeDepth / 2); // center the extrusion depth on the aperture plane
+  geo.translate(-edgeX, 0, -extrudeDepth / 2); // origin -> hinge jamb edge (x); center the extrusion depth on the aperture plane (z), unchanged
   const mat = new THREE.MeshLambertMaterial({ color: itrDoorStateColor(entry.state), transparent: true, opacity: 1 });
   const leaf = new THREE.Mesh(geo, mat);
+  leaf.position.x = edgeX; // re-anchor: the (now hinge-edge) origin sits at the true jamb offset from the cell center
   leaf.castShadow = true; leaf.receiveShadow = true;
   leaf.userData = { isDoorLeaf: true };
 
@@ -3596,18 +3645,23 @@ function interiorBuildInteractableDoorMesh(entry, cx, cz, floorTopMap){
   hinge.rotation.y = ew ? Math.PI / 2 : 0;
 
   if(entry.state === "broken"){
-    // KILTER-style deterministic tilt (never a random per-render jitter, this file's own THE KILTER
-    // convention reused rather than reinvented) — a broken door tips forward off its own base edge.
-    const k = kilterFor("d4-door-broken:" + (entry.sourceRef || ""));
-    leaf.rotation.x = (55 + k.yawDeg * 3.5) * Math.PI / 180; // ~48-62deg tip, deterministic per sourceRef
-    leaf.position.y -= 0.1; // a broken leaf sags off true floor contact
+    // D4b ruling 2: DETACHED + GROUNDED — a near-flat forward tip (itrDoorBrokenTipRad, 78-90deg,
+    // KILTER-seeded per sourceRef) about the leaf's own base edge (y=0, unaffected by the hinge-edge
+    // x-translate above), with a computed Y-lift so its lowest point sits in true floor contact
+    // instead of the old fixed "-0.1 sag" (which is exactly what read as a mid-air diagonal slab).
+    const tipRad = itrDoorBrokenTipRad(entry.sourceRef);
+    leaf.rotation.x = tipRad;
+    // at rotation.x=tipRad, a vertex at local (x, y=0, z=+extrudeDepth/2) maps to world-relative
+    // y' = -[extrudeDepth/2]*sin(tipRad) — the leaf's own lowest point pre-lift. Lifting by that exact
+    // magnitude (plus a hair of clearance) grounds it precisely, never a magic constant.
+    leaf.position.y = (extrudeDepth / 2) * Math.sin(tipRad) + ITR_DOOR_BROKEN_GROUND_CLEARANCE;
   } else {
     const swingDeg = ITR_DOOR_SWING_DEG[entry.state];
     leaf.rotation.y = (typeof swingDeg === "number" ? swingDeg : 0) * Math.PI / 180;
   }
 
   hinge.add(leaf);
-  hinge.userData = { kind: "interactable", archetype: "door", sourceRef: entry.sourceRef, state: entry.state, slug: entry.slug, leaf: leaf, arched: arched };
+  hinge.userData = { kind: "interactable", archetype: "door", sourceRef: entry.sourceRef, state: entry.state, slug: entry.slug, leaf: leaf, arched: arched, hingeSign: hingeSign };
   return hinge;
 }
 // door-swing tween duration — BW4's own 280-350ms "glide, never snap" band (placeCameraTweened's
@@ -3619,8 +3673,7 @@ const ITR_DOOR_SWING_TWEEN_MS = 320;
 // diff/tween path (below) can compute a FROM pose and a TO pose on the SAME axis convention.
 function itrDoorRestPose(state, sourceRef){
   if(state === "broken"){
-    const k = kilterFor("d4-door-broken:" + (sourceRef || ""));
-    return { axis: "x", rad: (55 + k.yawDeg * 3.5) * Math.PI / 180 };
+    return { axis: "x", rad: itrDoorBrokenTipRad(sourceRef) };
   }
   const swingDeg = ITR_DOOR_SWING_DEG[state];
   return { axis: "y", rad: (typeof swingDeg === "number" ? swingDeg : 0) * Math.PI / 180 };
@@ -11474,6 +11527,7 @@ window.Theater._interiorBuildInteractablesForTest = function(interactables, cx, 
 window.Theater._itrDoorShapeForTest = function(arched){ return itrDoorShape(arched); };
 window.Theater._itrDoorIsArchedForTest = function(entry){ return itrDoorIsArched(entry); };
 window.Theater._itrDoorRestPoseForTest = function(state, sourceRef){ return itrDoorRestPose(state, sourceRef); };
+window.Theater._itrDoorHingeSignForTest = function(sourceRef){ return itrDoorHingeSign(sourceRef); };
 window.Theater._resetInteriorDoorStateForTest = function(){ S.interiorDoorStateBySourceRef = {}; };
 
 // BEAUTY-WAVE.md VP1c — TEST-ONLY SEAM, same spirit as the two accessors above: exposes the flat-

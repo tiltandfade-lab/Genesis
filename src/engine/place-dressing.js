@@ -279,6 +279,34 @@ function dpAdjacentToDoor(x, y, plan) {
   });
 }
 
+// D4b FINDING (docs/STAGE-D-WAVE-SPECS.md, Adam's taste-gate ruling 1b): a DOOR cell's own FLOOR
+// neighbors — "the door's direct approach", standing in for a real swing-arc/aisle model this data
+// layer doesn't have (mirrors src/engine/place-distribution.js's pldDoorApronCells / src/engine/
+// room-grammar.js's rgDoorApronCells verbatim — SAME formula, independently reimplemented per this
+// file's own ENGINE PURITY LAW discipline above, so the three necessarily agree byte-for-byte without
+// an import). Before this fix, dpPlaceRoom's general `placeable` pool (focal/setPiece, blocker,
+// wall-hang, filler — every step EXCEPT the seam-softening sub-pass below) had NO apron exclusion at
+// all: a large setPiece could roll straight onto the floor cell directly in front of a door (Adam's
+// taste-gate "there's a vine arch square in the door approach" complaint, confirmed live against the
+// D4 study card). The seam-softening sub-pass's OWN "doorway-adjacent corners" target is deliberately
+// EXEMPT — that's a small, size:"small" texture cue Adam never flagged, not the bug.
+function dpDoorApronCells(room, plan) {
+  const out = new Set();
+  for (let yy = room.y; yy < room.y + room.d; yy++) {
+    for (let xx = room.x; xx < room.x + room.w; xx++) {
+      if (xx < 0 || yy < 0 || xx >= plan.cellW || yy >= plan.cellD) continue;
+      if (plan.cells[yy * plan.cellW + xx] !== SPATIAL_CELL.DOOR) continue;
+      out.add(xx + "," + yy);
+      [[1, 0], [-1, 0], [0, 1], [0, -1]].forEach(([dx, dy]) => {
+        const nx = xx + dx, ny = yy + dy;
+        if (nx < 0 || ny < 0 || nx >= plan.cellW || ny >= plan.cellD) return;
+        if (plan.cells[ny * plan.cellW + nx] === SPATIAL_CELL.FLOOR) out.add(nx + "," + ny);
+      });
+    }
+  }
+  return out;
+}
+
 // the wall-base LINE for a room: its own FLOOR cells that are wall-adjacent, in stable row-major
 // order (dpRoomFloorCells' own order) — a deterministic, roughly-perimeter-following sequence the
 // RHYTHM-style interval sampler below walks across, so sampled fillers spread along the joint
@@ -428,7 +456,14 @@ function dpPlaceRoom(room, plan, roster, rng, seamRoster) {
   const wallHangRoster = roster.filter((e) => e.primary === "wall-hang" && !e.lightAffine);
   const lightRoster = roster.filter((e) => e.lightAffine);
 
-  const shuffledPlaceable = dpShuffle(placeable, rng);
+  // D4b FINDING fix (ruling 1b): exclude the door-apron cells (dpDoorApronCells, above) from the
+  // GENERAL candidate pool ONLY — focal/setPiece (step 2), blocker+wall-hang (step 3/4, both derived
+  // from `wallAdjacent` below), and filler (step 5) all draw from `shuffledPlaceable`, so all four now
+  // skip a door's direct approach. `placeable` itself stays untouched (the seam-softening sub-pass,
+  // step 6, still targets doorway-adjacent corners on purpose — that small size:"small" texture cue
+  // is the intended design, not the bug).
+  const doorApronSet = dpDoorApronCells(room, plan);
+  const shuffledPlaceable = dpShuffle(placeable.filter((c) => !doorApronSet.has(c.x + "," + c.y)), rng);
   const wallAdjacent = dpShuffle(shuffledPlaceable.filter((c) => dpAdjacentToWall(c.x, c.y, plan)), rng);
   // BW2-1b item 2 (placement bias): the FAR-side subset of wallAdjacent — never on the canonical
   // camera side of the room's own center (dpIsCameraSideOfRoom, above) — is the blocker step's

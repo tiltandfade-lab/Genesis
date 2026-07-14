@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-14T21:33:54.683Z",
+  "generatedAt": "2026-07-14T22:23:22.678Z",
   "shots": [
     "door-shut.png",
     "door-ajar.png",
@@ -15,8 +15,8 @@
     "notes": [
       "startSession() called"
     ],
-    "worldId": "mrl65pkgl5j3e",
-    "worldName": "The Lakeside Springs"
+    "worldId": "mrl7ws6f82wpp",
+    "worldName": "The Shimmering Maw"
   },
   "theaterState": {
     "hasBattleStage": true,

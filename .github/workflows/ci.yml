@@ -2,10 +2,16 @@ name: CI
 
 # Genesis validation gates (docs/NEXT-STEPS.md "Wire CI" item): manifest consistency,
 # every headless-capable dev/verify-*.mjs harness, and the running playtest-bug-probes
-# regression list. Runs on every push (all branches) and every pull_request.
+# regression list.
+#
+# Runs on pushes to master + every pull_request ONLY — NOT on every branch push. A blanket
+# `on: push` (all branches) meant a single `git push --all` of ~100 backup/worktree branches
+# fired ~100 failing CI runs and flooded the inbox (2026-07-13). Feature branches get their CI
+# coverage via their pull_request; direct branch backups no longer trigger a run.
 
 on:
   push:
+    branches: [master]
   pull_request:
 
 jobs:

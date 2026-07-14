@@ -1,0 +1,7 @@
+{
+  "runtimeAdmitted": false,
+  "sheets": [
+    {"file":"spr-fantasy-halfling-farmer-innkeeper-messenger-runner-roadside-chef-candidate-001.png","callId":"exec-a7696336-d51f-40eb-89b7-411798c97a66","deadCallIds":["exec-7205b8aa-42ae-4226-9e20-d467eb612792"],"cells":["spr-fantasy-halfling-farmer-dark-skinned-tends-the-best-soil-in-the-valley","spr-fantasy-halfling-innkeeper-knows-every-traveler-s-business-before-they-ve-unpacked","spr-fantasy-halfling-messenger-runner-halfling-fastest-feet-in-the-county-mostly-ignored-otherwise","spr-fantasy-halfling-roadside-chef-halfling-feeds-every-traveler-who-passes-no-exceptions"]},
+    {"file":"spr-fantasy-destitute-halfling-magnate-halfling-remedy-maker-halfling-thief-halfling-candidate-001.png","callId":"exec-5792091a-8b42-4ce3-a672-457706c65b98","cells":["spr-fantasy-destitute-halfling","spr-fantasy-magnate-halfling","spr-fantasy-remedy-maker-halfling","spr-fantasy-thief-halfling"]}
+  ]
+}

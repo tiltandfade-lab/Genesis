@@ -1,0 +1,9 @@
+{
+  "runtimeAdmitted": false,
+  "sheets": [
+    {"file":"spr-fantasy-goliath-bridge-toll-keeper-dockworker-candidate-001.png","callId":"exec-ea1e7f15-f0bb-4c0d-92cd-953af2fe4808","cells":["spr-fantasy-goliath-bridge-toll-keeper-goliath-collects-the-fee-stops-the-trouble-rarely-needs-to-try-hard","spr-fantasy-goliath-dockworker-goliath-moves-cargo-alone-that-takes-four-other-men"]},
+    {"file":"spr-fantasy-goliath-quarry-foreman-servant-goliath-candidate-001.png","callId":"exec-5c454d43-f2b0-4a09-8310-b87495a27bc3","deadCallIds":["exec-d51000d0-018c-40ed-8a0f-a69fce9fa076"],"cells":["spr-fantasy-goliath-quarry-foreman-the-only-one-strong-enough-to-reset-a-slipped-cart-alone","spr-fantasy-servant-goliath"]},
+    {"file":"spr-fantasy-host-goliath-pampered-elite-goliath-candidate-001.png","callId":"exec-76829b52-8d08-4b23-b595-0627aee7fa84","cells":["spr-fantasy-host-goliath","spr-fantasy-pampered-elite-goliath"]},
+    {"file":"spr-fantasy-smuggler-goliath-candidate-001.png","callId":"exec-f0e36d9f-dda4-4673-b9ab-0246a6a056d9","cells":["spr-fantasy-smuggler-goliath"]}
+  ]
+}

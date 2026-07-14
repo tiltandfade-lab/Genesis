@@ -1,0 +1,9 @@
+{
+  "runtimeAdmitted": false,
+  "sheets": [
+    {"file":"spr-fantasy-tiefling-fortune-teller-rival-candidate-001.png","callId":"exec-3d7c5d35-71ce-40d3-b822-0401391b4386","cells":["spr-fantasy-tiefling-fortune-teller-half-the-town-swears-by-her-half-crosses-the-street","spr-fantasy-tiefling-fortune-teller-s-rival-tiefling-claims-to-be-the-real-seer-in-town"]},
+    {"file":"spr-fantasy-tiefling-blacksmith-apprentice-street-performer-candidate-001.png","callId":"exec-95391828-9be8-4545-a2b6-572ff3f13d5f","cells":["spr-fantasy-tiefling-blacksmith-s-apprentice-still-learning-already-better-than-most-journeymen","spr-fantasy-tiefling-street-performer-tiefling-half-the-crowd-is-there-for-the-trick-half-for-the-horror"]},
+    {"file":"spr-fantasy-tiefling-tavern-owner-feeder-tiefling-candidate-001.png","callId":"exec-8bb66d18-e59b-4bda-94c6-069f384af580","cells":["spr-fantasy-tiefling-tavern-owner-tiefling-runs-the-friendliest-bar-in-a-town-that-fears-her-kind","spr-fantasy-feeder-tiefling"]},
+    {"file":"spr-fantasy-outsider-tiefling-candidate-001.png","callId":"exec-905864f4-94bb-457c-bad2-5e17571a0b31","cells":["spr-fantasy-outsider-tiefling"]}
+  ]
+}

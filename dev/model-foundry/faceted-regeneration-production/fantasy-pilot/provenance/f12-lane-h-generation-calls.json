@@ -1,0 +1,8 @@
+{
+  "runtimeAdmitted": false,
+  "sheets": [
+    {"file":"spr-fantasy-dragonborn-ship-s-purser-temple-acolyte-candidate-001.png","callId":"exec-a79e2470-ac13-43c7-849a-c76e865d5c14","cells":["spr-fantasy-dragonborn-ship-s-purser-dragonborn-keeps-the-manifest-honest-mostly","spr-fantasy-dragonborn-temple-acolyte-young-dragonborn-devout-earnest-still-memorizing-the-rites"]},
+    {"file":"spr-fantasy-builder-dragonborn-land-worker-dragonborn-candidate-001.png","callId":"exec-c30df886-bf3e-4aac-8b54-a2ab42c827f1","cells":["spr-fantasy-builder-dragonborn","spr-fantasy-land-worker-dragonborn"]},
+    {"file":"spr-fantasy-recluse-dragonborn-candidate-001.png","callId":"exec-9af750a1-7d05-4026-8448-eb26c4808a1e","cells":["spr-fantasy-recluse-dragonborn"]}
+  ]
+}

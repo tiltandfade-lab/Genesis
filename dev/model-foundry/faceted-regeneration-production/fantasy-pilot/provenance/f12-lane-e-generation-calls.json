@@ -1,0 +1,7 @@
+{
+  "runtimeAdmitted": false,
+  "sheets": [
+    {"file":"spr-fantasy-gnomish-alchemist-clockmaker-tinkerer-delver-candidate-001.png","callId":"exec-d4f7ae03-dec5-46a8-9548-8913e41d8837","cells":["spr-fantasy-gnomish-alchemist-s-assistant-gnome-mixes-potions-that-mostly-don-t-explode","spr-fantasy-gnomish-clockmaker-gnome-every-clock-in-town-keeps-slightly-different-time-on-purpose","spr-fantasy-gnomish-tinkerer-clockwork-contraptions-that-mostly-work","spr-fantasy-delver-gnome"]},
+    {"file":"spr-fantasy-misfit-outlaw-trader-gnome-candidate-001.png","callId":"exec-3a9bc463-c868-4e66-a441-f74504e516f6","cells":["spr-fantasy-misfit-gnome","spr-fantasy-outlaw-gnome","spr-fantasy-trader-gnome"]}
+  ]
+}

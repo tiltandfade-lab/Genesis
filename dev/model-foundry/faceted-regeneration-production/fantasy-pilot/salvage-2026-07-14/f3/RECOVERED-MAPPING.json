@@ -1,0 +1,16 @@
+{
+  "recoveredBy": "Claude Code visual identification, 2026-07-14",
+  "note": "F3 session saved raw returns named by call-ID only (mapping lost in the worktree corruption). Subjects identified visually against SPRITE-INDEX F3 identity list. exec-72395760 matches no F3 identity — it is an armored orc warrior (F2 spr-fantasy-orc-warrior, already covered on codex/faceted-F2) or possibly intended as spr-fantasy-half-ogre-ogrillon; Adam to rule at admission.",
+  "runtimeAdmitted": false,
+  "sheets": [
+    {"file": "exec-3edd92c0-6772-49b0-bcf6-390624c0843a.png", "callId": "exec-3edd92c0-6772-49b0-bcf6-390624c0843a", "cells": ["spr-fantasy-troll"]},
+    {"file": "exec-44ae3737-b533-4511-967d-980e589d3b2d.png", "callId": "exec-44ae3737-b533-4511-967d-980e589d3b2d", "cells": ["spr-fantasy-cloud-giant"]},
+    {"file": "exec-72395760-e742-42a4-bac7-93a024bcf9fb.png", "callId": "exec-72395760-e742-42a4-bac7-93a024bcf9fb", "cells": ["UNRESOLVED: armored orc warrior — no F3 identity; see note"]},
+    {"file": "exec-77f9d40c-1d95-4523-b6ca-16ec0230b13c.png", "callId": "exec-77f9d40c-1d95-4523-b6ca-16ec0230b13c", "cells": ["spr-fantasy-ettin"]},
+    {"file": "exec-b50f25f2-7d67-4f43-a7df-3d041eff6130.png", "callId": "exec-b50f25f2-7d67-4f43-a7df-3d041eff6130", "cells": ["spr-fantasy-ogre"]},
+    {"file": "exec-cae47e2b-b081-4ae0-ab58-3d7616c43e0e.png", "callId": "exec-cae47e2b-b081-4ae0-ab58-3d7616c43e0e", "cells": ["spr-fantasy-frost-giant"]},
+    {"file": "exec-d14db8c5-0345-41c7-aee9-2c98b2f725fd.png", "callId": "exec-d14db8c5-0345-41c7-aee9-2c98b2f725fd", "cells": ["spr-fantasy-storm-giant"]},
+    {"file": "exec-d25c7eab-1ab2-4079-aeca-8a85a56ef37f.png", "callId": "exec-d25c7eab-1ab2-4079-aeca-8a85a56ef37f", "cells": ["spr-fantasy-fire-giant"]},
+    {"file": "exec-f2aff764-a8c3-4e62-94e7-2a2441e44c51.png", "callId": "exec-f2aff764-a8c3-4e62-94e7-2a2441e44c51", "cells": ["spr-fantasy-stone-giant"]}
+  ]
+}

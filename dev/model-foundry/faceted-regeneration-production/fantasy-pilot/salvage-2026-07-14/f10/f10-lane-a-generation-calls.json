@@ -1,0 +1,12 @@
+{
+  "runtimeAdmitted": false,
+  "sheets": [
+    {"file":"spr-fantasy-awakened-shrub__spr-fantasy-the-twig-blight-candidate-001.png","callId":"exec-a1a86a29-c4e0-43e2-9556-8dd74d82daad","cells":["spr-fantasy-awakened-shrub","spr-fantasy-the-twig-blight"]},
+    {"file":"spr-fantasy-the-needle-blight__spr-fantasy-the-vine-blight-candidate-001.png","callId":"exec-8a1a2e7e-58c0-485f-9a1a-7ef9f5e40734","cells":["spr-fantasy-the-needle-blight","spr-fantasy-the-vine-blight"]},
+    {"file":"spr-fantasy-shambling-mound-candidate-001.png","callId":"exec-7d6ab4fb-fc68-4c64-a27f-603d7a77cc45","cells":["spr-fantasy-shambling-mound"]},
+    {"file":"spr-fantasy-awakened-tree-candidate-001.png","callId":"exec-88592ad8-2400-4246-b65a-f10b510dd88d","cells":["spr-fantasy-awakened-tree"]},
+    {"file":"spr-fantasy-tree-blight-candidate-001.png","callId":"exec-9f973678-5c8f-4fa7-a069-ec3a3b61882c","cells":["spr-fantasy-tree-blight"]},
+    {"file":"spr-fantasy-treant-candidate-001.png","callId":"exec-7f67b47d-780b-4d14-a2b7-4b2ef198512b","cells":["spr-fantasy-treant"]},
+    {"file":"spr-fantasy-gulthias-blight-candidate-001.png","callId":"exec-04bd2a39-31b1-4d12-96e8-3533c4494636","cells":["spr-fantasy-gulthias-blight"]}
+  ]
+}

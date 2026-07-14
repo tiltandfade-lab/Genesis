@@ -1,0 +1,19 @@
+{
+  "runtimeAdmitted": false,
+  "sheets": [
+    {"file":"spr-fantasy-dao-candidate-001.png","callId":"exec-863c677c-43b4-45d8-9d31-717dc2449009","cells":["spr-fantasy-dao"]},
+    {"file":"spr-fantasy-djinni-candidate-001.png","callId":"exec-63475a18-9fc5-4273-b208-40458f425d0e","cells":["spr-fantasy-djinni"]},
+    {"file":"spr-fantasy-efreeti-candidate-001.png","callId":"exec-5abe5a61-0081-48bf-8d2f-c89dd90bf8ff","cells":["spr-fantasy-efreeti"]},
+    {"file":"spr-fantasy-marid-candidate-001.png","callId":"exec-029dd5bf-9629-4321-a170-020beb71afa1","cells":["spr-fantasy-marid"]},
+    {"file":"spr-fantasy-invisible-stalker-candidate-001.png","callId":"exec-08a90680-333b-4c7f-b946-e6c47c0f8a3d","cells":["spr-fantasy-invisible-stalker"]},
+    {"file":"spr-fantasy-salamander-candidate-001.png","callId":"exec-55de501f-647e-4731-8795-5d3a47b39249","cells":["spr-fantasy-salamander"]},
+    {"file":"spr-fantasy-salamander-inferno-master-candidate-001.png","callId":"exec-6fedd42f-64b2-458d-8041-8267d9af00a0","cells":["spr-fantasy-salamander-inferno-master"]},
+    {"file":"spr-fantasy-water-weird-candidate-001.png","callId":"exec-9a8d6c87-8e1a-42dc-be7e-19a082a6e286","cells":["spr-fantasy-water-weird"]},
+    {"file":"spr-fantasy-elemental-cataclysm-candidate-001.png","callId":"exec-c40e37de-cec4-4a16-b418-a38b03f91597","cells":["spr-fantasy-elemental-cataclysm"]},
+    {"file":"spr-fantasy-azer-pyromancer__spr-fantasy-azer-sentinel-candidate-001.png","callId":"exec-4e3f51a0-e338-411d-9d27-cf99d8f79e9a","cells":["spr-fantasy-azer-pyromancer","spr-fantasy-azer-sentinel"]},
+    {"file":"spr-fantasy-galeb-duhr__spr-fantasy-gargoyle-candidate-001.png","callId":"exec-bcdcfc99-7a81-45d4-81d1-276b4d7ffa23","cells":["spr-fantasy-galeb-duhr","spr-fantasy-gargoyle"]},
+    {"file":"spr-fantasy-xorn-candidate-001.png","callId":"exec-71201fe1-0245-43e4-9f3b-f38c9abe9bcd","cells":["spr-fantasy-xorn"]},
+    {"file":"spr-fantasy-salamander-fire-snake-candidate-001.png","callId":"exec-e2cb6e92-b54a-4eae-b67a-bc3821a11579","cells":["spr-fantasy-salamander-fire-snake"]},
+    {"file":"spr-fantasy-magmin-candidate-001.png","callId":"exec-8ab7f876-ed51-493a-a804-ab99f2b827d0","cells":["spr-fantasy-magmin"]}
+  ]
+}

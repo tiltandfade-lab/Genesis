@@ -49,9 +49,33 @@
         different axis entirely); the arched silhouette rides the geometry (aperture-matches-roll).
      8. PART B — interiorBuildInteractables: a state_transition between two builds of the SAME
         sourceRef fires exactly one tween on the BW4 channel (S.tweens), fake-clock-drivable to its
-        final pose; an unchanged state (or a brand-new sourceRef) mounts directly, no tween; non-door
-        archetypes are skipped entirely (D4 scope).
-     9. check-manifest.py OK (run live, not just cited).
+        final pose (now ITR_DOOR_SWING_OPEN_DEG, D4b ruling 3's 100-110deg band); an unchanged state
+        (or a brand-new sourceRef) mounts directly, no tween; non-door archetypes are skipped
+        entirely (D4 scope); the tween's hinge-anchor position is proved UNCHANGED throughout
+        (D4b: same axis, never a teleport).
+     8b. E0-1 fade compliance (unchanged from D4).
+
+   ─── D4b (docs/STAGE-D-WAVE-SPECS.md D4b, Adam's taste-gate FAIL + 3 rulings) ───────────────────
+     9. RED-FIRST: the pre-fix build (master tip fe9da32d — D4 landed, D4b not yet) has no
+        itrDoorHingeSign at all, and its leaf geometry's local origin sits at the shape's own
+        CENTERLINE (strictly inside its x-extent, never at a real edge) — proving the retired
+        centerline pivot live, not just asserted.
+    10. GREEN: the fixed code's leaf origin sits at a REAL shape edge for every state, and that
+        hinge-anchor position is INVARIANT across shut/ajar/open for the same sourceRef while
+        rotation.y genuinely sweeps — the hinge-edge axis, proved both ways.
+    11. Hinge side (itrDoorHingeSign) is deterministic per sourceRef (same ref -> same side twice)
+        and spreads across both sides over a sample of different sourceRefs (a hash-pick, never a
+        constant); the mounted mesh's own hingeSign matches.
+    12. Ruling 2: broken is DETACHED+GROUNDED — tip angle in the documented 78-90deg band (never the
+        retired ~48-62deg), far-edge height near-zero (reads as fallen, not a diagonal slab still
+        standing), and min-Y sits exactly at the documented ground-clearance hair above the floor
+        (the computed lift formula proved exact, not approximate).
+    13. check-manifest.py OK (run live, not just cited).
+
+   Ruling 1(b) (dressing/apron finding + fix) lives in src/engine/place-dressing.js
+   (dpDoorApronCells + the shuffledPlaceable apron-exclusion) — covered by the EXISTING
+   dev/verify-dungeon-dressing.mjs / dev/verify-place-dressing.mjs suites (both re-run green,
+   unchanged pass counts) rather than duplicated here; this file stays scoped to the door RENDER.
 
    Run: node dev/verify-d4-doors.mjs */
 import { readFileSync } from "node:fs";
@@ -323,7 +347,17 @@ function makeStubTHREE() {
     };
   }
   function ExtrudeGeometry(shape, opts) {
-    return { isExtrude: true, shape, opts, translate(x, y, z) { this._translated = { x, y, z }; return this; } };
+    return {
+      isExtrude: true, shape, opts,
+      translate(x, y, z) {
+        // D4b: ACCUMULATE (never overwrite) — interiorBuildInteractableDoorMesh makes exactly one
+        // translate() call post-fix, but accumulating keeps this stub correct even if a future edit
+        // splits it into more than one call.
+        const prev = this._translated || { x: 0, y: 0, z: 0 };
+        this._translated = { x: prev.x + x, y: prev.y + y, z: prev.z + z };
+        return this;
+      },
+    };
   }
   function MeshLambertMaterial(opts) { return Object.assign({ userData: {}, opacity: 1, transparent: false }, opts); }
   return { Group, Mesh, Shape, ExtrudeGeometry, MeshLambertMaterial };
@@ -335,13 +369,20 @@ console.log("\n=== extracting Job 3 functions from src/ui/theater-boot.js ===");
 const itrDoorIsArchedSrc = extractFn(bootSrc, "itrDoorIsArched");
 const itrDoorShapeSrc = extractFn(bootSrc, "itrDoorShape");
 const itrDoorStateColorSrc = extractFn(bootSrc, "itrDoorStateColor");
+const itrDoorHingeSignSrc = extractFn(bootSrc, "itrDoorHingeSign");
+const itrDoorBrokenTipRadSrc = extractFn(bootSrc, "itrDoorBrokenTipRad");
 const interiorBuildInteractableDoorMeshSrc = extractFn(bootSrc, "interiorBuildInteractableDoorMesh");
 const itrDoorRestPoseSrc = extractFn(bootSrc, "itrDoorRestPose");
 const interiorBuildInteractablesSrc = extractFn(bootSrc, "interiorBuildInteractables");
 const interiorFloorTopAtSrc = extractFn(bootSrc, "interiorFloorTopAt");
 const kilterForSrc = extractFn(bootSrc, "kilterFor");
 const archKeywordsLine = extractFrozenArrLine(bootSrc, "ITR_DOOR_ARCH_KEYWORDS");
+const swingAjarDegLine = extractConstLine(bootSrc, "ITR_DOOR_SWING_AJAR_DEG");
+const swingOpenDegLine = extractConstLine(bootSrc, "ITR_DOOR_SWING_OPEN_DEG");
 const swingDegLine = extractFrozenObjLine(bootSrc, "ITR_DOOR_SWING_DEG");
+const brokenTipBaseDegLine = extractConstLine(bootSrc, "ITR_DOOR_BROKEN_TIP_BASE_DEG");
+const brokenTipJitterMultLine = extractConstLine(bootSrc, "ITR_DOOR_BROKEN_TIP_JITTER_MULT");
+const brokenGroundClearanceLine = extractConstLine(bootSrc, "ITR_DOOR_BROKEN_GROUND_CLEARANCE");
 const widthLine = extractConstLine(bootSrc, "ITR_DOOR_WIDTH");
 const heightLine = extractConstLine(bootSrc, "ITR_DOOR_HEIGHT");
 const fallbackDepthLine = extractConstLine(bootSrc, "ITR_DOOR_FALLBACK_DEPTH");
@@ -352,9 +393,13 @@ const floorBaseYLine = extractConstLine(bootSrc, "ITR_FLOOR_BASE_Y");
 const floorHeightFallbackLine = extractConstLine(bootSrc, "ITR_FLOOR_HEIGHT_FALLBACK");
 
 [["itrDoorIsArched", itrDoorIsArchedSrc], ["itrDoorShape", itrDoorShapeSrc], ["itrDoorStateColor", itrDoorStateColorSrc],
+ ["itrDoorHingeSign", itrDoorHingeSignSrc], ["itrDoorBrokenTipRad", itrDoorBrokenTipRadSrc],
  ["interiorBuildInteractableDoorMesh", interiorBuildInteractableDoorMeshSrc], ["itrDoorRestPose", itrDoorRestPoseSrc],
  ["interiorBuildInteractables", interiorBuildInteractablesSrc], ["interiorFloorTopAt", interiorFloorTopAtSrc],
- ["kilterFor", kilterForSrc], ["ITR_DOOR_ARCH_KEYWORDS", archKeywordsLine], ["ITR_DOOR_SWING_DEG", swingDegLine]]
+ ["kilterFor", kilterForSrc], ["ITR_DOOR_ARCH_KEYWORDS", archKeywordsLine], ["ITR_DOOR_SWING_DEG", swingDegLine],
+ ["ITR_DOOR_SWING_AJAR_DEG", swingAjarDegLine], ["ITR_DOOR_SWING_OPEN_DEG", swingOpenDegLine],
+ ["ITR_DOOR_BROKEN_TIP_BASE_DEG", brokenTipBaseDegLine], ["ITR_DOOR_BROKEN_TIP_JITTER_MULT", brokenTipJitterMultLine],
+ ["ITR_DOOR_BROKEN_GROUND_CLEARANCE", brokenGroundClearanceLine]]
   .forEach(([name, src]) => ok(!!src, `extracted ${name} from theater-boot.js`));
 
 function buildSandbox() {
@@ -366,12 +411,19 @@ function buildSandbox() {
   };
   vm.createContext(sandbox);
   const body = [
-    archKeywordsLine, widthLine, heightLine, fallbackDepthLine, swingDegLine, tweenMsLine,
+    archKeywordsLine, widthLine, heightLine, fallbackDepthLine,
+    swingAjarDegLine, swingOpenDegLine, swingDegLine, tweenMsLine,
+    brokenTipBaseDegLine, brokenTipJitterMultLine, brokenGroundClearanceLine,
     kilterYawLine, kilterPosLine, floorBaseYLine, floorHeightFallbackLine,
     itrDoorIsArchedSrc, itrDoorShapeSrc, itrDoorStateColorSrc, kilterForSrc,
+    itrDoorHingeSignSrc, itrDoorBrokenTipRadSrc,
     interiorFloorTopAtSrc, itrDoorRestPoseSrc, interiorBuildInteractableDoorMeshSrc,
     interiorBuildInteractablesSrc,
     "this.itrDoorShape=itrDoorShape; this.itrDoorIsArched=itrDoorIsArched;",
+    "this.itrDoorHingeSign=itrDoorHingeSign; this.itrDoorBrokenTipRad=itrDoorBrokenTipRad;",
+    "this.ITR_DOOR_SWING_AJAR_DEG=ITR_DOOR_SWING_AJAR_DEG; this.ITR_DOOR_SWING_OPEN_DEG=ITR_DOOR_SWING_OPEN_DEG;",
+    "this.ITR_DOOR_WIDTH=ITR_DOOR_WIDTH; this.ITR_DOOR_HEIGHT=ITR_DOOR_HEIGHT;",
+    "this.ITR_DOOR_BROKEN_GROUND_CLEARANCE=ITR_DOOR_BROKEN_GROUND_CLEARANCE;",
     "this.interiorBuildInteractableDoorMesh=interiorBuildInteractableDoorMesh;",
     "this.interiorBuildInteractables=interiorBuildInteractables;",
   ].join("\n\n");
@@ -439,12 +491,20 @@ group("8 — PART B: a state_transition between two builds fires exactly one twe
   ok(tw.isDoorStateTween === true && tw.doorSourceRef === "d1", "the tween is tagged isDoorStateTween for sourceRef d1");
   const doorHinge2 = g2.children[0];
   ok(doorHinge2.userData.leaf.rotation.y === 0, "the tween starts the leaf AT the previous (shut) pose — never a teleport to the new pose");
+  // D4b ruling 3: the tween must rotate about the SAME hinge axis throughout — never a teleport,
+  // never a re-parent. leaf.position (the hinge-edge anchor, set once at mesh-build time) must stay
+  // IDENTICAL before/mid/after the tween; only rotation.y may move.
+  const posBefore = { x: doorHinge2.userData.leaf.position.x, z: doorHinge2.userData.leaf.position.z };
   tw.update(0.5);
   const midSwing = doorHinge2.userData.leaf.rotation.y;
-  ok(midSwing > 0 && midSwing < (85 * Math.PI / 180), `mid-tween (t=0.5, fake clock) sits strictly between shut and open (got ${midSwing.toFixed(3)} rad)`);
+  ok(midSwing > 0 && midSwing < (sandbox.ITR_DOOR_SWING_OPEN_DEG * Math.PI / 180), `mid-tween (t=0.5, fake clock) sits strictly between shut and open (got ${midSwing.toFixed(3)} rad)`);
+  ok(doorHinge2.userData.leaf.position.x === posBefore.x && doorHinge2.userData.leaf.position.z === posBefore.z,
+    "mid-tween: the leaf's hinge-anchor position is UNCHANGED (same axis throughout — only rotation moves, never a teleport/re-anchor)");
   tw.update(1);
   tw.onDone();
-  ok(Math.abs(doorHinge2.userData.leaf.rotation.y - (85 * Math.PI / 180)) < 1e-9, "onDone snaps exactly to the open rest pose");
+  ok(Math.abs(doorHinge2.userData.leaf.rotation.y - (sandbox.ITR_DOOR_SWING_OPEN_DEG * Math.PI / 180)) < 1e-9, "onDone snaps exactly to the open rest pose");
+  ok(doorHinge2.userData.leaf.position.x === posBefore.x && doorHinge2.userData.leaf.position.z === posBefore.z,
+    "post-tween: the leaf's hinge-anchor position is STILL unchanged");
 
   // an UNCHANGED state across two builds of the same sourceRef fires no new tween.
   sandbox.S.tweens = [];
@@ -472,7 +532,152 @@ group("8b — E0-1 fade compliance: the door leaf joins its owning wall segment'
   ok(/transparent: true/.test(interiorBuildInteractableDoorMeshSrc), "the door leaf material is transparent:true from construction (fade-capable the instant a tween starts — C4.1b's own law)");
 }
 
-console.log("\n=== 9. check-manifest.py ===");
+// ============================================================================
+// D4b — docs/STAGE-D-WAVE-SPECS.md D4b (door presentation fix, Adam's 3 taste-gate rulings).
+// shapeXExtent(pts) reads a stub Shape's own recorded points (moveTo/lineTo/absarc) to find its
+// x-extent BEFORE any geo.translate — the same technique this file already uses to inspect shapes
+// (check 6, `pts.some(...)`), extended to find min/max rather than just arc-presence.
+// ============================================================================
+function shapeXExtent(pts) {
+  let minX = Infinity, maxX = -Infinity;
+  (pts || []).forEach((p) => {
+    if (p.op === "arc") { minX = Math.min(minX, p.cx - p.r); maxX = Math.max(maxX, p.cx + p.r); }
+    else { minX = Math.min(minX, p.x); maxX = Math.max(maxX, p.x); }
+  });
+  return { minX, maxX };
+}
+// the HINGE-EDGE INVARIANT itself (D4b ruling 3): after interiorBuildInteractableDoorMesh's own
+// geo.translate(-edgeX, ...), the shape's local origin (0) must land EXACTLY on one of its own x
+// extents (min or max) — i.e. the translate amount recorded on the stub geometry (`_translated.x`)
+// must equal -minX or -maxX. When that holds, the leaf's local origin (which `leaf.rotation.y`
+// always rotates about, by definition — an object's own origin is invariant under its own rotation)
+// IS a real physical edge of the door, not empty space at its centerline: rotating the leaf then
+// genuinely swings the FAR edge while the hinge edge never moves, in WORLD space, because
+// `leaf.position` (the world anchor of that local origin) is never touched by `leaf.rotation`.
+function hingeIsAtARealEdge(hinge) {
+  const leaf = hinge.userData.leaf;
+  const { minX, maxX } = shapeXExtent(leaf.geometry.shape.pts);
+  const tx = (leaf.geometry._translated && leaf.geometry._translated.x) || 0;
+  const atMin = Math.abs(tx - -minX) < 1e-9;
+  const atMax = Math.abs(tx - -maxX) < 1e-9;
+  return { atRealEdge: atMin || atMax, minX, maxX, tx };
+}
+
+group("9 — D4b RED-FIRST: the pre-fix (master tip fe9da32d) centerline pivot fails the hinge-edge invariant");
+{
+  const D4B_BASE_COMMIT = "fe9da32d"; // master tip this branch forked from — D4 landed, D4b NOT yet
+  const oldBootSrc = execSync(`git show ${D4B_BASE_COMMIT}:src/ui/theater-boot.js`, { cwd: ROOT }).toString();
+  ok(!/function itrDoorHingeSign\(/.test(oldBootSrc), `0d. ${D4B_BASE_COMMIT}'s theater-boot.js has no itrDoorHingeSign at all (the retired centerline pivot has no hinge-side concept)`);
+
+  const oldFns = {
+    itrDoorIsArched: extractFn(oldBootSrc, "itrDoorIsArched"),
+    itrDoorShape: extractFn(oldBootSrc, "itrDoorShape"),
+    itrDoorStateColor: extractFn(oldBootSrc, "itrDoorStateColor"),
+    kilterFor: extractFn(oldBootSrc, "kilterFor"),
+    interiorFloorTopAt: extractFn(oldBootSrc, "interiorFloorTopAt"),
+    interiorBuildInteractableDoorMesh: extractFn(oldBootSrc, "interiorBuildInteractableDoorMesh"),
+  };
+  const oldConsts = {
+    archKeywords: extractFrozenArrLine(oldBootSrc, "ITR_DOOR_ARCH_KEYWORDS"),
+    swingDeg: extractFrozenObjLine(oldBootSrc, "ITR_DOOR_SWING_DEG"),
+    width: extractConstLine(oldBootSrc, "ITR_DOOR_WIDTH"),
+    height: extractConstLine(oldBootSrc, "ITR_DOOR_HEIGHT"),
+    fallbackDepth: extractConstLine(oldBootSrc, "ITR_DOOR_FALLBACK_DEPTH"),
+    kilterYaw: extractConstLine(oldBootSrc, "KILTER_YAW_DEG"),
+    kilterPos: extractConstLine(oldBootSrc, "KILTER_POS_FRAC"),
+    floorBaseY: extractConstLine(oldBootSrc, "ITR_FLOOR_BASE_Y"),
+    floorHeightFallback: extractConstLine(oldBootSrc, "ITR_FLOOR_HEIGHT_FALLBACK"),
+  };
+  Object.entries(oldFns).concat(Object.entries(oldConsts)).forEach(([name, src]) =>
+    ok(!!src, `extracted pre-fix ${name} from ${D4B_BASE_COMMIT}`));
+
+  const THREE = makeStubTHREE();
+  const oldSandbox = { THREE, console };
+  vm.createContext(oldSandbox);
+  vm.runInContext([
+    oldConsts.archKeywords, oldConsts.width, oldConsts.height, oldConsts.fallbackDepth, oldConsts.swingDeg,
+    oldConsts.kilterYaw, oldConsts.kilterPos, oldConsts.floorBaseY, oldConsts.floorHeightFallback,
+    oldFns.itrDoorIsArched, oldFns.itrDoorShape, oldFns.itrDoorStateColor, oldFns.kilterFor,
+    oldFns.interiorFloorTopAt, oldFns.interiorBuildInteractableDoorMesh,
+    "this.interiorBuildInteractableDoorMesh=interiorBuildInteractableDoorMesh;",
+  ].join("\n\n"), oldSandbox, { filename: "d4b-red-first-old-boot.js" });
+
+  const floorTopMap = new Map([["0,0", -0.3]]);
+  const oldShut = oldSandbox.interiorBuildInteractableDoorMesh({ archetype: "door", x: 0, y: 0, state: "shut", sourceRef: "red1", extrudeDepth: 0.32 }, 0, 0, floorTopMap);
+  const oldOpen = oldSandbox.interiorBuildInteractableDoorMesh({ archetype: "door", x: 0, y: 0, state: "open", sourceRef: "red1", extrudeDepth: 0.32 }, 0, 0, floorTopMap);
+  const oldEdge = hingeIsAtARealEdge(oldShut);
+  ok(!oldEdge.atRealEdge, `RED: pre-fix geometry's local origin sits at the shape's CENTERLINE (x=0), strictly inside its own extent [${oldEdge.minX}, ${oldEdge.maxX}] — never a real edge (this IS the retired centerline-pivot bug)`, oldEdge);
+  ok(oldShut.userData.leaf.position.x === 0 && oldOpen.userData.leaf.position.x === 0,
+    "RED: pre-fix leaf.position.x is 0 regardless of state — no hinge-edge anchor exists at all, confirming the centerline-spin diagnosis");
+}
+
+group("10 — D4b GREEN: the fixed code's leaf origin sits at a real jamb edge, invariant across states");
+{
+  const sandbox = buildSandbox();
+  const floorTopMap = new Map([["0,0", -0.3]]);
+  const mk = (state) => sandbox.interiorBuildInteractableDoorMesh({ archetype: "door", x: 0, y: 0, state, sourceRef: "hinge1", extrudeDepth: 0.32 }, 0, 0, floorTopMap);
+  const shut = mk("shut"), ajar = mk("ajar"), open = mk("open");
+  [["shut", shut], ["ajar", ajar], ["open", open]].forEach(([label, hinge]) => {
+    const edge = hingeIsAtARealEdge(hinge);
+    ok(edge.atRealEdge, `${label}: the leaf geometry's local origin sits at a REAL shape edge (${JSON.stringify(edge)}), not the centerline`);
+  });
+  // the WORLD-relative hinge anchor (leaf.position, in the hinge group's own frame) is IDENTICAL
+  // across shut/ajar/open for the SAME sourceRef — the far edge sweeps (rotation.y differs) but the
+  // hinge-edge vertex column (this anchor) never moves, satisfying the RED-FIRST check's converse.
+  ok(shut.userData.leaf.position.x === ajar.userData.leaf.position.x && ajar.userData.leaf.position.x === open.userData.leaf.position.x,
+    `the hinge anchor x is INVARIANT across shut/ajar/open (${shut.userData.leaf.position.x}) while rotation.y sweeps (${shut.userData.leaf.rotation.y}, ${ajar.userData.leaf.rotation.y}, ${open.userData.leaf.rotation.y})`);
+  ok(ajar.userData.leaf.rotation.y !== shut.userData.leaf.rotation.y && open.userData.leaf.rotation.y !== ajar.userData.leaf.rotation.y,
+    "the far edge genuinely sweeps — rotation.y strictly differs state to state (never a static pose masquerading as a hinge)");
+}
+
+group("11 — D4b hinge side: deterministic per sourceRef, may differ across sourceRefs");
+{
+  const sandbox = buildSandbox();
+  const a1 = sandbox.itrDoorHingeSign("S1.door");
+  const a2 = sandbox.itrDoorHingeSign("S1.door");
+  ok(a1 === a2, `the SAME sourceRef resolves the SAME hinge side twice (${a1} === ${a2})`);
+  ok(a1 === 1 || a1 === -1, "itrDoorHingeSign resolves to exactly +1 or -1, never anything else");
+  const samples = ["S1.door", "S2.door", "S3.door", "S4.door", "S5.door", "S6.door", "S7.door", "S8.door", "d1", "d2", "d3", "d4", "d5", "d6"]
+    .map((ref) => sandbox.itrDoorHingeSign(ref));
+  ok(samples.some((v) => v === 1) && samples.some((v) => v === -1),
+    `across ${samples.length} different sourceRefs, BOTH hinge sides appear at least once (a hash-pick, never a constant) — got ${JSON.stringify(samples)}`);
+
+  // the hinge side actually reaches the built mesh's own edge choice (edgeX sign matches hingeSign).
+  const floorTopMap = new Map([["0,0", -0.3]]);
+  const left = sandbox.interiorBuildInteractableDoorMesh({ archetype: "door", x: 0, y: 0, state: "shut", sourceRef: "S1.door", extrudeDepth: 0.32 }, 0, 0, floorTopMap);
+  ok(left.userData.hingeSign === a1, "the mounted hinge's own userData.hingeSign matches itrDoorHingeSign's own resolution for the same sourceRef");
+}
+
+group("12 — D4b ruling 2: broken leaf is DETACHED+GROUNDED — near-flat tip, min-Y at true floor contact");
+{
+  const sandbox = buildSandbox();
+  const floorTopMap = new Map([["0,0", -0.3]]);
+  const extrudeDepth = 0.32;
+  const broken = sandbox.interiorBuildInteractableDoorMesh({ archetype: "door", x: 0, y: 0, state: "broken", sourceRef: "brk1", extrudeDepth }, 0, 0, floorTopMap);
+  const leaf = broken.userData.leaf;
+  const tipRad = leaf.rotation.x;
+  const tipDeg = tipRad * 180 / Math.PI;
+  ok(tipDeg >= 77 && tipDeg <= 91, `broken tip is near-flat (78-90deg documented range, got ${tipDeg.toFixed(1)}deg) — never the retired ~48-62deg mid-air diagonal`);
+  // the leaf's own TOP (far) edge height above the base, post-tip — this is the metric that reads as
+  // "still standing at an angle" (Adam's "diagonal frame" complaint) when large, vs "collapsed flat"
+  // when small. H = the shape's own max-Y extent (ITR_DOOR_HEIGHT for a plain door).
+  const topEdgeHeight = sandbox.ITR_DOOR_HEIGHT * Math.cos(tipRad);
+  ok(topEdgeHeight < 0.5, `the leaf's far edge sits within 0.5u of the floor once fully tipped (got ${topEdgeHeight.toFixed(3)}u) — reads as FALLEN, not a diagonal slab still standing`);
+  // min-Y in true floor contact: the computed grounding-lift (leaf.position.y) must exactly cancel the
+  // rotation-induced dip (extrudeDepth/2 * sin(tip)), leaving only the documented ground-clearance hair.
+  const dip = (extrudeDepth / 2) * Math.sin(tipRad);
+  const minY = -dip + leaf.position.y;
+  ok(Math.abs(minY - sandbox.ITR_DOOR_BROKEN_GROUND_CLEARANCE) < 1e-9,
+    `min-Y sits exactly at the documented ground-clearance hair above the floor (got ${minY.toFixed(4)}, expected ${sandbox.ITR_DOOR_BROKEN_GROUND_CLEARANCE}) — GROUNDED, never floating`);
+
+  // determinism + sourceRef spread (unchanged contract, re-proved against the new formula).
+  const b1 = sandbox.interiorBuildInteractableDoorMesh({ archetype: "door", x: 0, y: 0, state: "broken", sourceRef: "brk1", extrudeDepth }, 0, 0, floorTopMap);
+  const b2 = sandbox.interiorBuildInteractableDoorMesh({ archetype: "door", x: 0, y: 0, state: "broken", sourceRef: "brkOTHER", extrudeDepth }, 0, 0, floorTopMap);
+  ok(b1.userData.leaf.rotation.x === broken.userData.leaf.rotation.x, "broken tilt is still deterministic per sourceRef (re-derived identically)");
+  ok(b2.userData.leaf.rotation.x !== broken.userData.leaf.rotation.x, "a different sourceRef still gets a different (seeded, not constant) broken tilt");
+}
+
+console.log("\n=== 13. check-manifest.py ===");
 {
   let out = "", code = 0;
   try { out = execSync("python3 build/check-manifest.py", { cwd: ROOT }).toString(); }

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-14T22:23:22.678Z",
+  "generatedAt": "2026-07-14T23:07:16.390Z",
   "shots": [
     "door-shut.png",
     "door-ajar.png",
@@ -15,8 +15,8 @@
     "notes": [
       "startSession() called"
     ],
-    "worldId": "mrl7ws6f82wpp",
-    "worldName": "The Shimmering Maw"
+    "worldId": "mrl9h6twll0td",
+    "worldName": "The Bog-Iron Camp"
   },
   "theaterState": {
     "hasBattleStage": true,

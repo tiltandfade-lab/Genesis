@@ -1,0 +1,30 @@
+{
+  "runtimeAdmitted": false,
+  "lane": "M",
+  "outputs": [
+    {"file":"raw-effects/fx-impact-slash-arc-candidate-001.png","callId":"exec-2a3a0fab-e9bb-463b-a096-351287c7f9cd","cells":["fx-impact-slash-arc"]},
+    {"file":"raw-effects/fx-impact-slash-heavy-candidate-001.png","callId":"exec-4d0d1aa1-aad0-4709-b224-b4feabc4ee6d","cells":["fx-impact-slash-heavy"]},
+    {"file":"raw-effects/fx-impact-pierce-glint-candidate-001.png","callId":"exec-53029062-f200-4efd-9182-aae2c88fc556","cells":["fx-impact-pierce-glint"]},
+    {"file":"raw-effects/fx-impact-blunt-star-candidate-001.png","callId":"exec-747e5f90-5c8a-492b-a489-e12b58b6f9fc","cells":["fx-impact-blunt-star"]},
+    {"file":"raw-effects/fx-impact-crush-shatter-candidate-001.png","callId":"exec-74eeddcf-9981-47e0-97a5-df3784c48a85","cells":["fx-impact-crush-shatter"]},
+    {"file":"raw-effects/fx-magic-castcircle-candidate-001.png","callId":"exec-78518249-4668-4164-b7ba-b5767efdf4ea","cells":["fx-magic-castcircle"]},
+    {"file":"raw-effects/fx-magic-sigilflash-candidate-001.png","callId":"exec-7e00a366-21f2-4423-9c4d-c70d4b0ddef7","cells":["fx-magic-sigilflash"]},
+    {"file":"raw-effects/fx-magic-orbcharge-candidate-001.png","callId":"exec-87bae71f-7170-4bc7-9585-135c8ad3382a","cells":["fx-magic-orbcharge"]},
+    {"file":"raw-effects/fx-magic-bolthead-candidate-001.png","callId":"exec-87d4e575-4e27-49c8-be93-f67efbe6b11e","cells":["fx-magic-bolthead"]},
+    {"file":"raw-effects/fx-magic-burstring-candidate-001.png","callId":"exec-896665eb-f7be-4e9b-971a-6062366d3d84","cells":["fx-magic-burstring"]},
+    {"file":"raw-effects/fx-status-bloodspatter-candidate-001.png","callId":"exec-9c8e2496-dfc6-4d4b-9e35-48da7bdbd6d9","cells":["fx-status-bloodspatter"]},
+    {"file":"raw-effects/fx-status-healmotes-candidate-001.png","callId":"exec-a4a2c830-2e98-46af-aff2-dfa4102d3f48","cells":["fx-status-healmotes"]},
+    {"file":"raw-effects/fx-status-poisonbubble-candidate-001.png","callId":"exec-a725f4b4-441c-4510-9ea3-79c548ce5017","cells":["fx-status-poisonbubble"]},
+    {"file":"raw-effects/fx-status-shieldshimmer-candidate-001.png","callId":"exec-ade9b3a2-0e62-4663-ae4f-05f413b96fa0","cells":["fx-status-shieldshimmer"]},
+    {"file":"raw-effects/fx-status-smokepuff-candidate-001.png","callId":"exec-b41908fd-a3c3-420a-8e57-fa9ad372116c","cells":["fx-status-smokepuff"]},
+    {"file":"raw-effects/fx-status-sparkburst-candidate-001.png","callId":"exec-b474e43f-22c6-4656-8d61-a7b43cfc0308","cells":["fx-status-sparkburst"]},
+    {"file":"raw-effects/fx-status-stunstars-candidate-001.png","callId":"exec-c3a557bc-fe0e-4c2e-a25b-1c4335d837aa","cells":["fx-status-stunstars"]},
+    {"file":"raw-effects/fx-env-splash-candidate-001.png","callId":"exec-c600dc21-f1b2-49c7-96de-afb4d85a80c0","cells":["fx-env-splash"]},
+    {"file":"raw-effects/fx-env-dustkick-candidate-001.png","callId":"exec-d377e5d5-17d1-469f-b5b0-f8bb3ee02eae","cells":["fx-env-dustkick"]},
+    {"file":"raw-effects/fx-env-frostburst-candidate-001.png","callId":"exec-d95b5d5a-6529-4736-bb86-6ec776d73deb","cells":["fx-env-frostburst"]},
+    {"file":"raw-effects/fx-env-emberdrift-candidate-001.png","callId":"exec-e9a57358-75cf-47cb-9d3a-6ac7dd0c1abb","cells":["fx-env-emberdrift"]},
+    {"file":"raw-effects/fx-env-debriscloud-candidate-001.png","callId":"exec-3edd92c0-6772-49b0-bcf6-390624c0843a","cells":["fx-env-debriscloud"]},
+    {"file":"raw-effects/fx-env-rippleflash-candidate-001.png","callId":"exec-44ae3737-b533-4511-967d-980e589d3b2d","cells":["fx-env-rippleflash"]},
+    {"file":"raw-effects/fx-env-shadowpool-candidate-001.png","callId":"exec-72395760-e742-42a4-bac7-93a024bcf9fb","cells":["fx-env-shadowpool"]}
+  ]
+}

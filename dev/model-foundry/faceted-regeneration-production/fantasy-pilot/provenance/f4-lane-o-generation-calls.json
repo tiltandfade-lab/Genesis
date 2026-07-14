@@ -1,0 +1,15 @@
+{
+  "runtimeAdmitted": false,
+  "lane": "O",
+  "outputs": [
+    {"file":"raw-decals/shared-blood-decal-candidate-001.png","callId":"exec-12125f5f-38e5-4cb6-adba-9a925013555c","cells":["shared-blood-decal"]},
+    {"file":"raw-decals/shared-water-decal-candidate-001.png","callId":"exec-1782449d-0ba6-48c0-a020-a983f36f98b4","cells":["shared-water-decal"]},
+    {"file":"raw-decals/shared-grime-decal-candidate-001.png","callId":"exec-1e0410b1-2466-481e-a263-36488f301d4a","cells":["shared-grime-decal"]},
+    {"file":"raw-decals/shared-wear-decal-candidate-001.png","callId":"exec-1feb09bb-de22-4ff3-9fcd-444f3497e83d","cells":["shared-wear-decal"]},
+    {"file":"raw-decals/shared-scorch-decal-candidate-001.png","callId":"exec-253aed8a-03d5-4173-9024-9671de6a7756","cells":["shared-scorch-decal"]},
+    {"file":"raw-decals/shared-crack-decal-candidate-001.png","callId":"exec-2b6834d8-3a77-4336-984f-7b672c3797a1","cells":["shared-crack-decal"]},
+    {"file":"raw-decals/shared-rust-decal-candidate-001.png","callId":"exec-46159384-5792-4ca2-ae38-9b64977e5851","cells":["shared-rust-decal"]},
+    {"file":"raw-decals/shared-moss-decal-candidate-001.png","callId":"exec-52037673-ceb9-4a3c-93ef-087d0ab8da80","cells":["shared-moss-decal"]},
+    {"file":"raw-decals/shared-cobweb-decal-candidate-001.png","callId":"exec-57d75c03-d847-409a-8282-e2311182d4ca","cells":["shared-cobweb-decal"]}
+  ]
+}

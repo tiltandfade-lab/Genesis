@@ -196,6 +196,50 @@ Other archetypes' render (D5, after the taste gate + kit/Kenney red-pens); full 
 archway glimpse; vertical slots.
 
 ## Adam's ledger
-1. **D4 taste gate** — the door study card + walk-through captures when D4 lands.
+1. **D4 taste gate — FAILED 2026-07-14 (three rulings, now D4b's law).** The machinery (wiring/
+   persistence/events/crossfade) is landed and sound; the door PRESENTATION failed.
 2. **Kenney red-pen** (149 candidates) upgrades archetypes in place afterward — never blocks.
 3. BW5's SEAM 3 (materials/conditions) rides Stage E, unchanged.
+
+---
+
+## D4b — Door presentation fix (Adam's taste-gate rulings)  ·  branch `fix/d4b-door-presentation`
+
+### Adam's rulings (2026-07-14 — these ARE the decisions; do not re-litigate)
+1. **"There's a big ass column right in front of the door, so I can't really even see it."** The
+   study card must show the door with an UNOBSTRUCTED sightline: no pillar mass, no dressing piece
+   (the vine arch sat in the door approach), nothing between camera and leaf. Also diagnose WHY the
+   sightline was blocked: (a) is the chunky masonry mass around the door the doorframe/wall geometry
+   itself rendering too massive? (b) can production dressing legally sit in a door's approach/apron
+   (if dressPlan/scene pieces don't respect door aprons, file it as a finding — fix here only if it's
+   a one-line apron check; else report for its own unit)?
+2. **"There's a frame where the door is diagonal."** No state may read as a floating/diagonal slab.
+   Ajar must read as a door CRACKED OPEN; broken must read as a door FALLEN OFF ITS HINGES (leaning
+   against the jamb or flat on the floor at the threshold — grounded, in contact with named geometry,
+   never floating mid-wall).
+3. **"A door opens on hinges — a fixed point of rotation on a single axis, and that axis usually
+   isn't the center of the door."** Retire the centerline pivot. The leaf rotates about a FIXED
+   VERTICAL AXIS AT ONE JAMB EDGE. Hinge side: deterministic per sourceRef (hash-pick a jamb) until
+   a rolled hinge fact exists — document the seam. All states derive from that axis: shut=0°,
+   ajar≈20-25°, open≈100-110° (swung toward the wall, leaf face visible edge-on to the aperture),
+   broken=detached from the axis, grounded per ruling 2. The BW4 tween animates rotation about the
+   SAME hinge axis (never a teleport, never a centerline spin).
+
+### Files
+`src/ui/theater-boot.js` (the D4 door build + tween path — do NOT touch makeGradePass);
+`dev/battle-gate/capture-d4-doors.mjs` (stage a clean-sightline scene: door on a fully visible wall,
+apron clear, camera yaw chosen so the leaf and swing read); `dev/verify-d4-doors.mjs` (extend:
+hinge-axis checks red-first).
+
+### Verification
+⊗ RED FIRST: leaf vertices at ajar/open rotate about the jamb edge (the hinge-edge vertex column is
+INVARIANT under the state change; the far edge sweeps) — fails on the landed centerline pivot.
+Broken leaf is grounded (min-Y at floor / leaning contact), never mid-wall. Tween rotates about the
+same axis (fake-clock mid-pose check). Hinge side deterministic per sourceRef. Re-run the D4 suite
+(verify-d4-doors extended, room-grammar 38, dungeon-interior 287, theater-shot 107, e0-1 32,
+dm-events 70, manifest OK). RE-SHOOT the full study card + walk-through with the clean staging —
+every state legible at a glance; this goes back to Adam's taste gate.
+
+### Out of scope
+Door art/texture (kit/Kenney lane); other archetypes (D5, still gated on the re-shot card); the
+persisted-state/wiring machinery (landed, untouched).

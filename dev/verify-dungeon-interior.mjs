@@ -242,17 +242,36 @@ group("4 — scaleDomain 4.0 room walls render 4x the height of a scaleDomain 1.
 
 group("5 — a transition/squeeze door instance is narrower+lower than a plain door");
 {
+  // D4d (docs/STAGE-D-WAVE-SPECS.md): the doorframe used to be ONE solid wFrac x wFrac box per door,
+  // so squeeze[0].sx/.sy directly WAS the door's own width/height. D4d splits every door into 2 slim
+  // jamb posts (tagged `jamb: true`, sy===h, width fixed at ITR_JAMB_WIDTH_FRAC regardless of
+  // squeeze/plain — a jamb's OWN cross-section no longer discriminates width) + 1 header (tagged
+  // `header: true`, whose wFrac-bearing dimension — the larger of sx/sz, since frame depth is always
+  // the slimmer axis — DOES still carry the full aperture width). RED-FIRST proof (pre-fix, run
+  // against this same fixture): the naive squeeze[0]/plainDoors[0] pick grabbed a squeeze JAMB
+  // (sx=0.25) vs a plain HEADER (sx=0.15) — 0.25 < 0.15 is false, a false-negative comparing two
+  // different prism roles, not a real width regression. Height still compares cleanly off `jamb`
+  // entries (sy===h directly, unaffected by the width split); width now compares off `header`
+  // entries' own wFrac-bearing dimension. Never weakened: still asserts the SAME real property
+  // (squeeze reads narrower AND lower than plain) via the entry that actually carries it.
   const fixture = buildChainFixture(6);
   const plan = M.spatializePlan(fixture, "The Spine", { walkId: "u3-squeeze-door" });
   const semPlan = M.semanticizePlan(plan, fixture, [{ segNum: 1, scaleVsHuman: 3.0, apex: false }]);
   const board = M.interiorBuildBoard(semPlan, { realmId: "chrome" });
-  const squeeze = board.instances.doorframe.filter((d) => d.squeeze);
-  const plainDoors = board.instances.doorframe.filter((d) => !d.squeeze);
-  ok(squeeze.length > 0, "at least one squeeze doorframe instance exists (mixed-domain fixture)");
-  if (squeeze.length && plainDoors.length) {
-    ok(squeeze[0].sy < plainDoors[0].sy, `squeeze door sy (${squeeze[0].sy}) < plain door sy (${plainDoors[0].sy})`);
-    ok(squeeze[0].sx < plainDoors[0].sx, `squeeze door sx (${squeeze[0].sx}) < plain door sx (${plainDoors[0].sx})`);
-  } else {
+  const squeezeJambs = board.instances.doorframe.filter((d) => d.squeeze && d.jamb);
+  const plainJambs = board.instances.doorframe.filter((d) => !d.squeeze && d.jamb);
+  const squeezeHeaders = board.instances.doorframe.filter((d) => d.squeeze && d.header);
+  const plainHeaders = board.instances.doorframe.filter((d) => !d.squeeze && d.header);
+  ok(squeezeJambs.length > 0, "at least one squeeze doorframe jamb instance exists (mixed-domain fixture)");
+  if (squeezeJambs.length && plainJambs.length) {
+    ok(squeezeJambs[0].sy < plainJambs[0].sy, `squeeze door jamb sy (${squeezeJambs[0].sy}) < plain door jamb sy (${plainJambs[0].sy})`);
+  }
+  if (squeezeHeaders.length && plainHeaders.length) {
+    const squeezeWidth = Math.max(squeezeHeaders[0].sx, squeezeHeaders[0].sz);
+    const plainWidth = Math.max(plainHeaders[0].sx, plainHeaders[0].sz);
+    ok(squeezeWidth < plainWidth, `squeeze door header width (${squeezeWidth}) < plain door header width (${plainWidth})`);
+  }
+  if (!(squeezeJambs.length && plainJambs.length)) {
     console.log("  (no plain door in this fixture to compare against — squeeze-vs-squeeze check skipped, not a failure)");
   }
 }

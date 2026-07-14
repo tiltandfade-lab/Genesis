@@ -77,8 +77,42 @@
    dev/verify-dungeon-dressing.mjs / dev/verify-place-dressing.mjs suites (both re-run green,
    unchanged pass counts) rather than duplicated here; this file stays scoped to the door RENDER.
 
+   ─── D4c (docs/STAGE-D-WAVE-SPECS.md D4c, Adam's design ruling 2026-07-14 — "a broken door would
+   have a few states: flopped onto the ground; broken into bits; broken partially on the hinge") ──
+   LOCKED ARCHITECTURE: three visual VARIANTS ("flopped"|"hanging"|"shattered") within the single
+   `broken` CONTRACT state — D0's event contract / D1's registry state lists / dm-contract stay
+   byte-untouched. The variant is picked once per sourceRef via a deterministic FNV-1a hash
+   (itrDoorBrokenVariantFor, the SAME convention itrDoorHingeSign already established).
+     14. RED-FIRST: master tip 62cf1c77 (this branch's fork point — D4b landed, D4c not yet) has no
+         itrDoorBrokenVariantFor/ITR_DOOR_BROKEN_VARIANTS at all — every broken door was the single
+         flopped tip-forward pose regardless of sourceRef (re-checked live, not just asserted).
+         GREEN: three fixture doors with hash-DISTINCT sourceRefs (found by direct search against
+         the real hash, no test-seam override) resolve three DIFFERENT variants; a sample of many
+         sourceRefs spreads roughly evenly across all three (uniform thirds, never a constant).
+     15. flopped: byte-identical to D4b's landed pose for a fixed sourceRef (pinned via the
+         _setBrokenDoorVariantForTest-equivalent internal force seam, since D4c's 3-way hash may no
+         longer naturally pick "flopped" for every sourceRef the D4b-era tests used).
+     16. hanging: hinge-edge invariant still holds (D4b's own hingeIsAtARealEdge helper, reused
+         unchanged) — jamb contact proven, never flat (rotation.x stays 0; rotation.y/z both
+         non-zero and within their documented 15-30deg / 18-28deg bands).
+     17. shattered: the leaf is hidden (never removed — fade/tween code still finds userData.leaf)
+         and 3-5 seeded shards mount instead — all grounded (exact ground-clearance height), all
+         within the door cell union its 1-cell apron, none inside the aperture's clear lane, count
+         in band, and the WHOLE scatter deterministic across two independent builds of the same
+         sourceRef (and different for a different sourceRef).
+     18. tween: a live state_transition into "broken" tweens the SAME variant itrDoorRestPose's
+         hash resolves for that sourceRef (rest pose and tween share the one function) — hanging's
+         two simultaneous rotation components interpolate correctly mid-tween; a transition landing
+         on "shattered" un-does the fresh-build's terminal shard mount, animates the fall, then
+         re-mounts the IDENTICAL final shard scatter onDone (a live break reads the same as a
+         freshly-rendered one).
+     19. Contract untouched: INTERACTABLE_ARCHETYPE_STATES.door is unchanged (still
+         shut/ajar/open/broken, no new entries) and `python3 build/gen-dm-contract.py` is a no-op
+         (dm-contract.json byte-identical) — D4c never touched D1's registry or D0's contract.
+     20. check-manifest.py OK, re-checked after the D4c edit (superset of section 13 above).
+
    Run: node dev/verify-d4-doors.mjs */
-import { readFileSync } from "node:fs";
+import { readFileSync, existsSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { execSync } from "node:child_process";
@@ -312,6 +346,13 @@ function extractConstLine(src, name) {
   const m = src.match(re);
   return m ? m[0] : null;
 }
+// D4c: ITR_DOOR_BROKEN_VARIANT_FORCE_FOR_TEST is a `let` (mutable test-seam override), not a
+// `const` — extractConstLine's regex never matches it.
+function extractLetLine(src, name) {
+  const re = new RegExp("let " + name + "\\s*=\\s*[^;]+;");
+  const m = src.match(re);
+  return m ? m[0] : null;
+}
 function extractFrozenObjLine(src, name) {
   const re = new RegExp("const " + name + " = Object\\.freeze\\(\\{[\\s\\S]*?\\}\\);");
   const m = src.match(re);
@@ -334,7 +375,13 @@ function makeStubTHREE() {
     return { geometry: geo, material: mat, userData: {}, position: makeVec3(0, 0, 0), rotation: { x: 0, y: 0, z: 0 }, castShadow: false, receiveShadow: false };
   }
   function Group() {
-    const g = { children: [], userData: {}, position: makeVec3(0, 0, 0), rotation: { x: 0, y: 0, z: 0 }, add(o) { o.parent = g; this.children.push(o); return this; } };
+    const g = {
+      children: [], userData: {}, position: makeVec3(0, 0, 0), rotation: { x: 0, y: 0, z: 0 },
+      add(o) { o.parent = g; this.children.push(o); return this; },
+      // D4c: real THREE.Object3D.remove() — needed by interiorBuildInteractables' shattered-variant
+      // tween path (undo the fresh-build's terminal shard mount before animating the fall).
+      remove(o) { const idx = this.children.indexOf(o); if (idx !== -1) { this.children.splice(idx, 1); o.parent = null; } return this; },
+    };
     return g;
   }
   function Shape() {
@@ -392,6 +439,31 @@ const kilterPosLine = extractConstLine(bootSrc, "KILTER_POS_FRAC");
 const floorBaseYLine = extractConstLine(bootSrc, "ITR_FLOOR_BASE_Y");
 const floorHeightFallbackLine = extractConstLine(bootSrc, "ITR_FLOOR_HEIGHT_FALLBACK");
 
+// D4c symbols
+const itrDoorSeedUnitSrc = extractFn(bootSrc, "itrDoorSeedUnit");
+const brokenVariantsLine = extractFrozenArrLine(bootSrc, "ITR_DOOR_BROKEN_VARIANTS");
+const brokenVariantForceLine = extractLetLine(bootSrc, "ITR_DOOR_BROKEN_VARIANT_FORCE_FOR_TEST");
+const itrDoorBrokenVariantForSrc = extractFn(bootSrc, "itrDoorBrokenVariantFor");
+const hangingSwingMinLine = extractConstLine(bootSrc, "ITR_DOOR_HANGING_SWING_MIN_DEG");
+const hangingSwingMaxLine = extractConstLine(bootSrc, "ITR_DOOR_HANGING_SWING_MAX_DEG");
+const hangingDroopMinLine = extractConstLine(bootSrc, "ITR_DOOR_HANGING_DROOP_MIN_DEG");
+const hangingDroopMaxLine = extractConstLine(bootSrc, "ITR_DOOR_HANGING_DROOP_MAX_DEG");
+const itrDoorHangingSwingRadSrc = extractFn(bootSrc, "itrDoorHangingSwingRad");
+const itrDoorHangingDroopRadSrc = extractFn(bootSrc, "itrDoorHangingDroopRad");
+const shatterMinCountLine = extractConstLine(bootSrc, "ITR_DOOR_SHATTER_MIN_COUNT");
+const shatterMaxCountLine = extractConstLine(bootSrc, "ITR_DOOR_SHATTER_MAX_COUNT");
+const shatterCellLine = extractConstLine(bootSrc, "ITR_DOOR_SHATTER_CELL");
+const shatterApronCellsLine = extractConstLine(bootSrc, "ITR_DOOR_SHATTER_APRON_CELLS");
+const shatterClearLaneLine = extractConstLine(bootSrc, "ITR_DOOR_SHATTER_CLEAR_LANE");
+const shatterSizeMinLine = extractConstLine(bootSrc, "ITR_DOOR_SHATTER_SIZE_MIN");
+const shatterSizeMaxLine = extractConstLine(bootSrc, "ITR_DOOR_SHATTER_SIZE_MAX");
+const shatterThicknessLine = extractConstLine(bootSrc, "ITR_DOOR_SHATTER_THICKNESS");
+const shatterJitterFracLine = extractConstLine(bootSrc, "ITR_DOOR_SHATTER_JITTER_FRAC");
+const itrDoorShatterCountSrc = extractFn(bootSrc, "itrDoorShatterCount");
+const itrDoorShatterShardsSrc = extractFn(bootSrc, "itrDoorShatterShards");
+const itrDoorShatterShapeForSrc = extractFn(bootSrc, "itrDoorShatterShapeFor");
+const itrDoorBuildShatterShardMeshSrc = extractFn(bootSrc, "itrDoorBuildShatterShardMesh");
+
 [["itrDoorIsArched", itrDoorIsArchedSrc], ["itrDoorShape", itrDoorShapeSrc], ["itrDoorStateColor", itrDoorStateColorSrc],
  ["itrDoorHingeSign", itrDoorHingeSignSrc], ["itrDoorBrokenTipRad", itrDoorBrokenTipRadSrc],
  ["interiorBuildInteractableDoorMesh", interiorBuildInteractableDoorMeshSrc], ["itrDoorRestPose", itrDoorRestPoseSrc],
@@ -399,7 +471,19 @@ const floorHeightFallbackLine = extractConstLine(bootSrc, "ITR_FLOOR_HEIGHT_FALL
  ["kilterFor", kilterForSrc], ["ITR_DOOR_ARCH_KEYWORDS", archKeywordsLine], ["ITR_DOOR_SWING_DEG", swingDegLine],
  ["ITR_DOOR_SWING_AJAR_DEG", swingAjarDegLine], ["ITR_DOOR_SWING_OPEN_DEG", swingOpenDegLine],
  ["ITR_DOOR_BROKEN_TIP_BASE_DEG", brokenTipBaseDegLine], ["ITR_DOOR_BROKEN_TIP_JITTER_MULT", brokenTipJitterMultLine],
- ["ITR_DOOR_BROKEN_GROUND_CLEARANCE", brokenGroundClearanceLine]]
+ ["ITR_DOOR_BROKEN_GROUND_CLEARANCE", brokenGroundClearanceLine],
+ ["itrDoorSeedUnit", itrDoorSeedUnitSrc], ["ITR_DOOR_BROKEN_VARIANTS", brokenVariantsLine],
+ ["ITR_DOOR_BROKEN_VARIANT_FORCE_FOR_TEST", brokenVariantForceLine], ["itrDoorBrokenVariantFor", itrDoorBrokenVariantForSrc],
+ ["ITR_DOOR_HANGING_SWING_MIN_DEG", hangingSwingMinLine], ["ITR_DOOR_HANGING_SWING_MAX_DEG", hangingSwingMaxLine],
+ ["ITR_DOOR_HANGING_DROOP_MIN_DEG", hangingDroopMinLine], ["ITR_DOOR_HANGING_DROOP_MAX_DEG", hangingDroopMaxLine],
+ ["itrDoorHangingSwingRad", itrDoorHangingSwingRadSrc], ["itrDoorHangingDroopRad", itrDoorHangingDroopRadSrc],
+ ["ITR_DOOR_SHATTER_MIN_COUNT", shatterMinCountLine], ["ITR_DOOR_SHATTER_MAX_COUNT", shatterMaxCountLine],
+ ["ITR_DOOR_SHATTER_CELL", shatterCellLine], ["ITR_DOOR_SHATTER_APRON_CELLS", shatterApronCellsLine],
+ ["ITR_DOOR_SHATTER_CLEAR_LANE", shatterClearLaneLine], ["ITR_DOOR_SHATTER_SIZE_MIN", shatterSizeMinLine],
+ ["ITR_DOOR_SHATTER_SIZE_MAX", shatterSizeMaxLine], ["ITR_DOOR_SHATTER_THICKNESS", shatterThicknessLine],
+ ["ITR_DOOR_SHATTER_JITTER_FRAC", shatterJitterFracLine], ["itrDoorShatterCount", itrDoorShatterCountSrc],
+ ["itrDoorShatterShards", itrDoorShatterShardsSrc], ["itrDoorShatterShapeFor", itrDoorShatterShapeForSrc],
+ ["itrDoorBuildShatterShardMesh", itrDoorBuildShatterShardMeshSrc]]
   .forEach(([name, src]) => ok(!!src, `extracted ${name} from theater-boot.js`));
 
 function buildSandbox() {
@@ -417,6 +501,15 @@ function buildSandbox() {
     kilterYawLine, kilterPosLine, floorBaseYLine, floorHeightFallbackLine,
     itrDoorIsArchedSrc, itrDoorShapeSrc, itrDoorStateColorSrc, kilterForSrc,
     itrDoorHingeSignSrc, itrDoorBrokenTipRadSrc,
+    // D4c symbols (order matters only for the `let` force-override, which must exist before
+    // itrDoorBrokenVariantFor's body references it — function declarations are hoisted, but this
+    // keeps the source block reading top-to-bottom same as the real file).
+    brokenVariantsLine, brokenVariantForceLine, itrDoorSeedUnitSrc, itrDoorBrokenVariantForSrc,
+    hangingSwingMinLine, hangingSwingMaxLine, hangingDroopMinLine, hangingDroopMaxLine,
+    itrDoorHangingSwingRadSrc, itrDoorHangingDroopRadSrc,
+    shatterMinCountLine, shatterMaxCountLine, shatterCellLine, shatterApronCellsLine,
+    shatterClearLaneLine, shatterSizeMinLine, shatterSizeMaxLine, shatterThicknessLine, shatterJitterFracLine,
+    itrDoorShatterCountSrc, itrDoorShatterShardsSrc, itrDoorShatterShapeForSrc, itrDoorBuildShatterShardMeshSrc,
     interiorFloorTopAtSrc, itrDoorRestPoseSrc, interiorBuildInteractableDoorMeshSrc,
     interiorBuildInteractablesSrc,
     "this.itrDoorShape=itrDoorShape; this.itrDoorIsArched=itrDoorIsArched;",
@@ -426,6 +519,22 @@ function buildSandbox() {
     "this.ITR_DOOR_BROKEN_GROUND_CLEARANCE=ITR_DOOR_BROKEN_GROUND_CLEARANCE;",
     "this.interiorBuildInteractableDoorMesh=interiorBuildInteractableDoorMesh;",
     "this.interiorBuildInteractables=interiorBuildInteractables;",
+    "this.itrDoorRestPose=itrDoorRestPose;",
+    "this.itrDoorBrokenVariantFor=itrDoorBrokenVariantFor;",
+    "this.itrDoorHangingSwingRad=itrDoorHangingSwingRad; this.itrDoorHangingDroopRad=itrDoorHangingDroopRad;",
+    "this.itrDoorShatterShards=itrDoorShatterShards; this.itrDoorShatterCount=itrDoorShatterCount;",
+    "this.ITR_DOOR_SHATTER_MIN_COUNT=ITR_DOOR_SHATTER_MIN_COUNT; this.ITR_DOOR_SHATTER_MAX_COUNT=ITR_DOOR_SHATTER_MAX_COUNT;",
+    "this.ITR_DOOR_SHATTER_CELL=ITR_DOOR_SHATTER_CELL; this.ITR_DOOR_SHATTER_APRON_CELLS=ITR_DOOR_SHATTER_APRON_CELLS;",
+    "this.ITR_DOOR_SHATTER_CLEAR_LANE=ITR_DOOR_SHATTER_CLEAR_LANE;",
+    "this.ITR_DOOR_SHATTER_THICKNESS=ITR_DOOR_SHATTER_THICKNESS; this.ITR_DOOR_SHATTER_SIZE_MIN=ITR_DOOR_SHATTER_SIZE_MIN;",
+    "this.ITR_DOOR_SHATTER_SIZE_MAX=ITR_DOOR_SHATTER_SIZE_MAX; this.ITR_DOOR_SHATTER_JITTER_FRAC=ITR_DOOR_SHATTER_JITTER_FRAC;",
+    "this.ITR_DOOR_HANGING_SWING_MIN_DEG=ITR_DOOR_HANGING_SWING_MIN_DEG; this.ITR_DOOR_HANGING_SWING_MAX_DEG=ITR_DOOR_HANGING_SWING_MAX_DEG;",
+    "this.ITR_DOOR_HANGING_DROOP_MIN_DEG=ITR_DOOR_HANGING_DROOP_MIN_DEG; this.ITR_DOOR_HANGING_DROOP_MAX_DEG=ITR_DOOR_HANGING_DROOP_MAX_DEG;",
+    // test-only poke: sets the SAME `let` production's window.Theater._setBrokenDoorVariantForTest
+    // writes to — this sandbox has no window.Theater registration block at all (Part B only extracts
+    // bare functions), so this tiny local helper is the sandbox-side equivalent of that seam.
+    "function __forceBrokenVariantForTest(v){ ITR_DOOR_BROKEN_VARIANT_FORCE_FOR_TEST = (v===\"flopped\"||v===\"hanging\"||v===\"shattered\") ? v : null; }",
+    "this.__forceBrokenVariantForTest = __forceBrokenVariantForTest;",
   ].join("\n\n");
   vm.runInContext(body, sandbox, { filename: "stage-d-d4-doors-render.js" });
   return sandbox;
@@ -445,6 +554,13 @@ group("6 — PART B: itrDoorShape — arched door gets a real curved segment; pl
 group("7 — PART B: reserve entries skip; states visibly distinct; arched silhouette rides the geometry");
 {
   const sandbox = buildSandbox();
+  // D4c: this group's own contract is specifically about the FLOPPED pose (tip-forward, D4b's
+  // landed formula) — D4c's 3-way hash may no longer naturally pick "flopped" for sourceRefs "d1"/
+  // "dOTHER" (it's now one of three), so pin the variant here to keep testing exactly what this
+  // group always tested, independent of whatever the hash happens to resolve for these particular
+  // strings. The NEW D4c-specific variant coverage lives in groups 14-18 below, using real
+  // hash-distinct sourceRefs (no force) to prove the pick itself.
+  sandbox.__forceBrokenVariantForTest("flopped");
   const floorTopMap = new Map([["0,0", -0.3], ["-1,0", -0.3], ["1,0", -0.3]]);
   const reserveEntry = sandbox.interiorBuildInteractableDoorMesh({ archetype: "door", x: null, y: null, reserve: true, state: "shut", sourceRef: "r1" }, 0, 0, floorTopMap);
   ok(reserveEntry === null, "a reserve:true (unplaced) entry produces NO mesh (Law 5: narration-only, never a phantom)");
@@ -651,6 +767,9 @@ group("11 — D4b hinge side: deterministic per sourceRef, may differ across sou
 group("12 — D4b ruling 2: broken leaf is DETACHED+GROUNDED — near-flat tip, min-Y at true floor contact");
 {
   const sandbox = buildSandbox();
+  // D4c: same reasoning as group 7's own pin — this group tests the FLOPPED tip/grounding formula
+  // specifically, so force it regardless of what "brk1"/"brkOTHER" naturally hash to.
+  sandbox.__forceBrokenVariantForTest("flopped");
   const floorTopMap = new Map([["0,0", -0.3]]);
   const extrudeDepth = 0.32;
   const broken = sandbox.interiorBuildInteractableDoorMesh({ archetype: "door", x: 0, y: 0, state: "broken", sourceRef: "brk1", extrudeDepth }, 0, 0, floorTopMap);
@@ -677,7 +796,229 @@ group("12 — D4b ruling 2: broken leaf is DETACHED+GROUNDED — near-flat tip, 
   ok(b2.userData.leaf.rotation.x !== broken.userData.leaf.rotation.x, "a different sourceRef still gets a different (seeded, not constant) broken tilt");
 }
 
-console.log("\n=== 13. check-manifest.py ===");
+// ============================================================================
+// D4c — docs/STAGE-D-WAVE-SPECS.md D4c (broken-door variant family, Adam's design ruling
+// 2026-07-14). LOCKED ARCHITECTURE: three visual VARIANTS within the single `broken` CONTRACT
+// state — never new states.
+// ============================================================================
+const D4C_BASE_COMMIT = "62cf1c77"; // this branch's own fork point — D4b landed, D4c NOT yet
+
+group("14 — D4c RED-FIRST: the pre-D4c build has no variant family at all; GREEN: hash-distinct sourceRefs resolve distinct variants");
+{
+  const oldBootSrc = execSync(`git show ${D4C_BASE_COMMIT}:src/ui/theater-boot.js`, { cwd: ROOT }).toString();
+  ok(!/function itrDoorBrokenVariantFor\(/.test(oldBootSrc), `RED: ${D4C_BASE_COMMIT}'s theater-boot.js has no itrDoorBrokenVariantFor at all (every broken door was the single flopped tip-forward pose)`);
+  ok(!/ITR_DOOR_BROKEN_VARIANTS/.test(oldBootSrc), `RED: ${D4C_BASE_COMMIT}'s theater-boot.js has no ITR_DOOR_BROKEN_VARIANTS constant at all`);
+  const oldFn = extractFn(oldBootSrc, "interiorBuildInteractableDoorMesh");
+  ok(!!oldFn && /itrDoorBrokenTipRad\(entry\.sourceRef\)/.test(oldFn) && !/hanging|shattered/.test(oldFn),
+    `RED: ${D4C_BASE_COMMIT}'s interiorBuildInteractableDoorMesh's broken branch is UNCONDITIONALLY the tip-forward formula — no variant branch exists to fail on`);
+
+  // GREEN: real hash-distinct sourceRefs (found by direct search against the live hash, NO force
+  // override) resolve three DIFFERENT variants — these three strings were chosen by brute-force
+  // search over the fixture-style "S<n>.door" naming this file's own buildInteractableFixture
+  // already uses (S1.door->shattered, S3.door->flopped, S6.door->hanging against THIS branch's
+  // hash — re-verified live below, never just asserted).
+  const sandbox = buildSandbox();
+  const distinctRefs = ["S1.door", "S3.door", "S6.door"];
+  const resolved = distinctRefs.map((r) => sandbox.itrDoorBrokenVariantFor(r));
+  ok(new Set(resolved).size === 3, `GREEN: three hash-distinct sourceRefs (${JSON.stringify(distinctRefs)}) resolve THREE DIFFERENT variants (got ${JSON.stringify(resolved)})`, resolved);
+  ok(resolved.every((v) => v === "flopped" || v === "hanging" || v === "shattered"), "every resolved variant is one of the three named variants, never anything else");
+
+  // determinism: the SAME sourceRef resolves the SAME variant twice.
+  ok(sandbox.itrDoorBrokenVariantFor("S1.door") === sandbox.itrDoorBrokenVariantFor("S1.door"), "the same sourceRef resolves the same variant on a second call");
+
+  // uniform thirds: a large sample of sourceRefs spreads roughly evenly across all three (never a
+  // constant, never a 2-way split). FNV-1a's diffusion is imperfect for very short, sequential-
+  // suffix strings at small N (a measured property, not a bug — kilterFor/itrDoorHingeSign accept
+  // the same "hash-pick, never a constant" bar rather than a strict per-sample uniformity guarantee)
+  // — 3000 draws is where the distribution actually converges (measured directly: 300 draws can
+  // skew to a 30/20/50 split, 3000 lands within a few percent of even thirds every run), so the
+  // sample size itself is the fix, not a loosened bound.
+  const sample = Array.from({ length: 3000 }, (_, i) => sandbox.itrDoorBrokenVariantFor("d4c-sample-" + i));
+  const counts = { flopped: 0, hanging: 0, shattered: 0 };
+  sample.forEach((v) => counts[v]++);
+  const lo = sample.length * 0.25, hi = sample.length * 0.45;
+  ok(counts.flopped > lo && counts.flopped < hi && counts.hanging > lo && counts.hanging < hi && counts.shattered > lo && counts.shattered < hi,
+    `uniform thirds: over ${sample.length} sourceRefs, every variant lands within [25%,45%] of the sample (got ${JSON.stringify(counts)}) — never a skewed or constant pick`, counts);
+}
+
+group("15 — D4c flopped: byte-identical to D4b's landed pose for a fixed sourceRef (variant pinned)");
+{
+  const sandbox = buildSandbox();
+  sandbox.__forceBrokenVariantForTest("flopped");
+  const floorTopMap = new Map([["0,0", -0.3]]);
+  const extrudeDepth = 0.32;
+  const hinge = sandbox.interiorBuildInteractableDoorMesh({ archetype: "door", x: 0, y: 0, state: "broken", sourceRef: "d4c-flopped-fixed", extrudeDepth }, 0, 0, floorTopMap);
+  const leaf = hinge.userData.leaf;
+  ok(hinge.userData.brokenVariant === "flopped", "hinge.userData.brokenVariant reads 'flopped' when pinned");
+  ok(leaf.rotation.y === 0 && leaf.rotation.z === 0 && Math.abs(leaf.rotation.x) > 0, "flopped: rotation is X-only (D4b's landed tip-forward), Y and Z both zero");
+  const expectedTip = (84 + 0) * Math.PI / 180; // sanity band re-check, not the exact formula (that's D4b's own group 12 contract)
+  ok(leaf.rotation.x > 77 * Math.PI / 180 && leaf.rotation.x < 91 * Math.PI / 180, "flopped tip sits in D4b's documented 78-90deg band");
+  const expectedY = (extrudeDepth / 2) * Math.sin(leaf.rotation.x) + sandbox.ITR_DOOR_BROKEN_GROUND_CLEARANCE;
+  ok(Math.abs(leaf.position.y - expectedY) < 1e-9, "flopped's grounding-lift formula is UNCHANGED from D4b (exact, not approximate)");
+  ok(leaf.visible !== false, "flopped: the leaf stays visible (never hidden — only shattered hides it)");
+  ok(hinge.userData.shards == null, "flopped: no shards array at all (that's shattered-only)");
+
+  // byte-identical re-derivation: building the SAME fixed sourceRef twice (fresh sandbox each time,
+  // still forced to flopped) gives IDENTICAL rotation/position — the pose function is pure.
+  const sandbox2 = buildSandbox();
+  sandbox2.__forceBrokenVariantForTest("flopped");
+  const hinge2 = sandbox2.interiorBuildInteractableDoorMesh({ archetype: "door", x: 0, y: 0, state: "broken", sourceRef: "d4c-flopped-fixed", extrudeDepth }, 0, 0, floorTopMap);
+  ok(hinge2.userData.leaf.rotation.x === leaf.rotation.x && hinge2.userData.leaf.position.y === leaf.position.y,
+    "flopped is byte-identical across two independent builds of the same fixed sourceRef");
+}
+
+group("16 — D4c hanging: hinge-jamb contact holds, never flat, angle bands honored");
+{
+  const sandbox = buildSandbox();
+  sandbox.__forceBrokenVariantForTest("hanging");
+  const floorTopMap = new Map([["0,0", -0.3]]);
+  const hinge = sandbox.interiorBuildInteractableDoorMesh({ archetype: "door", x: 0, y: 0, state: "broken", sourceRef: "d4c-hanging-1", extrudeDepth: 0.32 }, 0, 0, floorTopMap);
+  const leaf = hinge.userData.leaf;
+  ok(hinge.userData.brokenVariant === "hanging", "hinge.userData.brokenVariant reads 'hanging' when pinned");
+
+  // D4b's own hinge-edge invariant (hingeIsAtARealEdge, group 10's helper) re-proved for hanging —
+  // the geometry's local origin still sits at a real jamb edge (unchanged translate), so the
+  // surviving hinge point stays in true jamb contact regardless of the extra rotation.
+  const edge = hingeIsAtARealEdge(hinge);
+  ok(edge.atRealEdge, `hanging: the leaf geometry's local origin STILL sits at a real jamb edge (${JSON.stringify(edge)}) — jamb contact holds`);
+  ok(leaf.position.x !== 0 || sandbox.ITR_DOOR_WIDTH === 0, "hanging: leaf.position.x is the same nonzero jamb offset every swing state already uses (never re-anchored)");
+  ok(leaf.position.y === 0, "hanging: no grounding-lift is applied — the surviving hinge point sits at the SAME floor-level y every swing state already uses (never lifted, never embedded)");
+
+  ok(leaf.rotation.x === 0, "hanging: rotation.x stays 0 — never the flopped tip-forward axis");
+  ok(leaf.rotation.y !== 0, "hanging: rotation.y (the partial swing) is non-zero");
+  ok(leaf.rotation.z !== 0, "hanging: rotation.z (the droop) is non-zero — simultaneously with the swing, never flat");
+  const swingDeg = leaf.rotation.y * 180 / Math.PI, droopDeg = leaf.rotation.z * 180 / Math.PI;
+  ok(swingDeg >= sandbox.ITR_DOOR_HANGING_SWING_MIN_DEG - 1e-6 && swingDeg <= sandbox.ITR_DOOR_HANGING_SWING_MAX_DEG + 1e-6,
+    `hanging swing sits in the documented ${sandbox.ITR_DOOR_HANGING_SWING_MIN_DEG}-${sandbox.ITR_DOOR_HANGING_SWING_MAX_DEG}deg band (got ${swingDeg.toFixed(2)}deg)`);
+  ok(droopDeg >= sandbox.ITR_DOOR_HANGING_DROOP_MIN_DEG - 1e-6 && droopDeg <= sandbox.ITR_DOOR_HANGING_DROOP_MAX_DEG + 1e-6,
+    `hanging droop sits in the documented ${sandbox.ITR_DOOR_HANGING_DROOP_MIN_DEG}-${sandbox.ITR_DOOR_HANGING_DROOP_MAX_DEG}deg band (got ${droopDeg.toFixed(2)}deg)`);
+  ok(leaf.visible !== false, "hanging: the leaf stays visible (still the real geometry, just re-posed)");
+
+  // NOT fully grounded flat: a flat-on-the-ground pose would need rotation near +/-90deg on an axis
+  // that lays the whole leaf down — hanging's bands (15-30 / 18-28) stay far short of that, so the
+  // leaf reads as still mostly upright, distinct from flopped.
+  ok(swingDeg < 45 && droopDeg < 45, "hanging stays far short of a flat-on-the-ground rotation — visibly upright, distinct from flopped");
+
+  // determinism + sourceRef spread, same law every other broken pick already follows.
+  const hinge2 = sandbox.interiorBuildInteractableDoorMesh({ archetype: "door", x: 0, y: 0, state: "broken", sourceRef: "d4c-hanging-1", extrudeDepth: 0.32 }, 0, 0, floorTopMap);
+  ok(hinge2.userData.leaf.rotation.y === leaf.rotation.y && hinge2.userData.leaf.rotation.z === leaf.rotation.z, "hanging pose is deterministic per sourceRef (re-derived identically)");
+  const hinge3 = sandbox.interiorBuildInteractableDoorMesh({ archetype: "door", x: 0, y: 0, state: "broken", sourceRef: "d4c-hanging-OTHER", extrudeDepth: 0.32 }, 0, 0, floorTopMap);
+  ok(hinge3.userData.leaf.rotation.y !== leaf.rotation.y || hinge3.userData.leaf.rotation.z !== leaf.rotation.z, "a different sourceRef gets different (seeded) hanging angles");
+}
+
+group("17 — D4c shattered: leaf hidden (never removed), 3-5 grounded seeded shards, in-bounds, deterministic");
+{
+  const sandbox = buildSandbox();
+  sandbox.__forceBrokenVariantForTest("shattered");
+  const floorTopMap = new Map([["0,0", -0.3]]);
+  const hinge = sandbox.interiorBuildInteractableDoorMesh({ archetype: "door", x: 0, y: 0, state: "broken", sourceRef: "d4c-shatter-1", extrudeDepth: 0.32 }, 0, 0, floorTopMap);
+  ok(hinge.userData.brokenVariant === "shattered", "hinge.userData.brokenVariant reads 'shattered' when pinned");
+  ok(hinge.userData.leaf != null && hinge.userData.leaf.material != null, "the leaf mesh STILL exists on userData.leaf (never removed) — the E0-1 fade-compliance pass and the tween channel both key off it existing");
+  ok(hinge.userData.leaf.visible === false, "the leaf is HIDDEN (visible:false) — replaced by shards, not merely re-posed");
+
+  const shards = hinge.userData.shards;
+  ok(Array.isArray(shards) && shards.length >= 3 && shards.length <= 5, `shard count is in the documented 3-5 band (got ${shards && shards.length})`, shards && shards.length);
+
+  const cellHalf = sandbox.ITR_DOOR_SHATTER_CELL / 2;
+  const zMax = sandbox.ITR_DOOR_SHATTER_CELL * (1 + sandbox.ITR_DOOR_SHATTER_APRON_CELLS) - cellHalf;
+  shards.forEach((m, i) => {
+    ok(Math.abs(m.position.y - sandbox.ITR_DOOR_BROKEN_GROUND_CLEARANCE) < 1e-9, `shard ${i} is GROUNDED at the exact documented ground-clearance height (got ${m.position.y})`);
+    ok(m.position.x >= -cellHalf - 1e-6 && m.position.x <= cellHalf + 1e-6, `shard ${i}'s x is within the door cell's own width (got ${m.position.x.toFixed(3)}, bound +/-${cellHalf})`);
+    ok(m.position.z >= -cellHalf - 1e-6 && m.position.z <= zMax + 1e-6, `shard ${i}'s z is within the door cell UNION its 1-cell apron (got ${m.position.z.toFixed(3)}, bound [${(-cellHalf).toFixed(2)}, ${zMax.toFixed(2)}])`);
+    ok(Math.abs(m.position.x) >= sandbox.ITR_DOOR_SHATTER_CLEAR_LANE - 1e-6, `shard ${i} stays OUT of the aperture's clear lane (got x=${m.position.x.toFixed(3)}, lane +/-${sandbox.ITR_DOOR_SHATTER_CLEAR_LANE}) — the aperture reads fully open, never cluttered`);
+    ok(m.rotation.x === -Math.PI / 2, `shard ${i} is flattened (rotation.x=-PI/2) — lies flat, never standing`);
+    ok(m.geometry && m.geometry.opts && m.geometry.opts.depth === sandbox.ITR_DOOR_SHATTER_THICKNESS, `shard ${i} extrudes at the documented thin thickness (never a slab)`);
+  });
+
+  // determinism across two independent builds of the SAME sourceRef — the WHOLE scatter (count,
+  // every shard's x/z/yaw/size) is byte-identical; a different sourceRef differs.
+  const hinge2 = sandbox.interiorBuildInteractableDoorMesh({ archetype: "door", x: 0, y: 0, state: "broken", sourceRef: "d4c-shatter-1", extrudeDepth: 0.32 }, 0, 0, floorTopMap);
+  const describeShards = (h) => h.userData.shards.map((m) => ({ x: m.position.x, z: m.position.z, yaw: m.rotation.z, geo: m.geometry.shape.pts }));
+  ok(JSON.stringify(describeShards(hinge)) === JSON.stringify(describeShards(hinge2)), "the shard scatter is byte-identical across two independent builds of the same sourceRef");
+  const hinge3 = sandbox.interiorBuildInteractableDoorMesh({ archetype: "door", x: 0, y: 0, state: "broken", sourceRef: "d4c-shatter-OTHER", extrudeDepth: 0.32 }, 0, 0, floorTopMap);
+  ok(JSON.stringify(describeShards(hinge)) !== JSON.stringify(describeShards(hinge3)), "a different sourceRef gets a different (seeded, not constant) shard scatter");
+}
+
+group("18 — D4c tween: rest+tween share one pose function; hanging's two-axis interpolation; shattered's fall-then-swap");
+{
+  // 18a — a live transition into HANGING interpolates BOTH rotation components simultaneously (the
+  // {rotX,rotY,rotZ} triple this pose function now returns, vs D4b's single {axis,rad}).
+  {
+    const sandbox = buildSandbox();
+    sandbox.__forceBrokenVariantForTest("hanging");
+    const floorTopMap = new Map([["0,0", -0.3]]);
+    const entryShut = [{ archetype: "door", x: 0, y: 0, state: "shut", sourceRef: "d4c-tw-hang", extrudeDepth: 0.32 }];
+    sandbox.interiorBuildInteractables(entryShut, 0, 0, floorTopMap);
+    const entryBroken = [{ archetype: "door", x: 0, y: 0, state: "broken", sourceRef: "d4c-tw-hang", extrudeDepth: 0.32 }];
+    const g2 = sandbox.interiorBuildInteractables(entryBroken, 0, 0, floorTopMap);
+    ok(sandbox.S.tweens.length === 1, `a real shut->broken transition fires exactly one tween (got ${sandbox.S.tweens.length})`);
+    const tw = sandbox.S.tweens[0];
+    const leaf = g2.children[0].userData.leaf;
+    ok(leaf.rotation.x === 0 && leaf.rotation.y === 0 && leaf.rotation.z === 0, "tween start sits at the shut rest pose (all-zero) — never a teleport");
+    tw.update(0.5);
+    ok(leaf.rotation.y > 0 && leaf.rotation.z > 0, `mid-tween (t=0.5): BOTH hanging rotation components have moved off zero simultaneously (y=${leaf.rotation.y.toFixed(3)}, z=${leaf.rotation.z.toFixed(3)})`);
+    ok(leaf.rotation.x === 0, "mid-tween: rotation.x stays untouched (hanging never uses the X axis)");
+    tw.update(1); tw.onDone();
+    const restPose = sandbox.itrDoorRestPose("broken", "d4c-tw-hang");
+    ok(Math.abs(leaf.rotation.y - restPose.rotY) < 1e-9 && Math.abs(leaf.rotation.z - restPose.rotZ) < 1e-9, "onDone snaps exactly to the hanging rest pose itrDoorRestPose resolves for this sourceRef — rest and tween agree, the ONE shared pose function");
+    ok(g2.children[0].userData.brokenVariant === "hanging", "onDone stamps the resolved variant onto userData");
+  }
+
+  // 18b — a live transition into SHATTERED: the fresh build (entry.state already "broken") mounts
+  // the terminal shard scatter immediately, but interiorBuildInteractables must UNDO that so the
+  // tween has a real leaf to animate falling, then REDO the identical scatter onDone.
+  {
+    const sandbox = buildSandbox();
+    sandbox.__forceBrokenVariantForTest("shattered");
+    const floorTopMap = new Map([["0,0", -0.3]]);
+    const entryShut = [{ archetype: "door", x: 0, y: 0, state: "shut", sourceRef: "d4c-tw-shatter", extrudeDepth: 0.32 }];
+    sandbox.interiorBuildInteractables(entryShut, 0, 0, floorTopMap);
+    const entryBroken = [{ archetype: "door", x: 0, y: 0, state: "broken", sourceRef: "d4c-tw-shatter", extrudeDepth: 0.32 }];
+    const g2 = sandbox.interiorBuildInteractables(entryBroken, 0, 0, floorTopMap);
+    const hinge2 = g2.children[0];
+    const leaf = hinge2.userData.leaf;
+    ok(sandbox.S.tweens.length === 1, "a real shut->broken(shattered) transition fires exactly one tween");
+    const tw = sandbox.S.tweens[0];
+    ok(leaf.visible === true, "tween start: the fresh build's terminal shard-mount was UNDONE — the leaf is visible again, ready to animate the fall");
+    ok(!hinge2.userData.shards, "tween start: the fresh build's terminal shards were removed from the hinge — none present mid-fall");
+    tw.update(0.5);
+    ok(Math.abs(leaf.rotation.x) > 0 && leaf.rotation.y === 0 && leaf.rotation.z === 0, `mid-tween: the leaf animates the SAME tip-forward fall flopped uses (rotation.x=${leaf.rotation.x.toFixed(3)}) while still visible`);
+    ok(leaf.visible === true, "mid-tween: the leaf is still visible (falling), shards not yet swapped in");
+    tw.update(1); tw.onDone();
+    ok(leaf.visible === false, "onDone: the leaf is hidden again — the fall has completed and the shard swap fired");
+    ok(Array.isArray(hinge2.userData.shards) && hinge2.userData.shards.length >= 3 && hinge2.userData.shards.length <= 5, "onDone: the shard scatter is (re-)mounted, count in the documented band");
+    ok(hinge2.userData.brokenVariant === "shattered", "onDone stamps brokenVariant:'shattered'");
+
+    // the ONDONE scatter is IDENTICAL to a freshly-rendered (non-tweened) shattered door of the
+    // same sourceRef — a live break reads the same as a fresh render, per the spec's own tween note.
+    const freshHinge = sandbox.interiorBuildInteractableDoorMesh({ archetype: "door", x: 0, y: 0, state: "broken", sourceRef: "d4c-tw-shatter", extrudeDepth: 0.32 }, 0, 0, floorTopMap);
+    const describe = (shards) => shards.map((m) => ({ x: m.position.x, z: m.position.z, yaw: m.rotation.z }));
+    ok(JSON.stringify(describe(hinge2.userData.shards)) === JSON.stringify(describe(freshHinge.userData.shards)),
+      "the tween's onDone shard scatter is BYTE-IDENTICAL to a freshly-rendered shattered door of the same sourceRef (itrDoorShatterShards is a pure function of sourceRef)");
+  }
+}
+
+group("19 — D4c contract untouched: registry state list unchanged, dm-contract regen is a no-op");
+{
+  const interactablesSrcNow = read("data/interactables.js");
+  const statesMatch = interactablesSrcNow.match(/"door":\s*Object\.freeze\(\[[^\]]*\]\)/);
+  ok(!!statesMatch, "INTERACTABLE_ARCHETYPE_STATES.door is present in data/interactables.js");
+  ok(!!statesMatch && /shut/.test(statesMatch[0]) && /ajar/.test(statesMatch[0]) && /open/.test(statesMatch[0]) && /broken/.test(statesMatch[0]) && !/hanging|shattered|flopped/.test(statesMatch[0]),
+    `door archetype states are STILL exactly shut/ajar/open/broken — no new state names leaked in (got ${statesMatch && statesMatch[0]})`);
+
+  const beforeInteractables = read("data/interactables.js");
+  const beforeContract = existsSync(join(ROOT, "dm-contract.json")) ? read("dm-contract.json") : null;
+  let regenOk = true, regenOut = "";
+  try { regenOut = execSync("python3 build/gen-dm-contract.py", { cwd: ROOT, stdio: ["pipe", "pipe", "pipe"] }).toString(); }
+  catch (e) { regenOk = false; regenOut = String(e.stdout || e.message); }
+  ok(regenOk, "python3 build/gen-dm-contract.py runs clean (exit 0)", regenOut.split("\n").slice(-5).join(" | "));
+  const afterInteractables = read("data/interactables.js");
+  const afterContract = existsSync(join(ROOT, "dm-contract.json")) ? read("dm-contract.json") : null;
+  ok(beforeInteractables === afterInteractables, "data/interactables.js is BYTE-IDENTICAL before/after the regen (D4c never touched D1's registry)");
+  ok(beforeContract === afterContract, "dm-contract.json is BYTE-IDENTICAL before/after the regen (a true no-op — D4c never touched D0's contract)");
+}
+
+console.log("\n=== 20. check-manifest.py ===");
 {
   let out = "", code = 0;
   try { out = execSync("python3 build/check-manifest.py", { cwd: ROOT }).toString(); }

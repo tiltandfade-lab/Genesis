@@ -1,0 +1,264 @@
+{
+  "generatedAt": "2026-07-14T23:06:57.099Z",
+  "shots": [
+    "variant-flopped.png",
+    "variant-hanging.png",
+    "variant-shattered.png"
+  ],
+  "notes": [],
+  "boot": {
+    "ok": true,
+    "notes": [
+      "startSession() called"
+    ],
+    "worldId": "mrl9gs0knsjal",
+    "worldName": "Three-Candle Way"
+  },
+  "theaterState": {
+    "hasBattleStage": true,
+    "theaterMounted": true,
+    "hasCanvas": true,
+    "hasSetInteriorBoard": true,
+    "hasVariantSeam": true
+  },
+  "interactables": [
+    {
+      "archetype": "chest",
+      "slug": "fantasy-obj-chest-closed",
+      "state": "closed",
+      "extrudeDepth": 0.28,
+      "name": "Wooden chest latch",
+      "flavor": "Latch spring is weak.",
+      "roomSegNum": 1,
+      "sourceRef": "S1.object",
+      "x": 7,
+      "y": 8
+    },
+    {
+      "archetype": "shrine",
+      "slug": "fantasy-obj-shrine-dormant",
+      "state": "dormant",
+      "extrudeDepth": 0.3,
+      "name": "Stone Altar",
+      "flavor": "A low slab.",
+      "roomSegNum": 1,
+      "sourceRef": "S1.feature",
+      "x": 3,
+      "y": 3
+    },
+    {
+      "archetype": "door",
+      "slug": "fantasy-obj-door-shut",
+      "state": "broken",
+      "extrudeDepth": 0.32,
+      "name": "Iron Door",
+      "flavor": "riveted plates",
+      "roomSegNum": 1,
+      "sourceRef": "S1.door",
+      "x": 9,
+      "y": 6
+    },
+    {
+      "archetype": "lever",
+      "slug": "fantasy-obj-lever-left",
+      "state": "left",
+      "extrudeDepth": 0.12,
+      "name": "Lever bar",
+      "flavor": "Half-hidden behind rubble.",
+      "roomSegNum": 2,
+      "sourceRef": "S2.object",
+      "x": 14,
+      "y": 8
+    },
+    {
+      "archetype": "campfire",
+      "slug": "fantasy-obj-campfire-unlit",
+      "state": "unlit",
+      "extrudeDepth": 0.16,
+      "name": "Cold Hearth",
+      "flavor": "Ash long dead.",
+      "roomSegNum": 2,
+      "sourceRef": "S2.feature",
+      "x": 16,
+      "y": 8,
+      "lightAffine": true
+    },
+    {
+      "archetype": "door",
+      "slug": "fantasy-obj-door-shut",
+      "state": "broken",
+      "extrudeDepth": 0.32,
+      "name": "Iron Door",
+      "flavor": "riveted plates",
+      "roomSegNum": 2,
+      "sourceRef": "S2.door",
+      "x": 17,
+      "y": 7
+    },
+    {
+      "archetype": "container",
+      "slug": "fantasy-obj-container-intact",
+      "state": "intact",
+      "extrudeDepth": 0.2,
+      "name": "Crate lid",
+      "flavor": "Nailed shut.",
+      "roomSegNum": 3,
+      "sourceRef": "S3.object",
+      "x": 22,
+      "y": 8
+    },
+    {
+      "archetype": "portal",
+      "slug": "fantasy-obj-portal-sealed",
+      "state": "sealed",
+      "extrudeDepth": 0.34,
+      "name": "Iron Portcullis",
+      "flavor": "Rusted teeth.",
+      "roomSegNum": 3,
+      "sourceRef": "S3.feature",
+      "x": 26,
+      "y": 3
+    },
+    {
+      "archetype": "door",
+      "slug": "fantasy-obj-door-open",
+      "state": "broken",
+      "extrudeDepth": 0.32,
+      "name": "Archway",
+      "flavor": "no frame",
+      "roomSegNum": 3,
+      "sourceRef": "S3.door",
+      "x": 17,
+      "y": 7
+    }
+  ],
+  "variant_flopped": {
+    "diag": [
+      {
+        "sourceRef": "S1.door",
+        "archetype": "door",
+        "state": "broken",
+        "arched": false,
+        "x": 3,
+        "y": -0.3,
+        "z": 0,
+        "leafRotY": 0,
+        "leafRotX": 1.4845935848300171,
+        "brokenVariant": "flopped",
+        "shardCount": 0
+      },
+      {
+        "sourceRef": "S2.door",
+        "archetype": "door",
+        "state": "broken",
+        "arched": false,
+        "x": 11,
+        "y": -0.3,
+        "z": 1,
+        "leafRotY": 0,
+        "leafRotX": 1.5442215202879177,
+        "brokenVariant": "flopped",
+        "shardCount": 0
+      },
+      {
+        "sourceRef": "S3.door",
+        "archetype": "door",
+        "state": "broken",
+        "arched": true,
+        "x": 11,
+        "y": -0.3,
+        "z": 1,
+        "leafRotY": 0,
+        "leafRotX": 1.4620712190076495,
+        "brokenVariant": "flopped",
+        "shardCount": 0
+      }
+    ]
+  },
+  "variant_hanging": {
+    "diag": [
+      {
+        "sourceRef": "S1.door",
+        "archetype": "door",
+        "state": "broken",
+        "arched": false,
+        "x": 3,
+        "y": -0.3,
+        "z": 0,
+        "leafRotY": 0.2938694545261548,
+        "leafRotX": 0,
+        "brokenVariant": "hanging",
+        "shardCount": 0
+      },
+      {
+        "sourceRef": "S2.door",
+        "archetype": "door",
+        "state": "broken",
+        "arched": false,
+        "x": 11,
+        "y": -0.3,
+        "z": 1,
+        "leafRotY": 0.3533189186597224,
+        "leafRotX": 0,
+        "brokenVariant": "hanging",
+        "shardCount": 0
+      },
+      {
+        "sourceRef": "S3.door",
+        "archetype": "door",
+        "state": "broken",
+        "arched": true,
+        "x": 11,
+        "y": -0.3,
+        "z": 1,
+        "leafRotY": 0.4819166739009789,
+        "leafRotX": 0,
+        "brokenVariant": "hanging",
+        "shardCount": 0
+      }
+    ]
+  },
+  "variant_shattered": {
+    "diag": [
+      {
+        "sourceRef": "S1.door",
+        "archetype": "door",
+        "state": "broken",
+        "arched": false,
+        "x": 3,
+        "y": -0.3,
+        "z": 0,
+        "leafRotY": 0,
+        "leafRotX": 1.4845935848300171,
+        "brokenVariant": "shattered",
+        "shardCount": 3
+      },
+      {
+        "sourceRef": "S2.door",
+        "archetype": "door",
+        "state": "broken",
+        "arched": false,
+        "x": 11,
+        "y": -0.3,
+        "z": 1,
+        "leafRotY": 0,
+        "leafRotX": 1.5442215202879177,
+        "brokenVariant": "shattered",
+        "shardCount": 4
+      },
+      {
+        "sourceRef": "S3.door",
+        "archetype": "door",
+        "state": "broken",
+        "arched": true,
+        "x": 11,
+        "y": -0.3,
+        "z": 1,
+        "leafRotY": 0,
+        "leafRotX": 1.4620712190076495,
+        "brokenVariant": "shattered",
+        "shardCount": 4
+      }
+    ]
+  }
+}

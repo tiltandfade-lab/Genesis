@@ -11115,3 +11115,145 @@ window.Theater._interiorBuildLightConeForTest = function(light, height){ return 
 window.Theater._lightFlickerStepForTest = function(pointLights, bases, interiorTargets, amplitude){
   return lightFlickerStep(pointLights, bases, interiorTargets, amplitude);
 };
+
+// FACETED FANTASY PROP PILOT — TEST/CAPTURE ONLY. This seam mounts candidate citizens into an
+// already-built production interior without adding them to a runtime registry. It deliberately keeps
+// technical compilation, integrated visual review, and admission separate: every child is tagged
+// runtimeAdmitted:false and the group is destroyed by the next normal setInteriorBoard rebuild.
+// The builders below exercise the intended construction classes instead of contour-extruding every
+// reference PNG: door/lever/trap are articulated geometry, the container is a six-faced box, the
+// portrait is a shallow framed surface, and only the accepted B-treatment shield loads as a contour GLB.
+window.Theater._mountFantasyPropPilotForTest = async function(spec){
+  if(!S.interiorGroup || !S.isInteriorBoard) return { ok:false, reason:"no-interior-board" };
+  spec = spec || {};
+  const group = new THREE.Group();
+  group.name = "fantasy-prop-pilot-candidates";
+  group.userData.runtimeAdmitted = false;
+  group.userData.captureOnly = true;
+
+  const mat = function(color, roughness, metalness, emissive){
+    const m = new THREE.MeshStandardMaterial({ color, roughness: roughness == null ? 0.72 : roughness,
+      metalness: metalness == null ? 0.08 : metalness, flatShading:true });
+    if(emissive){ m.emissive = new THREE.Color(emissive); m.emissiveIntensity = 0.7; }
+    return m;
+  };
+  const oak = mat("#5a321d", 0.86, 0.02), oakDark = mat("#2b1710", 0.9, 0.01);
+  const iron = mat("#443d38", 0.48, 0.68), ironDark = mat("#201d1c", 0.6, 0.58);
+  const brass = mat("#a8782f", 0.38, 0.72), stone = mat("#6f685c", 0.92, 0.02);
+  const trapMetal = mat("#554f46", 0.62, 0.52);
+  const addBox = function(parent, size, pos, material, bevel){
+    const geo = bevel
+      ? new THREE.BoxGeometry(size.x, size.y, size.z, 2, 2, 2)
+      : new THREE.BoxGeometry(size.x, size.y, size.z);
+    const mesh = new THREE.Mesh(geo, material); mesh.position.set(pos.x, pos.y, pos.z);
+    mesh.castShadow = true; mesh.receiveShadow = true; parent.add(mesh); return mesh;
+  };
+  const tag = function(obj, slug, constructionClass, sourceRefs){
+    obj.userData.slug = slug; obj.userData.constructionClass = constructionClass;
+    obj.userData.sourceRefs = sourceRefs || []; obj.userData.runtimeAdmitted = false;
+    return obj;
+  };
+  const mount = function(obj, p, yaw){ obj.position.set(p.x, p.y, p.z); obj.rotation.y = yaw || 0; group.add(obj); return obj; };
+
+  function door(state){
+    const root = new THREE.Group(), leaf = new THREE.Group();
+    addBox(root,{x:1.42,y:0.18,z:0.24},{x:0,y:2.02,z:0},stone);
+    addBox(root,{x:0.18,y:2.1,z:0.24},{x:-0.72,y:1.05,z:0},stone);
+    addBox(root,{x:0.18,y:2.1,z:0.24},{x:0.72,y:1.05,z:0},stone);
+    addBox(leaf,{x:1.22,y:1.9,z:0.13},{x:0,y:0.95,z:0.03},oak,true);
+    [-0.38,0,0.38].forEach(x=>addBox(leaf,{x:0.07,y:1.8,z:0.03},{x,y:0.95,z:0.11},oakDark));
+    [0.35,1.52].forEach(y=>addBox(leaf,{x:1.12,y:0.09,z:0.06},{x:0,y,z:0.13},iron));
+    addBox(leaf,{x:0.11,y:0.11,z:0.07},{x:0.42,y:0.96,z:0.17},brass);
+    if(state === "open"){ leaf.position.x = -0.57; leaf.rotation.y = -Math.PI * 0.42; }
+    root.add(leaf); return tag(root,"fantasy-obj-door-"+(state === "open" ? "open" : "shut"),"ARTICULATED_MODEL",
+      ["Engine/02. _Procedures/Dungeon Encounter v2.0.md#Dungeon Door Type","Engine/02. _Procedures/Dungeon Encounter v2.0.md#Dungeon Door State","assets/dressing/fantasy-obj-door-"+(state === "open" ? "open" : "shut")+".png"]);
+  }
+  function lever(state){
+    const root = new THREE.Group();
+    addBox(root,{x:0.38,y:0.58,z:0.10},{x:0,y:0.32,z:0},ironDark,true);
+    addBox(root,{x:0.27,y:0.44,z:0.05},{x:0,y:0.32,z:0.07},brass,true);
+    const arm = new THREE.Group();
+    addBox(arm,{x:0.075,y:0.48,z:0.075},{x:0,y:0.24,z:0},iron);
+    const knob = new THREE.Mesh(new THREE.IcosahedronGeometry(0.11,0),mat("#7b1f19",0.45,0.16));
+    knob.position.y=0.5; knob.castShadow=true; arm.add(knob);
+    arm.position.set(0,0.3,0.14); arm.rotation.z = state === "right" ? -0.72 : 0.72; root.add(arm);
+    return tag(root,"fantasy-obj-lever-"+state,"ARTICULATED_MODEL",
+      ["docs/BEAUTY-WAVE-5.md#levers","assets/dressing/fantasy-obj-lever-"+state+".png"]);
+  }
+  function trap(){
+    const root = new THREE.Group();
+    addBox(root,{x:1.25,y:0.055,z:1.05},{x:0,y:0.028,z:0},stone);
+    addBox(root,{x:1.08,y:0.045,z:0.88},{x:0,y:0.07,z:0},trapMetal);
+    [-0.38,-0.13,0.13,0.38].forEach(x=>addBox(root,{x:0.055,y:0.035,z:0.78},{x,y:0.10,z:0},ironDark));
+    addBox(root,{x:0.16,y:0.04,z:0.16},{x:0,y:0.11,z:0},brass,true);
+    return tag(root,"fantasy-obj-trap-hidden","MODEL_RECIPE",
+      ["Engine/02. _Procedures/Dungeon Encounter v2.0.md","assets/dressing/fantasy-obj-trap-hidden.png"]);
+  }
+  function facedContainer(){
+    const root = new THREE.Group();
+    addBox(root,{x:1.05,y:0.68,z:0.78},{x:0,y:0.34,z:0},oak,true);
+    [-0.43,0.43].forEach(x=>addBox(root,{x:0.09,y:0.72,z:0.84},{x,y:0.36,z:0},iron));
+    [-0.30,0.30].forEach(z=>addBox(root,{x:1.1,y:0.09,z:0.08},{x:0,y:0.60,z},iron));
+    addBox(root,{x:0.18,y:0.22,z:0.05},{x:0,y:0.42,z:0.42},brass,true);
+    return tag(root,"fantasy-obj-container-intact","FACED_BOX",
+      ["docs/BEAUTY-WAVE-5.md#containers","assets/dressing/fantasy-obj-container-intact.png"]);
+  }
+  function portrait(){
+    const root = new THREE.Group(), tex = new THREE.TextureLoader().load("assets/dressing/fantasy-painting-1.png",markDirty);
+    tex.colorSpace = THREE.SRGBColorSpace;
+    addBox(root,{x:1.22,y:1.48,z:0.08},{x:0,y:0.74,z:0},oakDark,true);
+    const face = new THREE.Mesh(new THREE.PlaneGeometry(1.02,1.28),new THREE.MeshStandardMaterial({map:tex,roughness:0.78,metalness:0,side:THREE.DoubleSide}));
+    face.position.set(0,0.74,0.046); face.castShadow=true; root.add(face);
+    [-0.46,0.46].forEach(x=>addBox(root,{x:0.07,y:1.36,z:0.07},{x,y:0.74,z:0.08},brass));
+    [-0.59,0.59].forEach(y=>addBox(root,{x:1.02,y:0.07,z:0.07},{x:0,y:0.74+y,z:0.08},brass));
+    return tag(root,"fantasy-painting-1","SHALLOW_EXTRUDE",
+      ["src/engine/place-dressing.js#fantasy-painting-1","assets/dressing/fantasy-painting-1.png","spr-fantasy-ancient-red-dragon"]);
+  }
+
+  mount(door("shut"),spec.doorShut || {x:-2.5,y:0,z:-2.55},0);
+  mount(door("open"),spec.doorOpen || {x:2.35,y:0,z:-2.55},0);
+  mount(lever("left"),spec.leverLeft || {x:-1.25,y:0.72,z:-2.38},0);
+  mount(lever("right"),spec.leverRight || {x:1.25,y:0.72,z:-2.38},0);
+  mount(portrait(),spec.portrait || {x:0,y:0.70,z:-2.42},0);
+  mount(trap(),spec.trap || {x:-1.0,y:0.01,z:0.35},0);
+  mount(facedContainer(),spec.container || {x:1.55,y:0,z:0.25},-0.25);
+
+  let shield = null;
+  try {
+    shield = await glbLoadScene("dev/model-foundry/faceted-extrusion-proof/fantasy-shield-faceted.glb");
+    if(shield){
+      const bounds=new THREE.Box3().setFromObject(shield), size=new THREE.Vector3(), center=new THREE.Vector3();
+      bounds.getSize(size); bounds.getCenter(center);
+      const scalar=1.15/Math.max(0.001,size.y,size.x);
+      shield.scale.setScalar(scalar);
+      shield.position.set(-center.x*scalar,-center.y*scalar,-center.z*scalar);
+      shield.traverse(function(o){ if(o.isMesh){ o.castShadow=true; o.receiveShadow=true; } });
+      const shieldMount=new THREE.Group();shieldMount.add(shield);
+      tag(shieldMount,"fantasy-ornate-wall-shield","EXTRUDE",
+        ["dev/model-foundry/faceted-extrusion-proof/fantasy-shield-flat-orthographic-source.png","dev/model-foundry/faceted-extrusion-proof/fantasy-shield-faceted.glb"]);
+      mount(shieldMount,spec.shield || {x:-2.05,y:1.45,z:-2.35},0);
+    }
+  } catch(e){ console.warn("qa: fantasy pilot shield load failed",e); }
+  S.interiorGroup.add(group); markDirty();
+  return { ok:true, runtimeAdmittedCount:0, mounted:group.children.map(function(c){ return {
+    slug:c.userData.slug || null, constructionClass:c.userData.constructionClass || null,
+    runtimeAdmitted:false, sourceRefs:c.userData.sourceRefs || []
+  }; }) };
+};
+// Capture-only composition helper for the pilot above. Candidate props are not part of ShotPlan, so
+// the production occlusion classifier cannot know they are required subjects. Fade the two wall-upper
+// segments nearest the live camera while retaining the opaque capped stem; this uses the real split
+// wall bodies and leaves geometry/collision/mount ownership intact.
+window.Theater._fantasyPropPilotCutawayForTest = function(){
+  if(!S.camera || !S.interiorLastRoomShell) return false;
+  const segments=S.interiorLastRoomShell.wallSegments || [], uppers=S.interiorLastRoomShell.wallUpperMeshes || [];
+  const ranked=uppers.map(function(entry){
+    const seg=segments[entry.ownerSegIndex], mid=seg?{x:(seg.a.x+seg.b.x)/2,z:(seg.a.z+seg.b.z)/2}:{x:0,z:0};
+    return {entry,d:Math.hypot(mid.x-S.camera.position.x,mid.z-S.camera.position.z)};
+  }).sort(function(a,b){return a.d-b.d;});
+  ranked.slice(0,Math.min(2,ranked.length)).forEach(function(hit){
+    const m=hit.entry.mesh&&hit.entry.mesh.material;if(m){m.transparent=true;m.opacity=0.045;m.depthWrite=false;}
+  });
+  try{renderTheaterFrame();}catch(e){} markDirty(); return true;
+};
+window.Theater._freezeFantasyPropPilotLightForTest = function(){ stopLightFlicker(); try{renderTheaterFrame();}catch(e){} return true; };

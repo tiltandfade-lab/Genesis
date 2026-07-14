@@ -1,0 +1,1445 @@
+{
+  "document_key": "srd-2024",
+  "expected_count": 339,
+  "field_diffs": {
+    "Alarm": {
+      "casting_time": {
+        "local": "1 minute or Ritual",
+        "open5e": "1minute"
+      }
+    },
+    "Alter Self": {
+      "duration": {
+        "local": "Concentration, up to 1 hour",
+        "open5e": "1 hour"
+      }
+    },
+    "Animal Messenger": {
+      "casting_time": {
+        "local": "Action or Ritual",
+        "open5e": "action"
+      }
+    },
+    "Animate Dead": {
+      "casting_time": {
+        "local": "1 minute",
+        "open5e": "1minute"
+      }
+    },
+    "Animate Objects": {
+      "duration": {
+        "local": "Concentration, up to 1 minute",
+        "open5e": "1 minute"
+      }
+    },
+    "Antilife Shell": {
+      "duration": {
+        "local": "Concentration, up to 1 hour",
+        "open5e": "1 hour"
+      }
+    },
+    "Antimagic Field": {
+      "duration": {
+        "local": "Concentration, up to 1 hour",
+        "open5e": "1 hour"
+      }
+    },
+    "Antipathy/Sympathy": {
+      "casting_time": {
+        "local": "1 hour",
+        "open5e": "1hour"
+      }
+    },
+    "Arcane Eye": {
+      "duration": {
+        "local": "Concentration, up to 1 hour",
+        "open5e": "1 hour"
+      }
+    },
+    "Arcane Hand": {
+      "duration": {
+        "local": "Concentration, up to 1 minute",
+        "open5e": "1 minute"
+      }
+    },
+    "Arcane Sword": {
+      "duration": {
+        "local": "Concentration, up to 1 minute",
+        "open5e": "1 minute"
+      }
+    },
+    "Astral Projection": {
+      "casting_time": {
+        "local": "1 hour",
+        "open5e": "1hour"
+      }
+    },
+    "Augury": {
+      "casting_time": {
+        "local": "1 minute or Ritual",
+        "open5e": "1minute"
+      }
+    },
+    "Aura of Life": {
+      "duration": {
+        "local": "Concentration, up to 10 minutes",
+        "open5e": "10 minutes"
+      }
+    },
+    "Awaken": {
+      "casting_time": {
+        "local": "8 hours",
+        "open5e": "1hour"
+      }
+    },
+    "Bane": {
+      "duration": {
+        "local": "Concentration, up to 1 minute",
+        "open5e": "1 minute"
+      }
+    },
+    "Banishment": {
+      "duration": {
+        "local": "Concentration, up to 1 minute",
+        "open5e": "1 minute"
+      }
+    },
+    "Barkskin": {
+      "casting_time": {
+        "local": "Bonus Action",
+        "open5e": "bonus-action"
+      },
+      "range": {
+        "local": "Touch Component: V, S, M (a handful of bark)",
+        "open5e": "Touch"
+      }
+    },
+    "Beacon of Hope": {
+      "duration": {
+        "local": "Concentration, up to 1 minute",
+        "open5e": "1 minute"
+      }
+    },
+    "Bestow Curse": {
+      "duration": {
+        "local": "Concentration, up to 1 minute",
+        "open5e": "1 minute"
+      }
+    },
+    "Black Tentacles": {
+      "duration": {
+        "local": "Concentration, up to 1 minute",
+        "open5e": "1 minute"
+      }
+    },
+    "Blade Barrier": {
+      "duration": {
+        "local": "Concentration, up to 10 minutes",
+        "open5e": "10 minutes"
+      }
+    },
+    "Bless": {
+      "duration": {
+        "local": "Concentration, up to 1 minute",
+        "open5e": "1 minute"
+      }
+    },
+    "Blur": {
+      "duration": {
+        "local": "Concentration, up to 1 minute",
+        "open5e": "1 minute"
+      }
+    },
+    "Call Lightning": {
+      "duration": {
+        "local": "Concentration, up to 10 minutes",
+        "open5e": "10 minutes"
+      }
+    },
+    "Calm Emotions": {
+      "duration": {
+        "local": "Concentration, up to 1 minute",
+        "open5e": "1 minute"
+      }
+    },
+    "Clairvoyance": {
+      "casting_time": {
+        "local": "10 minutes",
+        "open5e": "1minute"
+      },
+      "duration": {
+        "local": "Concentration, up to 10 minutes",
+        "open5e": "10 minutes"
+      }
+    },
+    "Clone": {
+      "casting_time": {
+        "local": "1 hour",
+        "open5e": "1hour"
+      }
+    },
+    "Cloudkill": {
+      "duration": {
+        "local": "Concentration, up to 10 minutes",
+        "open5e": "10 minutes"
+      }
+    },
+    "Commune": {
+      "casting_time": {
+        "local": "1 minute or Ritual",
+        "open5e": "1minute"
+      }
+    },
+    "Commune with Nature": {
+      "casting_time": {
+        "local": "1 minute or Ritual",
+        "open5e": "1minute"
+      }
+    },
+    "Comprehend Languages": {
+      "casting_time": {
+        "local": "Action or Ritual",
+        "open5e": "action"
+      }
+    },
+    "Compulsion": {
+      "duration": {
+        "local": "Concentration, up to 1 minute",
+        "open5e": "1 minute"
+      }
+    },
+    "Confusion": {
+      "duration": {
+        "local": "Concentration, up to 1 minute",
+        "open5e": "1 minute"
+      }
+    },
+    "Conjure Animals": {
+      "duration": {
+        "local": "Concentration, up to 10 minutes",
+        "open5e": "10 minutes"
+      }
+    },
+    "Conjure Celestial": {
+      "duration": {
+        "local": "Concentration, up to 10 minutes",
+        "open5e": "10 minutes"
+      }
+    },
+    "Conjure Elemental": {
+      "duration": {
+        "local": "Concentration, up to 10 minutes",
+        "open5e": "10 minutes"
+      }
+    },
+    "Conjure Fey": {
+      "duration": {
+        "local": "Concentration, up to 10 minutes",
+        "open5e": "10 minutes"
+      }
+    },
+    "Conjure Minor Elementals": {
+      "duration": {
+        "local": "Concentration, up to 10 minutes",
+        "open5e": "10 minutes"
+      }
+    },
+    "Conjure Woodland Beings": {
+      "duration": {
+        "local": "Concentration, up to 10 minutes",
+        "open5e": "10 minutes"
+      }
+    },
+    "Contact Other Plane": {
+      "casting_time": {
+        "local": "1 minute or Ritual",
+        "open5e": "1minute"
+      }
+    },
+    "Contagion": {
+      "range": {
+        "local": "Touch Component: V, S",
+        "open5e": "Touch"
+      }
+    },
+    "Contingency": {
+      "casting_time": {
+        "local": "10 minutes",
+        "open5e": "1minute"
+      }
+    },
+    "Control Water": {
+      "duration": {
+        "local": "Concentration, up to 10 minutes",
+        "open5e": "10 minutes"
+      }
+    },
+    "Control Weather": {
+      "casting_time": {
+        "local": "10 minutes",
+        "open5e": "1minute"
+      },
+      "duration": {
+        "local": "Concentration, up to 8 hours",
+        "open5e": "8 hours"
+      }
+    },
+    "Counterspell": {
+      "casting_time": {
+        "local": "Reaction, which you take when you see a creature within 60 feet of yourself casting a spell with Verbal, Somatic, or Material components",
+        "open5e": "reaction"
+      }
+    },
+    "Create Undead": {
+      "casting_time": {
+        "local": "1 minute",
+        "open5e": "1minute"
+      }
+    },
+    "Creation": {
+      "casting_time": {
+        "local": "1 minute",
+        "open5e": "1minute"
+      }
+    },
+    "Dancing Lights": {
+      "duration": {
+        "local": "Concentration, up to 1 minute",
+        "open5e": "1 minute"
+      }
+    },
+    "Darkness": {
+      "duration": {
+        "local": "Concentration, up to 10 minutes",
+        "open5e": "10 minutes"
+      }
+    },
+    "Delayed Blast Fireball": {
+      "duration": {
+        "local": "Concentration, up to 1 minute",
+        "open5e": "1 minute"
+      }
+    },
+    "Detect Evil and Good": {
+      "duration": {
+        "local": "Concentration, up to 10 minutes",
+        "open5e": "10 minutes"
+      }
+    },
+    "Detect Magic": {
+      "casting_time": {
+        "local": "Action or Ritual",
+        "open5e": "action"
+      },
+      "duration": {
+        "local": "Concentration, up to 10 minutes",
+        "open5e": "10 minutes"
+      }
+    },
+    "Detect Poison and Disease": {
+      "casting_time": {
+        "local": "Action or Ritual",
+        "open5e": "action"
+      },
+      "duration": {
+        "local": "Concentration, up to 10 minutes",
+        "open5e": "10 minutes"
+      }
+    },
+    "Detect Thoughts": {
+      "duration": {
+        "local": "Concentration, up to 1 minute",
+        "open5e": "1 minute"
+      }
+    },
+    "Dispel Evil and Good": {
+      "duration": {
+        "local": "Concentration, up to 1 minute",
+        "open5e": "1 minute"
+      }
+    },
+    "Divination": {
+      "casting_time": {
+        "local": "Action or Ritual",
+        "open5e": "action"
+      }
+    },
+    "Divine Favor": {
+      "casting_time": {
+        "local": "Bonus Action",
+        "open5e": "bonus-action"
+      }
+    },
+    "Divine Smite": {
+      "casting_time": {
+        "local": "Bonus Action, which you take immedi- ately after hitting a target with a Melee weapon or an Unarmed Strike",
+        "open5e": "bonus-action"
+      },
+      "range": {
+        "local": "Self Component: V",
+        "open5e": "Self"
+      }
+    },
+    "Divine Word": {
+      "casting_time": {
+        "local": "Bonus Action",
+        "open5e": "bonus-action"
+      }
+    },
+    "Dominate Beast": {
+      "duration": {
+        "local": "Concentration, up to 1 minute",
+        "open5e": "1 minute"
+      }
+    },
+    "Dominate Monster": {
+      "duration": {
+        "local": "Concentration, up to 1 hour",
+        "open5e": "1 hour"
+      }
+    },
+    "Dominate Person": {
+      "duration": {
+        "local": "Concentration, up to 1 minute",
+        "open5e": "1 minute"
+      }
+    },
+    "Dragon\u2019s Breath": {
+      "casting_time": {
+        "local": "Bonus Action",
+        "open5e": "bonus-action"
+      },
+      "duration": {
+        "local": "Concentration, up to 1 minute",
+        "open5e": "1 minute"
+      }
+    },
+    "Dream": {
+      "casting_time": {
+        "local": "1 minute",
+        "open5e": "1minute"
+      }
+    },
+    "Earthquake": {
+      "duration": {
+        "local": "Concentration, up to 1 minute",
+        "open5e": "1 minute"
+      }
+    },
+    "Enhance Ability": {
+      "duration": {
+        "local": "Concentration, up to 1 hour",
+        "open5e": "1 hour"
+      }
+    },
+    "Enlarge/Reduce": {
+      "duration": {
+        "local": "Concentration, up to 1 minute",
+        "open5e": "1 minute"
+      }
+    },
+    "Ensnaring Strike": {
+      "casting_time": {
+        "local": "Bonus Action, which you take immedi- ately after hitting a creature with a weapon",
+        "open5e": "bonus-action"
+      },
+      "duration": {
+        "local": "Concentration, up to 1 minute",
+        "open5e": "1 minute"
+      }
+    },
+    "Entangle": {
+      "duration": {
+        "local": "Concentration, up to 1 minute",
+        "open5e": "1 minute"
+      }
+    },
+    "Enthrall": {
+      "duration": {
+        "local": "Concentration, up to 1 minute",
+        "open5e": "1 minute"
+      }
+    },
+    "Etherealness": {
+      "duration": {
+        "local": "Up to 8 hours",
+        "open5e": "8 hours"
+      }
+    },
+    "Expeditious Retreat": {
+      "casting_time": {
+        "local": "Bonus Action",
+        "open5e": "bonus-action"
+      },
+      "duration": {
+        "local": "Concentration, up to 10 minutes",
+        "open5e": "10 minutes"
+      }
+    },
+    "Eyebite": {
+      "duration": {
+        "local": "Concentration, up to 1 minute",
+        "open5e": "1 minute"
+      }
+    },
+    "Fabricate": {
+      "casting_time": {
+        "local": "10 minutes",
+        "open5e": "1minute"
+      }
+    },
+    "Faerie Fire": {
+      "duration": {
+        "local": "Concentration, up to 1 minute",
+        "open5e": "1 minute"
+      }
+    },
+    "Fear": {
+      "duration": {
+        "local": "Concentration, up to 1 minute",
+        "open5e": "1 minute"
+      }
+    },
+    "Feather Fall": {
+      "casting_time": {
+        "local": "Reaction, which you take when you or a creature you can see within 60 feet of you falls",
+        "open5e": "reaction"
+      }
+    },
+    "Find Familiar": {
+      "casting_time": {
+        "local": "1 hour or Ritual",
+        "open5e": "1hour"
+      }
+    },
+    "Find Steed": {
+      "range": {
+        "local": "30 feet Component: V, S",
+        "open5e": "30 feet"
+      }
+    },
+    "Find the Path": {
+      "casting_time": {
+        "local": "1 minute",
+        "open5e": "1minute"
+      },
+      "duration": {
+        "local": "Concentration, up to 1 day",
+        "open5e": "1 day"
+      }
+    },
+    "Flame Blade": {
+      "casting_time": {
+        "local": "Bonus Action",
+        "open5e": "bonus-action"
+      },
+      "duration": {
+        "local": "Concentration, up to 10 minutes",
+        "open5e": "10 minutes"
+      }
+    },
+    "Flaming Sphere": {
+      "duration": {
+        "local": "Concentration, up to 1 minute",
+        "open5e": "1 minute"
+      }
+    },
+    "Flesh to Stone": {
+      "duration": {
+        "local": "Concentration, up to 1 minute",
+        "open5e": "1 minute"
+      }
+    },
+    "Floating Disk": {
+      "casting_time": {
+        "local": "Action or Ritual",
+        "open5e": "action"
+      }
+    },
+    "Fly": {
+      "duration": {
+        "local": "Concentration, up to 10 minutes",
+        "open5e": "10 minutes"
+      }
+    },
+    "Fog Cloud": {
+      "duration": {
+        "local": "Concentration, up to 1 hour",
+        "open5e": "1 hour"
+      }
+    },
+    "Forbiddance": {
+      "casting_time": {
+        "local": "10 minutes or Ritual",
+        "open5e": "10minutes"
+      }
+    },
+    "Forcecage": {
+      "duration": {
+        "local": "Concentration, up to 1 hour",
+        "open5e": "1 hour"
+      }
+    },
+    "Foresight": {
+      "casting_time": {
+        "local": "1 minute",
+        "open5e": "1minute"
+      }
+    },
+    "Gaseous Form": {
+      "duration": {
+        "local": "Concentration, up to 1 hour",
+        "open5e": "1 hour"
+      }
+    },
+    "Gate": {
+      "duration": {
+        "local": "Concentration, up to 1 minute",
+        "open5e": "1 minute"
+      }
+    },
+    "Geas": {
+      "casting_time": {
+        "local": "1 minute",
+        "open5e": "1minute"
+      }
+    },
+    "Gentle Repose": {
+      "casting_time": {
+        "local": "Action or Ritual",
+        "open5e": "action"
+      }
+    },
+    "Giant Insect": {
+      "duration": {
+        "local": "Concentration, up to 10 minutes",
+        "open5e": "10 minutes"
+      }
+    },
+    "Globe of Invulnerability": {
+      "duration": {
+        "local": "Concentration, up to 1 minute",
+        "open5e": "1 minute"
+      }
+    },
+    "Glyph of Warding": {
+      "casting_time": {
+        "local": "1 hour",
+        "open5e": "1hour"
+      }
+    },
+    "Greater Invisibility": {
+      "duration": {
+        "local": "Concentration, up to 1 minute",
+        "open5e": "1 minute"
+      }
+    },
+    "Guards and Wards": {
+      "casting_time": {
+        "local": "1 hour",
+        "open5e": "1hour"
+      }
+    },
+    "Guidance": {
+      "duration": {
+        "local": "Concentration, up to 1 minute",
+        "open5e": "1 minute"
+      },
+      "range": {
+        "local": "Touch Component: V, S",
+        "open5e": "Touch"
+      }
+    },
+    "Gust of Wind": {
+      "duration": {
+        "local": "Concentration, up to 1 minute",
+        "open5e": "1 minute"
+      }
+    },
+    "Hallow": {
+      "casting_time": {
+        "local": "24 hours",
+        "open5e": "1hour"
+      }
+    },
+    "Hallucinatory Terrain": {
+      "casting_time": {
+        "local": "10 minutes",
+        "open5e": "1minute"
+      }
+    },
+    "Haste": {
+      "duration": {
+        "local": "Concentration, up to 1 minute",
+        "open5e": "1 minute"
+      }
+    },
+    "Healing Word": {
+      "casting_time": {
+        "local": "Bonus Action",
+        "open5e": "bonus-action"
+      }
+    },
+    "Heat Metal": {
+      "duration": {
+        "local": "Concentration, up to 1 minute",
+        "open5e": "1 minute"
+      }
+    },
+    "Hellish Rebuke": {
+      "casting_time": {
+        "local": "Reaction, which you take in response to taking damage from a creature that you can see within 60 feet of yourself",
+        "open5e": "reaction"
+      }
+    },
+    "Heroes\u2019 Feast": {
+      "casting_time": {
+        "local": "10 minutes",
+        "open5e": "1minute"
+      }
+    },
+    "Heroism": {
+      "duration": {
+        "local": "Concentration, up to 1 minute",
+        "open5e": "1 minute"
+      }
+    },
+    "Hex": {
+      "casting_time": {
+        "local": "Bonus Action",
+        "open5e": "bonus-action"
+      },
+      "duration": {
+        "local": "Concentration, up to 1 hour",
+        "open5e": "1 hour"
+      }
+    },
+    "Hideous Laughter": {
+      "duration": {
+        "local": "Concentration, up to 1 minute",
+        "open5e": "1 minute"
+      }
+    },
+    "Hold Monster": {
+      "duration": {
+        "local": "Concentration, up to 1 minute",
+        "open5e": "1 minute"
+      }
+    },
+    "Hold Person": {
+      "duration": {
+        "local": "Concentration, up to 1 minute",
+        "open5e": "1 minute"
+      }
+    },
+    "Holy Aura": {
+      "duration": {
+        "local": "Concentration, up to 1 minute",
+        "open5e": "1 minute"
+      }
+    },
+    "Hunter\u2019s Mark": {
+      "casting_time": {
+        "local": "Bonus Action",
+        "open5e": "bonus-action"
+      },
+      "duration": {
+        "local": "Concentration, up to 1 hour",
+        "open5e": "1 hour"
+      }
+    },
+    "Hypnotic Pattern": {
+      "duration": {
+        "local": "Concentration, up to 1 minute",
+        "open5e": "1 minute"
+      }
+    },
+    "Identify": {
+      "casting_time": {
+        "local": "1 minute or Ritual",
+        "open5e": "1minute"
+      }
+    },
+    "Illusory Script": {
+      "casting_time": {
+        "local": "1 minute or Ritual",
+        "open5e": "1minute"
+      }
+    },
+    "Imprisonment": {
+      "casting_time": {
+        "local": "1 minute",
+        "open5e": "1minute"
+      }
+    },
+    "Incendiary Cloud": {
+      "duration": {
+        "local": "Concentration, up to 1 minute",
+        "open5e": "1 minute"
+      }
+    },
+    "Insect Plague": {
+      "duration": {
+        "local": "Concentration, up to 10 minutes",
+        "open5e": "10 minutes"
+      }
+    },
+    "Instant Summons": {
+      "casting_time": {
+        "local": "1 minute or Ritual",
+        "open5e": "1minute"
+      }
+    },
+    "Invisibility": {
+      "duration": {
+        "local": "Concentration, up to 1 hour",
+        "open5e": "1 hour"
+      }
+    },
+    "Irresistible Dance": {
+      "duration": {
+        "local": "Concentration, up to 1 minute",
+        "open5e": "1 minute"
+      }
+    },
+    "Jump": {
+      "casting_time": {
+        "local": "Bonus Action",
+        "open5e": "bonus-action"
+      },
+      "range": {
+        "local": "Touch Component: V, S, M (a grasshopper\u2019s hind leg)",
+        "open5e": "Touch"
+      }
+    },
+    "Legend Lore": {
+      "casting_time": {
+        "local": "10 minutes",
+        "open5e": "1minute"
+      }
+    },
+    "Lesser Restoration": {
+      "casting_time": {
+        "local": "Bonus Action",
+        "open5e": "bonus-action"
+      }
+    },
+    "Levitate": {
+      "duration": {
+        "local": "Concentration, up to 10 minutes",
+        "open5e": "10 minutes"
+      }
+    },
+    "Locate Animals or Plants": {
+      "casting_time": {
+        "local": "Action or Ritual",
+        "open5e": "action"
+      }
+    },
+    "Locate Creature": {
+      "duration": {
+        "local": "Concentration, up to 1 hour",
+        "open5e": "1 hour"
+      }
+    },
+    "Locate Object": {
+      "duration": {
+        "local": "Concentration, up to 10 minutes",
+        "open5e": "10 minutes"
+      }
+    },
+    "Magic Circle": {
+      "casting_time": {
+        "local": "1 minute",
+        "open5e": "1minute"
+      }
+    },
+    "Magic Jar": {
+      "casting_time": {
+        "local": "1 minute",
+        "open5e": "1minute"
+      }
+    },
+    "Magic Mouth": {
+      "casting_time": {
+        "local": "1 minute or Ritual",
+        "open5e": "1minute"
+      }
+    },
+    "Magic Weapon": {
+      "casting_time": {
+        "local": "Bonus Action",
+        "open5e": "bonus-action"
+      }
+    },
+    "Magnificent Mansion": {
+      "casting_time": {
+        "local": "1 minute",
+        "open5e": "1minute"
+      }
+    },
+    "Major Image": {
+      "duration": {
+        "local": "Concentration, up to 10 minutes",
+        "open5e": "10 minutes"
+      }
+    },
+    "Mass Healing Word": {
+      "casting_time": {
+        "local": "Bonus Action",
+        "open5e": "bonus-action"
+      }
+    },
+    "Maze": {
+      "duration": {
+        "local": "Concentration, up to 10 minutes",
+        "open5e": "10 minutes"
+      }
+    },
+    "Meld into Stone": {
+      "casting_time": {
+        "local": "Action or Ritual",
+        "open5e": "action"
+      }
+    },
+    "Mending": {
+      "casting_time": {
+        "local": "1 minute",
+        "open5e": "1minute"
+      }
+    },
+    "Mind Spike": {
+      "duration": {
+        "local": "Concentration, up to 1 hour",
+        "open5e": "1 hour"
+      }
+    },
+    "Mirage Arcane": {
+      "casting_time": {
+        "local": "10 minutes",
+        "open5e": "1minute"
+      }
+    },
+    "Mislead": {
+      "duration": {
+        "local": "Concentration, up to 1 hour",
+        "open5e": "1 hour"
+      }
+    },
+    "Misty Step": {
+      "casting_time": {
+        "local": "Bonus Action",
+        "open5e": "bonus-action"
+      }
+    },
+    "Modify Memory": {
+      "duration": {
+        "local": "Concentration, up to 1 minute",
+        "open5e": "1 minute"
+      }
+    },
+    "Moonbeam": {
+      "duration": {
+        "local": "Concentration, up to 1 minute",
+        "open5e": "1 minute"
+      }
+    },
+    "Move Earth": {
+      "duration": {
+        "local": "Concentration, up to 2 hours",
+        "open5e": "2 hours"
+      }
+    },
+    "Pass without Trace": {
+      "duration": {
+        "local": "Concentration, up to 1 hour",
+        "open5e": "1 hour"
+      }
+    },
+    "Phantasmal Force": {
+      "duration": {
+        "local": "Concentration, up to 1 minute",
+        "open5e": "1 minute"
+      }
+    },
+    "Phantasmal Killer": {
+      "duration": {
+        "local": "Concentration, up to 1 minute",
+        "open5e": "1 minute"
+      }
+    },
+    "Phantom Steed": {
+      "casting_time": {
+        "local": "1 minute or Ritual",
+        "open5e": "1minute"
+      }
+    },
+    "Planar Ally": {
+      "casting_time": {
+        "local": "10 minutes",
+        "open5e": "1minute"
+      }
+    },
+    "Planar Binding": {
+      "casting_time": {
+        "local": "1 hour",
+        "open5e": "1hour"
+      }
+    },
+    "Plant Growth": {
+      "casting_time": {
+        "local": "Action (Overgrowth) or 8 hours (Enrichment)",
+        "open5e": "1hour"
+      }
+    },
+    "Polymorph": {
+      "duration": {
+        "local": "Concentration, up to 1 hour",
+        "open5e": "1 hour"
+      }
+    },
+    "Power Word Heal": {
+      "range": {
+        "local": "60 feet Component: V",
+        "open5e": "60 feet"
+      }
+    },
+    "Power Word Kill": {
+      "range": {
+        "local": "60 feet Component: V",
+        "open5e": "60 feet"
+      }
+    },
+    "Prayer of Healing": {
+      "casting_time": {
+        "local": "10 minutes",
+        "open5e": "1minute"
+      }
+    },
+    "Prestidigitation": {
+      "duration": {
+        "local": "Up to 1 hour",
+        "open5e": "1 hour"
+      }
+    },
+    "Private Sanctum": {
+      "casting_time": {
+        "local": "10 minutes",
+        "open5e": "1minute"
+      }
+    },
+    "Produce Flame": {
+      "casting_time": {
+        "local": "Bonus Action",
+        "open5e": "bonus-action"
+      }
+    },
+    "Project Image": {
+      "duration": {
+        "local": "Concentration, up to 1 day",
+        "open5e": "1 day"
+      }
+    },
+    "Protection from Energy": {
+      "duration": {
+        "local": "Concentration, up to 1 hour",
+        "open5e": "1 hour"
+      }
+    },
+    "Protection from Evil and Good": {
+      "duration": {
+        "local": "Concentration up to 10 minutes",
+        "open5e": "10 minutes"
+      }
+    },
+    "Purify Food and Drink": {
+      "casting_time": {
+        "local": "Action or Ritual",
+        "open5e": "action"
+      }
+    },
+    "Raise Dead": {
+      "casting_time": {
+        "local": "1 hour",
+        "open5e": "1hour"
+      }
+    },
+    "Ray of Enfeeblement": {
+      "duration": {
+        "local": "Concentration, up to 1 minute",
+        "open5e": "1 minute"
+      }
+    },
+    "Regenerate": {
+      "casting_time": {
+        "local": "1 minute",
+        "open5e": "1minute"
+      }
+    },
+    "Reincarnate": {
+      "casting_time": {
+        "local": "1 hour",
+        "open5e": "1hour"
+      }
+    },
+    "Resilient Sphere": {
+      "duration": {
+        "local": "Concentration, up to 1 minute",
+        "open5e": "1 minute"
+      }
+    },
+    "Resistance": {
+      "duration": {
+        "local": "Concentration, up to 1 minute",
+        "open5e": "1 minute"
+      },
+      "range": {
+        "local": "Touch Component: V, S",
+        "open5e": "Touch"
+      }
+    },
+    "Resurrection": {
+      "casting_time": {
+        "local": "1 hour",
+        "open5e": "1hour"
+      }
+    },
+    "Reverse Gravity": {
+      "duration": {
+        "local": "Concentration, up to 1 minute",
+        "open5e": "1 minute"
+      }
+    },
+    "Sanctuary": {
+      "casting_time": {
+        "local": "Bonus Action",
+        "open5e": "bonus-action"
+      }
+    },
+    "Scrying": {
+      "casting_time": {
+        "local": "10 minutes",
+        "open5e": "1minute"
+      },
+      "duration": {
+        "local": "Concentration, up to 10 minutes",
+        "open5e": "10 minutes"
+      }
+    },
+    "Searing Smite": {
+      "casting_time": {
+        "local": "Bonus Action, which you take immedi- ately after hitting a target with a Melee weapon or an Unarmed Strike",
+        "open5e": "bonus-action"
+      },
+      "range": {
+        "local": "Self Component: V",
+        "open5e": "Self"
+      }
+    },
+    "Shapechange": {
+      "duration": {
+        "local": "Concentration, up to 1 hour",
+        "open5e": "1 hour"
+      }
+    },
+    "Shield": {
+      "casting_time": {
+        "local": "Reaction, which you take when you are hit by an attack roll or targeted by the Magic Missile spell",
+        "open5e": "reaction"
+      }
+    },
+    "Shield of Faith": {
+      "casting_time": {
+        "local": "Bonus Action",
+        "open5e": "bonus-action"
+      },
+      "duration": {
+        "local": "Concentration, up to 10 minutes",
+        "open5e": "10 minutes"
+      }
+    },
+    "Shillelagh": {
+      "casting_time": {
+        "local": "Bonus Action",
+        "open5e": "bonus-action"
+      }
+    },
+    "Shining Smite": {
+      "casting_time": {
+        "local": "Bonus Action, which you take immedi- ately after hitting a creature with a Melee weapon or an Unarmed Strike",
+        "open5e": "bonus-action"
+      },
+      "duration": {
+        "local": "Concentration, up to 1 minute",
+        "open5e": "1 minute"
+      },
+      "range": {
+        "local": "Self Component: V",
+        "open5e": "Self"
+      }
+    },
+    "Silence": {
+      "casting_time": {
+        "local": "Action or Ritual",
+        "open5e": "action"
+      },
+      "duration": {
+        "local": "Concentration, up to 10 minutes",
+        "open5e": "10 minutes"
+      }
+    },
+    "Silent Image": {
+      "duration": {
+        "local": "Concentration, up to 10 minutes",
+        "open5e": "10 minutes"
+      }
+    },
+    "Simulacrum": {
+      "casting_time": {
+        "local": "12 hours",
+        "open5e": "1hour"
+      }
+    },
+    "Sleep": {
+      "duration": {
+        "local": "Concentration, up to 1 minute",
+        "open5e": "1 minute"
+      }
+    },
+    "Sleet Storm": {
+      "duration": {
+        "local": "Concentration, up to 1 minute",
+        "open5e": "1 minute"
+      }
+    },
+    "Slow": {
+      "duration": {
+        "local": "Concentration, up to 1 minute",
+        "open5e": "1 minute"
+      }
+    },
+    "Sorcerous Burst": {
+      "range": {
+        "local": "120 feet Component: V, S",
+        "open5e": "120 feet"
+      }
+    },
+    "Speak with Animals": {
+      "casting_time": {
+        "local": "Action or Ritual",
+        "open5e": "action"
+      }
+    },
+    "Spider Climb": {
+      "duration": {
+        "local": "Concentration, up to 1 hour",
+        "open5e": "1 hour"
+      }
+    },
+    "Spike Growth": {
+      "duration": {
+        "local": "Concentration, up to 10 minutes",
+        "open5e": "10 minutes"
+      }
+    },
+    "Spirit Guardians": {
+      "duration": {
+        "local": "Concentration, up to 10 minutes",
+        "open5e": "10 minutes"
+      }
+    },
+    "Spiritual Weapon": {
+      "casting_time": {
+        "local": "Bonus Action",
+        "open5e": "bonus-action"
+      },
+      "duration": {
+        "local": "Concentration, up to 1 minute",
+        "open5e": "1 minute"
+      }
+    },
+    "Stinking Cloud": {
+      "duration": {
+        "local": "Concentration, up to 1 minute",
+        "open5e": "1 minute"
+      }
+    },
+    "Stoneskin": {
+      "duration": {
+        "local": "Concentration, up to 1 hour",
+        "open5e": "1 hour"
+      }
+    },
+    "Storm of Vengeance": {
+      "duration": {
+        "local": "Concentration, up to 1 minute",
+        "open5e": "1 minute"
+      }
+    },
+    "Suggestion": {
+      "duration": {
+        "local": "Concentration, up to 8 hours",
+        "open5e": "8 hours"
+      }
+    },
+    "Summon Dragon": {
+      "duration": {
+        "local": "Concentration, up to 1 hour",
+        "open5e": "1 hour"
+      }
+    },
+    "Sunbeam": {
+      "duration": {
+        "local": "Concentration, up to 1 minute",
+        "open5e": "1 minute"
+      }
+    },
+    "Symbol": {
+      "casting_time": {
+        "local": "1 minute",
+        "open5e": "1minute"
+      }
+    },
+    "Telekinesis": {
+      "duration": {
+        "local": "Concentration, up to 10 minutes",
+        "open5e": "10 minutes"
+      }
+    },
+    "Telepathic Bond": {
+      "casting_time": {
+        "local": "Action or Ritual",
+        "open5e": "action"
+      }
+    },
+    "Teleportation Circle": {
+      "casting_time": {
+        "local": "1 minute",
+        "open5e": "1minute"
+      }
+    },
+    "Thaumaturgy": {
+      "duration": {
+        "local": "Up to 1 minute",
+        "open5e": "1 minute"
+      }
+    },
+    "Tiny Hut": {
+      "casting_time": {
+        "local": "1 minute or Ritual",
+        "open5e": "1minute"
+      }
+    },
+    "Tree Stride": {
+      "duration": {
+        "local": "Concentration, up to 1 minute",
+        "open5e": "1 minute"
+      }
+    },
+    "True Polymorph": {
+      "duration": {
+        "local": "Concentration, up to 1 hour",
+        "open5e": "1 hour"
+      }
+    },
+    "True Resurrection": {
+      "casting_time": {
+        "local": "1 hour",
+        "open5e": "1hour"
+      }
+    },
+    "Tsunami": {
+      "casting_time": {
+        "local": "1 minute",
+        "open5e": "1minute"
+      },
+      "duration": {
+        "local": "Concentration, up to 6 rounds",
+        "open5e": "6 rounds"
+      }
+    },
+    "Unseen Servant": {
+      "casting_time": {
+        "local": "Action or Ritual",
+        "open5e": "action"
+      }
+    },
+    "Vampiric Touch": {
+      "duration": {
+        "local": "Concentration, up to 1 minute",
+        "open5e": "1 minute"
+      }
+    },
+    "Wall of Fire": {
+      "duration": {
+        "local": "Concentration, up to 1 minute",
+        "open5e": "1 minute"
+      }
+    },
+    "Wall of Force": {
+      "duration": {
+        "local": "Concentration, up to 10 minutes",
+        "open5e": "10 minutes"
+      }
+    },
+    "Wall of Ice": {
+      "duration": {
+        "local": "Concentration, up to 10 minutes",
+        "open5e": "10 minutes"
+      }
+    },
+    "Wall of Stone": {
+      "duration": {
+        "local": "Concentration, up to 10 minutes",
+        "open5e": "10 minutes"
+      }
+    },
+    "Wall of Thorns": {
+      "duration": {
+        "local": "Concentration, up to 10 minutes",
+        "open5e": "10 minutes"
+      }
+    },
+    "Water Breathing": {
+      "casting_time": {
+        "local": "Action or Ritual",
+        "open5e": "action"
+      }
+    },
+    "Water Walk": {
+      "casting_time": {
+        "local": "Action or Ritual",
+        "open5e": "action"
+      }
+    },
+    "Web": {
+      "duration": {
+        "local": "Concentration, up to 1 hour",
+        "open5e": "1 hour"
+      }
+    },
+    "Weird": {
+      "duration": {
+        "local": "Concentration, up to 1 minute",
+        "open5e": "1 minute"
+      }
+    },
+    "Wind Walk": {
+      "casting_time": {
+        "local": "1 minute",
+        "open5e": "1minute"
+      }
+    },
+    "Wind Wall": {
+      "duration": {
+        "local": "Concentration, up to 1 minute",
+        "open5e": "1 minute"
+      }
+    }
+  },
+  "joined_count": 339,
+  "local_count": 339,
+  "only_in_local": [],
+  "only_in_open5e": [],
+  "open5e_count": 339
+}

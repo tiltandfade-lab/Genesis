@@ -8,6 +8,51 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-07-14 — PHASE-3 WAVE-1: no-spend visual wave + diorama cutaway restore + repo migration [Claude Opus 4.8, orchestrated]
+
+Phase-3 Wave-1 executed as background worktree-isolated Sonnet executors, each personally re-gated
+(harnesses re-run by me, visual units' PNGs READ, never self-report), landed `--no-ff`. Master tip
+after the wave: `a23d2eb2`.
+
+**Added**
+- **P3-1a Poisson dressing** (`src/engine/place-distribution.js`, `placeDistribute`) — seeded
+  Poisson-disk realization of incidental floor dressing behind `ROOM_PLACE_DISTRIBUTE=false`
+  (byte-identical until a follow-up flip). 27/27 (5 red-first), dungeon-dressing 655/0, interior
+  287/0, active-room p95 0.53ms.
+- **W0-c Open5e cross-check** (`build/sync-open5e.py`) — read-only SRD-Data validator vs Open5e
+  `srd-2024` (339/339 name join, 223 representation-format field diffs surfaced); NEVER writes SRD-Data.
+- **E0-1 wall-fixture occlusion-fade** — wall-mounted practicals fade with their occluded wall
+  segment (per-wall-mount body-material clone; append into the `ownerSegIndex` fadeEntry, never
+  overwrite). 32/0 + 3-way isolation proof; capture confirms suppressed torch dims, non-suppressed
+  stays lit. (Grew from a P3-1d out-of-scope finding.)
+- **P3-1e eyeball fixtures** (`dev/battle-gate/eyeball-fixtures/`) — legacy-vs-oss capture pairs
+  (tiered / aperture / dressed room), same scene/camera/crop taste-gate set; frames READ (tiers
+  render under both kernels — a staging gap, not a code defect).
+- **P3-1b depth-state audit** (`dev/audit-depth-state.mjs`) — four-yaw oss capture + material census;
+  PROVEN defect table EMPTY (renderer transparency clean), one latent wall-upper condition flagged for P3-3.
+
+**Fixed**
+- **P3-1d diorama cutaway restoration** — compiled rooms read as OPEN dioramas again, not closed
+  boxes (the C4.1b regression). Camera-side wall-upper band suppression restored via
+  `itrOcclusionClassify` (`wallUpperCameraSideBlockingSet`, `theater-shot.js`); occlusion subjects
+  extended anchors→all mounted figures (`OCCLUSION_SUBJECT_CAP=24`, loud warn). 14/14 red-first,
+  wall-occlusion 23/0, theater-shot 107/0, interior 287/0; before/after loop-gate PNGs READ.
+
+**Changed**
+- **CI scoped to master + PRs** (`.github/workflows/ci.yml`) — a blanket `on: push` (all branches)
+  turned a `git push --all` backup into ~100 failing CI runs (inbox flood); branch backups no longer
+  each trigger a run. Cancelled the active runs; deleted 81 junk `worktree-*` branches from origin.
+- **Repo migrated to an APFS sparsebundle on the Work Drive** (`/Volumes/Genesis/Genesis`) — off the
+  97%-full boot drive. exec bits preserved (git clean, no fileMode churn), all branches + Cowork
+  memory carried over, verified (check-manifest OK, harnesses green, app serves). Launchers +
+  `.claude/launch.json` rerouted; old copy removed (corrupt zip discarded — origin is the backup).
+- **P3-2 Stage B teed up** (`docs/PHASE-3-WAVE-2-SPECS.md`, B1–B4) — GATED on sprite-QA registry
+  coordination (B1 regenerates `sprite-registry.js`).
+
+**Deferred**
+- W0-b PRNG dedup — real surface is 20+ harness files, not 3; re-scope before executing.
+- W0-a struck — MF-3b hit-stop already shipped in BW4B (`17474b45`); wave plan listed a stale unit.
+
 ## 2026-07-13 (later) — OSS adoption research pass + Phase-3 brief + oss stabilization evidence
 
 Closed out the geometry-flip session. Adam asked whether Genesis is "rebuilding the wheel" on open-source;
@@ -953,52 +998,4 @@ props made scale-true, and a repeatable Blender+text modeling pipeline proven ac
 **Deferred**
 - Frontier GLBs built but NOT engine-wired (Step 6 next session). The 16-wide text-wave throughput test
   + the MODEL-BLITZ-24H overnight run are the next session's opening moves.
-
-## 2026-07-08 — TABLETOP pre-alpha BUILT: 5 of 7 units on master (overnight unattended build)
-
-Adam un-gated the TABLETOP build (`docs/TABLETOP-UNITS.md` U1–U7) for an overnight unattended
-run — Fable planned + launched Wave 1, Opus took over as boss at the model handoff and gated +
-landed the rest. Five `--no-ff` merges on master, all pushed: `22673a3` (U1+U2) → `7bdf51f`
-(U3) → `c06350a` (U4) → `4bac31f` (U6). Every landing personally re-gated by Opus (check-manifest
-+ the unit harness + the full ~120-file `dev/verify-*.mjs` sweep at zero RED), never on executor
-self-report. Full detail: `docs/OVERNIGHT-REPORT-2026-07-08.md`.
-
-**Added**
-- **U1 — trayFrom + the Standing Table** (`src/engine/theater-data.js`): the theater is now the
-  permanent center stage (empty table under realm light when idle, the here-segment's tray when
-  walking, combat unchanged). `theaterBoardFrom` became a one-line wrapper over `trayFrom`;
-  combat parity is fixture-proven (`dev/fixtures/tabletop-u1-board.json` byte-gate).
-- **U2 — the 3-column shell + ARIA** (`render.js`, `dice.js`, `genesis.html`): stage-mode is the
-  standing layout (left status / center stage / right feed+composer), collapsible, all-keyboard;
-  `.dm-feed` `role="log"`, the battle prose twin moved OUTSIDE the aria-hidden stage subtree.
-- **U3 — blank-piece fallback + ambient presence** (`theater-figures.js`, `codex.js`, `dm.js`):
-  `blank:figure`/`blank:prop` bottom the resolve chain (never-null for figure/prop); soft ambient
-  NPCs surface as an aggregate digest presence line via the one shared `codexAmbientPresenceFor`.
-- **U4 — cast tableau + arrangement grammar** (`theater-data.js`): `castFrom` + pure
-  `arrangeTableau` (facing-pair/ring/march/shopfront/vignette), mechanical selection, one
-  attitude→placement table.
-- **U6 — combat reconfigure/relax + tray persistence** (`theater-data.js`, `dm.js`, `render.js`):
-  `combat_start` reconfigures the standing tray into lanes with NO remount/retire; `combat_end`
-  relaxes back to the tableau + stages corpse traces; §9.10 dedup (one noun → one piece);
-  serialize/reload tray-hash persistence. Also **wired `castFrom` into `theaterStageSync`** (the
-  gap U4 left) and **fixed a real cross-fight `fid` collision** (a second fight in a room no longer
-  drops its corpses as false dupes).
-
-**Changed**
-- `docs/DIRECTION.md` §4: recorded Adam's 2026-07-07 verbal BUILD un-gate for the tabletop
-  pre-alpha (supersedes the soak-gate for U1–U7 only; no other subsystem un-gated).
-
-**Deferred / Parked**
-- **U5 (overlay lanes) + U7 (harness pack) PARKED** on a genuine corpse-channel design fork:
-  U5 and U6 built incompatible corpse plumbing (U5 `board.corpses`/`statId` refs that collide for
-  same-type foes; U6 `castFrom` corpse-units/collision-safe `fid`). U6's landed as canonical; U5's
-  separable ambient-overlays rescope to a morning "U5′" rebased on U6, then U7 runs on the full
-  U1–U6 tree. Needs Adam's corpse-channel ratification. Branch `feat/tabletop-u5-overlays`
-  (`f229cf8`) preserved + pushed.
-- **ES-module migration** still deferred (Fable's call, ratified in effect): a mid-run migration
-  would have invalidated U3–U6's `file:line` spec anchors unattended; U3–U6 didn't need it.
-
-**Flagged for design review** (not blockers): `engine.theater-data` (L1) now calls up into
-`world.prep`/`world.codex` (WARN-level, spec-named) — dependency direction worth a look; U4's
-`theaterCastPcRefFrom` duplicates dm.js's PC-ref construction to avoid more coupling.
 

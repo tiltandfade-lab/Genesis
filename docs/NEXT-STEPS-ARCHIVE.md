@@ -18,6 +18,23 @@ just preserves the old ordered-queue framing for anyone reconstructing why a cal
 
 ---
 
+## Do next (2026-07-11, BW4 MOTION & FEEL LANDED — the wave opened two Adam-gated items)
+
+BW4's 4 buildable units are on master + pushed (camera tweens, spawn grace, hit-stop mechanism,
+turn rhythm — details in CHANGELOG 2026-07-11 BW4, HANDOFF top). Two open, both need Adam:
+
+1. ☐ **MF-3b — hit-stop production wiring (Adam's event-shape call).** Hit-stop/recoil/crit are
+   built+tested but DORMANT: production plays `hit-damage` (base shake+flash) but never passes
+   `opts.attackerId` (gates the freeze+recoil) nor emits `hit-crit` (gates crit-response). FIX =
+   thread `attackerId` + a crit flag onto the hp ledger event (EVENT-CONTRACT addition at the
+   `DM_EVENT_FIELDS` boundary). Smaller than a strike/hurt remap, no double-fire risk. fall-death
+   hold is already live.
+2. ☐ **MF-5 — the feel gate.** Play 3 combat rounds ("does it feel like moving miniatures?") +
+   the instrumented 10s turn-burst. Best AFTER MF-3b (so the burst shows hit-stop) and mind the
+   documented capture-vs-tween screenshot limit. Interim evidence committed: the loop-gate
+   contact sheet + `loop-01-camera-mid-tween.png` + the fake-clock tween-curve harnesses.
+3. ☐ Then the BW2/BW3 carry-over below (PACKET-01 mocks, beauty-shot eyeball, GIT-LFS, UW1-4).
+
 ## Do next (2026-07-10, SPRITE-GEN-V2 — the V3 wave; laws in docs/SPRITE-GEN-V2.md, tags in docs/SPRITE-TAGS.md)
 
 1. ☑ **Cleanup + survey + laws + V3 generation + gate — DONE 2026-07-10** (worktrees 21→1; 2,431

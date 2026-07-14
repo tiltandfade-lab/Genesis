@@ -46,6 +46,7 @@ const world = {
   prep: { activeWalkId: "n-1", nodes: { "n-1": { interactables: [
     { sourceRef: "door-1", archetype: "door", state: "shut", name: "the iron door" },
     { sourceRef: "chest-1", archetype: "chest", name: "a battered strongbox" },   // no explicit state — default path
+    { sourceRef: "widget-1", archetype: "qa-unrostered-widget", state: "dormant", name: "a strange device" },   // §4: an archetype NO registry lists — the no-state-list degrade
   ] } } },
 };
 win.U.worlds[world.id] = world;
@@ -82,12 +83,20 @@ const findEnt = (ref) => world.prep.nodes["n-1"].interactables.find((it) => it.s
   check("missing entityRef -> ok:false reason:'no-entity-ref', never throws",
     !threw && r && r.ok === false && r.reason === "no-entity-ref", JSON.stringify(r)); }
 
-// === 4. registry absent (pre-D1: window.INTERACTABLE_ARCHETYPE_STATES undefined) -> quiet no-op,
-//        entity's state field untouched (never a blind write without a known state list) ===
-{ check("precondition: INTERACTABLE_ARCHETYPE_STATES is absent (pre-D1)", typeof win.INTERACTABLE_ARCHETYPE_STATES === "undefined");
-  const before = ledgerLen(), ent = findEnt("door-1"), stateBefore = ent.state;
-  const r = win.applyEvent(world, { type: "state_transition", payload: { entityRef: "door-1", to: "open" }, source: "declared" });
-  check("registry absent -> ok:false reason:'no-state-list', ledger unmoved, entity.state untouched",
+// === 4. no state list known for the archetype -> quiet no-op, entity's state field untouched
+//        (never a blind write without a known state list).
+//        FIXTURE FIX 2026-07-14 (red-first: this section WENT RED on the D0+D1 integrated tree —
+//        18/4 at merge cbc90402..33fe8537): the original fixture simulated "registry absent (pre-D1)"
+//        via `door-1` + asserting `win.INTERACTABLE_ARCHETYPE_STATES === undefined`. Post-D1 that
+//        simulation is IMPOSSIBLE in a full-app load: data/interactables.js declares the table as a
+//        top-level lexical `const`, which SHADOWS any window property — dm.js saw the real door list,
+//        the "absent" transition genuinely applied (correct behavior!), and the mutated door-1
+//        cascaded into three downstream `from` assertions. Same degrade path, robust form: an
+//        UNROSTERED archetype (no registry lists it, real or synthetic) hits the identical
+//        no-state-list branch whether or not D1's registry is loaded. Behavior unweakened. ===
+{ const before = ledgerLen(), ent = findEnt("widget-1"), stateBefore = ent.state;
+  const r = win.applyEvent(world, { type: "state_transition", payload: { entityRef: "widget-1", to: "active" }, source: "declared" });
+  check("unrostered archetype (no state list known) -> ok:false reason:'no-state-list', ledger unmoved, entity.state untouched",
     r.ok === false && r.reason === "no-state-list" && ledgerLen() === before && ent.state === stateBefore, JSON.stringify(r)); }
 
 // --- from here on, the harness supplies the D1 archetype state-list table (synthetic — D1 owns

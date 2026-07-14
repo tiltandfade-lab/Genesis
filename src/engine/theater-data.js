@@ -1129,6 +1129,16 @@ function trayFrom(source, scene, opts){
     if(projectedDressing.length){
       dressedPlan = Object.assign({}, dressedPlan, { dressing:(dressedPlan.dressing||[]).concat(projectedDressing) });
     }
+    // PHASE-3-WAVE-1-SPECS.md P3-1a (GP-3a Poisson place-distribution.js) — the frozen seam: nouns/
+    // counts/source refs/home rooms/canonical anchors are decided above; ROOM_PLACE_DISTRIBUTE (src/
+    // engine/place-distribution.js, default false) gates a seeded incidental-filler realization pass
+    // so landing OFF keeps this render byte-identical to pre-this-unit.
+    if(typeof placeDistribute === "function" && typeof ROOM_PLACE_DISTRIBUTE !== "undefined" && ROOM_PLACE_DISTRIBUTE){
+      dressedPlan = placeDistribute(dressedPlan, {
+        walkId: source.record?.id ?? source.walkId ?? null,
+        focusSegNum: source.focusSegNum
+      });
+    }
     const board = interiorBuildBoard(dressedPlan, {
       env: env, realmId: realmId, focusSegNum: source.focusSegNum, radius: source.radius,
       projection:projection

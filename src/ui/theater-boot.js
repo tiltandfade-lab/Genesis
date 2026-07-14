@@ -4163,7 +4163,7 @@ const GRADE_VIGNETTE_OUTER = 0.92; // radius where it reaches full depth (corner
 // _setRoomShellPolygonKernel test-seam convention) needs to reassign this in-process so an A/B
 // capture harness can flip "none"<->"agx" without a source edit between runs. Product code never
 // writes this; only the test seam does.
-let GRADE_TONEMAP = "none"; // "none" | "agx" — default OFF, flips only on Adam's explicit taste call
+let GRADE_TONEMAP = "agx"; // "none" | "agx" — Adam flipped agx ON 2026-07-14 (A/B ruled "looks awesome"); "none" = the pre-AgX look, seam-settable back via _setGradeTonemapForTest
 
 // AgX tone-mapping GLSL — VERBATIM port from three.js r166 (three@0.166.1,
 // node_modules/three/src/renderers/shaders/ShaderChunk/tonemapping_pars_fragment.glsl.js's

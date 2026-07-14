@@ -1,8 +1,0 @@
-{
-  "turnId": "fixture-combat",
-  "narration": "You ease between two tar-slick pilings, the mud sucking at your boots. Through a gap in the planking above you can hear them — two voices, low and quick, and the unmistakable wet slap of someone hefting something heavy and wrapped in oilcloth. The size of a ledger. One more step and the rotten board under your foot begins, very slowly, to give.",
-  "events": [],
-  "rollRequest": { "skill": "Stealth", "ability": "dex", "dcHidden": true },
-  "ask": null,
-  "dmNotes": "I do not roll for the player. Requesting an open Stealth (DEX) check; the result rides the next turn's rolls. DC kept hidden."
-}

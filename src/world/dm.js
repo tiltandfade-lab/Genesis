@@ -1562,7 +1562,7 @@ function codexMintSignificantFoes(w, foes){
 // list can't silently drift from the code that consumes it). An event whose type is NOT here still
 // applies if well-formed (validateEvent flags unknownType but passes it; the switch no-ops it) —
 // forward-compatible by design. Add a new case to the switch AND a line here (the test enforces both).
-const DM_EVENT_TYPES = ["hp_changed","death_save","temp_hp","combat_start","combat_end","attack","action","opportunity_attack","move_zone","grapple","shove","hazard_tick","slot_spent","cast","concentration_start","concentration_broken","resource_spent","rest","item_changed","item_split","item_use","charge_spend","charge_restore","condition_add","condition_remove","item_rust_exposure","item_claimed","condition_expired","round_tick","foe_morale","foe_action","equip","unequip","set_grip","attune","unattune","fact_canonized","codex_add","codex_link","codex_update","codex_reveal","codex_contact","social_check","attitude_shift","animal_interview","animal_care","morale_check","parley_open","insight_read","discovery","clock_advanced","clock_fired","front_closed","encounter_resolved","kill","claim_deed","gift","epithet_grant","hire","dismiss","tend_pet","companion_update","recruit_creature","choice_logged","inspiration_granted","inspiration_spend","check","crit_outcome","stage_fx","terrain_change","adjudication","level_applied","prep_applied","prep_contact","walk_advance","walk_update","walk_complete","capture","chase_start","chase_round","chase_yield","downtime","distant_word","shrine_omen","xp_granted","open_shop","district_mint","building_approach","building_contact","job_board_read","job_accept","tarot_landed","advance_clock","move_node","start_walk","travel_start","knockout","bastion_claim","mark_added","mark_removed"];
+const DM_EVENT_TYPES = ["hp_changed","death_save","temp_hp","combat_start","combat_end","attack","action","opportunity_attack","move_zone","grapple","shove","hazard_tick","slot_spent","cast","concentration_start","concentration_broken","resource_spent","rest","item_changed","item_split","item_use","charge_spend","charge_restore","condition_add","condition_remove","item_rust_exposure","item_claimed","condition_expired","round_tick","foe_morale","foe_action","equip","unequip","set_grip","attune","unattune","fact_canonized","codex_add","codex_link","codex_update","codex_reveal","codex_contact","social_check","attitude_shift","animal_interview","animal_care","morale_check","parley_open","insight_read","discovery","clock_advanced","clock_fired","front_closed","encounter_resolved","kill","claim_deed","gift","epithet_grant","hire","dismiss","tend_pet","companion_update","recruit_creature","choice_logged","inspiration_granted","inspiration_spend","check","crit_outcome","stage_fx","terrain_change","adjudication","level_applied","prep_applied","prep_contact","walk_advance","walk_update","walk_complete","capture","chase_start","chase_round","chase_yield","downtime","distant_word","shrine_omen","xp_granted","open_shop","district_mint","building_approach","building_contact","job_board_read","job_accept","tarot_landed","advance_clock","move_node","start_walk","travel_start","knockout","bastion_claim","mark_added","mark_removed","state_transition"];
 
 // The known provenance vocabulary — who asserted this event. "detected" = the engine derived it
 // from observed state (prefer); "declared" = the DM reported it (the default when omitted);
@@ -1730,7 +1730,11 @@ const DM_EVENT_FIELDS = {
   move_node:         { accept:["nodeId","travelMin","cause"], alias:{ to:"nodeId", node:"nodeId", id:"nodeId" } },
   start_walk:        { accept:["nodeId","enter"], alias:{ id:"nodeId", node:"nodeId" } },
   travel_start:      { accept:["toNodeId","travelMin","cause"], alias:{ nodeId:"toNodeId", to:"toNodeId", dest:"toNodeId" } },
-  knockout:          { accept:["cause"] }
+  knockout:          { accept:["cause"] },
+  // D0 (docs/STAGE-D-WAVE-SPECS.md) — the state primitive's transition event. entityRef/from/to/cause
+  // are plain strings (state names are never numeric — no `num` tag). `from` is optional: applyEvent
+  // derives it from the entity's current/default state for the ledger line when the DM omits it.
+  state_transition:  { accept:["entityRef","from","to","cause"] }
 };
 
 /* Fold ONE event's payload through DM_EVENT_FIELDS: rewrite aliases to canonical (canonical wins
@@ -1879,6 +1883,47 @@ function bastionPrice(w){
   const t=(typeof livingSheet==="function")?livingSheet(w):null;
   const lvl=(t&&t.sh&&t.sh.level)||1;
   return 250*Math.max(1, Math.ceil(lvl/2));
+}
+
+/* D0 (docs/STAGE-D-WAVE-SPECS.md) — resolve a placed interactable by entityRef. Looks at the
+   ACTIVE walk's prep node for a `.interactables[]` array (the shape D2 will populate as
+   `plan.interactables[]`, sourceRef-keyed — WALK-NATIVE-A.md's citizens/interactables lanes carry
+   `sourceRef`, so state_transition matches the same key) and finds the entry whose sourceRef
+   equals entityRef. Pre-D2 (no `.interactables[]` on any prep node yet) this always returns null —
+   a graceful degrade, not a bug: state_transition simply has nothing to write to until D2 lands.
+   Reads `w.prep` directly (never calls prepOf, which LAZILY CREATES it — resolution must never have
+   a write side effect). The verify harness constructs this exact shape on a synthetic `w` to drive
+   the "applies" path (CLAUDE.md "harness supplies synthetic entities" per the D0 spec). */
+function dmFindInteractable(w, entityRef){
+  if(entityRef==null || !w) return null;
+  const P=w.prep;
+  if(!P || !P.nodes) return null;
+  const nodeId=P.activeWalkId;
+  const pn=nodeId!=null && P.nodes[nodeId];
+  if(!pn || !Array.isArray(pn.interactables)) return null;
+  return pn.interactables.find(function(it){ return it && it.sourceRef===entityRef; }) || null;
+}
+
+/* D0 — the archetype→state-list lookup state_transition validates `to` against. D1's
+   data/interactables.js fold is the eventual source of truth and will export this table (naming
+   TBD by D1) under the classic global INTERACTABLE_ARCHETYPE_STATES; until D1 lands the global is
+   simply absent, so this degrades to null (classic-globals `typeof` check — never assumes the
+   registry exists, never throws). The verify harness sets the global directly before exercising the
+   "applies"/"invalid state" paths — same classic-globals convention D1's own registry will use. */
+function dmArchetypeStates(archetype){
+  if(typeof INTERACTABLE_ARCHETYPE_STATES==="undefined" || !INTERACTABLE_ARCHETYPE_STATES) return null;
+  const list=INTERACTABLE_ARCHETYPE_STATES[archetype];
+  return Array.isArray(list) ? list : null;
+}
+
+/* D0 — an entity's EFFECTIVE state: its own explicit `.state` if set, else the archetype's
+   authored "at rest" default (the state list's first entry — BW5's table always lists the resting
+   state first: shut/closed/lit/left/sealed/intact/hidden), else null when neither is known. Never
+   throws on missing archetype data (mirrors the no-op degrade posture everywhere else in D0). */
+function dmEntityState(ent, states){
+  if(!ent) return null;
+  if(ent.state!=null) return ent.state;
+  return (Array.isArray(states) && states.length) ? states[0] : null;
 }
 
 function applyEvent(w,e){
@@ -4357,6 +4402,33 @@ function applyEvent(w,e){
       if(typeof jobWalkAccept!=="function") return {ok:false,reason:"job-walks-unavailable"};
       const r=jobWalkAccept(w, p.postingId);
       return r;
+    }
+
+    /* D0 (docs/STAGE-D-WAVE-SPECS.md, BEAUTY-WAVE-5.md S0-3/Law 6) — the state primitive. A mutable
+       `state` field on placed entities generally (interactables first; fixtures/fires/surfaces
+       later per S0-3), fired by this transition event — the hook BW4's tween channel animates
+       (never a teleport; animation itself is out of scope here). Two independent degrade paths,
+       both quiet (no console.warn — matches the existing "…-unavailable" reason convention, NOT the
+       loud drift/coercion warnings): entity not found (pre-D2, or a stale/typo'd ref) and no known
+       state list for the archetype (pre-D1, or an archetype the registry doesn't cover) both no-op
+       forward-compatibly. Only a KNOWN archetype rejecting an unlisted `to` is a real validation
+       failure — that one IS loud (no silent write). */
+    case "state_transition":{
+      const ref=p.entityRef;
+      if(ref==null) return {ok:false, reason:"no-entity-ref"};
+      const ent=dmFindInteractable(w, ref);
+      if(!ent) return {ok:false, reason:"no-such-entity", entityRef:ref};   // quiet no-op — pre-D2 default
+      const states=dmArchetypeStates(ent.archetype);
+      if(!states) return {ok:false, reason:"no-state-list", archetype:ent.archetype};   // quiet no-op — pre-D1 default
+      if(p.to==null || states.indexOf(p.to)<0){
+        console.warn("[dm-seam] state_transition rejected — invalid `to` state:",p.to,"for archetype",ent.archetype,"allowed:",states,e);
+        return {ok:false, reason:"invalid-state", to:p.to, allowed:states.slice()};
+      }
+      const from=(p.from!=null) ? p.from : dmEntityState(ent, states);
+      ent.state=p.to;
+      addLedger(w,"outcome",{kind:"state",entityRef:ref,archetype:ent.archetype,from,to:p.to,cause:p.cause||null,source:src},
+        "◇ "+(ent.name||ref)+" — "+(from||"?")+" → "+p.to+(p.cause?(" ("+p.cause+")"):"")+".");
+      return {ok:true, entityRef:ref, from, to:p.to};
     }
 
     default:

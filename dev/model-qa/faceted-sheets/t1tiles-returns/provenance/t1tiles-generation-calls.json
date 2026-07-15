@@ -1,0 +1,12 @@
+[
+  {"file":"raw-textures/fantasy-floor-1-candidate-001.png","callId":"exec-dcf534a9-2e4f-47ba-847a-e6b79e239533","slot":"fantasy-floor-1"},
+  {"file":"raw-textures/fantasy-floor-alt-1-candidate-001.png","callId":"exec-00223974-ccfc-49b5-9fce-bdcb4a48afc1","slot":"fantasy-floor-alt-1"},
+  {"file":"raw-textures/fantasy-wall-1-candidate-001.png","callId":"exec-87af5745-d70c-454d-966c-5ecf1c4d3f7e","slot":"fantasy-wall-1"},
+  {"file":"raw-textures/fantasy-trim-1-candidate-001.png","callId":"exec-025a19e8-7623-4243-9a5f-a26d3c106c16","slot":"fantasy-trim-1"},
+  {"file":"raw-textures/fantasy-face-cabinet-door-1-candidate-001.png","callId":"exec-87afaded-8c5d-4dea-aed2-dcd4398982c2","slot":"fantasy-face-cabinet-door-1"},
+  {"file":"raw-textures/fantasy-face-crate-side-1-candidate-001.png","callId":"exec-472c1098-200b-4471-b48a-c39c63e6f422","slot":"fantasy-face-crate-side-1"},
+  {"file":"raw-textures/fantasy-face-crate-top-1-candidate-001.png","callId":"exec-d8d01bad-3c23-4a8f-83ad-79fbd077d4b4","slot":"fantasy-face-crate-top-1"},
+  {"file":"raw-textures/fantasy-face-panel-plain-1-candidate-001.png","callId":"exec-a5d6664f-1fbc-4947-9f62-35c704afca05","slot":"fantasy-face-panel-plain-1"},
+  {"file":"raw-textures/fantasy-face-panel-vents-1-candidate-001.png","callId":"exec-eadbe431-a709-4864-bc0c-7cc929385f9a","slot":"fantasy-face-panel-vents-1"},
+  {"file":"raw-textures/fantasy-face-panel-glow-1-candidate-001.png","callId":"exec-217357fb-1324-49f0-93bd-3c68cbc658be","slot":"fantasy-face-panel-glow-1"}
+]

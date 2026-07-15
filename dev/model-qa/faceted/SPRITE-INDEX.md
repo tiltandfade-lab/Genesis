@@ -1,0 +1,1008 @@
+---
+type: sprite-index
+project: Genesis
+scope: fantasy realm (incl. spr-pc) + combat VFX + decals
+created: 2026-07-13
+generated-by: gen-index.py (machine-verified against assets/sprites and the packet files)
+---
+
+# FANTASY SPRITE INDEX — the cohesive map
+
+One row per asset family; every fantasy sprite on disk maps to exactly ONE packet (verified).
+Status: **done** = F1 raw candidates generated & consolidated · **queued** = packet written,
+awaiting generation · **retire** = legacy sheet replaced by individual sprites · **alias** =
+covered by an F1 anchor under a different slug (admission maps the winner onto the legacy id).
+
+## Program totals
+
+| packet | scope | identities | status |
+|---|---|---|---|
+| F1 | Anchors + undead/goblinoid/bandit-cultist/guards-beasts pilot | 49 | done (45 raw candidates, ledgered) |
+| F2 | Dragons (young/wyrmling core), wolves, orc civilians | 31 | queued |
+| F3 | Menagerie: giants, devils, elementals, oozes, monster-folk, giant-beasts | 115 | queued |
+| F4 | Combat VFX + decals (fx-*/decal families — separate contract) | 56 fx + 9 decal families | queued (contract locked: hybrid faceted+glow, single-frame) |
+| F5 | Dragons complete: wyrmlings, adults, ancients, gold family, dragon-kin | 36 | queued |
+| F6 | Undead completion | 28 | queued |
+| F7 | Fiends & celestials | 34 | queued |
+| F8 | Aberrations, monstrosities & deep things | 62 | queued |
+| F9 | Beasts: mundane menagerie, dinosaurs, mounts, swarms | 75 | queued |
+| F10 | Nature & the strange: plants, fungi, fey, oozes, elementals, constructs | 53 | queued |
+| F11 | Humanoid stat-blocks & monster-folk | 48 | queued |
+| F12 | Civilians & faction role-skins | 61 | queued |
+| F13 | Realm animals: wild / dungeon / domestic | 73 | queued |
+| F14 | Kid roster (20 wants) | 20 | queued |
+| F15 | PC roster grid (9×12×2) | 216 | queued |
+| RETIRE | legacy roster sheets | 2 | retire on F5/F1 admission |
+| alias | legacy ids covered by F1 anchors | 1 | alias |
+
+**Named figure identities across packets: 901** (of which 7 are net-new with no legacy sprite). Disk sprites accounted for: 896/896.
+
+## F1 — Anchors + undead/goblinoid/bandit-cultist/guards-beasts pilot (49)
+
+- `spr-fantasy-aberrant-cultist`
+- `spr-fantasy-adult-black-dragon`
+- `spr-fantasy-bandit`
+- `spr-fantasy-bandit-captain`
+- `spr-fantasy-bandit-courier`
+- `spr-fantasy-bandit-crime-lord`
+- `spr-fantasy-bandit-deceiver`
+- `spr-fantasy-bandit-enforcer`
+- `spr-fantasy-cultist`
+- `spr-fantasy-cultist-fanatic`
+- `spr-fantasy-death-cultist`
+- `spr-fantasy-desperate-bandit`
+- `spr-fantasy-dragonborn-temple-guard-devout-literal-minded-takes-the-oath-seriously`
+- `spr-fantasy-dwarven-town-guard-captain-elderly-dwarf-decades-on-the-wall-trusted-by-everyone`
+- `spr-fantasy-elemental-cultist`
+- `spr-fantasy-enforcer-dragonborn`
+- `spr-fantasy-eye-tyrant-zombie`
+- `spr-fantasy-fiend-cultist`
+- `spr-fantasy-flaming-skeleton`
+- `spr-fantasy-giant-wolf-spider`
+- `spr-fantasy-goblin-boss`
+- `spr-fantasy-goblin-cutter-minion`
+- `spr-fantasy-goblin-hexer`
+- `spr-fantasy-goblin-minion`
+- `spr-fantasy-goblin-warrior`
+- `spr-fantasy-guard`
+- `spr-fantasy-guard-captain`
+- `spr-fantasy-guardian-naga`
+- `spr-fantasy-hobgoblin-captain`
+- `spr-fantasy-hobgoblin-iron-shadow`
+- `spr-fantasy-hobgoblin-soldier`
+- `spr-fantasy-kobold`
+- `spr-fantasy-minotaur-skeleton`
+- `spr-fantasy-ogre-zombie`
+- `spr-fantasy-orcish-caravan-blacksmith-orc-repairs-wagon-wheels-faster-than-anyone-in-three-towns`
+- `spr-fantasy-orcish-caravan-guard-hired-muscle-with-a-reputation-for-actually-caring-about-the-cargo`
+- `spr-fantasy-orcish-healer-gentle-hands-a-reputation-people-are-slow-to-trust`
+- `spr-fantasy-ornate-heraldic-shield` **(NEW — no legacy sprite)**
+- `spr-fantasy-road-guard-elf`
+- `spr-fantasy-scarred-feral-guard-dog` **(NEW — no legacy sprite)**
+- `spr-fantasy-shield-guardian`
+- `spr-fantasy-skeleton`
+- `spr-fantasy-skeleton-archer`
+- `spr-fantasy-skeleton-warrior`
+- `spr-fantasy-undead-knight` **(NEW — no legacy sprite)**
+- `spr-fantasy-warhorse-skeleton`
+- `spr-fantasy-winged-kobold-urd`
+- `spr-fantasy-zombie`
+- `spr-fantasy-zombie-plague-carrier`
+
+## F2 — Dragons (young/wyrmling core), wolves, orc civilians (31)
+
+- `spr-fantasy-cipher-orc`
+- `spr-fantasy-dire-wolf`
+- `spr-fantasy-halfling-orchard-keeper-elderly-halfling-knows-every-tree-in-the-grove-by-name`
+- `spr-fantasy-kobold-inventor`
+- `spr-fantasy-metalworker-orc`
+- `spr-fantasy-orc-berserker`
+- `spr-fantasy-orc-blind-prophet`
+- `spr-fantasy-orc-warrior`
+- `spr-fantasy-orcish-farrier-orc-shoes-every-horse-in-the-valley-feared-and-respected-equally`
+- `spr-fantasy-orcish-stable-hand-orc-gentle-with-horses-terrifying-to-everyone-else`
+- `spr-fantasy-recruiter-orc`
+- `spr-fantasy-red-dragon-wyrmling`
+- `spr-fantasy-rite-keeper-orc`
+- `spr-fantasy-shadow-dragon`
+- `spr-fantasy-silver-dragon-wyrmling`
+- `spr-fantasy-the-faerie-dragon`
+- `spr-fantasy-the-pseudodragon`
+- `spr-fantasy-werewolf`
+- `spr-fantasy-white-dragon-wyrmling`
+- `spr-fantasy-wild-animal-a-lone-timber-wolf-pup-not-yet-part-of-any-pack-still-learning-to-hunt`
+- `spr-fantasy-wild-animal-territory-wolf-holds-a-stretch-of-ground-and-knows-every-crossing-of-it`
+- `spr-fantasy-winter-wolf`
+- `spr-fantasy-wolf`
+- `spr-fantasy-young-blue-dragon`
+- `spr-fantasy-young-brass-dragon`
+- `spr-fantasy-young-bronze-dragon`
+- `spr-fantasy-young-copper-dragon`
+- `spr-fantasy-young-green-dragon`
+- `spr-fantasy-young-red-dragon`
+- `spr-fantasy-young-silver-dragon`
+- `spr-fantasy-young-white-dragon`
+
+## F3 — Menagerie: giants, devils, elementals, oozes, monster-folk, giant-beasts (115)
+
+- `spr-fantasy-air-elemental`
+- `spr-fantasy-animated-armor`
+- `spr-fantasy-animated-flying-sword`
+- `spr-fantasy-animated-rug-of-smothering`
+- `spr-fantasy-barbed-devil`
+- `spr-fantasy-bearded-devil`
+- `spr-fantasy-bone-devil`
+- `spr-fantasy-bugbear-stalker`
+- `spr-fantasy-bugbear-stalker-strangler`
+- `spr-fantasy-bugbear-warrior`
+- `spr-fantasy-centaur-trooper`
+- `spr-fantasy-centaur-warden`
+- `spr-fantasy-chain-devil`
+- `spr-fantasy-clay-golem`
+- `spr-fantasy-cloaker`
+- `spr-fantasy-clockwork-law-construct-duodrone`
+- `spr-fantasy-clockwork-law-construct-monodrone`
+- `spr-fantasy-clockwork-law-construct-tridrone`
+- `spr-fantasy-cloud-giant`
+- `spr-fantasy-cyclops-oracle`
+- `spr-fantasy-cyclops-sentry`
+- `spr-fantasy-doppelganger`
+- `spr-fantasy-dust-mephit`
+- `spr-fantasy-earth-elemental`
+- `spr-fantasy-ettin`
+- `spr-fantasy-fire-elemental`
+- `spr-fantasy-fire-giant`
+- `spr-fantasy-flameskull`
+- `spr-fantasy-flesh-golem`
+- `spr-fantasy-frost-giant`
+- `spr-fantasy-gelatinous-cube`
+- `spr-fantasy-giant-ape`
+- `spr-fantasy-giant-axe-beak`
+- `spr-fantasy-giant-badger`
+- `spr-fantasy-giant-bat`
+- `spr-fantasy-giant-boar`
+- `spr-fantasy-giant-centipede`
+- `spr-fantasy-giant-constrictor-snake`
+- `spr-fantasy-giant-crab`
+- `spr-fantasy-giant-crocodile`
+- `spr-fantasy-giant-eagle`
+- `spr-fantasy-giant-elk`
+- `spr-fantasy-giant-fire-beetle`
+- `spr-fantasy-giant-frog`
+- `spr-fantasy-giant-goat`
+- `spr-fantasy-giant-hyena`
+- `spr-fantasy-giant-lizard`
+- `spr-fantasy-giant-octopus`
+- `spr-fantasy-giant-owl`
+- `spr-fantasy-giant-rat`
+- `spr-fantasy-giant-scorpion`
+- `spr-fantasy-giant-seahorse`
+- `spr-fantasy-giant-shark`
+- `spr-fantasy-giant-spider`
+- `spr-fantasy-giant-squid`
+- `spr-fantasy-giant-toad`
+- `spr-fantasy-giant-vulture`
+- `spr-fantasy-giant-wasp`
+- `spr-fantasy-giant-weasel`
+- `spr-fantasy-gibbering-mouther`
+- `spr-fantasy-gnoll-demoniac`
+- `spr-fantasy-gnoll-fang-of-the-beast`
+- `spr-fantasy-gnoll-pack-lord`
+- `spr-fantasy-gnoll-warrior`
+- `spr-fantasy-gray-ooze`
+- `spr-fantasy-half-ogre-ogrillon`
+- `spr-fantasy-harpy`
+- `spr-fantasy-harpy-matriarch`
+- `spr-fantasy-hell-hound`
+- `spr-fantasy-hill-giant`
+- `spr-fantasy-horned-devil`
+- `spr-fantasy-ice-devil`
+- `spr-fantasy-ice-mephit`
+- `spr-fantasy-imp`
+- `spr-fantasy-iron-golem`
+- `spr-fantasy-lizardfolk-geomancer`
+- `spr-fantasy-lizardfolk-sovereign`
+- `spr-fantasy-magma-mephit`
+- `spr-fantasy-medusa`
+- `spr-fantasy-merfolk-skirmisher`
+- `spr-fantasy-merfolk-wavebender`
+- `spr-fantasy-mimic`
+- `spr-fantasy-ogre`
+- `spr-fantasy-otyugh`
+- `spr-fantasy-psychic-gray-ooze`
+- `spr-fantasy-quasit`
+- `spr-fantasy-rust-monster`
+- `spr-fantasy-sahuagin-baron`
+- `spr-fantasy-sahuagin-priest`
+- `spr-fantasy-sahuagin-warrior`
+- `spr-fantasy-satyr`
+- `spr-fantasy-satyr-revelmaster`
+- `spr-fantasy-smoke-mephit`
+- `spr-fantasy-sphinx-of-lore`
+- `spr-fantasy-sphinx-of-secrets`
+- `spr-fantasy-sphinx-of-valor`
+- `spr-fantasy-sphinx-of-wonder`
+- `spr-fantasy-spined-devil`
+- `spr-fantasy-steam-mephit`
+- `spr-fantasy-stone-giant`
+- `spr-fantasy-stone-golem`
+- `spr-fantasy-storm-giant`
+- `spr-fantasy-troglodyte`
+- `spr-fantasy-troll`
+- `spr-fantasy-vampire`
+- `spr-fantasy-vampire-familiar`
+- `spr-fantasy-vampire-nightbringer`
+- `spr-fantasy-vampire-spawn`
+- `spr-fantasy-vampire-umbral-lord`
+- `spr-fantasy-water-elemental`
+- `spr-fantasy-yuan-ti-abomination`
+- `spr-fantasy-yuan-ti-infiltrator`
+- `spr-fantasy-yuan-ti-malison-type-1`
+- `spr-fantasy-yuan-ti-malison-type-2`
+- `spr-fantasy-yuan-ti-malison-type-3`
+
+## F4 — combat VFX + decals (see PACKET-F4.md / EFFECTS-DECALS-INDEX.md)
+
+- 24 system VFX (`fx-impact/magic/status/env-*`) + 32 fantasy-themed (`fx-fantasy/ash/gloom/cosmic-*`) — black-key hybrid faceted+glow, single-frame
+- 9 decal families (`blood water grime wear scorch crack rust moss cobweb`) — magenta-key top-down source masters
+- Out of scope: ~64 other-genre `fx-*` (suburb/noir/chrome/frontier/th/hs/lw/bk)
+
+## F5 — Dragons complete: wyrmlings, adults, ancients, gold family, dragon-kin (36)
+
+- `spr-fantasy-adult-blue-dragon`
+- `spr-fantasy-adult-brass-dragon`
+- `spr-fantasy-adult-bronze-dragon`
+- `spr-fantasy-adult-copper-dragon`
+- `spr-fantasy-adult-gold-dragon` **(NEW — no legacy sprite)**
+- `spr-fantasy-adult-green-dragon`
+- `spr-fantasy-adult-red-dragon`
+- `spr-fantasy-adult-silver-dragon`
+- `spr-fantasy-adult-white-dragon`
+- `spr-fantasy-ancient-black-dragon`
+- `spr-fantasy-ancient-blue-dragon`
+- `spr-fantasy-ancient-brass-dragon`
+- `spr-fantasy-ancient-bronze-dragon`
+- `spr-fantasy-ancient-copper-dragon`
+- `spr-fantasy-ancient-gold-dragon` **(NEW — no legacy sprite)**
+- `spr-fantasy-ancient-green-dragon`
+- `spr-fantasy-ancient-red-dragon`
+- `spr-fantasy-ancient-silver-dragon`
+- `spr-fantasy-ancient-white-dragon`
+- `spr-fantasy-behir`
+- `spr-fantasy-black-dragon-wyrmling`
+- `spr-fantasy-blue-dragon-wyrmling`
+- `spr-fantasy-brass-dragon-wyrmling`
+- `spr-fantasy-bronze-dragon-wyrmling`
+- `spr-fantasy-copper-dragon-wyrmling`
+- `spr-fantasy-dracolich`
+- `spr-fantasy-dragon-turtle`
+- `spr-fantasy-faerie-dragon-youth`
+- `spr-fantasy-gold-dragon-wyrmling` **(NEW — no legacy sprite)**
+- `spr-fantasy-green-dragon-wyrmling`
+- `spr-fantasy-half-dragon`
+- `spr-fantasy-juvenile-shadow-dragon`
+- `spr-fantasy-ridden-wyvern`
+- `spr-fantasy-wyvern`
+- `spr-fantasy-young-black-dragon`
+- `spr-fantasy-young-gold-dragon` **(NEW — no legacy sprite)**
+
+## F6 — Undead completion (28)
+
+- `spr-fantasy-banshee`
+- `spr-fantasy-bone-naga`
+- `spr-fantasy-clawed-drowner`
+- `spr-fantasy-crawling-claw`
+- `spr-fantasy-death-knight`
+- `spr-fantasy-death-knight-aspirant`
+- `spr-fantasy-demilich`
+- `spr-fantasy-drowned-husk`
+- `spr-fantasy-ghast`
+- `spr-fantasy-ghast-base`
+- `spr-fantasy-ghast-gravecaller-spellstitched-elite`
+- `spr-fantasy-ghost`
+- `spr-fantasy-ghoul`
+- `spr-fantasy-graveyard-revenant`
+- `spr-fantasy-greater-shadow`
+- `spr-fantasy-haunting-revenant`
+- `spr-fantasy-lacedon-sodden-ghoul`
+- `spr-fantasy-lich`
+- `spr-fantasy-mummy`
+- `spr-fantasy-mummy-lord`
+- `spr-fantasy-poltergeist`
+- `spr-fantasy-shadow`
+- `spr-fantasy-specter`
+- `spr-fantasy-swamp-shadow`
+- `spr-fantasy-wight`
+- `spr-fantasy-wight-lord`
+- `spr-fantasy-will-o-wisp`
+- `spr-fantasy-wraith`
+
+## F7 — Fiends & celestials (34)
+
+- `spr-fantasy-arcanaloth`
+- `spr-fantasy-balor`
+- `spr-fantasy-cambion`
+- `spr-fantasy-chasme`
+- `spr-fantasy-couatl`
+- `spr-fantasy-deva`
+- `spr-fantasy-dretch`
+- `spr-fantasy-empyrean`
+- `spr-fantasy-empyrean-iota`
+- `spr-fantasy-erinyes`
+- `spr-fantasy-glabrezu`
+- `spr-fantasy-hezrou`
+- `spr-fantasy-incubus`
+- `spr-fantasy-larva`
+- `spr-fantasy-lemure`
+- `spr-fantasy-manes`
+- `spr-fantasy-manes-vaporspawn`
+- `spr-fantasy-marilith`
+- `spr-fantasy-mezzoloth`
+- `spr-fantasy-nalfeshnee`
+- `spr-fantasy-night-hag`
+- `spr-fantasy-nightmare`
+- `spr-fantasy-nycaloth`
+- `spr-fantasy-oni`
+- `spr-fantasy-pegasus`
+- `spr-fantasy-pit-fiend`
+- `spr-fantasy-planetar`
+- `spr-fantasy-rakshasa`
+- `spr-fantasy-solar`
+- `spr-fantasy-succubus`
+- `spr-fantasy-ultroloth`
+- `spr-fantasy-unicorn`
+- `spr-fantasy-vrock`
+- `spr-fantasy-yochlol`
+
+## F8 — Aberrations, monstrosities & deep things (62)
+
+- `spr-fantasy-abominable-yeti`
+- `spr-fantasy-ankheg`
+- `spr-fantasy-basilisk`
+- `spr-fantasy-blind-deep-stalker`
+- `spr-fantasy-blob-of-annihilation`
+- `spr-fantasy-brain-crawler`
+- `spr-fantasy-brazen-gorgon`
+- `spr-fantasy-bulette`
+- `spr-fantasy-bulette-pup`
+- `spr-fantasy-carrion-crawler`
+- `spr-fantasy-chimera`
+- `spr-fantasy-cockatrice`
+- `spr-fantasy-cockatrice-regent`
+- `spr-fantasy-darkmantle`
+- `spr-fantasy-death-dog`
+- `spr-fantasy-deep-brute`
+- `spr-fantasy-deep-brute-thonot`
+- `spr-fantasy-displacer-beast`
+- `spr-fantasy-drider`
+- `spr-fantasy-elder-deep-thing`
+- `spr-fantasy-ettercap`
+- `spr-fantasy-eye-tyrant`
+- `spr-fantasy-fomorian`
+- `spr-fantasy-gorgon`
+- `spr-fantasy-greater-mimic`
+- `spr-fantasy-grell`
+- `spr-fantasy-grick`
+- `spr-fantasy-grick-ancient`
+- `spr-fantasy-griffon`
+- `spr-fantasy-hippogriff`
+- `spr-fantasy-hook-horror`
+- `spr-fantasy-hydra`
+- `spr-fantasy-kraken`
+- `spr-fantasy-lamia`
+- `spr-fantasy-manticore`
+- `spr-fantasy-merrow`
+- `spr-fantasy-mind-thief`
+- `spr-fantasy-mind-thief-arcanist`
+- `spr-fantasy-minotaur-of-the-horned-king`
+- `spr-fantasy-ogre-howdah`
+- `spr-fantasy-owlbear`
+- `spr-fantasy-owlbear-cub`
+- `spr-fantasy-peryton`
+- `spr-fantasy-phase-spider`
+- `spr-fantasy-piercer`
+- `spr-fantasy-primeval-owlbear`
+- `spr-fantasy-purple-worm`
+- `spr-fantasy-remorhaz`
+- `spr-fantasy-roc`
+- `spr-fantasy-roper`
+- `spr-fantasy-secret-eye`
+- `spr-fantasy-spirit-naga`
+- `spr-fantasy-stirge`
+- `spr-fantasy-tarrasque`
+- `spr-fantasy-troll-amalgam`
+- `spr-fantasy-troll-limb`
+- `spr-fantasy-umber-hulk`
+- `spr-fantasy-undead-eye-tyrant`
+- `spr-fantasy-void-monk-monk`
+- `spr-fantasy-void-monk-psion`
+- `spr-fantasy-void-monk-zerth`
+- `spr-fantasy-yeti`
+
+## F9 — Beasts: mundane menagerie, dinosaurs, mounts, swarms (75)
+
+- `spr-fantasy-allosaurus`
+- `spr-fantasy-ankylosaurus`
+- `spr-fantasy-ape`
+- `spr-fantasy-archelon`
+- `spr-fantasy-axe-beak`
+- `spr-fantasy-baboon`
+- `spr-fantasy-badger`
+- `spr-fantasy-bat`
+- `spr-fantasy-black-bear`
+- `spr-fantasy-blood-hawk`
+- `spr-fantasy-boar`
+- `spr-fantasy-bog-twisted-giant-rat`
+- `spr-fantasy-brown-bear`
+- `spr-fantasy-camel`
+- `spr-fantasy-cat`
+- `spr-fantasy-constrictor-snake`
+- `spr-fantasy-crab`
+- `spr-fantasy-crocodile`
+- `spr-fantasy-deer`
+- `spr-fantasy-dire-worg`
+- `spr-fantasy-draft-horse`
+- `spr-fantasy-eagle`
+- `spr-fantasy-elephant`
+- `spr-fantasy-elk`
+- `spr-fantasy-flying-snake`
+- `spr-fantasy-frog`
+- `spr-fantasy-giant-venomous-snake`
+- `spr-fantasy-goat`
+- `spr-fantasy-hawk`
+- `spr-fantasy-hippopotamus`
+- `spr-fantasy-hunter-shark`
+- `spr-fantasy-hyena`
+- `spr-fantasy-jackal`
+- `spr-fantasy-killer-whale`
+- `spr-fantasy-lion`
+- `spr-fantasy-lizard`
+- `spr-fantasy-mammoth`
+- `spr-fantasy-mastiff`
+- `spr-fantasy-mule`
+- `spr-fantasy-octopus`
+- `spr-fantasy-owl`
+- `spr-fantasy-panther`
+- `spr-fantasy-piranha`
+- `spr-fantasy-plesiosaurus`
+- `spr-fantasy-polar-bear`
+- `spr-fantasy-pony`
+- `spr-fantasy-pteranodon`
+- `spr-fantasy-rat`
+- `spr-fantasy-raven`
+- `spr-fantasy-reef-shark`
+- `spr-fantasy-rhinoceros`
+- `spr-fantasy-riding-horse`
+- `spr-fantasy-saber-toothed-tiger`
+- `spr-fantasy-scorpion`
+- `spr-fantasy-seahorse`
+- `spr-fantasy-spider`
+- `spr-fantasy-swarm-of-bats`
+- `spr-fantasy-swarm-of-crawling-claws`
+- `spr-fantasy-swarm-of-dretches`
+- `spr-fantasy-swarm-of-insects`
+- `spr-fantasy-swarm-of-larvae`
+- `spr-fantasy-swarm-of-lemures`
+- `spr-fantasy-swarm-of-piranhas`
+- `spr-fantasy-swarm-of-rats`
+- `spr-fantasy-swarm-of-ravens`
+- `spr-fantasy-swarm-of-stirges`
+- `spr-fantasy-swarm-of-venomous-snakes`
+- `spr-fantasy-tiger`
+- `spr-fantasy-triceratops`
+- `spr-fantasy-tyrannosaurus-rex`
+- `spr-fantasy-venomous-snake`
+- `spr-fantasy-vulture`
+- `spr-fantasy-warhorse`
+- `spr-fantasy-weasel`
+- `spr-fantasy-worg`
+
+## F10 — Nature & the strange: plants, fungi, fey, oozes, elementals, constructs (53)
+
+- `spr-fantasy-arch-hag`
+- `spr-fantasy-awakened-shrub`
+- `spr-fantasy-awakened-tree`
+- `spr-fantasy-azer-pyromancer`
+- `spr-fantasy-azer-sentinel`
+- `spr-fantasy-black-pudding`
+- `spr-fantasy-blink-dog`
+- `spr-fantasy-blue-chaos-frog`
+- `spr-fantasy-colossus`
+- `spr-fantasy-dao`
+- `spr-fantasy-death-chaos-frog`
+- `spr-fantasy-djinni`
+- `spr-fantasy-dryad`
+- `spr-fantasy-efreeti`
+- `spr-fantasy-elemental-cataclysm`
+- `spr-fantasy-galeb-duhr`
+- `spr-fantasy-gargoyle`
+- `spr-fantasy-gas-spore-fungus`
+- `spr-fantasy-gray-chaos-frog`
+- `spr-fantasy-green-chaos-frog`
+- `spr-fantasy-green-hag`
+- `spr-fantasy-gulthias-blight`
+- `spr-fantasy-helmed-horror`
+- `spr-fantasy-homunculus`
+- `spr-fantasy-invisible-stalker`
+- `spr-fantasy-magmin`
+- `spr-fantasy-marid`
+- `spr-fantasy-mire-creeper`
+- `spr-fantasy-myconid-adult`
+- `spr-fantasy-myconid-sovereign`
+- `spr-fantasy-myconid-spore-servant`
+- `spr-fantasy-myconid-sprout`
+- `spr-fantasy-ochre-jelly`
+- `spr-fantasy-pixie`
+- `spr-fantasy-pixie-wonderbringer`
+- `spr-fantasy-red-chaos-frog`
+- `spr-fantasy-salamander`
+- `spr-fantasy-salamander-fire-snake`
+- `spr-fantasy-salamander-inferno-master`
+- `spr-fantasy-scarecrow`
+- `spr-fantasy-sea-hag`
+- `spr-fantasy-shambling-mound`
+- `spr-fantasy-shrieker-fungus`
+- `spr-fantasy-sprite`
+- `spr-fantasy-the-needle-blight`
+- `spr-fantasy-the-twig-blight`
+- `spr-fantasy-the-vine-blight`
+- `spr-fantasy-treant`
+- `spr-fantasy-tree-blight`
+- `spr-fantasy-violet-fungus`
+- `spr-fantasy-violet-fungus-necrohulk`
+- `spr-fantasy-water-weird`
+- `spr-fantasy-xorn`
+
+## F11 — Humanoid stat-blocks & monster-folk (48)
+
+- `spr-fantasy-aarakocra-aeromancer`
+- `spr-fantasy-aarakocra-skirmisher`
+- `spr-fantasy-archdruid`
+- `spr-fantasy-archmage`
+- `spr-fantasy-archpriest`
+- `spr-fantasy-assassin`
+- `spr-fantasy-astral-raider-dracomancer`
+- `spr-fantasy-astral-raider-knight`
+- `spr-fantasy-astral-raider-warrior`
+- `spr-fantasy-berserker`
+- `spr-fantasy-berserker-commander`
+- `spr-fantasy-bullywug-bog-sage-mud-lord`
+- `spr-fantasy-bullywug-warrior`
+- `spr-fantasy-commoner`
+- `spr-fantasy-druid-circle-warden`
+- `spr-fantasy-fish-folk`
+- `spr-fantasy-fish-folk-archpriest`
+- `spr-fantasy-fish-folk-monitor`
+- `spr-fantasy-fish-folk-whip`
+- `spr-fantasy-gladiator`
+- `spr-fantasy-jackalwere`
+- `spr-fantasy-knight`
+- `spr-fantasy-lantern-sage`
+- `spr-fantasy-mage`
+- `spr-fantasy-noble`
+- `spr-fantasy-performer`
+- `spr-fantasy-performer-legend`
+- `spr-fantasy-performer-maestro`
+- `spr-fantasy-performer-tiefling`
+- `spr-fantasy-pirate`
+- `spr-fantasy-pirate-admiral`
+- `spr-fantasy-pirate-captain`
+- `spr-fantasy-priest`
+- `spr-fantasy-priest-acolyte`
+- `spr-fantasy-questing-knight`
+- `spr-fantasy-scout`
+- `spr-fantasy-spy`
+- `spr-fantasy-spy-master`
+- `spr-fantasy-thri-kreen-marauder`
+- `spr-fantasy-thri-kreen-psion`
+- `spr-fantasy-tough`
+- `spr-fantasy-tough-boss`
+- `spr-fantasy-warrior-infantry`
+- `spr-fantasy-warrior-veteran`
+- `spr-fantasy-werebear`
+- `spr-fantasy-wereboar`
+- `spr-fantasy-wererat`
+- `spr-fantasy-weretiger`
+
+## F12 — Civilians & faction role-skins (61)
+
+- `spr-fantasy-builder-dragonborn`
+- `spr-fantasy-clothier-dwarf`
+- `spr-fantasy-delver-gnome`
+- `spr-fantasy-destitute-halfling`
+- `spr-fantasy-dragonborn-ship-s-purser-dragonborn-keeps-the-manifest-honest-mostly`
+- `spr-fantasy-dragonborn-temple-acolyte-young-dragonborn-devout-earnest-still-memorizing-the-rites`
+- `spr-fantasy-dwarven-brewer-the-tavern-s-actual-reason-for-existing`
+- `spr-fantasy-dwarven-brewery-heiress-dwarf-runs-the-family-business-better-than-her-father-did`
+- `spr-fantasy-dwarven-forge-master-three-generations-of-the-same-smithy-soot-in-every-crease`
+- `spr-fantasy-dwarven-mine-assayer-dwarf-judges-ore-quality-by-weight-and-smell-alone`
+- `spr-fantasy-elven-archivist-keeper-of-a-library-older-than-the-town-around-it`
+- `spr-fantasy-elven-fletcher-every-arrow-leaves-her-stall-true`
+- `spr-fantasy-elven-herbalist-elf-sells-cures-and-quietly-a-few-curses`
+- `spr-fantasy-elven-ranger-s-apprentice-elf-still-learning-to-read-a-trail-properly`
+- `spr-fantasy-elven-scribe-elf-copies-manuscripts-for-the-town-archive-meticulous-to-a-fault`
+- `spr-fantasy-feeder-tiefling`
+- `spr-fantasy-gnomish-alchemist-s-assistant-gnome-mixes-potions-that-mostly-don-t-explode`
+- `spr-fantasy-gnomish-clockmaker-gnome-every-clock-in-town-keeps-slightly-different-time-on-purpose`
+- `spr-fantasy-gnomish-tinkerer-clockwork-contraptions-that-mostly-work`
+- `spr-fantasy-goliath-bridge-toll-keeper-goliath-collects-the-fee-stops-the-trouble-rarely-needs-to-try-hard`
+- `spr-fantasy-goliath-dockworker-goliath-moves-cargo-alone-that-takes-four-other-men`
+- `spr-fantasy-goliath-quarry-foreman-the-only-one-strong-enough-to-reset-a-slipped-cart-alone`
+- `spr-fantasy-guilt-stained-vagrant`
+- `spr-fantasy-halfling-farmer-dark-skinned-tends-the-best-soil-in-the-valley`
+- `spr-fantasy-halfling-innkeeper-knows-every-traveler-s-business-before-they-ve-unpacked`
+- `spr-fantasy-halfling-messenger-runner-halfling-fastest-feet-in-the-county-mostly-ignored-otherwise`
+- `spr-fantasy-halfling-roadside-chef-halfling-feeds-every-traveler-who-passes-no-exceptions`
+- `spr-fantasy-hauler-elf`
+- `spr-fantasy-healer-human`
+- `spr-fantasy-hidden-fanatic-human`
+- `spr-fantasy-hired-blade-dwarf`
+- `spr-fantasy-host-goliath`
+- `spr-fantasy-human-midwife-elderly-delivered-half-the-village-remembers-all-of-it`
+- `spr-fantasy-human-midwife-s-apprentice-human-dark-skinned-learning-the-trade-from-her-mother`
+- `spr-fantasy-human-miller-dust-covered-counts-every-sack-twice`
+- `spr-fantasy-human-retired-soldier-one-armed-human-dark-skinned-runs-the-town-s-only-proper-tavern-brawl-rules`
+- `spr-fantasy-human-town-crier-human-announces-news-rumor-and-the-occasional-lie-for-coin`
+- `spr-fantasy-human-wheelwright-human-dark-skinned-third-generation-in-the-same-shop`
+- `spr-fantasy-land-worker-dragonborn`
+- `spr-fantasy-magnate-halfling`
+- `spr-fantasy-maker-human`
+- `spr-fantasy-misfit-gnome`
+- `spr-fantasy-outfitter-elf`
+- `spr-fantasy-outlaw-gnome`
+- `spr-fantasy-outsider-tiefling`
+- `spr-fantasy-pampered-elite-goliath`
+- `spr-fantasy-recluse-dragonborn`
+- `spr-fantasy-remedy-maker-halfling`
+- `spr-fantasy-secret-scholar-human`
+- `spr-fantasy-servant-goliath`
+- `spr-fantasy-smuggler-goliath`
+- `spr-fantasy-stand-in-dwarf`
+- `spr-fantasy-thief-halfling`
+- `spr-fantasy-tiefling-blacksmith-s-apprentice-still-learning-already-better-than-most-journeymen`
+- `spr-fantasy-tiefling-fortune-teller-half-the-town-swears-by-her-half-crosses-the-street`
+- `spr-fantasy-tiefling-fortune-teller-s-rival-tiefling-claims-to-be-the-real-seer-in-town`
+- `spr-fantasy-tiefling-street-performer-tiefling-half-the-crowd-is-there-for-the-trick-half-for-the-horror`
+- `spr-fantasy-tiefling-tavern-owner-tiefling-runs-the-friendliest-bar-in-a-town-that-fears-her-kind`
+- `spr-fantasy-trader-gnome`
+- `spr-fantasy-unofficial-power-elf`
+- `spr-fantasy-wild-provider-dwarf`
+
+## F13 — Realm animals: wild / dungeon / domestic (73)
+
+- `spr-fantasy-domestic-animal-a-single-caged-ferret-kit-young-hyperactive-still-learning-the-vermin-catcher-s-trade`
+- `spr-fantasy-domestic-animal-a-single-caged-songbird-kept-for-the-sound-of-it-restless-behind-the-wire`
+- `spr-fantasy-domestic-animal-a-single-donkey-stubborn-sure-footed-outlives-every-horse-on-the-property`
+- `spr-fantasy-domestic-animal-a-single-duck-waddling-unbothered-first-to-notice-a-stranger-at-the-water-s-edge`
+- `spr-fantasy-domestic-animal-a-single-goat-headstrong-climbs-what-it-shouldn-t-eats-what-it-shouldn-t`
+- `spr-fantasy-domestic-animal-a-single-goose-from-the-flock-loud-territorial-first-to-mark-a-stranger`
+- `spr-fantasy-domestic-animal-a-single-hunting-hound-lean-nose-down-bred-for-the-chase-and-bored-without-it`
+- `spr-fantasy-domestic-animal-a-single-kitten-too-young-to-have-earned-the-barn-cat-s-independence-yet`
+- `spr-fantasy-domestic-animal-a-single-peacock-kept-for-show-screams-like-something-s-wrong-when-nothing-is`
+- `spr-fantasy-domestic-animal-a-single-pig-smarter-than-it-s-given-credit-for-rooting-at-the-fence-line`
+- `spr-fantasy-domestic-animal-a-single-pony-smaller-and-calmer-than-the-war-mule-a-child-s-first-mount`
+- `spr-fantasy-domestic-animal-a-single-rabbit-twitchy-kept-for-the-table-or-kept-as-a-pet-never-sure-which`
+- `spr-fantasy-domestic-animal-a-single-sheep-from-the-herd-moves-with-the-others-and-its-lone-reluctance-to-follow-is-the-tell`
+- `spr-fantasy-domestic-animal-a-single-turkey-puffed-up-and-loud-more-guard-animal-than-anyone-admits`
+- `spr-fantasy-domestic-animal-a-single-turtle-slow-kept-yard-animal-older-than-most-of-the-household`
+- `spr-fantasy-domestic-animal-barn-cat-owns-the-place-tolerates-the-people-hunts-the-dark-corners`
+- `spr-fantasy-domestic-animal-bird-kept-close-a-single-hawk-carries-watches-and-remembers-a-face`
+- `spr-fantasy-domestic-animal-half-tamed-wild-thing-comes-to-the-window-never-the-hand-trusts-one-child-and-no-one-else`
+- `spr-fantasy-domestic-animal-loyal-dog-bonded-to-one-person-reads-their-mood-before-they-do`
+- `spr-fantasy-domestic-animal-old-animal-past-its-working-years-half-blind-and-still-the-first-to-growl-at-the-wrong-thing`
+- `spr-fantasy-domestic-animal-stray-belongs-to-no-one-and-everyone-the-street-s-own-alarm-bell`
+- `spr-fantasy-domestic-animal-the-realm-beast-the-realm-beast-a-locally-distinct-pet-one-animal-realm-appropriate`
+- `spr-fantasy-domestic-animal-the-town-s-own-animal-the-one-everyone-knows-by-name-its-fate-is-the-town-s-mood-made-visible`
+- `spr-fantasy-domestic-animal-vermin-catcher-a-single-ferret-goes-gladly-where-people-won-t`
+- `spr-fantasy-domestic-animal-working-beast-a-single-ox-earns-its-feed-patient-and-spooks-true`
+- `spr-fantasy-dungeon-animal-abandoned-mine-canary-a-small-bird-in-a-rusted-cage-somehow-still-alive-still-singing`
+- `spr-fantasy-dungeon-animal-an-ordinary-animal-deliberately-unremarkable-domestic-or-wild-doesn-t-matter-its-presence-this-deep-is-the-signal-let-the-scene-decide-what-it-means`
+- `spr-fantasy-dungeon-animal-blind-cave-rat-pale-sightless-thrives-in-total-dark-first-sign-something-s-been-dug-through`
+- `spr-fantasy-dungeon-animal-blind-salamander-pale-slow-the-kind-of-thing-that-shouldn-t-have-a-reason-to-be-this-deep`
+- `spr-fantasy-dungeon-animal-cave-adapted-spider-pale-eyeless-spins-webs-across-passages-nobody-s-walked-in-years`
+- `spr-fantasy-dungeon-animal-cave-cricket-oversized-chirping-alone-in-the-dark-first-warning-of-the-swarm-nearby`
+- `spr-fantasy-dungeon-animal-chained-beast-escaped-its-post-a-working-animal-that-slipped-its-old-restraint-still-wears-the-collar`
+- `spr-fantasy-dungeon-animal-deep-well-fish-stranded-flopping-in-a-puddle-far-from-any-real-water-source`
+- `spr-fantasy-dungeon-animal-echo-startled-bird-a-single-bird-trapped-in-the-upper-galleries-flies-at-every-footstep`
+- `spr-fantasy-dungeon-animal-feral-falconry-bird-a-hawk-that-escaped-its-jesses-generations-ago-now-hunts-the-tunnels-vermin`
+- `spr-fantasy-dungeon-animal-feral-vermin-catcher-once-someone-s-ferret-or-terrier-now-lives-wild-in-the-tunnels-still-killing-rats-out-of-habit`
+- `spr-fantasy-dungeon-animal-glow-moss-grazer-a-small-rodent-whose-fur-has-picked-up-a-faint-luminescence-from-what-it-eats`
+- `spr-fantasy-dungeon-animal-half-tamed-thing-comes-to-a-lantern-s-light-never-a-hand-feeds-on-what-the-dungeon-leaves-behind`
+- `spr-fantasy-dungeon-animal-lost-hunting-hound-a-noble-s-dog-that-wandered-too-far-in-and-never-found-the-way-back-out`
+- `spr-fantasy-dungeon-animal-nest-robbing-crow-one-bird-that-s-learned-the-dungeon-s-side-passages-better-than-most-explorers`
+- `spr-fantasy-dungeon-animal-scarred-guard-dog-gone-feral-once-trained-to-patrol-these-halls-now-answers-to-no-one`
+- `spr-fantasy-dungeon-animal-sole-survivor-packhorse-the-last-of-a-caravan-s-animals-malnourished-still-saddled`
+- `spr-fantasy-dungeon-animal-starving-stray-a-cat-or-dog-that-followed-someone-in-and-got-left-behind`
+- `spr-fantasy-dungeon-animal-trapped-messenger-pigeon-still-carries-a-note-no-one-living-will-ever-read`
+- `spr-fantasy-dungeon-animal-tunnel-adapted-snake-pale-scaled-sluggish-in-the-cold-strikes-only-when-cornered`
+- `spr-fantasy-dungeon-animal-tunnel-bat-colony-straggler-a-single-bat-that-never-rejoined-the-swarm-clings-alone-near-a-cracked-vent`
+- `spr-fantasy-dungeon-animal-tunnel-blind-mole-huge-clawed-forepaws-displaces-more-earth-than-it-should-be-able-to`
+- `spr-fantasy-dungeon-animal-unnervingly-large-lone-rat-alone-watching-doesn-t-scatter-like-the-others`
+- `spr-fantasy-dungeon-animal-wrong-place-goat-a-farm-animal-that-fell-through-a-sinkhole-and-somehow-survived-down-here`
+- `spr-fantasy-dungeon-animal-wrongly-still-lizard-motionless-so-long-it-s-mistaken-for-a-carving-until-it-isn-t`
+- `spr-fantasy-wild-animal-a-badger-low-broad-digging-with-total-disregard-for-anything-nearby`
+- `spr-fantasy-wild-animal-a-black-bear-foraging-unbothered-dangerous-only-if-pressed`
+- `spr-fantasy-wild-animal-a-bull-elk-antlers-full-grown-the-season-s-rut-making-it-reckless`
+- `spr-fantasy-wild-animal-a-great-owl-silent-wingbeats-watches-more-than-it-hunts`
+- `spr-fantasy-wild-animal-a-heron-stalks-the-shallows-on-legs-too-thin-to-look-that-patient`
+- `spr-fantasy-wild-animal-a-lynx-kitten-spotted-coat-play-stalking-something-that-isn-t-there-yet`
+- `spr-fantasy-wild-animal-a-mountain-goat-sure-footed-on-a-ledge-no-predator-bothers-to-follow`
+- `spr-fantasy-wild-animal-a-peregrine-falcon-stooping-mid-hunt-faster-than-anything-else-in-the-sky`
+- `spr-fantasy-wild-animal-a-red-fox-kit-curious-unafraid-too-young-to-know-better`
+- `spr-fantasy-wild-animal-a-single-deer-from-the-herd-moves-with-the-herd-reads-the-wind-before-the-ranger-does`
+- `spr-fantasy-wild-animal-a-single-elk-grazes-the-tree-line-at-dawn-gone-before-full-light`
+- `spr-fantasy-wild-animal-a-single-goose-from-the-migrant-flock-passes-through-and-carries-news-of-where-it-s-been`
+- `spr-fantasy-wild-animal-a-single-vulture-from-the-carrion-flock-first-to-know-when-something-has-died-nearby`
+- `spr-fantasy-wild-animal-a-wild-boar-sow-tusks-lowered-protective-of-ground-she-doesn-t-even-own-yet`
+- `spr-fantasy-wild-animal-a-wild-turkey-tom-displaying-loud-oblivious-to-anything-hunting-it`
+- `spr-fantasy-wild-animal-ambush-lynx-solitary-patient-and-the-reason-the-trail-went-quiet`
+- `spr-fantasy-wild-animal-burrowing-badger-knows-what-the-earth-carries-underneath`
+- `spr-fantasy-wild-animal-half-wild-fringe-fox-drawn-to-the-edge-of-camps-curious-and-never-quite-trusting`
+- `spr-fantasy-wild-animal-old-solitary-boar-scarred-wary-and-gives-ground-to-no-one`
+- `spr-fantasy-wild-animal-river-otter-knows-the-water-s-moods-better-than-any-map`
+- `spr-fantasy-wild-animal-the-elder-of-the-wood-the-beast-every-other-animal-on-the-node-defers-to`
+- `spr-fantasy-wild-animal-the-realm-beast-a-locally-distinct-wild-creature-one-animal-realm-appropriate`
+- `spr-fantasy-wild-animal-watcher-hawk-sees-the-whole-valley-from-height-and-forgets-nothing-it-circled`
+
+## F14 — Kid roster (20 wants) (20)
+
+- `spr-fantasy-kid-wants-be-believed-by-one-grown-up-just-one-about-the-thing-they-saw`
+- `spr-fantasy-kid-wants-be-chosen-for-the-errand-the-team-the-trust-for-once`
+- `spr-fantasy-kid-wants-feed-the-thing-in-the-woods-that-s-been-kind-to-them`
+- `spr-fantasy-kid-wants-find-out-what-the-grown-ups-whisper-about-behind-the-shut-door`
+- `spr-fantasy-kid-wants-find-the-dog-that-didn-t-come-home`
+- `spr-fantasy-kid-wants-get-back-what-was-taken-from-them-and-it-s-the-object-the-whole-plot-turns-on`
+- `spr-fantasy-kid-wants-get-their-small-hoard-back-from-whoever-confiscated-it`
+- `spr-fantasy-kid-wants-keep-the-little-one-from-finding-out-the-bad-thing-that-happened`
+- `spr-fantasy-kid-wants-keep-the-pretty-thing-they-found-which-someone-dangerous-is-tearing-the-town-apart-to-recover`
+- `spr-fantasy-kid-wants-keep-the-secret-they-swore-to-keep-even-now-that-it-s-gone-wrong`
+- `spr-fantasy-kid-wants-make-their-parent-laugh-the-old-way-the-way-from-before`
+- `spr-fantasy-kid-wants-not-have-to-go-home-tonight`
+- `spr-fantasy-kid-wants-prove-they-re-not-a-baby-by-going-where-they-re-forbidden-to-go`
+- `spr-fantasy-kid-wants-put-it-back-before-anyone-notices-it-was-gone`
+- `spr-fantasy-kid-wants-see-the-locked-place-opened-just-once-just-to-know`
+- `spr-fantasy-kid-wants-slip-a-message-to-the-one-person-the-family-has-forbidden-them-to-see`
+- `spr-fantasy-kid-wants-stay-up-late-enough-to-catch-the-thing-that-comes-at-night`
+- `spr-fantasy-kid-wants-trade-the-strange-coin-they-found-for-something-they-actually-want`
+- `spr-fantasy-kid-wants-warn-someone-and-not-one-adult-will-slow-down-long-enough-to-hear-it`
+- `spr-fantasy-kid-wants-win-back-the-friend-who-stopped-coming-around`
+
+## F15 — PC roster grid (9×12×2) (216)
+
+- `spr-pc-dragonborn-barbarian-female`
+- `spr-pc-dragonborn-barbarian-male`
+- `spr-pc-dragonborn-bard-female`
+- `spr-pc-dragonborn-bard-male`
+- `spr-pc-dragonborn-cleric-female`
+- `spr-pc-dragonborn-cleric-male`
+- `spr-pc-dragonborn-druid-female`
+- `spr-pc-dragonborn-druid-male`
+- `spr-pc-dragonborn-fighter-female`
+- `spr-pc-dragonborn-fighter-male`
+- `spr-pc-dragonborn-monk-female`
+- `spr-pc-dragonborn-monk-male`
+- `spr-pc-dragonborn-paladin-female`
+- `spr-pc-dragonborn-paladin-male`
+- `spr-pc-dragonborn-ranger-female`
+- `spr-pc-dragonborn-ranger-male`
+- `spr-pc-dragonborn-rogue-female`
+- `spr-pc-dragonborn-rogue-male`
+- `spr-pc-dragonborn-sorcerer-female`
+- `spr-pc-dragonborn-sorcerer-male`
+- `spr-pc-dragonborn-warlock-female`
+- `spr-pc-dragonborn-warlock-male`
+- `spr-pc-dragonborn-wizard-female`
+- `spr-pc-dragonborn-wizard-male`
+- `spr-pc-dwarf-barbarian-female`
+- `spr-pc-dwarf-barbarian-male`
+- `spr-pc-dwarf-bard-female`
+- `spr-pc-dwarf-bard-male`
+- `spr-pc-dwarf-cleric-female`
+- `spr-pc-dwarf-cleric-male`
+- `spr-pc-dwarf-druid-female`
+- `spr-pc-dwarf-druid-male`
+- `spr-pc-dwarf-fighter-female`
+- `spr-pc-dwarf-fighter-male`
+- `spr-pc-dwarf-monk-female`
+- `spr-pc-dwarf-monk-male`
+- `spr-pc-dwarf-paladin-female`
+- `spr-pc-dwarf-paladin-male`
+- `spr-pc-dwarf-ranger-female`
+- `spr-pc-dwarf-ranger-male`
+- `spr-pc-dwarf-rogue-female`
+- `spr-pc-dwarf-rogue-male`
+- `spr-pc-dwarf-sorcerer-female`
+- `spr-pc-dwarf-sorcerer-male`
+- `spr-pc-dwarf-warlock-female`
+- `spr-pc-dwarf-warlock-male`
+- `spr-pc-dwarf-wizard-female`
+- `spr-pc-dwarf-wizard-male`
+- `spr-pc-elf-barbarian-female`
+- `spr-pc-elf-barbarian-male`
+- `spr-pc-elf-bard-female`
+- `spr-pc-elf-bard-male`
+- `spr-pc-elf-cleric-female`
+- `spr-pc-elf-cleric-male`
+- `spr-pc-elf-druid-female`
+- `spr-pc-elf-druid-male`
+- `spr-pc-elf-fighter-female`
+- `spr-pc-elf-fighter-male`
+- `spr-pc-elf-monk-female`
+- `spr-pc-elf-monk-male`
+- `spr-pc-elf-paladin-female`
+- `spr-pc-elf-paladin-male`
+- `spr-pc-elf-ranger-female`
+- `spr-pc-elf-ranger-male`
+- `spr-pc-elf-rogue-female`
+- `spr-pc-elf-rogue-male`
+- `spr-pc-elf-sorcerer-female`
+- `spr-pc-elf-sorcerer-male`
+- `spr-pc-elf-warlock-female`
+- `spr-pc-elf-warlock-male`
+- `spr-pc-elf-wizard-female`
+- `spr-pc-elf-wizard-male`
+- `spr-pc-gnome-barbarian-female`
+- `spr-pc-gnome-barbarian-male`
+- `spr-pc-gnome-bard-female`
+- `spr-pc-gnome-bard-male`
+- `spr-pc-gnome-cleric-female`
+- `spr-pc-gnome-cleric-male`
+- `spr-pc-gnome-druid-female`
+- `spr-pc-gnome-druid-male`
+- `spr-pc-gnome-fighter-female`
+- `spr-pc-gnome-fighter-male`
+- `spr-pc-gnome-monk-female`
+- `spr-pc-gnome-monk-male`
+- `spr-pc-gnome-paladin-female`
+- `spr-pc-gnome-paladin-male`
+- `spr-pc-gnome-ranger-female`
+- `spr-pc-gnome-ranger-male`
+- `spr-pc-gnome-rogue-female`
+- `spr-pc-gnome-rogue-male`
+- `spr-pc-gnome-sorcerer-female`
+- `spr-pc-gnome-sorcerer-male`
+- `spr-pc-gnome-warlock-female`
+- `spr-pc-gnome-warlock-male`
+- `spr-pc-gnome-wizard-female`
+- `spr-pc-gnome-wizard-male`
+- `spr-pc-goliath-barbarian-female`
+- `spr-pc-goliath-barbarian-male`
+- `spr-pc-goliath-bard-female`
+- `spr-pc-goliath-bard-male`
+- `spr-pc-goliath-cleric-female`
+- `spr-pc-goliath-cleric-male`
+- `spr-pc-goliath-druid-female`
+- `spr-pc-goliath-druid-male`
+- `spr-pc-goliath-fighter-female`
+- `spr-pc-goliath-fighter-male`
+- `spr-pc-goliath-monk-female`
+- `spr-pc-goliath-monk-male`
+- `spr-pc-goliath-paladin-female`
+- `spr-pc-goliath-paladin-male`
+- `spr-pc-goliath-ranger-female`
+- `spr-pc-goliath-ranger-male`
+- `spr-pc-goliath-rogue-female`
+- `spr-pc-goliath-rogue-male`
+- `spr-pc-goliath-sorcerer-female`
+- `spr-pc-goliath-sorcerer-male`
+- `spr-pc-goliath-warlock-female`
+- `spr-pc-goliath-warlock-male`
+- `spr-pc-goliath-wizard-female`
+- `spr-pc-goliath-wizard-male`
+- `spr-pc-halfling-barbarian-female`
+- `spr-pc-halfling-barbarian-male`
+- `spr-pc-halfling-bard-female`
+- `spr-pc-halfling-bard-male`
+- `spr-pc-halfling-cleric-female`
+- `spr-pc-halfling-cleric-male`
+- `spr-pc-halfling-druid-female`
+- `spr-pc-halfling-druid-male`
+- `spr-pc-halfling-fighter-female`
+- `spr-pc-halfling-fighter-male`
+- `spr-pc-halfling-monk-female`
+- `spr-pc-halfling-monk-male`
+- `spr-pc-halfling-paladin-female`
+- `spr-pc-halfling-paladin-male`
+- `spr-pc-halfling-ranger-female`
+- `spr-pc-halfling-ranger-male`
+- `spr-pc-halfling-rogue-female`
+- `spr-pc-halfling-rogue-male`
+- `spr-pc-halfling-sorcerer-female`
+- `spr-pc-halfling-sorcerer-male`
+- `spr-pc-halfling-warlock-female`
+- `spr-pc-halfling-warlock-male`
+- `spr-pc-halfling-wizard-female`
+- `spr-pc-halfling-wizard-male`
+- `spr-pc-human-barbarian-female`
+- `spr-pc-human-barbarian-male`
+- `spr-pc-human-bard-female`
+- `spr-pc-human-bard-male`
+- `spr-pc-human-cleric-female`
+- `spr-pc-human-cleric-male`
+- `spr-pc-human-druid-female`
+- `spr-pc-human-druid-male`
+- `spr-pc-human-fighter-female`
+- `spr-pc-human-fighter-male`
+- `spr-pc-human-monk-female`
+- `spr-pc-human-monk-male`
+- `spr-pc-human-paladin-female`
+- `spr-pc-human-paladin-male`
+- `spr-pc-human-ranger-female`
+- `spr-pc-human-ranger-male`
+- `spr-pc-human-rogue-female`
+- `spr-pc-human-rogue-male`
+- `spr-pc-human-sorcerer-female`
+- `spr-pc-human-sorcerer-male`
+- `spr-pc-human-warlock-female`
+- `spr-pc-human-warlock-male`
+- `spr-pc-human-wizard-female`
+- `spr-pc-human-wizard-male`
+- `spr-pc-orc-barbarian-female`
+- `spr-pc-orc-barbarian-male`
+- `spr-pc-orc-bard-female`
+- `spr-pc-orc-bard-male`
+- `spr-pc-orc-cleric-female`
+- `spr-pc-orc-cleric-male`
+- `spr-pc-orc-druid-female`
+- `spr-pc-orc-druid-male`
+- `spr-pc-orc-fighter-female`
+- `spr-pc-orc-fighter-male`
+- `spr-pc-orc-monk-female`
+- `spr-pc-orc-monk-male`
+- `spr-pc-orc-paladin-female`
+- `spr-pc-orc-paladin-male`
+- `spr-pc-orc-ranger-female`
+- `spr-pc-orc-ranger-male`
+- `spr-pc-orc-rogue-female`
+- `spr-pc-orc-rogue-male`
+- `spr-pc-orc-sorcerer-female`
+- `spr-pc-orc-sorcerer-male`
+- `spr-pc-orc-warlock-female`
+- `spr-pc-orc-warlock-male`
+- `spr-pc-orc-wizard-female`
+- `spr-pc-orc-wizard-male`
+- `spr-pc-tiefling-barbarian-female`
+- `spr-pc-tiefling-barbarian-male`
+- `spr-pc-tiefling-bard-female`
+- `spr-pc-tiefling-bard-male`
+- `spr-pc-tiefling-cleric-female`
+- `spr-pc-tiefling-cleric-male`
+- `spr-pc-tiefling-druid-female`
+- `spr-pc-tiefling-druid-male`
+- `spr-pc-tiefling-fighter-female`
+- `spr-pc-tiefling-fighter-male`
+- `spr-pc-tiefling-monk-female`
+- `spr-pc-tiefling-monk-male`
+- `spr-pc-tiefling-paladin-female`
+- `spr-pc-tiefling-paladin-male`
+- `spr-pc-tiefling-ranger-female`
+- `spr-pc-tiefling-ranger-male`
+- `spr-pc-tiefling-rogue-female`
+- `spr-pc-tiefling-rogue-male`
+- `spr-pc-tiefling-sorcerer-female`
+- `spr-pc-tiefling-sorcerer-male`
+- `spr-pc-tiefling-warlock-female`
+- `spr-pc-tiefling-warlock-male`
+- `spr-pc-tiefling-wizard-female`
+- `spr-pc-tiefling-wizard-male`
+
+## Retired legacy sheets
+
+- `spr-fantasy-gold-dragon-roster-5e-2024-mechanics` — replaced by PACKET-F5 gold family (4 individual sprites)
+- `spr-fantasy-the-cultist-roster-base-2024-stat-blocks` — individuals regenerated in PACKET-F1 lane 4 + F4-era cultist set
+
+## Aliases (F1 anchor covers a legacy id)
+
+- `spr-fantasy-dungeon-animal-scarred-guard-dog-gone-feral-once-trained-to-patrol-these-halls-now-answers-to-no-one` ← F1 anchor spr-fantasy-scarred-feral-guard-dog
+
+## Mechanical coverage notes (gap-hunt results, 2026-07-13)
+
+- **Zero fantasy/PC sprites are referenced-but-missing** in `data/` + `src/` — every mechanical
+  reference resolves to a disk sprite. Zero orphans on disk.
+- All 510 `bestiary.js` entries are sprite-backed; the only "gaps" were 6 naming aliases
+  (`the-` prefix: pseudodragon, faerie-dragon, needle/twig/vine-blight, cultist-roster) — noted,
+  not real gaps.
+- **Gold dragons** exist mechanically (wyrmling/young/adult/ancient inside the roster entry) with
+  no individual sprites — PACKET-F5 authors them as NEW.
+- The 11 other realms reference ~3,420 sprites that don't exist yet (chrome/suburb/bright/gloom/
+  lost/ash/cosmic/theater/high/noir/frontier) — parked until those realms get the faceted pass.

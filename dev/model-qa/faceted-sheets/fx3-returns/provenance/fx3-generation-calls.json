@@ -1,0 +1,12 @@
+[
+  {"file":"raw-figures/fx-env-shadowpool-candidate-001.png","callId":"exec-23af983b-f3b9-4429-a998-900c25879a51","cells":["fx-env-shadowpool","fx-env-splash","fx-fantasy-emberrune","fx-fantasy-featherdrift"]},
+  {"file":"raw-figures/fx-fantasy-frostshard-candidate-001.png","callId":"exec-3e9b7317-efce-4b60-9b5a-5c26148c9cee","cells":["fx-fantasy-frostshard","fx-fantasy-holyglow","fx-fantasy-holyglow-alt","fx-fantasy-leafburst"]},
+  {"file":"raw-figures/fx-fantasy-leafburst-alt-candidate-001.png","callId":"exec-046b3d71-ba9c-4099-8272-946eeb5b2856","cells":["fx-fantasy-leafburst-alt","fx-gloom-bonedust","fx-gloom-vhstear","fx-gloom-vhstear-alt"]},
+  {"file":"raw-figures/fx-impact-blunt-star-candidate-001.png","callId":"exec-f858d226-0446-4734-9be8-bd11a43d9e8d","cells":["fx-impact-blunt-star","fx-impact-crush-shatter","fx-impact-pierce-glint","fx-impact-slash-arc"]},
+  {"file":"raw-figures/fx-impact-slash-heavy-candidate-001.png","callId":"exec-1d4be1ab-34d5-478e-814f-7023a805d06f","cells":["fx-impact-slash-heavy","fx-magic-bolthead","fx-magic-burstring","fx-magic-castcircle"]},
+  {"file":"raw-figures/fx-magic-orbcharge-candidate-001.png","callId":"exec-2ac2794f-31eb-4e66-8374-70f92506c70a","cells":["fx-magic-orbcharge","fx-magic-sigilflash","fx-status-bloodspatter","fx-status-healmotes"]},
+  {"file":"raw-figures/fx-status-poisonbubble-candidate-001.png","callId":"exec-fc9a28d8-0357-42c7-bd58-9034cb61adea","cells":["fx-status-poisonbubble","fx-status-shieldshimmer","fx-status-smokepuff","fx-status-sparkburst"]},
+  {"file":"raw-figures/fx-status-stunstars-candidate-001.png","callId":"exec-d47f4b3d-b52b-49ca-b0ad-d92ae3e3c253","cells":["fx-status-stunstars","shared-blood-decal","shared-cobweb-decal","shared-crack-decal"]},
+  {"file":"raw-figures/shared-grime-decal-candidate-001.png","callId":"exec-c5be21d9-3380-42ea-8c2d-c503caf80008","cells":["shared-grime-decal","shared-moss-decal","shared-rust-decal","shared-scorch-decal"]},
+  {"file":"raw-figures/shared-water-decal-candidate-001.png","callId":"exec-2add7545-0df0-4008-9ff1-1ade3cecd4ff","cells":["shared-water-decal","shared-wear-decal"]}
+]

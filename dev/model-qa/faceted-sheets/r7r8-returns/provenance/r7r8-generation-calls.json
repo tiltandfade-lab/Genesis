@@ -1,0 +1,86 @@
+[
+  {
+    "file": "r7r8-returns/raw-figures/spr-fantasy-arcanaloth-candidate-001.png",
+    "callId": "unknown",
+    "cells": [
+      "spr-fantasy-arcanaloth"
+    ]
+  },
+  {
+    "file": "r7r8-returns/raw-figures/spr-fantasy-chasme-candidate-001.png",
+    "callId": "recovered-cache",
+    "cells": [
+      "spr-fantasy-chasme"
+    ]
+  },
+  {
+    "file": "r7r8-returns/raw-figures/spr-fantasy-couatl-candidate-001.png",
+    "callId": "019f62bb-d23b-74a0-b042-6b2b041a73a8",
+    "cells": [
+      "spr-fantasy-couatl"
+    ]
+  },
+  {
+    "file": "r7r8-returns/raw-figures/spr-fantasy-empyrean-candidate-001.png",
+    "callId": "019f62bb-d23b-74a0-b042-6b2b041a73a8",
+    "cells": [
+      "spr-fantasy-empyrean"
+    ]
+  },
+  {
+    "file": "r7r8-returns/raw-figures/spr-fantasy-empyrean-iota-candidate-001.png",
+    "callId": "019f62bb-d23b-74a0-b042-6b2b041a73a8",
+    "cells": [
+      "spr-fantasy-empyrean-iota"
+    ]
+  },
+  {
+    "file": "r7r8-returns/raw-figures/spr-fantasy-hezrou-candidate-001.png",
+    "callId": "019f62bb-d23b-74a0-b042-6b2b041a73a8",
+    "cells": [
+      "spr-fantasy-hezrou"
+    ]
+  },
+  {
+    "file": "r7r8-returns/raw-figures/spr-fantasy-manes-vaporspawn-candidate-001.png",
+    "callId": "019f62c8-47a8-7e22-9de7-ef54d89e32a2",
+    "cells": [
+      "spr-fantasy-manes-vaporspawn"
+    ]
+  },
+  {
+    "file": "r7r8-returns/raw-figures/spr-fantasy-nalfeshnee-candidate-001.png",
+    "callId": "019f62bb-d23b-74a0-b042-6b2b041a73a8",
+    "cells": [
+      "spr-fantasy-nalfeshnee"
+    ]
+  },
+  {
+    "file": "r7r8-returns/raw-figures/spr-fantasy-night-hag-candidate-001.png",
+    "callId": "019f62bb-d23b-74a0-b042-6b2b041a73a8",
+    "cells": [
+      "spr-fantasy-night-hag"
+    ]
+  },
+  {
+    "file": "r7r8-returns/raw-figures/spr-fantasy-nightmare-candidate-001.png",
+    "callId": "019f62bb-d23b-74a0-b042-6b2b041a73a8",
+    "cells": [
+      "spr-fantasy-nightmare"
+    ]
+  },
+  {
+    "file": "r7r8-returns/raw-figures/spr-fantasy-oni-candidate-001.png",
+    "callId": "019f62bb-d23b-74a0-b042-6b2b041a73a8",
+    "cells": [
+      "spr-fantasy-oni"
+    ]
+  },
+  {
+    "file": "r7r8-returns/raw-figures/spr-fantasy-pit-fiend-candidate-001.png",
+    "callId": "019f62bb-d23b-74a0-b042-6b2b041a73a8",
+    "cells": [
+      "spr-fantasy-pit-fiend"
+    ]
+  }
+]

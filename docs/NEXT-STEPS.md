@@ -241,3 +241,12 @@ research wave + art review + north star into waves; this block is just the point
    (`codex/extruded-prop-pilot`, `codex/kenney-mesh-audit` — they lived untracked in /private/tmp).
 4. ☐ Then P3-2 Stage B sprite citizenship (unified with the faceted admission schema) →
    P3-3 (GP-4b + AgX + D0 slice) → P3-4 (atlas Phase A + instancing spike + oracle checkpoint).
+
+## Do next (2026-07-14, faceted program — post-generation)
+
+- ☑ Fantasy figure/fx/decal/prop/icon/item/tileset generation (see CHANGELOG 2026-07-14)
+- ☐ Fire `gapfill-final.md` (last 10 figure identities)
+- ☐ Step-E source rejection + chroma removal/slice over all banked candidates (plan §9 F–G)
+- ☐ §9 admission + Adam's sprite-review height pass (port 5179) → sprite-registry regen
+- ☐ Engine swap: replace 896 pixel sprites, retire 2 legacy roster sheets
+- ☐ Decisions parked: procedural-vs-textured floors (88 realm-surfaces), K1 kit-sheet QA, other realms

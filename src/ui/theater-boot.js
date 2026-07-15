@@ -2851,24 +2851,73 @@ function normalizeSpriteKey(s){
   return (s || "").toLowerCase().replace(/[^a-z0-9]/g, "");
 }
 
-/* T4.1 resolution: recipeSlug is already "the exact bestiary id" (wholeObjectKeyFor's own header
-   comment) — join it against SPRITE_REGISTRY's `name` field (the manifest/registry's own join key
-   per the spec's shared-data-shapes section, "cell name <-> realm-bestiary-draft.json creature name
-   within the same realm"). Only a `status:"cut"` entry ever resolves here: a same-name entry that is
-   still `status:"pending"` (not yet sliced) is a real miss for THIS function — it returns null and
-   the caller falls through to the existing 3D chain untouched, exactly like a whole-object key that
-   doesn't resolve. (The spec's fuller realm/type/size fallback tier is NOT implemented in this unit
-   — see the T4 deviation note in the unit's own handoff; the exact-name/cut-only tier above is the
-   one every RED-FIRST acceptance check in this unit's spec actually exercises.) */
+// VQ2-RESPEC.md S4 (ledger P0 #1, "Giant Rat renders as a robed humanoid") — a dev-visible tally
+// of how often spriteEntryFor had to fall back to the normalized-name scan below because the
+// bestiary-id map (SPRITE_BY_BESTIARY_ID) didn't resolve recipeSlug directly. Exposed read-only
+// via window.Theater._spriteJoinNameFallbackCountForTest (bottom of this file) — a harness/console
+// can watch this climb to confirm the id-map tier is actually doing the work it claims, not just
+// silently present.
+let SPRITE_JOIN_NAME_FALLBACK_COUNT = 0;
+
+/* T4.1 resolution, extended by S4: recipeSlug is already "the exact bestiary id" (wholeObjectKeyFor's
+   own header comment, and src/engine/theater-data.js's own `f.modelKey || f.statId` header comment on
+   theaterUnitsFrom). TWO tiers, id map first:
+
+   TIER 1 — SPRITE_BY_BESTIARY_ID[recipeSlug] (build/gen-sprite-registry.py's S4 Part A: a
+   deterministic index built at GENERATION time from the SAME realm-bestiary join the generator
+   already performs — every cut entry's own bestiary-joined `frame` field, keyed by that id). An
+   id is an EXACT key, never normalized — "Giant Rat" the display name and "giant-rat" the bestiary
+   id can collide under normalizeSpriteKey (both -> "giantrat"), and two DIFFERENT bestiary ids can
+   collide too (e.g. an overlay relabel divorces a slug's display name from its own bestiary id while
+   another creature's real name matches the ORIGINAL name) — the id map sidesteps the whole class:
+   one id, one slug, no ambiguity. A slug the map points at that isn't (yet) `status:"cut"` or is
+   `verdict:"fail"` falls through to TIER 2 exactly like a plain miss, never a broken lookup.
+
+   TIER 2 — the pre-S4 normalized-name linear scan (unchanged): join recipeSlug against
+   SPRITE_REGISTRY's `name` field per the spec's shared-data-shapes section ("cell name <->
+   realm-bestiary-draft.json creature name within the same realm"). Only a `status:"cut"` entry ever
+   resolves here: a same-name entry that is still `status:"pending"` (not yet sliced) is a real miss
+   for THIS function — it returns null and the caller falls through to the existing 3D chain
+   untouched, exactly like a whole-object key that doesn't resolve. Every time THIS tier is the one
+   that resolves the sprite (the id map missed or wasn't consulted for a real hit), the fallback
+   counter above increments and a one-line console.warn tags the mismatch (dev-visible only — no
+   user-facing surface) so a `--admit-faceted`-style regen sweep or Adam's own console can see how
+   often the weaker join tier is still load-bearing. (The spec's fuller realm/type/size fallback tier
+   is NOT implemented in this unit — see the T4 deviation note in the unit's own handoff; the
+   exact-name/cut-only tier above is the one every RED-FIRST acceptance check in this unit's spec
+   actually exercises.) Never resolved via the `frame` field at render time — `frame` is consumed
+   ONLY by the generator, at build time, to construct the id map itself. */
 function spriteEntryFor(recipeSlug){
   if(!recipeSlug || typeof SPRITE_REGISTRY === "undefined" || !SPRITE_REGISTRY) return null;
+
+  // TIER 1 — the deterministic bestiary-id map, exact match, no normalization.
+  if(typeof SPRITE_BY_BESTIARY_ID !== "undefined" && SPRITE_BY_BESTIARY_ID){
+    const idSlug = SPRITE_BY_BESTIARY_ID[recipeSlug];
+    if(idSlug){
+      const idEntry = SPRITE_REGISTRY[idSlug];
+      if(idEntry && idEntry.status === "cut" && idEntry.verdict !== "fail"){
+        return Object.assign({ slug: idSlug }, idEntry);
+      }
+      // id-mapped slug isn't (yet) render-eligible — falls through to TIER 2 as a real miss,
+      // same discipline as every other resolution tier in this file.
+    }
+  }
+
+  // TIER 2 — the pre-S4 normalized-name linear scan (fallback, logged).
   const wantKey = normalizeSpriteKey(recipeSlug);
   if(!wantKey) return null;
   for(const regKey in SPRITE_REGISTRY){
     const e = SPRITE_REGISTRY[regKey];
     if(!e || !e.name || e.status !== "cut") continue;
     if(e.verdict === "fail") continue; // review-failed art never renders — falls through to the 3D chain
-    if(normalizeSpriteKey(e.name) === wantKey) return Object.assign({ slug: regKey }, e);
+    if(normalizeSpriteKey(e.name) === wantKey){
+      SPRITE_JOIN_NAME_FALLBACK_COUNT++;
+      if(typeof console !== "undefined" && console.warn){
+        console.warn("[sprite-join] name-join fallback: recipeSlug '" + recipeSlug + "' -> '" + regKey
+          + "' (no SPRITE_BY_BESTIARY_ID hit; fallback count=" + SPRITE_JOIN_NAME_FALLBACK_COUNT + ")");
+      }
+      return Object.assign({ slug: regKey }, e);
+    }
   }
   return null; // no cut entry by that name — a pending-only match (or no match at all) falls through
 }
@@ -11563,6 +11612,14 @@ window.Theater.lightConeEnabled = function(){ return !!ITR_LIGHT_CONE_ENABLED; }
 window.Theater.interiorLightGlowCount = function(){ return S.interiorLightGlowCount || 0; };
 window.Theater.setBrightPracticalsSuppressed = function(v){ ITR_BRIGHT_SUPPRESS_PRACTICALS = !!v; };
 window.Theater.brightPracticalsSuppressed = function(){ return !!ITR_BRIGHT_SUPPRESS_PRACTICALS; };
+// VQ2-RESPEC.md S4 — test-only seam (same "_xxxForTest" idiom as every other harness hook in this
+// file): exposes the pure spriteEntryFor join function directly so a harness can drive the
+// TIER 1 (bestiary-id map) / TIER 2 (normalized-name fallback) resolution WITHOUT going through
+// figureFor/refFigure.build's full 3D-fallback machinery — the collision-class fixture (S4's
+// RED-FIRST check) only needs the join outcome, not a built figure. Also exposes the fallback
+// counter read-only so a harness can assert TIER 2 actually fired (or didn't).
+window.Theater._spriteEntryForTest = function(recipeSlug){ return spriteEntryFor(recipeSlug); };
+window.Theater._spriteJoinNameFallbackCountForTest = function(){ return SPRITE_JOIN_NAME_FALLBACK_COUNT; };
 // docs/LIGHT-SIGHT-POLISH.md P-1 problem 3 — harness-facing diagnostic + runtime toggle, same
 // convention as the cone gate just above: every mounted light-emitter marker (card OR nub) in the
 // CURRENT interior scene graph, tagged by userData.lightEmitterMarker (see interiorBuildLightCard /

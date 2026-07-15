@@ -1215,10 +1215,14 @@ function theaterNodeBoardBuild(record, realms, env){
          a plain continuation of the existing urban floor vocabulary, not a bespoke new material).
      (b) BUILDING MASSES — SETTLEMENT_BUILDING_MIN..MAX (4-8), one per chosen non-center-lane zone (8
          candidate zones exist on this grid — 4 bands x {L,R} — so the max case fills every lot). Each
-         chosen zone's WHOLE 3x3 tile patch is stamped `kind:"building"` at a raised, multi-step height
-         — the SAME "a tile is a small extruded column" mechanism every floor/elevated tile already
-         renders with (setBoard, theater-boot.js), just tall and contiguous over 9 tiles, so a chosen
-         zone reads as ONE solid building mass with NO new GL geometry code for the mass itself.
+         chosen zone's 3x3 tile patch (minus ruling-3's own adjacency-buffer row when this zone's
+         same-lane back-neighbor is ALSO chosen — see the chosen-lot loop's own bufferedNear comment) is
+         stamped `kind:"building"` at a raised height capped to SETTLEMENT_BUILDING_HEIGHT_MIN..MAX
+         (ENV-3b ruling 1: 1.5x-2x SETTLEMENT_STANDEE_HEIGHT_REF, never the old unbounded STEPS+JITTER
+         mass that swallowed the frame) — the SAME "a tile is a small extruded column" mechanism every
+         floor/elevated tile already renders with (setBoard, theater-boot.js), just tall and contiguous
+         over up to 9 tiles, so a chosen zone reads as ONE solid building mass with NO new GL geometry
+         code for the mass itself.
          `t.material` is the zone's own seeded facade-material pick (SETTLEMENT_FACADE_MATERIAL_BY_REALM
          / _TRIM_BY_REALM — existing procedural material recipes theater-boot.js's buildFloorMaterialCanvas
          already paints, "NO new art"); theater-boot.js's tileMaterialsFor gets ONE new, ADDITIVE,
@@ -1231,8 +1235,8 @@ function theaterNodeBoardBuild(record, realms, env){
          narratability — it carries NO mesh of its own (the tile mass IS the render), so it can never
          double-render against the tile geometry.
      (c) face variety — seeded per-building pick between the realm's primary facade material and its
-         trim/accent material + a seeded height jitter (0..SETTLEMENT_BUILDING_HEIGHT_JITTER extra
-         THEATER_STEPs) so a row of buildings doesn't read as one uniform extruded slab.
+         trim/accent material + a seeded height roll inside the SETTLEMENT_BUILDING_HEIGHT_MIN..MAX band
+         (ruling 1) so a row of buildings doesn't read as one uniform extruded slab.
      (d) NPC sprinkle — SETTLEMENT_NPC_MIN..MAX (2-4) `kind:"dressing"` props seeded onto the street's
          own SIDEWALK tiles (the two non-center-column tiles of each street zone's 3x3 patch — the exact
          center column stays the CLEAR walking lane, mirroring env2BiomeScatterFor's own clear-lane law),
@@ -1264,10 +1268,31 @@ const SETTLEMENT_BUILDING_MAX = 8;
 const SETTLEMENT_NPC_MIN = 2;
 const SETTLEMENT_NPC_MAX = 4;
 const SETTLEMENT_STREET_PROP_COUNT = 2;
-const SETTLEMENT_BUILDING_HEIGHT_STEPS = 3;      // THEATER_STEP multiples — clearly a MASS, not a 1-step elevated patch
-const SETTLEMENT_BUILDING_HEIGHT_JITTER = 2;     // +0..+this many extra THEATER_STEPs, seeded per building (skyline variety)
+// ENV-3b (docs/ENV-EXTERIOR-WAVE.md composition-fix wave, ruling 1): the original STEPS(3)+JITTER(0..2)
+// combo — a flat multiple of THEATER_STEP=1.0 with NO relation to any figure's own real size — let a
+// building mass top out at 5.0 world units, a giant windowless cube swallowing a ~1.1-1.5u standee (the
+// battle-gate's "buildings are giant featureless cubes" failure, dev/battle-gate/env3-town/
+// env3-town-daylit.png). Capped instead to a NAMED multiple of the SAME standee-height convention
+// theater-boot.js's own GLB_TARGET_HEIGHT already establishes (1.5 world units — "module height
+// convention", that file's own header) so a building always reads as A BUILDING next to a figure, never
+// a monolith. theater-data.js stays GL-free (§9.1 PURE — no import of theater-boot.js's ES-module
+// scope, and it loads FIRST in manifest.json's loadOrder besides), so this mirrors that constant's
+// VALUE by name rather than importing it.
+const SETTLEMENT_STANDEE_HEIGHT_REF = 1.5;                                    // world units — mirrors theater-boot.js's GLB_TARGET_HEIGHT
+const SETTLEMENT_BUILDING_HEIGHT_MIN = SETTLEMENT_STANDEE_HEIGHT_REF * 1.5;   // 2.25u — a real building, not a shed
+const SETTLEMENT_BUILDING_HEIGHT_MAX = SETTLEMENT_STANDEE_HEIGHT_REF * 2.0;   // 3.0u — the cap: never more than 2x a standee
 const SETTLEMENT_STREET_MATERIAL = "cobble";
 const SETTLEMENT_LOT_MATERIAL = "cracked-earth"; // an unbuilt lot — bare ground, not a second street
+// ENV-3b ruling 3: same-lane adjacent-band building lots sit on a CONTIGUOUS grid (theaterZoneOrigin
+// steps by exactly THEATER_PATCH with no gap) — two chosen building zones back-to-back in the SAME
+// lane (only direction that can ever be adjacent; the street lane always separates L from R — see
+// theaterSettlementBoardBuild's own chosenLots derivation) fused into one silhouette (gate failure
+// "adjacent lots fuse into one silhouette"). This many tile ROWS get trimmed off a building's own
+// band-facing (z) edge, back to SETTLEMENT_LOT_MATERIAL, whenever ITS OWN band-1 same-lane neighbor is
+// ALSO a chosen building — see the chosen-lot loop below for the one-directional (backward-only) check
+// that keeps a chain of 3+ adjacent buildings each buffered from its immediate neighbor without
+// double-trimming.
+const SETTLEMENT_BUILDING_ADJACENCY_BUFFER = 1; // tile rows
 
 const SETTLEMENT_FACADE_MATERIAL_BY_REALM = { fantasy: "plank", gloom: "cave-rock", chrome: "grating" };
 const SETTLEMENT_FACADE_MATERIAL_DEFAULT = "plank";
@@ -1385,13 +1410,24 @@ function theaterSettlementBoardBuild(nodeInfo, realms, env){
         const bRng = (typeof dspMulberry32 === "function") ? dspMulberry32(bSeed) : rng;
         const useTrim = bRng() < 0.35;
         const material = useTrim ? trimMaterial : facadeMaterial;
-        const jitter = Math.floor(bRng() * (SETTLEMENT_BUILDING_HEIGHT_JITTER + 1));
-        const h = (SETTLEMENT_BUILDING_HEIGHT_STEPS + jitter) * THEATER_STEP;
+        // ruling 1: a seeded height in [MIN,MAX] (2.25u..3.0u — 1.5x-2x SETTLEMENT_STANDEE_HEIGHT_REF)
+        // replaces the old unbounded STEPS+JITTER combo (was up to 5.0u — the "swallows the frame" bug).
+        const h = SETTLEMENT_BUILDING_HEIGHT_MIN + bRng() * (SETTLEMENT_BUILDING_HEIGHT_MAX - SETTLEMENT_BUILDING_HEIGHT_MIN);
         const tint = gradeTint(theaterLightenHex(palette.elevTint, useTrim ? 1.08 : 0.94));
+        // ruling 3: this zone's own NEAR (low-z) edge gets trimmed to a buffer row (SETTLEMENT_LOT_
+        // MATERIAL, unbuilt) whenever the immediately-preceding band on the SAME lane is ALSO a chosen
+        // building — a plain backward-only chosenKey lookup (candidates/chosenKey, above), never a
+        // second forward pass — so a chain of 3+ adjacent same-lane buildings gets exactly ONE buffer
+        // row between each consecutive pair (the FAR edge of the earlier one stays full; only the
+        // LATER one's near edge trims), never a double-trim eating two rows from a single gap.
+        const bufferedNear = bi > 0 && !!chosenKey[(bi - 1) + ":" + li];
+        const zStart = bufferedNear ? SETTLEMENT_BUILDING_ADJACENCY_BUFFER : 0;
+        const depth = THEATER_PATCH - zStart;
         buildingRec = {
           id: "bldg:" + nodeId + ":" + zoneKey, zone: zoneKey,
-          x: origin.x + 1, z: origin.z + 1, w: THEATER_PATCH, d: THEATER_PATCH, h: h,
-          facadeMaterial: material, facadeTextureFile: facadeTextureFile, tint: tint
+          x: origin.x + 1, z: origin.z + zStart + depth / 2, w: THEATER_PATCH, d: depth, h: h,
+          facadeMaterial: material, facadeTextureFile: facadeTextureFile, tint: tint,
+          zStart: zStart
         };
         buildings.push(buildingRec);
       }
@@ -1399,9 +1435,18 @@ function theaterSettlementBoardBuild(nodeInfo, realms, env){
       for(let tx = 0; tx < THEATER_PATCH; tx++){
         for(let tz = 0; tz < THEATER_PATCH; tz++){
           const wx = origin.x + tx, wz = origin.z + tz;
-          if(isBuilding){
+          const buildingHere = isBuilding && tz >= buildingRec.zStart;
+          if(buildingHere){
             tiles.push({ x: wx, z: wz, h: buildingRec.h, kind: "building", tint: buildingRec.tint,
               altTop: false, zone: zoneKey, material: buildingRec.facadeMaterial, buildingId: buildingRec.id });
+          } else if(isBuilding){
+            // ruling 3's own trimmed adjacency-buffer row: this zone IS a building lot, but THIS row
+            // is the 1-tile gap held back from the mass — renders as a plain unbuilt lot tile (the
+            // SAME material/read as any other non-building, non-street tile below), never a second
+            // street lane and never fused into the neighbor's mass.
+            const lotTint = gradeTint(theaterLightenHex(palette.top, 0.85));
+            tiles.push({ x: wx, z: wz, h: 0, kind: "floor", tint: lotTint, altTop: false,
+              zone: zoneKey, material: SETTLEMENT_LOT_MATERIAL });
           } else if(isStreet){
             const streetTint = gradeTint(palette.top);
             tiles.push({ x: wx, z: wz, h: 0, kind: "floor", tint: streetTint, altTop: false,

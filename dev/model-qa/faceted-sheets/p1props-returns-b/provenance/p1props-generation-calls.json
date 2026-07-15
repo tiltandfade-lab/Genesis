@@ -1,0 +1,23 @@
+[
+  {"file":"raw-props/flat-001-candidate-001.png","callId":"exec-ecba7735-8540-4b6f-a627-3a27b652b546","assetId":"flat-001","components":["Book"],"qa":"FAILED: first candidate retained for audit; rerolled once"},
+  {"file":"raw-props/flat-001-candidate-002.png","callId":"exec-ce789510-abca-4d35-821c-01e98ecff983","assetId":"flat-001","components":["Book"],"qa":"REOPENED; corner chroma not mathematically uniform"},
+  {"file":"raw-props/flat-002-candidate-001.png","callId":"exec-e4b72361-99e3-4707-88f4-b25b5ce33642","assetId":"flat-002","components":["Case, Map or Scroll"],"qa":"REOPENED; corner chroma not mathematically uniform"},
+  {"file":"raw-props/flat-003-candidate-001.png","callId":"exec-5cbfc236-f45b-4584-98e7-bdaf6767a425","assetId":"flat-003","components":["Hunting Trap"],"qa":"REOPENED; corner chroma not mathematically uniform"},
+  {"file":"raw-props/flat-004-candidate-001.png","callId":"exec-df133df0-e320-48f0-881d-8932a34392eb","assetId":"flat-004","components":["Map"],"qa":"REOPENED; corner chroma not mathematically uniform"},
+  {"file":"raw-props/flat-005-candidate-001.png","callId":"exec-b577ec71-72b2-417d-8918-5bdbc6b87c73","assetId":"flat-005","components":["Shield"],"qa":"REOPENED; corner chroma not mathematically uniform"},
+  {"file":"raw-props/flat-006-candidate-001.png","callId":"exec-1a4d81ff-a5b5-41ea-9f0c-87b6763f22c8","assetId":"flat-006","components":["Spell Scroll (Cantrip)"],"qa":"REOPENED; corner chroma not mathematically uniform"},
+  {"file":"raw-props/flat-007-candidate-001.png","callId":"exec-496c4154-7703-4401-91d0-15a3a2e39090","assetId":"flat-007","components":["Spell Scroll (Level 1)"],"qa":"REOPENED; corner chroma not mathematically uniform"},
+  {"file":"raw-props/flat-008-candidate-001.png","callId":"exec-a6bc7438-e758-491e-afc0-8b2b3b9934d9","assetId":"flat-008","components":["Animated Shield"],"qa":"REOPENED; corner chroma not mathematically uniform"},
+  {"file":"raw-props/flat-009-candidate-001.png","callId":"exec-3bdfb598-6c53-4c1b-942f-38b9f59eb3d3","assetId":"flat-009","components":["Arrow-Catching Shield"],"qa":"REOPENED; corner chroma not mathematically uniform"},
+  {"file":"raw-props/flat-010-candidate-001.png","callId":"exec-da0099c2-0297-41fa-915e-247074d0e153","assetId":"flat-010","components":["Luck Blade"],"qa":"REOPENED; corner chroma not mathematically uniform"},
+  {"file":"raw-props/flat-011-candidate-001.png","callId":"exec-87b9585b-7828-4b54-9b1b-772dc5b6db49","assetId":"flat-011","components":["Sentinel Shield"],"qa":"REOPENED; corner chroma not mathematically uniform"},
+  {"file":"raw-props/flat-012-candidate-001.png","callId":"exec-fbc573e5-52ae-4272-a13e-2fa1380221bf","assetId":"flat-012","components":["Shield of Missile Attraction"],"qa":"REOPENED; corner chroma not mathematically uniform"},
+  {"file":"raw-props/flat-013-candidate-001.png","callId":"exec-3e99bfe4-0219-42df-8964-3790f3557f95","assetId":"flat-013","components":["Shield of the Cavalier"],"qa":"REOPENED; corner chroma not mathematically uniform"},
+  {"file":"raw-props/flat-014-candidate-001.png","callId":"exec-a461a6e5-52b4-452e-ae02-32d1a32848cc","assetId":"flat-014","components":["Shield, +1, +2, or +3"],"qa":"REOPENED; corner chroma not mathematically uniform"},
+  {"file":"raw-props/flat-015-candidate-001.png","callId":"exec-579ad133-62eb-414a-83d6-0e0e50b297d9","assetId":"flat-015","components":["Spell Scroll"],"qa":"REOPENED; corner chroma not mathematically uniform"},
+  {"file":"raw-props/flat-016-candidate-001.png","callId":"exec-732da855-073d-4aeb-9430-ae04f80fc3e9","assetId":"flat-016","components":["Spellguard Shield"],"qa":"REOPENED; corner chroma not mathematically uniform"},
+  {"file":"raw-props/flat-029-candidate-001.png","callId":"exec-7de97d27-2408-4e08-983d-9c79522cc1c6","assetId":"flat-029","components":["fantasy painting 1"],"qa":"REOPENED; corner chroma not mathematically uniform"},
+  {"file":"raw-props/flat-030-candidate-001.png","callId":"exec-0d107930-ab4e-4aea-8cf9-b52772b18353","assetId":"flat-030","components":["fantasy painting 2"],"qa":"REOPENED; corner chroma not mathematically uniform"},
+  {"file":"raw-props/flat-031-candidate-001.png","callId":"exec-e8875563-256e-434e-9d26-0db1a6953e8f","assetId":"flat-031","components":["fantasy painting 3"],"qa":"REOPENED; corner chroma not mathematically uniform"},
+  {"file":"raw-props/flat-032-candidate-001.png","callId":"exec-de36fc3c-1ddc-4bcf-b55e-c5f56f4ade23","assetId":"flat-032","components":["fantasy painting 4"],"qa":"REOPENED; corner chroma not mathematically uniform"}
+]

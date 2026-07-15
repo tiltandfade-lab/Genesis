@@ -42,8 +42,47 @@
    milestone-shots apart. PLAY_LENS_MAX_SHOTS caps the run; hitting it logs LOUDLY (never a silent
    drop).
 
-   Run:   node dev/play-lens.mjs --run-id <id> [--realm chrome] [--port 5241]
+   Run:   node dev/play-lens.mjs --run-id <id> [--realm chrome] [--force-realm fantasy|gloom|chrome]
+          [--route standard|travel-heavy|dungeon-heavy|town-beats] [--port 5241]
    Output: dev/play-lens/run-<runId>/pl-<seq>-<kind>-<context>.png + manifest.json + findings.json
+
+   L1 (docs/VQ2-RESPEC.md §3 WAVE L / dev/play-lens/ledger.md "Rig improvements") — rig-only
+   extensions, game logic byte-untouched:
+     1. THE BOT FIGHTS — driveCombatRound now emits real production `attack` + `move_zone` events
+        (not a Theater FX ping) so rounds 2-3 carry real HP/position deltas — the honest re-test for
+        ledger P0 #2 (PC token presence across rounds).
+     2. TRANSITION CAMERA — driveStateTransition parses the room's segNum off the interactable's own
+        sourceRef ("S<segNum>.<field>", src/engine/walk-interactables.js:267) and the caller
+        walk_advances the cursor there before shooting, so the capture actually frames the room the
+        transition happened in (today's gap: pn.interactables spans every room in the plan, not just
+        the one in camera).
+     3. SHOP CAPTURE VERIFICATION — verifyShopPanelRendered() asserts the `.shop-header` DOM node is
+        actually laid out and in-viewport after open_shop, not just that the event returned ok:true.
+        Recorded on findings.json's top-level `shopRenderVerdict`.
+     4. RECORD-LESS SETTLEMENT LEG — driveRecordlessSettlement() lands the PC on a node stamped
+        env:"urban" (mirrors driveDungeon's own P.nodes[nodeId]={env:"dungeon",...} technique) with
+        NO codexId ever bound, so theaterHereSourceFor's {kind:"node"} single-site-tray branch never
+        fires and the ENV-3 town builder ({kind:"settlement"}) is the one exercised — the PL-3 ledger
+        note ("Dorsal Market took precedence — correct; the record-less read is still owed").
+     5. --force-realm <fantasy|gloom|chrome> — INSPECTED before implementing (see the branch's commit
+        body for the full trail): the bardo WORLDBEATS tables (master/smell/sound/arch/taboo/nearby/
+        myth/faction/pressure) carry a SPICE BAND (`cat`: Grounded/Textured/Strange/Volatile/Mythic),
+        never a realm tag — "reroll bardoRollWorld until it matches a target realm" cannot converge,
+        there is nothing realm-shaped in those tables to match. The real, already-wired lever is
+        `w.realm` (src/engine/breach.js's breachMarkRealmActive): theaterActiveRealmsFor/
+        activeRealmsFor read `w.realm.active`+`.name` to populate theaterHereSourceFor's `realms[]`,
+        which interiorBuildBoard/interiorTileKitFor (src/ui/theater-interior.js) consume to pick the
+        INTERIOR_TILE_KITS entry a dungeon room renders with — INTERIOR_TILE_KITS carries `fantasy`
+        as a first-class key (the "three original kits" alongside chrome/gloom, predating the later
+        GR1 9-realm expansion), so this is a direct, no-reroll seam: call the real production function
+        once, dev-only, right after boot. Two honest scope notes surfaced in the manifest: (a)
+        PLACE_SKINS (settlement/place-gen material skin) only defines {chrome, frontier, gloom} — a
+        forced "fantasy" settlement mint degrades to the frontier skin, rollPlace's own pre-existing
+        fallback; (b) production play never sets w.realm (a fresh-bound world has none) — this flag
+        exists ONLY in the rig, gated behind an explicit CLI arg, never fired unseeded/by default.
+     6. --route <standard|travel-heavy|dungeon-heavy|town-beats> — parameter presets over the SAME
+        leg vocabulary (dungeon segCount, travel's own travelMin payload field, an extra shop-cycle
+        for town-beats) — no new leg types invented. `standard` is byte-identical to the pre-L1 route.
 */
 
 import { spawn } from "node:child_process";
@@ -73,7 +112,34 @@ if (!args["run-id"]) {
   process.exit(2);
 }
 const RUN_ID = String(args["run-id"]);
-const REALM = args.realm || "chrome"; // core-3 first (docs/PLAY-LENS.md) — chrome/gloom/fantasy
+
+// L1 §5 — dev-only realm steering. Whitelist matches INTERIOR_TILE_KITS' three original kits
+// (src/ui/theater-interior.js) == docs/PLAY-LENS.md's "core-3" — see the header note above for the
+// full inspection trail on why this (not a bardoRollWorld reroll) is the real seam.
+const FORCE_REALM_WHITELIST = ["fantasy", "gloom", "chrome"];
+const FORCE_REALM = args["force-realm"] || null;
+if (FORCE_REALM && FORCE_REALM_WHITELIST.indexOf(FORCE_REALM) < 0) {
+  process.stderr.write(`play-lens.mjs: --force-realm '${FORCE_REALM}' must be one of ${FORCE_REALM_WHITELIST.join("|")}\n`);
+  process.exit(2);
+}
+const REALM = FORCE_REALM || args.realm || "chrome"; // core-3 first (docs/PLAY-LENS.md) — chrome/gloom/fantasy
+
+// L1 §6 — route variants over the SAME leg vocabulary (dungeon segCount / travel's travelMin payload
+// field / an extra shop open-close cycle for town-beats). `standard` is the pre-L1 fixed cross-section,
+// byte-identical to before this unit.
+const ROUTE = args.route || "standard";
+const ROUTE_PRESETS = {
+  "standard":       { travelMin: null, dungeonSegCount: 6,  extraShopCycle: false },
+  "travel-heavy":   { travelMin: 300,  dungeonSegCount: 3,  extraShopCycle: false },
+  "dungeon-heavy":  { travelMin: null, dungeonSegCount: 11, extraShopCycle: false },
+  "town-beats":     { travelMin: 90,   dungeonSegCount: 3,  extraShopCycle: true },
+};
+if (!ROUTE_PRESETS[ROUTE]) {
+  process.stderr.write(`play-lens.mjs: --route '${ROUTE}' must be one of ${Object.keys(ROUTE_PRESETS).join("|")}\n`);
+  process.exit(2);
+}
+const ROUTE_CFG = ROUTE_PRESETS[ROUTE];
+
 const outDir = path.join(__dirname, "play-lens", `run-${RUN_ID}`);
 fs.mkdirSync(outDir, { recursive: true });
 
@@ -299,6 +365,25 @@ function makeCapture(page) {
 // first one", capture-dungeon-loop.mjs's own header law, adopted here verbatim).
 // ============================================================================
 
+// L1 §5 — dev-only realm force. Calls the REAL production function breachMarkRealmActive
+// (src/engine/breach.js) once, right after boot: this is the marooned-realm seam ("w.realm"),
+// the ONE place theaterActiveRealmsFor/activeRealmsFor read a non-empty realms[] from outside a
+// live breach walk — see the file header for the full inspection trail on why this (not a
+// bardoRollWorld reroll) is the real, no-reroll-needed lever. Idempotent (breachMarkRealmActive
+// itself never re-rolls an already-active w.realm) and a documented production no-op path when the
+// flag is absent (a plain-booted world never gets w.realm set — "production stays unseeded").
+async function driveForceRealm(page, realmTag) {
+  return await page.evaluate((realmTag) => {
+    try {
+      if (typeof breachMarkRealmActive !== "function") return { ok: false, reason: "breach-unavailable" };
+      const w = activeWorld();
+      if (!w) return { ok: false, reason: "no-active-world" };
+      const r = breachMarkRealmActive(w, realmTag);
+      return { ok: true, realm: r };
+    } catch (e) { return { ok: false, error: e.message, stack: e.stack }; }
+  }, realmTag);
+}
+
 // LEG 2 — mint a real place-gen record and bind it to the CURRENT node (the origin/"Setting" node
 // bindWorld minted never gets a codexId in normal play — settlements are out of rollPlace's single-
 // site scale, see PLACE-GEN.md — so this is the closest production-real analog to a "town/
@@ -330,8 +415,8 @@ async function mintSettlementNode(page, realm) {
 // freshly minted destination node. Returns whether a walk actually opened (a real distinct travel
 // tray to screenshot) or the engine's own instant-arrival degrade fired (still ok:true — an honest,
 // documented production fallback, not a rig failure).
-async function driveTravel(page, destName) {
-  return await page.evaluate((destName) => {
+async function driveTravel(page, destName, travelMin) {
+  return await page.evaluate((destName, travelMin) => {
     const out = { ok: false, stage: "start" };
     try {
       const w = (typeof activeWorld === "function") ? activeWorld() : null;
@@ -341,7 +426,13 @@ async function driveTravel(page, destName) {
       const nodeId = addNode(w, destName, "Place");
       out.destNodeId = nodeId;
       out.stage = "travel_start";
-      const r = applyEvent(w, { type: "travel_start", payload: { toNodeId: nodeId } });
+      // L1 §6 route presets: travel_start's own payload.travelMin (threaded to travelDepart, src/
+      // world/play.js) sets route.leagues -> the wilderness walk's leg count (encN) — the SAME
+      // production field a DM-declared travel time would carry. null (standard route) leaves the
+      // pre-L1 behavior byte-identical (travelDepart's own rollRoute() picks the leagues).
+      const payload = { toNodeId: nodeId };
+      if (travelMin != null) payload.travelMin = travelMin;
+      const r = applyEvent(w, { type: "travel_start", payload });
       if (!r || r.ok !== true) return Object.assign(out, { stage: "travel_start-failed", detail: r });
       if (typeof renderWorld === "function") renderWorld();
       out.walk = !!r.walk;
@@ -351,7 +442,7 @@ async function driveTravel(page, destName) {
       out.stage = "done";
       return out;
     } catch (e) { return Object.assign(out, { stage: (out.stage || "start") + "-exception", error: e.message, stack: e.stack }); }
-  }, destName);
+  }, destName, travelMin);
 }
 
 // the active walk's segment list in BFS order (each walk_advance onto one is a SCENE CHANGE —
@@ -469,26 +560,53 @@ async function driveCombatStart(page, foes) {
   }, foes);
 }
 
-// one combat round: an hp_changed "hit" on foe[0] (visible combat action) + round_tick(phase:"end")
-// (the production seam that actually increments GS.combat.round — src/world/dm.js:3007-3032).
-async function driveCombatRound(page, foeIdx) {
-  return await page.evaluate((foeIdx) => {
+// L1 §1 — THE BOT FIGHTS. One combat round: a real `attack` on a living foe (the SAME production
+// event a PC's weapon swing fires — applies damage to the foe via applyDamage inside the `attack`
+// case, src/world/dm.js:2189) + a real `move_zone` (the SAME production event a declared move fires
+// — src/world/dm.js:2373) + round_tick(phase:"end") (increments GS.combat.round). Replaces the old
+// Theater.play("hurt") FX-only ping, which never touched GS.combat/w.ledger at all — the RED-FIRST
+// proof (this branch's commit body) shows the old driver left pcBand/foe HP byte-identical across
+// two full rounds and added zero attack/hp ledger entries; this driver visibly changes both.
+// resetTurnBudget (src/engine/combat-actions.js) is called once per round on GS.combat.pc — the
+// "walk/turn loop's own job" per that file's header — since round_tick(phase:"end") only clears
+// per-turn FLAGS (disengaged/readied), never the movement BUDGET; without this a second round's
+// move_zone would legally fail with reason:"already-moved".
+async function driveCombatRound(page, round) {
+  return await page.evaluate((round) => {
     const out = { ok: false, stage: "start" };
     try {
       if (!GS.combat || !GS.combat.active) return Object.assign(out, { stage: "no-combat" });
-      const foe = (GS.combat.foes || [])[foeIdx];
+      const w = activeWorld();
+      out.beforeFoes = GS.combat.foes.map((f) => ({ fid: f.fid, hpCur: f.hpCur, down: !!f.down }));
+      out.beforePcBand = GS.combat.pc.band;
+
+      const foe = (GS.combat.foes || []).find((f) => !f.down) || (GS.combat.foes || [])[0];
       if (foe) {
-        try { window.Theater && window.Theater.play && window.Theater.play("hurt", { who: foe.fid }); } catch (e) {}
+        out.stage = "attack";
+        const atk = applyEvent(w, { type: "attack", payload: { d20: 15, targetAC: foe.ac || 13, target: foe.fid } });
+        out.attack = { ok: !!(atk && atk.ok), targetFid: foe.fid, hit: !!(atk && atk.result && atk.result.hit), damage: atk && atk.result && atk.result.damage };
+      } else {
+        out.attack = { ok: false, reason: "no-living-foe" };
       }
+
+      if (typeof resetTurnBudget === "function") resetTurnBudget(GS.combat.pc);
+      out.stage = "move_zone";
+      const wantBand = GS.combat.pc.band === "melee" ? "near" : "melee";
+      const mv = applyEvent(w, { type: "move_zone", payload: { who: "pc", band: wantBand } });
+      out.move = { ok: !!(mv && mv.ok), band: mv && mv.band, reason: mv && mv.reason };
+
       out.stage = "round_tick";
-      const rt = applyEvent(activeWorld(), { type: "round_tick", payload: { phase: "end" } });
+      const rt = applyEvent(w, { type: "round_tick", payload: { phase: "end" } });
       if (typeof renderWorld === "function") renderWorld();
+
+      out.afterFoes = GS.combat.foes.map((f) => ({ fid: f.fid, hpCur: f.hpCur, down: !!f.down }));
+      out.afterPcBand = GS.combat.pc.band;
       out.ok = !!(rt && rt.round != null);
       out.round = GS.combat.round;
       out.stage = "done";
       return out;
     } catch (e) { return Object.assign(out, { stage: (out.stage || "start") + "-exception", error: e.message, stack: e.stack }); }
-  }, foeIdx);
+  }, round);
 }
 
 // a real state_transition on a real rolled interactable — reads plan.interactables[] as reconciled
@@ -516,6 +634,14 @@ async function driveStateTransition(page) {
       const next = states[(curIdx + 1) % states.length];
       const r = applyEvent(w, { type: "state_transition", payload: { entityRef: found.sourceRef, to: next } });
       if (!r || r.ok !== true) return Object.assign(out, { stage: "state_transition-failed", detail: r });
+      // L1 §2 — TRANSITION CAMERA. pn.interactables spans EVERY room in the walk's spatial plan (D2's
+      // bindWalkInteractables iterates plan.rooms.forEach unconditionally, src/engine/
+      // walk-interactables.js) — the first eligible entity found above is not necessarily in the room
+      // currently in camera (pn.cursor.current). sourceRef is stamped "S<segNum>.<field>" by that same
+      // bind (walk-interactables.js:267) — the one place a room identity rides on an interactable ref.
+      // Parse it so the caller can walk_advance the cursor there before screenshotting.
+      const m = /^S(\d+)\./.exec(found.sourceRef || "");
+      out.roomSegNum = m ? Number(m[1]) : null;
       if (typeof renderWorld === "function") renderWorld();
       out.ok = true; out.stage = "done"; out.entityRef = found.sourceRef; out.archetype = found.archetype; out.from = r.from; out.to = r.to;
       return out;
@@ -549,6 +675,78 @@ async function driveDungeonComplete(page) {
       out.detail = r;
       return out;
     } catch (e) { return Object.assign(out, { stage: (out.stage || "start") + "-exception", error: e.message, stack: e.stack }); }
+  });
+}
+
+// L1 §4 — RECORD-LESS SETTLEMENT LEG. mintSettlementNode (LEG 2, above) always binds a codexId, which
+// routes theaterHereSourceFor to its {kind:"node"} single-site-tray branch — the ENV-3 town builder
+// ({kind:"settlement"}) only fires for a settlement-kind node with NO bound place record
+// (nodeIsSettlementKind + theaterNodeSourceFor returning null, src/world/render.js:472-505). This
+// mints a FRESH node, stamps its prep entry env:"urban" directly (mirrors driveDungeon's own
+// P.nodes[nodeId]={env:"dungeon",...} technique above — the SAME proven rig pattern, not a new one),
+// and NEVER binds a codexId, then moves the PC there via the real `move_node` production event
+// (src/world/dm.js:4251 — a narrative jump, no active walk required/left open). PL-3 ledger: "Dorsal
+// Market took precedence — correct; the record-less read is still owed."
+async function driveRecordlessSettlement(page) {
+  return await page.evaluate(() => {
+    const out = { ok: false, stage: "start" };
+    try {
+      const w = (typeof activeWorld === "function") ? activeWorld() : null;
+      if (!w) return Object.assign(out, { stage: "no-active-world" });
+      if (typeof addNode !== "function" || typeof applyEvent !== "function" || typeof prepOf !== "function")
+        return Object.assign(out, { stage: "missing-functions" });
+      out.stage = "add-node";
+      const nodeId = addNode(w, "Play-Lens Record-less Settlement", "Place");
+      out.nodeId = nodeId;
+      const P = prepOf(w);
+      P.nodes[nodeId] = { env: "urban", soft: true, locked: false, hook: null };
+      out.stage = "move_node";
+      const mv = applyEvent(w, { type: "move_node", payload: { nodeId, travelMin: 0, cause: "play-lens record-less settlement leg" } });
+      if (!mv || mv.ok !== true) return Object.assign(out, { stage: "move_node-failed", detail: mv });
+      if (typeof renderWorld === "function") renderWorld();
+      const src = (typeof theaterHereSourceFor === "function") ? theaterHereSourceFor(w) : null;
+      out.sourceKind = src && src.kind; // expect "settlement" — the ENV-3 town builder
+      out.hasCodexId = !!(mapOf(w).nodes[nodeId] && mapOf(w).nodes[nodeId].codexId);
+      out.ok = true; out.stage = "done";
+      return out;
+    } catch (e) { return Object.assign(out, { stage: (out.stage || "start") + "-exception", error: e.message, stack: e.stack }); }
+  });
+}
+
+// L1 §3 — SHOP CAPTURE VERIFICATION. open_shop's own handler sets GS.gamePanel="shop" and calls
+// renderWorld() synchronously (src/world/dm.js:4328-4329), so by the time driveOpenShop below
+// returns, the DOM SHOULD already carry the panel — this asserts that honestly instead of trusting
+// the event's ok:true. shopPanel (src/world/render.js:1442) roots its markup at `.shop-header`
+// inside the sliding `.panel-col` aside; checked for both layout (display/visibility/non-zero rect)
+// and actually being inside the captured viewport (a slid-off-canvas panel would still pass a bare
+// querySelector check).
+async function verifyShopPanelRendered(page) {
+  return await page.evaluate(() => {
+    const el = document.querySelector(".panel-col .shop-header") || document.querySelector(".shop-header");
+    if (!el) {
+      // diagnostic-only, never a fix: src/world/render.js's battle-stage branch (showStage=
+      // stageMode&&!GS.stageCollapsed) replaces .panel-col wholesale with the DM chat feed
+      // (.stage-feed-col) — gamePanelContent(w,cur,panel), the ONE place shopPanel() renders, only
+      // ever fires in the non-battle-stage/classic layout. Surfacing this so the finding names WHY,
+      // not just THAT — a genuine production gap this rig discovered, not a rig bug.
+      const battleStageActive = !!document.querySelector(".game.battle-stage");
+      const stageFeedColPresent = !!document.querySelector(".stage-feed-col");
+      return {
+        rendered: false, reason: "no-.shop-header-in-dom",
+        battleStageActive, stageFeedColPresent,
+        note: battleStageActive ? "battle-stage layout is active — render.js's showStage branch swaps .panel-col for the DM feed unconditionally; GS.gamePanel='shop' has no visual effect while the theater stage is mounted (a real production gap, not a rig defect)." : null,
+      };
+    }
+    const cs = getComputedStyle(el);
+    const rect = el.getBoundingClientRect();
+    const laidOut = cs.display !== "none" && cs.visibility !== "hidden" && rect.width > 0 && rect.height > 0;
+    const inViewport = rect.right > 0 && rect.bottom > 0 && rect.left < window.innerWidth && rect.top < window.innerHeight;
+    const nameEl = document.querySelector(".panel-col .shop-name");
+    return {
+      rendered: laidOut && inViewport, laidOut, inViewport,
+      rect: { x: rect.x, y: rect.y, w: rect.width, h: rect.height },
+      shopName: nameEl ? nameEl.textContent.trim() : null,
+    };
   });
 }
 
@@ -593,7 +791,7 @@ async function driveRest(page) {
 // main
 // ============================================================================
 async function main() {
-  const findings = { runId: RUN_ID, realm: REALM, generatedAt: new Date().toISOString(), legs: [], notes: [] };
+  const findings = { runId: RUN_ID, realm: REALM, route: ROUTE, forceRealm: FORCE_REALM, generatedAt: new Date().toISOString(), legs: [], notes: [] };
   const server = await startServer();
   let browser = null;
   const legOk = (name, detail) => { findings.legs.push({ leg: name, ok: true, detail }); log(`LEG OK: ${name}`); };
@@ -614,9 +812,24 @@ async function main() {
     findings.boot = boot;
     if (!boot.ok) throw new Error("boot failed: " + JSON.stringify(boot));
     legOk("tiyl-start", { worldName: boot.worldName });
+
+    // L1 §5 — dev-only realm force, applied as early as possible (before the FIRST render) so even
+    // the boot shot below reflects the target realm's interior/material kit.
+    if (FORCE_REALM) {
+      const fr = await driveForceRealm(page, FORCE_REALM);
+      findings.forceRealm = Object.assign({ requested: FORCE_REALM }, fr);
+      if (fr.ok) {
+        legOk("force-realm", fr);
+        findings.notes.push(`--force-realm ${FORCE_REALM}: w.realm.active=true via breachMarkRealmActive — dungeon INTERIOR_TILE_KITS + activeRealms now steer to '${FORCE_REALM}'. Scope note: PLACE_SKINS (settlement mint skin) only defines {chrome,frontier,gloom} — a 'fantasy' settlement mint degrades to the frontier skin (rollPlace's own pre-existing fallback), unaffected by this flag.`);
+      } else {
+        legFail("force-realm", fr);
+        findings.notes.push("--force-realm could not be applied: " + JSON.stringify(fr));
+      }
+    }
+
     const theaterState = await waitForTheater(page);
     findings.theaterState = theaterState;
-    await cap.shot("boot", "tiyl-start", "world founded via the bardo; PC living");
+    await cap.shot("boot", "tiyl-start", "world founded via the bardo; PC living" + (FORCE_REALM ? ` (--force-realm ${FORCE_REALM})` : ""));
 
     // LEG 2 — settlement/place node tray.
     const mint = await mintSettlementNode(page, REALM);
@@ -633,7 +846,7 @@ async function main() {
 
     // LEG 3 — travel. Every walk_advance onto a new leg IS a scene change (the tray re-derives off
     // the new here-segment) — shot per leg, per docs/PLAY-LENS.md's capture policy.
-    const travel = await driveTravel(page, "Play-Lens Dungeon Approach");
+    const travel = await driveTravel(page, "Play-Lens Dungeon Approach", ROUTE_CFG.travelMin);
     findings.travel = travel;
     if (travel.ok) {
       legOk("travel-depart", travel);
@@ -664,7 +877,7 @@ async function main() {
     // LEG 4 — dungeon walk with combat rounds. Room-by-room: each walk_advance re-derives the
     // interior tray onto the NEW room (a scene change per docs/PLAY-LENS.md), so shoot each room the
     // party actually enters, then open combat in the deepest room reached.
-    const dungeonCfg = { nodeId: destNodeId, segCount: 6, foes: ["Wolf", "Giant Rat", "Skeleton"] };
+    const dungeonCfg = { nodeId: destNodeId, segCount: ROUTE_CFG.dungeonSegCount, foes: ["Wolf", "Giant Rat", "Skeleton"] };
     const drive = await driveDungeon(page, dungeonCfg);
     findings.dungeon = drive;
     if (drive.ok) {
@@ -696,18 +909,43 @@ async function main() {
         findings.notes.push("combat_start could not be driven: " + JSON.stringify(cs));
       }
 
-      // 2 more rounds (round_tick phase:"end" bumps GS.combat.round — src/world/dm.js:3026-3027).
+      // L1 §1 — 2 more rounds, each a REAL attack + move_zone + round_tick(phase:"end") (bumps
+      // GS.combat.round — src/world/dm.js:3026-3027), not just an FX ping. Notes carry the actual
+      // hit/damage/band delta so the manifest row is self-documenting proof, not just "round N".
       for (let r = 2; r <= 3; r++) {
-        const rt = await driveCombatRound(page, (r - 2) % (dungeonCfg.foes.length));
+        const rt = await driveCombatRound(page, r);
         findings["combatRound" + r] = rt;
-        if (rt.ok) { legOk("combat-round-" + r, rt); await cap.shot("combat_round", "round-" + r, "round_tick(phase:end) -> GS.combat.round=" + rt.round); }
-        else { legFail("combat-round-" + r, rt); findings.notes.push("combat round " + r + " could not be driven: " + JSON.stringify(rt)); }
+        if (rt.ok) {
+          legOk("combat-round-" + r, rt);
+          const a = rt.attack || {};
+          await cap.shot("combat_round", "round-" + r,
+            `attack(target=${a.targetFid},hit=${a.hit},dmg=${a.damage}) + move_zone(pc:${rt.beforePcBand}->${rt.afterPcBand}) -> round=${rt.round}`);
+        } else {
+          legFail("combat-round-" + r, rt);
+          findings.notes.push("combat round " + r + " could not be driven: " + JSON.stringify(rt));
+        }
       }
 
       // a real state_transition on a rolled interactable, if the room has one.
       const st = await driveStateTransition(page);
       findings.stateTransition = st;
-      if (st.ok) { legOk("state-transition", st); await cap.shot("state_transition", st.archetype + "-" + st.from + "-to-" + st.to, `entityRef ${st.entityRef}`); }
+      if (st.ok) {
+        legOk("state-transition", st);
+        // L1 §2 — refocus the camera on the transition's OWN room before shooting.
+        let refocusNote = "";
+        if (st.roomSegNum != null) {
+          const curCtx = await snapshotContext(page);
+          if (curCtx.segNum !== st.roomSegNum) {
+            const adv = await driveWalkAdvance(page, st.roomSegNum);
+            refocusNote = adv.ok ? ` [camera refocused to S${st.roomSegNum}]` : ` [refocus to S${st.roomSegNum} FAILED: ${JSON.stringify(adv).slice(0, 150)}]`;
+          } else {
+            refocusNote = ` [already focused on S${st.roomSegNum}]`;
+          }
+        } else {
+          refocusNote = " [no roomSegNum parsed off sourceRef — camera left as-is]";
+        }
+        await cap.shot("state_transition", st.archetype + "-" + st.from + "-to-" + st.to, `entityRef ${st.entityRef}` + refocusNote);
+      }
       else {
         legFail("state-transition", st);
         findings.notes.push("state_transition leg: " + (st.stage === "no-eligible-interactable" ? "this room rolled no interactable with >=2 states (honest — not every room has one)" : JSON.stringify(st)));
@@ -728,17 +966,50 @@ async function main() {
       await cap.shot("scene", "dungeon-fallback", "driveDungeon failed — capturing whatever the standing table shows instead");
     }
 
+    // L1 §4 — record-less settlement leg (unconditional — a standing ledger debt, not route-gated).
+    // No active walk at this point (dungeon-complete above cleared it), which move_node requires.
+    const recordless = await driveRecordlessSettlement(page);
+    findings.recordlessSettlement = recordless;
+    if (recordless.ok) {
+      legOk("recordless-settlement", recordless);
+      await cap.shot("scene", "recordless-settlement",
+        `theaterHereSourceFor.kind=${recordless.sourceKind} (expect "settlement" — ENV-3 town builder; hasCodexId=${recordless.hasCodexId})`);
+    } else {
+      legFail("recordless-settlement", recordless);
+      findings.notes.push("LEG recordless-settlement could not be driven headless: " + JSON.stringify(recordless));
+    }
+
     // LEG 5 — shop/interior.
     const shop = await driveOpenShop(page);
     findings.shop = shop;
     if (shop.ok) {
       legOk("shop", shop);
-      await cap.shot("scene", "shop-open", "open_shop — GS.gamePanel=shop");
+      // L1 §3 — assert the shop panel actually rendered in-capture, don't just trust ok:true.
+      const shopVerdict = await verifyShopPanelRendered(page);
+      findings.shopRenderVerdict = shopVerdict;
+      await cap.shot("scene", "shop-open", `open_shop — GS.gamePanel=shop; render-verdict rendered=${shopVerdict.rendered} shopName="${shopVerdict.shopName}"`);
       await driveCloseShop(page);
       await cap.shot("scene", "shop-closed", "shop closed, back to the standing table");
+      // L1 §6 town-beats: an extra open/close cycle to bias this route's leg mix toward town/shop beats.
+      if (ROUTE_CFG.extraShopCycle) {
+        const shop2 = await driveOpenShop(page);
+        findings.shop2 = shop2;
+        if (shop2.ok) {
+          legOk("shop-cycle-2", shop2);
+          const shopVerdict2 = await verifyShopPanelRendered(page);
+          findings.shopRenderVerdict2 = shopVerdict2;
+          await cap.shot("scene", "shop-open-2", `route=town-beats extra cycle — render-verdict rendered=${shopVerdict2.rendered}`);
+          await driveCloseShop(page);
+          await cap.shot("scene", "shop-closed-2", "shop closed (extra town-beats cycle)");
+        } else {
+          legFail("shop-cycle-2", shop2);
+          findings.notes.push("town-beats extra shop cycle could not be driven: " + JSON.stringify(shop2));
+        }
+      }
     } else {
       legFail("shop", shop);
       findings.notes.push("LEG shop could not be driven headless: " + JSON.stringify(shop));
+      findings.shopRenderVerdict = { rendered: false, reason: "open_shop-event-failed" };
     }
 
     // LEG 6 — rest.

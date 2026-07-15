@@ -1,5 +1,5 @@
 You are a sprite-generation worker for the Genesis faceted art program. Your batch:
-ROUND 3 — RQ effects & decals (F4 rebuild): fx-* sheets use the effects contract, shared-*-decal sheets magenta top-down. Everything you need is pasted below — do NOT read repo files for subjects;
+ROUND 3 — RQ effects (F4 rebuild) — fx-* sheets ONLY; decals moved to pdecal-decals.md under the new naturalistic decal contract. Everything you need is pasted below — do NOT read repo files for subjects;
 this prompt is the complete, authoritative source. You have image generation; use it
 for every sheet.
 
@@ -149,45 +149,3 @@ Canvas 3548×1774, 4 equal vertical 4:8 cells. The figures, left to right:
 3. `fx-status-smokepuff` (Medium) — (no seed row — derive from slug)
 4. `fx-status-sparkburst` (Medium) — (no seed row — derive from slug)
 
-### Sheet RQ-12 — 4 cells (Medium)
-
-Canvas 3548×1774, 4 equal vertical 4:8 cells. The figures, left to right:
-
-1. `fx-status-stunstars` (Medium) — (no seed row — derive from slug)
-2. `shared-blood-decal` (Medium) — (no seed row — derive from slug)
-3. `shared-cobweb-decal` (Medium) — (no seed row — derive from slug)
-4. `shared-crack-decal` (Medium) — (no seed row — derive from slug)
-
-### Sheet RQ-13 — 4 cells (Medium)
-
-Canvas 3548×1774, 4 equal vertical 4:8 cells. The figures, left to right:
-
-1. `shared-grime-decal` (Medium) — (no seed row — derive from slug)
-2. `shared-moss-decal` (Medium) — (no seed row — derive from slug)
-3. `shared-rust-decal` (Medium) — (no seed row — derive from slug)
-4. `shared-scorch-decal` (Medium) — (no seed row — derive from slug)
-
-### Sheet RQ-14 — 2 cells (Medium)
-
-Canvas 1774×1774, 2 equal vertical 4:8 cells. The figures, left to right:
-
-1. `shared-water-decal` (Medium) — (no seed row — derive from slug)
-2. `shared-wear-decal` (Medium) — (no seed row — derive from slug)
-
-
-## F5 re-dos (18 identities)
-
-Failed files (reason digest):
-- `spr-fantasy-adult-blue-dragon-candidate-001.png` — note:pixel-duplicate of F4/shared-blood-decal-candidate-001
-- `spr-fantasy-adult-bronze-dragon-candidate-001.png` — style-drift:smooth
-- `spr-fantasy-adult-copper-dragon-candidate-001.png` — style-drift:smooth
-- `spr-fantasy-adult-gold-dragon-candidate-001.png` — style-drift:smooth; note:pixel-duplicate of F4/shared-grime-decal-candidate-001
-- `spr-fantasy-adult-green-dragon-candidate-001.png` — note:pixel-duplicate of F4/shared-crack-decal-candidate-001
-- `spr-fantasy-adult-silver-dragon-candidate-001.png` — style-drift:smooth
-- `spr-fantasy-adult-white-dragon-candidate-001.png` — note:pixel-duplicate of F4/shared-moss-decal-candidate-001
-- `spr-fantasy-ancient-black-dragon-candidate-001.png` — style-drift:photoreal
-- `spr-fantasy-ancient-blue-dragon-candidate-001.png` — anatomy:major:tail terminates in two separate tapering tips at bottom-center: left coil ends i
-- `spr-fantasy-ancient-green-dragon-candidate-001.png` — style-drift:soft-facet
-- `spr-fantasy-ancient-white-dragon-candidate-001.png` — anatomy:major:tail duplicated/mirrored: two separate spiked tail tips converge at bottom cente
-- `spr-fantasy-brass-dragon-wyrmling-bronze-dragon-wyrmling-candidate-001.png` — cropped; note:bronze wyrmling's right wing cut off by right image edge (confirmed by border-pi
-- …and 6 more (see qa-ledger.json)

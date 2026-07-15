@@ -176,6 +176,12 @@ async function mountTownShot(page, profile) {
   try {
     const page = await browser.newPage();
     await page.goto(`${BASE}/genesis.html`, { waitUntil: "networkidle0", timeout: 30000 });
+    // ENV-3b (docs/ENV-EXTERIOR-WAVE.md composition-fix wave) ruling 4: an ambient toast ("Bizarre...",
+    // src/ui/chrome.js's toast()) can fire mid-capture and land squarely in frame (the gate's own
+    // "an ambient toast renders mid-frame" failure) — suppress it BEFORE bootToInSession runs any world
+    // logic that might trigger one, same mechanism dev/battle-gate/capture-interior-study.mjs already
+    // uses for the identical class of bug (its own addStyleTag call, verbatim selector list).
+    await page.addStyleTag({ content: "#toast,.toast,#bardoCard,#spicePop,#diceOverlay{display:none !important;visibility:hidden !important}" });
     const boot = await bootToInSession(page);
     if (!boot.ok) { log("BOOT FAILED:", JSON.stringify(boot)); process.exitCode = 1; return; }
     log("booted:", boot.worldId);

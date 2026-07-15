@@ -266,7 +266,8 @@ def auto_tags(realm, kind, role, ctype, size):
     return tags
 
 
-def fold_in_orphans(entries, faceted_cut_slugs, bestiary_by_realm, corpus_sizing, v3_by_sheet_cell):
+def fold_in_orphans(entries, faceted_cut_slugs, bestiary_by_realm, corpus_sizing, v3_by_sheet_cell,
+                     admit_faceted=False):
     """VQ2-RESPEC.md S4 Part B — the 60 orphan fold-ins (S3's honest documented deviation:
     write_inventory_report's own docstring called this "NOT invented as new SPRITE_REGISTRY
     entries; that would grow the registry beyond its join source, out of scope for THAT unit").
@@ -332,7 +333,10 @@ def fold_in_orphans(entries, faceted_cut_slugs, bestiary_by_realm, corpus_sizing
         entry["candidateAsset"] = f"assets/sprites-faceted/{slug}.png"
         entry["artStyleVersion"] = "faceted-v1"
         entry["qaStatus"] = QA_STATUS_CANDIDATE
-        entry["runtimeAdmitted"] = RUNTIME_ADMITTED_DEFAULT
+        # S5 — THE FLIP. --admit-faceted admits every slug with a real cut file (these orphan
+        # rows only ever exist because one does, per the guard above); omit the flag and every
+        # entry stays "legacy" (RUNTIME_ADMITTED_DEFAULT) — the re-derivable retreat.
+        entry["runtimeAdmitted"] = "candidate" if admit_faceted else RUNTIME_ADMITTED_DEFAULT
 
         cut_record = faceted_cut_slugs.get(slug)
         contract = standee_contract_for({}, cut_record)
@@ -470,7 +474,7 @@ HEADER = (
 )
 
 
-def build_registry(manifest_path, check_only=False, overlay_path=OVERLAY, out_path=OUT):
+def build_registry(manifest_path, check_only=False, overlay_path=OVERLAY, out_path=OUT, admit_faceted=False):
     manifest = load_json(manifest_path)
     bestiary_by_realm = load_bestiary_by_realm()
     overlay = load_json(overlay_path, default={})
@@ -585,7 +589,10 @@ def build_registry(manifest_path, check_only=False, overlay_path=OVERLAY, out_pa
             entry["candidateAsset"] = f"assets/sprites-faceted/{slug}.png" if has_candidate_file else None
             entry["artStyleVersion"] = "faceted-v1" if has_candidate_file else "v3"
             entry["qaStatus"] = QA_STATUS_CANDIDATE if has_candidate_file else entry.get("verdict")
-            entry["runtimeAdmitted"] = RUNTIME_ADMITTED_DEFAULT
+            # S5 — THE FLIP. --admit-faceted admits every entry with an actual cut file on disk
+            # (has_candidate_file, not just report presence); no flag -> every entry stays
+            # RUNTIME_ADMITTED_DEFAULT ("legacy") — re-derivable, one flag reverts everything.
+            entry["runtimeAdmitted"] = "candidate" if (admit_faceted and has_candidate_file) else RUNTIME_ADMITTED_DEFAULT
             if has_candidate_file:
                 candidate_count += 1
 
@@ -607,6 +614,7 @@ def build_registry(manifest_path, check_only=False, overlay_path=OVERLAY, out_pa
     print(f"VP1 sizing fold: {sizing_joined} cut slug(s) got feet/scaleTrue")
     print(f"monster-kind join coverage: {monster_joined}/{monster_total} ({coverage:.1f}%)")
     print(f"S3/B1 faceted candidates: {candidate_count}")
+    print(f"S5 flip: admit_faceted={admit_faceted}")
     print(f"S3/B1 worldHeight source (registry-wide): {height_sources}")
     if warn_unjoined:
         print(f"WARN — {len(warn_unjoined)} unjoined cell(s):")
@@ -622,11 +630,14 @@ def build_registry(manifest_path, check_only=False, overlay_path=OVERLAY, out_pa
 
     # S4 Part B — orphan fold-in. Runs AFTER the manifest-cell loop above so it only ever adds
     # slugs that loop didn't already join (fold_in_orphans' own "already a real join" skip).
-    orphans_added = fold_in_orphans(entries, faceted_cut_slugs, bestiary_by_realm, corpus_sizing, v3_by_sheet_cell)
+    orphans_added = fold_in_orphans(entries, faceted_cut_slugs, bestiary_by_realm, corpus_sizing, v3_by_sheet_cell,
+                                     admit_faceted=admit_faceted)
     for _slug, _e in orphans_added:
         height_sources[_e["heightSource"]] = height_sources.get(_e["heightSource"], 0) + 1
         candidate_count += 1
     print(f"S4 orphan fold-in: {len(orphans_added)} slug(s) added directly from the faceted cut report (no v2-manifest cell)")
+    runtime_candidate_count = sum(1 for e in entries.values() if e.get("runtimeAdmitted") == "candidate")
+    print(f"S5 flip: {runtime_candidate_count} entries runtimeAdmitted=\"candidate\" (admit_faceted={admit_faceted})")
 
     # S4 Part A — the deterministic bestiary-id -> slug index (theater-boot.js's spriteEntryFor
     # consults this FIRST, before its normalized-name fallback scan).
@@ -753,8 +764,17 @@ def main():
     ap.add_argument("--overlay", default=OVERLAY, help="override the overlay path (testing)")
     ap.add_argument("--out", default=OUT, help="override the output path (testing)")
     ap.add_argument("--check", action="store_true")
+    ap.add_argument(
+        "--admit-faceted", action="store_true",
+        help="VQ2-RESPEC.md S5 — THE FLIP. Set runtimeAdmitted:\"candidate\" on every entry with "
+             "a real assets/sprites-faceted/<slug>.png cut file on disk (the 252 S2-cut faceted "
+             "slugs); every other entry (and every entry when this flag is omitted) stays "
+             "\"legacy\". Re-derivable: running without this flag re-generates an all-legacy "
+             "registry regardless of prior admission state.",
+    )
     args = ap.parse_args()
-    build_registry(args.manifest, check_only=args.check, overlay_path=args.overlay, out_path=args.out)
+    build_registry(args.manifest, check_only=args.check, overlay_path=args.overlay, out_path=args.out,
+                    admit_faceted=args.admit_faceted)
 
 
 if __name__ == "__main__":

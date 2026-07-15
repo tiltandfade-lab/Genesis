@@ -5,7 +5,7 @@
       "fileName": "env3-town-daylit.png",
       "mounted": {
         "ok": true,
-        "buildings": 6,
+        "buildings": 5,
         "streetTiles": 36,
         "props": 5,
         "tiles": 108,
@@ -18,7 +18,7 @@
       "fileName": "env3-town-moonlit.png",
       "mounted": {
         "ok": true,
-        "buildings": 6,
+        "buildings": 5,
         "streetTiles": 36,
         "props": 5,
         "tiles": 108,
@@ -31,7 +31,7 @@
       "fileName": "env3-town-overcast.png",
       "mounted": {
         "ok": true,
-        "buildings": 6,
+        "buildings": 5,
         "streetTiles": 36,
         "props": 5,
         "tiles": 108,

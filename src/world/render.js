@@ -366,9 +366,25 @@ function renderWorld(){
   // must live OUTSIDE the aria-hidden stage subtree — extracted here as the feed section's live
   // sibling, once, instead of nested inside theaterStageHtml's own (now aria-hidden) markup.
   const stageProse=showStage?stageProseHtml(GS.combat):"";
+  // STAGE-MODE PANEL COLUMN (the L1 play-lens rig's shopRenderVerdict finding, 2026-07-15 —
+  // dev/play-lens/DEMAND-LEDGER.md null row #3): since TABLETOP-UNITS §U1 made the mounted stage
+  // the STANDING in-session layout, the stage branch below replacing .panel-col with the feed
+  // silently killed EVERY gamePanelContent panel (shop/character/actions/map) in normal play —
+  // open_shop set GS.gamePanel="shop" and nothing changed on screen. §6's own doctrine is "pure
+  // re-arrangement, not a content change," so the classic branch's panel aside comes back here as
+  // its own column (stage · panel · feed) rather than replacing the feed: shopping is conversational
+  // (buy via the panel, haggle via the composer), so the feed + #dmAction must stay on screen, and
+  // the stage stays up because open_shop's tableau (theaterCastSourceFor's shopOpen read) stages the
+  // very scene the panel transacts against. panel==="combat" is the one exclusion: in stage mode
+  // theaterStageHtml computes the combat header/grid ITSELF (see the note above — cmbDamageFlashed
+  // is a read-then-overwrite; rendering combatPanel() a second time in the same pass would see a
+  // false "no change" diff), so the aside stays suppressed for it, exactly as before this fix.
+  const stagePanel=(showStage&&panel&&panel!=="combat")
+    ? `<aside class="panel-col game-panel-col">${gamePanelContent(w,cur,panel)}</aside>` : "";
   const mainHtml=showStage
     ? `<div class="game-main">
         <div class="chat-col stage-col" aria-hidden="true">${theaterStageHtml(w,cur)}</div>
+        ${stagePanel}
         <section class="panel-col stage-feed-col" aria-label="The DM">${stageProse}${head}${chat}</section>
       </div>`
     : `<div class="game-main">

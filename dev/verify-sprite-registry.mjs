@@ -280,10 +280,13 @@ console.log("\n=== worldHeight/heightSource honest on the no-feet/no-size fixtur
 // ---- S6 — dev/sprite-review.py's editable `feet` overlay key (VQ2-RESPEC.md S6) ----
 console.log("\n=== RED-FIRST: pre-S6 baseline sprite-review.py must reject overlay key \"feet\" ===");
 {
-  // The pre-S6 baseline is the branch point against master (git merge-base) — its ALLOWED_KEYS
-  // has no "feet" entry. If apply_patch() there doesn't reject it, the RED-FIRST proof (and the
-  // GREEN check below) aren't actually proving anything.
-  const baseSha = execFileSync("git", ["merge-base", "HEAD", "master"], { cwd: ROOT }).toString().trim();
+  // The pre-S6 baseline is a HARDCODED pre-S6 SHA: 9f8e9ead (the S4 merge commit, permanent
+  // history that predates S6's ALLOWED_KEYS "feet" entry). It was `git merge-base HEAD master`,
+  // which went structurally stale the moment S6 landed ON master (merge-base then resolves to a
+  // post-S6 tree whose apply_patch ACCEPTS feet and crashes trying to save into a temp dir) —
+  // the exact staleness class the pre-S3 baseline check hit and fixed the same way. Pinned at
+  // the S5 master merge, 2026-07-15; a legitimate fixture repair, the assertion is untouched.
+  const baseSha = "9f8e9ead";
   const baselineSrc = execFileSync("git", ["show", `${baseSha}:dev/sprite-review.py`],
     { cwd: ROOT, maxBuffer: 1024 * 1024 * 8 }).toString();
   const scratch = mkdtempSync(join(tmpdir(), "genesis-sprite-feet-"));

@@ -1,5 +1,5 @@
 You are a sprite-generation worker for the Genesis faceted art program. Your batch:
-RQ quality re-dos, sheets RQ-01 through RQ-35. Everything you need is pasted below — do NOT read repo files for subjects;
+ROUND 3 — R7 remainder + R9 remainder + stragglers + RQ figure re-dos. Everything you need is pasted below — do NOT read repo files for subjects;
 this prompt is the complete, authoritative source. You have image generation; use it
 for every sheet.
 
@@ -9,11 +9,12 @@ Rules — these are the whole job:
    by that sheet's numbered cell list. The paste block is VERBATIM LAW (STYLE-CANON.md) —
    do not reword, trim, or summarize any sentence of it. Nothing added, nothing
    substituted, no subjects invented. EXCEPTION for sheets whose ids start with fx-:
-   use the effects contract noted in the sheet's own section (hybrid faceted+glow,
-   single-frame, black/alpha key); shared-*-decal sheets stay magenta-key top-down.
-2. Create a fresh directory named rqa-returns/ before the first call. It must start
-   EMPTY — if it already contains files, STOP and report that instead of generating.
-   Save each result IMMEDIATELY as rqa-returns/raw-figures/<first-cell-id>-candidate-001.png.
+   use the effects contract (hybrid faceted+glow, single-frame, black/alpha key);
+   shared-*-decal sheets stay magenta-key top-down.
+2. Create a fresh directory named mix3-returns/ under dev/model-qa/faceted-sheets/
+   before the first call. It must start EMPTY — if it already contains files, STOP and
+   report that instead of generating. Save each result IMMEDIATELY as
+   mix3-returns/raw-figures/<first-cell-id>-candidate-001.png.
 3. After each save, RE-OPEN the saved file and verify: correct cell count, all four
    corners #FF00FF (for magenta sheets), no figure touching an edge, every tail ends in
    exactly ONE tip, correct limb counts — AND the style laws: lanky house bias, COMPACT
@@ -21,7 +22,7 @@ Rules — these are the whole job:
    If a figure reads chibi, cute, wide-based, bright-saturated, or cartoon-MMO: re-roll
    once, then mark FAILED. Do NOT substitute a different subject and do NOT rename
    another file to fill the slot.
-4. Append one JSON row per call to rqa-returns/provenance/rqa-generation-calls.json:
+4. Append one JSON row per call to mix3-returns/provenance/mix3-generation-calls.json:
    {"file": "...", "callId": "...", "cells": ["..."]} — written at save time, not
    reconstructed later.
 5. Do NOT run any git commands. Files on disk plus the provenance JSON are your entire
@@ -29,9 +30,11 @@ Rules — these are the whole job:
 6. Your final report is only trusted if it matches the directory exactly. Report:
    sheets attempted, sheets saved, sheets FAILED (with reasons), and the full filename
    list. A report claiming more than the directory holds will be treated as fabricated —
-   the last run's reports were audited file-by-file and the fabrications were found.
+   prior runs' reports were audited file-by-file and the fabrications were found.
 
 === PASTE BLOCK (VERBATIM LAW — use in every call, fill [N] and [N x 887]) ===
+
+VERBATIM from [`STYLE-CANON.md`](STYLE-CANON.md) — do not reword any sentence of it.
 
 > Render a character sprite sheet as a single image: a horizontal strip of **[N] equal vertical
 > cells**, total canvas **[N×887]×1774** (each cell 887×1774, a vertical 4:8 frame). One figure
@@ -78,163 +81,104 @@ Rules — these are the whole job:
 
 === YOUR SHEETS, IN ORDER ===
 
-### Sheet RQ-01 — 2 cells (Medium)
+### Sheet R7-01 — 2 cells (Medium)
 
 Canvas 1774×1774, 2 equal vertical 4:8 cells. The figures, left to right:
 
-1. `spr-fantasy-kobold-inventor-halfling-orchard-keeper-elderly-halfling-knows-every-tree-in-the-grove-by-name` (Medium) — (no seed row — derive from slug)
-2. `spr-fantasy-red-dragon-wyrmling-white-dragon-wyrmling` (Medium) — (no seed row — derive from slug)
+1. `spr-fantasy-arcanaloth` (Medium) — arcanaloth, jackal-headed contract-mage in fine robes, one sealed contract scroll in hand, ink-stained precision. verb: AMENDS-THE-CONTRACT.
+2. `spr-fantasy-cambion` (Medium) — half-fiend cambion, human bearing betrayed by horns and furled leather wings, courtly blade, ambition worn openly. verb: CHARMS-THE-COURT.
 
-
-## F4 re-dos (50 identities)
-
-Failed files (reason digest):
-- `fx-ash-biolumeflash-candidate-001.png` — note:content reads as orange lava/basalt crack, not a biolume flash; possibly swapped
-- `fx-ash-toxicburst-alt-candidate-001.png` — note:palette reads fire-orange, not toxic
-- `fx-ash-toxicburst-candidate-001.png` — note:palette reads holy-gold, not toxic; horizontal flare streaks touch left/right ed
-- `fx-cosmic-sandveil-alt-candidate-001.png` — note:gold star mandala, no sand character
-- `fx-cosmic-scarabswirl-candidate-001.png` — style-drift:photoreal; note:creature sprite in fx slot, magenta bg instead of dark fx bg
-- `fx-cosmic-sigilbloom-candidate-001.png` — style-drift:photoreal; note:creature sprite in fx slot, magenta bg instead of dark fx bg
-- `fx-cosmic-voidrip-candidate-001.png` — style-drift:photoreal; note:creature sprite in fx slot, magenta bg instead of dark fx bg
-- `fx-env-debriscloud-candidate-001.png` — note:troll character sprite in fx slot, not an effect
-- `fx-env-dustkick-candidate-001.png` — note:verdigris dragon creature sprite in fx slot, not an effect
-- `fx-env-emberdrift-candidate-001.png` — note:two-cell orc character sheet in fx slot, not an effect
-- `fx-env-frostburst-candidate-001.png` — note:ice dragon creature sprite in fx slot, not an effect
-- `fx-env-rippleflash-candidate-001.png` — note:robed patriarch character sprite in fx slot, not an effect
-- …and 38 more (see qa-ledger.json)
-
-### Sheet RQ-02 — 4 cells (Medium)
-
-Canvas 3548×1774, 4 equal vertical 4:8 cells. The figures, left to right:
-
-1. `fx-ash-biolumeflash` (Medium) — (no seed row — derive from slug)
-2. `fx-ash-toxicburst` (Medium) — (no seed row — derive from slug)
-3. `fx-ash-toxicburst-alt` (Medium) — (no seed row — derive from slug)
-4. `fx-cosmic-sandveil-alt` (Medium) — (no seed row — derive from slug)
-
-### Sheet RQ-03 — 4 cells (Medium)
-
-Canvas 3548×1774, 4 equal vertical 4:8 cells. The figures, left to right:
-
-1. `fx-cosmic-scarabswirl` (Medium) — (no seed row — derive from slug)
-2. `fx-cosmic-sigilbloom` (Medium) — (no seed row — derive from slug)
-3. `fx-cosmic-voidrip` (Medium) — (no seed row — derive from slug)
-4. `fx-env-debriscloud` (Medium) — (no seed row — derive from slug)
-
-### Sheet RQ-04 — 4 cells (Medium)
-
-Canvas 3548×1774, 4 equal vertical 4:8 cells. The figures, left to right:
-
-1. `fx-env-dustkick` (Medium) — (no seed row — derive from slug)
-2. `fx-env-emberdrift` (Medium) — (no seed row — derive from slug)
-3. `fx-env-frostburst` (Medium) — (no seed row — derive from slug)
-4. `fx-env-rippleflash` (Medium) — (no seed row — derive from slug)
-
-### Sheet RQ-05 — 4 cells (Medium)
-
-Canvas 3548×1774, 4 equal vertical 4:8 cells. The figures, left to right:
-
-1. `fx-env-shadowpool` (Medium) — (no seed row — derive from slug)
-2. `fx-env-splash` (Medium) — (no seed row — derive from slug)
-3. `fx-fantasy-emberrune` (Medium) — (no seed row — derive from slug)
-4. `fx-fantasy-featherdrift` (Medium) — (no seed row — derive from slug)
-
-### Sheet RQ-06 — 4 cells (Medium)
-
-Canvas 3548×1774, 4 equal vertical 4:8 cells. The figures, left to right:
-
-1. `fx-fantasy-frostshard` (Medium) — (no seed row — derive from slug)
-2. `fx-fantasy-holyglow` (Medium) — (no seed row — derive from slug)
-3. `fx-fantasy-holyglow-alt` (Medium) — (no seed row — derive from slug)
-4. `fx-fantasy-leafburst` (Medium) — (no seed row — derive from slug)
-
-### Sheet RQ-07 — 4 cells (Medium)
-
-Canvas 3548×1774, 4 equal vertical 4:8 cells. The figures, left to right:
-
-1. `fx-fantasy-leafburst-alt` (Medium) — (no seed row — derive from slug)
-2. `fx-gloom-bonedust` (Medium) — (no seed row — derive from slug)
-3. `fx-gloom-vhstear` (Medium) — (no seed row — derive from slug)
-4. `fx-gloom-vhstear-alt` (Medium) — (no seed row — derive from slug)
-
-### Sheet RQ-08 — 4 cells (Medium)
-
-Canvas 3548×1774, 4 equal vertical 4:8 cells. The figures, left to right:
-
-1. `fx-impact-blunt-star` (Medium) — (no seed row — derive from slug)
-2. `fx-impact-crush-shatter` (Medium) — (no seed row — derive from slug)
-3. `fx-impact-pierce-glint` (Medium) — (no seed row — derive from slug)
-4. `fx-impact-slash-arc` (Medium) — (no seed row — derive from slug)
-
-### Sheet RQ-09 — 4 cells (Medium)
-
-Canvas 3548×1774, 4 equal vertical 4:8 cells. The figures, left to right:
-
-1. `fx-impact-slash-heavy` (Medium) — (no seed row — derive from slug)
-2. `fx-magic-bolthead` (Medium) — (no seed row — derive from slug)
-3. `fx-magic-burstring` (Medium) — (no seed row — derive from slug)
-4. `fx-magic-castcircle` (Medium) — (no seed row — derive from slug)
-
-### Sheet RQ-10 — 4 cells (Medium)
-
-Canvas 3548×1774, 4 equal vertical 4:8 cells. The figures, left to right:
-
-1. `fx-magic-orbcharge` (Medium) — (no seed row — derive from slug)
-2. `fx-magic-sigilflash` (Medium) — (no seed row — derive from slug)
-3. `fx-status-bloodspatter` (Medium) — (no seed row — derive from slug)
-4. `fx-status-healmotes` (Medium) — (no seed row — derive from slug)
-
-### Sheet RQ-11 — 4 cells (Medium)
-
-Canvas 3548×1774, 4 equal vertical 4:8 cells. The figures, left to right:
-
-1. `fx-status-poisonbubble` (Medium) — (no seed row — derive from slug)
-2. `fx-status-shieldshimmer` (Medium) — (no seed row — derive from slug)
-3. `fx-status-smokepuff` (Medium) — (no seed row — derive from slug)
-4. `fx-status-sparkburst` (Medium) — (no seed row — derive from slug)
-
-### Sheet RQ-12 — 4 cells (Medium)
-
-Canvas 3548×1774, 4 equal vertical 4:8 cells. The figures, left to right:
-
-1. `fx-status-stunstars` (Medium) — (no seed row — derive from slug)
-2. `shared-blood-decal` (Medium) — (no seed row — derive from slug)
-3. `shared-cobweb-decal` (Medium) — (no seed row — derive from slug)
-4. `shared-crack-decal` (Medium) — (no seed row — derive from slug)
-
-### Sheet RQ-13 — 4 cells (Medium)
-
-Canvas 3548×1774, 4 equal vertical 4:8 cells. The figures, left to right:
-
-1. `shared-grime-decal` (Medium) — (no seed row — derive from slug)
-2. `shared-moss-decal` (Medium) — (no seed row — derive from slug)
-3. `shared-rust-decal` (Medium) — (no seed row — derive from slug)
-4. `shared-scorch-decal` (Medium) — (no seed row — derive from slug)
-
-### Sheet RQ-14 — 2 cells (Medium)
+### Sheet R7-03 — 2 cells (Medium)
 
 Canvas 1774×1774, 2 equal vertical 4:8 cells. The figures, left to right:
 
-1. `shared-water-decal` (Medium) — (no seed row — derive from slug)
-2. `shared-wear-decal` (Medium) — (no seed row — derive from slug)
+1. `spr-fantasy-couatl` (Medium) — couatl, feathered rainbow serpent, coils STACKED TIGHT beneath it (§0), wings furled along the coil, ancient patient gaze. verb: WATCHES-OVER.
+2. `spr-fantasy-dretch` (Small) — pot-bellied dretch, slack rubbery hide, stubby claws, miserable resentful hunch. verb: COWERS-FORWARD.
 
+### Sheet R7-07 — 4 cells (Medium)
 
-## F5 re-dos (18 identities)
+Canvas 3548×1774, 4 equal vertical 4:8 cells. The figures, left to right:
 
-Failed files (reason digest):
-- `spr-fantasy-adult-blue-dragon-candidate-001.png` — note:pixel-duplicate of F4/shared-blood-decal-candidate-001
-- `spr-fantasy-adult-bronze-dragon-candidate-001.png` — style-drift:smooth
-- `spr-fantasy-adult-copper-dragon-candidate-001.png` — style-drift:smooth
-- `spr-fantasy-adult-gold-dragon-candidate-001.png` — style-drift:smooth; note:pixel-duplicate of F4/shared-grime-decal-candidate-001
-- `spr-fantasy-adult-green-dragon-candidate-001.png` — note:pixel-duplicate of F4/shared-crack-decal-candidate-001
-- `spr-fantasy-adult-silver-dragon-candidate-001.png` — style-drift:smooth
-- `spr-fantasy-adult-white-dragon-candidate-001.png` — note:pixel-duplicate of F4/shared-moss-decal-candidate-001
-- `spr-fantasy-ancient-black-dragon-candidate-001.png` — style-drift:photoreal
-- `spr-fantasy-ancient-blue-dragon-candidate-001.png` — anatomy:major:tail terminates in two separate tapering tips at bottom-center: left coil ends i
-- `spr-fantasy-ancient-green-dragon-candidate-001.png` — style-drift:soft-facet
-- `spr-fantasy-ancient-white-dragon-candidate-001.png` — anatomy:major:tail duplicated/mirrored: two separate spiked tail tips converge at bottom cente
-- `spr-fantasy-brass-dragon-wyrmling-bronze-dragon-wyrmling-candidate-001.png` — cropped; note:bronze wyrmling's right wing cut off by right image edge (confirmed by border-pi
-- …and 6 more (see qa-ledger.json)
+1. `spr-fantasy-incubus` (Medium) — incubus, beautiful-and-wrong, furled bat wings, tail wrapped, allure as threat — NO pin-up glamour (rule 7). verb: LEANS-TOO-CLOSE.
+2. `spr-fantasy-larva` (Medium) — damned larva, bloated maggot body wearing a human face, dragging itself by soft graspings. verb: SQUIRMS.
+3. `spr-fantasy-lemure` (Medium) — lemure, molten-flesh mound with a vaguely human agonized face, limbless, the bottom rank of Hell made literal. verb: OOZES-IN-RANK.
+4. `spr-fantasy-manes` (Small) — mindless manes, larval damned-soul demon, doughy split hide, needle teeth, blind clawing. verb: CLAWS-BLIND.
+
+### Sheet R7-08 — 2 cells (Small)
+
+Canvas 1774×1774, 2 equal vertical 4:8 cells. The figures, left to right:
+
+1. `spr-fantasy-manes-vaporspawn` (Small) — manes mid-dissolution, body sloughing into faceted vapor planes (material, not a smoke plume), face last to go. verb: COMES-APART.
+2. `spr-fantasy-mezzoloth` (Medium) — mezzoloth line-mercenary, insectile chitin plates, four arms with a single trident, soldier's economy of motion. verb: HONORS-THE-FEE.
+
+### Sheet R7-11 — 2 cells (Large)
+
+Canvas 1774×1774, 2 equal vertical 4:8 cells. The figures, left to right:
+
+1. `spr-fantasy-nightmare` (Large) — nightmare steed, TRUE equine anatomy, mane and fetlocks of faceted flame as material (no plume), no rider, no tack. verb: PAWS-THE-DARK.
+2. `spr-fantasy-nycaloth` (Large) — nycaloth shock-trooper, four-armed gargoyle-green brute, one greataxe, bat wings half-furled for the drop. verb: DROPS-FROM-ABOVE.
+
+### Sheet R7-12 — 2 cells (Large)
+
+Canvas 1774×1774, 2 equal vertical 4:8 cells. The figures, left to right:
+
+1. `spr-fantasy-oni` (Large) — oni ogre-mage, blue-black hide, small horns, single glaive, a night-prowler's patient cunning. verb: STALKS-THE-EAVES.
+2. `spr-fantasy-pegasus` (Large) — pegasus, TRUE equine anatomy (no toy-pony drift), white feathered wings half-furled, unshod, unbridled, wary of mortals. verb: ALIGHTS.
+
+### Sheet R7-13 — 2 cells (Large)
+
+Canvas 1774×1774, 2 equal vertical 4:8 cells. The figures, left to right:
+
+1. `spr-fantasy-pit-fiend` (Large) — pit fiend tyrant-general, great horns, wings half-furled, tail wrapped around the stance, flame-veined hide as material, one heavy mace. verb: COMMANDS-THE-LEGION.
+2. `spr-fantasy-planetar` (Large) — planetar, hairless emerald-skinned warrior-angel, wings half-furled, one greatsword, judgment already decided. verb: EXECUTES-JUDGMENT.
+
+### Sheet R7-14 — 3 cells (Medium)
+
+Canvas 2661×1774, 3 equal vertical 4:8 cells. The figures, left to right:
+
+1. `spr-fantasy-rakshasa` (Medium) — rakshasa, tiger-headed noble in rich robes, backward-palmed hands (canon), courtesy that is entirely false. verb: SMILES-FALSE.
+2. `spr-fantasy-succubus` (Medium) — succubus, same law as the incubus — seduction read as predation, furled wings, tail wrapped tight, weathered adult menace, zero cheesecake. verb: PROMISES-RUIN.
+3. `spr-fantasy-ultroloth` (Medium) — ultroloth overseer, elongated featureless egg-smooth head, twin opalescent eyes the only feature, austere robes, no weapon needed. verb: STARES-THROUGH.
+
+### Sheet R7-15 — 2 cells (Large)
+
+Canvas 1774×1774, 2 equal vertical 4:8 cells. The figures, left to right:
+
+1. `spr-fantasy-unicorn` (Large) — unicorn, true equine anatomy, single spiral horn, forest-warden severity — a guardian that has killed for its glade, no kitsch. verb: WARDS-THE-GLADE.
+2. `spr-fantasy-vrock` (Large) — vulture-demon vrock, filth-mottled feathers, wings half-furled, spore-crusted chest, taloned stance. verb: SCREECHES-DOWN.
+
+### Sheet R7-16 — 1 cell (Medium)
+
+Canvas 887×1774, 1 equal vertical 4:8 cells. The figure, left to right:
+
+1. `spr-fantasy-yochlol` (Medium) — yochlol handmaiden, melted-wax pillar with a single eye and reaching pseudopods, one flank half-shifted toward a drow silhouette. verb: MELTS-BETWEEN-SHAPES.
+
+### Sheet ST-01 — 2 cells
+
+Canvas 1774×1774, 2 equal vertical 4:8 cells. The figures, left to right:
+
+1. `spr-fantasy-cipher-orc` (Medium NPC) — orc scribe/codebreaker, ink-stained fingers, spectacle-cord, wax-sealed scroll case. verb: DECODES.
+2. `spr-fantasy-dungeon-animal-scarred-guard-dog-gone-feral-once-trained-to-patrol-these-halls-now-answers-to-no-one` (M) — **COVERED — do not regenerate.** F1 anchor `spr-fantasy-scarred-feral-guard-dog` (candidate-003 ACCEPT) is this identity; admission maps the anchor's winner onto this legacy id.
+
+### Sheet ST-02 — 2 cells
+
+Canvas 1774×1774, 2 equal vertical 4:8 cells. The figures, left to right:
+
+1. `spr-fantasy-blob-of-annihilation` (Medium) — (no seed row — derive from slug)
+2. `spr-fantasy-sphinx-of-wonder` (Tiny) — tiny cat-sized winged sphinx-kitten, curious (awe not cute-mascot). verb: WONDERS.
+
+### Sheet ST-03 — 2 cells
+
+Canvas 1774×1774, 2 equal vertical 4:8 cells. The figures, left to right:
+
+1. `spr-fantasy-troglodyte` (Medium) — stooped cave troglodyte, crest, stone club, reeking. verb: SKULKS.
+2. `spr-fantasy-vampire-spawn` (Medium) — feral fledgling vampire, bloodstained, crouched. verb: HUNGERS.
+
+### Sheet ST-04 — 1 cell
+
+Canvas 887×1774, 1 equal vertical 4:8 cells. The figures, left to right:
+
+1. `spr-fantasy-yuan-ti-infiltrator` (Medium) — near-human yuan-ti spy, faint scales, hooded robe hiding serpent traits. verb: PASSES-UNSEEN.
 
 ### Sheet RQ-15 — 1 cell (Huge)
 
@@ -393,3 +337,9 @@ Failed files (reason digest):
 - `spr-fantasy-blue-dragon-candidate-001.png` — anatomy:major:tail duplicated/mirrored: coil from the left ends in a smooth tapered tip and co
 - `spr-fantasy-brass-dragon-candidate-001.png` — anatomy:major:two tail tips: left coil ends in an upcurved hook point at lower left, second bl
 - `spr-fantasy-hill-giant-candidate-001.png` — style-drift:photoreal
+
+### Sheet RQ-38 — 1 cell (Gargantuan)
+
+Canvas 887×1774, 1 equal vertical 4:8 cells. The figure, left to right:
+
+1. `spr-fantasy-blob-of-annihilation` (Gargantuan) — blob of annihilation, a world-eating ooze of event-horizon-black facets studded with half-dissolved relics and bones, fill the frame. verb: UNMAKES.

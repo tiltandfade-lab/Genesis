@@ -49,6 +49,49 @@ CARD: one fixture scene × 4 profiles, same camera — READ + describe.
 
 ---
 
+## ENV-1c — The solar/lunar arc (Adam's ruling 2026-07-14)  ·  branch `feat/env1c-celestial-arc`  ·  AFTER ENV-1b (same rig region)
+
+### Adam's ruling (verbatim intent; do not re-litigate)
+"The sun and moon are diegetic sources and their position in the time of day should affect overall
+lighting when outdoors." Outdoor light is not a static profile — it is WHERE THE SUN/MOON IS.
+
+### Decision
+Map game time → celestial position → the exterior light rig (composes with ENV-1's profile looks +
+ENV-1b's cast shadows; requires both landed):
+- **Source of time:** `w.clock.min` (continuous minutes; `timeOfDay()` bands in src/world/dm.js:423
+  are the labels, the arc uses the CONTINUOUS value). The tray build already receives world state —
+  thread the clock through the same seam the tray sources use (pure; no new store).
+- **The arc:** sun elevation/azimuth = a simple continuous function of min-of-day (named consts for
+  sunrise/sunset minutes; a low-parameter arc, NOT an astronomy library — deterministic and cheap).
+  The exterior KEY light's direction follows it → with ENV-1b's shadow maps, dawn/dusk = LONG raking
+  shadows, noon = short tight ones, automatically.
+- **Color/intensity curves along the arc** (named-const keyframes, lerped): dawn = low warm-pink,
+  morning = warm gold, noon = high near-white, dusk = low orange-red, night = the MOON takes the key
+  (cool blue-silver, dimmer, its own slower arc + shadow casting), deep night = near-down moon.
+  Void/sky tint follows the same keyframes (dawn/dusk skies read).
+- **Profile composition:** the rolled light profile MODULATES the arc, never replaces it — daylit =
+  the clear-sky arc as-is; overcast = sun position retained but diffused (shadows soften/fade,
+  colors flatten grey); moonlit at night = the moon arc as-is; `dark` and all INTERIOR profiles are
+  untouched (interiors keep their practicals-only world — the arc is outdoors-only).
+- One re-tune surface: extend `TABLETOP_EXTERIOR_LOOK` (or a sibling `CELESTIAL_ARC` table) — Adam
+  red-pens keyframes, not code.
+
+### Verification
+⊗ RED FIRST: the same daylit tray at min=dawn vs min=noon differs (key direction + color — assert
+light direction vector + a sampled sky/ground color delta; fails today, time is ignored). Shadow
+direction flips across the day (with 1b landed: sample the shadow side of a figure at morning vs
+evening). Noon luma > dawn luma; night(moonlit) ≪ noon; determinism (same clock ⇒ same rig);
+interiors byte-stable; overcast damps shadow contrast vs daylit at the same minute. Re-run: env1
+(28), env1b's harness, qfb-tray (37), theater-shot (107), dungeon-interior (287), manifest.
+CARD: one dressed tray × 5 times of day (dawn/morning/noon/dusk/deep-night), same camera — the
+"the sun moves" exhibit for Adam. READ + describe.
+
+### Out of scope
+Interior time effects (windows/skylights — a future ruling); weather beyond the existing profiles
+(ENV-WAVES doctrine); an astronomy-accurate ephemeris; seasons.
+
+---
+
 ## ENV-2 — Travel legs project their rolled biome  ·  branch `feat/env2-travel-terrain`
 
 ### The measured defect + the roll-is-truth fact

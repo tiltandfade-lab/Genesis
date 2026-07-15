@@ -397,6 +397,7 @@
    {
     "name": "Cable Snarl",
     "base": "web-mass",
+    "retint": "#2e2c28",
     "size": "Medium",
     "cover": "half",
     "crossRealm": "cosmic",
@@ -789,6 +790,7 @@
    {
     "name": "Alley Fire Escape",
     "base": "web-mass",
+    "retint": "#4a4c4f",
     "size": "Large",
     "cover": "three-quarters",
     "crossRealm": "chrome, gloom",
@@ -861,6 +863,7 @@
    {
     "name": "Broken Parking Meter Row",
     "base": "web-mass",
+    "retint": "#63615a",
     "size": "Small",
     "cover": "none",
     "crossRealm": "suburb, chrome",
@@ -1163,6 +1166,7 @@
    {
     "name": "Rebar Thicket",
     "base": "web-mass",
+    "retint": "#5a4a3a",
     "size": "Large",
     "cover": "half",
     "crossRealm": "specific",
@@ -1199,6 +1203,7 @@
    {
     "name": "Shopping Cart Tangle",
     "base": "web-mass",
+    "retint": "#6e7276",
     "size": "Medium",
     "cover": "half",
     "crossRealm": "suburb",
@@ -1366,6 +1371,7 @@
    {
     "name": "Overgrown Hedge Row",
     "base": "web-mass",
+    "retint": "#445c34",
     "size": "Medium",
     "cover": "three-quarters",
     "crossRealm": "gloom, lost-world",
@@ -1623,6 +1629,7 @@
    {
     "name": "Fleshy Growth",
     "base": "web-mass",
+    "retint": "#7a5a52",
     "size": "Large",
     "cover": "three-quarters",
     "crossRealm": "gloom, ash",
@@ -1907,6 +1914,7 @@
    {
     "name": "Barbed Coil",
     "base": "web-mass",
+    "retint": "#5a4030",
     "size": "Medium",
     "cover": "half",
     "crossRealm": "ash, frontier",
@@ -2060,6 +2068,7 @@
    {
     "name": "Downed Observation Balloon",
     "base": "web-mass",
+    "retint": "#8a7a5c",
     "size": "Huge",
     "cover": "three-quarters",
     "crossRealm": "specific",
@@ -2245,6 +2254,7 @@
    {
     "name": "Cargo Net Tangle",
     "base": "web-mass",
+    "retint": "#8a7a54",
     "size": "Medium",
     "cover": "half",
     "crossRealm": "frontier, lost-world",
@@ -2326,6 +2336,7 @@
    {
     "name": "Ratlines Web",
     "base": "web-mass",
+    "retint": "#8a7a54",
     "size": "Medium",
     "cover": "half",
     "crossRealm": "specific",
@@ -2407,6 +2418,7 @@
    {
     "name": "Coiled Mooring Rope",
     "base": "web-mass",
+    "retint": "#8a7a54",
     "size": "Small",
     "cover": "none",
     "crossRealm": "all",
@@ -2772,6 +2784,7 @@
    {
     "name": "Jungle Liana Curtain",
     "base": "web-mass",
+    "retint": "#3f5c2e",
     "size": "Large",
     "cover": "half",
     "crossRealm": "high-seas",
@@ -3169,6 +3182,7 @@
    {
     "name": "Grinning Crank-Box",
     "base": "web-mass",
+    "retint": "#4a3c2a",
     "size": "Medium",
     "cover": "half",
     "crossRealm": "specific",
@@ -3322,6 +3336,7 @@
    {
     "name": "Storm-Cloud Bounce House",
     "base": "web-mass",
+    "retint": "#6a7a8a",
     "size": "Large",
     "cover": "none",
     "crossRealm": "specific",

@@ -153,8 +153,12 @@ console.log("=== SECTION A: theater-figures.js blank-piece fallback ===");
     /wholeObjectGeometryFor\(wKey,\s*false,\s*"figure"\)/.test(bootSrc), "");
   check("the props path calls resolveWholeObject(wPropKey, \"prop\")",
     /resolveWholeObject\(wPropKey,\s*"prop"\)/.test(bootSrc), "");
+  // QF-B1 (2026-07-14, PLAY-LENS P0 #4): this call site grew an optional 4th arg (wRetint — a
+  // realm-prop's authored partParams.retint, threaded through to wholeObjectRetintColorBuffer) —
+  // the regex now tolerates ANY trailing args after "prop" rather than requiring the call to end
+  // there, since the fact this check actually verifies (pieceKind:"prop" is passed) is unchanged.
   check("the props path's geometry call passes \"prop\" through wholeObjectGeometryFor",
-    /wholeObjectGeometryFor\(wPropKey,\s*false,\s*"prop"\)/.test(bootSrc), "");
+    /wholeObjectGeometryFor\(wPropKey,\s*false,\s*"prop"[^)]*\)/.test(bootSrc), "");
   check("mountLightProp's lookup deliberately carries NO pieceKind (light: profiles legitimately miss)",
     /const entry = resolveWholeObject\(wKey\);/.test(bootSrc), "");
 

@@ -423,6 +423,7 @@
       "overridden": false
     },
     "floorMaterial": "ash",
+    "biomeProfileBias": null,
     "surfaceName": null,
     "surfaceTint": null,
     "surfaceBaseTint": null,

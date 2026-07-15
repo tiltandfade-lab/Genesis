@@ -723,12 +723,157 @@ const THEATER_FLOOR_KEYWORD_RULES = [
   [/dirt|clay|earth|packed/i, "cracked-earth"]
 ];
 
-/* §2 rule 2 — wilderness biome -> default material when no keyword hit. */
+/* §2 rule 2 — wilderness biome -> default material when no keyword hit.
+   ENV-2 (docs/ENV-EXTERIOR-WAVE.md) FIX: this map predates a check against the REAL compiled
+   `wilderness-biome-type` table (Engine/03. _Tables/03. Session Mechanics/Dungeons/Wilderness Biome
+   Type.md) and was keyed off wild-walk.js's own WILDERNESS_BIOMES fallback array instead — which
+   carries "Underdark"/"Jungle", words the real d10 table never rolls (its own d9/d10 rows are
+   "Deeplands"/"Underwater"). Two of the ten real biomes therefore NEVER matched this map and always
+   fell through to THEATER_FLOOR_ENV_FALLBACK.wilderness ("cracked-earth") regardless of the actual
+   rolled terrain. Added below, additively (Underdark/Jungle keys are left in place — harmless dead
+   entries, not a destructive edit — in case a hand-authored fixture still uses the old words). */
 const THEATER_FLOOR_BIOME_MAP = {
   Grassland: "grass", Forest: "leaf-litter", Jungle: "leaf-litter",
   Desert: "sand", Coastal: "sand", Arctic: "snow-ice",
-  Mountain: "scree", Hill: "cracked-earth", Swamp: "mud", Underdark: "cave-rock"
+  Mountain: "scree", Hill: "cracked-earth", Swamp: "mud", Underdark: "cave-rock",
+  Deeplands: "cave-rock", Underwater: "cave-rock"
 };
+
+/* ENV-2 (docs/ENV-EXTERIOR-WAVE.md "Travel legs project their rolled biome") — BIOME_DRESSING maps
+   each biome the REAL wilderness-biome-type table rolls (the same 10-row d10 table THEATER_FLOOR_
+   BIOME_MAP above reads, Engine/03. _Tables/03. Session Mechanics/Dungeons/Wilderness Biome Type.md)
+   to a pool of EXISTING assets/dressing flora/clutter slugs (no new art — every slug below is a real
+   file already checked into assets/dressing/, drawn from the same realm sets src/engine/place-
+   dressing.js's DRESSING_POOL already uses for interior rooms) + `ground` (a THEATER_FLOOR_BIOME_MAP
+   key, kept in sync so the scatter and the floor tint agree on what terrain this is) + an optional
+   `profileBias` — an ADVISORY hook only (e.g. a swamp reads truer under an overcast sky); nothing
+   consumes it yet (ENV-1, running in parallel, owns LIGHT_PROFILES/the profile picker — this unit
+   never reaches into that machinery). Stamped onto the board as `biomeProfileBias` (below) so a
+   later unit can wire it without re-deriving the mapping. No dedicated art exists for every biome
+   (there is no "ice" or "underwater" flora set) — those pools reuse the nearest visually-plausible
+   existing slugs on purpose, per the spec's own "no new art" law; env2BiomeScatterFor's own generic-
+   pool fallback (below) is for a biome word this map doesn't recognize AT ALL, a different case. */
+const BIOME_DRESSING = {
+  Arctic: { ground: "snow-ice", pool: [
+    { slug: "fantasy-flora-mossboulder", cardKind: "medium" },
+    { slug: "fantasy-clutter-rubblewall", cardKind: "medium" },
+    { slug: "gloom-flora-bonelichen", cardKind: "small" }
+  ] },
+  Coastal: { ground: "sand", pool: [
+    { slug: "fantasy-flora-cattailreed", cardKind: "small" },
+    { slug: "fantasy-flora-lilypad", cardKind: "small" },
+    { slug: "ash-flora-dunegrass", cardKind: "medium" }
+  ] },
+  Desert: { ground: "sand", pool: [
+    { slug: "ash-flora-dunegrass", cardKind: "medium" },
+    { slug: "fantasy-clutter-rusted-plow", cardKind: "medium" },
+    { slug: "ash-flora-cracknettle", cardKind: "small" }
+  ] },
+  Forest: { ground: "leaf-litter", pool: [
+    { slug: "fantasy-flora-oak", cardKind: "medium" },
+    { slug: "fantasy-flora-oak-alt", cardKind: "medium" },
+    { slug: "fantasy-flora-fern", cardKind: "small" },
+    { slug: "fantasy-flora-fern-alt", cardKind: "small" },
+    { slug: "fantasy-flora-birchgrove", cardKind: "medium" },
+    { slug: "fantasy-flora-hedgerow", cardKind: "medium" }
+  ] },
+  Grassland: { ground: "grass", pool: [
+    { slug: "fantasy-flora-wildflowerpatch", cardKind: "small" },
+    { slug: "fantasy-flora-thistlecluster", cardKind: "small" },
+    { slug: "fantasy-flora-hedgerow", cardKind: "medium" }
+  ] },
+  Hill: { ground: "cracked-earth", pool: [
+    { slug: "fantasy-flora-hedgerow", cardKind: "medium" },
+    { slug: "fantasy-flora-mossboulder", cardKind: "medium" },
+    { slug: "fantasy-clutter-rubblewall", cardKind: "medium" }
+  ] },
+  Mountain: { ground: "scree", pool: [
+    { slug: "fantasy-clutter-rubblewall", cardKind: "medium" },
+    { slug: "fantasy-flora-mossboulder", cardKind: "medium" },
+    { slug: "ash-clutter-rustplate", cardKind: "small" }
+  ] },
+  Swamp: { ground: "mud", profileBias: "overcast", pool: [
+    { slug: "fantasy-flora-cattailreed", cardKind: "small" },
+    { slug: "fantasy-flora-lilypad", cardKind: "small" },
+    { slug: "gloom-flora-mossgrave", cardKind: "medium" },
+    { slug: "gloom-flora-nightshade", cardKind: "small" }
+  ] },
+  Deeplands: { ground: "cave-rock", pool: [
+    { slug: "gloom-flora-rootcrack", cardKind: "small" },
+    { slug: "gloom-flora-witherstalk", cardKind: "small" },
+    { slug: "gloom-flora-bonelichen", cardKind: "small" }
+  ] },
+  Underwater: { ground: "cave-rock", pool: [
+    { slug: "fantasy-flora-lilypad", cardKind: "small" },
+    { slug: "gloom-flora-nightshade", cardKind: "small" },
+    { slug: "fantasy-flora-cattailreed", cardKind: "small" }
+  ] }
+};
+// unknown/unrecognized biome word -> this generic pool (spec: "unknown biome degrades to the generic
+// pool, logged"). Never realm-specific — the safest neutral scatter for a biome this map can't place.
+const BIOME_DRESSING_GENERIC = { ground: null, pool: [
+  { slug: "fantasy-flora-fern", cardKind: "small" },
+  { slug: "fantasy-clutter-woodpile", cardKind: "medium" },
+  { slug: "fantasy-flora-hedgerow", cardKind: "medium" }
+] };
+
+// modest density (docs/ENV-EXTERIOR-WAVE.md ENV-2: "the 2e empty-is-resting-state law still
+// governs") — a travel leg reads as calm ground with a handful of terrain-appropriate features, never
+// a cluttered set. Named consts so Adam's return-pass re-tune has one obvious dial.
+const ENV2_DRESSING_MIN_COUNT = 3;
+const ENV2_DRESSING_MAX_COUNT = 6;
+
+/* ENV-2 — a deterministic seeded scatter of BIOME_DRESSING's pool across this board's own tiles,
+   EXCLUDING the center lane (the walking path — CLEAR-law analog: a party crossing a travel tray
+   must always have an obviously clear lane through the middle, never a prop planted underfoot).
+   Seeded off walkId+segment id (mirrors src/engine/place-distribution.js's own
+   "place-realize:v1:"+walkId+":"+segKey seed-string convention, verbatim prefix style) via the SAME
+   dspHashStr/dspMulberry32 globals that file already established (place-spatialize.js, loaded before
+   this file — see manifest.json loadOrder) — never Math.random, so the same walk+leg always scatters
+   byte-identically and a fresh walk/leg always scatters differently. Returns [] (never throws) when
+   there's no biome to key off, no tiles to scatter onto, or BIOME_DRESSING/the shuffle helper isn't
+   loaded (a narrow test harness). Logs (console.warn) once per call when a biome isn't recognized —
+   never silently invents a look for a word this map doesn't know. */
+function env2BiomeScatterFor(segment, tiles, lanes, opts){
+  const seg = segment || {};
+  opts = opts || {};
+  if(!seg.biome || !tiles || !tiles.length || !Array.isArray(lanes) || !lanes.length) return [];
+  let entry = BIOME_DRESSING[seg.biome];
+  if(!entry){
+    console.warn("env2: unrecognized wilderness biome '" + seg.biome + "' — degrading to the generic dressing pool");
+    entry = BIOME_DRESSING_GENERIC;
+  }
+  const pool = entry.pool || [];
+  if(!pool.length) return [];
+
+  // the clear walking lane: the CENTER lane of whatever lane list this grid actually has (3 lanes ->
+  // index 1, "C"; degrades sanely for a narrower/wider grid — never a hardcoded literal lane name).
+  const clearLaneName = lanes[Math.floor((lanes.length - 1) / 2)];
+  const eligible = tiles.filter(t => t && (t.kind === "floor" || t.kind === "elevated")
+    && typeof t.zone === "string" && t.zone.split(":")[1] !== clearLaneName);
+  if(!eligible.length) return [];
+
+  const walkId = opts.walkId != null ? String(opts.walkId) : "";
+  const segId = String(seg.id || seg.num || "");
+  const seedStr = "env2-dress:v1:" + walkId + ":" + segId;
+  const seed = dspHashStr(seedStr);
+  const rng = dspMulberry32(seed);
+  const shuffled = (typeof pldShuffle === "function") ? pldShuffle(eligible, rng) : eligible.slice();
+
+  const count = Math.min(shuffled.length,
+    ENV2_DRESSING_MIN_COUNT + Math.floor(rng() * (ENV2_DRESSING_MAX_COUNT - ENV2_DRESSING_MIN_COUNT + 1)));
+  const out = [];
+  for(let i = 0; i < count; i++){
+    const cell = shuffled[i];
+    const dressPick = pool[Math.floor(rng() * pool.length)];
+    out.push({
+      kind: "dressing", zone: cell.zone, x: cell.x, z: cell.z,
+      slug: dressPick.slug, cardKind: dressPick.cardKind || "medium", primary: "floor",
+      biome: seg.biome, sourceRef: "env2:" + segId + ":" + i
+    });
+  }
+  return out;
+}
 
 /* §2 rule 3 — seeded env-default pools (dungeon/urban only; wilderness/breach never reach this rule,
    see theaterFloorMaterial below) so two rooms in the same env still differ instead of every unmarked
@@ -1595,8 +1740,28 @@ function theaterBoardBuild(segment, scene, opts){
     // rendered both from cm.scene.hazardZones/elevZones directly.
   });
 
+  // ENV-2 (docs/ENV-EXTERIOR-WAVE.md) — the travel tray's biome scatter. Gated on BOTH env==="wilderness"
+  // AND opts.walkId being present: opts.walkId is threaded ONLY by src/world/render.js's non-combat
+  // standing-table call site (theaterStageSync's walking branch, below trayFrom's "segment" source) —
+  // every combat caller (theaterBoardFrom's own wrapper, driven by combat_start's cm.segment/cm.scene)
+  // never sets it, so a wilderness FIGHT's board is untouched by this unit (byte-identical to before —
+  // the existing combat byte-gates never exercise opts.walkId and stay green). This is a deliberate
+  // scope boundary, not an oversight: ENV-2 is the non-combat travel tray specifically; a wilderness
+  // encounter's board keeps its pre-unit cover/hazard-only prop set.
+  let biomeProfileBias = null;
+  if(env === "wilderness" && opts.walkId != null){
+    const scatter = env2BiomeScatterFor(segment, tiles, lanes, opts);
+    if(scatter.length) props = props.concat(scatter);
+    const biomeEntry = segment && segment.biome && BIOME_DRESSING[segment.biome];
+    if(biomeEntry && biomeEntry.profileBias) biomeProfileBias = biomeEntry.profileBias;
+  }
+
   return {
     tiles, props, env, light, floorMaterial,
+    // ENV-2: an ADVISORY profile hint off this leg's rolled biome (e.g. Swamp -> "overcast") — null
+    // whenever the scatter above didn't run or the biome carries no bias. Nothing reads this yet
+    // (ENV-1 owns the profile picker, out of scope for this unit) — a wired-but-inert data hook only.
+    biomeProfileBias: biomeProfileBias,
     // REALM-SURFACES-WIRING.md §3: null on every non-realm room (regression-safe — a caller that
     // ignores these two fields sees an unchanged board shape); a named surface + its prose tint when
     // opts.realms picked one. Room-wide (matches floorMaterial's own "one per room" scope).
@@ -2450,7 +2615,24 @@ function castFrom(w, source){
   else if(source.walking) arrangement = "march";
   else arrangement = "vignette";
 
-  return arrangeTableau(units, arrangement);
+  // ENV-2 (docs/ENV-EXTERIOR-WAVE.md) FIX — "the PC token renders on the travel tray" / ROOT CAUSE:
+  // arrangeTableau's own arrangements (below) place every unit in a SMALL local frame centered on
+  // (0,0) — correct only when the mounted board's own tile-bounding-box center is ALSO (0,0) (the
+  // idle table's empty tiles, or a near-square node tray). The flat combat-zone-grid tray every
+  // walking/travel leg uses (theaterBoardBuild, this file, above) is corner-anchored — its tiles span
+  // roughly x:[0,8] z:[0,11] — so its OWN center is (4,5.5), not (0,0). setUnits (theater-boot.js)
+  // re-centers every unit by subtracting the board's real tile-bbox centroid (S.boardOrigin, computed
+  // the identical way for tiles AND units), so a PC emitted at raw (0,0) rendered at the board's
+  // extreme CORNER tile instead of its center — technically on-board and technically visible, but
+  // planted in the least-lit, most out-of-frame spot on the tray (confirmed live via a real browser
+  // session: figureFor built a real, visible PC figure; it was simply standing on the wrong tile).
+  // `source.boardCenter` (OPTIONAL — every existing caller/test omits it, so this defaults to {0,0},
+  // byte-identical to pre-unit behavior) is the caller's own already-known board tile-bbox center
+  // (src/world/render.js's theaterStageSync computes it off the SAME board it just handed to
+  // setBoard/setInteriorBoard, right before calling castFrom) — arrangeTableau adds it back onto every
+  // PLACED unit's position so "0,0" once again means "the board's own visual center," whatever board
+  // is actually mounted.
+  return arrangeTableau(units, arrangement, source.boardCenter);
 }
 
 /* THE ATTITUDE -> PLACEMENT TABLE (§U4 locked rule): "hostile = far + square-on, friendly =
@@ -2475,12 +2657,19 @@ function theaterAttitudePlacementFor(value){
   return THEATER_ATTITUDE_PLACEMENT[key] || THEATER_ATTITUDE_PLACEMENT_DEFAULT;
 }
 
-/* arrangeTableau(units, arrangement) -> units[] — PURE, stamps x/z (+ band/slot, additive
-   layout metadata) onto a fresh copy of each unit; never mutates its input array/objects.
+/* arrangeTableau(units, arrangement, boardCenter?) -> units[] — PURE, stamps x/z (+ band/slot,
+   additive layout metadata) onto a fresh copy of each unit; never mutates its input array/objects.
    arrangement in "facing-pair"|"ring"|"march"|"shopfront"|"vignette" (§U4 locked). Attitude
    (npc units only, via theaterAttitudePlacementFor) drives distance+facing inside facing-pair/
-   ring ONLY, per the locked rule — the other three arrangements never read .attitude. */
-function arrangeTableau(units, arrangement){
+   ring ONLY, per the locked rule — the other three arrangements never read .attitude.
+   ENV-2 (docs/ENV-EXTERIOR-WAVE.md) — `boardCenter` ({cx,cz}, OPTIONAL) re-homes every arrangement
+   onto the ACTUAL mounted board's own tile-bbox center instead of the hardcoded (0,0) every
+   arrangement below is authored against (see castFrom's own header comment on this call site for the
+   full root-cause account). Applied INSIDE `place()` only — units that stamp their own ABSOLUTE
+   board-space position directly (corpse traces, below in castFrom, via theaterZoneOrigin — already in
+   the same coordinate frame tiles use) never pass through `place()` and are correctly left untouched.
+   Absent/undefined boardCenter -> {cx:0,cz:0}, i.e. byte-identical to every pre-unit caller. */
+function arrangeTableau(units, arrangement, boardCenter){
   const list = (units || []).map(u => Object.assign({}, u));
   const byKind = k => list.filter(u => u.kind === k);
   const pc = byKind("pc")[0] || null;
@@ -2488,7 +2677,9 @@ function arrangeTableau(units, arrangement){
   const npcs = byKind("npc");
   const ambients = byKind("ambient");
 
-  const place = (u, x, z, band, slot) => { u.x = x; u.z = z; u.band = band; if(slot != null) u.slot = slot; };
+  const originCx = (boardCenter && Number.isFinite(boardCenter.cx)) ? boardCenter.cx : 0;
+  const originCz = (boardCenter && Number.isFinite(boardCenter.cz)) ? boardCenter.cz : 0;
+  const place = (u, x, z, band, slot) => { u.x = x + originCx; u.z = z + originCz; u.band = band; if(slot != null) u.slot = slot; };
   const spreadX = (n, i, step) => (i - (Math.max(n, 1) - 1) / 2) * step;
 
   if(arrangement === "shopfront"){

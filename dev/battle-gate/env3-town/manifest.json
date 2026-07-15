@@ -1,0 +1,43 @@
+{
+  "results": [
+    {
+      "profile": "daylit",
+      "fileName": "env3-town-daylit.png",
+      "mounted": {
+        "ok": true,
+        "buildings": 6,
+        "streetTiles": 36,
+        "props": 5,
+        "tiles": 108,
+        "realmId": "frontier",
+        "profile": "daylit"
+      }
+    },
+    {
+      "profile": "moonlit",
+      "fileName": "env3-town-moonlit.png",
+      "mounted": {
+        "ok": true,
+        "buildings": 6,
+        "streetTiles": 36,
+        "props": 5,
+        "tiles": 108,
+        "realmId": "frontier",
+        "profile": "moonlit"
+      }
+    },
+    {
+      "profile": "overcast",
+      "fileName": "env3-town-overcast.png",
+      "mounted": {
+        "ok": true,
+        "buildings": 6,
+        "streetTiles": 36,
+        "props": 5,
+        "tiles": 108,
+        "realmId": "frontier",
+        "profile": "overcast"
+      }
+    }
+  ]
+}

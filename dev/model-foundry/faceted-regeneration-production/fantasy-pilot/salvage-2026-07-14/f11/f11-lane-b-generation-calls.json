@@ -1,0 +1,9 @@
+{
+  "runtimeAdmitted": false,
+  "packet": "F11",
+  "lane": "F11-B",
+  "outputs": [
+    {"file":"raw-figures/spr-fantasy-performer-spr-fantasy-performer-legend-candidate-001.png","callId":"exec-81e6fd44-7bda-4817-b527-782c6b52c0fb","cells":["spr-fantasy-performer","spr-fantasy-performer-legend"]},
+    {"file":"raw-figures/spr-fantasy-performer-maestro-spr-fantasy-performer-tiefling-candidate-001.png","callId":"exec-1fa3ceb9-b975-429f-ae99-fe0aca95e848","cells":["spr-fantasy-performer-maestro","spr-fantasy-performer-tiefling"]}
+  ]
+}

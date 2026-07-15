@@ -1,0 +1,79 @@
+[
+  {
+    "file": "raw-items/mundane-item-sheet-1-candidate-001.png",
+    "callId": "exec-a1753f1b-2732-4a57-ad67-01f3c4de7ddf",
+    "sheet": "mundane item sheet 1/7",
+    "cells": ["Acid", "Alchemist’s Fire", "Alchemist’s Supplies", "Alms Box", "Antitoxin", "Arcane Focus (crystal)", "Arcane Focus (orb)", "Arcane Focus (quarterstaff)", "Arcane Focus (rod)", "Arcane Focus (staff)", "Arcane Focus (wand)", "Arrow", "Backpack", "Bag Of Sand", "Ball Bearings", "Barrel", "Basket", "Battleaxe", "Bedroll", "Bell", "Blanket", "Block and Tackle", "Block Of Incense", "Blowgun", "Bolt"]
+  }
+  ,{
+    "file": "raw-items/mundane-item-sheet-2-candidate-001.png",
+    "callId": "exec-c157df2f-4043-4345-81cc-303701bb49b5",
+    "sheet": "mundane item sheet 2/7",
+    "cells": ["Book", "Bottle, Glass", "Breastplate", "Brewer’s Supplies", "Bucket", "Bullets, Firearm", "Bullets, Sling", "Calligrapher’s Supplies", "Caltrops", "Candle", "Carpenter’s Tools", "Cartographer’s Tools", "Case, Crossbow Bolt", "Case, Map or Scroll", "Censer", "Chain", "Chain Mail", "Chain Shirt", "Chest", "Climber’s Kit", "Clothes, Fine", "Clothes, Traveler’s", "Club", "Cobbler’s Tools", "Component Pouch"]
+  },{
+    "file": "raw-items/mundane-item-sheet-3-candidate-001.png",
+    "callId": "exec-83456403-5980-408b-a62d-690cff199d11",
+    "sheet": "Mundane item sheet 3/7 (5×5 grid, 25 cells)",
+    "cells": ["Cook’s Utensils", "Costume", "Crowbar", "Dagger", "Dart", "Disguise Kit", "Druidic Focus (quarterstaff)", "Druidic Focus (sprig Of Mistletoe)", "Druidic Focus (wooden Staff)", "Druidic Focus (yew Wand)", "Flail", "Flask", "Forgery Kit", "Gaming Set", "Glaive", "Glassblower’s Tools", "Grappling Hook", "Greataxe", "Greatclub", "Greatsword", "Halberd", "Half Plate Armor", "Hand Crossbow", "Handaxe", "Healer’s Kit"]
+  },{
+    "file": "raw-items/mundane-item-sheet-5-candidate-001.png",
+    "callId": "exec-95ca4fae-f7b5-4d87-8dbe-776496c97e9a.png",
+    "sheet": "Mundane item sheet 5/7 (5×5 grid, 25 cells)",
+    "cells": ["Magnifying Glass","Manacles","Map","Mason’s Tools","Maul","Mess Kit","Mirror","Morningstar","Musket","Navigator’s Tools","Needle","Net","Oil","Padded Armor","Painter’s Supplies","Paper","Parchment","Perfume","Pike","Pistol","Piton","Pitons","Plate Armor","Poison, Basic","Poisoner’s Kit"]
+  },{
+    "file": "raw-items/mundane-item-sheet-6-candidate-001.png",
+    "callId": "exec-d9b298ad-ac71-4dc4-bad3-65fd08365241.png",
+    "sheet": "Mundane item sheet 6/7 (5×5 grid, 25 cells)",
+    "cells": ["Pole","Pot, Iron","Potion of Healing","Potter’s Tools","Pouch","Quarterstaff","Quiver","Ram, Portable","Rapier","Rations","Ring Mail","Robe","Rope","Sack","Scale Mail","Scimitar","Sealing Wax","Shield","Shortbow","Shortsword","Shovel","Sickle","Signal Whistle","Sling","Small Knife"]
+  },{
+    "file": "raw-items/mundane-item-sheet-7-candidate-001.png",
+    "callId": "exec-e16cee38-8d05-4b87-a004-74c0ebfcaff0.png",
+    "sheet": "Mundane item sheet 7/7 (5×5 grid, 25 cells)",
+    "cells": ["Smith’s Tools","Soap","Spear","Spell Scroll (Cantrip)","Spell Scroll (Level 1)","Spellbook","Spikes, Iron","Splint Armor","Spyglass","String","Studded Leather Armor","Tent","Thieves’ Tools","Tinderbox","Tinker’s Tools","Torch","Trident","Vestments","Vial","War Pick","Warhammer","Waterskin","Weaver’s Tools","Whip","Woodcarver’s Tools"]
+  },{
+    "file": "raw-items/magic-item-sheet-1-candidate-001.png",
+    "callId": "exec-9c7c1fe7-8cd3-4c9e-a8e6-aeb36999efb9.png",
+    "sheet": "Magic item sheet 1/8 (5×5 grid, 25 cells)",
+    "cells": ["Adamantine Armor","Ammunition, +1, +2, or +3","Amulet of Health","Amulet of Proof against Detection and Location","Amulet of the Planes","Animated Shield","Apparatus of the Crab","Armor of Invulnerability","Armor of Resistance","Armor of Vulnerability","Armor, +1, +2, or +3","Arrow-Catching Shield","Bag of Beans","Bag of Devouring","Bag of Holding","Bag of Tricks","Bead of Force","Bead of Nourishment","Belt of Dwarvenkind","Belt of Giant Strength","Berserker Axe","Boots of Elvenkind","Boots of Levitation","Boots of Speed","Boots of Striding and Springing"]
+  },{
+    "file": "raw-items/magic-item-sheet-2-candidate-001.png",
+    "callId": "exec-4a927d1e-2cac-4b42-85f1-48d6c70caffb.png",
+    "sheet": "Magic item sheet 2/8 (5×5 grid, 25 cells)",
+    "cells": ["Boots of the Winterlands","Bowl of Commanding Water Elementals","Bracers of Archery","Bracers of Defense","Brazier of Commanding Fire Elementals","Brooch of Shielding","Broom of Flying","Candle of Invocation","Cape of the Mountebank","Carpet of Flying","Censer of Controlling Air Elementals","Chime of Opening","Circlet of Blasting","Cloak of Arachnida","Cloak of Displacement","Cloak of Elvenkind","Cloak of Protection","Cloak of the Bat","Cloak of the Manta Ray","Crystal Ball","Crystal Ball of Mind Reading","Crystal Ball of Telepathy","Crystal Ball of True Seeing","Cube of Force","Dagger of Venom"]
+  },{
+    "file": "raw-items/magic-item-sheet-3-candidate-001.png",
+    "callId": "exec-0cbfc69d-dd9e-43fb-a47e-c689a41bb264.png",
+    "sheet": "Magic item sheet 3/8 (5×5 grid, 25 cells)",
+    "cells": ["Dancing Sword","Decanter of Endless Water","Deck of Illusions","Defender","Demon Armor","Dimensional Shackles","Dragon Scale Mail","Dragon Slayer","Dust of Disappearance","Dust of Dryness","Dust of Sneezing and Choking","Dwarven Plate","Efficient Quiver","Efreeti Bottle","Elemental Gem","health","Elven Chain","Energy Bow","Eversmoking Bottle","Eyes of Charming","Eyes of Minute Seeing","Eyes of the Eagle","Feather Token","Folding Boat","Gauntlets of Ogre Power"]
+  },{
+    "file": "raw-items/magic-item-sheet-4-candidate-001.png",
+    "callId": "exec-8471854d-99c8-4439-83ef-5d4f6f901c60.png",
+    "sheet": "Magic item sheet 4/8 (5×5 grid, 25 cells)",
+    "cells": ["Giant Slayer","Glamoured Studded Leather","Gloves of Missile Snaring","Gloves of Swimming and Climbing","Gloves of Thievery","Goggles of Night","Handy Haversack","Hat of Disguise","Hat of Many Spells","Headband of Intellect","Helm of Comprehending Languages","Helm of Telepathy","Horn of Blasting","Horn of Valhalla","Horseshoes of a Zephyr","Horseshoes of Speed","Immovable Rod","Instant Fortress","Ioun Stone","Iron Bands","Iron Flask","Javelin of Lightning","Lantern of Revealing","Luck Blade","Mace of Smiting"]
+  },{
+    "file": "raw-items/magic-item-sheet-5-candidate-001.png",
+    "callId": "exec-76334d30-1479-4515-bf4d-9f8d9bbf9959.png",
+    "sheet": "Magic item sheet 5/8 (5×5 grid, 25 cells)",
+    "cells": ["Mantle of Spell Resistance","Manual of Bodily Health","Manual of Gainful Exercise","Manual of Golems","Manual of Quickness of Action","Marvelous Pigments","Mirror of Life Trapping","Mithral Armor","Mysterious Deck","Necklace of Adaptation","Necklace of Fireballs","Necklace of Prayer Beads","Nine Lives Stealer","etherealness","sharpness","slipperiness","Pearl of Power","Periapt of Health","Periapt of Proof against Poison","Periapt of Wound Closure","love","Pipes of Haunting","Pipes of the Sewers","Plate Armor of Etherealness","Portable Hole"]
+  },{
+    "file": "raw-items/magic-item-sheet-6-candidate-001.png",
+    "callId": "exec-6120a097-e45c-4a2f-95d5-0a380943580b.png",
+    "sheet": "Magic item sheet 6/8 (5×5 grid, 25 cells)",
+    "cells": ["animal friendship","clairvoyance","climbing","diminution","flying","gaseous form","giant strength","growth","heroism","invisibility","invulnerability","longevity","mind reading","resistance","speed","vitality","water breathing","Quarterstaff of the Acrobat","Ring of Djinni Summoning","Ring of Feather Falling","Ring of Free Action","Ring of Invisibility","Ring of Jumping","Ring of Mind Shielding","Ring of Protection"]
+  },{
+    "file": "raw-items/magic-item-sheet-7-candidate-001.png",
+    "callId": "exec-276605b3-9f2f-4b3e-b8f2-b8f339f434c1.png",
+    "sheet": "Magic item sheet 7/8 (5×5 grid, 25 cells)",
+    "cells": ["Ring of Regeneration","Ring of Resistance","Ring of Spell Storing","Ring of Spell Turning","Ring of Swimming","Ring of Telekinesis","Ring of Three Wishes","Ring of Warmth","Ring of Water Walking","Ring of X-ray Vision","Robe of Eyes","Robe of Stars","Robe of the Archmagi","Robe of Useful Items","Rod of Absorption","Rod of Alertness","Rod of Rulership","Rod of Security","Rope of Climbing","Rope of Entanglement","Scimitar of Speed","Sending Stones","Sentinel Shield","Shield of Missile Attraction","Shield of the Cavalier"]
+  },{
+    "file": "raw-items/magic-item-sheet-8-candidate-001.png",
+    "callId": "exec-5c81158a-9527-47db-a5de-72093e6eadb5.png",
+    "sheet": "Magic item sheet 8/8 (5×5 grid, 25 cells)",
+    "cells": ["Shield, +1, +2, or +3","Slippers of Spider Climbing","Sovereign Glue","Spell Scroll","Spellguard Shield","Sphere of Annihilation","Staff of the Python","Stone of Controlling Earth Elementals","Stone of Good Luck (Luckstone)","Sword of Life Stealing","Sword of Sharpness","Talisman of the Sphere","Tome of Clear Thought","Tome of Leadership and Influence","Tome of Understanding","Universal Solvent","Vicious Weapon","Vorpal Sword","Wand of the War Mage, +1, +2, or +3","Weapon of Warning","Weapon, +1, +2, or +3","Well of Many Worlds","Wind Fan","Winged Boots","Wings of Flying"]
+  },{
+    "file": "raw-items/mundane-item-sheet-4-candidate-001.png",
+    "callId": "exec-ac5f8036-7c35-4957-8588-9cf069f54415",
+    "sheet": "Mundane item sheet 4/7 (5×5 grid, 25 cells)",
+    "cells": ["Heavy Crossbow", "Herbalism Kit", "Hide Armor", "Holy Symbol", "Holy Water", "Hunting Trap", "Incense", "Ink", "Ink Pen", "Javelin", "Jeweler’s Tools", "Jug", "Ladder", "Lamp", "Lance", "Lantern, Bullseye", "Lantern, Hooded", "Leather Armor", "Leatherworker’s Tools", "Light Crossbow", "Light Hammer", "Lock", "Longbow", "Longsword", "Mace"]
+  }
+]

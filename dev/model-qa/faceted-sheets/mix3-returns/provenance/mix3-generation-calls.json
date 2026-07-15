@@ -1,0 +1,283 @@
+[
+  {
+    "file": "mix3-returns/raw-figures/spr-fantasy-arcanaloth-candidate-001.png",
+    "callId": "R7-01-candidate-001",
+    "cells": [
+      "spr-fantasy-arcanaloth",
+      "spr-fantasy-cambion"
+    ]
+  },
+  {
+    "file": "mix3-returns/raw-figures/spr-fantasy-couatl-candidate-001.png",
+    "callId": "R7-03-candidate-001",
+    "cells": [
+      "spr-fantasy-couatl",
+      "spr-fantasy-dretch"
+    ]
+  },
+  {
+    "file": "mix3-returns/raw-figures/spr-fantasy-incubus-candidate-001.png",
+    "callId": "R7-07-candidate-001",
+    "cells": [
+      "spr-fantasy-incubus",
+      "spr-fantasy-larva",
+      "spr-fantasy-lemure",
+      "spr-fantasy-manes"
+    ]
+  },
+  {
+    "file": "mix3-returns/raw-figures/spr-fantasy-manes-vaporspawn-candidate-001.png",
+    "callId": "R7-08-candidate-001",
+    "cells": [
+      "spr-fantasy-manes-vaporspawn",
+      "spr-fantasy-mezzoloth"
+    ]
+  },
+  {
+    "file": "mix3-returns/raw-figures/spr-fantasy-nightmare-candidate-001.png",
+    "callId": "R7-11-candidate-001",
+    "cells": [
+      "spr-fantasy-nightmare",
+      "spr-fantasy-nycaloth"
+    ]
+  },
+  {
+    "file": "mix3-returns/raw-figures/spr-fantasy-oni-candidate-001.png",
+    "callId": "R7-12-candidate-001",
+    "cells": [
+      "spr-fantasy-oni",
+      "spr-fantasy-pegasus"
+    ]
+  },
+  {
+    "file": "mix3-returns/raw-figures/spr-fantasy-pit-fiend-candidate-001.png",
+    "callId": "R7-13-candidate-001",
+    "cells": [
+      "spr-fantasy-pit-fiend",
+      "spr-fantasy-planetar"
+    ]
+  },
+  {
+    "file": "mix3-returns/raw-figures/spr-fantasy-rakshasa-candidate-001.png",
+    "callId": "R7-14-candidate-001",
+    "cells": [
+      "spr-fantasy-rakshasa",
+      "spr-fantasy-succubus",
+      "spr-fantasy-ultroloth"
+    ]
+  },
+  {
+    "file": "mix3-returns/raw-figures/spr-fantasy-unicorn-candidate-001.png",
+    "callId": "R7-15-candidate-001",
+    "cells": [
+      "spr-fantasy-unicorn",
+      "spr-fantasy-vrock"
+    ]
+  },
+  {
+    "file": "mix3-returns/raw-figures/spr-fantasy-yochlol-candidate-001.png",
+    "callId": "R7-16-candidate-001",
+    "cells": [
+      "spr-fantasy-yochlol"
+    ]
+  },
+  {
+    "file": "mix3-returns/raw-figures/spr-fantasy-blob-of-annihilation-candidate-001.png",
+    "callId": "ST-02-candidate-001",
+    "cells": [
+      "spr-fantasy-blob-of-annihilation",
+      "spr-fantasy-sphinx-of-wonder"
+    ]
+  },
+  {
+    "file": "mix3-returns/raw-figures/spr-fantasy-troglodyte-candidate-001.png",
+    "callId": "ST-03-candidate-001",
+    "cells": [
+      "spr-fantasy-troglodyte",
+      "spr-fantasy-vampire-spawn"
+    ]
+  },
+  {
+    "file": "mix3-returns/raw-figures/spr-fantasy-yuan-ti-infiltrator-candidate-001.png",
+    "callId": "ST-04-candidate-001",
+    "cells": [
+      "spr-fantasy-yuan-ti-infiltrator"
+    ]
+  },
+  {
+    "file": "mix3-returns/raw-figures/spr-fantasy-adult-blue-dragon-candidate-001.png",
+    "callId": "RQ-15-candidate-001",
+    "cells": [
+      "spr-fantasy-adult-blue-dragon"
+    ]
+  },
+  {
+    "file": "mix3-returns/raw-figures/spr-fantasy-adult-bronze-dragon-candidate-001.png",
+    "callId": "RQ-16-candidate-001",
+    "cells": [
+      "spr-fantasy-adult-bronze-dragon"
+    ]
+  },
+  {
+    "file": "mix3-returns/raw-figures/spr-fantasy-adult-copper-dragon-candidate-001.png",
+    "callId": "RQ-17-candidate-001",
+    "cells": [
+      "spr-fantasy-adult-copper-dragon"
+    ]
+  },
+  {
+    "file": "mix3-returns/raw-figures/spr-fantasy-adult-gold-dragon-candidate-001.png",
+    "callId": "RQ-18-candidate-001",
+    "cells": [
+      "spr-fantasy-adult-gold-dragon"
+    ]
+  },
+  {
+    "file": "mix3-returns/raw-figures/spr-fantasy-adult-green-dragon-candidate-001.png",
+    "callId": "RQ-19-candidate-001",
+    "cells": [
+      "spr-fantasy-adult-green-dragon"
+    ]
+  },
+  {
+    "file": "mix3-returns/raw-figures/spr-fantasy-adult-silver-dragon-candidate-001.png",
+    "callId": "RQ-20-candidate-001",
+    "cells": [
+      "spr-fantasy-adult-silver-dragon"
+    ]
+  },
+  {
+    "file": "mix3-returns/raw-figures/spr-fantasy-adult-white-dragon-candidate-001.png",
+    "callId": "RQ-21-candidate-001",
+    "cells": [
+      "spr-fantasy-adult-white-dragon"
+    ]
+  },
+  {
+    "file": "mix3-returns/raw-figures/spr-fantasy-ancient-black-dragon-candidate-001.png",
+    "callId": "RQ-22-candidate-001",
+    "cells": [
+      "spr-fantasy-ancient-black-dragon"
+    ]
+  },
+  {
+    "file": "mix3-returns/raw-figures/spr-fantasy-ancient-blue-dragon-candidate-001.png",
+    "callId": "RQ-23-candidate-001",
+    "cells": [
+      "spr-fantasy-ancient-blue-dragon"
+    ]
+  },
+  {
+    "file": "mix3-returns/raw-figures/spr-fantasy-ancient-green-dragon-candidate-001.png",
+    "callId": "RQ-24-candidate-001",
+    "cells": [
+      "spr-fantasy-ancient-green-dragon"
+    ]
+  },
+  {
+    "file": "mix3-returns/raw-figures/spr-fantasy-ancient-white-dragon-candidate-001.png",
+    "callId": "RQ-25-candidate-001",
+    "cells": [
+      "spr-fantasy-ancient-white-dragon"
+    ]
+  },
+  {
+    "file": "mix3-returns/raw-figures/spr-fantasy-brass-dragon-wyrmling-bronze-dragon-wyrmling-candidate-001.png",
+    "callId": "RQ-26-candidate-001",
+    "cells": [
+      "spr-fantasy-brass-dragon-wyrmling-bronze-dragon-wyrmling",
+      "spr-fantasy-copper-dragon-wyrmling-gold-dragon-wyrmling"
+    ]
+  },
+  {
+    "file": "mix3-returns/raw-figures/spr-fantasy-dragon-turtle-candidate-001.png",
+    "callId": "RQ-27-candidate-001",
+    "cells": [
+      "spr-fantasy-dragon-turtle"
+    ]
+  },
+  {
+    "file": "mix3-returns/raw-figures/spr-fantasy-half-dragon-candidate-001.png",
+    "callId": "RQ-28-candidate-001",
+    "cells": [
+      "spr-fantasy-half-dragon"
+    ]
+  },
+  {
+    "file": "mix3-returns/raw-figures/spr-fantasy-ridden-wyvern-candidate-001.png",
+    "callId": "RQ-29-candidate-001",
+    "cells": [
+      "spr-fantasy-ridden-wyvern",
+      "spr-fantasy-wyvern"
+    ]
+  },
+  {
+    "file": "mix3-returns/raw-figures/spr-fantasy-young-black-dragon-candidate-001.png",
+    "callId": "RQ-30-candidate-001",
+    "cells": [
+      "spr-fantasy-young-black-dragon",
+      "spr-fantasy-bone-naga-candidate-001.png",
+      "spr-fantasy-crawling-claw-candidate-001.png",
+      "spr-fantasy-death-knight-spr-fantasy-death-knight-aspirant-candidate-001.png",
+      "spr-fantasy-graveyard-revenant-spr-fantasy-haunting-revenant-candidate-001.png",
+      "spr-fantasy-mummy-spr-fantasy-mummy-lord-candidate-001.png",
+      "spr-fantasy-poltergeist-spr-fantasy-swamp-shadow-candidate-001.png",
+      "spr-fantasy-shadow-spr-fantasy-greater-shadow-candidate-001.png",
+      "spr-fantasy-wight-spr-fantasy-wight-lord-candidate-001.png"
+    ]
+  },
+  {
+    "file": "mix3-returns/raw-figures/spr-fantasy-bone-naga-candidate-001.png",
+    "callId": "RQ-31-candidate-001",
+    "cells": [
+      "spr-fantasy-bone-naga"
+    ]
+  },
+  {
+    "file": "mix3-returns/raw-figures/spr-fantasy-crawling-claw-candidate-001.png",
+    "callId": "RQ-32-candidate-001",
+    "cells": [
+      "spr-fantasy-crawling-claw",
+      "spr-fantasy-death-knight",
+      "spr-fantasy-death-knight-aspirant",
+      "spr-fantasy-graveyard-revenant"
+    ]
+  },
+  {
+    "file": "mix3-returns/raw-figures/spr-fantasy-greater-shadow-candidate-001.png",
+    "callId": "RQ-33-candidate-001",
+    "cells": [
+      "spr-fantasy-greater-shadow",
+      "spr-fantasy-haunting-revenant",
+      "spr-fantasy-mummy",
+      "spr-fantasy-mummy-lord"
+    ]
+  },
+  {
+    "file": "mix3-returns/raw-figures/spr-fantasy-poltergeist-candidate-001.png",
+    "callId": "RQ-34-candidate-001",
+    "cells": [
+      "spr-fantasy-poltergeist",
+      "spr-fantasy-shadow",
+      "spr-fantasy-swamp-shadow",
+      "spr-fantasy-wight"
+    ]
+  },
+  {
+    "file": "mix3-returns/raw-figures/spr-fantasy-wight-lord-candidate-001.png",
+    "callId": "RQ-35-candidate-001",
+    "cells": [
+      "spr-fantasy-wight-lord",
+      "spr-fantasy-blue-dragon-candidate-001.png",
+      "spr-fantasy-brass-dragon-candidate-001.png",
+      "spr-fantasy-hill-giant-candidate-001.png"
+    ]
+  },
+  {
+    "file": "mix3-returns/raw-figures/spr-fantasy-blob-of-annihilation-candidate-002.png",
+    "callId": "RQ-38-candidate-002",
+    "cells": [
+      "spr-fantasy-blob-of-annihilation"
+    ]
+  }
+]

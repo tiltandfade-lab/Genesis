@@ -1,0 +1,127 @@
+[
+  {
+    "file": "raw-decals/shared-blood-decal-c-candidate-001.png",
+    "callId": "exec-570e510f-f1cb-4c58-b6a4-29f657ef1670",
+    "assetId": "shared-blood-decal-c"
+  },
+  {
+    "file": "raw-decals/shared-water-decal-c-candidate-001.png",
+    "callId": "exec-f0fdd481-f778-4da5-9963-db0901f20e79",
+    "assetId": "shared-water-decal-c"
+  },
+  {
+    "file": "raw-decals/shared-grime-decal-c-candidate-001.png",
+    "callId": "exec-8dc7ff73-8f5c-47f9-9563-b749be9a9469",
+    "assetId": "shared-grime-decal-c"
+  },
+  {
+    "file": "raw-decals/shared-wear-decal-c-candidate-001.png",
+    "callId": "exec-5ed9afe7-af6a-4e4e-b5dd-0e099a9dd3ac",
+    "assetId": "shared-wear-decal-c"
+  },
+  {
+    "file": "raw-decals/shared-scorch-decal-c-candidate-001.png",
+    "callId": "exec-15f8b6b7-9a2a-474c-ba7f-08d8d5dd2fec",
+    "assetId": "shared-scorch-decal-c"
+  },
+  {
+    "file": "raw-decals/shared-crack-decal-c-candidate-001.png",
+    "callId": "exec-367ed5c2-5a6e-4278-962b-fe719e3b23c0",
+    "assetId": "shared-crack-decal-c"
+  },
+  {
+    "file": "raw-decals/shared-rust-decal-c-candidate-001.png",
+    "callId": "exec-7d214733-04b1-45bc-bb97-d759235b0bae",
+    "assetId": "shared-rust-decal-c"
+  },
+  {
+    "file": "raw-decals/shared-moss-decal-c-candidate-001.png",
+    "callId": "exec-3a88e368-17fe-41d8-98e6-4d508bba7868",
+    "assetId": "shared-moss-decal-c"
+  },
+  {
+    "file": "raw-decals/shared-cobweb-decal-c-candidate-001.png",
+    "callId": "exec-121d17c2-d552-4315-af19-11e0611793aa",
+    "assetId": "shared-cobweb-decal-c"
+  },
+  {
+    "file": "raw-decals/cond-wood-splinter-light-candidate-001.png",
+    "callId": "exec-4cb55dd2-9664-4f18-9715-0586d587652b",
+    "assetId": "cond-wood-splinter-light"
+  },
+  {
+    "file": "raw-decals/cond-wood-splinter-heavy-candidate-001.png",
+    "callId": "exec-6e4138ea-d302-4a94-be14-6686ab450b1a",
+    "assetId": "cond-wood-splinter-heavy"
+  },
+  {
+    "file": "raw-decals/cond-stone-chip-light-candidate-001.png",
+    "callId": "exec-0503e241-5576-49f1-ace8-a80befd0acde",
+    "assetId": "cond-stone-chip-light"
+  },
+  {
+    "file": "raw-decals/cond-stone-chip-heavy-candidate-001.png",
+    "callId": "exec-8b381f9c-0747-49e4-b3b9-5c74e63a31ca",
+    "assetId": "cond-stone-chip-heavy"
+  },
+  {
+    "file": "raw-decals/cond-metal-dent-light-candidate-001.png",
+    "callId": "exec-d8682e82-a279-4550-8b80-695533e1817d",
+    "assetId": "cond-metal-dent-light"
+  },
+  {
+    "file": "raw-decals/cond-metal-dent-heavy-candidate-001.png",
+    "callId": "exec-38d0b284-58e8-4d35-9770-c1b8198d128e",
+    "assetId": "cond-metal-dent-heavy"
+  },
+  {
+    "file": "raw-decals/trace-claw-gouges-candidate-001.png",
+    "callId": "exec-f34a50a0-b875-440e-9e0c-70045e839bf1",
+    "assetId": "trace-claw-gouges"
+  },
+  {
+    "file": "raw-decals/trace-drag-marks-candidate-001.png",
+    "callId": "exec-c0df9652-f31b-415e-b3cc-3867c3621169",
+    "assetId": "trace-drag-marks"
+  },
+  {
+    "file": "raw-decals/trace-muddy-prints-candidate-001.png",
+    "callId": "exec-fa63fd62-800e-4f0d-912f-a7ebaa03f90c",
+    "assetId": "trace-muddy-prints"
+  },
+  {
+    "file": "raw-decals/trace-soot-handprint-candidate-001.png",
+    "callId": "exec-9a367a2f-21fc-42de-ad02-d88b5bf125a1",
+    "assetId": "trace-soot-handprint"
+  },
+  {
+    "file": "raw-decals/mark-ritual-chalk-candidate-001.png",
+    "callId": "exec-d59fc79f-a516-4c06-be3d-7c792d676ea8",
+    "assetId": "mark-ritual-chalk"
+  },
+  {
+    "file": "raw-decals/mark-rune-scrawl-candidate-001.png",
+    "callId": "exec-a715602f-b546-49a6-b134-5c1e702b8cb6",
+    "assetId": "mark-rune-scrawl"
+  },
+  {
+    "file": "raw-decals/mark-faction-sigil-candidate-001.png",
+    "callId": "exec-ba64f44a-b2c0-44ab-a204-4ca13fbc1896",
+    "assetId": "mark-faction-sigil"
+  },
+  {
+    "file": "raw-decals/mark-tally-scratches-candidate-001.png",
+    "callId": "exec-f05fc60d-b80a-4b18-bf30-c665b162cb42",
+    "assetId": "mark-tally-scratches"
+  },
+  {
+    "file": "raw-decals/mark-wax-drips-candidate-001.png",
+    "callId": "exec-9f8dcee6-857f-49bb-bcbd-4adbf394113a",
+    "assetId": "mark-wax-drips"
+  },
+  {
+    "file": "raw-decals/mark-whitewash-patch-candidate-001.png",
+    "callId": "exec-40798502-0752-4944-a760-3e922939addb",
+    "assetId": "mark-whitewash-patch"
+  }
+]

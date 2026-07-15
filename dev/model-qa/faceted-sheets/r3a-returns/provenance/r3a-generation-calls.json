@@ -1,0 +1,195 @@
+[
+  {
+    "file": "raw-figures/spr-fantasy-air-elemental-candidate-001.png",
+    "callId": "dfccd86c-12de-45d8-9f00-b7516fe80360",
+    "cells": [
+      "spr-fantasy-air-elemental"
+    ]
+  },
+  {
+    "file": "raw-figures/spr-fantasy-animated-armor-candidate-001.png",
+    "callId": "602786de-fe04-4e33-8a1a-7281a00b47df",
+    "cells": [
+      "spr-fantasy-animated-armor",
+      "spr-fantasy-animated-flying-sword"
+    ]
+  },
+  {
+    "file": "raw-figures/spr-fantasy-animated-rug-of-smothering-candidate-001.png",
+    "callId": "587b74c7-378e-4bb9-8380-8b60d4cfd7b9",
+    "cells": [
+      "spr-fantasy-animated-rug-of-smothering"
+    ]
+  },
+  {
+    "file": "raw-figures/spr-fantasy-barbed-devil-candidate-001.png",
+    "callId": "3b6b0775-f269-49da-81c0-570076021fed",
+    "cells": [
+      "spr-fantasy-barbed-devil",
+      "spr-fantasy-bearded-devil"
+    ]
+  },
+  {
+    "file": "raw-figures/spr-fantasy-bone-devil-candidate-001.png",
+    "callId": "2bf8d776-fe02-4e8e-ae52-3951d836b81e",
+    "cells": [
+      "spr-fantasy-bone-devil"
+    ]
+  },
+  {
+    "file": "raw-figures/spr-fantasy-bugbear-stalker-candidate-001.png",
+    "callId": "3202c1db-bf2b-4932-990d-2f43764e4660",
+    "cells": [
+      "spr-fantasy-bugbear-stalker",
+      "spr-fantasy-bugbear-stalker-strangler",
+      "spr-fantasy-bugbear-warrior"
+    ]
+  },
+  {
+    "file": "raw-figures/spr-fantasy-centaur-trooper-candidate-001.png",
+    "callId": "790ec6a1-f409-4864-9395-28d9c62f351f",
+    "cells": [
+      "spr-fantasy-centaur-trooper",
+      "spr-fantasy-centaur-warden"
+    ]
+  },
+  {
+    "file": "raw-figures/spr-fantasy-chain-devil-candidate-001.png",
+    "callId": "03a85569-1d9e-4059-994a-1b633c30ebcb",
+    "cells": [
+      "spr-fantasy-chain-devil"
+    ]
+  },
+  {
+    "file": "raw-figures/spr-fantasy-clay-golem-candidate-001.png",
+    "callId": "836968bd-27f1-4491-9fdd-c3130ca71c11",
+    "cells": [
+      "spr-fantasy-clay-golem",
+      "spr-fantasy-cloaker"
+    ]
+  },
+  {
+    "file": "raw-figures/spr-fantasy-clockwork-law-construct-duodrone-candidate-001.png",
+    "callId": "b0cfbf77-17df-4562-84cc-2b4147b5a46e",
+    "cells": [
+      "spr-fantasy-clockwork-law-construct-duodrone",
+      "spr-fantasy-clockwork-law-construct-monodrone",
+      "spr-fantasy-clockwork-law-construct-tridrone"
+    ]
+  },
+  {
+    "file": "raw-figures/spr-fantasy-cyclops-oracle-candidate-001.png",
+    "callId": "8ef1a1c1-6bef-48a2-9b3f-2f919198e530",
+    "cells": [
+      "spr-fantasy-cyclops-oracle"
+    ]
+  },
+  {
+    "file": "raw-figures/spr-fantasy-cyclops-sentry-candidate-001.png",
+    "callId": "12803a8c-aa3a-4610-9929-f548e28e30fc",
+    "cells": [
+      "spr-fantasy-cyclops-sentry"
+    ]
+  },
+  {
+    "file": "raw-figures/spr-fantasy-doppelganger-candidate-001.png",
+    "callId": "9c7d9daa-9e89-4470-bdac-b01167baee92",
+    "cells": [
+      "spr-fantasy-doppelganger",
+      "spr-fantasy-dust-mephit"
+    ]
+  },
+  {
+    "file": "raw-figures/spr-fantasy-earth-elemental-candidate-001.png",
+    "callId": "5f94832b-ba65-4106-b9fc-6bd5c3b1561b",
+    "cells": [
+      "spr-fantasy-earth-elemental",
+      "spr-fantasy-fire-elemental"
+    ]
+  },
+  {
+    "file": "raw-figures/spr-fantasy-flameskull-candidate-001.png",
+    "callId": "958b1590-52d6-4b6d-86b0-de29a914034d",
+    "cells": [
+      "spr-fantasy-flameskull"
+    ]
+  },
+  {
+    "file": "raw-figures/spr-fantasy-flesh-golem-candidate-001.png",
+    "callId": "34df1a25-00c2-4fa6-90d9-bf88ff33f664",
+    "cells": [
+      "spr-fantasy-flesh-golem",
+      "spr-fantasy-gelatinous-cube"
+    ]
+  },
+  {
+    "file": "raw-figures/spr-fantasy-giant-ape-candidate-001.png",
+    "callId": "551f114d-5ebf-425b-99e3-8628481683d7",
+    "cells": [
+      "spr-fantasy-giant-ape",
+      "spr-fantasy-giant-axe-beak",
+      "spr-fantasy-giant-badger",
+      "spr-fantasy-giant-bat"
+    ]
+  },
+  {
+    "file": "raw-figures/spr-fantasy-giant-boar-candidate-001.png",
+    "callId": "56ba0b4e-d8a3-4f54-bfa6-f91889ab8def",
+    "cells": [
+      "spr-fantasy-giant-boar",
+      "spr-fantasy-giant-centipede",
+      "spr-fantasy-giant-constrictor-snake",
+      "spr-fantasy-giant-crab"
+    ]
+  },
+  {
+    "file": "raw-figures/spr-fantasy-giant-crocodile-candidate-001.png",
+    "callId": "e8886c93-7634-47d8-abb9-1d4de26e7a17",
+    "cells": [
+      "spr-fantasy-giant-crocodile",
+      "spr-fantasy-giant-eagle",
+      "spr-fantasy-giant-elk",
+      "spr-fantasy-giant-fire-beetle"
+    ]
+  },
+  {
+    "file": "raw-figures/spr-fantasy-giant-frog-candidate-001.png",
+    "callId": "ed4d5c9d-aa0d-4d72-80e0-457f5060a656",
+    "cells": [
+      "spr-fantasy-giant-frog",
+      "spr-fantasy-giant-goat",
+      "spr-fantasy-giant-hyena",
+      "spr-fantasy-giant-lizard"
+    ]
+  },
+  {
+    "file": "raw-figures/spr-fantasy-giant-octopus-candidate-001.png",
+    "callId": "8366c5bd-884b-43e8-82fd-686c384f024a",
+    "cells": [
+      "spr-fantasy-giant-octopus",
+      "spr-fantasy-giant-owl",
+      "spr-fantasy-giant-rat",
+      "spr-fantasy-giant-scorpion"
+    ]
+  },
+  {
+    "file": "raw-figures/spr-fantasy-giant-seahorse-candidate-001.png",
+    "callId": "f2553b3f-856a-44ce-9925-493881cd144d",
+    "cells": [
+      "spr-fantasy-giant-seahorse",
+      "spr-fantasy-giant-shark",
+      "spr-fantasy-giant-spider",
+      "spr-fantasy-giant-squid"
+    ]
+  },
+  {
+    "file": "raw-figures/spr-fantasy-giant-toad-candidate-001.png",
+    "callId": "90dd7016-ca33-43cc-ad74-68281a66c946",
+    "cells": [
+      "spr-fantasy-giant-toad",
+      "spr-fantasy-giant-vulture",
+      "spr-fantasy-giant-wasp",
+      "spr-fantasy-giant-weasel"
+    ]
+  }
+]

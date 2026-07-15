@@ -1,0 +1,9 @@
+{
+  "runtimeAdmitted": false,
+  "sheets": [
+    {"file":"spr-fantasy-blue-chaos-frog-candidate-001.png","callId":"exec-80da7442-c4ae-4464-97b6-0051354672ab","cells":["spr-fantasy-blue-chaos-frog"]},
+    {"file":"spr-fantasy-green-chaos-frog-candidate-001.png","callId":"exec-96fd6083-7527-43c1-8c72-634643f7d618","cells":["spr-fantasy-green-chaos-frog"]},
+    {"file":"spr-fantasy-red-chaos-frog-candidate-001.png","callId":"exec-50d34e6d-449f-4303-91f4-8359f244315a","cells":["spr-fantasy-red-chaos-frog"]},
+    {"file":"spr-fantasy-gray-chaos-frog__spr-fantasy-death-chaos-frog-candidate-001.png","callId":"exec-e239957b-70bb-4503-9c59-426d7a475b49","cells":["spr-fantasy-gray-chaos-frog","spr-fantasy-death-chaos-frog"]}
+  ]
+}

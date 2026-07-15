@@ -1,0 +1,296 @@
+[
+  {
+    "file": "rqb-returns/raw-figures/spr-fantasy-blue-dragon-candidate-001.png",
+    "callId": "019f6301-365b-7a43-a33c-95b1b90a36a7",
+    "cells": [
+      "spr-fantasy-blue-dragon",
+      "spr-fantasy-brass-dragon"
+    ]
+  },
+  {
+    "file": "rqb-returns/raw-figures/spr-fantasy-hill-giant-candidate-001.png",
+    "callId": "019f6301-365b-7a43-a33c-95b1b90a36a7",
+    "cells": [
+      "spr-fantasy-hill-giant"
+    ]
+  },
+  {
+    "file": "rqb-returns/raw-figures/spr-fantasy-blob-of-annihilation-candidate-001.png",
+    "callId": "019f6301-365b-7a43-a33c-95b1b90a36a7",
+    "cells": [
+      "spr-fantasy-blob-of-annihilation"
+    ]
+  },
+  {
+    "file": "rqb-returns/raw-figures/spr-fantasy-deep-brute-candidate-001.png",
+    "callId": "019f6301-365b-7a43-a33c-95b1b90a36a7",
+    "cells": [
+      "spr-fantasy-deep-brute",
+      "spr-fantasy-deep-brute-thonot"
+    ]
+  },
+  {
+    "file": "rqb-returns/raw-figures/spr-fantasy-elder-deep-thing-candidate-001.png",
+    "callId": "019f6301-365b-7a43-a33c-95b1b90a36a7",
+    "cells": [
+      "spr-fantasy-elder-deep-thing"
+    ]
+  },
+  {
+    "file": "rqb-returns/raw-figures/spr-fantasy-grell-candidate-001.png",
+    "callId": "019f6301-365b-7a43-a33c-95b1b90a36a7",
+    "cells": [
+      "spr-fantasy-grell"
+    ]
+  },
+  {
+    "file": "rqb-returns/raw-figures/spr-fantasy-hook-horror-candidate-001.png",
+    "callId": "019f6301-365b-7a43-a33c-95b1b90a36a7",
+    "cells": [
+      "spr-fantasy-hook-horror"
+    ]
+  },
+  {
+    "file": "rqb-returns/raw-figures/spr-fantasy-mind-thief-candidate-001.png",
+    "callId": "019f6301-365b-7a43-a33c-95b1b90a36a7",
+    "cells": [
+      "spr-fantasy-mind-thief",
+      "spr-fantasy-mind-thief-arcanist",
+      "spr-fantasy-piercer"
+    ]
+  },
+  {
+    "file": "rqb-returns/raw-figures/spr-fantasy-roper-candidate-001.png",
+    "callId": "019f6301-365b-7a43-a33c-95b1b90a36a7",
+    "cells": [
+      "spr-fantasy-roper"
+    ]
+  },
+  {
+    "file": "rqb-returns/raw-figures/spr-fantasy-secret-eye-candidate-001.png",
+    "callId": "019f6301-365b-7a43-a33c-95b1b90a36a7",
+    "cells": [
+      "spr-fantasy-secret-eye"
+    ]
+  },
+  {
+    "file": "rqb-returns/raw-figures/spr-fantasy-umber-hulk-candidate-001.png",
+    "callId": "019f6301-365b-7a43-a33c-95b1b90a36a7",
+    "cells": [
+      "spr-fantasy-umber-hulk"
+    ]
+  },
+  {
+    "file": "rqb-returns/raw-figures/spr-fantasy-void-monk-monk-candidate-001.png",
+    "callId": "019f6301-365b-7a43-a33c-95b1b90a36a7",
+    "cells": [
+      "spr-fantasy-void-monk-monk",
+      "spr-fantasy-void-monk-psion",
+      "spr-fantasy-void-monk-zerth"
+    ]
+  },
+  {
+    "file": "rqb-returns/raw-figures/spr-fantasy-bat-raven-owl-hawk-candidate-001.png",
+    "callId": "019f6301-365b-7a43-a33c-95b1b90a36a7",
+    "cells": [
+      "spr-fantasy-bat-raven-owl-hawk",
+      "spr-fantasy-blood-hawk-eagle",
+      "spr-fantasy-panther-hyena",
+      "spr-fantasy-venomous-snake-flying-snake"
+    ]
+  },
+  {
+    "file": "rqb-returns/raw-figures/spr-fantasy-arch-hag-candidate-001.png",
+    "callId": "019f6301-365b-7a43-a33c-95b1b90a36a7",
+    "cells": [
+      "spr-fantasy-arch-hag"
+    ]
+  },
+  {
+    "file": "rqb-returns/raw-figures/spr-fantasy-awakened-shrub-candidate-001.png",
+    "callId": "019f6301-365b-7a43-a33c-95b1b90a36a7",
+    "cells": [
+      "spr-fantasy-awakened-shrub",
+      "spr-fantasy-bandit-enforcer",
+      "spr-fantasy-homunculus"
+    ]
+  },
+  {
+    "file": "rqb-returns/raw-figures/spr-fantasy-myconid-sovereign-candidate-001.png",
+    "callId": "019f6301-365b-7a43-a33c-95b1b90a36a7",
+    "cells": [
+      "spr-fantasy-myconid-sovereign"
+    ]
+  },
+  {
+    "file": "rqb-returns/raw-figures/spr-fantasy-myconid-sprout-candidate-001.png",
+    "callId": "019f6301-365b-7a43-a33c-95b1b90a36a7",
+    "cells": [
+      "spr-fantasy-myconid-sprout",
+      "spr-fantasy-pixie",
+      "spr-fantasy-pixie-wonderbringer",
+      "spr-fantasy-sprite"
+    ]
+  },
+  {
+    "file": "rqb-returns/raw-figures/spr-fantasy-the-twig-blight-candidate-001.png",
+    "callId": "019f6301-365b-7a43-a33c-95b1b90a36a7",
+    "cells": [
+      "spr-fantasy-the-twig-blight"
+    ]
+  },
+  {
+    "file": "rqb-returns/raw-figures/spr-fantasy-violet-fungus-necrohulk-candidate-001.png",
+    "callId": "019f6301-365b-7a43-a33c-95b1b90a36a7",
+    "cells": [
+      "spr-fantasy-violet-fungus-necrohulk"
+    ]
+  },
+  {
+    "file": "rqb-returns/raw-figures/spr-fantasy-archmage-candidate-001.png",
+    "callId": "019f6301-365b-7a43-a33c-95b1b90a36a7",
+    "cells": [
+      "spr-fantasy-archmage",
+      "spr-fantasy-commoner",
+      "spr-fantasy-lantern-sage",
+      "spr-fantasy-mage"
+    ]
+  },
+  {
+    "file": "rqb-returns/raw-figures/spr-fantasy-noble-candidate-001.png",
+    "callId": "019f6301-365b-7a43-a33c-95b1b90a36a7",
+    "cells": [
+      "spr-fantasy-noble",
+      "spr-fantasy-priest-acolyte",
+      "spr-fantasy-werebear",
+      "spr-fantasy-wereboar"
+    ]
+  },
+  {
+    "file": "rqb-returns/raw-figures/spr-fantasy-builder-dragonborn-land-worker-dragonborn-candidate-001.png",
+    "callId": "019f6301-365b-7a43-a33c-95b1b90a36a7",
+    "cells": [
+      "spr-fantasy-builder-dragonborn-land-worker-dragonborn",
+      "spr-fantasy-dragonborn-ship-s-purser-temple-acolyte",
+      "spr-fantasy-elven-herbalist-elf-sells-cures-and-quietly-a-few-curses-hauler-elf",
+      "spr-fantasy-gnomish-alchemist-clockmaker-tinkerer-delver"
+    ]
+  },
+  {
+    "file": "rqb-returns/raw-figures/spr-fantasy-host-goliath-pampered-elite-goliath-candidate-001.png",
+    "callId": "019f6301-365b-7a43-a33c-95b1b90a36a7",
+    "cells": [
+      "spr-fantasy-host-goliath-pampered-elite-goliath",
+      "spr-fantasy-tiefling-fortune-teller-rival"
+    ]
+  },
+  {
+    "file": "rqb-returns/raw-figures/spr-fantasy-domestic-animal-goat-goose-peacock-turkey-candidate-001.png",
+    "callId": "019f6301-365b-7a43-a33c-95b1b90a36a7",
+    "cells": [
+      "spr-fantasy-domestic-animal-goat-goose-peacock-turkey",
+      "spr-fantasy-dungeon-animal-canary-cave-rat-salamander-cricket",
+      "spr-fantasy-wild-animal-a-lynx-kitten-peregrine-falcon-red-fox-kit-watcher-hawk",
+      "spr-fantasy-wild-animal-black-bear-mountain-goat"
+    ]
+  },
+  {
+    "file": "rqb-returns/raw-figures/spr-pc-dragonborn-barbarian-candidate-001.png",
+    "callId": "019f6301-365b-7a43-a33c-95b1b90a36a7",
+    "cells": [
+      "spr-pc-dragonborn-barbarian",
+      "spr-pc-dragonborn-bard",
+      "spr-pc-dragonborn-druid",
+      "spr-pc-dragonborn-paladin"
+    ]
+  },
+  {
+    "file": "rqb-returns/raw-figures/spr-pc-dragonborn-rogue-candidate-001.png",
+    "callId": "019f6301-365b-7a43-a33c-95b1b90a36a7",
+    "cells": [
+      "spr-pc-dragonborn-rogue",
+      "spr-pc-dragonborn-sorcerer",
+      "spr-pc-dragonborn-wizard",
+      "spr-pc-dwarf-barbarian"
+    ]
+  },
+  {
+    "file": "rqb-returns/raw-figures/spr-pc-dwarf-fighter-candidate-001.png",
+    "callId": "019f6301-365b-7a43-a33c-95b1b90a36a7",
+    "cells": [
+      "spr-pc-dwarf-fighter",
+      "spr-pc-goliath-ranger",
+      "spr-pc-goliath-wizard",
+      "spr-pc-halfling-barbarian"
+    ]
+  },
+  {
+    "file": "rqb-returns/raw-figures/spr-pc-halfling-bard-candidate-001.png",
+    "callId": "019f6301-365b-7a43-a33c-95b1b90a36a7",
+    "cells": [
+      "spr-pc-halfling-bard",
+      "spr-pc-halfling-cleric",
+      "spr-pc-halfling-druid",
+      "spr-pc-halfling-fighter"
+    ]
+  },
+  {
+    "file": "rqb-returns/raw-figures/spr-pc-halfling-monk-candidate-001.png",
+    "callId": "019f6301-365b-7a43-a33c-95b1b90a36a7",
+    "cells": [
+      "spr-pc-halfling-monk",
+      "spr-pc-halfling-paladin",
+      "spr-pc-halfling-ranger",
+      "spr-pc-halfling-rogue"
+    ]
+  },
+  {
+    "file": "rqb-returns/raw-figures/spr-pc-halfling-sorcerer-candidate-001.png",
+    "callId": "019f6301-365b-7a43-a33c-95b1b90a36a7",
+    "cells": [
+      "spr-pc-halfling-sorcerer",
+      "spr-pc-halfling-warlock",
+      "spr-pc-halfling-wizard",
+      "spr-pc-orc-cleric"
+    ]
+  },
+  {
+    "file": "rqb-returns/raw-figures/spr-pc-orc-monk-candidate-001.png",
+    "callId": "019f6301-365b-7a43-a33c-95b1b90a36a7",
+    "cells": [
+      "spr-pc-orc-monk",
+      "spr-pc-orc-paladin",
+      "spr-pc-orc-ranger",
+      "spr-pc-orc-rogue"
+    ]
+  },
+  {
+    "file": "rqb-returns/raw-figures/spr-pc-orc-warlock-candidate-001.png",
+    "callId": "019f6301-365b-7a43-a33c-95b1b90a36a7",
+    "cells": [
+      "spr-pc-orc-warlock",
+      "spr-pc-orc-wizard",
+      "spr-pc-tiefling-barbarian",
+      "spr-pc-tiefling-bard"
+    ]
+  },
+  {
+    "file": "rqb-returns/raw-figures/spr-pc-tiefling-fighter-candidate-001.png",
+    "callId": "019f6301-365b-7a43-a33c-95b1b90a36a7",
+    "cells": [
+      "spr-pc-tiefling-fighter",
+      "spr-pc-tiefling-monk",
+      "spr-pc-tiefling-paladin",
+      "spr-pc-tiefling-ranger"
+    ]
+  },
+  {
+    "file": "rqb-returns/raw-figures/spr-pc-tiefling-rogue-candidate-001.png",
+    "callId": "019f6301-365b-7a43-a33c-95b1b90a36a7",
+    "cells": [
+      "spr-pc-tiefling-rogue",
+      "spr-pc-tiefling-warlock",
+      "spr-pc-tiefling-wizard"
+    ]
+  }
+]

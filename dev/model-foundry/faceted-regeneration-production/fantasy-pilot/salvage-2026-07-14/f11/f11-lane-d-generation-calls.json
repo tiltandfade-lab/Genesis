@@ -1,0 +1,10 @@
+{
+  "runtimeAdmitted": false,
+  "packet": "F11",
+  "lane": "F11-D",
+  "outputs": [
+    {"file":"raw-figures/spr-fantasy-jackalwere-spr-fantasy-wererat-candidate-001.png","callId":"exec-765c2db5-7bd2-4297-9dda-0673e67a2c01","cells":["spr-fantasy-jackalwere","spr-fantasy-wererat"]},
+    {"file":"raw-figures/spr-fantasy-wereboar-spr-fantasy-werebear-candidate-001.png","callId":"exec-174b883c-2e38-4fca-be83-e04eace05470","cells":["spr-fantasy-wereboar","spr-fantasy-werebear"]},
+    {"file":"raw-figures/spr-fantasy-weretiger-candidate-001.png","callId":"exec-d9970b55-fe90-462d-8e1e-a7f6e9fde4f5","cells":["spr-fantasy-weretiger"]}
+  ]
+}

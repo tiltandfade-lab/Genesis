@@ -43,6 +43,22 @@ tuning (one table each) · the AgX/exposure interplay → Stage E.
    (bot fights; transition camera; shop capture; a record-less settlement node for the town read).
 4. Everything below is prior history.
 
+## Latest (2026-07-14) — Faceted sprite generation COMPLETE for fantasy; swap track next [Claude Code]
+
+Every fantasy-realm asset class has faceted candidates banked on `codex/faceted-f1-consolidation`:
+figures 891/901 (last 10 in `dev/model-qa/faceted-sheets/session-prompts/gapfill-final.md`),
+effects, 43 decals, props/dressing (kit contract enforced), icons, the 375-item universe, and the
+floor/wall tileset. Art direction is now un-losable: `docs/ART-DIRECTION-CANON.md` on master,
+mandated by CLAUDE.md + AGENTS.md, with the decision-capture rule. 510-file QA ledger at
+`dev/model-qa/faceted-sheets/qa-ledger.json`; crop rejects quarantined; all raw returns keep-all
+for Adam's sprite-review height pass.
+
+**Do next (pick up here):** 1) fire gapfill-final.md (one Codex window, 6 sheets); 2) build the
+Step-E source-reject + chroma/slice pass over all banked candidates (§9 production sequence);
+3) §9 admission → Adam reviews heights via `python3 dev/sprite-review.py` (5179); 4) registry
+regen + engine swap of the 896 pixel sprites; 5) then the parked decisions (procedural-vs-textured
+floors, K1 kit QA, other realms).
+
 ## Latest (2026-07-14, evening) — STAGE D + AgX LIVE + doors + PLAY-LENS: the ledger now orders the waves [Claude Opus 4.8, orchestrated]
 
 The evening block (CHANGELOG 2026-07-14 later, master `67566b6a`, pushed): **Stage D STATEFUL NOUNS

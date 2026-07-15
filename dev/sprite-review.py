@@ -5,15 +5,23 @@ Serves dev/sprite-review.html plus a tiny JSON API that acts DIRECTLY on the rep
 no copy-paste round-trips:
 
   GET  /                → the review UI
-  GET  /sprites/<slug>.png → the cut sprite from assets/sprites/
+  GET  /sprites/<slug>.png → the cut (legacy v3) sprite from assets/sprites/
+  GET  /sprites-faceted/<slug>.png → the faceted-wave candidate cut from assets/sprites-faceted/
+                          (VQ2-RESPEC.md S6) — same slug namespace, both routes 403 on any
+                          attempt to escape their root directory and 404 on an unknown/uncut slug.
   GET  /api/data        → { registry, overlay } — SPRITE_REGISTRY (parsed out of
                           data/sprite-registry.js via a node one-liner) deep-merged view,
-                          plus the raw overlay
+                          plus the raw overlay. Registry entries already carry candidateAsset/
+                          legacyAsset/artStyleVersion/qaStatus/worldHeight/heightSource (S3/B1).
   POST /api/overlay     → body {"slug": "...", "set": {...}, "clear": ["key", ...]}
                           merges into dev/model-qa/sprite-tags-overlay.json (atomic write).
                           Recognized keys: scale (number, per-slug billboard height multiplier
                           — the heads-line-up calibration), verdict ("pass"|"fail"), note,
-                          tags (list), redlined (bool). An entry emptied of every key is removed.
+                          tags (list), redlined (bool), floor (ground-contact fraction), feet
+                          (number, 0.1-100 — Adam's expected-height override; VQ2-RESPEC.md S6,
+                          folds into worldHeight/heightSource:"overlay" at regen, top source in
+                          the ladder ahead of measured/band-default). An entry emptied of every
+                          key is removed.
   POST /api/regen       → runs build/gen-sprite-registry.py so the overlay folds into
                           data/sprite-registry.js (what the theater actually reads).
 
@@ -35,6 +43,8 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 REGISTRY_JS = os.path.join(ROOT, "data", "sprite-registry.js")
 OVERLAY = os.path.join(ROOT, "dev", "model-qa", "sprite-tags-overlay.json")
 SPRITES_DIR = os.path.join(ROOT, "assets", "sprites")
+# VQ2-RESPEC.md S6 — the faceted-wave candidate cuts (S2's build/cut-faceted.py output).
+SPRITES_FACETED_DIR = os.path.join(ROOT, "assets", "sprites-faceted")
 UI_HTML = os.path.join(ROOT, "dev", "sprite-review.html")
 PORT = 5179
 
@@ -76,7 +86,7 @@ def save_overlay(data):
             os.remove(tmp)
 
 
-ALLOWED_KEYS = {"scale", "verdict", "note", "tags", "redlined", "reusable", "floor"}
+ALLOWED_KEYS = {"scale", "verdict", "note", "tags", "redlined", "reusable", "floor", "feet"}
 
 
 def apply_patch(slug, set_keys, clear_keys):
@@ -105,6 +115,16 @@ def apply_patch(slug, set_keys, clear_keys):
                 entry.pop("floor", None)
                 continue
             v = round(v, 4)
+        if k == "feet":
+            # Adam's expected-height override (VQ2-RESPEC.md S6) — the TOP source in
+            # build/gen-sprite-registry.py's worldHeight ladder (overlay > measured > SRD
+            # band-default > loud null). Sane range only; no "sparse" no-op value here (unlike
+            # scale/floor) since there's no default height to elide against — clear it via the
+            # "clear" list instead.
+            v = float(v)
+            if not (0.1 <= v <= 100):
+                raise ValueError(f"feet out of range (0.1..100): {v}")
+            v = round(v, 3)
         if k == "verdict" and v not in ("pass", "fail"):
             raise ValueError(f"verdict must be pass|fail, got {v!r}")
         if k == "tags" and not (isinstance(v, list) and all(isinstance(t, str) for t in v)):
@@ -133,25 +153,45 @@ class Handler(BaseHTTPRequestHandler):
         self.wfile.write(payload)
 
     def log_message(self, fmt, *args):  # keep the console readable
-        if "/sprites/" not in (args[0] if args else ""):
+        if "/sprites/" not in (args[0] if args else "") and "/sprites-faceted/" not in (args[0] if args else ""):
             sys.stderr.write("[review] " + (fmt % args) + "\n")
+
+    def _serve_sprite(self, prefix, dir_root):
+        """Serve <dir_root>/<slug>.png for a route mounted at `prefix` (e.g. "/sprites/").
+        Belt-and-suspenders traversal guard: decode the raw suffix BEFORE any filesystem join
+        so an encoded "..", "/" or "\\" is caught as a 403 explicitly, then re-confirm the
+        resolved path never leaves dir_root (403 too) before falling back to slug-shape/
+        existence 404s. SLUG_RE alone already blocks this (a traversal payload never matches
+        ^spr-[a-z0-9-]+$), but VQ2-RESPEC.md S6 asks for the 403 explicitly, not a 404."""
+        from urllib.parse import unquote
+        raw = unquote(self.path[len(prefix):])
+        if "/" in raw or "\\" in raw or ".." in raw:
+            self._send(403, {"error": "forbidden"})
+            return
+        name = raw
+        if not (name.endswith(".png") and SLUG_RE.match(name[:-4])):
+            self._send(404, {"error": "bad sprite path"})
+            return
+        root_real = os.path.realpath(dir_root)
+        p = os.path.realpath(os.path.join(dir_root, name))
+        if not (p == root_real or p.startswith(root_real + os.sep)):
+            self._send(403, {"error": "forbidden"})
+            return
+        if not os.path.exists(p):
+            self._send(404, {"error": "no such sprite"})
+            return
+        with open(p, "rb") as f:
+            self._send(200, f.read(), "image/png")
 
     def do_GET(self):
         try:
             if self.path in ("/", "/index.html"):
                 with open(UI_HTML, "rb") as f:
                     self._send(200, f.read(), "text/html; charset=utf-8")
+            elif self.path.startswith("/sprites-faceted/"):
+                self._serve_sprite("/sprites-faceted/", SPRITES_FACETED_DIR)
             elif self.path.startswith("/sprites/"):
-                name = os.path.basename(self.path)
-                if not (name.endswith(".png") and SLUG_RE.match(name[:-4])):
-                    self._send(404, {"error": "bad sprite path"})
-                    return
-                p = os.path.join(SPRITES_DIR, name)
-                if not os.path.exists(p):
-                    self._send(404, {"error": "no such sprite"})
-                    return
-                with open(p, "rb") as f:
-                    self._send(200, f.read(), "image/png")
+                self._serve_sprite("/sprites/", SPRITES_DIR)
             elif self.path == "/api/data":
                 self._send(200, {"registry": parse_registry(), "overlay": load_overlay()})
             elif self.path == "/rejects":

@@ -236,11 +236,15 @@ def standee_contract_for(overlay_entry, cut_record):
     }
 
 
-def world_height_for(feet, size):
-    """worldHeight + heightSource, in source-priority order: (1) measured — an existing `feet`
-    value (corpus-sizing/v3-sizing joins, folded above for cut entries); (2) band-default — the
-    SRD size-band midpoint ladder, keyed off the bestiary-joined `size`; (3) missing — neither
-    resolves, so worldHeight stays null rather than a silent guess."""
+def world_height_for(overlay_feet, feet, size):
+    """worldHeight + heightSource, in source-priority order: (1) overlay — VQ2-RESPEC.md S6's
+    Adam-editable `feet` value (dev/sprite-review.py's overlay, the TOP source — his editor
+    ruling always wins); (2) measured — an existing `feet` value (corpus-sizing/v3-sizing joins,
+    folded above for cut entries); (3) band-default — the SRD size-band midpoint ladder, keyed
+    off the bestiary-joined `size`; (4) missing — none resolves, so worldHeight stays null rather
+    than a silent guess."""
+    if isinstance(overlay_feet, (int, float)):
+        return float(overlay_feet), "overlay"
     if isinstance(feet, (int, float)):
         return feet, "measured"
     band = SIZE_BAND_DEFAULT_FEET.get((size or "").strip().lower())
@@ -266,7 +270,7 @@ def auto_tags(realm, kind, role, ctype, size):
     return tags
 
 
-def fold_in_orphans(entries, faceted_cut_slugs, bestiary_by_realm, corpus_sizing, v3_by_sheet_cell):
+def fold_in_orphans(entries, faceted_cut_slugs, bestiary_by_realm, corpus_sizing, v3_by_sheet_cell, overlay):
     """VQ2-RESPEC.md S4 Part B — the 60 orphan fold-ins (S3's honest documented deviation:
     write_inventory_report's own docstring called this "NOT invented as new SPRITE_REGISTRY
     entries; that would grow the registry beyond its join source, out of scope for THAT unit").
@@ -338,7 +342,14 @@ def fold_in_orphans(entries, faceted_cut_slugs, bestiary_by_realm, corpus_sizing
         contract = standee_contract_for({}, cut_record)
         entry.update(contract)
 
-        world_height, height_source = world_height_for(entry.get("feet"), size)
+        # S4↔S6 merge reconcile: fold_in_orphans predates the S6 3-arg ladder — orphans are
+        # exactly the entries whose heights Adam most needs to set in the editor (most are
+        # heightSource:"missing"), so the overlay is the TOP source here too, same validation
+        # window as the manifest-cell path.
+        _ov_feet = overlay.get(slug, {}).get("feet")
+        if not (isinstance(_ov_feet, (int, float)) and 0.1 <= _ov_feet <= 100):
+            _ov_feet = None
+        world_height, height_source = world_height_for(_ov_feet, entry.get("feet"), size)
         entry["worldHeight"] = world_height
         entry["heightSource"] = height_source
 
@@ -455,8 +466,9 @@ HEADER = (
     "VQ2-RESPEC.md S3 / PHASE-3-WAVE-2-SPECS.md B1: every entry additionally carries the standee "
     "contract (footX, footY, contentBounds, alphaCutoff, shadowProfile) and faceted-migration art "
     "admission (legacyAsset, candidateAsset, artStyleVersion, qaStatus, runtimeAdmitted). "
-    "worldHeight/heightSource are authoritative (measured feet -> SRD size-band default -> loud "
-    "null, never a silent guess); runtimeAdmitted defaults to \"legacy\" for every entry in this "
+    "worldHeight/heightSource are authoritative (VQ2-RESPEC.md S6: overlay feet [Adam's "
+    "sprite-review.py height edit] -> measured feet -> SRD size-band default -> loud null, "
+    "never a silent guess); runtimeAdmitted defaults to \"legacy\" for every entry in this "
     "unit (the candidate/legacy flip is a later unit, not this one) so render stays byte-identical. "
     "VQ2-RESPEC.md S4 Part B: entries whose slug has a faceted-cut-report file but no v2-manifest "
     "cell join (the 60 orphan fold-ins) are appended directly from that report — sheet:"
@@ -478,7 +490,7 @@ def build_registry(manifest_path, check_only=False, overlay_path=OVERLAY, out_pa
     corpus_sizing, v3_by_sheet_cell = load_sizing_sources()
     faceted_cut_slugs = load_faceted_cut_report()
     sizing_joined = 0
-    height_sources = {"measured": 0, "band-default": 0, "missing": 0}
+    height_sources = {"overlay": 0, "measured": 0, "band-default": 0, "missing": 0}
     candidate_count = 0
 
     entries = OrderedDict()
@@ -593,8 +605,16 @@ def build_registry(manifest_path, check_only=False, overlay_path=OVERLAY, out_pa
             contract = standee_contract_for(ov, cut_record)
             entry.update(contract)
 
+            # S6 — Adam's editor-set height override (dev/sprite-review.py ALLOWED_KEYS
+            # "feet"), re-validated here at the contract boundary (same defensive-range
+            # pattern as the scale/floor overlay reads above) so a hand-edited overlay file
+            # can never inject an out-of-band worldHeight. TOP source in the ladder.
+            overlay_feet = ov.get("feet")
+            if not (isinstance(overlay_feet, (int, float)) and 0.1 <= overlay_feet <= 100):
+                overlay_feet = None
+
             # S3 / B1 — worldHeight/heightSource (authoritative; runtime never infers size).
-            world_height, height_source = world_height_for(entry.get("feet"), size)
+            world_height, height_source = world_height_for(overlay_feet, entry.get("feet"), size)
             entry["worldHeight"] = world_height
             entry["heightSource"] = height_source
             height_sources[height_source] += 1
@@ -622,7 +642,7 @@ def build_registry(manifest_path, check_only=False, overlay_path=OVERLAY, out_pa
 
     # S4 Part B — orphan fold-in. Runs AFTER the manifest-cell loop above so it only ever adds
     # slugs that loop didn't already join (fold_in_orphans' own "already a real join" skip).
-    orphans_added = fold_in_orphans(entries, faceted_cut_slugs, bestiary_by_realm, corpus_sizing, v3_by_sheet_cell)
+    orphans_added = fold_in_orphans(entries, faceted_cut_slugs, bestiary_by_realm, corpus_sizing, v3_by_sheet_cell, overlay)
     for _slug, _e in orphans_added:
         height_sources[_e["heightSource"]] = height_sources.get(_e["heightSource"], 0) + 1
         candidate_count += 1
@@ -706,7 +726,7 @@ def write_inventory_report(entries, faceted_cut_slugs):
     report being written and this run — still surfaced, never silently dropped). GENERATED —
     never hand-edit; this is the artifact Adam red-pens in the sprite editor
     (dev/sprite-review.py), not an editable source."""
-    summary = {"measured": 0, "band-default": 0, "missing": 0}
+    summary = {"overlay": 0, "measured": 0, "band-default": 0, "missing": 0}
     slugs_out = OrderedDict()
     unjoined = []
     for slug in sorted(faceted_cut_slugs.keys()):

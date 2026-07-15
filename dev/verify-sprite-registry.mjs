@@ -158,7 +158,7 @@ function standeeFieldsValid(registry) {
       typeof e.footY === "number" &&
       (e.worldHeight === null || typeof e.worldHeight === "number") &&
       typeof e.heightSource === "string" &&
-      ["measured", "band-default", "missing"].includes(e.heightSource) &&
+      ["overlay", "measured", "band-default", "missing"].includes(e.heightSource) &&
       (e.contentBounds === null || Array.isArray(e.contentBounds)) &&
       typeof e.alphaCutoff === "number" &&
       typeof e.shadowProfile === "string" &&
@@ -172,29 +172,29 @@ function standeeFieldsValid(registry) {
   return { ok: bad.length === 0, bad, total: entries.length };
 }
 
-console.log("\n=== RED-FIRST: standee-contract field assertion must bite on the pre-S3 baseline ===");
+console.log("\n=== RED-FIRST: standee-contract field assertion must bite on a stripped clone ===");
 {
-  // The pre-S3 baseline used to be `git merge-base HEAD master` — but S3 (19bf6ad2, merged to
-  // master as 8708ba7b) has now landed ON master itself, so that merge-base no longer predates
-  // S3 for any branch cut afterward (S4 among them): master's own tip already carries every
-  // standee-contract field, which made this RED-FIRST silently stop proving anything (bad=0/N)
-  // rather than failing loudly on a real gap — exactly the "validator stopped doing its job"
-  // shape CLAUDE.md's own discipline warns about. Fixed to a HARDCODED pre-S3 SHA instead: S2's
-  // own merge commit (ea402a6c, "S2: 252 faceted figures cut..."), the true parent of S3's single
-  // feature commit (19bf6ad2^) — a real ancestor that predates footX/footY/.../runtimeAdmitted
-  // and, being history, never drifts forward the way a merge-base target can. Fixed 2026-07-15
-  // (VQ2-RESPEC.md S4) — a legitimate fixture update to a stale RED-FIRST assumption, not a
-  // relaxed gate (the assertion function itself, standeeFieldsValid, is untouched).
-  const baseSha = "ea402a6c";
-  const baselineSrc = execFileSync("git", ["show", `${baseSha}:data/sprite-registry.js`],
-    { cwd: ROOT, maxBuffer: 1024 * 1024 * 32 }).toString();
-  const win = boot("data/sprite-registry.js", baselineSrc);
-  const baselineRegistry = win.__spriteRegistry();
-  const result = standeeFieldsValid(baselineRegistry);
+  // Synthetic pre-S3-shape clone: strip every S3/B1 field from a copy of the REAL registry.
+  // (Was a `git merge-base HEAD master` lookup — that stopped proving anything the moment S3
+  // permanently landed on master: merge-base(HEAD, master) from any fresh branch off current
+  // master now just IS master, whose data/sprite-registry.js already carries every S3 field, so
+  // the "pre-S3 baseline" it fetched was never actually pre-S3. Stripping in-memory is also more
+  // robust going forward — it doesn't depend on git history shape at all. VQ2-RESPEC.md S6 fix,
+  // orthogonal to this unit's own feature work but required to keep this harness honestly green.)
+  const STANDEE_FIELDS = ["footX", "footY", "worldHeight", "heightSource", "contentBounds",
+    "alphaCutoff", "shadowProfile", "legacyAsset", "candidateAsset", "artStyleVersion",
+    "qaStatus", "runtimeAdmitted"];
+  const strippedRegistry = {};
+  for (const [slug, e] of Object.entries(registry)) {
+    const clone = { ...e };
+    for (const f of STANDEE_FIELDS) delete clone[f];
+    strippedRegistry[slug] = clone;
+  }
+  const result = standeeFieldsValid(strippedRegistry);
   const bites = result.ok === false && result.bad.length === result.total;
   console.log(bites
-    ? `  ✓ RED-FIRST proven: checker correctly FAILED on the pre-S3 baseline (${result.bad.length}/${result.total} entries missing the new fields)`
-    : `  ✗ RED-FIRST FAILED TO PROVE ANYTHING: checker did not catch the pre-S3 baseline (bad=${result.bad.length}/${result.total})`);
+    ? `  ✓ RED-FIRST proven: checker correctly FAILED on a stripped pre-S3-shape clone (${result.bad.length}/${result.total} entries missing the new fields)`
+    : `  ✗ RED-FIRST FAILED TO PROVE ANYTHING: checker did not catch the stripped clone (bad=${result.bad.length}/${result.total})`);
   if (!bites) { fail++; } else { pass++; }
 }
 
@@ -215,12 +215,18 @@ console.log("\n=== S3/B1 standee contract + faceted admission (real generated re
   console.log(`     (${candidates.length} entries carry a candidateAsset, all file-verified)`);
 }
 
-// ---- S3 / B1 — worldHeight never a silent guess ----
-// Mirrors build/gen-sprite-registry.py's world_height_for() priority exactly: measured feet ->
-// SRD size-band default -> loud null. Checks the SOURCE data (feet/size), not just internal
-// self-consistency, so a fabricated worldHeight on an entry with neither actually gets caught.
+// ---- S3 / B1 (+ S6) — worldHeight never a silent guess ----
+// Mirrors build/gen-sprite-registry.py's world_height_for() priority exactly: overlay feet ->
+// measured feet -> SRD size-band default -> loud null. Checks the SOURCE data (overlay/feet/
+// size), not just internal self-consistency, so a fabricated worldHeight on an entry with none
+// of those actually gets caught. overlayFeet is undefined for every call in this file except
+// the dedicated S6 section below (registry entries don't carry the raw overlay value, only the
+// derived worldHeight/heightSource — the overlay file itself is the source of truth for that).
 const SIZE_BAND_DEFAULT_FEET = { tiny: 1.5, small: 3, medium: 5.5, large: 9, huge: 15, gargantuan: 25 };
-function worldHeightHonest(feet, size, worldHeight, heightSource) {
+function worldHeightHonest(overlayFeet, feet, size, worldHeight, heightSource) {
+  if (typeof overlayFeet === "number") {
+    return heightSource === "overlay" && worldHeight === overlayFeet;
+  }
   if (typeof feet === "number") {
     return heightSource === "measured" && worldHeight === feet;
   }
@@ -233,9 +239,9 @@ function worldHeightHonest(feet, size, worldHeight, heightSource) {
 
 console.log("\n=== RED-FIRST: worldHeight-honesty assertion must bite on a silently-guessed clone ===");
 {
-  // No feet, no resolvable size (the exact fixture-slug shape below) — but a fabricated
-  // worldHeight, the silent guess this law forbids.
-  const bites = worldHeightHonest(undefined, null, 5.5, "band-default") === false;
+  // No overlay, no feet, no resolvable size (the exact fixture-slug shape below) — but a
+  // fabricated worldHeight, the silent guess this law forbids.
+  const bites = worldHeightHonest(undefined, undefined, null, 5.5, "band-default") === false;
   console.log(bites
     ? "  ✓ RED-FIRST proven: checker correctly FAILED on a silently-guessed worldHeight"
     : "  ✗ RED-FIRST FAILED TO PROVE ANYTHING: checker did not catch the silent guess");
@@ -265,10 +271,87 @@ console.log("\n=== worldHeight/heightSource honest on the no-feet/no-size fixtur
   check("8b. no-feet/no-size fixture slug yields heightSource:\"missing\"",
     entry && entry.heightSource === "missing", `got heightSource=${JSON.stringify(entry && entry.heightSource)}`);
   check("8c. worldHeightHonest() holds for the real fixture entry",
-    entry && worldHeightHonest(entry.feet, entry.size, entry.worldHeight, entry.heightSource),
+    entry && worldHeightHonest(undefined, entry.feet, entry.size, entry.worldHeight, entry.heightSource),
     `entry=${JSON.stringify(entry)}`);
 
   try { unlinkSync(outPath); } catch {}
+}
+
+// ---- S6 — dev/sprite-review.py's editable `feet` overlay key (VQ2-RESPEC.md S6) ----
+console.log("\n=== RED-FIRST: pre-S6 baseline sprite-review.py must reject overlay key \"feet\" ===");
+{
+  // The pre-S6 baseline is the branch point against master (git merge-base) — its ALLOWED_KEYS
+  // has no "feet" entry. If apply_patch() there doesn't reject it, the RED-FIRST proof (and the
+  // GREEN check below) aren't actually proving anything.
+  const baseSha = execFileSync("git", ["merge-base", "HEAD", "master"], { cwd: ROOT }).toString().trim();
+  const baselineSrc = execFileSync("git", ["show", `${baseSha}:dev/sprite-review.py`],
+    { cwd: ROOT, maxBuffer: 1024 * 1024 * 8 }).toString();
+  const scratch = mkdtempSync(join(tmpdir(), "genesis-sprite-feet-"));
+  const baselinePath = join(scratch, "sprite-review-baseline.py");
+  writeFileSync(baselinePath, baselineSrc);
+
+  const redScript = [
+    "import importlib.util",
+    `spec = importlib.util.spec_from_file_location("baseline_sr", ${JSON.stringify(baselinePath)})`,
+    "mod = importlib.util.module_from_spec(spec)",
+    "spec.loader.exec_module(mod)",
+    "try:",
+    '    mod.apply_patch("spr-ash-rustfall-ghoul", {"feet": 6.0}, None)',
+    '    print("ACCEPTED")',
+    "except ValueError as e:",
+    '    print("REJECTED:" + str(e))',
+  ].join("\n");
+  const redOut = execFileSync("python3", ["-c", redScript], { cwd: ROOT }).toString().trim();
+  const redBites = redOut.startsWith("REJECTED") && redOut.toLowerCase().includes("feet");
+  console.log(redBites
+    ? `  ✓ RED-FIRST proven: baseline sprite-review.py rejects overlay key "feet" (${redOut})`
+    : `  ✗ RED-FIRST FAILED TO PROVE ANYTHING: baseline did not reject "feet" (${redOut})`);
+  if (!redBites) { fail++; } else { pass++; }
+
+  console.log("\n=== overlay `feet` round-trip -> regen -> worldHeight/heightSource:\"overlay\" ===");
+  const overlayPath = join(scratch, "overlay.json");
+  const targetSlug = "spr-ash-rustfall-ghoul"; // real (non-fixture) registry slug, band-default pre-overlay
+
+  const greenScript = [
+    "import importlib.util, json",
+    `spec = importlib.util.spec_from_file_location("sr", ${JSON.stringify(join(ROOT, "dev", "sprite-review.py"))})`,
+    "mod = importlib.util.module_from_spec(spec)",
+    "spec.loader.exec_module(mod)",
+    `mod.OVERLAY = ${JSON.stringify(overlayPath)}`,
+    `entry = mod.apply_patch(${JSON.stringify(targetSlug)}, {"feet": 6.25}, None)`,
+    'assert entry["feet"] == 6.25, entry',
+    "range_rejected = False",
+    "try:",
+    `    mod.apply_patch(${JSON.stringify(targetSlug)}, {"feet": 150}, None)`,
+    "except ValueError:",
+    "    range_rejected = True",
+    `with open(${JSON.stringify(overlayPath)}) as f:`,
+    "    data = json.load(f)",
+    `assert data[${JSON.stringify(targetSlug)}]["feet"] == 6.25, data  # unchanged by the rejected patch`,
+    'print("RANGE_REJECTED:" + ("true" if range_rejected else "false"))',
+    'print("OK")',
+  ].join("\n");
+  const greenOut = execFileSync("python3", ["-c", greenScript], { cwd: ROOT }).toString().trim();
+  check("9. overlay accepts in-range feet, round-trips to the overlay file, rejects out-of-range without mutating it",
+    greenOut.includes("RANGE_REJECTED:true") && greenOut.includes("OK"), greenOut);
+
+  const outPath = join(scratch, "sprite-registry.out.js");
+  execFileSync("python3", [
+    join(ROOT, "build", "gen-sprite-registry.py"),
+    "--overlay", overlayPath,
+    "--out", outPath,
+  ], { cwd: ROOT });
+  const outSrc = readFileSync(outPath, "utf-8");
+  const foldedRegistry = new Function(outSrc + "\nreturn SPRITE_REGISTRY;")();
+  const targetEntry = foldedRegistry[targetSlug];
+  check("10. overlay feet folds through regen to worldHeight == the overlay value",
+    targetEntry && targetEntry.worldHeight === 6.25, `got worldHeight=${JSON.stringify(targetEntry && targetEntry.worldHeight)}`);
+  check("10b. overlay feet folds through regen to heightSource:\"overlay\"",
+    targetEntry && targetEntry.heightSource === "overlay", `got heightSource=${JSON.stringify(targetEntry && targetEntry.heightSource)}`);
+
+  try { unlinkSync(overlayPath); } catch {}
+  try { unlinkSync(outPath); } catch {}
+  try { unlinkSync(baselinePath); } catch {}
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);

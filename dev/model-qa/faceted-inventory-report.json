@@ -5,6 +5,7 @@
   "registryJoinedCount": 252,
   "unjoinedCandidates": [],
   "summaryByHeightSource": {
+    "overlay": 0,
     "measured": 192,
     "band-default": 0,
     "missing": 60

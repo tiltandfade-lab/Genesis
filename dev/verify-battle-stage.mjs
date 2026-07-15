@@ -355,5 +355,59 @@ const check = (name, cond, detail = "") =>
     panel.indexOf("⌇ flood near:C") >= 0, panel.slice(0, 400));
 }
 
+// ============================================================================
+// 8. STAGE-MODE PANEL COLUMN (2026-07-15 — the L1 rig's shopRenderVerdict finding, DEMAND-LEDGER
+//    null row #3): with the stage STANDING (§U1), gamePanelContent panels must still render.
+//    Pre-fix, the showStage branch replaced .panel-col with the feed and every panel
+//    (shop/character/actions/map) silently vanished from the DOM in normal play — open_shop's
+//    GS.gamePanel="shop" had zero visual effect. The fix adds .panel-col.game-panel-col as its own
+//    column (stage · panel · feed); the feed + composer must SURVIVE alongside it (shopping is
+//    conversational — buy via the panel, haggle via #dmAction), and panel==="combat" stays
+//    suppressed (theaterStageHtml owns combat chrome; combatPanel() re-entry would double-call
+//    cmbDamageFlashed, a read-then-overwrite). RED-FIRST: proven against the pre-fix render.js
+//    (orchestrated run — see the unit's report; the checks below fail without the stagePanel arm).
+// ============================================================================
+{
+  const win = freshWin();
+  const world = makeWorld(win);
+  stubTheater(win);
+  win.renderWorld();               // first pass mounts; stage mode is live on the internal re-render
+  const host = win.document.getElementById("worldView");
+  check("8a. (fixture) battle-stage mode is live with no fight", !!host.querySelector(".game.battle-stage"));
+
+  // the shop: open_shop's own GS stamps (dm.js), minimal merchant fixture in world state
+  world.shops = { s1: { id: "s1", name: "Verify Goods", archetype: "general", stock: [], nodeId: world.currentNodeId } };
+  win.GS.gamePanel = "shop"; win.GS.activeShopId = "s1"; win.GS.shopTab = "buy";
+  win.renderWorld();
+  const h8 = win.document.getElementById("worldView");
+  check("8b. the shop panel renders IN STAGE MODE (.game-panel-col .shop-header exists — the rig's exact probe)",
+    !!h8.querySelector(".panel-col.game-panel-col .shop-header"));
+  check("8c. the shop name is the fixture merchant's (content really came through gamePanelContent)",
+    /Verify Goods/.test((h8.querySelector(".game-panel-col .shop-name") || {}).textContent || ""));
+  check("8d. the feed SURVIVES alongside the open panel (haggling stays possible)",
+    !!h8.querySelector(".panel-col.stage-feed-col .dm-feed"));
+  check("8e. the composer (#dmAction) survives alongside the open panel",
+    !!h8.querySelector(".stage-feed-col #dmAction"));
+  check("8f. the stage column survives alongside the open panel (one table, many arrangements)",
+    !!h8.querySelector(".chat-col.stage-col"));
+
+  // a non-shop panel takes the same column
+  win.GS.gamePanel = "character"; win.GS.activeShopId = null;
+  win.renderWorld();
+  check("8g. character panel renders in the same stage-mode column",
+    !!win.document.querySelector(".panel-col.game-panel-col"));
+
+  // combat stays suppressed — theaterStageHtml owns combat chrome in stage mode
+  const combat = startFight(win, world);
+  win.renderWorld();
+  const h8c = win.document.getElementById("worldView");
+  check("8h. (fixture) combat forced the combat panel key", win.GS.gamePanel === "combat");
+  check("8i. NO .game-panel-col renders for panel==='combat' in stage mode (no combatPanel re-entry)",
+    !h8c.querySelector(".panel-col.game-panel-col"));
+  // close out so this block leaves no dangling fight
+  combat.foes.forEach(f => { f.hp = 0; f.down = true; });
+  win.applyEvent(world, { type: "combat_end", source: "declared", payload: { outcome: "resolved" } });
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

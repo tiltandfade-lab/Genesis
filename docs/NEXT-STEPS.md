@@ -24,19 +24,20 @@ Adam's directives folded (VQ2/SOL-SOLUTIONS as suggestions-for-law · sprite fli
 faceted inventory (tags+heights, editor-tweakable) · gameplay rounds → demand-vs-null census ·
 extrusion plan · re-spec + orchestrate). Dispositions + the flip ruling in DESIGN.md 2026-07-15.
 
-1. ☐ **WAVE S — sprite flip + inventory** (S1 land faceted corpus → S2 cut pipeline →
-   S3 B1 registry + heights/tags inventory → S4 miscast-join fix → S5 THE FLIP
-   (`FACETED_FLIP_ENABLED`, v3 in reserve) → S6 editor `feet` support). Then P3-2 B2∥B3→B4
-   auto-fire (standing delegation — S3 IS the registry landing).
-2. ☐ **WAVE L — lens matrix + census** (L1 PL-1b rig + realm forcing · L2 resolution-outcome
-   census → census.json · L3 PL-4 matrix runs → dev/play-lens/DEMAND-LEDGER.md).
-3. ☐ **WAVE F — VQ2 build units, ledger-ordered:** F1 combat-in-room (P-F) · F2 staging beats
-   (P-D) · F3 Stage E + P-A gates · F4 Kenney adapter pilot (P-B) · F5 town-slice (P-C, after
-   F4+L3) · F6 odd-rolls parked.
-4. ☐ **Extrusion lane:** X1 land + reconcile EXTRUDED-SPRITE-PROP-LIBRARY (rides Wave S) ·
-   X2 compiler slice after B2.
-5. ☐ Adam's red-pen ledger: flip taste call (B3 + S5 card) · inventory band-defaults ·
-   F3/F5 look consts · P-E deferral check.
+1. ☑ **WAVE S COMPLETE (2026-07-15)** — S1–S6 all landed; **THE FLIP IS LIVE** (252 candidates,
+   v3 reserve intact, one-flag revert). B3 gallery landed same day (B2/B4 still open).
+2. ☑ **WAVE L COMPLETE (2026-07-15)** — L1 rig + L2 census + L3 PL-4 matrix landed;
+   **`dev/play-lens/DEMAND-LEDGER.md` is the fill-ordering instrument** (P0 #2 FIXED · P0 #1
+   reclassified lane-stacking · null-facade = the `frontier` REALM_TEXTURES key bug · shop panel
+   never renders under the battle stage · 21 NPC-card slugs = the art-packet list).
+3. ☐ **WAVE F — VQ2 build units, ledger-ordered:** F1 combat-in-room (P-F; should also unstack
+   the invisible rat) · F2 staging beats (P-D; owns the shop wiring gap) · F3 Stage E + P-A gates
+   (+ B3's daylit blow-out evidence) · quick-fix candidate: settlement-mint `frontier` re-key ·
+   F4 Kenney adapter pilot (P-B) · F5 town-slice (P-C, after F4) · F6 odd-rolls parked.
+4. ☑ X1 landed (extrusion spec + pilots on master) · ☐ X2 compiler slice after B2 · ☐ B2
+   physical standee (Adam's B3 taste gate first) → B4 kill size-inference.
+5. ☐ Adam's red-pen ledger: flip taste verdict (B3 sheets + sprite editor) · editor feet pass on
+   band-default/missing heights · NPC-card + facade packets (ledger row 2) · r*-v2 dirs ruling.
 
 ## Do next (2026-07-15 — AUTONOMOUS ARC LANDED: quick-fix + ENV/EXTERIOR complete, PL-3 verified)
 
@@ -227,26 +228,3 @@ L7. ☐ **Regenerate `table-registry.json/.md`** — stale after the rename/new 
 - Then mid-session verbs: ~~Wilderness Encounter port~~ **STALE — the generator IS ported** (`src/engine/wild-walk.js`, all 24 `wilderness-*` tables compiled; prep walks consume it). The real gap was the Travel verb ignoring it → **☑ SPECCED as `docs/TRAVEL-WALKS.md`** (2026-07-01 night: travel becomes the walk). Urban/Dungeon remain callable via prep walks.
 
 
-## Do next (2026-07-13, PHASE 3 DIRECTION SET — docs/PHASE-3-WAVE-PLAN.md is the queue)
-
-Fable set the Phase-3 trajectory (Adam delegated). The plan doc composes the director brief +
-research wave + art review + north star into waves; this block is just the pointer.
-
-1. ☐ **W0 singles fan out** (MF-3b hit-stop wiring · PRNG dedup · Open5e validator).
-2. ☐ **P3-1 no-spend visual wave** — Poisson scatter · depth-state audit · **diorama cutaway
-   restoration** (the C4.1b regression Adam's eyeball round caught — real, not the oss kernel;
-   the §15 hold stands) · integrated eyeball fixtures (tiered room + dressed room, legacy-vs-oss).
-3. ☐ **Adam: run PACKET-F1** (`dev/model-qa/faceted/PACKET-F1.md`) — anchors + kits first,
-   2-minute eyeball, then the 4 parallel lanes. Codex lanes banked+pushed
-   (`codex/extruded-prop-pilot`, `codex/kenney-mesh-audit` — they lived untracked in /private/tmp).
-4. ☐ Then P3-2 Stage B sprite citizenship (unified with the faceted admission schema) →
-   P3-3 (GP-4b + AgX + D0 slice) → P3-4 (atlas Phase A + instancing spike + oracle checkpoint).
-
-## Do next (2026-07-14, faceted program — post-generation)
-
-- ☑ Fantasy figure/fx/decal/prop/icon/item/tileset generation (see CHANGELOG 2026-07-14)
-- ☐ Fire `gapfill-final.md` (last 10 figure identities)
-- ☐ Step-E source rejection + chroma removal/slice over all banked candidates (plan §9 F–G)
-- ☐ §9 admission + Adam's sprite-review height pass (port 5179) → sprite-registry regen
-- ☐ Engine swap: replace 896 pixel sprites, retire 2 legacy roster sheets
-- ☐ Decisions parked: procedural-vs-textured floors (88 realm-surfaces), K1 kit-sheet QA, other realms

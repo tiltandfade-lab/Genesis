@@ -8,6 +8,49 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-07-15 (later) — THE VQ2/FLIP PASS: Sol's laws folded · THE SPRITE FLIP LIVE · the demand census + ledger [Claude Fable 5, orchestrated]
+
+Adam's directives (VQ2 as suggestions-for-law · sprite flip w/ v3 reserve · faceted inventory ·
+gameplay rounds → demand-vs-null · extrusion plan · re-spec + orchestrate) executed end-to-end.
+Re-spec = `docs/VQ2-RESPEC.md` (Sol dispositions §1 + Waves S/L/F/X); every unit executor-built in
+an isolated worktree, orchestrator-re-gated (harnesses re-run personally, captures READ), landed
+`--no-ff`, pushed per landing.
+
+**Added**
+- **WAVE S COMPLETE — THE SPRITE FLIP IS LIVE.** S1 faceted corpus landed (419 candidates, F2–F15
+  packets) · S2 `build/cut-faceted.py` (252 figures cut to `assets/sprites-faceted/`, 47 loud
+  skips; multi-cell splits via provenance `cells[]`) · S3 B1 standee contract + admission schema +
+  the tags/heights INVENTORY (`faceted-inventory-report.json`) · S4 bestiary-id map join
+  (`SPRITE_BY_BESTIARY_ID`, ledger P0 #1 class killed) + 60 orphan fold-ins (registry 4316→4376,
+  252/252 joined) · S5 THE FLIP (252 `runtimeAdmitted:"candidate"`; `FACETED_FLIP_ENABLED` =
+  one-flag revert; `assets/sprites/` v3 = untouched reserve) · S6 sprite editor serves faceted,
+  legacy-vs-candidate side-by-side, editable `feet` (overlay > measured > band-default ladder).
+- **WAVE L COMPLETE — the demand instrument exists.** L1 rig extensions (the bot FIGHTS ·
+  transition camera · shop-render verdict · record-less settlement leg · `--force-realm` ·
+  `--route`) · L2 the census (5 seams instrumented, `census.json` per run, byte-identical-render
+  proof) · L3 **PL-4: 4 realms × routes, 96 shots, 65/65 legs → `dev/play-lens/DEMAND-LEDGER.md`**.
+- **B3 standee acceptance gallery** (core-three × light × yaw + flip pairs) — the P3-2 Stage B
+  taste artifact; **X1** extrusion spec + pilot artifacts landed (EXTRUDED-SPRITE-PROP-LIBRARY +
+  proofs + 42 library GLBs).
+
+**Ledger verdicts (PL-4, evidence-graded):** P0 #2 vanishing-PC **FIXED** (9 frames, 3 realms) ·
+P0 #1 rat-miscast **NOT-REPRO/reclassified** (faceted texture resolves every time; the rat is
+lane-STACKED invisible — F1 side-effect expected) · **null-facade root cause found**: settlement
+mint always degrades to realm key `frontier` which `REALM_TEXTURES` never defines (key-routing
+bug, not just missing art) · **shop panel never renders under the battle stage** (new wiring gap;
+chip filed) · 21 NPC role-portrait slugs = the measured art-packet demand list · daylit Large-
+creature blow-out across all realms (B3) = Stage E evidence.
+
+**Changed** — DESIGN.md 2026-07-15 entry (Sol dispositions + the flip ruling); NEXT-STEPS new
+Do-next; Sol's P-A..P-F folded per §1 (P-A gates→Stage E; P-B/C/D/E/F → F-wave units; cut list
+wholesale).
+
+**Deferred** — F1 combat-in-room + F2 staging beats (specced, next session's top; now with
+sharper evidence) · B2 physical standee + B4 kill size-inference (B2 is Adam's B3-gated taste
+build) · r*-v2 return dirs (56 files) unprocessed pending ruling · 21 fantasy orphan heights =
+`missing` (Adam's editor pass) · gloom/chrome faceted tranches (all 252 candidates are
+fantasy/pc).
+
 ## 2026-07-15 — THE AUTONOMOUS ARC: quick-fix wave + ENV/EXTERIOR (daytime · sun/moon · biomes · town) + PL-3 [Claude Opus 4.8, autonomous per Adam's delegation]
 
 Adam delegated ("take your direction on the wave order, work autonomously"); the ledger ordered the
@@ -956,76 +999,4 @@ sweep green.
 **Deferred:** beautification queue (Adam curates from the wave sheets; 5 IMPROVED_WITH_DOUBT residuals
 noted in the second-pass reports); re-run the coverage audit once Adam's realm re-keys finish; the 14
 prop models + NPC humanoid set (VISUAL-ASSET-QUEUE); frontier GLB step-6 wiring.
-
-## 2026-07-09 (overnight — the accidental design session) — realms re-keyed · 6 new system specs · craft expansions
-
-Adam's table-crafting session became a full design session ("the game feels like it's getting closer
-and closer to a real unique vision"). Three background waves (14 units + REALM-HOOKS in flight), every
-unit orchestrator-gated, all of Adam's ~30 rulings folded into the specs' RESOLVED sections before merge.
-
-**Added (specs, all with build units + red-first tests):** `ANIMAL-SOCIAL` (Speak-with-Animals as a
-game lane; witness packets; care-lever parley; wilderness social web), `TIYL-WEIGHTED-STARTS`
-(class+background-weighted origins, 4×/2×/1×), `HOOK-WALKS` (engaged place-thing hooks mint
-reward-terminated walks; 8–12 segment law; dungeon-discovery + breach-in-walks + mid-walk entry
-riders), `GLOOM-KEY` (the town that made a deal — town-secret d20 w/ deal-vs-attractor split,
-feeding-schedule clocks, player-rolled d20 belief-weapons), `SHIP-TRAVEL` (Saltmarsh App. A adapted:
-mobile home node, derived crew quality, full-lethality sea), `PLACE-GEN` (24-archetype place spine ×
-11 realm skins, replaces rollPlace in place), `CAMEO-CAST` (authored named NPCs w/ rarity-gated
-mints — the ET-in-suburb tech; data-only mod seam). `SHIP-RULES-GATHER` + saltmarsh-page-index.
-
-**Changed (craft, PROVISIONAL pending Adam's row-level pass):** Child Saw d50→d100 (5 new witness
-categories); Bright-Kingdom d50→d55 (+Zelda-key doers) + Nintendo/80s register; Suburb d50→d62
-(Earthbound/BTTF doers incl. THE BIKE); CHROME re-keyed (Warriors×TMNT×RoboCop neon-slum megacity);
-COSMIC re-keyed (Egyptian/Hermetic/Enochian; tarot-engine tie-in; drowned-court retired); LOST WORLD
-re-keyed (saurian dominion, three strata, seeded Zeal layer, dino-mount seam). Tables recompiled (383).
-
-**Verification:** check-manifest OK; full NPC sweep green post-merge (coherence-fixes 19/0 · dial 51/0
-· role-realms 30/0 · partials 34/0 · regions 32/0 · presence-hooks 61/0 · prep-bundle 56/0).
-
-**Added late in the night:** `REALM-HOOKS` (hooks get the spine/skins/authored-extras treatment; 24 hook shapes; the lethality law — no consequence before a surfaced tell; 75/25 npc/realm discovery split). **Deferred:** models-lane asks (saurian castes, dino mounts,
-bat gang, ED-209-class boss, ally-mutant, Zeal sentinel); book gathers (Adam, morning); all craft
-row-level taste passes.
-
----
-
-## 2026-07-08 (night — NPC subsystem) — coherence dial · partials · realm role skins · role-realms engine
-
-Autonomous engine-wiring run (Adam out of the loop; `genesis-orchestrate` — worktree-isolated
-executors, every unit personally re-gated, never on executor self-report). Ran in parallel with the
-MODEL-FOUNDRY session on the shared master; the **parallel-sessions protocol** was adopted mid-run to
-keep the two from colliding. Craft context: `[[project-genesis-craft-pass-2]]`.
-
-**Added**
-- **Coherence dial** (`src/engine/codex-roll.js`, `docs/NPC-COHERENCE-DIAL.md`) — `rollNPC` gains a
-  coherence MODE: `pickCoherence` picks a tier off the region-temperature curve; `coherenceAtomGate`
-  suppresses identity/lever atoms to null at low tiers; `want`/`role`/`name`/`race` always fire, the
-  hook is never gated. verify-coherence-dial 51/0 (red-first proven).
-- **Partials** (`docs/NPC-PARTIALS.md`) — `rollPartial(kind)` for children/animals (coherence:
-  'archetype', no adult lever stack; kids carry a witness hook, animals a tell) + 4 tables:
-  `Child Want` (d20), `Child Saw` (d50), `Animal Kind` (d12), `Animal Tell` (d20). verify-partials 34/0.
-- **Realm role skins** (`docs/NPC-ROLE-REALMS.md`) — all 11 realms skinned over `NPC Role Spine`
-  (35 archetypes) + `build/gen-role-skins.py` → `data/npc-role-skins.js` + `roleForRealm`; `rollNPC`
-  role step is realm-aware (frontier = migration parity) + a breach-leak hybridization opt-in seam.
-  verify-role-realms 30/30 (migration-parity + drop-exclusion red-first).
-- **Parallel-sessions protocol** (`CLAUDE.md`) — worktree-per-session + ownership lanes +
-  generated-artifacts-regenerate-at-merge + serialized master merges + launcher
-  `~/Desktop/Launchers/New Genesis Worktree.command`.
-
-**Changed**
-- Data seam: `compile-tables.py --emit` → **383 tables** in `window.GENESIS_TABLES` (partials now
-  `rollTable`-reachable); regenerated `data/table-usage.js` + `data/table-atlas.js`.
-- `verify-gen` + `verify-prep-bundle` fixtures made coherence-aware (archetype NPCs carry null levers
-  by design — assert the always-on `want`). **Superseded by the queued questgiver fix** (see Deferred).
-- DM-CHARTER §9.3b: graphic death is a FEATURE (GoT register); children the sole graphic carve-out;
-  animals no exception. DESIGN.md: the subsystem's five locked decisions registered.
-
-**Deferred / Parked**
-- **E-PRES presence-and-hooks** — ambient population + hook discovery + 3-tier attention + the
-  if-ignored rewire — BUILT + fully gated (verify-presence-hooks 61/0, backward-compat 54/0, full
-  sweep 0, fuzz + monkey clean) but **PARKED on `feat/npc-presence-hooks`** (pushed) for a live
-  playtest before merge (it changes felt gameplay: ambient density, discovery rates).
-- **Two fix-specs** (`docs/NPC-COHERENCE-FIXES.md`): (1) questgivers must never be forced to archetype
-  — split significant vs functional roleHints; (2) `regionForNode` supplies no `.center`, so
-  fray-by-node temperature is inert on the live path (a pre-existing gap shared by the coherence dial,
-  role-realms hybridization, and E-PRES — one fix lights all three).
 

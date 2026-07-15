@@ -18,6 +18,18 @@ The running execution order. `DESIGN.md` holds the *what* and *why*; this holds 
 roll into `NEXT-STEPS-ARCHIVE.md` via `python3 build/archive-docs.py --emit`. Standing plan
 sections (tracks/layers/etc.) are never auto-archived.
 
+## Do next (2026-07-15 — AUTONOMOUS ARC LANDED: quick-fix + ENV/EXTERIOR complete, PL-3 verified)
+
+Master `c0a60b77` (CHANGELOG 2026-07-15): ☑ QUICK-FIX wave (P0 roots) · ☑ ENV-1/1b/1c/2/3/3b
+(daytime · cast shadows · the moving sun/moon · biomes · the first town) · ☑ PL-3 deltas (6 ledger
+items FIXED in real play). Adam's rulings registered in DESIGN.md (cast-shadows; celestial arc).
+
+1. ☐ **Stage E** — exposure floor + emissive-masked bloom (ledger #12/13). Spec off ledger evidence.
+2. ☐ **Combat-in-room + staging beats** (ledger #10/11) → then D5 archetypes.
+3. ☐ **P3-2 Stage B** — AUTO-FIRES on sprite-QA registry landing (standing delegation; quiet so far).
+4. ☐ Adam's packet: facade/NPC art (ImageGen/kit) · daylit-shadow + arc keyframe tuning · PL-1b rig
+   items (bot fights · transition camera · shop capture · record-less-settlement town read).
+
 ## Do next (2026-07-14 evening — THE LEDGER ORDERS THE WAVES; Stage D + AgX + doors + PLAY-LENS landed)
 
 Evening block landed (master `67566b6a`): ☑ Stage D D0–D4 (stateful nouns end-to-end) · ☑ AgX
@@ -52,40 +64,6 @@ CI scoped to master+PRs.
    (PBR materials + `LIGHT_RIG_PROFILES` + emissive bloom, retires the occlusion ghost-halo).
 4. ☐ Standing polish waves (SPECCED): UNIFICATION-WAVE · ENV-WAVES · POLISH-WAVE-1.
 5. ☐ W0-b PRNG dedup (deferred — re-scope: surface is 20+ harnesses, not 3).
-
-## Do next (2026-07-12 — GRAPHICS-NORTH-STAR: Stage A + Stage C CLOSED; Stage D/E next)
-
-Codex's A→B graphics program (`docs/GRAPHICS-NORTH-STAR.md`) — **Stage A BUILT** (walk-native boundary +
-composed camera + occlusion, master `00b775f8`) **and Stage C BUILT** (real room shapes — octagon/rotunda/
-L from the rolled `areaType/dims/side`, shape render-decoupled from the whole-cell combat grid; master
-`388a4c7b`, CHANGELOG 2026-07-12 later). Rooms no longer read as maps — by framing (A) AND geometry (C).
-
-**Next graphics waves:** ☐ **Stage D** (stateful nouns — door→room transition keystone, levers/chests) ·
-☐ **Stage E** (material+light finish — LIGHT_RIG_PROFILES + PBR shells + emissive-masked bloom, which
-also properly retires the occlusion ghost-halo the hotfix minimally patched + the AO-gradient on non-rect
-floors Stage C deferred). ☐ **Stage B** (sprite citizenship) overlaps Codex's active sprite lane —
-coordinate. Stage-C deferrals: vertical-stair two-slots, corridor-L-bend-through-notch edge case.
-**Sprite lane (Codex):** BUG-14 (slice debris) + BUG-15 (crusty res — ImageGen regen); figurine-life +
-map vision-quest (`docs/vision-quests/`).
-
---- (historical, Stage A build order below) ---
-
-Sequenced by Adam's ruling: build the boundary first (WDV-1/2), then wire A3, then A4.
-
-1. ☑ **WDV-1 `walkSceneFrom`** — the walk-native boundary (`src/engine/walk-scene.js`); `board.walkScene`. 32/0.
-2. ☑ **WDV-2 stamped provenance** — `walkPickStamped` + `segment.rollRefs`, byte-additive. 34/0.
-3. ☑ **A3 shot-compose** — ShotPlan wired, composed camera live, WalkScene-fed. 29/0. (Round-1 framing
-   regression caught at the capture gate + corrected.)
-4. ☑ **A4 dynamic occlusion v2** — live `ShotPlan.occlusionTargets`, per-instance ghost fade + hysteresis.
-5. ☐ **Adam eyeballs the Stage-A frames** (`dev/battle-gate/shot-compose/after-composed.png`, the A4
-   on/off, the loop contact sheet); dial the named consts if wanted.
-6. ☐ **Stage B — sprite citizenship** is the next graphics wave (the §4.5 standee contract: footX/Y,
-   worldHeight, plinth/contact-shadow/explicit shader, in-engine acceptance gallery). Then C (polygon
-   rooms — the shell compiler is landed) / D (stateful nouns) / E (material+light finish).
-7. ☐ **Codex's remaining walk-native units** (deferred, his recommendation): WDV-3 table visual metadata,
-   WDV-4 overlay/state key unification, WDV-5 cross-env diorama gate.
-8. ☐ Follow-up: the two pre-existing render-only reds (occlusion ghost bloom/AO pixel check; bw2-1b
-   doorframe over-occlusion) — render-only, auto-skip in CI.
 
 ## Open threads — carried forward (STANDING section; never auto-archived)
 

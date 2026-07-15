@@ -1,0 +1,699 @@
+{
+  "realm": "gloom",
+  "generatedAt": "2026-07-15T15:06:12.112Z",
+  "cast": [
+    {
+      "role": "candidate-covered",
+      "pieceSlug": "Giant Rat",
+      "registrySlug": "spr-fantasy-giant-rat"
+    },
+    {
+      "role": "legacy-only",
+      "pieceSlug": "Wolf",
+      "registrySlug": "spr-fantasy-wolf"
+    },
+    {
+      "role": "large-huge",
+      "pieceSlug": "Ogre Zombie",
+      "registrySlug": "spr-fantasy-ogre-zombie"
+    },
+    {
+      "role": "npc",
+      "pieceSlug": "Land-worker (Dragonborn)",
+      "registrySlug": "spr-fantasy-land-worker-dragonborn"
+    },
+    {
+      "role": "pc",
+      "pieceSlug": "Dragonborn Barbarian (Male)",
+      "registrySlug": "spr-pc-dragonborn-barbarian-male"
+    }
+  ],
+  "matrixCells": [
+    {
+      "lightProfile": "torchlit",
+      "piecesResolved": 5,
+      "piecesRequested": 5,
+      "yaw0": {
+        "shot": "shots/gloom-torchlit-yaw0.png",
+        "cameraPos": {
+          "x": 11.117039776685056,
+          "y": 11.008570786366768,
+          "z": 11.117039776685058,
+          "zoom": 1
+        },
+        "pieces": [
+          {
+            "spriteSlug": "spr-fantasy-giant-rat",
+            "interiorWidth": 0.2816077738515901,
+            "interiorHeight": 0.396,
+            "worldPos": {
+              "x": -2.000103476047516,
+              "y": -0.204,
+              "z": 1.0008340454101563
+            },
+            "projectedFootPx": {
+              "x": 502,
+              "y": 446
+            },
+            "projectedMidPx": {
+              "x": 500,
+              "y": 425
+            },
+            "projectedWidthPx": 35,
+            "lumaSpriteSample": 41.85091999999999,
+            "lumaSurroundSample": 0.21259999999999965,
+            "lumaRatio": 41.85
+          },
+          {
+            "spriteSlug": "spr-fantasy-wolf",
+            "interiorWidth": 0.7664825581395349,
+            "interiorHeight": 0.561,
+            "worldPos": {
+              "x": -1.0134879493713378,
+              "y": -0.204,
+              "z": 0.9874495720863342
+            },
+            "projectedFootPx": {
+              "x": 585,
+              "y": 496
+            },
+            "projectedMidPx": {
+              "x": 583,
+              "y": 466
+            },
+            "projectedWidthPx": 99,
+            "lumaSpriteSample": 36.68855999999995,
+            "lumaSurroundSample": 50.00089999999997,
+            "lumaRatio": 0.73
+          },
+          {
+            "spriteSlug": "spr-fantasy-ogre-zombie",
+            "interiorWidth": 1.7457272727272728,
+            "interiorHeight": 1.903,
+            "worldPos": {
+              "x": 1.0056800174713134,
+              "y": -0.204,
+              "z": 1.0066175389289855
+            },
+            "projectedFootPx": {
+              "x": 766,
+              "y": 610
+            },
+            "projectedMidPx": {
+              "x": 766,
+              "y": 504
+            },
+            "projectedWidthPx": 246,
+            "lumaSpriteSample": 70.57194399999995,
+            "lumaSurroundSample": 0,
+            "lumaRatio": null
+          },
+          {
+            "spriteSlug": "spr-fantasy-land-worker-dragonborn",
+            "interiorWidth": 1.1344410480349345,
+            "interiorHeight": 1.2429999999999999,
+            "worldPos": {
+              "x": 1.9818398356437683,
+              "y": -0.204,
+              "z": 0.9809023141860962
+            },
+            "projectedFootPx": {
+              "x": 866,
+              "y": 668
+            },
+            "projectedMidPx": {
+              "x": 868,
+              "y": 599
+            },
+            "projectedWidthPx": 163,
+            "lumaSpriteSample": 39.66750399999995,
+            "lumaSurroundSample": 0,
+            "lumaRatio": null
+          },
+          {
+            "spriteSlug": "spr-pc-dragonborn-barbarian-male",
+            "interiorWidth": 0.7771127819548873,
+            "interiorHeight": 1.276,
+            "worldPos": {
+              "x": 2.949321219921112,
+              "y": -0.15971896729059518,
+              "z": 0.9502587413787842
+            },
+            "projectedFootPx": {
+              "x": 972,
+              "y": 725
+            },
+            "projectedMidPx": {
+              "x": 976,
+              "y": 652
+            },
+            "projectedWidthPx": 116,
+            "lumaSpriteSample": 27.777863999999994,
+            "lumaSurroundSample": 0,
+            "lumaRatio": null
+          }
+        ]
+      },
+      "yaw60": {
+        "shot": "shots/gloom-torchlit-yaw60.png",
+        "cameraPos": {
+          "x": -2.923575005145838,
+          "y": 11.008570786366768,
+          "z": 15.172443279744801,
+          "zoom": 1
+        },
+        "pieces": [
+          {
+            "spriteSlug": "spr-fantasy-giant-rat",
+            "interiorWidth": 0.2816077738515901,
+            "interiorHeight": 0.396,
+            "worldPos": {
+              "x": -2.000103476047516,
+              "y": -0.204,
+              "z": 1.0008340454101563
+            },
+            "projectedFootPx": {
+              "x": 419,
+              "y": 588
+            },
+            "projectedMidPx": {
+              "x": 417,
+              "y": 567
+            },
+            "projectedWidthPx": 39,
+            "lumaSpriteSample": 50.076032000000005,
+            "lumaSurroundSample": 17.991816,
+            "lumaRatio": 2.78
+          },
+          {
+            "spriteSlug": "spr-fantasy-wolf",
+            "interiorWidth": 0.7664825581395349,
+            "interiorHeight": 0.561,
+            "worldPos": {
+              "x": -1.0134879493713378,
+              "y": -0.204,
+              "z": 0.9874495720863342
+            },
+            "projectedFootPx": {
+              "x": 554,
+              "y": 567
+            },
+            "projectedMidPx": {
+              "x": 552,
+              "y": 537
+            },
+            "projectedWidthPx": 106,
+            "lumaSpriteSample": 17.08791800000001,
+            "lumaSurroundSample": 0.637799999999999,
+            "lumaRatio": 17.09
+          },
+          {
+            "spriteSlug": "spr-fantasy-ogre-zombie",
+            "interiorWidth": 1.7457272727272728,
+            "interiorHeight": 1.903,
+            "worldPos": {
+              "x": 1.0056800174713134,
+              "y": -0.204,
+              "z": 1.0066175389289855
+            },
+            "projectedFootPx": {
+              "x": 822,
+              "y": 528
+            },
+            "projectedMidPx": {
+              "x": 823,
+              "y": 424
+            },
+            "projectedWidthPx": 241,
+            "lumaSpriteSample": 20.871164,
+            "lumaSurroundSample": 2.2143480000000024,
+            "lumaRatio": 9.43
+          },
+          {
+            "spriteSlug": "spr-fantasy-land-worker-dragonborn",
+            "interiorWidth": 1.1344410480349345,
+            "interiorHeight": 1.2429999999999999,
+            "worldPos": {
+              "x": 1.9818398356437683,
+              "y": -0.204,
+              "z": 0.9809023141860962
+            },
+            "projectedFootPx": {
+              "x": 946,
+              "y": 507
+            },
+            "projectedMidPx": {
+              "x": 949,
+              "y": 440
+            },
+            "projectedWidthPx": 153,
+            "lumaSpriteSample": 5.500173999999998,
+            "lumaSurroundSample": 0,
+            "lumaRatio": null
+          },
+          {
+            "spriteSlug": "spr-pc-dragonborn-barbarian-male",
+            "interiorWidth": 0.7771127819548873,
+            "interiorHeight": 1.276,
+            "worldPos": {
+              "x": 2.949321219921112,
+              "y": -0.15971896729059518,
+              "z": 0.9502587413787842
+            },
+            "projectedFootPx": {
+              "x": 1066,
+              "y": 482
+            },
+            "projectedMidPx": {
+              "x": 1072,
+              "y": 413
+            },
+            "projectedWidthPx": 104,
+            "lumaSpriteSample": 3.7037400000000016,
+            "lumaSurroundSample": 3.012568000000002,
+            "lumaRatio": 1.23
+          }
+        ]
+      },
+      "widthAcrossYawObservation": [
+        {
+          "spriteSlug": "spr-fantasy-giant-rat",
+          "widthYaw0": 35,
+          "widthYaw60": 39,
+          "ratio": 1.11
+        },
+        {
+          "spriteSlug": "spr-fantasy-wolf",
+          "widthYaw0": 99,
+          "widthYaw60": 106,
+          "ratio": 1.07
+        },
+        {
+          "spriteSlug": "spr-fantasy-ogre-zombie",
+          "widthYaw0": 246,
+          "widthYaw60": 241,
+          "ratio": 0.98
+        },
+        {
+          "spriteSlug": "spr-fantasy-land-worker-dragonborn",
+          "widthYaw0": 163,
+          "widthYaw60": 153,
+          "ratio": 0.94
+        },
+        {
+          "spriteSlug": "spr-pc-dragonborn-barbarian-male",
+          "widthYaw0": 116,
+          "widthYaw60": 104,
+          "ratio": 0.9
+        }
+      ],
+      "observations": {
+        "edgeOnInvisibleCards": "projectedWidthPx measured mechanically per piece per yaw (see widthAcrossYawObservation); standees Y-axis-billboard toward the camera (theater-boot.js law), so width is expected to stay ~constant across yaw under the current pre-B2 architecture — a genuine edge-on view is not reachable by camera orbit alone yet.",
+        "fullBrightInDarkCorner": "lumaRatio = spriteLuma/surroundLuma per piece (see pieces[].lumaRatio above), read off the actual saved PNG. A torchlit cell where a piece's ratio is far above its siblings' is the measurable signature; absolute judgment (does it read as full-bright) is Adam/orchestrator's call.",
+        "squareShadows": "not mechanically classifiable from pixel data (no per-object alpha mask survives compositing) — human eyes on the contact sheet.",
+        "floatingFeet": "projectedFootPx per piece is the exact pixel the ENGINE placed the contact point at (see pieces[].projectedFootPx) — confirming the rendered sprite's own visible bottom edge sits there is a human-eyes call this harness cannot make from a flat RGB screenshot.",
+        "tiltedBases": "human eyes on the contact sheet — no plinth-orientation seam exposed to test yet (pre-B2).",
+        "keyHalos": "human eyes on the contact sheet."
+      }
+    },
+    {
+      "lightProfile": "daylit",
+      "piecesResolved": 5,
+      "piecesRequested": 5,
+      "yaw0": {
+        "shot": "shots/gloom-daylit-yaw0.png",
+        "cameraPos": {
+          "x": 10.448218382321631,
+          "y": 11.008570786366768,
+          "z": 11.310217972068113,
+          "zoom": 1
+        },
+        "pieces": [
+          {
+            "spriteSlug": "spr-fantasy-giant-rat",
+            "interiorWidth": 0.2816077738515901,
+            "interiorHeight": 0.396,
+            "worldPos": {
+              "x": -2.000103476047516,
+              "y": -0.204,
+              "z": 1.0008340454101563
+            },
+            "projectedFootPx": {
+              "x": 502,
+              "y": 446
+            },
+            "projectedMidPx": {
+              "x": 500,
+              "y": 425
+            },
+            "projectedWidthPx": 35,
+            "lumaSpriteSample": 194.46213599999996,
+            "lumaSurroundSample": 150.30521199999995,
+            "lumaRatio": 1.29
+          },
+          {
+            "spriteSlug": "spr-fantasy-wolf",
+            "interiorWidth": 0.7664825581395349,
+            "interiorHeight": 0.561,
+            "worldPos": {
+              "x": -1.0134879493713378,
+              "y": -0.204,
+              "z": 0.9874495720863342
+            },
+            "projectedFootPx": {
+              "x": 585,
+              "y": 496
+            },
+            "projectedMidPx": {
+              "x": 583,
+              "y": 466
+            },
+            "projectedWidthPx": 99,
+            "lumaSpriteSample": 204.10795600000006,
+            "lumaSurroundSample": 183.690862,
+            "lumaRatio": 1.11
+          },
+          {
+            "spriteSlug": "spr-fantasy-ogre-zombie",
+            "interiorWidth": 1.7457272727272728,
+            "interiorHeight": 1.903,
+            "worldPos": {
+              "x": 1.0056800174713134,
+              "y": -0.204,
+              "z": 1.0066175389289855
+            },
+            "projectedFootPx": {
+              "x": 766,
+              "y": 610
+            },
+            "projectedMidPx": {
+              "x": 766,
+              "y": 504
+            },
+            "projectedWidthPx": 246,
+            "lumaSpriteSample": 211.80529199999984,
+            "lumaSurroundSample": 25.59952600000001,
+            "lumaRatio": 8.27
+          },
+          {
+            "spriteSlug": "spr-fantasy-land-worker-dragonborn",
+            "interiorWidth": 1.1344410480349345,
+            "interiorHeight": 1.2429999999999999,
+            "worldPos": {
+              "x": 1.9818398356437683,
+              "y": -0.204,
+              "z": 0.9809023141860962
+            },
+            "projectedFootPx": {
+              "x": 866,
+              "y": 668
+            },
+            "projectedMidPx": {
+              "x": 868,
+              "y": 599
+            },
+            "projectedWidthPx": 163,
+            "lumaSpriteSample": 143.81616599999998,
+            "lumaSurroundSample": 18.605850000000007,
+            "lumaRatio": 7.73
+          },
+          {
+            "spriteSlug": "spr-pc-dragonborn-barbarian-male",
+            "interiorWidth": 0.7771127819548873,
+            "interiorHeight": 1.276,
+            "worldPos": {
+              "x": 2.949321219921112,
+              "y": -0.15971896729059518,
+              "z": 0.9502587413787842
+            },
+            "projectedFootPx": {
+              "x": 972,
+              "y": 725
+            },
+            "projectedMidPx": {
+              "x": 976,
+              "y": 652
+            },
+            "projectedWidthPx": 116,
+            "lumaSpriteSample": 111.84315400000001,
+            "lumaSurroundSample": 10.124668000000007,
+            "lumaRatio": 11.05
+          }
+        ]
+      },
+      "yaw60": {
+        "shot": "shots/gloom-daylit-yaw60.png",
+        "cameraPos": {
+          "x": -3.425282926986508,
+          "y": 11.008570786366768,
+          "z": 14.689816059323071,
+          "zoom": 1
+        },
+        "pieces": [
+          {
+            "spriteSlug": "spr-fantasy-giant-rat",
+            "interiorWidth": 0.2816077738515901,
+            "interiorHeight": 0.396,
+            "worldPos": {
+              "x": -2.000103476047516,
+              "y": -0.204,
+              "z": 1.0008340454101563
+            },
+            "projectedFootPx": {
+              "x": 416,
+              "y": 600
+            },
+            "projectedMidPx": {
+              "x": 414,
+              "y": 578
+            },
+            "projectedWidthPx": 40,
+            "lumaSpriteSample": 175.20159199999992,
+            "lumaSurroundSample": 133.50977199999997,
+            "lumaRatio": 1.31
+          },
+          {
+            "spriteSlug": "spr-fantasy-wolf",
+            "interiorWidth": 0.7664825581395349,
+            "interiorHeight": 0.561,
+            "worldPos": {
+              "x": -1.0134879493713378,
+              "y": -0.204,
+              "z": 0.9874495720863342
+            },
+            "projectedFootPx": {
+              "x": 552,
+              "y": 574
+            },
+            "projectedMidPx": {
+              "x": 550,
+              "y": 543
+            },
+            "projectedWidthPx": 108,
+            "lumaSpriteSample": 179.33963200000002,
+            "lumaSurroundSample": 41.51549199999994,
+            "lumaRatio": 4.32
+          },
+          {
+            "spriteSlug": "spr-fantasy-ogre-zombie",
+            "interiorWidth": 1.7457272727272728,
+            "interiorHeight": 1.903,
+            "worldPos": {
+              "x": 1.0056800174713134,
+              "y": -0.204,
+              "z": 1.0066175389289855
+            },
+            "projectedFootPx": {
+              "x": 822,
+              "y": 527
+            },
+            "projectedMidPx": {
+              "x": 824,
+              "y": 422
+            },
+            "projectedWidthPx": 245,
+            "lumaSpriteSample": 151.13421399999993,
+            "lumaSurroundSample": 32.45751999999998,
+            "lumaRatio": 4.66
+          },
+          {
+            "spriteSlug": "spr-fantasy-land-worker-dragonborn",
+            "interiorWidth": 1.1344410480349345,
+            "interiorHeight": 1.2429999999999999,
+            "worldPos": {
+              "x": 1.9818398356437683,
+              "y": -0.204,
+              "z": 0.9809023141860962
+            },
+            "projectedFootPx": {
+              "x": 946,
+              "y": 502
+            },
+            "projectedMidPx": {
+              "x": 949,
+              "y": 435
+            },
+            "projectedWidthPx": 155,
+            "lumaSpriteSample": 107.58009800000004,
+            "lumaSurroundSample": 31.80745399999998,
+            "lumaRatio": 3.38
+          },
+          {
+            "spriteSlug": "spr-pc-dragonborn-barbarian-male",
+            "interiorWidth": 0.7771127819548873,
+            "interiorHeight": 1.276,
+            "worldPos": {
+              "x": 2.949321219921112,
+              "y": -0.15971896729059518,
+              "z": 0.9502587413787842
+            },
+            "projectedFootPx": {
+              "x": 1066,
+              "y": 473
+            },
+            "projectedMidPx": {
+              "x": 1072,
+              "y": 404
+            },
+            "projectedWidthPx": 105,
+            "lumaSpriteSample": 99.36322200000002,
+            "lumaSurroundSample": 30.27839799999999,
+            "lumaRatio": 3.28
+          }
+        ]
+      },
+      "widthAcrossYawObservation": [
+        {
+          "spriteSlug": "spr-fantasy-giant-rat",
+          "widthYaw0": 35,
+          "widthYaw60": 40,
+          "ratio": 1.14
+        },
+        {
+          "spriteSlug": "spr-fantasy-wolf",
+          "widthYaw0": 99,
+          "widthYaw60": 108,
+          "ratio": 1.09
+        },
+        {
+          "spriteSlug": "spr-fantasy-ogre-zombie",
+          "widthYaw0": 246,
+          "widthYaw60": 245,
+          "ratio": 1
+        },
+        {
+          "spriteSlug": "spr-fantasy-land-worker-dragonborn",
+          "widthYaw0": 163,
+          "widthYaw60": 155,
+          "ratio": 0.95
+        },
+        {
+          "spriteSlug": "spr-pc-dragonborn-barbarian-male",
+          "widthYaw0": 116,
+          "widthYaw60": 105,
+          "ratio": 0.91
+        }
+      ],
+      "observations": {
+        "edgeOnInvisibleCards": "projectedWidthPx measured mechanically per piece per yaw (see widthAcrossYawObservation); standees Y-axis-billboard toward the camera (theater-boot.js law), so width is expected to stay ~constant across yaw under the current pre-B2 architecture — a genuine edge-on view is not reachable by camera orbit alone yet.",
+        "fullBrightInDarkCorner": "lumaRatio = spriteLuma/surroundLuma per piece (see pieces[].lumaRatio above), read off the actual saved PNG. A torchlit cell where a piece's ratio is far above its siblings' is the measurable signature; absolute judgment (does it read as full-bright) is Adam/orchestrator's call.",
+        "squareShadows": "not mechanically classifiable from pixel data (no per-object alpha mask survives compositing) — human eyes on the contact sheet.",
+        "floatingFeet": "projectedFootPx per piece is the exact pixel the ENGINE placed the contact point at (see pieces[].projectedFootPx) — confirming the rendered sprite's own visible bottom edge sits there is a human-eyes call this harness cannot make from a flat RGB screenshot.",
+        "tiltedBases": "human eyes on the contact sheet — no plinth-orientation seam exposed to test yet (pre-B2).",
+        "keyHalos": "human eyes on the contact sheet."
+      }
+    }
+  ],
+  "flipPair": {
+    "registrySlug": "spr-fantasy-giant-rat",
+    "candidate": {
+      "ok": true,
+      "shot": "shots/gloom-flip-candidate.png",
+      "piecesResolved": 1,
+      "observations": [
+        {
+          "spriteSlug": "spr-fantasy-giant-rat",
+          "interiorWidth": 0.2816077738515901,
+          "interiorHeight": 0.396,
+          "worldPos": {
+            "x": 0.5102009057998658,
+            "y": -0.204,
+            "z": 1.0111384272575379
+          },
+          "projectedFootPx": {
+            "x": 766,
+            "y": 668
+          },
+          "projectedMidPx": {
+            "x": 766,
+            "y": 493
+          },
+          "projectedWidthPx": 249
+        }
+      ],
+      "luma": {
+        "spriteLuma": 31.700549999999975,
+        "bgLuma": 38.88848,
+        "canvasSize": {
+          "w": 1600,
+          "h": 1200
+        }
+      }
+    },
+    "legacy": {
+      "ok": true,
+      "shot": "shots/gloom-flip-legacy.png",
+      "piecesResolved": 1,
+      "observations": [
+        {
+          "spriteSlug": "spr-fantasy-giant-rat",
+          "interiorWidth": 0.2816077738515901,
+          "interiorHeight": 0.396,
+          "worldPos": {
+            "x": 0.5102009057998658,
+            "y": -0.204,
+            "z": 1.0111384272575379
+          },
+          "projectedFootPx": {
+            "x": 766,
+            "y": 668
+          },
+          "projectedMidPx": {
+            "x": 766,
+            "y": 493
+          },
+          "projectedWidthPx": 249
+        }
+      ],
+      "luma": {
+        "spriteLuma": 31.700549999999975,
+        "bgLuma": 38.88848,
+        "canvasSize": {
+          "w": 1600,
+          "h": 1200
+        }
+      }
+    },
+    "stubApplied": {
+      "ok": true,
+      "prior": "candidate",
+      "now": "legacy"
+    },
+    "stubRestored": {
+      "ok": true,
+      "prior": "legacy",
+      "now": "candidate"
+    },
+    "observations": "side-by-side close-up, same board/pose/light for both panels (only runtimeAdmitted differs, mutated in-page then restored — never touched disk). Whether the faceted register reads as canon vs. the legacy v3 corpus (line weight, palette, silhouette read) is Adam/orchestrator's taste call off the two PNGs — not something this harness scores."
+  },
+  "notes": [],
+  "consoleErrors": [
+    "Failed to load resource: the server responded with a status of 404 (File not found)",
+    "Failed to load resource: the server responded with a status of 404 (File not found)",
+    "Failed to load resource: the server responded with a status of 404 (File not found)",
+    "Failed to load resource: the server responded with a status of 404 (File not found)",
+    "Failed to load resource: the server responded with a status of 404 (File not found)"
+  ],
+  "pcSpriteReachableViaInteriorPath": true,
+  "contactSheet": "gloom-contact-sheet.png"
+}

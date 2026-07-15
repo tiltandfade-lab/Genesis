@@ -15,7 +15,35 @@ Graphics work must preserve canonical cards and no-human production while taking
 reach the visual target. Read it before this handoff's historical graphics queue, then read
 `docs/GRAPHICS-PRODUCTION-RESEARCH-WAVE.md` for evaluated tools and executable research gates.
 
-## ⭐ Latest (2026-07-14, evening) — STAGE D + AgX LIVE + doors + PLAY-LENS: the ledger now orders the waves [Claude Opus 4.8, orchestrated]
+## ⭐ Latest (2026-07-15) — THE AUTONOMOUS ARC LANDED: daytime, the moving sun, biomes, the first town — PL-3 verified [Claude Opus 4.8, autonomous]
+
+Adam's delegation executed end-to-end in the ledger order (CHANGELOG 2026-07-15, master `c0a60b77`,
+pushed): the **QUICK-FIX WAVE** (P0s at root: web-mass retint ~15 props, camera headroom, arrival
+board, the class-wide door/dressing active-room scoping bug; rat-miscast + vanishing-PC honestly
+could-not-repro, lens re-tests) and the **ENV/EXTERIOR WAVE complete** — ENV-1 profiles differentiate
+(TABLETOP_EXTERIOR_LOOK re-tune table) · ENV-1b **cast shadows from diegetic sources** (Adam's
+ruling; the fake "no shadow maps" law RETIRED — DESIGN.md 2026-07-14 entries) · ENV-1c **the sun and
+moon move** (Adam's ruling; CELESTIAL_ARC keyframe table; dawn rakes long, dusk lights the opposite
+side, the moon takes the night; towns carry the clock) · ENV-2 travel legs project their rolled
+biome (BIOME_DRESSING; the "missing PC" was corner-anchoring) · ENV-3+3b the first compositional
+town (settlement routing + the 5-ruling composition pass). **PL-3 re-run: 6 ledger items FIXED in
+real play** (dev/play-lens/ledger.md deltas).
+
+**Adam's red-pen packet (all cards shared in-chat; nothing blocks):** facade art (doors/windows/
+roofs) + NPC street-card art → ImageGen packets / kit lane · daylit soft-shadow + celestial keyframe
+tuning (one table each) · the AgX/exposure interplay → Stage E.
+
+**Do next (pick up here — ledger order):**
+1. **Stage E** — exposure floor + emissive-masked bloom (ledger #12/13: crushed blacks, blown
+   whites; the bloom re-blows what AgX compressed). Spec next session off ledger evidence.
+2. **Combat-in-room + staging beats** (ledger #10/11) — then D5 archetypes (door card passed with
+   D4b/D4c/D4d; Adam's broken-variant family live).
+3. **P3-2 Stage B AUTO-FIRES when sprite-QA's registry regen lands on master** (Adam's standing
+   delegation; still quiet as of this close). PL-1b rig improvements ride the next lens run
+   (bot fights; transition camera; shop capture; a record-less settlement node for the town read).
+4. Everything below is prior history.
+
+## Latest (2026-07-14, evening) — STAGE D + AgX LIVE + doors + PLAY-LENS: the ledger now orders the waves [Claude Opus 4.8, orchestrated]
 
 The evening block (CHANGELOG 2026-07-14 later, master `67566b6a`, pushed): **Stage D STATEFUL NOUNS
 complete** (state primitive → interactables registry → walk binding → ROOM-GRAMMAR → the doors-first

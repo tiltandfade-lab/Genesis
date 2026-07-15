@@ -455,6 +455,28 @@ function theaterGuiseSnapshotFor(w,walk){
   return Object.keys(out).length?out:undefined;
 }
 
+/* ENV-3 (docs/ENV-EXTERIOR-WAVE.md "The town tray") — the settlement-kind predicate: true when
+   standing at a node that is either (a) the world's origin/start settlement (w.startNodeId — the
+   character-creation hometown, minted with NO place-gen archetype per mintOriginPlaceThread's own
+   SCOPE-FENCE decision above, docs/PLACE-GEN.md ADDENDUM §7D item 9: "settlements stay compositional",
+   never a single spine archetype — so theaterNodeSourceFor can NEVER find a bound PLACE record for it,
+   the exact "settlement tray shows zero town" defect the ledger measured), or (b) a prep frontier whose
+   rolled env band is "urban" (P.nodes[nodeId].env — src/world/prep.js's own per-frontier `env.kind`
+   stamp, the same field nodeEnvBand/nodeLodgingTier already read for "how big is this place"). A node
+   that carries a BOUND single-site PLACE record (theaterNodeSourceFor succeeds — the diner/watering-
+   hole class) is checked FIRST by the caller and never reaches this predicate at all, so an urban
+   frontier whose own notable-location roll already gave it a typed node tray keeps rendering through
+   that existing path, untouched (ENV-3's own "single-site place trays are untouched" instruction).
+   Null-safe: an absent nodeId, or prepOf not loaded (a narrow test harness), degrades to false, never a
+   throw — same total-function discipline every other predicate in this file keeps. */
+function nodeIsSettlementKind(w, nodeId){
+  if(!nodeId) return false;
+  if(w && w.startNodeId && nodeId===w.startNodeId) return true;
+  const P=(typeof prepOf==="function") ? prepOf(w) : null;
+  const pn=P && P.nodes && P.nodes[nodeId];
+  return !!(pn && pn.env==="urban");
+}
+
 function theaterHereSourceFor(w){
   const realms=(typeof theaterActiveRealmsFor==="function")?theaterActiveRealmsFor(w):[];
   const hasWalkSeam=(typeof prepOf==="function"&&typeof walkOfFrontier==="function");
@@ -462,6 +484,13 @@ function theaterHereSourceFor(w){
   if(!id){
     const nodeRec=theaterNodeSourceFor(w,w&&w.currentNodeId);
     if(nodeRec) return { kind:"node", record:nodeRec, realms:realms };
+    // ENV-3: no bound single-site PLACE record at this node — if it's settlement-kind, compose the
+    // town tray instead of degrading straight to the empty idle table (nodeIsSettlementKind's own
+    // header comment has the full routing law + why this is the "diner untouched" ordering).
+    if(nodeIsSettlementKind(w, w&&w.currentNodeId)){
+      const tier=(typeof nodeLodgingTier==="function") ? nodeLodgingTier(w, w.currentNodeId) : 0;
+      return { kind:"settlement", nodeId:w.currentNodeId, tier:tier, env:"urban", realms:realms };
+    }
     return { kind:"idle", realms:realms };
   }
   const pn=P.nodes&&P.nodes[id], walk=walkOfFrontier(w,id);

@@ -5996,11 +5996,28 @@ function tileMaterialsFor(t, topColorCache, sideColorCache, colorFor){
   } else {
     topMat = applyPsxShaderTweaks(new THREE.MeshLambertMaterial({ color: topColor }));
   }
-  const sideMat = applyPsxShaderTweaks(new THREE.MeshLambertMaterial({ color: sideColor })); // sides
-                                                                         // stay flat-tinted (§1 rule 2
-                                                                         // is a TOP-face trick; texturing
-                                                                         // sides too would wash out the
-                                                                         // top/side contrast)
+  // ENV-3 (docs/ENV-EXTERIOR-WAVE.md "The town tray") — ADDITIVE, kind-gated: a settlement building
+  // mass (theaterSettlementBoardBuild, theater-data.js — `kind:"building"` did not exist before this
+  // unit) textures its SIDE faces from the SAME material canvas the top already uses, so a raised
+  // 3x3 patch of building tiles reads as a facade, not a flat-tinted box — the FACED-BOX construction
+  // class's "wears existing textures per face" (GRAPHICS-ENGINE.md §H), via the EXISTING procedural
+  // material painter (buildFloorCanvasTexture), no new art. Every OTHER kind (floor/elevated/hazard/
+  // water) can never satisfy `t.kind==="building"` — this branch is unreachable for them, so their own
+  // sideMat stays the exact flat-tinted MeshLambertMaterial below, byte-unchanged.
+  let sideMat;
+  if(t.kind === "building" && t.material){
+    const wallTex = buildFloorCanvasTexture(t.material, t.tint || "#4a5a3c", (t.x || 0) + ":" + (t.z || 0) + ":wall", false);
+    sideMat = applyPsxShaderTweaks(wallTex
+      ? new THREE.MeshLambertMaterial({ map: wallTex, color: sideColor })
+      : new THREE.MeshLambertMaterial({ color: sideColor })); // canvas failure -> flat color, never throws
+  } else {
+    sideMat = applyPsxShaderTweaks(new THREE.MeshLambertMaterial({ color: sideColor })); // sides
+                                                                           // stay flat-tinted (§1 rule 2
+                                                                           // is a TOP-face trick; texturing
+                                                                           // sides too would wash out the
+                                                                           // top/side contrast) for every
+                                                                           // OTHER tile kind
+  }
   return [sideMat, sideMat, topMat, sideMat, sideMat, sideMat];
 }
 

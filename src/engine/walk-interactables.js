@@ -192,8 +192,20 @@ function wiCenter2x2(room) {
 }
 function wiRoomDoorCells(room, plan) {
   if (!plan || !Array.isArray(plan.doors)) return [];
+  // QF-A3 ROOT CAUSE (PLAY-LENS ledger P0 #3 — pl-011/pl-016, "door leaf floats unanchored in real
+  // rolled rooms"): engine.place-spatialize's own doors.push (src/engine/place-spatialize.js) stamps
+  // TWO entries per room-to-room doorway, ONE per side — {x,y} is the cell INSIDE the pushing room,
+  // `toSeg` is the OTHER room's segNum ("this door leads TO toSeg FROM here"). betweenSegs is the
+  // SAME pair on both entries, so filtering on betweenSegs alone (the pre-existing check just below)
+  // keeps BOTH sides for a room whose doorway connects it to a neighbor — including the neighbor's
+  // OWN entry, whose {x,y} is a cell inside the NEIGHBOR room, not this one. bindWalkInteractables'
+  // seeded pick (see its own header) could then land on that foreign cell, placing the door leaf at a
+  // coordinate that belongs to a different room entirely — no wall aperture anywhere near it in the
+  // room actually being rendered, exactly the reported defect. A door entry's {x,y} is inside THIS
+  // room precisely when `toSeg` points AWAY from it (toSeg !== room.segNum, per place-spatialize's own
+  // push order above) — the missing second half of the filter.
   return plan.doors
-    .filter((d) => d && Array.isArray(d.betweenSegs) && d.betweenSegs.indexOf(room.segNum) >= 0)
+    .filter((d) => d && Array.isArray(d.betweenSegs) && d.betweenSegs.indexOf(room.segNum) >= 0 && d.toSeg !== room.segNum)
     .map((d) => ({ x: d.x, y: d.y }));
 }
 // candidate cell pool for a resolved D1 `location` value — floor is the default for an unknown/

@@ -1213,8 +1213,42 @@ function trayFrom(source, scene, opts){
       env: env, realmId: realmId, focusSegNum: source.focusSegNum, radius: source.radius,
       projection:projection
     });
-    board.dressing = dressedPlan.dressing || [];
-    board.interactables = dressedPlan.interactables || [];
+    // QF-A3 (PLAY-LENS ledger P0 #3 — pl-011/pl-016, "door leaf floats unanchored in real rolled
+    // rooms"): ROOT CAUSE. interiorBuildBoard (just above) scopes WALL/FLOOR geometry to only the
+    // room(s) actually in view — ITR_ACTIVE_ROOM_ONLY's keepSet (src/ui/theater-interior.js), the
+    // active room ALONE by default, never the whole plan. `dressedPlan.dressing`/`.interactables`
+    // (bindWalkInteractables/dressPlan's own output, ABOVE) carry EVERY room's entries — the whole
+    // multi-room dungeon plan, never trimmed to what's on stage. Handing that unfiltered list straight
+    // to board.dressing/board.interactables (the pre-existing lines this replaces) means a door/prop
+    // whose `roomSegNum` belongs to a room that ISN'T rendered this pass has no wall/aperture on stage
+    // to anchor to at all — its cell coordinates, read as an offset from THIS room's cx/cz origin,
+    // land it scattered wherever that arithmetic happens to fall: leaning on a bare wall segment with
+    // no aperture cut (pl-011), or hovering over an unrelated pit hazard (pl-016). This is a CLASS bug,
+    // not a doors-only one — dressing rides the identical unfiltered path (see the ledger's own P2 #14
+    // "orphaned small sprites, no ground contact" — the same defect's dressing-side symptom) — so both
+    // fields are filtered here, the ONE place either list turns into a render surface.
+    // Reuses interiorBuildBoard's OWN keepSet derivation (itrActiveRoomKeepSet/itrFocusRoomSet,
+    // src/ui/theater-interior.js globals — call-time typeof-guarded the same way this file already
+    // calls interiorBuildBoard/dressPlan/bindWalkInteractables itself, never a second, possibly-
+    // diverging "which room is this" formula). `interactables` (unfiltered, already reconciled against
+    // the persisted per-sourceRef store above) is untouched here — only the RENDER lists narrow, so an
+    // off-screen room's door still tracks its own persisted state correctly for when the party actually
+    // walks there next.
+    function qfA3RoomKeepSet(){
+      if(typeof itrActiveRoomKeepSet !== "function" || typeof itrFocusRoomSet !== "function") return null;
+      const activeOnly = (typeof ITR_ACTIVE_ROOM_ONLY === "undefined") || ITR_ACTIVE_ROOM_ONLY;
+      return activeOnly
+        ? itrActiveRoomKeepSet(dressedPlan, source.focusSegNum)
+        : itrFocusRoomSet(dressedPlan, source.focusSegNum, source.radius == null ? 1 : source.radius);
+    }
+    function qfA3FilterToKeptRooms(list){
+      if(!list || !list.length) return list || [];
+      const keepSet = qfA3RoomKeepSet();
+      if(keepSet === null) return list; // whole-plan mode (no focus room) -> unfiltered, unchanged
+      return list.filter(e => e && (e.roomSegNum == null || keepSet.has(e.roomSegNum)));
+    }
+    board.dressing = qfA3FilterToKeptRooms(dressedPlan.dressing || []);
+    board.interactables = qfA3FilterToKeptRooms(dressedPlan.interactables || []);
     board.projection = projection;
     board.activeRoomId = source.focusSegNum != null ? source.focusSegNum : null;
     // WALK-NATIVE-A.md WDV-1 — the anti-drift boundary: stamps board.walkScene (additive; never

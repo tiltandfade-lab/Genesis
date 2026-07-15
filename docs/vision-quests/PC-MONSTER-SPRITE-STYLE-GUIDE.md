@@ -2,7 +2,10 @@
 
 ## Status
 
-Exploration style guide for the reference sheets in this folder. This is not yet a replacement for the canonical production rules in `docs/SPRITE-SHEETS.md` and `docs/SPRITE-TRANSITION.md`.
+**LOCKED by Adam, 2026-07-12:** this mature faceted figurine language is the target for regenerated
+creature, NPC, and PC sprites. `docs/SPRITE-SHEETS.md` and `docs/SPRITE-TRANSITION.md` remain
+authoritative for manifests, slicing, registry integration, fallback, and runtime behavior; their
+older visual preamble must be reconciled to this guide before the next production generation.
 
 The current canonical pipeline already records:
 
@@ -16,7 +19,7 @@ The current canonical pipeline already records:
 - size scaling against creature category;
 - fallback from sprite → whole object → cuboid → blank meeple.
 
-This guide records the newer **faceted figurine** look used by the PC and monster reference sheets.
+This guide records the canonical **mature faceted figurine** look used by the PC and monster reference sheets.
 
 ## Difference from the current canonical style
 
@@ -32,7 +35,8 @@ The new vision variant uses:
 - readable iconic silhouettes over anatomical detail;
 - slightly stronger color blocking and material separation.
 
-Do not silently mix these conventions in production. Claude should treat this file as a candidate house-style variant until the project owner locks the key color, palette, and view rules.
+Do not silently mix these conventions in production. Existing sprites remain legacy fallbacks until
+their replacements pass the migration gates in `docs/FACETED-SPRITE-ART-MIGRATION.md`.
 
 ## Reproduction prompt
 
@@ -199,12 +203,8 @@ Reject or regenerate a sheet when:
 - pose differences are too subtle to be mechanically useful;
 - the image introduces text or a watermark.
 
-## Lock decision still required
+## Lock decision
 
-Before production-wide generation, choose one canonical convention:
-
-- existing canonical magenta-key sprite style;
-- this green-key faceted figurine variant;
-- or a reconciled style that keeps the canonical pipeline but adopts the figurine palette and front/back staging rules.
-
-Until that decision is made, keep these images in `docs/vision-quests/references/` and do not treat them as the final asset corpus.
+The mature faceted figurine language is locked. Key color is an intake implementation detail, not an
+art-style identity: choose a per-asset key absent from the subject, then run despill and alpha QA.
+Runtime promotion remains per asset or state family, never per generated sheet.

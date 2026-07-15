@@ -1193,6 +1193,275 @@ function theaterNodeBoardBuild(record, realms, env){
   };
 }
 
+/* ENV-3 (docs/ENV-EXTERIOR-WAVE.md "The town tray — first compositional settlement") —
+   theaterSettlementBoardBuild(nodeInfo, realms, env): the theaterNodeBoardBuild SIBLING for a whole
+   SETTLEMENT, not a single rolled site. PLACE-GEN's own scope fence ("settlements stay compositional",
+   docs/PLACE-GEN.md ~line 173) means a settlement node never carries a single archetype/dims the way a
+   minted PLACE record does (theaterNodeBoardBuild's GRID-LAW footprint above doesn't apply here) — this
+   builder instead composes a STREET SCENE on the SAME band x lane x 3x3-patch grid every walked/combat
+   board (theaterBoardBuild) already uses (cmZoneGrid's own shape), so the tabletop camera fit already
+   tuned against that geometry (TABLETOP_CAMERA_HEADROOM, theater-boot.js) needs no new tuning here.
+
+   Routing (src/world/render.js's theaterHereSourceFor): fires ONLY when standing at a node with NO
+   active walk AND no bound single-site PLACE record (theaterNodeSourceFor returns null for it — the
+   diner/watering-hole class stays on its existing path, byte-unchanged) AND the node is settlement-kind
+   (nodeIsSettlementKind, render.js — the world's start/origin town, or a prep frontier whose rolled env
+   band is "urban"). See that function's own header comment for the full routing law.
+
+   Composition (GRAPHICS-ENGINE.md §H's FACED-BOX construction class — "a parametric box wearing
+   existing textures", NO new art):
+     (a) STREET — the grid's own CENTER lane (env2BiomeScatterFor's identical "clear lane" formula,
+         above), every band, "cobble"-materialed (THEATER_FLOOR_ENV_POOL.urban's own first preference —
+         a plain continuation of the existing urban floor vocabulary, not a bespoke new material).
+     (b) BUILDING MASSES — SETTLEMENT_BUILDING_MIN..MAX (4-8), one per chosen non-center-lane zone (8
+         candidate zones exist on this grid — 4 bands x {L,R} — so the max case fills every lot). Each
+         chosen zone's WHOLE 3x3 tile patch is stamped `kind:"building"` at a raised, multi-step height
+         — the SAME "a tile is a small extruded column" mechanism every floor/elevated tile already
+         renders with (setBoard, theater-boot.js), just tall and contiguous over 9 tiles, so a chosen
+         zone reads as ONE solid building mass with NO new GL geometry code for the mass itself.
+         `t.material` is the zone's own seeded facade-material pick (SETTLEMENT_FACADE_MATERIAL_BY_REALM
+         / _TRIM_BY_REALM — existing procedural material recipes theater-boot.js's buildFloorMaterialCanvas
+         already paints, "NO new art"); theater-boot.js's tileMaterialsFor gets ONE new, ADDITIVE,
+         kind-gated branch (`t.kind==="building"`) that ALSO textures the SIDE faces from this same
+         material (every other existing kind's sides stay flat-tinted, byte-unchanged — that file's own
+         comment on the change). `board.buildings[]` carries one descriptive record per mass
+         (id/zone/footprint/height/facadeMaterial + a `facadeTextureFile` pointer into REALM_TEXTURES
+         .wall when this realm has a folded texture — fantasy/gloom/chrome only, the 3-flagship scope;
+         null for every other realm, never a throw) for a future GL wall-texture pass and for DM
+         narratability — it carries NO mesh of its own (the tile mass IS the render), so it can never
+         double-render against the tile geometry.
+     (c) face variety — seeded per-building pick between the realm's primary facade material and its
+         trim/accent material + a seeded height jitter (0..SETTLEMENT_BUILDING_HEIGHT_JITTER extra
+         THEATER_STEPs) so a row of buildings doesn't read as one uniform extruded slab.
+     (d) NPC sprinkle — SETTLEMENT_NPC_MIN..MAX (2-4) `kind:"dressing"` props seeded onto the street's
+         own SIDEWALK tiles (the two non-center-column tiles of each street zone's 3x3 patch — the exact
+         center column stays the CLEAR walking lane, mirroring env2BiomeScatterFor's own clear-lane law),
+         drawn from data/sprite-registry.js's realm-tagged `kind:"npc"` corpus when loaded, else a small
+         named generic label pool. `.slug` rides the registry key (or a generic label key) straight
+         through trayFrom's EXISTING dressing-card render channel (buildDressingCard/dressingTextureFor,
+         theater-boot.js) — no new mount code: an unmatched slug (every one of these today — the sprite
+         corpus lives under assets/sprites/<sheet>, not assets/dressing/) degrades to that channel's own
+         readable placeholder card, the same graceful "art hasn't landed yet" state every other undressed
+         prop in this codebase already has.
+     (e) market/well/cart props — SETTLEMENT_STREET_PROP_COUNT (2) more `kind:"dressing"` entries,
+         reserved FIRST (before the NPC sprinkle draws its own tiles) at the grid's CENTER band's own
+         street sidewalk tiles (the town-square read), drawn from SETTLEMENT_STREET_PROP_POOL_BY_REALM —
+         REAL existing assets/dressing/*.png slugs (fantasy/gloom/chrome; a generic neutral pool for
+         every other realm, same BIOME_DRESSING_GENERIC precedent above). Reserving these tiles first
+         means the NPC draw (d) can never land on the same tile.
+     (f) lighting — `board.light`/`board.renderProfile` are stamped exactly like every other tray
+         (theaterRollLight + theaterStampRenderProfile); ENV-1's applyLightProfile/ENV-1c's celestial arc
+         (both GL-side, theater-boot.js, untouched by this unit) light it automatically from those fields
+         — no per-unit lighting code needed here.
+
+   PURE (§9.1): no GS/w/U read, no RNG outside the seeded dspHashStr/dspMulberry32/pldShuffle chain this
+   file already uses (env2BiomeScatterFor's own convention) — the SAME nodeInfo.id always yields a
+   byte-identical board. Total-function: a missing/partial nodeInfo, absent realms, or an unloaded
+   cmZoneGrid/dspHashStr/pldShuffle all degrade to the same 4-band/3-lane fallback shape
+   theaterIdleBoardFrom already uses, never a throw. */
+const SETTLEMENT_BUILDING_MIN = 4;
+const SETTLEMENT_BUILDING_MAX = 8;
+const SETTLEMENT_NPC_MIN = 2;
+const SETTLEMENT_NPC_MAX = 4;
+const SETTLEMENT_STREET_PROP_COUNT = 2;
+const SETTLEMENT_BUILDING_HEIGHT_STEPS = 3;      // THEATER_STEP multiples — clearly a MASS, not a 1-step elevated patch
+const SETTLEMENT_BUILDING_HEIGHT_JITTER = 2;     // +0..+this many extra THEATER_STEPs, seeded per building (skyline variety)
+const SETTLEMENT_STREET_MATERIAL = "cobble";
+const SETTLEMENT_LOT_MATERIAL = "cracked-earth"; // an unbuilt lot — bare ground, not a second street
+
+const SETTLEMENT_FACADE_MATERIAL_BY_REALM = { fantasy: "plank", gloom: "cave-rock", chrome: "grating" };
+const SETTLEMENT_FACADE_MATERIAL_DEFAULT = "plank";
+const SETTLEMENT_FACADE_TRIM_BY_REALM = { fantasy: "flagstone", gloom: "scree", chrome: "asphalt" };
+const SETTLEMENT_FACADE_TRIM_DEFAULT = "flagstone";
+
+// existing assets/dressing/*.png slugs only (PLACE-GEN's "the place-gen prop census is the pool" —
+// ENV-3's own decision text) — no realm-bespoke "well"/"market-stall" art exists, so these are the
+// nearest visually-plausible existing clutter per realm (mirrors BIOME_DRESSING's own "no dedicated
+// art for every case" posture, above).
+const SETTLEMENT_STREET_PROP_POOL_BY_REALM = {
+  fantasy: [ "fantasy-clutter-emptybarrel", "fantasy-clutter-brokencart-wheel", "fantasy-clutter-woodpile",
+             "fantasy-clutter-hayloose", "fantasy-clutter-firewoodstack" ],
+  gloom:   [ "gloom-clutter-bonepile", "gloom-clutter-urnshard", "gloom-clutter-driedwreathpile", "gloom-clutter-coffinlid" ],
+  chrome:  [ "chrome-clutter-crateseal", "chrome-clutter-vendingwreck", "chrome-clutter-cablesnarl", "chrome-clutter-batterypack" ]
+};
+const SETTLEMENT_STREET_PROP_POOL_GENERIC = [ "fantasy-clutter-woodpile", "fantasy-clutter-emptybarrel" ];
+
+const SETTLEMENT_NPC_LABEL_POOL_GENERIC = [ "Townsfolk", "Market-goer", "Passerby", "Elder", "Street-vendor" ];
+
+/* realm-keyed pick with a generic default — never a throw on an unrecognized/absent realmId. Shared by
+   the facade/trim material picks below. */
+function theaterSettlementMaterialFor(realmId, table, fallback){
+  return (table && table[realmId]) || fallback;
+}
+
+/* the settlement's own street-prop pool pick — same realm-keyed/generic-default law as BIOME_DRESSING_
+   GENERIC (env2, above): a realm with no dedicated market/cart set reuses the neutral pool rather than
+   inventing a bespoke one on the spot. */
+function theaterSettlementPropPoolFor(realmId){
+  const pool = SETTLEMENT_STREET_PROP_POOL_BY_REALM[realmId];
+  return (pool && pool.length) ? pool : SETTLEMENT_STREET_PROP_POOL_GENERIC;
+}
+
+/* the settlement's own NPC-sprinkle pool: data/sprite-registry.js's realm-tagged `kind:"npc"` corpus
+   (ENV-3's own "realm-keyed NPC sprites from the corpus" instruction) when loaded and this realm has
+   any entries, else the generic label pool. Returns [{slug,name}], never empty (the generic pool is
+   the total-function floor). Call-time/typeof-guarded — SPRITE_REGISTRY loads well before this file
+   (manifest.json loadOrder) but this mirrors this file's own established cross-file-read discipline. */
+function theaterSettlementNpcPoolFor(realmId){
+  if(typeof SPRITE_REGISTRY !== "undefined" && SPRITE_REGISTRY){
+    const hits = [];
+    for(const key in SPRITE_REGISTRY){
+      const e = SPRITE_REGISTRY[key];
+      if(e && e.kind === "npc" && e.realm === realmId) hits.push({ slug: key, name: e.name || key });
+    }
+    if(hits.length) return hits;
+  }
+  return SETTLEMENT_NPC_LABEL_POOL_GENERIC.map((name, i) => ({ slug: "settlement-npc-generic-" + i, name: name }));
+}
+
+function theaterSettlementBoardBuild(nodeInfo, realms, env){
+  env = env || "urban";
+  const node = nodeInfo || {};
+  const nodeId = node.id != null ? String(node.id) : "settlement";
+  const realmList = Array.isArray(realms) ? realms : [];
+  const realmId = realmList.length ? realmList[0] : "frontier";
+  const renderProfile = theaterStampRenderProfile(realmId);
+  const gradeTint = (hex) => {
+    if(typeof gradeColor !== "function" || !renderProfile) return hex;
+    const graded = gradeColor(hex, renderProfile);
+    return "#" + graded.toString(16).padStart(6, "0");
+  };
+  const palette = theaterPaletteFor(env);
+
+  const grid = (typeof cmZoneGrid === "function")
+    ? cmZoneGrid(undefined)
+    : { bands: ["melee", "near", "far", "out"], lanes: ["L", "C", "R"], bandCount: 4, laneCount: 3 };
+  const bands = grid.bands || [];
+  const lanes = grid.lanes || [];
+  const centerLaneIdx = Math.floor((lanes.length - 1) / 2);
+
+  const seedBase = "env3-settlement:v1:" + nodeId;
+  const seed = (typeof dspHashStr === "function") ? dspHashStr(seedBase) : 1;
+  const rng = (typeof dspMulberry32 === "function") ? dspMulberry32(seed) : (function(){
+    let s = seed || 1; return function(){ s = (s * 1103515245 + 12345) & 0x7fffffff; return s / 0x7fffffff; };
+  })();
+
+  // candidate building lots: every non-center-lane zone, in stable (band,lane) order before shuffling —
+  // 8 of them on the fallback/default 4-band x 3-lane grid, exactly matching SETTLEMENT_BUILDING_MAX.
+  const candidates = [];
+  for(let bi = 0; bi < bands.length; bi++){
+    for(let li = 0; li < lanes.length; li++){
+      if(li === centerLaneIdx) continue;
+      candidates.push({ bi: bi, li: li });
+    }
+  }
+  const shuffledLots = (typeof pldShuffle === "function") ? pldShuffle(candidates, rng) : candidates.slice();
+  const buildingCount = Math.min(shuffledLots.length,
+    SETTLEMENT_BUILDING_MIN + Math.floor(rng() * (SETTLEMENT_BUILDING_MAX - SETTLEMENT_BUILDING_MIN + 1)));
+  const chosenLots = shuffledLots.slice(0, buildingCount);
+  const chosenKey = {};
+  chosenLots.forEach(function(c){ chosenKey[c.bi + ":" + c.li] = true; });
+
+  const facadeMaterial = theaterSettlementMaterialFor(realmId, SETTLEMENT_FACADE_MATERIAL_BY_REALM, SETTLEMENT_FACADE_MATERIAL_DEFAULT);
+  const trimMaterial = theaterSettlementMaterialFor(realmId, SETTLEMENT_FACADE_TRIM_BY_REALM, SETTLEMENT_FACADE_TRIM_DEFAULT);
+  const facadeTextureFile = (typeof REALM_TEXTURES !== "undefined" && REALM_TEXTURES[realmId]
+    && REALM_TEXTURES[realmId].wall && REALM_TEXTURES[realmId].wall[0] && REALM_TEXTURES[realmId].wall[0].file) || null;
+
+  const tiles = [];
+  const buildings = [];
+  const streetSidewalkTiles = []; // {x,z,zone,bandIdx} — off the exact center column, NEVER a building tile
+
+  for(let bi = 0; bi < bands.length; bi++){
+    for(let li = 0; li < lanes.length; li++){
+      const zoneKey = bands[bi] + ":" + lanes[li];
+      const origin = theaterZoneOrigin(bi, li);
+      const isStreet = (li === centerLaneIdx);
+      const isBuilding = !isStreet && !!chosenKey[bi + ":" + li];
+
+      let buildingRec = null;
+      if(isBuilding){
+        const bSeedKey = seedBase + ":building:" + zoneKey;
+        const bSeed = (typeof dspHashStr === "function") ? dspHashStr(bSeedKey) : 0;
+        const bRng = (typeof dspMulberry32 === "function") ? dspMulberry32(bSeed) : rng;
+        const useTrim = bRng() < 0.35;
+        const material = useTrim ? trimMaterial : facadeMaterial;
+        const jitter = Math.floor(bRng() * (SETTLEMENT_BUILDING_HEIGHT_JITTER + 1));
+        const h = (SETTLEMENT_BUILDING_HEIGHT_STEPS + jitter) * THEATER_STEP;
+        const tint = gradeTint(theaterLightenHex(palette.elevTint, useTrim ? 1.08 : 0.94));
+        buildingRec = {
+          id: "bldg:" + nodeId + ":" + zoneKey, zone: zoneKey,
+          x: origin.x + 1, z: origin.z + 1, w: THEATER_PATCH, d: THEATER_PATCH, h: h,
+          facadeMaterial: material, facadeTextureFile: facadeTextureFile, tint: tint
+        };
+        buildings.push(buildingRec);
+      }
+
+      for(let tx = 0; tx < THEATER_PATCH; tx++){
+        for(let tz = 0; tz < THEATER_PATCH; tz++){
+          const wx = origin.x + tx, wz = origin.z + tz;
+          if(isBuilding){
+            tiles.push({ x: wx, z: wz, h: buildingRec.h, kind: "building", tint: buildingRec.tint,
+              altTop: false, zone: zoneKey, material: buildingRec.facadeMaterial, buildingId: buildingRec.id });
+          } else if(isStreet){
+            const streetTint = gradeTint(palette.top);
+            tiles.push({ x: wx, z: wz, h: 0, kind: "floor", tint: streetTint, altTop: false,
+              zone: zoneKey, material: SETTLEMENT_STREET_MATERIAL });
+            if(tx !== 1) streetSidewalkTiles.push({ x: wx, z: wz, zone: zoneKey, bandIdx: bi }); // off the tx=1 walking column
+          } else {
+            const lotTint = gradeTint(theaterLightenHex(palette.top, 0.85));
+            tiles.push({ x: wx, z: wz, h: 0, kind: "floor", tint: lotTint, altTop: false,
+              zone: zoneKey, material: SETTLEMENT_LOT_MATERIAL });
+          }
+        }
+      }
+    }
+  }
+
+  // (e) market/well/cart props FIRST — reserves the CENTER band's own sidewalk tiles, so the NPC draw
+  // just below can never land on the same tile (a plain array-membership exclusion, no RNG retry loop).
+  const props = [];
+  const usedTileKey = {};
+  if(streetSidewalkTiles.length){
+    const centerBandIdx = bands.length ? Math.floor((bands.length - 1) / 2) : 0;
+    const centerTiles = streetSidewalkTiles.filter(function(c){ return c.bandIdx === centerBandIdx; });
+    const propPool = theaterSettlementPropPoolFor(realmId);
+    const propShuffled = (typeof pldShuffle === "function") ? pldShuffle(centerTiles.slice(), rng) : centerTiles.slice();
+    const propCount = Math.min(propShuffled.length, SETTLEMENT_STREET_PROP_COUNT);
+    for(let i = 0; i < propCount; i++){
+      const cell = propShuffled[i];
+      usedTileKey[cell.x + "," + cell.z] = true;
+      const propSlug = propPool[Math.floor(rng() * propPool.length)];
+      props.push({ kind: "dressing", zone: cell.zone, x: cell.x, z: cell.z, slug: propSlug,
+        cardKind: "medium", primary: "floor", sourceRef: "env3-market:" + nodeId + ":" + i });
+    }
+
+    // (d) NPC sprinkle — every remaining sidewalk tile is eligible (never a used market-prop tile).
+    const npcCandidates = streetSidewalkTiles.filter(function(c){ return !usedTileKey[c.x + "," + c.z]; });
+    const npcPool = theaterSettlementNpcPoolFor(realmId);
+    const npcShuffled = (typeof pldShuffle === "function") ? pldShuffle(npcCandidates.slice(), rng) : npcCandidates.slice();
+    const npcCount = Math.min(npcShuffled.length,
+      SETTLEMENT_NPC_MIN + Math.floor(rng() * (SETTLEMENT_NPC_MAX - SETTLEMENT_NPC_MIN + 1)));
+    for(let i = 0; i < npcCount; i++){
+      const cell = npcShuffled[i];
+      const npcPick = npcPool[Math.floor(rng() * npcPool.length)];
+      props.push({ kind: "dressing", zone: cell.zone, x: cell.x, z: cell.z, slug: npcPick.slug,
+        cardKind: "medium", primary: "floor", realmPropName: npcPick.name,
+        sourceRef: "env3-npc:" + nodeId + ":" + i });
+    }
+  }
+
+  const light = theaterRollLight(env, "settlement:" + nodeId, "");
+
+  return {
+    tiles: tiles, props: props, buildings: buildings, env: env, light: light,
+    floorMaterial: SETTLEMENT_STREET_MATERIAL, surfaceName: "Settlement Street",
+    surfaceTint: null, surfaceBaseTint: null,
+    realms: realmList.length ? realmList : undefined, realmId: realmId,
+    renderProfile: renderProfile,
+    grid: { bands: bands, lanes: lanes, bandCount: bands.length, laneCount: lanes.length }
+  };
+}
+
 /* docs/STAGE-D-WAVE-SPECS.md D4 JOB 2 — the persisted-state seam. `prepNode` is the SAME live
    w.prep.nodes[<activeWalkId>] object D0's dmFindInteractable (src/world/dm.js) indexes by
    sourceRef to find-and-mutate a placed entity's `.state` across turns (a state_transition event
@@ -1271,6 +1540,14 @@ function trayFrom(source, scene, opts){
     const env = source.env || opts.env;
     const realms = source.realms || opts.realms;
     return theaterNodeBoardBuild(source.record, realms, env);
+  }
+  if(source.kind === "settlement"){
+    // ENV-3 (docs/ENV-EXTERIOR-WAVE.md) — the compositional town tray. theaterHereSourceFor
+    // (src/world/render.js) only ever mints this source kind for a settlement-kind node with no bound
+    // single-site PLACE record — see theaterSettlementBoardBuild's own header for the full routing law.
+    const env = source.env || opts.env || "urban";
+    const realms = source.realms || opts.realms;
+    return theaterSettlementBoardBuild({ id: source.nodeId, tier: source.tier }, realms, env);
   }
   if(source.kind === "interior" && source.plan && typeof interiorBuildBoard === "function"){
     const env = source.env || opts.env;

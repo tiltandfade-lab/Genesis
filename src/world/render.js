@@ -477,27 +477,37 @@ function nodeIsSettlementKind(w, nodeId){
   return !!(pn && pn.env==="urban");
 }
 
+// ENV-1c (docs/ENV-EXTERIOR-WAVE.md) — the continuous world-clock minute, read ONCE per source
+// derivation and threaded through every return branch below the SAME additive way ENV-2 threaded
+// `walkId` (this function's own precedent, see that unit's comments further down): a pure snapshot
+// off clockOf(w).min (src/world/state.js — the SAME field dmDigest's own clock.min ships to the DM
+// seat), never a second clock. Absent clockOf (a narrow test harness with state.js unloaded)
+// degrades to null, which every downstream celestial-arc consumer (theater-boot.js's
+// applyCelestialArc) treats as "no clock threaded" -> byte-identical to pre-ENV-1c rendering.
+// (MERGE 2026-07-14: ENV-3's settlement branch below also carries clockMin — towns get the arc.)
 function theaterHereSourceFor(w){
   const realms=(typeof theaterActiveRealmsFor==="function")?theaterActiveRealmsFor(w):[];
+  const clockMin=(typeof clockOf==="function"&&w)?clockOf(w).min:null;
   const hasWalkSeam=(typeof prepOf==="function"&&typeof walkOfFrontier==="function");
   const P=hasWalkSeam?prepOf(w):null, id=P&&P.activeWalkId;
   if(!id){
     const nodeRec=theaterNodeSourceFor(w,w&&w.currentNodeId);
-    if(nodeRec) return { kind:"node", record:nodeRec, realms:realms };
+    if(nodeRec) return { kind:"node", record:nodeRec, realms:realms, clockMin:clockMin };
     // ENV-3: no bound single-site PLACE record at this node — if it's settlement-kind, compose the
     // town tray instead of degrading straight to the empty idle table (nodeIsSettlementKind's own
     // header comment has the full routing law + why this is the "diner untouched" ordering).
+    // ENV-1c composition: the settlement source carries clockMin too — the town lives under the arc.
     if(nodeIsSettlementKind(w, w&&w.currentNodeId)){
       const tier=(typeof nodeLodgingTier==="function") ? nodeLodgingTier(w, w.currentNodeId) : 0;
-      return { kind:"settlement", nodeId:w.currentNodeId, tier:tier, env:"urban", realms:realms };
+      return { kind:"settlement", nodeId:w.currentNodeId, tier:tier, env:"urban", realms:realms, clockMin:clockMin };
     }
-    return { kind:"idle", realms:realms };
+    return { kind:"idle", realms:realms, clockMin:clockMin };
   }
   const pn=P.nodes&&P.nodes[id], walk=walkOfFrontier(w,id);
-  if(!pn||!walk) return { kind:"idle", realms:realms };
+  if(!pn||!walk) return { kind:"idle", realms:realms, clockMin:clockMin };
   const cur=(pn.cursor&&pn.cursor.current)||1;
   const seg=(walk.segments||[]).find(s=>s.num===cur);
-  if(!seg) return { kind:"idle", env:walk.environment||undefined, realms:realms };
+  if(!seg) return { kind:"idle", env:walk.environment||undefined, realms:realms, clockMin:clockMin };
   // TABLETOP-UNITS.md §U6 (U5's overlay.traces contract): the segment's own reskin/overlay entry
   // (pn.segments, keyed "S<num>" — the SAME array walkUpdateSegment/{type:"walk_update"} writes, see
   // dm.js's combat_end case) may carry {traces,removed} left by a combat that already ended on this
@@ -524,7 +534,7 @@ function theaterHereSourceFor(w){
     return { kind:"interior", plan:pn.spatial, walk:walk, segment:seg, overlay:reskinEntry,
       guiseByEntityId:theaterGuiseSnapshotFor(w,walk),
       focusSegNum:cur, radius:1, walkId:id, prepNode:pn,
-      env:walk.environment||undefined, realms:realms,
+      env:walk.environment||undefined, realms:realms, clockMin:clockMin,
       traces:(reskinEntry&&reskinEntry.traces)||undefined, removed:(reskinEntry&&reskinEntry.removed)||undefined };
   }
   // ENV-2 (docs/ENV-EXTERIOR-WAVE.md) — walkId:id, additive (mirrors the {kind:"interior"} branch's
@@ -533,7 +543,7 @@ function theaterHereSourceFor(w){
   // real active walk, not just this leg's own segment id (two DIFFERENT rolled walks would otherwise
   // scatter byte-identically on the same leg number). No existing caller reads this field before this
   // unit, so its addition is a pure no-op everywhere else.
-  return { kind:"segment", segment:seg, env:walk.environment||undefined, realms:realms, walkId:id,
+  return { kind:"segment", segment:seg, env:walk.environment||undefined, realms:realms, walkId:id, clockMin:clockMin,
     traces:(reskinEntry&&reskinEntry.traces)||undefined, removed:(reskinEntry&&reskinEntry.removed)||undefined };
 }
 
@@ -625,7 +635,13 @@ function theaterStageSync(w,cur){
       // a walk-less fight/older snapshot -> theaterBoardFrom's own opts.realms default (undefined) keeps
       // today's exact behavior, same null-safe discipline as `env` above.
       const realms=(cm.segment&&cm.segment.realms)||undefined;
-      const board=theaterBoardFrom(cm.segment,cm.scene,{env,realms});
+      // ENV-1c (docs/ENV-EXTERIOR-WAVE.md): a wilderness fight's board is exterior too — thread the
+      // SAME clockOf(w).min read theaterHereSourceFor uses (below) so a daylit/moonlit combat tray's
+      // key light also follows the sun/moon, not just the non-combat standing table. Additive/null-
+      // safe (a walk-less fight/narrow harness -> null, which applyCelestialArc treats as "no clock
+      // threaded" -> byte-identical to pre-ENV-1c rendering, same degrade law every field here keeps).
+      const clockMin=(typeof clockOf==="function"&&w)?clockOf(w).min:null;
+      const board=theaterBoardFrom(cm.segment,cm.scene,{env,realms,clockMin});
       window.Theater.setBoard(board);
     }
     if(typeof theaterUnitsFrom==="function" && typeof window.Theater.setUnits==="function"){
@@ -642,7 +658,10 @@ function theaterStageSync(w,cur){
     // data.js) — this is what gates/seeds a wilderness travel leg's biome-scatter dressing.
     let board=null;
     if(typeof trayFrom==="function" && typeof window.Theater.setBoard==="function"){
-      board=trayFrom(hereSource,null,{env:hereSource.env,realms:hereSource.realms,walkId:hereSource.walkId});
+      // ENV-1c (docs/ENV-EXTERIOR-WAVE.md): clockMin threaded the SAME additive way walkId is, one
+      // line up — hereSource.clockMin (theaterHereSourceFor's own read, above) rides through to
+      // trayFrom's opts so every non-combat tray kind (segment/node/idle) can stamp board.clockMin.
+      board=trayFrom(hereSource,null,{env:hereSource.env,realms:hereSource.realms,walkId:hereSource.walkId,clockMin:hereSource.clockMin});
       // DUNGEON-GRAPH.md U3: a SpatialPlan-sourced tray (theaterHereSourceFor's {kind:"interior",plan}
       // branch) comes back shaped {kind:"interior3d",...} — a materially different render family (real
       // volumetric InstancedMesh geometry, not the flat combat tile-column grid) that the GL layer's

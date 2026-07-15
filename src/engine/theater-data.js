@@ -1058,7 +1058,7 @@ function theaterStampRenderProfile(boardRealm){
    theaterRollLight (a fixed "idle:<env>" seed key — there's no segment to carry a stamped light, so
    this is the graceful seeded-fallback path every real room's light derivation already has). Never
    throws on a missing/empty env or realms (theaterPaletteFor/theaterRollLight are both total). */
-function theaterIdleBoardFrom(env, realms){
+function theaterIdleBoardFrom(env, realms, clockMin){
   env = env || THEATER_DEFAULT_ENV;
   const realmList = Array.isArray(realms) ? realms : [];
   const boardRealm = realmList.length ? realmList[0] : null;
@@ -1073,6 +1073,8 @@ function theaterIdleBoardFrom(env, realms){
     realms: realmList.length ? realmList : undefined,
     realmId: boardRealm,
     renderProfile: renderProfile,
+    // ENV-1c: additive, null-safe — see theaterBoardBuild's own clockMin comment above.
+    clockMin: clockMin != null ? clockMin : null,
     grid: { bands: grid.bands, lanes: grid.lanes, bandCount: grid.bandCount, laneCount: grid.laneCount }
   };
 }
@@ -1119,7 +1121,7 @@ function theaterNodePropTile(recordId, idx, cellCount, taken){
    1x1 floor with no props — never a throw, same total-function discipline theaterBoardBuild's own
    defensive reads already keep for a partial/narrow-harness segment. Pure: no RNG, no GS/w/U touch —
    same (record,realms,env) snapshot always yields an identical board (§9.1). */
-function theaterNodeBoardBuild(record, realms, env){
+function theaterNodeBoardBuild(record, realms, env, clockMin){
   env = env || THEATER_DEFAULT_ENV;
   const rec = record || {};
   const rolled = rec.rolled || {};
@@ -1189,6 +1191,11 @@ function theaterNodeBoardBuild(record, realms, env){
     realms: realmList.length ? realmList : undefined,
     realmId: dressRealm,
     renderProfile: renderProfile,
+    // ENV-1c: additive, null-safe — see theaterBoardBuild's own clockMin comment above. A node tray's
+    // light is an AUTHORED per-archetype default (not env-rolled — dressing.light, above), but an
+    // outdoor archetype (a market square, a shrine yard) still stamps daylit/overcast/moonlit, so it
+    // still qualifies for the celestial-arc post-pass the SAME way a travel leg does.
+    clockMin: clockMin != null ? clockMin : null,
     grid: { bands: bands, lanes: lanes, bandCount: d, laneCount: w }
   };
 }
@@ -1534,12 +1541,16 @@ function trayFrom(source, scene, opts){
   if(source.kind === "idle"){
     const env = source.env || opts.env;
     const realms = source.realms || opts.realms;
-    return theaterIdleBoardFrom(env, realms);
+    // ENV-1c: source.clockMin (theaterHereSourceFor's own read) wins over opts.clockMin, mirroring
+    // the env/realms precedence immediately above — same additive, null-safe shape.
+    const clockMin = source.clockMin != null ? source.clockMin : opts.clockMin;
+    return theaterIdleBoardFrom(env, realms, clockMin);
   }
   if(source.kind === "node"){
     const env = source.env || opts.env;
     const realms = source.realms || opts.realms;
-    return theaterNodeBoardBuild(source.record, realms, env);
+    const clockMin = source.clockMin != null ? source.clockMin : opts.clockMin;
+    return theaterNodeBoardBuild(source.record, realms, env, clockMin);
   }
   if(source.kind === "settlement"){
     // ENV-3 (docs/ENV-EXTERIOR-WAVE.md) — the compositional town tray. theaterHereSourceFor
@@ -2061,6 +2072,11 @@ function theaterBoardBuild(segment, scene, opts){
     // bright-kingdom was the mirror's stale value. Stamp > sync-by-convention). tint is a NUMBER
     // (or null) here — see renderProfile derivation above (T1's fix).
     renderProfile: renderProfile,
+    // ENV-1c (docs/ENV-EXTERIOR-WAVE.md) — opts.clockMin passed straight through (null on every
+    // caller that doesn't thread it — a narrow harness, an older call site) so theater-boot.js's
+    // setBoard can drive the exterior key light off the SAME continuous world-clock minute the DM
+    // digest ships (w.clock.min), same null-safe additive shape realms/surfaceName already keep.
+    clockMin: opts.clockMin != null ? opts.clockMin : null,
     grid: { bands, lanes, bandCount: grid.bandCount, laneCount: grid.laneCount }
   };
 }

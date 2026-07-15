@@ -233,6 +233,27 @@ const CAM_FIT_MARGIN = 0.94;
 // own dedicated computation), plus this headroom margin — clearance above the tallest figure's own
 // measured top so its head sits inside the frame with room to spare, never flush against the edge.
 const TABLETOP_CAMERA_HEADROOM = 0.3;
+// ENV-3b (docs/ENV-EXTERIOR-WAVE.md composition-fix wave) ruling 2: QF-B3's own S.interiorFitMaxHeight
+// correction (above) was computed ONLY inside setUnits, off a LOCAL tabletopTallestTop var — correct
+// for the ordinary setBoard-then-setUnits render pass, but dressingTextureFor's own async real-art-
+// arrival replay (a real assets/dressing/<slug>.png landing) calls setBoard ALONE ("S.boardKey = null;
+// setBoard(S.lastBoard);", a few hundred lines down) with no accompanying setUnits call — that replay's
+// own placeCamera() call had nothing but the just-reset 0 to fit against, silently dropping the
+// standee-height correction (and, ruling 1/2 both landing together, a settlement's own tall BUILDING
+// masses too) back to a footprint-only fit until the NEXT full setUnits ever ran again. Both
+// measurements now persist on S itself (S.boardTallestTileTop — setBoard's own tile-mount loop;
+// S.unitsTallestTop — setUnits' own unit-mount loop, set just below) rather than living only in a
+// function-local var, so THIS shared combiner can be called from the tail of EITHER setBoard or setUnits
+// and always produce the correct MAX of "the last known tall tile" and "the last known tall figure" —
+// whichever one didn't just re-run keeps its own persisted, still-valid measurement. No-op (S remains
+// untouched, camera unmoved) for the interior channel (setInteriorBoard's own dedicated fit owns that
+// case entirely — see S.isInteriorBoard's own header).
+function refitTabletopHeightFit(){
+  if(S.isInteriorBoard) return;
+  const fitTop = Math.max(S.boardTallestTileTop || 0, S.unitsTallestTop || 0);
+  S.interiorFitMaxHeight = fitTop > 0 ? (fitTop + TABLETOP_CAMERA_HEADROOM) : 0;
+  placeCamera();
+}
 // BEAUTY-WAVE-4.md MF-1 (CAMERA TWEENS — the snap killer): every beat/room/move-step camera refit
 // glides position+target over this duration instead of snapping (BW4's 280-350ms band, ease-out).
 // A single fixed value inside the band (not randomized) keeps the motion predictable + fake-clock
@@ -4381,6 +4402,15 @@ function createTheaterState(){
     // tabletop's own permanent value — setBoard resets this every call; only setInteriorBoard computes
     // a real number, from data.pieces' true-scale heights).
     interiorFitMaxHeight: 0,
+    // ENV-3b (docs/ENV-EXTERIOR-WAVE.md composition-fix wave) ruling 2 — sibling to interiorFitMaxHeight
+    // just above, but for setBoard's own TILE geometry (a settlement's building masses) rather than
+    // mounted figures: see setBoard's own reset-and-measure comment + setUnits' fold-in comment for the
+    // full mechanism. 0 pre-mount/pre-setBoard, same convention as every other field here.
+    boardTallestTileTop: 0,
+    // ENV-3b ruling 2 sibling — the last setUnits() call's own tabletopTallestTop, persisted so a LATER
+    // setBoard-only replay (no accompanying setUnits) still has a valid figure height on record for
+    // refitTabletopHeightFit's combiner. 0 pre-mount/pre-setUnits.
+    unitsTallestTop: 0,
     // BEAUTY-WAVE-2.md BW2-1: which channel last mounted a board — setBoard/setInteriorBoard each set
     // this to their own kind. placeCamera's hx/hz degenerate-box FLOOR is smaller for the interior
     // channel (its "beat"/CLOSE-room fits are DESIGNED to be tight — a small room or huddle is the
@@ -6519,6 +6549,19 @@ function setBoard(data){
   // S.interiorFitMaxHeight, so this is the one place it resets back to the tabletop's permanent 0,
   // mirroring the orthoCamera/hemiLight restores just above.
   S.interiorFitMaxHeight = 0;
+  // ENV-3b (docs/ENV-EXTERIOR-WAVE.md composition-fix wave) ruling 2: QF-B3's own S.interiorFitMaxHeight
+  // correction (above) only ever measured MOUNTED FIGURES (setUnits' tabletopTallestTop) — a board's
+  // own TILE geometry (a settlement's `kind:"building"` masses, stamped straight onto the tile column
+  // mesh below, never a "unit") was invisible to that term entirely, so a building mass taller than any
+  // standing figure had NO vertical headroom correction at all: the camera's ortho viewSize fit only
+  // ever "knew" about the board's flat FOOTPRINT plus whatever figure happened to be tallest, so a
+  // building sticking up well past that (even after ruling 1's height cap) got its top cropped and the
+  // frame read as "standing inside the block maze" rather than framing the whole tray (the gate's
+  // camera-crop failure). Tracked fresh every setBoard call (reset here, same convention as every other
+  // per-call-reset field just above/below) and folded into the tile mount loop's own tallest-top read
+  // (below); setUnits' own final S.interiorFitMaxHeight computation (that file's own QF-B3 block) takes
+  // the MAX of this and its own tabletopTallestTop, so neither term can starve the other.
+  S.boardTallestTileTop = 0;
   S.isInteriorBoard = false; // placeCamera's own tabletop-vs-interior half-floor split
   drainTweens(S); // A2: force-complete every live tween BEFORE tearing down the board/FX it may reference
   clearGroup(S.fxGroup); // A2: a new board must never inherit the old board's still-animating debris/glyphs
@@ -6661,6 +6704,13 @@ function setBoard(data){
     const materials = tileMaterialsFor(t, topColorCache, sideColorCache, colorFor);
     const mesh = new THREE.Mesh(geo, materials);
     mesh.position.set(t.x - cx, h / 2 - 0.5, t.z - cz);
+    // ENV-3b ruling 2: this column's own real world-Y top (mesh center + half-height) — see
+    // S.boardTallestTileTop's own header comment (above, this function's setup block) for why a tall
+    // TILE mass (a settlement building) needs the same camera-fit visibility a mounted figure already
+    // gets via tabletopTallestTop (setUnits). A flat/unelevated tile's top sits at 0, a no-op against
+    // the reset-to-0 default.
+    const tileTop = h - 0.5;
+    if(tileTop > S.boardTallestTileTop) S.boardTallestTileTop = tileTop;
     // ENV-1B: the tabletop's own ground plane — receives a figure/prop's cast shadow, mirroring the
     // interior room-shell FLOOR mesh's own receiveShadow=true (never castShadow — a floor casting onto
     // itself/neighbors is not a meaningful contact-darkness read, same "shadows land on the GROUND"
@@ -6823,7 +6873,30 @@ function setBoard(data){
     S.propGroup.add(mesh);
   });
 
-  placeCamera();
+  // ENV-3b ruling 2: was a bare placeCamera() call, fitting against whatever S.interiorFitMaxHeight
+  // happened to still hold (0, this function's own reset above, on the FIRST call of a render pass —
+  // or a stale figure-height reading left over from setUnits on a LATER async-replay-only call). The
+  // shared combiner (this function's own header comment, above) folds in S.boardTallestTileTop (just
+  // measured by the tile loop above) alongside whatever figure height is still on record, so a
+  // building's own height is never dropped from the fit — including on a setBoard-only replay.
+  refitTabletopHeightFit();
+  // ENV-3 (docs/ENV-EXTERIOR-WAVE.md) ruling 5 — SYNC-FACE ON REBUILD: every fresh THREE.Group this
+  // function just built (the tile group carries no billboards, but S.propGroup's dressing cards do —
+  // buildDressingCard, above, tags each with userData.sprite=true) starts at rotation.y=0 by
+  // construction; before this fix, the ONLY place that ever corrected it was updateSpriteBillboardYaw's
+  // OWN scan inside scheduleRender's requestAnimationFrame callback — a race that depends on a paint
+  // tick actually landing before anything reads the scene. That race is lost whenever this exact
+  // function re-runs ASYNCHRONOUSLY off dressingTextureFor's own real-art-arrival replay (a few
+  // hundred lines up: "S.boardKey = null; setBoard(S.lastBoard);") — a REAL assets/dressing/<slug>.png
+  // landing for even ONE prop rebuilds the WHOLE propGroup from scratch (clearGroup, above), so every
+  // OTHER card (including permanently-placeholder NPC/market cards whose slug never resolves) goes
+  // back to its fresh, unfaced rotation.y=0 too — found live: the ENV-3 town card capture, a settlement
+  // NPC placeholder card rendering with visibly MIRRORED text (a DoubleSide-textured plane viewed from
+  // its own back reads as a horizontal mirror of its front). Calling the SAME face pass here,
+  // synchronously, the instant this rebuild finishes, makes "freshly built cards face the camera" true
+  // by construction rather than by timing luck — the next real rAF tick's own call is now a harmless,
+  // idempotent no-op (the camera yaw hasn't changed) rather than the only place this ever happened.
+  updateSpriteBillboardYaw();
   markDirty();
 }
 
@@ -11047,10 +11120,20 @@ function setUnits(data){
   // no units at all (the idle empty table) leaves tabletopTallestTop at 0 — S.interiorFitMaxHeight stays
   // 0 too, byte-identical to before this unit for that case (screenHalfHeight's height term is a no-op).
   if(!S.isInteriorBoard){
-    S.interiorFitMaxHeight = tabletopTallestTop > 0 ? (tabletopTallestTop + TABLETOP_CAMERA_HEADROOM) : 0;
-    placeCamera();
+    // ENV-3b ruling 2: persist this call's own figure-height measurement onto S (mirroring
+    // S.boardTallestTileTop, setBoard's sibling term) so a LATER setBoard-only replay (dressingTextureFor's
+    // async real-art-arrival re-render, which never calls setUnits again) still has a valid figure
+    // height to fold in via the shared combiner — see refitTabletopHeightFit's own header for the full
+    // mechanism this closes. A board with no units at all (the idle empty table) leaves this at 0,
+    // byte-identical to before this unit for that case.
+    S.unitsTallestTop = tabletopTallestTop;
+    refitTabletopHeightFit();
   }
 
+  // ENV-3 ruling 5 — SYNC-FACE ON REBUILD: same race setBoard's own matching call (above) closes,
+  // for S.unitGroup's freshly (re)built standees — see that call site's own full header for the
+  // mechanism. Idempotent with the next real rAF tick's own pass.
+  updateSpriteBillboardYaw();
   markDirty();
 }
 
@@ -12268,6 +12351,30 @@ window.Theater._clipMarginLawForTest = {
 // harness that needs a DETERMINISTIC read of "did the camera-tilt vs verb-tilt split apply correctly"
 // without racing a real rAF tick calls this directly instead).
 window.Theater._updateSpriteBillboardYawForTest = function(){ updateSpriteBillboardYaw(); };
+// ENV-3 (docs/ENV-EXTERIOR-WAVE.md) ruling 5 — TEST-ONLY SEAM: a deterministic read of every
+// S.propGroup billboard card's OWN rotation.y next to the "correct camera-facing" yaw
+// updateSpriteBillboardYaw's own `facing` local would assign it (mirrors that function's exact
+// formula, kept in lockstep by hand since `facing` is function-scoped there) — a harness asserts
+// against this rather than screenshot-diffing to catch a facing regression (the "mirrored text" bug
+// class) without a live GL frame.
+window.Theater._propGroupCardsForTest = function(){
+  const yaw = (S.rotationStep * 90 * Math.PI) / 180 + (CAM_YAW_OFFSET_DEG * Math.PI) / 180;
+  const expectedFacing = yaw + Math.PI;
+  const out = [];
+  if(S.propGroup){
+    for(let i = 0; i < S.propGroup.children.length; i++){
+      const fig = S.propGroup.children[i];
+      if(!fig || !fig.userData || !fig.userData.sprite) continue;
+      out.push({
+        slug: fig.userData.dressingSlug || null,
+        rotY: fig.rotation.y,
+        expectedFacing: expectedFacing,
+        x: fig.position.x, z: fig.position.z
+      });
+    }
+  }
+  return out;
+};
 // BW2-2b — TEST-ONLY SEAM: exposes the kilter RNG + the base-glow toggle so a harness can assert
 // determinism/bounds (kilterFor) and the shared-material-isolation property (setBaseGlow only ever
 // touches the ONE mesh it's handed) without re-deriving either from scratch.

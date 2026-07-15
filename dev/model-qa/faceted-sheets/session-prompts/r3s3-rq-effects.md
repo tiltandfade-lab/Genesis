@@ -9,8 +9,13 @@ Rules — these are the whole job:
    by that sheet's numbered cell list. The paste block is VERBATIM LAW (STYLE-CANON.md) —
    do not reword, trim, or summarize any sentence of it. Nothing added, nothing
    substituted, no subjects invented. EXCEPTION for sheets whose ids start with fx-:
-   use the effects contract (hybrid faceted+glow, single-frame, black/alpha key);
-   shared-*-decal sheets stay magenta-key top-down.
+   use the effects contract (hybrid faceted+glow, single-frame, black/alpha key).
+   DECAL CONTRACT for shared-*-decal sheets: magenta-key, strict top or front projection,
+   and — per Adam's ruling — decals are NOT triangulated. Render each decal as a
+   naturalistic organic surface mark: matte, irregular natural edges, realistic
+   stain/spread behavior (blood pools and trails, moss creeps from crevices, scorch
+   feathers outward, cracks propagate along stress lines). Same adult horror register
+   and muted palette; NO polygonal planes or faceted geometry on any decal.
 2. Create a fresh directory named fx3-returns/ under dev/model-qa/faceted-sheets/
    before the first call. It must start EMPTY — if it already contains files, STOP and
    report that instead of generating. Save each result IMMEDIATELY as

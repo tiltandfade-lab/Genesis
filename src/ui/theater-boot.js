@@ -215,6 +215,24 @@ const CAM_YAW_OFFSET_DEG = 45;
 // rotation step (verify-battle-stage's fixture-2 non-square-room overflow gate, G9 camera-yaw fix,
 // still holds — this only rescales viewSize uniformly, it doesn't touch the yaw-aware footprint math).
 const CAM_FIT_MARGIN = 0.94;
+// QF-B3 (2026-07-14, PLAY-LENS P0 #6 — "the tray camera clips the PC's head"): placeCamera's
+// screenHalfHeight term is `screenHalfDepth * sin(elevation) + (a standee-height term) * cos(elevation)`
+// — the interior/"beat" camera channel already carries a real standee-height term (S.interiorFitMaxHeight,
+// setInteriorBoard's own interiorFitMaxHeightFor), but the FLAT TABLETOP channel (setBoard/setUnits — the
+// node/settlement tray AND live combat both render through this same GL layer) never did: setBoard resets
+// S.interiorFitMaxHeight to 0 with the comment "0 for the flat tabletop... only setInteriorBoard ever
+// computes a nonzero" — i.e. the tray's floor-footprint-only fit term has ZERO knowledge of how TALL a
+// standing figure actually is, so a normal-height PC/NPC standee can have its head cropped by the top
+// frame edge even though its floor cell sits correctly inside the fit (the exact "Ogre Zombie" class of
+// bug BW2-1's own header already names for the interior channel — this closes the matching gap on the
+// tabletop channel). setUnits (below) now measures every mounted figure's REAL rendered bounding-box
+// height (an accurate THREE.Box3 read, not a per-archetype height guess — the tabletop mounts whole-
+// object/recipe/cuboid/interior-sprite figures through several different scale conventions, so a single
+// bbox read is the one measurement that's correct for all of them) and feeds the tallest one into this
+// SAME S.interiorFitMaxHeight field (gated `!S.isInteriorBoard` so it never stomps the interior channel's
+// own dedicated computation), plus this headroom margin — clearance above the tallest figure's own
+// measured top so its head sits inside the frame with room to spare, never flush against the edge.
+const TABLETOP_CAMERA_HEADROOM = 0.3;
 // BEAUTY-WAVE-4.md MF-1 (CAMERA TWEENS — the snap killer): every beat/room/move-step camera refit
 // glides position+target over this duration instead of snapping (BW4's 280-350ms band, ease-out).
 // A single fixed value inside the band (not randomized) keeps the motion predictable + fake-clock
@@ -1179,6 +1197,33 @@ function wholeObjectDesaturateColorBuffer(col){
   }
 }
 
+/* QF-B1 (2026-07-14, PLAY-LENS P0 #4 — "unshaded white wireframe mesh floating in the settlement
+   tray"): a targeted per-instance RECOLOR of a baked color-buffer IN PLACE, same "mutate the cached
+   buffer once before it becomes a BufferAttribute" idiom as wholeObjectDesaturateColorBuffer just
+   above. ROOT CAUSE this repairs: data/realm-props.js reuses a small set of whole-object models as
+   generic SHAPE placeholders across many semantically-unrelated named props — most visibly
+   prop-web.js's buildWebMass (a giant-spider corner web: thin pale ghost-silk strand tubes) standing
+   in for "Alley Fire Escape" / "Rebar Thicket" / "Cable Snarl" / "Cargo Net Tangle" / "Barbed Coil" /
+   "Coiled Mooring Rope" / "Shopping Cart Tangle" / "Broken Parking Meter Row" and others — none of
+   which should read as pale silk. The whole-object pipeline has no other per-instance color hook
+   (materials are shared/cached by opacity only, base color is always white so the BAKED vertex colors
+   show through 1:1 — see wholeObjectMaterialsFor's own header) so every reuse rendered in the SAME
+   fixed near-white palette regardless of what it was standing in for; on thin low-poly strand
+   geometry that reads exactly as an unshaded white wireframe cage, not "a dark iron fire escape."
+   Preserves each vertex's own baked LUMA (the model's existing lit/shadow/highlight pattern survives
+   untouched — a strand still reads brighter where the original bake lit it) and replaces only the HUE,
+   by scaling the target tint's r/g/b channels by that per-vertex luma — the standard "recolor a
+   grayscale ramp" technique, deliberately simple (placeholder-tier, CLAUDE.md §II.0b "ALL ART IS
+   PLACEHOLDER" — this un-blocks the wrong-palette bug without pretending to be a bespoke re-model). */
+function wholeObjectRetintColorBuffer(col, targetHex){
+  const tr = ((targetHex >> 16) & 255) / 255, tg = ((targetHex >> 8) & 255) / 255, tb = (targetHex & 255) / 255;
+  for(let i = 0; i < col.length; i += 3){
+    const r = col[i], g = col[i + 1], b = col[i + 2];
+    const luma = r * 0.299 + g * 0.587 + b * 0.114;
+    col[i] = tr * luma; col[i + 1] = tg * luma; col[i + 2] = tb * luma;
+  }
+}
+
 /* wholeObjectGeometryFor(key, gray) — §4 step 3: cache-checked; else resolves the registry entry,
    calls its (already-loaded) builder between resetGeom()/getBuffers() (probe-lib.js's own contract),
    buckets tris by channel (WHOLE_CHANNEL_BUCKET, classifier fallback for untagged/"" tris), rebuilds
@@ -1190,9 +1235,20 @@ function wholeObjectDesaturateColorBuffer(col){
    crash (§4 step 5's own guard list). D7: geometry is cached and tagged so clearGroup's per-setUnits
    sweep can skip disposing a SHARED cached geometry (see clearGroup's own edit below). */
 const WHOLE_GEOMETRY_CACHE = {};
-function wholeObjectGeometryFor(key, gray, pieceKind){
+/* QF-B1 (2026-07-14, PLAY-LENS P0 #4): `retintHex` is an OPTIONAL 4th arg — a realm-props.js entry
+   that REUSES a whole-object model whose baked palette doesn't match what it's standing in for (e.g.
+   "Alley Fire Escape"/"Rebar Thicket"/"Cable Snarl" all reuse prop-web.js's buildWebMass — a giant-
+   spider corner web authored in pale ghost-silk tones — as a generic thin-tangled-lattice placeholder
+   shape; a fire escape/rebar/cable has no business rendering pale silk-white) threads its own
+   `partParams.retint` hex straight through from the props mount call site below to
+   wholeObjectRetintColorBuffer, applied to the SAME cached-geometry pipeline the `gray` desaturated-
+   corpse variant already uses (own cache-key suffix, so a retinted variant never clobbers the
+   original-palette geometry every OTHER reuse of that key still wants — see setBoard's props loop).
+   Omitted (every pre-existing figure call site, and every prop reuse whose baked palette already
+   fits — Cobweb Mass/Hanging Cocoon Cluster genuinely ARE pale silk) is a byte-identical no-op. */
+function wholeObjectGeometryFor(key, gray, pieceKind, retintHex){
   if(!key) return null;
-  const cacheKey = key + (gray ? "|gray" : "");
+  const cacheKey = key + (gray ? "|gray" : "") + (retintHex != null ? ("|retint:" + retintHex.toString(16)) : "");
   const cached = WHOLE_GEOMETRY_CACHE[cacheKey];
   if(cached) return cached;
 
@@ -1243,6 +1299,7 @@ function wholeObjectGeometryFor(key, gray, pieceKind){
     ranges.push([start * 3, (w - start) * 3]);
   }
   if(gray) wholeObjectDesaturateColorBuffer(col);
+  if(retintHex != null) wholeObjectRetintColorBuffer(col, retintHex);
 
   const geo = new THREE.BufferGeometry();
   geo.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3));
@@ -5112,7 +5169,19 @@ function placeCamera(){
   }
 
   // NOW apply the player's own zoom multiplier on top of the corrected auto-fit viewSize.
-  const viewSize = autoFitViewSize * (S.zoomLevel || 1);
+  // QF-B3: THEATER-ZOOM-SPREAD's own readability default (DEFAULT_FIGURE_ZOOM_STEPS, ~0.51x at 3
+  // steps) is a deliberate zoom-IN bias — a smaller viewSize reads as "closer/bigger" — applied
+  // UNCONDITIONALLY on every flat-tabletop board, board-footprint fit or not. Before this unit,
+  // nothing floored how far that bias could shrink the frame, so it could (and did — pl-001/pl-002)
+  // zoom in past the point where a standing figure's own head still fits: viewSizeForHeight (this
+  // function's own headroom-inclusive height term, now carrying TABLETOP_CAMERA_HEADROOM via
+  // S.interiorFitMaxHeight — see that constant's own header) is the one viewSize below which the
+  // tallest mounted figure's padded top would NOT be contained — clamping the biased viewSize to
+  // never go below it makes "zoom in for readability" and "never crop a head" compatible: a board
+  // whose footprint already demands more room than the bias would give keeps its existing (larger)
+  // fit unchanged (Math.max is a no-op there), and a board that WOULD have over-zoomed past a
+  // figure's head now stops exactly at the safe floor instead.
+  const viewSize = Math.max(autoFitViewSize * (S.zoomLevel || 1), viewSizeForHeight);
   S.camera.left = -viewSize * aspect;
   S.camera.right = viewSize * aspect;
   S.camera.top = viewSize;
@@ -6473,7 +6542,13 @@ function setBoard(data){
           : "prop:" + p.part);
       const wEntry = resolveWholeObject(wPropKey, "prop");
       if(wEntry && typeof wEntry.build === "function"){
-        const wGeo = wholeObjectGeometryFor(wPropKey, false, "prop");
+        // QF-B1: an authored `partParams.retint` (data/realm-props.js — a realm prop reusing a
+        // whole-object model whose baked palette doesn't match, e.g. the web-mass shape standing in
+        // for "Alley Fire Escape") recolors the cached geometry's baked vertex colors toward that hex
+        // (own cache-key suffix inside wholeObjectGeometryFor — never touches the original-palette
+        // geometry every OTHER reuse of this same key still wants, e.g. Cobweb Mass's genuine web read).
+        const wRetint = (p.partParams && typeof p.partParams.retint === "number") ? p.partParams.retint : null;
+        const wGeo = wholeObjectGeometryFor(wPropKey, false, "prop", wRetint);
         if(wGeo){
           const wMats = wholeObjectMaterialsFor(wEntry);
           const wg = new THREE.Group();
@@ -10474,6 +10549,12 @@ function setUnits(data){
     color: scorchTintFor(S.env), transparent: true, opacity: 0.88, depthWrite: false
   }));
 
+  // QF-B3 (TABLETOP_CAMERA_HEADROOM's own header comment, above): the tallest mounted figure's REAL
+  // rendered top (world-space y, floor at 0), measured after this loop below. Only tracked for the
+  // flat tabletop channel (`!S.isInteriorBoard`) — the interior channel already has its own dedicated
+  // computation (interiorFitMaxHeightFor) and must never be stomped by this one.
+  let tabletopTallestTop = 0;
+
   (data.units || []).forEach(u => {
     // BW2-2b item 4 (THE KILTER): `let`, not `const` — an interior-true-scale standee nudges these by
     // a tiny seeded offset below (kilterFor); the flat tabletop path (interiorSpriteFig false) never
@@ -10625,6 +10706,18 @@ function setUnits(data){
       || (recipeFor(u.recipeSlug) && Parts.PARTS[recipeFor(u.recipeSlug).base] && Parts.PARTS[recipeFor(u.recipeSlug).base].anchors)
       || Parts.torsoBiped.anchors;
     applyConditionMods(figure, u.conditionMods, modAnchors, tint);
+    // QF-B3: measure this figure's REAL rendered top (post scale/position/down-topple/condition-mods —
+    // the very last transform this figure gets) via an actual bounding-box read, not a per-archetype
+    // height guess (see TABLETOP_CAMERA_HEADROOM's own header for why a bbox is the one measurement
+    // that's correct across whole-object/recipe/cuboid/interior-sprite figures alike). A downed/prone
+    // figure is naturally shorter once toppled (rotation.z=Math.PI/2 above) — the bbox reflects that
+    // correctly on its own, no special-casing needed. Skipped entirely on the interior channel (that
+    // system already computes its own fit height — see tabletopTallestTop's own declaration above).
+    if(!S.isInteriorBoard){
+      figure.updateMatrixWorld(true);
+      const figBox = new THREE.Box3().setFromObject(figure);
+      if(isFinite(figBox.max.y) && figBox.max.y > tabletopTallestTop) tabletopTallestTop = figBox.max.y;
+    }
     if(u.fled) figure.visible = false;
     // T3 (§4 ctx contract): tag every figure with its unit id so theater-verbs.js's findUnit(id) can
     // resolve a verb's `who` straight to this live Object3D — no separate id->handle map to keep in
@@ -10700,6 +10793,20 @@ function setUnits(data){
   // against for both halves (a still-absent id next time is a despawn; an id absent from THIS set that
   // reappears later is a fresh mount again).
   S.knownUnitIds = newUnitIds;
+
+  // QF-B3: setBoard already ran placeCamera() once for this render, but at THAT point no unit was
+  // mounted yet, so its screenHalfHeight term had no real standee height to work with (the flat
+  // tabletop's permanent 0 — see TABLETOP_CAMERA_HEADROOM's own header). Now that every figure is
+  // mounted+measured (tabletopTallestTop, above), refit the camera against the REAL tallest one, headroom
+  // included — this is the fit that actually sticks (setUnits always runs after setBoard, never before).
+  // Gated `!S.isInteriorBoard` so the interior channel's own dedicated fit (setInteriorBoard's own
+  // placeCameraTweened call, already correct) is never touched or double-fit by this one. A board with
+  // no units at all (the idle empty table) leaves tabletopTallestTop at 0 — S.interiorFitMaxHeight stays
+  // 0 too, byte-identical to before this unit for that case (screenHalfHeight's height term is a no-op).
+  if(!S.isInteriorBoard){
+    S.interiorFitMaxHeight = tabletopTallestTop > 0 ? (tabletopTallestTop + TABLETOP_CAMERA_HEADROOM) : 0;
+    placeCamera();
+  }
 
   markDirty();
 }
@@ -11919,4 +12026,18 @@ window.Theater._interiorBuildLightConeForTest = function(light, height){ return 
 // the result back, rather than racing startLightFlicker's real 480ms setInterval.
 window.Theater._lightFlickerStepForTest = function(pointLights, bases, interiorTargets, amplitude){
   return lightFlickerStep(pointLights, bases, interiorTargets, amplitude);
+};
+// QF-B1 (2026-07-14, PLAY-LENS P0 #4) test hooks — same "_xxxForTest" idiom as every other seam
+// above. _wholeObjectRetintColorBufferForTest exposes the pure per-vertex recolor math directly
+// (no geometry/scene needed). _wholeObjectGeometryForTest exposes the cached-geometry factory so a
+// harness can pull a REAL registered prop's baked color attribute (e.g. "prop:web-mass") with and
+// without a retintHex and assert the buffer actually changed — the red-first repro for "a realm-prop
+// entry reuses a whole-object model whose baked palette doesn't match what it's standing in for."
+window.Theater._wholeObjectRetintColorBufferForTest = function(col, targetHex){
+  const copy = Float32Array.from(col);
+  wholeObjectRetintColorBuffer(copy, targetHex);
+  return copy;
+};
+window.Theater._wholeObjectGeometryForTest = function(key, gray, pieceKind, retintHex){
+  return wholeObjectGeometryFor(key, gray, pieceKind, retintHex);
 };

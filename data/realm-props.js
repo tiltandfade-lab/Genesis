@@ -556,7 +556,9 @@ const REALM_PROPS={
    "model": "prop:web-mass",
    "summary": "knotted sparking cable bundle, tangled half-cover",
    "part": "web-mass",
-   "partParams": {}
+   "partParams": {
+    "retint": 3025960
+   }
   },
   {
    "name": "Grav-Cart",
@@ -1079,7 +1081,9 @@ const REALM_PROPS={
    "model": "prop:web-mass",
    "summary": "zigzag iron fire escape, loose ladder, tall cover",
    "part": "web-mass",
-   "partParams": {}
+   "partParams": {
+    "retint": 4869199
+   }
   },
   {
    "name": "Back-Alley Card Table",
@@ -1182,7 +1186,9 @@ const REALM_PROPS={
    "model": "prop:web-mass",
    "summary": "bent meter row, jimmied coin slots, street marker",
    "part": "web-mass",
-   "partParams": {}
+   "partParams": {
+    "retint": 6512986
+   }
   },
   {
    "name": "Smashed Slot Machine",
@@ -1584,7 +1590,9 @@ const REALM_PROPS={
    "model": "prop:web-mass",
    "summary": "Tangled rebar snarl, jagged half-cover, snags movement",
    "part": "web-mass",
-   "partParams": {}
+   "partParams": {
+    "retint": 5917242
+   }
   },
   {
    "name": "Traffic Light Gantry",
@@ -1636,7 +1644,9 @@ const REALM_PROPS={
    "model": "prop:web-mass",
    "summary": "Fused cart-pile tangle, low cover, wheel-locked mass",
    "part": "web-mass",
-   "partParams": {}
+   "partParams": {
+    "retint": 7238262
+   }
   },
   {
    "name": "Sandbag Emplacement",
@@ -1853,7 +1863,9 @@ const REALM_PROPS={
    "model": "prop:web-mass",
    "summary": "Dense shrub tangle, chunky three-quarter cover",
    "part": "web-mass",
-   "partParams": {}
+   "partParams": {
+    "retint": 4480052
+   }
   },
   {
    "name": "Carport Support Post",
@@ -2194,7 +2206,9 @@ const REALM_PROPS={
    "model": "prop:web-mass",
    "summary": "pulsing alien-flesh mass, breathes faintly wrong",
    "part": "web-mass",
-   "partParams": {}
+   "partParams": {
+    "retint": 8018514
+   }
   },
   {
    "name": "Impossible Stair",
@@ -2578,7 +2592,9 @@ const REALM_PROPS={
    "model": "prop:web-mass",
    "summary": "Tangled rusted wire snarl, slows and snags movement",
    "part": "web-mass",
-   "partParams": {}
+   "partParams": {
+    "retint": 5914672
+   }
   },
   {
    "name": "Field Artillery Piece",
@@ -2781,7 +2797,9 @@ const REALM_PROPS={
    "model": "prop:web-mass",
    "summary": "Collapsed spotter balloon, huge draped tangle cover",
    "part": "web-mass",
-   "partParams": {}
+   "partParams": {
+    "retint": 9075292
+   }
   },
   {
    "name": "Triage Cot Row",
@@ -3020,7 +3038,9 @@ const REALM_PROPS={
    "model": "prop:web-mass",
    "summary": "Snarled netting mass, awkward footing hazard",
    "part": "web-mass",
-   "partParams": {}
+   "partParams": {
+    "retint": 9075284
+   }
   },
   {
    "name": "Capstan",
@@ -3119,7 +3139,9 @@ const REALM_PROPS={
    "model": "prop:web-mass",
    "summary": "Swaying rope-ladder net between mast shrouds",
    "part": "web-mass",
-   "partParams": {}
+   "partParams": {
+    "retint": 9075284
+   }
   },
   {
    "name": "Cracked Ship's Bell",
@@ -3226,7 +3248,9 @@ const REALM_PROPS={
    "model": "prop:web-mass",
    "summary": "Huge coiled hawser, nested rope pile",
    "part": "web-mass",
-   "partParams": {}
+   "partParams": {
+    "retint": 9075284
+   }
   },
   {
    "name": "Scuttle Hatch",
@@ -3700,7 +3724,9 @@ const REALM_PROPS={
    "model": "prop:web-mass",
    "summary": "hanging liana curtain, half cover",
    "part": "web-mass",
-   "partParams": {}
+   "partParams": {
+    "retint": 4152366
+   }
   },
   {
    "name": "Standing Megalith",
@@ -4210,7 +4236,9 @@ const REALM_PROPS={
    "model": "prop:web-mass",
    "summary": "jack-in-the-box, self-turning crank, unsettling toy prop",
    "part": "web-mass",
-   "partParams": {}
+   "partParams": {
+    "retint": 4865066
+   }
   },
   {
    "name": "Painted Charger",
@@ -4398,7 +4426,9 @@ const REALM_PROPS={
    "model": "prop:web-mass",
    "summary": "sagging inflatable castle, wheezing blower, soft mass",
    "part": "web-mass",
-   "partParams": {}
+   "partParams": {
+    "retint": 6978186
+   }
   },
   {
    "name": "Ferris Gondola Husk",

@@ -1,0 +1,548 @@
+{
+  "runId": "pl4-fantasy",
+  "realm": "fantasy",
+  "route": "standard",
+  "forceRealm": {
+    "requested": "fantasy",
+    "ok": true,
+    "realm": {
+      "active": true,
+      "name": "fantasy",
+      "physics": [],
+      "debt": 2,
+      "motif": null
+    }
+  },
+  "generatedAt": "2026-07-15T15:08:16.746Z",
+  "legs": [
+    {
+      "leg": "tiyl-start",
+      "ok": true,
+      "detail": {
+        "worldName": "Mire-End"
+      }
+    },
+    {
+      "leg": "force-realm",
+      "ok": true,
+      "detail": {
+        "ok": true,
+        "realm": {
+          "active": true,
+          "name": "fantasy",
+          "physics": [],
+          "debt": 2,
+          "motif": null
+        }
+      }
+    },
+    {
+      "leg": "settlement-node",
+      "ok": true,
+      "detail": {
+        "ok": true,
+        "nodeId": "mire-end",
+        "recordId": "location:the-gravity-well",
+        "archetypeKey": 11,
+        "name": "The Gravity-Well",
+        "sourceKind": "node"
+      }
+    },
+    {
+      "leg": "travel-depart",
+      "ok": true,
+      "detail": {
+        "ok": true,
+        "stage": "done",
+        "destNodeId": "play-lens-dungeon-approach",
+        "walk": true,
+        "instant": false,
+        "travelMin": 180
+      }
+    },
+    {
+      "leg": "travel-arrive",
+      "ok": true,
+      "detail": {
+        "ok": true,
+        "stage": "done",
+        "arrivedNodeId": "play-lens-dungeon-approach",
+        "detail": {
+          "ok": true,
+          "completed": "play-lens-dungeon-approach",
+          "next": null,
+          "arrived": true,
+          "destNodeId": "play-lens-dungeon-approach"
+        }
+      }
+    },
+    {
+      "leg": "dungeon-walk",
+      "ok": true,
+      "detail": {
+        "topology": "The Branch",
+        "roomCount": 7
+      }
+    },
+    {
+      "leg": "dungeon-rooms",
+      "ok": true,
+      "detail": {
+        "walked": 7
+      }
+    },
+    {
+      "leg": "combat-start",
+      "ok": true,
+      "detail": {
+        "foes": [
+          {
+            "fid": "f1",
+            "name": "Wolf"
+          },
+          {
+            "fid": "f2",
+            "name": "Giant Rat"
+          },
+          {
+            "fid": "f3",
+            "name": "Skeleton"
+          }
+        ]
+      }
+    },
+    {
+      "leg": "combat-round-2",
+      "ok": true,
+      "detail": {
+        "ok": true,
+        "stage": "done",
+        "beforeFoes": [
+          {
+            "fid": "f1",
+            "down": false
+          },
+          {
+            "fid": "f2",
+            "down": false
+          },
+          {
+            "fid": "f3",
+            "down": false
+          }
+        ],
+        "beforePcBand": "melee",
+        "attack": {
+          "ok": true,
+          "targetFid": "f1",
+          "hit": true,
+          "damage": 7
+        },
+        "move": {
+          "ok": false,
+          "reason": "band-not-in-room"
+        },
+        "afterFoes": [
+          {
+            "fid": "f1",
+            "down": false
+          },
+          {
+            "fid": "f2",
+            "down": false
+          },
+          {
+            "fid": "f3",
+            "down": false
+          }
+        ],
+        "afterPcBand": "melee",
+        "round": 2
+      }
+    },
+    {
+      "leg": "combat-round-3",
+      "ok": true,
+      "detail": {
+        "ok": true,
+        "stage": "done",
+        "beforeFoes": [
+          {
+            "fid": "f1",
+            "down": false
+          },
+          {
+            "fid": "f2",
+            "down": false
+          },
+          {
+            "fid": "f3",
+            "down": false
+          }
+        ],
+        "beforePcBand": "melee",
+        "attack": {
+          "ok": true,
+          "targetFid": "f1",
+          "hit": true,
+          "damage": 12
+        },
+        "move": {
+          "ok": false,
+          "reason": "band-not-in-room"
+        },
+        "afterFoes": [
+          {
+            "fid": "f1",
+            "down": true
+          },
+          {
+            "fid": "f2",
+            "down": false
+          },
+          {
+            "fid": "f3",
+            "down": false
+          }
+        ],
+        "afterPcBand": "melee",
+        "round": 3
+      }
+    },
+    {
+      "leg": "state-transition",
+      "ok": true,
+      "detail": {
+        "ok": true,
+        "stage": "done",
+        "candidateCount": 7,
+        "roomSegNum": 1,
+        "entityRef": "S1.door",
+        "archetype": "door",
+        "from": "shut",
+        "to": "ajar"
+      }
+    },
+    {
+      "leg": "combat-end",
+      "ok": true,
+      "detail": {
+        "ok": true,
+        "stage": "done"
+      }
+    },
+    {
+      "leg": "dungeon-complete",
+      "ok": true,
+      "detail": {
+        "ok": true,
+        "stage": "start",
+        "detail": {
+          "ok": true,
+          "completed": "play-lens-dungeon-approach",
+          "next": "frontier-s1-0"
+        }
+      }
+    },
+    {
+      "leg": "recordless-settlement",
+      "ok": true,
+      "detail": {
+        "ok": true,
+        "stage": "done",
+        "nodeId": "play-lens-record-less-settlement",
+        "sourceKind": "settlement",
+        "hasCodexId": false
+      }
+    },
+    {
+      "leg": "shop",
+      "ok": true,
+      "detail": {
+        "ok": true,
+        "stage": "done",
+        "shopId": "the-play-lens-trading-post"
+      }
+    },
+    {
+      "leg": "rest",
+      "ok": true,
+      "detail": {
+        "ok": true,
+        "rest": "long",
+        "restored": "nothing to restore",
+        "hitDice": null,
+        "interrupted": false,
+        "interruptedMinutes": null,
+        "exhaustion": 0,
+        "lodging": {
+          "tier": 0,
+          "price": 1,
+          "charged": 1,
+          "unpaid": 0
+        },
+        "leveled": null,
+        "minutes": 480
+      }
+    }
+  ],
+  "notes": [
+    "--force-realm fantasy: w.realm.active=true via breachMarkRealmActive — dungeon INTERIOR_TILE_KITS + activeRealms now steer to 'fantasy'. Scope note: PLACE_SKINS (settlement mint skin) only defines {chrome,frontier,gloom} — a 'fantasy' settlement mint degrades to the frontier skin (rollPlace's own pre-existing fallback), unaffected by this flag."
+  ],
+  "boot": {
+    "ok": true,
+    "notes": [
+      "startSession() called"
+    ],
+    "worldId": "mrm7t5v35o956",
+    "worldName": "Mire-End"
+  },
+  "theaterState": {
+    "hasBattleStage": true,
+    "theaterMounted": true,
+    "hasCanvas": true
+  },
+  "mint": {
+    "ok": true,
+    "nodeId": "mire-end",
+    "recordId": "location:the-gravity-well",
+    "archetypeKey": 11,
+    "name": "The Gravity-Well",
+    "sourceKind": "node"
+  },
+  "travel": {
+    "ok": true,
+    "stage": "done",
+    "destNodeId": "play-lens-dungeon-approach",
+    "walk": true,
+    "instant": false,
+    "travelMin": 180
+  },
+  "travelSegments": {
+    "ok": true,
+    "walkId": "play-lens-dungeon-approach",
+    "segs": [
+      1,
+      2,
+      3
+    ],
+    "current": 1,
+    "env": "wilderness"
+  },
+  "travelArrive": {
+    "ok": true,
+    "stage": "done",
+    "arrivedNodeId": "play-lens-dungeon-approach",
+    "detail": {
+      "ok": true,
+      "completed": "play-lens-dungeon-approach",
+      "next": null,
+      "arrived": true,
+      "destNodeId": "play-lens-dungeon-approach"
+    }
+  },
+  "dungeon": {
+    "ok": true,
+    "stage": "done",
+    "topology": "The Branch",
+    "segCount": 7,
+    "environment": "dungeon",
+    "nodeId": "play-lens-dungeon-approach",
+    "roomCount": 7
+  },
+  "dungeonSegments": {
+    "ok": true,
+    "walkId": "play-lens-dungeon-approach",
+    "segs": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "current": 1,
+    "env": "dungeon"
+  },
+  "combatStart": {
+    "ok": true,
+    "stage": "done",
+    "foes": [
+      {
+        "fid": "f1",
+        "name": "Wolf"
+      },
+      {
+        "fid": "f2",
+        "name": "Giant Rat"
+      },
+      {
+        "fid": "f3",
+        "name": "Skeleton"
+      }
+    ]
+  },
+  "combatRound2": {
+    "ok": true,
+    "stage": "done",
+    "beforeFoes": [
+      {
+        "fid": "f1",
+        "down": false
+      },
+      {
+        "fid": "f2",
+        "down": false
+      },
+      {
+        "fid": "f3",
+        "down": false
+      }
+    ],
+    "beforePcBand": "melee",
+    "attack": {
+      "ok": true,
+      "targetFid": "f1",
+      "hit": true,
+      "damage": 7
+    },
+    "move": {
+      "ok": false,
+      "reason": "band-not-in-room"
+    },
+    "afterFoes": [
+      {
+        "fid": "f1",
+        "down": false
+      },
+      {
+        "fid": "f2",
+        "down": false
+      },
+      {
+        "fid": "f3",
+        "down": false
+      }
+    ],
+    "afterPcBand": "melee",
+    "round": 2
+  },
+  "combatRound3": {
+    "ok": true,
+    "stage": "done",
+    "beforeFoes": [
+      {
+        "fid": "f1",
+        "down": false
+      },
+      {
+        "fid": "f2",
+        "down": false
+      },
+      {
+        "fid": "f3",
+        "down": false
+      }
+    ],
+    "beforePcBand": "melee",
+    "attack": {
+      "ok": true,
+      "targetFid": "f1",
+      "hit": true,
+      "damage": 12
+    },
+    "move": {
+      "ok": false,
+      "reason": "band-not-in-room"
+    },
+    "afterFoes": [
+      {
+        "fid": "f1",
+        "down": true
+      },
+      {
+        "fid": "f2",
+        "down": false
+      },
+      {
+        "fid": "f3",
+        "down": false
+      }
+    ],
+    "afterPcBand": "melee",
+    "round": 3
+  },
+  "stateTransition": {
+    "ok": true,
+    "stage": "done",
+    "candidateCount": 7,
+    "roomSegNum": 1,
+    "entityRef": "S1.door",
+    "archetype": "door",
+    "from": "shut",
+    "to": "ajar"
+  },
+  "combatEnd": {
+    "ok": true,
+    "stage": "done"
+  },
+  "dungeonComplete": {
+    "ok": true,
+    "stage": "start",
+    "detail": {
+      "ok": true,
+      "completed": "play-lens-dungeon-approach",
+      "next": "frontier-s1-0"
+    }
+  },
+  "recordlessSettlement": {
+    "ok": true,
+    "stage": "done",
+    "nodeId": "play-lens-record-less-settlement",
+    "sourceKind": "settlement",
+    "hasCodexId": false
+  },
+  "shop": {
+    "ok": true,
+    "stage": "done",
+    "shopId": "the-play-lens-trading-post"
+  },
+  "shopRenderVerdict": {
+    "rendered": false,
+    "reason": "no-.shop-header-in-dom",
+    "battleStageActive": true,
+    "stageFeedColPresent": true,
+    "note": "battle-stage layout is active — render.js's showStage branch swaps .panel-col for the DM feed unconditionally; GS.gamePanel='shop' has no visual effect while the theater stage is mounted (a real production gap, not a rig defect)."
+  },
+  "rest": {
+    "ok": true,
+    "rest": "long",
+    "restored": "nothing to restore",
+    "hitDice": null,
+    "interrupted": false,
+    "interruptedMinutes": null,
+    "exhaustion": 0,
+    "lodging": {
+      "tier": 0,
+      "price": 1,
+      "charged": 1,
+      "unpaid": 0
+    },
+    "leveled": null,
+    "minutes": 480
+  },
+  "shotCount": 23,
+  "kindsPresent": [
+    "boot",
+    "scene",
+    "combat_round",
+    "state_transition",
+    "rest"
+  ],
+  "legOkCount": 16,
+  "legFailCount": 0,
+  "consoleErrorCount": 8,
+  "unexpected404": [],
+  "benign404Count": 8
+}

@@ -1,0 +1,1107 @@
+{
+  "runId": "pl4-chrome",
+  "realm": "chrome",
+  "route": "town-beats",
+  "generatedAt": "2026-07-15T15:09:45.393Z",
+  "totals": {
+    "counts": {
+      "facade:null-facade": 4,
+      "dressing:placeholder-card": 39,
+      "figure:whole-object": 35,
+      "dressing:resolved": 33,
+      "figure:sprite-faceted": 5,
+      "figure:sprite-legacy": 7
+    },
+    "entriesCaptured": 123
+  },
+  "topUnresolved": [
+    {
+      "key": "facade:frontier",
+      "count": 4
+    },
+    {
+      "key": "dressing:fantasy-clutter-emptybarrel",
+      "count": 1
+    },
+    {
+      "key": "dressing:fantasy-clutter-woodpile",
+      "count": 1
+    },
+    {
+      "key": "dressing:spr-frontier-landed-gentry",
+      "count": 1
+    },
+    {
+      "key": "dressing:spr-frontier-reluctant-officeholder",
+      "count": 1
+    },
+    {
+      "key": "dressing:spr-frontier-physician",
+      "count": 1
+    },
+    {
+      "key": "dressing:fantasy-flora-hedgerow",
+      "count": 1
+    },
+    {
+      "key": "dressing:fantasy-flora-birchgrove",
+      "count": 1
+    },
+    {
+      "key": "dressing:fantasy-flora-oak-alt",
+      "count": 1
+    },
+    {
+      "key": "dressing:fantasy-flora-oak",
+      "count": 1
+    },
+    {
+      "key": "dressing:fantasy-flora-fern",
+      "count": 1
+    },
+    {
+      "key": "dressing:fantasy-flora-fern-alt",
+      "count": 1
+    },
+    {
+      "key": "dressing:chrome-flora-neonlily",
+      "count": 1
+    },
+    {
+      "key": "dressing:chrome-flora-neonbonsai-alt",
+      "count": 1
+    },
+    {
+      "key": "dressing:chrome-flora-drone-hive",
+      "count": 1
+    },
+    {
+      "key": "dressing:chrome-clutter-cablesnarl",
+      "count": 1
+    },
+    {
+      "key": "dressing:chrome-clutter-crateseal",
+      "count": 1
+    },
+    {
+      "key": "dressing:chrome-flora-circuitmoss",
+      "count": 1
+    },
+    {
+      "key": "dressing:chrome-flora-hologram-fern",
+      "count": 1
+    },
+    {
+      "key": "dressing:chrome-flora-lightpod",
+      "count": 1
+    }
+  ],
+  "perShot": [
+    {
+      "seq": 1,
+      "kind": "boot",
+      "file": "pl-001-boot-tiyl-start.png",
+      "censusDelta": {
+        "counts": {
+          "facade:null-facade": 4,
+          "dressing:placeholder-card": 5,
+          "figure:whole-object": 4,
+          "dressing:resolved": 2
+        },
+        "entries": [
+          {
+            "seam": "facade",
+            "outcome": "null-facade",
+            "name": "frontier",
+            "sceneKind": "settlement"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "fantasy-clutter-emptybarrel",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "fantasy-clutter-woodpile",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "spr-frontier-landed-gentry",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "spr-frontier-reluctant-officeholder",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "spr-frontier-physician",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "class:barbarian",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "blank:figure",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "blank:figure",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "blank:figure",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "facade",
+            "outcome": "null-facade",
+            "name": "frontier",
+            "sceneKind": "settlement"
+          },
+          {
+            "seam": "facade",
+            "outcome": "null-facade",
+            "name": "frontier",
+            "sceneKind": "settlement"
+          },
+          {
+            "seam": "facade",
+            "outcome": "null-facade",
+            "name": "frontier",
+            "sceneKind": "settlement"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "fantasy-clutter-woodpile",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "fantasy-clutter-emptybarrel",
+            "sceneKind": "tabletop"
+          }
+        ]
+      }
+    },
+    {
+      "seq": 2,
+      "kind": "scene",
+      "file": "pl-002-scene-settlement-2.png",
+      "censusDelta": {
+        "counts": {
+          "figure:whole-object": 4
+        },
+        "entries": [
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "class:barbarian",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "blank:figure",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "blank:figure",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "blank:figure",
+            "sceneKind": "tabletop"
+          }
+        ]
+      }
+    },
+    {
+      "seq": 3,
+      "kind": "scene",
+      "file": "pl-003-scene-travel-walk.png",
+      "censusDelta": {
+        "counts": {
+          "dressing:placeholder-card": 3,
+          "figure:whole-object": 1,
+          "dressing:resolved": 3
+        },
+        "entries": [
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "fantasy-flora-hedgerow",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "fantasy-flora-birchgrove",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "fantasy-flora-oak-alt",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "class:barbarian",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "fantasy-flora-hedgerow",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "fantasy-flora-birchgrove",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "fantasy-flora-oak-alt",
+            "sceneKind": "tabletop"
+          }
+        ]
+      }
+    },
+    {
+      "seq": 4,
+      "kind": "scene",
+      "file": "pl-004-scene-travel-leg-2.png",
+      "censusDelta": {
+        "counts": {
+          "dressing:placeholder-card": 3,
+          "dressing:resolved": 3
+        },
+        "entries": [
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "fantasy-flora-oak",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "fantasy-flora-fern",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "fantasy-flora-fern-alt",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "fantasy-flora-oak",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "fantasy-flora-fern",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "fantasy-flora-fern-alt",
+            "sceneKind": "tabletop"
+          }
+        ]
+      }
+    },
+    {
+      "seq": 5,
+      "kind": "scene",
+      "file": "pl-005-scene-travel-arrive.png",
+      "censusDelta": {
+        "counts": {
+          "figure:whole-object": 1
+        },
+        "entries": [
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "class:barbarian",
+            "sceneKind": "tabletop"
+          }
+        ]
+      }
+    },
+    {
+      "seq": 6,
+      "kind": "scene",
+      "file": "pl-006-scene-dungeon-room-1.png",
+      "censusDelta": {
+        "counts": {
+          "dressing:placeholder-card": 7,
+          "figure:whole-object": 1,
+          "dressing:resolved": 7
+        },
+        "entries": [
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "chrome-flora-neonlily",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "chrome-flora-neonbonsai-alt",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "chrome-flora-drone-hive",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "chrome-clutter-cablesnarl",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "chrome-clutter-crateseal",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "chrome-flora-circuitmoss",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "chrome-flora-hologram-fern",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "class:barbarian",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "chrome-flora-neonlily",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "chrome-flora-drone-hive",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "chrome-clutter-cablesnarl",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "chrome-flora-neonbonsai-alt",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "chrome-clutter-crateseal",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "chrome-flora-circuitmoss",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "chrome-flora-hologram-fern",
+            "sceneKind": "interior"
+          }
+        ]
+      }
+    },
+    {
+      "seq": 7,
+      "kind": "scene",
+      "file": "pl-007-scene-dungeon-room-2.png",
+      "censusDelta": {
+        "counts": {
+          "dressing:placeholder-card": 8,
+          "figure:whole-object": 1,
+          "dressing:resolved": 8
+        },
+        "entries": [
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "chrome-flora-lightpod",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "chrome-flora-billboardvine",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "chrome-clutter-batterypack",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "chrome-flora-cableplanter",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "chrome-flora-wireweed",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "chrome-clutter-keyboardpile",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "chrome-clutter-drone-husk",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "chrome-flora-solarvine",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "class:barbarian",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "chrome-flora-lightpod",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "chrome-flora-billboardvine",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "chrome-clutter-batterypack",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "chrome-flora-wireweed",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "chrome-flora-cableplanter",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "chrome-clutter-keyboardpile",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "chrome-clutter-drone-husk",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "chrome-flora-solarvine",
+            "sceneKind": "interior"
+          }
+        ]
+      }
+    },
+    {
+      "seq": 8,
+      "kind": "scene",
+      "file": "pl-008-scene-dungeon-room-3.png",
+      "censusDelta": {
+        "counts": {
+          "dressing:placeholder-card": 2,
+          "figure:whole-object": 1,
+          "dressing:resolved": 2
+        },
+        "entries": [
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "chrome-flora-scraptree",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "chrome-flora-glasscoral",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "class:barbarian",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "chrome-flora-scraptree",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "chrome-flora-glasscoral",
+            "sceneKind": "interior"
+          }
+        ]
+      }
+    },
+    {
+      "seq": 9,
+      "kind": "scene",
+      "file": "pl-009-scene-dungeon-room-4.png",
+      "censusDelta": {
+        "counts": {
+          "dressing:placeholder-card": 7,
+          "figure:whole-object": 1,
+          "dressing:resolved": 7
+        },
+        "entries": [
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "chrome-flora-neonbonsai",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "chrome-flora-cableplanter-alt",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "chrome-clutter-circuitscrap",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "chrome-flora-antennagrass",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "chrome-flora-hazardfern",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "chrome-flora-vendingivy",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "chrome-clutter-brokenscreen-alt",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "class:barbarian",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "chrome-flora-neonbonsai",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "chrome-flora-cableplanter-alt",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "chrome-clutter-circuitscrap",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "chrome-flora-antennagrass",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "chrome-flora-hazardfern",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "chrome-clutter-brokenscreen-alt",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "chrome-flora-vendingivy",
+            "sceneKind": "interior"
+          }
+        ]
+      }
+    },
+    {
+      "seq": 10,
+      "kind": "combat_round",
+      "file": "pl-010-combat_round-round-1.png",
+      "censusDelta": {
+        "counts": {
+          "figure:whole-object": 10,
+          "figure:sprite-faceted": 3,
+          "figure:sprite-legacy": 3
+        },
+        "entries": [
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "class:barbarian",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "wolf",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "giant-rat",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "skeleton",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "class:barbarian",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "wolf",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "sprite-faceted",
+            "name": "spr-fantasy-giant-rat",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "skeleton",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "class:barbarian",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "sprite-legacy",
+            "name": "spr-fantasy-wolf",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "sprite-faceted",
+            "name": "spr-fantasy-giant-rat",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "skeleton",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "class:barbarian",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "sprite-legacy",
+            "name": "spr-fantasy-wolf",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "sprite-faceted",
+            "name": "spr-fantasy-giant-rat",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "sprite-legacy",
+            "name": "spr-fantasy-skeleton",
+            "sceneKind": "tabletop"
+          }
+        ]
+      }
+    },
+    {
+      "seq": 11,
+      "kind": "combat_round",
+      "file": "pl-011-combat_round-round-2.png",
+      "censusDelta": {
+        "counts": {
+          "figure:whole-object": 1,
+          "figure:sprite-faceted": 1,
+          "figure:sprite-legacy": 2
+        },
+        "entries": [
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "class:barbarian",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "sprite-legacy",
+            "name": "spr-fantasy-wolf",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "sprite-faceted",
+            "name": "spr-fantasy-giant-rat",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "sprite-legacy",
+            "name": "spr-fantasy-skeleton",
+            "sceneKind": "tabletop"
+          }
+        ]
+      }
+    },
+    {
+      "seq": 12,
+      "kind": "combat_round",
+      "file": "pl-012-combat_round-round-3.png",
+      "censusDelta": {
+        "counts": {
+          "figure:whole-object": 1,
+          "figure:sprite-faceted": 1,
+          "figure:sprite-legacy": 2
+        },
+        "entries": [
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "class:barbarian",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "sprite-legacy",
+            "name": "spr-fantasy-wolf",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "sprite-faceted",
+            "name": "spr-fantasy-giant-rat",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "sprite-legacy",
+            "name": "spr-fantasy-skeleton",
+            "sceneKind": "tabletop"
+          }
+        ]
+      }
+    },
+    {
+      "seq": 13,
+      "kind": "state_transition",
+      "file": "pl-013-state_transition-door-shut-to-ajar.png",
+      "censusDelta": {
+        "counts": {},
+        "entries": []
+      }
+    },
+    {
+      "seq": 14,
+      "kind": "scene",
+      "file": "pl-014-scene-combat-end.png",
+      "censusDelta": {
+        "counts": {
+          "figure:whole-object": 3
+        },
+        "entries": [
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "class:barbarian",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "f1",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "f2",
+            "sceneKind": "interior"
+          }
+        ]
+      }
+    },
+    {
+      "seq": 15,
+      "kind": "scene",
+      "file": "pl-015-scene-dungeon-complete.png",
+      "censusDelta": {
+        "counts": {
+          "figure:whole-object": 1
+        },
+        "entries": [
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "class:barbarian",
+            "sceneKind": "tabletop"
+          }
+        ]
+      }
+    },
+    {
+      "seq": 16,
+      "kind": "scene",
+      "file": "pl-016-scene-recordless-settlement.png",
+      "censusDelta": {
+        "counts": {
+          "dressing:placeholder-card": 4,
+          "figure:whole-object": 1,
+          "dressing:resolved": 1
+        },
+        "entries": [
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "chrome-clutter-vendingwreck",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "spr-chrome-static-vultures-feathered-scrap-metal-shoulder-rigs-a-scavenger-gang-enforcer-sharpened-scrap-talons-riveted-over-the-knuckles",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "spr-chrome-chrome-locusts-swarm-tactics-gang-insectoid-scrap-plate-shoulder-armor-leader-the-plating-fans-out-like-wings-when-he-raises-his-arms",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "spr-chrome-mutant-stray-dog-pack-leader-leads-a-loose-found-family-of-enhanced-strays-fiercely-protective",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "class:barbarian",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "chrome-clutter-vendingwreck",
+            "sceneKind": "tabletop"
+          }
+        ]
+      }
+    },
+    {
+      "seq": 17,
+      "kind": "scene",
+      "file": "pl-017-scene-shop-open.png",
+      "censusDelta": {
+        "counts": {
+          "figure:whole-object": 1
+        },
+        "entries": [
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "class:barbarian",
+            "sceneKind": "tabletop"
+          }
+        ]
+      }
+    },
+    {
+      "seq": 18,
+      "kind": "scene",
+      "file": "pl-018-scene-shop-closed.png",
+      "censusDelta": {
+        "counts": {
+          "figure:whole-object": 1
+        },
+        "entries": [
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "class:barbarian",
+            "sceneKind": "tabletop"
+          }
+        ]
+      }
+    },
+    {
+      "seq": 19,
+      "kind": "scene",
+      "file": "pl-019-scene-shop-open-2.png",
+      "censusDelta": {
+        "counts": {
+          "figure:whole-object": 1
+        },
+        "entries": [
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "class:barbarian",
+            "sceneKind": "tabletop"
+          }
+        ]
+      }
+    },
+    {
+      "seq": 20,
+      "kind": "scene",
+      "file": "pl-020-scene-shop-closed-2.png",
+      "censusDelta": {
+        "counts": {
+          "figure:whole-object": 1
+        },
+        "entries": [
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "class:barbarian",
+            "sceneKind": "tabletop"
+          }
+        ]
+      }
+    },
+    {
+      "seq": 21,
+      "kind": "rest",
+      "file": "pl-021-rest-long-rest.png",
+      "censusDelta": {
+        "counts": {},
+        "entries": []
+      }
+    }
+  ]
+}

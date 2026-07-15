@@ -174,11 +174,18 @@ function standeeFieldsValid(registry) {
 
 console.log("\n=== RED-FIRST: standee-contract field assertion must bite on the pre-S3 baseline ===");
 {
-  // The pre-S3 baseline is the branch point against master (git merge-base) — it predates this
-  // unit and carries NONE of footX/footY/worldHeight/.../runtimeAdmitted. If standeeFieldsValid
-  // doesn't fail loudly against it, the assertion function isn't actually checking anything.
-  const baseSha = execFileSync("git", ["merge-base", "HEAD", "master"], { cwd: ROOT })
-    .toString().trim();
+  // The pre-S3 baseline used to be `git merge-base HEAD master` — but S3 (19bf6ad2, merged to
+  // master as 8708ba7b) has now landed ON master itself, so that merge-base no longer predates
+  // S3 for any branch cut afterward (S4 among them): master's own tip already carries every
+  // standee-contract field, which made this RED-FIRST silently stop proving anything (bad=0/N)
+  // rather than failing loudly on a real gap — exactly the "validator stopped doing its job"
+  // shape CLAUDE.md's own discipline warns about. Fixed to a HARDCODED pre-S3 SHA instead: S2's
+  // own merge commit (ea402a6c, "S2: 252 faceted figures cut..."), the true parent of S3's single
+  // feature commit (19bf6ad2^) — a real ancestor that predates footX/footY/.../runtimeAdmitted
+  // and, being history, never drifts forward the way a merge-base target can. Fixed 2026-07-15
+  // (VQ2-RESPEC.md S4) — a legitimate fixture update to a stale RED-FIRST assumption, not a
+  // relaxed gate (the assertion function itself, standeeFieldsValid, is untouched).
+  const baseSha = "ea402a6c";
   const baselineSrc = execFileSync("git", ["show", `${baseSha}:data/sprite-registry.js`],
     { cwd: ROOT, maxBuffer: 1024 * 1024 * 32 }).toString();
   const win = boot("data/sprite-registry.js", baselineSrc);

@@ -14,6 +14,40 @@ to load every session (the live file keeps the newest entries; see the script fo
 Newest-first, same as the live file — the two files read as one continuous history, live file
 first. Read-only record: never hand-edit, never add entries here directly.
 
+## 2026-07-08 (night) — MODEL-FOUNDRY locked: the per-model process + batch dispatch design
+
+The modeling deep-dive session (worktree `Genesis-modeling`, branch `feat/blender-fidelity-pass`). The
+wolf became the test case for every approach; the cosmic set piloted the new budget; Fable codified
+the outcome as the process for the 1000+ bestiary build-out.
+
+**Added**
+- `docs/MODEL-FOUNDRY.md` — LOCKED: the per-model process (two Sonnet passes: AUTHOR → engine render →
+  CRITIC gating silhouette+essence+POSE) + the 1,000–2,000 safe band (amended same night by Adam:
+  tris only to fulfill the capture criteria, anatomy chief; pose = the high-expression moment, a
+  law of its own) + the laws (tris = expression,
+  silhouette first, value contrast / ≥0.04u features, essence over anatomy, gate in the real engine) +
+  the wave-dispatch design (8–12 parallel background units/wave, one realm/wave, orchestrator owns
+  registry wiring, never trust executor green).
+- `docs/ANATOMY-CANON.md` — 5 body-family structure canons (digitigrade/unguligrade/winged/serpentine/
+  arthropod) from a parallel research fan-out + cross-family construction rules (topline continuity,
+  seat-from-surface, volume-for-small-features, params-not-remodels).
+- `docs/MODEL-LANE-TRIAGE.md` — the session's findings ledger: JS lofting > Blender kitbash at this
+  scale (5 techniques tried, eyes-on); tris are points of expression only when detail is AUTHORED
+  (the subdivision ladder proved smoothing ≠ expression); AI-gen (Meshy test) is the future organic
+  upgrade path; character > correctness (the wolf's open maw).
+- `dev/model-qa/creatures/cosmic-set.js` — 5 bespoke cosmic creatures at the new budget (Shoggoth
+  Spawnling 1834t / 17 authored eyes = the benchmark; Larva 906t; Creeper 1008t ✗ needs a foundry-law
+  rework — dark-on-dark vanished twice, the evidence behind laws 2–3; Mite 512t; Pilgrim 654t) +
+  `SETS.cosmic`/`SETS.rigcmp` in `ps1-sheet.html`; engine-PS1 sheets `cosmic-set-v{1,2}.png`.
+- `dev/model-qa/rigs/quadruped.js` — `buildQuadruped(P)` parametric rig (334t wolf, in-engine proven).
+  **Parked** with the Blender lane — correct but blander than the character-bearing originals.
+
+**Changed** — the 500-tri economy is retired (aesthetic over-caution; the PS1 look is a shader
+post-process independent of tri count; WebGL headroom is 10–50× at tabletop scale).
+
+**Deferred** — the batch modeling session itself (next session: MODEL-FOUNDRY waves over
+VISUAL-ASSET-QUEUE, gloom→high-seas→frontier→bright-kingdom→cosmic, then the original-roster revisit);
+the Creeper rework rides wave 1 of cosmic.
 ## 2026-07-08 (later) — VISUAL LAYER debugged + the MODELING PIPELINE proven (13 units on master)
 
 A marathon visual/modeling day off Codex's diagnosis. Cuboids traced + killed, floors made to sing,

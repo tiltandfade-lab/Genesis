@@ -1,7 +1,7 @@
 ---
 type: session-handoff
 project: Genesis
-updated: 2026-07-11
+updated: 2026-07-14
 ---
 
 # Genesis — Session Hand-off
@@ -15,7 +15,33 @@ Graphics work must preserve canonical cards and no-human production while taking
 reach the visual target. Read it before this handoff's historical graphics queue, then read
 `docs/GRAPHICS-PRODUCTION-RESEARCH-WAVE.md` for evaluated tools and executable research gates.
 
-## ⭐ Latest (2026-07-14, evening) — STAGE D + AgX LIVE + doors + PLAY-LENS: the ledger now orders the waves [Claude Opus 4.8, orchestrated]
+## ⭐ Latest (2026-07-14, later-2) — VQ2 WORLD LOOKS: the missing world/beat looks now have targets [Codex]
+
+`dev/model-qa/mock-gen/PACKET-VQ2-WORLD-LOOKS.md` is complete on `codex/vq2-world-looks`: 16 vision
+frames in `ui-sketches/mock-frames/vq2-world-looks/` plus `SOL-SOLUTIONS.md` and the reproducible
+`GENERATION-PROMPTS.md`. This is the independent art-direction answer to PLAY-LENS's largest MISSING
+mass: daylight, travel trays, arrival shape, minimum town grammar, Kenney assimilation, state-beat
+micro-stages, odd-roll substitution, and combat that retains its explored room.
+
+**Headline rulings:** daylight = a bright tray photographed in a dark room (directional key, not
+recolored ambient) · Kenney = geometry reserve behind a Genesis material/scale/socket adapter · town =
+two facade planes maximum, not a city screenshot · beat = one anchor + ≤3 support families + one
+practical · odd roll = standard geometry + exotic material/state + one hero silhouette · combat = the
+same interior scene graph with units/grid layered on top.
+
+**Verification:** all 16 PNGs decode at 1672×941; the required P-A..P-F sections each contain exactly
+LAW/RECIPE/RISK; contact-sheet visual QA completed; no runtime modules changed.
+
+**Do next (pick up here):**
+1. Adam red-pens the 16-frame set, especially daylight (#1/#2), the Kenney bridge (#7/#10/#11), and
+   the exact exploration→combat pair (#10/#16).
+2. Turn accepted P-A..P-F rulings into bounded specs in this order: P-A exterior light rig → P-B donor
+   adapter → P-C town slice → P-D beats → P-F combat continuity; P-E odd-roll substitution can follow
+   the adapter.
+3. Re-run PLAY-LENS after every landed visual wave; keep `pl-022`, UI chrome, and canonical sprites in
+   the protected regression set.
+
+## Latest (2026-07-14, evening) — STAGE D + AgX LIVE + doors + PLAY-LENS: the ledger now orders the waves [Claude Opus 4.8, orchestrated]
 
 The evening block (CHANGELOG 2026-07-14 later, master `67566b6a`, pushed): **Stage D STATEFUL NOUNS
 complete** (state primitive → interactables registry → walk binding → ROOM-GRAMMAR → the doors-first

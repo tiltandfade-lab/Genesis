@@ -3,7 +3,7 @@ type: next-steps
 branch: Genesis
 status: living
 created: 2026-06-18
-updated: 2026-06-19
+updated: 2026-07-14
 related:
   - "[[DESIGN]]"
   - "[[GAP-ANALYSIS]]"
@@ -17,6 +17,21 @@ The running execution order. `DESIGN.md` holds the *what* and *why*; this holds 
 **Auto-archive rule (2026-07-09):** at most 4 dated `## Do next (...)` blocks live here; older ones
 roll into `NEXT-STEPS-ARCHIVE.md` via `python3 build/archive-docs.py --emit`. Standing plan
 sections (tracks/layers/etc.) are never auto-archived.
+
+## Do next (2026-07-14 later-2 — VQ2 WORLD LOOKS COMPLETE; Adam red-pen → bounded build specs)
+
+☑ `PACKET-VQ2-WORLD-LOOKS.md` complete: 16 frames + `SOL-SOLUTIONS.md` + reproducible prompt set on
+`codex/vq2-world-looks`. This closes the mock/decision gap, not the implementation units.
+
+1. ☐ **Adam VQ2 taste gate:** daylight #1/#2 · town/Kenney #7/#10/#11 · staging #12/#13 · exact
+   exploration→combat continuity #10/#16.
+2. ☐ **P-A exterior light rig** — directional sun/sky profiles, exterior ambient floor, thumbnail and
+   luminance gates. This is the ENV/EXTERIOR wave's first unblocker.
+3. ☐ **P-B donor adapter → P-C town slice** — normalize palette/material/scale/socket/condition once;
+   admit only the exact proven donor families; then build the two-facade town grammar.
+4. ☐ **P-D state beats → P-F combat continuity** — stable micro-stage recipes; preserve the same
+   interior scene graph and camera through combat. P-E odd-roll substitution follows the donor adapter.
+5. ☐ Re-run PLAY-LENS after each landing. Protected set: `pl-022`, UI chrome, wolf/skeleton sprites.
 
 ## Do next (2026-07-14 evening — THE LEDGER ORDERS THE WAVES; Stage D + AgX + doors + PLAY-LENS landed)
 
@@ -52,40 +67,6 @@ CI scoped to master+PRs.
    (PBR materials + `LIGHT_RIG_PROFILES` + emissive bloom, retires the occlusion ghost-halo).
 4. ☐ Standing polish waves (SPECCED): UNIFICATION-WAVE · ENV-WAVES · POLISH-WAVE-1.
 5. ☐ W0-b PRNG dedup (deferred — re-scope: surface is 20+ harnesses, not 3).
-
-## Do next (2026-07-12 — GRAPHICS-NORTH-STAR: Stage A + Stage C CLOSED; Stage D/E next)
-
-Codex's A→B graphics program (`docs/GRAPHICS-NORTH-STAR.md`) — **Stage A BUILT** (walk-native boundary +
-composed camera + occlusion, master `00b775f8`) **and Stage C BUILT** (real room shapes — octagon/rotunda/
-L from the rolled `areaType/dims/side`, shape render-decoupled from the whole-cell combat grid; master
-`388a4c7b`, CHANGELOG 2026-07-12 later). Rooms no longer read as maps — by framing (A) AND geometry (C).
-
-**Next graphics waves:** ☐ **Stage D** (stateful nouns — door→room transition keystone, levers/chests) ·
-☐ **Stage E** (material+light finish — LIGHT_RIG_PROFILES + PBR shells + emissive-masked bloom, which
-also properly retires the occlusion ghost-halo the hotfix minimally patched + the AO-gradient on non-rect
-floors Stage C deferred). ☐ **Stage B** (sprite citizenship) overlaps Codex's active sprite lane —
-coordinate. Stage-C deferrals: vertical-stair two-slots, corridor-L-bend-through-notch edge case.
-**Sprite lane (Codex):** BUG-14 (slice debris) + BUG-15 (crusty res — ImageGen regen); figurine-life +
-map vision-quest (`docs/vision-quests/`).
-
---- (historical, Stage A build order below) ---
-
-Sequenced by Adam's ruling: build the boundary first (WDV-1/2), then wire A3, then A4.
-
-1. ☑ **WDV-1 `walkSceneFrom`** — the walk-native boundary (`src/engine/walk-scene.js`); `board.walkScene`. 32/0.
-2. ☑ **WDV-2 stamped provenance** — `walkPickStamped` + `segment.rollRefs`, byte-additive. 34/0.
-3. ☑ **A3 shot-compose** — ShotPlan wired, composed camera live, WalkScene-fed. 29/0. (Round-1 framing
-   regression caught at the capture gate + corrected.)
-4. ☑ **A4 dynamic occlusion v2** — live `ShotPlan.occlusionTargets`, per-instance ghost fade + hysteresis.
-5. ☐ **Adam eyeballs the Stage-A frames** (`dev/battle-gate/shot-compose/after-composed.png`, the A4
-   on/off, the loop contact sheet); dial the named consts if wanted.
-6. ☐ **Stage B — sprite citizenship** is the next graphics wave (the §4.5 standee contract: footX/Y,
-   worldHeight, plinth/contact-shadow/explicit shader, in-engine acceptance gallery). Then C (polygon
-   rooms — the shell compiler is landed) / D (stateful nouns) / E (material+light finish).
-7. ☐ **Codex's remaining walk-native units** (deferred, his recommendation): WDV-3 table visual metadata,
-   WDV-4 overlay/state key unification, WDV-5 cross-env diorama gate.
-8. ☐ Follow-up: the two pre-existing render-only reds (occlusion ghost bloom/AO pixel check; bw2-1b
-   doorframe over-occlusion) — render-only, auto-skip in CI.
 
 ## Open threads — carried forward (STANDING section; never auto-archived)
 

@@ -450,7 +450,16 @@ function shotPlanFrom(tray, combat, viewState) {
 
   const units = resolveCombatUnits(combat);
   const provenance = [];
-  const noteProvenance = (ref, source, detail) => provenance.push({ ref, source, detail: detail || null });
+  // VQ2-RESPEC.md §3 unit L2 — `outcome` is an ADDITIVE optional 4th arg (every existing call site
+  // below omits it, unchanged; the pushed shape just carries one more always-present, usually-null
+  // field). Deliberately never populated from GS.theaterCensus HERE: a ShotPlan's provenance is built
+  // at PLANNING time, before figureFor/spriteTextureFor/dressingTextureFor ever run for THIS shot's
+  // pieces (those resolve later, during the actual setUnits/setInteriorBoard THREE mount) — a lookup
+  // at this call site would read STALE census entries from a prior shot, which is worse than the
+  // honest `null` a caller that has nothing yet leaves in place. The param exists so a future caller
+  // that DOES already know an outcome (e.g. a re-plan pass after mount) can pass it for free, without
+  // provenance's own shape changing again.
+  const noteProvenance = (ref, source, detail, outcome) => provenance.push({ ref, source, detail: detail || null, outcome: outcome || null });
   units.forEach((u) => noteProvenance(u.id, "combat-unit", u.kind));
 
   const stage = stageFromTray(tray);

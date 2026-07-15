@@ -140,9 +140,11 @@
       "path": "src/state.js",
       "type": "state",
       "owns": [
-        "GS"
+        "GS",
+        "THEATER_CENSUS_CAP",
+        "theaterCensusRecord"
       ],
-      "desc": "The single mutable-state container (GS). All transient app/creator state (CGEN/BARDO/CG_DRAG/FATE_CTX/SEED/ORC) lives here as GS.* — greppable, one home. `var` so GS is on window (inline on* handlers need it). U stays in world.state. Established 2026-06-20 per docs/SCALING.md."
+      "desc": "The single mutable-state container (GS). All transient app/creator state (CGEN/BARDO/CG_DRAG/FATE_CTX/SEED/ORC) lives here as GS.* — greppable, one home. `var` so GS is on window (inline on* handlers need it). U stays in world.state. Established 2026-06-20 per docs/SCALING.md. GS.theaterCensus + theaterCensusRecord (VQ2-RESPEC.md §3 unit L2): the read-only demand-vs-null census instrument, appended to by theater-boot.js/theater-materials.js/theater-data.js."
     },
     {
       "id": "data.pronouns",

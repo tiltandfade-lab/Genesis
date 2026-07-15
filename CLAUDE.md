@@ -34,7 +34,11 @@ so it'll serve the app fine but every DM turn fails as "bridge unreachable." See
 ## Architecture (read `docs/HANDOFF.md` + `docs/SCALING.md` before editing code)
 
 **Graphics sessions have an additional mandatory authority:** read
-`docs/GRAPHICS-CONVERGENCE-CHARTER.md` before planning any theater, diorama, sprite, prop, material,
+`docs/ART-DIRECTION-CANON.md` FIRST for any sprite/prop/decal/texture/effects generation or
+review work — it is Adam's verbatim art direction (style laws, master prompts, kit contracts,
+decal exemption) and must be QUOTED, never paraphrased, into any packet, template, or prompt;
+art rulings made in conversation are appended there the same session (the decision-capture
+rule). Then read `docs/GRAPHICS-CONVERGENCE-CHARTER.md` before planning any theater, diorama, sprite, prop, material,
 lighting, camera, VFX, or graphics-toolchain change. It protects the walk/table engine while requiring
 measured convergence toward the approved mockups. Do not lower the visual target to close a unit.
 

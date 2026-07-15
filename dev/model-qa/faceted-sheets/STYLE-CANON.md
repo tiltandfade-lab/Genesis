@@ -94,3 +94,27 @@ stain/spread behavior for the material (blood pools and trails, moss creeps from
 scorch feathers outward, cracks propagate along stress lines). Same adult horror register and
 muted palette as the canon; NO triangulation, NO polygonal planes, NO faceted geometry of any
 kind on a decal. Magenta-key, strict top or front projection per the decal contract.
+
+## Prop canon (plan §3/§4/§7 on codex/extruded-prop-pilot — verbatim pointers, Adam 2026-07-14)
+
+Props and dressing are governed by three verbatim authorities on `codex/extruded-prop-pilot`
+(`dev/model-foundry/FACETED-ART-REGENERATION-PRODUCTION-PLAN.md`); prompts must fill, never
+shorten, the §7 master prop prompt ("Do not shorten it"):
+
+1. **§4 construction-class routing** — every prop is classified before generation:
+   EXTRUDE (flat things that become 3D by sprite extrusion: shield, plaque, sign, tablet,
+   door leaf, blade, key) · LAYERED_EXTRUDE · FACED_BOX (chest/crate) · LATHE (urn, barrel) ·
+   SWEEP (rope, chain) · MODEL_RECIPE (furniture, tree, rubble, trap mechanism) · DECAL · FX.
+   When uncertain between EXTRUDE and a volumetric class, choose the volumetric class.
+2. **§4.1 component-kit contract** — an object with moving, swappable, repeating, or
+   independently deep parts is an assembly kit: the image model supplies ISOLATED component
+   art, NEVER preassembled; the engine assembles and owns every state (door shut/ajar/open
+   reuse one leaf sprite; lever left/right are deterministic rotations; pivots are metadata,
+   never painted marks). Do not split fixed ornament; the goal is useful reuse, not maximum
+   fragmentation.
+3. **§7 master prop prompt** — the only legal prop generation prompt; runners replace only
+   the bracketed fields. Its style paragraph ("mature, restrained, high-tier polygonal
+   fantasy art… fewer, larger, deliberate triangular planes… Avoid cute, toy-like, glossy,
+   generic starter-tier art… generic mobile-game loot") plus §3.2's facet scale law are the
+   anti-WoW / anti-oversimplification gates for props. The 2026-07-14 prop drift happened
+   because the pilot's queue JSON *shortened* §7 — shortening is the drift vector.

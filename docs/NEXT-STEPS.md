@@ -18,6 +18,26 @@ The running execution order. `DESIGN.md` holds the *what* and *why*; this holds 
 roll into `NEXT-STEPS-ARCHIVE.md` via `python3 build/archive-docs.py --emit`. Standing plan
 sections (tracks/layers/etc.) are never auto-archived.
 
+## Do next (2026-07-15 later — VQ2 RESPEC: the sprite flip + demand census + Sol's laws; docs/VQ2-RESPEC.md is the order)
+
+Adam's directives folded (VQ2/SOL-SOLUTIONS as suggestions-for-law · sprite flip w/ v3 reserve ·
+faceted inventory (tags+heights, editor-tweakable) · gameplay rounds → demand-vs-null census ·
+extrusion plan · re-spec + orchestrate). Dispositions + the flip ruling in DESIGN.md 2026-07-15.
+
+1. ☐ **WAVE S — sprite flip + inventory** (S1 land faceted corpus → S2 cut pipeline →
+   S3 B1 registry + heights/tags inventory → S4 miscast-join fix → S5 THE FLIP
+   (`FACETED_FLIP_ENABLED`, v3 in reserve) → S6 editor `feet` support). Then P3-2 B2∥B3→B4
+   auto-fire (standing delegation — S3 IS the registry landing).
+2. ☐ **WAVE L — lens matrix + census** (L1 PL-1b rig + realm forcing · L2 resolution-outcome
+   census → census.json · L3 PL-4 matrix runs → dev/play-lens/DEMAND-LEDGER.md).
+3. ☐ **WAVE F — VQ2 build units, ledger-ordered:** F1 combat-in-room (P-F) · F2 staging beats
+   (P-D) · F3 Stage E + P-A gates · F4 Kenney adapter pilot (P-B) · F5 town-slice (P-C, after
+   F4+L3) · F6 odd-rolls parked.
+4. ☐ **Extrusion lane:** X1 land + reconcile EXTRUDED-SPRITE-PROP-LIBRARY (rides Wave S) ·
+   X2 compiler slice after B2.
+5. ☐ Adam's red-pen ledger: flip taste call (B3 + S5 card) · inventory band-defaults ·
+   F3/F5 look consts · P-E deferral check.
+
 ## Do next (2026-07-15 — AUTONOMOUS ARC LANDED: quick-fix + ENV/EXTERIOR complete, PL-3 verified)
 
 Master `c0a60b77` (CHANGELOG 2026-07-15): ☑ QUICK-FIX wave (P0 roots) · ☑ ENV-1/1b/1c/2/3/3b

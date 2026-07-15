@@ -1,0 +1,64 @@
+{
+  "results": [
+    {
+      "biome": "Forest",
+      "profile": "daylit",
+      "fileName": "env2-forest-daylit.png",
+      "mounted": {
+        "ok": true,
+        "biome": "Forest",
+        "profile": "daylit"
+      }
+    },
+    {
+      "biome": "Forest",
+      "profile": "moonlit",
+      "fileName": "env2-forest-moonlit.png",
+      "mounted": {
+        "ok": true,
+        "biome": "Forest",
+        "profile": "moonlit"
+      }
+    },
+    {
+      "biome": "Desert",
+      "profile": "daylit",
+      "fileName": "env2-desert-daylit.png",
+      "mounted": {
+        "ok": true,
+        "biome": "Desert",
+        "profile": "daylit"
+      }
+    },
+    {
+      "biome": "Desert",
+      "profile": "moonlit",
+      "fileName": "env2-desert-moonlit.png",
+      "mounted": {
+        "ok": true,
+        "biome": "Desert",
+        "profile": "moonlit"
+      }
+    },
+    {
+      "biome": "Swamp",
+      "profile": "daylit",
+      "fileName": "env2-swamp-daylit.png",
+      "mounted": {
+        "ok": true,
+        "biome": "Swamp",
+        "profile": "daylit"
+      }
+    },
+    {
+      "biome": "Swamp",
+      "profile": "moonlit",
+      "fileName": "env2-swamp-moonlit.png",
+      "mounted": {
+        "ok": true,
+        "biome": "Swamp",
+        "profile": "moonlit"
+      }
+    }
+  ]
+}

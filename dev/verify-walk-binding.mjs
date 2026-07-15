@@ -309,5 +309,97 @@ group("7 — no registry / absent-global degrade: never throws, empty projection
   ok(anyPlaced && anyPlaced.slug === null && anyPlaced.extrudeDepth === null, "a placed entry degrades to slug:null/extrudeDepth:null rather than inventing art", JSON.stringify(anyPlaced));
 }
 
+group("8 — QF-A3 BACKFILL (docs/ENV-EXTERIOR-WAVE.md ENV-2 rider): a multi-room interior board's own");
+console.log("    interactables/dressing are filtered to the active-room keepSet (fix landed 749e8dd1,");
+console.log("    trayFrom's own qfA3FilterToKeptRooms — src/engine/theater-data.js). This harness never");
+console.log("    exercised trayFrom's {kind:\"interior\"} branch at all before this backfill — checks 1-7");
+console.log("    above stop at bindWalkInteractables' own plan.interactables[], one layer short of the");
+console.log("    render seam QF-A3 actually fixed (PLAY-LENS ledger P0 #3, pl-011/pl-016 — a door/prop");
+console.log("    belonging to an off-screen room rendering scattered/unanchored in the room actually on");
+console.log("    stage). RED-FIRST proof (below): stub qfA3FilterToKeptRooms's TWO call sites back to");
+console.log("    the pre-fix unfiltered assignment in a COPY of the real source text, confirm an entry");
+console.log("    from a room NOT in view leaks onto the board, then confirm the real (unmutated) source");
+console.log("    keeps it out.");
+{
+  // the SAME minimal module set dev/verify-place-distribution.mjs's own check 8 already proved
+  // sufficient to drive a real trayFrom({kind:"interior"}) call, plus walk-interactables.js + data/
+  // interactables.js (this file's own group-1..7 dependency) so plan.interactables is real, not empty.
+  function loadInteriorModules(theaterDataSrcOverride) {
+    const sandbox = { console };
+    sandbox.window = sandbox;
+    vm.createContext(sandbox);
+    const combined = [
+      read("src/engine/place-spatialize.js"),
+      read("src/engine/place-semantics.js"),
+      read("data/interactables.js"),
+      read("src/engine/place-dressing.js"),
+      read("src/engine/walk-interactables.js"),
+      read("src/ui/theater-interior.js"),
+      theaterDataSrcOverride || read("src/engine/theater-data.js"),
+      "this.__trayFrom=typeof trayFrom!=='undefined'?trayFrom:undefined;",
+      "this.__spatializePlan=typeof spatializePlan!=='undefined'?spatializePlan:undefined;",
+      "this.__semanticizePlan=typeof semanticizePlan!=='undefined'?semanticizePlan:undefined;",
+      "this.__dressPlan=typeof dressPlan!=='undefined'?dressPlan:undefined;",
+    ].join("\n");
+    vm.runInContext(combined, sandbox, { filename: "qf-a3-backfill.js" });
+    return { trayFrom: sandbox.__trayFrom, spatializePlan: sandbox.__spatializePlan, semanticizePlan: sandbox.__semanticizePlan, dressPlan: sandbox.__dressPlan };
+  }
+
+  // buildInteractableFixture()'s own 4-room chain (s1-s2-s3-s4, each carrying a real object+feature
+  // roll — see its own header above) is exactly the "multi-room interior board" QF-A3's own comment
+  // names; reused verbatim rather than a new fixture.
+  const fixture = buildInteractableFixture();
+  const M8 = loadInteriorModules();
+  ok(typeof M8.trayFrom === "function", "8a-setup. trayFrom is loadable alongside the interior chain");
+  const plan = M8.spatializePlan(fixture, "The Backfill Spine", { walkId: "qf-a3-backfill" });
+  const semPlan = M8.semanticizePlan(plan, fixture, []);
+  ok(Array.isArray(semPlan.rooms) && semPlan.rooms.length >= 3, "8b-setup. the fixture plan actually has 3+ rooms (a real multi-room board, not vacuous)", semPlan.rooms && semPlan.rooms.length);
+  // focus on room s2 (the middle room, connected on both sides — most likely to catch a leak from
+  // either neighbor): whole-plan-if-absent, so pick its own segNum explicitly.
+  const s2 = semPlan.rooms.find((r) => r.segNum === 2) || semPlan.rooms[1];
+  const focusSegNum = s2.segNum;
+
+  const boardReal = M8.trayFrom({ kind: "interior", plan: semPlan, walk: { segments: fixture }, focusSegNum, radius: 1, env: "dungeon", realms: [] }, null, {});
+  ok(!!boardReal && Array.isArray(boardReal.dressing), "8c-setup. the real board carries a dressing array");
+  ok(!!boardReal && Array.isArray(boardReal.interactables), "8d-setup. the real board carries an interactables array");
+
+  const dressingRoomsSeen = new Set((boardReal.dressing || []).map((d) => d.roomSegNum).filter((n) => n != null));
+  const interactableRoomsSeen = new Set((boardReal.interactables || []).map((e) => e.roomSegNum).filter((n) => n != null));
+  ok(dressingRoomsSeen.size <= 1 && (dressingRoomsSeen.size === 0 || dressingRoomsSeen.has(focusSegNum)),
+    "8e. the REAL (unmutated) board's dressing carries ONLY the focus room's own entries — no off-screen-room leak",
+    JSON.stringify([...dressingRoomsSeen]));
+  ok(interactableRoomsSeen.size <= 1 && (interactableRoomsSeen.size === 0 || interactableRoomsSeen.has(focusSegNum)),
+    "8f. the REAL (unmutated) board's interactables carry ONLY the focus room's own entries — no off-screen-room leak",
+    JSON.stringify([...interactableRoomsSeen]));
+
+  // sanity: the UNFILTERED plan actually spans multiple rooms (else 8e/8f above would be vacuously
+  // true just because the fixture never had more than one room's worth of entries to begin with).
+  const directDressed = M8.dressPlan(semPlan, { realmId: "fantasy", walkId: "qf-a3-backfill" });
+  const unfilteredDressingRooms = new Set((directDressed.dressing || []).map((d) => d.roomSegNum).filter((n) => n != null));
+  ok(unfilteredDressingRooms.size >= 2, "8g-setup. sanity: the fixture's OWN unfiltered dressing spans 2+ rooms (the check isn't vacuous)", JSON.stringify([...unfilteredDressingRooms]));
+
+  // ⊗ RED-FIRST: stub BOTH qfA3FilterToKeptRooms call sites (a source-text rewrite of a COPY, never
+  // the committed file) back to the pre-QF-A3 unfiltered assignment, and prove the leak reappears.
+  const realSrc = read("src/engine/theater-data.js");
+  const mutatedSrc = realSrc
+    .replace("board.dressing = qfA3FilterToKeptRooms(dressedPlan.dressing || []);", "board.dressing = dressedPlan.dressing || [];")
+    .replace("board.interactables = qfA3FilterToKeptRooms(dressedPlan.interactables || []);", "board.interactables = dressedPlan.interactables || [];");
+  ok(mutatedSrc !== realSrc, "8h-setup. the stub rewrite actually matched + changed the real source text (regex/string hit real code, not vacuous)");
+  const M8red = loadInteriorModules(mutatedSrc);
+  const boardMutated = M8red.trayFrom({ kind: "interior", plan: semPlan, walk: { segments: fixture }, focusSegNum, radius: 1, env: "dungeon", realms: [] }, null, {});
+  const mutatedDressingRooms = new Set((boardMutated.dressing || []).map((d) => d.roomSegNum).filter((n) => n != null));
+  const mutatedInteractableRooms = new Set((boardMutated.interactables || []).map((e) => e.roomSegNum).filter((n) => n != null));
+  ok(mutatedDressingRooms.size >= 2, "8i. RED-CONFIRMED: with the room filter stubbed out, board.dressing leaks OTHER rooms' entries (the gate is load-bearing)", JSON.stringify([...mutatedDressingRooms]));
+  ok(mutatedInteractableRooms.size >= 2, "8j. RED-CONFIRMED: with the room filter stubbed out, board.interactables leaks OTHER rooms' entries (the gate is load-bearing)", JSON.stringify([...mutatedInteractableRooms]));
+
+  // restore proof: re-loading the REAL (unmutated) source one more time from disk (not the earlier
+  // in-memory M8) still filters correctly — the fix lives in the committed file, not a fluke of this
+  // harness's own first sandbox instance.
+  const M8restored = loadInteriorModules(read("src/engine/theater-data.js"));
+  const boardRestored = M8restored.trayFrom({ kind: "interior", plan: semPlan, walk: { segments: fixture }, focusSegNum, radius: 1, env: "dungeon", realms: [] }, null, {});
+  const restoredDressingRooms = new Set((boardRestored.dressing || []).map((d) => d.roomSegNum).filter((n) => n != null));
+  ok(restoredDressingRooms.size <= 1, "8k. RESTORE-GREEN: reloading the real committed source from disk filters correctly again", JSON.stringify([...restoredDressingRooms]));
+}
+
 console.log(`\n=== TOTAL: ${pass} passed, ${fail} failed ===`);
 if (fail > 0) process.exit(1);

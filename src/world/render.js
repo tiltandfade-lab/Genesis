@@ -498,7 +498,13 @@ function theaterHereSourceFor(w){
       env:walk.environment||undefined, realms:realms,
       traces:(reskinEntry&&reskinEntry.traces)||undefined, removed:(reskinEntry&&reskinEntry.removed)||undefined };
   }
-  return { kind:"segment", segment:seg, env:walk.environment||undefined, realms:realms,
+  // ENV-2 (docs/ENV-EXTERIOR-WAVE.md) — walkId:id, additive (mirrors the {kind:"interior"} branch's
+  // own walkId field, above): threaded through trayFrom -> theaterBoardBuild's opts so a wilderness
+  // travel leg's biome-scatter seed (env2BiomeScatterFor, src/engine/theater-data.js) can key off the
+  // real active walk, not just this leg's own segment id (two DIFFERENT rolled walks would otherwise
+  // scatter byte-identically on the same leg number). No existing caller reads this field before this
+  // unit, so its addition is a pure no-op everywhere else.
+  return { kind:"segment", segment:seg, env:walk.environment||undefined, realms:realms, walkId:id,
     traces:(reskinEntry&&reskinEntry.traces)||undefined, removed:(reskinEntry&&reskinEntry.removed)||undefined };
 }
 
@@ -517,6 +523,32 @@ function theaterCastSourceFor(w,hereSource){
   const shopOpen=!!(GS.gamePanel==="shop"&&GS.activeShopId);
   return { hereNodeId:hereNodeId, walking:walking, shopOpen:shopOpen,
     traces:hereSource&&hereSource.traces, removed:hereSource&&hereSource.removed };
+}
+
+/* ENV-2 (docs/ENV-EXTERIOR-WAVE.md) — the standing table's own board-center read for arrangeTableau's
+   `boardCenter` param (src/engine/theater-data.js). Mirrors theater-boot.js's setBoard/
+   setInteriorBoard tile-bbox-centroid formula EXACTLY (same minX/maxX/minZ/maxZ reduction over
+   board.tiles for a flat tabletop board; board.focusRect||board.bounds for an {kind:"interior3d"}
+   board — the SAME two fields setInteriorBoard itself reads, src/ui/theater-boot.js) so a unit
+   arrangeTableau places lands on the IDENTICAL point the GL layer will later re-center tiles/pieces
+   against — never a second, possibly-diverging "what's the center" formula. Pure, null-safe: a board
+   with no tiles (the idle table) or no recognizable bounds returns {cx:0,cz:0} — the exact center
+   arrangeTableau's own arrangements were already authored against, so this is a byte-identical no-op
+   for the idle/node-tray case and a real correction only where the two disagreed. */
+function theaterBoardCenterFor(board){
+  if(!board) return { cx:0, cz:0 };
+  if(board.kind==="interior3d"){
+    const b=board.focusRect||board.bounds;
+    if(b && Number.isFinite(b.minX) && Number.isFinite(b.maxX) && Number.isFinite(b.minZ) && Number.isFinite(b.maxZ)){
+      return { cx:(b.minX+b.maxX)/2, cz:(b.minZ+b.maxZ)/2 };
+    }
+    return { cx:0, cz:0 };
+  }
+  const tiles=board.tiles||[];
+  if(!tiles.length) return { cx:0, cz:0 };
+  let minX=0,maxX=0,minZ=0,maxZ=0;
+  tiles.forEach(t=>{ minX=Math.min(minX,t.x); maxX=Math.max(maxX,t.x); minZ=Math.min(minZ,t.z); maxZ=Math.max(maxZ,t.z); });
+  return { cx:(minX+maxX)/2, cz:(minZ+maxZ)/2 };
 }
 
 /* BATTLE-STAGE / TABLETOP-VISION Standing Table (TABLETOP-UNITS.md §U1 seams 2+4) — attempts the
@@ -575,8 +607,13 @@ function theaterStageSync(w,cur){
     // TABLETOP-VISION §1/§3 (TABLETOP-UNITS.md §U1 seam 4): outside combat the standing table shows
     // the here-segment's tray while walking, or the empty idle table when nothing is staged.
     const hereSource=theaterHereSourceFor(w);
+    // ENV-2 (docs/ENV-EXTERIOR-WAVE.md): walkId threaded through to theaterBoardBuild's opts (the
+    // "segment" tray branch reads opts.walkId directly, unlike the "interior" branch which reads
+    // source.walkId off hereSource itself — see trayFrom's own two branches, src/engine/theater-
+    // data.js) — this is what gates/seeds a wilderness travel leg's biome-scatter dressing.
+    let board=null;
     if(typeof trayFrom==="function" && typeof window.Theater.setBoard==="function"){
-      const board=trayFrom(hereSource,null,{env:hereSource.env,realms:hereSource.realms});
+      board=trayFrom(hereSource,null,{env:hereSource.env,realms:hereSource.realms,walkId:hereSource.walkId});
       // DUNGEON-GRAPH.md U3: a SpatialPlan-sourced tray (theaterHereSourceFor's {kind:"interior",plan}
       // branch) comes back shaped {kind:"interior3d",...} — a materially different render family (real
       // volumetric InstancedMesh geometry, not the flat combat tile-column grid) that the GL layer's
@@ -601,6 +638,13 @@ function theaterStageSync(w,cur){
     // every other guard here.
     if(typeof castFrom==="function" && typeof window.Theater.setUnits==="function"){
       const castSource=theaterCastSourceFor(w,hereSource);
+      // ENV-2 (docs/ENV-EXTERIOR-WAVE.md) FIX — "the PC token renders on the travel tray": the board
+      // just built (above) is the SAME object theater-boot.js's setBoard/setInteriorBoard re-centers
+      // units against (S.boardOrigin, computed off the board's own tile bbox) — hand arrangeTableau
+      // that SAME center (theaterBoardCenterFor, below) so a unit arrangeTableau places at its own
+      // local "0,0" lands back on the board's actual visual center instead of a corner tile. See
+      // castFrom's own header comment (src/engine/theater-data.js) for the full root-cause account.
+      castSource.boardCenter=theaterBoardCenterFor(board);
       window.Theater.setUnits({ units: castFrom(w,castSource) });
     } else if(typeof window.Theater.setUnits==="function") window.Theater.setUnits({ units: [] });
   }

@@ -4505,6 +4505,17 @@ function updateSpriteBillboardYaw(){
       if(fig && fig.userData && fig.userData.sprite) face(fig);
     }
   }
+  // ENV-2 (docs/ENV-EXTERIOR-WAVE.md) — the flat tabletop's own board.props (setBoard, above) can now
+  // carry biome-scatter dressing CARDS (buildDressingCard — same userData.sprite tag every other
+  // billboard group in this file already carries), mounted into S.propGroup. This group was NEVER
+  // scanned here before this unit (no prop ever carried userData.sprite) — a pure additive no-op for
+  // every existing board/prop; only ENV-2's own new dressing cards are affected.
+  if(S.propGroup){
+    for(let i = 0; i < S.propGroup.children.length; i++){
+      const fig = S.propGroup.children[i];
+      if(fig && fig.userData && fig.userData.sprite) face(fig);
+    }
+  }
   // DUNGEON-GRAPH.md U3 iteration-2, ruling 3: interior "pieces" (creature/PC sprites standing in the
   // room) are billboard groups too (interiorBuildPieces -> buildSpriteBillboard, same userData.sprite
   // tag), but they live in S.interiorGroup's own pieces sub-group, not S.unitGroup — walk the group
@@ -6506,6 +6517,24 @@ function setBoard(data){
     // per-part geometry introspection.
     addGroundingBlob(S.propGroup, px, pz, -0.495, 0.42);
 
+    // ENV-2 (docs/ENV-EXTERIOR-WAVE.md) — a biome-scatter dressing entry (theaterBoardBuild's
+    // env2BiomeScatterFor, src/engine/theater-data.js — carries `.slug`/`.cardKind`, never `.part`/
+    // `.model`) renders as a camera-facing billboard card, the SAME buildDressingCard the interior
+    // dressing pipeline already uses (assets/dressing/<slug>.png, or its placeholder card when the
+    // art hasn't landed — dressingTextureFor's own graceful degrade). Checked FIRST, ahead of the
+    // whole-object/part chain below: these entries carry no `.part`/`.model` to fall through onto,
+    // so without this branch every scattered flora/rock/tree rendered as the SAME undifferentiated
+    // flat prop-box the true no-keyword-hit fallback (bottom of this loop) uses — never distinguishing
+    // a Forest fern from a Desert dune. `updateSpriteBillboardYaw` (this file) is extended alongside
+    // this unit to ALSO camera-face S.propGroup's own sprite-tagged children (it previously only
+    // walked S.unitGroup/S.interiorGroup, since no prop ever carried userData.sprite before now).
+    if(p.slug && !p.part && !p.model){
+      const g = buildDressingCard(p);
+      g.position.set(px, 0, pz);
+      S.propGroup.add(g);
+      return;
+    }
+
     // REALM-PROPS-WIRING.md §3: a realm prop entry carries its own Size (theater-data.js stamps
     // `p.size` only when theaterRealmPropForText resolved this zone's prop — every other prop entry,
     // including every pre-unit generic-cover entry, has no `size` at all). propFootprint(undefined)
@@ -7857,6 +7886,16 @@ function dressingTextureFor(slug){
       if(S.mounted && S.lastBoard && S.lastBoard.kind === "interior3d"){
         S.boardKey = null;
         setInteriorBoard(S.lastBoard);
+      } else if(S.mounted && S.lastBoard && S.lastBoard.kind !== "interior3d" && Array.isArray(S.lastBoard.props)){
+        // ENV-2 (docs/ENV-EXTERIOR-WAVE.md) — the flat tabletop board (setBoard, NOT setInteriorBoard;
+        // no `kind` field at all — see setBoard's own comment on that) can now ALSO carry dressing
+        // cards (a travel leg's biome scatter). Before this unit, this replay-on-real-art-arrival
+        // trick only knew how to re-invoke setInteriorBoard — a flat board's placeholder card would
+        // stay a placeholder FOREVER even after the real assets/dressing/<slug>.png finished loading,
+        // since setBoard was never told to re-run. Mirrors the interior branch exactly: null the dirty
+        // key so the "identical payload" skip doesn't swallow this replay, re-run the SAME last board.
+        S.boardKey = null;
+        setBoard(S.lastBoard);
       }
     },
     undefined,

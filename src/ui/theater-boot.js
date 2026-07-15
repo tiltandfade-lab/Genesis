@@ -5644,7 +5644,16 @@ const TABLETOP_EXTERIOR_LOOK = {
 // void/background tint for the TABLETOP channel only — profile wins for the 3 exterior moods (the
 // protection set has no entry here, so it falls through to the pre-existing env-keyed voidTintFor,
 // byte-identical to before this unit).
-function voidTintForTabletop(env, profileKey){
+// ENV-1c (docs/ENV-EXTERIOR-WAVE.md): `clockMin` is an ADDITIVE 3rd param — omitted (or S.celestialVoidTint
+// unset, applyCelestialArc's own no-op guard below) falls straight through to ENV-1's static per-profile
+// void, byte-identical to pre-ENV-1c. When a clock IS threaded and the profile is one of the 3 exterior
+// moods, S.celestialVoidTint (stamped by applyCelestialArc, called earlier in setBoard — see that
+// function's own header) wins: the sky/void reads the SAME dawn/noon/dusk/moonlit keyframe the key
+// light's color just used, not a flat per-profile constant.
+function voidTintForTabletop(env, profileKey, clockMin){
+  if(clockMin != null && CELESTIAL_PROFILE_SET[profileKey] && S.celestialVoidTint != null){
+    return S.celestialVoidTint;
+  }
   const look = profileKey && TABLETOP_EXTERIOR_LOOK[profileKey];
   return look ? look.void : voidTintFor(env);
 }
@@ -5661,6 +5670,178 @@ function applyTabletopExteriorLook(profileKey){
     if(look.ambientColor != null) S.ambientLight.color.setHex(gradeColorLocal(look.ambientColor, S.realmProfile));
   }
   (S.pointLights || []).forEach(l => { l.intensity *= look.pointScale; });
+}
+
+/* ============================================================================================
+   ENV-1c (docs/ENV-EXTERIOR-WAVE.md) — "the sun and moon are diegetic sources and their position in
+   the time of day should affect overall lighting when outdoors" (Adam's verbatim ruling, 2026-07-14).
+   Outdoor light is not a static per-profile mood (ENV-1's own TABLETOP_EXTERIOR_LOOK, just above) —
+   it is WHERE THE SUN/MOON IS. This is a SECOND tabletop-only post-pass, same discipline as
+   applyTabletopExteriorLook/applyTabletopShadowCasters above: mutates the LIVE S.ambientLight/
+   S.pointLights instances those two already (re)built for THIS render, never LIGHT_PROFILES itself.
+   Called ONLY from setBoard (never setInteriorBoard — "dark and ALL interior profiles untouched,
+   the arc is outdoors-only" per Adam's own scope note), AFTER applyTabletopExteriorLook (so it
+   further refines the SAME already-profile-scaled light) and BEFORE applyTabletopShadowCasters (so
+   the shadow-caster pass configures shadow camera/bias against the key's FINAL, arc-repositioned
+   transform, not its pre-arc fractional position).
+
+   THE ARC — a low-parameter continuous function of minute-of-day, NOT an astronomy library
+   (explicitly out of scope, per the spec's own closing note): SUNRISE_MIN/SUNSET_MIN bound the sun's
+   daytime pass; elevation follows a single sine hump (0 at sunrise/sunset, 1 at solar noon) so
+   dawn/dusk naturally read low + raking and noon naturally reads high + tight — ENV-1B's shadow-caster
+   pass gets that "for free" purely from the light's REPOSITIONED transform, no shadow-specific code
+   needed here. Azimuth sweeps east->west (sunrise -90 degrees -> sunset +90 degrees) linearly with the
+   same t, so the key's horizontal (x/z) position — and therefore any cast shadow's direction — flips
+   sign between morning and evening. The moon gets its OWN slower arc across the night span (sunset ->
+   next sunrise, wrapped), one shared shape function (celestialMoonDirFor mirrors celestialSunDirFor
+   exactly) — "night = the moon takes the key" per the ruling.
+
+   PROFILE COMPOSITION (the ruling's own "modulates the arc, never replaces it"): daylit renders the
+   clear-sky sun arc as-authored; moonlit renders the moon arc as-authored; overcast renders the SAME
+   sun arc (sun position retained) but desaturated toward grey (OVERCAST_DESAT) with its key
+   intensity contribution further damped (OVERCAST_SHADOW_DAMP) — overcast today authors ZERO points
+   in LIGHT_PROFILES (see that table's own "overcast: points: []" entry), so this function's point-
+   light branch is already a no-op there by construction: overcast casts no shadow at all, which IS
+   "shadow contrast drops" taken to its floor, consistent with pre-ENV-1c behavior. The void/color
+   desaturation still applies (a subtle grey-flattened sky drift across the day), matching the
+   ruling's "void/sky tint follows the same keyframes" for every exterior profile, not just daylit.
+
+   ONE RE-TUNE SURFACE: CELESTIAL_ARC — every color/intensity/timing number Adam red-pens lives here,
+   nothing below it does per-profile branching beyond the OVERCAST_* modulation the ruling itself
+   calls out by name. */
+const CELESTIAL_ARC = {
+  SUNRISE_MIN: 360,   // 06:00 — sun elevation crosses 0 going up (a fantasy day, not real-world solar timing)
+  SUNSET_MIN: 1200,   // 20:00 — sun elevation crosses 0 going down
+  MIN_ELEV_ANGLE: 0.2094, // ~12 degrees — a floor so the key never grazes dead-flat at literal sunrise/sunset (keeps the raking shadow readable instead of a degenerate zero-length ray)
+  sun: {
+    dawnColor:   0xffc2a8, // low warm-pink (dawn side of the arc, t < 0.5)
+    duskColor:   0xff7a42, // low orange-red (dusk side of the arc, t >= 0.5) — deliberately a DIFFERENT hue than dawn
+    zenithColor: 0xfff6e4, // high near-white (solar noon, either side)
+    dawnVoid:    0xf3c7b0,
+    duskVoid:    0xe89a68,
+    zenithVoid:  0xaed4f2, // matches TABLETOP_EXTERIOR_LOOK.daylit.void at full elevation — noon converges on ENV-1's own authored sky
+    intensityHorizon: 0.35, // fraction of ENV-1's already-profile-scaled key intensity, at elevation 0 (sunrise/sunset)
+    intensityZenith:  1.0   // 1.0 = ENV-1's own authored intensity, unmodified, at solar noon
+  },
+  moon: {
+    color: 0xaebfe8, // cool blue-silver — moonlit's own authored point hue (LIGHT_PROFILES.moonlit), kept identical
+    void:  0x141c30, // matches TABLETOP_EXTERIOR_LOOK.moonlit.void at full elevation
+    intensityHorizon: 0.4,
+    intensityZenith:  1.0
+  },
+  OVERCAST_DESAT: 0.4,        // 0 = no change, 1 = full grey — overcast's own "colors flatten" law
+  OVERCAST_SHADOW_DAMP: 0.55  // overcast's key contribution shrinks further (on TOP of ENV-1's own pointScale) -> softer lit/shadow luma delta than daylit at the same minute
+};
+const CELESTIAL_KEY_REACH_FACTOR = 2.2; // key distance = max(boardHalfX,boardHalfZ) * this — stays inside applyTabletopShadowCasters' own far-plane budget (2.5x half-extent, that function's own const)
+const CELESTIAL_MIN_KEY_HEIGHT = 1.5;   // never lets the key's Y drop to/through the tile plane even at the MIN_ELEV_ANGLE floor
+const CELESTIAL_AMBIENT_FLOOR_SCALE = 0.6; // ambient intensity never drops below 60% of ENV-1's own authored value — the readability floor's own "never unreadably dark" law, extended to the arc
+// the exact 3-profile exterior set TABLETOP_EXTERIOR_LOOK already carves out — reused here so the
+// celestial layer's own protection-set discipline never drifts from ENV-1's.
+const CELESTIAL_PROFILE_SET = { daylit: true, overcast: true, moonlit: true };
+
+// min-of-day -> {x,y,z (unit direction), elevation (0..1), t (0..1, sunrise->sunset)}. Pure, total:
+// clamps `min` into [SUNRISE_MIN,SUNSET_MIN] first, so a daylit/overcast profile rolled outside that
+// window (a keyword override, an edge-case snapshot) still returns a sane (if degenerate) direction
+// rather than NaN/negative-elevation garbage.
+function celestialSunDirFor(min){
+  const rise = CELESTIAL_ARC.SUNRISE_MIN, set = CELESTIAL_ARC.SUNSET_MIN;
+  const clamped = Math.min(Math.max(min, rise), set);
+  const t = (set > rise) ? (clamped - rise) / (set - rise) : 0.5;
+  const elevation = Math.sin(t * Math.PI); // 0 at rise/set, 1 at solar noon
+  const elevAngle = CELESTIAL_ARC.MIN_ELEV_ANGLE + elevation * (Math.PI / 2 - CELESTIAL_ARC.MIN_ELEV_ANGLE);
+  const azimuth = -Math.PI / 2 + t * Math.PI; // east (-90deg) at sunrise -> west (+90deg) at sunset
+  return {
+    x: Math.cos(elevAngle) * Math.cos(azimuth),
+    y: Math.sin(elevAngle),
+    z: Math.cos(elevAngle) * Math.sin(azimuth),
+    elevation: elevation, t: t
+  };
+}
+// mirrors celestialSunDirFor exactly, over the NIGHT span instead (sunset -> next sunrise, wrapped
+// across midnight) — "its own slower arc" per the ruling: a longer or shorter span than the sun's own
+// (whatever SUNRISE_MIN/SUNSET_MIN currently bound) naturally paces differently, with zero extra code.
+function celestialMoonDirFor(min){
+  const rise = CELESTIAL_ARC.SUNRISE_MIN, set = CELESTIAL_ARC.SUNSET_MIN;
+  const nightLen = (1440 - set) + rise;
+  let elapsed = min - set;
+  if(elapsed < 0) elapsed += 1440;
+  const t = (nightLen > 0) ? Math.min(Math.max(elapsed / nightLen, 0), 1) : 0.5;
+  const elevation = Math.sin(t * Math.PI);
+  const elevAngle = CELESTIAL_ARC.MIN_ELEV_ANGLE + elevation * (Math.PI / 2 - CELESTIAL_ARC.MIN_ELEV_ANGLE);
+  const azimuth = -Math.PI / 2 + t * Math.PI;
+  return {
+    x: Math.cos(elevAngle) * Math.cos(azimuth),
+    y: Math.sin(elevAngle),
+    z: Math.cos(elevAngle) * Math.sin(azimuth),
+    elevation: elevation, t: t
+  };
+}
+// two 0xrrggbb ints -> a linearly-interpolated 0xrrggbb int at fraction f (clamped 0..1).
+function celestialLerpColor(a, b, f){
+  f = Math.max(0, Math.min(1, f));
+  const ar=(a>>16)&255, ag=(a>>8)&255, ab=a&255, br=(b>>16)&255, bg=(b>>8)&255, bb=b&255;
+  const r = Math.round(ar + (br-ar)*f), g = Math.round(ag + (bg-ag)*f), bl = Math.round(ab + (bb-ab)*f);
+  return (r<<16)|(g<<8)|bl;
+}
+// a 0xrrggbb int, pulled toward its own luma-grey by fraction amt (0..1) — overcast's "colors flatten
+// grey" law, reused for both the key color and the void tint.
+function celestialDesaturate(hex, amt){
+  const r=(hex>>16)&255, g=(hex>>8)&255, b=hex&255;
+  const grey = Math.round(r*0.299 + g*0.587 + b*0.114);
+  const nr = Math.round(r + (grey-r)*amt), ng = Math.round(g + (grey-g)*amt), nb = Math.round(b + (grey-b)*amt);
+  return (nr<<16)|(ng<<8)|nb;
+}
+// the public per-profile arc read: (profileKey in CELESTIAL_PROFILE_SET, clockMin) -> {dir, elevation,
+// color, voidTint, intensityScale}. Pure, total — no RNG, no S/GS/w touch — so the SAME (profileKey,
+// clockMin) always yields a byte-identical rig (the determinism requirement this unit's own
+// verification names explicitly).
+function celestialArcFor(profileKey, clockMin){
+  const isMoon = profileKey === "moonlit";
+  const dirInfo = isMoon ? celestialMoonDirFor(clockMin) : celestialSunDirFor(clockMin);
+  const body = isMoon ? CELESTIAL_ARC.moon : CELESTIAL_ARC.sun;
+  const e = dirInfo.elevation;
+  let color, voidTint;
+  if(isMoon){
+    color = body.color; voidTint = body.void; // one hue family, no dawn/dusk side split for the moon
+  } else {
+    const horizonColor = dirInfo.t < 0.5 ? body.dawnColor : body.duskColor;
+    const horizonVoid  = dirInfo.t < 0.5 ? body.dawnVoid  : body.duskVoid;
+    color = celestialLerpColor(horizonColor, body.zenithColor, e);
+    voidTint = celestialLerpColor(horizonVoid, body.zenithVoid, e);
+  }
+  let intensityScale = body.intensityHorizon + (body.intensityZenith - body.intensityHorizon) * e;
+  if(profileKey === "overcast"){
+    color = celestialDesaturate(color, CELESTIAL_ARC.OVERCAST_DESAT);
+    voidTint = celestialDesaturate(voidTint, CELESTIAL_ARC.OVERCAST_DESAT);
+    intensityScale *= CELESTIAL_ARC.OVERCAST_SHADOW_DAMP;
+  }
+  return { dir: { x: dirInfo.x, y: dirInfo.y, z: dirInfo.z }, elevation: e, color: color, voidTint: voidTint, intensityScale: intensityScale, isMoon: isMoon };
+}
+// the mutator: repositions/re-colors/re-scales the profile's own key point (S.pointLights[0] — every
+// LIGHT_PROFILES entry authors at most one, applyTabletopShadowCasters' own header note) and damps
+// ambient intensity by the same curve (floored at CELESTIAL_AMBIENT_FLOOR_SCALE — never below ENV-1's
+// own readability floor). ALWAYS resets S.celestialVoidTint first (even on every early-return path) —
+// S persists across renders, so a stale value from a PRIOR daylit/moonlit board must never leak into
+// THIS render's void tint (voidTintForTabletop, above, reads it after this function returns).
+// No-op (byte-identical to pre-ENV-1c setBoard) whenever clockMin is null (no clock threaded — a
+// combat-less/walk-less snapshot, a narrow harness) or profileKey isn't one of the 3 exterior moods —
+// the SAME protection-set discipline ENV-1/ENV-1B already established for this rig region.
+function applyCelestialArc(profileKey, clockMin){
+  S.celestialVoidTint = null;
+  if(clockMin == null || !CELESTIAL_PROFILE_SET[profileKey]) return;
+  const arc = celestialArcFor(profileKey, clockMin);
+  S.celestialVoidTint = arc.voidTint;
+  if(S.pointLights && S.pointLights.length){
+    const hx = S.boardHalfX || 4, hz = S.boardHalfZ || 4;
+    const reach = Math.max(hx, hz) * CELESTIAL_KEY_REACH_FACTOR;
+    const key = S.pointLights[0];
+    key.position.set(arc.dir.x * reach, Math.max(CELESTIAL_MIN_KEY_HEIGHT, arc.dir.y * reach), arc.dir.z * reach);
+    key.color.setHex(gradeColorLocal(arc.color, S.realmProfile));
+    key.intensity *= arc.intensityScale;
+  }
+  if(S.ambientLight){
+    S.ambientLight.intensity *= Math.max(CELESTIAL_AMBIENT_FLOOR_SCALE, arc.intensityScale);
+  }
 }
 
 // ENV-1B (docs/GRAPHICS-CONVERGENCE-CHARTER.md §3.3; Adam's DESIGN.md 2026-07-10 ruling — "soft real
@@ -6603,20 +6784,30 @@ function setBoard(data){
   // for why this is a SEPARATE post-pass rather than an edit to applyLightProfile/LIGHT_PROFILES
   // themselves. No-op for the protection-set profiles (dark/torchlit/etc).
   applyTabletopExteriorLook(lightProfileKey);
+  // ENV-1c (docs/ENV-EXTERIOR-WAVE.md): the celestial-arc post-pass — data.clockMin is theater-data.js's
+  // own stamp (src/engine/theater-data.js, threaded from src/world/render.js's theaterHereSourceFor/
+  // theaterStageSync off w.clock.min, the SAME continuous minute dmDigest ships the DM seat). Runs
+  // AFTER applyTabletopExteriorLook (further refines the SAME already-profile-scaled key/ambient) and
+  // BEFORE applyTabletopShadowCasters (so the shadow pass configures against the key's FINAL,
+  // arc-repositioned transform). No-op — byte-identical to pre-ENV-1c — whenever data.clockMin is
+  // absent (a narrow harness, an older snapshot) or lightProfileKey isn't one of the 3 exterior moods.
+  applyCelestialArc(lightProfileKey, data.clockMin != null ? data.clockMin : null);
   // ENV-1B: every tabletop board's own profile point(s) become shadow casters — see
   // applyTabletopShadowCasters' own header for the full provenance/scope note. Runs after
   // applyTabletopExteriorLook so the shadow-casting flag lands on the SAME already-scaled light
   // instances (order is otherwise inert — shadow config doesn't read intensity).
   applyTabletopShadowCasters();
 
-  // T1.5 §1/§2 env threading, now ALSO profile-threaded (ENV-1): voidTintForTabletop reads the
-  // active light profile first (the 3 exterior moods each carry their own background wash — a
-  // light sky-tone for daylit, muted grey for overcast, near-dark cool blue for moonlit) and only
-  // falls back to the plain env-keyed void for the protection-set profiles, matching this unit's
-  // "byte-identical dark/torchlit" guarantee. Computed AFTER applyLightProfile/
-  // applyTabletopExteriorLook (was before, pre-unit) so S.lightProfileKey is current — mountLightProp
-  // above doesn't read scene.background, so this reordering is otherwise inert.
-  const voidTint = gradeColorLocal(voidTintForTabletop(env, lightProfileKey), S.realmProfile);
+  // T1.5 §1/§2 env threading, now ALSO profile-threaded (ENV-1) and clock-threaded (ENV-1c):
+  // voidTintForTabletop reads the celestial arc's own void keyframe first (S.celestialVoidTint,
+  // stamped by applyCelestialArc just above) when a clock is threaded, else falls back to ENV-1's
+  // static per-profile wash (a light sky-tone for daylit, muted grey for overcast, near-dark cool
+  // blue for moonlit), and only falls back further to the plain env-keyed void for the protection-set
+  // profiles — matching this unit's "byte-identical dark/torchlit" guarantee. Computed AFTER
+  // applyLightProfile/applyTabletopExteriorLook/applyCelestialArc (was before, pre-ENV-1) so
+  // S.lightProfileKey/S.celestialVoidTint are current — mountLightProp above doesn't read
+  // scene.background, so this reordering is otherwise inert.
+  const voidTint = gradeColorLocal(voidTintForTabletop(env, lightProfileKey, data.clockMin != null ? data.clockMin : null), S.realmProfile);
   if(S.scene){
     S.scene.background = new THREE.Color(voidTint);
     if(S.scene.fog) S.scene.fog.color = new THREE.Color(voidTint);
@@ -11509,9 +11700,14 @@ window.Theater._tabletopSceneLightsForTest = function(){
     // ENV-1B: castShadow/shadow.mapSize/shadow.bias ride along so a harness can assert the
     // applyTabletopShadowCasters contract directly (every point casts, at TABLETOP_SHADOW_MAP_SIZE)
     // without inferring it from a pixel measurement.
+    // ENV-1c: `position` rides along too (additive — every existing consumer of this accessor ignores
+    // unknown fields) so a harness can assert the celestial-arc key-light DIRECTION directly (the
+    // dawn-vs-noon / morning-vs-evening RED-FIRST checks this unit's own verification requires),
+    // rather than inferring it purely from a shadow-region pixel measurement.
     points: (S.pointLights || []).map((l) => ({
       intensity: l.intensity, color: l.color ? l.color.getHex() : null,
       castShadow: !!l.castShadow, shadowMapSize: l.shadow ? l.shadow.mapSize.x : null, shadowBias: l.shadow ? l.shadow.bias : null,
+      position: l.position ? { x: l.position.x, y: l.position.y, z: l.position.z } : null,
     })),
     background: (S.scene && S.scene.background && S.scene.background.isColor) ? S.scene.background.getHex() : null,
   };

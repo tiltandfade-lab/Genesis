@@ -46,7 +46,21 @@ const MATERIAL_FAMILY = Object.freeze({
   "metal-panel": "metal",
   "bone": "mottle", "flesh": "mottle", "ice": "mottle", "asphalt": "mottle", "linoleum": "mottle"
 });
-function materialFamilyFor(material) { return MATERIAL_FAMILY[material] || "mottle"; }
+// VQ2-RESPEC.md §3 unit L2 — read-only census of the "unknown material string" fallback ONLY (an
+// explicit `MATERIAL_FAMILY[material] === "mottle"` mapping, e.g. "bone"/"flesh", is a deliberate
+// authored choice, not a miss — the census only fires when `material` isn't in the table at all).
+// Guarded on `typeof theaterCensusRecord === "function"` (this file's header: "no THREE, no canvas,
+// no DOM" — it must stay testable head-on in a bare node vm sandbox with no GS/state.js loaded at
+// all, e.g. dev/verify-dungeon-interior.mjs's own sandbox; that guard makes this call a silent no-op
+// there, never a ReferenceError) — read-only, never influences which painter runs (the SAME `fam`
+// value is returned either way).
+function materialFamilyFor(material) {
+  const fam = MATERIAL_FAMILY[material] || "mottle";
+  if(!MATERIAL_FAMILY[material] && typeof theaterCensusRecord === "function"){
+    theaterCensusRecord("material", "mottle-fallback", material || null, null);
+  }
+  return fam;
+}
 
 // ─── tiny pure color helpers (no THREE.Color — this file stays GL-free, see header) ─────────────────
 function mtHexToRgb(hex) {

@@ -2852,6 +2852,25 @@ function spriteAssetPathFor(entry){
   return entry.legacyAsset || ("assets/sprites/" + entry.slug + ".png");
 }
 
+// VQ2-RESPEC.md §3 unit L2 — read-only census helper, mirroring spriteAssetPathFor's OWN gate exactly
+// (same three conditions, same order) so the recorded outcome always names whichever corpus the
+// figure ACTUALLY resolved against, never a re-derived guess that could drift from the real path.
+function _spriteCensusOutcome(entry){
+  return (FACETED_FLIP_ENABLED && entry && entry.runtimeAdmitted === "candidate" && entry.candidateAsset)
+    ? "sprite-faceted" : "sprite-legacy";
+}
+// VQ2-RESPEC.md §3 unit L2 — the SAME "interior"|"tabletop"|null vocabulary figureFor's own
+// _censusSceneKind local uses (derived there from the interiorMode PARAM, not S.lastBoard, since
+// figureFor can be called via refFigure.build with no board mounted at all) — this helper covers
+// every OTHER seam call site that only has S.lastBoard to go on (spriteTextureFor/dressingTextureFor
+// fire from an async texture-load callback, well outside any single figureFor call's scope), so a
+// play-lens census read never has to reconcile two different scene-kind spellings for the same
+// literal board ("interior3d" here vs "interior" there).
+function _censusBoardSceneKind(){
+  if(!S.lastBoard) return null;
+  return S.lastBoard.kind === "interior3d" ? "interior" : "tabletop";
+}
+
 // texture cache, keyed by sprite slug: undefined (never requested) | "pending" | "failed" | a loaded
 // THREE.Texture. Exposed read/write on window.Theater._spriteTextureCache (bottom of this file) as a
 // TEST-ONLY seam — dev/verify-theater-sprites.mjs pre-seeds a fake Texture here to exercise the
@@ -3003,7 +3022,14 @@ function spriteTextureFor(entry){
   }
   const cached = SPRITE_TEXTURE_CACHE[spriteSlug];
   if(cached && cached !== "pending" && cached !== "failed") return cached;
-  if(cached === "pending" || cached === "failed") return null;
+  if(cached === "pending") return null;
+  if(cached === "failed"){
+    // VQ2-RESPEC.md §3 unit L2 — a slug that already failed to load stays permanently failed (never
+    // retried, per this function's own header); each subsequent request is a fresh demand hitting the
+    // same dead end, so it's recorded every time, not just on the original failure.
+    if(typeof theaterCensusRecord === "function") theaterCensusRecord("sprite-texture", "sprite-load-failed", spriteSlug, _censusBoardSceneKind());
+    return null;
+  }
   SPRITE_TEXTURE_CACHE[spriteSlug] = "pending";
   textureLoader.load(
     path,
@@ -3035,7 +3061,12 @@ function spriteTextureFor(entry){
       }
     },
     undefined,
-    function(){ SPRITE_TEXTURE_CACHE[spriteSlug] = "failed"; }
+    function(){
+      SPRITE_TEXTURE_CACHE[spriteSlug] = "failed";
+      // VQ2-RESPEC.md §3 unit L2 — the FIRST failure, recorded at the moment it happens (the "failed"
+      // cache-state check above only catches requests AFTER this one).
+      if(typeof theaterCensusRecord === "function") theaterCensusRecord("sprite-texture", "sprite-load-failed", spriteSlug, _censusBoardSceneKind());
+    }
   );
   return null;
 }
@@ -3200,6 +3231,10 @@ function interiorSpriteBillboard(entry, wallHeightCap){
 // scaleTrue, the SAME function VP1 wired for non-combat interior pieces) instead of inheriting the
 // tabletop's render-height-multiplier convention (the kaiju bug this unit fixes).
 function figureFor(archetype, seed, tint, silhouette, weapon, recipeSlug, pcRecipe, kind, className, wholeKeyOverride, interiorMode, wallHeightCap){
+  // VQ2-RESPEC.md §3 unit L2 — a light context tag for the census entries below (which scene family
+  // this figure resolved into), NOT a new state field — read-only, computed fresh per call from the
+  // SAME interiorMode param setUnits/interiorBuildPieces already thread through.
+  const _censusSceneKind = interiorMode ? "interior" : "tabletop";
   // SPRITE-TRANSITION T4: the sprite-billboard channel resolves AHEAD of the whole-object/glb/recipe/
   // cuboid chain below (docs/SPRITE-TRANSITION.md T4.1) — creature-kind pieces only (a pc/ally keys
   // off its CLASS, not a bestiary name, so it has no sprite-registry join key at all and always skips
@@ -3224,11 +3259,16 @@ function figureFor(archetype, seed, tint, silhouette, weapon, recipeSlug, pcReci
           g.userData.interiorWidth = built.width;
           g.userData.interiorFloorFrac = (typeof sEntry.floor === "number") ? sEntry.floor : 0;
           _tallyPath("sprite", sEntry.slug);
+          if(typeof theaterCensusRecord === "function") theaterCensusRecord("figure", _spriteCensusOutcome(sEntry), sEntry.slug, _censusSceneKind);
           return g;
         }
       } else {
         const sg = buildSpriteBillboard(sEntry);
-        if(sg){ _tallyPath("sprite", sEntry.slug); return sg; }
+        if(sg){
+          _tallyPath("sprite", sEntry.slug);
+          if(typeof theaterCensusRecord === "function") theaterCensusRecord("figure", _spriteCensusOutcome(sEntry), sEntry.slug, _censusSceneKind);
+          return sg;
+        }
       }
     }
   }
@@ -3279,6 +3319,7 @@ function figureFor(archetype, seed, tint, silhouette, weapon, recipeSlug, pcReci
         g.userData.wholeObjectKey = wKey;
         g.userData.wholeObjectDiscR = wEntry.discR;
         _tallyPath("glb", wKey);
+        if(typeof theaterCensusRecord === "function") theaterCensusRecord("figure", "glb", wKey, _censusSceneKind);
         return g;
       }
     } else if(wEntry && typeof wEntry.build === "function"){
@@ -3293,6 +3334,7 @@ function figureFor(archetype, seed, tint, silhouette, weapon, recipeSlug, pcReci
         g.userData.wholeObjectKey = wKey;
         g.userData.wholeObjectDiscR = wEntry.discR;
         _tallyPath(_classifyWholeKey(wKey), wKey);
+        if(typeof theaterCensusRecord === "function") theaterCensusRecord("figure", "whole-object", wKey, _censusSceneKind);
         return g;
       }
     }
@@ -3317,13 +3359,26 @@ function figureFor(archetype, seed, tint, silhouette, weapon, recipeSlug, pcReci
   // chain (pcRecipe > bestiary recipe > archetype), not a new code path. A foe never carries
   // pcRecipe (theaterUnitsFrom only stamps it on pc/ally units), so this branch is a pure no-op
   // for every foe figure.
-  if(pcRecipe){ _tallyPath("pcRecipe", null); return buildFigureFromRecipe(pcRecipe, tint, kind); }
+  if(pcRecipe){
+    _tallyPath("pcRecipe", null);
+    if(typeof theaterCensusRecord === "function") theaterCensusRecord("figure", "recipe", className || kind || null, _censusSceneKind);
+    return buildFigureFromRecipe(pcRecipe, tint, kind);
+  }
   const recipe = recipeFor(recipeSlug);
-  if(recipe){ _tallyPath("recipe", recipeSlug); return buildFigureFromRecipe(recipe, tint, kind); }
+  if(recipe){
+    _tallyPath("recipe", recipeSlug);
+    if(typeof theaterCensusRecord === "function") theaterCensusRecord("figure", "recipe", recipeSlug, _censusSceneKind);
+    return buildFigureFromRecipe(recipe, tint, kind);
+  }
   // the legacy archetype-builder path — a genuine cuboid (§U3: reached only when there is NO whole-
   // object key, NO recipe; instrumented so this stops being invisible). `wKey||("kind:"+kind)` names
   // the miss so the debug report says WHAT couldn't resolve (a foe recipeSlug, a keyless npc, etc.).
-  _tallyPath("cuboid", wholeObjectKeyFor(kind, className, recipeSlug) || ("kind:" + kind));
+  const _cuboidMissKey = wholeObjectKeyFor(kind, className, recipeSlug) || ("kind:" + kind);
+  _tallyPath("cuboid", _cuboidMissKey);
+  // L2: name the creature itself (recipeSlug — the bestiary id/name a caller already passed) when
+  // present, falling back to the miss key only for a name-less piece (a keyless npc/pc) — the census
+  // entry should say WHO had no art, not just which internal key failed to resolve.
+  if(typeof theaterCensusRecord === "function") theaterCensusRecord("figure", "cuboid", recipeSlug || _cuboidMissKey, _censusSceneKind);
   const build = ARCHETYPE_BUILDERS[archetype] || ARCHETYPE_BUILDERS.biped;
   const g = build(seed, tint, silhouette, weapon);
   // UNIT 0 (L16): the legacy archetype-builder fallback (no recipe) turns to the SAME convention as
@@ -8434,11 +8489,17 @@ function dressingTextureFor(slug){
   if(cached) return cached;
   const placeholder = dressingPlaceholderTexture(slug);
   DRESSING_TEXTURE_CACHE[slug] = placeholder;
+  // VQ2-RESPEC.md §3 unit L2 — the synchronous name-label CanvasTexture fires HERE, on every slug's
+  // first request this session; a real assets/dressing/<slug>.png (if/when it settles below) upgrades
+  // the SAME slug to "resolved" separately, mirroring what actually renders on screen frame-to-frame
+  // (a placeholder card first, real art once it lands — never invented as already-resolved).
+  if(typeof theaterCensusRecord === "function") theaterCensusRecord("dressing", "placeholder-card", slug, _censusBoardSceneKind());
   textureLoader.load(
     "assets/dressing/" + slug + ".png",
     function(tex){
       nearestify(tex);
       DRESSING_TEXTURE_CACHE[slug] = tex;
+      if(typeof theaterCensusRecord === "function") theaterCensusRecord("dressing", "resolved", slug, _censusBoardSceneKind());
       if(S.mounted && S.lastBoard && S.lastBoard.kind === "interior3d"){
         S.boardKey = null;
         setInteriorBoard(S.lastBoard);
@@ -11675,6 +11736,22 @@ window.Theater.brightPracticalsSuppressed = function(){ return !!ITR_BRIGHT_SUPP
 // counter read-only so a harness can assert TIER 2 actually fired (or didn't).
 window.Theater._spriteEntryForTest = function(recipeSlug){ return spriteEntryFor(recipeSlug); };
 window.Theater._spriteJoinNameFallbackCountForTest = function(){ return SPRITE_JOIN_NAME_FALLBACK_COUNT; };
+// VQ2-RESPEC.md §3 unit L2 — the demand-vs-null census read-out, same "_xxxForTest" idiom as every
+// other harness hook in this file: a play-lens run (or any harness) reads a SUMMARIZED snapshot
+// after each capture rather than poking GS.theaterCensus directly (GS is a classic-script global this
+// ES-module scope doesn't otherwise expose a stable accessor for). Returns a fresh {counts, entries}
+// object each call (a shallow copy of GS.theaterCensus's own two fields) — read-only, never mutates
+// the live census; a caller wanting to "reset between shots" just remembers the prior counts/length
+// and diffs, exactly like dev/play-lens.mjs's own manifest.json delta convention.
+window.Theater._censusForTest = function(){
+  const c = (typeof GS !== "undefined" && GS && GS.theaterCensus) ? GS.theaterCensus : { entries: [], counts: {} };
+  return { counts: Object.assign({}, c.counts), entries: c.entries.slice() };
+};
+// VQ2-RESPEC.md §3 unit L2 — test-only seam exposing dressingTextureFor directly (mirrors
+// _spriteEntryForTest's own "drive the pure resolution function without the full board-mount
+// machinery" convention), so a harness can exercise seam 3's placeholder-card/resolved census
+// recording for a bare slug without constructing a full interior board fixture.
+window.Theater._dressingTextureForTest = function(slug){ return dressingTextureFor(slug); };
 // docs/LIGHT-SIGHT-POLISH.md P-1 problem 3 — harness-facing diagnostic + runtime toggle, same
 // convention as the cone gate just above: every mounted light-emitter marker (card OR nub) in the
 // CURRENT interior scene graph, tagged by userData.lightEmitterMarker (see interiorBuildLightCard /

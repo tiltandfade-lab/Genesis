@@ -322,10 +322,31 @@ async function measureFps(page) {
 // ============================================================================
 // the capture ledger — seq/manifest/cap discipline lives here, once.
 // ============================================================================
+// VQ2-RESPEC.md §3 unit L2 — read the live GS.theaterCensus off the page via the SAME test-only
+// seam the L2 unit itself exposes (window.Theater._censusForTest), returning null on any older/
+// stripped build that doesn't carry it yet (a total-function floor — this rig must degrade
+// cleanly against a page that predates L2, exactly like every other optional feature-detect in
+// this file, e.g. measureFps above).
+async function readCensus(page) {
+  try {
+    return await page.evaluate(() => (window.Theater && typeof window.Theater._censusForTest === "function") ? window.Theater._censusForTest() : null);
+  } catch (e) { return null; }
+}
+// counts totals are exact regardless of the entries FIFO cap (theaterCensusRecord's own law) — sum
+// them to get "how many NEW entries landed since the last snapshot" even once entries[] itself
+// starts evicting its oldest rows under a long run.
+function censusCountsTotal(counts) { return Object.values(counts || {}).reduce((a, b) => a + b, 0); }
+function censusCountsDelta(curr, prev) {
+  const out = {};
+  for (const k in (curr || {})) { const d = (curr[k] || 0) - (prev[k] || 0); if (d > 0) out[k] = d; }
+  return out;
+}
+
 function makeCapture(page) {
   let seq = 0;
   const rows = [];
   let capped = false;
+  let prevCensusCounts = {}; // the running "already seen as of the last shot" baseline
   return {
     async shot(kind, context, notes) {
       if (seq >= PLAY_LENS_MAX_SHOTS) {
@@ -344,11 +365,25 @@ function makeCapture(page) {
       }
       const ctx = await snapshotContext(page);
       const fps = await measureFps(page);
+      // L2 — this shot's census DELTA: counts that grew since the last shot (exact, cap-independent)
+      // plus the tail slice of `entries` those new counts correspond to (entries is FIFO-append-only,
+      // so the newest N entries are always the last N in the array — see readCensus's own header).
+      const census = await readCensus(page);
+      let censusDelta = null;
+      if (census) {
+        const countsDelta = censusCountsDelta(census.counts, prevCensusCounts);
+        const numNew = censusCountsTotal(census.counts) - censusCountsTotal(prevCensusCounts);
+        censusDelta = {
+          counts: countsDelta,
+          entries: numNew > 0 ? census.entries.slice(-Math.min(numNew, census.entries.length)) : [],
+        };
+        prevCensusCounts = census.counts;
+      }
       const row = { seq, kind, realm: ctx.realm || REALM, env: ctx.env || null, nodeKind: ctx.nodeKind || null,
         walkId: ctx.walkId || null, segNum: ctx.segNum != null ? ctx.segNum : null, lightProfile: ctx.lightProfile || null,
         fps: (fps && typeof fps.fps === "number") ? Number(fps.fps.toFixed(1)) : null,
         notes: notes || null, file: fileName, combatRound: ctx.combatRound != null ? ctx.combatRound : null,
-        currentNodeId: ctx.currentNodeId || null, clock: ctx.clock || null };
+        currentNodeId: ctx.currentNodeId || null, clock: ctx.clock || null, censusDelta };
       rows.push(row);
       log(`  [${seqStr}] ${kind}/${safeContext} -> ${fileName}` + (notes ? ` (${notes})` : ""));
       return row;
@@ -1031,6 +1066,34 @@ async function main() {
       rows: cap.rows(),
     };
     fs.writeFileSync(path.join(outDir, "manifest.json"), JSON.stringify(manifest, null, 2));
+
+    // L2 (VQ2-RESPEC.md §3) — the demand-vs-null census: per-shot deltas (already captured on each
+    // row by makeCapture's shot()) + the run's FINAL live totals (counts are exact regardless of the
+    // entries FIFO cap — theaterCensusRecord's own law) + the top-N most-requested UNRESOLVED names
+    // (the "fell to a placeholder/cuboid/failed tier" outcomes only — a resolved sprite/glb/recipe/
+    // whole-object hit is demand that was MET, not a gap the ledger needs to rank). Written beside
+    // manifest.json every run, even a page that predates L2 (readCensus's own total-function floor
+    // returns null there, and this block degrades to an honest empty {} rather than throwing).
+    const finalCensus = await readCensus(page);
+    const MISS_OUTCOMES = new Set(["cuboid", "placeholder-card", "sprite-load-failed", "mottle-fallback", "null-facade"]);
+    const missTally = {};
+    for (const e of (finalCensus && finalCensus.entries) || []) {
+      if (!MISS_OUTCOMES.has(e.outcome)) continue;
+      const key = e.seam + ":" + (e.name || "(unnamed)");
+      missTally[key] = (missTally[key] || 0) + 1;
+    }
+    const topUnresolved = Object.entries(missTally)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 20)
+      .map(([key, count]) => ({ key, count }));
+    const census = {
+      runId: RUN_ID, realm: REALM, route: ROUTE, generatedAt: findings.generatedAt,
+      totals: { counts: (finalCensus && finalCensus.counts) || {}, entriesCaptured: (finalCensus && finalCensus.entries.length) || 0 },
+      topUnresolved,
+      perShot: cap.rows().map((r) => ({ seq: r.seq, kind: r.kind, file: r.file, censusDelta: r.censusDelta })),
+    };
+    fs.writeFileSync(path.join(outDir, "census.json"), JSON.stringify(census, null, 2));
+    log(`census: ${path.join(outDir, "census.json")}`);
 
     findings.shotCount = cap.count();
     findings.kindsPresent = manifest.kindsPresent;

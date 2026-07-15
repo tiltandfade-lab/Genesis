@@ -1398,6 +1398,18 @@ function theaterSettlementBoardBuild(nodeInfo, realms, env){
   const trimMaterial = theaterSettlementMaterialFor(realmId, SETTLEMENT_FACADE_TRIM_BY_REALM, SETTLEMENT_FACADE_TRIM_DEFAULT);
   const facadeTextureFile = (typeof REALM_TEXTURES !== "undefined" && REALM_TEXTURES[realmId]
     && REALM_TEXTURES[realmId].wall && REALM_TEXTURES[realmId].wall[0] && REALM_TEXTURES[realmId].wall[0].file) || null;
+  // VQ2-RESPEC.md §3 unit L2 — read-only census: facadeTextureFile is computed ONCE per settlement
+  // tray (above, realm-keyed), not per building — every building[] this tray produces below shares
+  // the SAME value, so a null here means the WHOLE tray falls back to a procedural facade (no door/
+  // window/roof art at all, per this file's own header note), recorded once per tray build rather
+  // than once per building (the nullness isn't independently rolled per lot). Guarded the same
+  // "typeof theaterCensusRecord === function" way every other seam is — this file loads before
+  // src/ui/theater-boot.js in manifest.json's loadOrder but well AFTER src/state.js (index 0), so the
+  // guard is a defensive no-op in a real session and the load-bearing byte-identical-behavior seam for
+  // any harness that loads this file standalone without state.js.
+  if(facadeTextureFile === null && typeof theaterCensusRecord === "function"){
+    theaterCensusRecord("facade", "null-facade", realmId, "settlement");
+  }
 
   const tiles = [];
   const buildings = [];

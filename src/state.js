@@ -36,5 +36,34 @@ var GS = {
   cmbDioramaOpen: false,         // BATTLE-VISUALS A1: the "⌗ diorama" toggle — collapsed by default until Phase B (BATTLE-THEATER) replaces the slot
   theaterMounted: false,         // BATTLE-STAGE (docs/BATTLE-THEATER.md §6): true once window.Theater.mount() has succeeded for the CURRENT fight — gates the stage-mode layout swap (feed moves to the right rail, the theater canvas + zone strip take the center). Reset to false on combat_end so the next fight re-attempts mount.
   stageCollapsed: false,         // TABLETOP-UNITS U2 (docs/TABLETOP-UNITS.md §U2): the rail's stage-toggle, GS-only — true = the center stage is user-collapsed to the classic feed-hero layout even while mounted. Never persisted, never an event; toggleStage() (world.render) is the sole writer.
-  archive: { open: false, worldId: null, entries: null, loading: false }  // Chronicle › archived-narration vault (FOREVER-STORAGE §2 on-demand read); entries = the fetched archiveReadForWorld slice, only while open
+  archive: { open: false, worldId: null, entries: null, loading: false },  // Chronicle › archived-narration vault (FOREVER-STORAGE §2 on-demand read); entries = the fetched archiveReadForWorld slice, only while open
+  // VQ2-RESPEC.md §3 unit L2 — the demand-vs-null census instrument. Read-only observation of which
+  // resolution TIER each provenanced scene element (figure/sprite-texture/dressing-card/material/
+  // facade) actually got, appended to by the seams themselves (theater-boot.js/theater-materials.js/
+  // theater-data.js, each guarded on `typeof theaterCensusRecord === "function"` so a bare-vm-sandbox
+  // harness that never loads this file — e.g. dev/verify-dungeon-interior.mjs's THREE/DOM/GS-free
+  // materialFamilyFor sandbox — stays byte-identical, never throws). `counts` stays exact forever
+  // (a plain seam:outcome tally); `entries` is the capped FIFO detail log (see theaterCensusRecord,
+  // below) so a long session can't grow this unbounded.
+  theaterCensus: { entries: [], counts: {} }
 };
+// FIFO cap on GS.theaterCensus.entries — named const per L2's own instruction ("a long session can't
+// grow unbounded; counts are exact regardless"). 2000 is generous for a single play-lens run (a few
+// hundred provenanced elements per shot x a few dozen shots) while bounding worst-case memory in a
+// long live session.
+var THEATER_CENSUS_CAP = 2000;
+// theaterCensusRecord(seam, outcome, name, sceneKind) — the single append point every seam calls
+// through. Never throws, never returns a value product logic could branch on (pure side effect) —
+// this instrument OBSERVES resolution outcomes, it never influences them (L2's own "ZERO behavior
+// change" law). `name` is the creature/prop/material/realm identifier the outcome resolved (or
+// failed to resolve) for; `sceneKind` is a light context tag (e.g. "interior"|"tabletop"|"settlement")
+// so a play-lens read can bucket demand by scene type — both optional, stamped null when the caller
+// has nothing cheap to pass.
+function theaterCensusRecord(seam, outcome, name, sceneKind){
+  if(!GS.theaterCensus) GS.theaterCensus = { entries: [], counts: {} }; // defensive — GS is always the source of truth, never reset mid-session by this instrument itself
+  var c = GS.theaterCensus;
+  var key = seam + ":" + outcome;
+  c.counts[key] = (c.counts[key] || 0) + 1;
+  c.entries.push({ seam: seam, outcome: outcome, name: name || null, sceneKind: sceneKind || null });
+  if(c.entries.length > THEATER_CENSUS_CAP) c.entries.shift(); // FIFO — counts above stay exact regardless of the cap
+}

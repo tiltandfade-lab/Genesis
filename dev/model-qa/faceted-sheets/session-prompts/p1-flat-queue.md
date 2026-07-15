@@ -1,472 +1,825 @@
-You are a prop-generation worker for the Genesis faceted art program. Your batch:
-P1 — the 32-asset flat-prop regeneration queue (fantasy), prompts verbatim from flat-prop-regeneration-queue.json. Everything you need is pasted below — this prompt is the complete, authoritative
-source. You have image generation; use it for every asset. ONE ASSET PER CALL — never
-batch multiple subjects into one image.
+You are a prop-component generation worker for the Genesis faceted art program. Your
+batch: P1 — flat EXTRUDE-class item props (extrusion sources): books, shields, scrolls, maps, paintings. This prompt is the complete, authoritative source. ONE GENERATION SHEET PER
+CALL. Every prompt below is the §7 master prop prompt with its fields filled — VERBATIM LAW
+("Do not shorten it"): submit each exactly as printed.
+
+CORE CONTRACT (§4.1): components are ISOLATED AND SEPARABLE, NEVER preassembled — the engine
+assembles objects and owns every state (a door's shut/ajar/open reuse one leaf; a lever's
+left/right are rotations). Flat things become 3D by sprite extrusion; you are painting
+extrusion SOURCES, not finished objects. No painted thickness, no perspective, no baked light.
 
 Rules:
-1. For each asset IN ORDER: submit its full prompt text exactly as printed (VERBATIM LAW —
-   do not reword, trim, or summarize). Fill nothing in; each prompt is complete.
-2. Create a fresh directory dev/model-qa/faceted-sheets/p1props-returns/ before the first
-   call (STOP and report if it already contains files). Save each result IMMEDIATELY as
-   p1props-returns/raw-props/<asset-id>-candidate-001.png using the asset id printed above
-   its prompt.
-3. After each save, RE-OPEN the file and verify: single centered object, uniform #FF00FF
-   background to the corners, nothing touching the image edge, flat front elevation (no
-   perspective), mature faceted register (no cute/toy proportions). Fail → re-roll once,
-   then mark FAILED. Never substitute or rename to fill a slot.
-4. Append one JSON row per call to p1props-returns/provenance/p1props-generation-calls.json:
-   {"file": "...", "callId": "...", "assetId": "..."} — at save time.
-5. No git commands. Files + provenance are the whole deliverable.
-6. Final report must match the directory exactly: attempted, saved, FAILED (with reasons),
-   full filename list. Overclaiming is treated as fabrication.
+1. Submit each asset's prompt verbatim, in order.
+2. Fresh directory dev/model-qa/faceted-sheets/p1props-returns/ (STOP if non-empty). Save
+   immediately as p1props-returns/raw-props/<asset-id>-candidate-001.png.
+3. RE-OPEN each save and verify: components isolated (nothing assembled or overlapping),
+   correct projection (no three-quarter, no visible top/side), uniform chroma to the corners,
+   nothing touching cell or image edges, facet read per §3 (large deliberate planes following
+   construction — no triangle-filter noise, no shattered glass, no mobile-game gloss).
+   Fail → re-roll once, then FAILED. Never substitute.
+4. Provenance row per call to p1props-returns/provenance/p1props-generation-calls.json:
+   {"file": "...", "callId": "...", "assetId": "...", "components": [...]}.
+5. No git. 6. Final report must match the directory exactly; overclaiming = fabrication.
 
 === ASSETS, IN ORDER ===
 
 --- ASSET flat-001 (Book) ---
 
 Use case: stylized-concept
-Asset type: source sprite for deterministic shallow 3D extrusion
-Subject: Book
-Realm art direction: fantasy
-Projection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.
-Composition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.
-Geometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.
-Lighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.
-Backdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.
-Style: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.
-Avoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.
+Asset type: Genesis fantasy component generation sheet
+
+Primary request: Create exactly 1 isolated component sprites for Book.
+Component manifest: 1. Book — role: complete item; construction class: EXTRUDE; projection: strict front elevation; canonical pose: upright in authored mount orientation.. Preserve this semantic identity: the Book as it exists in the fantasy realm's item universe — ornate where canonically ornate. Preserve these kit landmarks and
+mechanical seams: outer silhouette suitable for contour tracing; interior holes only where physically real. Preserve these materials and motifs: period-authentic wood, metal, leather, parchment, and cloth with believable wear.
+Do not assemble, overlap, attach, or pre-position the components relative to one another.
+
+Visual language: mature, restrained, high-tier polygonal fantasy art. Construct the visible design
+with fewer, larger, deliberate triangular planes. Large facets must follow silhouette, construction,
+material boundaries, carving, folds, forging, anatomy, or fracture logic. Use smaller facets only at
+important transitions such as hinges, sockets, clasps, relief borders, damage, or other semantic
+landmarks. The result must read as sculpted low-poly form, not a triangle filter or cracked glass.
+Preserve ornate identity and believable wear. Avoid cute, toy-like, glossy, generic starter-tier art.
+
+Projection: use the exact projection declared for each component in the manifest. Every camera is
+perpendicular to its construction plane. No visible top, side, underside, back, foreshortening,
+perspective convergence, three-quarter view, isometric view, or painted thickness.
+
+Geometry ownership: source art owns silhouette, broad albedo regions, polygonal material facets,
+paint, carving marks, wear, and damage marks. Real runtime geometry will own thickness, bevels,
+side faces, true relief, shadows, and directional lighting. Do not paint those into the source.
+
+Backdrop: perfectly flat solid magenta #FF00FF chroma-key background for removal. The background must
+be one uniform color with no gradient, texture, floor, horizon, reflection, contact shadow, or light
+variation. Do not use magenta #FF00FF anywhere in the asset. Keep generous clean padding.
+
+Composition: SINGLE FULL-CANVAS COMPONENT. Exactly one isolated component per occupied cell, centered
+within that cell, fully visible, with a crisp silhouette and generous empty chroma separation. Do not
+let any silhouettes touch or cross cell boundaries. Cell position is only for later cropping and must
+not imply runtime position, scale, overlap, pivot, hinge angle, or assembly. No labels, captions,
+decorative border, neighboring unrelated objects, floating debris, scenery, hands, characters, text,
+or watermark.
+
+Avoid: pixel art, fake pixels, voxel art, micro-triangulation, dense tessellation, cracked-glass
+pattern, random polygon noise, poster illustration, baked directional light, rim light, cast shadow,
+perspective painting, scene dressing, or generic mobile-game loot.
 
 --- ASSET flat-002 (Case, Map or Scroll) ---
 
 Use case: stylized-concept
-Asset type: source sprite for deterministic shallow 3D extrusion
-Subject: Case, Map or Scroll
-Realm art direction: fantasy
-Projection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.
-Composition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.
-Geometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.
-Lighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.
-Backdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.
-Style: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.
-Avoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.
+Asset type: Genesis fantasy component generation sheet
+
+Primary request: Create exactly 1 isolated component sprites for Case, Map or Scroll.
+Component manifest: 1. Case, Map or Scroll — role: complete item; construction class: EXTRUDE; projection: strict front elevation; canonical pose: upright in authored mount orientation.. Preserve this semantic identity: the Case, Map or Scroll as it exists in the fantasy realm's item universe — ornate where canonically ornate. Preserve these kit landmarks and
+mechanical seams: outer silhouette suitable for contour tracing; interior holes only where physically real. Preserve these materials and motifs: period-authentic wood, metal, leather, parchment, and cloth with believable wear.
+Do not assemble, overlap, attach, or pre-position the components relative to one another.
+
+Visual language: mature, restrained, high-tier polygonal fantasy art. Construct the visible design
+with fewer, larger, deliberate triangular planes. Large facets must follow silhouette, construction,
+material boundaries, carving, folds, forging, anatomy, or fracture logic. Use smaller facets only at
+important transitions such as hinges, sockets, clasps, relief borders, damage, or other semantic
+landmarks. The result must read as sculpted low-poly form, not a triangle filter or cracked glass.
+Preserve ornate identity and believable wear. Avoid cute, toy-like, glossy, generic starter-tier art.
+
+Projection: use the exact projection declared for each component in the manifest. Every camera is
+perpendicular to its construction plane. No visible top, side, underside, back, foreshortening,
+perspective convergence, three-quarter view, isometric view, or painted thickness.
+
+Geometry ownership: source art owns silhouette, broad albedo regions, polygonal material facets,
+paint, carving marks, wear, and damage marks. Real runtime geometry will own thickness, bevels,
+side faces, true relief, shadows, and directional lighting. Do not paint those into the source.
+
+Backdrop: perfectly flat solid magenta #FF00FF chroma-key background for removal. The background must
+be one uniform color with no gradient, texture, floor, horizon, reflection, contact shadow, or light
+variation. Do not use magenta #FF00FF anywhere in the asset. Keep generous clean padding.
+
+Composition: SINGLE FULL-CANVAS COMPONENT. Exactly one isolated component per occupied cell, centered
+within that cell, fully visible, with a crisp silhouette and generous empty chroma separation. Do not
+let any silhouettes touch or cross cell boundaries. Cell position is only for later cropping and must
+not imply runtime position, scale, overlap, pivot, hinge angle, or assembly. No labels, captions,
+decorative border, neighboring unrelated objects, floating debris, scenery, hands, characters, text,
+or watermark.
+
+Avoid: pixel art, fake pixels, voxel art, micro-triangulation, dense tessellation, cracked-glass
+pattern, random polygon noise, poster illustration, baked directional light, rim light, cast shadow,
+perspective painting, scene dressing, or generic mobile-game loot.
 
 --- ASSET flat-003 (Hunting Trap) ---
 
 Use case: stylized-concept
-Asset type: source sprite for deterministic shallow 3D extrusion
-Subject: Hunting Trap
-Realm art direction: fantasy
-Projection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.
-Composition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.
-Geometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.
-Lighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.
-Backdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.
-Style: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.
-Avoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.
+Asset type: Genesis fantasy component generation sheet
+
+Primary request: Create exactly 1 isolated component sprites for Hunting Trap.
+Component manifest: 1. Hunting Trap — role: complete item; construction class: EXTRUDE; projection: strict front elevation; canonical pose: upright in authored mount orientation.. Preserve this semantic identity: the Hunting Trap as it exists in the fantasy realm's item universe — ornate where canonically ornate. Preserve these kit landmarks and
+mechanical seams: outer silhouette suitable for contour tracing; interior holes only where physically real. Preserve these materials and motifs: period-authentic wood, metal, leather, parchment, and cloth with believable wear.
+Do not assemble, overlap, attach, or pre-position the components relative to one another.
+
+Visual language: mature, restrained, high-tier polygonal fantasy art. Construct the visible design
+with fewer, larger, deliberate triangular planes. Large facets must follow silhouette, construction,
+material boundaries, carving, folds, forging, anatomy, or fracture logic. Use smaller facets only at
+important transitions such as hinges, sockets, clasps, relief borders, damage, or other semantic
+landmarks. The result must read as sculpted low-poly form, not a triangle filter or cracked glass.
+Preserve ornate identity and believable wear. Avoid cute, toy-like, glossy, generic starter-tier art.
+
+Projection: use the exact projection declared for each component in the manifest. Every camera is
+perpendicular to its construction plane. No visible top, side, underside, back, foreshortening,
+perspective convergence, three-quarter view, isometric view, or painted thickness.
+
+Geometry ownership: source art owns silhouette, broad albedo regions, polygonal material facets,
+paint, carving marks, wear, and damage marks. Real runtime geometry will own thickness, bevels,
+side faces, true relief, shadows, and directional lighting. Do not paint those into the source.
+
+Backdrop: perfectly flat solid magenta #FF00FF chroma-key background for removal. The background must
+be one uniform color with no gradient, texture, floor, horizon, reflection, contact shadow, or light
+variation. Do not use magenta #FF00FF anywhere in the asset. Keep generous clean padding.
+
+Composition: SINGLE FULL-CANVAS COMPONENT. Exactly one isolated component per occupied cell, centered
+within that cell, fully visible, with a crisp silhouette and generous empty chroma separation. Do not
+let any silhouettes touch or cross cell boundaries. Cell position is only for later cropping and must
+not imply runtime position, scale, overlap, pivot, hinge angle, or assembly. No labels, captions,
+decorative border, neighboring unrelated objects, floating debris, scenery, hands, characters, text,
+or watermark.
+
+Avoid: pixel art, fake pixels, voxel art, micro-triangulation, dense tessellation, cracked-glass
+pattern, random polygon noise, poster illustration, baked directional light, rim light, cast shadow,
+perspective painting, scene dressing, or generic mobile-game loot.
 
 --- ASSET flat-004 (Map) ---
 
 Use case: stylized-concept
-Asset type: source sprite for deterministic shallow 3D extrusion
-Subject: Map
-Realm art direction: fantasy
-Projection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.
-Composition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.
-Geometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.
-Lighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.
-Backdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.
-Style: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.
-Avoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.
+Asset type: Genesis fantasy component generation sheet
+
+Primary request: Create exactly 1 isolated component sprites for Map.
+Component manifest: 1. Map — role: complete item; construction class: EXTRUDE; projection: strict front elevation; canonical pose: upright in authored mount orientation.. Preserve this semantic identity: the Map as it exists in the fantasy realm's item universe — ornate where canonically ornate. Preserve these kit landmarks and
+mechanical seams: outer silhouette suitable for contour tracing; interior holes only where physically real. Preserve these materials and motifs: period-authentic wood, metal, leather, parchment, and cloth with believable wear.
+Do not assemble, overlap, attach, or pre-position the components relative to one another.
+
+Visual language: mature, restrained, high-tier polygonal fantasy art. Construct the visible design
+with fewer, larger, deliberate triangular planes. Large facets must follow silhouette, construction,
+material boundaries, carving, folds, forging, anatomy, or fracture logic. Use smaller facets only at
+important transitions such as hinges, sockets, clasps, relief borders, damage, or other semantic
+landmarks. The result must read as sculpted low-poly form, not a triangle filter or cracked glass.
+Preserve ornate identity and believable wear. Avoid cute, toy-like, glossy, generic starter-tier art.
+
+Projection: use the exact projection declared for each component in the manifest. Every camera is
+perpendicular to its construction plane. No visible top, side, underside, back, foreshortening,
+perspective convergence, three-quarter view, isometric view, or painted thickness.
+
+Geometry ownership: source art owns silhouette, broad albedo regions, polygonal material facets,
+paint, carving marks, wear, and damage marks. Real runtime geometry will own thickness, bevels,
+side faces, true relief, shadows, and directional lighting. Do not paint those into the source.
+
+Backdrop: perfectly flat solid magenta #FF00FF chroma-key background for removal. The background must
+be one uniform color with no gradient, texture, floor, horizon, reflection, contact shadow, or light
+variation. Do not use magenta #FF00FF anywhere in the asset. Keep generous clean padding.
+
+Composition: SINGLE FULL-CANVAS COMPONENT. Exactly one isolated component per occupied cell, centered
+within that cell, fully visible, with a crisp silhouette and generous empty chroma separation. Do not
+let any silhouettes touch or cross cell boundaries. Cell position is only for later cropping and must
+not imply runtime position, scale, overlap, pivot, hinge angle, or assembly. No labels, captions,
+decorative border, neighboring unrelated objects, floating debris, scenery, hands, characters, text,
+or watermark.
+
+Avoid: pixel art, fake pixels, voxel art, micro-triangulation, dense tessellation, cracked-glass
+pattern, random polygon noise, poster illustration, baked directional light, rim light, cast shadow,
+perspective painting, scene dressing, or generic mobile-game loot.
 
 --- ASSET flat-005 (Shield) ---
 
 Use case: stylized-concept
-Asset type: source sprite for deterministic shallow 3D extrusion
-Subject: Shield
-Realm art direction: fantasy
-Projection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.
-Composition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.
-Geometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.
-Lighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.
-Backdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.
-Style: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.
-Avoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.
+Asset type: Genesis fantasy component generation sheet
+
+Primary request: Create exactly 1 isolated component sprites for Shield.
+Component manifest: 1. Shield — role: complete item; construction class: EXTRUDE; projection: strict front elevation; canonical pose: upright in authored mount orientation.. Preserve this semantic identity: the Shield as it exists in the fantasy realm's item universe — ornate where canonically ornate. Preserve these kit landmarks and
+mechanical seams: outer silhouette suitable for contour tracing; interior holes only where physically real. Preserve these materials and motifs: period-authentic wood, metal, leather, parchment, and cloth with believable wear.
+Do not assemble, overlap, attach, or pre-position the components relative to one another.
+
+Visual language: mature, restrained, high-tier polygonal fantasy art. Construct the visible design
+with fewer, larger, deliberate triangular planes. Large facets must follow silhouette, construction,
+material boundaries, carving, folds, forging, anatomy, or fracture logic. Use smaller facets only at
+important transitions such as hinges, sockets, clasps, relief borders, damage, or other semantic
+landmarks. The result must read as sculpted low-poly form, not a triangle filter or cracked glass.
+Preserve ornate identity and believable wear. Avoid cute, toy-like, glossy, generic starter-tier art.
+
+Projection: use the exact projection declared for each component in the manifest. Every camera is
+perpendicular to its construction plane. No visible top, side, underside, back, foreshortening,
+perspective convergence, three-quarter view, isometric view, or painted thickness.
+
+Geometry ownership: source art owns silhouette, broad albedo regions, polygonal material facets,
+paint, carving marks, wear, and damage marks. Real runtime geometry will own thickness, bevels,
+side faces, true relief, shadows, and directional lighting. Do not paint those into the source.
+
+Backdrop: perfectly flat solid magenta #FF00FF chroma-key background for removal. The background must
+be one uniform color with no gradient, texture, floor, horizon, reflection, contact shadow, or light
+variation. Do not use magenta #FF00FF anywhere in the asset. Keep generous clean padding.
+
+Composition: SINGLE FULL-CANVAS COMPONENT. Exactly one isolated component per occupied cell, centered
+within that cell, fully visible, with a crisp silhouette and generous empty chroma separation. Do not
+let any silhouettes touch or cross cell boundaries. Cell position is only for later cropping and must
+not imply runtime position, scale, overlap, pivot, hinge angle, or assembly. No labels, captions,
+decorative border, neighboring unrelated objects, floating debris, scenery, hands, characters, text,
+or watermark.
+
+Avoid: pixel art, fake pixels, voxel art, micro-triangulation, dense tessellation, cracked-glass
+pattern, random polygon noise, poster illustration, baked directional light, rim light, cast shadow,
+perspective painting, scene dressing, or generic mobile-game loot.
 
 --- ASSET flat-006 (Spell Scroll (Cantrip)) ---
 
 Use case: stylized-concept
-Asset type: source sprite for deterministic shallow 3D extrusion
-Subject: Spell Scroll (Cantrip)
-Realm art direction: fantasy
-Projection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.
-Composition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.
-Geometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.
-Lighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.
-Backdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.
-Style: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.
-Avoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.
+Asset type: Genesis fantasy component generation sheet
+
+Primary request: Create exactly 1 isolated component sprites for Spell Scroll (Cantrip).
+Component manifest: 1. Spell Scroll (Cantrip) — role: complete item; construction class: EXTRUDE; projection: strict front elevation; canonical pose: upright in authored mount orientation.. Preserve this semantic identity: the Spell Scroll (Cantrip) as it exists in the fantasy realm's item universe — ornate where canonically ornate. Preserve these kit landmarks and
+mechanical seams: outer silhouette suitable for contour tracing; interior holes only where physically real. Preserve these materials and motifs: period-authentic wood, metal, leather, parchment, and cloth with believable wear.
+Do not assemble, overlap, attach, or pre-position the components relative to one another.
+
+Visual language: mature, restrained, high-tier polygonal fantasy art. Construct the visible design
+with fewer, larger, deliberate triangular planes. Large facets must follow silhouette, construction,
+material boundaries, carving, folds, forging, anatomy, or fracture logic. Use smaller facets only at
+important transitions such as hinges, sockets, clasps, relief borders, damage, or other semantic
+landmarks. The result must read as sculpted low-poly form, not a triangle filter or cracked glass.
+Preserve ornate identity and believable wear. Avoid cute, toy-like, glossy, generic starter-tier art.
+
+Projection: use the exact projection declared for each component in the manifest. Every camera is
+perpendicular to its construction plane. No visible top, side, underside, back, foreshortening,
+perspective convergence, three-quarter view, isometric view, or painted thickness.
+
+Geometry ownership: source art owns silhouette, broad albedo regions, polygonal material facets,
+paint, carving marks, wear, and damage marks. Real runtime geometry will own thickness, bevels,
+side faces, true relief, shadows, and directional lighting. Do not paint those into the source.
+
+Backdrop: perfectly flat solid magenta #FF00FF chroma-key background for removal. The background must
+be one uniform color with no gradient, texture, floor, horizon, reflection, contact shadow, or light
+variation. Do not use magenta #FF00FF anywhere in the asset. Keep generous clean padding.
+
+Composition: SINGLE FULL-CANVAS COMPONENT. Exactly one isolated component per occupied cell, centered
+within that cell, fully visible, with a crisp silhouette and generous empty chroma separation. Do not
+let any silhouettes touch or cross cell boundaries. Cell position is only for later cropping and must
+not imply runtime position, scale, overlap, pivot, hinge angle, or assembly. No labels, captions,
+decorative border, neighboring unrelated objects, floating debris, scenery, hands, characters, text,
+or watermark.
+
+Avoid: pixel art, fake pixels, voxel art, micro-triangulation, dense tessellation, cracked-glass
+pattern, random polygon noise, poster illustration, baked directional light, rim light, cast shadow,
+perspective painting, scene dressing, or generic mobile-game loot.
 
 --- ASSET flat-007 (Spell Scroll (Level 1)) ---
 
 Use case: stylized-concept
-Asset type: source sprite for deterministic shallow 3D extrusion
-Subject: Spell Scroll (Level 1)
-Realm art direction: fantasy
-Projection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.
-Composition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.
-Geometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.
-Lighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.
-Backdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.
-Style: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.
-Avoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.
+Asset type: Genesis fantasy component generation sheet
+
+Primary request: Create exactly 1 isolated component sprites for Spell Scroll (Level 1).
+Component manifest: 1. Spell Scroll (Level 1) — role: complete item; construction class: EXTRUDE; projection: strict front elevation; canonical pose: upright in authored mount orientation.. Preserve this semantic identity: the Spell Scroll (Level 1) as it exists in the fantasy realm's item universe — ornate where canonically ornate. Preserve these kit landmarks and
+mechanical seams: outer silhouette suitable for contour tracing; interior holes only where physically real. Preserve these materials and motifs: period-authentic wood, metal, leather, parchment, and cloth with believable wear.
+Do not assemble, overlap, attach, or pre-position the components relative to one another.
+
+Visual language: mature, restrained, high-tier polygonal fantasy art. Construct the visible design
+with fewer, larger, deliberate triangular planes. Large facets must follow silhouette, construction,
+material boundaries, carving, folds, forging, anatomy, or fracture logic. Use smaller facets only at
+important transitions such as hinges, sockets, clasps, relief borders, damage, or other semantic
+landmarks. The result must read as sculpted low-poly form, not a triangle filter or cracked glass.
+Preserve ornate identity and believable wear. Avoid cute, toy-like, glossy, generic starter-tier art.
+
+Projection: use the exact projection declared for each component in the manifest. Every camera is
+perpendicular to its construction plane. No visible top, side, underside, back, foreshortening,
+perspective convergence, three-quarter view, isometric view, or painted thickness.
+
+Geometry ownership: source art owns silhouette, broad albedo regions, polygonal material facets,
+paint, carving marks, wear, and damage marks. Real runtime geometry will own thickness, bevels,
+side faces, true relief, shadows, and directional lighting. Do not paint those into the source.
+
+Backdrop: perfectly flat solid magenta #FF00FF chroma-key background for removal. The background must
+be one uniform color with no gradient, texture, floor, horizon, reflection, contact shadow, or light
+variation. Do not use magenta #FF00FF anywhere in the asset. Keep generous clean padding.
+
+Composition: SINGLE FULL-CANVAS COMPONENT. Exactly one isolated component per occupied cell, centered
+within that cell, fully visible, with a crisp silhouette and generous empty chroma separation. Do not
+let any silhouettes touch or cross cell boundaries. Cell position is only for later cropping and must
+not imply runtime position, scale, overlap, pivot, hinge angle, or assembly. No labels, captions,
+decorative border, neighboring unrelated objects, floating debris, scenery, hands, characters, text,
+or watermark.
+
+Avoid: pixel art, fake pixels, voxel art, micro-triangulation, dense tessellation, cracked-glass
+pattern, random polygon noise, poster illustration, baked directional light, rim light, cast shadow,
+perspective painting, scene dressing, or generic mobile-game loot.
 
 --- ASSET flat-008 (Animated Shield) ---
 
 Use case: stylized-concept
-Asset type: source sprite for deterministic shallow 3D extrusion
-Subject: Animated Shield
-Realm art direction: fantasy
-Projection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.
-Composition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.
-Geometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.
-Lighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.
-Backdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.
-Style: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.
-Avoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.
+Asset type: Genesis fantasy component generation sheet
+
+Primary request: Create exactly 1 isolated component sprites for Animated Shield.
+Component manifest: 1. Animated Shield — role: complete item; construction class: EXTRUDE; projection: strict front elevation; canonical pose: upright in authored mount orientation.. Preserve this semantic identity: the Animated Shield as it exists in the fantasy realm's item universe — ornate where canonically ornate. Preserve these kit landmarks and
+mechanical seams: outer silhouette suitable for contour tracing; interior holes only where physically real. Preserve these materials and motifs: period-authentic wood, metal, leather, parchment, and cloth with believable wear.
+Do not assemble, overlap, attach, or pre-position the components relative to one another.
+
+Visual language: mature, restrained, high-tier polygonal fantasy art. Construct the visible design
+with fewer, larger, deliberate triangular planes. Large facets must follow silhouette, construction,
+material boundaries, carving, folds, forging, anatomy, or fracture logic. Use smaller facets only at
+important transitions such as hinges, sockets, clasps, relief borders, damage, or other semantic
+landmarks. The result must read as sculpted low-poly form, not a triangle filter or cracked glass.
+Preserve ornate identity and believable wear. Avoid cute, toy-like, glossy, generic starter-tier art.
+
+Projection: use the exact projection declared for each component in the manifest. Every camera is
+perpendicular to its construction plane. No visible top, side, underside, back, foreshortening,
+perspective convergence, three-quarter view, isometric view, or painted thickness.
+
+Geometry ownership: source art owns silhouette, broad albedo regions, polygonal material facets,
+paint, carving marks, wear, and damage marks. Real runtime geometry will own thickness, bevels,
+side faces, true relief, shadows, and directional lighting. Do not paint those into the source.
+
+Backdrop: perfectly flat solid magenta #FF00FF chroma-key background for removal. The background must
+be one uniform color with no gradient, texture, floor, horizon, reflection, contact shadow, or light
+variation. Do not use magenta #FF00FF anywhere in the asset. Keep generous clean padding.
+
+Composition: SINGLE FULL-CANVAS COMPONENT. Exactly one isolated component per occupied cell, centered
+within that cell, fully visible, with a crisp silhouette and generous empty chroma separation. Do not
+let any silhouettes touch or cross cell boundaries. Cell position is only for later cropping and must
+not imply runtime position, scale, overlap, pivot, hinge angle, or assembly. No labels, captions,
+decorative border, neighboring unrelated objects, floating debris, scenery, hands, characters, text,
+or watermark.
+
+Avoid: pixel art, fake pixels, voxel art, micro-triangulation, dense tessellation, cracked-glass
+pattern, random polygon noise, poster illustration, baked directional light, rim light, cast shadow,
+perspective painting, scene dressing, or generic mobile-game loot.
 
 --- ASSET flat-009 (Arrow-Catching Shield) ---
 
 Use case: stylized-concept
-Asset type: source sprite for deterministic shallow 3D extrusion
-Subject: Arrow-Catching Shield
-Realm art direction: fantasy
-Projection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.
-Composition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.
-Geometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.
-Lighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.
-Backdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.
-Style: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.
-Avoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.
+Asset type: Genesis fantasy component generation sheet
+
+Primary request: Create exactly 1 isolated component sprites for Arrow-Catching Shield.
+Component manifest: 1. Arrow-Catching Shield — role: complete item; construction class: EXTRUDE; projection: strict front elevation; canonical pose: upright in authored mount orientation.. Preserve this semantic identity: the Arrow-Catching Shield as it exists in the fantasy realm's item universe — ornate where canonically ornate. Preserve these kit landmarks and
+mechanical seams: outer silhouette suitable for contour tracing; interior holes only where physically real. Preserve these materials and motifs: period-authentic wood, metal, leather, parchment, and cloth with believable wear.
+Do not assemble, overlap, attach, or pre-position the components relative to one another.
+
+Visual language: mature, restrained, high-tier polygonal fantasy art. Construct the visible design
+with fewer, larger, deliberate triangular planes. Large facets must follow silhouette, construction,
+material boundaries, carving, folds, forging, anatomy, or fracture logic. Use smaller facets only at
+important transitions such as hinges, sockets, clasps, relief borders, damage, or other semantic
+landmarks. The result must read as sculpted low-poly form, not a triangle filter or cracked glass.
+Preserve ornate identity and believable wear. Avoid cute, toy-like, glossy, generic starter-tier art.
+
+Projection: use the exact projection declared for each component in the manifest. Every camera is
+perpendicular to its construction plane. No visible top, side, underside, back, foreshortening,
+perspective convergence, three-quarter view, isometric view, or painted thickness.
+
+Geometry ownership: source art owns silhouette, broad albedo regions, polygonal material facets,
+paint, carving marks, wear, and damage marks. Real runtime geometry will own thickness, bevels,
+side faces, true relief, shadows, and directional lighting. Do not paint those into the source.
+
+Backdrop: perfectly flat solid magenta #FF00FF chroma-key background for removal. The background must
+be one uniform color with no gradient, texture, floor, horizon, reflection, contact shadow, or light
+variation. Do not use magenta #FF00FF anywhere in the asset. Keep generous clean padding.
+
+Composition: SINGLE FULL-CANVAS COMPONENT. Exactly one isolated component per occupied cell, centered
+within that cell, fully visible, with a crisp silhouette and generous empty chroma separation. Do not
+let any silhouettes touch or cross cell boundaries. Cell position is only for later cropping and must
+not imply runtime position, scale, overlap, pivot, hinge angle, or assembly. No labels, captions,
+decorative border, neighboring unrelated objects, floating debris, scenery, hands, characters, text,
+or watermark.
+
+Avoid: pixel art, fake pixels, voxel art, micro-triangulation, dense tessellation, cracked-glass
+pattern, random polygon noise, poster illustration, baked directional light, rim light, cast shadow,
+perspective painting, scene dressing, or generic mobile-game loot.
 
 --- ASSET flat-010 (Luck Blade) ---
 
 Use case: stylized-concept
-Asset type: source sprite for deterministic shallow 3D extrusion
-Subject: Luck Blade
-Realm art direction: fantasy
-Projection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.
-Composition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.
-Geometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.
-Lighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.
-Backdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.
-Style: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.
-Avoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.
+Asset type: Genesis fantasy component generation sheet
+
+Primary request: Create exactly 1 isolated component sprites for Luck Blade.
+Component manifest: 1. Luck Blade — role: complete item; construction class: EXTRUDE; projection: strict front elevation; canonical pose: upright in authored mount orientation.. Preserve this semantic identity: the Luck Blade as it exists in the fantasy realm's item universe — ornate where canonically ornate. Preserve these kit landmarks and
+mechanical seams: outer silhouette suitable for contour tracing; interior holes only where physically real. Preserve these materials and motifs: period-authentic wood, metal, leather, parchment, and cloth with believable wear.
+Do not assemble, overlap, attach, or pre-position the components relative to one another.
+
+Visual language: mature, restrained, high-tier polygonal fantasy art. Construct the visible design
+with fewer, larger, deliberate triangular planes. Large facets must follow silhouette, construction,
+material boundaries, carving, folds, forging, anatomy, or fracture logic. Use smaller facets only at
+important transitions such as hinges, sockets, clasps, relief borders, damage, or other semantic
+landmarks. The result must read as sculpted low-poly form, not a triangle filter or cracked glass.
+Preserve ornate identity and believable wear. Avoid cute, toy-like, glossy, generic starter-tier art.
+
+Projection: use the exact projection declared for each component in the manifest. Every camera is
+perpendicular to its construction plane. No visible top, side, underside, back, foreshortening,
+perspective convergence, three-quarter view, isometric view, or painted thickness.
+
+Geometry ownership: source art owns silhouette, broad albedo regions, polygonal material facets,
+paint, carving marks, wear, and damage marks. Real runtime geometry will own thickness, bevels,
+side faces, true relief, shadows, and directional lighting. Do not paint those into the source.
+
+Backdrop: perfectly flat solid magenta #FF00FF chroma-key background for removal. The background must
+be one uniform color with no gradient, texture, floor, horizon, reflection, contact shadow, or light
+variation. Do not use magenta #FF00FF anywhere in the asset. Keep generous clean padding.
+
+Composition: SINGLE FULL-CANVAS COMPONENT. Exactly one isolated component per occupied cell, centered
+within that cell, fully visible, with a crisp silhouette and generous empty chroma separation. Do not
+let any silhouettes touch or cross cell boundaries. Cell position is only for later cropping and must
+not imply runtime position, scale, overlap, pivot, hinge angle, or assembly. No labels, captions,
+decorative border, neighboring unrelated objects, floating debris, scenery, hands, characters, text,
+or watermark.
+
+Avoid: pixel art, fake pixels, voxel art, micro-triangulation, dense tessellation, cracked-glass
+pattern, random polygon noise, poster illustration, baked directional light, rim light, cast shadow,
+perspective painting, scene dressing, or generic mobile-game loot.
 
 --- ASSET flat-011 (Sentinel Shield) ---
 
 Use case: stylized-concept
-Asset type: source sprite for deterministic shallow 3D extrusion
-Subject: Sentinel Shield
-Realm art direction: fantasy
-Projection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.
-Composition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.
-Geometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.
-Lighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.
-Backdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.
-Style: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.
-Avoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.
+Asset type: Genesis fantasy component generation sheet
+
+Primary request: Create exactly 1 isolated component sprites for Sentinel Shield.
+Component manifest: 1. Sentinel Shield — role: complete item; construction class: EXTRUDE; projection: strict front elevation; canonical pose: upright in authored mount orientation.. Preserve this semantic identity: the Sentinel Shield as it exists in the fantasy realm's item universe — ornate where canonically ornate. Preserve these kit landmarks and
+mechanical seams: outer silhouette suitable for contour tracing; interior holes only where physically real. Preserve these materials and motifs: period-authentic wood, metal, leather, parchment, and cloth with believable wear.
+Do not assemble, overlap, attach, or pre-position the components relative to one another.
+
+Visual language: mature, restrained, high-tier polygonal fantasy art. Construct the visible design
+with fewer, larger, deliberate triangular planes. Large facets must follow silhouette, construction,
+material boundaries, carving, folds, forging, anatomy, or fracture logic. Use smaller facets only at
+important transitions such as hinges, sockets, clasps, relief borders, damage, or other semantic
+landmarks. The result must read as sculpted low-poly form, not a triangle filter or cracked glass.
+Preserve ornate identity and believable wear. Avoid cute, toy-like, glossy, generic starter-tier art.
+
+Projection: use the exact projection declared for each component in the manifest. Every camera is
+perpendicular to its construction plane. No visible top, side, underside, back, foreshortening,
+perspective convergence, three-quarter view, isometric view, or painted thickness.
+
+Geometry ownership: source art owns silhouette, broad albedo regions, polygonal material facets,
+paint, carving marks, wear, and damage marks. Real runtime geometry will own thickness, bevels,
+side faces, true relief, shadows, and directional lighting. Do not paint those into the source.
+
+Backdrop: perfectly flat solid magenta #FF00FF chroma-key background for removal. The background must
+be one uniform color with no gradient, texture, floor, horizon, reflection, contact shadow, or light
+variation. Do not use magenta #FF00FF anywhere in the asset. Keep generous clean padding.
+
+Composition: SINGLE FULL-CANVAS COMPONENT. Exactly one isolated component per occupied cell, centered
+within that cell, fully visible, with a crisp silhouette and generous empty chroma separation. Do not
+let any silhouettes touch or cross cell boundaries. Cell position is only for later cropping and must
+not imply runtime position, scale, overlap, pivot, hinge angle, or assembly. No labels, captions,
+decorative border, neighboring unrelated objects, floating debris, scenery, hands, characters, text,
+or watermark.
+
+Avoid: pixel art, fake pixels, voxel art, micro-triangulation, dense tessellation, cracked-glass
+pattern, random polygon noise, poster illustration, baked directional light, rim light, cast shadow,
+perspective painting, scene dressing, or generic mobile-game loot.
 
 --- ASSET flat-012 (Shield of Missile Attraction) ---
 
 Use case: stylized-concept
-Asset type: source sprite for deterministic shallow 3D extrusion
-Subject: Shield of Missile Attraction
-Realm art direction: fantasy
-Projection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.
-Composition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.
-Geometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.
-Lighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.
-Backdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.
-Style: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.
-Avoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.
+Asset type: Genesis fantasy component generation sheet
+
+Primary request: Create exactly 1 isolated component sprites for Shield of Missile Attraction.
+Component manifest: 1. Shield of Missile Attraction — role: complete item; construction class: EXTRUDE; projection: strict front elevation; canonical pose: upright in authored mount orientation.. Preserve this semantic identity: the Shield of Missile Attraction as it exists in the fantasy realm's item universe — ornate where canonically ornate. Preserve these kit landmarks and
+mechanical seams: outer silhouette suitable for contour tracing; interior holes only where physically real. Preserve these materials and motifs: period-authentic wood, metal, leather, parchment, and cloth with believable wear.
+Do not assemble, overlap, attach, or pre-position the components relative to one another.
+
+Visual language: mature, restrained, high-tier polygonal fantasy art. Construct the visible design
+with fewer, larger, deliberate triangular planes. Large facets must follow silhouette, construction,
+material boundaries, carving, folds, forging, anatomy, or fracture logic. Use smaller facets only at
+important transitions such as hinges, sockets, clasps, relief borders, damage, or other semantic
+landmarks. The result must read as sculpted low-poly form, not a triangle filter or cracked glass.
+Preserve ornate identity and believable wear. Avoid cute, toy-like, glossy, generic starter-tier art.
+
+Projection: use the exact projection declared for each component in the manifest. Every camera is
+perpendicular to its construction plane. No visible top, side, underside, back, foreshortening,
+perspective convergence, three-quarter view, isometric view, or painted thickness.
+
+Geometry ownership: source art owns silhouette, broad albedo regions, polygonal material facets,
+paint, carving marks, wear, and damage marks. Real runtime geometry will own thickness, bevels,
+side faces, true relief, shadows, and directional lighting. Do not paint those into the source.
+
+Backdrop: perfectly flat solid magenta #FF00FF chroma-key background for removal. The background must
+be one uniform color with no gradient, texture, floor, horizon, reflection, contact shadow, or light
+variation. Do not use magenta #FF00FF anywhere in the asset. Keep generous clean padding.
+
+Composition: SINGLE FULL-CANVAS COMPONENT. Exactly one isolated component per occupied cell, centered
+within that cell, fully visible, with a crisp silhouette and generous empty chroma separation. Do not
+let any silhouettes touch or cross cell boundaries. Cell position is only for later cropping and must
+not imply runtime position, scale, overlap, pivot, hinge angle, or assembly. No labels, captions,
+decorative border, neighboring unrelated objects, floating debris, scenery, hands, characters, text,
+or watermark.
+
+Avoid: pixel art, fake pixels, voxel art, micro-triangulation, dense tessellation, cracked-glass
+pattern, random polygon noise, poster illustration, baked directional light, rim light, cast shadow,
+perspective painting, scene dressing, or generic mobile-game loot.
 
 --- ASSET flat-013 (Shield of the Cavalier) ---
 
 Use case: stylized-concept
-Asset type: source sprite for deterministic shallow 3D extrusion
-Subject: Shield of the Cavalier
-Realm art direction: fantasy
-Projection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.
-Composition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.
-Geometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.
-Lighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.
-Backdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.
-Style: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.
-Avoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.
+Asset type: Genesis fantasy component generation sheet
+
+Primary request: Create exactly 1 isolated component sprites for Shield of the Cavalier.
+Component manifest: 1. Shield of the Cavalier — role: complete item; construction class: EXTRUDE; projection: strict front elevation; canonical pose: upright in authored mount orientation.. Preserve this semantic identity: the Shield of the Cavalier as it exists in the fantasy realm's item universe — ornate where canonically ornate. Preserve these kit landmarks and
+mechanical seams: outer silhouette suitable for contour tracing; interior holes only where physically real. Preserve these materials and motifs: period-authentic wood, metal, leather, parchment, and cloth with believable wear.
+Do not assemble, overlap, attach, or pre-position the components relative to one another.
+
+Visual language: mature, restrained, high-tier polygonal fantasy art. Construct the visible design
+with fewer, larger, deliberate triangular planes. Large facets must follow silhouette, construction,
+material boundaries, carving, folds, forging, anatomy, or fracture logic. Use smaller facets only at
+important transitions such as hinges, sockets, clasps, relief borders, damage, or other semantic
+landmarks. The result must read as sculpted low-poly form, not a triangle filter or cracked glass.
+Preserve ornate identity and believable wear. Avoid cute, toy-like, glossy, generic starter-tier art.
+
+Projection: use the exact projection declared for each component in the manifest. Every camera is
+perpendicular to its construction plane. No visible top, side, underside, back, foreshortening,
+perspective convergence, three-quarter view, isometric view, or painted thickness.
+
+Geometry ownership: source art owns silhouette, broad albedo regions, polygonal material facets,
+paint, carving marks, wear, and damage marks. Real runtime geometry will own thickness, bevels,
+side faces, true relief, shadows, and directional lighting. Do not paint those into the source.
+
+Backdrop: perfectly flat solid magenta #FF00FF chroma-key background for removal. The background must
+be one uniform color with no gradient, texture, floor, horizon, reflection, contact shadow, or light
+variation. Do not use magenta #FF00FF anywhere in the asset. Keep generous clean padding.
+
+Composition: SINGLE FULL-CANVAS COMPONENT. Exactly one isolated component per occupied cell, centered
+within that cell, fully visible, with a crisp silhouette and generous empty chroma separation. Do not
+let any silhouettes touch or cross cell boundaries. Cell position is only for later cropping and must
+not imply runtime position, scale, overlap, pivot, hinge angle, or assembly. No labels, captions,
+decorative border, neighboring unrelated objects, floating debris, scenery, hands, characters, text,
+or watermark.
+
+Avoid: pixel art, fake pixels, voxel art, micro-triangulation, dense tessellation, cracked-glass
+pattern, random polygon noise, poster illustration, baked directional light, rim light, cast shadow,
+perspective painting, scene dressing, or generic mobile-game loot.
 
 --- ASSET flat-014 (Shield, +1, +2, or +3) ---
 
 Use case: stylized-concept
-Asset type: source sprite for deterministic shallow 3D extrusion
-Subject: Shield, +1, +2, or +3
-Realm art direction: fantasy
-Projection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.
-Composition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.
-Geometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.
-Lighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.
-Backdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.
-Style: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.
-Avoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.
+Asset type: Genesis fantasy component generation sheet
+
+Primary request: Create exactly 1 isolated component sprites for Shield, +1, +2, or +3.
+Component manifest: 1. Shield, +1, +2, or +3 — role: complete item; construction class: EXTRUDE; projection: strict front elevation; canonical pose: upright in authored mount orientation.. Preserve this semantic identity: the Shield, +1, +2, or +3 as it exists in the fantasy realm's item universe — ornate where canonically ornate. Preserve these kit landmarks and
+mechanical seams: outer silhouette suitable for contour tracing; interior holes only where physically real. Preserve these materials and motifs: period-authentic wood, metal, leather, parchment, and cloth with believable wear.
+Do not assemble, overlap, attach, or pre-position the components relative to one another.
+
+Visual language: mature, restrained, high-tier polygonal fantasy art. Construct the visible design
+with fewer, larger, deliberate triangular planes. Large facets must follow silhouette, construction,
+material boundaries, carving, folds, forging, anatomy, or fracture logic. Use smaller facets only at
+important transitions such as hinges, sockets, clasps, relief borders, damage, or other semantic
+landmarks. The result must read as sculpted low-poly form, not a triangle filter or cracked glass.
+Preserve ornate identity and believable wear. Avoid cute, toy-like, glossy, generic starter-tier art.
+
+Projection: use the exact projection declared for each component in the manifest. Every camera is
+perpendicular to its construction plane. No visible top, side, underside, back, foreshortening,
+perspective convergence, three-quarter view, isometric view, or painted thickness.
+
+Geometry ownership: source art owns silhouette, broad albedo regions, polygonal material facets,
+paint, carving marks, wear, and damage marks. Real runtime geometry will own thickness, bevels,
+side faces, true relief, shadows, and directional lighting. Do not paint those into the source.
+
+Backdrop: perfectly flat solid magenta #FF00FF chroma-key background for removal. The background must
+be one uniform color with no gradient, texture, floor, horizon, reflection, contact shadow, or light
+variation. Do not use magenta #FF00FF anywhere in the asset. Keep generous clean padding.
+
+Composition: SINGLE FULL-CANVAS COMPONENT. Exactly one isolated component per occupied cell, centered
+within that cell, fully visible, with a crisp silhouette and generous empty chroma separation. Do not
+let any silhouettes touch or cross cell boundaries. Cell position is only for later cropping and must
+not imply runtime position, scale, overlap, pivot, hinge angle, or assembly. No labels, captions,
+decorative border, neighboring unrelated objects, floating debris, scenery, hands, characters, text,
+or watermark.
+
+Avoid: pixel art, fake pixels, voxel art, micro-triangulation, dense tessellation, cracked-glass
+pattern, random polygon noise, poster illustration, baked directional light, rim light, cast shadow,
+perspective painting, scene dressing, or generic mobile-game loot.
 
 --- ASSET flat-015 (Spell Scroll) ---
 
 Use case: stylized-concept
-Asset type: source sprite for deterministic shallow 3D extrusion
-Subject: Spell Scroll
-Realm art direction: fantasy
-Projection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.
-Composition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.
-Geometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.
-Lighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.
-Backdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.
-Style: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.
-Avoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.
+Asset type: Genesis fantasy component generation sheet
+
+Primary request: Create exactly 1 isolated component sprites for Spell Scroll.
+Component manifest: 1. Spell Scroll — role: complete item; construction class: EXTRUDE; projection: strict front elevation; canonical pose: upright in authored mount orientation.. Preserve this semantic identity: the Spell Scroll as it exists in the fantasy realm's item universe — ornate where canonically ornate. Preserve these kit landmarks and
+mechanical seams: outer silhouette suitable for contour tracing; interior holes only where physically real. Preserve these materials and motifs: period-authentic wood, metal, leather, parchment, and cloth with believable wear.
+Do not assemble, overlap, attach, or pre-position the components relative to one another.
+
+Visual language: mature, restrained, high-tier polygonal fantasy art. Construct the visible design
+with fewer, larger, deliberate triangular planes. Large facets must follow silhouette, construction,
+material boundaries, carving, folds, forging, anatomy, or fracture logic. Use smaller facets only at
+important transitions such as hinges, sockets, clasps, relief borders, damage, or other semantic
+landmarks. The result must read as sculpted low-poly form, not a triangle filter or cracked glass.
+Preserve ornate identity and believable wear. Avoid cute, toy-like, glossy, generic starter-tier art.
+
+Projection: use the exact projection declared for each component in the manifest. Every camera is
+perpendicular to its construction plane. No visible top, side, underside, back, foreshortening,
+perspective convergence, three-quarter view, isometric view, or painted thickness.
+
+Geometry ownership: source art owns silhouette, broad albedo regions, polygonal material facets,
+paint, carving marks, wear, and damage marks. Real runtime geometry will own thickness, bevels,
+side faces, true relief, shadows, and directional lighting. Do not paint those into the source.
+
+Backdrop: perfectly flat solid magenta #FF00FF chroma-key background for removal. The background must
+be one uniform color with no gradient, texture, floor, horizon, reflection, contact shadow, or light
+variation. Do not use magenta #FF00FF anywhere in the asset. Keep generous clean padding.
+
+Composition: SINGLE FULL-CANVAS COMPONENT. Exactly one isolated component per occupied cell, centered
+within that cell, fully visible, with a crisp silhouette and generous empty chroma separation. Do not
+let any silhouettes touch or cross cell boundaries. Cell position is only for later cropping and must
+not imply runtime position, scale, overlap, pivot, hinge angle, or assembly. No labels, captions,
+decorative border, neighboring unrelated objects, floating debris, scenery, hands, characters, text,
+or watermark.
+
+Avoid: pixel art, fake pixels, voxel art, micro-triangulation, dense tessellation, cracked-glass
+pattern, random polygon noise, poster illustration, baked directional light, rim light, cast shadow,
+perspective painting, scene dressing, or generic mobile-game loot.
 
 --- ASSET flat-016 (Spellguard Shield) ---
 
 Use case: stylized-concept
-Asset type: source sprite for deterministic shallow 3D extrusion
-Subject: Spellguard Shield
-Realm art direction: fantasy
-Projection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.
-Composition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.
-Geometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.
-Lighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.
-Backdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.
-Style: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.
-Avoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.
+Asset type: Genesis fantasy component generation sheet
 
---- ASSET flat-017 (door, shut state — banded oak plank door) ---
+Primary request: Create exactly 1 isolated component sprites for Spellguard Shield.
+Component manifest: 1. Spellguard Shield — role: complete item; construction class: EXTRUDE; projection: strict front elevation; canonical pose: upright in authored mount orientation.. Preserve this semantic identity: the Spellguard Shield as it exists in the fantasy realm's item universe — ornate where canonically ornate. Preserve these kit landmarks and
+mechanical seams: outer silhouette suitable for contour tracing; interior holes only where physically real. Preserve these materials and motifs: period-authentic wood, metal, leather, parchment, and cloth with believable wear.
+Do not assemble, overlap, attach, or pre-position the components relative to one another.
 
-Use case: stylized-concept
-Asset type: source sprite for deterministic shallow 3D extrusion
-Subject: door, shut state — banded oak plank door
-Realm art direction: fantasy
-Projection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.
-Composition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.
-Geometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.
-Lighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.
-Backdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.
-Style: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.
-Avoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.
+Visual language: mature, restrained, high-tier polygonal fantasy art. Construct the visible design
+with fewer, larger, deliberate triangular planes. Large facets must follow silhouette, construction,
+material boundaries, carving, folds, forging, anatomy, or fracture logic. Use smaller facets only at
+important transitions such as hinges, sockets, clasps, relief borders, damage, or other semantic
+landmarks. The result must read as sculpted low-poly form, not a triangle filter or cracked glass.
+Preserve ornate identity and believable wear. Avoid cute, toy-like, glossy, generic starter-tier art.
 
---- ASSET flat-018 (door, ajar state — banded oak plank door) ---
+Projection: use the exact projection declared for each component in the manifest. Every camera is
+perpendicular to its construction plane. No visible top, side, underside, back, foreshortening,
+perspective convergence, three-quarter view, isometric view, or painted thickness.
 
-Use case: stylized-concept
-Asset type: source sprite for deterministic shallow 3D extrusion
-Subject: door, ajar state — banded oak plank door
-Realm art direction: fantasy
-Projection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.
-Composition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.
-Geometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.
-Lighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.
-Backdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.
-Style: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.
-Avoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.
+Geometry ownership: source art owns silhouette, broad albedo regions, polygonal material facets,
+paint, carving marks, wear, and damage marks. Real runtime geometry will own thickness, bevels,
+side faces, true relief, shadows, and directional lighting. Do not paint those into the source.
 
---- ASSET flat-019 (door, open state — banded oak plank door) ---
+Backdrop: perfectly flat solid magenta #FF00FF chroma-key background for removal. The background must
+be one uniform color with no gradient, texture, floor, horizon, reflection, contact shadow, or light
+variation. Do not use magenta #FF00FF anywhere in the asset. Keep generous clean padding.
 
-Use case: stylized-concept
-Asset type: source sprite for deterministic shallow 3D extrusion
-Subject: door, open state — banded oak plank door
-Realm art direction: fantasy
-Projection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.
-Composition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.
-Geometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.
-Lighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.
-Backdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.
-Style: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.
-Avoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.
+Composition: SINGLE FULL-CANVAS COMPONENT. Exactly one isolated component per occupied cell, centered
+within that cell, fully visible, with a crisp silhouette and generous empty chroma separation. Do not
+let any silhouettes touch or cross cell boundaries. Cell position is only for later cropping and must
+not imply runtime position, scale, overlap, pivot, hinge angle, or assembly. No labels, captions,
+decorative border, neighboring unrelated objects, floating debris, scenery, hands, characters, text,
+or watermark.
 
---- ASSET flat-020 (door, broken state — banded oak plank door) ---
-
-Use case: stylized-concept
-Asset type: source sprite for deterministic shallow 3D extrusion
-Subject: door, broken state — banded oak plank door
-Realm art direction: fantasy
-Projection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.
-Composition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.
-Geometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.
-Lighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.
-Backdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.
-Style: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.
-Avoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.
-
---- ASSET flat-021 (lever, left state — in the realm's own material language) ---
-
-Use case: stylized-concept
-Asset type: source sprite for deterministic shallow 3D extrusion
-Subject: lever, left state — in the realm's own material language
-Realm art direction: fantasy
-Projection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.
-Composition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.
-Geometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.
-Lighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.
-Backdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.
-Style: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.
-Avoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.
-
---- ASSET flat-022 (lever, right state — in the realm's own material language) ---
-
-Use case: stylized-concept
-Asset type: source sprite for deterministic shallow 3D extrusion
-Subject: lever, right state — in the realm's own material language
-Realm art direction: fantasy
-Projection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.
-Composition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.
-Geometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.
-Lighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.
-Backdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.
-Style: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.
-Avoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.
-
---- ASSET flat-023 (trap, hidden state — in the realm's own material language) ---
-
-Use case: stylized-concept
-Asset type: source sprite for deterministic shallow 3D extrusion
-Subject: trap, hidden state — in the realm's own material language
-Realm art direction: fantasy
-Projection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.
-Composition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.
-Geometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.
-Lighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.
-Backdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.
-Style: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.
-Avoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.
-
---- ASSET flat-024 (trap, sprung state — in the realm's own material language) ---
-
-Use case: stylized-concept
-Asset type: source sprite for deterministic shallow 3D extrusion
-Subject: trap, sprung state — in the realm's own material language
-Realm art direction: fantasy
-Projection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.
-Composition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.
-Geometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.
-Lighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.
-Backdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.
-Style: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.
-Avoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.
-
---- ASSET flat-025 (ALT of 'door, shut state — banded oak plank door' — different shape/growth/wear, same kind) ---
-
-Use case: stylized-concept
-Asset type: source sprite for deterministic shallow 3D extrusion
-Subject: ALT of 'door, shut state — banded oak plank door' — different shape/growth/wear, same kind
-Realm art direction: fantasy
-Projection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.
-Composition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.
-Geometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.
-Lighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.
-Backdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.
-Style: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.
-Avoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.
-
---- ASSET flat-026 (ALT of 'door, ajar state — banded oak plank door' — different shape/growth/wear, same kind) ---
-
-Use case: stylized-concept
-Asset type: source sprite for deterministic shallow 3D extrusion
-Subject: ALT of 'door, ajar state — banded oak plank door' — different shape/growth/wear, same kind
-Realm art direction: fantasy
-Projection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.
-Composition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.
-Geometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.
-Lighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.
-Backdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.
-Style: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.
-Avoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.
-
---- ASSET flat-027 (ALT of 'door, open state — banded oak plank door' — different shape/growth/wear, same kind) ---
-
-Use case: stylized-concept
-Asset type: source sprite for deterministic shallow 3D extrusion
-Subject: ALT of 'door, open state — banded oak plank door' — different shape/growth/wear, same kind
-Realm art direction: fantasy
-Projection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.
-Composition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.
-Geometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.
-Lighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.
-Backdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.
-Style: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.
-Avoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.
-
---- ASSET flat-028 (ALT of 'door, broken state — banded oak plank door' — different shape/growth/wear, same kind) ---
-
-Use case: stylized-concept
-Asset type: source sprite for deterministic shallow 3D extrusion
-Subject: ALT of 'door, broken state — banded oak plank door' — different shape/growth/wear, same kind
-Realm art direction: fantasy
-Projection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.
-Composition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.
-Geometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.
-Lighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.
-Backdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.
-Style: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.
-Avoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.
+Avoid: pixel art, fake pixels, voxel art, micro-triangulation, dense tessellation, cracked-glass
+pattern, random polygon noise, poster illustration, baked directional light, rim light, cast shadow,
+perspective painting, scene dressing, or generic mobile-game loot.
 
 --- ASSET flat-029 (fantasy painting 1) ---
 
 Use case: stylized-concept
-Asset type: source sprite for deterministic shallow 3D extrusion
-Subject: fantasy painting 1
-Realm art direction: fantasy
-Projection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.
-Composition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.
-Geometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.
-Lighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.
-Backdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.
-Style: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.
-Avoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.
+Asset type: Genesis fantasy component generation sheet
+
+Primary request: Create exactly 1 isolated component sprites for fantasy painting 1.
+Component manifest: 1. fantasy painting 1 — role: complete item; construction class: EXTRUDE; projection: strict front elevation; canonical pose: upright in authored mount orientation.. Preserve this semantic identity: the fantasy painting 1 as it exists in the fantasy realm's item universe — ornate where canonically ornate. Preserve these kit landmarks and
+mechanical seams: outer silhouette suitable for contour tracing; interior holes only where physically real. Preserve these materials and motifs: period-authentic wood, metal, leather, parchment, and cloth with believable wear.
+Do not assemble, overlap, attach, or pre-position the components relative to one another.
+
+Visual language: mature, restrained, high-tier polygonal fantasy art. Construct the visible design
+with fewer, larger, deliberate triangular planes. Large facets must follow silhouette, construction,
+material boundaries, carving, folds, forging, anatomy, or fracture logic. Use smaller facets only at
+important transitions such as hinges, sockets, clasps, relief borders, damage, or other semantic
+landmarks. The result must read as sculpted low-poly form, not a triangle filter or cracked glass.
+Preserve ornate identity and believable wear. Avoid cute, toy-like, glossy, generic starter-tier art.
+
+Projection: use the exact projection declared for each component in the manifest. Every camera is
+perpendicular to its construction plane. No visible top, side, underside, back, foreshortening,
+perspective convergence, three-quarter view, isometric view, or painted thickness.
+
+Geometry ownership: source art owns silhouette, broad albedo regions, polygonal material facets,
+paint, carving marks, wear, and damage marks. Real runtime geometry will own thickness, bevels,
+side faces, true relief, shadows, and directional lighting. Do not paint those into the source.
+
+Backdrop: perfectly flat solid magenta #FF00FF chroma-key background for removal. The background must
+be one uniform color with no gradient, texture, floor, horizon, reflection, contact shadow, or light
+variation. Do not use magenta #FF00FF anywhere in the asset. Keep generous clean padding.
+
+Composition: SINGLE FULL-CANVAS COMPONENT. Exactly one isolated component per occupied cell, centered
+within that cell, fully visible, with a crisp silhouette and generous empty chroma separation. Do not
+let any silhouettes touch or cross cell boundaries. Cell position is only for later cropping and must
+not imply runtime position, scale, overlap, pivot, hinge angle, or assembly. No labels, captions,
+decorative border, neighboring unrelated objects, floating debris, scenery, hands, characters, text,
+or watermark.
+
+Avoid: pixel art, fake pixels, voxel art, micro-triangulation, dense tessellation, cracked-glass
+pattern, random polygon noise, poster illustration, baked directional light, rim light, cast shadow,
+perspective painting, scene dressing, or generic mobile-game loot.
 
 --- ASSET flat-030 (fantasy painting 2) ---
 
 Use case: stylized-concept
-Asset type: source sprite for deterministic shallow 3D extrusion
-Subject: fantasy painting 2
-Realm art direction: fantasy
-Projection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.
-Composition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.
-Geometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.
-Lighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.
-Backdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.
-Style: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.
-Avoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.
+Asset type: Genesis fantasy component generation sheet
+
+Primary request: Create exactly 1 isolated component sprites for fantasy painting 2.
+Component manifest: 1. fantasy painting 2 — role: complete item; construction class: EXTRUDE; projection: strict front elevation; canonical pose: upright in authored mount orientation.. Preserve this semantic identity: the fantasy painting 2 as it exists in the fantasy realm's item universe — ornate where canonically ornate. Preserve these kit landmarks and
+mechanical seams: outer silhouette suitable for contour tracing; interior holes only where physically real. Preserve these materials and motifs: period-authentic wood, metal, leather, parchment, and cloth with believable wear.
+Do not assemble, overlap, attach, or pre-position the components relative to one another.
+
+Visual language: mature, restrained, high-tier polygonal fantasy art. Construct the visible design
+with fewer, larger, deliberate triangular planes. Large facets must follow silhouette, construction,
+material boundaries, carving, folds, forging, anatomy, or fracture logic. Use smaller facets only at
+important transitions such as hinges, sockets, clasps, relief borders, damage, or other semantic
+landmarks. The result must read as sculpted low-poly form, not a triangle filter or cracked glass.
+Preserve ornate identity and believable wear. Avoid cute, toy-like, glossy, generic starter-tier art.
+
+Projection: use the exact projection declared for each component in the manifest. Every camera is
+perpendicular to its construction plane. No visible top, side, underside, back, foreshortening,
+perspective convergence, three-quarter view, isometric view, or painted thickness.
+
+Geometry ownership: source art owns silhouette, broad albedo regions, polygonal material facets,
+paint, carving marks, wear, and damage marks. Real runtime geometry will own thickness, bevels,
+side faces, true relief, shadows, and directional lighting. Do not paint those into the source.
+
+Backdrop: perfectly flat solid magenta #FF00FF chroma-key background for removal. The background must
+be one uniform color with no gradient, texture, floor, horizon, reflection, contact shadow, or light
+variation. Do not use magenta #FF00FF anywhere in the asset. Keep generous clean padding.
+
+Composition: SINGLE FULL-CANVAS COMPONENT. Exactly one isolated component per occupied cell, centered
+within that cell, fully visible, with a crisp silhouette and generous empty chroma separation. Do not
+let any silhouettes touch or cross cell boundaries. Cell position is only for later cropping and must
+not imply runtime position, scale, overlap, pivot, hinge angle, or assembly. No labels, captions,
+decorative border, neighboring unrelated objects, floating debris, scenery, hands, characters, text,
+or watermark.
+
+Avoid: pixel art, fake pixels, voxel art, micro-triangulation, dense tessellation, cracked-glass
+pattern, random polygon noise, poster illustration, baked directional light, rim light, cast shadow,
+perspective painting, scene dressing, or generic mobile-game loot.
 
 --- ASSET flat-031 (fantasy painting 3) ---
 
 Use case: stylized-concept
-Asset type: source sprite for deterministic shallow 3D extrusion
-Subject: fantasy painting 3
-Realm art direction: fantasy
-Projection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.
-Composition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.
-Geometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.
-Lighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.
-Backdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.
-Style: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.
-Avoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.
+Asset type: Genesis fantasy component generation sheet
+
+Primary request: Create exactly 1 isolated component sprites for fantasy painting 3.
+Component manifest: 1. fantasy painting 3 — role: complete item; construction class: EXTRUDE; projection: strict front elevation; canonical pose: upright in authored mount orientation.. Preserve this semantic identity: the fantasy painting 3 as it exists in the fantasy realm's item universe — ornate where canonically ornate. Preserve these kit landmarks and
+mechanical seams: outer silhouette suitable for contour tracing; interior holes only where physically real. Preserve these materials and motifs: period-authentic wood, metal, leather, parchment, and cloth with believable wear.
+Do not assemble, overlap, attach, or pre-position the components relative to one another.
+
+Visual language: mature, restrained, high-tier polygonal fantasy art. Construct the visible design
+with fewer, larger, deliberate triangular planes. Large facets must follow silhouette, construction,
+material boundaries, carving, folds, forging, anatomy, or fracture logic. Use smaller facets only at
+important transitions such as hinges, sockets, clasps, relief borders, damage, or other semantic
+landmarks. The result must read as sculpted low-poly form, not a triangle filter or cracked glass.
+Preserve ornate identity and believable wear. Avoid cute, toy-like, glossy, generic starter-tier art.
+
+Projection: use the exact projection declared for each component in the manifest. Every camera is
+perpendicular to its construction plane. No visible top, side, underside, back, foreshortening,
+perspective convergence, three-quarter view, isometric view, or painted thickness.
+
+Geometry ownership: source art owns silhouette, broad albedo regions, polygonal material facets,
+paint, carving marks, wear, and damage marks. Real runtime geometry will own thickness, bevels,
+side faces, true relief, shadows, and directional lighting. Do not paint those into the source.
+
+Backdrop: perfectly flat solid magenta #FF00FF chroma-key background for removal. The background must
+be one uniform color with no gradient, texture, floor, horizon, reflection, contact shadow, or light
+variation. Do not use magenta #FF00FF anywhere in the asset. Keep generous clean padding.
+
+Composition: SINGLE FULL-CANVAS COMPONENT. Exactly one isolated component per occupied cell, centered
+within that cell, fully visible, with a crisp silhouette and generous empty chroma separation. Do not
+let any silhouettes touch or cross cell boundaries. Cell position is only for later cropping and must
+not imply runtime position, scale, overlap, pivot, hinge angle, or assembly. No labels, captions,
+decorative border, neighboring unrelated objects, floating debris, scenery, hands, characters, text,
+or watermark.
+
+Avoid: pixel art, fake pixels, voxel art, micro-triangulation, dense tessellation, cracked-glass
+pattern, random polygon noise, poster illustration, baked directional light, rim light, cast shadow,
+perspective painting, scene dressing, or generic mobile-game loot.
 
 --- ASSET flat-032 (fantasy painting 4) ---
 
 Use case: stylized-concept
-Asset type: source sprite for deterministic shallow 3D extrusion
-Subject: fantasy painting 4
-Realm art direction: fantasy
-Projection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.
-Composition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.
-Geometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.
-Lighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.
-Backdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.
-Style: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.
-Avoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.
+Asset type: Genesis fantasy component generation sheet
+
+Primary request: Create exactly 1 isolated component sprites for fantasy painting 4.
+Component manifest: 1. fantasy painting 4 — role: complete item; construction class: EXTRUDE; projection: strict front elevation; canonical pose: upright in authored mount orientation.. Preserve this semantic identity: the fantasy painting 4 as it exists in the fantasy realm's item universe — ornate where canonically ornate. Preserve these kit landmarks and
+mechanical seams: outer silhouette suitable for contour tracing; interior holes only where physically real. Preserve these materials and motifs: period-authentic wood, metal, leather, parchment, and cloth with believable wear.
+Do not assemble, overlap, attach, or pre-position the components relative to one another.
+
+Visual language: mature, restrained, high-tier polygonal fantasy art. Construct the visible design
+with fewer, larger, deliberate triangular planes. Large facets must follow silhouette, construction,
+material boundaries, carving, folds, forging, anatomy, or fracture logic. Use smaller facets only at
+important transitions such as hinges, sockets, clasps, relief borders, damage, or other semantic
+landmarks. The result must read as sculpted low-poly form, not a triangle filter or cracked glass.
+Preserve ornate identity and believable wear. Avoid cute, toy-like, glossy, generic starter-tier art.
+
+Projection: use the exact projection declared for each component in the manifest. Every camera is
+perpendicular to its construction plane. No visible top, side, underside, back, foreshortening,
+perspective convergence, three-quarter view, isometric view, or painted thickness.
+
+Geometry ownership: source art owns silhouette, broad albedo regions, polygonal material facets,
+paint, carving marks, wear, and damage marks. Real runtime geometry will own thickness, bevels,
+side faces, true relief, shadows, and directional lighting. Do not paint those into the source.
+
+Backdrop: perfectly flat solid magenta #FF00FF chroma-key background for removal. The background must
+be one uniform color with no gradient, texture, floor, horizon, reflection, contact shadow, or light
+variation. Do not use magenta #FF00FF anywhere in the asset. Keep generous clean padding.
+
+Composition: SINGLE FULL-CANVAS COMPONENT. Exactly one isolated component per occupied cell, centered
+within that cell, fully visible, with a crisp silhouette and generous empty chroma separation. Do not
+let any silhouettes touch or cross cell boundaries. Cell position is only for later cropping and must
+not imply runtime position, scale, overlap, pivot, hinge angle, or assembly. No labels, captions,
+decorative border, neighboring unrelated objects, floating debris, scenery, hands, characters, text,
+or watermark.
+
+Avoid: pixel art, fake pixels, voxel art, micro-triangulation, dense tessellation, cracked-glass
+pattern, random polygon noise, poster illustration, baked directional light, rim light, cast shadow,
+perspective painting, scene dressing, or generic mobile-game loot.
 

@@ -1,570 +1,1505 @@
-You are a prop-generation worker for the Genesis faceted art program. Your batch:
-P2 — fantasy dressing regeneration: clutter, flora, and campfire set-dressing props (39 assets). Everything you need is pasted below — this prompt is the complete, authoritative
-source. You have image generation; use it for every asset. ONE ASSET PER CALL — never
-batch multiple subjects into one image.
+You are a prop-component generation worker for the Genesis faceted art program. Your
+batch: P2 — fantasy set-dressing components routed by §4 construction class (extrusion sources, lathe profiles, model-recipe reference art, top-projection ground pieces) + the campfire kit. This prompt is the complete, authoritative source. ONE GENERATION SHEET PER
+CALL. Every prompt below is the §7 master prop prompt with its fields filled — VERBATIM LAW
+("Do not shorten it"): submit each exactly as printed.
+
+CORE CONTRACT (§4.1): components are ISOLATED AND SEPARABLE, NEVER preassembled — the engine
+assembles objects and owns every state (a door's shut/ajar/open reuse one leaf; a lever's
+left/right are rotations). Flat things become 3D by sprite extrusion; you are painting
+extrusion SOURCES, not finished objects. No painted thickness, no perspective, no baked light.
 
 Rules:
-1. For each asset IN ORDER: submit its full prompt text exactly as printed (VERBATIM LAW —
-   do not reword, trim, or summarize). Fill nothing in; each prompt is complete.
-2. Create a fresh directory dev/model-qa/faceted-sheets/p2dress-returns/ before the first
-   call (STOP and report if it already contains files). Save each result IMMEDIATELY as
-   p2dress-returns/raw-props/<asset-id>-candidate-001.png using the asset id printed above
-   its prompt.
-3. After each save, RE-OPEN the file and verify: single centered object, uniform #FF00FF
-   background to the corners, nothing touching the image edge, flat front elevation (no
-   perspective), mature faceted register (no cute/toy proportions). Fail → re-roll once,
-   then mark FAILED. Never substitute or rename to fill a slot.
-4. Append one JSON row per call to p2dress-returns/provenance/p2dress-generation-calls.json:
-   {"file": "...", "callId": "...", "assetId": "..."} — at save time.
-5. No git commands. Files + provenance are the whole deliverable.
-6. Final report must match the directory exactly: attempted, saved, FAILED (with reasons),
-   full filename list. Overclaiming is treated as fabrication.
+1. Submit each asset's prompt verbatim, in order.
+2. Fresh directory dev/model-qa/faceted-sheets/p2dress-returns/ (STOP if non-empty). Save
+   immediately as p2dress-returns/raw-props/<asset-id>-candidate-001.png.
+3. RE-OPEN each save and verify: components isolated (nothing assembled or overlapping),
+   correct projection (no three-quarter, no visible top/side), uniform chroma to the corners,
+   nothing touching cell or image edges, facet read per §3 (large deliberate planes following
+   construction — no triangle-filter noise, no shattered glass, no mobile-game gloss).
+   Fail → re-roll once, then FAILED. Never substitute.
+4. Provenance row per call to p2dress-returns/provenance/p2dress-generation-calls.json:
+   {"file": "...", "callId": "...", "assetId": "...", "components": [...]}.
+5. No git. 6. Final report must match the directory exactly; overclaiming = fabrication.
 
 === ASSETS, IN ORDER ===
 
---- ASSET fantasy-clutter-brokencart-wheel-alt (brokencart wheel alt) ---
+--- ASSET fantasy-clutter-brokencart-wheel [EXTRUDE] ---
 
 Use case: stylized-concept
-Asset type: source sprite for deterministic shallow 3D extrusion
-Subject: brokencart wheel alt — fantasy set-dressing prop
-Realm art direction: fantasy
-Projection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.
-Composition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.
-Geometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.
-Lighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.
-Backdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.
-Style: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.
-Avoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.
+Asset type: Genesis fantasy component generation sheet
 
---- ASSET fantasy-clutter-brokencart-wheel (brokencart wheel) ---
+Primary request: Create exactly 1 isolated component sprites for brokencart wheel.
+Component manifest: 1. brokencart wheel — role: complete set-dressing piece; construction class: EXTRUDE; projection: strict front elevation; canonical pose: neutral authored orientation.. Preserve this semantic identity: a weathered brokencart wheel from a lived-in dark-fantasy world. Preserve these kit landmarks and
+mechanical seams: outer silhouette suitable for contour tracing. Preserve these materials and motifs: aged wood, rusted iron, dry plant matter, stone — believable rot, rust, splinter, and wear.
+Do not assemble, overlap, attach, or pre-position the components relative to one another.
 
-Use case: stylized-concept
-Asset type: source sprite for deterministic shallow 3D extrusion
-Subject: brokencart wheel — fantasy set-dressing prop
-Realm art direction: fantasy
-Projection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.
-Composition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.
-Geometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.
-Lighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.
-Backdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.
-Style: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.
-Avoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.
+Visual language: mature, restrained, high-tier polygonal fantasy art. Construct the visible design
+with fewer, larger, deliberate triangular planes. Large facets must follow silhouette, construction,
+material boundaries, carving, folds, forging, anatomy, or fracture logic. Use smaller facets only at
+important transitions such as hinges, sockets, clasps, relief borders, damage, or other semantic
+landmarks. The result must read as sculpted low-poly form, not a triangle filter or cracked glass.
+Preserve ornate identity and believable wear. Avoid cute, toy-like, glossy, generic starter-tier art.
 
---- ASSET fantasy-clutter-brokenwheelbarrow (brokenwheelbarrow) ---
+Projection: use the exact projection declared for each component in the manifest. Every camera is
+perpendicular to its construction plane. No visible top, side, underside, back, foreshortening,
+perspective convergence, three-quarter view, isometric view, or painted thickness.
 
-Use case: stylized-concept
-Asset type: source sprite for deterministic shallow 3D extrusion
-Subject: brokenwheelbarrow — fantasy set-dressing prop
-Realm art direction: fantasy
-Projection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.
-Composition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.
-Geometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.
-Lighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.
-Backdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.
-Style: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.
-Avoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.
+Geometry ownership: source art owns silhouette, broad albedo regions, polygonal material facets,
+paint, carving marks, wear, and damage marks. Real runtime geometry will own thickness, bevels,
+side faces, true relief, shadows, and directional lighting. Do not paint those into the source.
 
---- ASSET fantasy-clutter-candlestub (candlestub) ---
+Backdrop: perfectly flat solid magenta #FF00FF chroma-key background for removal. The background must
+be one uniform color with no gradient, texture, floor, horizon, reflection, contact shadow, or light
+variation. Do not use magenta #FF00FF anywhere in the asset. Keep generous clean padding.
+
+Composition: SINGLE FULL-CANVAS COMPONENT. Exactly one isolated component per occupied cell, centered
+within that cell, fully visible, with a crisp silhouette and generous empty chroma separation. Do not
+let any silhouettes touch or cross cell boundaries. Cell position is only for later cropping and must
+not imply runtime position, scale, overlap, pivot, hinge angle, or assembly. No labels, captions,
+decorative border, neighboring unrelated objects, floating debris, scenery, hands, characters, text,
+or watermark.
+
+Avoid: pixel art, fake pixels, voxel art, micro-triangulation, dense tessellation, cracked-glass
+pattern, random polygon noise, poster illustration, baked directional light, rim light, cast shadow,
+perspective painting, scene dressing, or generic mobile-game loot.
+
+--- ASSET fantasy-clutter-brokencart-wheel-alt [EXTRUDE] ---
 
 Use case: stylized-concept
-Asset type: source sprite for deterministic shallow 3D extrusion
-Subject: candlestub — fantasy set-dressing prop
-Realm art direction: fantasy
-Projection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.
-Composition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.
-Geometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.
-Lighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.
-Backdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.
-Style: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.
-Avoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.
+Asset type: Genesis fantasy component generation sheet
 
---- ASSET fantasy-clutter-emptybarrel (emptybarrel) ---
+Primary request: Create exactly 1 isolated component sprites for brokencart wheel alt.
+Component manifest: 1. brokencart wheel alt — role: complete set-dressing piece; construction class: EXTRUDE; projection: strict front elevation; canonical pose: neutral authored orientation.. Preserve this semantic identity: a weathered brokencart wheel alt from a lived-in dark-fantasy world. Preserve these kit landmarks and
+mechanical seams: outer silhouette suitable for contour tracing. Preserve these materials and motifs: aged wood, rusted iron, dry plant matter, stone — believable rot, rust, splinter, and wear.
+Do not assemble, overlap, attach, or pre-position the components relative to one another.
 
-Use case: stylized-concept
-Asset type: source sprite for deterministic shallow 3D extrusion
-Subject: emptybarrel — fantasy set-dressing prop
-Realm art direction: fantasy
-Projection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.
-Composition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.
-Geometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.
-Lighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.
-Backdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.
-Style: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.
-Avoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.
+Visual language: mature, restrained, high-tier polygonal fantasy art. Construct the visible design
+with fewer, larger, deliberate triangular planes. Large facets must follow silhouette, construction,
+material boundaries, carving, folds, forging, anatomy, or fracture logic. Use smaller facets only at
+important transitions such as hinges, sockets, clasps, relief borders, damage, or other semantic
+landmarks. The result must read as sculpted low-poly form, not a triangle filter or cracked glass.
+Preserve ornate identity and believable wear. Avoid cute, toy-like, glossy, generic starter-tier art.
 
---- ASSET fantasy-clutter-firewoodstack (firewoodstack) ---
+Projection: use the exact projection declared for each component in the manifest. Every camera is
+perpendicular to its construction plane. No visible top, side, underside, back, foreshortening,
+perspective convergence, three-quarter view, isometric view, or painted thickness.
 
-Use case: stylized-concept
-Asset type: source sprite for deterministic shallow 3D extrusion
-Subject: firewoodstack — fantasy set-dressing prop
-Realm art direction: fantasy
-Projection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.
-Composition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.
-Geometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.
-Lighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.
-Backdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.
-Style: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.
-Avoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.
+Geometry ownership: source art owns silhouette, broad albedo regions, polygonal material facets,
+paint, carving marks, wear, and damage marks. Real runtime geometry will own thickness, bevels,
+side faces, true relief, shadows, and directional lighting. Do not paint those into the source.
 
---- ASSET fantasy-clutter-hayloose (hayloose) ---
+Backdrop: perfectly flat solid magenta #FF00FF chroma-key background for removal. The background must
+be one uniform color with no gradient, texture, floor, horizon, reflection, contact shadow, or light
+variation. Do not use magenta #FF00FF anywhere in the asset. Keep generous clean padding.
+
+Composition: SINGLE FULL-CANVAS COMPONENT. Exactly one isolated component per occupied cell, centered
+within that cell, fully visible, with a crisp silhouette and generous empty chroma separation. Do not
+let any silhouettes touch or cross cell boundaries. Cell position is only for later cropping and must
+not imply runtime position, scale, overlap, pivot, hinge angle, or assembly. No labels, captions,
+decorative border, neighboring unrelated objects, floating debris, scenery, hands, characters, text,
+or watermark.
+
+Avoid: pixel art, fake pixels, voxel art, micro-triangulation, dense tessellation, cracked-glass
+pattern, random polygon noise, poster illustration, baked directional light, rim light, cast shadow,
+perspective painting, scene dressing, or generic mobile-game loot.
+
+--- ASSET fantasy-clutter-shieldwall-fragment [EXTRUDE] ---
 
 Use case: stylized-concept
-Asset type: source sprite for deterministic shallow 3D extrusion
-Subject: hayloose — fantasy set-dressing prop
-Realm art direction: fantasy
-Projection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.
-Composition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.
-Geometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.
-Lighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.
-Backdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.
-Style: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.
-Avoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.
+Asset type: Genesis fantasy component generation sheet
 
---- ASSET fantasy-clutter-lanternhook (lanternhook) ---
+Primary request: Create exactly 1 isolated component sprites for shieldwall fragment.
+Component manifest: 1. shieldwall fragment — role: complete set-dressing piece; construction class: EXTRUDE; projection: strict front elevation; canonical pose: neutral authored orientation.. Preserve this semantic identity: a weathered shieldwall fragment from a lived-in dark-fantasy world. Preserve these kit landmarks and
+mechanical seams: outer silhouette suitable for contour tracing. Preserve these materials and motifs: aged wood, rusted iron, dry plant matter, stone — believable rot, rust, splinter, and wear.
+Do not assemble, overlap, attach, or pre-position the components relative to one another.
 
-Use case: stylized-concept
-Asset type: source sprite for deterministic shallow 3D extrusion
-Subject: lanternhook — fantasy set-dressing prop
-Realm art direction: fantasy
-Projection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.
-Composition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.
-Geometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.
-Lighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.
-Backdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.
-Style: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.
-Avoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.
+Visual language: mature, restrained, high-tier polygonal fantasy art. Construct the visible design
+with fewer, larger, deliberate triangular planes. Large facets must follow silhouette, construction,
+material boundaries, carving, folds, forging, anatomy, or fracture logic. Use smaller facets only at
+important transitions such as hinges, sockets, clasps, relief borders, damage, or other semantic
+landmarks. The result must read as sculpted low-poly form, not a triangle filter or cracked glass.
+Preserve ornate identity and believable wear. Avoid cute, toy-like, glossy, generic starter-tier art.
 
---- ASSET fantasy-clutter-potteryshard (potteryshard) ---
+Projection: use the exact projection declared for each component in the manifest. Every camera is
+perpendicular to its construction plane. No visible top, side, underside, back, foreshortening,
+perspective convergence, three-quarter view, isometric view, or painted thickness.
 
-Use case: stylized-concept
-Asset type: source sprite for deterministic shallow 3D extrusion
-Subject: potteryshard — fantasy set-dressing prop
-Realm art direction: fantasy
-Projection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.
-Composition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.
-Geometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.
-Lighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.
-Backdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.
-Style: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.
-Avoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.
+Geometry ownership: source art owns silhouette, broad albedo regions, polygonal material facets,
+paint, carving marks, wear, and damage marks. Real runtime geometry will own thickness, bevels,
+side faces, true relief, shadows, and directional lighting. Do not paint those into the source.
 
---- ASSET fantasy-clutter-rubblewall (rubblewall) ---
+Backdrop: perfectly flat solid magenta #FF00FF chroma-key background for removal. The background must
+be one uniform color with no gradient, texture, floor, horizon, reflection, contact shadow, or light
+variation. Do not use magenta #FF00FF anywhere in the asset. Keep generous clean padding.
+
+Composition: SINGLE FULL-CANVAS COMPONENT. Exactly one isolated component per occupied cell, centered
+within that cell, fully visible, with a crisp silhouette and generous empty chroma separation. Do not
+let any silhouettes touch or cross cell boundaries. Cell position is only for later cropping and must
+not imply runtime position, scale, overlap, pivot, hinge angle, or assembly. No labels, captions,
+decorative border, neighboring unrelated objects, floating debris, scenery, hands, characters, text,
+or watermark.
+
+Avoid: pixel art, fake pixels, voxel art, micro-triangulation, dense tessellation, cracked-glass
+pattern, random polygon noise, poster illustration, baked directional light, rim light, cast shadow,
+perspective painting, scene dressing, or generic mobile-game loot.
+
+--- ASSET fantasy-clutter-tornbanner [EXTRUDE] ---
 
 Use case: stylized-concept
-Asset type: source sprite for deterministic shallow 3D extrusion
-Subject: rubblewall — fantasy set-dressing prop
-Realm art direction: fantasy
-Projection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.
-Composition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.
-Geometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.
-Lighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.
-Backdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.
-Style: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.
-Avoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.
+Asset type: Genesis fantasy component generation sheet
 
---- ASSET fantasy-clutter-rusted-plow (rusted plow) ---
+Primary request: Create exactly 1 isolated component sprites for tornbanner.
+Component manifest: 1. tornbanner — role: complete set-dressing piece; construction class: EXTRUDE; projection: strict front elevation; canonical pose: neutral authored orientation.. Preserve this semantic identity: a weathered tornbanner from a lived-in dark-fantasy world. Preserve these kit landmarks and
+mechanical seams: outer silhouette suitable for contour tracing. Preserve these materials and motifs: aged wood, rusted iron, dry plant matter, stone — believable rot, rust, splinter, and wear.
+Do not assemble, overlap, attach, or pre-position the components relative to one another.
 
-Use case: stylized-concept
-Asset type: source sprite for deterministic shallow 3D extrusion
-Subject: rusted plow — fantasy set-dressing prop
-Realm art direction: fantasy
-Projection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.
-Composition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.
-Geometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.
-Lighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.
-Backdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.
-Style: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.
-Avoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.
+Visual language: mature, restrained, high-tier polygonal fantasy art. Construct the visible design
+with fewer, larger, deliberate triangular planes. Large facets must follow silhouette, construction,
+material boundaries, carving, folds, forging, anatomy, or fracture logic. Use smaller facets only at
+important transitions such as hinges, sockets, clasps, relief borders, damage, or other semantic
+landmarks. The result must read as sculpted low-poly form, not a triangle filter or cracked glass.
+Preserve ornate identity and believable wear. Avoid cute, toy-like, glossy, generic starter-tier art.
 
---- ASSET fantasy-clutter-shieldwall-fragment (shieldwall fragment) ---
+Projection: use the exact projection declared for each component in the manifest. Every camera is
+perpendicular to its construction plane. No visible top, side, underside, back, foreshortening,
+perspective convergence, three-quarter view, isometric view, or painted thickness.
 
-Use case: stylized-concept
-Asset type: source sprite for deterministic shallow 3D extrusion
-Subject: shieldwall fragment — fantasy set-dressing prop
-Realm art direction: fantasy
-Projection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.
-Composition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.
-Geometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.
-Lighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.
-Backdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.
-Style: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.
-Avoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.
+Geometry ownership: source art owns silhouette, broad albedo regions, polygonal material facets,
+paint, carving marks, wear, and damage marks. Real runtime geometry will own thickness, bevels,
+side faces, true relief, shadows, and directional lighting. Do not paint those into the source.
 
---- ASSET fantasy-clutter-tackleheap (tackleheap) ---
+Backdrop: perfectly flat solid magenta #FF00FF chroma-key background for removal. The background must
+be one uniform color with no gradient, texture, floor, horizon, reflection, contact shadow, or light
+variation. Do not use magenta #FF00FF anywhere in the asset. Keep generous clean padding.
+
+Composition: SINGLE FULL-CANVAS COMPONENT. Exactly one isolated component per occupied cell, centered
+within that cell, fully visible, with a crisp silhouette and generous empty chroma separation. Do not
+let any silhouettes touch or cross cell boundaries. Cell position is only for later cropping and must
+not imply runtime position, scale, overlap, pivot, hinge angle, or assembly. No labels, captions,
+decorative border, neighboring unrelated objects, floating debris, scenery, hands, characters, text,
+or watermark.
+
+Avoid: pixel art, fake pixels, voxel art, micro-triangulation, dense tessellation, cracked-glass
+pattern, random polygon noise, poster illustration, baked directional light, rim light, cast shadow,
+perspective painting, scene dressing, or generic mobile-game loot.
+
+--- ASSET fantasy-clutter-lanternhook [EXTRUDE] ---
 
 Use case: stylized-concept
-Asset type: source sprite for deterministic shallow 3D extrusion
-Subject: tackleheap — fantasy set-dressing prop
-Realm art direction: fantasy
-Projection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.
-Composition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.
-Geometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.
-Lighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.
-Backdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.
-Style: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.
-Avoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.
+Asset type: Genesis fantasy component generation sheet
 
---- ASSET fantasy-clutter-tornbanner (tornbanner) ---
+Primary request: Create exactly 1 isolated component sprites for lanternhook.
+Component manifest: 1. lanternhook — role: complete set-dressing piece; construction class: EXTRUDE; projection: strict front elevation; canonical pose: neutral authored orientation.. Preserve this semantic identity: a weathered lanternhook from a lived-in dark-fantasy world. Preserve these kit landmarks and
+mechanical seams: outer silhouette suitable for contour tracing. Preserve these materials and motifs: aged wood, rusted iron, dry plant matter, stone — believable rot, rust, splinter, and wear.
+Do not assemble, overlap, attach, or pre-position the components relative to one another.
 
-Use case: stylized-concept
-Asset type: source sprite for deterministic shallow 3D extrusion
-Subject: tornbanner — fantasy set-dressing prop
-Realm art direction: fantasy
-Projection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.
-Composition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.
-Geometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.
-Lighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.
-Backdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.
-Style: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.
-Avoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.
+Visual language: mature, restrained, high-tier polygonal fantasy art. Construct the visible design
+with fewer, larger, deliberate triangular planes. Large facets must follow silhouette, construction,
+material boundaries, carving, folds, forging, anatomy, or fracture logic. Use smaller facets only at
+important transitions such as hinges, sockets, clasps, relief borders, damage, or other semantic
+landmarks. The result must read as sculpted low-poly form, not a triangle filter or cracked glass.
+Preserve ornate identity and believable wear. Avoid cute, toy-like, glossy, generic starter-tier art.
 
---- ASSET fantasy-clutter-woodpile-alt (woodpile alt) ---
+Projection: use the exact projection declared for each component in the manifest. Every camera is
+perpendicular to its construction plane. No visible top, side, underside, back, foreshortening,
+perspective convergence, three-quarter view, isometric view, or painted thickness.
 
-Use case: stylized-concept
-Asset type: source sprite for deterministic shallow 3D extrusion
-Subject: woodpile alt — fantasy set-dressing prop
-Realm art direction: fantasy
-Projection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.
-Composition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.
-Geometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.
-Lighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.
-Backdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.
-Style: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.
-Avoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.
+Geometry ownership: source art owns silhouette, broad albedo regions, polygonal material facets,
+paint, carving marks, wear, and damage marks. Real runtime geometry will own thickness, bevels,
+side faces, true relief, shadows, and directional lighting. Do not paint those into the source.
 
---- ASSET fantasy-clutter-woodpile (woodpile) ---
+Backdrop: perfectly flat solid magenta #FF00FF chroma-key background for removal. The background must
+be one uniform color with no gradient, texture, floor, horizon, reflection, contact shadow, or light
+variation. Do not use magenta #FF00FF anywhere in the asset. Keep generous clean padding.
+
+Composition: SINGLE FULL-CANVAS COMPONENT. Exactly one isolated component per occupied cell, centered
+within that cell, fully visible, with a crisp silhouette and generous empty chroma separation. Do not
+let any silhouettes touch or cross cell boundaries. Cell position is only for later cropping and must
+not imply runtime position, scale, overlap, pivot, hinge angle, or assembly. No labels, captions,
+decorative border, neighboring unrelated objects, floating debris, scenery, hands, characters, text,
+or watermark.
+
+Avoid: pixel art, fake pixels, voxel art, micro-triangulation, dense tessellation, cracked-glass
+pattern, random polygon noise, poster illustration, baked directional light, rim light, cast shadow,
+perspective painting, scene dressing, or generic mobile-game loot.
+
+--- ASSET fantasy-clutter-potteryshard [EXTRUDE] ---
 
 Use case: stylized-concept
-Asset type: source sprite for deterministic shallow 3D extrusion
-Subject: woodpile — fantasy set-dressing prop
-Realm art direction: fantasy
-Projection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.
-Composition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.
-Geometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.
-Lighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.
-Backdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.
-Style: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.
-Avoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.
+Asset type: Genesis fantasy component generation sheet
 
---- ASSET fantasy-flora-birchgrove (birchgrove) ---
+Primary request: Create exactly 1 isolated component sprites for potteryshard.
+Component manifest: 1. potteryshard — role: complete set-dressing piece; construction class: EXTRUDE; projection: strict front elevation; canonical pose: neutral authored orientation.. Preserve this semantic identity: a weathered potteryshard from a lived-in dark-fantasy world. Preserve these kit landmarks and
+mechanical seams: outer silhouette suitable for contour tracing. Preserve these materials and motifs: aged wood, rusted iron, dry plant matter, stone — believable rot, rust, splinter, and wear.
+Do not assemble, overlap, attach, or pre-position the components relative to one another.
 
-Use case: stylized-concept
-Asset type: source sprite for deterministic shallow 3D extrusion
-Subject: birchgrove — fantasy set-dressing prop
-Realm art direction: fantasy
-Projection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.
-Composition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.
-Geometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.
-Lighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.
-Backdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.
-Style: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.
-Avoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.
+Visual language: mature, restrained, high-tier polygonal fantasy art. Construct the visible design
+with fewer, larger, deliberate triangular planes. Large facets must follow silhouette, construction,
+material boundaries, carving, folds, forging, anatomy, or fracture logic. Use smaller facets only at
+important transitions such as hinges, sockets, clasps, relief borders, damage, or other semantic
+landmarks. The result must read as sculpted low-poly form, not a triangle filter or cracked glass.
+Preserve ornate identity and believable wear. Avoid cute, toy-like, glossy, generic starter-tier art.
 
---- ASSET fantasy-flora-brambleblocker (brambleblocker) ---
+Projection: use the exact projection declared for each component in the manifest. Every camera is
+perpendicular to its construction plane. No visible top, side, underside, back, foreshortening,
+perspective convergence, three-quarter view, isometric view, or painted thickness.
 
-Use case: stylized-concept
-Asset type: source sprite for deterministic shallow 3D extrusion
-Subject: brambleblocker — fantasy set-dressing prop
-Realm art direction: fantasy
-Projection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.
-Composition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.
-Geometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.
-Lighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.
-Backdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.
-Style: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.
-Avoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.
+Geometry ownership: source art owns silhouette, broad albedo regions, polygonal material facets,
+paint, carving marks, wear, and damage marks. Real runtime geometry will own thickness, bevels,
+side faces, true relief, shadows, and directional lighting. Do not paint those into the source.
 
---- ASSET fantasy-flora-cattailreed (cattailreed) ---
+Backdrop: perfectly flat solid magenta #FF00FF chroma-key background for removal. The background must
+be one uniform color with no gradient, texture, floor, horizon, reflection, contact shadow, or light
+variation. Do not use magenta #FF00FF anywhere in the asset. Keep generous clean padding.
+
+Composition: SINGLE FULL-CANVAS COMPONENT. Exactly one isolated component per occupied cell, centered
+within that cell, fully visible, with a crisp silhouette and generous empty chroma separation. Do not
+let any silhouettes touch or cross cell boundaries. Cell position is only for later cropping and must
+not imply runtime position, scale, overlap, pivot, hinge angle, or assembly. No labels, captions,
+decorative border, neighboring unrelated objects, floating debris, scenery, hands, characters, text,
+or watermark.
+
+Avoid: pixel art, fake pixels, voxel art, micro-triangulation, dense tessellation, cracked-glass
+pattern, random polygon noise, poster illustration, baked directional light, rim light, cast shadow,
+perspective painting, scene dressing, or generic mobile-game loot.
+
+--- ASSET fantasy-clutter-rusted-plow [EXTRUDE] ---
 
 Use case: stylized-concept
-Asset type: source sprite for deterministic shallow 3D extrusion
-Subject: cattailreed — fantasy set-dressing prop
-Realm art direction: fantasy
-Projection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.
-Composition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.
-Geometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.
-Lighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.
-Backdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.
-Style: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.
-Avoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.
+Asset type: Genesis fantasy component generation sheet
 
---- ASSET fantasy-flora-fern-alt (fern alt) ---
+Primary request: Create exactly 1 isolated component sprites for rusted plow.
+Component manifest: 1. rusted plow — role: complete set-dressing piece; construction class: EXTRUDE; projection: strict profile; canonical pose: neutral authored orientation.. Preserve this semantic identity: a weathered rusted plow from a lived-in dark-fantasy world. Preserve these kit landmarks and
+mechanical seams: outer silhouette suitable for contour tracing. Preserve these materials and motifs: aged wood, rusted iron, dry plant matter, stone — believable rot, rust, splinter, and wear.
+Do not assemble, overlap, attach, or pre-position the components relative to one another.
 
-Use case: stylized-concept
-Asset type: source sprite for deterministic shallow 3D extrusion
-Subject: fern alt — fantasy set-dressing prop
-Realm art direction: fantasy
-Projection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.
-Composition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.
-Geometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.
-Lighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.
-Backdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.
-Style: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.
-Avoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.
+Visual language: mature, restrained, high-tier polygonal fantasy art. Construct the visible design
+with fewer, larger, deliberate triangular planes. Large facets must follow silhouette, construction,
+material boundaries, carving, folds, forging, anatomy, or fracture logic. Use smaller facets only at
+important transitions such as hinges, sockets, clasps, relief borders, damage, or other semantic
+landmarks. The result must read as sculpted low-poly form, not a triangle filter or cracked glass.
+Preserve ornate identity and believable wear. Avoid cute, toy-like, glossy, generic starter-tier art.
 
---- ASSET fantasy-flora-fern (fern) ---
+Projection: use the exact projection declared for each component in the manifest. Every camera is
+perpendicular to its construction plane. No visible top, side, underside, back, foreshortening,
+perspective convergence, three-quarter view, isometric view, or painted thickness.
 
-Use case: stylized-concept
-Asset type: source sprite for deterministic shallow 3D extrusion
-Subject: fern — fantasy set-dressing prop
-Realm art direction: fantasy
-Projection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.
-Composition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.
-Geometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.
-Lighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.
-Backdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.
-Style: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.
-Avoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.
+Geometry ownership: source art owns silhouette, broad albedo regions, polygonal material facets,
+paint, carving marks, wear, and damage marks. Real runtime geometry will own thickness, bevels,
+side faces, true relief, shadows, and directional lighting. Do not paint those into the source.
 
---- ASSET fantasy-flora-hedgerow (hedgerow) ---
+Backdrop: perfectly flat solid magenta #FF00FF chroma-key background for removal. The background must
+be one uniform color with no gradient, texture, floor, horizon, reflection, contact shadow, or light
+variation. Do not use magenta #FF00FF anywhere in the asset. Keep generous clean padding.
+
+Composition: SINGLE FULL-CANVAS COMPONENT. Exactly one isolated component per occupied cell, centered
+within that cell, fully visible, with a crisp silhouette and generous empty chroma separation. Do not
+let any silhouettes touch or cross cell boundaries. Cell position is only for later cropping and must
+not imply runtime position, scale, overlap, pivot, hinge angle, or assembly. No labels, captions,
+decorative border, neighboring unrelated objects, floating debris, scenery, hands, characters, text,
+or watermark.
+
+Avoid: pixel art, fake pixels, voxel art, micro-triangulation, dense tessellation, cracked-glass
+pattern, random polygon noise, poster illustration, baked directional light, rim light, cast shadow,
+perspective painting, scene dressing, or generic mobile-game loot.
+
+--- ASSET fantasy-clutter-candlestub [LATHE] ---
 
 Use case: stylized-concept
-Asset type: source sprite for deterministic shallow 3D extrusion
-Subject: hedgerow — fantasy set-dressing prop
-Realm art direction: fantasy
-Projection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.
-Composition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.
-Geometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.
-Lighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.
-Backdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.
-Style: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.
-Avoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.
+Asset type: Genesis fantasy component generation sheet
 
---- ASSET fantasy-flora-herbbundle (herbbundle) ---
+Primary request: Create exactly 1 isolated component sprites for candlestub.
+Component manifest: 1. candlestub — role: complete set-dressing piece; construction class: LATHE; projection: strict profile; canonical pose: neutral authored orientation.. Preserve this semantic identity: a weathered candlestub from a lived-in dark-fantasy world. Preserve these kit landmarks and
+mechanical seams: outer silhouette suitable for contour tracing. Preserve these materials and motifs: aged wood, rusted iron, dry plant matter, stone — believable rot, rust, splinter, and wear.
+Do not assemble, overlap, attach, or pre-position the components relative to one another.
 
-Use case: stylized-concept
-Asset type: source sprite for deterministic shallow 3D extrusion
-Subject: herbbundle — fantasy set-dressing prop
-Realm art direction: fantasy
-Projection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.
-Composition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.
-Geometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.
-Lighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.
-Backdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.
-Style: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.
-Avoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.
+Visual language: mature, restrained, high-tier polygonal fantasy art. Construct the visible design
+with fewer, larger, deliberate triangular planes. Large facets must follow silhouette, construction,
+material boundaries, carving, folds, forging, anatomy, or fracture logic. Use smaller facets only at
+important transitions such as hinges, sockets, clasps, relief borders, damage, or other semantic
+landmarks. The result must read as sculpted low-poly form, not a triangle filter or cracked glass.
+Preserve ornate identity and believable wear. Avoid cute, toy-like, glossy, generic starter-tier art.
 
---- ASSET fantasy-flora-honeycomb-nook (honeycomb nook) ---
+Projection: use the exact projection declared for each component in the manifest. Every camera is
+perpendicular to its construction plane. No visible top, side, underside, back, foreshortening,
+perspective convergence, three-quarter view, isometric view, or painted thickness.
 
-Use case: stylized-concept
-Asset type: source sprite for deterministic shallow 3D extrusion
-Subject: honeycomb nook — fantasy set-dressing prop
-Realm art direction: fantasy
-Projection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.
-Composition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.
-Geometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.
-Lighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.
-Backdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.
-Style: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.
-Avoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.
+Geometry ownership: source art owns silhouette, broad albedo regions, polygonal material facets,
+paint, carving marks, wear, and damage marks. Real runtime geometry will own thickness, bevels,
+side faces, true relief, shadows, and directional lighting. Do not paint those into the source.
 
---- ASSET fantasy-flora-ivywall (ivywall) ---
+Backdrop: perfectly flat solid magenta #FF00FF chroma-key background for removal. The background must
+be one uniform color with no gradient, texture, floor, horizon, reflection, contact shadow, or light
+variation. Do not use magenta #FF00FF anywhere in the asset. Keep generous clean padding.
+
+Composition: SINGLE FULL-CANVAS COMPONENT. Exactly one isolated component per occupied cell, centered
+within that cell, fully visible, with a crisp silhouette and generous empty chroma separation. Do not
+let any silhouettes touch or cross cell boundaries. Cell position is only for later cropping and must
+not imply runtime position, scale, overlap, pivot, hinge angle, or assembly. No labels, captions,
+decorative border, neighboring unrelated objects, floating debris, scenery, hands, characters, text,
+or watermark.
+
+Avoid: pixel art, fake pixels, voxel art, micro-triangulation, dense tessellation, cracked-glass
+pattern, random polygon noise, poster illustration, baked directional light, rim light, cast shadow,
+perspective painting, scene dressing, or generic mobile-game loot.
+
+--- ASSET fantasy-clutter-emptybarrel [LATHE] ---
 
 Use case: stylized-concept
-Asset type: source sprite for deterministic shallow 3D extrusion
-Subject: ivywall — fantasy set-dressing prop
-Realm art direction: fantasy
-Projection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.
-Composition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.
-Geometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.
-Lighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.
-Backdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.
-Style: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.
-Avoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.
+Asset type: Genesis fantasy component generation sheet
 
---- ASSET fantasy-flora-lilypad (lilypad) ---
+Primary request: Create exactly 1 isolated component sprites for emptybarrel.
+Component manifest: 1. emptybarrel — role: complete set-dressing piece; construction class: LATHE; projection: strict profile; canonical pose: neutral authored orientation.. Preserve this semantic identity: a weathered emptybarrel from a lived-in dark-fantasy world. Preserve these kit landmarks and
+mechanical seams: outer silhouette suitable for contour tracing. Preserve these materials and motifs: aged wood, rusted iron, dry plant matter, stone — believable rot, rust, splinter, and wear.
+Do not assemble, overlap, attach, or pre-position the components relative to one another.
 
-Use case: stylized-concept
-Asset type: source sprite for deterministic shallow 3D extrusion
-Subject: lilypad — fantasy set-dressing prop
-Realm art direction: fantasy
-Projection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.
-Composition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.
-Geometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.
-Lighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.
-Backdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.
-Style: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.
-Avoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop. Authored as a FLAT TOP-PROJECTION ground decal source (strict top-down plan view), not a front elevation.
+Visual language: mature, restrained, high-tier polygonal fantasy art. Construct the visible design
+with fewer, larger, deliberate triangular planes. Large facets must follow silhouette, construction,
+material boundaries, carving, folds, forging, anatomy, or fracture logic. Use smaller facets only at
+important transitions such as hinges, sockets, clasps, relief borders, damage, or other semantic
+landmarks. The result must read as sculpted low-poly form, not a triangle filter or cracked glass.
+Preserve ornate identity and believable wear. Avoid cute, toy-like, glossy, generic starter-tier art.
 
---- ASSET fantasy-flora-mossboulder (mossboulder) ---
+Projection: use the exact projection declared for each component in the manifest. Every camera is
+perpendicular to its construction plane. No visible top, side, underside, back, foreshortening,
+perspective convergence, three-quarter view, isometric view, or painted thickness.
 
-Use case: stylized-concept
-Asset type: source sprite for deterministic shallow 3D extrusion
-Subject: mossboulder — fantasy set-dressing prop
-Realm art direction: fantasy
-Projection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.
-Composition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.
-Geometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.
-Lighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.
-Backdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.
-Style: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.
-Avoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.
+Geometry ownership: source art owns silhouette, broad albedo regions, polygonal material facets,
+paint, carving marks, wear, and damage marks. Real runtime geometry will own thickness, bevels,
+side faces, true relief, shadows, and directional lighting. Do not paint those into the source.
 
---- ASSET fantasy-flora-mushroomring (mushroomring) ---
+Backdrop: perfectly flat solid magenta #FF00FF chroma-key background for removal. The background must
+be one uniform color with no gradient, texture, floor, horizon, reflection, contact shadow, or light
+variation. Do not use magenta #FF00FF anywhere in the asset. Keep generous clean padding.
+
+Composition: SINGLE FULL-CANVAS COMPONENT. Exactly one isolated component per occupied cell, centered
+within that cell, fully visible, with a crisp silhouette and generous empty chroma separation. Do not
+let any silhouettes touch or cross cell boundaries. Cell position is only for later cropping and must
+not imply runtime position, scale, overlap, pivot, hinge angle, or assembly. No labels, captions,
+decorative border, neighboring unrelated objects, floating debris, scenery, hands, characters, text,
+or watermark.
+
+Avoid: pixel art, fake pixels, voxel art, micro-triangulation, dense tessellation, cracked-glass
+pattern, random polygon noise, poster illustration, baked directional light, rim light, cast shadow,
+perspective painting, scene dressing, or generic mobile-game loot.
+
+--- ASSET fantasy-clutter-brokenwheelbarrow [MODEL_RECIPE] ---
 
 Use case: stylized-concept
-Asset type: source sprite for deterministic shallow 3D extrusion
-Subject: mushroomring — fantasy set-dressing prop
-Realm art direction: fantasy
-Projection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.
-Composition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.
-Geometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.
-Lighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.
-Backdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.
-Style: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.
-Avoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop. Authored as a FLAT TOP-PROJECTION ground decal source (strict top-down plan view), not a front elevation.
+Asset type: Genesis fantasy component generation sheet
 
---- ASSET fantasy-flora-oak-alt (oak alt) ---
+Primary request: Create exactly 1 isolated component sprites for brokenwheelbarrow.
+Component manifest: 1. brokenwheelbarrow — role: complete set-dressing piece; construction class: MODEL_RECIPE; projection: strict front elevation (reference art for a deterministic geometry recipe); canonical pose: neutral authored orientation.. Preserve this semantic identity: a weathered brokenwheelbarrow from a lived-in dark-fantasy world. Preserve these kit landmarks and
+mechanical seams: outer silhouette suitable for contour tracing. Preserve these materials and motifs: aged wood, rusted iron, dry plant matter, stone — believable rot, rust, splinter, and wear.
+Do not assemble, overlap, attach, or pre-position the components relative to one another.
 
-Use case: stylized-concept
-Asset type: source sprite for deterministic shallow 3D extrusion
-Subject: oak alt — fantasy set-dressing prop
-Realm art direction: fantasy
-Projection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.
-Composition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.
-Geometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.
-Lighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.
-Backdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.
-Style: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.
-Avoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.
+Visual language: mature, restrained, high-tier polygonal fantasy art. Construct the visible design
+with fewer, larger, deliberate triangular planes. Large facets must follow silhouette, construction,
+material boundaries, carving, folds, forging, anatomy, or fracture logic. Use smaller facets only at
+important transitions such as hinges, sockets, clasps, relief borders, damage, or other semantic
+landmarks. The result must read as sculpted low-poly form, not a triangle filter or cracked glass.
+Preserve ornate identity and believable wear. Avoid cute, toy-like, glossy, generic starter-tier art.
 
---- ASSET fantasy-flora-oak (oak) ---
+Projection: use the exact projection declared for each component in the manifest. Every camera is
+perpendicular to its construction plane. No visible top, side, underside, back, foreshortening,
+perspective convergence, three-quarter view, isometric view, or painted thickness.
 
-Use case: stylized-concept
-Asset type: source sprite for deterministic shallow 3D extrusion
-Subject: oak — fantasy set-dressing prop
-Realm art direction: fantasy
-Projection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.
-Composition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.
-Geometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.
-Lighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.
-Backdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.
-Style: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.
-Avoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.
+Geometry ownership: source art owns silhouette, broad albedo regions, polygonal material facets,
+paint, carving marks, wear, and damage marks. Real runtime geometry will own thickness, bevels,
+side faces, true relief, shadows, and directional lighting. Do not paint those into the source.
 
---- ASSET fantasy-flora-rootarch (rootarch) ---
+Backdrop: perfectly flat solid magenta #FF00FF chroma-key background for removal. The background must
+be one uniform color with no gradient, texture, floor, horizon, reflection, contact shadow, or light
+variation. Do not use magenta #FF00FF anywhere in the asset. Keep generous clean padding.
+
+Composition: SINGLE FULL-CANVAS COMPONENT. Exactly one isolated component per occupied cell, centered
+within that cell, fully visible, with a crisp silhouette and generous empty chroma separation. Do not
+let any silhouettes touch or cross cell boundaries. Cell position is only for later cropping and must
+not imply runtime position, scale, overlap, pivot, hinge angle, or assembly. No labels, captions,
+decorative border, neighboring unrelated objects, floating debris, scenery, hands, characters, text,
+or watermark.
+
+Avoid: pixel art, fake pixels, voxel art, micro-triangulation, dense tessellation, cracked-glass
+pattern, random polygon noise, poster illustration, baked directional light, rim light, cast shadow,
+perspective painting, scene dressing, or generic mobile-game loot.
+
+--- ASSET fantasy-clutter-firewoodstack [MODEL_RECIPE] ---
 
 Use case: stylized-concept
-Asset type: source sprite for deterministic shallow 3D extrusion
-Subject: rootarch — fantasy set-dressing prop
-Realm art direction: fantasy
-Projection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.
-Composition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.
-Geometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.
-Lighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.
-Backdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.
-Style: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.
-Avoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.
+Asset type: Genesis fantasy component generation sheet
 
---- ASSET fantasy-flora-thistlecluster (thistlecluster) ---
+Primary request: Create exactly 1 isolated component sprites for firewoodstack.
+Component manifest: 1. firewoodstack — role: complete set-dressing piece; construction class: MODEL_RECIPE; projection: strict front elevation (reference art); canonical pose: neutral authored orientation.. Preserve this semantic identity: a weathered firewoodstack from a lived-in dark-fantasy world. Preserve these kit landmarks and
+mechanical seams: outer silhouette suitable for contour tracing. Preserve these materials and motifs: aged wood, rusted iron, dry plant matter, stone — believable rot, rust, splinter, and wear.
+Do not assemble, overlap, attach, or pre-position the components relative to one another.
 
-Use case: stylized-concept
-Asset type: source sprite for deterministic shallow 3D extrusion
-Subject: thistlecluster — fantasy set-dressing prop
-Realm art direction: fantasy
-Projection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.
-Composition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.
-Geometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.
-Lighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.
-Backdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.
-Style: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.
-Avoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.
+Visual language: mature, restrained, high-tier polygonal fantasy art. Construct the visible design
+with fewer, larger, deliberate triangular planes. Large facets must follow silhouette, construction,
+material boundaries, carving, folds, forging, anatomy, or fracture logic. Use smaller facets only at
+important transitions such as hinges, sockets, clasps, relief borders, damage, or other semantic
+landmarks. The result must read as sculpted low-poly form, not a triangle filter or cracked glass.
+Preserve ornate identity and believable wear. Avoid cute, toy-like, glossy, generic starter-tier art.
 
---- ASSET fantasy-flora-toadstool (toadstool) ---
+Projection: use the exact projection declared for each component in the manifest. Every camera is
+perpendicular to its construction plane. No visible top, side, underside, back, foreshortening,
+perspective convergence, three-quarter view, isometric view, or painted thickness.
 
-Use case: stylized-concept
-Asset type: source sprite for deterministic shallow 3D extrusion
-Subject: toadstool — fantasy set-dressing prop
-Realm art direction: fantasy
-Projection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.
-Composition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.
-Geometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.
-Lighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.
-Backdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.
-Style: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.
-Avoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.
+Geometry ownership: source art owns silhouette, broad albedo regions, polygonal material facets,
+paint, carving marks, wear, and damage marks. Real runtime geometry will own thickness, bevels,
+side faces, true relief, shadows, and directional lighting. Do not paint those into the source.
 
---- ASSET fantasy-flora-vinelattice (vinelattice) ---
+Backdrop: perfectly flat solid magenta #FF00FF chroma-key background for removal. The background must
+be one uniform color with no gradient, texture, floor, horizon, reflection, contact shadow, or light
+variation. Do not use magenta #FF00FF anywhere in the asset. Keep generous clean padding.
+
+Composition: SINGLE FULL-CANVAS COMPONENT. Exactly one isolated component per occupied cell, centered
+within that cell, fully visible, with a crisp silhouette and generous empty chroma separation. Do not
+let any silhouettes touch or cross cell boundaries. Cell position is only for later cropping and must
+not imply runtime position, scale, overlap, pivot, hinge angle, or assembly. No labels, captions,
+decorative border, neighboring unrelated objects, floating debris, scenery, hands, characters, text,
+or watermark.
+
+Avoid: pixel art, fake pixels, voxel art, micro-triangulation, dense tessellation, cracked-glass
+pattern, random polygon noise, poster illustration, baked directional light, rim light, cast shadow,
+perspective painting, scene dressing, or generic mobile-game loot.
+
+--- ASSET fantasy-clutter-hayloose [MODEL_RECIPE] ---
 
 Use case: stylized-concept
-Asset type: source sprite for deterministic shallow 3D extrusion
-Subject: vinelattice — fantasy set-dressing prop
-Realm art direction: fantasy
-Projection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.
-Composition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.
-Geometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.
-Lighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.
-Backdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.
-Style: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.
-Avoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.
+Asset type: Genesis fantasy component generation sheet
 
---- ASSET fantasy-flora-wildflowerpatch (wildflowerpatch) ---
+Primary request: Create exactly 1 isolated component sprites for hayloose.
+Component manifest: 1. hayloose — role: complete set-dressing piece; construction class: MODEL_RECIPE; projection: strict front elevation (reference art); canonical pose: neutral authored orientation.. Preserve this semantic identity: a weathered hayloose from a lived-in dark-fantasy world. Preserve these kit landmarks and
+mechanical seams: outer silhouette suitable for contour tracing. Preserve these materials and motifs: aged wood, rusted iron, dry plant matter, stone — believable rot, rust, splinter, and wear.
+Do not assemble, overlap, attach, or pre-position the components relative to one another.
 
-Use case: stylized-concept
-Asset type: source sprite for deterministic shallow 3D extrusion
-Subject: wildflowerpatch — fantasy set-dressing prop
-Realm art direction: fantasy
-Projection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.
-Composition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.
-Geometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.
-Lighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.
-Backdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.
-Style: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.
-Avoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop. Authored as a FLAT TOP-PROJECTION ground decal source (strict top-down plan view), not a front elevation.
+Visual language: mature, restrained, high-tier polygonal fantasy art. Construct the visible design
+with fewer, larger, deliberate triangular planes. Large facets must follow silhouette, construction,
+material boundaries, carving, folds, forging, anatomy, or fracture logic. Use smaller facets only at
+important transitions such as hinges, sockets, clasps, relief borders, damage, or other semantic
+landmarks. The result must read as sculpted low-poly form, not a triangle filter or cracked glass.
+Preserve ornate identity and believable wear. Avoid cute, toy-like, glossy, generic starter-tier art.
 
---- ASSET fantasy-flora-willowdrape (willowdrape) ---
+Projection: use the exact projection declared for each component in the manifest. Every camera is
+perpendicular to its construction plane. No visible top, side, underside, back, foreshortening,
+perspective convergence, three-quarter view, isometric view, or painted thickness.
 
-Use case: stylized-concept
-Asset type: source sprite for deterministic shallow 3D extrusion
-Subject: willowdrape — fantasy set-dressing prop
-Realm art direction: fantasy
-Projection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.
-Composition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.
-Geometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.
-Lighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.
-Backdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.
-Style: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.
-Avoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.
+Geometry ownership: source art owns silhouette, broad albedo regions, polygonal material facets,
+paint, carving marks, wear, and damage marks. Real runtime geometry will own thickness, bevels,
+side faces, true relief, shadows, and directional lighting. Do not paint those into the source.
 
---- ASSET fantasy-obj-campfire-dead (campfire dead) ---
+Backdrop: perfectly flat solid magenta #FF00FF chroma-key background for removal. The background must
+be one uniform color with no gradient, texture, floor, horizon, reflection, contact shadow, or light
+variation. Do not use magenta #FF00FF anywhere in the asset. Keep generous clean padding.
+
+Composition: SINGLE FULL-CANVAS COMPONENT. Exactly one isolated component per occupied cell, centered
+within that cell, fully visible, with a crisp silhouette and generous empty chroma separation. Do not
+let any silhouettes touch or cross cell boundaries. Cell position is only for later cropping and must
+not imply runtime position, scale, overlap, pivot, hinge angle, or assembly. No labels, captions,
+decorative border, neighboring unrelated objects, floating debris, scenery, hands, characters, text,
+or watermark.
+
+Avoid: pixel art, fake pixels, voxel art, micro-triangulation, dense tessellation, cracked-glass
+pattern, random polygon noise, poster illustration, baked directional light, rim light, cast shadow,
+perspective painting, scene dressing, or generic mobile-game loot.
+
+--- ASSET fantasy-clutter-rubblewall [MODEL_RECIPE] ---
 
 Use case: stylized-concept
-Asset type: source sprite for deterministic shallow 3D extrusion
-Subject: campfire dead — fantasy set-dressing prop
-Realm art direction: fantasy
-Projection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.
-Composition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.
-Geometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.
-Lighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.
-Backdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.
-Style: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.
-Avoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.
+Asset type: Genesis fantasy component generation sheet
 
---- ASSET fantasy-obj-campfire-lit (campfire lit) ---
+Primary request: Create exactly 1 isolated component sprites for rubblewall.
+Component manifest: 1. rubblewall — role: complete set-dressing piece; construction class: MODEL_RECIPE; projection: strict front elevation (reference art); canonical pose: neutral authored orientation.. Preserve this semantic identity: a weathered rubblewall from a lived-in dark-fantasy world. Preserve these kit landmarks and
+mechanical seams: outer silhouette suitable for contour tracing. Preserve these materials and motifs: aged wood, rusted iron, dry plant matter, stone — believable rot, rust, splinter, and wear.
+Do not assemble, overlap, attach, or pre-position the components relative to one another.
+
+Visual language: mature, restrained, high-tier polygonal fantasy art. Construct the visible design
+with fewer, larger, deliberate triangular planes. Large facets must follow silhouette, construction,
+material boundaries, carving, folds, forging, anatomy, or fracture logic. Use smaller facets only at
+important transitions such as hinges, sockets, clasps, relief borders, damage, or other semantic
+landmarks. The result must read as sculpted low-poly form, not a triangle filter or cracked glass.
+Preserve ornate identity and believable wear. Avoid cute, toy-like, glossy, generic starter-tier art.
+
+Projection: use the exact projection declared for each component in the manifest. Every camera is
+perpendicular to its construction plane. No visible top, side, underside, back, foreshortening,
+perspective convergence, three-quarter view, isometric view, or painted thickness.
+
+Geometry ownership: source art owns silhouette, broad albedo regions, polygonal material facets,
+paint, carving marks, wear, and damage marks. Real runtime geometry will own thickness, bevels,
+side faces, true relief, shadows, and directional lighting. Do not paint those into the source.
+
+Backdrop: perfectly flat solid magenta #FF00FF chroma-key background for removal. The background must
+be one uniform color with no gradient, texture, floor, horizon, reflection, contact shadow, or light
+variation. Do not use magenta #FF00FF anywhere in the asset. Keep generous clean padding.
+
+Composition: SINGLE FULL-CANVAS COMPONENT. Exactly one isolated component per occupied cell, centered
+within that cell, fully visible, with a crisp silhouette and generous empty chroma separation. Do not
+let any silhouettes touch or cross cell boundaries. Cell position is only for later cropping and must
+not imply runtime position, scale, overlap, pivot, hinge angle, or assembly. No labels, captions,
+decorative border, neighboring unrelated objects, floating debris, scenery, hands, characters, text,
+or watermark.
+
+Avoid: pixel art, fake pixels, voxel art, micro-triangulation, dense tessellation, cracked-glass
+pattern, random polygon noise, poster illustration, baked directional light, rim light, cast shadow,
+perspective painting, scene dressing, or generic mobile-game loot.
+
+--- ASSET fantasy-clutter-tackleheap [MODEL_RECIPE] ---
 
 Use case: stylized-concept
-Asset type: source sprite for deterministic shallow 3D extrusion
-Subject: campfire lit — fantasy set-dressing prop
-Realm art direction: fantasy
-Projection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.
-Composition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.
-Geometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.
-Lighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.
-Backdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.
-Style: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.
-Avoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.
+Asset type: Genesis fantasy component generation sheet
 
---- ASSET fantasy-obj-campfire-unlit (campfire unlit) ---
+Primary request: Create exactly 1 isolated component sprites for tackleheap.
+Component manifest: 1. tackleheap — role: complete set-dressing piece; construction class: MODEL_RECIPE; projection: strict front elevation (reference art); canonical pose: neutral authored orientation.. Preserve this semantic identity: a weathered tackleheap from a lived-in dark-fantasy world. Preserve these kit landmarks and
+mechanical seams: outer silhouette suitable for contour tracing. Preserve these materials and motifs: aged wood, rusted iron, dry plant matter, stone — believable rot, rust, splinter, and wear.
+Do not assemble, overlap, attach, or pre-position the components relative to one another.
+
+Visual language: mature, restrained, high-tier polygonal fantasy art. Construct the visible design
+with fewer, larger, deliberate triangular planes. Large facets must follow silhouette, construction,
+material boundaries, carving, folds, forging, anatomy, or fracture logic. Use smaller facets only at
+important transitions such as hinges, sockets, clasps, relief borders, damage, or other semantic
+landmarks. The result must read as sculpted low-poly form, not a triangle filter or cracked glass.
+Preserve ornate identity and believable wear. Avoid cute, toy-like, glossy, generic starter-tier art.
+
+Projection: use the exact projection declared for each component in the manifest. Every camera is
+perpendicular to its construction plane. No visible top, side, underside, back, foreshortening,
+perspective convergence, three-quarter view, isometric view, or painted thickness.
+
+Geometry ownership: source art owns silhouette, broad albedo regions, polygonal material facets,
+paint, carving marks, wear, and damage marks. Real runtime geometry will own thickness, bevels,
+side faces, true relief, shadows, and directional lighting. Do not paint those into the source.
+
+Backdrop: perfectly flat solid magenta #FF00FF chroma-key background for removal. The background must
+be one uniform color with no gradient, texture, floor, horizon, reflection, contact shadow, or light
+variation. Do not use magenta #FF00FF anywhere in the asset. Keep generous clean padding.
+
+Composition: SINGLE FULL-CANVAS COMPONENT. Exactly one isolated component per occupied cell, centered
+within that cell, fully visible, with a crisp silhouette and generous empty chroma separation. Do not
+let any silhouettes touch or cross cell boundaries. Cell position is only for later cropping and must
+not imply runtime position, scale, overlap, pivot, hinge angle, or assembly. No labels, captions,
+decorative border, neighboring unrelated objects, floating debris, scenery, hands, characters, text,
+or watermark.
+
+Avoid: pixel art, fake pixels, voxel art, micro-triangulation, dense tessellation, cracked-glass
+pattern, random polygon noise, poster illustration, baked directional light, rim light, cast shadow,
+perspective painting, scene dressing, or generic mobile-game loot.
+
+--- ASSET fantasy-clutter-woodpile [MODEL_RECIPE] ---
 
 Use case: stylized-concept
-Asset type: source sprite for deterministic shallow 3D extrusion
-Subject: campfire unlit — fantasy set-dressing prop
-Realm art direction: fantasy
-Projection: strict flat orthographic front elevation. Camera axis exactly perpendicular to the object's broad face. Zero perspective and zero foreshortening. Show no top face, side face, underside, floor, or horizon.
-Composition: exactly one complete object, centered, upright in its authored mount orientation, generous even padding, no detached particles or secondary objects.
-Geometry readability: a crisp closed outer silhouette suitable for contour tracing. Interior holes may be shown only when physically real. Do not fake thickness, bevel, or a three-quarter view in the painting; the geometry compiler adds depth later.
-Lighting: nearly unlit/albedo presentation with very soft frontal illumination only. No cast shadow, contact shadow, rim light, bloom, reflection, ambient scene light, or directional shading that implies depth.
-Backdrop: perfectly uniform solid #ff00ff chroma key. No gradient, texture, floor plane, vignette, or key color inside the object.
-Style: mature faceted low-poly tabletop-diorama prop. Strong adult silhouette, restrained palette, crisp polygonal albedo regions, tactile material wear, no cute or toy-like proportions. Material identity comes from color and surface marks rather than perspective or painted illumination. The runtime mesh will provide the final visible triangulation and lighting.
-Avoid: isometric, three-quarter, oblique, tilted camera, visible thickness, visible top, visible side, painterly directional shading, baked specular highlights, fake normal-map lighting, dramatic lighting, scene dressing, text, watermark, frame crop.
+Asset type: Genesis fantasy component generation sheet
+
+Primary request: Create exactly 1 isolated component sprites for woodpile.
+Component manifest: 1. woodpile — role: complete set-dressing piece; construction class: MODEL_RECIPE; projection: strict front elevation (reference art); canonical pose: neutral authored orientation.. Preserve this semantic identity: a weathered woodpile from a lived-in dark-fantasy world. Preserve these kit landmarks and
+mechanical seams: outer silhouette suitable for contour tracing. Preserve these materials and motifs: aged wood, rusted iron, dry plant matter, stone — believable rot, rust, splinter, and wear.
+Do not assemble, overlap, attach, or pre-position the components relative to one another.
+
+Visual language: mature, restrained, high-tier polygonal fantasy art. Construct the visible design
+with fewer, larger, deliberate triangular planes. Large facets must follow silhouette, construction,
+material boundaries, carving, folds, forging, anatomy, or fracture logic. Use smaller facets only at
+important transitions such as hinges, sockets, clasps, relief borders, damage, or other semantic
+landmarks. The result must read as sculpted low-poly form, not a triangle filter or cracked glass.
+Preserve ornate identity and believable wear. Avoid cute, toy-like, glossy, generic starter-tier art.
+
+Projection: use the exact projection declared for each component in the manifest. Every camera is
+perpendicular to its construction plane. No visible top, side, underside, back, foreshortening,
+perspective convergence, three-quarter view, isometric view, or painted thickness.
+
+Geometry ownership: source art owns silhouette, broad albedo regions, polygonal material facets,
+paint, carving marks, wear, and damage marks. Real runtime geometry will own thickness, bevels,
+side faces, true relief, shadows, and directional lighting. Do not paint those into the source.
+
+Backdrop: perfectly flat solid magenta #FF00FF chroma-key background for removal. The background must
+be one uniform color with no gradient, texture, floor, horizon, reflection, contact shadow, or light
+variation. Do not use magenta #FF00FF anywhere in the asset. Keep generous clean padding.
+
+Composition: SINGLE FULL-CANVAS COMPONENT. Exactly one isolated component per occupied cell, centered
+within that cell, fully visible, with a crisp silhouette and generous empty chroma separation. Do not
+let any silhouettes touch or cross cell boundaries. Cell position is only for later cropping and must
+not imply runtime position, scale, overlap, pivot, hinge angle, or assembly. No labels, captions,
+decorative border, neighboring unrelated objects, floating debris, scenery, hands, characters, text,
+or watermark.
+
+Avoid: pixel art, fake pixels, voxel art, micro-triangulation, dense tessellation, cracked-glass
+pattern, random polygon noise, poster illustration, baked directional light, rim light, cast shadow,
+perspective painting, scene dressing, or generic mobile-game loot.
+
+--- ASSET fantasy-clutter-woodpile-alt [MODEL_RECIPE] ---
+
+Use case: stylized-concept
+Asset type: Genesis fantasy component generation sheet
+
+Primary request: Create exactly 1 isolated component sprites for woodpile alt.
+Component manifest: 1. woodpile alt — role: complete set-dressing piece; construction class: MODEL_RECIPE; projection: strict front elevation (reference art); canonical pose: neutral authored orientation.. Preserve this semantic identity: a weathered woodpile alt from a lived-in dark-fantasy world. Preserve these kit landmarks and
+mechanical seams: outer silhouette suitable for contour tracing. Preserve these materials and motifs: aged wood, rusted iron, dry plant matter, stone — believable rot, rust, splinter, and wear.
+Do not assemble, overlap, attach, or pre-position the components relative to one another.
+
+Visual language: mature, restrained, high-tier polygonal fantasy art. Construct the visible design
+with fewer, larger, deliberate triangular planes. Large facets must follow silhouette, construction,
+material boundaries, carving, folds, forging, anatomy, or fracture logic. Use smaller facets only at
+important transitions such as hinges, sockets, clasps, relief borders, damage, or other semantic
+landmarks. The result must read as sculpted low-poly form, not a triangle filter or cracked glass.
+Preserve ornate identity and believable wear. Avoid cute, toy-like, glossy, generic starter-tier art.
+
+Projection: use the exact projection declared for each component in the manifest. Every camera is
+perpendicular to its construction plane. No visible top, side, underside, back, foreshortening,
+perspective convergence, three-quarter view, isometric view, or painted thickness.
+
+Geometry ownership: source art owns silhouette, broad albedo regions, polygonal material facets,
+paint, carving marks, wear, and damage marks. Real runtime geometry will own thickness, bevels,
+side faces, true relief, shadows, and directional lighting. Do not paint those into the source.
+
+Backdrop: perfectly flat solid magenta #FF00FF chroma-key background for removal. The background must
+be one uniform color with no gradient, texture, floor, horizon, reflection, contact shadow, or light
+variation. Do not use magenta #FF00FF anywhere in the asset. Keep generous clean padding.
+
+Composition: SINGLE FULL-CANVAS COMPONENT. Exactly one isolated component per occupied cell, centered
+within that cell, fully visible, with a crisp silhouette and generous empty chroma separation. Do not
+let any silhouettes touch or cross cell boundaries. Cell position is only for later cropping and must
+not imply runtime position, scale, overlap, pivot, hinge angle, or assembly. No labels, captions,
+decorative border, neighboring unrelated objects, floating debris, scenery, hands, characters, text,
+or watermark.
+
+Avoid: pixel art, fake pixels, voxel art, micro-triangulation, dense tessellation, cracked-glass
+pattern, random polygon noise, poster illustration, baked directional light, rim light, cast shadow,
+perspective painting, scene dressing, or generic mobile-game loot.
+
+--- ASSET fantasy-flora-oak [MODEL_RECIPE] ---
+
+Use case: stylized-concept
+Asset type: Genesis fantasy component generation sheet
+
+Primary request: Create exactly 1 isolated component sprites for oak.
+Component manifest: 1. oak — role: complete set-dressing piece; construction class: MODEL_RECIPE; projection: strict front elevation (reference art for a deterministic geometry recipe); canonical pose: neutral authored orientation.. Preserve this semantic identity: a weathered oak from a lived-in dark-fantasy world. Preserve these kit landmarks and
+mechanical seams: outer silhouette suitable for contour tracing. Preserve these materials and motifs: aged wood, rusted iron, dry plant matter, stone — believable rot, rust, splinter, and wear.
+Do not assemble, overlap, attach, or pre-position the components relative to one another.
+
+Visual language: mature, restrained, high-tier polygonal fantasy art. Construct the visible design
+with fewer, larger, deliberate triangular planes. Large facets must follow silhouette, construction,
+material boundaries, carving, folds, forging, anatomy, or fracture logic. Use smaller facets only at
+important transitions such as hinges, sockets, clasps, relief borders, damage, or other semantic
+landmarks. The result must read as sculpted low-poly form, not a triangle filter or cracked glass.
+Preserve ornate identity and believable wear. Avoid cute, toy-like, glossy, generic starter-tier art.
+
+Projection: use the exact projection declared for each component in the manifest. Every camera is
+perpendicular to its construction plane. No visible top, side, underside, back, foreshortening,
+perspective convergence, three-quarter view, isometric view, or painted thickness.
+
+Geometry ownership: source art owns silhouette, broad albedo regions, polygonal material facets,
+paint, carving marks, wear, and damage marks. Real runtime geometry will own thickness, bevels,
+side faces, true relief, shadows, and directional lighting. Do not paint those into the source.
+
+Backdrop: perfectly flat solid magenta #FF00FF chroma-key background for removal. The background must
+be one uniform color with no gradient, texture, floor, horizon, reflection, contact shadow, or light
+variation. Do not use magenta #FF00FF anywhere in the asset. Keep generous clean padding.
+
+Composition: SINGLE FULL-CANVAS COMPONENT. Exactly one isolated component per occupied cell, centered
+within that cell, fully visible, with a crisp silhouette and generous empty chroma separation. Do not
+let any silhouettes touch or cross cell boundaries. Cell position is only for later cropping and must
+not imply runtime position, scale, overlap, pivot, hinge angle, or assembly. No labels, captions,
+decorative border, neighboring unrelated objects, floating debris, scenery, hands, characters, text,
+or watermark.
+
+Avoid: pixel art, fake pixels, voxel art, micro-triangulation, dense tessellation, cracked-glass
+pattern, random polygon noise, poster illustration, baked directional light, rim light, cast shadow,
+perspective painting, scene dressing, or generic mobile-game loot.
+
+--- ASSET fantasy-flora-oak-alt [MODEL_RECIPE] ---
+
+Use case: stylized-concept
+Asset type: Genesis fantasy component generation sheet
+
+Primary request: Create exactly 1 isolated component sprites for oak alt.
+Component manifest: 1. oak alt — role: complete set-dressing piece; construction class: MODEL_RECIPE; projection: strict front elevation (reference art for a deterministic geometry recipe); canonical pose: neutral authored orientation.. Preserve this semantic identity: a weathered oak alt from a lived-in dark-fantasy world. Preserve these kit landmarks and
+mechanical seams: outer silhouette suitable for contour tracing. Preserve these materials and motifs: aged wood, rusted iron, dry plant matter, stone — believable rot, rust, splinter, and wear.
+Do not assemble, overlap, attach, or pre-position the components relative to one another.
+
+Visual language: mature, restrained, high-tier polygonal fantasy art. Construct the visible design
+with fewer, larger, deliberate triangular planes. Large facets must follow silhouette, construction,
+material boundaries, carving, folds, forging, anatomy, or fracture logic. Use smaller facets only at
+important transitions such as hinges, sockets, clasps, relief borders, damage, or other semantic
+landmarks. The result must read as sculpted low-poly form, not a triangle filter or cracked glass.
+Preserve ornate identity and believable wear. Avoid cute, toy-like, glossy, generic starter-tier art.
+
+Projection: use the exact projection declared for each component in the manifest. Every camera is
+perpendicular to its construction plane. No visible top, side, underside, back, foreshortening,
+perspective convergence, three-quarter view, isometric view, or painted thickness.
+
+Geometry ownership: source art owns silhouette, broad albedo regions, polygonal material facets,
+paint, carving marks, wear, and damage marks. Real runtime geometry will own thickness, bevels,
+side faces, true relief, shadows, and directional lighting. Do not paint those into the source.
+
+Backdrop: perfectly flat solid magenta #FF00FF chroma-key background for removal. The background must
+be one uniform color with no gradient, texture, floor, horizon, reflection, contact shadow, or light
+variation. Do not use magenta #FF00FF anywhere in the asset. Keep generous clean padding.
+
+Composition: SINGLE FULL-CANVAS COMPONENT. Exactly one isolated component per occupied cell, centered
+within that cell, fully visible, with a crisp silhouette and generous empty chroma separation. Do not
+let any silhouettes touch or cross cell boundaries. Cell position is only for later cropping and must
+not imply runtime position, scale, overlap, pivot, hinge angle, or assembly. No labels, captions,
+decorative border, neighboring unrelated objects, floating debris, scenery, hands, characters, text,
+or watermark.
+
+Avoid: pixel art, fake pixels, voxel art, micro-triangulation, dense tessellation, cracked-glass
+pattern, random polygon noise, poster illustration, baked directional light, rim light, cast shadow,
+perspective painting, scene dressing, or generic mobile-game loot.
+
+--- ASSET fantasy-flora-birchgrove [MODEL_RECIPE] ---
+
+Use case: stylized-concept
+Asset type: Genesis fantasy component generation sheet
+
+Primary request: Create exactly 1 isolated component sprites for birchgrove.
+Component manifest: 1. birchgrove — role: complete set-dressing piece; construction class: MODEL_RECIPE; projection: strict front elevation (reference art for a deterministic geometry recipe); canonical pose: neutral authored orientation.. Preserve this semantic identity: a weathered birchgrove from a lived-in dark-fantasy world. Preserve these kit landmarks and
+mechanical seams: outer silhouette suitable for contour tracing. Preserve these materials and motifs: aged wood, rusted iron, dry plant matter, stone — believable rot, rust, splinter, and wear.
+Do not assemble, overlap, attach, or pre-position the components relative to one another.
+
+Visual language: mature, restrained, high-tier polygonal fantasy art. Construct the visible design
+with fewer, larger, deliberate triangular planes. Large facets must follow silhouette, construction,
+material boundaries, carving, folds, forging, anatomy, or fracture logic. Use smaller facets only at
+important transitions such as hinges, sockets, clasps, relief borders, damage, or other semantic
+landmarks. The result must read as sculpted low-poly form, not a triangle filter or cracked glass.
+Preserve ornate identity and believable wear. Avoid cute, toy-like, glossy, generic starter-tier art.
+
+Projection: use the exact projection declared for each component in the manifest. Every camera is
+perpendicular to its construction plane. No visible top, side, underside, back, foreshortening,
+perspective convergence, three-quarter view, isometric view, or painted thickness.
+
+Geometry ownership: source art owns silhouette, broad albedo regions, polygonal material facets,
+paint, carving marks, wear, and damage marks. Real runtime geometry will own thickness, bevels,
+side faces, true relief, shadows, and directional lighting. Do not paint those into the source.
+
+Backdrop: perfectly flat solid magenta #FF00FF chroma-key background for removal. The background must
+be one uniform color with no gradient, texture, floor, horizon, reflection, contact shadow, or light
+variation. Do not use magenta #FF00FF anywhere in the asset. Keep generous clean padding.
+
+Composition: SINGLE FULL-CANVAS COMPONENT. Exactly one isolated component per occupied cell, centered
+within that cell, fully visible, with a crisp silhouette and generous empty chroma separation. Do not
+let any silhouettes touch or cross cell boundaries. Cell position is only for later cropping and must
+not imply runtime position, scale, overlap, pivot, hinge angle, or assembly. No labels, captions,
+decorative border, neighboring unrelated objects, floating debris, scenery, hands, characters, text,
+or watermark.
+
+Avoid: pixel art, fake pixels, voxel art, micro-triangulation, dense tessellation, cracked-glass
+pattern, random polygon noise, poster illustration, baked directional light, rim light, cast shadow,
+perspective painting, scene dressing, or generic mobile-game loot.
+
+--- ASSET fantasy-flora-hedgerow [MODEL_RECIPE] ---
+
+Use case: stylized-concept
+Asset type: Genesis fantasy component generation sheet
+
+Primary request: Create exactly 1 isolated component sprites for hedgerow.
+Component manifest: 1. hedgerow — role: complete set-dressing piece; construction class: MODEL_RECIPE; projection: strict front elevation (reference art for a deterministic geometry recipe); canonical pose: neutral authored orientation.. Preserve this semantic identity: a weathered hedgerow from a lived-in dark-fantasy world. Preserve these kit landmarks and
+mechanical seams: outer silhouette suitable for contour tracing. Preserve these materials and motifs: aged wood, rusted iron, dry plant matter, stone — believable rot, rust, splinter, and wear.
+Do not assemble, overlap, attach, or pre-position the components relative to one another.
+
+Visual language: mature, restrained, high-tier polygonal fantasy art. Construct the visible design
+with fewer, larger, deliberate triangular planes. Large facets must follow silhouette, construction,
+material boundaries, carving, folds, forging, anatomy, or fracture logic. Use smaller facets only at
+important transitions such as hinges, sockets, clasps, relief borders, damage, or other semantic
+landmarks. The result must read as sculpted low-poly form, not a triangle filter or cracked glass.
+Preserve ornate identity and believable wear. Avoid cute, toy-like, glossy, generic starter-tier art.
+
+Projection: use the exact projection declared for each component in the manifest. Every camera is
+perpendicular to its construction plane. No visible top, side, underside, back, foreshortening,
+perspective convergence, three-quarter view, isometric view, or painted thickness.
+
+Geometry ownership: source art owns silhouette, broad albedo regions, polygonal material facets,
+paint, carving marks, wear, and damage marks. Real runtime geometry will own thickness, bevels,
+side faces, true relief, shadows, and directional lighting. Do not paint those into the source.
+
+Backdrop: perfectly flat solid magenta #FF00FF chroma-key background for removal. The background must
+be one uniform color with no gradient, texture, floor, horizon, reflection, contact shadow, or light
+variation. Do not use magenta #FF00FF anywhere in the asset. Keep generous clean padding.
+
+Composition: SINGLE FULL-CANVAS COMPONENT. Exactly one isolated component per occupied cell, centered
+within that cell, fully visible, with a crisp silhouette and generous empty chroma separation. Do not
+let any silhouettes touch or cross cell boundaries. Cell position is only for later cropping and must
+not imply runtime position, scale, overlap, pivot, hinge angle, or assembly. No labels, captions,
+decorative border, neighboring unrelated objects, floating debris, scenery, hands, characters, text,
+or watermark.
+
+Avoid: pixel art, fake pixels, voxel art, micro-triangulation, dense tessellation, cracked-glass
+pattern, random polygon noise, poster illustration, baked directional light, rim light, cast shadow,
+perspective painting, scene dressing, or generic mobile-game loot.
+
+--- ASSET fantasy-flora-willowdrape [MODEL_RECIPE] ---
+
+Use case: stylized-concept
+Asset type: Genesis fantasy component generation sheet
+
+Primary request: Create exactly 1 isolated component sprites for willowdrape.
+Component manifest: 1. willowdrape — role: complete set-dressing piece; construction class: MODEL_RECIPE; projection: strict front elevation (reference art for a deterministic geometry recipe); canonical pose: neutral authored orientation.. Preserve this semantic identity: a weathered willowdrape from a lived-in dark-fantasy world. Preserve these kit landmarks and
+mechanical seams: outer silhouette suitable for contour tracing. Preserve these materials and motifs: aged wood, rusted iron, dry plant matter, stone — believable rot, rust, splinter, and wear.
+Do not assemble, overlap, attach, or pre-position the components relative to one another.
+
+Visual language: mature, restrained, high-tier polygonal fantasy art. Construct the visible design
+with fewer, larger, deliberate triangular planes. Large facets must follow silhouette, construction,
+material boundaries, carving, folds, forging, anatomy, or fracture logic. Use smaller facets only at
+important transitions such as hinges, sockets, clasps, relief borders, damage, or other semantic
+landmarks. The result must read as sculpted low-poly form, not a triangle filter or cracked glass.
+Preserve ornate identity and believable wear. Avoid cute, toy-like, glossy, generic starter-tier art.
+
+Projection: use the exact projection declared for each component in the manifest. Every camera is
+perpendicular to its construction plane. No visible top, side, underside, back, foreshortening,
+perspective convergence, three-quarter view, isometric view, or painted thickness.
+
+Geometry ownership: source art owns silhouette, broad albedo regions, polygonal material facets,
+paint, carving marks, wear, and damage marks. Real runtime geometry will own thickness, bevels,
+side faces, true relief, shadows, and directional lighting. Do not paint those into the source.
+
+Backdrop: perfectly flat solid magenta #FF00FF chroma-key background for removal. The background must
+be one uniform color with no gradient, texture, floor, horizon, reflection, contact shadow, or light
+variation. Do not use magenta #FF00FF anywhere in the asset. Keep generous clean padding.
+
+Composition: SINGLE FULL-CANVAS COMPONENT. Exactly one isolated component per occupied cell, centered
+within that cell, fully visible, with a crisp silhouette and generous empty chroma separation. Do not
+let any silhouettes touch or cross cell boundaries. Cell position is only for later cropping and must
+not imply runtime position, scale, overlap, pivot, hinge angle, or assembly. No labels, captions,
+decorative border, neighboring unrelated objects, floating debris, scenery, hands, characters, text,
+or watermark.
+
+Avoid: pixel art, fake pixels, voxel art, micro-triangulation, dense tessellation, cracked-glass
+pattern, random polygon noise, poster illustration, baked directional light, rim light, cast shadow,
+perspective painting, scene dressing, or generic mobile-game loot.
+
+--- ASSET fantasy-flora-mossboulder [MODEL_RECIPE] ---
+
+Use case: stylized-concept
+Asset type: Genesis fantasy component generation sheet
+
+Primary request: Create exactly 1 isolated component sprites for mossboulder.
+Component manifest: 1. mossboulder — role: complete set-dressing piece; construction class: MODEL_RECIPE; projection: strict front elevation (reference art for a deterministic geometry recipe); canonical pose: neutral authored orientation.. Preserve this semantic identity: a weathered mossboulder from a lived-in dark-fantasy world. Preserve these kit landmarks and
+mechanical seams: outer silhouette suitable for contour tracing. Preserve these materials and motifs: aged wood, rusted iron, dry plant matter, stone — believable rot, rust, splinter, and wear.
+Do not assemble, overlap, attach, or pre-position the components relative to one another.
+
+Visual language: mature, restrained, high-tier polygonal fantasy art. Construct the visible design
+with fewer, larger, deliberate triangular planes. Large facets must follow silhouette, construction,
+material boundaries, carving, folds, forging, anatomy, or fracture logic. Use smaller facets only at
+important transitions such as hinges, sockets, clasps, relief borders, damage, or other semantic
+landmarks. The result must read as sculpted low-poly form, not a triangle filter or cracked glass.
+Preserve ornate identity and believable wear. Avoid cute, toy-like, glossy, generic starter-tier art.
+
+Projection: use the exact projection declared for each component in the manifest. Every camera is
+perpendicular to its construction plane. No visible top, side, underside, back, foreshortening,
+perspective convergence, three-quarter view, isometric view, or painted thickness.
+
+Geometry ownership: source art owns silhouette, broad albedo regions, polygonal material facets,
+paint, carving marks, wear, and damage marks. Real runtime geometry will own thickness, bevels,
+side faces, true relief, shadows, and directional lighting. Do not paint those into the source.
+
+Backdrop: perfectly flat solid magenta #FF00FF chroma-key background for removal. The background must
+be one uniform color with no gradient, texture, floor, horizon, reflection, contact shadow, or light
+variation. Do not use magenta #FF00FF anywhere in the asset. Keep generous clean padding.
+
+Composition: SINGLE FULL-CANVAS COMPONENT. Exactly one isolated component per occupied cell, centered
+within that cell, fully visible, with a crisp silhouette and generous empty chroma separation. Do not
+let any silhouettes touch or cross cell boundaries. Cell position is only for later cropping and must
+not imply runtime position, scale, overlap, pivot, hinge angle, or assembly. No labels, captions,
+decorative border, neighboring unrelated objects, floating debris, scenery, hands, characters, text,
+or watermark.
+
+Avoid: pixel art, fake pixels, voxel art, micro-triangulation, dense tessellation, cracked-glass
+pattern, random polygon noise, poster illustration, baked directional light, rim light, cast shadow,
+perspective painting, scene dressing, or generic mobile-game loot.
+
+--- ASSET fantasy-flora-rootarch [MODEL_RECIPE] ---
+
+Use case: stylized-concept
+Asset type: Genesis fantasy component generation sheet
+
+Primary request: Create exactly 1 isolated component sprites for rootarch.
+Component manifest: 1. rootarch — role: complete set-dressing piece; construction class: MODEL_RECIPE; projection: strict front elevation (reference art for a deterministic geometry recipe); canonical pose: neutral authored orientation.. Preserve this semantic identity: a weathered rootarch from a lived-in dark-fantasy world. Preserve these kit landmarks and
+mechanical seams: outer silhouette suitable for contour tracing. Preserve these materials and motifs: aged wood, rusted iron, dry plant matter, stone — believable rot, rust, splinter, and wear.
+Do not assemble, overlap, attach, or pre-position the components relative to one another.
+
+Visual language: mature, restrained, high-tier polygonal fantasy art. Construct the visible design
+with fewer, larger, deliberate triangular planes. Large facets must follow silhouette, construction,
+material boundaries, carving, folds, forging, anatomy, or fracture logic. Use smaller facets only at
+important transitions such as hinges, sockets, clasps, relief borders, damage, or other semantic
+landmarks. The result must read as sculpted low-poly form, not a triangle filter or cracked glass.
+Preserve ornate identity and believable wear. Avoid cute, toy-like, glossy, generic starter-tier art.
+
+Projection: use the exact projection declared for each component in the manifest. Every camera is
+perpendicular to its construction plane. No visible top, side, underside, back, foreshortening,
+perspective convergence, three-quarter view, isometric view, or painted thickness.
+
+Geometry ownership: source art owns silhouette, broad albedo regions, polygonal material facets,
+paint, carving marks, wear, and damage marks. Real runtime geometry will own thickness, bevels,
+side faces, true relief, shadows, and directional lighting. Do not paint those into the source.
+
+Backdrop: perfectly flat solid magenta #FF00FF chroma-key background for removal. The background must
+be one uniform color with no gradient, texture, floor, horizon, reflection, contact shadow, or light
+variation. Do not use magenta #FF00FF anywhere in the asset. Keep generous clean padding.
+
+Composition: SINGLE FULL-CANVAS COMPONENT. Exactly one isolated component per occupied cell, centered
+within that cell, fully visible, with a crisp silhouette and generous empty chroma separation. Do not
+let any silhouettes touch or cross cell boundaries. Cell position is only for later cropping and must
+not imply runtime position, scale, overlap, pivot, hinge angle, or assembly. No labels, captions,
+decorative border, neighboring unrelated objects, floating debris, scenery, hands, characters, text,
+or watermark.
+
+Avoid: pixel art, fake pixels, voxel art, micro-triangulation, dense tessellation, cracked-glass
+pattern, random polygon noise, poster illustration, baked directional light, rim light, cast shadow,
+perspective painting, scene dressing, or generic mobile-game loot.
+
+--- ASSET fantasy-flora-brambleblocker [MODEL_RECIPE] ---
+
+Use case: stylized-concept
+Asset type: Genesis fantasy component generation sheet
+
+Primary request: Create exactly 1 isolated component sprites for brambleblocker.
+Component manifest: 1. brambleblocker — role: complete set-dressing piece; construction class: MODEL_RECIPE; projection: strict front elevation (reference art for a deterministic geometry recipe); canonical pose: neutral authored orientation.. Preserve this semantic identity: a weathered brambleblocker from a lived-in dark-fantasy world. Preserve these kit landmarks and
+mechanical seams: outer silhouette suitable for contour tracing. Preserve these materials and motifs: aged wood, rusted iron, dry plant matter, stone — believable rot, rust, splinter, and wear.
+Do not assemble, overlap, attach, or pre-position the components relative to one another.
+
+Visual language: mature, restrained, high-tier polygonal fantasy art. Construct the visible design
+with fewer, larger, deliberate triangular planes. Large facets must follow silhouette, construction,
+material boundaries, carving, folds, forging, anatomy, or fracture logic. Use smaller facets only at
+important transitions such as hinges, sockets, clasps, relief borders, damage, or other semantic
+landmarks. The result must read as sculpted low-poly form, not a triangle filter or cracked glass.
+Preserve ornate identity and believable wear. Avoid cute, toy-like, glossy, generic starter-tier art.
+
+Projection: use the exact projection declared for each component in the manifest. Every camera is
+perpendicular to its construction plane. No visible top, side, underside, back, foreshortening,
+perspective convergence, three-quarter view, isometric view, or painted thickness.
+
+Geometry ownership: source art owns silhouette, broad albedo regions, polygonal material facets,
+paint, carving marks, wear, and damage marks. Real runtime geometry will own thickness, bevels,
+side faces, true relief, shadows, and directional lighting. Do not paint those into the source.
+
+Backdrop: perfectly flat solid magenta #FF00FF chroma-key background for removal. The background must
+be one uniform color with no gradient, texture, floor, horizon, reflection, contact shadow, or light
+variation. Do not use magenta #FF00FF anywhere in the asset. Keep generous clean padding.
+
+Composition: SINGLE FULL-CANVAS COMPONENT. Exactly one isolated component per occupied cell, centered
+within that cell, fully visible, with a crisp silhouette and generous empty chroma separation. Do not
+let any silhouettes touch or cross cell boundaries. Cell position is only for later cropping and must
+not imply runtime position, scale, overlap, pivot, hinge angle, or assembly. No labels, captions,
+decorative border, neighboring unrelated objects, floating debris, scenery, hands, characters, text,
+or watermark.
+
+Avoid: pixel art, fake pixels, voxel art, micro-triangulation, dense tessellation, cracked-glass
+pattern, random polygon noise, poster illustration, baked directional light, rim light, cast shadow,
+perspective painting, scene dressing, or generic mobile-game loot.
+
+--- ASSET fantasy-flora-ivywall [MODEL_RECIPE] ---
+
+Use case: stylized-concept
+Asset type: Genesis fantasy component generation sheet
+
+Primary request: Create exactly 1 isolated component sprites for ivywall.
+Component manifest: 1. ivywall — role: complete set-dressing piece; construction class: MODEL_RECIPE; projection: strict front elevation (reference art for a deterministic geometry recipe); canonical pose: neutral authored orientation.. Preserve this semantic identity: a weathered ivywall from a lived-in dark-fantasy world. Preserve these kit landmarks and
+mechanical seams: outer silhouette suitable for contour tracing. Preserve these materials and motifs: aged wood, rusted iron, dry plant matter, stone — believable rot, rust, splinter, and wear.
+Do not assemble, overlap, attach, or pre-position the components relative to one another.
+
+Visual language: mature, restrained, high-tier polygonal fantasy art. Construct the visible design
+with fewer, larger, deliberate triangular planes. Large facets must follow silhouette, construction,
+material boundaries, carving, folds, forging, anatomy, or fracture logic. Use smaller facets only at
+important transitions such as hinges, sockets, clasps, relief borders, damage, or other semantic
+landmarks. The result must read as sculpted low-poly form, not a triangle filter or cracked glass.
+Preserve ornate identity and believable wear. Avoid cute, toy-like, glossy, generic starter-tier art.
+
+Projection: use the exact projection declared for each component in the manifest. Every camera is
+perpendicular to its construction plane. No visible top, side, underside, back, foreshortening,
+perspective convergence, three-quarter view, isometric view, or painted thickness.
+
+Geometry ownership: source art owns silhouette, broad albedo regions, polygonal material facets,
+paint, carving marks, wear, and damage marks. Real runtime geometry will own thickness, bevels,
+side faces, true relief, shadows, and directional lighting. Do not paint those into the source.
+
+Backdrop: perfectly flat solid magenta #FF00FF chroma-key background for removal. The background must
+be one uniform color with no gradient, texture, floor, horizon, reflection, contact shadow, or light
+variation. Do not use magenta #FF00FF anywhere in the asset. Keep generous clean padding.
+
+Composition: SINGLE FULL-CANVAS COMPONENT. Exactly one isolated component per occupied cell, centered
+within that cell, fully visible, with a crisp silhouette and generous empty chroma separation. Do not
+let any silhouettes touch or cross cell boundaries. Cell position is only for later cropping and must
+not imply runtime position, scale, overlap, pivot, hinge angle, or assembly. No labels, captions,
+decorative border, neighboring unrelated objects, floating debris, scenery, hands, characters, text,
+or watermark.
+
+Avoid: pixel art, fake pixels, voxel art, micro-triangulation, dense tessellation, cracked-glass
+pattern, random polygon noise, poster illustration, baked directional light, rim light, cast shadow,
+perspective painting, scene dressing, or generic mobile-game loot.
+
+--- ASSET fantasy-flora-vinelattice [MODEL_RECIPE] ---
+
+Use case: stylized-concept
+Asset type: Genesis fantasy component generation sheet
+
+Primary request: Create exactly 1 isolated component sprites for vinelattice.
+Component manifest: 1. vinelattice — role: complete set-dressing piece; construction class: MODEL_RECIPE; projection: strict front elevation (reference art for a deterministic geometry recipe); canonical pose: neutral authored orientation.. Preserve this semantic identity: a weathered vinelattice from a lived-in dark-fantasy world. Preserve these kit landmarks and
+mechanical seams: outer silhouette suitable for contour tracing. Preserve these materials and motifs: aged wood, rusted iron, dry plant matter, stone — believable rot, rust, splinter, and wear.
+Do not assemble, overlap, attach, or pre-position the components relative to one another.
+
+Visual language: mature, restrained, high-tier polygonal fantasy art. Construct the visible design
+with fewer, larger, deliberate triangular planes. Large facets must follow silhouette, construction,
+material boundaries, carving, folds, forging, anatomy, or fracture logic. Use smaller facets only at
+important transitions such as hinges, sockets, clasps, relief borders, damage, or other semantic
+landmarks. The result must read as sculpted low-poly form, not a triangle filter or cracked glass.
+Preserve ornate identity and believable wear. Avoid cute, toy-like, glossy, generic starter-tier art.
+
+Projection: use the exact projection declared for each component in the manifest. Every camera is
+perpendicular to its construction plane. No visible top, side, underside, back, foreshortening,
+perspective convergence, three-quarter view, isometric view, or painted thickness.
+
+Geometry ownership: source art owns silhouette, broad albedo regions, polygonal material facets,
+paint, carving marks, wear, and damage marks. Real runtime geometry will own thickness, bevels,
+side faces, true relief, shadows, and directional lighting. Do not paint those into the source.
+
+Backdrop: perfectly flat solid magenta #FF00FF chroma-key background for removal. The background must
+be one uniform color with no gradient, texture, floor, horizon, reflection, contact shadow, or light
+variation. Do not use magenta #FF00FF anywhere in the asset. Keep generous clean padding.
+
+Composition: SINGLE FULL-CANVAS COMPONENT. Exactly one isolated component per occupied cell, centered
+within that cell, fully visible, with a crisp silhouette and generous empty chroma separation. Do not
+let any silhouettes touch or cross cell boundaries. Cell position is only for later cropping and must
+not imply runtime position, scale, overlap, pivot, hinge angle, or assembly. No labels, captions,
+decorative border, neighboring unrelated objects, floating debris, scenery, hands, characters, text,
+or watermark.
+
+Avoid: pixel art, fake pixels, voxel art, micro-triangulation, dense tessellation, cracked-glass
+pattern, random polygon noise, poster illustration, baked directional light, rim light, cast shadow,
+perspective painting, scene dressing, or generic mobile-game loot.
+
+--- ASSET fantasy-flora-honeycomb-nook [MODEL_RECIPE] ---
+
+Use case: stylized-concept
+Asset type: Genesis fantasy component generation sheet
+
+Primary request: Create exactly 1 isolated component sprites for honeycomb nook.
+Component manifest: 1. honeycomb nook — role: complete set-dressing piece; construction class: MODEL_RECIPE; projection: strict front elevation (reference art for a deterministic geometry recipe); canonical pose: neutral authored orientation.. Preserve this semantic identity: a weathered honeycomb nook from a lived-in dark-fantasy world. Preserve these kit landmarks and
+mechanical seams: outer silhouette suitable for contour tracing. Preserve these materials and motifs: aged wood, rusted iron, dry plant matter, stone — believable rot, rust, splinter, and wear.
+Do not assemble, overlap, attach, or pre-position the components relative to one another.
+
+Visual language: mature, restrained, high-tier polygonal fantasy art. Construct the visible design
+with fewer, larger, deliberate triangular planes. Large facets must follow silhouette, construction,
+material boundaries, carving, folds, forging, anatomy, or fracture logic. Use smaller facets only at
+important transitions such as hinges, sockets, clasps, relief borders, damage, or other semantic
+landmarks. The result must read as sculpted low-poly form, not a triangle filter or cracked glass.
+Preserve ornate identity and believable wear. Avoid cute, toy-like, glossy, generic starter-tier art.
+
+Projection: use the exact projection declared for each component in the manifest. Every camera is
+perpendicular to its construction plane. No visible top, side, underside, back, foreshortening,
+perspective convergence, three-quarter view, isometric view, or painted thickness.
+
+Geometry ownership: source art owns silhouette, broad albedo regions, polygonal material facets,
+paint, carving marks, wear, and damage marks. Real runtime geometry will own thickness, bevels,
+side faces, true relief, shadows, and directional lighting. Do not paint those into the source.
+
+Backdrop: perfectly flat solid magenta #FF00FF chroma-key background for removal. The background must
+be one uniform color with no gradient, texture, floor, horizon, reflection, contact shadow, or light
+variation. Do not use magenta #FF00FF anywhere in the asset. Keep generous clean padding.
+
+Composition: SINGLE FULL-CANVAS COMPONENT. Exactly one isolated component per occupied cell, centered
+within that cell, fully visible, with a crisp silhouette and generous empty chroma separation. Do not
+let any silhouettes touch or cross cell boundaries. Cell position is only for later cropping and must
+not imply runtime position, scale, overlap, pivot, hinge angle, or assembly. No labels, captions,
+decorative border, neighboring unrelated objects, floating debris, scenery, hands, characters, text,
+or watermark.
+
+Avoid: pixel art, fake pixels, voxel art, micro-triangulation, dense tessellation, cracked-glass
+pattern, random polygon noise, poster illustration, baked directional light, rim light, cast shadow,
+perspective painting, scene dressing, or generic mobile-game loot.
+
+--- ASSET fantasy-flora-fern [EXTRUDE] ---
+
+Use case: stylized-concept
+Asset type: Genesis fantasy component generation sheet
+
+Primary request: Create exactly 1 isolated component sprites for fern.
+Component manifest: 1. fern — role: complete set-dressing piece; construction class: EXTRUDE; projection: strict front elevation; canonical pose: neutral authored orientation.. Preserve this semantic identity: a weathered fern from a lived-in dark-fantasy world. Preserve these kit landmarks and
+mechanical seams: outer silhouette suitable for contour tracing. Preserve these materials and motifs: aged wood, rusted iron, dry plant matter, stone — believable rot, rust, splinter, and wear.
+Do not assemble, overlap, attach, or pre-position the components relative to one another.
+
+Visual language: mature, restrained, high-tier polygonal fantasy art. Construct the visible design
+with fewer, larger, deliberate triangular planes. Large facets must follow silhouette, construction,
+material boundaries, carving, folds, forging, anatomy, or fracture logic. Use smaller facets only at
+important transitions such as hinges, sockets, clasps, relief borders, damage, or other semantic
+landmarks. The result must read as sculpted low-poly form, not a triangle filter or cracked glass.
+Preserve ornate identity and believable wear. Avoid cute, toy-like, glossy, generic starter-tier art.
+
+Projection: use the exact projection declared for each component in the manifest. Every camera is
+perpendicular to its construction plane. No visible top, side, underside, back, foreshortening,
+perspective convergence, three-quarter view, isometric view, or painted thickness.
+
+Geometry ownership: source art owns silhouette, broad albedo regions, polygonal material facets,
+paint, carving marks, wear, and damage marks. Real runtime geometry will own thickness, bevels,
+side faces, true relief, shadows, and directional lighting. Do not paint those into the source.
+
+Backdrop: perfectly flat solid magenta #FF00FF chroma-key background for removal. The background must
+be one uniform color with no gradient, texture, floor, horizon, reflection, contact shadow, or light
+variation. Do not use magenta #FF00FF anywhere in the asset. Keep generous clean padding.
+
+Composition: SINGLE FULL-CANVAS COMPONENT. Exactly one isolated component per occupied cell, centered
+within that cell, fully visible, with a crisp silhouette and generous empty chroma separation. Do not
+let any silhouettes touch or cross cell boundaries. Cell position is only for later cropping and must
+not imply runtime position, scale, overlap, pivot, hinge angle, or assembly. No labels, captions,
+decorative border, neighboring unrelated objects, floating debris, scenery, hands, characters, text,
+or watermark.
+
+Avoid: pixel art, fake pixels, voxel art, micro-triangulation, dense tessellation, cracked-glass
+pattern, random polygon noise, poster illustration, baked directional light, rim light, cast shadow,
+perspective painting, scene dressing, or generic mobile-game loot.
+
+--- ASSET fantasy-flora-fern-alt [EXTRUDE] ---
+
+Use case: stylized-concept
+Asset type: Genesis fantasy component generation sheet
+
+Primary request: Create exactly 1 isolated component sprites for fern alt.
+Component manifest: 1. fern alt — role: complete set-dressing piece; construction class: EXTRUDE; projection: strict front elevation; canonical pose: neutral authored orientation.. Preserve this semantic identity: a weathered fern alt from a lived-in dark-fantasy world. Preserve these kit landmarks and
+mechanical seams: outer silhouette suitable for contour tracing. Preserve these materials and motifs: aged wood, rusted iron, dry plant matter, stone — believable rot, rust, splinter, and wear.
+Do not assemble, overlap, attach, or pre-position the components relative to one another.
+
+Visual language: mature, restrained, high-tier polygonal fantasy art. Construct the visible design
+with fewer, larger, deliberate triangular planes. Large facets must follow silhouette, construction,
+material boundaries, carving, folds, forging, anatomy, or fracture logic. Use smaller facets only at
+important transitions such as hinges, sockets, clasps, relief borders, damage, or other semantic
+landmarks. The result must read as sculpted low-poly form, not a triangle filter or cracked glass.
+Preserve ornate identity and believable wear. Avoid cute, toy-like, glossy, generic starter-tier art.
+
+Projection: use the exact projection declared for each component in the manifest. Every camera is
+perpendicular to its construction plane. No visible top, side, underside, back, foreshortening,
+perspective convergence, three-quarter view, isometric view, or painted thickness.
+
+Geometry ownership: source art owns silhouette, broad albedo regions, polygonal material facets,
+paint, carving marks, wear, and damage marks. Real runtime geometry will own thickness, bevels,
+side faces, true relief, shadows, and directional lighting. Do not paint those into the source.
+
+Backdrop: perfectly flat solid magenta #FF00FF chroma-key background for removal. The background must
+be one uniform color with no gradient, texture, floor, horizon, reflection, contact shadow, or light
+variation. Do not use magenta #FF00FF anywhere in the asset. Keep generous clean padding.
+
+Composition: SINGLE FULL-CANVAS COMPONENT. Exactly one isolated component per occupied cell, centered
+within that cell, fully visible, with a crisp silhouette and generous empty chroma separation. Do not
+let any silhouettes touch or cross cell boundaries. Cell position is only for later cropping and must
+not imply runtime position, scale, overlap, pivot, hinge angle, or assembly. No labels, captions,
+decorative border, neighboring unrelated objects, floating debris, scenery, hands, characters, text,
+or watermark.
+
+Avoid: pixel art, fake pixels, voxel art, micro-triangulation, dense tessellation, cracked-glass
+pattern, random polygon noise, poster illustration, baked directional light, rim light, cast shadow,
+perspective painting, scene dressing, or generic mobile-game loot.
+
+--- ASSET fantasy-flora-cattailreed [EXTRUDE] ---
+
+Use case: stylized-concept
+Asset type: Genesis fantasy component generation sheet
+
+Primary request: Create exactly 1 isolated component sprites for cattailreed.
+Component manifest: 1. cattailreed — role: complete set-dressing piece; construction class: EXTRUDE; projection: strict front elevation; canonical pose: neutral authored orientation.. Preserve this semantic identity: a weathered cattailreed from a lived-in dark-fantasy world. Preserve these kit landmarks and
+mechanical seams: outer silhouette suitable for contour tracing. Preserve these materials and motifs: aged wood, rusted iron, dry plant matter, stone — believable rot, rust, splinter, and wear.
+Do not assemble, overlap, attach, or pre-position the components relative to one another.
+
+Visual language: mature, restrained, high-tier polygonal fantasy art. Construct the visible design
+with fewer, larger, deliberate triangular planes. Large facets must follow silhouette, construction,
+material boundaries, carving, folds, forging, anatomy, or fracture logic. Use smaller facets only at
+important transitions such as hinges, sockets, clasps, relief borders, damage, or other semantic
+landmarks. The result must read as sculpted low-poly form, not a triangle filter or cracked glass.
+Preserve ornate identity and believable wear. Avoid cute, toy-like, glossy, generic starter-tier art.
+
+Projection: use the exact projection declared for each component in the manifest. Every camera is
+perpendicular to its construction plane. No visible top, side, underside, back, foreshortening,
+perspective convergence, three-quarter view, isometric view, or painted thickness.
+
+Geometry ownership: source art owns silhouette, broad albedo regions, polygonal material facets,
+paint, carving marks, wear, and damage marks. Real runtime geometry will own thickness, bevels,
+side faces, true relief, shadows, and directional lighting. Do not paint those into the source.
+
+Backdrop: perfectly flat solid magenta #FF00FF chroma-key background for removal. The background must
+be one uniform color with no gradient, texture, floor, horizon, reflection, contact shadow, or light
+variation. Do not use magenta #FF00FF anywhere in the asset. Keep generous clean padding.
+
+Composition: SINGLE FULL-CANVAS COMPONENT. Exactly one isolated component per occupied cell, centered
+within that cell, fully visible, with a crisp silhouette and generous empty chroma separation. Do not
+let any silhouettes touch or cross cell boundaries. Cell position is only for later cropping and must
+not imply runtime position, scale, overlap, pivot, hinge angle, or assembly. No labels, captions,
+decorative border, neighboring unrelated objects, floating debris, scenery, hands, characters, text,
+or watermark.
+
+Avoid: pixel art, fake pixels, voxel art, micro-triangulation, dense tessellation, cracked-glass
+pattern, random polygon noise, poster illustration, baked directional light, rim light, cast shadow,
+perspective painting, scene dressing, or generic mobile-game loot.
+
+--- ASSET fantasy-flora-thistlecluster [EXTRUDE] ---
+
+Use case: stylized-concept
+Asset type: Genesis fantasy component generation sheet
+
+Primary request: Create exactly 1 isolated component sprites for thistlecluster.
+Component manifest: 1. thistlecluster — role: complete set-dressing piece; construction class: EXTRUDE; projection: strict front elevation; canonical pose: neutral authored orientation.. Preserve this semantic identity: a weathered thistlecluster from a lived-in dark-fantasy world. Preserve these kit landmarks and
+mechanical seams: outer silhouette suitable for contour tracing. Preserve these materials and motifs: aged wood, rusted iron, dry plant matter, stone — believable rot, rust, splinter, and wear.
+Do not assemble, overlap, attach, or pre-position the components relative to one another.
+
+Visual language: mature, restrained, high-tier polygonal fantasy art. Construct the visible design
+with fewer, larger, deliberate triangular planes. Large facets must follow silhouette, construction,
+material boundaries, carving, folds, forging, anatomy, or fracture logic. Use smaller facets only at
+important transitions such as hinges, sockets, clasps, relief borders, damage, or other semantic
+landmarks. The result must read as sculpted low-poly form, not a triangle filter or cracked glass.
+Preserve ornate identity and believable wear. Avoid cute, toy-like, glossy, generic starter-tier art.
+
+Projection: use the exact projection declared for each component in the manifest. Every camera is
+perpendicular to its construction plane. No visible top, side, underside, back, foreshortening,
+perspective convergence, three-quarter view, isometric view, or painted thickness.
+
+Geometry ownership: source art owns silhouette, broad albedo regions, polygonal material facets,
+paint, carving marks, wear, and damage marks. Real runtime geometry will own thickness, bevels,
+side faces, true relief, shadows, and directional lighting. Do not paint those into the source.
+
+Backdrop: perfectly flat solid magenta #FF00FF chroma-key background for removal. The background must
+be one uniform color with no gradient, texture, floor, horizon, reflection, contact shadow, or light
+variation. Do not use magenta #FF00FF anywhere in the asset. Keep generous clean padding.
+
+Composition: SINGLE FULL-CANVAS COMPONENT. Exactly one isolated component per occupied cell, centered
+within that cell, fully visible, with a crisp silhouette and generous empty chroma separation. Do not
+let any silhouettes touch or cross cell boundaries. Cell position is only for later cropping and must
+not imply runtime position, scale, overlap, pivot, hinge angle, or assembly. No labels, captions,
+decorative border, neighboring unrelated objects, floating debris, scenery, hands, characters, text,
+or watermark.
+
+Avoid: pixel art, fake pixels, voxel art, micro-triangulation, dense tessellation, cracked-glass
+pattern, random polygon noise, poster illustration, baked directional light, rim light, cast shadow,
+perspective painting, scene dressing, or generic mobile-game loot.
+
+--- ASSET fantasy-flora-toadstool [EXTRUDE] ---
+
+Use case: stylized-concept
+Asset type: Genesis fantasy component generation sheet
+
+Primary request: Create exactly 1 isolated component sprites for toadstool.
+Component manifest: 1. toadstool — role: complete set-dressing piece; construction class: EXTRUDE; projection: strict front elevation; canonical pose: neutral authored orientation.. Preserve this semantic identity: a weathered toadstool from a lived-in dark-fantasy world. Preserve these kit landmarks and
+mechanical seams: outer silhouette suitable for contour tracing. Preserve these materials and motifs: aged wood, rusted iron, dry plant matter, stone — believable rot, rust, splinter, and wear.
+Do not assemble, overlap, attach, or pre-position the components relative to one another.
+
+Visual language: mature, restrained, high-tier polygonal fantasy art. Construct the visible design
+with fewer, larger, deliberate triangular planes. Large facets must follow silhouette, construction,
+material boundaries, carving, folds, forging, anatomy, or fracture logic. Use smaller facets only at
+important transitions such as hinges, sockets, clasps, relief borders, damage, or other semantic
+landmarks. The result must read as sculpted low-poly form, not a triangle filter or cracked glass.
+Preserve ornate identity and believable wear. Avoid cute, toy-like, glossy, generic starter-tier art.
+
+Projection: use the exact projection declared for each component in the manifest. Every camera is
+perpendicular to its construction plane. No visible top, side, underside, back, foreshortening,
+perspective convergence, three-quarter view, isometric view, or painted thickness.
+
+Geometry ownership: source art owns silhouette, broad albedo regions, polygonal material facets,
+paint, carving marks, wear, and damage marks. Real runtime geometry will own thickness, bevels,
+side faces, true relief, shadows, and directional lighting. Do not paint those into the source.
+
+Backdrop: perfectly flat solid magenta #FF00FF chroma-key background for removal. The background must
+be one uniform color with no gradient, texture, floor, horizon, reflection, contact shadow, or light
+variation. Do not use magenta #FF00FF anywhere in the asset. Keep generous clean padding.
+
+Composition: SINGLE FULL-CANVAS COMPONENT. Exactly one isolated component per occupied cell, centered
+within that cell, fully visible, with a crisp silhouette and generous empty chroma separation. Do not
+let any silhouettes touch or cross cell boundaries. Cell position is only for later cropping and must
+not imply runtime position, scale, overlap, pivot, hinge angle, or assembly. No labels, captions,
+decorative border, neighboring unrelated objects, floating debris, scenery, hands, characters, text,
+or watermark.
+
+Avoid: pixel art, fake pixels, voxel art, micro-triangulation, dense tessellation, cracked-glass
+pattern, random polygon noise, poster illustration, baked directional light, rim light, cast shadow,
+perspective painting, scene dressing, or generic mobile-game loot.
+
+--- ASSET fantasy-flora-herbbundle [EXTRUDE] ---
+
+Use case: stylized-concept
+Asset type: Genesis fantasy component generation sheet
+
+Primary request: Create exactly 1 isolated component sprites for herbbundle.
+Component manifest: 1. herbbundle — role: complete set-dressing piece; construction class: EXTRUDE; projection: strict front elevation; canonical pose: neutral authored orientation.. Preserve this semantic identity: a weathered herbbundle from a lived-in dark-fantasy world. Preserve these kit landmarks and
+mechanical seams: outer silhouette suitable for contour tracing. Preserve these materials and motifs: aged wood, rusted iron, dry plant matter, stone — believable rot, rust, splinter, and wear.
+Do not assemble, overlap, attach, or pre-position the components relative to one another.
+
+Visual language: mature, restrained, high-tier polygonal fantasy art. Construct the visible design
+with fewer, larger, deliberate triangular planes. Large facets must follow silhouette, construction,
+material boundaries, carving, folds, forging, anatomy, or fracture logic. Use smaller facets only at
+important transitions such as hinges, sockets, clasps, relief borders, damage, or other semantic
+landmarks. The result must read as sculpted low-poly form, not a triangle filter or cracked glass.
+Preserve ornate identity and believable wear. Avoid cute, toy-like, glossy, generic starter-tier art.
+
+Projection: use the exact projection declared for each component in the manifest. Every camera is
+perpendicular to its construction plane. No visible top, side, underside, back, foreshortening,
+perspective convergence, three-quarter view, isometric view, or painted thickness.
+
+Geometry ownership: source art owns silhouette, broad albedo regions, polygonal material facets,
+paint, carving marks, wear, and damage marks. Real runtime geometry will own thickness, bevels,
+side faces, true relief, shadows, and directional lighting. Do not paint those into the source.
+
+Backdrop: perfectly flat solid magenta #FF00FF chroma-key background for removal. The background must
+be one uniform color with no gradient, texture, floor, horizon, reflection, contact shadow, or light
+variation. Do not use magenta #FF00FF anywhere in the asset. Keep generous clean padding.
+
+Composition: SINGLE FULL-CANVAS COMPONENT. Exactly one isolated component per occupied cell, centered
+within that cell, fully visible, with a crisp silhouette and generous empty chroma separation. Do not
+let any silhouettes touch or cross cell boundaries. Cell position is only for later cropping and must
+not imply runtime position, scale, overlap, pivot, hinge angle, or assembly. No labels, captions,
+decorative border, neighboring unrelated objects, floating debris, scenery, hands, characters, text,
+or watermark.
+
+Avoid: pixel art, fake pixels, voxel art, micro-triangulation, dense tessellation, cracked-glass
+pattern, random polygon noise, poster illustration, baked directional light, rim light, cast shadow,
+perspective painting, scene dressing, or generic mobile-game loot.
+
+--- ASSET fantasy-flora-lilypad [DECAL] ---
+
+Use case: stylized-concept
+Asset type: Genesis fantasy component generation sheet
+
+Primary request: Create exactly 1 isolated component sprites for lilypad.
+Component manifest: 1. lilypad — role: complete set-dressing piece; construction class: DECAL; projection: strict top projection (flat ground-plane source); canonical pose: neutral authored orientation.. Preserve this semantic identity: a weathered lilypad from a lived-in dark-fantasy world. Preserve these kit landmarks and
+mechanical seams: outer silhouette suitable for contour tracing. Preserve these materials and motifs: aged wood, rusted iron, dry plant matter, stone — believable rot, rust, splinter, and wear.
+Do not assemble, overlap, attach, or pre-position the components relative to one another.
+
+Visual language: mature, restrained, high-tier polygonal fantasy art. Construct the visible design
+with fewer, larger, deliberate triangular planes. Large facets must follow silhouette, construction,
+material boundaries, carving, folds, forging, anatomy, or fracture logic. Use smaller facets only at
+important transitions such as hinges, sockets, clasps, relief borders, damage, or other semantic
+landmarks. The result must read as sculpted low-poly form, not a triangle filter or cracked glass.
+Preserve ornate identity and believable wear. Avoid cute, toy-like, glossy, generic starter-tier art.
+
+Projection: use the exact projection declared for each component in the manifest. Every camera is
+perpendicular to its construction plane. No visible top, side, underside, back, foreshortening,
+perspective convergence, three-quarter view, isometric view, or painted thickness.
+
+Geometry ownership: source art owns silhouette, broad albedo regions, polygonal material facets,
+paint, carving marks, wear, and damage marks. Real runtime geometry will own thickness, bevels,
+side faces, true relief, shadows, and directional lighting. Do not paint those into the source.
+
+Backdrop: perfectly flat solid magenta #FF00FF chroma-key background for removal. The background must
+be one uniform color with no gradient, texture, floor, horizon, reflection, contact shadow, or light
+variation. Do not use magenta #FF00FF anywhere in the asset. Keep generous clean padding.
+
+Composition: SINGLE FULL-CANVAS COMPONENT. Exactly one isolated component per occupied cell, centered
+within that cell, fully visible, with a crisp silhouette and generous empty chroma separation. Do not
+let any silhouettes touch or cross cell boundaries. Cell position is only for later cropping and must
+not imply runtime position, scale, overlap, pivot, hinge angle, or assembly. No labels, captions,
+decorative border, neighboring unrelated objects, floating debris, scenery, hands, characters, text,
+or watermark.
+
+Avoid: pixel art, fake pixels, voxel art, micro-triangulation, dense tessellation, cracked-glass
+pattern, random polygon noise, poster illustration, baked directional light, rim light, cast shadow,
+perspective painting, scene dressing, or generic mobile-game loot.
+
+--- ASSET fantasy-flora-mushroomring [DECAL] ---
+
+Use case: stylized-concept
+Asset type: Genesis fantasy component generation sheet
+
+Primary request: Create exactly 1 isolated component sprites for mushroomring.
+Component manifest: 1. mushroomring — role: complete set-dressing piece; construction class: DECAL; projection: strict top projection (flat ground-plane source); canonical pose: neutral authored orientation.. Preserve this semantic identity: a weathered mushroomring from a lived-in dark-fantasy world. Preserve these kit landmarks and
+mechanical seams: outer silhouette suitable for contour tracing. Preserve these materials and motifs: aged wood, rusted iron, dry plant matter, stone — believable rot, rust, splinter, and wear.
+Do not assemble, overlap, attach, or pre-position the components relative to one another.
+
+Visual language: mature, restrained, high-tier polygonal fantasy art. Construct the visible design
+with fewer, larger, deliberate triangular planes. Large facets must follow silhouette, construction,
+material boundaries, carving, folds, forging, anatomy, or fracture logic. Use smaller facets only at
+important transitions such as hinges, sockets, clasps, relief borders, damage, or other semantic
+landmarks. The result must read as sculpted low-poly form, not a triangle filter or cracked glass.
+Preserve ornate identity and believable wear. Avoid cute, toy-like, glossy, generic starter-tier art.
+
+Projection: use the exact projection declared for each component in the manifest. Every camera is
+perpendicular to its construction plane. No visible top, side, underside, back, foreshortening,
+perspective convergence, three-quarter view, isometric view, or painted thickness.
+
+Geometry ownership: source art owns silhouette, broad albedo regions, polygonal material facets,
+paint, carving marks, wear, and damage marks. Real runtime geometry will own thickness, bevels,
+side faces, true relief, shadows, and directional lighting. Do not paint those into the source.
+
+Backdrop: perfectly flat solid magenta #FF00FF chroma-key background for removal. The background must
+be one uniform color with no gradient, texture, floor, horizon, reflection, contact shadow, or light
+variation. Do not use magenta #FF00FF anywhere in the asset. Keep generous clean padding.
+
+Composition: SINGLE FULL-CANVAS COMPONENT. Exactly one isolated component per occupied cell, centered
+within that cell, fully visible, with a crisp silhouette and generous empty chroma separation. Do not
+let any silhouettes touch or cross cell boundaries. Cell position is only for later cropping and must
+not imply runtime position, scale, overlap, pivot, hinge angle, or assembly. No labels, captions,
+decorative border, neighboring unrelated objects, floating debris, scenery, hands, characters, text,
+or watermark.
+
+Avoid: pixel art, fake pixels, voxel art, micro-triangulation, dense tessellation, cracked-glass
+pattern, random polygon noise, poster illustration, baked directional light, rim light, cast shadow,
+perspective painting, scene dressing, or generic mobile-game loot.
+
+--- ASSET fantasy-flora-wildflowerpatch [DECAL] ---
+
+Use case: stylized-concept
+Asset type: Genesis fantasy component generation sheet
+
+Primary request: Create exactly 1 isolated component sprites for wildflowerpatch.
+Component manifest: 1. wildflowerpatch — role: complete set-dressing piece; construction class: DECAL; projection: strict top projection (flat ground-plane source); canonical pose: neutral authored orientation.. Preserve this semantic identity: a weathered wildflowerpatch from a lived-in dark-fantasy world. Preserve these kit landmarks and
+mechanical seams: outer silhouette suitable for contour tracing. Preserve these materials and motifs: aged wood, rusted iron, dry plant matter, stone — believable rot, rust, splinter, and wear.
+Do not assemble, overlap, attach, or pre-position the components relative to one another.
+
+Visual language: mature, restrained, high-tier polygonal fantasy art. Construct the visible design
+with fewer, larger, deliberate triangular planes. Large facets must follow silhouette, construction,
+material boundaries, carving, folds, forging, anatomy, or fracture logic. Use smaller facets only at
+important transitions such as hinges, sockets, clasps, relief borders, damage, or other semantic
+landmarks. The result must read as sculpted low-poly form, not a triangle filter or cracked glass.
+Preserve ornate identity and believable wear. Avoid cute, toy-like, glossy, generic starter-tier art.
+
+Projection: use the exact projection declared for each component in the manifest. Every camera is
+perpendicular to its construction plane. No visible top, side, underside, back, foreshortening,
+perspective convergence, three-quarter view, isometric view, or painted thickness.
+
+Geometry ownership: source art owns silhouette, broad albedo regions, polygonal material facets,
+paint, carving marks, wear, and damage marks. Real runtime geometry will own thickness, bevels,
+side faces, true relief, shadows, and directional lighting. Do not paint those into the source.
+
+Backdrop: perfectly flat solid magenta #FF00FF chroma-key background for removal. The background must
+be one uniform color with no gradient, texture, floor, horizon, reflection, contact shadow, or light
+variation. Do not use magenta #FF00FF anywhere in the asset. Keep generous clean padding.
+
+Composition: SINGLE FULL-CANVAS COMPONENT. Exactly one isolated component per occupied cell, centered
+within that cell, fully visible, with a crisp silhouette and generous empty chroma separation. Do not
+let any silhouettes touch or cross cell boundaries. Cell position is only for later cropping and must
+not imply runtime position, scale, overlap, pivot, hinge angle, or assembly. No labels, captions,
+decorative border, neighboring unrelated objects, floating debris, scenery, hands, characters, text,
+or watermark.
+
+Avoid: pixel art, fake pixels, voxel art, micro-triangulation, dense tessellation, cracked-glass
+pattern, random polygon noise, poster illustration, baked directional light, rim light, cast shadow,
+perspective painting, scene dressing, or generic mobile-game loot.
+
+--- ASSET fantasy-campfire-kit [MODEL_RECIPE kit — replaces campfire-lit/-dead/-unlit; the flame is runtime FX, char state is an albedo swap] ---
+
+Use case: stylized-concept
+Asset type: Genesis fantasy component generation sheet
+
+Primary request: Create exactly 2 isolated component sprites for campfire kit.
+Component manifest: 1. campfire-stone-ring — role: permanent ground mount; construction class: MODEL_RECIPE (reference art); projection: strict front elevation; canonical pose: neutral. 2. campfire-wood-pyre — role: swappable fuel stack (fresh and charred are separate albedo states of this component); construction class: MODEL_RECIPE (reference art); projection: strict front elevation; canonical pose: neutral unlit.. Preserve this semantic identity: a rough travelers' campfire — ring of field stones around a stacked wood pyre. Preserve these kit landmarks and
+mechanical seams: the seam between stone ring and pyre; the pyre sits inside the ring but is generated ISOLATED. Preserve these materials and motifs: soot-blackened field stone, split firewood, ash.
+Do not assemble, overlap, attach, or pre-position the components relative to one another.
+
+Visual language: mature, restrained, high-tier polygonal fantasy art. Construct the visible design
+with fewer, larger, deliberate triangular planes. Large facets must follow silhouette, construction,
+material boundaries, carving, folds, forging, anatomy, or fracture logic. Use smaller facets only at
+important transitions such as hinges, sockets, clasps, relief borders, damage, or other semantic
+landmarks. The result must read as sculpted low-poly form, not a triangle filter or cracked glass.
+Preserve ornate identity and believable wear. Avoid cute, toy-like, glossy, generic starter-tier art.
+
+Projection: use the exact projection declared for each component in the manifest. Every camera is
+perpendicular to its construction plane. No visible top, side, underside, back, foreshortening,
+perspective convergence, three-quarter view, isometric view, or painted thickness.
+
+Geometry ownership: source art owns silhouette, broad albedo regions, polygonal material facets,
+paint, carving marks, wear, and damage marks. Real runtime geometry will own thickness, bevels,
+side faces, true relief, shadows, and directional lighting. Do not paint those into the source.
+
+Backdrop: perfectly flat solid magenta #FF00FF chroma-key background for removal. The background must
+be one uniform color with no gradient, texture, floor, horizon, reflection, contact shadow, or light
+variation. Do not use magenta #FF00FF anywhere in the asset. Keep generous clean padding.
+
+Composition: 2X1 GRID FOR UP TO TWO LARGE OR ORNATE COMPONENTS. Exactly one isolated component per occupied cell, centered
+within that cell, fully visible, with a crisp silhouette and generous empty chroma separation. Do not
+let any silhouettes touch or cross cell boundaries. Cell position is only for later cropping and must
+not imply runtime position, scale, overlap, pivot, hinge angle, or assembly. No labels, captions,
+decorative border, neighboring unrelated objects, floating debris, scenery, hands, characters, text,
+or watermark.
+
+Avoid: pixel art, fake pixels, voxel art, micro-triangulation, dense tessellation, cracked-glass
+pattern, random polygon noise, poster illustration, baked directional light, rim light, cast shadow,
+perspective painting, scene dressing, or generic mobile-game loot.
 

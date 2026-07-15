@@ -27,6 +27,13 @@ overlay's `tags`/`reusable`/`redlined` keys are deep-merged onto the entry, last
 winning). `status` is "cut" iff `assets/sprites/<slug>.png` exists on disk at generation time,
 else "pending".
 
+VQ2-RESPEC.md S3 / PHASE-3-WAVE-2-SPECS.md B1 additionally stamps EVERY entry with the standee
+contract (footX, footY, worldHeight, heightSource, contentBounds, alphaCutoff, shadowProfile)
+and the faceted-migration art-admission fields (legacyAsset, candidateAsset, artStyleVersion,
+qaStatus, runtimeAdmitted) — see HEADER below for the full field contract and
+world_height_for()/standee_contract_for() for the derivation rules. Also emits
+dev/model-qa/faceted-inventory-report.json (real runs only, --out==OUT).
+
 --check validates without writing:
   - manifest parses, every slug matches ^spr-
   - no slug collisions across sheets
@@ -68,6 +75,25 @@ V3_GRID_COLS = 5  # matches the observed 25-cell (5x5) v2-manifest sheet shape
 SPRITES_DIR = os.path.join(ROOT, "assets", "sprites")
 OUT = os.path.join(ROOT, "data", "sprite-registry.js")
 REJECTS = os.path.join(ROOT, "dev", "sprite-manifests", "REJECTS.md")
+
+# VQ2-RESPEC.md S3 / PHASE-3-WAVE-2-SPECS.md B1 — the standee contract + faceted-migration
+# art-admission fields. FACETED_CUT_REPORT (build/cut-faceted.py's S2 sidecar) supplies
+# per-slug contentBounds/footContact for the 252 cut faceted candidates in SPRITES_FACETED_DIR.
+FACETED_CUT_REPORT = os.path.join(ROOT, "dev", "model-qa", "faceted-cut-report.json")
+SPRITES_FACETED_DIR = os.path.join(ROOT, "assets", "sprites-faceted")
+INVENTORY_REPORT = os.path.join(ROOT, "dev", "model-qa", "faceted-inventory-report.json")
+# SRD size-band midpoint ladder (draft values, Adam re-tunes) — worldHeight's fallback when no
+# measured `feet` exists for a slug. heightSource records which branch fired; a slug with
+# neither feet nor a resolvable size NEVER gets a guessed number (worldHeight:null, loud).
+SIZE_BAND_DEFAULT_FEET = {
+    "tiny": 1.5, "small": 3, "medium": 5.5, "large": 9, "huge": 15, "gargantuan": 25,
+}
+ALPHA_CUTOFF_DEFAULT = 0.5
+SHADOW_PROFILE_DEFAULT = "soft-pool"
+QA_STATUS_CANDIDATE = "provisional-flip-2026-07-15"
+# The flip (render reads runtimeAdmitted to pick candidate vs legacy) is unit S5, not S3 — every
+# entry here admits "legacy" so render stays byte-identical after this unit lands.
+RUNTIME_ADMITTED_DEFAULT = "legacy"
 
 SLUG_RE = re.compile(r"^spr-")
 
@@ -150,6 +176,68 @@ def sizing_for(slug, sheet, cell, corpus_sizing, v3_by_sheet_cell):
     return None
 
 
+def load_faceted_cut_report():
+    """dev/model-qa/faceted-cut-report.json's slugs{} (S2's cut sidecar) — per-slug
+    contentBounds [x0,y0,x1,y1] (normalized alpha bbox) + footContact (normalized x-center of
+    the lowest opaque row, i.e. an already-normalized footX). Missing file -> {} (no candidates
+    yet; every entry falls through to the legacy/default foot-contact branch below)."""
+    report = load_json(FACETED_CUT_REPORT, default={})
+    return report.get("slugs", {}) if isinstance(report, dict) else {}
+
+
+def standee_contract_for(overlay_entry, cut_record):
+    """B1 contract fields: footX, footY, contentBounds, alphaCutoff, shadowProfile.
+
+    Priority (VQ2-RESPEC.md S3 / PHASE-3-WAVE-2-SPECS.md B1):
+      1. faceted cut-report record (S2) -> contentBounds direct, footX = footContact (already
+         x-normalized), footY = contentBounds[3] (the alpha bbox's bottom edge, same row the
+         cut report's foot_contact_x measured — normalized top-down, 0=top/1=bottom).
+      2. legacy overlay `floor` (ground-contact fraction UP FROM THE BOTTOM edge) -> footY =
+         1 - floor (converted to the same top-down convention), footX defaults to bbox center
+         (floor carries no x measurement). contentBounds stays null (not measured for legacy-only
+         art).
+      3. neither -> bbox bottom-center default (footX 0.5, footY 1.0), contentBounds null.
+    """
+    content_bounds = None
+    foot_x = foot_y = None
+
+    if cut_record and isinstance(cut_record.get("contentBounds"), list) and len(cut_record["contentBounds"]) == 4:
+        content_bounds = [round(float(v), 6) for v in cut_record["contentBounds"]]
+        if isinstance(cut_record.get("footContact"), (int, float)):
+            foot_x = round(float(cut_record["footContact"]), 6)
+        foot_y = content_bounds[3]
+
+    if foot_x is None or foot_y is None:
+        floor = overlay_entry.get("floor")
+        if isinstance(floor, (int, float)) and 0 < floor <= 0.9:
+            foot_x = 0.5
+            foot_y = round(1.0 - float(floor), 4)
+        else:
+            foot_x = 0.5
+            foot_y = 1.0
+
+    return {
+        "footX": foot_x,
+        "footY": foot_y,
+        "contentBounds": content_bounds,
+        "alphaCutoff": ALPHA_CUTOFF_DEFAULT,
+        "shadowProfile": SHADOW_PROFILE_DEFAULT,
+    }
+
+
+def world_height_for(feet, size):
+    """worldHeight + heightSource, in source-priority order: (1) measured — an existing `feet`
+    value (corpus-sizing/v3-sizing joins, folded above for cut entries); (2) band-default — the
+    SRD size-band midpoint ladder, keyed off the bestiary-joined `size`; (3) missing — neither
+    resolves, so worldHeight stays null rather than a silent guess."""
+    if isinstance(feet, (int, float)):
+        return feet, "measured"
+    band = SIZE_BAND_DEFAULT_FEET.get((size or "").strip().lower())
+    if band is not None:
+        return band, "band-default"
+    return None, "missing"
+
+
 def join_creature(realm, name, bestiary_by_realm):
     realm_idx = bestiary_by_realm.get(realm)
     if not realm_idx:
@@ -201,6 +289,20 @@ def emit_entry(slug, e):
         fields.append(f'verdict:{js_str(e["verdict"])}')
     if e.get("note") is not None:
         fields.append(f'note:{js_str(e["note"])}')
+    # S3 / B1 — standee contract (always present).
+    fields.append(f'footX:{json.dumps(e["footX"])}')
+    fields.append(f'footY:{json.dumps(e["footY"])}')
+    fields.append('contentBounds:' + (json.dumps(e["contentBounds"]) if e["contentBounds"] is not None else "null"))
+    fields.append(f'alphaCutoff:{json.dumps(e["alphaCutoff"])}')
+    fields.append(f'shadowProfile:{js_str(e["shadowProfile"])}')
+    fields.append('worldHeight:' + (json.dumps(e["worldHeight"]) if e["worldHeight"] is not None else "null"))
+    fields.append(f'heightSource:{js_str(e["heightSource"])}')
+    # S3 / B1 — faceted-migration art admission (always present).
+    fields.append('legacyAsset:' + (js_str(e["legacyAsset"]) if e["legacyAsset"] is not None else "null"))
+    fields.append('candidateAsset:' + (js_str(e["candidateAsset"]) if e["candidateAsset"] is not None else "null"))
+    fields.append(f'artStyleVersion:{js_str(e["artStyleVersion"])}')
+    fields.append('qaStatus:' + (js_str(e["qaStatus"]) if e["qaStatus"] is not None else "null"))
+    fields.append(f'runtimeAdmitted:{js_str(e["runtimeAdmitted"])}')
     return " \"" + slug + "\": {" + ", ".join(fields) + "},\n"
 
 
@@ -218,6 +320,12 @@ HEADER = (
     "entries additionally carry feet (real-world height, ft) and scaleTrue (feet/5.5, 2dp) "
     "folded from dev/model-qa/corpus-sizing.json + dev/sprite-sheets/incoming/v3/v3-sizing.json "
     "where joinable; the legacy scale field is a SEPARATE tabletop-only calibration, untouched. "
+    "VQ2-RESPEC.md S3 / PHASE-3-WAVE-2-SPECS.md B1: every entry additionally carries the standee "
+    "contract (footX, footY, contentBounds, alphaCutoff, shadowProfile) and faceted-migration art "
+    "admission (legacyAsset, candidateAsset, artStyleVersion, qaStatus, runtimeAdmitted). "
+    "worldHeight/heightSource are authoritative (measured feet -> SRD size-band default -> loud "
+    "null, never a silent guess); runtimeAdmitted defaults to \"legacy\" for every entry in this "
+    "unit (the candidate/legacy flip is a later unit, not this one) so render stays byte-identical. "
     "Regenerate; never hand-edit. */\n"
 )
 
@@ -228,7 +336,10 @@ def build_registry(manifest_path, check_only=False, overlay_path=OVERLAY, out_pa
     overlay = load_json(overlay_path, default={})
     overlay = {k: v for k, v in overlay.items() if not k.startswith("_")}
     corpus_sizing, v3_by_sheet_cell = load_sizing_sources()
+    faceted_cut_slugs = load_faceted_cut_report()
     sizing_joined = 0
+    height_sources = {"measured": 0, "band-default": 0, "missing": 0}
+    candidate_count = 0
 
     entries = OrderedDict()
     seen_slugs = {}
@@ -323,6 +434,31 @@ def build_registry(manifest_path, check_only=False, overlay_path=OVERLAY, out_pa
                     entry["feet"] = feet
                     entry["scaleTrue"] = round(float(feet) / 5.5, 2)
                     sizing_joined += 1
+
+            # S3 / B1 — faceted art-admission. candidateAsset gates on the actual cut file
+            # (assets/sprites-faceted/<slug>.png), not just report presence, per the literal
+            # contract ("when that file exists"); the cut-report record supplies the standee
+            # contract's contentBounds/footContact when both agree.
+            has_candidate_file = os.path.exists(os.path.join(SPRITES_FACETED_DIR, f"{slug}.png"))
+            cut_record = faceted_cut_slugs.get(slug) if has_candidate_file else None
+            entry["legacyAsset"] = f"assets/sprites/{slug}.png" if entry["status"] == "cut" else None
+            entry["candidateAsset"] = f"assets/sprites-faceted/{slug}.png" if has_candidate_file else None
+            entry["artStyleVersion"] = "faceted-v1" if has_candidate_file else "v3"
+            entry["qaStatus"] = QA_STATUS_CANDIDATE if has_candidate_file else entry.get("verdict")
+            entry["runtimeAdmitted"] = RUNTIME_ADMITTED_DEFAULT
+            if has_candidate_file:
+                candidate_count += 1
+
+            # S3 / B1 — standee contract.
+            contract = standee_contract_for(ov, cut_record)
+            entry.update(contract)
+
+            # S3 / B1 — worldHeight/heightSource (authoritative; runtime never infers size).
+            world_height, height_source = world_height_for(entry.get("feet"), size)
+            entry["worldHeight"] = world_height
+            entry["heightSource"] = height_source
+            height_sources[height_source] += 1
+
             entries[slug] = entry
 
     coverage = (monster_joined / monster_total * 100) if monster_total else 100.0
@@ -330,6 +466,8 @@ def build_registry(manifest_path, check_only=False, overlay_path=OVERLAY, out_pa
     print(f"sheets: {len(manifest.get('sheets', []))}  cells: {len(entries)}")
     print(f"VP1 sizing fold: {sizing_joined} cut slug(s) got feet/scaleTrue")
     print(f"monster-kind join coverage: {monster_joined}/{monster_total} ({coverage:.1f}%)")
+    print(f"S3/B1 faceted candidates: {candidate_count}")
+    print(f"S3/B1 worldHeight source (registry-wide): {height_sources}")
     if warn_unjoined:
         print(f"WARN — {len(warn_unjoined)} unjoined cell(s):")
         for w in warn_unjoined:
@@ -354,6 +492,7 @@ def build_registry(manifest_path, check_only=False, overlay_path=OVERLAY, out_pa
     # --out scratch runs must stay side-effect-free).
     if out_path == OUT:
         write_rejects(entries, sheet_meta, cell_cue)
+        write_inventory_report(entries, faceted_cut_slugs)
     return entries, coverage, warn_unjoined
 
 
@@ -390,6 +529,62 @@ def write_rejects(entries, sheet_meta, cell_cue):
     with open(REJECTS, "w", encoding="utf-8") as f:
         f.write("".join(out))
     print(f"wrote {REJECTS} ({len(fails)} rejects)")
+
+
+def write_inventory_report(entries, faceted_cut_slugs):
+    """dev/model-qa/faceted-inventory-report.json — VQ2-RESPEC.md S3 / PHASE-3-WAVE-2-SPECS.md
+    B1's "THE INVENTORY": for EACH of the faceted cut report's candidate slugs (assets/sprites-
+    faceted/<slug>.png, 252 at time of writing) — tags, worldHeight, heightSource, size band,
+    whether legacy art also exists — plus summary counts by heightSource across that same set.
+
+    Honest gap: not every faceted cut-report slug matches a SPRITE_REGISTRY entry (the S2 art
+    wave cut some identities from dev/model-qa/faceted-sheets/ that were never folded into
+    dev/sprite-manifests/v2-manifest.json as a manifest cell, so gen-sprite-registry.py's join
+    has nothing to attach candidateAsset/tags/worldHeight to for those slugs). Those slugs are
+    still listed here (registryEntry:false, heightSource:"missing") — they are NOT invented as
+    new SPRITE_REGISTRY entries; that would grow the registry beyond its join source, which is
+    out of scope for this generator's contract-extension unit. GENERATED — never hand-edit; this
+    is the artifact Adam red-pens in the sprite editor (dev/sprite-review.py), not an editable
+    source."""
+    summary = {"measured": 0, "band-default": 0, "missing": 0}
+    slugs_out = OrderedDict()
+    unjoined = []
+    for slug in sorted(faceted_cut_slugs.keys()):
+        e = entries.get(slug)
+        if e is None or e.get("candidateAsset") is None:
+            unjoined.append(slug)
+            slugs_out[slug] = {
+                "tags": [], "worldHeight": None, "heightSource": "missing",
+                "sizeBand": None, "legacyAssetExists": False, "registryEntry": False,
+            }
+            summary["missing"] += 1
+            continue
+        summary[e["heightSource"]] = summary.get(e["heightSource"], 0) + 1
+        slugs_out[slug] = {
+            "tags": e["tags"],
+            "worldHeight": e["worldHeight"],
+            "heightSource": e["heightSource"],
+            "sizeBand": e["size"],
+            "legacyAssetExists": e.get("legacyAsset") is not None,
+            "registryEntry": True,
+        }
+    report = {
+        "generatedBy": "build/gen-sprite-registry.py",
+        "spec": "VQ2-RESPEC.md S3 / PHASE-3-WAVE-2-SPECS.md B1",
+        "candidateCount": len(faceted_cut_slugs),
+        "registryJoinedCount": len(faceted_cut_slugs) - len(unjoined),
+        "unjoinedCandidates": unjoined,
+        "summaryByHeightSource": summary,
+        "slugs": slugs_out,
+    }
+    with open(INVENTORY_REPORT, "w", encoding="utf-8") as f:
+        json.dump(report, f, indent=2, sort_keys=False)
+        f.write("\n")
+    print(
+        f"wrote {INVENTORY_REPORT} ({len(faceted_cut_slugs)} candidate slugs, "
+        f"{len(faceted_cut_slugs) - len(unjoined)} joined to a registry entry, "
+        f"{len(unjoined)} unjoined)"
+    )
 
 
 def main():

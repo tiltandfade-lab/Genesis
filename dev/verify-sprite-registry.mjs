@@ -17,8 +17,23 @@
    check #2 against real data, the same assertion function is run against a deliberately corrupted
    clone of the registry (one slug's "spr-" prefix stripped) and MUST fail. That corrupted-clone
    run is printed first, under a "RED-FIRST" banner, and is expected/required to show a failure —
-   only the run against the real registry afterward is expected to pass. */
-import { readFileSync, writeFileSync, unlinkSync, mkdtempSync } from "node:fs";
+   only the run against the real registry afterward is expected to pass.
+
+   VQ2-RESPEC.md S3 / PHASE-3-WAVE-2-SPECS.md B1 extends this harness with:
+     5. Every entry carries the standee-contract + faceted-admission fields (footX/footY/
+        worldHeight/heightSource/contentBounds/alphaCutoff/shadowProfile/legacyAsset/
+        candidateAsset/artStyleVersion/qaStatus/runtimeAdmitted), correctly typed. RED-FIRST
+        against the pre-S3 baseline registry (git merge-base HEAD master:data/sprite-registry.js,
+        which has none of these fields) — the assertion function MUST fail there before trusting
+        it green against the real regenerated registry.
+     6. runtimeAdmitted present (a string) on every entry.
+     7. Every candidateAsset path that IS set resolves to a real file on disk.
+     8. worldHeight/heightSource never silently guess: a fixture entry with neither a measured
+        `feet` nor a resolvable `size` (spr-gloom-attic-moth-swarm, the fixture's deliberately-
+        unjoined cell) yields worldHeight:null + heightSource:"missing". RED-FIRST: the same
+        assertion function is proven to bite on a mutated clone that injects a fake band-default
+        guess before trusting it against the real fixture-generated entry. */
+import { readFileSync, writeFileSync, unlinkSync, mkdtempSync, existsSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { createRequire } from "node:module";
@@ -30,9 +45,12 @@ const read = (p) => readFileSync(join(ROOT, p), "utf-8");
 const JSDOM_HOME = process.env.JSDOM_HOME || join(process.env.HOME, ".genesis-jsdom");
 const { JSDOM } = createRequire(join(JSDOM_HOME, "package.json"))("jsdom");
 
-function boot() {
+function boot(overridePath, overrideSrc) {
   const man = JSON.parse(read("manifest.json"));
-  const src = man.loadOrder.filter((p) => p.endsWith(".js")).map(read).join("\n;\n");
+  const src = man.loadOrder
+    .filter((p) => p.endsWith(".js"))
+    .map((p) => (overridePath && p === overridePath ? overrideSrc : read(p)))
+    .join("\n;\n");
   const dom = new JSDOM(`<!doctype html><html><body><div id="worldView"></div></body></html>`,
     { runScripts: "dangerously", url: "http://localhost/" });
   const win = dom.window;
@@ -127,6 +145,122 @@ console.log("\n=== Overlay merge wins over auto-tags ===");
     entryText);
 
   try { unlinkSync(overlayPath); } catch {}
+  try { unlinkSync(outPath); } catch {}
+}
+
+// ---- S3 / B1 — the standee-contract + faceted-admission field assertion ----
+function standeeFieldsValid(registry) {
+  const entries = Object.entries(registry);
+  const bad = [];
+  for (const [slug, e] of entries) {
+    const ok =
+      typeof e.footX === "number" &&
+      typeof e.footY === "number" &&
+      (e.worldHeight === null || typeof e.worldHeight === "number") &&
+      typeof e.heightSource === "string" &&
+      ["measured", "band-default", "missing"].includes(e.heightSource) &&
+      (e.contentBounds === null || Array.isArray(e.contentBounds)) &&
+      typeof e.alphaCutoff === "number" &&
+      typeof e.shadowProfile === "string" &&
+      (e.legacyAsset === null || typeof e.legacyAsset === "string") &&
+      (e.candidateAsset === null || typeof e.candidateAsset === "string") &&
+      typeof e.artStyleVersion === "string" &&
+      (e.qaStatus === null || typeof e.qaStatus === "string") &&
+      typeof e.runtimeAdmitted === "string";
+    if (!ok) bad.push(slug);
+  }
+  return { ok: bad.length === 0, bad, total: entries.length };
+}
+
+console.log("\n=== RED-FIRST: standee-contract field assertion must bite on the pre-S3 baseline ===");
+{
+  // The pre-S3 baseline is the branch point against master (git merge-base) — it predates this
+  // unit and carries NONE of footX/footY/worldHeight/.../runtimeAdmitted. If standeeFieldsValid
+  // doesn't fail loudly against it, the assertion function isn't actually checking anything.
+  const baseSha = execFileSync("git", ["merge-base", "HEAD", "master"], { cwd: ROOT })
+    .toString().trim();
+  const baselineSrc = execFileSync("git", ["show", `${baseSha}:data/sprite-registry.js`],
+    { cwd: ROOT, maxBuffer: 1024 * 1024 * 32 }).toString();
+  const win = boot("data/sprite-registry.js", baselineSrc);
+  const baselineRegistry = win.__spriteRegistry();
+  const result = standeeFieldsValid(baselineRegistry);
+  const bites = result.ok === false && result.bad.length === result.total;
+  console.log(bites
+    ? `  ✓ RED-FIRST proven: checker correctly FAILED on the pre-S3 baseline (${result.bad.length}/${result.total} entries missing the new fields)`
+    : `  ✗ RED-FIRST FAILED TO PROVE ANYTHING: checker did not catch the pre-S3 baseline (bad=${result.bad.length}/${result.total})`);
+  if (!bites) { fail++; } else { pass++; }
+}
+
+console.log("\n=== S3/B1 standee contract + faceted admission (real generated registry) ===");
+{
+  const fieldsResult = standeeFieldsValid(registry);
+  check("5. standee-contract + art-admission fields present + typed on every entry",
+    fieldsResult.ok, `${fieldsResult.total - fieldsResult.bad.length}/${fieldsResult.total} valid; bad sample: ${JSON.stringify(fieldsResult.bad.slice(0, 5))}`);
+
+  const missingRuntimeAdmitted = Object.entries(registry).filter(([, e]) => typeof e.runtimeAdmitted !== "string");
+  check("6. runtimeAdmitted present (string) on every entry", missingRuntimeAdmitted.length === 0,
+    `${missingRuntimeAdmitted.length} entries missing it, e.g. ${JSON.stringify(missingRuntimeAdmitted.slice(0, 3).map(([s]) => s))}`);
+
+  const candidates = Object.entries(registry).filter(([, e]) => e.candidateAsset);
+  const missingFiles = candidates.filter(([, e]) => !existsSync(join(ROOT, e.candidateAsset)));
+  check("7. every candidateAsset path exists on disk", missingFiles.length === 0,
+    `${missingFiles.length}/${candidates.length} candidateAsset entries point at a missing file: ${JSON.stringify(missingFiles.slice(0, 3).map(([s]) => s))}`);
+  console.log(`     (${candidates.length} entries carry a candidateAsset, all file-verified)`);
+}
+
+// ---- S3 / B1 — worldHeight never a silent guess ----
+// Mirrors build/gen-sprite-registry.py's world_height_for() priority exactly: measured feet ->
+// SRD size-band default -> loud null. Checks the SOURCE data (feet/size), not just internal
+// self-consistency, so a fabricated worldHeight on an entry with neither actually gets caught.
+const SIZE_BAND_DEFAULT_FEET = { tiny: 1.5, small: 3, medium: 5.5, large: 9, huge: 15, gargantuan: 25 };
+function worldHeightHonest(feet, size, worldHeight, heightSource) {
+  if (typeof feet === "number") {
+    return heightSource === "measured" && worldHeight === feet;
+  }
+  const band = SIZE_BAND_DEFAULT_FEET[String(size ?? "").trim().toLowerCase()];
+  if (band !== undefined) {
+    return heightSource === "band-default" && worldHeight === band;
+  }
+  return heightSource === "missing" && worldHeight === null;
+}
+
+console.log("\n=== RED-FIRST: worldHeight-honesty assertion must bite on a silently-guessed clone ===");
+{
+  // No feet, no resolvable size (the exact fixture-slug shape below) — but a fabricated
+  // worldHeight, the silent guess this law forbids.
+  const bites = worldHeightHonest(undefined, null, 5.5, "band-default") === false;
+  console.log(bites
+    ? "  ✓ RED-FIRST proven: checker correctly FAILED on a silently-guessed worldHeight"
+    : "  ✗ RED-FIRST FAILED TO PROVE ANYTHING: checker did not catch the silent guess");
+  if (!bites) { fail++; } else { pass++; }
+}
+
+console.log("\n=== worldHeight/heightSource honest on the no-feet/no-size fixture slug ===");
+{
+  // Round-trip the real generator against the fixture manifest (same convention as the overlay
+  // test above) — spr-gloom-attic-moth-swarm is deliberately unjoined (size:null) and never cut
+  // (no `feet` fold), so it has no measured height and no resolvable size band.
+  const scratch = mkdtempSync(join(tmpdir(), "genesis-sprite-worldheight-"));
+  const outPath = join(scratch, "sprite-registry.out.js");
+  execFileSync("python3", [
+    join(ROOT, "build", "gen-sprite-registry.py"),
+    "--manifest", join(ROOT, "dev", "fixtures", "v2-manifest.json"),
+    "--out", outPath,
+  ], { cwd: ROOT });
+
+  const outSrc = readFileSync(outPath, "utf-8");
+  const fixtureRegistry = new Function(outSrc + "\nreturn SPRITE_REGISTRY;")();
+  const targetSlug = "spr-gloom-attic-moth-swarm";
+  const entry = fixtureRegistry[targetSlug];
+
+  check("8. no-feet/no-size fixture slug yields worldHeight:null",
+    entry && entry.worldHeight === null, `got worldHeight=${JSON.stringify(entry && entry.worldHeight)}`);
+  check("8b. no-feet/no-size fixture slug yields heightSource:\"missing\"",
+    entry && entry.heightSource === "missing", `got heightSource=${JSON.stringify(entry && entry.heightSource)}`);
+  check("8c. worldHeightHonest() holds for the real fixture entry",
+    entry && worldHeightHonest(entry.feet, entry.size, entry.worldHeight, entry.heightSource),
+    `entry=${JSON.stringify(entry)}`);
+
   try { unlinkSync(outPath); } catch {}
 }
 

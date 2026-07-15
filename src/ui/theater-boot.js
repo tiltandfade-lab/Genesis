@@ -5571,6 +5571,87 @@ function applyLightProfile(key){
   if(profile.flicker > 0) startLightFlicker(profile.flicker);
 }
 
+/* ============================================================================================
+   ENV-1 (docs/ENV-EXTERIOR-WAVE.md) — "light profiles differentiate everywhere". ROOT CAUSE
+   (measured live against pl-004..009, dev/play-lens/ledger.md #8): applyLightProfile ALREADY runs
+   on the flat tabletop channel — setBoard called it before this unit too, so every node/travel/
+   settlement/combat/idle tray was already "consuming the active profile" in that narrow sense. Two
+   things nonetheless made daylit/overcast/moonlit render pixel-identical to each other (and to a
+   plain dark room) on that channel:
+     1. the void/background tint (ENV_VOID_TINT/voidTintFor, above) is keyed ONLY by `env`
+        (dungeon/urban/wilderness/breach) — the SAME wilderness travel leg shows the identical
+        near-black void whether the walk rolled daylit, moonlit, or overcast. This is the single
+        biggest visible defect (the void dominates a large fraction of every travel/node frame —
+        see pl-004..009): "the black void reads as night ONLY when it should," per this unit's spec.
+     2. STAGE_AMBIENT_FLOOR (0.42, above) clamps UP any profile authored below it — overcast (0.39)
+        and moonlit (0.36) both clamp to the IDENTICAL 0.42 ambient on this channel, erasing the
+        mood table's own (already-small, 0.03) intended gap between them, since nothing downstream
+        of applyLightProfile touches S.ambientLight again on the tabletop path (unlike the interior
+        channel below).
+   FIX SCOPE — tabletop channel ONLY (setBoard calls the two helpers below; setInteriorBoard never
+   does). LIGHT_PROFILES/applyLightProfile/STAGE_AMBIENT_FLOOR themselves stay byte-UNTOUCHED: they
+   are shared with the interior channel, which OVERWRITES ambient/hemi/key/fill from its OWN
+   ITR_BRIGHT_REALM_FILL/ITR_SCENE_* tables the instant setInteriorBoard's rigOn block runs, and
+   separately multiplies every S.pointLights[].intensity by its own fillScale — so editing
+   LIGHT_PROFILES' authored point numbers here would ride straight through to interior renders and
+   break the "interiors byte-stable" requirement. Everything below is NEW code, called only from
+   setBoard, mutating the LIVE THREE objects applyLightProfile just built for THIS render — never
+   the shared authored table.
+   dark/torchlit/lavalit/fungal-glow/magic-glow/lamplit/voidlit are the PROTECTION SET: absent from
+   both tables below, so a tabletop tray rolling any of those profiles is BYTE-IDENTICAL to before
+   this unit (no lookup hit -> both helpers fall through to the pre-existing voidTintFor(env)/plain-
+   applyLightProfile behavior — the WORKING interior/dungeon-tabletop look, unchanged). Only the 3
+   exterior moods get a differentiated look — the same "which profiles are the sun/moon/sky's own
+   diegetic reach" set the interior channel already classifies as ITR_BRIGHT_PROFILES, reused here
+   for the identical classification on this channel.
+   Grouped per profile — one re-tune surface, DRAFT VALUES, Adam re-tunes here:
+     daylit   — bright warm key + sky-blue ambient wash, ambient boosted well above the floor, a
+                light sky-tone background (never a black void in daylight).
+     overcast — flat grey-cool diffuse, muted background, ambient between daylit and moonlit.
+     moonlit  — dim cool blue, near-dark background — the darkest of the 3 exterior looks, but
+                ALWAYS >= dark's own floored ambient/void (an unlit room must never read brighter
+                than moonlight).
+   pointScale tunes each profile's existing LIGHT_PROFILES point-light contribution for THIS channel
+   only — moonlit's authored point (intensity 8, decay:0 = non-attenuating, so it reaches the whole
+   board at full strength regardless of distance) would otherwise out-shine overcast's flat ambient-
+   only wash on the tile surface itself (a candela-scale point intensity and a 0-1 ambient multiplier
+   are not directly comparable units), inverting the required daylit > overcast > moonlit luma
+   ordering. Scaling it down here (mutating the live light instance, never LIGHT_PROFILES) keeps that
+   ordering honest without touching the shared profile table the interior channel also reads.
+   ============================================================================================ */
+// ambientColor: a tabletop-only ambient HUE override (the spec's "sky-blue ambient" for daylit —
+// LIGHT_PROFILES' authored daylit ambient color is a neutral 0xd8dce0, shared with the interior
+// channel, so the sky-blue read lands here instead). The warm KEY stays the profile's own authored
+// point color (daylit 0xfff2d8 — already warm), scaled by pointScale. overcast/moonlit keep their
+// authored ambient hues (already grey-cool/cool-blue) — listed explicitly anyway so the whole look
+// is re-tunable from this one table.
+const TABLETOP_EXTERIOR_LOOK = {
+  daylit:   { ambient: 0.80, ambientColor: 0xbdd7f0, pointScale: 1.2,  void: 0xaed4f2 }, // sky-blue ambient + warm key + bright sky wash
+  overcast: { ambient: 0.55, ambientColor: 0xa8adb5, pointScale: 1.0,  void: 0x8c94a0 }, // flat muted grey-cool (authored hue kept)
+  moonlit:  { ambient: 0.44, ambientColor: 0x8fa0c8, pointScale: 0.35, void: 0x141c30 }  // dim cool blue, near-dark (authored hue kept)
+};
+// void/background tint for the TABLETOP channel only — profile wins for the 3 exterior moods (the
+// protection set has no entry here, so it falls through to the pre-existing env-keyed voidTintFor,
+// byte-identical to before this unit).
+function voidTintForTabletop(env, profileKey){
+  const look = profileKey && TABLETOP_EXTERIOR_LOOK[profileKey];
+  return look ? look.void : voidTintFor(env);
+}
+// mutates the LIVE S.ambientLight/S.pointLights objects applyLightProfile just (re)built for THIS
+// render — never LIGHT_PROFILES itself. No-op (byte-identical to pre-unit setBoard) for any profile
+// not in TABLETOP_EXTERIOR_LOOK (the protection set).
+function applyTabletopExteriorLook(profileKey){
+  const look = profileKey && TABLETOP_EXTERIOR_LOOK[profileKey];
+  if(!look) return;
+  if(S.ambientLight){
+    S.ambientLight.intensity = look.ambient;
+    // graded through the SAME realm profile applyLightProfile just used for the authored ambient
+    // color — the tabletop hue override obeys the identical realm-grade seam, never bypasses it.
+    if(look.ambientColor != null) S.ambientLight.color.setHex(gradeColorLocal(look.ambientColor, S.realmProfile));
+  }
+  (S.pointLights || []).forEach(l => { l.intensity *= look.pointScale; });
+}
+
 // BW2-4b item 2 — THE CAMERA-KEY SHADOW. One soft shadow-casting DirectionalLight aimed at the interior
 // board center from the CAMERA's general direction (up + toward the camera), created lazily and reused
 // across setInteriorBoard calls (positions/target refreshed each mount, disabled by setBoard on the flat
@@ -6443,12 +6524,6 @@ function setBoard(data){
   // for every call below (figureMaterialFor/applyLightProfile/the void-tint grade). Mirror drift =
   // the lava-red bright-kingdom incident, 2026-07-05 — this is why the mirror is gone, not patched.
   S.realmProfile = data.renderProfile || null;
-  const voidTint = gradeColorLocal(voidTintFor(env), S.realmProfile);
-  if(S.scene){
-    S.scene.background = new THREE.Color(voidTint);
-    if(S.scene.fog) S.scene.fog.color = new THREE.Color(voidTint);
-  }
-  if(S.renderer) S.renderer.setClearColor(voidTint, 1);
 
   // P1' WHOLE-OBJECT WIRING Unit B (docs/P1-WIRING.md §4 Unit B step 1): resolve + mount the rolled
   // profile's lighting prop BEFORE applyLightProfile runs, so S.lightPropAnchor is ready the moment
@@ -6461,7 +6536,27 @@ function setBoard(data){
   // all (an older snapshot / a preview fixture that hasn't set one — same graceful-degrade discipline
   // as the env fallback just above). Applied AFTER boardHalfX/boardHalfZ are set (earlier in this
   // function) so point-light positions resolve against the REAL board size, not the pre-board default.
-  applyLightProfile((data.light && data.light.profile) || LIGHT_DEFAULT_PROFILE);
+  const lightProfileKey = (data.light && data.light.profile) || LIGHT_DEFAULT_PROFILE;
+  applyLightProfile(lightProfileKey);
+  // ENV-1 (docs/ENV-EXTERIOR-WAVE.md): tabletop-only exterior differentiation (daylit/overcast/
+  // moonlit) — see TABLETOP_EXTERIOR_LOOK's own header comment above applyLightProfile's definition
+  // for why this is a SEPARATE post-pass rather than an edit to applyLightProfile/LIGHT_PROFILES
+  // themselves. No-op for the protection-set profiles (dark/torchlit/etc).
+  applyTabletopExteriorLook(lightProfileKey);
+
+  // T1.5 §1/§2 env threading, now ALSO profile-threaded (ENV-1): voidTintForTabletop reads the
+  // active light profile first (the 3 exterior moods each carry their own background wash — a
+  // light sky-tone for daylit, muted grey for overcast, near-dark cool blue for moonlit) and only
+  // falls back to the plain env-keyed void for the protection-set profiles, matching this unit's
+  // "byte-identical dark/torchlit" guarantee. Computed AFTER applyLightProfile/
+  // applyTabletopExteriorLook (was before, pre-unit) so S.lightProfileKey is current — mountLightProp
+  // above doesn't read scene.background, so this reordering is otherwise inert.
+  const voidTint = gradeColorLocal(voidTintForTabletop(env, lightProfileKey), S.realmProfile);
+  if(S.scene){
+    S.scene.background = new THREE.Color(voidTint);
+    if(S.scene.fog) S.scene.fog.color = new THREE.Color(voidTint);
+  }
+  if(S.renderer) S.renderer.setClearColor(voidTint, 1);
 
   const topColorCache = {};
   const sideColorCache = {};
@@ -11271,6 +11366,19 @@ window.Theater._interiorSceneLightsForTest = function(){
   };
 };
 window.Theater.shadowMapEnabled = function(){ return !!(S.renderer && S.renderer.shadowMap.enabled); };
+// ENV-1 (docs/ENV-EXTERIOR-WAVE.md) — harness-facing diagnostic for the TABLETOP channel (setBoard),
+// same read-only convention as _interiorSceneLightsForTest above but for the flat-tray light rig:
+// the resolved profile key, live ambient/point-light state, and the actual scene.background hex
+// setBoard just set — so a harness can assert the void/ambient values directly (not just infer them
+// from a pixel measurement) and prove which branch (protection-set vs TABLETOP_EXTERIOR_LOOK) fired.
+window.Theater._tabletopSceneLightsForTest = function(){
+  return {
+    profileKey: S.lightProfileKey || null,
+    ambient: S.ambientLight ? S.ambientLight.intensity : null,
+    points: (S.pointLights || []).map((l) => ({ intensity: l.intensity, color: l.color ? l.color.getHex() : null })),
+    background: (S.scene && S.scene.background && S.scene.background.isColor) ? S.scene.background.getHex() : null,
+  };
+};
 // dungeon-loop-gate (dev/battle-gate/capture-dungeon-loop.mjs) — a harness-facing read-only accessor,
 // same family as the interior* diagnostics above: how many verb tweens (play()'s own S.tweens, the
 // standee AND ordinary 3D-figure verbs both push into this one array) are still live right now, so a

@@ -55,3 +55,25 @@ re-run post-D4c/D4d to re-grade the door findings.
    finishing pass).
 4. **COMBAT-IN-ROOM** (#10) + **STAGING BEATS** (#11): the continuity-of-place work.
 5. **P3-2 sprites** (still gated on the sprite-QA session) + D5 archetypes ride their existing gates.
+
+---
+
+# PL-3 DELTAS — run-pl3-001 (2026-07-15, the composed stack)
+
+Same 14-leg route, 26 shots, zero breaks. Against the pl1-002 baseline:
+
+## FIXED (verified in real play)
+- **#7 travel legs empty** → biome flora + ground tint + daylight sky on every exterior leg (pl-005: chrome flora under a morning sky).
+- **#8 profiles unwired** → daylit/moonlit/dark visibly distinct in play; the PC casts a MORNING-DIRECTION shadow (ENV-1b+1c composing).
+- **P0 #2 PC missing/corner** → PC centered + fully in frame at the node tray (pl-002), casting shadows.
+- **P0 #4 wireframe mesh** → no unshaded fallbacks observed.
+- **P0 #6 head-clip** → full figure + headroom (pl-002).
+- **P0 #5 arrival blob** → arrival resolves a real tray.
+
+## PARTIAL / ROUTED-AS-DESIGNED
+- **#9 town**: this run's start node bound a place record (Dorsal Market) → single-site tray took precedence (correct). The town builder's own card (env3-town-daylit) passed the gate; a lens run at a record-less settlement node still owed.
+
+## STANDING (unchanged, known)
+- Headless captures under-render figure meshes (rig caveat; the shadow is the witness).
+- P0 #1 rat-miscast + combat-void staging: combat legs still owed a delta read (combat frames not re-read this pass — next audit).
+- Facade art (doors/windows/roofs), NPC card art, exposure crush in interiors → Adam's packets + Stage E.

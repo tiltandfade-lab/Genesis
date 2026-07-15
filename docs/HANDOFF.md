@@ -6,6 +6,22 @@ updated: 2026-07-11
 
 # Genesis — Session Hand-off
 
+## ⭐ Latest (2026-07-14) — Faceted sprite generation COMPLETE for fantasy; swap track next [Claude Code]
+
+Every fantasy-realm asset class has faceted candidates banked on `codex/faceted-f1-consolidation`:
+figures 891/901 (last 10 in `dev/model-qa/faceted-sheets/session-prompts/gapfill-final.md`),
+effects, 43 decals, props/dressing (kit contract enforced), icons, the 375-item universe, and the
+floor/wall tileset. Art direction is now un-losable: `docs/ART-DIRECTION-CANON.md` on master,
+mandated by CLAUDE.md + AGENTS.md, with the decision-capture rule. 510-file QA ledger at
+`dev/model-qa/faceted-sheets/qa-ledger.json`; crop rejects quarantined; all raw returns keep-all
+for Adam's sprite-review height pass.
+
+**Do next (pick up here):** 1) fire gapfill-final.md (one Codex window, 6 sheets); 2) build the
+Step-E source-reject + chroma/slice pass over all banked candidates (§9 production sequence);
+3) §9 admission → Adam reviews heights via `python3 dev/sprite-review.py` (5179); 4) registry
+regen + engine swap of the 896 pixel sprites; 5) then the parked decisions (procedural-vs-textured
+floors, K1 kit QA, other realms).
+
 ## Graphics authority — read before the next visual unit
 
 `docs/GRAPHICS-CONVERGENCE-CHARTER.md` is now the governing graphics doctrine. It locks the protected
@@ -15,7 +31,7 @@ Graphics work must preserve canonical cards and no-human production while taking
 reach the visual target. Read it before this handoff's historical graphics queue, then read
 `docs/GRAPHICS-PRODUCTION-RESEARCH-WAVE.md` for evaluated tools and executable research gates.
 
-## ⭐ Latest (2026-07-13, overnight) — GRAPHICS CONVERGENCE: wall-volumes wave + Phase 0/1/2 geometry [Claude Opus 4.8, orchestrated]
+## Latest (2026-07-13, overnight) — GRAPHICS CONVERGENCE: wall-volumes wave + Phase 0/1/2 geometry [Claude Opus 4.8, orchestrated]
 
 Codex researches, Claude orchestrates ([[project-genesis-graphics-convergence]]). The execution
 spine is `docs/GRAPHICS-CONVERGENCE-PLAN.md` (composes the 3 research waves → phased waves on the

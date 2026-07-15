@@ -83,6 +83,18 @@
     <option value="pass">pass</option><option value="fail">fail</option>
     <option value="flagged">flagged ⚠</option>
   </select>
+  <select id="fCandidate" title="VQ2-RESPEC.md S6 — the faceted-wave candidate corpus">
+    <option value="">candidate: all</option>
+    <option value="yes">has candidate</option>
+    <option value="no">no candidate</option>
+  </select>
+  <select id="fHeight" title="worldHeight source — walk the band-default/missing list Adam's editor pass is for">
+    <option value="">height: all</option>
+    <option value="overlay">overlay (edited)</option>
+    <option value="measured">measured</option>
+    <option value="band-default">band-default</option>
+    <option value="missing">missing</option>
+  </select>
   <input id="fSearch" type="text" placeholder="search name…" size="16">
   <label style="color:var(--dim);font-size:12px">zoom
     <input id="zoom" type="range" min="30" max="320" value="150" style="width:110px;vertical-align:middle"></label>
@@ -99,7 +111,7 @@
       <input id="scaleVal" type="text" value="1.00">
       <button id="reset1" title="reset to 1.0">1.0</button>
       <button id="pin">pin ⇩</button>
-      <button id="saveBtn" title="write scale + tags + note to the overlay">SAVE (s)</button>
+      <button id="saveBtn" title="write scale + tags + note + feet to the overlay">SAVE (s)</button>
       <button id="passBtn" class="pass">PASS (p)</button>
       <button id="failBtn" class="fail">FAIL (f)</button>
       <button id="clearBtn" title="clear verdict">clear</button>
@@ -177,14 +189,20 @@ const isDirty = slug => !!PENDING[slug] &&
   (Math.abs(scaleFor(slug) - savedScale(slug)) > 1e-9 ||
    Math.abs(floorFor(slug) - savedFloor(slug)) > 1e-9);
 
+/* VQ2-RESPEC.md S6 — the review pool is "legacy-cut OR has a faceted candidate", not just
+   status:"cut" as before: candidate-only slugs (no legacy art yet, S4's orphans included) need
+   to show up here too so Adam can walk the band-default/missing heightSource list even before
+   they have any legacy art to compare against. */
+const inPool = e => e.status === "cut" || !!e.candidateAsset;
+
 async function load(){
   const r = await fetch("/api/data"); const d = await r.json();
   if(d.error){ alert(d.error); return; }
   REG = d.registry; OVERLAY = d.overlay;
-  const cutEntries = Object.entries(REG).filter(([,e]) => e.status === "cut");
-  fillFilter("fRealm", "realm", cutEntries.map(([,e]) => e.realm));
-  fillFilter("fKind", "kind", cutEntries.map(([,e]) => e.kind));
-  fillFilter("fSize", "size", cutEntries.map(([,e]) => sizeOf(e)));
+  const poolEntries = Object.entries(REG).filter(([,e]) => inPool(e));
+  fillFilter("fRealm", "realm", poolEntries.map(([,e]) => e.realm));
+  fillFilter("fKind", "kind", poolEntries.map(([,e]) => e.kind));
+  fillFilter("fSize", "size", poolEntries.map(([,e]) => sizeOf(e)));
   applyFilters();
 }
 function fillFilter(id, label, vals){
@@ -196,11 +214,14 @@ function fillFilter(id, label, vals){
 function stateOf(slug){ return ovr(slug).verdict || "unreviewed"; }
 function applyFilters(){
   const fr = $("fRealm").value, fk = $("fKind").value, fs = $("fSize").value,
-        st = $("fState").value, q = $("fSearch").value.toLowerCase();
+        st = $("fState").value, q = $("fSearch").value.toLowerCase(),
+        fc = $("fCandidate").value, fh = $("fHeight").value;
   const curSlug = cur() && cur().slug;
   list = Object.entries(REG)
-    .filter(([, e]) => e.status === "cut")
+    .filter(([, e]) => inPool(e))
     .filter(([, e]) => (!fr || e.realm === fr) && (!fk || e.kind === fk) && (!fs || sizeOf(e) === fs))
+    .filter(([, e]) => !fc || (fc === "yes" ? !!e.candidateAsset : !e.candidateAsset))
+    .filter(([, e]) => !fh || e.heightSource === fh)
     .filter(([s]) => !st ||
       (st === "flagged" ? (ovr(s).note || "").startsWith("⚠")
        : st === "unreviewed" ? stateOf(s) === "unreviewed" : stateOf(s) === st))
@@ -210,6 +231,11 @@ function applyFilters(){
   idx = Math.max(0, list.findIndex(e => e.slug === curSlug));
   render();
 }
+
+/* Stage/rail image source: legacy art when it exists (the scale-calibration lineup has always
+   been legacy-only), else the faceted candidate — so candidate-only slugs (no legacy PNG,
+   VQ2-RESPEC.md S6's orphans) still render here instead of a broken image. */
+const stageSrc = e => e.legacyAsset ? `/sprites/${e.slug}.png` : (e.candidateAsset ? `/sprites-faceted/${e.slug}.png` : "");
 
 function figHtml(e, cls){
   const h = Math.round(sizeScale(e) * medPx * scaleFor(e.slug));
@@ -221,7 +247,7 @@ function figHtml(e, cls){
   return `<div class="fig ${cls}" data-slug="${e.slug}">
       ${cls === "pinned" ? `<button class="unpin" onclick="unpin('${e.slug}')">unpin ✕</button>` : ""}
       <div class="imgwrap" style="position:relative">
-        <img src="/sprites/${e.slug}.png" style="height:${h}px" draggable="false">
+        <img src="${stageSrc(e)}" style="height:${h}px" draggable="false">
         ${line}
       </div>
       <span class="cap">${e.name} · ${sizeOf(e)} → ${guideFor(e).key}${scaleFor(e.slug) !== 1 ? " · ×" + scaleFor(e.slug).toFixed(2) : ""}</span>
@@ -271,15 +297,33 @@ function render(){
   }
   renderInfo(); renderRail(); renderProgress();
 }
+/* heightSource badge colors — measured is settled fact, overlay is Adam's own ruling (both
+   "trust it"); band-default/missing are the ones worth his editor pass (VQ2-RESPEC.md S6). */
+const HEIGHT_BADGE_COLOR = {
+  measured: "var(--pass)", overlay: "var(--accent)",
+  "band-default": "#d99a2b", missing: "var(--fail)",
+};
 let infoSlug = null;
 function renderInfo(){
   const e = cur();
   if(!e){ $("info").innerHTML = "<p>No sprites match the filter.</p>"; infoSlug = null; return; }
   const o = ovr(e.slug), st = stateOf(e.slug);
-  // same sprite re-rendering (slider move etc.) — keep any in-progress tag/note typing
+  // same sprite re-rendering (slider move etc.) — keep any in-progress tag/note/feet typing
   const keepTags = infoSlug === e.slug && $("ovTags") ? $("ovTags").value : null;
   const keepNote = infoSlug === e.slug && $("ovNote") ? $("ovNote").value : null;
+  const keepFeet = infoSlug === e.slug && $("ovFeet") ? $("ovFeet").value : null;
   infoSlug = e.slug;
+  const heightSource = e.heightSource || "missing";
+  const heightColor = HEIGHT_BADGE_COLOR[heightSource] || "#2c2836";
+  const artBlock = e.candidateAsset ? `
+    <div style="color:var(--dim);font-size:12px;margin-top:10px">art — legacy vs faceted candidate (VQ2-RESPEC.md S6)</div>
+    <div style="display:flex;gap:10px;margin-top:4px;align-items:flex-end">
+      ${e.legacyAsset
+        ? `<div style="text-align:center"><img src="/sprites/${e.slug}.png" style="max-width:100px;max-height:150px;image-rendering:pixelated;border:1px solid var(--line);border-radius:4px;background:#221f2a" draggable="false"><div style="font-size:10px;color:var(--dim);margin-top:2px">legacy · v3</div></div>`
+        : `<div style="font-size:11px;color:var(--dim);max-width:100px">(no legacy art)</div>`}
+      <div style="text-align:center"><img src="/sprites-faceted/${e.slug}.png" style="max-width:100px;max-height:150px;image-rendering:pixelated;border:1px solid var(--accent);border-radius:4px;background:#221f2a" draggable="false"><div style="font-size:10px;color:var(--accent);margin-top:2px">faceted · ${e.artStyleVersion}</div></div>
+    </div>
+    <div style="font-size:11px;color:var(--dim);margin-top:3px">qaStatus: ${e.qaStatus ?? "—"}</div>` : "";
   $("info").innerHTML = `
     <h2>${e.name}</h2><div class="slug">${e.slug}</div>
     <p class="verdict ${st}">${st.toUpperCase()}${o.scale ? ` · scale ×${o.scale}` : ""}${floorFor(e.slug) > 0 ? ` · floor ${(floorFor(e.slug) * 100).toFixed(1)}%` : ""}</p>
@@ -299,27 +343,37 @@ function renderInfo(){
     <div class="chips">${(e.tags || []).map(t => `<span class="chip">${t}</span>`).join("")}</div>
     <div style="color:var(--dim);font-size:12px">overlay tags (comma-sep — replaces auto set)</div>
     <input type="text" id="ovTags" value="${(o.tags || []).join(", ")}" placeholder="(inherit auto tags)">
+    <div style="color:var(--dim);font-size:12px;margin-top:8px">expected height (worldHeight, ft) — VQ2-RESPEC.md S6</div>
+    <div style="display:flex;gap:6px;align-items:center;margin-top:2px">
+      <input type="text" id="ovFeet" value="${o.feet != null ? o.feet : ""}" placeholder="${e.worldHeight != null ? e.worldHeight : "—"}" style="width:64px;flex:none">
+      <span class="chip" style="background:${heightColor};color:#15131a;font-weight:600;border-color:${heightColor}">${heightSource}</span>
+    </div>
+    <div style="font-size:11px;color:var(--dim);margin-top:2px">effective: ${e.worldHeight != null ? e.worldHeight + " ft" : "— (loud null, never guessed)"}</div>
+    ${artBlock}
     <div style="color:var(--dim);font-size:12px;margin-top:8px">note</div>
     <textarea id="ovNote" rows="2" placeholder="why it failed / what to redo…">${o.note || ""}</textarea>
     <button style="margin-top:6px" onclick="saveChanges()">save changes</button>`;
   if(keepTags !== null) $("ovTags").value = keepTags;
   if(keepNote !== null) $("ovNote").value = keepNote;
+  if(keepFeet !== null) $("ovFeet").value = keepFeet;
 }
 function renderRail(){
   $("rail").innerHTML = list.map((e, i) => `
     <div class="thumb ${i === idx ? "current" : ""}" onclick="go(${i})" title="${e.name}">
-      <img src="/sprites/${e.slug}.png" loading="lazy">
+      <img src="${stageSrc(e)}" loading="lazy">
+      ${e.candidateAsset ? `<span class="dot" style="left:2px;right:auto;background:var(--accent)" title="has faceted candidate"></span>` : ""}
       ${stateOf(e.slug) !== "unreviewed" ? `<span class="dot ${stateOf(e.slug)}"></span>` : ""}
     </div>`).join("");
   const c = $("rail").querySelector(".current");
   if(c) c.scrollIntoView({ block: "nearest", inline: "center" });
 }
 function renderProgress(){
-  const all = Object.entries(REG).filter(([, e]) => e.status === "cut");
+  const all = Object.entries(REG).filter(([, e]) => inPool(e));
   const done = all.filter(([s]) => stateOf(s) !== "unreviewed").length;
   const failN = all.filter(([s]) => stateOf(s) === "fail").length;
+  const candN = all.filter(([, e]) => e.candidateAsset).length;
   $("progress").textContent =
-    `filter: ${idx + 1}/${list.length} · reviewed ${done}/${all.length} (${failN} fail)`;
+    `filter: ${idx + 1}/${list.length} · reviewed ${done}/${all.length} (${failN} fail) · ${candN} w/ candidate`;
 }
 
 async function post(url, body){
@@ -344,9 +398,9 @@ function setScale(v){
   render();
 }
 function metaEdits(){
-  // tags/note straight from the inputs — committed by Save/Pass/Fail alongside the scale
+  // tags/note/feet straight from the inputs — committed by Save/Pass/Fail alongside the scale
   const set = {}, clear = [];
-  const tagsEl = $("ovTags"), noteEl = $("ovNote");
+  const tagsEl = $("ovTags"), noteEl = $("ovNote"), feetEl = $("ovFeet");
   if(tagsEl){
     const tags = tagsEl.value.split(",").map(s => s.trim()).filter(Boolean);
     if(tags.length) set.tags = tags; else clear.push("tags");
@@ -354,6 +408,18 @@ function metaEdits(){
   if(noteEl){
     const note = noteEl.value.trim();
     if(note) set.note = note; else clear.push("note");
+  }
+  if(feetEl){
+    // VQ2-RESPEC.md S6 — Adam's expected-height override (worldHeight ladder's TOP source).
+    // Range/type validation happens server-side (dev/sprite-review.py apply_patch); an
+    // unparseable value here just gets left alone (no set/clear) rather than silently wiping
+    // a prior overlay ruling on a typo.
+    const raw = feetEl.value.trim();
+    if(!raw) clear.push("feet");
+    else {
+      const f = parseFloat(raw);
+      if(Number.isFinite(f)) set.feet = f; else toast("feet: enter a number (0.1–100)");
+    }
   }
   return { set, clear };
 }
@@ -385,7 +451,7 @@ function pinCur(){ const e = cur(); if(e && !pins.includes(e.slug)){ pins.push(e
 function unpin(slug){ pins = pins.filter(s => s !== slug); persistPins(); render(); }
 function persistPins(){ localStorage.setItem("spritePins", JSON.stringify(pins)); }
 
-["fRealm","fKind","fSize","fState"].forEach(id => $(id).onchange = applyFilters);
+["fRealm","fKind","fSize","fState","fCandidate","fHeight"].forEach(id => $(id).onchange = applyFilters);
 $("fSearch").oninput = applyFilters;
 $("zoom").oninput = e => { medPx = +e.target.value; render(); };
 $("prev").onclick = () => go(idx - 1); $("next").onclick = () => go(idx + 1);

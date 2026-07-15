@@ -187,6 +187,30 @@ def validate_and_build(source, realm_ids):
                 errors.append(f"{realm}/{name}: mapped part '{part}' not found in "
                                f"THEATER_PROP_KEYWORD_RULES (theater-data.js) — mapping drifted")
 
+            # QF-B1 (2026-07-14, PLAY-LENS P0 #4): an optional per-entry `retint` ("#rrggbb") — a
+            # realm prop that reuses a whole-object model whose BAKED palette doesn't match what it's
+            # standing in for (e.g. "Alley Fire Escape"/"Rebar Thicket"/"Cable Snarl" all reuse
+            # prop-web.js's buildWebMass — a giant-spider corner web authored in pale ghost-silk
+            # tones — as a generic thin-tangled-lattice placeholder shape; theater-boot.js's
+            # wholeObjectRetintColorBuffer recolors the cached geometry toward this hex at mount
+            # time). part_params is BASE_TO_PART's OWN shared dict object (same reference for every
+            # entry with this base) — COPY it before merging in a per-entry key, never mutate the
+            # shared dict in place (would leak this entry's retint onto every sibling using the same
+            # base, e.g. Cobweb Mass's genuine pale-web read). Written out as a plain decimal int —
+            # json.dumps has no hex-literal syntax, and a JS number doesn't care what base its SOURCE
+            # was written in; matches wholeObjectRetintColorBuffer's own `typeof === "number"` gate
+            # and its `>> 16` / `& 255` bit-ops, byte-identical whether the literal reads 0x4a4c4f or
+            # 4884815.
+            retint_raw = p.get("retint")
+            if retint_raw:
+                if part_params is None:
+                    errors.append(f"{realm}/{name}: retint set but base '{base}' has no part/partParams to attach it to")
+                elif not (isinstance(retint_raw, str) and re.fullmatch(r"#?[0-9a-fA-F]{6}", retint_raw)):
+                    errors.append(f"{realm}/{name}: retint '{retint_raw}' is not a '#rrggbb' hex string")
+                else:
+                    part_params = dict(part_params)
+                    part_params["retint"] = int(retint_raw.lstrip("#"), 16)
+
             cross_norm = normalize_cross_realm(cross_realm_raw, realm_ids)
             if isinstance(cross_norm, tuple):
                 cross_norm, bad = cross_norm

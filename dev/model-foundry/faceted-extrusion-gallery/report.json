@@ -1,0 +1,108 @@
+{
+  "schema": "genesis.faceted-extrusion-gallery.v1",
+  "realm": "fantasy",
+  "verdict": "QA_PENDING",
+  "runtimeAdmittedCount": 0,
+  "intent": "Sample the B treatment across ornate Fantasy silhouettes before any regeneration wave.",
+  "assets": [
+    {
+      "id": "shield",
+      "label": "Shield",
+      "source": "assets/icons/shield.png",
+      "output": "dev/model-foundry/faceted-extrusion-proof/gallery-shield-faceted.glb",
+      "style": "B: existing ornate art + faceted extrusion",
+      "faces": 338,
+      "depth": 0.1,
+      "bevel": 0.018,
+      "reliefAmplitude": 0.051
+    },
+    {
+      "id": "key",
+      "label": "Key",
+      "source": "assets/icons/key.png",
+      "output": "dev/model-foundry/faceted-extrusion-proof/gallery-key-faceted.glb",
+      "style": "B: existing ornate art + faceted extrusion",
+      "faces": 328,
+      "depth": 0.1,
+      "bevel": 0.018,
+      "reliefAmplitude": 0.051
+    },
+    {
+      "id": "book-arcane",
+      "label": "Arcane book",
+      "source": "assets/icons/book-arcane.png",
+      "output": "dev/model-foundry/faceted-extrusion-proof/gallery-book-arcane-faceted.glb",
+      "style": "B: existing ornate art + faceted extrusion",
+      "faces": 216,
+      "depth": 0.1,
+      "bevel": 0.018,
+      "reliefAmplitude": 0.051
+    },
+    {
+      "id": "banner",
+      "label": "Ceremonial banner",
+      "source": "assets/icons/banner.png",
+      "output": "dev/model-foundry/faceted-extrusion-proof/gallery-banner-faceted.glb",
+      "style": "B: existing ornate art + faceted extrusion",
+      "faces": 270,
+      "depth": 0.1,
+      "bevel": 0.018,
+      "reliefAmplitude": 0.051
+    },
+    {
+      "id": "medallion",
+      "label": "DM medallion",
+      "source": "assets/icons/medallion-dm.png",
+      "output": "dev/model-foundry/faceted-extrusion-proof/gallery-medallion-faceted.glb",
+      "style": "B: existing ornate art + faceted extrusion",
+      "faces": 250,
+      "depth": 0.1,
+      "bevel": 0.018,
+      "reliefAmplitude": 0.051
+    },
+    {
+      "id": "door",
+      "label": "Arched door",
+      "source": "assets/icons/door-arched.png",
+      "output": "dev/model-foundry/faceted-extrusion-proof/gallery-door-faceted.glb",
+      "style": "B: existing ornate art + faceted extrusion",
+      "faces": 212,
+      "depth": 0.1,
+      "bevel": 0.018,
+      "reliefAmplitude": 0.051
+    },
+    {
+      "id": "helm",
+      "label": "Ceremonial helm",
+      "source": "assets/icons/helm.png",
+      "output": "dev/model-foundry/faceted-extrusion-proof/gallery-helm-faceted.glb",
+      "style": "B: existing ornate art + faceted extrusion",
+      "faces": 310,
+      "depth": 0.1,
+      "bevel": 0.018,
+      "reliefAmplitude": 0.051
+    },
+    {
+      "id": "compass",
+      "label": "Star compass",
+      "source": "assets/icons/compass.png",
+      "output": "dev/model-foundry/faceted-extrusion-proof/gallery-compass-faceted.glb",
+      "style": "B: existing ornate art + faceted extrusion",
+      "faces": 268,
+      "depth": 0.1,
+      "bevel": 0.018,
+      "reliefAmplitude": 0.051
+    },
+    {
+      "id": "tome",
+      "label": "Tome",
+      "source": "assets/icons/tome.png",
+      "output": "dev/model-foundry/faceted-extrusion-proof/gallery-tome-faceted.glb",
+      "style": "B: existing ornate art + faceted extrusion",
+      "faces": 195,
+      "depth": 0.1,
+      "bevel": 0.018,
+      "reliefAmplitude": 0.051
+    }
+  ]
+}

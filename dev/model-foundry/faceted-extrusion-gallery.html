@@ -1,0 +1,19 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Fantasy Faceted Extrusion Gallery</title>
+<style>
+html,body{margin:0;width:1440px;height:1080px;overflow:hidden;background:#121215;color:#eee5d6;font-family:Arial,sans-serif}
+header{height:72px;padding:16px 22px;box-sizing:border-box;border-bottom:1px solid #3a373d;background:#17161a}h1{font-size:21px;margin:0 0 6px}p{font-size:13px;color:#b9b2a9;margin:0}
+#stage{display:none}#grid{display:grid;grid-template-columns:repeat(3,480px);grid-template-rows:repeat(3,336px)}
+.cell{width:480px;height:336px;border-right:1px solid #3a373d;border-bottom:1px solid #3a373d;box-sizing:border-box;background:#232127}.cell img{display:block;width:480px;height:286px}.label{height:50px;padding:9px 12px;box-sizing:border-box;background:#17161a;font-size:14px;line-height:17px}.label small{display:block;color:#9d968f}
+</style>
+<header><h1>Fantasy artifact gallery · B treatment</h1><p>Existing ornate art, each rebuilt as a shallow faceted extrusion with a recessed body and physical rim. This is a direction sample, not runtime admission.</p></header>
+<canvas id="stage" width="480" height="286"></canvas><div id="grid"></div>
+<script type="importmap">{"imports":{"three":"/vendor/three/three.module.js","three/addons/":"/vendor/three/addons/"}}</script>
+<script type="module">
+import * as THREE from "/vendor/three/three.module.js";import {GLTFLoader} from "/vendor/three/addons/loaders/GLTFLoader.js";
+const renderer=new THREE.WebGLRenderer({canvas:document.querySelector('#stage'),antialias:true,preserveDrawingBuffer:true});renderer.setSize(480,286,false);renderer.setPixelRatio(1);renderer.outputColorSpace=THREE.SRGBColorSpace;
+const loader=new GLTFLoader(),load=url=>new Promise((resolve,reject)=>loader.load(url,resolve,undefined,reject));
+function viewFor(gltf){const scene=new THREE.Scene();scene.background=new THREE.Color(0x232127);scene.add(new THREE.HemisphereLight(0xffedcf,0x26313e,1.1));const key=new THREE.DirectionalLight(0xffd6a6,3.4);key.position.set(-3,5,4);scene.add(key);const rim=new THREE.DirectionalLight(0x7aa9d8,1.25);rim.position.set(4,2,-3);scene.add(rim);const group=gltf.scene,box=new THREE.Box3().setFromObject(group),center=box.getCenter(new THREE.Vector3()),size=box.getSize(new THREE.Vector3());group.position.sub(center);group.position.y+=size.y/2;scene.add(group);const wall=new THREE.Mesh(new THREE.BoxGeometry(2.7,1.9,.12),new THREE.MeshStandardMaterial({color:0x474148,roughness:.95,flatShading:true}));wall.position.set(0,.75,-.20);scene.add(wall);const max=Math.max(size.x,size.y,.01),cam=new THREE.OrthographicCamera(-1,1,.6,-.6,.01,100);cam.position.set(2.5,2,3.8).normalize().multiplyScalar(max*3.2);cam.lookAt(0,size.y*.48,0);cam.zoom=1.06/max;cam.updateProjectionMatrix();return{scene,cam}}
+window.renderGallery=async report=>{const grid=document.querySelector('#grid');grid.textContent='';for(const item of report.assets){const v=viewFor(await load('/'+item.output));renderer.render(v.scene,v.cam);const cell=document.createElement('div');cell.className='cell';const image=document.createElement('img');image.src=renderer.domElement.toDataURL('image/png');const label=document.createElement('div');label.className='label';label.innerHTML=`${item.label}<small>${item.faces} faces · ${item.depth}u depth · B treatment</small>`;cell.append(image,label);grid.append(cell)}await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));window.__rendered=true};window.__ready=true;
+</script>

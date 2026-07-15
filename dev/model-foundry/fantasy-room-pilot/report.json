@@ -1,0 +1,166 @@
+{
+  "schema": "genesis.fantasy-prop-room-pilot.v1",
+  "technicalStatus": "COMPILED_AND_MOUNTED",
+  "visualStatus": "PENDING_HUMAN_REVIEW",
+  "runtimeAdmittedCount": 0,
+  "capture": "/private/tmp/Genesis-extruded-props/dev/model-foundry/fantasy-room-pilot/fantasy-walk-room.png",
+  "provenance": {
+    "walkId": "fantasy-prop-pilot-table-backed",
+    "realm": "fantasy",
+    "roomLabel": "Banded Oak Threshold",
+    "tableRefs": [
+      "Engine/02. _Procedures/Dungeon Encounter v2.0.md",
+      "src/engine/place-dressing.js#fantasy"
+    ]
+  },
+  "candidates": [
+    {
+      "slug": "fantasy-obj-door-shut",
+      "constructionClass": "ARTICULATED_MODEL",
+      "runtimeAdmitted": false,
+      "sourceRefs": [
+        "Engine/02. _Procedures/Dungeon Encounter v2.0.md#Dungeon Door Type",
+        "Engine/02. _Procedures/Dungeon Encounter v2.0.md#Dungeon Door State",
+        "assets/dressing/fantasy-obj-door-shut.png"
+      ]
+    },
+    {
+      "slug": "fantasy-obj-door-open",
+      "constructionClass": "ARTICULATED_MODEL",
+      "runtimeAdmitted": false,
+      "sourceRefs": [
+        "Engine/02. _Procedures/Dungeon Encounter v2.0.md#Dungeon Door Type",
+        "Engine/02. _Procedures/Dungeon Encounter v2.0.md#Dungeon Door State",
+        "assets/dressing/fantasy-obj-door-open.png"
+      ]
+    },
+    {
+      "slug": "fantasy-obj-lever-left",
+      "constructionClass": "ARTICULATED_MODEL",
+      "runtimeAdmitted": false,
+      "sourceRefs": [
+        "docs/BEAUTY-WAVE-5.md#levers",
+        "assets/dressing/fantasy-obj-lever-left.png"
+      ]
+    },
+    {
+      "slug": "fantasy-obj-lever-right",
+      "constructionClass": "ARTICULATED_MODEL",
+      "runtimeAdmitted": false,
+      "sourceRefs": [
+        "docs/BEAUTY-WAVE-5.md#levers",
+        "assets/dressing/fantasy-obj-lever-right.png"
+      ]
+    },
+    {
+      "slug": "fantasy-painting-1",
+      "constructionClass": "SHALLOW_EXTRUDE",
+      "runtimeAdmitted": false,
+      "sourceRefs": [
+        "src/engine/place-dressing.js#fantasy-painting-1",
+        "assets/dressing/fantasy-painting-1.png",
+        "spr-fantasy-ancient-red-dragon"
+      ]
+    },
+    {
+      "slug": "fantasy-obj-trap-hidden",
+      "constructionClass": "MODEL_RECIPE",
+      "runtimeAdmitted": false,
+      "sourceRefs": [
+        "Engine/02. _Procedures/Dungeon Encounter v2.0.md",
+        "assets/dressing/fantasy-obj-trap-hidden.png"
+      ]
+    },
+    {
+      "slug": "fantasy-obj-container-intact",
+      "constructionClass": "FACED_BOX",
+      "runtimeAdmitted": false,
+      "sourceRefs": [
+        "docs/BEAUTY-WAVE-5.md#containers",
+        "assets/dressing/fantasy-obj-container-intact.png"
+      ]
+    },
+    {
+      "slug": "fantasy-ornate-wall-shield",
+      "constructionClass": "EXTRUDE",
+      "runtimeAdmitted": false,
+      "sourceRefs": [
+        "dev/model-foundry/faceted-extrusion-proof/fantasy-shield-flat-orthographic-source.png",
+        "dev/model-foundry/faceted-extrusion-proof/fantasy-shield-faceted.glb"
+      ]
+    }
+  ],
+  "diagnostics": {
+    "glowCount": 0,
+    "emitters": [
+      {
+        "x": 1.84,
+        "y": 1.1530091982905288,
+        "z": 3.552713678800501e-17,
+        "fixtureId": "sconce-iron",
+        "mount": "wall",
+        "ownerSegIndex": 1,
+        "emissiveIntensity": 1.605440779933706
+      }
+    ],
+    "inventory": {
+      "mounted": true,
+      "interior": true,
+      "scene": {
+        "objects": 106,
+        "meshes": 66,
+        "instancedMeshes": 1,
+        "sprites": 0,
+        "objectKinds": {
+          "Scene": 1,
+          "DirectionalLight": 3,
+          "HemisphereLight": 1,
+          "Group": 30,
+          "Mesh": 66,
+          "PointLight": 2,
+          "Object3D": 2,
+          "AmbientLight": 1
+        }
+      },
+      "resources": {
+        "materials": 27,
+        "textures": 5,
+        "materialTypes": {
+          "MeshLambertMaterial": 9,
+          "MeshBasicMaterial": 6,
+          "MeshStandardMaterial": 12
+        },
+        "transparentMaterials": 10,
+        "alphaTestMaterials": 1,
+        "additiveMaterials": 6
+      },
+      "renderer": {
+        "calls": 1,
+        "triangles": 1,
+        "points": 0,
+        "lines": 0,
+        "geometries": 68,
+        "textures": 20,
+        "programs": 25,
+        "frame": 1654
+      },
+      "post": {
+        "mounted": true,
+        "dof": false,
+        "bloom": false,
+        "grade": false
+      }
+    },
+    "camera": {
+      "x": 6.8,
+      "y": 7.2,
+      "z": 8.4,
+      "zoom": 1.05
+    }
+  },
+  "consoleErrors": [
+    "Failed to load resource: the server responded with a status of 404 (File not found)",
+    "Failed to load resource: the server responded with a status of 404 (File not found)",
+    "Failed to load resource: the server responded with a status of 404 (File not found)"
+  ]
+}

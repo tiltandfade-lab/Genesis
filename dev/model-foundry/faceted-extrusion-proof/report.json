@@ -1,0 +1,40 @@
+{
+  "schema": "genesis.faceted-extrusion-proof.v1",
+  "verdict": "QA_PENDING",
+  "runtimeAdmittedCount": 0,
+  "sourceContract": "matched geometry comparison: original ornate art versus regenerated faceted-v4 art",
+  "variants": [
+    {
+      "id": "legacy",
+      "label": "A \u00b7 original shield + legacy raw contour slab",
+      "output": "dev/model-foundry/extruded-props/glb/fantasy-shield.glb",
+      "knownVerdict": "FAIL"
+    },
+    {
+      "id": "original-faceted",
+      "label": "B \u00b7 original art + new faceted extrusion",
+      "output": "dev/model-foundry/faceted-extrusion-proof/fantasy-shield-faceted.glb",
+      "knownVerdict": "REFERENCE",
+      "faces": 174,
+      "depth": 0.1,
+      "bevel": 0.018,
+      "reliefAmplitude": 0.051
+    },
+    {
+      "id": "v4-faceted",
+      "label": "C \u00b7 regenerated v4 art + same extrusion",
+      "output": "dev/model-foundry/faceted-extrusion-proof/fantasy-shield-v4-faceted.glb",
+      "knownVerdict": "QA_PENDING",
+      "faces": 238,
+      "depth": 0.1,
+      "bevel": 0.018,
+      "reliefAmplitude": 0.051
+    }
+  ],
+  "views": [
+    "front-three-quarter",
+    "reverse-light",
+    "grazing-side",
+    "topology-diagnostic"
+  ]
+}

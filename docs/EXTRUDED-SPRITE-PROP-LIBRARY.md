@@ -1,7 +1,7 @@
 ---
 type: build-plan
 project: Genesis
-status: SPECCED 2026-07-12; generation and implementation wait for Adam's go-ahead
+status: ES-0/ES-1 IN PROGRESS 2026-07-12; three-core-realm scope locked
 created: 2026-07-12
 authority: GRAPHICS-ENGINE.md section H owns construction classes; this document operationalizes the sprite-derived prop library
 related:
@@ -44,9 +44,11 @@ feeds those three classes and extends the offline prop compiler described in
 
 Genesis already has three unusually valuable source corpora:
 
-1. Twelve realm prompt files contain **50 authored loot-table items per realm**, or approximately
-   600 object descriptions. Those sections were deliberately excluded from the creature manifest
-   pending an item-specific pipeline.
+1. Twelve realm prompt files contain 50 authored loot-table items per realm. **Extrusion production
+   is limited to Fantasy, Gloom, and Chrome**, providing 475 core item descriptions (375 general
+   Fantasy items plus 50 Gloom and 50 Chrome items). Existing art
+   from another realm may be admitted only as an explicit exception when it fills a concrete
+   cross-realm semantic gap; there is no twelve-realm extrusion matrix.
 2. `BEAUTY-WAVE-5.md` describes approximately 300 stateful interactable cells across doors, chests,
    containers, campfires, levers, portals, shrines, and traps.
 3. `setting-dressing.md` and the place-asset queue describe signs, banners, portraits, windows,
@@ -318,19 +320,27 @@ The first production-worthy library should be small enough to validate deeply:
 | realm motifs | 12 per pilot realm | emblem, trim, clasp, aperture, fracture, rune families |
 | stateful interactables | 8 archetypes in pilot realms | door, chest, container, fire, lever, portal, shrine, trap |
 
-Pilot realms are **Fantasy, Gloom, and Chrome**. They provide a strong material and shape spread:
+Production realms are **Fantasy, Gloom, and Chrome**. They provide a strong material and shape spread:
 stone/wood/iron, domestic-funerary wrongness, and industrial/ceramic/emissive machinery. Do not
-generate all twelve realms until these three prove the compiler and visual language.
+generate a matrix for the other nine realms. Relevant existing sprites from those realms enter only
+through the exception review described above.
+
+**Current regeneration pilot override (Adam, 2026-07-12): Fantasy only.** Gloom and Chrome remain in
+the inventory and long-term architecture but are deferred from generation and admission until the
+Fantasy faceted-source and extrusion proof is accepted.
 
 ### 7.3 Expansion target
 
-After the pilot passes, expand by player-facing demand rather than completing a ceremonial matrix:
+After the pilot passes, deepen the three core realms by player-facing demand rather than completing
+a ceremonial all-realm matrix:
 
 1. Compile all 600 item descriptions into candidate registry records.
 2. Resolve each to an existing chassis/operator/motif recipe where possible.
 3. Generate new art only for unresolved high-frequency or high-importance families.
 4. Record unresolved requests in the prop-gap ledger.
 5. Promote recurring gaps into new parts or motif families.
+6. Admit an other-realm sprite only when it is already present, semantically reusable, and resolves
+   a named gap; record the exception and do not generate neighboring matrix cells.
 
 This creates near-infinite supply through reuse while protecting ImageGen credits and review time.
 
@@ -362,8 +372,36 @@ No human is required in the production loop. The review roles are automated but 
 
 ## 9. Automated gates
 
+### 9.0 Locked visual language: mature faceted low poly
+
+Extruded and procedurally assembled props target the same mature faceted language as the selected
+low-poly donor meshes. This is not a painted low-poly filter. The division of ownership is strict:
+
+- source art owns the orthographic silhouette, broad front-face albedo regions, decals, damage, and
+  material marks;
+- geometry owns thickness, bevels, visible triangulation, silhouette breaks, and contact shape;
+- runtime materials and lights own directional shading, highlights, emissive response, and shadows.
+
+For shallow props, construct the front relief as an adaptive constrained triangulation rather than
+one coplanar textured cap. Seed vertices from silhouette curvature, material-region boundaries, and
+a deterministic low-density interior distribution. Apply small seeded depth offsets, generally
+`0-3%` of prop depth, while pinning the silhouette, base contact, hinges, sockets, apertures, and all
+state-family landmarks. Use flat normals on the relief and bevel shell; vary face albedo value and
+roughness within narrow realm/material bands. Do not add random triangulation where it harms a
+manufactured object's design language: Chrome panels use purposeful folds, Fantasy uses carved or
+hammered planes, and Gloom uses chipped funerary fracture patterns.
+
+The style must remain mature and restrained: no inflated toy proportions, candy palette, excessive
+edge highlights, or uniform noise facets. Facets are a structural vocabulary, not decoration.
+
 ### 9.1 Source-art gates
 
+- strict orthographic front elevation for every extrusion source: camera perpendicular to the broad
+  face, with no visible top, side, underside, or perspective convergence;
+- legacy isometric and three-quarter sprites are semantic/material references only and must be
+  regenerated flat; adding mesh depth to painted perspective creates double perspective;
+- generate one extrusion source per model call; sprite sheets are review composites, never source
+  generations, because shared sheets encourage camera drift and contaminating debris;
 - expected cell count and stable cell-to-slug mapping;
 - no cropping, scene background, hand, character, or cast shadow;
 - alpha/key cleanup produces bounded component count;
@@ -491,11 +529,12 @@ Gate: every visible result retains source-card provenance; hidden content remain
 visual budget changes projection only; reload reproduces the room byte-identically at the recipe
 level.
 
-### ES-5: demand-driven realm expansion
+### ES-5: demand-driven core-realm deepening
 
 - Compile all realm item candidates.
 - Resolve existing recipes before generating art.
-- Expand remaining realms by encounter frequency and unresolved gap count.
+- Expand Fantasy, Gloom, and Chrome by encounter frequency and unresolved gap count.
+- Review isolated other-realm exceptions without opening a new realm-generation wave.
 - Publish periodic contact sheets and coverage reports.
 
 Gate: measured recipe reuse rises over time; new generation is justified by unresolved semantic

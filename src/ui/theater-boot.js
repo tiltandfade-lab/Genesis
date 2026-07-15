@@ -2828,12 +2828,44 @@ function _tallyPath(bucket, key){
    on T3's branch, per the spec's explicit "do not depend on T3" instruction). */
 let SPRITE_CHANNEL_ENABLED = true;
 
+/* VQ2-RESPEC.md Wave S ruling (Adam, 2026-07-15) + DESIGN.md 2026-07-15 — "the one-flag retreat".
+   Adam's explicit call: flip the runtime corpus to the faceted candidates now (provisional batch
+   admission), keep the v3/legacy corpus untouched as the reserve "in case this direction is a
+   failure" — reversible with ONE flag, no data/sprite-registry.js edit required. FACETED_FLIP_ENABLED
+   is that flag: true (default, post-gate) lets spriteAssetPathFor prefer a "candidate"-admitted
+   entry's candidateAsset; false forces EVERY resolution back to legacyAsset corpus-wide regardless
+   of what the registry's runtimeAdmitted field says. The other retreat layer lives in the generator
+   (build/gen-sprite-registry.py's --admit-faceted flag — omit it and the registry itself regenerates
+   all-"legacy"); this flag is the render-time half, for an instant revert with no regen. */
+const FACETED_FLIP_ENABLED = true;
+
+// VQ2-RESPEC.md S5 — resolves the ACTUAL asset path a sprite-registry entry should render with.
+// candidateAsset wins only when the flip is on AND the registry itself admits this entry as
+// "candidate" AND a candidateAsset path is actually present (three independent gates — any one of
+// them false is enough to fall back). legacyAsset is next; the bare literal is the final fallback
+// for a registry-less caller or an entry with neither field (byte-identical to the pre-S3 convention).
+function spriteAssetPathFor(entry){
+  if(!entry) return null;
+  if(FACETED_FLIP_ENABLED && entry.runtimeAdmitted === "candidate" && entry.candidateAsset){
+    return entry.candidateAsset;
+  }
+  return entry.legacyAsset || ("assets/sprites/" + entry.slug + ".png");
+}
+
 // texture cache, keyed by sprite slug: undefined (never requested) | "pending" | "failed" | a loaded
 // THREE.Texture. Exposed read/write on window.Theater._spriteTextureCache (bottom of this file) as a
 // TEST-ONLY seam — dev/verify-theater-sprites.mjs pre-seeds a fake Texture here to exercise the
 // cut-status render path without a real network/file image load (the spec's own "stub texture
 // loader" instruction); nothing in product logic writes to this object from outside spriteTextureFor.
 const SPRITE_TEXTURE_CACHE = {};
+// VQ2-RESPEC.md S5 cache-key law: SPRITE_TEXTURE_CACHE stays SLUG-keyed (existing diagnostic/
+// capture-script contract — window.Theater._spriteTextureCache is read by slug elsewhere, e.g.
+// dev/battle-gate/capture-mediums-lineup.mjs), but a slug's RESOLVED PATH can change mid-session
+// (FACETED_FLIP_ENABLED toggled, or a registry regen flips runtimeAdmitted) — SPRITE_TEXTURE_SRC
+// remembers which path is CURRENTLY loaded under each slug's cache entry, so spriteTextureFor can
+// tell a real cache hit from a STALE one (same slug, different resolved asset) and evict+reload
+// instead of silently serving the wrong asset's texture under the old key.
+const SPRITE_TEXTURE_SRC = {};
 
 // GRAPHICS-ENGINE.md GR2 (dressing cards): texture cache keyed by dressing slug — either a
 // synchronously-generated placeholder label-card CanvasTexture (art doesn't exist yet — DRESSING-GEN
@@ -2944,14 +2976,37 @@ function spriteSizeScaleFor(size){
    and, if the theater is still mounted, replays S.lastUnits (same null-the-dirty-key-then-resend
    trick loadWholeObjectBuilders' callback uses) so the sprite appears on the very next render without
    the caller having to re-drive anything. A failed load caches "failed" — permanently falls through,
-   never retried, never throws. */
-function spriteTextureFor(slug){
-  const cached = SPRITE_TEXTURE_CACHE[slug];
+   never retried, never throws.
+
+   VQ2-RESPEC.md S5 -- takes the full registry ENTRY now (was just `slug`) so it can resolve THROUGH
+   the entry's own admission fields (spriteAssetPathFor, above) instead of hard-building the legacy
+   path itself. Cache-key law: SPRITE_TEXTURE_SRC[slug] remembers which path is currently loaded
+   under SPRITE_TEXTURE_CACHE[slug] -- a resolved-path mismatch (the flip fired, or a regen changed
+   this slug's admission, since the last request) evicts the stale entry and reloads from the NEW
+   path, rather than serving a legacy texture out of a cache slot the candidate now owns (or vice
+   versa) under the same slug key. */
+function spriteTextureFor(entry){
+  // named spriteSlug (not `slug`) -- `slug` is a symbol world.state already owns; a same-named
+  // const/let/var here (even function-local) trips check-manifest's single-definition DRIFT check,
+  // which scans by regex, not real scope (build/check-manifest.py's own documented limitation).
+  const spriteSlug = entry && entry.slug;
+  if(!spriteSlug) return null;
+  const path = spriteAssetPathFor(entry);
+  // A slug never seen before (SPRITE_TEXTURE_SRC has no prior record) just records `path` without
+  // evicting -- a test harness pre-seeding SPRITE_TEXTURE_CACHE[slug] directly (the "stub texture
+  // loader" seam, dev/verify-theater-sprites.mjs) must still hit on ITS first read; only a slug
+  // seen before whose resolved path has since CHANGED (a real flip, mid-session) is stale.
+  const priorPath = SPRITE_TEXTURE_SRC[spriteSlug];
+  SPRITE_TEXTURE_SRC[spriteSlug] = path;
+  if(priorPath !== undefined && priorPath !== path){
+    delete SPRITE_TEXTURE_CACHE[spriteSlug]; // stale -- loaded (or pending/failed) from a DIFFERENT path
+  }
+  const cached = SPRITE_TEXTURE_CACHE[spriteSlug];
   if(cached && cached !== "pending" && cached !== "failed") return cached;
   if(cached === "pending" || cached === "failed") return null;
-  SPRITE_TEXTURE_CACHE[slug] = "pending";
+  SPRITE_TEXTURE_CACHE[spriteSlug] = "pending";
   textureLoader.load(
-    "assets/sprites/" + slug + ".png",
+    path,
     function(tex){
       // BEAUTY-WAVE-2 BW2-0: magFilter stays Nearest (crisp when magnified — the pixel-art law, a
       // creature sprite viewed close must show its authored texel grid, not smoothed mush). minFilter
@@ -2963,7 +3018,7 @@ function spriteTextureFor(slug){
       tex.magFilter = THREE.NearestFilter;
       tex.minFilter = THREE.LinearFilter;
       tex.generateMipmaps = false;
-      SPRITE_TEXTURE_CACHE[slug] = tex;
+      SPRITE_TEXTURE_CACHE[spriteSlug] = tex;
       if(S.mounted && S.lastUnits){
         S.unitsKey = null; // force the dirty-key skip past, same trick as the glb-settle replay
         setUnits(S.lastUnits);
@@ -2980,7 +3035,7 @@ function spriteTextureFor(slug){
       }
     },
     undefined,
-    function(){ SPRITE_TEXTURE_CACHE[slug] = "failed"; }
+    function(){ SPRITE_TEXTURE_CACHE[spriteSlug] = "failed"; }
   );
   return null;
 }
@@ -3079,7 +3134,7 @@ function buildSpriteBillboardMesh(tex, w, h, slug){
 }
 
 function buildSpriteBillboard(entry){
-  const tex = spriteTextureFor(entry.slug);
+  const tex = spriteTextureFor(entry); // S5: resolves through entry's own admission fields, not just the slug
   if(!tex) return null; // not loaded yet / failed load -> caller falls through, never rejects
   // entry.scale = the per-slug heads-line-up calibration from the sprite-review overlay
   // (dev/sprite-review.py -> sprite-tags-overlay.json -> gen-sprite-registry.py) — crops vary
@@ -3110,7 +3165,7 @@ function buildSpriteBillboard(entry){
 // baked square plane. Returns {group, height} so interiorBuildPieces can floor-offset + wall-clamp
 // without re-deriving the height.
 function interiorSpriteBillboard(entry, wallHeightCap){
-  const tex = spriteTextureFor(entry.slug);
+  const tex = spriteTextureFor(entry); // S5: resolves through entry's own admission fields, not just the slug
   if(!tex) return null; // not loaded yet / failed load -> caller falls through, never rejects
   const scaleTrue = (typeof entry.scaleTrue === "number" && entry.scaleTrue > 0)
     ? entry.scaleTrue
@@ -12362,12 +12417,31 @@ Object.defineProperty(window.Theater, "spriteChannel", {
   enumerable: true, configurable: true
 });
 
+/* VQ2-RESPEC.md S5 — `window.Theater.facetedFlip`, READ-ONLY (FACETED_FLIP_ENABLED is a real `const`
+   per spec, not a `let` like spriteChannel/wholeObject — the one-flag retreat is a SOURCE edit
+   (flip the const, reload), same as the generator's `--admit-faceted` flag is a build-time source/
+   CLI toggle, not a runtime one). This getter is diagnostics-only, so a console/harness can READ the
+   live value; a harness that needs to prove the false-branch mutates the source text before loading
+   the module in its own subprocess (this file's established RED-FIRST convention — see
+   dev/verify-sprite-join.mjs's TIER-1 stub-out for the same pattern), not a runtime set. */
+Object.defineProperty(window.Theater, "facetedFlip", {
+  get: function(){ return FACETED_FLIP_ENABLED; },
+  enumerable: true, configurable: true
+});
+
 // SPRITE-TRANSITION T4 — TEST-ONLY SEAM: exposes the module-private texture cache so a harness (this
 // unit's own dev/verify-theater-sprites.mjs) can pre-seed a fake THREE.Texture-like object for a slug
 // before calling refFigure.build/setUnits, exercising the cut-status render path without a real
 // network/file image load ("stub texture loader" per the spec). Nothing in product logic reads or
 // writes this from outside spriteTextureFor — same read-only-diagnostics spirit as window.Theater.stats.
 window.Theater._spriteTextureCache = SPRITE_TEXTURE_CACHE;
+
+// VQ2-RESPEC.md S5 — TEST-ONLY SEAM: exposes the path-resolution helper directly (so a harness can
+// assert legacy-vs-candidate resolution against a bare entry object, no THREE/textureLoader/mount
+// needed) and the slug->currently-loaded-path side table the cache-key invalidation law reads.
+window.Theater._spriteAssetPathForTest = spriteAssetPathFor;
+window.Theater._spriteTextureSrcCache = SPRITE_TEXTURE_SRC;
+window.Theater._spriteTextureForTest = spriteTextureFor;
 
 // BEAUTY-WAVE.md VP1 — TEST-ONLY SEAM: exposes interiorBuildPieces directly (the true-scale interior
 // piece sizing this unit fixed) so a harness (dev/verify-dungeon-interior.mjs's VP1 checks) can build

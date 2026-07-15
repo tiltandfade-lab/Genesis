@@ -188,7 +188,10 @@ console.log("\n[7 — escape hatch: mount()'s opts.psx one-liner is symmetric]")
 console.log("\n[8 — sprite filter law: mag Nearest (unchanged), min Linear (was Nearest)]");
 {
   function extractSpriteFilterSnippet(src){
-    const anchor = 'function spriteTextureFor(slug){';
+    // VQ2-RESPEC.md S5 renamed spriteTextureFor's param (slug -> entry) so it can resolve through
+    // the registry entry's own admission fields; OLD_SOURCE is a pre-S5 git ref and still reads
+    // `(slug)`, so the anchor matches the function NAME + open-paren only, tolerant of either.
+    const anchor = 'function spriteTextureFor(';
     const start = src.indexOf(anchor);
     if(start < 0) throw new Error("spriteTextureFor not found");
     const loadCbStart = src.indexOf("function(tex){", start);

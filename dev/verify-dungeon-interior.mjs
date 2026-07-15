@@ -517,12 +517,21 @@ group("16 — GR3: a shared HemisphereLight is built once in mount() (table+inte
   ok(/scene\.add\(hemi\)/.test(mountBody), "the hemisphere light is added to the scene inside mount() (persists for every board mounted after)");
 }
 
-group("17 — REGRESSION: the tabletop's own shadowMap-off restore (U3, unchanged) still stands");
+group("17 — shadow-mapping is ON for BOTH channels (ENV-1B, 2026-07-14 — supersedes the U3 tabletop-off restore)");
 {
-  ok(/if\(S\.renderer\) S\.renderer\.shadowMap\.enabled = false;/.test(bootSrc),
-    "setBoard still restores renderer.shadowMap.enabled=false whenever a combat/tabletop board mounts");
-  const onCount = (bootSrc.match(/S\.renderer\.shadowMap\.enabled = true;/g) || []).length;
-  ok(onCount === 1, `shadow-mapping is turned ON in exactly one place (setInteriorBoard) — found ${onCount}`);
+  // HISTORY: this check used to assert the OPPOSITE — that setBoard restored shadowMap.enabled=false
+  // (U3 iteration-2's "no shadow maps on the tabletop" ruling). ENV-1B retired that rule: it was a
+  // 2026-07-07 pre-alpha placeholder, never an Adam ruling; Adam's actual DESIGN.md north star
+  // (2026-07-10) wants "soft real lighting + cast shadows" on every channel. Per CLAUDE.md's
+  // "validators preserve the thing's job" discipline, the check now protects the NEW law: the
+  // renderer default AND setBoard's per-channel restore both keep shadow-mapping enabled, and no
+  // stray `= false` line survives anywhere (retire() aside — grep proves there is none at all).
+  ok(!/S\.renderer\.shadowMap\.enabled = false;/.test(bootSrc),
+    "no code path forces renderer.shadowMap.enabled=false anymore (the old §2/U3 tabletop restore is retired)");
+  const onCount = (bootSrc.match(/renderer\.shadowMap\.enabled = true;/g) || []).length;
+  ok(onCount === 3, `shadow-mapping is enabled in exactly the three expected places (mount() default, setBoard restore, setInteriorBoard) — found ${onCount}`);
+  ok(/function applyTabletopShadowCasters\(\)/.test(bootSrc),
+    "applyTabletopShadowCasters exists (the tabletop channel's own shadow-caster pass, ENV-1B)");
 }
 
 group("18 — GR4/GR3 wiring: skirt InstancedMesh + kit-graded void/fog backdrop in setInteriorBoard");

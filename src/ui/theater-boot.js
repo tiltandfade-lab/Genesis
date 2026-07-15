@@ -5652,6 +5652,43 @@ function applyTabletopExteriorLook(profileKey){
   (S.pointLights || []).forEach(l => { l.intensity *= look.pointScale; });
 }
 
+// ENV-1B (docs/GRAPHICS-CONVERGENCE-CHARTER.md §3.3; Adam's DESIGN.md 2026-07-10 ruling — "soft real
+// lighting + cast shadows", AO off BECAUSE "real shadows carry contact darkness") — THE TABLETOP
+// SHADOW-CASTER PASS. Same discipline as applyTabletopExteriorLook just above: mutates the LIVE
+// S.pointLights instances applyLightProfile just (re)built for THIS render, never LIGHT_PROFILES or
+// applyLightProfile itself (which is SHARED with setInteriorBoard — see that function's own header —
+// so giving castShadow to a light INSIDE applyLightProfile would silently turn the interior channel's
+// own profile-mood point into a second shadow source alongside its diegetic torch practicals,
+// breaking interior byte-stability for no reason). Called ONLY from setBoard, mirroring
+// applyTabletopExteriorLook's own "new code, tabletop-only" scope note.
+//   daylit's own point is the profile table's "warm key" (applyTabletopExteriorLook's own header
+//   names it that — the profile's authored point color, boosted by TABLETOP_EXTERIOR_LOOK's
+//   pointScale) — it stands in for the sun on this channel, so it casts. Every OTHER profile's single
+//   authored point (torchlit/lamplit/lavalit/fungal-glow/magic-glow/voidlit/dark/moonlit) casts too,
+//   the SAME "torch/practical points cast" convention interiorBuildLights already applies to its own
+//   diegetic PointLight practicals (pl.castShadow=true there, this file's own established pattern).
+//   No per-profile branching needed: every LIGHT_PROFILES entry authors at most ONE point (overcast
+//   authors zero — a flat ambient-only wash with nothing to mark), so there is no interior-style
+//   INTERIOR_SHADOW_CASTER_CAP to reproduce here.
+const TABLETOP_SHADOW_MAP_SIZE = 512; // ENV-1B: starts at INTERIOR_SHADOW_MAP_SIZE's own value (line ~7015) — same small per-light budget, a SEPARATE named const so the two channels can be retuned independently.
+const TABLETOP_SHADOW_BIAS = -0.002;  // mirrors interiorBuildLights' own PointLight practical bias (line ~7488)
+function applyTabletopShadowCasters(){
+  if(!S.pointLights || !S.pointLights.length) return;
+  // far plane keyed off THIS board's own half-extent (set earlier in setBoard, before applyLightProfile
+  // runs) rather than interior's fixed room-scale fallback — a tabletop board can span far more world
+  // units than an interior room, and a too-small far plane would clip the shadow before it reaches the
+  // floor at the board's edge. Falls back to interior's own 4-unit pre-fit default pre-mount/pre-board
+  // (mountInteriorCameraKey's own "S.boardHalfExtent || 4" convention, reused here).
+  const far = Math.max(10, (S.boardHalfExtent || 4) * 2.5);
+  S.pointLights.forEach(light => {
+    light.castShadow = true;
+    light.shadow.mapSize.set(TABLETOP_SHADOW_MAP_SIZE, TABLETOP_SHADOW_MAP_SIZE);
+    light.shadow.camera.near = 0.1;
+    light.shadow.camera.far = far;
+    light.shadow.bias = TABLETOP_SHADOW_BIAS;
+  });
+}
+
 // BW2-4b item 2 — THE CAMERA-KEY SHADOW. One soft shadow-casting DirectionalLight aimed at the interior
 // board center from the CAMERA's general direction (up + toward the camera), created lazily and reused
 // across setInteriorBoard calls (positions/target refreshed each mount, disabled by setBoard on the flat
@@ -6198,7 +6235,17 @@ function mount(el, opts){
   // antialias OFF: PSX authenticity (T1's antialias:true fought the low-res/pixelated read) — the
   // low internal resolution + pixelated upscale IS the texture, smoothing it defeats the point.
   renderer.setClearColor(VOID_BG, 1);
-  renderer.shadowMap.enabled = false; // §2: "no shadow maps" — blob quads only
+  // ENV-1B (2026-07-14): §2's old "no shadow maps — blob quads only" ruling is RETIRED. It was a
+  // 2026-07-07 pre-alpha placeholder decision, never an Adam ruling — his actual north star
+  // (docs/DESIGN.md, 2026-07-10) calls for "soft real lighting + cast shadows" on every channel, AO
+  // staying off specifically BECAUSE "real shadows carry contact darkness." The interior channel has
+  // carried real shadow-mapping since DUNGEON-GRAPH.md U3 (setInteriorBoard, ~line 9185); this default
+  // now matches it so the tabletop/exterior channel (setBoard) gets the same treatment. Type left at
+  // three's default (PCFShadowMap) — neither channel has ever set renderer.shadowMap.type, so this is
+  // a byte-identical shadow FILTER across both, only the on/off flag changes. Blob quads (below) stay:
+  // they are the AO-substitute contact-darkness grounding Adam's own ruling calls for, orthogonal to a
+  // real cast shadow, not a competing "no shadow maps" holdover.
+  renderer.shadowMap.enabled = true;
   el.innerHTML = "";
   el.appendChild(renderer.domElement);
   applyPsxCanvasSize(renderer, renderer.domElement, width, height);
@@ -6410,11 +6457,13 @@ function setBoard(data){
   if(dirtyKey === S.boardKey){ window.Theater.stats.boardSkips++; return; }
   S.boardKey = dirtyKey;
   window.Theater.stats.boardBuilds++;
-  // DUNGEON-GRAPH.md U3 iteration-2, ruling 2: restore the standing table's "no shadow maps" ruling
-  // (§2, mount()'s own default below) whenever a COMBAT/tabletop board mounts — setInteriorBoard is
-  // the only place that turns shadow-mapping ON, so this is the one place it turns back off, however
-  // many interior trays were mounted in between.
-  if(S.renderer) S.renderer.shadowMap.enabled = false;
+  // ENV-1B (2026-07-14): shadow-mapping stays ON for the tabletop/combat path too — see mount()'s own
+  // ENV-1B comment above for the full provenance (§2's old "no shadow maps" line retired; Adam's
+  // DESIGN.md ruling wants real cast shadows everywhere). Kept as an explicit restore here (not just
+  // left at mount()'s own true default) for the SAME per-channel discipline the orthoCamera/hemiLight/
+  // keyLight/fillLight restores just below already keep — one obvious place for a future channel-
+  // specific divergence, exactly like every other toggle in this block.
+  if(S.renderer) S.renderer.shadowMap.enabled = true;
   // GRAPHICS-ENGINE law 2b/VP0: the flat tabletop channel ALWAYS renders ortho, regardless of
   // INTERIOR_CAM_MODE — only setInteriorBoard ever reads that flag. Restoring S.orthoCamera here
   // mirrors the shadowMap/hemi restores just above/below (setInteriorBoard is the only place that
@@ -6543,6 +6592,11 @@ function setBoard(data){
   // for why this is a SEPARATE post-pass rather than an edit to applyLightProfile/LIGHT_PROFILES
   // themselves. No-op for the protection-set profiles (dark/torchlit/etc).
   applyTabletopExteriorLook(lightProfileKey);
+  // ENV-1B: every tabletop board's own profile point(s) become shadow casters — see
+  // applyTabletopShadowCasters' own header for the full provenance/scope note. Runs after
+  // applyTabletopExteriorLook so the shadow-casting flag lands on the SAME already-scaled light
+  // instances (order is otherwise inert — shadow config doesn't read intensity).
+  applyTabletopShadowCasters();
 
   // T1.5 §1/§2 env threading, now ALSO profile-threaded (ENV-1): voidTintForTabletop reads the
   // active light profile first (the 3 exterior moods each carry their own background wash — a
@@ -6579,6 +6633,11 @@ function setBoard(data){
     const materials = tileMaterialsFor(t, topColorCache, sideColorCache, colorFor);
     const mesh = new THREE.Mesh(geo, materials);
     mesh.position.set(t.x - cx, h / 2 - 0.5, t.z - cz);
+    // ENV-1B: the tabletop's own ground plane — receives a figure/prop's cast shadow, mirroring the
+    // interior room-shell FLOOR mesh's own receiveShadow=true (never castShadow — a floor casting onto
+    // itself/neighbors is not a meaningful contact-darkness read, same "shadows land on the GROUND"
+    // convention this unit follows throughout).
+    mesh.receiveShadow = true;
     S.tileGroup.add(mesh);
   });
 
@@ -6647,7 +6706,14 @@ function setBoard(data){
         if(wGeo){
           const wMats = wholeObjectMaterialsFor(wEntry);
           const wg = new THREE.Group();
-          wg.add(new THREE.Mesh(wGeo, wMats));
+          const wMesh = new THREE.Mesh(wGeo, wMats);
+          // ENV-1B: a whole-object prop is a solid volumetric body (never a flat billboard cutout) —
+          // both cast and receive, mirroring the interior room-shell furniture/wall/door convention
+          // (theater-boot.js's own solid-object pattern: castShadow=true, receiveShadow=true) rather
+          // than the sprite/dressing-card "cast-only" convention reserved for flat alpha-cutout art.
+          wMesh.castShadow = true;
+          wMesh.receiveShadow = true;
+          wg.add(wMesh);
           wg.scale.setScalar(WHOLE_OBJECT_SCALE);
           const wScale = p.partParams && p.partParams.scale;
           if(wScale && isFinite(wScale) && wScale > 0) wg.scale.multiplyScalar(wScale);
@@ -6668,6 +6734,12 @@ function setBoard(data){
       const g = new THREE.Group();
       const propTint = flatTints(0x6b5638);
       renderPartInto(g, partFn, p.partParams || {}, propTint, { x: 0, y: 0, z: 0 });
+      // ENV-1B: stamp cast+receive on JUST this prop's own freshly-built boxes (a traverse scoped to
+      // `g`, never a change to addBox/renderPartInto themselves — those are SHARED with figure bodies
+      // on both channels, and touching them there would also change the interior channel's own
+      // pieces, breaking byte-stability for no reason). Same solid-object convention as the whole-
+      // object prop mesh just above.
+      g.traverse(n => { if(n.isMesh){ n.castShadow = true; n.receiveShadow = true; } });
       // BUG REPAIR (found by the MODEL-QA rig's scene captures, 2026-07-03): theater-data.js's own
       // THEATER_PROP_KEYWORD_RULES emit `params.scale` ({scale:0.6} candelabra, {scale:1.8} colossal
       // statue, {scale:0.4} grate-rubble, ...) but NO part function reads a scale param — the value
@@ -6696,6 +6768,10 @@ function setBoard(data){
       : new THREE.MeshLambertMaterial({ color: propColor }));
     const mesh = new THREE.Mesh(geo, mat);
     mesh.position.set(px, 0.45, pz);
+    // ENV-1B: same solid-object cast+receive convention as the whole-object/part prop tiers above —
+    // the absolute flat-box fallback is still a real box volume, not a billboard cutout.
+    mesh.castShadow = true;
+    mesh.receiveShadow = true;
     // REALM-PROPS-WIRING.md §3: same scale discipline for the absolute flat-box fallback tier.
     if(footprint.scale !== 1.0) mesh.scale.multiplyScalar(footprint.scale);
     S.propGroup.add(mesh);
@@ -10814,6 +10890,22 @@ function setUnits(data){
       if(isFinite(figBox.max.y) && figBox.max.y > tabletopTallestTop) tabletopTallestTop = figBox.max.y;
     }
     if(u.fled) figure.visible = false;
+    // ENV-1B: every TABLETOP figure casts a real shadow (Adam's DESIGN.md cast-shadows ruling — see
+    // mount()'s own ENV-1B provenance comment). Stamped HERE, per-mounted-figure and gated
+    // !interiorMode, rather than inside figureFor/addBox/renderPartInto — those builders are SHARED
+    // with the interior channel, where PC/ally solid figures have never cast (only sprite billboards
+    // and room-shell geometry do there), so stamping in the shared builder would change interior
+    // renders and break that channel's byte-stability. Sprite-billboard figures already carry
+    // castShadow=true + an alpha-tested customDepthMaterial from buildSpriteBillboardMesh (re-setting
+    // is harmless); this traverse is what brings the whole-object/recipe/cuboid solid-figure family
+    // up to the same convention. receiveShadow stays untouched (false) on every figure mesh —
+    // BEAUTY-WAVE-3's "a cast shadow smeared across a flat card reads as a bug" ruling generalizes:
+    // shadows land on the GROUND (the tiles' own receiveShadow=true), never on other minis.
+    // userData.standeeBase (the interior plinth tag) is excluded by the same convention
+    // mfArtMaterialsOf already keeps — a base never casts (degenerate self-shadow at floor level).
+    if(!interiorMode){
+      figure.traverse(n => { if(n.isMesh && !(n.userData && n.userData.standeeBase)) n.castShadow = true; });
+    }
     // T3 (§4 ctx contract): tag every figure with its unit id so theater-verbs.js's findUnit(id) can
     // resolve a verb's `who` straight to this live Object3D — no separate id->handle map to keep in
     // sync, the tag lives on the object itself exactly where setUnits already iterates it.
@@ -11375,7 +11467,13 @@ window.Theater._tabletopSceneLightsForTest = function(){
   return {
     profileKey: S.lightProfileKey || null,
     ambient: S.ambientLight ? S.ambientLight.intensity : null,
-    points: (S.pointLights || []).map((l) => ({ intensity: l.intensity, color: l.color ? l.color.getHex() : null })),
+    // ENV-1B: castShadow/shadow.mapSize/shadow.bias ride along so a harness can assert the
+    // applyTabletopShadowCasters contract directly (every point casts, at TABLETOP_SHADOW_MAP_SIZE)
+    // without inferring it from a pixel measurement.
+    points: (S.pointLights || []).map((l) => ({
+      intensity: l.intensity, color: l.color ? l.color.getHex() : null,
+      castShadow: !!l.castShadow, shadowMapSize: l.shadow ? l.shadow.mapSize.x : null, shadowBias: l.shadow ? l.shadow.bias : null,
+    })),
     background: (S.scene && S.scene.background && S.scene.background.isColor) ? S.scene.background.getHex() : null,
   };
 };

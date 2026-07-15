@@ -18,6 +18,29 @@ just preserves the old ordered-queue framing for anyone reconstructing why a cal
 
 ---
 
+## Do next (2026-07-13, PHASE 3 DIRECTION SET — docs/PHASE-3-WAVE-PLAN.md is the queue)
+
+Fable set the Phase-3 trajectory (Adam delegated). The plan doc composes the director brief +
+research wave + art review + north star into waves; this block is just the pointer.
+
+1. ☐ **W0 singles fan out** (MF-3b hit-stop wiring · PRNG dedup · Open5e validator).
+2. ☐ **P3-1 no-spend visual wave** — Poisson scatter · depth-state audit · **diorama cutaway
+   restoration** (the C4.1b regression Adam's eyeball round caught — real, not the oss kernel;
+   the §15 hold stands) · integrated eyeball fixtures (tiered room + dressed room, legacy-vs-oss).
+3. ☐ **Adam: run PACKET-F1** (`dev/model-qa/faceted/PACKET-F1.md`) — anchors + kits first,
+   2-minute eyeball, then the 4 parallel lanes. Codex lanes banked+pushed
+   (`codex/extruded-prop-pilot`, `codex/kenney-mesh-audit` — they lived untracked in /private/tmp).
+4. ☐ Then P3-2 Stage B sprite citizenship (unified with the faceted admission schema) →
+   P3-3 (GP-4b + AgX + D0 slice) → P3-4 (atlas Phase A + instancing spike + oracle checkpoint).
+
+## Do next (2026-07-14, faceted program — post-generation)
+
+- ☑ Fantasy figure/fx/decal/prop/icon/item/tileset generation (see CHANGELOG 2026-07-14)
+- ☐ Fire `gapfill-final.md` (last 10 figure identities)
+- ☐ Step-E source rejection + chroma removal/slice over all banked candidates (plan §9 F–G)
+- ☐ §9 admission + Adam's sprite-review height pass (port 5179) → sprite-registry regen
+- ☐ Engine swap: replace 896 pixel sprites, retire 2 legacy roster sheets
+- ☐ Decisions parked: procedural-vs-textured floors (88 realm-surfaces), K1 kit-sheet QA, other realms
 ## Do next (2026-07-12 — GRAPHICS-NORTH-STAR: Stage A + Stage C CLOSED; Stage D/E next)
 
 Codex's A→B graphics program (`docs/GRAPHICS-NORTH-STAR.md`) — **Stage A BUILT** (walk-native boundary +

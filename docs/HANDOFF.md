@@ -15,7 +15,36 @@ Graphics work must preserve canonical cards and no-human production while taking
 reach the visual target. Read it before this handoff's historical graphics queue, then read
 `docs/GRAPHICS-PRODUCTION-RESEARCH-WAVE.md` for evaluated tools and executable research gates.
 
-## ⭐ Latest (2026-07-15) — THE AUTONOMOUS ARC LANDED: daytime, the moving sun, biomes, the first town — PL-3 verified [Claude Opus 4.8, autonomous]
+## ⭐ Latest (2026-07-15, later) — VQ2/FLIP PASS: the sprite flip LIVE + the demand ledger [Claude Fable 5, orchestrated]
+
+The whole pass ran off `docs/VQ2-RESPEC.md` (Sol's SOL-SOLUTIONS folded as provisional law —
+dispositions in §1 + DESIGN.md 2026-07-15; the frames live in the vq2-world-looks worktree's
+`ui-sketches/mock-frames/vq2-world-looks/`). Master tip `fce0d11b`, pushed.
+
+**Landed:** Wave S complete — **THE SPRITE FLIP IS LIVE** (252 faceted candidates admitted;
+`FACETED_FLIP_ENABLED` in theater-boot = the one-flag revert; `assets/sprites/` v3 = the
+untouched reserve; registry 4376 entries w/ full B1 contract + heights inventory; bestiary-id
+join map kills the miscast class; sprite editor does legacy-vs-faceted + editable `feet`).
+Wave L complete — the census instrument + **`dev/play-lens/DEMAND-LEDGER.md`** (PL-4: 4 realms,
+96 shots; P0 #2 FIXED, P0 #1 reclassified to lane-stacking; null-facade root cause = the
+settlement mint's `frontier` key missing from REALM_TEXTURES; shop panel never renders under the
+battle stage; 21 NPC-card slugs = the art-packet demand). B3 gallery landed (flip taste sheets +
+the daylit Large-creature blow-out = Stage E evidence). X1 extrusion spec + pilot artifacts on
+master.
+
+**Do next (ledger + respec order):**
+1. **F1 combat-in-room** (Sol P-F recipe; also expected to fix the stacked-invisible rat) +
+   **F2 staging beats** (Sol P-D; owns the shop-render wiring gap).
+2. **F3 Stage E** w/ the P-A luminance gates (new evidence: B3's daylit blow-out) ·
+   **quick root-fix candidate:** re-key the settlement mint off the `frontier` fallback (the
+   100%-null-facade bug — small, huge visual payoff).
+3. **B2 physical standee** (Adam rules on B3's sheets first) → B4 kill size-inference.
+4. **Adam's hands:** sprite-editor pass (feet on band-default/missing entries; flip taste
+   verdict — `FACETED_FLIP_ENABLED=false` retreats) · the NPC-card + facade art packets (the
+   ledger names the exact 21 slugs) · r*-v2 dirs ruling (56 uncut returns).
+5. Then F4 Kenney adapter pilot → F5 town-slice → gloom/chrome faceted tranches.
+
+## Latest (2026-07-15) — THE AUTONOMOUS ARC LANDED: daytime, the moving sun, biomes, the first town — PL-3 verified [Claude Opus 4.8, autonomous]
 
 Adam's delegation executed end-to-end in the ledger order (CHANGELOG 2026-07-15, master `c0a60b77`,
 pushed): the **QUICK-FIX WAVE** (P0s at root: web-mass retint ~15 props, camera headroom, arrival

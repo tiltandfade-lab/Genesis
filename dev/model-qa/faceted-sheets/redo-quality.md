@@ -15,7 +15,7 @@ the WRONG SUBJECT entirely (the F4/F8 misrouting). Same architecture as `refire-
 
 **F4 exception:** effect (`fx-*`) sheets do NOT use the magenta figure block — use the effects
 contract from `../faceted/EFFECTS-DECALS-INDEX.md` (hybrid faceted+glow, single-frame,
-black/alpha key, effects-specific Step-E); decals are magenta-key top-down source masters.
+black/alpha key, effects-specific Step-E); decals are magenta-key top-down source masters — and per Adam's 2026-07-14 ruling decals are NOT triangulated: naturalistic organic surface marks, no faceting (see STYLE-CANON.md decal exemption).
 Everything else in the template applies unchanged, including the tone gates.
 
 Dragon-specific reminder (top offender class): ONE tail, ONE tip — the generator loves a

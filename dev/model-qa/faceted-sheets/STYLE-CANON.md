@@ -84,3 +84,13 @@ and the cell mechanics change):
 > mirrored, doubled, or floating tail segments; correct limb counts (wyverns are BIPEDAL — two
 > legs plus wings; no fifth leg, no third wing); tails and wings connect to the body at one
 > continuous, plausible joint.
+
+## Decal exemption (Adam's ruling, 2026-07-14 — additive)
+
+Triangulated faceting applies to FIGURES, PROPS, and EFFECTS. It does NOT apply to decals.
+Decals (blood, water, grime, wear, scorch, crack, rust, moss, cobweb — flat surface marks) are
+rendered as **naturalistic organic surface marks**: matte, irregular natural edges, realistic
+stain/spread behavior for the material (blood pools and trails, moss creeps from crevices,
+scorch feathers outward, cracks propagate along stress lines). Same adult horror register and
+muted palette as the canon; NO triangulation, NO polygonal planes, NO faceted geometry of any
+kind on a decal. Magenta-key, strict top or front projection per the decal contract.

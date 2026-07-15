@@ -2,69 +2,8 @@
   "generatedBy": "build/gen-sprite-registry.py",
   "spec": "VQ2-RESPEC.md S3 / PHASE-3-WAVE-2-SPECS.md B1",
   "candidateCount": 252,
-  "registryJoinedCount": 192,
-  "unjoinedCandidates": [
-    "spr-fantasy-adult-gold-dragon",
-    "spr-fantasy-bat-raven-owl-hawk",
-    "spr-fantasy-blood-hawk-eagle",
-    "spr-fantasy-blue-dragon",
-    "spr-fantasy-brass-dragon",
-    "spr-fantasy-brass-dragon-wyrmling-bronze-dragon-wyrmling",
-    "spr-fantasy-builder-dragonborn-land-worker-dragonborn",
-    "spr-fantasy-copper-dragon-wyrmling-gold-dragon-wyrmling",
-    "spr-fantasy-domestic-animal-goat-goose-peacock-turkey",
-    "spr-fantasy-dragonborn-ship-s-purser-temple-acolyte",
-    "spr-fantasy-dungeon-animal-canary-cave-rat-salamander-cricket",
-    "spr-fantasy-elven-herbalist-elf-sells-cures-and-quietly-a-few-curses-hauler-elf",
-    "spr-fantasy-gnomish-alchemist-clockmaker-tinkerer-delver",
-    "spr-fantasy-host-goliath-pampered-elite-goliath",
-    "spr-fantasy-kobold-inventor-halfling-orchard-keeper-elderly-halfling-knows-every-tree-in-the-grove-by-name",
-    "spr-fantasy-panther-hyena",
-    "spr-fantasy-red-dragon-wyrmling-white-dragon-wyrmling",
-    "spr-fantasy-tiefling-fortune-teller-rival",
-    "spr-fantasy-venomous-snake-flying-snake",
-    "spr-fantasy-wild-animal-a-lynx-kitten-peregrine-falcon-red-fox-kit-watcher-hawk",
-    "spr-fantasy-wild-animal-black-bear-mountain-goat",
-    "spr-pc-dragonborn-barbarian",
-    "spr-pc-dragonborn-bard",
-    "spr-pc-dragonborn-druid",
-    "spr-pc-dragonborn-paladin",
-    "spr-pc-dragonborn-rogue",
-    "spr-pc-dragonborn-sorcerer",
-    "spr-pc-dragonborn-wizard",
-    "spr-pc-dwarf-barbarian",
-    "spr-pc-dwarf-fighter",
-    "spr-pc-goliath-ranger",
-    "spr-pc-goliath-wizard",
-    "spr-pc-halfling-barbarian",
-    "spr-pc-halfling-bard",
-    "spr-pc-halfling-cleric",
-    "spr-pc-halfling-druid",
-    "spr-pc-halfling-fighter",
-    "spr-pc-halfling-monk",
-    "spr-pc-halfling-paladin",
-    "spr-pc-halfling-ranger",
-    "spr-pc-halfling-rogue",
-    "spr-pc-halfling-sorcerer",
-    "spr-pc-halfling-warlock",
-    "spr-pc-halfling-wizard",
-    "spr-pc-orc-cleric",
-    "spr-pc-orc-monk",
-    "spr-pc-orc-paladin",
-    "spr-pc-orc-ranger",
-    "spr-pc-orc-rogue",
-    "spr-pc-orc-warlock",
-    "spr-pc-orc-wizard",
-    "spr-pc-tiefling-barbarian",
-    "spr-pc-tiefling-bard",
-    "spr-pc-tiefling-fighter",
-    "spr-pc-tiefling-monk",
-    "spr-pc-tiefling-paladin",
-    "spr-pc-tiefling-ranger",
-    "spr-pc-tiefling-rogue",
-    "spr-pc-tiefling-warlock",
-    "spr-pc-tiefling-wizard"
-  ],
+  "registryJoinedCount": 252,
+  "unjoinedCandidates": [],
   "summaryByHeightSource": {
     "measured": 192,
     "band-default": 0,
@@ -120,12 +59,15 @@
       "registryEntry": true
     },
     "spr-fantasy-adult-gold-dragon": {
-      "tags": [],
+      "tags": [
+        "fantasy",
+        "monster"
+      ],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": false
+      "registryEntry": true
     },
     "spr-fantasy-adult-green-dragon": {
       "tags": [
@@ -355,12 +297,15 @@
       "registryEntry": true
     },
     "spr-fantasy-bat-raven-owl-hawk": {
-      "tags": [],
+      "tags": [
+        "fantasy",
+        "monster"
+      ],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": false
+      "registryEntry": true
     },
     "spr-fantasy-bearded-devil": {
       "tags": [
@@ -387,20 +332,26 @@
       "registryEntry": true
     },
     "spr-fantasy-blood-hawk-eagle": {
-      "tags": [],
+      "tags": [
+        "fantasy",
+        "monster"
+      ],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": false
+      "registryEntry": true
     },
     "spr-fantasy-blue-dragon": {
-      "tags": [],
+      "tags": [
+        "fantasy",
+        "monster"
+      ],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": false
+      "registryEntry": true
     },
     "spr-fantasy-bone-naga": {
       "tags": [
@@ -415,20 +366,26 @@
       "registryEntry": true
     },
     "spr-fantasy-brass-dragon": {
-      "tags": [],
+      "tags": [
+        "fantasy",
+        "monster"
+      ],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": false
+      "registryEntry": true
     },
     "spr-fantasy-brass-dragon-wyrmling-bronze-dragon-wyrmling": {
-      "tags": [],
+      "tags": [
+        "fantasy",
+        "monster"
+      ],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": false
+      "registryEntry": true
     },
     "spr-fantasy-brazen-gorgon": {
       "tags": [
@@ -479,12 +436,15 @@
       "registryEntry": true
     },
     "spr-fantasy-builder-dragonborn-land-worker-dragonborn": {
-      "tags": [],
+      "tags": [
+        "fantasy",
+        "monster"
+      ],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": false
+      "registryEntry": true
     },
     "spr-fantasy-bulette": {
       "tags": [
@@ -619,12 +579,15 @@
       "registryEntry": true
     },
     "spr-fantasy-copper-dragon-wyrmling-gold-dragon-wyrmling": {
-      "tags": [],
+      "tags": [
+        "fantasy",
+        "monster"
+      ],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": false
+      "registryEntry": true
     },
     "spr-fantasy-couatl": {
       "tags": [
@@ -735,12 +698,15 @@
       "registryEntry": true
     },
     "spr-fantasy-domestic-animal-goat-goose-peacock-turkey": {
-      "tags": [],
+      "tags": [
+        "fantasy",
+        "monster"
+      ],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": false
+      "registryEntry": true
     },
     "spr-fantasy-dragon-turtle": {
       "tags": [
@@ -755,12 +721,15 @@
       "registryEntry": true
     },
     "spr-fantasy-dragonborn-ship-s-purser-temple-acolyte": {
-      "tags": [],
+      "tags": [
+        "fantasy",
+        "monster"
+      ],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": false
+      "registryEntry": true
     },
     "spr-fantasy-dretch": {
       "tags": [
@@ -787,12 +756,15 @@
       "registryEntry": true
     },
     "spr-fantasy-dungeon-animal-canary-cave-rat-salamander-cricket": {
-      "tags": [],
+      "tags": [
+        "fantasy",
+        "monster"
+      ],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": false
+      "registryEntry": true
     },
     "spr-fantasy-earth-elemental": {
       "tags": [
@@ -819,12 +791,15 @@
       "registryEntry": true
     },
     "spr-fantasy-elven-herbalist-elf-sells-cures-and-quietly-a-few-curses-hauler-elf": {
-      "tags": [],
+      "tags": [
+        "fantasy",
+        "monster"
+      ],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": false
+      "registryEntry": true
     },
     "spr-fantasy-empyrean": {
       "tags": [
@@ -1223,12 +1198,15 @@
       "registryEntry": true
     },
     "spr-fantasy-gnomish-alchemist-clockmaker-tinkerer-delver": {
-      "tags": [],
+      "tags": [
+        "fantasy",
+        "monster"
+      ],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": false
+      "registryEntry": true
     },
     "spr-fantasy-gorgon": {
       "tags": [
@@ -1471,12 +1449,15 @@
       "registryEntry": true
     },
     "spr-fantasy-host-goliath-pampered-elite-goliath": {
-      "tags": [],
+      "tags": [
+        "fantasy",
+        "monster"
+      ],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": false
+      "registryEntry": true
     },
     "spr-fantasy-hydra": {
       "tags": [
@@ -1515,12 +1496,15 @@
       "registryEntry": true
     },
     "spr-fantasy-kobold-inventor-halfling-orchard-keeper-elderly-halfling-knows-every-tree-in-the-grove-by-name": {
-      "tags": [],
+      "tags": [
+        "fantasy",
+        "monster"
+      ],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": false
+      "registryEntry": true
     },
     "spr-fantasy-kraken": {
       "tags": [
@@ -1859,12 +1843,15 @@
       "registryEntry": true
     },
     "spr-fantasy-panther-hyena": {
-      "tags": [],
+      "tags": [
+        "fantasy",
+        "monster"
+      ],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": false
+      "registryEntry": true
     },
     "spr-fantasy-pegasus": {
       "tags": [
@@ -2011,12 +1998,15 @@
       "registryEntry": true
     },
     "spr-fantasy-red-dragon-wyrmling-white-dragon-wyrmling": {
-      "tags": [],
+      "tags": [
+        "fantasy",
+        "monster"
+      ],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": false
+      "registryEntry": true
     },
     "spr-fantasy-remorhaz": {
       "tags": [
@@ -2258,12 +2248,15 @@
       "registryEntry": true
     },
     "spr-fantasy-tiefling-fortune-teller-rival": {
-      "tags": [],
+      "tags": [
+        "fantasy",
+        "monster"
+      ],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": false
+      "registryEntry": true
     },
     "spr-fantasy-troglodyte": {
       "tags": [
@@ -2362,12 +2355,15 @@
       "registryEntry": true
     },
     "spr-fantasy-venomous-snake-flying-snake": {
-      "tags": [],
+      "tags": [
+        "fantasy",
+        "monster"
+      ],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": false
+      "registryEntry": true
     },
     "spr-fantasy-violet-fungus-necrohulk": {
       "tags": [
@@ -2466,20 +2462,26 @@
       "registryEntry": true
     },
     "spr-fantasy-wild-animal-a-lynx-kitten-peregrine-falcon-red-fox-kit-watcher-hawk": {
-      "tags": [],
+      "tags": [
+        "fantasy",
+        "monster"
+      ],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": false
+      "registryEntry": true
     },
     "spr-fantasy-wild-animal-black-bear-mountain-goat": {
-      "tags": [],
+      "tags": [
+        "fantasy",
+        "monster"
+      ],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": false
+      "registryEntry": true
     },
     "spr-fantasy-wyvern": {
       "tags": [
@@ -2542,316 +2544,433 @@
       "registryEntry": true
     },
     "spr-pc-dragonborn-barbarian": {
-      "tags": [],
+      "tags": [
+        "pc",
+        "pc"
+      ],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": false
+      "registryEntry": true
     },
     "spr-pc-dragonborn-bard": {
-      "tags": [],
+      "tags": [
+        "pc",
+        "pc"
+      ],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": false
+      "registryEntry": true
     },
     "spr-pc-dragonborn-druid": {
-      "tags": [],
+      "tags": [
+        "pc",
+        "pc"
+      ],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": false
+      "registryEntry": true
     },
     "spr-pc-dragonborn-paladin": {
-      "tags": [],
+      "tags": [
+        "pc",
+        "pc"
+      ],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": false
+      "registryEntry": true
     },
     "spr-pc-dragonborn-rogue": {
-      "tags": [],
+      "tags": [
+        "pc",
+        "pc"
+      ],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": false
+      "registryEntry": true
     },
     "spr-pc-dragonborn-sorcerer": {
-      "tags": [],
+      "tags": [
+        "pc",
+        "pc"
+      ],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": false
+      "registryEntry": true
     },
     "spr-pc-dragonborn-wizard": {
-      "tags": [],
+      "tags": [
+        "pc",
+        "pc"
+      ],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": false
+      "registryEntry": true
     },
     "spr-pc-dwarf-barbarian": {
-      "tags": [],
+      "tags": [
+        "pc",
+        "pc"
+      ],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": false
+      "registryEntry": true
     },
     "spr-pc-dwarf-fighter": {
-      "tags": [],
+      "tags": [
+        "pc",
+        "pc"
+      ],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": false
+      "registryEntry": true
     },
     "spr-pc-goliath-ranger": {
-      "tags": [],
+      "tags": [
+        "pc",
+        "pc"
+      ],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": false
+      "registryEntry": true
     },
     "spr-pc-goliath-wizard": {
-      "tags": [],
+      "tags": [
+        "pc",
+        "pc"
+      ],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": false
+      "registryEntry": true
     },
     "spr-pc-halfling-barbarian": {
-      "tags": [],
+      "tags": [
+        "pc",
+        "pc"
+      ],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": false
+      "registryEntry": true
     },
     "spr-pc-halfling-bard": {
-      "tags": [],
+      "tags": [
+        "pc",
+        "pc"
+      ],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": false
+      "registryEntry": true
     },
     "spr-pc-halfling-cleric": {
-      "tags": [],
+      "tags": [
+        "pc",
+        "pc"
+      ],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": false
+      "registryEntry": true
     },
     "spr-pc-halfling-druid": {
-      "tags": [],
+      "tags": [
+        "pc",
+        "pc"
+      ],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": false
+      "registryEntry": true
     },
     "spr-pc-halfling-fighter": {
-      "tags": [],
+      "tags": [
+        "pc",
+        "pc"
+      ],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": false
+      "registryEntry": true
     },
     "spr-pc-halfling-monk": {
-      "tags": [],
+      "tags": [
+        "pc",
+        "pc"
+      ],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": false
+      "registryEntry": true
     },
     "spr-pc-halfling-paladin": {
-      "tags": [],
+      "tags": [
+        "pc",
+        "pc"
+      ],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": false
+      "registryEntry": true
     },
     "spr-pc-halfling-ranger": {
-      "tags": [],
+      "tags": [
+        "pc",
+        "pc"
+      ],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": false
+      "registryEntry": true
     },
     "spr-pc-halfling-rogue": {
-      "tags": [],
+      "tags": [
+        "pc",
+        "pc"
+      ],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": false
+      "registryEntry": true
     },
     "spr-pc-halfling-sorcerer": {
-      "tags": [],
+      "tags": [
+        "pc",
+        "pc"
+      ],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": false
+      "registryEntry": true
     },
     "spr-pc-halfling-warlock": {
-      "tags": [],
+      "tags": [
+        "pc",
+        "pc"
+      ],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": false
+      "registryEntry": true
     },
     "spr-pc-halfling-wizard": {
-      "tags": [],
+      "tags": [
+        "pc",
+        "pc"
+      ],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": false
+      "registryEntry": true
     },
     "spr-pc-orc-cleric": {
-      "tags": [],
+      "tags": [
+        "pc",
+        "pc"
+      ],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": false
+      "registryEntry": true
     },
     "spr-pc-orc-monk": {
-      "tags": [],
+      "tags": [
+        "pc",
+        "pc"
+      ],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": false
+      "registryEntry": true
     },
     "spr-pc-orc-paladin": {
-      "tags": [],
+      "tags": [
+        "pc",
+        "pc"
+      ],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": false
+      "registryEntry": true
     },
     "spr-pc-orc-ranger": {
-      "tags": [],
+      "tags": [
+        "pc",
+        "pc"
+      ],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": false
+      "registryEntry": true
     },
     "spr-pc-orc-rogue": {
-      "tags": [],
+      "tags": [
+        "pc",
+        "pc"
+      ],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": false
+      "registryEntry": true
     },
     "spr-pc-orc-warlock": {
-      "tags": [],
+      "tags": [
+        "pc",
+        "pc"
+      ],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": false
+      "registryEntry": true
     },
     "spr-pc-orc-wizard": {
-      "tags": [],
+      "tags": [
+        "pc",
+        "pc"
+      ],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": false
+      "registryEntry": true
     },
     "spr-pc-tiefling-barbarian": {
-      "tags": [],
+      "tags": [
+        "pc",
+        "pc"
+      ],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": false
+      "registryEntry": true
     },
     "spr-pc-tiefling-bard": {
-      "tags": [],
+      "tags": [
+        "pc",
+        "pc"
+      ],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": false
+      "registryEntry": true
     },
     "spr-pc-tiefling-fighter": {
-      "tags": [],
+      "tags": [
+        "pc",
+        "pc"
+      ],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": false
+      "registryEntry": true
     },
     "spr-pc-tiefling-monk": {
-      "tags": [],
+      "tags": [
+        "pc",
+        "pc"
+      ],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": false
+      "registryEntry": true
     },
     "spr-pc-tiefling-paladin": {
-      "tags": [],
+      "tags": [
+        "pc",
+        "pc"
+      ],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": false
+      "registryEntry": true
     },
     "spr-pc-tiefling-ranger": {
-      "tags": [],
+      "tags": [
+        "pc",
+        "pc"
+      ],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": false
+      "registryEntry": true
     },
     "spr-pc-tiefling-rogue": {
-      "tags": [],
+      "tags": [
+        "pc",
+        "pc"
+      ],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": false
+      "registryEntry": true
     },
     "spr-pc-tiefling-warlock": {
-      "tags": [],
+      "tags": [
+        "pc",
+        "pc"
+      ],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": false
+      "registryEntry": true
     },
     "spr-pc-tiefling-wizard": {
-      "tags": [],
+      "tags": [
+        "pc",
+        "pc"
+      ],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": false
+      "registryEntry": true
     }
   }
 }

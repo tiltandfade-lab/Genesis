@@ -176,6 +176,17 @@ def sizing_for(slug, sheet, cell, corpus_sizing, v3_by_sheet_cell):
     return None
 
 
+def title_from_slug(slug, prefix):
+    """VQ2-RESPEC.md S4 Part B — kebab -> Title Case for an orphan fold-in slug, e.g.
+    'spr-fantasy-adult-gold-dragon' with prefix 'spr-fantasy-' -> 'Adult Gold Dragon'. Purely
+    mechanical (no dictionary lookups) — a lossy kebab artifact (an embedded possessive's stray
+    "-s-", a multi-identity slug concatenating two creature names) produces an ugly-but-honest
+    title rather than an invented one; those either miss the bestiary join below (nulls, loud in
+    the inventory report) or over-match harmlessly."""
+    body = slug[len(prefix):] if slug.startswith(prefix) else slug
+    return " ".join(w.capitalize() for w in body.split("-") if w)
+
+
 def load_faceted_cut_report():
     """dev/model-qa/faceted-cut-report.json's slugs{} (S2's cut sidecar) — per-slug
     contentBounds [x0,y0,x1,y1] (normalized alpha bbox) + footContact (normalized x-center of
@@ -255,6 +266,127 @@ def auto_tags(realm, kind, role, ctype, size):
     return tags
 
 
+def fold_in_orphans(entries, faceted_cut_slugs, bestiary_by_realm, corpus_sizing, v3_by_sheet_cell):
+    """VQ2-RESPEC.md S4 Part B — the 60 orphan fold-ins (S3's honest documented deviation:
+    write_inventory_report's own docstring called this "NOT invented as new SPRITE_REGISTRY
+    entries; that would grow the registry beyond its join source, out of scope for THAT unit").
+    This unit extends the generator with a direct entry source: every faceted-cut-report slug
+    (`dev/model-qa/faceted-cut-report.json`) that has NO real v2-manifest-cell join AND has an
+    actual cut file on disk gets a new registry row here.
+
+    Per slug: name is derived mechanically from the slug (kebab -> Title Case, title_from_slug);
+    non-pc (`spr-fantasy-*`) slugs are bestiary-joined by that name within realm=fantasy for
+    role/cr/type/size/frame (the SAME join_creature exact-then-loose join every manifest cell
+    uses above) — a miss leaves those fields null, never invented. `spr-pc-*` slugs skip the
+    bestiary join entirely (realm="pc", kind="pc", matching the existing PC-entry convention:
+    PCs were never bestiary creatures). sheet:"faceted-direct"/cell:null mark "no manifest cell
+    ever existed for this slug"; status:"cut" because the art is real; legacyAsset:null because
+    no v3 wave ever cut this identity; candidateAsset points at the real faceted file.
+    worldHeight/heightSource use the SAME measured -> band-default -> missing ladder as every
+    other entry (sizing_for/world_height_for, unmodified) — corpus-sizing.json carries no keys
+    for these slugs at time of writing (they never existed as a cut slug before), so every one
+    of these rows resolves to band-default (bestiary join succeeded, size known) or missing
+    (join failed) unless a future corpus-sizing pass adds a measured value.
+
+    Returns the list of (slug, entry) pairs added, in sorted-slug order (deterministic across
+    regens) — entries[] is mutated in place, appended so pre-existing entries keep their exact
+    prior emit order/bytes (the S4 byte-stability gate)."""
+    added = []
+    for slug in sorted(faceted_cut_slugs.keys()):
+        existing = entries.get(slug)
+        if existing is not None and existing.get("candidateAsset") is not None:
+            continue  # already a real v2-manifest-cell join (S3 territory) — not an orphan
+        if not os.path.exists(os.path.join(SPRITES_FACETED_DIR, f"{slug}.png")):
+            continue  # cut-report lists it but the file is missing/quarantined — not this unit's job
+
+        is_pc = slug.startswith("spr-pc-")
+        realm = "pc" if is_pc else "fantasy"
+        kind = "pc" if is_pc else "monster"
+        prefix = "spr-pc-" if is_pc else "spr-fantasy-"
+        name = title_from_slug(slug, prefix)
+
+        role = cr = ctype = size = frame = None
+        if not is_pc:
+            match = join_creature(realm, name, bestiary_by_realm)
+            if match:
+                role = match.get("role")
+                cr = match.get("cr")
+                ctype = match.get("type")
+                size = match.get("size")
+                frame = match.get("frame")
+
+        tags = auto_tags(realm, kind, role, ctype, size)
+
+        entry = {
+            "realm": realm, "kind": kind, "name": name, "role": role, "cr": cr,
+            "type": ctype, "size": size, "frame": frame, "tags": tags,
+            "sheet": "faceted-direct", "cell": None, "status": "cut",
+        }
+
+        feet = sizing_for(slug, "faceted-direct", None, corpus_sizing, v3_by_sheet_cell)
+        if isinstance(feet, (int, float)):
+            entry["feet"] = feet
+            entry["scaleTrue"] = round(float(feet) / 5.5, 2)
+
+        entry["legacyAsset"] = None
+        entry["candidateAsset"] = f"assets/sprites-faceted/{slug}.png"
+        entry["artStyleVersion"] = "faceted-v1"
+        entry["qaStatus"] = QA_STATUS_CANDIDATE
+        entry["runtimeAdmitted"] = RUNTIME_ADMITTED_DEFAULT
+
+        cut_record = faceted_cut_slugs.get(slug)
+        contract = standee_contract_for({}, cut_record)
+        entry.update(contract)
+
+        world_height, height_source = world_height_for(entry.get("feet"), size)
+        entry["worldHeight"] = world_height
+        entry["heightSource"] = height_source
+
+        entries[slug] = entry
+        added.append((slug, entry))
+    return added
+
+
+def build_bestiary_id_map(entries):
+    """VQ2-RESPEC.md S4 Part A (ledger P0 #1, "Giant Rat renders as a robed humanoid") —
+    deterministic bestiary-id -> registry-slug index, built from the SAME realm-bestiary join
+    this generator already performs above: entry["frame"] IS the joined bestiary id (the fantasy
+    branch of load_bestiary_by_realm sets it to the data/bestiary.js dict key, e.g. "giant-rat";
+    the realm-draft branch sets it to REALM_BESTIARY's own "frame"/"model" field) — the SAME
+    field src/engine/theater-data.js's theaterUnitsFrom stamps onto a combat unit as
+    `f.modelKey || f.statId` (recipeSlug). src/ui/theater-boot.js's spriteEntryFor consults this
+    map by EXACT recipeSlug match first, before falling back to its existing normalized-name
+    linear scan — an id never carries the "Giant Rat" vs "giant-rat" spacing/case ambiguity a
+    display name does, so no collision class exists at this join tier.
+
+    Only `status:"cut"` entries are eligible (spriteEntryFor never resolves a pending entry) and
+    a `verdict:"fail"` entry is excluded (review-failed art must still fall through to the 3D
+    chain). On a genuine collision — two different cut entries joined to the SAME bestiary id, a
+    real duplicate-art situation, not a normalization artifact — the first in slug-sorted order
+    wins (deterministic across regens) and every collision is returned so it stays visible
+    (printed by the caller), never silently dropped."""
+    by_id = {}
+    collisions = []
+    for slug in sorted(entries.keys()):
+        e = entries[slug]
+        frame = e.get("frame")
+        if not frame or e.get("status") != "cut" or e.get("verdict") == "fail":
+            continue
+        if frame in by_id:
+            collisions.append((frame, by_id[frame], slug))
+            continue
+        by_id[frame] = slug
+    return by_id, collisions
+
+
+def emit_bestiary_id_map(by_id):
+    lines = ["const SPRITE_BY_BESTIARY_ID={\n"]
+    for bid in sorted(by_id.keys()):
+        lines.append(f"  {js_str(bid)}: {js_str(by_id[bid])},\n")
+    lines.append("};\n")
+    return "".join(lines)
+
+
 def js_str(v):
     return json.dumps(v)
 
@@ -326,7 +458,15 @@ HEADER = (
     "worldHeight/heightSource are authoritative (measured feet -> SRD size-band default -> loud "
     "null, never a silent guess); runtimeAdmitted defaults to \"legacy\" for every entry in this "
     "unit (the candidate/legacy flip is a later unit, not this one) so render stays byte-identical. "
-    "Regenerate; never hand-edit. */\n"
+    "VQ2-RESPEC.md S4 Part B: entries whose slug has a faceted-cut-report file but no v2-manifest "
+    "cell join (the 60 orphan fold-ins) are appended directly from that report — sheet:"
+    "\"faceted-direct\", cell:null, status:\"cut\", legacyAsset:null, name derived mechanically "
+    "from the slug (kebab -> Title Case); a bestiary join failure leaves role/cr/type/size/frame "
+    "null rather than inventing a value. VQ2-RESPEC.md S4 Part A: this file also emits a second "
+    "top-level global, SPRITE_BY_BESTIARY_ID = {bestiaryId: slug} — a deterministic index built "
+    "from every cut entry's own bestiary-joined `frame` field, consulted FIRST (exact match) by "
+    "src/ui/theater-boot.js's spriteEntryFor, before its normalized-display-name fallback scan "
+    "(the miscast-join fix, ledger P0 #1). Regenerate; never hand-edit. */\n"
 )
 
 
@@ -480,13 +620,31 @@ def build_registry(manifest_path, check_only=False, overlay_path=OVERLAY, out_pa
     if check_only:
         return entries, coverage, warn_unjoined
 
+    # S4 Part B — orphan fold-in. Runs AFTER the manifest-cell loop above so it only ever adds
+    # slugs that loop didn't already join (fold_in_orphans' own "already a real join" skip).
+    orphans_added = fold_in_orphans(entries, faceted_cut_slugs, bestiary_by_realm, corpus_sizing, v3_by_sheet_cell)
+    for _slug, _e in orphans_added:
+        height_sources[_e["heightSource"]] = height_sources.get(_e["heightSource"], 0) + 1
+        candidate_count += 1
+    print(f"S4 orphan fold-in: {len(orphans_added)} slug(s) added directly from the faceted cut report (no v2-manifest cell)")
+
+    # S4 Part A — the deterministic bestiary-id -> slug index (theater-boot.js's spriteEntryFor
+    # consults this FIRST, before its normalized-name fallback scan).
+    bestiary_id_map, id_collisions = build_bestiary_id_map(entries)
+    print(f"S4 bestiary-id map: {len(bestiary_id_map)} id(s) -> slug")
+    if id_collisions:
+        print(f"S4 bestiary-id collisions ({len(id_collisions)}, first-in-slug-order wins, all listed):")
+        for frame, kept, dropped in id_collisions:
+            print(f"  - '{frame}': kept {kept}, dropped {dropped}")
+
     lines = [HEADER, "const SPRITE_REGISTRY={\n"]
     for slug, e in entries.items():
         lines.append(emit_entry(slug, e))
     lines.append("};\n")
+    lines.append(emit_bestiary_id_map(bestiary_id_map))
     with open(out_path, "w", encoding="utf-8") as f:
         f.write("".join(lines))
-    print(f"wrote {out_path} ({len(entries)} entries)")
+    print(f"wrote {out_path} ({len(entries)} entries, {len(bestiary_id_map)} bestiary-id map entries)")
 
     # Rejects report — the regen shopping list. Real runs only (the verify harness's
     # --out scratch runs must stay side-effect-free).
@@ -537,15 +695,17 @@ def write_inventory_report(entries, faceted_cut_slugs):
     faceted/<slug>.png, 252 at time of writing) — tags, worldHeight, heightSource, size band,
     whether legacy art also exists — plus summary counts by heightSource across that same set.
 
-    Honest gap: not every faceted cut-report slug matches a SPRITE_REGISTRY entry (the S2 art
-    wave cut some identities from dev/model-qa/faceted-sheets/ that were never folded into
-    dev/sprite-manifests/v2-manifest.json as a manifest cell, so gen-sprite-registry.py's join
-    has nothing to attach candidateAsset/tags/worldHeight to for those slugs). Those slugs are
-    still listed here (registryEntry:false, heightSource:"missing") — they are NOT invented as
-    new SPRITE_REGISTRY entries; that would grow the registry beyond its join source, which is
-    out of scope for this generator's contract-extension unit. GENERATED — never hand-edit; this
-    is the artifact Adam red-pens in the sprite editor (dev/sprite-review.py), not an editable
-    source."""
+    S3's honest gap (closed by S4 Part B, fold_in_orphans above): the S2 art wave cut some
+    identities from dev/model-qa/faceted-sheets/ that were never folded into
+    dev/sprite-manifests/v2-manifest.json as a manifest cell, so this generator's manifest-cell
+    join had nothing to attach candidateAsset/tags/worldHeight to for those slugs. build_registry
+    now calls fold_in_orphans BEFORE this function runs, appending a direct registry entry for
+    every one of those slugs (sheet:"faceted-direct") — so every faceted-cut-report slug now has
+    a `entries[slug]` to read here; `unjoinedCandidates` below is expected empty post-S4 (a
+    non-empty list would mean a cut-report slug's file went missing/quarantined between the
+    report being written and this run — still surfaced, never silently dropped). GENERATED —
+    never hand-edit; this is the artifact Adam red-pens in the sprite editor
+    (dev/sprite-review.py), not an editable source."""
     summary = {"measured": 0, "band-default": 0, "missing": 0}
     slugs_out = OrderedDict()
     unjoined = []

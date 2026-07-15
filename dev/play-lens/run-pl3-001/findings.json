@@ -1,0 +1,327 @@
+{
+  "runId": "pl3-001",
+  "realm": "chrome",
+  "generatedAt": "2026-07-15T03:53:06.548Z",
+  "legs": [
+    {
+      "leg": "tiyl-start",
+      "ok": true,
+      "detail": {
+        "worldName": "The Dorsal Market"
+      }
+    },
+    {
+      "leg": "settlement-node",
+      "ok": true,
+      "detail": {
+        "ok": true,
+        "nodeId": "the-dorsal-market",
+        "recordId": "location:cliff-row",
+        "archetypeKey": "add:the-arcology-mezzanine",
+        "name": "Cliff-Row",
+        "sourceKind": "node"
+      }
+    },
+    {
+      "leg": "travel-depart",
+      "ok": true,
+      "detail": {
+        "ok": true,
+        "stage": "done",
+        "destNodeId": "play-lens-dungeon-approach",
+        "walk": true,
+        "instant": false,
+        "travelMin": 480
+      }
+    },
+    {
+      "leg": "travel-arrive",
+      "ok": true,
+      "detail": {
+        "ok": true,
+        "stage": "done",
+        "arrivedNodeId": "play-lens-dungeon-approach",
+        "detail": {
+          "ok": true,
+          "completed": "play-lens-dungeon-approach",
+          "next": null,
+          "arrived": true,
+          "destNodeId": "play-lens-dungeon-approach"
+        }
+      }
+    },
+    {
+      "leg": "dungeon-walk",
+      "ok": true,
+      "detail": {
+        "topology": "The Stronghold",
+        "roomCount": 7
+      }
+    },
+    {
+      "leg": "dungeon-rooms",
+      "ok": true,
+      "detail": {
+        "walked": 7
+      }
+    },
+    {
+      "leg": "combat-start",
+      "ok": true,
+      "detail": {
+        "foes": [
+          {
+            "fid": "f1",
+            "name": "Wolf"
+          },
+          {
+            "fid": "f2",
+            "name": "Giant Rat"
+          },
+          {
+            "fid": "f3",
+            "name": "Skeleton"
+          }
+        ]
+      }
+    },
+    {
+      "leg": "combat-round-2",
+      "ok": true,
+      "detail": {
+        "ok": true,
+        "stage": "done",
+        "round": 2
+      }
+    },
+    {
+      "leg": "combat-round-3",
+      "ok": true,
+      "detail": {
+        "ok": true,
+        "stage": "done",
+        "round": 3
+      }
+    },
+    {
+      "leg": "state-transition",
+      "ok": true,
+      "detail": {
+        "ok": true,
+        "stage": "done",
+        "candidateCount": 7,
+        "entityRef": "S1.door",
+        "archetype": "door",
+        "from": "shut",
+        "to": "ajar"
+      }
+    },
+    {
+      "leg": "combat-end",
+      "ok": true,
+      "detail": {
+        "ok": true,
+        "stage": "done"
+      }
+    },
+    {
+      "leg": "dungeon-complete",
+      "ok": true,
+      "detail": {
+        "ok": true,
+        "stage": "start",
+        "detail": {
+          "ok": true,
+          "completed": "play-lens-dungeon-approach",
+          "next": "frontier-s1-0"
+        }
+      }
+    },
+    {
+      "leg": "shop",
+      "ok": true,
+      "detail": {
+        "ok": true,
+        "stage": "done",
+        "shopId": "the-play-lens-trading-post"
+      }
+    },
+    {
+      "leg": "rest",
+      "ok": true,
+      "detail": {
+        "ok": true,
+        "rest": "long",
+        "restored": "nothing to restore",
+        "hitDice": null,
+        "interrupted": false,
+        "interruptedMinutes": null,
+        "exhaustion": 0,
+        "lodging": null,
+        "leveled": null,
+        "minutes": 480
+      }
+    }
+  ],
+  "notes": [],
+  "boot": {
+    "ok": true,
+    "notes": [
+      "startSession() called"
+    ],
+    "worldId": "mrljos4hyq4i7",
+    "worldName": "The Dorsal Market"
+  },
+  "theaterState": {
+    "hasBattleStage": true,
+    "theaterMounted": true,
+    "hasCanvas": true
+  },
+  "mint": {
+    "ok": true,
+    "nodeId": "the-dorsal-market",
+    "recordId": "location:cliff-row",
+    "archetypeKey": "add:the-arcology-mezzanine",
+    "name": "Cliff-Row",
+    "sourceKind": "node"
+  },
+  "travel": {
+    "ok": true,
+    "stage": "done",
+    "destNodeId": "play-lens-dungeon-approach",
+    "walk": true,
+    "instant": false,
+    "travelMin": 480
+  },
+  "travelSegments": {
+    "ok": true,
+    "walkId": "play-lens-dungeon-approach",
+    "segs": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "current": 1,
+    "env": "wilderness"
+  },
+  "travelArrive": {
+    "ok": true,
+    "stage": "done",
+    "arrivedNodeId": "play-lens-dungeon-approach",
+    "detail": {
+      "ok": true,
+      "completed": "play-lens-dungeon-approach",
+      "next": null,
+      "arrived": true,
+      "destNodeId": "play-lens-dungeon-approach"
+    }
+  },
+  "dungeon": {
+    "ok": true,
+    "stage": "done",
+    "topology": "The Stronghold",
+    "segCount": 7,
+    "environment": "dungeon",
+    "nodeId": "play-lens-dungeon-approach",
+    "roomCount": 7
+  },
+  "dungeonSegments": {
+    "ok": true,
+    "walkId": "play-lens-dungeon-approach",
+    "segs": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "current": 1,
+    "env": "dungeon"
+  },
+  "combatStart": {
+    "ok": true,
+    "stage": "done",
+    "foes": [
+      {
+        "fid": "f1",
+        "name": "Wolf"
+      },
+      {
+        "fid": "f2",
+        "name": "Giant Rat"
+      },
+      {
+        "fid": "f3",
+        "name": "Skeleton"
+      }
+    ]
+  },
+  "combatRound2": {
+    "ok": true,
+    "stage": "done",
+    "round": 2
+  },
+  "combatRound3": {
+    "ok": true,
+    "stage": "done",
+    "round": 3
+  },
+  "stateTransition": {
+    "ok": true,
+    "stage": "done",
+    "candidateCount": 7,
+    "entityRef": "S1.door",
+    "archetype": "door",
+    "from": "shut",
+    "to": "ajar"
+  },
+  "combatEnd": {
+    "ok": true,
+    "stage": "done"
+  },
+  "dungeonComplete": {
+    "ok": true,
+    "stage": "start",
+    "detail": {
+      "ok": true,
+      "completed": "play-lens-dungeon-approach",
+      "next": "frontier-s1-0"
+    }
+  },
+  "shop": {
+    "ok": true,
+    "stage": "done",
+    "shopId": "the-play-lens-trading-post"
+  },
+  "rest": {
+    "ok": true,
+    "rest": "long",
+    "restored": "nothing to restore",
+    "hitDice": null,
+    "interrupted": false,
+    "interruptedMinutes": null,
+    "exhaustion": 0,
+    "lodging": null,
+    "leveled": null,
+    "minutes": 480
+  },
+  "shotCount": 26,
+  "kindsPresent": [
+    "boot",
+    "scene",
+    "combat_round",
+    "state_transition",
+    "rest"
+  ],
+  "legOkCount": 14,
+  "legFailCount": 0,
+  "consoleErrorCount": 7,
+  "unexpected404": [],
+  "benign404Count": 7
+}

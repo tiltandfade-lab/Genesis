@@ -8,6 +8,46 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-07-15 — THE AUTONOMOUS ARC: quick-fix wave + ENV/EXTERIOR (daytime · sun/moon · biomes · town) + PL-3 [Claude Opus 4.8, autonomous per Adam's delegation]
+
+Adam delegated ("take your direction on the wave order, work autonomously"); the ledger ordered the
+waves. Every unit orchestrator-re-gated (own harness runs, every card READ + shared in-chat per
+Adam's ask), landed `--no-ff`, pushed. Master tip `c0a60b77`.
+
+**Fixed (QUICK-FIX WAVE, ledger P0):**
+- QF-B: the "wireframe cage" = buildWebMass (spider web, baked ghost-silk vertex colors) reused as
+  placeholder for ~15 props → luma-preserving `retint` authored in realm-props.json (generator-
+  threaded); head-clip + arrival-blob shared one root (tabletop camera carried no figure height) →
+  TABLETOP_CAMERA_HEADROOM. QF-A: class-wide scoping bug — the active-room render mounted the WHOLE
+  plan's doors+dressing in the current room's frame (also explains ledger P2 #14) + the door
+  cell-pick could land on the neighbor's paired entry; 8/8 rooms now at the 0.5u wall offset.
+  Rat-miscast + vanishing-PC honestly could-not-reproduce (leads documented; lens re-tests).
+
+**Added (ENV/EXTERIOR WAVE — Adam's "we don't even have daytime! or a town scene", measured then built):**
+- **ENV-1 light profiles differentiate everywhere** (root: void tint env-keyed never profile-keyed +
+  STAGE_AMBIENT_FLOOR clamping; daylit-vs-moonlit luma 0.0254 → 0.528; TABLETOP_EXTERIOR_LOOK = the
+  re-tune table). **ENV-1b cast shadows on the tabletop** (Adam's ruling; the fake "no shadow maps"
+  law retired — see DESIGN.md 2026-07-14; darkening 0.154 proven; fps floor ~660). **ENV-1c the
+  sun and moon MOVE** (Adam's ruling; continuous clock → celestial arc; key travels 11.25u dawn→noon,
+  shadows flip sides morning/dusk; CELESTIAL_ARC keyframes; manual 3-way merge composed with ENV-3 —
+  towns carry the clock). **ENV-2 travel legs project their ROLLED biome** (wild-walk already rolled
+  one per leg — the tray discarded it; BIOME_DRESSING 10 biomes → existing-asset pools; ground-map
+  fix for Deeplands/Underwater; the "missing PC" = arrangeTableau centering (0,0) on corner-anchored
+  boards). **ENV-3 the settlement tray** (root: settlements deliberately bind no place record →
+  fell to idle; nodeIsSettlementKind routes them; diner-class proven untouched) + **ENV-3b the
+  composition** (orchestrator bounced round 1: monolith cubes/maze camera/fused lots/toast/mirrored
+  cards — all 5 root-caused, incl. one race with two symptoms: the async art-arrival replay dropped
+  the height-fit AND rebuilt cards unfaced).
+
+**PL-3 (the composed-stack lens re-run):** same route, 26 shots, 0 breaks — **6 ledger items
+verified FIXED in real play** (travel biomes under a morning sky; the PC casting a morning-direction
+shadow; profiles distinct; PC centered/framed; no wireframes; arrival real). Deltas appended to
+dev/play-lens/ledger.md.
+
+**Deferred / Adam's red-pen packet:** facade art (doors/windows/roofs) + NPC card art (ImageGen/kit
+lane) · daylit soft-shadow + arc keyframe tuning (one table each) · Stage E exposure/bloom (next in
+ledger order) · combat-leg delta read next audit · town lens-read at a record-less settlement node.
+
 ## 2026-07-14 (later) — STAGE D STATEFUL NOUNS + AgX LIVE + the door package + PLAY-LENS [Claude Opus 4.8, orchestrated]
 
 The evening block: the whole Stage D spine, AgX as the production look, the door package driven by
@@ -958,39 +998,4 @@ keep the two from colliding. Craft context: `[[project-genesis-craft-pass-2]]`.
   — split significant vs functional roleHints; (2) `regionForNode` supplies no `.center`, so
   fray-by-node temperature is inert on the live path (a pre-existing gap shared by the coherence dial,
   role-realms hybridization, and E-PRES — one fix lights all three).
-
-## 2026-07-08 (night) — MODEL-FOUNDRY locked: the per-model process + batch dispatch design
-
-The modeling deep-dive session (worktree `Genesis-modeling`, branch `feat/blender-fidelity-pass`). The
-wolf became the test case for every approach; the cosmic set piloted the new budget; Fable codified
-the outcome as the process for the 1000+ bestiary build-out.
-
-**Added**
-- `docs/MODEL-FOUNDRY.md` — LOCKED: the per-model process (two Sonnet passes: AUTHOR → engine render →
-  CRITIC gating silhouette+essence+POSE) + the 1,000–2,000 safe band (amended same night by Adam:
-  tris only to fulfill the capture criteria, anatomy chief; pose = the high-expression moment, a
-  law of its own) + the laws (tris = expression,
-  silhouette first, value contrast / ≥0.04u features, essence over anatomy, gate in the real engine) +
-  the wave-dispatch design (8–12 parallel background units/wave, one realm/wave, orchestrator owns
-  registry wiring, never trust executor green).
-- `docs/ANATOMY-CANON.md` — 5 body-family structure canons (digitigrade/unguligrade/winged/serpentine/
-  arthropod) from a parallel research fan-out + cross-family construction rules (topline continuity,
-  seat-from-surface, volume-for-small-features, params-not-remodels).
-- `docs/MODEL-LANE-TRIAGE.md` — the session's findings ledger: JS lofting > Blender kitbash at this
-  scale (5 techniques tried, eyes-on); tris are points of expression only when detail is AUTHORED
-  (the subdivision ladder proved smoothing ≠ expression); AI-gen (Meshy test) is the future organic
-  upgrade path; character > correctness (the wolf's open maw).
-- `dev/model-qa/creatures/cosmic-set.js` — 5 bespoke cosmic creatures at the new budget (Shoggoth
-  Spawnling 1834t / 17 authored eyes = the benchmark; Larva 906t; Creeper 1008t ✗ needs a foundry-law
-  rework — dark-on-dark vanished twice, the evidence behind laws 2–3; Mite 512t; Pilgrim 654t) +
-  `SETS.cosmic`/`SETS.rigcmp` in `ps1-sheet.html`; engine-PS1 sheets `cosmic-set-v{1,2}.png`.
-- `dev/model-qa/rigs/quadruped.js` — `buildQuadruped(P)` parametric rig (334t wolf, in-engine proven).
-  **Parked** with the Blender lane — correct but blander than the character-bearing originals.
-
-**Changed** — the 500-tri economy is retired (aesthetic over-caution; the PS1 look is a shader
-post-process independent of tri count; WebGL headroom is 10–50× at tabletop scale).
-
-**Deferred** — the batch modeling session itself (next session: MODEL-FOUNDRY waves over
-VISUAL-ASSET-QUEUE, gloom→high-seas→frontier→bright-kingdom→cosmic, then the original-roster revisit);
-the Creeper rework rides wave 1 of cosmic.
 

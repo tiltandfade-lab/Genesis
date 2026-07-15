@@ -1,0 +1,1593 @@
+{
+  "runId": "pl4-gloom",
+  "realm": "gloom",
+  "generatedAt": "2026-07-15T15:08:54.335Z",
+  "shotCount": 30,
+  "maxShots": 120,
+  "capped": false,
+  "kindsPresent": [
+    "boot",
+    "scene",
+    "combat_round",
+    "state_transition",
+    "rest"
+  ],
+  "rows": [
+    {
+      "seq": 1,
+      "kind": "boot",
+      "realm": "gloom",
+      "env": "urban",
+      "nodeKind": "settlement",
+      "walkId": null,
+      "segNum": null,
+      "lightProfile": "lamplit",
+      "fps": 314,
+      "notes": "world founded via the bardo; PC living (--force-realm gloom)",
+      "file": "pl-001-boot-tiyl-start.png",
+      "combatRound": null,
+      "currentNodeId": "the-drowned-port",
+      "clock": "1:360",
+      "censusDelta": {
+        "counts": {
+          "facade:null-facade": 4,
+          "dressing:placeholder-card": 5,
+          "figure:whole-object": 4,
+          "dressing:resolved": 2
+        },
+        "entries": [
+          {
+            "seam": "facade",
+            "outcome": "null-facade",
+            "name": "frontier",
+            "sceneKind": "settlement"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "fantasy-clutter-woodpile",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "fantasy-clutter-emptybarrel",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "spr-frontier-innkeeper",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "spr-frontier-homesteader",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "spr-frontier-pale-sleepless-night-shift-railroad-watchman-guards-a-line-nobody-s-tried-to-rob-in-years",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "class:barbarian",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "blank:figure",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "blank:figure",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "blank:figure",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "facade",
+            "outcome": "null-facade",
+            "name": "frontier",
+            "sceneKind": "settlement"
+          },
+          {
+            "seam": "facade",
+            "outcome": "null-facade",
+            "name": "frontier",
+            "sceneKind": "settlement"
+          },
+          {
+            "seam": "facade",
+            "outcome": "null-facade",
+            "name": "frontier",
+            "sceneKind": "settlement"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "fantasy-clutter-woodpile",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "fantasy-clutter-emptybarrel",
+            "sceneKind": "tabletop"
+          }
+        ]
+      }
+    },
+    {
+      "seq": 2,
+      "kind": "scene",
+      "realm": "gloom",
+      "env": null,
+      "nodeKind": "node",
+      "walkId": null,
+      "segNum": null,
+      "lightProfile": "overcast",
+      "fps": 1680.7,
+      "notes": "node tray via rollPlace/codexAdd binding (settlements are out of rollPlace's single-site scale per PLACE-GEN.md — closest production-real analog to a town tray)",
+      "file": "pl-002-scene-settlement-20.png",
+      "combatRound": null,
+      "currentNodeId": "the-drowned-port",
+      "clock": "1:360",
+      "censusDelta": {
+        "counts": {
+          "figure:whole-object": 4
+        },
+        "entries": [
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "class:barbarian",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "blank:figure",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "blank:figure",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "blank:figure",
+            "sceneKind": "tabletop"
+          }
+        ]
+      }
+    },
+    {
+      "seq": 3,
+      "kind": "scene",
+      "realm": "gloom",
+      "env": "wilderness",
+      "nodeKind": "segment",
+      "walkId": "play-lens-dungeon-approach",
+      "segNum": 1,
+      "lightProfile": "torchlit",
+      "fps": 192.9,
+      "notes": "real wilderness travel walk opened",
+      "file": "pl-003-scene-travel-walk.png",
+      "combatRound": null,
+      "currentNodeId": "the-drowned-port",
+      "clock": "1:360",
+      "censusDelta": {
+        "counts": {
+          "dressing:placeholder-card": 2,
+          "figure:whole-object": 1,
+          "dressing:resolved": 2
+        },
+        "entries": [
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "fantasy-clutter-rubblewall",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "fantasy-flora-hedgerow",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "class:barbarian",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "fantasy-clutter-rubblewall",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "fantasy-flora-hedgerow",
+            "sceneKind": "tabletop"
+          }
+        ]
+      }
+    },
+    {
+      "seq": 4,
+      "kind": "scene",
+      "realm": "gloom",
+      "env": "wilderness",
+      "nodeKind": "segment",
+      "walkId": "play-lens-dungeon-approach",
+      "segNum": 2,
+      "lightProfile": "moonlit",
+      "fps": 281.3,
+      "notes": "walk_advance leg 2",
+      "file": "pl-004-scene-travel-leg-2.png",
+      "combatRound": null,
+      "currentNodeId": "the-drowned-port",
+      "clock": "1:435",
+      "censusDelta": {
+        "counts": {
+          "dressing:placeholder-card": 1,
+          "dressing:resolved": 1
+        },
+        "entries": [
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "fantasy-flora-mossboulder",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "fantasy-flora-mossboulder",
+            "sceneKind": "tabletop"
+          }
+        ]
+      }
+    },
+    {
+      "seq": 5,
+      "kind": "scene",
+      "realm": "gloom",
+      "env": "wilderness",
+      "nodeKind": "segment",
+      "walkId": "play-lens-dungeon-approach",
+      "segNum": 3,
+      "lightProfile": "daylit",
+      "fps": 291.5,
+      "notes": "walk_advance leg 3",
+      "file": "pl-005-scene-travel-leg-3.png",
+      "combatRound": null,
+      "currentNodeId": "the-drowned-port",
+      "clock": "1:510",
+      "censusDelta": {
+        "counts": {
+          "dressing:placeholder-card": 4,
+          "dressing:resolved": 4
+        },
+        "entries": [
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "fantasy-flora-fern",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "fantasy-flora-fern-alt",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "fantasy-flora-oak-alt",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "fantasy-flora-birchgrove",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "fantasy-flora-fern",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "fantasy-flora-fern-alt",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "fantasy-flora-oak-alt",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "fantasy-flora-birchgrove",
+            "sceneKind": "tabletop"
+          }
+        ]
+      }
+    },
+    {
+      "seq": 6,
+      "kind": "scene",
+      "realm": "gloom",
+      "env": "wilderness",
+      "nodeKind": "segment",
+      "walkId": "play-lens-dungeon-approach",
+      "segNum": 4,
+      "lightProfile": "magic-glow",
+      "fps": 282.9,
+      "notes": "walk_advance leg 4",
+      "file": "pl-006-scene-travel-leg-4.png",
+      "combatRound": null,
+      "currentNodeId": "the-drowned-port",
+      "clock": "1:585",
+      "censusDelta": {
+        "counts": {
+          "dressing:placeholder-card": 1,
+          "dressing:resolved": 1
+        },
+        "entries": [
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "fantasy-flora-oak",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "fantasy-flora-oak",
+            "sceneKind": "tabletop"
+          }
+        ]
+      }
+    },
+    {
+      "seq": 7,
+      "kind": "scene",
+      "realm": "gloom",
+      "env": "wilderness",
+      "nodeKind": "segment",
+      "walkId": "play-lens-dungeon-approach",
+      "segNum": 5,
+      "lightProfile": "moonlit",
+      "fps": 306.3,
+      "notes": "walk_advance leg 5",
+      "file": "pl-007-scene-travel-leg-5.png",
+      "combatRound": null,
+      "currentNodeId": "the-drowned-port",
+      "clock": "1:660",
+      "censusDelta": {
+        "counts": {},
+        "entries": []
+      }
+    },
+    {
+      "seq": 8,
+      "kind": "scene",
+      "realm": "gloom",
+      "env": null,
+      "nodeKind": "idle",
+      "walkId": null,
+      "segNum": null,
+      "lightProfile": "dark",
+      "fps": 9090.9,
+      "notes": "walk_complete landed the PC at the destination node",
+      "file": "pl-008-scene-travel-arrive.png",
+      "combatRound": null,
+      "currentNodeId": "play-lens-dungeon-approach",
+      "clock": "1:660",
+      "censusDelta": {
+        "counts": {
+          "figure:whole-object": 1
+        },
+        "entries": [
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "class:barbarian",
+            "sceneKind": "tabletop"
+          }
+        ]
+      }
+    },
+    {
+      "seq": 9,
+      "kind": "scene",
+      "realm": "gloom",
+      "env": "dungeon",
+      "nodeKind": "interior",
+      "walkId": "play-lens-dungeon-approach",
+      "segNum": 1,
+      "lightProfile": "dark",
+      "fps": 131.9,
+      "notes": "The Stronghold room S1",
+      "file": "pl-009-scene-dungeon-room-1.png",
+      "combatRound": null,
+      "currentNodeId": "play-lens-dungeon-approach",
+      "clock": "1:670",
+      "censusDelta": {
+        "counts": {
+          "dressing:placeholder-card": 6,
+          "figure:whole-object": 1,
+          "dressing:resolved": 6
+        },
+        "entries": [
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "gloom-clutter-lanternrust",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "gloom-clutter-brokentombstone",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "gloom-clutter-funeralbell",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "gloom-flora-rootcrack",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "gloom-clutter-urnshard",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "gloom-flora-fungalcrust",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "class:barbarian",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "gloom-clutter-lanternrust",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "gloom-clutter-funeralbell",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "gloom-clutter-brokentombstone",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "gloom-flora-rootcrack",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "gloom-clutter-urnshard",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "gloom-flora-fungalcrust",
+            "sceneKind": "interior"
+          }
+        ]
+      }
+    },
+    {
+      "seq": 10,
+      "kind": "scene",
+      "realm": "gloom",
+      "env": "dungeon",
+      "nodeKind": "interior",
+      "walkId": "play-lens-dungeon-approach",
+      "segNum": 2,
+      "lightProfile": "dark",
+      "fps": 145.7,
+      "notes": "The Stronghold room S2",
+      "file": "pl-010-scene-dungeon-room-2.png",
+      "combatRound": null,
+      "currentNodeId": "play-lens-dungeon-approach",
+      "clock": "1:680",
+      "censusDelta": {
+        "counts": {
+          "dressing:placeholder-card": 4,
+          "figure:whole-object": 1,
+          "dressing:resolved": 4
+        },
+        "entries": [
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "gloom-flora-driedwreath",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "gloom-flora-cattails-alt",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "gloom-flora-mourningfern",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "gloom-clutter-shroudrag",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "class:barbarian",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "gloom-flora-driedwreath",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "gloom-flora-cattails-alt",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "gloom-flora-mourningfern",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "gloom-clutter-shroudrag",
+            "sceneKind": "interior"
+          }
+        ]
+      }
+    },
+    {
+      "seq": 11,
+      "kind": "scene",
+      "realm": "gloom",
+      "env": "dungeon",
+      "nodeKind": "interior",
+      "walkId": "play-lens-dungeon-approach",
+      "segNum": 3,
+      "lightProfile": "dark",
+      "fps": 143.5,
+      "notes": "The Stronghold room S3",
+      "file": "pl-011-scene-dungeon-room-3.png",
+      "combatRound": null,
+      "currentNodeId": "play-lens-dungeon-approach",
+      "clock": "1:690",
+      "censusDelta": {
+        "counts": {
+          "dressing:placeholder-card": 8,
+          "figure:whole-object": 1,
+          "dressing:resolved": 8
+        },
+        "entries": [
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "gloom-flora-witheredwillow",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "gloom-clutter-brokentombstone-alt",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "gloom-clutter-candlewax-pool",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "gloom-clutter-funeralbell-alt",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "gloom-flora-graveturf",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "gloom-clutter-coffinnail-scatter",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "gloom-clutter-bonepile",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "gloom-flora-mournvine",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "class:barbarian",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "gloom-clutter-candlewax-pool",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "gloom-clutter-brokentombstone-alt",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "gloom-flora-witheredwillow",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "gloom-clutter-funeralbell-alt",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "gloom-flora-graveturf",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "gloom-clutter-coffinnail-scatter",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "gloom-clutter-bonepile",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "gloom-flora-mournvine",
+            "sceneKind": "interior"
+          }
+        ]
+      }
+    },
+    {
+      "seq": 12,
+      "kind": "scene",
+      "realm": "gloom",
+      "env": "dungeon",
+      "nodeKind": "interior",
+      "walkId": "play-lens-dungeon-approach",
+      "segNum": 4,
+      "lightProfile": "dark",
+      "fps": 146,
+      "notes": "The Stronghold room S4",
+      "file": "pl-012-scene-dungeon-room-4.png",
+      "combatRound": null,
+      "currentNodeId": "play-lens-dungeon-approach",
+      "clock": "1:700",
+      "censusDelta": {
+        "counts": {
+          "dressing:placeholder-card": 4,
+          "figure:whole-object": 1,
+          "dressing:resolved": 4
+        },
+        "entries": [
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "gloom-flora-mournbell",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "gloom-flora-wiltrose",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "gloom-flora-nightshade",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "gloom-flora-mossgrave",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "class:barbarian",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "gloom-flora-wiltrose",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "gloom-flora-mournbell",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "gloom-flora-nightshade",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "gloom-flora-mossgrave",
+            "sceneKind": "interior"
+          }
+        ]
+      }
+    },
+    {
+      "seq": 13,
+      "kind": "scene",
+      "realm": "gloom",
+      "env": "dungeon",
+      "nodeKind": "interior",
+      "walkId": "play-lens-dungeon-approach",
+      "segNum": 5,
+      "lightProfile": "dark",
+      "fps": 148.1,
+      "notes": "The Stronghold room S5",
+      "file": "pl-013-scene-dungeon-room-5.png",
+      "combatRound": null,
+      "currentNodeId": "play-lens-dungeon-approach",
+      "clock": "1:710",
+      "censusDelta": {
+        "counts": {
+          "dressing:placeholder-card": 2,
+          "figure:whole-object": 1,
+          "dressing:resolved": 2
+        },
+        "entries": [
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "gloom-flora-witherstalk",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "gloom-flora-bonelichen",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "class:barbarian",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "gloom-flora-witherstalk",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "gloom-flora-bonelichen",
+            "sceneKind": "interior"
+          }
+        ]
+      }
+    },
+    {
+      "seq": 14,
+      "kind": "scene",
+      "realm": "gloom",
+      "env": "dungeon",
+      "nodeKind": "interior",
+      "walkId": "play-lens-dungeon-approach",
+      "segNum": 6,
+      "lightProfile": "dark",
+      "fps": 141,
+      "notes": "The Stronghold room S6",
+      "file": "pl-014-scene-dungeon-room-6.png",
+      "combatRound": null,
+      "currentNodeId": "play-lens-dungeon-approach",
+      "clock": "1:720",
+      "censusDelta": {
+        "counts": {
+          "dressing:placeholder-card": 3,
+          "figure:whole-object": 1,
+          "dressing:resolved": 3
+        },
+        "entries": [
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "gloom-flora-deadorchard",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "gloom-clutter-driedwreathpile",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "gloom-clutter-coffinlid",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "class:barbarian",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "gloom-flora-deadorchard",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "gloom-clutter-driedwreathpile",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "gloom-clutter-coffinlid",
+            "sceneKind": "interior"
+          }
+        ]
+      }
+    },
+    {
+      "seq": 15,
+      "kind": "scene",
+      "realm": "gloom",
+      "env": "dungeon",
+      "nodeKind": "interior",
+      "walkId": "play-lens-dungeon-approach",
+      "segNum": 7,
+      "lightProfile": "dark",
+      "fps": 163.5,
+      "notes": "The Stronghold room S7",
+      "file": "pl-015-scene-dungeon-room-7.png",
+      "combatRound": null,
+      "currentNodeId": "play-lens-dungeon-approach",
+      "clock": "1:730",
+      "censusDelta": {
+        "counts": {
+          "dressing:placeholder-card": 1,
+          "figure:whole-object": 1,
+          "dressing:resolved": 1
+        },
+        "entries": [
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "gloom-clutter-mausoleumdoor-shard",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "class:barbarian",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "gloom-clutter-mausoleumdoor-shard",
+            "sceneKind": "interior"
+          }
+        ]
+      }
+    },
+    {
+      "seq": 16,
+      "kind": "scene",
+      "realm": "gloom",
+      "env": "dungeon",
+      "nodeKind": "interior",
+      "walkId": "play-lens-dungeon-approach",
+      "segNum": 8,
+      "lightProfile": "dark",
+      "fps": 162.1,
+      "notes": "The Stronghold room S8",
+      "file": "pl-016-scene-dungeon-room-8.png",
+      "combatRound": null,
+      "currentNodeId": "play-lens-dungeon-approach",
+      "clock": "1:740",
+      "censusDelta": {
+        "counts": {
+          "dressing:placeholder-card": 3,
+          "figure:whole-object": 1,
+          "dressing:resolved": 3
+        },
+        "entries": [
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "gloom-clutter-shovelstuck",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "gloom-clutter-mourningveil",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "gloom-flora-driedivy",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "class:barbarian",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "gloom-clutter-shovelstuck",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "gloom-clutter-mourningveil",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "gloom-flora-driedivy",
+            "sceneKind": "interior"
+          }
+        ]
+      }
+    },
+    {
+      "seq": 17,
+      "kind": "scene",
+      "realm": "gloom",
+      "env": "dungeon",
+      "nodeKind": "interior",
+      "walkId": "play-lens-dungeon-approach",
+      "segNum": 9,
+      "lightProfile": "dark",
+      "fps": 130.1,
+      "notes": "The Stronghold room S9",
+      "file": "pl-017-scene-dungeon-room-9.png",
+      "combatRound": null,
+      "currentNodeId": "play-lens-dungeon-approach",
+      "clock": "1:750",
+      "censusDelta": {
+        "counts": {
+          "figure:whole-object": 1
+        },
+        "entries": [
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "class:barbarian",
+            "sceneKind": "interior"
+          }
+        ]
+      }
+    },
+    {
+      "seq": 18,
+      "kind": "scene",
+      "realm": "gloom",
+      "env": "dungeon",
+      "nodeKind": "interior",
+      "walkId": "play-lens-dungeon-approach",
+      "segNum": 10,
+      "lightProfile": "dark",
+      "fps": 146.6,
+      "notes": "The Stronghold room S10",
+      "file": "pl-018-scene-dungeon-room-10.png",
+      "combatRound": null,
+      "currentNodeId": "play-lens-dungeon-approach",
+      "clock": "1:760",
+      "censusDelta": {
+        "counts": {
+          "figure:whole-object": 1
+        },
+        "entries": [
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "class:barbarian",
+            "sceneKind": "interior"
+          }
+        ]
+      }
+    },
+    {
+      "seq": 19,
+      "kind": "scene",
+      "realm": "gloom",
+      "env": "dungeon",
+      "nodeKind": "interior",
+      "walkId": "play-lens-dungeon-approach",
+      "segNum": 11,
+      "lightProfile": "dark",
+      "fps": 157.9,
+      "notes": "The Stronghold room S11",
+      "file": "pl-019-scene-dungeon-room-11.png",
+      "combatRound": null,
+      "currentNodeId": "play-lens-dungeon-approach",
+      "clock": "1:770",
+      "censusDelta": {
+        "counts": {
+          "figure:whole-object": 1
+        },
+        "entries": [
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "class:barbarian",
+            "sceneKind": "interior"
+          }
+        ]
+      }
+    },
+    {
+      "seq": 20,
+      "kind": "scene",
+      "realm": "gloom",
+      "env": "dungeon",
+      "nodeKind": "interior",
+      "walkId": "play-lens-dungeon-approach",
+      "segNum": 12,
+      "lightProfile": "dark",
+      "fps": 152,
+      "notes": "The Stronghold room S12",
+      "file": "pl-020-scene-dungeon-room-12.png",
+      "combatRound": null,
+      "currentNodeId": "play-lens-dungeon-approach",
+      "clock": "1:780",
+      "censusDelta": {
+        "counts": {
+          "figure:whole-object": 1
+        },
+        "entries": [
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "class:barbarian",
+            "sceneKind": "interior"
+          }
+        ]
+      }
+    },
+    {
+      "seq": 21,
+      "kind": "combat_round",
+      "realm": "gloom",
+      "env": "dungeon",
+      "nodeKind": "interior",
+      "walkId": "play-lens-dungeon-approach",
+      "segNum": 12,
+      "lightProfile": "dark",
+      "fps": 420.2,
+      "notes": "combat_start — round 1",
+      "file": "pl-021-combat_round-round-1.png",
+      "combatRound": 1,
+      "currentNodeId": "play-lens-dungeon-approach",
+      "clock": "1:780",
+      "censusDelta": {
+        "counts": {
+          "figure:whole-object": 10,
+          "figure:sprite-legacy": 4,
+          "figure:sprite-faceted": 2
+        },
+        "entries": [
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "class:barbarian",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "wolf",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "giant-rat",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "skeleton",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "class:barbarian",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "sprite-legacy",
+            "name": "spr-fantasy-wolf",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "giant-rat",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "skeleton",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "class:barbarian",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "sprite-legacy",
+            "name": "spr-fantasy-wolf",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "sprite-faceted",
+            "name": "spr-fantasy-giant-rat",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "skeleton",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "class:barbarian",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "sprite-legacy",
+            "name": "spr-fantasy-wolf",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "sprite-faceted",
+            "name": "spr-fantasy-giant-rat",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "sprite-legacy",
+            "name": "spr-fantasy-skeleton",
+            "sceneKind": "tabletop"
+          }
+        ]
+      }
+    },
+    {
+      "seq": 22,
+      "kind": "combat_round",
+      "realm": "gloom",
+      "env": "dungeon",
+      "nodeKind": "interior",
+      "walkId": "play-lens-dungeon-approach",
+      "segNum": 12,
+      "lightProfile": "dark",
+      "fps": 418.4,
+      "notes": "attack(target=f1,hit=true,dmg=8) + move_zone(pc:melee->melee) -> round=2",
+      "file": "pl-022-combat_round-round-2.png",
+      "combatRound": 2,
+      "currentNodeId": "play-lens-dungeon-approach",
+      "clock": "1:780",
+      "censusDelta": {
+        "counts": {
+          "figure:whole-object": 1,
+          "figure:sprite-legacy": 2,
+          "figure:sprite-faceted": 1
+        },
+        "entries": [
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "class:barbarian",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "sprite-legacy",
+            "name": "spr-fantasy-wolf",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "sprite-faceted",
+            "name": "spr-fantasy-giant-rat",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "sprite-legacy",
+            "name": "spr-fantasy-skeleton",
+            "sceneKind": "tabletop"
+          }
+        ]
+      }
+    },
+    {
+      "seq": 23,
+      "kind": "combat_round",
+      "realm": "gloom",
+      "env": "dungeon",
+      "nodeKind": "interior",
+      "walkId": "play-lens-dungeon-approach",
+      "segNum": 12,
+      "lightProfile": "dark",
+      "fps": 392.9,
+      "notes": "attack(target=f1,hit=true,dmg=12) + move_zone(pc:melee->melee) -> round=3",
+      "file": "pl-023-combat_round-round-3.png",
+      "combatRound": 3,
+      "currentNodeId": "play-lens-dungeon-approach",
+      "clock": "1:780",
+      "censusDelta": {
+        "counts": {
+          "figure:whole-object": 1,
+          "figure:sprite-legacy": 2,
+          "figure:sprite-faceted": 1
+        },
+        "entries": [
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "class:barbarian",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "sprite-legacy",
+            "name": "spr-fantasy-wolf",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "sprite-faceted",
+            "name": "spr-fantasy-giant-rat",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "sprite-legacy",
+            "name": "spr-fantasy-skeleton",
+            "sceneKind": "tabletop"
+          }
+        ]
+      }
+    },
+    {
+      "seq": 24,
+      "kind": "state_transition",
+      "realm": "gloom",
+      "env": "dungeon",
+      "nodeKind": "interior",
+      "walkId": "play-lens-dungeon-approach",
+      "segNum": 1,
+      "lightProfile": "dark",
+      "fps": 409.8,
+      "notes": "entityRef S1.door [camera refocused to S1]",
+      "file": "pl-024-state_transition-door-shut-to-ajar.png",
+      "combatRound": 3,
+      "currentNodeId": "play-lens-dungeon-approach",
+      "clock": "1:790",
+      "censusDelta": {
+        "counts": {},
+        "entries": []
+      }
+    },
+    {
+      "seq": 25,
+      "kind": "scene",
+      "realm": "gloom",
+      "env": "dungeon",
+      "nodeKind": "interior",
+      "walkId": "play-lens-dungeon-approach",
+      "segNum": 1,
+      "lightProfile": "dark",
+      "fps": 124.6,
+      "notes": "combat_end(resolved)",
+      "file": "pl-025-scene-combat-end.png",
+      "combatRound": null,
+      "currentNodeId": "play-lens-dungeon-approach",
+      "clock": "1:791",
+      "censusDelta": {
+        "counts": {
+          "figure:whole-object": 2
+        },
+        "entries": [
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "class:barbarian",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "f1",
+            "sceneKind": "interior"
+          }
+        ]
+      }
+    },
+    {
+      "seq": 26,
+      "kind": "scene",
+      "realm": "gloom",
+      "env": null,
+      "nodeKind": "idle",
+      "walkId": null,
+      "segNum": null,
+      "lightProfile": "dark",
+      "fps": 11764.7,
+      "notes": "walk_complete — frontier cleared",
+      "file": "pl-026-scene-dungeon-complete.png",
+      "combatRound": null,
+      "currentNodeId": "play-lens-dungeon-approach",
+      "clock": "1:791",
+      "censusDelta": {
+        "counts": {
+          "figure:whole-object": 1
+        },
+        "entries": [
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "class:barbarian",
+            "sceneKind": "tabletop"
+          }
+        ]
+      }
+    },
+    {
+      "seq": 27,
+      "kind": "scene",
+      "realm": "gloom",
+      "env": "urban",
+      "nodeKind": "settlement",
+      "walkId": null,
+      "segNum": null,
+      "lightProfile": "dark",
+      "fps": 435.7,
+      "notes": "theaterHereSourceFor.kind=settlement (expect \"settlement\" — ENV-3 town builder; hasCodexId=false)",
+      "file": "pl-027-scene-recordless-settlement.png",
+      "combatRound": null,
+      "currentNodeId": "play-lens-record-less-settlement",
+      "clock": "1:791",
+      "censusDelta": {
+        "counts": {
+          "dressing:placeholder-card": 3,
+          "figure:whole-object": 1
+        },
+        "entries": [
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "spr-gloom-grave-cool-hand-a-handshake-that-runs-a-few-degrees-too-cold-otherwise-ordinary",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "spr-gloom-heavyset-town-mechanic-the-only-one-who-ll-drive-out-past-the-old-mill-after-dark",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "spr-gloom-stout-diner-cook-dark-skinned-feeds-the-night-shift-forgets-faces-on-purpose",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "class:barbarian",
+            "sceneKind": "tabletop"
+          }
+        ]
+      }
+    },
+    {
+      "seq": 28,
+      "kind": "scene",
+      "realm": "gloom",
+      "env": "urban",
+      "nodeKind": "settlement",
+      "walkId": null,
+      "segNum": null,
+      "lightProfile": "dark",
+      "fps": 438.6,
+      "notes": "open_shop — GS.gamePanel=shop; render-verdict rendered=false shopName=\"undefined\"",
+      "file": "pl-028-scene-shop-open.png",
+      "combatRound": null,
+      "currentNodeId": "play-lens-record-less-settlement",
+      "clock": "1:791",
+      "censusDelta": {
+        "counts": {
+          "figure:whole-object": 1
+        },
+        "entries": [
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "class:barbarian",
+            "sceneKind": "tabletop"
+          }
+        ]
+      }
+    },
+    {
+      "seq": 29,
+      "kind": "scene",
+      "realm": "gloom",
+      "env": "urban",
+      "nodeKind": "settlement",
+      "walkId": null,
+      "segNum": null,
+      "lightProfile": "dark",
+      "fps": 411.5,
+      "notes": "shop closed, back to the standing table",
+      "file": "pl-029-scene-shop-closed.png",
+      "combatRound": null,
+      "currentNodeId": "play-lens-record-less-settlement",
+      "clock": "1:791",
+      "censusDelta": {
+        "counts": {
+          "figure:whole-object": 1
+        },
+        "entries": [
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "class:barbarian",
+            "sceneKind": "tabletop"
+          }
+        ]
+      }
+    },
+    {
+      "seq": 30,
+      "kind": "rest",
+      "realm": "gloom",
+      "env": "urban",
+      "nodeKind": "settlement",
+      "walkId": null,
+      "segNum": null,
+      "lightProfile": "dark",
+      "fps": 412.4,
+      "notes": "rest(long) — clock advanced 480min",
+      "file": "pl-030-rest-long-rest.png",
+      "combatRound": null,
+      "currentNodeId": "play-lens-record-less-settlement",
+      "clock": "1:1271",
+      "censusDelta": {
+        "counts": {},
+        "entries": []
+      }
+    }
+  ]
+}

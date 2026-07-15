@@ -11,7 +11,13 @@ operating contract — **`CLAUDE.md` is the authoritative, fuller version, so re
 2. **`docs/HANDOFF.md`** — current state + "Do next"; read at the start of every session to see where
    things stand and what's in flight.
 3. **`docs/README.md`** — the full docs index + the `type:` taxonomy (which doc is which).
-4. The specific **`docs/<SPEC>.md`** for your task (specs are `status: SPECCED|BUILT`; execute a
+4. **`docs/ART-DIRECTION-CANON.md`** — MANDATORY before any art/sprite/prop/decal/texture
+   generation or review: Adam's verbatim art direction. QUOTE it, never paraphrase it, in every
+   generation prompt. Any art ruling Adam gives you in conversation must be appended to that
+   file (dated) and committed in the same session — a chat that isn't captured there is lost.
+   Deep authority: `docs/FACETED-ART-REGENERATION-PRODUCTION-PLAN.md`; batch mechanics:
+   `docs/FACETED-SHEET-TEMPLATE.md`.
+5. The specific **`docs/<SPEC>.md`** for your task (specs are `status: SPECCED|BUILT`; execute a
    SPECCED one exactly unless capture evidence exposes a conflict with a canonical roll, a newer
    contract, or the accepted visual target; document the conflict before amending the spec).
 

@@ -1,0 +1,659 @@
+{
+  "generatedAt": "2026-07-16T04:05:20.577Z",
+  "branch": "chore/pal-card4-hires",
+  "sha": "e26a4b6b79f960ed3774ed7c4067a003643a63dc",
+  "realm": "fantasy",
+  "lightProfile": "torchlit",
+  "deviceScaleFactor": 2,
+  "shotCssPx": {
+    "w": 1600,
+    "h": 1200
+  },
+  "shotPhysicalPx": {
+    "w": 3200,
+    "h": 2400
+  },
+  "sampleSet": [
+    {
+      "slug": "spr-fantasy-wolf",
+      "extractedPath": "/private/tmp/claude-501/-Volumes-Genesis-Genesis/511b0c52-df6c-4cdb-81d7-16f6f0dd9e7c/scratchpad/pal-ab-originals/spr-fantasy-wolf.png",
+      "present": true,
+      "bytes": 82152
+    },
+    {
+      "slug": "spr-fantasy-air-elemental",
+      "extractedPath": "/private/tmp/claude-501/-Volumes-Genesis-Genesis/511b0c52-df6c-4cdb-81d7-16f6f0dd9e7c/scratchpad/pal-ab-originals/spr-fantasy-air-elemental.png",
+      "present": true,
+      "bytes": 105545
+    },
+    {
+      "slug": "spr-fantasy-giant-fire-beetle",
+      "extractedPath": "/private/tmp/claude-501/-Volumes-Genesis-Genesis/511b0c52-df6c-4cdb-81d7-16f6f0dd9e7c/scratchpad/pal-ab-originals/spr-fantasy-giant-fire-beetle.png",
+      "present": true,
+      "bytes": 90804
+    },
+    {
+      "slug": "spr-pc-dragonborn-barbarian-male",
+      "extractedPath": "/private/tmp/claude-501/-Volumes-Genesis-Genesis/511b0c52-df6c-4cdb-81d7-16f6f0dd9e7c/scratchpad/pal-ab-originals/spr-pc-dragonborn-barbarian-male.png",
+      "present": true,
+      "bytes": 91917
+    },
+    {
+      "slug": "spr-fantasy-adult-blue-dragon",
+      "extractedPath": "/private/tmp/claude-501/-Volumes-Genesis-Genesis/511b0c52-df6c-4cdb-81d7-16f6f0dd9e7c/scratchpad/pal-ab-originals/spr-fantasy-adult-blue-dragon.png",
+      "present": true,
+      "bytes": 138741
+    },
+    {
+      "slug": "spr-fantasy-adult-copper-dragon",
+      "extractedPath": "/private/tmp/claude-501/-Volumes-Genesis-Genesis/511b0c52-df6c-4cdb-81d7-16f6f0dd9e7c/scratchpad/pal-ab-originals/spr-fantasy-adult-copper-dragon.png",
+      "present": true,
+      "bytes": 130477
+    }
+  ],
+  "castLineup": [
+    {
+      "pieceSlug": "Wolf",
+      "registrySlug": "spr-fantasy-wolf",
+      "note": "fur — gradient/blend case"
+    },
+    {
+      "pieceSlug": "Air Elemental",
+      "registrySlug": "spr-fantasy-air-elemental",
+      "note": "wispy translucent gradient"
+    },
+    {
+      "pieceSlug": "Giant Fire Beetle",
+      "registrySlug": "spr-fantasy-giant-fire-beetle",
+      "note": "glow blend (small — expect a tight crop)"
+    },
+    {
+      "pieceSlug": "Dragonborn Barbarian (Male)",
+      "registrySlug": "spr-pc-dragonborn-barbarian-male",
+      "note": "pc slug"
+    },
+    {
+      "pieceSlug": "Adult Blue Dragon",
+      "registrySlug": "spr-fantasy-adult-blue-dragon",
+      "note": "Adam's named proven case"
+    },
+    {
+      "pieceSlug": "Adult Copper Dragon",
+      "registrySlug": "spr-fantasy-adult-copper-dragon",
+      "note": "Adam's loved one"
+    }
+  ],
+  "methodology": {
+    "saturation": "mean HSL S (0..1) over included pixels",
+    "contrast": "RMS/coefficient-of-variation: stdev(sRGB luma 0.2126R+0.7152G+0.0722B) / mean(luma), display-space bytes, not linearized",
+    "rawFileMask": "raw PNG: alpha > 10 (true alpha channel), trimmed to its own tight alpha bbox before compositing",
+    "engineCropMask": "engine crop: per-pixel max(|cast_channel - bg_channel|) > 24/255 against a same-camera/same-light/zero-piece background render of the identical room, in PHYSICAL (DSF=2) pixel space",
+    "uniqueColors": "count of distinct (r,g,b) byte-tuples within the masked region",
+    "meanAbsHueDeltaAdjacent": "mean circular HSL-hue distance between each masked pixel and its right/below masked neighbor — a local-jump ('banding') proxy, computed for the in-engine original-vs-quantized pair only"
+  },
+  "notes": [],
+  "camera": {
+    "poses": [
+      {
+        "label": "card4-quantized-cast",
+        "identical": true,
+        "maxDelta": 1.1102230246251565e-16
+      },
+      {
+        "label": "card4-baseline-bg",
+        "identical": true,
+        "maxDelta": 1.1102230246251565e-16
+      },
+      {
+        "label": "card4-originals-cast",
+        "identical": true,
+        "maxDelta": 1.1102230246251565e-16
+      }
+    ]
+  },
+  "room": {
+    "x": 29,
+    "y": 30,
+    "w": 25,
+    "d": 12
+  },
+  "lineupPositions": [
+    {
+      "x": 30,
+      "y": 36
+    },
+    {
+      "x": 34,
+      "y": 36
+    },
+    {
+      "x": 39,
+      "y": 36
+    },
+    {
+      "x": 43,
+      "y": 36
+    },
+    {
+      "x": 48,
+      "y": 36
+    },
+    {
+      "x": 52,
+      "y": 36
+    }
+  ],
+  "canvasBoxCssPx": {
+    "x": 280,
+    "y": 38,
+    "height": 874,
+    "width": 972
+  },
+  "productionDefaults": {
+    "spriteEmissiveFloor": 0.05,
+    "gradeTintScale": 0.45,
+    "tonemap": "agx"
+  },
+  "screenshotActualPx": {
+    "w": 3200,
+    "h": 2400
+  },
+  "rows": [
+    {
+      "registrySlug": "spr-fantasy-wolf",
+      "pieceSlug": "Wolf",
+      "note": "fur — gradient/blend case",
+      "ok": true,
+      "rowShot": "shots/card4-row-spr-fantasy-wolf.png",
+      "cropRectCssPx": {
+        "x": 469,
+        "y": 317,
+        "w": 32,
+        "h": 18
+      },
+      "cropRectPhysicalPx": {
+        "x": 938,
+        "y": 634,
+        "w": 64,
+        "h": 36
+      },
+      "rawBBox": {
+        "x": 5,
+        "y": 5,
+        "w": 225,
+        "h": 162
+      },
+      "rawStats": {
+        "n": 18564,
+        "width": 235,
+        "height": 172,
+        "meanSaturation": 0.36677743551852143,
+        "rmsContrast": 0.645194205287246,
+        "meanLuma": 85.539167097608,
+        "uniqueColors": 16499
+      },
+      "inEngineOriginal": {
+        "n": 877,
+        "meanSaturation": 0.5516638052742578,
+        "rmsContrast": 0.3215207326483065,
+        "meanLuma": 72.46953432155082,
+        "uniqueColors": 818,
+        "meanAbsHueDeltaAdjacent": 0.007447034023126742,
+        "rect": {
+          "x": 938,
+          "y": 634,
+          "w": 64,
+          "h": 36
+        },
+        "maskedFraction": 0.3806423611111111
+      },
+      "inEngineQuantized": {
+        "n": 872,
+        "meanSaturation": 0.5562590724240546,
+        "rmsContrast": 0.3237558367829011,
+        "meanLuma": 72.30828761467885,
+        "uniqueColors": 665,
+        "meanAbsHueDeltaAdjacent": 0.005835226677859632,
+        "rect": {
+          "x": 938,
+          "y": 634,
+          "w": 64,
+          "h": 36
+        },
+        "maskedFraction": 0.3784722222222222
+      },
+      "deltaUniqueColors": 153,
+      "deltaMeanAbsHueDeltaAdjacent": 0.0016118073452671099
+    },
+    {
+      "registrySlug": "spr-fantasy-air-elemental",
+      "pieceSlug": "Air Elemental",
+      "note": "wispy translucent gradient",
+      "ok": true,
+      "rowShot": "shots/card4-row-spr-fantasy-air-elemental.png",
+      "cropRectCssPx": {
+        "x": 536,
+        "y": 331,
+        "w": 79,
+        "h": 59
+      },
+      "cropRectPhysicalPx": {
+        "x": 1072,
+        "y": 662,
+        "w": 158,
+        "h": 118
+      },
+      "rawBBox": {
+        "x": 5,
+        "y": 5,
+        "w": 211,
+        "h": 209
+      },
+      "rawStats": {
+        "n": 20794,
+        "width": 221,
+        "height": 219,
+        "meanSaturation": 0.1557696630056441,
+        "rmsContrast": 0.38336785872597284,
+        "meanLuma": 146.7131331249394,
+        "uniqueColors": 18527
+      },
+      "inEngineOriginal": {
+        "n": 6813,
+        "meanSaturation": 0.3077387900184739,
+        "rmsContrast": 0.19742135894630009,
+        "meanLuma": 97.36455071187476,
+        "uniqueColors": 3953,
+        "meanAbsHueDeltaAdjacent": 0.007604916972833706,
+        "rect": {
+          "x": 1072,
+          "y": 662,
+          "w": 158,
+          "h": 118
+        },
+        "maskedFraction": 0.36542587427590645
+      },
+      "inEngineQuantized": {
+        "n": 6812,
+        "meanSaturation": 0.3081454156287422,
+        "rmsContrast": 0.2108680627303297,
+        "meanLuma": 95.65164333529175,
+        "uniqueColors": 2115,
+        "meanAbsHueDeltaAdjacent": 0.00713129663788518,
+        "rect": {
+          "x": 1072,
+          "y": 662,
+          "w": 158,
+          "h": 118
+        },
+        "maskedFraction": 0.36537223771722804
+      },
+      "deltaUniqueColors": 1838,
+      "deltaMeanAbsHueDeltaAdjacent": 0.00047362033494852563
+    },
+    {
+      "registrySlug": "spr-fantasy-giant-fire-beetle",
+      "pieceSlug": "Giant Fire Beetle",
+      "note": "glow blend (small — expect a tight crop)",
+      "ok": true,
+      "rowShot": "shots/card4-row-spr-fantasy-giant-fire-beetle.png",
+      "cropRectCssPx": {
+        "x": 693,
+        "y": 450,
+        "w": 16,
+        "h": 10
+      },
+      "cropRectPhysicalPx": {
+        "x": 1386,
+        "y": 900,
+        "w": 32,
+        "h": 20
+      },
+      "rawBBox": {
+        "x": 5,
+        "y": 5,
+        "w": 227,
+        "h": 199
+      },
+      "rawStats": {
+        "n": 17709,
+        "width": 237,
+        "height": 209,
+        "meanSaturation": 0.4732090235529786,
+        "rmsContrast": 0.847480497016722,
+        "meanLuma": 59.804827872833286,
+        "uniqueColors": 14218
+      },
+      "inEngineOriginal": {
+        "n": 139,
+        "meanSaturation": 0.6190857099724828,
+        "rmsContrast": 0.48009009965359756,
+        "meanLuma": 64.31680143884894,
+        "uniqueColors": 132,
+        "meanAbsHueDeltaAdjacent": 0.012964352628605513,
+        "rect": {
+          "x": 1386,
+          "y": 900,
+          "w": 32,
+          "h": 20
+        },
+        "maskedFraction": 0.2171875
+      },
+      "inEngineQuantized": {
+        "n": 152,
+        "meanSaturation": 0.6328288917347572,
+        "rmsContrast": 0.44872883633688027,
+        "meanLuma": 61.451785526315774,
+        "uniqueColors": 137,
+        "meanAbsHueDeltaAdjacent": 0.013888709370117143,
+        "rect": {
+          "x": 1386,
+          "y": 900,
+          "w": 32,
+          "h": 20
+        },
+        "maskedFraction": 0.2375
+      },
+      "deltaUniqueColors": -5,
+      "deltaMeanAbsHueDeltaAdjacent": -0.0009243567415116293
+    },
+    {
+      "registrySlug": "spr-pc-dragonborn-barbarian-male",
+      "pieceSlug": "Dragonborn Barbarian (Male)",
+      "note": "pc slug",
+      "ok": true,
+      "rowShot": "shots/card4-row-spr-pc-dragonborn-barbarian-male.png",
+      "cropRectCssPx": {
+        "x": 789,
+        "y": 476,
+        "w": 36,
+        "h": 43
+      },
+      "cropRectPhysicalPx": {
+        "x": 1578,
+        "y": 952,
+        "w": 72,
+        "h": 86
+      },
+      "rawBBox": {
+        "x": 4,
+        "y": 5,
+        "w": 153,
+        "h": 255
+      },
+      "rawStats": {
+        "n": 20635,
+        "width": 162,
+        "height": 266,
+        "meanSaturation": 0.6172567171522316,
+        "rmsContrast": 0.9264134396035122,
+        "meanLuma": 59.14953341410261,
+        "uniqueColors": 18539
+      },
+      "inEngineOriginal": {
+        "n": 2021,
+        "meanSaturation": 0.6805104074074112,
+        "rmsContrast": 0.5108094789117756,
+        "meanLuma": 49.627560712518495,
+        "uniqueColors": 1774,
+        "meanAbsHueDeltaAdjacent": 0.018748723003549732,
+        "rect": {
+          "x": 1578,
+          "y": 952,
+          "w": 72,
+          "h": 86
+        },
+        "maskedFraction": 0.3263888888888889
+      },
+      "inEngineQuantized": {
+        "n": 2013,
+        "meanSaturation": 0.720381293853817,
+        "rmsContrast": 0.48749039943162514,
+        "meanLuma": 48.05437496274238,
+        "uniqueColors": 1147,
+        "meanAbsHueDeltaAdjacent": 0.015038734209185157,
+        "rect": {
+          "x": 1578,
+          "y": 952,
+          "w": 72,
+          "h": 86
+        },
+        "maskedFraction": 0.3250968992248062
+      },
+      "deltaUniqueColors": 627,
+      "deltaMeanAbsHueDeltaAdjacent": 0.003709988794364575
+    },
+    {
+      "registrySlug": "spr-fantasy-adult-blue-dragon",
+      "pieceSlug": "Adult Blue Dragon",
+      "note": "Adam's named proven case",
+      "ok": true,
+      "rowShot": "shots/card4-row-spr-fantasy-adult-blue-dragon.png",
+      "cropRectCssPx": {
+        "x": 899,
+        "y": 528,
+        "w": 108,
+        "h": 80
+      },
+      "cropRectPhysicalPx": {
+        "x": 1798,
+        "y": 1056,
+        "w": 216,
+        "h": 160
+      },
+      "rawBBox": {
+        "x": 5,
+        "y": 5,
+        "w": 225,
+        "h": 231
+      },
+      "rawStats": {
+        "n": 34396,
+        "width": 235,
+        "height": 241,
+        "meanSaturation": 0.4138976138394007,
+        "rmsContrast": 0.7461754584655066,
+        "meanLuma": 64.4444989359224,
+        "uniqueColors": 30604
+      },
+      "inEngineOriginal": {
+        "n": 16021,
+        "meanSaturation": 0.2629348628285361,
+        "rmsContrast": 0.5232917989677061,
+        "meanLuma": 39.62689329005676,
+        "uniqueColors": 11776,
+        "meanAbsHueDeltaAdjacent": 0.055416410800766036,
+        "rect": {
+          "x": 1798,
+          "y": 1056,
+          "w": 216,
+          "h": 160
+        },
+        "maskedFraction": 0.46357060185185184
+      },
+      "inEngineQuantized": {
+        "n": 15374,
+        "meanSaturation": 0.13978840597480188,
+        "rmsContrast": 0.39961866888882913,
+        "meanLuma": 42.74597498373896,
+        "uniqueColors": 3559,
+        "meanAbsHueDeltaAdjacent": 0.1107282882206876,
+        "rect": {
+          "x": 1798,
+          "y": 1056,
+          "w": 216,
+          "h": 160
+        },
+        "maskedFraction": 0.44484953703703706
+      },
+      "deltaUniqueColors": 8217,
+      "deltaMeanAbsHueDeltaAdjacent": -0.055311877419921565
+    },
+    {
+      "registrySlug": "spr-fantasy-adult-copper-dragon",
+      "pieceSlug": "Adult Copper Dragon",
+      "note": "Adam's loved one",
+      "ok": true,
+      "rowShot": "shots/card4-row-spr-fantasy-adult-copper-dragon.png",
+      "cropRectCssPx": {
+        "x": 1011,
+        "y": 595,
+        "w": 118,
+        "h": 81
+      },
+      "cropRectPhysicalPx": {
+        "x": 2022,
+        "y": 1190,
+        "w": 236,
+        "h": 162
+      },
+      "rawBBox": {
+        "x": 5,
+        "y": 5,
+        "w": 224,
+        "h": 221
+      },
+      "rawStats": {
+        "n": 29648,
+        "width": 234,
+        "height": 231,
+        "meanSaturation": 0.6257664101253809,
+        "rmsContrast": 0.7196476069446178,
+        "meanLuma": 76.2075878912581,
+        "uniqueColors": 27362
+      },
+      "inEngineOriginal": {
+        "n": 12749,
+        "meanSaturation": 0.6932916590498263,
+        "rmsContrast": 0.3494173151232354,
+        "meanLuma": 48.724700400031345,
+        "uniqueColors": 8955,
+        "meanAbsHueDeltaAdjacent": 0.011222487263205228,
+        "rect": {
+          "x": 2022,
+          "y": 1190,
+          "w": 236,
+          "h": 162
+        },
+        "maskedFraction": 0.33346411383134544
+      },
+      "inEngineQuantized": {
+        "n": 12946,
+        "meanSaturation": 0.6619529422154196,
+        "rmsContrast": 0.3257516265485203,
+        "meanLuma": 48.909444631546435,
+        "uniqueColors": 5965,
+        "meanAbsHueDeltaAdjacent": 0.00895566518045198,
+        "rect": {
+          "x": 2022,
+          "y": 1190,
+          "w": 236,
+          "h": 162
+        },
+        "maskedFraction": 0.33861686545302366
+      },
+      "deltaUniqueColors": 2990,
+      "deltaMeanAbsHueDeltaAdjacent": 0.0022668220827532486
+    }
+  ],
+  "quantResolution": [
+    {
+      "pieceSlug": "Wolf",
+      "registrySlug": "spr-fantasy-wolf",
+      "resolvedPath": "assets/sprites/spr-fantasy-wolf.png",
+      "textureState": "loaded",
+      "worldHeight": 2.8
+    },
+    {
+      "pieceSlug": "Air Elemental",
+      "registrySlug": "spr-fantasy-air-elemental",
+      "resolvedPath": "assets/sprites/spr-fantasy-air-elemental.png",
+      "textureState": "loaded",
+      "worldHeight": 9
+    },
+    {
+      "pieceSlug": "Giant Fire Beetle",
+      "registrySlug": "spr-fantasy-giant-fire-beetle",
+      "resolvedPath": "assets/sprites/spr-fantasy-giant-fire-beetle.png",
+      "textureState": "loaded",
+      "worldHeight": 1.5
+    },
+    {
+      "pieceSlug": "Dragonborn Barbarian (Male)",
+      "registrySlug": "spr-pc-dragonborn-barbarian-male",
+      "resolvedPath": "assets/sprites/spr-pc-dragonborn-barbarian-male.png",
+      "textureState": "loaded",
+      "worldHeight": 6.4
+    },
+    {
+      "pieceSlug": "Adult Blue Dragon",
+      "registrySlug": "spr-fantasy-adult-blue-dragon",
+      "resolvedPath": "assets/sprites/spr-fantasy-adult-blue-dragon.png",
+      "textureState": "loaded",
+      "worldHeight": 20
+    },
+    {
+      "pieceSlug": "Adult Copper Dragon",
+      "registrySlug": "spr-fantasy-adult-copper-dragon",
+      "resolvedPath": "assets/sprites/spr-fantasy-adult-copper-dragon.png",
+      "textureState": "loaded",
+      "worldHeight": 18
+    }
+  ],
+  "originalsResolution": [
+    {
+      "pieceSlug": "Wolf",
+      "registrySlug": "spr-fantasy-wolf",
+      "resolvedPath": "assets/sprites/spr-fantasy-wolf.png?palOrig=1",
+      "textureState": "loaded",
+      "worldHeight": 2.8
+    },
+    {
+      "pieceSlug": "Air Elemental",
+      "registrySlug": "spr-fantasy-air-elemental",
+      "resolvedPath": "assets/sprites/spr-fantasy-air-elemental.png?palOrig=1",
+      "textureState": "loaded",
+      "worldHeight": 9
+    },
+    {
+      "pieceSlug": "Giant Fire Beetle",
+      "registrySlug": "spr-fantasy-giant-fire-beetle",
+      "resolvedPath": "assets/sprites/spr-fantasy-giant-fire-beetle.png?palOrig=1",
+      "textureState": "loaded",
+      "worldHeight": 1.5
+    },
+    {
+      "pieceSlug": "Dragonborn Barbarian (Male)",
+      "registrySlug": "spr-pc-dragonborn-barbarian-male",
+      "resolvedPath": "assets/sprites/spr-pc-dragonborn-barbarian-male.png?palOrig=1",
+      "textureState": "loaded",
+      "worldHeight": 6.4
+    },
+    {
+      "pieceSlug": "Adult Blue Dragon",
+      "registrySlug": "spr-fantasy-adult-blue-dragon",
+      "resolvedPath": "assets/sprites/spr-fantasy-adult-blue-dragon.png?palOrig=1",
+      "textureState": "loaded",
+      "worldHeight": 20
+    },
+    {
+      "pieceSlug": "Adult Copper Dragon",
+      "registrySlug": "spr-fantasy-adult-copper-dragon",
+      "resolvedPath": "assets/sprites/spr-fantasy-adult-copper-dragon.png?palOrig=1",
+      "textureState": "loaded",
+      "worldHeight": 18
+    }
+  ],
+  "shots": {
+    "quantized": "shots/card4-quantized-cast.png",
+    "originals": "shots/card4-originals-cast.png",
+    "bg": "shots/card4-baseline-bg.png"
+  },
+  "consoleErrors": [
+    "Failed to load resource: the server responded with a status of 404 (File not found)",
+    "Failed to load resource: the server responded with a status of 404 (File not found)",
+    "Failed to load resource: the server responded with a status of 404 (File not found)",
+    "Failed to load resource: the server responded with a status of 404 (File not found)",
+    "Failed to load resource: the server responded with a status of 404 (File not found)"
+  ]
+}

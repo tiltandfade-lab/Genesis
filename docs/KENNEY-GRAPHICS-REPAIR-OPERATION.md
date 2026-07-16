@@ -573,7 +573,7 @@ The formula is `host.matrixWorld * hostSocket.localMatrix * mateFlip * inverse(c
 | `kenney-pirate-kit/crate` | floor | height 0.30-0.80u; width/depth 0.35-1.20u |
 | `kenney-pirate-kit/chest` | floor | height 0.35-0.85u; width 0.60-1.30u; depth 0.30-0.90u |
 | `kenney-furniture-kit/tableRound` | floor | height 0.50-0.72u; width/depth 0.60-1.40u |
-| `kenney-furniture-kit/bench` | floor | height 0.30-0.65u; long axis 0.65-1.80u |
+| `kenney-furniture-kit/benchCushionLow` | floor | height 0.30-0.65u; long axis 0.65-1.80u |
 | `kenney-furniture-kit/chair` | floor | height 0.55-1.05u; width/depth 0.25-0.80u |
 | `kenney-furniture-kit/lampWall` | wall | height 0.10-0.60u; wall depth <=0.40u |
 | `kenney-furniture-kit/lampRoundFloor` | floor | height 0.80-1.60u; width/depth 0.15-0.60u |
@@ -582,9 +582,15 @@ The formula is `host.matrixWorld * hostSocket.localMatrix * mateFlip * inverse(c
 
 **Ordered behavior:**
 
-1. Add pack records (`structuralGrid:null`) and source-hash-bound asset records for exactly these
-   candidates. A pack owns one unit-system `canonicalScale`; asset-level scale is uniform, optional,
-   and justified by `scaleReason:"semantic-size:<envelope>"`.
+1. Add pack records (`structuralGrid:null`) and source-hash-bound asset records for exactly these ten
+   approved-pilot candidates. A pack owns one unit-system `canonicalScale`; asset-level scale is
+   uniform, optional, and justified by `scaleReason:"semantic-size:<envelope>"`. Also add one
+   non-pilot rejection record for `kenney-furniture-kit/bench` with `qaStatus:"quarantined"`, no
+   mount sockets, and notes containing its measured ratio proof: raw long/height `0.40/0.47`; long
+   `>=0.65u` requires total scale `>=1.625`, while height `<=0.65u` requires total scale
+   `<=1.382979`. It is excluded from the ten-asset lineup and runtime approval. This named quarantine
+   replaces the original candidate with `kenney-furniture-kit/benchCushionLow` rather than weakening
+   the envelope or rotating the bench onto a false ground face.
 2. Use raw/normalized/Genesis-material views to set forward/up, ground offset, footprint, mount frame,
    and any semantic-size scale. Compare beside a 1.2u (6-ft) human yardstick and one-unit grid.
 3. Floor assets receive one reviewed `floor-mount`; `lampWall` receives one reviewed `wall-mount` whose
@@ -603,7 +609,8 @@ The formula is `host.matrixWorld * hostSocket.localMatrix * mateFlip * inverse(c
 2. ⊗ A stale source hash, nonuniform scale, or unreviewed mount blocks normalization/admission.
 3. Every normalized primitive retains UVs; every result has finite transformed bounds and OBB footprint.
 4. Two normalizer runs are byte-identical; the report names source hash, pack scale, per-asset scale
-   reason, dimensions, footprint, mounts, and QA state for all ten.
+   reason, dimensions, footprint, mounts, and QA state for all ten, plus a `rejectedCandidates`
+   entry proving the original bench remains quarantined and mount-free.
 
 **Visual gate:** one fixed-camera lineup shows raw, normalized, Genesis-material, and 6-ft-yardstick
 views for all ten. Nothing floats, sinks, faces sideways, clips its own ground plane, or reads at an
@@ -630,7 +637,7 @@ implausible human scale.
 **Approved pilot asset ids:**
 
 `kenney-retro-fantasy-kit/detail-barrel`, `kenney-pirate-kit/crate`,
-`kenney-pirate-kit/chest`, `kenney-furniture-kit/tableRound`, `kenney-furniture-kit/bench`,
+`kenney-pirate-kit/chest`, `kenney-furniture-kit/tableRound`, `kenney-furniture-kit/benchCushionLow`,
 `kenney-furniture-kit/chair`, `kenney-furniture-kit/lampWall`,
 `kenney-furniture-kit/lampRoundFloor`, `kenney-fantasy-town-kit/lantern`,
 `kenney-factory-kit/lever-double`. Approval is contingent on KGR-4A visual calibration; a failing asset

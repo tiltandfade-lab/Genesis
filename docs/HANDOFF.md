@@ -14,6 +14,8 @@ eight capabilities required to reach the approved mockups, and supplies the C0-C
 Graphics work must preserve canonical cards and no-human production while taking the time required to
 reach the visual target. Read it before this handoff's historical graphics queue, then read
 `docs/GRAPHICS-PRODUCTION-RESEARCH-WAVE.md` for evaluated tools and executable research gates.
+For any sprite/pixel-art generation or review work specifically, `docs/ART-DEPARTMENT.md` is the
+pixel register's canonical home — live-corpus state, the style law index, and the regen runbooks.
 
 ## ⭐ Latest (2026-07-15, later) — VQ2/FLIP PASS: the sprite flip LIVE + the demand ledger [Claude Fable 5, orchestrated]
 

@@ -38,6 +38,7 @@ Adam) can jump straight to the right doc instead of grepping/reading its way the
 **North star** (`type: design-guide`) — the dream, the look, and the ordered path; sits *above* the decision registry.
 
 - `GRAPHICS-CONVERGENCE-CHARTER.md` — governing graphics authority: protect the walk/table engine while deliberately converging generated scenes on the approved mockups; visual-compiler boundaries, C0-C8 ladder, no-human production contract, and Claude session protocol. (2026-07-12)
+- `ART-DEPARTMENT.md` (`type: style-canon`, sibling of `ART-DIRECTION-CANON.md`) — the pixel sprite register's canonical home: live-corpus state, the per-realm style law index (quoted verbatim), and the two regeneration runbooks (regen an in-style sheet / fold a staged realm live). Start here for any sprite generation or review work. (2026-07-15)
 - `DESIGN-GUIDE.md` — the pillars, the visual bible, the T0–T7 roadmap. When it and `DESIGN.md` disagree, fix the drift in the same change. (2026-07-01)
 - `DIRECTION.md` — the standing directorial trajectory (2026-07-03 reshape): the playability gate, renderer decency-gate-then-freeze, soak-before-build, the batched Adam ledger, the v1 ship-gate. Supersedes NEXT-STEPS ordering where they disagree. (2026-07-03)
 

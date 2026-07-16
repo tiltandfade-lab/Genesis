@@ -36,12 +36,13 @@ shells → look pass) · ☑ F1 combat-in-room (#10 closed) · ☑ F2 staging be
    real `JSDOM_HOME`** — else locally-installed puppeteer runs the 18 render harnesses CI skips.
 1. ☐ **ADAM'S WORD: originals restoration** (evidence complete; restore→re-clean→reference).
 2. ☐ **KENNEY GRAPHICS REPAIR OPERATION** — execute the locked queue
-   `KGR-1 → KGR-2 → KGR-3 → (KGR-4A ∥ KGR-4B) → KGR-5 → KGR-6` in
+   `KGR-1 → KGR-2 → KGR-3 → (KGR-4A ∥ KGR-4B) → KGR-4C → KGR-5 → KGR-6` in
    `KENNEY-GRAPHICS-REPAIR-OPERATION.md`. Correct transforms, bounds, UVs, unsafe outline behavior,
    and structural-shell ownership before expanding runtime admission; then add the calibration
-   workbench, six-degree-of-freedom socket solver, approved registry, and footprint-aware
-   walk-native realization. This supersedes the old kit-shell proving run: Kenney structural shells
-   retreat until a future operation can prove them without breaking the canonical compiled room.
+   workbench, mount-frame solver, Kenney-native cell+quarter-turn structural contract, approved
+   registry, a mandatory ten-asset calibration pass, and footprint-aware walk-native realization.
+   This supersedes the old kit-shell proving run: Kenney structural shells retreat until a future
+   operation can prove them without breaking the canonical compiled room.
 3. ☐ **Playtest after KGR-6**: walk generation + assembly edge cases, using only the visually
    accepted proving-run build.
 4. ☐ Polish, evidence-ordered: KS-3c wall-rim sawtooth · ELEV-1b · LL-1b · rest-prop collisions ·
@@ -237,4 +238,3 @@ L7. ☐ **Regenerate `table-registry.json/.md`** — stale after the rename/new 
 - O2. ☑ **Fragments for the opening surface — DONE 2026-06-19.** Authored 6–10 word sensory fragments for all 9 world-genesis tables (218 rows) + both pressure tables, held in a parallel `FRAG` map in `genesis.html` (no row-array surgery). Threaded through `lookup`/`rollTbl`/`rollPressure` (each now returns the row `idx` + fragment). **The player sees the fragment at the roll** (genesis cards + the triad nearby), and pressures stay veiled (player sees the fragment, DM holds danger+doom); the world view *after founding* shows real names (the reveal arc), and `handToDM` carries the truth. Bundle/entry rolls already read as fragments, so weren't duplicated. Verified: FRAG arrays align to row counts, runtime threading 0 misses in 9000 rolls, script parses clean.
 - O3. ☐ **Carry the sensory-first ordering** from `_START_New World` into how the opening is *presented* (place before powers).
 - Then mid-session verbs: ~~Wilderness Encounter port~~ **STALE — the generator IS ported** (`src/engine/wild-walk.js`, all 24 `wilderness-*` tables compiled; prep walks consume it). The real gap was the Travel verb ignoring it → **☑ SPECCED as `docs/TRAVEL-WALKS.md`** (2026-07-01 night: travel becomes the walk). Urban/Dungeon remain callable via prep walks.
-

@@ -55,6 +55,36 @@ symbol after rebasing; any stale anchor is a stop-and-report condition, not perm
    at `theater-data.js:1809-1814`; `board.walkScene` is stamped after board construction at lines
    1903-1910 rather than driving asset selection.
 
+### 1.1 Research disposition — 2026-07-16 adversarial read
+
+Two advisory reports were read against this incumbent plan: *Genesis — OSS & Asset Mining Research*
+and *Kenney upstream findings*. Their useful evidence narrows one contract and exposes one missing
+admission gate, but does not change the operation's posture.
+
+**Accepted:** Kenney's structural convention is grid cell + quarter-turn orientation, not
+socket-to-socket assembly; source module size is a per-pack constant; the packs contain useful
+pre-baked room/elevation vocabulary; Kenney publishes no reusable three.js placement code. Therefore
+v2 sockets narrow to attachment mounts, while structural metadata records a grid module and
+orientation index.
+
+**Corrected:** the upstream appendix unions raw POSITION-accessor bounds without applying node
+transforms. That reports `kenney-mini-dungeon/wall` as 2x2 source units even though its transformed
+scene footprint is 1x1, and similarly overstates other dimensions. Genesis's existing scene-graph
+measurement is the authoritative method. The locked constants remain modular-dungeon 4.0 source
+units -> 2.0 Genesis world units (`canonicalScale:0.5`) and mini-dungeon 1.0 -> 2.0
+(`canonicalScale:2.0`). KGR-1/KGR-3 gain a negative control so this measurement bug cannot return.
+
+**Plan weakness corrected:** the original queue built the workbench and then assumed approved pilot
+calibrations would exist for KGR-5. Tool creation is not calibrated data. KGR-4C now explicitly uses
+the workbench to normalize, capture, and approve the ten named external assets before runtime binding.
+
+**Deferred or rejected for this operation:** pre-baked Kenney rooms, structural elevation pieces,
+and `InstancedMesh` are valuable inputs to a later structural-shell re-admission/performance unit, but
+they do not repair the current transform, seam, collision, or walk-fidelity failures. A pre-baked room
+may be used only when its dimensions, polygon, tiers, apertures, and provenance exactly match the
+canonical Stage-C room. KayKit, rot.js, WFC, graph libraries, BVHs, atlas tooling, and other OSS mining
+suggestions solve different problems and do not enter this corrective operation.
+
 ## 2. Locked decisions
 
 ### D1 — recover correctness before expanding admission
@@ -68,11 +98,14 @@ Manual corrections live in `dev/model-foundry/kenney-calibration.json`, source-h
 normalizer consumes that sidecar and owns generated normalized GLBs. No executor hand-edits binary GLB
 output or writes renderer-local per-slug yaw/scale patches.
 
-### D3 — a socket is a six-degree attachment frame
+### D3 — attachment sockets are six-degree frames; structures use grid addresses
 
-A socket has identity, position, quaternion, mate rule, family compatibility, size, and clearance.
-A point without an orientation is invalid under schema v2. Runtime mating uses full matrices, never
-`if(axis === "z") rotation.y = PI/2` as an attachment solution.
+A v2 socket represents a mount relationship only: `floor-mount`, `wall-mount`, `top-surface`, or
+`hinge`. It has identity, position, quaternion, mate rule, family compatibility, size, and clearance.
+A point without an orientation is invalid under schema v2. `butt-join-{n|s|e|w}` is retired from v2;
+structural adjacency is `{cell, orientationIndex}` against the pack's measured module grid, with
+`orientationIndex` constrained to 0..3 quarter-turns. Runtime attachment mating uses full matrices,
+never `if(axis === "z") rotation.y = PI/2` as a mount solution.
 
 ### D4 — full scene-graph transforms cross every detach boundary
 
@@ -120,20 +153,45 @@ records with `qaStatus:"approved-runtime"` and a matching source hash. `needs-re
     "kenney-modular-dungeon-kit": {
       "sourceUp": "+Y",
       "sourceForward": "+Z",
-      "canonicalScale": 0.5
+      "canonicalScale": 0.5,
+      "structuralGrid": {
+        "sourceModuleUnits": 4.0,
+        "targetWorldUnits": 2.0,
+        "orientationSteps": 4,
+        "joinMode": "cell-orientation"
+      }
+    },
+    "kenney-mini-dungeon": {
+      "sourceUp": "+Y",
+      "sourceForward": "+Z",
+      "canonicalScale": 2.0,
+      "structuralGrid": {
+        "sourceModuleUnits": 1.0,
+        "targetWorldUnits": 2.0,
+        "orientationSteps": 4,
+        "joinMode": "cell-orientation"
+      }
     }
   },
   "assets": {
     "kenney-modular-dungeon-kit/gate-door": {
       "sourceSha256": "<64 lowercase hex>",
+      "admissionClass": "PART_DONOR",
+      "category": "doorway-frame",
+      "rootMaterialFamily": "stone",
       "preTransform": {
         "translation": [0, 0, 0],
         "rotation": [0, 0, 0, 1],
         "scale": [1, 1, 1]
       },
+      "scaleReason": null,
       "groundOffset": 0,
       "semanticParts": {
-        "door-leaf": { "nodePath": "<stable slash-delimited node path>", "detachable": true }
+        "door-leaf": {
+          "nodePath": "<stable slash-delimited node path>",
+          "detachable": true,
+          "materialFamily": "wood"
+        }
       },
       "sockets": [
         {
@@ -158,11 +216,21 @@ records with `qaStatus:"approved-runtime"` and a matching source hash. `needs-re
 Rules:
 
 - vectors contain finite numbers; scale components are positive;
+- `admissionClass` is `DIRECT_MODULATED|PART_DONOR|CHASSIS` and `rootMaterialFamily` is one of the
+  normalizer's declared Genesis material families;
+- `DIRECT_MODULATED` structural assets require `preTransform.scale:[1,1,1]`; other assets may use a
+  nonidentity positive uniform per-asset scale only with a nonempty `scaleReason`; nonuniform scale
+  is invalid;
+- each semantic part supplies a stable `nodePath`, `detachable` boolean, and declared material family;
 - quaternions are normalized within `1e-5` and stored `[x,y,z,w]`;
 - socket ids are unique inside one asset;
+- socket `type` is `floor-mount|wall-mount|top-surface|hinge`; v2 rejects `butt-join-*`;
 - `mateRule` is `coincident` or `opposed-z`;
 - `qaStatus` is `needs-review|approved-dev|approved-runtime|quarantined`;
 - `sourceSha256` mismatch is a hard normalizer/registry failure;
+- `structuralGrid` is null for a nonstructural pack; otherwise `joinMode` is `cell-orientation`,
+  `orientationSteps` is exactly 4, and `canonicalScale * sourceModuleUnits === targetWorldUnits`
+  within `1e-6`;
 - `footprintOverride`, when non-null, is
   `{center:[x,z],halfExtents:[x,z],yawRadians:number}`; otherwise bounds derive from transformed
   geometry;
@@ -178,16 +246,24 @@ Each output piece root carries:
   assetId: "<pack>/<slug>",
   sourceSha256: "<hash>",
   recipeHash: "<hash>",
+  admissionClass: "DIRECT_MODULATED",
+  category: "floor",
   normalizedFrame: {
     up: "+Y",
     forward: "+Z",
     sourceToGenesis: [/* 16 column-major finite numbers */]
   },
+  structuralGrid: {
+    sourceModuleUnits: 4,
+    targetWorldUnits: 2,
+    orientationSteps: 4,
+    joinMode: "cell-orientation"
+  },
   bounds: {
     aabbMin: [x,y,z], aabbMax: [x,y,z], groundY: y,
     footprint: {center:[x,z], halfExtents:[x,z], yawRadians:0}
   },
-  semanticParts: {"door-leaf": {nodePath:"...", detachable:true}},
+  semanticParts: {"door-leaf": {nodePath:"...", detachable:true, materialFamily:"wood"}},
   sockets: [{id,type,position,rotation,mateRule,mateFamily,size,clearance}]
 }
 ```
@@ -232,6 +308,8 @@ This is derived data. Saves and walk records do not persist it.
 **Ordered behavior:**
 
 1. Union every primitive accessor's min/max; a mesh with zero usable POSITION accessors returns null.
+   Pack/asset dimensions continue to come from the transformed scene walk, never a global union of
+   raw accessors that ignores node matrices.
 2. Preserve UV attributes exactly while continuing to discard material/texture/image/sampler records.
 3. Before detaching a door leaf: call `rawGroup.updateMatrixWorld(true)` and
    `leafObj.updateWorldMatrix(true,false)`; compute
@@ -251,8 +329,11 @@ This is derived data. Saves and walk records do not persist it.
 3. ⊗ In real Chrome, snapshot the gate leaf's world-space vertex bounds before split and after closed
    remount. Every min/max component must match within `1e-5`. Replacing `leafToPiece` with
    `leafObj.matrix` must fail.
-4. The hinge world position remains fixed within `1e-5` for shut/ajar/open rotations.
-5. `python3 build/normalize-donors.py` run twice produces byte-identical indexes/provenance and
+4. ⊗ A node-scaled scene fixture must report transformed scene bounds, not raw accessor bounds;
+   replacing the scene walk with the upstream appendix's accessor-only union must fail. The real
+   mini-dungeon wall/floor structural footprints both report 1.0x1.0 source units.
+5. The hinge world position remains fixed within `1e-5` for shut/ajar/open rotations.
+6. `python3 build/normalize-donors.py` run twice produces byte-identical indexes/provenance and
    recipe-identical GLBs.
 
 **Visual gate:** re-shoot `dev/battle-gate/ks2-door-assembly/{kit-door-shut,kit-door-open}.png` at the
@@ -307,34 +388,51 @@ crenellation-to-prism sawtooth, continuous floors/walls, and the repaired Kenney
 - new `dev/model-foundry/kenney-calibration.json` and
   `dev/model-foundry/kenney-calibration.schema.json`;
 - `build/normalize-donors.py` mapping/constants, root transform, socket stamping, validation,
-  provenance/index emission;
+  provenance/index emission, and calibration-driven asset iteration;
 - `src/ui/theater-donor.js` metadata/socket loading;
 - new `dev/verify-kenney-calibration.mjs`; update `dev/verify-kenney-adapter.mjs`;
-- `docs/KENNEY-SOCKET-WAVE.md` deviation note: v1 point sockets superseded by this v2 contract.
+- `docs/KENNEY-SOCKET-WAVE.md` deviation note: v1 point/universal sockets are superseded by v2
+  mount frames plus the cell-orientation structural contract.
 
 **Ordered behavior:**
 
-1. Seed pack records for the two normalized packs and asset records for all current 47 outputs.
-2. Replace scale-on-arbitrary-source-root output with the identity donor-root +
+1. Convert the fixed two-pack piece dictionaries into seed data for the calibration source, then make
+   the normalizer iterate validated `calibration.assets` records. Adding a calibrated asset must not
+   require a new Python branch or slug constant.
+2. Seed pack records for the two normalized packs and asset records for all current 47 outputs. Lock
+   modular-dungeon `4.0 -> 2.0` / scale `0.5` and mini-dungeon `1.0 -> 2.0` / scale `2.0` from
+   transformed scene bounds.
+3. Stamp structural pieces with the pack's grid contract. Their placement primitive is canonical
+   grid cell + `orientationIndex:0|1|2|3`; do not emit v2 butt-join sockets. Preserve v1 butt-join
+   reads only as old-output compatibility metadata.
+4. Replace scale-on-arbitrary-source-root output with the identity donor-root +
    `genesis-source-transform` hierarchy in §3.2. Apply scale exactly once.
-3. Validate hashes/TRS/quaternions/socket ids/enums before writing any generated output. Collect every
+5. Validate hashes/TRS/quaternions/socket ids/enums before writing any generated output. Collect every
    error and exit nonzero without partially replacing the output tree.
-4. Derive transformed bounds/ground/footprint after the complete source-to-Genesis matrix; an explicit
+6. Derive transformed bounds/ground/footprint after the complete source-to-Genesis matrix; an explicit
    footprint override wins and is reported as such.
-5. Emit v2 socket frames. Existing AABB sockets may seed positions, but every one receives an explicit
-   quaternion and remains `needs-review` until visually approved.
-6. Runtime loader accepts v1 for graceful old-output fallback but runtime registry generation accepts
+7. Emit v2 attachment socket frames only. Existing AABB mount positions may seed positions, but every
+   one receives an explicit quaternion and remains `needs-review` until visually approved.
+8. Runtime loader accepts v1 for graceful old-output fallback but runtime registry generation accepts
    v2 only.
 
 **RED-FIRST / mutation checks:**
 
 1. ⊗ Hash mismatch, duplicate socket id, zero quaternion, negative scale, and NaN each fail before
    output replacement.
-2. ⊗ Applying pack scale at both wrapper and source root must fail dimension parity.
-3. Every v2 socket matrix is finite and orthonormal within `1e-5`.
-4. Every floor-mount lies on derived ground within `0.01u`, unless a reviewed override explicitly says
+2. ⊗ Replacing the transformed scene measurement with raw accessor-union measurement fails the real
+   mini-dungeon 1.0-module fixture and blocks normalization.
+3. ⊗ Applying pack scale at both wrapper and source root must fail dimension parity.
+4. Every `DIRECT_MODULATED` structural piece is a clean multiple of its pack module within 2%; every
+   exception is `PART_DONOR`. No v2 structural piece contains a `butt-join-*` socket.
+5. ⊗ A `DIRECT_MODULATED` structural per-asset scale, a nonuniform scale, or a PART_DONOR nonidentity
+   scale without `scaleReason` fails before output replacement.
+6. Adding a valid scratch calibration record causes normalization without editing Python source;
+   removing the calibration-driven iteration must fail.
+7. Every v2 attachment socket matrix is finite and orthonormal within `1e-5`.
+8. Every floor-mount lies on derived ground within `0.01u`, unless a reviewed override explicitly says
    otherwise.
-5. Two normalizer runs are byte-identical.
+9. Two normalizer runs are byte-identical.
 
 **Out:** approving the 149 queue and a UI editor.
 
@@ -356,8 +454,9 @@ crenellation-to-prism sawtooth, continuous floors/walls, and the repaired Kenney
 
 - asset search/filter across census, candidates, normalized assets, and QA state;
 - raw / normalized / Genesis-material views using the real GLTFLoader and donor material path;
-- axes, one-unit grid, ground plane, wireframe, backface, normals, AABB, footprint, and hierarchy
-  overlays;
+- axes, one-unit Genesis grid, pack-module source grid, ground plane, wireframe, backface, normals,
+  AABB, footprint, and hierarchy overlays;
+- structural quarter-turn preview buttons (`orientationIndex` 0..3) with cell/module occupancy readout;
 - editable translation/rotation/scale and ground offset; UI may display Euler degrees but stores a
   normalized quaternion;
 - socket list with add/delete/rename/type/mate/size/clearance fields and translate/rotate gizmo;
@@ -421,7 +520,9 @@ The formula is `host.matrixWorld * hostSocket.localMatrix * mateFlip * inverse(c
 2. Return null for missing/duplicate/incompatible sockets, singular matrices, or non-finite results.
 3. Door frame hinge and detachable leaf pivot use `coincident`; the solver owns the mount. Door state
    owns only the additional swing rotation around the mated hinge frame.
-4. Preserve fallback behavior when the donor/template/solver is unavailable.
+4. The door frame itself remains placed by the canonical aperture cell + quarter-turn orientation;
+   the attachment solver does not use or recreate butt-join sockets.
+5. Preserve fallback behavior when the donor/template/solver is unavailable.
 
 **RED-FIRST / mutation checks:**
 
@@ -433,10 +534,68 @@ The formula is `host.matrixWorld * hostSocket.localMatrix * mateFlip * inverse(c
 
 **Out:** automatic wall-run assembly and physics joints.
 
-## 9. Unit KGR-5 — footprint-aware walk-to-Kenney realization
+## 9. Unit KGR-4C — ten-asset pilot calibration and normalization
 
-**Branch:** `feat/kenney-runtime-realization` stacked after KGR-4B; merge KGR-4A first so approved pilot
-calibrations exist.
+**Branch:** `chore/kenney-pilot-calibration` after KGR-4A and KGR-4B have both landed.
+
+**Files/artifacts:**
+
+- `dev/model-foundry/kenney-calibration.json` only through the workbench save API;
+- generated normalized GLBs/indexes/provenance only through `python3 build/normalize-donors.py`;
+- `dev/model-foundry/kenney-workbench-captures/pilot-<asset>.png` and
+  `pilot-calibration-report.json`;
+- new `dev/verify-kenney-pilot-calibration.mjs`;
+- no production JS. A workbench/normalizer defect stops and returns to its owning unit.
+
+**Candidates and physical envelopes** (Genesis GRID LAW: 1 world unit = 5 ft):
+
+| asset | mount | accepted transformed envelope |
+| --- | --- | --- |
+| `kenney-retro-fantasy-kit/detail-barrel` | floor | height 0.50-0.85u; width/depth 0.35-0.80u |
+| `kenney-pirate-kit/crate` | floor | height 0.30-0.80u; width/depth 0.35-1.20u |
+| `kenney-pirate-kit/chest` | floor | height 0.35-0.85u; width 0.60-1.30u; depth 0.30-0.90u |
+| `kenney-furniture-kit/tableRound` | floor | height 0.50-0.72u; width/depth 0.60-1.40u |
+| `kenney-furniture-kit/bench` | floor | height 0.30-0.65u; long axis 0.65-1.80u |
+| `kenney-furniture-kit/chair` | floor | height 0.55-1.05u; width/depth 0.25-0.80u |
+| `kenney-furniture-kit/lampWall` | wall | height 0.10-0.60u; wall depth <=0.40u |
+| `kenney-furniture-kit/lampRoundFloor` | floor | height 0.80-1.60u; width/depth 0.15-0.60u |
+| `kenney-fantasy-town-kit/lantern` | floor | height 0.80-2.00u; width/depth 0.15-0.70u |
+| `kenney-factory-kit/lever-double` | floor | height 0.25-0.85u; width/depth 0.25-1.00u |
+
+**Ordered behavior:**
+
+1. Add pack records (`structuralGrid:null`) and source-hash-bound asset records for exactly these
+   candidates. A pack owns one unit-system `canonicalScale`; asset-level scale is uniform, optional,
+   and justified by `scaleReason:"semantic-size:<envelope>"`.
+2. Use raw/normalized/Genesis-material views to set forward/up, ground offset, footprint, mount frame,
+   and any semantic-size scale. Compare beside a 1.2u (6-ft) human yardstick and one-unit grid.
+3. Floor assets receive one reviewed `floor-mount`; `lampWall` receives one reviewed `wall-mount` whose
+   +Z faces away from the wall. Do not add decorative or speculative sockets.
+4. Save each record as `approved-dev`, normalize all ten, then inspect the generated capture at
+   orientation indices 0..3. The orchestrator alone promotes a record to `approved-runtime` after the
+   physical envelope, grounding, forward read, material response, and footprint pass.
+5. If any candidate cannot pass without nonuniform distortion, hash bypass, renderer-local patch, or
+   false noun identity, quarantine it and stop KGR-4C. Amend this spec with a named replacement before
+   KGR-5; do not silently lower the ten-asset gate.
+
+**RED-FIRST / mutation checks:**
+
+1. ⊗ A record outside its physical envelope or with a mount ground/wall error >`0.01u` cannot become
+   `approved-runtime`.
+2. ⊗ A stale source hash, nonuniform scale, or unreviewed mount blocks normalization/admission.
+3. Every normalized primitive retains UVs; every result has finite transformed bounds and OBB footprint.
+4. Two normalizer runs are byte-identical; the report names source hash, pack scale, per-asset scale
+   reason, dimensions, footprint, mounts, and QA state for all ten.
+
+**Visual gate:** one fixed-camera lineup shows raw, normalized, Genesis-material, and 6-ft-yardstick
+views for all ten. Nothing floats, sinks, faces sideways, clips its own ground plane, or reads at an
+implausible human scale.
+
+**Out:** runtime rule binding, more than ten admissions, structural shells, and performance batching.
+
+## 10. Unit KGR-5 — footprint-aware walk-to-Kenney realization
+
+**Branch:** `feat/kenney-runtime-realization` stacked after KGR-4C.
 
 **Files/functions:**
 
@@ -516,7 +675,7 @@ Rules match only already-present nouns. First matching rule wins; candidates are
 **Out:** semantic substitutions beyond the named rules, stacking loose clutter on table tops, and
 structural kit shells.
 
-## 10. Unit KGR-6 — proving run and admission gate
+## 11. Unit KGR-6 — proving run and admission gate
 
 **Branch:** `test/kenney-repair-proving-run` stacked on KGR-5.
 
@@ -548,6 +707,8 @@ structural kit shells.
 - every mapped donor primitive has a UV channel;
 - zero OBB overlaps among separately placed pilot props; wall penetration ≤`0.01u`;
 - zero runtime registry entries with stale hash or non-`approved-runtime` status;
+- modular-dungeon and mini-dungeon module constants match transformed scene bounds; every structural
+  orientation index is an integer in 0..3 and no v2 donor emits `butt-join-*`;
 - continuous room shell active on all three shapes; kit wall/floor count zero;
 - capture page reports zero console errors and zero failed GLB loads.
 
@@ -570,6 +731,7 @@ node dev/verify-ks3-kit-shells.mjs
 node dev/verify-kenney-calibration.mjs
 node dev/verify-kenney-workbench.mjs
 node dev/verify-kenney-attachment.mjs
+node dev/verify-kenney-pilot-calibration.mjs
 node dev/verify-kenney-realization.mjs
 node dev/verify-kenney-graphics-repair.mjs
 for f in dev/verify-*.mjs; do node "$f" >/dev/null 2>&1 || echo "FAIL $f"; done
@@ -578,17 +740,18 @@ for f in dev/verify-*.mjs; do node "$f" >/dev/null 2>&1 || echo "FAIL $f"; done
 After landing, run one real bridge playtest through `genesis-playtest-rig`; log any alignment,
 collision, asset-truth, or first-render fallback complaint before considering catalog expansion.
 
-## 11. Queue and execution ownership
+## 12. Queue and execution ownership
 
 ```text
 KGR-1 transform+UV
   -> KGR-2 render retreat
     -> KGR-3 calibration contract
       -> KGR-4A workbench ----\
-      -> KGR-4B attachment ----+-> KGR-5 realization -> KGR-6 proving run -> playtest
+      -> KGR-4B attachment ----+-> KGR-4C pilot calibration -> KGR-5 realization
+                                                          -> KGR-6 proving run -> playtest
 ```
 
-- KGR-1, KGR-2, KGR-3, KGR-5, and KGR-6 serialize because they touch shared normalization/render
+- KGR-1, KGR-2, KGR-3, KGR-4C, KGR-5, and KGR-6 serialize because they touch shared normalization/render
   seams or depend on approved calibration output.
 - KGR-4A and KGR-4B may run in parallel in separate worktrees. This is the only fan-out.
 - Leaf executors execute exactly one unit, do not spawn subagents, commit, and never merge.
@@ -599,7 +762,7 @@ KGR-1 transform+UV
   adversarial review of this locked plan. Sol does not replace the orchestrator or silently amend the
   accepted decisions.
 
-## 12. Explicitly out of scope for the entire operation
+## 13. Explicitly out of scope for the entire operation
 
 - automatic admission of all 1,752 source assets or all 149 candidates;
 - structural Kenney wall/floor re-enablement;
@@ -609,12 +772,16 @@ KGR-1 transform+UV
 - new generated art or edits to existing sprite/dressing images;
 - in-game authoring UI or scene-specific saved overrides;
 - material-authoring beyond preserving UVs and the existing Genesis grading path;
+- KayKit or any other new asset corpus, procgen/graph/WFC/BVH/UI dependency, and runtime package
+  adoption prompted by the advisory OSS report;
+- `InstancedMesh` conversion or other draw-call optimization before the repaired inventory is
+  profiled and shown to need it;
 - stacking arbitrary loose objects on top-surface sockets in production (the workbench proves the
   contract; a later composition unit may consume it).
 
-## 13. Completion definition
+## 14. Completion definition
 
-The operation is complete only when all seven executable units are merged, full CI-equivalent
+The operation is complete only when all eight executable units are merged, full CI-equivalent
 verification is green, the proving captures pass the orchestrator's visual read, one bridge playtest
 records no P0/P1 alignment or collision complaint, and docs close coherently through
 `genesis-clean-close`.

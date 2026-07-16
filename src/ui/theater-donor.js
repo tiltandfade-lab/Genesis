@@ -114,6 +114,10 @@ export function donorEntriesForRead(index) {
   return index || {};
 }
 
+const DONOR_QA_STATUSES = new Set([
+  "needs-review", "approved-dev", "approved-runtime", "quarantined",
+]);
+
 export function donorRegistryFromIndex(index) {
   if (!index || index.schema !== "genesis.donor-index.v2" || !index.assets) {
     throw new Error("donorRegistryFromIndex: genesis.donor-index.v2 required");
@@ -123,9 +127,11 @@ export function donorRegistryFromIndex(index) {
     if (!entry || entry.schema !== "genesis.donor.v2" ||
         entry.assetId !== `${index.pack}/${slug}` ||
         !/^[0-9a-f]{64}$/.test(entry.sourceSha256 || "") ||
-        !/^[0-9a-f]{64}$/.test(entry.recipeHash || "")) {
+        !/^[0-9a-f]{64}$/.test(entry.recipeHash || "") ||
+        !DONOR_QA_STATUSES.has(entry.qaStatus)) {
       throw new Error(`donorRegistryFromIndex: invalid v2 entry ${slug}`);
     }
+    if (entry.qaStatus !== "approved-runtime") continue;
     registry[entry.assetId] = entry;
   }
   return registry;

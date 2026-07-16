@@ -501,6 +501,48 @@ console.log("\n=== 6. KGR-3 calibrated v2 indexes + runtime compatibility bounda
   check("KGR-3 ⊗: registry generation rejects anything except donor-index v2",
     /function\s+donorRegistryFromIndex[\s\S]*?schema\s*!==\s*"genesis\.donor-index\.v2"[\s\S]*?throw new Error/.test(donorSrc),
     "strict v2 registry guard missing");
+
+  // Execute the real exported helper with only its browser/THREE imports replaced by inert
+  // declarations. donorRegistryFromIndex itself is otherwise byte-for-byte the production body.
+  const executableDonorSrc = donorSrc
+    .replace('import * as THREE from "three";', "const THREE = {};")
+    .replace('import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";', "class GLTFLoader {}");
+  let registryHelper = null;
+  try {
+    ({ donorRegistryFromIndex: registryHelper } = await import(
+      `data:text/javascript;base64,${Buffer.from(executableDonorSrc).toString("base64")}`
+    ));
+  } catch (error) {
+    check("KGR-3 D8: real registry helper imports in the harness", false, error.message);
+  }
+  if (registryHelper) {
+    const indexes = Object.keys(calibration.packs).map((pack) =>
+      JSON.parse(readText(`assets/models-normalized/${pack}/index.json`)));
+    const productionCount = indexes.reduce((count, index) =>
+      count + Object.keys(registryHelper(index)).length, 0);
+    check("KGR-3 D8: current needs-review v2 indexes yield zero production registry entries",
+      productionCount === 0, `entries=${productionCount}`);
+
+    const sampleIndex = indexes[0];
+    const [sampleSlug, sampleEntry] = Object.entries(sampleIndex.assets)[0];
+    const indexWithStatus = (qaStatus, omit = false) => {
+      const entry = { ...sampleEntry };
+      if (omit) delete entry.qaStatus;
+      else entry.qaStatus = qaStatus;
+      return { ...sampleIndex, assets: { [sampleSlug]: entry } };
+    };
+    check("KGR-3 D8: a provenance-valid approved-runtime entry enters production lookup",
+      Object.keys(registryHelper(indexWithStatus("approved-runtime"))).length === 1);
+    for (const qaStatus of ["needs-review", "approved-dev", "quarantined"]) {
+      check(`KGR-3 D8 ⊗: ${qaStatus} is excluded from production lookup`,
+        Object.keys(registryHelper(indexWithStatus(qaStatus))).length === 0);
+    }
+    let unknownFailed = false, missingFailed = false;
+    try { registryHelper(indexWithStatus("future-status")); } catch { unknownFailed = true; }
+    try { registryHelper(indexWithStatus(null, true)); } catch { missingFailed = true; }
+    check("KGR-3 D8 ⊗: unknown qaStatus fails instead of silently skipping", unknownFailed);
+    check("KGR-3 D8 ⊗: missing qaStatus fails instead of silently skipping", missingFailed);
+  }
   check("KGR-3: loaded piece metadata exposes frame/grid/bounds/source hash",
     ["sourceSha256", "normalizedFrame", "structuralGrid", "bounds", "qaStatus"].every((key) =>
       new RegExp(`${key}: entry\\.${key}`).test(donorSrc)), "one or more v2 metadata fields are not loaded");

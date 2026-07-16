@@ -194,9 +194,25 @@ console.log("\n=== calibration-driven iteration, overrides, and determinism ==="
   const scratch=clone(calibration), source=join(ROOT,"assets/models/kenney-mini-dungeon/wall.glb"), scratchFile=join(sourceRoot,"kenney-mini-dungeon/scratch-calibrated.glb");
   symlinkSync(source,scratchFile);
   scratch.assets["kenney-mini-dungeon/scratch-calibrated"]={...clone(scratch.assets["kenney-mini-dungeon/wall"]),sourceSha256:sha(readFileSync(source)),footprintOverride:{center:[3,4],halfExtents:[0.5,0.75],yawRadians:0.25}};
+  const socketSource=join(ROOT,"assets/models/kenney-mini-dungeon/floor.glb"), socketFile=join(sourceRoot,"kenney-mini-dungeon/scratch-custom-sockets.glb");
+  symlinkSync(socketSource,socketFile);
+  const socketAsset=clone(scratch.assets["kenney-mini-dungeon/floor"]);
+  socketAsset.sourceSha256=sha(readFileSync(socketSource));
+  socketAsset.sockets=indexes["kenney-mini-dungeon"].assets.floor.sockets.map((socket)=>({
+    ...clone(socket), id: socket.type==="floor-mount" ? "base-center" : "usable-deck",
+  }));
+  scratch.assets["kenney-mini-dungeon/scratch-custom-sockets"]=socketAsset;
   const run=makeTempRun(scratch,null,sourceRoot), idx=run.result.status===0?JSON.parse(readFileSync(join(run.out,"kenney-mini-dungeon/index.json"),"utf8")):null;
   check("adding one valid scratch calibration record normalizes without a Python slug branch",run.result.status===0&&existsSync(join(run.out,"kenney-mini-dungeon/scratch-calibrated.glb")),run.result.stderr);
   check("explicit footprint override wins and is reported",idx?.assets?.["scratch-calibrated"]?.bounds?.footprintSource==="override"&&idx.assets["scratch-calibrated"].bounds.footprint.center[0]===3);
+  const customSockets=idx?.assets?.["scratch-custom-sockets"]?.sockets||[];
+  check("custom socket IDs survive while same-type floor/top defaults are suppressed",
+    customSockets.length===2 &&
+    customSockets.filter((socket)=>socket.type==="floor-mount").length===1 &&
+    customSockets.filter((socket)=>socket.type==="top-surface").length===1 &&
+    ["base-center","usable-deck"].every((id)=>customSockets.some((socket)=>socket.id===id)) &&
+    !customSockets.some((socket)=>["floor-mount","top-surface"].includes(socket.id)),
+    JSON.stringify(customSockets));
   clean(run); rmSync(temp,{recursive:true,force:true});
 }
 

@@ -13512,6 +13512,7 @@ function lightLabField(entry){
   row.style.cssText = "display:flex;align-items:center;gap:6px;margin:3px 0;font:11px/1.3 monospace;color:#ddd;";
   const label = document.createElement("label");
   label.textContent = entry.label;
+  label.title = entry.label + " (" + entry.path + ")"; // the panel's fixed width truncates long labels — full text + the raw tunable path on hover
   label.style.cssText = "flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;";
   row.appendChild(label);
   const valOut = document.createElement("span");

@@ -1,6 +1,6 @@
 {
   "algorithmVersion": 1,
-  "calibrationHash": "f5450be4667690abdc98d5fd7eb9d97a957608bc93d4d1b375e8fbb97c88e259",
+  "calibrationHash": "edd57bdb9f00b564ac607a2f9f8a7501a72db9abb5a950cbc4d14ddd2f1a41ba",
   "deviationsAndNotes": [
     "Donor schema v1 point/universal butt-join sockets are superseded by v2 attachment frames and cell-orientation structural placement.",
     "All v2 attachment positions inherited from the KS-1 seed remain needs-review until KGR-4C visual approval."
@@ -164,13 +164,13 @@
       },
       "outputFile": "assets/models-normalized/kenney-factory-kit/lever-double.glb",
       "pack": "kenney-factory-kit",
-      "qaStatus": "approved-dev",
+      "qaStatus": "approved-runtime",
       "rawDims": [
         0.5399999618530273,
         0.37500000596046446,
         0.5399999618530273
       ],
-      "recipeHash": "06fa1e65b97cf88a10aa704d58003f566a4198087d2ac02f7d9779c9223900c5",
+      "recipeHash": "58ccda5b729a544faddb42bc34c9d25d543a6eb70391cd23507af4d34476e4e7",
       "scaledDims": [
         0.5399999618530273,
         0.37500000596046446,
@@ -276,13 +276,13 @@
       },
       "outputFile": "assets/models-normalized/kenney-fantasy-town-kit/lantern.glb",
       "pack": "kenney-fantasy-town-kit",
-      "qaStatus": "approved-dev",
+      "qaStatus": "approved-runtime",
       "rawDims": [
         0.21644848585128784,
         1.555999994277954,
         0.22431999444961548
       ],
-      "recipeHash": "0fb3b8d6c5b87c1ce88cd7fb3f146bffa47df049a05426b84d1dc8fa2ed2f4ed",
+      "recipeHash": "bb91bede6ec47d37062ac16c8b73a9f2b37464206ee8b177fbfc7c80c7a783a2",
       "scaledDims": [
         0.21644848585128784,
         1.555999994277954,
@@ -394,7 +394,7 @@
         0.47,
         0.2
       ],
-      "recipeHash": "06037270f74bc47bf524c7c00d22a3558a346203152d5dcbf8e7f72f091d570c",
+      "recipeHash": "4ce0d95027b4f8203663e65ade93d8202dc00da72fc946c577848aafea6d7440",
       "scaledDims": [
         0.6000000000000001,
         0.705,
@@ -467,13 +467,13 @@
       },
       "outputFile": "assets/models-normalized/kenney-furniture-kit/benchCushionLow.glb",
       "pack": "kenney-furniture-kit",
-      "qaStatus": "approved-dev",
+      "qaStatus": "approved-runtime",
       "rawDims": [
         0.420000026,
         0.2,
         0.22
       ],
-      "recipeHash": "cccf80c67d89f6524ad92ae38a691127d545fe49ae992844cac1e0bbbfdbce31",
+      "recipeHash": "13b1bff3d40fa29820c6d07c1b0b56bb1f1a51a876b36b9c505367807c74004b",
       "scaledDims": [
         0.6500000402380954,
         0.30952380952380965,
@@ -579,13 +579,13 @@
       },
       "outputFile": "assets/models-normalized/kenney-furniture-kit/chair.glb",
       "pack": "kenney-furniture-kit",
-      "qaStatus": "approved-dev",
+      "qaStatus": "approved-runtime",
       "rawDims": [
         0.2,
         0.47,
         0.2
       ],
-      "recipeHash": "70a7630b6e9a6e6f17b89405dd1069b8cd8252c622d074c33a779158b0497d1f",
+      "recipeHash": "bb86fb260e310b5a3ad65788c4302e9992a3bfd906bb7ca8552ee2faa7ae7b6d",
       "scaledDims": [
         0.30000000000000004,
         0.705,
@@ -691,13 +691,13 @@
       },
       "outputFile": "assets/models-normalized/kenney-furniture-kit/lampRoundFloor.glb",
       "pack": "kenney-furniture-kit",
-      "qaStatus": "approved-dev",
+      "qaStatus": "approved-runtime",
       "rawDims": [
         0.15203940999999999,
         0.86,
         0.1755599983
       ],
-      "recipeHash": "6bd79e315ffac693a2d2b027d9bf4199162d841758c4b0ed9173b8538807b65f",
+      "recipeHash": "e80e49854997bc390c43444164405bb843ffb72d93c3a725e65267527c752b35",
       "scaledDims": [
         0.228059115,
         1.29,
@@ -803,13 +803,13 @@
       },
       "outputFile": "assets/models-normalized/kenney-furniture-kit/lampWall.glb",
       "pack": "kenney-furniture-kit",
-      "qaStatus": "approved-dev",
+      "qaStatus": "approved-runtime",
       "rawDims": [
         0.22663537467999997,
         0.0928,
         0.15033599999999997
       ],
-      "recipeHash": "85f3f6c489fad3d5efa9c06ecee7fc6b400bed2c8c87a4abb45ca8cbaf8835b2",
+      "recipeHash": "213d6b71a843a6b72a5cb969ee0531dfa405d24da04e0eff051d23d16859c402",
       "scaledDims": [
         0.3399530620199999,
         0.1392,
@@ -915,13 +915,13 @@
       },
       "outputFile": "assets/models-normalized/kenney-furniture-kit/tableRound.glb",
       "pack": "kenney-furniture-kit",
-      "qaStatus": "approved-dev",
+      "qaStatus": "approved-runtime",
       "rawDims": [
         0.6928203,
         0.366733961,
         0.8
       ],
-      "recipeHash": "f878645f7fc61c5b0dcf0746959aed3f9d0bab89d156ee62d8a4280e69ffd8bf",
+      "recipeHash": "246852de9431cda97cbba3e2b3893a57fa373bff13cd22a0ef787c2baaa3f3f3",
       "scaledDims": [
         1.0392304499999998,
         0.5501009415,
@@ -1033,7 +1033,7 @@
         0.0,
         1.0
       ],
-      "recipeHash": "1723660d1364416c6d2127f3d77268979935fbc45cdfb6ee7a7231fbd8df0cfc",
+      "recipeHash": "3d8f8b01900702406019f6fee1a36c56ea084cb8c859d09c5102920c88d282ec",
       "scaledDims": [
         2.0,
         0.0,
@@ -1181,7 +1181,7 @@
         0.05000000074505806,
         1.0
       ],
-      "recipeHash": "d32b14182e7d78071f4534cc6ed77662832329fb0746f3a674a997b1be42bdee",
+      "recipeHash": "0ad9a96accb69af5877ec6470aef3bfab63ca0b0a7209c5c5140d8395a9a5a6d",
       "scaledDims": [
         2.0,
         0.10000000149011612,
@@ -1329,7 +1329,7 @@
         0.75,
         0.20000001788139343
       ],
-      "recipeHash": "d659af6a6d1ab4cb58167db73809db63fbb1c0ff29f5f13c4e00ac0592f570a5",
+      "recipeHash": "a58161d397451d610dba38744660d715f397469d0ac5d65090a10e1fe939f663",
       "scaledDims": [
         1.600000023841858,
         1.5,
@@ -1483,7 +1483,7 @@
         0.8999999761581421,
         1.0
       ],
-      "recipeHash": "9f0fa8b268ce6ee7710f6c2b368c9dbc03fc977bbfbe366e4f0859861b3dc531",
+      "recipeHash": "e08e683c4a4bfc169b40b19b98d3411fc90fa03e70f1dca0aa6f2c6bd61efb36",
       "scaledDims": [
         2.0,
         1.7999999523162842,
@@ -1631,7 +1631,7 @@
         1.100000023841858,
         1.0
       ],
-      "recipeHash": "bb908e1c742ac79a986a2452a8072fea15340a0b68fee9f0b2893b5c851dd749",
+      "recipeHash": "ff4d8b019d2de2332be6d5fee5b1f919254a4818e132be325d86b9b93c8d534a",
       "scaledDims": [
         2.0,
         2.200000047683716,
@@ -1748,7 +1748,7 @@
         1.0,
         1.0
       ],
-      "recipeHash": "8a6e0346411cca3615799c6e86098b7d5286d0442c34d745147c8079098ac4d2",
+      "recipeHash": "2cfeb6b77f96adad6770e7559e30d51a08fe6d2ce2e206734e9c39ab49d0874a",
       "scaledDims": [
         2.0,
         2.0,
@@ -1865,7 +1865,7 @@
         1.0,
         1.0
       ],
-      "recipeHash": "baa997e2a5e033a79fb38ad61e823bd673d4d6c4de7e3246b24a9a362b44d9b2",
+      "recipeHash": "0b2559602998ea92825160142f6b222acee870169ace49767ecf85284e78c04d",
       "scaledDims": [
         2.0,
         2.0,
@@ -1982,7 +1982,7 @@
         1.0,
         1.050000011920929
       ],
-      "recipeHash": "1098f9398d5296b9af3ddafb58bdd8c45de7f1d183d28f43fdb894e28c304243",
+      "recipeHash": "423644d03fa69ee61731d91256f84f66f5077cd3c3e27b868d2ae5ed67a663da",
       "scaledDims": [
         2.0,
         2.0,
@@ -2130,7 +2130,7 @@
         4.150000095367434,
         4.000000953674316
       ],
-      "recipeHash": "10b191b71dfcdbc46fadd14ae076a57f3911f722fb29a94d7017ed60bcb78678",
+      "recipeHash": "162a6c7bf7f7bfc725cf8288ba318c48ada70efcd5ffb057a86c478f90e19e99",
       "scaledDims": [
         2.0,
         2.075000047683717,
@@ -2247,7 +2247,7 @@
         4.233285903930681,
         4.000000238418579
       ],
-      "recipeHash": "cee84059fd27351a2f49d61ff608369cf288196f87e38dcc401794e1e75436c4",
+      "recipeHash": "5dc4211bb7e6cf36fd7ad553fab5aff62297481e22adf95d14b9c14a70f3eb62",
       "scaledDims": [
         2.0,
         2.1166429519653405,
@@ -2364,7 +2364,7 @@
         4.150000095367434,
         4.0000035762786865
       ],
-      "recipeHash": "ceba23f8863b98cfef9dee95708b22417b11884b3ee6d7b66ec5cc55a19b3ee8",
+      "recipeHash": "1206e49cd767c71c15bde5c719bb45ca5f25a96c281acf1001ef43dd73ab4410",
       "scaledDims": [
         2.000001549720764,
         2.075000047683717,
@@ -2481,7 +2481,7 @@
         4.049999713897722,
         4.000000476837158
       ],
-      "recipeHash": "df662f4a524f62e69e6c195200d1a505fed94edbfdf1d06790c9878551082224",
+      "recipeHash": "422a6e24bc9fc43e9c0594ec363202361ef10995654f525e1a0eb215a4809c29",
       "scaledDims": [
         2.0,
         2.024999856948861,
@@ -2598,7 +2598,7 @@
         4.15000009536745,
         4.000000715255737
       ],
-      "recipeHash": "1184150f173bbe47d601e46e270a447dd66a0d87157072a06b5fdd12bb5198bb",
+      "recipeHash": "27b9cd235462571e4bb8f794fede99ecaaf161a5d719efc13798d1341dc73a61",
       "scaledDims": [
         2.0028867721557617,
         2.075000047683725,
@@ -2715,7 +2715,7 @@
         4.1500000953674485,
         8.0
       ],
-      "recipeHash": "5703fdeb693b78d484c198e01bf285dea4fddc4c80416073d21f47cafc615ff2",
+      "recipeHash": "e4b5e186846b2597310a2cf9d29dafc781de0005b994e4511271c169435a7979",
       "scaledDims": [
         4.000001430511475,
         2.0750000476837243,
@@ -2832,7 +2832,7 @@
         4.233285903930667,
         8.000001907348633
       ],
-      "recipeHash": "72095815de15bb90153f245495da0a7838b4cbc6c6fc178b450885b534e24678",
+      "recipeHash": "fa5077736d92192a7cf1f60f57675f4a498005e115de78a05c9bc1f221140ab9",
       "scaledDims": [
         4.0,
         2.1166429519653334,
@@ -2949,7 +2949,7 @@
         4.233285903930681,
         8.0
       ],
-      "recipeHash": "74501f8f4fb842716872526a13f5ea232be31edcb56b8b4e345d7182d14bffc5",
+      "recipeHash": "dfa349260d5be9dc2a087d4ffacbc6284f814bbf74c7f9aa35d6d8c344762b57",
       "scaledDims": [
         4.000000238418579,
         2.1166429519653405,
@@ -3066,7 +3066,7 @@
         4.233285903930667,
         8.000001907348633
       ],
-      "recipeHash": "2f1204351c5f5228af1f15a12bee9967b0a5032111e12d736b7c93300ea1516f",
+      "recipeHash": "4d593b93affa8a3dce0318eaee4e32273d1082f670506a2c558b7cea0bfbc040",
       "scaledDims": [
         4.000001430511475,
         2.1166429519653334,
@@ -3183,7 +3183,7 @@
         4.049999713897722,
         8.0
       ],
-      "recipeHash": "67fba5578bf91ea158b99a39612b0b1ad3d283ceb2cc022c8def2524d4fdb27c",
+      "recipeHash": "4603517eaf2764e8a42fd5255afff1dddc780bafb825e71d144cd3261bfa7632",
       "scaledDims": [
         4.0,
         2.024999856948861,
@@ -3300,7 +3300,7 @@
         4.233285903930681,
         8.000000953674316
       ],
-      "recipeHash": "6ec567e1e741e0e5d9af90d97b7e6f832f6026de2828029acaf73df32d251cfa",
+      "recipeHash": "7e58982dbece4883065c4565e3deb86d05bd55279f0702545b3947c639d88d1a",
       "scaledDims": [
         4.000000238418579,
         2.1166429519653405,
@@ -3417,7 +3417,7 @@
         4.399999618530273,
         1.4000002145767212
       ],
-      "recipeHash": "94262f6a7dc958b7cc112fe1e05636518047c338cabfaf66f89495aaa118e96a",
+      "recipeHash": "953c7cb823dd5ac9a5fd3231a3e338ef9c4cb01a8373321376f7e3ff21fb3c69",
       "scaledDims": [
         2.200000047683716,
         2.1999998092651367,
@@ -3535,7 +3535,7 @@
         4.399999618530273,
         1.4000002145767212
       ],
-      "recipeHash": "293c4c985d275f3c1c4ed0114fbba0c3132a997e4c1c6fefaa504f5647b0fc29",
+      "recipeHash": "3a726e0f1c892a44496a91651f8d0794c707b73361fa651d523948b7b6f71003",
       "scaledDims": [
         2.200000047683716,
         2.1999998092651367,
@@ -3690,7 +3690,7 @@
         4.399999618530273,
         1.4000002145767212
       ],
-      "recipeHash": "ce5f9c286b4b6fbdda69f0961d5f68fd41ab266f64bc805ce0902a88342c8f73",
+      "recipeHash": "cd1edab4083214d40ebad03a6e552a0ecbb05958d0501f6521e399d1a691af44",
       "scaledDims": [
         2.200000047683716,
         2.1999998092651367,
@@ -3845,7 +3845,7 @@
         4.399999618530273,
         1.4000002145767212
       ],
-      "recipeHash": "56c6f85d0eb6ba8b698ed41ca0bc981f3bfadc2a52d9c10373094ccfec720f3c",
+      "recipeHash": "77e765c763bcf9547f006a701af0e30ff22d7686d625980ac60af40f7f59c92b",
       "scaledDims": [
         2.200000047683716,
         2.1999998092651367,
@@ -3999,7 +3999,7 @@
         4.233285903930681,
         12.000004768371582
       ],
-      "recipeHash": "3ec6613fd0e589b132911df1344cb883388d65554e1bbc8b36f827eaf77daee6",
+      "recipeHash": "32a5178f139c30c4c530bf3c6098164008c48031a2278f9eb5d8c64a186eb36b",
       "scaledDims": [
         6.000000476837158,
         2.1166429519653405,
@@ -4116,7 +4116,7 @@
         4.233285903930681,
         20.0
       ],
-      "recipeHash": "af28295c61447912b83e44b6f3a6528c3ed6901314f2bdaf9cd05e7456a49c1d",
+      "recipeHash": "6f80170575af75126d5c53d95f0570f0429e65901e576e491401b65dd3a2f0b4",
       "scaledDims": [
         10.000499725341797,
         2.1166429519653405,
@@ -4233,7 +4233,7 @@
         4.233285903930681,
         20.0
       ],
-      "recipeHash": "8a9c2526389bd11d3d7476c8d364e2ad8df2a7db6f898dafc0013a7f6fc719e5",
+      "recipeHash": "15f2e6f6416a20c289635f113fddde7a127c64a0681fd513557e082c8182d0c6",
       "scaledDims": [
         10.000001430511475,
         2.1166429519653405,
@@ -4350,7 +4350,7 @@
         4.233285903930681,
         12.000000476837158
       ],
-      "recipeHash": "f518619d9b6d67ffc9e9e42293a6cb210b9c7cc80a573c910f1f74882b81fbfe",
+      "recipeHash": "d60e7467f833bd219a94a441f9c084cbacbcabc548474487dccb369a385d6c8d",
       "scaledDims": [
         6.000000238418579,
         2.1166429519653405,
@@ -4467,7 +4467,7 @@
         4.233285903930681,
         12.000000476837158
       ],
-      "recipeHash": "1845a1201e0123a1321dc4cdf21f35c62ad051acf4cab53629e7427908d58a91",
+      "recipeHash": "de134eb6298ff3e67add73ea64e4d51ed82126d728bfbe4b9ae5d14f7b432cae",
       "scaledDims": [
         6.0,
         2.1166429519653405,
@@ -4584,7 +4584,7 @@
         4.233285903930681,
         12.000001907348633
       ],
-      "recipeHash": "658345e847c1daeb2e9543620811aed397abefb90e69aa06ddd3db88de35bdcc",
+      "recipeHash": "b02aa164169adff4b882baf57e123daa7890b94b5c80403f2795ae02560e8362",
       "scaledDims": [
         10.0,
         2.1166429519653405,
@@ -4701,7 +4701,7 @@
         4.233285903930681,
         12.000001907348633
       ],
-      "recipeHash": "2e38725482ca4270478ba932365520a5acc5b4904a505ef6104c70ef14f61724",
+      "recipeHash": "0d5dae92174008ec2e6949ced541673283b2887ffcd5b5ad08c89901ab37b4e6",
       "scaledDims": [
         10.0,
         2.1166429519653405,
@@ -4818,7 +4818,7 @@
         8.550000190734867,
         8.399999618530273
       ],
-      "recipeHash": "6b14caa370d9d0096cb0038796bbbae7cf48e4da6fe113b1afaa7c87f27eb96b",
+      "recipeHash": "3e34072ded17d45190c2a3221ac08f2c0c33c80b1ce84d87425fa5570fdbc304",
       "scaledDims": [
         2.200000047683716,
         4.275000095367433,
@@ -4966,7 +4966,7 @@
         8.550000190734867,
         8.399999618530273
       ],
-      "recipeHash": "a95451e3a52bb61ffef25ec5783ca63b73fa05bfdea5e0deb3f332df156e07f2",
+      "recipeHash": "26e928b849263dc04b450c3f3f5e747099f7fe7b786727b9a843ab5ae8a244de",
       "scaledDims": [
         4.199999809265137,
         4.275000095367433,
@@ -5114,7 +5114,7 @@
         4.233285903930664,
         4.0
       ],
-      "recipeHash": "03464952f1512c3daa923d436af8dd80ab0ed20f8ebe6e4cf041540c06bcae3c",
+      "recipeHash": "2d20e8d8be8793274e3ffa784b13d9ab772ff68f1bdfd84ff39bd0a306162665",
       "scaledDims": [
         2.0,
         2.116642951965332,
@@ -5231,7 +5231,7 @@
         4.233285903930664,
         1.7913262844085693
       ],
-      "recipeHash": "4a160bc4b55e9b285d8b1542bc7bb5df98acfa962bb8bcc23790ca30d2813b31",
+      "recipeHash": "c28ce6a523fe11983922cab62480a4556bbd2b8b7e00b5193740d724de77d106",
       "scaledDims": [
         0.8956631422042847,
         2.116642951965332,
@@ -5348,7 +5348,7 @@
         0.0,
         4.0
       ],
-      "recipeHash": "c149f7ffd85d128151945e727259032bfaaee9404a8830bcfc6307f54c0e33ba",
+      "recipeHash": "a973ac8b83e172c0e10b7ac43a6d961364d7c959f1f8d280dd3ba36179a195e7",
       "scaledDims": [
         2.0,
         0.0,
@@ -5496,7 +5496,7 @@
         4.233285903930664,
         8.0
       ],
-      "recipeHash": "d8e3856452733d1fdf7fd714b2aac46787bbbf0d58e9b7a441caa37e16509f22",
+      "recipeHash": "17646b16993ee45269ea9d586d1c9e011460e03edf0904ce23e89d89c9f69531",
       "scaledDims": [
         4.0,
         2.116642951965332,
@@ -5644,7 +5644,7 @@
         0.10000000149011612,
         4.0
       ],
-      "recipeHash": "0e7bbd04e23d76cb97bebf9cd1cfeac6abfd837454c1dff105f800485be126d6",
+      "recipeHash": "f5f84e86af9334a28fda655bbbd353f90745eaa99b336bf9349f1ee5f6b1e848",
       "scaledDims": [
         2.0,
         0.05000000074505806,
@@ -5792,7 +5792,7 @@
         0.10000000149011612,
         4.0
       ],
-      "recipeHash": "7f3d6d77b523a5cbe6f40063cc509a3fb1970fd24c4650e71d6fb1ae1e49fe5a",
+      "recipeHash": "420b81e1a4166ced010e74cce366b0c45ededef97791ad94a0bfdd5168312b9d",
       "scaledDims": [
         2.0,
         0.05000000074505806,
@@ -5940,7 +5940,7 @@
         0.5,
         4.000000476837158
       ],
-      "recipeHash": "c663e3246409790ff050a2bd55c80d850fbf4fd8923df89ec5b149e50243a9b3",
+      "recipeHash": "c7ff3aff6898ae9cc2030c808a697bdc67edaa89e34c69ad7f1f7328f6d5f554",
       "scaledDims": [
         2.011870861053467,
         0.25,
@@ -6088,7 +6088,7 @@
         3.0891523361206055,
         4.000000476837158
       ],
-      "recipeHash": "16455348cae36fde88fc59a3359a81577fc4d17f36e3806db999992afa2a5fd3",
+      "recipeHash": "654a36b44b98e5cdcea2787821707ad6460a86557389cb9c487d4e2d7a3c6a9f",
       "scaledDims": [
         2.0216528177261353,
         1.5445761680603027,
@@ -6236,7 +6236,7 @@
         3.0,
         4.000000476837158
       ],
-      "recipeHash": "1c0fcb25411fbcbf5bdc560eb6c27ebf4f7cf2c1c9215349bb283ea560fcc71a",
+      "recipeHash": "d7498ea207dbcba86e1b68403c5851048d4449fa24c88ee8e68d9700c9273505",
       "scaledDims": [
         2.011870861053467,
         1.5,
@@ -6384,7 +6384,7 @@
         4.150000095367434,
         1.993566870689392
       ],
-      "recipeHash": "65fe9b186a5aa454e177c3f9284226a107e4918cce9b779d654e245eb2817036",
+      "recipeHash": "91ea42754405bdef4c4189d93b77aa3224296d81badb7c4a09f5e7cef1db4c0f",
       "scaledDims": [
         2.0,
         2.075000047683717,
@@ -6501,7 +6501,7 @@
         4.049999713897722,
         1.0019950866699219
       ],
-      "recipeHash": "79b638d7146df82b456a4872cf5b79b8249dc0e8bd6d519cb58d8188dae30e28",
+      "recipeHash": "12044f6b0a3304abe50f0801357b32193216f9e1475c278155ae6aca5a605acc",
       "scaledDims": [
         0.5009975433349609,
         2.024999856948861,
@@ -6618,7 +6618,7 @@
         4.233285903930667,
         1.993566870689392
       ],
-      "recipeHash": "c44a2715da3da71176fb103909db3dc4c6c642e5de86fed435bbe9459ea14f7e",
+      "recipeHash": "226f5f216b272ade600ca623d8a7e9f4d89d7006cdd19f5f0855176d8e0cf693",
       "scaledDims": [
         2.0,
         2.1166429519653334,
@@ -6735,7 +6735,7 @@
         4.150000095367432,
         1.8073967099189758
       ],
-      "recipeHash": "c97b29f5aa34e07a0f75b890fd6cec35e386fd8cdbfa1225942cf7339750e7e6",
+      "recipeHash": "38ba33f5a4ca57b2fe6c0a8a116bd299f8de059ce014821814613037f048e055",
       "scaledDims": [
         1.0,
         2.075000047683716,
@@ -6852,7 +6852,7 @@
         4.499999999999998,
         0.6260783672332764
       ],
-      "recipeHash": "05faa69489a91ed8a8f0d3208aab2725d5c33e4ee9a546004b514cde2c98bb56",
+      "recipeHash": "56970a06e2232b919ea6ed2efe382bf1016e8bd23dcc3342da7b81e3874e5112",
       "scaledDims": [
         2.0,
         2.249999999999999,
@@ -6969,7 +6969,7 @@
         4.5,
         0.6184567809104919
       ],
-      "recipeHash": "f6a72f69d4109f9ea581635437565522a53b82d56898570a4a4473114c066bc7",
+      "recipeHash": "85ed0e7dbcdfe338e4d87772cd10bf21b519f86b0d544b248a39c4f71aabd0ac",
       "scaledDims": [
         2.0,
         2.25,
@@ -7080,13 +7080,13 @@
       },
       "outputFile": "assets/models-normalized/kenney-pirate-kit/chest.glb",
       "pack": "kenney-pirate-kit",
-      "qaStatus": "approved-dev",
+      "qaStatus": "approved-runtime",
       "rawDims": [
         1.2749999856571201,
         1.147499988079071,
         1.2749999856948853
       ],
-      "recipeHash": "b4eeb3e69d0d450cb0d57c062c06684d806fd36bdc78adbeed1cf39da62dffcb",
+      "recipeHash": "6bf598e65a78e287977cd342216ee6c86b87628edb81d762f0a254878e4baef0",
       "scaledDims": [
         0.8924999899599839,
         0.8032499916553497,
@@ -7192,13 +7192,13 @@
       },
       "outputFile": "assets/models-normalized/kenney-pirate-kit/crate.glb",
       "pack": "kenney-pirate-kit",
-      "qaStatus": "approved-dev",
+      "qaStatus": "approved-runtime",
       "rawDims": [
         1.0779999494552612,
         0.7699999809265137,
         1.309000015258789
       ],
-      "recipeHash": "434d14bf9d88efa2ae273877fb2fc02a07d2fa898c214153a333a5a4f1de4bb2",
+      "recipeHash": "1fa036257d8300fd3a621c180b8650c0cf83ebe4981ca00e45e6f787ea03b411",
       "scaledDims": [
         0.7545999646186828,
         0.5389999866485595,
@@ -7304,13 +7304,13 @@
       },
       "outputFile": "assets/models-normalized/kenney-retro-fantasy-kit/detail-barrel.glb",
       "pack": "kenney-retro-fantasy-kit",
-      "qaStatus": "approved-dev",
+      "qaStatus": "approved-runtime",
       "rawDims": [
         0.2460000067949295,
         0.30000001192092896,
         0.2460000067949295
       ],
-      "recipeHash": "0b74174160a4353a176f55d5389762775f3e4383fc2974688928bc91fa50fe6d",
+      "recipeHash": "9d43a4c5f154a361a1bdf7ccbfa353759becbec9aac2c662ef9d703018d335a3",
       "scaledDims": [
         0.492000013589859,
         0.6000000238418579,

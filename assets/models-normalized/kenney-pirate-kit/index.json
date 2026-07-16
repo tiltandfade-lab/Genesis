@@ -58,8 +58,8 @@
         ],
         "up": "+Y"
       },
-      "qaStatus": "approved-dev",
-      "recipeHash": "b4eeb3e69d0d450cb0d57c062c06684d806fd36bdc78adbeed1cf39da62dffcb",
+      "qaStatus": "approved-runtime",
+      "recipeHash": "6bf598e65a78e287977cd342216ee6c86b87628edb81d762f0a254878e4baef0",
       "schema": "genesis.donor.v2",
       "semanticParts": {},
       "sockets": [
@@ -154,8 +154,8 @@
         ],
         "up": "+Y"
       },
-      "qaStatus": "approved-dev",
-      "recipeHash": "434d14bf9d88efa2ae273877fb2fc02a07d2fa898c214153a333a5a4f1de4bb2",
+      "qaStatus": "approved-runtime",
+      "recipeHash": "1fa036257d8300fd3a621c180b8650c0cf83ebe4981ca00e45e6f787ea03b411",
       "schema": "genesis.donor.v2",
       "semanticParts": {},
       "sockets": [
@@ -194,7 +194,7 @@
       "structuralGrid": null
     }
   },
-  "calibrationHash": "f5450be4667690abdc98d5fd7eb9d97a957608bc93d4d1b375e8fbb97c88e259",
+  "calibrationHash": "edd57bdb9f00b564ac607a2f9f8a7501a72db9abb5a950cbc4d14ddd2f1a41ba",
   "normalizerVersion": "kgr3-calibration-v2",
   "pack": "kenney-pirate-kit",
   "schema": "genesis.donor-index.v2"

@@ -412,7 +412,10 @@ crenellation-to-prism sawtooth, continuous floors/walls, and the repaired Kenney
 6. Derive transformed bounds/ground/footprint after the complete source-to-Genesis matrix; an explicit
    footprint override wins and is reported as such.
 7. Emit v2 attachment socket frames only. Existing AABB mount positions may seed positions, but every
-   one receives an explicit quaternion and remains `needs-review` until visually approved.
+   one receives an explicit quaternion and remains `needs-review` until visually approved. Default
+   placement-mount derivation is fail-closed: `quarantined` records derive no sockets; an explicit
+   reviewed `floor-mount` or `wall-mount` suppresses derivation of the other placement-mount type;
+   non-quarantined legacy records with no explicit placement mount retain the existing floor default.
 8. Runtime loader accepts v1 for graceful old-output fallback but runtime registry generation accepts
    v2 only.
 

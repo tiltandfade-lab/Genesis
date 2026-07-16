@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-16T04:04:43.520Z",
+  "generatedAt": "2026-07-16T05:16:06.216Z",
   "shots": [
     "rect-kit-on.png",
     "rect-prism-off.png",
@@ -15,8 +15,8 @@
     "notes": [
       "startSession() called"
     ],
-    "worldId": "mrmzjp3v9g8w2",
-    "worldName": "The Shimmering Maw"
+    "worldId": "mrn23ddn3dkvt",
+    "worldName": "The Ash-Plaza"
   },
   "theaterState": {
     "hasBattleStage": true,
@@ -41,7 +41,7 @@
       "coverCount": 1,
       "furnitureCount": 0,
       "wallPropsCount": 0,
-      "portalCount": 0,
+      "portalCount": 1,
       "kitDoorCount": 1,
       "kitShellWallCount": 15,
       "kitShellFloorCount": 14
@@ -63,7 +63,7 @@
       "coverCount": 1,
       "furnitureCount": 0,
       "wallPropsCount": 0,
-      "portalCount": 0,
+      "portalCount": 1,
       "kitDoorCount": 0,
       "kitShellWallCount": 0,
       "kitShellFloorCount": 0
@@ -85,7 +85,7 @@
       "coverCount": 3,
       "furnitureCount": 0,
       "wallPropsCount": 0,
-      "portalCount": 0,
+      "portalCount": 1,
       "kitDoorCount": 1,
       "kitShellWallCount": 11,
       "kitShellFloorCount": 14
@@ -107,7 +107,7 @@
       "coverCount": 3,
       "furnitureCount": 0,
       "wallPropsCount": 0,
-      "portalCount": 0,
+      "portalCount": 1,
       "kitDoorCount": 0,
       "kitShellWallCount": 0,
       "kitShellFloorCount": 0
@@ -129,7 +129,7 @@
       "coverCount": 3,
       "furnitureCount": 0,
       "wallPropsCount": 0,
-      "portalCount": 0,
+      "portalCount": 1,
       "kitDoorCount": 1,
       "kitShellWallCount": 16,
       "kitShellFloorCount": 16
@@ -151,7 +151,7 @@
       "coverCount": 3,
       "furnitureCount": 0,
       "wallPropsCount": 0,
-      "portalCount": 0,
+      "portalCount": 1,
       "kitDoorCount": 0,
       "kitShellWallCount": 0,
       "kitShellFloorCount": 0
@@ -173,7 +173,7 @@
       "coverCount": 1,
       "furnitureCount": 0,
       "wallPropsCount": 0,
-      "portalCount": 0,
+      "portalCount": 1,
       "kitDoorCount": 1,
       "kitShellWallCount": 15,
       "kitShellFloorCount": 14

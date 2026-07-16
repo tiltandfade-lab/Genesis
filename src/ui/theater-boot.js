@@ -4484,13 +4484,31 @@ function interiorBuildKitShellWalls(wallRuns, cx, cz, realmId, realmProfile, wal
   return group;
 }
 
+// KS-3b item 1 (docs/KENNEY-SOCKET-WAVE.md's own KS-3 gate flag, "THE FLOOR CHECKER") — the hard
+// per-block CHECKER itself was a Z-fighting bug in the outline-hull step (fixed at the source,
+// theater-donor.js's own DONOR_OUTLINE_HULL_EXEMPT_CATEGORIES header carries the full diagnosis), not
+// a texture/grading defect — every kit floor block clone shares one identical graded material, so
+// with the hull bug gone the floor would read as a perfectly FLAT, uniform tone (no texture at all;
+// template-floor.glb carries no TEXCOORD_0 post-normalize, build/normalize-donors.py's own
+// strip_materials header — every kit piece's grain sample lands on one constant texel, a real,
+// separately-tracked gap, not this unit's to re-bake). Adam's own Wildermyth law text (KS-3b's own
+// task text, quoting DESIGN.md) wants "clean blocky with SUBTLE low-frequency variation" — perfectly
+// flat reads just as artificial as a hard checker, so each block gets one small, deterministic,
+// LOW-AMPLITUDE value multiplier. The multiplier itself is computed in theater-interior.js's own
+// itrKitShellFloorBlocks (blk.toneJitter, KIT_FLOOR_TONE_JITTER_AMP/itrKitFloorToneJitter — that
+// file's own header carries the full "why pure-data, why not a band swap" rationale) — this is the
+// SAME "eligibility+placement is pure data, this file only owns the THREE mesh mount" split KS-3's own
+// wallRuns/floorBlocks convention already established a few hundred lines up; never re-derived here.
+
 /* interiorBuildKitShellFloors(floorBlocks, cx, cz, realmId, realmProfile) -> THREE.Group. One donor
    template-floor clone per 2x2 block entry, re-anchored so the piece's own `floor-mount` socket (which
    coincides with its `top-surface` socket for template-floor — both at local (0,0,0), per the admitted
    piece's own KS1-PROVENANCE.json sockets) sits at its holder Group's local origin, then placed at
    world Y = KIT_FLOOR_TOP_Y (the baseline floor's real top plane, matching every prism floor cell's own
    sy=ITR_FLOOR_HEIGHT convention this block's eligibility already guarantees). No rotation needed — the
-   piece's footprint is square (2x2 world units on both axes), so axis orientation is a non-issue. */
+   piece's footprint is square (2x2 world units on both axes), so axis orientation is a non-issue. Each
+   block's mesh gets its OWN cloned material (never mutates donorTemplateFor's shared cached material)
+   carrying blk.toneJitter (KS-3b item 1, computed upstream — see this function's own header). */
 function interiorBuildKitShellFloors(floorBlocks, cx, cz, realmId, realmProfile){
   const group = new THREE.Group();
   if(!floorBlocks || !floorBlocks.length) return group;
@@ -4499,11 +4517,17 @@ function interiorBuildKitShellFloors(floorBlocks, cx, cz, realmId, realmProfile)
   floorBlocks.forEach((blk) => {
     const piece = tmpl.group.clone(true);
     piece.position.set(-tmpl.floorMountLocal[0], -tmpl.floorMountLocal[1], -tmpl.floorMountLocal[2]);
-    piece.traverse((o) => { if(o.isMesh){ o.receiveShadow = true; } });
+    const jitter = typeof blk.toneJitter === "number" ? blk.toneJitter : 1;
+    piece.traverse((o) => {
+      if(o.isMesh){
+        o.receiveShadow = true;
+        if(o.material){ o.material = o.material.clone(); o.material.color.multiplyScalar(jitter); }
+      }
+    });
     const holder = new THREE.Group();
     holder.add(piece);
     holder.position.set((blk.x || 0) - (cx || 0), KIT_FLOOR_TOP_Y, (blk.z || 0) - (cz || 0));
-    holder.userData = { interiorKind: "kit-shell-floor", room: blk.room };
+    holder.userData = { interiorKind: "kit-shell-floor", room: blk.room, toneJitter: jitter };
     group.add(holder);
   });
   return group;
@@ -10842,16 +10866,29 @@ function setInteriorBoard(data){
   // Computed from the camera yaw AT BUILD TIME (a later user rotate keeps the same cutaway until the
   // next board build — acceptable v1, noted here on purpose).
   const ITR_CUTAWAY_PARAPET_FRAC = 0.4; // BW2-5 item 2: "≈0.4 wall height"
-  let wallList = inst.wall;
+  // KS-3b item 2 (docs/KENNEY-SOCKET-WAVE.md) — itrCameraSideBand: the "is this WORLD (x,z) on the
+  // camera-facing side of the room's own focusRect band" test, hoisted out of the wallList map below
+  // into its own closure so the kit-shell wall mounting call further down this function (which never
+  // had ANY cutaway treatment before this unit — the ORCHESTRATOR flag this fixes) can apply the
+  // IDENTICAL test to donor wall RUNS instead of a second, driftable copy of the same yaw/dot-product
+  // math. A board with no framed room (data.focusRect absent) reports "never camera-side" for every
+  // position — full height everywhere, byte-identical to every pre-KS-3b board.
+  let itrCameraSideBand = function(){ return false; };
   if(data.focusRect){
     const fr = data.focusRect;
     const yawNow = (S.rotationStep * 90 * Math.PI) / 180 + (CAM_YAW_OFFSET_DEG * Math.PI) / 180;
     const dirX = Math.sin(yawNow), dirZ = Math.cos(yawNow);
+    itrCameraSideBand = function(x, z){
+      const inBand = x >= fr.minX - 1 && x <= fr.maxX + 1 && z >= fr.minZ - 1 && z <= fr.maxZ + 1;
+      if(!inBand) return false;
+      const rx = x - cx, rz = z - cz;
+      return (rx * dirX + rz * dirZ) > 0;
+    };
+  }
+  let wallList = inst.wall;
+  if(data.focusRect){
     wallList = inst.wall.map(function(wi){
-      const inBand = wi.x >= fr.minX - 1 && wi.x <= fr.maxX + 1 && wi.z >= fr.minZ - 1 && wi.z <= fr.maxZ + 1;
-      if(!inBand) return wi;
-      const rx = wi.x - cx, rz = wi.z - cz;
-      if(rx * dirX + rz * dirZ <= 0) return wi;            // far-side walls stay full height
+      if(!itrCameraSideBand(wi.x, wi.z)) return wi;         // far-side / out-of-band walls stay full height
       const parapetH = (wi.sy || 1) * ITR_CUTAWAY_PARAPET_FRAC;
       if((wi.sy || 1) <= parapetH) return wi;              // already at/under parapet height — never GROWS a wall
       return Object.assign({}, wi, { sy: parapetH });
@@ -11621,6 +11658,21 @@ function setInteriorBoard(data){
   // identical to pre-KS-3). realmId/realmProfile close the SAME live-grading path the KS-3 door
   // retrofit above uses — every kit piece (door, wall, floor) now shares one recipe.
   const kitShellWallGroup = interiorBuildKitShellWalls(data.kitShellWalls, cx, cz, data.realmId, S.realmProfile, data.wallHeightBase);
+  // KS-3b item 2 (docs/KENNEY-SOCKET-WAVE.md's own KS-3 gate flag) — CAMERA-SIDE CUTAWAY PARITY. Kit
+  // wall modules previously rendered at full height/opacity unconditionally — the prism wallList
+  // parapet cut a few hundred lines up (itrCameraSideBand/ITR_CUTAWAY_PARAPET_FRAC) only ever touched
+  // `inst.wall`, never these donor-piece runs, so a kit-shelled room read "walled-in" regardless of
+  // camera framing (the diorama's own open-tray identity, BW2-5 item 2, silently didn't apply to the
+  // new shell type). Reuses the IDENTICAL closure + constant the prism path just computed above —
+  // never a second copy of the yaw/dot-product math — applied per RUN (data.kitShellWalls[i], in
+  // WORLD coordinates, zipped by index with kitShellWallGroup.children[i] — interiorBuildKitShellWalls
+  // builds one holder per run in that exact array order) so a mixed kit+prism room's walls cut away
+  // consistently at every camera-facing wall, whichever path rendered it.
+  (data.kitShellWalls || []).forEach(function(run, i){
+    const holder = kitShellWallGroup.children[i];
+    if(!holder || !itrCameraSideBand(run.x || 0, run.z || 0)) return;
+    holder.scale.y *= ITR_CUTAWAY_PARAPET_FRAC;
+  });
   S.interiorGroup.add(kitShellWallGroup);
   const kitShellFloorGroup = interiorBuildKitShellFloors(data.kitShellFloors, cx, cz, data.realmId, S.realmProfile);
   S.interiorGroup.add(kitShellFloorGroup);

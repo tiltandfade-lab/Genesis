@@ -275,6 +275,32 @@ function buildDonorOutlineHull(mesh, style) {
   hull.userData.donorOutlineHull = true;
   return hull;
 }
+// KS-3b item 1 (docs/KENNEY-SOCKET-WAVE.md's own KS-3 gate flag) — THE FLOOR CHECKER, root cause.
+// buildDonorOutlineHull's technique (a uniformly-scaled BackSide clone of the SAME geometry) only
+// produces a real silhouette line when the source mesh has actual volume — the scaled duplicate's
+// surface has to land measurably OUTSIDE the base mesh along its own normal for the BackSide trick to
+// read as a thin rim rather than a second copy of the same surface. template-floor.glb (and every
+// other admitted "floor" category piece) is a FLAT, double-sided quad: two coincident faces at y=0,
+// a +Y-normal top face (what the camera sees from above) and a -Y-normal bottom face baked into the
+// SAME mesh so the underside isn't a hole when viewed from below. Scaling that uniformly about its
+// own local origin leaves every vertex still at y=0 (0 * scale = 0) — the hull is NOT pushed outward
+// in any direction, it lands exactly on top of the base mesh. Two coincident triangle layers at the
+// identical world depth is textbook Z-FIGHTING: viewed from above, the hull's BackSide material
+// renders the mesh's own -Y (bottom) face — invisible from above on the FrontSide base mesh, but now
+// visible because BackSide flips which winding is culled — at the SAME depth as the base mesh's +Y
+// (top) face. The GPU's depth test then flips per pixel on floating-point rounding, and because every
+// kit floor block shares the identical geometry/material/camera-relative depth, that dither pattern
+// repeats IDENTICALLY block-to-block — summing into the harsh, perfectly regular checkerboard the
+// KS-3 beauty card showed (dev/battle-gate/ks3-kit-shells/beauty-dressed.png). Never a texture or
+// grading defect (rotation/gradeColorLocal band/grain-phase were the KS-3 gate's own hypotheses —
+// all ruled out empirically: every kit floor block clone shares one identical graded material/UUID,
+// confirmed live via window.Theater._interiorBuildKitShellFloorsForTest). FIX: floor-category donor
+// pieces skip the outline-hull step entirely, below. A ground plane butt-joined edge-to-edge with its
+// neighbors has no exposed silhouette edge for the OUTLINE LAW's "outer silhouette only" language to
+// apply to in the first place — the hull was never buying anything visually on a floor tile, only
+// breaking it. (Volumetric pieces — walls, doors, pillars — keep the hull unchanged; their geometry
+// has real thickness, so the scaled duplicate genuinely lands outside the base surface.)
+const DONOR_OUTLINE_HULL_EXEMPT_CATEGORIES = Object.freeze({ floor: true });
 
 // ─── loadDonorPiece — the public loader ─────────────────────────────────────────────────────────
 // loadDonorPiece(pack, slug, opts) -> Promise<THREE.Group>
@@ -316,7 +342,9 @@ export async function loadDonorPiece(pack, slug, opts) {
         const family = donorData.materialFamily;
         obj.material = donorMaterialForFamily(family, seedKey + ":" + obj.name, realmProfile);
         materialFamiliesApplied.push(family);
-        if (outlineStyle) {
+        // KS-3b item 1 — see DONOR_OUTLINE_HULL_EXEMPT_CATEGORIES's own header: flat/volume-less
+        // categories (floor) skip the hull, it can only Z-fight a coincident double-sided quad.
+        if (outlineStyle && !DONOR_OUTLINE_HULL_EXEMPT_CATEGORIES[entry.category]) {
           const hull = buildDonorOutlineHull(obj, outlineStyle);
           if (hull) obj.add(hull);
         }

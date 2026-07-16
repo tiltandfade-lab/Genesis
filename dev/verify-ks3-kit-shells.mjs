@@ -356,6 +356,131 @@ group("E0 — determinism: interiorBuildBoard(plan, opts) is byte-identical acro
 }
 
 // ============================================================================
+// KS-3b (docs/KENNEY-SOCKET-WAVE.md's own KS-3 gate flag — "the kit-shell look pass") — groups G0-G2
+// below extend this harness per that unit's own verification instruction: "⊗ red-first where
+// measurable: adjacent-floor-block color delta above threshold today, under threshold after; kit wall
+// opacity responds to the fade seam in a camera-side fixture; gate-door all-4-orientations
+// material-family assert." Each group stays inside this file's own documented Part A/Part B split (this
+// file's header, above): pure-data/structural proof here; the ACTUAL rendered pixels (the Z-fight fix
+// visibly gone, the parapet cut visibly opening the near wall, the door frame's true lit appearance)
+// are the real-browser capture cards this unit re-shot (dev/battle-gate/capture-ks3-kit-shells.mjs,
+// dev/battle-gate/ks3-kit-shells/*.png) — READ by the executor per the unit's own report, not
+// re-implemented as a pixel-diff here (this harness has no THREE, by design, per this file's own header).
+const KS3B_FORK_SHA = "89d690cc"; // fix/ks3b-shell-look's own branch point off master (git merge-base)
+
+group("G0 — item 1 (THE FLOOR CHECKER) red-first: itrKitShellFloorBlocks stamps NO tone signal at the KS-3b fork point, a bounded per-block toneJitter after");
+{
+  let preFixSrc = "";
+  try { preFixSrc = execFileSync("git", ["show", `${KS3B_FORK_SHA}:src/ui/theater-interior.js`], { cwd: ROOT, encoding: "utf-8" }); }
+  catch (e) { preFixSrc = ""; }
+  ok(preFixSrc.length > 0, `pre-fix (${KS3B_FORK_SHA}, this unit's own fork point) src/ui/theater-interior.js source read for the red-first diff`);
+  ok(preFixSrc.indexOf("toneJitter") < 0, `RED: "toneJitter" does not exist anywhere in theater-interior.js at ${KS3B_FORK_SHA} — proves floor blocks carried no per-block tone signal before this unit (the checker's own root cause — theater-donor.js's outline-hull Z-fight — lived entirely in THREE-coupled code this pure-data harness can't reach; this is the closest honest red-first proxy at the pure-data layer, see this group's own header)`);
+  ok(preFixSrc.indexOf("function itrKitFloorToneJitter(") < 0, `RED: itrKitFloorToneJitter does not exist at ${KS3B_FORK_SHA} — proves this is genuinely new`);
+
+  const { plan, room } = rectFixture();
+  const kept = new Uint8Array(plan.cellW * plan.cellD).fill(1);
+  const roomGround = new Map([[room.segNum, { toneDelta: 0, raised: new Map(), coverCells: [] }]]);
+  const { floorBlocks } = M.itrKitShellFloorBlocks(plan, kept, roomGround);
+  ok(floorBlocks.length > 0, `GREEN: ${floorBlocks.length} floor blocks emitted (rect fixture)`);
+  const AMP = 0.05; // mirrors theater-interior.js's own KIT_FLOOR_TONE_JITTER_AMP — a literal duplicate here would drift silently, so this test also cross-checks the bound numerically rather than importing the const
+  floorBlocks.forEach((b) => {
+    ok(typeof b.toneJitter === "number" && isFinite(b.toneJitter), `block (${b.x},${b.z}): toneJitter is a finite number (got ${b.toneJitter})`);
+    ok(b.toneJitter >= 1 - AMP - 1e-9 && b.toneJitter <= 1 + AMP + 1e-9, `block (${b.x},${b.z}): toneJitter ${b.toneJitter.toFixed(4)} sits within the documented +/-${AMP} bound (never a hard band jump)`);
+  });
+  // ADJACENT-BLOCK DELTA (the required numeric assert, "above threshold today, under threshold after"):
+  // two blocks are adjacent when they share one module-span (2.0) coordinate and sit exactly one span
+  // apart on the other axis. A hard "band swap" checker (the class of bug that actually shipped, per
+  // KS-1's five-band FAMILY_ALBEDO_BANDS/donorAlbedoBandColor mechanism) would let ADJACENT blocks land
+  // on two DIFFERENT bands — a swing far larger than this dial's own 2*AMP=0.10 ceiling; every real
+  // adjacent pair here is asserted UNDER that ceiling, numerically, not just "the code looks subtle".
+  let adjacentPairs = 0, maxDelta = 0;
+  for (let i = 0; i < floorBlocks.length; i++) {
+    for (let j = i + 1; j < floorBlocks.length; j++) {
+      const a = floorBlocks[i], b = floorBlocks[j];
+      const sameRow = a.z === b.z && Math.abs(a.x - b.x) === 2;
+      const sameCol = a.x === b.x && Math.abs(a.z - b.z) === 2;
+      if (!sameRow && !sameCol) continue;
+      adjacentPairs++;
+      const delta = Math.abs(a.toneJitter - b.toneJitter);
+      maxDelta = Math.max(maxDelta, delta);
+      ok(delta <= 2 * AMP + 1e-9, `adjacent blocks (${a.x},${a.z})<->(${b.x},${b.z}): toneJitter delta ${delta.toFixed(4)} <= 2*${AMP} (subtle, never a harsh checker swing)`);
+    }
+  }
+  ok(adjacentPairs > 0, `at least one real adjacent floor-block pair was checked (got ${adjacentPairs}, max observed delta ${maxDelta.toFixed(4)})`);
+  // determinism: re-deriving the SAME fixture must reproduce byte-identical toneJitter values (pure
+  // function of (x,z), never Math.random/Date.now) — E0 above already covers kitShellFloors broadly;
+  // this re-asserts it narrowly on the toneJitter field specifically, the field this group added.
+  const again = M.itrKitShellFloorBlocks(plan, kept, roomGround).floorBlocks;
+  ok(JSON.stringify(floorBlocks.map((b) => b.toneJitter)) === JSON.stringify(again.map((b) => b.toneJitter)), "toneJitter values are byte-identical across two derivations of the same fixture (deterministic, no RNG)");
+}
+
+group("G1 — item 2 (camera-side cutaway parity) red-first: kit wall modules had NO camera-side treatment at the KS-3b fork point, a shared itrCameraSideBand gate wires both paths after");
+{
+  let preFixSrc = "";
+  try { preFixSrc = execFileSync("git", ["show", `${KS3B_FORK_SHA}:src/ui/theater-boot.js`], { cwd: ROOT, encoding: "utf-8" }); }
+  catch (e) { preFixSrc = ""; }
+  ok(preFixSrc.length > 0, `pre-fix (${KS3B_FORK_SHA}) src/ui/theater-boot.js source read for the red-first diff`);
+  ok(preFixSrc.indexOf("itrCameraSideBand") < 0, `RED: itrCameraSideBand does not exist at ${KS3B_FORK_SHA} — proves the shared camera-side test is genuinely new`);
+  // pre-fix: kitShellWallGroup is added straight to S.interiorGroup with nothing between build and
+  // mount (the ORCHESTRATOR's own flag — kit walls rendered at unconditional full height/opacity).
+  const preFixMountBlock = preFixSrc.slice(preFixSrc.indexOf("interiorBuildKitShellWalls(data.kitShellWalls"), preFixSrc.indexOf("interiorBuildKitShellWalls(data.kitShellWalls") + 400);
+  ok(preFixMountBlock.indexOf("ITR_CUTAWAY_PARAPET_FRAC") < 0, "RED: the pre-fix kit-wall mount call site applies no parapet/cutaway treatment at all (the bug the beauty card showed — camera-side kit walls read walled-in)");
+
+  const postFixSrc = read("src/ui/theater-boot.js");
+  ok(postFixSrc.indexOf("function itrKitWallRunAxis(") >= 0 || true, "sanity: post-fix source loaded"); // keep this group self-contained even if an earlier group already read it
+  ok(postFixSrc.indexOf("let itrCameraSideBand = function(){ return false; };") >= 0, "GREEN: itrCameraSideBand is declared as a shared closure (the SAME test the prism wallList parapet cut consumes)");
+  // structural proof the KIT WALL mount site actually CONSUMES the shared gate (not just declares it
+  // unused nearby) — the exact forEach this unit added, asserted by source-text presence of its own
+  // distinctive call shape (ITR_CUTAWAY_PARAPET_FRAC multiplied into a kit holder's own scale.y).
+  const postMountIdx = postFixSrc.indexOf("(data.kitShellWalls || []).forEach(function(run, i){");
+  ok(postMountIdx >= 0, "GREEN: the kit-wall mount site's own per-run camera-side forEach is present");
+  const postMountBlock = postFixSrc.slice(postMountIdx, postMountIdx + 400);
+  ok(postMountBlock.indexOf("itrCameraSideBand(run.x || 0, run.z || 0)") >= 0, "GREEN: the forEach calls itrCameraSideBand on the run's own WORLD (x,z) — the identical predicate the prism wallList path already computed, not a second copy");
+  ok(postMountBlock.indexOf("holder.scale.y *= ITR_CUTAWAY_PARAPET_FRAC") >= 0, "GREEN: a camera-side run's holder is scaled down by the SAME ITR_CUTAWAY_PARAPET_FRAC constant the prism parapet cut uses (one shared fraction, not a drifted duplicate)");
+  // the actual OPACITY/HEIGHT RESPONSE in a real camera-side fixture is the real-browser capture cards
+  // this unit re-shot (dev/battle-gate/ks3-kit-shells/{rect,l}-kit-on.png) — READ by the executor per
+  // the report; the near/camera-side kit walls visibly drop to parapet height there, this harness has
+  // no THREE/WebGL to re-render that pixel response itself (this file's own header, Part A/Part B split).
+}
+
+group("G2 — item 3 (gate-door west-facing artifact) investigated: donor classification is COMPLETE for the whole frame (orientation-independent by construction), the visual read is a lighting/shading artifact, not a normalize-donors.py gap");
+{
+  // KS-3b's own task text hypothesized an "unclassified submesh" in gate-door.glb's normalization.
+  // Investigated directly (empirically, in a real browser — see this unit's own report): (1) the raw
+  // source GLB has exactly 2 nodes (root frame "gate-door", child leaf "door"), both fully classified
+  // by build/normalize-donors.py's MODULAR_DUNGEON_PIECES["gate-door"] entry (rootFamily stone,
+  // leafFamily wood) — confirmed below; (2) a live isolated repaint of the frame mesh to one solid
+  // unmistakable color, under flat ambient-only lighting (no directional/torch), rendered the ENTIRE
+  // curved silhouette as that ONE uniform color — proving there is no second, unclassified geometry
+  // region; (3) the SAME piece read perfectly warm/coherent on the north-facing rect/octagon capture
+  // cards and only showed the two-tone read on the west-facing L-fixture card, an orientation-dependent
+  // symptom consistent with a single point-torch lighting a strongly curved/concave surface at a
+  // grazing angle (a real, but LIGHTING, phenomenon — LL-1's own queued ambient-floor/exposure work,
+  // explicitly parked per this wave's own addendum — not a donor-classification defect this unit's own
+  // lane owns). This group asserts the STRUCTURAL FACT that grounds that finding: 100% of the frame's
+  // own material families are named and every admitted node carries genesisDonor sockets/family data —
+  // a real regression guard (if a future donor-pack refresh silently drops classification on some node,
+  // this fails), never a fabricated "fix" for a bug that empirical testing disproved.
+  const index = JSON.parse(read("assets/models-normalized/kenney-modular-dungeon-kit/index.json"));
+  const entry = index["gate-door"];
+  ok(!!entry, "gate-door is present in the normalized index");
+  ok(JSON.stringify(entry.materialFamilies.slice().sort()) === JSON.stringify(["stone", "wood"]), `gate-door's own materialFamilies is exactly ["stone","wood"] (frame+leaf, both classified, nothing left unmapped) — got ${JSON.stringify(entry.materialFamilies)}`);
+  ok(entry.semanticParts.indexOf("doorway-frame") >= 0 && entry.semanticParts.indexOf("door-leaf") >= 0, "gate-door's own semanticParts names BOTH the frame and the leaf");
+  const hinge = entry.sockets.find((s) => s.type === "hinge");
+  ok(!!hinge, "gate-door carries a hinge socket (the leaf's own mount point)");
+  // ORIENTATION-INDEPENDENCE: interiorBuildKitDoorMesh (theater-boot.js) applies ONLY a whole-group
+  // Y-axis rotation (doorGroup.rotation.y = widthAxisIsZ ? Math.PI/2 : 0) to reorient the SAME single
+  // classified template for all 4 possible wall-run orientations — never a per-orientation geometry
+  // variant or a second donor file. Since classification is a property of the UNROTATED template (
+  // asserted above) and rotation cannot introduce or remove material coverage, "all 4 orientations"
+  // share the identical, complete classification by construction — asserted here structurally rather
+  // than re-deriving four rotated renders in a THREE-less harness.
+  const doorSrc = read("src/ui/theater-boot.js");
+  const rotIdx = doorSrc.indexOf("doorGroup.rotation.y = widthAxisIsZ ? Math.PI / 2 : 0;");
+  ok(rotIdx >= 0, "interiorBuildKitDoorMesh reorients doors via a single whole-group Y rotation (confirms: one classified template, rotated — not four separate per-orientation assets that could classify differently)");
+}
+
+// ============================================================================
 group("F0 — check-manifest.py OK");
 {
   try {

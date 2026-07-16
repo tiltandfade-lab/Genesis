@@ -588,7 +588,30 @@ function itrKitShellEmitRun(startIdx, endIdx, fixedCoord, axis, scale, wallRuns,
    KEPT grid: axis-'x' runs are grouped row-major (consecutive x at a fixed y), axis-'z' runs are grouped
    column-major (consecutive y at a fixed x) — a cell's axis is a single deterministic value (never both),
    so the two passes never double-claim the same cell. KIT_SHELL_ENABLED=false short-circuits to empty
-   (the flag's own retreat, checked once here rather than at every call site). */
+   (the flag's own retreat, checked once here rather than at every call site).
+
+   KS-3b item 4 (docs/KENNEY-SOCKET-WAVE.md's own KS-3 gate flag) — WHY TRUE CORNERS (itrKitWallRunAxis
+   returning null, just below) have NO dedicated kit corner piece mounted into the gap, and never will
+   under this v1: kenney-modular-dungeon-kit's own `template-wall-corner` was investigated (measured via
+   dev/model-foundry/KS1-PROVENANCE.json + a raw-vertex dump of its source GLB) as the obvious candidate
+   to fill exactly this gap. It is a genuine, self-contained L-shaped corner-turret unit (160 verts, a
+   real stepped/crenellated profile, not a plain box) — but its own natural footprint measures 0.5x0.5
+   world units (scaledDims [0.5, 2.025, 0.5]), a QUARTER the area of the 1.0x1.0-unit room-grid cell a
+   corner needs to fill, and its own butt-join sockets sit only 0.25 units from its center — a SMALLER,
+   INCOMPATIBLE module grid from the wall/floor pieces' clean 2.0-unit span (KIT_WALL_NATIVE_HEIGHT's own
+   neighbor consts, theater-boot.js). "Compose two corner pieces per grid corner cell" (the option this
+   unit's own spec text offered) does not tile this piece cleanly: it is one indivisible turret shape,
+   not a repeatable tile, so two (or four) copies do not compose into a larger corner the way two
+   template-wall halves compose into one module — they'd either float centered in a visibly oversized
+   cell (leaving a 0.25-unit gap on every side against the neighboring 2.0-unit-wide kit wall panels) or
+   need a SECOND, un-audited canonicalScale/placement convention specific to this one piece (exactly the
+   risk the original KS-3 scope note flagged). RULING (permanent, v1): corners stay on the prism path.
+   The prism per-cell corner geometry (interiorBuildBoard's own instances.wall / the corner-pillar pass
+   above) already renders every corner cleanly today — mixed kit+prism shells are legal and expected per
+   this wave's own spec text, and a corner is exactly the class of cell that spec licenses to prism. A
+   future unit that wants an authored kit-native corner would need Kenney's OWN corner-piece convention
+   (their kit ships this turret sized to their own smaller sub-grid, not this project's 1-cell grid) —
+   solvable, but a genuinely new placement contract, not a cheap follow-on to this one. */
 function itrKitShellWallRuns(plan, kept, roomIdx, corridorIdx) {
   const wallRuns = [], claimedWall = new Set();
   if (!KIT_SHELL_ENABLED) return { wallRuns, claimedWall };
@@ -628,7 +651,35 @@ function itrKitShellWallRuns(plan, kept, roomIdx, corridorIdx) {
   return { wallRuns, claimedWall };
 }
 
-/* itrKitShellFloorBlocks(plan, kept, roomGround, daisByRoom) -> { floorBlocks:[{x,z,room}], claimedFloor:Set }
+// KS-3b item 1 (docs/KENNEY-SOCKET-WAVE.md's own KS-3 gate flag, "THE FLOOR CHECKER") — TONE JITTER,
+// the pure-data half. The hard CHECKER itself was a Z-fighting bug in the outline-hull step (fixed at
+// the source, theater-donor.js's own DONOR_OUTLINE_HULL_EXEMPT_CATEGORIES header carries the full
+// diagnosis) — every kit floor block clone shares one identical graded material, so with the hull bug
+// gone the floor reads as a perfectly FLAT, uniform tone. Adam's own Wildermyth law text (KS-3b's own
+// task text, quoting DESIGN.md) wants "clean blocky with SUBTLE low-frequency variation" — perfectly
+// flat reads just as artificial as a hard checker, so this file (the ELIGIBILITY/placement pure-data
+// layer, per this section's own established split — theater-boot.js's interiorBuildKitShellFloors owns
+// the THREE mesh mount only) stamps a small, deterministic, LOW-AMPLITUDE per-block value multiplier —
+// never a per-node BAND SWAP (a hash-selected band from a short fixed list is a hard high-contrast
+// jump — exactly what produced the checker read once, a hull z-fight the GPU resolved per-pixel); a
+// smooth +/-KIT_FLOOR_TONE_JITTER_AMP multiplier is a soft per-instance dial, not a band selector.
+// itrKitFloorToneHash mirrors theater-boot.js's own swarmHashLocal algorithm shape (mulberry-style,
+// documented there as "the swarm one lives in theater-parts") — a SEPARATE, self-contained copy since
+// this file and theater-boot.js's sealed ES-module scope can't share a function directly (same
+// precedent as donorHashStr/dspHashStr elsewhere in this codebase), not a fresh invention.
+const KIT_FLOOR_TONE_JITTER_AMP = 0.05;   // +/-5% value multiplier — subtle, never a hard band jump
+const KIT_FLOOR_TONE_JITTER_SALT = 71;    // arbitrary/fixed for determinism (never Math.random/Date.now)
+function itrKitFloorToneHash(i, salt) {
+  let h = ((i + 1) * 374761393 + salt * 668265263) | 0;
+  h = (h ^ (h >>> 13)) | 0; h = Math.imul(h, 1274126177) | 0;
+  return ((h ^ (h >>> 16)) >>> 0) / 4294967296;
+}
+function itrKitFloorToneJitter(x, z) {
+  const cell = Math.round((x || 0) * 2) * 131 + Math.round((z || 0) * 2) * 733;
+  return 1 + (itrKitFloorToneHash(cell, KIT_FLOOR_TONE_JITTER_SALT) - 0.5) * 2 * KIT_FLOOR_TONE_JITTER_AMP;
+}
+
+/* itrKitShellFloorBlocks(plan, kept, roomGround, daisByRoom) -> { floorBlocks:[{x,z,room,toneJitter}], claimedFloor:Set }
    2x2 kenney template-floor tile blocks, anchored per-room at the room's OWN (r.x,r.y) origin corner
    (deterministic, room-local — never a global-grid anchor that could shear across two adjacent rooms of
    different offsets). KIT_SHELL v1 SCOPE (documented, not silently narrowed): a candidate block's 4
@@ -663,7 +714,8 @@ function itrKitShellFloorBlocks(plan, kept, roomGround, daisByRoom) {
           return true;
         });
         if (!ok) continue;
-        floorBlocks.push({ x: bx + 0.5, z: by + 0.5, room: r.segNum });
+        const bcx = bx + 0.5, bcz = by + 0.5;
+        floorBlocks.push({ x: bcx, z: bcz, room: r.segNum, toneJitter: itrKitFloorToneJitter(bcx, bcz) });
         cells.forEach(([cx2, cy2]) => claimedFloor.add(cx2 + "," + cy2));
       }
     }

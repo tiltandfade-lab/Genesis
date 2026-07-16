@@ -502,6 +502,25 @@ console.log("\n=== 6. KGR-3 calibrated v2 indexes + runtime compatibility bounda
     /function\s+donorRegistryFromIndex[\s\S]*?schema\s*!==\s*"genesis\.donor-index\.v2"[\s\S]*?throw new Error/.test(donorSrc),
     "strict v2 registry guard missing");
 
+  const socketDerivationProbe = normalizerPythonProbe([
+    "bounds = {'footprint': {'center': [0, 0]}, 'groundY': 0, 'aabbMax': [1, 2, 1]}",
+    "wall = {'sockets': [module.default_socket('wall-anchor', 'wall-mount', [0, 1, 0], 'wall')], 'category': 'wall', 'qaStatus': 'needs-review'}",
+    "quarantined = {'sockets': [], 'category': 'floor', 'qaStatus': 'quarantined'}",
+    "legacy = {'sockets': [], 'category': 'wall', 'qaStatus': 'needs-review'}",
+    "print(json.dumps({'wall': module.derive_sockets(wall, bounds), 'quarantined': module.derive_sockets(quarantined, bounds), 'legacy': module.derive_sockets(legacy, bounds)}))",
+  ].join("\n"));
+  check("KGR-3 mount derivation: explicit wall-mount-only fixture stays wall-only",
+    socketDerivationProbe.wall.length === 1 &&
+    socketDerivationProbe.wall[0].id === "wall-anchor" &&
+    socketDerivationProbe.wall[0].type === "wall-mount",
+    JSON.stringify(socketDerivationProbe.wall));
+  check("KGR-3 mount derivation: empty quarantined fixture remains socket-empty",
+    socketDerivationProbe.quarantined.length === 0,
+    JSON.stringify(socketDerivationProbe.quarantined));
+  check("KGR-3 mount derivation: mountless reviewed legacy fixture still derives floor-mount",
+    socketDerivationProbe.legacy.length === 1 && socketDerivationProbe.legacy[0].type === "floor-mount",
+    JSON.stringify(socketDerivationProbe.legacy));
+
   // Execute the real exported helper with only its browser/THREE imports replaced by inert
   // declarations. donorRegistryFromIndex itself is otherwise byte-for-byte the production body.
   const executableDonorSrc = donorSrc

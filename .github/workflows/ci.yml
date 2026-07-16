@@ -89,8 +89,13 @@ jobs:
               echo "$out"
             else
               echo "$out"
-              if echo "$out" | grep -qE "puppeteer-core|No module named 'PIL'"; then
-                echo "SKIP (render/paint harness — puppeteer/Pillow unavailable in CI): $f"
+              # DEP-MISSING signatures = SKIP, not FAIL (see the dep-aware note above). Each is a
+              # SPECIFIC "this dependency isn't installed in CI" message a harness emits deliberately,
+              # never a generic error — so this can't mask a real failure. puppeteer-core/PIL =
+              # render/paint tools; "fast-check not resolvable under GEOMETRY_TOOLS_HOME" = the
+              # geometry-tools fuzz kit (dev/geometry-tools/setup.mjs), the same by-hand-locally posture.
+              if echo "$out" | grep -qE "puppeteer-core|No module named 'PIL'|fast-check not resolvable"; then
+                echo "SKIP (dep unavailable in CI — render/paint/geometry-tools): $f"
               else
                 echo "FAILED: $f"
                 fail=1

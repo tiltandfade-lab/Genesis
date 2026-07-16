@@ -149,3 +149,17 @@ The questionnaire is CLOSED. Deltas to this wave:
   for Kenney walk-scenes. Promo window: late Sept/Oct 2026.
 - Open item for a future pass: the capture rig's DPR (Adam reads test renders as low-res —
   distinguish rig resolution from real canvas quality next lens run).
+- **UV unwrap (Adam's 2026-07-15 question):** NOT installed — xatlas-web was ruled "build-time
+  spike," xatlas-three DEFERRED (worker capture unsolved), and the 2026-07-13 direction moved the
+  pin to watlas; P3-4 (its carrier wave) never fired. Not needed for KS-1's DIRECT_MODULATED path
+  (procedural materials on the kits' authored UVs); it becomes load-bearing at the FIRST CHASSIS
+  family (ImageGen paint-overs need clean unwraps to bake onto). Ruling: pull the watlas spike
+  forward WHEN the first CHASSIS verdict lands, not before.
+- **ELEV-1 (Adam picked Option B, 2026-07-15 late):** a rolled per-room elevation-profile table
+  (Engine markdown — HIS authoring surface; Fable drafts PROPOSED rows/weights, Adam red-pens
+  before any build). Render + cell data first (per-cell ft elevation, 5-ft multiples), mechanics
+  ride the tactical wave later. No-clip law: tiers snap to cell groups; stair/ramp cells are their
+  own cells; door-aperture cells stay flat; the CONNECTION owns any room-to-room delta (the
+  reserved vertical-stair two-slot contract) so rooms never reconcile absolute heights. Depth-bias
+  rider (C's flavor cheaply): deeper graph rooms bias toward sunken/chasm rows; true global
+  elevation coherence stays deferred until a feature needs it.

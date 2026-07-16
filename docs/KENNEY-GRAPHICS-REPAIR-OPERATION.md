@@ -510,7 +510,10 @@ new-pack calibration possible through the save API rather than a hand edit.
 - new pure ESM `src/ui/theater-attachment.js`;
 - `src/ui/theater-donor.js` socket frame conversion;
 - `src/ui/theater-boot.js` `kitDoorSplitTemplate` / `interiorBuildKitDoorMesh` migration;
-- `genesis.html` module import only through `theater-boot.js`; manifest registration for the new module;
+- `genesis.html` module import only through `theater-boot.js`; manifest registration for the new module
+  with `importedBy:"ui.theater-boot"`; extend `build/check-manifest.py` so an imported-only module is
+  valid only when the named manifest module exists, is itself loaded, and contains the matching
+  static import. An `importedBy` module with its own direct HTML tag is an error;
 - new `dev/verify-kenney-attachment.mjs`; extend `dev/verify-ks2-door-assembly.mjs`.
 
 **Public API:**
@@ -543,6 +546,8 @@ The formula is `host.matrixWorld * hostSocket.localMatrix * mateFlip * inverse(c
 2. ⊗ `opposed-z` normals face each other; removing the flip fails.
 3. ⊗ Real gate leaf pre/post closed world vertices match within `1e-5`; open/ajar keep the hinge fixed.
 4. Missing/incompatible sockets return null without mutating either object.
+5. ⊗ Removing the `importedBy` declaration or the static import fails manifest validation; adding a
+   direct `genesis.html` tag for the imported-only module also fails.
 
 **Out:** automatic wall-run assembly and physics joints.
 

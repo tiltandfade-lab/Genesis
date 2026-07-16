@@ -282,6 +282,63 @@ function wsClassifyWilderness(scene, ctx){
   });
 }
 
+// ─── PUBLIC — walkSceneBeatFor(input) -> {beatId,family,rolled} | null (VQ2-RESPEC.md §4 F2,
+// Sol P-D, ledger #11) ──────────────────────────────────────────────────────────────────────────
+// THE BEAT CLASSIFICATION half of "a state beat earns a micro-stage" — pure, no GS/w/theater-boot.js
+// reads of its own (this file's own header discipline: engine-pure, never a world write). Every fact
+// it needs arrives as an EXPLICIT input flag from the caller (src/world/render.js's
+// theaterBeatInputFor — the SAME "source carries flags" precedent theaterCastSourceFor's shopOpen/
+// theaterHereSourceFor's env/realms/clockMin already set, none of them GS/w reads performed by the
+// engine layer itself). The REGISTRY (data/theater-beats.js) holds the anchor/support/practical
+// grammar per beat; this function only decides WHICH beat (if any) is active and, for walk_complete,
+// extracts the ROLLED fields off the real finale segment (walk-native law: project ONLY what the
+// segment actually carries — s.areaType/s.feature, the exact fields wsClassifyDungeon already reads
+// for a live walked room — never an invented default).
+//
+// input = {
+//   shopOpen: bool,          // GS.gamePanel==="shop" && GS.activeShopId (the existing shopOpen flag)
+//   shopHere: bool,          // a shop is minted at the current node, panel not open
+//   justRested: bool,        // an edge-triggered "the long rest that just completed" signal (this
+//                            // render only, self-clearing — theaterBeatInputFor's own header comment,
+//                            // src/world/render.js, has the full account of why it's edge-triggered
+//                            // rather than a clock-minute match)
+//   walkCompleteHere: bool,  // the current node's own frontier walk is done (no active walk here)
+//   finaleSegment: object|null, walkId, walk  // for walk_complete's rolled-field projection
+// }
+// Priority order (first true wins — at most one beat stages per render, matching the single-idle-
+// table precedent every other trayFrom branch already keeps): shopOpen > justRested > shopHere >
+// walkCompleteHere. FOUND LIVE (a play-lens capture card caught it, not assumed): a rest taken AT a
+// shop-bearing settlement node has BOTH shopHere and justRested true simultaneously (the party is
+// standing exactly where a shop sits, panel closed, having just rested there) — shopHere used to be
+// checked first, so the intentional "we just rested" beat silently lost to the ambient "there's a
+// closed shop here" one every time (pl-021's own capture read as shop_closed, not camp). justRested
+// now outranks shopHere: an ACTIVE just-happened event beats a passive ambient fact about the location,
+// matching shopOpen's own precedent (an active transacting state also outranks the ambient facts below
+// it). A caller passing multiple true flags still degrades to ONE beat, never a throw.
+function walkSceneBeatFor(input){
+  input = input || {};
+  if(input.shopOpen) return { beatId: "shop_open", family: "shop", rolled: {} };
+  if(input.justRested) return { beatId: "long_rest", family: "rest", rolled: {} };
+  if(input.shopHere) return { beatId: "shop_closed", family: "shop", rolled: {} };
+  if(input.walkCompleteHere){
+    const seg = input.finaleSegment || null;
+    const walkId = input.walkId != null ? input.walkId : null;
+    const segNum = (seg && seg.num != null) ? seg.num : null;
+    const areaType = (seg && wsPresent(seg.areaType)) ? seg.areaType : null;
+    const feature = (seg && wsPresent(seg.feature)) ? { name: seg.feature.name || null, flavor: seg.feature.flavor || null } : null;
+    return {
+      beatId: "walk_complete", family: "arrival",
+      rolled: {
+        areaType: areaType,
+        areaTypeSourceRef: areaType ? wsSourceRef(walkId, segNum, "areaType", wsRollRef(seg, "area"), null) : null,
+        feature: feature,
+        featureSourceRef: feature ? wsSourceRef(walkId, segNum, "feature", wsRollRef(seg, "feature"), null) : null
+      }
+    };
+  }
+  return null;
+}
+
 // ─── PUBLIC — walkSceneFrom(input) -> WalkScene (docs/WALK-NATIVE-A.md WDV-1) ────────────────────
 function walkSceneFrom(input){
   input = input || {};

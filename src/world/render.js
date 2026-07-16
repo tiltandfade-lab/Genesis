@@ -563,6 +563,68 @@ function theaterHereSourceFor(w){
     traces:(reskinEntry&&reskinEntry.traces)||undefined, removed:(reskinEntry&&reskinEntry.removed)||undefined };
 }
 
+/* VQ2-RESPEC.md §4 unit F2 (Sol P-D, ledger #11 — dev/play-lens/DEMAND-LEDGER.md row 4) — gathers the
+   EXPLICIT flags src/engine/walk-scene.js's walkSceneBeatFor (PURE, no GS/w reads of its own)
+   classifies a state beat off. Every flag here is a plain READ of state that already exists for other
+   reasons — GS.gamePanel/activeShopId (the SAME shopOpen convention theaterCastSourceFor already
+   reads, below), w.shops (the merchant registry, docs/SHOP-UI.md §2a), sheet.lastLongRest (the SAME
+   HQ3-C3 stamp restRiders, src/world/play.js, already writes on a successful long rest), P.nodes' own
+   cursor.done (walkComplete's own completion stamp, src/world/prep.js) — this function adds NO new
+   PERSISTED (world-saved) state anywhere (dm.js/play.js untouched by this unit), only reads. Null-safe
+   throughout: a narrow test harness / missing w degrades to every flag false, never a throw.
+
+   justRested EDGE-TRIGGER (found live, not assumed): restRiders (src/world/play.js:576) stamps
+   lastLongRest off clockOf(w) BEFORE the caller advances the clock afterward (dm.js's "rest" case /
+   play.js's passTime both advance AFTER restRiders returns) — so lastLongRest is ALWAYS ~480/1440
+   minutes BEHIND the clock by the time any render runs; an exact-clock-minute match (this function's
+   first draft) never fires in real play, confirmed via a live play-lens capture (pl-021 rendered the
+   plain settlement tray, not the camp). Fixed with a one-render EDGE trigger instead: GS (the
+   documented home for new transient state, CLAUDE.md) remembers the last lastLongRest stamp it has
+   already shown the beat for; justRested is true only the FIRST render after a NEW stamp appears, then
+   self-clears. Known minor edge case (accepted, not silently patched around): a page reload standing
+   exactly where the PC last rested re-shows the camp beat for one render (GS resets on reload, the
+   "already shown" memory goes with it) — harmless (self-clears next render), far better than the
+   pre-fix "never fires at all" defect.
+
+   walkCompleteHere BUNDLE FIX (found live, not assumed): a first draft read `pn.walk` directly and
+   NEVER fired for a real frontier node — a play-lens capture (pl-015, "dungeon-complete") showed the
+   bare PC standee on a black void, no arrival stage. A FRONTIER (dungeon/wilderness) walk's segments
+   live in the session-prep BUNDLE (P.bundle.environments[pn.idx].walk); `pn.walk` is the TRAVEL-WALKS
+   shape only (src/world/prep.js:726's own comment). Fixed by calling walkOfFrontier(w,nodeId) — the
+   EXISTING helper that already reads both shapes correctly, the SAME one theaterHereSourceFor itself
+   calls for the identical purpose one function up — instead of re-deriving a second, narrower formula.
+
+   Scope note: walkCompleteHere only ever matches a completed FRONTIER walk (dungeon/wilderness
+   explored in place) — a completed TRAVEL walk relocates w.currentNodeId to the destination node,
+   which carries no `pn` under its own id, so this flag naturally never fires for a travel arrival
+   (that context renders via the ordinary idle/settlement tray instead, unchanged). */
+function theaterBeatInputFor(w){
+  if(!w) return null;
+  const shopOpen=!!(GS.gamePanel==="shop"&&GS.activeShopId);
+  const shop=(w.shops&&Object.values(w.shops).find(s=>s&&s.nodeId===w.currentNodeId))||null;
+  const shopHere=!shopOpen&&!!shop;
+  const living=(w.characters||[]).filter(c=>c&&c.status==="living").slice(-1)[0];
+  const lastLong=living&&living.sheet&&living.sheet.lastLongRest;
+  const restKey=lastLong?(lastLong.day+":"+lastLong.min):null;
+  const justRested=!!(restKey&&GS.theaterBeatSeenRestStamp!==restKey);
+  if(restKey) GS.theaterBeatSeenRestStamp=restKey;
+  const P=(typeof prepOf==="function")?prepOf(w):null;
+  const pn=P&&P.nodes&&P.nodes[w.currentNodeId];
+  // FOUND LIVE (a play-lens capture card caught this too — pl-015's "dungeon-complete" render was the
+  // bare PC on a black void, no arrival stage at all): a FRONTIER (dungeon/wilderness) walk's segments
+  // live in the session-prep BUNDLE (P.bundle.environments[pn.idx].walk), not directly on `pn.walk`
+  // (that shape is the TRAVEL-WALKS convention only, src/world/prep.js:726 comment) — `pn.walk` was
+  // undefined for every real frontier node, so walkCompleteHere silently never fired. walkOfFrontier(w,
+  // nodeId) (src/world/prep.js) is the EXISTING helper that already reads both shapes correctly —
+  // theaterHereSourceFor itself calls it for the identical purpose one function up; reused verbatim
+  // here instead of re-deriving a second, narrower "where's the walk" formula.
+  const walk=(typeof walkOfFrontier==="function")?walkOfFrontier(w,w.currentNodeId):null;
+  const walkCompleteHere=!!(pn&&pn.cursor&&pn.cursor.done&&walk&&!P.activeWalkId);
+  const finaleSegment=walkCompleteHere?((walk.segments||[]).find(s=>s&&s.isFinale)||null):null;
+  return { shopOpen, shopHere, justRested, walkCompleteHere, finaleSegment,
+    walkId: walkCompleteHere?w.currentNodeId:null, walk: walkCompleteHere?walk:null };
+}
+
 /* TABLETOP-UNITS.md §U6 — the standing tableau's OWN source read for castFrom(w,source): mirrors
    theaterHereSourceFor's null-safe discipline but shapes the {hereNodeId,walking,shopOpen,traces,
    removed} contract §U4 locked (+ §U6's two additive trace fields). hereNodeId prefers the active
@@ -668,6 +730,12 @@ function theaterStageSync(w,cur){
     // TABLETOP-VISION §1/§3 (TABLETOP-UNITS.md §U1 seam 4): outside combat the standing table shows
     // the here-segment's tray while walking, or the empty idle table when nothing is staged.
     const hereSource=theaterHereSourceFor(w);
+    // VQ2-RESPEC.md §4 F2 — hereSource.beat (additive; every existing trayFrom caller/test omits it,
+    // byte-identical) carries the explicit flags walkSceneBeatFor classifies a state beat off,
+    // gathered read-only by theaterBeatInputFor (above). trayFrom applies it to the flat tray kinds
+    // only (idle/node/settlement/segment) via theaterStageBeat (src/engine/theater-data.js) — a no-op
+    // for the {kind:"interior"} SpatialPlan branch (out of F2's scope, see that function's own note).
+    hereSource.beat=(typeof theaterBeatInputFor==="function")?theaterBeatInputFor(w):null;
     // ENV-2 (docs/ENV-EXTERIOR-WAVE.md): walkId threaded through to theaterBoardBuild's opts (the
     // "segment" tray branch reads opts.walkId directly, unlike the "interior" branch which reads
     // source.walkId off hereSource itself — see trayFrom's own two branches, src/engine/theater-
@@ -709,6 +777,13 @@ function theaterStageSync(w,cur){
       // local "0,0" lands back on the board's actual visual center instead of a corner tile. See
       // castFrom's own header comment (src/engine/theater-data.js) for the full root-cause account.
       castSource.boardCenter=theaterBoardCenterFor(board);
+      // VQ2-RESPEC.md §4 F2 — the CAST half of the same beat classification the board just staged
+      // (theaterStageBeat, src/engine/theater-data.js), read straight off the board's own
+      // board.beatStage.beatId stamp rather than re-classifying a second time — one classification,
+      // two consumers (the tray's props/light, and here castFrom's "camp" arrangement for
+      // long_rest's "pc.seated"). Absent/no-beat board -> undefined, byte-identical to every
+      // pre-F2 caller.
+      castSource.beatId=board&&board.beatStage&&board.beatStage.beatId;
       window.Theater.setUnits({ units: castFrom(w,castSource) });
     } else if(typeof window.Theater.setUnits==="function") window.Theater.setUnits({ units: [] });
   }

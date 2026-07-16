@@ -1,0 +1,1187 @@
+{
+  "runId": "f2-v3",
+  "realm": "fantasy",
+  "generatedAt": "2026-07-16T04:36:16.504Z",
+  "shotCount": 21,
+  "maxShots": 120,
+  "capped": false,
+  "kindsPresent": [
+    "boot",
+    "scene",
+    "combat_round",
+    "state_transition",
+    "rest"
+  ],
+  "rows": [
+    {
+      "seq": 1,
+      "kind": "boot",
+      "realm": "fantasy",
+      "env": "urban",
+      "nodeKind": "settlement",
+      "walkId": null,
+      "segNum": null,
+      "lightProfile": "torchlit",
+      "fps": 307.2,
+      "notes": "world founded via the bardo; PC living (--force-realm fantasy)",
+      "file": "pl-001-boot-tiyl-start.png",
+      "combatRound": null,
+      "currentNodeId": "high-harrow-gate",
+      "clock": "1:360",
+      "censusDelta": {
+        "counts": {
+          "facade:null-facade": 4,
+          "dressing:placeholder-card": 3,
+          "figure:whole-object": 4,
+          "dressing:resolved": 1
+        },
+        "entries": [
+          {
+            "seam": "facade",
+            "outcome": "null-facade",
+            "name": "frontier",
+            "sceneKind": "settlement"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "fantasy-clutter-woodpile",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "spr-frontier-heavyset-saloon-owner-hears-every-confession-that-comes-with-a-whiskey",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "spr-frontier-young-telegraph-operator-knows-every-secret-that-comes-through-the-wire",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "class:barbarian",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "blank:figure",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "blank:figure",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "blank:figure",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "facade",
+            "outcome": "null-facade",
+            "name": "frontier",
+            "sceneKind": "settlement"
+          },
+          {
+            "seam": "facade",
+            "outcome": "null-facade",
+            "name": "frontier",
+            "sceneKind": "settlement"
+          },
+          {
+            "seam": "facade",
+            "outcome": "null-facade",
+            "name": "frontier",
+            "sceneKind": "settlement"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "fantasy-clutter-woodpile",
+            "sceneKind": "tabletop"
+          }
+        ]
+      }
+    },
+    {
+      "seq": 2,
+      "kind": "scene",
+      "realm": "fantasy",
+      "env": null,
+      "nodeKind": "node",
+      "walkId": null,
+      "segNum": null,
+      "lightProfile": "torchlit",
+      "fps": 1492.5,
+      "notes": "node tray via rollPlace/codexAdd binding (settlements are out of rollPlace's single-site scale per PLACE-GEN.md — closest production-real analog to a town tray)",
+      "file": "pl-002-scene-settlement-5.png",
+      "combatRound": null,
+      "currentNodeId": "high-harrow-gate",
+      "clock": "1:360",
+      "censusDelta": {
+        "counts": {
+          "figure:whole-object": 4
+        },
+        "entries": [
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "class:barbarian",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "blank:figure",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "blank:figure",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "blank:figure",
+            "sceneKind": "tabletop"
+          }
+        ]
+      }
+    },
+    {
+      "seq": 3,
+      "kind": "scene",
+      "realm": "fantasy",
+      "env": "wilderness",
+      "nodeKind": "segment",
+      "walkId": "play-lens-dungeon-approach",
+      "segNum": 1,
+      "lightProfile": "torchlit",
+      "fps": 363,
+      "notes": "real wilderness travel walk opened",
+      "file": "pl-003-scene-travel-walk.png",
+      "combatRound": null,
+      "currentNodeId": "high-harrow-gate",
+      "clock": "1:360",
+      "censusDelta": {
+        "counts": {
+          "dressing:placeholder-card": 2,
+          "figure:whole-object": 1,
+          "dressing:resolved": 2
+        },
+        "entries": [
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "fantasy-flora-hedgerow",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "fantasy-flora-wildflowerpatch",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "class:barbarian",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "fantasy-flora-hedgerow",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "fantasy-flora-wildflowerpatch",
+            "sceneKind": "tabletop"
+          }
+        ]
+      }
+    },
+    {
+      "seq": 4,
+      "kind": "scene",
+      "realm": "fantasy",
+      "env": "wilderness",
+      "nodeKind": "segment",
+      "walkId": "play-lens-dungeon-approach",
+      "segNum": 2,
+      "lightProfile": "moonlit",
+      "fps": 315,
+      "notes": "walk_advance leg 2",
+      "file": "pl-004-scene-travel-leg-2.png",
+      "combatRound": null,
+      "currentNodeId": "high-harrow-gate",
+      "clock": "1:450",
+      "censusDelta": {
+        "counts": {
+          "dressing:placeholder-card": 1,
+          "dressing:resolved": 1
+        },
+        "entries": [
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "fantasy-flora-thistlecluster",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "fantasy-flora-thistlecluster",
+            "sceneKind": "tabletop"
+          }
+        ]
+      }
+    },
+    {
+      "seq": 5,
+      "kind": "scene",
+      "realm": "fantasy",
+      "env": null,
+      "nodeKind": "idle",
+      "walkId": null,
+      "segNum": null,
+      "lightProfile": "dark",
+      "fps": 2898.6,
+      "notes": "walk_complete landed the PC at the destination node",
+      "file": "pl-005-scene-travel-arrive.png",
+      "combatRound": null,
+      "currentNodeId": "play-lens-dungeon-approach",
+      "clock": "1:450",
+      "censusDelta": {
+        "counts": {
+          "figure:whole-object": 1
+        },
+        "entries": [
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "class:barbarian",
+            "sceneKind": "tabletop"
+          }
+        ]
+      }
+    },
+    {
+      "seq": 6,
+      "kind": "scene",
+      "realm": "fantasy",
+      "env": "dungeon",
+      "nodeKind": "interior",
+      "walkId": "play-lens-dungeon-approach",
+      "segNum": 1,
+      "lightProfile": "dark",
+      "fps": 93.6,
+      "notes": "The Ruin room S1",
+      "file": "pl-006-scene-dungeon-room-1.png",
+      "combatRound": null,
+      "currentNodeId": "play-lens-dungeon-approach",
+      "clock": "1:460",
+      "censusDelta": {
+        "counts": {
+          "dressing:placeholder-card": 5,
+          "figure:whole-object": 1,
+          "dressing:resolved": 5
+        },
+        "entries": [
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "fantasy-clutter-lanternhook",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "fantasy-clutter-rusted-plow",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "fantasy-clutter-potteryshard",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "fantasy-clutter-firewoodstack",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "fantasy-flora-herbbundle",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "class:barbarian",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "fantasy-clutter-rusted-plow",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "fantasy-clutter-lanternhook",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "fantasy-clutter-firewoodstack",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "fantasy-clutter-potteryshard",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "fantasy-flora-herbbundle",
+            "sceneKind": "interior"
+          }
+        ]
+      }
+    },
+    {
+      "seq": 7,
+      "kind": "scene",
+      "realm": "fantasy",
+      "env": "dungeon",
+      "nodeKind": "interior",
+      "walkId": "play-lens-dungeon-approach",
+      "segNum": 2,
+      "lightProfile": "dark",
+      "fps": 87.8,
+      "notes": "The Ruin room S2",
+      "file": "pl-007-scene-dungeon-room-2.png",
+      "combatRound": null,
+      "currentNodeId": "play-lens-dungeon-approach",
+      "clock": "1:470",
+      "censusDelta": {
+        "counts": {
+          "dressing:placeholder-card": 5,
+          "figure:whole-object": 1,
+          "dressing:resolved": 5
+        },
+        "entries": [
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "fantasy-clutter-candlestub",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "fantasy-flora-mushroomring",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "fantasy-clutter-woodpile-alt",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "fantasy-clutter-hayloose",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "fantasy-painting-1",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "class:barbarian",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "fantasy-clutter-candlestub",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "fantasy-clutter-woodpile-alt",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "fantasy-clutter-hayloose",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "fantasy-flora-mushroomring",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "fantasy-painting-1",
+            "sceneKind": "interior"
+          }
+        ]
+      }
+    },
+    {
+      "seq": 8,
+      "kind": "scene",
+      "realm": "fantasy",
+      "env": "dungeon",
+      "nodeKind": "interior",
+      "walkId": "play-lens-dungeon-approach",
+      "segNum": 3,
+      "lightProfile": "dark",
+      "fps": 86.9,
+      "notes": "The Ruin room S3",
+      "file": "pl-008-scene-dungeon-room-3.png",
+      "combatRound": null,
+      "currentNodeId": "play-lens-dungeon-approach",
+      "clock": "1:480",
+      "censusDelta": {
+        "counts": {
+          "dressing:placeholder-card": 7,
+          "figure:whole-object": 1,
+          "dressing:resolved": 7
+        },
+        "entries": [
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "fantasy-flora-willowdrape",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "fantasy-flora-oak-alt",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "fantasy-flora-mossboulder",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "fantasy-flora-fern-alt",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "fantasy-flora-fern",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "fantasy-clutter-brokencart-wheel",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "fantasy-painting-3",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "class:barbarian",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "fantasy-flora-willowdrape",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "fantasy-flora-oak-alt",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "fantasy-flora-mossboulder",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "fantasy-flora-fern-alt",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "fantasy-flora-fern",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "fantasy-clutter-brokencart-wheel",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "fantasy-painting-3",
+            "sceneKind": "interior"
+          }
+        ]
+      }
+    },
+    {
+      "seq": 9,
+      "kind": "scene",
+      "realm": "fantasy",
+      "env": "dungeon",
+      "nodeKind": "interior",
+      "walkId": "play-lens-dungeon-approach",
+      "segNum": 4,
+      "lightProfile": "dark",
+      "fps": 69.1,
+      "notes": "The Ruin room S4",
+      "file": "pl-009-scene-dungeon-room-4.png",
+      "combatRound": null,
+      "currentNodeId": "play-lens-dungeon-approach",
+      "clock": "1:490",
+      "censusDelta": {
+        "counts": {
+          "dressing:placeholder-card": 7,
+          "figure:whole-object": 1,
+          "dressing:resolved": 7
+        },
+        "entries": [
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "fantasy-flora-rootarch",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "fantasy-flora-honeycomb-nook",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "fantasy-clutter-emptybarrel",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "fantasy-clutter-tackleheap",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "fantasy-flora-lilypad",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "fantasy-painting-4",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "fantasy-flora-ivywall",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "class:barbarian",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "fantasy-flora-rootarch",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "fantasy-clutter-emptybarrel",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "fantasy-flora-honeycomb-nook",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "fantasy-clutter-tackleheap",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "fantasy-flora-lilypad",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "fantasy-painting-4",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "resolved",
+            "name": "fantasy-flora-ivywall",
+            "sceneKind": "interior"
+          }
+        ]
+      }
+    },
+    {
+      "seq": 10,
+      "kind": "combat_round",
+      "realm": "fantasy",
+      "env": "dungeon",
+      "nodeKind": "interior",
+      "walkId": "play-lens-dungeon-approach",
+      "segNum": 4,
+      "lightProfile": "dark",
+      "fps": 244.8,
+      "notes": "combat_start — round 1",
+      "file": "pl-010-combat_round-round-1.png",
+      "combatRound": 1,
+      "currentNodeId": "play-lens-dungeon-approach",
+      "clock": "1:490",
+      "censusDelta": {
+        "counts": {
+          "figure:whole-object": 10,
+          "figure:sprite-legacy": 6
+        },
+        "entries": [
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "class:barbarian",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "wolf",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "giant-rat",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "skeleton",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "class:barbarian",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "sprite-legacy",
+            "name": "spr-fantasy-wolf",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "giant-rat",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "skeleton",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "class:barbarian",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "sprite-legacy",
+            "name": "spr-fantasy-wolf",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "sprite-legacy",
+            "name": "spr-fantasy-giant-rat",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "skeleton",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "class:barbarian",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "sprite-legacy",
+            "name": "spr-fantasy-wolf",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "sprite-legacy",
+            "name": "spr-fantasy-giant-rat",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "sprite-legacy",
+            "name": "spr-fantasy-skeleton",
+            "sceneKind": "tabletop"
+          }
+        ]
+      }
+    },
+    {
+      "seq": 11,
+      "kind": "combat_round",
+      "realm": "fantasy",
+      "env": "dungeon",
+      "nodeKind": "interior",
+      "walkId": "play-lens-dungeon-approach",
+      "segNum": 4,
+      "lightProfile": "dark",
+      "fps": 246.6,
+      "notes": "attack(target=f1,hit=true,dmg=8) + move_zone(pc:melee->near) -> round=2",
+      "file": "pl-011-combat_round-round-2.png",
+      "combatRound": 2,
+      "currentNodeId": "play-lens-dungeon-approach",
+      "clock": "1:490",
+      "censusDelta": {
+        "counts": {
+          "figure:whole-object": 1,
+          "figure:sprite-legacy": 3
+        },
+        "entries": [
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "class:barbarian",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "sprite-legacy",
+            "name": "spr-fantasy-wolf",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "sprite-legacy",
+            "name": "spr-fantasy-giant-rat",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "sprite-legacy",
+            "name": "spr-fantasy-skeleton",
+            "sceneKind": "tabletop"
+          }
+        ]
+      }
+    },
+    {
+      "seq": 12,
+      "kind": "combat_round",
+      "realm": "fantasy",
+      "env": "dungeon",
+      "nodeKind": "interior",
+      "walkId": "play-lens-dungeon-approach",
+      "segNum": 4,
+      "lightProfile": "dark",
+      "fps": 230.1,
+      "notes": "attack(target=f1,hit=true,dmg=11) + move_zone(pc:near->melee) -> round=3",
+      "file": "pl-012-combat_round-round-3.png",
+      "combatRound": 3,
+      "currentNodeId": "play-lens-dungeon-approach",
+      "clock": "1:490",
+      "censusDelta": {
+        "counts": {
+          "figure:whole-object": 1,
+          "figure:sprite-legacy": 3
+        },
+        "entries": [
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "class:barbarian",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "sprite-legacy",
+            "name": "spr-fantasy-wolf",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "sprite-legacy",
+            "name": "spr-fantasy-giant-rat",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "sprite-legacy",
+            "name": "spr-fantasy-skeleton",
+            "sceneKind": "tabletop"
+          }
+        ]
+      }
+    },
+    {
+      "seq": 13,
+      "kind": "state_transition",
+      "realm": "fantasy",
+      "env": "dungeon",
+      "nodeKind": "interior",
+      "walkId": "play-lens-dungeon-approach",
+      "segNum": 1,
+      "lightProfile": "dark",
+      "fps": 203.7,
+      "notes": "entityRef S1.door [camera refocused to S1]",
+      "file": "pl-013-state_transition-door-shut-to-ajar.png",
+      "combatRound": 3,
+      "currentNodeId": "play-lens-dungeon-approach",
+      "clock": "1:500",
+      "censusDelta": {
+        "counts": {},
+        "entries": []
+      }
+    },
+    {
+      "seq": 14,
+      "kind": "scene",
+      "realm": "fantasy",
+      "env": "dungeon",
+      "nodeKind": "interior",
+      "walkId": "play-lens-dungeon-approach",
+      "segNum": 1,
+      "lightProfile": "dark",
+      "fps": 77,
+      "notes": "combat_end(resolved)",
+      "file": "pl-014-scene-combat-end.png",
+      "combatRound": null,
+      "currentNodeId": "play-lens-dungeon-approach",
+      "clock": "1:501",
+      "censusDelta": {
+        "counts": {
+          "figure:whole-object": 2
+        },
+        "entries": [
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "class:barbarian",
+            "sceneKind": "interior"
+          },
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "f1",
+            "sceneKind": "interior"
+          }
+        ]
+      }
+    },
+    {
+      "seq": 15,
+      "kind": "scene",
+      "realm": "fantasy",
+      "env": null,
+      "nodeKind": "idle",
+      "walkId": null,
+      "segNum": null,
+      "lightProfile": "dark",
+      "fps": 2325.6,
+      "notes": "walk_complete — frontier cleared",
+      "file": "pl-015-scene-dungeon-complete.png",
+      "combatRound": null,
+      "currentNodeId": "play-lens-dungeon-approach",
+      "clock": "1:501",
+      "censusDelta": {
+        "counts": {
+          "figure:whole-object": 1
+        },
+        "entries": [
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "class:barbarian",
+            "sceneKind": "tabletop"
+          }
+        ]
+      }
+    },
+    {
+      "seq": 16,
+      "kind": "scene",
+      "realm": "fantasy",
+      "env": "urban",
+      "nodeKind": "settlement",
+      "walkId": null,
+      "segNum": null,
+      "lightProfile": "dark",
+      "fps": 288.2,
+      "notes": "theaterHereSourceFor.kind=settlement (expect \"settlement\" — ENV-3 town builder; hasCodexId=false)",
+      "file": "pl-016-scene-recordless-settlement.png",
+      "combatRound": null,
+      "currentNodeId": "play-lens-record-less-settlement",
+      "clock": "1:501",
+      "censusDelta": {
+        "counts": {
+          "dressing:placeholder-card": 3,
+          "figure:whole-object": 1
+        },
+        "entries": [
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "spr-fantasy-elven-fletcher-every-arrow-leaves-her-stall-true",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "spr-fantasy-goliath-bridge-toll-keeper-goliath-collects-the-fee-stops-the-trouble-rarely-needs-to-try-hard",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "dressing",
+            "outcome": "placeholder-card",
+            "name": "spr-fantasy-gnomish-clockmaker-gnome-every-clock-in-town-keeps-slightly-different-time-on-purpose",
+            "sceneKind": "tabletop"
+          },
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "class:barbarian",
+            "sceneKind": "tabletop"
+          }
+        ]
+      }
+    },
+    {
+      "seq": 17,
+      "kind": "scene",
+      "realm": "fantasy",
+      "env": "urban",
+      "nodeKind": "settlement",
+      "walkId": null,
+      "segNum": null,
+      "lightProfile": "lamplit",
+      "fps": 305.3,
+      "notes": "open_shop — GS.gamePanel=shop; render-verdict rendered=true shopName=\"The Play-Lens Trading Post\"",
+      "file": "pl-017-scene-shop-open.png",
+      "combatRound": null,
+      "currentNodeId": "play-lens-record-less-settlement",
+      "clock": "1:501",
+      "censusDelta": {
+        "counts": {
+          "figure:whole-object": 1
+        },
+        "entries": [
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "class:barbarian",
+            "sceneKind": "tabletop"
+          }
+        ]
+      }
+    },
+    {
+      "seq": 18,
+      "kind": "scene",
+      "realm": "fantasy",
+      "env": "urban",
+      "nodeKind": "settlement",
+      "walkId": null,
+      "segNum": null,
+      "lightProfile": "dark",
+      "fps": 292.8,
+      "notes": "shop closed, back to the standing table",
+      "file": "pl-018-scene-shop-closed.png",
+      "combatRound": null,
+      "currentNodeId": "play-lens-record-less-settlement",
+      "clock": "1:501",
+      "censusDelta": {
+        "counts": {
+          "figure:whole-object": 1
+        },
+        "entries": [
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "class:barbarian",
+            "sceneKind": "tabletop"
+          }
+        ]
+      }
+    },
+    {
+      "seq": 19,
+      "kind": "scene",
+      "realm": "fantasy",
+      "env": "urban",
+      "nodeKind": "settlement",
+      "walkId": null,
+      "segNum": null,
+      "lightProfile": "lamplit",
+      "fps": 275.1,
+      "notes": "route=town-beats extra cycle — render-verdict rendered=true",
+      "file": "pl-019-scene-shop-open-2.png",
+      "combatRound": null,
+      "currentNodeId": "play-lens-record-less-settlement",
+      "clock": "1:501",
+      "censusDelta": {
+        "counts": {
+          "figure:whole-object": 1
+        },
+        "entries": [
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "class:barbarian",
+            "sceneKind": "tabletop"
+          }
+        ]
+      }
+    },
+    {
+      "seq": 20,
+      "kind": "scene",
+      "realm": "fantasy",
+      "env": "urban",
+      "nodeKind": "settlement",
+      "walkId": null,
+      "segNum": null,
+      "lightProfile": "dark",
+      "fps": 309.6,
+      "notes": "shop closed (extra town-beats cycle)",
+      "file": "pl-020-scene-shop-closed-2.png",
+      "combatRound": null,
+      "currentNodeId": "play-lens-record-less-settlement",
+      "clock": "1:501",
+      "censusDelta": {
+        "counts": {
+          "figure:whole-object": 1
+        },
+        "entries": [
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "class:barbarian",
+            "sceneKind": "tabletop"
+          }
+        ]
+      }
+    },
+    {
+      "seq": 21,
+      "kind": "rest",
+      "realm": "fantasy",
+      "env": "urban",
+      "nodeKind": "settlement",
+      "walkId": null,
+      "segNum": null,
+      "lightProfile": "torchlit",
+      "fps": 297.6,
+      "notes": "rest(long) — clock advanced 480min",
+      "file": "pl-021-rest-long-rest.png",
+      "combatRound": null,
+      "currentNodeId": "play-lens-record-less-settlement",
+      "clock": "1:981",
+      "censusDelta": {
+        "counts": {
+          "figure:whole-object": 1
+        },
+        "entries": [
+          {
+            "seam": "figure",
+            "outcome": "whole-object",
+            "name": "class:barbarian",
+            "sceneKind": "tabletop"
+          }
+        ]
+      }
+    }
+  ]
+}

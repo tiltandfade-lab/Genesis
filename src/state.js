@@ -45,7 +45,13 @@ var GS = {
   // materialFamilyFor sandbox — stays byte-identical, never throws). `counts` stays exact forever
   // (a plain seam:outcome tally); `entries` is the capped FIFO detail log (see theaterCensusRecord,
   // below) so a long session can't grow this unbounded.
-  theaterCensus: { entries: [], counts: {} }
+  theaterCensus: { entries: [], counts: {} },
+  // VQ2-RESPEC.md §4 unit F2 (Sol P-D, ledger #11) — the long_rest state-beat's EDGE-TRIGGER memory:
+  // "day:min" of the last lastLongRest stamp (sheet.lastLongRest, src/world/play.js) theaterBeatInputFor
+  // (src/world/render.js) has already shown the camp beat for. Never persisted (GS resets on reload —
+  // an accepted, self-clearing edge case, see theaterBeatInputFor's own header comment), never written
+  // by any other seam.
+  theaterBeatSeenRestStamp: null
 };
 // FIFO cap on GS.theaterCensus.entries — named const per L2's own instruction ("a long session can't
 // grow unbounded; counts are exact regardless"). 2000 is generous for a single play-lens run (a few

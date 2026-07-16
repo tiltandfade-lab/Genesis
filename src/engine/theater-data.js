@@ -1563,6 +1563,158 @@ function trayReconcileInteractableState(prepNode, interactables){
   return interactables;
 }
 
+/* VQ2-RESPEC.md §4 unit F2 (Sol P-D, ledger #11 — dev/play-lens/DEMAND-LEDGER.md row 4) —
+   BEAT-STAGING: the region of the tray build that turns a classified beat (src/engine/walk-scene.js's
+   walkSceneBeatFor) into board.props/board.light mutations via THEATER_BEAT_REGISTRY
+   (data/theater-beats.js). Called from trayFrom (below) AFTER the board itself is built — "a data
+   registry consumed after walkSceneFrom," never an event branch inside theater-boot.js (untouched by
+   this unit). PURE: mutates the freshly-built `board` object in place — the SAME convention trayFrom's
+   own interior branch already uses for board.dressing/board.activeRoomId/board.walkScene a bit further
+   down this file — and returns it; no GS/w read, no RNG, same (board,beat) snapshot always yields an
+   identical result.
+
+   PRACTICAL LIGHT (Sol P-D's "1 bright practical"): expressed as board.light via
+   theaterLightOverrideFromText/theaterRollLight's own {profile,rolled,overridden} shape (the exact
+   free-text-to-profile seam theaterBoardBuild's own light derivation already uses, a few hundred lines
+   below) — NOT a prop instance. mountLightProp (src/ui/theater-boot.js) already auto-mounts + positions
+   a practical prop keyed off board.light.profile BEFORE applyLightProfile runs (that function's own
+   header comment: "called from setBoard AFTER applyLightProfile's board-half-extent bookkeeping is
+   current but BEFORE applyLightProfile itself runs") — this IS "achieve the ordering from the tray/
+   board side, not by editing the light rig," with zero theater-boot.js edits. lightOn:false (or a
+   family with no lightText, e.g. "arrival") leaves board.light exactly as the tray already rolled it —
+   never a fabricated OFF profile; shop_closed's "lamp 0" is simply the absence of an override,
+   mountLightProp finding nothing keyed for the board's ordinary ambient profile.
+
+   PROPS: anchor + support entries from the registry, each carrying a STABLE `id` (an ADDITIVE field —
+   every existing board.props consumer reads part/model/x/z only, per src/ui/theater-boot.js's setBoard
+   prop loop, read-verified for this unit) and a `sourceRef` provenance stamp — `{kind:"beat-grammar",
+   beatId, propId}` for a registry-authored piece, `{kind:"rolled-field", fieldPath}` (or the real
+   sourceRef walk-scene.js's walkSceneBeatFor already built off the finale segment) for walk_complete's
+   projected feature. A state's `hide[]` list drops an id from THIS render's output while leaving it in
+   the registry (Sol P-D: "states mutate the same scene graph — stable ids across state changes" —
+   shop_open/shop_closed differ only in which of the SAME ids are emitted, never a second copy of the
+   geometry). `part` values are drawn only from theaterPropForText's own existing keyword vocabulary
+   (table-slab/crate/tent-canopy/furnace-block/...) — no new render geometry class.
+
+   walk_complete's anchor is special: walk-native law forbids inventing a default, so the registry's
+   own `arrival.anchor` is null — the anchor IS the rolled feature, projected here via
+   theaterPropForText off the classification's own rolled.feature text (the SAME keyword resolution a
+   normally-walked room's feature already renders through, so an arrival feature reads exactly as it
+   would have mid-walk). rolled.areaType (when present) additionally stamps board.floorMaterial via the
+   EXISTING theaterFloorMaterial helper (a pseudo-segment carrying only {areaType,feature} — that
+   helper's own theaterFloorTextPool reads every field defensively, verified above in this file, so a
+   partial object is safe). Both are skipped entirely when the finale segment carried neither field —
+   "project ONLY rolled fields... never invention."
+
+   BUDGETS (THEATER_BEAT_MAX_PROPS/_PRACTICALS, data/theater-beats.js, named once so this enforcer and
+   dev/verify-f2-staging-beats.mjs's checker read the identical numbers): enforced by construction (1
+   anchor + <=3 support authored per family) and re-capped here in case a future registry edit grows a
+   family past budget — the cap TRIMS rather than silently over-rendering, an honest red flag the
+   harness's budget check is built to catch. */
+function theaterStageBeat(board, beat, opts){
+  if(!board || !beat || typeof THEATER_BEAT_REGISTRY === "undefined") return board;
+  const familyKey = beat.family || (typeof THEATER_BEAT_FAMILY_BY_STATE !== "undefined" ? THEATER_BEAT_FAMILY_BY_STATE[beat.beatId] : null);
+  const family = familyKey ? THEATER_BEAT_REGISTRY[familyKey] : null;
+  if(!family) return board;
+  const state = (family.states && family.states[beat.beatId]) || {};
+  const hideSet = {};
+  (state.hide || []).forEach(id => { hideSet[id] = true; });
+
+  const staged = [];
+  const stagePiece = (piece, sourceRef) => {
+    if(!piece || !piece.id || hideSet[piece.id]) return;
+    const entry = {
+      id: piece.id, kind: "cover", zone: null, x: piece.x || 0, z: piece.z || 0, level: null,
+      partParams: piece.partParams || {},
+      sourceRef: sourceRef || { kind: "beat-grammar", beatId: beat.beatId, propId: piece.id }
+    };
+    if(piece.part) entry.part = piece.part;
+    if(piece.model) entry.model = piece.model;
+    if(piece.realmPropName) entry.realmPropName = piece.realmPropName;
+    staged.push(entry);
+  };
+  if(family.anchor) stagePiece(family.anchor);
+  (family.support || []).forEach(p => stagePiece(p));
+
+  // walk_complete ONLY: the anchor IS the rolled feature (walk-native law) — never authored in the
+  // registry, projected here off beat.rolled.feature (walk-scene.js's own classification, sourced
+  // straight from the real finale segment).
+  if(beat.beatId === "walk_complete" && beat.rolled){
+    if(beat.rolled.feature){
+      const featureText = [beat.rolled.feature.name, beat.rolled.feature.flavor].filter(Boolean).join(" ");
+      const hit = (typeof theaterPropForText === "function") ? theaterPropForText(featureText) : null;
+      if(hit && (hit.part || hit.model)){
+        stagePiece(
+          { id: "beat:arrival:feature", part: hit.part, model: hit.model, partParams: hit.params || {},
+            realmPropName: beat.rolled.feature.name || null, x: 0, z: 0 },
+          beat.rolled.featureSourceRef || { kind: "rolled-field", fieldPath: "feature" }
+        );
+      }
+    }
+    // rolled areaType (when present) stages the finale room's own floor material — reuses the EXISTING
+    // theaterFloorMaterial helper off a pseudo-segment carrying only the rolled fields; never invents a
+    // material when the segment carried no areaType at all. Independent of the feature check above (an
+    // areaType-only finale, no feature card, still deserves its own floor read).
+    if(beat.rolled.areaType && typeof theaterFloorMaterial === "function"){
+      const pseudoSeg = { areaType: beat.rolled.areaType, feature: beat.rolled.feature };
+      board.floorMaterial = theaterFloorMaterial(pseudoSeg, (opts && opts.env) || THEATER_DEFAULT_ENV);
+    }
+    // GROUNDING (found live via a play-lens capture card): theaterIdleBoardFrom's board.tiles is
+    // PERMANENTLY empty by that function's own design ("no rolled room, so tiles/props stay EMPTY") —
+    // the arrival feature prop above was floating in the black void with nothing beneath it, reading
+    // as a stray object, not a PLACE. Only when there's a REAL rolled field to ground (feature or
+    // areaType — never invented, "0 unprovenanced nouns" holds) AND the board arrived here with zero
+    // tiles already (every OTHER beat/no-beat caller is untouched — a settlement/node/segment board
+    // already has real tiles and is never touched by this branch) — a small floor patch, the SAME
+    // {x,z,h,kind,tint,material} tile shape every other tray already emits (theaterNodeBoardBuild,
+    // above in this file), tinted off the SAME env palette this file's own theaterBoardBuild already
+    // uses. NOT a full room (no walls, no doors — that geometry is theater-interior.js/KS-3 territory,
+    // out of F2's lane boundary) — just enough ground for the rolled feature/PC standee to read as
+    // standing somewhere, not floating in nothing.
+    if((beat.rolled.feature || beat.rolled.areaType) && board.tiles && board.tiles.length === 0 && typeof theaterPaletteFor === "function"){
+      const palette = theaterPaletteFor((opts && opts.env) || THEATER_DEFAULT_ENV);
+      const patch = [];
+      for(let z = -1; z <= 1; z++){
+        for(let x = -1; x <= 1; x++){
+          patch.push({ x: x, z: z, h: 0, kind: "floor", tint: palette.top, altTop: false,
+            zone: "arrival:" + x + ":" + z, material: board.floorMaterial || null });
+        }
+      }
+      board.tiles = patch;
+    }
+  }
+
+  const cap = (typeof THEATER_BEAT_MAX_PROPS === "number") ? THEATER_BEAT_MAX_PROPS : 4;
+  const finalProps = staged.slice(0, cap);
+
+  board.props = (board.props || []).concat(finalProps);
+  board.beatStage = {
+    beatId: beat.beatId, family: familyKey, propIds: finalProps.map(p => p.id),
+    provenance: finalProps.map(p => p.sourceRef), budget: { maxProps: cap, propCount: finalProps.length }
+  };
+
+  // practical light (see header) — an override only ever REPLACES the profile the tray already rolled,
+  // never invents a rolled/base value out of nothing.
+  if(state.lightOn && family.lightText && typeof theaterLightOverrideFromText === "function"){
+    const override = theaterLightOverrideFromText(family.lightText);
+    if(override){
+      const baseRolled = (board.light && board.light.rolled) || override;
+      board.light = { profile: override, rolled: baseRolled, overridden: true };
+      board.beatStage.practical = { profile: override, lightText: family.lightText };
+    }
+  }
+
+  // "pc.seated" (long_rest): a cue for castFrom's arrangeTableau (§U4, below in this file) to pick the
+  // "camp" arrangement — castFrom reads this off source.beatId (src/world/render.js threads
+  // hereSource.beat.beatId through the SAME theaterCastSourceFor seam shopOpen already rides). Tray-side
+  // stamp only; no cast/unit is ever mounted from theaterStageBeat itself (compose with castFrom, never
+  // duplicate it — the shop_open/shop_closed "shopkeep/pc cast" the F2 spec names is castFrom's own
+  // existing shopOpen->shopfront read, untouched here).
+  board.beatArrangement = state.campArrangement ? "camp" : null;
+
+  return board;
+}
+
 /* TABLETOP-UNITS.md §U1 — trayFrom(source, scene, opts): the Standing Table generalization of
    theaterBoardFrom. source.kind selects the origin:
      {kind:"segment", segment}  — an active walk's here-segment (all three envs) — routes through
@@ -1595,19 +1747,26 @@ function trayReconcileInteractableState(prepNode, interactables){
 function trayFrom(source, scene, opts){
   source = source || {};
   opts = opts || {};
+  // VQ2-RESPEC.md §4 F2 (Sol P-D) — beat classification. source.beat (src/world/render.js's
+  // theaterBeatInputFor gathers the explicit flags) -> walkSceneBeatFor (src/engine/walk-scene.js,
+  // PURE) -> at most one active beat, applied via theaterStageBeat (above) to every FLAT-tray board
+  // kind below (idle/node/settlement/the segment fallback). The {kind:"interior",plan} branch further
+  // down returns its own board BEFORE this is ever consulted — a materially different render family
+  // (KS-3/F1 territory, F2's own lane boundary), out of scope for this unit; see that branch's return.
+  const beat = (source.beat && typeof walkSceneBeatFor === "function") ? walkSceneBeatFor(source.beat) : null;
   if(source.kind === "idle"){
     const env = source.env || opts.env;
     const realms = source.realms || opts.realms;
     // ENV-1c: source.clockMin (theaterHereSourceFor's own read) wins over opts.clockMin, mirroring
     // the env/realms precedence immediately above — same additive, null-safe shape.
     const clockMin = source.clockMin != null ? source.clockMin : opts.clockMin;
-    return theaterIdleBoardFrom(env, realms, clockMin);
+    return theaterStageBeat(theaterIdleBoardFrom(env, realms, clockMin), beat, { env: env });
   }
   if(source.kind === "node"){
     const env = source.env || opts.env;
     const realms = source.realms || opts.realms;
     const clockMin = source.clockMin != null ? source.clockMin : opts.clockMin;
-    return theaterNodeBoardBuild(source.record, realms, env, clockMin);
+    return theaterStageBeat(theaterNodeBoardBuild(source.record, realms, env, clockMin), beat, { env: env });
   }
   if(source.kind === "settlement"){
     // ENV-3 (docs/ENV-EXTERIOR-WAVE.md) — the compositional town tray. theaterHereSourceFor
@@ -1615,7 +1774,7 @@ function trayFrom(source, scene, opts){
     // single-site PLACE record — see theaterSettlementBoardBuild's own header for the full routing law.
     const env = source.env || opts.env || "urban";
     const realms = source.realms || opts.realms;
-    return theaterSettlementBoardBuild({ id: source.nodeId, tier: source.tier }, realms, env);
+    return theaterStageBeat(theaterSettlementBoardBuild({ id: source.nodeId, tier: source.tier }, realms, env), beat, { env: env });
   }
   if(source.kind === "interior" && source.plan && typeof interiorBuildBoard === "function"){
     const env = source.env || opts.env;
@@ -1749,10 +1908,12 @@ function trayFrom(source, scene, opts){
       overlay:source.overlay||null, spatialRoom:(source.plan?.rooms||[]).find(r=>r.segNum===source.focusSegNum)||null,
       live:{combat:opts?.combat||null, viewState:null}}) : null;
     board.walkScene = walkScene;
+    // F2 lane boundary: NOT run through theaterStageBeat — interior3d is a different render family
+    // (KS-3/F1 territory), out of scope for this unit (see this function's own header comment).
     return board;
   }
   const segment = source.kind === "interior" ? source.record : source.segment;
-  return theaterBoardBuild(segment, scene, opts);
+  return theaterStageBeat(theaterBoardBuild(segment, scene, opts), beat, opts);
 }
 
 /* theaterBoardFrom is now a ONE-LINE WRAPPER over trayFrom — every existing combat caller
@@ -2952,8 +3113,10 @@ const CM_LANES_FALLBACK = ["L", "C", "R"];
      - corpse traces: source.traces (§U6/§U5's overlay.traces contract, OPTIONAL/additive) — a
                       combat that already ended on this tray left toppled figures behind; staged
                       here (never touched by arrangeTableau) at the trace's own recorded zone.
-   source = { hereNodeId, walking, shopOpen, traces?, removed? } — the three flags the arrangement
-   rule below reads, plus the two OPTIONAL trace fields (§U6). All cross-module reads are call-time
+   source = { hereNodeId, walking, shopOpen, beatId?, traces?, removed? } — the three flags the
+   arrangement rule below reads (+ VQ2-RESPEC.md §4 F2's OPTIONAL/additive beatId, read only for
+   "long_rest" -> the "camp" arrangement), plus the two OPTIONAL trace fields (§U6). All cross-module
+   reads are call-time
    + typeof-guarded (this file's existing convention for
    cmZoneGrid/realmRenderProfile/etc.) — an absent w/records/companion helper degrades to an
    empty list, never a throw. PURE: no GS/w/U writes (§9.9); the same (w,source) snapshot always
@@ -3100,10 +3263,16 @@ function castFrom(w, source){
   }
 
   // Arrangement selection — MECHANICAL, no DM/model call (§U4 locked rule, priority-ordered):
-  //   shop open -> shopfront; >1 contacted NPC -> ring; exactly 1 -> facing-pair;
-  //   walking -> march; else -> vignette.
+  //   shop open -> shopfront; long_rest beat -> camp (VQ2-RESPEC.md §4 F2, Sol P-D — "pc.seated");
+  //   >1 contacted NPC -> ring; exactly 1 -> facing-pair; walking -> march; else -> vignette.
+  // source.beatId (OPTIONAL — every existing caller/test omits it, byte-identical) is the SAME
+  // theaterCastSourceFor seam shopOpen already rides (src/world/render.js threads
+  // hereSource.beat.beatId through), never a duplicate of theaterStageBeat's own tray-side
+  // board.beatArrangement stamp (src/engine/theater-data.js, above) — this is the CAST half of the
+  // same beat classification, composed with it.
   let arrangement;
   if(source.shopOpen) arrangement = "shopfront";
+  else if(source.beatId === "long_rest") arrangement = "camp";
   else if(contactedNpcs.length > 1) arrangement = "ring";
   else if(contactedNpcs.length === 1) arrangement = "facing-pair";
   else if(source.walking) arrangement = "march";
@@ -3153,7 +3322,8 @@ function theaterAttitudePlacementFor(value){
 
 /* arrangeTableau(units, arrangement, boardCenter?) -> units[] — PURE, stamps x/z (+ band/slot,
    additive layout metadata) onto a fresh copy of each unit; never mutates its input array/objects.
-   arrangement in "facing-pair"|"ring"|"march"|"shopfront"|"vignette" (§U4 locked). Attitude
+   arrangement in "facing-pair"|"ring"|"march"|"shopfront"|"vignette"|"camp" (§U4 locked + VQ2-RESPEC
+   §4 F2's additive "camp"). Attitude
    (npc units only, via theaterAttitudePlacementFor) drives distance+facing inside facing-pair/
    ring ONLY, per the locked rule — the other three arrangements never read .attitude.
    ENV-2 (docs/ENV-EXTERIOR-WAVE.md) — `boardCenter` ({cx,cz}, OPTIONAL) re-homes every arrangement
@@ -3212,6 +3382,19 @@ function arrangeTableau(units, arrangement, boardCenter){
     allies.forEach(u => { i++; place(u, 0, -i * 1.2, "file", i); });
     npcs.forEach(u => { i++; place(u, 0, -i * 1.2, "file", i); });
     ambients.forEach(u => { i++; place(u, 0, -i * 1.2, "file", i); });
+  } else if(arrangement === "camp"){
+    // long_rest (VQ2-RESPEC.md §4 F2, Sol P-D): the party settles around theaterStageBeat's own
+    // campfire-pit anchor (data/theater-beats.js — mounted at the tray's local origin, the SAME (0,0)
+    // this arrangement's own frame is authored against). PC sits closest to the fire, facing it;
+    // companions/contacted npcs take the remaining ring seats; ambients (uninvolved wildlife/
+    // travelers) stay back at the treeline. `pose:"seated"` is an ADDITIVE placement-only hint (no
+    // theater-boot.js figure-pose support exists yet, out of this unit's lane — the PC still renders
+    // standing, simply positioned at the fire; flagged as a deviation in F2's report, not silently
+    // upgraded).
+    if(pc){ place(pc, 0, 1.1, "seated"); pc.pose = "seated"; }
+    allies.forEach((u, i) => place(u, spreadX(allies.length, i, 1.3), -1.0, "ring", i + 1));
+    npcs.forEach((u, i) => place(u, spreadX(npcs.length, i, 1.3), -1.7, "ring", i + 1));
+    ambients.forEach((u, i) => place(u, spreadX(ambients.length, i, 1.3), -2.6, "back", i + 1));
   } else {
     // vignette (default/fallback): a loose scattered group around the PC.
     if(pc) place(pc, 0, 0, "center");

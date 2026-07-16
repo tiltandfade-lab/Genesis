@@ -47,6 +47,7 @@
     "data/roll-counts.js",
     "data/table-atlas.js",
     "data/crown-legend.js",
+    "data/theater-beats.js",
     "src/engine/core.js",
     "src/engine/tables.js",
     "src/engine/world-gen.js",
@@ -3991,6 +3992,19 @@
       ],
       "callTimeDeps": [],
       "desc": "CROWNING \u00a77.C2.1 (docs/CROWNING-BASTION.md) \u2014 the Crown Legend table. PROVISIONAL vocabulary: an 8-row, spice-graded (grounded/notable/strange/mythic) hand-authored table of how the plane will remember a crowned world (the crowning ritual's roll 1). Authored source, like data/souls-canon.js \u2014 NOT generated; Adam's craft pass replaces the row text later (the shape is locked)."
+    },
+    {
+      "id": "data.theater-beats",
+      "path": "data/theater-beats.js",
+      "type": "data",
+      "owns": [
+        "THEATER_BEAT_REGISTRY",
+        "THEATER_BEAT_FAMILY_BY_STATE",
+        "THEATER_BEAT_MAX_PROPS",
+        "THEATER_BEAT_MAX_PRACTICALS"
+      ],
+      "callTimeDeps": [],
+      "desc": "VQ2-RESPEC.md \u00a74 unit F2 (Sol P-D, ledger #11 \u2014 dev/play-lens/DEMAND-LEDGER.md row 4: shop_open/shop_closed/long_rest/dungeon_complete all rendered the identical idle pedestal). THE BEAT REGISTRY: a hand-authored data table (anchor + <=3 support props + a practical light-text + minimal per-state deltas) per state-beat FAMILY (shop: shop_open/shop_closed share stable prop ids; rest: long_rest; arrival: walk_complete, whose anchor is left null \u2014 walk-native law, projected at stage-time off the real rolled finale-segment feature, never authored here). Consumed by theaterStageBeat (src/engine/theater-data.js, the BEAT-staging region of trayFrom), fed by src/engine/walk-scene.js's walkSceneBeatFor classification (itself fed by src/world/render.js's theaterBeatInputFor \u2014 explicit, pre-existing state reads only: GS.gamePanel/activeShopId, w.shops, sheet.lastLongRest, prep cursor.done \u2014 no new persisted state anywhere). THEATER_BEAT_MAX_PROPS/_PRACTICALS are Sol P-D's named budget, read by both the enforcer (theaterStageBeat) and the checker (dev/verify-f2-staging-beats.mjs) so neither can drift from the other. Authored, not generated \u2014 hand-edit like data/place-skins.js's SCENE_DRESSING_BY_ARCHETYPE."
     },
     {
       "id": "ui.ref-wiki",

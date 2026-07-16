@@ -3,21 +3,19 @@
    adapter: build/normalize-donors.py (the build-time normalizer) + src/ui/theater-donor.js (the
    runtime loader) + manifest registration.
 
-   WHY THIS HARNESS NEEDS NEITHER jsdom NOR THREE.js (a deliberate scope decision, not an
-   oversight): every check the KS-1 spec asks for — "sockets present+typed on every admitted
+   Most checks need neither jsdom nor THREE.js: "sockets present+typed on every admitted
    piece", "scale within ±2% of the measured grid mapping", "determinism (byte-identical second
-   normalizer run)", "zero mottle-fallback material families", "manifest registration" — is a
-   property of the OUTPUT ARTIFACTS (the normalized .glb files' own glTF JSON, the provenance
+   normalizer run)", "zero mottle-fallback material families", and "manifest registration" are
+   properties of the OUTPUT ARTIFACTS (the normalized .glb files' own glTF JSON, the provenance
    report, manifest.json/genesis.html) or of build/normalize-donors.py's own re-run behavior. None
    of them require actually executing src/ui/theater-donor.js's THREE.js runtime path end-to-end.
    This harness therefore implements its own minimal glTF-binary reader (a direct JS port of
    build/normalize-donors.py's read_glb/scene_aabb — same algorithm, independently re-implemented
    rather than shared, so a bug in one language's port doesn't silently launder into the other's
-   "verification") and reads files directly — zero new deps, zero jsdom/three vendor shim churn,
-   nothing fragile. src/ui/theater-donor.js's OWN correctness (material recipe application,
-   gradeColorLocal mirror fidelity, socket userData plumbing) is proven separately by the bridge-
-   card capture harness (dev/battle-gate/ks1-bridge/), which DOES exercise the real module in a
-   real browser — the two harnesses are complementary, not redundant.
+   "verification") and reads files directly. KGR-3's primitive-material amendment additionally
+   parses two normalized real donors with the committed GLTFLoader and executes the production
+   family resolver, because primitive extras and ancestor inheritance are loader behavior rather
+   than a JSON-only claim. The bridge-card capture remains the complementary browser proof.
 
    RED-FIRST (⊗, CLAUDE.md convention): section 1 below runs the EXACT SAME "sockets present+typed"
    check function against a RAW, un-normalized source .glb (assets/models/kenney-modular-dungeon-
@@ -27,9 +25,10 @@
    Run:  node dev/verify-kenney-adapter.mjs
          (re-runs build/normalize-donors.py itself for the determinism check — needs python3 on
          PATH, no other deps) */
-import { readFileSync, existsSync, readdirSync } from "node:fs";
+import { readFileSync, existsSync, readdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
+import { tmpdir } from "node:os";
 import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { isDeepStrictEqual } from "node:util";
@@ -146,6 +145,52 @@ function normalizerPythonProbe(expression) {
     expression,
   ].join("\n");
   return JSON.parse(execFileSync("python3", ["-c", code], { cwd: ROOT, encoding: "utf-8" }));
+}
+
+function furnitureFixtureCalibration() {
+  const pack="kenney-furniture-kit";
+  const asset=(slug,rootMaterialFamily)=>({
+    sourceSha256:sha256Buf(read(join("assets/models",pack,`${slug}.glb`))),
+    admissionClass:"PART_DONOR", category:"furniture", rootMaterialFamily,
+    preTransform:{translation:[0,0,0],rotation:[0,0,0,1],scale:[1,1,1]},
+    scaleReason:null, groundOffset:0, semanticParts:{}, sockets:[],
+    footprintOverride:null, qaStatus:"needs-review", notes:[],
+  });
+  return {
+    schema:"genesis.kenney-calibration.v1", algorithmVersion:1,
+    packs:{[pack]:{sourceUp:"+Y",sourceForward:"+Z",canonicalScale:1,structuralGrid:null}},
+    assets:{
+      [`${pack}/benchCushionLow`]:asset("benchCushionLow","wood"),
+      [`${pack}/lampWall`]:asset("lampWall","iron"),
+    },
+  };
+}
+function normalizeFurnitureFixtures() {
+  const scratch=mkdtempSync(join(tmpdir(),"genesis-kgr3-materials-"));
+  const calibrationPath=join(scratch,"calibration.json"), outputRoot=join(scratch,"normalized");
+  writeFileSync(calibrationPath,JSON.stringify(furnitureFixtureCalibration(),null,2)+"\n");
+  execFileSync("python3",["build/normalize-donors.py","--calibration",calibrationPath,
+    "--output-root",outputRoot,"--provenance",join(scratch,"provenance.json")],
+    {cwd:ROOT,stdio:"pipe"});
+  return {scratch,outputRoot};
+}
+async function runtimeGltfLoaderClass() {
+  const threeUrl=pathToFileURL(join(ROOT,"vendor/three/three.module.js")).href;
+  const utilsSource=readText("vendor/three/addons/utils/BufferGeometryUtils.js")
+    .replace("from 'three';",`from ${JSON.stringify(threeUrl)};`);
+  const utilsUrl=`data:text/javascript;base64,${Buffer.from(utilsSource).toString("base64")}`;
+  const loaderSource=readText("vendor/three/addons/loaders/GLTFLoader.js")
+    .replace("from 'three';",`from ${JSON.stringify(threeUrl)};`)
+    .replace("from '../utils/BufferGeometryUtils.js';",`from ${JSON.stringify(utilsUrl)};`);
+  return (await import(`data:text/javascript;base64,${Buffer.from(loaderSource).toString("base64")}`)).GLTFLoader;
+}
+function parseGlbWithLoader(path, LoaderClass) {
+  const bytes=readFileSync(path);
+  const arrayBuffer=bytes.buffer.slice(bytes.byteOffset,bytes.byteOffset+bytes.byteLength);
+  return new Promise((resolve,reject)=>new LoaderClass().parse(arrayBuffer,"",resolve,reject));
+}
+function sameFamilyBag(actual,expected) {
+  return [...actual].sort().join("|")===[...expected].sort().join("|");
 }
 
 const VALID_SOCKET_TYPES = new Set(["floor-mount", "wall-mount", "top-surface", "hinge"]);
@@ -526,10 +571,11 @@ console.log("\n=== 6. KGR-3 calibrated v2 indexes + runtime compatibility bounda
   const executableDonorSrc = donorSrc
     .replace('import * as THREE from "three";', "const THREE = {};")
     .replace('import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";', "class GLTFLoader {}")
-    .replace('import { socketFrameOf } from "./theater-attachment.js";', "const socketFrameOf = () => null;");
-  let registryHelper = null;
+    .replace('import { socketFrameOf } from "./theater-attachment.js";', "const socketFrameOf = () => null;") +
+    "\nexport { donorMaterialFamilyForMesh };\n";
+  let registryHelper = null, materialFamilyHelper = null;
   try {
-    ({ donorRegistryFromIndex: registryHelper } = await import(
+    ({ donorRegistryFromIndex: registryHelper, donorMaterialFamilyForMesh: materialFamilyHelper } = await import(
       `data:text/javascript;base64,${Buffer.from(executableDonorSrc).toString("base64")}`
     ));
   } catch (error) {
@@ -562,6 +608,60 @@ console.log("\n=== 6. KGR-3 calibrated v2 indexes + runtime compatibility bounda
     try { registryHelper(indexWithStatus(null, true)); } catch { missingFailed = true; }
     check("KGR-3 D8 ⊗: unknown qaStatus fails instead of silently skipping", unknownFailed);
     check("KGR-3 D8 ⊗: missing qaStatus fails instead of silently skipping", missingFailed);
+  }
+
+  const sourceMaterialMap = normalizerPythonProbe(
+    "print(json.dumps([module.source_material_family(name) for name in ['WOOD', 'CaRpEt', 'METAL', 'LaMp', '_defaultMat', None]]))"
+  );
+  check("KGR-3 primitive materials: exact case-folded source map and unknown/absent rejection",
+    JSON.stringify(sourceMaterialMap)===JSON.stringify(["wood","cloth","iron","glass",null,null]),
+    JSON.stringify(sourceMaterialMap));
+  if (materialFamilyHelper) {
+    let fixtureRun = null;
+    try {
+      fixtureRun=normalizeFurnitureFixtures();
+      const LoaderClass=await runtimeGltfLoaderClass();
+      const bench=await parseGlbWithLoader(join(fixtureRun.outputRoot,"kenney-furniture-kit/benchCushionLow.glb"),LoaderClass);
+      const lamp=await parseGlbWithLoader(join(fixtureRun.outputRoot,"kenney-furniture-kit/lampWall.glb"),LoaderClass);
+      const meshList=(scene)=>{const out=[];scene.traverse((obj)=>{if(obj.isMesh)out.push(obj);});return out;};
+      const benchMeshes=meshList(bench.scene), lampMeshes=meshList(lamp.scene);
+      const families=(meshes)=>meshes.map((mesh)=>materialFamilyHelper(mesh));
+      const benchFamilies=families(benchMeshes), lampFamilies=families(lampMeshes);
+      check("KGR-3 primitive materials: GLTFLoader runtime bench family bag is wood,cloth,wood",
+        sameFamilyBag(benchFamilies,["wood","cloth","wood"]),JSON.stringify(benchFamilies));
+      check("KGR-3 primitive materials: GLTFLoader runtime lamp family bag is iron,glass",
+        sameFamilyBag(lampFamilies,["iron","glass"]),JSON.stringify(lampFamilies));
+      const unknownBenchMesh=benchMeshes.find((mesh)=>!mesh.geometry?.userData?.genesisDonor?.materialFamily);
+      check("KGR-3 primitive materials: unknown _defaultMat inherits nearest calibrated root family",
+        !!unknownBenchMesh&&materialFamilyHelper(unknownBenchMesh)==="wood");
+      check("KGR-3 primitive materials: every real multi-primitive mesh resolves before white fallback",
+        benchFamilies.concat(lampFamilies).every((family)=>typeof family==="string"&&family.length>0));
+
+      const geometryData=benchMeshes.map((mesh)=>mesh.geometry.userData);
+      benchMeshes.forEach((mesh)=>{mesh.geometry.userData={};});
+      const withoutPrimitiveStamping=families(benchMeshes);
+      geometryData.forEach((data,index)=>{benchMeshes[index].geometry.userData=data;});
+      check("KGR-3 primitive materials ⊗: removing primitive stamping reds the real bench family bag",
+        !sameFamilyBag(withoutPrimitiveStamping,["wood","cloth","wood"]),
+        JSON.stringify(withoutPrimitiveStamping));
+
+      const ancestorFamilies=[];
+      bench.scene.traverse((obj)=>{
+        const donor=obj.userData?.genesisDonor;
+        if(donor&&Object.hasOwn(donor,"materialFamily")) {
+          ancestorFamilies.push([donor,donor.materialFamily]); delete donor.materialFamily;
+        }
+      });
+      const withoutAncestorInheritance=families(benchMeshes);
+      ancestorFamilies.forEach(([donor,family])=>{donor.materialFamily=family;});
+      check("KGR-3 primitive materials ⊗: removing ancestor family reds the unknown bench primitive",
+        !sameFamilyBag(withoutAncestorInheritance,["wood","cloth","wood"])&&
+        withoutAncestorInheritance.includes(null),JSON.stringify(withoutAncestorInheritance));
+    } catch (error) {
+      check("KGR-3 primitive materials: real normalized GLTFLoader fixture executes",false,error.stack||error.message);
+    } finally {
+      if(fixtureRun)rmSync(fixtureRun.scratch,{recursive:true,force:true});
+    }
   }
   check("KGR-3: loaded piece metadata exposes frame/grid/bounds/source hash",
     ["sourceSha256", "normalizedFrame", "structuralGrid", "bounds", "qaStatus"].every((key) =>

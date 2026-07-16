@@ -17,7 +17,31 @@ reach the visual target. Read it before this handoff's historical graphics queue
 For any sprite/pixel-art generation or review work specifically, `docs/ART-DEPARTMENT.md` is the
 pixel register's canonical home — live-corpus state, the style law index, and the regen runbooks.
 
-## ⭐ Latest (2026-07-15, later) — VQ2/FLIP PASS: the sprite flip LIVE + the demand ledger [Claude Fable 5, orchestrated]
+## ⭐ Latest (2026-07-16) — THE KENNEY-SOCKET WAVE: the kit engine stands + PIXEL-FIRST [Claude Fable 5, orchestrated]
+
+The design meeting's rulings executed (CHANGELOG 2026-07-16; DESIGN.md 2026-07-15 ×3 entries).
+Master pushed at every landing. THE STATE: **rooms assemble from socketed Kenney modules**
+(KS-1/2/3/3b — adapter, hinge-socket doors, mixed kit+prism shells, checker+cutaway fixed),
+**combat keeps the room** (F1, ledger #10 closed, stacked-rat fixed), **beats stage** (F2,
+ledger #11 closed), **elevation rolls** (ELEV-1 — Adam's table, ±3 tiers, engine truth),
+**Stage-E mechanisms live** (blow-out killed; LIGHT-LAB parked dormant, launcher on the
+Desktop), **PIXEL SPRITES ARE CANON** (docs/ART-DEPARTMENT.md = the runbook; faceted = reserve;
+magenta crud killed via MC-1+MC-2 originals-adjudication).
+
+**Do next (the meeting's own order):**
+1. **Adam's word: ORIGINALS RESTORATION?** (evidence complete: retina card 4 + the
+   manufactured-magenta finding; the restore unit = restore 896 → re-run both cleaners →
+   palettes to reference.)
+2. **The proving run** (spec at wave head): kit shells × a spread of rolled walks, retina DPR,
+   census — "prove versatile environments from a wide range of walk rolls."
+3. **Playtest** for walk-gen + assembly breaks/leaks/failures.
+4. Polish stack, evidence-ordered: KS-3c (wall-rim sawtooth) · ELEV-1b (risers/stairs +
+   gallery/chasm seams) · LL-1b (2 lab tunables live-replay) · rest-prop collisions ·
+   occlusion-aware combat cells.
+5. Then ST-1 staging intelligence · town kit through the adapter · B2 smooth-contour depth ·
+   ELEV-2 mechanics (accelerated per Adam — athletics/acrobatics are real gameplay).
+
+## Latest (2026-07-15, later) — VQ2/FLIP PASS: the sprite flip LIVE + the demand ledger [Claude Fable 5, orchestrated]
 
 The whole pass ran off `docs/VQ2-RESPEC.md` (Sol's SOL-SOLUTIONS folded as provisional law —
 dispositions in §1 + DESIGN.md 2026-07-15; the frames live in the vq2-world-looks worktree's

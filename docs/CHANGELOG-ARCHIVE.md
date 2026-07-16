@@ -14,6 +14,41 @@ to load every session (the live file keeps the newest entries; see the script fo
 Newest-first, same as the live file — the two files read as one continuous history, live file
 first. Read-only record: never hand-edit, never add entries here directly.
 
+## 2026-07-09 (later) — THE MODEL FOUNDRY BATCH: ~185 bespoke models, every foe on a real body
+
+The MODEL-FOUNDRY production run (planned in the 2026-07-08 deep-dive) executed end-to-end in one
+marathon session: 14 --no-ff merges, every wave orchestrator-gated (independent bake-checks, floor
+gate, check-manifest, verify-theater-figures 40/40, verify-model-grammar 87/87, eyes-on every sheet).
+
+**Added (models):** pilot 6 (3 gloom bespokes + wolf/skeleton/young-red-dragon rebuilds — the old
+"red" dragon had rendered GREEN); gloom waves 1–2 (23); rebuild waves 1–4 (ALL 42 high-traffic alias
+targets re-authored to the 1k–2k band); high-seas 1–2 (17); frontier 1–2 (22, incl. the effort A/B);
+bright-kingdom (12 — 3 golems, gelatinous cube, ettin…); cosmic (12 — eye tyrant, gibbering mouther…);
+suburb (12 — oni, marilith, lich, death-knight…); cross-realm catch-all (12 — one mage serves 5 realms,
+helmed-horror 4; canine ladder + were-trio complete). Audit sheets in `dev/model-qa/sheets/`.
+
+**Changed:** the great 52-alias repoint sweep (birds off harpy/wyvern onto the vulture line, sharks
+off owlbear, megafauna onto rhinoceros, nagas onto spirit-naga, sphinx/lamia/werebear/roc/toad wired
+to their pre-existing realm bespokes) + smarter family repoints each wave; `swarm-of-stirges`
+duplicate-key bug fixed. POSE-ANATOMY law added to ANATOMY-CANON (Adam's spine/elbow ruling +
+rigor-mortis carve-out); MODEL-FOUNDRY law 5 amended. Pose-fix wave re-posed 8 mannequins + re-authored
+the worg; the closing second-iteration pass improved all 18 flagged models (0 reverts; the wolf's
+maw finally reads, 122→143 RGB).
+
+**Changed (process, Adam's rulings):** production config = author-only LOW-effort Sonnet + mandatory
+hostile self-review, NO critic pass (the frontier A/B proved LOW authors 2.2× faster at equal quality;
+whole-pipeline cost ≈⅓ of the pilot config, ~12 units/12 min/wave). Coverage-first doctrine: get the
+pieces on the board, beautify from the sheets. Tri finding: the "extra polygons" cost ≈0 — old roster
+already averaged ~950 tris; the band's value is license, not budget.
+
+**Fixed:** NPC-COHERENCE-FIXES §1+§2 (questgiver never flattened to archetype; `regionForNode`
+supplies `.center` so fray temperature is live) — built red-first by a background agent, 19/19 + full
+sweep green.
+
+**Deferred:** beautification queue (Adam curates from the wave sheets; 5 IMPROVED_WITH_DOUBT residuals
+noted in the second-pass reports); re-run the coverage audit once Adam's realm re-keys finish; the 14
+prop models + NPC humanoid set (VISUAL-ASSET-QUEUE); frontier GLB step-6 wiring.
+
 ## 2026-07-09 (overnight — the accidental design session) — realms re-keyed · 6 new system specs · craft expansions
 
 Adam's table-crafting session became a full design session ("the game feels like it's getting closer

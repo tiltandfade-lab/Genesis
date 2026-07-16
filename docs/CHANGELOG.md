@@ -8,6 +8,52 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-07-16 — THE KENNEY-SOCKET WAVE LANDS + PIXEL-FIRST + the design meeting executed [Claude Fable 5, orchestrated]
+
+The 2026-07-15 design meeting's rulings (DESIGN.md, three entries) executed end-to-end overnight.
+Every unit executor-built, orchestrator-re-gated (harnesses re-run, every card READ), landed
+--no-ff, pushed per landing.
+
+**Added — THE KIT ENGINE:** all 16 Kenney packs banked · KS-1 donor adapter + THE SOCKET SCHEMA
+(47 structural pieces normalized to the 5-ft grid; floor/butt-join/top/hinge sockets; three-card
+bridge gate, all DIRECT_MODULATED) · KS-2 THE DOOR IS AN ASSEMBLY (kit frame + hinge-socket leaf;
+4 states as hinge rotations; QF-D1 wall-run axis fix kills the sideways-frame "hollow column";
+floating leaves structurally impossible) · KS-3 kit room shells (rect/octagon/L assemble from
+socketed modules, mixed kit+prism legal, realm-graded, KIT_SHELL_ENABLED one-flag revert) ·
+KS-3b look pass (the checkerboard floor was Z-FIGHTING — hull-on-flat-quad — killed; kit walls
+join the camera-side cutaway; gate-door "defect" DISPROVEN honestly; corners ruled
+prism-permanent on measurement).
+
+**Added — CONTINUITY + LIGHT + ELEVATION:** F1 combat is a STATE of the explored room (ledger
+#10 CLOSED; identical scene recipe across explore→fight→end on all 5 shapes; every combatant on
+its own real cell — the stacked-invisible-rat fixed) · F2 staging-beat registry (ledger #11
+CLOSED; shop_open/closed/long_rest/walk_complete micro-stages, stable ids, provenance-stamped,
+zero boot edits) · LL-1 Stage-E mechanisms (exposure floor + emissive-masked bloom — the daylit
+blow-out killed: 3.4%→0.0% clipped) + LIGHT-LAB (18 live tunables, export→fold round-trip;
+parked dormant per Adam's Q11) + "Open Genesis Light Lab.command" launcher · ELEV-1 rolled room
+elevation (Adam's d100 table live in Engine markdown; weighted roller + min-dims walk-down +
+depth bias; shape-generic tiers ±3; ELEV-1b render-polish before-state banked).
+
+**Changed — PIXEL-FIRST (Adam's sheets verdict):** the faceted flip RETREATED — registry
+all-legacy, faceted = per-creature-re-admissible reserve; docs/ART-DEPARTMENT.md = the pixel
+register's canonical home + regeneration runbook (CLAUDE.md mandate updated; ART-DIRECTION-CANON
+carries the ruling verbatim) · MC-1+MC-2 magenta crud killed (148 fleck-cleans + 372
+hole-punches adjudicated against originals; cloud class verified clean by eye; PC lane + 33
+orig-unavailable slugs deferred to eyes) · flip-verdict sheets (21, all 252 pairs) + faceted
+mismatch audit (206/252 sound; two pipeline bugs — r3a off-by-one file-save + 4 byte-dup PC
+files; 22 salvageable by re-cut) · the washout evidence stack (PAL-AB + retina card 4): palette
+quantization = hue-specific loss (blue dragon −47% sat) AND manufactured magenta from blue
+(djinni); AgX = dominant chain lever. **Adam's originals restoration ruling PENDING — one word.**
+
+**Fixed:** F1 harness red-first baseline pinned (the HEAD-staleness class, 3rd occurrence — now
+a named pattern); stray root-tree palette regen reverted (lane violation caught by the dirty-file
+check).
+
+**Deferred:** KS-3c sawtooth on far-wall top rims (same hull class, orchestrator-flagged) ·
+ELEV-1b risers/stairs + gallery/chasm seam gaps · rest-prop collision-awareness · occlusion-aware
+combat cell pick · LL-1b light-lab live-replay for 2 tunables · the proving run + playtest (next
+wave head, per the meeting).
+
 ## 2026-07-15 (later) — THE VQ2/FLIP PASS: Sol's laws folded · THE SPRITE FLIP LIVE · the demand census + ledger [Claude Fable 5, orchestrated]
 
 Adam's directives (VQ2 as suggestions-for-law · sprite flip w/ v3 reserve · faceted inventory ·
@@ -964,39 +1010,4 @@ Also trimmed `NEXT-STEPS.md` to the live queue (history → `NEXT-STEPS-ARCHIVE.
 lookup table to `docs/README.md`.
 
 ---
-
-## 2026-07-09 (later) — THE MODEL FOUNDRY BATCH: ~185 bespoke models, every foe on a real body
-
-The MODEL-FOUNDRY production run (planned in the 2026-07-08 deep-dive) executed end-to-end in one
-marathon session: 14 --no-ff merges, every wave orchestrator-gated (independent bake-checks, floor
-gate, check-manifest, verify-theater-figures 40/40, verify-model-grammar 87/87, eyes-on every sheet).
-
-**Added (models):** pilot 6 (3 gloom bespokes + wolf/skeleton/young-red-dragon rebuilds — the old
-"red" dragon had rendered GREEN); gloom waves 1–2 (23); rebuild waves 1–4 (ALL 42 high-traffic alias
-targets re-authored to the 1k–2k band); high-seas 1–2 (17); frontier 1–2 (22, incl. the effort A/B);
-bright-kingdom (12 — 3 golems, gelatinous cube, ettin…); cosmic (12 — eye tyrant, gibbering mouther…);
-suburb (12 — oni, marilith, lich, death-knight…); cross-realm catch-all (12 — one mage serves 5 realms,
-helmed-horror 4; canine ladder + were-trio complete). Audit sheets in `dev/model-qa/sheets/`.
-
-**Changed:** the great 52-alias repoint sweep (birds off harpy/wyvern onto the vulture line, sharks
-off owlbear, megafauna onto rhinoceros, nagas onto spirit-naga, sphinx/lamia/werebear/roc/toad wired
-to their pre-existing realm bespokes) + smarter family repoints each wave; `swarm-of-stirges`
-duplicate-key bug fixed. POSE-ANATOMY law added to ANATOMY-CANON (Adam's spine/elbow ruling +
-rigor-mortis carve-out); MODEL-FOUNDRY law 5 amended. Pose-fix wave re-posed 8 mannequins + re-authored
-the worg; the closing second-iteration pass improved all 18 flagged models (0 reverts; the wolf's
-maw finally reads, 122→143 RGB).
-
-**Changed (process, Adam's rulings):** production config = author-only LOW-effort Sonnet + mandatory
-hostile self-review, NO critic pass (the frontier A/B proved LOW authors 2.2× faster at equal quality;
-whole-pipeline cost ≈⅓ of the pilot config, ~12 units/12 min/wave). Coverage-first doctrine: get the
-pieces on the board, beautify from the sheets. Tri finding: the "extra polygons" cost ≈0 — old roster
-already averaged ~950 tris; the band's value is license, not budget.
-
-**Fixed:** NPC-COHERENCE-FIXES §1+§2 (questgiver never flattened to archetype; `regionForNode`
-supplies `.center` so fray temperature is live) — built red-first by a background agent, 19/19 + full
-sweep green.
-
-**Deferred:** beautification queue (Adam curates from the wave sheets; 5 IMPROVED_WITH_DOUBT residuals
-noted in the second-pass reports); re-run the coverage audit once Adam's realm re-keys finish; the 14
-prop models + NPC humanoid set (VISUAL-ASSET-QUEUE); frontier GLB step-6 wiring.
 

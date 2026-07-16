@@ -18,6 +18,25 @@ just preserves the old ordered-queue framing for anyone reconstructing why a cal
 
 ---
 
+## Do next (2026-07-14 — PHASE-3 WAVE-1 CLOSED; Stage B teed up, gated on sprite-QA)
+
+Phase-3 Wave-1 landed (master `a23d2eb2`, CHANGELOG 2026-07-14): ☑ P3-1a Poisson (flag-off) ·
+☑ P3-1b depth audit (empty defect table) · ☑ W0-c Open5e validator · ☑ **P3-1d diorama cutaway
+restore** (rooms open again) · ☑ **E0-1 wall-fixture fade** · ☑ P3-1e eyeball fixtures · ⏹ W0-a
+struck (MF-3b already in BW4B). Repo migrated to `/Volumes/Genesis/Genesis` (APFS sparsebundle);
+CI scoped to master+PRs.
+
+**Next, in order:**
+1. ☐ **P3-2 Stage B — sprite citizenship** (`docs/PHASE-3-WAVE-2-SPECS.md`, B1–B4). **GATED:** B1
+   regenerates `sprite-registry.js`; a live sprite-QA session also writes it — fire B1 only after
+   QA's regen lands on master (Adam signals). B2/B3/B4 don't touch the registry.
+2. ☐ **P3-3** — AgX filmic tone-curve into `makeGradePass` + depth-state corrections + D0 semantic
+   construction (core-three).
+3. ☐ **Stage D** (stateful nouns / interactables, `BEAUTY-WAVE-5`, doors-first keystone) → ☐ **Stage E**
+   (PBR materials + `LIGHT_RIG_PROFILES` + emissive bloom, retires the occlusion ghost-halo).
+4. ☐ Standing polish waves (SPECCED): UNIFICATION-WAVE · ENV-WAVES · POLISH-WAVE-1.
+5. ☐ W0-b PRNG dedup (deferred — re-scope: surface is 20+ harnesses, not 3).
+
 ## Do next (2026-07-13, PHASE 3 DIRECTION SET — docs/PHASE-3-WAVE-PLAN.md is the queue)
 
 Fable set the Phase-3 trajectory (Adam delegated). The plan doc composes the director brief +

@@ -96,6 +96,36 @@ function buildBigHubFixture() {
   }));
 }
 
+// CR-1 item 5c (2026-07-15 adversarial review) — check 7b's fixture, investigated: buildBigHubFixture's
+// b2 (the 3-exit hub node) is the ONLY room in that fixture whose own dpWallBaseCells() candidate list
+// (confirmed by direct instrumentation) contains a literal DOOR cell, i.e. a cell that IS wall-adjacent
+// under place-dressing.js's own geometry — every other room's doors sit on a floor-floor threshold, not
+// wall-adjacent, so widening dpRoomFloorCells' FLOOR check to also accept DOOR (the 7b mutation) can
+// never surface THEM via wallBase at all, mutated or not. columnFoot/furnitureFoot are structurally
+// immune to this mutation regardless of fixture (dpAdjacentCellsWithin1 runs its own independent
+// SPATIAL_CELL.FLOOR check, never delegating to dpRoomFloorCells), and doorCorner's own filter
+// (dpAdjacentToDoor) requires a NEIGHBORING door cell, which a lone door practically never has — so
+// wallBase is the only seam kind the mutation can ever move, and only on the ONE room where a door is
+// wall-adjacent. The bug: that room (b2) carries role:"path" (DRAGGING_DENSITY_BY_ROLE.path.seam = 3),
+// and its OWN doorCorner candidates alone (4, from its 2 real doors) already exhaust that budget before
+// dpPlaceRoom's step 6 ever reaches its `if (remaining > 0)` wallBase branch — so the mutated wallBase
+// list, even though it DOES contain the door cell, was NEVER ONCE CONSULTED. Same topology, ONE change:
+// b2 (not b4) is the finale, raising ITS OWN budget to 6 (DRESSING_DENSITY_BY_ROLE.finale.seam) — enough
+// headroom after doorCorner+furnitureFoot for the wallBase branch to actually run. Confirmed by direct
+// sweep (dev-only, not committed): realm "chrome", walkId "bw35-7b-chrome-door" deterministically lands
+// a wallBase seam entry AT (11,6), the real DOOR cell, under the mutated source — and confirmed the SAME
+// fixture+walkId never does under the real, unmutated source (33 seam entries across all 3 realms, zero
+// on a door cell) — the "mutation-red vs restored-green" pair item 5c calls for.
+function buildDoorAdjacentSeamFixture() {
+  const ids = ["b1", "b2", "b3", "b4"];
+  const exitsFor = { b1: ["b2"], b2: ["b1", "b3", "b4"], b3: ["b2"], b4: ["b2"] };
+  return ids.map((id, i) => ({
+    id, num: i + 1, label: id, isFinale: id === "b2", depth: i,
+    exits: exitsFor[id].map((t) => ({ targetId: t })),
+    light: "normal",
+  }));
+}
+
 let pass = 0, fail = 0;
 function ok(cond, msg) { if (cond) { pass++; } else { fail++; console.error("  FAIL: " + msg); } }
 function group(name) { console.log("\n[" + name + "]"); }
@@ -286,6 +316,14 @@ group("7a — MUTATION: disable DP_CENTER_EXCLUDE_ENABLED -> a seam entry can la
 
 group("7b — MUTATION: widen dpRoomFloorCells' FLOOR check to also accept DOOR -> a seam entry can land ON a door cell");
 {
+  // CR-1 item 5c: densified/reshaped fixture (buildDoorAdjacentSeamFixture, see its own header
+  // comment above for the full investigation) — same star topology as buildBigHubFixture, but the
+  // room whose door IS wall-adjacent (b2) is now the finale (seam budget 6, not path's 3), so its
+  // own doorCorner candidates no longer exhaust the seam budget before the wallBase branch runs.
+  // walkId pinned to "bw35-7b-<realm>-door" (confirmed by direct sweep — see comment above); only
+  // "chrome" is required to hit for `ok()` below (matches the ORIGINAL check's own "any of the 3
+  // realms" discipline), all 3 are still exercised so a future roster/rng change that shifts WHICH
+  // realm hits doesn't quietly break this check.
   const originalSrc = read("src/engine/place-dressing.js");
   const needle = "if (plan.cells[yy * plan.cellW + xx] === SPATIAL_CELL.FLOOR) cells.push({ x: xx, y: yy });";
   ok(originalSrc.includes(needle), "sanity: dpRoomFloorCells' exact FLOOR-check line found (mutation target exists)");
@@ -294,19 +332,43 @@ group("7b — MUTATION: widen dpRoomFloorCells' FLOOR check to also accept DOOR 
     "if (plan.cells[yy * plan.cellW + xx] === SPATIAL_CELL.FLOOR || plan.cells[yy * plan.cellW + xx] === SPATIAL_CELL.DOOR) cells.push({ x: xx, y: yy });"
   );
   ok(mutatedSrc !== originalSrc, "mutation rewrote the FLOOR-only check");
+
+  const fixture = buildDoorAdjacentSeamFixture();
+
+  // RED — the mutated module.
   const MM = loadModules(mutatedSrc);
-  const fixture = buildBigHubFixture();
-  const plan = MM.spatializePlan(fixture, "The Big Hub", { walkId: "bw35-7b" });
-  const semPlan = MM.semanticizePlan(plan, fixture, []);
-  let anyOnDoor = false;
+  const planRed = MM.spatializePlan(fixture, "The Big Hub V2", { walkId: "bw35-7b" });
+  const semPlanRed = MM.semanticizePlan(planRed, fixture, []);
+  let anyOnDoorRed = false;
+  const onDoorDetail = [];
   ["chrome", "gloom", "fantasy"].forEach((realm) => {
-    const dressed = MM.dressPlan(semPlan, { realmId: realm, walkId: "bw35-7b-" + realm });
+    const dressed = MM.dressPlan(semPlanRed, { realmId: realm, walkId: "bw35-7b-" + realm + "-door" });
     dressed.dressing.forEach((d) => {
-      if (dressed.cells[d.y * dressed.cellW + d.x] === MM.SPATIAL_CELL.DOOR) anyOnDoor = true;
+      if (dressed.cells[d.y * dressed.cellW + d.x] === MM.SPATIAL_CELL.DOOR) {
+        anyOnDoorRed = true;
+        onDoorDetail.push({ realm, x: d.x, y: d.y, seamKind: d.seamKind });
+      }
     });
   });
-  if (anyOnDoor) { pass++; console.log("  ✓ with the FLOOR-only veto widened to also accept DOOR, a dressing entry lands ON a door cell (proves the veto — not luck — keeps cards off doors)"); }
+  if (anyOnDoorRed) { pass++; console.log("  ✓ RED: with the FLOOR-only veto widened to also accept DOOR, a dressing entry lands ON a door cell (proves the veto — not luck — keeps cards off doors)", JSON.stringify(onDoorDetail)); }
   else { fail++; console.error("  FAIL: mutation did not surface a door-cell placement — fixture may need to be denser/differently shaped"); }
+
+  // restored-GREEN — the SAME fixture + SAME walkIds, real unmutated src/engine/place-dressing.js.
+  // Proves 7b isn't vacuous the other direction too: the mutation, not the fixture/walkId choice, is
+  // what put a card on a door.
+  const MG = loadModules(originalSrc);
+  const planGreen = MG.spatializePlan(fixture, "The Big Hub V2", { walkId: "bw35-7b" });
+  const semPlanGreen = MG.semanticizePlan(planGreen, fixture, []);
+  let anyOnDoorGreen = false, greenSeamTotal = 0;
+  ["chrome", "gloom", "fantasy"].forEach((realm) => {
+    const dressed = MG.dressPlan(semPlanGreen, { realmId: realm, walkId: "bw35-7b-" + realm + "-door" });
+    greenSeamTotal += dressed.dressing.filter((d) => d.seam).length;
+    dressed.dressing.forEach((d) => {
+      if (dressed.cells[d.y * dressed.cellW + d.x] === MG.SPATIAL_CELL.DOOR) anyOnDoorGreen = true;
+    });
+  });
+  ok(greenSeamTotal > 0, `restored-GREEN sanity: this fixture+walkId set still rolls real seam entries (${greenSeamTotal}), not a degenerate empty case`);
+  ok(!anyOnDoorGreen, `restored-GREEN: the SAME fixture+walkIds, real unmutated code, place ZERO entries on a door cell (${greenSeamTotal} seam entries checked)`);
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);

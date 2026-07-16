@@ -28,6 +28,14 @@
         on that path.
      e. An id the map points at whose entry is NOT `status:"cut"` (or is `verdict:"fail"`) falls
         through to TIER 2 as a real miss, exactly like every other resolution tier in this file.
+     f. CR-1 item 4 — the TIER 2 console.warn de-dupe: a slug that repeatedly falls through to
+        TIER 2 within the same session climbs SPRITE_JOIN_NAME_FALLBACK_COUNT on every hit, but
+        console.warn only fires (and the warned-Set only grows) on the FIRST hit for that slug.
+     g. CR-1 item 2 — the SPRITE_BY_BESTIARY_ID collision tie-break, driven DIRECTLY against
+        build/gen-sprite-registry.py's build_bestiary_id_map (not through theater-boot.js at
+        all): a synthetic multi-way collision proves the qaStatus-candidate > verdict-pass >
+        alphabetical-last-resort preference order, including the within-tier alphabetical
+        tie-break when two entries share the same winning tier.
 
    Run:  node dev/verify-sprite-join.mjs   (jsdom + real vendored three.js, per-env in
          ~/.genesis-jsdom — see CLAUDE.md; also needs node_modules/three + node_modules/jsdom shims
@@ -112,6 +120,10 @@ const FIXTURE_REGISTRY = {
   // (e): an id IS mapped to this slug, but it's not cut yet — TIER 1 must treat that as a miss
   // and fall through to TIER 2 (which also can't resolve it — no name collision here), not throw.
   "spr-fantasy-shy-ghoul": { realm: "fantasy", kind: "monster", name: "Shy Ghoul", size: "Medium", status: "pending" },
+  // (f) CR-1 item 4 — a TIER-2-only entry (no id-map hit), used fresh (never queried elsewhere
+  // in this fixture) so the de-dupe proof's "first hit warns, repeat hits don't" claim isn't
+  // muddied by an earlier call to the same slug.
+  "spr-fantasy-market-vendor": { realm: "fantasy", kind: "npc", name: "Market Vendor", size: "Medium", status: "cut" },
 };
 const FIXTURE_ID_MAP = {
   "giant-rat": "spr-fantasy-giant-rat",
@@ -178,6 +190,22 @@ try {
 
     const missEntirely = T._spriteEntryForTest("no-such-creature-anywhere");
     result.missEntirelyResolved = !!missEntirely; // must be null
+
+    // (f) CR-1 item 4 — de-dupe: three TIER-2 hits on a FRESH slug (never queried above), spied
+    // via a console.warn override. Counter must climb by 3; the warned-Set and the actual
+    // console.warn call count must each grow by exactly 1 (first hit only).
+    let warnCalls = 0;
+    const origWarn = console.warn;
+    console.warn = function(){ warnCalls++; return origWarn.apply(console, arguments); };
+    const dedupeCountBefore = T._spriteJoinNameFallbackCountForTest();
+    const dedupeWarnedSizeBefore = T._spriteJoinNameFallbackWarnedSizeForTest();
+    T._spriteEntryForTest("market-vendor");
+    T._spriteEntryForTest("market-vendor");
+    T._spriteEntryForTest("market-vendor");
+    console.warn = origWarn;
+    result.dedupeCountDelta = T._spriteJoinNameFallbackCountForTest() - dedupeCountBefore;
+    result.dedupeWarnedSizeDelta = T._spriteJoinNameFallbackWarnedSizeForTest() - dedupeWarnedSizeBefore;
+    result.dedupeWarnCalls = warnCalls;
   } else {
     const giantRat = T._spriteEntryForTest("giant-rat");
     result.prodGiantRatSlug = giantRat && giantRat.slug;
@@ -237,6 +265,12 @@ if(!green.ok){
     green.pendingViaIdResolved === false, `pendingViaIdResolved=${green.pendingViaIdResolved}`);
   check("no match at any tier returns null (never throws, never guesses)",
     green.missEntirelyResolved === false, `missEntirelyResolved=${green.missEntirelyResolved}`);
+  check("(f) CR-1 item 4: fallback counter climbs on EVERY repeat TIER-2 hit (3 calls -> +3)",
+    green.dedupeCountDelta === 3, `dedupeCountDelta=${green.dedupeCountDelta}`);
+  check("(f) CR-1 item 4: warned-Set grows only on the FIRST hit for that slug (3 calls -> +1)",
+    green.dedupeWarnedSizeDelta === 1, `dedupeWarnedSizeDelta=${green.dedupeWarnedSizeDelta}`);
+  check("(f) CR-1 item 4: console.warn itself fires only once across the 3 repeat calls",
+    green.dedupeWarnCalls === 1, `dedupeWarnCalls=${green.dedupeWarnCalls}`);
 }
 
 console.log("=== S4 (b) RED-FIRST: TIER 1 stubbed out — the pre-S4 collision bug reproduced ===");
@@ -276,6 +310,54 @@ if(!prod.ok){
     prod.prodGiantRatKind === "monster", `kind=${prod.prodGiantRatKind}`);
   check("(c) the resolved entry is status:\"cut\" (real art, not a pending placeholder)",
     prod.prodGiantRatStatus === "cut", `status=${prod.prodGiantRatStatus}`);
+}
+
+console.log("=== (g) CR-1 item 2 — build_bestiary_id_map driven DIRECTLY (not through theater-boot.js) ===");
+{
+  // Four synthetic bestiary ids, each a multi-slug collision exercising one rung of the
+  // qaStatus-candidate > verdict-pass > alphabetical-last-resort ladder:
+  //   creature-a: a candidate beats a verdict:"pass" beats a plain entry (all three tiers present).
+  //   creature-b: no candidate present — verdict:"pass" beats a plain entry (alphabetically-first
+  //               "spr-aaa-*" loses to "spr-zzz-passed", proving tier beats alphabetical order).
+  //   creature-c: neither marker present on either slug — falls all the way to the alphabetical
+  //               last resort ("spr-aaa-none" beats "spr-zzz-none").
+  //   creature-d: TWO candidates collide — proves the alphabetical tie-break also applies WITHIN
+  //               a tier, not just as the final fallback.
+  const pyScript = [
+    "import importlib.util, json",
+    `spec = importlib.util.spec_from_file_location("gen_mod", ${JSON.stringify(join(ROOT, "build", "gen-sprite-registry.py"))})`,
+    "mod = importlib.util.module_from_spec(spec)",
+    "spec.loader.exec_module(mod)",
+    "entries = {",
+    '  "spr-bbb-candidate": {"frame": "creature-a", "status": "cut", "qaStatus": mod.QA_STATUS_CANDIDATE},',
+    '  "spr-mmm-passed":    {"frame": "creature-a", "status": "cut", "verdict": "pass"},',
+    '  "spr-aaa-first":     {"frame": "creature-a", "status": "cut"},',
+    '  "spr-zzz-passed":    {"frame": "creature-b", "status": "cut", "verdict": "pass"},',
+    '  "spr-aaa-second":    {"frame": "creature-b", "status": "cut"},',
+    '  "spr-zzz-none":      {"frame": "creature-c", "status": "cut"},',
+    '  "spr-aaa-none":      {"frame": "creature-c", "status": "cut"},',
+    '  "spr-zzz-candidate": {"frame": "creature-d", "status": "cut", "qaStatus": mod.QA_STATUS_CANDIDATE},',
+    '  "spr-aaa-candidate": {"frame": "creature-d", "status": "cut", "qaStatus": mod.QA_STATUS_CANDIDATE},',
+    "}",
+    "by_id, collisions = mod.build_bestiary_id_map(entries)",
+    'print(json.dumps({"by_id": by_id, "collisions": collisions}))',
+  ].join("\n");
+  const out = execFileSync("python3", ["-c", pyScript], { cwd: ROOT, encoding: "utf-8" });
+  const g = JSON.parse(out.trim().split("\n").pop());
+
+  check("(g) qaStatus-candidate beats verdict-pass beats a plain entry (creature-a -> spr-bbb-candidate)",
+    g.by_id["creature-a"] === "spr-bbb-candidate", `got ${g.by_id["creature-a"]}`);
+  check("(g) with no candidate present, verdict-pass beats alphabetical order (creature-b -> spr-zzz-passed, NOT spr-aaa-second)",
+    g.by_id["creature-b"] === "spr-zzz-passed", `got ${g.by_id["creature-b"]}`);
+  check("(g) with neither marker present, alphabetical is the last-resort tie-break (creature-c -> spr-aaa-none)",
+    g.by_id["creature-c"] === "spr-aaa-none", `got ${g.by_id["creature-c"]}`);
+  check("(g) two same-tier candidates still resolve via the alphabetical tie-break WITHIN the tier (creature-d -> spr-aaa-candidate)",
+    g.by_id["creature-d"] === "spr-aaa-candidate", `got ${g.by_id["creature-d"]}`);
+
+  const expectedCollisionCount = 2 /* creature-a: 3 slugs, 1 winner */ + 1 /* creature-b */ + 1 /* creature-c */ + 1 /* creature-d */;
+  check("(g) every loser in every group is reported as a collision, none silently dropped",
+    g.collisions.length === expectedCollisionCount,
+    `expected ${expectedCollisionCount} collision(s), got ${g.collisions.length}: ${JSON.stringify(g.collisions)}`);
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);

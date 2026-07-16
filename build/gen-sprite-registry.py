@@ -39,6 +39,12 @@ dev/model-qa/faceted-inventory-report.json (real runs only, --out==OUT).
   - no slug collisions across sheets
   - join coverage for kind:"monster" cells only (informational; not a failing gate here —
     dev/verify-sprite-registry.mjs is the gate that enforces >=90%)
+  - CR-1 item 3: also dry-runs fold_in_orphans (the S4 Part B orphan fold-in) and
+    build_bestiary_id_map (the S4 Part A id map + CR-1 item 2's collision tie-break) against a
+    throwaway copy of the joined entries — prints "CHECK: S4 orphan fold-in (dry) ..." /
+    "CHECK: S4 bestiary-id map (dry) ..." — so a bug in either path is caught by --check, not
+    only by a real regen. Zero writes: neither dry call touches disk, and check-mode never
+    reaches the write_rejects/write_inventory_report/write_collisions_report gate below.
 
 Run: python3 build/gen-sprite-registry.py                      (writes data/sprite-registry.js,
                                                                   fixture manifest by default)
@@ -82,6 +88,9 @@ REJECTS = os.path.join(ROOT, "dev", "sprite-manifests", "REJECTS.md")
 FACETED_CUT_REPORT = os.path.join(ROOT, "dev", "model-qa", "faceted-cut-report.json")
 SPRITES_FACETED_DIR = os.path.join(ROOT, "assets", "sprites-faceted")
 INVENTORY_REPORT = os.path.join(ROOT, "dev", "model-qa", "faceted-inventory-report.json")
+# CR-1 item 2 — the SPRITE_BY_BESTIARY_ID collision persistence report (see
+# write_collisions_report / build_bestiary_id_map below).
+COLLISIONS_REPORT = os.path.join(ROOT, "dev", "model-qa", "sprite-join-collisions.json")
 # SRD size-band midpoint ladder (draft values, Adam re-tunes) — worldHeight's fallback when no
 # measured `feet` exists for a slug. heightSource records which branch fired; a slug with
 # neither feet nor a resolvable size NEVER gets a guessed number (worldHeight:null, loud).
@@ -343,7 +352,13 @@ def fold_in_orphans(entries, faceted_cut_slugs, bestiary_by_realm, corpus_sizing
         entry["runtimeAdmitted"] = "candidate" if admit_faceted else RUNTIME_ADMITTED_DEFAULT
 
         cut_record = faceted_cut_slugs.get(slug)
-        contract = standee_contract_for({}, cut_record)
+        # CR-1 item 1 (2026-07-15 adversarial review): this was passing {} instead of the
+        # slug's own overlay entry, so Adam's editor `floor` override on a transparent-crop
+        # orphan (no faceted cut-record contentBounds) silently fell through to the bbox
+        # bottom-center default instead of his ruled ground-contact line. fold_in_orphans has
+        # the overlay dict in scope (it's a function param) — use it, matching the same
+        # ov = overlay.get(slug, {}) read the manifest-cell path performs above.
+        contract = standee_contract_for(overlay.get(slug, {}), cut_record)
         entry.update(contract)
 
         # S4↔S6 merge reconcile: fold_in_orphans predates the S6 3-arg ladder — orphans are
@@ -377,21 +392,74 @@ def build_bestiary_id_map(entries):
     Only `status:"cut"` entries are eligible (spriteEntryFor never resolves a pending entry) and
     a `verdict:"fail"` entry is excluded (review-failed art must still fall through to the 3D
     chain). On a genuine collision — two different cut entries joined to the SAME bestiary id, a
-    real duplicate-art situation, not a normalization artifact — the first in slug-sorted order
-    wins (deterministic across regens) and every collision is returned so it stays visible
-    (printed by the caller), never silently dropped."""
-    by_id = {}
-    collisions = []
+    real duplicate-art situation, not a normalization artifact — CR-1 item 2 (2026-07-15
+    adversarial review) replaces the old "first in slug-sorted order wins" tie-break (arbitrary
+    once the faceted-migration wave ships fresher art alongside legacy-reviewed pieces — the
+    alphabetically-first slug for a given bestiary id has no relationship to which art is
+    actually better) with a priority ladder, evaluated per colliding bestiary id until one tier
+    distinguishes the group:
+      1. qaStatus == QA_STATUS_CANDIDATE — the faceted-migration wave's own candidate marker;
+         prefer the fresher art.
+      2. verdict == "pass" — an explicit reviewer sign-off beats an unreviewed entry.
+      3. alphabetical (slug order) — the deterministic last resort when neither tier above
+         distinguishes the group (including "none of them have either marker").
+    Every collision is still returned in full (frame, kept, dropped) so it stays visible
+    (printed by the caller and persisted to dev/model-qa/sprite-join-collisions.json by
+    write_collisions_report), never silently dropped."""
+    by_frame = {}
     for slug in sorted(entries.keys()):
         e = entries[slug]
         frame = e.get("frame")
         if not frame or e.get("status") != "cut" or e.get("verdict") == "fail":
             continue
-        if frame in by_id:
-            collisions.append((frame, by_id[frame], slug))
+        by_frame.setdefault(frame, []).append(slug)
+
+    def tier(slug):
+        e = entries[slug]
+        if e.get("qaStatus") == QA_STATUS_CANDIDATE:
+            return 0
+        if e.get("verdict") == "pass":
+            return 1
+        return 2
+
+    by_id = {}
+    collisions = []
+    for frame in sorted(by_frame.keys()):
+        slugs = by_frame[frame]
+        if len(slugs) == 1:
+            by_id[frame] = slugs[0]
             continue
-        by_id[frame] = slug
+        # min() ranks by (tier, slug) — tier decides first, alphabetical slug order is the
+        # last-resort tie-break both within a tier and when no tier distinguishes at all.
+        winner = min(slugs, key=lambda s: (tier(s), s))
+        by_id[frame] = winner
+        for s in slugs:
+            if s != winner:
+                collisions.append((frame, winner, s))
     return by_id, collisions
+
+
+def write_collisions_report(collisions):
+    """dev/model-qa/sprite-join-collisions.json — CR-1 item 2: every SPRITE_BY_BESTIARY_ID
+    collision build_bestiary_id_map resolved, persisted so it stays visible across regens
+    instead of only living in a run's stdout. Written even when collisions is empty (an
+    empty-but-present report beats a file that silently stops existing the day collisions
+    do — the same "loud, never silent" discipline as the standee-contract nulls above).
+    GENERATED — never hand-edit."""
+    report = {
+        "generatedBy": "build/gen-sprite-registry.py",
+        "spec": "KENNEY-SOCKET-WAVE.md CR-1 item 2",
+        "policy": "qaStatus-candidate > verdict-pass > alphabetical-last-resort",
+        "collisionCount": len(collisions),
+        "collisions": [
+            {"bestiaryId": frame, "kept": kept, "dropped": dropped}
+            for frame, kept, dropped in collisions
+        ],
+    }
+    with open(COLLISIONS_REPORT, "w", encoding="utf-8") as f:
+        json.dump(report, f, indent=2, sort_keys=False)
+        f.write("\n")
+    print(f"wrote {COLLISIONS_REPORT} ({len(collisions)} collision(s))")
 
 
 def emit_bestiary_id_map(by_id):
@@ -646,6 +714,23 @@ def build_registry(manifest_path, check_only=False, overlay_path=OVERLAY, out_pa
             raise SystemExit(1)
 
     if check_only:
+        # CR-1 item 3 (2026-07-15 adversarial review): --check used to return here without ever
+        # exercising fold_in_orphans/build_bestiary_id_map — a bug in either path (including
+        # this same wave's own item-1/item-2 fixes) could sit undetected through every --check
+        # run right up until a real regen actually wrote the registry. Exercise both here, DRY:
+        # on a throwaway shallow copy of `entries` (fold_in_orphans only ever reads existing
+        # entries and assigns NEW keys — see its own docstring — so a shallow copy is sufficient
+        # to keep the check-mode return value byte-identical to before) and never calling any
+        # write_* function (those are gated on out_path == OUT further below, which check-mode
+        # never reaches) — zero writes, matching --check's own contract.
+        dry_entries = dict(entries)
+        dry_orphans_added = fold_in_orphans(dry_entries, faceted_cut_slugs, bestiary_by_realm,
+                                            corpus_sizing, v3_by_sheet_cell, overlay,
+                                            admit_faceted=admit_faceted)
+        dry_bestiary_id_map, dry_id_collisions = build_bestiary_id_map(dry_entries)
+        print(f"CHECK: S4 orphan fold-in (dry) would add {len(dry_orphans_added)} slug(s)")
+        print(f"CHECK: S4 bestiary-id map (dry) would resolve {len(dry_bestiary_id_map)} id(s), "
+              f"{len(dry_id_collisions)} collision(s)")
         return entries, coverage, warn_unjoined
 
     # S4 Part B — orphan fold-in. Runs AFTER the manifest-cell loop above so it only ever adds
@@ -664,7 +749,8 @@ def build_registry(manifest_path, check_only=False, overlay_path=OVERLAY, out_pa
     bestiary_id_map, id_collisions = build_bestiary_id_map(entries)
     print(f"S4 bestiary-id map: {len(bestiary_id_map)} id(s) -> slug")
     if id_collisions:
-        print(f"S4 bestiary-id collisions ({len(id_collisions)}, first-in-slug-order wins, all listed):")
+        print(f"S4 bestiary-id collisions ({len(id_collisions)}, qaStatus-candidate > verdict-pass "
+              f"> alphabetical-last-resort wins, all listed):")
         for frame, kept, dropped in id_collisions:
             print(f"  - '{frame}': kept {kept}, dropped {dropped}")
 
@@ -682,6 +768,7 @@ def build_registry(manifest_path, check_only=False, overlay_path=OVERLAY, out_pa
     if out_path == OUT:
         write_rejects(entries, sheet_meta, cell_cue)
         write_inventory_report(entries, faceted_cut_slugs)
+        write_collisions_report(id_collisions)
     return entries, coverage, warn_unjoined
 
 

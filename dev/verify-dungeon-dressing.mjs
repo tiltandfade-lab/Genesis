@@ -250,24 +250,50 @@ console.log("\n[6 — PRODUCTION WIRING: trayFrom's {kind:\"interior\"} branch a
     "this.__spatializePlan=typeof spatializePlan!=='undefined'?spatializePlan:undefined;",
     "this.__semanticizePlan=typeof semanticizePlan!=='undefined'?semanticizePlan:undefined;",
     "this.__dressPlan=typeof dressPlan!=='undefined'?dressPlan:undefined;",
+    // CR-1 item 5a — exposed so check 6c can ask theater-interior.js's OWN keepSet formula what
+    // it kept, rather than re-deriving a second, possibly-diverging "which room is this" rule
+    // (the exact discipline QF-A3's own header comment in theater-data.js insists on).
+    "this.__itrActiveRoomKeepSet=typeof itrActiveRoomKeepSet!=='undefined'?itrActiveRoomKeepSet:undefined;",
   ].join("\n");
   vm.runInContext(combined, sandbox, { filename: "dungeon-graph-gr2-wiring.js" });
-  const { __trayFrom: trayFrom, __spatializePlan: spatializePlan, __semanticizePlan: semanticizePlan, __dressPlan: dressPlan } = sandbox;
+  const { __trayFrom: trayFrom, __spatializePlan: spatializePlan, __semanticizePlan: semanticizePlan, __dressPlan: dressPlan, __itrActiveRoomKeepSet: itrActiveRoomKeepSet } = sandbox;
   ok(typeof trayFrom === "function", "6a-setup. theater-data.js's real trayFrom is loadable alongside theater-interior.js/place-dressing.js");
 
   if (typeof trayFrom === "function") {
     const fixture = buildHubFixture();
     const plan = spatializePlan(fixture, "The Hub", { walkId: "gr2-wiring-check" });
     const semPlan = semanticizePlan(plan, fixture, []);
+    const focusSegNum = semPlan.rooms[0].segNum;
     // the EXACT source shape theaterHereSourceFor (src/world/render.js) builds for a dungeon walk
     // carrying pn.spatial: {kind:"interior", plan, focusSegNum, radius, env, realms}.
-    const board = trayFrom({ kind: "interior", plan: semPlan, focusSegNum: semPlan.rooms[0].segNum, radius: 1, env: "dungeon", realms: ["fantasy"] }, null, {});
+    const board = trayFrom({ kind: "interior", plan: semPlan, focusSegNum: focusSegNum, radius: 1, env: "dungeon", realms: ["fantasy"] }, null, {});
     ok(!!board, "6a. trayFrom({kind:\"interior\",plan}) returns a board");
     ok(Array.isArray(board && board.dressing), "6b. the returned board carries a `dressing` array field", JSON.stringify(board && board.dressing));
     const directDressed = dressPlan(semPlan, { realmId: "fantasy" });
-    ok(!!board && JSON.stringify(board.dressing) === JSON.stringify(directDressed.dressing),
-      "6c. trayFrom's board.dressing is BYTE-IDENTICAL to calling dressPlan(plan,{realmId}) directly (same seed derivation — plan.seed, since trayFrom passes no walkId) — proves it's really wired through, not a stub/empty array",
-      JSON.stringify({ trayFrom: board && board.dressing, direct: directDressed.dressing }));
+    // CR-1 item 5a (2026-07-15 adversarial review): 6c used to assert board.dressing was
+    // BYTE-IDENTICAL to the unfiltered dressPlan() output — true before QF-A3 (theater-data.js
+    // ~line 1740), false and WRONG to assert after it: QF-A3 deliberately narrows board.dressing
+    // to the active room's keepSet (a door/prop belonging to an off-screen room has nothing to
+    // anchor to — see that block's own header comment), so once QF-A3 landed this fixture's
+    // multi-room Hub made 6c permanently red by design, not by regression. Re-tuned to assert
+    // THE FILTERED CONTRACT instead: every kept-room (or roomSegNum-less) prop from the direct,
+    // unfiltered dressPlan() output survives into board.dressing UNCHANGED, and every OTHER
+    // room's prop is absent — computed against itrActiveRoomKeepSet's own real keepSet formula
+    // (imported above), never a second hand-rolled "which room is this" rule.
+    ok(typeof itrActiveRoomKeepSet === "function", "6c-setup. theater-interior.js's itrActiveRoomKeepSet is loadable alongside trayFrom");
+    const keepSet = typeof itrActiveRoomKeepSet === "function" ? itrActiveRoomKeepSet(semPlan, focusSegNum) : null;
+    const expectedKept = (directDressed.dressing || []).filter((e) => e && (e.roomSegNum == null || (keepSet && keepSet.has(e.roomSegNum))));
+    const otherRoomProps = (directDressed.dressing || []).filter((e) => e && e.roomSegNum != null && !(keepSet && keepSet.has(e.roomSegNum)));
+    ok(otherRoomProps.length > 0,
+      "6c-setup. discriminating: the Hub fixture's direct (unfiltered) dressing actually spans MULTIPLE rooms (otherwise 6c below would pass vacuously)",
+      `directDressed.dressing roomSegNums: ${JSON.stringify((directDressed.dressing || []).map((e) => e.roomSegNum))}`);
+    ok(!!board && JSON.stringify(board.dressing) === JSON.stringify(expectedKept),
+      "6c. trayFrom's board.dressing IS THE FILTERED CONTRACT — every kept-room (or roomSegNum-less) prop from the direct dressPlan() call survives unchanged, in the same order",
+      JSON.stringify({ trayFrom: board && board.dressing, expectedKept: expectedKept }));
+    const leakedOtherRoomProps = otherRoomProps.filter((e) => (board && board.dressing || []).some((b) => b === e || JSON.stringify(b) === JSON.stringify(e)));
+    ok(leakedOtherRoomProps.length === 0,
+      "6c-b. every OTHER room's prop (present in the direct unfiltered call) is ABSENT from board.dressing — no off-screen-room prop leaks onto stage",
+      JSON.stringify(leakedOtherRoomProps));
     ok((board && board.dressing || []).length > 0, "6d. discriminating: the dressing array is actually non-empty for this fixture (a Hub with real rooms), not a vacuous pass");
 
     // MUTATION: prove 6b/6c are load-bearing, not vacuous — reload with the PRE-FIX trayFrom body

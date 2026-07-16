@@ -10,12 +10,18 @@ const $$ = (selector) => [...document.querySelectorAll(selector)];
 const clone = (value) => JSON.parse(JSON.stringify(value));
 const MATERIALS = ["stone", "wood", "iron", "roof", "glass", "cloth"];
 const rawLoadingManager = new THREE.LoadingManager();
-// The two pre-KGR census packs reference an uncommitted Blender colormap by relative URI. Geometry
-// inspection must remain usable and console-clean; substitute a neutral one-pixel texture only for
-// that absent immutable-source dependency. The GLB itself is still loaded by the real GLTFLoader.
+// Known source GLBs reference these absent immutable-source textures. Geometry inspection must remain
+// usable and console-clean; substitute a neutral one-pixel texture only for these exact requests.
+// The GLB itself is still loaded by the real GLTFLoader. This is intentionally not a missing-file net.
+const DIAGNOSTIC_TEXTURE_FALLBACKS=new Map([
+  ["textures/colormap.png","Textures/colormap.png"],
+  ["textures/barrel.png","Textures/barrel.png"],
+]);
 const workbenchAssetUrl = (url) => {
-  if (!String(url).split("?")[0].toLowerCase().endsWith("/textures/colormap.png") && String(url).split("?")[0].toLowerCase() !== "textures/colormap.png") return url;
-  state.materialFallbacks.add("Textures/colormap.png");
+  const path=String(url).split("?")[0].replaceAll("\\","/").toLowerCase();
+  const entry=[...DIAGNOSTIC_TEXTURE_FALLBACKS].find(([request])=>path===request||path.endsWith(`/${request}`));
+  if(!entry)return url;
+  state.materialFallbacks.add(entry[1]);
   return "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR4nGPYuXnFfwAHUQMUvPIZzwAAAABJRU5ErkJggg==";
 };
 rawLoadingManager.setURLModifier(workbenchAssetUrl);
@@ -177,7 +183,7 @@ function updateRecordFromInputs() {
 function rawUrl(entry) { return "/"+entry.path; }
 function normalizedUrl(id) { return `/assets/models-normalized/${packOf(id)}/${slugOf(id)}.glb`; }
 async function loadCurrentView() {
-  setError(); setStatus(`loading ${state.view}…`); transform.detach();
+  state.materialFallbacks.clear();setError(); setStatus(`loading ${state.view}…`); transform.detach();
   if (state.model) { orientationGroup.remove(state.model); disposeObject(state.model); state.model=null; }
   try {
     if (state.view==="raw") { state.modelUrl=rawUrl(currentCensus()); state.model=(await loader.loadAsync(state.modelUrl)).scene; }

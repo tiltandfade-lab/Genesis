@@ -434,13 +434,31 @@ async function main() {
     // ================================================================
     // P-1 problem 1 — PER-REALM BRIGHT FILL (suburb daylit no longer clips)
     // ================================================================
-    group("P-1a — suburb daylit no longer blows out (RED-FIRST: prove it clipped under the old one-size numbers)");
+    group("P-1a — suburb daylit no longer blows out (RED-FIRST: prove the old one-size numbers read measurably hotter)");
     // CLIP_MAX 0.97 -> 0.98 (2026-07-12): the real anti-clip gate is CLIP_FRACTION_GATE (share of near-
     // white pixels; suburb GREEN sits ~0.03, well under 0.15). roomMax (the single brightest pixel) is a
     // secondary, and buildScene's layout isn't byte-deterministic run-to-run — suburb GREEN's peak floats
-    // ~0.95-0.975, so a 0.97 ceiling flaked. RED still clips stably at ~0.993 (>= 0.98). Suburb's FULL
-    // exposure fix (a bright peak IS still there) is the deferred Stage-E LightRig/emissive-bloom work.
+    // ~0.95-0.975, so a 0.97 ceiling flaked. Suburb's FULL exposure fix (a bright peak IS still there) is
+    // the deferred Stage-E LightRig/emissive-bloom work.
     const CLIP_MAX = 0.98, CLIP_FRACTION_GATE = 0.15;
+    // CR-1 item 5b (2026-07-15 adversarial review): the RED-FIRST assertion below USED TO require
+    // roomMax >= CLIP_MAX / clippedFraction >= CLIP_FRACTION_GATE — true pre-AgX (the renderer had no
+    // tone-mapping curve at all, GRADE_TONEMAP === "none", so raw radiance past 1.0 hard-clipped to pure
+    // white), but the "AgX is the production look" flip (06bb47f8, 2026-07-14, GRADE_TONEMAP default
+    // "agx" — see theater-boot.js's own AgXToneMapping port) changed what "the old global numbers" DO to
+    // a frame: AgX's filmic shoulder rolls off highlights smoothly instead of hard-clipping, so the SAME
+    // historical ITR_BRIGHT_REALM_FILL_DEFAULT numbers, forced onto suburb, now measure roomMax≈0.78 /
+    // clippedFraction≈0.00 — genuinely, provably NOT clipping anymore under AgX (this is AgX doing its
+    // job, not a fixture bug: a re-run confirms these numbers stably, deterministically, never approach
+    // CLIP_MAX under this scene/seed). Cranking the forced numbers even higher to FORCE a literal clip
+    // would stop testing "the old one-size numbers" (the actual historical regression) and start testing
+    // an invented, unrepresentative light level — the CLAUDE.md validator-discipline line, satisfying a
+    // gate mechanically instead of keeping it true. Honestly re-scoped instead: this group now proves the
+    // per-realm fill is still LOAD-BEARING — the OLD global numbers read a CLEAR, non-marginal margin
+    // hotter (both roomMean and roomMax) than the real per-realm numbers — while the absolute "never hard
+    // clips to white" guarantee for THIS light range is now AgX's own systemic property (checked directly
+    // by dev/verify-agx-tonecurve.mjs), not something the per-realm fill alone has to hold the line on.
+    const RED_HOTTER_MARGIN = 1.15; // observed ratios ~1.18 (mean) / ~1.27 (max) — comfortable headroom
     const suburbBuilt = await buildScene(page, { realmId: "suburb", lightProfile: "daylit", walkId: "diegetic-suburb-p1" });
     if (!suburbBuilt.ok) throw new Error("suburb scene build failed: " + suburbBuilt.error);
     // AMBIENT-ONLY variant: buildScene always injects ONE controlled torch (a fixed, un-scaled point
@@ -455,8 +473,6 @@ async function main() {
     const suburbRed = await measure(page, suburbBuilt.probe, suburbRedPng);
     ok(suburbRed.ok, "suburb RED-baseline frame measured: " + (suburbRed.error || "ok"));
     console.log(`  suburb daylit, FORCED to the old global bright-fill numbers: roomMean=${suburbRed.roomMean != null ? suburbRed.roomMean.toFixed(4) : "n/a"} roomMax=${suburbRed.roomMax != null ? suburbRed.roomMax.toFixed(4) : "n/a"} clippedFraction=${suburbRed.roomClippedFraction != null ? suburbRed.roomClippedFraction.toFixed(2) : "n/a"}`);
-    ok(suburbRed.roomMax != null && suburbRed.roomMax >= CLIP_MAX && suburbRed.roomClippedFraction >= CLIP_FRACTION_GATE,
-      `RED-FIRST: suburb's own room DOES clip under lost-world's global bright-fill numbers (roomMax=${suburbRed.roomMax != null ? suburbRed.roomMax.toFixed(4) : "n/a"} >= ${CLIP_MAX}, clippedFraction=${suburbRed.roomClippedFraction != null ? suburbRed.roomClippedFraction.toFixed(2) : "n/a"} >= ${CLIP_FRACTION_GATE}) — the check is load-bearing (proves the regression is real, not assumed)`);
 
     await page.evaluate(() => window.Theater.setBrightRealmFillForceDefaultForTest(false));
     const suburbGreenPng = await mountAndShoot(page, suburbAmbientBoard, path.join(outDir, "p1a-suburb-daylit-GREEN-per-realm.png"));
@@ -465,7 +481,18 @@ async function main() {
     const suburbLights = await page.evaluate(() => window.Theater._interiorSceneLightsForTest());
     console.log(`  suburb daylit, PER-REALM fill (${JSON.stringify(suburbLights)}): roomMean=${suburbGreen.roomMean != null ? suburbGreen.roomMean.toFixed(4) : "n/a"} roomMax=${suburbGreen.roomMax != null ? suburbGreen.roomMax.toFixed(4) : "n/a"} clippedFraction=${suburbGreen.roomClippedFraction != null ? suburbGreen.roomClippedFraction.toFixed(2) : "n/a"}`);
     ok(suburbGreen.roomMax != null && suburbGreen.roomMax < CLIP_MAX && suburbGreen.roomClippedFraction < CLIP_FRACTION_GATE,
-      `GREEN: with the real per-realm fill, suburb no longer clips (roomMax=${suburbGreen.roomMax != null ? suburbGreen.roomMax.toFixed(4) : "n/a"} < ${CLIP_MAX}, clippedFraction=${suburbGreen.roomClippedFraction != null ? suburbGreen.roomClippedFraction.toFixed(2) : "n/a"} < ${CLIP_FRACTION_GATE})`);
+      `GREEN: with the real per-realm fill, suburb stays well under the clip ceiling (roomMax=${suburbGreen.roomMax != null ? suburbGreen.roomMax.toFixed(4) : "n/a"} < ${CLIP_MAX}, clippedFraction=${suburbGreen.roomClippedFraction != null ? suburbGreen.roomClippedFraction.toFixed(2) : "n/a"} < ${CLIP_FRACTION_GATE})`);
+    // CR-1 item 5b — the re-scoped RED-vs-GREEN comparison (see the group-header comment above for the
+    // full AgX rationale): both numbers now measured, prove the OLD one-size numbers read a CLEAR,
+    // non-marginal margin hotter than the real per-realm fill, on both roomMean and roomMax — the per-
+    // realm fill is still doing real, load-bearing dimming work, even though neither number hard-clips
+    // to white under AgX's rolloff anymore.
+    const redMeanRatio = (suburbRed.roomMean != null && suburbGreen.roomMean) ? suburbRed.roomMean / suburbGreen.roomMean : null;
+    const redMaxRatio = (suburbRed.roomMax != null && suburbGreen.roomMax) ? suburbRed.roomMax / suburbGreen.roomMax : null;
+    ok(redMeanRatio != null && redMeanRatio >= RED_HOTTER_MARGIN,
+      `RED-FIRST (re-scoped): the old global numbers read a CLEAR margin hotter on roomMean (ratio=${redMeanRatio != null ? redMeanRatio.toFixed(3) : "n/a"} >= ${RED_HOTTER_MARGIN}) — the per-realm fill is load-bearing, not vacuous`);
+    ok(redMaxRatio != null && redMaxRatio >= RED_HOTTER_MARGIN,
+      `RED-FIRST (re-scoped): the old global numbers read a CLEAR margin hotter on roomMax (ratio=${redMaxRatio != null ? redMaxRatio.toFixed(3) : "n/a"} >= ${RED_HOTTER_MARGIN}) — the per-realm fill is load-bearing, not vacuous`);
     ok(suburbGreen.roomMean != null && suburbGreen.roomMean >= 0.05,
       `the fix doesn't overcorrect into darkness: suburb's room still reads lit (roomMean=${suburbGreen.roomMean != null ? suburbGreen.roomMean.toFixed(4) : "n/a"} >= 0.05)`);
 

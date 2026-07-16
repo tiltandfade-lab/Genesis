@@ -1,0 +1,7 @@
+{
+  "generatedBy": "build/gen-sprite-registry.py",
+  "spec": "KENNEY-SOCKET-WAVE.md CR-1 item 2",
+  "policy": "qaStatus-candidate > verdict-pass > alphabetical-last-resort",
+  "collisionCount": 0,
+  "collisions": []
+}

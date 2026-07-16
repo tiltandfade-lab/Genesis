@@ -2909,6 +2909,13 @@ function normalizeSpriteKey(s){
 // can watch this climb to confirm the id-map tier is actually doing the work it claims, not just
 // silently present.
 let SPRITE_JOIN_NAME_FALLBACK_COUNT = 0;
+// CR-1 item 4 (2026-07-15 adversarial review): the TIER 2 console.warn below used to fire on
+// EVERY fallback hit — a hot path for any creature whose id-map lookup misses, flooding the
+// console across a normal session once a handful of slugs are missing an id-map entry. De-duped
+// to once per distinct recipeSlug per session via this Set; SPRITE_JOIN_NAME_FALLBACK_COUNT
+// itself is NOT de-duped — it still increments on every TIER 2 hit (a harness reads the raw
+// tally), only the console.warn call is suppressed on repeat hits for an already-warned slug.
+const SPRITE_JOIN_NAME_FALLBACK_WARNED = new Set();
 
 /* T4.1 resolution, extended by S4: recipeSlug is already "the exact bestiary id" (wholeObjectKeyFor's
    own header comment, and src/engine/theater-data.js's own `f.modelKey || f.statId` header comment on
@@ -2963,9 +2970,14 @@ function spriteEntryFor(recipeSlug){
     if(e.verdict === "fail") continue; // review-failed art never renders — falls through to the 3D chain
     if(normalizeSpriteKey(e.name) === wantKey){
       SPRITE_JOIN_NAME_FALLBACK_COUNT++;
-      if(typeof console !== "undefined" && console.warn){
-        console.warn("[sprite-join] name-join fallback: recipeSlug '" + recipeSlug + "' -> '" + regKey
-          + "' (no SPRITE_BY_BESTIARY_ID hit; fallback count=" + SPRITE_JOIN_NAME_FALLBACK_COUNT + ")");
+      // CR-1 item 4 — warn once per distinct recipeSlug per session; the counter above still
+      // climbs on every hit regardless.
+      if(!SPRITE_JOIN_NAME_FALLBACK_WARNED.has(recipeSlug)){
+        SPRITE_JOIN_NAME_FALLBACK_WARNED.add(recipeSlug);
+        if(typeof console !== "undefined" && console.warn){
+          console.warn("[sprite-join] name-join fallback: recipeSlug '" + recipeSlug + "' -> '" + regKey
+            + "' (no SPRITE_BY_BESTIARY_ID hit; fallback count=" + SPRITE_JOIN_NAME_FALLBACK_COUNT + ")");
+        }
       }
       return Object.assign({ slug: regKey }, e);
     }
@@ -11736,6 +11748,11 @@ window.Theater.brightPracticalsSuppressed = function(){ return !!ITR_BRIGHT_SUPP
 // counter read-only so a harness can assert TIER 2 actually fired (or didn't).
 window.Theater._spriteEntryForTest = function(recipeSlug){ return spriteEntryFor(recipeSlug); };
 window.Theater._spriteJoinNameFallbackCountForTest = function(){ return SPRITE_JOIN_NAME_FALLBACK_COUNT; };
+// CR-1 item 4 — the TIER 2 console.warn de-dupe Set, read-only size + a reset, so a harness can
+// prove "warns once per slug, counter still climbs every hit" across repeated _spriteEntryForTest
+// calls within a single subprocess instead of needing a fresh one per assertion.
+window.Theater._spriteJoinNameFallbackWarnedSizeForTest = function(){ return SPRITE_JOIN_NAME_FALLBACK_WARNED.size; };
+window.Theater._resetSpriteJoinNameFallbackWarnedForTest = function(){ SPRITE_JOIN_NAME_FALLBACK_WARNED.clear(); };
 // VQ2-RESPEC.md §3 unit L2 — the demand-vs-null census read-out, same "_xxxForTest" idiom as every
 // other harness hook in this file: a play-lens run (or any harness) reads a SUMMARIZED snapshot
 // after each capture rather than poking GS.theaterCensus directly (GS is a classic-script global this

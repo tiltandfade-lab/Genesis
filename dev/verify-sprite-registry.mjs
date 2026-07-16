@@ -32,8 +32,24 @@
         `feet` nor a resolvable `size` (spr-gloom-attic-moth-swarm, the fixture's deliberately-
         unjoined cell) yields worldHeight:null + heightSource:"missing". RED-FIRST: the same
         assertion function is proven to bite on a mutated clone that injects a fake band-default
-        guess before trusting it against the real fixture-generated entry. */
-import { readFileSync, writeFileSync, unlinkSync, mkdtempSync, existsSync } from "node:fs";
+        guess before trusting it against the real fixture-generated entry.
+
+   KENNEY-SOCKET-WAVE.md CR-1 item 1 extends this harness with:
+     11. fold_in_orphans' standee-contract call must honor the SLUG'S OWN overlay entry (Adam's
+         editor `floor` override), not an unconditional `{}` — gen-sprite-registry.py:346 passed
+         `{}` instead of `overlay.get(slug, {})`, so an orphan with no faceted cut-record
+         contentBounds (a transparent-crop orphan) silently dropped his ruled ground-contact line
+         and fell back to the bbox bottom-center default. RED-FIRST: fold_in_orphans is driven
+         DIRECTLY (python3 -c, importlib) against a pinned PRE-FIX commit of
+         build/gen-sprite-registry.py (66fc7a0b, the exact commit this branch forked from) with a
+         synthetic orphan slug whose cut-record carries no contentBounds and whose overlay sets
+         `floor`; the pre-fix module MUST ignore the override (footY stays at the un-overlaid 1.0
+         default) before the real, current module is proven to honor it (footY == 1 - floor).
+     12. item 3: `--check` now dry-exercises fold_in_orphans + build_bestiary_id_map (prints
+         "CHECK: S4 orphan fold-in (dry) ..." / "CHECK: S4 bestiary-id map (dry) ...") instead of
+         returning before either ever runs — asserted via the process exit code + stdout, plus a
+         before/after byte-diff of every write-path artifact proving --check performs zero writes. */
+import { readFileSync, writeFileSync, unlinkSync, mkdtempSync, mkdirSync, rmSync, existsSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { createRequire } from "node:module";
@@ -355,6 +371,106 @@ console.log("\n=== RED-FIRST: pre-S6 baseline sprite-review.py must reject overl
   try { unlinkSync(overlayPath); } catch {}
   try { unlinkSync(outPath); } catch {}
   try { unlinkSync(baselinePath); } catch {}
+}
+
+// ---- KENNEY-SOCKET-WAVE.md CR-1 item 1 — fold_in_orphans must honor the slug's own overlay
+// entry (Adam's editor `floor` override), not an unconditional {} ----
+console.log("\n=== RED-FIRST: CR-1 item 1 — fold_in_orphans must honor overlay `floor` when the cut-record carries no contentBounds ===");
+{
+  // Pinned at the exact master commit this branch forked from (66fc7a0b) — the commit
+  // immediately BEFORE gen-sprite-registry.py:346 was fixed to pass overlay.get(slug, {})
+  // instead of {} into standee_contract_for. A moving ref (git merge-base) would go stale the
+  // instant this fix lands on master — the same staleness class the S6 baseline section above
+  // already hit once and fixed the same way (a hardcoded pinned SHA).
+  const preFixSha = "66fc7a0b";
+  const preFixSrc = execFileSync("git", ["show", `${preFixSha}:build/gen-sprite-registry.py`],
+    { cwd: ROOT, maxBuffer: 1024 * 1024 * 8 }).toString();
+  const scratch = mkdtempSync(join(tmpdir(), "genesis-orphan-floor-"));
+  const preFixPath = join(scratch, "gen_pre_fix.py");
+  writeFileSync(preFixPath, preFixSrc);
+  const facetedDir = join(scratch, "sprites-faceted");
+  mkdirSync(facetedDir, { recursive: true });
+  // fold_in_orphans gates a slug's inclusion on a real cut file existing on disk (SPRITES_FACETED_DIR)
+  // — monkeypatched below to this scratch dir so the fixture never touches the real corpus.
+  writeFileSync(join(facetedDir, "spr-fantasy-test-orphan.png"), "");
+
+  const runScript = (modPath) => [
+    "import importlib.util",
+    `spec = importlib.util.spec_from_file_location("gen_mod", ${JSON.stringify(modPath)})`,
+    "mod = importlib.util.module_from_spec(spec)",
+    "spec.loader.exec_module(mod)",
+    `mod.SPRITES_FACETED_DIR = ${JSON.stringify(facetedDir)}`,
+    "entries = {}",
+    // no "contentBounds" key at all -> a falsy cut_record's own truthiness check in
+    // standee_contract_for -> the "null contentBounds" scenario CR-1 item 1 names.
+    'faceted_cut_slugs = {"spr-fantasy-test-orphan": {}}',
+    'overlay = {"spr-fantasy-test-orphan": {"floor": 0.2}}',
+    "mod.fold_in_orphans(entries, faceted_cut_slugs, {}, {}, {}, overlay, admit_faceted=False)",
+    'e = entries["spr-fantasy-test-orphan"]',
+    'print("footY=" + str(e["footY"]))',
+  ].join("\n");
+
+  const preFixOut = execFileSync("python3", ["-c", runScript(preFixPath)], { cwd: ROOT, encoding: "utf-8" }).trim();
+  const preFixFootY = parseFloat(preFixOut.split("footY=")[1]);
+  // pre-fix: {} was passed instead of the overlay entry, so the floor override is invisible —
+  // standee_contract_for falls all the way to its own bbox-bottom-center default (footY 1.0).
+  const preFixBites = Math.abs(preFixFootY - 1.0) < 1e-9;
+  console.log(preFixBites
+    ? `  ✓ RED-FIRST proven: pre-fix fold_in_orphans ignores the overlay floor override (footY=${preFixFootY}, the un-overlaid 1.0 default)`
+    : `  ✗ RED-FIRST FAILED TO PROVE ANYTHING: pre-fix footY=${preFixFootY}, expected 1.0`);
+  if (!preFixBites) { fail++; } else { pass++; }
+
+  const postFixOut = execFileSync("python3", ["-c", runScript(join(ROOT, "build", "gen-sprite-registry.py"))],
+    { cwd: ROOT, encoding: "utf-8" }).trim();
+  const postFixFootY = parseFloat(postFixOut.split("footY=")[1]);
+  check("11. post-fix fold_in_orphans honors the overlay floor override (footY = 1 - floor = 0.8)",
+    Math.abs(postFixFootY - 0.8) < 1e-9, `got footY=${postFixFootY}`);
+
+  rmSync(scratch, { recursive: true, force: true });
+}
+
+// ---- KENNEY-SOCKET-WAVE.md CR-1 item 3 — `--check` now exercises fold_in_orphans +
+// build_bestiary_id_map DRY, asserted via the process's own exit code + stdout, with a
+// before/after byte-diff on every artifact the write path could touch proving zero writes ----
+console.log("\n=== CR-1 item 3 — `--check` exercises fold_in_orphans/build_bestiary_id_map DRY (zero writes) ===");
+{
+  const OUT_PATH = join(ROOT, "data", "sprite-registry.js");
+  const COLLISIONS_PATH = join(ROOT, "dev", "model-qa", "sprite-join-collisions.json");
+  const INVENTORY_PATH = join(ROOT, "dev", "model-qa", "faceted-inventory-report.json");
+  const REJECTS_PATH = join(ROOT, "dev", "sprite-manifests", "REJECTS.md");
+  const snapshot = () => ({
+    registry: existsSync(OUT_PATH) ? readFileSync(OUT_PATH, "utf-8") : null,
+    collisions: existsSync(COLLISIONS_PATH) ? readFileSync(COLLISIONS_PATH, "utf-8") : null,
+    inventory: existsSync(INVENTORY_PATH) ? readFileSync(INVENTORY_PATH, "utf-8") : null,
+    rejects: existsSync(REJECTS_PATH) ? readFileSync(REJECTS_PATH, "utf-8") : null,
+  });
+  const before = snapshot();
+
+  let checkOut = "", checkExitCode = 0;
+  try {
+    checkOut = execFileSync("python3", [join(ROOT, "build", "gen-sprite-registry.py"), "--check"],
+      { cwd: ROOT, encoding: "utf-8" });
+  } catch (e) {
+    checkExitCode = e.status ?? 1;
+    checkOut = (e.stdout || "").toString();
+  }
+
+  check("12. `--check` exits 0 against the real (production) manifest",
+    checkExitCode === 0, `exit code ${checkExitCode}`);
+  check("12b. `--check` stdout carries the S4 orphan fold-in dry-run marker",
+    /CHECK: S4 orphan fold-in \(dry\) would add \d+ slug\(s\)/.test(checkOut), checkOut.slice(-500));
+  check("12c. `--check` stdout carries the S4 bestiary-id map dry-run marker (id count + collision count)",
+    /CHECK: S4 bestiary-id map \(dry\) would resolve \d+ id\(s\), \d+ collision\(s\)/.test(checkOut), checkOut.slice(-500));
+
+  const after = snapshot();
+  check("12d. `--check` writes NOTHING — data/sprite-registry.js byte-unchanged",
+    before.registry === after.registry, "registry file mutated by --check");
+  check("12e. `--check` writes NOTHING — dev/model-qa/sprite-join-collisions.json unchanged (present/absent state preserved)",
+    before.collisions === after.collisions, "collisions report mutated/created by --check");
+  check("12f. `--check` writes NOTHING — faceted-inventory-report.json unchanged",
+    before.inventory === after.inventory, "inventory report mutated by --check");
+  check("12g. `--check` writes NOTHING — REJECTS.md unchanged",
+    before.rejects === after.rejects, "REJECTS.md mutated by --check");
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);

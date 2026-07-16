@@ -29,6 +29,9 @@ GLB_MAGIC = b"glTF"
 CHUNK_JSON = 0x4E4F534A
 CHUNK_BIN = 0x004E4942
 MATERIAL_FAMILIES = {"stone", "wood", "iron", "roof", "glass", "cloth"}
+SOURCE_MATERIAL_FAMILIES = {
+    "wood": "wood", "carpet": "cloth", "metal": "iron", "lamp": "glass",
+}
 ADMISSION_CLASSES = {"DIRECT_MODULATED", "PART_DONOR", "CHASSIS"}
 SOCKET_TYPES = {"floor-mount", "wall-mount", "top-surface", "hinge"}
 MATE_RULES = {"coincident", "opposed-z"}
@@ -215,6 +218,27 @@ def strip_materials(gltf):
         for primitive in mesh.get("primitives", []):
             primitive.pop("material", None)
             primitive.pop("extensions", None)
+
+
+def source_material_family(name):
+    return SOURCE_MATERIAL_FAMILIES.get(name.casefold()) if isinstance(name, str) else None
+
+
+def stamp_primitive_materials(gltf):
+    materials = gltf.get("materials", [])
+    for mesh in gltf.get("meshes", []):
+        for primitive in mesh.get("primitives", []):
+            material_index = primitive.get("material")
+            if not isinstance(material_index, int) or not 0 <= material_index < len(materials):
+                continue
+            family = source_material_family(materials[material_index].get("name"))
+            if family is None:
+                continue
+            extras = dict(primitive.get("extras") or {})
+            donor_data = dict(extras.get("genesisDonor") or {})
+            donor_data["materialFamily"] = family
+            extras["genesisDonor"] = donor_data
+            primitive["extras"] = extras
 
 
 def merge_extras(node, donor_data):
@@ -560,6 +584,7 @@ def normalize_asset(asset_id, asset, pack, source_tuple, calibration_hash):
     source_gltf, binchunk, raw_bounds = source_tuple
     gltf = copy.deepcopy(source_gltf)
     original_paths = node_paths(gltf)
+    stamp_primitive_materials(gltf)
     strip_materials(gltf)
     stamp_mesh_materials(gltf, original_paths, asset)
     donor_idx, source_matrix = wrap_source(gltf, pack, asset, asset_id)

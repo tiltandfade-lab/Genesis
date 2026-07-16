@@ -291,6 +291,17 @@ function donorMaterialForFamily(family, seedKey, profile) {
   });
 }
 
+function donorMaterialFamilyForMesh(mesh) {
+  const primitiveFamily = mesh.geometry && mesh.geometry.userData &&
+    mesh.geometry.userData.genesisDonor && mesh.geometry.userData.genesisDonor.materialFamily;
+  if (primitiveFamily) return primitiveFamily;
+  for (let owner = mesh; owner; owner = owner.parent) {
+    const donorData = owner.userData && owner.userData.genesisDonor;
+    if (donorData && donorData.materialFamily) return donorData.materialFamily;
+  }
+  return null;
+}
+
 // ─── outline policy metadata ───────────────────────────────────────────────────────────────────
 // KGR-2: the inverted-hull geometry implementation is retired. Keep this realm table + lookup as
 // dormant art policy only; a future shader/screen-space unit may consume it without reintroducing
@@ -341,8 +352,10 @@ export async function loadDonorPiece(pack, slug, opts) {
       if (Array.isArray(donorData.sockets)) {
         donorData.sockets.forEach((socket) => socketRecords.push({ owner: obj, socket }));
       }
-      if (donorData.materialFamily && obj.isMesh) {
-        const family = donorData.materialFamily;
+    }
+    if (obj.isMesh) {
+      const family = donorMaterialFamilyForMesh(obj);
+      if (family) {
         obj.material = donorMaterialForFamily(family, seedKey + ":" + obj.name, realmProfile);
         materialFamiliesApplied.push(family);
       }

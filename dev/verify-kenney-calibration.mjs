@@ -90,6 +90,36 @@ function makeTempRun(calibration, rawText = null, sourceRoot = join(ROOT,"assets
 }
 function clean(run){rmSync(run.temp,{recursive:true,force:true});}
 
+function furnitureFixtureCalibration() {
+  const pack="kenney-furniture-kit";
+  const asset=(slug,rootMaterialFamily)=>({
+    sourceSha256:sha(readFileSync(join(ROOT,"assets/models",pack,`${slug}.glb`))),
+    admissionClass:"PART_DONOR", category:"furniture", rootMaterialFamily,
+    preTransform:{translation:[0,0,0],rotation:[0,0,0,1],scale:[1,1,1]},
+    scaleReason:null, groundOffset:0, semanticParts:{}, sockets:[],
+    footprintOverride:null, qaStatus:"needs-review", notes:[],
+  });
+  return {
+    schema:"genesis.kenney-calibration.v1", algorithmVersion:1,
+    packs:{[pack]:{sourceUp:"+Y",sourceForward:"+Z",canonicalScale:1,structuralGrid:null}},
+    assets:{
+      [`${pack}/benchCushionLow`]:asset("benchCushionLow","wood"),
+      [`${pack}/lampWall`]:asset("lampWall","iron"),
+    },
+  };
+}
+
+function primitiveMaterialFamilies(gltf) {
+  const meshNode=(gltf.nodes||[]).find((node)=>node.mesh!==undefined);
+  const rootFamily=meshNode?.extras?.genesisDonor?.materialFamily||null;
+  const primitives=gltf.meshes?.[meshNode?.mesh]?.primitives||[];
+  const overrides=primitives.map((primitive)=>primitive.extras?.genesisDonor?.materialFamily||null);
+  return {overrides,resolved:overrides.map((family)=>family||rootFamily),rootFamily};
+}
+function sameFamilyBag(actual,expected) {
+  return [...actual].sort().join("|")===[...expected].sort().join("|");
+}
+
 console.log("\n=== KGR-3 calibration source + v2 artifacts ===");
 const calibration=json("dev/model-foundry/kenney-calibration.json");
 const schema=json("dev/model-foundry/kenney-calibration.schema.json");
@@ -137,6 +167,37 @@ check("every attachment quaternion is finite and normalized",framesOk);
 check("every derived floor mount lies on ground within 0.01u",groundsOk);
 check("DIRECT_MODULATED footprints obey their structural grid within 2%",gridOk);
 check("material stripping preserves every TEXCOORD accessor index",uvOk);
+
+console.log("\n=== primitive material semantics from real multi-primitive donors ===");
+{
+  const run=makeTempRun(furnitureFixtureCalibration());
+  const benchPath=join(run.out,"kenney-furniture-kit/benchCushionLow.glb");
+  const lampPath=join(run.out,"kenney-furniture-kit/lampWall.glb");
+  check("real benchCushionLow/lampWall scratch normalization succeeds",
+    run.result.status===0&&existsSync(benchPath)&&existsSync(lampPath),run.result.stderr);
+  if(run.result.status===0) {
+    const bench=primitiveMaterialFamilies(readGlb(benchPath));
+    const lamp=primitiveMaterialFamilies(readGlb(lampPath));
+    check("recognized primitive extras preserve bench wood/carpet semantics before source materials are stripped",
+      JSON.stringify(bench.overrides)===JSON.stringify(["wood","cloth",null]),JSON.stringify(bench));
+    check("recognized primitive extras preserve lamp metal/lamp semantics before source materials are stripped",
+      JSON.stringify(lamp.overrides)===JSON.stringify(["iron","glass"]),JSON.stringify(lamp));
+    check("normalized real primitive family bags are bench wood,cloth,wood and lamp iron,glass",
+      sameFamilyBag(bench.resolved,["wood","cloth","wood"])&&
+      sameFamilyBag(lamp.resolved,["iron","glass"]),
+      JSON.stringify({bench:bench.resolved,lamp:lamp.resolved}));
+    check("unknown _defaultMat primitive inherits the calibrated bench root family",
+      bench.overrides[2]===null&&bench.resolved[2]==="wood"&&bench.rootFamily==="wood",JSON.stringify(bench));
+    const withoutPrimitiveStamping=bench.overrides.map(()=>bench.rootFamily);
+    check("⊗ removing primitive stamping makes the real bench family bag red",
+      !sameFamilyBag(withoutPrimitiveStamping,["wood","cloth","wood"]),JSON.stringify(withoutPrimitiveStamping));
+    const withoutAncestorInheritance=bench.overrides;
+    check("⊗ removing ancestor inheritance leaves the unknown bench primitive unresolved",
+      !sameFamilyBag(withoutAncestorInheritance,["wood","cloth","wood"])&&withoutAncestorInheritance.includes(null),
+      JSON.stringify(withoutAncestorInheritance));
+  }
+  clean(run);
+}
 
 console.log("\n=== transformed measurement + single-scale negative controls ===");
 {

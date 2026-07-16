@@ -108,6 +108,28 @@ scorch feathers outward, cracks propagate along stress lines). Same adult horror
 muted palette as the canon; NO triangulation, NO polygonal planes, NO faceted geometry of any
 kind on a decal. Magenta-key, strict top or front projection per the decal contract.
 
+## THE PIXEL CANON RULING (Adam, 2026-07-15 — additive; scopes the figure register above)
+
+Adam's words, verbatim, after the flip-verdict sheet review:
+
+> "i think for now we stick with the pixel art style and just try to get the magenta crud
+> cleaned up"
+
+> "the other thing we need to do is make sure that sprites are the canon thing, the docs that
+> helped us generate them need to be made a critical part of the art department of this game
+> now. those docs should be easy to find, easy to regenerate sprites with with the exact same
+> style per realm"
+
+**Scope of this ruling:** the LIVE creature/NPC standee register is the PIXEL corpus
+(`assets/sprites/`, the v3 generation) and its style authorities (docs/SPRITE-GEN-V2.md, the
+CLEAN-SHAPES amendment, the realm master palettes, the per-realm outline law) — consolidated
+into **`docs/ART-DEPARTMENT.md`**, the pixel register's own canonical home and regeneration
+runbook, a SIBLING of this file under the same quote-never-paraphrase discipline. The faceted
+figure register above remains LAW for the faceted RESERVE corpus (re-admissible per creature)
+and for any future faceted regeneration; the prop/decal/fx/tile lanes are untouched by this
+ruling (their registers pend their own verdicts). The decision-capture rule continues to apply
+to BOTH files: figure-art rulings land here or in ART-DEPARTMENT.md the session they are made.
+
 ## Prop canon (plan §3/§4/§7 on codex/extruded-prop-pilot — verbatim pointers, Adam 2026-07-14)
 
 Props and dressing are governed by three verbatim authorities on `codex/extruded-prop-pilot`

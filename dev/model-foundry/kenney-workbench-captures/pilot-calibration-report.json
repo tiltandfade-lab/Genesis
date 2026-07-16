@@ -1,0 +1,1419 @@
+{
+  "schema": "genesis.kenney-pilot-calibration-report.v1",
+  "unit": "KGR-4C",
+  "qaState": "approved-dev",
+  "pilots": [
+    {
+      "assetId": "kenney-retro-fantasy-kit/detail-barrel",
+      "sourceSha256": "4262d0d3c8ac39bc10c0bb96e9b687d3bd1cc4a79df12b86fef37ebfd24fbb1b",
+      "packScale": 2,
+      "perAssetScale": 1,
+      "scaleReason": null,
+      "dimensions": [
+        0.492000013589859,
+        0.6000000238418579,
+        0.492000013589859
+      ],
+      "footprint": {
+        "center": [
+          0,
+          0
+        ],
+        "halfExtents": [
+          0.246,
+          0.246
+        ],
+        "yawRadians": 0
+      },
+      "mount": {
+        "id": "floor-mount",
+        "type": "floor-mount",
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "mateRule": "coincident",
+        "mateFamily": "floor",
+        "size": [
+          0.492,
+          0.05,
+          0.492
+        ],
+        "clearance": {
+          "shape": "box",
+          "size": [
+            0.492,
+            0.6,
+            0.492
+          ]
+        }
+      },
+      "qaStatus": "approved-dev",
+      "rootMaterialFamily": "wood",
+      "orientations": [
+        {
+          "index": 0,
+          "halfExtents": [
+            0.246,
+            0.246
+          ],
+          "yawRadians": 0
+        },
+        {
+          "index": 1,
+          "halfExtents": [
+            0.246,
+            0.246
+          ],
+          "yawRadians": 1.5707963267948966
+        },
+        {
+          "index": 2,
+          "halfExtents": [
+            0.246,
+            0.246
+          ],
+          "yawRadians": 3.141592653589793
+        },
+        {
+          "index": 3,
+          "halfExtents": [
+            0.246,
+            0.246
+          ],
+          "yawRadians": 4.71238898038469
+        }
+      ],
+      "views": {
+        "raw": {
+          "url": "/assets/models/kenney-retro-fantasy-kit/detail-barrel.glb",
+          "diagnostic": "RAW MATERIAL UNAVAILABLE: Textures/barrel.png is absent from the source corpus; neutral diagnostic texture substituted."
+        },
+        "normalized": {
+          "url": "/assets/models-normalized/kenney-retro-fantasy-kit/detail-barrel.glb",
+          "diagnostic": ""
+        },
+        "genesis": {
+          "url": "loadDonorPiece(kenney-retro-fantasy-kit, detail-barrel)",
+          "diagnostic": ""
+        }
+      },
+      "browser": {
+        "yardstick": {
+          "height": 1.2000000476837158,
+          "groundY": 0,
+          "parent": "workbench-calibrated-root",
+          "visible": true,
+          "onScreen": true
+        },
+        "sockets": 1,
+        "appliedFamilies": [
+          "wood"
+        ],
+        "meshes": [
+          {
+            "name": "detail-barrel_2",
+            "materials": [
+              {
+                "type": "MeshStandardMaterial",
+                "color": "87613f",
+                "metalness": 0,
+                "roughness": 0.85,
+                "transmission": null
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "assetId": "kenney-pirate-kit/crate",
+      "sourceSha256": "b525674e07c8b83667512a8dd93be0d7684358347d0e64d2bb16b156ac382ed1",
+      "packScale": 0.7,
+      "perAssetScale": 1,
+      "scaleReason": null,
+      "dimensions": [
+        0.7545999646186828,
+        0.5389999866485595,
+        0.9163000106811523
+      ],
+      "footprint": {
+        "center": [
+          0,
+          0
+        ],
+        "halfExtents": [
+          0.3773,
+          0.45815
+        ],
+        "yawRadians": 0
+      },
+      "mount": {
+        "id": "floor-mount",
+        "type": "floor-mount",
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "mateRule": "coincident",
+        "mateFamily": "floor",
+        "size": [
+          0.7546,
+          0.05,
+          0.9163
+        ],
+        "clearance": {
+          "shape": "box",
+          "size": [
+            0.7546,
+            0.539,
+            0.9163
+          ]
+        }
+      },
+      "qaStatus": "approved-dev",
+      "rootMaterialFamily": "wood",
+      "orientations": [
+        {
+          "index": 0,
+          "halfExtents": [
+            0.3773,
+            0.45815
+          ],
+          "yawRadians": 0
+        },
+        {
+          "index": 1,
+          "halfExtents": [
+            0.45815,
+            0.3773
+          ],
+          "yawRadians": 1.5707963267948966
+        },
+        {
+          "index": 2,
+          "halfExtents": [
+            0.3773,
+            0.45815
+          ],
+          "yawRadians": 3.141592653589793
+        },
+        {
+          "index": 3,
+          "halfExtents": [
+            0.45815,
+            0.3773
+          ],
+          "yawRadians": 4.71238898038469
+        }
+      ],
+      "views": {
+        "raw": {
+          "url": "/assets/models/kenney-pirate-kit/crate.glb",
+          "diagnostic": "RAW MATERIAL UNAVAILABLE: Textures/colormap.png is absent from the source corpus; neutral diagnostic texture substituted."
+        },
+        "normalized": {
+          "url": "/assets/models-normalized/kenney-pirate-kit/crate.glb",
+          "diagnostic": ""
+        },
+        "genesis": {
+          "url": "loadDonorPiece(kenney-pirate-kit, crate)",
+          "diagnostic": ""
+        }
+      },
+      "browser": {
+        "yardstick": {
+          "height": 1.2000000476837158,
+          "groundY": 0,
+          "parent": "workbench-calibrated-root",
+          "visible": true,
+          "onScreen": true
+        },
+        "sockets": 1,
+        "appliedFamilies": [
+          "wood"
+        ],
+        "meshes": [
+          {
+            "name": "crate_2",
+            "materials": [
+              {
+                "type": "MeshStandardMaterial",
+                "color": "3c2a1c",
+                "metalness": 0,
+                "roughness": 0.85,
+                "transmission": null
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "assetId": "kenney-pirate-kit/chest",
+      "sourceSha256": "26d26c4c032a12320fe05b5005a72eba96db7167db0d35873639a4b7dcc06bcb",
+      "packScale": 0.7,
+      "perAssetScale": 1,
+      "scaleReason": null,
+      "dimensions": [
+        0.8924999899599839,
+        0.8032499916553497,
+        0.8924999899864197
+      ],
+      "footprint": {
+        "center": [
+          0,
+          0
+        ],
+        "halfExtents": [
+          0.44625,
+          0.44625
+        ],
+        "yawRadians": 0
+      },
+      "mount": {
+        "id": "floor-mount",
+        "type": "floor-mount",
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "mateRule": "coincident",
+        "mateFamily": "floor",
+        "size": [
+          0.8925,
+          0.05,
+          0.8925
+        ],
+        "clearance": {
+          "shape": "box",
+          "size": [
+            0.8925,
+            0.80325,
+            0.8925
+          ]
+        }
+      },
+      "qaStatus": "approved-dev",
+      "rootMaterialFamily": "wood",
+      "orientations": [
+        {
+          "index": 0,
+          "halfExtents": [
+            0.44625,
+            0.44625
+          ],
+          "yawRadians": 0
+        },
+        {
+          "index": 1,
+          "halfExtents": [
+            0.44625,
+            0.44625
+          ],
+          "yawRadians": 1.5707963267948966
+        },
+        {
+          "index": 2,
+          "halfExtents": [
+            0.44625,
+            0.44625
+          ],
+          "yawRadians": 3.141592653589793
+        },
+        {
+          "index": 3,
+          "halfExtents": [
+            0.44625,
+            0.44625
+          ],
+          "yawRadians": 4.71238898038469
+        }
+      ],
+      "views": {
+        "raw": {
+          "url": "/assets/models/kenney-pirate-kit/chest.glb",
+          "diagnostic": "RAW MATERIAL UNAVAILABLE: Textures/colormap.png is absent from the source corpus; neutral diagnostic texture substituted."
+        },
+        "normalized": {
+          "url": "/assets/models-normalized/kenney-pirate-kit/chest.glb",
+          "diagnostic": ""
+        },
+        "genesis": {
+          "url": "loadDonorPiece(kenney-pirate-kit, chest)",
+          "diagnostic": ""
+        }
+      },
+      "browser": {
+        "yardstick": {
+          "height": 1.2000000476837158,
+          "groundY": 0,
+          "parent": "workbench-calibrated-root",
+          "visible": true,
+          "onScreen": true
+        },
+        "sockets": 1,
+        "appliedFamilies": [
+          "wood",
+          "wood"
+        ],
+        "meshes": [
+          {
+            "name": "chest_2",
+            "materials": [
+              {
+                "type": "MeshStandardMaterial",
+                "color": "87613f",
+                "metalness": 0,
+                "roughness": 0.85,
+                "transmission": null
+              }
+            ]
+          },
+          {
+            "name": "lid",
+            "materials": [
+              {
+                "type": "MeshStandardMaterial",
+                "color": "3c2a1c",
+                "metalness": 0,
+                "roughness": 0.85,
+                "transmission": null
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "assetId": "kenney-furniture-kit/tableRound",
+      "sourceSha256": "f8daea9124a542a00b7bdacfddac82dc468573d43e44d7b54dd6316e9695754b",
+      "packScale": 1.5,
+      "perAssetScale": 1,
+      "scaleReason": null,
+      "dimensions": [
+        1.0392304499999998,
+        0.5501009415,
+        1.2000000000000002
+      ],
+      "footprint": {
+        "center": [
+          0,
+          0
+        ],
+        "halfExtents": [
+          0.519615225,
+          0.6
+        ],
+        "yawRadians": 0
+      },
+      "mount": {
+        "id": "floor-mount",
+        "type": "floor-mount",
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "mateRule": "coincident",
+        "mateFamily": "floor",
+        "size": [
+          1.03923045,
+          0.05,
+          1.2
+        ],
+        "clearance": {
+          "shape": "box",
+          "size": [
+            1.03923045,
+            0.550100941,
+            1.2
+          ]
+        }
+      },
+      "qaStatus": "approved-dev",
+      "rootMaterialFamily": "wood",
+      "orientations": [
+        {
+          "index": 0,
+          "halfExtents": [
+            0.519615225,
+            0.6
+          ],
+          "yawRadians": 0
+        },
+        {
+          "index": 1,
+          "halfExtents": [
+            0.6,
+            0.519615225
+          ],
+          "yawRadians": 1.5707963267948966
+        },
+        {
+          "index": 2,
+          "halfExtents": [
+            0.519615225,
+            0.6
+          ],
+          "yawRadians": 3.141592653589793
+        },
+        {
+          "index": 3,
+          "halfExtents": [
+            0.6,
+            0.519615225
+          ],
+          "yawRadians": 4.71238898038469
+        }
+      ],
+      "views": {
+        "raw": {
+          "url": "/assets/models/kenney-furniture-kit/tableRound.glb",
+          "diagnostic": ""
+        },
+        "normalized": {
+          "url": "/assets/models-normalized/kenney-furniture-kit/tableRound.glb",
+          "diagnostic": ""
+        },
+        "genesis": {
+          "url": "loadDonorPiece(kenney-furniture-kit, tableRound)",
+          "diagnostic": ""
+        }
+      },
+      "browser": {
+        "yardstick": {
+          "height": 1.2000000476837158,
+          "groundY": 0,
+          "parent": "workbench-calibrated-root",
+          "visible": true,
+          "onScreen": true
+        },
+        "sockets": 1,
+        "appliedFamilies": [
+          "wood"
+        ],
+        "meshes": [
+          {
+            "name": "tableRound(Clone)",
+            "materials": [
+              {
+                "type": "MeshStandardMaterial",
+                "color": "87613f",
+                "metalness": 0,
+                "roughness": 0.85,
+                "transmission": null
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "assetId": "kenney-furniture-kit/benchCushionLow",
+      "sourceSha256": "d1fac209eae2ea7393beefa4932dacb54d500e8f9932a1b17d2a842527df1b2c",
+      "packScale": 1.5,
+      "perAssetScale": 1.031746031746032,
+      "scaleReason": "semantic-size:height 0.30-0.65u; long axis 0.65-1.80u",
+      "dimensions": [
+        0.6500000402380954,
+        0.30952380952380965,
+        0.34047619047619054
+      ],
+      "footprint": {
+        "center": [
+          0,
+          0
+        ],
+        "halfExtents": [
+          0.325,
+          0.170238095238095
+        ],
+        "yawRadians": 0
+      },
+      "mount": {
+        "id": "floor-mount",
+        "type": "floor-mount",
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "mateRule": "coincident",
+        "mateFamily": "floor",
+        "size": [
+          0.65,
+          0.05,
+          0.34047619047619
+        ],
+        "clearance": {
+          "shape": "box",
+          "size": [
+            0.65,
+            0.30952380952381,
+            0.34047619047619
+          ]
+        }
+      },
+      "qaStatus": "approved-dev",
+      "rootMaterialFamily": "wood",
+      "orientations": [
+        {
+          "index": 0,
+          "halfExtents": [
+            0.325,
+            0.170238095238095
+          ],
+          "yawRadians": 0
+        },
+        {
+          "index": 1,
+          "halfExtents": [
+            0.170238095238095,
+            0.325
+          ],
+          "yawRadians": 1.5707963267948966
+        },
+        {
+          "index": 2,
+          "halfExtents": [
+            0.325,
+            0.170238095238095
+          ],
+          "yawRadians": 3.141592653589793
+        },
+        {
+          "index": 3,
+          "halfExtents": [
+            0.170238095238095,
+            0.325
+          ],
+          "yawRadians": 4.71238898038469
+        }
+      ],
+      "views": {
+        "raw": {
+          "url": "/assets/models/kenney-furniture-kit/benchCushionLow.glb",
+          "diagnostic": ""
+        },
+        "normalized": {
+          "url": "/assets/models-normalized/kenney-furniture-kit/benchCushionLow.glb",
+          "diagnostic": ""
+        },
+        "genesis": {
+          "url": "loadDonorPiece(kenney-furniture-kit, benchCushionLow)",
+          "diagnostic": ""
+        }
+      },
+      "browser": {
+        "yardstick": {
+          "height": 1.2000000476837158,
+          "groundY": 0,
+          "parent": "workbench-calibrated-root",
+          "visible": true,
+          "onScreen": true
+        },
+        "sockets": 1,
+        "appliedFamilies": [
+          "wood",
+          "cloth",
+          "wood"
+        ],
+        "meshes": [
+          {
+            "name": "Mesh_benchCushionLow",
+            "materials": [
+              {
+                "type": "MeshStandardMaterial",
+                "color": "a1794f",
+                "metalness": 0,
+                "roughness": 0.85,
+                "transmission": null
+              }
+            ]
+          },
+          {
+            "name": "Mesh_benchCushionLow_1",
+            "materials": [
+              {
+                "type": "MeshStandardMaterial",
+                "color": "5c4f61",
+                "metalness": 0,
+                "roughness": 0.92,
+                "transmission": null
+              }
+            ]
+          },
+          {
+            "name": "Mesh_benchCushionLow_2",
+            "materials": [
+              {
+                "type": "MeshStandardMaterial",
+                "color": "6e4c33",
+                "metalness": 0,
+                "roughness": 0.85,
+                "transmission": null
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "assetId": "kenney-furniture-kit/chair",
+      "sourceSha256": "c8a11eec93e89e31250ba91afc1b8d56c3bec7ae86640fd1239f595ff4180883",
+      "packScale": 1.5,
+      "perAssetScale": 1,
+      "scaleReason": null,
+      "dimensions": [
+        0.30000000000000004,
+        0.705,
+        0.30000000000000004
+      ],
+      "footprint": {
+        "center": [
+          0,
+          0
+        ],
+        "halfExtents": [
+          0.15,
+          0.15
+        ],
+        "yawRadians": 0
+      },
+      "mount": {
+        "id": "floor-mount",
+        "type": "floor-mount",
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "mateRule": "coincident",
+        "mateFamily": "floor",
+        "size": [
+          0.3,
+          0.05,
+          0.3
+        ],
+        "clearance": {
+          "shape": "box",
+          "size": [
+            0.3,
+            0.705,
+            0.3
+          ]
+        }
+      },
+      "qaStatus": "approved-dev",
+      "rootMaterialFamily": "wood",
+      "orientations": [
+        {
+          "index": 0,
+          "halfExtents": [
+            0.15,
+            0.15
+          ],
+          "yawRadians": 0
+        },
+        {
+          "index": 1,
+          "halfExtents": [
+            0.15,
+            0.15
+          ],
+          "yawRadians": 1.5707963267948966
+        },
+        {
+          "index": 2,
+          "halfExtents": [
+            0.15,
+            0.15
+          ],
+          "yawRadians": 3.141592653589793
+        },
+        {
+          "index": 3,
+          "halfExtents": [
+            0.15,
+            0.15
+          ],
+          "yawRadians": 4.71238898038469
+        }
+      ],
+      "views": {
+        "raw": {
+          "url": "/assets/models/kenney-furniture-kit/chair.glb",
+          "diagnostic": ""
+        },
+        "normalized": {
+          "url": "/assets/models-normalized/kenney-furniture-kit/chair.glb",
+          "diagnostic": ""
+        },
+        "genesis": {
+          "url": "loadDonorPiece(kenney-furniture-kit, chair)",
+          "diagnostic": ""
+        }
+      },
+      "browser": {
+        "yardstick": {
+          "height": 1.2000000476837158,
+          "groundY": 0,
+          "parent": "workbench-calibrated-root",
+          "visible": true,
+          "onScreen": true
+        },
+        "sockets": 1,
+        "appliedFamilies": [
+          "wood"
+        ],
+        "meshes": [
+          {
+            "name": "chair(Clone)",
+            "materials": [
+              {
+                "type": "MeshStandardMaterial",
+                "color": "6e4c33",
+                "metalness": 0,
+                "roughness": 0.85,
+                "transmission": null
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "assetId": "kenney-furniture-kit/lampWall",
+      "sourceSha256": "a9679ecd3be05731846f22ade97c37069598ca7a06dd9319f50230e63a1ea83c",
+      "packScale": 1.5,
+      "perAssetScale": 1,
+      "scaleReason": null,
+      "dimensions": [
+        0.3399530620199999,
+        0.1392,
+        0.22550399999999995
+      ],
+      "footprint": {
+        "center": [
+          0,
+          0.112752
+        ],
+        "halfExtents": [
+          0.1699765305,
+          0.112752
+        ],
+        "yawRadians": 0
+      },
+      "mount": {
+        "id": "wall-mount",
+        "type": "wall-mount",
+        "position": [
+          0,
+          0.0696,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "mateRule": "coincident",
+        "mateFamily": "wall",
+        "size": [
+          0.339953061,
+          0.1392,
+          0.05
+        ],
+        "clearance": {
+          "shape": "box",
+          "size": [
+            0.339953061,
+            0.1392,
+            0.225504
+          ]
+        }
+      },
+      "qaStatus": "approved-dev",
+      "rootMaterialFamily": "iron",
+      "orientations": [
+        {
+          "index": 0,
+          "halfExtents": [
+            0.1699765305,
+            0.112752
+          ],
+          "yawRadians": 0
+        },
+        {
+          "index": 1,
+          "halfExtents": [
+            0.112752,
+            0.1699765305
+          ],
+          "yawRadians": 1.5707963267948966
+        },
+        {
+          "index": 2,
+          "halfExtents": [
+            0.1699765305,
+            0.112752
+          ],
+          "yawRadians": 3.141592653589793
+        },
+        {
+          "index": 3,
+          "halfExtents": [
+            0.112752,
+            0.1699765305
+          ],
+          "yawRadians": 4.71238898038469
+        }
+      ],
+      "views": {
+        "raw": {
+          "url": "/assets/models/kenney-furniture-kit/lampWall.glb",
+          "diagnostic": ""
+        },
+        "normalized": {
+          "url": "/assets/models-normalized/kenney-furniture-kit/lampWall.glb",
+          "diagnostic": ""
+        },
+        "genesis": {
+          "url": "loadDonorPiece(kenney-furniture-kit, lampWall)",
+          "diagnostic": ""
+        }
+      },
+      "browser": {
+        "yardstick": {
+          "height": 1.2000000476837158,
+          "groundY": 0,
+          "parent": "workbench-calibrated-root",
+          "visible": true,
+          "onScreen": true
+        },
+        "sockets": 1,
+        "appliedFamilies": [
+          "iron",
+          "glass"
+        ],
+        "meshes": [
+          {
+            "name": "Mesh_lampWall",
+            "materials": [
+              {
+                "type": "MeshStandardMaterial",
+                "color": "76767d",
+                "metalness": 0.35,
+                "roughness": 0.88,
+                "transmission": null
+              }
+            ]
+          },
+          {
+            "name": "Mesh_lampWall_1",
+            "materials": [
+              {
+                "type": "MeshPhysicalMaterial",
+                "color": "5f7a7d",
+                "metalness": 0,
+                "roughness": 0.3,
+                "transmission": 0.75
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "assetId": "kenney-furniture-kit/lampRoundFloor",
+      "sourceSha256": "50fe1b5b588edf15bfa9cc880f71a02a4fda6036350b24733d0ef4de5cc5e908",
+      "packScale": 1.5,
+      "perAssetScale": 1,
+      "scaleReason": null,
+      "dimensions": [
+        0.228059115,
+        1.29,
+        0.26333999745
+      ],
+      "footprint": {
+        "center": [
+          0,
+          0
+        ],
+        "halfExtents": [
+          0.1140295575,
+          0.131669998725
+        ],
+        "yawRadians": 0
+      },
+      "mount": {
+        "id": "floor-mount",
+        "type": "floor-mount",
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "mateRule": "coincident",
+        "mateFamily": "floor",
+        "size": [
+          0.228059115,
+          0.05,
+          0.26333999745
+        ],
+        "clearance": {
+          "shape": "box",
+          "size": [
+            0.228059115,
+            1.29,
+            0.26333999745
+          ]
+        }
+      },
+      "qaStatus": "approved-dev",
+      "rootMaterialFamily": "iron",
+      "orientations": [
+        {
+          "index": 0,
+          "halfExtents": [
+            0.1140295575,
+            0.131669998725
+          ],
+          "yawRadians": 0
+        },
+        {
+          "index": 1,
+          "halfExtents": [
+            0.131669998725,
+            0.1140295575
+          ],
+          "yawRadians": 1.5707963267948966
+        },
+        {
+          "index": 2,
+          "halfExtents": [
+            0.1140295575,
+            0.131669998725
+          ],
+          "yawRadians": 3.141592653589793
+        },
+        {
+          "index": 3,
+          "halfExtents": [
+            0.131669998725,
+            0.1140295575
+          ],
+          "yawRadians": 4.71238898038469
+        }
+      ],
+      "views": {
+        "raw": {
+          "url": "/assets/models/kenney-furniture-kit/lampRoundFloor.glb",
+          "diagnostic": ""
+        },
+        "normalized": {
+          "url": "/assets/models-normalized/kenney-furniture-kit/lampRoundFloor.glb",
+          "diagnostic": ""
+        },
+        "genesis": {
+          "url": "loadDonorPiece(kenney-furniture-kit, lampRoundFloor)",
+          "diagnostic": ""
+        }
+      },
+      "browser": {
+        "yardstick": {
+          "height": 1.2000000476837158,
+          "groundY": 0,
+          "parent": "workbench-calibrated-root",
+          "visible": true,
+          "onScreen": true
+        },
+        "sockets": 1,
+        "appliedFamilies": [
+          "iron",
+          "glass"
+        ],
+        "meshes": [
+          {
+            "name": "Mesh_lampRoundFloor",
+            "materials": [
+              {
+                "type": "MeshStandardMaterial",
+                "color": "4c4c52",
+                "metalness": 0.35,
+                "roughness": 0.88,
+                "transmission": null
+              }
+            ]
+          },
+          {
+            "name": "Mesh_lampRoundFloor_1",
+            "materials": [
+              {
+                "type": "MeshPhysicalMaterial",
+                "color": "6f8b8e",
+                "metalness": 0,
+                "roughness": 0.3,
+                "transmission": 0.75
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "assetId": "kenney-fantasy-town-kit/lantern",
+      "sourceSha256": "f270637e3083d6e84a30626ee05df2b09597a642985a7f5c3e4ab5bb1c7a8d55",
+      "packScale": 1,
+      "perAssetScale": 1,
+      "scaleReason": null,
+      "dimensions": [
+        0.21644848585128784,
+        1.555999994277954,
+        0.22431999444961548
+      ],
+      "footprint": {
+        "center": [
+          0,
+          0
+        ],
+        "halfExtents": [
+          0.108224242925644,
+          0.112159997224808
+        ],
+        "yawRadians": 0
+      },
+      "mount": {
+        "id": "floor-mount",
+        "type": "floor-mount",
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "mateRule": "coincident",
+        "mateFamily": "floor",
+        "size": [
+          0.216448485851288,
+          0.05,
+          0.224319994449616
+        ],
+        "clearance": {
+          "shape": "box",
+          "size": [
+            0.216448485851288,
+            1.555999994277954,
+            0.224319994449616
+          ]
+        }
+      },
+      "qaStatus": "approved-dev",
+      "rootMaterialFamily": "iron",
+      "orientations": [
+        {
+          "index": 0,
+          "halfExtents": [
+            0.108224242925644,
+            0.112159997224808
+          ],
+          "yawRadians": 0
+        },
+        {
+          "index": 1,
+          "halfExtents": [
+            0.112159997224808,
+            0.108224242925644
+          ],
+          "yawRadians": 1.5707963267948966
+        },
+        {
+          "index": 2,
+          "halfExtents": [
+            0.108224242925644,
+            0.112159997224808
+          ],
+          "yawRadians": 3.141592653589793
+        },
+        {
+          "index": 3,
+          "halfExtents": [
+            0.112159997224808,
+            0.108224242925644
+          ],
+          "yawRadians": 4.71238898038469
+        }
+      ],
+      "views": {
+        "raw": {
+          "url": "/assets/models/kenney-fantasy-town-kit/lantern.glb",
+          "diagnostic": "RAW MATERIAL UNAVAILABLE: Textures/colormap.png is absent from the source corpus; neutral diagnostic texture substituted."
+        },
+        "normalized": {
+          "url": "/assets/models-normalized/kenney-fantasy-town-kit/lantern.glb",
+          "diagnostic": ""
+        },
+        "genesis": {
+          "url": "loadDonorPiece(kenney-fantasy-town-kit, lantern)",
+          "diagnostic": ""
+        }
+      },
+      "browser": {
+        "yardstick": {
+          "height": 1.2000000476837158,
+          "groundY": 0,
+          "parent": "workbench-calibrated-root",
+          "visible": true,
+          "onScreen": true
+        },
+        "sockets": 1,
+        "appliedFamilies": [
+          "iron"
+        ],
+        "meshes": [
+          {
+            "name": "lantern_2",
+            "materials": [
+              {
+                "type": "MeshStandardMaterial",
+                "color": "4c4c52",
+                "metalness": 0.35,
+                "roughness": 0.88,
+                "transmission": null
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "assetId": "kenney-factory-kit/lever-double",
+      "sourceSha256": "b14d1fc30f29a8e8dc56dae7b20a8a988be5155bafcddc726cd8c8ebf0bbe5b9",
+      "packScale": 1,
+      "perAssetScale": 1,
+      "scaleReason": null,
+      "dimensions": [
+        0.5399999618530273,
+        0.37500000596046446,
+        0.5399999618530273
+      ],
+      "footprint": {
+        "center": [
+          0,
+          0
+        ],
+        "halfExtents": [
+          0.27,
+          0.27
+        ],
+        "yawRadians": 0
+      },
+      "mount": {
+        "id": "floor-mount",
+        "type": "floor-mount",
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "mateRule": "coincident",
+        "mateFamily": "floor",
+        "size": [
+          0.54,
+          0.05,
+          0.54
+        ],
+        "clearance": {
+          "shape": "box",
+          "size": [
+            0.54,
+            0.375,
+            0.54
+          ]
+        }
+      },
+      "qaStatus": "approved-dev",
+      "rootMaterialFamily": "iron",
+      "orientations": [
+        {
+          "index": 0,
+          "halfExtents": [
+            0.27,
+            0.27
+          ],
+          "yawRadians": 0
+        },
+        {
+          "index": 1,
+          "halfExtents": [
+            0.27,
+            0.27
+          ],
+          "yawRadians": 1.5707963267948966
+        },
+        {
+          "index": 2,
+          "halfExtents": [
+            0.27,
+            0.27
+          ],
+          "yawRadians": 3.141592653589793
+        },
+        {
+          "index": 3,
+          "halfExtents": [
+            0.27,
+            0.27
+          ],
+          "yawRadians": 4.71238898038469
+        }
+      ],
+      "views": {
+        "raw": {
+          "url": "/assets/models/kenney-factory-kit/lever-double.glb",
+          "diagnostic": "RAW MATERIAL UNAVAILABLE: Textures/colormap.png is absent from the source corpus; neutral diagnostic texture substituted."
+        },
+        "normalized": {
+          "url": "/assets/models-normalized/kenney-factory-kit/lever-double.glb",
+          "diagnostic": ""
+        },
+        "genesis": {
+          "url": "loadDonorPiece(kenney-factory-kit, lever-double)",
+          "diagnostic": ""
+        }
+      },
+      "browser": {
+        "yardstick": {
+          "height": 1.2000000476837158,
+          "groundY": 0,
+          "parent": "workbench-calibrated-root",
+          "visible": true,
+          "onScreen": true
+        },
+        "sockets": 1,
+        "appliedFamilies": [
+          "iron",
+          "iron"
+        ],
+        "meshes": [
+          {
+            "name": "lever-double_2",
+            "materials": [
+              {
+                "type": "MeshStandardMaterial",
+                "color": "4c4c52",
+                "metalness": 0.35,
+                "roughness": 0.88,
+                "transmission": null
+              }
+            ]
+          },
+          {
+            "name": "handle",
+            "materials": [
+              {
+                "type": "MeshStandardMaterial",
+                "color": "3a3a3f",
+                "metalness": 0.35,
+                "roughness": 0.88,
+                "transmission": null
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "rejectedCandidates": [
+    {
+      "assetId": "kenney-furniture-kit/bench",
+      "sourceSha256": "ba05a6d23a5a5a44da016757632070e47ff7587ce10e2f6d6d52328b4cf5489b",
+      "qaStatus": "quarantined",
+      "mounts": [],
+      "notes": [
+        "KGR-4C ratio proof: raw long/height 0.40/0.47; long >=0.65u requires total scale >=1.625, while height <=0.65u requires total scale <=1.382979.",
+        "Rejected without mount: do not rotate onto a false ground face; replaced by kenney-furniture-kit/benchCushionLow."
+      ]
+    }
+  ],
+  "captures": {
+    "perAsset": {
+      "kenney-retro-fantasy-kit/detail-barrel": "dev/model-foundry/kenney-workbench-captures/pilot-kenney-retro-fantasy-kit--detail-barrel.png",
+      "kenney-pirate-kit/crate": "dev/model-foundry/kenney-workbench-captures/pilot-kenney-pirate-kit--crate.png",
+      "kenney-pirate-kit/chest": "dev/model-foundry/kenney-workbench-captures/pilot-kenney-pirate-kit--chest.png",
+      "kenney-furniture-kit/tableRound": "dev/model-foundry/kenney-workbench-captures/pilot-kenney-furniture-kit--tableRound.png",
+      "kenney-furniture-kit/benchCushionLow": "dev/model-foundry/kenney-workbench-captures/pilot-kenney-furniture-kit--benchCushionLow.png",
+      "kenney-furniture-kit/chair": "dev/model-foundry/kenney-workbench-captures/pilot-kenney-furniture-kit--chair.png",
+      "kenney-furniture-kit/lampWall": "dev/model-foundry/kenney-workbench-captures/pilot-kenney-furniture-kit--lampWall.png",
+      "kenney-furniture-kit/lampRoundFloor": "dev/model-foundry/kenney-workbench-captures/pilot-kenney-furniture-kit--lampRoundFloor.png",
+      "kenney-fantasy-town-kit/lantern": "dev/model-foundry/kenney-workbench-captures/pilot-kenney-fantasy-town-kit--lantern.png",
+      "kenney-factory-kit/lever-double": "dev/model-foundry/kenney-workbench-captures/pilot-kenney-factory-kit--lever-double.png"
+    },
+    "lineup": "dev/model-foundry/kenney-workbench-captures/pilot-all-ten-lineup.png"
+  },
+  "consoleErrors": [],
+  "deterministic": {
+    "beforeDigest": "a37147cc5fbe9f14a30f96a427f3b4b9293a34b0b0aaa633a148d56850dc79d0",
+    "afterDigest": "a37147cc5fbe9f14a30f96a427f3b4b9293a34b0b0aaa633a148d56850dc79d0",
+    "stdout": "[normalize-donors] 58 calibrated assets validated and normalized; schema genesis.donor.v2",
+    "stderr": ""
+  }
+}

@@ -1,0 +1,105 @@
+{
+  "algorithmVersion": 1,
+  "assets": {
+    "lantern": {
+      "admissionClass": "PART_DONOR",
+      "assetId": "kenney-fantasy-town-kit/lantern",
+      "bounds": {
+        "aabbMax": [
+          0.10822424292564392,
+          1.555999994277954,
+          0.11215999722480774
+        ],
+        "aabbMin": [
+          -0.10822424292564392,
+          0.0,
+          -0.11215999722480774
+        ],
+        "footprint": {
+          "center": [
+            0,
+            0
+          ],
+          "halfExtents": [
+            0.108224242925644,
+            0.112159997224808
+          ],
+          "yawRadians": 0
+        },
+        "footprintSource": "override",
+        "groundY": 0.0
+      },
+      "canonicalScale": 1,
+      "category": "practical-light",
+      "companionLeaf": null,
+      "file": "lantern.glb",
+      "materialFamilies": [
+        "iron"
+      ],
+      "normalizedFrame": {
+        "forward": "+Z",
+        "sourceToGenesis": [
+          1,
+          0,
+          0,
+          0.0,
+          0,
+          1,
+          0,
+          0.0,
+          0,
+          0,
+          1,
+          0.0,
+          0,
+          0,
+          0,
+          1.0
+        ],
+        "up": "+Y"
+      },
+      "qaStatus": "approved-dev",
+      "recipeHash": "0fb3b8d6c5b87c1ce88cd7fb3f146bffa47df049a05426b84d1dc8fa2ed2f4ed",
+      "schema": "genesis.donor.v2",
+      "semanticParts": {},
+      "sockets": [
+        {
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.216448485851288,
+              1.555999994277954,
+              0.224319994449616
+            ]
+          },
+          "id": "floor-mount",
+          "mateFamily": "floor",
+          "mateRule": "coincident",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "size": [
+            0.216448485851288,
+            0.05,
+            0.224319994449616
+          ],
+          "type": "floor-mount"
+        }
+      ],
+      "sourceSha256": "f270637e3083d6e84a30626ee05df2b09597a642985a7f5c3e4ab5bb1c7a8d55",
+      "structuralGrid": null
+    }
+  },
+  "calibrationHash": "f5450be4667690abdc98d5fd7eb9d97a957608bc93d4d1b375e8fbb97c88e259",
+  "normalizerVersion": "kgr3-calibration-v2",
+  "pack": "kenney-fantasy-town-kit",
+  "schema": "genesis.donor-index.v2"
+}

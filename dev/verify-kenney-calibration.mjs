@@ -4,7 +4,7 @@ import { execFileSync, spawnSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import {
   cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync,
-  rmSync, symlinkSync, writeFileSync,
+  rmSync, statSync, symlinkSync, writeFileSync,
 } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
@@ -73,7 +73,7 @@ function sceneBounds(gltf) {
 function dimensions(bounds) { return bounds[1].map((v,i)=>v-bounds[0][i]); }
 function hashTree(root) {
   const out={};
-  for (const pack of ["kenney-mini-dungeon","kenney-modular-dungeon-kit"]) {
+  for (const pack of readdirSync(root).filter(name=>statSync(join(root,name)).isDirectory()).sort()) {
     const dir=join(root,pack); if (!existsSync(dir)) continue;
     for (const file of readdirSync(dir).sort()) out[`${pack}/${file}`]=sha(readFileSync(join(dir,file)));
   }
@@ -124,11 +124,37 @@ console.log("\n=== KGR-3 calibration source + v2 artifacts ===");
 const calibration=json("dev/model-foundry/kenney-calibration.json");
 const schema=json("dev/model-foundry/kenney-calibration.schema.json");
 check("calibration and schema identify genesis.kenney-calibration.v1", calibration.schema==="genesis.kenney-calibration.v1" && schema.$id==="genesis.kenney-calibration.v1");
-check("calibration owns all 47 current outputs", Object.keys(calibration.assets).length===47, `got ${Object.keys(calibration.assets).length}`);
-check("two measured pack grid contracts are locked", calibration.packs["kenney-modular-dungeon-kit"].canonicalScale===0.5 && calibration.packs["kenney-mini-dungeon"].canonicalScale===2.0 && Object.values(calibration.packs).every(p=>p.structuralGrid.orientationSteps===4 && p.structuralGrid.joinMode==="cell-orientation"));
+const structuralPacks=new Set(["kenney-mini-dungeon","kenney-modular-dungeon-kit"]);
+const pilotPacks=new Set(["kenney-retro-fantasy-kit","kenney-pirate-kit","kenney-furniture-kit","kenney-fantasy-town-kit","kenney-factory-kit"]);
+const namedPilotAssets=new Set([
+  "kenney-retro-fantasy-kit/detail-barrel","kenney-pirate-kit/crate","kenney-pirate-kit/chest",
+  "kenney-furniture-kit/tableRound","kenney-furniture-kit/benchCushionLow","kenney-furniture-kit/chair",
+  "kenney-furniture-kit/lampWall","kenney-furniture-kit/lampRoundFloor",
+  "kenney-fantasy-town-kit/lantern","kenney-factory-kit/lever-double",
+]);
+const rejectedPilot="kenney-furniture-kit/bench";
+const calibratedIds=Object.keys(calibration.assets).sort();
+const legacyStructuralIds=calibratedIds.filter(id=>structuralPacks.has(id.split("/")[0]));
+check("calibration ownership is 47 structural + ten pilots + one named rejection",
+  legacyStructuralIds.length===47 && namedPilotAssets.size===10 &&
+  calibratedIds.length===legacyStructuralIds.length+namedPilotAssets.size+1 &&
+  [...namedPilotAssets].every(id=>calibration.assets[id]?.qaStatus==="approved-dev") &&
+  calibration.assets[rejectedPilot]?.qaStatus==="quarantined",
+  `got ${calibratedIds.length} total / ${legacyStructuralIds.length} structural`);
+const structuralRecords=[...structuralPacks].map(pack=>calibration.packs[pack]);
+check("two measured pack grid contracts are locked",
+  calibration.packs["kenney-modular-dungeon-kit"].canonicalScale===0.5 &&
+  calibration.packs["kenney-mini-dungeon"].canonicalScale===2.0 &&
+  structuralRecords.every(record=>record.structuralGrid?.orientationSteps===4 && record.structuralGrid?.joinMode==="cell-orientation"));
+check("five named pilot packs are explicitly nonstructural",
+  [...pilotPacks].every(pack=>calibration.packs[pack]?.structuralGrid===null));
 const indexes=Object.fromEntries(Object.keys(calibration.packs).map(pack=>[pack,json(`assets/models-normalized/${pack}/index.json`)]));
-check("both indexes use the v2 envelope", Object.values(indexes).every(i=>i.schema==="genesis.donor-index.v2" && i.assets && !i[Object.keys(i.assets)[0]]));
-check("indexes contain exactly the calibrated ids", Object.entries(indexes).flatMap(([pack,i])=>Object.keys(i.assets).map(slug=>`${pack}/${slug}`)).sort().join("|")===Object.keys(calibration.assets).sort().join("|"));
+check("all indexes use the v2 envelope", Object.values(indexes).every(i=>i.schema==="genesis.donor-index.v2" && i.assets && !i[Object.keys(i.assets)[0]]));
+const indexedIds=Object.entries(indexes).flatMap(([pack,i])=>Object.keys(i.assets).map(slug=>`${pack}/${slug}`)).sort();
+const exactOwnership=(expected,actual)=>expected.length===actual.length&&expected.every((id,index)=>id===actual[index]);
+check("indexes contain exactly the calibrated ids", exactOwnership(calibratedIds,indexedIds));
+check("⊗ omitted normalized output fails exact calibration ownership", !exactOwnership(calibratedIds,indexedIds.slice(1)));
+check("⊗ unexpected normalized output fails exact calibration ownership", !exactOwnership(calibratedIds,[...indexedIds,"kenney-unexpected/escape"].sort()));
 
 let hierarchyOk=true, sourceScaleOk=true, metadataOk=true, socketsOk=true, framesOk=true, groundsOk=true, gridOk=true, hashesOk=true, uvOk=true;
 for (const [assetId, asset] of Object.entries(calibration.assets)) {
@@ -141,8 +167,13 @@ for (const [assetId, asset] of Object.entries(calibration.assets)) {
   const meta=donor.extras?.genesisDonor;
   metadataOk &&= meta?.schema==="genesis.donor.v2" && meta.assetId===assetId && meta.sourceSha256===asset.sourceSha256 && meta.bounds && meta.normalizedFrame?.sourceToGenesis?.length===16;
   hashesOk &&= sha(readFileSync(sourcePath))===asset.sourceSha256 && entry.sourceSha256===asset.sourceSha256;
-  gridOk &&= entry.structuralGrid?.orientationSteps===4 && entry.structuralGrid?.joinMode==="cell-orientation";
-  socketsOk &&= entry.sockets.length>0 && entry.sockets.every(s=>s.id && !s.type.startsWith("butt-join-") && ["floor-mount","wall-mount","top-surface","hinge"].includes(s.type));
+  const packGrid=calibration.packs[pack].structuralGrid;
+  gridOk &&= packGrid===null
+    ? entry.structuralGrid===null
+    : entry.structuralGrid?.orientationSteps===4 && entry.structuralGrid?.joinMode==="cell-orientation";
+  socketsOk &&= asset.qaStatus==="quarantined"
+    ? entry.sockets.length===0
+    : entry.sockets.length>0 && entry.sockets.every(s=>s.id && !s.type.startsWith("butt-join-") && ["floor-mount","wall-mount","top-surface","hinge"].includes(s.type));
   const ids=entry.sockets.map(s=>s.id); socketsOk &&= new Set(ids).size===ids.length;
   for (const s of entry.sockets) {
     const [x,y,z,w]=s.rotation, n=Math.hypot(x,y,z,w);

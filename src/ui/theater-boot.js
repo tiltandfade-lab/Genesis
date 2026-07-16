@@ -3992,6 +3992,51 @@ function itrDoorBuildShatterShardMesh(shardDesc, color){
 // implements exactly what its own spec text licenses: "broken=leaf removed + debris decal license" —
 // the leaf hides; a debris-decal treatment is future work, not required by this unit.
 // ============================================================================
+// KS-3 (docs/KENNEY-SOCKET-WAVE.md) — GENERIC PER-REALM DONOR TEMPLATE CACHE. Closes KS-2's own
+// documented deviation ("a live per-realm grade bridge at PRELOAD time is deferred until KS-3 broadens
+// kit adoption past this single structural pilot piece") AND backs the new kit-shell wall/floor pieces
+// below — one shared warm-cache mechanism instead of three copies of the same async-preload dance.
+//
+// donorTemplateFor(pack, slug, realmId, realmProfile) -> {group, floorMountLocal:[x,y,z]} | null.
+// Keyed "pack/slug@realmId" (a realm's own live profile is static for a session — data/realms.js's
+// REALMS table never changes underfoot — so keying on realmId alone is equivalent to keying on the
+// full profile fingerprint, simpler). First call for a given key kicks off the REAL graded load
+// (loadDonorPiece with the live realmProfile, theater-donor.js's own documented recipe path — five-band
+// albedo through gradeColorLocal + grain + per-realm outline, the SAME material path every other
+// admitted kit piece takes) and returns null immediately (never blocks a synchronous render); once the
+// load resolves, the SAME "real art/graded template arrives late, re-run the last board" replay
+// convention dressingTextureFor already establishes (this file, ~line 8975: `S.boardKey = null;
+// setInteriorBoard(S.lastBoard);`) fires so the very next paint upgrades from nothing (or a stale
+// realm's leftover template) to the correctly-graded piece — never inventing an already-graded frame.
+// floorMountLocal is read ONCE off the freshly-loaded group (never off a later clone's userData, which
+// three.js's Object3D.clone only shallow-copies by reference) — the same "read sockets off the ORIGINAL
+// loaded group, store plain numbers" discipline kitDoorSplitTemplate below already established for the
+// door's own hinge socket.
+const DONOR_TEMPLATE_CACHE = {}; // "pack/slug@realmId" -> "pending" | {group, floorMountLocal} | undefined
+function donorPieceFloorMountLocal(group){
+  const fm = socketsByType(group, "floor-mount")[0];
+  return fm ? fm.position : [0, 0, 0];
+}
+function donorTemplateFor(pack, slug, realmId, realmProfile){
+  const rid = realmId || "fantasy";
+  const key = pack + "/" + slug + "@" + rid;
+  const cached = DONOR_TEMPLATE_CACHE[key];
+  if(cached && cached !== "pending") return cached;
+  if(cached !== "pending"){
+    DONOR_TEMPLATE_CACHE[key] = "pending";
+    loadDonorPiece(pack, slug, { realmId: rid, realmProfile: realmProfile || null }).then((group) => {
+      DONOR_TEMPLATE_CACHE[key] = { group, floorMountLocal: donorPieceFloorMountLocal(group) };
+      if(S.mounted && S.lastBoard && S.lastBoard.kind === "interior3d"){ S.boardKey = null; setInteriorBoard(S.lastBoard); }
+    }).catch(() => { delete DONOR_TEMPLATE_CACHE[key]; /* never throws — caller's own prism fallback stands forever for this key */ });
+  }
+  return null;
+}
+// test-seam bridge for this cache (window.Theater._donorTemplateReadyForTest) is registered further
+// down, alongside every other test-only window.Theater._xyz property — window.Theater itself is a
+// single object-literal assignment further down this file (NOT built incrementally), so a property
+// added here, before that assignment runs, would be silently wiped out.
+
+// ============================================================================
 const KIT_DOOR_PACK = "kenney-modular-dungeon-kit";
 const KIT_DOOR_SLUG = "gate-door";
 let kitDoorTemplate = null;     // {frameGroup, leafGeometry, leafMaterial, hingeLocal:[x,y,z]} once warm
@@ -4033,19 +4078,41 @@ function kitDoorSplitTemplate(rawGroup){
   });
   return { frameGroup: rawGroup, leafGeometry, leafMaterial, hingeLocal };
 }
-// Preloaded ONCE at module scope — mirrors loadWholeObjectBuilders/glbLoadScene's own preload-then-
-// clone convention (this file's BATTLE-THEATER T2 header, above) so the per-door SYNCHRONOUS mesh-
-// build path (interiorBuildInteractableDoorMesh, below) never awaits a network fetch mid-render: a
-// render that runs before this settles simply falls back to the (QF-D1-fixed) prism path for every
-// door — same "never blank, never throws, the existing fallback shows until the async resource is
-// warm" precedent every other GLB-backed seam in this file already follows. realmProfile:null (a
-// byte-identical grading passthrough, theater-donor.js's own documented convention) — a live per-realm
-// grade bridge at PRELOAD time is deferred until KS-3 broadens kit adoption past this single
-// structural pilot piece (Scope: FANTASY-ONLY to pre-alpha, KS-2's own addendum).
+// Preloaded ONCE at module scope, UNGRADED (realmProfile:null — a byte-identical passthrough) —
+// mirrors loadWholeObjectBuilders/glbLoadScene's own preload-then-clone convention (this file's
+// BATTLE-THEATER T2 header, above) so the per-door SYNCHRONOUS mesh-build path
+// (interiorBuildInteractableDoorMesh, below) never awaits a network fetch mid-render: a render that
+// runs before ANY template settles simply falls back to the (QF-D1-fixed) prism path for every door —
+// same "never blank, never throws, the existing fallback shows until the async resource is warm"
+// precedent every other GLB-backed seam in this file already follows. This is now the SAFETY-NET
+// fallback template only — kitDoorTemplateFor below prefers a GRADED per-realm template (see the KS-3
+// retrofit note just below) the moment one warms, and re-renders to pick it up automatically.
 loadDonorPiece(KIT_DOOR_PACK, KIT_DOOR_SLUG, { realmId: "fantasy", realmProfile: null }).then((group) => {
   const split = kitDoorSplitTemplate(group);
   if(split){ kitDoorTemplate = split; kitDoorTemplateReady = true; }
 }).catch(() => { /* network/parse failure: kitDoorTemplateReady stays false forever -> prism path always, never throws */ });
+
+// KS-3 RETROFIT (docs/KENNEY-SOCKET-WAVE.md KS-3, "CLOSE" the KS-2 realm-grading-passthrough
+// deviation): kitDoorTemplateFor(realmId, realmProfile) prefers the GRADED per-realm template (built
+// through donorTemplateFor above — the SAME live gradeColorLocal five-band+grain+outline recipe path
+// every other kit piece now takes) the moment it's warm; until then it degrades to the ungraded
+// module-scope singleton above (kitDoorTemplate/kitDoorTemplateReady, UNCHANGED — the safety net that
+// keeps the door's own "never wait on network" latency behavior intact for the very first render of a
+// session). kitDoorSplitTemplate's own leaf/hinge surgery still runs on the graded group — it's a pure
+// geometric operation independent of material grading, so re-running it per realm is correct, not
+// wasted work (it must re-run: cloning kitDoorTemplate.frameGroup would carry the WRONG realm's
+// materials if the split were cached once off the first-ever load).
+const kitDoorGradedTemplatesByRealm = {}; // realmId -> {frameGroup, leafGeometry, leafMaterial, hingeLocal} once warm+split
+function kitDoorTemplateFor(realmId, realmProfile){
+  const rid = realmId || "fantasy";
+  if(kitDoorGradedTemplatesByRealm[rid]) return kitDoorGradedTemplatesByRealm[rid];
+  const tmpl = donorTemplateFor(KIT_DOOR_PACK, KIT_DOOR_SLUG, rid, realmProfile);
+  if(tmpl){
+    const split = kitDoorSplitTemplate(tmpl.group.clone(true)); // clone: donorTemplateFor's own cached .group is shared across every future call for this key, never mutated in place
+    if(split) kitDoorGradedTemplatesByRealm[rid] = split;
+  }
+  return kitDoorGradedTemplatesByRealm[rid] || (kitDoorTemplateReady ? kitDoorTemplate : null);
+}
 
 // state -> {rotY, visible}: shut/ajar/open reuse the SAME ITR_DOOR_SWING_DEG constants the prism
 // path's itrDoorRestPose swings by (0/22/105deg — three distinct angles); broken hides the leaf
@@ -4056,16 +4123,19 @@ function itrKitDoorRestPose(state){
   const swingDeg = ITR_DOOR_SWING_DEG[state];
   return { rotY: (typeof swingDeg === "number" ? swingDeg : 0) * Math.PI / 180, visible: true };
 }
-// interiorBuildKitDoorMesh(entry, cx, cz, floorTopMap, widthAxisIsZ) -> THREE.Group | null. Mirrors
-// interiorBuildInteractableDoorMesh's own return shape (userData.leaf set, kind/archetype/sourceRef/
-// state/slug tagged) so interiorBuildInteractables' bookkeeping (bySourceRef, S.interiorDoorStateBySourceRef)
-// treats a kit door and a prism door identically — userData.kit:true is the ONE discriminator the
-// state-transition tween logic below branches on (kit doors get the simpler itrKitDoorRestPose tween;
-// everything else about mounting/tracking is shared). Returns null (prism fallback, never throws) when
-// the template isn't warm yet, this entry isn't renderable, or (defensively) the template somehow
-// carries no leaf.
-function interiorBuildKitDoorMesh(entry, cx, cz, floorTopMap, widthAxisIsZ){
-  if(!kitDoorTemplateReady || !kitDoorTemplate) return null;
+// interiorBuildKitDoorMesh(entry, cx, cz, floorTopMap, widthAxisIsZ, realmId, realmProfile) -> THREE.Group
+// | null. Mirrors interiorBuildInteractableDoorMesh's own return shape (userData.leaf set, kind/
+// archetype/sourceRef/state/slug tagged) so interiorBuildInteractables' bookkeeping (bySourceRef,
+// S.interiorDoorStateBySourceRef) treats a kit door and a prism door identically — userData.kit:true is
+// the ONE discriminator the state-transition tween logic below branches on (kit doors get the simpler
+// itrKitDoorRestPose tween; everything else about mounting/tracking is shared). Returns null (prism
+// fallback, never throws) when NO template (graded or fallback) is warm yet, this entry isn't
+// renderable, or (defensively) the template somehow carries no leaf. `realmId`/`realmProfile` (KS-3
+// retrofit): threaded through to kitDoorTemplateFor so this door takes the SAME live realm grade every
+// other kit piece takes — see that function's own header for the graded-vs-fallback resolution order.
+function interiorBuildKitDoorMesh(entry, cx, cz, floorTopMap, widthAxisIsZ, realmId, realmProfile){
+  const tmpl = kitDoorTemplateFor(realmId, realmProfile);
+  if(!tmpl) return null;
   if(!entry || entry.reserve || entry.x == null || entry.y == null) return null;
   const doorGroup = new THREE.Group();
   const floorTop = interiorFloorTopAt(floorTopMap, entry.x, entry.y);
@@ -4077,13 +4147,13 @@ function interiorBuildKitDoorMesh(entry, cx, cz, floorTopMap, widthAxisIsZ){
   // always agree on orientation.
   doorGroup.rotation.y = widthAxisIsZ ? Math.PI / 2 : 0;
 
-  const frame = kitDoorTemplate.frameGroup.clone(true); // Object3D clone: shares geometry/material refs (userData.shared-tagged above), never re-baked per instance
+  const frame = tmpl.frameGroup.clone(true); // Object3D clone: shares geometry/material refs (userData.shared-tagged above), never re-baked per instance
   doorGroup.add(frame);
 
-  const hingeLocal = kitDoorTemplate.hingeLocal;
+  const hingeLocal = tmpl.hingeLocal;
   const hingeGroup = new THREE.Group();
   hingeGroup.position.set(hingeLocal[0], hingeLocal[1], hingeLocal[2]);
-  const leaf = new THREE.Mesh(kitDoorTemplate.leafGeometry, kitDoorTemplate.leafMaterial);
+  const leaf = new THREE.Mesh(tmpl.leafGeometry, tmpl.leafMaterial);
   leaf.castShadow = true; leaf.receiveShadow = true;
   leaf.userData = { isDoorLeaf: true };
   const pose = itrKitDoorRestPose(entry.state);
@@ -4136,9 +4206,9 @@ function itrDoorHingeSign(sourceRef){
 // template has finished its async preload (interiorBuildKitDoorMesh returns non-null only then), the
 // kit assembly renders INSTEAD of the prism hinge+leaf below — every prism path survives as the
 // unconditional fallback (kitDoorInfo absent, or the template still cold) per the wave's own posture.
-function interiorBuildInteractableDoorMesh(entry, cx, cz, floorTopMap, kitDoorInfo){
+function interiorBuildInteractableDoorMesh(entry, cx, cz, floorTopMap, kitDoorInfo, realmId, realmProfile){
   if(kitDoorInfo){
-    const kitMesh = interiorBuildKitDoorMesh(entry, cx, cz, floorTopMap, kitDoorInfo.widthAxisIsZ);
+    const kitMesh = interiorBuildKitDoorMesh(entry, cx, cz, floorTopMap, kitDoorInfo.widthAxisIsZ, realmId, realmProfile);
     if(kitMesh) return kitMesh;
   }
   if(!entry || entry.reserve || entry.x == null || entry.y == null) return null;
@@ -4245,7 +4315,8 @@ function itrKitDoorMap(kitDoors){
   (kitDoors || []).forEach((k) => { m.set(Math.round(k.x) + "," + Math.round(k.z), { widthAxisIsZ: !!k.widthAxisIsZ }); });
   return m;
 }
-/* interiorBuildInteractables(interactables, cx, cz, floorTopMap, kitDoors) -> {group, bySourceRef}.
+/* interiorBuildInteractables(interactables, cx, cz, floorTopMap, kitDoors, realmId, realmProfile) ->
+   {group, bySourceRef}.
    Builds one door assembly per placed (non-reserve) door entry (D4's own scope — see header above)
    and DIFFS against S.interiorDoorStateBySourceRef (the previous render's per-sourceRef state) so a
    real state_transition (a door's state actually changing between two renders of the SAME sourceRef)
@@ -4258,8 +4329,10 @@ function itrKitDoorMap(kitDoors){
    an actual kit mesh (template warm + entry valid) or falls back to the prism path. The state-
    transition TWEEN itself branches on `hinge.userData.kit` — a kit door's simpler {rotY,visible} pose
    (itrKitDoorRestPose) vs. the prism door's full D4c {rotX,rotY,rotZ,variant} pose (itrDoorRestPose) —
-   so the existing prism tween code below is untouched (wrapped in the else branch, byte-identical). */
-function interiorBuildInteractables(interactables, cx, cz, floorTopMap, kitDoors){
+   so the existing prism tween code below is untouched (wrapped in the else branch, byte-identical).
+   KS-3 retrofit: `realmId`/`realmProfile` thread straight through to interiorBuildInteractableDoorMesh
+   -> interiorBuildKitDoorMesh -> kitDoorTemplateFor, closing the realm-grading-passthrough deviation. */
+function interiorBuildInteractables(interactables, cx, cz, floorTopMap, kitDoors, realmId, realmProfile){
   const group = new THREE.Group();
   const bySourceRef = {};
   const prevStates = S.interiorDoorStateBySourceRef || {};
@@ -4268,7 +4341,7 @@ function interiorBuildInteractables(interactables, cx, cz, floorTopMap, kitDoors
   (interactables || []).forEach((entry) => {
     if(!entry || entry.archetype !== "door") return; // D4 SCOPE: doors ship first (BW5 IA-4) — other archetypes render in D5
     const kitDoorInfo = entry.x != null && entry.y != null ? kitDoorMap.get(Math.round(entry.x) + "," + Math.round(entry.y)) : null;
-    const hinge = interiorBuildInteractableDoorMesh(entry, cx, cz, floorTopMap, kitDoorInfo);
+    const hinge = interiorBuildInteractableDoorMesh(entry, cx, cz, floorTopMap, kitDoorInfo, realmId, realmProfile);
     if(!hinge) return;
     const sourceRef = entry.sourceRef;
     nextStates[sourceRef] = entry.state;
@@ -4346,6 +4419,93 @@ function interiorBuildInteractables(interactables, cx, cz, floorTopMap, kitDoors
   });
   S.interiorDoorStateBySourceRef = nextStates;
   group.userData = { bySourceRef: bySourceRef };
+  return group;
+}
+
+// ============================================================================
+// KS-3 (docs/KENNEY-SOCKET-WAVE.md) — "ROOM SHELLS FROM THE KIT". theater-interior.js's
+// itrKitShellWallRuns/itrKitShellFloorBlocks decide ELIGIBILITY + placement (pure data — data.
+// kitShellWalls:[{x,z,axis,span}], data.kitShellFloors:[{x,z,room}], siblings of data.kitDoors); this
+// section owns the actual THREE mesh mount, following the SAME donorTemplateFor per-realm warm-cache
+// + "re-anchor a piece's own floor-mount socket onto its group's local origin" discipline
+// kitDoorSplitTemplate/interiorBuildKitDoorMesh above already established for the door. Both builders
+// return an EMPTY THREE.Group when their input array is empty (KIT_SHELL_ENABLED=false in
+// theater-interior.js -> zero entries -> zero geometry added here — the flag's own retreat holds
+// end to end) or when the template isn't warm yet (never blocks a render; the claimed prism cells stay
+// dark until the next rebuild picks up the warm template via donorTemplateFor's own "re-run the last
+// board" replay — a real, if rare, first-render gap, exactly the same class of gap the door's own
+// preload-then-clone convention already accepts).
+const KIT_WALL_PACK = "kenney-modular-dungeon-kit", KIT_WALL_SLUG = "template-wall";
+const KIT_FLOOR_PACK = "kenney-modular-dungeon-kit", KIT_FLOOR_SLUG = "template-floor";
+// measured scaledDims[1] (dev/model-foundry/KS1-PROVENANCE.json, template-wall) — the piece's own
+// natural post-canonicalScale height. Genesis's own prism wall convention is data.wallHeightBase
+// (ITR_WALL_HEIGHT_BASE, theater-interior.js — this ES-module scope keeps its own local mirror rather
+// than reaching across the sealed boundary, same convention ITR_WALLHANG_FALLBACK_WALL_HEIGHT already
+// keeps a few thousand lines below). The two don't match natively (2.075 vs 2.4) — interiorBuildKitShellWalls
+// applies a non-uniform Object3D.scale.y correction (X/Z untouched, so the piece's own 2-world-unit
+// module span for butt-joining is never distorted) so a kit wall run and its neighboring prism
+// jamb/corner/reveal cells share one consistent wall height, never a visible height seam at the mixed
+// shell's own kit<->prism boundary.
+const KIT_WALL_NATIVE_HEIGHT = 2.075;
+const KIT_WALL_FALLBACK_HEIGHT_BASE = 2.4; // mirrors ITR_WALL_HEIGHT_BASE — used only if a caller omits data.wallHeightBase
+// interiorFloorTopAt's own convention: a baseline (unraised) floor cell's TOP sits at
+// ITR_FLOOR_BASE_Y + ITR_FLOOR_HEIGHT_FALLBACK (both already defined above in this file) — kit floor
+// tiles are v1-scoped to baseline-only cells (itrKitShellFloorBlocks' own header), so that fixed world Y
+// is this builder's own constant rather than a per-block floorTopMap lookup (every claimed block's 4
+// cells share the identical baseline sy by construction).
+const KIT_FLOOR_TOP_Y = ITR_FLOOR_BASE_Y + ITR_FLOOR_HEIGHT_FALLBACK;
+
+/* interiorBuildKitShellWalls(wallRuns, cx, cz, realmId, realmProfile, wallHeightBase) -> THREE.Group.
+   One donor template-wall clone per run entry, re-anchored so the piece's own `floor-mount` socket
+   sits at its holder Group's local origin (mirrors the door's hinge re-anchor, generalized to a
+   non-leaf whole-piece placement — see this section's own header), then placed at
+   (run.x-cx, ITR_FLOOR_BASE_Y, run.z-cz) with rotation.y = 0 for an axis-'x' run (long axis along
+   world X) or Math.PI/2 for axis-'z' (long axis along world Z) — the SAME widthAxisIsZ-style rotation
+   convention interiorBuildKitDoorMesh already uses, so a kit wall run and a kit door on the same wall
+   plane always agree on orientation. */
+function interiorBuildKitShellWalls(wallRuns, cx, cz, realmId, realmProfile, wallHeightBase){
+  const group = new THREE.Group();
+  if(!wallRuns || !wallRuns.length) return group;
+  const tmpl = donorTemplateFor(KIT_WALL_PACK, KIT_WALL_SLUG, realmId, realmProfile);
+  if(!tmpl) return group;
+  const scaleY = (typeof wallHeightBase === "number" && wallHeightBase > 0 ? wallHeightBase : KIT_WALL_FALLBACK_HEIGHT_BASE) / KIT_WALL_NATIVE_HEIGHT;
+  wallRuns.forEach((run) => {
+    const piece = tmpl.group.clone(true);
+    piece.position.set(-tmpl.floorMountLocal[0], -tmpl.floorMountLocal[1], -tmpl.floorMountLocal[2]);
+    piece.traverse((o) => { if(o.isMesh){ o.castShadow = true; o.receiveShadow = true; } });
+    const holder = new THREE.Group();
+    holder.add(piece);
+    holder.scale.y = scaleY;
+    holder.position.set((run.x || 0) - (cx || 0), ITR_FLOOR_BASE_Y, (run.z || 0) - (cz || 0));
+    holder.rotation.y = run.axis === "z" ? Math.PI / 2 : 0;
+    holder.userData = { interiorKind: "kit-shell-wall", axis: run.axis, span: run.span };
+    group.add(holder);
+  });
+  return group;
+}
+
+/* interiorBuildKitShellFloors(floorBlocks, cx, cz, realmId, realmProfile) -> THREE.Group. One donor
+   template-floor clone per 2x2 block entry, re-anchored so the piece's own `floor-mount` socket (which
+   coincides with its `top-surface` socket for template-floor — both at local (0,0,0), per the admitted
+   piece's own KS1-PROVENANCE.json sockets) sits at its holder Group's local origin, then placed at
+   world Y = KIT_FLOOR_TOP_Y (the baseline floor's real top plane, matching every prism floor cell's own
+   sy=ITR_FLOOR_HEIGHT convention this block's eligibility already guarantees). No rotation needed — the
+   piece's footprint is square (2x2 world units on both axes), so axis orientation is a non-issue. */
+function interiorBuildKitShellFloors(floorBlocks, cx, cz, realmId, realmProfile){
+  const group = new THREE.Group();
+  if(!floorBlocks || !floorBlocks.length) return group;
+  const tmpl = donorTemplateFor(KIT_FLOOR_PACK, KIT_FLOOR_SLUG, realmId, realmProfile);
+  if(!tmpl) return group;
+  floorBlocks.forEach((blk) => {
+    const piece = tmpl.group.clone(true);
+    piece.position.set(-tmpl.floorMountLocal[0], -tmpl.floorMountLocal[1], -tmpl.floorMountLocal[2]);
+    piece.traverse((o) => { if(o.isMesh){ o.receiveShadow = true; } });
+    const holder = new THREE.Group();
+    holder.add(piece);
+    holder.position.set((blk.x || 0) - (cx || 0), KIT_FLOOR_TOP_Y, (blk.z || 0) - (cz || 0));
+    holder.userData = { interiorKind: "kit-shell-floor", room: blk.room };
+    group.add(holder);
+  });
   return group;
 }
 
@@ -10683,18 +10843,34 @@ function setInteriorBoard(data){
   S.interiorLastDoorGhostList = doorGhostList; // S-1/A4 test seam — the separately-drawn doorframe ghosts
   S.interiorLastPortalList = data.portals || [];
 
+  // KS-3 (docs/KENNEY-SOCKET-WAVE.md) — the C4 room-shell compiler builds ONE continuous polygon/wall-
+  // stem mesh from `floorList`'s own cell set, entirely INDEPENDENT of the discrete `inst.wall` cell
+  // array (its wall stem is offset from the floor polygon's own boundary contour, never built from
+  // individual wall-cell boxes) — so a kit wall module and the compiled shell's own continuous stem
+  // would occupy the SAME physical space at every kit-claimed run (found live: a visible double-wall
+  // moire in the first real capture). The compiled shell and the per-cell floorMesh/wallMesh pair below
+  // are ALREADY a mutually-exclusive either/or (itrFloorWallMeshes, a few hundred lines down) gated on
+  // ITR_ROOM_SHELL alone; useCompiledRoomShell extends that SAME gate so a board this build's own
+  // kitShellWalls/kitShellFloors actually claimed something for renders via the per-cell prism path
+  // INSTEAD (floorMesh/wallMesh, which floorList/wallList already derive from the kit-skipped
+  // inst.floor/inst.wall — the same backing my pure-data harness proved gap/overlap-free), never both
+  // systems at once. A board with nothing kit-claimed (KIT_SHELL_ENABLED off, or a shape/scale this
+  // unit's own eligibility tests exclude) is COMPLETELY UNAFFECTED — useCompiledRoomShell reduces to
+  // the bare ITR_ROOM_SHELL flag, byte-identical to pre-KS-3.
+  const useCompiledRoomShell = ITR_ROOM_SHELL && !((data.kitShellWalls && data.kitShellWalls.length) || (data.kitShellFloors && data.kitShellFloors.length));
+
   // ═══ ROOM-SHELL COMPILER (docs/ROOM-SHELL-COMPILER.md; docs/GRAPHICS-NORTH-STAR.md Stage C unit
   // C4) — compiles the active room's own floor cells into a CONTINUOUS shell (one triangulated floor
   // polygon per elevation tier + wall/riser quad-strips from boundary segments) instead of the per-
-  // cell floorMesh/wallMesh InstancedMesh pair above, when ITR_ROOM_SHELL is on (default). Built
-  // straight off `floorList`/`inst.doorframe` — the SAME data interiorBuildBoard already produced;
-  // this unit never re-reads plan.cells, per the spec's own "keep interiorBuildBoard as the data
-  // producer, the compiler is render-only" instruction. Pillars/doorframe/skirt/portals/dressing/
-  // lights/standees below are UNTOUCHED (they still read S.interiorFloorTopMap, built earlier off
-  // `inst.floor` regardless of this flag).
+  // cell floorMesh/wallMesh InstancedMesh pair above, when useCompiledRoomShell is true (ITR_ROOM_SHELL
+  // on AND — KS-3 — this board has nothing kit-claimed). Built straight off `floorList`/`inst.doorframe`
+  // — the SAME data interiorBuildBoard already produced; this unit never re-reads plan.cells, per the
+  // spec's own "keep interiorBuildBoard as the data producer, the compiler is render-only" instruction.
+  // Pillars/doorframe/skirt/portals/dressing/lights/standees below are UNTOUCHED (they still read
+  // S.interiorFloorTopMap, built earlier off `inst.floor` regardless of this flag).
   let roomShellMeshes = [];
   S.interiorLastRoomShell = null;
-  if(ITR_ROOM_SHELL && floorList && floorList.length){
+  if(useCompiledRoomShell && floorList && floorList.length){
     const doorKeySet = new Set((inst.doorframe || []).map((d) => Math.round(d.x) + "," + Math.round(d.z)));
     const shellCells = floorList.map((f) => {
       const sy = (typeof f.sy === "number" && Number.isFinite(f.sy)) ? f.sy : ITR_FLOOR_HEIGHT_FALLBACK;
@@ -11117,7 +11293,7 @@ function setInteriorBoard(data){
   // floor/wall/riser meshes REPLACE the per-cell floorMesh/wallMesh/wallGhostMesh pair above (never
   // both — that would double-render the same surfaces). doorMesh/skirtMesh/portalMesh/pillarMeshes
   // stay unconditional either way (this unit's scope is floor/wall/riser geometry only).
-  const itrFloorWallMeshes = (ITR_ROOM_SHELL && roomShellMeshes.length) ? roomShellMeshes : [floorMesh, wallMesh, wallGhostMesh];
+  const itrFloorWallMeshes = (useCompiledRoomShell && roomShellMeshes.length) ? roomShellMeshes : [floorMesh, wallMesh, wallGhostMesh];
   const itrAllInteriorMeshes = itrFloorWallMeshes.concat([doorMesh, doorGhostMesh, skirtMesh, portalMesh]).concat(pillarMeshes).concat(pillarGhostMeshes);
   itrAllInteriorMeshes.forEach((mesh) => { if(mesh) S.interiorGroup.add(mesh); });
   S.interiorMeshCount = itrAllInteriorMeshes.filter(Boolean).length;
@@ -11255,7 +11431,7 @@ function setInteriorBoard(data){
   // interiorBuildInteractables' own header for the full render-keystone contract). KS-2:
   // data.kitDoors is interiorBuildBoard's OWN output (theater-interior.js, a sibling of data.instances)
   // — unlike interactables/pieces/dressing above, this one IS produced by interiorBuildBoard itself.
-  const interactablesGroup = interiorBuildInteractables(data.interactables, cx, cz, S.interiorFloorTopMap, data.kitDoors);
+  const interactablesGroup = interiorBuildInteractables(data.interactables, cx, cz, S.interiorFloorTopMap, data.kitDoors, data.realmId, S.realmProfile);
   S.interiorGroup.add(interactablesGroup);
   // D4 — E0-1 FADE COMPLIANCE (the SAME append-never-overwrite pattern the wall-fixture block above
   // uses, docs/PHASE-3-WAVE-1-SPECS.md E0-1): a door on an occlusion-suppressed wall segment fades
@@ -11301,6 +11477,22 @@ function setInteriorBoard(data){
     brokenVariant: hinge.userData && hinge.userData.brokenVariant,
     shardCount: (hinge.userData && hinge.userData.shards) ? hinge.userData.shards.length : 0
   }));
+
+  // KS-3 (docs/KENNEY-SOCKET-WAVE.md) — ROOM SHELLS FROM THE KIT. data.kitShellWalls/data.kitShellFloors
+  // are interiorBuildBoard's OWN output (theater-interior.js, siblings of data.kitDoors — see that
+  // field's own comment above) — pure placement data; both empty whenever KIT_SHELL_ENABLED is off
+  // (theater-interior.js's own flag), so these two builders add zero geometry in that state (the
+  // per-cell prism `wall`/`floor` instance meshes above already cover every cell in full, byte-
+  // identical to pre-KS-3). realmId/realmProfile close the SAME live-grading path the KS-3 door
+  // retrofit above uses — every kit piece (door, wall, floor) now shares one recipe.
+  const kitShellWallGroup = interiorBuildKitShellWalls(data.kitShellWalls, cx, cz, data.realmId, S.realmProfile, data.wallHeightBase);
+  S.interiorGroup.add(kitShellWallGroup);
+  const kitShellFloorGroup = interiorBuildKitShellFloors(data.kitShellFloors, cx, cz, data.realmId, S.realmProfile);
+  S.interiorGroup.add(kitShellFloorGroup);
+  // harness-facing diagnostics — mirrors S.interiorLastDoorList's own "read what THREE actually placed"
+  // convention, never a parallel formula that could drift from the render.
+  S.interiorLastKitShellWalls = kitShellWallGroup.children.map((h) => ({ x: h.position.x, y: h.position.y, z: h.position.z, rotY: h.rotation.y, axis: h.userData.axis, scaleY: h.scale.y }));
+  S.interiorLastKitShellFloors = kitShellFloorGroup.children.map((h) => ({ x: h.position.x, y: h.position.y, z: h.position.z, room: h.userData.room }));
 
   // BEAUTY-WAVE.md VP6 item 4 — VISIBLE HISTORY (render half). data.decals is a plain field the caller
   // sets directly on the board object (same convention as data.pieces/data.dressing above), sourced
@@ -13156,8 +13348,25 @@ window.Theater._resetInteriorDoorStateForTest = function(){ S.interiorDoorStateB
 window.Theater._itrKitDoorRestPoseForTest = function(state){ return itrKitDoorRestPose(state); };
 window.Theater._kitDoorTemplateReadyForTest = function(){ return kitDoorTemplateReady; };
 window.Theater._kitDoorTemplateForTest = function(){ return kitDoorTemplate; };
-window.Theater._interiorBuildKitDoorMeshForTest = function(entry, cx, cz, floorTopMap, widthAxisIsZ){
-  return interiorBuildKitDoorMesh(entry, cx, cz, floorTopMap, widthAxisIsZ);
+window.Theater._interiorBuildKitDoorMeshForTest = function(entry, cx, cz, floorTopMap, widthAxisIsZ, realmId, realmProfile){
+  return interiorBuildKitDoorMesh(entry, cx, cz, floorTopMap, widthAxisIsZ, realmId, realmProfile);
+};
+// KS-3 — TEST-ONLY SEAMS: the generic per-(pack,slug,realmId) donor template cache (closes the KS-2
+// realm-grading-passthrough deviation) + the kit-shell wall/floor builders, same "expose without
+// waiting on a real render loop" spirit as the KS-2 seams just above.
+window.Theater._donorTemplateReadyForTest = function(pack, slug, realmId){
+  const cached = DONOR_TEMPLATE_CACHE[pack + "/" + slug + "@" + (realmId || "fantasy")];
+  return !!(cached && cached !== "pending");
+};
+window.Theater._kitDoorGradedTemplateForTest = function(realmId){ return kitDoorGradedTemplatesByRealm[realmId || "fantasy"] || null; };
+window.Theater._interiorBuildKitShellWallsForTest = function(wallRuns, cx, cz, realmId, realmProfile, wallHeightBase){
+  return interiorBuildKitShellWalls(wallRuns, cx, cz, realmId, realmProfile, wallHeightBase);
+};
+window.Theater._interiorBuildKitShellFloorsForTest = function(floorBlocks, cx, cz, realmId, realmProfile){
+  return interiorBuildKitShellFloors(floorBlocks, cx, cz, realmId, realmProfile);
+};
+window.Theater._interiorLastKitShellForTest = function(){
+  return { walls: S.interiorLastKitShellWalls || [], floors: S.interiorLastKitShellFloors || [] };
 };
 // D4c test seam (mirrors _setGradeTonemapForTest's own convention above): pin the broken-variant
 // pick for every door regardless of sourceRef — a controlled A/B/C study-card capture (or a verify

@@ -514,6 +514,163 @@ var ITR_ACTIVE_ROOM_ONLY = true;
 // flag's state — "every prism path survives as fallback" per the wave's own posture.
 var KIT_DOORS_ENABLED = true;
 
+// ─── KS-3 (docs/KENNEY-SOCKET-WAVE.md): KIT_SHELL_ENABLED — "room shells from the kit" ────────────────
+// Default ON (Adam's ruling — "build around the kit… archive the old stuff, anything we have to retire
+// for functionality of procedural arrangement"): rolled room shells assemble from kit wall/floor
+// modules wherever the geometry can honestly support it — straight WALL-cell runs of 2+ cells tile with
+// kenney-modular-dungeon-kit/template-wall modules (2-world-unit span, butt-joined end to end); FLOOR
+// cells tile in 2x2 kenney-modular-dungeon-kit/template-floor blocks. Corners, T/cross junctions,
+// isolated wall cells, door apertures + their immediate flanking cells, any single-cell run remainder,
+// and any room/cell this file's own eligibility tests can't cleanly classify ALWAYS stay on the prism
+// path below (itrKitShellWallRuns/itrKitShellFloorBlocks below are the ONLY two places that decide
+// eligibility; the main per-cell loop just skips whatever they've claimed) — MIXED shells are legal and
+// expected, per the wave's own spec text ("kit modules where runs are straight; prism walls where the
+// kit can't turn the corner"). Same `var` auto-attach-to-window convention as ITR_ACTIVE_ROOM_ONLY/
+// KIT_DOORS_ENABLED above, so a live session or a harness can flip it (`window.KIT_SHELL_ENABLED =
+// false`) for an A/B capture — OFF means itrKitShellWallRuns/itrKitShellFloorBlocks return empty
+// claim-sets, so EVERY cell falls through to the untouched prism per-cell push below: byte-identical to
+// pre-KS-3 output (the flag is the retreat).
+var KIT_SHELL_ENABLED = true;
+
+// itrKitWallRunAxis(x,y,plan) -> 'x' | 'z' | null. A WALL cell qualifies for kit-module tiling only when
+// exactly ONE perpendicular pair of its 4-neighbors is "open" (FLOOR/DOOR/WATER — a room/passage
+// interior) and the other pair is not: open only to its north/south -> this cell's own wall FACE reads
+// north/south, which means the wall itself physically RUNS east-west (the world X axis) -> 'x'. Open
+// only to its east/west -> the wall runs north-south (world Z) -> 'z'. Open on BOTH perpendicular pairs
+// (a true corner) or on NEITHER (an isolated/diagonal-only wall cell, e.g. an octagon's chamfered notch)
+// returns null — exactly the "kit can't turn the corner" cells the spec licenses straight to the prism
+// path, with zero special-casing needed for octagon/L/cave shapes: this test is purely local per-cell
+// topology, so it naturally finds only the straight stretches on ANY Stage-C shape.
+function itrKitWallRunAxis(x, y, plan) {
+  const isOpen = (code) => code === SPATIAL_CELL.FLOOR || code === SPATIAL_CELL.DOOR || code === SPATIAL_CELL.WATER;
+  const nsOpen = isOpen(itrCellCodeAt(x, y - 1, plan)) || isOpen(itrCellCodeAt(x, y + 1, plan));
+  const ewOpen = isOpen(itrCellCodeAt(x - 1, y, plan)) || isOpen(itrCellCodeAt(x + 1, y, plan));
+  if (nsOpen && !ewOpen) return "x";
+  if (ewOpen && !nsOpen) return "z";
+  return null;
+}
+
+// itrKitWallRunDoorAdjacent(x,y,plan,axis) -> true when this (otherwise run-eligible) WALL cell sits
+// immediately next to a DOOR cell ALONG the run's own axis. KS-2's kit gate-door frame overhangs half a
+// module into each of its two flanking wall cells (itrKitDoorEligible's own header) — excluding those
+// exact cells from wall-run tiling (they stay prism) guarantees a kit wall module can never spatially
+// double up against a kit door frame's own overhang, the seam-integrity gate's "no overlap/z-fighting"
+// requirement satisfied by construction rather than by a runtime geometry check.
+function itrKitWallRunDoorAdjacent(x, y, plan, axis) {
+  const dx = axis === "x" ? 1 : 0, dz = axis === "x" ? 0 : 1;
+  return itrCellCodeAt(x + dx, y + dz, plan) === SPATIAL_CELL.DOOR || itrCellCodeAt(x - dx, y - dz, plan) === SPATIAL_CELL.DOOR;
+}
+
+// itrKitShellEmitRun(startIdx, endIdx, fixedCoord, axis, scale, wallRuns, claimedWall): tiles a maximal
+// eligible run [startIdx..endIdx] (inclusive, along `axis`, at the run's own fixed perpendicular
+// coordinate) into as many 2-cell kit modules as fit, anchored at the run's OWN start (deterministic,
+// never a global-grid anchor a run's own position could drift against). `scale` is this run's uniform
+// wall scaleDomain (itrWallScale) — KIT_SHELL v1 SCOPE: only scale===1.0 runs tile with the kit (a fixed
+// module can't stretch to a lair's own scaled wall height without visible distortion); a scaled run's
+// cells are simply never claimed, falling to the existing per-cell prism path unchanged. Any 1-cell
+// remainder (an odd-length run) is left unclaimed at the run's own tail — same fate.
+function itrKitShellEmitRun(startIdx, endIdx, fixedCoord, axis, scale, wallRuns, claimedWall) {
+  if (scale !== 1.0) return;
+  const len = endIdx - startIdx + 1;
+  const modules = Math.floor(len / 2);
+  for (let m = 0; m < modules; m++) {
+    const c0 = startIdx + m * 2, c1 = c0 + 1;
+    const mid = (c0 + c1) / 2;
+    const run = axis === "x" ? { x: mid, z: fixedCoord, axis, span: 2 } : { x: fixedCoord, z: mid, axis, span: 2 };
+    wallRuns.push(run);
+    if (axis === "x") { claimedWall.add(c0 + "," + fixedCoord); claimedWall.add(c1 + "," + fixedCoord); }
+    else { claimedWall.add(fixedCoord + "," + c0); claimedWall.add(fixedCoord + "," + c1); }
+  }
+}
+
+/* itrKitShellWallRuns(plan, kept, roomIdx, corridorIdx) -> { wallRuns:[{x,z,axis,span}], claimedWall:Set }
+   Pure/deterministic (no RNG) — a straight function of the already-fixed cell grid. Two passes over the
+   KEPT grid: axis-'x' runs are grouped row-major (consecutive x at a fixed y), axis-'z' runs are grouped
+   column-major (consecutive y at a fixed x) — a cell's axis is a single deterministic value (never both),
+   so the two passes never double-claim the same cell. KIT_SHELL_ENABLED=false short-circuits to empty
+   (the flag's own retreat, checked once here rather than at every call site). */
+function itrKitShellWallRuns(plan, kept, roomIdx, corridorIdx) {
+  const wallRuns = [], claimedWall = new Set();
+  if (!KIT_SHELL_ENABLED) return { wallRuns, claimedWall };
+  const idx = (x, y) => y * plan.cellW + x;
+  const isKept = (x, y) => x >= 0 && y >= 0 && x < plan.cellW && y < plan.cellD && kept[idx(x, y)];
+  const axisOf = new Map();
+  for (let y = 0; y < plan.cellD; y++) {
+    for (let x = 0; x < plan.cellW; x++) {
+      if (!isKept(x, y) || plan.cells[idx(x, y)] !== SPATIAL_CELL.WALL) continue;
+      let axis = itrKitWallRunAxis(x, y, plan);
+      if (axis && itrKitWallRunDoorAdjacent(x, y, plan, axis)) axis = null;
+      if (axis) axisOf.set(x + "," + y, axis);
+    }
+  }
+  for (let y = 0; y < plan.cellD; y++) {
+    let start = null, runScale = 1.0;
+    for (let x = 0; x <= plan.cellW; x++) {
+      const a = x < plan.cellW ? axisOf.get(x + "," + y) : undefined;
+      if (a === "x") {
+        if (start === null) { start = x; runScale = itrWallScale(x, y, plan, roomIdx, corridorIdx); }
+      } else if (start !== null) {
+        itrKitShellEmitRun(start, x - 1, y, "x", runScale, wallRuns, claimedWall); start = null;
+      }
+    }
+  }
+  for (let x = 0; x < plan.cellW; x++) {
+    let start = null, runScale = 1.0;
+    for (let y = 0; y <= plan.cellD; y++) {
+      const a = y < plan.cellD ? axisOf.get(x + "," + y) : undefined;
+      if (a === "z") {
+        if (start === null) { start = y; runScale = itrWallScale(x, y, plan, roomIdx, corridorIdx); }
+      } else if (start !== null) {
+        itrKitShellEmitRun(start, y - 1, x, "z", runScale, wallRuns, claimedWall); start = null;
+      }
+    }
+  }
+  return { wallRuns, claimedWall };
+}
+
+/* itrKitShellFloorBlocks(plan, kept, roomGround, daisByRoom) -> { floorBlocks:[{x,z,room}], claimedFloor:Set }
+   2x2 kenney template-floor tile blocks, anchored per-room at the room's OWN (r.x,r.y) origin corner
+   (deterministic, room-local — never a global-grid anchor that could shear across two adjacent rooms of
+   different offsets). KIT_SHELL v1 SCOPE (documented, not silently narrowed): a candidate block's 4
+   cells must all be plain FLOOR (DOOR/WATER excluded), all in the SAME room, at room.scaleDomain===1.0
+   (a scaled lair floor can't tile with a fixed-size module), and NONE of the 4 may be a VP3 ground-
+   design "raised" cell, a STAGE-C terrain-tiered cell, or a BW2-5 finale-dais top/ring cell (all three
+   ride the SAME `sy` override path — a jittered/tiered/dais step is deliberate texture the flat kit
+   tile can't represent) — checked PER CELL, never per room: a room that's mostly flat with one raised
+   corner (or a finale room whose dais covers only its own two rings) still kit-tiles everywhere else;
+   only the actually-affected cells fall back to prism. */
+function itrKitShellFloorBlocks(plan, kept, roomGround, daisByRoom) {
+  const floorBlocks = [], claimedFloor = new Set();
+  if (!KIT_SHELL_ENABLED) return { floorBlocks, claimedFloor };
+  const idx = (x, y) => y * plan.cellW + x;
+  const isKept = (x, y) => x >= 0 && y >= 0 && x < plan.cellW && y < plan.cellD && kept[idx(x, y)];
+  (plan.rooms || []).forEach((r) => {
+    if (!isKept(r.x, r.y) && !itrRoomCellList(r).some(({ x, y }) => isKept(x, y))) return;
+    if ((r.scaleDomain || 1.0) !== 1.0) return;
+    const gd = roomGround.get(r.segNum);
+    const raised = gd && gd.raised;
+    const dais = r.role === "finale" && daisByRoom ? daisByRoom.get(r.segNum) : null;
+    for (let by = r.y; by < r.y + r.d; by += 2) {
+      for (let bx = r.x; bx < r.x + r.w; bx += 2) {
+        const cells = [[bx, by], [bx + 1, by], [bx, by + 1], [bx + 1, by + 1]];
+        const ok = cells.every(([cx2, cy2]) => {
+          if (!isKept(cx2, cy2)) return false;
+          if (plan.cells[idx(cx2, cy2)] !== SPATIAL_CELL.FLOOR) return false;
+          const key = cx2 + "," + cy2;
+          if (raised && raised.has(key)) return false;
+          if (plan.tiers && plan.tiers[idx(cx2, cy2)]) return false;
+          if (dais && (dais.top.has(key) || dais.ring.has(key))) return false;
+          return true;
+        });
+        if (!ok) continue;
+        floorBlocks.push({ x: bx + 0.5, z: by + 0.5, room: r.segNum });
+        cells.forEach(([cx2, cy2]) => claimedFloor.add(cx2 + "," + cy2));
+      }
+    }
+  });
+  return { floorBlocks, claimedFloor };
+}
+
 // itrActiveRoomKeepSet(plan, focusSegNum) -> Set([focusSegNum]) | null. Mirrors itrFocusRoomSet's own
 // A missing focusSegNum preserves the explicit whole-plan study/harness path (`null`). An explicit but
 // unknown focus fails CLOSED to an empty set so stale room state can never reveal the whole dungeon.
@@ -1327,6 +1484,14 @@ function interiorBuildBoard(plan, opts) {
     if (r.role === "finale") daisByRoom.set(r.segNum, itrDaisCellsFor(r));
   });
 
+  // KS-3 (docs/KENNEY-SOCKET-WAVE.md): precompute the kit-shell claim sets BEFORE the main per-cell
+  // loop below — the loop's own floor.push/wall.push calls skip any cell these two functions have
+  // claimed (a kit module renders it instead), mirroring the door aperture's existing skip. Depends on
+  // `roomGround` + `daisByRoom` (both just above, for the floor blocks' per-cell "never a VP3-raised or
+  // finale-dais cell" exclusion) and `kept` (already built above) — all already exist by this point.
+  const kitShellWallData = itrKitShellWallRuns(plan, kept, roomIdx, corridorIdx);
+  const kitShellFloorData = itrKitShellFloorBlocks(plan, kept, roomGround, daisByRoom);
+
   for (let y = 0; y < plan.cellD; y++) {
     for (let x = 0; x < plan.cellW; x++) {
       if (!kept[idx(x, y)]) continue;
@@ -1379,7 +1544,12 @@ function interiorBuildBoard(plan, opts) {
         // itrDarkenHex convention that pass already uses).
         const floorSceneDir = sceneDirectionFor(kit.realmId, room && room.role);
         color = itrDarkenHex(color, floorSceneDir.valueScript.floor);
-        floor.push({ x, z: y, sx: 1, sy, sz: 1, color, scaleDomain: scale });
+        // KS-3: a cell itrKitShellFloorBlocks already claimed for a 2x2 kit floor tile skips the prism
+        // push entirely (the kit mesh renders it instead) — `track` still runs unconditionally so the
+        // room's own camera-fit bounds are never narrower just because a cell went kit instead of prism.
+        if (!(KIT_SHELL_ENABLED && kitShellFloorData.claimedFloor.has(x + "," + y))) {
+          floor.push({ x, z: y, sx: 1, sy, sz: 1, color, scaleDomain: scale });
+        }
         track(x, y);
       }
       if (code === SPATIAL_CELL.DOOR) {
@@ -1539,7 +1709,12 @@ function interiorBuildBoard(plan, opts) {
         const wallRoom = itrRoomRoleNear(x, y, plan, roomIdx);
         const wallSceneDir = sceneDirectionFor(kit.realmId, wallRoom && wallRoom.role);
         const wallColor = itrDarkenHex(kit.wallColor, wallSceneDir.valueScript.wall);
-        wall.push({ x, z: y, sx: 1, sy: h, sz: 1, color: wallColor, scaleDomain: scale });
+        // KS-3: a cell itrKitShellWallRuns already claimed for a kit wall module skips the prism push
+        // (the kit mesh renders it instead) — `track` still runs unconditionally, same rationale as the
+        // floor branch above.
+        if (!(KIT_SHELL_ENABLED && kitShellWallData.claimedWall.has(x + "," + y))) {
+          wall.push({ x, z: y, sx: 1, sy: h, sz: 1, color: wallColor, scaleDomain: scale });
+        }
         track(x, y);
       }
     }
@@ -1709,6 +1884,14 @@ function interiorBuildBoard(plan, opts) {
     // assembly or fall back to the prism hinge+leaf — pure placement data (position/rotation axis),
     // no THREE, no state; the state->pose mapping stays entirely theater-boot.js's job (D0's own split).
     kitDoors: kitDoors,
+    // KS-3 (docs/KENNEY-SOCKET-WAVE.md): siblings of `instances`/`kitDoors` above — one entry per
+    // kit-tiled wall module / floor block (pure placement data, no THREE; theater-boot.js's GL layer
+    // owns the actual donor-piece mount). `instances.wall`/`instances.floor` above already omit every
+    // cell these two arrays claim (itrKitShellWallRuns/itrKitShellFloorBlocks, see their own headers),
+    // so a cell is NEVER double-rendered kit+prism. Empty arrays whenever KIT_SHELL_ENABLED is off —
+    // "the flag is the retreat" (byte-identical prism output).
+    kitShellWalls: kitShellWallData.wallRuns,
+    kitShellFloors: kitShellFloorData.floorBlocks,
     // GR4 (docs/GRAPHICS-ENGINE.md build unit GR4 STAGE LAW): the edge skirt, computed off the SAME
     // bounds this function already tracked above (no second bounds derivation) — a sibling of
     // `instances`, not a 5th member of it (see this function's own doc comment on why check 2's "4
@@ -1764,7 +1947,12 @@ function interiorBuildBoard(plan, opts) {
       // legitimately shrinks whenever a door cell resolves to the kit path instead (those cells push
       // zero prism entries). kitDoorCount makes the swap visible rather than silently changing
       // doorCount's own meaning underfoot.
-      kitDoorCount: kitDoors.length }
+      kitDoorCount: kitDoors.length,
+      // KS-3: wallCount/floorCount above are the PRISM instance counts — they legitimately shrink
+      // whenever a run/block resolves to the kit path (same "make the swap visible" rationale as
+      // kitDoorCount just above, applied to walls/floors).
+      kitShellWallCount: kitShellWallData.wallRuns.length,
+      kitShellFloorCount: kitShellFloorData.floorBlocks.length }
   };
 }
 

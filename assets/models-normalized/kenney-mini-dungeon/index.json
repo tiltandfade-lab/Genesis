@@ -8,7 +8,7 @@
     "materialFamilies": [
       "stone"
     ],
-    "recipeHash": "595c03bdae5a31e714594da2619c3065ecb63dd34dba7bc74ac9e0d07afc9794",
+    "recipeHash": "abc84b9bb58d698f3d569ad4e157d51ab887791a7744bf99935d9f487f97d61f",
     "semanticParts": [
       "floor"
     ],
@@ -72,7 +72,7 @@
     "materialFamilies": [
       "stone"
     ],
-    "recipeHash": "694218a2a2c3c23a66abd7a9c31623f97752fd647b91754e3352a6919e47a252",
+    "recipeHash": "9c4d44c3617d31914374cd269f01bf4c7e2cded1ac78f5d191cc44ba03ae7751",
     "semanticParts": [
       "floor"
     ],
@@ -136,7 +136,7 @@
     "materialFamilies": [
       "wood"
     ],
-    "recipeHash": "e187f82bb7a961d855e97ff5400da2aac5150400d360184bb5f94e8536827e8a",
+    "recipeHash": "07817b5eedf5efcbe099fa8a49cd6c4fdf3084bb8a4371dcf7ed1c5229f78df8",
     "semanticParts": [
       "door-leaf"
     ],
@@ -168,7 +168,7 @@
     "materialFamilies": [
       "stone"
     ],
-    "recipeHash": "becfcf6dcb896afd08a7bdf839eb674943e187f0ce5e1f7639555bb468d0ec2e",
+    "recipeHash": "631b4fdb840f21e0775ffad6569d83959bc1661227d98c731341272d52ff0b2b",
     "semanticParts": [
       "stairs"
     ],
@@ -232,7 +232,7 @@
     "materialFamilies": [
       "stone"
     ],
-    "recipeHash": "1f9504dc608c0cdfd347619e8705d8ef2517520c4aa96327d33f37c18c01e6c4",
+    "recipeHash": "36eae6b75b286c900acc0f8c4387132b5479d93ba7e6b2efabe186e17c4f8780",
     "semanticParts": [
       "wall"
     ],
@@ -288,7 +288,7 @@
     "materialFamilies": [
       "stone"
     ],
-    "recipeHash": "53e9656441b2505a3d32c412bcd4c5705b366435081d9f88c966b7f1fefdc099",
+    "recipeHash": "1569e5dd55d279eb69880eb9e96dba84f44c43703fdc97a7a98b3e742b3cb2bd",
     "semanticParts": [
       "wall"
     ],
@@ -344,7 +344,7 @@
     "materialFamilies": [
       "stone"
     ],
-    "recipeHash": "0dc3bc2cfb4b94d6ab9d3a6d0218c7a4a8f697f0bc0cdf2a69836962433a9481",
+    "recipeHash": "637ec98c3b531fb69dc7d80c66777f40c7d10884a3a86e6e0db00f650fd8a89f",
     "semanticParts": [
       "wall"
     ],
@@ -400,7 +400,7 @@
     "materialFamilies": [
       "stone"
     ],
-    "recipeHash": "d42cd9254fec994a883b4a14ca6598f1f594e5b45eb6ae13433240a5c8424cfd",
+    "recipeHash": "71e63eb3e29ba752929956bbbce4731cb6bd886695589411922f1dd998ef01b0",
     "semanticParts": [
       "doorway-frame"
     ],

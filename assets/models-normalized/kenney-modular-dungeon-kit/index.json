@@ -8,7 +8,7 @@
     "materialFamilies": [
       "stone"
     ],
-    "recipeHash": "83a050729fc0f85643990a75cca16e463f85ec887e085f40fdb91f1c3c880e0f",
+    "recipeHash": "bb9e846b0baa608e88ca7ff87bb88d88f9ed4dc6fc6584e06aa792509571fe30",
     "semanticParts": [
       "corridor-shell"
     ],
@@ -72,7 +72,7 @@
     "materialFamilies": [
       "stone"
     ],
-    "recipeHash": "787fd3b8d7999aa43c4fab8cec32d59ed5b55dc94850bb4286721bdc0417c615",
+    "recipeHash": "9e02825186f7cda67016c4c36251ac68ae218544b745a41cd8e9c5b45bac1263",
     "semanticParts": [
       "corridor-shell"
     ],
@@ -136,7 +136,7 @@
     "materialFamilies": [
       "stone"
     ],
-    "recipeHash": "88bad7b6a2395e6f32d31abee195a4d2a769d2502c2dd6f6df324a1a6b2c4983",
+    "recipeHash": "3ea6c308b108998411ae4cb2f511bdd88b09dda122784ef29296cd232035cc89",
     "semanticParts": [
       "corridor-shell"
     ],
@@ -200,7 +200,7 @@
     "materialFamilies": [
       "stone"
     ],
-    "recipeHash": "c4f9aa3d992994a31fd21f99a1d7d10e0e37aa3e9dec552223d38f20c016489e",
+    "recipeHash": "bc234bc3fb954c72c57b37ffb0f6e8db1544395e2320858fcd6d0e48c53bb9e7",
     "semanticParts": [
       "corridor-shell"
     ],
@@ -264,7 +264,7 @@
     "materialFamilies": [
       "stone"
     ],
-    "recipeHash": "32a85057916bf049cd83b6a1d25d09895ede41716634e80478604165cffeb58a",
+    "recipeHash": "3b83d4224cbc0f27a5b38835e8a32e7a6c2350e7f1e9040d59060f0cd3c8a69d",
     "semanticParts": [
       "corridor-shell"
     ],
@@ -328,7 +328,7 @@
     "materialFamilies": [
       "stone"
     ],
-    "recipeHash": "04bcc265e0c5177b9a875714bb8ea233d0d094f5bb4aa059d5ca57d22aa8951c",
+    "recipeHash": "f83d6eb2500c877a31f172b161188d334304c1d1355c9a694c1ce7f6f0f91104",
     "semanticParts": [
       "corridor-shell"
     ],
@@ -392,7 +392,7 @@
     "materialFamilies": [
       "stone"
     ],
-    "recipeHash": "75bc88010a1f16322a0d1b00aec093ab9303473fc4da7d2eadf9e454d66c6d7a",
+    "recipeHash": "c1306d20eb561ec7fb9df9d04f102daeafd0244f6bd8c4b167a8c5fab308b795",
     "semanticParts": [
       "corridor-shell"
     ],
@@ -456,7 +456,7 @@
     "materialFamilies": [
       "stone"
     ],
-    "recipeHash": "90f6d46c8a01e4c0b4c647e2538c3edfd4f080d492deef1df76115b1eff9b057",
+    "recipeHash": "b76474f574893b88220e11e243c0db676dffbaaad3445119dc67bad0cd07a617",
     "semanticParts": [
       "corridor-shell"
     ],
@@ -520,7 +520,7 @@
     "materialFamilies": [
       "stone"
     ],
-    "recipeHash": "1bb66f1d026e17425ec031884429460e37fb8b1d43f03bffbf973a7b98858dac",
+    "recipeHash": "4433171f854f7366bef3b23a885f5bf56794794ee42a8996d36cb3e7fd051362",
     "semanticParts": [
       "corridor-shell"
     ],
@@ -584,7 +584,7 @@
     "materialFamilies": [
       "stone"
     ],
-    "recipeHash": "c930cd3a7762c5fba3207982ae2fe2e54a14c958a1fcee31ceabc9961d951d9b",
+    "recipeHash": "f7b56b54129ae738cdf4abce1237d90adeb82b8ac6b69bf829322203c72b83f2",
     "semanticParts": [
       "corridor-shell"
     ],
@@ -648,7 +648,7 @@
     "materialFamilies": [
       "stone"
     ],
-    "recipeHash": "0f4f3e6f547a9cd6ea7ef9541a03e2722ac15ead2bf92fc915c5a5efccd727e7",
+    "recipeHash": "2cc8ef69afbcbd5c6a62c2bf218d590424df81d9a2994dad2f0634140e478627",
     "semanticParts": [
       "corridor-shell"
     ],
@@ -712,7 +712,7 @@
     "materialFamilies": [
       "stone"
     ],
-    "recipeHash": "55d6ff58a23e900dba86a2237e3b1e052954667fc1588072464b1c037ab7a2ac",
+    "recipeHash": "9da2d81b3f2d8a54af57273c51ddfff93d5b800d81386a3bf0ce3a0a91dea06a",
     "semanticParts": [
       "arch"
     ],
@@ -769,7 +769,7 @@
       "stone",
       "wood"
     ],
-    "recipeHash": "11e5cc219825d18888c5d90a2184e9f1072c2dd79f37299ff747555048ef9189",
+    "recipeHash": "6a1ff0bf1de0b268f3e4b715c4f2a746c46e57a24c8d4f9b8afb308e0858c198",
     "semanticParts": [
       "doorway-frame",
       "door-leaf"
@@ -843,7 +843,7 @@
       "stone",
       "wood"
     ],
-    "recipeHash": "ec1282888d82b72617d9c23e35087b0bbf11dc368ca93db58b33abef46309188",
+    "recipeHash": "9694e903812811f1dbd1ba7a1476edcc443964ed07a113e1f4aa914bda83b713",
     "semanticParts": [
       "doorway-frame",
       "door-leaf"
@@ -917,7 +917,7 @@
       "iron",
       "stone"
     ],
-    "recipeHash": "897c68759f78497f2b7d67ccff00e014c67b620983bacc717823ff0d7d4701ad",
+    "recipeHash": "81f3056ef4ce493c033eaf46b1511bca28c21a6f55d538208deabecf8071fba9",
     "semanticParts": [
       "doorway-frame",
       "door-leaf"
@@ -990,7 +990,7 @@
     "materialFamilies": [
       "stone"
     ],
-    "recipeHash": "b55c2a9bef47dd1bca8ba96baebadc4c4bc5948c6e57047e3f0560eccf79f677",
+    "recipeHash": "3705c0896826144b22d490d057c8c77efcf909502803395f2d70c52b5596e3ac",
     "semanticParts": [
       "room-shell"
     ],
@@ -1054,7 +1054,7 @@
     "materialFamilies": [
       "stone"
     ],
-    "recipeHash": "0d62f6d08096a3fdf3858e715970ef5e8a9c9f6d2a1994babe7bd599ff81df3a",
+    "recipeHash": "cd6583022dd66891b2e399d8797915f0dab2807dfa63c836a03114877388521b",
     "semanticParts": [
       "room-shell"
     ],
@@ -1118,7 +1118,7 @@
     "materialFamilies": [
       "stone"
     ],
-    "recipeHash": "1477ad75449e4dd3d0252d82ed0bfa4ee90a1f330829fbbdc09abb873302914f",
+    "recipeHash": "48ddcdd25aefb1bb7e74c22943ad01777704bfd7637a0b3cbd06b5ae96425cd9",
     "semanticParts": [
       "room-shell"
     ],
@@ -1182,7 +1182,7 @@
     "materialFamilies": [
       "stone"
     ],
-    "recipeHash": "608cec2e27961c776a0b7bc25d501bac2de282ec90593d3b2ac9e43b6d1fccf1",
+    "recipeHash": "27a66241377a66667891d5ac3e42172171a855cd7b3a69c79d1ec48640de569f",
     "semanticParts": [
       "room-shell"
     ],
@@ -1246,7 +1246,7 @@
     "materialFamilies": [
       "stone"
     ],
-    "recipeHash": "e6941d063581409e9ca5fab74963d7669b3d9c7f432cf20338fa4f6b1e9851d3",
+    "recipeHash": "1e86a1b56cc27467143823ef0dec3bf444cce2bbb1e9467b942d14792756d4a8",
     "semanticParts": [
       "room-shell"
     ],
@@ -1310,7 +1310,7 @@
     "materialFamilies": [
       "stone"
     ],
-    "recipeHash": "b049ef4c16196acb030690bf38c8c25f9bf203d1a78ce62c8d88b5b0c918799a",
+    "recipeHash": "1a2f622e2dd12ccb4574a617e46769a121ae8d2b1ef39306dcd2ff3b094a25ce",
     "semanticParts": [
       "room-shell"
     ],
@@ -1374,7 +1374,7 @@
     "materialFamilies": [
       "stone"
     ],
-    "recipeHash": "dea53f6e50c08a495ce7bb284133bd7fa9da9e6f622ced442ed847adde27657f",
+    "recipeHash": "34e3a59858d3cf9fc64ff396b0f046eceb694cf49b6b870d4caa76f130328c06",
     "semanticParts": [
       "room-shell"
     ],
@@ -1438,7 +1438,7 @@
     "materialFamilies": [
       "stone"
     ],
-    "recipeHash": "9b04a93841efe118f90f2dcaa15cd6120f31fe995087402833c5b3e65aedb836",
+    "recipeHash": "3372c31ea2a1dab7514799c0b8e4bd13b2588eaab8e58464dc8da66bd2a22998",
     "semanticParts": [
       "stairs"
     ],
@@ -1502,7 +1502,7 @@
     "materialFamilies": [
       "stone"
     ],
-    "recipeHash": "b0e12182e21fb9d0019e5a34103d94530d44ef1a72a5e8f0abbcce9b40010ab7",
+    "recipeHash": "40f27b8fdce54832b6c900bd5540dffca2c827fab08499c0d638b7e118fe689c",
     "semanticParts": [
       "stairs"
     ],
@@ -1566,7 +1566,7 @@
     "materialFamilies": [
       "stone"
     ],
-    "recipeHash": "c23d85d3e57fb44beee0890f24e9ff95aff2f73334b1fc81cbea2f774770648e",
+    "recipeHash": "df114d40d62c62cb7ff57a64ff6736b38c8a8a54e5ff6956dd8e010a06dc745f",
     "semanticParts": [
       "wall-corner"
     ],
@@ -1622,7 +1622,7 @@
     "materialFamilies": [
       "stone"
     ],
-    "recipeHash": "6e58ca15b34f34bf25be55442c026a33e81b8cddc02688f10962956cd1cad6db",
+    "recipeHash": "6bed12b9b868dd3493b80ca602e7377fd0dc5ba35895eabcccf88d1d4b807b9d",
     "semanticParts": [
       "wall"
     ],
@@ -1678,7 +1678,7 @@
     "materialFamilies": [
       "stone"
     ],
-    "recipeHash": "44d2a37b4e864b6fc2794a4a10265e17099fc784d5d0b3cb708a0224a57fc387",
+    "recipeHash": "99cc85916d501feabcabff34d5f4e89a85afa818b1cfd7aa5b814d6a09848f6f",
     "semanticParts": [
       "floor"
     ],
@@ -1742,7 +1742,7 @@
     "materialFamilies": [
       "stone"
     ],
-    "recipeHash": "a0136a83453a5c8b6c54fae804208349b19d49d81e54cb0185dfd8763b7d558f",
+    "recipeHash": "a02ce7ed71c83394db4284f7cfed04132bfef5c3612cce4b15297c71fa335096",
     "semanticParts": [
       "floor"
     ],
@@ -1806,7 +1806,7 @@
     "materialFamilies": [
       "stone"
     ],
-    "recipeHash": "b804ed183335c14951fee15a79cadeb09830946b92d404f71914985e4679f0fe",
+    "recipeHash": "9b2e792258dcbbb223ca03ba25501db8cbaf9c7039f916f425bcf1ce5ee81b73",
     "semanticParts": [
       "floor"
     ],
@@ -1870,7 +1870,7 @@
     "materialFamilies": [
       "stone"
     ],
-    "recipeHash": "a7378f6d54ddbfb0851eff65d7d917e11a5b569de05b021980a3b982b67c9d32",
+    "recipeHash": "838c31351beb230205f295d7158085c1a59856942b109c483ba7baba93a13fb9",
     "semanticParts": [
       "floor"
     ],
@@ -1934,7 +1934,7 @@
     "materialFamilies": [
       "stone"
     ],
-    "recipeHash": "3aaf880f918779e2a09d44503c0a80daf6eef3e1987969f782b391e9013cd4db",
+    "recipeHash": "0736dc694a92def18aadf72a0ab6f081a65d05301ea2b9d3bed307cb89ee50ca",
     "semanticParts": [
       "floor"
     ],
@@ -1998,7 +1998,7 @@
     "materialFamilies": [
       "stone"
     ],
-    "recipeHash": "fe1a7486b95aa2d52f659e4ddfcb83b153aaa95e0e8f8d2489328b3f40e603b3",
+    "recipeHash": "7f7a6a836b5d8ba1dd1a89242fb14f28b47addaaddd22bcb1dee61ce8d391fca",
     "semanticParts": [
       "floor"
     ],
@@ -2062,7 +2062,7 @@
     "materialFamilies": [
       "stone"
     ],
-    "recipeHash": "08268455b8523d64e76e2408991d4a5321a66083eb9e9fcc2bfa8a413c047824",
+    "recipeHash": "afb30a2d69f80c524a95e2d94d907e473335ead1402acfa3d2e170e574252767",
     "semanticParts": [
       "floor"
     ],
@@ -2126,7 +2126,7 @@
     "materialFamilies": [
       "stone"
     ],
-    "recipeHash": "b972c4d614e762428a922ad1ca1d305640d38190c0ee23ccd274415d55c0c3aa",
+    "recipeHash": "29ad64f52571a1526c294a9714d8d82048959d35552c8cc7d3ddca631cd5afb3",
     "semanticParts": [
       "wall"
     ],
@@ -2182,7 +2182,7 @@
     "materialFamilies": [
       "stone"
     ],
-    "recipeHash": "b7b5041949bb4016eb8ec2db82671daca55fcf62dbd673c0f673ee8d7409f6b4",
+    "recipeHash": "2c6fc3279b3ee3913cd6b913a0fb9e6f6c695dc4dc26e3914e2dd1c21db54465",
     "semanticParts": [
       "wall-corner"
     ],
@@ -2238,7 +2238,7 @@
     "materialFamilies": [
       "stone"
     ],
-    "recipeHash": "783fb6ea42b00b8894972520ca5146e059efd8716348a0563f22cb2fd18c4926",
+    "recipeHash": "f92289b565ca1894f2160fd0efba7010e0121f16d50da95d53d9264dda2b02cf",
     "semanticParts": [
       "wall"
     ],
@@ -2294,7 +2294,7 @@
     "materialFamilies": [
       "stone"
     ],
-    "recipeHash": "b5d8ef86c4df66774cf593d7df81f9b9598b35620755f18859303d9fcf6ad58f",
+    "recipeHash": "ab663198d4670c70728cc9c8d67326a6af40fd912ccc8b2a342efbdf924249a6",
     "semanticParts": [
       "wall"
     ],
@@ -2350,7 +2350,7 @@
     "materialFamilies": [
       "stone"
     ],
-    "recipeHash": "a4495c053a83803b42d66b4717189afdb01703ad7cb6b1dd9549c73cbd45c8ff",
+    "recipeHash": "309aeb2d225361a3f38992aa51f1b04878bd535d5b63d51bea82dd3dc92641e6",
     "semanticParts": [
       "wall"
     ],
@@ -2406,7 +2406,7 @@
     "materialFamilies": [
       "stone"
     ],
-    "recipeHash": "55cf68dee1e85c578e9832fae46057383487d4f0493837550feee6c84534e73d",
+    "recipeHash": "28f8258d2032cdc2c402f1e83afea341dd223604375eacb957f37606ca759364",
     "semanticParts": [
       "wall"
     ],

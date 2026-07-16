@@ -32,6 +32,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
+import { isDeepStrictEqual } from "node:util";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const read = (p) => readFileSync(join(ROOT, p));
@@ -136,6 +137,17 @@ function allNodeExtras(gltf) {
 }
 function sha256Buf(buf) { return createHash("sha256").update(buf).digest("hex"); }
 
+function normalizerPythonProbe(expression) {
+  const code = [
+    "import importlib.util, json",
+    "spec = importlib.util.spec_from_file_location('normalize_donors', 'build/normalize-donors.py')",
+    "module = importlib.util.module_from_spec(spec)",
+    "spec.loader.exec_module(module)",
+    expression,
+  ].join("\n");
+  return JSON.parse(execFileSync("python3", ["-c", code], { cwd: ROOT, encoding: "utf-8" }));
+}
+
 const VALID_SOCKET_TYPES = new Set(["floor-mount", "wall-mount", "top-surface", "hinge", "butt-join-n", "butt-join-s", "butt-join-e", "butt-join-w"]);
 const VALID_FAMILIES = new Set(["stone", "wood", "iron", "roof", "glass", "cloth"]);
 
@@ -164,6 +176,44 @@ if (!existsSync(RAW_SAMPLE)) {
     `expected 0/0, got count=${red.count} extrasNodeCount=${red.extrasNodeCount}`);
 }
 
+console.log("\n=== 1b. KGR-1 RED-FIRST: primitive-union bounds + transformed-scene bounds ===");
+{
+  const union = normalizerPythonProbe([
+    "gltf = {'nodes':[{'mesh':0}], 'meshes':[{'primitives':[",
+    "  {'attributes':{'POSITION':0}}, {'attributes':{'POSITION':1}}",
+    "]}], 'accessors':[",
+    "  {'min':[-4,-3,-2], 'max':[5,6,7]},",
+    "  {'min':[-1,-1,-1], 'max':[1,1,1]}",
+    "]}",
+    "print(json.dumps(module.node_local_mesh_aabb(gltf, 0)))",
+  ].join("\n"));
+  check("KGR-1 ⊗ primitive union: a smaller second primitive cannot overwrite the first primitive's extrema",
+    JSON.stringify(union) === JSON.stringify([[-4, -3, -2], [5, 6, 7]]),
+    `got ${JSON.stringify(union)}; old last-primitive implementation returns [[-1,-1,-1],[1,1,1]]`);
+
+  const transformedProbe = normalizerPythonProbe([
+    "gltf = {'scene':0, 'scenes':[{'nodes':[0]}], 'nodes':[{'mesh':0, 'translation':[10,20,30], 'scale':[2,3,4]}],",
+    " 'meshes':[{'primitives':[{'attributes':{'POSITION':0}}]}],",
+    " 'accessors':[{'min':[-1,-1,-1], 'max':[1,1,1]}]}",
+    "print(json.dumps({'sceneWalk':module.scene_aabb(gltf), 'accessorOnly':[gltf['accessors'][0]['min'], gltf['accessors'][0]['max']]}))",
+  ].join("\n"));
+  check("KGR-1 ⊗ transformed scene walk: node translation/scale affect measured scene bounds",
+    JSON.stringify(transformedProbe.sceneWalk) === JSON.stringify([[8, 17, 26], [12, 23, 34]]),
+    `got ${JSON.stringify(transformedProbe.sceneWalk)}`);
+  check("KGR-1 ⊗ mutation control: replacing the scene walk with accessor-only union reports the wrong scaled-node bounds",
+    JSON.stringify(transformedProbe.accessorOnly) !== JSON.stringify([[8, 17, 26], [12, 23, 34]]) &&
+      JSON.stringify(transformedProbe.accessorOnly) === JSON.stringify([[-1, -1, -1], [1, 1, 1]]),
+    `accessor-only control unexpectedly matched: ${JSON.stringify(transformedProbe.accessorOnly)}`);
+
+  for (const slug of ["wall", "floor"]) {
+    const { gltf } = readGlb(join(ROOT, "assets", "models", "kenney-mini-dungeon", `${slug}.glb`));
+    const bounds = sceneAabb(gltf);
+    const footprint = [bounds[1][0] - bounds[0][0], bounds[1][2] - bounds[0][2]];
+    check(`KGR-1 transformed real mini-dungeon ${slug} footprint is 1.0 x 1.0 source units`,
+      footprint.every((v) => Math.abs(v - 1.0) <= 1e-9), `got ${JSON.stringify(footprint)}`);
+  }
+}
+
 // ============================================================================
 // 2. Run the normalizer fresh, then GREEN re-proof: every admitted piece's NORMALIZED output has
 //    sockets present + typed.
@@ -183,8 +233,8 @@ if (provenance) {
   check("provenance reports the expected total (47 pieces: 39 modular-dungeon-kit + 8 mini-dungeon)",
     provenance.totalPiecesAdmitted === 47, `got ${provenance.totalPiecesAdmitted}`);
 
-  let allSocketsOk = true, allScaleOk = true, allFamiliesOk = true;
-  const scaleFailures = [], socketFailures = [], familyFailures = [];
+  let allSocketsOk = true, allScaleOk = true, allFamiliesOk = true, allUvsOk = true, allAuthoredMaterialsGone = true;
+  const scaleFailures = [], socketFailures = [], familyFailures = [], uvFailures = [], materialStripFailures = [];
 
   for (const piece of provenance.pieces) {
     const outAbs = join(ROOT, piece.outputFile);
@@ -205,6 +255,17 @@ if (provenance) {
     // footprint should land on an exact multiple of MODULE_TARGET_WORLD_UNITS=2.0 per the scale
     // derivation in build/normalize-donors.py's own header).
     const { gltf: outGltf } = readGlb(outAbs);
+    for (const key of ["materials", "textures", "images", "samplers"]) {
+      if (key in outGltf) { allAuthoredMaterialsGone = false; materialStripFailures.push(`${piece.pack}/${piece.slug}: retained top-level ${key}`); }
+    }
+    for (let mi = 0; mi < (outGltf.meshes || []).length; mi++) {
+      for (let pi = 0; pi < (outGltf.meshes[mi].primitives || []).length; pi++) {
+        if ("material" in outGltf.meshes[mi].primitives[pi]) {
+          allAuthoredMaterialsGone = false;
+          materialStripFailures.push(`${piece.pack}/${piece.slug}: mesh ${mi} primitive ${pi} retained material binding`);
+        }
+      }
+    }
     const aabb = sceneAabb(outGltf);
     const dims = [aabb[1][0] - aabb[0][0], aabb[1][1] - aabb[0][1], aabb[1][2] - aabb[0][2]];
     const expected = piece.scaledDims;
@@ -254,11 +315,40 @@ if (provenance) {
     for (const fam of piece.materialFamilies) {
       if (!VALID_FAMILIES.has(fam)) { allFamiliesOk = false; familyFailures.push(`${piece.pack}/${piece.slug}: invalid family "${fam}"`); }
     }
+
+    // (d) KGR-1 material-coordinate law: removing authored material records must not remove any
+    // source TEXCOORD_* attribute or its accessor/bufferView dependency. The normalizer leaves the
+    // BIN and accessor tables intact by design, so exact index + JSON equality is the strongest gate.
+    const { gltf: rawGltf } = readGlb(join(ROOT, "assets", "models", piece.pack, `${piece.slug}.glb`));
+    for (let mi = 0; mi < (rawGltf.meshes || []).length; mi++) {
+      const rawPrims = rawGltf.meshes[mi].primitives || [];
+      const outPrims = ((outGltf.meshes || [])[mi] || {}).primitives || [];
+      for (let pi = 0; pi < rawPrims.length; pi++) {
+        const rawAttrs = rawPrims[pi].attributes || {};
+        const outAttrs = (outPrims[pi] || {}).attributes || {};
+        for (const name of Object.keys(rawAttrs).filter((k) => k.startsWith("TEXCOORD_"))) {
+          const rawAccessorIndex = rawAttrs[name], outAccessorIndex = outAttrs[name];
+          const sameIndex = outAccessorIndex === rawAccessorIndex;
+          const rawAccessor = rawGltf.accessors[rawAccessorIndex];
+          const outAccessor = outGltf.accessors[outAccessorIndex];
+          const sameAccessor = sameIndex && isDeepStrictEqual(outAccessor, rawAccessor);
+          const rawView = rawAccessor && rawGltf.bufferViews[rawAccessor.bufferView];
+          const outView = outAccessor && outGltf.bufferViews[outAccessor.bufferView];
+          const sameView = sameAccessor && isDeepStrictEqual(outView, rawView);
+          if (!sameView) {
+            allUvsOk = false;
+            uvFailures.push(`${piece.pack}/${piece.slug} mesh ${mi} primitive ${pi} ${name}: raw accessor ${rawAccessorIndex}, output ${String(outAccessorIndex)}`);
+          }
+        }
+      }
+    }
   }
 
   check("GREEN: every admitted piece's NORMALIZED output has sockets present + validly typed", allSocketsOk, socketFailures.slice(0, 5).join(" | "));
   check("GREEN: every admitted piece's measured scale is within ±2% of its provenance record AND (for shell/floor module pieces) the nearest 1.0-world-unit GRID LAW cell boundary", allScaleOk, scaleFailures.slice(0, 5).join(" | "));
   check("GREEN: every stamped material family is in the valid vocabulary {stone,wood,iron,roof,glass,cloth}", allFamiliesOk, familyFailures.slice(0, 5).join(" | "));
+  check("KGR-1 ⊗ GREEN: every normalized primitive retains every raw TEXCOORD_* accessor and referenced bufferView exactly", allUvsOk, uvFailures.slice(0, 5).join(" | "));
+  check("KGR-1 material strip: authored material/image/texture/sampler records and primitive bindings remain absent", allAuthoredMaterialsGone, materialStripFailures.slice(0, 5).join(" | "));
 }
 
 // ============================================================================
@@ -322,10 +412,14 @@ function hashAllOutputs() {
 }
 const hashesBefore = hashAllOutputs();
 const reportTextBefore = existsSync(join(ROOT, "dev/model-foundry/KS1-PROVENANCE.json")) ? readText("dev/model-foundry/KS1-PROVENANCE.json") : null;
+const indexTextBefore = Object.fromEntries(["kenney-modular-dungeon-kit", "kenney-mini-dungeon"].map((pack) =>
+  [pack, readText(join("assets", "models-normalized", pack, "index.json"))]));
 try {
   execFileSync("python3", ["build/normalize-donors.py"], { cwd: ROOT, stdio: "pipe" });
   const hashesAfter = hashAllOutputs();
   const reportTextAfter = readText("dev/model-foundry/KS1-PROVENANCE.json");
+  const indexTextAfter = Object.fromEntries(["kenney-modular-dungeon-kit", "kenney-mini-dungeon"].map((pack) =>
+    [pack, readText(join("assets", "models-normalized", pack, "index.json"))]));
   const keysBefore = Object.keys(hashesBefore), keysAfter = Object.keys(hashesAfter);
   const sameKeys = keysBefore.length === keysAfter.length && keysBefore.every((k) => k in hashesAfter);
   const sameHashes = sameKeys && keysBefore.every((k) => hashesBefore[k] === hashesAfter[k]);
@@ -334,6 +428,8 @@ try {
     sameKeys ? keysBefore.filter((k) => hashesBefore[k] !== hashesAfter[k]).slice(0, 5).join(", ") : "key set differs");
   check("determinism: the provenance report JSON is byte-identical across two runs (no embedded timestamps/randomness)",
     reportTextBefore !== null && reportTextBefore === reportTextAfter, "report text differs between runs");
+  check("determinism: both pack index.json files are byte-identical across two runs",
+    JSON.stringify(indexTextBefore) === JSON.stringify(indexTextAfter), "one or both pack indexes changed across identical runs");
 } catch (e) {
   fail++;
   console.log("  ✗ second normalizer run threw:", e.message);

@@ -78,7 +78,7 @@ PROVENANCE_PATH = os.path.join(REPO_ROOT, "dev", "model-foundry", "KS1-PROVENANC
 # semanticPart mapping, a corrected socket formula, a canonicalScale re-derivation) invalidates
 # the cache deterministically without needing a manual cache-bust. Bump this when the
 # classification/socket/scale RULES below change (not when unrelated parts of this file change).
-NORMALIZER_RECIPE_VERSION = "ks1-normalize-v1"
+NORMALIZER_RECIPE_VERSION = "kgr1-normalize-v2"
 
 # ─────────────────────────────────────────────────────────────────────────────────────────────
 # GRID LAW (src/ui/theater-interior.js:25, quoted): "1 SpatialPlan cell = 5 ft = 1 world unit".
@@ -318,9 +318,16 @@ def node_local_mesh_aabb(gltf, node_idx):
             continue
         acc = gltf["accessors"][pos_idx]
         mn, mx = acc.get("min"), acc.get("max")
-        if not mn or not mx:
+        if not mn or not mx or len(mn) < 3 or len(mx) < 3:
             continue
-        aabb = [list(mn), list(mx)]
+        if not all(math.isfinite(v) for v in list(mn[:3]) + list(mx[:3])):
+            continue
+        if aabb is None:
+            aabb = [list(mn[:3]), list(mx[:3])]
+        else:
+            for axis in range(3):
+                aabb[0][axis] = min(aabb[0][axis], mn[axis])
+                aabb[1][axis] = max(aabb[1][axis], mx[axis])
     return aabb
 
 
@@ -495,9 +502,10 @@ def find_node_index_by_name(gltf, name):
 def strip_materials(gltf):
     """Byte-level material discard, per P-B: 'discard their authored pastel MeshStandardMaterials'.
     Drops materials/textures/images/samplers arrays wholesale and every primitive's `material`
-    index + any now-unused TEXCOORD attribute reference. The BIN chunk is left completely
-    untouched (image bytes become unreferenced dead weight inside it rather than being surgically
-    cut — deliberately: re-offsetting bufferViews after removing image bytes is exactly the kind
+    index while preserving every TEXCOORD_* attribute and its existing accessor/bufferView chain.
+    The runtime Genesis material path consumes those authored coordinates. The BIN chunk is left
+    completely untouched (image bytes become unreferenced dead weight inside it rather than being
+    surgically cut — deliberately: re-offsetting bufferViews after removing image bytes is exactly the kind
     of binary-surgery bug class this script avoids by construction; a few dead KB of orphaned
     texture bytes is a fully acceptable, honestly-documented tradeoff for zero risk of corrupting
     live POSITION/NORMAL geometry accessors, which is what actually matters for KS-1)."""
@@ -516,9 +524,6 @@ def strip_materials(gltf):
         for prim in mesh.get("primitives", []):
             if "material" in prim:
                 del prim["material"]
-            attrs = prim.get("attributes", {})
-            for tk in [k for k in attrs if k.startswith("TEXCOORD_")]:
-                del attrs[tk]
             if "extensions" in prim:
                 del prim["extensions"]
 

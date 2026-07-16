@@ -124,7 +124,28 @@ F1 combat-in-room / F2 staging beats REMAIN QUEUED — they now inherit kit room
 Playtests re-aim at walk generation + assembly edge cases once KS-2/KS-3 are live
 ```
 
-Still open from the meeting (Adam's answers pending, nothing above blocks on them): camera freedom
-(Q3, his message cut off there) · flip-verdict evidence + mixed-corpus tolerance (Q14) · heights
-batch vs as-you-go (Q15) · B2-vs-X2 order (Q16) · realm scope at launch (Q19) · the vertical-slice
-question (Q20 — reorders the month if yes).
+## ADDENDUM — the meeting's Part II (Adam's Q3–Q20 answers, DESIGN.md 2026-07-15 evening Part II)
+
+The questionnaire is CLOSED. Deltas to this wave:
+- **All 16 packs are on master** (merge `ea03e353`) — KS-1's future family sweeps draw from the
+  full corpus; "we are building a full kenney engine and we will reskin it."
+- **Archive-not-fight:** any procedural system that conflicts with kit-based arrangement retires
+  via propose-and-archive (Adam pre-authorized the class; each retirement still gets named).
+- **Camera ruling:** cinematic composed angles beat free orbit everywhere they buy beauty; combat
+  may adopt FFT quarter-turn. A COMPOSED-CAMERA lane opens after KS-3 (composeShot already exists;
+  this licenses locking angles per scene kind).
+- **LL-1 disposition:** mechanisms land, lab parks dormant, light lane frozen until Kenney
+  environments prove (Q11 supersedes Part I's "critical" — logged transparently in DESIGN.md).
+- **ELEV-0 (discussion, NOT build):** rolled elevation convention — Adam: flat maps should not be
+  the rule; "let's discuss before just jumping right in." Proposal drafts on Stage C's existing
+  dais/pit tier parsing + the kits' stair/platform pieces + a walk-roller elevation field; goes to
+  Adam as options, nothing fires without his pick.
+- **Flip verdicts:** per-creature, by Adam, over the flip-verdict-sheets (chore in flight);
+  mixed corpus is the standing state. **Heights:** Fable estimates the 81 gaps
+  (heightSource:"estimated"), Adam re-rules in the editor.
+- **B2 later adopts the SMOOTH-contour extrusion register** (the codex-render depth — "minor
+  amount of depth… smooth edged extrusions even with rough edged pixel art"; choppy = reject).
+- **Scope:** FANTASY-ONLY to pre-alpha; gloom/chrome art tranches parked. Playtest + latency wait
+  for Kenney walk-scenes. Promo window: late Sept/Oct 2026.
+- Open item for a future pass: the capture rig's DPR (Adam reads test renders as low-res —
+  distinguish rig resolution from real canvas quality next lens run).

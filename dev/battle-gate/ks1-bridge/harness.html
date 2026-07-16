@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<!-- dev/battle-gate/ks1-bridge/harness.html — KS-1 (docs/KENNEY-SOCKET-WAVE.md) bridge-gate
+     capture harness. A STANDALONE scene (own renderer/camera/lights), NOT the live genesis.html
+     app — precedented by dev/model-foundry/faceted-extrusion-proof.html / extruded-prop-viewer.html
+     for exactly this situation (pre-integration visual proof of a donor/generated asset before it
+     is wired into the real interior pipeline). theater-donor.js is not wired into theater-boot.js's
+     live scene yet this unit (KS-2/KS-3 do that), so there is no live setInteriorBoard seam to
+     mount a donor piece into for a screenshot — this harness exercises the REAL runtime module
+     (src/ui/theater-donor.js's loadDonorPiece/donorGradeColor/donorOutlineStyleFor, imported
+     verbatim, not reimplemented) inside a scene built to match the production light-profile
+     NUMBERS (torchlit, quoted from src/ui/theater-boot.js's LIGHT_PROFILES table as DATA — read,
+     not imported/edited) so the DIRECT_MODULATED panel is judged under a faithful approximation
+     of the real interior grade.
+
+     Three render modes, matching Sol's own three-card bridge gate (quoted in build/normalize-
+     donors.py's header): "raw" (the untouched source .glb, its own authored pastel materials,
+     lit plainly), "direct" (the NORMALIZED piece through theater-donor.js's real material recipe,
+     placed inside a "real interior" — a normalized room-small.glb/wall.glb shell from the SAME
+     pack, mounted via its own floor-mount socket, under the torchlit rig), "grey" (the same
+     DIRECT_MODULATED piece, every material replaced with flat neutral grey, framed at a
+     documented "gameplay size" camera convention — see CAMERA CONVENTION below).
+
+     window.__ks1Capture(pack, slug, mode, opts) -> Promise<void> (renders one frame; the driver
+     script screenshots the canvas immediately after the returned promise resolves). -->
+<html>
+<head>
+<meta charset="utf-8">
+<title>KS-1 bridge harness</title>
+<style>html,body{margin:0;padding:0;background:#000;overflow:hidden}canvas{display:block}</style>
+<script type="importmap">
+{
+  "imports": {
+    "three": "../../../vendor/three/three.module.js",
+    "three/addons/": "../../../vendor/three/addons/"
+  }
+}
+</script>
+</head>
+<body>
+<canvas id="c" width="1200" height="900"></canvas>
+<script type="module">
+import * as THREE from "three";
+import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+import { loadDonorPiece, donorGradeColor } from "../../../src/ui/theater-donor.js";
+
+const canvas = document.getElementById("c");
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, preserveDrawingBuffer: true });
+renderer.setSize(1200, 900, false);
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+
+// TORCHLIT RIG — quoted (as data) from src/ui/theater-boot.js LIGHT_PROFILES.torchlit
+// (~line 5647): ambient {color:0x4a3826, intensity:0.21}, points:[{color:0xffa04a, intensity:18,
+// pos:{x:0,y:2.2,z:0.6}}] (pos there is a FRACTION of the board's half-extents; here it is
+// resolved against this scene's own subject-scaled room, same ratio). r166+ three.js
+// (this repo's vendored version) uses physically-correct photometric point-light units, decay:0
+// for a flat non-attenuating light — same convention as theater-boot.js's own applyLightProfile.
+const TORCHLIT = { ambient: { color: 0x4a3826, intensity: 0.21 }, point: { color: 0xffa04a, intensity: 18 } };
+
+function buildRig(scene, roomHalfExtent) {
+  const amb = new THREE.AmbientLight(TORCHLIT.ambient.color, TORCHLIT.ambient.intensity);
+  scene.add(amb);
+  const pt = new THREE.PointLight(TORCHLIT.point.color, TORCHLIT.point.intensity, 0, 0);
+  pt.position.set(0, roomHalfExtent * 0.9, roomHalfExtent * 0.3);
+  scene.add(pt);
+  return { amb, pt };
+}
+
+// a flat, neutral "plain lit" rig for the RAW panel (Kenney's own authored materials are pastel
+// PBR meant for flat, even lighting on their own store pages — the torchlit rig would make the
+// raw pastel comparison unfair in the OTHER direction, crushing it into darkness rather than
+// showing what "raw Kenney" actually reads like at a glance).
+function buildPlainRig(scene) {
+  const amb = new THREE.AmbientLight(0xffffff, 0.65);
+  scene.add(amb);
+  const dir = new THREE.DirectionalLight(0xffffff, 1.1);
+  dir.position.set(2, 4, 3);
+  scene.add(dir);
+  const fill = new THREE.DirectionalLight(0xffffff, 0.4);
+  fill.position.set(-2, 2, -2);
+  scene.add(fill);
+  return { amb, dir, fill };
+}
+
+let currentScene = null, currentCamera = null;
+
+function frameObject(camera, object, opts) {
+  const box = new THREE.Box3().setFromObject(object);
+  const size = box.getSize(new THREE.Vector3());
+  const center = box.getCenter(new THREE.Vector3());
+  const maxDim = Math.max(size.x, size.y, size.z);
+  // CAMERA CONVENTION ("gameplay size", documented not hand-waved): a 50deg vertical FOV framing
+  // the subject's largest dimension with ~22% headroom margin — a mid-shot, not a macro close-up,
+  // approximating how a piece reads at ordinary dungeon-interior camera distance rather than a
+  // product-shot crop. Fixed elevation angle (documented in the results.json record).
+  const fovRad = (50 * Math.PI) / 180;
+  const dist = (maxDim * 1.22) / (2 * Math.tan(fovRad / 2));
+  const elevRad = (22 * Math.PI) / 180;
+  camera.position.set(
+    center.x + dist * Math.sin(elevRad) * 0.9,
+    center.y + dist * Math.sin(elevRad) + size.y * 0.15,
+    center.z + dist * Math.cos(elevRad)
+  );
+  camera.lookAt(center.x, center.y + size.y * 0.15, center.z);
+  camera.updateProjectionMatrix();
+  return { size, center, maxDim, dist };
+}
+
+async function loadRaw(pack, slug) {
+  const url = new URL(`../../../assets/models/${pack}/${slug}.glb`, import.meta.url).href;
+  const loader = new GLTFLoader();
+  const gltf = await loader.loadAsync(url);
+  return gltf.scene;
+}
+
+function greyify(root) {
+  const grey = new THREE.MeshStandardMaterial({ color: 0x9a9a9a, roughness: 0.85, metalness: 0 });
+  root.traverse((o) => { if (o.isMesh) o.material = grey; });
+}
+
+// buildInterior(subjectMaxDim) -> a "real interior" backdrop for the DIRECT_MODULATED panel: a
+// dark stone floor plane sized to the subject + a few grounding shadow/contact cues, under the
+// torchlit rig. FIRST DRAFT of this harness tried loading a SECOND full room-small.glb (or a
+// wall.glb ring) as a literal backdrop room — dropped after inspecting the resulting captures:
+// when the subject IS ITSELF a room-shell piece (room-small), that produced two overlapping
+// identical meshes (z-fighting); for a small subject (gate-door) it placed the camera INSIDE the
+// backdrop shell, producing a confusing jumbled frame. A plain lit floor plane is simpler, robust,
+// and still satisfies "in a real interior under the production grade" in spirit — the recipe
+// under test is the MATERIAL treatment, not scene-dressing complexity; a literal socket-assembled
+// backdrop room is KS-3's own job ("room shells FROM the kit"), not this bridge gate's.
+function buildInterior(scene, subjectMaxDim) {
+  const floorSize = Math.max(4, subjectMaxDim * 3);
+  const floorGeo = new THREE.PlaneGeometry(floorSize, floorSize);
+  const floorMat = new THREE.MeshStandardMaterial({ color: 0x2a2620, roughness: 0.92, metalness: 0 });
+  const floor = new THREE.Mesh(floorGeo, floorMat);
+  floor.rotation.x = -Math.PI / 2;
+  floor.position.y = 0;
+  scene.add(floor);
+  return floorSize / 2;
+}
+
+window.__ks1Capture = async function (pack, slug, mode, opts) {
+  opts = opts || {};
+  const realmId = opts.realmId || "fantasy";
+  const realmProfile = opts.realmProfile || null;
+
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x05050a);
+  const camera = new THREE.PerspectiveCamera(50, 1200 / 900, 0.05, 100);
+
+  let subject;
+  if (mode === "raw") {
+    buildPlainRig(scene);
+    subject = await loadRaw(pack, slug);
+    scene.add(subject);
+  } else {
+    subject = await loadDonorPiece(pack, slug, { realmId, realmProfile, seedKey: "ks1-bridge-subject" });
+    if (mode === "grey") {
+      const rimLight = new THREE.DirectionalLight(0xffffff, 1.0);
+      rimLight.position.set(2, 3, 2);
+      scene.add(rimLight);
+      scene.add(new THREE.AmbientLight(0xffffff, 0.5));
+      greyify(subject);
+      scene.add(subject);
+    } else {
+      // "direct" — DIRECT_MODULATED in a real interior under the production (torchlit) grade
+      const subjectBox = new THREE.Box3().setFromObject(subject);
+      const subjectSize = subjectBox.getSize(new THREE.Vector3());
+      const subjectMaxDim = Math.max(subjectSize.x, subjectSize.y, subjectSize.z);
+      const interiorHalf = buildInterior(scene, subjectMaxDim);
+      buildRig(scene, interiorHalf);
+      scene.add(subject);
+    }
+  }
+
+  frameObject(camera, subject, opts);
+  currentScene = scene; currentCamera = camera;
+  renderer.render(scene, camera);
+  window.__ks1Ready = true;
+};
+
+window.__ks1Rerender = function () {
+  if (currentScene && currentCamera) renderer.render(currentScene, currentCamera);
+};
+</script>
+</body>
+</html>

@@ -1,11 +1,12 @@
 # vendor/three — pinned three.js (BATTLE-THEATER T1 + T2 + T3)
 
 **Version:** `three@0.166.0` (r166)
-**Source:** unpkg CDN, downloaded 2026-07-03 (core) / 2026-07-08 (addons) / 2026-07-11 (postprocessing)
+**Source:** unpkg CDN, downloaded 2026-07-03 (core) / 2026-07-08 (addons) / 2026-07-11 (postprocessing) / 2026-07-16 (TransformControls)
   - `three.module.js` ← `https://unpkg.com/three@0.166.0/build/three.module.js` (1,292,872 bytes)
   - `LICENSE` ← `https://unpkg.com/three@0.166.0/LICENSE` (1,081 bytes)
   - `addons/loaders/GLTFLoader.js` ← `https://unpkg.com/three@0.166.0/examples/jsm/loaders/GLTFLoader.js` (110,043 bytes)
   - `addons/utils/BufferGeometryUtils.js` ← `https://unpkg.com/three@0.166.0/examples/jsm/utils/BufferGeometryUtils.js` (31,768 bytes)
+  - `addons/controls/TransformControls.js` ← `https://unpkg.com/three@0.166.0/examples/jsm/controls/TransformControls.js` (40,731 bytes)
   - `addons/postprocessing/EffectComposer.js` ← `https://unpkg.com/three@0.166.0/examples/jsm/postprocessing/EffectComposer.js` (4,651 bytes)
   - `addons/postprocessing/Pass.js` ← `https://unpkg.com/three@0.166.0/examples/jsm/postprocessing/Pass.js` (1,706 bytes)
   - `addons/postprocessing/RenderPass.js` ← `https://unpkg.com/three@0.166.0/examples/jsm/postprocessing/RenderPass.js` (1,941 bytes)

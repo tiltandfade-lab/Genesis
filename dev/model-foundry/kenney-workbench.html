@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Genesis Kenney Donor / Socket Workbench</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E">
+  <style>
+    :root { color-scheme:dark; --ink:#e9e0d2; --muted:#9e968b; --panel:#1b191d; --edge:#403a43; --gold:#dfad58; --red:#e0786d; --green:#7fc797; }
+    * { box-sizing:border-box } html,body { margin:0; width:100%; height:100%; overflow:hidden; background:#111014; color:var(--ink); font:12px/1.35 system-ui,sans-serif }
+    button,input,select,textarea { font:inherit; color:var(--ink); background:#29262d; border:1px solid #504954; border-radius:3px; padding:4px 6px }
+    button { cursor:pointer } button:hover,button.active { border-color:var(--gold); color:#fff3d1 } button.danger { border-color:#71423f }
+    input[type=number] { width:74px } input[type=range] { padding:0 } label { color:var(--muted) }
+    #app { height:100%; display:grid; grid-template-rows:44px 1fr 28px }
+    header { display:flex; gap:8px; align-items:center; padding:7px 10px; background:#18161a; border-bottom:1px solid var(--edge) }
+    header h1 { font:600 14px/1 system-ui; margin:0 12px 0 0; letter-spacing:.03em }
+    #assetSearch { width:260px } #assetFilter,#qaFilter { width:140px }
+    #dirty { margin-left:auto; padding:4px 8px; border-radius:12px; background:#28252c; color:var(--muted) } #dirty.is-dirty { color:#19140d; background:var(--gold) }
+    main { min-height:0; display:grid; grid-template-columns:300px 1fr 360px }
+    aside { overflow:auto; background:var(--panel); border-right:1px solid var(--edge) } aside.right { border-right:0; border-left:1px solid var(--edge) }
+    .section { padding:9px 10px; border-bottom:1px solid var(--edge) } .section h2 { font-size:11px; text-transform:uppercase; letter-spacing:.1em; color:#c7bda9; margin:0 0 8px }
+    #assetList { height:300px; overflow:auto; border:1px solid #353039; background:#141317 }
+    .asset { display:block; width:100%; border:0; border-bottom:1px solid #2c2830; border-radius:0; text-align:left; padding:6px 7px; background:none; overflow:hidden; text-overflow:ellipsis; white-space:nowrap }
+    .asset.current { color:#fff1c4; background:#302a23 } .pill { display:inline-block; padding:1px 4px; margin-right:4px; border-radius:7px; background:#34303a; font-size:9px; color:#bab1a5 }
+    .row { display:flex; gap:5px; align-items:center; margin:5px 0; flex-wrap:wrap } .row > label:first-child { min-width:82px }
+    .vec { display:grid; grid-template-columns:repeat(3,1fr); gap:4px } .vec2 { display:grid; grid-template-columns:repeat(2,1fr); gap:4px } .vec4 { display:grid; grid-template-columns:repeat(4,1fr); gap:4px } .vec input,.vec2 input,.vec4 input { width:100% }
+    #viewport { min-width:0; min-height:0; position:relative; background:#17161a }
+    #viewCanvas { width:100%; height:100%; display:block; outline:none }
+    #viewHud { position:absolute; left:10px; top:10px; max-width:52%; padding:7px 9px; background:#111014d9; border:1px solid #514956; pointer-events:none }
+    #viewHud strong { color:#f3d393 } #errors { color:#f1a099; white-space:pre-wrap }
+    #orientation { position:absolute; bottom:10px; left:10px; display:flex; gap:4px; background:#111014d9; padding:6px; border:1px solid #514956 }
+    #orientation span { padding:4px;color:var(--muted) } #occupancy { color:#e6c67e!important }
+    .toggles { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:4px } .toggles label { display:flex; align-items:center; gap:4px }
+    #hierarchy { max-height:180px; overflow:auto; white-space:pre; font:11px/1.45 ui-monospace,monospace; color:#bbb3c2 }
+    #socketList { max-height:150px; overflow:auto; border:1px solid #353039 } .socket-row { display:flex; gap:4px; align-items:center; padding:4px; border-bottom:1px solid #302b33 } .socket-row button:first-child { flex:1;text-align:left }
+    .status-good { color:var(--green) } .status-bad { color:var(--red) }
+    textarea { width:100%; min-height:45px; resize:vertical }
+    footer { display:flex; align-items:center; gap:14px; padding:4px 10px; background:#151318; border-top:1px solid var(--edge); color:var(--muted) }
+    footer #saveStatus { margin-left:auto }
+  </style>
+  <script type="importmap">{"imports":{"three":"/vendor/three/three.module.js","three/addons/":"/vendor/three/addons/"}}</script>
+</head>
+<body>
+<div id="app">
+  <header>
+    <h1>KENNEY DONOR / SOCKET WORKBENCH</h1>
+    <input id="assetSearch" type="search" placeholder="Search 1,752 census assets">
+    <select id="assetFilter"><option value="all">All assets</option><option value="candidate">Candidates</option><option value="normalized">Normalized</option><option value="calibrated">Calibrated</option></select>
+    <select id="qaFilter"><option value="all">All QA states</option><option>needs-review</option><option>approved-dev</option><option>approved-runtime</option><option>quarantined</option><option value="uncalibrated">uncalibrated</option></select>
+    <button id="resetAsset">Reset Asset</button><button id="saveAsset">Save Asset</button><button id="exportSnapshot">Export Snapshot</button>
+    <span id="dirty">clean</span>
+  </header>
+  <main>
+    <aside>
+      <div class="section"><h2>Catalog</h2><div id="assetCount">loading…</div><div id="assetList"></div></div>
+      <div class="section"><h2>View source</h2><div class="row" id="viewModes"><button data-view="raw">Raw</button><button data-view="normalized">Normalized</button><button data-view="genesis" class="active">Genesis material</button></div><div id="loadedUrl">—</div></div>
+      <div class="section"><h2>Overlays</h2><div class="toggles">
+        <label><input type="checkbox" data-overlay="axes" checked> axes</label><label><input type="checkbox" data-overlay="grid" checked> one-unit grid</label>
+        <label><input type="checkbox" data-overlay="module" checked> pack-module grid</label><label><input type="checkbox" data-overlay="ground" checked> ground plane</label>
+        <label><input type="checkbox" data-overlay="wireframe"> wireframe</label><label><input type="checkbox" data-overlay="backface"> backface</label>
+        <label><input type="checkbox" data-overlay="normals"> normals</label><label><input type="checkbox" data-overlay="aabb" checked> AABB</label>
+        <label><input type="checkbox" data-overlay="footprint" checked> footprint</label><label><input type="checkbox" data-overlay="hierarchy"> hierarchy</label>
+      </div></div>
+      <div class="section"><h2>Hierarchy</h2><div id="hierarchy">—</div></div>
+    </aside>
+    <section id="viewport">
+      <canvas id="viewCanvas" tabindex="0"></canvas>
+      <div id="viewHud"><strong id="assetId">—</strong><div id="boundsReadout">—</div><div id="errors"></div></div>
+      <div id="orientation"><span>orientationIndex</span><button data-o="0" class="active">0</button><button data-o="1">1</button><button data-o="2">2</button><button data-o="3">3</button><span id="occupancy">—</span></div>
+    </section>
+    <aside class="right">
+      <div class="section" id="packPanel"><h2>Pack calibration</h2>
+        <div id="packMode">—</div>
+        <div class="row"><label>Source up</label><input id="sourceUp" value="+Y" readonly><label>forward</label><input id="sourceForward" value="+Z" readonly></div>
+        <div class="row"><label>Canonical scale</label><input id="canonicalScale" type="number" step=".01" min=".000001"></div>
+        <label><input id="structuralPack" type="checkbox"> structural module grid</label>
+        <div id="structuralFields"><div class="row"><label>Source module</label><input id="sourceModuleUnits" type="number" step=".01" min=".000001"><label>Target world</label><input id="targetWorldUnits" type="number" step=".01" min=".000001"></div><div>orientationSteps 4 · joinMode cell-orientation</div></div>
+      </div>
+      <div class="section"><h2>Asset calibration</h2>
+        <div class="row"><label>Admission</label><select id="admissionClass"><option>DIRECT_MODULATED</option><option>PART_DONOR</option><option>CHASSIS</option></select></div>
+        <div class="row"><label>QA state</label><select id="qaStatus"><option>needs-review</option><option>approved-dev</option><option>approved-runtime</option><option>quarantined</option></select></div>
+        <div class="row"><label>Category</label><input id="category"></div><div class="row"><label>Material</label><select id="rootMaterial"><option>stone</option><option>wood</option><option>iron</option><option>roof</option><option>glass</option><option>cloth</option></select></div>
+        <label>Translation</label><div class="vec" data-vector="translation"><input type="number" step=".01"><input type="number" step=".01"><input type="number" step=".01"></div>
+        <label>Rotation (Euler degrees; persisted quaternion)</label><div class="vec" data-vector="euler"><input type="number" step="1"><input type="number" step="1"><input type="number" step="1"></div>
+        <label>Uniform scale</label><div class="vec" data-vector="scale"><input type="number" step=".01" min=".001"><input type="number" step=".01" min=".001"><input type="number" step=".01" min=".001"></div>
+        <div class="row"><label>Scale reason</label><input id="scaleReason" placeholder="semantic-size:…"></div><div class="row"><label>Ground offset</label><input id="groundOffset" type="number" step=".01"></div>
+        <div class="row"><label><input id="footprintOverrideEnabled" type="checkbox"> calibrated footprint override</label></div>
+        <div id="footprintFields"><label>Center X / Z</label><div class="vec2" data-footprint-vector="center"><input type="number" step=".01"><input type="number" step=".01"></div><label>Half extents X / Z</label><div class="vec2" data-footprint-vector="halfExtents"><input type="number" step=".01" min=".001"><input type="number" step=".01" min=".001"></div><div class="row"><label>Yaw degrees</label><input id="footprintYaw" type="number" step="1"></div></div>
+        <label>Notes</label><textarea id="notes"></textarea>
+      </div>
+      <div class="section"><h2>Sockets</h2><div class="row"><button id="addSocket">Add</button><select id="snapMode"><option value="none">unsnapped</option><option value="vertex">vertex</option><option value="edge">edge</option><option value="face">face</option><option value="aabb">AABB</option></select><button id="snapSocket">Snap socket</button><button id="gizmoTranslate">Move</button><button id="gizmoRotate">Rotate</button></div><div id="socketList"></div>
+        <div id="socketEditor">
+          <div class="row"><label>ID</label><input id="socketId"></div><div class="row"><label>Type</label><select id="socketType"><option>floor-mount</option><option>wall-mount</option><option>top-surface</option><option>hinge</option></select></div>
+          <div class="row"><label>Mate rule</label><select id="mateRule"><option>coincident</option><option>opposed-z</option></select><input id="mateFamily" placeholder="mate family"></div>
+          <label>Position</label><div class="vec" data-socket-vector="position"><input type="number" step=".01"><input type="number" step=".01"><input type="number" step=".01"></div>
+          <label>Rotation quaternion</label><div class="vec4" data-socket-vector="rotation"><input type="number" step=".01"><input type="number" step=".01"><input type="number" step=".01"><input type="number" step=".01"></div>
+          <label>Socket size</label><div class="vec" data-socket-vector="size"><input type="number" step=".01"><input type="number" step=".01"><input type="number" step=".01"></div>
+          <label>Clearance box</label><div class="vec" data-socket-vector="clearance"><input type="number" step=".01"><input type="number" step=".01"><input type="number" step=".01"></div>
+        </div>
+      </div>
+      <div class="section"><h2>Host + child mate preview</h2>
+        <div class="row"><label>Host socket</label><select id="hostSocket"></select></div><div class="row"><label>Child asset</label><select id="childAsset"></select></div><div class="row"><label>Child socket</label><select id="childSocket"></select></div>
+        <div class="row"><button id="snapMate">Snap mate</button><label>Exploded</label><input id="exploded" type="range" min="0" max="2" value="0" step=".01"></div>
+        <div class="row"><label>Door sweep</label><input id="doorSweep" type="range" min="0" max="110" value="0" step="1"><span id="doorSweepValue">0°</span></div>
+        <div id="mateError">position — · angle —</div>
+      </div>
+    </aside>
+  </main>
+  <footer><span>Mouse drag: orbit · wheel: dolly · gizmo: calibrated frame</span><span id="serverContract">loopback write boundary</span><span id="saveStatus">booting…</span></footer>
+</div>
+<script type="module" src="/dev/model-foundry/kenney-workbench.js"></script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+{
+  "schema": "genesis.kenney-workbench-capture.v1",
+  "assetId": "kenney-mini-dungeon/gate",
+  "viewUrls": {
+    "raw": "/assets/models/kenney-mini-dungeon/gate.glb",
+    "normalized": "/assets/models-normalized/kenney-mini-dungeon/gate.glb",
+    "genesis": "loadDonorPiece(kenney-mini-dungeon, gate)"
+  },
+  "overlays": {
+    "axes": true,
+    "ground": true,
+    "module": true,
+    "sockets": 1,
+    "canvas": {
+      "width": 780,
+      "height": 888
+    }
+  },
+  "mate": {
+    "position": 0,
+    "angleDeg": 0,
+    "text": "position 0.000000u · angle 0.0000°",
+    "error": "RAW MATERIAL UNAVAILABLE: Textures/colormap.png is absent from the source corpus; neutral diagnostic texture substituted.",
+    "child": "kenney-mini-dungeon/wall-opening",
+    "childSocketCount": 1
+  },
+  "consoleErrors": [],
+  "materialDiagnostic": "RAW MATERIAL UNAVAILABLE: Textures/colormap.png is absent from the source corpus; neutral diagnostic texture substituted.",
+  "rotatedBounds": {
+    "proper": [
+      4,
+      2,
+      1
+    ],
+    "mutated": [
+      1.2232676335131574,
+      2,
+      4.808361366362063
+    ]
+  }
+}

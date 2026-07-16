@@ -148,7 +148,7 @@ function normalizerPythonProbe(expression) {
   return JSON.parse(execFileSync("python3", ["-c", code], { cwd: ROOT, encoding: "utf-8" }));
 }
 
-const VALID_SOCKET_TYPES = new Set(["floor-mount", "wall-mount", "top-surface", "hinge", "butt-join-n", "butt-join-s", "butt-join-e", "butt-join-w"]);
+const VALID_SOCKET_TYPES = new Set(["floor-mount", "wall-mount", "top-surface", "hinge"]);
 const VALID_FAMILIES = new Set(["stone", "wood", "iron", "roof", "glass", "cloth"]);
 
 function socketsPresentAndTyped(glbPath) {
@@ -464,9 +464,55 @@ console.log("\n=== 5. KGR-2: outline policy retained, inverted-hull geometry ret
 }
 
 // ============================================================================
-// 6. manifest registration
+// 6. KGR-3 calibrated v2 indexes + runtime compatibility boundary
 // ============================================================================
-console.log("\n=== 6. manifest registration ===");
+console.log("\n=== 6. KGR-3 calibrated v2 indexes + runtime compatibility boundary ===");
+{
+  const calibration = JSON.parse(readText("dev/model-foundry/kenney-calibration.json"));
+  check("KGR-3: calibration source owns all 47 assets",
+    calibration.schema === "genesis.kenney-calibration.v1" && Object.keys(calibration.assets || {}).length === 47,
+    `schema=${calibration.schema} count=${Object.keys(calibration.assets || {}).length}`);
+  let allV2 = true, allFrames = true, noButt = true, allHashes = true;
+  for (const pack of Object.keys(calibration.packs || {})) {
+    const index = JSON.parse(readText(`assets/models-normalized/${pack}/index.json`));
+    allV2 = allV2 && index.schema === "genesis.donor-index.v2" && !!index.assets;
+    for (const [slug, entry] of Object.entries(index.assets || {})) {
+      allV2 = allV2 && entry.schema === "genesis.donor.v2" && entry.assetId === `${pack}/${slug}`;
+      allHashes = allHashes && entry.sourceSha256 === calibration.assets[`${pack}/${slug}`].sourceSha256;
+      for (const socket of entry.sockets || []) {
+        allFrames = allFrames && socket.id && Array.isArray(socket.rotation) && socket.rotation.length === 4 &&
+          socket.position.concat(socket.rotation).every(Number.isFinite);
+        noButt = noButt && !String(socket.type).startsWith("butt-join-");
+      }
+    }
+  }
+  check("KGR-3: both normalized indexes and every entry use donor v2", allV2);
+  check("KGR-3: every index entry retains its calibrated source hash", allHashes);
+  check("KGR-3: every v2 socket carries id + finite position/quaternion frame", allFrames);
+  check("KGR-3 ⊗: no v2 entry emits a butt-join structural socket", noButt);
+
+  const donorSrc = readText("src/ui/theater-donor.js");
+  check("KGR-3: runtime read helper explicitly unwraps v2 indexes",
+    /function\s+donorEntriesForRead[\s\S]*?genesis\.donor-index\.v2[\s\S]*?index\.assets/.test(donorSrc),
+    "donorEntriesForRead v2 branch missing");
+  check("KGR-3: runtime read helper retains a flat-index v1 fallback",
+    /function\s+donorEntriesForRead[\s\S]*?return\s+index\s*\|\|\s*\{\}/.test(donorSrc),
+    "flat v1 fallback missing");
+  check("KGR-3 ⊗: registry generation rejects anything except donor-index v2",
+    /function\s+donorRegistryFromIndex[\s\S]*?schema\s*!==\s*"genesis\.donor-index\.v2"[\s\S]*?throw new Error/.test(donorSrc),
+    "strict v2 registry guard missing");
+  check("KGR-3: loaded piece metadata exposes frame/grid/bounds/source hash",
+    ["sourceSha256", "normalizedFrame", "structuralGrid", "bounds", "qaStatus"].every((key) =>
+      new RegExp(`${key}: entry\\.${key}`).test(donorSrc)), "one or more v2 metadata fields are not loaded");
+  check("KGR-3 ⊗: runtime load hard-fails v2 source/recipe provenance mismatch",
+    /loadedV2Metadata\.sourceSha256\s*!==\s*entry\.sourceSha256[\s\S]*?loadedV2Metadata\.recipeHash\s*!==\s*entry\.recipeHash[\s\S]*?throw new Error/.test(donorSrc),
+    "v2 loaded-root/index provenance guard missing");
+}
+
+// ============================================================================
+// 7. manifest registration
+// ============================================================================
+console.log("\n=== 7. manifest registration ===");
 {
   const manifest = JSON.parse(readText("manifest.json"));
   const entry = manifest.modules.find((m) => m.id === "ui.theater-donor");

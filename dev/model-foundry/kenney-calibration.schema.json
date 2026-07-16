@@ -1,0 +1,126 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "genesis.kenney-calibration.v1",
+  "title": "Genesis Kenney donor calibration",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "algorithmVersion", "packs", "assets"],
+  "properties": {
+    "schema": {"const": "genesis.kenney-calibration.v1"},
+    "algorithmVersion": {"type": "integer", "minimum": 1},
+    "packs": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {"$ref": "#/$defs/pack"}
+    },
+    "assets": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {"$ref": "#/$defs/asset"}
+    }
+  },
+  "$defs": {
+    "finiteNumber": {"type": "number"},
+    "vec2": {
+      "type": "array", "minItems": 2, "maxItems": 2,
+      "items": {"$ref": "#/$defs/finiteNumber"}
+    },
+    "vec3": {
+      "type": "array", "minItems": 3, "maxItems": 3,
+      "items": {"$ref": "#/$defs/finiteNumber"}
+    },
+    "quat": {
+      "type": "array", "minItems": 4, "maxItems": 4,
+      "items": {"$ref": "#/$defs/finiteNumber"}
+    },
+    "pack": {
+      "type": "object", "additionalProperties": false,
+      "required": ["sourceUp", "sourceForward", "canonicalScale", "structuralGrid"],
+      "properties": {
+        "sourceUp": {"const": "+Y"},
+        "sourceForward": {"const": "+Z"},
+        "canonicalScale": {"type": "number", "exclusiveMinimum": 0},
+        "structuralGrid": {"oneOf": [
+          {"type": "null"},
+          {
+            "type": "object", "additionalProperties": false,
+            "required": ["sourceModuleUnits", "targetWorldUnits", "orientationSteps", "joinMode"],
+            "properties": {
+              "sourceModuleUnits": {"type": "number", "exclusiveMinimum": 0},
+              "targetWorldUnits": {"type": "number", "exclusiveMinimum": 0},
+              "orientationSteps": {"const": 4},
+              "joinMode": {"const": "cell-orientation"}
+            }
+          }
+        ]}
+      }
+    },
+    "semanticPart": {
+      "type": "object", "additionalProperties": false,
+      "required": ["nodePath", "detachable", "materialFamily"],
+      "properties": {
+        "nodePath": {"type": "string", "minLength": 1},
+        "detachable": {"type": "boolean"},
+        "materialFamily": {"enum": ["stone", "wood", "iron", "roof", "glass", "cloth"]}
+      }
+    },
+    "clearance": {
+      "type": "object", "additionalProperties": false,
+      "required": ["shape", "size"],
+      "properties": {
+        "shape": {"const": "box"},
+        "size": {"$ref": "#/$defs/vec3"}
+      }
+    },
+    "socket": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "type", "position", "rotation", "mateRule", "mateFamily", "size", "clearance"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "type": {"enum": ["floor-mount", "wall-mount", "top-surface", "hinge"]},
+        "position": {"$ref": "#/$defs/vec3"},
+        "rotation": {"$ref": "#/$defs/quat"},
+        "mateRule": {"enum": ["coincident", "opposed-z"]},
+        "mateFamily": {"type": "string", "minLength": 1},
+        "size": {"$ref": "#/$defs/vec3"},
+        "clearance": {"$ref": "#/$defs/clearance"}
+      }
+    },
+    "footprint": {
+      "type": "object", "additionalProperties": false,
+      "required": ["center", "halfExtents", "yawRadians"],
+      "properties": {
+        "center": {"$ref": "#/$defs/vec2"},
+        "halfExtents": {"$ref": "#/$defs/vec2"},
+        "yawRadians": {"$ref": "#/$defs/finiteNumber"}
+      }
+    },
+    "asset": {
+      "type": "object", "additionalProperties": false,
+      "required": ["sourceSha256", "admissionClass", "category", "rootMaterialFamily", "preTransform", "scaleReason", "groundOffset", "semanticParts", "sockets", "footprintOverride", "qaStatus", "notes"],
+      "properties": {
+        "sourceSha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "admissionClass": {"enum": ["DIRECT_MODULATED", "PART_DONOR", "CHASSIS"]},
+        "category": {"type": "string", "minLength": 1},
+        "rootMaterialFamily": {"enum": ["stone", "wood", "iron", "roof", "glass", "cloth"]},
+        "preTransform": {
+          "type": "object", "additionalProperties": false,
+          "required": ["translation", "rotation", "scale"],
+          "properties": {
+            "translation": {"$ref": "#/$defs/vec3"},
+            "rotation": {"$ref": "#/$defs/quat"},
+            "scale": {"$ref": "#/$defs/vec3"}
+          }
+        },
+        "scaleReason": {"type": ["string", "null"]},
+        "groundOffset": {"$ref": "#/$defs/finiteNumber"},
+        "semanticParts": {"type": "object", "additionalProperties": {"$ref": "#/$defs/semanticPart"}},
+        "sockets": {"type": "array", "items": {"$ref": "#/$defs/socket"}},
+        "footprintOverride": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/footprint"}]},
+        "qaStatus": {"enum": ["needs-review", "approved-dev", "approved-runtime", "quarantined"]},
+        "notes": {"type": "array", "items": {"type": "string"}},
+        "companionLeaf": {"type": ["string", "null"]}
+      }
+    }
+  }
+}

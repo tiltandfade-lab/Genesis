@@ -202,3 +202,12 @@ The questionnaire is CLOSED. Deltas to this wave:
   reserved vertical-stair two-slot contract) so rooms never reconcile absolute heights. Depth-bias
   rider (C's flavor cheaply): deeper graph rooms bias toward sunken/chasm rows; true global
   elevation coherence stays deferred until a feature needs it.
+
+## KGR-3 donor-schema supersession note (2026-07-16)
+
+The KS-1 `genesisDonor` v1 point sockets — including universal `butt-join-{n|s|e|w}` points — are
+superseded for newly normalized output. `genesis.donor.v2` uses explicit attachment frames
+(position plus quaternion) for mounts, hinges, and placeable surfaces. Structural assembly uses the
+pack's canonical grid cell plus `orientationIndex: 0|1|2|3` under the `cell-orientation` contract;
+v2 structural assets do not emit butt-join sockets. The runtime loader retains v1 reads solely for
+graceful compatibility with old committed output; registry generation accepts v2 only.

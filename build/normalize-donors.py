@@ -1,198 +1,107 @@
 #!/usr/bin/env python3
-"""build/normalize-donors.py — KS-1 (docs/KENNEY-SOCKET-WAVE.md) the Kenney donor build-time
-normalizer. Pure Python 3 stdlib only (no pygltflib/trimesh/node available in this environment —
-verified before writing this: `python3 -c "import pygltflib"` / `import trimesh` both
-ModuleNotFoundError, no node_modules/package.json in the repo). Implements a minimal glTF-binary
-(.glb) reader/writer by hand off the public glTF 2.0 spec (12-byte header + JSON chunk + optional
-BIN chunk, each chunk padded to 4-byte alignment).
+"""Normalize calibrated Kenney GLB donors into Genesis donor schema v2.
 
-GOVERNED BY (read in full before touching this file):
-  docs/ART-DIRECTION-CANON.md (quoted, never paraphrased, for any art-direction language)
-  docs/GRAPHICS-CONVERGENCE-CHARTER.md §3.4/§5/§6
-  docs/KENNEY-SOCKET-WAVE.md unit KS-1 (this file's spec — executed verbatim, not re-litigated)
-  Sol's P-B recipe, quoted verbatim below (docs/VQ2-RESPEC.md §1 / ui-sketches/mock-frames/
-  vq2-world-looks/SOL-SOLUTIONS.md, branch codex/vq2-world-looks — read via `git show`, that
-  branch is NOT merged to master; this file only depends on its LANGUAGE, not its code):
-
-  P-B LAW (verbatim): "Kenney is a geometry reserve, never a render style. A donor mesh is
-  admitted only after its materials, value grouping, scale, sockets, and condition are replaced
-  by Genesis-owned recipes; if its silhouette still reads "raw Kenney" at gameplay thumbnail
-  size, it is CHASSIS and requires a generated face treatment or decomposition rather than a
-  stronger tint."
-  P-B RECIPE (verbatim): "Add one donor adapter at the GLTF boundary, keyed by
-  {pack, slug, admissionClass, semanticParts, sockets, canonicalScale}. On load, traverse donor
-  meshes, discard their authored pastel MeshStandardMaterials, classify node/material names into
-  stone|wood|iron|roof|glass|cloth, and rebuild with Genesis materials: roughness 0.82–0.94,
-  metalness 0.0 except iron 0.35, realm-graded five-band albedo sampled through gradeColorLocal,
-  nearest-filtered 32×32 deterministic grain from interiorMaterialTexture, and selective outline
-  color from the realm profile. ... Cache the normalized GLTF by recipe hash and keep the source
-  pack untouched."
-
-  BUILD/RUNTIME SPLIT (this file's own scope decision, stated up front): gradeColorLocal and
-  interiorMaterialTexture are THREE.js/canvas/live-realm-profile calls — they cannot run in an
-  offline Python build step. This script's job is the OFFLINE half of the recipe: discard the
-  authored materials wholesale (byte-level — the output GLB carries no materials/textures/images/
-  samplers at all), CLASSIFY each node into a Genesis material family, and STAMP that
-  classification (+ sockets + canonicalScale + provenance) as glTF `extras` on the relevant
-  nodes. The RUNTIME half (actually painting roughness/metalness/graded-albedo/grain onto a THREE
-  material at load time, keyed off the family this script stamps) lives in
-  src/ui/theater-donor.js — the one new ES-module runtime loader this KS-1 unit also ships,
-  per the lane boundary in its own header (it must not edit theater-boot.js/theater-materials.js).
-
-USAGE:
-    python3 build/normalize-donors.py           # normalize the KS-1 pilot set, write outputs
-    python3 build/normalize-donors.py --check   # re-run + diff against committed output
-                                                 # (the determinism gate dev/verify-kenney-adapter.mjs
-                                                 # also exercises programmatically)
-
-OUTPUTS:
-    assets/models-normalized/<pack>/<slug>.glb     — normalized GLB (materials stripped, sockets +
-                                                       provenance in node.extras.genesisDonor,
-                                                       canonicalScale BAKED into each scene root
-                                                       node's own `scale` field — so a plain
-                                                       GLTFLoader.load() already returns geometry
-                                                       correctly sized to Genesis world units;
-                                                       sockets are recorded in that SAME post-scale
-                                                       frame).
-    assets/models-normalized/<pack>/index.json      — slug -> {file, recipeHash, admissionClass,
-                                                       semanticParts, sockets, canonicalScale}
-                                                       lookup table the runtime loader fetches.
-    dev/model-foundry/KS1-PROVENANCE.json           — the full per-piece provenance/report record
-                                                       (raw data: measured dims, scale derivation,
-                                                       socket counts, material families, source
-                                                       sha256, recipe hash, license pointer).
+The calibration file is the only asset inventory. This build step owns deterministic geometry
+measurement, source-to-Genesis transforms, attachment frames, validation, provenance, and indexes.
+It intentionally has no per-pack or per-slug dispatch table: adding a valid calibration record and
+source GLB is sufficient to produce a normalized donor.
 """
+import argparse
+import copy
+import hashlib
 import json
+import math
 import os
+import shutil
 import struct
 import sys
-import hashlib
-import math
+import tempfile
+
 
 REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-ASSETS_MODELS = os.path.join(REPO_ROOT, "assets", "models")
-OUT_ROOT = os.path.join(REPO_ROOT, "assets", "models-normalized")
-PROVENANCE_PATH = os.path.join(REPO_ROOT, "dev", "model-foundry", "KS1-PROVENANCE.json")
+DEFAULT_SOURCE_ROOT = os.path.join(REPO_ROOT, "assets", "models")
+DEFAULT_OUT_ROOT = os.path.join(REPO_ROOT, "assets", "models-normalized")
+DEFAULT_CALIBRATION = os.path.join(REPO_ROOT, "dev", "model-foundry", "kenney-calibration.json")
+DEFAULT_PROVENANCE = os.path.join(REPO_ROOT, "dev", "model-foundry", "KS1-PROVENANCE.json")
+NORMALIZER_RECIPE_VERSION = "kgr3-calibration-v2"
 
-# recipe/classification code version — folded into recipeHash so a future rule change (a new
-# semanticPart mapping, a corrected socket formula, a canonicalScale re-derivation) invalidates
-# the cache deterministically without needing a manual cache-bust. Bump this when the
-# classification/socket/scale RULES below change (not when unrelated parts of this file change).
-NORMALIZER_RECIPE_VERSION = "kgr1-normalize-v2"
-
-# ─────────────────────────────────────────────────────────────────────────────────────────────
-# GRID LAW (src/ui/theater-interior.js:25, quoted): "1 SpatialPlan cell = 5 ft = 1 world unit".
-# Every canonicalScale below targets this — the pilot's own measured "1 kit module" maps to
-# 2 Genesis world units (10 ft), not 1 (5 ft). MEASURED, not guessed — see "SCALE DERIVATION"
-# below for the full measurement + cross-check chain per pack.
-# ─────────────────────────────────────────────────────────────────────────────────────────────
-GENESIS_WORLD_UNIT_FT = 5.0
-MODULE_TARGET_WORLD_UNITS = 2.0  # 1 kit module = 2 Genesis cells = 10 ft (measured, see below)
-
-# ─────────────────────────────────────────────────────────────────────────────────────────────
-# SCALE DERIVATION (measured, not guessed — dev/normalize-donors measurement pass, 2026-07-15):
-#
-# kenney-modular-dungeon-kit: template-floor.glb / corridor.glb / template-corner.glb / room-*.glb
-# all measure an exact 4.0-authored-unit module footprint (template-floor.glb world AABB:
-# X [-2,2] Z [-2,2] = 4.0x4.0; corridor.glb 4.0x4.15x4.0; room-small.glb 12.0x12.0 = exactly 3
-# modules; room-large.glb 20.0x20.0 = exactly 5 modules — module size is internally consistent
-# across 7+ independently-measured pieces). Cross-check for the module-to-feet ratio: standard
-# D&D dungeon corridors are conventionally 10 ft (2 cells) wide, and this pack's corridor.glb is
-# exactly 1 module wide -> 1 module = 10 ft = 2 world units -> 1 authored unit = 2.5 ft.
-# Second independent cross-check: at that ratio, corridor.glb's measured wall height (4.15
-# authored units) comes out to 10.375 ft, matching the DMG's own 10-ft standard dungeon ceiling
-# convention within ~4%. Two independent real-world references (10-ft corridor convention, 10-ft
-# ceiling convention) both land within a few percent of the same authored-unit-to-feet ratio —
-# this is the "measure the wall module against the 5-ft cell" the spec asks for, not a guess.
-#   canonicalScale = MODULE_TARGET_WORLD_UNITS / measured_module_units = 2.0 / 4.0 = 0.5
-#
-# kenney-mini-dungeon: wall.glb / floor.glb both measure an exact 1.0-authored-unit module
-# footprint (world AABB X [-0.5,0.5] Z [-0.5,0.5] = 1.0x1.0, consistent across both pieces).
-# This is a SEPARATE pack with its own authored-unit convention (Kenney does not publish a
-# shared real-world scale across separate downloadable kits), so it cannot borrow the modular-
-# dungeon-kit's per-authored-unit ratio directly — it needs its own measurement. Cross-check
-# path: assume the SAME real-world module size (10 ft = 2 world units) as the sibling dungeon
-# pack, since both are Kenney "dungeon" kits built to the same design brief (a documented,
-# stated assumption, not hidden) -> 1 authored unit = 10 ft = 2 world units.
-#   canonicalScale = MODULE_TARGET_WORLD_UNITS / measured_module_units = 2.0 / 1.0 = 2.0
-# Independent cross-check: at that ratio, wall.glb's measured height (1.1 authored units) comes
-# out to 11 ft — within the same plausible 10-11ft dungeon-ceiling band the OTHER pack's
-# independently-derived ratio produced (10.375 ft) via a completely different reference
-# (module-footprint assumption vs corridor-width+ceiling-height convention). The two packs'
-# independently-measured ceiling heights landing within ~6% of each other, via two unrelated
-# derivation paths, is the cross-validation — recorded honestly in KS1-PROVENANCE.json for
-# Adam's red-pen, not asserted as certain. (character-human.glb was ALSO measured — 0.7553
-# authored units tall — but Kenney "mini" kit characters are commonly stylized/short relative to
-# true anthropometric scale for tile-kit legibility, so anchoring the ratio to a "6ft human"
-# assumption produced an INCONSISTENT wall height (~8.4ft) vs the module-parity method (~11ft);
-# the module-parity + corridor/ceiling cross-check was preferred as the more consistent, better-
-# corroborated measurement. This deviation is logged, not hidden.)
-# ─────────────────────────────────────────────────────────────────────────────────────────────
-PACK_CANONICAL_SCALE = {
-    "kenney-modular-dungeon-kit": 0.5,
-    "kenney-mini-dungeon": 2.0,
-}
-PACK_MEASURED_MODULE_UNITS = {
-    "kenney-modular-dungeon-kit": 4.0,
-    "kenney-mini-dungeon": 1.0,
-}
-
-# ─── minimal glTF-binary (.glb) reader ─────────────────────────────────────────────────────────
 GLB_MAGIC = b"glTF"
 CHUNK_JSON = 0x4E4F534A
 CHUNK_BIN = 0x004E4942
+MATERIAL_FAMILIES = {"stone", "wood", "iron", "roof", "glass", "cloth"}
+ADMISSION_CLASSES = {"DIRECT_MODULATED", "PART_DONOR", "CHASSIS"}
+SOCKET_TYPES = {"floor-mount", "wall-mount", "top-surface", "hinge"}
+MATE_RULES = {"coincident", "opposed-z"}
+QA_STATUSES = {"needs-review", "approved-dev", "approved-runtime", "quarantined"}
+MATERIAL_RECIPE = {
+    "stone": {"roughness": 0.90, "metalness": 0.0},
+    "wood": {"roughness": 0.85, "metalness": 0.0},
+    "iron": {"roughness": 0.88, "metalness": 0.35},
+    "roof": {"roughness": 0.88, "metalness": 0.0},
+    "glass": {"roughness": 0.30, "metalness": 0.0},
+    "cloth": {"roughness": 0.92, "metalness": 0.0},
+}
+
+
+class CalibrationError(Exception):
+    pass
+
+
+def sha256_bytes(data):
+    return hashlib.sha256(data).hexdigest()
+
+
+def sha256_file(path):
+    with open(path, "rb") as handle:
+        return sha256_bytes(handle.read())
+
+
+def canonical_json_bytes(value, indent=None):
+    if indent is None:
+        return json.dumps(value, sort_keys=True, separators=(",", ":"), allow_nan=False).encode("utf-8")
+    return (json.dumps(value, sort_keys=True, indent=indent, allow_nan=False) + "\n").encode("utf-8")
 
 
 def read_glb(path):
-    with open(path, "rb") as f:
-        data = f.read()
+    with open(path, "rb") as handle:
+        data = handle.read()
+    if len(data) < 20:
+        raise ValueError(f"truncated glb: {path}")
     magic, version, length = struct.unpack_from("<4sII", data, 0)
-    if magic != GLB_MAGIC:
-        raise ValueError(f"not a glb (bad magic): {path}")
-    offset = 12
-    gltf = None
-    binchunk = b""
+    if magic != GLB_MAGIC or version != 2 or length != len(data):
+        raise ValueError(f"invalid glb header: {path}")
+    offset, gltf, binchunk = 12, None, b""
     while offset < length:
         chunk_len, chunk_type = struct.unpack_from("<II", data, offset)
         offset += 8
-        chunk_data = data[offset:offset + chunk_len]
+        chunk = data[offset:offset + chunk_len]
         offset += chunk_len
         if chunk_type == CHUNK_JSON:
-            gltf = json.loads(chunk_data.decode("utf-8"))
+            gltf = json.loads(chunk.decode("utf-8"))
         elif chunk_type == CHUNK_BIN:
-            binchunk = chunk_data
+            binchunk = chunk
     if gltf is None:
-        raise ValueError(f"no JSON chunk in glb: {path}")
+        raise ValueError(f"no JSON chunk: {path}")
     return gltf, binchunk, data
 
 
+def encode_glb(gltf, binchunk):
+    json_chunk = canonical_json_bytes(gltf)
+    json_chunk += b" " * ((4 - len(json_chunk) % 4) % 4)
+    binary = binchunk + (b"\x00" * ((4 - len(binchunk) % 4) % 4) if binchunk else b"")
+    total = 12 + 8 + len(json_chunk) + (8 + len(binary) if binary else 0)
+    parts = [struct.pack("<4sII", GLB_MAGIC, 2, total),
+             struct.pack("<II", len(json_chunk), CHUNK_JSON), json_chunk]
+    if binary:
+        parts.extend([struct.pack("<II", len(binary), CHUNK_BIN), binary])
+    return b"".join(parts)
+
+
 def write_glb(path, gltf_json, binchunk):
-    """Repacks a glTF JSON object + an UNTOUCHED binary chunk into a .glb. JSON chunk padded with
-    spaces (0x20) to 4-byte alignment per spec; BIN chunk padded with zero bytes. Deterministic:
-    sort_keys + fixed separators means byte-identical output for byte-identical input (the
-    determinism gate dev/verify-kenney-adapter.mjs exercises)."""
-    json_bytes = json.dumps(gltf_json, sort_keys=True, separators=(",", ":")).encode("utf-8")
-    pad = (4 - (len(json_bytes) % 4)) % 4
-    json_bytes += b" " * pad
-    bin_bytes = binchunk
-    bin_pad = (4 - (len(bin_bytes) % 4)) % 4 if bin_bytes else 0
-    bin_bytes = bin_bytes + (b"\x00" * bin_pad) if bin_bytes else bin_bytes
-
-    total_len = 12 + 8 + len(json_bytes)
-    if bin_bytes:
-        total_len += 8 + len(bin_bytes)
-
-    with open(path, "wb") as f:
-        f.write(struct.pack("<4sII", GLB_MAGIC, 2, total_len))
-        f.write(struct.pack("<II", len(json_bytes), CHUNK_JSON))
-        f.write(json_bytes)
-        if bin_bytes:
-            f.write(struct.pack("<II", len(bin_bytes), CHUNK_BIN))
-            f.write(bin_bytes)
+    with open(path, "wb") as handle:
+        handle.write(encode_glb(gltf_json, binchunk))
 
 
-# ─── pure AABB math (no numpy) — mirrors dev tooling written during measurement, kept local so
-#     this script has zero non-stdlib deps ──────────────────────────────────────────────────────
 def quat_to_mat3(q):
     x, y, z, w = q
     xx, yy, zz = x * x, y * y, z * z
@@ -206,46 +115,36 @@ def quat_to_mat3(q):
 
 
 def mat4_from_trs(t, r, s):
-    t = t or [0, 0, 0]
-    r = r or [0, 0, 0, 1]
-    s = s or [1, 1, 1]
-    m3 = quat_to_mat3(r)
-    M = [[0] * 4 for _ in range(4)]
-    for i in range(3):
-        for j in range(3):
-            M[i][j] = m3[i][j] * s[j]
-    M[0][3] = t[0]
-    M[1][3] = t[1]
-    M[2][3] = t[2]
-    M[3][3] = 1
-    return M
+    t, r, s = t or [0, 0, 0], r or [0, 0, 0, 1], s or [1, 1, 1]
+    rot = quat_to_mat3(r)
+    out = [[0.0] * 4 for _ in range(4)]
+    for row in range(3):
+        for col in range(3):
+            out[row][col] = rot[row][col] * s[col]
+    out[0][3], out[1][3], out[2][3], out[3][3] = t[0], t[1], t[2], 1.0
+    return out
 
 
-def mat4_from_matrix(mat):
-    M = [[0] * 4 for _ in range(4)]
-    for col in range(4):
-        for row in range(4):
-            M[row][col] = mat[col * 4 + row]
-    return M
+def mat4_from_matrix(values):
+    return [[values[col * 4 + row] for col in range(4)] for row in range(4)]
 
 
-def mat_mul(A, B):
-    C = [[0] * 4 for _ in range(4)]
-    for i in range(4):
-        for j in range(4):
-            C[i][j] = sum(A[i][k] * B[k][j] for k in range(4))
-    return C
+def mat_mul(a, b):
+    return [[sum(a[row][k] * b[k][col] for k in range(4)) for col in range(4)] for row in range(4)]
 
 
 def mat_identity():
-    return [[1 if i == j else 0 for j in range(4)] for i in range(4)]
+    return [[1.0 if row == col else 0.0 for col in range(4)] for row in range(4)]
 
 
-def transform_point(M, p):
-    x, y, z = p
-    v = [x, y, z, 1]
-    out = [sum(M[i][k] * v[k] for k in range(4)) for i in range(4)]
-    return (out[0], out[1], out[2])
+def mat_column_major(matrix):
+    return [matrix[row][col] for col in range(4) for row in range(4)]
+
+
+def transform_point(matrix, point):
+    vector = [point[0], point[1], point[2], 1.0]
+    result = [sum(matrix[row][k] * vector[k] for k in range(4)) for row in range(4)]
+    return result[:3]
 
 
 def node_local_matrix(node):
@@ -254,658 +153,595 @@ def node_local_matrix(node):
     return mat4_from_trs(node.get("translation"), node.get("rotation"), node.get("scale"))
 
 
-def walk_aabb(gltf, node_idx, parent_matrix, aabb):
-    node = gltf["nodes"][node_idx]
-    world = mat_mul(parent_matrix, node_local_matrix(node))
-    mesh_idx = node.get("mesh")
-    if mesh_idx is not None:
-        for prim in gltf["meshes"][mesh_idx].get("primitives", []):
-            pos_idx = prim.get("attributes", {}).get("POSITION")
-            if pos_idx is None:
-                continue
-            acc = gltf["accessors"][pos_idx]
-            mn, mx = acc.get("min"), acc.get("max")
-            if not mn or not mx:
-                continue
-            for corner in [(mn[0], mn[1], mn[2]), (mn[0], mn[1], mx[2]), (mn[0], mx[1], mn[2]), (mn[0], mx[1], mx[2]),
-                           (mx[0], mn[1], mn[2]), (mx[0], mn[1], mx[2]), (mx[0], mx[1], mn[2]), (mx[0], mx[1], mx[2])]:
-                wp = transform_point(world, corner)
-                for i in range(3):
-                    aabb[0][i] = min(aabb[0][i], wp[i])
-                    aabb[1][i] = max(aabb[1][i], wp[i])
-    for c in node.get("children", []):
-        walk_aabb(gltf, c, world, aabb)
-
-
-def scene_aabb(gltf):
-    scene_idx = gltf.get("scene", 0)
-    scene = gltf["scenes"][scene_idx]
-    aabb = [[math.inf, math.inf, math.inf], [-math.inf, -math.inf, -math.inf]]
-    for root in scene.get("nodes", []):
-        walk_aabb(gltf, root, mat_identity(), aabb)
-    return aabb
-
-
-def node_world_matrix(gltf, target_idx):
-    """world matrix of one specific node (used for hinge-position derivation)."""
-    result = {"m": None}
-
-    def walk(node_idx, parent_matrix):
-        node = gltf["nodes"][node_idx]
-        world = mat_mul(parent_matrix, node_local_matrix(node))
-        if node_idx == target_idx:
-            result["m"] = world
-        for c in node.get("children", []):
-            walk(c, world)
-
-    scene_idx = gltf.get("scene", 0)
-    for root in gltf["scenes"][scene_idx].get("nodes", []):
-        walk(root, mat_identity())
-    return result["m"]
-
-
 def node_local_mesh_aabb(gltf, node_idx):
-    """AABB of just this node's own mesh in the node's OWN local space (pre-transform) — used to
-    find the leaf's own edge for hinge derivation."""
     node = gltf["nodes"][node_idx]
     mesh_idx = node.get("mesh")
     if mesh_idx is None:
         return None
-    aabb = None
-    for prim in gltf["meshes"][mesh_idx].get("primitives", []):
-        pos_idx = prim.get("attributes", {}).get("POSITION")
-        if pos_idx is None:
+    result = None
+    for primitive in gltf["meshes"][mesh_idx].get("primitives", []):
+        position_idx = primitive.get("attributes", {}).get("POSITION")
+        if position_idx is None:
             continue
-        acc = gltf["accessors"][pos_idx]
-        mn, mx = acc.get("min"), acc.get("max")
-        if not mn or not mx or len(mn) < 3 or len(mx) < 3:
+        accessor = gltf["accessors"][position_idx]
+        low, high = accessor.get("min"), accessor.get("max")
+        if not low or not high or not all(math.isfinite(v) for v in list(low[:3]) + list(high[:3])):
             continue
-        if not all(math.isfinite(v) for v in list(mn[:3]) + list(mx[:3])):
-            continue
-        if aabb is None:
-            aabb = [list(mn[:3]), list(mx[:3])]
+        if result is None:
+            result = [list(low[:3]), list(high[:3])]
         else:
             for axis in range(3):
-                aabb[0][axis] = min(aabb[0][axis], mn[axis])
-                aabb[1][axis] = max(aabb[1][axis], mx[axis])
-    return aabb
+                result[0][axis] = min(result[0][axis], low[axis])
+                result[1][axis] = max(result[1][axis], high[axis])
+    return result
 
 
-# ─────────────────────────────────────────────────────────────────────────────────────────────
-# MATERIAL FAMILY CLASSIFICATION — "classify node/material names into stone|wood|iron|roof|glass
-# |cloth" (Sol P-B, quoted above). Kenney's own glTF exports carry ONE shared "colormap" material
-# per file (a texture-atlas convention) — the material NAME itself carries zero semantic
-# information (verified: every inspected piece's material is literally named "colormap"). So
-# classification here runs on NODE NAME (the mesh/node's own authored name — "wall", "door",
-# "gate", "stairs", "template-floor", etc.) which DOES carry real semantic signal in every piece
-# inspected. This is "classify node/material names" read correctly for a kit that only gives one
-# of those two signals anything to classify on.
-# ─────────────────────────────────────────────────────────────────────────────────────────────
-FAMILY_STONE, FAMILY_WOOD, FAMILY_IRON, FAMILY_ROOF, FAMILY_GLASS, FAMILY_CLOTH = (
-    "stone", "wood", "iron", "roof", "glass", "cloth",
-)
-
-# roughness ALWAYS in the 0.82-0.94 band regardless of family (Sol P-B: "roughness 0.82-0.94,
-# metalness 0.0 except iron 0.35" reads as ONE roughness band for every family, ONLY metalness
-# varies by family) — this table is exported for src/ui/theater-donor.js's own header record
-# (kept here as the single source Adam can review; the runtime module inlines the same numbers
-# since it cannot import this Python file, and its own header says so).
-MATERIAL_RECIPE = {
-    FAMILY_STONE: {"roughness": 0.90, "metalness": 0.0},
-    FAMILY_WOOD: {"roughness": 0.85, "metalness": 0.0},
-    FAMILY_IRON: {"roughness": 0.88, "metalness": 0.35},
-    FAMILY_ROOF: {"roughness": 0.88, "metalness": 0.0},
-    FAMILY_GLASS: {"roughness": 0.30, "metalness": 0.0},
-    FAMILY_CLOTH: {"roughness": 0.92, "metalness": 0.0},
-}
-
-# ─────────────────────────────────────────────────────────────────────────────────────────────
-# PILOT MANIFEST — the KS-1 admitted set. "master-resident packs only ... STRUCTURAL pieces —
-# walls, wall-corners, doorways/gates, doors, arches, floors, stairs — NOT decor first" (spec,
-# verbatim). Every file in each pack was individually inspected (node names, mesh names, world
-# AABB via the exact AABB code above) before this table was written — see
-# dev/model-foundry/KS1-PROVENANCE.json for the full measured-dims record per piece. Pieces NOT
-# in this table (creatures, weapons, containers, terrain dressing, wood-structure/wood-support
-# bracing, column) are left as SOURCE_RESERVE per KENNEY-MESH-AUDIT.md's own taxonomy — untouched,
-# undeleted, simply not normalized this wave; each exclusion is logged in the provenance report
-# with a one-line reason, never silently dropped.
-#
-# Per-entry fields:
-#   category: one of the spec's named STRUCTURAL categories this piece fills
-#   rootFamily: material family for the piece's root/frame node
-#   leafNode: name of a CHILD node that is a distinct sub-part needing its OWN family + its own
-#             hinge socket (a swinging door leaf / portcullis leaf), or None
-#   leafFamily: material family for that child node, if leafNode is set
-#   shellLike: True for whole floor+wall(+ceiling) architectural chunks -> gets floor-mount +
-#              top-surface + all 4 butt-joins
-#   frameLike: True for doorway/gate frames -> gets floor-mount + all 4 butt-joins (+ hinge if it
-#              owns/hosts a leaf, whether in this same file or a companion file in the pack)
-#   wallLike:  True for wall/corner/floor-tile atomic template pieces -> floor-mount + butt-joins
-#              (+ top-surface for floor-flavored ones, see isFloor)
-#   isFloor:   True adds a top-surface socket (walkable/placeable top face) to a wallLike piece
-#   isStairs:  True -> floor-mount + top-surface (at measured top landing height) + butt-joins
-#   leafOnly:  True for a standalone door-leaf file with NO frame geometry of its own (mini-
-#              dungeon's gate.glb) -> hinge + floor-mount only, no butt-joins (not a module-grid
-#              piece)
-# ─────────────────────────────────────────────────────────────────────────────────────────────
-MODULAR_DUNGEON_PIECES = {
-    # corridor shells (floor+walls+ceiling baked as one mesh)
-    "corridor": {"category": "corridor-shell", "rootFamily": FAMILY_STONE, "shellLike": True},
-    "corridor-corner": {"category": "corridor-shell", "rootFamily": FAMILY_STONE, "shellLike": True},
-    "corridor-end": {"category": "corridor-shell", "rootFamily": FAMILY_STONE, "shellLike": True},
-    "corridor-intersection": {"category": "corridor-shell", "rootFamily": FAMILY_STONE, "shellLike": True},
-    "corridor-junction": {"category": "corridor-shell", "rootFamily": FAMILY_STONE, "shellLike": True},
-    "corridor-transition": {"category": "corridor-shell", "rootFamily": FAMILY_STONE, "shellLike": True},
-    "corridor-wide": {"category": "corridor-shell", "rootFamily": FAMILY_STONE, "shellLike": True},
-    "corridor-wide-corner": {"category": "corridor-shell", "rootFamily": FAMILY_STONE, "shellLike": True},
-    "corridor-wide-end": {"category": "corridor-shell", "rootFamily": FAMILY_STONE, "shellLike": True},
-    "corridor-wide-intersection": {"category": "corridor-shell", "rootFamily": FAMILY_STONE, "shellLike": True},
-    "corridor-wide-junction": {"category": "corridor-shell", "rootFamily": FAMILY_STONE, "shellLike": True},
-    # room shells
-    "room-corner": {"category": "room-shell", "rootFamily": FAMILY_STONE, "shellLike": True},
-    "room-large": {"category": "room-shell", "rootFamily": FAMILY_STONE, "shellLike": True},
-    "room-large-variation": {"category": "room-shell", "rootFamily": FAMILY_STONE, "shellLike": True},
-    "room-small": {"category": "room-shell", "rootFamily": FAMILY_STONE, "shellLike": True},
-    "room-small-variation": {"category": "room-shell", "rootFamily": FAMILY_STONE, "shellLike": True},
-    "room-wide": {"category": "room-shell", "rootFamily": FAMILY_STONE, "shellLike": True},
-    "room-wide-variation": {"category": "room-shell", "rootFamily": FAMILY_STONE, "shellLike": True},
-    # doorway/gate frames — gate-door.glb/gate-door-window.glb carry a child "door" node (the
-    # swinging leaf, wood); gate-metal-bars.glb carries a child "gate" node (the leaf, iron); the
-    # plain gate.glb has NO leaf child (an open, fixed archway) -> fills the "arches" category,
-    # honestly noted in the report as the closest analog since neither pack ships a dedicated
-    # freestanding arch piece.
-    "gate-door": {"category": "doorway-frame", "rootFamily": FAMILY_STONE, "frameLike": True,
-                  "leafNode": "door", "leafFamily": FAMILY_WOOD},
-    "gate-door-window": {"category": "doorway-frame", "rootFamily": FAMILY_STONE, "frameLike": True,
-                          "leafNode": "door", "leafFamily": FAMILY_WOOD},
-    "gate-metal-bars": {"category": "doorway-frame", "rootFamily": FAMILY_STONE, "frameLike": True,
-                         "leafNode": "gate", "leafFamily": FAMILY_IRON},
-    "gate": {"category": "arch", "rootFamily": FAMILY_STONE, "frameLike": True},
-    # stairs
-    "stairs": {"category": "stairs", "rootFamily": FAMILY_STONE, "isStairs": True},
-    "stairs-wide": {"category": "stairs", "rootFamily": FAMILY_STONE, "isStairs": True},
-    # atomic wall/corner/floor template pieces
-    "template-corner": {"category": "wall-corner", "rootFamily": FAMILY_STONE, "wallLike": True},
-    "template-wall-corner": {"category": "wall-corner", "rootFamily": FAMILY_STONE, "wallLike": True},
-    "template-wall": {"category": "wall", "rootFamily": FAMILY_STONE, "wallLike": True},
-    "template-wall-detail-a": {"category": "wall", "rootFamily": FAMILY_STONE, "wallLike": True},
-    "template-wall-half": {"category": "wall", "rootFamily": FAMILY_STONE, "wallLike": True},
-    "template-wall-stairs": {"category": "wall", "rootFamily": FAMILY_STONE, "wallLike": True},
-    "template-wall-top": {"category": "wall", "rootFamily": FAMILY_STONE, "wallLike": True},
-    "template-detail": {"category": "wall", "rootFamily": FAMILY_STONE, "wallLike": True},
-    "template-floor": {"category": "floor", "rootFamily": FAMILY_STONE, "wallLike": True, "isFloor": True},
-    "template-floor-big": {"category": "floor", "rootFamily": FAMILY_STONE, "wallLike": True, "isFloor": True},
-    "template-floor-detail": {"category": "floor", "rootFamily": FAMILY_STONE, "wallLike": True, "isFloor": True},
-    "template-floor-detail-a": {"category": "floor", "rootFamily": FAMILY_STONE, "wallLike": True, "isFloor": True},
-    "template-floor-layer": {"category": "floor", "rootFamily": FAMILY_STONE, "wallLike": True, "isFloor": True},
-    "template-floor-layer-hole": {"category": "floor", "rootFamily": FAMILY_STONE, "wallLike": True, "isFloor": True},
-    "template-floor-layer-raised": {"category": "floor", "rootFamily": FAMILY_STONE, "wallLike": True, "isFloor": True},
-}
-
-MINI_DUNGEON_PIECES = {
-    "wall": {"category": "wall", "rootFamily": FAMILY_STONE, "wallLike": True},
-    "wall-half": {"category": "wall", "rootFamily": FAMILY_STONE, "wallLike": True},
-    "wall-narrow": {"category": "wall", "rootFamily": FAMILY_STONE, "wallLike": True},
-    # wall-opening is the doorway HOST in this pack (the leaf lives in the separate gate.glb file
-    # below) — gets a hinge socket marking where that companion leaf mounts.
-    "wall-opening": {"category": "doorway-frame", "rootFamily": FAMILY_STONE, "frameLike": True,
-                      "companionLeaf": "gate"},
-    "floor": {"category": "floor", "rootFamily": FAMILY_STONE, "wallLike": True, "isFloor": True},
-    "floor-detail": {"category": "floor", "rootFamily": FAMILY_STONE, "wallLike": True, "isFloor": True},
-    "stairs": {"category": "stairs", "rootFamily": FAMILY_STONE, "isStairs": True},
-    # standalone leaf: parent "gate" node carries NO mesh, child "door" node carries the actual
-    # leaf geometry, symmetric about its own node origin (X -0.4..0.4) — unlike the modular-
-    # dungeon-kit's asymmetric leaf (offset entirely to one side, so ITS node origin already IS
-    # the hinge edge), this leaf's hinge edge is derived from its own local mesh-space min-X face.
-    "gate": {"category": "door-leaf", "rootFamily": FAMILY_WOOD, "leafOnly": True, "leafChildNode": "door"},
-}
-
-# excluded pieces, logged with an honest one-line reason (never silently dropped) — kept OUT of
-# the pilot admission per the spec's named category list (walls/wall-corners/doorways-gates/
-# door-leaves/arches/floors/stairs); left as SOURCE_RESERVE.
-EXCLUDED_MINI_DUNGEON = {
-    "character-human": "creature figure, out of KS-1's structural-pilot scope",
-    "character-orc": "creature figure, out of KS-1's structural-pilot scope",
-    "dirt": "terrain dressing, not a named structural category",
-    "rocks": "terrain dressing, not a named structural category",
-    "stones": "terrain dressing, not a named structural category",
-    "banner": "decor, KS-1 pilot is structural-only (\"NOT decor first\", spec verbatim)",
-    "barrel": "prop/container, not a named structural category",
-    "chest": "prop/container, not a named structural category",
-    "coin": "prop, not a named structural category",
-    "shield-rectangle": "weapon/prop, not a named structural category",
-    "shield-round": "weapon/prop, not a named structural category",
-    "weapon-spear": "weapon/prop, not a named structural category",
-    "weapon-sword": "weapon/prop, not a named structural category",
-    "trap": "mechanism/prop, not a named structural category",
-    "column": "support piece with no clean fit to walls/wall-corners/floors/stairs/doorways/"
-              "arches; excluded to stay disciplined to the spec's named category list",
-    "wood-structure": "support/bracing piece, same exclusion reasoning as column",
-    "wood-support": "support/bracing piece, same exclusion reasoning as column",
-}
+def walk_aabb(gltf, node_idx, parent_matrix, aabb):
+    node = gltf["nodes"][node_idx]
+    world = mat_mul(parent_matrix, node_local_matrix(node))
+    local = node_local_mesh_aabb(gltf, node_idx)
+    if local:
+        low, high = local
+        for x in (low[0], high[0]):
+            for y in (low[1], high[1]):
+                for z in (low[2], high[2]):
+                    point = transform_point(world, [x, y, z])
+                    for axis in range(3):
+                        aabb[0][axis] = min(aabb[0][axis], point[axis])
+                        aabb[1][axis] = max(aabb[1][axis], point[axis])
+    for child in node.get("children", []):
+        walk_aabb(gltf, child, world, aabb)
 
 
-def sha256_file(path):
-    h = hashlib.sha256()
-    with open(path, "rb") as f:
-        h.update(f.read())
-    return h.hexdigest()
-
-
-def find_node_index_by_name(gltf, name):
-    for i, n in enumerate(gltf.get("nodes", [])):
-        if n.get("name") == name:
-            return i
-    return None
+def scene_aabb(gltf):
+    result = [[math.inf] * 3, [-math.inf] * 3]
+    scene = gltf["scenes"][gltf.get("scene", 0)]
+    for root in scene.get("nodes", []):
+        walk_aabb(gltf, root, mat_identity(), result)
+    if not all(math.isfinite(v) for side in result for v in side):
+        raise ValueError("scene contains no measurable POSITION bounds")
+    return result
 
 
 def strip_materials(gltf):
-    """Byte-level material discard, per P-B: 'discard their authored pastel MeshStandardMaterials'.
-    Drops materials/textures/images/samplers arrays wholesale and every primitive's `material`
-    index while preserving every TEXCOORD_* attribute and its existing accessor/bufferView chain.
-    The runtime Genesis material path consumes those authored coordinates. The BIN chunk is left
-    completely untouched (image bytes become unreferenced dead weight inside it rather than being
-    surgically cut — deliberately: re-offsetting bufferViews after removing image bytes is exactly the kind
-    of binary-surgery bug class this script avoids by construction; a few dead KB of orphaned
-    texture bytes is a fully acceptable, honestly-documented tradeoff for zero risk of corrupting
-    live POSITION/NORMAL geometry accessors, which is what actually matters for KS-1)."""
     for key in ("materials", "textures", "images", "samplers"):
-        if key in gltf:
-            del gltf[key]
-    if "extensionsUsed" in gltf:
-        gltf["extensionsUsed"] = [e for e in gltf["extensionsUsed"] if e != "KHR_texture_transform"]
-        if not gltf["extensionsUsed"]:
-            del gltf["extensionsUsed"]
-    if "extensionsRequired" in gltf:
-        gltf["extensionsRequired"] = [e for e in gltf["extensionsRequired"] if e != "KHR_texture_transform"]
-        if not gltf["extensionsRequired"]:
-            del gltf["extensionsRequired"]
+        gltf.pop(key, None)
+    for ext_key in ("extensionsUsed", "extensionsRequired"):
+        if ext_key in gltf:
+            gltf[ext_key] = [value for value in gltf[ext_key] if value != "KHR_texture_transform"]
+            if not gltf[ext_key]:
+                del gltf[ext_key]
     for mesh in gltf.get("meshes", []):
-        for prim in mesh.get("primitives", []):
-            if "material" in prim:
-                del prim["material"]
-            if "extensions" in prim:
-                del prim["extensions"]
+        for primitive in mesh.get("primitives", []):
+            primitive.pop("material", None)
+            primitive.pop("extensions", None)
 
 
-def bake_scale_into_roots(gltf, scale):
-    """Bakes canonicalScale directly into every scene root node's own `scale` field (none of the
-    pilot pieces carry a `matrix` on their root nodes — verified during inspection — so this is a
-    safe, minimal JSON edit: no vertex/accessor rewriting, no matrix-decomposition risk). After
-    this, a plain GLTFLoader.load() on the output file already returns geometry sized correctly
-    to Genesis world units — sockets (computed below, already in the post-scale frame) line up
-    with it with no further runtime math."""
-    scene_idx = gltf.get("scene", 0)
-    for root_idx in gltf["scenes"][scene_idx].get("nodes", []):
-        node = gltf["nodes"][root_idx]
-        if "matrix" in node:
-            raise ValueError("unexpected matrix on a pilot root node — scale-bake assumption violated")
-        existing = node.get("scale", [1, 1, 1])
-        node["scale"] = [existing[0] * scale, existing[1] * scale, existing[2] * scale]
+def merge_extras(node, donor_data):
+    extras = dict(node.get("extras") or {})
+    extras["genesisDonor"] = donor_data
+    node["extras"] = extras
 
 
-def sockets_for_shell(aabb_scaled):
-    (mnx, mny, mnz), (mxx, mxy, mxz) = aabb_scaled
-    cx, cz = (mnx + mxx) / 2.0, (mnz + mxz) / 2.0
-    return [
-        {"type": "floor-mount", "position": [cx, 0.0, cz]},
-        {"type": "top-surface", "position": [cx, 0.0, cz]},
-        {"type": "butt-join-n", "position": [cx, 0.0, mnz]},
-        {"type": "butt-join-s", "position": [cx, 0.0, mxz]},
-        {"type": "butt-join-e", "position": [mxx, 0.0, cz]},
-        {"type": "butt-join-w", "position": [mnx, 0.0, cz]},
-    ]
+def is_finite_number(value):
+    return isinstance(value, (int, float)) and not isinstance(value, bool) and math.isfinite(value)
 
 
-def sockets_for_wall(aabb_scaled, is_floor):
-    (mnx, mny, mnz), (mxx, mxy, mxz) = aabb_scaled
-    cx, cz = (mnx + mxx) / 2.0, (mnz + mxz) / 2.0
-    s = [
-        {"type": "floor-mount", "position": [cx, 0.0, cz]},
-        {"type": "butt-join-n", "position": [cx, 0.0, mnz]},
-        {"type": "butt-join-s", "position": [cx, 0.0, mxz]},
-        {"type": "butt-join-e", "position": [mxx, 0.0, cz]},
-        {"type": "butt-join-w", "position": [mnx, 0.0, cz]},
-    ]
-    if is_floor:
-        s.append({"type": "top-surface", "position": [cx, 0.0, cz]})
-    return s
+def validate_vector(errors, label, value, length, positive=False):
+    if not isinstance(value, list) or len(value) != length:
+        errors.append(f"{label}: expected {length}-vector")
+        return
+    for index, component in enumerate(value):
+        if not is_finite_number(component):
+            errors.append(f"{label}[{index}]: must be finite")
+        elif positive and component <= 0:
+            errors.append(f"{label}[{index}]: must be positive")
 
 
-def sockets_for_stairs(aabb_scaled):
-    (mnx, mny, mnz), (mxx, mxy, mxz) = aabb_scaled
-    cx, cz = (mnx + mxx) / 2.0, (mnz + mxz) / 2.0
-    return [
-        {"type": "floor-mount", "position": [cx, 0.0, cz]},
-        # top landing: approximated at the piece's measured top height, centered in XZ — a
-        # documented simplification (the true landing is a sub-region, not the whole footprint
-        # center); flagged for KS-2/KS-3 to refine when stairs actually get placed against a wall
-        # run. mxy is already the height in the CALLER's (post-scale) frame.
-        {"type": "top-surface", "position": [cx, mxy, cz]},
-        {"type": "butt-join-n", "position": [cx, 0.0, mnz]},
-        {"type": "butt-join-s", "position": [cx, 0.0, mxz]},
-        {"type": "butt-join-e", "position": [mxx, 0.0, cz]},
-        {"type": "butt-join-w", "position": [mnx, 0.0, cz]},
-    ]
+def validate_quaternion(errors, label, value):
+    validate_vector(errors, label, value, 4)
+    if isinstance(value, list) and len(value) == 4 and all(is_finite_number(v) for v in value):
+        norm = math.sqrt(sum(v * v for v in value))
+        if norm == 0 or abs(norm - 1.0) > 1e-5:
+            errors.append(f"{label}: quaternion norm {norm!r} is not 1 within 1e-5")
 
 
-def sockets_for_frame(aabb_scaled, hinge_pos):
-    (mnx, mny, mnz), (mxx, mxy, mxz) = aabb_scaled
-    cx, cz = (mnx + mxx) / 2.0, (mnz + mxz) / 2.0
-    s = [
-        {"type": "floor-mount", "position": [cx, 0.0, cz]},
-        {"type": "butt-join-n", "position": [cx, 0.0, mnz]},
-        {"type": "butt-join-s", "position": [cx, 0.0, mxz]},
-        {"type": "butt-join-e", "position": [mxx, 0.0, cz]},
-        {"type": "butt-join-w", "position": [mnx, 0.0, cz]},
-    ]
-    if hinge_pos is not None:
-        s.append({"type": "hinge", "position": list(hinge_pos)})
-    return s
+def reject_unknown(errors, label, value, allowed):
+    if isinstance(value, dict):
+        for key in sorted(set(value) - set(allowed)):
+            errors.append(f"{label}.{key}: unknown field")
 
 
-def derive_hinge_for_leaf_child(gltf, root_idx, leaf_node_idx, scale):
-    """Hinge derivation rule (documented, applied consistently, not hand-tuned per file):
-    - if the leaf's OWN local mesh AABB is asymmetric about its node origin (heavily offset to
-      one side — e.g. spans [-3,0] not [-1.5,1.5]), the node's own local origin (its translation
-      in the PARENT's frame, i.e. its world position when the parent/frame node is untransformed)
-      IS already the hinge edge — the kit's own modeling convention places the pivot there.
-    - if the leaf's local mesh AABB is roughly SYMMETRIC about its node origin, there is no
-      offset to read the edge from; the hinge edge is instead the leaf's own local mesh-space
-      min-X face (a deterministic, documented convention — 'hinge on the local-space left edge'),
-      transformed into world space.
-    Returns (x,y,z) in the ALREADY-SCALED (canonicalScale-applied) Genesis-world frame.
-    """
-    world_m = node_world_matrix(gltf, leaf_node_idx)
-    local_aabb = node_local_mesh_aabb(gltf, leaf_node_idx)
-    if world_m is None or local_aabb is None:
-        return None
-    mn, mx = local_aabb
-    span = [mx[i] - mn[i] for i in range(3)]
-    mid = [(mn[i] + mx[i]) / 2.0 for i in range(3)]
-    # asymmetry ratio on X (the swing axis in every pilot leaf) — how far the local AABB's own
-    # midpoint sits from 0 (the node origin) relative to its own half-width.
-    half_w = span[0] / 2.0 if span[0] > 1e-9 else 1e-9
-    asym = abs(mid[0]) / half_w
-    if asym > 0.5:
-        # asymmetric: node origin (0,0,0) local -> hinge edge already there
-        hinge_local = (0.0, mid[1], mid[2])
-    else:
-        # symmetric: hinge = local mesh-space min-X face, mid Y/Z
-        hinge_local = (mn[0], mid[1], mid[2])
-    world_pt = transform_point(world_m, hinge_local)
-    return (world_pt[0] * scale, world_pt[1] * scale, world_pt[2] * scale)
+def load_calibration(path):
+    with open(path, encoding="utf-8") as handle:
+        return json.load(handle)
 
 
-def classify_piece(pack, slug, gltf, binchunk, src_path, spec):
-    scale = PACK_CANONICAL_SCALE[pack]
-    raw_aabb = scene_aabb(gltf)
-    scaled_aabb = [[c * scale for c in raw_aabb[0]], [c * scale for c in raw_aabb[1]]]
-    raw_dims = [raw_aabb[1][i] - raw_aabb[0][i] for i in range(3)]
-    scaled_dims = [scaled_aabb[1][i] - scaled_aabb[0][i] for i in range(3)]
+def validate_calibration(calibration, source_root):
+    errors, sources = [], {}
+    reject_unknown(errors, "calibration", calibration, {"schema", "algorithmVersion", "packs", "assets"})
+    if calibration.get("schema") != "genesis.kenney-calibration.v1":
+        errors.append("schema: expected genesis.kenney-calibration.v1")
+    if not isinstance(calibration.get("algorithmVersion"), int) or calibration["algorithmVersion"] < 1:
+        errors.append("algorithmVersion: expected positive integer")
+    packs, assets = calibration.get("packs"), calibration.get("assets")
+    if not isinstance(packs, dict) or not packs:
+        errors.append("packs: expected nonempty object")
+        packs = {}
+    if not isinstance(assets, dict) or not assets:
+        errors.append("assets: expected nonempty object")
+        assets = {}
 
-    root_idx = gltf["scenes"][gltf.get("scene", 0)]["nodes"][0]
-    node_extras = {}  # node_idx -> genesisDonor dict
-    all_sockets = []
-    semantic_parts = [spec["category"]]
-    material_families = [spec["rootFamily"]]
+    for pack_id, pack in sorted(packs.items()):
+        label = f"packs.{pack_id}"
+        if not isinstance(pack, dict):
+            errors.append(f"{label}: expected object")
+            continue
+        reject_unknown(errors, label, pack, {"sourceUp", "sourceForward", "canonicalScale", "structuralGrid"})
+        scale = pack.get("canonicalScale")
+        if not is_finite_number(scale) or scale <= 0:
+            errors.append(f"{label}.canonicalScale: must be finite and positive")
+        if pack.get("sourceUp") != "+Y" or pack.get("sourceForward") != "+Z":
+            errors.append(f"{label}: KGR-3 seed supports calibrated +Y up / +Z forward only")
+        grid = pack.get("structuralGrid")
+        if grid is None:
+            continue
+        if not isinstance(grid, dict):
+            errors.append(f"{label}.structuralGrid: expected object or null")
+            continue
+        reject_unknown(errors, f"{label}.structuralGrid", grid,
+                       {"sourceModuleUnits", "targetWorldUnits", "orientationSteps", "joinMode"})
+        for key in ("sourceModuleUnits", "targetWorldUnits"):
+            if not is_finite_number(grid.get(key)) or grid[key] <= 0:
+                errors.append(f"{label}.structuralGrid.{key}: must be finite and positive")
+        if grid.get("orientationSteps") != 4 or grid.get("joinMode") != "cell-orientation":
+            errors.append(f"{label}.structuralGrid: requires orientationSteps=4 and joinMode=cell-orientation")
+        if (is_finite_number(scale) and isinstance(grid, dict) and
+                is_finite_number(grid.get("sourceModuleUnits")) and
+                is_finite_number(grid.get("targetWorldUnits")) and
+                abs(scale * grid["sourceModuleUnits"] - grid["targetWorldUnits"]) > 1e-6):
+            errors.append(f"{label}: canonicalScale * sourceModuleUnits must equal targetWorldUnits")
 
-    if spec.get("shellLike"):
-        sockets = sockets_for_shell(scaled_aabb)
-    elif spec.get("isStairs"):
-        sockets = sockets_for_stairs(scaled_aabb)
-    elif spec.get("leafOnly"):
-        leaf_idx = find_node_index_by_name(gltf, spec["leafChildNode"])
-        hinge = derive_hinge_for_leaf_child(gltf, root_idx, leaf_idx, scale) if leaf_idx is not None else None
-        (mnx, mny, mnz), (mxx, mxy, mxz) = scaled_aabb
-        cx, cz = (mnx + mxx) / 2.0, (mnz + mxz) / 2.0
-        sockets = [{"type": "floor-mount", "position": [cx, 0.0, cz]}]
-        if hinge is not None:
-            sockets.append({"type": "hinge", "position": list(hinge)})
-    elif spec.get("frameLike"):
-        hinge = None
-        leaf_node_name = spec.get("leafNode")
-        if leaf_node_name:
-            leaf_idx = find_node_index_by_name(gltf, leaf_node_name)
-            if leaf_idx is not None:
-                hinge = derive_hinge_for_leaf_child(gltf, root_idx, leaf_idx, scale)
-                node_extras[leaf_idx] = {
-                    "semanticPart": "door-leaf",
-                    "materialFamily": spec["leafFamily"],
-                    "sockets": [{"type": "hinge", "position": list(hinge)}] if hinge else [],
-                }
-                semantic_parts.append("door-leaf")
-                material_families.append(spec["leafFamily"])
-        elif spec.get("companionLeaf"):
-            # this frame's leaf lives in a SEPARATE file (mini-dungeon's wall-opening.glb hosts
-            # the opening, gate.glb IS the leaf — two donor files, one doorway assembly). No
-            # in-file child node to measure against, so the hinge is derived from the FRAME's own
-            # local mesh AABB: the min-X edge (mirroring the "symmetric leaf" convention used
-            # above), at mid-height, at the FRONT face (max-Z, where a mounted leaf would swing
-            # from) — a documented, consistent convention, not a per-file guess. KS-2 (which
-            # actually assembles frame+companion-leaf pairs) is the right place to visually
-            # confirm/refine this against the real geometry.
-            frame_local = node_local_mesh_aabb(gltf, root_idx)
-            if frame_local is not None:
-                mn, mx = frame_local
-                hinge_local = (mn[0], (mn[1] + mx[1]) / 2.0, mx[2])
-                world_m = node_world_matrix(gltf, root_idx)
-                wp = transform_point(world_m, hinge_local)
-                hinge = (wp[0] * scale, wp[1] * scale, wp[2] * scale)
-        sockets = sockets_for_frame(scaled_aabb, hinge)
-    elif spec.get("wallLike"):
-        sockets = sockets_for_wall(scaled_aabb, spec.get("isFloor", False))
-    else:
-        raise ValueError(f"{pack}/{slug}: no socket rule matched spec {spec}")
-
-    all_sockets = list(sockets)
-    for extra in node_extras.values():
-        all_sockets.extend(extra.get("sockets", []))
-
-    source_sha = sha256_file(src_path)
-    recipe_key = json.dumps({
-        "pack": pack, "slug": slug, "version": NORMALIZER_RECIPE_VERSION,
-        "spec": {k: v for k, v in spec.items()}, "scale": scale,
-    }, sort_keys=True)
-    recipe_hash = hashlib.sha256((source_sha + recipe_key).encode("utf-8")).hexdigest()
-
-    root_extras = {
-        "pack": pack, "slug": slug,
-        "admissionClass": "DIRECT_MODULATED",
-        "semanticParts": semantic_parts,
-        "materialFamily": spec["rootFamily"],
-        "materialFamilies": material_families,
-        "sockets": sockets,  # root-level sockets only; leaf-node sockets live on the leaf node
-        "canonicalScale": scale,
-        "sourceSha256": source_sha,
-        "recipeHash": recipe_hash,
-        "recipeVersion": NORMALIZER_RECIPE_VERSION,
-        "license": "CC0-1.0",
-        "attribution": "assets/models/ATTRIBUTION.md",
-    }
-    node_extras[root_idx] = merge_extras(node_extras.get(root_idx), root_extras)
-
-    return {
-        "rawDims": raw_dims,
-        "scaledDims": scaled_dims,
-        "sockets": all_sockets,
-        "nodeExtras": node_extras,
-        "semanticParts": semantic_parts,
-        "materialFamilies": material_families,
-        "sourceSha256": source_sha,
-        "recipeHash": recipe_hash,
-        "companionLeaf": spec.get("companionLeaf"),
-        "category": spec["category"],
-    }
-
-
-def merge_extras(existing, new):
-    if not existing:
-        return new
-    merged = dict(existing)
-    merged.update(new)
-    return merged
-
-
-def apply_node_extras(gltf, node_extras):
-    for idx, extras in node_extras.items():
-        node = gltf["nodes"][idx]
-        node["extras"] = merge_extras(node.get("extras"), {"genesisDonor": extras})
-
-
-def normalize_pack(pack, pieces):
-    src_dir = os.path.join(ASSETS_MODELS, pack)
-    out_dir = os.path.join(OUT_ROOT, pack)
-    os.makedirs(out_dir, exist_ok=True)
-    index = {}
-    report_pieces = []
-
-    for slug, spec in sorted(pieces.items()):
-        src_path = os.path.join(src_dir, slug + ".glb")
-        if not os.path.exists(src_path):
-            raise FileNotFoundError(f"pilot manifest references missing file: {src_path}")
-        gltf, binchunk, _raw = read_glb(src_path)
-        info = classify_piece(pack, slug, gltf, binchunk, src_path, spec)
-
-        strip_materials(gltf)
-        bake_scale_into_roots(gltf, PACK_CANONICAL_SCALE[pack])
-        apply_node_extras(gltf, info["nodeExtras"])
-        gltf.setdefault("asset", {})
-        gltf["asset"]["extras"] = {
-            "genesisDonorNormalizer": NORMALIZER_RECIPE_VERSION,
-            "recipeHash": info["recipeHash"],
-        }
-
-        out_path = os.path.join(out_dir, slug + ".glb")
-        write_glb(out_path, gltf, binchunk)
-
-        index[slug] = {
-            "file": slug + ".glb",
-            "recipeHash": info["recipeHash"],
-            "admissionClass": "DIRECT_MODULATED",
-            "category": info["category"],
-            "semanticParts": info["semanticParts"],
-            "materialFamilies": sorted(set(info["materialFamilies"])),
-            "sockets": info["sockets"],
-            "canonicalScale": PACK_CANONICAL_SCALE[pack],
-            "companionLeaf": info["companionLeaf"],
-        }
-        report_pieces.append({
-            "pack": pack, "slug": slug, "category": info["category"],
-            "semanticParts": info["semanticParts"],
-            "materialFamilies": sorted(set(info["materialFamilies"])),
-            "socketCounts": socket_type_counts(info["sockets"]),
-            "sockets": info["sockets"],
-            "rawDims": info["rawDims"], "scaledDims": info["scaledDims"],
-            "canonicalScale": PACK_CANONICAL_SCALE[pack],
-            "sourceSha256": info["sourceSha256"],
-            "recipeHash": info["recipeHash"],
-            "outputFile": os.path.relpath(out_path, REPO_ROOT),
+    for asset_id, asset in sorted(assets.items()):
+        label = f"assets.{asset_id}"
+        if not isinstance(asset, dict):
+            errors.append(f"{label}: expected object")
+            continue
+        reject_unknown(errors, label, asset, {
+            "sourceSha256", "admissionClass", "category", "rootMaterialFamily", "preTransform",
+            "scaleReason", "groundOffset", "semanticParts", "sockets", "footprintOverride",
+            "qaStatus", "notes", "companionLeaf",
         })
+        if asset_id.count("/") != 1:
+            errors.append(f"{label}: id must be <pack>/<slug>")
+            continue
+        pack_id, slug = asset_id.split("/", 1)
+        if pack_id not in packs:
+            errors.append(f"{label}: unknown pack {pack_id}")
+        elif asset.get("admissionClass") == "DIRECT_MODULATED" and packs[pack_id].get("structuralGrid") is None:
+            errors.append(f"{label}: DIRECT_MODULATED requires a pack structuralGrid")
+        source_sha = asset.get("sourceSha256")
+        if not isinstance(source_sha, str) or len(source_sha) != 64 or any(c not in "0123456789abcdef" for c in source_sha):
+            errors.append(f"{label}.sourceSha256: expected 64 lowercase hex characters")
+        if asset.get("admissionClass") not in ADMISSION_CLASSES:
+            errors.append(f"{label}.admissionClass: invalid enum")
+        if asset.get("rootMaterialFamily") not in MATERIAL_FAMILIES:
+            errors.append(f"{label}.rootMaterialFamily: invalid enum")
+        if not isinstance(asset.get("category"), str) or not asset["category"].strip():
+            errors.append(f"{label}.category: nonempty string required")
+        if asset.get("qaStatus") not in QA_STATUSES:
+            errors.append(f"{label}.qaStatus: invalid enum")
+        pre = asset.get("preTransform")
+        if not isinstance(pre, dict):
+            errors.append(f"{label}.preTransform: expected object")
+        else:
+            reject_unknown(errors, f"{label}.preTransform", pre, {"translation", "rotation", "scale"})
+            validate_vector(errors, f"{label}.preTransform.translation", pre.get("translation"), 3)
+            validate_quaternion(errors, f"{label}.preTransform.rotation", pre.get("rotation"))
+            validate_vector(errors, f"{label}.preTransform.scale", pre.get("scale"), 3, positive=True)
+            scale_vec = pre.get("scale")
+            if isinstance(scale_vec, list) and len(scale_vec) == 3 and all(is_finite_number(v) for v in scale_vec):
+                uniform = max(scale_vec) - min(scale_vec) <= 1e-9
+                identity = all(abs(v - 1.0) <= 1e-9 for v in scale_vec)
+                if not uniform:
+                    errors.append(f"{label}.preTransform.scale: nonuniform scale is forbidden")
+                if asset.get("admissionClass") == "DIRECT_MODULATED" and not identity:
+                    errors.append(f"{label}: DIRECT_MODULATED per-asset scale must be identity")
+                if not identity and not str(asset.get("scaleReason") or "").strip():
+                    errors.append(f"{label}: nonidentity per-asset scale requires scaleReason")
+        if not is_finite_number(asset.get("groundOffset")):
+            errors.append(f"{label}.groundOffset: must be finite")
+        semantic_parts = asset.get("semanticParts")
+        if not isinstance(semantic_parts, dict):
+            errors.append(f"{label}.semanticParts: expected object")
+            semantic_parts = {}
+        for part_id, part in sorted(semantic_parts.items()):
+            reject_unknown(errors, f"{label}.semanticParts.{part_id}", part,
+                           {"nodePath", "detachable", "materialFamily"})
+            if not isinstance(part, dict) or not str(part.get("nodePath") or "").strip():
+                errors.append(f"{label}.semanticParts.{part_id}: stable nodePath required")
+            if not isinstance(part, dict) or not isinstance(part.get("detachable"), bool):
+                errors.append(f"{label}.semanticParts.{part_id}.detachable: boolean required")
+            if not isinstance(part, dict) or part.get("materialFamily") not in MATERIAL_FAMILIES:
+                errors.append(f"{label}.semanticParts.{part_id}.materialFamily: invalid enum")
+        sockets = asset.get("sockets")
+        if not isinstance(sockets, list):
+            errors.append(f"{label}.sockets: expected array")
+            sockets = []
+        ids = set()
+        for index, socket in enumerate(sockets):
+            slabel = f"{label}.sockets[{index}]"
+            if not isinstance(socket, dict):
+                errors.append(f"{slabel}: expected object")
+                continue
+            reject_unknown(errors, slabel, socket,
+                           {"id", "type", "position", "rotation", "mateRule", "mateFamily", "size", "clearance"})
+            socket_id = socket.get("id")
+            if not isinstance(socket_id, str) or not socket_id:
+                errors.append(f"{slabel}.id: nonempty string required")
+            elif socket_id in ids:
+                errors.append(f"{label}: duplicate socket id {socket_id}")
+            else:
+                ids.add(socket_id)
+            if socket.get("type") not in SOCKET_TYPES:
+                errors.append(f"{slabel}.type: invalid v2 type (butt-join sockets are forbidden)")
+            if socket.get("mateRule") not in MATE_RULES:
+                errors.append(f"{slabel}.mateRule: invalid enum")
+            if not isinstance(socket.get("mateFamily"), str) or not socket["mateFamily"].strip():
+                errors.append(f"{slabel}.mateFamily: nonempty string required")
+            validate_vector(errors, f"{slabel}.position", socket.get("position"), 3)
+            validate_quaternion(errors, f"{slabel}.rotation", socket.get("rotation"))
+            validate_vector(errors, f"{slabel}.size", socket.get("size"), 3, positive=True)
+            clearance = socket.get("clearance")
+            if not isinstance(clearance, dict) or clearance.get("shape") != "box":
+                errors.append(f"{slabel}.clearance: box required")
+            else:
+                reject_unknown(errors, f"{slabel}.clearance", clearance, {"shape", "size"})
+                validate_vector(errors, f"{slabel}.clearance.size", clearance.get("size"), 3, positive=True)
+        override = asset.get("footprintOverride")
+        if override is not None:
+            if not isinstance(override, dict):
+                errors.append(f"{label}.footprintOverride: expected object or null")
+            else:
+                reject_unknown(errors, f"{label}.footprintOverride", override,
+                               {"center", "halfExtents", "yawRadians"})
+                validate_vector(errors, f"{label}.footprintOverride.center", override.get("center"), 2)
+                validate_vector(errors, f"{label}.footprintOverride.halfExtents", override.get("halfExtents"), 2, positive=True)
+                if not is_finite_number(override.get("yawRadians")):
+                    errors.append(f"{label}.footprintOverride.yawRadians: must be finite")
+        if asset.get("scaleReason") is not None and not isinstance(asset.get("scaleReason"), str):
+            errors.append(f"{label}.scaleReason: string or null required")
+        if not isinstance(asset.get("notes"), list) or not all(isinstance(note, str) for note in asset.get("notes", [])):
+            errors.append(f"{label}.notes: string array required")
 
-    index_path = os.path.join(out_dir, "index.json")
-    with open(index_path, "w") as f:
-        json.dump(index, f, indent=2, sort_keys=True)
-        f.write("\n")
+        source_path = os.path.join(source_root, pack_id, slug + ".glb")
+        if not os.path.isfile(source_path):
+            errors.append(f"{label}: missing source {source_path}")
+            continue
+        try:
+            gltf, binchunk, raw = read_glb(source_path)
+            actual_sha = sha256_bytes(raw)
+            if actual_sha != source_sha:
+                errors.append(f"{label}: sourceSha256 mismatch (expected {source_sha}, got {actual_sha})")
+            paths = node_paths(gltf)
+            for part_id, part in semantic_parts.items():
+                if isinstance(part, dict) and part.get("nodePath") not in paths:
+                    errors.append(f"{label}.semanticParts.{part_id}: nodePath not found: {part.get('nodePath')}")
+            sources[asset_id] = (gltf, binchunk, raw_aabb_for_source(gltf))
+        except Exception as exc:
+            errors.append(f"{label}: source read failed: {exc}")
+    return errors, sources
 
-    return report_pieces, index
+
+def node_paths(gltf):
+    result = {}
+    def visit(index, parents):
+        node = gltf["nodes"][index]
+        path = "/".join(parents + [node.get("name") or f"node-{index}"])
+        result[path] = index
+        for child in node.get("children", []):
+            visit(child, parents + [node.get("name") or f"node-{index}"])
+    for root in gltf["scenes"][gltf.get("scene", 0)].get("nodes", []):
+        visit(root, [])
+    return result
+
+
+def raw_aabb_for_source(gltf):
+    # This must remain the transformed scene walk. Accessor-wide unions include NORMAL/TANGENT
+    # accessors and ignore node TRS; the real mini-dungeon wall is the mutation fixture for that bug.
+    return scene_aabb(gltf)
+
+
+def default_socket(socket_id, socket_type, position, mate_family):
+    return {
+        "id": socket_id, "type": socket_type, "position": position,
+        "rotation": [0, 0, 0, 1], "mateRule": "coincident", "mateFamily": mate_family,
+        "size": [0.05, 0.05, 0.05], "clearance": {"shape": "box", "size": [0.1, 0.1, 0.1]},
+    }
+
+
+def wrap_source(gltf, pack, asset, asset_id):
+    old_roots = list(gltf["scenes"][gltf.get("scene", 0)].get("nodes", []))
+    pre = asset["preTransform"]
+    canonical = pack["canonicalScale"]
+    source_translation = list(pre["translation"])
+    source_translation[1] += asset["groundOffset"]
+    source_scale = [value * canonical for value in pre["scale"]]
+    source_idx = len(gltf["nodes"])
+    gltf["nodes"].append({
+        "name": "genesis-source-transform", "children": old_roots,
+        "translation": source_translation, "rotation": list(pre["rotation"]), "scale": source_scale,
+    })
+    donor_idx = len(gltf["nodes"])
+    gltf["nodes"].append({"name": asset_id.split("/", 1)[1], "children": [source_idx]})
+    gltf["scenes"][gltf.get("scene", 0)]["nodes"] = [donor_idx]
+    return donor_idx, mat4_from_trs(source_translation, pre["rotation"], source_scale)
+
+
+def stamp_mesh_materials(gltf, original_paths, asset):
+    overrides = {part["nodePath"]: (part_id, part) for part_id, part in asset["semanticParts"].items()}
+    for path, index in original_paths.items():
+        node = gltf["nodes"][index]
+        if node.get("mesh") is None:
+            continue
+        family, part_id = asset["rootMaterialFamily"], None
+        if path in overrides:
+            part_id, part = overrides[path]
+            family = part["materialFamily"]
+        data = {"materialFamily": family}
+        if part_id:
+            data["semanticPart"] = part_id
+        merge_extras(node, data)
+
+
+def derive_bounds(gltf, asset):
+    low, high = scene_aabb(gltf)
+    if asset["footprintOverride"] is None:
+        footprint = {
+            "center": [(low[0] + high[0]) / 2.0, (low[2] + high[2]) / 2.0],
+            "halfExtents": [(high[0] - low[0]) / 2.0, (high[2] - low[2]) / 2.0],
+            "yawRadians": 0,
+        }
+        source = "derived"
+    else:
+        footprint, source = copy.deepcopy(asset["footprintOverride"]), "override"
+    return {
+        "aabbMin": low, "aabbMax": high, "groundY": low[1],
+        "footprint": footprint, "footprintSource": source,
+    }
+
+
+def derive_sockets(asset, bounds):
+    sockets = copy.deepcopy(asset["sockets"])
+    ids = {socket["id"] for socket in sockets}
+    center = bounds["footprint"]["center"]
+    if "floor-mount" not in ids:
+        sockets.append(default_socket("floor-mount", "floor-mount",
+                                      [center[0], bounds["groundY"], center[1]], "floor"))
+    if asset["category"] in {"floor", "stairs"} and "top-surface" not in ids:
+        sockets.append(default_socket("top-surface", "top-surface",
+                                      [center[0], bounds["aabbMax"][1], center[1]], "placeable"))
+    return sorted(sockets, key=lambda item: item["id"])
+
+
+def validate_output_contract(errors, asset_id, asset, pack, gltf, bounds, sockets, source_matrix):
+    label = f"assets.{asset_id}"
+    if asset["admissionClass"] == "DIRECT_MODULATED":
+        target = pack["structuralGrid"]["targetWorldUnits"]
+        for axis, dimension in (("x", bounds["aabbMax"][0] - bounds["aabbMin"][0]),
+                                ("z", bounds["aabbMax"][2] - bounds["aabbMin"][2])):
+            nearest = round(dimension / target) * target
+            if nearest <= 0 or abs(dimension - nearest) / nearest > 0.02:
+                errors.append(f"{label}: DIRECT_MODULATED {axis} footprint {dimension} is not a module multiple within 2%")
+    if any(socket["type"].startswith("butt-join-") for socket in sockets):
+        errors.append(f"{label}: v2 structural output contains butt-join socket")
+    for socket in sockets:
+        if not all(is_finite_number(value) for value in socket["position"] + socket["rotation"]):
+            errors.append(f"{label}.sockets.{socket['id']}: frame contains nonfinite value")
+        matrix = mat4_from_trs(socket["position"], socket["rotation"], [1, 1, 1])
+        axes = [[matrix[row][col] for row in range(3)] for col in range(3)]
+        for index, axis in enumerate(axes):
+            if abs(sum(v * v for v in axis) - 1.0) > 1e-5:
+                errors.append(f"{label}.sockets.{socket['id']}: frame axis {index} is not unit length")
+        if any(abs(sum(axes[a][i] * axes[b][i] for i in range(3))) > 1e-5
+               for a in range(3) for b in range(a + 1, 3)):
+            errors.append(f"{label}.sockets.{socket['id']}: frame axes are not orthogonal")
+        if socket["type"] == "floor-mount" and abs(socket["position"][1] - bounds["groundY"]) > 0.01:
+            errors.append(f"{label}.sockets.{socket['id']}: floor mount is off derived ground")
+    flat_matrix = mat_column_major(source_matrix)
+    if not all(is_finite_number(v) for v in flat_matrix):
+        errors.append(f"{label}: sourceToGenesis matrix is nonfinite")
+
+
+def normalize_asset(asset_id, asset, pack, source_tuple, calibration_hash):
+    source_gltf, binchunk, raw_bounds = source_tuple
+    gltf = copy.deepcopy(source_gltf)
+    original_paths = node_paths(gltf)
+    strip_materials(gltf)
+    stamp_mesh_materials(gltf, original_paths, asset)
+    donor_idx, source_matrix = wrap_source(gltf, pack, asset, asset_id)
+    bounds = derive_bounds(gltf, asset)
+    sockets = derive_sockets(asset, bounds)
+    recipe_payload = {
+        "version": NORMALIZER_RECIPE_VERSION, "calibrationHash": calibration_hash,
+        "assetId": asset_id, "pack": pack, "asset": asset,
+    }
+    recipe_hash = sha256_bytes(canonical_json_bytes(recipe_payload))
+    metadata = {
+        "schema": "genesis.donor.v2", "assetId": asset_id,
+        "sourceSha256": asset["sourceSha256"], "recipeHash": recipe_hash,
+        "admissionClass": asset["admissionClass"], "category": asset["category"],
+        "normalizedFrame": {"up": "+Y", "forward": "+Z", "sourceToGenesis": mat_column_major(source_matrix)},
+        "structuralGrid": copy.deepcopy(pack["structuralGrid"]), "bounds": bounds,
+        "semanticParts": copy.deepcopy(asset["semanticParts"]), "sockets": sockets,
+        "qaStatus": asset["qaStatus"],
+    }
+    merge_extras(gltf["nodes"][donor_idx], metadata)
+    gltf.setdefault("asset", {})["extras"] = {
+        "genesisDonorNormalizer": NORMALIZER_RECIPE_VERSION, "recipeHash": recipe_hash,
+        "schema": "genesis.donor.v2",
+    }
+    low, high = raw_bounds
+    raw_dims = [high[i] - low[i] for i in range(3)]
+    scaled_dims = [bounds["aabbMax"][i] - bounds["aabbMin"][i] for i in range(3)]
+    entry = {
+        "schema": "genesis.donor.v2", "file": asset_id.split("/", 1)[1] + ".glb",
+        "assetId": asset_id, "recipeHash": recipe_hash, "sourceSha256": asset["sourceSha256"],
+        "admissionClass": asset["admissionClass"], "category": asset["category"],
+        "semanticParts": copy.deepcopy(asset["semanticParts"]),
+        "materialFamilies": sorted({asset["rootMaterialFamily"]} |
+                                   {part["materialFamily"] for part in asset["semanticParts"].values()}),
+        "sockets": sockets, "canonicalScale": pack["canonicalScale"],
+        "structuralGrid": copy.deepcopy(pack["structuralGrid"]), "bounds": bounds,
+        "normalizedFrame": metadata["normalizedFrame"],
+        "companionLeaf": asset.get("companionLeaf"), "qaStatus": asset["qaStatus"],
+    }
+    report = dict(entry)
+    report.update({"pack": asset_id.split("/", 1)[0], "slug": asset_id.split("/", 1)[1],
+                   "rawDims": raw_dims, "scaledDims": scaled_dims,
+                   "socketCounts": socket_type_counts(sockets),
+                   "outputFile": f"assets/models-normalized/{asset_id}.glb"})
+    return encode_glb(gltf, binchunk), entry, report, (gltf, bounds, sockets, source_matrix)
 
 
 def socket_type_counts(sockets):
     counts = {}
-    for s in sockets:
-        counts[s["type"]] = counts.get(s["type"], 0) + 1
+    for socket in sockets:
+        counts[socket["type"]] = counts.get(socket["type"], 0) + 1
     return counts
 
 
-def main():
-    check_mode = "--check" in sys.argv
-    os.makedirs(OUT_ROOT, exist_ok=True)
-    os.makedirs(os.path.dirname(PROVENANCE_PATH), exist_ok=True)
-
-    all_pieces = []
-    pack_indexes = {}
-
-    r1, idx1 = normalize_pack("kenney-modular-dungeon-kit", MODULAR_DUNGEON_PIECES)
-    all_pieces.extend(r1)
-    pack_indexes["kenney-modular-dungeon-kit"] = idx1
-
-    r2, idx2 = normalize_pack("kenney-mini-dungeon", MINI_DUNGEON_PIECES)
-    all_pieces.extend(r2)
-    pack_indexes["kenney-mini-dungeon"] = idx2
-
-    excluded = [{"pack": "kenney-mini-dungeon", "slug": s, "reason": r}
-                for s, r in sorted(EXCLUDED_MINI_DUNGEON.items())]
-
-    global_socket_counts = {}
-    for p in all_pieces:
-        for t, c in p["socketCounts"].items():
-            global_socket_counts[t] = global_socket_counts.get(t, 0) + c
-
-    report = {
-        "unit": "KS-1",
+def build_all(calibration, sources):
+    calibration_hash = sha256_bytes(canonical_json_bytes(calibration))
+    outputs, indexes, reports, contract_errors = {}, {}, [], []
+    for asset_id, asset in sorted(calibration["assets"].items()):
+        pack_id, slug = asset_id.split("/", 1)
+        glb_bytes, entry, report, contract = normalize_asset(
+            asset_id, asset, calibration["packs"][pack_id], sources[asset_id], calibration_hash)
+        validate_output_contract(contract_errors, asset_id, asset, calibration["packs"][pack_id], *contract)
+        outputs[(pack_id, slug + ".glb")] = glb_bytes
+        indexes.setdefault(pack_id, {})[slug] = entry
+        reports.append(report)
+    index_docs = {}
+    for pack_id, entries in sorted(indexes.items()):
+        index_docs[pack_id] = {
+            "schema": "genesis.donor-index.v2", "pack": pack_id,
+            "algorithmVersion": calibration["algorithmVersion"],
+            "normalizerVersion": NORMALIZER_RECIPE_VERSION,
+            "calibrationHash": calibration_hash, "assets": entries,
+        }
+    global_counts = {}
+    for report in reports:
+        for socket_type, count in report["socketCounts"].items():
+            global_counts[socket_type] = global_counts.get(socket_type, 0) + count
+    provenance = {
+        "schema": "genesis.donor-provenance.v2", "unit": "KGR-3",
         "normalizerVersion": NORMALIZER_RECIPE_VERSION,
-        "packs": {
-            "kenney-modular-dungeon-kit": {
-                "canonicalScale": PACK_CANONICAL_SCALE["kenney-modular-dungeon-kit"],
-                "measuredModuleUnits": PACK_MEASURED_MODULE_UNITS["kenney-modular-dungeon-kit"],
-                "moduleTargetWorldUnits": MODULE_TARGET_WORLD_UNITS,
-                "piecesAdmitted": len(r1),
-            },
-            "kenney-mini-dungeon": {
-                "canonicalScale": PACK_CANONICAL_SCALE["kenney-mini-dungeon"],
-                "measuredModuleUnits": PACK_MEASURED_MODULE_UNITS["kenney-mini-dungeon"],
-                "moduleTargetWorldUnits": MODULE_TARGET_WORLD_UNITS,
-                "piecesAdmitted": len(r2),
-            },
-        },
-        "totalPiecesAdmitted": len(all_pieces),
-        "globalSocketCounts": global_socket_counts,
-        "materialFamiliesObserved": sorted(set(f for p in all_pieces for f in p["materialFamilies"])),
-        "materialFamiliesUnusedThisWave": sorted(
-            set([FAMILY_STONE, FAMILY_WOOD, FAMILY_IRON, FAMILY_ROOF, FAMILY_GLASS, FAMILY_CLOTH])
-            - set(f for p in all_pieces for f in p["materialFamilies"])
-        ),
-        "materialRecipe": MATERIAL_RECIPE,
-        "pieces": all_pieces,
-        "excluded": excluded,
+        "algorithmVersion": calibration["algorithmVersion"], "calibrationHash": calibration_hash,
+        "packs": {pack_id: {**copy.deepcopy(pack),
+                             "piecesAdmitted": sum(1 for report in reports if report["pack"] == pack_id)}
+                  for pack_id, pack in sorted(calibration["packs"].items())},
+        "totalPiecesAdmitted": len(reports), "globalSocketCounts": global_counts,
+        "materialFamiliesObserved": sorted({family for report in reports for family in report["materialFamilies"]}),
+        "materialRecipe": MATERIAL_RECIPE, "pieces": reports,
         "deviationsAndNotes": [
-            "Neither pilot pack ships a dedicated freestanding 'arch' piece — "
-            "kenney-modular-dungeon-kit's gate.glb (a leafless open archway) is admitted under "
-            "category 'arch' as the closest analog; noted here rather than silently substituted.",
-            "No 'roof'/'glass'/'cloth' material family appears anywhere in this pilot's admitted "
-            "structural set (see materialFamiliesUnusedThisWave) — gate-door-window.glb's "
-            "'window' is a cut opening in the stone frame, not a separate glass-material node at "
-            "the node-name granularity this classifier reads; no piece in this pilot mounts a "
-            "distinct glass pane.",
-            "No 'wall-mount' socket appears anywhere in this pilot — every admitted piece is "
-            "floor-based (walls/floors/doorframes sit ON the grid, nothing mounts flush to a "
-            "vertical wall face). Reserved for a future decor donor wave (sconces, banners).",
-            "kenney-modular-dungeon-kit gate-metal-bars.glb's leaf offset (-0.05 authored units) "
-            "is unusually small for a swinging door — flagged as possibly a sliding-gate "
-            "mechanism rather than a hinge-swing in the source kit; the hinge socket is stamped "
-            "per the same rule as every other leaf regardless, for KS-2 to judge visually.",
-            "canonicalScale derivation for kenney-mini-dungeon used a same-publisher-module-"
-            "parity assumption (documented above, PACK_CANONICAL_SCALE comment) rather than a "
-            "direct real-world reference, because the pack's own character-model height produced "
-            "an inconsistent ratio (see the long comment above PACK_CANONICAL_SCALE) — this is "
-            "the single lowest-confidence measurement in this report and is flagged for Adam's "
-            "red-pen explicitly, not smoothed over.",
+            "Donor schema v1 point/universal butt-join sockets are superseded by v2 attachment frames and cell-orientation structural placement.",
+            "All v2 attachment positions inherited from the KS-1 seed remain needs-review until KGR-4C visual approval.",
         ],
     }
-    with open(PROVENANCE_PATH, "w") as f:
-        json.dump(report, f, indent=2, sort_keys=True)
-        f.write("\n")
+    return contract_errors, outputs, index_docs, provenance
 
-    print(f"[normalize-donors] {len(all_pieces)} pieces normalized "
-          f"({len(r1)} modular-dungeon-kit + {len(r2)} mini-dungeon), "
-          f"{len(excluded)} excluded (reserved).")
-    print(f"[normalize-donors] provenance -> {os.path.relpath(PROVENANCE_PATH, REPO_ROOT)}")
-    print(f"[normalize-donors] material families observed: {report['materialFamiliesObserved']}")
-    if check_mode:
-        print("[normalize-donors] --check: re-run complete; diff the two runs' output trees "
-              "with `git status`/`git diff --stat` to confirm byte-identical determinism.")
+
+def atomic_write(path, data):
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    fd, temp_path = tempfile.mkstemp(prefix=".kgr3-", dir=os.path.dirname(path))
+    try:
+        with os.fdopen(fd, "wb") as handle:
+            handle.write(data)
+        os.replace(temp_path, path)
+    except Exception:
+        try:
+            os.unlink(temp_path)
+        except OSError:
+            pass
+        raise
+
+
+def write_outputs(out_root, provenance_path, outputs, indexes, provenance):
+    os.makedirs(out_root, exist_ok=True)
+    stage = tempfile.mkdtemp(prefix=".kgr3-stage-", dir=os.path.dirname(out_root))
+    backups = []
+    try:
+        for (pack_id, filename), data in outputs.items():
+            pack_dir = os.path.join(stage, pack_id)
+            os.makedirs(pack_dir, exist_ok=True)
+            with open(os.path.join(pack_dir, filename), "wb") as handle:
+                handle.write(data)
+        for pack_id, index in indexes.items():
+            with open(os.path.join(stage, pack_id, "index.json"), "wb") as handle:
+                handle.write(canonical_json_bytes(index, indent=2))
+        for pack_id in sorted(indexes):
+            destination = os.path.join(out_root, pack_id)
+            incoming = os.path.join(stage, pack_id)
+            backup = destination + ".kgr3-backup"
+            if os.path.exists(backup):
+                shutil.rmtree(backup)
+            if os.path.exists(destination):
+                os.replace(destination, backup)
+                backups.append((destination, backup))
+            os.replace(incoming, destination)
+        atomic_write(provenance_path, canonical_json_bytes(provenance, indent=2))
+        for _, backup in backups:
+            shutil.rmtree(backup)
+    except Exception:
+        for destination, backup in reversed(backups):
+            if os.path.exists(destination):
+                shutil.rmtree(destination)
+            if os.path.exists(backup):
+                os.replace(backup, destination)
+        raise
+    finally:
+        shutil.rmtree(stage, ignore_errors=True)
+
+
+def parse_args(argv):
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--calibration", default=DEFAULT_CALIBRATION)
+    parser.add_argument("--source-root", default=DEFAULT_SOURCE_ROOT)
+    parser.add_argument("--output-root", default=DEFAULT_OUT_ROOT)
+    parser.add_argument("--provenance", default=DEFAULT_PROVENANCE)
+    parser.add_argument("--validate-only", action="store_true")
+    parser.add_argument("--check", action="store_true")
+    return parser.parse_args(argv)
+
+
+def main(argv=None):
+    args = parse_args(argv or sys.argv[1:])
+    try:
+        calibration = load_calibration(args.calibration)
+    except Exception as exc:
+        print(f"[normalize-donors] calibration read failed: {exc}", file=sys.stderr)
+        return 1
+    errors, sources = validate_calibration(calibration, args.source_root)
+    if not errors:
+        try:
+            contract_errors, outputs, indexes, provenance = build_all(calibration, sources)
+            errors.extend(contract_errors)
+        except Exception as exc:
+            errors.append(f"normalization planning failed: {exc}")
+    if errors:
+        print(f"[normalize-donors] {len(errors)} validation error(s); no outputs replaced:", file=sys.stderr)
+        for error in errors:
+            print(f"  - {error}", file=sys.stderr)
+        return 1
+    if not args.validate_only:
+        write_outputs(args.output_root, args.provenance, outputs, indexes, provenance)
+    print(f"[normalize-donors] {len(outputs)} calibrated assets validated"
+          f"{' (no writes)' if args.validate_only else ' and normalized'}; schema genesis.donor.v2")
+    if args.check:
+        print("[normalize-donors] --check complete; deterministic artifacts regenerated")
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

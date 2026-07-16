@@ -56,9 +56,11 @@
    inverted-hull outline (a backface-culled, slightly-expanded duplicate shell in a solid color) —
    "full" (gloom) gets a normal-width hull in near-black; "selective" (fantasy) gets a thinner
    hull in dark-umber (the closest honest 3D analog of "outer silhouette only, not every internal
-   edge" this technique affords); "none" (chrome) adds no hull at all. This is a documented
-   APPROXIMATION of a law written for a different medium, not a literal implementation — flagged
-   here and in dev/model-foundry/KS1-PROVENANCE.json rather than presented as a solved 1:1 port.
+   edge" this technique affords); "none" (chrome) adds no hull at all. KGR-2 RETIREMENT: gameplay
+   captures proved that geometry approach unsafe (coplanar stipple/moire and polygon intersection),
+   so the inverted-hull geometry implementation is retired. The per-realm table remains below as
+   dormant policy metadata for a future screen-space/shader outline unit; loading a donor never adds
+   duplicate hull geometry.
 
    SOCKET SCHEMA (docs/KENNEY-SOCKET-WAVE.md KS-1, Adam's ruling "adopt their conventions, don't
    invent a schema"): floor-mount, wall-mount, top-surface, hinge, butt-join-{n|s|e|w}. Stamped by
@@ -257,8 +259,10 @@ function donorMaterialForFamily(family, seedKey, profile) {
   });
 }
 
-// ─── outline (see this file's own header for the quoted OUTLINE LAW + the honest 3D-adaptation
-// note). Returns null for "none" (chrome) so callers can skip adding a child entirely. ───────────
+// ─── outline policy metadata ───────────────────────────────────────────────────────────────────
+// KGR-2: the inverted-hull geometry implementation is retired. Keep this realm table + lookup as
+// dormant art policy only; a future shader/screen-space unit may consume it without reintroducing
+// child geometry at the donor-loader boundary.
 const OUTLINE_STYLE_BY_REALM = Object.freeze({
   fantasy: { mode: "selective", color: 0x3a2a1a, widthWorld: 0.015 }, // dark-umber, thin (outer-silhouette approximation)
   gloom: { mode: "full", color: 0x0a0a0a, widthWorld: 0.035 },        // near-black, full width (the VHS-horror cel look)
@@ -267,46 +271,12 @@ const OUTLINE_STYLE_BY_REALM = Object.freeze({
 export function donorOutlineStyleFor(realmId) {
   return OUTLINE_STYLE_BY_REALM[realmId] || null; // unset realms: no outline (drafted-per-realm, per BEAUTY-WAVE.md's own "others drafted... when their expansion ships")
 }
-function buildDonorOutlineHull(mesh, style) {
-  if (!style || style.mode === "none" || !style.widthWorld) return null;
-  const hullMat = new THREE.MeshBasicMaterial({ color: style.color, side: THREE.BackSide });
-  const hull = new THREE.Mesh(mesh.geometry, hullMat);
-  hull.scale.setScalar(1 + style.widthWorld);
-  hull.userData.donorOutlineHull = true;
-  return hull;
-}
-// KS-3b item 1 (docs/KENNEY-SOCKET-WAVE.md's own KS-3 gate flag) — THE FLOOR CHECKER, root cause.
-// buildDonorOutlineHull's technique (a uniformly-scaled BackSide clone of the SAME geometry) only
-// produces a real silhouette line when the source mesh has actual volume — the scaled duplicate's
-// surface has to land measurably OUTSIDE the base mesh along its own normal for the BackSide trick to
-// read as a thin rim rather than a second copy of the same surface. template-floor.glb (and every
-// other admitted "floor" category piece) is a FLAT, double-sided quad: two coincident faces at y=0,
-// a +Y-normal top face (what the camera sees from above) and a -Y-normal bottom face baked into the
-// SAME mesh so the underside isn't a hole when viewed from below. Scaling that uniformly about its
-// own local origin leaves every vertex still at y=0 (0 * scale = 0) — the hull is NOT pushed outward
-// in any direction, it lands exactly on top of the base mesh. Two coincident triangle layers at the
-// identical world depth is textbook Z-FIGHTING: viewed from above, the hull's BackSide material
-// renders the mesh's own -Y (bottom) face — invisible from above on the FrontSide base mesh, but now
-// visible because BackSide flips which winding is culled — at the SAME depth as the base mesh's +Y
-// (top) face. The GPU's depth test then flips per pixel on floating-point rounding, and because every
-// kit floor block shares the identical geometry/material/camera-relative depth, that dither pattern
-// repeats IDENTICALLY block-to-block — summing into the harsh, perfectly regular checkerboard the
-// KS-3 beauty card showed (dev/battle-gate/ks3-kit-shells/beauty-dressed.png). Never a texture or
-// grading defect (rotation/gradeColorLocal band/grain-phase were the KS-3 gate's own hypotheses —
-// all ruled out empirically: every kit floor block clone shares one identical graded material/UUID,
-// confirmed live via window.Theater._interiorBuildKitShellFloorsForTest). FIX: floor-category donor
-// pieces skip the outline-hull step entirely, below. A ground plane butt-joined edge-to-edge with its
-// neighbors has no exposed silhouette edge for the OUTLINE LAW's "outer silhouette only" language to
-// apply to in the first place — the hull was never buying anything visually on a floor tile, only
-// breaking it. (Volumetric pieces — walls, doors, pillars — keep the hull unchanged; their geometry
-// has real thickness, so the scaled duplicate genuinely lands outside the base surface.)
-const DONOR_OUTLINE_HULL_EXEMPT_CATEGORIES = Object.freeze({ floor: true });
 
 // ─── loadDonorPiece — the public loader ─────────────────────────────────────────────────────────
 // loadDonorPiece(pack, slug, opts) -> Promise<THREE.Group>
 //   opts.realmProfile  — {sat,tintAmt,tint,contrast} passed to donorGradeColor per material (null
 //                         = byte-identical unpainted passthrough, same convention as gradeColorLocal)
-//   opts.realmId        — drives donorOutlineStyleFor (null/unknown realm = no outline hull)
+//   opts.realmId        — reserved for future non-geometry outline policy; retained API compatibility
 //   opts.seedKey         — deterministic grain/albedo-band seed (defaults to "pack/slug")
 // Returns a FRESH clone every call (SkeletonUtils-free clone via Object3D.clone(true), safe here
 // since donor pieces carry no skinning) so two placed instances of the same donor never share a
@@ -328,7 +298,6 @@ export async function loadDonorPiece(pack, slug, opts) {
 
   const seedKey = opts.seedKey || cacheKey;
   const realmProfile = opts.realmProfile || null;
-  const outlineStyle = opts.realmId ? donorOutlineStyleFor(opts.realmId) : null;
   const sockets = [];
   const materialFamiliesApplied = [];
 
@@ -342,12 +311,6 @@ export async function loadDonorPiece(pack, slug, opts) {
         const family = donorData.materialFamily;
         obj.material = donorMaterialForFamily(family, seedKey + ":" + obj.name, realmProfile);
         materialFamiliesApplied.push(family);
-        // KS-3b item 1 — see DONOR_OUTLINE_HULL_EXEMPT_CATEGORIES's own header: flat/volume-less
-        // categories (floor) skip the hull, it can only Z-fight a coincident double-sided quad.
-        if (outlineStyle && !DONOR_OUTLINE_HULL_EXEMPT_CATEGORIES[entry.category]) {
-          const hull = buildDonorOutlineHull(obj, outlineStyle);
-          if (hull) obj.add(hull);
-        }
       }
     }
   });

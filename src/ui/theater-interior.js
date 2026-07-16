@@ -515,8 +515,9 @@ var ITR_ACTIVE_ROOM_ONLY = true;
 var KIT_DOORS_ENABLED = true;
 
 // ─── KS-3 (docs/KENNEY-SOCKET-WAVE.md): KIT_SHELL_ENABLED — "room shells from the kit" ────────────────
-// Default ON (Adam's ruling — "build around the kit… archive the old stuff, anything we have to retire
-// for functionality of procedural arrangement"): rolled room shells assemble from kit wall/floor
+// KGR-2 render-safety retreat: default OFF. The old structural experiment remains available only for
+// explicit research/evidence toggles; production rolled room shells use the continuous compiler.
+// When manually enabled, room shells assemble from kit wall/floor
 // modules wherever the geometry can honestly support it — straight WALL-cell runs of 2+ cells tile with
 // kenney-modular-dungeon-kit/template-wall modules (2-world-unit span, butt-joined end to end); FLOOR
 // cells tile in 2x2 kenney-modular-dungeon-kit/template-floor blocks. Corners, T/cross junctions,
@@ -530,7 +531,7 @@ var KIT_DOORS_ENABLED = true;
 // false`) for an A/B capture — OFF means itrKitShellWallRuns/itrKitShellFloorBlocks return empty
 // claim-sets, so EVERY cell falls through to the untouched prism per-cell push below: byte-identical to
 // pre-KS-3 output (the flag is the retreat).
-var KIT_SHELL_ENABLED = true;
+var KIT_SHELL_ENABLED = false;
 
 // itrKitWallRunAxis(x,y,plan) -> 'x' | 'z' | null. A WALL cell qualifies for kit-module tiling only when
 // exactly ONE perpendicular pair of its 4-neighbors is "open" (FLOOR/DOOR/WATER — a room/passage

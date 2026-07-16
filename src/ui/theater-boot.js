@@ -11038,27 +11038,16 @@ function setInteriorBoard(data){
   S.interiorLastDoorGhostList = doorGhostList; // S-1/A4 test seam — the separately-drawn doorframe ghosts
   S.interiorLastPortalList = data.portals || [];
 
-  // KS-3 (docs/KENNEY-SOCKET-WAVE.md) — the C4 room-shell compiler builds ONE continuous polygon/wall-
-  // stem mesh from `floorList`'s own cell set, entirely INDEPENDENT of the discrete `inst.wall` cell
-  // array (its wall stem is offset from the floor polygon's own boundary contour, never built from
-  // individual wall-cell boxes) — so a kit wall module and the compiled shell's own continuous stem
-  // would occupy the SAME physical space at every kit-claimed run (found live: a visible double-wall
-  // moire in the first real capture). The compiled shell and the per-cell floorMesh/wallMesh pair below
-  // are ALREADY a mutually-exclusive either/or (itrFloorWallMeshes, a few hundred lines down) gated on
-  // ITR_ROOM_SHELL alone; useCompiledRoomShell extends that SAME gate so a board this build's own
-  // kitShellWalls/kitShellFloors actually claimed something for renders via the per-cell prism path
-  // INSTEAD (floorMesh/wallMesh, which floorList/wallList already derive from the kit-skipped
-  // inst.floor/inst.wall — the same backing my pure-data harness proved gap/overlap-free), never both
-  // systems at once. A board with nothing kit-claimed (KIT_SHELL_ENABLED off, or a shape/scale this
-  // unit's own eligibility tests exclude) is COMPLETELY UNAFFECTED — useCompiledRoomShell reduces to
-  // the bare ITR_ROOM_SHELL flag, byte-identical to pre-KS-3.
-  const useCompiledRoomShell = ITR_ROOM_SHELL && !((data.kitShellWalls && data.kitShellWalls.length) || (data.kitShellFloors && data.kitShellFloors.length));
+  // KGR-2 render-safety retreat: the continuous compiler owns the production room shell whenever its
+  // own flag is enabled. Retired/research kit arrays are never allowed to suppress it. Kenney doors
+  // remain an independent aperture path and every non-shell fallback below remains unchanged.
+  const useCompiledRoomShell = ITR_ROOM_SHELL;
 
   // ═══ ROOM-SHELL COMPILER (docs/ROOM-SHELL-COMPILER.md; docs/GRAPHICS-NORTH-STAR.md Stage C unit
   // C4) — compiles the active room's own floor cells into a CONTINUOUS shell (one triangulated floor
   // polygon per elevation tier + wall/riser quad-strips from boundary segments) instead of the per-
-  // cell floorMesh/wallMesh InstancedMesh pair above, when useCompiledRoomShell is true (ITR_ROOM_SHELL
-  // on AND — KS-3 — this board has nothing kit-claimed). Built straight off `floorList`/`inst.doorframe`
+  // cell floorMesh/wallMesh InstancedMesh pair above, when useCompiledRoomShell is true. Built straight
+  // off `floorList`/`inst.doorframe`
   // — the SAME data interiorBuildBoard already produced; this unit never re-reads plan.cells, per the
   // spec's own "keep interiorBuildBoard as the data producer, the compiler is render-only" instruction.
   // Pillars/doorframe/skirt/portals/dressing/lights/standees below are UNTOUCHED (they still read

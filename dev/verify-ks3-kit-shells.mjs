@@ -172,6 +172,39 @@ group("A1 — real admitted donor socket data sanity (dev/model-foundry/KS1-PROV
   ok(Math.abs(corner.scaledDims[0] - 0.5) < 0.01, `template-wall-corner's own measured scaledDims[0] = ${corner.scaledDims[0].toFixed(4)} world units — a quarter-cell footprint, the documented reason corners stay on the prism path this unit (mixed shells are legal per the wave's own spec text)`);
 }
 
+group("A2 — KGR-2 default retreat: zero shell claims, door claims unchanged, compiler gate cannot be suppressed by kit arrays");
+{
+  // Fresh sandbox: no harness assignment is allowed to mask the production default.
+  const DEFAULT_M = loadModules(REAL_SOURCE);
+  const fx = rectFixture();
+  DEFAULT_M.sandbox.window.KIT_DOORS_ENABLED = true;
+  const defaultBoard = DEFAULT_M.interiorBuildBoard(fx.plan, { realmId: "fantasy", env: "dungeon" });
+  ok(defaultBoard.kitShellWalls.length === 0 && defaultBoard.kitShellFloors.length === 0,
+    `KGR-2 default emits zero kit-shell claims (walls=${defaultBoard.kitShellWalls.length}, floors=${defaultBoard.kitShellFloors.length})`);
+  ok(defaultBoard.meta.kitShellWallCount === 0 && defaultBoard.meta.kitShellFloorCount === 0,
+    "KGR-2 default meta reports zero kit-shell wall/floor claims");
+  ok(defaultBoard.kitDoors.length > 0, `KGR-2 default preserves Kenney door claims (got ${defaultBoard.kitDoors.length})`);
+
+  // Research-only opt-in still executes the old placement experiment. Door output must be wholly
+  // independent of that shell flag: same fixture, same exact kitDoors bytes.
+  DEFAULT_M.sandbox.window.KIT_SHELL_ENABLED = true;
+  const researchBoard = DEFAULT_M.interiorBuildBoard(fx.plan, { realmId: "fantasy", env: "dungeon" });
+  ok(researchBoard.kitShellWalls.length > 0 && researchBoard.kitShellFloors.length > 0,
+    "KGR-2 research opt-in retains the old kit-shell placement path behind the flag");
+  ok(JSON.stringify(defaultBoard.kitDoors) === JSON.stringify(researchBoard.kitDoors),
+    "KGR-2 door claims are byte-identical with retired kit shells default-off vs research-on");
+
+  const bootSrc = read("src/ui/theater-boot.js");
+  ok(/const\s+useCompiledRoomShell\s*=\s*ITR_ROOM_SHELL\s*;/.test(bootSrc),
+    "KGR-2 renderer defines useCompiledRoomShell = ITR_ROOM_SHELL exactly");
+  ok(!/ITR_ROOM_SHELL\s*&&\s*!\(\(data\.kitShellWalls/.test(bootSrc),
+    "KGR-2 ⊗ old conditional cannot let injected kit-shell arrays suppress the compiler");
+}
+
+// B0-G2 are the retained research/evidence gates for the old shell experiment. Production now
+// defaults it off, so opt this harness's long-lived sandbox in explicitly before those groups.
+M.sandbox.window.KIT_SHELL_ENABLED = true;
+
 // ============================================================================
 group("B0 — rect fixture: wall-run classification + join-seam integrity (adjacent module centers differ by EXACTLY one module span, numerically)");
 {

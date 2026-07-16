@@ -202,6 +202,20 @@ console.log("\n=== calibration-driven iteration, overrides, and determinism ==="
     ...clone(socket), id: socket.type==="floor-mount" ? "base-center" : "usable-deck",
   }));
   scratch.assets["kenney-mini-dungeon/scratch-custom-sockets"]=socketAsset;
+  const wallSocket={
+    ...clone(indexes["kenney-mini-dungeon"].assets.wall.sockets.find((socket)=>socket.type==="floor-mount")),
+    id:"wall-anchor", type:"wall-mount", mateFamily:"wall",
+  };
+  const wallMountedFile=join(sourceRoot,"kenney-mini-dungeon/scratch-wall-mounted.glb");
+  symlinkSync(source,wallMountedFile);
+  scratch.assets["kenney-mini-dungeon/scratch-wall-mounted"]={
+    ...clone(scratch.assets["kenney-mini-dungeon/wall"]), sockets:[wallSocket],
+  };
+  const quarantinedFile=join(sourceRoot,"kenney-mini-dungeon/scratch-quarantined.glb");
+  symlinkSync(source,quarantinedFile);
+  scratch.assets["kenney-mini-dungeon/scratch-quarantined"]={
+    ...clone(scratch.assets["kenney-mini-dungeon/wall"]), qaStatus:"quarantined", sockets:[],
+  };
   const run=makeTempRun(scratch,null,sourceRoot), idx=run.result.status===0?JSON.parse(readFileSync(join(run.out,"kenney-mini-dungeon/index.json"),"utf8")):null;
   check("adding one valid scratch calibration record normalizes without a Python slug branch",run.result.status===0&&existsSync(join(run.out,"kenney-mini-dungeon/scratch-calibrated.glb")),run.result.stderr);
   check("explicit footprint override wins and is reported",idx?.assets?.["scratch-calibrated"]?.bounds?.footprintSource==="override"&&idx.assets["scratch-calibrated"].bounds.footprint.center[0]===3);
@@ -213,6 +227,14 @@ console.log("\n=== calibration-driven iteration, overrides, and determinism ==="
     ["base-center","usable-deck"].every((id)=>customSockets.some((socket)=>socket.id===id)) &&
     !customSockets.some((socket)=>["floor-mount","top-surface"].includes(socket.id)),
     JSON.stringify(customSockets));
+  const wallSockets=idx?.assets?.["scratch-wall-mounted"]?.sockets||[];
+  check("explicit wall-mount-only fixture stays wall-only without a speculative floor mount",
+    wallSockets.length===1 && wallSockets[0].id==="wall-anchor" && wallSockets[0].type==="wall-mount",
+    JSON.stringify(wallSockets));
+  const quarantinedSockets=idx?.assets?.["scratch-quarantined"]?.sockets;
+  check("empty quarantined fixture derives zero default sockets",
+    Array.isArray(quarantinedSockets) && quarantinedSockets.length===0,
+    JSON.stringify(quarantinedSockets));
   clean(run); rmSync(temp,{recursive:true,force:true});
 }
 

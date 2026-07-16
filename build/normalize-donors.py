@@ -513,9 +513,12 @@ def derive_bounds(gltf, asset):
 
 def derive_sockets(asset, bounds):
     sockets = copy.deepcopy(asset["sockets"])
+    if asset["qaStatus"] == "quarantined":
+        return sorted(sockets, key=lambda item: item["id"])
     types = {socket["type"] for socket in sockets}
+    placement_types = types & {"floor-mount", "wall-mount"}
     center = bounds["footprint"]["center"]
-    if "floor-mount" not in types:
+    if not placement_types:
         sockets.append(default_socket("floor-mount", "floor-mount",
                                       [center[0], bounds["groundY"], center[1]], "floor"))
     if asset["category"] in {"floor", "stairs"} and "top-surface" not in types:

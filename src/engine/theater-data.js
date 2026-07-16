@@ -2779,6 +2779,150 @@ function theaterUnitsFrom(combat){
 }
 
 /* ============================================================================
+   VQ2-RESPEC.md §4 unit F1 (ledger #10 Sol P-F, ledger row #6 "the stacked invisible rat") —
+   COMBAT-IN-ROOM UNIT PLACEMENT.
+
+   theaterUnitsFrom's own x/z (theaterZoneOrigin + theaterWithinZoneOffset, just above) is the FLAT
+   tile-column convention the generic combat board (theaterBoardFrom/window.Theater.setBoard) has
+   always used — a small band/lane-only patch grid fully decoupled from any REAL room's floor
+   footprint. render.js's theaterStageSync now routes INTERIOR combat (a spatial-plan dungeon room)
+   through trayFrom({kind:"interior",...})/setInteriorBoard instead — the SAME scene graph
+   exploration already built — so those flat coordinates mean nothing there; interpreted against the
+   interior board's own origin they'd cluster every combatant into one small corner of the real room,
+   and (the ledger's own diagnosis) same-band/lane occupants can still land on each other since the
+   flat ring's spacing has no relationship to the room's actual floor cells.
+
+   theaterCombatRoomCellsFor(plan, focusSegNum, blockedKeySet) -> the ACTIVE ROOM's legal floor-cell
+   list: every plan.rooms[].cells entry (GLOBAL {x,y} grid coords, GRID LAW 1 cell = 5 ft = 1 world
+   unit, place-spatialize.js) belonging to the room at focusSegNum, MINUS any cell key present in
+   blockedKeySet (dressing-blocked cells — see theaterCombatBlockedCellKeySetFor below). Pure,
+   deterministic, order-preserving (room.cells' own order — no re-sort here, callers sort as needed).
+
+   theaterCombatBlockedCellKeySetFor(board) -> a Set of "x,y" keys for every cell a combat unit must
+   not stand on: board.furniture (interiorBuildBoard's own blocker-primary dressing volumes — already
+   scoped to the active room by that function's own keepSet) plus board.interactables (any interactable
+   already occupying a floor cell — chests/levers/braziers/etc., cellX/cellY or x/y). Read-only over
+   the board trayFrom already returned — never re-derives dressing/interactables itself.
+
+   theaterUnitsOnRoomCells(combat, units, legalCells, grid) -> units[] (theaterUnitsFrom's own shape,
+   x/z REMAPPED onto real, unique room cells) — the "stacked rat" fix. band maps to a RADIAL RING from
+   the legal-cell set's own centroid (nearest ring = melee, farthest = out; rings split by CELL COUNT,
+   never by raw distance value, so a lopsided shape — cave/octagon/tiered — can't starve an outer band
+   of any cells at all); lane maps to an ANGULAR THIRD within that ring (L/C/R, sorted by bearing from
+   the centroid). Every unit gets its OWN cell: a second occupant of the same ring×lane bucket takes
+   the bucket's next-nearest still-free cell, never the bucket's one preferred cell; a caller that
+   somehow runs out of same-bucket cells falls back to the nearest still-free cell in the WHOLE room
+   (never throws, never silently overlaps while any legal cell remains free); a room with NO legal
+   cells at all (a narrow test fixture, or every cell blocked) returns `units` UNCHANGED — the flat
+   theaterZoneOrigin position stays a harmless, honest degrade rather than a crash.
+
+   Pure/deterministic throughout: same (combat,units,legalCells,grid) snapshot -> byte-identical
+   assignment (stable sorts, ties broken by x then y — never Math.random/Date.now). combat/units are
+   read-only (band/lane are read off combat.pc/allies/foes in the SAME pc-then-allies-then-foes order
+   theaterUnitsFrom just built `units` in, above — index-aligned, not id-matched, since that order is
+   this function's own contract with its one caller). */
+function theaterCombatRoomCellsFor(plan, focusSegNum, blockedKeySet){
+  if(!plan || !Array.isArray(plan.rooms)) return [];
+  const room = plan.rooms.find(r => r && r.segNum === focusSegNum);
+  if(!room || !Array.isArray(room.cells)) return [];
+  const blocked = blockedKeySet || new Set();
+  const seen = new Set();
+  const out = [];
+  room.cells.forEach(c => {
+    if(!c) return;
+    const key = c.x + "," + c.y;
+    if(blocked.has(key) || seen.has(key)) return;
+    seen.add(key);
+    out.push({ x: c.x, y: c.y });
+  });
+  return out;
+}
+function theaterCombatBlockedCellKeySetFor(board){
+  const out = new Set();
+  if(!board) return out;
+  (board.furniture || []).forEach(f => { if(f) out.add(f.x + "," + f.y); });
+  (board.interactables || []).forEach(e => {
+    if(!e) return;
+    const x = e.cellX != null ? e.cellX : e.x, y = e.cellY != null ? e.cellY : e.y;
+    if(x != null && y != null) out.add(x + "," + y);
+  });
+  return out;
+}
+function theaterUnitsOnRoomCells(combat, units, legalCells, grid){
+  units = units || [];
+  if(!combat || !Array.isArray(legalCells) || !legalCells.length) return units; // no room geometry -> byte-identical degrade
+  const bands = (grid && grid.bands) || CM_BANDS_FALLBACK;
+  const lanes = (grid && grid.lanes) || CM_LANES_FALLBACK;
+  // the SAME pc-then-allies-then-foes order theaterUnitsFrom built `units` in, above — index-aligned
+  // band/lane lookup, never an id-match (units carry no band/lane field of their own once theaterUnitsFrom
+  // has already resolved them to x/z).
+  const bandLaneByIndex = [];
+  if(combat.pc) bandLaneByIndex.push({ band: combat.pc.band, lane: combat.pc.lane });
+  (combat.allies || []).forEach(a => bandLaneByIndex.push({
+    band: a.band || (combat.pc && combat.pc.band), lane: a.lane || (combat.pc && combat.pc.lane)
+  }));
+  (combat.foes || []).forEach(f => bandLaneByIndex.push({ band: f.band, lane: f.lane }));
+
+  const cx = legalCells.reduce((s, c) => s + c.x, 0) / legalCells.length;
+  const cz = legalCells.reduce((s, c) => s + c.y, 0) / legalCells.length;
+  const withGeom = legalCells.map(c => ({
+    x: c.x, y: c.y,
+    dist: Math.hypot(c.x - cx, c.y - cz),
+    angle: Math.atan2(c.y - cz, c.x - cx)
+  })).sort((a, b) => a.dist - b.dist || a.x - b.x || a.y - b.y);
+  const ringSize = Math.max(1, Math.ceil(withGeom.length / bands.length));
+  const ringOf = withGeom.map((c, i) => Math.min(bands.length - 1, Math.floor(i / ringSize)));
+
+  const taken = new Set();
+  const keyOf = (c) => c.x + "," + c.y;
+  function pickFrom(pool){
+    for(let i = 0; i < pool.length; i++){ if(!taken.has(keyOf(pool[i]))) return pool[i]; }
+    return null;
+  }
+  function pickNearestFree(target){
+    let best = null, bestD = Infinity;
+    withGeom.forEach(c => {
+      if(taken.has(keyOf(c))) return;
+      const d = Math.hypot(c.x - target.x, c.y - target.y);
+      if(d < bestD){ bestD = d; best = c; }
+    });
+    return best;
+  }
+  // pickNearestAny — the absolute last resort when EVERY legal cell is already taken (more living
+  // combatants than the room has floor, a genuinely degenerate case — a tiny room stuffed past its
+  // physical capacity). Ignores `taken` entirely: shares the nearest already-occupied cell rather than
+  // falling back to theaterUnitsFrom's own flat theaterZoneOrigin coordinate (which would land the
+  // unit OUTSIDE the room's real footprint — worse than a share, since "on a legal room cell" would go
+  // false instead of merely "not alone on its cell"). Never returns null when legalCells is non-empty.
+  function pickNearestAny(target){
+    let best = null, bestD = Infinity;
+    withGeom.forEach(c => {
+      const d = Math.hypot(c.x - target.x, c.y - target.y);
+      if(d < bestD){ bestD = d; best = c; }
+    });
+    return best;
+  }
+  return units.map((u, i) => {
+    const bl = bandLaneByIndex[i] || {};
+    const bandIdx = Math.max(0, bands.indexOf(bl.band));
+    const laneIdx = Math.max(0, lanes.indexOf(bl.lane));
+    const ringCells = withGeom.filter((c, idx) => ringOf[idx] === bandIdx)
+      .sort((a, b) => a.angle - b.angle || a.x - b.x || a.y - b.y);
+    const laneSize = Math.max(1, Math.ceil(ringCells.length / lanes.length));
+    const laneStart = laneIdx * laneSize;
+    const lanePool = ringCells.slice(laneStart, laneStart + laneSize).concat(ringCells);
+    let cell = pickFrom(lanePool);
+    if(!cell) cell = pickNearestFree({ x: u.x, y: u.z });
+    if(!cell) cell = pickNearestAny({ x: u.x, y: u.z }); // every legal cell taken — share the closest rather than leave the room
+    if(!cell) return u; // legalCells was empty (guarded above, never reached) — harmless no-op fallback
+    taken.add(keyOf(cell));
+    return Object.assign({}, u, { x: cell.x, z: cell.y, roomCell: { x: cell.x, y: cell.y } });
+  });
+}
+const CM_BANDS_FALLBACK = ["melee", "near", "far", "out"];
+const CM_LANES_FALLBACK = ["L", "C", "R"];
+
+/* ============================================================================
    TABLETOP-UNITS.md §U4 — CAST TABLEAU + ARRANGEMENT GRAMMAR (TABLETOP-VISION.md §3).
    Figures OUTSIDE combat: PC (+companions) + contacted here-NPCs (painted) + soft ambients
    (blank, per §U3) placed on the standing tray by a MECHANICAL arrangement archetype — no DM/

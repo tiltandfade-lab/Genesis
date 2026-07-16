@@ -153,3 +153,11 @@ shorten, the §7 master prop prompt ("Do not shorten it"):
    generic starter-tier art… generic mobile-game loot") plus §3.2's facet scale law are the
    anti-WoW / anti-oversimplification gates for props. The 2026-07-14 prop drift happened
    because the pilot's queue JSON *shortened* §7 — shortening is the drift vector.
+
+## Kenney prototype direction (Adam, 2026-07-16 — additive)
+
+Adam's words, verbatim, on the purpose of the Kenney donor catalog in the live prototype:
+
+> "i have switched over to the full kenny asset catalog for the prototype of this game, just
+> trying to get these procedural trays populated with some stuff that makes the game feel alive
+> and real"

@@ -75,6 +75,8 @@ const CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
 // dedicated range — disjoint from every sibling verify-*/capture-*.mjs's own claimed ranges.
 const GREEN_PORT_CANDIDATES = [5321, 5322, 5323];
 const RED_PORT_CANDIDATES = [5326, 5327, 5328];
+const PROTECTION_PORT_CANDIDATES = [5351, 5352, 5353];
+const KGR1_COMMIT = "8261915d";
 // the "meaningfully darker" materiality threshold for the shadow-region-vs-control luma comparison —
 // a single named number, used symmetrically (RED must sit below it, GREEN must clear it), same
 // discipline as verify-env1-light-profiles.mjs's own ENV1_MATERIAL_LUMA_DELTA.
@@ -121,12 +123,12 @@ async function launchChrome() {
 // ------------------------------------------------------------------------------------------------
 // Scratch "OLD CODE" tree — same convention as verify-env1-light-profiles.mjs's buildOldCodeScratch.
 // ------------------------------------------------------------------------------------------------
-function buildOldCodeScratch() {
-  const scratch = path.join(repoRoot, ".env1b-red-scratch");
+function buildBootScratch(scratchName, bootCommit) {
+  const scratch = path.join(repoRoot, scratchName);
   fs.rmSync(scratch, { recursive: true, force: true });
   fs.mkdirSync(path.join(scratch, "src", "ui"), { recursive: true });
   for (const entry of fs.readdirSync(repoRoot)) {
-    if (entry === "src" || entry === ".env1b-red-scratch" || entry === ".git") continue;
+    if (entry === "src" || (entry.startsWith(".env1") && entry.endsWith("-scratch")) || entry === ".git") continue;
     fs.symlinkSync(path.join(repoRoot, entry), path.join(scratch, entry));
   }
   for (const entry of fs.readdirSync(path.join(repoRoot, "src"))) {
@@ -137,7 +139,7 @@ function buildOldCodeScratch() {
     if (entry === "theater-boot.js") continue;
     fs.symlinkSync(path.join(repoRoot, "src", "ui", entry), path.join(scratch, "src", "ui", entry));
   }
-  const oldSource = execFileSync("git", ["show", `${BASE_COMMIT}:src/ui/theater-boot.js`], { cwd: repoRoot, encoding: "utf-8", maxBuffer: 1024 * 1024 * 64 });
+  const oldSource = execFileSync("git", ["show", `${bootCommit}:src/ui/theater-boot.js`], { cwd: repoRoot, encoding: "utf-8", maxBuffer: 1024 * 1024 * 64 });
   fs.writeFileSync(path.join(scratch, "src", "ui", "theater-boot.js"), oldSource);
   return scratch;
 }
@@ -187,7 +189,10 @@ function dressedTrayUnits() {
 }
 async function setDressedTray(page, env, lightProfile) {
   await page.bringToFront();
-  await page.evaluate((board) => { window.Theater.setBoard(board); }, dressedTrayBoard(env, lightProfile));
+  await page.evaluate((board) => {
+    if (window.__envProtectionRandom) Math.random = window.__envProtectionRandom;
+    window.Theater.setBoard(board);
+  }, dressedTrayBoard(env, lightProfile));
   await page.evaluate((units) => { window.Theater.setUnits(units); }, dressedTrayUnits());
   await page.waitForFunction(() => !window.Theater || typeof window.Theater.tweensLive !== "function" || window.Theater.tweensLive() === 0, { timeout: 15000 });
   // SPRITE PRE-WARM: buildSpriteBillboard's texture fetch is async (spriteTextureFor's own header —
@@ -279,9 +284,10 @@ function interiorFixtureSrc(lightProfile) {
     const W = 6, D = 6, wallH = 2.4;
     const floor = [];
     for (let z = 0; z < D; z++) for (let x = 0; x < W; x++) floor.push({ x, z, sx: 1, sy: 1, sz: 1, color: kit.floorColor });
+    // Bare point only: ENV-1B protects the shadow/light restore path, not a donor-backed sconce
+    // body's geometry or outline policy.
     const lights = [
-      { x: 3, z: -0.9, y: 1.6, color: "#ff9a44", intensity: 1.2, distance: 8, decay: 2, kind: "torch",
-        fixtureId: "sconce-iron", mount: "wall", emitterLocal: { x: 0, y: 0.06, z: 0.16 }, castShadow: false },
+      { x: 3, z: -0.9, y: 1.6, color: "#ff9a44", intensity: 1.2, distance: 8, decay: 2, kind: "torch", castShadow: false },
     ];
     return {
       kind: "interior3d", env: "dungeon", realmId: "gloom", cellSize: 1, wallHeightBase: wallH,
@@ -300,11 +306,24 @@ function interiorFixtureSrc(lightProfile) {
 }
 async function setInterior(page, lightProfile) {
   await page.bringToFront();
+  // ENV-1B's protection capture compares the interior light/shadow restore discipline, not Kenney
+  // structural admission. Force both servers onto the same per-cell fallback renderer so a later
+  // shell/door change cannot masquerade as lighting drift; every shadow assertion remains live.
+  await page.evaluate(() => {
+    if (!window.__envProtectionRandom) window.__envProtectionRandom = Math.random;
+    Math.random = () => 0.5; // freeze torch flicker identically on OLD and NEW protection captures
+    if (typeof window.KIT_SHELL_ENABLED !== "undefined") window.KIT_SHELL_ENABLED = false;
+    if (typeof window.KIT_DOORS_ENABLED !== "undefined") window.KIT_DOORS_ENABLED = false;
+    if (window.Theater && typeof window.Theater._setRoomShellEnabled === "function") {
+      window.Theater._setRoomShellEnabled(false);
+    }
+  });
   await page.evaluate((src) => {
     const buildBoard = new Function(src);
     window.Theater.setInteriorBoard(buildBoard());
   }, interiorFixtureSrc(lightProfile));
   await page.waitForFunction(() => !window.Theater || typeof window.Theater.tweensLive !== "function" || window.Theater.tweensLive() === 0, { timeout: 15000 });
+  await page.waitForFunction(() => !window.Theater || typeof window.Theater.interiorFileTexPending !== "function" || window.Theater.interiorFileTexPending() === 0, { timeout: 15000 });
   await sleep(250);
 }
 
@@ -325,15 +344,18 @@ async function main() {
       "current worktree flips BOTH mount()'s default and setBoard's restore to true");
   }
 
-  const scratch = buildOldCodeScratch();
-  let redServer = null, greenServer = null, browser = null;
+  const scratch = buildBootScratch(".env1b-red-scratch", BASE_COMMIT);
+  const protectionScratch = buildBootScratch(".env1b-protection-scratch", KGR1_COMMIT);
+  let redServer = null, protectionServer = null, greenServer = null, browser = null;
   try {
-    [redServer, greenServer] = await Promise.all([
+    [redServer, protectionServer, greenServer] = await Promise.all([
       startServer(scratch, RED_PORT_CANDIDATES),
+      startServer(protectionScratch, PROTECTION_PORT_CANDIDATES),
       startServer(repoRoot, GREEN_PORT_CANDIDATES),
     ]);
     browser = await launchChrome();
     const redPage = await newMountedPage(browser, redServer.base);
+    const protectionPage = await newMountedPage(browser, protectionServer.base);
     const greenPage = await newMountedPage(browser, greenServer.base);
 
     // shadow-region sample point — located mechanically in section 1/2 (never hand-guessed), reused
@@ -426,11 +448,11 @@ async function main() {
       ok(diagOvercast.points.length === 0, "[overcast] authors zero points — nothing to mark as a caster (expected, not a gap)", diagOvercast);
     }
 
-    group("4. interior byte-stability — torchlit + daylit, OLD vs NEW pixel-diff < epsilon");
+    group("4. interior byte-stability — KGR-1 parent vs current, torchlit + daylit pixel-diff < epsilon");
     {
       const EPS = 0.01;
-      await setInterior(redPage, "torchlit");
-      const redT1 = await screenshotBase64(redPage);
+      await setInterior(protectionPage, "torchlit");
+      const redT1 = await screenshotBase64(protectionPage);
       await setInterior(greenPage, "torchlit");
       const greenT1 = await screenshotBase64(greenPage);
       const diffA = await pixelDiffMean(greenPage, redT1, greenT1);
@@ -438,8 +460,8 @@ async function main() {
       ok(diffA.sameDims, "interior3d/torchlit: identical dimensions old vs new", diffA);
       ok(diffA.mean < EPS, "interior3d/torchlit: OLD vs NEW pixel-diff mean < " + EPS, diffA);
 
-      await setInterior(redPage, "daylit");
-      const redD1 = await screenshotBase64(redPage);
+      await setInterior(protectionPage, "daylit");
+      const redD1 = await screenshotBase64(protectionPage);
       await setInterior(greenPage, "daylit");
       const greenD1 = await screenshotBase64(greenPage);
       const diffB = await pixelDiffMean(greenPage, redD1, greenD1);
@@ -502,8 +524,10 @@ async function main() {
   } finally {
     if (browser) await browser.close();
     if (redServer && redServer.proc) { try { redServer.proc.kill("SIGTERM"); } catch (e) {} }
+    if (protectionServer && protectionServer.proc) { try { protectionServer.proc.kill("SIGTERM"); } catch (e) {} }
     if (greenServer && greenServer.proc) { try { greenServer.proc.kill("SIGTERM"); } catch (e) {} }
     fs.rmSync(scratch, { recursive: true, force: true });
+    fs.rmSync(protectionScratch, { recursive: true, force: true });
   }
 }
 

@@ -1,13 +1,9 @@
 {
-  "generatedAt": "2026-07-16T05:16:06.216Z",
+  "generatedAt": "2026-07-16T15:09:05.277Z",
   "shots": [
-    "rect-kit-on.png",
-    "rect-prism-off.png",
-    "octagon-kit-on.png",
-    "octagon-prism-off.png",
-    "l-kit-on.png",
-    "l-prism-off.png",
-    "beauty-dressed.png"
+    "rect-kgr2-default.png",
+    "octagon-kgr2-default.png",
+    "l-kgr2-default.png"
   ],
   "notes": [],
   "boot": {
@@ -15,8 +11,8 @@
     "notes": [
       "startSession() called"
     ],
-    "worldId": "mrn23ddn3dkvt",
-    "worldName": "The Ash-Plaza"
+    "worldId": "mrnn9yq06e8w7",
+    "worldName": "The Drowned Port"
   },
   "theaterState": {
     "hasBattleStage": true,
@@ -24,30 +20,37 @@
     "hasCanvas": true,
     "hasSetInteriorBoard": true
   },
+  "outlineSweep": {
+    "ok": true,
+    "piecesLoaded": 47,
+    "hullDescendants": 0,
+    "failures": []
+  },
   "templatesReady": true,
-  "rect-kit-on": {
-    "doorCell": {
-      "x": 6,
-      "y": 0
-    },
-    "meta": {
-      "roomCount": 1,
-      "floorCount": 22,
-      "wallCount": 11,
-      "doorCount": 0,
-      "pillarCount": 0,
-      "lightCount": 2,
-      "skirtCount": 40,
-      "coverCount": 1,
-      "furnitureCount": 0,
-      "wallPropsCount": 0,
-      "portalCount": 1,
-      "kitDoorCount": 1,
-      "kitShellWallCount": 15,
-      "kitShellFloorCount": 14
+  "injectedArraysCompilerProof": {
+    "compiledShellMounted": true,
+    "kitShell": {
+      "walls": [
+        {
+          "x": -3.5,
+          "y": -0.5,
+          "z": -4,
+          "rotY": 0,
+          "axis": "x",
+          "scaleY": 1.1566265060240963
+        }
+      ],
+      "floors": [
+        {
+          "x": -3.5,
+          "y": -0.3,
+          "z": -1.5,
+          "room": 1
+        }
+      ]
     }
   },
-  "rect-prism-off": {
+  "rect-kgr2-default": {
     "doorCell": {
       "x": 6,
       "y": 0
@@ -56,7 +59,7 @@
       "roomCount": 1,
       "floorCount": 78,
       "wallCount": 41,
-      "doorCount": 5,
+      "doorCount": 0,
       "pillarCount": 0,
       "lightCount": 2,
       "skirtCount": 40,
@@ -64,34 +67,16 @@
       "furnitureCount": 0,
       "wallPropsCount": 0,
       "portalCount": 1,
-      "kitDoorCount": 0,
+      "kitDoorCount": 1,
       "kitShellWallCount": 0,
       "kitShellFloorCount": 0
-    }
-  },
-  "octagon-kit-on": {
-    "doorCell": {
-      "x": 5,
-      "y": 0
     },
-    "meta": {
-      "roomCount": 1,
-      "floorCount": 22,
-      "wallCount": 15,
-      "doorCount": 0,
-      "pillarCount": 0,
-      "lightCount": 3,
-      "skirtCount": 40,
-      "coverCount": 3,
-      "furnitureCount": 0,
-      "wallPropsCount": 0,
-      "portalCount": 1,
-      "kitDoorCount": 1,
-      "kitShellWallCount": 11,
-      "kitShellFloorCount": 14
+    "runtime": {
+      "compiledShellMounted": true,
+      "kitDoorMounted": true
     }
   },
-  "octagon-prism-off": {
+  "octagon-kgr2-default": {
     "doorCell": {
       "x": 5,
       "y": 0
@@ -100,7 +85,7 @@
       "roomCount": 1,
       "floorCount": 78,
       "wallCount": 37,
-      "doorCount": 5,
+      "doorCount": 0,
       "pillarCount": 0,
       "lightCount": 3,
       "skirtCount": 40,
@@ -108,34 +93,16 @@
       "furnitureCount": 0,
       "wallPropsCount": 0,
       "portalCount": 1,
-      "kitDoorCount": 0,
+      "kitDoorCount": 1,
       "kitShellWallCount": 0,
       "kitShellFloorCount": 0
-    }
-  },
-  "l-kit-on": {
-    "doorCell": {
-      "x": 0,
-      "y": 7
     },
-    "meta": {
-      "roomCount": 1,
-      "floorCount": 17,
-      "wallCount": 8,
-      "doorCount": 0,
-      "pillarCount": 0,
-      "lightCount": 3,
-      "skirtCount": 44,
-      "coverCount": 3,
-      "furnitureCount": 0,
-      "wallPropsCount": 0,
-      "portalCount": 1,
-      "kitDoorCount": 1,
-      "kitShellWallCount": 16,
-      "kitShellFloorCount": 16
+    "runtime": {
+      "compiledShellMounted": true,
+      "kitDoorMounted": true
     }
   },
-  "l-prism-off": {
+  "l-kgr2-default": {
     "doorCell": {
       "x": 0,
       "y": 7
@@ -144,7 +111,7 @@
       "roomCount": 1,
       "floorCount": 81,
       "wallCount": 40,
-      "doorCount": 5,
+      "doorCount": 0,
       "pillarCount": 0,
       "lightCount": 3,
       "skirtCount": 44,
@@ -152,37 +119,13 @@
       "furnitureCount": 0,
       "wallPropsCount": 0,
       "portalCount": 1,
-      "kitDoorCount": 0,
+      "kitDoorCount": 1,
       "kitShellWallCount": 0,
       "kitShellFloorCount": 0
-    }
-  },
-  "beauty-dressed": {
-    "doorCell": {
-      "x": 6,
-      "y": 0
     },
-    "meta": {
-      "roomCount": 1,
-      "floorCount": 22,
-      "wallCount": 11,
-      "doorCount": 0,
-      "pillarCount": 0,
-      "lightCount": 2,
-      "skirtCount": 40,
-      "coverCount": 1,
-      "furnitureCount": 0,
-      "wallPropsCount": 0,
-      "portalCount": 1,
-      "kitDoorCount": 1,
-      "kitShellWallCount": 15,
-      "kitShellFloorCount": 14
-    },
-    "renderProfile": {
-      "sat": 1,
-      "tint": 8421504,
-      "tintAmt": 0,
-      "contrast": 1
+    "runtime": {
+      "compiledShellMounted": true,
+      "kitDoorMounted": true
     }
   }
 }

@@ -1,8 +1,8 @@
 #!/usr/bin/env node
-/* dev/battle-gate/capture-ks3-kit-shells.mjs — docs/KENNEY-SOCKET-WAVE.md KS-3's REQUIRED capture cards:
-   "the SAME rolled room kit-shell ON vs prism (flag off) for rect + octagon + L, fantasy realm,
-   torchlit, same camera asserted — 6 panels. Plus one wide dressed-room beauty shot with kit walls +
-   kit door + props."
+/* dev/battle-gate/capture-ks3-kit-shells.mjs — KGR-2 render-safety capture gate. Rect, octagon, and
+   L fixtures render at gameplay scale through the production default: compiled continuous shell,
+   zero kit wall/floor claims, Kenney door still enabled. The retired kit-shell experiment remains
+   callable behind KIT_SHELL_ENABLED for research, but is no longer part of the acceptance raster.
 
    Server/Chrome/boot conventions VERBATIM from dev/battle-gate/capture-ks2-door-assembly.mjs (itself
    VERBATIM from capture-d4-doors.mjs) — port range 5231-5235, a fresh range. Same HAND-BUILT-plan
@@ -16,8 +16,7 @@
    the SAME live fantasy grade.
 
    Run:  node dev/battle-gate/capture-ks3-kit-shells.mjs
-   Output: dev/battle-gate/ks3-kit-shells/{rect,octagon,l}-{kit-on,prism-off}.png + beauty-dressed.png +
-           metrics.json */
+   Output: dev/battle-gate/ks3-kit-shells/{rect,octagon,l}-kgr2-default.png + metrics.json */
 
 import { spawn } from "node:child_process";
 import { createRequire } from "node:module";
@@ -235,11 +234,11 @@ function planForShape(shape) {
   return { w, d, cells, room, doorCell };
 }
 
-async function buildBoard(page, { shape, kitShellOn, dressed }) {
+async function buildBoard(page, { shape, kitShellOn = false, kitDoorsOn = true, dressed }) {
   return await page.evaluate((cfg) => {
     try {
       window.KIT_SHELL_ENABLED = cfg.kitShellOn;
-      window.KIT_DOORS_ENABLED = cfg.kitShellOn; // the door's own kit path rides the SAME on/off toggle for this card — a clean "prism world" vs "kit world" comparison, not a mixed state
+      window.KIT_DOORS_ENABLED = cfg.kitDoorsOn;
       const fx = cfg.fx;
       const plan = {
         cellW: fx.w, cellD: fx.d, cells: fx.cells, rooms: [fx.room],
@@ -276,7 +275,32 @@ async function buildBoard(page, { shape, kitShellOn, dressed }) {
       }
       return { ok: true, board, doorCell: fx.doorCell };
     } catch (e) { return { ok: false, error: e.message, stack: e.stack }; }
-  }, { shape, kitShellOn, fx: planForShape(shape), dressed: !!dressed });
+  }, { shape, kitShellOn: !!kitShellOn, kitDoorsOn: kitDoorsOn !== false, fx: planForShape(shape), dressed: !!dressed });
+}
+
+async function sweepLoadedPilotOutlines(page) {
+  return await page.evaluate(async () => {
+    if (!window.TheaterDonor || typeof window.TheaterDonor.loadDonorPiece !== "function") {
+      return { ok: false, error: "window.TheaterDonor unavailable" };
+    }
+    const packs = ["kenney-modular-dungeon-kit", "kenney-mini-dungeon"];
+    const failures = [];
+    let piecesLoaded = 0, hullDescendants = 0;
+    for (const pack of packs) {
+      const index = await window.TheaterDonor.donorIndexFor(pack);
+      for (const slug of Object.keys(index).sort()) {
+        const group = await window.TheaterDonor.loadDonorPiece(pack, slug, {
+          realmId: "fantasy", realmProfile: null, seedKey: "kgr2-outline-sweep:" + pack + "/" + slug,
+        });
+        let pieceHulls = 0;
+        group.traverse((obj) => { if (obj.userData && obj.userData.donorOutlineHull) pieceHulls++; });
+        piecesLoaded++;
+        hullDescendants += pieceHulls;
+        if (pieceHulls) failures.push(`${pack}/${slug}:${pieceHulls}`);
+      }
+    }
+    return { ok: failures.length === 0, piecesLoaded, hullDescendants, failures };
+  });
 }
 
 async function main() {
@@ -296,8 +320,18 @@ async function main() {
     metrics.theaterState = theaterState;
     if (!theaterState || !theaterState.hasSetInteriorBoard) throw new Error("Theater never mounted: " + JSON.stringify(theaterState));
 
-    // warm the templates with one throwaway kit-on rect build BEFORE any real capture, so every
-    // subsequent shot (including the very first) already has the graded templates hot.
+    // KGR-2 ⊗ real-runtime proof over every normalized pilot. Restoring obj.add(hull) makes this
+    // fail because volumetric fantasy pieces acquire descendants marked donorOutlineHull.
+    const outlineSweep = await sweepLoadedPilotOutlines(page);
+    metrics.outlineSweep = outlineSweep;
+    if (!outlineSweep.ok || outlineSweep.piecesLoaded !== 47 || outlineSweep.hullDescendants !== 0) {
+      throw new Error("KGR-2 donor outline sweep failed: " + JSON.stringify(outlineSweep));
+    }
+    log(`outline sweep: ${outlineSweep.piecesLoaded} pilots loaded, ${outlineSweep.hullDescendants} hull descendants`);
+
+    // Warm all three templates once. This explicitly opts into the retired shell experiment only
+    // for cache warming; every acceptance board below uses the production-safe default, and the
+    // first accepted shot already has the graded templates hot.
     const warm = await buildBoard(page, { shape: "rect", kitShellOn: true, dressed: false });
     if (warm.ok) {
       await page.evaluate((board) => { window.Theater._resetInteriorDoorStateForTest(); window.Theater.setInteriorBoard(board); }, warm.board);
@@ -315,34 +349,51 @@ async function main() {
       log(`captured ${fileName}`);
     }
 
-    // ─── 6-panel comparison: kit-on vs prism-off, same fixture/camera, per shape ────────────────────
-    for (const shape of ["rect", "octagon", "l"]) {
-      for (const [label, kitShellOn] of [["kit-on", true], ["prism-off", false]]) {
-        const built = await buildBoard(page, { shape, kitShellOn, dressed: false });
-        if (!built.ok) { metrics.notes.push(`${shape}-${label} build FAILED: ${built.error}`); continue; }
-        metrics[`${shape}-${label}`] = { doorCell: built.doorCell, meta: built.board.meta };
-        await page.evaluate((board) => {
-          window.Theater._resetInteriorDoorStateForTest();
-          window.Theater.setInteriorBoard(board);
-        }, built.board);
-        await sleep(1600);
-        await shoot(`${shape}-${label}.png`);
-      }
+    // KGR-2 ⊗ renderer fixture: inject nonempty retired arrays into otherwise-default board data.
+    // The continuous shell must still mount; the old `ITR_ROOM_SHELL && !arrays` conditional fails.
+    {
+      const injected = await buildBoard(page, { shape: "rect", kitShellOn: false, kitDoorsOn: true, dressed: false });
+      if (!injected.ok) throw new Error("compiler injection fixture build failed: " + injected.error);
+      injected.board.kitShellWalls = [{ x: 2.5, z: 0, axis: "x", span: 2 }];
+      injected.board.kitShellFloors = [{ x: 2.5, z: 2.5, room: 1, toneJitter: 1 }];
+      await page.evaluate((board) => {
+        window.Theater._resetInteriorDoorStateForTest();
+        window.Theater.setInteriorBoard(board);
+      }, injected.board);
+      await sleep(500);
+      const mounted = await page.evaluate(() => ({
+        compiledShellMounted: !!window.Theater._interiorRoomShellForTest(),
+        kitShell: window.Theater._interiorLastKitShellForTest(),
+      }));
+      metrics.injectedArraysCompilerProof = mounted;
+      if (!mounted.compiledShellMounted) throw new Error("nonempty injected kit arrays suppressed compiled room shell");
     }
 
-    // ─── wide dressed-room beauty shot: kit walls + kit door + mounted figures, kit-on ─────────────
-    {
-      const built = await buildBoard(page, { shape: "rect", kitShellOn: true, dressed: true });
-      if (!built.ok) { metrics.notes.push(`beauty-dressed build FAILED: ${built.error}`); }
-      else {
-        metrics["beauty-dressed"] = { doorCell: built.doorCell, meta: built.board.meta, renderProfile: built.board.renderProfile };
-        await page.evaluate((board) => {
-          window.Theater._resetInteriorDoorStateForTest();
-          window.Theater.setInteriorBoard(board);
-        }, built.board);
-        await sleep(1800);
-        await shoot("beauty-dressed.png");
+    // ─── KGR-2 default acceptance: same safe path for rect, octagon, and L ────────────────────────
+    for (const shape of ["rect", "octagon", "l"]) {
+      const built = await buildBoard(page, { shape, kitShellOn: false, kitDoorsOn: true, dressed: false });
+      if (!built.ok) throw new Error(`${shape} default build failed: ${built.error}`);
+      if (built.board.kitShellWalls.length || built.board.kitShellFloors.length) {
+        throw new Error(`${shape} default emitted kit shell claims`);
       }
+      await page.evaluate((board) => {
+        window.Theater._resetInteriorDoorStateForTest();
+        window.Theater.setInteriorBoard(board);
+      }, built.board);
+      await sleep(1600);
+      const runtime = await page.evaluate((board) => {
+        const shell = window.Theater._interiorRoomShellForTest();
+        const group = window.Theater._interiorBuildInteractablesForTest(board.interactables, 0, 0, new Map(), board.kitDoors);
+        return {
+          compiledShellMounted: !!shell,
+          kitDoorMounted: !!(group && group.children && group.children.some((child) => child.userData && child.userData.kit)),
+        };
+      }, built.board);
+      if (!runtime.compiledShellMounted || !runtime.kitDoorMounted) {
+        throw new Error(`${shape} runtime path failed: ${JSON.stringify(runtime)}`);
+      }
+      metrics[`${shape}-kgr2-default`] = { doorCell: built.doorCell, meta: built.board.meta, runtime };
+      await shoot(`${shape}-kgr2-default.png`);
     }
 
     fs.writeFileSync(path.join(outDir, "metrics.json"), JSON.stringify(metrics, null, 2));

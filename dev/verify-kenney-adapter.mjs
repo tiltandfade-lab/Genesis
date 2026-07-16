@@ -436,9 +436,37 @@ try {
 }
 
 // ============================================================================
-// 5. manifest registration
+// 5. KGR-2 render-safety retreat — the per-realm outline table remains policy metadata, but the
+//    inverted-hull geometry path is retired. The real-browser sweep over every loaded pilot lives
+//    in capture-ks3-kit-shells.mjs; these source checks make the retirement mutation-sensitive.
 // ============================================================================
-console.log("\n=== 5. manifest registration ===");
+console.log("\n=== 5. KGR-2: outline policy retained, inverted-hull geometry retired ===");
+{
+  const donorSrc = readText("src/ui/theater-donor.js");
+  const outlineTable = donorSrc.match(/const OUTLINE_STYLE_BY_REALM = Object\.freeze\(\{([\s\S]*?)\}\);/);
+  check("KGR-2: OUTLINE_STYLE_BY_REALM remains present as dormant policy metadata", !!outlineTable,
+    "realm outline policy table missing");
+  if (outlineTable) {
+    for (const realm of ["fantasy", "gloom", "chrome"]) {
+      check(`KGR-2: dormant outline policy still names ${realm}`, new RegExp(`\\b${realm}\\s*:`).test(outlineTable[1]),
+        `${realm} policy missing`);
+    }
+  }
+  check("KGR-2: source explicitly documents that inverted-hull geometry is retired",
+    /inverted-hull geometry[^\n]*retired|geometry implementation[^\n]*retired/i.test(donorSrc),
+    "missing explicit retired-geometry comment");
+  check("KGR-2 ⊗: no buildDonorOutlineHull geometry constructor remains",
+    !/function\s+buildDonorOutlineHull\s*\(/.test(donorSrc), "restored inverted-hull constructor found");
+  check("KGR-2 ⊗: no donorOutlineHull runtime marker remains",
+    !/donorOutlineHull/.test(donorSrc), "restored donorOutlineHull marker found");
+  check("KGR-2 ⊗: load traversal never adds an outline hull child",
+    !/obj\.add\(hull\)/.test(donorSrc), "restored obj.add(hull) mutation found");
+}
+
+// ============================================================================
+// 6. manifest registration
+// ============================================================================
+console.log("\n=== 6. manifest registration ===");
 {
   const manifest = JSON.parse(readText("manifest.json"));
   const entry = manifest.modules.find((m) => m.id === "ui.theater-donor");

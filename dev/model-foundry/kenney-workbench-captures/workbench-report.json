@@ -6,6 +6,19 @@
     "normalized": "/assets/models-normalized/kenney-mini-dungeon/gate.glb",
     "genesis": "loadDonorPiece(kenney-mini-dungeon, gate)"
   },
+  "materialDiagnostics": {
+    "raw": "RAW MATERIAL UNAVAILABLE: Textures/colormap.png is absent from the source corpus; neutral diagnostic texture substituted.",
+    "normalized": "",
+    "genesis": ""
+  },
+  "rawBarrel": {
+    "assetId": "kenney-retro-fantasy-kit/detail-barrel",
+    "url": "/assets/models/kenney-retro-fantasy-kit/detail-barrel.glb",
+    "modelName": "raw:kenney-retro-fantasy-kit/detail-barrel",
+    "meshCount": 1,
+    "vertexCount": 160,
+    "diagnostic": "RAW MATERIAL UNAVAILABLE: Textures/barrel.png is absent from the source corpus; neutral diagnostic texture substituted."
+  },
   "overlays": {
     "axes": true,
     "ground": true,

@@ -113,6 +113,45 @@ as FIXTURE updates with why-comments: dressing 6c re-tuned to QF-A3's filtered c
 diegetic-light P-1a baseline re-derived under AgX, seam-softening 7b fixture densified so the
 mutation bites. Validators keep their jobs — no gate weakening.
 
+## ELEV-1 — rolled room elevation (Adam: "build elev-1", 2026-07-15 late; draft table approved "for now")  ·  branch `feat/elev1-rolled-elevation`
+
+**Scope fence:** TABLE + ROLLER + SPATIALIZE this unit — engine truth end-to-end. NO
+theater-interior.js edits (KS-3 owns it); rendering rides the EXISTING per-cell tiers seam
+(place-spatialize's tiers buffer → theater-interior sy quanta) exactly as it already renders
+side-parse tiers. Riser/stair dressing + kit pieces at tier boundaries = **ELEV-1b**, stacks
+after KS-3.
+
+1. **The table (Adam's approved draft, PROVISIONAL — his authoring surface, he re-tunes rows):**
+   new `Engine/03. _Tables/03. Session Mechanics/Dungeons/Room Elevation Profile.md`, proper
+   frontmatter per the schema, d100: 01–40 Flat · 41–55 Dais (+1 step, feature/centerpiece
+   anchors on it) · 56–70 Sunken center (−1) · 71–80 Split-level (+1 half, one stair/ramp cell
+   joining) · 81–90 Terraced (2–3 steps of +1) · 91–96 Gallery ring (perimeter +2 overlooking
+   center) · 97–100 Chasm/shaft (−2..−3 cut, bridge or edge path). Steps are 5-ft GRID-LAW
+   quanta. Recompile via `python3 "Engine/00. _System/compile-tables.py" --emit` (never
+   hand-edit tables.js/json).
+2. **The roller:** `rollDungeonWalk` (src/engine/dungeon-walk.js — the area-roll region ~:111-120,
+   :586 segment assembly) rolls the profile per room at WALK TIME: `elevation: { roll, profile,
+   degradedFrom }` on the segment. **Min-dims gates** (named table): dais/sunken ≥3×3 · split/
+   terraced ≥4 cells on an axis · gallery ≥5×5 · chasm ≥4 on the crossing axis — a rolled row the
+   room can't fit WALKS DOWN the table to the nearest fitting row, recording both (roll canonical,
+   projection honest). **Depth-bias rider** (the cheap C): named-const shift toward sunken/chasm
+   rows as graph depth grows. Additive field — absent = flat (old saves byte-compatible).
+3. **The projection:** place-spatialize.js extends the tiers buffer to ±3 quanta and writes the
+   profile's cell-set geometry (centroid dais, perimeter gallery, axis splits — shape-generic off
+   the room's cell polygon, no per-shape cases). **Precedence law:** side-parse tiers (Adam's
+   rolled prose) WIN per cell; the profile fills the rest. Door-aperture cells + their inside
+   neighbor stay tier 0. Deterministic (stable hash chains, never the shared rng stream —
+   Stage C's own convention).
+4. **⊗ RED-FIRST:** a fixture room with a rolled gallery profile has today NO elevation field and
+   a flat tiers buffer beyond side-parse; post: per-cell tiers match the profile geometry, door
+   cells 0, side-tier precedence proven (a side-declared dais cell keeps its side value under a
+   conflicting profile), min-dims walk-down proven (small room + chasm roll → recorded
+   degradedFrom), determinism byte-identical. Sweep: walk-scene, dungeon-interior 288 (render
+   seam consumes ±3 without edits — if it clamps/breaks at >±1, REPORT it, don't patch
+   theater-interior), theater-shot 107, place-spatialize/qfb-tray harnesses, compile-tables
+   clean, check-manifest OK. Card: 4 profiles rendered via the existing seam (whatever ±3 looks
+   like today, honestly captured) — the ELEV-1b before-state.
+
 ## Sequencing + what stays frozen
 
 ```text

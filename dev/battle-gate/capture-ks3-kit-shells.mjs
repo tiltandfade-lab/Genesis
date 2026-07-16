@@ -247,7 +247,14 @@ async function buildBoard(page, { shape, kitShellOn, dressed }) {
         doors: [{ x: fx.doorCell.x, y: fx.doorCell.y, squeeze: false }],
         seed: "ks3-capture-" + fx.room.shape,
       };
-      const board = interiorBuildBoard(plan, { realmId: "fantasy", env: "dungeon" });
+      // KS-3b item 2 (docs/KENNEY-SOCKET-WAVE.md's own KS-3 gate flag) — focusSegNum is REQUIRED for
+      // interiorBuildBoard to stamp data.focusRect at all (theater-interior.js's own focusRect/
+      // activeRoomShape derivation, both gated on opts.focusSegNum != null) — without it neither the
+      // PRE-EXISTING prism wallList parapet cut (BW2-5) nor this unit's new kit-wall camera-side parity
+      // ever fire, so this card would silently never exercise "does the room stay open as the camera
+      // orbits" at all (the exact card this unit's own report needs to show). A real gameplay session
+      // always supplies focusSegNum when it fits/frames a room; this capture now does too.
+      const board = interiorBuildBoard(plan, { realmId: "fantasy", env: "dungeon", focusSegNum: fx.room.segNum });
       // KS-3 retrofit proof: a REAL fantasy render profile (not null) so every kit piece's live grade
       // is actually exercised, not a byte-identical passthrough.
       board.renderProfile = (typeof theaterStampRenderProfile === "function") ? theaterStampRenderProfile("fantasy") : null;

@@ -28,6 +28,17 @@ ledger #11 closed), **elevation rolls** (ELEV-1 — Adam's table, ±3 tiers, eng
 Desktop), **PIXEL SPRITES ARE CANON** (docs/ART-DEPARTMENT.md = the runbook; faceted = reserve;
 magenta crud killed via MC-1+MC-2 originals-adjudication).
 
+**⚠ CI IS RED (discovered at this close) — priority 0.** CI has failed on master for 60+ runs,
+predating this whole wave (even docs-only commits fail). Two isolated fixes landed (`678681f5`):
+the dep-skip loop now recognizes `fast-check not resolvable`; LL-1's `emitter.layers.enable(BLOOM_LAYER)`
+is guarded for the vm-extraction harnesses. REMAINING (task chipped — "Green the CI"): the LL-1
+`LIGHT_TUNABLES` aggregate (theater-boot.js:6545) is absent from the light-cluster harnesses' extract
+lists (`ReferenceError` in verify-bw3-4-light-shafts / -e0-1-fixture-fade / -visible-practicals / …) —
+fix that FIRST; then `gen-gallery-paintings.py --emit`, then the pre-existing bucket-3 drift
+(place-distribution, stage-c-terrain, digest-diet, table-usage-data, …). Run the FULL
+`for f in dev/verify-*.mjs` loop as the gate, never per-unit. Process scar: per-unit re-gating this
+wave never ran the full sweep, so the accumulated red went unseen.
+
 **Do next (the meeting's own order):**
 1. **Adam's word: ORIGINALS RESTORATION?** (evidence complete: retina card 4 + the
    manufactured-magenta finding; the restore unit = restore 896 → re-run both cleaners →

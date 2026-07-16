@@ -11,6 +11,18 @@
     "ground": true,
     "module": true,
     "sockets": 1,
+    "humanScale": {
+      "height": 1.2000000476837158,
+      "groundY": 0,
+      "parent": "workbench-calibrated-root",
+      "visible": true,
+      "onScreen": true,
+      "legend": "6 ft / 1.2u",
+      "legendVisible": true,
+      "independent": true,
+      "toggleOffHidden": true,
+      "captureVisible": true
+    },
     "canvas": {
       "width": 780,
       "height": 888

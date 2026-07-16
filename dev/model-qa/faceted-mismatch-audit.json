@@ -1,0 +1,1884 @@
+{
+  "generatedBy": "chore/faceted-mismatch-audit -- manual visual review (Claude, 2026-07-15)",
+  "method": "Read all 21 dev/model-qa/flip-verdict-sheets/sheet-NN.png sheets cell-by-cell (252 slugs total, cropped per-cell for legibility), judged MATCH/MISMATCH/DUBIOUS/NOT-JUDGEABLE against the legacy art + slug name as the identity reference. For every MISMATCH/DUBIOUS, traced cause via dev/model-qa/faceted-cut-report.json (sourceFile/cellIndex/cellsProvenance), cross-checked sibling cells in the same candidate file for cut-order-swap signatures, and directly opened raw candidate source images (dev/model-qa/faceted-sheets/*/raw-figures/*.png) plus provenance/*-generation-calls.json where sibling evidence was inconclusive.",
+  "totals": {
+    "slugsAudited": 252,
+    "byVerdict": {
+      "MATCH": 206,
+      "MISMATCH": 41,
+      "DUBIOUS": 5
+    },
+    "byCause": {
+      "GENERATION-MISROUTE": 14,
+      "CUT-ORDER": 26,
+      "QUALITY-FAILURE": 1,
+      "AMBIGUOUS": 1,
+      "OTHER-UNKNOWN": 4
+    },
+    "bySalvage": {
+      "needs-regeneration": 18,
+      "salvageable-recut": 22,
+      "needs-regeneration (identity correct, anatomy malformed)": 1,
+      "adam-call (regen if monster identity kept, else accept as NPC reinterpretation)": 1,
+      "adam-call (style judgment, not a pipeline defect)": 4
+    }
+  },
+  "slugs": {
+    "spr-fantasy-abominable-yeti": {
+      "name": "Abominable Yeti",
+      "sheet": "sheet-01.png",
+      "cell": 0,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-adult-blue-dragon": {
+      "name": "Adult Blue Dragon",
+      "sheet": "sheet-01.png",
+      "cell": 1,
+      "verdict": "MATCH",
+      "note": "feral/thin stylization but dragon identity preserved"
+    },
+    "spr-fantasy-adult-bronze-dragon": {
+      "name": "Adult Bronze Dragon",
+      "sheet": "sheet-01.png",
+      "cell": 2,
+      "verdict": "MATCH",
+      "note": "rearing bipedal pose teal-bronze coloring but dragon identity preserved"
+    },
+    "spr-fantasy-adult-copper-dragon": {
+      "name": "Adult Copper Dragon",
+      "sheet": "sheet-01.png",
+      "cell": 3,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-adult-gold-dragon": {
+      "name": "Adult Gold Dragon",
+      "sheet": "sheet-01.png",
+      "cell": 4,
+      "verdict": "MATCH",
+      "note": "no legacy counterpart"
+    },
+    "spr-fantasy-adult-green-dragon": {
+      "name": "Adult Green Dragon",
+      "sheet": "sheet-01.png",
+      "cell": 5,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-adult-silver-dragon": {
+      "name": "Adult Silver Dragon",
+      "sheet": "sheet-01.png",
+      "cell": 6,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-adult-white-dragon": {
+      "name": "Adult White Dragon",
+      "sheet": "sheet-01.png",
+      "cell": 7,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-air-elemental": {
+      "name": "Air Elemental",
+      "sheet": "sheet-01.png",
+      "cell": 8,
+      "verdict": "MATCH",
+      "note": "residual magenta key pixels visible but shape ok"
+    },
+    "spr-fantasy-allosaurus": {
+      "name": "Allosaurus",
+      "sheet": "sheet-01.png",
+      "cell": 9,
+      "verdict": "MATCH",
+      "note": "candidate crops off right edge of panel"
+    },
+    "spr-fantasy-ancient-black-dragon": {
+      "name": "Ancient Black Dragon",
+      "sheet": "sheet-01.png",
+      "cell": 10,
+      "verdict": "MATCH",
+      "note": "mossy green-black swamp coloring thematically ok"
+    },
+    "spr-fantasy-ancient-blue-dragon": {
+      "name": "Ancient Blue Dragon",
+      "sheet": "sheet-01.png",
+      "cell": 11,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-ancient-green-dragon": {
+      "name": "Ancient Green Dragon",
+      "sheet": "sheet-02.png",
+      "cell": 0,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-ancient-white-dragon": {
+      "name": "Ancient White Dragon",
+      "sheet": "sheet-02.png",
+      "cell": 1,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-animated-armor": {
+      "name": "Animated Armor",
+      "sheet": "sheet-02.png",
+      "cell": 2,
+      "verdict": "MATCH",
+      "note": "darker spikier reaper-style armor but suit-of-armor identity clear"
+    },
+    "spr-fantasy-animated-flying-sword": {
+      "name": "Animated Flying Sword",
+      "sheet": "sheet-02.png",
+      "cell": 3,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-ankheg": {
+      "name": "Ankheg",
+      "sheet": "sheet-02.png",
+      "cell": 4,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-ankylosaurus": {
+      "name": "Ankylosaurus",
+      "sheet": "sheet-02.png",
+      "cell": 5,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-arcanaloth": {
+      "name": "Arcanaloth",
+      "sheet": "sheet-02.png",
+      "cell": 6,
+      "verdict": "MISMATCH",
+      "note": "CAUSE=GENERATION-MISROUTE (standalone, not sibling-swap). sourceFile=mix3-returns/raw-figures/spr-fantasy-arcanaloth-candidate-001.png cell0; its sibling spr-fantasy-cambion (cell1, same file) IS correctly a dapper devilish noble, so the file's OTHER half generated fine -- only the arcanaloth half drew a jackal-headed robed scribe instead. Mitigating note: real D&D arcanaloths ARE canonically jackal-headed yugoloths, so this may be a lore-accurate but house-style-inconsistent render rather than a pure error; still flagged since it departs completely from the corpus's demonic-devil visual language used for every other fiend.",
+      "cause": "GENERATION-MISROUTE",
+      "salvage": "needs-regeneration"
+    },
+    "spr-fantasy-arch-hag": {
+      "name": "Arch-hag",
+      "sheet": "sheet-02.png",
+      "cell": 7,
+      "verdict": "MISMATCH",
+      "note": "CAUSE=GENERATION-MISROUTE (single-cell candidate, rqb-returns/raw-figures/spr-fantasy-arch-hag-candidate-001.png, no sibling to diagnose against). Faceted depicts a tall elegant regal robed woman with an antler/crown headpiece in a serene praying pose -- no hag ugliness/hunch/rags/monstrous scale. Mitigating note: hags disguising as beautiful maidens is a classic trope, so this MAY be a deliberate 'hag in disguise' render, but nothing in the image signals disguise (no uncanny-valley tell); reads as a queen/priestess NPC by default.",
+      "cause": "GENERATION-MISROUTE",
+      "salvage": "needs-regeneration"
+    },
+    "spr-fantasy-archmage": {
+      "name": "Archmage",
+      "sheet": "sheet-02.png",
+      "cell": 8,
+      "verdict": "MATCH",
+      "note": "dark-robed sorcerer variant but wizard identity clear"
+    },
+    "spr-fantasy-awakened-shrub": {
+      "name": "Awakened Shrub",
+      "sheet": "sheet-02.png",
+      "cell": 9,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-bandit-enforcer": {
+      "name": "Bandit Enforcer",
+      "sheet": "sheet-02.png",
+      "cell": 10,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-barbed-devil": {
+      "name": "Barbed Devil",
+      "sheet": "sheet-02.png",
+      "cell": 11,
+      "verdict": "MISMATCH",
+      "note": "CAUSE=GENERATION-MISROUTE (standalone, not sibling-swap). Viewed raw source r3a-returns/raw-figures/spr-fantasy-barbed-devil-candidate-001.png directly: cell0 (this slug) is a spiky quadrupedal dragon/raptor-postured beast with a curled thorny tail -- not remotely humanoid. Its sibling cell1 (Bearded Devil, same file) IS a correct bipedal horned devil with a glaive and a beard of hooked spikes matching D&D canon exactly -- so the file's other half rendered fine; only this half drew a beast instead of a devil.",
+      "cause": "GENERATION-MISROUTE",
+      "salvage": "needs-regeneration"
+    },
+    "spr-fantasy-bat-raven-owl-hawk": {
+      "name": "Bat Raven Owl Hawk",
+      "sheet": "sheet-03.png",
+      "cell": 0,
+      "verdict": "MATCH",
+      "note": "no legacy counterpart; bird-winged humanoid reads fine for the grouping"
+    },
+    "spr-fantasy-bearded-devil": {
+      "name": "Bearded Devil",
+      "sheet": "sheet-03.png",
+      "cell": 1,
+      "verdict": "MATCH",
+      "note": "Viewed raw source directly (same file as Barbed Devil, r3a-returns/.../spr-fantasy-barbed-devil-candidate-001.png cell1): bipedal horned devil wielding a glaive with a distinct beard of hooked spikes around the chin -- this is canonically accurate to D&D's Bearded Devil (glaive + spike-beard are its signature traits). Upgraded from initial DUBIOUS after direct source inspection; pale/gray palette is a stylization, not an identity miss."
+    },
+    "spr-fantasy-blob-of-annihilation": {
+      "name": "Blob of Annihilation",
+      "sheet": "sheet-03.png",
+      "cell": 2,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-blood-hawk-eagle": {
+      "name": "Blood Hawk Eagle",
+      "sheet": "sheet-03.png",
+      "cell": 3,
+      "verdict": "MATCH",
+      "note": "no legacy counterpart"
+    },
+    "spr-fantasy-blue-dragon": {
+      "name": "Blue Dragon",
+      "sheet": "sheet-03.png",
+      "cell": 4,
+      "verdict": "MATCH",
+      "note": "no legacy counterpart"
+    },
+    "spr-fantasy-bone-naga": {
+      "name": "Bone Naga",
+      "sheet": "sheet-03.png",
+      "cell": 5,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-brass-dragon": {
+      "name": "Brass Dragon",
+      "sheet": "sheet-03.png",
+      "cell": 6,
+      "verdict": "MATCH",
+      "note": "no legacy counterpart"
+    },
+    "spr-fantasy-brass-dragon-wyrmling-bronze-dragon-wyrmling": {
+      "name": "Brass Dragon Wyrmling Bronze Dragon Wyrmling",
+      "sheet": "sheet-03.png",
+      "cell": 7,
+      "verdict": "MATCH",
+      "note": "no legacy counterpart"
+    },
+    "spr-fantasy-brazen-gorgon": {
+      "name": "Brazen Gorgon",
+      "sheet": "sheet-03.png",
+      "cell": 8,
+      "verdict": "MATCH",
+      "note": "faceted is a bronze/molten bull-headed minotaur-like figure -- correct identity for D&D 'Gorgon' (bronze-plated bull); legacy panel shows a snake-haired medusa/naga woman which appears to be the mislabeled one, not the faceted candidate -- out of audit scope (legacy-side issue, not a faceted regression)"
+    },
+    "spr-fantasy-bugbear-stalker": {
+      "name": "Bugbear Stalker",
+      "sheet": "sheet-03.png",
+      "cell": 9,
+      "verdict": "MATCH",
+      "note": "faceted reinterprets the family as lean pointy-eared goblinoid raiders rather than legacy's hyena/bear-faced look -- consistent across all 3 bugbear-stalker/-strangler/-warrior slugs with variant-appropriate weapons (knife/garrote/mace); reads as a deliberate style pass, not a misroute"
+    },
+    "spr-fantasy-bugbear-stalker-strangler": {
+      "name": "Bugbear Stalker (Strangler)",
+      "sheet": "sheet-03.png",
+      "cell": 10,
+      "verdict": "MATCH",
+      "note": "same lean-goblinoid family reinterpretation as spr-fantasy-bugbear-stalker; garrote weapon matches the Strangler variant name"
+    },
+    "spr-fantasy-bugbear-warrior": {
+      "name": "Bugbear Warrior",
+      "sheet": "sheet-03.png",
+      "cell": 11,
+      "verdict": "MATCH",
+      "note": "same lean-goblinoid family reinterpretation; spiked mace matches Warrior variant"
+    },
+    "spr-fantasy-builder-dragonborn-land-worker-dragonborn": {
+      "name": "Builder Dragonborn Land Worker Dragonborn",
+      "sheet": "sheet-04.png",
+      "cell": 0,
+      "verdict": "MATCH",
+      "note": "no legacy counterpart"
+    },
+    "spr-fantasy-bulette": {
+      "name": "Bulette",
+      "sheet": "sheet-04.png",
+      "cell": 1,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-bulette-pup": {
+      "name": "Bulette Pup",
+      "sheet": "sheet-04.png",
+      "cell": 2,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-cambion": {
+      "name": "Cambion",
+      "sheet": "sheet-04.png",
+      "cell": 3,
+      "verdict": "MATCH",
+      "note": "dapper devilish-noble reinterpretation but horns/wings/sword half-fiend identity clear"
+    },
+    "spr-fantasy-carrion-crawler": {
+      "name": "Carrion Crawler",
+      "sheet": "sheet-04.png",
+      "cell": 4,
+      "verdict": "MATCH",
+      "note": "faceted's tentacle-mouth design is actually MORE canonically correct for Carrion Crawler than legacy's skeletal-lizard look"
+    },
+    "spr-fantasy-centaur-trooper": {
+      "name": "Centaur Trooper",
+      "sheet": "sheet-04.png",
+      "cell": 5,
+      "verdict": "MATCH",
+      "note": "bow instead of spear but centaur identity clear"
+    },
+    "spr-fantasy-centaur-warden": {
+      "name": "Centaur Warden",
+      "sheet": "sheet-04.png",
+      "cell": 6,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-chasme": {
+      "name": "Chasme",
+      "sheet": "sheet-04.png",
+      "cell": 7,
+      "verdict": "MATCH",
+      "note": "faceted is a winged fly-demon with proboscis -- the CORRECT D&D Chasme identity; legacy's many-eyed beholder-tentacle look appears to be the mislabeled one, out of audit scope"
+    },
+    "spr-fantasy-chimera": {
+      "name": "Chimera",
+      "sheet": "sheet-04.png",
+      "cell": 8,
+      "verdict": "MATCH",
+      "note": "dragon head in place of snake-head but lion/goat/reptile three-headed winged chimera identity clear"
+    },
+    "spr-fantasy-cockatrice": {
+      "name": "Cockatrice",
+      "sheet": "sheet-04.png",
+      "cell": 9,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-cockatrice-regent": {
+      "name": "Drake Regent",
+      "sheet": "sheet-06.png",
+      "cell": 0,
+      "verdict": "MATCH",
+      "note": "crowned rooster-griffon hybrid fits a regal cockatrice"
+    },
+    "spr-fantasy-commoner": {
+      "name": "Commoner",
+      "sheet": "sheet-04.png",
+      "cell": 10,
+      "verdict": "MATCH",
+      "note": "hooded traveler w/ sack+sickle vs legacy's capped peasant w/ club -- both read as a commoner NPC"
+    },
+    "spr-fantasy-copper-dragon-wyrmling-gold-dragon-wyrmling": {
+      "name": "Copper Dragon Wyrmling Gold Dragon Wyrmling",
+      "sheet": "sheet-04.png",
+      "cell": 11,
+      "verdict": "MATCH",
+      "note": "no legacy counterpart"
+    },
+    "spr-fantasy-couatl": {
+      "name": "Couatl",
+      "sheet": "sheet-05.png",
+      "cell": 0,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-crawling-claw": {
+      "name": "Crawling Claw",
+      "sheet": "sheet-05.png",
+      "cell": 1,
+      "verdict": "MATCH",
+      "note": "faceted shows a single large disembodied clawed hand -- the canonically correct Crawling Claw; legacy's skull+torso rendering is the looser one"
+    },
+    "spr-fantasy-darkmantle": {
+      "name": "Darkmantle",
+      "sheet": "sheet-05.png",
+      "cell": 2,
+      "verdict": "MATCH",
+      "note": "pointed mantle/cloak shape with tentacle fringe reads well for a stalactite-mimic 'mantle' creature"
+    },
+    "spr-fantasy-death-dog": {
+      "name": "Death Dog",
+      "sheet": "sheet-05.png",
+      "cell": 3,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-death-knight": {
+      "name": "Death Knight",
+      "sheet": "sheet-05.png",
+      "cell": 4,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-death-knight-aspirant": {
+      "name": "Death Knight Aspirant",
+      "sheet": "sheet-05.png",
+      "cell": 5,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-deep-brute": {
+      "name": "Deep-Brute",
+      "sheet": "sheet-05.png",
+      "cell": 6,
+      "verdict": "MISMATCH",
+      "note": "CAUSE=GENERATION-MISROUTE, whole 2-cell candidate. Viewed raw source rqb-returns/raw-figures/spr-fantasy-deep-brute-candidate-001.png directly: cell0 is an angry white-furred ape/yeti beast on all fours -- no relation to legacy's green reptilian/orc-brute with club. Sibling cell1 (Deep-Brute Thonot) is ALSO wrong and unrelated to this cell, so it's not a sibling-swap -- the model simply never drew deep-brutes for either half of this prompt.",
+      "cause": "GENERATION-MISROUTE",
+      "salvage": "needs-regeneration"
+    },
+    "spr-fantasy-deep-brute-thonot": {
+      "name": "Deep-Brute Thonot",
+      "sheet": "sheet-05.png",
+      "cell": 7,
+      "verdict": "MISMATCH",
+      "note": "CAUSE=GENERATION-MISROUTE, same candidate file as spr-fantasy-deep-brute (cell1). Raw source confirms a ghostly purple-haired witch-doctor/shaman figure draped in skull-and-bone totems, hand raised with a magic-lightning effect -- no reptilian traits, and not a recognizable variant of the deep-brute-ape in cell0 either. Both halves of this candidate are wrong and mutually unrelated -- whole file needs regeneration.",
+      "cause": "GENERATION-MISROUTE",
+      "salvage": "needs-regeneration"
+    },
+    "spr-fantasy-displacer-beast": {
+      "name": "Displacer Beast",
+      "sheet": "sheet-05.png",
+      "cell": 8,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-domestic-animal-goat-goose-peacock-turkey": {
+      "name": "Domestic Animal Goat Goose Peacock Turkey",
+      "sheet": "sheet-05.png",
+      "cell": 9,
+      "verdict": "MATCH",
+      "note": "no legacy counterpart; shows goat (one of the named animals)"
+    },
+    "spr-fantasy-dragon-turtle": {
+      "name": "Dragon Turtle",
+      "sheet": "sheet-05.png",
+      "cell": 10,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-dragonborn-ship-s-purser-temple-acolyte": {
+      "name": "Dragonborn Ship S Purser Temple Acolyte",
+      "sheet": "sheet-05.png",
+      "cell": 11,
+      "verdict": "MATCH",
+      "note": "no legacy counterpart"
+    },
+    "spr-fantasy-dretch": {
+      "name": "Dretch",
+      "sheet": "sheet-06.png",
+      "cell": 1,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-drider": {
+      "name": "Drider",
+      "sheet": "sheet-06.png",
+      "cell": 2,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-dungeon-animal-canary-cave-rat-salamander-cricket": {
+      "name": "Dungeon Animal Canary Cave Rat Salamander Cricket",
+      "sheet": "sheet-06.png",
+      "cell": 3,
+      "verdict": "MATCH",
+      "note": "no legacy counterpart; shows rat/salamander/cricket subset"
+    },
+    "spr-fantasy-earth-elemental": {
+      "name": "Earth Elemental",
+      "sheet": "sheet-06.png",
+      "cell": 4,
+      "verdict": "MISMATCH",
+      "note": "CAUSE=CUT-ORDER (r3a whole-file batch shift, SALVAGEABLE -- confirmed, corrected from initial GENERATION-MISROUTE call). sourceFile=r3a-returns/raw-figures/spr-fantasy-earth-elemental-candidate-001.png actually contains call12's real content (doppelganger-like dissolving wraith + gargoyle-devil), part of the same r3a off-by-one file-save bug documented under Giant Boar (sheet 07 c00). This slug's OWN true art was directly located: r3a-returns/raw-figures/spr-fantasy-flameskull-candidate-001.png cell0 is a perfect rocky boulder-body Earth Elemental (verified by direct image inspection) -- mechanically salvageable by re-pointing sourceFile+cellIndex, no regeneration needed.",
+      "cause": "CUT-ORDER",
+      "salvage": "salvageable-recut"
+    },
+    "spr-fantasy-elder-deep-thing": {
+      "name": "Elder Deep-Thing",
+      "sheet": "sheet-06.png",
+      "cell": 5,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-elven-herbalist-elf-sells-cures-and-quietly-a-few-curses-hauler-elf": {
+      "name": "Elven Herbalist Elf Sells Cures And Quietly A Few Curses Hauler Elf",
+      "sheet": "sheet-06.png",
+      "cell": 6,
+      "verdict": "MATCH",
+      "note": "no legacy counterpart"
+    },
+    "spr-fantasy-empyrean": {
+      "name": "Empyrean",
+      "sheet": "sheet-06.png",
+      "cell": 7,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-empyrean-iota": {
+      "name": "Empyrean Iota",
+      "sheet": "sheet-06.png",
+      "cell": 8,
+      "verdict": "MATCH",
+      "note": "crystalline winged figure vs legacy's plasma-energy figure but celestial-being identity holds"
+    },
+    "spr-fantasy-ettercap": {
+      "name": "Ettercap",
+      "sheet": "sheet-06.png",
+      "cell": 9,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-fire-elemental": {
+      "name": "Fire Elemental",
+      "sheet": "sheet-06.png",
+      "cell": 10,
+      "verdict": "MISMATCH",
+      "note": "CAUSE=CUT-ORDER (r3a whole-file batch shift, SALVAGEABLE -- confirmed, corrected from initial GENERATION-MISROUTE call). Same misassigned file as spr-fantasy-earth-elemental. This slug's OWN true art was directly located: r3a-returns/raw-figures/spr-fantasy-flameskull-candidate-001.png cell1 is a perfect blazing flame-body humanoid Fire Elemental (verified by direct image inspection) -- mechanically salvageable by re-pointing sourceFile+cellIndex, no regeneration needed.",
+      "cause": "CUT-ORDER",
+      "salvage": "salvageable-recut"
+    },
+    "spr-fantasy-fomorian": {
+      "name": "Fomorian",
+      "sheet": "sheet-06.png",
+      "cell": 11,
+      "verdict": "MATCH",
+      "note": "gaunt pale rendering but retains the single cyclopean eye + club that identify Fomorian"
+    },
+    "spr-fantasy-giant-boar": {
+      "name": "Giant Boar",
+      "sheet": "sheet-07.png",
+      "cell": 0,
+      "verdict": "MISMATCH",
+      "note": "CAUSE=CUT-ORDER (candidate-file batch misassignment). Faceted is a scarred gray gorilla/ape, not a boar. sourceFile=r3a-returns/.../spr-fantasy-giant-boar-candidate-001.png cell0. This file's true content (ape/bird/badger/bat, see sibling cells) belongs to some OTHER slug-quartet generated immediately before this one in the r3a call order -- not yet identified. See sheet-07/08 pattern note below.",
+      "cause": "CUT-ORDER",
+      "salvage": "salvageable-recut"
+    },
+    "spr-fantasy-giant-centipede": {
+      "name": "Giant Centipede",
+      "sheet": "sheet-07.png",
+      "cell": 1,
+      "verdict": "MISMATCH",
+      "note": "CAUSE=CUT-ORDER (same misassigned file as giant-boar, cell1). Faceted is a crested ground-bird, not a centipede.",
+      "cause": "CUT-ORDER",
+      "salvage": "salvageable-recut"
+    },
+    "spr-fantasy-giant-constrictor-snake": {
+      "name": "Giant Constrictor Snake",
+      "sheet": "sheet-07.png",
+      "cell": 2,
+      "verdict": "MISMATCH",
+      "note": "CAUSE=CUT-ORDER (same misassigned file as giant-boar, cell2). Faceted is a badger, not a snake.",
+      "cause": "CUT-ORDER",
+      "salvage": "salvageable-recut"
+    },
+    "spr-fantasy-giant-crab": {
+      "name": "Giant Crab",
+      "sheet": "sheet-07.png",
+      "cell": 3,
+      "verdict": "MISMATCH",
+      "note": "CAUSE=CUT-ORDER (same misassigned file as giant-boar, cell3). Faceted is a hanging bat, not a crab.",
+      "cause": "CUT-ORDER",
+      "salvage": "salvageable-recut"
+    },
+    "spr-fantasy-giant-crocodile": {
+      "name": "Giant Crocodile",
+      "sheet": "sheet-07.png",
+      "cell": 4,
+      "verdict": "MISMATCH",
+      "note": "CAUSE=CUT-ORDER CONFIRMED SALVAGEABLE. sourceFile=spr-fantasy-giant-crocodile-candidate-001.png cell0, but this file's 4 cells actually contain the REAL giant-boar/centipede/snake/crab art (visually matches those legacy sprites). This is a whole-candidate-file one-batch shift: file N holds the real output of batch N-1. Real crocodile art must live in the NEXT file in the chain (frog-candidate, cell0) -- confirmed below.",
+      "cause": "CUT-ORDER",
+      "salvage": "salvageable-recut"
+    },
+    "spr-fantasy-giant-eagle": {
+      "name": "Giant Eagle",
+      "sheet": "sheet-07.png",
+      "cell": 5,
+      "verdict": "MISMATCH",
+      "note": "CAUSE=CUT-ORDER, same shifted file as giant-crocodile (cell1) = real giant-centipede art. Real eagle art is in frog-candidate cell1.",
+      "cause": "CUT-ORDER",
+      "salvage": "salvageable-recut"
+    },
+    "spr-fantasy-giant-elk": {
+      "name": "Giant Elk",
+      "sheet": "sheet-07.png",
+      "cell": 6,
+      "verdict": "MISMATCH",
+      "note": "CAUSE=CUT-ORDER, same shifted file as giant-crocodile (cell2) = real giant-constrictor-snake art. Real elk art is in frog-candidate cell2.",
+      "cause": "CUT-ORDER",
+      "salvage": "salvageable-recut"
+    },
+    "spr-fantasy-giant-fire-beetle": {
+      "name": "Giant Fire Beetle",
+      "sheet": "sheet-07.png",
+      "cell": 7,
+      "verdict": "MISMATCH",
+      "note": "CAUSE=CUT-ORDER, same shifted file as giant-crocodile (cell3) = real giant-crab art. Real fire-beetle art is in frog-candidate cell3.",
+      "cause": "CUT-ORDER",
+      "salvage": "salvageable-recut"
+    },
+    "spr-fantasy-giant-frog": {
+      "name": "Giant Frog",
+      "sheet": "sheet-07.png",
+      "cell": 8,
+      "verdict": "MISMATCH",
+      "note": "CAUSE=CUT-ORDER CONFIRMED SALVAGEABLE. sourceFile=spr-fantasy-giant-frog-candidate-001.png cell0 actually contains the REAL giant-crocodile art (toothy scaled reptile, matches legacy). Same one-batch-shift pattern continues from giant-crocodile's file. Real frog art should be in octopus-candidate cell0 -- verify on sheet 08.",
+      "cause": "CUT-ORDER",
+      "salvage": "salvageable-recut"
+    },
+    "spr-fantasy-giant-goat": {
+      "name": "Giant Goat",
+      "sheet": "sheet-07.png",
+      "cell": 9,
+      "verdict": "MISMATCH",
+      "note": "CAUSE=CUT-ORDER, frog-candidate cell1 = real giant-eagle art (eagle perched on rock). Real goat art expected in octopus-candidate cell1.",
+      "cause": "CUT-ORDER",
+      "salvage": "salvageable-recut"
+    },
+    "spr-fantasy-giant-hyena": {
+      "name": "Giant Hyena",
+      "sheet": "sheet-07.png",
+      "cell": 10,
+      "verdict": "MISMATCH",
+      "note": "CAUSE=CUT-ORDER, frog-candidate cell2 = real giant-elk art (antlered elk). Real hyena art expected in octopus-candidate cell2.",
+      "cause": "CUT-ORDER",
+      "salvage": "salvageable-recut"
+    },
+    "spr-fantasy-giant-lizard": {
+      "name": "Giant Lizard",
+      "sheet": "sheet-07.png",
+      "cell": 11,
+      "verdict": "MISMATCH",
+      "note": "CAUSE=CUT-ORDER, frog-candidate cell3 = real giant-fire-beetle art (glowing orange-shelled beetle). Real lizard art expected in octopus-candidate cell3.",
+      "cause": "CUT-ORDER",
+      "salvage": "salvageable-recut"
+    },
+    "spr-fantasy-giant-octopus": {
+      "name": "Giant Octopus",
+      "sheet": "sheet-08.png",
+      "cell": 0,
+      "verdict": "MISMATCH",
+      "note": "CAUSE=CUT-ORDER CONFIRMED. sourceFile=giant-octopus-candidate-001.png cell0 actually shows the real giant-frog art (toad swallowing a rat). Confirms the whole-round save-index-lag bug: r3a-returns/provenance/r3a-generation-calls.json shows call17=giant-boar-quartet, call18=crocodile-quartet, call19=frog-quartet, call20=octopus-quartet -- each candidate FILE's on-disk bytes hold the PRIOR call's real output (file for call K holds call K-1's real render). Mechanically salvageable by re-pointing sourceFile one call earlier per slug-quartet.",
+      "cause": "CUT-ORDER",
+      "salvage": "salvageable-recut"
+    },
+    "spr-fantasy-giant-owl": {
+      "name": "Giant Owl",
+      "sheet": "sheet-08.png",
+      "cell": 1,
+      "verdict": "MISMATCH",
+      "note": "CAUSE=CUT-ORDER (same file as giant-octopus, cell1) = real giant-goat art (horned ram).",
+      "cause": "CUT-ORDER",
+      "salvage": "salvageable-recut"
+    },
+    "spr-fantasy-giant-rat": {
+      "name": "Giant Rat",
+      "sheet": "sheet-08.png",
+      "cell": 2,
+      "verdict": "MISMATCH",
+      "note": "CAUSE=CUT-ORDER (same file, cell2) = real giant-hyena art.",
+      "cause": "CUT-ORDER",
+      "salvage": "salvageable-recut"
+    },
+    "spr-fantasy-giant-scorpion": {
+      "name": "Giant Scorpion",
+      "sheet": "sheet-08.png",
+      "cell": 3,
+      "verdict": "MISMATCH",
+      "note": "CAUSE=CUT-ORDER (same file, cell3) = real giant-lizard art (lizard on rock).",
+      "cause": "CUT-ORDER",
+      "salvage": "salvageable-recut"
+    },
+    "spr-fantasy-giant-seahorse": {
+      "name": "Giant Seahorse",
+      "sheet": "sheet-08.png",
+      "cell": 4,
+      "verdict": "MISMATCH",
+      "note": "CAUSE=CUT-ORDER CONFIRMED. sourceFile=giant-seahorse-candidate-001.png cell0 shows real giant-octopus art (cthulhu-esque octopus bust).",
+      "cause": "CUT-ORDER",
+      "salvage": "salvageable-recut"
+    },
+    "spr-fantasy-giant-shark": {
+      "name": "Giant Shark",
+      "sheet": "sheet-08.png",
+      "cell": 5,
+      "verdict": "MISMATCH",
+      "note": "CAUSE=CUT-ORDER (same file, cell1) = real giant-owl art.",
+      "cause": "CUT-ORDER",
+      "salvage": "salvageable-recut"
+    },
+    "spr-fantasy-giant-spider": {
+      "name": "Giant Spider",
+      "sheet": "sheet-08.png",
+      "cell": 6,
+      "verdict": "MISMATCH",
+      "note": "CAUSE=CUT-ORDER (same file, cell2) = real giant-rat art.",
+      "cause": "CUT-ORDER",
+      "salvage": "salvageable-recut"
+    },
+    "spr-fantasy-giant-squid": {
+      "name": "Giant Squid",
+      "sheet": "sheet-08.png",
+      "cell": 7,
+      "verdict": "MISMATCH",
+      "note": "CAUSE=CUT-ORDER (same file, cell3) = real giant-scorpion art.",
+      "cause": "CUT-ORDER",
+      "salvage": "salvageable-recut"
+    },
+    "spr-fantasy-giant-toad": {
+      "name": "Giant Toad",
+      "sheet": "sheet-08.png",
+      "cell": 8,
+      "verdict": "MISMATCH",
+      "note": "CAUSE=CUT-ORDER CONFIRMED. sourceFile=giant-toad-candidate-001.png cell0 shows real giant-seahorse art.",
+      "cause": "CUT-ORDER",
+      "salvage": "needs-regeneration"
+    },
+    "spr-fantasy-giant-vulture": {
+      "name": "Giant Vulture",
+      "sheet": "sheet-08.png",
+      "cell": 9,
+      "verdict": "MISMATCH",
+      "note": "CAUSE=CUT-ORDER (same file, cell1) = real giant-shark art.",
+      "cause": "CUT-ORDER",
+      "salvage": "needs-regeneration"
+    },
+    "spr-fantasy-giant-wasp": {
+      "name": "Giant Wasp",
+      "sheet": "sheet-08.png",
+      "cell": 10,
+      "verdict": "MISMATCH",
+      "note": "CAUSE=CUT-ORDER (same file, cell2) = real giant-spider art.",
+      "cause": "CUT-ORDER",
+      "salvage": "needs-regeneration"
+    },
+    "spr-fantasy-giant-weasel": {
+      "name": "Giant Weasel",
+      "sheet": "sheet-08.png",
+      "cell": 11,
+      "verdict": "MISMATCH",
+      "note": "CAUSE=CUT-ORDER (same file, cell3) = real giant-squid art. NOTE: giant-toad-candidate-001.png is the LAST call (index22) in r3a-generation-calls.json -- its own TRUE intended content (toad/vulture/wasp/weasel) is the tail of the whole shift chain and has no known recoverable file within r3a-returns (would be call23, which does not exist in this round). All 4 of Giant Toad/Vulture/Wasp/Weasel therefore need fresh regeneration, not a re-cut -- unless the real art surfaces in a later round by cross-round archaeology.",
+      "cause": "CUT-ORDER",
+      "salvage": "needs-regeneration"
+    },
+    "spr-fantasy-gnoll-demoniac": {
+      "name": "Gnoll Demoniac",
+      "sheet": "sheet-09.png",
+      "cell": 1,
+      "verdict": "MATCH",
+      "note": "reptilian-leaning demon head + ritual skull/circle imagery fits the 'possessed cultist' demoniac theme"
+    },
+    "spr-fantasy-gnoll-fang-of-the-beast": {
+      "name": "Gnoll Fang of the Beast",
+      "sheet": "sheet-09.png",
+      "cell": 2,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-gnoll-pack-lord": {
+      "name": "Gnoll Pack Lord",
+      "sheet": "sheet-09.png",
+      "cell": 3,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-gnoll-warrior": {
+      "name": "Gnoll Warrior",
+      "sheet": "sheet-09.png",
+      "cell": 4,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-gnomish-alchemist-clockmaker-tinkerer-delver": {
+      "name": "Gnomish Alchemist Clockmaker Tinkerer Delver",
+      "sheet": "sheet-09.png",
+      "cell": 5,
+      "verdict": "MATCH",
+      "note": "no legacy counterpart"
+    },
+    "spr-fantasy-gorgon": {
+      "name": "Gilded Medusa",
+      "sheet": "sheet-09.png",
+      "cell": 0,
+      "verdict": "MISMATCH",
+      "note": "CAUSE=GENERATION-MISROUTE, most likely a prompt-text mixup (not a cut-order swap -- these are two ENTIRELY SEPARATE candidate files). sourceFile=r8b-returns/raw-figures/spr-fantasy-gorgon-candidate-001.png cell0, sibling cell1=spr-fantasy-greater-mimic which IS correct (confirmed door-mimic, sheet 09 c08) -- so this file's other half is fine. The bronze-bull image itself is the correct D&D 'Gorgon' monster, and a SEPARATE file (spr-fantasy-brazen-gorgon-candidate-001.png) ALSO independently generated a bronze bull for spr-fantasy-brazen-gorgon (confirmed MATCH, sheet 03 c08). Two near-identically-named slugs ('gorgon' vs 'brazen-gorgon') both produced the same bull-monster concept -- strongly suggests the prompt text for spr-fantasy-gorgon accidentally reused/echoed the brazen-gorgon prompt rather than a 'Gilded Medusa' (snake-haired woman) prompt.",
+      "cause": "GENERATION-MISROUTE",
+      "salvage": "needs-regeneration"
+    },
+    "spr-fantasy-graveyard-revenant": {
+      "name": "Graveyard Revenant",
+      "sheet": "sheet-09.png",
+      "cell": 6,
+      "verdict": "MATCH",
+      "note": "Victorian-coat ghost rendering but gaunt undead-humanoid identity holds"
+    },
+    "spr-fantasy-gray-ooze": {
+      "name": "Gray Ooze",
+      "sheet": "sheet-09.png",
+      "cell": 7,
+      "verdict": "MISMATCH",
+      "note": "CAUSE=GENERATION-MISROUTE (standalone, not sibling-swap). Viewed raw source r3c-returns/raw-figures/spr-fantasy-gnoll-fang-of-the-beast-candidate-001.png directly (4-cell sheet): cells 0-2 are three correctly-rendered gnoll warriors (matching their assigned slugs, all confirmed MATCH), cell3 (this slug) is a thin twisting crystalline tendril/claw with no ooze/blob/drip characteristics at all. Only the 4th (unrelated 'ooze' tack-on) slot failed while the 3 gnoll slots rendered fine -- isolated single-cell failure, not a swap.",
+      "cause": "GENERATION-MISROUTE",
+      "salvage": "needs-regeneration"
+    },
+    "spr-fantasy-greater-mimic": {
+      "name": "Greater Mimic",
+      "sheet": "sheet-09.png",
+      "cell": 8,
+      "verdict": "MATCH",
+      "note": "door-shaped mimic instead of chest-shaped but toothy-mouth mimic identity clear"
+    },
+    "spr-fantasy-greater-shadow": {
+      "name": "Greater Shadow",
+      "sheet": "sheet-09.png",
+      "cell": 9,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-grell": {
+      "name": "Lurking Fiend",
+      "sheet": "sheet-11.png",
+      "cell": 8,
+      "verdict": "MATCH",
+      "note": "faceted's floating tentacled beaked head with no body is the CORRECT D&D Grell depiction; legacy's zombie-humanoid look is the imprecise one, out of audit scope"
+    },
+    "spr-fantasy-grick": {
+      "name": "Grick",
+      "sheet": "sheet-09.png",
+      "cell": 10,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-grick-ancient": {
+      "name": "Grick Ancient",
+      "sheet": "sheet-09.png",
+      "cell": 11,
+      "verdict": "MISMATCH",
+      "note": "CAUSE=GENERATION-MISROUTE (standalone, not sibling-swap). sourceFile=r8b-returns/raw-figures/spr-fantasy-grick-ancient-candidate-001.png cell0, sibling cell1=spr-fantasy-griffon which IS correct (confirmed MATCH, sheet 10 c00) -- so this file's other half rendered fine; only the grick-ancient half drew a plain coiled snake instead of the circular tooth-ring maw + tentacle-arms that define a grick.",
+      "cause": "GENERATION-MISROUTE",
+      "salvage": "needs-regeneration"
+    },
+    "spr-fantasy-griffon": {
+      "name": "Griffon",
+      "sheet": "sheet-10.png",
+      "cell": 0,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-half-dragon": {
+      "name": "Half-Dragon",
+      "sheet": "sheet-10.png",
+      "cell": 1,
+      "verdict": "DUBIOUS",
+      "note": "CAUSE=QUALITY FAILURE, not a crop artifact and not an identity swap. Viewed raw source mix3-returns/raw-figures/spr-fantasy-half-dragon-candidate-001.png directly (single cell): the creature IS a dragon-headed humanoid (correct Half-Dragon identity) but is severely malformed/elongated -- unnaturally stretched torso and limbs, taffy-like proportions. Identity is right, anatomy quality is not; this is a bad generation needing a quality-motivated regen, distinct from the identity-mismatch cases elsewhere in this audit.",
+      "cause": "QUALITY-FAILURE",
+      "salvage": "needs-regeneration (identity correct, anatomy malformed)"
+    },
+    "spr-fantasy-harpy": {
+      "name": "Harpy",
+      "sheet": "sheet-10.png",
+      "cell": 2,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-harpy-matriarch": {
+      "name": "Harpy Matriarch",
+      "sheet": "sheet-10.png",
+      "cell": 3,
+      "verdict": "MATCH",
+      "note": "crowned/regal bird-woman fits 'Matriarch'"
+    },
+    "spr-fantasy-haunting-revenant": {
+      "name": "Haunting Revenant",
+      "sheet": "sheet-10.png",
+      "cell": 4,
+      "verdict": "MATCH",
+      "note": "gaunt robed undead figure fits revenant identity (scale mismatch vs Gargantuan caption is a stats issue not an art identity issue)"
+    },
+    "spr-fantasy-hell-hound": {
+      "name": "Hell Hound",
+      "sheet": "sheet-10.png",
+      "cell": 5,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-hezrou": {
+      "name": "Hezrou",
+      "sheet": "sheet-10.png",
+      "cell": 6,
+      "verdict": "MATCH",
+      "note": "toad/frog-demon quadruped is actually the canonically correct Hezrou depiction; legacy's generic horned-devil look is the looser one"
+    },
+    "spr-fantasy-hill-giant": {
+      "name": "Hill Giant",
+      "sheet": "sheet-10.png",
+      "cell": 7,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-hippogriff": {
+      "name": "Hippogriff",
+      "sheet": "sheet-10.png",
+      "cell": 8,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-homunculus": {
+      "name": "Homunculus",
+      "sheet": "sheet-10.png",
+      "cell": 9,
+      "verdict": "MISMATCH",
+      "note": "CAUSE=GENERATION-MISROUTE (standalone, not sibling-swap). sourceFile=rqb-returns/raw-figures/spr-fantasy-awakened-shrub-candidate-001.png cell2; siblings cell0=spr-fantasy-awakened-shrub and cell1=spr-fantasy-bandit-enforcer are BOTH correct (confirmed MATCH, sheet 02 c09/c10) -- so 2 of 3 cells in this candidate rendered fine; only the homunculus (3rd) slot drew a bat-winged gargoyle/imp instead of a small clay/construct servant.",
+      "cause": "GENERATION-MISROUTE",
+      "salvage": "needs-regeneration"
+    },
+    "spr-fantasy-hook-horror": {
+      "name": "Hook Horror",
+      "sheet": "sheet-10.png",
+      "cell": 10,
+      "verdict": "MATCH",
+      "note": "faceted is a gaunt vulture-headed insectoid with large hooked clawed limbs -- actually the canonically correct Hook Horror depiction; legacy's beholder-tentacle look is the looser one"
+    },
+    "spr-fantasy-horned-devil": {
+      "name": "Horned Devil",
+      "sheet": "sheet-10.png",
+      "cell": 11,
+      "verdict": "MATCH",
+      "note": "pale/gaunt stylization instead of legacy's red-muscular devil, but horns+wings+bipedal devil silhouette holds. Third devil (after Barbed/Bearded) in this same pale-gaunt style -- likely a deliberate house style for the devil family, revisit Barbed/Bearded Devil DUBIOUS calls against this."
+    },
+    "spr-fantasy-host-goliath-pampered-elite-goliath": {
+      "name": "Host Goliath Pampered Elite Goliath",
+      "sheet": "sheet-11.png",
+      "cell": 0,
+      "verdict": "MATCH",
+      "note": "no legacy counterpart"
+    },
+    "spr-fantasy-hydra": {
+      "name": "Hydra",
+      "sheet": "sheet-11.png",
+      "cell": 1,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-ice-devil": {
+      "name": "Ice Devil",
+      "sheet": "sheet-11.png",
+      "cell": 2,
+      "verdict": "MATCH",
+      "note": "abstract thin icy-crystal-spike silhouette; fourth devil (Barbed/Bearded/Horned/Ice) in the same pale-abstract house style -- consistent enough to read as deliberate, not a misroute"
+    },
+    "spr-fantasy-ice-mephit": {
+      "name": "Ice Mephit",
+      "sheet": "sheet-11.png",
+      "cell": 3,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-kobold-inventor-halfling-orchard-keeper-elderly-halfling-knows-every-tree-in-the-grove-by-name": {
+      "name": "Kobold Inventor Halfling Orchard Keeper Elderly Halfling Knows Every Tree In The Grove By Name",
+      "sheet": "sheet-11.png",
+      "cell": 4,
+      "verdict": "MATCH",
+      "note": "no legacy counterpart; shows the 'elderly orchard keeper' half of this merged multi-NPC slug"
+    },
+    "spr-fantasy-kraken": {
+      "name": "Kraken",
+      "sheet": "sheet-11.png",
+      "cell": 5,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-lamia": {
+      "name": "Lamia",
+      "sheet": "sheet-11.png",
+      "cell": 6,
+      "verdict": "MATCH",
+      "note": "faceted's lion-bodied woman is the CORRECT D&D Lamia (body of a lion + humanoid female torso per 5e MM); legacy's snake-tailed naga look is the imprecise one, out of audit scope"
+    },
+    "spr-fantasy-lantern-sage": {
+      "name": "Lantern-Sage",
+      "sheet": "sheet-11.png",
+      "cell": 7,
+      "verdict": "MISMATCH",
+      "note": "CAUSE=AMBIGUOUS -- likely deliberate name-literal reinterpretation rather than a pipeline error. sourceFile=rqb-returns/raw-figures/spr-fantasy-archmage-candidate-001.png cell2; ALL 3 siblings in this 4-cell candidate (archmage, commoner, mage) are correctly-rendered humanoid NPC spellcasters (all confirmed MATCH), and lantern-sage's own render (a hooded sage carrying a lantern-staff) fits that same 'humanoid NPC' cluster perfectly. This suggests the generation batch consistently treated 'Lantern-Sage' as a literal sage-with-a-lantern NPC, not a pipeline glitch. Still flagged as MISMATCH because legacy clearly establishes it as an ANIMATE-OBJECT monster (living lantern, tentacles, central eye, Small size) -- a fundamentally different creature kind, whatever the cause.",
+      "cause": "AMBIGUOUS",
+      "salvage": "adam-call (regen if monster identity kept, else accept as NPC reinterpretation)"
+    },
+    "spr-fantasy-mage": {
+      "name": "Mage",
+      "sheet": "sheet-11.png",
+      "cell": 9,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-manes-vaporspawn": {
+      "name": "Manes Vaporspawn",
+      "sheet": "sheet-11.png",
+      "cell": 10,
+      "verdict": "MATCH",
+      "note": "Reconsidered from DUBIOUS: sourceFile=mix3-returns/raw-figures/spr-fantasy-manes-vaporspawn-candidate-001.png cell0, sibling cell1=spr-fantasy-mezzoloth IS correct (confirmed MATCH, sheet 12 c03), so this file's other half is fine and this isn't a swap. A pale humanoid dissolving into shattered/vapor-like shards is actually a reasonable literal read of 'VAPORSPAWN' specifically (a demon spawned of/dissolving into vapor) -- the qualifier in the name supports the insubstantial treatment rather than contradicting it."
+    },
+    "spr-fantasy-manticore": {
+      "name": "Manticore",
+      "sheet": "sheet-11.png",
+      "cell": 11,
+      "verdict": "MATCH",
+      "note": "human-faced lion-bat-hybrid is the correct Manticore read"
+    },
+    "spr-fantasy-merfolk-skirmisher": {
+      "name": "Merfolk Skirmisher",
+      "sheet": "sheet-12.png",
+      "cell": 0,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-merfolk-wavebender": {
+      "name": "Merfolk Wavebender",
+      "sheet": "sheet-12.png",
+      "cell": 1,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-merrow": {
+      "name": "Merrow",
+      "sheet": "sheet-12.png",
+      "cell": 2,
+      "verdict": "MATCH",
+      "note": "male fish-humanoid vs legacy's female but monstrous-aquatic-humanoid identity clear"
+    },
+    "spr-fantasy-mezzoloth": {
+      "name": "Mezzoloth",
+      "sheet": "sheet-12.png",
+      "cell": 3,
+      "verdict": "MATCH",
+      "note": "faceted's pale alien insectoid is the correct yugoloth Mezzoloth read; legacy's red devil look is the imprecise one"
+    },
+    "spr-fantasy-mimic": {
+      "name": "Mimic",
+      "sheet": "sheet-12.png",
+      "cell": 4,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-mind-thief": {
+      "name": "Mind-Thief",
+      "sheet": "sheet-12.png",
+      "cell": 5,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-mind-thief-arcanist": {
+      "name": "Mind-Thief Arcanist",
+      "sheet": "sheet-12.png",
+      "cell": 6,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-minotaur-of-the-horned-king": {
+      "name": "Minotaur of the Horned King",
+      "sheet": "sheet-12.png",
+      "cell": 7,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-mummy": {
+      "name": "Mummy",
+      "sheet": "sheet-12.png",
+      "cell": 8,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-mummy-lord": {
+      "name": "Mummy Lord",
+      "sheet": "sheet-12.png",
+      "cell": 9,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-myconid-sovereign": {
+      "name": "Myconid Sovereign",
+      "sheet": "sheet-12.png",
+      "cell": 10,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-myconid-sprout": {
+      "name": "Myconid Sprout",
+      "sheet": "sheet-12.png",
+      "cell": 11,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-nalfeshnee": {
+      "name": "Nalfeshnee",
+      "sheet": "sheet-13.png",
+      "cell": 0,
+      "verdict": "MATCH",
+      "note": "faceted's fat boar-headed winged demon is the correct canonical Nalfeshnee; legacy's generic red demon is the imprecise one"
+    },
+    "spr-fantasy-night-hag": {
+      "name": "Night Hag",
+      "sheet": "sheet-13.png",
+      "cell": 1,
+      "verdict": "MATCH",
+      "note": "blue-toned gaunt hag reads fine"
+    },
+    "spr-fantasy-nightmare": {
+      "name": "Nightmare",
+      "sheet": "sheet-13.png",
+      "cell": 2,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-noble": {
+      "name": "Noble",
+      "sheet": "sheet-13.png",
+      "cell": 3,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-nycaloth": {
+      "name": "Nycaloth",
+      "sheet": "sheet-13.png",
+      "cell": 4,
+      "verdict": "MATCH",
+      "note": "green reptilian winged demon vs legacy's purple devil but yugoloth-demon identity holds"
+    },
+    "spr-fantasy-ogre-howdah": {
+      "name": "Ogre Howdah",
+      "sheet": "sheet-13.png",
+      "cell": 5,
+      "verdict": "MATCH",
+      "note": "ogre + spiked howdah platform matches; goblin riders omitted but structure identity clear"
+    },
+    "spr-fantasy-oni": {
+      "name": "Oni",
+      "sheet": "sheet-13.png",
+      "cell": 6,
+      "verdict": "MATCH",
+      "note": "blue oni-mage variant vs legacy's red oni -- both are valid oni color traditions"
+    },
+    "spr-fantasy-otyugh": {
+      "name": "Otyugh",
+      "sheet": "sheet-13.png",
+      "cell": 7,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-owlbear": {
+      "name": "Owlbear",
+      "sheet": "sheet-13.png",
+      "cell": 8,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-owlbear-cub": {
+      "name": "Owlbear Cub",
+      "sheet": "sheet-13.png",
+      "cell": 9,
+      "verdict": "MATCH",
+      "note": "faceted shows clearer owl-beak features than legacy"
+    },
+    "spr-fantasy-panther-hyena": {
+      "name": "Panther Hyena",
+      "sheet": "sheet-13.png",
+      "cell": 10,
+      "verdict": "MATCH",
+      "note": "no legacy counterpart; hyena half of the combined name reads clearly"
+    },
+    "spr-fantasy-pegasus": {
+      "name": "Pegasus",
+      "sheet": "sheet-13.png",
+      "cell": 11,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-peryton": {
+      "name": "Peryton",
+      "sheet": "sheet-14.png",
+      "cell": 0,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-phase-spider": {
+      "name": "Phase Spider",
+      "sheet": "sheet-14.png",
+      "cell": 1,
+      "verdict": "MATCH",
+      "note": "residual magenta VFX visible but spider identity clear"
+    },
+    "spr-fantasy-piercer": {
+      "name": "Piercer",
+      "sheet": "sheet-14.png",
+      "cell": 2,
+      "verdict": "MATCH",
+      "note": "faceted's teardrop stalactite-shaped rock with a central eye-slit is actually a MORE accurate Piercer (a stalactite-mimic) than legacy's crab-armed creature"
+    },
+    "spr-fantasy-pixie": {
+      "name": "Pixie",
+      "sheet": "sheet-14.png",
+      "cell": 3,
+      "verdict": "DUBIOUS",
+      "note": "CAUSE=deliberate style pass, not a swap: sourceFile=rqb-returns/raw-figures/spr-fantasy-myconid-sprout-candidate-001.png cell1; siblings cell0=spr-fantasy-myconid-sprout and cell3=spr-fantasy-sprite are BOTH correct (confirmed MATCH). Faceted is a tall slender adult fae/elf woman -- no visual signal of the Tiny scale a pixie requires, and none of legacy's childlike Tinkerbell-style proportions. Winged-fae identity present but scale/character reads as a different (adult, elegant) fae archetype.",
+      "cause": "OTHER-UNKNOWN",
+      "salvage": "adam-call (style judgment, not a pipeline defect)"
+    },
+    "spr-fantasy-pixie-wonderbringer": {
+      "name": "Pixie Wonderbringer",
+      "sheet": "sheet-14.png",
+      "cell": 4,
+      "verdict": "DUBIOUS",
+      "note": "same tall adult-fae reinterpretation as spr-fantasy-pixie (same candidate file, cell2, same correct siblings) -- consistent across both pixie slugs, confirming a deliberate style pass rather than a misroute, but flagging since it changes the Tiny-scale identity notably.",
+      "cause": "OTHER-UNKNOWN",
+      "salvage": "adam-call (style judgment, not a pipeline defect)"
+    },
+    "spr-fantasy-priest-acolyte": {
+      "name": "Priest Acolyte",
+      "sheet": "sheet-14.png",
+      "cell": 5,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-primeval-owlbear": {
+      "name": "Primeval Owlbear",
+      "sheet": "sheet-14.png",
+      "cell": 6,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-psychic-gray-ooze": {
+      "name": "Psychic Gray Ooze",
+      "sheet": "sheet-14.png",
+      "cell": 7,
+      "verdict": "MATCH",
+      "note": "hooded ghost-ooze hybrid with dripping goo limbs fits an ooze family member reasonably"
+    },
+    "spr-fantasy-purple-worm": {
+      "name": "Purple Worm",
+      "sheet": "sheet-14.png",
+      "cell": 8,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-quasit": {
+      "name": "Quasit",
+      "sheet": "sheet-14.png",
+      "cell": 9,
+      "verdict": "MATCH",
+      "note": "green imp variant vs legacy's red but winged horned demon-imp identity clear"
+    },
+    "spr-fantasy-rakshasa": {
+      "name": "Rakshasa",
+      "sheet": "sheet-14.png",
+      "cell": 10,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-red-dragon-wyrmling-white-dragon-wyrmling": {
+      "name": "Red Dragon Wyrmling White Dragon Wyrmling",
+      "sheet": "sheet-14.png",
+      "cell": 11,
+      "verdict": "MATCH",
+      "note": "no legacy counterpart; blends red+white dragon traits per the combined name"
+    },
+    "spr-fantasy-remorhaz": {
+      "name": "Remorhaz",
+      "sheet": "sheet-15.png",
+      "cell": 0,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-ridden-wyvern": {
+      "name": "Ridden Wyvern",
+      "sheet": "sheet-15.png",
+      "cell": 1,
+      "verdict": "MISMATCH",
+      "note": "CAUSE=GENERATION-MISROUTE (standalone, not sibling-swap). sourceFile=mix3-returns/raw-figures/spr-fantasy-ridden-wyvern-candidate-001.png cell0, sibling cell1=spr-fantasy-wyvern IS correct (confirmed MATCH, sheet 18 c04 -- a proper bipedal winged dragon with stinger tail) -- so the file's other half rendered fine. Only the ridden-wyvern half drew a quadruped horse/deer-like creature with no rider at all.",
+      "cause": "GENERATION-MISROUTE",
+      "salvage": "needs-regeneration"
+    },
+    "spr-fantasy-roc": {
+      "name": "Roc",
+      "sheet": "sheet-15.png",
+      "cell": 2,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-roper": {
+      "name": "Roper",
+      "sheet": "sheet-15.png",
+      "cell": 3,
+      "verdict": "MATCH",
+      "note": "rock-mound-with-tentacles-and-eye reads well for Roper"
+    },
+    "spr-fantasy-rust-monster": {
+      "name": "Rust Monster",
+      "sheet": "sheet-15.png",
+      "cell": 4,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-sahuagin-baron": {
+      "name": "Sahuagin Baron",
+      "sheet": "sheet-15.png",
+      "cell": 5,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-sahuagin-priest": {
+      "name": "Sahuagin Priest",
+      "sheet": "sheet-15.png",
+      "cell": 6,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-sahuagin-warrior": {
+      "name": "Sahuagin Warrior",
+      "sheet": "sheet-15.png",
+      "cell": 7,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-satyr": {
+      "name": "Satyr",
+      "sheet": "sheet-15.png",
+      "cell": 8,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-satyr-revelmaster": {
+      "name": "Satyr Revelmaster",
+      "sheet": "sheet-15.png",
+      "cell": 9,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-secret-eye": {
+      "name": "Secret-Eye",
+      "sheet": "sheet-15.png",
+      "cell": 10,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-smoke-mephit": {
+      "name": "Smoke Mephit",
+      "sheet": "sheet-15.png",
+      "cell": 11,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-sphinx-of-valor": {
+      "name": "Sphinx of Valor",
+      "sheet": "sheet-16.png",
+      "cell": 0,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-spirit-naga": {
+      "name": "Spirit Naga",
+      "sheet": "sheet-16.png",
+      "cell": 1,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-sprite": {
+      "name": "Sprite",
+      "sheet": "sheet-16.png",
+      "cell": 2,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-stirge": {
+      "name": "Stirge",
+      "sheet": "sheet-16.png",
+      "cell": 3,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-stone-golem": {
+      "name": "Stone Golem",
+      "sheet": "sheet-16.png",
+      "cell": 4,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-succubus": {
+      "name": "Succubus",
+      "sheet": "sheet-16.png",
+      "cell": 5,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-tarrasque": {
+      "name": "Tarrasque",
+      "sheet": "sheet-16.png",
+      "cell": 6,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-the-twig-blight": {
+      "name": "The Twig Blight",
+      "sheet": "sheet-16.png",
+      "cell": 7,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-tiefling-fortune-teller-rival": {
+      "name": "Tiefling Fortune Teller Rival",
+      "sheet": "sheet-16.png",
+      "cell": 8,
+      "verdict": "MATCH",
+      "note": "no legacy counterpart"
+    },
+    "spr-fantasy-troglodyte": {
+      "name": "Troglodyte",
+      "sheet": "sheet-16.png",
+      "cell": 9,
+      "verdict": "DUBIOUS",
+      "note": "CAUSE=standalone, not a swap: sourceFile=mix3-returns/raw-figures/spr-fantasy-troglodyte-candidate-001.png cell0, sibling cell1=spr-fantasy-vampire-spawn IS correct (confirmed MATCH). Faceted is pale/gaunt and desaturated, lacking legacy's clear green-scaled reptilian brute look. Mitigating note: cave-dwelling reptilians going pale from lack of sunlight is a defensible in-universe read, but no reptilian scale/snout texture is visible either, so the species identity itself is genuinely unclear.",
+      "cause": "OTHER-UNKNOWN",
+      "salvage": "adam-call (style judgment, not a pipeline defect)"
+    },
+    "spr-fantasy-troll-amalgam": {
+      "name": "Troll Amalgam",
+      "sheet": "sheet-16.png",
+      "cell": 10,
+      "verdict": "MATCH",
+      "note": "fused multi-headed conjoined figure fits 'Amalgam' well even without classic green troll skin"
+    },
+    "spr-fantasy-troll-limb": {
+      "name": "Troll Limb",
+      "sheet": "sheet-16.png",
+      "cell": 11,
+      "verdict": "MATCH",
+      "note": "residual magenta key-color fringe at the stump but severed clawed-arm identity clear"
+    },
+    "spr-fantasy-ultroloth": {
+      "name": "Ultroloth",
+      "sheet": "sheet-17.png",
+      "cell": 0,
+      "verdict": "MATCH",
+      "note": "faceted's tall elegant hooded figure with a smooth featureless glowing-eyed face is the CORRECT canonical Ultroloth (5e MM describes an elegant humanoid yugoloth with an expressionless face); legacy's tentacled cthulhu-demon look is the imprecise one, out of audit scope"
+    },
+    "spr-fantasy-umber-hulk": {
+      "name": "Umber Hulk",
+      "sheet": "sheet-17.png",
+      "cell": 1,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-undead-eye-tyrant": {
+      "name": "Undead Eye-Tyrant",
+      "sheet": "sheet-17.png",
+      "cell": 2,
+      "verdict": "MATCH",
+      "note": "decayed/hollow beholder-skull look fits the 'Undead' qualifier well"
+    },
+    "spr-fantasy-unicorn": {
+      "name": "Unicorn",
+      "sheet": "sheet-17.png",
+      "cell": 3,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-vampire-spawn": {
+      "name": "Vampire Spawn",
+      "sheet": "sheet-17.png",
+      "cell": 4,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-venomous-snake-flying-snake": {
+      "name": "Venomous Snake Flying Snake",
+      "sheet": "sheet-17.png",
+      "cell": 5,
+      "verdict": "MATCH",
+      "note": "no legacy counterpart; winged serpent fits 'flying snake' half of the name"
+    },
+    "spr-fantasy-violet-fungus-necrohulk": {
+      "name": "Violet Fungus Necrohulk",
+      "sheet": "sheet-17.png",
+      "cell": 6,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-void-monk-monk": {
+      "name": "Void-Monk Monk",
+      "sheet": "sheet-17.png",
+      "cell": 7,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-void-monk-psion": {
+      "name": "Void-Monk Psion",
+      "sheet": "sheet-17.png",
+      "cell": 8,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-void-monk-zerth": {
+      "name": "Void-Monk Zerth",
+      "sheet": "sheet-17.png",
+      "cell": 9,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-vrock": {
+      "name": "Vrock",
+      "sheet": "sheet-17.png",
+      "cell": 10,
+      "verdict": "MATCH",
+      "note": "faceted's vulture-headed winged demon is the CORRECT canonical Vrock; legacy's generic gargoyle-demon look is the imprecise one, out of audit scope"
+    },
+    "spr-fantasy-water-elemental": {
+      "name": "Water Elemental",
+      "sheet": "sheet-17.png",
+      "cell": 11,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-werebear": {
+      "name": "Werebear",
+      "sheet": "sheet-18.png",
+      "cell": 0,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-wereboar": {
+      "name": "Wereboar",
+      "sheet": "sheet-18.png",
+      "cell": 1,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-wild-animal-a-lynx-kitten-peregrine-falcon-red-fox-kit-watcher-hawk": {
+      "name": "Wild Animal A Lynx Kitten Peregrine Falcon Red Fox Kit Watcher Hawk",
+      "sheet": "sheet-18.png",
+      "cell": 2,
+      "verdict": "MATCH",
+      "note": "no legacy counterpart; shows lynx/falcon/fox subset"
+    },
+    "spr-fantasy-wild-animal-black-bear-mountain-goat": {
+      "name": "Wild Animal Black Bear Mountain Goat",
+      "sheet": "sheet-18.png",
+      "cell": 3,
+      "verdict": "MATCH",
+      "note": "no legacy counterpart"
+    },
+    "spr-fantasy-wyvern": {
+      "name": "Wyvern",
+      "sheet": "sheet-18.png",
+      "cell": 4,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-yeti": {
+      "name": "Yeti",
+      "sheet": "sheet-18.png",
+      "cell": 5,
+      "verdict": "MATCH",
+      "note": null
+    },
+    "spr-fantasy-yochlol": {
+      "name": "Yochlol",
+      "sheet": "sheet-18.png",
+      "cell": 6,
+      "verdict": "DUBIOUS",
+      "note": "CAUSE=OTHER/UNKNOWN -- single-cell candidate (mix3-returns/raw-figures/spr-fantasy-yochlol-candidate-001.png, no sibling to diagnose against). Faceted shows a tree-root/bark humanoid fused with a shadowy robed woman, one eye on the trunk -- doesn't match Yochlol's usual ooze/spider-demon shapeshifter imagery and reads more like a dryad/tree-spirit. Possible identity confusion; not confidently a MATCH or MISMATCH without more context.",
+      "cause": "OTHER-UNKNOWN",
+      "salvage": "adam-call (style judgment, not a pipeline defect)"
+    },
+    "spr-fantasy-yuan-ti-abomination": {
+      "name": "Yuan-ti Abomination",
+      "sheet": "sheet-18.png",
+      "cell": 7,
+      "verdict": "MATCH",
+      "note": "single elegant snake-woman archer vs legacy's grotesque many-headed tangle -- less monstrous but the core snake-humanoid yuan-ti identity holds"
+    },
+    "spr-fantasy-yuan-ti-infiltrator": {
+      "name": "Yuan-ti Infiltrator",
+      "sheet": "sheet-18.png",
+      "cell": 8,
+      "verdict": "MATCH",
+      "note": "faceted is a plain hooded human-looking figure with no visible scales/snake traits -- but this is canonically correct: D&D Yuan-ti Infiltrators are specifically the caste that can pass as fully human to infiltrate. Legacy's scaled-lizardfolk look is the less accurate one."
+    },
+    "spr-pc-dragonborn-barbarian": {
+      "name": "Dragonborn Barbarian",
+      "sheet": "sheet-18.png",
+      "cell": 9,
+      "verdict": "MATCH",
+      "note": "no legacy counterpart"
+    },
+    "spr-pc-dragonborn-bard": {
+      "name": "Dragonborn Bard",
+      "sheet": "sheet-18.png",
+      "cell": 10,
+      "verdict": "MATCH",
+      "note": "no legacy counterpart"
+    },
+    "spr-pc-dragonborn-druid": {
+      "name": "Dragonborn Druid",
+      "sheet": "sheet-18.png",
+      "cell": 11,
+      "verdict": "MATCH",
+      "note": "no legacy counterpart"
+    },
+    "spr-pc-dragonborn-paladin": {
+      "name": "Dragonborn Paladin",
+      "sheet": "sheet-19.png",
+      "cell": 0,
+      "verdict": "MATCH",
+      "note": "no legacy counterpart"
+    },
+    "spr-pc-dragonborn-rogue": {
+      "name": "Dragonborn Rogue",
+      "sheet": "sheet-19.png",
+      "cell": 1,
+      "verdict": "MISMATCH",
+      "note": "CAUSE CONFIRMED=GENERATION-MISROUTE (duplicate-file bug, distinct from the r3a shift bug). sourceFile=rqb-returns/raw-figures/spr-pc-dragonborn-rogue-candidate-001.png is a byte-for-byte MD5-identical duplicate of rqb-returns/raw-figures/spr-fantasy-domestic-animal-goat-goose-peacock-turkey-candidate-001.png (call23 in rqb-generation-calls.json). Faceted shows a mountain goat, not a dragonborn. Call25's real PC-class art was apparently never saved separately -- needs full regeneration, no recoverable art exists on disk.",
+      "cause": "GENERATION-MISROUTE",
+      "salvage": "needs-regeneration"
+    },
+    "spr-pc-dragonborn-sorcerer": {
+      "name": "Dragonborn Sorcerer",
+      "sheet": "sheet-19.png",
+      "cell": 2,
+      "verdict": "MISMATCH",
+      "note": "CAUSE=same duplicate-file bug as spr-pc-dragonborn-rogue (cell1 of the same duplicated file) = shows the rat/salamander/cricket 'Dungeon Animal' trio, not a dragonborn. Needs regeneration.",
+      "cause": "GENERATION-MISROUTE",
+      "salvage": "needs-regeneration"
+    },
+    "spr-pc-dragonborn-wizard": {
+      "name": "Dragonborn Wizard",
+      "sheet": "sheet-19.png",
+      "cell": 3,
+      "verdict": "MISMATCH",
+      "note": "CAUSE=same duplicate-file bug (cell2) = shows the lynx/falcon/fox 'Wild Animal' trio, not a dragonborn. Needs regeneration.",
+      "cause": "GENERATION-MISROUTE",
+      "salvage": "needs-regeneration"
+    },
+    "spr-pc-dwarf-barbarian": {
+      "name": "Dwarf Barbarian",
+      "sheet": "sheet-19.png",
+      "cell": 4,
+      "verdict": "MISMATCH",
+      "note": "CAUSE=same duplicate-file bug (cell3) = shows the black-bear+mountain-goat pair, not a dwarf. Needs regeneration.",
+      "cause": "GENERATION-MISROUTE",
+      "salvage": "needs-regeneration"
+    },
+    "spr-pc-dwarf-fighter": {
+      "name": "Dwarf Fighter",
+      "sheet": "sheet-19.png",
+      "cell": 5,
+      "verdict": "MATCH",
+      "note": "no legacy counterpart"
+    },
+    "spr-pc-goliath-ranger": {
+      "name": "Goliath Ranger",
+      "sheet": "sheet-19.png",
+      "cell": 6,
+      "verdict": "MATCH",
+      "note": "no legacy counterpart; lean archer build reads more human/elf than hulking goliath but archetype (ranger) holds"
+    },
+    "spr-pc-goliath-wizard": {
+      "name": "Goliath Wizard",
+      "sheet": "sheet-19.png",
+      "cell": 7,
+      "verdict": "MATCH",
+      "note": "no legacy counterpart; same lean-build note as Goliath Ranger"
+    },
+    "spr-pc-halfling-barbarian": {
+      "name": "Halfling Barbarian",
+      "sheet": "sheet-19.png",
+      "cell": 8,
+      "verdict": "MATCH",
+      "note": "no legacy counterpart"
+    },
+    "spr-pc-halfling-bard": {
+      "name": "Halfling Bard",
+      "sheet": "sheet-19.png",
+      "cell": 9,
+      "verdict": "MATCH",
+      "note": "no legacy counterpart"
+    },
+    "spr-pc-halfling-cleric": {
+      "name": "Halfling Cleric",
+      "sheet": "sheet-19.png",
+      "cell": 10,
+      "verdict": "MATCH",
+      "note": "no legacy counterpart"
+    },
+    "spr-pc-halfling-druid": {
+      "name": "Halfling Druid",
+      "sheet": "sheet-19.png",
+      "cell": 11,
+      "verdict": "MATCH",
+      "note": "no legacy counterpart"
+    },
+    "spr-pc-halfling-fighter": {
+      "name": "Halfling Fighter",
+      "sheet": "sheet-20.png",
+      "cell": 0,
+      "verdict": "MATCH",
+      "note": "no legacy counterpart"
+    },
+    "spr-pc-halfling-monk": {
+      "name": "Halfling Monk",
+      "sheet": "sheet-20.png",
+      "cell": 1,
+      "verdict": "MATCH",
+      "note": "no legacy counterpart"
+    },
+    "spr-pc-halfling-paladin": {
+      "name": "Halfling Paladin",
+      "sheet": "sheet-20.png",
+      "cell": 2,
+      "verdict": "MATCH",
+      "note": "no legacy counterpart"
+    },
+    "spr-pc-halfling-ranger": {
+      "name": "Halfling Ranger",
+      "sheet": "sheet-20.png",
+      "cell": 3,
+      "verdict": "MATCH",
+      "note": "no legacy counterpart"
+    },
+    "spr-pc-halfling-rogue": {
+      "name": "Halfling Rogue",
+      "sheet": "sheet-20.png",
+      "cell": 4,
+      "verdict": "MATCH",
+      "note": "no legacy counterpart"
+    },
+    "spr-pc-halfling-sorcerer": {
+      "name": "Halfling Sorcerer",
+      "sheet": "sheet-20.png",
+      "cell": 5,
+      "verdict": "MATCH",
+      "note": "no legacy counterpart"
+    },
+    "spr-pc-halfling-warlock": {
+      "name": "Halfling Warlock",
+      "sheet": "sheet-20.png",
+      "cell": 6,
+      "verdict": "MATCH",
+      "note": "no legacy counterpart"
+    },
+    "spr-pc-halfling-wizard": {
+      "name": "Halfling Wizard",
+      "sheet": "sheet-20.png",
+      "cell": 7,
+      "verdict": "MATCH",
+      "note": "no legacy counterpart"
+    },
+    "spr-pc-orc-cleric": {
+      "name": "Orc Cleric",
+      "sheet": "sheet-20.png",
+      "cell": 8,
+      "verdict": "MATCH",
+      "note": "no legacy counterpart"
+    },
+    "spr-pc-orc-monk": {
+      "name": "Orc Monk",
+      "sheet": "sheet-20.png",
+      "cell": 9,
+      "verdict": "MATCH",
+      "note": "no legacy counterpart"
+    },
+    "spr-pc-orc-paladin": {
+      "name": "Orc Paladin",
+      "sheet": "sheet-20.png",
+      "cell": 10,
+      "verdict": "MATCH",
+      "note": "no legacy counterpart"
+    },
+    "spr-pc-orc-ranger": {
+      "name": "Orc Ranger",
+      "sheet": "sheet-20.png",
+      "cell": 11,
+      "verdict": "MATCH",
+      "note": "no legacy counterpart"
+    },
+    "spr-pc-orc-rogue": {
+      "name": "Orc Rogue",
+      "sheet": "sheet-21.png",
+      "cell": 0,
+      "verdict": "MATCH",
+      "note": "no legacy counterpart"
+    },
+    "spr-pc-orc-warlock": {
+      "name": "Orc Warlock",
+      "sheet": "sheet-21.png",
+      "cell": 1,
+      "verdict": "MATCH",
+      "note": "no legacy counterpart"
+    },
+    "spr-pc-orc-wizard": {
+      "name": "Orc Wizard",
+      "sheet": "sheet-21.png",
+      "cell": 2,
+      "verdict": "MATCH",
+      "note": "no legacy counterpart"
+    },
+    "spr-pc-tiefling-barbarian": {
+      "name": "Tiefling Barbarian",
+      "sheet": "sheet-21.png",
+      "cell": 3,
+      "verdict": "MATCH",
+      "note": "no legacy counterpart"
+    },
+    "spr-pc-tiefling-bard": {
+      "name": "Tiefling Bard",
+      "sheet": "sheet-21.png",
+      "cell": 4,
+      "verdict": "MATCH",
+      "note": "no legacy counterpart"
+    },
+    "spr-pc-tiefling-fighter": {
+      "name": "Tiefling Fighter",
+      "sheet": "sheet-21.png",
+      "cell": 5,
+      "verdict": "MATCH",
+      "note": "no legacy counterpart"
+    },
+    "spr-pc-tiefling-monk": {
+      "name": "Tiefling Monk",
+      "sheet": "sheet-21.png",
+      "cell": 6,
+      "verdict": "MATCH",
+      "note": "no legacy counterpart"
+    },
+    "spr-pc-tiefling-paladin": {
+      "name": "Tiefling Paladin",
+      "sheet": "sheet-21.png",
+      "cell": 7,
+      "verdict": "MATCH",
+      "note": "no legacy counterpart"
+    },
+    "spr-pc-tiefling-ranger": {
+      "name": "Tiefling Ranger",
+      "sheet": "sheet-21.png",
+      "cell": 8,
+      "verdict": "MATCH",
+      "note": "no legacy counterpart"
+    },
+    "spr-pc-tiefling-rogue": {
+      "name": "Tiefling Rogue",
+      "sheet": "sheet-21.png",
+      "cell": 9,
+      "verdict": "MATCH",
+      "note": "no legacy counterpart"
+    },
+    "spr-pc-tiefling-warlock": {
+      "name": "Tiefling Warlock",
+      "sheet": "sheet-21.png",
+      "cell": 10,
+      "verdict": "MATCH",
+      "note": "no legacy counterpart"
+    },
+    "spr-pc-tiefling-wizard": {
+      "name": "Tiefling Wizard",
+      "sheet": "sheet-21.png",
+      "cell": 11,
+      "verdict": "MATCH",
+      "note": "no legacy counterpart"
+    }
+  }
+}

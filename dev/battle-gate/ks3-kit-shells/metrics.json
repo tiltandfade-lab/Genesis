@@ -1,0 +1,188 @@
+{
+  "generatedAt": "2026-07-16T04:04:43.520Z",
+  "shots": [
+    "rect-kit-on.png",
+    "rect-prism-off.png",
+    "octagon-kit-on.png",
+    "octagon-prism-off.png",
+    "l-kit-on.png",
+    "l-prism-off.png",
+    "beauty-dressed.png"
+  ],
+  "notes": [],
+  "boot": {
+    "ok": true,
+    "notes": [
+      "startSession() called"
+    ],
+    "worldId": "mrmzjp3v9g8w2",
+    "worldName": "The Shimmering Maw"
+  },
+  "theaterState": {
+    "hasBattleStage": true,
+    "theaterMounted": true,
+    "hasCanvas": true,
+    "hasSetInteriorBoard": true
+  },
+  "templatesReady": true,
+  "rect-kit-on": {
+    "doorCell": {
+      "x": 6,
+      "y": 0
+    },
+    "meta": {
+      "roomCount": 1,
+      "floorCount": 22,
+      "wallCount": 11,
+      "doorCount": 0,
+      "pillarCount": 0,
+      "lightCount": 2,
+      "skirtCount": 40,
+      "coverCount": 1,
+      "furnitureCount": 0,
+      "wallPropsCount": 0,
+      "portalCount": 0,
+      "kitDoorCount": 1,
+      "kitShellWallCount": 15,
+      "kitShellFloorCount": 14
+    }
+  },
+  "rect-prism-off": {
+    "doorCell": {
+      "x": 6,
+      "y": 0
+    },
+    "meta": {
+      "roomCount": 1,
+      "floorCount": 78,
+      "wallCount": 41,
+      "doorCount": 5,
+      "pillarCount": 0,
+      "lightCount": 2,
+      "skirtCount": 40,
+      "coverCount": 1,
+      "furnitureCount": 0,
+      "wallPropsCount": 0,
+      "portalCount": 0,
+      "kitDoorCount": 0,
+      "kitShellWallCount": 0,
+      "kitShellFloorCount": 0
+    }
+  },
+  "octagon-kit-on": {
+    "doorCell": {
+      "x": 5,
+      "y": 0
+    },
+    "meta": {
+      "roomCount": 1,
+      "floorCount": 22,
+      "wallCount": 15,
+      "doorCount": 0,
+      "pillarCount": 0,
+      "lightCount": 3,
+      "skirtCount": 40,
+      "coverCount": 3,
+      "furnitureCount": 0,
+      "wallPropsCount": 0,
+      "portalCount": 0,
+      "kitDoorCount": 1,
+      "kitShellWallCount": 11,
+      "kitShellFloorCount": 14
+    }
+  },
+  "octagon-prism-off": {
+    "doorCell": {
+      "x": 5,
+      "y": 0
+    },
+    "meta": {
+      "roomCount": 1,
+      "floorCount": 78,
+      "wallCount": 37,
+      "doorCount": 5,
+      "pillarCount": 0,
+      "lightCount": 3,
+      "skirtCount": 40,
+      "coverCount": 3,
+      "furnitureCount": 0,
+      "wallPropsCount": 0,
+      "portalCount": 0,
+      "kitDoorCount": 0,
+      "kitShellWallCount": 0,
+      "kitShellFloorCount": 0
+    }
+  },
+  "l-kit-on": {
+    "doorCell": {
+      "x": 0,
+      "y": 7
+    },
+    "meta": {
+      "roomCount": 1,
+      "floorCount": 17,
+      "wallCount": 8,
+      "doorCount": 0,
+      "pillarCount": 0,
+      "lightCount": 3,
+      "skirtCount": 44,
+      "coverCount": 3,
+      "furnitureCount": 0,
+      "wallPropsCount": 0,
+      "portalCount": 0,
+      "kitDoorCount": 1,
+      "kitShellWallCount": 16,
+      "kitShellFloorCount": 16
+    }
+  },
+  "l-prism-off": {
+    "doorCell": {
+      "x": 0,
+      "y": 7
+    },
+    "meta": {
+      "roomCount": 1,
+      "floorCount": 81,
+      "wallCount": 40,
+      "doorCount": 5,
+      "pillarCount": 0,
+      "lightCount": 3,
+      "skirtCount": 44,
+      "coverCount": 3,
+      "furnitureCount": 0,
+      "wallPropsCount": 0,
+      "portalCount": 0,
+      "kitDoorCount": 0,
+      "kitShellWallCount": 0,
+      "kitShellFloorCount": 0
+    }
+  },
+  "beauty-dressed": {
+    "doorCell": {
+      "x": 6,
+      "y": 0
+    },
+    "meta": {
+      "roomCount": 1,
+      "floorCount": 22,
+      "wallCount": 11,
+      "doorCount": 0,
+      "pillarCount": 0,
+      "lightCount": 2,
+      "skirtCount": 40,
+      "coverCount": 1,
+      "furnitureCount": 0,
+      "wallPropsCount": 0,
+      "portalCount": 0,
+      "kitDoorCount": 1,
+      "kitShellWallCount": 15,
+      "kitShellFloorCount": 14
+    },
+    "renderProfile": {
+      "sat": 1,
+      "tint": 8421504,
+      "tintAmt": 0,
+      "contrast": 1
+    }
+  }
+}

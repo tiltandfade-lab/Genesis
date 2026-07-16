@@ -130,6 +130,7 @@ import { resolveWholeObject, loadWholeObjectBuilders, WHOLE_OBJECT_REGISTRY, NEA
 // preload-then-clone convention just below) and interiorBuildKitDoorMesh (near
 // interiorBuildInteractableDoorMesh) for the actual mount.
 import { loadDonorPiece, socketsByType } from "./theater-donor.js";
+import { socketFrameOf, mateMatrix, applyMate } from "./theater-attachment.js";
 // ROOM-SHELL COMPILER (docs/ROOM-SHELL-COMPILER.md; docs/GRAPHICS-NORTH-STAR.md Stage C unit C4): the
 // active room's cells compiled into a CONTINUOUS shell (floor polygon + wall/riser quad-strips) instead
 // of the per-cell InstancedMesh box read below — see this file's own ITR_ROOM_SHELL flag + itrBuild*
@@ -4039,7 +4040,7 @@ function donorTemplateFor(pack, slug, realmId, realmProfile){
 // ============================================================================
 const KIT_DOOR_PACK = "kenney-modular-dungeon-kit";
 const KIT_DOOR_SLUG = "gate-door";
-let kitDoorTemplate = null;     // {frameGroup, leafGeometry, leafMaterial, hingeLocal:[x,y,z]} once warm
+let kitDoorTemplate = null;     // {frameGroup, leafGeometry, leafMaterial, hingeSocketId} once warm
 let kitDoorTemplateReady = false;
 // kitDoorSplitTemplate: one-time surgery on a freshly loaded donor piece — pulls the `door-leaf`
 // semantic child (theater-donor.js stamps `userData.genesisDonor.semanticPart === "door-leaf"` on it,
@@ -4055,9 +4056,10 @@ let kitDoorTemplateReady = false;
 // template — never re-fetched, never re-baked per instance.
 function kitDoorSplitTemplate(rawGroup){
   const hingeSockets = socketsByType(rawGroup, "hinge");
-  if(!hingeSockets.length) return null; // an admitted piece with no hinge socket -> never a kit door, prism fallback
-  const hingeLocal = hingeSockets[0].position;
-  if(!Array.isArray(hingeLocal) || hingeLocal.length !== 3 || !hingeLocal.every(Number.isFinite)) return null;
+  if(hingeSockets.length !== 1) return null; // missing/duplicate hinge -> ambiguous piece, prism fallback
+  const hingeSocketId = hingeSockets[0].id;
+  const hingeFrame = socketFrameOf(rawGroup, hingeSocketId);
+  if(!hingeFrame) return null;
   let leafObj = null;
   rawGroup.traverse((obj) => {
     if(leafObj) return;
@@ -4083,10 +4085,11 @@ function kitDoorSplitTemplate(rawGroup){
   try {
     leafGeometry = leafObj.geometry.clone();
     leafGeometry.applyMatrix4(leafToPiece);
-    // hingeLocal is already expressed in the piece-root frame. Moving the baked vertices by its
-    // negative makes the new mesh-local origin the hinge socket; remounting at +hingeLocal exactly
-    // reconstructs the authored shut pose.
-    leafGeometry.translate(-hingeLocal[0], -hingeLocal[1], -hingeLocal[2]);
+    // Express the baked vertices in the detachable leaf's hinge-socket frame. The attachment solver
+    // later mates an identity child hinge frame to the frame's full six-degree hinge frame; closed
+    // therefore reconstructs the authored vertices even when the socket carries rotation.
+    const hingeInverse = hingeFrame.localMatrix.clone().invert();
+    leafGeometry.applyMatrix4(hingeInverse);
   } catch(_err){ return null; }
   const leafPosition = leafGeometry && leafGeometry.getAttribute && leafGeometry.getAttribute("position");
   if(!leafPosition || !leafPosition.count){ if(leafGeometry && leafGeometry.dispose) leafGeometry.dispose(); return null; }
@@ -4108,7 +4111,17 @@ function kitDoorSplitTemplate(rawGroup){
       if(mat){ mat.userData = mat.userData || {}; mat.userData.shared = true; }
     });
   });
-  return { frameGroup: rawGroup, leafGeometry, leafMaterial, hingeLocal };
+  const hingePosition = new THREE.Vector3();
+  hingePosition.setFromMatrixPosition(hingeFrame.localMatrix);
+  return {
+    frameGroup: rawGroup,
+    leafGeometry,
+    leafMaterial,
+    hingeSocketId,
+    // Retained as read-only compatibility/debug metadata; mounting no longer consumes position-only
+    // hinge data.
+    hingeLocal: hingePosition.toArray(),
+  };
 }
 // Preloaded ONCE at module scope, UNGRADED (realmProfile:null — a byte-identical passthrough) —
 // mirrors loadWholeObjectBuilders/glbLoadScene's own preload-then-clone convention (this file's
@@ -4182,21 +4195,32 @@ function interiorBuildKitDoorMesh(entry, cx, cz, floorTopMap, widthAxisIsZ, real
   const frame = tmpl.frameGroup.clone(true); // Object3D clone: shares geometry/material refs (userData.shared-tagged above), never re-baked per instance
   doorGroup.add(frame);
 
-  const hingeLocal = tmpl.hingeLocal;
-  const hingeGroup = new THREE.Group();
-  hingeGroup.position.set(hingeLocal[0], hingeLocal[1], hingeLocal[2]);
+  // The detachable leaf is a piece whose identity root IS its hinge frame. Its geometry was baked
+  // into that frame by kitDoorSplitTemplate; the child socket is therefore identity and the solver
+  // owns the complete frame-to-leaf mate. Door state is a separate child-local Y swing only.
+  const leafPiece = new THREE.Group();
+  leafPiece.userData.genesisDonorPiece = { category: "door-leaf" };
+  leafPiece.userData.sockets = [{
+    id: tmpl.hingeSocketId,
+    type: "hinge",
+    position: [0, 0, 0],
+    rotation: [0, 0, 0, 1],
+    mateRule: "coincident",
+    mateFamily: "doorway-frame",
+  }];
   const leaf = new THREE.Mesh(tmpl.leafGeometry, tmpl.leafMaterial);
   leaf.castShadow = true; leaf.receiveShadow = true;
   leaf.userData = { isDoorLeaf: true };
+  leafPiece.add(leaf);
+  const mate = mateMatrix(frame, tmpl.hingeSocketId, leafPiece, tmpl.hingeSocketId);
+  if(!mate || !applyMate(leafPiece, mate, doorGroup)) return null;
   const pose = itrKitDoorRestPose(entry.state);
   leaf.rotation.y = pose.rotY;
   leaf.visible = pose.visible;
-  hingeGroup.add(leaf);
-  doorGroup.add(hingeGroup);
 
   doorGroup.userData = {
     kind: "interactable", archetype: "door", sourceRef: entry.sourceRef, state: entry.state,
-    slug: entry.slug, leaf: leaf, kit: true, widthAxisIsZ: widthAxisIsZ,
+    slug: entry.slug, leaf: leaf, leafPiece: leafPiece, kit: true, widthAxisIsZ: widthAxisIsZ,
   };
   return doorGroup;
 }

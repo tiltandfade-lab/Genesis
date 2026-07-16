@@ -75,6 +75,7 @@
 */
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+import { socketFrameOf } from "./theater-attachment.js";
 
 // ─── index fetch + cache ────────────────────────────────────────────────────────────────────────
 const DONOR_INDEX_CACHE = {}; // pack -> Promise<index object> (assets/models-normalized/<pack>/index.json)
@@ -329,7 +330,7 @@ export async function loadDonorPiece(pack, slug, opts) {
 
   const seedKey = opts.seedKey || cacheKey;
   const realmProfile = opts.realmProfile || null;
-  const sockets = [];
+  const socketRecords = [];
   const materialFamiliesApplied = [];
   let loadedV2Metadata = null;
 
@@ -338,7 +339,7 @@ export async function loadDonorPiece(pack, slug, opts) {
     if (donorData) {
       if (donorData.schema === "genesis.donor.v2") loadedV2Metadata = donorData;
       if (Array.isArray(donorData.sockets)) {
-        donorData.sockets.forEach((s) => sockets.push(Object.assign({ node: obj.name }, s)));
+        donorData.sockets.forEach((socket) => socketRecords.push({ owner: obj, socket }));
       }
       if (donorData.materialFamily && obj.isMesh) {
         const family = donorData.materialFamily;
@@ -372,6 +373,30 @@ export async function loadDonorPiece(pack, slug, opts) {
     qaStatus: entry.qaStatus || null,
     companionLeaf: entry.companionLeaf || null,
   };
+  // KGR-4B: classic callers receive the same sockets converted from their owning donor node into
+  // the identity piece-root frame. socketFrameOf performs the full hierarchy composition (including
+  // quaternion and scale); localMatrix preserves that six-degree frame without reducing it back to
+  // position-only metadata. Duplicate ids stay duplicated and unconverted so the solver rejects the
+  // piece instead of laundering an ambiguous attachment point into production.
+  const socketIdCounts = new Map();
+  socketRecords.forEach(({ socket }) => {
+    socketIdCounts.set(socket.id, (socketIdCounts.get(socket.id) || 0) + 1);
+  });
+  const sockets = socketRecords.map(({ owner, socket }) => {
+    if (socketIdCounts.get(socket.id) !== 1) return Object.assign({ node: owner.name }, socket);
+    const frame = socketFrameOf(group, socket.id);
+    if (!frame) return Object.assign({ node: owner.name }, socket);
+    const position = new THREE.Vector3();
+    const rotation = new THREE.Quaternion();
+    const scale = new THREE.Vector3();
+    frame.localMatrix.decompose(position, rotation, scale);
+    return Object.assign({}, socket, {
+      node: owner.name,
+      position: position.toArray(),
+      rotation: rotation.normalize().toArray(),
+      localMatrix: frame.localMatrix.elements.slice(),
+    });
+  });
   group.userData.sockets = sockets;
   return group;
 }

@@ -105,11 +105,46 @@ if os.path.exists("genesis.html"):
     lo=[e for e in M.get("loadOrder",[]) if e.endswith(".js")]
     tagset=set(classic_tags)
     module_mods={m["path"] for m in mods if m.get("type")=="module"}
+    module_by_id={m["id"]:m for m in mods if m.get("type")=="module"}
     for e in lo:
         if e not in tagset: errors.append(f"loadOrder entry has NO <script> tag in genesis.html (won't load): {e}")
-    for mp in module_mods:
-        if mp not in module_tags:
-            errors.append(f"module-type manifest entry has NO <script type=\"module\"> tag in genesis.html (won't load): {mp}")
+    # KGR-4B: a pure module may be loaded only through one named module importer. importedBy is a
+    # strict, mechanically-proved alternative to the historical duplicate <script> tag convention:
+    # the importer must exist, itself be reachable, and contain the matching static relative import;
+    # an imported-only target carrying a direct tag is drift (browsers would dedupe it, but the
+    # contract deliberately keeps one runtime entry path).
+    def _module_is_loaded(mod, seen=None):
+        if mod["path"] in module_tags: return True
+        importer_id=mod.get("importedBy")
+        if not importer_id: return False
+        seen=set() if seen is None else set(seen)
+        if mod["id"] in seen: return False
+        seen.add(mod["id"])
+        importer=module_by_id.get(importer_id)
+        return bool(importer and _module_is_loaded(importer,seen))
+
+    for mod in (m for m in mods if m.get("type")=="module"):
+        mp=mod["path"]
+        importer_id=mod.get("importedBy")
+        if not importer_id:
+            if mp not in module_tags:
+                errors.append(f"module-type manifest entry has NO <script type=\"module\"> tag in genesis.html (won't load): {mp}")
+            continue
+        if mp in module_tags:
+            errors.append(f"imported-only module also has a direct <script type=\"module\"> tag in genesis.html: {mp}")
+        importer=module_by_id.get(importer_id)
+        if not importer:
+            errors.append(f"{mod['id']}: importedBy names no module manifest id: {importer_id}")
+            continue
+        if not _module_is_loaded(importer):
+            errors.append(f"{mod['id']}: importedBy module is not reachable from genesis.html: {importer_id}")
+        importer_path=importer["path"]
+        rel=os.path.relpath(mp,os.path.dirname(importer_path)).replace(os.sep,"/")
+        if not rel.startswith("."): rel="./"+rel
+        importer_src=_text(importer_path)
+        static_import=re.compile(r'\bimport\s+(?:[\s\S]*?\s+from\s+)?[\"\']'+re.escape(rel)+r'[\"\']\s*;')
+        if not static_import.search(importer_src):
+            errors.append(f"{mod['id']}: {importer_id} lacks static import {rel}")
     known={"tables.js"}  # compiled artifact, intentionally not a manifest module
     for t in classic_tags:
         if t not in set(lo) and t not in known and t not in module_mods:

@@ -506,7 +506,8 @@ console.log("\n=== 6. KGR-3 calibrated v2 indexes + runtime compatibility bounda
   // declarations. donorRegistryFromIndex itself is otherwise byte-for-byte the production body.
   const executableDonorSrc = donorSrc
     .replace('import * as THREE from "three";', "const THREE = {};")
-    .replace('import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";', "class GLTFLoader {}");
+    .replace('import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";', "class GLTFLoader {}")
+    .replace('import { socketFrameOf } from "./theater-attachment.js";', "const socketFrameOf = () => null;");
   let registryHelper = null;
   try {
     ({ donorRegistryFromIndex: registryHelper } = await import(

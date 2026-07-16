@@ -86,6 +86,7 @@ async function newPage(browser) {
     } else req.continue();
   });
   page.on("console", (msg) => { if (msg.type() === "error") log("console.error:", msg.text().slice(0, 200)); });
+  page.on("response", (res) => { if (res.status() >= 400) log(`HTTP ${res.status()}:`, res.url()); });
   page.on("pageerror", (e) => log("PAGE ERROR:", e.message));
   return page;
 }
@@ -188,6 +189,7 @@ async function measureKitDoorSplit(page) {
   return await page.evaluate(async () => {
     const THREE = await import("/vendor/three/three.module.js");
     const { GLTFLoader } = await import("/vendor/three/addons/loaders/GLTFLoader.js");
+    const { mateMatrix, applyMate } = await import("/src/ui/theater-attachment.js");
     const boundsOf = (geometry, matrixWorld) => {
       const attr = geometry && geometry.getAttribute && geometry.getAttribute("position");
       if (!attr) return null;
@@ -216,10 +218,18 @@ async function measureKitDoorSplit(page) {
     const before = boundsOf(sourceLeaf.geometry, sourceLeaf.matrixWorld);
 
     const holder = new THREE.Group();
-    const hinge = new THREE.Group();
-    hinge.position.fromArray(tmpl.hingeLocal);
+    const frame = tmpl.frameGroup.clone(true);
+    holder.add(frame);
+    const leafPiece = new THREE.Group();
+    leafPiece.userData.genesisDonorPiece = { category: "door-leaf" };
+    leafPiece.userData.sockets = [{
+      id: tmpl.hingeSocketId, type: "hinge", position: [0, 0, 0], rotation: [0, 0, 0, 1],
+      mateRule: "coincident", mateFamily: "doorway-frame",
+    }];
     const leaf = new THREE.Mesh(tmpl.leafGeometry, tmpl.leafMaterial);
-    hinge.add(leaf); holder.add(hinge);
+    leafPiece.add(leaf);
+    const mate = mateMatrix(frame, tmpl.hingeSocketId, leafPiece, tmpl.hingeSocketId);
+    if (!mate || !applyMate(leafPiece, mate, holder)) return { ok: false, error: "production attachment mate failed" };
     holder.updateMatrixWorld(true);
     leaf.updateWorldMatrix(true, false);
     const after = boundsOf(leaf.geometry, leaf.matrixWorld);
@@ -230,8 +240,8 @@ async function measureKitDoorSplit(page) {
     for (const angle of [0, 22 * Math.PI / 180, 105 * Math.PI / 180]) {
       leaf.rotation.y = angle;
       holder.updateMatrixWorld(true);
-      hinge.updateWorldMatrix(true, false);
-      const p = new THREE.Vector3().setFromMatrixPosition(hinge.matrixWorld);
+      leafPiece.updateWorldMatrix(true, false);
+      const p = new THREE.Vector3().setFromMatrixPosition(leafPiece.matrixWorld);
       hingePositions.push(p.toArray());
     }
     const hingeDeltas = hingePositions.slice(1).flatMap((p) => p.map((v, i) => Math.abs(v - hingePositions[0][i])));
@@ -250,7 +260,10 @@ async function measureKitDoorFallbacks(page) {
     if (typeof split !== "function") return { ok: false, error: "split test seam unavailable" };
     const fixture = ({ singular = false, invalidHinge = false } = {}) => {
       const root = new THREE.Group();
-      root.userData.sockets = [{ type: "hinge", position: invalidHinge ? [NaN, 0, 0] : [0, 0.5, 0] }];
+      root.userData.genesisDonorPiece = { category: "doorway-frame" };
+      root.userData.sockets = [{ id: "hinge", type: "hinge",
+        position: invalidHinge ? [NaN, 0, 0] : [0, 0.5, 0], rotation: [0, 0, 0, 1],
+        mateRule: "coincident", mateFamily: "door-leaf" }];
       if (singular) root.scale.set(0, 1, 1);
       const leaf = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 0.1), new THREE.MeshBasicMaterial());
       leaf.userData.genesisDonor = { semanticPart: "door-leaf" };

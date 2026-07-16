@@ -437,6 +437,7 @@
       "tintAmt": 0,
       "contrast": 1
     },
+    "clockMin": null,
     "grid": {
       "bands": [
         "melee",

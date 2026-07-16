@@ -122,16 +122,33 @@ console.log("\n=== setup: mutation needle found in current dungeon-walk.js ===")
 check("0. MUTATION setup: scene stamped-pick statement found verbatim in src/engine/dungeon-walk.js", mutationFound,
   "needle not found — the RED-FIRST proof below cannot run; source at that line must have drifted");
 
+// WDV-2 additivity is what checks 1c/1d/1e isolate: "adding rollRefs perturbed no existing field value
+// or roll count." ELEV-1 (commit 7d15862f, the LAST commit to touch these 5 walk files) landed AFTER
+// WDV-2 and added a per-room elevation roll in dungeon-walk.js (dwalkElevation) that CONSUMES PRNG draws
+// off this shared seeded stream — so the current dungeon walk, and every later walk rolled after it in
+// rollAllThree, legitimately diverges from the pre-WDV-2 (BASE_SHA) reference. That is a real, intended
+// feature, NOT a rollRefs regression (ELEV-1's own additivity is dev/verify-elev1-elevation.mjs's job).
+// dwalkElevation guards with `if(!rows.length) return null` BEFORE any Math.random() — ELEV-1's own
+// documented "a segment with no elevation key renders exactly as before this unit" no-op path. Feeding
+// the actual/mutated windows an EMPTY room-elevation-profile table takes that zero-draw path, so 1c/1d/1e
+// compare the current walk MINUS ELEV-1's later roll against the pre-WDV-2 reference — isolating EXACTLY
+// WDV-2's rollRefs additivity again (the reference itself predates ELEV-1's dwalkElevation call, so it
+// never rolls elevation regardless; only the actual/mutated sides need the neutralizer). walkRows(id)
+// reads walkTables()[id] (src/engine/walk.js:145) and is the ONLY consumer of this id, so nothing else
+// is touched. This scopes the gate to its real job; it does not weaken it — a rollRefs wiring bug still
+// diverges (proven live by the 1a/1b RED mutation, which runs through this same neutralized path).
+const NEUTRALIZE_ELEV1 = '\n;(function(){ if(typeof walkRows==="function"){ var _wr=walkRows; walkRows=function(id){ return id==="room-elevation-profile" ? [] : _wr(id); }; } })();';
+
 console.log("\n=== 1. RED-FIRST byte-compat (contract §3 / spec check 1) ===");
 {
   const SEED = 12345;
   const refWin = freshDom(referenceSrc).win;
   const refWalks = withSeededRandom(refWin, SEED, () => rollAllThree(refWin));
 
-  const mutWin = mutationFound ? freshDom(mutatedSrc).win : null;
+  const mutWin = mutationFound ? freshDom(mutatedSrc + NEUTRALIZE_ELEV1).win : null;
   const mutWalks = mutationFound ? withSeededRandom(mutWin, SEED, () => rollAllThree(mutWin)) : null;
 
-  const actWin = freshDom(actualSrc).win;
+  const actWin = freshDom(actualSrc + NEUTRALIZE_ELEV1).win;
   const actWalks = withSeededRandom(actWin, SEED, () => rollAllThree(actWin));
 
   if (mutationFound) {

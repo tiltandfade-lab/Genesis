@@ -984,6 +984,8 @@ const TABLE_USAGE = {
     "consumers": {
       "chain": [],
       "code": [
+        "dungeon-walk.js",
+        "place-spatialize.js",
         "table-atlas.js"
       ],
       "procedure": [
@@ -1104,7 +1106,9 @@ const TABLE_USAGE = {
     "consumers": {
       "chain": [],
       "code": [
-        "table-atlas.js"
+        "table-atlas.js",
+        "theater-boot.js",
+        "walk-interactables.js"
       ],
       "procedure": [
         "Dungeon Encounter v2.0.md"
@@ -1119,7 +1123,8 @@ const TABLE_USAGE = {
     "consumers": {
       "chain": [],
       "code": [
-        "table-atlas.js"
+        "table-atlas.js",
+        "theater-boot.js"
       ],
       "procedure": [
         "Dungeon Encounter v2.0.md"
@@ -1247,7 +1252,8 @@ const TABLE_USAGE = {
     "consumers": {
       "chain": [],
       "code": [
-        "table-atlas.js"
+        "table-atlas.js",
+        "walk-interactables.js"
       ],
       "procedure": [
         "5-Room Dungeon Generator v3.1.md",
@@ -1297,7 +1303,8 @@ const TABLE_USAGE = {
         "Puzzle Type.md"
       ],
       "code": [
-        "table-atlas.js"
+        "table-atlas.js",
+        "walk-interactables.js"
       ],
       "procedure": [
         "5-Room Dungeon Generator v3.1.md",
@@ -3599,6 +3606,19 @@ const TABLE_USAGE = {
     "domain": "Character Genesis",
     "file": "Engine/03. _Tables/04. Character Genesis/Genesis Backgrounds.md"
   },
+  "room-elevation-profile": {
+    "base": "Room Elevation Profile",
+    "cls": "WIRED",
+    "consumers": {
+      "chain": [],
+      "code": [
+        "dungeon-walk.js"
+      ],
+      "procedure": []
+    },
+    "domain": "Session Mechanics / Dungeons",
+    "file": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Room Elevation Profile.md"
+  },
   "shrine-and-omen": {
     "base": "Shrine and Omen",
     "cls": "WIRED",
@@ -5282,7 +5302,8 @@ const TABLE_USAGE = {
     "consumers": {
       "chain": [],
       "code": [
-        "table-atlas.js"
+        "table-atlas.js",
+        "theater-data.js"
       ],
       "procedure": [
         "Wilderness Encounter v2.0.md"

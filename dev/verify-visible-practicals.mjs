@@ -174,6 +174,25 @@ function extractObjBlock(src, name) {
   const m = src.match(re);
   return m ? m[0] : null;
 }
+// LL-1 (docs/KENNEY-SOCKET-WAVE.md) — LIGHT_TUNABLES is the mutable light-lab indirection seam
+// interiorBuildLights now reads (LIGHT_TUNABLES.lightRenderGain, was the bare ITR_LIGHT_RENDER_GAIN).
+// Extract the REAL object — seeded verbatim off its authored dependency consts, never a neutral stub
+// that would silently weaken these assertions. `skip` lists any dependency const the caller already
+// injects into the SAME scope (avoids a double-declare); append the prelude AFTER those skipped consts.
+function lightTunablesPrelude(src, skip) {
+  skip = skip || [];
+  const deps = ["LIGHT_PROFILES","STAGE_AMBIENT_FLOOR","GRADE_EXPOSURE_FLOOR","BLOOM_THRESHOLD",
+    "BLOOM_STRENGTH","GRADE_TINT_SCALE","GRADE_TINT_MAX","CELESTIAL_ARC",
+    "ITR_SPRITE_EMISSIVE_FLOOR","ITR_SCENE_AMBIENT","ITR_LIGHT_RENDER_GAIN"];
+  const lines = deps.filter((n) => !skip.includes(n)).map((n) => {
+    const m = src.match(new RegExp("const " + n + "\\s*=\\s*[^;]+;")); // scalars/object-literals — no internal ';'
+    if (!m) throw new Error("lightTunablesPrelude: dep const not found: " + n);
+    return m[0];
+  });
+  const lt = src.match(/const LIGHT_TUNABLES = \{[\s\S]*?\n\};/); // profiles IIFE has internal ';' — match to the first column-0 "\n};"
+  if (!lt) throw new Error("lightTunablesPrelude: LIGHT_TUNABLES block not found");
+  return lines.join("\n") + "\n" + lt[0];
+}
 
 function makeVec3(x, y, z) {
   return {
@@ -376,7 +395,10 @@ console.log("\n=== PART B ITEM 3 — interiorBuildLights E0 wiring (theater-boot
     const src = "const THREE = arguments[0]; const document = arguments[1];\n"
       + "let INTERIOR_CONE_TEXTURE = null; let INTERIOR_GLOW_TEXTURE = null; let ITR_FIXTURE_BODY_MATERIAL_CACHE = null;\n"
       + coneEnabledLine + "\n" + brightSuppressLine + "\n" + glowDiagLine + "\n"
-      + constLines.join("\n") + "\n" + partsBlock + "\n" + emitterGeoBlock + "\n" + fns.join("\n")
+      + constLines.join("\n") + "\n" + partsBlock + "\n" + emitterGeoBlock + "\n"
+      // LL-1: interiorBuildLights reads LIGHT_TUNABLES.lightRenderGain; ITR_LIGHT_RENDER_GAIN is already in
+      // constLines above, so skip it here (the prelude reuses that same declaration — no double-declare).
+      + lightTunablesPrelude(bootSrc, ["ITR_LIGHT_RENDER_GAIN"]) + "\n" + fns.join("\n")
       + "\nreturn { interiorBuildLights, "
       + "setConeEnabled: function(v){ ITR_LIGHT_CONE_ENABLED = !!v; }, "
       + "setBrightSuppressPracticals: function(v){ ITR_BRIGHT_SUPPRESS_PRACTICALS = !!v; }, "

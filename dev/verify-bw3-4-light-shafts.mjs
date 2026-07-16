@@ -76,6 +76,29 @@ function extractObjBlock(src, name){
   const m = src.match(re);
   return m ? m[0] : null;
 }
+// LL-1 (docs/KENNEY-SOCKET-WAVE.md) — LIGHT_TUNABLES is the mutable light-lab indirection seam every
+// render fn this file source-extracts (interiorBuildLights/applyLightProfile/celestial*/makeGradePass/
+// updatePostSuiteGrade/sprite-emissive) now reads INSTEAD of the bare consts. This prelude extracts the
+// REAL object — seeded verbatim off its authored dependency consts (LIGHT_PROFILES, the floor/bloom/tint
+// scalars, CELESTIAL_ARC, the ITR sprite/scene/gain consts), never a neutral stub that would silently
+// weaken these assertions — so the sandbox reads production's own values. `skip` lists any dependency
+// const the caller already injects into the SAME sandbox scope (avoids a double-declare); the prelude
+// must be appended AFTER those skipped consts so its LIGHT_TUNABLES sees them in scope.
+function lightTunablesPrelude(src, skip){
+  skip = skip || [];
+  const deps = ["LIGHT_PROFILES","STAGE_AMBIENT_FLOOR","GRADE_EXPOSURE_FLOOR","BLOOM_THRESHOLD",
+    "BLOOM_STRENGTH","GRADE_TINT_SCALE","GRADE_TINT_MAX","CELESTIAL_ARC",
+    "ITR_SPRITE_EMISSIVE_FLOOR","ITR_SCENE_AMBIENT","ITR_LIGHT_RENDER_GAIN"];
+  const lines = deps.filter((n) => !skip.includes(n)).map((n) => {
+    const m = src.match(new RegExp("const " + n + "\\s*=\\s*[^;]+;")); // these dep consts are scalars/object-literals — no internal ';'
+    if(!m) throw new Error("lightTunablesPrelude: dep const not found: " + n);
+    return m[0];
+  });
+  // LIGHT_TUNABLES' own profiles IIFE DOES carry internal ';' — match to the first column-0 "\n};" instead.
+  const lt = src.match(/const LIGHT_TUNABLES = \{[\s\S]*?\n\};/);
+  if(!lt) throw new Error("lightTunablesPrelude: LIGHT_TUNABLES block not found");
+  return lines.join("\n") + "\n" + lt[0];
+}
 
 // ============================================================================
 // STUBS shared by ITEM 1/2 — a minimal real-enough THREE + document, same "just enough to run the
@@ -269,6 +292,9 @@ console.log("\n=== ITEM 2 — interiorBuildLights wiring, E0 fixtures + gated co
       + brightSuppressLine + "\n"
       + glowDiagLine + "\n"
       + constLines.join("\n") + "\n" + partsBlock + "\n" + emitterGeoBlock + "\n"
+      // LL-1: interiorBuildLights now reads LIGHT_TUNABLES.lightRenderGain (was the bare ITR_LIGHT_RENDER_GAIN,
+      // already in constLines above — so skip it here to avoid a double-declare; the prelude reuses it).
+      + lightTunablesPrelude(bootSrc, ["ITR_LIGHT_RENDER_GAIN"]) + "\n"
       + fns.join("\n")
       + "\nreturn { interiorBuildLights, setConeEnabled: function(v){ ITR_LIGHT_CONE_ENABLED = !!v; }, coneEnabled: function(){ return ITR_LIGHT_CONE_ENABLED; }, setBrightSuppressPracticals: function(v){ ITR_BRIGHT_SUPPRESS_PRACTICALS = !!v; }, brightSuppressPracticals: function(){ return ITR_BRIGHT_SUPPRESS_PRACTICALS; }, setGlowDiagnostic: function(v){ ITR_GLOW_DISC_DIAGNOSTIC = !!v; }, ITR_LIGHT_RENDER_GAIN: ITR_LIGHT_RENDER_GAIN, ITR_BRIGHT_PRACTICAL_INTENSITY_SCALE: ITR_BRIGHT_PRACTICAL_INTENSITY_SCALE };";
     const factory = new Function(src);

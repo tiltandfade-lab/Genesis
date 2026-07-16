@@ -646,6 +646,8 @@ implausible human scale.
 - new classic/pure `src/engine/kenney-realization.js` loaded before `place-distribution.js`;
 - `src/engine/theater-data.js:1796-1824` realization call before distribution;
 - `src/engine/place-distribution.js:57-69,165-270` footprint/yaw collision;
+- `src/ui/theater-interior.js` delegates its later `itrWallSideAt` stamp to the single pure
+  engine-level wall-side authority used by realization;
 - `src/ui/theater-boot.js:7725-7855` board props and `9470-9520` interior dressing donor mount;
 - new `dev/verify-kenney-realization.mjs`; extend place-distribution/dungeon-dressing harnesses.
 
@@ -691,8 +693,11 @@ Rules match only already-present nouns. First matching rule wins; candidates are
 **Placement:**
 
 1. Stamp `visualAsset` before `placeDistribute` without modifying canonical fields.
-2. Candidate yaw is one of `0, PI/2, PI, 3PI/2`; wall mounts derive yaw from the existing stamped
-   `wallSide` and are not randomized.
+2. Candidate yaw is one of `0, PI/2, PI, 3PI/2`; wall mounts are not randomized. The authoritative
+   wall side is resolved before distribution by the pure engine-level helper in
+   `kenney-realization.js`, from the already-present plan bounds/cells and `SPATIAL_CELL` contract.
+   The later `theater-interior.js` wall-side stamp must delegate to that same helper; no duplicate UI
+   formula or engine-to-UI dependency is allowed.
 3. Use transformed footprint OBBs and a four-axis 2D SAT overlap test. Wall erosion uses the projected
    half-extent along the wall normal. Existing `cardKind` radii remain fallback-only.
 4. If no legal placement exists, retain the canonical anchor and set
@@ -714,6 +719,12 @@ Rules match only already-present nouns. First matching rule wins; candidates are
 
 **Out:** semantic substitutions beyond the named rules, stacking loose clutter on table tops, and
 structural kit shells.
+
+**2026-07-16 ordering amendment:** inspection found that `theater-data` realizes and distributes
+before `theater-interior` stamps `wallSide` (load orders 96 and 97 respectively). Merely finalizing
+wall yaw later would leave pre-distribution OBB wall eligibility undefined. KGR-5 therefore owns the
+narrow `theater-interior.js` delegation above: one engine-pure wall-side authority is used at both
+seams and must pass a parity mutation gate.
 
 ## 11. Unit KGR-6 — proving run and admission gate
 

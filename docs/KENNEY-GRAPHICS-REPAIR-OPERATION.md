@@ -460,8 +460,9 @@ crenellation-to-prism sawtooth, continuous floors/walls, and the repaired Kenney
 - editable translation/rotation/scale and ground offset; UI may display Euler degrees but stores a
   normalized quaternion;
 - when a census-known asset belongs to a pack absent from calibration, an explicit new-pack panel
-  edits `sourceUp`, `sourceForward`, `canonicalScale`, and `structuralGrid` and supplies that
-  `packRecord` on the first save; existing-pack values are read-only in this asset editor;
+  displays the v1 schema's locked `sourceUp:"+Y"` and `sourceForward:"+Z"` invariants, edits
+  `canonicalScale` and `structuralGrid`, and supplies that `packRecord` on the first save;
+  existing-pack values are read-only in this asset editor;
 - socket list with add/delete/rename/type/mate/size/clearance fields and translate/rotate gizmo;
 - vertex/edge/face/AABB snapping, with an explicit unsnapped mode;
 - host+child mate preview, exploded slider, socket axes, seam-distance readout, and door sweep preview;

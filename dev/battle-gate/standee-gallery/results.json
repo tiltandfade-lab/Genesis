@@ -1,38 +1,8 @@
 {
-  "generatedAt": "2026-07-15T15:05:31.503Z",
+  "generatedAt": "2026-07-16T02:10:39.949Z",
   "realms": {
     "fantasy": {
       "contactSheet": "fantasy-contact-sheet.png",
-      "castSlugs": [
-        "spr-fantasy-giant-rat",
-        "spr-fantasy-wolf",
-        "spr-fantasy-ogre-zombie",
-        "spr-fantasy-land-worker-dragonborn",
-        "spr-pc-dragonborn-barbarian-male"
-      ],
-      "matrixCellCount": 2,
-      "flipPairPresent": true,
-      "pcSpriteReachableViaInteriorPath": true,
-      "consoleErrorCount": 5,
-      "notes": []
-    },
-    "gloom": {
-      "contactSheet": "gloom-contact-sheet.png",
-      "castSlugs": [
-        "spr-fantasy-giant-rat",
-        "spr-fantasy-wolf",
-        "spr-fantasy-ogre-zombie",
-        "spr-fantasy-land-worker-dragonborn",
-        "spr-pc-dragonborn-barbarian-male"
-      ],
-      "matrixCellCount": 2,
-      "flipPairPresent": true,
-      "pcSpriteReachableViaInteriorPath": true,
-      "consoleErrorCount": 5,
-      "notes": []
-    },
-    "chrome": {
-      "contactSheet": "chrome-contact-sheet.png",
       "castSlugs": [
         "spr-fantasy-giant-rat",
         "spr-fantasy-wolf",

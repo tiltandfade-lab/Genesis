@@ -3134,7 +3134,7 @@ function buildSpriteBillboardMesh(tex, w, h, slug){
   const mat = SPRITE_UNLIT_DEBUG
     ? new THREE.MeshBasicMaterial({ map: tex, transparent: true, alphaTest: 0.5, side: THREE.DoubleSide, depthWrite: true })
     : new THREE.MeshLambertMaterial({
-        map: tex, emissiveMap: tex, emissive: ITR_SPRITE_EMISSIVE_TINT, emissiveIntensity: ITR_SPRITE_EMISSIVE_FLOOR,
+        map: tex, emissiveMap: tex, emissive: ITR_SPRITE_EMISSIVE_TINT, emissiveIntensity: LIGHT_TUNABLES.spriteEmissiveFloor,
         transparent: true, alphaTest: 0.5, side: THREE.DoubleSide, depthWrite: true
       });
   // DUNGEON-GRAPH.md U3 iteration-2, SPRITE PURITY ruling (Adam 2026-07-10 evening): billboards must
@@ -4815,7 +4815,12 @@ function createTheaterState(){
     // read its output); it is added/removed alongside the effects so an interior board's chain is
     // [render, dof, bloom, grade] and the tabletop's chain is empty (direct render). postSuiteMounted
     // tracks whether the effect passes are currently attached to S.composer.
-    postSuite: null, postSuiteMounted: false, dofFocusDist: 0, dofFocusNdcY: 0
+    postSuite: null, postSuiteMounted: false, dofFocusDist: 0, dofFocusNdcY: 0,
+    // LL-1 (docs/KENNEY-SOCKET-WAVE.md unit LL-1) — LIGHT-LAB tracking. lightLabMounted/lightLabEls/
+    // lightLabReadoutTimer are this session's DOM-panel bookkeeping (torn down by unmountLightLab, or
+    // at retire() below); lightLabProfileKey is which LIGHT_PROFILES entry the lab's dropdown currently
+    // has selected for editing (independent of S.lightProfileKey, the profile actually RENDERED).
+    lightLabMounted: false, lightLabEls: null, lightLabReadoutTimer: null, lightLabProfileKey: null
   };
 }
 
@@ -4934,7 +4939,19 @@ function scheduleRender(){
 // would show a blank/stale frame rather than a passthrough if called anyway. This is the exact
 // "flag ON, zero passes == byte-identical to pre-composer render" behavior BW3-0 exists to prove.
 function renderTheaterFrame(){
+  // LL-1: the ENTIRE activation cost when the light-lab is off — one boolean read
+  // (lightLabMaybeAutoMount's own short-circuit) at the top of the one render call site. No DOM, no
+  // listener, no timer exists until the flag actually flips true (lightLabShouldEnable's own header).
+  lightLabMaybeAutoMount();
   if(S.postChainEnabled && S.composer && S.composer.passes && S.composer.passes.length > 0){
+    // LL-1 EMISSIVE-MASKED BLOOM: refresh the bloom pass's isolated emitter-only render for THIS frame
+    // before the composer consumes it (Pass.render() itself never gets a live scene/camera — see
+    // MaskedBloomPass's own header). Gated on the bloom pass actually being mounted+enabled so the
+    // flat tabletop (no post suite) and any test harness that disables bloom pay zero extra cost.
+    if(S.postSuiteMounted && S.postSuite && S.postSuite.bloom && S.postSuite.bloom.enabled
+      && typeof S.postSuite.bloom.updateEmissiveIsolate === "function"){
+      S.postSuite.bloom.updateEmissiveIsolate(S.renderer, S.scene, S.camera);
+    }
     S.composer.render();
   } else {
     S.renderer.render(S.scene, S.camera);
@@ -4980,6 +4997,32 @@ const BLOOM_THRESHOLD = 0.68;  // linear luminance gate — emissives clear it, 
 const BLOOM_STRENGTH = 1.15;   // halo intensity — soft, mock-level (the torch/neon glow, not a flare)
 const BLOOM_RADIUS = 0.5;      // spread of the halo (tighter = the wash stays ON the emissive)
 const BLOOM_RESOLUTION_SCALE = 0.5; // half-res bloom chain (fps)
+// LL-1 (docs/KENNEY-SOCKET-WAVE.md unit LL-1) — EMISSIVE-MASKED BLOOM. The threshold above was the
+// ONLY gate WALL-VOLUMES-PRACTICALS.md's E0 shipped ("No bloom mask" — its own Decisions section,
+// scoped out because a dim torch-lit crypt never pushed non-emissive albedo near 0.68). The B3 standee
+// gallery's daylit lineup broke that assumption for good (ledger #12/13; dev/battle-gate/standee-
+// gallery/shots/fantasy-daylit-yaw0.png — the Ogre Zombie standee, and the whole room around it, reads
+// as a blown-white smear): under a BRIGHT profile's key+ambient+AgX's own filmic lift, ordinary lit-
+// but-non-emissive surfaces cross BLOOM_THRESHOLD on their own, so the threshold alone can no longer
+// distinguish "genuinely emitting" from "brightly lit" — bloom re-blows exactly what AgX's shoulder
+// just finished compressing back into range. This unit supersedes E0's "no bloom mask" scope-out with
+// a real one: MaskedBloomPass (below) restricts its bright-pass EXTRACTION to an isolated render of
+// ONLY the objects tagged onto BLOOM_LAYER, so a pixel can seed the bloom halo only if it belongs to a
+// mesh actually marked as a true emitter — today, every fixture's own emitter submesh
+// (interiorBuildFixtureGroup's `emitter.userData.fixtureEmitter`/`emitter.layers.enable(BLOOM_LAYER)`,
+// further down — the SAME tag E0 already stamps on every torch/candle/lantern/brazier flame). THRESHOLD
+// still applies inside the isolated render — this is an AND with the mask, not a replacement, so a
+// dim/unlit fixture still doesn't bloom. Layer 0 (three's default) stays enabled on every object as
+// always; BLOOM_LAYER is purely ADDITIVE onto true emitters, never a visibility change for anything.
+const BLOOM_LAYER = 1;
+// TEST-ONLY SEAM (same convention as ITR_BRIGHT_REALM_FILL_FORCE_DEFAULT_FOR_TEST / GRADE_TONEMAP's own
+// _setGradeTonemapForTest): forces MaskedBloomPass's bright-pass extraction back to the FULL composited
+// frame (readBuffer.texture) instead of the emissive-isolated texture — reproduces the EXACT pre-LL-1
+// "threshold-only, no mask" bloom behavior on demand, live, in the SAME running app. Lets a harness
+// show the B3 daylit blow-out RED (flag true), then clear the flag and show the SAME fixture GREEN
+// under the real mask — a true A/B, not two separately-captured screenshots. Product code never sets
+// this; only dev/verify-*.mjs (via window.Theater._setBloomMaskDisabledForTest) does.
+let BLOOM_MASK_DISABLED_FOR_TEST = false;
 
 // ── FILMIC GRADE dials (BW3-6). One per-realm post grade: exposure -> ACES filmic tone curve ->
 // contrast (both MONOTONIC, so the VALUE LAW ordering floor<wall<light survives in pixels, not just
@@ -5005,6 +5048,37 @@ const GRADE_TINT_MAX = 0.12;   // hard cap on the tint wash so no realm over-tin
 const GRADE_VIGNETTE = 0.20;   // edge darkening depth (the mocks all carry a soft vignette)
 const GRADE_VIGNETTE_INNER = 0.34; // radius (from centre, UV) where the vignette starts
 const GRADE_VIGNETTE_OUTER = 0.92; // radius where it reaches full depth (corners ~0.71 in a wide frame)
+
+// LL-1 (docs/KENNEY-SOCKET-WAVE.md unit LL-1, Stage-E ledger #12: pl-012/013/014/017/022 crush ~half
+// the frame to illegible black) — EXPOSURE FLOOR. STAGE_AMBIENT_FLOOR (below, ~L5710) already floors
+// the SCENE's own ambient light so nothing is authored pitch-black; the crush ledger evidence shows
+// that isn't enough once AgX's log2 encoding gets its hands on the frame — AgX's own AgxMinEv
+// (-12.47393, see AGX_TONEMAP_GLSL above) maps very-low-but-nonzero linear values so far down its
+// input range that agxDefaultContrastApprox's sigmoid still crushes them to 0 well before midtones
+// start responding, which is a property of the CURVE (untouched here — the spec is explicit: "do NOT
+// touch makeGradePass's curve"), not a bug in it. The fix lives one step upstream: lift the linear
+// frame's floor BEFORE it enters AgXToneMapping, so shadow detail sits inside the curve's responsive
+// range to begin with. `max(lin, floor)` is a LIFT, never a cap — it can only brighten a pixel darker
+// than the floor, so it can't blow out anything already bright, and it's fully monotonic (the VALUE
+// LAW ordering floor<wall<light in pixels survives, same discipline every stage in this pass already
+// keeps). Interiors-only per the unit's own scope: wired into FS_AGX alone (below), never FS_NONE —
+// FS_NONE is the BYTE-IDENTICAL-to-master literal dev/verify-agx-tonecurve.mjs diffs character-for-
+// character; inserting anything into it would break that proof for no benefit (GRADE_TONEMAP="none"
+// has no AgX shoulder to feed a floor into anyway). Mutable indirection: LIGHT_TUNABLES.gradeExposureFloor
+// (declared after CELESTIAL_ARC, below) is what the render path actually reads; this const is only its
+// seed default — see LIGHT_TUNABLES' own header for the byte-identical-when-untouched contract.
+// TUNING (live, against dev/verify-diegetic-light.mjs — the sharpest existing near-black regression
+// detector in the repo): AgX's shoulder is extremely steep near black — a floor of 0.01-0.035 already
+// visibly LIFTS the "genuinely dark far corner"/"dim torchlit crypt" pixels those L-3/L-4/LC-2/P-1b
+// gates depend on staying convincingly darker than their lit comparisons (measured live: 0.035 pushed
+// L-3's far corner from 0.012->0.196 display luma and blew L-4's daylit:torchlit contrast ratio from
+// 6.86 down to 1.14 — RED, not the intended fix). 0.006 is the largest value that still clears every
+// one of those gates at their real production margins (verified: 62/63 passed, matching master's own
+// baseline exactly — only the pre-existing, unrelated P-1a stale-red remains). Conservative BY DESIGN:
+// this default only rescues genuinely near-zero (crushed) pixels; it does not chase the full ledger #12
+// "half the frame" claim on its own — LIGHT_TUNABLES.gradeExposureFloor is the live dial (LIGHT-LAB,
+// further down) for Adam to push higher if he judges a stronger lift worth the contrast trade-off.
+const GRADE_EXPOSURE_FLOOR = 0.006; // linear RGB floor, pre-AgX — see the TUNING note above for why not higher
 
 // P3-3a (docs/PHASE-3-AGX-SPEC.md): the grade above never had a tone-mapping curve — a linear clamp
 // (the `clamp(...,0.0,1.0)` in the contrast line below) is the only thing standing between a hot
@@ -5187,6 +5261,7 @@ function makeGradePass(){
       uniform sampler2D tDiffuse;
       uniform vec2 uResolution;
       uniform float uExposure, uContrast, uSat, uTintAmt, uVignette, uVigInner, uVigOuter;
+      uniform float uExposureFloor;
       uniform vec3 uTint;
       ${AGX_TONEMAP_GLSL}
       void main(){
@@ -5195,6 +5270,11 @@ function makeGradePass(){
         // which applies the real sRGB OETF at the end of the chain. gamma 2.2 approximation is plenty
         // for a grade (the display encode is OutputPass's exact job, not this one's).
         vec3 lin = texture2D(tDiffuse, vUv).rgb;
+        // LL-1 EXPOSURE FLOOR (GRADE_EXPOSURE_FLOOR/LIGHT_TUNABLES.gradeExposureFloor, above) — a LIFT
+        // (max, never a cap) applied BEFORE AgXToneMapping so near-black shadow detail survives the
+        // curve's own log2 domain instead of crushing to 0 (ledger #12/13). The curve itself
+        // (AgXToneMapping/AGX_TONEMAP_GLSL, verbatim three.js port) is untouched.
+        lin = max(lin, vec3(uExposureFloor));
         lin = AgXToneMapping(lin); // P3-3a: filmic shoulder — tonemap BEFORE the perceptual grade math
         vec3 col = pow(max(lin, 0.0), vec3(1.0 / 2.2)); // linear -> perceptual
         // exposure already applied inside AgXToneMapping (its own uExposure multiply, three's own convention)
@@ -5221,7 +5301,15 @@ function makeGradePass(){
       uTintAmt: { value: 0.0 },
       uVignette: { value: GRADE_VIGNETTE },
       uVigInner: { value: GRADE_VIGNETTE_INNER },
-      uVigOuter: { value: GRADE_VIGNETTE_OUTER }
+      uVigOuter: { value: GRADE_VIGNETTE_OUTER },
+      // LL-1: unused by FS_NONE (harmless — an unread uniform), read by FS_AGX only. Seeded from the
+      // bare const here (matching uExposure/uContrast/uSat/uVignette*'s own siblings just above —
+      // makeGradePass() must stay independently constructible without a live LIGHT_TUNABLES in scope,
+      // the same isolation dev/verify-agx-tonecurve.mjs's vm-sandbox extraction already depends on for
+      // every OTHER uniform here); updatePostSuiteGrade (below) pushes the LIVE LIGHT_TUNABLES.
+      // gradeExposureFloor value onto this uniform on every mount/tunable-change, same as every other
+      // grade dial — this seed is only ever the very first frame's value pre-first-push.
+      uExposureFloor: { value: GRADE_EXPOSURE_FLOOR }
     },
     vertexShader: `varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }`,
     fragmentShader: isAgx ? FS_AGX : FS_NONE
@@ -5231,16 +5319,132 @@ function makeGradePass(){
   return pass;
 }
 
+// LL-1 — MaskedBloomPass: a thin subclass of UnrealBloomPass (vendor/three/addons/postprocessing/
+// UnrealBloomPass.js — verbatim, unmodified there) that substitutes an EMISSIVE-ISOLATED texture for
+// the bright-pass extraction's source, while leaving every other stage (blur mip chain, composite,
+// final additive blend onto the real readBuffer) byte-identical to the parent's own render(). See
+// BLOOM_LAYER's own header comment (above) for the "why"; this class is the "how".
+class MaskedBloomPass extends UnrealBloomPass {
+  constructor(resolution, strength, radius, threshold){
+    super(resolution, strength, radius, threshold);
+    // Feeds ONLY the bright-pass extraction (itself already downsampled to half of `resolution` —
+    // renderTargetBright's own size, parent constructor above) — matching that same size is enough
+    // resolution for a threshold+blur read; no reason to isolate at full drawing-buffer res.
+    const resx = Math.max(1, Math.round(resolution.x / 2)), resy = Math.max(1, Math.round(resolution.y / 2));
+    this.emissiveIsolateTarget = new THREE.WebGLRenderTarget(resx, resy, { type: THREE.HalfFloatType });
+    this.emissiveIsolateTarget.texture.name = "MaskedBloomPass.emissiveIsolate";
+    this.emissiveIsolateTarget.texture.generateMipmaps = false;
+    this._isolateLayers = new THREE.Layers();
+    this._isolateLayers.disableAll();
+    this._isolateLayers.enable(BLOOM_LAYER);
+  }
+  // Called ONCE per frame, BEFORE composer.render() (renderTheaterFrame's own new call site, below) —
+  // Pass.render() only ever receives already-rendered buffer textures, never a live scene/camera to
+  // re-render from, so the isolate render can't happen inside render() itself. Cheap: everything NOT
+  // on BLOOM_LAYER is SKIPPED by three's own camera-layers test before draw, not drawn-then-discarded —
+  // a room with 1-2 lit fixtures draws 1-2 meshes here, not the whole scene graph.
+  updateEmissiveIsolate(renderer, scene, camera){
+    const priorMask = camera.layers.mask;
+    const priorTarget = renderer.getRenderTarget();
+    const priorClear = new THREE.Color();
+    renderer.getClearColor(priorClear);
+    const priorAlpha = renderer.getClearAlpha();
+    camera.layers.mask = this._isolateLayers.mask;
+    renderer.setRenderTarget(this.emissiveIsolateTarget);
+    renderer.setClearColor(0x000000, 1);
+    renderer.clear();
+    renderer.render(scene, camera);
+    camera.layers.mask = priorMask;
+    renderer.setRenderTarget(priorTarget);
+    renderer.setClearColor(priorClear, priorAlpha);
+  }
+  setSize(width, height){
+    super.setSize(width, height);
+    const resx = Math.max(1, Math.round(width / 2)), resy = Math.max(1, Math.round(height / 2));
+    this.emissiveIsolateTarget.setSize(resx, resy);
+  }
+  dispose(){
+    super.dispose();
+    this.emissiveIsolateTarget.dispose();
+  }
+  // Verbatim mirror of UnrealBloomPass.render() (vendor/three/addons/postprocessing/UnrealBloomPass.js)
+  // with exactly ONE substitution, called out inline below: the bright-pass extraction reads
+  // `this.emissiveIsolateTarget.texture` instead of `readBuffer.texture`. Every later stage (blur mips,
+  // composite, final additive blend) still targets the REAL readBuffer exactly as the parent does, so
+  // the full base frame is always preserved underneath — only the bloom halo's SOURCE is masked.
+  render(renderer, writeBuffer, readBuffer, deltaTime, maskActive){
+    renderer.getClearColor(this._oldClearColor);
+    this.oldClearAlpha = renderer.getClearAlpha();
+    const oldAutoClear = renderer.autoClear;
+    renderer.autoClear = false;
+    renderer.setClearColor(this.clearColor, 0);
+    if(maskActive) renderer.state.buffers.stencil.setTest(false);
+    if(this.renderToScreen){
+      this.fsQuad.material = this.basic;
+      this.basic.map = readBuffer.texture;
+      renderer.setRenderTarget(null);
+      renderer.clear();
+      this.fsQuad.render(renderer);
+    }
+    // 1. Extract Bright Areas — FROM THE EMISSIVE-ISOLATED TEXTURE (the one substitution vs. parent,
+    // which reads readBuffer.texture here instead). BLOOM_MASK_DISABLED_FOR_TEST (test-only seam, above)
+    // reverts to readBuffer.texture on demand — the exact pre-LL-1 behavior — for a live RED/GREEN A/B.
+    this.highPassUniforms["tDiffuse"].value = BLOOM_MASK_DISABLED_FOR_TEST ? readBuffer.texture : this.emissiveIsolateTarget.texture;
+    this.highPassUniforms["luminosityThreshold"].value = this.threshold;
+    this.fsQuad.material = this.materialHighPassFilter;
+    renderer.setRenderTarget(this.renderTargetBright);
+    renderer.clear();
+    this.fsQuad.render(renderer);
+    // 2. Blur all the mips progressively (verbatim parent logic).
+    let inputRenderTarget = this.renderTargetBright;
+    for(let i = 0; i < this.nMips; i++){
+      this.fsQuad.material = this.separableBlurMaterials[i];
+      this.separableBlurMaterials[i].uniforms["colorTexture"].value = inputRenderTarget.texture;
+      this.separableBlurMaterials[i].uniforms["direction"].value = UnrealBloomPass.BlurDirectionX;
+      renderer.setRenderTarget(this.renderTargetsHorizontal[i]);
+      renderer.clear();
+      this.fsQuad.render(renderer);
+      this.separableBlurMaterials[i].uniforms["colorTexture"].value = this.renderTargetsHorizontal[i].texture;
+      this.separableBlurMaterials[i].uniforms["direction"].value = UnrealBloomPass.BlurDirectionY;
+      renderer.setRenderTarget(this.renderTargetsVertical[i]);
+      renderer.clear();
+      this.fsQuad.render(renderer);
+      inputRenderTarget = this.renderTargetsVertical[i];
+    }
+    // Composite all the mips (verbatim parent logic).
+    this.fsQuad.material = this.compositeMaterial;
+    this.compositeMaterial.uniforms["bloomStrength"].value = this.strength;
+    this.compositeMaterial.uniforms["bloomRadius"].value = this.radius;
+    this.compositeMaterial.uniforms["bloomTintColors"].value = this.bloomTintColors;
+    renderer.setRenderTarget(this.renderTargetsHorizontal[0]);
+    renderer.clear();
+    this.fsQuad.render(renderer);
+    // Blend it additively over the REAL input texture (readBuffer — the full, unmasked scene).
+    this.fsQuad.material = this.blendMaterial;
+    this.copyUniforms["tDiffuse"].value = this.renderTargetsHorizontal[0].texture;
+    if(maskActive) renderer.state.buffers.stencil.setTest(true);
+    if(this.renderToScreen){
+      renderer.setRenderTarget(null);
+      this.fsQuad.render(renderer);
+    } else {
+      renderer.setRenderTarget(readBuffer);
+      this.fsQuad.render(renderer);
+    }
+    renderer.setClearColor(this._oldClearColor, this.oldClearAlpha);
+    renderer.autoClear = oldAutoClear;
+  }
+}
+
 // Build the three passes once (lazy — needs a live renderer + a sized canvas). Stored on S.postSuite.
 function buildPostSuite(){
   if(S.postSuite || !S.renderer || !S.composer) return S.postSuite;
   const size = new THREE.Vector2();
   S.renderer.getSize(size);
   const dof = makeDofPass();
-  const bloom = new UnrealBloomPass(
+  const bloom = new MaskedBloomPass(
     new THREE.Vector2(Math.max(1, Math.round(size.x * BLOOM_RESOLUTION_SCALE)),
                       Math.max(1, Math.round(size.y * BLOOM_RESOLUTION_SCALE))),
-    BLOOM_STRENGTH, BLOOM_RADIUS, BLOOM_THRESHOLD
+    LIGHT_TUNABLES.bloomStrength, BLOOM_RADIUS, LIGHT_TUNABLES.bloomThreshold
   );
   bloom.__bwName = "bloom";
   const grade = makeGradePass();
@@ -5278,10 +5482,18 @@ function updatePostSuiteGrade(kit, rigOn){
   if(hasGrade){
     const tintNum = hexStrToNum(kit.gradeTint);
     g.uTint.value.setHex(tintNum);
-    g.uTintAmt.value = Math.min(GRADE_TINT_MAX, kit.gradeStrength * GRADE_TINT_SCALE);
+    g.uTintAmt.value = Math.min(LIGHT_TUNABLES.gradeTintMax, kit.gradeStrength * LIGHT_TUNABLES.gradeTintScale);
   } else {
     g.uTint.value.setRGB(1, 1, 1);
     g.uTintAmt.value = 0.0;
+  }
+  // LL-1: every mount is a sync point for the grade/bloom LIVE tunables (this is what "drag -> re-
+  // render" reaches for these — no separate push path to keep in sync with mountPostSuite's own call
+  // site below). Untouched LIGHT_TUNABLES == the authored consts, so this is a no-op read in production.
+  g.uExposureFloor.value = LIGHT_TUNABLES.gradeExposureFloor;
+  if(S.postSuite.bloom){
+    S.postSuite.bloom.threshold = LIGHT_TUNABLES.bloomThreshold;
+    S.postSuite.bloom.strength = LIGHT_TUNABLES.bloomStrength;
   }
 }
 
@@ -5919,19 +6131,26 @@ function applyLightProfile(key){
 
   const profile = lightProfileFor(key);
   S.lightProfileKey = key;
+  // LL-1 (docs/KENNEY-SOCKET-WAVE.md unit LL-1) — the light-lab's own per-profile override, defaulting
+  // to THIS profile's own authored ambient/key numbers (LIGHT_TUNABLES.profiles is seeded straight off
+  // LIGHT_PROFILES at declaration — see LIGHT_TUNABLES' own header). An untouched lab means `tune.*`
+  // below reads byte-identical to `profile.ambient.*`/`profile.points[0].*`, so this indirection is a
+  // pure no-op in production.
+  const tune = LIGHT_TUNABLES.profiles[key] || LIGHT_TUNABLES.profiles[LIGHT_DEFAULT_PROFILE];
 
-  // readability floor (STAGE_AMBIENT_FLOOR, above) — clamp UP only, never down: a profile authored
-  // brighter than the floor (at 0.65 that's daylit 0.85 alone) keeps its own value untouched; every
-  // sub-floor profile (dark 0.38 the worst case; overcast/moonlit sit just under) gets lifted. Color
-  // is read straight off the profile either way — the floor governs intensity alone, so the profile
-  // still owns the mood/hue, and points still carry each profile's relative brightness identity.
-  const ambientIntensity = Math.max(profile.ambient.intensity, STAGE_AMBIENT_FLOOR);
+  // readability floor (LIGHT_TUNABLES.stageAmbientFloor, seeded from STAGE_AMBIENT_FLOOR above) —
+  // clamp UP only, never down: a profile authored brighter than the floor (at 0.65 that's daylit 0.85
+  // alone) keeps its own value untouched; every sub-floor profile (dark 0.38 the worst case; overcast/
+  // moonlit sit just under) gets lifted. Color is read straight off the tunable either way — the floor
+  // governs intensity alone, so the profile still owns the mood/hue, and points still carry each
+  // profile's relative brightness identity.
+  const ambientIntensity = Math.max(tune.ambientIntensity, LIGHT_TUNABLES.stageAmbientFloor);
   // REALM-RENDER-STYLE.md §3: grade the profile's authored color through the current board's render
   // profile (S.realmProfile, set by setBoard just before this call — see that function's own comment;
   // null pre-mount/pre-setBoard, which gradeColorLocal treats as a no-op) — same "colors are already
   // resolved" seam the tile tints and figure materials share. Intensity is untouched (the readability
   // floor's own "color stays authored, only intensity is floored" discipline extends here).
-  const ambientColor = gradeColorLocal(profile.ambient.color, S.realmProfile);
+  const ambientColor = gradeColorLocal(tune.ambientColor, S.realmProfile);
   const ambient = new THREE.AmbientLight(ambientColor, ambientIntensity);
   S.scene.add(ambient);
   S.ambientLight = ambient;
@@ -5948,8 +6167,12 @@ function applyLightProfile(key){
   profile.points.forEach((p, i) => {
     // decay:0, distance:0 — a flat non-attenuating point light (see LIGHT_PROFILES' own header on why:
     // predictable per-profile intensity numbers regardless of board size, no physically-correct falloff
-    // tuning needed per profile).
-    const light = new THREE.PointLight(gradeColorLocal(p.color, S.realmProfile), p.intensity, 0, 0);
+    // tuning needed per profile). LL-1: index 0 (every LIGHT_PROFILES entry authors at most one point)
+    // reads the lab's own tunable color/intensity; any further point (none exist today) keeps its
+    // authored value untouched — tune only ever overrides the ONE point this profile vocabulary has.
+    const pColor = (i === 0 && tune.pointColor != null) ? tune.pointColor : p.color;
+    const pIntensity = (i === 0 && tune.pointIntensity != null) ? tune.pointIntensity : p.intensity;
+    const light = new THREE.PointLight(gradeColorLocal(pColor, S.realmProfile), pIntensity, 0, 0);
     if(i === 0 && S.lightPropAnchor){
       light.position.set(S.lightPropAnchor.x, S.lightPropAnchor.y, S.lightPropAnchor.z);
     } else {
@@ -6119,16 +6342,70 @@ const CELESTIAL_AMBIENT_FLOOR_SCALE = 0.6; // ambient intensity never drops belo
 // celestial layer's own protection-set discipline never drifts from ENV-1's.
 const CELESTIAL_PROFILE_SET = { daylit: true, overcast: true, moonlit: true };
 
+// ════════════════════════════════════════════════════════════════════════════════════════════════
+// LL-1 (docs/KENNEY-SOCKET-WAVE.md unit LL-1) — LIGHT_TUNABLES: the ONE mutable indirection seam the
+// dev-only light-lab (further down, gated behind ?lightlab=1) writes through. "The consts are const"
+// (the unit's own instruction) — every named const this table mirrors stays exactly as authored above;
+// nothing here ever reassigns one. Every RENDER call site this unit touches (applyLightProfile, the
+// celestial-arc functions, makeGradePass's uniforms, buildPostSuite/updatePostSuiteGrade, the sprite
+// emissive-floor material builders, the interior brightness-law consumers) was rewired to read the
+// matching LIGHT_TUNABLES.* property INSTEAD OF the bare const name — so an untouched LIGHT_TUNABLES
+// (its properties are SEEDED, at declaration time below, straight off the same consts) makes every one
+// of those call sites read a value byte-identical to what it read before this unit existed. The lab is
+// the ONLY writer; product/game code never assigns into this object after this declaration. Scope is
+// deliberately the set LL-1 names explicitly — LIGHT_PROFILES' per-profile key(point)/ambient
+// color+intensity, CELESTIAL_ARC's timing/desaturation keyframes, STAGE_AMBIENT_FLOOR + the new
+// exposure floor, bloom threshold/strength, the per-realm grade-strength scalers, and the three BW2-4b
+// "how sprites react to light" consts (readability floor / dark-corner cap / torch-pool band) — not
+// every tunable-shaped number in this file.
+const LIGHT_TUNABLES = {
+  // per LIGHT_PROFILES key: {ambientColor, ambientIntensity} = the profile's "fill" (ambient wash);
+  // {pointColor, pointIntensity} = its "key" (the one authored point — see LIGHT_PROFILES' own header:
+  // every entry authors at most one). Deep-seeded (primitive values only, never a shared reference back
+  // into LIGHT_PROFILES) so mutating a tunable can never touch the authored table itself.
+  profiles: (() => {
+    const out = {};
+    for(const key in LIGHT_PROFILES){
+      const p = LIGHT_PROFILES[key];
+      out[key] = {
+        ambientColor: p.ambient.color,
+        ambientIntensity: p.ambient.intensity,
+        pointColor: p.points[0] ? p.points[0].color : null,
+        pointIntensity: p.points[0] ? p.points[0].intensity : null,
+      };
+    }
+    return out;
+  })(),
+  stageAmbientFloor: STAGE_AMBIENT_FLOOR,
+  gradeExposureFloor: GRADE_EXPOSURE_FLOOR,
+  bloomThreshold: BLOOM_THRESHOLD,
+  bloomStrength: BLOOM_STRENGTH,
+  gradeTintScale: GRADE_TINT_SCALE,
+  gradeTintMax: GRADE_TINT_MAX,
+  celestialArc: {
+    SUNRISE_MIN: CELESTIAL_ARC.SUNRISE_MIN,
+    SUNSET_MIN: CELESTIAL_ARC.SUNSET_MIN,
+    MIN_ELEV_ANGLE: CELESTIAL_ARC.MIN_ELEV_ANGLE,
+    OVERCAST_DESAT: CELESTIAL_ARC.OVERCAST_DESAT,
+    OVERCAST_SHADOW_DAMP: CELESTIAL_ARC.OVERCAST_SHADOW_DAMP,
+  },
+  // BW2-4b "how sprites react to light" — see ITR_SPRITE_EMISSIVE_FLOOR/ITR_SCENE_AMBIENT/
+  // ITR_LIGHT_RENDER_GAIN's own declarations (above) for the full brightness-law derivation.
+  spriteEmissiveFloor: ITR_SPRITE_EMISSIVE_FLOOR, // readability floor
+  sceneAmbient: ITR_SCENE_AMBIENT,                 // dark-corner cap (the BW2-4b "dark-corner floor")
+  lightRenderGain: ITR_LIGHT_RENDER_GAIN,           // torch-pool band (pool brightness/tightness)
+};
+
 // min-of-day -> {x,y,z (unit direction), elevation (0..1), t (0..1, sunrise->sunset)}. Pure, total:
 // clamps `min` into [SUNRISE_MIN,SUNSET_MIN] first, so a daylit/overcast profile rolled outside that
 // window (a keyword override, an edge-case snapshot) still returns a sane (if degenerate) direction
 // rather than NaN/negative-elevation garbage.
 function celestialSunDirFor(min){
-  const rise = CELESTIAL_ARC.SUNRISE_MIN, set = CELESTIAL_ARC.SUNSET_MIN;
+  const rise = LIGHT_TUNABLES.celestialArc.SUNRISE_MIN, set = LIGHT_TUNABLES.celestialArc.SUNSET_MIN;
   const clamped = Math.min(Math.max(min, rise), set);
   const t = (set > rise) ? (clamped - rise) / (set - rise) : 0.5;
   const elevation = Math.sin(t * Math.PI); // 0 at rise/set, 1 at solar noon
-  const elevAngle = CELESTIAL_ARC.MIN_ELEV_ANGLE + elevation * (Math.PI / 2 - CELESTIAL_ARC.MIN_ELEV_ANGLE);
+  const elevAngle = LIGHT_TUNABLES.celestialArc.MIN_ELEV_ANGLE + elevation * (Math.PI / 2 - LIGHT_TUNABLES.celestialArc.MIN_ELEV_ANGLE);
   const azimuth = -Math.PI / 2 + t * Math.PI; // east (-90deg) at sunrise -> west (+90deg) at sunset
   return {
     x: Math.cos(elevAngle) * Math.cos(azimuth),
@@ -6141,13 +6418,13 @@ function celestialSunDirFor(min){
 // across midnight) — "its own slower arc" per the ruling: a longer or shorter span than the sun's own
 // (whatever SUNRISE_MIN/SUNSET_MIN currently bound) naturally paces differently, with zero extra code.
 function celestialMoonDirFor(min){
-  const rise = CELESTIAL_ARC.SUNRISE_MIN, set = CELESTIAL_ARC.SUNSET_MIN;
+  const rise = LIGHT_TUNABLES.celestialArc.SUNRISE_MIN, set = LIGHT_TUNABLES.celestialArc.SUNSET_MIN;
   const nightLen = (1440 - set) + rise;
   let elapsed = min - set;
   if(elapsed < 0) elapsed += 1440;
   const t = (nightLen > 0) ? Math.min(Math.max(elapsed / nightLen, 0), 1) : 0.5;
   const elevation = Math.sin(t * Math.PI);
-  const elevAngle = CELESTIAL_ARC.MIN_ELEV_ANGLE + elevation * (Math.PI / 2 - CELESTIAL_ARC.MIN_ELEV_ANGLE);
+  const elevAngle = LIGHT_TUNABLES.celestialArc.MIN_ELEV_ANGLE + elevation * (Math.PI / 2 - LIGHT_TUNABLES.celestialArc.MIN_ELEV_ANGLE);
   const azimuth = -Math.PI / 2 + t * Math.PI;
   return {
     x: Math.cos(elevAngle) * Math.cos(azimuth),
@@ -6191,9 +6468,9 @@ function celestialArcFor(profileKey, clockMin){
   }
   let intensityScale = body.intensityHorizon + (body.intensityZenith - body.intensityHorizon) * e;
   if(profileKey === "overcast"){
-    color = celestialDesaturate(color, CELESTIAL_ARC.OVERCAST_DESAT);
-    voidTint = celestialDesaturate(voidTint, CELESTIAL_ARC.OVERCAST_DESAT);
-    intensityScale *= CELESTIAL_ARC.OVERCAST_SHADOW_DAMP;
+    color = celestialDesaturate(color, LIGHT_TUNABLES.celestialArc.OVERCAST_DESAT);
+    voidTint = celestialDesaturate(voidTint, LIGHT_TUNABLES.celestialArc.OVERCAST_DESAT);
+    intensityScale *= LIGHT_TUNABLES.celestialArc.OVERCAST_SHADOW_DAMP;
   }
   return { dir: { x: dirInfo.x, y: dirInfo.y, z: dirInfo.z }, elevation: e, color: color, voidTint: voidTint, intensityScale: intensityScale, isMoon: isMoon };
 }
@@ -8079,6 +8356,10 @@ function interiorBuildFixtureGroup(light){
   const emitter = new THREE.Mesh(emitterGeoFn(), interiorFixtureEmitterMaterial(light.color, wantWall));
   emitter.name = "emitter";
   emitter.userData.fixtureEmitter = true;
+  // LL-1 EMISSIVE-MASKED BLOOM (BLOOM_LAYER's own header comment, above): a true emitter joins
+  // BLOOM_LAYER IN ADDITION TO layer 0 (three's default, left untouched — this is additive, never a
+  // visibility change) so MaskedBloomPass's isolated bright-pass extraction can see it.
+  emitter.layers.enable(BLOOM_LAYER);
   emitter.position.set(el.x || 0, el.y || 0, el.z || 0);
   emitter.castShadow = false; emitter.receiveShadow = false; // a fixture's own flame/bulb never shadows itself, same discipline the old glow disc/nub kept
   group.add(emitter);
@@ -8209,7 +8490,7 @@ function interiorBuildLights(lights, cx, cz, realmId, floorTopMap, pieces, isBri
       // value; this is the absolute decay-2 pool brightness. Preserves the fill<=60%-of-key ratio (both
       // key and fill are gained equally). LIGHT-CLOSE: a suppressed practical scales toward
       // ITR_BRIGHT_PRACTICAL_INTENSITY_SCALE (0 by default) — the sky fill carries the room instead.
-      (light.intensity != null ? light.intensity : 1.2) * ITR_LIGHT_RENDER_GAIN * (suppressPractical ? ITR_BRIGHT_PRACTICAL_INTENSITY_SCALE : 1),
+      (light.intensity != null ? light.intensity : 1.2) * LIGHT_TUNABLES.lightRenderGain * (suppressPractical ? ITR_BRIGHT_PRACTICAL_INTENSITY_SCALE : 1),
       // BW2-4b item 1 — LIGHT RANGE CAP: tighten each pool to a small hot circle (the mock read) so the
       // gaps between torches go genuinely dark (the BRIGHTNESS LAW's dark-corner requirement).
       Math.min(light.distance != null ? light.distance : 12, ITR_LIGHT_DISTANCE_CAP),
@@ -8728,7 +9009,7 @@ function buildDressingCard(entry){
   const mat = SPRITE_UNLIT_DEBUG
     ? new THREE.MeshBasicMaterial({ map: tex, transparent: true, alphaTest: 0.5, side: THREE.DoubleSide, depthWrite: true })
     : new THREE.MeshLambertMaterial({
-        map: tex, emissiveMap: tex, emissive: ITR_SPRITE_EMISSIVE_TINT, emissiveIntensity: ITR_SPRITE_EMISSIVE_FLOOR,
+        map: tex, emissiveMap: tex, emissive: ITR_SPRITE_EMISSIVE_TINT, emissiveIntensity: LIGHT_TUNABLES.spriteEmissiveFloor,
         transparent: true, alphaTest: 0.5, side: THREE.DoubleSide, depthWrite: true
       });
   mat.userData.psxExempt = true; // SPRITE PURITY — cards are flat painted art, never PS1-distorted
@@ -8902,7 +9183,7 @@ function buildExtrusionProp(entry){
   const frontMat = SPRITE_UNLIT_DEBUG
     ? new THREE.MeshBasicMaterial({ map: tex, transparent: true, alphaTest: 0.5, depthWrite: true })
     : new THREE.MeshLambertMaterial({
-        map: tex, emissiveMap: tex, emissive: ITR_SPRITE_EMISSIVE_TINT, emissiveIntensity: ITR_SPRITE_EMISSIVE_FLOOR,
+        map: tex, emissiveMap: tex, emissive: ITR_SPRITE_EMISSIVE_TINT, emissiveIntensity: LIGHT_TUNABLES.spriteEmissiveFloor,
         transparent: true, alphaTest: 0.5, depthWrite: true
       });
   frontMat.userData.psxExempt = true; // SPRITE PURITY — the art face is flat painted art, never PS1-distorted
@@ -10146,7 +10427,7 @@ function setInteriorBoard(data){
     // register — never brightened). Every other non-bright/non-emissive realm keeps ITR_SCENE_AMBIENT
     // exactly.
     const gloomLift = (data.realmId === "gloom") ? ITR_GLOOM_AMBIENT_LIFT : 0;
-    if(S.ambientLight) S.ambientLight.intensity = isBrightRealm ? brightFill.ambient : isEmissiveRealm ? ITR_EMISSIVE_SCENE_AMBIENT : (ITR_SCENE_AMBIENT + gloomLift);
+    if(S.ambientLight) S.ambientLight.intensity = isBrightRealm ? brightFill.ambient : isEmissiveRealm ? ITR_EMISSIVE_SCENE_AMBIENT : (LIGHT_TUNABLES.sceneAmbient + gloomLift);
     if(S.hemiLight) S.hemiLight.intensity = isBrightRealm ? brightFill.hemi : isEmissiveRealm ? ITR_EMISSIVE_SCENE_HEMI : ITR_SCENE_HEMI;
     (S.pointLights || []).forEach((l) => { l.intensity *= isBrightRealm ? brightFill.fillScale : isEmissiveRealm ? ITR_EMISSIVE_SCENE_FILL_SCALE : ITR_SCENE_FILL_SCALE; });
     // BW2-4b item 1 — THE BRIGHTNESS LAW: dim the tabletop key/fill DirectionalLights to a whisper for
@@ -11783,6 +12064,7 @@ function disposeAuxCaches(){
 }
 
 function retire(){
+  unmountLightLab(); // LL-1: the lab panel is a DOM node OUTSIDE S's own render tree — tear it down explicitly so a re-mount never orphans/duplicates it (S itself is about to be replaced wholesale below)
   if(S.resizeHandler) window.removeEventListener("resize", S.resizeHandler);
   if(S.raf) cancelAnimationFrame(S.raf);
   if(S.tweenRaf) cancelAnimationFrame(S.tweenRaf); // T3: stop the verb tween loop too, not just render-on-demand's raf
@@ -12392,7 +12674,10 @@ window.Theater._postSuiteForTest = function(){
       tintAmt: ps.grade.uniforms.uTintAmt.value,
       tintHex: "#" + ps.grade.uniforms.uTint.value.getHexString(),
       exposure: ps.grade.uniforms.uExposure.value,
-      vignette: ps.grade.uniforms.uVignette.value
+      vignette: ps.grade.uniforms.uVignette.value,
+      // LL-1: the exposure-floor uniform (ledger #12/13) — additive field, every existing consumer of
+      // this accessor already ignores unknown keys.
+      exposureFloor: ps.grade.uniforms.uExposureFloor.value
     }
   };
 };
@@ -12444,6 +12729,101 @@ window.Theater._setGradeTonemapForTest = function(v){
   return { changed: true, tonemap: GRADE_TONEMAP };
 };
 window.Theater._gradeTonemapForTest = function(){ return GRADE_TONEMAP; };
+// LL-1 test seams. _setBloomMaskDisabledForTest flips BLOOM_MASK_DISABLED_FOR_TEST (see its own header,
+// near BLOOM_LAYER) — the live RED/GREEN A/B for the emissive-masked-bloom red-first proof.
+// _lightTunablesForTest returns a DEEP snapshot of LIGHT_TUNABLES (never the live object itself — a
+// caller mutating the returned snapshot must never reach back into the real tunables) so a harness can
+// assert the seeded values equal their authored consts ("pure no-op when untouched").
+window.Theater._setBloomMaskDisabledForTest = function(v){ BLOOM_MASK_DISABLED_FOR_TEST = !!v; markDirty(); return BLOOM_MASK_DISABLED_FOR_TEST; };
+window.Theater._lightTunablesForTest = function(){ return JSON.parse(JSON.stringify(LIGHT_TUNABLES)); };
+// LL-1 (docs/KENNEY-SOCKET-WAVE.md unit LL-1) — P-A LUMINANCE-GATE READOUTS (docs/VQ2-RESPEC.md §1
+// P-A: tray-edge <=12% display luma, PC-face >=18%, profile medians separated >=6%). This seam only
+// MEASURES off the REAL rendered frame — it renders no verdict and asserts nothing; F3 (VQ2-RESPEC's
+// own future unit) owns turning these numbers into a pass/fail gate. Feeds the light-lab's live
+// readout display and any harness assertion built on top.
+// Reads gl.readPixels off S.renderer's live drawing buffer SYNCHRONOUSLY right after a forced render
+// (the renderer carries no preserveDrawingBuffer — same same-task-read discipline dev/verify-agx-
+// tonecurve.mjs's own Section 3 already documents for reading a WebGL buffer honestly). Luma is the
+// standard Rec.709 weighting on the DISPLAY-space (post-OutputPass sRGB) bytes, 0..1 — the SAME
+// formula every capture-*.mjs harness's own sampleLuma() already uses on saved PNGs (see e.g.
+// dev/battle-gate/standee-gallery/capture-standee-gallery.mjs), so a number from this seam is directly
+// comparable to one read off a battle-gate contact sheet.
+window.Theater._lumaGatesForTest = function(){
+  if(!S.mounted || !S.renderer || !S.camera) return null;
+  renderTheaterFrame();
+  const gl = S.renderer.getContext();
+  if(!gl) return null;
+  const bw = gl.drawingBufferWidth, bh = gl.drawingBufferHeight;
+  if(!bw || !bh) return null;
+  function lumaAt(px, py){
+    const half = 1; // 3x3 sample box
+    const x0 = Math.max(0, Math.min(bw - 3, Math.round(px) - half));
+    // WebGL's y=0 row is the BOTTOM of the buffer — flip from the top-left screen convention every
+    // other NDC->pixel helper in this file uses (ndcToPixel's own siblings, e.g. capture-standee-
+    // gallery.mjs, document the identical flip for the same reason).
+    const y0 = Math.max(0, Math.min(bh - 3, bh - Math.round(py) - half - 1));
+    const buf = new Uint8Array(4 * 3 * 3);
+    gl.readPixels(x0, y0, 3, 3, gl.RGBA, gl.UNSIGNED_BYTE, buf);
+    let sum = 0, n = 0;
+    for(let i = 0; i < buf.length; i += 4){ sum += 0.2126 * buf[i] + 0.7152 * buf[i + 1] + 0.0722 * buf[i + 2]; n++; }
+    return n ? (sum / n) / 255 : null;
+  }
+  function ndcToPx(ndc){
+    return { x: (ndc.x * 0.5 + 0.5) * bw, y: (ndc.y * 0.5 + 0.5) * bh };
+  }
+  // ---- tray-edge: the board's own REAL footprint boundary (S.boardHalfX/Z, S.boardCenter — the same
+  // fields interiorFrustumCheck already reads, real geometry, never guessed) at floor height, midpoint
+  // of each of the 4 edges, projected through the live camera.
+  const hx = S.boardHalfX || S.boardHalfExtent || 5, hz = S.boardHalfZ || S.boardHalfExtent || 5;
+  const cx = (S.boardCenter && typeof S.boardCenter.x === "number") ? S.boardCenter.x : 0;
+  const cz = (S.boardCenter && typeof S.boardCenter.z === "number") ? S.boardCenter.z : 0;
+  S.camera.updateMatrixWorld();
+  const edgeMidpoints = [[cx, 0, cz - hz], [cx, 0, cz + hz], [cx - hx, 0, cz], [cx + hx, 0, cz]];
+  const edgeLumas = edgeMidpoints
+    .map(([x, y, z]) => { const px = ndcToPx(new THREE.Vector3(x, y, z).project(S.camera)); return lumaAt(px.x, px.y); })
+    .filter((v) => v != null);
+  const trayEdgeLuma = edgeLumas.length ? edgeLumas.reduce((a, b) => a + b, 0) / edgeLumas.length : null;
+  // ---- PC-face: the live kind:"pc" unit's own figure group (S.unitGroup, tagged userData.unitId —
+  // T3's own convention), sampled at ~85% of its rendered bbox height (a face-height approximation —
+  // there is no rigged head bone in this figure system to sample exactly).
+  let pcFaceLuma = null;
+  const pcUnit = (S.lastUnits && Array.isArray(S.lastUnits.units)) ? S.lastUnits.units.find((u) => u.kind === "pc") : null;
+  if(pcUnit && S.unitGroup){
+    const idStr = String(pcUnit.id);
+    let fig = null;
+    for(let i = 0; i < S.unitGroup.children.length; i++){
+      if(S.unitGroup.children[i].userData && S.unitGroup.children[i].userData.unitId === idStr){ fig = S.unitGroup.children[i]; break; }
+    }
+    if(fig){
+      fig.updateMatrixWorld(true);
+      const box = new THREE.Box3().setFromObject(fig);
+      if(isFinite(box.max.y)){
+        const faceY = box.min.y + (box.max.y - box.min.y) * 0.85;
+        const faceX = (box.min.x + box.max.x) / 2, faceZ = (box.min.z + box.max.z) / 2;
+        const px = ndcToPx(new THREE.Vector3(faceX, faceY, faceZ).project(S.camera));
+        pcFaceLuma = lumaAt(px.x, px.y);
+      }
+    }
+  }
+  // ---- frame median: coarse 7x5 sample grid across the whole canvas. The ">=6% profile-median
+  // separation" half of the P-A gate is a CALLER's job (call this seam twice under two light profiles
+  // and diff the two frameMedianLuma numbers) — this seam only ever returns ONE frame's reading.
+  const cols = 7, rows = 5, samples = [];
+  for(let r = 0; r < rows; r++){
+    for(let c = 0; c < cols; c++){
+      const v = lumaAt(((c + 0.5) / cols) * bw, ((r + 0.5) / rows) * bh);
+      if(v != null) samples.push(v);
+    }
+  }
+  samples.sort((a, b) => a - b);
+  const frameMedianLuma = samples.length ? samples[Math.floor(samples.length / 2)] : null;
+  return {
+    trayEdgeLuma, pcFaceLuma, frameMedianLuma,
+    lightProfile: S.lightProfileKey || null,
+    drawingBuffer: { w: bw, h: bh },
+    pcUnitFound: !!pcUnit, pcFigureFound: pcFaceLuma != null,
+  };
+};
 window.Theater.dofFocus = function(){
   return { dist: S.dofFocusDist || 0, ndcY: S.dofFocusNdcY || 0, focusV: S.postSuite ? S.postSuite.dof.uniforms.uFocusV.value : null };
 };
@@ -13164,3 +13544,354 @@ window.Theater._fantasyPropPilotCutawayForTest = function(){
   try{renderTheaterFrame();}catch(e){} markDirty(); return true;
 };
 window.Theater._freezeFantasyPropPilotLightForTest = function(){ stopLightFlicker(); try{renderTheaterFrame();}catch(e){} return true; };
+
+/* ══════════════════════════════════════════════════════════════════════════════════════════════
+   LL-1 (docs/KENNEY-SOCKET-WAVE.md unit LL-1) — LIGHT-LAB: Adam's dev-only tool for ruling the
+   environment AND how sprites react to light, live. Plain DOM, zero dependencies, zero cost when off
+   (ZERO DOM nodes built, ZERO listeners attached, and the ONLY per-frame cost is the one boolean flag
+   check `renderTheaterFrame` already does — see lightLabMaybeAutoMount's own call site there). Every
+   slider here writes through the SAME LIGHT_TUNABLES seam the render call sites already read (their
+   own headers document the byte-identical-when-untouched contract) — the lab never writes source, it
+   only ever mutates that one in-memory object; EXPORT hands the CURRENT values to Adam as JSON, and
+   `build/fold-lightlab.py` (a separate, offline step Adam runs by hand) folds an exported file back
+   into the named consts themselves — "sliders never write code directly," per the unit's own law.
+   ══════════════════════════════════════════════════════════════════════════════════════════════ */
+
+// get/set through the SAME dotted-path vocabulary the schema below uses. "profile.<field>" resolves
+// against LIGHT_TUNABLES.profiles[<the profile currently selected in the lab>] (defaults to whatever's
+// actually live, S.lightProfileKey) rather than a fixed key — the lab edits "the profile you're
+// looking at," and the dropdown (buildLightLabDom, below) is what changes which one that is.
+function lightLabResolveTarget(path){
+  if(path.indexOf("profile.") === 0){
+    const key = (S.lightLabProfileKey && LIGHT_TUNABLES.profiles[S.lightLabProfileKey]) ? S.lightLabProfileKey
+      : (S.lightProfileKey || LIGHT_DEFAULT_PROFILE);
+    return { obj: LIGHT_TUNABLES.profiles[key], field: path.slice("profile.".length), profileKey: key };
+  }
+  if(path.indexOf("celestialArc.") === 0){
+    return { obj: LIGHT_TUNABLES.celestialArc, field: path.slice("celestialArc.".length) };
+  }
+  return { obj: LIGHT_TUNABLES, field: path };
+}
+function getLightTunable(path){
+  const t = lightLabResolveTarget(path);
+  return t.obj ? t.obj[t.field] : undefined;
+}
+// Re-applies whatever's currently mounted so a set() is visible without a page reload — "drag ->
+// re-render." Replays the last board payload (setBoard/setInteriorBoard already funnel EVERY lighting
+// call — applyLightProfile, applyCelestialArc, the ITR_* brightness-law block — through themselves, so
+// a full replay is the one place guaranteed to pick up any tunable's new value correctly, at the cost
+// of a real rebuild rather than a bare uniform poke). Grade/bloom dials are ALSO pushed directly onto
+// the live pass (mountPostSuite's own updatePostSuiteGrade does this too, redundantly-but-harmlessly,
+// on the interior path — this covers the tabletop path, where postSuite may be stale/unmounted).
+function lightLabApplyTunables(){
+  if(!S.mounted) return;
+  if(S.lastBoard){
+    if(S.isInteriorBoard) setInteriorBoard(S.lastBoard);
+    else setBoard(S.lastBoard);
+  } else if(S.lightProfileKey){
+    applyLightProfile(S.lightProfileKey); // pre-setBoard/mount-time baseline (no board yet)
+  }
+  if(S.postSuite){
+    S.postSuite.grade.uniforms.uExposureFloor.value = LIGHT_TUNABLES.gradeExposureFloor;
+    if(S.postSuite.bloom){
+      S.postSuite.bloom.threshold = LIGHT_TUNABLES.bloomThreshold;
+      S.postSuite.bloom.strength = LIGHT_TUNABLES.bloomStrength;
+    }
+  }
+  markDirty();
+  scheduleRender();
+}
+function setLightTunable(path, value){
+  const t = lightLabResolveTarget(path);
+  if(!t.obj || !(t.field in t.obj)) return false;
+  t.obj[t.field] = value;
+  lightLabApplyTunables();
+  return true;
+}
+// window.Theater._lightLabSetTunable/_lightLabGetTunable — the SAME function every DOM slider's own
+// oninput handler calls (buildLightLabDom, below binds through these, never a second code path) — a
+// scripted probe drives this seam directly, so "does the slider work" and "does this function work"
+// are the same question by construction, not two independently-maintained proofs.
+window.Theater._lightLabSetTunable = function(path, value){ return setLightTunable(path, value); };
+window.Theater._lightLabGetTunable = function(path){ return getLightTunable(path); };
+window.Theater._lightLabSchema = function(){ return LIGHT_TUNABLE_SCHEMA.map((e) => Object.assign({}, e)); };
+window.Theater._lightLabExport = function(){ return lightLabExportJSON(); };
+
+// The flat probe/UI manifest — one entry per bindable tunable. `group:"profile"` entries are relative
+// to whichever profile the lab's dropdown currently has selected (lightLabResolveTarget's own "profile."
+// prefix); every other entry is a direct LIGHT_TUNABLES (or LIGHT_TUNABLES.celestialArc) property.
+const LIGHT_TUNABLE_SCHEMA = [
+  { path: "profile.ambientIntensity", label: "Ambient intensity (fill)", type: "range", min: 0, max: 1.5, step: 0.01, group: "profile" },
+  { path: "profile.ambientColor", label: "Ambient color (fill)", type: "color", group: "profile" },
+  { path: "profile.pointIntensity", label: "Key intensity", type: "range", min: 0, max: 30, step: 0.5, group: "profile" },
+  { path: "profile.pointColor", label: "Key color", type: "color", group: "profile" },
+  { path: "stageAmbientFloor", label: "Stage ambient floor (STAGE_AMBIENT_FLOOR)", type: "range", min: 0, max: 1, step: 0.01, group: "global" },
+  { path: "gradeExposureFloor", label: "Exposure floor, pre-AgX (ledger #12/13)", type: "range", min: 0, max: 0.3, step: 0.005, group: "global" },
+  { path: "bloomThreshold", label: "Bloom threshold (linear)", type: "range", min: 0, max: 2, step: 0.01, group: "global" },
+  { path: "bloomStrength", label: "Bloom strength", type: "range", min: 0, max: 3, step: 0.05, group: "global" },
+  { path: "gradeTintScale", label: "Per-realm grade strength (tint scale)", type: "range", min: 0, max: 1.5, step: 0.01, group: "global" },
+  { path: "gradeTintMax", label: "Grade tint hard cap", type: "range", min: 0, max: 0.5, step: 0.01, group: "global" },
+  { path: "celestialArc.SUNRISE_MIN", label: "Sunrise (min-of-day)", type: "range", min: 0, max: 720, step: 5, group: "celestial" },
+  { path: "celestialArc.SUNSET_MIN", label: "Sunset (min-of-day)", type: "range", min: 720, max: 1440, step: 5, group: "celestial" },
+  { path: "celestialArc.MIN_ELEV_ANGLE", label: "Min elevation angle (rad)", type: "range", min: 0, max: 1, step: 0.01, group: "celestial" },
+  { path: "celestialArc.OVERCAST_DESAT", label: "Overcast desaturation", type: "range", min: 0, max: 1, step: 0.01, group: "celestial" },
+  { path: "celestialArc.OVERCAST_SHADOW_DAMP", label: "Overcast shadow damp", type: "range", min: 0, max: 1, step: 0.01, group: "celestial" },
+  { path: "spriteEmissiveFloor", label: "Sprite readability floor", type: "range", min: 0, max: 0.3, step: 0.005, group: "sprite" },
+  { path: "sceneAmbient", label: "Dark-corner cap (interior scene ambient)", type: "range", min: 0, max: 0.5, step: 0.005, group: "sprite" },
+  { path: "lightRenderGain", label: "Torch-pool band (fixture render gain)", type: "range", min: 0, max: 10, step: 0.1, group: "sprite" },
+];
+
+function lightLabColorToHexStr(v){
+  const n = (typeof v === "number") ? v : 0;
+  return "#" + n.toString(16).padStart(6, "0");
+}
+function lightLabHexStrToNum(s){
+  return parseInt(String(s).replace("#", ""), 16) || 0;
+}
+
+// EXPORT: the current LIGHT_TUNABLES values, JSON-serializable, colors as "0xRRGGBB" strings (matching
+// the source's own hex-literal style so build/fold-lightlab.py can write them back verbatim rather
+// than reformatting). "sliders never write code" — this is a snapshot handed to Adam; folding it back
+// into the named consts is the SEPARATE, explicit, offline build/fold-lightlab.py step.
+function lightLabExportJSON(){
+  const hex = (n) => "0x" + (((typeof n === "number") ? n : 0).toString(16).padStart(6, "0"));
+  const profiles = {};
+  for(const key in LIGHT_TUNABLES.profiles){
+    const p = LIGHT_TUNABLES.profiles[key];
+    profiles[key] = {
+      ambientColor: hex(p.ambientColor), ambientIntensity: p.ambientIntensity,
+      pointColor: p.pointColor != null ? hex(p.pointColor) : null, pointIntensity: p.pointIntensity,
+    };
+  }
+  return {
+    _unit: "LL-1", _generatedAt: new Date().toISOString(),
+    profiles,
+    stageAmbientFloor: LIGHT_TUNABLES.stageAmbientFloor,
+    gradeExposureFloor: LIGHT_TUNABLES.gradeExposureFloor,
+    bloomThreshold: LIGHT_TUNABLES.bloomThreshold,
+    bloomStrength: LIGHT_TUNABLES.bloomStrength,
+    gradeTintScale: LIGHT_TUNABLES.gradeTintScale,
+    gradeTintMax: LIGHT_TUNABLES.gradeTintMax,
+    celestialArc: Object.assign({}, LIGHT_TUNABLES.celestialArc),
+    spriteEmissiveFloor: LIGHT_TUNABLES.spriteEmissiveFloor,
+    sceneAmbient: LIGHT_TUNABLES.sceneAmbient,
+    lightRenderGain: LIGHT_TUNABLES.lightRenderGain,
+  };
+}
+
+// Activation check: `?lightlab=1` in the URL OR `window.GS.lightLabEnabled === true` (console-settable
+// at ANY time post-boot — Adam types `GS.lightLabEnabled = true` in devtools, no reload —
+// lightLabMaybeAutoMount's own per-frame poll, below, is what notices the flag flip without a
+// dedicated listener/timer). The URL check parses `location.search` — real work, so it's memoized into
+// LIGHT_LAB_URL_FLAG on the FIRST call and never repeated; every frame after that is a true single
+// boolean property read (`window.GS.lightLabEnabled`) plus one cached-boolean compare, matching the
+// unit's own "no per-frame reads beyond one boolean" law.
+let LIGHT_LAB_URL_FLAG = null;
+function lightLabShouldEnable(){
+  try {
+    if(typeof window === "undefined") return false;
+    if(window.GS && window.GS.lightLabEnabled === true) return true;
+    if(LIGHT_LAB_URL_FLAG === null){
+      LIGHT_LAB_URL_FLAG = !!(window.location && window.location.search
+        && new URLSearchParams(window.location.search).get("lightlab") === "1");
+    }
+    return LIGHT_LAB_URL_FLAG;
+  } catch(e){}
+  return false;
+}
+// Called from renderTheaterFrame (the one render call site — BW3-0's own convention, reused here) —
+// "no per-frame reads beyond one boolean" per the unit's own law: S.lightLabMounted is a plain boolean,
+// lightLabShouldEnable() is a cheap property/URL check, and once mounted this function is a single
+// truthy short-circuit (`if(S.lightLabMounted) return;`) for the rest of the session. Zero DOM, zero
+// listeners, zero DOM until the flag actually flips true.
+function lightLabMaybeAutoMount(){
+  if(S.lightLabMounted) return;
+  if(!lightLabShouldEnable()) return;
+  mountLightLab();
+}
+window.Theater.lightLab = function(enabled){
+  if(enabled === false){ unmountLightLab(); return false; }
+  mountLightLab();
+  return S.lightLabMounted;
+};
+
+function lightLabField(entry){
+  const row = document.createElement("div");
+  row.style.cssText = "display:flex;align-items:center;gap:6px;margin:3px 0;font:11px/1.3 monospace;color:#ddd;";
+  const label = document.createElement("label");
+  label.textContent = entry.label;
+  label.title = entry.label + " (" + entry.path + ")"; // the panel's fixed width truncates long labels — full text + the raw tunable path on hover
+  label.style.cssText = "flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;";
+  row.appendChild(label);
+  const valOut = document.createElement("span");
+  valOut.style.cssText = "flex:0 0 48px;text-align:right;color:#9c9;";
+  let input;
+  if(entry.type === "color"){
+    input = document.createElement("input");
+    input.type = "color";
+    input.style.cssText = "flex:0 0 28px;height:16px;border:none;padding:0;background:none;";
+    const cur = getLightTunable(entry.path);
+    input.value = lightLabColorToHexStr(cur);
+    valOut.textContent = input.value;
+    input.addEventListener("input", () => {
+      const v = lightLabHexStrToNum(input.value);
+      setLightTunable(entry.path, v);
+      valOut.textContent = input.value;
+      lightLabRefreshReadouts();
+    });
+  } else {
+    input = document.createElement("input");
+    input.type = "range";
+    input.min = String(entry.min); input.max = String(entry.max); input.step = String(entry.step);
+    const cur = getLightTunable(entry.path);
+    input.value = String(typeof cur === "number" ? cur : entry.min);
+    input.style.cssText = "flex:1 1 90px;min-width:0;";
+    valOut.textContent = Number(input.value).toFixed(3);
+    input.addEventListener("input", () => {
+      const v = parseFloat(input.value);
+      setLightTunable(entry.path, v);
+      valOut.textContent = v.toFixed(3);
+      lightLabRefreshReadouts();
+    });
+  }
+  input.dataset.llPath = entry.path;
+  row.appendChild(input);
+  row.appendChild(valOut);
+  return { row, input };
+}
+
+// re-renders the "profile" group's 4 fields against whichever profile the dropdown currently selects —
+// called on dropdown change AND once at mount.
+function lightLabRebuildProfileFields(container){
+  container.innerHTML = "";
+  LIGHT_TUNABLE_SCHEMA.filter((e) => e.group === "profile").forEach((entry) => {
+    container.appendChild(lightLabField(entry).row);
+  });
+}
+
+function lightLabRefreshReadouts(){
+  if(!S.lightLabMounted || !S.lightLabEls || !S.lightLabEls.readout) return;
+  const gates = (window.Theater._lumaGatesForTest && S.mounted) ? window.Theater._lumaGatesForTest() : null;
+  const el = S.lightLabEls.readout;
+  if(!gates){ el.textContent = "P-A readouts: no live board mounted."; return; }
+  const pct = (v) => (v == null ? "—" : (v * 100).toFixed(1) + "%");
+  el.textContent =
+    "P-A readouts (docs/VQ2-RESPEC.md §1) — profile: " + (gates.lightProfile || "—") +
+    "\n  tray-edge luma: " + pct(gates.trayEdgeLuma) + "  (gate: <=12%)" +
+    "\n  PC-face luma:   " + pct(gates.pcFaceLuma) + (gates.pcUnitFound ? "" : "  (no PC unit on this board)") + "  (gate: >=18%)" +
+    "\n  frame median:   " + pct(gates.frameMedianLuma) + "  (compare across profiles for the >=6% separation gate)";
+}
+
+function mountLightLab(){
+  if(S.lightLabMounted) return;
+  if(typeof document === "undefined") return;
+  // defensive: a prior instance's panel outliving an S reset (retire() always tears it down first, but
+  // this is a one-line insurance policy against ever double-mounting) — remove any stale node before
+  // building a fresh one.
+  const stale = document.getElementById("genesis-light-lab");
+  if(stale && stale.parentNode) stale.parentNode.removeChild(stale);
+  const panel = document.createElement("div");
+  panel.id = "genesis-light-lab";
+  panel.style.cssText =
+    "position:fixed;top:8px;right:8px;width:300px;max-height:92vh;overflow:auto;z-index:99999;" +
+    "background:rgba(20,20,24,0.94);border:1px solid #444;border-radius:6px;padding:8px;" +
+    "font:12px/1.3 -apple-system,sans-serif;color:#eee;box-shadow:0 4px 18px rgba(0,0,0,0.5);";
+  const title = document.createElement("div");
+  title.textContent = "LIGHT-LAB (LL-1) — dev only";
+  title.style.cssText = "font-weight:600;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;";
+  const closeBtn = document.createElement("button");
+  closeBtn.textContent = "×";
+  closeBtn.style.cssText = "background:none;border:none;color:#ccc;font-size:16px;cursor:pointer;line-height:1;";
+  closeBtn.addEventListener("click", () => unmountLightLab());
+  title.appendChild(closeBtn);
+  panel.appendChild(title);
+
+  // profile selector + its 4 fields
+  const profSection = document.createElement("div");
+  profSection.style.cssText = "border-top:1px solid #333;padding-top:4px;margin-top:4px;";
+  const profHeader = document.createElement("div");
+  profHeader.textContent = "Profile (LIGHT_PROFILES)";
+  profHeader.style.cssText = "color:#9ab;margin-bottom:2px;";
+  profSection.appendChild(profHeader);
+  const select = document.createElement("select");
+  select.style.cssText = "width:100%;margin-bottom:4px;background:#222;color:#eee;border:1px solid #444;";
+  Object.keys(LIGHT_TUNABLES.profiles).forEach((key) => {
+    const opt = document.createElement("option");
+    opt.value = key; opt.textContent = key;
+    select.appendChild(opt);
+  });
+  select.value = S.lightLabProfileKey || S.lightProfileKey || LIGHT_DEFAULT_PROFILE;
+  S.lightLabProfileKey = select.value;
+  const profFields = document.createElement("div");
+  select.addEventListener("change", () => {
+    S.lightLabProfileKey = select.value;
+    lightLabRebuildProfileFields(profFields);
+  });
+  const previewBtn = document.createElement("button");
+  previewBtn.textContent = "Preview this profile on the live board";
+  previewBtn.style.cssText = "width:100%;margin:2px 0 6px;font:11px monospace;background:#2a2a30;color:#ddd;border:1px solid #444;border-radius:3px;cursor:pointer;";
+  previewBtn.addEventListener("click", () => {
+    if(!S.mounted) return;
+    applyLightProfile(select.value);
+    markDirty(); scheduleRender();
+    lightLabRefreshReadouts();
+  });
+  profSection.appendChild(select);
+  profSection.appendChild(previewBtn);
+  profSection.appendChild(profFields);
+  panel.appendChild(profSection);
+  lightLabRebuildProfileFields(profFields);
+
+  ["global", "celestial", "sprite"].forEach((group) => {
+    const section = document.createElement("div");
+    section.style.cssText = "border-top:1px solid #333;padding-top:4px;margin-top:4px;";
+    const header = document.createElement("div");
+    header.textContent = group === "global" ? "Exposure / bloom / grade"
+      : group === "celestial" ? "Celestial arc (CELESTIAL_ARC)" : "Sprite brightness (BW2-4b)";
+    header.style.cssText = "color:#9ab;margin-bottom:2px;";
+    section.appendChild(header);
+    LIGHT_TUNABLE_SCHEMA.filter((e) => e.group === group).forEach((entry) => {
+      section.appendChild(lightLabField(entry).row);
+    });
+    panel.appendChild(section);
+  });
+
+  // P-A readouts
+  const readoutSection = document.createElement("div");
+  readoutSection.style.cssText = "border-top:1px solid #333;padding-top:4px;margin-top:4px;";
+  const readout = document.createElement("pre");
+  readout.style.cssText = "white-space:pre-wrap;font:10px/1.4 monospace;color:#bcd;margin:0;";
+  readoutSection.appendChild(readout);
+  panel.appendChild(readoutSection);
+
+  // export
+  const exportBtn = document.createElement("button");
+  exportBtn.textContent = "EXPORT current values (JSON)";
+  exportBtn.style.cssText = "width:100%;margin-top:6px;font:11px monospace;background:#2a2a30;color:#ddd;border:1px solid #444;border-radius:3px;cursor:pointer;padding:4px;";
+  exportBtn.addEventListener("click", () => {
+    const json = JSON.stringify(lightLabExportJSON(), null, 2);
+    const blob = new Blob([json], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = "light-lab-export.json";
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  });
+  panel.appendChild(exportBtn);
+
+  document.body.appendChild(panel);
+  S.lightLabMounted = true;
+  S.lightLabEls = { panel, readout };
+  lightLabRefreshReadouts();
+  S.lightLabReadoutTimer = (typeof window !== "undefined" && window.setInterval)
+    ? window.setInterval(lightLabRefreshReadouts, 600) : null;
+}
+function unmountLightLab(){
+  if(!S.lightLabMounted) return;
+  if(S.lightLabReadoutTimer) { clearInterval(S.lightLabReadoutTimer); S.lightLabReadoutTimer = null; }
+  if(S.lightLabEls && S.lightLabEls.panel && S.lightLabEls.panel.parentNode){
+    S.lightLabEls.panel.parentNode.removeChild(S.lightLabEls.panel);
+  }
+  S.lightLabEls = null;
+  S.lightLabMounted = false;
+}

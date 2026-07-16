@@ -411,12 +411,20 @@ crenellation-to-prism sawtooth, continuous floors/walls, and the repaired Kenney
    error and exit nonzero without partially replacing the output tree.
 6. Derive transformed bounds/ground/footprint after the complete source-to-Genesis matrix; an explicit
    footprint override wins and is reported as such.
-7. Emit v2 attachment socket frames only. Existing AABB mount positions may seed positions, but every
+7. Before removing authored material/image/texture/sampler bindings, preserve honest multi-primitive
+   material semantics in primitive extras. Case-folded source material names map only through
+   `wood -> wood`, `carpet -> cloth`, `metal -> iron`, and `lamp -> glass`; an absent or unrecognized
+   name inherits the nearest calibrated node/root `materialFamily`. Never infer a family from asset id,
+   source color, or primitive order. `GLTFLoader` exposes primitive extras on `geometry.userData`, so
+   `loadDonorPiece` resolves a Mesh family from that primitive override first and otherwise walks to
+   the nearest ancestor donor node. This must make real multi-primitive furniture/lamp donors receive
+   Genesis materials instead of the white `MeshStandardMaterial` fallback.
+8. Emit v2 attachment socket frames only. Existing AABB mount positions may seed positions, but every
    one receives an explicit quaternion and remains `needs-review` until visually approved. Default
    placement-mount derivation is fail-closed: `quarantined` records derive no sockets; an explicit
    reviewed `floor-mount` or `wall-mount` suppresses derivation of the other placement-mount type;
    non-quarantined legacy records with no explicit placement mount retain the existing floor default.
-8. Runtime loader accepts v1 for graceful old-output fallback but runtime registry generation accepts
+9. Runtime loader accepts v1 for graceful old-output fallback but runtime registry generation accepts
    v2 only.
 
 **RED-FIRST / mutation checks:**
@@ -436,6 +444,10 @@ crenellation-to-prism sawtooth, continuous floors/walls, and the repaired Kenney
 8. Every floor-mount lies on derived ground within `0.01u`, unless a reviewed override explicitly says
    otherwise.
 9. Two normalizer runs are byte-identical.
+10. ⊗ Removing primitive extras or nearest-ancestor inheritance makes the real
+    `benchCushionLow`/`lampWall` fixtures fall back to white materials; with the contract enabled their
+    applied families are respectively `wood,cloth,wood` and `iron,glass` (set comparison where
+    primitive order is loader-defined). Unknown source material names inherit the calibrated root.
 
 **Out:** approving the 149 queue and a UI editor.
 

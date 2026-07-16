@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-16T02:13:46.747Z",
+  "generatedAt": "2026-07-16T14:45:47.457Z",
   "shots": [
     "kit-on.png",
     "prism-off.png",
@@ -15,8 +15,8 @@
     "notes": [
       "startSession() called"
     ],
-    "worldId": "mrmvkymdozjqk",
-    "worldName": "The Walled Orchard"
+    "worldId": "mrnmfzomm1wpv",
+    "worldName": "Ash-Hollow"
   },
   "theaterState": {
     "hasBattleStage": true,
@@ -25,6 +25,67 @@
     "hasSetInteriorBoard": true
   },
   "kitDoorTemplateReady": true,
+  "kgr1SplitProbe": {
+    "ok": true,
+    "before": {
+      "min": [
+        -0.75,
+        -1.3541939244228127e-17,
+        -0.20000004619211476
+      ],
+      "max": [
+        0.75,
+        1.7978427410125732,
+        0.19999995976834972
+      ]
+    },
+    "after": {
+      "min": [
+        -0.75,
+        0,
+        -0.20000004619211476
+      ],
+      "max": [
+        0.75,
+        1.7978427410125732,
+        0.19999995976834972
+      ]
+    },
+    "deltas": [
+      0,
+      1.3541939244228127e-17,
+      0,
+      0,
+      0,
+      0
+    ],
+    "maxBoundsDelta": 1.3541939244228127e-17,
+    "hingePositions": [
+      [
+        0.75,
+        0.8989213705062866,
+        -4.321188251654297e-8
+      ],
+      [
+        0.75,
+        0.8989213705062866,
+        -4.321188251654297e-8
+      ],
+      [
+        0.75,
+        0.8989213705062866,
+        -4.321188251654297e-8
+      ]
+    ],
+    "maxHingeDelta": 0
+  },
+  "kgr1FallbackProbe": {
+    "ok": true,
+    "singularReturnedNull": true,
+    "invalidReturnedNull": true,
+    "singularLeafRetained": true,
+    "invalidLeafRetained": true
+  },
   "kit-on": {
     "doorCells": [
       {
@@ -45,8 +106,8 @@
     ],
     "meta": {
       "roomCount": 1,
-      "floorCount": 52,
-      "wallCount": 35,
+      "floorCount": 24,
+      "wallCount": 17,
       "doorCount": 0,
       "pillarCount": 0,
       "lightCount": 2,
@@ -55,7 +116,9 @@
       "furnitureCount": 0,
       "wallPropsCount": 0,
       "portalCount": 0,
-      "kitDoorCount": 3
+      "kitDoorCount": 3,
+      "kitShellWallCount": 9,
+      "kitShellFloorCount": 7
     }
   },
   "prism-off": {
@@ -78,8 +141,8 @@
     ],
     "meta": {
       "roomCount": 1,
-      "floorCount": 52,
-      "wallCount": 35,
+      "floorCount": 24,
+      "wallCount": 17,
       "doorCount": 15,
       "pillarCount": 0,
       "lightCount": 2,
@@ -88,7 +151,9 @@
       "furnitureCount": 0,
       "wallPropsCount": 0,
       "portalCount": 0,
-      "kitDoorCount": 0
+      "kitDoorCount": 0,
+      "kitShellWallCount": 9,
+      "kitShellFloorCount": 7
     }
   },
   "corner-door-prism": {
@@ -101,8 +166,8 @@
     ],
     "meta": {
       "roomCount": 1,
-      "floorCount": 50,
-      "wallCount": 33,
+      "floorCount": 22,
+      "wallCount": 9,
       "doorCount": 5,
       "pillarCount": 0,
       "lightCount": 2,
@@ -111,7 +176,9 @@
       "furnitureCount": 0,
       "wallPropsCount": 0,
       "portalCount": 0,
-      "kitDoorCount": 0
+      "kitDoorCount": 0,
+      "kitShellWallCount": 12,
+      "kitShellFloorCount": 7
     }
   }
 }

@@ -4057,24 +4057,56 @@ function kitDoorSplitTemplate(rawGroup){
   const hingeSockets = socketsByType(rawGroup, "hinge");
   if(!hingeSockets.length) return null; // an admitted piece with no hinge socket -> never a kit door, prism fallback
   const hingeLocal = hingeSockets[0].position;
+  if(!Array.isArray(hingeLocal) || hingeLocal.length !== 3 || !hingeLocal.every(Number.isFinite)) return null;
   let leafObj = null;
   rawGroup.traverse((obj) => {
     if(leafObj) return;
     const gd = obj.userData && obj.userData.genesisDonor;
     if(gd && gd.semanticPart === "door-leaf") leafObj = obj;
   });
-  if(!leafObj || !leafObj.geometry) return null; // no leaf child -> never a kit door, prism fallback
-  leafObj.updateMatrix();
-  const leafGeometry = leafObj.geometry.clone();
-  leafGeometry.applyMatrix4(leafObj.matrix); // bake the leaf's own local transform -> frame-root-local space
-  leafGeometry.translate(-hingeLocal[0], -hingeLocal[1], -hingeLocal[2]); // re-anchor: local origin -> the hinge point
+  if(!leafObj || !leafObj.geometry || !leafObj.material) return null; // incomplete leaf -> never a kit door, prism fallback
+
+  // A semantic child can sit below scaled/rotated/transformed ancestors. Crossing the detach
+  // boundary therefore requires its COMPLETE frame relative to the donor piece root; leafObj.matrix
+  // alone is only parent-local and was the source of the giant detached slab KGR-1 repairs.
+  rawGroup.updateMatrixWorld(true);
+  leafObj.updateWorldMatrix(true, false);
+  const pieceDet = rawGroup.matrixWorld.determinant();
+  const leafDet = leafObj.matrixWorld.determinant();
+  if(!Number.isFinite(pieceDet) || Math.abs(pieceDet) <= 1e-12 ||
+     !Number.isFinite(leafDet) || Math.abs(leafDet) <= 1e-12) return null;
+  const pieceWorldInverse = rawGroup.matrixWorld.clone().invert();
+  const leafToPiece = pieceWorldInverse.multiply(leafObj.matrixWorld);
+  if(!leafToPiece.elements.every(Number.isFinite)) return null;
+
+  let leafGeometry = null;
+  try {
+    leafGeometry = leafObj.geometry.clone();
+    leafGeometry.applyMatrix4(leafToPiece);
+    // hingeLocal is already expressed in the piece-root frame. Moving the baked vertices by its
+    // negative makes the new mesh-local origin the hinge socket; remounting at +hingeLocal exactly
+    // reconstructs the authored shut pose.
+    leafGeometry.translate(-hingeLocal[0], -hingeLocal[1], -hingeLocal[2]);
+  } catch(_err){ return null; }
+  const leafPosition = leafGeometry && leafGeometry.getAttribute && leafGeometry.getAttribute("position");
+  if(!leafPosition || !leafPosition.count){ if(leafGeometry && leafGeometry.dispose) leafGeometry.dispose(); return null; }
+  for(let i = 0; i < leafPosition.count; i++){
+    if(!Number.isFinite(leafPosition.getX(i)) || !Number.isFinite(leafPosition.getY(i)) || !Number.isFinite(leafPosition.getZ(i))){
+      if(leafGeometry.dispose) leafGeometry.dispose();
+      return null;
+    }
+  }
   leafGeometry.userData.shared = true;
   const leafMaterial = leafObj.material;
-  if(leafMaterial) leafMaterial.userData.shared = true;
+  (Array.isArray(leafMaterial) ? leafMaterial : [leafMaterial]).forEach((mat) => {
+    if(mat){ mat.userData = mat.userData || {}; mat.userData.shared = true; }
+  });
   if(leafObj.parent) leafObj.parent.remove(leafObj); // detach — the frame keeps every OTHER child
   rawGroup.traverse((obj) => {
     if(obj.geometry) obj.geometry.userData.shared = true;
-    if(obj.material) obj.material.userData.shared = true;
+    if(obj.material) (Array.isArray(obj.material) ? obj.material : [obj.material]).forEach((mat) => {
+      if(mat){ mat.userData = mat.userData || {}; mat.userData.shared = true; }
+    });
   });
   return { frameGroup: rawGroup, leafGeometry, leafMaterial, hingeLocal };
 }
@@ -13538,6 +13570,7 @@ window.Theater._resetInteriorDoorStateForTest = function(){ S.interiorDoorStateB
 window.Theater._itrKitDoorRestPoseForTest = function(state){ return itrKitDoorRestPose(state); };
 window.Theater._kitDoorTemplateReadyForTest = function(){ return kitDoorTemplateReady; };
 window.Theater._kitDoorTemplateForTest = function(){ return kitDoorTemplate; };
+window.Theater._kitDoorSplitTemplateForTest = function(group){ return kitDoorSplitTemplate(group); };
 window.Theater._interiorBuildKitDoorMeshForTest = function(entry, cx, cz, floorTopMap, widthAxisIsZ, realmId, realmProfile){
   return interiorBuildKitDoorMesh(entry, cx, cz, floorTopMap, widthAxisIsZ, realmId, realmProfile);
 };

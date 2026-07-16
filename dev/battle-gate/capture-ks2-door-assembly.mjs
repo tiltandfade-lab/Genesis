@@ -179,6 +179,99 @@ async function waitForKitDoorTemplate(page) {
   return false;
 }
 
+// KGR-1: independently load the normalized gate-door before surgery, then compare its authored
+// leaf's world-space vertices against the production split template remounted shut. This runs in
+// real Chrome against the real GLTFLoader/THREE implementation. The comparison is deliberately
+// vertex-derived rather than Box3.setFromObject so a local-vs-ancestor transform bug cannot hide
+// behind matching object origins.
+async function measureKitDoorSplit(page) {
+  return await page.evaluate(async () => {
+    const THREE = await import("/vendor/three/three.module.js");
+    const { GLTFLoader } = await import("/vendor/three/addons/loaders/GLTFLoader.js");
+    const boundsOf = (geometry, matrixWorld) => {
+      const attr = geometry && geometry.getAttribute && geometry.getAttribute("position");
+      if (!attr) return null;
+      const min = [Infinity, Infinity, Infinity], max = [-Infinity, -Infinity, -Infinity];
+      const v = new THREE.Vector3();
+      for (let i = 0; i < attr.count; i++) {
+        v.fromBufferAttribute(attr, i).applyMatrix4(matrixWorld);
+        min[0] = Math.min(min[0], v.x); min[1] = Math.min(min[1], v.y); min[2] = Math.min(min[2], v.z);
+        max[0] = Math.max(max[0], v.x); max[1] = Math.max(max[1], v.y); max[2] = Math.max(max[2], v.z);
+      }
+      return { min, max };
+    };
+    const loader = new GLTFLoader();
+    const loaded = await loader.loadAsync("/assets/models-normalized/kenney-modular-dungeon-kit/gate-door.glb");
+    const source = loaded.scene;
+    let sourceLeaf = null;
+    source.traverse((obj) => {
+      const gd = obj.userData && obj.userData.genesisDonor;
+      if (!sourceLeaf && gd && gd.semanticPart === "door-leaf") sourceLeaf = obj;
+    });
+    const tmpl = window.Theater && window.Theater._kitDoorTemplateForTest && window.Theater._kitDoorTemplateForTest();
+    if (!sourceLeaf || !tmpl || !tmpl.leafGeometry) return { ok: false, error: "source leaf or production template unavailable" };
+
+    source.updateMatrixWorld(true);
+    sourceLeaf.updateWorldMatrix(true, false);
+    const before = boundsOf(sourceLeaf.geometry, sourceLeaf.matrixWorld);
+
+    const holder = new THREE.Group();
+    const hinge = new THREE.Group();
+    hinge.position.fromArray(tmpl.hingeLocal);
+    const leaf = new THREE.Mesh(tmpl.leafGeometry, tmpl.leafMaterial);
+    hinge.add(leaf); holder.add(hinge);
+    holder.updateMatrixWorld(true);
+    leaf.updateWorldMatrix(true, false);
+    const after = boundsOf(leaf.geometry, leaf.matrixWorld);
+    const afterFlat = after.min.concat(after.max);
+    const deltas = before.min.concat(before.max).map((v, i) => Math.abs(v - afterFlat[i]));
+
+    const hingePositions = [];
+    for (const angle of [0, 22 * Math.PI / 180, 105 * Math.PI / 180]) {
+      leaf.rotation.y = angle;
+      holder.updateMatrixWorld(true);
+      hinge.updateWorldMatrix(true, false);
+      const p = new THREE.Vector3().setFromMatrixPosition(hinge.matrixWorld);
+      hingePositions.push(p.toArray());
+    }
+    const hingeDeltas = hingePositions.slice(1).flatMap((p) => p.map((v, i) => Math.abs(v - hingePositions[0][i])));
+    return {
+      ok: true, before, after, deltas,
+      maxBoundsDelta: Math.max(...deltas),
+      hingePositions, maxHingeDelta: Math.max(0, ...hingeDeltas),
+    };
+  });
+}
+
+async function measureKitDoorFallbacks(page) {
+  return await page.evaluate(async () => {
+    const THREE = await import("/vendor/three/three.module.js");
+    const split = window.Theater && window.Theater._kitDoorSplitTemplateForTest;
+    if (typeof split !== "function") return { ok: false, error: "split test seam unavailable" };
+    const fixture = ({ singular = false, invalidHinge = false } = {}) => {
+      const root = new THREE.Group();
+      root.userData.sockets = [{ type: "hinge", position: invalidHinge ? [NaN, 0, 0] : [0, 0.5, 0] }];
+      if (singular) root.scale.set(0, 1, 1);
+      const leaf = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 0.1), new THREE.MeshBasicMaterial());
+      leaf.userData.genesisDonor = { semanticPart: "door-leaf" };
+      root.add(leaf);
+      return { root, leaf };
+    };
+    const singular = fixture({ singular: true });
+    const invalid = fixture({ invalidHinge: true });
+    const singularResult = split(singular.root);
+    const invalidResult = split(invalid.root);
+    return {
+      ok: singularResult === null && invalidResult === null &&
+        singular.leaf.parent === singular.root && invalid.leaf.parent === invalid.root,
+      singularReturnedNull: singularResult === null,
+      invalidReturnedNull: invalidResult === null,
+      singularLeafRetained: singular.leaf.parent === singular.root,
+      invalidLeafRetained: invalid.leaf.parent === invalid.root,
+    };
+  });
+}
+
 // HAND-BUILT plan (mirrors dev/verify-ks2-door-assembly.mjs's own fixture technique): one 7x7-floor
 // room, THREE doors — a CORNER door (west wall, one cell off the NW corner — the exact class
 // DESIGN-REVIEW-2026-07-15.md §0 names) and two STANDARD mid-wall doors (kit-eligible; the north one
@@ -245,6 +338,17 @@ async function main() {
     const kitReady = await waitForKitDoorTemplate(page);
     metrics.kitDoorTemplateReady = kitReady;
     log(`kit door template ready: ${kitReady}`);
+    if (!kitReady) throw new Error("kit door template did not become ready");
+    metrics.kgr1SplitProbe = await measureKitDoorSplit(page);
+    if (!metrics.kgr1SplitProbe.ok) throw new Error("KGR-1 split probe failed: " + JSON.stringify(metrics.kgr1SplitProbe));
+    if (metrics.kgr1SplitProbe.maxBoundsDelta > 1e-5) {
+      throw new Error(`KGR-1 pre/post closed leaf bounds differ by ${metrics.kgr1SplitProbe.maxBoundsDelta} (>1e-5)`);
+    }
+    if (metrics.kgr1SplitProbe.maxHingeDelta > 1e-5) {
+      throw new Error(`KGR-1 hinge moves by ${metrics.kgr1SplitProbe.maxHingeDelta} (>1e-5)`);
+    }
+    metrics.kgr1FallbackProbe = await measureKitDoorFallbacks(page);
+    if (!metrics.kgr1FallbackProbe.ok) throw new Error("KGR-1 invalid/singular split did not preserve fallback: " + JSON.stringify(metrics.kgr1FallbackProbe));
 
     async function shoot(fileName) {
       const canvasEl = await page.$(".theater-stage-canvas canvas");

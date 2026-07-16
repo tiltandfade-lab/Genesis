@@ -470,18 +470,27 @@ The server binds `127.0.0.1` on a non-5175 port. It exposes only:
 
 - `GET /api/calibration`;
 - `PUT /api/calibration/<urlencoded assetId>` body
-  `{expectedSourceSha256, record}`;
+  `{expectedSourceSha256, record, packRecord?}`;
 - `POST /api/validate` body `{assetId, record}` with no write.
 
-PUT validates the full record, verifies the source hash against the census, rejects unknown asset ids
-and traversal, updates exactly one `assets[assetId]`, writes a sibling temporary file, fsyncs, then
-renames atomically. It cannot write GLBs, generated indexes, or arbitrary paths.
+PUT validates the full record, verifies the source hash against the census, rejects asset ids absent
+from the census/candidate inventory and rejects traversal. A census-known asset absent from
+`calibration.assets` may be inserted. If its pack is also absent, `packRecord` is required and the
+same atomic transaction may add exactly that one `packs[packId]` plus exactly that one
+`assets[assetId]`; `packRecord` is forbidden for an existing pack, so an asset edit cannot mutate
+pack-wide scale or axes as a side effect. The server validates the resulting full calibration,
+writes a sibling temporary file, fsyncs, then renames atomically. It cannot write GLBs, generated
+indexes, or arbitrary paths. This preserves the three-endpoint surface while making KGR-4C's
+new-pack calibration possible through the save API rather than a hand edit.
 
 **RED-FIRST / mutation checks:**
 
 1. ⊗ Source-hash mismatch, unknown id, invalid quaternion, and traversal each return 4xx and leave the
    manifest byte-identical.
-2. ⊗ A valid save changes exactly one asset record and survives server restart.
+2. ⊗ A valid save in an existing pack changes exactly one asset record and survives server restart.
+   A census-known asset in a new pack requires `packRecord` and atomically adds exactly one pack plus
+   one asset; omitting it, supplying it for an existing pack, or changing any other pack/asset fails
+   byte-identically.
 3. Raw/normalized toggle changes the loaded URL; Genesis-material mode passes through
    `loadDonorPiece`, not a lookalike material implementation.
 4. Mate preview reports ≤`0.005u` positional and ≤`0.5°` angular error after Snap.

@@ -1,0 +1,105 @@
+{
+  "algorithmVersion": 1,
+  "assets": {
+    "lever-double": {
+      "admissionClass": "PART_DONOR",
+      "assetId": "kenney-factory-kit/lever-double",
+      "bounds": {
+        "aabbMax": [
+          0.26999998092651367,
+          0.37500000596046446,
+          0.26999998092651367
+        ],
+        "aabbMin": [
+          -0.26999998092651367,
+          0.0,
+          -0.26999998092651367
+        ],
+        "footprint": {
+          "center": [
+            0,
+            0
+          ],
+          "halfExtents": [
+            0.27,
+            0.27
+          ],
+          "yawRadians": 0
+        },
+        "footprintSource": "override",
+        "groundY": 0.0
+      },
+      "canonicalScale": 1,
+      "category": "mechanism",
+      "companionLeaf": null,
+      "file": "lever-double.glb",
+      "materialFamilies": [
+        "iron"
+      ],
+      "normalizedFrame": {
+        "forward": "+Z",
+        "sourceToGenesis": [
+          1,
+          0,
+          0,
+          0.0,
+          0,
+          1,
+          0,
+          0.0,
+          0,
+          0,
+          1,
+          0.0,
+          0,
+          0,
+          0,
+          1.0
+        ],
+        "up": "+Y"
+      },
+      "qaStatus": "approved-dev",
+      "recipeHash": "06fa1e65b97cf88a10aa704d58003f566a4198087d2ac02f7d9779c9223900c5",
+      "schema": "genesis.donor.v2",
+      "semanticParts": {},
+      "sockets": [
+        {
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.54,
+              0.375,
+              0.54
+            ]
+          },
+          "id": "floor-mount",
+          "mateFamily": "floor",
+          "mateRule": "coincident",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "size": [
+            0.54,
+            0.05,
+            0.54
+          ],
+          "type": "floor-mount"
+        }
+      ],
+      "sourceSha256": "b14d1fc30f29a8e8dc56dae7b20a8a988be5155bafcddc726cd8c8ebf0bbe5b9",
+      "structuralGrid": null
+    }
+  },
+  "calibrationHash": "f5450be4667690abdc98d5fd7eb9d97a957608bc93d4d1b375e8fbb97c88e259",
+  "normalizerVersion": "kgr3-calibration-v2",
+  "pack": "kenney-factory-kit",
+  "schema": "genesis.donor-index.v2"
+}

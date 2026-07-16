@@ -29,7 +29,7 @@
         "footprintSource": "derived",
         "groundY": 0.0
       },
-      "canonicalScale": 2.0,
+      "canonicalScale": 2,
       "category": "floor",
       "companionLeaf": null,
       "file": "floor.glb",
@@ -39,17 +39,17 @@
       "normalizedFrame": {
         "forward": "+Z",
         "sourceToGenesis": [
-          2.0,
+          2,
+          0,
+          0,
           0.0,
+          0,
+          2,
+          0,
           0.0,
-          0.0,
-          0.0,
-          2.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          2.0,
+          0,
+          0,
+          2,
           0.0,
           0,
           0,
@@ -59,7 +59,7 @@
         "up": "+Y"
       },
       "qaStatus": "needs-review",
-      "recipeHash": "40620eb3d6db36238d1b78f359156032d2712058efa228b661b6a01c9f994d6b",
+      "recipeHash": "1723660d1364416c6d2127f3d77268979935fbc45cdfb6ee7a7231fbd8df0cfc",
       "schema": "genesis.donor.v2",
       "semanticParts": {},
       "sockets": [
@@ -128,8 +128,8 @@
       "structuralGrid": {
         "joinMode": "cell-orientation",
         "orientationSteps": 4,
-        "sourceModuleUnits": 1.0,
-        "targetWorldUnits": 2.0
+        "sourceModuleUnits": 1,
+        "targetWorldUnits": 2
       }
     },
     "floor-detail": {
@@ -160,7 +160,7 @@
         "footprintSource": "derived",
         "groundY": 0.0
       },
-      "canonicalScale": 2.0,
+      "canonicalScale": 2,
       "category": "floor",
       "companionLeaf": null,
       "file": "floor-detail.glb",
@@ -170,17 +170,17 @@
       "normalizedFrame": {
         "forward": "+Z",
         "sourceToGenesis": [
-          2.0,
+          2,
+          0,
+          0,
           0.0,
+          0,
+          2,
+          0,
           0.0,
-          0.0,
-          0.0,
-          2.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          2.0,
+          0,
+          0,
+          2,
           0.0,
           0,
           0,
@@ -190,7 +190,7 @@
         "up": "+Y"
       },
       "qaStatus": "needs-review",
-      "recipeHash": "8eb09edc4a24e6ab0ab3d6963c278d5ba0e3e26b92d8f179e78f23d1313be6cb",
+      "recipeHash": "d32b14182e7d78071f4534cc6ed77662832329fb0746f3a674a997b1be42bdee",
       "schema": "genesis.donor.v2",
       "semanticParts": {},
       "sockets": [
@@ -259,8 +259,8 @@
       "structuralGrid": {
         "joinMode": "cell-orientation",
         "orientationSteps": 4,
-        "sourceModuleUnits": 1.0,
-        "targetWorldUnits": 2.0
+        "sourceModuleUnits": 1,
+        "targetWorldUnits": 2
       }
     },
     "gate": {
@@ -291,7 +291,7 @@
         "footprintSource": "derived",
         "groundY": 0.0
       },
-      "canonicalScale": 2.0,
+      "canonicalScale": 2,
       "category": "door-leaf",
       "companionLeaf": null,
       "file": "gate.glb",
@@ -301,17 +301,17 @@
       "normalizedFrame": {
         "forward": "+Z",
         "sourceToGenesis": [
-          2.0,
+          2,
+          0,
+          0,
           0.0,
+          0,
+          2,
+          0,
           0.0,
-          0.0,
-          0.0,
-          2.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          2.0,
+          0,
+          0,
+          2,
           0.0,
           0,
           0,
@@ -321,7 +321,7 @@
         "up": "+Y"
       },
       "qaStatus": "needs-review",
-      "recipeHash": "1fa4bb98e678fc2496645311225420ab09263af899193604883ad2db9884808d",
+      "recipeHash": "d659af6a6d1ab4cb58167db73809db63fbb1c0ff29f5f13c4e00ac0592f570a5",
       "schema": "genesis.donor.v2",
       "semanticParts": {
         "door-leaf": {
@@ -396,8 +396,8 @@
       "structuralGrid": {
         "joinMode": "cell-orientation",
         "orientationSteps": 4,
-        "sourceModuleUnits": 1.0,
-        "targetWorldUnits": 2.0
+        "sourceModuleUnits": 1,
+        "targetWorldUnits": 2
       }
     },
     "stairs": {
@@ -428,7 +428,7 @@
         "footprintSource": "derived",
         "groundY": 0.0
       },
-      "canonicalScale": 2.0,
+      "canonicalScale": 2,
       "category": "stairs",
       "companionLeaf": null,
       "file": "stairs.glb",
@@ -438,17 +438,17 @@
       "normalizedFrame": {
         "forward": "+Z",
         "sourceToGenesis": [
-          2.0,
+          2,
+          0,
+          0,
           0.0,
+          0,
+          2,
+          0,
           0.0,
-          0.0,
-          0.0,
-          2.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          2.0,
+          0,
+          0,
+          2,
           0.0,
           0,
           0,
@@ -458,7 +458,7 @@
         "up": "+Y"
       },
       "qaStatus": "needs-review",
-      "recipeHash": "81e9fce65b5567b2a21395c244311669c55f8a1654d26e5d1f17579bc71c77b5",
+      "recipeHash": "9f0fa8b268ce6ee7710f6c2b368c9dbc03fc977bbfbe366e4f0859861b3dc531",
       "schema": "genesis.donor.v2",
       "semanticParts": {},
       "sockets": [
@@ -527,8 +527,8 @@
       "structuralGrid": {
         "joinMode": "cell-orientation",
         "orientationSteps": 4,
-        "sourceModuleUnits": 1.0,
-        "targetWorldUnits": 2.0
+        "sourceModuleUnits": 1,
+        "targetWorldUnits": 2
       }
     },
     "wall": {
@@ -559,7 +559,7 @@
         "footprintSource": "derived",
         "groundY": 0.0
       },
-      "canonicalScale": 2.0,
+      "canonicalScale": 2,
       "category": "wall",
       "companionLeaf": null,
       "file": "wall.glb",
@@ -569,17 +569,17 @@
       "normalizedFrame": {
         "forward": "+Z",
         "sourceToGenesis": [
-          2.0,
+          2,
+          0,
+          0,
           0.0,
+          0,
+          2,
+          0,
           0.0,
-          0.0,
-          0.0,
-          2.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          2.0,
+          0,
+          0,
+          2,
           0.0,
           0,
           0,
@@ -589,7 +589,7 @@
         "up": "+Y"
       },
       "qaStatus": "needs-review",
-      "recipeHash": "29c6ac85e1412050aef253ff903688ff515a6d0b4ecafcde62bc89fc7972d1b5",
+      "recipeHash": "bb908e1c742ac79a986a2452a8072fea15340a0b68fee9f0b2893b5c851dd749",
       "schema": "genesis.donor.v2",
       "semanticParts": {},
       "sockets": [
@@ -628,8 +628,8 @@
       "structuralGrid": {
         "joinMode": "cell-orientation",
         "orientationSteps": 4,
-        "sourceModuleUnits": 1.0,
-        "targetWorldUnits": 2.0
+        "sourceModuleUnits": 1,
+        "targetWorldUnits": 2
       }
     },
     "wall-half": {
@@ -660,7 +660,7 @@
         "footprintSource": "derived",
         "groundY": 0.0
       },
-      "canonicalScale": 2.0,
+      "canonicalScale": 2,
       "category": "wall",
       "companionLeaf": null,
       "file": "wall-half.glb",
@@ -670,17 +670,17 @@
       "normalizedFrame": {
         "forward": "+Z",
         "sourceToGenesis": [
-          2.0,
+          2,
+          0,
+          0,
           0.0,
+          0,
+          2,
+          0,
           0.0,
-          0.0,
-          0.0,
-          2.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          2.0,
+          0,
+          0,
+          2,
           0.0,
           0,
           0,
@@ -690,7 +690,7 @@
         "up": "+Y"
       },
       "qaStatus": "needs-review",
-      "recipeHash": "b9c78837ae8c9c7b811f5b7e32269af03614a99f2dd68748b860434dfd68c14e",
+      "recipeHash": "8a6e0346411cca3615799c6e86098b7d5286d0442c34d745147c8079098ac4d2",
       "schema": "genesis.donor.v2",
       "semanticParts": {},
       "sockets": [
@@ -729,8 +729,8 @@
       "structuralGrid": {
         "joinMode": "cell-orientation",
         "orientationSteps": 4,
-        "sourceModuleUnits": 1.0,
-        "targetWorldUnits": 2.0
+        "sourceModuleUnits": 1,
+        "targetWorldUnits": 2
       }
     },
     "wall-narrow": {
@@ -761,7 +761,7 @@
         "footprintSource": "derived",
         "groundY": 0.0
       },
-      "canonicalScale": 2.0,
+      "canonicalScale": 2,
       "category": "wall",
       "companionLeaf": null,
       "file": "wall-narrow.glb",
@@ -771,17 +771,17 @@
       "normalizedFrame": {
         "forward": "+Z",
         "sourceToGenesis": [
-          2.0,
+          2,
+          0,
+          0,
           0.0,
+          0,
+          2,
+          0,
           0.0,
-          0.0,
-          0.0,
-          2.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          2.0,
+          0,
+          0,
+          2,
           0.0,
           0,
           0,
@@ -791,7 +791,7 @@
         "up": "+Y"
       },
       "qaStatus": "needs-review",
-      "recipeHash": "25db6ebf567446468f22f4bc372b485035fbea4bbf0c8081ea2e9e61c0b59681",
+      "recipeHash": "baa997e2a5e033a79fb38ad61e823bd673d4d6c4de7e3246b24a9a362b44d9b2",
       "schema": "genesis.donor.v2",
       "semanticParts": {},
       "sockets": [
@@ -830,8 +830,8 @@
       "structuralGrid": {
         "joinMode": "cell-orientation",
         "orientationSteps": 4,
-        "sourceModuleUnits": 1.0,
-        "targetWorldUnits": 2.0
+        "sourceModuleUnits": 1,
+        "targetWorldUnits": 2
       }
     },
     "wall-opening": {
@@ -862,7 +862,7 @@
         "footprintSource": "derived",
         "groundY": 0.0
       },
-      "canonicalScale": 2.0,
+      "canonicalScale": 2,
       "category": "doorway-frame",
       "companionLeaf": "gate",
       "file": "wall-opening.glb",
@@ -872,17 +872,17 @@
       "normalizedFrame": {
         "forward": "+Z",
         "sourceToGenesis": [
-          2.0,
+          2,
+          0,
+          0,
           0.0,
+          0,
+          2,
+          0,
           0.0,
-          0.0,
-          0.0,
-          2.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          2.0,
+          0,
+          0,
+          2,
           0.0,
           0,
           0,
@@ -892,7 +892,7 @@
         "up": "+Y"
       },
       "qaStatus": "needs-review",
-      "recipeHash": "394f7fcfe5b12e3ab373b231579638d66e8ec2747172e054b055a3cd415bf163",
+      "recipeHash": "1098f9398d5296b9af3ddafb58bdd8c45de7f1d183d28f43fdb894e28c304243",
       "schema": "genesis.donor.v2",
       "semanticParts": {},
       "sockets": [
@@ -961,12 +961,12 @@
       "structuralGrid": {
         "joinMode": "cell-orientation",
         "orientationSteps": 4,
-        "sourceModuleUnits": 1.0,
-        "targetWorldUnits": 2.0
+        "sourceModuleUnits": 1,
+        "targetWorldUnits": 2
       }
     }
   },
-  "calibrationHash": "e8ea45872d1683d56cc996a9ff44708ce3c840014242291ba99d1f54efb8007a",
+  "calibrationHash": "f5450be4667690abdc98d5fd7eb9d97a957608bc93d4d1b375e8fbb97c88e259",
   "normalizerVersion": "kgr3-calibration-v2",
   "pack": "kenney-mini-dungeon",
   "schema": "genesis.donor-index.v2"

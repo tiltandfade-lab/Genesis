@@ -1,0 +1,201 @@
+{
+  "algorithmVersion": 1,
+  "assets": {
+    "chest": {
+      "admissionClass": "PART_DONOR",
+      "assetId": "kenney-pirate-kit/chest",
+      "bounds": {
+        "aabbMax": [
+          0.4462499916553497,
+          0.8032499916553497,
+          0.4462499916553497
+        ],
+        "aabbMin": [
+          -0.4462499983046343,
+          0.0,
+          -0.44624999833106993
+        ],
+        "footprint": {
+          "center": [
+            0,
+            0
+          ],
+          "halfExtents": [
+            0.44625,
+            0.44625
+          ],
+          "yawRadians": 0
+        },
+        "footprintSource": "override",
+        "groundY": 0.0
+      },
+      "canonicalScale": 0.7,
+      "category": "container",
+      "companionLeaf": null,
+      "file": "chest.glb",
+      "materialFamilies": [
+        "wood"
+      ],
+      "normalizedFrame": {
+        "forward": "+Z",
+        "sourceToGenesis": [
+          0.7,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.7,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.7,
+          0.0,
+          0,
+          0,
+          0,
+          1.0
+        ],
+        "up": "+Y"
+      },
+      "qaStatus": "approved-dev",
+      "recipeHash": "b4eeb3e69d0d450cb0d57c062c06684d806fd36bdc78adbeed1cf39da62dffcb",
+      "schema": "genesis.donor.v2",
+      "semanticParts": {},
+      "sockets": [
+        {
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.8925,
+              0.80325,
+              0.8925
+            ]
+          },
+          "id": "floor-mount",
+          "mateFamily": "floor",
+          "mateRule": "coincident",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "size": [
+            0.8925,
+            0.05,
+            0.8925
+          ],
+          "type": "floor-mount"
+        }
+      ],
+      "sourceSha256": "26d26c4c032a12320fe05b5005a72eba96db7167db0d35873639a4b7dcc06bcb",
+      "structuralGrid": null
+    },
+    "crate": {
+      "admissionClass": "PART_DONOR",
+      "assetId": "kenney-pirate-kit/crate",
+      "bounds": {
+        "aabbMax": [
+          0.3772999823093414,
+          0.5389999866485595,
+          0.45815000534057615
+        ],
+        "aabbMin": [
+          -0.3772999823093414,
+          0.0,
+          -0.45815000534057615
+        ],
+        "footprint": {
+          "center": [
+            0,
+            0
+          ],
+          "halfExtents": [
+            0.3773,
+            0.45815
+          ],
+          "yawRadians": 0
+        },
+        "footprintSource": "override",
+        "groundY": 0.0
+      },
+      "canonicalScale": 0.7,
+      "category": "container",
+      "companionLeaf": null,
+      "file": "crate.glb",
+      "materialFamilies": [
+        "wood"
+      ],
+      "normalizedFrame": {
+        "forward": "+Z",
+        "sourceToGenesis": [
+          0.7,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.7,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.7,
+          0.0,
+          0,
+          0,
+          0,
+          1.0
+        ],
+        "up": "+Y"
+      },
+      "qaStatus": "approved-dev",
+      "recipeHash": "434d14bf9d88efa2ae273877fb2fc02a07d2fa898c214153a333a5a4f1de4bb2",
+      "schema": "genesis.donor.v2",
+      "semanticParts": {},
+      "sockets": [
+        {
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.7546,
+              0.539,
+              0.9163
+            ]
+          },
+          "id": "floor-mount",
+          "mateFamily": "floor",
+          "mateRule": "coincident",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "size": [
+            0.7546,
+            0.05,
+            0.9163
+          ],
+          "type": "floor-mount"
+        }
+      ],
+      "sourceSha256": "b525674e07c8b83667512a8dd93be0d7684358347d0e64d2bb16b156ac382ed1",
+      "structuralGrid": null
+    }
+  },
+  "calibrationHash": "f5450be4667690abdc98d5fd7eb9d97a957608bc93d4d1b375e8fbb97c88e259",
+  "normalizerVersion": "kgr3-calibration-v2",
+  "pack": "kenney-pirate-kit",
+  "schema": "genesis.donor-index.v2"
+}

@@ -1,0 +1,554 @@
+{
+  "algorithmVersion": 1,
+  "assets": {
+    "bench": {
+      "admissionClass": "PART_DONOR",
+      "assetId": "kenney-furniture-kit/bench",
+      "bounds": {
+        "aabbMax": [
+          0.3000000000000001,
+          0.705,
+          0.15
+        ],
+        "aabbMin": [
+          -0.3,
+          0.0,
+          -0.15000000000000005
+        ],
+        "footprint": {
+          "center": [
+            0,
+            0
+          ],
+          "halfExtents": [
+            0.3,
+            0.15
+          ],
+          "yawRadians": 0
+        },
+        "footprintSource": "override",
+        "groundY": 0.0
+      },
+      "canonicalScale": 1.5,
+      "category": "furniture",
+      "companionLeaf": null,
+      "file": "bench.glb",
+      "materialFamilies": [
+        "wood"
+      ],
+      "normalizedFrame": {
+        "forward": "+Z",
+        "sourceToGenesis": [
+          1.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          1.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          1.5,
+          0.0,
+          -0.3,
+          0,
+          0.15,
+          1.0
+        ],
+        "up": "+Y"
+      },
+      "qaStatus": "quarantined",
+      "recipeHash": "06037270f74bc47bf524c7c00d22a3558a346203152d5dcbf8e7f72f091d570c",
+      "schema": "genesis.donor.v2",
+      "semanticParts": {},
+      "sockets": [],
+      "sourceSha256": "ba05a6d23a5a5a44da016757632070e47ff7587ce10e2f6d6d52328b4cf5489b",
+      "structuralGrid": null
+    },
+    "benchCushionLow": {
+      "admissionClass": "PART_DONOR",
+      "assetId": "kenney-furniture-kit/benchCushionLow",
+      "bounds": {
+        "aabbMax": [
+          0.32500004023809503,
+          0.30952380952380965,
+          0.17023809523809547
+        ],
+        "aabbMin": [
+          -0.32500000000000046,
+          0.0,
+          -0.17023809523809508
+        ],
+        "footprint": {
+          "center": [
+            0,
+            0
+          ],
+          "halfExtents": [
+            0.325,
+            0.170238095238095
+          ],
+          "yawRadians": 0
+        },
+        "footprintSource": "override",
+        "groundY": 0.0
+      },
+      "canonicalScale": 1.5,
+      "category": "furniture",
+      "companionLeaf": null,
+      "file": "benchCushionLow.glb",
+      "materialFamilies": [
+        "wood"
+      ],
+      "normalizedFrame": {
+        "forward": "+Z",
+        "sourceToGenesis": [
+          1.5476190476190481,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          1.5476190476190481,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          1.5476190476190481,
+          0.0,
+          -0.30952380952381,
+          0,
+          0.154761904761905,
+          1.0
+        ],
+        "up": "+Y"
+      },
+      "qaStatus": "approved-dev",
+      "recipeHash": "cccf80c67d89f6524ad92ae38a691127d545fe49ae992844cac1e0bbbfdbce31",
+      "schema": "genesis.donor.v2",
+      "semanticParts": {},
+      "sockets": [
+        {
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.65,
+              0.30952380952381,
+              0.34047619047619
+            ]
+          },
+          "id": "floor-mount",
+          "mateFamily": "floor",
+          "mateRule": "coincident",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "size": [
+            0.65,
+            0.05,
+            0.34047619047619
+          ],
+          "type": "floor-mount"
+        }
+      ],
+      "sourceSha256": "d1fac209eae2ea7393beefa4932dacb54d500e8f9932a1b17d2a842527df1b2c",
+      "structuralGrid": null
+    },
+    "chair": {
+      "admissionClass": "PART_DONOR",
+      "assetId": "kenney-furniture-kit/chair",
+      "bounds": {
+        "aabbMax": [
+          0.15000000000000005,
+          0.705,
+          0.15
+        ],
+        "aabbMin": [
+          -0.15,
+          0.0,
+          -0.15000000000000005
+        ],
+        "footprint": {
+          "center": [
+            0,
+            0
+          ],
+          "halfExtents": [
+            0.15,
+            0.15
+          ],
+          "yawRadians": 0
+        },
+        "footprintSource": "override",
+        "groundY": 0.0
+      },
+      "canonicalScale": 1.5,
+      "category": "furniture",
+      "companionLeaf": null,
+      "file": "chair.glb",
+      "materialFamilies": [
+        "wood"
+      ],
+      "normalizedFrame": {
+        "forward": "+Z",
+        "sourceToGenesis": [
+          1.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          1.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          1.5,
+          0.0,
+          -0.15,
+          0,
+          0.15,
+          1.0
+        ],
+        "up": "+Y"
+      },
+      "qaStatus": "approved-dev",
+      "recipeHash": "70a7630b6e9a6e6f17b89405dd1069b8cd8252c622d074c33a779158b0497d1f",
+      "schema": "genesis.donor.v2",
+      "semanticParts": {},
+      "sockets": [
+        {
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.3,
+              0.705,
+              0.3
+            ]
+          },
+          "id": "floor-mount",
+          "mateFamily": "floor",
+          "mateRule": "coincident",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "size": [
+            0.3,
+            0.05,
+            0.3
+          ],
+          "type": "floor-mount"
+        }
+      ],
+      "sourceSha256": "c8a11eec93e89e31250ba91afc1b8d56c3bec7ae86640fd1239f595ff4180883",
+      "structuralGrid": null
+    },
+    "lampRoundFloor": {
+      "admissionClass": "PART_DONOR",
+      "assetId": "kenney-furniture-kit/lampRoundFloor",
+      "bounds": {
+        "aabbMax": [
+          0.1140295575,
+          1.29,
+          0.13166999872500001
+        ],
+        "aabbMin": [
+          -0.1140295575,
+          0.0,
+          -0.13166999872499996
+        ],
+        "footprint": {
+          "center": [
+            0,
+            0
+          ],
+          "halfExtents": [
+            0.1140295575,
+            0.131669998725
+          ],
+          "yawRadians": 0
+        },
+        "footprintSource": "override",
+        "groundY": 0.0
+      },
+      "canonicalScale": 1.5,
+      "category": "practical-light",
+      "companionLeaf": null,
+      "file": "lampRoundFloor.glb",
+      "materialFamilies": [
+        "iron"
+      ],
+      "normalizedFrame": {
+        "forward": "+Z",
+        "sourceToGenesis": [
+          1.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          1.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          1.5,
+          0.0,
+          -0.0899999925,
+          0,
+          0.090000001275,
+          1.0
+        ],
+        "up": "+Y"
+      },
+      "qaStatus": "approved-dev",
+      "recipeHash": "6bd79e315ffac693a2d2b027d9bf4199162d841758c4b0ed9173b8538807b65f",
+      "schema": "genesis.donor.v2",
+      "semanticParts": {},
+      "sockets": [
+        {
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.228059115,
+              1.29,
+              0.26333999745
+            ]
+          },
+          "id": "floor-mount",
+          "mateFamily": "floor",
+          "mateRule": "coincident",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "size": [
+            0.228059115,
+            0.05,
+            0.26333999745
+          ],
+          "type": "floor-mount"
+        }
+      ],
+      "sourceSha256": "50fe1b5b588edf15bfa9cc880f71a02a4fda6036350b24733d0ef4de5cc5e908",
+      "structuralGrid": null
+    },
+    "lampWall": {
+      "admissionClass": "PART_DONOR",
+      "assetId": "kenney-furniture-kit/lampWall",
+      "bounds": {
+        "aabbMax": [
+          0.16997653100999996,
+          0.1392,
+          0.22550399999999995
+        ],
+        "aabbMin": [
+          -0.16997653100999996,
+          0.0,
+          0.0
+        ],
+        "footprint": {
+          "center": [
+            0,
+            0.112752
+          ],
+          "halfExtents": [
+            0.1699765305,
+            0.112752
+          ],
+          "yawRadians": 0
+        },
+        "footprintSource": "override",
+        "groundY": 0.0
+      },
+      "canonicalScale": 1.5,
+      "category": "practical-light",
+      "companionLeaf": null,
+      "file": "lampWall.glb",
+      "materialFamilies": [
+        "iron"
+      ],
+      "normalizedFrame": {
+        "forward": "+Z",
+        "sourceToGenesis": [
+          1.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          1.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          1.5,
+          0.0,
+          0,
+          0,
+          0,
+          1.0
+        ],
+        "up": "+Y"
+      },
+      "qaStatus": "approved-dev",
+      "recipeHash": "85f3f6c489fad3d5efa9c06ecee7fc6b400bed2c8c87a4abb45ca8cbaf8835b2",
+      "schema": "genesis.donor.v2",
+      "semanticParts": {},
+      "sockets": [
+        {
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.339953061,
+              0.1392,
+              0.225504
+            ]
+          },
+          "id": "wall-mount",
+          "mateFamily": "wall",
+          "mateRule": "coincident",
+          "position": [
+            0,
+            0.0696,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "size": [
+            0.339953061,
+            0.1392,
+            0.05
+          ],
+          "type": "wall-mount"
+        }
+      ],
+      "sourceSha256": "a9679ecd3be05731846f22ade97c37069598ca7a06dd9319f50230e63a1ea83c",
+      "structuralGrid": null
+    },
+    "tableRound": {
+      "admissionClass": "PART_DONOR",
+      "assetId": "kenney-furniture-kit/tableRound",
+      "bounds": {
+        "aabbMax": [
+          0.5196152249999998,
+          0.55010097,
+          0.6
+        ],
+        "aabbMin": [
+          -0.519615225,
+          2.8500000026632222e-08,
+          -0.6000000000000002
+        ],
+        "footprint": {
+          "center": [
+            0,
+            0
+          ],
+          "halfExtents": [
+            0.519615225,
+            0.6
+          ],
+          "yawRadians": 0
+        },
+        "footprintSource": "override",
+        "groundY": 2.8500000026632222e-08
+      },
+      "canonicalScale": 1.5,
+      "category": "furniture",
+      "companionLeaf": null,
+      "file": "tableRound.glb",
+      "materialFamilies": [
+        "wood"
+      ],
+      "normalizedFrame": {
+        "forward": "+Z",
+        "sourceToGenesis": [
+          1.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          1.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          1.5,
+          0.0,
+          -0.519615225,
+          0.405,
+          0.6,
+          1.0
+        ],
+        "up": "+Y"
+      },
+      "qaStatus": "approved-dev",
+      "recipeHash": "f878645f7fc61c5b0dcf0746959aed3f9d0bab89d156ee62d8a4280e69ffd8bf",
+      "schema": "genesis.donor.v2",
+      "semanticParts": {},
+      "sockets": [
+        {
+          "clearance": {
+            "shape": "box",
+            "size": [
+              1.03923045,
+              0.550100941,
+              1.2
+            ]
+          },
+          "id": "floor-mount",
+          "mateFamily": "floor",
+          "mateRule": "coincident",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "size": [
+            1.03923045,
+            0.05,
+            1.2
+          ],
+          "type": "floor-mount"
+        }
+      ],
+      "sourceSha256": "f8daea9124a542a00b7bdacfddac82dc468573d43e44d7b54dd6316e9695754b",
+      "structuralGrid": null
+    }
+  },
+  "calibrationHash": "f5450be4667690abdc98d5fd7eb9d97a957608bc93d4d1b375e8fbb97c88e259",
+  "normalizerVersion": "kgr3-calibration-v2",
+  "pack": "kenney-furniture-kit",
+  "schema": "genesis.donor-index.v2"
+}

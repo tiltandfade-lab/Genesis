@@ -264,6 +264,12 @@ console.log("\n=== 1b. KGR-1 RED-FIRST: primitive-union bounds + transformed-sce
 //    sockets present + typed.
 // ============================================================================
 console.log("\n=== 2. Run build/normalize-donors.py, then GREEN re-proof over every admitted piece ===");
+const adapterCalibration = JSON.parse(readText("dev/model-foundry/kenney-calibration.json"));
+const expectedCalibrationIds = Object.keys(adapterCalibration.assets || {}).sort();
+const exactIds = (expected,actual) => expected.length === actual.length && expected.every((id,index)=>id===actual[index]);
+const socketsMatchQa = (record,sockets) => record?.qaStatus === "quarantined"
+  ? !sockets.hasAny && sockets.count === 0
+  : sockets.hasAny && sockets.allTyped;
 let provenance = null;
 try {
   execFileSync("python3", ["build/normalize-donors.py"], { cwd: ROOT, stdio: "pipe" });
@@ -275,8 +281,22 @@ try {
 }
 
 if (provenance) {
-  check("provenance reports the expected total (47 pieces: 39 modular-dungeon-kit + 8 mini-dungeon)",
-    provenance.totalPiecesAdmitted === 47, `got ${provenance.totalPiecesAdmitted}`);
+  const provenanceIds=provenance.pieces.map(piece=>`${piece.pack}/${piece.slug}`).sort();
+  const outputIds=Object.keys(adapterCalibration.packs).flatMap(pack=>
+    readdirSync(join(ROOT,"assets/models-normalized",pack))
+      .filter(file=>file.endsWith(".glb"))
+      .map(file=>`${pack}/${file.replace(/\.glb$/i,"")}`)).sort();
+  const indexIds=Object.keys(adapterCalibration.packs).flatMap(pack=>{
+    const index=JSON.parse(readText(`assets/models-normalized/${pack}/index.json`));
+    return Object.keys(index.assets||{}).map(slug=>`${pack}/${slug}`);
+  }).sort();
+  check("provenance total is derived from exact validated calibration ownership",
+    provenance.totalPiecesAdmitted===expectedCalibrationIds.length&&exactIds(expectedCalibrationIds,provenanceIds),
+    `calibration=${expectedCalibrationIds.length} provenance=${provenance.totalPiecesAdmitted}`);
+  check("normalized GLB file ids match calibration ownership bidirectionally",exactIds(expectedCalibrationIds,outputIds));
+  check("normalized index ids match calibration ownership bidirectionally",exactIds(expectedCalibrationIds,indexIds));
+  check("⊗ missing id fails exact adapter ownership",!exactIds(expectedCalibrationIds,provenanceIds.slice(1)));
+  check("⊗ extra id fails exact adapter ownership",!exactIds(expectedCalibrationIds,[...provenanceIds,"kenney-unexpected/escape"].sort()));
 
   let allSocketsOk = true, allScaleOk = true, allFamiliesOk = true, allUvsOk = true, allAuthoredMaterialsGone = true;
   const scaleFailures = [], socketFailures = [], familyFailures = [], uvFailures = [], materialStripFailures = [];
@@ -289,9 +309,11 @@ if (provenance) {
     // — re-derives independently from the glb bytes so this check can't just be validating
     // the report validating itself).
     const s = socketsPresentAndTyped(outAbs);
-    if (!s.hasAny || !s.allTyped) {
+    const assetId=`${piece.pack}/${piece.slug}`, record=adapterCalibration.assets[assetId];
+    const socketsMatchStatus=socketsMatchQa(record,s);
+    if (!socketsMatchStatus) {
       allSocketsOk = false;
-      socketFailures.push(`${piece.pack}/${piece.slug}: hasAny=${s.hasAny} allTyped=${s.allTyped} count=${s.count}`);
+      socketFailures.push(`${assetId}: qa=${record?.qaStatus} hasAny=${s.hasAny} allTyped=${s.allTyped} count=${s.count}`);
     }
 
     // (b) scale within ±2% of the measured grid mapping — re-measure the OUTPUT file's own
@@ -389,7 +411,9 @@ if (provenance) {
     }
   }
 
-  check("GREEN: every admitted piece's NORMALIZED output has sockets present + validly typed", allSocketsOk, socketFailures.slice(0, 5).join(" | "));
+  check("GREEN: quarantined outputs are socket-empty; every non-quarantined output has valid typed sockets", allSocketsOk, socketFailures.slice(0, 5).join(" | "));
+  check("⊗ non-quarantined mount-free record fails the adapter socket rule",
+    !socketsMatchQa({qaStatus:"approved-dev"},{hasAny:false,allTyped:true,count:0}));
   check("GREEN: every admitted piece's measured scale is within ±2% of its provenance record AND (for shell/floor module pieces) the nearest 1.0-world-unit GRID LAW cell boundary", allScaleOk, scaleFailures.slice(0, 5).join(" | "));
   check("GREEN: every stamped material family is in the valid vocabulary {stone,wood,iron,roof,glass,cloth}", allFamiliesOk, familyFailures.slice(0, 5).join(" | "));
   check("KGR-1 ⊗ GREEN: every normalized primitive retains every raw TEXCOORD_* accessor and referenced bufferView exactly", allUvsOk, uvFailures.slice(0, 5).join(" | "));
@@ -514,16 +538,18 @@ console.log("\n=== 5. KGR-2: outline policy retained, inverted-hull geometry ret
 console.log("\n=== 6. KGR-3 calibrated v2 indexes + runtime compatibility boundary ===");
 {
   const calibration = JSON.parse(readText("dev/model-foundry/kenney-calibration.json"));
-  check("KGR-3: calibration source owns all 47 assets",
-    calibration.schema === "genesis.kenney-calibration.v1" && Object.keys(calibration.assets || {}).length === 47,
+  check("KGR-3: calibration source owns the exact validated asset set",
+    calibration.schema === "genesis.kenney-calibration.v1" && exactIds(expectedCalibrationIds,Object.keys(calibration.assets || {}).sort()),
     `schema=${calibration.schema} count=${Object.keys(calibration.assets || {}).length}`);
   let allV2 = true, allFrames = true, noButt = true, allHashes = true;
+  const indexedIds=[];
   for (const pack of Object.keys(calibration.packs || {})) {
     const index = JSON.parse(readText(`assets/models-normalized/${pack}/index.json`));
     allV2 = allV2 && index.schema === "genesis.donor-index.v2" && !!index.assets;
     for (const [slug, entry] of Object.entries(index.assets || {})) {
-      allV2 = allV2 && entry.schema === "genesis.donor.v2" && entry.assetId === `${pack}/${slug}`;
-      allHashes = allHashes && entry.sourceSha256 === calibration.assets[`${pack}/${slug}`].sourceSha256;
+      const assetId=`${pack}/${slug}`; indexedIds.push(assetId);
+      allV2 = allV2 && entry.schema === "genesis.donor.v2" && entry.assetId === assetId;
+      allHashes = allHashes && !!calibration.assets[assetId] && entry.sourceSha256 === calibration.assets[assetId].sourceSha256;
       for (const socket of entry.sockets || []) {
         allFrames = allFrames && socket.id && Array.isArray(socket.rotation) && socket.rotation.length === 4 &&
           socket.position.concat(socket.rotation).every(Number.isFinite);
@@ -531,7 +557,12 @@ console.log("\n=== 6. KGR-3 calibrated v2 indexes + runtime compatibility bounda
       }
     }
   }
-  check("KGR-3: both normalized indexes and every entry use donor v2", allV2);
+  indexedIds.sort();
+  check("KGR-3: all normalized indexes and every entry use donor v2", allV2);
+  check("KGR-3: normalized indexes exactly equal calibration ownership",exactIds(expectedCalibrationIds,indexedIds));
+  check("KGR-3 ⊗: missing/extra index ids both fail ownership",
+    !exactIds(expectedCalibrationIds,indexedIds.slice(1))&&
+    !exactIds(expectedCalibrationIds,[...indexedIds,"kenney-unexpected/escape"].sort()));
   check("KGR-3: every index entry retains its calibrated source hash", allHashes);
   check("KGR-3: every v2 socket carries id + finite position/quaternion frame", allFrames);
   check("KGR-3 ⊗: no v2 entry emits a butt-join structural socket", noButt);

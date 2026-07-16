@@ -2,56 +2,2488 @@
   "schema": "genesis.kenney-calibration.v1",
   "algorithmVersion": 1,
   "packs": {
-    "kenney-mini-dungeon": {"sourceUp": "+Y", "sourceForward": "+Z", "canonicalScale": 2.0, "structuralGrid": {"sourceModuleUnits": 1.0, "targetWorldUnits": 2.0, "orientationSteps": 4, "joinMode": "cell-orientation"}},
-    "kenney-modular-dungeon-kit": {"sourceUp": "+Y", "sourceForward": "+Z", "canonicalScale": 0.5, "structuralGrid": {"sourceModuleUnits": 4.0, "targetWorldUnits": 2.0, "orientationSteps": 4, "joinMode": "cell-orientation"}}
+    "kenney-mini-dungeon": {
+      "sourceUp": "+Y",
+      "sourceForward": "+Z",
+      "canonicalScale": 2,
+      "structuralGrid": {
+        "sourceModuleUnits": 1,
+        "targetWorldUnits": 2,
+        "orientationSteps": 4,
+        "joinMode": "cell-orientation"
+      }
+    },
+    "kenney-modular-dungeon-kit": {
+      "sourceUp": "+Y",
+      "sourceForward": "+Z",
+      "canonicalScale": 0.5,
+      "structuralGrid": {
+        "sourceModuleUnits": 4,
+        "targetWorldUnits": 2,
+        "orientationSteps": 4,
+        "joinMode": "cell-orientation"
+      }
+    },
+    "kenney-retro-fantasy-kit": {
+      "sourceUp": "+Y",
+      "sourceForward": "+Z",
+      "canonicalScale": 2,
+      "structuralGrid": null
+    },
+    "kenney-pirate-kit": {
+      "sourceUp": "+Y",
+      "sourceForward": "+Z",
+      "canonicalScale": 0.7,
+      "structuralGrid": null
+    },
+    "kenney-furniture-kit": {
+      "sourceUp": "+Y",
+      "sourceForward": "+Z",
+      "canonicalScale": 1.5,
+      "structuralGrid": null
+    },
+    "kenney-fantasy-town-kit": {
+      "sourceUp": "+Y",
+      "sourceForward": "+Z",
+      "canonicalScale": 1,
+      "structuralGrid": null
+    },
+    "kenney-factory-kit": {
+      "sourceUp": "+Y",
+      "sourceForward": "+Z",
+      "canonicalScale": 1,
+      "structuralGrid": null
+    }
   },
   "assets": {
-    "kenney-mini-dungeon/floor": {"sourceSha256":"1f4e4c6edcb86c5e19fbe97390160c2e844e13a776e0ad3f1c97f001c540fcb5","admissionClass":"DIRECT_MODULATED","category":"floor","rootMaterialFamily":"stone","preTransform":{"translation":[0,0,0],"rotation":[0,0,0,1],"scale":[1,1,1]},"scaleReason":null,"groundOffset":0,"semanticParts":{},"sockets":[],"footprintOverride":null,"qaStatus":"needs-review","notes":[]},
-    "kenney-mini-dungeon/floor-detail": {"sourceSha256":"ae4462e07b402c97bd9f563246a3fbaa43b5ac635ea2dff50c310d4b17cf2b58","admissionClass":"DIRECT_MODULATED","category":"floor","rootMaterialFamily":"stone","preTransform":{"translation":[0,0,0],"rotation":[0,0,0,1],"scale":[1,1,1]},"scaleReason":null,"groundOffset":0,"semanticParts":{},"sockets":[],"footprintOverride":null,"qaStatus":"needs-review","notes":[]},
-    "kenney-mini-dungeon/gate": {"sourceSha256":"50dd5a912d6cb2cb7bf9f1f5c2e0ec721d5265626ce7c16ac8a7eaba3c7cbc13","admissionClass":"PART_DONOR","category":"door-leaf","rootMaterialFamily":"wood","preTransform":{"translation":[0,0,0],"rotation":[0,0,0,1],"scale":[1,1,1]},"scaleReason":null,"groundOffset":0,"semanticParts":{"door-leaf":{"nodePath":"gate/door","detachable":true,"materialFamily":"wood"}},"sockets":[{"id":"hinge-left","type":"hinge","position":[-0.800000011920929,0.75,0],"rotation":[0,0,0,1],"mateRule":"coincident","mateFamily":"doorway-frame","size":[0.05,1.5,0.05],"clearance":{"shape":"box","size":[1.6,2.2,1.6]}}],"footprintOverride":null,"qaStatus":"needs-review","notes":[]},
-    "kenney-mini-dungeon/stairs": {"sourceSha256":"1b954aa217f3f40e1fc97569ee71d9729927afc89c14a6a5a7f7293062b149b2","admissionClass":"PART_DONOR","category":"stairs","rootMaterialFamily":"stone","preTransform":{"translation":[0,0,0],"rotation":[0,0,0,1],"scale":[1,1,1]},"scaleReason":null,"groundOffset":0,"semanticParts":{},"sockets":[],"footprintOverride":null,"qaStatus":"needs-review","notes":[]},
-    "kenney-mini-dungeon/wall": {"sourceSha256":"6c74c80556ebba2143a9c9e2570862791e8bfd7f3bc1308f6fbaeba312911cf7","admissionClass":"PART_DONOR","category":"wall","rootMaterialFamily":"stone","preTransform":{"translation":[0,0,0],"rotation":[0,0,0,1],"scale":[1,1,1]},"scaleReason":null,"groundOffset":0,"semanticParts":{},"sockets":[],"footprintOverride":null,"qaStatus":"needs-review","notes":[]},
-    "kenney-mini-dungeon/wall-half": {"sourceSha256":"71799e86c614e46731b01d2810c51b59dc5f2dc63842dd1d70113ea550e55fc5","admissionClass":"PART_DONOR","category":"wall","rootMaterialFamily":"stone","preTransform":{"translation":[0,0,0],"rotation":[0,0,0,1],"scale":[1,1,1]},"scaleReason":null,"groundOffset":0,"semanticParts":{},"sockets":[],"footprintOverride":null,"qaStatus":"needs-review","notes":[]},
-    "kenney-mini-dungeon/wall-narrow": {"sourceSha256":"9c298db229e7afc76abd4de0156f64cd6511a7d972d012e12c87493130ba094b","admissionClass":"PART_DONOR","category":"wall","rootMaterialFamily":"stone","preTransform":{"translation":[0,0,0],"rotation":[0,0,0,1],"scale":[1,1,1]},"scaleReason":null,"groundOffset":0,"semanticParts":{},"sockets":[],"footprintOverride":null,"qaStatus":"needs-review","notes":[]},
-    "kenney-mini-dungeon/wall-opening": {"sourceSha256":"02ca8ed569571b4723e1cc9ffdee37e0281b11aa384795f459566c2980f10086","admissionClass":"PART_DONOR","category":"doorway-frame","rootMaterialFamily":"stone","preTransform":{"translation":[0,0,0],"rotation":[0,0,0,1],"scale":[1,1,1]},"scaleReason":null,"groundOffset":0,"semanticParts":{},"sockets":[{"id":"hinge-left","type":"hinge","position":[-1,1,1.100000023841858],"rotation":[0,0,0,1],"mateRule":"coincident","mateFamily":"door-leaf","size":[0.05,2,0.05],"clearance":{"shape":"box","size":[2,2.4,2]}}],"footprintOverride":null,"qaStatus":"needs-review","notes":[],"companionLeaf":"gate"},
-    "kenney-modular-dungeon-kit/corridor": {"sourceSha256":"e70f61e46cdfcea4b52e722abdbbdc5cf727461660ccd8556ad4b7a39a5997d5","admissionClass":"DIRECT_MODULATED","category":"corridor-shell","rootMaterialFamily":"stone","preTransform":{"translation":[0,0,0],"rotation":[0,0,0,1],"scale":[1,1,1]},"scaleReason":null,"groundOffset":0,"semanticParts":{},"sockets":[],"footprintOverride":null,"qaStatus":"needs-review","notes":[]},
-    "kenney-modular-dungeon-kit/corridor-corner": {"sourceSha256":"9c8efc6da00f45f1bb9986e596bea9bec5433d776bfd440e315f1f14570edfe8","admissionClass":"DIRECT_MODULATED","category":"corridor-shell","rootMaterialFamily":"stone","preTransform":{"translation":[0,0,0],"rotation":[0,0,0,1],"scale":[1,1,1]},"scaleReason":null,"groundOffset":0,"semanticParts":{},"sockets":[],"footprintOverride":null,"qaStatus":"needs-review","notes":[]},
-    "kenney-modular-dungeon-kit/corridor-end": {"sourceSha256":"aa0cc13ebf45c7d3af0c072f53bf74c9fc1d8b4eec949484bc7ce551615bff66","admissionClass":"DIRECT_MODULATED","category":"corridor-shell","rootMaterialFamily":"stone","preTransform":{"translation":[0,0,0],"rotation":[0,0,0,1],"scale":[1,1,1]},"scaleReason":null,"groundOffset":0,"semanticParts":{},"sockets":[],"footprintOverride":null,"qaStatus":"needs-review","notes":[]},
-    "kenney-modular-dungeon-kit/corridor-intersection": {"sourceSha256":"8391b37a520da2e81ba00f9992f74eb338d4b93263ef180b895508b7096edce8","admissionClass":"DIRECT_MODULATED","category":"corridor-shell","rootMaterialFamily":"stone","preTransform":{"translation":[0,0,0],"rotation":[0,0,0,1],"scale":[1,1,1]},"scaleReason":null,"groundOffset":0,"semanticParts":{},"sockets":[],"footprintOverride":null,"qaStatus":"needs-review","notes":[]},
-    "kenney-modular-dungeon-kit/corridor-junction": {"sourceSha256":"024813c67150354bae6fa9dceb618eae00c918461d38a3e8f2e5d5241df600e7","admissionClass":"DIRECT_MODULATED","category":"corridor-shell","rootMaterialFamily":"stone","preTransform":{"translation":[0,0,0],"rotation":[0,0,0,1],"scale":[1,1,1]},"scaleReason":null,"groundOffset":0,"semanticParts":{},"sockets":[],"footprintOverride":null,"qaStatus":"needs-review","notes":[]},
-    "kenney-modular-dungeon-kit/corridor-transition": {"sourceSha256":"b8628cee5af8ea7ea89024ee5e0eb30c91b217680daed8188e0cb7babb27ab8f","admissionClass":"DIRECT_MODULATED","category":"corridor-shell","rootMaterialFamily":"stone","preTransform":{"translation":[0,0,0],"rotation":[0,0,0,1],"scale":[1,1,1]},"scaleReason":null,"groundOffset":0,"semanticParts":{},"sockets":[],"footprintOverride":null,"qaStatus":"needs-review","notes":[]},
-    "kenney-modular-dungeon-kit/corridor-wide": {"sourceSha256":"0a24c93238ebd1178c522e5effc7f0bfc1963133f2d50635a84c2465d5dd0f43","admissionClass":"DIRECT_MODULATED","category":"corridor-shell","rootMaterialFamily":"stone","preTransform":{"translation":[0,0,0],"rotation":[0,0,0,1],"scale":[1,1,1]},"scaleReason":null,"groundOffset":0,"semanticParts":{},"sockets":[],"footprintOverride":null,"qaStatus":"needs-review","notes":[]},
-    "kenney-modular-dungeon-kit/corridor-wide-corner": {"sourceSha256":"c1613a016eb107379c51c75ae7ced7e5244b27d7904910981584ce73f78a6db1","admissionClass":"DIRECT_MODULATED","category":"corridor-shell","rootMaterialFamily":"stone","preTransform":{"translation":[0,0,0],"rotation":[0,0,0,1],"scale":[1,1,1]},"scaleReason":null,"groundOffset":0,"semanticParts":{},"sockets":[],"footprintOverride":null,"qaStatus":"needs-review","notes":[]},
-    "kenney-modular-dungeon-kit/corridor-wide-end": {"sourceSha256":"ecaef7f049d790a14da8ec6169afd9f81e12e5c9f3629429e07790a998cc197c","admissionClass":"DIRECT_MODULATED","category":"corridor-shell","rootMaterialFamily":"stone","preTransform":{"translation":[0,0,0],"rotation":[0,0,0,1],"scale":[1,1,1]},"scaleReason":null,"groundOffset":0,"semanticParts":{},"sockets":[],"footprintOverride":null,"qaStatus":"needs-review","notes":[]},
-    "kenney-modular-dungeon-kit/corridor-wide-intersection": {"sourceSha256":"258d31b3658fb3015b50be9169259e3c1f4ee4fa0d8b68ed937e8bc7664a461a","admissionClass":"DIRECT_MODULATED","category":"corridor-shell","rootMaterialFamily":"stone","preTransform":{"translation":[0,0,0],"rotation":[0,0,0,1],"scale":[1,1,1]},"scaleReason":null,"groundOffset":0,"semanticParts":{},"sockets":[],"footprintOverride":null,"qaStatus":"needs-review","notes":[]},
-    "kenney-modular-dungeon-kit/corridor-wide-junction": {"sourceSha256":"a1653befb7ae2fe7c99fdb9ec600930be04c0c5e1fd8c0d112ddaf3c9c4aa6f9","admissionClass":"DIRECT_MODULATED","category":"corridor-shell","rootMaterialFamily":"stone","preTransform":{"translation":[0,0,0],"rotation":[0,0,0,1],"scale":[1,1,1]},"scaleReason":null,"groundOffset":0,"semanticParts":{},"sockets":[],"footprintOverride":null,"qaStatus":"needs-review","notes":[]},
-    "kenney-modular-dungeon-kit/gate": {"sourceSha256":"491c9e9980751cf4fee75e3cfc4390075402c0070962ff1d33fe98138ea289c9","admissionClass":"PART_DONOR","category":"arch","rootMaterialFamily":"stone","preTransform":{"translation":[0,0,0],"rotation":[0,0,0,1],"scale":[1,1,1]},"scaleReason":null,"groundOffset":0,"semanticParts":{},"sockets":[],"footprintOverride":null,"qaStatus":"needs-review","notes":[]},
-    "kenney-modular-dungeon-kit/gate-door": {"sourceSha256":"902ac6617d56143799aa2ca73d1113838cb09a9ebc7cbd7c7eeb785504099fd8","admissionClass":"PART_DONOR","category":"doorway-frame","rootMaterialFamily":"stone","preTransform":{"translation":[0,0,0],"rotation":[0,0,0,1],"scale":[1,1,1]},"scaleReason":null,"groundOffset":0,"semanticParts":{"door-leaf":{"nodePath":"gate-door/door","detachable":true,"materialFamily":"wood"}},"sockets":[{"id":"hinge-left","type":"hinge","position":[0.75,0.8989213705062866,-4.321188251654297e-8],"rotation":[0,0,0,1],"mateRule":"coincident","mateFamily":"door-leaf","size":[0.05,2,0.05],"clearance":{"shape":"box","size":[2,2.4,2]}}],"footprintOverride":null,"qaStatus":"needs-review","notes":[]},
-    "kenney-modular-dungeon-kit/gate-door-window": {"sourceSha256":"9fca8b1307efae4c4305c646ab61c1532c06ad389e011de604d58a49912642db","admissionClass":"PART_DONOR","category":"doorway-frame","rootMaterialFamily":"stone","preTransform":{"translation":[0,0,0],"rotation":[0,0,0,1],"scale":[1,1,1]},"scaleReason":null,"groundOffset":0,"semanticParts":{"door-leaf":{"nodePath":"gate-door-window/door","detachable":true,"materialFamily":"wood"}},"sockets":[{"id":"hinge-left","type":"hinge","position":[0.75,0.8989213705062866,1.9520669658501952e-7],"rotation":[0,0,0,1],"mateRule":"coincident","mateFamily":"door-leaf","size":[0.05,2,0.05],"clearance":{"shape":"box","size":[2,2.4,2]}}],"footprintOverride":null,"qaStatus":"needs-review","notes":[]},
-    "kenney-modular-dungeon-kit/gate-metal-bars": {"sourceSha256":"e3a2228906e1601c6d4fbb53d615f03541094177a624168e77b1ab0220e081f4","admissionClass":"PART_DONOR","category":"doorway-frame","rootMaterialFamily":"stone","preTransform":{"translation":[0,0,0],"rotation":[0,0,0,1],"scale":[1,1,1]},"scaleReason":null,"groundOffset":0,"semanticParts":{"door-leaf":{"nodePath":"gate-metal-bars/gate","detachable":true,"materialFamily":"iron"}},"sockets":[{"id":"hinge-left","type":"hinge","position":[-0.7499999642372132,0.8499999642372131,0],"rotation":[0,0,0,1],"mateRule":"coincident","mateFamily":"door-leaf","size":[0.05,2,0.05],"clearance":{"shape":"box","size":[2,2.4,2]}}],"footprintOverride":null,"qaStatus":"needs-review","notes":[]},
-    "kenney-modular-dungeon-kit/room-corner": {"sourceSha256":"2141c0636c857a62b040063adbeef9aba86d1271245a2a83f89ed4ca8f942b98","admissionClass":"DIRECT_MODULATED","category":"room-shell","rootMaterialFamily":"stone","preTransform":{"translation":[0,0,0],"rotation":[0,0,0,1],"scale":[1,1,1]},"scaleReason":null,"groundOffset":0,"semanticParts":{},"sockets":[],"footprintOverride":null,"qaStatus":"needs-review","notes":[]},
-    "kenney-modular-dungeon-kit/room-large": {"sourceSha256":"07873ae13a1ddbc0e067fb91a792c1fd4f26f876e73d415502e558baec40023d","admissionClass":"DIRECT_MODULATED","category":"room-shell","rootMaterialFamily":"stone","preTransform":{"translation":[0,0,0],"rotation":[0,0,0,1],"scale":[1,1,1]},"scaleReason":null,"groundOffset":0,"semanticParts":{},"sockets":[],"footprintOverride":null,"qaStatus":"needs-review","notes":[]},
-    "kenney-modular-dungeon-kit/room-large-variation": {"sourceSha256":"824d58bbc23ab56f4588dbc8d3f89ec91a4d53dfbb75104fe70b37aa3e7540a8","admissionClass":"DIRECT_MODULATED","category":"room-shell","rootMaterialFamily":"stone","preTransform":{"translation":[0,0,0],"rotation":[0,0,0,1],"scale":[1,1,1]},"scaleReason":null,"groundOffset":0,"semanticParts":{},"sockets":[],"footprintOverride":null,"qaStatus":"needs-review","notes":[]},
-    "kenney-modular-dungeon-kit/room-small": {"sourceSha256":"a7e74a5f2c91ce0503190bcda140259545478d7c80f60243d2c13a897e01af20","admissionClass":"DIRECT_MODULATED","category":"room-shell","rootMaterialFamily":"stone","preTransform":{"translation":[0,0,0],"rotation":[0,0,0,1],"scale":[1,1,1]},"scaleReason":null,"groundOffset":0,"semanticParts":{},"sockets":[],"footprintOverride":null,"qaStatus":"needs-review","notes":[]},
-    "kenney-modular-dungeon-kit/room-small-variation": {"sourceSha256":"19069719157fef9d3a24c8176767cd8de9fe5efc3534d6aa7e6967955b142c86","admissionClass":"DIRECT_MODULATED","category":"room-shell","rootMaterialFamily":"stone","preTransform":{"translation":[0,0,0],"rotation":[0,0,0,1],"scale":[1,1,1]},"scaleReason":null,"groundOffset":0,"semanticParts":{},"sockets":[],"footprintOverride":null,"qaStatus":"needs-review","notes":[]},
-    "kenney-modular-dungeon-kit/room-wide": {"sourceSha256":"8b953028a4254ea4e342768cb561e01a02ca7ec5d0b752d3cabf83347de413b0","admissionClass":"DIRECT_MODULATED","category":"room-shell","rootMaterialFamily":"stone","preTransform":{"translation":[0,0,0],"rotation":[0,0,0,1],"scale":[1,1,1]},"scaleReason":null,"groundOffset":0,"semanticParts":{},"sockets":[],"footprintOverride":null,"qaStatus":"needs-review","notes":[]},
-    "kenney-modular-dungeon-kit/room-wide-variation": {"sourceSha256":"c64720b297c4847746f720dd928cc5b70b11ff45c817e39e9d067f18198d9510","admissionClass":"DIRECT_MODULATED","category":"room-shell","rootMaterialFamily":"stone","preTransform":{"translation":[0,0,0],"rotation":[0,0,0,1],"scale":[1,1,1]},"scaleReason":null,"groundOffset":0,"semanticParts":{},"sockets":[],"footprintOverride":null,"qaStatus":"needs-review","notes":[]},
-    "kenney-modular-dungeon-kit/stairs": {"sourceSha256":"1110a2578cc74e4954901cf688b184a191d34bd8eebcb15215a0efc5e9ca50c1","admissionClass":"PART_DONOR","category":"stairs","rootMaterialFamily":"stone","preTransform":{"translation":[0,0,0],"rotation":[0,0,0,1],"scale":[1,1,1]},"scaleReason":null,"groundOffset":0,"semanticParts":{},"sockets":[],"footprintOverride":null,"qaStatus":"needs-review","notes":[]},
-    "kenney-modular-dungeon-kit/stairs-wide": {"sourceSha256":"f620cd90dbd6bbb6c6667d6529d5ded2c26205470b1580163b0c52e2410c2640","admissionClass":"PART_DONOR","category":"stairs","rootMaterialFamily":"stone","preTransform":{"translation":[0,0,0],"rotation":[0,0,0,1],"scale":[1,1,1]},"scaleReason":null,"groundOffset":0,"semanticParts":{},"sockets":[],"footprintOverride":null,"qaStatus":"needs-review","notes":[]},
-    "kenney-modular-dungeon-kit/template-corner": {"sourceSha256":"9b91d52743f284704b15aaa68b2bb2a7041bcd968d2dfd3617ed107f1db235d2","admissionClass":"PART_DONOR","category":"wall-corner","rootMaterialFamily":"stone","preTransform":{"translation":[0,0,0],"rotation":[0,0,0,1],"scale":[1,1,1]},"scaleReason":null,"groundOffset":0,"semanticParts":{},"sockets":[],"footprintOverride":null,"qaStatus":"needs-review","notes":[]},
-    "kenney-modular-dungeon-kit/template-detail": {"sourceSha256":"1e996e74b9e841418009c9292a8247dc6413588bbdcdf298b7f2666be73b6a68","admissionClass":"PART_DONOR","category":"wall","rootMaterialFamily":"stone","preTransform":{"translation":[0,0,0],"rotation":[0,0,0,1],"scale":[1,1,1]},"scaleReason":null,"groundOffset":0,"semanticParts":{},"sockets":[],"footprintOverride":null,"qaStatus":"needs-review","notes":[]},
-    "kenney-modular-dungeon-kit/template-floor": {"sourceSha256":"2499e536e31a15ed29da17f1c8ae500c274fb169c993edb39f4072e486dadc41","admissionClass":"DIRECT_MODULATED","category":"floor","rootMaterialFamily":"stone","preTransform":{"translation":[0,0,0],"rotation":[0,0,0,1],"scale":[1,1,1]},"scaleReason":null,"groundOffset":0,"semanticParts":{},"sockets":[],"footprintOverride":null,"qaStatus":"needs-review","notes":[]},
-    "kenney-modular-dungeon-kit/template-floor-big": {"sourceSha256":"01fa0798d42dbbd7536750de3e33b4ee9acb74eca6523d54d456e884ed1c81da","admissionClass":"DIRECT_MODULATED","category":"floor","rootMaterialFamily":"stone","preTransform":{"translation":[0,0,0],"rotation":[0,0,0,1],"scale":[1,1,1]},"scaleReason":null,"groundOffset":0,"semanticParts":{},"sockets":[],"footprintOverride":null,"qaStatus":"needs-review","notes":[]},
-    "kenney-modular-dungeon-kit/template-floor-detail": {"sourceSha256":"0acd25cbb92a565ad9559c47a3c60dcf6a22ee05ad6dcad2e5b2bf32de63d84d","admissionClass":"DIRECT_MODULATED","category":"floor","rootMaterialFamily":"stone","preTransform":{"translation":[0,0,0],"rotation":[0,0,0,1],"scale":[1,1,1]},"scaleReason":null,"groundOffset":0,"semanticParts":{},"sockets":[],"footprintOverride":null,"qaStatus":"needs-review","notes":[]},
-    "kenney-modular-dungeon-kit/template-floor-detail-a": {"sourceSha256":"403a357e1d59760f171d9def9db4ff01859372bde885dad2322e1519dafa4351","admissionClass":"DIRECT_MODULATED","category":"floor","rootMaterialFamily":"stone","preTransform":{"translation":[0,0,0],"rotation":[0,0,0,1],"scale":[1,1,1]},"scaleReason":null,"groundOffset":0,"semanticParts":{},"sockets":[],"footprintOverride":null,"qaStatus":"needs-review","notes":[]},
-    "kenney-modular-dungeon-kit/template-floor-layer": {"sourceSha256":"384d960dc5c79fd6b966cce37a246177dfd7b40c6131a98a19ee1553497da643","admissionClass":"DIRECT_MODULATED","category":"floor","rootMaterialFamily":"stone","preTransform":{"translation":[0,0,0],"rotation":[0,0,0,1],"scale":[1,1,1]},"scaleReason":null,"groundOffset":0,"semanticParts":{},"sockets":[],"footprintOverride":null,"qaStatus":"needs-review","notes":[]},
-    "kenney-modular-dungeon-kit/template-floor-layer-hole": {"sourceSha256":"e1f1f7338d3b7aae87cfd97301d04bb3d22b5300680141b072d12a11e64062dc","admissionClass":"DIRECT_MODULATED","category":"floor","rootMaterialFamily":"stone","preTransform":{"translation":[0,0,0],"rotation":[0,0,0,1],"scale":[1,1,1]},"scaleReason":null,"groundOffset":0,"semanticParts":{},"sockets":[],"footprintOverride":null,"qaStatus":"needs-review","notes":[]},
-    "kenney-modular-dungeon-kit/template-floor-layer-raised": {"sourceSha256":"7fc682e72dce4eb16e524d0af577f1ccdc0c4681f309fc5f450dd80e4676a9bc","admissionClass":"DIRECT_MODULATED","category":"floor","rootMaterialFamily":"stone","preTransform":{"translation":[0,0,0],"rotation":[0,0,0,1],"scale":[1,1,1]},"scaleReason":null,"groundOffset":0,"semanticParts":{},"sockets":[],"footprintOverride":null,"qaStatus":"needs-review","notes":[]},
-    "kenney-modular-dungeon-kit/template-wall": {"sourceSha256":"58a34df2429968d82b45f0666ed1371cdcaa1e42468c1d4697c04bff47e9fbe5","admissionClass":"PART_DONOR","category":"wall","rootMaterialFamily":"stone","preTransform":{"translation":[0,0,0],"rotation":[0,0,0,1],"scale":[1,1,1]},"scaleReason":null,"groundOffset":0,"semanticParts":{},"sockets":[],"footprintOverride":null,"qaStatus":"needs-review","notes":[]},
-    "kenney-modular-dungeon-kit/template-wall-corner": {"sourceSha256":"fbccb15028552ba779cd765b5d41ea328f3b4a5e2c61be11fda5de87b1b81f9d","admissionClass":"PART_DONOR","category":"wall-corner","rootMaterialFamily":"stone","preTransform":{"translation":[0,0,0],"rotation":[0,0,0,1],"scale":[1,1,1]},"scaleReason":null,"groundOffset":0,"semanticParts":{},"sockets":[],"footprintOverride":null,"qaStatus":"needs-review","notes":[]},
-    "kenney-modular-dungeon-kit/template-wall-detail-a": {"sourceSha256":"441384f33790b7a6fe3caddc8c4637c3a58a0f7ed6015be1011704353b2e4886","admissionClass":"PART_DONOR","category":"wall","rootMaterialFamily":"stone","preTransform":{"translation":[0,0,0],"rotation":[0,0,0,1],"scale":[1,1,1]},"scaleReason":null,"groundOffset":0,"semanticParts":{},"sockets":[],"footprintOverride":null,"qaStatus":"needs-review","notes":[]},
-    "kenney-modular-dungeon-kit/template-wall-half": {"sourceSha256":"69b0cabe772ca9fb88545ef21e303e434a57cde2fb3bd2373627136534168c56","admissionClass":"PART_DONOR","category":"wall","rootMaterialFamily":"stone","preTransform":{"translation":[0,0,0],"rotation":[0,0,0,1],"scale":[1,1,1]},"scaleReason":null,"groundOffset":0,"semanticParts":{},"sockets":[],"footprintOverride":null,"qaStatus":"needs-review","notes":[]},
-    "kenney-modular-dungeon-kit/template-wall-stairs": {"sourceSha256":"c62afcc130d896836e454cc42320372b8d047cc568c32f5401bcc585b5ff1032","admissionClass":"PART_DONOR","category":"wall","rootMaterialFamily":"stone","preTransform":{"translation":[0,0,0],"rotation":[0,0,0,1],"scale":[1,1,1]},"scaleReason":null,"groundOffset":0,"semanticParts":{},"sockets":[],"footprintOverride":null,"qaStatus":"needs-review","notes":[]},
-    "kenney-modular-dungeon-kit/template-wall-top": {"sourceSha256":"253fbea03d92a52c895ab731194ac011c65a2a2d1d53b62b8586723024acd8f7","admissionClass":"PART_DONOR","category":"wall","rootMaterialFamily":"stone","preTransform":{"translation":[0,0,0],"rotation":[0,0,0,1],"scale":[1,1,1]},"scaleReason":null,"groundOffset":0,"semanticParts":{},"sockets":[],"footprintOverride":null,"qaStatus":"needs-review","notes":[]}
+    "kenney-mini-dungeon/floor": {
+      "sourceSha256": "1f4e4c6edcb86c5e19fbe97390160c2e844e13a776e0ad3f1c97f001c540fcb5",
+      "admissionClass": "DIRECT_MODULATED",
+      "category": "floor",
+      "rootMaterialFamily": "stone",
+      "preTransform": {
+        "translation": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "scaleReason": null,
+      "groundOffset": 0,
+      "semanticParts": {},
+      "sockets": [],
+      "footprintOverride": null,
+      "qaStatus": "needs-review",
+      "notes": []
+    },
+    "kenney-mini-dungeon/floor-detail": {
+      "sourceSha256": "ae4462e07b402c97bd9f563246a3fbaa43b5ac635ea2dff50c310d4b17cf2b58",
+      "admissionClass": "DIRECT_MODULATED",
+      "category": "floor",
+      "rootMaterialFamily": "stone",
+      "preTransform": {
+        "translation": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "scaleReason": null,
+      "groundOffset": 0,
+      "semanticParts": {},
+      "sockets": [],
+      "footprintOverride": null,
+      "qaStatus": "needs-review",
+      "notes": []
+    },
+    "kenney-mini-dungeon/gate": {
+      "sourceSha256": "50dd5a912d6cb2cb7bf9f1f5c2e0ec721d5265626ce7c16ac8a7eaba3c7cbc13",
+      "admissionClass": "PART_DONOR",
+      "category": "door-leaf",
+      "rootMaterialFamily": "wood",
+      "preTransform": {
+        "translation": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "scaleReason": null,
+      "groundOffset": 0,
+      "semanticParts": {
+        "door-leaf": {
+          "nodePath": "gate/door",
+          "detachable": true,
+          "materialFamily": "wood"
+        }
+      },
+      "sockets": [
+        {
+          "id": "hinge-left",
+          "type": "hinge",
+          "position": [
+            -0.800000011920929,
+            0.75,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "mateRule": "coincident",
+          "mateFamily": "doorway-frame",
+          "size": [
+            0.05,
+            1.5,
+            0.05
+          ],
+          "clearance": {
+            "shape": "box",
+            "size": [
+              1.6,
+              2.2,
+              1.6
+            ]
+          }
+        }
+      ],
+      "footprintOverride": null,
+      "qaStatus": "needs-review",
+      "notes": []
+    },
+    "kenney-mini-dungeon/stairs": {
+      "sourceSha256": "1b954aa217f3f40e1fc97569ee71d9729927afc89c14a6a5a7f7293062b149b2",
+      "admissionClass": "PART_DONOR",
+      "category": "stairs",
+      "rootMaterialFamily": "stone",
+      "preTransform": {
+        "translation": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "scaleReason": null,
+      "groundOffset": 0,
+      "semanticParts": {},
+      "sockets": [],
+      "footprintOverride": null,
+      "qaStatus": "needs-review",
+      "notes": []
+    },
+    "kenney-mini-dungeon/wall": {
+      "sourceSha256": "6c74c80556ebba2143a9c9e2570862791e8bfd7f3bc1308f6fbaeba312911cf7",
+      "admissionClass": "PART_DONOR",
+      "category": "wall",
+      "rootMaterialFamily": "stone",
+      "preTransform": {
+        "translation": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "scaleReason": null,
+      "groundOffset": 0,
+      "semanticParts": {},
+      "sockets": [],
+      "footprintOverride": null,
+      "qaStatus": "needs-review",
+      "notes": []
+    },
+    "kenney-mini-dungeon/wall-half": {
+      "sourceSha256": "71799e86c614e46731b01d2810c51b59dc5f2dc63842dd1d70113ea550e55fc5",
+      "admissionClass": "PART_DONOR",
+      "category": "wall",
+      "rootMaterialFamily": "stone",
+      "preTransform": {
+        "translation": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "scaleReason": null,
+      "groundOffset": 0,
+      "semanticParts": {},
+      "sockets": [],
+      "footprintOverride": null,
+      "qaStatus": "needs-review",
+      "notes": []
+    },
+    "kenney-mini-dungeon/wall-narrow": {
+      "sourceSha256": "9c298db229e7afc76abd4de0156f64cd6511a7d972d012e12c87493130ba094b",
+      "admissionClass": "PART_DONOR",
+      "category": "wall",
+      "rootMaterialFamily": "stone",
+      "preTransform": {
+        "translation": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "scaleReason": null,
+      "groundOffset": 0,
+      "semanticParts": {},
+      "sockets": [],
+      "footprintOverride": null,
+      "qaStatus": "needs-review",
+      "notes": []
+    },
+    "kenney-mini-dungeon/wall-opening": {
+      "sourceSha256": "02ca8ed569571b4723e1cc9ffdee37e0281b11aa384795f459566c2980f10086",
+      "admissionClass": "PART_DONOR",
+      "category": "doorway-frame",
+      "rootMaterialFamily": "stone",
+      "preTransform": {
+        "translation": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "scaleReason": null,
+      "groundOffset": 0,
+      "semanticParts": {},
+      "sockets": [
+        {
+          "id": "hinge-left",
+          "type": "hinge",
+          "position": [
+            -1,
+            1,
+            1.100000023841858
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "mateRule": "coincident",
+          "mateFamily": "door-leaf",
+          "size": [
+            0.05,
+            2,
+            0.05
+          ],
+          "clearance": {
+            "shape": "box",
+            "size": [
+              2,
+              2.4,
+              2
+            ]
+          }
+        }
+      ],
+      "footprintOverride": null,
+      "qaStatus": "needs-review",
+      "notes": [],
+      "companionLeaf": "gate"
+    },
+    "kenney-modular-dungeon-kit/corridor": {
+      "sourceSha256": "e70f61e46cdfcea4b52e722abdbbdc5cf727461660ccd8556ad4b7a39a5997d5",
+      "admissionClass": "DIRECT_MODULATED",
+      "category": "corridor-shell",
+      "rootMaterialFamily": "stone",
+      "preTransform": {
+        "translation": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "scaleReason": null,
+      "groundOffset": 0,
+      "semanticParts": {},
+      "sockets": [],
+      "footprintOverride": null,
+      "qaStatus": "needs-review",
+      "notes": []
+    },
+    "kenney-modular-dungeon-kit/corridor-corner": {
+      "sourceSha256": "9c8efc6da00f45f1bb9986e596bea9bec5433d776bfd440e315f1f14570edfe8",
+      "admissionClass": "DIRECT_MODULATED",
+      "category": "corridor-shell",
+      "rootMaterialFamily": "stone",
+      "preTransform": {
+        "translation": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "scaleReason": null,
+      "groundOffset": 0,
+      "semanticParts": {},
+      "sockets": [],
+      "footprintOverride": null,
+      "qaStatus": "needs-review",
+      "notes": []
+    },
+    "kenney-modular-dungeon-kit/corridor-end": {
+      "sourceSha256": "aa0cc13ebf45c7d3af0c072f53bf74c9fc1d8b4eec949484bc7ce551615bff66",
+      "admissionClass": "DIRECT_MODULATED",
+      "category": "corridor-shell",
+      "rootMaterialFamily": "stone",
+      "preTransform": {
+        "translation": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "scaleReason": null,
+      "groundOffset": 0,
+      "semanticParts": {},
+      "sockets": [],
+      "footprintOverride": null,
+      "qaStatus": "needs-review",
+      "notes": []
+    },
+    "kenney-modular-dungeon-kit/corridor-intersection": {
+      "sourceSha256": "8391b37a520da2e81ba00f9992f74eb338d4b93263ef180b895508b7096edce8",
+      "admissionClass": "DIRECT_MODULATED",
+      "category": "corridor-shell",
+      "rootMaterialFamily": "stone",
+      "preTransform": {
+        "translation": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "scaleReason": null,
+      "groundOffset": 0,
+      "semanticParts": {},
+      "sockets": [],
+      "footprintOverride": null,
+      "qaStatus": "needs-review",
+      "notes": []
+    },
+    "kenney-modular-dungeon-kit/corridor-junction": {
+      "sourceSha256": "024813c67150354bae6fa9dceb618eae00c918461d38a3e8f2e5d5241df600e7",
+      "admissionClass": "DIRECT_MODULATED",
+      "category": "corridor-shell",
+      "rootMaterialFamily": "stone",
+      "preTransform": {
+        "translation": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "scaleReason": null,
+      "groundOffset": 0,
+      "semanticParts": {},
+      "sockets": [],
+      "footprintOverride": null,
+      "qaStatus": "needs-review",
+      "notes": []
+    },
+    "kenney-modular-dungeon-kit/corridor-transition": {
+      "sourceSha256": "b8628cee5af8ea7ea89024ee5e0eb30c91b217680daed8188e0cb7babb27ab8f",
+      "admissionClass": "DIRECT_MODULATED",
+      "category": "corridor-shell",
+      "rootMaterialFamily": "stone",
+      "preTransform": {
+        "translation": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "scaleReason": null,
+      "groundOffset": 0,
+      "semanticParts": {},
+      "sockets": [],
+      "footprintOverride": null,
+      "qaStatus": "needs-review",
+      "notes": []
+    },
+    "kenney-modular-dungeon-kit/corridor-wide": {
+      "sourceSha256": "0a24c93238ebd1178c522e5effc7f0bfc1963133f2d50635a84c2465d5dd0f43",
+      "admissionClass": "DIRECT_MODULATED",
+      "category": "corridor-shell",
+      "rootMaterialFamily": "stone",
+      "preTransform": {
+        "translation": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "scaleReason": null,
+      "groundOffset": 0,
+      "semanticParts": {},
+      "sockets": [],
+      "footprintOverride": null,
+      "qaStatus": "needs-review",
+      "notes": []
+    },
+    "kenney-modular-dungeon-kit/corridor-wide-corner": {
+      "sourceSha256": "c1613a016eb107379c51c75ae7ced7e5244b27d7904910981584ce73f78a6db1",
+      "admissionClass": "DIRECT_MODULATED",
+      "category": "corridor-shell",
+      "rootMaterialFamily": "stone",
+      "preTransform": {
+        "translation": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "scaleReason": null,
+      "groundOffset": 0,
+      "semanticParts": {},
+      "sockets": [],
+      "footprintOverride": null,
+      "qaStatus": "needs-review",
+      "notes": []
+    },
+    "kenney-modular-dungeon-kit/corridor-wide-end": {
+      "sourceSha256": "ecaef7f049d790a14da8ec6169afd9f81e12e5c9f3629429e07790a998cc197c",
+      "admissionClass": "DIRECT_MODULATED",
+      "category": "corridor-shell",
+      "rootMaterialFamily": "stone",
+      "preTransform": {
+        "translation": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "scaleReason": null,
+      "groundOffset": 0,
+      "semanticParts": {},
+      "sockets": [],
+      "footprintOverride": null,
+      "qaStatus": "needs-review",
+      "notes": []
+    },
+    "kenney-modular-dungeon-kit/corridor-wide-intersection": {
+      "sourceSha256": "258d31b3658fb3015b50be9169259e3c1f4ee4fa0d8b68ed937e8bc7664a461a",
+      "admissionClass": "DIRECT_MODULATED",
+      "category": "corridor-shell",
+      "rootMaterialFamily": "stone",
+      "preTransform": {
+        "translation": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "scaleReason": null,
+      "groundOffset": 0,
+      "semanticParts": {},
+      "sockets": [],
+      "footprintOverride": null,
+      "qaStatus": "needs-review",
+      "notes": []
+    },
+    "kenney-modular-dungeon-kit/corridor-wide-junction": {
+      "sourceSha256": "a1653befb7ae2fe7c99fdb9ec600930be04c0c5e1fd8c0d112ddaf3c9c4aa6f9",
+      "admissionClass": "DIRECT_MODULATED",
+      "category": "corridor-shell",
+      "rootMaterialFamily": "stone",
+      "preTransform": {
+        "translation": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "scaleReason": null,
+      "groundOffset": 0,
+      "semanticParts": {},
+      "sockets": [],
+      "footprintOverride": null,
+      "qaStatus": "needs-review",
+      "notes": []
+    },
+    "kenney-modular-dungeon-kit/gate": {
+      "sourceSha256": "491c9e9980751cf4fee75e3cfc4390075402c0070962ff1d33fe98138ea289c9",
+      "admissionClass": "PART_DONOR",
+      "category": "arch",
+      "rootMaterialFamily": "stone",
+      "preTransform": {
+        "translation": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "scaleReason": null,
+      "groundOffset": 0,
+      "semanticParts": {},
+      "sockets": [],
+      "footprintOverride": null,
+      "qaStatus": "needs-review",
+      "notes": []
+    },
+    "kenney-modular-dungeon-kit/gate-door": {
+      "sourceSha256": "902ac6617d56143799aa2ca73d1113838cb09a9ebc7cbd7c7eeb785504099fd8",
+      "admissionClass": "PART_DONOR",
+      "category": "doorway-frame",
+      "rootMaterialFamily": "stone",
+      "preTransform": {
+        "translation": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "scaleReason": null,
+      "groundOffset": 0,
+      "semanticParts": {
+        "door-leaf": {
+          "nodePath": "gate-door/door",
+          "detachable": true,
+          "materialFamily": "wood"
+        }
+      },
+      "sockets": [
+        {
+          "id": "hinge-left",
+          "type": "hinge",
+          "position": [
+            0.75,
+            0.8989213705062866,
+            -4.321188251654297e-8
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "mateRule": "coincident",
+          "mateFamily": "door-leaf",
+          "size": [
+            0.05,
+            2,
+            0.05
+          ],
+          "clearance": {
+            "shape": "box",
+            "size": [
+              2,
+              2.4,
+              2
+            ]
+          }
+        }
+      ],
+      "footprintOverride": null,
+      "qaStatus": "needs-review",
+      "notes": []
+    },
+    "kenney-modular-dungeon-kit/gate-door-window": {
+      "sourceSha256": "9fca8b1307efae4c4305c646ab61c1532c06ad389e011de604d58a49912642db",
+      "admissionClass": "PART_DONOR",
+      "category": "doorway-frame",
+      "rootMaterialFamily": "stone",
+      "preTransform": {
+        "translation": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "scaleReason": null,
+      "groundOffset": 0,
+      "semanticParts": {
+        "door-leaf": {
+          "nodePath": "gate-door-window/door",
+          "detachable": true,
+          "materialFamily": "wood"
+        }
+      },
+      "sockets": [
+        {
+          "id": "hinge-left",
+          "type": "hinge",
+          "position": [
+            0.75,
+            0.8989213705062866,
+            1.9520669658501952e-7
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "mateRule": "coincident",
+          "mateFamily": "door-leaf",
+          "size": [
+            0.05,
+            2,
+            0.05
+          ],
+          "clearance": {
+            "shape": "box",
+            "size": [
+              2,
+              2.4,
+              2
+            ]
+          }
+        }
+      ],
+      "footprintOverride": null,
+      "qaStatus": "needs-review",
+      "notes": []
+    },
+    "kenney-modular-dungeon-kit/gate-metal-bars": {
+      "sourceSha256": "e3a2228906e1601c6d4fbb53d615f03541094177a624168e77b1ab0220e081f4",
+      "admissionClass": "PART_DONOR",
+      "category": "doorway-frame",
+      "rootMaterialFamily": "stone",
+      "preTransform": {
+        "translation": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "scaleReason": null,
+      "groundOffset": 0,
+      "semanticParts": {
+        "door-leaf": {
+          "nodePath": "gate-metal-bars/gate",
+          "detachable": true,
+          "materialFamily": "iron"
+        }
+      },
+      "sockets": [
+        {
+          "id": "hinge-left",
+          "type": "hinge",
+          "position": [
+            -0.7499999642372132,
+            0.8499999642372131,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "mateRule": "coincident",
+          "mateFamily": "door-leaf",
+          "size": [
+            0.05,
+            2,
+            0.05
+          ],
+          "clearance": {
+            "shape": "box",
+            "size": [
+              2,
+              2.4,
+              2
+            ]
+          }
+        }
+      ],
+      "footprintOverride": null,
+      "qaStatus": "needs-review",
+      "notes": []
+    },
+    "kenney-modular-dungeon-kit/room-corner": {
+      "sourceSha256": "2141c0636c857a62b040063adbeef9aba86d1271245a2a83f89ed4ca8f942b98",
+      "admissionClass": "DIRECT_MODULATED",
+      "category": "room-shell",
+      "rootMaterialFamily": "stone",
+      "preTransform": {
+        "translation": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "scaleReason": null,
+      "groundOffset": 0,
+      "semanticParts": {},
+      "sockets": [],
+      "footprintOverride": null,
+      "qaStatus": "needs-review",
+      "notes": []
+    },
+    "kenney-modular-dungeon-kit/room-large": {
+      "sourceSha256": "07873ae13a1ddbc0e067fb91a792c1fd4f26f876e73d415502e558baec40023d",
+      "admissionClass": "DIRECT_MODULATED",
+      "category": "room-shell",
+      "rootMaterialFamily": "stone",
+      "preTransform": {
+        "translation": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "scaleReason": null,
+      "groundOffset": 0,
+      "semanticParts": {},
+      "sockets": [],
+      "footprintOverride": null,
+      "qaStatus": "needs-review",
+      "notes": []
+    },
+    "kenney-modular-dungeon-kit/room-large-variation": {
+      "sourceSha256": "824d58bbc23ab56f4588dbc8d3f89ec91a4d53dfbb75104fe70b37aa3e7540a8",
+      "admissionClass": "DIRECT_MODULATED",
+      "category": "room-shell",
+      "rootMaterialFamily": "stone",
+      "preTransform": {
+        "translation": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "scaleReason": null,
+      "groundOffset": 0,
+      "semanticParts": {},
+      "sockets": [],
+      "footprintOverride": null,
+      "qaStatus": "needs-review",
+      "notes": []
+    },
+    "kenney-modular-dungeon-kit/room-small": {
+      "sourceSha256": "a7e74a5f2c91ce0503190bcda140259545478d7c80f60243d2c13a897e01af20",
+      "admissionClass": "DIRECT_MODULATED",
+      "category": "room-shell",
+      "rootMaterialFamily": "stone",
+      "preTransform": {
+        "translation": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "scaleReason": null,
+      "groundOffset": 0,
+      "semanticParts": {},
+      "sockets": [],
+      "footprintOverride": null,
+      "qaStatus": "needs-review",
+      "notes": []
+    },
+    "kenney-modular-dungeon-kit/room-small-variation": {
+      "sourceSha256": "19069719157fef9d3a24c8176767cd8de9fe5efc3534d6aa7e6967955b142c86",
+      "admissionClass": "DIRECT_MODULATED",
+      "category": "room-shell",
+      "rootMaterialFamily": "stone",
+      "preTransform": {
+        "translation": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "scaleReason": null,
+      "groundOffset": 0,
+      "semanticParts": {},
+      "sockets": [],
+      "footprintOverride": null,
+      "qaStatus": "needs-review",
+      "notes": []
+    },
+    "kenney-modular-dungeon-kit/room-wide": {
+      "sourceSha256": "8b953028a4254ea4e342768cb561e01a02ca7ec5d0b752d3cabf83347de413b0",
+      "admissionClass": "DIRECT_MODULATED",
+      "category": "room-shell",
+      "rootMaterialFamily": "stone",
+      "preTransform": {
+        "translation": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "scaleReason": null,
+      "groundOffset": 0,
+      "semanticParts": {},
+      "sockets": [],
+      "footprintOverride": null,
+      "qaStatus": "needs-review",
+      "notes": []
+    },
+    "kenney-modular-dungeon-kit/room-wide-variation": {
+      "sourceSha256": "c64720b297c4847746f720dd928cc5b70b11ff45c817e39e9d067f18198d9510",
+      "admissionClass": "DIRECT_MODULATED",
+      "category": "room-shell",
+      "rootMaterialFamily": "stone",
+      "preTransform": {
+        "translation": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "scaleReason": null,
+      "groundOffset": 0,
+      "semanticParts": {},
+      "sockets": [],
+      "footprintOverride": null,
+      "qaStatus": "needs-review",
+      "notes": []
+    },
+    "kenney-modular-dungeon-kit/stairs": {
+      "sourceSha256": "1110a2578cc74e4954901cf688b184a191d34bd8eebcb15215a0efc5e9ca50c1",
+      "admissionClass": "PART_DONOR",
+      "category": "stairs",
+      "rootMaterialFamily": "stone",
+      "preTransform": {
+        "translation": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "scaleReason": null,
+      "groundOffset": 0,
+      "semanticParts": {},
+      "sockets": [],
+      "footprintOverride": null,
+      "qaStatus": "needs-review",
+      "notes": []
+    },
+    "kenney-modular-dungeon-kit/stairs-wide": {
+      "sourceSha256": "f620cd90dbd6bbb6c6667d6529d5ded2c26205470b1580163b0c52e2410c2640",
+      "admissionClass": "PART_DONOR",
+      "category": "stairs",
+      "rootMaterialFamily": "stone",
+      "preTransform": {
+        "translation": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "scaleReason": null,
+      "groundOffset": 0,
+      "semanticParts": {},
+      "sockets": [],
+      "footprintOverride": null,
+      "qaStatus": "needs-review",
+      "notes": []
+    },
+    "kenney-modular-dungeon-kit/template-corner": {
+      "sourceSha256": "9b91d52743f284704b15aaa68b2bb2a7041bcd968d2dfd3617ed107f1db235d2",
+      "admissionClass": "PART_DONOR",
+      "category": "wall-corner",
+      "rootMaterialFamily": "stone",
+      "preTransform": {
+        "translation": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "scaleReason": null,
+      "groundOffset": 0,
+      "semanticParts": {},
+      "sockets": [],
+      "footprintOverride": null,
+      "qaStatus": "needs-review",
+      "notes": []
+    },
+    "kenney-modular-dungeon-kit/template-detail": {
+      "sourceSha256": "1e996e74b9e841418009c9292a8247dc6413588bbdcdf298b7f2666be73b6a68",
+      "admissionClass": "PART_DONOR",
+      "category": "wall",
+      "rootMaterialFamily": "stone",
+      "preTransform": {
+        "translation": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "scaleReason": null,
+      "groundOffset": 0,
+      "semanticParts": {},
+      "sockets": [],
+      "footprintOverride": null,
+      "qaStatus": "needs-review",
+      "notes": []
+    },
+    "kenney-modular-dungeon-kit/template-floor": {
+      "sourceSha256": "2499e536e31a15ed29da17f1c8ae500c274fb169c993edb39f4072e486dadc41",
+      "admissionClass": "DIRECT_MODULATED",
+      "category": "floor",
+      "rootMaterialFamily": "stone",
+      "preTransform": {
+        "translation": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "scaleReason": null,
+      "groundOffset": 0,
+      "semanticParts": {},
+      "sockets": [],
+      "footprintOverride": null,
+      "qaStatus": "needs-review",
+      "notes": []
+    },
+    "kenney-modular-dungeon-kit/template-floor-big": {
+      "sourceSha256": "01fa0798d42dbbd7536750de3e33b4ee9acb74eca6523d54d456e884ed1c81da",
+      "admissionClass": "DIRECT_MODULATED",
+      "category": "floor",
+      "rootMaterialFamily": "stone",
+      "preTransform": {
+        "translation": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "scaleReason": null,
+      "groundOffset": 0,
+      "semanticParts": {},
+      "sockets": [],
+      "footprintOverride": null,
+      "qaStatus": "needs-review",
+      "notes": []
+    },
+    "kenney-modular-dungeon-kit/template-floor-detail": {
+      "sourceSha256": "0acd25cbb92a565ad9559c47a3c60dcf6a22ee05ad6dcad2e5b2bf32de63d84d",
+      "admissionClass": "DIRECT_MODULATED",
+      "category": "floor",
+      "rootMaterialFamily": "stone",
+      "preTransform": {
+        "translation": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "scaleReason": null,
+      "groundOffset": 0,
+      "semanticParts": {},
+      "sockets": [],
+      "footprintOverride": null,
+      "qaStatus": "needs-review",
+      "notes": []
+    },
+    "kenney-modular-dungeon-kit/template-floor-detail-a": {
+      "sourceSha256": "403a357e1d59760f171d9def9db4ff01859372bde885dad2322e1519dafa4351",
+      "admissionClass": "DIRECT_MODULATED",
+      "category": "floor",
+      "rootMaterialFamily": "stone",
+      "preTransform": {
+        "translation": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "scaleReason": null,
+      "groundOffset": 0,
+      "semanticParts": {},
+      "sockets": [],
+      "footprintOverride": null,
+      "qaStatus": "needs-review",
+      "notes": []
+    },
+    "kenney-modular-dungeon-kit/template-floor-layer": {
+      "sourceSha256": "384d960dc5c79fd6b966cce37a246177dfd7b40c6131a98a19ee1553497da643",
+      "admissionClass": "DIRECT_MODULATED",
+      "category": "floor",
+      "rootMaterialFamily": "stone",
+      "preTransform": {
+        "translation": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "scaleReason": null,
+      "groundOffset": 0,
+      "semanticParts": {},
+      "sockets": [],
+      "footprintOverride": null,
+      "qaStatus": "needs-review",
+      "notes": []
+    },
+    "kenney-modular-dungeon-kit/template-floor-layer-hole": {
+      "sourceSha256": "e1f1f7338d3b7aae87cfd97301d04bb3d22b5300680141b072d12a11e64062dc",
+      "admissionClass": "DIRECT_MODULATED",
+      "category": "floor",
+      "rootMaterialFamily": "stone",
+      "preTransform": {
+        "translation": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "scaleReason": null,
+      "groundOffset": 0,
+      "semanticParts": {},
+      "sockets": [],
+      "footprintOverride": null,
+      "qaStatus": "needs-review",
+      "notes": []
+    },
+    "kenney-modular-dungeon-kit/template-floor-layer-raised": {
+      "sourceSha256": "7fc682e72dce4eb16e524d0af577f1ccdc0c4681f309fc5f450dd80e4676a9bc",
+      "admissionClass": "DIRECT_MODULATED",
+      "category": "floor",
+      "rootMaterialFamily": "stone",
+      "preTransform": {
+        "translation": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "scaleReason": null,
+      "groundOffset": 0,
+      "semanticParts": {},
+      "sockets": [],
+      "footprintOverride": null,
+      "qaStatus": "needs-review",
+      "notes": []
+    },
+    "kenney-modular-dungeon-kit/template-wall": {
+      "sourceSha256": "58a34df2429968d82b45f0666ed1371cdcaa1e42468c1d4697c04bff47e9fbe5",
+      "admissionClass": "PART_DONOR",
+      "category": "wall",
+      "rootMaterialFamily": "stone",
+      "preTransform": {
+        "translation": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "scaleReason": null,
+      "groundOffset": 0,
+      "semanticParts": {},
+      "sockets": [],
+      "footprintOverride": null,
+      "qaStatus": "needs-review",
+      "notes": []
+    },
+    "kenney-modular-dungeon-kit/template-wall-corner": {
+      "sourceSha256": "fbccb15028552ba779cd765b5d41ea328f3b4a5e2c61be11fda5de87b1b81f9d",
+      "admissionClass": "PART_DONOR",
+      "category": "wall-corner",
+      "rootMaterialFamily": "stone",
+      "preTransform": {
+        "translation": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "scaleReason": null,
+      "groundOffset": 0,
+      "semanticParts": {},
+      "sockets": [],
+      "footprintOverride": null,
+      "qaStatus": "needs-review",
+      "notes": []
+    },
+    "kenney-modular-dungeon-kit/template-wall-detail-a": {
+      "sourceSha256": "441384f33790b7a6fe3caddc8c4637c3a58a0f7ed6015be1011704353b2e4886",
+      "admissionClass": "PART_DONOR",
+      "category": "wall",
+      "rootMaterialFamily": "stone",
+      "preTransform": {
+        "translation": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "scaleReason": null,
+      "groundOffset": 0,
+      "semanticParts": {},
+      "sockets": [],
+      "footprintOverride": null,
+      "qaStatus": "needs-review",
+      "notes": []
+    },
+    "kenney-modular-dungeon-kit/template-wall-half": {
+      "sourceSha256": "69b0cabe772ca9fb88545ef21e303e434a57cde2fb3bd2373627136534168c56",
+      "admissionClass": "PART_DONOR",
+      "category": "wall",
+      "rootMaterialFamily": "stone",
+      "preTransform": {
+        "translation": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "scaleReason": null,
+      "groundOffset": 0,
+      "semanticParts": {},
+      "sockets": [],
+      "footprintOverride": null,
+      "qaStatus": "needs-review",
+      "notes": []
+    },
+    "kenney-modular-dungeon-kit/template-wall-stairs": {
+      "sourceSha256": "c62afcc130d896836e454cc42320372b8d047cc568c32f5401bcc585b5ff1032",
+      "admissionClass": "PART_DONOR",
+      "category": "wall",
+      "rootMaterialFamily": "stone",
+      "preTransform": {
+        "translation": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "scaleReason": null,
+      "groundOffset": 0,
+      "semanticParts": {},
+      "sockets": [],
+      "footprintOverride": null,
+      "qaStatus": "needs-review",
+      "notes": []
+    },
+    "kenney-modular-dungeon-kit/template-wall-top": {
+      "sourceSha256": "253fbea03d92a52c895ab731194ac011c65a2a2d1d53b62b8586723024acd8f7",
+      "admissionClass": "PART_DONOR",
+      "category": "wall",
+      "rootMaterialFamily": "stone",
+      "preTransform": {
+        "translation": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "scaleReason": null,
+      "groundOffset": 0,
+      "semanticParts": {},
+      "sockets": [],
+      "footprintOverride": null,
+      "qaStatus": "needs-review",
+      "notes": []
+    },
+    "kenney-retro-fantasy-kit/detail-barrel": {
+      "sourceSha256": "4262d0d3c8ac39bc10c0bb96e9b687d3bd1cc4a79df12b86fef37ebfd24fbb1b",
+      "admissionClass": "PART_DONOR",
+      "category": "container",
+      "rootMaterialFamily": "wood",
+      "preTransform": {
+        "translation": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "scaleReason": null,
+      "groundOffset": 0,
+      "semanticParts": {},
+      "sockets": [
+        {
+          "id": "floor-mount",
+          "type": "floor-mount",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "mateRule": "coincident",
+          "mateFamily": "floor",
+          "size": [
+            0.492,
+            0.05,
+            0.492
+          ],
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.492,
+              0.6,
+              0.492
+            ]
+          }
+        }
+      ],
+      "footprintOverride": {
+        "center": [
+          0,
+          0
+        ],
+        "halfExtents": [
+          0.246,
+          0.246
+        ],
+        "yawRadians": 0
+      },
+      "qaStatus": "approved-dev",
+      "notes": [
+        "KGR-4C reviewed floor contact; rotationally symmetric +Z forward.",
+        "Raw authored texture unavailable; Genesis-material review required."
+      ]
+    },
+    "kenney-pirate-kit/crate": {
+      "sourceSha256": "b525674e07c8b83667512a8dd93be0d7684358347d0e64d2bb16b156ac382ed1",
+      "admissionClass": "PART_DONOR",
+      "category": "container",
+      "rootMaterialFamily": "wood",
+      "preTransform": {
+        "translation": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "scaleReason": null,
+      "groundOffset": 0,
+      "semanticParts": {},
+      "sockets": [
+        {
+          "id": "floor-mount",
+          "type": "floor-mount",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "mateRule": "coincident",
+          "mateFamily": "floor",
+          "size": [
+            0.7546,
+            0.05,
+            0.9163
+          ],
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.7546,
+              0.539,
+              0.9163
+            ]
+          }
+        }
+      ],
+      "footprintOverride": {
+        "center": [
+          0,
+          0
+        ],
+        "halfExtents": [
+          0.3773,
+          0.45815
+        ],
+        "yawRadians": 0
+      },
+      "qaStatus": "approved-dev",
+      "notes": [
+        "KGR-4C reviewed floor contact; +Z forward.",
+        "Raw authored texture unavailable; Genesis-material review required."
+      ]
+    },
+    "kenney-pirate-kit/chest": {
+      "sourceSha256": "26d26c4c032a12320fe05b5005a72eba96db7167db0d35873639a4b7dcc06bcb",
+      "admissionClass": "PART_DONOR",
+      "category": "container",
+      "rootMaterialFamily": "wood",
+      "preTransform": {
+        "translation": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "scaleReason": null,
+      "groundOffset": 0,
+      "semanticParts": {},
+      "sockets": [
+        {
+          "id": "floor-mount",
+          "type": "floor-mount",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "mateRule": "coincident",
+          "mateFamily": "floor",
+          "size": [
+            0.8925,
+            0.05,
+            0.8925
+          ],
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.8925,
+              0.80325,
+              0.8925
+            ]
+          }
+        }
+      ],
+      "footprintOverride": {
+        "center": [
+          0,
+          0
+        ],
+        "halfExtents": [
+          0.44625,
+          0.44625
+        ],
+        "yawRadians": 0
+      },
+      "qaStatus": "approved-dev",
+      "notes": [
+        "KGR-4C reviewed floor contact; lid hinge at -Z establishes +Z front.",
+        "Raw authored texture unavailable; Genesis-material review required."
+      ]
+    },
+    "kenney-furniture-kit/tableRound": {
+      "sourceSha256": "f8daea9124a542a00b7bdacfddac82dc468573d43e44d7b54dd6316e9695754b",
+      "admissionClass": "PART_DONOR",
+      "category": "furniture",
+      "rootMaterialFamily": "wood",
+      "preTransform": {
+        "translation": [
+          -0.519615225,
+          0,
+          0.6
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "scaleReason": null,
+      "groundOffset": 0.405,
+      "semanticParts": {},
+      "sockets": [
+        {
+          "id": "floor-mount",
+          "type": "floor-mount",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "mateRule": "coincident",
+          "mateFamily": "floor",
+          "size": [
+            1.03923045,
+            0.05,
+            1.2
+          ],
+          "clearance": {
+            "shape": "box",
+            "size": [
+              1.03923045,
+              0.550100941,
+              1.2
+            ]
+          }
+        }
+      ],
+      "footprintOverride": {
+        "center": [
+          0,
+          0
+        ],
+        "halfExtents": [
+          0.519615225,
+          0.6
+        ],
+        "yawRadians": 0
+      },
+      "qaStatus": "approved-dev",
+      "notes": [
+        "KGR-4C reviewed pedestal floor contact; rotationally symmetric +Z forward."
+      ]
+    },
+    "kenney-furniture-kit/benchCushionLow": {
+      "sourceSha256": "d1fac209eae2ea7393beefa4932dacb54d500e8f9932a1b17d2a842527df1b2c",
+      "admissionClass": "PART_DONOR",
+      "category": "furniture",
+      "rootMaterialFamily": "wood",
+      "preTransform": {
+        "translation": [
+          -0.30952380952381,
+          0,
+          0.154761904761905
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "scale": [
+          1.031746031746032,
+          1.031746031746032,
+          1.031746031746032
+        ]
+      },
+      "scaleReason": "semantic-size:height 0.30-0.65u; long axis 0.65-1.80u",
+      "groundOffset": 0,
+      "semanticParts": {},
+      "sockets": [
+        {
+          "id": "floor-mount",
+          "type": "floor-mount",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "mateRule": "coincident",
+          "mateFamily": "floor",
+          "size": [
+            0.65,
+            0.05,
+            0.34047619047619
+          ],
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.65,
+              0.30952380952381,
+              0.34047619047619
+            ]
+          }
+        }
+      ],
+      "footprintOverride": {
+        "center": [
+          0,
+          0
+        ],
+        "halfExtents": [
+          0.325,
+          0.170238095238095
+        ],
+        "yawRadians": 0
+      },
+      "qaStatus": "approved-dev",
+      "notes": [
+        "KGR-4C reviewed low bench floor contact; backless seat uses +Z forward.",
+        "Uniform semantic-size scale replaces impossible bench candidate without distortion."
+      ]
+    },
+    "kenney-furniture-kit/chair": {
+      "sourceSha256": "c8a11eec93e89e31250ba91afc1b8d56c3bec7ae86640fd1239f595ff4180883",
+      "admissionClass": "PART_DONOR",
+      "category": "furniture",
+      "rootMaterialFamily": "wood",
+      "preTransform": {
+        "translation": [
+          -0.15,
+          0,
+          0.15
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "scaleReason": null,
+      "groundOffset": 0,
+      "semanticParts": {},
+      "sockets": [
+        {
+          "id": "floor-mount",
+          "type": "floor-mount",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "mateRule": "coincident",
+          "mateFamily": "floor",
+          "size": [
+            0.3,
+            0.05,
+            0.3
+          ],
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.3,
+              0.705,
+              0.3
+            ]
+          }
+        }
+      ],
+      "footprintOverride": {
+        "center": [
+          0,
+          0
+        ],
+        "halfExtents": [
+          0.15,
+          0.15
+        ],
+        "yawRadians": 0
+      },
+      "qaStatus": "approved-dev",
+      "notes": [
+        "KGR-4C reviewed four-leg floor contact; backrest at -Z establishes +Z front."
+      ]
+    },
+    "kenney-furniture-kit/lampWall": {
+      "sourceSha256": "a9679ecd3be05731846f22ade97c37069598ca7a06dd9319f50230e63a1ea83c",
+      "admissionClass": "PART_DONOR",
+      "category": "practical-light",
+      "rootMaterialFamily": "iron",
+      "preTransform": {
+        "translation": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "scaleReason": null,
+      "groundOffset": 0,
+      "semanticParts": {},
+      "sockets": [
+        {
+          "id": "wall-mount",
+          "type": "wall-mount",
+          "position": [
+            0,
+            0.0696,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "mateRule": "coincident",
+          "mateFamily": "wall",
+          "size": [
+            0.339953061,
+            0.1392,
+            0.05
+          ],
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.339953061,
+              0.1392,
+              0.225504
+            ]
+          }
+        }
+      ],
+      "footprintOverride": {
+        "center": [
+          0,
+          0.112752
+        ],
+        "halfExtents": [
+          0.1699765305,
+          0.112752
+        ],
+        "yawRadians": 0
+      },
+      "qaStatus": "approved-dev",
+      "notes": [
+        "KGR-4C reviewed wall contact at z=0; identity frame +Z faces away from wall.",
+        "Authored metal/lamp primitives share one node; Genesis iron material preserves geometry but not authored emissive separation."
+      ]
+    },
+    "kenney-furniture-kit/lampRoundFloor": {
+      "sourceSha256": "50fe1b5b588edf15bfa9cc880f71a02a4fda6036350b24733d0ef4de5cc5e908",
+      "admissionClass": "PART_DONOR",
+      "category": "practical-light",
+      "rootMaterialFamily": "iron",
+      "preTransform": {
+        "translation": [
+          -0.0899999925,
+          0,
+          0.090000001275
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "scaleReason": null,
+      "groundOffset": 0,
+      "semanticParts": {},
+      "sockets": [
+        {
+          "id": "floor-mount",
+          "type": "floor-mount",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "mateRule": "coincident",
+          "mateFamily": "floor",
+          "size": [
+            0.228059115,
+            0.05,
+            0.26333999745
+          ],
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.228059115,
+              1.29,
+              0.26333999745
+            ]
+          }
+        }
+      ],
+      "footprintOverride": {
+        "center": [
+          0,
+          0
+        ],
+        "halfExtents": [
+          0.1140295575,
+          0.131669998725
+        ],
+        "yawRadians": 0
+      },
+      "qaStatus": "approved-dev",
+      "notes": [
+        "KGR-4C reviewed circular base floor contact; rotationally symmetric +Z forward.",
+        "Authored metal/lamp primitives share one node; Genesis iron material preserves geometry but not authored emissive separation."
+      ]
+    },
+    "kenney-fantasy-town-kit/lantern": {
+      "sourceSha256": "f270637e3083d6e84a30626ee05df2b09597a642985a7f5c3e4ab5bb1c7a8d55",
+      "admissionClass": "PART_DONOR",
+      "category": "practical-light",
+      "rootMaterialFamily": "iron",
+      "preTransform": {
+        "translation": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "scaleReason": null,
+      "groundOffset": 0,
+      "semanticParts": {},
+      "sockets": [
+        {
+          "id": "floor-mount",
+          "type": "floor-mount",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "mateRule": "coincident",
+          "mateFamily": "floor",
+          "size": [
+            0.216448485851288,
+            0.05,
+            0.224319994449616
+          ],
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.216448485851288,
+              1.555999994277954,
+              0.224319994449616
+            ]
+          }
+        }
+      ],
+      "footprintOverride": {
+        "center": [
+          0,
+          0
+        ],
+        "halfExtents": [
+          0.108224242925644,
+          0.112159997224808
+        ],
+        "yawRadians": 0
+      },
+      "qaStatus": "approved-dev",
+      "notes": [
+        "KGR-4C reviewed post base floor contact; rotationally symmetric +Z forward.",
+        "Raw authored texture unavailable; Genesis-material review required."
+      ]
+    },
+    "kenney-factory-kit/lever-double": {
+      "sourceSha256": "b14d1fc30f29a8e8dc56dae7b20a8a988be5155bafcddc726cd8c8ebf0bbe5b9",
+      "admissionClass": "PART_DONOR",
+      "category": "mechanism",
+      "rootMaterialFamily": "iron",
+      "preTransform": {
+        "translation": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "scaleReason": null,
+      "groundOffset": 0,
+      "semanticParts": {},
+      "sockets": [
+        {
+          "id": "floor-mount",
+          "type": "floor-mount",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "mateRule": "coincident",
+          "mateFamily": "floor",
+          "size": [
+            0.54,
+            0.05,
+            0.54
+          ],
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.54,
+              0.375,
+              0.54
+            ]
+          }
+        }
+      ],
+      "footprintOverride": {
+        "center": [
+          0,
+          0
+        ],
+        "halfExtents": [
+          0.27,
+          0.27
+        ],
+        "yawRadians": 0
+      },
+      "qaStatus": "approved-dev",
+      "notes": [
+        "KGR-4C reviewed plinth floor contact; +Z forward.",
+        "Raw authored texture unavailable; Genesis-material review required."
+      ]
+    },
+    "kenney-furniture-kit/bench": {
+      "sourceSha256": "ba05a6d23a5a5a44da016757632070e47ff7587ce10e2f6d6d52328b4cf5489b",
+      "admissionClass": "PART_DONOR",
+      "category": "furniture",
+      "rootMaterialFamily": "wood",
+      "preTransform": {
+        "translation": [
+          -0.3,
+          0,
+          0.15
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "scaleReason": null,
+      "groundOffset": 0,
+      "semanticParts": {},
+      "sockets": [],
+      "footprintOverride": {
+        "center": [
+          0,
+          0
+        ],
+        "halfExtents": [
+          0.3,
+          0.15
+        ],
+        "yawRadians": 0
+      },
+      "qaStatus": "quarantined",
+      "notes": [
+        "KGR-4C ratio proof: raw long/height 0.40/0.47; long >=0.65u requires total scale >=1.625, while height <=0.65u requires total scale <=1.382979.",
+        "Rejected without mount: do not rotate onto a false ground face; replaced by kenney-furniture-kit/benchCushionLow."
+      ]
+    }
   }
 }

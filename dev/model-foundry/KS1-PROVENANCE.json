@@ -1,14 +1,15 @@
 {
   "algorithmVersion": 1,
-  "calibrationHash": "e8ea45872d1683d56cc996a9ff44708ce3c840014242291ba99d1f54efb8007a",
+  "calibrationHash": "f5450be4667690abdc98d5fd7eb9d97a957608bc93d4d1b375e8fbb97c88e259",
   "deviationsAndNotes": [
     "Donor schema v1 point/universal butt-join sockets are superseded by v2 attachment frames and cell-orientation structural placement.",
     "All v2 attachment positions inherited from the KS-1 seed remain needs-review until KGR-4C visual approval."
   ],
   "globalSocketCounts": {
-    "floor-mount": 47,
+    "floor-mount": 56,
     "hinge": 5,
-    "top-surface": 12
+    "top-surface": 12,
+    "wall-mount": 1
   },
   "materialFamiliesObserved": [
     "iron",
@@ -43,16 +44,37 @@
   },
   "normalizerVersion": "kgr3-calibration-v2",
   "packs": {
+    "kenney-factory-kit": {
+      "canonicalScale": 1,
+      "piecesAdmitted": 1,
+      "sourceForward": "+Z",
+      "sourceUp": "+Y",
+      "structuralGrid": null
+    },
+    "kenney-fantasy-town-kit": {
+      "canonicalScale": 1,
+      "piecesAdmitted": 1,
+      "sourceForward": "+Z",
+      "sourceUp": "+Y",
+      "structuralGrid": null
+    },
+    "kenney-furniture-kit": {
+      "canonicalScale": 1.5,
+      "piecesAdmitted": 6,
+      "sourceForward": "+Z",
+      "sourceUp": "+Y",
+      "structuralGrid": null
+    },
     "kenney-mini-dungeon": {
-      "canonicalScale": 2.0,
+      "canonicalScale": 2,
       "piecesAdmitted": 8,
       "sourceForward": "+Z",
       "sourceUp": "+Y",
       "structuralGrid": {
         "joinMode": "cell-orientation",
         "orientationSteps": 4,
-        "sourceModuleUnits": 1.0,
-        "targetWorldUnits": 2.0
+        "sourceModuleUnits": 1,
+        "targetWorldUnits": 2
       }
     },
     "kenney-modular-dungeon-kit": {
@@ -63,12 +85,889 @@
       "structuralGrid": {
         "joinMode": "cell-orientation",
         "orientationSteps": 4,
-        "sourceModuleUnits": 4.0,
-        "targetWorldUnits": 2.0
+        "sourceModuleUnits": 4,
+        "targetWorldUnits": 2
       }
+    },
+    "kenney-pirate-kit": {
+      "canonicalScale": 0.7,
+      "piecesAdmitted": 2,
+      "sourceForward": "+Z",
+      "sourceUp": "+Y",
+      "structuralGrid": null
+    },
+    "kenney-retro-fantasy-kit": {
+      "canonicalScale": 2,
+      "piecesAdmitted": 1,
+      "sourceForward": "+Z",
+      "sourceUp": "+Y",
+      "structuralGrid": null
     }
   },
   "pieces": [
+    {
+      "admissionClass": "PART_DONOR",
+      "assetId": "kenney-factory-kit/lever-double",
+      "bounds": {
+        "aabbMax": [
+          0.26999998092651367,
+          0.37500000596046446,
+          0.26999998092651367
+        ],
+        "aabbMin": [
+          -0.26999998092651367,
+          0.0,
+          -0.26999998092651367
+        ],
+        "footprint": {
+          "center": [
+            0,
+            0
+          ],
+          "halfExtents": [
+            0.27,
+            0.27
+          ],
+          "yawRadians": 0
+        },
+        "footprintSource": "override",
+        "groundY": 0.0
+      },
+      "canonicalScale": 1,
+      "category": "mechanism",
+      "companionLeaf": null,
+      "file": "lever-double.glb",
+      "materialFamilies": [
+        "iron"
+      ],
+      "normalizedFrame": {
+        "forward": "+Z",
+        "sourceToGenesis": [
+          1,
+          0,
+          0,
+          0.0,
+          0,
+          1,
+          0,
+          0.0,
+          0,
+          0,
+          1,
+          0.0,
+          0,
+          0,
+          0,
+          1.0
+        ],
+        "up": "+Y"
+      },
+      "outputFile": "assets/models-normalized/kenney-factory-kit/lever-double.glb",
+      "pack": "kenney-factory-kit",
+      "qaStatus": "approved-dev",
+      "rawDims": [
+        0.5399999618530273,
+        0.37500000596046446,
+        0.5399999618530273
+      ],
+      "recipeHash": "06fa1e65b97cf88a10aa704d58003f566a4198087d2ac02f7d9779c9223900c5",
+      "scaledDims": [
+        0.5399999618530273,
+        0.37500000596046446,
+        0.5399999618530273
+      ],
+      "schema": "genesis.donor.v2",
+      "semanticParts": {},
+      "slug": "lever-double",
+      "socketCounts": {
+        "floor-mount": 1
+      },
+      "sockets": [
+        {
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.54,
+              0.375,
+              0.54
+            ]
+          },
+          "id": "floor-mount",
+          "mateFamily": "floor",
+          "mateRule": "coincident",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "size": [
+            0.54,
+            0.05,
+            0.54
+          ],
+          "type": "floor-mount"
+        }
+      ],
+      "sourceSha256": "b14d1fc30f29a8e8dc56dae7b20a8a988be5155bafcddc726cd8c8ebf0bbe5b9",
+      "structuralGrid": null
+    },
+    {
+      "admissionClass": "PART_DONOR",
+      "assetId": "kenney-fantasy-town-kit/lantern",
+      "bounds": {
+        "aabbMax": [
+          0.10822424292564392,
+          1.555999994277954,
+          0.11215999722480774
+        ],
+        "aabbMin": [
+          -0.10822424292564392,
+          0.0,
+          -0.11215999722480774
+        ],
+        "footprint": {
+          "center": [
+            0,
+            0
+          ],
+          "halfExtents": [
+            0.108224242925644,
+            0.112159997224808
+          ],
+          "yawRadians": 0
+        },
+        "footprintSource": "override",
+        "groundY": 0.0
+      },
+      "canonicalScale": 1,
+      "category": "practical-light",
+      "companionLeaf": null,
+      "file": "lantern.glb",
+      "materialFamilies": [
+        "iron"
+      ],
+      "normalizedFrame": {
+        "forward": "+Z",
+        "sourceToGenesis": [
+          1,
+          0,
+          0,
+          0.0,
+          0,
+          1,
+          0,
+          0.0,
+          0,
+          0,
+          1,
+          0.0,
+          0,
+          0,
+          0,
+          1.0
+        ],
+        "up": "+Y"
+      },
+      "outputFile": "assets/models-normalized/kenney-fantasy-town-kit/lantern.glb",
+      "pack": "kenney-fantasy-town-kit",
+      "qaStatus": "approved-dev",
+      "rawDims": [
+        0.21644848585128784,
+        1.555999994277954,
+        0.22431999444961548
+      ],
+      "recipeHash": "0fb3b8d6c5b87c1ce88cd7fb3f146bffa47df049a05426b84d1dc8fa2ed2f4ed",
+      "scaledDims": [
+        0.21644848585128784,
+        1.555999994277954,
+        0.22431999444961548
+      ],
+      "schema": "genesis.donor.v2",
+      "semanticParts": {},
+      "slug": "lantern",
+      "socketCounts": {
+        "floor-mount": 1
+      },
+      "sockets": [
+        {
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.216448485851288,
+              1.555999994277954,
+              0.224319994449616
+            ]
+          },
+          "id": "floor-mount",
+          "mateFamily": "floor",
+          "mateRule": "coincident",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "size": [
+            0.216448485851288,
+            0.05,
+            0.224319994449616
+          ],
+          "type": "floor-mount"
+        }
+      ],
+      "sourceSha256": "f270637e3083d6e84a30626ee05df2b09597a642985a7f5c3e4ab5bb1c7a8d55",
+      "structuralGrid": null
+    },
+    {
+      "admissionClass": "PART_DONOR",
+      "assetId": "kenney-furniture-kit/bench",
+      "bounds": {
+        "aabbMax": [
+          0.3000000000000001,
+          0.705,
+          0.15
+        ],
+        "aabbMin": [
+          -0.3,
+          0.0,
+          -0.15000000000000005
+        ],
+        "footprint": {
+          "center": [
+            0,
+            0
+          ],
+          "halfExtents": [
+            0.3,
+            0.15
+          ],
+          "yawRadians": 0
+        },
+        "footprintSource": "override",
+        "groundY": 0.0
+      },
+      "canonicalScale": 1.5,
+      "category": "furniture",
+      "companionLeaf": null,
+      "file": "bench.glb",
+      "materialFamilies": [
+        "wood"
+      ],
+      "normalizedFrame": {
+        "forward": "+Z",
+        "sourceToGenesis": [
+          1.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          1.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          1.5,
+          0.0,
+          -0.3,
+          0,
+          0.15,
+          1.0
+        ],
+        "up": "+Y"
+      },
+      "outputFile": "assets/models-normalized/kenney-furniture-kit/bench.glb",
+      "pack": "kenney-furniture-kit",
+      "qaStatus": "quarantined",
+      "rawDims": [
+        0.4,
+        0.47,
+        0.2
+      ],
+      "recipeHash": "06037270f74bc47bf524c7c00d22a3558a346203152d5dcbf8e7f72f091d570c",
+      "scaledDims": [
+        0.6000000000000001,
+        0.705,
+        0.30000000000000004
+      ],
+      "schema": "genesis.donor.v2",
+      "semanticParts": {},
+      "slug": "bench",
+      "socketCounts": {},
+      "sockets": [],
+      "sourceSha256": "ba05a6d23a5a5a44da016757632070e47ff7587ce10e2f6d6d52328b4cf5489b",
+      "structuralGrid": null
+    },
+    {
+      "admissionClass": "PART_DONOR",
+      "assetId": "kenney-furniture-kit/benchCushionLow",
+      "bounds": {
+        "aabbMax": [
+          0.32500004023809503,
+          0.30952380952380965,
+          0.17023809523809547
+        ],
+        "aabbMin": [
+          -0.32500000000000046,
+          0.0,
+          -0.17023809523809508
+        ],
+        "footprint": {
+          "center": [
+            0,
+            0
+          ],
+          "halfExtents": [
+            0.325,
+            0.170238095238095
+          ],
+          "yawRadians": 0
+        },
+        "footprintSource": "override",
+        "groundY": 0.0
+      },
+      "canonicalScale": 1.5,
+      "category": "furniture",
+      "companionLeaf": null,
+      "file": "benchCushionLow.glb",
+      "materialFamilies": [
+        "wood"
+      ],
+      "normalizedFrame": {
+        "forward": "+Z",
+        "sourceToGenesis": [
+          1.5476190476190481,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          1.5476190476190481,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          1.5476190476190481,
+          0.0,
+          -0.30952380952381,
+          0,
+          0.154761904761905,
+          1.0
+        ],
+        "up": "+Y"
+      },
+      "outputFile": "assets/models-normalized/kenney-furniture-kit/benchCushionLow.glb",
+      "pack": "kenney-furniture-kit",
+      "qaStatus": "approved-dev",
+      "rawDims": [
+        0.420000026,
+        0.2,
+        0.22
+      ],
+      "recipeHash": "cccf80c67d89f6524ad92ae38a691127d545fe49ae992844cac1e0bbbfdbce31",
+      "scaledDims": [
+        0.6500000402380954,
+        0.30952380952380965,
+        0.34047619047619054
+      ],
+      "schema": "genesis.donor.v2",
+      "semanticParts": {},
+      "slug": "benchCushionLow",
+      "socketCounts": {
+        "floor-mount": 1
+      },
+      "sockets": [
+        {
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.65,
+              0.30952380952381,
+              0.34047619047619
+            ]
+          },
+          "id": "floor-mount",
+          "mateFamily": "floor",
+          "mateRule": "coincident",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "size": [
+            0.65,
+            0.05,
+            0.34047619047619
+          ],
+          "type": "floor-mount"
+        }
+      ],
+      "sourceSha256": "d1fac209eae2ea7393beefa4932dacb54d500e8f9932a1b17d2a842527df1b2c",
+      "structuralGrid": null
+    },
+    {
+      "admissionClass": "PART_DONOR",
+      "assetId": "kenney-furniture-kit/chair",
+      "bounds": {
+        "aabbMax": [
+          0.15000000000000005,
+          0.705,
+          0.15
+        ],
+        "aabbMin": [
+          -0.15,
+          0.0,
+          -0.15000000000000005
+        ],
+        "footprint": {
+          "center": [
+            0,
+            0
+          ],
+          "halfExtents": [
+            0.15,
+            0.15
+          ],
+          "yawRadians": 0
+        },
+        "footprintSource": "override",
+        "groundY": 0.0
+      },
+      "canonicalScale": 1.5,
+      "category": "furniture",
+      "companionLeaf": null,
+      "file": "chair.glb",
+      "materialFamilies": [
+        "wood"
+      ],
+      "normalizedFrame": {
+        "forward": "+Z",
+        "sourceToGenesis": [
+          1.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          1.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          1.5,
+          0.0,
+          -0.15,
+          0,
+          0.15,
+          1.0
+        ],
+        "up": "+Y"
+      },
+      "outputFile": "assets/models-normalized/kenney-furniture-kit/chair.glb",
+      "pack": "kenney-furniture-kit",
+      "qaStatus": "approved-dev",
+      "rawDims": [
+        0.2,
+        0.47,
+        0.2
+      ],
+      "recipeHash": "70a7630b6e9a6e6f17b89405dd1069b8cd8252c622d074c33a779158b0497d1f",
+      "scaledDims": [
+        0.30000000000000004,
+        0.705,
+        0.30000000000000004
+      ],
+      "schema": "genesis.donor.v2",
+      "semanticParts": {},
+      "slug": "chair",
+      "socketCounts": {
+        "floor-mount": 1
+      },
+      "sockets": [
+        {
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.3,
+              0.705,
+              0.3
+            ]
+          },
+          "id": "floor-mount",
+          "mateFamily": "floor",
+          "mateRule": "coincident",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "size": [
+            0.3,
+            0.05,
+            0.3
+          ],
+          "type": "floor-mount"
+        }
+      ],
+      "sourceSha256": "c8a11eec93e89e31250ba91afc1b8d56c3bec7ae86640fd1239f595ff4180883",
+      "structuralGrid": null
+    },
+    {
+      "admissionClass": "PART_DONOR",
+      "assetId": "kenney-furniture-kit/lampRoundFloor",
+      "bounds": {
+        "aabbMax": [
+          0.1140295575,
+          1.29,
+          0.13166999872500001
+        ],
+        "aabbMin": [
+          -0.1140295575,
+          0.0,
+          -0.13166999872499996
+        ],
+        "footprint": {
+          "center": [
+            0,
+            0
+          ],
+          "halfExtents": [
+            0.1140295575,
+            0.131669998725
+          ],
+          "yawRadians": 0
+        },
+        "footprintSource": "override",
+        "groundY": 0.0
+      },
+      "canonicalScale": 1.5,
+      "category": "practical-light",
+      "companionLeaf": null,
+      "file": "lampRoundFloor.glb",
+      "materialFamilies": [
+        "iron"
+      ],
+      "normalizedFrame": {
+        "forward": "+Z",
+        "sourceToGenesis": [
+          1.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          1.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          1.5,
+          0.0,
+          -0.0899999925,
+          0,
+          0.090000001275,
+          1.0
+        ],
+        "up": "+Y"
+      },
+      "outputFile": "assets/models-normalized/kenney-furniture-kit/lampRoundFloor.glb",
+      "pack": "kenney-furniture-kit",
+      "qaStatus": "approved-dev",
+      "rawDims": [
+        0.15203940999999999,
+        0.86,
+        0.1755599983
+      ],
+      "recipeHash": "6bd79e315ffac693a2d2b027d9bf4199162d841758c4b0ed9173b8538807b65f",
+      "scaledDims": [
+        0.228059115,
+        1.29,
+        0.26333999745
+      ],
+      "schema": "genesis.donor.v2",
+      "semanticParts": {},
+      "slug": "lampRoundFloor",
+      "socketCounts": {
+        "floor-mount": 1
+      },
+      "sockets": [
+        {
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.228059115,
+              1.29,
+              0.26333999745
+            ]
+          },
+          "id": "floor-mount",
+          "mateFamily": "floor",
+          "mateRule": "coincident",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "size": [
+            0.228059115,
+            0.05,
+            0.26333999745
+          ],
+          "type": "floor-mount"
+        }
+      ],
+      "sourceSha256": "50fe1b5b588edf15bfa9cc880f71a02a4fda6036350b24733d0ef4de5cc5e908",
+      "structuralGrid": null
+    },
+    {
+      "admissionClass": "PART_DONOR",
+      "assetId": "kenney-furniture-kit/lampWall",
+      "bounds": {
+        "aabbMax": [
+          0.16997653100999996,
+          0.1392,
+          0.22550399999999995
+        ],
+        "aabbMin": [
+          -0.16997653100999996,
+          0.0,
+          0.0
+        ],
+        "footprint": {
+          "center": [
+            0,
+            0.112752
+          ],
+          "halfExtents": [
+            0.1699765305,
+            0.112752
+          ],
+          "yawRadians": 0
+        },
+        "footprintSource": "override",
+        "groundY": 0.0
+      },
+      "canonicalScale": 1.5,
+      "category": "practical-light",
+      "companionLeaf": null,
+      "file": "lampWall.glb",
+      "materialFamilies": [
+        "iron"
+      ],
+      "normalizedFrame": {
+        "forward": "+Z",
+        "sourceToGenesis": [
+          1.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          1.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          1.5,
+          0.0,
+          0,
+          0,
+          0,
+          1.0
+        ],
+        "up": "+Y"
+      },
+      "outputFile": "assets/models-normalized/kenney-furniture-kit/lampWall.glb",
+      "pack": "kenney-furniture-kit",
+      "qaStatus": "approved-dev",
+      "rawDims": [
+        0.22663537467999997,
+        0.0928,
+        0.15033599999999997
+      ],
+      "recipeHash": "85f3f6c489fad3d5efa9c06ecee7fc6b400bed2c8c87a4abb45ca8cbaf8835b2",
+      "scaledDims": [
+        0.3399530620199999,
+        0.1392,
+        0.22550399999999995
+      ],
+      "schema": "genesis.donor.v2",
+      "semanticParts": {},
+      "slug": "lampWall",
+      "socketCounts": {
+        "wall-mount": 1
+      },
+      "sockets": [
+        {
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.339953061,
+              0.1392,
+              0.225504
+            ]
+          },
+          "id": "wall-mount",
+          "mateFamily": "wall",
+          "mateRule": "coincident",
+          "position": [
+            0,
+            0.0696,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "size": [
+            0.339953061,
+            0.1392,
+            0.05
+          ],
+          "type": "wall-mount"
+        }
+      ],
+      "sourceSha256": "a9679ecd3be05731846f22ade97c37069598ca7a06dd9319f50230e63a1ea83c",
+      "structuralGrid": null
+    },
+    {
+      "admissionClass": "PART_DONOR",
+      "assetId": "kenney-furniture-kit/tableRound",
+      "bounds": {
+        "aabbMax": [
+          0.5196152249999998,
+          0.55010097,
+          0.6
+        ],
+        "aabbMin": [
+          -0.519615225,
+          2.8500000026632222e-08,
+          -0.6000000000000002
+        ],
+        "footprint": {
+          "center": [
+            0,
+            0
+          ],
+          "halfExtents": [
+            0.519615225,
+            0.6
+          ],
+          "yawRadians": 0
+        },
+        "footprintSource": "override",
+        "groundY": 2.8500000026632222e-08
+      },
+      "canonicalScale": 1.5,
+      "category": "furniture",
+      "companionLeaf": null,
+      "file": "tableRound.glb",
+      "materialFamilies": [
+        "wood"
+      ],
+      "normalizedFrame": {
+        "forward": "+Z",
+        "sourceToGenesis": [
+          1.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          1.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          1.5,
+          0.0,
+          -0.519615225,
+          0.405,
+          0.6,
+          1.0
+        ],
+        "up": "+Y"
+      },
+      "outputFile": "assets/models-normalized/kenney-furniture-kit/tableRound.glb",
+      "pack": "kenney-furniture-kit",
+      "qaStatus": "approved-dev",
+      "rawDims": [
+        0.6928203,
+        0.366733961,
+        0.8
+      ],
+      "recipeHash": "f878645f7fc61c5b0dcf0746959aed3f9d0bab89d156ee62d8a4280e69ffd8bf",
+      "scaledDims": [
+        1.0392304499999998,
+        0.5501009415,
+        1.2000000000000002
+      ],
+      "schema": "genesis.donor.v2",
+      "semanticParts": {},
+      "slug": "tableRound",
+      "socketCounts": {
+        "floor-mount": 1
+      },
+      "sockets": [
+        {
+          "clearance": {
+            "shape": "box",
+            "size": [
+              1.03923045,
+              0.550100941,
+              1.2
+            ]
+          },
+          "id": "floor-mount",
+          "mateFamily": "floor",
+          "mateRule": "coincident",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "size": [
+            1.03923045,
+            0.05,
+            1.2
+          ],
+          "type": "floor-mount"
+        }
+      ],
+      "sourceSha256": "f8daea9124a542a00b7bdacfddac82dc468573d43e44d7b54dd6316e9695754b",
+      "structuralGrid": null
+    },
     {
       "admissionClass": "DIRECT_MODULATED",
       "assetId": "kenney-mini-dungeon/floor",
@@ -97,7 +996,7 @@
         "footprintSource": "derived",
         "groundY": 0.0
       },
-      "canonicalScale": 2.0,
+      "canonicalScale": 2,
       "category": "floor",
       "companionLeaf": null,
       "file": "floor.glb",
@@ -107,17 +1006,17 @@
       "normalizedFrame": {
         "forward": "+Z",
         "sourceToGenesis": [
-          2.0,
+          2,
+          0,
+          0,
           0.0,
+          0,
+          2,
+          0,
           0.0,
-          0.0,
-          0.0,
-          2.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          2.0,
+          0,
+          0,
+          2,
           0.0,
           0,
           0,
@@ -134,7 +1033,7 @@
         0.0,
         1.0
       ],
-      "recipeHash": "40620eb3d6db36238d1b78f359156032d2712058efa228b661b6a01c9f994d6b",
+      "recipeHash": "1723660d1364416c6d2127f3d77268979935fbc45cdfb6ee7a7231fbd8df0cfc",
       "scaledDims": [
         2.0,
         0.0,
@@ -213,8 +1112,8 @@
       "structuralGrid": {
         "joinMode": "cell-orientation",
         "orientationSteps": 4,
-        "sourceModuleUnits": 1.0,
-        "targetWorldUnits": 2.0
+        "sourceModuleUnits": 1,
+        "targetWorldUnits": 2
       }
     },
     {
@@ -245,7 +1144,7 @@
         "footprintSource": "derived",
         "groundY": 0.0
       },
-      "canonicalScale": 2.0,
+      "canonicalScale": 2,
       "category": "floor",
       "companionLeaf": null,
       "file": "floor-detail.glb",
@@ -255,17 +1154,17 @@
       "normalizedFrame": {
         "forward": "+Z",
         "sourceToGenesis": [
-          2.0,
+          2,
+          0,
+          0,
           0.0,
+          0,
+          2,
+          0,
           0.0,
-          0.0,
-          0.0,
-          2.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          2.0,
+          0,
+          0,
+          2,
           0.0,
           0,
           0,
@@ -282,7 +1181,7 @@
         0.05000000074505806,
         1.0
       ],
-      "recipeHash": "8eb09edc4a24e6ab0ab3d6963c278d5ba0e3e26b92d8f179e78f23d1313be6cb",
+      "recipeHash": "d32b14182e7d78071f4534cc6ed77662832329fb0746f3a674a997b1be42bdee",
       "scaledDims": [
         2.0,
         0.10000000149011612,
@@ -361,8 +1260,8 @@
       "structuralGrid": {
         "joinMode": "cell-orientation",
         "orientationSteps": 4,
-        "sourceModuleUnits": 1.0,
-        "targetWorldUnits": 2.0
+        "sourceModuleUnits": 1,
+        "targetWorldUnits": 2
       }
     },
     {
@@ -393,7 +1292,7 @@
         "footprintSource": "derived",
         "groundY": 0.0
       },
-      "canonicalScale": 2.0,
+      "canonicalScale": 2,
       "category": "door-leaf",
       "companionLeaf": null,
       "file": "gate.glb",
@@ -403,17 +1302,17 @@
       "normalizedFrame": {
         "forward": "+Z",
         "sourceToGenesis": [
-          2.0,
+          2,
+          0,
+          0,
           0.0,
+          0,
+          2,
+          0,
           0.0,
-          0.0,
-          0.0,
-          2.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          2.0,
+          0,
+          0,
+          2,
           0.0,
           0,
           0,
@@ -430,7 +1329,7 @@
         0.75,
         0.20000001788139343
       ],
-      "recipeHash": "1fa4bb98e678fc2496645311225420ab09263af899193604883ad2db9884808d",
+      "recipeHash": "d659af6a6d1ab4cb58167db73809db63fbb1c0ff29f5f13c4e00ac0592f570a5",
       "scaledDims": [
         1.600000023841858,
         1.5,
@@ -515,8 +1414,8 @@
       "structuralGrid": {
         "joinMode": "cell-orientation",
         "orientationSteps": 4,
-        "sourceModuleUnits": 1.0,
-        "targetWorldUnits": 2.0
+        "sourceModuleUnits": 1,
+        "targetWorldUnits": 2
       }
     },
     {
@@ -547,7 +1446,7 @@
         "footprintSource": "derived",
         "groundY": 0.0
       },
-      "canonicalScale": 2.0,
+      "canonicalScale": 2,
       "category": "stairs",
       "companionLeaf": null,
       "file": "stairs.glb",
@@ -557,17 +1456,17 @@
       "normalizedFrame": {
         "forward": "+Z",
         "sourceToGenesis": [
-          2.0,
+          2,
+          0,
+          0,
           0.0,
+          0,
+          2,
+          0,
           0.0,
-          0.0,
-          0.0,
-          2.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          2.0,
+          0,
+          0,
+          2,
           0.0,
           0,
           0,
@@ -584,7 +1483,7 @@
         0.8999999761581421,
         1.0
       ],
-      "recipeHash": "81e9fce65b5567b2a21395c244311669c55f8a1654d26e5d1f17579bc71c77b5",
+      "recipeHash": "9f0fa8b268ce6ee7710f6c2b368c9dbc03fc977bbfbe366e4f0859861b3dc531",
       "scaledDims": [
         2.0,
         1.7999999523162842,
@@ -663,8 +1562,8 @@
       "structuralGrid": {
         "joinMode": "cell-orientation",
         "orientationSteps": 4,
-        "sourceModuleUnits": 1.0,
-        "targetWorldUnits": 2.0
+        "sourceModuleUnits": 1,
+        "targetWorldUnits": 2
       }
     },
     {
@@ -695,7 +1594,7 @@
         "footprintSource": "derived",
         "groundY": 0.0
       },
-      "canonicalScale": 2.0,
+      "canonicalScale": 2,
       "category": "wall",
       "companionLeaf": null,
       "file": "wall.glb",
@@ -705,17 +1604,17 @@
       "normalizedFrame": {
         "forward": "+Z",
         "sourceToGenesis": [
-          2.0,
+          2,
+          0,
+          0,
           0.0,
+          0,
+          2,
+          0,
           0.0,
-          0.0,
-          0.0,
-          2.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          2.0,
+          0,
+          0,
+          2,
           0.0,
           0,
           0,
@@ -732,7 +1631,7 @@
         1.100000023841858,
         1.0
       ],
-      "recipeHash": "29c6ac85e1412050aef253ff903688ff515a6d0b4ecafcde62bc89fc7972d1b5",
+      "recipeHash": "bb908e1c742ac79a986a2452a8072fea15340a0b68fee9f0b2893b5c851dd749",
       "scaledDims": [
         2.0,
         2.200000047683716,
@@ -780,8 +1679,8 @@
       "structuralGrid": {
         "joinMode": "cell-orientation",
         "orientationSteps": 4,
-        "sourceModuleUnits": 1.0,
-        "targetWorldUnits": 2.0
+        "sourceModuleUnits": 1,
+        "targetWorldUnits": 2
       }
     },
     {
@@ -812,7 +1711,7 @@
         "footprintSource": "derived",
         "groundY": 0.0
       },
-      "canonicalScale": 2.0,
+      "canonicalScale": 2,
       "category": "wall",
       "companionLeaf": null,
       "file": "wall-half.glb",
@@ -822,17 +1721,17 @@
       "normalizedFrame": {
         "forward": "+Z",
         "sourceToGenesis": [
-          2.0,
+          2,
+          0,
+          0,
           0.0,
+          0,
+          2,
+          0,
           0.0,
-          0.0,
-          0.0,
-          2.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          2.0,
+          0,
+          0,
+          2,
           0.0,
           0,
           0,
@@ -849,7 +1748,7 @@
         1.0,
         1.0
       ],
-      "recipeHash": "b9c78837ae8c9c7b811f5b7e32269af03614a99f2dd68748b860434dfd68c14e",
+      "recipeHash": "8a6e0346411cca3615799c6e86098b7d5286d0442c34d745147c8079098ac4d2",
       "scaledDims": [
         2.0,
         2.0,
@@ -897,8 +1796,8 @@
       "structuralGrid": {
         "joinMode": "cell-orientation",
         "orientationSteps": 4,
-        "sourceModuleUnits": 1.0,
-        "targetWorldUnits": 2.0
+        "sourceModuleUnits": 1,
+        "targetWorldUnits": 2
       }
     },
     {
@@ -929,7 +1828,7 @@
         "footprintSource": "derived",
         "groundY": 0.0
       },
-      "canonicalScale": 2.0,
+      "canonicalScale": 2,
       "category": "wall",
       "companionLeaf": null,
       "file": "wall-narrow.glb",
@@ -939,17 +1838,17 @@
       "normalizedFrame": {
         "forward": "+Z",
         "sourceToGenesis": [
-          2.0,
+          2,
+          0,
+          0,
           0.0,
+          0,
+          2,
+          0,
           0.0,
-          0.0,
-          0.0,
-          2.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          2.0,
+          0,
+          0,
+          2,
           0.0,
           0,
           0,
@@ -966,7 +1865,7 @@
         1.0,
         1.0
       ],
-      "recipeHash": "25db6ebf567446468f22f4bc372b485035fbea4bbf0c8081ea2e9e61c0b59681",
+      "recipeHash": "baa997e2a5e033a79fb38ad61e823bd673d4d6c4de7e3246b24a9a362b44d9b2",
       "scaledDims": [
         2.0,
         2.0,
@@ -1014,8 +1913,8 @@
       "structuralGrid": {
         "joinMode": "cell-orientation",
         "orientationSteps": 4,
-        "sourceModuleUnits": 1.0,
-        "targetWorldUnits": 2.0
+        "sourceModuleUnits": 1,
+        "targetWorldUnits": 2
       }
     },
     {
@@ -1046,7 +1945,7 @@
         "footprintSource": "derived",
         "groundY": 0.0
       },
-      "canonicalScale": 2.0,
+      "canonicalScale": 2,
       "category": "doorway-frame",
       "companionLeaf": "gate",
       "file": "wall-opening.glb",
@@ -1056,17 +1955,17 @@
       "normalizedFrame": {
         "forward": "+Z",
         "sourceToGenesis": [
-          2.0,
+          2,
+          0,
+          0,
           0.0,
+          0,
+          2,
+          0,
           0.0,
-          0.0,
-          0.0,
-          2.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          2.0,
+          0,
+          0,
+          2,
           0.0,
           0,
           0,
@@ -1083,7 +1982,7 @@
         1.0,
         1.050000011920929
       ],
-      "recipeHash": "394f7fcfe5b12e3ab373b231579638d66e8ec2747172e054b055a3cd415bf163",
+      "recipeHash": "1098f9398d5296b9af3ddafb58bdd8c45de7f1d183d28f43fdb894e28c304243",
       "scaledDims": [
         2.0,
         2.0,
@@ -1162,8 +2061,8 @@
       "structuralGrid": {
         "joinMode": "cell-orientation",
         "orientationSteps": 4,
-        "sourceModuleUnits": 1.0,
-        "targetWorldUnits": 2.0
+        "sourceModuleUnits": 1,
+        "targetWorldUnits": 2
       }
     },
     {
@@ -1231,7 +2130,7 @@
         4.150000095367434,
         4.000000953674316
       ],
-      "recipeHash": "7f3854f552efef87e0ce5b44a8add13d7bb4b4aff5a65c84209583fed3d79ad2",
+      "recipeHash": "10b191b71dfcdbc46fadd14ae076a57f3911f722fb29a94d7017ed60bcb78678",
       "scaledDims": [
         2.0,
         2.075000047683717,
@@ -1279,8 +2178,8 @@
       "structuralGrid": {
         "joinMode": "cell-orientation",
         "orientationSteps": 4,
-        "sourceModuleUnits": 4.0,
-        "targetWorldUnits": 2.0
+        "sourceModuleUnits": 4,
+        "targetWorldUnits": 2
       }
     },
     {
@@ -1348,7 +2247,7 @@
         4.233285903930681,
         4.000000238418579
       ],
-      "recipeHash": "3ddad1b76e5c9227509d0c3255cc2f980381eab5230819baca0a2112803a73bc",
+      "recipeHash": "cee84059fd27351a2f49d61ff608369cf288196f87e38dcc401794e1e75436c4",
       "scaledDims": [
         2.0,
         2.1166429519653405,
@@ -1396,8 +2295,8 @@
       "structuralGrid": {
         "joinMode": "cell-orientation",
         "orientationSteps": 4,
-        "sourceModuleUnits": 4.0,
-        "targetWorldUnits": 2.0
+        "sourceModuleUnits": 4,
+        "targetWorldUnits": 2
       }
     },
     {
@@ -1465,7 +2364,7 @@
         4.150000095367434,
         4.0000035762786865
       ],
-      "recipeHash": "663f744b03fb75e7cdb4fa5547079417b5fc3bc789cbe5724aab915bc7c74bc9",
+      "recipeHash": "ceba23f8863b98cfef9dee95708b22417b11884b3ee6d7b66ec5cc55a19b3ee8",
       "scaledDims": [
         2.000001549720764,
         2.075000047683717,
@@ -1513,8 +2412,8 @@
       "structuralGrid": {
         "joinMode": "cell-orientation",
         "orientationSteps": 4,
-        "sourceModuleUnits": 4.0,
-        "targetWorldUnits": 2.0
+        "sourceModuleUnits": 4,
+        "targetWorldUnits": 2
       }
     },
     {
@@ -1582,7 +2481,7 @@
         4.049999713897722,
         4.000000476837158
       ],
-      "recipeHash": "ce67705fc22dc0ba574b57ee34162f80fabe7670cfb39ebd228a5963e3cf72c1",
+      "recipeHash": "df662f4a524f62e69e6c195200d1a505fed94edbfdf1d06790c9878551082224",
       "scaledDims": [
         2.0,
         2.024999856948861,
@@ -1630,8 +2529,8 @@
       "structuralGrid": {
         "joinMode": "cell-orientation",
         "orientationSteps": 4,
-        "sourceModuleUnits": 4.0,
-        "targetWorldUnits": 2.0
+        "sourceModuleUnits": 4,
+        "targetWorldUnits": 2
       }
     },
     {
@@ -1699,7 +2598,7 @@
         4.15000009536745,
         4.000000715255737
       ],
-      "recipeHash": "f2879f73f36714e967d6d0dc14e2872ead2c763fa607a2d6600b601f44be0125",
+      "recipeHash": "1184150f173bbe47d601e46e270a447dd66a0d87157072a06b5fdd12bb5198bb",
       "scaledDims": [
         2.0028867721557617,
         2.075000047683725,
@@ -1747,8 +2646,8 @@
       "structuralGrid": {
         "joinMode": "cell-orientation",
         "orientationSteps": 4,
-        "sourceModuleUnits": 4.0,
-        "targetWorldUnits": 2.0
+        "sourceModuleUnits": 4,
+        "targetWorldUnits": 2
       }
     },
     {
@@ -1816,7 +2715,7 @@
         4.1500000953674485,
         8.0
       ],
-      "recipeHash": "e7f47eb3ef5fe926b41d6eff384b97889137376dd5aa2f422c54e1e623f99343",
+      "recipeHash": "5703fdeb693b78d484c198e01bf285dea4fddc4c80416073d21f47cafc615ff2",
       "scaledDims": [
         4.000001430511475,
         2.0750000476837243,
@@ -1864,8 +2763,8 @@
       "structuralGrid": {
         "joinMode": "cell-orientation",
         "orientationSteps": 4,
-        "sourceModuleUnits": 4.0,
-        "targetWorldUnits": 2.0
+        "sourceModuleUnits": 4,
+        "targetWorldUnits": 2
       }
     },
     {
@@ -1933,7 +2832,7 @@
         4.233285903930667,
         8.000001907348633
       ],
-      "recipeHash": "fd58c2e215ecf3c44aa5deed76e8d4af476c12fb16698254916a38570ed1e5af",
+      "recipeHash": "72095815de15bb90153f245495da0a7838b4cbc6c6fc178b450885b534e24678",
       "scaledDims": [
         4.0,
         2.1166429519653334,
@@ -1981,8 +2880,8 @@
       "structuralGrid": {
         "joinMode": "cell-orientation",
         "orientationSteps": 4,
-        "sourceModuleUnits": 4.0,
-        "targetWorldUnits": 2.0
+        "sourceModuleUnits": 4,
+        "targetWorldUnits": 2
       }
     },
     {
@@ -2050,7 +2949,7 @@
         4.233285903930681,
         8.0
       ],
-      "recipeHash": "0650b27b4ee6151dd09e5846247d480efafe22a6535b052ce42acb9894bb21fd",
+      "recipeHash": "74501f8f4fb842716872526a13f5ea232be31edcb56b8b4e345d7182d14bffc5",
       "scaledDims": [
         4.000000238418579,
         2.1166429519653405,
@@ -2098,8 +2997,8 @@
       "structuralGrid": {
         "joinMode": "cell-orientation",
         "orientationSteps": 4,
-        "sourceModuleUnits": 4.0,
-        "targetWorldUnits": 2.0
+        "sourceModuleUnits": 4,
+        "targetWorldUnits": 2
       }
     },
     {
@@ -2167,7 +3066,7 @@
         4.233285903930667,
         8.000001907348633
       ],
-      "recipeHash": "2970ccfa7c61436e218cef6a57a552fe60a9aa8358e64cff9d20b69cf91ce9cd",
+      "recipeHash": "2f1204351c5f5228af1f15a12bee9967b0a5032111e12d736b7c93300ea1516f",
       "scaledDims": [
         4.000001430511475,
         2.1166429519653334,
@@ -2215,8 +3114,8 @@
       "structuralGrid": {
         "joinMode": "cell-orientation",
         "orientationSteps": 4,
-        "sourceModuleUnits": 4.0,
-        "targetWorldUnits": 2.0
+        "sourceModuleUnits": 4,
+        "targetWorldUnits": 2
       }
     },
     {
@@ -2284,7 +3183,7 @@
         4.049999713897722,
         8.0
       ],
-      "recipeHash": "508bccf243a16b38a7ff2bedb6f5d3548ce08e30e5f4e6ac887beee4e69422c9",
+      "recipeHash": "67fba5578bf91ea158b99a39612b0b1ad3d283ceb2cc022c8def2524d4fdb27c",
       "scaledDims": [
         4.0,
         2.024999856948861,
@@ -2332,8 +3231,8 @@
       "structuralGrid": {
         "joinMode": "cell-orientation",
         "orientationSteps": 4,
-        "sourceModuleUnits": 4.0,
-        "targetWorldUnits": 2.0
+        "sourceModuleUnits": 4,
+        "targetWorldUnits": 2
       }
     },
     {
@@ -2401,7 +3300,7 @@
         4.233285903930681,
         8.000000953674316
       ],
-      "recipeHash": "dd3385427ee6b74dda605df224d4a52ce50468d4ba24a1145075ce1d551be861",
+      "recipeHash": "6ec567e1e741e0e5d9af90d97b7e6f832f6026de2828029acaf73df32d251cfa",
       "scaledDims": [
         4.000000238418579,
         2.1166429519653405,
@@ -2449,8 +3348,8 @@
       "structuralGrid": {
         "joinMode": "cell-orientation",
         "orientationSteps": 4,
-        "sourceModuleUnits": 4.0,
-        "targetWorldUnits": 2.0
+        "sourceModuleUnits": 4,
+        "targetWorldUnits": 2
       }
     },
     {
@@ -2518,7 +3417,7 @@
         4.399999618530273,
         1.4000002145767212
       ],
-      "recipeHash": "7c8e8304079d2c34b51449b29964c079cd53d4902a6bc2a8d6658c1ba88e3234",
+      "recipeHash": "94262f6a7dc958b7cc112fe1e05636518047c338cabfaf66f89495aaa118e96a",
       "scaledDims": [
         2.200000047683716,
         2.1999998092651367,
@@ -2566,8 +3465,8 @@
       "structuralGrid": {
         "joinMode": "cell-orientation",
         "orientationSteps": 4,
-        "sourceModuleUnits": 4.0,
-        "targetWorldUnits": 2.0
+        "sourceModuleUnits": 4,
+        "targetWorldUnits": 2
       }
     },
     {
@@ -2636,7 +3535,7 @@
         4.399999618530273,
         1.4000002145767212
       ],
-      "recipeHash": "64d517baecb83fb18ac223dbc003f980b52327165d11aedd5479f187b5fe527a",
+      "recipeHash": "293c4c985d275f3c1c4ed0114fbba0c3132a997e4c1c6fefaa504f5647b0fc29",
       "scaledDims": [
         2.200000047683716,
         2.1999998092651367,
@@ -2721,8 +3620,8 @@
       "structuralGrid": {
         "joinMode": "cell-orientation",
         "orientationSteps": 4,
-        "sourceModuleUnits": 4.0,
-        "targetWorldUnits": 2.0
+        "sourceModuleUnits": 4,
+        "targetWorldUnits": 2
       }
     },
     {
@@ -2791,7 +3690,7 @@
         4.399999618530273,
         1.4000002145767212
       ],
-      "recipeHash": "9f1ac960e77e8ac5e10814298cc5378ff9286d8da0b40b186b232c918c146611",
+      "recipeHash": "ce5f9c286b4b6fbdda69f0961d5f68fd41ab266f64bc805ce0902a88342c8f73",
       "scaledDims": [
         2.200000047683716,
         2.1999998092651367,
@@ -2876,8 +3775,8 @@
       "structuralGrid": {
         "joinMode": "cell-orientation",
         "orientationSteps": 4,
-        "sourceModuleUnits": 4.0,
-        "targetWorldUnits": 2.0
+        "sourceModuleUnits": 4,
+        "targetWorldUnits": 2
       }
     },
     {
@@ -2946,7 +3845,7 @@
         4.399999618530273,
         1.4000002145767212
       ],
-      "recipeHash": "fafa7e0c78b3191c503dc384365eab8e8fa8e10270d05c43b7cca6cc339253cc",
+      "recipeHash": "56c6f85d0eb6ba8b698ed41ca0bc981f3bfadc2a52d9c10373094ccfec720f3c",
       "scaledDims": [
         2.200000047683716,
         2.1999998092651367,
@@ -3031,8 +3930,8 @@
       "structuralGrid": {
         "joinMode": "cell-orientation",
         "orientationSteps": 4,
-        "sourceModuleUnits": 4.0,
-        "targetWorldUnits": 2.0
+        "sourceModuleUnits": 4,
+        "targetWorldUnits": 2
       }
     },
     {
@@ -3100,7 +3999,7 @@
         4.233285903930681,
         12.000004768371582
       ],
-      "recipeHash": "11f4bfe5d1148a828a540aed752a14dcdcbec3c08b251e256c6420e98b79587e",
+      "recipeHash": "3ec6613fd0e589b132911df1344cb883388d65554e1bbc8b36f827eaf77daee6",
       "scaledDims": [
         6.000000476837158,
         2.1166429519653405,
@@ -3148,8 +4047,8 @@
       "structuralGrid": {
         "joinMode": "cell-orientation",
         "orientationSteps": 4,
-        "sourceModuleUnits": 4.0,
-        "targetWorldUnits": 2.0
+        "sourceModuleUnits": 4,
+        "targetWorldUnits": 2
       }
     },
     {
@@ -3217,7 +4116,7 @@
         4.233285903930681,
         20.0
       ],
-      "recipeHash": "84e12b931567efe1894a75a943c117826f54be59000997edab3e98c161e9505e",
+      "recipeHash": "af28295c61447912b83e44b6f3a6528c3ed6901314f2bdaf9cd05e7456a49c1d",
       "scaledDims": [
         10.000499725341797,
         2.1166429519653405,
@@ -3265,8 +4164,8 @@
       "structuralGrid": {
         "joinMode": "cell-orientation",
         "orientationSteps": 4,
-        "sourceModuleUnits": 4.0,
-        "targetWorldUnits": 2.0
+        "sourceModuleUnits": 4,
+        "targetWorldUnits": 2
       }
     },
     {
@@ -3334,7 +4233,7 @@
         4.233285903930681,
         20.0
       ],
-      "recipeHash": "bf113d52124346e848c356bf49cdd421d011a1880065238c8754903ee171a03a",
+      "recipeHash": "8a9c2526389bd11d3d7476c8d364e2ad8df2a7db6f898dafc0013a7f6fc719e5",
       "scaledDims": [
         10.000001430511475,
         2.1166429519653405,
@@ -3382,8 +4281,8 @@
       "structuralGrid": {
         "joinMode": "cell-orientation",
         "orientationSteps": 4,
-        "sourceModuleUnits": 4.0,
-        "targetWorldUnits": 2.0
+        "sourceModuleUnits": 4,
+        "targetWorldUnits": 2
       }
     },
     {
@@ -3451,7 +4350,7 @@
         4.233285903930681,
         12.000000476837158
       ],
-      "recipeHash": "98186f1d0c91ba58430cf0844f5345c03919a94bed1723747b028aa81dc9d515",
+      "recipeHash": "f518619d9b6d67ffc9e9e42293a6cb210b9c7cc80a573c910f1f74882b81fbfe",
       "scaledDims": [
         6.000000238418579,
         2.1166429519653405,
@@ -3499,8 +4398,8 @@
       "structuralGrid": {
         "joinMode": "cell-orientation",
         "orientationSteps": 4,
-        "sourceModuleUnits": 4.0,
-        "targetWorldUnits": 2.0
+        "sourceModuleUnits": 4,
+        "targetWorldUnits": 2
       }
     },
     {
@@ -3568,7 +4467,7 @@
         4.233285903930681,
         12.000000476837158
       ],
-      "recipeHash": "460cfb2e874cafa8392e9bf3ea83fdc413110ba5d22f4b9e34dd61b94e1c27c8",
+      "recipeHash": "1845a1201e0123a1321dc4cdf21f35c62ad051acf4cab53629e7427908d58a91",
       "scaledDims": [
         6.0,
         2.1166429519653405,
@@ -3616,8 +4515,8 @@
       "structuralGrid": {
         "joinMode": "cell-orientation",
         "orientationSteps": 4,
-        "sourceModuleUnits": 4.0,
-        "targetWorldUnits": 2.0
+        "sourceModuleUnits": 4,
+        "targetWorldUnits": 2
       }
     },
     {
@@ -3685,7 +4584,7 @@
         4.233285903930681,
         12.000001907348633
       ],
-      "recipeHash": "0e8f316826d4fc64978886ffd66309b3dd83304b91aedc1f7b1e36a18bbdfac9",
+      "recipeHash": "658345e847c1daeb2e9543620811aed397abefb90e69aa06ddd3db88de35bdcc",
       "scaledDims": [
         10.0,
         2.1166429519653405,
@@ -3733,8 +4632,8 @@
       "structuralGrid": {
         "joinMode": "cell-orientation",
         "orientationSteps": 4,
-        "sourceModuleUnits": 4.0,
-        "targetWorldUnits": 2.0
+        "sourceModuleUnits": 4,
+        "targetWorldUnits": 2
       }
     },
     {
@@ -3802,7 +4701,7 @@
         4.233285903930681,
         12.000001907348633
       ],
-      "recipeHash": "4b2cd020ccc5e35f1e0fdcc7b9978b57fb6ebcbfd7913354171f94b75be101f5",
+      "recipeHash": "2e38725482ca4270478ba932365520a5acc5b4904a505ef6104c70ef14f61724",
       "scaledDims": [
         10.0,
         2.1166429519653405,
@@ -3850,8 +4749,8 @@
       "structuralGrid": {
         "joinMode": "cell-orientation",
         "orientationSteps": 4,
-        "sourceModuleUnits": 4.0,
-        "targetWorldUnits": 2.0
+        "sourceModuleUnits": 4,
+        "targetWorldUnits": 2
       }
     },
     {
@@ -3919,7 +4818,7 @@
         8.550000190734867,
         8.399999618530273
       ],
-      "recipeHash": "32633e59345f691945621df48ce9745183ee900e118f1658f4e77cc8fb555208",
+      "recipeHash": "6b14caa370d9d0096cb0038796bbbae7cf48e4da6fe113b1afaa7c87f27eb96b",
       "scaledDims": [
         2.200000047683716,
         4.275000095367433,
@@ -3998,8 +4897,8 @@
       "structuralGrid": {
         "joinMode": "cell-orientation",
         "orientationSteps": 4,
-        "sourceModuleUnits": 4.0,
-        "targetWorldUnits": 2.0
+        "sourceModuleUnits": 4,
+        "targetWorldUnits": 2
       }
     },
     {
@@ -4067,7 +4966,7 @@
         8.550000190734867,
         8.399999618530273
       ],
-      "recipeHash": "4fc447233906b0fda7c304c603a584e44a4513c5d35d5156896ae7fcac23f0a2",
+      "recipeHash": "a95451e3a52bb61ffef25ec5783ca63b73fa05bfdea5e0deb3f332df156e07f2",
       "scaledDims": [
         4.199999809265137,
         4.275000095367433,
@@ -4146,8 +5045,8 @@
       "structuralGrid": {
         "joinMode": "cell-orientation",
         "orientationSteps": 4,
-        "sourceModuleUnits": 4.0,
-        "targetWorldUnits": 2.0
+        "sourceModuleUnits": 4,
+        "targetWorldUnits": 2
       }
     },
     {
@@ -4215,7 +5114,7 @@
         4.233285903930664,
         4.0
       ],
-      "recipeHash": "2771703a45594a3d9c9cc7d19114a99d19790486f37c0ea399ed269c51cd365f",
+      "recipeHash": "03464952f1512c3daa923d436af8dd80ab0ed20f8ebe6e4cf041540c06bcae3c",
       "scaledDims": [
         2.0,
         2.116642951965332,
@@ -4263,8 +5162,8 @@
       "structuralGrid": {
         "joinMode": "cell-orientation",
         "orientationSteps": 4,
-        "sourceModuleUnits": 4.0,
-        "targetWorldUnits": 2.0
+        "sourceModuleUnits": 4,
+        "targetWorldUnits": 2
       }
     },
     {
@@ -4332,7 +5231,7 @@
         4.233285903930664,
         1.7913262844085693
       ],
-      "recipeHash": "f5f78f30f3898b38485cb0e175f9f1c0f664c4fd56e28b2ccdf75dbc900f9812",
+      "recipeHash": "4a160bc4b55e9b285d8b1542bc7bb5df98acfa962bb8bcc23790ca30d2813b31",
       "scaledDims": [
         0.8956631422042847,
         2.116642951965332,
@@ -4380,8 +5279,8 @@
       "structuralGrid": {
         "joinMode": "cell-orientation",
         "orientationSteps": 4,
-        "sourceModuleUnits": 4.0,
-        "targetWorldUnits": 2.0
+        "sourceModuleUnits": 4,
+        "targetWorldUnits": 2
       }
     },
     {
@@ -4449,7 +5348,7 @@
         0.0,
         4.0
       ],
-      "recipeHash": "9298089ca3512f04263e357cc975be65950700099eb86d69238b91524d4cb1a0",
+      "recipeHash": "c149f7ffd85d128151945e727259032bfaaee9404a8830bcfc6307f54c0e33ba",
       "scaledDims": [
         2.0,
         0.0,
@@ -4528,8 +5427,8 @@
       "structuralGrid": {
         "joinMode": "cell-orientation",
         "orientationSteps": 4,
-        "sourceModuleUnits": 4.0,
-        "targetWorldUnits": 2.0
+        "sourceModuleUnits": 4,
+        "targetWorldUnits": 2
       }
     },
     {
@@ -4597,7 +5496,7 @@
         4.233285903930664,
         8.0
       ],
-      "recipeHash": "7b8261528548492bae2ef2a8658c9eb4e90eabb0db0b8fab6ae4f858eb531f58",
+      "recipeHash": "d8e3856452733d1fdf7fd714b2aac46787bbbf0d58e9b7a441caa37e16509f22",
       "scaledDims": [
         4.0,
         2.116642951965332,
@@ -4676,8 +5575,8 @@
       "structuralGrid": {
         "joinMode": "cell-orientation",
         "orientationSteps": 4,
-        "sourceModuleUnits": 4.0,
-        "targetWorldUnits": 2.0
+        "sourceModuleUnits": 4,
+        "targetWorldUnits": 2
       }
     },
     {
@@ -4745,7 +5644,7 @@
         0.10000000149011612,
         4.0
       ],
-      "recipeHash": "5e5da26259e68bb467ea943673e312f78d4102aa74c33fed0afeec9ea4e2c7b9",
+      "recipeHash": "0e7bbd04e23d76cb97bebf9cd1cfeac6abfd837454c1dff105f800485be126d6",
       "scaledDims": [
         2.0,
         0.05000000074505806,
@@ -4824,8 +5723,8 @@
       "structuralGrid": {
         "joinMode": "cell-orientation",
         "orientationSteps": 4,
-        "sourceModuleUnits": 4.0,
-        "targetWorldUnits": 2.0
+        "sourceModuleUnits": 4,
+        "targetWorldUnits": 2
       }
     },
     {
@@ -4893,7 +5792,7 @@
         0.10000000149011612,
         4.0
       ],
-      "recipeHash": "4d01d23bd25751164dc20bbfa335d6a8c864dfc570c93dcee13677868dd7dbac",
+      "recipeHash": "7f3d6d77b523a5cbe6f40063cc509a3fb1970fd24c4650e71d6fb1ae1e49fe5a",
       "scaledDims": [
         2.0,
         0.05000000074505806,
@@ -4972,8 +5871,8 @@
       "structuralGrid": {
         "joinMode": "cell-orientation",
         "orientationSteps": 4,
-        "sourceModuleUnits": 4.0,
-        "targetWorldUnits": 2.0
+        "sourceModuleUnits": 4,
+        "targetWorldUnits": 2
       }
     },
     {
@@ -5041,7 +5940,7 @@
         0.5,
         4.000000476837158
       ],
-      "recipeHash": "d7c5a060a503a2c6d936fff23dc8d528af99e81f868504844b82ecbba39d1646",
+      "recipeHash": "c663e3246409790ff050a2bd55c80d850fbf4fd8923df89ec5b149e50243a9b3",
       "scaledDims": [
         2.011870861053467,
         0.25,
@@ -5120,8 +6019,8 @@
       "structuralGrid": {
         "joinMode": "cell-orientation",
         "orientationSteps": 4,
-        "sourceModuleUnits": 4.0,
-        "targetWorldUnits": 2.0
+        "sourceModuleUnits": 4,
+        "targetWorldUnits": 2
       }
     },
     {
@@ -5189,7 +6088,7 @@
         3.0891523361206055,
         4.000000476837158
       ],
-      "recipeHash": "8c0c120f26a18b999397500a273e364a3dde8bd236f24aa9d2212aca3da42a77",
+      "recipeHash": "16455348cae36fde88fc59a3359a81577fc4d17f36e3806db999992afa2a5fd3",
       "scaledDims": [
         2.0216528177261353,
         1.5445761680603027,
@@ -5268,8 +6167,8 @@
       "structuralGrid": {
         "joinMode": "cell-orientation",
         "orientationSteps": 4,
-        "sourceModuleUnits": 4.0,
-        "targetWorldUnits": 2.0
+        "sourceModuleUnits": 4,
+        "targetWorldUnits": 2
       }
     },
     {
@@ -5337,7 +6236,7 @@
         3.0,
         4.000000476837158
       ],
-      "recipeHash": "170c19429d6dc0a848d0f17206398178ecad2a811ed783f2374a8af2f3369dcb",
+      "recipeHash": "1c0fcb25411fbcbf5bdc560eb6c27ebf4f7cf2c1c9215349bb283ea560fcc71a",
       "scaledDims": [
         2.011870861053467,
         1.5,
@@ -5416,8 +6315,8 @@
       "structuralGrid": {
         "joinMode": "cell-orientation",
         "orientationSteps": 4,
-        "sourceModuleUnits": 4.0,
-        "targetWorldUnits": 2.0
+        "sourceModuleUnits": 4,
+        "targetWorldUnits": 2
       }
     },
     {
@@ -5485,7 +6384,7 @@
         4.150000095367434,
         1.993566870689392
       ],
-      "recipeHash": "e489bed2f8d4be1df859046edd0627e5f06417429b2ec663184d63fe7a74e31a",
+      "recipeHash": "65fe9b186a5aa454e177c3f9284226a107e4918cce9b779d654e245eb2817036",
       "scaledDims": [
         2.0,
         2.075000047683717,
@@ -5533,8 +6432,8 @@
       "structuralGrid": {
         "joinMode": "cell-orientation",
         "orientationSteps": 4,
-        "sourceModuleUnits": 4.0,
-        "targetWorldUnits": 2.0
+        "sourceModuleUnits": 4,
+        "targetWorldUnits": 2
       }
     },
     {
@@ -5602,7 +6501,7 @@
         4.049999713897722,
         1.0019950866699219
       ],
-      "recipeHash": "9b105d11d8036d348ad2ab78db469b245612fd7661a12c5f05f9296091590a8d",
+      "recipeHash": "79b638d7146df82b456a4872cf5b79b8249dc0e8bd6d519cb58d8188dae30e28",
       "scaledDims": [
         0.5009975433349609,
         2.024999856948861,
@@ -5650,8 +6549,8 @@
       "structuralGrid": {
         "joinMode": "cell-orientation",
         "orientationSteps": 4,
-        "sourceModuleUnits": 4.0,
-        "targetWorldUnits": 2.0
+        "sourceModuleUnits": 4,
+        "targetWorldUnits": 2
       }
     },
     {
@@ -5719,7 +6618,7 @@
         4.233285903930667,
         1.993566870689392
       ],
-      "recipeHash": "f429c442bd5a8317bf7eb33b29c61bd9045286353450a96ffd81aa1ac071d813",
+      "recipeHash": "c44a2715da3da71176fb103909db3dc4c6c642e5de86fed435bbe9459ea14f7e",
       "scaledDims": [
         2.0,
         2.1166429519653334,
@@ -5767,8 +6666,8 @@
       "structuralGrid": {
         "joinMode": "cell-orientation",
         "orientationSteps": 4,
-        "sourceModuleUnits": 4.0,
-        "targetWorldUnits": 2.0
+        "sourceModuleUnits": 4,
+        "targetWorldUnits": 2
       }
     },
     {
@@ -5836,7 +6735,7 @@
         4.150000095367432,
         1.8073967099189758
       ],
-      "recipeHash": "62052ab5ceeae6b13f69d71f22e13c6c29ffa0c4736c774ed647f36d84ae679d",
+      "recipeHash": "c97b29f5aa34e07a0f75b890fd6cec35e386fd8cdbfa1225942cf7339750e7e6",
       "scaledDims": [
         1.0,
         2.075000047683716,
@@ -5884,8 +6783,8 @@
       "structuralGrid": {
         "joinMode": "cell-orientation",
         "orientationSteps": 4,
-        "sourceModuleUnits": 4.0,
-        "targetWorldUnits": 2.0
+        "sourceModuleUnits": 4,
+        "targetWorldUnits": 2
       }
     },
     {
@@ -5953,7 +6852,7 @@
         4.499999999999998,
         0.6260783672332764
       ],
-      "recipeHash": "2b6e4d3f451d86309b89b17ed1048736a17174561b317bec6c761cd8db6741c3",
+      "recipeHash": "05faa69489a91ed8a8f0d3208aab2725d5c33e4ee9a546004b514cde2c98bb56",
       "scaledDims": [
         2.0,
         2.249999999999999,
@@ -6001,8 +6900,8 @@
       "structuralGrid": {
         "joinMode": "cell-orientation",
         "orientationSteps": 4,
-        "sourceModuleUnits": 4.0,
-        "targetWorldUnits": 2.0
+        "sourceModuleUnits": 4,
+        "targetWorldUnits": 2
       }
     },
     {
@@ -6070,7 +6969,7 @@
         4.5,
         0.6184567809104919
       ],
-      "recipeHash": "31a4521ef1ce16aa47d740de38f70b246adb2e3d6fe99ce7ac4d8a2a97797c60",
+      "recipeHash": "f6a72f69d4109f9ea581635437565522a53b82d56898570a4a4473114c066bc7",
       "scaledDims": [
         2.0,
         2.25,
@@ -6118,12 +7017,348 @@
       "structuralGrid": {
         "joinMode": "cell-orientation",
         "orientationSteps": 4,
-        "sourceModuleUnits": 4.0,
-        "targetWorldUnits": 2.0
+        "sourceModuleUnits": 4,
+        "targetWorldUnits": 2
       }
+    },
+    {
+      "admissionClass": "PART_DONOR",
+      "assetId": "kenney-pirate-kit/chest",
+      "bounds": {
+        "aabbMax": [
+          0.4462499916553497,
+          0.8032499916553497,
+          0.4462499916553497
+        ],
+        "aabbMin": [
+          -0.4462499983046343,
+          0.0,
+          -0.44624999833106993
+        ],
+        "footprint": {
+          "center": [
+            0,
+            0
+          ],
+          "halfExtents": [
+            0.44625,
+            0.44625
+          ],
+          "yawRadians": 0
+        },
+        "footprintSource": "override",
+        "groundY": 0.0
+      },
+      "canonicalScale": 0.7,
+      "category": "container",
+      "companionLeaf": null,
+      "file": "chest.glb",
+      "materialFamilies": [
+        "wood"
+      ],
+      "normalizedFrame": {
+        "forward": "+Z",
+        "sourceToGenesis": [
+          0.7,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.7,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.7,
+          0.0,
+          0,
+          0,
+          0,
+          1.0
+        ],
+        "up": "+Y"
+      },
+      "outputFile": "assets/models-normalized/kenney-pirate-kit/chest.glb",
+      "pack": "kenney-pirate-kit",
+      "qaStatus": "approved-dev",
+      "rawDims": [
+        1.2749999856571201,
+        1.147499988079071,
+        1.2749999856948853
+      ],
+      "recipeHash": "b4eeb3e69d0d450cb0d57c062c06684d806fd36bdc78adbeed1cf39da62dffcb",
+      "scaledDims": [
+        0.8924999899599839,
+        0.8032499916553497,
+        0.8924999899864197
+      ],
+      "schema": "genesis.donor.v2",
+      "semanticParts": {},
+      "slug": "chest",
+      "socketCounts": {
+        "floor-mount": 1
+      },
+      "sockets": [
+        {
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.8925,
+              0.80325,
+              0.8925
+            ]
+          },
+          "id": "floor-mount",
+          "mateFamily": "floor",
+          "mateRule": "coincident",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "size": [
+            0.8925,
+            0.05,
+            0.8925
+          ],
+          "type": "floor-mount"
+        }
+      ],
+      "sourceSha256": "26d26c4c032a12320fe05b5005a72eba96db7167db0d35873639a4b7dcc06bcb",
+      "structuralGrid": null
+    },
+    {
+      "admissionClass": "PART_DONOR",
+      "assetId": "kenney-pirate-kit/crate",
+      "bounds": {
+        "aabbMax": [
+          0.3772999823093414,
+          0.5389999866485595,
+          0.45815000534057615
+        ],
+        "aabbMin": [
+          -0.3772999823093414,
+          0.0,
+          -0.45815000534057615
+        ],
+        "footprint": {
+          "center": [
+            0,
+            0
+          ],
+          "halfExtents": [
+            0.3773,
+            0.45815
+          ],
+          "yawRadians": 0
+        },
+        "footprintSource": "override",
+        "groundY": 0.0
+      },
+      "canonicalScale": 0.7,
+      "category": "container",
+      "companionLeaf": null,
+      "file": "crate.glb",
+      "materialFamilies": [
+        "wood"
+      ],
+      "normalizedFrame": {
+        "forward": "+Z",
+        "sourceToGenesis": [
+          0.7,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.7,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.7,
+          0.0,
+          0,
+          0,
+          0,
+          1.0
+        ],
+        "up": "+Y"
+      },
+      "outputFile": "assets/models-normalized/kenney-pirate-kit/crate.glb",
+      "pack": "kenney-pirate-kit",
+      "qaStatus": "approved-dev",
+      "rawDims": [
+        1.0779999494552612,
+        0.7699999809265137,
+        1.309000015258789
+      ],
+      "recipeHash": "434d14bf9d88efa2ae273877fb2fc02a07d2fa898c214153a333a5a4f1de4bb2",
+      "scaledDims": [
+        0.7545999646186828,
+        0.5389999866485595,
+        0.9163000106811523
+      ],
+      "schema": "genesis.donor.v2",
+      "semanticParts": {},
+      "slug": "crate",
+      "socketCounts": {
+        "floor-mount": 1
+      },
+      "sockets": [
+        {
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.7546,
+              0.539,
+              0.9163
+            ]
+          },
+          "id": "floor-mount",
+          "mateFamily": "floor",
+          "mateRule": "coincident",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "size": [
+            0.7546,
+            0.05,
+            0.9163
+          ],
+          "type": "floor-mount"
+        }
+      ],
+      "sourceSha256": "b525674e07c8b83667512a8dd93be0d7684358347d0e64d2bb16b156ac382ed1",
+      "structuralGrid": null
+    },
+    {
+      "admissionClass": "PART_DONOR",
+      "assetId": "kenney-retro-fantasy-kit/detail-barrel",
+      "bounds": {
+        "aabbMax": [
+          0.2460000067949295,
+          0.6000000238418579,
+          0.2460000067949295
+        ],
+        "aabbMin": [
+          -0.2460000067949295,
+          0.0,
+          -0.2460000067949295
+        ],
+        "footprint": {
+          "center": [
+            0,
+            0
+          ],
+          "halfExtents": [
+            0.246,
+            0.246
+          ],
+          "yawRadians": 0
+        },
+        "footprintSource": "override",
+        "groundY": 0.0
+      },
+      "canonicalScale": 2,
+      "category": "container",
+      "companionLeaf": null,
+      "file": "detail-barrel.glb",
+      "materialFamilies": [
+        "wood"
+      ],
+      "normalizedFrame": {
+        "forward": "+Z",
+        "sourceToGenesis": [
+          2,
+          0,
+          0,
+          0.0,
+          0,
+          2,
+          0,
+          0.0,
+          0,
+          0,
+          2,
+          0.0,
+          0,
+          0,
+          0,
+          1.0
+        ],
+        "up": "+Y"
+      },
+      "outputFile": "assets/models-normalized/kenney-retro-fantasy-kit/detail-barrel.glb",
+      "pack": "kenney-retro-fantasy-kit",
+      "qaStatus": "approved-dev",
+      "rawDims": [
+        0.2460000067949295,
+        0.30000001192092896,
+        0.2460000067949295
+      ],
+      "recipeHash": "0b74174160a4353a176f55d5389762775f3e4383fc2974688928bc91fa50fe6d",
+      "scaledDims": [
+        0.492000013589859,
+        0.6000000238418579,
+        0.492000013589859
+      ],
+      "schema": "genesis.donor.v2",
+      "semanticParts": {},
+      "slug": "detail-barrel",
+      "socketCounts": {
+        "floor-mount": 1
+      },
+      "sockets": [
+        {
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.492,
+              0.6,
+              0.492
+            ]
+          },
+          "id": "floor-mount",
+          "mateFamily": "floor",
+          "mateRule": "coincident",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "size": [
+            0.492,
+            0.05,
+            0.492
+          ],
+          "type": "floor-mount"
+        }
+      ],
+      "sourceSha256": "4262d0d3c8ac39bc10c0bb96e9b687d3bd1cc4a79df12b86fef37ebfd24fbb1b",
+      "structuralGrid": null
     }
   ],
   "schema": "genesis.donor-provenance.v2",
-  "totalPiecesAdmitted": 47,
+  "totalPiecesAdmitted": 58,
   "unit": "KGR-3"
 }

@@ -1,0 +1,458 @@
+{
+  "floor": {
+    "admissionClass": "DIRECT_MODULATED",
+    "canonicalScale": 2.0,
+    "category": "floor",
+    "companionLeaf": null,
+    "file": "floor.glb",
+    "materialFamilies": [
+      "stone"
+    ],
+    "recipeHash": "595c03bdae5a31e714594da2619c3065ecb63dd34dba7bc74ac9e0d07afc9794",
+    "semanticParts": [
+      "floor"
+    ],
+    "sockets": [
+      {
+        "position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "type": "floor-mount"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "type": "butt-join-n"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "type": "butt-join-s"
+      },
+      {
+        "position": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "type": "butt-join-e"
+      },
+      {
+        "position": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "type": "butt-join-w"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "type": "top-surface"
+      }
+    ]
+  },
+  "floor-detail": {
+    "admissionClass": "DIRECT_MODULATED",
+    "canonicalScale": 2.0,
+    "category": "floor",
+    "companionLeaf": null,
+    "file": "floor-detail.glb",
+    "materialFamilies": [
+      "stone"
+    ],
+    "recipeHash": "694218a2a2c3c23a66abd7a9c31623f97752fd647b91754e3352a6919e47a252",
+    "semanticParts": [
+      "floor"
+    ],
+    "sockets": [
+      {
+        "position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "type": "floor-mount"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "type": "butt-join-n"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "type": "butt-join-s"
+      },
+      {
+        "position": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "type": "butt-join-e"
+      },
+      {
+        "position": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "type": "butt-join-w"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "type": "top-surface"
+      }
+    ]
+  },
+  "gate": {
+    "admissionClass": "DIRECT_MODULATED",
+    "canonicalScale": 2.0,
+    "category": "door-leaf",
+    "companionLeaf": null,
+    "file": "gate.glb",
+    "materialFamilies": [
+      "wood"
+    ],
+    "recipeHash": "e187f82bb7a961d855e97ff5400da2aac5150400d360184bb5f94e8536827e8a",
+    "semanticParts": [
+      "door-leaf"
+    ],
+    "sockets": [
+      {
+        "position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "type": "floor-mount"
+      },
+      {
+        "position": [
+          -0.800000011920929,
+          0.75,
+          0.0
+        ],
+        "type": "hinge"
+      }
+    ]
+  },
+  "stairs": {
+    "admissionClass": "DIRECT_MODULATED",
+    "canonicalScale": 2.0,
+    "category": "stairs",
+    "companionLeaf": null,
+    "file": "stairs.glb",
+    "materialFamilies": [
+      "stone"
+    ],
+    "recipeHash": "becfcf6dcb896afd08a7bdf839eb674943e187f0ce5e1f7639555bb468d0ec2e",
+    "semanticParts": [
+      "stairs"
+    ],
+    "sockets": [
+      {
+        "position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "type": "floor-mount"
+      },
+      {
+        "position": [
+          0.0,
+          1.7999999523162842,
+          0.0
+        ],
+        "type": "top-surface"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "type": "butt-join-n"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "type": "butt-join-s"
+      },
+      {
+        "position": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "type": "butt-join-e"
+      },
+      {
+        "position": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "type": "butt-join-w"
+      }
+    ]
+  },
+  "wall": {
+    "admissionClass": "DIRECT_MODULATED",
+    "canonicalScale": 2.0,
+    "category": "wall",
+    "companionLeaf": null,
+    "file": "wall.glb",
+    "materialFamilies": [
+      "stone"
+    ],
+    "recipeHash": "1f9504dc608c0cdfd347619e8705d8ef2517520c4aa96327d33f37c18c01e6c4",
+    "semanticParts": [
+      "wall"
+    ],
+    "sockets": [
+      {
+        "position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "type": "floor-mount"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "type": "butt-join-n"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "type": "butt-join-s"
+      },
+      {
+        "position": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "type": "butt-join-e"
+      },
+      {
+        "position": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "type": "butt-join-w"
+      }
+    ]
+  },
+  "wall-half": {
+    "admissionClass": "DIRECT_MODULATED",
+    "canonicalScale": 2.0,
+    "category": "wall",
+    "companionLeaf": null,
+    "file": "wall-half.glb",
+    "materialFamilies": [
+      "stone"
+    ],
+    "recipeHash": "53e9656441b2505a3d32c412bcd4c5705b366435081d9f88c966b7f1fefdc099",
+    "semanticParts": [
+      "wall"
+    ],
+    "sockets": [
+      {
+        "position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "type": "floor-mount"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "type": "butt-join-n"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "type": "butt-join-s"
+      },
+      {
+        "position": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "type": "butt-join-e"
+      },
+      {
+        "position": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "type": "butt-join-w"
+      }
+    ]
+  },
+  "wall-narrow": {
+    "admissionClass": "DIRECT_MODULATED",
+    "canonicalScale": 2.0,
+    "category": "wall",
+    "companionLeaf": null,
+    "file": "wall-narrow.glb",
+    "materialFamilies": [
+      "stone"
+    ],
+    "recipeHash": "0dc3bc2cfb4b94d6ab9d3a6d0218c7a4a8f697f0bc0cdf2a69836962433a9481",
+    "semanticParts": [
+      "wall"
+    ],
+    "sockets": [
+      {
+        "position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "type": "floor-mount"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "type": "butt-join-n"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "type": "butt-join-s"
+      },
+      {
+        "position": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "type": "butt-join-e"
+      },
+      {
+        "position": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "type": "butt-join-w"
+      }
+    ]
+  },
+  "wall-opening": {
+    "admissionClass": "DIRECT_MODULATED",
+    "canonicalScale": 2.0,
+    "category": "doorway-frame",
+    "companionLeaf": "gate",
+    "file": "wall-opening.glb",
+    "materialFamilies": [
+      "stone"
+    ],
+    "recipeHash": "d42cd9254fec994a883b4a14ca6598f1f594e5b45eb6ae13433240a5c8424cfd",
+    "semanticParts": [
+      "doorway-frame"
+    ],
+    "sockets": [
+      {
+        "position": [
+          0.0,
+          0.0,
+          0.050000011920928955
+        ],
+        "type": "floor-mount"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "type": "butt-join-n"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          1.100000023841858
+        ],
+        "type": "butt-join-s"
+      },
+      {
+        "position": [
+          1.0,
+          0.0,
+          0.050000011920928955
+        ],
+        "type": "butt-join-e"
+      },
+      {
+        "position": [
+          -1.0,
+          0.0,
+          0.050000011920928955
+        ],
+        "type": "butt-join-w"
+      },
+      {
+        "position": [
+          -1.0,
+          1.0,
+          1.100000023841858
+        ],
+        "type": "hinge"
+      }
+    ]
+  }
+}

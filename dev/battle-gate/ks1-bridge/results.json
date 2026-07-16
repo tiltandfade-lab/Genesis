@@ -1,0 +1,62 @@
+{
+  "generatedAt": "2026-07-16T01:12:08.256Z",
+  "branch": "feat/ks1-kenney-adapter",
+  "sha": "66fc7a0b3c0a3af86ec1b85779cd59dfd0b83ab1",
+  "verdictedAt": "2026-07-16T01:30:00.000Z",
+  "verdictedBy": "orchestrator (read the composite cards directly, per KS-1's own instruction)",
+  "gateStrictness": "LOOSE — Adam's ruling: kit silhouettes fine; \"no pastel/toy read\" is the bar. REJECT to CHASSIS only if the modulated card still reads toy/pastel or fights the realm palette.",
+  "families": [
+    {
+      "pack": "kenney-modular-dungeon-kit",
+      "slug": "room-small",
+      "label": "modular-dungeon-kit / room-small (room-shell architecture)",
+      "shots": {
+        "raw": "shots/kenney-modular-dungeon-kit-room-small-raw.png",
+        "direct": "shots/kenney-modular-dungeon-kit-room-small-direct.png",
+        "grey": "shots/kenney-modular-dungeon-kit-room-small-grey.png"
+      },
+      "composite": "kenney-modular-dungeon-kit-room-small-card.png",
+      "verdict": "DIRECT_MODULATED",
+      "description": "RAW panel is bare untextured grey PBR geometry, NOT the pastel Kenney colormap — a genuine finding, not a rendering bug: the source .glb's own images[] array references an external 'Textures/colormap.png' URI that assets/models/ATTRIBUTION.md documents as deliberately never copied into the repo (only .glb geometry was kept). So the honest RAW baseline for this repo's actual committed asset is plain grey, not pastel — the comparison is still valid (Genesis material recipe vs. no material at all), just less dramatically contrasted than a hypothetical fully-textured Kenney original would be. DIRECT_MODULATED shows a recognizable dungeon room shell in warm stone tones under the torchlit rig (ambient 0x4a3826/0.21, point 0xffa04a/18, quoted from theater-boot.js's real LIGHT_PROFILES.torchlit), grounded on a floor plane, clear depth and form — reads as grim/gritty stone architecture, not toy or pastel, and does not fight the fantasy realm's expected palette. GREY SILHOUETTE reads clean and legible at the documented gameplay-size camera convention (50deg FOV, ~22% headroom, ~22deg elevation). The room shell's own interior floor step/dais (visible as a diagonal shape in both RAW and DIRECT panels) is authored Kenney geometry, not a capture artifact.",
+      "deviationsNoted": [
+        "The per-realm outline hull (donorOutlineStyleFor 'fantasy' -> selective dark-umber, thin) is applied in code but not strongly visible at this capture's exposure/lighting — a low-priority, honestly-flagged gap, not hidden. See src/ui/theater-donor.js's own header for the documented 2D-to-3D outline-law adaptation."
+      ]
+    },
+    {
+      "pack": "kenney-modular-dungeon-kit",
+      "slug": "gate-door",
+      "label": "modular-dungeon-kit / gate-door (doorway-frame + hinge leaf)",
+      "shots": {
+        "raw": "shots/kenney-modular-dungeon-kit-gate-door-raw.png",
+        "direct": "shots/kenney-modular-dungeon-kit-gate-door-direct.png",
+        "grey": "shots/kenney-modular-dungeon-kit-gate-door-grey.png"
+      },
+      "composite": "kenney-modular-dungeon-kit-gate-door-card.png",
+      "verdict": "DIRECT_MODULATED",
+      "description": "This is the pilot's centerpiece 'sockets are the point' piece: the stone frame (root node) and wood door leaf (child 'door' node, hinge socket at its own kit-authored pivot edge) each carry their OWN material family, visibly true in the DIRECT_MODULATED panel — the frame reads as warm-lit stone with a bright inner-arch highlight, the leaf sits in shadow at the base, structurally distinct even though both are close in value under this particular light angle (a legible-but-subtle distinction, not a failure — the frame/leaf silhouette split itself, which is the actual socket claim, is unambiguous). No pastel or toy read anywhere on this card; the archway silhouette is strong and reads as real dungeon architecture. Same RAW-panel untextured-grey finding as room-small applies here (same missing external texture file, same honest baseline).",
+      "deviationsNoted": [
+        "At this specific light angle/exposure the wood leaf and stone frame are closer in apparent value than ideal for a demonstration card — both materials ARE correctly distinct (stone roughness 0.90/metalness 0 vs wood roughness 0.85/metalness 0, different five-band albedo), the low contrast here is a lighting-angle choice in this harness, not a material-recipe defect. Worth a brighter/front-lit re-capture in KS-2 when the leaf actually animates open/shut."
+      ]
+    },
+    {
+      "pack": "kenney-mini-dungeon",
+      "slug": "wall",
+      "label": "mini-dungeon / wall (wall architecture)",
+      "shots": {
+        "raw": "shots/kenney-mini-dungeon-wall-raw.png",
+        "direct": "shots/kenney-mini-dungeon-wall-direct.png",
+        "grey": "shots/kenney-mini-dungeon-wall-grey.png"
+      },
+      "composite": "kenney-mini-dungeon-wall-card.png",
+      "verdict": "DIRECT_MODULATED",
+      "description": "Second, independently-measured pack (canonicalScale 2.0 vs the sibling pack's 0.5 — see build/normalize-donors.py's SCALE DERIVATION comment) proves the adapter is not tuned to one pack's numbers. DIRECT_MODULATED shows a warm-lit stone wall block, top surface catching the torchlight brightly, sides falling into shadow, grounded on the floor plane — clean, legible, no pastel/toy read, and consistent in register with the sibling pack's card despite the two packs' very different raw authored scales.",
+      "deviationsNoted": []
+    }
+  ],
+  "overallNotes": [
+    "All three admitted families classify DIRECT_MODULATED under this LOOSE-strictness gate — none read toy/pastel or fought the fantasy realm palette. No family was rejected to CHASSIS this pass.",
+    "The RAW panel's untextured-grey appearance (not pastel) across ALL THREE cards is a genuine, repo-wide finding: every pilot .glb's glTF JSON references an external 'Textures/colormap.png' URI that was never copied into assets/models/ (confirmed against assets/models/ATTRIBUTION.md's own stated scope: '.glb only... loose Textures/ ... not copied in'). This does not weaken the DIRECT_MODULATED verdicts (Genesis materials vs. no materials at all is still the operative comparison, and the graded/grained result reads as real architecture either way) but is recorded here so nobody mistakes 'RAW is plain grey' for a capture bug in a future review.",
+    "The 'real interior' backdrop for the DIRECT_MODULATED panel is a plain lit floor plane, not a socket-assembled room built from other donor pieces — a first draft of this harness tried loading a second room-small.glb (or a wall.glb ring) as a literal backdrop room and produced z-fighting (when the subject IS a room shell) or a camera-inside-the-backdrop confusion (for smaller subjects); dropped in favor of the simpler, robust floor-plane treatment. A literal socket-assembled backdrop room is KS-3's own scope ('room shells FROM the kit'), not this bridge gate's.",
+    "Camera convention for all DIRECT/GREY panels: 50deg vertical FOV, subject's largest AABB dimension framed with ~22% headroom margin, ~22deg elevation angle — documented in dev/battle-gate/ks1-bridge/harness.html's frameObject function, not hand-tuned per shot."
+  ]
+}

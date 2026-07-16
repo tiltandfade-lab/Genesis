@@ -1546,6 +1546,12 @@
      check-manifest.py from the classic loadOrder <script>-tag pairing check, same as the other
      theater-* ES-module files. -->
 <script type="module" src="src/ui/ref-bestiary.js"></script>
+<!-- KS-1 (docs/KENNEY-SOCKET-WAVE.md): the Kenney donor adapter's runtime loader. Own ES-module
+     boundary, loaded after theater-boot.js's tag (same convention as ref-bestiary.js above). Not
+     wired into any live call site yet this unit — KS-2/KS-3 do that; this tag exists so the
+     module is reachable (dev console `window.TheaterDonor`, and this unit's own capture/verify
+     harnesses) ahead of that wiring. -->
+<script type="module" src="src/ui/theater-donor.js"></script>
 <script>
 
 /* ============================================================

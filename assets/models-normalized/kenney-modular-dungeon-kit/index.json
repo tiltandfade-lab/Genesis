@@ -1,0 +1,2456 @@
+{
+  "corridor": {
+    "admissionClass": "DIRECT_MODULATED",
+    "canonicalScale": 0.5,
+    "category": "corridor-shell",
+    "companionLeaf": null,
+    "file": "corridor.glb",
+    "materialFamilies": [
+      "stone"
+    ],
+    "recipeHash": "83a050729fc0f85643990a75cca16e463f85ec887e085f40fdb91f1c3c880e0f",
+    "semanticParts": [
+      "corridor-shell"
+    ],
+    "sockets": [
+      {
+        "position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "type": "floor-mount"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "type": "top-surface"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          -1.000000238418579
+        ],
+        "type": "butt-join-n"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          1.000000238418579
+        ],
+        "type": "butt-join-s"
+      },
+      {
+        "position": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "type": "butt-join-e"
+      },
+      {
+        "position": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "type": "butt-join-w"
+      }
+    ]
+  },
+  "corridor-corner": {
+    "admissionClass": "DIRECT_MODULATED",
+    "canonicalScale": 0.5,
+    "category": "corridor-shell",
+    "companionLeaf": null,
+    "file": "corridor-corner.glb",
+    "materialFamilies": [
+      "stone"
+    ],
+    "recipeHash": "787fd3b8d7999aa43c4fab8cec32d59ed5b55dc94850bb4286721bdc0417c615",
+    "semanticParts": [
+      "corridor-shell"
+    ],
+    "sockets": [
+      {
+        "position": [
+          0.0,
+          0.0,
+          -5.960464477539063e-08
+        ],
+        "type": "floor-mount"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          -5.960464477539063e-08
+        ],
+        "type": "top-surface"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          -1.0000001192092896
+        ],
+        "type": "butt-join-n"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "type": "butt-join-s"
+      },
+      {
+        "position": [
+          1.0,
+          0.0,
+          -5.960464477539063e-08
+        ],
+        "type": "butt-join-e"
+      },
+      {
+        "position": [
+          -1.0,
+          0.0,
+          -5.960464477539063e-08
+        ],
+        "type": "butt-join-w"
+      }
+    ]
+  },
+  "corridor-end": {
+    "admissionClass": "DIRECT_MODULATED",
+    "canonicalScale": 0.5,
+    "category": "corridor-shell",
+    "companionLeaf": null,
+    "file": "corridor-end.glb",
+    "materialFamilies": [
+      "stone"
+    ],
+    "recipeHash": "88bad7b6a2395e6f32d31abee195a4d2a769d2502c2dd6f6df324a1a6b2c4983",
+    "semanticParts": [
+      "corridor-shell"
+    ],
+    "sockets": [
+      {
+        "position": [
+          -5.960464477539063e-08,
+          0.0,
+          6.556510925292969e-07
+        ],
+        "type": "floor-mount"
+      },
+      {
+        "position": [
+          -5.960464477539063e-08,
+          0.0,
+          6.556510925292969e-07
+        ],
+        "type": "top-surface"
+      },
+      {
+        "position": [
+          -5.960464477539063e-08,
+          0.0,
+          -1.000000238418579
+        ],
+        "type": "butt-join-n"
+      },
+      {
+        "position": [
+          -5.960464477539063e-08,
+          0.0,
+          1.0000015497207642
+        ],
+        "type": "butt-join-s"
+      },
+      {
+        "position": [
+          1.0000007152557373,
+          0.0,
+          6.556510925292969e-07
+        ],
+        "type": "butt-join-e"
+      },
+      {
+        "position": [
+          -1.0000008344650269,
+          0.0,
+          6.556510925292969e-07
+        ],
+        "type": "butt-join-w"
+      }
+    ]
+  },
+  "corridor-intersection": {
+    "admissionClass": "DIRECT_MODULATED",
+    "canonicalScale": 0.5,
+    "category": "corridor-shell",
+    "companionLeaf": null,
+    "file": "corridor-intersection.glb",
+    "materialFamilies": [
+      "stone"
+    ],
+    "recipeHash": "c4f9aa3d992994a31fd21f99a1d7d10e0e37aa3e9dec552223d38f20c016489e",
+    "semanticParts": [
+      "corridor-shell"
+    ],
+    "sockets": [
+      {
+        "position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "type": "floor-mount"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "type": "top-surface"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          -1.0000001192092896
+        ],
+        "type": "butt-join-n"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          1.0000001192092896
+        ],
+        "type": "butt-join-s"
+      },
+      {
+        "position": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "type": "butt-join-e"
+      },
+      {
+        "position": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "type": "butt-join-w"
+      }
+    ]
+  },
+  "corridor-junction": {
+    "admissionClass": "DIRECT_MODULATED",
+    "canonicalScale": 0.5,
+    "category": "corridor-shell",
+    "companionLeaf": null,
+    "file": "corridor-junction.glb",
+    "materialFamilies": [
+      "stone"
+    ],
+    "recipeHash": "32a85057916bf049cd83b6a1d25d09895ede41716634e80478604165cffeb58a",
+    "semanticParts": [
+      "corridor-shell"
+    ],
+    "sockets": [
+      {
+        "position": [
+          0.0014433860778808594,
+          0.0,
+          5.960464477539063e-08
+        ],
+        "type": "floor-mount"
+      },
+      {
+        "position": [
+          0.0014433860778808594,
+          0.0,
+          5.960464477539063e-08
+        ],
+        "type": "top-surface"
+      },
+      {
+        "position": [
+          0.0014433860778808594,
+          0.0,
+          -1.0000001192092896
+        ],
+        "type": "butt-join-n"
+      },
+      {
+        "position": [
+          0.0014433860778808594,
+          0.0,
+          1.000000238418579
+        ],
+        "type": "butt-join-s"
+      },
+      {
+        "position": [
+          1.0028867721557617,
+          0.0,
+          5.960464477539063e-08
+        ],
+        "type": "butt-join-e"
+      },
+      {
+        "position": [
+          -1.0,
+          0.0,
+          5.960464477539063e-08
+        ],
+        "type": "butt-join-w"
+      }
+    ]
+  },
+  "corridor-transition": {
+    "admissionClass": "DIRECT_MODULATED",
+    "canonicalScale": 0.5,
+    "category": "corridor-shell",
+    "companionLeaf": null,
+    "file": "corridor-transition.glb",
+    "materialFamilies": [
+      "stone"
+    ],
+    "recipeHash": "04bcc265e0c5177b9a875714bb8ea233d0d094f5bb4aa059d5ca57d22aa8951c",
+    "semanticParts": [
+      "corridor-shell"
+    ],
+    "sockets": [
+      {
+        "position": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "type": "floor-mount"
+      },
+      {
+        "position": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "type": "top-surface"
+      },
+      {
+        "position": [
+          -1.0,
+          0.0,
+          -2.0
+        ],
+        "type": "butt-join-n"
+      },
+      {
+        "position": [
+          -1.0,
+          0.0,
+          2.0
+        ],
+        "type": "butt-join-s"
+      },
+      {
+        "position": [
+          1.0000007152557373,
+          0.0,
+          0.0
+        ],
+        "type": "butt-join-e"
+      },
+      {
+        "position": [
+          -3.0000007152557373,
+          0.0,
+          0.0
+        ],
+        "type": "butt-join-w"
+      }
+    ]
+  },
+  "corridor-wide": {
+    "admissionClass": "DIRECT_MODULATED",
+    "canonicalScale": 0.5,
+    "category": "corridor-shell",
+    "companionLeaf": null,
+    "file": "corridor-wide.glb",
+    "materialFamilies": [
+      "stone"
+    ],
+    "recipeHash": "75bc88010a1f16322a0d1b00aec093ab9303473fc4da7d2eadf9e454d66c6d7a",
+    "semanticParts": [
+      "corridor-shell"
+    ],
+    "sockets": [
+      {
+        "position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "type": "floor-mount"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "type": "top-surface"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          -2.000000476837158
+        ],
+        "type": "butt-join-n"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          2.000000476837158
+        ],
+        "type": "butt-join-s"
+      },
+      {
+        "position": [
+          2.0,
+          0.0,
+          0.0
+        ],
+        "type": "butt-join-e"
+      },
+      {
+        "position": [
+          -2.0,
+          0.0,
+          0.0
+        ],
+        "type": "butt-join-w"
+      }
+    ]
+  },
+  "corridor-wide-corner": {
+    "admissionClass": "DIRECT_MODULATED",
+    "canonicalScale": 0.5,
+    "category": "corridor-shell",
+    "companionLeaf": null,
+    "file": "corridor-wide-corner.glb",
+    "materialFamilies": [
+      "stone"
+    ],
+    "recipeHash": "90f6d46c8a01e4c0b4c647e2538c3edfd4f080d492deef1df76115b1eff9b057",
+    "semanticParts": [
+      "corridor-shell"
+    ],
+    "sockets": [
+      {
+        "position": [
+          1.1920928955078125e-07,
+          0.0,
+          0.0
+        ],
+        "type": "floor-mount"
+      },
+      {
+        "position": [
+          1.1920928955078125e-07,
+          0.0,
+          0.0
+        ],
+        "type": "top-surface"
+      },
+      {
+        "position": [
+          1.1920928955078125e-07,
+          0.0,
+          -2.0
+        ],
+        "type": "butt-join-n"
+      },
+      {
+        "position": [
+          1.1920928955078125e-07,
+          0.0,
+          2.0
+        ],
+        "type": "butt-join-s"
+      },
+      {
+        "position": [
+          2.000000238418579,
+          0.0,
+          0.0
+        ],
+        "type": "butt-join-e"
+      },
+      {
+        "position": [
+          -2.0,
+          0.0,
+          0.0
+        ],
+        "type": "butt-join-w"
+      }
+    ]
+  },
+  "corridor-wide-end": {
+    "admissionClass": "DIRECT_MODULATED",
+    "canonicalScale": 0.5,
+    "category": "corridor-shell",
+    "companionLeaf": null,
+    "file": "corridor-wide-end.glb",
+    "materialFamilies": [
+      "stone"
+    ],
+    "recipeHash": "1bb66f1d026e17425ec031884429460e37fb8b1d43f03bffbf973a7b98858dac",
+    "semanticParts": [
+      "corridor-shell"
+    ],
+    "sockets": [
+      {
+        "position": [
+          -7.152557373046875e-07,
+          0.0,
+          0.0
+        ],
+        "type": "floor-mount"
+      },
+      {
+        "position": [
+          -7.152557373046875e-07,
+          0.0,
+          0.0
+        ],
+        "type": "top-surface"
+      },
+      {
+        "position": [
+          -7.152557373046875e-07,
+          0.0,
+          -2.000000476837158
+        ],
+        "type": "butt-join-n"
+      },
+      {
+        "position": [
+          -7.152557373046875e-07,
+          0.0,
+          2.000000476837158
+        ],
+        "type": "butt-join-s"
+      },
+      {
+        "position": [
+          2.0,
+          0.0,
+          0.0
+        ],
+        "type": "butt-join-e"
+      },
+      {
+        "position": [
+          -2.0000014305114746,
+          0.0,
+          0.0
+        ],
+        "type": "butt-join-w"
+      }
+    ]
+  },
+  "corridor-wide-intersection": {
+    "admissionClass": "DIRECT_MODULATED",
+    "canonicalScale": 0.5,
+    "category": "corridor-shell",
+    "companionLeaf": null,
+    "file": "corridor-wide-intersection.glb",
+    "materialFamilies": [
+      "stone"
+    ],
+    "recipeHash": "c930cd3a7762c5fba3207982ae2fe2e54a14c958a1fcee31ceabc9961d951d9b",
+    "semanticParts": [
+      "corridor-shell"
+    ],
+    "sockets": [
+      {
+        "position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "type": "floor-mount"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "type": "top-surface"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          -2.0
+        ],
+        "type": "butt-join-n"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          2.0
+        ],
+        "type": "butt-join-s"
+      },
+      {
+        "position": [
+          2.0,
+          0.0,
+          0.0
+        ],
+        "type": "butt-join-e"
+      },
+      {
+        "position": [
+          -2.0,
+          0.0,
+          0.0
+        ],
+        "type": "butt-join-w"
+      }
+    ]
+  },
+  "corridor-wide-junction": {
+    "admissionClass": "DIRECT_MODULATED",
+    "canonicalScale": 0.5,
+    "category": "corridor-shell",
+    "companionLeaf": null,
+    "file": "corridor-wide-junction.glb",
+    "materialFamilies": [
+      "stone"
+    ],
+    "recipeHash": "0f4f3e6f547a9cd6ea7ef9541a03e2722ac15ead2bf92fc915c5a5efccd727e7",
+    "semanticParts": [
+      "corridor-shell"
+    ],
+    "sockets": [
+      {
+        "position": [
+          1.1920928955078125e-07,
+          0.0,
+          2.384185791015625e-07
+        ],
+        "type": "floor-mount"
+      },
+      {
+        "position": [
+          1.1920928955078125e-07,
+          0.0,
+          2.384185791015625e-07
+        ],
+        "type": "top-surface"
+      },
+      {
+        "position": [
+          1.1920928955078125e-07,
+          0.0,
+          -2.0
+        ],
+        "type": "butt-join-n"
+      },
+      {
+        "position": [
+          1.1920928955078125e-07,
+          0.0,
+          2.000000476837158
+        ],
+        "type": "butt-join-s"
+      },
+      {
+        "position": [
+          2.000000238418579,
+          0.0,
+          2.384185791015625e-07
+        ],
+        "type": "butt-join-e"
+      },
+      {
+        "position": [
+          -2.0,
+          0.0,
+          2.384185791015625e-07
+        ],
+        "type": "butt-join-w"
+      }
+    ]
+  },
+  "gate": {
+    "admissionClass": "DIRECT_MODULATED",
+    "canonicalScale": 0.5,
+    "category": "arch",
+    "companionLeaf": null,
+    "file": "gate.glb",
+    "materialFamilies": [
+      "stone"
+    ],
+    "recipeHash": "55d6ff58a23e900dba86a2237e3b1e052954667fc1588072464b1c037ab7a2ac",
+    "semanticParts": [
+      "arch"
+    ],
+    "sockets": [
+      {
+        "position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "type": "floor-mount"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          -0.3500000536441803
+        ],
+        "type": "butt-join-n"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          0.3500000536441803
+        ],
+        "type": "butt-join-s"
+      },
+      {
+        "position": [
+          1.100000023841858,
+          0.0,
+          0.0
+        ],
+        "type": "butt-join-e"
+      },
+      {
+        "position": [
+          -1.100000023841858,
+          0.0,
+          0.0
+        ],
+        "type": "butt-join-w"
+      }
+    ]
+  },
+  "gate-door": {
+    "admissionClass": "DIRECT_MODULATED",
+    "canonicalScale": 0.5,
+    "category": "doorway-frame",
+    "companionLeaf": null,
+    "file": "gate-door.glb",
+    "materialFamilies": [
+      "stone",
+      "wood"
+    ],
+    "recipeHash": "11e5cc219825d18888c5d90a2184e9f1072c2dd79f37299ff747555048ef9189",
+    "semanticParts": [
+      "doorway-frame",
+      "door-leaf"
+    ],
+    "sockets": [
+      {
+        "position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "type": "floor-mount"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          -0.3500000536441803
+        ],
+        "type": "butt-join-n"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          0.3500000536441803
+        ],
+        "type": "butt-join-s"
+      },
+      {
+        "position": [
+          1.100000023841858,
+          0.0,
+          0.0
+        ],
+        "type": "butt-join-e"
+      },
+      {
+        "position": [
+          -1.100000023841858,
+          0.0,
+          0.0
+        ],
+        "type": "butt-join-w"
+      },
+      {
+        "position": [
+          0.75,
+          0.8989213705062866,
+          -4.321188251654297e-08
+        ],
+        "type": "hinge"
+      },
+      {
+        "position": [
+          0.75,
+          0.8989213705062866,
+          -4.321188251654297e-08
+        ],
+        "type": "hinge"
+      }
+    ]
+  },
+  "gate-door-window": {
+    "admissionClass": "DIRECT_MODULATED",
+    "canonicalScale": 0.5,
+    "category": "doorway-frame",
+    "companionLeaf": null,
+    "file": "gate-door-window.glb",
+    "materialFamilies": [
+      "stone",
+      "wood"
+    ],
+    "recipeHash": "ec1282888d82b72617d9c23e35087b0bbf11dc368ca93db58b33abef46309188",
+    "semanticParts": [
+      "doorway-frame",
+      "door-leaf"
+    ],
+    "sockets": [
+      {
+        "position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "type": "floor-mount"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          -0.3500000536441803
+        ],
+        "type": "butt-join-n"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          0.3500000536441803
+        ],
+        "type": "butt-join-s"
+      },
+      {
+        "position": [
+          1.100000023841858,
+          0.0,
+          0.0
+        ],
+        "type": "butt-join-e"
+      },
+      {
+        "position": [
+          -1.100000023841858,
+          0.0,
+          0.0
+        ],
+        "type": "butt-join-w"
+      },
+      {
+        "position": [
+          0.75,
+          0.8989213705062866,
+          1.9520669658501952e-07
+        ],
+        "type": "hinge"
+      },
+      {
+        "position": [
+          0.75,
+          0.8989213705062866,
+          1.9520669658501952e-07
+        ],
+        "type": "hinge"
+      }
+    ]
+  },
+  "gate-metal-bars": {
+    "admissionClass": "DIRECT_MODULATED",
+    "canonicalScale": 0.5,
+    "category": "doorway-frame",
+    "companionLeaf": null,
+    "file": "gate-metal-bars.glb",
+    "materialFamilies": [
+      "iron",
+      "stone"
+    ],
+    "recipeHash": "897c68759f78497f2b7d67ccff00e014c67b620983bacc717823ff0d7d4701ad",
+    "semanticParts": [
+      "doorway-frame",
+      "door-leaf"
+    ],
+    "sockets": [
+      {
+        "position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "type": "floor-mount"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          -0.3500000536441803
+        ],
+        "type": "butt-join-n"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          0.3500000536441803
+        ],
+        "type": "butt-join-s"
+      },
+      {
+        "position": [
+          1.100000023841858,
+          0.0,
+          0.0
+        ],
+        "type": "butt-join-e"
+      },
+      {
+        "position": [
+          -1.100000023841858,
+          0.0,
+          0.0
+        ],
+        "type": "butt-join-w"
+      },
+      {
+        "position": [
+          -0.7499999642372132,
+          0.8499999642372131,
+          0.0
+        ],
+        "type": "hinge"
+      },
+      {
+        "position": [
+          -0.7499999642372132,
+          0.8499999642372131,
+          0.0
+        ],
+        "type": "hinge"
+      }
+    ]
+  },
+  "room-corner": {
+    "admissionClass": "DIRECT_MODULATED",
+    "canonicalScale": 0.5,
+    "category": "room-shell",
+    "companionLeaf": null,
+    "file": "room-corner.glb",
+    "materialFamilies": [
+      "stone"
+    ],
+    "recipeHash": "b55c2a9bef47dd1bca8ba96baebadc4c4bc5948c6e57047e3f0560eccf79f677",
+    "semanticParts": [
+      "room-shell"
+    ],
+    "sockets": [
+      {
+        "position": [
+          2.384185791015625e-07,
+          0.0,
+          -7.152557373046875e-07
+        ],
+        "type": "floor-mount"
+      },
+      {
+        "position": [
+          2.384185791015625e-07,
+          0.0,
+          -7.152557373046875e-07
+        ],
+        "type": "top-surface"
+      },
+      {
+        "position": [
+          2.384185791015625e-07,
+          0.0,
+          -3.000001907348633
+        ],
+        "type": "butt-join-n"
+      },
+      {
+        "position": [
+          2.384185791015625e-07,
+          0.0,
+          3.000000476837158
+        ],
+        "type": "butt-join-s"
+      },
+      {
+        "position": [
+          3.000000476837158,
+          0.0,
+          -7.152557373046875e-07
+        ],
+        "type": "butt-join-e"
+      },
+      {
+        "position": [
+          -3.0,
+          0.0,
+          -7.152557373046875e-07
+        ],
+        "type": "butt-join-w"
+      }
+    ]
+  },
+  "room-large": {
+    "admissionClass": "DIRECT_MODULATED",
+    "canonicalScale": 0.5,
+    "category": "room-shell",
+    "companionLeaf": null,
+    "file": "room-large.glb",
+    "materialFamilies": [
+      "stone"
+    ],
+    "recipeHash": "0d62f6d08096a3fdf3858e715970ef5e8a9c9f6d2a1994babe7bd599ff81df3a",
+    "semanticParts": [
+      "room-shell"
+    ],
+    "sockets": [
+      {
+        "position": [
+          -0.0002498626708984375,
+          0.0,
+          0.0
+        ],
+        "type": "floor-mount"
+      },
+      {
+        "position": [
+          -0.0002498626708984375,
+          0.0,
+          0.0
+        ],
+        "type": "top-surface"
+      },
+      {
+        "position": [
+          -0.0002498626708984375,
+          0.0,
+          -5.0
+        ],
+        "type": "butt-join-n"
+      },
+      {
+        "position": [
+          -0.0002498626708984375,
+          0.0,
+          5.0
+        ],
+        "type": "butt-join-s"
+      },
+      {
+        "position": [
+          5.0,
+          0.0,
+          0.0
+        ],
+        "type": "butt-join-e"
+      },
+      {
+        "position": [
+          -5.000499725341797,
+          0.0,
+          0.0
+        ],
+        "type": "butt-join-w"
+      }
+    ]
+  },
+  "room-large-variation": {
+    "admissionClass": "DIRECT_MODULATED",
+    "canonicalScale": 0.5,
+    "category": "room-shell",
+    "companionLeaf": null,
+    "file": "room-large-variation.glb",
+    "materialFamilies": [
+      "stone"
+    ],
+    "recipeHash": "1477ad75449e4dd3d0252d82ed0bfa4ee90a1f330829fbbdc09abb873302914f",
+    "semanticParts": [
+      "room-shell"
+    ],
+    "sockets": [
+      {
+        "position": [
+          7.152557373046875e-07,
+          0.0,
+          0.0
+        ],
+        "type": "floor-mount"
+      },
+      {
+        "position": [
+          7.152557373046875e-07,
+          0.0,
+          0.0
+        ],
+        "type": "top-surface"
+      },
+      {
+        "position": [
+          7.152557373046875e-07,
+          0.0,
+          -5.0
+        ],
+        "type": "butt-join-n"
+      },
+      {
+        "position": [
+          7.152557373046875e-07,
+          0.0,
+          5.0
+        ],
+        "type": "butt-join-s"
+      },
+      {
+        "position": [
+          5.000001430511475,
+          0.0,
+          0.0
+        ],
+        "type": "butt-join-e"
+      },
+      {
+        "position": [
+          -5.0,
+          0.0,
+          0.0
+        ],
+        "type": "butt-join-w"
+      }
+    ]
+  },
+  "room-small": {
+    "admissionClass": "DIRECT_MODULATED",
+    "canonicalScale": 0.5,
+    "category": "room-shell",
+    "companionLeaf": null,
+    "file": "room-small.glb",
+    "materialFamilies": [
+      "stone"
+    ],
+    "recipeHash": "608cec2e27961c776a0b7bc25d501bac2de282ec90593d3b2ac9e43b6d1fccf1",
+    "semanticParts": [
+      "room-shell"
+    ],
+    "sockets": [
+      {
+        "position": [
+          1.1920928955078125e-07,
+          0.0,
+          3.5762786865234375e-07
+        ],
+        "type": "floor-mount"
+      },
+      {
+        "position": [
+          1.1920928955078125e-07,
+          0.0,
+          3.5762786865234375e-07
+        ],
+        "type": "top-surface"
+      },
+      {
+        "position": [
+          1.1920928955078125e-07,
+          0.0,
+          -2.999999761581421
+        ],
+        "type": "butt-join-n"
+      },
+      {
+        "position": [
+          1.1920928955078125e-07,
+          0.0,
+          3.000000476837158
+        ],
+        "type": "butt-join-s"
+      },
+      {
+        "position": [
+          3.000000238418579,
+          0.0,
+          3.5762786865234375e-07
+        ],
+        "type": "butt-join-e"
+      },
+      {
+        "position": [
+          -3.0,
+          0.0,
+          3.5762786865234375e-07
+        ],
+        "type": "butt-join-w"
+      }
+    ]
+  },
+  "room-small-variation": {
+    "admissionClass": "DIRECT_MODULATED",
+    "canonicalScale": 0.5,
+    "category": "room-shell",
+    "companionLeaf": null,
+    "file": "room-small-variation.glb",
+    "materialFamilies": [
+      "stone"
+    ],
+    "recipeHash": "e6941d063581409e9ca5fab74963d7669b3d9c7f432cf20338fa4f6b1e9851d3",
+    "semanticParts": [
+      "room-shell"
+    ],
+    "sockets": [
+      {
+        "position": [
+          2.384185791015625e-07,
+          0.0,
+          3.5762786865234375e-07
+        ],
+        "type": "floor-mount"
+      },
+      {
+        "position": [
+          2.384185791015625e-07,
+          0.0,
+          3.5762786865234375e-07
+        ],
+        "type": "top-surface"
+      },
+      {
+        "position": [
+          2.384185791015625e-07,
+          0.0,
+          -2.999999761581421
+        ],
+        "type": "butt-join-n"
+      },
+      {
+        "position": [
+          2.384185791015625e-07,
+          0.0,
+          3.000000476837158
+        ],
+        "type": "butt-join-s"
+      },
+      {
+        "position": [
+          3.000000238418579,
+          0.0,
+          3.5762786865234375e-07
+        ],
+        "type": "butt-join-e"
+      },
+      {
+        "position": [
+          -2.999999761581421,
+          0.0,
+          3.5762786865234375e-07
+        ],
+        "type": "butt-join-w"
+      }
+    ]
+  },
+  "room-wide": {
+    "admissionClass": "DIRECT_MODULATED",
+    "canonicalScale": 0.5,
+    "category": "room-shell",
+    "companionLeaf": null,
+    "file": "room-wide.glb",
+    "materialFamilies": [
+      "stone"
+    ],
+    "recipeHash": "b049ef4c16196acb030690bf38c8c25f9bf203d1a78ce62c8d88b5b0c918799a",
+    "semanticParts": [
+      "room-shell"
+    ],
+    "sockets": [
+      {
+        "position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "type": "floor-mount"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "type": "top-surface"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          -3.000000476837158
+        ],
+        "type": "butt-join-n"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          3.000000476837158
+        ],
+        "type": "butt-join-s"
+      },
+      {
+        "position": [
+          5.0,
+          0.0,
+          0.0
+        ],
+        "type": "butt-join-e"
+      },
+      {
+        "position": [
+          -5.0,
+          0.0,
+          0.0
+        ],
+        "type": "butt-join-w"
+      }
+    ]
+  },
+  "room-wide-variation": {
+    "admissionClass": "DIRECT_MODULATED",
+    "canonicalScale": 0.5,
+    "category": "room-shell",
+    "companionLeaf": null,
+    "file": "room-wide-variation.glb",
+    "materialFamilies": [
+      "stone"
+    ],
+    "recipeHash": "dea53f6e50c08a495ce7bb284133bd7fa9da9e6f622ced442ed847adde27657f",
+    "semanticParts": [
+      "room-shell"
+    ],
+    "sockets": [
+      {
+        "position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "type": "floor-mount"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "type": "top-surface"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          -3.000000476837158
+        ],
+        "type": "butt-join-n"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          3.000000476837158
+        ],
+        "type": "butt-join-s"
+      },
+      {
+        "position": [
+          5.0,
+          0.0,
+          0.0
+        ],
+        "type": "butt-join-e"
+      },
+      {
+        "position": [
+          -5.0,
+          0.0,
+          0.0
+        ],
+        "type": "butt-join-w"
+      }
+    ]
+  },
+  "stairs": {
+    "admissionClass": "DIRECT_MODULATED",
+    "canonicalScale": 0.5,
+    "category": "stairs",
+    "companionLeaf": null,
+    "file": "stairs.glb",
+    "materialFamilies": [
+      "stone"
+    ],
+    "recipeHash": "9b04a93841efe118f90f2dcaa15cd6120f31fe995087402833c5b3e65aedb836",
+    "semanticParts": [
+      "stairs"
+    ],
+    "sockets": [
+      {
+        "position": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "type": "floor-mount"
+      },
+      {
+        "position": [
+          0.0,
+          4.275000095367432,
+          -1.0
+        ],
+        "type": "top-surface"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          -3.0999999046325684
+        ],
+        "type": "butt-join-n"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          1.0999999046325684
+        ],
+        "type": "butt-join-s"
+      },
+      {
+        "position": [
+          1.100000023841858,
+          0.0,
+          -1.0
+        ],
+        "type": "butt-join-e"
+      },
+      {
+        "position": [
+          -1.100000023841858,
+          0.0,
+          -1.0
+        ],
+        "type": "butt-join-w"
+      }
+    ]
+  },
+  "stairs-wide": {
+    "admissionClass": "DIRECT_MODULATED",
+    "canonicalScale": 0.5,
+    "category": "stairs",
+    "companionLeaf": null,
+    "file": "stairs-wide.glb",
+    "materialFamilies": [
+      "stone"
+    ],
+    "recipeHash": "b0e12182e21fb9d0019e5a34103d94530d44ef1a72a5e8f0abbcce9b40010ab7",
+    "semanticParts": [
+      "stairs"
+    ],
+    "sockets": [
+      {
+        "position": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "type": "floor-mount"
+      },
+      {
+        "position": [
+          0.0,
+          4.275000095367432,
+          -1.0
+        ],
+        "type": "top-surface"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          -3.0999999046325684
+        ],
+        "type": "butt-join-n"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          1.0999999046325684
+        ],
+        "type": "butt-join-s"
+      },
+      {
+        "position": [
+          2.0999999046325684,
+          0.0,
+          -1.0
+        ],
+        "type": "butt-join-e"
+      },
+      {
+        "position": [
+          -2.0999999046325684,
+          0.0,
+          -1.0
+        ],
+        "type": "butt-join-w"
+      }
+    ]
+  },
+  "template-corner": {
+    "admissionClass": "DIRECT_MODULATED",
+    "canonicalScale": 0.5,
+    "category": "wall-corner",
+    "companionLeaf": null,
+    "file": "template-corner.glb",
+    "materialFamilies": [
+      "stone"
+    ],
+    "recipeHash": "c23d85d3e57fb44beee0890f24e9ff95aff2f73334b1fc81cbea2f774770648e",
+    "semanticParts": [
+      "wall-corner"
+    ],
+    "sockets": [
+      {
+        "position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "type": "floor-mount"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "type": "butt-join-n"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "type": "butt-join-s"
+      },
+      {
+        "position": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "type": "butt-join-e"
+      },
+      {
+        "position": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "type": "butt-join-w"
+      }
+    ]
+  },
+  "template-detail": {
+    "admissionClass": "DIRECT_MODULATED",
+    "canonicalScale": 0.5,
+    "category": "wall",
+    "companionLeaf": null,
+    "file": "template-detail.glb",
+    "materialFamilies": [
+      "stone"
+    ],
+    "recipeHash": "6e58ca15b34f34bf25be55442c026a33e81b8cddc02688f10962956cd1cad6db",
+    "semanticParts": [
+      "wall"
+    ],
+    "sockets": [
+      {
+        "position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "type": "floor-mount"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          -0.44783157110214233
+        ],
+        "type": "butt-join-n"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          0.44783157110214233
+        ],
+        "type": "butt-join-s"
+      },
+      {
+        "position": [
+          0.44783157110214233,
+          0.0,
+          0.0
+        ],
+        "type": "butt-join-e"
+      },
+      {
+        "position": [
+          -0.44783157110214233,
+          0.0,
+          0.0
+        ],
+        "type": "butt-join-w"
+      }
+    ]
+  },
+  "template-floor": {
+    "admissionClass": "DIRECT_MODULATED",
+    "canonicalScale": 0.5,
+    "category": "floor",
+    "companionLeaf": null,
+    "file": "template-floor.glb",
+    "materialFamilies": [
+      "stone"
+    ],
+    "recipeHash": "44d2a37b4e864b6fc2794a4a10265e17099fc784d5d0b3cb708a0224a57fc387",
+    "semanticParts": [
+      "floor"
+    ],
+    "sockets": [
+      {
+        "position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "type": "floor-mount"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "type": "butt-join-n"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "type": "butt-join-s"
+      },
+      {
+        "position": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "type": "butt-join-e"
+      },
+      {
+        "position": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "type": "butt-join-w"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "type": "top-surface"
+      }
+    ]
+  },
+  "template-floor-big": {
+    "admissionClass": "DIRECT_MODULATED",
+    "canonicalScale": 0.5,
+    "category": "floor",
+    "companionLeaf": null,
+    "file": "template-floor-big.glb",
+    "materialFamilies": [
+      "stone"
+    ],
+    "recipeHash": "a0136a83453a5c8b6c54fae804208349b19d49d81e54cb0185dfd8763b7d558f",
+    "semanticParts": [
+      "floor"
+    ],
+    "sockets": [
+      {
+        "position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "type": "floor-mount"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          -2.0
+        ],
+        "type": "butt-join-n"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          2.0
+        ],
+        "type": "butt-join-s"
+      },
+      {
+        "position": [
+          2.0,
+          0.0,
+          0.0
+        ],
+        "type": "butt-join-e"
+      },
+      {
+        "position": [
+          -2.0,
+          0.0,
+          0.0
+        ],
+        "type": "butt-join-w"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "type": "top-surface"
+      }
+    ]
+  },
+  "template-floor-detail": {
+    "admissionClass": "DIRECT_MODULATED",
+    "canonicalScale": 0.5,
+    "category": "floor",
+    "companionLeaf": null,
+    "file": "template-floor-detail.glb",
+    "materialFamilies": [
+      "stone"
+    ],
+    "recipeHash": "b804ed183335c14951fee15a79cadeb09830946b92d404f71914985e4679f0fe",
+    "semanticParts": [
+      "floor"
+    ],
+    "sockets": [
+      {
+        "position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "type": "floor-mount"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "type": "butt-join-n"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "type": "butt-join-s"
+      },
+      {
+        "position": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "type": "butt-join-e"
+      },
+      {
+        "position": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "type": "butt-join-w"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "type": "top-surface"
+      }
+    ]
+  },
+  "template-floor-detail-a": {
+    "admissionClass": "DIRECT_MODULATED",
+    "canonicalScale": 0.5,
+    "category": "floor",
+    "companionLeaf": null,
+    "file": "template-floor-detail-a.glb",
+    "materialFamilies": [
+      "stone"
+    ],
+    "recipeHash": "a7378f6d54ddbfb0851eff65d7d917e11a5b569de05b021980a3b982b67c9d32",
+    "semanticParts": [
+      "floor"
+    ],
+    "sockets": [
+      {
+        "position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "type": "floor-mount"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "type": "butt-join-n"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "type": "butt-join-s"
+      },
+      {
+        "position": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "type": "butt-join-e"
+      },
+      {
+        "position": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "type": "butt-join-w"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "type": "top-surface"
+      }
+    ]
+  },
+  "template-floor-layer": {
+    "admissionClass": "DIRECT_MODULATED",
+    "canonicalScale": 0.5,
+    "category": "floor",
+    "companionLeaf": null,
+    "file": "template-floor-layer.glb",
+    "materialFamilies": [
+      "stone"
+    ],
+    "recipeHash": "3aaf880f918779e2a09d44503c0a80daf6eef3e1987969f782b391e9013cd4db",
+    "semanticParts": [
+      "floor"
+    ],
+    "sockets": [
+      {
+        "position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "type": "floor-mount"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          -1.0000001192092896
+        ],
+        "type": "butt-join-n"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          1.0000001192092896
+        ],
+        "type": "butt-join-s"
+      },
+      {
+        "position": [
+          1.0059354305267334,
+          0.0,
+          0.0
+        ],
+        "type": "butt-join-e"
+      },
+      {
+        "position": [
+          -1.0059354305267334,
+          0.0,
+          0.0
+        ],
+        "type": "butt-join-w"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "type": "top-surface"
+      }
+    ]
+  },
+  "template-floor-layer-hole": {
+    "admissionClass": "DIRECT_MODULATED",
+    "canonicalScale": 0.5,
+    "category": "floor",
+    "companionLeaf": null,
+    "file": "template-floor-layer-hole.glb",
+    "materialFamilies": [
+      "stone"
+    ],
+    "recipeHash": "fe1a7486b95aa2d52f659e4ddfcb83b153aaa95e0e8f8d2489328b3f40e603b3",
+    "semanticParts": [
+      "floor"
+    ],
+    "sockets": [
+      {
+        "position": [
+          3.516674041748047e-06,
+          0.0,
+          0.0
+        ],
+        "type": "floor-mount"
+      },
+      {
+        "position": [
+          3.516674041748047e-06,
+          0.0,
+          -1.0000001192092896
+        ],
+        "type": "butt-join-n"
+      },
+      {
+        "position": [
+          3.516674041748047e-06,
+          0.0,
+          1.0000001192092896
+        ],
+        "type": "butt-join-s"
+      },
+      {
+        "position": [
+          1.0108299255371094,
+          0.0,
+          0.0
+        ],
+        "type": "butt-join-e"
+      },
+      {
+        "position": [
+          -1.0108228921890259,
+          0.0,
+          0.0
+        ],
+        "type": "butt-join-w"
+      },
+      {
+        "position": [
+          3.516674041748047e-06,
+          0.0,
+          0.0
+        ],
+        "type": "top-surface"
+      }
+    ]
+  },
+  "template-floor-layer-raised": {
+    "admissionClass": "DIRECT_MODULATED",
+    "canonicalScale": 0.5,
+    "category": "floor",
+    "companionLeaf": null,
+    "file": "template-floor-layer-raised.glb",
+    "materialFamilies": [
+      "stone"
+    ],
+    "recipeHash": "08268455b8523d64e76e2408991d4a5321a66083eb9e9fcc2bfa8a413c047824",
+    "semanticParts": [
+      "floor"
+    ],
+    "sockets": [
+      {
+        "position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "type": "floor-mount"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          -1.0000001192092896
+        ],
+        "type": "butt-join-n"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          1.0000001192092896
+        ],
+        "type": "butt-join-s"
+      },
+      {
+        "position": [
+          1.0059354305267334,
+          0.0,
+          0.0
+        ],
+        "type": "butt-join-e"
+      },
+      {
+        "position": [
+          -1.0059354305267334,
+          0.0,
+          0.0
+        ],
+        "type": "butt-join-w"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "type": "top-surface"
+      }
+    ]
+  },
+  "template-wall": {
+    "admissionClass": "DIRECT_MODULATED",
+    "canonicalScale": 0.5,
+    "category": "wall",
+    "companionLeaf": null,
+    "file": "template-wall.glb",
+    "materialFamilies": [
+      "stone"
+    ],
+    "recipeHash": "b972c4d614e762428a922ad1ca1d305640d38190c0ee23ccd274415d55c0c3aa",
+    "semanticParts": [
+      "wall"
+    ],
+    "sockets": [
+      {
+        "position": [
+          0.0,
+          0.0,
+          -0.498391717672348
+        ],
+        "type": "floor-mount"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          -0.996783435344696
+        ],
+        "type": "butt-join-n"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "type": "butt-join-s"
+      },
+      {
+        "position": [
+          1.0,
+          0.0,
+          -0.498391717672348
+        ],
+        "type": "butt-join-e"
+      },
+      {
+        "position": [
+          -1.0,
+          0.0,
+          -0.498391717672348
+        ],
+        "type": "butt-join-w"
+      }
+    ]
+  },
+  "template-wall-corner": {
+    "admissionClass": "DIRECT_MODULATED",
+    "canonicalScale": 0.5,
+    "category": "wall-corner",
+    "companionLeaf": null,
+    "file": "template-wall-corner.glb",
+    "materialFamilies": [
+      "stone"
+    ],
+    "recipeHash": "b7b5041949bb4016eb8ec2db82671daca55fcf62dbd673c0f673ee8d7409f6b4",
+    "semanticParts": [
+      "wall-corner"
+    ],
+    "sockets": [
+      {
+        "position": [
+          -0.25049877166748047,
+          0.0,
+          -0.25049877166748047
+        ],
+        "type": "floor-mount"
+      },
+      {
+        "position": [
+          -0.25049877166748047,
+          0.0,
+          -0.5009975433349609
+        ],
+        "type": "butt-join-n"
+      },
+      {
+        "position": [
+          -0.25049877166748047,
+          0.0,
+          0.0
+        ],
+        "type": "butt-join-s"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          -0.25049877166748047
+        ],
+        "type": "butt-join-e"
+      },
+      {
+        "position": [
+          -0.5009975433349609,
+          0.0,
+          -0.25049877166748047
+        ],
+        "type": "butt-join-w"
+      }
+    ]
+  },
+  "template-wall-detail-a": {
+    "admissionClass": "DIRECT_MODULATED",
+    "canonicalScale": 0.5,
+    "category": "wall",
+    "companionLeaf": null,
+    "file": "template-wall-detail-a.glb",
+    "materialFamilies": [
+      "stone"
+    ],
+    "recipeHash": "783fb6ea42b00b8894972520ca5146e059efd8716348a0563f22cb2fd18c4926",
+    "semanticParts": [
+      "wall"
+    ],
+    "sockets": [
+      {
+        "position": [
+          0.0,
+          0.0,
+          -0.498391717672348
+        ],
+        "type": "floor-mount"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          -0.996783435344696
+        ],
+        "type": "butt-join-n"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "type": "butt-join-s"
+      },
+      {
+        "position": [
+          1.0,
+          0.0,
+          -0.498391717672348
+        ],
+        "type": "butt-join-e"
+      },
+      {
+        "position": [
+          -1.0,
+          0.0,
+          -0.498391717672348
+        ],
+        "type": "butt-join-w"
+      }
+    ]
+  },
+  "template-wall-half": {
+    "admissionClass": "DIRECT_MODULATED",
+    "canonicalScale": 0.5,
+    "category": "wall",
+    "companionLeaf": null,
+    "file": "template-wall-half.glb",
+    "materialFamilies": [
+      "stone"
+    ],
+    "recipeHash": "b5d8ef86c4df66774cf593d7df81f9b9598b35620755f18859303d9fcf6ad58f",
+    "semanticParts": [
+      "wall"
+    ],
+    "sockets": [
+      {
+        "position": [
+          0.0,
+          0.0,
+          -0.45184914767742157
+        ],
+        "type": "floor-mount"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          -0.9036983251571655
+        ],
+        "type": "butt-join-n"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          2.9802322387695312e-08
+        ],
+        "type": "butt-join-s"
+      },
+      {
+        "position": [
+          0.5,
+          0.0,
+          -0.45184914767742157
+        ],
+        "type": "butt-join-e"
+      },
+      {
+        "position": [
+          -0.5,
+          0.0,
+          -0.45184914767742157
+        ],
+        "type": "butt-join-w"
+      }
+    ]
+  },
+  "template-wall-stairs": {
+    "admissionClass": "DIRECT_MODULATED",
+    "canonicalScale": 0.5,
+    "category": "wall",
+    "companionLeaf": null,
+    "file": "template-wall-stairs.glb",
+    "materialFamilies": [
+      "stone"
+    ],
+    "recipeHash": "a4495c053a83803b42d66b4717189afdb01703ad7cb6b1dd9549c73cbd45c8ff",
+    "semanticParts": [
+      "wall"
+    ],
+    "sockets": [
+      {
+        "position": [
+          0.0,
+          0.0,
+          -0.1565195918083191
+        ],
+        "type": "floor-mount"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          -0.3130391836166382
+        ],
+        "type": "butt-join-n"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "type": "butt-join-s"
+      },
+      {
+        "position": [
+          1.0,
+          0.0,
+          -0.1565195918083191
+        ],
+        "type": "butt-join-e"
+      },
+      {
+        "position": [
+          -1.0,
+          0.0,
+          -0.1565195918083191
+        ],
+        "type": "butt-join-w"
+      }
+    ]
+  },
+  "template-wall-top": {
+    "admissionClass": "DIRECT_MODULATED",
+    "canonicalScale": 0.5,
+    "category": "wall",
+    "companionLeaf": null,
+    "file": "template-wall-top.glb",
+    "materialFamilies": [
+      "stone"
+    ],
+    "recipeHash": "55cf68dee1e85c578e9832fae46057383487d4f0493837550feee6c84534e73d",
+    "semanticParts": [
+      "wall"
+    ],
+    "sockets": [
+      {
+        "position": [
+          0.0,
+          0.0,
+          -0.15461419522762299
+        ],
+        "type": "floor-mount"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          -0.30922839045524597
+        ],
+        "type": "butt-join-n"
+      },
+      {
+        "position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "type": "butt-join-s"
+      },
+      {
+        "position": [
+          1.0,
+          0.0,
+          -0.15461419522762299
+        ],
+        "type": "butt-join-e"
+      },
+      {
+        "position": [
+          -1.0,
+          0.0,
+          -0.15461419522762299
+        ],
+        "type": "butt-join-w"
+      }
+    ]
+  }
+}

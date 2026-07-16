@@ -27,7 +27,7 @@ const state = {
   packRecord: null, savedPackRecord: null, packIsNew: false,
   materialFallbacks: new Set(),
   model: null, modelUrl: null, childPreview: null, childRecord: null, childId: null,
-  overlays: { axes:true, grid:true, module:true, ground:true, wireframe:false, backface:false, normals:false, aabb:true, footprint:true, hierarchy:false },
+  overlays: { axes:true, grid:true, module:true, ground:true, wireframe:false, backface:false, normals:false, aabb:true, footprint:true, hierarchy:false, humanScale:true },
 };
 
 const canvas = $("#viewCanvas");
@@ -47,7 +47,34 @@ const socketGroup = new THREE.Group(); socketGroup.name = "socket-overlays"; ori
 const childGroup = new THREE.Group(); childGroup.name = "mate-preview"; scene.add(childGroup);
 const axes = new THREE.AxesHelper(2.5); axes.name = "overlay-axes"; overlayGroup.add(axes);
 const unitGrid = new THREE.GridHelper(40,40,0x826a47,0x37333b); unitGrid.name="overlay-grid"; overlayGroup.add(unitGrid);
+const humanYardstick = createHumanYardstick(); humanYardstick.position.set(-1.25,0,.8); modelMount.add(humanYardstick);
 let moduleGrid = null, groundPlane = null, boxHelper = null, footprintHelper = null, normalsHelper = null;
+
+function createHumanYardstick() {
+  // Diagnostic geometry only: a deterministic six-foot reference in Genesis's 5 ft/u scale.
+  // It is a sibling of the orientation group so asset TRS and quarter-turns cannot move it.
+  const group=new THREE.Group(); group.name="overlay-human-yardstick"; group.userData={diagnostic:true,heightWorldUnits:1.2,groundY:0};
+  const neutral=new THREE.MeshStandardMaterial({color:0xb8b2a8,roughness:1,metalness:0,flatShading:true});
+  const dark=new THREE.MeshStandardMaterial({color:0x77736d,roughness:1,metalness:0,flatShading:true});
+  const part=(geometry,material,x,y,z)=>{const mesh=new THREE.Mesh(geometry,material);mesh.position.set(x,y,z);mesh.name="human-yardstick-facet";group.add(mesh);return mesh;};
+  part(new THREE.CylinderGeometry(.052,.062,.52,4,1,false),dark,-.072,.26,0);
+  part(new THREE.CylinderGeometry(.052,.062,.52,4,1,false),dark,.072,.26,0);
+  part(new THREE.CylinderGeometry(.11,.17,.48,5,1,false),neutral,0,.76,0);
+  part(new THREE.CylinderGeometry(.09,.105,.2,6,1,false),neutral,0,1.1,0);
+  const tickGeometry=new THREE.BufferGeometry().setFromPoints([
+    new THREE.Vector3(-.24,0,0),new THREE.Vector3(-.24,1.2,0),
+    new THREE.Vector3(-.29,0,0),new THREE.Vector3(-.19,0,0),
+    new THREE.Vector3(-.29,1.2,0),new THREE.Vector3(-.19,1.2,0),
+  ]);
+  const ticks=new THREE.LineSegments(tickGeometry,new THREE.LineBasicMaterial({color:0xf0ca7a}));ticks.name="human-yardstick-measure";group.add(ticks);
+  return group;
+}
+function humanYardstickMetrics() {
+  humanYardstick.updateMatrixWorld(true);
+  const box=new THREE.Box3().setFromObject(humanYardstick);
+  const projected=[];for(const x of [box.min.x,box.max.x])for(const y of [box.min.y,box.max.y])for(const z of [box.min.z,box.max.z])projected.push(new THREE.Vector3(x,y,z).project(camera));
+  return {height:box.max.y-box.min.y,groundY:box.min.y,parent:humanYardstick.parent?.name,visible:humanYardstick.visible,onScreen:projected.some(point=>Math.abs(point.x)<=1&&Math.abs(point.y)<=1&&point.z>=-1&&point.z<=1)};
+}
 
 const transform = new TransformControls(camera, renderer.domElement);
 const transformVisual = typeof transform.getHelper === "function" ? transform.getHelper() : transform;
@@ -178,7 +205,7 @@ function applyCalibrationPreview() {
 }
 function fitCamera() {
   if (!state.model) return;
-  const box=new THREE.Box3().setFromObject(state.model); if(box.isEmpty()) return;
+  const box=new THREE.Box3().setFromObject(state.model); if(state.overlays.humanScale)box.expandByObject(humanYardstick);if(box.isEmpty()) return;
   const size=box.getSize(new THREE.Vector3()), center=box.getCenter(new THREE.Vector3()); orbit.target.copy(center); orbit.distance=Math.max(size.length()*1.8,2); orbit.pitch=.48;orbit.yaw=.72;
 }
 function disposeObject(root) { root.traverse((o)=>{ if(o.geometry&&o.userData.__workbenchGenerated)o.geometry.dispose(); }); }
@@ -214,7 +241,7 @@ function normalLines(root) {
   if(!positions.length)return null;const geometry=new THREE.BufferGeometry();geometry.setAttribute("position",new THREE.Float32BufferAttribute(positions,3));const lines=new THREE.LineSegments(geometry,new THREE.LineBasicMaterial({color:0x78b7ff}));lines.name="overlay-normals";return lines;
 }
 function applyOverlayState() {
-  axes.visible=state.overlays.axes;unitGrid.visible=state.overlays.grid;if(moduleGrid)moduleGrid.visible=state.overlays.module;if(groundPlane)groundPlane.visible=state.overlays.ground;if(boxHelper)boxHelper.visible=state.overlays.aabb;if(footprintHelper)footprintHelper.visible=state.overlays.footprint;if(normalsHelper)normalsHelper.visible=state.overlays.normals;$("#hierarchy").style.display=state.overlays.hierarchy?"block":"none";
+  axes.visible=state.overlays.axes;unitGrid.visible=state.overlays.grid;humanYardstick.visible=state.overlays.humanScale;$("#humanScaleLegend").hidden=!state.overlays.humanScale;if(moduleGrid)moduleGrid.visible=state.overlays.module;if(groundPlane)groundPlane.visible=state.overlays.ground;if(boxHelper)boxHelper.visible=state.overlays.aabb;if(footprintHelper)footprintHelper.visible=state.overlays.footprint;if(normalsHelper)normalsHelper.visible=state.overlays.normals;$("#hierarchy").style.display=state.overlays.hierarchy?"block":"none";
   state.model?.traverse((object)=>{if(!object.isMesh)return;const material=object.userData.__workbenchMaterial;if(!material)return;if(!object.userData.__workbenchClone)object.userData.__workbenchClone=material.clone();const m=object.userData.__workbenchClone;m.wireframe=state.overlays.wireframe;m.side=state.overlays.backface?THREE.BackSide:THREE.FrontSide;m.needsUpdate=true;object.material=(state.overlays.wireframe||state.overlays.backface)?m:material;});
 }
 
@@ -293,6 +320,6 @@ function bind() {
 }
 function resize(){const rect=canvas.getBoundingClientRect();const w=Math.max(1,Math.floor(rect.width)),h=Math.max(1,Math.floor(rect.height));renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();}
 function frame(){resize();const cp=Math.cos(orbit.pitch);camera.position.set(orbit.target.x+Math.sin(orbit.yaw)*cp*orbit.distance,orbit.target.y+Math.sin(orbit.pitch)*orbit.distance,orbit.target.z+Math.cos(orbit.yaw)*cp*orbit.distance);camera.lookAt(orbit.target);renderer.render(scene,camera);requestAnimationFrame(frame);}
-async function boot(){bind();const [calibration,census,admission]=await Promise.all([fetch("/api/calibration").then(r=>r.json()),fetch("/dev/model-foundry/kenney-census.json").then(r=>r.json()),fetch("/dev/model-foundry/kenney-admission-manifest.json").then(r=>r.json())]);state.calibration=calibration;state.census=census;state.candidates=new Set((admission.candidates||[]).map(assetIdOf));for(const entry of census.assets)state.censusById.set(assetIdOf(entry),entry);for(const [id,record] of Object.entries(calibration.assets)){if(state.censusById.has(id))continue;const [pack,slug]=id.split("/");const entry={pack,name:`${slug}.glb`,path:`assets/models/${pack}/${slug}.glb`,sha256:record.sourceSha256,role:record.category,family:"normalized",normalizedOnly:true};census.assets.push(entry);state.censusById.set(id,entry);}renderAssetList();const first=state.censusById.has("kenney-mini-dungeon/gate")?"kenney-mini-dungeon/gate":Object.keys(calibration.assets)[0];await selectAsset(first);window.__kenneyWorkbench={state,selectAsset,loadCurrentView,snapMate:applyMatePreview,pieceLocalBounds,rotatedBoundsControl,renderer,scene,camera};window.__kenneyWorkbenchReady=true;setStatus("ready",true);}
+async function boot(){bind();const [calibration,census,admission]=await Promise.all([fetch("/api/calibration").then(r=>r.json()),fetch("/dev/model-foundry/kenney-census.json").then(r=>r.json()),fetch("/dev/model-foundry/kenney-admission-manifest.json").then(r=>r.json())]);state.calibration=calibration;state.census=census;state.candidates=new Set((admission.candidates||[]).map(assetIdOf));for(const entry of census.assets)state.censusById.set(assetIdOf(entry),entry);for(const [id,record] of Object.entries(calibration.assets)){if(state.censusById.has(id))continue;const [pack,slug]=id.split("/");const entry={pack,name:`${slug}.glb`,path:`assets/models/${pack}/${slug}.glb`,sha256:record.sourceSha256,role:record.category,family:"normalized",normalizedOnly:true};census.assets.push(entry);state.censusById.set(id,entry);}renderAssetList();const first=state.censusById.has("kenney-mini-dungeon/gate")?"kenney-mini-dungeon/gate":Object.keys(calibration.assets)[0];await selectAsset(first);window.__kenneyWorkbench={state,selectAsset,loadCurrentView,snapMate:applyMatePreview,pieceLocalBounds,rotatedBoundsControl,humanYardstickMetrics,renderer,scene,camera};window.__kenneyWorkbenchReady=true;setStatus("ready",true);}
 
 frame();boot().catch(error=>{setError(error.stack||error.message);setStatus("boot failed",false);window.__kenneyWorkbenchReady=false;});

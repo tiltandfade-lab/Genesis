@@ -728,6 +728,138 @@ function dspEntryDoorCell(path, room) {
   return null;
 }
 
+/* ─── ELEV-1 — rolled room elevation, THE PROJECTION (docs/KENNEY-SOCKET-WAVE.md ELEV-1) ────────
+   `segment.elevation` (src/engine/dungeon-walk.js's dwalkElevation, {roll,profile,degradedFrom})
+   projects onto the SAME parallel `tiers` buffer STAGE C2's side-parse patches already write —
+   extends its logical write range to ±3 quanta (the buffer itself is Int8Array already, no
+   datatype change; ±3 is the new LEGITIMATE write range this unit adds). PRECEDENCE LAW: a
+   side-parse cell (Adam's rolled prose) WINS — the profile only fills cells side-parse left at 0.
+   Door-aperture cells + their inside neighbor are forced back to tier 0 as a final pass (a rolled
+   profile routinely covers HALF the room or more, unlike side-parse's small hand-authored patches,
+   so a profile/door collision is the common case here, not the rare one side-parse never needed to
+   guard). SHAPE-GENERIC: every patch generator below reads ONLY `room.cells` (the room's actual
+   C3 polygon, whatever its shape) — no octagon/L/cross special-casing. Determinism: every
+   disambiguating choice (which half raises, terrace step count, chasm depth) uses ITS OWN
+   dspHashStr-derived chain off this build's `seed` (never the shared mulberry32 `rng` stream),
+   same discipline as C2's dspTerrainSeedHash / C3's dspShapeCellHash01 — never perturbs the call
+   sequence any OTHER draw in this file depends on. */
+
+function dspElevBBox(cells) {
+  let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+  cells.forEach((c) => {
+    if (c.x < minX) minX = c.x; if (c.x > maxX) maxX = c.x;
+    if (c.y < minY) minY = c.y; if (c.y > maxY) maxY = c.y;
+  });
+  return { minX, maxX, minY, maxY, w: maxX - minX + 1, d: maxY - minY + 1 };
+}
+
+// Dais / Sunken center: a centroid patch at ~half the room's own bbox extent per axis, intersected
+// against the room's ACTUAL polygon (never bleeds onto a non-floor cell of an L/octagon/cave room).
+function dspElevCentroidCells(room, frac) {
+  const cellSet = new Set(room.cells.map((c) => c.x + "," + c.y));
+  const bb = dspElevBBox(room.cells);
+  const pw = Math.max(1, Math.min(bb.w, Math.round(bb.w * frac)));
+  const pd = Math.max(1, Math.min(bb.d, Math.round(bb.d * frac)));
+  const ox = bb.minX + Math.floor((bb.w - pw) / 2), oy = bb.minY + Math.floor((bb.d - pd) / 2);
+  const out = [];
+  for (let y = oy; y < oy + pd; y++) for (let x = ox; x < ox + pw; x++) if (cellSet.has(x + "," + y)) out.push({ x, y });
+  return out;
+}
+
+// Split-level: raise ONE half (picked off the seed hash) +1 along the room's own longer axis; the
+// "one stair/ramp cell" is a SINGLE cell (never a whole boundary column/row) — the room.cells member
+// nearest the split line AND nearest the room's own cross-axis center, held back to baseline 0
+// regardless of which half it would otherwise fall in.
+function dspElevSplitCells(room, seed) {
+  const bb = dspElevBBox(room.cells);
+  const alongX = bb.w >= bb.d;
+  const raiseFirst = (dspHashStr(String(seed) + ":elev:split:" + room.segNum) % 2) === 0;
+  const mid = alongX ? (bb.minX + Math.floor(bb.w / 2)) : (bb.minY + Math.floor(bb.d / 2));
+  const crossCenter = alongX ? (bb.minY + bb.d / 2) : (bb.minX + bb.w / 2);
+  let joinKey = null, joinDist = Infinity;
+  room.cells.forEach((c) => {
+    const along = alongX ? c.x : c.y, cross = alongX ? c.y : c.x;
+    const dist = Math.abs(along - mid) + Math.abs(cross - crossCenter);
+    if (dist < joinDist) { joinDist = dist; joinKey = c.x + "," + c.y; }
+  });
+  const out = [];
+  room.cells.forEach((c) => {
+    if (joinKey && (c.x + "," + c.y) === joinKey) return; // the one stair/ramp cell
+    const along = alongX ? c.x : c.y;
+    if ((along < mid) === raiseFirst) out.push(c);
+  });
+  return out;
+}
+
+// Terraced: 2-3 steps of +1 climbing from one edge along the room's own longer axis. Step count is
+// seed-picked (2 or 3, matching the table's "2-3 steps" band); band 0 (the starting edge) stays
+// baseline 0, bands 1..steps climb +1 each — caps the max tier at +3, inside the ±3 budget exactly.
+function dspElevTerracedPatches(room, seed) {
+  const bb = dspElevBBox(room.cells);
+  const alongX = bb.w >= bb.d;
+  const steps = 2 + (dspHashStr(String(seed) + ":elev:terrace:" + room.segNum) % 2);
+  const bands = steps + 1;
+  const extent = alongX ? bb.w : bb.d, base = alongX ? bb.minX : bb.minY;
+  const byBand = Array.from({ length: bands }, () => []);
+  room.cells.forEach((c) => {
+    const rel = (alongX ? c.x : c.y) - base;
+    const bandIdx = Math.max(0, Math.min(bands - 1, Math.floor((rel * bands) / Math.max(1, extent))));
+    byBand[bandIdx].push(c);
+  });
+  const patches = [];
+  for (let b = 1; b < bands; b++) if (byBand[b].length) patches.push({ cells: byBand[b], tier: b });
+  return patches;
+}
+
+// Gallery ring: the room's own polygon FRONTIER (any cell 4-adjacent to a non-member cell) at +2 —
+// a one-cell-wide perimeter ring, shape-generic off room.cells (works identically for a rect,
+// octagon, or cave room's frontier). The interior stays at baseline 0 ("overlooking center" — the
+// draft names no separate center tier, so none is invented here).
+function dspElevGalleryRingCells(room) {
+  const allowed = room.cells;
+  const allowedKeys = new Set(allowed.map((c) => c.x + "," + c.y));
+  return allowed.filter((c) =>
+    !allowedKeys.has((c.x - 1) + "," + c.y) || !allowedKeys.has((c.x + 1) + "," + c.y) ||
+    !allowedKeys.has(c.x + "," + (c.y - 1)) || !allowedKeys.has(c.x + "," + (c.y + 1)));
+}
+
+// Chasm/shaft: a one-cell-wide cut perpendicular to the room's longer axis, through its middle, at
+// -2 or -3 (seed-picked); one cell along the cut (the "bridge or edge path") stays baseline 0 so
+// the room is never fully bisected into two unreachable halves by the profile alone.
+function dspElevChasmPatches(room, seed) {
+  const bb = dspElevBBox(room.cells);
+  const alongX = bb.w >= bb.d;
+  const h = dspHashStr(String(seed) + ":elev:chasm:" + room.segNum);
+  const tier = -(2 + (h % 2));
+  const mid = alongX ? (bb.minX + Math.floor(bb.w / 2)) : (bb.minY + Math.floor(bb.d / 2));
+  const bridgeAt = alongX ? (bb.minY + Math.floor(bb.d / 2)) : (bb.minX + Math.floor(bb.w / 2));
+  const cells = [];
+  room.cells.forEach((c) => {
+    const coord = alongX ? c.x : c.y;
+    if (coord !== mid) return;
+    const cross = alongX ? c.y : c.x;
+    if (cross === bridgeAt) return; // the bridge/edge-path cell
+    cells.push(c);
+  });
+  return cells.length ? [{ cells, tier }] : [];
+}
+
+// dspElevationPatchesForProfile(profile, room, seed) -> [{cells:[{x,y}...], tier}] — the dispatcher.
+// "Flat" and any unrecognized profile name (a future Adam re-tune this build hasn't seen yet)
+// -> [] (no patches, room stays flat) — an honest no-op, never a guess.
+function dspElevationPatchesForProfile(profile, room, seed) {
+  if (!room || !Array.isArray(room.cells) || !room.cells.length) return [];
+  switch (profile) {
+    case "Dais": { const cells = dspElevCentroidCells(room, 0.5); return cells.length ? [{ cells, tier: 1 }] : []; }
+    case "Sunken center": { const cells = dspElevCentroidCells(room, 0.5); return cells.length ? [{ cells, tier: -1 }] : []; }
+    case "Split-level": { const cells = dspElevSplitCells(room, seed); return cells.length ? [{ cells, tier: 1 }] : []; }
+    case "Terraced": return dspElevTerracedPatches(room, seed);
+    case "Gallery ring": { const cells = dspElevGalleryRingCells(room); return cells.length ? [{ cells, tier: 2 }] : []; }
+    case "Chasm/shaft": return dspElevChasmPatches(room, seed);
+    default: return [];
+  }
+}
+
 // ─── the single-attempt build (throws on an unreachable plan; caller retries with a new seed) ─
 function dspBuildPlanOnce(segments, topologyName, opts, seed) {
   const rng = dspMulberry32(seed);
@@ -903,6 +1035,48 @@ function dspBuildPlanOnce(segments, topologyName, opts, seed) {
 
     corridors.push({ fromSeg: ra.segNum, toSeg: rb.segNum, cells: widened, width, bridge });
   });
+
+  // ELEV-1 (docs/KENNEY-SOCKET-WAVE.md ELEV-1): fold each room's rolled `segment.elevation` profile
+  // into `tiers` — runs HERE (after doors are carved, `doors[]` fully populated) so the door-cell
+  // law below can zero every real door-aperture cell regardless of source. PRECEDENCE LAW: only
+  // writes a cell still at 0 (a side-parse patch, stamped above, already claimed anything nonzero).
+  if (SPATIAL_SHAPES) {
+    rooms.forEach((r) => {
+      const seg = byId[r.segId];
+      if (!seg || !seg.elevation || !r.cells || !r.cells.length) return;
+      const profile = seg.elevation.profile;
+      const patches = dspElevationPatchesForProfile(profile, r, seed);
+      if (!patches.length) return;
+      r.elevationProfile = { profile, degradedFrom: seg.elevation.degradedFrom || null }; // additive provenance
+      patches.forEach((patch) => patch.cells.forEach((c) => {
+        if (c.x < 0 || c.y < 0 || c.x >= cellW || c.y >= cellD) return;
+        const ii = idx(c.x, c.y);
+        if (tiers[ii] !== 0) return; // side-parse already claimed this cell — it wins
+        tiers[ii] = patch.tier;
+      }));
+    });
+
+    // Door-aperture law: a door cell, and every room-interior cell immediately inside it, always
+    // stay tier 0 — a rolled profile can legitimately cover half a room or more (unlike side-parse's
+    // small hand-authored patches), so without this a dais/sunken/terrace/chasm patch would routinely
+    // stamp a doorway. `toSeg` identifies the OTHER room a door leads to; the door's OWN room is
+    // whichever of betweenSegs isn't toSeg (dungeon-walk.js's own doors[] convention, unchanged here).
+    // ALL matching same-room 4-neighbors are zeroed, not just the first found — a door cell can sit
+    // where more than one of its neighbors belongs to its own room (e.g. near a corner of a non-rect
+    // C3 shape), and a player stepping through should never land on a raised/lowered cell on ANY side.
+    doors.forEach((d) => {
+      if (d.x < 0 || d.y < 0 || d.x >= cellW || d.y >= cellD) return;
+      tiers[idx(d.x, d.y)] = 0;
+      const ownSeg = Array.isArray(d.betweenSegs) ? d.betweenSegs.find((n) => n !== d.toSeg) : null;
+      const ownRoom = ownSeg != null ? rooms.find((r) => r.segNum === ownSeg) : null;
+      if (!ownRoom || !Array.isArray(ownRoom.cells)) return;
+      const ownKeys = new Set(ownRoom.cells.map((c) => c.x + "," + c.y));
+      const nbrs = [[d.x + 1, d.y], [d.x - 1, d.y], [d.x, d.y + 1], [d.x, d.y - 1]];
+      for (const [nx, ny] of nbrs) {
+        if (ownKeys.has(nx + "," + ny) && nx >= 0 && ny >= 0 && nx < cellW && ny < cellD) tiers[idx(nx, ny)] = 0;
+      }
+    });
+  }
 
   // rasterize: any VOID cell 8-adjacent to a passable (FLOOR/DOOR/WATER) cell becomes WALL.
   const passable = new Set([SPATIAL_CELL.FLOOR, SPATIAL_CELL.DOOR, SPATIAL_CELL.WATER]);

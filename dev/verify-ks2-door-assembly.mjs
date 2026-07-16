@@ -343,6 +343,30 @@ group("B5 — determinism: interiorBuildBoard(plan, opts) is byte-identical acro
   });
 }
 
+group("B6 — KGR-4B live door path delegates hinge mating to the attachment solver");
+{
+  const bootSrc = read("src/ui/theater-boot.js");
+  const attachmentSrc = read("src/ui/theater-attachment.js");
+  const splitSrc = extractFn(bootSrc, "kitDoorSplitTemplate") || "";
+  const buildSrc = extractFn(bootSrc, "interiorBuildKitDoorMesh") || "";
+  ok(/import \{ socketFrameOf, mateMatrix, applyMate \} from "\.\/theater-attachment\.js";/.test(bootSrc),
+    "theater-boot imports the exact KGR-4B public attachment API");
+  ok(splitSrc.includes("socketFrameOf(rawGroup, hingeSocketId)"),
+    "door split resolves the frame hinge as a six-degree socket frame");
+  ok(splitSrc.includes("leafGeometry.applyMatrix4(hingeInverse)"),
+    "detached leaf geometry is expressed in the full inverse hinge frame, not position-only translation");
+  ok(buildSrc.includes("mateMatrix(frame, tmpl.hingeSocketId, leafPiece, tmpl.hingeSocketId)"),
+    "live kit-door builder computes frame-to-leaf mating through mateMatrix");
+  ok(buildSrc.includes("applyMate(leafPiece, mate, doorGroup)"),
+    "live kit-door builder applies the solver result in the requested door parent");
+  ok(buildSrc.includes("doorGroup.position.set((entry.x || 0) - (cx || 0), floorTop, (entry.y || 0) - (cz || 0))") &&
+     buildSrc.includes("doorGroup.rotation.y = widthAxisIsZ ? Math.PI / 2 : 0"),
+    "frame placement remains canonical aperture cell + quarter-turn orientation");
+  ok(attachmentSrc.includes("hostWorld.clone().multiply(hostFrame.localMatrix).multiply(mateFlip)") &&
+     attachmentSrc.includes("multiply(childFrame.localMatrix.clone().invert())"),
+    "attachment module carries the locked host * hostSocket * flip * inverse(childSocket) formula");
+}
+
 // ============================================================================
 // manifest sanity
 // ============================================================================

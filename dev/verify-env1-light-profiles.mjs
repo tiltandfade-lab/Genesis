@@ -69,6 +69,8 @@ const CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
 // dedicated range — never shared with any other verify-*.mjs/capture-*.mjs dedicated range.
 const GREEN_PORT_CANDIDATES = [5311, 5312, 5313];
 const RED_PORT_CANDIDATES = [5316, 5317, 5318];
+const PROTECTION_PORT_CANDIDATES = [5341, 5342, 5343];
+const KGR1_COMMIT = "8261915d";
 
 let pass = 0, fail = 0;
 function ok(cond, label, detail) { if (cond) { pass++; console.log("  ✓", label); } else { fail++; console.log("  ✗ FAIL:", label, detail !== undefined ? "— " + JSON.stringify(detail) : ""); } }
@@ -119,12 +121,12 @@ async function launchChrome() {
 // (no copying of the multi-GB asset tree) and self-cleaning (an isolated scratch dir, never the
 // real worktree). Proves RED against the ACTUAL base-commit source, not a hand description of it.
 // ------------------------------------------------------------------------------------------------
-function buildOldCodeScratch() {
-  const scratch = path.join(repoRoot, ".env1-red-scratch");
+function buildBootScratch(scratchName, bootCommit) {
+  const scratch = path.join(repoRoot, scratchName);
   fs.rmSync(scratch, { recursive: true, force: true });
   fs.mkdirSync(path.join(scratch, "src", "ui"), { recursive: true });
   for (const entry of fs.readdirSync(repoRoot)) {
-    if (entry === "src" || entry === ".env1-red-scratch" || entry === ".git") continue;
+    if (entry === "src" || (entry.startsWith(".env1") && entry.endsWith("-scratch")) || entry === ".git") continue;
     fs.symlinkSync(path.join(repoRoot, entry), path.join(scratch, entry));
   }
   for (const entry of fs.readdirSync(path.join(repoRoot, "src"))) {
@@ -135,7 +137,7 @@ function buildOldCodeScratch() {
     if (entry === "theater-boot.js") continue;
     fs.symlinkSync(path.join(repoRoot, "src", "ui", entry), path.join(scratch, "src", "ui", entry));
   }
-  const oldSource = execFileSync("git", ["show", `${BASE_COMMIT}:src/ui/theater-boot.js`], { cwd: repoRoot, encoding: "utf-8", maxBuffer: 1024 * 1024 * 64 });
+  const oldSource = execFileSync("git", ["show", `${bootCommit}:src/ui/theater-boot.js`], { cwd: repoRoot, encoding: "utf-8", maxBuffer: 1024 * 1024 * 64 });
   fs.writeFileSync(path.join(scratch, "src", "ui", "theater-boot.js"), oldSource);
   return scratch;
 }
@@ -173,9 +175,13 @@ function tabletopFixture(env, lightProfile) {
   for (let x = 0; x < 6; x++) for (let z = 0; z < 5; z++) tiles.push({ x, z, h: 0, kind: "floor" });
   return { tiles, props: [], env, light: { profile: lightProfile }, grid: { bandCount: 5, laneCount: 6 }, __n: Math.random() };
 }
-async function setTabletop(page, env, lightProfile) {
+async function setTabletop(page, env, lightProfile, freezeRandom = false) {
   await page.bringToFront(); // un-throttle this page's rAF loop (see launchChrome's own comment)
-  await page.evaluate((board) => { window.Theater.setBoard(board); }, tabletopFixture(env, lightProfile));
+  await page.evaluate(({ board, freezeRandom }) => {
+    if (!window.__envProtectionRandom) window.__envProtectionRandom = Math.random;
+    Math.random = freezeRandom ? (() => 0.5) : window.__envProtectionRandom;
+    window.Theater.setBoard(board);
+  }, { board: tabletopFixture(env, lightProfile), freezeRandom });
   await sleep(220);
 }
 // NOTE: the WebGL canvas's own drawing buffer reads black post-composite (preserveDrawingBuffer is
@@ -220,9 +226,10 @@ function interiorFixtureSrc(lightProfile) {
     const W = 6, D = 6, wallH = 2.4;
     const floor = [];
     for (let z = 0; z < D; z++) for (let x = 0; x < W; x++) floor.push({ x, z, sx: 1, sy: 1, sz: 1, color: kit.floorColor });
+    // Bare point only: this fixture protects the light profile, so a donor-backed sconce body would
+    // couple its pixel-stability claim to unrelated Kenney geometry/outline policy.
     const lights = [
-      { x: 3, z: -0.9, y: 1.6, color: "#ff9a44", intensity: 1.2, distance: 8, decay: 2, kind: "torch",
-        fixtureId: "sconce-iron", mount: "wall", emitterLocal: { x: 0, y: 0.06, z: 0.16 }, castShadow: false },
+      { x: 3, z: -0.9, y: 1.6, color: "#ff9a44", intensity: 1.2, distance: 8, decay: 2, kind: "torch", castShadow: false },
     ];
     return {
       kind: "interior3d", env: "dungeon", realmId: "gloom", cellSize: 1, wallHeightBase: wallH,
@@ -241,11 +248,26 @@ function interiorFixtureSrc(lightProfile) {
 }
 async function setInterior(page, lightProfile) {
   await page.bringToFront(); // un-throttle this page's rAF loop (see launchChrome's own comment)
+  // This protection fixture owns the ENV-1 lighting claim, not the later Kenney structural
+  // experiment. Keep both OLD and NEW captures on the same per-cell fallback path: explicitly
+  // retire kit shell/door admission and the compiled shell for this comparison. Otherwise a later
+  // graphics unit can legitimately change room geometry and make an unchanged light rig look like
+  // ENV-1 drift. All luminance/profile assertions below still exercise the live interior renderer.
+  await page.evaluate(() => {
+    if (!window.__envProtectionRandom) window.__envProtectionRandom = Math.random;
+    Math.random = () => 0.5; // freeze torch flicker identically on OLD and NEW protection captures
+    if (typeof window.KIT_SHELL_ENABLED !== "undefined") window.KIT_SHELL_ENABLED = false;
+    if (typeof window.KIT_DOORS_ENABLED !== "undefined") window.KIT_DOORS_ENABLED = false;
+    if (window.Theater && typeof window.Theater._setRoomShellEnabled === "function") {
+      window.Theater._setRoomShellEnabled(false);
+    }
+  });
   await page.evaluate((src) => {
     const buildBoard = new Function(src);
     window.Theater.setInteriorBoard(buildBoard());
   }, interiorFixtureSrc(lightProfile));
   await page.waitForFunction(() => !window.Theater || typeof window.Theater.tweensLive !== "function" || window.Theater.tweensLive() === 0, { timeout: 15000 });
+  await page.waitForFunction(() => !window.Theater || typeof window.Theater.interiorFileTexPending !== "function" || window.Theater.interiorFileTexPending() === 0, { timeout: 15000 });
   await sleep(250);
 }
 
@@ -304,11 +326,13 @@ async function main() {
       "current worktree source carries all 3 new symbols");
   }
 
-  const scratch = buildOldCodeScratch();
-  let redServer = null, greenServer = null, browser = null;
+  const scratch = buildBootScratch(".env1-red-scratch", BASE_COMMIT);
+  const protectionScratch = buildBootScratch(".env1-protection-scratch", KGR1_COMMIT);
+  let redServer = null, protectionServer = null, greenServer = null, browser = null;
   try {
-    [redServer, greenServer] = await Promise.all([
+    [redServer, protectionServer, greenServer] = await Promise.all([
       startServer(scratch, RED_PORT_CANDIDATES),
+      startServer(protectionScratch, PROTECTION_PORT_CANDIDATES),
       startServer(repoRoot, GREEN_PORT_CANDIDATES),
     ]);
     browser = await launchChrome();
@@ -317,6 +341,7 @@ async function main() {
     // contexts turned out to starve later mounts (a stuck setInteriorBoard tween-settle wait), so
     // this harness opens each server's page exactly once.
     const redPage = await newMountedPage(browser, redServer.base);
+    const protectionPage = await newMountedPage(browser, protectionServer.base);
     const greenPage = await newMountedPage(browser, greenServer.base);
 
     group("1. RED-FIRST (empirical, base-commit server) — daylit vs moonlit, same fixture/env");
@@ -398,7 +423,7 @@ async function main() {
       ok(darkVaries, "[negative control] dark profile's background DOES vary per-env (protection set correctly still env-keyed)", darkResults);
     }
 
-    group("5. stability — protection-set renders identical old-server vs new-server (pixel-diff < epsilon)");
+    group("5. stability — KGR-1 parent vs current protection render (pixel-diff < epsilon)");
     {
       // Byte-exact is impossible here even for UNCHANGED code — see pixelDiffMean's own header
       // (torch flicker = Math.random every 480ms on live intensities). So: measure the SAME-server
@@ -409,9 +434,9 @@ async function main() {
       const EPS = 0.01;
 
       // 5a. interior3d under torchlit (the working interior look).
-      await setInterior(redPage, "torchlit");
-      const redT1 = await screenshotBase64(redPage);
-      const redT2 = await screenshotBase64(redPage); // same server twice = the noise floor
+      await setInterior(protectionPage, "torchlit");
+      const redT1 = await screenshotBase64(protectionPage);
+      const redT2 = await screenshotBase64(protectionPage); // same server twice = the noise floor
       await setInterior(greenPage, "torchlit");
       const greenT1 = await screenshotBase64(greenPage);
       const noiseA = await pixelDiffMean(greenPage, redT1, redT2);
@@ -423,8 +448,8 @@ async function main() {
       // 5b. interior3d under daylit (the interior channel's OWN pre-existing bright-realm path —
       // never touched by this unit; proves setInteriorBoard's ITR_BRIGHT_REALM_FILL system is
       // fully untouched too, not just the dark/torchlit case).
-      await setInterior(redPage, "daylit");
-      const redD1 = await screenshotBase64(redPage);
+      await setInterior(protectionPage, "daylit");
+      const redD1 = await screenshotBase64(protectionPage);
       await setInterior(greenPage, "daylit");
       const greenD1 = await screenshotBase64(greenPage);
       const diffB = await pixelDiffMean(greenPage, redD1, greenD1);
@@ -434,9 +459,13 @@ async function main() {
       // 5c. flat tabletop under dark (this unit's own protection set, ON the channel this unit
       // actually changed — the strongest stability proof for the tabletop path; the dark profile
       // has flicker 0 and the tabletop has no motes, so this one should be at/near true zero).
-      await setTabletop(redPage, "dungeon", "dark");
+      // Keep the original ENV-1 feature-red server for this tabletop-channel protection. Give it
+      // the same interior->tabletop transition as the current page first; camera/light restore is
+      // part of the claim and a fresh-tabletop vs post-interior comparison is not equivalent.
+      await setInterior(redPage, "daylit");
+      await setTabletop(redPage, "dungeon", "dark", true);
       const redK1 = await screenshotBase64(redPage);
-      await setTabletop(greenPage, "dungeon", "dark");
+      await setTabletop(greenPage, "dungeon", "dark", true);
       const greenK1 = await screenshotBase64(greenPage);
       const diffC = await pixelDiffMean(greenPage, redK1, greenK1);
       console.log("    tabletop/dark: cross-server mean=" + diffC.mean.toFixed(5) + " max=" + diffC.max.toFixed(5));
@@ -460,8 +489,10 @@ async function main() {
   } finally {
     if (browser) await browser.close();
     if (redServer && redServer.proc) { try { redServer.proc.kill("SIGTERM"); } catch (e) {} }
+    if (protectionServer && protectionServer.proc) { try { protectionServer.proc.kill("SIGTERM"); } catch (e) {} }
     if (greenServer && greenServer.proc) { try { greenServer.proc.kill("SIGTERM"); } catch (e) {} }
     fs.rmSync(scratch, { recursive: true, force: true });
+    fs.rmSync(protectionScratch, { recursive: true, force: true });
   }
 }
 

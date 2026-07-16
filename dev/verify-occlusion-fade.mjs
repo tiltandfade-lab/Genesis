@@ -146,7 +146,12 @@ async function main() {
       if (ready) break;
       await sleep(150);
     }
-    await page.addStyleTag({ content: "#toast,.toast,#bardoCard,#spicePop,#diceOverlay{display:none !important;visibility:hidden !important}" });
+    // The projected world-space sample is only meaningful when the theater canvas is the visible
+    // compositor. The start screen otherwise sits above it and makes baseline/RED/GREEN read the
+    // same logo pixels even while the live raycast correctly reports the blocker. This mirrors the
+    // other real-browser theater harnesses' overlay isolation and keeps the visual proof tied to the
+    // live projected occluder geometry below.
+    await page.addStyleTag({ content: "#toast,.toast,#bardoCard,#spicePop,#diceOverlay,#startView{display:none !important;visibility:hidden !important}" });
 
     // PRE-EXISTING BUG discovered while building this harness (flagged separately, out of scope for
     // S-1 — NOT fixed here): theater-boot.js's module-scope `loadWholeObjectBuilders(...)` completion
@@ -328,8 +333,7 @@ async function main() {
 
     // ── take the BASELINE screenshot NOW, off this exact settled mount (no occluders yet) — before
     // ANY second setInteriorBoard call has a chance to touch camera state again.
-    const baseline = await shootAndSample(samplePoint, "baseline");
-    ok(!!baseline.sample, `baseline patch sampled (${JSON.stringify(baseline.sample || baseline.raw)})`);
+    const baseline = await shoot(samplePoint, "baseline");
 
     // ── mount WITH the occluding + control pillar injected onto the EXACT SAME board object
     // (window.__occfadeBoard, stashed above) — never reconstructed from scratch — so cameraFit's own
@@ -375,36 +379,75 @@ async function main() {
     // sample the figure's own screen patch out of a just-captured canvas screenshot (preserveDrawing-
     // Buffer is off — capture-value-plunge.mjs's own established "screenshot then decode as a 2D-canvas
     // image" pattern, since drawImage(glCanvas) reads black once composited).
-    async function shootAndSample(figWorldPos, tag) {
+    async function shoot(figWorldPos, tag) {
       await sleep(600); // generous — let the render-on-demand rAF tick actually paint
       const canvasEl = await page.$(".theater-stage-canvas canvas");
       const shotPath = path.join(outDir, tag + ".png");
       if (canvasEl) await canvasEl.screenshot({ path: shotPath }); else await page.screenshot({ path: shotPath });
+      return { shotPath, figWorldPos };
+    }
+
+    // Derive a stable visual probe from the rendered blocker itself. projectWorldPoint gives the
+    // live occluder's screen neighborhood; inside that neighborhood we select the small patch with
+    // the strongest block-mean red dominance from the RED screenshot. This survives camera/shell
+    // changes without moving a magic pixel by eye, while the saturated fixture color guarantees the
+    // selected patch belongs to the opaque blocker rather than the dungeon palette.
+    async function findRenderedBlockerPatch(shotPath, blockerWorldPos) {
       const pngB64 = fs.readFileSync(shotPath).toString("base64");
-      const sample = await page.evaluate(({ pngB64, figWorldPos }) => new Promise((resolve) => {
+      return await page.evaluate(({ pngB64, blockerWorldPos }) => new Promise((resolve) => {
         const img = new Image();
         img.onload = () => {
           const W = img.naturalWidth, H = img.naturalHeight;
           const c = document.createElement("canvas"); c.width = W; c.height = H;
           const ctx = c.getContext("2d"); ctx.drawImage(img, 0, 0, W, H);
           let data; try { data = ctx.getImageData(0, 0, W, H).data; } catch (e) { return resolve({ err: "getImageData: " + e.message, W, H }); }
-          const p = window.Theater.projectWorldPoint(figWorldPos.x, figWorldPos.y, figWorldPos.z);
-          if (!p) return resolve({ err: "projectWorldPoint returned null", W, H, figWorldPos });
-          const sx = Math.round((p.ndcX * 0.5 + 0.5) * W), sy = Math.round((1 - (p.ndcY * 0.5 + 0.5)) * H);
-          const rad = Math.max(2, Math.floor(H * 0.02));
+          const p = window.Theater.projectWorldPoint(blockerWorldPos.x, blockerWorldPos.y, blockerWorldPos.z);
+          if (!p) return resolve({ err: "projectWorldPoint returned null", W, H, blockerWorldPos });
+          const projectedX = Math.round((p.ndcX * 0.5 + 0.5) * W);
+          const projectedY = Math.round((1 - (p.ndcY * 0.5 + 0.5)) * H);
+          const searchRad = Math.max(24, Math.floor(H * 0.12));
+          const rad = Math.max(3, Math.floor(H * 0.007));
+          let best = null;
+          for (let cy = Math.max(rad, projectedY - searchRad); cy <= Math.min(H - rad - 1, projectedY + searchRad); cy += 2) {
+            for (let cx = Math.max(rad, projectedX - searchRad); cx <= Math.min(W - rad - 1, projectedX + searchRad); cx += 2) {
+              let r = 0, g = 0, b = 0, n = 0;
+              for (let dy = -rad; dy <= rad; dy++) for (let dx = -rad; dx <= rad; dx++) {
+                const i = ((cy + dy) * W + (cx + dx)) * 4;
+                r += data[i]; g += data[i + 1]; b += data[i + 2]; n++;
+              }
+              r /= n; g /= n; b /= n;
+              const score = r - Math.max(g, b);
+              if (!best || score > best.score) best = { sx: cx, sy: cy, rad, score, r, g, b, n };
+            }
+          }
+          resolve(Object.assign(best || {}, { projectedX, projectedY, searchRad, W, H }));
+        };
+        img.onerror = () => resolve({ err: "png decode failed" });
+        img.src = "data:image/png;base64," + pngB64;
+      }), { pngB64, blockerWorldPos });
+    }
+
+    async function sampleShotAtPatch(shotPath, patch) {
+      const pngB64 = fs.readFileSync(shotPath).toString("base64");
+      return await page.evaluate(({ pngB64, patch }) => new Promise((resolve) => {
+        const img = new Image();
+        img.onload = () => {
+          const W = img.naturalWidth, H = img.naturalHeight;
+          const c = document.createElement("canvas"); c.width = W; c.height = H;
+          const ctx = c.getContext("2d"); ctx.drawImage(img, 0, 0, W, H);
+          let data; try { data = ctx.getImageData(0, 0, W, H).data; } catch (e) { return resolve({ err: "getImageData: " + e.message, W, H }); }
+          const sx = patch.sx, sy = patch.sy, rad = patch.rad;
           let r = 0, g = 0, b = 0, n = 0;
           for (let dy = -rad; dy <= rad; dy++) for (let dx = -rad; dx <= rad; dx++) {
             const x = sx + dx, y = sy + dy;
             if (x < 0 || y < 0 || x >= W || y >= H) continue;
             const i = (y * W + x) * 4; r += data[i]; g += data[i + 1]; b += data[i + 2]; n++;
           }
-          const dbg = { p, camPos: window.Theater._interiorCameraPositionForTest(), figWorldPos };
-          resolve(n ? { r: r / n, g: g / n, b: b / n, sx, sy, n } : { err: "0 in-bounds pixels sampled", W, H, sx, sy, dbg });
+          resolve(n ? { r: r / n, g: g / n, b: b / n, sx, sy, rad, n } : { err: "0 in-bounds pixels sampled", W, H, sx, sy });
         };
         img.onerror = () => resolve({ err: "png decode failed" });
         img.src = "data:image/png;base64," + pngB64;
-      }), { pngB64, figWorldPos });
-      return { shotPath, sample: sample && !sample.err ? sample : null, raw: sample };
+      }), { pngB64, patch });
     }
     function colorDist(a, b) { if (!a || !b) return null; return Math.hypot(a.r - b.r, a.g - b.g, a.b - b.b); }
 
@@ -420,7 +463,13 @@ async function main() {
       raycastAtSamplePoint: window.Theater._interiorRaycastClearForTest(sp),
     }), samplePoint);
     console.log("  DEBUG mesh dump (RED):", JSON.stringify(meshDump));
-    const red = await shootAndSample(samplePoint, "red-occluded");
+    const red = await shoot(samplePoint, "red-occluded");
+    const blockerPatch = await findRenderedBlockerPatch(red.shotPath, samplePoint);
+    ok(!blockerPatch.err && blockerPatch.score > 20,
+      `RED: live projected blocker resolves a saturated rendered patch (${JSON.stringify(blockerPatch)})`);
+    baseline.sample = await sampleShotAtPatch(baseline.shotPath, blockerPatch);
+    red.sample = await sampleShotAtPatch(red.shotPath, blockerPatch);
+    ok(!!baseline.sample && !baseline.sample.err, `baseline patch sampled (${JSON.stringify(baseline.sample)})`);
     ok(!!red.sample, `red-state figure patch sampled (${JSON.stringify(red.sample)})`);
     const redDist = colorDist(baseline.sample, red.sample);
     ok(redDist != null && redDist > 40, `RED: figure patch color distance from baseline is LARGE (${redDist && redDist.toFixed(1)}) — the full-height occluder (fade disabled) genuinely blocks the figure, proving this check is load-bearing before trusting any green`);
@@ -431,7 +480,8 @@ async function main() {
     // figure's own patch should read close to baseline (visible through the faded occluder).
     group("GREEN — occlusion fade ENABLED (the fix): the figure's own screen patch reads THROUGH the faded occluder");
     const greenGeo = await mountWithOccluders(false);
-    const green = await shootAndSample(samplePoint, "green-through");
+    const green = await shoot(samplePoint, "green-through");
+    green.sample = await sampleShotAtPatch(green.shotPath, blockerPatch);
     ok(!!green.sample, `green-state figure patch sampled (${JSON.stringify(green.sample)})`);
     const greenDist = colorDist(baseline.sample, green.sample);
     const greenVsRed = colorDist(green.sample, red.sample);

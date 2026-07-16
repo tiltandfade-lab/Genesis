@@ -1,0 +1,719 @@
+{
+  "generatedAt": "2026-07-16T00:15:28.815Z",
+  "branch": "feat/ab-flip-cards",
+  "sha": "aec3c89368349aa34783f5c50d9b7fb5715e1542",
+  "realm": "fantasy",
+  "cast": [
+    {
+      "role": "small",
+      "pieceSlug": "Giant Rat",
+      "registrySlug": "spr-fantasy-giant-rat",
+      "sizeLabel": "Small"
+    },
+    {
+      "role": "medium-humanoid",
+      "pieceSlug": "Gnoll Warrior",
+      "registrySlug": "spr-fantasy-gnoll-warrior",
+      "sizeLabel": "Medium",
+      "substitutedFor": "spr-fantasy-hobgoblin-soldier (candidateAsset:null)"
+    },
+    {
+      "role": "large",
+      "pieceSlug": "Owlbear",
+      "registrySlug": "spr-fantasy-owlbear",
+      "sizeLabel": "Large",
+      "substitutedFor": "spr-fantasy-ogre-zombie (candidateAsset:null)"
+    },
+    {
+      "role": "gargantuan",
+      "pieceSlug": "Adult Gold Dragon",
+      "registrySlug": "spr-fantasy-adult-gold-dragon",
+      "sizeLabel": "Gargantuan (nominal — size field is null on this entry)",
+      "orphanFoldIn": true
+    },
+    {
+      "role": "pc",
+      "pieceSlug": "Dwarf Fighter",
+      "registrySlug": "spr-pc-dwarf-fighter",
+      "sizeLabel": "PC (no size field)",
+      "orphanFoldIn": true
+    }
+  ],
+  "lights": {
+    "torchlit": {
+      "lightProfile": "torchlit",
+      "notes": [],
+      "controlPose": {
+        "position": {
+          "x": 9.526666859848325,
+          "y": 9.43371514283157,
+          "z": 9.526666859848326
+        },
+        "lookAt": {
+          "x": 3.7343872064526344,
+          "y": 3.6979507793211095,
+          "z": 3.7343872064526327
+        }
+      },
+      "cameraIdentityCheck": {
+        "ok": true,
+        "positionMaxDelta": 0,
+        "matrixWorldMaxDelta": 0,
+        "maxDelta": 0,
+        "identical": true
+      },
+      "candidate": {
+        "shot": "shots/torchlit-candidate.png",
+        "piecesResolved": 5,
+        "piecesRequested": 5,
+        "timedOut": false,
+        "perCreature": [
+          {
+            "pieceSlug": "Giant Rat",
+            "registrySlug": "spr-fantasy-giant-rat",
+            "runtimeAdmitted": "candidate",
+            "resolvedPath": "assets/sprites-faceted/spr-fantasy-giant-rat.png",
+            "cachedPathMatchesResolved": true,
+            "textureResolved": true,
+            "textureState": "loaded",
+            "corpus": "faceted (candidate)",
+            "worldHeight": 2,
+            "scaleTrue": 0.36,
+            "worldPos": {
+              "x": -2.0062073183059694,
+              "y": -0.204,
+              "z": 0.4947302031517029
+            },
+            "projectedFootPx": {
+              "x": 515,
+              "y": 412
+            },
+            "projectedWidthPx": 40
+          },
+          {
+            "pieceSlug": "Gnoll Warrior",
+            "registrySlug": "spr-fantasy-gnoll-warrior",
+            "runtimeAdmitted": "candidate",
+            "resolvedPath": "assets/sprites-faceted/spr-fantasy-gnoll-warrior.png",
+            "cachedPathMatchesResolved": true,
+            "textureResolved": true,
+            "textureState": "loaded",
+            "corpus": "faceted (candidate)",
+            "worldHeight": 6,
+            "scaleTrue": 1.09,
+            "worldPos": {
+              "x": -0.9651534700393677,
+              "y": -0.204,
+              "z": 0.5357840514183044
+            },
+            "projectedFootPx": {
+              "x": 610,
+              "y": 474
+            },
+            "projectedWidthPx": 143
+          },
+          {
+            "pieceSlug": "Owlbear",
+            "registrySlug": "spr-fantasy-owlbear",
+            "runtimeAdmitted": "candidate",
+            "resolvedPath": "assets/sprites-faceted/spr-fantasy-owlbear.png",
+            "cachedPathMatchesResolved": true,
+            "textureResolved": true,
+            "textureState": "loaded",
+            "corpus": "faceted (candidate)",
+            "worldHeight": 8,
+            "scaleTrue": 1.45,
+            "worldPos": {
+              "x": 0.042398142814636226,
+              "y": -0.204,
+              "z": 0.5414606213569642
+            },
+            "projectedFootPx": {
+              "x": 712,
+              "y": 537
+            },
+            "projectedWidthPx": 174
+          },
+          {
+            "pieceSlug": "Adult Gold Dragon",
+            "registrySlug": "spr-fantasy-adult-gold-dragon",
+            "runtimeAdmitted": "candidate",
+            "resolvedPath": "assets/sprites-faceted/spr-fantasy-adult-gold-dragon.png",
+            "cachedPathMatchesResolved": true,
+            "textureResolved": true,
+            "textureState": "loaded",
+            "corpus": "faceted (candidate)",
+            "worldHeight": null,
+            "scaleTrue": null,
+            "worldPos": {
+              "x": 1.0234994053840638,
+              "y": -0.204,
+              "z": 0.5244369268417358
+            },
+            "projectedFootPx": {
+              "x": 822,
+              "y": 601
+            },
+            "projectedWidthPx": 87
+          },
+          {
+            "pieceSlug": "Dwarf Fighter",
+            "registrySlug": "spr-pc-dwarf-fighter",
+            "runtimeAdmitted": "candidate",
+            "resolvedPath": "assets/sprites-faceted/spr-pc-dwarf-fighter.png",
+            "cachedPathMatchesResolved": true,
+            "textureResolved": true,
+            "textureState": "loaded",
+            "corpus": "faceted (candidate)",
+            "worldHeight": null,
+            "scaleTrue": null,
+            "worldPos": {
+              "x": 2.0299203991889954,
+              "y": -0.204,
+              "z": 0.5308579206466675
+            },
+            "projectedFootPx": {
+              "x": 940,
+              "y": 673
+            },
+            "projectedWidthPx": 137
+          }
+        ]
+      },
+      "legacy": {
+        "shot": "shots/torchlit-legacy.png",
+        "piecesResolved": 3,
+        "piecesRequested": 5,
+        "timedOut": true,
+        "perCreature": [
+          {
+            "pieceSlug": "Giant Rat",
+            "registrySlug": "spr-fantasy-giant-rat",
+            "runtimeAdmitted": "legacy",
+            "resolvedPath": "assets/sprites/spr-fantasy-giant-rat.png",
+            "cachedPathMatchesResolved": true,
+            "textureResolved": true,
+            "textureState": "loaded",
+            "corpus": "legacy (v3)",
+            "worldHeight": 2,
+            "scaleTrue": 0.36,
+            "worldPos": {
+              "x": -2.0062073183059694,
+              "y": -0.204,
+              "z": 0.4947302031517029
+            },
+            "projectedFootPx": {
+              "x": 515,
+              "y": 412
+            },
+            "projectedWidthPx": 75
+          },
+          {
+            "pieceSlug": "Gnoll Warrior",
+            "registrySlug": "spr-fantasy-gnoll-warrior",
+            "runtimeAdmitted": "legacy",
+            "resolvedPath": "assets/sprites/spr-fantasy-gnoll-warrior.png",
+            "cachedPathMatchesResolved": true,
+            "textureResolved": true,
+            "textureState": "loaded",
+            "corpus": "legacy (v3)",
+            "worldHeight": 6,
+            "scaleTrue": 1.09,
+            "worldPos": {
+              "x": -0.9651534700393677,
+              "y": -0.204,
+              "z": 0.5357840514183044
+            },
+            "projectedFootPx": {
+              "x": 610,
+              "y": 474
+            },
+            "projectedWidthPx": 190
+          },
+          {
+            "pieceSlug": "Owlbear",
+            "registrySlug": "spr-fantasy-owlbear",
+            "runtimeAdmitted": "legacy",
+            "resolvedPath": "assets/sprites/spr-fantasy-owlbear.png",
+            "cachedPathMatchesResolved": true,
+            "textureResolved": true,
+            "textureState": "loaded",
+            "corpus": "legacy (v3)",
+            "worldHeight": 8,
+            "scaleTrue": 1.45,
+            "worldPos": {
+              "x": 0.042398142814636226,
+              "y": -0.204,
+              "z": 0.5414606213569642
+            },
+            "projectedFootPx": {
+              "x": 712,
+              "y": 537
+            },
+            "projectedWidthPx": 250
+          },
+          {
+            "pieceSlug": "Adult Gold Dragon",
+            "registrySlug": "spr-fantasy-adult-gold-dragon",
+            "runtimeAdmitted": "legacy",
+            "resolvedPath": "assets/sprites/spr-fantasy-adult-gold-dragon.png",
+            "cachedPathMatchesResolved": true,
+            "textureResolved": false,
+            "textureState": "failed",
+            "corpus": null,
+            "worldHeight": null,
+            "scaleTrue": null,
+            "worldPos": null,
+            "note": "not present in live interiorGroup — texture never resolved"
+          },
+          {
+            "pieceSlug": "Dwarf Fighter",
+            "registrySlug": "spr-pc-dwarf-fighter",
+            "runtimeAdmitted": "legacy",
+            "resolvedPath": "assets/sprites/spr-pc-dwarf-fighter.png",
+            "cachedPathMatchesResolved": true,
+            "textureResolved": false,
+            "textureState": "failed",
+            "corpus": null,
+            "worldHeight": null,
+            "scaleTrue": null,
+            "worldPos": null,
+            "note": "not present in live interiorGroup — texture never resolved"
+          }
+        ]
+      },
+      "stubApplied": {
+        "ok": true,
+        "results": [
+          {
+            "registrySlug": "spr-fantasy-giant-rat",
+            "ok": true,
+            "prior": "candidate",
+            "now": "legacy"
+          },
+          {
+            "registrySlug": "spr-fantasy-gnoll-warrior",
+            "ok": true,
+            "prior": "candidate",
+            "now": "legacy"
+          },
+          {
+            "registrySlug": "spr-fantasy-owlbear",
+            "ok": true,
+            "prior": "candidate",
+            "now": "legacy"
+          },
+          {
+            "registrySlug": "spr-fantasy-adult-gold-dragon",
+            "ok": true,
+            "prior": "candidate",
+            "now": "legacy"
+          },
+          {
+            "registrySlug": "spr-pc-dwarf-fighter",
+            "ok": true,
+            "prior": "candidate",
+            "now": "legacy"
+          }
+        ]
+      },
+      "stubRestored": {
+        "ok": true,
+        "results": [
+          {
+            "registrySlug": "spr-fantasy-giant-rat",
+            "ok": true,
+            "prior": "legacy",
+            "now": "candidate"
+          },
+          {
+            "registrySlug": "spr-fantasy-gnoll-warrior",
+            "ok": true,
+            "prior": "legacy",
+            "now": "candidate"
+          },
+          {
+            "registrySlug": "spr-fantasy-owlbear",
+            "ok": true,
+            "prior": "legacy",
+            "now": "candidate"
+          },
+          {
+            "registrySlug": "spr-fantasy-adult-gold-dragon",
+            "ok": true,
+            "prior": "legacy",
+            "now": "candidate"
+          },
+          {
+            "registrySlug": "spr-pc-dwarf-fighter",
+            "ok": true,
+            "prior": "legacy",
+            "now": "candidate"
+          }
+        ]
+      },
+      "composite": "torchlit-ab-composite.png"
+    },
+    "daylit": {
+      "lightProfile": "daylit",
+      "notes": [],
+      "controlPose": {
+        "position": {
+          "x": 9.526666859848325,
+          "y": 9.43371514283157,
+          "z": 9.526666859848326
+        },
+        "lookAt": {
+          "x": 3.7343872064526344,
+          "y": 3.6979507793211095,
+          "z": 3.7343872064526327
+        }
+      },
+      "cameraIdentityCheck": {
+        "ok": true,
+        "positionMaxDelta": 0,
+        "matrixWorldMaxDelta": 0,
+        "maxDelta": 0,
+        "identical": true
+      },
+      "candidate": {
+        "shot": "shots/daylit-candidate.png",
+        "piecesResolved": 5,
+        "piecesRequested": 5,
+        "timedOut": false,
+        "perCreature": [
+          {
+            "pieceSlug": "Giant Rat",
+            "registrySlug": "spr-fantasy-giant-rat",
+            "runtimeAdmitted": "candidate",
+            "resolvedPath": "assets/sprites-faceted/spr-fantasy-giant-rat.png",
+            "cachedPathMatchesResolved": true,
+            "textureResolved": true,
+            "textureState": "loaded",
+            "corpus": "faceted (candidate)",
+            "worldHeight": 2,
+            "scaleTrue": 0.36,
+            "worldPos": {
+              "x": -2.0062073183059694,
+              "y": -0.204,
+              "z": 0.4947302031517029
+            },
+            "projectedFootPx": {
+              "x": 515,
+              "y": 412
+            },
+            "projectedWidthPx": 40
+          },
+          {
+            "pieceSlug": "Gnoll Warrior",
+            "registrySlug": "spr-fantasy-gnoll-warrior",
+            "runtimeAdmitted": "candidate",
+            "resolvedPath": "assets/sprites-faceted/spr-fantasy-gnoll-warrior.png",
+            "cachedPathMatchesResolved": true,
+            "textureResolved": true,
+            "textureState": "loaded",
+            "corpus": "faceted (candidate)",
+            "worldHeight": 6,
+            "scaleTrue": 1.09,
+            "worldPos": {
+              "x": -0.9651534700393677,
+              "y": -0.204,
+              "z": 0.5357840514183044
+            },
+            "projectedFootPx": {
+              "x": 610,
+              "y": 474
+            },
+            "projectedWidthPx": 143
+          },
+          {
+            "pieceSlug": "Owlbear",
+            "registrySlug": "spr-fantasy-owlbear",
+            "runtimeAdmitted": "candidate",
+            "resolvedPath": "assets/sprites-faceted/spr-fantasy-owlbear.png",
+            "cachedPathMatchesResolved": true,
+            "textureResolved": true,
+            "textureState": "loaded",
+            "corpus": "faceted (candidate)",
+            "worldHeight": 8,
+            "scaleTrue": 1.45,
+            "worldPos": {
+              "x": 0.042398142814636226,
+              "y": -0.204,
+              "z": 0.5414606213569642
+            },
+            "projectedFootPx": {
+              "x": 712,
+              "y": 537
+            },
+            "projectedWidthPx": 174
+          },
+          {
+            "pieceSlug": "Adult Gold Dragon",
+            "registrySlug": "spr-fantasy-adult-gold-dragon",
+            "runtimeAdmitted": "candidate",
+            "resolvedPath": "assets/sprites-faceted/spr-fantasy-adult-gold-dragon.png",
+            "cachedPathMatchesResolved": true,
+            "textureResolved": true,
+            "textureState": "loaded",
+            "corpus": "faceted (candidate)",
+            "worldHeight": null,
+            "scaleTrue": null,
+            "worldPos": {
+              "x": 1.0234994053840638,
+              "y": -0.204,
+              "z": 0.5244369268417358
+            },
+            "projectedFootPx": {
+              "x": 822,
+              "y": 601
+            },
+            "projectedWidthPx": 87
+          },
+          {
+            "pieceSlug": "Dwarf Fighter",
+            "registrySlug": "spr-pc-dwarf-fighter",
+            "runtimeAdmitted": "candidate",
+            "resolvedPath": "assets/sprites-faceted/spr-pc-dwarf-fighter.png",
+            "cachedPathMatchesResolved": true,
+            "textureResolved": true,
+            "textureState": "loaded",
+            "corpus": "faceted (candidate)",
+            "worldHeight": null,
+            "scaleTrue": null,
+            "worldPos": {
+              "x": 2.0299203991889954,
+              "y": -0.204,
+              "z": 0.5308579206466675
+            },
+            "projectedFootPx": {
+              "x": 940,
+              "y": 673
+            },
+            "projectedWidthPx": 137
+          }
+        ]
+      },
+      "legacy": {
+        "shot": "shots/daylit-legacy.png",
+        "piecesResolved": 3,
+        "piecesRequested": 5,
+        "timedOut": true,
+        "perCreature": [
+          {
+            "pieceSlug": "Giant Rat",
+            "registrySlug": "spr-fantasy-giant-rat",
+            "runtimeAdmitted": "legacy",
+            "resolvedPath": "assets/sprites/spr-fantasy-giant-rat.png",
+            "cachedPathMatchesResolved": true,
+            "textureResolved": true,
+            "textureState": "loaded",
+            "corpus": "legacy (v3)",
+            "worldHeight": 2,
+            "scaleTrue": 0.36,
+            "worldPos": {
+              "x": -2.0062073183059694,
+              "y": -0.204,
+              "z": 0.4947302031517029
+            },
+            "projectedFootPx": {
+              "x": 515,
+              "y": 412
+            },
+            "projectedWidthPx": 75
+          },
+          {
+            "pieceSlug": "Gnoll Warrior",
+            "registrySlug": "spr-fantasy-gnoll-warrior",
+            "runtimeAdmitted": "legacy",
+            "resolvedPath": "assets/sprites/spr-fantasy-gnoll-warrior.png",
+            "cachedPathMatchesResolved": true,
+            "textureResolved": true,
+            "textureState": "loaded",
+            "corpus": "legacy (v3)",
+            "worldHeight": 6,
+            "scaleTrue": 1.09,
+            "worldPos": {
+              "x": -0.9651534700393677,
+              "y": -0.204,
+              "z": 0.5357840514183044
+            },
+            "projectedFootPx": {
+              "x": 610,
+              "y": 474
+            },
+            "projectedWidthPx": 190
+          },
+          {
+            "pieceSlug": "Owlbear",
+            "registrySlug": "spr-fantasy-owlbear",
+            "runtimeAdmitted": "legacy",
+            "resolvedPath": "assets/sprites/spr-fantasy-owlbear.png",
+            "cachedPathMatchesResolved": true,
+            "textureResolved": true,
+            "textureState": "loaded",
+            "corpus": "legacy (v3)",
+            "worldHeight": 8,
+            "scaleTrue": 1.45,
+            "worldPos": {
+              "x": 0.042398142814636226,
+              "y": -0.204,
+              "z": 0.5414606213569642
+            },
+            "projectedFootPx": {
+              "x": 712,
+              "y": 537
+            },
+            "projectedWidthPx": 250
+          },
+          {
+            "pieceSlug": "Adult Gold Dragon",
+            "registrySlug": "spr-fantasy-adult-gold-dragon",
+            "runtimeAdmitted": "legacy",
+            "resolvedPath": "assets/sprites/spr-fantasy-adult-gold-dragon.png",
+            "cachedPathMatchesResolved": true,
+            "textureResolved": false,
+            "textureState": "failed",
+            "corpus": null,
+            "worldHeight": null,
+            "scaleTrue": null,
+            "worldPos": null,
+            "note": "not present in live interiorGroup — texture never resolved"
+          },
+          {
+            "pieceSlug": "Dwarf Fighter",
+            "registrySlug": "spr-pc-dwarf-fighter",
+            "runtimeAdmitted": "legacy",
+            "resolvedPath": "assets/sprites/spr-pc-dwarf-fighter.png",
+            "cachedPathMatchesResolved": true,
+            "textureResolved": false,
+            "textureState": "failed",
+            "corpus": null,
+            "worldHeight": null,
+            "scaleTrue": null,
+            "worldPos": null,
+            "note": "not present in live interiorGroup — texture never resolved"
+          }
+        ]
+      },
+      "stubApplied": {
+        "ok": true,
+        "results": [
+          {
+            "registrySlug": "spr-fantasy-giant-rat",
+            "ok": true,
+            "prior": "candidate",
+            "now": "legacy"
+          },
+          {
+            "registrySlug": "spr-fantasy-gnoll-warrior",
+            "ok": true,
+            "prior": "candidate",
+            "now": "legacy"
+          },
+          {
+            "registrySlug": "spr-fantasy-owlbear",
+            "ok": true,
+            "prior": "candidate",
+            "now": "legacy"
+          },
+          {
+            "registrySlug": "spr-fantasy-adult-gold-dragon",
+            "ok": true,
+            "prior": "candidate",
+            "now": "legacy"
+          },
+          {
+            "registrySlug": "spr-pc-dwarf-fighter",
+            "ok": true,
+            "prior": "candidate",
+            "now": "legacy"
+          }
+        ]
+      },
+      "stubRestored": {
+        "ok": true,
+        "results": [
+          {
+            "registrySlug": "spr-fantasy-giant-rat",
+            "ok": true,
+            "prior": "legacy",
+            "now": "candidate"
+          },
+          {
+            "registrySlug": "spr-fantasy-gnoll-warrior",
+            "ok": true,
+            "prior": "legacy",
+            "now": "candidate"
+          },
+          {
+            "registrySlug": "spr-fantasy-owlbear",
+            "ok": true,
+            "prior": "legacy",
+            "now": "candidate"
+          },
+          {
+            "registrySlug": "spr-fantasy-adult-gold-dragon",
+            "ok": true,
+            "prior": "legacy",
+            "now": "candidate"
+          },
+          {
+            "registrySlug": "spr-pc-dwarf-fighter",
+            "ok": true,
+            "prior": "legacy",
+            "now": "candidate"
+          }
+        ]
+      },
+      "composite": "daylit-ab-composite.png"
+    }
+  },
+  "notes": [
+    "PC ORPHAN FINDING: all 39 realm:pc runtimeAdmitted:candidate registry entries have legacyAsset:null (full-file scan, not a one-slug spot check) — no PC choice in this cast could show a real legacy-vs-candidate pair; systemic, not specific to spr-pc-dwarf-fighter.",
+    "BOARDSKIP GOTCHA: setInteriorBoard's dirtyKey check (src/ui/theater-boot.js ~L9648) skips a full rebuild when JSON.stringify(board) is unchanged from the prior mount — a runtimeAdmitted-only registry flip is invisible to that check, so remounting the SAME board object twice (candidate then legacy) silently re-serves the FIRST panel's cached texture with zero new network activity unless an inert cache-bust marker forces the dirtyKey to differ (this script's own _abCacheBust field, added after this exact confound was caught live). capture-standee-gallery.mjs's own B3 flip-pair cell (buildSinglePieceBoard/captureFlipPanel) mounts the identical board object twice the same way with NO cache-bust — its reported piecesResolved counts are plausibly NOT proof its 'legacy' panel ever showed real legacy art. Not fixed here (out of scope) — flagged for whoever owns that gallery next.",
+    "DAYLIT EXPOSURE FINDING: at this lineup's camera distance, the daylit light profile blows out the pale/cream faceted standees (and the legacy owlbear even harder) to a near-white smear — read the daylit composite/raw shots yourself before trusting them for an art-register judgment; torchlit is the more legible comparison of the two."
+  ],
+  "room": {
+    "x": 18,
+    "y": 12,
+    "w": 7,
+    "d": 4
+  },
+  "lineupPositions": [
+    {
+      "x": 19,
+      "y": 14
+    },
+    {
+      "x": 20,
+      "y": 14
+    },
+    {
+      "x": 21,
+      "y": 14
+    },
+    {
+      "x": 22,
+      "y": 14
+    },
+    {
+      "x": 23,
+      "y": 14
+    }
+  ],
+  "lineupGuardCells": {
+    "loX": 19,
+    "hiX": 23
+  },
+  "consoleErrors": [
+    "Failed to load resource: the server responded with a status of 404 (File not found)",
+    "Failed to load resource: the server responded with a status of 404 (File not found)",
+    "Failed to load resource: the server responded with a status of 404 (File not found)",
+    "Failed to load resource: the server responded with a status of 404 (File not found)",
+    "Failed to load resource: the server responded with a status of 404 (File not found)",
+    "Failed to load resource: the server responded with a status of 404 (File not found)",
+    "Failed to load resource: the server responded with a status of 404 (File not found)",
+    "Failed to load resource: the server responded with a status of 404 (File not found)"
+  ]
+}

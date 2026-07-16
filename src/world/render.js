@@ -638,31 +638,71 @@ function theaterStageSync(w,cur){
   if(slot && typeof window.Theater.reattach==="function") window.Theater.reattach(slot);
   const cm=GS.combat;
   if(cm&&cm.active){
-    // then push the current board/units so the stage stays in sync with GS.combat every render.
-    if(typeof theaterBoardFrom==="function" && typeof window.Theater.setBoard==="function"){
-      // BATTLE-THEATER LIGHTING: cm.segment.environment (stamped by the combat_start handler in dm.js off
-      // the active walk — see theaterEnvSegmentFor) picks the palette/void-tint env; theaterBoardFrom's own
-      // opts.env default ("dungeon") still covers a segment with no environment (an older snapshot, a
-      // walk-less fight, a narrow test harness) — this is a pure additive read, never a required field.
-      const env=(cm.segment&&cm.segment.environment)||undefined;
-      // REALM-SURFACES-WIRING.md §3: cm.segment.realms (stamped by combat_start off the SAME
-      // activeRealmsFor(skin,w) value the walk's own encounter path used — see dm.js's combat_start
-      // case) selects the active realm's floor surface instead of the generic material pool. Absent on
-      // a walk-less fight/older snapshot -> theaterBoardFrom's own opts.realms default (undefined) keeps
-      // today's exact behavior, same null-safe discipline as `env` above.
-      const realms=(cm.segment&&cm.segment.realms)||undefined;
-      // ENV-1c (docs/ENV-EXTERIOR-WAVE.md): a wilderness fight's board is exterior too — thread the
-      // SAME clockOf(w).min read theaterHereSourceFor uses (below) so a daylit/moonlit combat tray's
-      // key light also follows the sun/moon, not just the non-combat standing table. Additive/null-
-      // safe (a walk-less fight/narrow harness -> null, which applyCelestialArc treats as "no clock
-      // threaded" -> byte-identical to pre-ENV-1c rendering, same degrade law every field here keeps).
-      const clockMin=(typeof clockOf==="function"&&w)?clockOf(w).min:null;
-      const board=theaterBoardFrom(cm.segment,cm.scene,{env,realms,clockMin});
-      window.Theater.setBoard(board);
+    // VQ2-RESPEC.md §4 unit F1 (ledger #10 Sol P-F: "combat is a STATE of the explored room, never a
+    // board swap") — COMBAT-IN-ROOM. Before this unit, EVERY fight (interior or not) rebuilt the
+    // generic flat combat-zone-grid tray (theaterBoardFrom/window.Theater.setBoard) below, discarding
+    // whatever room the party had just been exploring — the measured "combat stages in a black void"
+    // defect (dev/play-lens/DEMAND-LEDGER.md row #5, 12/12 combat-round frames across the PL-4 matrix).
+    // When the party is standing in an INTERIOR spatial-plan room (theaterHereSourceFor's own
+    // {kind:"interior",plan} branch — the exact same read the non-combat tableau branch below already
+    // makes every render), combat now routes through trayFrom({kind:"interior",...})/setInteriorBoard
+    // instead: the SAME pure (hereSource) snapshot exploration itself would render this tick, so the
+    // scene recipe (walkScene/dressed plan/activeRoomId/tileKit/lights/instance counts) is BYTE-
+    // IDENTICAL across the exploration->combat cut — nothing here rolls/mutates plan geometry, `opts.
+    // combat` only ever reaches walkSceneFrom's narrative `live.combat` field (theater-data.js's
+    // trayFrom, the interior+plan branch), never the geometry build. Non-interior combat (no active
+    // walk, an exterior/segment tray, or a walk-less test fixture) is OUT OF SCOPE for this unit — it
+    // falls through to the pre-existing flat board below, unchanged (the cut list's own "no combat
+    // board swap" note: the flat path isn't being ripped out, only bypassed where a real room exists).
+    const hereSource = (typeof theaterHereSourceFor==="function") ? theaterHereSourceFor(w) : null;
+    const interiorCombat = !!(hereSource && hereSource.kind==="interior" && hereSource.plan);
+    let stagedInterior=false;
+    if(interiorCombat && typeof trayFrom==="function" && typeof window.Theater.setInteriorBoard==="function"){
+      const board = trayFrom(hereSource, cm.scene, { combat: cm });
+      if(board && board.kind==="interior3d"){
+        // F1: "enrich with combat.units = theaterUnitsFrom(GS.combat).units" — resolved here (not
+        // inside the pure trayFrom/theaterBoardBuild call above) since it needs the board's OWN
+        // furniture/interactables lists (dressing-blocked cells) to place units legally; stamped onto
+        // the board so setInteriorBoard's camera/grid-overlay logic can read it too.
+        let units = (typeof theaterUnitsFrom==="function") ? theaterUnitsFrom(cm).units : [];
+        if(typeof theaterCombatRoomCellsFor==="function" && typeof theaterCombatBlockedCellKeySetFor==="function" && typeof theaterUnitsOnRoomCells==="function"){
+          const blocked = theaterCombatBlockedCellKeySetFor(board);
+          const legalCells = theaterCombatRoomCellsFor(hereSource.plan, hereSource.focusSegNum, blocked);
+          units = theaterUnitsOnRoomCells(cm, units, legalCells, cm.grid);
+          board.combat = { active:true, units:units, legalCells:legalCells };
+        }
+        window.Theater.setInteriorBoard(board);
+        if(typeof window.Theater.setUnits==="function") window.Theater.setUnits({ units:units });
+        stagedInterior=true;
+      }
     }
-    if(typeof theaterUnitsFrom==="function" && typeof window.Theater.setUnits==="function"){
-      const units=theaterUnitsFrom(cm);
-      window.Theater.setUnits(units);
+    if(!stagedInterior){
+      // then push the current board/units so the stage stays in sync with GS.combat every render.
+      if(typeof theaterBoardFrom==="function" && typeof window.Theater.setBoard==="function"){
+        // BATTLE-THEATER LIGHTING: cm.segment.environment (stamped by the combat_start handler in dm.js off
+        // the active walk — see theaterEnvSegmentFor) picks the palette/void-tint env; theaterBoardFrom's own
+        // opts.env default ("dungeon") still covers a segment with no environment (an older snapshot, a
+        // walk-less fight, a narrow test harness) — this is a pure additive read, never a required field.
+        const env=(cm.segment&&cm.segment.environment)||undefined;
+        // REALM-SURFACES-WIRING.md §3: cm.segment.realms (stamped by combat_start off the SAME
+        // activeRealmsFor(skin,w) value the walk's own encounter path used — see dm.js's combat_start
+        // case) selects the active realm's floor surface instead of the generic material pool. Absent on
+        // a walk-less fight/older snapshot -> theaterBoardFrom's own opts.realms default (undefined) keeps
+        // today's exact behavior, same null-safe discipline as `env` above.
+        const realms=(cm.segment&&cm.segment.realms)||undefined;
+        // ENV-1c (docs/ENV-EXTERIOR-WAVE.md): a wilderness fight's board is exterior too — thread the
+        // SAME clockOf(w).min read theaterHereSourceFor uses (below) so a daylit/moonlit combat tray's
+        // key light also follows the sun/moon, not just the non-combat standing table. Additive/null-
+        // safe (a walk-less fight/narrow harness -> null, which applyCelestialArc treats as "no clock
+        // threaded" -> byte-identical to pre-ENV-1c rendering, same degrade law every field here keeps).
+        const clockMin=(typeof clockOf==="function"&&w)?clockOf(w).min:null;
+        const board=theaterBoardFrom(cm.segment,cm.scene,{env,realms,clockMin});
+        window.Theater.setBoard(board);
+      }
+      if(typeof theaterUnitsFrom==="function" && typeof window.Theater.setUnits==="function"){
+        const units=theaterUnitsFrom(cm);
+        window.Theater.setUnits(units);
+      }
     }
   } else {
     // TABLETOP-VISION §1/§3 (TABLETOP-UNITS.md §U1 seam 4): outside combat the standing table shows

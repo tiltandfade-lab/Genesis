@@ -10117,6 +10117,112 @@ function itrBlockerNudgeCell(cellX, cellY, blockerLists){
 // so the overlap here is always small).
 const CLIP_DRESSING_EPSILON = 0.02;
 
+// VQ2-RESPEC.md §4 unit F1 — "target/distance delta clamped ≤10%" (combat-in-room's own camera law,
+// Sol P-F). f1ClampCamFit(camFit, baseline, maxFrac) bounds a combat render's composed fit against the
+// SAME room's last non-combat (exploration) fit: the TARGET (camFit.center) is clamped to an absolute
+// delta of at most `maxFrac` of the room's own fitted extent (max(baseline.halfX,halfZ,1) — the room's
+// footprint is the natural "how far is far" reference; using the raw center coordinate itself would be
+// unstable near the room-mode default of ~(0,0)). The DISTANCE proxy (halfX/halfZ — what
+// placeCamera's screenHalf*/viewSize math actually scales off) is clamped as a relative delta off its
+// OWN baseline value instead (a room's fitted half-extent is never ~0, so a plain relative bound is
+// safe there). Never mutates its inputs; returns a NEW {center,halfX,halfZ} object every time.
+const F1_COMBAT_CAM_CLAMP_FRAC = 0.10;
+function f1ClampCamFit(camFit, baseline, maxFrac){
+  if(!camFit || !baseline) return camFit;
+  const scale = Math.max(baseline.halfX || 0, baseline.halfZ || 0, 1);
+  const maxCenterDelta = scale * maxFrac;
+  const dx = camFit.center.x - baseline.center.x, dz = camFit.center.z - baseline.center.z;
+  const centerDist = Math.hypot(dx, dz);
+  let center = camFit.center;
+  if(centerDist > maxCenterDelta && centerDist > 0){
+    const k = maxCenterDelta / centerDist;
+    const clampedX = baseline.center.x + dx * k, clampedZ = baseline.center.z + dz * k;
+    // interiorCameraFitFor/fitFromComposedShot always hand back a REAL THREE.Vector3 for `.center`
+    // (placeCamera's own S.boardCenter.clone() call downstream requires it) — clone+mutate here so
+    // the clamped result stays a Vector3 in production, never a bare `new THREE.Vector3(...)` call
+    // (which would make this function un-eval-able outside a THREE-loaded context; dev/verify-f1-
+    // combat-in-room.mjs §7 extracts + evals this exact function text standalone, no THREE global,
+    // to unit-test the pure clamp math). A plain {x,z}-shaped input (that harness's own fixtures)
+    // degrades to a plain object the same way.
+    if(typeof camFit.center.clone === "function"){
+      center = camFit.center.clone();
+      if(typeof center.set === "function") center.set(clampedX, center.y, clampedZ);
+      else { center.x = clampedX; center.z = clampedZ; }
+    } else {
+      center = { x: clampedX, z: clampedZ };
+    }
+  }
+  function clampExtent(cur, base){
+    if(!(base > 0)) return cur;
+    const maxDelta = base * maxFrac;
+    const delta = cur - base;
+    if(Math.abs(delta) <= maxDelta) return cur;
+    return base + Math.sign(delta) * maxDelta;
+  }
+  return { center, halfX: clampExtent(camFit.halfX, baseline.halfX), halfZ: clampExtent(camFit.halfZ, baseline.halfZ) };
+}
+
+// VQ2-RESPEC.md §4 unit F1 — "grid = thin umber lines on the room floor (depthWrite:false,
+// opacity:0.16, polygonOffset, radial fade before wall-adjacent cells)". f1CombatGridTexture() is a
+// small cached CanvasTexture: a single grid cell's border (a thin inset stroke), tiled ONE-PER-LEGAL-
+// CELL by f1BuildCombatGrid below (never a single room-spanning plane — that would draw grid lines
+// across furniture-blocked/non-room cells too, the exact thing "dressing-blocked cells excluded"
+// forbids). Cached module-scope (built once, reused for the life of the session — the texture itself
+// carries no per-room data, only the line pattern).
+let F1_GRID_TEX_CACHE = null;
+function f1CombatGridTexture(){
+  if(F1_GRID_TEX_CACHE) return F1_GRID_TEX_CACHE;
+  if(typeof document === "undefined") return null; // headless/jsdom harness with no canvas — degrade to no texture (solid-color fallback below)
+  const size = 64;
+  const canvas = document.createElement("canvas");
+  canvas.width = size; canvas.height = size;
+  const ctx = canvas.getContext("2d");
+  if(!ctx) return null;
+  ctx.clearRect(0, 0, size, size);
+  ctx.strokeStyle = "#8a5a2b"; // thin umber
+  ctx.lineWidth = 2;
+  ctx.strokeRect(1, 1, size - 2, size - 2);
+  const tex = new THREE.CanvasTexture(canvas);
+  tex.magFilter = THREE.NearestFilter;
+  tex.minFilter = THREE.NearestFilter;
+  F1_GRID_TEX_CACHE = tex;
+  return tex;
+}
+// f1BuildCombatGrid(legalCells, cx, cz, floorTopMap) -> THREE.Group — one 1x1 quad per legal combat
+// cell (GRID LAW: 1 SpatialPlan cell = 1 world unit), flat on the room's own real floor top
+// (interiorFloorTopAt, the SAME derived law every other floor-contact mount in this file uses — never
+// a hardcoded plane). "radial fade before wall-adjacent cells": any legal cell touching the room
+// boundary (one of its 4 orthogonal neighbors is NOT itself a legal cell — a wall, a door threshold,
+// or a dressing-blocked cell) gets its opacity roughly halved instead of the interior's full 0.16, so
+// the overlay visually recedes before it ever touches a wall face rather than terminating with a hard
+// cut. depthWrite:false + polygonOffset (factor/units -1) keep it a pure decal over the floor mesh —
+// visible without z-fighting, never occluding anything drawn after it.
+const F1_GRID_OPACITY = 0.16;
+const F1_GRID_EDGE_OPACITY = 0.08;
+function f1BuildCombatGrid(legalCells, cx, cz, floorTopMap){
+  const group = new THREE.Group();
+  if(!Array.isArray(legalCells) || !legalCells.length) return group;
+  const legalKeys = new Set(legalCells.map((c) => c.x + "," + c.y));
+  const tex = f1CombatGridTexture();
+  const geo = new THREE.PlaneGeometry(0.96, 0.96);
+  geo.rotateX(-Math.PI / 2);
+  legalCells.forEach((c) => {
+    const isEdge = !legalKeys.has((c.x + 1) + "," + c.y) || !legalKeys.has((c.x - 1) + "," + c.y)
+      || !legalKeys.has(c.x + "," + (c.y + 1)) || !legalKeys.has(c.x + "," + (c.y - 1));
+    const opacity = isEdge ? F1_GRID_EDGE_OPACITY : F1_GRID_OPACITY;
+    const mat = new THREE.MeshBasicMaterial({
+      color: 0x8a5a2b, map: tex || null, transparent: true, opacity,
+      depthWrite: false, polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -1,
+      side: THREE.DoubleSide
+    });
+    const mesh = new THREE.Mesh(geo, mat);
+    const floorTop = interiorFloorTopAt(floorTopMap, c.x, c.y);
+    mesh.position.set(c.x - (cx || 0), floorTop + 0.01, c.y - (cz || 0));
+    group.add(mesh);
+  });
+  return group;
+}
+
 function setInteriorBoard(data){
   if(!S.mounted || !data) return;
   // BEAUTY-WAVE-4.md MF-1: capture the TRUE live camera pose as the very FIRST thing this function
@@ -10287,6 +10393,23 @@ function setInteriorBoard(data){
     } catch(e){ camFit = null; S.lastComposedShotError = e && e.message ? e.message : String(e); } // any throw -> the exact pre-existing focusRect path below, untouched
   }
   if(!camFit) camFit = interiorCameraFitFor(data.cameraFit, fit, cx, cz);
+  // VQ2-RESPEC.md §4 unit F1 — "camera yaw/pitch preserved from exploration; target/distance delta
+  // clamped ≤10%". Yaw/pitch are ALREADY preserved by construction: placeCamera()/placeCameraTweened()
+  // derive yaw ONLY from S.rotationStep (mount()-time 0, changed ONLY by the player's own rotate()
+  // call — see this file's own "S.rotationStep =" writers, never touched anywhere in this function),
+  // so a combat render never rotates the camera regardless of what camFit lands on. What CAN move is
+  // camFit itself: shotPlanFrom (a few lines up) already threads GS.combat into the action-cluster
+  // anchors the shot-compose path scores against, so the SAME room's combat-vs-exploration fit can
+  // legitimately differ once units land on real cells (F1's own placement, theaterUnitsOnRoomCells).
+  // f1ClampCamFit bounds that drift: S.f1PreCombatCamFit is the last NON-combat fit this exact room
+  // produced (snapshotted below, every non-combat render — "from exploration" always means the most
+  // recent one, matching a player who was just standing here); a combat render for the SAME
+  // activeRoomId clamps its own camFit against that baseline, never against an unrelated room's.
+  if(data.combat && S.f1PreCombatCamFit && S.f1PreCombatCamFit.activeRoomId === data.activeRoomId){
+    camFit = f1ClampCamFit(camFit, S.f1PreCombatCamFit, F1_COMBAT_CAM_CLAMP_FRAC);
+  } else if(!data.combat){
+    S.f1PreCombatCamFit = { activeRoomId: data.activeRoomId, center: { x: camFit.center.x, z: camFit.center.z }, halfX: camFit.halfX, halfZ: camFit.halfZ };
+  }
   S.boardCenter = camFit.center;
   S.boardHalfX = camFit.halfX;
   S.boardHalfZ = camFit.halfZ;
@@ -11186,6 +11309,18 @@ function setInteriorBoard(data){
   S.interiorGroup.add(piecesBuilt.group);
   S.interiorPiecesResolved = piecesBuilt.resolved;
   S.interiorPiecesRequested = piecesBuilt.requested;
+
+  // VQ2-RESPEC.md §4 unit F1 — the combat floor-grid overlay (data.combat.legalCells, stamped by
+  // render.js's theaterStageSync onto the board before this call — see theaterCombatRoomCellsFor,
+  // src/engine/theater-data.js). A pure DECAL layer over the room's own real floor (never new wall/
+  // light/material INSTANCES — the "zero new architecture at combat start" gate reads S.interiorGroup's
+  // wall/floor/light child counts, none of which this touches); mounted as a child of S.interiorGroup
+  // so it's swept by the SAME clearGroup(S.interiorGroup) call above every rebuild, combat or not —
+  // combat_end's next non-combat render (data.combat absent) simply never re-adds it, the exact
+  // "combat end restores exactly" behavior for free, no separate teardown call needed.
+  if(data.combat && Array.isArray(data.combat.legalCells) && data.combat.legalCells.length){
+    S.interiorGroup.add(f1BuildCombatGrid(data.combat.legalCells, cx, cz, S.interiorFloorTopMap));
+  }
   // BW2-1b — harness-facing diagnostic (mirrors S.interiorDressingWorldPositions, below): one entry
   // per MOUNTED standee, its REAL world position read straight off the group THREE actually placed
   // (post CLIP MARGIN nudge) — so an occlusion/clip-margin harness asserts against the mount, never a

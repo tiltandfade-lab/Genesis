@@ -1,6 +1,6 @@
 {
   "realm": "fantasy",
-  "generatedAt": "2026-07-15T15:05:53.963Z",
+  "generatedAt": "2026-07-16T02:10:47.154Z",
   "cast": [
     {
       "role": "candidate-covered",
@@ -53,16 +53,16 @@
             },
             "projectedFootPx": {
               "x": 601,
-              "y": 476
+              "y": 479
             },
             "projectedMidPx": {
               "x": 599,
-              "y": 450
+              "y": 453
             },
             "projectedWidthPx": 44,
-            "lumaSpriteSample": 66.15172799999999,
-            "lumaSurroundSample": 40.156245999999996,
-            "lumaRatio": 1.65
+            "lumaSpriteSample": 68.18445000000001,
+            "lumaSurroundSample": 40.12864599999998,
+            "lumaRatio": 1.7
           },
           {
             "spriteSlug": "spr-fantasy-wolf",
@@ -75,16 +75,16 @@
             },
             "projectedFootPx": {
               "x": 709,
-              "y": 538
+              "y": 541
             },
             "projectedMidPx": {
               "x": 708,
-              "y": 501
+              "y": 504
             },
             "projectedWidthPx": 125,
-            "lumaSpriteSample": 82.28668800000005,
-            "lumaSurroundSample": 30.644650000000023,
-            "lumaRatio": 2.69
+            "lumaSpriteSample": 55.298178,
+            "lumaSurroundSample": 36.053624000000006,
+            "lumaRatio": 1.53
           },
           {
             "spriteSlug": "spr-fantasy-ogre-zombie",
@@ -97,15 +97,15 @@
             },
             "projectedFootPx": {
               "x": 789,
-              "y": 584
+              "y": 587
             },
             "projectedMidPx": {
               "x": 790,
-              "y": 455
+              "y": 457
             },
             "projectedWidthPx": 300,
-            "lumaSpriteSample": 93.33651200000003,
-            "lumaSurroundSample": 139.12018600000002,
+            "lumaSpriteSample": 93.28874199999998,
+            "lumaSurroundSample": 139.10094799999996,
             "lumaRatio": 0.67
           },
           {
@@ -119,16 +119,16 @@
             },
             "projectedFootPx": {
               "x": 808,
-              "y": 598
+              "y": 601
             },
             "projectedMidPx": {
               "x": 809,
-              "y": 514
+              "y": 517
             },
             "projectedWidthPx": 194,
-            "lumaSpriteSample": 82.634866,
-            "lumaSurroundSample": 23.19956800000001,
-            "lumaRatio": 3.56
+            "lumaSpriteSample": 65.80262000000002,
+            "lumaSurroundSample": 24.372916000000014,
+            "lumaRatio": 2.7
           },
           {
             "spriteSlug": "spr-pc-dragonborn-barbarian-male",
@@ -141,16 +141,16 @@
             },
             "projectedFootPx": {
               "x": 1064,
-              "y": 604
+              "y": 607
             },
             "projectedMidPx": {
               "x": 1071,
-              "y": 517
+              "y": 520
             },
             "projectedWidthPx": 134,
-            "lumaSpriteSample": 0,
-            "lumaSurroundSample": 114.24166999999994,
-            "lumaRatio": 0
+            "lumaSpriteSample": 3,
+            "lumaSurroundSample": 114.41021399999993,
+            "lumaRatio": 0.03
           }
         ]
       },
@@ -174,16 +174,16 @@
             },
             "projectedFootPx": {
               "x": 533,
-              "y": 613
+              "y": 616
             },
             "projectedMidPx": {
               "x": 531,
-              "y": 587
+              "y": 590
             },
             "projectedWidthPx": 48,
-            "lumaSpriteSample": 76.19734199999999,
-            "lumaSurroundSample": 41.442502,
-            "lumaRatio": 1.84
+            "lumaSpriteSample": 72.39353800000002,
+            "lumaSurroundSample": 43.52699799999999,
+            "lumaRatio": 1.66
           },
           {
             "spriteSlug": "spr-fantasy-wolf",
@@ -196,16 +196,16 @@
             },
             "projectedFootPx": {
               "x": 692,
-              "y": 583
+              "y": 586
             },
             "projectedMidPx": {
               "x": 691,
-              "y": 546
+              "y": 549
             },
             "projectedWidthPx": 129,
-            "lumaSpriteSample": 24.394588000000002,
-            "lumaSurroundSample": 22.080356000000002,
-            "lumaRatio": 1.1
+            "lumaSpriteSample": 18.943842,
+            "lumaSurroundSample": 24.828823999999983,
+            "lumaRatio": 0.76
           },
           {
             "spriteSlug": "spr-fantasy-ogre-zombie",
@@ -218,16 +218,16 @@
             },
             "projectedFootPx": {
               "x": 801,
-              "y": 563
+              "y": 566
             },
             "projectedMidPx": {
               "x": 802,
-              "y": 434
+              "y": 437
             },
             "projectedWidthPx": 298,
-            "lumaSpriteSample": 57.852399999999996,
-            "lumaSurroundSample": 56.771372,
-            "lumaRatio": 1.02
+            "lumaSpriteSample": 68.99265,
+            "lumaSurroundSample": 56.65734800000001,
+            "lumaRatio": 1.22
           },
           {
             "spriteSlug": "spr-fantasy-land-worker-dragonborn",
@@ -240,16 +240,16 @@
             },
             "projectedFootPx": {
               "x": 828,
-              "y": 560
+              "y": 563
             },
             "projectedMidPx": {
               "x": 830,
-              "y": 477
+              "y": 480
             },
             "projectedWidthPx": 191,
-            "lumaSpriteSample": 23.13838399999999,
-            "lumaSurroundSample": 0.637799999999999,
-            "lumaRatio": 23.14
+            "lumaSpriteSample": 30.328707999999992,
+            "lumaSurroundSample": 3.0361420000000003,
+            "lumaRatio": 9.99
           },
           {
             "spriteSlug": "spr-pc-dragonborn-barbarian-male",
@@ -262,16 +262,16 @@
             },
             "projectedFootPx": {
               "x": 956,
-              "y": 437
+              "y": 440
             },
             "projectedMidPx": {
               "x": 961,
-              "y": 353
+              "y": 356
             },
             "projectedWidthPx": 123,
-            "lumaSpriteSample": 20.11143999999999,
-            "lumaSurroundSample": 11.402644000000008,
-            "lumaRatio": 1.76
+            "lumaSpriteSample": 18.766487999999995,
+            "lumaSurroundSample": 12.152743999999974,
+            "lumaRatio": 1.54
           }
         ]
       },
@@ -323,9 +323,9 @@
       "yaw0": {
         "shot": "shots/fantasy-daylit-yaw0.png",
         "cameraPos": {
-          "x": 8.1661935579364,
+          "x": 8.371311839608879,
           "y": 8.903279275385565,
-          "z": 9.20121815763439,
+          "z": 9.148941140659211,
           "zoom": 1
         },
         "pieces": [
@@ -340,16 +340,16 @@
             },
             "projectedFootPx": {
               "x": 601,
-              "y": 476
+              "y": 479
             },
             "projectedMidPx": {
               "x": 599,
-              "y": 450
+              "y": 453
             },
             "projectedWidthPx": 44,
-            "lumaSpriteSample": 204.94196600000006,
-            "lumaSurroundSample": 194.56258000000005,
-            "lumaRatio": 1.05
+            "lumaSpriteSample": 154.88887,
+            "lumaSurroundSample": 144.13923599999998,
+            "lumaRatio": 1.07
           },
           {
             "spriteSlug": "spr-fantasy-wolf",
@@ -362,16 +362,16 @@
             },
             "projectedFootPx": {
               "x": 709,
-              "y": 538
+              "y": 541
             },
             "projectedMidPx": {
               "x": 708,
-              "y": 501
+              "y": 504
             },
             "projectedWidthPx": 125,
-            "lumaSpriteSample": 225.091706,
-            "lumaSurroundSample": 172.81897199999992,
-            "lumaRatio": 1.3
+            "lumaSpriteSample": 154.37239199999993,
+            "lumaSurroundSample": 149.45562199999995,
+            "lumaRatio": 1.03
           },
           {
             "spriteSlug": "spr-fantasy-ogre-zombie",
@@ -384,16 +384,16 @@
             },
             "projectedFootPx": {
               "x": 789,
-              "y": 584
+              "y": 587
             },
             "projectedMidPx": {
               "x": 790,
-              "y": 455
+              "y": 457
             },
             "projectedWidthPx": 300,
-            "lumaSpriteSample": 220.06003800000002,
-            "lumaSurroundSample": 139.12018600000002,
-            "lumaRatio": 1.58
+            "lumaSpriteSample": 158.81641600000003,
+            "lumaSurroundSample": 139.10094799999996,
+            "lumaRatio": 1.14
           },
           {
             "spriteSlug": "spr-fantasy-land-worker-dragonborn",
@@ -406,16 +406,16 @@
             },
             "projectedFootPx": {
               "x": 808,
-              "y": 598
+              "y": 601
             },
             "projectedMidPx": {
               "x": 809,
-              "y": 514
+              "y": 517
             },
             "projectedWidthPx": 194,
-            "lumaSpriteSample": 198.826214,
-            "lumaSurroundSample": 155.65401399999996,
-            "lumaRatio": 1.28
+            "lumaSpriteSample": 141.308864,
+            "lumaSurroundSample": 148.100268,
+            "lumaRatio": 0.95
           },
           {
             "spriteSlug": "spr-pc-dragonborn-barbarian-male",
@@ -428,25 +428,25 @@
             },
             "projectedFootPx": {
               "x": 1064,
-              "y": 604
+              "y": 607
             },
             "projectedMidPx": {
               "x": 1071,
-              "y": 517
+              "y": 520
             },
             "projectedWidthPx": 134,
-            "lumaSpriteSample": 74.14714599999996,
-            "lumaSurroundSample": 114.24166999999994,
-            "lumaRatio": 0.65
+            "lumaSpriteSample": 3,
+            "lumaSurroundSample": 114.41021399999993,
+            "lumaRatio": 0.03
           }
         ]
       },
       "yaw60": {
         "shot": "shots/fantasy-daylit-yaw60.png",
         "cameraPos": {
-          "x": -3.3546608953885437,
+          "x": -3.20682852981773,
           "y": 8.903279275385565,
-          "z": 11.376750119784996,
+          "z": 11.528249254006386,
           "zoom": 1
         },
         "pieces": [
@@ -468,9 +468,9 @@
               "y": 599
             },
             "projectedWidthPx": 49,
-            "lumaSpriteSample": 193.03929000000005,
-            "lumaSurroundSample": 164.1907539999999,
-            "lumaRatio": 1.18
+            "lumaSpriteSample": 153.79610600000004,
+            "lumaSurroundSample": 139.97434599999997,
+            "lumaRatio": 1.1
           },
           {
             "spriteSlug": "spr-fantasy-wolf",
@@ -482,17 +482,17 @@
               "z": 0.5054116749763489
             },
             "projectedFootPx": {
-              "x": 694,
-              "y": 589
+              "x": 693,
+              "y": 590
             },
             "projectedMidPx": {
-              "x": 693,
-              "y": 551
+              "x": 692,
+              "y": 553
             },
-            "projectedWidthPx": 132,
-            "lumaSpriteSample": 185.98295199999987,
-            "lumaSurroundSample": 131.39865600000002,
-            "lumaRatio": 1.42
+            "projectedWidthPx": 131,
+            "lumaSpriteSample": 109.75359000000006,
+            "lumaSurroundSample": 119.31200599999984,
+            "lumaRatio": 0.92
           },
           {
             "spriteSlug": "spr-fantasy-ogre-zombie",
@@ -505,16 +505,16 @@
             },
             "projectedFootPx": {
               "x": 802,
-              "y": 563
+              "y": 566
             },
             "projectedMidPx": {
-              "x": 804,
-              "y": 432
+              "x": 803,
+              "y": 436
             },
-            "projectedWidthPx": 305,
-            "lumaSpriteSample": 206.66005599999994,
-            "lumaSurroundSample": 224.72818400000017,
-            "lumaRatio": 0.92
+            "projectedWidthPx": 303,
+            "lumaSpriteSample": 168.5178,
+            "lumaSurroundSample": 168.117224,
+            "lumaRatio": 1
           },
           {
             "spriteSlug": "spr-fantasy-land-worker-dragonborn",
@@ -527,16 +527,16 @@
             },
             "projectedFootPx": {
               "x": 830,
-              "y": 559
+              "y": 562
             },
             "projectedMidPx": {
-              "x": 832,
-              "y": 475
+              "x": 831,
+              "y": 478
             },
-            "projectedWidthPx": 195,
-            "lumaSpriteSample": 164.40446599999993,
-            "lumaSurroundSample": 56.64853399999993,
-            "lumaRatio": 2.9
+            "projectedWidthPx": 194,
+            "lumaSpriteSample": 134.38582599999995,
+            "lumaSurroundSample": 40.06458199999999,
+            "lumaRatio": 3.35
           },
           {
             "spriteSlug": "spr-pc-dragonborn-barbarian-male",
@@ -548,17 +548,17 @@
               "z": -0.47378551959991455
             },
             "projectedFootPx": {
-              "x": 948,
-              "y": 426
+              "x": 950,
+              "y": 431
             },
             "projectedMidPx": {
-              "x": 952,
-              "y": 342
+              "x": 955,
+              "y": 348
             },
-            "projectedWidthPx": 125,
-            "lumaSpriteSample": 145.05810400000007,
-            "lumaSurroundSample": 52.62189399999998,
-            "lumaRatio": 2.76
+            "projectedWidthPx": 124,
+            "lumaSpriteSample": 132.88673799999998,
+            "lumaSurroundSample": 39.55279199999997,
+            "lumaRatio": 3.36
           }
         ]
       },
@@ -572,25 +572,25 @@
         {
           "spriteSlug": "spr-fantasy-wolf",
           "widthYaw0": 125,
-          "widthYaw60": 132,
-          "ratio": 1.06
+          "widthYaw60": 131,
+          "ratio": 1.05
         },
         {
           "spriteSlug": "spr-fantasy-ogre-zombie",
           "widthYaw0": 300,
-          "widthYaw60": 305,
-          "ratio": 1.02
+          "widthYaw60": 303,
+          "ratio": 1.01
         },
         {
           "spriteSlug": "spr-fantasy-land-worker-dragonborn",
           "widthYaw0": 194,
-          "widthYaw60": 195,
-          "ratio": 1.01
+          "widthYaw60": 194,
+          "ratio": 1
         },
         {
           "spriteSlug": "spr-pc-dragonborn-barbarian-male",
           "widthYaw0": 134,
-          "widthYaw60": 125,
+          "widthYaw60": 124,
           "ratio": 0.93
         }
       ],
@@ -622,18 +622,18 @@
           },
           "projectedFootPx": {
             "x": 766,
-            "y": 670
+            "y": 673
           },
           "projectedMidPx": {
             "x": 766,
-            "y": 495
+            "y": 498
           },
           "projectedWidthPx": 249
         }
       ],
       "luma": {
-        "spriteLuma": 51.04172000000007,
-        "bgLuma": 52.24968000000002,
+        "spriteLuma": 50.82716000000005,
+        "bgLuma": 52.095376000000044,
         "canvasSize": {
           "w": 1600,
           "h": 1200
@@ -656,18 +656,18 @@
           },
           "projectedFootPx": {
             "x": 766,
-            "y": 670
+            "y": 673
           },
           "projectedMidPx": {
             "x": 766,
-            "y": 495
+            "y": 498
           },
           "projectedWidthPx": 249
         }
       ],
       "luma": {
-        "spriteLuma": 51.04172000000007,
-        "bgLuma": 52.24968000000002,
+        "spriteLuma": 50.82716000000005,
+        "bgLuma": 52.095376000000044,
         "canvasSize": {
           "w": 1600,
           "h": 1200

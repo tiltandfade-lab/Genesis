@@ -231,7 +231,9 @@ process.exit(fail ? 1 : 0);
 // the SAME technique dev/verify-bw2-0-crisp-channel.mjs already established for this sealed-ES-module
 // file's pure-logic functions. Returns { runMakeGradePass(tonemapValue) -> {fragmentShader, uniforms} }.
 function makeGradePassRunner(src) {
-  const gradeConstNames = ["GRADE_EXPOSURE", "GRADE_CONTRAST", "GRADE_SATURATION", "GRADE_VIGNETTE", "GRADE_VIGNETTE_INNER", "GRADE_VIGNETTE_OUTER"];
+  // LL-1 (docs/KENNEY-SOCKET-WAVE.md unit LL-1): GRADE_EXPOSURE_FLOOR joined this list — makeGradePass's
+  // uExposureFloor uniform (FS_AGX only) seeds from it directly, mirroring every sibling uniform here.
+  const gradeConstNames = ["GRADE_EXPOSURE", "GRADE_CONTRAST", "GRADE_SATURATION", "GRADE_VIGNETTE", "GRADE_VIGNETTE_INNER", "GRADE_VIGNETTE_OUTER", "GRADE_EXPOSURE_FLOOR"];
   const constDecls = gradeConstNames.map((n) => `const ${n} = ${extractConst(src, n)};`).join("\n");
   // (default-agnostic since the 2026-07-14 flip — the sandbox pins its own "none" below either way)
   const letMatch = src.match(/let GRADE_TONEMAP = "(none|agx)";/);
@@ -282,7 +284,9 @@ async function renderGradeCurve(newSrc) {
   const fsNone = runMakeGradePass("none").fragmentShader;
   const fsAgx = runMakeGradePass("agx").fragmentShader;
 
-  const gradeConstNames = ["GRADE_EXPOSURE", "GRADE_CONTRAST", "GRADE_SATURATION", "GRADE_VIGNETTE", "GRADE_VIGNETTE_INNER", "GRADE_VIGNETTE_OUTER"];
+  // LL-1 (docs/KENNEY-SOCKET-WAVE.md unit LL-1): GRADE_EXPOSURE_FLOOR joined this list — makeGradePass's
+  // uExposureFloor uniform (FS_AGX only) seeds from it directly, mirroring every sibling uniform here.
+  const gradeConstNames = ["GRADE_EXPOSURE", "GRADE_CONTRAST", "GRADE_SATURATION", "GRADE_VIGNETTE", "GRADE_VIGNETTE_INNER", "GRADE_VIGNETTE_OUTER", "GRADE_EXPOSURE_FLOOR"];
   const gradeConsts = {};
   for (const n of gradeConstNames) gradeConsts[n] = parseFloat(extractConst(newSrc, n));
 

@@ -8543,7 +8543,10 @@ function interiorBuildFixtureGroup(light){
   // LL-1 EMISSIVE-MASKED BLOOM (BLOOM_LAYER's own header comment, above): a true emitter joins
   // BLOOM_LAYER IN ADDITION TO layer 0 (three's default, left untouched — this is additive, never a
   // visibility change) so MaskedBloomPass's isolated bright-pass extraction can see it.
-  emitter.layers.enable(BLOOM_LAYER);
+  // Guarded because the vm-extraction verify harnesses (verify-theater-light-props / -visible-practicals /
+  // -bw3-4-light-shafts / -e0-1-fixture-fade, the whole fixture cluster) run this code against a stubbed
+  // THREE whose Mesh has no `.layers` — a real THREE.Mesh always does, so this is a pure no-op in production.
+  if(emitter.layers) emitter.layers.enable(BLOOM_LAYER);
   emitter.position.set(el.x || 0, el.y || 0, el.z || 0);
   emitter.castShadow = false; emitter.receiveShadow = false; // a fixture's own flame/bulb never shadows itself, same discipline the old glow disc/nub kept
   group.add(emitter);

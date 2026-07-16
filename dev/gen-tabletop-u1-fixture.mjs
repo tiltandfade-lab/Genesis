@@ -18,6 +18,16 @@
    byte-identical (diff proven in the feat/realm-floor-color commit). The same law still applies
    going forward: never re-run to green a failing gate.
 
+   RE-BASELINED ONCE, 2026-07-16 (CI-greening): env1c (commit e9552e11, "the solar/lunar arc")
+   added ONE new top-level board field, clockMin (the board now carries the walk's clock minute so
+   outdoor light can follow the sun/moon), which this frozen snapshot predated, so check 1a went red.
+   PROVEN before re-baselining: theaterBoardFrom(fixture) with clockMin stripped is byte-identical to
+   the old snapshot (tiles/props/grid/every other key unchanged); the sole diff is "clockMin": null
+   (the fixture opts set no clock). A legitimate, intentional feature addition, the same sanctioned
+   re-baseline as 2026-07-08, NOT a mechanical green: the byte-gate's job (catch UNINTENDED board
+   changes from the trayFrom split / future refactors) is preserved. The same law still applies
+   going forward: never re-run to green a failing gate.
+
    Run:  node dev/gen-tabletop-u1-fixture.mjs */
 import { readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";

@@ -4,9 +4,9 @@
 
 **What this maps:** every compiled table (`tables.json`) → source file → what *triggers* it. The Oracle tab rolls **any** table manually, so "trigger" means an **automatic** call: a generator **procedure**, a **roll-chain**, or **wired code**. Tables with none are **Oracle-only** — authored but not in any flow (wire-up or retire candidates). *Caveat: two unwired tables that cross-link each other read as ⛓ chained.*
 
-**Totals:** 385 tables / 305 files.  
-By table — ▶ procedure: **0** · ⛓ chained: **1** · 🔗 wired: **354** · ⚠️ Oracle-only: **30**.  
-⚠️ Oracle-only source files: **19** of 305.
+**Totals:** 386 tables / 306 files.  
+By table — ▶ procedure: **0** · ⛓ chained: **1** · 🔗 wired: **355** · ⚠️ Oracle-only: **30**.  
+⚠️ Oracle-only source files: **19** of 306.
 
 ---
 
@@ -82,7 +82,7 @@ Authored content not reached by any procedure, chain, or code. Click through to 
 - [[Watcher Effect Pool]] — 🔗 **wired in code** — table-atlas.js  *(d8, 8 rows)*
 
 ### Session Mechanics / Dungeons
-- [[Dungeon Area Type]] — 🔗 **wired in code** — table-atlas.js  *(d200, 200 rows)*
+- [[Dungeon Area Type]] — 🔗 **wired in code** — dungeon-walk.js, place-spatialize.js, table-atlas.js  *(d200, 200 rows)*
 - [[Dungeon Art Motif]] — 🔗 **wired in code** — table-atlas.js  *(d20, 20 rows)*
 - [[Dungeon Art Motif Modifier]] — 🔗 **wired in code** — table-atlas.js  *(d6, 6 rows)*
 - [[Dungeon Boss]] — 🔗 **wired in code** — combat.js, table-atlas.js  *(d100, 100 rows)*
@@ -90,8 +90,8 @@ Authored content not reached by any procedure, chain, or code. Click through to 
 - [[Dungeon Discovery Content]] — 🔗 **wired in code** — table-atlas.js  *(d50, 50 rows)*
 - [[Dungeon Discovery Form]] — 🔗 **wired in code** — table-atlas.js  *(d50, 50 rows)*
 - [[Dungeon Distortion]] — 🔗 **wired in code** — table-atlas.js  *(d20, 20 rows)*
-- [[Dungeon Door State]] — 🔗 **wired in code** — table-atlas.js  *(d20, 20 rows)*
-- [[Dungeon Door Type]] — 🔗 **wired in code** — table-atlas.js  *(d50, 50 rows)*
+- [[Dungeon Door State]] — 🔗 **wired in code** — table-atlas.js, theater-boot.js, walk-interactables.js  *(d20, 20 rows)*
+- [[Dungeon Door Type]] — 🔗 **wired in code** — table-atlas.js, theater-boot.js  *(d50, 50 rows)*
 - [[Dungeon Dressing Mega Table]] — 🔗 **wired in code** — dungeon-walk.js, table-atlas.js  *(6 sub-tables)*
 - [[Dungeon Empty Result]] — 🔗 **wired in code** — table-atlas.js  *(d20, 20 rows)*
 - [[Dungeon Encounter Type]] — 🔗 **wired in code** — dungeon-walk.js, table-atlas.js  *(d20, 20 rows)*
@@ -100,10 +100,10 @@ Authored content not reached by any procedure, chain, or code. Click through to 
 - [[Dungeon Environment Skin]] — 🔗 **wired in code** — table-atlas.js  *(d100, 100 rows)*
 - [[Dungeon Exit Destination Type]] — 🔗 **wired in code** — table-atlas.js  *(d100, 100 rows)*
 - [[Dungeon Exit State]] — 🔗 **wired in code** — table-atlas.js  *(d100, 100 rows)*
-- [[Dungeon Feature]] — 🔗 **wired in code** — table-atlas.js  *(d153, 153 rows)*
+- [[Dungeon Feature]] — 🔗 **wired in code** — table-atlas.js, walk-interactables.js  *(d153, 153 rows)*
 - [[Dungeon Finale Type]] — 🔗 **wired in code** — table-atlas.js  *(d100, 100 rows)*
 - [[Dungeon Hazard]] — 🔗 **wired in code** — table-atlas.js  *(d50, 50 rows)*
-- [[Dungeon Interactable Object]] — 🔗 **wired in code** — table-atlas.js  *(d100, 100 rows)*
+- [[Dungeon Interactable Object]] — 🔗 **wired in code** — table-atlas.js, walk-interactables.js  *(d100, 100 rows)*
 - [[Dungeon Lighting]] — 🔗 **wired in code** — blockwright.js, render.js, table-atlas.js  *(d100, 100 rows)*
 - [[Dungeon Loot - Artifact]] — 🔗 **wired in code** — table-atlas.js  *(d1, 1 rows)*
 - [[Dungeon Loot - Common]] — 🔗 **wired in code** — table-atlas.js  *(d31, 31 rows)*
@@ -144,6 +144,7 @@ Authored content not reached by any procedure, chain, or code. Click through to 
 - [[Puzzle Mechanism]] — 🔗 **wired in code** — table-atlas.js  *(d20, 20 rows)*
 - [[Puzzle Solution Path]] — 🔗 **wired in code** — table-atlas.js  *(d20, 20 rows)*
 - [[Puzzle Type]] — 🔗 **wired in code** — table-atlas.js  *(d20, 20 rows)*
+- [[Room Elevation Profile]] — 🔗 **wired in code** — dungeon-walk.js  *(d100, 7 rows)*
 - [[Urban Area Type]] — 🔗 **wired in code** — table-atlas.js  *(d200, 200 rows)*
 - [[Urban Art]] — 🔗 **wired in code** — table-atlas.js  *(3 sub-tables)*
 - [[Urban Art Motif]] — 🔗 **wired in code** — table-atlas.js  *(d20, 20 rows)*
@@ -217,7 +218,7 @@ Authored content not reached by any procedure, chain, or code. Click through to 
 - [[Wilderness Area Type]] — 🔗 **wired in code** — table-atlas.js  *(d300, 300 rows)*
 - [[Wilderness Art]] — 🔗 **wired in code** — table-atlas.js, wiring-b.js  *(3 sub-tables)*
 - [[Wilderness Background Event]] — 🔗 **wired in code** — table-atlas.js  *(d100, 100 rows)*
-- [[Wilderness Biome Type]] — 🔗 **wired in code** — table-atlas.js  *(d10, 10 rows)*
+- [[Wilderness Biome Type]] — 🔗 **wired in code** — table-atlas.js, theater-data.js  *(d10, 10 rows)*
 - [[Wilderness Contact]] — 🔗 **wired in code** — table-atlas.js  *(d500, 500 rows)*
 - [[Wilderness Empty Result]] — 🔗 **wired in code** — table-atlas.js  *(d20, 20 rows)*
 - [[Wilderness Encounter Type]] — 🔗 **wired in code** — table-atlas.js, wild-walk.js  *(d20, 20 rows)*

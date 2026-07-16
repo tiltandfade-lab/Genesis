@@ -385,9 +385,22 @@ group("8 — flag OFF (default): the PRODUCTION seam never calls placeDistribute
   const board = trayFrom({ kind: "interior", plan: semPlan, focusSegNum: semPlan.rooms[0].segNum, radius: 1, env: "dungeon", realms: ["fantasy"] }, null, {});
   const directDressed = dressPlan(semPlan, { realmId: "fantasy" });
   ok(!!board && Array.isArray(board.dressing), "8c. trayFrom({kind:\"interior\"}) returns a board carrying a dressing array");
-  ok(!!board && JSON.stringify(board.dressing) === JSON.stringify(directDressed.dressing),
-    "8d. flag OFF (default): board.dressing is deep-equal to dressPlan(plan,{realmId}) directly — placeDistribute never ran (byte-identical to pre-this-unit production behavior)",
-    JSON.stringify({ tray: board && board.dressing, direct: directDressed.dressing }));
+  // ACTIVE-ROOM-ONLY (docs unit A1, dev/verify-active-room-only.mjs): trayFrom({kind:"interior"}) with
+  // focusSegNum+radius:1 now keeps ONLY the focus room's (+ radius-1 neighbors') dressing, so board.dressing
+  // is a focus-filtered SUBSET of the whole-plan dressPlan (here focus=rooms[0].segNum reduces to a single
+  // room: 7 entries vs the plan's 75) — a legitimate feature ORTHOGONAL to the ROOM_PLACE_DISTRIBUTE flag
+  // this group tests. To isolate placeDistribute's effect, compare against dressPlan filtered to the SAME
+  // focus rooms. placeDistribute redistributes positions WITHIN a room's legal region, never moves entries
+  // BETWEEN rooms, so roomSegNum membership is invariant under it — filtering by board.dressing's own
+  // roomSegNums is therefore safe (a redistribution would still change x/y and break byte-equality, which
+  // 8f's positive control confirms). Deriving the focus set from the flag-off board keeps both checks
+  // comparing like-for-like (before the A1 filter landed, focusDressing === directDressed.dressing and
+  // this reduced to the original whole-plan deep-equal).
+  const focusRooms = new Set((board.dressing || []).map((d) => d.roomSegNum));
+  const focusDressing = directDressed.dressing.filter((d) => focusRooms.has(d.roomSegNum));
+  ok(!!board && board.dressing.length > 0 && JSON.stringify(board.dressing) === JSON.stringify(focusDressing),
+    "8d. flag OFF (default): board.dressing is byte-identical to dressPlan(plan,{realmId}) filtered to the focus room(s) — placeDistribute never ran (pre-this-unit production behavior, modulo the A1 active-room filter)",
+    JSON.stringify({ tray: board && board.dressing, focusDirect: focusDressing }));
 
   // MUTATION-style positive control (not RED-FIRST on production code — proves 8d isn't vacuously
   // green because placeDistribute is a no-op in general): force the flag ON via a source rewrite
@@ -408,8 +421,15 @@ group("8 — flag OFF (default): the PRODUCTION seam never calls placeDistribute
     "this.__trayFrom=typeof trayFrom!=='undefined'?trayFrom:undefined;",
   ].join("\n"), sandbox2, { filename: "place-distribution-wiring-on.js" });
   const flippedBoard = sandbox2.__trayFrom({ kind: "interior", plan: semPlan, focusSegNum: semPlan.rooms[0].segNum, radius: 1, env: "dungeon", realms: ["fantasy"] }, null, {});
-  const diverges = JSON.stringify(flippedBoard.dressing) !== JSON.stringify(directDressed.dressing);
-  ok(diverges, "8f. with the flag forced ON, board.dressing DIVERGES from the flag-off baseline (proves the guard in theater-data.js is load-bearing, not a dead branch)");
+  // Compare against the SAME focus-filtered dressPlan 8d uses — NOT the whole-plan directDressed. The A1
+  // active-room filter alone makes ANY interior board's dressing diverge from the 75-entry whole plan, so
+  // comparing against directDressed here would make 8f vacuously green (passing on the filter, not the
+  // flag). Filtering to the focus rooms isolates placeDistribute's real effect: with the flag ON it
+  // repositions entries WITHIN the focus room, so the focus-filtered board must differ from the
+  // focus-filtered plain dressPlan — that divergence is what proves the guard is load-bearing.
+  const flippedFocus = directDressed.dressing.filter((d) => focusRooms.has(d.roomSegNum));
+  const diverges = JSON.stringify(flippedBoard.dressing) !== JSON.stringify(flippedFocus);
+  ok(diverges, "8f. with the flag forced ON, board.dressing DIVERGES from the focus-filtered flag-off baseline (proves the guard in theater-data.js is load-bearing, not a dead branch)");
 }
 
 group("9 — perf: active-room realize p95 < 2ms over 200 runs");

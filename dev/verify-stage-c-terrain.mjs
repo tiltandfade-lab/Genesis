@@ -59,6 +59,30 @@ let pass = 0, fail = 0;
 const check = (name, cond, detail = "") =>
   cond ? (pass++, console.log("  ✓", name)) : (fail++, console.log("  ✗", name, "—", JSON.stringify(detail)));
 
+// ELEV-1 DOOR-APERTURE LAW (src/engine/place-spatialize.js ~L1067, commit 7d15862f). After C2's
+// side-parse patches stamp the `tiers` buffer, a FINAL pass forces every real door cell + its
+// same-room 4-neighbors back to tier 0 so a doorway is always walkable — a rolled elevation profile
+// routinely covers half a room, so a patch/door collision is now the common case (these C2 fixtures
+// predate that law). A C2 dais/pit/ring patch cell that happens to sit on a door aperture is therefore
+// LEGITIMATELY 0, not the patch tier. This helper reproduces the source's exact zeroing scope (the
+// door cell itself + the OWN room's 4-neighbors, ownSeg = betweenSegs minus toSeg) so the tier checks
+// below can split into "non-aperture patch cells read tier T" AND "aperture patch cells read 0" — the
+// door law is then asserted, never silently dropped. When a patch has no door collision (the common
+// case for these fixtures) the returned set is empty and the checks read exactly as before.
+function doorZeroedInRoom(plan, room){
+  const roomKeys = new Set((room.cells || []).map((c) => c.x + "," + c.y));
+  const z = new Set();
+  for(const d of (plan.doors || [])){
+    if(roomKeys.has(d.x + "," + d.y)) z.add(d.x + "," + d.y);      // a door cell that is itself a room floor cell
+    const ownSeg = Array.isArray(d.betweenSegs) ? d.betweenSegs.find((n) => n !== d.toSeg) : null;
+    if(ownSeg !== room.segNum) continue;                          // only THIS room's own door zeroes THIS room's neighbors
+    for(const [nx, ny] of [[d.x + 1, d.y], [d.x - 1, d.y], [d.x, d.y + 1], [d.x, d.y - 1]]){
+      if(roomKeys.has(nx + "," + ny)) z.add(nx + "," + ny);
+    }
+  }
+  return z;
+}
+
 // ─── loaders ──────────────────────────────────────────────────────────────────────────────────
 // engine-only sandbox (place-spatialize.js alone) — mirrors dev/verify-stage-c-size.mjs exactly.
 function loadEngine() {
@@ -229,9 +253,15 @@ let sunkenPlanOn, sunkenRoomOn;
   check("2c. the patch is exactly 3x3 = 9 cells (the diameter-form footprint parse, same as the raised case)",
     !!room && room.terrain[0].cells.length === 9, room && room.terrain[0].cells.length);
   const idx = (x, y) => y * plan.cellW + x;
-  check("2d. every patch cell is stamped tier=-3 in plan.tiers",
-    room.terrain[0].cells.every((c) => plan.tiers[idx(c.x, c.y)] === -3),
-    room.terrain[0].cells.map((c) => plan.tiers[idx(c.x, c.y)]));
+  const z2 = doorZeroedInRoom(plan, room);
+  const patch2 = room.terrain[0].cells;
+  const nonAp2 = patch2.filter((c) => !z2.has(c.x + "," + c.y));
+  const ap2 = patch2.filter((c) => z2.has(c.x + "," + c.y));
+  check("2d. every non-door-aperture patch cell is stamped tier=-3 in plan.tiers",
+    nonAp2.length > 0 && nonAp2.every((c) => plan.tiers[idx(c.x, c.y)] === -3),
+    patch2.map((c) => plan.tiers[idx(c.x, c.y)]));
+  check("2d-door. any patch cell that IS a door aperture reads tier 0 (ELEV-1 door-aperture law, never the patch tier)",
+    ap2.every((c) => plan.tiers[idx(c.x, c.y)] === 0), ap2.map((c) => plan.tiers[idx(c.x, c.y)]));
 }
 
 console.log("\n=== 3. determinism: same walkId run twice -> byte-identical tiers + terrain ===");
@@ -302,7 +332,17 @@ console.log("\n=== 5b. MULTI-PATCH: row 101 preserves sunken arena + raised peri
     ring && { ring: ring.cells.length, room: room.cells.length });
   const idx = (x, y) => y * plan.cellW + x;
   check("5g. every arena cell preserves the explicit five-foot depth as tier -5", !!arena && arena.cells.every((c) => plan.tiers[idx(c.x, c.y)] === -5));
-  check("5h. every ring cell is tier +1", !!ring && ring.cells.every((c) => plan.tiers[idx(c.x, c.y)] === 1));
+  // 5h — the ring IS the room's polygon frontier, exactly where doors sit, so a door aperture on the
+  // ring is the expected ELEV-1 collision. Split: non-aperture ring cells read +1; aperture ring cells
+  // read 0 (the door law). See doorZeroedInRoom's header.
+  const z5 = ring ? doorZeroedInRoom(plan, room) : new Set();
+  const nonAp5 = ring ? ring.cells.filter((c) => !z5.has(c.x + "," + c.y)) : [];
+  const ap5 = ring ? ring.cells.filter((c) => z5.has(c.x + "," + c.y)) : [];
+  check("5h. every non-door-aperture ring cell is tier +1",
+    !!ring && nonAp5.length > 0 && nonAp5.every((c) => plan.tiers[idx(c.x, c.y)] === 1),
+    ring && ring.cells.map((c) => plan.tiers[idx(c.x, c.y)]));
+  check("5h-door. any ring cell that IS a door aperture reads tier 0 (ELEV-1 door-aperture law)",
+    ap5.every((c) => plan.tiers[idx(c.x, c.y)] === 0), ap5.map((c) => plan.tiers[idx(c.x, c.y)]));
   const arenaKeys = new Set((arena ? arena.cells : []).map((c) => c.x + "," + c.y));
   check("5i. arena and perimeter ring do not collapse into the same cells",
     !!ring && ring.cells.every((c) => !arenaKeys.has(c.x + "," + c.y)));
@@ -338,9 +378,16 @@ console.log("\n=== 6. RENDER SEAM: interiorBuildBoard folds plan.tiers into floo
   const pitFloor = board.instances.floor.filter((f) =>
     sunkenRoom.terrain[0].cells.some((c) => c.x === f.x && c.y === f.z));
   check("6c. every sunken-patch floor instance found on the board", pitFloor.length === 9, pitFloor.length);
-  check("6d. every sunken-patch floor cell reads sy = ITR_FLOOR_HEIGHT - 3*ITR_DAIS_STEP",
-    pitFloor.every((f) => Math.abs(f.sy - (ITR_FLOOR_HEIGHT - 3 * ITR_DAIS_STEP)) < 1e-9),
+  // ELEV-1 door-aperture law: a door aperture inside the sunken patch renders flat (tier 0 -> sy =
+  // ITR_FLOOR_HEIGHT), not sunken. Split the sy check the same way the plan.tiers checks above do.
+  const zPit = doorZeroedInRoom(spatial, sunkenRoom);
+  const pitNonAp = pitFloor.filter((f) => !zPit.has(f.x + "," + f.z));
+  const pitAp = pitFloor.filter((f) => zPit.has(f.x + "," + f.z));
+  check("6d. every non-door-aperture sunken-patch floor cell reads sy = ITR_FLOOR_HEIGHT - 3*ITR_DAIS_STEP",
+    pitNonAp.length > 0 && pitNonAp.every((f) => Math.abs(f.sy - (ITR_FLOOR_HEIGHT - 3 * ITR_DAIS_STEP)) < 1e-9),
     pitFloor.map((f) => f.sy));
+  check("6d-door. any sunken-patch floor cell that IS a door aperture renders flat (sy = ITR_FLOOR_HEIGHT, tier 0)",
+    pitAp.every((f) => Math.abs(f.sy - ITR_FLOOR_HEIGHT) < 1e-9), pitAp.map((f) => f.sy));
 
   const patchKeySet = new Set(raisedRoom.terrain[0].cells.map((c) => c.x + "," + c.y));
   const untouchedInRaisedRoom = board.instances.floor.filter((f) =>

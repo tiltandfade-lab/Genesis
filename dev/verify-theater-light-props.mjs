@@ -98,8 +98,17 @@ console.log("\n=== 4. structural guards (RED-FIRST proof: red without Unit B, gr
   check("mountLightProp is called from setBoard BEFORE applyLightProfile (so the anchor is ready in time)",
     (() => {
       const mountIdx = bootSrc.indexOf("mountLightProp(data, cx, cz);");
-      const applyIdx = bootSrc.indexOf('applyLightProfile((data.light && data.light.profile) || LIGHT_DEFAULT_PROFILE);');
-      return mountIdx >= 0 && applyIdx >= 0 && mountIdx < applyIdx;
+      // setBoard's applyLightProfile call was refactored (post-P1' Unit B) from the inline
+      // `applyLightProfile((data.light && data.light.profile) || LIGHT_DEFAULT_PROFILE)` to a two-line
+      // form: `const lightProfileKey = (data.light && data.light.profile) || LIGHT_DEFAULT_PROFILE;`
+      // then `applyLightProfile(lightProfileKey);` (theater-boot.js:7651-7652). Behavior is byte-identical
+      // — the profile is still keyed off data.light.profile with the same dark fallback. Match BOTH the
+      // key derivation (preserves "keyed off data.light.profile", the intent the old string encoded) and
+      // the call, and assert mount precedes the setBoard call. This is the SAME ordering guard, just
+      // re-anchored on the current source text after a variable-extraction refactor.
+      const keyIdx = bootSrc.indexOf("const lightProfileKey = (data.light && data.light.profile) || LIGHT_DEFAULT_PROFILE;");
+      const applyIdx = bootSrc.indexOf("applyLightProfile(lightProfileKey);");
+      return mountIdx >= 0 && keyIdx >= 0 && applyIdx >= 0 && mountIdx < applyIdx;
     })(), "");
   check("mountLightProp guards WHOLE_OBJECT_ENABLED (the gate) before any registry lookup",
     /function mountLightProp[\s\S]{0,120}if\(!WHOLE_OBJECT_ENABLED\) return;/.test(bootSrc), "");

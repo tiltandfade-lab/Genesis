@@ -25,10 +25,15 @@ shells → look pass) · ☑ F1 combat-in-room (#10 closed) · ☑ F2 staging be
 ☑ ELEV-1 (Adam's table live) · ☑ LL-1 Stage-E mechanisms + LIGHT-LAB (parked) · ☑ PIXEL-FIRST
 (ART-DEPARTMENT.md canon; MC-1+MC-2 crud killed; faceted priced: 206/252 sound, 22 re-cuttable).
 
-0. ⚠ **GREEN THE CI (priority 0, task chipped)** — red 60+ runs, predates this wave. Landed
-   `678681f5`: fast-check dep-skip + LL-1 bloom-layer guard. Remaining: LL-1 `LIGHT_TUNABLES`
-   extraction-harness cluster (light harnesses `ReferenceError`) → `gen-gallery-paintings.py --emit`
-   → pre-existing bucket-3 drift. Run the FULL `dev/verify-*.mjs` loop as the gate, not per-unit.
+0. ☑ **GREEN THE CI — DONE 2026-07-16** (master `fac1333e`, run 29499604640, all steps green after
+   60+ red runs). LL-1 `LIGHT_TUNABLES` cluster: the 3 vm-extraction harnesses now inject the real
+   aggregate + its dep-closure. 8 bucket-3 real-feature drifts fixed without weakening a single
+   assertion (table-usage regen · tabletop-u1/place-tray env1c `clockMin` re-baseline · walk-stamped
+   ELEV-1 PRNG-neutralize · theater-light-props call-site re-anchor · digest-diet 31-seed median ·
+   place-distribution A1 focus-filter · stage-c-terrain ELEV-1 door-aperture split). `gen-gallery-
+   paintings.py` needed no fix — it correctly PIL-dep-skips. **The gate is the FULL `dev/verify-*.mjs`
+   loop; reproduce CI's dep-skips locally with a fake empty `$HOME` (puppeteer-core unresolvable) +
+   real `JSDOM_HOME`** — else locally-installed puppeteer runs the 18 render harnesses CI skips.
 1. ☐ **ADAM'S WORD: originals restoration** (evidence complete; restore→re-clean→reference).
 2. ☐ **The proving run** — kit shells × rolled-walk spread, retina DPR, census (spec at head).
 3. ☐ **Playtest**: walk-gen + assembly edge cases.

@@ -28,16 +28,24 @@ ledger #11 closed), **elevation rolls** (ELEV-1 — Adam's table, ±3 tiers, eng
 Desktop), **PIXEL SPRITES ARE CANON** (docs/ART-DEPARTMENT.md = the runbook; faceted = reserve;
 magenta crud killed via MC-1+MC-2 originals-adjudication).
 
-**⚠ CI IS RED (discovered at this close) — priority 0.** CI has failed on master for 60+ runs,
-predating this whole wave (even docs-only commits fail). Two isolated fixes landed (`678681f5`):
-the dep-skip loop now recognizes `fast-check not resolvable`; LL-1's `emitter.layers.enable(BLOOM_LAYER)`
-is guarded for the vm-extraction harnesses. REMAINING (task chipped — "Green the CI"): the LL-1
-`LIGHT_TUNABLES` aggregate (theater-boot.js:6545) is absent from the light-cluster harnesses' extract
-lists (`ReferenceError` in verify-bw3-4-light-shafts / -e0-1-fixture-fade / -visible-practicals / …) —
-fix that FIRST; then `gen-gallery-paintings.py --emit`, then the pre-existing bucket-3 drift
-(place-distribution, stage-c-terrain, digest-diet, table-usage-data, …). Run the FULL
-`for f in dev/verify-*.mjs` loop as the gate, never per-unit. Process scar: per-unit re-gating this
-wave never ran the full sweep, so the accumulated red went unseen.
+**✅ CI IS GREEN again (2026-07-16, master `fac1333e`, run 29499604640 — all steps green).** After
+60+ red runs, every failure in the last red run's FAILED list was root-caused and fixed WITHOUT
+weakening an assertion (mutation/RED/door-law proofs kept load-bearing): (1) the LL-1 `LIGHT_TUNABLES`
+regression — the aggregate (theater-boot.js:6545) was absent from the three vm-extraction harnesses'
+extract lists (`ReferenceError` in verify-bw3-4-light-shafts / -e0-1-fixture-fade / -visible-practicals);
+each now injects the REAL object + its dependency-closure consts. (2) Eight bucket-3 real-feature drifts:
+table-usage-data (regen), tabletop-u1 + place-tray (env1c `clockMin` fixture re-baseline), walk-stamped-
+provenance (ELEV-1 PRNG-neutralize to isolate WDV-2), theater-light-props (refactored call-site re-anchor),
+digest-diet (5→31 fixed-seed median; true median 11800 B < the unchanged 12 KB), place-distribution (A1
+active-room focus-filter accounted for; 8f made load-bearing again), stage-c-terrain (ELEV-1 door-aperture
+law split into non-aperture / aperture checks). `gen-gallery-paintings.py` needed NO fix — it correctly
+dep-skips (its only 3rd-party import is PIL, which CI lacks). **The GATE is the FULL `for f in dev/verify-*.mjs`
+loop, never per-unit** — and to reproduce CI's dep-skips locally, run it with a fake empty `$HOME` (so
+`puppeteer-core` under `$HOME/.genesis-jsdom` is unresolvable, exactly as in CI) + a real `JSDOM_HOME`;
+locally-installed puppeteer otherwise RUNS the 18 render harnesses that CI skips and hides the true set.
+Full CI-accurate sweep at close: 205 GREEN / 18 SKIP (all puppeteer/PIL render harnesses) / 0 RED.
+Process scar (still true): per-unit re-gating never runs the full sweep, so accumulated red goes unseen —
+run the whole loop.
 
 **Do next (the meeting's own order):**
 1. **Adam's word: ORIGINALS RESTORATION?** (evidence complete: retina card 4 + the

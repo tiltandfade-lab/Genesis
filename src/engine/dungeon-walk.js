@@ -121,6 +121,116 @@ function dwalkArea(sizePref){
            _roll:{ tableId:"dungeon-area-type", total:(typeof row[0]==="number"?row[0]:null), band:row[2]||null } };
 }
 
+// ─── ELEV-1 — rolled room elevation (docs/KENNEY-SOCKET-WAVE.md ELEV-1, Engine/03. _Tables/
+// 03. Session Mechanics/Dungeons/Room Elevation Profile.md, PROVISIONAL — Adam's authoring
+// surface, he re-tunes rows) — rolls a per-room elevation profile at WALK TIME, additive field
+// (absent = flat, old saves byte-compatible). The table is a real WEIGHTED d100 (row widths vary
+// 40/15/15/10/10/6/4) — walkPick/walkPickStamped do a UNIFORM row pick (right for tables whose
+// rows are each width-1, wrong here), so this rolls a real 1-100 total and matches it against the
+// compiled rows' own [lo,hi] (row[0]/row[1], preserved verbatim by compile-tables.py's `erows`).
+
+// dwalkElevRowForTotal(rows,total) -> the compiled row whose [lo,hi] contains `total`, else null.
+function dwalkElevRowForTotal(rows, total){
+  for(const r of rows){ if(typeof r[0]==="number" && typeof r[1]==="number" && total>=r[0] && total<=r[1]) return r; }
+  return null;
+}
+function dwalkElevProfileForTotal(rows, total){
+  const r=dwalkElevRowForTotal(rows, total);
+  return r ? ((r[5]&&r[5][0])||"").trim() : "Flat";
+}
+
+// depth-bias rider ("the cheap C" per the ADDENDUM): as graph depth grows, nudge the roll toward
+// the SUNKEN/CHASM bands specifically (not toward the raised bands a flat "+N to the roll" would
+// also favor) — named consts, capped. Reinterprets the already-drawn total; never a second
+// walkRnd()/rows-array call, so it can't perturb any OTHER dwalk* function's rng() call sequence.
+const DWALK_ELEV_DEPTH_BIAS_PCT_PER_LEVEL = 4;   // % chance added per graph-depth level
+const DWALK_ELEV_DEPTH_BIAS_PCT_CAP = 40;        // hard ceiling on the added chance
+function dwalkElevDepthBiasedTotal(rows, total, depth){
+  const bias=Math.min(DWALK_ELEV_DEPTH_BIAS_PCT_CAP, Math.max(0, (depth||0))*DWALK_ELEV_DEPTH_BIAS_PCT_PER_LEVEL);
+  if(bias<=0) return total;
+  const profile=dwalkElevProfileForTotal(rows, total);
+  if(profile==="Sunken center" || profile==="Chasm/shaft") return total; // already sunken/chasm
+  if(Math.random()*100>=bias) return total; // bias didn't trigger
+  const sunkenWidth=15, chasmWidth=4; // 56-70 / 97-100, matches the table's own band widths
+  return (Math.random()<(chasmWidth/(sunkenWidth+chasmWidth)))
+    ? (97+Math.floor(Math.random()*chasmWidth))
+    : (56+Math.floor(Math.random()*sunkenWidth));
+}
+
+// dwalkElevDimsPair(dims) -> {a,b} GRID-LAW cell counts (feet/5, rounded) | null (unparseable ->
+// null, an honest "can't verify -> walk down to Flat"). Local, deliberately NOT a cross-module call
+// into place-spatialize.js's dspFeetPairRaw (engine-layer purity + the roller's own min-dims gate
+// is independent of whatever the spatializer later does with the same dims string) — same "first
+// two feet values win, order = depth then width" convention as combat.js's cmDimsToGrid (:32) and
+// place-spatialize.js's dspFeetPairRaw (:87), so all three readings of a "Dungeon Area Type" dims
+// string agree with each other.
+function dwalkElevDimsPair(dims){
+  const s=String(dims||"");
+  if(/diameter/i.test(s)){
+    const m=s.match(/(\d+)\s*'/);
+    if(!m) return null;
+    const c=Math.max(1, Math.round(parseInt(m[1],10)/5));
+    return { a:c, b:c };
+  }
+  const nums=s.match(/(\d+)\s*'/g);
+  if(!nums || nums.length<2) return null;
+  const feet=nums.slice(0,2).map(n=>parseInt(n,10)).filter(n=>Number.isFinite(n)&&n>0);
+  if(feet.length<2) return null;
+  return { a:Math.max(1,Math.round(feet[0]/5)), b:Math.max(1,Math.round(feet[1]/5)) };
+}
+
+// Min-dims gates (named table, ELEV-1 spec verbatim): dais/sunken >=3x3 * split/terraced >=4 cells
+// on an axis * gallery >=5x5 * chasm >=4 on the crossing axis. Flat carries no gate (always fits).
+const DWALK_ELEV_MIN_DIMS = {
+  "Dais":{square:3}, "Sunken center":{square:3},
+  "Split-level":{axis:4}, "Terraced":{axis:4},
+  "Gallery ring":{square:5},
+  "Chasm/shaft":{axis:4},
+};
+function dwalkElevFits(profile, pair){
+  if(profile==="Flat") return true;
+  if(!pair) return false; // can't verify size -> honest walk-down, never a silent guess
+  const gate=DWALK_ELEV_MIN_DIMS[profile];
+  if(!gate) return true;
+  if(gate.square) return pair.a>=gate.square && pair.b>=gate.square;
+  if(gate.axis) return pair.a>=gate.axis || pair.b>=gate.axis;
+  return true;
+}
+// Walk-down order = the table's own row order, high band -> low band, ending at Flat (which always
+// fits) — "walks down the table" read literally: down = toward the earlier/lower-numbered rows.
+const DWALK_ELEV_WALKDOWN_ORDER = ["Chasm/shaft","Gallery ring","Terraced","Split-level","Sunken center","Dais","Flat"];
+function dwalkElevWalkDown(rolledProfile, pair){
+  const order=DWALK_ELEV_WALKDOWN_ORDER;
+  const from=Math.max(0, order.indexOf(rolledProfile));
+  for(let i=from;i<order.length;i++){ if(dwalkElevFits(order[i], pair)) return order[i]; }
+  return "Flat";
+}
+
+/* dwalkElevation(dims, depth) -> {roll,profile,degradedFrom,_roll} | null (table not yet compiled
+   -> null, caller omits the field entirely — byte-compatible with pre-ELEV-1 saves). `roll` is the
+   final (post depth-bias) 1-100 total; `profile` is the row it lands on, walked down to the
+   nearest row the room's OWN rolled `dims` can fit if the rolled row's min-dims gate fails;
+   `degradedFrom` is the pre-walk-down profile name when a walk-down happened, else null (roll
+   stays canonical, the projection stays honest — same discipline as dwalkResolveTopology's
+   wasFallback). `_roll` mirrors dwalkArea's own `_roll` sibling shape so the caller can lift it
+   into segment.rollRefs.elevation the same way rollRefs.area is populated. */
+function dwalkElevation(dims, depth){
+  const rows=walkRows("room-elevation-profile");
+  if(!rows.length) return null;
+  let total=1+Math.floor(Math.random()*100);
+  total=dwalkElevDepthBiasedTotal(rows, total, depth);
+  const rolledProfile=dwalkElevProfileForTotal(rows, total);
+  const pair=dwalkElevDimsPair(dims);
+  const fitted=dwalkElevFits(rolledProfile, pair) ? rolledProfile : dwalkElevWalkDown(rolledProfile, pair);
+  const row=dwalkElevRowForTotal(rows, total);
+  return {
+    roll: total,
+    profile: fitted,
+    degradedFrom: fitted!==rolledProfile ? rolledProfile : null,
+    _roll: { tableId:"room-elevation-profile", total, band:(row&&row[2])||null },
+  };
+}
+
 // ─── loot (tier+depth budget; boss gets top) ─────────────────────────────────
 function dwalkBudget(segCount, t2){
   if(t2){ if(segCount>=13) return {common:4,uncommon:6,rare:2,veryRare:1}; if(segCount>=9) return {common:3,uncommon:5,rare:1,veryRare:0}; return {common:2,uncommon:3,rare:0,veryRare:0}; }
@@ -553,6 +663,11 @@ function rollDungeonWalk(opts){
     });
     const area=dwalkArea(sizePref);
     if(area._roll) rollRefs.area=area._roll;
+    // ELEV-1: rolled per-room elevation profile, gated on THIS room's own rolled area dims + biased
+    // by ITS graph depth (`d`, already resolved above) — additive, null when the table isn't
+    // compiled yet (byte-compatible with pre-ELEV-1 saves).
+    const elevationR=dwalkElevation(area.dims, d);
+    if(elevationR && elevationR._roll) rollRefs.elevation=elevationR._roll;
     const sceneR=walkPickStamped("dungeon-scene",1); const [scene]=sceneR.values; rollRefs.scene=sceneR.source;
     const lightingR=walkPickStamped("dungeon-lighting",1,2); const [lighting,lightFlavor]=lightingR.values;
     // WDV-2: dungeon's ONLY compiled table backing the "practical" (light) role — the structured
@@ -587,6 +702,9 @@ function rollDungeonWalk(opts){
                  object:{ name:object, flavor:objFlavor }, feature:{ name:feature, flavor:featFlavor, dims:featDims },
                  dressing:{ text:dressText, condition:dressCond }, atmo,
                  secret:dwalkSecret(), rollRefs };
+    // ELEV-1: additive field, present only when the table compiled (else omitted entirely — a
+    // segment with no `elevation` key renders exactly as it did before this unit, flat).
+    if(elevationR) base.elevation={ roll:elevationR.roll, profile:elevationR.profile, degradedFrom:elevationR.degradedFrom };
     if(node.isFinale){
       const boss=dwalkBoss(bossAffinity), revelation=dwalkRevelation(revelAffinity);
       const [finaleType,finaleDesc]=walkPick("dungeon-finale-type",1,3), [exitState]=walkPick("dungeon-exit-state",1);

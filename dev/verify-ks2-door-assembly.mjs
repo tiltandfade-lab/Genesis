@@ -245,31 +245,22 @@ group("B1 — end-to-end through interiorBuildBoard (KIT_DOORS_ENABLED on): the 
   ok(kd && kd.pack === "kenney-modular-dungeon-kit" && kd.slug === "gate-door", "kitDoors entry names the KS-1-admitted gate-door piece");
 }
 
-group("B2 — butt-join transforms land flush against the neighboring WALL cells (frame placement math, using the REAL admitted socket data)");
+group("B2 — KGR-3 cell-orientation contract replaces v1 butt-join placement for structural frames");
 {
   const provenance = JSON.parse(read("dev/model-foundry/KS1-PROVENANCE.json"));
   const gateDoor = provenance.pieces.find((p) => p.pack === "kenney-modular-dungeon-kit" && p.slug === "gate-door");
   ok(!!gateDoor, "the admitted gate-door piece is present in KS1-PROVENANCE.json");
-  const buttE = gateDoor.sockets.find((s) => s.type === "butt-join-e");
-  const buttW = gateDoor.sockets.find((s) => s.type === "butt-join-w");
-  ok(!!buttE && !!buttW, "gate-door carries butt-join-e/w sockets");
-
+  ok(gateDoor.structuralGrid?.targetWorldUnits === 2.0,
+    `gate-door inherits the measured 2.0-world-unit structural module (got ${gateDoor.structuralGrid?.targetWorldUnits})`);
+  ok(gateDoor.structuralGrid?.orientationSteps === 4 && gateDoor.structuralGrid?.joinMode === "cell-orientation",
+    "gate-door placement is canonical grid cell + one of four quarter-turn orientations");
+  ok(!gateDoor.sockets.some((s) => String(s.type).startsWith("butt-join-")),
+    "KGR-3 v2 gate-door emits no superseded butt-join socket");
   const std = standardDoorFixture();
-  const widthAxisIsZ = false; // fixture 3's ground truth (north wall, width along X)
-  const rotY = widthAxisIsZ ? Math.PI / 2 : 0;
-  // world offset of each butt-join socket relative to the door cell's own center, after the SAME
-  // rotation interiorBuildKitDoorMesh applies to the whole frame group.
-  const rotateY = (x, z, rot) => ({ x: x * Math.cos(rot) + z * Math.sin(rot), z: -x * Math.sin(rot) + z * Math.cos(rot) });
-  [buttE, buttW].forEach((socket) => {
-    const world = rotateY(socket.position[0], socket.position[2], rotY);
-    // "flush in the wall run": the socket's own offset along the width axis (X here, since
-    // widthAxisIsZ=false) must land within the IMMEDIATE neighbor wall cell's own footprint —
-    // that cell's center sits exactly 1.0 world unit from the door cell's own center, spanning
-    // [0.5, 1.5]. A socket landing outside that band would mean the frame's own butt-join floats
-    // past the neighbor wall entirely (never "consistent with neighboring wall cells").
-    const dist = Math.abs(widthAxisIsZ ? world.z : world.x);
-    ok(dist >= 0.5 && dist <= 1.5, `butt-join ${socket.type}: |offset|=${dist.toFixed(3)} lands within the neighbor wall cell's own [0.5,1.5] footprint (flush, not floating)`);
-  });
+  const board = M.interiorBuildBoard(std.plan, { realmId: "fantasy", env: "dungeon" });
+  const kd = board.kitDoors.find((door) => door.x === std.doorCell.x && door.z === std.doorCell.y);
+  ok(kd && kd.widthAxisIsZ === false,
+    "fixture 3 projects the donor at the canonical door cell with the north-wall quarter-turn orientation");
 }
 
 // ============================================================================

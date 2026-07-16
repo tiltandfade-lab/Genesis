@@ -1,2456 +1,4329 @@
 {
-  "corridor": {
-    "admissionClass": "DIRECT_MODULATED",
-    "canonicalScale": 0.5,
-    "category": "corridor-shell",
-    "companionLeaf": null,
-    "file": "corridor.glb",
-    "materialFamilies": [
-      "stone"
-    ],
-    "recipeHash": "bb9e846b0baa608e88ca7ff87bb88d88f9ed4dc6fc6584e06aa792509571fe30",
-    "semanticParts": [
-      "corridor-shell"
-    ],
-    "sockets": [
-      {
-        "position": [
-          0.0,
-          0.0,
-          0.0
-        ],
-        "type": "floor-mount"
-      },
-      {
-        "position": [
-          0.0,
-          0.0,
-          0.0
-        ],
-        "type": "top-surface"
-      },
-      {
-        "position": [
-          0.0,
-          0.0,
-          -1.000000238418579
-        ],
-        "type": "butt-join-n"
-      },
-      {
-        "position": [
-          0.0,
-          0.0,
+  "algorithmVersion": 1,
+  "assets": {
+    "corridor": {
+      "admissionClass": "DIRECT_MODULATED",
+      "assetId": "kenney-modular-dungeon-kit/corridor",
+      "bounds": {
+        "aabbMax": [
+          1.0,
+          2.075000047683716,
           1.000000238418579
         ],
-        "type": "butt-join-s"
-      },
-      {
-        "position": [
-          1.0,
-          0.0,
-          0.0
-        ],
-        "type": "butt-join-e"
-      },
-      {
-        "position": [
+        "aabbMin": [
           -1.0,
-          0.0,
-          0.0
-        ],
-        "type": "butt-join-w"
-      }
-    ]
-  },
-  "corridor-corner": {
-    "admissionClass": "DIRECT_MODULATED",
-    "canonicalScale": 0.5,
-    "category": "corridor-shell",
-    "companionLeaf": null,
-    "file": "corridor-corner.glb",
-    "materialFamilies": [
-      "stone"
-    ],
-    "recipeHash": "9e02825186f7cda67016c4c36251ac68ae218544b745a41cd8e9c5b45bac1263",
-    "semanticParts": [
-      "corridor-shell"
-    ],
-    "sockets": [
-      {
-        "position": [
-          0.0,
-          0.0,
-          -5.960464477539063e-08
-        ],
-        "type": "floor-mount"
-      },
-      {
-        "position": [
-          0.0,
-          0.0,
-          -5.960464477539063e-08
-        ],
-        "type": "top-surface"
-      },
-      {
-        "position": [
-          0.0,
-          0.0,
-          -1.0000001192092896
-        ],
-        "type": "butt-join-n"
-      },
-      {
-        "position": [
-          0.0,
-          0.0,
-          1.0
-        ],
-        "type": "butt-join-s"
-      },
-      {
-        "position": [
-          1.0,
-          0.0,
-          -5.960464477539063e-08
-        ],
-        "type": "butt-join-e"
-      },
-      {
-        "position": [
-          -1.0,
-          0.0,
-          -5.960464477539063e-08
-        ],
-        "type": "butt-join-w"
-      }
-    ]
-  },
-  "corridor-end": {
-    "admissionClass": "DIRECT_MODULATED",
-    "canonicalScale": 0.5,
-    "category": "corridor-shell",
-    "companionLeaf": null,
-    "file": "corridor-end.glb",
-    "materialFamilies": [
-      "stone"
-    ],
-    "recipeHash": "3ea6c308b108998411ae4cb2f511bdd88b09dda122784ef29296cd232035cc89",
-    "semanticParts": [
-      "corridor-shell"
-    ],
-    "sockets": [
-      {
-        "position": [
-          -5.960464477539063e-08,
-          0.0,
-          6.556510925292969e-07
-        ],
-        "type": "floor-mount"
-      },
-      {
-        "position": [
-          -5.960464477539063e-08,
-          0.0,
-          6.556510925292969e-07
-        ],
-        "type": "top-surface"
-      },
-      {
-        "position": [
-          -5.960464477539063e-08,
-          0.0,
+          -1.4438228216156449e-15,
           -1.000000238418579
         ],
-        "type": "butt-join-n"
+        "footprint": {
+          "center": [
+            0.0,
+            0.0
+          ],
+          "halfExtents": [
+            1.0,
+            1.000000238418579
+          ],
+          "yawRadians": 0
+        },
+        "footprintSource": "derived",
+        "groundY": -1.4438228216156449e-15
       },
-      {
-        "position": [
-          -5.960464477539063e-08,
+      "canonicalScale": 0.5,
+      "category": "corridor-shell",
+      "companionLeaf": null,
+      "file": "corridor.glb",
+      "materialFamilies": [
+        "stone"
+      ],
+      "normalizedFrame": {
+        "forward": "+Z",
+        "sourceToGenesis": [
+          0.5,
           0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0,
+          0,
+          0,
+          1.0
+        ],
+        "up": "+Y"
+      },
+      "qaStatus": "needs-review",
+      "recipeHash": "7f3854f552efef87e0ce5b44a8add13d7bb4b4aff5a65c84209583fed3d79ad2",
+      "schema": "genesis.donor.v2",
+      "semanticParts": {},
+      "sockets": [
+        {
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.1,
+              0.1,
+              0.1
+            ]
+          },
+          "id": "floor-mount",
+          "mateFamily": "floor",
+          "mateRule": "coincident",
+          "position": [
+            0.0,
+            -1.4438228216156449e-15,
+            0.0
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "size": [
+            0.05,
+            0.05,
+            0.05
+          ],
+          "type": "floor-mount"
+        }
+      ],
+      "sourceSha256": "e70f61e46cdfcea4b52e722abdbbdc5cf727461660ccd8556ad4b7a39a5997d5",
+      "structuralGrid": {
+        "joinMode": "cell-orientation",
+        "orientationSteps": 4,
+        "sourceModuleUnits": 4.0,
+        "targetWorldUnits": 2.0
+      }
+    },
+    "corridor-corner": {
+      "admissionClass": "DIRECT_MODULATED",
+      "assetId": "kenney-modular-dungeon-kit/corridor-corner",
+      "bounds": {
+        "aabbMax": [
+          1.0,
+          2.116642951965332,
+          1.0
+        ],
+        "aabbMin": [
+          -1.0,
+          -8.538858673140613e-15,
+          -1.0000001192092896
+        ],
+        "footprint": {
+          "center": [
+            0.0,
+            -5.960464477539063e-08
+          ],
+          "halfExtents": [
+            1.0,
+            1.0000000596046448
+          ],
+          "yawRadians": 0
+        },
+        "footprintSource": "derived",
+        "groundY": -8.538858673140613e-15
+      },
+      "canonicalScale": 0.5,
+      "category": "corridor-shell",
+      "companionLeaf": null,
+      "file": "corridor-corner.glb",
+      "materialFamilies": [
+        "stone"
+      ],
+      "normalizedFrame": {
+        "forward": "+Z",
+        "sourceToGenesis": [
+          0.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0,
+          0,
+          0,
+          1.0
+        ],
+        "up": "+Y"
+      },
+      "qaStatus": "needs-review",
+      "recipeHash": "3ddad1b76e5c9227509d0c3255cc2f980381eab5230819baca0a2112803a73bc",
+      "schema": "genesis.donor.v2",
+      "semanticParts": {},
+      "sockets": [
+        {
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.1,
+              0.1,
+              0.1
+            ]
+          },
+          "id": "floor-mount",
+          "mateFamily": "floor",
+          "mateRule": "coincident",
+          "position": [
+            0.0,
+            -8.538858673140613e-15,
+            -5.960464477539063e-08
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "size": [
+            0.05,
+            0.05,
+            0.05
+          ],
+          "type": "floor-mount"
+        }
+      ],
+      "sourceSha256": "9c8efc6da00f45f1bb9986e596bea9bec5433d776bfd440e315f1f14570edfe8",
+      "structuralGrid": {
+        "joinMode": "cell-orientation",
+        "orientationSteps": 4,
+        "sourceModuleUnits": 4.0,
+        "targetWorldUnits": 2.0
+      }
+    },
+    "corridor-end": {
+      "admissionClass": "DIRECT_MODULATED",
+      "assetId": "kenney-modular-dungeon-kit/corridor-end",
+      "bounds": {
+        "aabbMax": [
+          1.0000007152557373,
+          2.075000047683716,
           1.0000015497207642
         ],
-        "type": "butt-join-s"
-      },
-      {
-        "position": [
-          1.0000007152557373,
-          0.0,
-          6.556510925292969e-07
-        ],
-        "type": "butt-join-e"
-      },
-      {
-        "position": [
+        "aabbMin": [
           -1.0000008344650269,
-          0.0,
-          6.556510925292969e-07
+          -1.4438228216156449e-15,
+          -1.000000238418579
         ],
-        "type": "butt-join-w"
+        "footprint": {
+          "center": [
+            -5.960464477539063e-08,
+            6.556510925292969e-07
+          ],
+          "halfExtents": [
+            1.000000774860382,
+            1.0000008940696716
+          ],
+          "yawRadians": 0
+        },
+        "footprintSource": "derived",
+        "groundY": -1.4438228216156449e-15
+      },
+      "canonicalScale": 0.5,
+      "category": "corridor-shell",
+      "companionLeaf": null,
+      "file": "corridor-end.glb",
+      "materialFamilies": [
+        "stone"
+      ],
+      "normalizedFrame": {
+        "forward": "+Z",
+        "sourceToGenesis": [
+          0.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0,
+          0,
+          0,
+          1.0
+        ],
+        "up": "+Y"
+      },
+      "qaStatus": "needs-review",
+      "recipeHash": "663f744b03fb75e7cdb4fa5547079417b5fc3bc789cbe5724aab915bc7c74bc9",
+      "schema": "genesis.donor.v2",
+      "semanticParts": {},
+      "sockets": [
+        {
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.1,
+              0.1,
+              0.1
+            ]
+          },
+          "id": "floor-mount",
+          "mateFamily": "floor",
+          "mateRule": "coincident",
+          "position": [
+            -5.960464477539063e-08,
+            -1.4438228216156449e-15,
+            6.556510925292969e-07
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "size": [
+            0.05,
+            0.05,
+            0.05
+          ],
+          "type": "floor-mount"
+        }
+      ],
+      "sourceSha256": "aa0cc13ebf45c7d3af0c072f53bf74c9fc1d8b4eec949484bc7ce551615bff66",
+      "structuralGrid": {
+        "joinMode": "cell-orientation",
+        "orientationSteps": 4,
+        "sourceModuleUnits": 4.0,
+        "targetWorldUnits": 2.0
       }
-    ]
-  },
-  "corridor-intersection": {
-    "admissionClass": "DIRECT_MODULATED",
-    "canonicalScale": 0.5,
-    "category": "corridor-shell",
-    "companionLeaf": null,
-    "file": "corridor-intersection.glb",
-    "materialFamilies": [
-      "stone"
-    ],
-    "recipeHash": "bc234bc3fb954c72c57b37ffb0f6e8db1544395e2320858fcd6d0e48c53bb9e7",
-    "semanticParts": [
-      "corridor-shell"
-    ],
-    "sockets": [
-      {
-        "position": [
-          0.0,
-          0.0,
-          0.0
-        ],
-        "type": "floor-mount"
-      },
-      {
-        "position": [
-          0.0,
-          0.0,
-          0.0
-        ],
-        "type": "top-surface"
-      },
-      {
-        "position": [
-          0.0,
-          0.0,
-          -1.0000001192092896
-        ],
-        "type": "butt-join-n"
-      },
-      {
-        "position": [
-          0.0,
-          0.0,
+    },
+    "corridor-intersection": {
+      "admissionClass": "DIRECT_MODULATED",
+      "assetId": "kenney-modular-dungeon-kit/corridor-intersection",
+      "bounds": {
+        "aabbMax": [
+          1.0,
+          2.0249998569488525,
           1.0000001192092896
         ],
-        "type": "butt-join-s"
-      },
-      {
-        "position": [
-          1.0,
-          0.0,
-          0.0
-        ],
-        "type": "butt-join-e"
-      },
-      {
-        "position": [
+        "aabbMin": [
           -1.0,
-          0.0,
-          0.0
-        ],
-        "type": "butt-join-w"
-      }
-    ]
-  },
-  "corridor-junction": {
-    "admissionClass": "DIRECT_MODULATED",
-    "canonicalScale": 0.5,
-    "category": "corridor-shell",
-    "companionLeaf": null,
-    "file": "corridor-junction.glb",
-    "materialFamilies": [
-      "stone"
-    ],
-    "recipeHash": "3b83d4224cbc0f27a5b38835e8a32e7a6c2350e7f1e9040d59060f0cd3c8a69d",
-    "semanticParts": [
-      "corridor-shell"
-    ],
-    "sockets": [
-      {
-        "position": [
-          0.0014433860778808594,
-          0.0,
-          5.960464477539063e-08
-        ],
-        "type": "floor-mount"
-      },
-      {
-        "position": [
-          0.0014433860778808594,
-          0.0,
-          5.960464477539063e-08
-        ],
-        "type": "top-surface"
-      },
-      {
-        "position": [
-          0.0014433860778808594,
-          0.0,
+          -8.538858673140613e-15,
           -1.0000001192092896
         ],
-        "type": "butt-join-n"
+        "footprint": {
+          "center": [
+            0.0,
+            0.0
+          ],
+          "halfExtents": [
+            1.0,
+            1.0000001192092896
+          ],
+          "yawRadians": 0
+        },
+        "footprintSource": "derived",
+        "groundY": -8.538858673140613e-15
       },
-      {
-        "position": [
-          0.0014433860778808594,
+      "canonicalScale": 0.5,
+      "category": "corridor-shell",
+      "companionLeaf": null,
+      "file": "corridor-intersection.glb",
+      "materialFamilies": [
+        "stone"
+      ],
+      "normalizedFrame": {
+        "forward": "+Z",
+        "sourceToGenesis": [
+          0.5,
           0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0,
+          0,
+          0,
+          1.0
+        ],
+        "up": "+Y"
+      },
+      "qaStatus": "needs-review",
+      "recipeHash": "ce67705fc22dc0ba574b57ee34162f80fabe7670cfb39ebd228a5963e3cf72c1",
+      "schema": "genesis.donor.v2",
+      "semanticParts": {},
+      "sockets": [
+        {
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.1,
+              0.1,
+              0.1
+            ]
+          },
+          "id": "floor-mount",
+          "mateFamily": "floor",
+          "mateRule": "coincident",
+          "position": [
+            0.0,
+            -8.538858673140613e-15,
+            0.0
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "size": [
+            0.05,
+            0.05,
+            0.05
+          ],
+          "type": "floor-mount"
+        }
+      ],
+      "sourceSha256": "8391b37a520da2e81ba00f9992f74eb338d4b93263ef180b895508b7096edce8",
+      "structuralGrid": {
+        "joinMode": "cell-orientation",
+        "orientationSteps": 4,
+        "sourceModuleUnits": 4.0,
+        "targetWorldUnits": 2.0
+      }
+    },
+    "corridor-junction": {
+      "admissionClass": "DIRECT_MODULATED",
+      "assetId": "kenney-modular-dungeon-kit/corridor-junction",
+      "bounds": {
+        "aabbMax": [
+          1.0028867721557617,
+          2.075000047683716,
           1.000000238418579
         ],
-        "type": "butt-join-s"
-      },
-      {
-        "position": [
-          1.0028867721557617,
-          0.0,
-          5.960464477539063e-08
-        ],
-        "type": "butt-join-e"
-      },
-      {
-        "position": [
+        "aabbMin": [
           -1.0,
-          0.0,
-          5.960464477539063e-08
+          -9.26077045452535e-15,
+          -1.0000001192092896
         ],
-        "type": "butt-join-w"
+        "footprint": {
+          "center": [
+            0.0014433860778808594,
+            5.960464477539063e-08
+          ],
+          "halfExtents": [
+            1.0014433860778809,
+            1.0000001788139343
+          ],
+          "yawRadians": 0
+        },
+        "footprintSource": "derived",
+        "groundY": -9.26077045452535e-15
+      },
+      "canonicalScale": 0.5,
+      "category": "corridor-shell",
+      "companionLeaf": null,
+      "file": "corridor-junction.glb",
+      "materialFamilies": [
+        "stone"
+      ],
+      "normalizedFrame": {
+        "forward": "+Z",
+        "sourceToGenesis": [
+          0.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0,
+          0,
+          0,
+          1.0
+        ],
+        "up": "+Y"
+      },
+      "qaStatus": "needs-review",
+      "recipeHash": "f2879f73f36714e967d6d0dc14e2872ead2c763fa607a2d6600b601f44be0125",
+      "schema": "genesis.donor.v2",
+      "semanticParts": {},
+      "sockets": [
+        {
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.1,
+              0.1,
+              0.1
+            ]
+          },
+          "id": "floor-mount",
+          "mateFamily": "floor",
+          "mateRule": "coincident",
+          "position": [
+            0.0014433860778808594,
+            -9.26077045452535e-15,
+            5.960464477539063e-08
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "size": [
+            0.05,
+            0.05,
+            0.05
+          ],
+          "type": "floor-mount"
+        }
+      ],
+      "sourceSha256": "024813c67150354bae6fa9dceb618eae00c918461d38a3e8f2e5d5241df600e7",
+      "structuralGrid": {
+        "joinMode": "cell-orientation",
+        "orientationSteps": 4,
+        "sourceModuleUnits": 4.0,
+        "targetWorldUnits": 2.0
       }
-    ]
-  },
-  "corridor-transition": {
-    "admissionClass": "DIRECT_MODULATED",
-    "canonicalScale": 0.5,
-    "category": "corridor-shell",
-    "companionLeaf": null,
-    "file": "corridor-transition.glb",
-    "materialFamilies": [
-      "stone"
-    ],
-    "recipeHash": "f83d6eb2500c877a31f172b161188d334304c1d1355c9a694c1ce7f6f0f91104",
-    "semanticParts": [
-      "corridor-shell"
-    ],
-    "sockets": [
-      {
-        "position": [
-          -1.0,
-          0.0,
-          0.0
-        ],
-        "type": "floor-mount"
-      },
-      {
-        "position": [
-          -1.0,
-          0.0,
-          0.0
-        ],
-        "type": "top-surface"
-      },
-      {
-        "position": [
-          -1.0,
-          0.0,
-          -2.0
-        ],
-        "type": "butt-join-n"
-      },
-      {
-        "position": [
-          -1.0,
-          0.0,
-          2.0
-        ],
-        "type": "butt-join-s"
-      },
-      {
-        "position": [
+    },
+    "corridor-transition": {
+      "admissionClass": "DIRECT_MODULATED",
+      "assetId": "kenney-modular-dungeon-kit/corridor-transition",
+      "bounds": {
+        "aabbMax": [
           1.0000007152557373,
-          0.0,
-          0.0
+          2.075000047683716,
+          2.0
         ],
-        "type": "butt-join-e"
-      },
-      {
-        "position": [
+        "aabbMin": [
           -3.0000007152557373,
-          0.0,
-          0.0
-        ],
-        "type": "butt-join-w"
-      }
-    ]
-  },
-  "corridor-wide": {
-    "admissionClass": "DIRECT_MODULATED",
-    "canonicalScale": 0.5,
-    "category": "corridor-shell",
-    "companionLeaf": null,
-    "file": "corridor-wide.glb",
-    "materialFamilies": [
-      "stone"
-    ],
-    "recipeHash": "c1306d20eb561ec7fb9df9d04f102daeafd0244f6bd8c4b167a8c5fab308b795",
-    "semanticParts": [
-      "corridor-shell"
-    ],
-    "sockets": [
-      {
-        "position": [
-          0.0,
-          0.0,
-          0.0
-        ],
-        "type": "floor-mount"
-      },
-      {
-        "position": [
-          0.0,
-          0.0,
-          0.0
-        ],
-        "type": "top-surface"
-      },
-      {
-        "position": [
-          0.0,
-          0.0,
-          -2.000000476837158
-        ],
-        "type": "butt-join-n"
-      },
-      {
-        "position": [
-          0.0,
-          0.0,
-          2.000000476837158
-        ],
-        "type": "butt-join-s"
-      },
-      {
-        "position": [
-          2.0,
-          0.0,
-          0.0
-        ],
-        "type": "butt-join-e"
-      },
-      {
-        "position": [
-          -2.0,
-          0.0,
-          0.0
-        ],
-        "type": "butt-join-w"
-      }
-    ]
-  },
-  "corridor-wide-corner": {
-    "admissionClass": "DIRECT_MODULATED",
-    "canonicalScale": 0.5,
-    "category": "corridor-shell",
-    "companionLeaf": null,
-    "file": "corridor-wide-corner.glb",
-    "materialFamilies": [
-      "stone"
-    ],
-    "recipeHash": "b76474f574893b88220e11e243c0db676dffbaaad3445119dc67bad0cd07a617",
-    "semanticParts": [
-      "corridor-shell"
-    ],
-    "sockets": [
-      {
-        "position": [
-          1.1920928955078125e-07,
-          0.0,
-          0.0
-        ],
-        "type": "floor-mount"
-      },
-      {
-        "position": [
-          1.1920928955078125e-07,
-          0.0,
-          0.0
-        ],
-        "type": "top-surface"
-      },
-      {
-        "position": [
-          1.1920928955078125e-07,
-          0.0,
+          -8.538858673140613e-15,
           -2.0
         ],
-        "type": "butt-join-n"
+        "footprint": {
+          "center": [
+            -1.0,
+            0.0
+          ],
+          "halfExtents": [
+            2.0000007152557373,
+            2.0
+          ],
+          "yawRadians": 0
+        },
+        "footprintSource": "derived",
+        "groundY": -8.538858673140613e-15
       },
-      {
-        "position": [
-          1.1920928955078125e-07,
+      "canonicalScale": 0.5,
+      "category": "corridor-shell",
+      "companionLeaf": null,
+      "file": "corridor-transition.glb",
+      "materialFamilies": [
+        "stone"
+      ],
+      "normalizedFrame": {
+        "forward": "+Z",
+        "sourceToGenesis": [
+          0.5,
           0.0,
-          2.0
+          0.0,
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0,
+          0,
+          0,
+          1.0
         ],
-        "type": "butt-join-s"
+        "up": "+Y"
       },
-      {
-        "position": [
-          2.000000238418579,
-          0.0,
-          0.0
-        ],
-        "type": "butt-join-e"
-      },
-      {
-        "position": [
-          -2.0,
-          0.0,
-          0.0
-        ],
-        "type": "butt-join-w"
+      "qaStatus": "needs-review",
+      "recipeHash": "e7f47eb3ef5fe926b41d6eff384b97889137376dd5aa2f422c54e1e623f99343",
+      "schema": "genesis.donor.v2",
+      "semanticParts": {},
+      "sockets": [
+        {
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.1,
+              0.1,
+              0.1
+            ]
+          },
+          "id": "floor-mount",
+          "mateFamily": "floor",
+          "mateRule": "coincident",
+          "position": [
+            -1.0,
+            -8.538858673140613e-15,
+            0.0
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "size": [
+            0.05,
+            0.05,
+            0.05
+          ],
+          "type": "floor-mount"
+        }
+      ],
+      "sourceSha256": "b8628cee5af8ea7ea89024ee5e0eb30c91b217680daed8188e0cb7babb27ab8f",
+      "structuralGrid": {
+        "joinMode": "cell-orientation",
+        "orientationSteps": 4,
+        "sourceModuleUnits": 4.0,
+        "targetWorldUnits": 2.0
       }
-    ]
-  },
-  "corridor-wide-end": {
-    "admissionClass": "DIRECT_MODULATED",
-    "canonicalScale": 0.5,
-    "category": "corridor-shell",
-    "companionLeaf": null,
-    "file": "corridor-wide-end.glb",
-    "materialFamilies": [
-      "stone"
-    ],
-    "recipeHash": "4433171f854f7366bef3b23a885f5bf56794794ee42a8996d36cb3e7fd051362",
-    "semanticParts": [
-      "corridor-shell"
-    ],
-    "sockets": [
-      {
-        "position": [
-          -7.152557373046875e-07,
-          0.0,
-          0.0
-        ],
-        "type": "floor-mount"
-      },
-      {
-        "position": [
-          -7.152557373046875e-07,
-          0.0,
-          0.0
-        ],
-        "type": "top-surface"
-      },
-      {
-        "position": [
-          -7.152557373046875e-07,
-          0.0,
-          -2.000000476837158
-        ],
-        "type": "butt-join-n"
-      },
-      {
-        "position": [
-          -7.152557373046875e-07,
-          0.0,
+    },
+    "corridor-wide": {
+      "admissionClass": "DIRECT_MODULATED",
+      "assetId": "kenney-modular-dungeon-kit/corridor-wide",
+      "bounds": {
+        "aabbMax": [
+          2.0,
+          2.116642951965332,
           2.000000476837158
         ],
-        "type": "butt-join-s"
-      },
-      {
-        "position": [
-          2.0,
-          0.0,
-          0.0
+        "aabbMin": [
+          -2.0,
+          -1.4440796843568997e-15,
+          -2.000000476837158
         ],
-        "type": "butt-join-e"
+        "footprint": {
+          "center": [
+            0.0,
+            0.0
+          ],
+          "halfExtents": [
+            2.0,
+            2.000000476837158
+          ],
+          "yawRadians": 0
+        },
+        "footprintSource": "derived",
+        "groundY": -1.4440796843568997e-15
       },
-      {
-        "position": [
+      "canonicalScale": 0.5,
+      "category": "corridor-shell",
+      "companionLeaf": null,
+      "file": "corridor-wide.glb",
+      "materialFamilies": [
+        "stone"
+      ],
+      "normalizedFrame": {
+        "forward": "+Z",
+        "sourceToGenesis": [
+          0.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0,
+          0,
+          0,
+          1.0
+        ],
+        "up": "+Y"
+      },
+      "qaStatus": "needs-review",
+      "recipeHash": "fd58c2e215ecf3c44aa5deed76e8d4af476c12fb16698254916a38570ed1e5af",
+      "schema": "genesis.donor.v2",
+      "semanticParts": {},
+      "sockets": [
+        {
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.1,
+              0.1,
+              0.1
+            ]
+          },
+          "id": "floor-mount",
+          "mateFamily": "floor",
+          "mateRule": "coincident",
+          "position": [
+            0.0,
+            -1.4440796843568997e-15,
+            0.0
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "size": [
+            0.05,
+            0.05,
+            0.05
+          ],
+          "type": "floor-mount"
+        }
+      ],
+      "sourceSha256": "0a24c93238ebd1178c522e5effc7f0bfc1963133f2d50635a84c2465d5dd0f43",
+      "structuralGrid": {
+        "joinMode": "cell-orientation",
+        "orientationSteps": 4,
+        "sourceModuleUnits": 4.0,
+        "targetWorldUnits": 2.0
+      }
+    },
+    "corridor-wide-corner": {
+      "admissionClass": "DIRECT_MODULATED",
+      "assetId": "kenney-modular-dungeon-kit/corridor-wide-corner",
+      "bounds": {
+        "aabbMax": [
+          2.000000238418579,
+          2.116642951965332,
+          2.0
+        ],
+        "aabbMin": [
+          -2.0,
+          -8.538858673140613e-15,
+          -2.0
+        ],
+        "footprint": {
+          "center": [
+            1.1920928955078125e-07,
+            0.0
+          ],
+          "halfExtents": [
+            2.0000001192092896,
+            2.0
+          ],
+          "yawRadians": 0
+        },
+        "footprintSource": "derived",
+        "groundY": -8.538858673140613e-15
+      },
+      "canonicalScale": 0.5,
+      "category": "corridor-shell",
+      "companionLeaf": null,
+      "file": "corridor-wide-corner.glb",
+      "materialFamilies": [
+        "stone"
+      ],
+      "normalizedFrame": {
+        "forward": "+Z",
+        "sourceToGenesis": [
+          0.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0,
+          0,
+          0,
+          1.0
+        ],
+        "up": "+Y"
+      },
+      "qaStatus": "needs-review",
+      "recipeHash": "0650b27b4ee6151dd09e5846247d480efafe22a6535b052ce42acb9894bb21fd",
+      "schema": "genesis.donor.v2",
+      "semanticParts": {},
+      "sockets": [
+        {
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.1,
+              0.1,
+              0.1
+            ]
+          },
+          "id": "floor-mount",
+          "mateFamily": "floor",
+          "mateRule": "coincident",
+          "position": [
+            1.1920928955078125e-07,
+            -8.538858673140613e-15,
+            0.0
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "size": [
+            0.05,
+            0.05,
+            0.05
+          ],
+          "type": "floor-mount"
+        }
+      ],
+      "sourceSha256": "c1613a016eb107379c51c75ae7ced7e5244b27d7904910981584ce73f78a6db1",
+      "structuralGrid": {
+        "joinMode": "cell-orientation",
+        "orientationSteps": 4,
+        "sourceModuleUnits": 4.0,
+        "targetWorldUnits": 2.0
+      }
+    },
+    "corridor-wide-end": {
+      "admissionClass": "DIRECT_MODULATED",
+      "assetId": "kenney-modular-dungeon-kit/corridor-wide-end",
+      "bounds": {
+        "aabbMax": [
+          2.0,
+          2.116642951965332,
+          2.000000476837158
+        ],
+        "aabbMin": [
           -2.0000014305114746,
-          0.0,
-          0.0
+          -1.4440797902360181e-15,
+          -2.000000476837158
         ],
-        "type": "butt-join-w"
+        "footprint": {
+          "center": [
+            -7.152557373046875e-07,
+            0.0
+          ],
+          "halfExtents": [
+            2.0000007152557373,
+            2.000000476837158
+          ],
+          "yawRadians": 0
+        },
+        "footprintSource": "derived",
+        "groundY": -1.4440797902360181e-15
+      },
+      "canonicalScale": 0.5,
+      "category": "corridor-shell",
+      "companionLeaf": null,
+      "file": "corridor-wide-end.glb",
+      "materialFamilies": [
+        "stone"
+      ],
+      "normalizedFrame": {
+        "forward": "+Z",
+        "sourceToGenesis": [
+          0.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0,
+          0,
+          0,
+          1.0
+        ],
+        "up": "+Y"
+      },
+      "qaStatus": "needs-review",
+      "recipeHash": "2970ccfa7c61436e218cef6a57a552fe60a9aa8358e64cff9d20b69cf91ce9cd",
+      "schema": "genesis.donor.v2",
+      "semanticParts": {},
+      "sockets": [
+        {
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.1,
+              0.1,
+              0.1
+            ]
+          },
+          "id": "floor-mount",
+          "mateFamily": "floor",
+          "mateRule": "coincident",
+          "position": [
+            -7.152557373046875e-07,
+            -1.4440797902360181e-15,
+            0.0
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "size": [
+            0.05,
+            0.05,
+            0.05
+          ],
+          "type": "floor-mount"
+        }
+      ],
+      "sourceSha256": "ecaef7f049d790a14da8ec6169afd9f81e12e5c9f3629429e07790a998cc197c",
+      "structuralGrid": {
+        "joinMode": "cell-orientation",
+        "orientationSteps": 4,
+        "sourceModuleUnits": 4.0,
+        "targetWorldUnits": 2.0
       }
-    ]
-  },
-  "corridor-wide-intersection": {
-    "admissionClass": "DIRECT_MODULATED",
-    "canonicalScale": 0.5,
-    "category": "corridor-shell",
-    "companionLeaf": null,
-    "file": "corridor-wide-intersection.glb",
-    "materialFamilies": [
-      "stone"
-    ],
-    "recipeHash": "f7b56b54129ae738cdf4abce1237d90adeb82b8ac6b69bf829322203c72b83f2",
-    "semanticParts": [
-      "corridor-shell"
-    ],
-    "sockets": [
-      {
-        "position": [
-          0.0,
-          0.0,
-          0.0
-        ],
-        "type": "floor-mount"
-      },
-      {
-        "position": [
-          0.0,
-          0.0,
-          0.0
-        ],
-        "type": "top-surface"
-      },
-      {
-        "position": [
-          0.0,
-          0.0,
-          -2.0
-        ],
-        "type": "butt-join-n"
-      },
-      {
-        "position": [
-          0.0,
-          0.0,
+    },
+    "corridor-wide-intersection": {
+      "admissionClass": "DIRECT_MODULATED",
+      "assetId": "kenney-modular-dungeon-kit/corridor-wide-intersection",
+      "bounds": {
+        "aabbMax": [
+          2.0,
+          2.0249998569488525,
           2.0
         ],
-        "type": "butt-join-s"
-      },
-      {
-        "position": [
-          2.0,
-          0.0,
-          0.0
-        ],
-        "type": "butt-join-e"
-      },
-      {
-        "position": [
+        "aabbMin": [
           -2.0,
-          0.0,
-          0.0
-        ],
-        "type": "butt-join-w"
-      }
-    ]
-  },
-  "corridor-wide-junction": {
-    "admissionClass": "DIRECT_MODULATED",
-    "canonicalScale": 0.5,
-    "category": "corridor-shell",
-    "companionLeaf": null,
-    "file": "corridor-wide-junction.glb",
-    "materialFamilies": [
-      "stone"
-    ],
-    "recipeHash": "2cc8ef69afbcbd5c6a62c2bf218d590424df81d9a2994dad2f0634140e478627",
-    "semanticParts": [
-      "corridor-shell"
-    ],
-    "sockets": [
-      {
-        "position": [
-          1.1920928955078125e-07,
-          0.0,
-          2.384185791015625e-07
-        ],
-        "type": "floor-mount"
-      },
-      {
-        "position": [
-          1.1920928955078125e-07,
-          0.0,
-          2.384185791015625e-07
-        ],
-        "type": "top-surface"
-      },
-      {
-        "position": [
-          1.1920928955078125e-07,
-          0.0,
+          -8.538858673140613e-15,
           -2.0
         ],
-        "type": "butt-join-n"
+        "footprint": {
+          "center": [
+            0.0,
+            0.0
+          ],
+          "halfExtents": [
+            2.0,
+            2.0
+          ],
+          "yawRadians": 0
+        },
+        "footprintSource": "derived",
+        "groundY": -8.538858673140613e-15
       },
-      {
-        "position": [
-          1.1920928955078125e-07,
+      "canonicalScale": 0.5,
+      "category": "corridor-shell",
+      "companionLeaf": null,
+      "file": "corridor-wide-intersection.glb",
+      "materialFamilies": [
+        "stone"
+      ],
+      "normalizedFrame": {
+        "forward": "+Z",
+        "sourceToGenesis": [
+          0.5,
           0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0,
+          0,
+          0,
+          1.0
+        ],
+        "up": "+Y"
+      },
+      "qaStatus": "needs-review",
+      "recipeHash": "508bccf243a16b38a7ff2bedb6f5d3548ce08e30e5f4e6ac887beee4e69422c9",
+      "schema": "genesis.donor.v2",
+      "semanticParts": {},
+      "sockets": [
+        {
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.1,
+              0.1,
+              0.1
+            ]
+          },
+          "id": "floor-mount",
+          "mateFamily": "floor",
+          "mateRule": "coincident",
+          "position": [
+            0.0,
+            -8.538858673140613e-15,
+            0.0
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "size": [
+            0.05,
+            0.05,
+            0.05
+          ],
+          "type": "floor-mount"
+        }
+      ],
+      "sourceSha256": "258d31b3658fb3015b50be9169259e3c1f4ee4fa0d8b68ed937e8bc7664a461a",
+      "structuralGrid": {
+        "joinMode": "cell-orientation",
+        "orientationSteps": 4,
+        "sourceModuleUnits": 4.0,
+        "targetWorldUnits": 2.0
+      }
+    },
+    "corridor-wide-junction": {
+      "admissionClass": "DIRECT_MODULATED",
+      "assetId": "kenney-modular-dungeon-kit/corridor-wide-junction",
+      "bounds": {
+        "aabbMax": [
+          2.000000238418579,
+          2.116642951965332,
           2.000000476837158
         ],
-        "type": "butt-join-s"
-      },
-      {
-        "position": [
-          2.000000238418579,
-          0.0,
-          2.384185791015625e-07
-        ],
-        "type": "butt-join-e"
-      },
-      {
-        "position": [
+        "aabbMin": [
           -2.0,
-          0.0,
-          2.384185791015625e-07
+          -8.538858673140613e-15,
+          -2.0
         ],
-        "type": "butt-join-w"
-      }
-    ]
-  },
-  "gate": {
-    "admissionClass": "DIRECT_MODULATED",
-    "canonicalScale": 0.5,
-    "category": "arch",
-    "companionLeaf": null,
-    "file": "gate.glb",
-    "materialFamilies": [
-      "stone"
-    ],
-    "recipeHash": "9da2d81b3f2d8a54af57273c51ddfff93d5b800d81386a3bf0ce3a0a91dea06a",
-    "semanticParts": [
-      "arch"
-    ],
-    "sockets": [
-      {
-        "position": [
-          0.0,
-          0.0,
-          0.0
-        ],
-        "type": "floor-mount"
+        "footprint": {
+          "center": [
+            1.1920928955078125e-07,
+            2.384185791015625e-07
+          ],
+          "halfExtents": [
+            2.0000001192092896,
+            2.000000238418579
+          ],
+          "yawRadians": 0
+        },
+        "footprintSource": "derived",
+        "groundY": -8.538858673140613e-15
       },
-      {
-        "position": [
+      "canonicalScale": 0.5,
+      "category": "corridor-shell",
+      "companionLeaf": null,
+      "file": "corridor-wide-junction.glb",
+      "materialFamilies": [
+        "stone"
+      ],
+      "normalizedFrame": {
+        "forward": "+Z",
+        "sourceToGenesis": [
+          0.5,
           0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0,
+          0,
+          0,
+          1.0
+        ],
+        "up": "+Y"
+      },
+      "qaStatus": "needs-review",
+      "recipeHash": "dd3385427ee6b74dda605df224d4a52ce50468d4ba24a1145075ce1d551be861",
+      "schema": "genesis.donor.v2",
+      "semanticParts": {},
+      "sockets": [
+        {
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.1,
+              0.1,
+              0.1
+            ]
+          },
+          "id": "floor-mount",
+          "mateFamily": "floor",
+          "mateRule": "coincident",
+          "position": [
+            1.1920928955078125e-07,
+            -8.538858673140613e-15,
+            2.384185791015625e-07
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "size": [
+            0.05,
+            0.05,
+            0.05
+          ],
+          "type": "floor-mount"
+        }
+      ],
+      "sourceSha256": "a1653befb7ae2fe7c99fdb9ec600930be04c0c5e1fd8c0d112ddaf3c9c4aa6f9",
+      "structuralGrid": {
+        "joinMode": "cell-orientation",
+        "orientationSteps": 4,
+        "sourceModuleUnits": 4.0,
+        "targetWorldUnits": 2.0
+      }
+    },
+    "gate": {
+      "admissionClass": "PART_DONOR",
+      "assetId": "kenney-modular-dungeon-kit/gate",
+      "bounds": {
+        "aabbMax": [
+          1.100000023841858,
+          2.1999998092651367,
+          0.3500000536441803
+        ],
+        "aabbMin": [
+          -1.100000023841858,
           0.0,
           -0.3500000536441803
         ],
-        "type": "butt-join-n"
+        "footprint": {
+          "center": [
+            0.0,
+            0.0
+          ],
+          "halfExtents": [
+            1.100000023841858,
+            0.3500000536441803
+          ],
+          "yawRadians": 0
+        },
+        "footprintSource": "derived",
+        "groundY": 0.0
       },
-      {
-        "position": [
+      "canonicalScale": 0.5,
+      "category": "arch",
+      "companionLeaf": null,
+      "file": "gate.glb",
+      "materialFamilies": [
+        "stone"
+      ],
+      "normalizedFrame": {
+        "forward": "+Z",
+        "sourceToGenesis": [
+          0.5,
           0.0,
           0.0,
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0,
+          0,
+          0,
+          1.0
+        ],
+        "up": "+Y"
+      },
+      "qaStatus": "needs-review",
+      "recipeHash": "7c8e8304079d2c34b51449b29964c079cd53d4902a6bc2a8d6658c1ba88e3234",
+      "schema": "genesis.donor.v2",
+      "semanticParts": {},
+      "sockets": [
+        {
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.1,
+              0.1,
+              0.1
+            ]
+          },
+          "id": "floor-mount",
+          "mateFamily": "floor",
+          "mateRule": "coincident",
+          "position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "size": [
+            0.05,
+            0.05,
+            0.05
+          ],
+          "type": "floor-mount"
+        }
+      ],
+      "sourceSha256": "491c9e9980751cf4fee75e3cfc4390075402c0070962ff1d33fe98138ea289c9",
+      "structuralGrid": {
+        "joinMode": "cell-orientation",
+        "orientationSteps": 4,
+        "sourceModuleUnits": 4.0,
+        "targetWorldUnits": 2.0
+      }
+    },
+    "gate-door": {
+      "admissionClass": "PART_DONOR",
+      "assetId": "kenney-modular-dungeon-kit/gate-door",
+      "bounds": {
+        "aabbMax": [
+          1.100000023841858,
+          2.1999998092651367,
           0.3500000536441803
         ],
-        "type": "butt-join-s"
-      },
-      {
-        "position": [
-          1.100000023841858,
-          0.0,
-          0.0
-        ],
-        "type": "butt-join-e"
-      },
-      {
-        "position": [
+        "aabbMin": [
           -1.100000023841858,
-          0.0,
-          0.0
+          -1.3541939244228127e-17,
+          -0.3500000536441803
         ],
-        "type": "butt-join-w"
-      }
-    ]
-  },
-  "gate-door": {
-    "admissionClass": "DIRECT_MODULATED",
-    "canonicalScale": 0.5,
-    "category": "doorway-frame",
-    "companionLeaf": null,
-    "file": "gate-door.glb",
-    "materialFamilies": [
-      "stone",
-      "wood"
-    ],
-    "recipeHash": "6a1ff0bf1de0b268f3e4b715c4f2a746c46e57a24c8d4f9b8afb308e0858c198",
-    "semanticParts": [
-      "doorway-frame",
-      "door-leaf"
-    ],
-    "sockets": [
-      {
-        "position": [
-          0.0,
-          0.0,
-          0.0
-        ],
-        "type": "floor-mount"
+        "footprint": {
+          "center": [
+            0.0,
+            0.0
+          ],
+          "halfExtents": [
+            1.100000023841858,
+            0.3500000536441803
+          ],
+          "yawRadians": 0
+        },
+        "footprintSource": "derived",
+        "groundY": -1.3541939244228127e-17
       },
-      {
-        "position": [
+      "canonicalScale": 0.5,
+      "category": "doorway-frame",
+      "companionLeaf": null,
+      "file": "gate-door.glb",
+      "materialFamilies": [
+        "stone",
+        "wood"
+      ],
+      "normalizedFrame": {
+        "forward": "+Z",
+        "sourceToGenesis": [
+          0.5,
           0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0,
+          0,
+          0,
+          1.0
+        ],
+        "up": "+Y"
+      },
+      "qaStatus": "needs-review",
+      "recipeHash": "64d517baecb83fb18ac223dbc003f980b52327165d11aedd5479f187b5fe527a",
+      "schema": "genesis.donor.v2",
+      "semanticParts": {
+        "door-leaf": {
+          "detachable": true,
+          "materialFamily": "wood",
+          "nodePath": "gate-door/door"
+        }
+      },
+      "sockets": [
+        {
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.1,
+              0.1,
+              0.1
+            ]
+          },
+          "id": "floor-mount",
+          "mateFamily": "floor",
+          "mateRule": "coincident",
+          "position": [
+            0.0,
+            -1.3541939244228127e-17,
+            0.0
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "size": [
+            0.05,
+            0.05,
+            0.05
+          ],
+          "type": "floor-mount"
+        },
+        {
+          "clearance": {
+            "shape": "box",
+            "size": [
+              2,
+              2.4,
+              2
+            ]
+          },
+          "id": "hinge-left",
+          "mateFamily": "door-leaf",
+          "mateRule": "coincident",
+          "position": [
+            0.75,
+            0.8989213705062866,
+            -4.321188251654297e-08
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "size": [
+            0.05,
+            2,
+            0.05
+          ],
+          "type": "hinge"
+        }
+      ],
+      "sourceSha256": "902ac6617d56143799aa2ca73d1113838cb09a9ebc7cbd7c7eeb785504099fd8",
+      "structuralGrid": {
+        "joinMode": "cell-orientation",
+        "orientationSteps": 4,
+        "sourceModuleUnits": 4.0,
+        "targetWorldUnits": 2.0
+      }
+    },
+    "gate-door-window": {
+      "admissionClass": "PART_DONOR",
+      "assetId": "kenney-modular-dungeon-kit/gate-door-window",
+      "bounds": {
+        "aabbMax": [
+          1.100000023841858,
+          2.1999998092651367,
+          0.3500000536441803
+        ],
+        "aabbMin": [
+          -1.100000023841858,
+          -1.3541939244228127e-17,
+          -0.3500000536441803
+        ],
+        "footprint": {
+          "center": [
+            0.0,
+            0.0
+          ],
+          "halfExtents": [
+            1.100000023841858,
+            0.3500000536441803
+          ],
+          "yawRadians": 0
+        },
+        "footprintSource": "derived",
+        "groundY": -1.3541939244228127e-17
+      },
+      "canonicalScale": 0.5,
+      "category": "doorway-frame",
+      "companionLeaf": null,
+      "file": "gate-door-window.glb",
+      "materialFamilies": [
+        "stone",
+        "wood"
+      ],
+      "normalizedFrame": {
+        "forward": "+Z",
+        "sourceToGenesis": [
+          0.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0,
+          0,
+          0,
+          1.0
+        ],
+        "up": "+Y"
+      },
+      "qaStatus": "needs-review",
+      "recipeHash": "9f1ac960e77e8ac5e10814298cc5378ff9286d8da0b40b186b232c918c146611",
+      "schema": "genesis.donor.v2",
+      "semanticParts": {
+        "door-leaf": {
+          "detachable": true,
+          "materialFamily": "wood",
+          "nodePath": "gate-door-window/door"
+        }
+      },
+      "sockets": [
+        {
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.1,
+              0.1,
+              0.1
+            ]
+          },
+          "id": "floor-mount",
+          "mateFamily": "floor",
+          "mateRule": "coincident",
+          "position": [
+            0.0,
+            -1.3541939244228127e-17,
+            0.0
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "size": [
+            0.05,
+            0.05,
+            0.05
+          ],
+          "type": "floor-mount"
+        },
+        {
+          "clearance": {
+            "shape": "box",
+            "size": [
+              2,
+              2.4,
+              2
+            ]
+          },
+          "id": "hinge-left",
+          "mateFamily": "door-leaf",
+          "mateRule": "coincident",
+          "position": [
+            0.75,
+            0.8989213705062866,
+            1.9520669658501952e-07
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "size": [
+            0.05,
+            2,
+            0.05
+          ],
+          "type": "hinge"
+        }
+      ],
+      "sourceSha256": "9fca8b1307efae4c4305c646ab61c1532c06ad389e011de604d58a49912642db",
+      "structuralGrid": {
+        "joinMode": "cell-orientation",
+        "orientationSteps": 4,
+        "sourceModuleUnits": 4.0,
+        "targetWorldUnits": 2.0
+      }
+    },
+    "gate-metal-bars": {
+      "admissionClass": "PART_DONOR",
+      "assetId": "kenney-modular-dungeon-kit/gate-metal-bars",
+      "bounds": {
+        "aabbMax": [
+          1.100000023841858,
+          2.1999998092651367,
+          0.3500000536441803
+        ],
+        "aabbMin": [
+          -1.100000023841858,
           0.0,
           -0.3500000536441803
         ],
-        "type": "butt-join-n"
+        "footprint": {
+          "center": [
+            0.0,
+            0.0
+          ],
+          "halfExtents": [
+            1.100000023841858,
+            0.3500000536441803
+          ],
+          "yawRadians": 0
+        },
+        "footprintSource": "derived",
+        "groundY": 0.0
       },
-      {
-        "position": [
+      "canonicalScale": 0.5,
+      "category": "doorway-frame",
+      "companionLeaf": null,
+      "file": "gate-metal-bars.glb",
+      "materialFamilies": [
+        "iron",
+        "stone"
+      ],
+      "normalizedFrame": {
+        "forward": "+Z",
+        "sourceToGenesis": [
+          0.5,
           0.0,
           0.0,
-          0.3500000536441803
-        ],
-        "type": "butt-join-s"
-      },
-      {
-        "position": [
-          1.100000023841858,
           0.0,
-          0.0
-        ],
-        "type": "butt-join-e"
-      },
-      {
-        "position": [
-          -1.100000023841858,
           0.0,
-          0.0
+          0.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0,
+          0,
+          0,
+          1.0
         ],
-        "type": "butt-join-w"
+        "up": "+Y"
       },
-      {
-        "position": [
-          0.75,
-          0.8989213705062866,
-          -4.321188251654297e-08
-        ],
-        "type": "hinge"
+      "qaStatus": "needs-review",
+      "recipeHash": "fafa7e0c78b3191c503dc384365eab8e8fa8e10270d05c43b7cca6cc339253cc",
+      "schema": "genesis.donor.v2",
+      "semanticParts": {
+        "door-leaf": {
+          "detachable": true,
+          "materialFamily": "iron",
+          "nodePath": "gate-metal-bars/gate"
+        }
       },
-      {
-        "position": [
-          0.75,
-          0.8989213705062866,
-          -4.321188251654297e-08
-        ],
-        "type": "hinge"
+      "sockets": [
+        {
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.1,
+              0.1,
+              0.1
+            ]
+          },
+          "id": "floor-mount",
+          "mateFamily": "floor",
+          "mateRule": "coincident",
+          "position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "size": [
+            0.05,
+            0.05,
+            0.05
+          ],
+          "type": "floor-mount"
+        },
+        {
+          "clearance": {
+            "shape": "box",
+            "size": [
+              2,
+              2.4,
+              2
+            ]
+          },
+          "id": "hinge-left",
+          "mateFamily": "door-leaf",
+          "mateRule": "coincident",
+          "position": [
+            -0.7499999642372132,
+            0.8499999642372131,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "size": [
+            0.05,
+            2,
+            0.05
+          ],
+          "type": "hinge"
+        }
+      ],
+      "sourceSha256": "e3a2228906e1601c6d4fbb53d615f03541094177a624168e77b1ab0220e081f4",
+      "structuralGrid": {
+        "joinMode": "cell-orientation",
+        "orientationSteps": 4,
+        "sourceModuleUnits": 4.0,
+        "targetWorldUnits": 2.0
       }
-    ]
-  },
-  "gate-door-window": {
-    "admissionClass": "DIRECT_MODULATED",
-    "canonicalScale": 0.5,
-    "category": "doorway-frame",
-    "companionLeaf": null,
-    "file": "gate-door-window.glb",
-    "materialFamilies": [
-      "stone",
-      "wood"
-    ],
-    "recipeHash": "9694e903812811f1dbd1ba7a1476edcc443964ed07a113e1f4aa914bda83b713",
-    "semanticParts": [
-      "doorway-frame",
-      "door-leaf"
-    ],
-    "sockets": [
-      {
-        "position": [
-          0.0,
-          0.0,
-          0.0
+    },
+    "room-corner": {
+      "admissionClass": "DIRECT_MODULATED",
+      "assetId": "kenney-modular-dungeon-kit/room-corner",
+      "bounds": {
+        "aabbMax": [
+          3.000000476837158,
+          2.116642951965332,
+          3.000000476837158
         ],
-        "type": "floor-mount"
-      },
-      {
-        "position": [
-          0.0,
-          0.0,
-          -0.3500000536441803
-        ],
-        "type": "butt-join-n"
-      },
-      {
-        "position": [
-          0.0,
-          0.0,
-          0.3500000536441803
-        ],
-        "type": "butt-join-s"
-      },
-      {
-        "position": [
-          1.100000023841858,
-          0.0,
-          0.0
-        ],
-        "type": "butt-join-e"
-      },
-      {
-        "position": [
-          -1.100000023841858,
-          0.0,
-          0.0
-        ],
-        "type": "butt-join-w"
-      },
-      {
-        "position": [
-          0.75,
-          0.8989213705062866,
-          1.9520669658501952e-07
-        ],
-        "type": "hinge"
-      },
-      {
-        "position": [
-          0.75,
-          0.8989213705062866,
-          1.9520669658501952e-07
-        ],
-        "type": "hinge"
-      }
-    ]
-  },
-  "gate-metal-bars": {
-    "admissionClass": "DIRECT_MODULATED",
-    "canonicalScale": 0.5,
-    "category": "doorway-frame",
-    "companionLeaf": null,
-    "file": "gate-metal-bars.glb",
-    "materialFamilies": [
-      "iron",
-      "stone"
-    ],
-    "recipeHash": "81f3056ef4ce493c033eaf46b1511bca28c21a6f55d538208deabecf8071fba9",
-    "semanticParts": [
-      "doorway-frame",
-      "door-leaf"
-    ],
-    "sockets": [
-      {
-        "position": [
-          0.0,
-          0.0,
-          0.0
-        ],
-        "type": "floor-mount"
-      },
-      {
-        "position": [
-          0.0,
-          0.0,
-          -0.3500000536441803
-        ],
-        "type": "butt-join-n"
-      },
-      {
-        "position": [
-          0.0,
-          0.0,
-          0.3500000536441803
-        ],
-        "type": "butt-join-s"
-      },
-      {
-        "position": [
-          1.100000023841858,
-          0.0,
-          0.0
-        ],
-        "type": "butt-join-e"
-      },
-      {
-        "position": [
-          -1.100000023841858,
-          0.0,
-          0.0
-        ],
-        "type": "butt-join-w"
-      },
-      {
-        "position": [
-          -0.7499999642372132,
-          0.8499999642372131,
-          0.0
-        ],
-        "type": "hinge"
-      },
-      {
-        "position": [
-          -0.7499999642372132,
-          0.8499999642372131,
-          0.0
-        ],
-        "type": "hinge"
-      }
-    ]
-  },
-  "room-corner": {
-    "admissionClass": "DIRECT_MODULATED",
-    "canonicalScale": 0.5,
-    "category": "room-shell",
-    "companionLeaf": null,
-    "file": "room-corner.glb",
-    "materialFamilies": [
-      "stone"
-    ],
-    "recipeHash": "3705c0896826144b22d490d057c8c77efcf909502803395f2d70c52b5596e3ac",
-    "semanticParts": [
-      "room-shell"
-    ],
-    "sockets": [
-      {
-        "position": [
-          2.384185791015625e-07,
-          0.0,
-          -7.152557373046875e-07
-        ],
-        "type": "floor-mount"
-      },
-      {
-        "position": [
-          2.384185791015625e-07,
-          0.0,
-          -7.152557373046875e-07
-        ],
-        "type": "top-surface"
-      },
-      {
-        "position": [
-          2.384185791015625e-07,
-          0.0,
+        "aabbMin": [
+          -3.0,
+          -8.538858673140613e-15,
           -3.000001907348633
         ],
-        "type": "butt-join-n"
+        "footprint": {
+          "center": [
+            2.384185791015625e-07,
+            -7.152557373046875e-07
+          ],
+          "halfExtents": [
+            3.000000238418579,
+            3.0000011920928955
+          ],
+          "yawRadians": 0
+        },
+        "footprintSource": "derived",
+        "groundY": -8.538858673140613e-15
       },
-      {
-        "position": [
-          2.384185791015625e-07,
+      "canonicalScale": 0.5,
+      "category": "room-shell",
+      "companionLeaf": null,
+      "file": "room-corner.glb",
+      "materialFamilies": [
+        "stone"
+      ],
+      "normalizedFrame": {
+        "forward": "+Z",
+        "sourceToGenesis": [
+          0.5,
           0.0,
-          3.000000476837158
-        ],
-        "type": "butt-join-s"
-      },
-      {
-        "position": [
-          3.000000476837158,
           0.0,
-          -7.152557373046875e-07
-        ],
-        "type": "butt-join-e"
-      },
-      {
-        "position": [
-          -3.0,
           0.0,
-          -7.152557373046875e-07
-        ],
-        "type": "butt-join-w"
-      }
-    ]
-  },
-  "room-large": {
-    "admissionClass": "DIRECT_MODULATED",
-    "canonicalScale": 0.5,
-    "category": "room-shell",
-    "companionLeaf": null,
-    "file": "room-large.glb",
-    "materialFamilies": [
-      "stone"
-    ],
-    "recipeHash": "cd6583022dd66891b2e399d8797915f0dab2807dfa63c836a03114877388521b",
-    "semanticParts": [
-      "room-shell"
-    ],
-    "sockets": [
-      {
-        "position": [
-          -0.0002498626708984375,
           0.0,
-          0.0
-        ],
-        "type": "floor-mount"
-      },
-      {
-        "position": [
-          -0.0002498626708984375,
+          0.5,
           0.0,
-          0.0
-        ],
-        "type": "top-surface"
-      },
-      {
-        "position": [
-          -0.0002498626708984375,
           0.0,
-          -5.0
-        ],
-        "type": "butt-join-n"
-      },
-      {
-        "position": [
-          -0.0002498626708984375,
           0.0,
-          5.0
-        ],
-        "type": "butt-join-s"
-      },
-      {
-        "position": [
-          5.0,
           0.0,
-          0.0
-        ],
-        "type": "butt-join-e"
-      },
-      {
-        "position": [
-          -5.000499725341797,
+          0.5,
           0.0,
-          0.0
-        ],
-        "type": "butt-join-w"
-      }
-    ]
-  },
-  "room-large-variation": {
-    "admissionClass": "DIRECT_MODULATED",
-    "canonicalScale": 0.5,
-    "category": "room-shell",
-    "companionLeaf": null,
-    "file": "room-large-variation.glb",
-    "materialFamilies": [
-      "stone"
-    ],
-    "recipeHash": "48ddcdd25aefb1bb7e74c22943ad01777704bfd7637a0b3cbd06b5ae96425cd9",
-    "semanticParts": [
-      "room-shell"
-    ],
-    "sockets": [
-      {
-        "position": [
-          7.152557373046875e-07,
-          0.0,
-          0.0
-        ],
-        "type": "floor-mount"
-      },
-      {
-        "position": [
-          7.152557373046875e-07,
-          0.0,
-          0.0
-        ],
-        "type": "top-surface"
-      },
-      {
-        "position": [
-          7.152557373046875e-07,
-          0.0,
-          -5.0
-        ],
-        "type": "butt-join-n"
-      },
-      {
-        "position": [
-          7.152557373046875e-07,
-          0.0,
-          5.0
-        ],
-        "type": "butt-join-s"
-      },
-      {
-        "position": [
-          5.000001430511475,
-          0.0,
-          0.0
-        ],
-        "type": "butt-join-e"
-      },
-      {
-        "position": [
-          -5.0,
-          0.0,
-          0.0
-        ],
-        "type": "butt-join-w"
-      }
-    ]
-  },
-  "room-small": {
-    "admissionClass": "DIRECT_MODULATED",
-    "canonicalScale": 0.5,
-    "category": "room-shell",
-    "companionLeaf": null,
-    "file": "room-small.glb",
-    "materialFamilies": [
-      "stone"
-    ],
-    "recipeHash": "27a66241377a66667891d5ac3e42172171a855cd7b3a69c79d1ec48640de569f",
-    "semanticParts": [
-      "room-shell"
-    ],
-    "sockets": [
-      {
-        "position": [
-          1.1920928955078125e-07,
-          0.0,
-          3.5762786865234375e-07
-        ],
-        "type": "floor-mount"
-      },
-      {
-        "position": [
-          1.1920928955078125e-07,
-          0.0,
-          3.5762786865234375e-07
-        ],
-        "type": "top-surface"
-      },
-      {
-        "position": [
-          1.1920928955078125e-07,
-          0.0,
-          -2.999999761581421
-        ],
-        "type": "butt-join-n"
-      },
-      {
-        "position": [
-          1.1920928955078125e-07,
-          0.0,
-          3.000000476837158
-        ],
-        "type": "butt-join-s"
-      },
-      {
-        "position": [
-          3.000000238418579,
-          0.0,
-          3.5762786865234375e-07
-        ],
-        "type": "butt-join-e"
-      },
-      {
-        "position": [
-          -3.0,
-          0.0,
-          3.5762786865234375e-07
-        ],
-        "type": "butt-join-w"
-      }
-    ]
-  },
-  "room-small-variation": {
-    "admissionClass": "DIRECT_MODULATED",
-    "canonicalScale": 0.5,
-    "category": "room-shell",
-    "companionLeaf": null,
-    "file": "room-small-variation.glb",
-    "materialFamilies": [
-      "stone"
-    ],
-    "recipeHash": "1e86a1b56cc27467143823ef0dec3bf444cce2bbb1e9467b942d14792756d4a8",
-    "semanticParts": [
-      "room-shell"
-    ],
-    "sockets": [
-      {
-        "position": [
-          2.384185791015625e-07,
-          0.0,
-          3.5762786865234375e-07
-        ],
-        "type": "floor-mount"
-      },
-      {
-        "position": [
-          2.384185791015625e-07,
-          0.0,
-          3.5762786865234375e-07
-        ],
-        "type": "top-surface"
-      },
-      {
-        "position": [
-          2.384185791015625e-07,
-          0.0,
-          -2.999999761581421
-        ],
-        "type": "butt-join-n"
-      },
-      {
-        "position": [
-          2.384185791015625e-07,
-          0.0,
-          3.000000476837158
-        ],
-        "type": "butt-join-s"
-      },
-      {
-        "position": [
-          3.000000238418579,
-          0.0,
-          3.5762786865234375e-07
-        ],
-        "type": "butt-join-e"
-      },
-      {
-        "position": [
-          -2.999999761581421,
-          0.0,
-          3.5762786865234375e-07
-        ],
-        "type": "butt-join-w"
-      }
-    ]
-  },
-  "room-wide": {
-    "admissionClass": "DIRECT_MODULATED",
-    "canonicalScale": 0.5,
-    "category": "room-shell",
-    "companionLeaf": null,
-    "file": "room-wide.glb",
-    "materialFamilies": [
-      "stone"
-    ],
-    "recipeHash": "1a2f622e2dd12ccb4574a617e46769a121ae8d2b1ef39306dcd2ff3b094a25ce",
-    "semanticParts": [
-      "room-shell"
-    ],
-    "sockets": [
-      {
-        "position": [
-          0.0,
-          0.0,
-          0.0
-        ],
-        "type": "floor-mount"
-      },
-      {
-        "position": [
-          0.0,
-          0.0,
-          0.0
-        ],
-        "type": "top-surface"
-      },
-      {
-        "position": [
-          0.0,
-          0.0,
-          -3.000000476837158
-        ],
-        "type": "butt-join-n"
-      },
-      {
-        "position": [
-          0.0,
-          0.0,
-          3.000000476837158
-        ],
-        "type": "butt-join-s"
-      },
-      {
-        "position": [
-          5.0,
-          0.0,
-          0.0
-        ],
-        "type": "butt-join-e"
-      },
-      {
-        "position": [
-          -5.0,
-          0.0,
-          0.0
-        ],
-        "type": "butt-join-w"
-      }
-    ]
-  },
-  "room-wide-variation": {
-    "admissionClass": "DIRECT_MODULATED",
-    "canonicalScale": 0.5,
-    "category": "room-shell",
-    "companionLeaf": null,
-    "file": "room-wide-variation.glb",
-    "materialFamilies": [
-      "stone"
-    ],
-    "recipeHash": "34e3a59858d3cf9fc64ff396b0f046eceb694cf49b6b870d4caa76f130328c06",
-    "semanticParts": [
-      "room-shell"
-    ],
-    "sockets": [
-      {
-        "position": [
-          0.0,
-          0.0,
-          0.0
-        ],
-        "type": "floor-mount"
-      },
-      {
-        "position": [
-          0.0,
-          0.0,
-          0.0
-        ],
-        "type": "top-surface"
-      },
-      {
-        "position": [
-          0.0,
-          0.0,
-          -3.000000476837158
-        ],
-        "type": "butt-join-n"
-      },
-      {
-        "position": [
-          0.0,
-          0.0,
-          3.000000476837158
-        ],
-        "type": "butt-join-s"
-      },
-      {
-        "position": [
-          5.0,
-          0.0,
-          0.0
-        ],
-        "type": "butt-join-e"
-      },
-      {
-        "position": [
-          -5.0,
-          0.0,
-          0.0
-        ],
-        "type": "butt-join-w"
-      }
-    ]
-  },
-  "stairs": {
-    "admissionClass": "DIRECT_MODULATED",
-    "canonicalScale": 0.5,
-    "category": "stairs",
-    "companionLeaf": null,
-    "file": "stairs.glb",
-    "materialFamilies": [
-      "stone"
-    ],
-    "recipeHash": "3372c31ea2a1dab7514799c0b8e4bd13b2588eaab8e58464dc8da66bd2a22998",
-    "semanticParts": [
-      "stairs"
-    ],
-    "sockets": [
-      {
-        "position": [
-          0.0,
-          0.0,
-          -1.0
-        ],
-        "type": "floor-mount"
-      },
-      {
-        "position": [
-          0.0,
-          4.275000095367432,
-          -1.0
-        ],
-        "type": "top-surface"
-      },
-      {
-        "position": [
-          0.0,
-          0.0,
-          -3.0999999046325684
-        ],
-        "type": "butt-join-n"
-      },
-      {
-        "position": [
-          0.0,
-          0.0,
-          1.0999999046325684
-        ],
-        "type": "butt-join-s"
-      },
-      {
-        "position": [
-          1.100000023841858,
-          0.0,
-          -1.0
-        ],
-        "type": "butt-join-e"
-      },
-      {
-        "position": [
-          -1.100000023841858,
-          0.0,
-          -1.0
-        ],
-        "type": "butt-join-w"
-      }
-    ]
-  },
-  "stairs-wide": {
-    "admissionClass": "DIRECT_MODULATED",
-    "canonicalScale": 0.5,
-    "category": "stairs",
-    "companionLeaf": null,
-    "file": "stairs-wide.glb",
-    "materialFamilies": [
-      "stone"
-    ],
-    "recipeHash": "40f27b8fdce54832b6c900bd5540dffca2c827fab08499c0d638b7e118fe689c",
-    "semanticParts": [
-      "stairs"
-    ],
-    "sockets": [
-      {
-        "position": [
-          0.0,
-          0.0,
-          -1.0
-        ],
-        "type": "floor-mount"
-      },
-      {
-        "position": [
-          0.0,
-          4.275000095367432,
-          -1.0
-        ],
-        "type": "top-surface"
-      },
-      {
-        "position": [
-          0.0,
-          0.0,
-          -3.0999999046325684
-        ],
-        "type": "butt-join-n"
-      },
-      {
-        "position": [
-          0.0,
-          0.0,
-          1.0999999046325684
-        ],
-        "type": "butt-join-s"
-      },
-      {
-        "position": [
-          2.0999999046325684,
-          0.0,
-          -1.0
-        ],
-        "type": "butt-join-e"
-      },
-      {
-        "position": [
-          -2.0999999046325684,
-          0.0,
-          -1.0
-        ],
-        "type": "butt-join-w"
-      }
-    ]
-  },
-  "template-corner": {
-    "admissionClass": "DIRECT_MODULATED",
-    "canonicalScale": 0.5,
-    "category": "wall-corner",
-    "companionLeaf": null,
-    "file": "template-corner.glb",
-    "materialFamilies": [
-      "stone"
-    ],
-    "recipeHash": "df114d40d62c62cb7ff57a64ff6736b38c8a8a54e5ff6956dd8e010a06dc745f",
-    "semanticParts": [
-      "wall-corner"
-    ],
-    "sockets": [
-      {
-        "position": [
-          0.0,
-          0.0,
-          0.0
-        ],
-        "type": "floor-mount"
-      },
-      {
-        "position": [
-          0.0,
-          0.0,
-          -1.0
-        ],
-        "type": "butt-join-n"
-      },
-      {
-        "position": [
-          0.0,
-          0.0,
+          0,
+          0,
+          0,
           1.0
         ],
-        "type": "butt-join-s"
+        "up": "+Y"
       },
-      {
-        "position": [
-          1.0,
-          0.0,
-          0.0
+      "qaStatus": "needs-review",
+      "recipeHash": "11f4bfe5d1148a828a540aed752a14dcdcbec3c08b251e256c6420e98b79587e",
+      "schema": "genesis.donor.v2",
+      "semanticParts": {},
+      "sockets": [
+        {
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.1,
+              0.1,
+              0.1
+            ]
+          },
+          "id": "floor-mount",
+          "mateFamily": "floor",
+          "mateRule": "coincident",
+          "position": [
+            2.384185791015625e-07,
+            -8.538858673140613e-15,
+            -7.152557373046875e-07
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "size": [
+            0.05,
+            0.05,
+            0.05
+          ],
+          "type": "floor-mount"
+        }
+      ],
+      "sourceSha256": "2141c0636c857a62b040063adbeef9aba86d1271245a2a83f89ed4ca8f942b98",
+      "structuralGrid": {
+        "joinMode": "cell-orientation",
+        "orientationSteps": 4,
+        "sourceModuleUnits": 4.0,
+        "targetWorldUnits": 2.0
+      }
+    },
+    "room-large": {
+      "admissionClass": "DIRECT_MODULATED",
+      "assetId": "kenney-modular-dungeon-kit/room-large",
+      "bounds": {
+        "aabbMax": [
+          5.0,
+          2.116642951965332,
+          5.0
         ],
-        "type": "butt-join-e"
+        "aabbMin": [
+          -5.000499725341797,
+          -8.538858673140613e-15,
+          -5.0
+        ],
+        "footprint": {
+          "center": [
+            -0.0002498626708984375,
+            0.0
+          ],
+          "halfExtents": [
+            5.000249862670898,
+            5.0
+          ],
+          "yawRadians": 0
+        },
+        "footprintSource": "derived",
+        "groundY": -8.538858673140613e-15
       },
-      {
-        "position": [
+      "canonicalScale": 0.5,
+      "category": "room-shell",
+      "companionLeaf": null,
+      "file": "room-large.glb",
+      "materialFamilies": [
+        "stone"
+      ],
+      "normalizedFrame": {
+        "forward": "+Z",
+        "sourceToGenesis": [
+          0.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0,
+          0,
+          0,
+          1.0
+        ],
+        "up": "+Y"
+      },
+      "qaStatus": "needs-review",
+      "recipeHash": "84e12b931567efe1894a75a943c117826f54be59000997edab3e98c161e9505e",
+      "schema": "genesis.donor.v2",
+      "semanticParts": {},
+      "sockets": [
+        {
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.1,
+              0.1,
+              0.1
+            ]
+          },
+          "id": "floor-mount",
+          "mateFamily": "floor",
+          "mateRule": "coincident",
+          "position": [
+            -0.0002498626708984375,
+            -8.538858673140613e-15,
+            0.0
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "size": [
+            0.05,
+            0.05,
+            0.05
+          ],
+          "type": "floor-mount"
+        }
+      ],
+      "sourceSha256": "07873ae13a1ddbc0e067fb91a792c1fd4f26f876e73d415502e558baec40023d",
+      "structuralGrid": {
+        "joinMode": "cell-orientation",
+        "orientationSteps": 4,
+        "sourceModuleUnits": 4.0,
+        "targetWorldUnits": 2.0
+      }
+    },
+    "room-large-variation": {
+      "admissionClass": "DIRECT_MODULATED",
+      "assetId": "kenney-modular-dungeon-kit/room-large-variation",
+      "bounds": {
+        "aabbMax": [
+          5.000001430511475,
+          2.116642951965332,
+          5.0
+        ],
+        "aabbMin": [
+          -5.0,
+          -8.538858673140613e-15,
+          -5.0
+        ],
+        "footprint": {
+          "center": [
+            7.152557373046875e-07,
+            0.0
+          ],
+          "halfExtents": [
+            5.000000715255737,
+            5.0
+          ],
+          "yawRadians": 0
+        },
+        "footprintSource": "derived",
+        "groundY": -8.538858673140613e-15
+      },
+      "canonicalScale": 0.5,
+      "category": "room-shell",
+      "companionLeaf": null,
+      "file": "room-large-variation.glb",
+      "materialFamilies": [
+        "stone"
+      ],
+      "normalizedFrame": {
+        "forward": "+Z",
+        "sourceToGenesis": [
+          0.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0,
+          0,
+          0,
+          1.0
+        ],
+        "up": "+Y"
+      },
+      "qaStatus": "needs-review",
+      "recipeHash": "bf113d52124346e848c356bf49cdd421d011a1880065238c8754903ee171a03a",
+      "schema": "genesis.donor.v2",
+      "semanticParts": {},
+      "sockets": [
+        {
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.1,
+              0.1,
+              0.1
+            ]
+          },
+          "id": "floor-mount",
+          "mateFamily": "floor",
+          "mateRule": "coincident",
+          "position": [
+            7.152557373046875e-07,
+            -8.538858673140613e-15,
+            0.0
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "size": [
+            0.05,
+            0.05,
+            0.05
+          ],
+          "type": "floor-mount"
+        }
+      ],
+      "sourceSha256": "824d58bbc23ab56f4588dbc8d3f89ec91a4d53dfbb75104fe70b37aa3e7540a8",
+      "structuralGrid": {
+        "joinMode": "cell-orientation",
+        "orientationSteps": 4,
+        "sourceModuleUnits": 4.0,
+        "targetWorldUnits": 2.0
+      }
+    },
+    "room-small": {
+      "admissionClass": "DIRECT_MODULATED",
+      "assetId": "kenney-modular-dungeon-kit/room-small",
+      "bounds": {
+        "aabbMax": [
+          3.000000238418579,
+          2.116642951965332,
+          3.000000476837158
+        ],
+        "aabbMin": [
+          -3.0,
+          -8.538858673140613e-15,
+          -2.999999761581421
+        ],
+        "footprint": {
+          "center": [
+            1.1920928955078125e-07,
+            3.5762786865234375e-07
+          ],
+          "halfExtents": [
+            3.0000001192092896,
+            3.0000001192092896
+          ],
+          "yawRadians": 0
+        },
+        "footprintSource": "derived",
+        "groundY": -8.538858673140613e-15
+      },
+      "canonicalScale": 0.5,
+      "category": "room-shell",
+      "companionLeaf": null,
+      "file": "room-small.glb",
+      "materialFamilies": [
+        "stone"
+      ],
+      "normalizedFrame": {
+        "forward": "+Z",
+        "sourceToGenesis": [
+          0.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0,
+          0,
+          0,
+          1.0
+        ],
+        "up": "+Y"
+      },
+      "qaStatus": "needs-review",
+      "recipeHash": "98186f1d0c91ba58430cf0844f5345c03919a94bed1723747b028aa81dc9d515",
+      "schema": "genesis.donor.v2",
+      "semanticParts": {},
+      "sockets": [
+        {
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.1,
+              0.1,
+              0.1
+            ]
+          },
+          "id": "floor-mount",
+          "mateFamily": "floor",
+          "mateRule": "coincident",
+          "position": [
+            1.1920928955078125e-07,
+            -8.538858673140613e-15,
+            3.5762786865234375e-07
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "size": [
+            0.05,
+            0.05,
+            0.05
+          ],
+          "type": "floor-mount"
+        }
+      ],
+      "sourceSha256": "a7e74a5f2c91ce0503190bcda140259545478d7c80f60243d2c13a897e01af20",
+      "structuralGrid": {
+        "joinMode": "cell-orientation",
+        "orientationSteps": 4,
+        "sourceModuleUnits": 4.0,
+        "targetWorldUnits": 2.0
+      }
+    },
+    "room-small-variation": {
+      "admissionClass": "DIRECT_MODULATED",
+      "assetId": "kenney-modular-dungeon-kit/room-small-variation",
+      "bounds": {
+        "aabbMax": [
+          3.000000238418579,
+          2.116642951965332,
+          3.000000476837158
+        ],
+        "aabbMin": [
+          -2.999999761581421,
+          -8.538858673140613e-15,
+          -2.999999761581421
+        ],
+        "footprint": {
+          "center": [
+            2.384185791015625e-07,
+            3.5762786865234375e-07
+          ],
+          "halfExtents": [
+            3.0,
+            3.0000001192092896
+          ],
+          "yawRadians": 0
+        },
+        "footprintSource": "derived",
+        "groundY": -8.538858673140613e-15
+      },
+      "canonicalScale": 0.5,
+      "category": "room-shell",
+      "companionLeaf": null,
+      "file": "room-small-variation.glb",
+      "materialFamilies": [
+        "stone"
+      ],
+      "normalizedFrame": {
+        "forward": "+Z",
+        "sourceToGenesis": [
+          0.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0,
+          0,
+          0,
+          1.0
+        ],
+        "up": "+Y"
+      },
+      "qaStatus": "needs-review",
+      "recipeHash": "460cfb2e874cafa8392e9bf3ea83fdc413110ba5d22f4b9e34dd61b94e1c27c8",
+      "schema": "genesis.donor.v2",
+      "semanticParts": {},
+      "sockets": [
+        {
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.1,
+              0.1,
+              0.1
+            ]
+          },
+          "id": "floor-mount",
+          "mateFamily": "floor",
+          "mateRule": "coincident",
+          "position": [
+            2.384185791015625e-07,
+            -8.538858673140613e-15,
+            3.5762786865234375e-07
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "size": [
+            0.05,
+            0.05,
+            0.05
+          ],
+          "type": "floor-mount"
+        }
+      ],
+      "sourceSha256": "19069719157fef9d3a24c8176767cd8de9fe5efc3534d6aa7e6967955b142c86",
+      "structuralGrid": {
+        "joinMode": "cell-orientation",
+        "orientationSteps": 4,
+        "sourceModuleUnits": 4.0,
+        "targetWorldUnits": 2.0
+      }
+    },
+    "room-wide": {
+      "admissionClass": "DIRECT_MODULATED",
+      "assetId": "kenney-modular-dungeon-kit/room-wide",
+      "bounds": {
+        "aabbMax": [
+          5.0,
+          2.116642951965332,
+          3.000000476837158
+        ],
+        "aabbMin": [
+          -5.0,
+          -8.538858673140613e-15,
+          -3.000000476837158
+        ],
+        "footprint": {
+          "center": [
+            0.0,
+            0.0
+          ],
+          "halfExtents": [
+            5.0,
+            3.000000476837158
+          ],
+          "yawRadians": 0
+        },
+        "footprintSource": "derived",
+        "groundY": -8.538858673140613e-15
+      },
+      "canonicalScale": 0.5,
+      "category": "room-shell",
+      "companionLeaf": null,
+      "file": "room-wide.glb",
+      "materialFamilies": [
+        "stone"
+      ],
+      "normalizedFrame": {
+        "forward": "+Z",
+        "sourceToGenesis": [
+          0.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0,
+          0,
+          0,
+          1.0
+        ],
+        "up": "+Y"
+      },
+      "qaStatus": "needs-review",
+      "recipeHash": "0e8f316826d4fc64978886ffd66309b3dd83304b91aedc1f7b1e36a18bbdfac9",
+      "schema": "genesis.donor.v2",
+      "semanticParts": {},
+      "sockets": [
+        {
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.1,
+              0.1,
+              0.1
+            ]
+          },
+          "id": "floor-mount",
+          "mateFamily": "floor",
+          "mateRule": "coincident",
+          "position": [
+            0.0,
+            -8.538858673140613e-15,
+            0.0
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "size": [
+            0.05,
+            0.05,
+            0.05
+          ],
+          "type": "floor-mount"
+        }
+      ],
+      "sourceSha256": "8b953028a4254ea4e342768cb561e01a02ca7ec5d0b752d3cabf83347de413b0",
+      "structuralGrid": {
+        "joinMode": "cell-orientation",
+        "orientationSteps": 4,
+        "sourceModuleUnits": 4.0,
+        "targetWorldUnits": 2.0
+      }
+    },
+    "room-wide-variation": {
+      "admissionClass": "DIRECT_MODULATED",
+      "assetId": "kenney-modular-dungeon-kit/room-wide-variation",
+      "bounds": {
+        "aabbMax": [
+          5.0,
+          2.116642951965332,
+          3.000000476837158
+        ],
+        "aabbMin": [
+          -5.0,
+          -8.538858673140613e-15,
+          -3.000000476837158
+        ],
+        "footprint": {
+          "center": [
+            0.0,
+            0.0
+          ],
+          "halfExtents": [
+            5.0,
+            3.000000476837158
+          ],
+          "yawRadians": 0
+        },
+        "footprintSource": "derived",
+        "groundY": -8.538858673140613e-15
+      },
+      "canonicalScale": 0.5,
+      "category": "room-shell",
+      "companionLeaf": null,
+      "file": "room-wide-variation.glb",
+      "materialFamilies": [
+        "stone"
+      ],
+      "normalizedFrame": {
+        "forward": "+Z",
+        "sourceToGenesis": [
+          0.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0,
+          0,
+          0,
+          1.0
+        ],
+        "up": "+Y"
+      },
+      "qaStatus": "needs-review",
+      "recipeHash": "4b2cd020ccc5e35f1e0fdcc7b9978b57fb6ebcbfd7913354171f94b75be101f5",
+      "schema": "genesis.donor.v2",
+      "semanticParts": {},
+      "sockets": [
+        {
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.1,
+              0.1,
+              0.1
+            ]
+          },
+          "id": "floor-mount",
+          "mateFamily": "floor",
+          "mateRule": "coincident",
+          "position": [
+            0.0,
+            -8.538858673140613e-15,
+            0.0
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "size": [
+            0.05,
+            0.05,
+            0.05
+          ],
+          "type": "floor-mount"
+        }
+      ],
+      "sourceSha256": "c64720b297c4847746f720dd928cc5b70b11ff45c817e39e9d067f18198d9510",
+      "structuralGrid": {
+        "joinMode": "cell-orientation",
+        "orientationSteps": 4,
+        "sourceModuleUnits": 4.0,
+        "targetWorldUnits": 2.0
+      }
+    },
+    "stairs": {
+      "admissionClass": "PART_DONOR",
+      "assetId": "kenney-modular-dungeon-kit/stairs",
+      "bounds": {
+        "aabbMax": [
+          1.100000023841858,
+          4.275000095367432,
+          1.0999999046325684
+        ],
+        "aabbMin": [
+          -1.100000023841858,
+          -1.4438228216156449e-15,
+          -3.0999999046325684
+        ],
+        "footprint": {
+          "center": [
+            0.0,
+            -1.0
+          ],
+          "halfExtents": [
+            1.100000023841858,
+            2.0999999046325684
+          ],
+          "yawRadians": 0
+        },
+        "footprintSource": "derived",
+        "groundY": -1.4438228216156449e-15
+      },
+      "canonicalScale": 0.5,
+      "category": "stairs",
+      "companionLeaf": null,
+      "file": "stairs.glb",
+      "materialFamilies": [
+        "stone"
+      ],
+      "normalizedFrame": {
+        "forward": "+Z",
+        "sourceToGenesis": [
+          0.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0,
+          0,
+          0,
+          1.0
+        ],
+        "up": "+Y"
+      },
+      "qaStatus": "needs-review",
+      "recipeHash": "32633e59345f691945621df48ce9745183ee900e118f1658f4e77cc8fb555208",
+      "schema": "genesis.donor.v2",
+      "semanticParts": {},
+      "sockets": [
+        {
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.1,
+              0.1,
+              0.1
+            ]
+          },
+          "id": "floor-mount",
+          "mateFamily": "floor",
+          "mateRule": "coincident",
+          "position": [
+            0.0,
+            -1.4438228216156449e-15,
+            -1.0
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "size": [
+            0.05,
+            0.05,
+            0.05
+          ],
+          "type": "floor-mount"
+        },
+        {
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.1,
+              0.1,
+              0.1
+            ]
+          },
+          "id": "top-surface",
+          "mateFamily": "placeable",
+          "mateRule": "coincident",
+          "position": [
+            0.0,
+            4.275000095367432,
+            -1.0
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "size": [
+            0.05,
+            0.05,
+            0.05
+          ],
+          "type": "top-surface"
+        }
+      ],
+      "sourceSha256": "1110a2578cc74e4954901cf688b184a191d34bd8eebcb15215a0efc5e9ca50c1",
+      "structuralGrid": {
+        "joinMode": "cell-orientation",
+        "orientationSteps": 4,
+        "sourceModuleUnits": 4.0,
+        "targetWorldUnits": 2.0
+      }
+    },
+    "stairs-wide": {
+      "admissionClass": "PART_DONOR",
+      "assetId": "kenney-modular-dungeon-kit/stairs-wide",
+      "bounds": {
+        "aabbMax": [
+          2.0999999046325684,
+          4.275000095367432,
+          1.0999999046325684
+        ],
+        "aabbMin": [
+          -2.0999999046325684,
+          -1.4453846444912634e-15,
+          -3.0999999046325684
+        ],
+        "footprint": {
+          "center": [
+            0.0,
+            -1.0
+          ],
+          "halfExtents": [
+            2.0999999046325684,
+            2.0999999046325684
+          ],
+          "yawRadians": 0
+        },
+        "footprintSource": "derived",
+        "groundY": -1.4453846444912634e-15
+      },
+      "canonicalScale": 0.5,
+      "category": "stairs",
+      "companionLeaf": null,
+      "file": "stairs-wide.glb",
+      "materialFamilies": [
+        "stone"
+      ],
+      "normalizedFrame": {
+        "forward": "+Z",
+        "sourceToGenesis": [
+          0.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0,
+          0,
+          0,
+          1.0
+        ],
+        "up": "+Y"
+      },
+      "qaStatus": "needs-review",
+      "recipeHash": "4fc447233906b0fda7c304c603a584e44a4513c5d35d5156896ae7fcac23f0a2",
+      "schema": "genesis.donor.v2",
+      "semanticParts": {},
+      "sockets": [
+        {
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.1,
+              0.1,
+              0.1
+            ]
+          },
+          "id": "floor-mount",
+          "mateFamily": "floor",
+          "mateRule": "coincident",
+          "position": [
+            0.0,
+            -1.4453846444912634e-15,
+            -1.0
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "size": [
+            0.05,
+            0.05,
+            0.05
+          ],
+          "type": "floor-mount"
+        },
+        {
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.1,
+              0.1,
+              0.1
+            ]
+          },
+          "id": "top-surface",
+          "mateFamily": "placeable",
+          "mateRule": "coincident",
+          "position": [
+            0.0,
+            4.275000095367432,
+            -1.0
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "size": [
+            0.05,
+            0.05,
+            0.05
+          ],
+          "type": "top-surface"
+        }
+      ],
+      "sourceSha256": "f620cd90dbd6bbb6c6667d6529d5ded2c26205470b1580163b0c52e2410c2640",
+      "structuralGrid": {
+        "joinMode": "cell-orientation",
+        "orientationSteps": 4,
+        "sourceModuleUnits": 4.0,
+        "targetWorldUnits": 2.0
+      }
+    },
+    "template-corner": {
+      "admissionClass": "PART_DONOR",
+      "assetId": "kenney-modular-dungeon-kit/template-corner",
+      "bounds": {
+        "aabbMax": [
+          1.0,
+          2.116642951965332,
+          1.0
+        ],
+        "aabbMin": [
           -1.0,
           0.0,
-          0.0
+          -1.0
         ],
-        "type": "butt-join-w"
+        "footprint": {
+          "center": [
+            0.0,
+            0.0
+          ],
+          "halfExtents": [
+            1.0,
+            1.0
+          ],
+          "yawRadians": 0
+        },
+        "footprintSource": "derived",
+        "groundY": 0.0
+      },
+      "canonicalScale": 0.5,
+      "category": "wall-corner",
+      "companionLeaf": null,
+      "file": "template-corner.glb",
+      "materialFamilies": [
+        "stone"
+      ],
+      "normalizedFrame": {
+        "forward": "+Z",
+        "sourceToGenesis": [
+          0.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0,
+          0,
+          0,
+          1.0
+        ],
+        "up": "+Y"
+      },
+      "qaStatus": "needs-review",
+      "recipeHash": "2771703a45594a3d9c9cc7d19114a99d19790486f37c0ea399ed269c51cd365f",
+      "schema": "genesis.donor.v2",
+      "semanticParts": {},
+      "sockets": [
+        {
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.1,
+              0.1,
+              0.1
+            ]
+          },
+          "id": "floor-mount",
+          "mateFamily": "floor",
+          "mateRule": "coincident",
+          "position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "size": [
+            0.05,
+            0.05,
+            0.05
+          ],
+          "type": "floor-mount"
+        }
+      ],
+      "sourceSha256": "9b91d52743f284704b15aaa68b2bb2a7041bcd968d2dfd3617ed107f1db235d2",
+      "structuralGrid": {
+        "joinMode": "cell-orientation",
+        "orientationSteps": 4,
+        "sourceModuleUnits": 4.0,
+        "targetWorldUnits": 2.0
       }
-    ]
-  },
-  "template-detail": {
-    "admissionClass": "DIRECT_MODULATED",
-    "canonicalScale": 0.5,
-    "category": "wall",
-    "companionLeaf": null,
-    "file": "template-detail.glb",
-    "materialFamilies": [
-      "stone"
-    ],
-    "recipeHash": "6bed12b9b868dd3493b80ca602e7377fd0dc5ba35895eabcccf88d1d4b807b9d",
-    "semanticParts": [
-      "wall"
-    ],
-    "sockets": [
-      {
-        "position": [
-          0.0,
-          0.0,
-          0.0
-        ],
-        "type": "floor-mount"
-      },
-      {
-        "position": [
-          0.0,
-          0.0,
-          -0.44783157110214233
-        ],
-        "type": "butt-join-n"
-      },
-      {
-        "position": [
-          0.0,
-          0.0,
+    },
+    "template-detail": {
+      "admissionClass": "PART_DONOR",
+      "assetId": "kenney-modular-dungeon-kit/template-detail",
+      "bounds": {
+        "aabbMax": [
+          0.44783157110214233,
+          2.116642951965332,
           0.44783157110214233
         ],
-        "type": "butt-join-s"
-      },
-      {
-        "position": [
-          0.44783157110214233,
-          0.0,
-          0.0
-        ],
-        "type": "butt-join-e"
-      },
-      {
-        "position": [
+        "aabbMin": [
           -0.44783157110214233,
-          0.0,
-          0.0
+          5.129489088118237e-30,
+          -0.44783157110214233
         ],
-        "type": "butt-join-w"
+        "footprint": {
+          "center": [
+            0.0,
+            0.0
+          ],
+          "halfExtents": [
+            0.44783157110214233,
+            0.44783157110214233
+          ],
+          "yawRadians": 0
+        },
+        "footprintSource": "derived",
+        "groundY": 5.129489088118237e-30
+      },
+      "canonicalScale": 0.5,
+      "category": "wall",
+      "companionLeaf": null,
+      "file": "template-detail.glb",
+      "materialFamilies": [
+        "stone"
+      ],
+      "normalizedFrame": {
+        "forward": "+Z",
+        "sourceToGenesis": [
+          0.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0,
+          0,
+          0,
+          1.0
+        ],
+        "up": "+Y"
+      },
+      "qaStatus": "needs-review",
+      "recipeHash": "f5f78f30f3898b38485cb0e175f9f1c0f664c4fd56e28b2ccdf75dbc900f9812",
+      "schema": "genesis.donor.v2",
+      "semanticParts": {},
+      "sockets": [
+        {
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.1,
+              0.1,
+              0.1
+            ]
+          },
+          "id": "floor-mount",
+          "mateFamily": "floor",
+          "mateRule": "coincident",
+          "position": [
+            0.0,
+            5.129489088118237e-30,
+            0.0
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "size": [
+            0.05,
+            0.05,
+            0.05
+          ],
+          "type": "floor-mount"
+        }
+      ],
+      "sourceSha256": "1e996e74b9e841418009c9292a8247dc6413588bbdcdf298b7f2666be73b6a68",
+      "structuralGrid": {
+        "joinMode": "cell-orientation",
+        "orientationSteps": 4,
+        "sourceModuleUnits": 4.0,
+        "targetWorldUnits": 2.0
       }
-    ]
-  },
-  "template-floor": {
-    "admissionClass": "DIRECT_MODULATED",
-    "canonicalScale": 0.5,
-    "category": "floor",
-    "companionLeaf": null,
-    "file": "template-floor.glb",
-    "materialFamilies": [
-      "stone"
-    ],
-    "recipeHash": "99cc85916d501feabcabff34d5f4e89a85afa818b1cfd7aa5b814d6a09848f6f",
-    "semanticParts": [
-      "floor"
-    ],
-    "sockets": [
-      {
-        "position": [
-          0.0,
-          0.0,
-          0.0
-        ],
-        "type": "floor-mount"
-      },
-      {
-        "position": [
-          0.0,
-          0.0,
-          -1.0
-        ],
-        "type": "butt-join-n"
-      },
-      {
-        "position": [
-          0.0,
+    },
+    "template-floor": {
+      "admissionClass": "DIRECT_MODULATED",
+      "assetId": "kenney-modular-dungeon-kit/template-floor",
+      "bounds": {
+        "aabbMax": [
+          1.0,
           0.0,
           1.0
         ],
-        "type": "butt-join-s"
-      },
-      {
-        "position": [
-          1.0,
-          0.0,
-          0.0
-        ],
-        "type": "butt-join-e"
-      },
-      {
-        "position": [
+        "aabbMin": [
           -1.0,
           0.0,
-          0.0
+          -1.0
         ],
-        "type": "butt-join-w"
+        "footprint": {
+          "center": [
+            0.0,
+            0.0
+          ],
+          "halfExtents": [
+            1.0,
+            1.0
+          ],
+          "yawRadians": 0
+        },
+        "footprintSource": "derived",
+        "groundY": 0.0
       },
-      {
-        "position": [
+      "canonicalScale": 0.5,
+      "category": "floor",
+      "companionLeaf": null,
+      "file": "template-floor.glb",
+      "materialFamilies": [
+        "stone"
+      ],
+      "normalizedFrame": {
+        "forward": "+Z",
+        "sourceToGenesis": [
+          0.5,
           0.0,
           0.0,
-          0.0
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0,
+          0,
+          0,
+          1.0
         ],
-        "type": "top-surface"
+        "up": "+Y"
+      },
+      "qaStatus": "needs-review",
+      "recipeHash": "9298089ca3512f04263e357cc975be65950700099eb86d69238b91524d4cb1a0",
+      "schema": "genesis.donor.v2",
+      "semanticParts": {},
+      "sockets": [
+        {
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.1,
+              0.1,
+              0.1
+            ]
+          },
+          "id": "floor-mount",
+          "mateFamily": "floor",
+          "mateRule": "coincident",
+          "position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "size": [
+            0.05,
+            0.05,
+            0.05
+          ],
+          "type": "floor-mount"
+        },
+        {
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.1,
+              0.1,
+              0.1
+            ]
+          },
+          "id": "top-surface",
+          "mateFamily": "placeable",
+          "mateRule": "coincident",
+          "position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "size": [
+            0.05,
+            0.05,
+            0.05
+          ],
+          "type": "top-surface"
+        }
+      ],
+      "sourceSha256": "2499e536e31a15ed29da17f1c8ae500c274fb169c993edb39f4072e486dadc41",
+      "structuralGrid": {
+        "joinMode": "cell-orientation",
+        "orientationSteps": 4,
+        "sourceModuleUnits": 4.0,
+        "targetWorldUnits": 2.0
       }
-    ]
-  },
-  "template-floor-big": {
-    "admissionClass": "DIRECT_MODULATED",
-    "canonicalScale": 0.5,
-    "category": "floor",
-    "companionLeaf": null,
-    "file": "template-floor-big.glb",
-    "materialFamilies": [
-      "stone"
-    ],
-    "recipeHash": "a02ce7ed71c83394db4284f7cfed04132bfef5c3612cce4b15297c71fa335096",
-    "semanticParts": [
-      "floor"
-    ],
-    "sockets": [
-      {
-        "position": [
-          0.0,
-          0.0,
-          0.0
-        ],
-        "type": "floor-mount"
-      },
-      {
-        "position": [
-          0.0,
-          0.0,
-          -2.0
-        ],
-        "type": "butt-join-n"
-      },
-      {
-        "position": [
-          0.0,
-          0.0,
+    },
+    "template-floor-big": {
+      "admissionClass": "DIRECT_MODULATED",
+      "assetId": "kenney-modular-dungeon-kit/template-floor-big",
+      "bounds": {
+        "aabbMax": [
+          2.0,
+          2.116642951965332,
           2.0
         ],
-        "type": "butt-join-s"
-      },
-      {
-        "position": [
-          2.0,
-          0.0,
-          0.0
-        ],
-        "type": "butt-join-e"
-      },
-      {
-        "position": [
+        "aabbMin": [
           -2.0,
-          0.0,
-          0.0
+          -6.157149495221126e-18,
+          -2.0
         ],
-        "type": "butt-join-w"
+        "footprint": {
+          "center": [
+            0.0,
+            0.0
+          ],
+          "halfExtents": [
+            2.0,
+            2.0
+          ],
+          "yawRadians": 0
+        },
+        "footprintSource": "derived",
+        "groundY": -6.157149495221126e-18
       },
-      {
-        "position": [
+      "canonicalScale": 0.5,
+      "category": "floor",
+      "companionLeaf": null,
+      "file": "template-floor-big.glb",
+      "materialFamilies": [
+        "stone"
+      ],
+      "normalizedFrame": {
+        "forward": "+Z",
+        "sourceToGenesis": [
+          0.5,
           0.0,
           0.0,
-          0.0
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0,
+          0,
+          0,
+          1.0
         ],
-        "type": "top-surface"
+        "up": "+Y"
+      },
+      "qaStatus": "needs-review",
+      "recipeHash": "7b8261528548492bae2ef2a8658c9eb4e90eabb0db0b8fab6ae4f858eb531f58",
+      "schema": "genesis.donor.v2",
+      "semanticParts": {},
+      "sockets": [
+        {
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.1,
+              0.1,
+              0.1
+            ]
+          },
+          "id": "floor-mount",
+          "mateFamily": "floor",
+          "mateRule": "coincident",
+          "position": [
+            0.0,
+            -6.157149495221126e-18,
+            0.0
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "size": [
+            0.05,
+            0.05,
+            0.05
+          ],
+          "type": "floor-mount"
+        },
+        {
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.1,
+              0.1,
+              0.1
+            ]
+          },
+          "id": "top-surface",
+          "mateFamily": "placeable",
+          "mateRule": "coincident",
+          "position": [
+            0.0,
+            2.116642951965332,
+            0.0
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "size": [
+            0.05,
+            0.05,
+            0.05
+          ],
+          "type": "top-surface"
+        }
+      ],
+      "sourceSha256": "01fa0798d42dbbd7536750de3e33b4ee9acb74eca6523d54d456e884ed1c81da",
+      "structuralGrid": {
+        "joinMode": "cell-orientation",
+        "orientationSteps": 4,
+        "sourceModuleUnits": 4.0,
+        "targetWorldUnits": 2.0
       }
-    ]
-  },
-  "template-floor-detail": {
-    "admissionClass": "DIRECT_MODULATED",
-    "canonicalScale": 0.5,
-    "category": "floor",
-    "companionLeaf": null,
-    "file": "template-floor-detail.glb",
-    "materialFamilies": [
-      "stone"
-    ],
-    "recipeHash": "9b2e792258dcbbb223ca03ba25501db8cbaf9c7039f916f425bcf1ce5ee81b73",
-    "semanticParts": [
-      "floor"
-    ],
-    "sockets": [
-      {
-        "position": [
-          0.0,
-          0.0,
-          0.0
+    },
+    "template-floor-detail": {
+      "admissionClass": "DIRECT_MODULATED",
+      "assetId": "kenney-modular-dungeon-kit/template-floor-detail",
+      "bounds": {
+        "aabbMax": [
+          1.0,
+          0.05000000074505806,
+          1.0
         ],
-        "type": "floor-mount"
-      },
-      {
-        "position": [
-          0.0,
+        "aabbMin": [
+          -1.0,
           0.0,
           -1.0
         ],
-        "type": "butt-join-n"
+        "footprint": {
+          "center": [
+            0.0,
+            0.0
+          ],
+          "halfExtents": [
+            1.0,
+            1.0
+          ],
+          "yawRadians": 0
+        },
+        "footprintSource": "derived",
+        "groundY": 0.0
       },
-      {
-        "position": [
+      "canonicalScale": 0.5,
+      "category": "floor",
+      "companionLeaf": null,
+      "file": "template-floor-detail.glb",
+      "materialFamilies": [
+        "stone"
+      ],
+      "normalizedFrame": {
+        "forward": "+Z",
+        "sourceToGenesis": [
+          0.5,
           0.0,
           0.0,
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0,
+          0,
+          0,
           1.0
         ],
-        "type": "butt-join-s"
+        "up": "+Y"
       },
-      {
-        "position": [
-          1.0,
-          0.0,
-          0.0
-        ],
-        "type": "butt-join-e"
-      },
-      {
-        "position": [
-          -1.0,
-          0.0,
-          0.0
-        ],
-        "type": "butt-join-w"
-      },
-      {
-        "position": [
-          0.0,
-          0.0,
-          0.0
-        ],
-        "type": "top-surface"
+      "qaStatus": "needs-review",
+      "recipeHash": "5e5da26259e68bb467ea943673e312f78d4102aa74c33fed0afeec9ea4e2c7b9",
+      "schema": "genesis.donor.v2",
+      "semanticParts": {},
+      "sockets": [
+        {
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.1,
+              0.1,
+              0.1
+            ]
+          },
+          "id": "floor-mount",
+          "mateFamily": "floor",
+          "mateRule": "coincident",
+          "position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "size": [
+            0.05,
+            0.05,
+            0.05
+          ],
+          "type": "floor-mount"
+        },
+        {
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.1,
+              0.1,
+              0.1
+            ]
+          },
+          "id": "top-surface",
+          "mateFamily": "placeable",
+          "mateRule": "coincident",
+          "position": [
+            0.0,
+            0.05000000074505806,
+            0.0
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "size": [
+            0.05,
+            0.05,
+            0.05
+          ],
+          "type": "top-surface"
+        }
+      ],
+      "sourceSha256": "0acd25cbb92a565ad9559c47a3c60dcf6a22ee05ad6dcad2e5b2bf32de63d84d",
+      "structuralGrid": {
+        "joinMode": "cell-orientation",
+        "orientationSteps": 4,
+        "sourceModuleUnits": 4.0,
+        "targetWorldUnits": 2.0
       }
-    ]
-  },
-  "template-floor-detail-a": {
-    "admissionClass": "DIRECT_MODULATED",
-    "canonicalScale": 0.5,
-    "category": "floor",
-    "companionLeaf": null,
-    "file": "template-floor-detail-a.glb",
-    "materialFamilies": [
-      "stone"
-    ],
-    "recipeHash": "838c31351beb230205f295d7158085c1a59856942b109c483ba7baba93a13fb9",
-    "semanticParts": [
-      "floor"
-    ],
-    "sockets": [
-      {
-        "position": [
-          0.0,
-          0.0,
-          0.0
+    },
+    "template-floor-detail-a": {
+      "admissionClass": "DIRECT_MODULATED",
+      "assetId": "kenney-modular-dungeon-kit/template-floor-detail-a",
+      "bounds": {
+        "aabbMax": [
+          1.0,
+          0.05000000074505806,
+          1.0
         ],
-        "type": "floor-mount"
-      },
-      {
-        "position": [
-          0.0,
+        "aabbMin": [
+          -1.0,
           0.0,
           -1.0
         ],
-        "type": "butt-join-n"
+        "footprint": {
+          "center": [
+            0.0,
+            0.0
+          ],
+          "halfExtents": [
+            1.0,
+            1.0
+          ],
+          "yawRadians": 0
+        },
+        "footprintSource": "derived",
+        "groundY": 0.0
       },
-      {
-        "position": [
+      "canonicalScale": 0.5,
+      "category": "floor",
+      "companionLeaf": null,
+      "file": "template-floor-detail-a.glb",
+      "materialFamilies": [
+        "stone"
+      ],
+      "normalizedFrame": {
+        "forward": "+Z",
+        "sourceToGenesis": [
+          0.5,
           0.0,
           0.0,
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0,
+          0,
+          0,
           1.0
         ],
-        "type": "butt-join-s"
+        "up": "+Y"
       },
-      {
-        "position": [
-          1.0,
-          0.0,
-          0.0
-        ],
-        "type": "butt-join-e"
-      },
-      {
-        "position": [
-          -1.0,
-          0.0,
-          0.0
-        ],
-        "type": "butt-join-w"
-      },
-      {
-        "position": [
-          0.0,
-          0.0,
-          0.0
-        ],
-        "type": "top-surface"
+      "qaStatus": "needs-review",
+      "recipeHash": "4d01d23bd25751164dc20bbfa335d6a8c864dfc570c93dcee13677868dd7dbac",
+      "schema": "genesis.donor.v2",
+      "semanticParts": {},
+      "sockets": [
+        {
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.1,
+              0.1,
+              0.1
+            ]
+          },
+          "id": "floor-mount",
+          "mateFamily": "floor",
+          "mateRule": "coincident",
+          "position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "size": [
+            0.05,
+            0.05,
+            0.05
+          ],
+          "type": "floor-mount"
+        },
+        {
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.1,
+              0.1,
+              0.1
+            ]
+          },
+          "id": "top-surface",
+          "mateFamily": "placeable",
+          "mateRule": "coincident",
+          "position": [
+            0.0,
+            0.05000000074505806,
+            0.0
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "size": [
+            0.05,
+            0.05,
+            0.05
+          ],
+          "type": "top-surface"
+        }
+      ],
+      "sourceSha256": "403a357e1d59760f171d9def9db4ff01859372bde885dad2322e1519dafa4351",
+      "structuralGrid": {
+        "joinMode": "cell-orientation",
+        "orientationSteps": 4,
+        "sourceModuleUnits": 4.0,
+        "targetWorldUnits": 2.0
       }
-    ]
-  },
-  "template-floor-layer": {
-    "admissionClass": "DIRECT_MODULATED",
-    "canonicalScale": 0.5,
-    "category": "floor",
-    "companionLeaf": null,
-    "file": "template-floor-layer.glb",
-    "materialFamilies": [
-      "stone"
-    ],
-    "recipeHash": "0736dc694a92def18aadf72a0ab6f081a65d05301ea2b9d3bed307cb89ee50ca",
-    "semanticParts": [
-      "floor"
-    ],
-    "sockets": [
-      {
-        "position": [
-          0.0,
-          0.0,
-          0.0
-        ],
-        "type": "floor-mount"
-      },
-      {
-        "position": [
-          0.0,
-          0.0,
-          -1.0000001192092896
-        ],
-        "type": "butt-join-n"
-      },
-      {
-        "position": [
-          0.0,
-          0.0,
+    },
+    "template-floor-layer": {
+      "admissionClass": "DIRECT_MODULATED",
+      "assetId": "kenney-modular-dungeon-kit/template-floor-layer",
+      "bounds": {
+        "aabbMax": [
+          1.0059354305267334,
+          0.25,
           1.0000001192092896
         ],
-        "type": "butt-join-s"
-      },
-      {
-        "position": [
-          1.0059354305267334,
-          0.0,
-          0.0
-        ],
-        "type": "butt-join-e"
-      },
-      {
-        "position": [
+        "aabbMin": [
           -1.0059354305267334,
           0.0,
-          0.0
-        ],
-        "type": "butt-join-w"
-      },
-      {
-        "position": [
-          0.0,
-          0.0,
-          0.0
-        ],
-        "type": "top-surface"
-      }
-    ]
-  },
-  "template-floor-layer-hole": {
-    "admissionClass": "DIRECT_MODULATED",
-    "canonicalScale": 0.5,
-    "category": "floor",
-    "companionLeaf": null,
-    "file": "template-floor-layer-hole.glb",
-    "materialFamilies": [
-      "stone"
-    ],
-    "recipeHash": "7f7a6a836b5d8ba1dd1a89242fb14f28b47addaaddd22bcb1dee61ce8d391fca",
-    "semanticParts": [
-      "floor"
-    ],
-    "sockets": [
-      {
-        "position": [
-          3.516674041748047e-06,
-          0.0,
-          0.0
-        ],
-        "type": "floor-mount"
-      },
-      {
-        "position": [
-          3.516674041748047e-06,
-          0.0,
           -1.0000001192092896
         ],
-        "type": "butt-join-n"
+        "footprint": {
+          "center": [
+            0.0,
+            0.0
+          ],
+          "halfExtents": [
+            1.0059354305267334,
+            1.0000001192092896
+          ],
+          "yawRadians": 0
+        },
+        "footprintSource": "derived",
+        "groundY": 0.0
       },
-      {
-        "position": [
-          3.516674041748047e-06,
+      "canonicalScale": 0.5,
+      "category": "floor",
+      "companionLeaf": null,
+      "file": "template-floor-layer.glb",
+      "materialFamilies": [
+        "stone"
+      ],
+      "normalizedFrame": {
+        "forward": "+Z",
+        "sourceToGenesis": [
+          0.5,
           0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0,
+          0,
+          0,
+          1.0
+        ],
+        "up": "+Y"
+      },
+      "qaStatus": "needs-review",
+      "recipeHash": "d7c5a060a503a2c6d936fff23dc8d528af99e81f868504844b82ecbba39d1646",
+      "schema": "genesis.donor.v2",
+      "semanticParts": {},
+      "sockets": [
+        {
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.1,
+              0.1,
+              0.1
+            ]
+          },
+          "id": "floor-mount",
+          "mateFamily": "floor",
+          "mateRule": "coincident",
+          "position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "size": [
+            0.05,
+            0.05,
+            0.05
+          ],
+          "type": "floor-mount"
+        },
+        {
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.1,
+              0.1,
+              0.1
+            ]
+          },
+          "id": "top-surface",
+          "mateFamily": "placeable",
+          "mateRule": "coincident",
+          "position": [
+            0.0,
+            0.25,
+            0.0
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "size": [
+            0.05,
+            0.05,
+            0.05
+          ],
+          "type": "top-surface"
+        }
+      ],
+      "sourceSha256": "384d960dc5c79fd6b966cce37a246177dfd7b40c6131a98a19ee1553497da643",
+      "structuralGrid": {
+        "joinMode": "cell-orientation",
+        "orientationSteps": 4,
+        "sourceModuleUnits": 4.0,
+        "targetWorldUnits": 2.0
+      }
+    },
+    "template-floor-layer-hole": {
+      "admissionClass": "DIRECT_MODULATED",
+      "assetId": "kenney-modular-dungeon-kit/template-floor-layer-hole",
+      "bounds": {
+        "aabbMax": [
+          1.0108299255371094,
+          1.5445761680603027,
           1.0000001192092896
         ],
-        "type": "butt-join-s"
-      },
-      {
-        "position": [
-          1.0108299255371094,
-          0.0,
-          0.0
-        ],
-        "type": "butt-join-e"
-      },
-      {
-        "position": [
+        "aabbMin": [
           -1.0108228921890259,
           0.0,
-          0.0
+          -1.0000001192092896
         ],
-        "type": "butt-join-w"
+        "footprint": {
+          "center": [
+            3.516674041748047e-06,
+            0.0
+          ],
+          "halfExtents": [
+            1.0108264088630676,
+            1.0000001192092896
+          ],
+          "yawRadians": 0
+        },
+        "footprintSource": "derived",
+        "groundY": 0.0
       },
-      {
-        "position": [
-          3.516674041748047e-06,
+      "canonicalScale": 0.5,
+      "category": "floor",
+      "companionLeaf": null,
+      "file": "template-floor-layer-hole.glb",
+      "materialFamilies": [
+        "stone"
+      ],
+      "normalizedFrame": {
+        "forward": "+Z",
+        "sourceToGenesis": [
+          0.5,
           0.0,
-          0.0
+          0.0,
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0,
+          0,
+          0,
+          1.0
         ],
-        "type": "top-surface"
+        "up": "+Y"
+      },
+      "qaStatus": "needs-review",
+      "recipeHash": "8c0c120f26a18b999397500a273e364a3dde8bd236f24aa9d2212aca3da42a77",
+      "schema": "genesis.donor.v2",
+      "semanticParts": {},
+      "sockets": [
+        {
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.1,
+              0.1,
+              0.1
+            ]
+          },
+          "id": "floor-mount",
+          "mateFamily": "floor",
+          "mateRule": "coincident",
+          "position": [
+            3.516674041748047e-06,
+            0.0,
+            0.0
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "size": [
+            0.05,
+            0.05,
+            0.05
+          ],
+          "type": "floor-mount"
+        },
+        {
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.1,
+              0.1,
+              0.1
+            ]
+          },
+          "id": "top-surface",
+          "mateFamily": "placeable",
+          "mateRule": "coincident",
+          "position": [
+            3.516674041748047e-06,
+            1.5445761680603027,
+            0.0
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "size": [
+            0.05,
+            0.05,
+            0.05
+          ],
+          "type": "top-surface"
+        }
+      ],
+      "sourceSha256": "e1f1f7338d3b7aae87cfd97301d04bb3d22b5300680141b072d12a11e64062dc",
+      "structuralGrid": {
+        "joinMode": "cell-orientation",
+        "orientationSteps": 4,
+        "sourceModuleUnits": 4.0,
+        "targetWorldUnits": 2.0
       }
-    ]
-  },
-  "template-floor-layer-raised": {
-    "admissionClass": "DIRECT_MODULATED",
-    "canonicalScale": 0.5,
-    "category": "floor",
-    "companionLeaf": null,
-    "file": "template-floor-layer-raised.glb",
-    "materialFamilies": [
-      "stone"
-    ],
-    "recipeHash": "afb30a2d69f80c524a95e2d94d907e473335ead1402acfa3d2e170e574252767",
-    "semanticParts": [
-      "floor"
-    ],
-    "sockets": [
-      {
-        "position": [
-          0.0,
-          0.0,
-          0.0
+    },
+    "template-floor-layer-raised": {
+      "admissionClass": "DIRECT_MODULATED",
+      "assetId": "kenney-modular-dungeon-kit/template-floor-layer-raised",
+      "bounds": {
+        "aabbMax": [
+          1.0059354305267334,
+          1.5,
+          1.0000001192092896
         ],
-        "type": "floor-mount"
-      },
-      {
-        "position": [
-          0.0,
+        "aabbMin": [
+          -1.0059354305267334,
           0.0,
           -1.0000001192092896
         ],
-        "type": "butt-join-n"
+        "footprint": {
+          "center": [
+            0.0,
+            0.0
+          ],
+          "halfExtents": [
+            1.0059354305267334,
+            1.0000001192092896
+          ],
+          "yawRadians": 0
+        },
+        "footprintSource": "derived",
+        "groundY": 0.0
       },
-      {
-        "position": [
+      "canonicalScale": 0.5,
+      "category": "floor",
+      "companionLeaf": null,
+      "file": "template-floor-layer-raised.glb",
+      "materialFamilies": [
+        "stone"
+      ],
+      "normalizedFrame": {
+        "forward": "+Z",
+        "sourceToGenesis": [
+          0.5,
           0.0,
           0.0,
-          1.0000001192092896
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0,
+          0,
+          0,
+          1.0
         ],
-        "type": "butt-join-s"
+        "up": "+Y"
       },
-      {
-        "position": [
-          1.0059354305267334,
-          0.0,
-          0.0
-        ],
-        "type": "butt-join-e"
-      },
-      {
-        "position": [
-          -1.0059354305267334,
-          0.0,
-          0.0
-        ],
-        "type": "butt-join-w"
-      },
-      {
-        "position": [
-          0.0,
-          0.0,
-          0.0
-        ],
-        "type": "top-surface"
+      "qaStatus": "needs-review",
+      "recipeHash": "170c19429d6dc0a848d0f17206398178ecad2a811ed783f2374a8af2f3369dcb",
+      "schema": "genesis.donor.v2",
+      "semanticParts": {},
+      "sockets": [
+        {
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.1,
+              0.1,
+              0.1
+            ]
+          },
+          "id": "floor-mount",
+          "mateFamily": "floor",
+          "mateRule": "coincident",
+          "position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "size": [
+            0.05,
+            0.05,
+            0.05
+          ],
+          "type": "floor-mount"
+        },
+        {
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.1,
+              0.1,
+              0.1
+            ]
+          },
+          "id": "top-surface",
+          "mateFamily": "placeable",
+          "mateRule": "coincident",
+          "position": [
+            0.0,
+            1.5,
+            0.0
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "size": [
+            0.05,
+            0.05,
+            0.05
+          ],
+          "type": "top-surface"
+        }
+      ],
+      "sourceSha256": "7fc682e72dce4eb16e524d0af577f1ccdc0c4681f309fc5f450dd80e4676a9bc",
+      "structuralGrid": {
+        "joinMode": "cell-orientation",
+        "orientationSteps": 4,
+        "sourceModuleUnits": 4.0,
+        "targetWorldUnits": 2.0
       }
-    ]
-  },
-  "template-wall": {
-    "admissionClass": "DIRECT_MODULATED",
-    "canonicalScale": 0.5,
-    "category": "wall",
-    "companionLeaf": null,
-    "file": "template-wall.glb",
-    "materialFamilies": [
-      "stone"
-    ],
-    "recipeHash": "29ad64f52571a1526c294a9714d8d82048959d35552c8cc7d3ddca631cd5afb3",
-    "semanticParts": [
-      "wall"
-    ],
-    "sockets": [
-      {
-        "position": [
-          0.0,
-          0.0,
-          -0.498391717672348
+    },
+    "template-wall": {
+      "admissionClass": "PART_DONOR",
+      "assetId": "kenney-modular-dungeon-kit/template-wall",
+      "bounds": {
+        "aabbMax": [
+          1.0,
+          2.075000047683716,
+          0.0
         ],
-        "type": "floor-mount"
-      },
-      {
-        "position": [
-          0.0,
-          0.0,
+        "aabbMin": [
+          -1.0,
+          -1.4438228216156449e-15,
           -0.996783435344696
         ],
-        "type": "butt-join-n"
+        "footprint": {
+          "center": [
+            0.0,
+            -0.498391717672348
+          ],
+          "halfExtents": [
+            1.0,
+            0.498391717672348
+          ],
+          "yawRadians": 0
+        },
+        "footprintSource": "derived",
+        "groundY": -1.4438228216156449e-15
       },
-      {
-        "position": [
+      "canonicalScale": 0.5,
+      "category": "wall",
+      "companionLeaf": null,
+      "file": "template-wall.glb",
+      "materialFamilies": [
+        "stone"
+      ],
+      "normalizedFrame": {
+        "forward": "+Z",
+        "sourceToGenesis": [
+          0.5,
           0.0,
           0.0,
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0,
+          0,
+          0,
+          1.0
+        ],
+        "up": "+Y"
+      },
+      "qaStatus": "needs-review",
+      "recipeHash": "e489bed2f8d4be1df859046edd0627e5f06417429b2ec663184d63fe7a74e31a",
+      "schema": "genesis.donor.v2",
+      "semanticParts": {},
+      "sockets": [
+        {
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.1,
+              0.1,
+              0.1
+            ]
+          },
+          "id": "floor-mount",
+          "mateFamily": "floor",
+          "mateRule": "coincident",
+          "position": [
+            0.0,
+            -1.4438228216156449e-15,
+            -0.498391717672348
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "size": [
+            0.05,
+            0.05,
+            0.05
+          ],
+          "type": "floor-mount"
+        }
+      ],
+      "sourceSha256": "58a34df2429968d82b45f0666ed1371cdcaa1e42468c1d4697c04bff47e9fbe5",
+      "structuralGrid": {
+        "joinMode": "cell-orientation",
+        "orientationSteps": 4,
+        "sourceModuleUnits": 4.0,
+        "targetWorldUnits": 2.0
+      }
+    },
+    "template-wall-corner": {
+      "admissionClass": "PART_DONOR",
+      "assetId": "kenney-modular-dungeon-kit/template-wall-corner",
+      "bounds": {
+        "aabbMax": [
+          0.0,
+          2.0249998569488525,
           0.0
         ],
-        "type": "butt-join-s"
-      },
-      {
-        "position": [
-          1.0,
-          0.0,
-          -0.498391717672348
-        ],
-        "type": "butt-join-e"
-      },
-      {
-        "position": [
-          -1.0,
-          0.0,
-          -0.498391717672348
-        ],
-        "type": "butt-join-w"
-      }
-    ]
-  },
-  "template-wall-corner": {
-    "admissionClass": "DIRECT_MODULATED",
-    "canonicalScale": 0.5,
-    "category": "wall-corner",
-    "companionLeaf": null,
-    "file": "template-wall-corner.glb",
-    "materialFamilies": [
-      "stone"
-    ],
-    "recipeHash": "2c6fc3279b3ee3913cd6b913a0fb9e6f6c695dc4dc26e3914e2dd1c21db54465",
-    "semanticParts": [
-      "wall-corner"
-    ],
-    "sockets": [
-      {
-        "position": [
-          -0.25049877166748047,
-          0.0,
-          -0.25049877166748047
-        ],
-        "type": "floor-mount"
-      },
-      {
-        "position": [
-          -0.25049877166748047,
-          0.0,
+        "aabbMin": [
+          -0.5009975433349609,
+          -8.538858673140613e-15,
           -0.5009975433349609
         ],
-        "type": "butt-join-n"
+        "footprint": {
+          "center": [
+            -0.25049877166748047,
+            -0.25049877166748047
+          ],
+          "halfExtents": [
+            0.25049877166748047,
+            0.25049877166748047
+          ],
+          "yawRadians": 0
+        },
+        "footprintSource": "derived",
+        "groundY": -8.538858673140613e-15
       },
-      {
-        "position": [
-          -0.25049877166748047,
+      "canonicalScale": 0.5,
+      "category": "wall-corner",
+      "companionLeaf": null,
+      "file": "template-wall-corner.glb",
+      "materialFamilies": [
+        "stone"
+      ],
+      "normalizedFrame": {
+        "forward": "+Z",
+        "sourceToGenesis": [
+          0.5,
           0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0,
+          0,
+          0,
+          1.0
+        ],
+        "up": "+Y"
+      },
+      "qaStatus": "needs-review",
+      "recipeHash": "9b105d11d8036d348ad2ab78db469b245612fd7661a12c5f05f9296091590a8d",
+      "schema": "genesis.donor.v2",
+      "semanticParts": {},
+      "sockets": [
+        {
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.1,
+              0.1,
+              0.1
+            ]
+          },
+          "id": "floor-mount",
+          "mateFamily": "floor",
+          "mateRule": "coincident",
+          "position": [
+            -0.25049877166748047,
+            -8.538858673140613e-15,
+            -0.25049877166748047
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "size": [
+            0.05,
+            0.05,
+            0.05
+          ],
+          "type": "floor-mount"
+        }
+      ],
+      "sourceSha256": "fbccb15028552ba779cd765b5d41ea328f3b4a5e2c61be11fda5de87b1b81f9d",
+      "structuralGrid": {
+        "joinMode": "cell-orientation",
+        "orientationSteps": 4,
+        "sourceModuleUnits": 4.0,
+        "targetWorldUnits": 2.0
+      }
+    },
+    "template-wall-detail-a": {
+      "admissionClass": "PART_DONOR",
+      "assetId": "kenney-modular-dungeon-kit/template-wall-detail-a",
+      "bounds": {
+        "aabbMax": [
+          1.0,
+          2.116642951965332,
           0.0
         ],
-        "type": "butt-join-s"
-      },
-      {
-        "position": [
-          0.0,
-          0.0,
-          -0.25049877166748047
-        ],
-        "type": "butt-join-e"
-      },
-      {
-        "position": [
-          -0.5009975433349609,
-          0.0,
-          -0.25049877166748047
-        ],
-        "type": "butt-join-w"
-      }
-    ]
-  },
-  "template-wall-detail-a": {
-    "admissionClass": "DIRECT_MODULATED",
-    "canonicalScale": 0.5,
-    "category": "wall",
-    "companionLeaf": null,
-    "file": "template-wall-detail-a.glb",
-    "materialFamilies": [
-      "stone"
-    ],
-    "recipeHash": "f92289b565ca1894f2160fd0efba7010e0121f16d50da95d53d9264dda2b02cf",
-    "semanticParts": [
-      "wall"
-    ],
-    "sockets": [
-      {
-        "position": [
-          0.0,
-          0.0,
-          -0.498391717672348
-        ],
-        "type": "floor-mount"
-      },
-      {
-        "position": [
-          0.0,
-          0.0,
+        "aabbMin": [
+          -1.0,
+          -1.4438228216156449e-15,
           -0.996783435344696
         ],
-        "type": "butt-join-n"
+        "footprint": {
+          "center": [
+            0.0,
+            -0.498391717672348
+          ],
+          "halfExtents": [
+            1.0,
+            0.498391717672348
+          ],
+          "yawRadians": 0
+        },
+        "footprintSource": "derived",
+        "groundY": -1.4438228216156449e-15
       },
-      {
-        "position": [
+      "canonicalScale": 0.5,
+      "category": "wall",
+      "companionLeaf": null,
+      "file": "template-wall-detail-a.glb",
+      "materialFamilies": [
+        "stone"
+      ],
+      "normalizedFrame": {
+        "forward": "+Z",
+        "sourceToGenesis": [
+          0.5,
           0.0,
           0.0,
-          0.0
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0,
+          0,
+          0,
+          1.0
         ],
-        "type": "butt-join-s"
+        "up": "+Y"
       },
-      {
-        "position": [
-          1.0,
-          0.0,
-          -0.498391717672348
-        ],
-        "type": "butt-join-e"
-      },
-      {
-        "position": [
-          -1.0,
-          0.0,
-          -0.498391717672348
-        ],
-        "type": "butt-join-w"
+      "qaStatus": "needs-review",
+      "recipeHash": "f429c442bd5a8317bf7eb33b29c61bd9045286353450a96ffd81aa1ac071d813",
+      "schema": "genesis.donor.v2",
+      "semanticParts": {},
+      "sockets": [
+        {
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.1,
+              0.1,
+              0.1
+            ]
+          },
+          "id": "floor-mount",
+          "mateFamily": "floor",
+          "mateRule": "coincident",
+          "position": [
+            0.0,
+            -1.4438228216156449e-15,
+            -0.498391717672348
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "size": [
+            0.05,
+            0.05,
+            0.05
+          ],
+          "type": "floor-mount"
+        }
+      ],
+      "sourceSha256": "441384f33790b7a6fe3caddc8c4637c3a58a0f7ed6015be1011704353b2e4886",
+      "structuralGrid": {
+        "joinMode": "cell-orientation",
+        "orientationSteps": 4,
+        "sourceModuleUnits": 4.0,
+        "targetWorldUnits": 2.0
       }
-    ]
-  },
-  "template-wall-half": {
-    "admissionClass": "DIRECT_MODULATED",
-    "canonicalScale": 0.5,
-    "category": "wall",
-    "companionLeaf": null,
-    "file": "template-wall-half.glb",
-    "materialFamilies": [
-      "stone"
-    ],
-    "recipeHash": "ab663198d4670c70728cc9c8d67326a6af40fd912ccc8b2a342efbdf924249a6",
-    "semanticParts": [
-      "wall"
-    ],
-    "sockets": [
-      {
-        "position": [
-          0.0,
-          0.0,
-          -0.45184914767742157
+    },
+    "template-wall-half": {
+      "admissionClass": "PART_DONOR",
+      "assetId": "kenney-modular-dungeon-kit/template-wall-half",
+      "bounds": {
+        "aabbMax": [
+          0.5,
+          2.075000047683716,
+          2.9802322387695312e-08
         ],
-        "type": "floor-mount"
-      },
-      {
-        "position": [
-          0.0,
+        "aabbMin": [
+          -0.5,
           0.0,
           -0.9036983251571655
         ],
-        "type": "butt-join-n"
+        "footprint": {
+          "center": [
+            0.0,
+            -0.45184914767742157
+          ],
+          "halfExtents": [
+            0.5,
+            0.45184917747974396
+          ],
+          "yawRadians": 0
+        },
+        "footprintSource": "derived",
+        "groundY": 0.0
       },
-      {
-        "position": [
-          0.0,
-          0.0,
-          2.9802322387695312e-08
-        ],
-        "type": "butt-join-s"
-      },
-      {
-        "position": [
+      "canonicalScale": 0.5,
+      "category": "wall",
+      "companionLeaf": null,
+      "file": "template-wall-half.glb",
+      "materialFamilies": [
+        "stone"
+      ],
+      "normalizedFrame": {
+        "forward": "+Z",
+        "sourceToGenesis": [
           0.5,
           0.0,
-          -0.45184914767742157
-        ],
-        "type": "butt-join-e"
-      },
-      {
-        "position": [
-          -0.5,
           0.0,
-          -0.45184914767742157
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0,
+          0,
+          0,
+          1.0
         ],
-        "type": "butt-join-w"
+        "up": "+Y"
+      },
+      "qaStatus": "needs-review",
+      "recipeHash": "62052ab5ceeae6b13f69d71f22e13c6c29ffa0c4736c774ed647f36d84ae679d",
+      "schema": "genesis.donor.v2",
+      "semanticParts": {},
+      "sockets": [
+        {
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.1,
+              0.1,
+              0.1
+            ]
+          },
+          "id": "floor-mount",
+          "mateFamily": "floor",
+          "mateRule": "coincident",
+          "position": [
+            0.0,
+            0.0,
+            -0.45184914767742157
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "size": [
+            0.05,
+            0.05,
+            0.05
+          ],
+          "type": "floor-mount"
+        }
+      ],
+      "sourceSha256": "69b0cabe772ca9fb88545ef21e303e434a57cde2fb3bd2373627136534168c56",
+      "structuralGrid": {
+        "joinMode": "cell-orientation",
+        "orientationSteps": 4,
+        "sourceModuleUnits": 4.0,
+        "targetWorldUnits": 2.0
       }
-    ]
-  },
-  "template-wall-stairs": {
-    "admissionClass": "DIRECT_MODULATED",
-    "canonicalScale": 0.5,
-    "category": "wall",
-    "companionLeaf": null,
-    "file": "template-wall-stairs.glb",
-    "materialFamilies": [
-      "stone"
-    ],
-    "recipeHash": "309aeb2d225361a3f38992aa51f1b04878bd535d5b63d51bea82dd3dc92641e6",
-    "semanticParts": [
-      "wall"
-    ],
-    "sockets": [
-      {
-        "position": [
-          0.0,
-          0.0,
-          -0.1565195918083191
-        ],
-        "type": "floor-mount"
-      },
-      {
-        "position": [
-          0.0,
-          0.0,
-          -0.3130391836166382
-        ],
-        "type": "butt-join-n"
-      },
-      {
-        "position": [
-          0.0,
-          0.0,
+    },
+    "template-wall-stairs": {
+      "admissionClass": "PART_DONOR",
+      "assetId": "kenney-modular-dungeon-kit/template-wall-stairs",
+      "bounds": {
+        "aabbMax": [
+          1.0,
+          2.25,
           0.0
         ],
-        "type": "butt-join-s"
-      },
-      {
-        "position": [
-          1.0,
-          0.0,
-          -0.1565195918083191
-        ],
-        "type": "butt-join-e"
-      },
-      {
-        "position": [
+        "aabbMin": [
           -1.0,
-          0.0,
-          -0.1565195918083191
+          7.219114108078224e-16,
+          -0.3130391836166382
         ],
-        "type": "butt-join-w"
-      }
-    ]
-  },
-  "template-wall-top": {
-    "admissionClass": "DIRECT_MODULATED",
-    "canonicalScale": 0.5,
-    "category": "wall",
-    "companionLeaf": null,
-    "file": "template-wall-top.glb",
-    "materialFamilies": [
-      "stone"
-    ],
-    "recipeHash": "28f8258d2032cdc2c402f1e83afea341dd223604375eacb957f37606ca759364",
-    "semanticParts": [
-      "wall"
-    ],
-    "sockets": [
-      {
-        "position": [
-          0.0,
-          0.0,
-          -0.15461419522762299
-        ],
-        "type": "floor-mount"
+        "footprint": {
+          "center": [
+            0.0,
+            -0.1565195918083191
+          ],
+          "halfExtents": [
+            1.0,
+            0.1565195918083191
+          ],
+          "yawRadians": 0
+        },
+        "footprintSource": "derived",
+        "groundY": 7.219114108078224e-16
       },
-      {
-        "position": [
+      "canonicalScale": 0.5,
+      "category": "wall",
+      "companionLeaf": null,
+      "file": "template-wall-stairs.glb",
+      "materialFamilies": [
+        "stone"
+      ],
+      "normalizedFrame": {
+        "forward": "+Z",
+        "sourceToGenesis": [
+          0.5,
           0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0,
+          0,
+          0,
+          1.0
+        ],
+        "up": "+Y"
+      },
+      "qaStatus": "needs-review",
+      "recipeHash": "2b6e4d3f451d86309b89b17ed1048736a17174561b317bec6c761cd8db6741c3",
+      "schema": "genesis.donor.v2",
+      "semanticParts": {},
+      "sockets": [
+        {
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.1,
+              0.1,
+              0.1
+            ]
+          },
+          "id": "floor-mount",
+          "mateFamily": "floor",
+          "mateRule": "coincident",
+          "position": [
+            0.0,
+            7.219114108078224e-16,
+            -0.1565195918083191
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "size": [
+            0.05,
+            0.05,
+            0.05
+          ],
+          "type": "floor-mount"
+        }
+      ],
+      "sourceSha256": "c62afcc130d896836e454cc42320372b8d047cc568c32f5401bcc585b5ff1032",
+      "structuralGrid": {
+        "joinMode": "cell-orientation",
+        "orientationSteps": 4,
+        "sourceModuleUnits": 4.0,
+        "targetWorldUnits": 2.0
+      }
+    },
+    "template-wall-top": {
+      "admissionClass": "PART_DONOR",
+      "assetId": "kenney-modular-dungeon-kit/template-wall-top",
+      "bounds": {
+        "aabbMax": [
+          1.0,
+          2.25,
+          0.0
+        ],
+        "aabbMin": [
+          -1.0,
           0.0,
           -0.30922839045524597
         ],
-        "type": "butt-join-n"
+        "footprint": {
+          "center": [
+            0.0,
+            -0.15461419522762299
+          ],
+          "halfExtents": [
+            1.0,
+            0.15461419522762299
+          ],
+          "yawRadians": 0
+        },
+        "footprintSource": "derived",
+        "groundY": 0.0
       },
-      {
-        "position": [
+      "canonicalScale": 0.5,
+      "category": "wall",
+      "companionLeaf": null,
+      "file": "template-wall-top.glb",
+      "materialFamilies": [
+        "stone"
+      ],
+      "normalizedFrame": {
+        "forward": "+Z",
+        "sourceToGenesis": [
+          0.5,
           0.0,
           0.0,
-          0.0
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0,
+          0,
+          0,
+          1.0
         ],
-        "type": "butt-join-s"
+        "up": "+Y"
       },
-      {
-        "position": [
-          1.0,
-          0.0,
-          -0.15461419522762299
-        ],
-        "type": "butt-join-e"
-      },
-      {
-        "position": [
-          -1.0,
-          0.0,
-          -0.15461419522762299
-        ],
-        "type": "butt-join-w"
+      "qaStatus": "needs-review",
+      "recipeHash": "31a4521ef1ce16aa47d740de38f70b246adb2e3d6fe99ce7ac4d8a2a97797c60",
+      "schema": "genesis.donor.v2",
+      "semanticParts": {},
+      "sockets": [
+        {
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.1,
+              0.1,
+              0.1
+            ]
+          },
+          "id": "floor-mount",
+          "mateFamily": "floor",
+          "mateRule": "coincident",
+          "position": [
+            0.0,
+            0.0,
+            -0.15461419522762299
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "size": [
+            0.05,
+            0.05,
+            0.05
+          ],
+          "type": "floor-mount"
+        }
+      ],
+      "sourceSha256": "253fbea03d92a52c895ab731194ac011c65a2a2d1d53b62b8586723024acd8f7",
+      "structuralGrid": {
+        "joinMode": "cell-orientation",
+        "orientationSteps": 4,
+        "sourceModuleUnits": 4.0,
+        "targetWorldUnits": 2.0
       }
-    ]
-  }
+    }
+  },
+  "calibrationHash": "e8ea45872d1683d56cc996a9ff44708ce3c840014242291ba99d1f54efb8007a",
+  "normalizerVersion": "kgr3-calibration-v2",
+  "pack": "kenney-modular-dungeon-kit",
+  "schema": "genesis.donor-index.v2"
 }

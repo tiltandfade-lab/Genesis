@@ -62,11 +62,11 @@
    dormant policy metadata for a future screen-space/shader outline unit; loading a donor never adds
    duplicate hull geometry.
 
-   SOCKET SCHEMA (docs/KENNEY-SOCKET-WAVE.md KS-1, Adam's ruling "adopt their conventions, don't
-   invent a schema"): floor-mount, wall-mount, top-surface, hinge, butt-join-{n|s|e|w}. Stamped by
-   build/normalize-donors.py into each admitted piece's node.extras.genesisDonor.sockets (already
-   in the POST-canonicalScale Genesis-world-unit frame — see that script's own bake_scale_into_
-   roots comment). THREE.js's GLTFLoader copies a glTF node's `extras` onto the parsed Object3D's
+   KGR-3 SOCKET SCHEMA: normalized v2 output carries identified attachment frames
+   (floor-mount, wall-mount, top-surface, hinge), each with position + quaternion in the identity
+   donor-root frame. Structural placement is canonical cell + orientationIndex 0..3; v2 emits no
+   butt-join sockets. The source-to-Genesis TRS lives exactly once on the
+   `genesis-source-transform` child. THREE.js's GLTFLoader copies a glTF node's `extras` onto the parsed Object3D's
    own `.userData` (documented three.js GLTFLoader behavior — this is how "socket metadata rides
    userData (classic-script friendly)" from the KS-1 spec is actually realized at runtime: no
    custom parsing needed, GLTFLoader does it for free). loadDonorPiece below walks the loaded scene
@@ -93,9 +93,9 @@ function donorGlbUrl(pack, file) {
   return new URL(`../../assets/models-normalized/${pack}/${file}`, import.meta.url).href;
 }
 
-// donorIndexFor(pack) -> Promise<index> — the slug -> {file, sockets, canonicalScale,
-// materialFamilies, admissionClass, semanticParts, category, companionLeaf} lookup
-// build/normalize-donors.py wrote. Fetched once per pack, cached forever (the index is a build
+// donorIndexFor(pack) -> Promise<index> — fetches the raw index envelope. KGR-3 output is
+// genesis.donor-index.v2 with entries under `assets`; donorEntriesForRead below also accepts the
+// old flat v1 object for graceful output compatibility. Fetched once per pack (the index is a build
 // artifact; a changed pack means a re-run of the normalizer, which is a fresh page load in
 // practice — no live invalidation needed this wave).
 export function donorIndexFor(pack) {
@@ -104,6 +104,37 @@ export function donorIndexFor(pack) {
       .then((r) => { if (!r.ok) throw new Error(`donor index ${pack}: HTTP ${r.status}`); return r.json(); });
   }
   return DONOR_INDEX_CACHE[pack];
+}
+
+// Runtime loads remain backward compatible with committed v1 flat indexes. New registry
+// generation is deliberately stricter: only the calibrated v2 envelope may mint registry data.
+// This keeps an old output renderable while preventing it from silently becoming new authority.
+export function donorEntriesForRead(index) {
+  if (index && index.schema === "genesis.donor-index.v2") return index.assets || {};
+  return index || {};
+}
+
+const DONOR_QA_STATUSES = new Set([
+  "needs-review", "approved-dev", "approved-runtime", "quarantined",
+]);
+
+export function donorRegistryFromIndex(index) {
+  if (!index || index.schema !== "genesis.donor-index.v2" || !index.assets) {
+    throw new Error("donorRegistryFromIndex: genesis.donor-index.v2 required");
+  }
+  const registry = {};
+  for (const [slug, entry] of Object.entries(index.assets)) {
+    if (!entry || entry.schema !== "genesis.donor.v2" ||
+        entry.assetId !== `${index.pack}/${slug}` ||
+        !/^[0-9a-f]{64}$/.test(entry.sourceSha256 || "") ||
+        !/^[0-9a-f]{64}$/.test(entry.recipeHash || "") ||
+        !DONOR_QA_STATUSES.has(entry.qaStatus)) {
+      throw new Error(`donorRegistryFromIndex: invalid v2 entry ${slug}`);
+    }
+    if (entry.qaStatus !== "approved-runtime") continue;
+    registry[entry.assetId] = entry;
+  }
+  return registry;
 }
 
 // ─── material recipe (Sol P-B, quoted in build/normalize-donors.py's own header) ─────────────────
@@ -286,8 +317,8 @@ export function donorOutlineStyleFor(realmId) {
 export async function loadDonorPiece(pack, slug, opts) {
   opts = opts || {};
   const index = await donorIndexFor(pack);
-  const entry = index[slug];
-  if (!entry) throw new Error(`loadDonorPiece: unknown donor ${pack}/${slug} (not in normalized index — check build/normalize-donors.py's PILOT manifest)`);
+  const entry = donorEntriesForRead(index)[slug];
+  if (!entry) throw new Error(`loadDonorPiece: unknown donor ${pack}/${slug} (not in the calibrated normalized index)`);
 
   const cacheKey = pack + "/" + slug;
   if (!DONOR_GLTF_CACHE[cacheKey]) {
@@ -300,10 +331,12 @@ export async function loadDonorPiece(pack, slug, opts) {
   const realmProfile = opts.realmProfile || null;
   const sockets = [];
   const materialFamiliesApplied = [];
+  let loadedV2Metadata = null;
 
   group.traverse((obj) => {
     const donorData = obj.userData && obj.userData.genesisDonor;
     if (donorData) {
+      if (donorData.schema === "genesis.donor.v2") loadedV2Metadata = donorData;
       if (Array.isArray(donorData.sockets)) {
         donorData.sockets.forEach((s) => sockets.push(Object.assign({ node: obj.name }, s)));
       }
@@ -315,14 +348,28 @@ export async function loadDonorPiece(pack, slug, opts) {
     }
   });
 
+  if (entry.schema === "genesis.donor.v2" &&
+      (!loadedV2Metadata || loadedV2Metadata.assetId !== entry.assetId ||
+       loadedV2Metadata.sourceSha256 !== entry.sourceSha256 ||
+       loadedV2Metadata.recipeHash !== entry.recipeHash)) {
+    throw new Error(`loadDonorPiece: v2 provenance mismatch for ${pack}/${slug}`);
+  }
+
   group.userData.genesisDonorPiece = {
+    schema: entry.schema || "genesis.donor.v1",
+    assetId: entry.assetId || `${pack}/${slug}`,
     pack, slug,
     admissionClass: entry.admissionClass,
     category: entry.category,
     semanticParts: entry.semanticParts,
     materialFamiliesApplied,
     canonicalScale: entry.canonicalScale,
+    sourceSha256: entry.sourceSha256 || null,
     recipeHash: entry.recipeHash,
+    normalizedFrame: entry.normalizedFrame || null,
+    structuralGrid: entry.structuralGrid || null,
+    bounds: entry.bounds || null,
+    qaStatus: entry.qaStatus || null,
     companionLeaf: entry.companionLeaf || null,
   };
   group.userData.sockets = sockets;
@@ -347,6 +394,7 @@ export function socketsByType(group, type) {
 // classic caller without a second edit later. ─────────────────────────────────────────────────────
 if (typeof window !== "undefined") {
   window.TheaterDonor = {
-    loadDonorPiece, donorIndexFor, donorGradeColor, donorOutlineStyleFor, socketsOf, socketsByType,
+    loadDonorPiece, donorIndexFor, donorEntriesForRead, donorRegistryFromIndex,
+    donorGradeColor, donorOutlineStyleFor, socketsOf, socketsByType,
   };
 }

@@ -152,16 +152,17 @@ group("A0 — RED-FIRST: KIT_SHELL_ENABLED / itrKitShellWallRuns / itrKitShellFl
   ok(preKS3Src.indexOf("KIT_SHELL_ENABLED") < 0, "RED: KIT_SHELL_ENABLED does not exist at c6ed1fcb — proves this is genuinely new");
 }
 
-group("A1 — real admitted donor socket data sanity (dev/model-foundry/KS1-PROVENANCE.json) — the module-span constants this unit's placement math assumes");
+group("A1 — KGR-3 structural-grid contract and transformed dimensions in real admitted provenance");
 {
   const provenance = JSON.parse(read("dev/model-foundry/KS1-PROVENANCE.json"));
   const byslug = (slug) => provenance.pieces.find((p) => p.pack === "kenney-modular-dungeon-kit" && p.slug === slug);
   const wall = byslug("template-wall"), floor = byslug("template-floor"), corner = byslug("template-wall-corner");
   ok(!!wall && !!floor && !!corner, "template-wall/template-floor/template-wall-corner are all present in the admitted corpus");
-  const e = wall.sockets.find((s) => s.type === "butt-join-e"), w = wall.sockets.find((s) => s.type === "butt-join-w");
-  const span = e.position[0] - w.position[0];
-  ok(Math.abs(span - 2.0) < 1e-6, `template-wall's own butt-join-e minus butt-join-w = ${span.toFixed(4)} world units (expected exactly 2.0 — the module span itrKitShellEmitRun tiles by)`);
-  ok(Math.abs(wall.scaledDims[0] - 2.0) < 1e-6, `template-wall's own measured scaledDims[0] (X width) = ${wall.scaledDims[0].toFixed(4)} (expected 2.0, confirms the socket-derived span independently)`);
+  ok(wall.structuralGrid?.targetWorldUnits === 2.0 && wall.structuralGrid?.orientationSteps === 4 && wall.structuralGrid?.joinMode === "cell-orientation",
+    "template-wall inherits the measured 2.0u module and four quarter-turn placement contract");
+  ok(!wall.sockets.some((s) => String(s.type).startsWith("butt-join-")),
+    "template-wall v2 metadata contains no superseded butt-join socket");
+  ok(Math.abs(wall.scaledDims[0] - 2.0) < 1e-6, `template-wall's transformed scaledDims[0] (X width) = ${wall.scaledDims[0].toFixed(4)} (expected 2.0)`);
   ok(Math.abs(floor.scaledDims[0] - 2.0) < 1e-6 && Math.abs(floor.scaledDims[2] - 2.0) < 1e-6, `template-floor's own measured scaledDims = [${floor.scaledDims.map((n) => n.toFixed(3))}] (expected X=Z=2.0 — a clean 2x2-cell square tile)`);
   // DOCUMENTED SCOPE DECISION (see this unit's own report / KENNEY-SOCKET-WAVE.md addendum): the corner
   // piece's own measured footprint (0.5x0.5, a quarter of a grid cell) does NOT match a 1-world-unit
@@ -495,10 +496,10 @@ group("G2 — item 3 (gate-door west-facing artifact) investigated: donor classi
   // a real regression guard (if a future donor-pack refresh silently drops classification on some node,
   // this fails), never a fabricated "fix" for a bug that empirical testing disproved.
   const index = JSON.parse(read("assets/models-normalized/kenney-modular-dungeon-kit/index.json"));
-  const entry = index["gate-door"];
+  const entry = index.assets["gate-door"];
   ok(!!entry, "gate-door is present in the normalized index");
   ok(JSON.stringify(entry.materialFamilies.slice().sort()) === JSON.stringify(["stone", "wood"]), `gate-door's own materialFamilies is exactly ["stone","wood"] (frame+leaf, both classified, nothing left unmapped) — got ${JSON.stringify(entry.materialFamilies)}`);
-  ok(entry.semanticParts.indexOf("doorway-frame") >= 0 && entry.semanticParts.indexOf("door-leaf") >= 0, "gate-door's own semanticParts names BOTH the frame and the leaf");
+  ok(entry.category === "doorway-frame" && !!entry.semanticParts["door-leaf"], "gate-door v2 metadata names the frame category and detachable door-leaf semantic part");
   const hinge = entry.sockets.find((s) => s.type === "hinge");
   ok(!!hinge, "gate-door carries a hinge socket (the leaf's own mount point)");
   // ORIENTATION-INDEPENDENCE: interiorBuildKitDoorMesh (theater-boot.js) applies ONLY a whole-group

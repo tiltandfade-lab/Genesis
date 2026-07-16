@@ -58,8 +58,8 @@
         ],
         "up": "+Y"
       },
-      "qaStatus": "approved-dev",
-      "recipeHash": "06fa1e65b97cf88a10aa704d58003f566a4198087d2ac02f7d9779c9223900c5",
+      "qaStatus": "approved-runtime",
+      "recipeHash": "58ccda5b729a544faddb42bc34c9d25d543a6eb70391cd23507af4d34476e4e7",
       "schema": "genesis.donor.v2",
       "semanticParts": {},
       "sockets": [
@@ -98,7 +98,7 @@
       "structuralGrid": null
     }
   },
-  "calibrationHash": "f5450be4667690abdc98d5fd7eb9d97a957608bc93d4d1b375e8fbb97c88e259",
+  "calibrationHash": "edd57bdb9f00b564ac607a2f9f8a7501a72db9abb5a950cbc4d14ddd2f1a41ba",
   "normalizerVersion": "kgr3-calibration-v2",
   "pack": "kenney-factory-kit",
   "schema": "genesis.donor-index.v2"

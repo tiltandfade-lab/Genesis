@@ -138,7 +138,7 @@ const legacyStructuralIds=calibratedIds.filter(id=>structuralPacks.has(id.split(
 check("calibration ownership is 47 structural + ten pilots + one named rejection",
   legacyStructuralIds.length===47 && namedPilotAssets.size===10 &&
   calibratedIds.length===legacyStructuralIds.length+namedPilotAssets.size+1 &&
-  [...namedPilotAssets].every(id=>calibration.assets[id]?.qaStatus==="approved-dev") &&
+  [...namedPilotAssets].every(id=>calibration.assets[id]?.qaStatus==="approved-runtime") &&
   calibration.assets[rejectedPilot]?.qaStatus==="quarantined",
   `got ${calibratedIds.length} total / ${legacyStructuralIds.length} structural`);
 const structuralRecords=[...structuralPacks].map(pack=>calibration.packs[pack]);

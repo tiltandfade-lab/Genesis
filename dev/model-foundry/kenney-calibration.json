@@ -1762,7 +1762,7 @@
         ],
         "yawRadians": 0
       },
-      "qaStatus": "approved-dev",
+      "qaStatus": "approved-runtime",
       "notes": [
         "KGR-4C reviewed floor contact; rotationally symmetric +Z forward.",
         "Raw authored texture unavailable; Genesis-material review required."
@@ -1837,7 +1837,7 @@
         ],
         "yawRadians": 0
       },
-      "qaStatus": "approved-dev",
+      "qaStatus": "approved-runtime",
       "notes": [
         "KGR-4C reviewed floor contact; +Z forward.",
         "Raw authored texture unavailable; Genesis-material review required."
@@ -1912,7 +1912,7 @@
         ],
         "yawRadians": 0
       },
-      "qaStatus": "approved-dev",
+      "qaStatus": "approved-runtime",
       "notes": [
         "KGR-4C reviewed floor contact; lid hinge at -Z establishes +Z front.",
         "Raw authored texture unavailable; Genesis-material review required."
@@ -1987,7 +1987,7 @@
         ],
         "yawRadians": 0
       },
-      "qaStatus": "approved-dev",
+      "qaStatus": "approved-runtime",
       "notes": [
         "KGR-4C reviewed pedestal floor contact; rotationally symmetric +Z forward."
       ]
@@ -2061,7 +2061,7 @@
         ],
         "yawRadians": 0
       },
-      "qaStatus": "approved-dev",
+      "qaStatus": "approved-runtime",
       "notes": [
         "KGR-4C reviewed low bench floor contact; backless seat uses +Z forward.",
         "Uniform semantic-size scale replaces impossible bench candidate without distortion."
@@ -2136,7 +2136,7 @@
         ],
         "yawRadians": 0
       },
-      "qaStatus": "approved-dev",
+      "qaStatus": "approved-runtime",
       "notes": [
         "KGR-4C reviewed four-leg floor contact; backrest at -Z establishes +Z front."
       ]
@@ -2210,10 +2210,10 @@
         ],
         "yawRadians": 0
       },
-      "qaStatus": "approved-dev",
+      "qaStatus": "approved-runtime",
       "notes": [
         "KGR-4C reviewed wall contact at z=0; identity frame +Z faces away from wall.",
-        "Authored metal/lamp primitives share one node; Genesis iron material preserves geometry but not authored emissive separation."
+        "Authored metal/lamp primitives are preserved as Genesis iron/glass families; light emission remains runtime-authored."
       ]
     },
     "kenney-furniture-kit/lampRoundFloor": {
@@ -2285,10 +2285,10 @@
         ],
         "yawRadians": 0
       },
-      "qaStatus": "approved-dev",
+      "qaStatus": "approved-runtime",
       "notes": [
         "KGR-4C reviewed circular base floor contact; rotationally symmetric +Z forward.",
-        "Authored metal/lamp primitives share one node; Genesis iron material preserves geometry but not authored emissive separation."
+        "Authored metal/lamp primitives are preserved as Genesis iron/glass families; light emission remains runtime-authored."
       ]
     },
     "kenney-fantasy-town-kit/lantern": {
@@ -2360,7 +2360,7 @@
         ],
         "yawRadians": 0
       },
-      "qaStatus": "approved-dev",
+      "qaStatus": "approved-runtime",
       "notes": [
         "KGR-4C reviewed post base floor contact; rotationally symmetric +Z forward.",
         "Raw authored texture unavailable; Genesis-material review required."
@@ -2435,7 +2435,7 @@
         ],
         "yawRadians": 0
       },
-      "qaStatus": "approved-dev",
+      "qaStatus": "approved-runtime",
       "notes": [
         "KGR-4C reviewed plinth floor contact; +Z forward.",
         "Raw authored texture unavailable; Genesis-material review required."

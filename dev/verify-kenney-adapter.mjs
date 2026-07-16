@@ -615,10 +615,18 @@ console.log("\n=== 6. KGR-3 calibrated v2 indexes + runtime compatibility bounda
   if (registryHelper) {
     const indexes = Object.keys(calibration.packs).map((pack) =>
       JSON.parse(readText(`assets/models-normalized/${pack}/index.json`)));
-    const productionCount = indexes.reduce((count, index) =>
-      count + Object.keys(registryHelper(index)).length, 0);
-    check("KGR-3 D8: current needs-review v2 indexes yield zero production registry entries",
-      productionCount === 0, `entries=${productionCount}`);
+    const expectedRuntimeIds = new Set([
+      "kenney-retro-fantasy-kit/detail-barrel", "kenney-pirate-kit/crate", "kenney-pirate-kit/chest",
+      "kenney-furniture-kit/tableRound", "kenney-furniture-kit/benchCushionLow", "kenney-furniture-kit/chair",
+      "kenney-furniture-kit/lampWall", "kenney-furniture-kit/lampRoundFloor",
+      "kenney-fantasy-town-kit/lantern", "kenney-factory-kit/lever-double",
+    ]);
+    const productionIds = indexes.flatMap((index) => Object.keys(registryHelper(index)));
+    check("KGR-3 D8: production registry is exactly the ten named approved-runtime pilots",
+      productionIds.length === expectedRuntimeIds.size &&
+      productionIds.every((id) => expectedRuntimeIds.has(id)) &&
+      [...expectedRuntimeIds].every((id) => productionIds.includes(id)),
+      JSON.stringify(productionIds));
 
     const sampleIndex = indexes[0];
     const [sampleSlug, sampleEntry] = Object.entries(sampleIndex.assets)[0];

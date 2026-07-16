@@ -94,7 +94,7 @@ function quatRotatesPlusZAway(q) {
 }
 
 mkdirSync(OUT, { recursive:true });
-const report = { schema:"genesis.kenney-pilot-calibration-report.v1", unit:"KGR-4C", qaState:"approved-dev", pilots:[], rejectedCandidates:[], captures:{perAsset:{},lineup:null}, consoleErrors:[], deterministic:{} };
+const report = { schema:"genesis.kenney-pilot-calibration-report.v1", unit:"KGR-4C", qaState:"approved-runtime", pilots:[], rejectedCandidates:[], captures:{perAsset:{},lineup:null}, consoleErrors:[], deterministic:{} };
 
 console.log("\n=== KGR-4C calibration records ===");
 for (const [pack, scale] of Object.entries(packs)) {
@@ -104,14 +104,16 @@ for (const [pack, scale] of Object.entries(packs)) {
   check(`${pack} canonicalScale=${scale}`, close(record?.canonicalScale, scale));
 }
 check("exactly ten named pilot candidates", pilots.length === 10 && pilotIds.size === 10);
-check("orchestrator has not promoted any pilot to approved-runtime", pilots.every(({id}) => calibration.assets[id]?.qaStatus !== "approved-runtime"));
+const runtimeIds = Object.entries(calibration.assets).filter(([, record]) => record.qaStatus === "approved-runtime").map(([id]) => id);
+check("exactly the ten named pilots are approved-runtime", runtimeIds.length === pilotIds.size && runtimeIds.every(id => pilotIds.has(id)) && pilots.every(({id}) => runtimeIds.includes(id)));
+check("approved-dev is empty after promotion", Object.values(calibration.assets).every(record => record.qaStatus !== "approved-dev"));
 
 console.log("\n=== KGR-4C normalized contracts ===");
 for (const item of pilots) {
   const { id, mount, envelope } = item, record = calibration.assets[id], censusEntry = censusById.get(id);
   const pack = id.split("/")[0], glb = readGlb(normalizedPath(id)), metadata = donorMetadata(glb.json);
   const index = JSON.parse(readFileSync(join(NORMALIZED, pack, "index.json"), "utf8")).assets[id.split("/")[1]];
-  check(`${id} is approved-dev`, record?.qaStatus === "approved-dev" && metadata?.qaStatus === "approved-dev" && index?.qaStatus === "approved-dev");
+  check(`${id} is approved-runtime`, record?.qaStatus === "approved-runtime" && metadata?.qaStatus === "approved-runtime" && index?.qaStatus === "approved-runtime");
   check(`${id} source hash matches census, source bytes, index, and GLB`, !!censusEntry && record.sourceSha256 === censusEntry.sha256 && record.sourceSha256 === fileSha256(assetPath(id)) && index.sourceSha256 === record.sourceSha256 && metadata.sourceSha256 === record.sourceSha256);
   check(`${id} uses uniform positive asset scale`, record.preTransform.scale.length === 3 && record.preTransform.scale.every(finite) && record.preTransform.scale.every(value => value > 0) && close(record.preTransform.scale[0], record.preTransform.scale[1], 1e-12) && close(record.preTransform.scale[1], record.preTransform.scale[2], 1e-12));
   if (id.endsWith("/benchCushionLow")) check(`${id} has the sole justified semantic scale`, !close(record.preTransform.scale[0], 1, 1e-12) && record.scaleReason === "semantic-size:height 0.30-0.65u; long axis 0.65-1.80u");

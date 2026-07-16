@@ -366,6 +366,61 @@ function itrDoorIndex(plan) {
   return byCell;
 }
 
+// QF-D1 (docs/DESIGN-REVIEW-2026-07-15.md §0, docs/KENNEY-SOCKET-WAVE.md KS-2): the door aperture's
+// WIDTH axis — which cell axis the frame's two jambs offset along, vs. which axis is the passage/
+// depth direction — used to derive off room-rect EDGE MEMBERSHIP (onLeftRight/onTopBottom against
+// doorRoom's own bounding rect, below). That silently defaults WRONG on corner cells (on BOTH edges at
+// once), doors whose doorRoom resolves to the NEIGHBORING room rather than the room whose wall is
+// actually pierced, and non-rectangular rooms' notch cells (octagon/L/cave — Stage C made these
+// common): the frame rotates 90deg from the wall it's actually set into, reading as "a hollow column
+// construction hanging out in front of the door" (Adam's own description, DESIGN-REVIEW-2026-07-15.md
+// §0) rather than a doorframe IN the wall. The fix: read the LOCAL WALL RUN directly off the cell grid
+// — a plain WALL cell adjacent to the door, along an axis, IS that wall's run direction (shape-
+// independent, corner-safe: a corner door's true local wall run is whichever direction still has
+// contiguous WALL next to it, regardless of which edge(s) of the room's abstract bounding rect it
+// happens to sit on). Scans outward up to ITR_WALL_RUN_SCAN_MAX cells per direction (a door sitting
+// right at a room corner may need to look past the immediate corner-turn cell before the WALL run is
+// unambiguous) and picks whichever axis's nearest WALL evidence is closer; a genuine tie (including "no
+// WALL found on either axis within the scan window" — a truly degenerate/interior-door topology)
+// demotes to the OLD room-rect edge read as a documented TIEBREAK ONLY, never the primary signal
+// (Adam's own KS-2 ruling: "room-rect edge membership demoted to tiebreak only").
+// itrCellCodeAt(x,y,plan) is DEFINED FURTHER DOWN this file (the BW2-5 door-reveal general-purpose
+// bounds-checked lookup, `function itrCellCodeAt(x, y, plan)` — reused here rather than duplicated
+// with a different arg order, which would silently shadow it via classic-script function hoisting).
+const ITR_WALL_RUN_SCAN_MAX = 3;
+function itrWallRunScanDist(plan, x, y, dx, dy) {
+  for (let d = 1; d <= ITR_WALL_RUN_SCAN_MAX; d++) {
+    const code = itrCellCodeAt(x + dx * d, y + dy * d, plan);
+    if (code === SPATIAL_CELL.WALL) return d;
+    if (code == null) return Infinity; // ran off the map before finding a wall -> no evidence this axis
+  }
+  return Infinity;
+}
+function itrDoorWidthAxisIsZ(x, y, plan, onLeftRight, onTopBottom) {
+  const nsEvidence = Math.min(itrWallRunScanDist(plan, x, y, 0, -1), itrWallRunScanDist(plan, x, y, 0, 1));
+  const ewEvidence = Math.min(itrWallRunScanDist(plan, x, y, -1, 0), itrWallRunScanDist(plan, x, y, 1, 0));
+  if (nsEvidence < ewEvidence) return true;  // nearer N/S WALL -> the wall runs north-south -> width axis Z
+  if (ewEvidence < nsEvidence) return false; // nearer E/W WALL -> the wall runs east-west -> width axis X
+  return !(onTopBottom && !onLeftRight); // genuine tie/no-evidence: the OLD room-rect read, tiebreak only
+}
+
+// KS-2 (docs/KENNEY-SOCKET-WAVE.md): itrKitDoorEligible — "a kit doorway piece fits the aperture
+// (standard 1-cell doors)". The admitted kenney-modular-dungeon-kit/gate-door piece is a FIXED-WIDTH
+// module measuring 2.2 world units across its own width axis (dev/model-foundry/KS1-PROVENANCE.json —
+// butt-join-e/w at +-1.1) against Genesis's 1.0-world-unit (5ft) GRID LAW cell: mounted centered on a
+// single door cell, its extra half-cell of width on each side (1.1 - 0.5 = 0.6 world units) overhangs
+// into the TWO cells flanking the door along the width axis. That overhang is architecturally honest
+// (masonry doorway jambs legitimately extend into the flanking wall mass) ONLY when those flanking
+// cells are themselves solid WALL — never void, floor, or another door, which would read as the frame
+// punching into open space or colliding with a second doorway. Squeeze/crawl apertures (a narrower,
+// irregular passage by design) never fit this fixed-width module — prism only, always.
+function itrKitDoorEligible(x, y, plan, widthAxisIsZ, squeeze) {
+  if (squeeze) return false;
+  const dx = widthAxisIsZ ? 0 : 1, dz = widthAxisIsZ ? 1 : 0;
+  return itrCellCodeAt(x + dx, y + dz, plan) === SPATIAL_CELL.WALL
+    && itrCellCodeAt(x - dx, y - dz, plan) === SPATIAL_CELL.WALL;
+}
+
 // scaleDomain per cell (rooms carry their own; corridors carry .heightScale when part of a >1.0 domain;
 // everything else defaults to 1.0 human scale) — used to size FLOOR/DOOR instances, whose cell IS
 // directly inside a room/corridor.
@@ -439,6 +494,25 @@ function itrFocusRoomSet(plan, focusSegNum, radius) {
 // itrFocusRoomSet just above, still the ONLY function that computes a neighbor-hop keep set (this
 // unit never edits it, just stops calling it by default).
 var ITR_ACTIVE_ROOM_ONLY = true;
+
+// ─── KS-2 (docs/KENNEY-SOCKET-WAVE.md): KIT_DOORS_ENABLED — "the doorway becomes an assembly" ─────────
+// Default ON (Adam's KS-1 gate having landed): a standard 1-cell door whose kit piece FITS the aperture
+// (itrKitDoorEligible, below — non-squeeze, both wall-run neighbors genuinely WALL so the kit frame's
+// extra width lands on solid wall mass, never void/floor/another door) mounts the normalized
+// kenney-modular-dungeon-kit/gate-door piece (frame socketed into the wall run via its butt-join
+// sockets + leaf mounted on the frame's `hinge` socket, theater-boot.js's interiorBuildInteractables)
+// INSTEAD of the D4d prism jambs/header/arch below — this file only decides ELIGIBILITY + the frame's
+// PLACEMENT transform (pure data, no THREE); theater-boot.js's ES-module GL layer owns the actual mesh
+// swap (async donor-piece load, following the SAME preload-then-clone convention
+// loadWholeObjectBuilders/glbLoadScene already established for whole-object GLBs — see that file's own
+// header). `var` (not `const`) — same classic-script "auto-attaches to window" convention
+// ITR_ACTIVE_ROOM_ONLY above documents — so a live session or a verify harness can flip it at runtime
+// (`window.KIT_DOORS_ENABLED = false`) for an A/B capture; OFF restores the prism path for EVERY door,
+// byte-for-byte identical to pre-KS-2 (the QF-D1 axis fix above still applies either way — it is a
+// correctness fix to the prism path itself, not part of the kit swap). Squeeze crawls, odd widths, and
+// any aperture the kit can't fit ALWAYS fall back to the (QF-D1-fixed) prism path regardless of this
+// flag's state — "every prism path survives as fallback" per the wave's own posture.
+var KIT_DOORS_ENABLED = true;
 
 // itrActiveRoomKeepSet(plan, focusSegNum) -> Set([focusSegNum]) | null. Mirrors itrFocusRoomSet's own
 // A missing focusSegNum preserves the explicit whole-plan study/harness path (`null`). An explicit but
@@ -1206,6 +1280,7 @@ function interiorBuildBoard(plan, opts) {
 
   const idx = (x, y) => y * plan.cellW + x;
   const floor = [], wall = [], doorframe = [], pillar = [];
+  const kitDoors = []; // KS-2: one entry per KIT_DOORS_ENABLED-eligible door cell — {x,z,widthAxisIsZ,pack,slug}
   const portals = []; // STAGE-A A1 — DARKNESS PORTAL cards, populated in the DOOR branch below
   let minX = Infinity, maxX = -Infinity, minZ = Infinity, maxZ = -Infinity;
   const track = (x, z) => { minX = Math.min(minX, x); maxX = Math.max(maxX, x); minZ = Math.min(minZ, z); maxZ = Math.max(maxZ, z); };
@@ -1337,60 +1412,74 @@ function interiorBuildBoard(plan, opts) {
 
         // D4d — DOORFRAME MASS FIX (replaces the old single wFrac x wFrac SOLID box). widthAxisIsZ
         // picks which cell axis the aperture's own WIDTH spans (jambs offset along it) vs. which axis
-        // is the passage/depth direction (the frame's own slim axis) — reusing the SAME onLeftRight/
-        // onTopBottom edge read the wall-thickness reveal block below already derives, never a second
-        // derivation. Defaults TRUE (aperture spans z, passage along x) for the rare/degenerate case
-        // (doorRoom unresolved, or an interior door not on any room-rect edge) — the SAME "never
-        // throws, degrades safely" precedent the reveal block below documents for its own axis read.
-        const widthAxisIsZ = !(onTopBottom && !onLeftRight);
-        const frameDepth = revealW + ITR_FRAME_PROUD; // hugs the wall plane: wall's own cut thickness + a small proud lip
-        const jambOffset = wFrac / 2 - ITR_JAMB_WIDTH_FRAC / 2; // jamb's OUTER edge lands flush with the aperture edge (== the old box's own edge)
-        [-1, 1].forEach((sign) => {
+        // is the passage/depth direction (the frame's own slim axis). QF-D1 (2026-07-15, see
+        // itrDoorWidthAxisIsZ's own header above): derived from the LOCAL WALL RUN (a wall-grid
+        // neighbor scan), NOT room-rect edge membership — the old onLeftRight/onTopBottom read is
+        // passed through only as that function's documented tiebreak. Shared by the wall-thickness
+        // reveal block AND the STAGE-A A1 darkness-portal block below (both further down) — computed
+        // ONCE here, never a second derivation, so the frame/reveal/portal geometry always agree on
+        // which axis the pierced wall actually runs.
+        const widthAxisIsZ = itrDoorWidthAxisIsZ(x, y, plan, onLeftRight, onTopBottom);
+        // KS-2: does the admitted kenney-modular-dungeon-kit/gate-door piece fit THIS aperture? See
+        // itrKitDoorEligible's own header. When it does (and the flag is on), the kit piece supplies
+        // BOTH the static frame AND the dynamic hinge+leaf (theater-boot.js's interiorBuildKitDoorMesh)
+        // — the prism jamb/header/arch prisms below are skipped entirely for this cell (never doubled
+        // up with the kit mesh), while the wall-thickness reveal + STAGE-A A1 darkness-portal blocks
+        // further down are UNCHANGED (they render the surrounding WALL, not the frame, regardless of
+        // which frame geometry fills the aperture).
+        const kitEligible = !!KIT_DOORS_ENABLED && itrKitDoorEligible(x, y, plan, widthAxisIsZ, squeeze);
+        if (kitEligible) {
+          kitDoors.push({ x, z: y, widthAxisIsZ, pack: "kenney-modular-dungeon-kit", slug: "gate-door" });
+        } else {
+          const frameDepth = revealW + ITR_FRAME_PROUD; // hugs the wall plane: wall's own cut thickness + a small proud lip
+          const jambOffset = wFrac / 2 - ITR_JAMB_WIDTH_FRAC / 2; // jamb's OUTER edge lands flush with the aperture edge (== the old box's own edge)
+          [-1, 1].forEach((sign) => {
+            doorframe.push(widthAxisIsZ
+              ? { x, z: y, sx: frameDepth, sy: h, sz: ITR_JAMB_WIDTH_FRAC, color: trimColor, squeeze, transition: !!(d && d.transition), oz: sign * jambOffset, jamb: true }
+              : { x, z: y, sx: ITR_JAMB_WIDTH_FRAC, sy: h, sz: frameDepth, color: trimColor, squeeze, transition: !!(d && d.transition), ox: sign * jambOffset, jamb: true });
+          });
+          // header/lintel: spans the FULL aperture width (same outer span the two jambs bracket) at the
+          // SAME slim depth, stacked ABOVE the jambs' own [0,h] span (yBase=h) — so that entire span,
+          // the D4 leaf's full clear opening, stays completely open between the jambs (nothing but the
+          // two slim posts occupies it).
           doorframe.push(widthAxisIsZ
-            ? { x, z: y, sx: frameDepth, sy: h, sz: ITR_JAMB_WIDTH_FRAC, color: trimColor, squeeze, transition: !!(d && d.transition), oz: sign * jambOffset, jamb: true }
-            : { x, z: y, sx: ITR_JAMB_WIDTH_FRAC, sy: h, sz: frameDepth, color: trimColor, squeeze, transition: !!(d && d.transition), ox: sign * jambOffset, jamb: true });
-        });
-        // header/lintel: spans the FULL aperture width (same outer span the two jambs bracket) at the
-        // SAME slim depth, stacked ABOVE the jambs' own [0,h] span (yBase=h) — so that entire span,
-        // the D4 leaf's full clear opening, stays completely open between the jambs (nothing but the
-        // two slim posts occupies it).
-        doorframe.push(widthAxisIsZ
-          ? { x, z: y, sx: frameDepth, sy: ITR_HEADER_HEIGHT, sz: wFrac, color: trimColor, squeeze, transition: !!(d && d.transition), yBase: h, header: true }
-          : { x, z: y, sx: wFrac, sy: ITR_HEADER_HEIGHT, sz: frameDepth, color: trimColor, squeeze, transition: !!(d && d.transition), yBase: h, header: true });
-        track(x, y);
+            ? { x, z: y, sx: frameDepth, sy: ITR_HEADER_HEIGHT, sz: wFrac, color: trimColor, squeeze, transition: !!(d && d.transition), yBase: h, header: true }
+            : { x, z: y, sx: wFrac, sy: ITR_HEADER_HEIGHT, sz: frameDepth, color: trimColor, squeeze, transition: !!(d && d.transition), yBase: h, header: true });
 
-        // BW2-5 item 1: ARCH HEADER — "doorframe prisms gain an arch header (2-3 stacked prisms
-        // corbelling in)". Plain (non-squeeze) doors only — a squeeze crawl-space reads as a crude
-        // tight passage, never a dressed archway. Two narrowing prisms stack ABOVE the D4d header (its
-        // own yBase shifted up by ITR_HEADER_HEIGHT so the corbels keep narrowing IN from the header's
-        // own slim footprint, never the old wide column's) via `yBase` (BW2-5's own field — see the
-        // constants block's header comment).
-        if (!squeeze) {
-          doorframe.push({
-            x, z: y, sx: wFrac * ITR_ARCH_STEP1_WIDTH_FRAC, sy: ITR_ARCH_STEP1_HEIGHT,
-            sz: wFrac * ITR_ARCH_STEP1_WIDTH_FRAC, color: trimColor, yBase: h + ITR_HEADER_HEIGHT, archStep: 1,
-          });
-          doorframe.push({
-            x, z: y, sx: wFrac * ITR_ARCH_STEP2_WIDTH_FRAC, sy: ITR_ARCH_STEP2_HEIGHT,
-            sz: wFrac * ITR_ARCH_STEP2_WIDTH_FRAC, color: trimColor,
-            yBase: h + ITR_HEADER_HEIGHT + ITR_ARCH_STEP1_HEIGHT, archStep: 2,
-          });
+          // BW2-5 item 1: ARCH HEADER — "doorframe prisms gain an arch header (2-3 stacked prisms
+          // corbelling in)". Plain (non-squeeze) doors only — a squeeze crawl-space reads as a crude
+          // tight passage, never a dressed archway. Two narrowing prisms stack ABOVE the D4d header (its
+          // own yBase shifted up by ITR_HEADER_HEIGHT so the corbels keep narrowing IN from the header's
+          // own slim footprint, never the old wide column's) via `yBase` (BW2-5's own field — see the
+          // constants block's header comment).
+          if (!squeeze) {
+            doorframe.push({
+              x, z: y, sx: wFrac * ITR_ARCH_STEP1_WIDTH_FRAC, sy: ITR_ARCH_STEP1_HEIGHT,
+              sz: wFrac * ITR_ARCH_STEP1_WIDTH_FRAC, color: trimColor, yBase: h + ITR_HEADER_HEIGHT, archStep: 1,
+            });
+            doorframe.push({
+              x, z: y, sx: wFrac * ITR_ARCH_STEP2_WIDTH_FRAC, sy: ITR_ARCH_STEP2_HEIGHT,
+              sz: wFrac * ITR_ARCH_STEP2_WIDTH_FRAC, color: trimColor,
+              yBase: h + ITR_HEADER_HEIGHT + ITR_ARCH_STEP1_HEIGHT, archStep: 2,
+            });
+          }
         }
+        track(x, y);
 
         // BW2-5 item 1: WALL-THICKNESS REVEAL — "visible wall THICKNESS at openings (door reveals —
         // the mock's doorways read deep)". The door frame's own footprint (wFrac) is narrower than the
         // full 1x1 cell; the (1-wFrac)/2 margin on either side used to render as pure void (you could
         // see clean through to whatever sits past the cell edge). Two thin WALL-colored jamb slabs fill
         // exactly that margin, offset within the cell via the new `ox`/`oz` fields, oriented
-        // PERPENDICULAR to the pierced wall's own run. Axis detection reads the neighboring ROOM's own
-        // RECT EDGE (doorRoom, already resolved above; itrRoomIndex's own rasterization already covers
-        // a room's full footprint INCLUDING its perimeter — a door sitting on that rect's edge column/
-        // row IS the wall it pierces, never "outside" the rect numerically, so this checks WHICH edge,
-        // not inside-vs-outside). Verified against real spatializePlan output — the door cell's own
-        // immediate 4-neighbors are frequently ALL floor-coded (a corridor mouth widening right at the
-        // threshold), so a neighbor-WALL scan measurably missed most real doors; the room rect edge is
-        // the reliable signal. Degrades to no reveal off a room's own edge (rare/degenerate topology,
-        // e.g. an interior door) — never throws.
+        // PERPENDICULAR to the pierced wall's own run. QF-D1 (2026-07-15): axis now reads `widthAxisIsZ`
+        // (the hoisted LOCAL WALL RUN scan, above) instead of the room-rect edge test this block used to
+        // derive independently — the old room-rect-edge rationale ("the door cell's own immediate
+        // 4-neighbors are frequently ALL floor-coded... a neighbor-WALL scan measurably missed most real
+        // doors") is superseded by itrDoorWidthAxisIsZ's own multi-cell scan (up to
+        // ITR_WALL_RUN_SCAN_MAX cells out, not just the immediate neighbor), which both correctly
+        // handles corner/notch cells room-rect membership got wrong AND keeps the room-rect read alive
+        // as that function's own documented tiebreak. Degrades to no reveal off a room's own edge
+        // (rare/degenerate topology, e.g. an interior door) — never throws.
         if (revealW > 0.01 && doorRoom) {
           const revealSceneDir = sceneDirectionFor(kit.realmId, doorRoom.role);
           const revealColor = itrDarkenHex(kit.wallColor, revealSceneDir.valueScript.wall);
@@ -1401,14 +1490,13 @@ function interiorBuildBoard(plan, opts) {
           // (the wall continues at full height past the door's own lintel), so this is both the
           // architecturally correct read AND keeps that invariant true.
           [-1, 1].forEach((sign) => {
-            if (onLeftRight && !onTopBottom) {
-              // the door sits on the room's own LEFT/RIGHT edge column -> it pierces a NORTH-SOUTH-
-              // running wall -> the passage is through x, so the jambs sit at the NORTH/SOUTH (z)
-              // margins, full width (x).
+            if (widthAxisIsZ) {
+              // the wall pierced runs NORTH-SOUTH -> the passage is through x, so the jambs sit at the
+              // NORTH/SOUTH (z) margins, full width (x).
               wall.push({ x, z: y, sx: 1, sy: baseH, sz: revealW, color: revealColor, scaleDomain: (d ? (d.heightScale || 1.0) : 1.0), oz: sign * (wFrac / 2 + revealW / 2) });
-            } else if (onTopBottom && !onLeftRight) {
-              // the door sits on the room's own TOP/BOTTOM edge row -> it pierces an EAST-WEST-running
-              // wall -> the jambs sit at the LEFT/RIGHT (x) margins, full depth (z).
+            } else {
+              // the wall pierced runs EAST-WEST -> the jambs sit at the LEFT/RIGHT (x) margins, full
+              // depth (z).
               wall.push({ x, z: y, sx: revealW, sy: baseH, sz: 1, color: revealColor, scaleDomain: (d ? (d.heightScale || 1.0) : 1.0), ox: sign * (wFrac / 2 + revealW / 2) });
             }
           });
@@ -1425,12 +1513,12 @@ function interiorBuildBoard(plan, opts) {
         if (ITR_ACTIVE_ROOM_ONLY && keepSet !== null && doorRoom) {
           const neighborSeg = ((d && d.betweenSegs) || []).find((s) => s !== doorRoom.segNum);
           if (neighborSeg == null || !keepSet.has(neighborSeg)) {
-            // outward = away from doorRoom's own center, along whichever axis the door sits on the
-            // rect edge of (same axis detection the reveal block above already shares) — the direction
-            // the corridor throat actually recedes into, not an arbitrary pick.
+            // outward = away from doorRoom's own center, along the passage axis (QF-D1: derived from
+            // widthAxisIsZ, the hoisted LOCAL WALL RUN scan, above — never the room-rect edge test) —
+            // the direction the corridor throat actually recedes into, not an arbitrary pick.
             let dirX = 0, dirZ = 0;
-            if (onLeftRight && !onTopBottom) dirX = (x === doorRoom.x) ? -1 : 1;
-            else if (onTopBottom && !onLeftRight) dirZ = (y === doorRoom.y) ? -1 : 1;
+            if (widthAxisIsZ) dirX = (x === doorRoom.x) ? -1 : 1;
+            else dirZ = (y === doorRoom.y) ? -1 : 1;
             const push = wFrac / 2 + ITR_PORTAL_DEPTH / 2 + ITR_PORTAL_GAP;
             portals.push({
               x, z: y,
@@ -1613,6 +1701,14 @@ function interiorBuildBoard(plan, opts) {
       wallTextureFile: wallTexVar ? wallTexVar.file : null, wallTextureWrap: wallTexVar ? wallTexVar.wrap : null,
       trimTextureFile: trimTexVar ? trimTexVar.file : null, trimTextureWrap: trimTexVar ? trimTexVar.wrap : null },
     instances: { floor: floor, wall: wall, doorframe: doorframe, pillar: pillar },
+    // KS-2 (docs/KENNEY-SOCKET-WAVE.md): one entry per KIT_DOORS_ENABLED-eligible door cell — a
+    // sibling of `instances` (same "not a 5th instance kind" convention skirt/cover/furniture below
+    // establish; the prism `instances.doorframe` list above already omits these cells' jamb/header/arch
+    // entries entirely, never doubled up). theater-boot.js's interiorBuildInteractables reads this
+    // (keyed "x,y") to decide, PER interactable door entry, whether to mount the kit gate-door
+    // assembly or fall back to the prism hinge+leaf — pure placement data (position/rotation axis),
+    // no THREE, no state; the state->pose mapping stays entirely theater-boot.js's job (D0's own split).
+    kitDoors: kitDoors,
     // GR4 (docs/GRAPHICS-ENGINE.md build unit GR4 STAGE LAW): the edge skirt, computed off the SAME
     // bounds this function already tracked above (no second bounds derivation) — a sibling of
     // `instances`, not a 5th member of it (see this function's own doc comment on why check 2's "4
@@ -1663,7 +1759,12 @@ function interiorBuildBoard(plan, opts) {
     meta: { roomCount: roomCount, floorCount: floor.length, wallCount: wall.length,
       doorCount: doorframe.length, pillarCount: pillar.length, lightCount: lights.length,
       skirtCount: skirt.length, coverCount: cover.length, furnitureCount: furniture.length,
-      wallPropsCount: wallProps.length, portalCount: portals.length }
+      wallPropsCount: wallProps.length, portalCount: portals.length,
+      // KS-2: doorCount above is the PRISM doorframe instance count (jamb/header/arch prisms) — it
+      // legitimately shrinks whenever a door cell resolves to the kit path instead (those cells push
+      // zero prism entries). kitDoorCount makes the swap visible rather than silently changing
+      // doorCount's own meaning underfoot.
+      kitDoorCount: kitDoors.length }
   };
 }
 

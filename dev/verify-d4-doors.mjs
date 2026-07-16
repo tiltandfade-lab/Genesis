@@ -421,6 +421,15 @@ const itrDoorBrokenTipRadSrc = extractFn(bootSrc, "itrDoorBrokenTipRad");
 const interiorBuildInteractableDoorMeshSrc = extractFn(bootSrc, "interiorBuildInteractableDoorMesh");
 const itrDoorRestPoseSrc = extractFn(bootSrc, "itrDoorRestPose");
 const interiorBuildInteractablesSrc = extractFn(bootSrc, "interiorBuildInteractables");
+// KS-2 (docs/KENNEY-SOCKET-WAVE.md) CONTRACT CHANGE: interiorBuildInteractables now unconditionally
+// calls itrKitDoorMap(kitDoors) at its own top (theater-boot.js) to build the per-cell kit-eligibility
+// lookup interiorBuildInteractableDoorMesh consumes — extracted here so this Part B sandbox stays
+// complete (a ReferenceError otherwise, RED-FIRST proof: reverting this one line reproduces
+// "itrKitDoorMap is not defined" at check 8 below). This harness itself never passes a `kitDoors` 5th
+// arg (byte-identical prism-only calls throughout), so itrKitDoorMap(undefined) always resolves to an
+// empty Map -> interiorBuildInteractableDoorMesh's new kitDoorInfo branch is always falsy -> every
+// assertion below still exercises the EXACT SAME byte-identical prism path as before KS-2.
+const itrKitDoorMapSrc = extractFn(bootSrc, "itrKitDoorMap");
 const interiorFloorTopAtSrc = extractFn(bootSrc, "interiorFloorTopAt");
 const kilterForSrc = extractFn(bootSrc, "kilterFor");
 const archKeywordsLine = extractFrozenArrLine(bootSrc, "ITR_DOOR_ARCH_KEYWORDS");
@@ -468,6 +477,7 @@ const itrDoorBuildShatterShardMeshSrc = extractFn(bootSrc, "itrDoorBuildShatterS
  ["itrDoorHingeSign", itrDoorHingeSignSrc], ["itrDoorBrokenTipRad", itrDoorBrokenTipRadSrc],
  ["interiorBuildInteractableDoorMesh", interiorBuildInteractableDoorMeshSrc], ["itrDoorRestPose", itrDoorRestPoseSrc],
  ["interiorBuildInteractables", interiorBuildInteractablesSrc], ["interiorFloorTopAt", interiorFloorTopAtSrc],
+ ["itrKitDoorMap", itrKitDoorMapSrc],
  ["kilterFor", kilterForSrc], ["ITR_DOOR_ARCH_KEYWORDS", archKeywordsLine], ["ITR_DOOR_SWING_DEG", swingDegLine],
  ["ITR_DOOR_SWING_AJAR_DEG", swingAjarDegLine], ["ITR_DOOR_SWING_OPEN_DEG", swingOpenDegLine],
  ["ITR_DOOR_BROKEN_TIP_BASE_DEG", brokenTipBaseDegLine], ["ITR_DOOR_BROKEN_TIP_JITTER_MULT", brokenTipJitterMultLine],
@@ -510,7 +520,7 @@ function buildSandbox() {
     shatterMinCountLine, shatterMaxCountLine, shatterCellLine, shatterApronCellsLine,
     shatterClearLaneLine, shatterSizeMinLine, shatterSizeMaxLine, shatterThicknessLine, shatterJitterFracLine,
     itrDoorShatterCountSrc, itrDoorShatterShardsSrc, itrDoorShatterShapeForSrc, itrDoorBuildShatterShardMeshSrc,
-    interiorFloorTopAtSrc, itrDoorRestPoseSrc, interiorBuildInteractableDoorMeshSrc,
+    interiorFloorTopAtSrc, itrDoorRestPoseSrc, itrKitDoorMapSrc, interiorBuildInteractableDoorMeshSrc,
     interiorBuildInteractablesSrc,
     "this.itrDoorShape=itrDoorShape; this.itrDoorIsArched=itrDoorIsArched;",
     "this.itrDoorHingeSign=itrDoorHingeSign; this.itrDoorBrokenTipRad=itrDoorBrokenTipRad;",
@@ -519,6 +529,7 @@ function buildSandbox() {
     "this.ITR_DOOR_BROKEN_GROUND_CLEARANCE=ITR_DOOR_BROKEN_GROUND_CLEARANCE;",
     "this.interiorBuildInteractableDoorMesh=interiorBuildInteractableDoorMesh;",
     "this.interiorBuildInteractables=interiorBuildInteractables;",
+    "this.itrKitDoorMap=itrKitDoorMap;",
     "this.itrDoorRestPose=itrDoorRestPose;",
     "this.itrDoorBrokenVariantFor=itrDoorBrokenVariantFor;",
     "this.itrDoorHangingSwingRad=itrDoorHangingSwingRad; this.itrDoorHangingDroopRad=itrDoorHangingDroopRad;",

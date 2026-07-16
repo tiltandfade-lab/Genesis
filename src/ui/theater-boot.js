@@ -123,6 +123,13 @@ import {
 } from "./spawn-grace.js";
 import * as Parts from "./theater-parts.js";
 import { resolveWholeObject, loadWholeObjectBuilders, WHOLE_OBJECT_REGISTRY, NEAREST_SUB } from "./theater-figures.js";
+// KS-2 (docs/KENNEY-SOCKET-WAVE.md, "the doorway becomes an assembly"): the KS-1 donor loader —
+// loadDonorPiece resolves a normalized Kenney piece (materials rebuilt, sockets on userData.sockets)
+// as a fresh THREE.Group clone; socketsByType is the flat-array convenience filter. See this file's
+// own KIT_DOOR_TEMPLATE preload (module scope, mirrors loadWholeObjectBuilders/glbLoadScene's own
+// preload-then-clone convention just below) and interiorBuildKitDoorMesh (near
+// interiorBuildInteractableDoorMesh) for the actual mount.
+import { loadDonorPiece, socketsByType } from "./theater-donor.js";
 // ROOM-SHELL COMPILER (docs/ROOM-SHELL-COMPILER.md; docs/GRAPHICS-NORTH-STAR.md Stage C unit C4): the
 // active room's cells compiled into a CONTINUOUS shell (floor polygon + wall/riser quad-strips) instead
 // of the per-cell InstancedMesh box read below — see this file's own ITR_ROOM_SHELL flag + itrBuild*
@@ -3970,6 +3977,128 @@ function itrDoorBuildShatterShardMesh(shardDesc, color){
   return mesh;
 }
 
+// ============================================================================
+// KS-2 (docs/KENNEY-SOCKET-WAVE.md) — "THE DOOR IS AN ASSEMBLY". A standard 1-cell door whose kit
+// piece FITS the aperture (theater-interior.js's itrKitDoorEligible, stamped onto the board's own
+// data.kitDoors — pure placement data, no THREE) mounts the normalized kenney-modular-dungeon-kit/
+// gate-door piece: the frame socketed into the wall run + the leaf mounted on the frame's own `hinge`
+// socket, INSTEAD of interiorBuildInteractableDoorMesh's prism hinge+leaf below. Stage-D door STATES
+// (shut/ajar/open/broken) still drive the SAME leaf-rotation concept (itrKitDoorRestPose reuses
+// ITR_DOOR_SWING_DEG, the identical shut:0/ajar:22/open:105 constants the prism path swings by) —
+// the D0 event contract is completely unchanged; only the geometry supplier swaps, per the spec's own
+// words. `broken` is deliberately SIMPLER than the prism path's D4c flopped/hanging/shattered variant
+// family (which assumes an analytically-authored extruded prism leaf with a known thickness/tip
+// formula) — real GLTF geometry has no such closed-form tip/lift math available for free, so KS-2
+// implements exactly what its own spec text licenses: "broken=leaf removed + debris decal license" —
+// the leaf hides; a debris-decal treatment is future work, not required by this unit.
+// ============================================================================
+const KIT_DOOR_PACK = "kenney-modular-dungeon-kit";
+const KIT_DOOR_SLUG = "gate-door";
+let kitDoorTemplate = null;     // {frameGroup, leafGeometry, leafMaterial, hingeLocal:[x,y,z]} once warm
+let kitDoorTemplateReady = false;
+// kitDoorSplitTemplate: one-time surgery on a freshly loaded donor piece — pulls the `door-leaf`
+// semantic child (theater-donor.js stamps `userData.genesisDonor.semanticPart === "door-leaf"` on it,
+// generic across every doorway-frame+door-leaf admitted piece, not a gate-door-specific hack) OUT of
+// the frame hierarchy and re-anchors its geometry's own local origin onto the piece's `hinge` socket
+// position — mirrors interiorBuildInteractableDoorMesh's own D4b "geo.translate so local origin sits
+// at the hinge jamb edge" precedent below, generalized to arbitrary authored GLTF geometry instead of
+// a procedurally authored Shape. Without this re-anchor, rotating the leaf node in place would pivot
+// about ITS OWN authored local origin (wherever Kenney's modeler put it) rather than the true hinge
+// line — the exact "floating/wrong-pivot leaf" failure KS-2's own ledger P0 #3 names. Tags every
+// geometry/material `userData.shared = true` (this file's own D7 dispose-skip convention,
+// disposeMeshMaybeShared below) since every door instance on a board clones this ONE resolved
+// template — never re-fetched, never re-baked per instance.
+function kitDoorSplitTemplate(rawGroup){
+  const hingeSockets = socketsByType(rawGroup, "hinge");
+  if(!hingeSockets.length) return null; // an admitted piece with no hinge socket -> never a kit door, prism fallback
+  const hingeLocal = hingeSockets[0].position;
+  let leafObj = null;
+  rawGroup.traverse((obj) => {
+    if(leafObj) return;
+    const gd = obj.userData && obj.userData.genesisDonor;
+    if(gd && gd.semanticPart === "door-leaf") leafObj = obj;
+  });
+  if(!leafObj || !leafObj.geometry) return null; // no leaf child -> never a kit door, prism fallback
+  leafObj.updateMatrix();
+  const leafGeometry = leafObj.geometry.clone();
+  leafGeometry.applyMatrix4(leafObj.matrix); // bake the leaf's own local transform -> frame-root-local space
+  leafGeometry.translate(-hingeLocal[0], -hingeLocal[1], -hingeLocal[2]); // re-anchor: local origin -> the hinge point
+  leafGeometry.userData.shared = true;
+  const leafMaterial = leafObj.material;
+  if(leafMaterial) leafMaterial.userData.shared = true;
+  if(leafObj.parent) leafObj.parent.remove(leafObj); // detach — the frame keeps every OTHER child
+  rawGroup.traverse((obj) => {
+    if(obj.geometry) obj.geometry.userData.shared = true;
+    if(obj.material) obj.material.userData.shared = true;
+  });
+  return { frameGroup: rawGroup, leafGeometry, leafMaterial, hingeLocal };
+}
+// Preloaded ONCE at module scope — mirrors loadWholeObjectBuilders/glbLoadScene's own preload-then-
+// clone convention (this file's BATTLE-THEATER T2 header, above) so the per-door SYNCHRONOUS mesh-
+// build path (interiorBuildInteractableDoorMesh, below) never awaits a network fetch mid-render: a
+// render that runs before this settles simply falls back to the (QF-D1-fixed) prism path for every
+// door — same "never blank, never throws, the existing fallback shows until the async resource is
+// warm" precedent every other GLB-backed seam in this file already follows. realmProfile:null (a
+// byte-identical grading passthrough, theater-donor.js's own documented convention) — a live per-realm
+// grade bridge at PRELOAD time is deferred until KS-3 broadens kit adoption past this single
+// structural pilot piece (Scope: FANTASY-ONLY to pre-alpha, KS-2's own addendum).
+loadDonorPiece(KIT_DOOR_PACK, KIT_DOOR_SLUG, { realmId: "fantasy", realmProfile: null }).then((group) => {
+  const split = kitDoorSplitTemplate(group);
+  if(split){ kitDoorTemplate = split; kitDoorTemplateReady = true; }
+}).catch(() => { /* network/parse failure: kitDoorTemplateReady stays false forever -> prism path always, never throws */ });
+
+// state -> {rotY, visible}: shut/ajar/open reuse the SAME ITR_DOOR_SWING_DEG constants the prism
+// path's itrDoorRestPose swings by (0/22/105deg — three distinct angles); broken hides the leaf
+// entirely rather than posing a 4th angle (see this section's own header for why). visible:false is
+// itself the 4th state's distinct, documented "transform" — literally "removed", per the spec text.
+function itrKitDoorRestPose(state){
+  if(state === "broken") return { rotY: 0, visible: false };
+  const swingDeg = ITR_DOOR_SWING_DEG[state];
+  return { rotY: (typeof swingDeg === "number" ? swingDeg : 0) * Math.PI / 180, visible: true };
+}
+// interiorBuildKitDoorMesh(entry, cx, cz, floorTopMap, widthAxisIsZ) -> THREE.Group | null. Mirrors
+// interiorBuildInteractableDoorMesh's own return shape (userData.leaf set, kind/archetype/sourceRef/
+// state/slug tagged) so interiorBuildInteractables' bookkeeping (bySourceRef, S.interiorDoorStateBySourceRef)
+// treats a kit door and a prism door identically — userData.kit:true is the ONE discriminator the
+// state-transition tween logic below branches on (kit doors get the simpler itrKitDoorRestPose tween;
+// everything else about mounting/tracking is shared). Returns null (prism fallback, never throws) when
+// the template isn't warm yet, this entry isn't renderable, or (defensively) the template somehow
+// carries no leaf.
+function interiorBuildKitDoorMesh(entry, cx, cz, floorTopMap, widthAxisIsZ){
+  if(!kitDoorTemplateReady || !kitDoorTemplate) return null;
+  if(!entry || entry.reserve || entry.x == null || entry.y == null) return null;
+  const doorGroup = new THREE.Group();
+  const floorTop = interiorFloorTopAt(floorTopMap, entry.x, entry.y);
+  doorGroup.position.set((entry.x || 0) - (cx || 0), floorTop, (entry.y || 0) - (cz || 0));
+  // BUTT-JOIN CONSISTENCY: the piece's own native WIDTH axis (its butt-join-e/w sockets) mounts flush
+  // along whichever world axis widthAxisIsZ names as the aperture's width — the SAME rotation
+  // convention the prism leaf's own `ew` neighbor-scan already established (interiorBuildInteractableDoorMesh,
+  // below: `hinge.rotation.y = ew ? Math.PI/2 : 0`), so kit and prism doors on the SAME cell would
+  // always agree on orientation.
+  doorGroup.rotation.y = widthAxisIsZ ? Math.PI / 2 : 0;
+
+  const frame = kitDoorTemplate.frameGroup.clone(true); // Object3D clone: shares geometry/material refs (userData.shared-tagged above), never re-baked per instance
+  doorGroup.add(frame);
+
+  const hingeLocal = kitDoorTemplate.hingeLocal;
+  const hingeGroup = new THREE.Group();
+  hingeGroup.position.set(hingeLocal[0], hingeLocal[1], hingeLocal[2]);
+  const leaf = new THREE.Mesh(kitDoorTemplate.leafGeometry, kitDoorTemplate.leafMaterial);
+  leaf.castShadow = true; leaf.receiveShadow = true;
+  leaf.userData = { isDoorLeaf: true };
+  const pose = itrKitDoorRestPose(entry.state);
+  leaf.rotation.y = pose.rotY;
+  leaf.visible = pose.visible;
+  hingeGroup.add(leaf);
+  doorGroup.add(hingeGroup);
+
+  doorGroup.userData = {
+    kind: "interactable", archetype: "door", sourceRef: entry.sourceRef, state: entry.state,
+    slug: entry.slug, leaf: leaf, kit: true, widthAxisIsZ: widthAxisIsZ,
+  };
+  return doorGroup;
+}
+
 function itrDoorStateColor(state){
   switch(state){
     case "open": return 0x8a6a42;
@@ -4001,7 +4130,17 @@ function itrDoorHingeSign(sourceRef){
 // point (the far edge sweeps; the hinge-edge vertex column never moves), instead of the retired D4
 // centerline spin. Returns null for anything this unit doesn't render (reserve entries, missing
 // coordinates).
-function interiorBuildInteractableDoorMesh(entry, cx, cz, floorTopMap){
+// KS-2 `kitDoorInfo` param: {widthAxisIsZ} when theater-interior.js's data.kitDoors names this exact
+// cell as KIT_DOORS_ENABLED-eligible, else null/undefined (squeeze, odd aperture, flag off, or the kit
+// piece's neighbor-wall fit test failed — itrKitDoorEligible's own scope). When present AND the kit
+// template has finished its async preload (interiorBuildKitDoorMesh returns non-null only then), the
+// kit assembly renders INSTEAD of the prism hinge+leaf below — every prism path survives as the
+// unconditional fallback (kitDoorInfo absent, or the template still cold) per the wave's own posture.
+function interiorBuildInteractableDoorMesh(entry, cx, cz, floorTopMap, kitDoorInfo){
+  if(kitDoorInfo){
+    const kitMesh = interiorBuildKitDoorMesh(entry, cx, cz, floorTopMap, kitDoorInfo.widthAxisIsZ);
+    if(kitMesh) return kitMesh;
+  }
   if(!entry || entry.reserve || entry.x == null || entry.y == null) return null;
   const extrudeDepth = (typeof entry.extrudeDepth === "number" && entry.extrudeDepth > 0) ? entry.extrudeDepth : ITR_DOOR_FALLBACK_DEPTH;
   const arched = itrDoorIsArched(entry);
@@ -4097,70 +4236,110 @@ function itrDoorRestPose(state, sourceRef){
   const swingDeg = ITR_DOOR_SWING_DEG[state];
   return { rotX: 0, rotY: (typeof swingDeg === "number" ? swingDeg : 0) * Math.PI / 180, rotZ: 0, variant: null };
 }
-/* interiorBuildInteractables(interactables, cx, cz, floorTopMap) -> {group, bySourceRef}. Builds one
-   door assembly per placed (non-reserve) door entry (D4's own scope — see header above) and DIFFS
-   against S.interiorDoorStateBySourceRef (the previous render's per-sourceRef state) so a real
-   state_transition (a door's state actually changing between two renders of the SAME sourceRef)
+// KS-2: data.kitDoors (theater-interior.js's own pure-data output, an array of {x,z,widthAxisIsZ,...})
+// -> a "x,y" -> {widthAxisIsZ} lookup Map, so interiorBuildInteractables can hand each door entry the
+// SAME per-cell kit-eligibility info theater-interior.js already computed (never re-derived here —
+// this file has no `plan`/`SPATIAL_CELL` grid to re-scan even if it wanted to).
+function itrKitDoorMap(kitDoors){
+  const m = new Map();
+  (kitDoors || []).forEach((k) => { m.set(Math.round(k.x) + "," + Math.round(k.z), { widthAxisIsZ: !!k.widthAxisIsZ }); });
+  return m;
+}
+/* interiorBuildInteractables(interactables, cx, cz, floorTopMap, kitDoors) -> {group, bySourceRef}.
+   Builds one door assembly per placed (non-reserve) door entry (D4's own scope — see header above)
+   and DIFFS against S.interiorDoorStateBySourceRef (the previous render's per-sourceRef state) so a
+   real state_transition (a door's state actually changing between two renders of the SAME sourceRef)
    animates its swing/tip-forward pose via the BW4 tween channel (S.tweens/tickTweens,
    theater-verbs.js) instead of snapping — D0 Law 6, "never a teleport". A brand-new sourceRef (never
    seen before this walk) or an unchanged state mounts directly at its rest pose — only a REAL
    transition earns a tween, mirroring MF-2's own "only a genuinely new arrival plays the mount-in
-   grace" discipline. */
-function interiorBuildInteractables(interactables, cx, cz, floorTopMap){
+   grace" discipline. KS-2: `kitDoors` (optional, theater-interior.js's data.kitDoors) is looked up per
+   entry via itrKitDoorMap; interiorBuildInteractableDoorMesh decides per-cell whether that resolves to
+   an actual kit mesh (template warm + entry valid) or falls back to the prism path. The state-
+   transition TWEEN itself branches on `hinge.userData.kit` — a kit door's simpler {rotY,visible} pose
+   (itrKitDoorRestPose) vs. the prism door's full D4c {rotX,rotY,rotZ,variant} pose (itrDoorRestPose) —
+   so the existing prism tween code below is untouched (wrapped in the else branch, byte-identical). */
+function interiorBuildInteractables(interactables, cx, cz, floorTopMap, kitDoors){
   const group = new THREE.Group();
   const bySourceRef = {};
   const prevStates = S.interiorDoorStateBySourceRef || {};
   const nextStates = {};
+  const kitDoorMap = itrKitDoorMap(kitDoors);
   (interactables || []).forEach((entry) => {
     if(!entry || entry.archetype !== "door") return; // D4 SCOPE: doors ship first (BW5 IA-4) — other archetypes render in D5
-    const hinge = interiorBuildInteractableDoorMesh(entry, cx, cz, floorTopMap);
+    const kitDoorInfo = entry.x != null && entry.y != null ? kitDoorMap.get(Math.round(entry.x) + "," + Math.round(entry.y)) : null;
+    const hinge = interiorBuildInteractableDoorMesh(entry, cx, cz, floorTopMap, kitDoorInfo);
     if(!hinge) return;
     const sourceRef = entry.sourceRef;
     nextStates[sourceRef] = entry.state;
     const prevState = prevStates[sourceRef];
     if(prevState != null && prevState !== entry.state){
       // a REAL state_transition since the last render of this exact door — glide, never snap.
-      const leaf = hinge.userData.leaf;
-      const from = itrDoorRestPose(prevState, sourceRef);
-      const to = itrDoorRestPose(entry.state, sourceRef);
-      leaf.rotation.x = from.rotX; leaf.rotation.y = from.rotY; leaf.rotation.z = from.rotZ;
-      // D4c: if this transition LANDS on the shattered variant, the fresh build above (entry.state
-      // is already "broken" by the time interiorBuildInteractableDoorMesh ran) already mounted the
-      // TERMINAL shattered visuals (leaf hidden + shards seeded at rest) — undo that here so the
-      // tween has an actual leaf to animate falling, then redo it in onDone once the fall completes.
-      // itrDoorShatterShards is a pure function of sourceRef, so a live break and a freshly-rendered
-      // break still converge on the IDENTICAL final shard scatter either way.
-      if(entry.state === "broken" && to.variant === "shattered" && hinge.userData.shards){
-        hinge.userData.shards.forEach((m) => hinge.remove(m));
-        hinge.userData.shards = null;
-        leaf.visible = true;
-      }
-      if(!S.tweens) S.tweens = [];
-      S.tweens.push({
-        start: Date.now(),
-        dur: ITR_DOOR_SWING_TWEEN_MS,
-        isDoorStateTween: true,
-        doorSourceRef: sourceRef,
-        update: (t) => {
-          const e = (typeof mf1EaseOutCubic === "function") ? mf1EaseOutCubic(t) : t;
-          // D4c: itrDoorRestPose now returns a full {rotX,rotY,rotZ} triple (never a single {axis,
-          // rad}) — every variant (including hanging's simultaneous Y+Z) interpolates the same way,
-          // no more axis-family branching needed.
-          leaf.rotation.x = from.rotX + (to.rotX - from.rotX) * e;
-          leaf.rotation.y = from.rotY + (to.rotY - from.rotY) * e;
-          leaf.rotation.z = from.rotZ + (to.rotZ - from.rotZ) * e;
-        },
-        onDone: () => {
-          leaf.rotation.x = to.rotX; leaf.rotation.y = to.rotY; leaf.rotation.z = to.rotZ;
-          if(entry.state === "broken" && to.variant === "shattered"){
-            leaf.visible = false;
-            const shards = itrDoorShatterShards(sourceRef).map((desc) => itrDoorBuildShatterShardMesh(desc, itrDoorStateColor("broken")));
-            shards.forEach((m) => hinge.add(m));
-            hinge.userData.shards = shards;
-          }
-          hinge.userData.brokenVariant = (entry.state === "broken") ? to.variant : null;
+      if(hinge.userData.kit){
+        // KIT DOOR — the simpler {rotY,visible} contract (this section's own header above).
+        const leaf = hinge.userData.leaf;
+        const from = itrKitDoorRestPose(prevState);
+        const to = itrKitDoorRestPose(entry.state);
+        leaf.rotation.y = from.rotY; leaf.visible = from.visible;
+        if(!S.tweens) S.tweens = [];
+        S.tweens.push({
+          start: Date.now(),
+          dur: ITR_DOOR_SWING_TWEEN_MS,
+          isDoorStateTween: true,
+          doorSourceRef: sourceRef,
+          update: (t) => {
+            const e = (typeof mf1EaseOutCubic === "function") ? mf1EaseOutCubic(t) : t;
+            // only interpolate the swing while the leaf is visible on BOTH ends — a broken (removed)
+            // endpoint has no meaningful angle to glide toward/from, so it just pops visibility at
+            // onDone (matching the "removed", not "eased away", read the spec text asks for).
+            if(from.visible && to.visible) leaf.rotation.y = from.rotY + (to.rotY - from.rotY) * e;
+          },
+          onDone: () => { leaf.rotation.y = to.rotY; leaf.visible = to.visible; },
+        });
+      } else {
+        // PRISM DOOR — byte-unchanged from pre-KS-2.
+        const leaf = hinge.userData.leaf;
+        const from = itrDoorRestPose(prevState, sourceRef);
+        const to = itrDoorRestPose(entry.state, sourceRef);
+        leaf.rotation.x = from.rotX; leaf.rotation.y = from.rotY; leaf.rotation.z = from.rotZ;
+        // D4c: if this transition LANDS on the shattered variant, the fresh build above (entry.state
+        // is already "broken" by the time interiorBuildInteractableDoorMesh ran) already mounted the
+        // TERMINAL shattered visuals (leaf hidden + shards seeded at rest) — undo that here so the
+        // tween has an actual leaf to animate falling, then redo it in onDone once the fall completes.
+        // itrDoorShatterShards is a pure function of sourceRef, so a live break and a freshly-rendered
+        // break still converge on the IDENTICAL final shard scatter either way.
+        if(entry.state === "broken" && to.variant === "shattered" && hinge.userData.shards){
+          hinge.userData.shards.forEach((m) => hinge.remove(m));
+          hinge.userData.shards = null;
+          leaf.visible = true;
         }
-      });
+        if(!S.tweens) S.tweens = [];
+        S.tweens.push({
+          start: Date.now(),
+          dur: ITR_DOOR_SWING_TWEEN_MS,
+          isDoorStateTween: true,
+          doorSourceRef: sourceRef,
+          update: (t) => {
+            const e = (typeof mf1EaseOutCubic === "function") ? mf1EaseOutCubic(t) : t;
+            // D4c: itrDoorRestPose now returns a full {rotX,rotY,rotZ} triple (never a single {axis,
+            // rad}) — every variant (including hanging's simultaneous Y+Z) interpolates the same way,
+            // no more axis-family branching needed.
+            leaf.rotation.x = from.rotX + (to.rotX - from.rotX) * e;
+            leaf.rotation.y = from.rotY + (to.rotY - from.rotY) * e;
+            leaf.rotation.z = from.rotZ + (to.rotZ - from.rotZ) * e;
+          },
+          onDone: () => {
+            leaf.rotation.x = to.rotX; leaf.rotation.y = to.rotY; leaf.rotation.z = to.rotZ;
+            if(entry.state === "broken" && to.variant === "shattered"){
+              leaf.visible = false;
+              const shards = itrDoorShatterShards(sourceRef).map((desc) => itrDoorBuildShatterShardMesh(desc, itrDoorStateColor("broken")));
+              shards.forEach((m) => hinge.add(m));
+              hinge.userData.shards = shards;
+            }
+            hinge.userData.brokenVariant = (entry.state === "broken") ? to.variant : null;
+          }
+        });
+      }
     }
     group.add(hinge);
     bySourceRef[sourceRef] = hinge;
@@ -10792,8 +10971,10 @@ function setInteriorBoard(data){
   // docs/STAGE-D-WAVE-SPECS.md D4 — data.interactables is a plain field the caller sets directly on
   // the board object (src/engine/theater-data.js's trayFrom — same convention as data.pieces/
   // data.dressing/data.wallProps above). D4 scope: door archetype only (see
-  // interiorBuildInteractables' own header for the full render-keystone contract).
-  const interactablesGroup = interiorBuildInteractables(data.interactables, cx, cz, S.interiorFloorTopMap);
+  // interiorBuildInteractables' own header for the full render-keystone contract). KS-2:
+  // data.kitDoors is interiorBuildBoard's OWN output (theater-interior.js, a sibling of data.instances)
+  // — unlike interactables/pieces/dressing above, this one IS produced by interiorBuildBoard itself.
+  const interactablesGroup = interiorBuildInteractables(data.interactables, cx, cz, S.interiorFloorTopMap, data.kitDoors);
   S.interiorGroup.add(interactablesGroup);
   // D4 — E0-1 FADE COMPLIANCE (the SAME append-never-overwrite pattern the wall-fixture block above
   // uses, docs/PHASE-3-WAVE-1-SPECS.md E0-1): a door on an occlusion-suppressed wall segment fades
@@ -12580,14 +12761,24 @@ window.Theater._interiorBuildDecalsForTest = function(decals, cx, cz, floorTopMa
 // live GL mount. Resetting S.interiorDoorStateBySourceRef is exposed too — a harness that wants an
 // isolated "first projection ever" run (no inherited diff state from an earlier check in the same
 // process) can call it explicitly rather than reaching into S directly.
-window.Theater._interiorBuildInteractablesForTest = function(interactables, cx, cz, floorTopMap){
-  return interiorBuildInteractables(interactables, cx, cz, floorTopMap);
+window.Theater._interiorBuildInteractablesForTest = function(interactables, cx, cz, floorTopMap, kitDoors){
+  return interiorBuildInteractables(interactables, cx, cz, floorTopMap, kitDoors);
 };
 window.Theater._itrDoorShapeForTest = function(arched){ return itrDoorShape(arched); };
 window.Theater._itrDoorIsArchedForTest = function(entry){ return itrDoorIsArched(entry); };
 window.Theater._itrDoorRestPoseForTest = function(state, sourceRef){ return itrDoorRestPose(state, sourceRef); };
 window.Theater._itrDoorHingeSignForTest = function(sourceRef){ return itrDoorHingeSign(sourceRef); };
 window.Theater._resetInteriorDoorStateForTest = function(){ S.interiorDoorStateBySourceRef = {}; };
+// KS-2 — TEST-ONLY SEAM, same spirit as the D4 accessors above: exposes the kit-door pose function +
+// live template-readiness so dev/verify-ks2-door-assembly.mjs can assert the kit path's own contract
+// (leaf transform == hinge socket + state rotation; distinct per-state angles; broken hides the leaf)
+// without waiting on a real render loop to happen to warm the async preload first.
+window.Theater._itrKitDoorRestPoseForTest = function(state){ return itrKitDoorRestPose(state); };
+window.Theater._kitDoorTemplateReadyForTest = function(){ return kitDoorTemplateReady; };
+window.Theater._kitDoorTemplateForTest = function(){ return kitDoorTemplate; };
+window.Theater._interiorBuildKitDoorMeshForTest = function(entry, cx, cz, floorTopMap, widthAxisIsZ){
+  return interiorBuildKitDoorMesh(entry, cx, cz, floorTopMap, widthAxisIsZ);
+};
 // D4c test seam (mirrors _setGradeTonemapForTest's own convention above): pin the broken-variant
 // pick for every door regardless of sourceRef — a controlled A/B/C study-card capture (or a verify
 // harness) can force each of "flopped"/"hanging"/"shattered" without brute-forcing a hash-matching

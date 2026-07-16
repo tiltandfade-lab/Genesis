@@ -1,0 +1,117 @@
+{
+  "generatedAt": "2026-07-16T02:13:46.747Z",
+  "shots": [
+    "kit-on.png",
+    "prism-off.png",
+    "kit-door-shut.png",
+    "kit-door-ajar.png",
+    "kit-door-open.png",
+    "kit-door-broken.png",
+    "corner-door-prism.png"
+  ],
+  "notes": [],
+  "boot": {
+    "ok": true,
+    "notes": [
+      "startSession() called"
+    ],
+    "worldId": "mrmvkymdozjqk",
+    "worldName": "The Walled Orchard"
+  },
+  "theaterState": {
+    "hasBattleStage": true,
+    "theaterMounted": true,
+    "hasCanvas": true,
+    "hasSetInteriorBoard": true
+  },
+  "kitDoorTemplateReady": true,
+  "kit-on": {
+    "doorCells": [
+      {
+        "x": 4,
+        "y": 0,
+        "id": "north-standard"
+      },
+      {
+        "x": 0,
+        "y": 1,
+        "id": "west-corner"
+      },
+      {
+        "x": 8,
+        "y": 4,
+        "id": "east-standard"
+      }
+    ],
+    "meta": {
+      "roomCount": 1,
+      "floorCount": 52,
+      "wallCount": 35,
+      "doorCount": 0,
+      "pillarCount": 0,
+      "lightCount": 2,
+      "skirtCount": 32,
+      "coverCount": 2,
+      "furnitureCount": 0,
+      "wallPropsCount": 0,
+      "portalCount": 0,
+      "kitDoorCount": 3
+    }
+  },
+  "prism-off": {
+    "doorCells": [
+      {
+        "x": 4,
+        "y": 0,
+        "id": "north-standard"
+      },
+      {
+        "x": 0,
+        "y": 1,
+        "id": "west-corner"
+      },
+      {
+        "x": 8,
+        "y": 4,
+        "id": "east-standard"
+      }
+    ],
+    "meta": {
+      "roomCount": 1,
+      "floorCount": 52,
+      "wallCount": 35,
+      "doorCount": 15,
+      "pillarCount": 0,
+      "lightCount": 2,
+      "skirtCount": 32,
+      "coverCount": 2,
+      "furnitureCount": 0,
+      "wallPropsCount": 0,
+      "portalCount": 0,
+      "kitDoorCount": 0
+    }
+  },
+  "corner-door-prism": {
+    "doorCells": [
+      {
+        "x": 0,
+        "y": 1,
+        "id": "west-corner"
+      }
+    ],
+    "meta": {
+      "roomCount": 1,
+      "floorCount": 50,
+      "wallCount": 33,
+      "doorCount": 5,
+      "pillarCount": 0,
+      "lightCount": 2,
+      "skirtCount": 32,
+      "coverCount": 2,
+      "furnitureCount": 0,
+      "wallPropsCount": 0,
+      "portalCount": 0,
+      "kitDoorCount": 0
+    }
+  }
+}

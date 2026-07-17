@@ -18,21 +18,28 @@ The running execution order. `DESIGN.md` holds the *what* and *why*; this holds 
 roll into `NEXT-STEPS-ARCHIVE.md` via `python3 build/archive-docs.py --emit`. Standing plan
 sections (tracks/layers/etc.) are never auto-archived.
 
-## Do next (2026-07-17 — KENNEY GRAPHICS REPAIR BUILT; live playtest found no P0/P1 transform defect)
+## Do next (2026-07-17 — KGR acceptance REOPENED: BUILT-INFRA only; gameplay-first slice owed)
 
-CHANGELOG 2026-07-17: ☑ KGR-1/2/3/4A/4B/4C/5/6 · ☑ ten source-hash-bound runtime pilots ·
-☑ calibration + manual Donor/Socket Workbench · ☑ footprint-aware walk-native realization ·
-☑ proving captures · ☑ live Prison / Asylum bridge playtest · ☑ first-render texture-readiness fix.
-The full catalog remains intentionally unadmitted; canonical fallbacks remain the truth-preserving
-result when a roll has no approved visual match.
+Adam's evidence review overturned the same-day close: the live-playtest capture was effectively
+blank (`prepPending` unserviced — flat fallback board), `rect.png` is a hand-authored controlled
+scene, `l-room.png`/`octagon.png` are nearly empty, and no rolled noun has ever realized a Kenney
+asset in production (rule vocabulary is furniture-shaped; the roll supplied algae/bones/mud/relief
+carving). Infrastructure preserved: ☑ KGR-1/2/3/4A/4B/4C/5/6 units landed · ☑ ten source-hash-bound
+runtime pilots · ☑ calibration + manual Donor/Socket Workbench · ☑ footprint-aware realization ·
+☑ first-render texture-readiness fix. `KENNEY-GRAPHICS-REPAIR-OPERATION.md` §15 is the amendment of
+record. Do NOT merge `integration/kenney-graphics-repair` to master until Adam accepts a real
+current-engine rolled walk that is unmistakably better.
 
-1. ☐ **PREP-AUTOPILOT:** service `prepPending` and apply the spatial overlay before Stage/frontier
-   entry. The live walk remained a flat board until `prep_applied`; this is the next functional gap.
-2. ☐ **P2 CHROME READABILITY PASS:** reduce overbright white flora and the dark-aperture/wood-leaf
-   contrast that makes a correctly mounted door read slab-like. Gate with real gameplay-scale captures.
-3. ☐ **NEXT KENNEY ADMISSION TRANCHE:** use the workbench and source hashes to approve a measured
-   noun-demand tranche from the candidate catalog. No bulk admission; each asset needs transform,
-   grounding, footprint/clearance, material-family, and visual QA acceptance.
+1. ☐ **KGR-7 GAMEPLAY-FIRST SLICE:** boot a real rolled walk through the production pipeline
+   (service `prepPending` → apply the spatial overlay → volumetric interior); diagnose the
+   noun→asset realization seam end to end (matching, registry coverage, placement, capture timing);
+   workbench-calibrate and approve the assets the actual roll demands (never reroll a noun);
+   populate ONE walk convincingly at gameplay scale; gate on genuine before/after engine frames —
+   isolated QA cards are not the visual gate.
+2. ☐ **P2 CHROME READABILITY PASS** (after KGR-7 passes): overbright white flora and the
+   dark-aperture/wood-leaf contrast that makes a correctly mounted door read slab-like.
+3. ☐ **NEXT KENNEY ADMISSION TRANCHE** (after KGR-7 passes): workbench + source hashes, measured
+   noun-demand, no bulk admission.
 4. ☐ Then resume polish: KS-3c wall-rim sawtooth · ELEV-1b · LL-1b · rest-prop collisions ·
    occlusion-aware combat cells; then ST-1 staging intelligence · town kit · B2 · ELEV-2.
 
@@ -53,7 +60,8 @@ shells → look pass) · ☑ F1 combat-in-room (#10 closed) · ☑ F2 staging be
    loop; reproduce CI's dep-skips locally with a fake empty `$HOME` (puppeteer-core unresolvable) +
    real `JSDOM_HOME`** — else locally-installed puppeteer runs the 18 render harnesses CI skips.
 1. ☐ **ADAM'S WORD: originals restoration** (evidence complete; restore→re-clean→reference).
-2. ☑ **KENNEY GRAPHICS REPAIR OPERATION — BUILT 2026-07-17.** Executed the locked queue
+2. ◐ **KENNEY GRAPHICS REPAIR OPERATION — BUILT-INFRA 2026-07-17; visual acceptance reopened same
+   day (OPERATION §15; the 2026-07-17 block above).** Executed the locked queue
    `KGR-1 → KGR-2 → KGR-3 → (KGR-4A ∥ KGR-4B) → KGR-4C → KGR-5 → KGR-6` in
    `KENNEY-GRAPHICS-REPAIR-OPERATION.md`. Correct transforms, bounds, UVs, unsafe outline behavior,
    and structural-shell ownership before expanding runtime admission; then add the calibration
@@ -61,8 +69,10 @@ shells → look pass) · ☑ F1 combat-in-room (#10 closed) · ☑ F2 staging be
    registry, a mandatory ten-asset calibration pass, and footprint-aware walk-native realization.
    This supersedes the old kit-shell proving run: Kenney structural shells retreat until a future
    operation can prove them without breaking the canonical compiled room.
-3. ☑ **Playtest after KGR-6 — DONE 2026-07-17:** the real Prison / Asylum walk found no P0/P1
-   alignment/collision defect; it exposed the prep-autopilot gap and a now-fixed texture-readiness warning.
+3. ◐ **Playtest after KGR-6 — RAN 2026-07-17 but not acceptance-grade:** the Prison / Asylum walk
+   surfaced no P0/P1 alignment/collision defect, exposed the prep-autopilot gap and a now-fixed
+   texture-readiness warning — but its capture recorded the unserviced flat-board state (invalid
+   evidence) and the roll exercised zero promoted props. KGR-7 re-runs this gate for real.
 4. ☐ Polish, evidence-ordered: KS-3c wall-rim sawtooth · ELEV-1b · LL-1b · rest-prop collisions ·
    occlusion-aware combat cells.
 5. ☐ Then: ST-1 staging intelligence · town kit · B2 smooth-contour depth · ELEV-2 mechanics.

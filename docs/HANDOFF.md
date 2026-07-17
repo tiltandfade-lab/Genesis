@@ -17,7 +17,27 @@ reach the visual target. Read it before this handoff's historical graphics queue
 For any sprite/pixel-art generation or review work specifically, `docs/ART-DEPARTMENT.md` is the
 pixel register's canonical home — live-corpus state, the style law index, and the regen runbooks.
 
-## ⭐ Latest (2026-07-17) — KENNEY GRAPHICS REPAIR BUILT: ten calibrated citizens, truthful fallbacks, live-play clean [Codex, orchestrated]
+## ⭐ Latest (2026-07-17, later) — KGR ACCEPTANCE REOPENED: BUILT-INFRA only; gameplay-first slice (KGR-7) owed [Claude Fable 5, orchestrated]
+
+Adam reviewed the actual KGR-6 evidence and overturned the same-day close below. The infrastructure
+stands — calibration schema, source-hash admission, workbench, attachment solver, transform repair,
+footprint-aware realization, ten calibrated pilots — but the player-visible game did not materially
+improve, and the acceptance evidence was invalid: the "live playtest" capture is an effectively
+blank frame (`prepPending` unserviced — the flat fallback board at capture time); `rect.png` is a
+hand-authored proving scene, not a rolled walk; `l-room.png`/`octagon.png` are nearly empty; the
+repaired door still reads awkward at gameplay scale. Green harnesses proved contracts, not visuals.
+The live roll's nouns (algae, bones, mud, relief carving) matched zero rules and zero approved
+assets — KGR-5 realization has never fired in real gameplay.
+
+`KENNEY-GRAPHICS-REPAIR-OPERATION.md` §15 records the amendment (status `BUILT-INFRA`) and defines
+**KGR-7, the gameplay-first vertical slice**: boot a real rolled walk through production (prep
+serviced, spatial overlay applied); diagnose the noun→asset seam end to end (matching, registry
+coverage, placement, capture timing); workbench-calibrate what the roll actually demands (never
+reroll a noun); populate ONE walk convincingly; gate on genuine before/after engine frames — not QA
+cards. `integration/kenney-graphics-repair` stays unmerged until Adam accepts a real current-engine
+rolled walk that is unmistakably better.
+
+## Latest (2026-07-17) — KENNEY GRAPHICS REPAIR infrastructure: ten calibrated citizens, truthful fallbacks [Codex, orchestrated — acceptance language amended same day, see above]
 
 `docs/KENNEY-GRAPHICS-REPAIR-OPERATION.md` is now **BUILT**. All eight units landed: full-hierarchy
 detach transforms; the unsafe outline retreat; calibration/schema + donor metadata v2; the manual

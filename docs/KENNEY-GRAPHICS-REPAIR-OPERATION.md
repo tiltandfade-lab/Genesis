@@ -1,7 +1,7 @@
 ---
 type: system-spec
 project: Genesis
-status: BUILT
+status: BUILT-INFRA — visual acceptance reopened 2026-07-17 (§15)
 created: 2026-07-16
 updated: 2026-07-17
 consumer: Codex/Fable orchestrator + leaf executors; orchestrator personally re-gates every unit
@@ -846,3 +846,54 @@ records no P0/P1 alignment or collision complaint, and docs close coherently thr
 `genesis-clean-close`.
 
 “The workbench exists,” “the harness is green,” or “ten assets load” is not completion by itself.
+
+## 15. 2026-07-17 acceptance amendment — BUILT-INFRA only; visual completion reopened
+
+Adam's review of the actual capture evidence overturned the same-day close. The implementation
+stands; the completion claim does not.
+
+What the evidence actually shows:
+
+- `live-playtest-prison-asylum.png` is effectively blank — the character sheet over an unrendered
+  void. It is invalid acceptance evidence: `prepPending` was unserviced at capture time, so the
+  first frontier render was the flat fallback board, and the capture recorded that state.
+- `rect.png` is a controlled, hand-authored proving scene — `capture-kenney-graphics-repair.mjs`
+  injects its `dressing` array directly. It is not a naturally rolled gameplay walk.
+- `l-room.png` and `octagon.png` are nearly empty rooms.
+- The repaired-door QA card passes measurement but still reads awkward at gameplay scale
+  (near-black leaf against beige shell; misreading white aperture topper).
+- The live roll's nouns (algae, bones, mud, relief carving) matched zero approved assets and zero
+  visual rules, so the KGR-5 realization layer has never fired in real gameplay. Rule coverage is
+  furniture-shaped (barrel/crate/table/bench/chair/light) while rolled dungeon vocabulary is not;
+  interior dressing carries roster slugs and projected walk citizens carry card slugs, while most
+  rules match `realmPropNameIncludes` — a field stamped only on settlement/urban tray paths.
+
+The machine gates (manifest OK; 209 verifier passes; 20 expected dependency skips; 0 reds; table
+lint 37/37) prove contracts, not visual success. Isolated QA cards and green harnesses are no
+longer accepted as visual completion evidence for this operation.
+
+Status is therefore `BUILT-INFRA`: the calibration schema, source-hash admission, workbench,
+attachment solver, transform repair, footprint-aware realization, and ten calibrated pilots are
+preserved as landed infrastructure. §14's completion definition is NOT met — "the proving captures
+pass the orchestrator's visual read" was satisfied with invalid evidence, and the bridge playtest
+never exercised a promoted prop.
+
+Completion now requires the gameplay-first vertical slice (Unit KGR-7):
+
+1. Boot a real rolled walk through the production pipeline — prep serviced, spatial overlay
+   applied, volumetric interior mounted.
+2. Diagnose end to end why its nouns produce no approved Kenney realization: `prepPending`
+   servicing, spatial-plan application, noun matching, registry coverage, placement, capture
+   timing.
+3. Never rewrite or reroll canonical nouns to fit available assets.
+4. Use the workbench to calibrate and approve assets demanded by the actual roll, expanding beyond
+   the ten pilots only where truthful.
+5. Populate one real walk convincingly at gameplay scale before broadening scope.
+6. Capture genuine before/after engine frames; isolated QA cards are not the visual gate.
+7. Acceptance means visible improvement: coherent density, correct grounding/orientation, no
+   intersections, readable materials, a room that feels inhabited.
+8. Only after that slice passes: the Chrome exposure/aperture P2 pass and further catalog
+   admission.
+
+`integration/kenney-graphics-repair` does not merge to master until Adam accepts a real
+current-engine rolled walk that is unmistakably better.

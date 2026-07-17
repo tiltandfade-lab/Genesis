@@ -8,6 +8,23 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-07-17 (later) — KGR ACCEPTANCE AMENDED: BUILT → BUILT-INFRA; gameplay-first slice (KGR-7) owed [Claude Fable 5, orchestrated]
+
+**Changed:** Adam's review of the actual KGR-6 captures overturned the same-day close (below). The
+live-playtest capture is an effectively blank frame (`prepPending` unserviced; the first frontier
+render was the flat fallback board and the capture recorded that state); `rect.png` is a
+hand-authored controlled scene rather than a rolled walk; `l-room.png`/`octagon.png` are nearly
+empty; the repaired door still reads awkward at gameplay scale; and the live roll's nouns (algae,
+bones, mud, relief carving) matched zero visual rules and zero approved assets — the KGR-5
+realization layer has never fired in real gameplay. `KENNEY-GRAPHICS-REPAIR-OPERATION.md` status
+corrected to `BUILT-INFRA`; its new §15 records the evidence verdict and defines **Unit KGR-7**:
+boot a real rolled walk through production, diagnose the noun→asset seam end to end, workbench-
+calibrate what the roll actually demands (never reroll a noun), populate one walk convincingly, and
+gate on genuine before/after engine frames. Machine gates remain green and remain insufficient —
+they prove contracts, not visual success. The implementation is preserved; only the acceptance
+language changed. `integration/kenney-graphics-repair` stays unmerged until Adam accepts a real
+current-engine rolled walk.
+
 ## 2026-07-17 — KENNEY GRAPHICS REPAIR: calibrated realization, proving run, and live-play close [Codex, orchestrated]
 
 The eight-unit `KENNEY-GRAPHICS-REPAIR-OPERATION.md` queue executed in dependency order, with the

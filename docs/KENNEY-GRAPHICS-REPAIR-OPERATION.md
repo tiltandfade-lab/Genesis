@@ -897,3 +897,22 @@ Completion now requires the gameplay-first vertical slice (Unit KGR-7):
 
 `integration/kenney-graphics-repair` does not merge to master until Adam accepts a real
 current-engine rolled walk that is unmistakably better.
+
+### §15.1 — 2026-07-17 KGR-7 vertical slice: BUILT, awaiting Adam's visual acceptance
+
+The slice ran against a real rolled world, **The Ivory Pit** (dungeon, The Loop, 4 segments),
+persisted as a canonical fixture (`dev/battle-gate/kgr7-walk-truth/kgr7-world-state.json` — the
+world IS the save file; `--restore` re-renders it under any engine state). Landed: the
+`capture-kgr7-walk-truth.mjs` acceptance rig (production boot → prep_applied → start_walk →
+settled engine frame + full noun→realization diagnosis); interior realm-truth (fantasy default per
+the Q19 pre-alpha ruling — the chrome-roster fallback was filling fantasy dungeons with neon
+sci-fi); walk-noun projection (the segment's rolled feature/object/dressing now derive additive,
+fail-closed, anchor-class dressing candidates carrying the rolled name); a three-asset
+walk-demand calibration tranche (rocks-small → Small cairn · pulley-crate → Winch drum ·
+pot-stew → Cookpot; plain pulley is a named approved-dev demotion) with rules and all admission
+gates re-pinned to the new exact set; and the fourth-wall law (wall-hung props hide with their
+camera-cutaway wall). Evidence: `kgr7-before-after.png` and
+`dev/playtest-findings-kgr7-walk-truth.md` (which also names the residual P2s: billboard wall
+clip, black blocker volumes, south-band staging, wall-visibility authority, dark leaves, and the
+catalog gaps mined from real demand). Machine gates are green and remain insufficient — this
+section closes only when Adam reads the frames and says the rolled walk is unmistakably better.

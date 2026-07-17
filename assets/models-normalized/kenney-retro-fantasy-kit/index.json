@@ -59,7 +59,7 @@
         "up": "+Y"
       },
       "qaStatus": "approved-runtime",
-      "recipeHash": "9d43a4c5f154a361a1bdf7ccbfa353759becbec9aac2c662ef9d703018d335a3",
+      "recipeHash": "fab2696e13d1aef2003302f1269524d3987f8dbbec9b38e51ff3fd4c9ee334a6",
       "schema": "genesis.donor.v2",
       "semanticParts": {},
       "sockets": [
@@ -96,9 +96,201 @@
       ],
       "sourceSha256": "4262d0d3c8ac39bc10c0bb96e9b687d3bd1cc4a79df12b86fef37ebfd24fbb1b",
       "structuralGrid": null
+    },
+    "pulley": {
+      "admissionClass": "PART_DONOR",
+      "assetId": "kenney-retro-fantasy-kit/pulley",
+      "bounds": {
+        "aabbMax": [
+          1.6780329473063492e-10,
+          0.05000000074505806,
+          0.05000001175312576
+        ],
+        "aabbMin": [
+          -0.6000000219960232,
+          -0.949999988079071,
+          -0.05000004356908599
+        ],
+        "footprint": {
+          "center": [
+            -0.3,
+            0
+          ],
+          "halfExtents": [
+            0.3,
+            0.05
+          ],
+          "yawRadians": 0
+        },
+        "footprintSource": "override",
+        "groundY": -0.949999988079071
+      },
+      "canonicalScale": 2,
+      "category": "rigging",
+      "companionLeaf": null,
+      "file": "pulley.glb",
+      "materialFamilies": [
+        "wood"
+      ],
+      "normalizedFrame": {
+        "forward": "+Z",
+        "sourceToGenesis": [
+          3.3560630940954184e-09,
+          0.0,
+          -0.9999999966439369,
+          0.0,
+          0.0,
+          1.0,
+          0.0,
+          0.0,
+          0.9999999966439369,
+          0.0,
+          3.3560630940954184e-09,
+          0.0,
+          0,
+          0,
+          0,
+          1.0
+        ],
+        "up": "+Y"
+      },
+      "qaStatus": "approved-dev",
+      "recipeHash": "f5cec162edaa994ad54e9ff609aa473f426bc076371c844174451a1a225592ef",
+      "schema": "genesis.donor.v2",
+      "semanticParts": {},
+      "sockets": [
+        {
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.7,
+              1.1,
+              0.3
+            ]
+          },
+          "id": "wall-mount",
+          "mateFamily": "wall",
+          "mateRule": "coincident",
+          "position": [
+            -0.3,
+            0,
+            -0.05
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "size": [
+            0.6,
+            1,
+            0.1
+          ],
+          "type": "wall-mount"
+        }
+      ],
+      "sourceSha256": "fcac7ec8db844c666de8d31c420ad5710b29536a6b0b620f318fab514a173708",
+      "structuralGrid": null
+    },
+    "pulley-crate": {
+      "admissionClass": "PART_DONOR",
+      "assetId": "kenney-retro-fantasy-kit/pulley-crate",
+      "bounds": {
+        "aabbMax": [
+          6.165480818027955e-10,
+          0.05000000074505806,
+          0.18371172187662357
+        ],
+        "aabbMin": [
+          -0.7337117176671047,
+          -0.9499999284744263,
+          -0.18371170943784523
+        ],
+        "footprint": {
+          "center": [
+            -0.3669,
+            0
+          ],
+          "halfExtents": [
+            0.367,
+            0.184
+          ],
+          "yawRadians": 0
+        },
+        "footprintSource": "override",
+        "groundY": -0.9499999284744263
+      },
+      "canonicalScale": 2,
+      "category": "rigging",
+      "companionLeaf": null,
+      "file": "pulley-crate.glb",
+      "materialFamilies": [
+        "wood"
+      ],
+      "normalizedFrame": {
+        "forward": "+Z",
+        "sourceToGenesis": [
+          3.3560630940954184e-09,
+          0.0,
+          -0.9999999966439369,
+          0.0,
+          0.0,
+          1.0,
+          0.0,
+          0.0,
+          0.9999999966439369,
+          0.0,
+          3.3560630940954184e-09,
+          0.0,
+          0,
+          0,
+          0,
+          1.0
+        ],
+        "up": "+Y"
+      },
+      "qaStatus": "approved-runtime",
+      "recipeHash": "7ef9d4e6fbda27b27e28c4bf5835ff813c5e43b27346f8e74e56defb68c89125",
+      "schema": "genesis.donor.v2",
+      "semanticParts": {},
+      "sockets": [
+        {
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.8,
+              1.1,
+              0.6
+            ]
+          },
+          "id": "wall-mount",
+          "mateFamily": "wall",
+          "mateRule": "coincident",
+          "position": [
+            -0.3669,
+            0,
+            -0.1837
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "size": [
+            0.7337,
+            1,
+            0.3674
+          ],
+          "type": "wall-mount"
+        }
+      ],
+      "sourceSha256": "63a6f00bf6ebd39a70b1e79bdfebdb4a1849d87826a4f0f516b9a55063b92870",
+      "structuralGrid": null
     }
   },
-  "calibrationHash": "edd57bdb9f00b564ac607a2f9f8a7501a72db9abb5a950cbc4d14ddd2f1a41ba",
+  "calibrationHash": "4516c7b36a7be526b7a3ec6a12f9a428645a57c448b14a50f45f6c82c8984adb",
   "normalizerVersion": "kgr3-calibration-v2",
   "pack": "kenney-retro-fantasy-kit",
   "schema": "genesis.donor-index.v2"

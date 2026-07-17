@@ -9511,12 +9511,22 @@ function buildExtrusionProp(entry){
   g.userData.extrusionHeight = h;   // BW2-2b integration: wall-contact AO sizes its halo off this
   return g;
 }
-function interiorBuildWallProps(wallProps, cx, cz, floorTopMap, wallHeightBase, realmId){
+function interiorBuildWallProps(wallProps, cx, cz, floorTopMap, wallHeightBase, realmId, cameraSideBand){
   const group = new THREE.Group();
   (wallProps || []).forEach((d) => {
     if(!d || !d.slug) return;
     const floorTop = interiorFloorTopAt(floorTopMap, d.x || 0, d.y || 0);
     const wallNormal = ITR_WALL_SIDE_NORMAL[d.wallSide];
+    // KGR-7 FOURTH-WALL LAW (OPERATION §15): a wall-hung prop follows its wall's camera cutaway. The
+    // parapet pass drops camera-side walls so the camera sees INTO the room; a painting/tackle left
+    // at mid-height on a wall that isn't there renders as a floating untextured back (the olive-quad
+    // artifact in the Ivory Pit frames). Same hoisted itrCameraSideBand test the parapet itself uses;
+    // the prop returns on the next board build if a rotate puts its wall on the far side.
+    if(wallNormal && typeof cameraSideBand === "function" &&
+       cameraSideBand((d.x || 0) + wallNormal.x, (d.y || 0) + wallNormal.z)){
+      console.warn("qa: wallhang-camera-cutaway-hidden", d.slug, d.x, d.y, d.wallSide);
+      return;
+    }
     const wallH = (typeof wallHeightBase === "number" && wallHeightBase > 0) ? wallHeightBase : ITR_WALLHANG_FALLBACK_WALL_HEIGHT;
     const target = wallNormal ? {
       x:(d.x || 0) - (cx || 0) + wallNormal.x * ITR_WALLHANG_WALL_OFFSET,
@@ -9596,7 +9606,7 @@ function addWallContactAO(cardGroup, cardHeight, zOffset){
   cardGroup.add(mesh);
   return mesh;
 }
-function interiorBuildDressing(dressing, cx, cz, floorTopMap, prismLists, wallHeightBase, realmId){
+function interiorBuildDressing(dressing, cx, cz, floorTopMap, prismLists, wallHeightBase, realmId, cameraSideBand){
   const group = new THREE.Group();
   // VP7 CONTACT GROUNDING: same sibling-subgroup convention as interiorBuildPieces' blobGroup
   // (below) — blobs never interleave into `group`'s own direct children.
@@ -9621,6 +9631,13 @@ function interiorBuildDressing(dressing, cx, cz, floorTopMap, prismLists, wallHe
     const floorTop = interiorFloorTopAt(floorTopMap, d.x || 0, d.y || 0);
     const wallSide = d.visualAsset && d.visualAsset.wallSide;
     const wallNormal = ITR_WALL_SIDE_NORMAL[wallSide];
+    // KGR-7 FOURTH-WALL LAW — same rule as interiorBuildWallProps: a wall-MOUNTED donor on a
+    // camera-cutaway wall hides with its wall rather than floating on the missing plane.
+    if(wallNormal && typeof cameraSideBand === "function" &&
+       cameraSideBand((d.x || 0) + wallNormal.x, (d.y || 0) + wallNormal.z)){
+      console.warn("qa: wallmount-camera-cutaway-hidden", d.slug, d.x, d.y, wallSide);
+      return;
+    }
     const wallH = (typeof wallHeightBase === "number" && wallHeightBase > 0) ? wallHeightBase : ITR_WALLHANG_FALLBACK_WALL_HEIGHT;
     const donorTarget = wallNormal ? {
       x:(d.x || 0) - (cx || 0) + wallNormal.x * ITR_WALLHANG_WALL_OFFSET,
@@ -11685,7 +11702,7 @@ function setInteriorBoard(data){
   // dressPlan output — a plain field the caller sets directly on the board object, same convention
   // as data.pieces/data.lightProfile above).
   const dressingGroup = interiorBuildDressing(data.dressing, cx, cz, S.interiorFloorTopMap,
-    [wallList, pillarList, inst.doorframe], data.wallHeightBase, data.realmId);
+    [wallList, pillarList, inst.doorframe], data.wallHeightBase, data.realmId, itrCameraSideBand);
   S.interiorGroup.add(dressingGroup);
   S.interiorDressingCount = (data.dressing || []).length;
   // harness-facing diagnostic (dev/verify-dungeon-dressing.mjs check 4: "render mount... origin-
@@ -11725,7 +11742,7 @@ function setInteriorBoard(data){
   S.interiorGroup.add(furnitureGroup);
   S.interiorFurnitureCount = (data.furniture || []).length;
   const wallPropsGroup = interiorBuildWallProps(data.wallProps, cx, cz, S.interiorFloorTopMap,
-    data.wallHeightBase, data.realmId);
+    data.wallHeightBase, data.realmId, itrCameraSideBand);
   S.interiorGroup.add(wallPropsGroup);
   S.interiorWallPropsCount = (data.wallProps || []).length;
   S.interiorWallPropsWorldPositions = wallPropsGroup.children.map((g) => {

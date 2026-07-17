@@ -104,9 +104,19 @@ for (const [pack, scale] of Object.entries(packs)) {
   check(`${pack} canonicalScale=${scale}`, close(record?.canonicalScale, scale));
 }
 check("exactly ten named pilot candidates", pilots.length === 10 && pilotIds.size === 10);
+// KGR-7 (OPERATION §15): the walk-demand tranche joins the runtime set, and the plain pulley is a
+// NAMED approved-dev demotion (edge-on sliver at the production camera; pulley-crate replaced it).
+const kgr7RuntimeIds = new Set([
+  "kenney-castle-kit/rocks-small", "kenney-retro-fantasy-kit/pulley-crate", "kenney-food-kit/pot-stew",
+]);
 const runtimeIds = Object.entries(calibration.assets).filter(([, record]) => record.qaStatus === "approved-runtime").map(([id]) => id);
-check("exactly the ten named pilots are approved-runtime", runtimeIds.length === pilotIds.size && runtimeIds.every(id => pilotIds.has(id)) && pilots.every(({id}) => runtimeIds.includes(id)));
-check("approved-dev is empty after promotion", Object.values(calibration.assets).every(record => record.qaStatus !== "approved-dev"));
+check("exactly the ten named pilots + KGR-7 tranche are approved-runtime",
+  runtimeIds.length === pilotIds.size + kgr7RuntimeIds.size &&
+  runtimeIds.every(id => pilotIds.has(id) || kgr7RuntimeIds.has(id)) &&
+  pilots.every(({id}) => runtimeIds.includes(id)) && [...kgr7RuntimeIds].every(id => runtimeIds.includes(id)));
+check("approved-dev is exactly the named KGR-7 pulley demotion",
+  Object.entries(calibration.assets).filter(([, record]) => record.qaStatus === "approved-dev")
+    .map(([id]) => id).join(",") === "kenney-retro-fantasy-kit/pulley");
 
 console.log("\n=== KGR-4C normalized contracts ===");
 for (const item of pilots) {

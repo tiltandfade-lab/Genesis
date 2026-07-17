@@ -17,7 +17,7 @@ reach the visual target. Read it before this handoff's historical graphics queue
 For any sprite/pixel-art generation or review work specifically, `docs/ART-DEPARTMENT.md` is the
 pixel register's canonical home — live-corpus state, the style law index, and the regen runbooks.
 
-## ⭐ Latest (2026-07-17, later) — KGR ACCEPTANCE REOPENED: BUILT-INFRA only; gameplay-first slice (KGR-7) owed [Claude Fable 5, orchestrated]
+## ⭐ Latest (2026-07-17, later) — KGR ACCEPTANCE REOPENED + KGR-7 SLICE BUILT: one real rolled walk, before/after, awaiting Adam [Claude Fable 5, orchestrated]
 
 Adam reviewed the actual KGR-6 evidence and overturned the same-day close below. The infrastructure
 stands — calibration schema, source-hash admission, workbench, attachment solver, transform repair,
@@ -36,6 +36,21 @@ coverage, placement, capture timing); workbench-calibrate what the roll actually
 reroll a noun); populate ONE walk convincingly; gate on genuine before/after engine frames — not QA
 cards. `integration/kenney-graphics-repair` stays unmerged until Adam accepts a real current-engine
 rolled walk that is unmistakably better.
+
+**KGR-7 ran the same day.** A real world rolled through the production pipeline — **The Ivory
+Pit**, dungeon, The Loop — is now the canonical acceptance fixture (`dev/battle-gate/
+kgr7-walk-truth/kgr7-world-state.json`; the rig restores it under any engine state). Diagnosis
+confirmed the full chain (prep unserviced → chrome-roster realm fallback → rolled nouns never
+projected → rules matching a field interiors never stamped → capture racing donor loads), and the
+slice fixed each at its seam: fantasy realm-truth, walk-noun projection (additive, fail-closed,
+anchor-class), a three-asset walk-demand tranche through the workbench API (cairn/winch/cookpot),
+the fourth-wall law for wall-hung props, and re-pinned admission gates. The after-frame stages the
+rolled Small cairn as calibrated 3D stone in a coherent fantasy room; before/after evidence:
+`dev/battle-gate/kgr7-walk-truth/kgr7-before-after.png`; residuals + catalog gaps:
+`dev/playtest-findings-kgr7-walk-truth.md`. **Do next:** Adam reads the frames (the only
+acceptance gate); then the P2 ladder (billboard wall clip · black blocker volumes · south-band
+staging · wall-visibility authority · dark leaves · Chrome exposure) and the next measured
+demand tranche.
 
 ## Latest (2026-07-17) — KENNEY GRAPHICS REPAIR infrastructure: ten calibrated citizens, truthful fallbacks [Codex, orchestrated — acceptance language amended same day, see above]
 

@@ -48,6 +48,24 @@
       "match": { "realmPropNameIncludes": ["lantern", "lamp"] },
       "families": ["lantern", "lamp-floor", "lamp-wall"],
       "mount": "context"
+    },
+    {
+      "id": "walk-noun-cairn",
+      "match": { "realmPropNameIncludes": ["cairn"] },
+      "families": ["rock-pile"],
+      "mount": "floor-mount"
+    },
+    {
+      "id": "walk-noun-winch",
+      "match": { "realmPropNameIncludes": ["winch", "pulley"] },
+      "families": ["pulley"],
+      "mount": "wall-mount"
+    },
+    {
+      "id": "walk-noun-cookpot",
+      "match": { "realmPropNameIncludes": ["cookpot", "stew pot", "cauldron"] },
+      "families": ["cookpot"],
+      "mount": "floor-mount"
     }
   ]
 }

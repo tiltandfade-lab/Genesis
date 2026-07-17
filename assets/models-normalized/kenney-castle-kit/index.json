@@ -1,0 +1,105 @@
+{
+  "algorithmVersion": 1,
+  "assets": {
+    "rocks-small": {
+      "admissionClass": "PART_DONOR",
+      "assetId": "kenney-castle-kit/rocks-small",
+      "bounds": {
+        "aabbMax": [
+          0.30901265144348145,
+          0.3,
+          0.33159259557723997
+        ],
+        "aabbMin": [
+          -0.30901265144348145,
+          0.0,
+          -0.33159263134002687
+        ],
+        "footprint": {
+          "center": [
+            0,
+            0
+          ],
+          "halfExtents": [
+            0.309,
+            0.332
+          ],
+          "yawRadians": 0
+        },
+        "footprintSource": "override",
+        "groundY": 0.0
+      },
+      "canonicalScale": 2,
+      "category": "rocks",
+      "companionLeaf": null,
+      "file": "rocks-small.glb",
+      "materialFamilies": [
+        "stone"
+      ],
+      "normalizedFrame": {
+        "forward": "+Z",
+        "sourceToGenesis": [
+          0.6,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.6,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.6,
+          0.0,
+          0,
+          0,
+          0,
+          1.0
+        ],
+        "up": "+Y"
+      },
+      "qaStatus": "approved-runtime",
+      "recipeHash": "a3b1547fa9bcbae1413b72d62197d498e7d18df83bb12e749a6eec130984ecaa",
+      "schema": "genesis.donor.v2",
+      "semanticParts": {},
+      "sockets": [
+        {
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.66,
+              0.4,
+              0.71
+            ]
+          },
+          "id": "floor-mount",
+          "mateFamily": "floor",
+          "mateRule": "coincident",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "size": [
+            0.618,
+            0.05,
+            0.663
+          ],
+          "type": "floor-mount"
+        }
+      ],
+      "sourceSha256": "d860d3a053e1fc7b5825a39f6df68f14c49bab7443c1703e1f5b28444bd60e0d",
+      "structuralGrid": null
+    }
+  },
+  "calibrationHash": "4516c7b36a7be526b7a3ec6a12f9a428645a57c448b14a50f45f6c82c8984adb",
+  "normalizerVersion": "kgr3-calibration-v2",
+  "pack": "kenney-castle-kit",
+  "schema": "genesis.donor-index.v2"
+}

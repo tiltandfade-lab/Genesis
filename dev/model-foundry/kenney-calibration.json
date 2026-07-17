@@ -53,6 +53,18 @@
       "sourceForward": "+Z",
       "canonicalScale": 1,
       "structuralGrid": null
+    },
+    "kenney-castle-kit": {
+      "sourceUp": "+Y",
+      "sourceForward": "+Z",
+      "canonicalScale": 2,
+      "structuralGrid": null
+    },
+    "kenney-food-kit": {
+      "sourceUp": "+Y",
+      "sourceForward": "+Z",
+      "canonicalScale": 0.5,
+      "structuralGrid": null
     }
   },
   "assets": {
@@ -2483,6 +2495,307 @@
       "notes": [
         "KGR-4C ratio proof: raw long/height 0.40/0.47; long >=0.65u requires total scale >=1.625, while height <=0.65u requires total scale <=1.382979.",
         "Rejected without mount: do not rotate onto a false ground face; replaced by kenney-furniture-kit/benchCushionLow."
+      ]
+    },
+    "kenney-castle-kit/rocks-small": {
+      "sourceSha256": "d860d3a053e1fc7b5825a39f6df68f14c49bab7443c1703e1f5b28444bd60e0d",
+      "admissionClass": "PART_DONOR",
+      "category": "rocks",
+      "rootMaterialFamily": "stone",
+      "preTransform": {
+        "translation": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "scale": [
+          0.3,
+          0.3,
+          0.3
+        ]
+      },
+      "scaleReason": "semantic-size:small-cairn 0.2-0.5u tall stone stack (KGR-7 walk demand: 'Small cairn — stones stacked like a waypoint')",
+      "groundOffset": 0,
+      "semanticParts": {},
+      "sockets": [
+        {
+          "id": "floor-mount",
+          "type": "floor-mount",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "mateRule": "coincident",
+          "mateFamily": "floor",
+          "size": [
+            0.618,
+            0.05,
+            0.663
+          ],
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.66,
+              0.4,
+              0.71
+            ]
+          }
+        }
+      ],
+      "footprintOverride": {
+        "center": [
+          0,
+          0
+        ],
+        "halfExtents": [
+          0.309,
+          0.332
+        ],
+        "yawRadians": 0
+      },
+      "qaStatus": "approved-runtime",
+      "notes": [
+        "KGR-7: realizes the rolled walk noun 'Small cairn' (The Ivory Pit S1). Rock pile reads as stacked stones at 0.3u height beside the 1.2u yardstick.",
+        "KGR-7 orchestrator promotion 2026-07-17: workbench lineup pass (grounding, scale vs 6-ft yardstick, Genesis material response); final gate is Adam's read of the rolled-walk room frames."
+      ]
+    },
+    "kenney-retro-fantasy-kit/pulley": {
+      "sourceSha256": "fcac7ec8db844c666de8d31c420ad5710b29536a6b0b620f318fab514a173708",
+      "admissionClass": "PART_DONOR",
+      "category": "rigging",
+      "rootMaterialFamily": "wood",
+      "preTransform": {
+        "translation": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0.70710678,
+          0,
+          0.70710678
+        ],
+        "scale": [
+          0.5,
+          0.5,
+          0.5
+        ]
+      },
+      "scaleReason": "semantic-size:wall winch tackle 0.6-1.4u tall (KGR-7 walk demand: 'Winch drum with frayed cable snarled around it')",
+      "groundOffset": 0,
+      "semanticParts": {},
+      "sockets": [
+        {
+          "id": "wall-mount",
+          "type": "wall-mount",
+          "position": [
+            -0.3,
+            0,
+            -0.05
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "mateRule": "coincident",
+          "mateFamily": "wall",
+          "size": [
+            0.6,
+            1,
+            0.1
+          ],
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.7,
+              1.1,
+              0.3
+            ]
+          }
+        }
+      ],
+      "footprintOverride": {
+        "center": [
+          -0.3,
+          0
+        ],
+        "halfExtents": [
+          0.3,
+          0.05
+        ],
+        "yawRadians": 0
+      },
+      "qaStatus": "approved-dev",
+      "notes": [
+        "KGR-7: realizes the rolled walk dressing noun 'Winch drum with frayed cable' (The Ivory Pit S1). Hanging rope tackle; +Z faces away from the wall after the 90-degree preTransform; hangs from the mount point.",
+        "KGR-7 orchestrator promotion 2026-07-17: workbench lineup pass (grounding, scale vs 6-ft yardstick, Genesis material response); final gate is Adam's read of the rolled-walk room frames.",
+        "KGR-7 demotion 2026-07-17: at the production gameplay camera the 0.1u-thin profile reads as a floating edge-on sliver, failing the §15 orientation/readability gate. pulley-crate carries the pulley family instead. Not quarantined — geometry is sound in the workbench; revisit if a camera ever faces it."
+      ]
+    },
+    "kenney-food-kit/pot-stew": {
+      "sourceSha256": "311ba282a85bd722b5093f512579a168e3da949617600196b60d782c11afd6b8",
+      "admissionClass": "PART_DONOR",
+      "category": "cookware",
+      "rootMaterialFamily": "iron",
+      "preTransform": {
+        "translation": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "scaleReason": null,
+      "groundOffset": 0,
+      "semanticParts": {},
+      "sockets": [
+        {
+          "id": "floor-mount",
+          "type": "floor-mount",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "mateRule": "coincident",
+          "mateFamily": "floor",
+          "size": [
+            0.329,
+            0.05,
+            0.411
+          ],
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.4,
+              0.3,
+              0.5
+            ]
+          }
+        }
+      ],
+      "footprintOverride": {
+        "center": [
+          0,
+          0
+        ],
+        "halfExtents": [
+          0.164,
+          0.206
+        ],
+        "yawRadians": 0
+      },
+      "qaStatus": "approved-runtime",
+      "notes": [
+        "KGR-7: realizes the rolled walk dressing noun 'Cookpot with soot-black belly' (The Ivory Pit S3). 0.18u tall stew pot.",
+        "KGR-7 orchestrator promotion 2026-07-17: workbench lineup pass (grounding, scale vs 6-ft yardstick, Genesis material response); final gate is Adam's read of the rolled-walk room frames."
+      ]
+    },
+    "kenney-retro-fantasy-kit/pulley-crate": {
+      "sourceSha256": "63a6f00bf6ebd39a70b1e79bdfebdb4a1849d87826a4f0f516b9a55063b92870",
+      "admissionClass": "PART_DONOR",
+      "category": "rigging",
+      "rootMaterialFamily": "wood",
+      "preTransform": {
+        "translation": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0.70710678,
+          0,
+          0.70710678
+        ],
+        "scale": [
+          0.5,
+          0.5,
+          0.5
+        ]
+      },
+      "scaleReason": "semantic-size:wall winch tackle 0.6-1.4u tall (KGR-7 walk demand: 'Winch drum with frayed cable snarled around it')",
+      "groundOffset": 0,
+      "semanticParts": {},
+      "sockets": [
+        {
+          "id": "wall-mount",
+          "type": "wall-mount",
+          "position": [
+            -0.3669,
+            0,
+            -0.1837
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "mateRule": "coincident",
+          "mateFamily": "wall",
+          "size": [
+            0.7337,
+            1,
+            0.3674
+          ],
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.8,
+              1.1,
+              0.6
+            ]
+          }
+        }
+      ],
+      "footprintOverride": {
+        "center": [
+          -0.3669,
+          0
+        ],
+        "halfExtents": [
+          0.367,
+          0.184
+        ],
+        "yawRadians": 0
+      },
+      "qaStatus": "approved-runtime",
+      "notes": [
+        "KGR-7: realizes the rolled walk dressing noun 'Winch drum with frayed cable' (The Ivory Pit S1). Pulley + hanging crate silhouette reads as hoisting gear at the gameplay camera where the thin plain pulley read as an edge-on sliver.",
+        "KGR-7 orchestrator promotion 2026-07-17: workbench geometry family shares the reviewed pulley calibration; final gate is Adam's read of the rolled-walk room frames."
       ]
     }
   }

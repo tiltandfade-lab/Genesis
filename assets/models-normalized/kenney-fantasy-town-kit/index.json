@@ -59,7 +59,7 @@
         "up": "+Y"
       },
       "qaStatus": "approved-runtime",
-      "recipeHash": "bb91bede6ec47d37062ac16c8b73a9f2b37464206ee8b177fbfc7c80c7a783a2",
+      "recipeHash": "fe2a976d3bf34ddd019ba9f197e7e931cfb19ab865693b3b9401a08727b25c0c",
       "schema": "genesis.donor.v2",
       "semanticParts": {},
       "sockets": [
@@ -98,7 +98,7 @@
       "structuralGrid": null
     }
   },
-  "calibrationHash": "edd57bdb9f00b564ac607a2f9f8a7501a72db9abb5a950cbc4d14ddd2f1a41ba",
+  "calibrationHash": "4516c7b36a7be526b7a3ec6a12f9a428645a57c448b14a50f45f6c82c8984adb",
   "normalizerVersion": "kgr3-calibration-v2",
   "pack": "kenney-fantasy-town-kit",
   "schema": "genesis.donor-index.v2"

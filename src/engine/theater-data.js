@@ -1788,7 +1788,15 @@ function trayFrom(source, scene, opts){
   if(source.kind === "interior" && source.plan && typeof interiorBuildBoard === "function"){
     const env = source.env || opts.env;
     const realms = source.realms || opts.realms;
-    const realmId = source.realmId || (Array.isArray(realms) && realms.length ? realms[0] : undefined);
+    // KGR-7 REALM TRUTH (OPERATION §15; DESIGN 2026-07-15 Q19 "FANTASY-ONLY TO PRE-ALPHA"):
+    // activeRealmsFor returns [] for every walk outside a breach/marooned-realm overlay — the BASE
+    // world. The old `undefined` fallthrough made every downstream default decide alone, and they
+    // disagreed with the ruling: dressPlan's DRESSING_DEFAULT_REALM filled plain fantasy dungeons
+    // with the CHROME roster (neon flora, antenna stacks — the "overexposed white flora" the live
+    // playtest logged), and no chrome slug has a Kenney rule, so realization could never fire on
+    // filler. The base game IS fantasy until realm expansions ship; say so once, at the seam every
+    // interior consumer (roster, kit, realization, donor materials) already reads.
+    const realmId = source.realmId || (Array.isArray(realms) && realms.length ? realms[0] : "fantasy");
     // GRAPHICS-ENGINE.md GR2 §D DRESSING SYSTEM — dressPlan (src/engine/place-dressing.js) existed and
     // was fully verified (dev/verify-dungeon-dressing.mjs) but was NEVER CALLED from this production
     // render path — the only callers were that harness and the study rig (dev/battle-gate/
@@ -1824,10 +1832,128 @@ function trayFrom(source, scene, opts){
     if(projectedDressing.length){
       dressedPlan = Object.assign({}, dressedPlan, { dressing:(dressedPlan.dressing||[]).concat(projectedDressing) });
     }
+    // KGR-7 WALK-NOUN PROJECTION (OPERATION §15). Legacy fallback cards carry the walk's OWN rolled
+    // nouns (segment feature/object/dressing) but no visual slug and no position, so the projected-
+    // dressing map above drops them and the room's canonical identity never reaches the stage — the
+    // Ivory Pit diagnosis showed a Bone Wall / Small cairn / Winch drum room rendering only generic
+    // roster filler. Derive an ADDITIVE dressing candidate per such card: identity rides
+    // realmPropName (the rolled name — the same field the realm-prop tray paths already stamp, and
+    // the field the realization rules match), position is a seeded deterministic floor cell in the
+    // active room (wall-adjacent so a wall-mount rule can resolve its side; floor mounts relocate to
+    // an interior cell). FAIL-CLOSED: a candidate is kept only when kenneyVisualAssetFor already
+    // resolves a truthful approved donor for it — an unmatched noun adds NOTHING and renders exactly
+    // as before. Canonical walk/prep fields are never written (D7).
+    const nounSeg = source.segment || null;
+    if(projection && typeof kenneyVisualAssetFor === "function" && typeof kenneyHashStr === "function" &&
+       typeof SPATIAL_CELL !== "undefined" && nounSeg && Array.isArray(source.plan?.rooms)){
+      const nounRoom = source.plan.rooms.find(r => r.segNum === source.focusSegNum);
+      if(nounRoom && source.plan.cells){
+        const plan0 = source.plan;
+        const occupied = {};
+        (dressedPlan.dressing || []).forEach(e => { if(e) occupied[Math.round(e.x)+","+Math.round(e.y)] = true; });
+        const floorCells = [], farWallCells = [];
+        const nearDoor = (cx2, cy) => [[0,0],[1,0],[-1,0],[0,1],[0,-1]].some(([dx,dy]) => {
+          const nx = cx2 + dx, ny = cy + dy;
+          if(nx < 0 || ny < 0 || nx >= plan0.cellW || ny >= plan0.cellD) return false;
+          return plan0.cells[ny * plan0.cellW + nx] === SPATIAL_CELL.DOOR;
+        });
+        for(let cy = nounRoom.y; cy < nounRoom.y + nounRoom.d; cy++){
+          for(let cx2 = nounRoom.x; cx2 < nounRoom.x + nounRoom.w; cx2++){
+            if(plan0.cells[cy * plan0.cellW + cx2] !== SPATIAL_CELL.FLOOR) continue;
+            const cell = { x: cx2, y: cy };
+            floorCells.push(cell);
+            // Wall-mount pool: solid wall stretches only — a tackle hung beside an aperture reads as
+            // if it floats in the doorway at the gameplay camera. Prefer the n/w walls: at the default
+            // production yaw the camera cutaway drops the s/e parapets, and a prop mounted there hides
+            // under the fourth-wall law (theater-boot.js) — legal but invisible, which defeats staging
+            // the room's own noun.
+            const side = (typeof kenneyWallSideAt === "function") ? kenneyWallSideAt(cx2, cy, plan0) : null;
+            if(side && !nearDoor(cx2, cy) && (side === "n" || side === "w")){
+              farWallCells.push(side === "n" ? Object.assign({}, cell, { north: true }) : cell);
+            }
+          }
+        }
+        // Readability pools: the north wall faces the fixed camera squarely (west is edge-clipped at
+        // the frame border), and a floor noun staged at the room's lit center band reads while one on
+        // the parapet rim vanishes into the cutaway shadow. North-wall cells fill east-to-west —
+        // deterministic, and the east stretch is the practical-lit, least-cluttered band at the
+        // default composition (the first after-capture hid the winch behind the room's west clutter).
+        const northWallCells = farWallCells.filter(c => c.north).sort((a, b) => b.x - a.x);
+        let centralFloorCells = [];
+        if(floorCells.length){
+          const cxMid = nounRoom.x + nounRoom.w / 2, cyMid = nounRoom.y + nounRoom.d / 2;
+          centralFloorCells = floorCells.slice().sort((a, b) =>
+            (Math.abs(a.x - cxMid) + Math.abs(a.y - cyMid)) - (Math.abs(b.x - cxMid) + Math.abs(b.y - cyMid)))
+            .slice(0, Math.max(4, Math.floor(floorCells.length * 0.4)));
+        }
+        // Floor occupancy blocks floor picks only; a wall mount hangs ABOVE a floor sprite's cell
+        // without conflict, so wall picks track their own occupancy (seeded by the roster's own
+        // wall-hang entries so a rolled painting and a walk noun never share a wall cell).
+        const wallOccupied = {};
+        (dressedPlan.dressing || []).forEach(e => { if(e && e.primary === "wall-hang") wallOccupied[Math.round(e.x)+","+Math.round(e.y)] = true; });
+        const pickCell = (pool, seedKey, ordered, occupancy) => {
+          if(!pool.length) return null;
+          const taken = occupancy || occupied;
+          const start = ordered ? 0 : kenneyHashStr(seedKey) % pool.length;
+          for(let step = 0; step < pool.length; step++){
+            const cell = pool[(start + step) % pool.length];
+            if(!taken[cell.x+","+cell.y]) return cell;
+          }
+          return null;
+        };
+        const nounFieldOf = ref => { const m = /\.(feature|object|dressing)$/.exec(String(ref || "")); return m ? m[1] : null; };
+        const nounNameOf = field => field === "feature" ? (nounSeg.feature && nounSeg.feature.name)
+          : field === "object" ? (nounSeg.object && nounSeg.object.name)
+          : (nounSeg.dressing && (nounSeg.dressing.text || nounSeg.dressing.name));
+        const derived = [];
+        projection.stageNow.forEach(card => {
+          if(!card || card.slug || card.position || !card.sourceRef) return;
+          const field = nounFieldOf(card.id) || nounFieldOf(card.sourceRef);
+          const name = field ? nounNameOf(field) : null;
+          if(!name) return;
+          const seedKey = "kgr7-noun:" + (source.walkId || plan0.seed || "") + ":" + source.focusSegNum + ":" + card.sourceRef;
+          // Camera-visible wall cells only (n/w): a wall noun that can only hang on a camera-side
+          // wall would mount legally and then hide under the fourth-wall law — staged-but-invisible
+          // helps nobody, so such a room simply keeps the noun in narration.
+          let cell = pickCell(northWallCells, seedKey, true, wallOccupied) ||
+            pickCell(farWallCells, seedKey, false, wallOccupied) || pickCell(floorCells, seedKey);
+          if(!cell) return;
+          const candidate = {
+            slug: "walk-noun-" + field, realmPropName: name,
+            x: cell.x, y: cell.y, roomSegNum: source.focusSegNum,
+            // Anchor-class primaries on purpose: these are the segment's CANONICAL rolled facts, not
+            // incidental filler — placeDistribute's pldIsEligible must never relocate them (its first
+            // Ivory Pit run pushed the cairn outside the room rect). The seeded cell above is final.
+            primary: field === "feature" ? "setPiece" : "focal",
+            cardKind: field === "feature" ? "large" : "medium",
+            sourceRef: card.sourceRef, role: card.role, count: card.count || 1,
+            walkNounDerived: true,
+          };
+          const probe = kenneyVisualAssetFor(candidate, { realmId: realmId, plan: plan0 });
+          if(!probe) return;
+          if(!probe.wallSide){
+            const interior = pickCell(centralFloorCells, seedKey + ":interior") || pickCell(floorCells, seedKey + ":interior");
+            if(interior){ candidate.x = interior.x; candidate.y = interior.y; }
+            occupied[candidate.x+","+candidate.y] = true;
+          } else {
+            wallOccupied[candidate.x+","+candidate.y] = true;
+          }
+          derived.push(candidate);
+        });
+        if(derived.length){
+          dressedPlan = Object.assign({}, dressedPlan, { dressing:(dressedPlan.dressing||[]).concat(derived) });
+        }
+      }
+    }
     // KGR-5: resolve replaceable donor metadata only after every noun/card is frozen and before the
     // placement pass.  The pure realization layer is additive and consumes no global RNG.
     if(typeof kenneyRealizePlan === "function"){
       dressedPlan = kenneyRealizePlan(dressedPlan, { realmId:realmId });
+    }
+    // KGR-7 fail-closed backstop: a derived walk-noun candidate that somehow lost its realization
+    // (registry drift between probe and stamp) renders nothing new rather than a broken card.
+    if(Array.isArray(dressedPlan.dressing) && dressedPlan.dressing.some(e => e && e.walkNounDerived && !e.visualAsset)){
+      dressedPlan = Object.assign({}, dressedPlan, { dressing: dressedPlan.dressing.filter(e => !(e && e.walkNounDerived && !e.visualAsset)) });
     }
     // PHASE-3-WAVE-1-SPECS.md P3-1a (GP-3a Poisson place-distribution.js) — the frozen seam: nouns/
     // counts/source refs/home rooms/canonical anchors are decided above; ROOM_PLACE_DISTRIBUTE (src/

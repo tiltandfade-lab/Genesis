@@ -30,6 +30,12 @@ PILOTS = {
     "kenney-furniture-kit/lampRoundFloor": "lamp-floor",
     "kenney-fantasy-town-kit/lantern": "lantern",
     "kenney-factory-kit/lever-double": "lever",
+    # KGR-7 walk-demand tranche (OPERATION §15): calibrated against The Ivory Pit's actual rolled
+    # nouns — never a bulk admission. Each entered through the workbench save API, passed the
+    # lineup read, and was promoted individually.
+    "kenney-castle-kit/rocks-small": "rock-pile",
+    "kenney-retro-fantasy-kit/pulley-crate": "pulley",
+    "kenney-food-kit/pot-stew": "cookpot",
 }
 
 

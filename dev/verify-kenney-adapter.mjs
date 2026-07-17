@@ -620,6 +620,8 @@ console.log("\n=== 6. KGR-3 calibrated v2 indexes + runtime compatibility bounda
       "kenney-furniture-kit/tableRound", "kenney-furniture-kit/benchCushionLow", "kenney-furniture-kit/chair",
       "kenney-furniture-kit/lampWall", "kenney-furniture-kit/lampRoundFloor",
       "kenney-fantasy-town-kit/lantern", "kenney-factory-kit/lever-double",
+      // KGR-7 walk-demand tranche (OPERATION §15) — calibrated against The Ivory Pit's rolled nouns.
+      "kenney-castle-kit/rocks-small", "kenney-retro-fantasy-kit/pulley-crate", "kenney-food-kit/pot-stew",
     ]);
     const productionIds = indexes.flatMap((index) => Object.keys(registryHelper(index)));
     check("KGR-3 D8: production registry is exactly the ten named approved-runtime pilots",

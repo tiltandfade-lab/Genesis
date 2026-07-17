@@ -262,7 +262,8 @@ group("5 — a transition/squeeze door instance is narrower+lower than a plain d
   const plainJambs = board.instances.doorframe.filter((d) => !d.squeeze && d.jamb);
   const squeezeHeaders = board.instances.doorframe.filter((d) => d.squeeze && d.header);
   const plainHeaders = board.instances.doorframe.filter((d) => !d.squeeze && d.header);
-  ok(squeezeJambs.length > 0, "at least one squeeze doorframe jamb instance exists (mixed-domain fixture)");
+  // KGR-8 DOOR LAW (DESIGN 2026-07-17 evening): zero doorframe prisms of ANY kind — squeeze included.
+  ok(squeezeJambs.length === 0 && board.instances.doorframe.length === 0, "ZERO doorframe instances (squeeze included) — KGR-8 door law");
   if (squeezeJambs.length && plainJambs.length) {
     ok(squeezeJambs[0].sy < plainJambs[0].sy, `squeeze door jamb sy (${squeezeJambs[0].sy}) < plain door jamb sy (${plainJambs[0].sy})`);
   }

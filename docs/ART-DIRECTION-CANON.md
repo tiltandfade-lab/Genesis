@@ -260,3 +260,52 @@ Art department roles:
 
 > "i am primary art director, codex is my assistant who can help me asses the technical issues.
 > sometimes i will consult codex but you don't need to worry about that"
+
+## THE MORNING RULINGS (Adam, 2026-07-17 — answers to the KGR-8 open questions, verbatim)
+
+The proving ladder:
+
+> "ok, so ivory pit is basically our test map? but it's just a single room? the walks don't
+> really do well with a single room, we should at least roll 5 rooms, but only after our clay
+> room has proven the kenny swap works at that scale, then we can scale up to the 5 room, then
+> we can scale up to the 14 room"
+
+(Fact of record: the Ivory Pit is a 4-segment rolled walk — Entry 40'×40', Sloped Passage,
+Natural Passage, Finale junction room; every recent frame showed only the ACTIVE room, the
+Entry. The ladder stands: clay 5×5 → rolled 5-room → rolled 14-room.)
+
+Corridors:
+
+> "short corridors it is"
+
+> "this is something that we discussed that exists in the tables of the dungeon builders guide
+> in the references, maybe it's time to introduce that"
+
+(Referent: the corridor dimension rollers — wide/trapped/narrow — sourced from the tables in
+`Reference/Dungeon Builder's Guidebook (2e).pdf`. Table work, Adam's domain; scanned PDF —
+vision-read, never trust the text layer.)
+
+Normal maps and sprites:
+
+> "do sprites get normal maps too? isn't that how the new squaresoft sprite citizenship
+> effects work?"
+
+> "full spread of normal maps characters included i want to see the taste cards"
+
+Taste cards ordered:
+
+> "taste card for camera angle please"
+
+> "taste card for grid application please"
+
+Decals:
+
+> "yeah i think a rolled size band per sprite"
+
+> "i think in most cases decals should be able to overlap and rotate freely"
+
+Characters:
+
+> "yes mirrored sprite is fine with the interim jank"
+
+> "characters should rotate to interact with whover and whatever they are interacting with"

@@ -1,7 +1,7 @@
 ---
 type: session-handoff
 project: Genesis
-status: AWAITING ADAM — present this verbatim at the next session open, then record answers per the decision-capture rule
+status: ANSWERED 2026-07-17 — Adam ruled; verbatim in ART-DIRECTION-CANON.md "MORNING RULINGS", digest in DESIGN.md, ladder + card queue folded into KGR8-KENNEY-SHELL-REBUILD.md
 created: 2026-07-17 (night)
 context: Adam's night rulings are recorded (ART-DIRECTION-CANON.md "NIGHT RULINGS"; DESIGN.md 2026-07-17 night; KGR8-KENNEY-SHELL-REBUILD.md amendment header; KGR8-CODEX-ASSESSMENT.md adopted). These are the follow-up questions he asked to be re-prompted with. Nothing builds until he rules; then the 5x5 clay proving room begins.
 ---

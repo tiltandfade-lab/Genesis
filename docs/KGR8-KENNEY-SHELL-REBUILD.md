@@ -24,6 +24,21 @@ scope: dungeon interior shells rebuilt from Kenney modules; door law; room-shape
 > floor sizes**, and **normal maps YES** (revive MATERIAL-IDENTITY.md's Sobel-from-albedo path as
 > a test card — its "Stage E" re-scope is the canonical mega-pass failure the new law forbids).
 
+> **2026-07-17 morning amendment (Adam's answers to KGR8-OPEN-QUESTIONS.md — verbatim in
+> ART-DIRECTION-CANON.md "MORNING RULINGS"; digest in DESIGN.md):**
+> **THE PROVING LADDER** — clay 5×5 (hand-authored, the only hand-built fixture) → **rolled**
+> 5-room walk → **rolled** 14-room walk; each rung proves the Kenney swap before the next
+> ("the walks don't really do well with a single room"). The Codex deterministic fixtures are
+> superseded: the scaled rungs are rolled worlds frozen like the Ivory Pit. **CORRIDOR ROLLERS**
+> get sourced from `Reference/Dungeon Builder's Guidebook (2e).pdf` tables (Adam's table lane;
+> vision-read the scan). **NORMAL MAPS: FULL SPREAD** — walls, floors, props, AND characters/
+> sprites (HD-2D normal-mapped sprite citizens), every scope proven by clay-room taste cards.
+> **TASTE CARDS ORDERED:** camera angle (pitch options once the clay shell exists, then frozen)
+> · grid application (always-on vs combat-emphasis; full lines vs edge ticks) · normal-map
+> spread. **DECALS:** rolled size band per decal noun, free rotation, overlap allowed, may run
+> under props. **CHARACTERS:** rotate to face whoever/whatever they interact with (composed
+> staging is the idle default); mirrored-back interim jank ACCEPTED.
+
 ## 0. Why this operation exists
 
 A week of units polished contracts inside a frame that structurally forbade the picture Adam asked

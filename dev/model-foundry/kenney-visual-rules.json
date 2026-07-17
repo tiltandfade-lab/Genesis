@@ -1,0 +1,53 @@
+{
+  "schema": "genesis.kenney-visual-rules.v1",
+  "rules": [
+    {
+      "id": "fantasy-emptybarrel",
+      "match": { "slug": "fantasy-clutter-emptybarrel" },
+      "families": ["barrel"],
+      "mount": "floor-mount"
+    },
+    {
+      "id": "fantasy-lanternhook",
+      "match": { "slug": "fantasy-clutter-lanternhook" },
+      "families": ["lantern", "lamp-wall"],
+      "mount": "wall-mount"
+    },
+    {
+      "id": "realm-prop-barrel",
+      "match": { "realmPropNameIncludes": ["barrel"] },
+      "families": ["barrel"],
+      "mount": "floor-mount"
+    },
+    {
+      "id": "realm-prop-crate",
+      "match": { "realmPropNameIncludes": ["crate"] },
+      "families": ["crate"],
+      "mount": "floor-mount"
+    },
+    {
+      "id": "realm-prop-table",
+      "match": { "realmPropNameIncludes": ["table"] },
+      "families": ["table"],
+      "mount": "floor-mount"
+    },
+    {
+      "id": "realm-prop-bench",
+      "match": { "realmPropNameIncludes": ["bench", "pew"] },
+      "families": ["bench"],
+      "mount": "floor-mount"
+    },
+    {
+      "id": "realm-prop-chair",
+      "match": { "realmPropNameIncludes": ["chair"] },
+      "families": ["chair"],
+      "mount": "floor-mount"
+    },
+    {
+      "id": "realm-prop-light",
+      "match": { "realmPropNameIncludes": ["lantern", "lamp"] },
+      "families": ["lantern", "lamp-floor", "lamp-wall"],
+      "mount": "context"
+    }
+  ]
+}

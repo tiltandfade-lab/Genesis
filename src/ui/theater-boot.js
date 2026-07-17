@@ -4027,10 +4027,62 @@ function donorTemplateFor(pack, slug, realmId, realmProfile){
     DONOR_TEMPLATE_CACHE[key] = "pending";
     loadDonorPiece(pack, slug, { realmId: rid, realmProfile: realmProfile || null }).then((group) => {
       DONOR_TEMPLATE_CACHE[key] = { group, floorMountLocal: donorPieceFloorMountLocal(group) };
-      if(S.mounted && S.lastBoard && S.lastBoard.kind === "interior3d"){ S.boardKey = null; setInteriorBoard(S.lastBoard); }
+      if(S.mounted && S.lastBoard){
+        S.boardKey = null;
+        if(S.lastBoard.kind === "interior3d") setInteriorBoard(S.lastBoard);
+        else setBoard(S.lastBoard);
+      }
     }).catch(() => { delete DONOR_TEMPLATE_CACHE[key]; /* never throws — caller's own prism fallback stands forever for this key */ });
   }
   return null;
+}
+
+function donorSocketForVisualAsset(group, visualAsset){
+  const sockets = group && group.userData && group.userData.sockets;
+  if(!visualAsset || !Array.isArray(sockets)) return null;
+  const matches = sockets.filter((socket) => socket && socket.id === visualAsset.mountSocket);
+  return matches.length === 1 ? matches[0] : null;
+}
+
+/* Legacy-first KGR-5 donor mount.  A cold cache starts the async donor load and returns null, so the
+   caller mounts its pre-existing card/whole-object immediately.  donorTemplateFor replays the last
+   board only after a successful load.  Invalid sockets and fallback-overlap never mount a donor. */
+function kenneyDonorMountFor(entry, targetPosition, yawRadians, realmId, realmProfile){
+  const visualAsset = entry && entry.visualAsset;
+  if(!visualAsset || visualAsset.placementStatus === "fallback-overlap" ||
+      typeof KENNEY_RUNTIME_REGISTRY_HASH === "undefined" ||
+      visualAsset.registryHash !== KENNEY_RUNTIME_REGISTRY_HASH) return null;
+  const tmpl = donorTemplateFor(visualAsset.pack, visualAsset.slug, realmId, realmProfile);
+  if(!tmpl || !tmpl.group) return null;
+  const socket = donorSocketForVisualAsset(tmpl.group, visualAsset);
+  if(!socket) return null;
+  let socketMatrix = null;
+  if(Array.isArray(socket.localMatrix) && socket.localMatrix.length === 16){
+    socketMatrix = new THREE.Matrix4().fromArray(socket.localMatrix);
+  } else if(Array.isArray(socket.position) && Array.isArray(socket.rotation)) {
+    socketMatrix = new THREE.Matrix4().compose(
+      new THREE.Vector3().fromArray(socket.position),
+      new THREE.Quaternion().fromArray(socket.rotation).normalize(),
+      new THREE.Vector3(1, 1, 1)
+    );
+  }
+  if(!socketMatrix || Math.abs(socketMatrix.determinant()) < 1e-10) return null;
+  const targetMatrix = new THREE.Matrix4().compose(
+    new THREE.Vector3(targetPosition.x, targetPosition.y, targetPosition.z),
+    new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), yawRadians || 0),
+    new THREE.Vector3(1, 1, 1)
+  );
+  const holder = new THREE.Group();
+  holder.matrixAutoUpdate = false;
+  holder.matrix.copy(targetMatrix).multiply(socketMatrix.clone().invert());
+  holder.matrix.decompose(holder.position, holder.quaternion, holder.scale);
+  const donor = tmpl.group.clone(true);
+  donor.traverse((obj) => { if(obj.isMesh){ obj.castShadow = true; obj.receiveShadow = true; } });
+  holder.add(donor);
+  holder.userData.kenneyVisualAsset = visualAsset.assetId;
+  holder.userData.kenneyMountSocket = visualAsset.mountSocket;
+  holder.userData.dressingSlug = entry.slug || null;
+  return holder;
 }
 // test-seam bridge for this cache (window.Theater._donorTemplateReadyForTest) is registered further
 // down, alongside every other test-only window.Theater._xyz property — window.Theater itself is a
@@ -7470,6 +7522,7 @@ function mount(el, opts){
   S.interiorMeshCount = 0;
   S.interiorDressingCount = 0;
   S.interiorDressingWorldPositions = [];
+  S.interiorDressingContactLayerCount = 0;
   // D4 — per-sourceRef door state from the PREVIOUS render, reset on a fresh mount() same as
   // S.occlusionFadeState below (a brand-new session must never inherit a stale sourceRef's state).
   S.interiorDoorStateBySourceRef = {};
@@ -7795,6 +7848,13 @@ function setBoard(data){
     // fixed blob under every prop still reads as "this object touches the ground here" without needing
     // per-part geometry introspection.
     addGroundingBlob(S.propGroup, px, pz, -0.495, 0.42);
+
+    const kenneyProp = kenneyDonorMountFor(p, { x:px, y:0, z:pz },
+      p.visualAsset && p.visualAsset.yawRadians, data.realmId, S.realmProfile);
+    if(kenneyProp){
+      S.propGroup.add(kenneyProp);
+      return;
+    }
 
     // ENV-2 (docs/ENV-EXTERIOR-WAVE.md) — a biome-scatter dressing entry (theaterBoardBuild's
     // env2BiomeScatterFor, src/engine/theater-data.js — carries `.slug`/`.cardKind`, never `.part`/
@@ -9446,12 +9506,22 @@ function buildExtrusionProp(entry){
   g.userData.extrusionHeight = h;   // BW2-2b integration: wall-contact AO sizes its halo off this
   return g;
 }
-function interiorBuildWallProps(wallProps, cx, cz, floorTopMap, wallHeightBase){
+function interiorBuildWallProps(wallProps, cx, cz, floorTopMap, wallHeightBase, realmId){
   const group = new THREE.Group();
   (wallProps || []).forEach((d) => {
     if(!d || !d.slug) return;
-    const g = buildExtrusionProp(d);
     const floorTop = interiorFloorTopAt(floorTopMap, d.x || 0, d.y || 0);
+    const wallNormal = ITR_WALL_SIDE_NORMAL[d.wallSide];
+    const wallH = (typeof wallHeightBase === "number" && wallHeightBase > 0) ? wallHeightBase : ITR_WALLHANG_FALLBACK_WALL_HEIGHT;
+    const target = wallNormal ? {
+      x:(d.x || 0) - (cx || 0) + wallNormal.x * ITR_WALLHANG_WALL_OFFSET,
+      y:floorTop + wallH * ITR_WALLHANG_HEIGHT_FRAC,
+      z:(d.y || 0) - (cz || 0) + wallNormal.z * ITR_WALLHANG_WALL_OFFSET,
+    } : { x:(d.x || 0) - (cx || 0), y:floorTop, z:(d.y || 0) - (cz || 0) };
+    const donor = kenneyDonorMountFor(d, target,
+      d.visualAsset && d.visualAsset.yawRadians, realmId || S.env, S.realmProfile);
+    if(donor){ group.add(donor); return; }
+    const g = buildExtrusionProp(d);
     // P-2 WALL-HANG PLACEMENT FIX (LIGHT-SIGHT-POLISH.md): buildExtrusionProp's mesh is built so its
     // BACK face passes through the group's own local origin (mesh.position.z = depth/2, back face at
     // local z=0) — meaning wherever we place g.position IS the point the back face sits on. Resolve
@@ -9459,9 +9529,7 @@ function interiorBuildWallProps(wallProps, cx, cz, floorTopMap, wallHeightBase){
     // (itrWallSideAt, computed once in theater-interior.js off the SpatialPlan's own wall-cell mask —
     // never re-derived/re-guessed here); push that point half a cell toward the wall so the back face
     // lands ON the wall plane instead of floating at the cell center, and lift it to wall mid-height.
-    const wallNormal = ITR_WALL_SIDE_NORMAL[d.wallSide];
     if(wallNormal){
-      const wallH = (typeof wallHeightBase === "number" && wallHeightBase > 0) ? wallHeightBase : ITR_WALLHANG_FALLBACK_WALL_HEIGHT;
       g.position.set(
         (d.x || 0) - (cx || 0) + wallNormal.x * ITR_WALLHANG_WALL_OFFSET,
         floorTop + wallH * ITR_WALLHANG_HEIGHT_FRAC,
@@ -9523,11 +9591,12 @@ function addWallContactAO(cardGroup, cardHeight, zOffset){
   cardGroup.add(mesh);
   return mesh;
 }
-function interiorBuildDressing(dressing, cx, cz, floorTopMap, prismLists){
+function interiorBuildDressing(dressing, cx, cz, floorTopMap, prismLists, wallHeightBase, realmId){
   const group = new THREE.Group();
   // VP7 CONTACT GROUNDING: same sibling-subgroup convention as interiorBuildPieces' blobGroup
   // (below) — blobs never interleave into `group`'s own direct children.
   const blobGroup = new THREE.Group();
+  blobGroup.userData.dressingContactLayer = true;
   // BEAUTY-WAVE-4.md MF-2 item 3: dressing cards get the SAME seeded stagger cascade as
   // data.pieces/data.furniture — "the room sets itself" applies to every set-piece family.
   const mountEntries = [];
@@ -9538,7 +9607,6 @@ function interiorBuildDressing(dressing, cx, cz, floorTopMap, prismLists){
     // (interiorBuildWallProps, off data.wallProps) — both derived from this SAME dressing roll, so
     // skip them here to avoid mounting the same entry twice.
     if(d.primary === "blocker" || d.primary === "wall-hang") return;
-    const g = buildDressingCard(d);
     // BW2-2: feet on THIS cell's own real floor top (interiorFloorTopAt — the derived law), replacing
     // the pre-BW2-2 hardcoded -0.4 (that value's own comment falsely claimed parity with pieces' -0.5
     // convention — it was actually 0.1 units higher, and still 0.1 below the true nominal floor top;
@@ -9546,6 +9614,22 @@ function interiorBuildDressing(dressing, cx, cz, floorTopMap, prismLists){
     // (per the mock, ui-sketches/mock-frames/mock-01-gloom-combat.png — only combat-representing
     // standees carry a base; a tombstone/torch/painting sits directly on the floor).
     const floorTop = interiorFloorTopAt(floorTopMap, d.x || 0, d.y || 0);
+    const wallSide = d.visualAsset && d.visualAsset.wallSide;
+    const wallNormal = ITR_WALL_SIDE_NORMAL[wallSide];
+    const wallH = (typeof wallHeightBase === "number" && wallHeightBase > 0) ? wallHeightBase : ITR_WALLHANG_FALLBACK_WALL_HEIGHT;
+    const donorTarget = wallNormal ? {
+      x:(d.x || 0) - (cx || 0) + wallNormal.x * ITR_WALLHANG_WALL_OFFSET,
+      y:floorTop + wallH * ITR_WALLHANG_HEIGHT_FRAC,
+      z:(d.y || 0) - (cz || 0) + wallNormal.z * ITR_WALLHANG_WALL_OFFSET,
+    } : { x:(d.x || 0) - (cx || 0), y:floorTop, z:(d.y || 0) - (cz || 0) };
+    const donor = kenneyDonorMountFor(d, donorTarget,
+      d.visualAsset && d.visualAsset.yawRadians, realmId || S.env, S.realmProfile);
+    if(donor){
+      group.add(donor);
+      mountEntries.push({ group: donor, key: d.slug + ":" + d.x + "," + d.y });
+      return;
+    }
+    const g = buildDressingCard(d);
     // CLIP MARGIN LAW (Adam addendum, mid-flight on BW2-1b), item 2 — LARGE cards only ("every
     // interior piece + large dressing card" is VP7's own existing large-only carve-out, reused
     // here): may TOUCH the wall plane (that's the point, dpAdjacentToWall already seeds it there) but
@@ -11595,16 +11679,22 @@ function setInteriorBoard(data){
   // GRAPHICS-ENGINE.md GR2 §D: dressing cards (data.dressing, src/engine/place-dressing.js's
   // dressPlan output — a plain field the caller sets directly on the board object, same convention
   // as data.pieces/data.lightProfile above).
-  const dressingGroup = interiorBuildDressing(data.dressing, cx, cz, S.interiorFloorTopMap, [wallList, pillarList, inst.doorframe]);
+  const dressingGroup = interiorBuildDressing(data.dressing, cx, cz, S.interiorFloorTopMap,
+    [wallList, pillarList, inst.doorframe], data.wallHeightBase, data.realmId);
   S.interiorGroup.add(dressingGroup);
   S.interiorDressingCount = (data.dressing || []).length;
   // harness-facing diagnostic (dev/verify-dungeon-dressing.mjs check 4: "render mount... origin-
   // shifted correctly") — one entry per mounted card, its REAL world position read straight off the
   // group THREE actually placed (never recomputed by the test), so the check proves the mount, not a
   // parallel formula that could drift from it.
-  S.interiorDressingWorldPositions = dressingGroup.children.map((g) => ({
-    slug: g.userData && g.userData.dressingSlug, x: g.position.x, y: g.position.y, z: g.position.z
-  }));
+  S.interiorDressingWorldPositions = dressingGroup.children
+    .filter((g) => g.userData && g.userData.dressingSlug)
+    .map((g) => ({
+      slug: g.userData.dressingSlug, x: g.position.x, y: g.position.y, z: g.position.z,
+      kenneyAsset: g.userData.kenneyVisualAsset || null
+    }));
+  S.interiorDressingContactLayerCount = dressingGroup.children
+    .filter((g) => g.userData && g.userData.dressingContactLayer).length;
 
   // BEAUTY-WAVE-2.md BW2-5: furniture-class blocker volumes (data.furniture) + wall-hang extrusion
   // props (data.wallProps, THE PROP PERSPECTIVE LAW) — both siblings of data.dressing, built off the
@@ -11629,7 +11719,8 @@ function setInteriorBoard(data){
     } : null);
   S.interiorGroup.add(furnitureGroup);
   S.interiorFurnitureCount = (data.furniture || []).length;
-  const wallPropsGroup = interiorBuildWallProps(data.wallProps, cx, cz, S.interiorFloorTopMap, data.wallHeightBase);
+  const wallPropsGroup = interiorBuildWallProps(data.wallProps, cx, cz, S.interiorFloorTopMap,
+    data.wallHeightBase, data.realmId);
   S.interiorGroup.add(wallPropsGroup);
   S.interiorWallPropsCount = (data.wallProps || []).length;
   S.interiorWallPropsWorldPositions = wallPropsGroup.children.map((g) => {
@@ -12613,6 +12704,7 @@ window.Theater.interiorShadowCasterCount = function(){ return S.interiorShadowCa
 // GRAPHICS-ENGINE.md GR2: same read-only harness-facing discipline — how many dressing cards mounted
 // on the last setInteriorBoard call. 0 before any interior board / on a board with no data.dressing.
 window.Theater.interiorDressingCount = function(){ return S.interiorDressingCount || 0; };
+window.Theater.interiorDressingContactLayerCount = function(){ return S.interiorDressingContactLayerCount || 0; };
 window.Theater.interiorDecalCount = function(){ return S.interiorDecalCount || 0; }; // VP6 item 4
 // docs/DIEGETIC-LIGHT.md L-1 — harness-facing diagnostic + runtime toggle, same read-only/reversible
 // convention as the study-rig's materials-on/off flag: how many light-shaft cones mounted on the last

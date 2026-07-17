@@ -4314,7 +4314,7 @@ function itrDoorHingeSign(sourceRef){
 // template has finished its async preload (interiorBuildKitDoorMesh returns non-null only then), the
 // kit assembly renders INSTEAD of the prism hinge+leaf below — every prism path survives as the
 // unconditional fallback (kitDoorInfo absent, or the template still cold) per the wave's own posture.
-function interiorBuildInteractableDoorMesh(entry, cx, cz, floorTopMap, kitDoorInfo, realmId, realmProfile){
+function interiorBuildInteractableDoorMesh(entry, cx, cz, floorTopMap, kitDoorInfo, realmId, realmProfile, axisInfo){
   if(kitDoorInfo){
     const kitMesh = interiorBuildKitDoorMesh(entry, cx, cz, floorTopMap, kitDoorInfo.widthAxisIsZ, realmId, realmProfile);
     if(kitMesh) return kitMesh;
@@ -4343,17 +4343,22 @@ function interiorBuildInteractableDoorMesh(entry, cx, cz, floorTopMap, kitDoorIn
   leaf.castShadow = true; leaf.receiveShadow = true;
   leaf.userData = { isDoorLeaf: true };
 
-  // corridor-axis orientation: floor on BOTH the east and west neighbor cells means the corridor runs
-  // east-west, so the wall (and the door filling it) plane runs north-south — rotate the default
-  // (north-south-spanning) leaf 90 degrees. Degrades to the default orientation (never throws) when
-  // floorTopMap can't resolve either axis (a harness board with no floor instances at all).
+  // KGR-8 ONE AXIS AUTHORITY + THROAT: the hinge yaw and the VISUAL mount cell both read
+  // board.doorAxis (the QF-D1 wall-run scan + throat resolution computed with the plan in hand —
+  // threaded through interiorBuildInteractables). The spatializer can stamp a door at a corridor
+  // mouth in open floor; the leaf renders at the throat cell between two wall cheeks instead, where
+  // a door reads as a door. The old one-cell "floor on BOTH e/w neighbors" heuristic survives ONLY
+  // as the fallback for callers with no plan (isolated harness fixtures).
   const rx = Math.round(entry.x), ry = Math.round(entry.y);
   const ew = !!(floorTopMap && floorTopMap.has((rx - 1) + "," + ry) && floorTopMap.has((rx + 1) + "," + ry));
+  const widthSpansZ = (axisInfo && typeof axisInfo.widthAxisIsZ === "boolean") ? axisInfo.widthAxisIsZ : ew;
+  const mountX = (axisInfo && axisInfo.visualX != null) ? axisInfo.visualX : (entry.x || 0);
+  const mountY = (axisInfo && axisInfo.visualZ != null) ? axisInfo.visualZ : (entry.y || 0);
 
   const hinge = new THREE.Group();
-  const floorTop = interiorFloorTopAt(floorTopMap, entry.x, entry.y);
-  hinge.position.set((entry.x || 0) - (cx || 0), floorTop, (entry.y || 0) - (cz || 0));
-  hinge.rotation.y = ew ? Math.PI / 2 : 0;
+  const floorTop = interiorFloorTopAt(floorTopMap, mountX, mountY);
+  hinge.position.set(mountX - (cx || 0), floorTop, mountY - (cz || 0));
+  hinge.rotation.y = widthSpansZ ? Math.PI / 2 : 0;
 
   // D4c: rest pose (rotation only) comes from the ONE shared pose function itrDoorRestPose — the
   // tween path (interiorBuildInteractables, below) computes its FROM/TO the same way, so a fresh
@@ -4444,16 +4449,22 @@ function itrKitDoorMap(kitDoors){
    so the existing prism tween code below is untouched (wrapped in the else branch, byte-identical).
    KS-3 retrofit: `realmId`/`realmProfile` thread straight through to interiorBuildInteractableDoorMesh
    -> interiorBuildKitDoorMesh -> kitDoorTemplateFor, closing the realm-grading-passthrough deviation. */
-function interiorBuildInteractables(interactables, cx, cz, floorTopMap, kitDoors, realmId, realmProfile){
+function interiorBuildInteractables(interactables, cx, cz, floorTopMap, kitDoors, realmId, realmProfile, doorAxis){
   const group = new THREE.Group();
   const bySourceRef = {};
   const prevStates = S.interiorDoorStateBySourceRef || {};
   const nextStates = {};
   const kitDoorMap = itrKitDoorMap(kitDoors);
+  // KGR-8 ONE AXIS AUTHORITY: board.doorAxis carries the QF-D1 wall-run scan per door cell — the
+  // leaf's hinge yaw reads it instead of its own (drift-prone) floor-neighbor heuristic.
+  const doorAxisMap = new Map();
+  (doorAxis || []).forEach((a) => { if(a) doorAxisMap.set(Math.round(a.x) + "," + Math.round(a.z), a); });
   (interactables || []).forEach((entry) => {
     if(!entry || entry.archetype !== "door") return; // D4 SCOPE: doors ship first (BW5 IA-4) — other archetypes render in D5
-    const kitDoorInfo = entry.x != null && entry.y != null ? kitDoorMap.get(Math.round(entry.x) + "," + Math.round(entry.y)) : null;
-    const hinge = interiorBuildInteractableDoorMesh(entry, cx, cz, floorTopMap, kitDoorInfo, realmId, realmProfile);
+    const cellKey = entry.x != null && entry.y != null ? Math.round(entry.x) + "," + Math.round(entry.y) : null;
+    const kitDoorInfo = cellKey != null ? kitDoorMap.get(cellKey) : null;
+    const axisInfo = cellKey != null ? (doorAxisMap.get(cellKey) || null) : null;
+    const hinge = interiorBuildInteractableDoorMesh(entry, cx, cz, floorTopMap, kitDoorInfo, realmId, realmProfile, axisInfo);
     if(!hinge) return;
     const sourceRef = entry.sourceRef;
     nextStates[sourceRef] = entry.state;
@@ -11783,7 +11794,7 @@ function setInteriorBoard(data){
   // interiorBuildInteractables' own header for the full render-keystone contract). KS-2:
   // data.kitDoors is interiorBuildBoard's OWN output (theater-interior.js, a sibling of data.instances)
   // — unlike interactables/pieces/dressing above, this one IS produced by interiorBuildBoard itself.
-  const interactablesGroup = interiorBuildInteractables(data.interactables, cx, cz, S.interiorFloorTopMap, data.kitDoors, data.realmId, S.realmProfile);
+  const interactablesGroup = interiorBuildInteractables(data.interactables, cx, cz, S.interiorFloorTopMap, data.kitDoors, data.realmId, S.realmProfile, data.doorAxis);
   S.interiorGroup.add(interactablesGroup);
   // D4 — E0-1 FADE COMPLIANCE (the SAME append-never-overwrite pattern the wall-fixture block above
   // uses, docs/PHASE-3-WAVE-1-SPECS.md E0-1): a door on an occlusion-suppressed wall segment fades

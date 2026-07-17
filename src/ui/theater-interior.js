@@ -1492,6 +1492,7 @@ function interiorBuildBoard(plan, opts) {
   const idx = (x, y) => y * plan.cellW + x;
   const floor = [], wall = [], doorframe = [], pillar = [];
   const kitDoors = []; // KS-2: one entry per KIT_DOORS_ENABLED-eligible door cell — {x,z,widthAxisIsZ,pack,slug}
+  const doorAxis = []; // KGR-8: one entry per DOOR cell — {x,z,widthAxisIsZ}, the QF-D1 wall-run authority the leaf mount consumes
   const portals = []; // STAGE-A A1 — DARKNESS PORTAL cards, populated in the DOOR branch below
   let minX = Infinity, maxX = -Infinity, minZ = Infinity, maxZ = -Infinity;
   const track = (x, z) => { minX = Math.min(minX, x); maxX = Math.max(maxX, x); minZ = Math.min(minZ, z); maxZ = Math.max(maxZ, z); };
@@ -1660,6 +1661,31 @@ function interiorBuildBoard(plan, opts) {
         // block below), the darkness portal past the opening, and the D4 leaf itself. wFrac/h still
         // shape the leaf and reveals; trimColor still feeds the accent thread bookkeeping above.
         void trimColor;
+        // KGR-8 ONE AXIS AUTHORITY + THROAT RESOLUTION. The spatializer stamps boundary doors at
+        // corridor MOUTHS that can sit in open floor (the Ivory Pit door cell has wall on ONE side
+        // and floor on the other three — there is no wall for a door to live in, which is why every
+        // frame treatment ever built here read as freestanding Stonehenge). A door only reads as a
+        // door between two wall cheeks, so the VISUAL door (leaf, reveals, portal) renders at the
+        // nearest passage cell flanked by WALL on both sides of the leaf's span axis — usually one
+        // step down the corridor throat. No throat within two steps -> open passage: no reveals, the
+        // portal stays at the nominal cell, the leaf keeps the nominal cell (rare degenerate case).
+        const cellCodeAt = (cx0, cy0) => (cx0 >= 0 && cy0 >= 0 && cx0 < plan.cellW && cy0 < plan.cellD)
+          ? plan.cells[cy0 * plan.cellW + cx0] : null;
+        const cheeksAreWalls = (cx0, cy0) => widthAxisIsZ
+          ? (cellCodeAt(cx0, cy0 - 1) === SPATIAL_CELL.WALL && cellCodeAt(cx0, cy0 + 1) === SPATIAL_CELL.WALL)
+          : (cellCodeAt(cx0 - 1, cy0) === SPATIAL_CELL.WALL && cellCodeAt(cx0 + 1, cy0) === SPATIAL_CELL.WALL);
+        let vx = x, vy = y, throated = cheeksAreWalls(x, y);
+        if (!throated) {
+          for (const step of [1, -1, 2, -2]) {
+            const tx = widthAxisIsZ ? x + step : x;
+            const ty = widthAxisIsZ ? y : y + step;
+            const code2 = cellCodeAt(tx, ty);
+            if ((code2 === SPATIAL_CELL.FLOOR || code2 === SPATIAL_CELL.DOOR) && cheeksAreWalls(tx, ty)) {
+              vx = tx; vy = ty; throated = true; break;
+            }
+          }
+        }
+        doorAxis.push({ x, z: y, widthAxisIsZ, visualX: vx, visualZ: vy, throated });
         track(x, y);
 
         // BW2-5 item 1: WALL-THICKNESS REVEAL — "visible wall THICKNESS at openings (door reveals —
@@ -1676,7 +1702,9 @@ function interiorBuildBoard(plan, opts) {
         // handles corner/notch cells room-rect membership got wrong AND keeps the room-rect read alive
         // as that function's own documented tiebreak. Degrades to no reveal off a room's own edge
         // (rare/degenerate topology, e.g. an interior door) — never throws.
-        if (revealW > 0.01 && doorRoom) {
+        // KGR-8: reveals render at the THROAT cell only (between real wall cheeks) — a reveal at an
+        // open-floor mouth cell was a full-height wall-colored slab floating in the room.
+        if (revealW > 0.01 && doorRoom && throated) {
           const revealSceneDir = sceneDirectionFor(kit.realmId, doorRoom.role);
           const revealColor = itrDarkenHex(kit.wallColor, revealSceneDir.valueScript.wall);
           // sy = baseH (the FULL, un-fractioned wall height at this cell — same value every real WALL
@@ -1689,11 +1717,11 @@ function interiorBuildBoard(plan, opts) {
             if (widthAxisIsZ) {
               // the wall pierced runs NORTH-SOUTH -> the passage is through x, so the jambs sit at the
               // NORTH/SOUTH (z) margins, full width (x).
-              wall.push({ x, z: y, sx: 1, sy: baseH, sz: revealW, color: revealColor, scaleDomain: (d ? (d.heightScale || 1.0) : 1.0), oz: sign * (wFrac / 2 + revealW / 2) });
+              wall.push({ x: vx, z: vy, sx: 1, sy: baseH, sz: revealW, color: revealColor, scaleDomain: (d ? (d.heightScale || 1.0) : 1.0), oz: sign * (wFrac / 2 + revealW / 2) });
             } else {
               // the wall pierced runs EAST-WEST -> the jambs sit at the LEFT/RIGHT (x) margins, full
               // depth (z).
-              wall.push({ x, z: y, sx: revealW, sy: baseH, sz: 1, color: revealColor, scaleDomain: (d ? (d.heightScale || 1.0) : 1.0), ox: sign * (wFrac / 2 + revealW / 2) });
+              wall.push({ x: vx, z: vy, sx: revealW, sy: baseH, sz: 1, color: revealColor, scaleDomain: (d ? (d.heightScale || 1.0) : 1.0), ox: sign * (wFrac / 2 + revealW / 2) });
             }
           });
         }
@@ -1715,9 +1743,12 @@ function interiorBuildBoard(plan, opts) {
             let dirX = 0, dirZ = 0;
             if (widthAxisIsZ) dirX = (x === doorRoom.x) ? -1 : 1;
             else dirZ = (y === doorRoom.y) ? -1 : 1;
-            const push = wFrac / 2 + ITR_PORTAL_DEPTH / 2 + ITR_PORTAL_GAP;
+            // KGR-8: the darkness stands at the THROAT (where the leaf renders), just past the leaf's
+            // own thickness — not shoved most of a cell into open floor, where it read as a
+            // free-standing fog-colored monolith beside the doorway.
+            const push = ITR_PORTAL_DEPTH / 2 + ITR_PORTAL_GAP + 0.16;
             portals.push({
-              x, z: y,
+              x: vx, z: vy,
               ox: dirX * push, oz: dirZ * push,
               sx: dirX !== 0 ? ITR_PORTAL_DEPTH : wFrac,
               sy: h,
@@ -1913,6 +1944,7 @@ function interiorBuildBoard(plan, opts) {
     // assembly or fall back to the prism hinge+leaf — pure placement data (position/rotation axis),
     // no THREE, no state; the state->pose mapping stays entirely theater-boot.js's job (D0's own split).
     kitDoors: kitDoors,
+    doorAxis: doorAxis,
     // KS-3 (docs/KENNEY-SOCKET-WAVE.md): siblings of `instances`/`kitDoors` above — one entry per
     // kit-tiled wall module / floor block (pure placement data, no THREE; theater-boot.js's GL layer
     // owns the actual donor-piece mount). `instances.wall`/`instances.floor` above already omit every

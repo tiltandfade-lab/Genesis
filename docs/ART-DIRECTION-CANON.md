@@ -161,3 +161,102 @@ Adam's words, verbatim, on the purpose of the Kenney donor catalog in the live p
 > "i have switched over to the full kenny asset catalog for the prototype of this game, just
 > trying to get these procedural trays populated with some stuff that makes the game feel alive
 > and real"
+
+
+## Character billboard / environmental citizenship ruling (Adam, 2026-07-17 — additive)
+
+Adam's words, verbatim:
+
+> "also, the only sprites that need to billboard are the character sprites, environment sprites
+> should probably be more of the sprite extrusions andgled and placed in the room in a way that
+> aligns them to their environment"
+
+Adam immediately removed the tentative qualifier:
+
+> "ok not probably, definitely. like every little item in your mock ups had a neat home and it
+> looked natural, in our renders it always looks like some random thing just floating around"
+
+**Scope of this ruling:** character figure standees may retain camera-facing billboard behavior.
+Environmental sprite art does not billboard. It becomes an environment-aligned scene citizen —
+preferably a smooth-contour extrusion, wall relief, surface-mounted extrusion, decal, or truthful
+3D asset — with its anchor and orientation derived from its actual architectural home (floor,
+wall, surface socket, edge, opening, corridor axis, or feature axis). Environmental items remain
+fixed in world space when the camera moves. A random floating or camera-facing environmental card
+is a visual reject.
+
+## THE NIGHT RULINGS (Adam, 2026-07-17 night — additive; answers to the KGR-8 fork questions)
+
+Camera:
+
+> "we aren't messing with the camera right now, that is just me being emotional"
+
+> "i think we just need to go ahead and commit to fixed camera, and build and dress rooms
+> cinematically around the position of the camera."
+
+(Q4, one composed angle per room with the cutaway authored for it:) > "locked"
+
+Process law:
+
+> "we need smaller controlled prototype proofs before we do systemwide changes from now on.
+> that is law"
+
+> "never never never again do we run a full system wide change without explicit test card proof
+> and approval"
+
+> (Q20, the clay room as first gate:) "yes from now on the clay room is our proving ground"
+
+> "i want to see a few samples of every system we are talking about adjusting or improving in a
+> 25ft x 25ft room (5x5 grid)"
+
+Characters:
+
+> "since we are fixing the angle of the camera, we can ensure that the pieces never are facing an
+> angle where they become a sliver, but in the old mock ups from codex, the pieces are placed at
+> various angles for great on screen composition. this is what we truly want"
+
+> "yes, at some point we will render a back view of each character and we will do a sprite swap
+> if the character is being viewed from behind, for now we just display the same sprite on the
+> other side mirrored to match the silhouette"
+
+Doors and scale:
+
+> "i think door size is fine, but some dungeons are ogre dungeons or dragon dungeons, they should
+> have different doors....so yeah the standard door size is fine and for now we'll just use that
+> until we get the visualizer working"
+
+Architecture:
+
+> (room sizes quantized to the kit grammar:) "yes, for now the dungeon room only rolls sizes the
+> kit grammar can build, though we need to figure out how to make the kit grammar more versatile
+> eventually"
+
+> (corridors:) "corridors should get their own rollers that determine their dimensions, wether
+> they are wide, trapped or narror etc...FOR NOW let's just do the easiest thing to make actually
+> work, whichever of the two options has the easiest implementation based on our tech"
+
+> (outward wall thickness:) "yes, it must grow outward and honestly i would like to see a faint
+> grid render across the floor"
+
+> (wall tops:) "open top for now"
+
+Environment art:
+
+> (Kenney 3D vs sprite when both exist:) "yes, kenny wins at first"
+
+> (big feature nouns as wall relief:) "yes, totally acceptable as wall relief, at some point we
+> can run sprites for the big feature nouns to create sprite extrusions from just like oldschool
+> first person dungeon crawlers, except with polygons instead of billboards"
+
+> (decals:) "yes, i think decals should be able to render at different sizes on the dungeon
+> floors"
+
+Materials:
+
+> "i don't want the retro flatness, i want the normal maps. i thought i made that clear a long
+> time ago. and wasn't there something similar on the sprites that caught light at some point?
+> that also seems to have been lost, yes test cards please, test cards for everything."
+
+Art department roles:
+
+> "i am primary art director, codex is my assistant who can help me asses the technical issues.
+> sometimes i will consult codex but you don't need to worry about that"

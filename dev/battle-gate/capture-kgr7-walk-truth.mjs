@@ -203,6 +203,17 @@ try {
       } catch (error) { return { ok: false, error: error.message }; }
     }, state);
     if (!restored.ok) throw new Error(`state restore failed: ${JSON.stringify(restored)}`);
+    // Optional: advance the restored walk's cursor to another rolled segment (--advance <segNum>)
+    // through the SAME walk_advance event the DM seat emits — a second room proving its own nouns.
+    if (args.advance) {
+      const advanced = await page.evaluate(toSeg => {
+        const w = activeWorld();
+        const result = applyEvent(w, { type: "walk_advance", payload: { toSeg }, source: "declared" });
+        if (typeof renderWorld === "function") renderWorld();
+        return result;
+      }, parseInt(args.advance, 10));
+      if (!advanced.ok) throw new Error(`walk_advance failed: ${JSON.stringify(advanced)}`);
+    }
     await waitTheater(page);
     await settleDiagnoseCapture(page, { restoredFrom: args.restore, notFoundUrls: [...new Set(notFound)] });
     await page.close();

@@ -66,6 +66,11 @@ rolled **Small cairn as a real calibrated 3D stone stack mid-floor**. Realizatio
 entries (both walk nouns); 7 filler entries remain honest billboards. Bone Wall stays
 narration-only — the catalog has no truthful bone asset (nearest hit: `food-kit/fish-bones`).
 
+Note: S1 is this walk's ONLY room — S2-S4 are passages (`plan.rooms` carries no segNum for them),
+so noun projection correctly skips them (`--advance 3` verified: cursor moves through the real
+walk_advance seam, passage renders, zero derived nouns). The cookpot/bookcase rules wait for a
+future roll that seats those nouns in a room.
+
 ## Residual findings (named, for the next units)
 
 - **P2-A billboard wall clip:** tall tilted setPiece cards (35° camera pitch) penetrate far walls;

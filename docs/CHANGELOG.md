@@ -8,6 +8,31 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-07-17 (later still) — KGR-7 VERTICAL SLICE: one real rolled walk, before/after [Claude Fable 5, orchestrated]
+
+**Added:** the gameplay-first acceptance rig (`dev/battle-gate/capture-kgr7-walk-truth.mjs`) —
+boots the real game, rolls a real world, services prep through the DM event seam, walks into the
+rolled dungeon frontier, and captures settled engine frames plus a full noun→realization
+diagnosis; the canonical world fixture **The Ivory Pit** (`kgr7-world-state.json`, restorable
+under any engine state); a three-asset walk-demand calibration tranche admitted through the
+workbench save API against the roll's actual nouns (rocks-small → Small cairn · pulley-crate →
+Winch drum · pot-stew → Cookpot) with matching rules; walk-noun projection in `trayFrom` (rolled
+feature/object/dressing derive additive fail-closed anchor-class candidates carrying the rolled
+name — the field the realization rules already match).
+
+**Changed:** interior `realmId` defaults to `"fantasy"` (Q19 pre-alpha ruling — the undefined
+fallthrough dressed fantasy dungeons from the CHROME roster: the neon flora the live playtest
+logged); wall-hung props follow their wall's camera cutaway (the fourth-wall law, using the
+parapet's own `itrCameraSideBand`); all four Kenney admission gates re-pinned to the new exact
+set (ten pilots + three tranche + pulley approved-dev demotion + bench quarantine).
+
+**Fixed:** the 0-realized production reality — the Ivory Pit S1 before-frame staged zero rolled
+nouns over sci-fi filler; the after-frame stages the rolled Small cairn as calibrated 3D stone
+mid-floor in a coherent fantasy room. Before/after: `kgr7-before-after.png`.
+
+**Deferred:** the named residual P2s and catalog gaps in
+`dev/playtest-findings-kgr7-walk-truth.md`. Adam's read of the frames is the acceptance gate.
+
 ## 2026-07-17 (later) — KGR ACCEPTANCE AMENDED: BUILT → BUILT-INFRA; gameplay-first slice (KGR-7) owed [Claude Fable 5, orchestrated]
 
 **Changed:** Adam's review of the actual KGR-6 captures overturned the same-day close (below). The

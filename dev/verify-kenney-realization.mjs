@@ -44,8 +44,10 @@ const exactIds = [
   "kenney-furniture-kit/tableRound", "kenney-furniture-kit/benchCushionLow", "kenney-furniture-kit/chair",
   "kenney-furniture-kit/lampWall", "kenney-furniture-kit/lampRoundFloor",
   "kenney-fantasy-town-kit/lantern", "kenney-factory-kit/lever-double",
+  // KGR-7 walk-demand tranche (OPERATION §15) — calibrated against The Ivory Pit's rolled nouns.
+  "kenney-castle-kit/rocks-small", "kenney-retro-fantasy-kit/pulley-crate", "kenney-food-kit/pot-stew",
 ].sort();
-ok(equal(Object.keys(rt.__assets).sort(), exactIds), "registry contains exactly the ten approved-runtime pilots");
+ok(equal(Object.keys(rt.__assets).sort(), exactIds), "registry contains exactly the ten pilots + the KGR-7 walk-demand tranche");
 ok(Object.values(rt.__assets).every((a) => a.qaStatus === "approved-runtime" && /^[0-9a-f]{64}$/.test(a.sourceSha256)),
   "every runtime entry is approved and source-hash-bound");
 const stale = loadRuntime({ registry: (src) => src.replaceAll('"qaStatus": "approved-runtime"', '"qaStatus": "approved-dev"') });

@@ -59,7 +59,7 @@
         "up": "+Y"
       },
       "qaStatus": "needs-review",
-      "recipeHash": "3d8f8b01900702406019f6fee1a36c56ea084cb8c859d09c5102920c88d282ec",
+      "recipeHash": "80affcc825bf335fa03e767b665d83f95a69a9dc495797f9d4d978a792192ed4",
       "schema": "genesis.donor.v2",
       "semanticParts": {},
       "sockets": [
@@ -190,7 +190,7 @@
         "up": "+Y"
       },
       "qaStatus": "needs-review",
-      "recipeHash": "0ad9a96accb69af5877ec6470aef3bfab63ca0b0a7209c5c5140d8395a9a5a6d",
+      "recipeHash": "9a5c0a0f1a05de183470deebaa4532f0f258c89cdc5eeed782288a59ac82dd9d",
       "schema": "genesis.donor.v2",
       "semanticParts": {},
       "sockets": [
@@ -321,7 +321,7 @@
         "up": "+Y"
       },
       "qaStatus": "needs-review",
-      "recipeHash": "a58161d397451d610dba38744660d715f397469d0ac5d65090a10e1fe939f663",
+      "recipeHash": "2c5479d94ae5098207684ba30119454abcbfff4b920522a8cc650ef8a4607d94",
       "schema": "genesis.donor.v2",
       "semanticParts": {
         "door-leaf": {
@@ -458,7 +458,7 @@
         "up": "+Y"
       },
       "qaStatus": "needs-review",
-      "recipeHash": "e08e683c4a4bfc169b40b19b98d3411fc90fa03e70f1dca0aa6f2c6bd61efb36",
+      "recipeHash": "6229d94efe92c12159a74367c8d1c399d6409fc2bdc480410ef8e46d913d381f",
       "schema": "genesis.donor.v2",
       "semanticParts": {},
       "sockets": [
@@ -589,7 +589,7 @@
         "up": "+Y"
       },
       "qaStatus": "needs-review",
-      "recipeHash": "ff4d8b019d2de2332be6d5fee5b1f919254a4818e132be325d86b9b93c8d534a",
+      "recipeHash": "fe21ab6c4ece098e58d76eee31bc8dbe8cefea0ab670911c4737cd5e0bb18d4e",
       "schema": "genesis.donor.v2",
       "semanticParts": {},
       "sockets": [
@@ -690,7 +690,7 @@
         "up": "+Y"
       },
       "qaStatus": "needs-review",
-      "recipeHash": "2cfeb6b77f96adad6770e7559e30d51a08fe6d2ce2e206734e9c39ab49d0874a",
+      "recipeHash": "ac34124aa3bfb002dbea8d710100d6fe8e701dc5b9549692075914f75430be40",
       "schema": "genesis.donor.v2",
       "semanticParts": {},
       "sockets": [
@@ -791,7 +791,7 @@
         "up": "+Y"
       },
       "qaStatus": "needs-review",
-      "recipeHash": "0b2559602998ea92825160142f6b222acee870169ace49767ecf85284e78c04d",
+      "recipeHash": "c84ea4bcca523d86f9c13bd26b55915d8f527121d20f9b408da0ae3423c655f8",
       "schema": "genesis.donor.v2",
       "semanticParts": {},
       "sockets": [
@@ -892,7 +892,7 @@
         "up": "+Y"
       },
       "qaStatus": "needs-review",
-      "recipeHash": "423644d03fa69ee61731d91256f84f66f5077cd3c3e27b868d2ae5ed67a663da",
+      "recipeHash": "43722780e3142aca3be95edd7b731f25098d57ad19be017bc6eea00f60c4cfe9",
       "schema": "genesis.donor.v2",
       "semanticParts": {},
       "sockets": [
@@ -966,7 +966,7 @@
       }
     }
   },
-  "calibrationHash": "edd57bdb9f00b564ac607a2f9f8a7501a72db9abb5a950cbc4d14ddd2f1a41ba",
+  "calibrationHash": "4516c7b36a7be526b7a3ec6a12f9a428645a57c448b14a50f45f6c82c8984adb",
   "normalizerVersion": "kgr3-calibration-v2",
   "pack": "kenney-mini-dungeon",
   "schema": "genesis.donor-index.v2"

@@ -1411,9 +1411,9 @@
   },
   "consoleErrors": [],
   "deterministic": {
-    "beforeDigest": "cf1b2d7887a984d7178cd87cee347bbc6bf1ce8557ab5ccb007c9e10ce5c9f30",
-    "afterDigest": "cf1b2d7887a984d7178cd87cee347bbc6bf1ce8557ab5ccb007c9e10ce5c9f30",
-    "stdout": "[normalize-donors] 58 calibrated assets validated and normalized; schema genesis.donor.v2",
+    "beforeDigest": "55a59b31544e85b482b36a13ae7dfe77116751000a4bff7f349e5d16aaea2c56",
+    "afterDigest": "55a59b31544e85b482b36a13ae7dfe77116751000a4bff7f349e5d16aaea2c56",
+    "stdout": "[normalize-donors] 62 calibrated assets validated and normalized; schema genesis.donor.v2",
     "stderr": ""
   }
 }

@@ -59,7 +59,7 @@
         "up": "+Y"
       },
       "qaStatus": "quarantined",
-      "recipeHash": "4ce0d95027b4f8203663e65ade93d8202dc00da72fc946c577848aafea6d7440",
+      "recipeHash": "9f5bf0ac8726e9680c4833b4299bccf40eff5a66e1b197d8693556c5381abce2",
       "schema": "genesis.donor.v2",
       "semanticParts": {},
       "sockets": [],
@@ -124,7 +124,7 @@
         "up": "+Y"
       },
       "qaStatus": "approved-runtime",
-      "recipeHash": "13b1bff3d40fa29820c6d07c1b0b56bb1f1a51a876b36b9c505367807c74004b",
+      "recipeHash": "f682cee484fca4e651a3f7a47133b505536c42647ce670e6bf53ec8823a986a3",
       "schema": "genesis.donor.v2",
       "semanticParts": {},
       "sockets": [
@@ -220,7 +220,7 @@
         "up": "+Y"
       },
       "qaStatus": "approved-runtime",
-      "recipeHash": "bb86fb260e310b5a3ad65788c4302e9992a3bfd906bb7ca8552ee2faa7ae7b6d",
+      "recipeHash": "da86434140ae2834241debbad2249b30db357f75d07aa35f9c8f1833b6890b0a",
       "schema": "genesis.donor.v2",
       "semanticParts": {},
       "sockets": [
@@ -316,7 +316,7 @@
         "up": "+Y"
       },
       "qaStatus": "approved-runtime",
-      "recipeHash": "e80e49854997bc390c43444164405bb843ffb72d93c3a725e65267527c752b35",
+      "recipeHash": "bcff7a4508bdba540b2a6d1d236808bdc2620b9a1ef395b7923b3d49d562fc1b",
       "schema": "genesis.donor.v2",
       "semanticParts": {},
       "sockets": [
@@ -412,7 +412,7 @@
         "up": "+Y"
       },
       "qaStatus": "approved-runtime",
-      "recipeHash": "213d6b71a843a6b72a5cb969ee0531dfa405d24da04e0eff051d23d16859c402",
+      "recipeHash": "0da4cca5604990ed69d72a7a7a84e17529876b3ce52ef5de97ebfed3137521c1",
       "schema": "genesis.donor.v2",
       "semanticParts": {},
       "sockets": [
@@ -508,7 +508,7 @@
         "up": "+Y"
       },
       "qaStatus": "approved-runtime",
-      "recipeHash": "246852de9431cda97cbba3e2b3893a57fa373bff13cd22a0ef787c2baaa3f3f3",
+      "recipeHash": "9f944e9a7bc48c6a8a319e64f46baf261d66a003f114e8b095067e97e962ff5f",
       "schema": "genesis.donor.v2",
       "semanticParts": {},
       "sockets": [
@@ -547,7 +547,7 @@
       "structuralGrid": null
     }
   },
-  "calibrationHash": "edd57bdb9f00b564ac607a2f9f8a7501a72db9abb5a950cbc4d14ddd2f1a41ba",
+  "calibrationHash": "4516c7b36a7be526b7a3ec6a12f9a428645a57c448b14a50f45f6c82c8984adb",
   "normalizerVersion": "kgr3-calibration-v2",
   "pack": "kenney-furniture-kit",
   "schema": "genesis.donor-index.v2"

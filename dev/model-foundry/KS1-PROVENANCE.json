@@ -1,15 +1,15 @@
 {
   "algorithmVersion": 1,
-  "calibrationHash": "edd57bdb9f00b564ac607a2f9f8a7501a72db9abb5a950cbc4d14ddd2f1a41ba",
+  "calibrationHash": "4516c7b36a7be526b7a3ec6a12f9a428645a57c448b14a50f45f6c82c8984adb",
   "deviationsAndNotes": [
     "Donor schema v1 point/universal butt-join sockets are superseded by v2 attachment frames and cell-orientation structural placement.",
     "All v2 attachment positions inherited from the KS-1 seed remain needs-review until KGR-4C visual approval."
   ],
   "globalSocketCounts": {
-    "floor-mount": 56,
+    "floor-mount": 58,
     "hinge": 5,
     "top-surface": 12,
-    "wall-mount": 1
+    "wall-mount": 3
   },
   "materialFamiliesObserved": [
     "iron",
@@ -44,6 +44,13 @@
   },
   "normalizerVersion": "kgr3-calibration-v2",
   "packs": {
+    "kenney-castle-kit": {
+      "canonicalScale": 2,
+      "piecesAdmitted": 1,
+      "sourceForward": "+Z",
+      "sourceUp": "+Y",
+      "structuralGrid": null
+    },
     "kenney-factory-kit": {
       "canonicalScale": 1,
       "piecesAdmitted": 1,
@@ -53,6 +60,13 @@
     },
     "kenney-fantasy-town-kit": {
       "canonicalScale": 1,
+      "piecesAdmitted": 1,
+      "sourceForward": "+Z",
+      "sourceUp": "+Y",
+      "structuralGrid": null
+    },
+    "kenney-food-kit": {
+      "canonicalScale": 0.5,
       "piecesAdmitted": 1,
       "sourceForward": "+Z",
       "sourceUp": "+Y",
@@ -98,13 +112,125 @@
     },
     "kenney-retro-fantasy-kit": {
       "canonicalScale": 2,
-      "piecesAdmitted": 1,
+      "piecesAdmitted": 3,
       "sourceForward": "+Z",
       "sourceUp": "+Y",
       "structuralGrid": null
     }
   },
   "pieces": [
+    {
+      "admissionClass": "PART_DONOR",
+      "assetId": "kenney-castle-kit/rocks-small",
+      "bounds": {
+        "aabbMax": [
+          0.30901265144348145,
+          0.3,
+          0.33159259557723997
+        ],
+        "aabbMin": [
+          -0.30901265144348145,
+          0.0,
+          -0.33159263134002687
+        ],
+        "footprint": {
+          "center": [
+            0,
+            0
+          ],
+          "halfExtents": [
+            0.309,
+            0.332
+          ],
+          "yawRadians": 0
+        },
+        "footprintSource": "override",
+        "groundY": 0.0
+      },
+      "canonicalScale": 2,
+      "category": "rocks",
+      "companionLeaf": null,
+      "file": "rocks-small.glb",
+      "materialFamilies": [
+        "stone"
+      ],
+      "normalizedFrame": {
+        "forward": "+Z",
+        "sourceToGenesis": [
+          0.6,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.6,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.6,
+          0.0,
+          0,
+          0,
+          0,
+          1.0
+        ],
+        "up": "+Y"
+      },
+      "outputFile": "assets/models-normalized/kenney-castle-kit/rocks-small.glb",
+      "pack": "kenney-castle-kit",
+      "qaStatus": "approved-runtime",
+      "rawDims": [
+        1.0300421714782715,
+        0.5,
+        1.105308711528778
+      ],
+      "recipeHash": "a3b1547fa9bcbae1413b72d62197d498e7d18df83bb12e749a6eec130984ecaa",
+      "scaledDims": [
+        0.6180253028869629,
+        0.3,
+        0.6631852269172669
+      ],
+      "schema": "genesis.donor.v2",
+      "semanticParts": {},
+      "slug": "rocks-small",
+      "socketCounts": {
+        "floor-mount": 1
+      },
+      "sockets": [
+        {
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.66,
+              0.4,
+              0.71
+            ]
+          },
+          "id": "floor-mount",
+          "mateFamily": "floor",
+          "mateRule": "coincident",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "size": [
+            0.618,
+            0.05,
+            0.663
+          ],
+          "type": "floor-mount"
+        }
+      ],
+      "sourceSha256": "d860d3a053e1fc7b5825a39f6df68f14c49bab7443c1703e1f5b28444bd60e0d",
+      "structuralGrid": null
+    },
     {
       "admissionClass": "PART_DONOR",
       "assetId": "kenney-factory-kit/lever-double",
@@ -170,7 +296,7 @@
         0.37500000596046446,
         0.5399999618530273
       ],
-      "recipeHash": "58ccda5b729a544faddb42bc34c9d25d543a6eb70391cd23507af4d34476e4e7",
+      "recipeHash": "d1ee851d8233f1a5c97bc29a137d1f527517a6a37aafcc00341e5cd0d3556b9b",
       "scaledDims": [
         0.5399999618530273,
         0.37500000596046446,
@@ -282,7 +408,7 @@
         1.555999994277954,
         0.22431999444961548
       ],
-      "recipeHash": "bb91bede6ec47d37062ac16c8b73a9f2b37464206ee8b177fbfc7c80c7a783a2",
+      "recipeHash": "fe2a976d3bf34ddd019ba9f197e7e931cfb19ab865693b3b9401a08727b25c0c",
       "scaledDims": [
         0.21644848585128784,
         1.555999994277954,
@@ -327,6 +453,118 @@
         }
       ],
       "sourceSha256": "f270637e3083d6e84a30626ee05df2b09597a642985a7f5c3e4ab5bb1c7a8d55",
+      "structuralGrid": null
+    },
+    {
+      "admissionClass": "PART_DONOR",
+      "assetId": "kenney-food-kit/pot-stew",
+      "bounds": {
+        "aabbMax": [
+          0.1643623560667038,
+          0.18039999902248383,
+          0.20551790297031403
+        ],
+        "aabbMin": [
+          -0.1643623560667038,
+          0.0,
+          -0.20551790297031403
+        ],
+        "footprint": {
+          "center": [
+            0,
+            0
+          ],
+          "halfExtents": [
+            0.164,
+            0.206
+          ],
+          "yawRadians": 0
+        },
+        "footprintSource": "override",
+        "groundY": 0.0
+      },
+      "canonicalScale": 0.5,
+      "category": "cookware",
+      "companionLeaf": null,
+      "file": "pot-stew.glb",
+      "materialFamilies": [
+        "iron"
+      ],
+      "normalizedFrame": {
+        "forward": "+Z",
+        "sourceToGenesis": [
+          0.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0,
+          0,
+          0,
+          1.0
+        ],
+        "up": "+Y"
+      },
+      "outputFile": "assets/models-normalized/kenney-food-kit/pot-stew.glb",
+      "pack": "kenney-food-kit",
+      "qaStatus": "approved-runtime",
+      "rawDims": [
+        0.6574494242668152,
+        0.36079999804496765,
+        0.8220716118812561
+      ],
+      "recipeHash": "1f27e227f13da329fb56504584620c6139f559dc0e6da976aa9192a8159b2214",
+      "scaledDims": [
+        0.3287247121334076,
+        0.18039999902248383,
+        0.41103580594062805
+      ],
+      "schema": "genesis.donor.v2",
+      "semanticParts": {},
+      "slug": "pot-stew",
+      "socketCounts": {
+        "floor-mount": 1
+      },
+      "sockets": [
+        {
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.4,
+              0.3,
+              0.5
+            ]
+          },
+          "id": "floor-mount",
+          "mateFamily": "floor",
+          "mateRule": "coincident",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "size": [
+            0.329,
+            0.05,
+            0.411
+          ],
+          "type": "floor-mount"
+        }
+      ],
+      "sourceSha256": "311ba282a85bd722b5093f512579a168e3da949617600196b60d782c11afd6b8",
       "structuralGrid": null
     },
     {
@@ -394,7 +632,7 @@
         0.47,
         0.2
       ],
-      "recipeHash": "4ce0d95027b4f8203663e65ade93d8202dc00da72fc946c577848aafea6d7440",
+      "recipeHash": "9f5bf0ac8726e9680c4833b4299bccf40eff5a66e1b197d8693556c5381abce2",
       "scaledDims": [
         0.6000000000000001,
         0.705,
@@ -473,7 +711,7 @@
         0.2,
         0.22
       ],
-      "recipeHash": "13b1bff3d40fa29820c6d07c1b0b56bb1f1a51a876b36b9c505367807c74004b",
+      "recipeHash": "f682cee484fca4e651a3f7a47133b505536c42647ce670e6bf53ec8823a986a3",
       "scaledDims": [
         0.6500000402380954,
         0.30952380952380965,
@@ -585,7 +823,7 @@
         0.47,
         0.2
       ],
-      "recipeHash": "bb86fb260e310b5a3ad65788c4302e9992a3bfd906bb7ca8552ee2faa7ae7b6d",
+      "recipeHash": "da86434140ae2834241debbad2249b30db357f75d07aa35f9c8f1833b6890b0a",
       "scaledDims": [
         0.30000000000000004,
         0.705,
@@ -697,7 +935,7 @@
         0.86,
         0.1755599983
       ],
-      "recipeHash": "e80e49854997bc390c43444164405bb843ffb72d93c3a725e65267527c752b35",
+      "recipeHash": "bcff7a4508bdba540b2a6d1d236808bdc2620b9a1ef395b7923b3d49d562fc1b",
       "scaledDims": [
         0.228059115,
         1.29,
@@ -809,7 +1047,7 @@
         0.0928,
         0.15033599999999997
       ],
-      "recipeHash": "213d6b71a843a6b72a5cb969ee0531dfa405d24da04e0eff051d23d16859c402",
+      "recipeHash": "0da4cca5604990ed69d72a7a7a84e17529876b3ce52ef5de97ebfed3137521c1",
       "scaledDims": [
         0.3399530620199999,
         0.1392,
@@ -921,7 +1159,7 @@
         0.366733961,
         0.8
       ],
-      "recipeHash": "246852de9431cda97cbba3e2b3893a57fa373bff13cd22a0ef787c2baaa3f3f3",
+      "recipeHash": "9f944e9a7bc48c6a8a319e64f46baf261d66a003f114e8b095067e97e962ff5f",
       "scaledDims": [
         1.0392304499999998,
         0.5501009415,
@@ -1033,7 +1271,7 @@
         0.0,
         1.0
       ],
-      "recipeHash": "3d8f8b01900702406019f6fee1a36c56ea084cb8c859d09c5102920c88d282ec",
+      "recipeHash": "80affcc825bf335fa03e767b665d83f95a69a9dc495797f9d4d978a792192ed4",
       "scaledDims": [
         2.0,
         0.0,
@@ -1181,7 +1419,7 @@
         0.05000000074505806,
         1.0
       ],
-      "recipeHash": "0ad9a96accb69af5877ec6470aef3bfab63ca0b0a7209c5c5140d8395a9a5a6d",
+      "recipeHash": "9a5c0a0f1a05de183470deebaa4532f0f258c89cdc5eeed782288a59ac82dd9d",
       "scaledDims": [
         2.0,
         0.10000000149011612,
@@ -1329,7 +1567,7 @@
         0.75,
         0.20000001788139343
       ],
-      "recipeHash": "a58161d397451d610dba38744660d715f397469d0ac5d65090a10e1fe939f663",
+      "recipeHash": "2c5479d94ae5098207684ba30119454abcbfff4b920522a8cc650ef8a4607d94",
       "scaledDims": [
         1.600000023841858,
         1.5,
@@ -1483,7 +1721,7 @@
         0.8999999761581421,
         1.0
       ],
-      "recipeHash": "e08e683c4a4bfc169b40b19b98d3411fc90fa03e70f1dca0aa6f2c6bd61efb36",
+      "recipeHash": "6229d94efe92c12159a74367c8d1c399d6409fc2bdc480410ef8e46d913d381f",
       "scaledDims": [
         2.0,
         1.7999999523162842,
@@ -1631,7 +1869,7 @@
         1.100000023841858,
         1.0
       ],
-      "recipeHash": "ff4d8b019d2de2332be6d5fee5b1f919254a4818e132be325d86b9b93c8d534a",
+      "recipeHash": "fe21ab6c4ece098e58d76eee31bc8dbe8cefea0ab670911c4737cd5e0bb18d4e",
       "scaledDims": [
         2.0,
         2.200000047683716,
@@ -1748,7 +1986,7 @@
         1.0,
         1.0
       ],
-      "recipeHash": "2cfeb6b77f96adad6770e7559e30d51a08fe6d2ce2e206734e9c39ab49d0874a",
+      "recipeHash": "ac34124aa3bfb002dbea8d710100d6fe8e701dc5b9549692075914f75430be40",
       "scaledDims": [
         2.0,
         2.0,
@@ -1865,7 +2103,7 @@
         1.0,
         1.0
       ],
-      "recipeHash": "0b2559602998ea92825160142f6b222acee870169ace49767ecf85284e78c04d",
+      "recipeHash": "c84ea4bcca523d86f9c13bd26b55915d8f527121d20f9b408da0ae3423c655f8",
       "scaledDims": [
         2.0,
         2.0,
@@ -1982,7 +2220,7 @@
         1.0,
         1.050000011920929
       ],
-      "recipeHash": "423644d03fa69ee61731d91256f84f66f5077cd3c3e27b868d2ae5ed67a663da",
+      "recipeHash": "43722780e3142aca3be95edd7b731f25098d57ad19be017bc6eea00f60c4cfe9",
       "scaledDims": [
         2.0,
         2.0,
@@ -2130,7 +2368,7 @@
         4.150000095367434,
         4.000000953674316
       ],
-      "recipeHash": "162a6c7bf7f7bfc725cf8288ba318c48ada70efcd5ffb057a86c478f90e19e99",
+      "recipeHash": "38b90fa14b7dd462bba9f202577cd7822b90ea45f7a2058ec7598c067c24f8e3",
       "scaledDims": [
         2.0,
         2.075000047683717,
@@ -2247,7 +2485,7 @@
         4.233285903930681,
         4.000000238418579
       ],
-      "recipeHash": "5dc4211bb7e6cf36fd7ad553fab5aff62297481e22adf95d14b9c14a70f3eb62",
+      "recipeHash": "fb8f5dd334323367438343a7c38e63d34d441332d557caede71be597ffb9e6dc",
       "scaledDims": [
         2.0,
         2.1166429519653405,
@@ -2364,7 +2602,7 @@
         4.150000095367434,
         4.0000035762786865
       ],
-      "recipeHash": "1206e49cd767c71c15bde5c719bb45ca5f25a96c281acf1001ef43dd73ab4410",
+      "recipeHash": "697f7fad7e7e4dfb27e5210fca45e545a542d6b482a9200b4fe911338e961c91",
       "scaledDims": [
         2.000001549720764,
         2.075000047683717,
@@ -2481,7 +2719,7 @@
         4.049999713897722,
         4.000000476837158
       ],
-      "recipeHash": "422a6e24bc9fc43e9c0594ec363202361ef10995654f525e1a0eb215a4809c29",
+      "recipeHash": "0e5fa98cd27b47f60de0b2752be202601b52a27293a9f76f92c04fbbea5e2087",
       "scaledDims": [
         2.0,
         2.024999856948861,
@@ -2598,7 +2836,7 @@
         4.15000009536745,
         4.000000715255737
       ],
-      "recipeHash": "27b9cd235462571e4bb8f794fede99ecaaf161a5d719efc13798d1341dc73a61",
+      "recipeHash": "50d55594b50bb3da5efe19282b8e308bcf923e18bb61b306b674af8dd5d81f67",
       "scaledDims": [
         2.0028867721557617,
         2.075000047683725,
@@ -2715,7 +2953,7 @@
         4.1500000953674485,
         8.0
       ],
-      "recipeHash": "e4b5e186846b2597310a2cf9d29dafc781de0005b994e4511271c169435a7979",
+      "recipeHash": "08a5c16633d32ec0701833586baf0ec2a1fbced79e5075927f0c7403f50f0f8f",
       "scaledDims": [
         4.000001430511475,
         2.0750000476837243,
@@ -2832,7 +3070,7 @@
         4.233285903930667,
         8.000001907348633
       ],
-      "recipeHash": "fa5077736d92192a7cf1f60f57675f4a498005e115de78a05c9bc1f221140ab9",
+      "recipeHash": "55e3ee2791eb2865609c0368088b9c69129ec1da41671d96d91c6ed9e3b04f7e",
       "scaledDims": [
         4.0,
         2.1166429519653334,
@@ -2949,7 +3187,7 @@
         4.233285903930681,
         8.0
       ],
-      "recipeHash": "dfa349260d5be9dc2a087d4ffacbc6284f814bbf74c7f9aa35d6d8c344762b57",
+      "recipeHash": "78b64bf73419c864a09806a6d67cbcb22cbea65fa8760a3ec3352cf62858678e",
       "scaledDims": [
         4.000000238418579,
         2.1166429519653405,
@@ -3066,7 +3304,7 @@
         4.233285903930667,
         8.000001907348633
       ],
-      "recipeHash": "4d593b93affa8a3dce0318eaee4e32273d1082f670506a2c558b7cea0bfbc040",
+      "recipeHash": "2fffef8c2d8a36bdee490dee3a9e1b7f7cbbcb76b1982630ffae8ecb85fd63e1",
       "scaledDims": [
         4.000001430511475,
         2.1166429519653334,
@@ -3183,7 +3421,7 @@
         4.049999713897722,
         8.0
       ],
-      "recipeHash": "4603517eaf2764e8a42fd5255afff1dddc780bafb825e71d144cd3261bfa7632",
+      "recipeHash": "e45bd88a36f6c011bbb543d86543e6498ddc4473d2c2d98a5b34f9942bd66cd1",
       "scaledDims": [
         4.0,
         2.024999856948861,
@@ -3300,7 +3538,7 @@
         4.233285903930681,
         8.000000953674316
       ],
-      "recipeHash": "7e58982dbece4883065c4565e3deb86d05bd55279f0702545b3947c639d88d1a",
+      "recipeHash": "3840d1934e02e92bb5fea28b930cc5f7d23f26545de204d86bf391babec1a41b",
       "scaledDims": [
         4.000000238418579,
         2.1166429519653405,
@@ -3417,7 +3655,7 @@
         4.399999618530273,
         1.4000002145767212
       ],
-      "recipeHash": "953c7cb823dd5ac9a5fd3231a3e338ef9c4cb01a8373321376f7e3ff21fb3c69",
+      "recipeHash": "a49005a30d9f94af727c6850bec23b68e61b80450c8e6166b21f91953cbff24b",
       "scaledDims": [
         2.200000047683716,
         2.1999998092651367,
@@ -3535,7 +3773,7 @@
         4.399999618530273,
         1.4000002145767212
       ],
-      "recipeHash": "3a726e0f1c892a44496a91651f8d0794c707b73361fa651d523948b7b6f71003",
+      "recipeHash": "78f09c9e8ebbfa81f0144e10b366b17269596649b0c0fb6b26ef6db6101b197b",
       "scaledDims": [
         2.200000047683716,
         2.1999998092651367,
@@ -3690,7 +3928,7 @@
         4.399999618530273,
         1.4000002145767212
       ],
-      "recipeHash": "cd1edab4083214d40ebad03a6e552a0ecbb05958d0501f6521e399d1a691af44",
+      "recipeHash": "9659cd61ebede15877773ce4b3abd84637f8b579aac3cd2b713a39a73845d110",
       "scaledDims": [
         2.200000047683716,
         2.1999998092651367,
@@ -3845,7 +4083,7 @@
         4.399999618530273,
         1.4000002145767212
       ],
-      "recipeHash": "77e765c763bcf9547f006a701af0e30ff22d7686d625980ac60af40f7f59c92b",
+      "recipeHash": "3bac3d65986539b99db26275ef2ae712842b540352d7fac54ae5d83a76ff0dca",
       "scaledDims": [
         2.200000047683716,
         2.1999998092651367,
@@ -3999,7 +4237,7 @@
         4.233285903930681,
         12.000004768371582
       ],
-      "recipeHash": "32a5178f139c30c4c530bf3c6098164008c48031a2278f9eb5d8c64a186eb36b",
+      "recipeHash": "5d3e59d5f0131fc06805610cce69c78fa5bc32abd583ca9967d1788f9c17def3",
       "scaledDims": [
         6.000000476837158,
         2.1166429519653405,
@@ -4116,7 +4354,7 @@
         4.233285903930681,
         20.0
       ],
-      "recipeHash": "6f80170575af75126d5c53d95f0570f0429e65901e576e491401b65dd3a2f0b4",
+      "recipeHash": "c9aa01ca6a04ae41309adb2577e3ce6d9f81cd50846b12f9ae2d00b96f3bca9b",
       "scaledDims": [
         10.000499725341797,
         2.1166429519653405,
@@ -4233,7 +4471,7 @@
         4.233285903930681,
         20.0
       ],
-      "recipeHash": "15f2e6f6416a20c289635f113fddde7a127c64a0681fd513557e082c8182d0c6",
+      "recipeHash": "8747241cd3de4fa512745a69bcc98662fdf5aa9c02607e6d8b497071c8a345ce",
       "scaledDims": [
         10.000001430511475,
         2.1166429519653405,
@@ -4350,7 +4588,7 @@
         4.233285903930681,
         12.000000476837158
       ],
-      "recipeHash": "d60e7467f833bd219a94a441f9c084cbacbcabc548474487dccb369a385d6c8d",
+      "recipeHash": "4d790c8e2661c7011ac6284376300e5d755828be79f829aad7c9376b56ffa052",
       "scaledDims": [
         6.000000238418579,
         2.1166429519653405,
@@ -4467,7 +4705,7 @@
         4.233285903930681,
         12.000000476837158
       ],
-      "recipeHash": "de134eb6298ff3e67add73ea64e4d51ed82126d728bfbe4b9ae5d14f7b432cae",
+      "recipeHash": "35331998602e37e1adcc122ab32bcf9302e2900b3a360a46855e3368327357d3",
       "scaledDims": [
         6.0,
         2.1166429519653405,
@@ -4584,7 +4822,7 @@
         4.233285903930681,
         12.000001907348633
       ],
-      "recipeHash": "b02aa164169adff4b882baf57e123daa7890b94b5c80403f2795ae02560e8362",
+      "recipeHash": "97cff5052f2937f5f648e0c87bb8528226ce29deb753fad0871799350f3b9ac0",
       "scaledDims": [
         10.0,
         2.1166429519653405,
@@ -4701,7 +4939,7 @@
         4.233285903930681,
         12.000001907348633
       ],
-      "recipeHash": "0d5dae92174008ec2e6949ced541673283b2887ffcd5b5ad08c89901ab37b4e6",
+      "recipeHash": "ab65bd04e20cf58431adabdb828c5edb5cc3da67c0eb4ba74956a58fbacaf2fd",
       "scaledDims": [
         10.0,
         2.1166429519653405,
@@ -4818,7 +5056,7 @@
         8.550000190734867,
         8.399999618530273
       ],
-      "recipeHash": "3e34072ded17d45190c2a3221ac08f2c0c33c80b1ce84d87425fa5570fdbc304",
+      "recipeHash": "0cfe37a515b4c76dca3a5f6843641cf399d16893e5dffdda5b8d6da8438bf9c7",
       "scaledDims": [
         2.200000047683716,
         4.275000095367433,
@@ -4966,7 +5204,7 @@
         8.550000190734867,
         8.399999618530273
       ],
-      "recipeHash": "26e928b849263dc04b450c3f3f5e747099f7fe7b786727b9a843ab5ae8a244de",
+      "recipeHash": "4c9e9720e9046110bd66d78093069d93ad8bfb8ee2091d465a07d94bdbfe0ff0",
       "scaledDims": [
         4.199999809265137,
         4.275000095367433,
@@ -5114,7 +5352,7 @@
         4.233285903930664,
         4.0
       ],
-      "recipeHash": "2d20e8d8be8793274e3ffa784b13d9ab772ff68f1bdfd84ff39bd0a306162665",
+      "recipeHash": "e66ee30017c6a37b2c1e5ecb3faf469f3cbfa80386a85df96c60e7e19db40aea",
       "scaledDims": [
         2.0,
         2.116642951965332,
@@ -5231,7 +5469,7 @@
         4.233285903930664,
         1.7913262844085693
       ],
-      "recipeHash": "c28ce6a523fe11983922cab62480a4556bbd2b8b7e00b5193740d724de77d106",
+      "recipeHash": "46a0007f3d2af7c83f373cb2035606508dfd9e663b7252888d9de8f231b8bdb0",
       "scaledDims": [
         0.8956631422042847,
         2.116642951965332,
@@ -5348,7 +5586,7 @@
         0.0,
         4.0
       ],
-      "recipeHash": "a973ac8b83e172c0e10b7ac43a6d961364d7c959f1f8d280dd3ba36179a195e7",
+      "recipeHash": "d757abbd8b989ee2234fc1466d26060d6b32c50fe5ec76bbd601e3e178c8178c",
       "scaledDims": [
         2.0,
         0.0,
@@ -5496,7 +5734,7 @@
         4.233285903930664,
         8.0
       ],
-      "recipeHash": "17646b16993ee45269ea9d586d1c9e011460e03edf0904ce23e89d89c9f69531",
+      "recipeHash": "efdbc405a56b77a5631c63de3601df22159dcdfc0d615c5b3258fe7d7a83f552",
       "scaledDims": [
         4.0,
         2.116642951965332,
@@ -5644,7 +5882,7 @@
         0.10000000149011612,
         4.0
       ],
-      "recipeHash": "f5f84e86af9334a28fda655bbbd353f90745eaa99b336bf9349f1ee5f6b1e848",
+      "recipeHash": "56671744de326a7c99f2fd86e1a8ec00cd730da684a8b7c063cecd0616e67756",
       "scaledDims": [
         2.0,
         0.05000000074505806,
@@ -5792,7 +6030,7 @@
         0.10000000149011612,
         4.0
       ],
-      "recipeHash": "420b81e1a4166ced010e74cce366b0c45ededef97791ad94a0bfdd5168312b9d",
+      "recipeHash": "50e13b08858b029591033c4d7527036dd6401332b28e35d9d8b3ac606c42b37b",
       "scaledDims": [
         2.0,
         0.05000000074505806,
@@ -5940,7 +6178,7 @@
         0.5,
         4.000000476837158
       ],
-      "recipeHash": "c7ff3aff6898ae9cc2030c808a697bdc67edaa89e34c69ad7f1f7328f6d5f554",
+      "recipeHash": "8cb7e893d8a7dd61a4f4c643a1f0609f1a88a04c5573c4f6c51abb4a5fab4fd3",
       "scaledDims": [
         2.011870861053467,
         0.25,
@@ -6088,7 +6326,7 @@
         3.0891523361206055,
         4.000000476837158
       ],
-      "recipeHash": "654a36b44b98e5cdcea2787821707ad6460a86557389cb9c487d4e2d7a3c6a9f",
+      "recipeHash": "3e9d56b9c4774c4f931c422460e1874bb6093b51e77f10416df017c47231707f",
       "scaledDims": [
         2.0216528177261353,
         1.5445761680603027,
@@ -6236,7 +6474,7 @@
         3.0,
         4.000000476837158
       ],
-      "recipeHash": "d7498ea207dbcba86e1b68403c5851048d4449fa24c88ee8e68d9700c9273505",
+      "recipeHash": "4764f5a4bc6914a2f6fc2d768afbdfaa36952dc7f3f8ce0bf5b2eb0b84fc87b5",
       "scaledDims": [
         2.011870861053467,
         1.5,
@@ -6384,7 +6622,7 @@
         4.150000095367434,
         1.993566870689392
       ],
-      "recipeHash": "91ea42754405bdef4c4189d93b77aa3224296d81badb7c4a09f5e7cef1db4c0f",
+      "recipeHash": "da352c2ad43c8165844780504a25616082caab0234ee4ffcfc645302e370d234",
       "scaledDims": [
         2.0,
         2.075000047683717,
@@ -6501,7 +6739,7 @@
         4.049999713897722,
         1.0019950866699219
       ],
-      "recipeHash": "12044f6b0a3304abe50f0801357b32193216f9e1475c278155ae6aca5a605acc",
+      "recipeHash": "d2bc52a9f2092134b79a72c35103b6e3252d028bc69a08f41ce1e88a60ee5790",
       "scaledDims": [
         0.5009975433349609,
         2.024999856948861,
@@ -6618,7 +6856,7 @@
         4.233285903930667,
         1.993566870689392
       ],
-      "recipeHash": "226f5f216b272ade600ca623d8a7e9f4d89d7006cdd19f5f0855176d8e0cf693",
+      "recipeHash": "4c92e56a11bed4b9a97cb6580900a35c268e32770e7cd1833781e83c0070ff3e",
       "scaledDims": [
         2.0,
         2.1166429519653334,
@@ -6735,7 +6973,7 @@
         4.150000095367432,
         1.8073967099189758
       ],
-      "recipeHash": "38ba33f5a4ca57b2fe6c0a8a116bd299f8de059ce014821814613037f048e055",
+      "recipeHash": "0958383b6cb939e6140c92d7f2d25bb663743b3b9b4d0cee7ea6fd9a68ade918",
       "scaledDims": [
         1.0,
         2.075000047683716,
@@ -6852,7 +7090,7 @@
         4.499999999999998,
         0.6260783672332764
       ],
-      "recipeHash": "56970a06e2232b919ea6ed2efe382bf1016e8bd23dcc3342da7b81e3874e5112",
+      "recipeHash": "0758fe4ef48b65f3846e34c5d28edafd2dd2e40b00494db79deab01d38b19757",
       "scaledDims": [
         2.0,
         2.249999999999999,
@@ -6969,7 +7207,7 @@
         4.5,
         0.6184567809104919
       ],
-      "recipeHash": "85ed0e7dbcdfe338e4d87772cd10bf21b519f86b0d544b248a39c4f71aabd0ac",
+      "recipeHash": "423ca73b2b626309b21bdd3beecb069f582bfe8c422f5842d2f82b8864ca43c4",
       "scaledDims": [
         2.0,
         2.25,
@@ -7086,7 +7324,7 @@
         1.147499988079071,
         1.2749999856948853
       ],
-      "recipeHash": "6bf598e65a78e287977cd342216ee6c86b87628edb81d762f0a254878e4baef0",
+      "recipeHash": "25bfb0814c1701175c8cba7dd9befea277c1f3abf3de7ec968940b422a690c2f",
       "scaledDims": [
         0.8924999899599839,
         0.8032499916553497,
@@ -7198,7 +7436,7 @@
         0.7699999809265137,
         1.309000015258789
       ],
-      "recipeHash": "1fa036257d8300fd3a621c180b8650c0cf83ebe4981ca00e45e6f787ea03b411",
+      "recipeHash": "dde6f12cb0bf17d1d45705ea4e69b85ffd2a72b9ad079f88fa037d8e2aa44d4c",
       "scaledDims": [
         0.7545999646186828,
         0.5389999866485595,
@@ -7310,7 +7548,7 @@
         0.30000001192092896,
         0.2460000067949295
       ],
-      "recipeHash": "9d43a4c5f154a361a1bdf7ccbfa353759becbec9aac2c662ef9d703018d335a3",
+      "recipeHash": "fab2696e13d1aef2003302f1269524d3987f8dbbec9b38e51ff3fd4c9ee334a6",
       "scaledDims": [
         0.492000013589859,
         0.6000000238418579,
@@ -7356,9 +7594,233 @@
       ],
       "sourceSha256": "4262d0d3c8ac39bc10c0bb96e9b687d3bd1cc4a79df12b86fef37ebfd24fbb1b",
       "structuralGrid": null
+    },
+    {
+      "admissionClass": "PART_DONOR",
+      "assetId": "kenney-retro-fantasy-kit/pulley",
+      "bounds": {
+        "aabbMax": [
+          1.6780329473063492e-10,
+          0.05000000074505806,
+          0.05000001175312576
+        ],
+        "aabbMin": [
+          -0.6000000219960232,
+          -0.949999988079071,
+          -0.05000004356908599
+        ],
+        "footprint": {
+          "center": [
+            -0.3,
+            0
+          ],
+          "halfExtents": [
+            0.3,
+            0.05
+          ],
+          "yawRadians": 0
+        },
+        "footprintSource": "override",
+        "groundY": -0.949999988079071
+      },
+      "canonicalScale": 2,
+      "category": "rigging",
+      "companionLeaf": null,
+      "file": "pulley.glb",
+      "materialFamilies": [
+        "wood"
+      ],
+      "normalizedFrame": {
+        "forward": "+Z",
+        "sourceToGenesis": [
+          3.3560630940954184e-09,
+          0.0,
+          -0.9999999966439369,
+          0.0,
+          0.0,
+          1.0,
+          0.0,
+          0.0,
+          0.9999999966439369,
+          0.0,
+          3.3560630940954184e-09,
+          0.0,
+          0,
+          0,
+          0,
+          1.0
+        ],
+        "up": "+Y"
+      },
+      "outputFile": "assets/models-normalized/kenney-retro-fantasy-kit/pulley.glb",
+      "pack": "kenney-retro-fantasy-kit",
+      "qaStatus": "approved-dev",
+      "rawDims": [
+        0.1000000536441803,
+        0.9999999888241291,
+        0.6000000238418579
+      ],
+      "recipeHash": "f5cec162edaa994ad54e9ff609aa473f426bc076371c844174451a1a225592ef",
+      "scaledDims": [
+        0.6000000221638265,
+        0.9999999888241291,
+        0.10000005532221175
+      ],
+      "schema": "genesis.donor.v2",
+      "semanticParts": {},
+      "slug": "pulley",
+      "socketCounts": {
+        "wall-mount": 1
+      },
+      "sockets": [
+        {
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.7,
+              1.1,
+              0.3
+            ]
+          },
+          "id": "wall-mount",
+          "mateFamily": "wall",
+          "mateRule": "coincident",
+          "position": [
+            -0.3,
+            0,
+            -0.05
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "size": [
+            0.6,
+            1,
+            0.1
+          ],
+          "type": "wall-mount"
+        }
+      ],
+      "sourceSha256": "fcac7ec8db844c666de8d31c420ad5710b29536a6b0b620f318fab514a173708",
+      "structuralGrid": null
+    },
+    {
+      "admissionClass": "PART_DONOR",
+      "assetId": "kenney-retro-fantasy-kit/pulley-crate",
+      "bounds": {
+        "aabbMax": [
+          6.165480818027955e-10,
+          0.05000000074505806,
+          0.18371172187662357
+        ],
+        "aabbMin": [
+          -0.7337117176671047,
+          -0.9499999284744263,
+          -0.18371170943784523
+        ],
+        "footprint": {
+          "center": [
+            -0.3669,
+            0
+          ],
+          "halfExtents": [
+            0.367,
+            0.184
+          ],
+          "yawRadians": 0
+        },
+        "footprintSource": "override",
+        "groundY": -0.9499999284744263
+      },
+      "canonicalScale": 2,
+      "category": "rigging",
+      "companionLeaf": null,
+      "file": "pulley-crate.glb",
+      "materialFamilies": [
+        "wood"
+      ],
+      "normalizedFrame": {
+        "forward": "+Z",
+        "sourceToGenesis": [
+          3.3560630940954184e-09,
+          0.0,
+          -0.9999999966439369,
+          0.0,
+          0.0,
+          1.0,
+          0.0,
+          0.0,
+          0.9999999966439369,
+          0.0,
+          3.3560630940954184e-09,
+          0.0,
+          0,
+          0,
+          0,
+          1.0
+        ],
+        "up": "+Y"
+      },
+      "outputFile": "assets/models-normalized/kenney-retro-fantasy-kit/pulley-crate.glb",
+      "pack": "kenney-retro-fantasy-kit",
+      "qaStatus": "approved-runtime",
+      "rawDims": [
+        0.3674234300851822,
+        0.9999999292194843,
+        0.7337117195129395
+      ],
+      "recipeHash": "7ef9d4e6fbda27b27e28c4bf5835ff813c5e43b27346f8e74e56defb68c89125",
+      "scaledDims": [
+        0.7337117182836528,
+        0.9999999292194843,
+        0.3674234313144688
+      ],
+      "schema": "genesis.donor.v2",
+      "semanticParts": {},
+      "slug": "pulley-crate",
+      "socketCounts": {
+        "wall-mount": 1
+      },
+      "sockets": [
+        {
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.8,
+              1.1,
+              0.6
+            ]
+          },
+          "id": "wall-mount",
+          "mateFamily": "wall",
+          "mateRule": "coincident",
+          "position": [
+            -0.3669,
+            0,
+            -0.1837
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "size": [
+            0.7337,
+            1,
+            0.3674
+          ],
+          "type": "wall-mount"
+        }
+      ],
+      "sourceSha256": "63a6f00bf6ebd39a70b1e79bdfebdb4a1849d87826a4f0f516b9a55063b92870",
+      "structuralGrid": null
     }
   ],
   "schema": "genesis.donor-provenance.v2",
-  "totalPiecesAdmitted": 58,
+  "totalPiecesAdmitted": 62,
   "unit": "KGR-3"
 }

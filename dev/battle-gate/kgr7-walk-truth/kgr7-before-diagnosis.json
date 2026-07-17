@@ -1,0 +1,418 @@
+{
+  "world": {
+    "id": "mrovl4og8l8yo",
+    "name": "The Ivory Pit"
+  },
+  "hereKind": "interior",
+  "walkId": "frontier-s1-1",
+  "realms": {
+    "active": [],
+    "sourceRealms": [],
+    "walkSkin": {
+      "text": "Every carved face has been chiseled off. ★ — Recently. The dust of the work still hangs in the torchlight, and the chisel is nowhere.",
+      "band": "Strange",
+      "ref": "walk-skin-dungeon#87",
+      "tail": "center",
+      "roll": {
+        "raw": 11,
+        "shifted": 11,
+        "frayMod": 0
+      }
+    }
+  },
+  "walk": {
+    "environment": "dungeon",
+    "topology": "The Loop",
+    "segments": 4,
+    "explicitDeal": false
+  },
+  "activeSegment": {
+    "num": 1,
+    "label": "Entry",
+    "areaType": "Chasm Room",
+    "segType": null,
+    "feature": {
+      "name": "Bone Wall",
+      "flavor": "Long bones form a lattice across the archway.",
+      "dims": "5' wide arch, 8' high — Can squeeze through (Str DC 11 to break a gap); Tiny pass freely"
+    },
+    "object": {
+      "name": "Small cairn",
+      "flavor": "Stones stacked like a waypoint."
+    },
+    "dressing": {
+      "text": "Winch drum with frayed cable snarled around it.",
+      "condition": "Tampered"
+    },
+    "atmo": {
+      "lane": "air",
+      "text": "updraft, slight"
+    },
+    "encounter": {
+      "type": "Discovery"
+    }
+  },
+  "deckCards": null,
+  "allSegments": [
+    {
+      "num": 1,
+      "label": "Entry",
+      "areaType": "Chasm Room",
+      "isFinale": false,
+      "feature": {
+        "name": "Bone Wall",
+        "flavor": "Long bones form a lattice across the archway."
+      },
+      "object": {
+        "name": "Small cairn",
+        "flavor": "Stones stacked like a waypoint."
+      },
+      "dressing": {
+        "text": "Winch drum with frayed cable snarled around it.",
+        "condition": "Tampered"
+      },
+      "encounter": {
+        "type": "Discovery"
+      }
+    },
+    {
+      "num": 2,
+      "label": "",
+      "areaType": "Sloped Passage",
+      "isFinale": false,
+      "feature": {
+        "name": "Toppled Bookcase",
+        "flavor": "A tall bookcase fallen across the floor, spilling rotted ledgers."
+      },
+      "object": {
+        "name": "Sliding panel",
+        "flavor": "Opens with a push—then sticks."
+      },
+      "dressing": {
+        "text": "Small shrine shelf with melted wax and empty bowl.",
+        "condition": "Fresh"
+      },
+      "encounter": {
+        "type": "Hazard"
+      }
+    },
+    {
+      "num": 3,
+      "label": "",
+      "areaType": "Natural Passage",
+      "isFinale": false,
+      "feature": {
+        "name": "Eldritch Circle",
+        "flavor": "Symbols shimmer like heat haze."
+      },
+      "object": {
+        "name": "Chalk nub",
+        "flavor": "Leaves crisp marks—fresh supply."
+      },
+      "dressing": {
+        "text": "Cookpot with soot-black belly and a sour smell.",
+        "condition": "Tampered"
+      },
+      "encounter": {
+        "type": "Social"
+      }
+    },
+    {
+      "num": 4,
+      "label": "Finale",
+      "areaType": "T-Junction",
+      "isFinale": true,
+      "feature": {
+        "name": "Refuse Pile",
+        "flavor": "Bones jut from beneath moldy debris."
+      },
+      "object": {
+        "name": "Rope ladder",
+        "flavor": "Lowest rung is missing; ends are frayed."
+      },
+      "dressing": {
+        "text": "A thick rug rolled and stood against the corner, damp-heavy and sour to the nose.",
+        "condition": "Fresh"
+      },
+      "encounter": null
+    }
+  ],
+  "plan": {
+    "rooms": 4,
+    "cellW": 27,
+    "cellD": 24
+  },
+  "boardDressing": [
+    {
+      "sourceRef": null,
+      "slug": "chrome-flora-neonbonsai-alt",
+      "realmPropName": null,
+      "role": null,
+      "primary": "light",
+      "cardKind": "small",
+      "renderStrategy": "billboard",
+      "projected": false,
+      "count": null,
+      "x": 16,
+      "y": 16,
+      "roomSegNum": 1,
+      "visualAsset": null
+    },
+    {
+      "sourceRef": null,
+      "slug": "chrome-flora-lightpod",
+      "realmPropName": null,
+      "role": null,
+      "primary": "focal",
+      "cardKind": "medium",
+      "renderStrategy": "billboard",
+      "projected": false,
+      "count": null,
+      "x": 20,
+      "y": 13,
+      "roomSegNum": 1,
+      "visualAsset": null
+    },
+    {
+      "sourceRef": null,
+      "slug": "chrome-flora-fiberreed",
+      "realmPropName": null,
+      "role": null,
+      "primary": "blocker",
+      "cardKind": "medium",
+      "renderStrategy": "full-3d-prop",
+      "projected": false,
+      "count": null,
+      "x": 16,
+      "y": 15,
+      "roomSegNum": 1,
+      "visualAsset": null
+    },
+    {
+      "sourceRef": null,
+      "slug": "chrome-clutter-antennastack",
+      "realmPropName": null,
+      "role": null,
+      "primary": "wall-hang",
+      "cardKind": "small",
+      "renderStrategy": "extruded-card",
+      "projected": false,
+      "count": null,
+      "x": 22,
+      "y": 15,
+      "roomSegNum": 1,
+      "visualAsset": null
+    },
+    {
+      "sourceRef": null,
+      "slug": "chrome-flora-wireweed",
+      "realmPropName": null,
+      "role": null,
+      "primary": "floor",
+      "cardKind": "small",
+      "renderStrategy": "billboard",
+      "projected": false,
+      "count": null,
+      "x": 21.778494588397443,
+      "y": 14.14365192418918,
+      "roomSegNum": 1,
+      "visualAsset": null
+    },
+    {
+      "sourceRef": null,
+      "slug": "chrome-clutter-crateseal",
+      "realmPropName": null,
+      "role": null,
+      "primary": "floor",
+      "cardKind": "small",
+      "renderStrategy": "billboard",
+      "projected": false,
+      "count": null,
+      "x": 15.812598828263582,
+      "y": 12.7468191861175,
+      "roomSegNum": 1,
+      "visualAsset": null
+    },
+    {
+      "sourceRef": null,
+      "slug": "chrome-clutter-crateseal",
+      "realmPropName": null,
+      "role": null,
+      "primary": "floor",
+      "cardKind": "small",
+      "renderStrategy": "billboard",
+      "projected": false,
+      "count": null,
+      "x": 15.975589139536023,
+      "y": 11.818378155324607,
+      "roomSegNum": 1,
+      "visualAsset": null
+    }
+  ],
+  "boardInteractables": [
+    {
+      "sourceRef": "S1.door",
+      "archetype": "door",
+      "slug": "chrome-obj-door-shut",
+      "x": 18,
+      "y": 13
+    }
+  ],
+  "projection": {
+    "density": "composed",
+    "stageNow": [
+      {
+        "id": "S1.object",
+        "role": "interactable",
+        "slug": null,
+        "sourceRef": "S1.object",
+        "count": 1
+      },
+      {
+        "id": "S1.feature",
+        "role": "feature",
+        "slug": null,
+        "sourceRef": "S1.feature",
+        "count": 1
+      },
+      {
+        "id": "S1.dressing",
+        "role": "dressing",
+        "slug": null,
+        "sourceRef": "S1.dressing",
+        "count": 1
+      }
+    ],
+    "narrateNow": 2,
+    "reserve": 0
+  },
+  "realization": {
+    "rulesLoaded": 8,
+    "runtimeAssets": 10,
+    "registryHash": "b728a0acd69a730dc08abd1069b80ac3d9c8a5183cac64ff77151bb28444af21",
+    "stamped": 0,
+    "unmatched": 7
+  },
+  "mounted": {
+    "dressingWorld": [
+      {
+        "slug": "chrome-flora-neonbonsai-alt",
+        "x": -3.5,
+        "y": -0.3,
+        "z": 1.5,
+        "kenneyAsset": null
+      },
+      {
+        "slug": "chrome-flora-lightpod",
+        "x": 0.5,
+        "y": -0.3,
+        "z": -1.5,
+        "kenneyAsset": null
+      },
+      {
+        "slug": "chrome-flora-wireweed",
+        "x": 2.278494588397443,
+        "y": -0.3,
+        "z": -0.3563480758108195,
+        "kenneyAsset": null
+      },
+      {
+        "slug": "chrome-clutter-crateseal",
+        "x": -3.6874011717364183,
+        "y": -0.3,
+        "z": -1.7531808138824996,
+        "kenneyAsset": null
+      },
+      {
+        "slug": "chrome-clutter-crateseal",
+        "x": -3.524410860463977,
+        "y": -0.3,
+        "z": -2.6816218446753926,
+        "kenneyAsset": null
+      }
+    ],
+    "shell": true
+  },
+  "meta": {
+    "label": "before",
+    "base": "http://127.0.0.1:63067",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "seed": 20260717,
+    "attempt": 0,
+    "notFoundUrls": [
+      "http://127.0.0.1:63067/assets/ui/vision-quest.css",
+      "http://127.0.0.1:63067/assets/title/genesis.png",
+      "http://127.0.0.1:63067/dev/model-qa/glb/grunt.glb",
+      "http://127.0.0.1:63067/dev/model-qa/glb/rlm-theater-trench.glb",
+      "http://127.0.0.1:63067/dev/model-qa/glb/rlm-theater-legion.glb",
+      "http://127.0.0.1:63067/dev/model-qa/glb/rlm-theater-revenant.glb",
+      "http://127.0.0.1:63067/dev/model-qa/glb/rlm-theater-mark4.glb",
+      "http://127.0.0.1:63067/dev/model-qa/glb/rlm-theater-sherman.glb",
+      "http://127.0.0.1:63067/dev/model-qa/glb/rlm-noir-brute.glb",
+      "http://127.0.0.1:63067/dev/model-qa/glb/rlm-noir-gangster.glb",
+      "http://127.0.0.1:63067/dev/model-qa/glb/rlm-noir-maestro.glb",
+      "http://127.0.0.1:63067/dev/model-qa/glb/rlm-noir-civilian.glb",
+      "http://127.0.0.1:63067/assets/plaques/scene-banner.png",
+      "http://127.0.0.1:63067/dm/health",
+      "http://127.0.0.1:63067/assets/textures-psx/manifest.json",
+      "http://127.0.0.1:63067/assets/icons/sword-shield.png",
+      "http://127.0.0.1:63067/assets/icons/helm.png",
+      "http://127.0.0.1:63067/assets/icons/key.png",
+      "http://127.0.0.1:63067/assets/icons/pin.png",
+      "http://127.0.0.1:63067/assets/icons/compass.png",
+      "http://127.0.0.1:63067/assets/icons/heart.png",
+      "http://127.0.0.1:63067/assets/icons/sun.png",
+      "http://127.0.0.1:63067/assets/dressing/spr-frontier-hermit.png",
+      "http://127.0.0.1:63067/assets/dressing/spr-frontier-town-guard.png",
+      "http://127.0.0.1:63067/favicon.ico"
+    ],
+    "pendingBefore": {
+      "session": 1,
+      "frontiers": [
+        "frontier-s1-0 (urban)",
+        "frontier-s1-1 (dungeon)",
+        "frontier-s1-2 (wilderness)"
+      ],
+      "reason": "no-overlays"
+    },
+    "entered": {
+      "dungeonId": "frontier-s1-1",
+      "pendingAfter": null
+    }
+  }
+}

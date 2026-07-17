@@ -133,12 +133,21 @@ const namedPilotAssets=new Set([
   "kenney-fantasy-town-kit/lantern","kenney-factory-kit/lever-double",
 ]);
 const rejectedPilot="kenney-furniture-kit/bench";
+// KGR-7 (OPERATION §15): the walk-demand tranche — three assets calibrated against The Ivory Pit's
+// actual rolled nouns — plus the named pulley demotion (mounts correctly but reads as an edge-on
+// sliver at the production camera; pulley-crate carries the pulley family instead).
+const kgr7RuntimeAssets=new Set([
+  "kenney-castle-kit/rocks-small","kenney-retro-fantasy-kit/pulley-crate","kenney-food-kit/pot-stew",
+]);
+const kgr7DevDemotion="kenney-retro-fantasy-kit/pulley";
 const calibratedIds=Object.keys(calibration.assets).sort();
 const legacyStructuralIds=calibratedIds.filter(id=>structuralPacks.has(id.split("/")[0]));
-check("calibration ownership is 47 structural + ten pilots + one named rejection",
+check("calibration ownership is 47 structural + ten pilots + KGR-7 tranche (3 runtime + 1 dev demotion) + one named rejection",
   legacyStructuralIds.length===47 && namedPilotAssets.size===10 &&
-  calibratedIds.length===legacyStructuralIds.length+namedPilotAssets.size+1 &&
+  calibratedIds.length===legacyStructuralIds.length+namedPilotAssets.size+kgr7RuntimeAssets.size+2 &&
   [...namedPilotAssets].every(id=>calibration.assets[id]?.qaStatus==="approved-runtime") &&
+  [...kgr7RuntimeAssets].every(id=>calibration.assets[id]?.qaStatus==="approved-runtime") &&
+  calibration.assets[kgr7DevDemotion]?.qaStatus==="approved-dev" &&
   calibration.assets[rejectedPilot]?.qaStatus==="quarantined",
   `got ${calibratedIds.length} total / ${legacyStructuralIds.length} structural`);
 const structuralRecords=[...structuralPacks].map(pack=>calibration.packs[pack]);

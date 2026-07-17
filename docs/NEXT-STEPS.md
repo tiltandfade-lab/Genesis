@@ -30,12 +30,13 @@ runtime pilots · ☑ calibration + manual Donor/Socket Workbench · ☑ footpri
 record. Do NOT merge `integration/kenney-graphics-repair` to master until Adam accepts a real
 current-engine rolled walk that is unmistakably better.
 
-1. ☐ **KGR-7 GAMEPLAY-FIRST SLICE:** boot a real rolled walk through the production pipeline
-   (service `prepPending` → apply the spatial overlay → volumetric interior); diagnose the
-   noun→asset realization seam end to end (matching, registry coverage, placement, capture timing);
-   workbench-calibrate and approve the assets the actual roll demands (never reroll a noun);
-   populate ONE walk convincingly at gameplay scale; gate on genuine before/after engine frames —
-   isolated QA cards are not the visual gate.
+1. ◐ **KGR-7 GAMEPLAY-FIRST SLICE — BUILT 2026-07-17, awaiting Adam's read.** The Ivory Pit
+   (real rolled world, canonical fixture) diagnosed end to end and repaired at each seam: fantasy
+   realm-truth · walk-noun projection (additive/fail-closed/anchored) · three-asset walk-demand
+   tranche (cairn/winch/cookpot) · fourth-wall law · re-pinned admission gates · the
+   `capture-kgr7-walk-truth.mjs` acceptance rig. Evidence `kgr7-before-after.png`; residuals in
+   `dev/playtest-findings-kgr7-walk-truth.md`. REMAINS: Adam's frame read (the only acceptance
+   gate), then the named P2 ladder.
 2. ☐ **P2 CHROME READABILITY PASS** (after KGR-7 passes): overbright white flora and the
    dark-aperture/wood-leaf contrast that makes a correctly mounted door read slab-like.
 3. ☐ **NEXT KENNEY ADMISSION TRANCHE** (after KGR-7 passes): workbench + source hashes, measured

@@ -1,0 +1,105 @@
+{
+  "algorithmVersion": 1,
+  "assets": {
+    "pot-stew": {
+      "admissionClass": "PART_DONOR",
+      "assetId": "kenney-food-kit/pot-stew",
+      "bounds": {
+        "aabbMax": [
+          0.1643623560667038,
+          0.18039999902248383,
+          0.20551790297031403
+        ],
+        "aabbMin": [
+          -0.1643623560667038,
+          0.0,
+          -0.20551790297031403
+        ],
+        "footprint": {
+          "center": [
+            0,
+            0
+          ],
+          "halfExtents": [
+            0.164,
+            0.206
+          ],
+          "yawRadians": 0
+        },
+        "footprintSource": "override",
+        "groundY": 0.0
+      },
+      "canonicalScale": 0.5,
+      "category": "cookware",
+      "companionLeaf": null,
+      "file": "pot-stew.glb",
+      "materialFamilies": [
+        "iron"
+      ],
+      "normalizedFrame": {
+        "forward": "+Z",
+        "sourceToGenesis": [
+          0.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0,
+          0,
+          0,
+          1.0
+        ],
+        "up": "+Y"
+      },
+      "qaStatus": "approved-runtime",
+      "recipeHash": "1f27e227f13da329fb56504584620c6139f559dc0e6da976aa9192a8159b2214",
+      "schema": "genesis.donor.v2",
+      "semanticParts": {},
+      "sockets": [
+        {
+          "clearance": {
+            "shape": "box",
+            "size": [
+              0.4,
+              0.3,
+              0.5
+            ]
+          },
+          "id": "floor-mount",
+          "mateFamily": "floor",
+          "mateRule": "coincident",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "size": [
+            0.329,
+            0.05,
+            0.411
+          ],
+          "type": "floor-mount"
+        }
+      ],
+      "sourceSha256": "311ba282a85bd722b5093f512579a168e3da949617600196b60d782c11afd6b8",
+      "structuralGrid": null
+    }
+  },
+  "calibrationHash": "4516c7b36a7be526b7a3ec6a12f9a428645a57c448b14a50f45f6c82c8984adb",
+  "normalizerVersion": "kgr3-calibration-v2",
+  "pack": "kenney-food-kit",
+  "schema": "genesis.donor-index.v2"
+}

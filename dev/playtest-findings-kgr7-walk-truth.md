@@ -93,6 +93,13 @@ future roll that seats those nouns in a room.
 ## Machine state
 
 `check-manifest` OK · all nine Kenney gates green after re-pinning the admission set ·
-`normalize-donors` 62 calibrated assets byte-stable · full `dev/verify-*.mjs` loop run at commit
-time (see CHANGELOG). Acceptance remains **Adam's read of the frames** — machine green proves
-contracts, not visual success (OPERATION §15).
+`normalize-donors` 62 calibrated assets byte-stable · `verify-wallhang-placement` re-pinned to the
+fourth-wall law (38/0). Full local `dev/verify-*.mjs` loop: every failure triaged — six were
+parallel-run contention flakes (green sequentially), one was the wallhang re-pin above, and
+**four are PRE-EXISTING local reds that fail identically at the pre-close baseline `6d40c751`**:
+`verify-diegetic-light` (nav timeout), `verify-interior-camera-frustum`,
+`verify-room-shell-render` (harness crash at line 329), `verify-s5-faceted-flip`. CI dep-skips all
+puppeteer render harnesses, so the KGR-6 close's "0 reds" never ran them — the same
+green-that-proves-less pattern §15 documents. They predate this branch and are left untouched here;
+queue them for their own repair pass. Acceptance remains **Adam's read of the frames** — machine
+green proves contracts, not visual success (OPERATION §15).

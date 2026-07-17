@@ -322,10 +322,19 @@ async function main() {
     group("G-1/G-2/G-3 — real mount: mid-wall height, flush to the true wall plane, oriented into the room (all 4 sides)");
     const EPS_PLANE = 0.02;
     const cellHalf = 0.5; // GRID LAW: cellSize=1 (theater-interior.js) — a wall plane sits half a cell off a room-edge cell's own center. Geometric fact, not a copy of the product's own offset constant.
+    // KGR-7 FOURTH-WALL LAW (OPERATION §15): with this fixture's focusRect and the default build-time
+    // camera yaw, the s/e walls take the parapet cutaway — wall-hangs on them now HIDE with their
+    // wall (theater-boot interiorBuildWallProps' cameraSideBand skip) instead of floating on the
+    // missing plane. The data layer still resolves all four wallSides (asserted above); the mount
+    // MATH is shared code, proven here on the two camera-visible sides.
     ["n", "s", "w", "e"].forEach((side) => {
       const slug = { n: "wh-north", s: "wh-south", w: "wh-west", e: "wh-east" }[side];
       const src = bySide[side];
       const m = mounted.find((x) => x.slug === slug);
+      if (side === "s" || side === "e") {
+        ok(!m, `${slug}: HIDDEN with its camera-cutaway wall (fourth-wall law) — not in interiorWallPropsWorldPositions()`);
+        return;
+      }
       if (!m) { ok(false, `${slug}: no mounted entry found in interiorWallPropsWorldPositions()`); return; }
       const floorTop = floorTopFor[slug];
       const wallH = built.wallHeightBase;
@@ -359,7 +368,8 @@ async function main() {
     // G-4 — wall-contact AO still present, still a small positive local z (hugs the NEW back face).
     // ================================================================
     group("G-4 — wall-contact AO still present, still hugging the (repositioned) back face");
-    ["wh-north", "wh-south", "wh-west", "wh-east"].forEach((slug) => {
+    // KGR-7: camera-visible sides only — s/e wall-hangs hide with their cutaway wall (see G-1 note).
+    ["wh-north", "wh-west"].forEach((slug) => {
       const m = mounted.find((x) => x.slug === slug);
       ok(!!m && m.aoPresent === true, `${slug}: wall-contact AO quad present`);
       ok(!!m && m.aoZ != null && m.aoZ > 0 && m.aoZ < 0.02, `${slug}: AO local z=${m && m.aoZ} sits a small POSITIVE offset in front of the back face (0 < z < 0.02)`);

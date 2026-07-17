@@ -45,9 +45,9 @@
         and minFilter=Linear (RED: pre-fix sets minFilter=Nearest); generateMipmaps stays false.
         MUTATION: reverting minFilter to NearestFilter in the extracted snippet flips this check red —
         proving it's load-bearing, not a check that would pass regardless.
-     9. world/kit untouched — the shared nearestify(tex) helper (every world/kit/grain/pixel-skin/
-        dressing/effect texture entry point) is BYTE-IDENTICAL between the pre-fix and fixed source —
-        this unit touched creature-sprite filtering ONLY, never the shared world-texture helper.
+     9. world/kit filter law — the shared nearestify(tex) helper still assigns Nearest to min+mag and
+        disables mipmaps. Its upload request is readiness-guarded: a TextureLoader placeholder is not
+        marked dirty until it owns image data (the focused behavioral proof lives in BW2-3 check 8).
 
    Run:  node dev/verify-bw2-0-crisp-channel.mjs */
 import { readFileSync } from "node:fs";
@@ -226,12 +226,14 @@ console.log("\n[8 — sprite filter law: mag Nearest (unchanged), min Linear (wa
     mutTex.minFilter !== "LINEAR", `mutant minFilter=${mutTex.minFilter} (should not equal LINEAR)`);
 }
 
-console.log("\n[9 — world/kit untouched: nearestify(tex) is byte-identical pre-fix vs fixed]");
+console.log("\n[9 — world/kit filter law + decode-ready upload]");
 {
   const oldNearestify = extractFunction(OLD_SOURCE, "nearestify");
   const newNearestify = extractFunction(NEW_SOURCE, "nearestify");
-  check("nearestify() function body is BYTE-IDENTICAL between pre-fix and fixed source (world/kit path never touched)",
-    oldNearestify === newNearestify);
+  check("pinned pre-fix nearestify marked every TextureLoader placeholder dirty immediately",
+    /tex\.needsUpdate = true/.test(oldNearestify) && !/if\(tex\.image\)/.test(oldNearestify));
+  check("fixed nearestify waits for image data before requesting a GPU upload",
+    /if\(tex\.image\) tex\.needsUpdate = true/.test(newNearestify));
   check("nearestify() still sets BOTH magFilter and minFilter to NearestFilter",
     /magFilter = THREE\.NearestFilter/.test(newNearestify) && /minFilter = THREE\.NearestFilter/.test(newNearestify));
 }

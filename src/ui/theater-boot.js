@@ -7192,7 +7192,12 @@ function nearestify(tex){
   tex.magFilter = THREE.NearestFilter;
   tex.minFilter = THREE.NearestFilter;
   tex.generateMipmaps = false;
-  tex.needsUpdate = true;
+  // TextureLoader returns its Texture immediately, before the image has decoded.  Marking that
+  // placeholder dirty asks WebGLRenderer to upload an image that does not exist yet and floods the
+  // first interior frame with "Texture marked for update but no image data found" warnings.  Loaded
+  // textures and Canvas/Data textures still need the explicit upload here; pending TextureLoader
+  // textures are marked dirty by Three itself when their onLoad path installs the image.
+  if(tex.image) tex.needsUpdate = true;
   return tex;
 }
 

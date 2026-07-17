@@ -222,5 +222,30 @@ group("7. folded engine-texel dimensions");
   console.log("  ✓ tiles 256x256, trims 256x64 (integer-ratio fold of the 512/128 source)");
 }
 
+// ── check 8: asynchronous texture upload readiness ─────────────────────────────────────────────
+group("8. asynchronous texture upload readiness");
+{
+  const bootSource = read("src/ui/theater-boot.js");
+  const nearestifySource = bootSource.match(/function nearestify\(tex\)\{[\s\S]*?\n\}/);
+  ok(!!nearestifySource, "nearestify extracted from the real GL module");
+  if(nearestifySource){
+    const nearestSandbox = { THREE:{ NearestFilter:"nearest" } };
+    vm.createContext(nearestSandbox);
+    vm.runInContext(nearestifySource[0] + ";this.__nearestify=nearestify;", nearestSandbox,
+      { filename:"theater-boot-nearestify.js" });
+    const pending = {};
+    nearestSandbox.__nearestify(pending);
+    ok(pending.needsUpdate !== true,
+      "TextureLoader placeholder is not marked dirty before image decode");
+    const decoded = { image:{} };
+    nearestSandbox.__nearestify(decoded);
+    ok(decoded.needsUpdate === true,
+      "decoded/Canvas/Data texture is marked dirty for upload");
+    ok(pending.magFilter === "nearest" && pending.minFilter === "nearest" && pending.generateMipmaps === false,
+      "pending texture still receives the crisp filtering contract");
+  }
+  console.log("  ✓ upload waits for image data; filtering is configured immediately");
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail > 0 ? 1 : 0);

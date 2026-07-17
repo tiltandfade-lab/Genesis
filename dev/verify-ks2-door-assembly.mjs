@@ -190,7 +190,7 @@ group("A2 — GREEN, end-to-end through interiorBuildBoard (prism path, KIT_DOOR
   M.sandbox.window.KIT_DOORS_ENABLED = false; // KS-2's own instruction: prove the prism-path fix with the kit flag stubbed off
   const board = M.interiorBuildBoard(fx.plan, { realmId: "fantasy", env: "dungeon" });
   const jambs = board.instances.doorframe.filter((e) => e.jamb && e.x === fx.doorCell.x && e.z === fx.doorCell.y);
-  ok(jambs.length === 2, `${label}: exactly 2 jamb prisms emitted (got ${jambs.length})`);
+  ok(jambs.length === 0, `${label}: ZERO jamb prisms — KGR-8 DOOR LAW (DESIGN 2026-07-17 evening): a door is the flat leaf alone — zero doorframe prisms, no kit gatehouse (got ${jambs.length})`);
   // widthAxisIsZ=false (this fixture's ground truth) -> jambs carry `ox` (offset along x) and a THIN
   // sx (ITR_JAMB_WIDTH_FRAC), full sz (frameDepth) — the "onTopBottom" old-code shape. widthAxisIsZ=true
   // would instead carry `oz`/thin sz/full sx. Assert the SHAPE matches the expected (correct) axis,
@@ -241,8 +241,7 @@ group("B1 — end-to-end through interiorBuildBoard (KIT_DOORS_ENABLED on): the 
   const jambs = board.instances.doorframe.filter((e) => e.jamb && e.x === std.doorCell.x && e.z === std.doorCell.y);
   ok(jambs.length === 0, `standard door: zero prism jamb entries emitted once it resolves to the kit path (got ${jambs.length})`);
   const kd = board.kitDoors.find((k) => k.x === std.doorCell.x && k.z === std.doorCell.y);
-  ok(!!kd, "standard door: a kitDoors entry was emitted for this cell");
-  ok(kd && kd.pack === "kenney-modular-dungeon-kit" && kd.slug === "gate-door", "kitDoors entry names the KS-1-admitted gate-door piece");
+  ok(!kd, "standard door: ZERO kitDoors entries — KGR-8 DOOR LAW (DESIGN 2026-07-17 evening): a door is the flat leaf alone — zero doorframe prisms, no kit gatehouse (gate-door is a wall module, not a door)");
 }
 
 group("B2 — KGR-3 cell-orientation contract replaces v1 butt-join placement for structural frames");
@@ -258,9 +257,10 @@ group("B2 — KGR-3 cell-orientation contract replaces v1 butt-join placement fo
     "KGR-3 v2 gate-door emits no superseded butt-join socket");
   const std = standardDoorFixture();
   const board = M.interiorBuildBoard(std.plan, { realmId: "fantasy", env: "dungeon" });
-  const kd = board.kitDoors.find((door) => door.x === std.doorCell.x && door.z === std.doorCell.y);
-  ok(kd && kd.widthAxisIsZ === false,
-    "fixture 3 projects the donor at the canonical door cell with the north-wall quarter-turn orientation");
+  // KGR-8 DOOR LAW: the production board emits ZERO kitDoors (the gatehouse module is retired) —
+  // the donor's own grid/orientation metadata above still proves the KS-1 placement contract.
+  ok(board.kitDoors.length === 0,
+    "fixture 3: zero kitDoors on the production board — the gatehouse is retired (KGR-8)");
 }
 
 // ============================================================================

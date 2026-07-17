@@ -512,7 +512,12 @@ var ITR_ACTIVE_ROOM_ONLY = true;
 // correctness fix to the prism path itself, not part of the kit swap). Squeeze crawls, odd widths, and
 // any aperture the kit can't fit ALWAYS fall back to the (QF-D1-fixed) prism path regardless of this
 // flag's state — "every prism path survives as fallback" per the wave's own posture.
-var KIT_DOORS_ENABLED = true;
+// KGR-8 DOOR LAW (Adam 2026-07-17: "it's just a door... a freakin flat rectangle would be better
+// than this stonehenge") — the kit gate-door is a whole stone GATEHOUSE wall module, not a door;
+// mounting it inside our own aperture double-framed every doorway. Retired with the jamb/header/
+// arch prisms (see the DOOR cell block below). A door is the flat leaf alone; 5ft/10ft widths and
+// a portcullis leaf arrive with the all-Kenney shell rebuild.
+var KIT_DOORS_ENABLED = false;
 
 // ─── KS-3 (docs/KENNEY-SOCKET-WAVE.md): KIT_SHELL_ENABLED — "room shells from the kit" ────────────────
 // KGR-2 render-safety retreat: default OFF. The old structural experiment remains available only for
@@ -1646,43 +1651,15 @@ function interiorBuildBoard(plan, opts) {
         // up with the kit mesh), while the wall-thickness reveal + STAGE-A A1 darkness-portal blocks
         // further down are UNCHANGED (they render the surrounding WALL, not the frame, regardless of
         // which frame geometry fills the aperture).
-        const kitEligible = !!KIT_DOORS_ENABLED && itrKitDoorEligible(x, y, plan, widthAxisIsZ, squeeze);
-        if (kitEligible) {
-          kitDoors.push({ x, z: y, widthAxisIsZ, pack: "kenney-modular-dungeon-kit", slug: "gate-door" });
-        } else {
-          const frameDepth = revealW + ITR_FRAME_PROUD; // hugs the wall plane: wall's own cut thickness + a small proud lip
-          const jambOffset = wFrac / 2 - ITR_JAMB_WIDTH_FRAC / 2; // jamb's OUTER edge lands flush with the aperture edge (== the old box's own edge)
-          [-1, 1].forEach((sign) => {
-            doorframe.push(widthAxisIsZ
-              ? { x, z: y, sx: frameDepth, sy: h, sz: ITR_JAMB_WIDTH_FRAC, color: trimColor, squeeze, transition: !!(d && d.transition), oz: sign * jambOffset, jamb: true }
-              : { x, z: y, sx: ITR_JAMB_WIDTH_FRAC, sy: h, sz: frameDepth, color: trimColor, squeeze, transition: !!(d && d.transition), ox: sign * jambOffset, jamb: true });
-          });
-          // header/lintel: spans the FULL aperture width (same outer span the two jambs bracket) at the
-          // SAME slim depth, stacked ABOVE the jambs' own [0,h] span (yBase=h) — so that entire span,
-          // the D4 leaf's full clear opening, stays completely open between the jambs (nothing but the
-          // two slim posts occupies it).
-          doorframe.push(widthAxisIsZ
-            ? { x, z: y, sx: frameDepth, sy: ITR_HEADER_HEIGHT, sz: wFrac, color: trimColor, squeeze, transition: !!(d && d.transition), yBase: h, header: true }
-            : { x, z: y, sx: wFrac, sy: ITR_HEADER_HEIGHT, sz: frameDepth, color: trimColor, squeeze, transition: !!(d && d.transition), yBase: h, header: true });
-
-          // BW2-5 item 1: ARCH HEADER — "doorframe prisms gain an arch header (2-3 stacked prisms
-          // corbelling in)". Plain (non-squeeze) doors only — a squeeze crawl-space reads as a crude
-          // tight passage, never a dressed archway. Two narrowing prisms stack ABOVE the D4d header (its
-          // own yBase shifted up by ITR_HEADER_HEIGHT so the corbels keep narrowing IN from the header's
-          // own slim footprint, never the old wide column's) via `yBase` (BW2-5's own field — see the
-          // constants block's header comment).
-          if (!squeeze) {
-            doorframe.push({
-              x, z: y, sx: wFrac * ITR_ARCH_STEP1_WIDTH_FRAC, sy: ITR_ARCH_STEP1_HEIGHT,
-              sz: wFrac * ITR_ARCH_STEP1_WIDTH_FRAC, color: trimColor, yBase: h + ITR_HEADER_HEIGHT, archStep: 1,
-            });
-            doorframe.push({
-              x, z: y, sx: wFrac * ITR_ARCH_STEP2_WIDTH_FRAC, sy: ITR_ARCH_STEP2_HEIGHT,
-              sz: wFrac * ITR_ARCH_STEP2_WIDTH_FRAC, color: trimColor,
-              yBase: h + ITR_HEADER_HEIGHT + ITR_ARCH_STEP1_HEIGHT, archStep: 2,
-            });
-          }
-        }
+        // KGR-8 DOOR LAW (Adam 2026-07-17): a door is the flat leaf alone. The kit gatehouse mount,
+        // the jamb posts, the header/lintel band, and the arch-corbel steps are all DEMOLISHED —
+        // every one of them was proud geometry standing around a doorway, and because the doorframe
+        // instance list never received the camera-side parapet cutaway walls get, headers/arches on
+        // near walls stood FULL HEIGHT in front of the lens (the "foyer column blocking the camera").
+        // What remains at a DOOR cell: the flush wall-thickness reveal slabs (wall, not frame — the
+        // block below), the darkness portal past the opening, and the D4 leaf itself. wFrac/h still
+        // shape the leaf and reveals; trimColor still feeds the accent thread bookkeeping above.
+        void trimColor;
         track(x, y);
 
         // BW2-5 item 1: WALL-THICKNESS REVEAL — "visible wall THICKNESS at openings (door reveals —
@@ -1866,9 +1843,12 @@ function interiorBuildBoard(plan, opts) {
       const room = roomIdx.get(d.x + "," + d.y);
       if (keepSet !== null && room && !keepSet.has(room.segNum)) return;
       if (d.primary === "blocker") {
-        const kind = itrFurnitureKindFor((plan.seed || "") + ":" + d.roomSegNum + ":" + d.x + "," + d.y + ":" + d.slug);
-        furniture.push({ x: d.x, y: d.y, kind, realmId: kit.realmId, slug: d.slug, roomSegNum: d.roomSegNum,
-          renderStrategy: d.renderStrategy || "full-3d-prop", visualAsset: d.visualAsset || null });
+        // KGR-8 (Adam 2026-07-17, the black-slab demolition): a blocker noun no longer renders as a
+        // GENERIC furniture prism recipe — a bramble thicket drawn as an untextured near-black
+        // "cabinet" volume was the most prominent garbage in every frame. Blockers now fall through
+        // to the normal dressing-card path (their own real sprite art), exactly like other floor
+        // dressing; a truthful 3D realization arrives per-noun via the Kenney registry, never a
+        // silhouette guess. (Routing removed here + the matching skip in interiorBuildDressing.)
       } else if (d.primary === "wall-hang") {
         const info = extrusionPropFor(d);
         wallProps.push({

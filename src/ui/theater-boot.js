@@ -4333,7 +4333,11 @@ function interiorBuildInteractableDoorMesh(entry, cx, cz, floorTopMap, kitDoorIn
   const edgeX = hingeSign > 0 ? -ITR_DOOR_WIDTH / 2 : ITR_DOOR_WIDTH / 2;
   const geo = new THREE.ExtrudeGeometry(shape, { depth: extrudeDepth, bevelEnabled: false, curveSegments: 10 });
   geo.translate(-edgeX, 0, -extrudeDepth / 2); // origin -> hinge jamb edge (x); center the extrusion depth on the aperture plane (z), unchanged
-  const mat = new THREE.MeshLambertMaterial({ color: itrDoorStateColor(entry.state), transparent: true, opacity: 1 });
+  // KGR-8: the leaf gets the SAME emissive readability floor every sprite card carries (BW2-4b's
+  // brightness law) — mid-brown wood was rendering as a near-black slab in dungeon light.
+  const mat = new THREE.MeshLambertMaterial({ color: itrDoorStateColor(entry.state), transparent: true, opacity: 1,
+    emissive: itrDoorStateColor(entry.state),
+    emissiveIntensity: (typeof LIGHT_TUNABLES !== "undefined" && LIGHT_TUNABLES.spriteEmissiveFloor) || 0.05 });
   const leaf = new THREE.Mesh(geo, mat);
   leaf.position.x = edgeX; // re-anchor: the (now hinge-edge) origin sits at the true jamb offset from the cell center
   leaf.castShadow = true; leaf.receiveShadow = true;
@@ -9621,7 +9625,9 @@ function interiorBuildDressing(dressing, cx, cz, floorTopMap, prismLists, wallHe
     // off the sibling data.furniture array) and wall-hang entries as extrusion props
     // (interiorBuildWallProps, off data.wallProps) — both derived from this SAME dressing roll, so
     // skip them here to avoid mounting the same entry twice.
-    if(d.primary === "blocker" || d.primary === "wall-hang") return;
+    // KGR-8: blockers mount here as their own sprite cards now (the furniture-prism routing is
+    // demolished — see theater-interior.js's blocker branch); only wall-hangs still route away.
+    if(d.primary === "wall-hang") return;
     // BW2-2: feet on THIS cell's own real floor top (interiorFloorTopAt — the derived law), replacing
     // the pre-BW2-2 hardcoded -0.4 (that value's own comment falsely claimed parity with pieces' -0.5
     // convention — it was actually 0.1 units higher, and still 0.1 below the true nominal floor top;
@@ -11595,7 +11601,20 @@ function setInteriorBoard(data){
   // interiorBuildBoard, A1 addition), a sibling of `instances` same as skirt just above (never counted
   // toward the "4 known instance kinds" data-shape check). Untextured flat dark slab (the card IS a
   // flat void-color read, not a surface that wants grain) — null texture, same convention skirt uses.
-  const portalMesh = interiorBuildInstancedMesh(data.portals, cx, cz, null, variant, "portal");
+  // KGR-8 (Adam 2026-07-17): portals follow their wall's camera cutaway — the same parapet map
+  // wallList gets above. With the doorframe towers demolished, a full-height portal card on a
+  // camera-side door stood exposed as a naked black monolith in front of the lens; now it drops to
+  // the same parapet band as the wall it pierces, reading as a dark opening in the low rim.
+  let portalList = data.portals;
+  if(data.focusRect && Array.isArray(portalList) && portalList.length){
+    portalList = portalList.map(function(pi){
+      if(!pi || !itrCameraSideBand(pi.x + (pi.ox || 0), pi.z + (pi.oz || 0))) return pi;
+      const parapetH = (pi.sy || 1) * ITR_CUTAWAY_PARAPET_FRAC;
+      if((pi.sy || 1) <= parapetH) return pi;
+      return Object.assign({}, pi, { sy: parapetH });
+    });
+  }
+  const portalMesh = interiorBuildInstancedMesh(portalList, cx, cz, null, variant, "portal");
   // BW2-5: furniture-class blocker volumes + wall-hang extrusion props (THE PROP PERSPECTIVE LAW) —
   // built further below (after dressing) since both read S.interiorFloorTopMap; declared here so the
   // mesh-count/group-add sweep stays one place. See interiorBuildFurniture/interiorBuildWallProps.

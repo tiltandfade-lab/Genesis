@@ -18,6 +18,20 @@ The running execution order. `DESIGN.md` holds the *what* and *why*; this holds 
 roll into `NEXT-STEPS-ARCHIVE.md` via `python3 build/archive-docs.py --emit`. Standing plan
 sections (tracks/layers/etc.) are never auto-archived.
 
+## Do next (2026-07-17 evening — THE SHELL RULINGS: prism shell condemned; KGR-8 is the lane)
+
+Adam's four rulings (DESIGN.md) closed the week's stall: all-Kenney shells (no mixing) ·
+rectilinear rooms · flat-leaf door law · void beyond the active room. Door/blocker/portal
+demolition LANDED same evening (`kgr7-kgr8-demolition.png`).
+
+1. ☐ **KGR-8 SHELL REBUILD** (`docs/KGR8-KENNEY-SHELL-REBUILD.md`): wall/floor/corner/aperture
+   module calibration tranche → room compiler v2 (whole-room kit claims, loud coverage-gap log) →
+   flat-leaf doors 5/10 ft + portcullis → silhouette base → pit/elevation reading → one
+   camera-visibility authority → kit-variant texture variation. Acceptance: Ivory Pit fixture +
+   one fresh roll, Adam's read.
+2. ☐ Then the still-open P2s that survive the new shell (billboard wall clip · south-band
+   staging · Chrome exposure) and the next walk-demand prop tranche.
+
 ## Do next (2026-07-17 — KGR acceptance REOPENED: BUILT-INFRA only; gameplay-first slice owed)
 
 Adam's evidence review overturned the same-day close: the live-playtest capture was effectively

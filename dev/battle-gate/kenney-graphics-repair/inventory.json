@@ -1,0 +1,1265 @@
+{
+  "schema": "genesis.kenney-graphics-repair-inventory.v1",
+  "unit": "KGR-6",
+  "registryHash": "b728a0acd69a730dc08abd1069b80ac3d9c8a5183cac64ff77151bb28444af21",
+  "runtimeAssets": [
+    {
+      "assetId": "kenney-retro-fantasy-kit/detail-barrel",
+      "qaStatus": "approved-runtime",
+      "sourceSha256": "4262d0d3c8ac39bc10c0bb96e9b687d3bd1cc4a79df12b86fef37ebfd24fbb1b",
+      "actualSourceSha256": "4262d0d3c8ac39bc10c0bb96e9b687d3bd1cc4a79df12b86fef37ebfd24fbb1b",
+      "family": "barrel",
+      "mountSockets": [
+        {
+          "id": "floor-mount",
+          "type": "floor-mount"
+        }
+      ]
+    },
+    {
+      "assetId": "kenney-pirate-kit/crate",
+      "qaStatus": "approved-runtime",
+      "sourceSha256": "b525674e07c8b83667512a8dd93be0d7684358347d0e64d2bb16b156ac382ed1",
+      "actualSourceSha256": "b525674e07c8b83667512a8dd93be0d7684358347d0e64d2bb16b156ac382ed1",
+      "family": "crate",
+      "mountSockets": [
+        {
+          "id": "floor-mount",
+          "type": "floor-mount"
+        }
+      ]
+    },
+    {
+      "assetId": "kenney-pirate-kit/chest",
+      "qaStatus": "approved-runtime",
+      "sourceSha256": "26d26c4c032a12320fe05b5005a72eba96db7167db0d35873639a4b7dcc06bcb",
+      "actualSourceSha256": "26d26c4c032a12320fe05b5005a72eba96db7167db0d35873639a4b7dcc06bcb",
+      "family": "chest",
+      "mountSockets": [
+        {
+          "id": "floor-mount",
+          "type": "floor-mount"
+        }
+      ]
+    },
+    {
+      "assetId": "kenney-furniture-kit/tableRound",
+      "qaStatus": "approved-runtime",
+      "sourceSha256": "f8daea9124a542a00b7bdacfddac82dc468573d43e44d7b54dd6316e9695754b",
+      "actualSourceSha256": "f8daea9124a542a00b7bdacfddac82dc468573d43e44d7b54dd6316e9695754b",
+      "family": "table",
+      "mountSockets": [
+        {
+          "id": "floor-mount",
+          "type": "floor-mount"
+        }
+      ]
+    },
+    {
+      "assetId": "kenney-furniture-kit/benchCushionLow",
+      "qaStatus": "approved-runtime",
+      "sourceSha256": "d1fac209eae2ea7393beefa4932dacb54d500e8f9932a1b17d2a842527df1b2c",
+      "actualSourceSha256": "d1fac209eae2ea7393beefa4932dacb54d500e8f9932a1b17d2a842527df1b2c",
+      "family": "bench",
+      "mountSockets": [
+        {
+          "id": "floor-mount",
+          "type": "floor-mount"
+        }
+      ]
+    },
+    {
+      "assetId": "kenney-furniture-kit/chair",
+      "qaStatus": "approved-runtime",
+      "sourceSha256": "c8a11eec93e89e31250ba91afc1b8d56c3bec7ae86640fd1239f595ff4180883",
+      "actualSourceSha256": "c8a11eec93e89e31250ba91afc1b8d56c3bec7ae86640fd1239f595ff4180883",
+      "family": "chair",
+      "mountSockets": [
+        {
+          "id": "floor-mount",
+          "type": "floor-mount"
+        }
+      ]
+    },
+    {
+      "assetId": "kenney-furniture-kit/lampWall",
+      "qaStatus": "approved-runtime",
+      "sourceSha256": "a9679ecd3be05731846f22ade97c37069598ca7a06dd9319f50230e63a1ea83c",
+      "actualSourceSha256": "a9679ecd3be05731846f22ade97c37069598ca7a06dd9319f50230e63a1ea83c",
+      "family": "lamp-wall",
+      "mountSockets": [
+        {
+          "id": "wall-mount",
+          "type": "wall-mount"
+        }
+      ]
+    },
+    {
+      "assetId": "kenney-furniture-kit/lampRoundFloor",
+      "qaStatus": "approved-runtime",
+      "sourceSha256": "50fe1b5b588edf15bfa9cc880f71a02a4fda6036350b24733d0ef4de5cc5e908",
+      "actualSourceSha256": "50fe1b5b588edf15bfa9cc880f71a02a4fda6036350b24733d0ef4de5cc5e908",
+      "family": "lamp-floor",
+      "mountSockets": [
+        {
+          "id": "floor-mount",
+          "type": "floor-mount"
+        }
+      ]
+    },
+    {
+      "assetId": "kenney-fantasy-town-kit/lantern",
+      "qaStatus": "approved-runtime",
+      "sourceSha256": "f270637e3083d6e84a30626ee05df2b09597a642985a7f5c3e4ab5bb1c7a8d55",
+      "actualSourceSha256": "f270637e3083d6e84a30626ee05df2b09597a642985a7f5c3e4ab5bb1c7a8d55",
+      "family": "lantern",
+      "mountSockets": [
+        {
+          "id": "floor-mount",
+          "type": "floor-mount"
+        }
+      ]
+    },
+    {
+      "assetId": "kenney-factory-kit/lever-double",
+      "qaStatus": "approved-runtime",
+      "sourceSha256": "b14d1fc30f29a8e8dc56dae7b20a8a988be5155bafcddc726cd8c8ebf0bbe5b9",
+      "actualSourceSha256": "b14d1fc30f29a8e8dc56dae7b20a8a988be5155bafcddc726cd8c8ebf0bbe5b9",
+      "family": "lever",
+      "mountSockets": [
+        {
+          "id": "floor-mount",
+          "type": "floor-mount"
+        }
+      ]
+    }
+  ],
+  "structuralPacks": [
+    {
+      "pack": "kenney-modular-dungeon-kit",
+      "schema": "genesis.donor-index.v2",
+      "structuralGrid": {
+        "sourceModuleUnits": 4,
+        "targetWorldUnits": 2,
+        "orientationSteps": 4,
+        "joinMode": "cell-orientation"
+      },
+      "entries": [
+        {
+          "slug": "corridor",
+          "qaStatus": "needs-review",
+          "structuralGrid": {
+            "joinMode": "cell-orientation",
+            "orientationSteps": 4,
+            "sourceModuleUnits": 4,
+            "targetWorldUnits": 2
+          },
+          "sockets": [
+            {
+              "id": "floor-mount",
+              "type": "floor-mount"
+            }
+          ],
+          "orientations": [
+            0,
+            1,
+            2,
+            3
+          ]
+        },
+        {
+          "slug": "corridor-corner",
+          "qaStatus": "needs-review",
+          "structuralGrid": {
+            "joinMode": "cell-orientation",
+            "orientationSteps": 4,
+            "sourceModuleUnits": 4,
+            "targetWorldUnits": 2
+          },
+          "sockets": [
+            {
+              "id": "floor-mount",
+              "type": "floor-mount"
+            }
+          ],
+          "orientations": [
+            0,
+            1,
+            2,
+            3
+          ]
+        },
+        {
+          "slug": "corridor-end",
+          "qaStatus": "needs-review",
+          "structuralGrid": {
+            "joinMode": "cell-orientation",
+            "orientationSteps": 4,
+            "sourceModuleUnits": 4,
+            "targetWorldUnits": 2
+          },
+          "sockets": [
+            {
+              "id": "floor-mount",
+              "type": "floor-mount"
+            }
+          ],
+          "orientations": [
+            0,
+            1,
+            2,
+            3
+          ]
+        },
+        {
+          "slug": "corridor-intersection",
+          "qaStatus": "needs-review",
+          "structuralGrid": {
+            "joinMode": "cell-orientation",
+            "orientationSteps": 4,
+            "sourceModuleUnits": 4,
+            "targetWorldUnits": 2
+          },
+          "sockets": [
+            {
+              "id": "floor-mount",
+              "type": "floor-mount"
+            }
+          ],
+          "orientations": [
+            0,
+            1,
+            2,
+            3
+          ]
+        },
+        {
+          "slug": "corridor-junction",
+          "qaStatus": "needs-review",
+          "structuralGrid": {
+            "joinMode": "cell-orientation",
+            "orientationSteps": 4,
+            "sourceModuleUnits": 4,
+            "targetWorldUnits": 2
+          },
+          "sockets": [
+            {
+              "id": "floor-mount",
+              "type": "floor-mount"
+            }
+          ],
+          "orientations": [
+            0,
+            1,
+            2,
+            3
+          ]
+        },
+        {
+          "slug": "corridor-transition",
+          "qaStatus": "needs-review",
+          "structuralGrid": {
+            "joinMode": "cell-orientation",
+            "orientationSteps": 4,
+            "sourceModuleUnits": 4,
+            "targetWorldUnits": 2
+          },
+          "sockets": [
+            {
+              "id": "floor-mount",
+              "type": "floor-mount"
+            }
+          ],
+          "orientations": [
+            0,
+            1,
+            2,
+            3
+          ]
+        },
+        {
+          "slug": "corridor-wide",
+          "qaStatus": "needs-review",
+          "structuralGrid": {
+            "joinMode": "cell-orientation",
+            "orientationSteps": 4,
+            "sourceModuleUnits": 4,
+            "targetWorldUnits": 2
+          },
+          "sockets": [
+            {
+              "id": "floor-mount",
+              "type": "floor-mount"
+            }
+          ],
+          "orientations": [
+            0,
+            1,
+            2,
+            3
+          ]
+        },
+        {
+          "slug": "corridor-wide-corner",
+          "qaStatus": "needs-review",
+          "structuralGrid": {
+            "joinMode": "cell-orientation",
+            "orientationSteps": 4,
+            "sourceModuleUnits": 4,
+            "targetWorldUnits": 2
+          },
+          "sockets": [
+            {
+              "id": "floor-mount",
+              "type": "floor-mount"
+            }
+          ],
+          "orientations": [
+            0,
+            1,
+            2,
+            3
+          ]
+        },
+        {
+          "slug": "corridor-wide-end",
+          "qaStatus": "needs-review",
+          "structuralGrid": {
+            "joinMode": "cell-orientation",
+            "orientationSteps": 4,
+            "sourceModuleUnits": 4,
+            "targetWorldUnits": 2
+          },
+          "sockets": [
+            {
+              "id": "floor-mount",
+              "type": "floor-mount"
+            }
+          ],
+          "orientations": [
+            0,
+            1,
+            2,
+            3
+          ]
+        },
+        {
+          "slug": "corridor-wide-intersection",
+          "qaStatus": "needs-review",
+          "structuralGrid": {
+            "joinMode": "cell-orientation",
+            "orientationSteps": 4,
+            "sourceModuleUnits": 4,
+            "targetWorldUnits": 2
+          },
+          "sockets": [
+            {
+              "id": "floor-mount",
+              "type": "floor-mount"
+            }
+          ],
+          "orientations": [
+            0,
+            1,
+            2,
+            3
+          ]
+        },
+        {
+          "slug": "corridor-wide-junction",
+          "qaStatus": "needs-review",
+          "structuralGrid": {
+            "joinMode": "cell-orientation",
+            "orientationSteps": 4,
+            "sourceModuleUnits": 4,
+            "targetWorldUnits": 2
+          },
+          "sockets": [
+            {
+              "id": "floor-mount",
+              "type": "floor-mount"
+            }
+          ],
+          "orientations": [
+            0,
+            1,
+            2,
+            3
+          ]
+        },
+        {
+          "slug": "gate",
+          "qaStatus": "needs-review",
+          "structuralGrid": {
+            "joinMode": "cell-orientation",
+            "orientationSteps": 4,
+            "sourceModuleUnits": 4,
+            "targetWorldUnits": 2
+          },
+          "sockets": [
+            {
+              "id": "floor-mount",
+              "type": "floor-mount"
+            }
+          ],
+          "orientations": [
+            0,
+            1,
+            2,
+            3
+          ]
+        },
+        {
+          "slug": "gate-door",
+          "qaStatus": "needs-review",
+          "structuralGrid": {
+            "joinMode": "cell-orientation",
+            "orientationSteps": 4,
+            "sourceModuleUnits": 4,
+            "targetWorldUnits": 2
+          },
+          "sockets": [
+            {
+              "id": "floor-mount",
+              "type": "floor-mount"
+            },
+            {
+              "id": "hinge-left",
+              "type": "hinge"
+            }
+          ],
+          "orientations": [
+            0,
+            1,
+            2,
+            3
+          ]
+        },
+        {
+          "slug": "gate-door-window",
+          "qaStatus": "needs-review",
+          "structuralGrid": {
+            "joinMode": "cell-orientation",
+            "orientationSteps": 4,
+            "sourceModuleUnits": 4,
+            "targetWorldUnits": 2
+          },
+          "sockets": [
+            {
+              "id": "floor-mount",
+              "type": "floor-mount"
+            },
+            {
+              "id": "hinge-left",
+              "type": "hinge"
+            }
+          ],
+          "orientations": [
+            0,
+            1,
+            2,
+            3
+          ]
+        },
+        {
+          "slug": "gate-metal-bars",
+          "qaStatus": "needs-review",
+          "structuralGrid": {
+            "joinMode": "cell-orientation",
+            "orientationSteps": 4,
+            "sourceModuleUnits": 4,
+            "targetWorldUnits": 2
+          },
+          "sockets": [
+            {
+              "id": "floor-mount",
+              "type": "floor-mount"
+            },
+            {
+              "id": "hinge-left",
+              "type": "hinge"
+            }
+          ],
+          "orientations": [
+            0,
+            1,
+            2,
+            3
+          ]
+        },
+        {
+          "slug": "room-corner",
+          "qaStatus": "needs-review",
+          "structuralGrid": {
+            "joinMode": "cell-orientation",
+            "orientationSteps": 4,
+            "sourceModuleUnits": 4,
+            "targetWorldUnits": 2
+          },
+          "sockets": [
+            {
+              "id": "floor-mount",
+              "type": "floor-mount"
+            }
+          ],
+          "orientations": [
+            0,
+            1,
+            2,
+            3
+          ]
+        },
+        {
+          "slug": "room-large",
+          "qaStatus": "needs-review",
+          "structuralGrid": {
+            "joinMode": "cell-orientation",
+            "orientationSteps": 4,
+            "sourceModuleUnits": 4,
+            "targetWorldUnits": 2
+          },
+          "sockets": [
+            {
+              "id": "floor-mount",
+              "type": "floor-mount"
+            }
+          ],
+          "orientations": [
+            0,
+            1,
+            2,
+            3
+          ]
+        },
+        {
+          "slug": "room-large-variation",
+          "qaStatus": "needs-review",
+          "structuralGrid": {
+            "joinMode": "cell-orientation",
+            "orientationSteps": 4,
+            "sourceModuleUnits": 4,
+            "targetWorldUnits": 2
+          },
+          "sockets": [
+            {
+              "id": "floor-mount",
+              "type": "floor-mount"
+            }
+          ],
+          "orientations": [
+            0,
+            1,
+            2,
+            3
+          ]
+        },
+        {
+          "slug": "room-small",
+          "qaStatus": "needs-review",
+          "structuralGrid": {
+            "joinMode": "cell-orientation",
+            "orientationSteps": 4,
+            "sourceModuleUnits": 4,
+            "targetWorldUnits": 2
+          },
+          "sockets": [
+            {
+              "id": "floor-mount",
+              "type": "floor-mount"
+            }
+          ],
+          "orientations": [
+            0,
+            1,
+            2,
+            3
+          ]
+        },
+        {
+          "slug": "room-small-variation",
+          "qaStatus": "needs-review",
+          "structuralGrid": {
+            "joinMode": "cell-orientation",
+            "orientationSteps": 4,
+            "sourceModuleUnits": 4,
+            "targetWorldUnits": 2
+          },
+          "sockets": [
+            {
+              "id": "floor-mount",
+              "type": "floor-mount"
+            }
+          ],
+          "orientations": [
+            0,
+            1,
+            2,
+            3
+          ]
+        },
+        {
+          "slug": "room-wide",
+          "qaStatus": "needs-review",
+          "structuralGrid": {
+            "joinMode": "cell-orientation",
+            "orientationSteps": 4,
+            "sourceModuleUnits": 4,
+            "targetWorldUnits": 2
+          },
+          "sockets": [
+            {
+              "id": "floor-mount",
+              "type": "floor-mount"
+            }
+          ],
+          "orientations": [
+            0,
+            1,
+            2,
+            3
+          ]
+        },
+        {
+          "slug": "room-wide-variation",
+          "qaStatus": "needs-review",
+          "structuralGrid": {
+            "joinMode": "cell-orientation",
+            "orientationSteps": 4,
+            "sourceModuleUnits": 4,
+            "targetWorldUnits": 2
+          },
+          "sockets": [
+            {
+              "id": "floor-mount",
+              "type": "floor-mount"
+            }
+          ],
+          "orientations": [
+            0,
+            1,
+            2,
+            3
+          ]
+        },
+        {
+          "slug": "stairs",
+          "qaStatus": "needs-review",
+          "structuralGrid": {
+            "joinMode": "cell-orientation",
+            "orientationSteps": 4,
+            "sourceModuleUnits": 4,
+            "targetWorldUnits": 2
+          },
+          "sockets": [
+            {
+              "id": "floor-mount",
+              "type": "floor-mount"
+            },
+            {
+              "id": "top-surface",
+              "type": "top-surface"
+            }
+          ],
+          "orientations": [
+            0,
+            1,
+            2,
+            3
+          ]
+        },
+        {
+          "slug": "stairs-wide",
+          "qaStatus": "needs-review",
+          "structuralGrid": {
+            "joinMode": "cell-orientation",
+            "orientationSteps": 4,
+            "sourceModuleUnits": 4,
+            "targetWorldUnits": 2
+          },
+          "sockets": [
+            {
+              "id": "floor-mount",
+              "type": "floor-mount"
+            },
+            {
+              "id": "top-surface",
+              "type": "top-surface"
+            }
+          ],
+          "orientations": [
+            0,
+            1,
+            2,
+            3
+          ]
+        },
+        {
+          "slug": "template-corner",
+          "qaStatus": "needs-review",
+          "structuralGrid": {
+            "joinMode": "cell-orientation",
+            "orientationSteps": 4,
+            "sourceModuleUnits": 4,
+            "targetWorldUnits": 2
+          },
+          "sockets": [
+            {
+              "id": "floor-mount",
+              "type": "floor-mount"
+            }
+          ],
+          "orientations": [
+            0,
+            1,
+            2,
+            3
+          ]
+        },
+        {
+          "slug": "template-detail",
+          "qaStatus": "needs-review",
+          "structuralGrid": {
+            "joinMode": "cell-orientation",
+            "orientationSteps": 4,
+            "sourceModuleUnits": 4,
+            "targetWorldUnits": 2
+          },
+          "sockets": [
+            {
+              "id": "floor-mount",
+              "type": "floor-mount"
+            }
+          ],
+          "orientations": [
+            0,
+            1,
+            2,
+            3
+          ]
+        },
+        {
+          "slug": "template-floor",
+          "qaStatus": "needs-review",
+          "structuralGrid": {
+            "joinMode": "cell-orientation",
+            "orientationSteps": 4,
+            "sourceModuleUnits": 4,
+            "targetWorldUnits": 2
+          },
+          "sockets": [
+            {
+              "id": "floor-mount",
+              "type": "floor-mount"
+            },
+            {
+              "id": "top-surface",
+              "type": "top-surface"
+            }
+          ],
+          "orientations": [
+            0,
+            1,
+            2,
+            3
+          ]
+        },
+        {
+          "slug": "template-floor-big",
+          "qaStatus": "needs-review",
+          "structuralGrid": {
+            "joinMode": "cell-orientation",
+            "orientationSteps": 4,
+            "sourceModuleUnits": 4,
+            "targetWorldUnits": 2
+          },
+          "sockets": [
+            {
+              "id": "floor-mount",
+              "type": "floor-mount"
+            },
+            {
+              "id": "top-surface",
+              "type": "top-surface"
+            }
+          ],
+          "orientations": [
+            0,
+            1,
+            2,
+            3
+          ]
+        },
+        {
+          "slug": "template-floor-detail",
+          "qaStatus": "needs-review",
+          "structuralGrid": {
+            "joinMode": "cell-orientation",
+            "orientationSteps": 4,
+            "sourceModuleUnits": 4,
+            "targetWorldUnits": 2
+          },
+          "sockets": [
+            {
+              "id": "floor-mount",
+              "type": "floor-mount"
+            },
+            {
+              "id": "top-surface",
+              "type": "top-surface"
+            }
+          ],
+          "orientations": [
+            0,
+            1,
+            2,
+            3
+          ]
+        },
+        {
+          "slug": "template-floor-detail-a",
+          "qaStatus": "needs-review",
+          "structuralGrid": {
+            "joinMode": "cell-orientation",
+            "orientationSteps": 4,
+            "sourceModuleUnits": 4,
+            "targetWorldUnits": 2
+          },
+          "sockets": [
+            {
+              "id": "floor-mount",
+              "type": "floor-mount"
+            },
+            {
+              "id": "top-surface",
+              "type": "top-surface"
+            }
+          ],
+          "orientations": [
+            0,
+            1,
+            2,
+            3
+          ]
+        },
+        {
+          "slug": "template-floor-layer",
+          "qaStatus": "needs-review",
+          "structuralGrid": {
+            "joinMode": "cell-orientation",
+            "orientationSteps": 4,
+            "sourceModuleUnits": 4,
+            "targetWorldUnits": 2
+          },
+          "sockets": [
+            {
+              "id": "floor-mount",
+              "type": "floor-mount"
+            },
+            {
+              "id": "top-surface",
+              "type": "top-surface"
+            }
+          ],
+          "orientations": [
+            0,
+            1,
+            2,
+            3
+          ]
+        },
+        {
+          "slug": "template-floor-layer-hole",
+          "qaStatus": "needs-review",
+          "structuralGrid": {
+            "joinMode": "cell-orientation",
+            "orientationSteps": 4,
+            "sourceModuleUnits": 4,
+            "targetWorldUnits": 2
+          },
+          "sockets": [
+            {
+              "id": "floor-mount",
+              "type": "floor-mount"
+            },
+            {
+              "id": "top-surface",
+              "type": "top-surface"
+            }
+          ],
+          "orientations": [
+            0,
+            1,
+            2,
+            3
+          ]
+        },
+        {
+          "slug": "template-floor-layer-raised",
+          "qaStatus": "needs-review",
+          "structuralGrid": {
+            "joinMode": "cell-orientation",
+            "orientationSteps": 4,
+            "sourceModuleUnits": 4,
+            "targetWorldUnits": 2
+          },
+          "sockets": [
+            {
+              "id": "floor-mount",
+              "type": "floor-mount"
+            },
+            {
+              "id": "top-surface",
+              "type": "top-surface"
+            }
+          ],
+          "orientations": [
+            0,
+            1,
+            2,
+            3
+          ]
+        },
+        {
+          "slug": "template-wall",
+          "qaStatus": "needs-review",
+          "structuralGrid": {
+            "joinMode": "cell-orientation",
+            "orientationSteps": 4,
+            "sourceModuleUnits": 4,
+            "targetWorldUnits": 2
+          },
+          "sockets": [
+            {
+              "id": "floor-mount",
+              "type": "floor-mount"
+            }
+          ],
+          "orientations": [
+            0,
+            1,
+            2,
+            3
+          ]
+        },
+        {
+          "slug": "template-wall-corner",
+          "qaStatus": "needs-review",
+          "structuralGrid": {
+            "joinMode": "cell-orientation",
+            "orientationSteps": 4,
+            "sourceModuleUnits": 4,
+            "targetWorldUnits": 2
+          },
+          "sockets": [
+            {
+              "id": "floor-mount",
+              "type": "floor-mount"
+            }
+          ],
+          "orientations": [
+            0,
+            1,
+            2,
+            3
+          ]
+        },
+        {
+          "slug": "template-wall-detail-a",
+          "qaStatus": "needs-review",
+          "structuralGrid": {
+            "joinMode": "cell-orientation",
+            "orientationSteps": 4,
+            "sourceModuleUnits": 4,
+            "targetWorldUnits": 2
+          },
+          "sockets": [
+            {
+              "id": "floor-mount",
+              "type": "floor-mount"
+            }
+          ],
+          "orientations": [
+            0,
+            1,
+            2,
+            3
+          ]
+        },
+        {
+          "slug": "template-wall-half",
+          "qaStatus": "needs-review",
+          "structuralGrid": {
+            "joinMode": "cell-orientation",
+            "orientationSteps": 4,
+            "sourceModuleUnits": 4,
+            "targetWorldUnits": 2
+          },
+          "sockets": [
+            {
+              "id": "floor-mount",
+              "type": "floor-mount"
+            }
+          ],
+          "orientations": [
+            0,
+            1,
+            2,
+            3
+          ]
+        },
+        {
+          "slug": "template-wall-stairs",
+          "qaStatus": "needs-review",
+          "structuralGrid": {
+            "joinMode": "cell-orientation",
+            "orientationSteps": 4,
+            "sourceModuleUnits": 4,
+            "targetWorldUnits": 2
+          },
+          "sockets": [
+            {
+              "id": "floor-mount",
+              "type": "floor-mount"
+            }
+          ],
+          "orientations": [
+            0,
+            1,
+            2,
+            3
+          ]
+        },
+        {
+          "slug": "template-wall-top",
+          "qaStatus": "needs-review",
+          "structuralGrid": {
+            "joinMode": "cell-orientation",
+            "orientationSteps": 4,
+            "sourceModuleUnits": 4,
+            "targetWorldUnits": 2
+          },
+          "sockets": [
+            {
+              "id": "floor-mount",
+              "type": "floor-mount"
+            }
+          ],
+          "orientations": [
+            0,
+            1,
+            2,
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "kenney-mini-dungeon",
+      "schema": "genesis.donor-index.v2",
+      "structuralGrid": {
+        "sourceModuleUnits": 1,
+        "targetWorldUnits": 2,
+        "orientationSteps": 4,
+        "joinMode": "cell-orientation"
+      },
+      "entries": [
+        {
+          "slug": "floor",
+          "qaStatus": "needs-review",
+          "structuralGrid": {
+            "joinMode": "cell-orientation",
+            "orientationSteps": 4,
+            "sourceModuleUnits": 1,
+            "targetWorldUnits": 2
+          },
+          "sockets": [
+            {
+              "id": "floor-mount",
+              "type": "floor-mount"
+            },
+            {
+              "id": "top-surface",
+              "type": "top-surface"
+            }
+          ],
+          "orientations": [
+            0,
+            1,
+            2,
+            3
+          ]
+        },
+        {
+          "slug": "floor-detail",
+          "qaStatus": "needs-review",
+          "structuralGrid": {
+            "joinMode": "cell-orientation",
+            "orientationSteps": 4,
+            "sourceModuleUnits": 1,
+            "targetWorldUnits": 2
+          },
+          "sockets": [
+            {
+              "id": "floor-mount",
+              "type": "floor-mount"
+            },
+            {
+              "id": "top-surface",
+              "type": "top-surface"
+            }
+          ],
+          "orientations": [
+            0,
+            1,
+            2,
+            3
+          ]
+        },
+        {
+          "slug": "gate",
+          "qaStatus": "needs-review",
+          "structuralGrid": {
+            "joinMode": "cell-orientation",
+            "orientationSteps": 4,
+            "sourceModuleUnits": 1,
+            "targetWorldUnits": 2
+          },
+          "sockets": [
+            {
+              "id": "floor-mount",
+              "type": "floor-mount"
+            },
+            {
+              "id": "hinge-left",
+              "type": "hinge"
+            }
+          ],
+          "orientations": [
+            0,
+            1,
+            2,
+            3
+          ]
+        },
+        {
+          "slug": "stairs",
+          "qaStatus": "needs-review",
+          "structuralGrid": {
+            "joinMode": "cell-orientation",
+            "orientationSteps": 4,
+            "sourceModuleUnits": 1,
+            "targetWorldUnits": 2
+          },
+          "sockets": [
+            {
+              "id": "floor-mount",
+              "type": "floor-mount"
+            },
+            {
+              "id": "top-surface",
+              "type": "top-surface"
+            }
+          ],
+          "orientations": [
+            0,
+            1,
+            2,
+            3
+          ]
+        },
+        {
+          "slug": "wall",
+          "qaStatus": "needs-review",
+          "structuralGrid": {
+            "joinMode": "cell-orientation",
+            "orientationSteps": 4,
+            "sourceModuleUnits": 1,
+            "targetWorldUnits": 2
+          },
+          "sockets": [
+            {
+              "id": "floor-mount",
+              "type": "floor-mount"
+            }
+          ],
+          "orientations": [
+            0,
+            1,
+            2,
+            3
+          ]
+        },
+        {
+          "slug": "wall-half",
+          "qaStatus": "needs-review",
+          "structuralGrid": {
+            "joinMode": "cell-orientation",
+            "orientationSteps": 4,
+            "sourceModuleUnits": 1,
+            "targetWorldUnits": 2
+          },
+          "sockets": [
+            {
+              "id": "floor-mount",
+              "type": "floor-mount"
+            }
+          ],
+          "orientations": [
+            0,
+            1,
+            2,
+            3
+          ]
+        },
+        {
+          "slug": "wall-narrow",
+          "qaStatus": "needs-review",
+          "structuralGrid": {
+            "joinMode": "cell-orientation",
+            "orientationSteps": 4,
+            "sourceModuleUnits": 1,
+            "targetWorldUnits": 2
+          },
+          "sockets": [
+            {
+              "id": "floor-mount",
+              "type": "floor-mount"
+            }
+          ],
+          "orientations": [
+            0,
+            1,
+            2,
+            3
+          ]
+        },
+        {
+          "slug": "wall-opening",
+          "qaStatus": "needs-review",
+          "structuralGrid": {
+            "joinMode": "cell-orientation",
+            "orientationSteps": 4,
+            "sourceModuleUnits": 1,
+            "targetWorldUnits": 2
+          },
+          "sockets": [
+            {
+              "id": "floor-mount",
+              "type": "floor-mount"
+            },
+            {
+              "id": "hinge-left",
+              "type": "hinge"
+            }
+          ],
+          "orientations": [
+            0,
+            1,
+            2,
+            3
+          ]
+        }
+      ]
+    }
+  ]
+}

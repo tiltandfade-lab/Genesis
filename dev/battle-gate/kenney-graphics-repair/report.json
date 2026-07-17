@@ -1,0 +1,2511 @@
+{
+  "schema": "genesis.kenney-graphics-repair-report.v1",
+  "unit": "KGR-6",
+  "dpr": 2,
+  "consoleErrors": [],
+  "resourceConsoleMessages": [],
+  "successfulGlbLoads": [
+    "http://127.0.0.1:52036/assets/models-normalized/kenney-factory-kit/lever-double.glb",
+    "http://127.0.0.1:52036/assets/models-normalized/kenney-fantasy-town-kit/lantern.glb",
+    "http://127.0.0.1:52036/assets/models-normalized/kenney-furniture-kit/benchCushionLow.glb",
+    "http://127.0.0.1:52036/assets/models-normalized/kenney-furniture-kit/chair.glb",
+    "http://127.0.0.1:52036/assets/models-normalized/kenney-furniture-kit/lampRoundFloor.glb",
+    "http://127.0.0.1:52036/assets/models-normalized/kenney-furniture-kit/lampWall.glb",
+    "http://127.0.0.1:52036/assets/models-normalized/kenney-furniture-kit/tableRound.glb",
+    "http://127.0.0.1:52036/assets/models-normalized/kenney-mini-dungeon/gate.glb",
+    "http://127.0.0.1:52036/assets/models-normalized/kenney-pirate-kit/chest.glb",
+    "http://127.0.0.1:52036/assets/models-normalized/kenney-pirate-kit/crate.glb",
+    "http://127.0.0.1:52036/assets/models-normalized/kenney-retro-fantasy-kit/detail-barrel.glb",
+    "http://127.0.0.1:52036/assets/models/kenney-factory-kit/lever-double.glb",
+    "http://127.0.0.1:52036/assets/models/kenney-fantasy-town-kit/lantern.glb",
+    "http://127.0.0.1:52036/assets/models/kenney-furniture-kit/benchCushionLow.glb",
+    "http://127.0.0.1:52036/assets/models/kenney-furniture-kit/chair.glb",
+    "http://127.0.0.1:52036/assets/models/kenney-furniture-kit/lampRoundFloor.glb",
+    "http://127.0.0.1:52036/assets/models/kenney-furniture-kit/lampWall.glb",
+    "http://127.0.0.1:52036/assets/models/kenney-furniture-kit/tableRound.glb",
+    "http://127.0.0.1:52036/assets/models/kenney-pirate-kit/chest.glb",
+    "http://127.0.0.1:52036/assets/models/kenney-pirate-kit/crate.glb",
+    "http://127.0.0.1:52036/assets/models/kenney-retro-fantasy-kit/detail-barrel.glb"
+  ],
+  "transientAbortedGlbLoads": [
+    "workbench: net::ERR_ABORTED http://127.0.0.1:52036/assets/models-normalized/kenney-retro-fantasy-kit/detail-barrel.glb",
+    "workbench: net::ERR_ABORTED http://127.0.0.1:52036/assets/models-normalized/kenney-pirate-kit/crate.glb",
+    "workbench: net::ERR_ABORTED http://127.0.0.1:52036/assets/models-normalized/kenney-pirate-kit/chest.glb",
+    "workbench: net::ERR_ABORTED http://127.0.0.1:52036/assets/models-normalized/kenney-furniture-kit/tableRound.glb",
+    "workbench: net::ERR_ABORTED http://127.0.0.1:52036/assets/models-normalized/kenney-furniture-kit/benchCushionLow.glb",
+    "workbench: net::ERR_ABORTED http://127.0.0.1:52036/assets/models-normalized/kenney-furniture-kit/chair.glb",
+    "workbench: net::ERR_ABORTED http://127.0.0.1:52036/assets/models-normalized/kenney-furniture-kit/lampWall.glb",
+    "workbench: net::ERR_ABORTED http://127.0.0.1:52036/assets/models-normalized/kenney-furniture-kit/lampRoundFloor.glb",
+    "workbench: net::ERR_ABORTED http://127.0.0.1:52036/assets/models-normalized/kenney-factory-kit/lever-double.glb"
+  ],
+  "failedGlbLoads": [],
+  "finite": {
+    "nonFiniteTransforms": 0,
+    "nonFiniteVertices": 0
+  },
+  "detachedPart": {
+    "maxWorldBoundsDelta": 1.3541939244228127e-17,
+    "tolerance": 0.00001
+  },
+  "mounts": [
+    {
+      "assetId": "kenney-retro-fantasy-kit/detail-barrel",
+      "type": "floor-mount",
+      "groundError": 0,
+      "socketVisible": true
+    },
+    {
+      "assetId": "kenney-pirate-kit/crate",
+      "type": "floor-mount",
+      "groundError": 0,
+      "socketVisible": true
+    },
+    {
+      "assetId": "kenney-pirate-kit/chest",
+      "type": "floor-mount",
+      "groundError": 0,
+      "socketVisible": true
+    },
+    {
+      "assetId": "kenney-furniture-kit/tableRound",
+      "type": "floor-mount",
+      "groundError": 2.8500000026632222e-8,
+      "socketVisible": true
+    },
+    {
+      "assetId": "kenney-furniture-kit/benchCushionLow",
+      "type": "floor-mount",
+      "groundError": 0,
+      "socketVisible": true
+    },
+    {
+      "assetId": "kenney-furniture-kit/chair",
+      "type": "floor-mount",
+      "groundError": 0,
+      "socketVisible": true
+    },
+    {
+      "assetId": "kenney-furniture-kit/lampWall",
+      "type": "wall-mount",
+      "groundError": 0,
+      "socketVisible": true
+    },
+    {
+      "assetId": "kenney-furniture-kit/lampRoundFloor",
+      "type": "floor-mount",
+      "groundError": 0,
+      "socketVisible": true
+    },
+    {
+      "assetId": "kenney-fantasy-town-kit/lantern",
+      "type": "floor-mount",
+      "groundError": 0,
+      "socketVisible": true
+    },
+    {
+      "assetId": "kenney-factory-kit/lever-double",
+      "type": "floor-mount",
+      "groundError": 0,
+      "socketVisible": true
+    }
+  ],
+  "mates": [
+    {
+      "assetId": "kenney-retro-fantasy-kit/detail-barrel",
+      "type": "floor-mount",
+      "positionError": 0,
+      "angleErrorDegrees": 0
+    },
+    {
+      "assetId": "kenney-pirate-kit/crate",
+      "type": "floor-mount",
+      "positionError": 0,
+      "angleErrorDegrees": 0
+    },
+    {
+      "assetId": "kenney-pirate-kit/chest",
+      "type": "floor-mount",
+      "positionError": 0,
+      "angleErrorDegrees": 0
+    },
+    {
+      "assetId": "kenney-furniture-kit/tableRound",
+      "type": "floor-mount",
+      "positionError": 0,
+      "angleErrorDegrees": 0
+    },
+    {
+      "assetId": "kenney-furniture-kit/benchCushionLow",
+      "type": "floor-mount",
+      "positionError": 0,
+      "angleErrorDegrees": 0
+    },
+    {
+      "assetId": "kenney-furniture-kit/chair",
+      "type": "floor-mount",
+      "positionError": 0,
+      "angleErrorDegrees": 0
+    },
+    {
+      "assetId": "kenney-furniture-kit/lampWall",
+      "type": "wall-mount",
+      "positionError": 0,
+      "angleErrorDegrees": 0
+    },
+    {
+      "assetId": "kenney-furniture-kit/lampRoundFloor",
+      "type": "floor-mount",
+      "positionError": 0,
+      "angleErrorDegrees": 0
+    },
+    {
+      "assetId": "kenney-fantasy-town-kit/lantern",
+      "type": "floor-mount",
+      "positionError": 0,
+      "angleErrorDegrees": 0
+    },
+    {
+      "assetId": "kenney-factory-kit/lever-double",
+      "type": "floor-mount",
+      "positionError": 0,
+      "angleErrorDegrees": 0
+    }
+  ],
+  "donorOutlineHullDescendants": 0,
+  "uv": {
+    "mappedPrimitives": 16,
+    "missingUvPrimitives": 0
+  },
+  "placement": {
+    "obbOverlaps": [],
+    "wallPenetration": 0
+  },
+  "registry": {
+    "stale": [],
+    "unapproved": []
+  },
+  "structural": {
+    "violations": [],
+    "measurements": [
+      {
+        "pack": "kenney-modular-dungeon-kit",
+        "slug": "corridor",
+        "targetWorldUnits": 2,
+        "transformedModule": 2,
+        "orientationIndexes": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "buttJoinSockets": [],
+        "bounds": {
+          "aabbMax": [
+            1,
+            2.075000047683716,
+            1.000000238418579
+          ],
+          "aabbMin": [
+            -1,
+            -1.4438228216156449e-15,
+            -1.000000238418579
+          ],
+          "footprint": {
+            "center": [
+              0,
+              0
+            ],
+            "halfExtents": [
+              1,
+              1.000000238418579
+            ],
+            "yawRadians": 0
+          },
+          "footprintSource": "derived",
+          "groundY": -1.4438228216156449e-15
+        }
+      },
+      {
+        "pack": "kenney-modular-dungeon-kit",
+        "slug": "corridor-corner",
+        "targetWorldUnits": 2,
+        "transformedModule": 2,
+        "orientationIndexes": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "buttJoinSockets": [],
+        "bounds": {
+          "aabbMax": [
+            1,
+            2.116642951965332,
+            1
+          ],
+          "aabbMin": [
+            -1,
+            -8.538858673140613e-15,
+            -1.0000001192092896
+          ],
+          "footprint": {
+            "center": [
+              0,
+              -5.960464477539063e-8
+            ],
+            "halfExtents": [
+              1,
+              1.0000000596046448
+            ],
+            "yawRadians": 0
+          },
+          "footprintSource": "derived",
+          "groundY": -8.538858673140613e-15
+        }
+      },
+      {
+        "pack": "kenney-modular-dungeon-kit",
+        "slug": "corridor-end",
+        "targetWorldUnits": 2,
+        "transformedModule": 2,
+        "orientationIndexes": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "buttJoinSockets": [],
+        "bounds": {
+          "aabbMax": [
+            1.0000007152557373,
+            2.075000047683716,
+            1.0000015497207642
+          ],
+          "aabbMin": [
+            -1.0000008344650269,
+            -1.4438228216156449e-15,
+            -1.000000238418579
+          ],
+          "footprint": {
+            "center": [
+              -5.960464477539063e-8,
+              6.556510925292969e-7
+            ],
+            "halfExtents": [
+              1.000000774860382,
+              1.0000008940696716
+            ],
+            "yawRadians": 0
+          },
+          "footprintSource": "derived",
+          "groundY": -1.4438228216156449e-15
+        }
+      },
+      {
+        "pack": "kenney-modular-dungeon-kit",
+        "slug": "corridor-intersection",
+        "targetWorldUnits": 2,
+        "transformedModule": 2,
+        "orientationIndexes": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "buttJoinSockets": [],
+        "bounds": {
+          "aabbMax": [
+            1,
+            2.0249998569488525,
+            1.0000001192092896
+          ],
+          "aabbMin": [
+            -1,
+            -8.538858673140613e-15,
+            -1.0000001192092896
+          ],
+          "footprint": {
+            "center": [
+              0,
+              0
+            ],
+            "halfExtents": [
+              1,
+              1.0000001192092896
+            ],
+            "yawRadians": 0
+          },
+          "footprintSource": "derived",
+          "groundY": -8.538858673140613e-15
+        }
+      },
+      {
+        "pack": "kenney-modular-dungeon-kit",
+        "slug": "corridor-junction",
+        "targetWorldUnits": 2,
+        "transformedModule": 2,
+        "orientationIndexes": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "buttJoinSockets": [],
+        "bounds": {
+          "aabbMax": [
+            1.0028867721557617,
+            2.075000047683716,
+            1.000000238418579
+          ],
+          "aabbMin": [
+            -1,
+            -9.26077045452535e-15,
+            -1.0000001192092896
+          ],
+          "footprint": {
+            "center": [
+              0.0014433860778808594,
+              5.960464477539063e-8
+            ],
+            "halfExtents": [
+              1.0014433860778809,
+              1.0000001788139343
+            ],
+            "yawRadians": 0
+          },
+          "footprintSource": "derived",
+          "groundY": -9.26077045452535e-15
+        }
+      },
+      {
+        "pack": "kenney-modular-dungeon-kit",
+        "slug": "corridor-transition",
+        "targetWorldUnits": 2,
+        "transformedModule": 2,
+        "orientationIndexes": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "buttJoinSockets": [],
+        "bounds": {
+          "aabbMax": [
+            1.0000007152557373,
+            2.075000047683716,
+            2
+          ],
+          "aabbMin": [
+            -3.0000007152557373,
+            -8.538858673140613e-15,
+            -2
+          ],
+          "footprint": {
+            "center": [
+              -1,
+              0
+            ],
+            "halfExtents": [
+              2.0000007152557373,
+              2
+            ],
+            "yawRadians": 0
+          },
+          "footprintSource": "derived",
+          "groundY": -8.538858673140613e-15
+        }
+      },
+      {
+        "pack": "kenney-modular-dungeon-kit",
+        "slug": "corridor-wide",
+        "targetWorldUnits": 2,
+        "transformedModule": 2,
+        "orientationIndexes": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "buttJoinSockets": [],
+        "bounds": {
+          "aabbMax": [
+            2,
+            2.116642951965332,
+            2.000000476837158
+          ],
+          "aabbMin": [
+            -2,
+            -1.4440796843568997e-15,
+            -2.000000476837158
+          ],
+          "footprint": {
+            "center": [
+              0,
+              0
+            ],
+            "halfExtents": [
+              2,
+              2.000000476837158
+            ],
+            "yawRadians": 0
+          },
+          "footprintSource": "derived",
+          "groundY": -1.4440796843568997e-15
+        }
+      },
+      {
+        "pack": "kenney-modular-dungeon-kit",
+        "slug": "corridor-wide-corner",
+        "targetWorldUnits": 2,
+        "transformedModule": 2,
+        "orientationIndexes": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "buttJoinSockets": [],
+        "bounds": {
+          "aabbMax": [
+            2.000000238418579,
+            2.116642951965332,
+            2
+          ],
+          "aabbMin": [
+            -2,
+            -8.538858673140613e-15,
+            -2
+          ],
+          "footprint": {
+            "center": [
+              1.1920928955078125e-7,
+              0
+            ],
+            "halfExtents": [
+              2.0000001192092896,
+              2
+            ],
+            "yawRadians": 0
+          },
+          "footprintSource": "derived",
+          "groundY": -8.538858673140613e-15
+        }
+      },
+      {
+        "pack": "kenney-modular-dungeon-kit",
+        "slug": "corridor-wide-end",
+        "targetWorldUnits": 2,
+        "transformedModule": 2,
+        "orientationIndexes": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "buttJoinSockets": [],
+        "bounds": {
+          "aabbMax": [
+            2,
+            2.116642951965332,
+            2.000000476837158
+          ],
+          "aabbMin": [
+            -2.0000014305114746,
+            -1.4440797902360181e-15,
+            -2.000000476837158
+          ],
+          "footprint": {
+            "center": [
+              -7.152557373046875e-7,
+              0
+            ],
+            "halfExtents": [
+              2.0000007152557373,
+              2.000000476837158
+            ],
+            "yawRadians": 0
+          },
+          "footprintSource": "derived",
+          "groundY": -1.4440797902360181e-15
+        }
+      },
+      {
+        "pack": "kenney-modular-dungeon-kit",
+        "slug": "corridor-wide-intersection",
+        "targetWorldUnits": 2,
+        "transformedModule": 2,
+        "orientationIndexes": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "buttJoinSockets": [],
+        "bounds": {
+          "aabbMax": [
+            2,
+            2.0249998569488525,
+            2
+          ],
+          "aabbMin": [
+            -2,
+            -8.538858673140613e-15,
+            -2
+          ],
+          "footprint": {
+            "center": [
+              0,
+              0
+            ],
+            "halfExtents": [
+              2,
+              2
+            ],
+            "yawRadians": 0
+          },
+          "footprintSource": "derived",
+          "groundY": -8.538858673140613e-15
+        }
+      },
+      {
+        "pack": "kenney-modular-dungeon-kit",
+        "slug": "corridor-wide-junction",
+        "targetWorldUnits": 2,
+        "transformedModule": 2,
+        "orientationIndexes": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "buttJoinSockets": [],
+        "bounds": {
+          "aabbMax": [
+            2.000000238418579,
+            2.116642951965332,
+            2.000000476837158
+          ],
+          "aabbMin": [
+            -2,
+            -8.538858673140613e-15,
+            -2
+          ],
+          "footprint": {
+            "center": [
+              1.1920928955078125e-7,
+              2.384185791015625e-7
+            ],
+            "halfExtents": [
+              2.0000001192092896,
+              2.000000238418579
+            ],
+            "yawRadians": 0
+          },
+          "footprintSource": "derived",
+          "groundY": -8.538858673140613e-15
+        }
+      },
+      {
+        "pack": "kenney-modular-dungeon-kit",
+        "slug": "gate",
+        "targetWorldUnits": 2,
+        "transformedModule": 2,
+        "orientationIndexes": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "buttJoinSockets": [],
+        "bounds": {
+          "aabbMax": [
+            1.100000023841858,
+            2.1999998092651367,
+            0.3500000536441803
+          ],
+          "aabbMin": [
+            -1.100000023841858,
+            0,
+            -0.3500000536441803
+          ],
+          "footprint": {
+            "center": [
+              0,
+              0
+            ],
+            "halfExtents": [
+              1.100000023841858,
+              0.3500000536441803
+            ],
+            "yawRadians": 0
+          },
+          "footprintSource": "derived",
+          "groundY": 0
+        }
+      },
+      {
+        "pack": "kenney-modular-dungeon-kit",
+        "slug": "gate-door",
+        "targetWorldUnits": 2,
+        "transformedModule": 2,
+        "orientationIndexes": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "buttJoinSockets": [],
+        "bounds": {
+          "aabbMax": [
+            1.100000023841858,
+            2.1999998092651367,
+            0.3500000536441803
+          ],
+          "aabbMin": [
+            -1.100000023841858,
+            -1.3541939244228127e-17,
+            -0.3500000536441803
+          ],
+          "footprint": {
+            "center": [
+              0,
+              0
+            ],
+            "halfExtents": [
+              1.100000023841858,
+              0.3500000536441803
+            ],
+            "yawRadians": 0
+          },
+          "footprintSource": "derived",
+          "groundY": -1.3541939244228127e-17
+        }
+      },
+      {
+        "pack": "kenney-modular-dungeon-kit",
+        "slug": "gate-door-window",
+        "targetWorldUnits": 2,
+        "transformedModule": 2,
+        "orientationIndexes": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "buttJoinSockets": [],
+        "bounds": {
+          "aabbMax": [
+            1.100000023841858,
+            2.1999998092651367,
+            0.3500000536441803
+          ],
+          "aabbMin": [
+            -1.100000023841858,
+            -1.3541939244228127e-17,
+            -0.3500000536441803
+          ],
+          "footprint": {
+            "center": [
+              0,
+              0
+            ],
+            "halfExtents": [
+              1.100000023841858,
+              0.3500000536441803
+            ],
+            "yawRadians": 0
+          },
+          "footprintSource": "derived",
+          "groundY": -1.3541939244228127e-17
+        }
+      },
+      {
+        "pack": "kenney-modular-dungeon-kit",
+        "slug": "gate-metal-bars",
+        "targetWorldUnits": 2,
+        "transformedModule": 2,
+        "orientationIndexes": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "buttJoinSockets": [],
+        "bounds": {
+          "aabbMax": [
+            1.100000023841858,
+            2.1999998092651367,
+            0.3500000536441803
+          ],
+          "aabbMin": [
+            -1.100000023841858,
+            0,
+            -0.3500000536441803
+          ],
+          "footprint": {
+            "center": [
+              0,
+              0
+            ],
+            "halfExtents": [
+              1.100000023841858,
+              0.3500000536441803
+            ],
+            "yawRadians": 0
+          },
+          "footprintSource": "derived",
+          "groundY": 0
+        }
+      },
+      {
+        "pack": "kenney-modular-dungeon-kit",
+        "slug": "room-corner",
+        "targetWorldUnits": 2,
+        "transformedModule": 2,
+        "orientationIndexes": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "buttJoinSockets": [],
+        "bounds": {
+          "aabbMax": [
+            3.000000476837158,
+            2.116642951965332,
+            3.000000476837158
+          ],
+          "aabbMin": [
+            -3,
+            -8.538858673140613e-15,
+            -3.000001907348633
+          ],
+          "footprint": {
+            "center": [
+              2.384185791015625e-7,
+              -7.152557373046875e-7
+            ],
+            "halfExtents": [
+              3.000000238418579,
+              3.0000011920928955
+            ],
+            "yawRadians": 0
+          },
+          "footprintSource": "derived",
+          "groundY": -8.538858673140613e-15
+        }
+      },
+      {
+        "pack": "kenney-modular-dungeon-kit",
+        "slug": "room-large",
+        "targetWorldUnits": 2,
+        "transformedModule": 2,
+        "orientationIndexes": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "buttJoinSockets": [],
+        "bounds": {
+          "aabbMax": [
+            5,
+            2.116642951965332,
+            5
+          ],
+          "aabbMin": [
+            -5.000499725341797,
+            -8.538858673140613e-15,
+            -5
+          ],
+          "footprint": {
+            "center": [
+              -0.0002498626708984375,
+              0
+            ],
+            "halfExtents": [
+              5.000249862670898,
+              5
+            ],
+            "yawRadians": 0
+          },
+          "footprintSource": "derived",
+          "groundY": -8.538858673140613e-15
+        }
+      },
+      {
+        "pack": "kenney-modular-dungeon-kit",
+        "slug": "room-large-variation",
+        "targetWorldUnits": 2,
+        "transformedModule": 2,
+        "orientationIndexes": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "buttJoinSockets": [],
+        "bounds": {
+          "aabbMax": [
+            5.000001430511475,
+            2.116642951965332,
+            5
+          ],
+          "aabbMin": [
+            -5,
+            -8.538858673140613e-15,
+            -5
+          ],
+          "footprint": {
+            "center": [
+              7.152557373046875e-7,
+              0
+            ],
+            "halfExtents": [
+              5.000000715255737,
+              5
+            ],
+            "yawRadians": 0
+          },
+          "footprintSource": "derived",
+          "groundY": -8.538858673140613e-15
+        }
+      },
+      {
+        "pack": "kenney-modular-dungeon-kit",
+        "slug": "room-small",
+        "targetWorldUnits": 2,
+        "transformedModule": 2,
+        "orientationIndexes": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "buttJoinSockets": [],
+        "bounds": {
+          "aabbMax": [
+            3.000000238418579,
+            2.116642951965332,
+            3.000000476837158
+          ],
+          "aabbMin": [
+            -3,
+            -8.538858673140613e-15,
+            -2.999999761581421
+          ],
+          "footprint": {
+            "center": [
+              1.1920928955078125e-7,
+              3.5762786865234375e-7
+            ],
+            "halfExtents": [
+              3.0000001192092896,
+              3.0000001192092896
+            ],
+            "yawRadians": 0
+          },
+          "footprintSource": "derived",
+          "groundY": -8.538858673140613e-15
+        }
+      },
+      {
+        "pack": "kenney-modular-dungeon-kit",
+        "slug": "room-small-variation",
+        "targetWorldUnits": 2,
+        "transformedModule": 2,
+        "orientationIndexes": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "buttJoinSockets": [],
+        "bounds": {
+          "aabbMax": [
+            3.000000238418579,
+            2.116642951965332,
+            3.000000476837158
+          ],
+          "aabbMin": [
+            -2.999999761581421,
+            -8.538858673140613e-15,
+            -2.999999761581421
+          ],
+          "footprint": {
+            "center": [
+              2.384185791015625e-7,
+              3.5762786865234375e-7
+            ],
+            "halfExtents": [
+              3,
+              3.0000001192092896
+            ],
+            "yawRadians": 0
+          },
+          "footprintSource": "derived",
+          "groundY": -8.538858673140613e-15
+        }
+      },
+      {
+        "pack": "kenney-modular-dungeon-kit",
+        "slug": "room-wide",
+        "targetWorldUnits": 2,
+        "transformedModule": 2,
+        "orientationIndexes": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "buttJoinSockets": [],
+        "bounds": {
+          "aabbMax": [
+            5,
+            2.116642951965332,
+            3.000000476837158
+          ],
+          "aabbMin": [
+            -5,
+            -8.538858673140613e-15,
+            -3.000000476837158
+          ],
+          "footprint": {
+            "center": [
+              0,
+              0
+            ],
+            "halfExtents": [
+              5,
+              3.000000476837158
+            ],
+            "yawRadians": 0
+          },
+          "footprintSource": "derived",
+          "groundY": -8.538858673140613e-15
+        }
+      },
+      {
+        "pack": "kenney-modular-dungeon-kit",
+        "slug": "room-wide-variation",
+        "targetWorldUnits": 2,
+        "transformedModule": 2,
+        "orientationIndexes": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "buttJoinSockets": [],
+        "bounds": {
+          "aabbMax": [
+            5,
+            2.116642951965332,
+            3.000000476837158
+          ],
+          "aabbMin": [
+            -5,
+            -8.538858673140613e-15,
+            -3.000000476837158
+          ],
+          "footprint": {
+            "center": [
+              0,
+              0
+            ],
+            "halfExtents": [
+              5,
+              3.000000476837158
+            ],
+            "yawRadians": 0
+          },
+          "footprintSource": "derived",
+          "groundY": -8.538858673140613e-15
+        }
+      },
+      {
+        "pack": "kenney-modular-dungeon-kit",
+        "slug": "stairs",
+        "targetWorldUnits": 2,
+        "transformedModule": 2,
+        "orientationIndexes": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "buttJoinSockets": [],
+        "bounds": {
+          "aabbMax": [
+            1.100000023841858,
+            4.275000095367432,
+            1.0999999046325684
+          ],
+          "aabbMin": [
+            -1.100000023841858,
+            -1.4438228216156449e-15,
+            -3.0999999046325684
+          ],
+          "footprint": {
+            "center": [
+              0,
+              -1
+            ],
+            "halfExtents": [
+              1.100000023841858,
+              2.0999999046325684
+            ],
+            "yawRadians": 0
+          },
+          "footprintSource": "derived",
+          "groundY": -1.4438228216156449e-15
+        }
+      },
+      {
+        "pack": "kenney-modular-dungeon-kit",
+        "slug": "stairs-wide",
+        "targetWorldUnits": 2,
+        "transformedModule": 2,
+        "orientationIndexes": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "buttJoinSockets": [],
+        "bounds": {
+          "aabbMax": [
+            2.0999999046325684,
+            4.275000095367432,
+            1.0999999046325684
+          ],
+          "aabbMin": [
+            -2.0999999046325684,
+            -1.4453846444912634e-15,
+            -3.0999999046325684
+          ],
+          "footprint": {
+            "center": [
+              0,
+              -1
+            ],
+            "halfExtents": [
+              2.0999999046325684,
+              2.0999999046325684
+            ],
+            "yawRadians": 0
+          },
+          "footprintSource": "derived",
+          "groundY": -1.4453846444912634e-15
+        }
+      },
+      {
+        "pack": "kenney-modular-dungeon-kit",
+        "slug": "template-corner",
+        "targetWorldUnits": 2,
+        "transformedModule": 2,
+        "orientationIndexes": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "buttJoinSockets": [],
+        "bounds": {
+          "aabbMax": [
+            1,
+            2.116642951965332,
+            1
+          ],
+          "aabbMin": [
+            -1,
+            0,
+            -1
+          ],
+          "footprint": {
+            "center": [
+              0,
+              0
+            ],
+            "halfExtents": [
+              1,
+              1
+            ],
+            "yawRadians": 0
+          },
+          "footprintSource": "derived",
+          "groundY": 0
+        }
+      },
+      {
+        "pack": "kenney-modular-dungeon-kit",
+        "slug": "template-detail",
+        "targetWorldUnits": 2,
+        "transformedModule": 2,
+        "orientationIndexes": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "buttJoinSockets": [],
+        "bounds": {
+          "aabbMax": [
+            0.44783157110214233,
+            2.116642951965332,
+            0.44783157110214233
+          ],
+          "aabbMin": [
+            -0.44783157110214233,
+            5.129489088118237e-30,
+            -0.44783157110214233
+          ],
+          "footprint": {
+            "center": [
+              0,
+              0
+            ],
+            "halfExtents": [
+              0.44783157110214233,
+              0.44783157110214233
+            ],
+            "yawRadians": 0
+          },
+          "footprintSource": "derived",
+          "groundY": 5.129489088118237e-30
+        }
+      },
+      {
+        "pack": "kenney-modular-dungeon-kit",
+        "slug": "template-floor",
+        "targetWorldUnits": 2,
+        "transformedModule": 2,
+        "orientationIndexes": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "buttJoinSockets": [],
+        "bounds": {
+          "aabbMax": [
+            1,
+            0,
+            1
+          ],
+          "aabbMin": [
+            -1,
+            0,
+            -1
+          ],
+          "footprint": {
+            "center": [
+              0,
+              0
+            ],
+            "halfExtents": [
+              1,
+              1
+            ],
+            "yawRadians": 0
+          },
+          "footprintSource": "derived",
+          "groundY": 0
+        }
+      },
+      {
+        "pack": "kenney-modular-dungeon-kit",
+        "slug": "template-floor-big",
+        "targetWorldUnits": 2,
+        "transformedModule": 2,
+        "orientationIndexes": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "buttJoinSockets": [],
+        "bounds": {
+          "aabbMax": [
+            2,
+            2.116642951965332,
+            2
+          ],
+          "aabbMin": [
+            -2,
+            -6.157149495221126e-18,
+            -2
+          ],
+          "footprint": {
+            "center": [
+              0,
+              0
+            ],
+            "halfExtents": [
+              2,
+              2
+            ],
+            "yawRadians": 0
+          },
+          "footprintSource": "derived",
+          "groundY": -6.157149495221126e-18
+        }
+      },
+      {
+        "pack": "kenney-modular-dungeon-kit",
+        "slug": "template-floor-detail",
+        "targetWorldUnits": 2,
+        "transformedModule": 2,
+        "orientationIndexes": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "buttJoinSockets": [],
+        "bounds": {
+          "aabbMax": [
+            1,
+            0.05000000074505806,
+            1
+          ],
+          "aabbMin": [
+            -1,
+            0,
+            -1
+          ],
+          "footprint": {
+            "center": [
+              0,
+              0
+            ],
+            "halfExtents": [
+              1,
+              1
+            ],
+            "yawRadians": 0
+          },
+          "footprintSource": "derived",
+          "groundY": 0
+        }
+      },
+      {
+        "pack": "kenney-modular-dungeon-kit",
+        "slug": "template-floor-detail-a",
+        "targetWorldUnits": 2,
+        "transformedModule": 2,
+        "orientationIndexes": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "buttJoinSockets": [],
+        "bounds": {
+          "aabbMax": [
+            1,
+            0.05000000074505806,
+            1
+          ],
+          "aabbMin": [
+            -1,
+            0,
+            -1
+          ],
+          "footprint": {
+            "center": [
+              0,
+              0
+            ],
+            "halfExtents": [
+              1,
+              1
+            ],
+            "yawRadians": 0
+          },
+          "footprintSource": "derived",
+          "groundY": 0
+        }
+      },
+      {
+        "pack": "kenney-modular-dungeon-kit",
+        "slug": "template-floor-layer",
+        "targetWorldUnits": 2,
+        "transformedModule": 2,
+        "orientationIndexes": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "buttJoinSockets": [],
+        "bounds": {
+          "aabbMax": [
+            1.0059354305267334,
+            0.25,
+            1.0000001192092896
+          ],
+          "aabbMin": [
+            -1.0059354305267334,
+            0,
+            -1.0000001192092896
+          ],
+          "footprint": {
+            "center": [
+              0,
+              0
+            ],
+            "halfExtents": [
+              1.0059354305267334,
+              1.0000001192092896
+            ],
+            "yawRadians": 0
+          },
+          "footprintSource": "derived",
+          "groundY": 0
+        }
+      },
+      {
+        "pack": "kenney-modular-dungeon-kit",
+        "slug": "template-floor-layer-hole",
+        "targetWorldUnits": 2,
+        "transformedModule": 2,
+        "orientationIndexes": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "buttJoinSockets": [],
+        "bounds": {
+          "aabbMax": [
+            1.0108299255371094,
+            1.5445761680603027,
+            1.0000001192092896
+          ],
+          "aabbMin": [
+            -1.0108228921890259,
+            0,
+            -1.0000001192092896
+          ],
+          "footprint": {
+            "center": [
+              0.000003516674041748047,
+              0
+            ],
+            "halfExtents": [
+              1.0108264088630676,
+              1.0000001192092896
+            ],
+            "yawRadians": 0
+          },
+          "footprintSource": "derived",
+          "groundY": 0
+        }
+      },
+      {
+        "pack": "kenney-modular-dungeon-kit",
+        "slug": "template-floor-layer-raised",
+        "targetWorldUnits": 2,
+        "transformedModule": 2,
+        "orientationIndexes": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "buttJoinSockets": [],
+        "bounds": {
+          "aabbMax": [
+            1.0059354305267334,
+            1.5,
+            1.0000001192092896
+          ],
+          "aabbMin": [
+            -1.0059354305267334,
+            0,
+            -1.0000001192092896
+          ],
+          "footprint": {
+            "center": [
+              0,
+              0
+            ],
+            "halfExtents": [
+              1.0059354305267334,
+              1.0000001192092896
+            ],
+            "yawRadians": 0
+          },
+          "footprintSource": "derived",
+          "groundY": 0
+        }
+      },
+      {
+        "pack": "kenney-modular-dungeon-kit",
+        "slug": "template-wall",
+        "targetWorldUnits": 2,
+        "transformedModule": 2,
+        "orientationIndexes": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "buttJoinSockets": [],
+        "bounds": {
+          "aabbMax": [
+            1,
+            2.075000047683716,
+            0
+          ],
+          "aabbMin": [
+            -1,
+            -1.4438228216156449e-15,
+            -0.996783435344696
+          ],
+          "footprint": {
+            "center": [
+              0,
+              -0.498391717672348
+            ],
+            "halfExtents": [
+              1,
+              0.498391717672348
+            ],
+            "yawRadians": 0
+          },
+          "footprintSource": "derived",
+          "groundY": -1.4438228216156449e-15
+        }
+      },
+      {
+        "pack": "kenney-modular-dungeon-kit",
+        "slug": "template-wall-corner",
+        "targetWorldUnits": 2,
+        "transformedModule": 2,
+        "orientationIndexes": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "buttJoinSockets": [],
+        "bounds": {
+          "aabbMax": [
+            0,
+            2.0249998569488525,
+            0
+          ],
+          "aabbMin": [
+            -0.5009975433349609,
+            -8.538858673140613e-15,
+            -0.5009975433349609
+          ],
+          "footprint": {
+            "center": [
+              -0.25049877166748047,
+              -0.25049877166748047
+            ],
+            "halfExtents": [
+              0.25049877166748047,
+              0.25049877166748047
+            ],
+            "yawRadians": 0
+          },
+          "footprintSource": "derived",
+          "groundY": -8.538858673140613e-15
+        }
+      },
+      {
+        "pack": "kenney-modular-dungeon-kit",
+        "slug": "template-wall-detail-a",
+        "targetWorldUnits": 2,
+        "transformedModule": 2,
+        "orientationIndexes": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "buttJoinSockets": [],
+        "bounds": {
+          "aabbMax": [
+            1,
+            2.116642951965332,
+            0
+          ],
+          "aabbMin": [
+            -1,
+            -1.4438228216156449e-15,
+            -0.996783435344696
+          ],
+          "footprint": {
+            "center": [
+              0,
+              -0.498391717672348
+            ],
+            "halfExtents": [
+              1,
+              0.498391717672348
+            ],
+            "yawRadians": 0
+          },
+          "footprintSource": "derived",
+          "groundY": -1.4438228216156449e-15
+        }
+      },
+      {
+        "pack": "kenney-modular-dungeon-kit",
+        "slug": "template-wall-half",
+        "targetWorldUnits": 2,
+        "transformedModule": 2,
+        "orientationIndexes": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "buttJoinSockets": [],
+        "bounds": {
+          "aabbMax": [
+            0.5,
+            2.075000047683716,
+            2.9802322387695312e-8
+          ],
+          "aabbMin": [
+            -0.5,
+            0,
+            -0.9036983251571655
+          ],
+          "footprint": {
+            "center": [
+              0,
+              -0.45184914767742157
+            ],
+            "halfExtents": [
+              0.5,
+              0.45184917747974396
+            ],
+            "yawRadians": 0
+          },
+          "footprintSource": "derived",
+          "groundY": 0
+        }
+      },
+      {
+        "pack": "kenney-modular-dungeon-kit",
+        "slug": "template-wall-stairs",
+        "targetWorldUnits": 2,
+        "transformedModule": 2,
+        "orientationIndexes": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "buttJoinSockets": [],
+        "bounds": {
+          "aabbMax": [
+            1,
+            2.25,
+            0
+          ],
+          "aabbMin": [
+            -1,
+            7.219114108078224e-16,
+            -0.3130391836166382
+          ],
+          "footprint": {
+            "center": [
+              0,
+              -0.1565195918083191
+            ],
+            "halfExtents": [
+              1,
+              0.1565195918083191
+            ],
+            "yawRadians": 0
+          },
+          "footprintSource": "derived",
+          "groundY": 7.219114108078224e-16
+        }
+      },
+      {
+        "pack": "kenney-modular-dungeon-kit",
+        "slug": "template-wall-top",
+        "targetWorldUnits": 2,
+        "transformedModule": 2,
+        "orientationIndexes": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "buttJoinSockets": [],
+        "bounds": {
+          "aabbMax": [
+            1,
+            2.25,
+            0
+          ],
+          "aabbMin": [
+            -1,
+            0,
+            -0.30922839045524597
+          ],
+          "footprint": {
+            "center": [
+              0,
+              -0.15461419522762299
+            ],
+            "halfExtents": [
+              1,
+              0.15461419522762299
+            ],
+            "yawRadians": 0
+          },
+          "footprintSource": "derived",
+          "groundY": 0
+        }
+      },
+      {
+        "pack": "kenney-mini-dungeon",
+        "slug": "floor",
+        "targetWorldUnits": 2,
+        "transformedModule": 2,
+        "orientationIndexes": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "buttJoinSockets": [],
+        "bounds": {
+          "aabbMax": [
+            1,
+            0,
+            1
+          ],
+          "aabbMin": [
+            -1,
+            0,
+            -1
+          ],
+          "footprint": {
+            "center": [
+              0,
+              0
+            ],
+            "halfExtents": [
+              1,
+              1
+            ],
+            "yawRadians": 0
+          },
+          "footprintSource": "derived",
+          "groundY": 0
+        }
+      },
+      {
+        "pack": "kenney-mini-dungeon",
+        "slug": "floor-detail",
+        "targetWorldUnits": 2,
+        "transformedModule": 2,
+        "orientationIndexes": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "buttJoinSockets": [],
+        "bounds": {
+          "aabbMax": [
+            1,
+            0.10000000149011612,
+            1
+          ],
+          "aabbMin": [
+            -1,
+            0,
+            -1
+          ],
+          "footprint": {
+            "center": [
+              0,
+              0
+            ],
+            "halfExtents": [
+              1,
+              1
+            ],
+            "yawRadians": 0
+          },
+          "footprintSource": "derived",
+          "groundY": 0
+        }
+      },
+      {
+        "pack": "kenney-mini-dungeon",
+        "slug": "gate",
+        "targetWorldUnits": 2,
+        "transformedModule": 2,
+        "orientationIndexes": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "buttJoinSockets": [],
+        "bounds": {
+          "aabbMax": [
+            0.800000011920929,
+            1.5,
+            0.20000001788139343
+          ],
+          "aabbMin": [
+            -0.800000011920929,
+            0,
+            -0.20000001788139343
+          ],
+          "footprint": {
+            "center": [
+              0,
+              0
+            ],
+            "halfExtents": [
+              0.800000011920929,
+              0.20000001788139343
+            ],
+            "yawRadians": 0
+          },
+          "footprintSource": "derived",
+          "groundY": 0
+        }
+      },
+      {
+        "pack": "kenney-mini-dungeon",
+        "slug": "stairs",
+        "targetWorldUnits": 2,
+        "transformedModule": 2,
+        "orientationIndexes": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "buttJoinSockets": [],
+        "bounds": {
+          "aabbMax": [
+            1,
+            1.7999999523162842,
+            1
+          ],
+          "aabbMin": [
+            -1,
+            0,
+            -1
+          ],
+          "footprint": {
+            "center": [
+              0,
+              0
+            ],
+            "halfExtents": [
+              1,
+              1
+            ],
+            "yawRadians": 0
+          },
+          "footprintSource": "derived",
+          "groundY": 0
+        }
+      },
+      {
+        "pack": "kenney-mini-dungeon",
+        "slug": "wall",
+        "targetWorldUnits": 2,
+        "transformedModule": 2,
+        "orientationIndexes": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "buttJoinSockets": [],
+        "bounds": {
+          "aabbMax": [
+            1,
+            2.200000047683716,
+            1
+          ],
+          "aabbMin": [
+            -1,
+            0,
+            -1
+          ],
+          "footprint": {
+            "center": [
+              0,
+              0
+            ],
+            "halfExtents": [
+              1,
+              1
+            ],
+            "yawRadians": 0
+          },
+          "footprintSource": "derived",
+          "groundY": 0
+        }
+      },
+      {
+        "pack": "kenney-mini-dungeon",
+        "slug": "wall-half",
+        "targetWorldUnits": 2,
+        "transformedModule": 2,
+        "orientationIndexes": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "buttJoinSockets": [],
+        "bounds": {
+          "aabbMax": [
+            1,
+            2,
+            1
+          ],
+          "aabbMin": [
+            -1,
+            0,
+            -1
+          ],
+          "footprint": {
+            "center": [
+              0,
+              0
+            ],
+            "halfExtents": [
+              1,
+              1
+            ],
+            "yawRadians": 0
+          },
+          "footprintSource": "derived",
+          "groundY": 0
+        }
+      },
+      {
+        "pack": "kenney-mini-dungeon",
+        "slug": "wall-narrow",
+        "targetWorldUnits": 2,
+        "transformedModule": 2,
+        "orientationIndexes": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "buttJoinSockets": [],
+        "bounds": {
+          "aabbMax": [
+            1,
+            2,
+            1
+          ],
+          "aabbMin": [
+            -1,
+            0,
+            -1
+          ],
+          "footprint": {
+            "center": [
+              0,
+              0
+            ],
+            "halfExtents": [
+              1,
+              1
+            ],
+            "yawRadians": 0
+          },
+          "footprintSource": "derived",
+          "groundY": 0
+        }
+      },
+      {
+        "pack": "kenney-mini-dungeon",
+        "slug": "wall-opening",
+        "targetWorldUnits": 2,
+        "transformedModule": 2,
+        "orientationIndexes": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "buttJoinSockets": [],
+        "bounds": {
+          "aabbMax": [
+            1,
+            2,
+            1.100000023841858
+          ],
+          "aabbMin": [
+            -1,
+            0,
+            -1
+          ],
+          "footprint": {
+            "center": [
+              0,
+              0.050000011920928955
+            ],
+            "halfExtents": [
+              1,
+              1.050000011920929
+            ],
+            "yawRadians": 0
+          },
+          "footprintSource": "derived",
+          "groundY": 0
+        }
+      }
+    ]
+  },
+  "rooms": [
+    {
+      "shape": "rect",
+      "continuousShell": true,
+      "kitWallCount": 0,
+      "kitFloorCount": 0,
+      "shellMeta": {
+        "floorCellCount": 64,
+        "tierCount": 1,
+        "wallSegmentCount": 8,
+        "riserSegmentCount": 0,
+        "bevelTriCount": 16
+      }
+    },
+    {
+      "shape": "L",
+      "continuousShell": true,
+      "kitWallCount": 0,
+      "kitFloorCount": 0,
+      "shellMeta": {
+        "floorCellCount": 40,
+        "tierCount": 1,
+        "wallSegmentCount": 6,
+        "riserSegmentCount": 0,
+        "bevelTriCount": 12
+      }
+    },
+    {
+      "shape": "octagon",
+      "continuousShell": true,
+      "kitWallCount": 0,
+      "kitFloorCount": 0,
+      "shellMeta": {
+        "floorCellCount": 45,
+        "tierCount": 1,
+        "wallSegmentCount": 12,
+        "riserSegmentCount": 0,
+        "bevelTriCount": 24
+      }
+    }
+  ],
+  "doors": [
+    {
+      "state": "shut",
+      "axis": "x",
+      "groupDimensions": [
+        2.200000047683716,
+        2.1999998092651367,
+        0.7000001072883606
+      ],
+      "frameDimensions": [
+        2.200000047683716,
+        2.1999998092651367,
+        0.7000001072883606
+      ],
+      "leafDimensions": [
+        1.5,
+        1.7978427410125732,
+        0.4000000059604645
+      ],
+      "doorPosition": [
+        0,
+        -0.3,
+        -4
+      ],
+      "doorScale": [
+        1,
+        1,
+        1
+      ],
+      "leafPiecePosition": [
+        0.75,
+        0.8989213705062866,
+        -4.3211882072569097e-8
+      ],
+      "leafPieceScale": [
+        1,
+        1,
+        1
+      ],
+      "leafPieceQuaternion": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "kit": true
+    },
+    {
+      "state": "shut",
+      "axis": "z",
+      "groupDimensions": [
+        0.7000001072883606,
+        2.1999998092651367,
+        2.200000047683716
+      ],
+      "frameDimensions": [
+        0.7000001072883606,
+        2.1999998092651367,
+        2.200000047683716
+      ],
+      "leafDimensions": [
+        0.4000000059604645,
+        1.7978427410125732,
+        1.5
+      ],
+      "doorPosition": [
+        -5,
+        -0.3,
+        0
+      ],
+      "doorScale": [
+        1,
+        1,
+        1
+      ],
+      "leafPiecePosition": [
+        0.75,
+        0.8989213705062866,
+        -4.3211882072569097e-8
+      ],
+      "leafPieceScale": [
+        1,
+        1,
+        1
+      ],
+      "leafPieceQuaternion": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "kit": true
+    },
+    {
+      "state": "ajar",
+      "axis": "x",
+      "groupDimensions": [
+        2.200000047683716,
+        2.1999998092651367,
+        1.097346674232747
+      ],
+      "frameDimensions": [
+        2.200000047683716,
+        2.1999998092651367,
+        0.7000001072883606
+      ],
+      "leafDimensions": [
+        1.5406184214493752,
+        1.7978427410125732,
+        0.9327834374770294
+      ],
+      "doorPosition": [
+        0,
+        -0.3,
+        -4
+      ],
+      "doorScale": [
+        1,
+        1,
+        1
+      ],
+      "leafPiecePosition": [
+        0.75,
+        0.8989213705062866,
+        -4.3211882072569097e-8
+      ],
+      "leafPieceScale": [
+        1,
+        1,
+        1
+      ],
+      "leafPieceQuaternion": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "kit": true
+    },
+    {
+      "state": "ajar",
+      "axis": "z",
+      "groupDimensions": [
+        1.097346674232747,
+        2.1999998092651367,
+        2.200000047683716
+      ],
+      "frameDimensions": [
+        0.7000001072883606,
+        2.1999998092651367,
+        2.200000047683716
+      ],
+      "leafDimensions": [
+        0.9327834374770294,
+        1.7978427410125732,
+        1.5406184214493754
+      ],
+      "doorPosition": [
+        -5,
+        -0.3,
+        0
+      ],
+      "doorScale": [
+        1,
+        1,
+        1
+      ],
+      "leafPiecePosition": [
+        0.75,
+        0.8989213705062866,
+        -4.3211882072569097e-8
+      ],
+      "leafPieceScale": [
+        1,
+        1,
+        1
+      ],
+      "leafPieceQuaternion": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "kit": true
+    },
+    {
+      "state": "open",
+      "axis": "x",
+      "groupDimensions": [
+        2.431413759632136,
+        2.1999998092651367,
+        1.8506525596577457
+      ],
+      "frameDimensions": [
+        2.200000047683716,
+        2.1999998092651367,
+        0.7000001072883606
+      ],
+      "leafDimensions": [
+        0.7745989039267749,
+        1.7978427410125732,
+        1.5524163590172928
+      ],
+      "doorPosition": [
+        0,
+        -0.3,
+        -4
+      ],
+      "doorScale": [
+        1,
+        1,
+        1
+      ],
+      "leafPiecePosition": [
+        0.75,
+        0.8989213705062866,
+        -4.3211882072569097e-8
+      ],
+      "leafPieceScale": [
+        1,
+        1,
+        1
+      ],
+      "leafPieceQuaternion": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "kit": true
+    },
+    {
+      "state": "open",
+      "axis": "z",
+      "groupDimensions": [
+        1.8506525596577457,
+        2.1999998092651367,
+        2.431413759632136
+      ],
+      "frameDimensions": [
+        0.7000001072883606,
+        2.1999998092651367,
+        2.200000047683716
+      ],
+      "leafDimensions": [
+        1.5524163590172928,
+        1.7978427410125732,
+        0.7745989039267748
+      ],
+      "doorPosition": [
+        -5,
+        -0.3,
+        0
+      ],
+      "doorScale": [
+        1,
+        1,
+        1
+      ],
+      "leafPiecePosition": [
+        0.75,
+        0.8989213705062866,
+        -4.3211882072569097e-8
+      ],
+      "leafPieceScale": [
+        1,
+        1,
+        1
+      ],
+      "leafPieceQuaternion": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "kit": true
+    }
+  ],
+  "lineupLabels": [
+    {
+      "assetId": "kenney-retro-fantasy-kit/detail-barrel",
+      "view": "raw"
+    },
+    {
+      "assetId": "kenney-retro-fantasy-kit/detail-barrel",
+      "view": "normalized"
+    },
+    {
+      "assetId": "kenney-retro-fantasy-kit/detail-barrel",
+      "view": "genesis"
+    },
+    {
+      "assetId": "kenney-pirate-kit/crate",
+      "view": "raw"
+    },
+    {
+      "assetId": "kenney-pirate-kit/crate",
+      "view": "normalized"
+    },
+    {
+      "assetId": "kenney-pirate-kit/crate",
+      "view": "genesis"
+    },
+    {
+      "assetId": "kenney-pirate-kit/chest",
+      "view": "raw"
+    },
+    {
+      "assetId": "kenney-pirate-kit/chest",
+      "view": "normalized"
+    },
+    {
+      "assetId": "kenney-pirate-kit/chest",
+      "view": "genesis"
+    },
+    {
+      "assetId": "kenney-furniture-kit/tableRound",
+      "view": "raw"
+    },
+    {
+      "assetId": "kenney-furniture-kit/tableRound",
+      "view": "normalized"
+    },
+    {
+      "assetId": "kenney-furniture-kit/tableRound",
+      "view": "genesis"
+    },
+    {
+      "assetId": "kenney-furniture-kit/benchCushionLow",
+      "view": "raw"
+    },
+    {
+      "assetId": "kenney-furniture-kit/benchCushionLow",
+      "view": "normalized"
+    },
+    {
+      "assetId": "kenney-furniture-kit/benchCushionLow",
+      "view": "genesis"
+    },
+    {
+      "assetId": "kenney-furniture-kit/chair",
+      "view": "raw"
+    },
+    {
+      "assetId": "kenney-furniture-kit/chair",
+      "view": "normalized"
+    },
+    {
+      "assetId": "kenney-furniture-kit/chair",
+      "view": "genesis"
+    },
+    {
+      "assetId": "kenney-furniture-kit/lampWall",
+      "view": "raw"
+    },
+    {
+      "assetId": "kenney-furniture-kit/lampWall",
+      "view": "normalized"
+    },
+    {
+      "assetId": "kenney-furniture-kit/lampWall",
+      "view": "genesis"
+    },
+    {
+      "assetId": "kenney-furniture-kit/lampRoundFloor",
+      "view": "raw"
+    },
+    {
+      "assetId": "kenney-furniture-kit/lampRoundFloor",
+      "view": "normalized"
+    },
+    {
+      "assetId": "kenney-furniture-kit/lampRoundFloor",
+      "view": "genesis"
+    },
+    {
+      "assetId": "kenney-fantasy-town-kit/lantern",
+      "view": "raw"
+    },
+    {
+      "assetId": "kenney-fantasy-town-kit/lantern",
+      "view": "normalized"
+    },
+    {
+      "assetId": "kenney-fantasy-town-kit/lantern",
+      "view": "genesis"
+    },
+    {
+      "assetId": "kenney-factory-kit/lever-double",
+      "view": "raw"
+    },
+    {
+      "assetId": "kenney-factory-kit/lever-double",
+      "view": "normalized"
+    },
+    {
+      "assetId": "kenney-factory-kit/lever-double",
+      "view": "genesis"
+    }
+  ],
+  "captures": {
+    "pilotLineup": "pilot-lineup.png",
+    "rect": "rect.png",
+    "lRoom": "l-room.png",
+    "octagon": "octagon.png",
+    "doorShut": "door-shut.png",
+    "doorOpen": "door-open.png",
+    "socketMates": "socket-mates.png"
+  },
+  "furnished": {
+    "entries": [
+      {
+        "sourceRef": "kgr6.barrel",
+        "assetId": "kenney-retro-fantasy-kit/detail-barrel",
+        "placementStatus": "placed",
+        "x": 7.952298076441512,
+        "y": 1.1195712872222066
+      },
+      {
+        "sourceRef": "kgr6.crate",
+        "assetId": "kenney-pirate-kit/crate",
+        "placementStatus": "placed",
+        "x": 7.071411274536513,
+        "y": 2.842583202193491
+      },
+      {
+        "sourceRef": "kgr6.table",
+        "assetId": "kenney-furniture-kit/tableRound",
+        "placementStatus": "placed",
+        "x": 8.030273075490259,
+        "y": 5.973704507541843
+      },
+      {
+        "sourceRef": "kgr6.bench",
+        "assetId": "kenney-furniture-kit/benchCushionLow",
+        "placementStatus": "placed",
+        "x": 3.0455978117790075,
+        "y": 6.949220411232672
+      },
+      {
+        "sourceRef": "kgr6.chair",
+        "assetId": "kenney-furniture-kit/chair",
+        "placementStatus": "placed",
+        "x": 0.9085868061147631,
+        "y": 2.1212994734197856
+      },
+      {
+        "sourceRef": "kgr6.lantern",
+        "assetId": "kenney-furniture-kit/lampWall",
+        "placementStatus": "candidate",
+        "x": 2,
+        "y": 1
+      }
+    ],
+    "mounted": [
+      {
+        "slug": "fantasy-clutter-emptybarrel",
+        "x": 2.9522980764415117,
+        "y": -0.3,
+        "z": -2.8804287127777934,
+        "kenneyAsset": "kenney-retro-fantasy-kit/detail-barrel"
+      },
+      {
+        "slug": "supply-crate",
+        "x": 2.071411274536513,
+        "y": -0.3,
+        "z": -1.1574167978065089,
+        "kenneyAsset": "kenney-pirate-kit/crate"
+      },
+      {
+        "slug": "round-table",
+        "x": 3.0302730754902587,
+        "y": -0.3,
+        "z": 1.973704507541843,
+        "kenneyAsset": "kenney-furniture-kit/tableRound"
+      },
+      {
+        "slug": "wooden-bench",
+        "x": -1.9544021882209925,
+        "y": -0.3,
+        "z": 2.9492204112326723,
+        "kenneyAsset": "kenney-furniture-kit/benchCushionLow"
+      },
+      {
+        "slug": "chair",
+        "x": -4.091413193885237,
+        "y": -0.3,
+        "z": -1.8787005265802144,
+        "kenneyAsset": "kenney-furniture-kit/chair"
+      }
+    ]
+  }
+}

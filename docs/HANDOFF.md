@@ -17,7 +17,20 @@ reach the visual target. Read it before this handoff's historical graphics queue
 For any sprite/pixel-art generation or review work specifically, `docs/ART-DEPARTMENT.md` is the
 pixel register's canonical home — live-corpus state, the style law index, and the regen runbooks.
 
-## ⭐ Latest (2026-07-17, later) — KGR ACCEPTANCE REOPENED + KGR-7 SLICE BUILT: one real rolled walk, before/after, awaiting Adam [Claude Fable 5, orchestrated]
+## ⭐ Latest (2026-07-17, evening) — ADAM'S SHELL RULINGS: the prism shell is condemned; doors are just doors [Adam + Claude Fable 5]
+
+Adam read the KGR-7 frames and named the real blocker: the any-polygon room system and the
+square-module Kenney kit are incompatible, and every unit had served both. Four rulings (DESIGN.md
+2026-07-17 evening): all-Kenney dungeon shells with whole-room claims and NO mixing · rectilinear
+rooms while kit shells prove · the door law (flat leaf only, 5/10 ft + portcullis, zero proud
+surround) · clean void beyond the active room. Demolition landed the same evening (gatehouse and
+doorframe prisms deleted, black blocker slabs gone, portals follow the wall cutaway) — see
+`dev/battle-gate/kgr7-walk-truth/kgr7-kgr8-demolition.png` against `kgr7-after.png`.
+**Do next: execute `docs/KGR8-KENNEY-SHELL-REBUILD.md`** — the room compiler that builds rooms
+FROM kit modules (module calibration tranche → compiler → doors → silhouette base → variation).
+Frame links for Adam are ABSOLUTE under `/Volumes/Genesis/` — the Desktop path is dead.
+
+## Latest (2026-07-17, later) — KGR ACCEPTANCE REOPENED + KGR-7 SLICE BUILT: one real rolled walk, before/after, awaiting Adam [Claude Fable 5, orchestrated]
 
 Adam reviewed the actual KGR-6 evidence and overturned the same-day close below. The infrastructure
 stands — calibration schema, source-hash admission, workbench, attachment solver, transform repair,

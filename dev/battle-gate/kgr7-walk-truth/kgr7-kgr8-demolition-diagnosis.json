@@ -1,0 +1,453 @@
+{
+  "world": {
+    "id": "mrovl4og8l8yo",
+    "name": "The Ivory Pit"
+  },
+  "hereKind": "interior",
+  "walkId": "frontier-s1-1",
+  "realms": {
+    "active": [],
+    "sourceRealms": [],
+    "walkSkin": {
+      "text": "Every carved face has been chiseled off. ★ — Recently. The dust of the work still hangs in the torchlight, and the chisel is nowhere.",
+      "band": "Strange",
+      "ref": "walk-skin-dungeon#87",
+      "tail": "center",
+      "roll": {
+        "raw": 11,
+        "shifted": 11,
+        "frayMod": 0
+      }
+    }
+  },
+  "walk": {
+    "environment": "dungeon",
+    "topology": "The Loop",
+    "segments": 4,
+    "explicitDeal": false
+  },
+  "activeSegment": {
+    "num": 1,
+    "label": "Entry",
+    "areaType": "Chasm Room",
+    "segType": null,
+    "feature": {
+      "name": "Bone Wall",
+      "flavor": "Long bones form a lattice across the archway.",
+      "dims": "5' wide arch, 8' high — Can squeeze through (Str DC 11 to break a gap); Tiny pass freely"
+    },
+    "object": {
+      "name": "Small cairn",
+      "flavor": "Stones stacked like a waypoint."
+    },
+    "dressing": {
+      "text": "Winch drum with frayed cable snarled around it.",
+      "condition": "Tampered"
+    },
+    "atmo": {
+      "lane": "air",
+      "text": "updraft, slight"
+    },
+    "encounter": {
+      "type": "Discovery"
+    }
+  },
+  "deckCards": null,
+  "allSegments": [
+    {
+      "num": 1,
+      "label": "Entry",
+      "areaType": "Chasm Room",
+      "isFinale": false,
+      "feature": {
+        "name": "Bone Wall",
+        "flavor": "Long bones form a lattice across the archway."
+      },
+      "object": {
+        "name": "Small cairn",
+        "flavor": "Stones stacked like a waypoint."
+      },
+      "dressing": {
+        "text": "Winch drum with frayed cable snarled around it.",
+        "condition": "Tampered"
+      },
+      "encounter": {
+        "type": "Discovery"
+      }
+    },
+    {
+      "num": 2,
+      "label": "",
+      "areaType": "Sloped Passage",
+      "isFinale": false,
+      "feature": {
+        "name": "Toppled Bookcase",
+        "flavor": "A tall bookcase fallen across the floor, spilling rotted ledgers."
+      },
+      "object": {
+        "name": "Sliding panel",
+        "flavor": "Opens with a push—then sticks."
+      },
+      "dressing": {
+        "text": "Small shrine shelf with melted wax and empty bowl.",
+        "condition": "Fresh"
+      },
+      "encounter": {
+        "type": "Hazard"
+      }
+    },
+    {
+      "num": 3,
+      "label": "",
+      "areaType": "Natural Passage",
+      "isFinale": false,
+      "feature": {
+        "name": "Eldritch Circle",
+        "flavor": "Symbols shimmer like heat haze."
+      },
+      "object": {
+        "name": "Chalk nub",
+        "flavor": "Leaves crisp marks—fresh supply."
+      },
+      "dressing": {
+        "text": "Cookpot with soot-black belly and a sour smell.",
+        "condition": "Tampered"
+      },
+      "encounter": {
+        "type": "Social"
+      }
+    },
+    {
+      "num": 4,
+      "label": "Finale",
+      "areaType": "T-Junction",
+      "isFinale": true,
+      "feature": {
+        "name": "Refuse Pile",
+        "flavor": "Bones jut from beneath moldy debris."
+      },
+      "object": {
+        "name": "Rope ladder",
+        "flavor": "Lowest rung is missing; ends are frayed."
+      },
+      "dressing": {
+        "text": "A thick rug rolled and stood against the corner, damp-heavy and sour to the nose.",
+        "condition": "Fresh"
+      },
+      "encounter": null
+    }
+  ],
+  "plan": {
+    "rooms": 4,
+    "cellW": 27,
+    "cellD": 24
+  },
+  "boardDressing": [
+    {
+      "sourceRef": null,
+      "slug": "fantasy-clutter-candlestub",
+      "realmPropName": null,
+      "role": null,
+      "primary": "light",
+      "cardKind": "small",
+      "renderStrategy": "extruded-card",
+      "projected": false,
+      "count": null,
+      "x": 16,
+      "y": 16,
+      "roomSegNum": 1,
+      "visualAsset": null
+    },
+    {
+      "sourceRef": null,
+      "slug": "fantasy-flora-willowdrape",
+      "realmPropName": null,
+      "role": null,
+      "primary": "setPiece",
+      "cardKind": "large",
+      "renderStrategy": "billboard",
+      "projected": false,
+      "count": null,
+      "x": 20,
+      "y": 13,
+      "roomSegNum": 1,
+      "visualAsset": null
+    },
+    {
+      "sourceRef": null,
+      "slug": "fantasy-flora-brambleblocker",
+      "realmPropName": null,
+      "role": null,
+      "primary": "blocker",
+      "cardKind": "medium",
+      "renderStrategy": "full-3d-prop",
+      "projected": false,
+      "count": null,
+      "x": 16,
+      "y": 15,
+      "roomSegNum": 1,
+      "visualAsset": null
+    },
+    {
+      "sourceRef": null,
+      "slug": "fantasy-painting-1",
+      "realmPropName": null,
+      "role": null,
+      "primary": "wall-hang",
+      "cardKind": "medium",
+      "renderStrategy": "extruded-card",
+      "projected": false,
+      "count": null,
+      "x": 22,
+      "y": 15,
+      "roomSegNum": 1,
+      "visualAsset": null
+    },
+    {
+      "sourceRef": null,
+      "slug": "fantasy-flora-mossboulder",
+      "realmPropName": null,
+      "role": null,
+      "primary": "floor",
+      "cardKind": "medium",
+      "renderStrategy": "billboard",
+      "projected": false,
+      "count": null,
+      "x": 16.078413269794545,
+      "y": 17.194361102003604,
+      "roomSegNum": 1,
+      "visualAsset": null
+    },
+    {
+      "sourceRef": null,
+      "slug": "fantasy-clutter-tackleheap",
+      "realmPropName": null,
+      "role": null,
+      "primary": "floor",
+      "cardKind": "small",
+      "renderStrategy": "billboard",
+      "projected": false,
+      "count": null,
+      "x": 20.99195754915476,
+      "y": 15.901457275263965,
+      "roomSegNum": 1,
+      "visualAsset": null
+    },
+    {
+      "sourceRef": null,
+      "slug": "fantasy-flora-fern",
+      "realmPropName": null,
+      "role": null,
+      "primary": "floor",
+      "cardKind": "small",
+      "renderStrategy": "billboard",
+      "projected": false,
+      "count": null,
+      "x": 15.993160096313805,
+      "y": 13.729661853443831,
+      "roomSegNum": 1,
+      "visualAsset": null
+    },
+    {
+      "sourceRef": "S1.object",
+      "slug": "walk-noun-object",
+      "realmPropName": "Small cairn",
+      "role": "interactable",
+      "primary": "focal",
+      "cardKind": "medium",
+      "renderStrategy": null,
+      "projected": false,
+      "count": 1,
+      "x": 21,
+      "y": 15,
+      "roomSegNum": 1,
+      "visualAsset": {
+        "assetId": "kenney-castle-kit/rocks-small",
+        "resolutionRule": "walk-noun-cairn",
+        "placementStatus": "candidate",
+        "mountSocket": "floor-mount"
+      }
+    },
+    {
+      "sourceRef": "S1.dressing",
+      "slug": "walk-noun-dressing",
+      "realmPropName": "Winch drum with frayed cable snarled around it.",
+      "role": "dressing",
+      "primary": "focal",
+      "cardKind": "medium",
+      "renderStrategy": null,
+      "projected": false,
+      "count": 1,
+      "x": 22,
+      "y": 14,
+      "roomSegNum": 1,
+      "visualAsset": {
+        "assetId": "kenney-retro-fantasy-kit/pulley-crate",
+        "resolutionRule": "walk-noun-winch",
+        "placementStatus": "candidate",
+        "mountSocket": "wall-mount"
+      }
+    }
+  ],
+  "boardInteractables": [
+    {
+      "sourceRef": "S1.door",
+      "archetype": "door",
+      "slug": "fantasy-obj-door-shut",
+      "x": 18,
+      "y": 13
+    }
+  ],
+  "projection": {
+    "density": "composed",
+    "stageNow": [
+      {
+        "id": "S1.object",
+        "role": "interactable",
+        "slug": null,
+        "sourceRef": "S1.object",
+        "count": 1
+      },
+      {
+        "id": "S1.feature",
+        "role": "feature",
+        "slug": null,
+        "sourceRef": "S1.feature",
+        "count": 1
+      },
+      {
+        "id": "S1.dressing",
+        "role": "dressing",
+        "slug": null,
+        "sourceRef": "S1.dressing",
+        "count": 1
+      }
+    ],
+    "narrateNow": 2,
+    "reserve": 0
+  },
+  "realization": {
+    "rulesLoaded": 11,
+    "runtimeAssets": 13,
+    "registryHash": "f06592b19614cdbb083ce6e40130e49606dd5e48df5930fb14296ec4881910d9",
+    "stamped": 2,
+    "unmatched": 7
+  },
+  "mounted": {
+    "dressingWorld": [
+      {
+        "slug": "fantasy-clutter-candlestub",
+        "x": -3.5,
+        "y": -0.3,
+        "z": 1.5,
+        "kenneyAsset": null
+      },
+      {
+        "slug": "fantasy-flora-willowdrape",
+        "x": 0.5,
+        "y": -0.3,
+        "z": -1.020344878854062,
+        "kenneyAsset": null
+      },
+      {
+        "slug": "fantasy-flora-brambleblocker",
+        "x": -3.5,
+        "y": -0.3,
+        "z": 0.5,
+        "kenneyAsset": null
+      },
+      {
+        "slug": "fantasy-flora-mossboulder",
+        "x": -3.421586730205455,
+        "y": -0.3,
+        "z": 2.6943611020036045,
+        "kenneyAsset": null
+      },
+      {
+        "slug": "fantasy-clutter-tackleheap",
+        "x": 1.4919575491547583,
+        "y": -0.3,
+        "z": 1.4014572752639651,
+        "kenneyAsset": null
+      },
+      {
+        "slug": "fantasy-flora-fern",
+        "x": -3.5068399036861955,
+        "y": -0.3,
+        "z": -0.7703381465561687,
+        "kenneyAsset": null
+      },
+      {
+        "slug": "walk-noun-object",
+        "x": 1.5,
+        "y": -0.3,
+        "z": 0.5,
+        "kenneyAsset": "kenney-castle-kit/rocks-small"
+      }
+    ],
+    "shell": true
+  },
+  "meta": {
+    "label": "kgr8-demolition",
+    "base": "http://127.0.0.1:60059",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "restoredFrom": "dev/battle-gate/kgr7-walk-truth/kgr7-world-state.json",
+    "notFoundUrls": [
+      "http://127.0.0.1:60059/assets/ui/vision-quest.css",
+      "http://127.0.0.1:60059/assets/title/genesis.png",
+      "http://127.0.0.1:60059/dev/model-qa/glb/grunt.glb",
+      "http://127.0.0.1:60059/dev/model-qa/glb/rlm-theater-trench.glb",
+      "http://127.0.0.1:60059/dev/model-qa/glb/rlm-theater-legion.glb",
+      "http://127.0.0.1:60059/dev/model-qa/glb/rlm-theater-revenant.glb",
+      "http://127.0.0.1:60059/dev/model-qa/glb/rlm-theater-mark4.glb",
+      "http://127.0.0.1:60059/dev/model-qa/glb/rlm-theater-sherman.glb",
+      "http://127.0.0.1:60059/dev/model-qa/glb/rlm-noir-brute.glb",
+      "http://127.0.0.1:60059/dev/model-qa/glb/rlm-noir-gangster.glb",
+      "http://127.0.0.1:60059/dev/model-qa/glb/rlm-noir-maestro.glb",
+      "http://127.0.0.1:60059/dev/model-qa/glb/rlm-noir-civilian.glb",
+      "http://127.0.0.1:60059/favicon.ico",
+      "http://127.0.0.1:60059/assets/plaques/scene-banner.png",
+      "http://127.0.0.1:60059/assets/icons/heart.png",
+      "http://127.0.0.1:60059/assets/icons/pin.png",
+      "http://127.0.0.1:60059/assets/icons/helm.png",
+      "http://127.0.0.1:60059/assets/icons/sword-shield.png",
+      "http://127.0.0.1:60059/assets/icons/compass.png",
+      "http://127.0.0.1:60059/assets/icons/sun.png",
+      "http://127.0.0.1:60059/assets/icons/key.png",
+      "http://127.0.0.1:60059/assets/dressing/walk-noun-object.png",
+      "http://127.0.0.1:60059/assets/textures-psx/manifest.json"
+    ]
+  }
+}

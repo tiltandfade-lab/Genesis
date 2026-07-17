@@ -8,6 +8,21 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-07-17 (evening) — THE KENNEY SHELL RULINGS + DOOR DEMOLITION [Adam ruled; Claude Fable 5 executed]
+
+**Changed:** Adam read the KGR-7 frames and ruled the week's stall closed by decision (DESIGN.md
+evening entry): ALL-KENNEY dungeon shells (whole-room claims, no mixing — the prism shell is
+condemned for dungeon interiors), RECTILINEAR rooms while kit shells prove, the DOOR LAW (flat
+leaf only — 5/10 ft + portcullis; zero proud surround), CLEAN VOID beyond the active room.
+Same-evening demolition landed on the Ivory Pit fixture: kit gatehouse mount retired, jamb/header/
+arch-corbel doorframe prisms deleted (they never received the parapet cutaway — the "foyer column
+blocking the camera"), blocker nouns render their own sprite art instead of generic black
+furniture prisms, darkness portals follow their wall's cutaway, door leaf gains the sprite
+emissive floor. Evidence: `dev/battle-gate/kgr7-walk-truth/kgr7-kgr8-demolition.png`.
+`docs/KGR8-KENNEY-SHELL-REBUILD.md` is the specced next operation — the room compiler that builds
+rooms FROM kit modules, which is where "is there even a single piece from Kenney in the scene"
+finally gets answered with the whole room.
+
 ## 2026-07-17 (later still) — KGR-7 VERTICAL SLICE: one real rolled walk, before/after [Claude Fable 5, orchestrated]
 
 **Added:** the gameplay-first acceptance rig (`dev/battle-gate/capture-kgr7-walk-truth.mjs`) —

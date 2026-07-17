@@ -135,13 +135,12 @@ group("1 — ARCH HEADER: non-squeeze doors gain 2 stacked doorframe prisms (yBa
   const plainFramePrisms = board.instances.doorframe.filter((d) => !d.squeeze && d.archStep == null);
   const plainDoorCells = new Set(plainFramePrisms.map((d) => d.x + "," + d.z));
   const archSteps = board.instances.doorframe.filter((d) => d.archStep != null);
-  ok(plainFramePrisms.length > 0, "at least one plain door frame prism exists");
-  ok(plainDoorCells.size > 0, "at least one distinct plain door cell exists");
-  ok(archSteps.length > 0, "at least one arch-header prism exists");
+  ok(plainFramePrisms.length === 0, "ZERO door frame prisms — KGR-8 DOOR LAW (DESIGN 2026-07-17 evening): a door is the flat leaf alone — zero doorframe prisms, no kit gatehouse");
+  ok(archSteps.length === 0, "ZERO arch-header prisms — same law");
   ok(archSteps.length === plainDoorCells.size * 2, `every plain door CELL earns exactly 2 arch-header prisms (${archSteps.length} steps / ${plainDoorCells.size} door cells)`);
   ok(archSteps.every((a) => typeof a.yBase === "number" && a.yBase > 0), "every arch-header prism carries yBase>0 (stacked ABOVE the main frame)");
   const step1 = archSteps.filter((a) => a.archStep === 1), step2 = archSteps.filter((a) => a.archStep === 2);
-  ok(step1.length > 0 && step2.length > 0, "both corbel steps (1 and 2) are present");
+  ok(step1.length === 0 && step2.length === 0, "ZERO corbel steps — same law");
   if (step1.length && step2.length) {
     ok(step2[0].sx < step1[0].sx, `step 2 is narrower than step 1 (corbelling IN: ${step2[0].sx} < ${step1[0].sx})`);
     ok(step2[0].yBase > step1[0].yBase, "step 2 stacks ABOVE step 1 (yBase increases)");
@@ -244,12 +243,9 @@ group("7 — FURNITURE CHANNEL: every blocker dressing entry has a matching boar
   const board = M.interiorBuildBoard(plan, {});
   const blockers = plan.dressing.filter((d) => d.primary === "blocker");
   ok(blockers.length > 0, "sanity: at least one blocker dressing entry rolled");
-  ok(board.furniture.length === blockers.length, `board.furniture has one entry per blocker dressing entry (${board.furniture.length} === ${blockers.length})`);
-  blockers.forEach((b) => {
-    const match = board.furniture.find((f) => f.x === b.x && f.y === b.y && f.roomSegNum === b.roomSegNum && f.slug === b.slug);
-    ok(!!match, `blocker "${b.slug}" @ (${b.x},${b.y}) has a matching furniture entry`);
-    ok(match && ["crate", "cabinet", "barrel-cluster", "table", "bench", "shelf-unit"].includes(match.kind), `furniture kind "${match && match.kind}" is one of the 6 named kinds`);
-  });
+  ok(board.furniture.length === 0, `ZERO furniture from blockers — KGR-8: blocker nouns render their own sprite art, never a generic prism silhouette (got ${board.furniture.length})`);
+  // KGR-8: the per-blocker furniture match is retired with the routing — blockers render their own
+  // sprite art via the normal dressing-card path (the ZERO assertion above pins the new truth).
   ["crate", "cabinet", "barrel-cluster", "table", "bench", "shelf-unit"].forEach((kind) => {
     const recipe = M.furnitureFor(kind, "chrome");
     ok(recipe && Array.isArray(recipe.prisms) && recipe.prisms.length >= 2 && recipe.prisms.length <= 6,
@@ -292,7 +288,7 @@ group("9/10/11 — GL-LAYER WIRING (text-scan, sealed ES-module boundary — sam
   ok(/itrPropEdgeColorFor/.test(bootSrc), "extrusion props sample their own side color off the art texture's edge pixels");
   ok(/userData\.extrusionProp = true/.test(bootSrc) && !/g\.userData\.sprite = true;\s*\n\s*g\.userData\.dressingSlug = entry\.slug;\s*\n\s*g\.userData\.extrusionProp/.test(bootSrc),
     "extrusion prop groups are tagged extrusionProp, NOT userData.sprite (never camera-billboarded)");
-  ok(/d\.primary === "blocker" \|\| d\.primary === "wall-hang"/.test(bootSrc), "interiorBuildDressing skips blocker/wall-hang entries (rendered via the new channels instead)");
+  ok(/d\.primary === "wall-hang"/.test(bootSrc) && !/d\.primary === "blocker" \|\| d\.primary === "wall-hang"/.test(bootSrc), "interiorBuildDressing skips ONLY wall-hang entries — KGR-8: blockers mount as their own sprite cards");
   ok(/interiorBuildFurniture\(data\.furniture/.test(bootSrc) && /interiorBuildWallProps\(data\.wallProps/.test(bootSrc), "setInteriorBoard mounts both new groups off data.furniture/data.wallProps");
   ok(/daisTop\)/.test(bootSrc) && /p\.preferDais/.test(bootSrc), "interiorBuildPieces threads an opt-in preferDais->daisTop cell default");
 }
@@ -326,7 +322,7 @@ group("13 — D4d DOORFRAME MASS FIX: plain-frame prisms are slim (never a wFrac
   const plan = fullPlan(buildChainFixture(10), "d4d-slim-budget", "fantasy");
   const board = M.interiorBuildBoard(plan, { realmId: "fantasy" });
   const plainFramePrisms = board.instances.doorframe.filter((d) => !d.squeeze && d.archStep == null);
-  ok(plainFramePrisms.length > 0, "at least one plain-frame prism exists");
+  ok(plainFramePrisms.length === 0, "ZERO plain-frame prisms — KGR-8 DOOR LAW (the leaf alone owns the aperture)");
   const columns = plainFramePrisms.filter((f) => Math.min(f.sx, f.sz) > SLIM_BUDGET);
   ok(columns.length === 0, `NO plain-frame prism is a column on both axes (${columns.length}/${plainFramePrisms.length} exceed the ${SLIM_BUDGET} slim budget on both sx and sz)`);
   ok(plainFramePrisms.every((f) => f.jamb || f.header), "every plain-frame prism is tagged jamb or header (never an untagged solid box)");
@@ -351,7 +347,7 @@ group("13 — D4d DOORFRAME MASS FIX: plain-frame prisms are slim (never a wFrac
     ok(openGap >= apertureWidth * 0.5, `door cell aperture gap (${openGap.toFixed(3)}) is >= half the aperture width (${apertureWidth.toFixed(3)}) — genuinely open, not a sliver`);
     checkedCells++;
   });
-  ok(checkedCells > 0, `at least one door cell's aperture cross-section was checked (${checkedCells} checked)`);
+  ok(checkedCells === 0, `zero aperture cross-sections to check — no frame prisms exist under the KGR-8 door law (${checkedCells} checked)`);
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);

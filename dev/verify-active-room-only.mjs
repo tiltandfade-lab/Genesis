@@ -300,7 +300,7 @@ async function main() {
     ok(greenFarFloor === 0, `GREEN: the 2-hop-away room's FLOOR mesh instances === 0 (never rendered even under the OLD radius:1 request) — got ${greenFarFloor}`);
     ok(greenFocusFloor > 0, `GREEN: the ACTIVE room's own FLOOR mesh instances still fully render (got ${greenFocusFloor})`);
     ok(m.meta.roomCount === 1, `GREEN: board.meta.roomCount === 1 (active room alone) — got ${m.meta.roomCount}`);
-    ok(counts.door.length >= 2, `GREEN: the active room's own 2 boundary doorframes still render (got ${counts.door.length} door instances)`);
+    ok(counts.door.length === 0, `GREEN: ZERO doorframe instances — KGR-8 DOOR LAW (DESIGN 2026-07-17 evening): a door is the flat leaf alone — zero doorframe prisms, no kit gatehouse (got ${counts.door.length})`);
     ok(counts.portal.length === 2, `GREEN: exactly 2 DARKNESS PORTAL cards — one per boundary door (to segNum 1, to segNum 3) — got ${counts.portal.length}`);
     ok(m.portalCount === counts.portal.length, `GREEN: board.meta.portalCount (${m.portalCount}) matches the live mounted portal list length (${counts.portal.length})`);
     counts.portal.forEach((p, i) => {

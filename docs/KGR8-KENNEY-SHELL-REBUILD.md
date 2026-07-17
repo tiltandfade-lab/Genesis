@@ -83,6 +83,17 @@ rolled world, both through `capture-kgr7-walk-truth.mjs`. The gate is Adam readi
 rooms that look like the kit built them, doors that are just doors, nothing between the camera and
 the room, nothing floating, nothing hollow. Machine gates prove contracts only (§15 law).
 
+## 4b. Spatializer truths the rebuild must fix (discovered closing the door bug)
+
+- **Corridors tunnel THROUGH room floors.** The Ivory Pit's room is crossed by two corridor lanes
+  running inside its own rectangle; boundary "door" cells sit at corridor mouths in OPEN FLOOR
+  (wall on one side, floor on three). No door treatment can read correctly there. Interim render
+  fix (landed): the visual door resolves to the nearest THROAT cell (wall cheeks both sides).
+  The real fix belongs to the rectilinear spatializer pass: rooms seal at their walls; corridors
+  START at room boundaries; door cells always sit in wall lines with cheeks.
+- **Under-slab is a bounding box**, not the floor silhouette (dies with the prism compiler).
+- **The rolled pit/chasm renders as a bare hollow basin** (needs a depth reading).
+
 ## 5. Out of scope
 
 Combat, elevation mechanics, non-dungeon environments, catalog bulk admission, outline/post

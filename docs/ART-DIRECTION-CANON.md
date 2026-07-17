@@ -153,3 +153,24 @@ shorten, the §7 master prop prompt ("Do not shorten it"):
    generic starter-tier art… generic mobile-game loot") plus §3.2's facet scale law are the
    anti-WoW / anti-oversimplification gates for props. The 2026-07-14 prop drift happened
    because the pilot's queue JSON *shortened* §7 — shortening is the drift vector.
+
+## Character billboard / environmental citizenship ruling (Adam, 2026-07-17 — additive)
+
+Adam's words, verbatim:
+
+> "also, the only sprites that need to billboard are the character sprites, environment sprites
+> should probably be more of the sprite extrusions andgled and placed in the room in a way that
+> aligns them to their environment"
+
+Adam immediately removed the tentative qualifier:
+
+> "ok not probably, definitely. like every little item in your mock ups had a neat home and it
+> looked natural, in our renders it always looks like some random thing just floating around"
+
+**Scope of this ruling:** character figure standees may retain camera-facing billboard behavior.
+Environmental sprite art does not billboard. It becomes an environment-aligned scene citizen —
+preferably a smooth-contour extrusion, wall relief, surface-mounted extrusion, decal, or truthful
+3D asset — with its anchor and orientation derived from its actual architectural home (floor,
+wall, surface socket, edge, opening, corridor axis, or feature axis). Environmental items remain
+fixed in world space when the camera moves. A random floating or camera-facing environmental card
+is a visual reject.

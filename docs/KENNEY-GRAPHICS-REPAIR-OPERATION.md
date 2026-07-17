@@ -649,7 +649,9 @@ implausible human scale.
 - `src/ui/theater-interior.js` delegates its later `itrWallSideAt` stamp to the single pure
   engine-level wall-side authority used by realization;
 - `src/ui/theater-boot.js:7725-7855` board props and `9470-9520` interior dressing donor mount;
-- new `dev/verify-kenney-realization.mjs`; extend place-distribution/dungeon-dressing harnesses.
+- new `dev/verify-kenney-realization.mjs`; extend place-distribution/dungeon-dressing harnesses;
+- `dev/verify-tabletop-u1.mjs` omits only the derived `visualAsset` field from its frozen
+  pre-refactor byte comparison while separately proving all canonical fields remain byte-identical.
 
 **Approved pilot asset ids:**
 
@@ -725,6 +727,12 @@ before `theater-interior` stamps `wallSide` (load orders 96 and 97 respectively)
 wall yaw later would leave pre-distribution OBB wall eligibility undefined. KGR-5 therefore owns the
 narrow `theater-interior.js` delegation above: one engine-pure wall-side authority is used at both
 seams and must pass a parity mutation gate.
+
+**2026-07-16 additive-byte-gate amendment:** the frozen `tabletop-u1` fixture compares the complete
+pre-refactor board and therefore reds on the intentionally additive `visualAsset` projection even
+when every canonical field is unchanged; `place-tray` inherits that false red. KGR-5 may normalize
+away only `visualAsset` for this legacy comparison. The frozen fixture remains unchanged, and an
+explicit guard must fail if any canonical or other derived field is omitted or mutated.
 
 ## 11. Unit KGR-6 — proving run and admission gate
 

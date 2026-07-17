@@ -17,7 +17,27 @@ reach the visual target. Read it before this handoff's historical graphics queue
 For any sprite/pixel-art generation or review work specifically, `docs/ART-DEPARTMENT.md` is the
 pixel register's canonical home — live-corpus state, the style law index, and the regen runbooks.
 
-## ⭐ Latest (2026-07-17, night) — NIGHT RULINGS RECORDED; CLAY ROOM IS THE PROVING GROUND; 11 follow-ups await Adam [Adam + Claude Fable 5]
+## ⭐ Latest (2026-07-17, morning after) — ADAM ANSWERED THE OPEN QUESTIONS; THE PROVING LADDER IS LAW; build the clay shell card [Adam + Claude Fable 5]
+
+Adam ruled on `KGR8-OPEN-QUESTIONS.md` (verbatim: ART-DIRECTION-CANON.md "MORNING RULINGS";
+digest: DESIGN.md 2026-07-17 morning-after; folded into the KGR-8 spec header). The rulings:
+**THE PROVING LADDER** — clay 5×5 → **rolled** 5-room → **rolled** 14-room, each rung proving
+the Kenney swap before the next (Codex's deterministic fixtures superseded; scaled rungs are
+rolled worlds frozen like the Ivory Pit — which is itself a 4-segment walk; frames only ever
+showed the active room). **Corridor rollers** come from `Reference/Dungeon Builder's Guidebook
+(2e).pdf` tables (Adam's table lane; vision-read the scan). **Normal maps: FULL SPREAD** —
+walls/floors/props/characters, HD-2D normal-mapped sprite citizens, all via clay taste cards.
+**Taste cards ordered:** camera angle (once the clay shell exists, then frozen) · grid
+application · normal-map spread. **Decals:** rolled size band per noun, free rotation, overlap
+allowed. **Characters:** rotate to face what they interact with; mirrored-back jank accepted.
+
+**Do next:** build the first clay card — one kit-built 5×5 room, one 5ft door, clay grey,
+current camera (Genesis-kgr4c, unit branch off integration, landed --no-ff, NEVER master).
+Then the ordered taste cards ride the clay room: camera angle → grid → normal-map three-ways
+(walls/floors, props, characters) → decal size/rotation/overlap → composed-angle characters.
+All links to Adam ABSOLUTE under /Volumes/Genesis/.
+
+## Prior (2026-07-17, night) — NIGHT RULINGS RECORDED; CLAY ROOM IS THE PROVING GROUND; 11 follow-ups were answered above [Adam + Claude Fable 5]
 
 Adam answered the KGR-8 fork questions (verbatim: ART-DIRECTION-CANON.md "NIGHT RULINGS"; digest:
 DESIGN.md 2026-07-17 night). The big ones: **THE PROTOTYPE-PROOF LAW** (no systemwide change

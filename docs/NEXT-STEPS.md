@@ -3,7 +3,7 @@ type: next-steps
 branch: Genesis
 status: living
 created: 2026-06-18
-updated: 2026-06-19
+updated: 2026-07-17
 related:
   - "[[DESIGN]]"
   - "[[GAP-ANALYSIS]]"
@@ -17,6 +17,24 @@ The running execution order. `DESIGN.md` holds the *what* and *why*; this holds 
 **Auto-archive rule (2026-07-09):** at most 4 dated `## Do next (...)` blocks live here; older ones
 roll into `NEXT-STEPS-ARCHIVE.md` via `python3 build/archive-docs.py --emit`. Standing plan
 sections (tracks/layers/etc.) are never auto-archived.
+
+## Do next (2026-07-17 — KENNEY GRAPHICS REPAIR BUILT; live playtest found no P0/P1 transform defect)
+
+CHANGELOG 2026-07-17: ☑ KGR-1/2/3/4A/4B/4C/5/6 · ☑ ten source-hash-bound runtime pilots ·
+☑ calibration + manual Donor/Socket Workbench · ☑ footprint-aware walk-native realization ·
+☑ proving captures · ☑ live Prison / Asylum bridge playtest · ☑ first-render texture-readiness fix.
+The full catalog remains intentionally unadmitted; canonical fallbacks remain the truth-preserving
+result when a roll has no approved visual match.
+
+1. ☐ **PREP-AUTOPILOT:** service `prepPending` and apply the spatial overlay before Stage/frontier
+   entry. The live walk remained a flat board until `prep_applied`; this is the next functional gap.
+2. ☐ **P2 CHROME READABILITY PASS:** reduce overbright white flora and the dark-aperture/wood-leaf
+   contrast that makes a correctly mounted door read slab-like. Gate with real gameplay-scale captures.
+3. ☐ **NEXT KENNEY ADMISSION TRANCHE:** use the workbench and source hashes to approve a measured
+   noun-demand tranche from the candidate catalog. No bulk admission; each asset needs transform,
+   grounding, footprint/clearance, material-family, and visual QA acceptance.
+4. ☐ Then resume polish: KS-3c wall-rim sawtooth · ELEV-1b · LL-1b · rest-prop collisions ·
+   occlusion-aware combat cells; then ST-1 staging intelligence · town kit · B2 · ELEV-2.
 
 ## Do next (2026-07-16 — KENNEY-SOCKET WAVE LANDED; the meeting's order continues)
 
@@ -35,7 +53,7 @@ shells → look pass) · ☑ F1 combat-in-room (#10 closed) · ☑ F2 staging be
    loop; reproduce CI's dep-skips locally with a fake empty `$HOME` (puppeteer-core unresolvable) +
    real `JSDOM_HOME`** — else locally-installed puppeteer runs the 18 render harnesses CI skips.
 1. ☐ **ADAM'S WORD: originals restoration** (evidence complete; restore→re-clean→reference).
-2. ☐ **KENNEY GRAPHICS REPAIR OPERATION** — execute the locked queue
+2. ☑ **KENNEY GRAPHICS REPAIR OPERATION — BUILT 2026-07-17.** Executed the locked queue
    `KGR-1 → KGR-2 → KGR-3 → (KGR-4A ∥ KGR-4B) → KGR-4C → KGR-5 → KGR-6` in
    `KENNEY-GRAPHICS-REPAIR-OPERATION.md`. Correct transforms, bounds, UVs, unsafe outline behavior,
    and structural-shell ownership before expanding runtime admission; then add the calibration
@@ -43,8 +61,8 @@ shells → look pass) · ☑ F1 combat-in-room (#10 closed) · ☑ F2 staging be
    registry, a mandatory ten-asset calibration pass, and footprint-aware walk-native realization.
    This supersedes the old kit-shell proving run: Kenney structural shells retreat until a future
    operation can prove them without breaking the canonical compiled room.
-3. ☐ **Playtest after KGR-6**: walk generation + assembly edge cases, using only the visually
-   accepted proving-run build.
+3. ☑ **Playtest after KGR-6 — DONE 2026-07-17:** the real Prison / Asylum walk found no P0/P1
+   alignment/collision defect; it exposed the prep-autopilot gap and a now-fixed texture-readiness warning.
 4. ☐ Polish, evidence-ordered: KS-3c wall-rim sawtooth · ELEV-1b · LL-1b · rest-prop collisions ·
    occlusion-aware combat cells.
 5. ☐ Then: ST-1 staging intelligence · town kit · B2 smooth-contour depth · ELEV-2 mechanics.
@@ -81,22 +99,6 @@ items FIXED in real play). Adam's rulings registered in DESIGN.md (cast-shadows;
 3. ☐ **P3-2 Stage B** — AUTO-FIRES on sprite-QA registry landing (standing delegation; quiet so far).
 4. ☐ Adam's packet: facade/NPC art (ImageGen/kit) · daylit-shadow + arc keyframe tuning · PL-1b rig
    items (bot fights · transition camera · shop capture · record-less-settlement town read).
-
-## Do next (2026-07-14 evening — THE LEDGER ORDERS THE WAVES; Stage D + AgX + doors + PLAY-LENS landed)
-
-Evening block landed (master `67566b6a`): ☑ Stage D D0–D4 (stateful nouns end-to-end) · ☑ AgX
-FLIPPED LIVE · ☑ door package (D4b hinge/apron, D4c broken variants, D4d slim frames) · ☑ PLAY-LENS
-PL-1 rig + PL-2 ledger (`dev/play-lens/ledger.md`). **Adam delegated autonomous execution in the
-ledger order; P3-2 auto-fires when sprite-QA lands on master; ENV = wire + draft looks, cards at
-his return.**
-
-1. ◐ **QUICK-FIX WAVE** (ledger P0: rat casting bug · vanishing PC token · unanchored door leaves ·
-   wireframe fallback · degenerate arrival · tray head-clip).
-2. ☐ **ENV/EXTERIOR WAVE** — travel terrain + light-profile wiring (daytime) + the town tray.
-3. ☐ **Stage E** — exposure floor + emissive-masked bloom.
-4. ☐ Combat-in-room (S0-1 slice) + staging beats. Then D5 archetypes (gated on the door card pass).
-5. ☐ P3-2 Stage B — AUTO-FIRES on sprite-QA registry landing. PL-1b rig improvements ride the next
-   lens run; the lens re-runs after EVERY landed wave (standing law).
 
 ## Open threads — carried forward (STANDING section; never auto-archived)
 

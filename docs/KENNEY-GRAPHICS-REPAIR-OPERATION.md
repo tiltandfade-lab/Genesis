@@ -1,9 +1,9 @@
 ---
 type: system-spec
 project: Genesis
-status: SPECCED
+status: BUILT
 created: 2026-07-16
-updated: 2026-07-16
+updated: 2026-07-17
 consumer: Codex/Fable orchestrator + leaf executors; orchestrator personally re-gates every unit
 depends_on: KENNEY-SOCKET-WAVE, KENNEY-MESH-AUDIT, GRAPHICS-CONVERGENCE-CHARTER, GRAPHICS-PRODUCTION-RESEARCH-WAVE
 scope: Kenney normalization, transform frames, sockets, donor rendering, calibration tools, footprint-aware visual realization

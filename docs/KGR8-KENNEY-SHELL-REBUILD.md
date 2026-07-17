@@ -1,7 +1,7 @@
 ---
 type: system-spec
 project: Genesis
-status: SPECCED — demolition landed 2026-07-17; shell rebuild next
+status: SPECCED+AMENDED — KGR8-CODEX-ASSESSMENT adopted + Adam's night rulings folded; first gate = the 5×5 clay proving room
 created: 2026-07-17
 consumer: Fable orchestrator + leaf executors; Adam's frame read is the only visual acceptance
 depends_on: KENNEY-GRAPHICS-REPAIR-OPERATION (§15 acceptance law), DESIGN 2026-07-17 evening rulings
@@ -9,6 +9,20 @@ scope: dungeon interior shells rebuilt from Kenney modules; door law; room-shape
 ---
 
 # KGR-8 — THE KENNEY SHELL REBUILD
+
+> **2026-07-17 night amendment:** `KGR8-CODEX-ASSESSMENT.md` is ADOPTED (A1 architecture-plan IR ·
+> A2 macro-first recipes · A3 no prism fallback in acceptance · A4 clay/grid/production/whole-walk
+> staged gates · A5 correlated variation · A6 environment citizenship (locked) · 8A–8G split · the
+> clay go/no-go boundary). Adam's night rulings (verbatim in ART-DIRECTION-CANON.md) bind further:
+> **the prototype-proof law** (no systemwide change without test-card proof and approval; the 5×5
+> clay proving room is the standing proving ground and the FIRST deliverable), **fixed camera**
+> (rooms composed around it; one angle; authored cutaway), **characters become composed-angle
+> smooth-contour extrusions** (mirrored back interim — supersedes "standees untouched" below),
+> **room sizes quantize to the buildable grammar menu**, **corridors: short sealed connectors
+> first** (dimension rollers later), **outward walls + faint floor grid + open tops**, **Kenney 3D
+> beats sprites when both exist**, **feature nouns may realize as wall relief; decals at varied
+> floor sizes**, and **normal maps YES** (revive MATERIAL-IDENTITY.md's Sobel-from-albedo path as
+> a test card — its "Stage E" re-scope is the canonical mega-pass failure the new law forbids).
 
 ## 0. Why this operation exists
 

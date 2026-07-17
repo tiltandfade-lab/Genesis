@@ -1,7 +1,7 @@
 ---
 type: session-handoff
 project: Genesis
-updated: 2026-07-11
+updated: 2026-07-17
 ---
 
 # Genesis — Session Hand-off
@@ -17,7 +17,35 @@ reach the visual target. Read it before this handoff's historical graphics queue
 For any sprite/pixel-art generation or review work specifically, `docs/ART-DEPARTMENT.md` is the
 pixel register's canonical home — live-corpus state, the style law index, and the regen runbooks.
 
-## ⭐ Latest (2026-07-16) — THE KENNEY-SOCKET WAVE: the kit engine stands + PIXEL-FIRST [Claude Fable 5, orchestrated]
+## ⭐ Latest (2026-07-17) — KENNEY GRAPHICS REPAIR BUILT: ten calibrated citizens, truthful fallbacks, live-play clean [Codex, orchestrated]
+
+`docs/KENNEY-GRAPHICS-REPAIR-OPERATION.md` is now **BUILT**. All eight units landed: full-hierarchy
+detach transforms; the unsafe outline retreat; calibration/schema + donor metadata v2; the manual
+Donor/Socket Workbench; six-degree attachment frames; ten source-hash-bound `approved-runtime`
+pilots; footprint-aware walk-native realization; and the proving/admission gate. The continuous
+Genesis compiled shell remains structural truth—Kenney wall/floor claims cannot tear it down—and a
+missing/unapproved noun keeps its canonical procedural or billboard fallback.
+
+The real bridge playtest used **The Bell of Grey → Prison / Asylum → The Loop, segment 1**. Once its
+`prep_applied` spatial overlay was supplied, the same canonical active walk mounted as a volumetric
+interior. At gameplay scale the calibrated door leaves were upright, grounded, aperture-associated,
+and free of P0/P1 detachment or polygon collision. This roll's algae, bones, mud, and relief carving
+did not truthfully match any of the ten furniture pilots, so no noun was rewritten. Evidence:
+`dev/battle-gate/kenney-graphics-repair/live-playtest-prison-asylum.png` and
+`dev/playtest-findings-kenney-graphics-repair.md`.
+
+The playtest also found and closed one independent texture-readiness defect: `nearestify()` no longer
+marks a TextureLoader placeholder for upload before `tex.image` exists; filters still bind at once and
+the decoded texture becomes dirty normally. Focused KGR and BW2 gates are green. Remaining work is
+P2—not a reopened transform failure: Chrome exposure/aperture readability, plus the prep-autopilot gap
+that left `prepPending` unserviced until the spatial overlay was applied.
+
+**Do next:** 1) make prep-autopilot service `prepPending` before Stage/frontier entry; 2) run a narrow
+P2 light/material composition pass on overbright Chrome flora and dark aperture surrounds; 3) use the
+workbench to approve the next measured catalog tranche only after those reads are clean. Keep the
+1,752-asset catalog approval-driven; do not bulk-admit it.
+
+## Latest (2026-07-16) — THE KENNEY-SOCKET WAVE: the kit engine stands + PIXEL-FIRST [Claude Fable 5, orchestrated]
 
 The design meeting's rulings executed (CHANGELOG 2026-07-16; DESIGN.md 2026-07-15 ×3 entries).
 Master pushed at every landing. THE STATE: **rooms assemble from socketed Kenney modules**

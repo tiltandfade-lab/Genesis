@@ -42,17 +42,14 @@
    one unrelated card anywhere else can never perturb an already-seeded entry's own draw (no shared
    stream, no ordinal dependency beyond that entry's OWN room+identity).
 
-   ROOM_PLACE_DISTRIBUTE (module-level const, default false) is the legacy/oss-style staging flag:
-   OFF keeps every render byte-identical to pre-this-unit (placeDistribute degrades to an identity
-   clone when its caller doesn't even check the flag, and the caller in theater-data.js guards the
-   call on this flag before ever invoking it) — mirrors ROOM_SHELL_POLYGON_KERNEL's legacy/oss
-   staging discipline (src/ui/theater-room-mesh.js's own header note). Flipping it ON in production
-   is explicitly OUT OF SCOPE for this unit (a separate follow-up flip, per the spec). */
+   ROOM_PLACE_DISTRIBUTE is the mutation-testable production gate. KGR-5 flips it on only after its
+   footprint, containment, anchor-immunity, fallback, and determinism fixtures prove the realized
+   path. Turning it off remains a byte-stable diagnostic control at theater-data's call seam. */
 
 // MUTATION-TESTABLE GUARD (dev/verify-place-distribution.mjs check 8 + its RED-FIRST proof):
-// default false = identity/byte-stable production behavior. A follow-up unit flips this once the
-// realization pass has been reviewed live; this unit only builds + proves the pass, never flips it.
-const ROOM_PLACE_DISTRIBUTE = false;
+// Production is enabled by KGR-5; the harness also evaluates an OFF mutation to prove this flag is
+// load-bearing and that canonical anchors remain byte-stable.
+const ROOM_PLACE_DISTRIBUTE = true;
 
 // size-class -> minimum clearance radius, in cell units (spec's own suggested minima). "increased
 // by footprint" per the spec — this data layer has no separate footprint metadata beyond cardKind,
@@ -154,6 +151,91 @@ function pldDist(a, b) {
   return Math.sqrt(dx * dx + dy * dy);
 }
 
+function pldVisualFootprint(entry) {
+  const fp = entry && entry.visualAsset && entry.visualAsset.footprint;
+  if (!fp || !Array.isArray(fp.center) || !Array.isArray(fp.halfExtents) ||
+      fp.center.length !== 2 || fp.halfExtents.length !== 2) return null;
+  const values = fp.center.concat(fp.halfExtents).map(Number);
+  if (!values.every(Number.isFinite) || values[2] <= 0 || values[3] <= 0) return null;
+  const yaw = Number(entry.visualAsset.yawRadians) + (Number(fp.yawRadians) || 0);
+  return { center: values.slice(0, 2), halfExtents: values.slice(2), yawRadians: yaw };
+}
+
+function pldObbFor(entry, x, y) {
+  const fp = pldVisualFootprint(entry);
+  if (!fp) return null;
+  const c = Math.cos(fp.yawRadians), s = Math.sin(fp.yawRadians);
+  return {
+    center: {
+      x: x + fp.center[0] * c - fp.center[1] * s,
+      y: y + fp.center[0] * s + fp.center[1] * c,
+    },
+    halfExtents: fp.halfExtents.slice(),
+    axes: [{ x: c, y: s }, { x: -s, y: c }],
+  };
+}
+
+function pldObbRadiusOnAxis(obb, axis) {
+  return obb.halfExtents[0] * Math.abs(obb.axes[0].x * axis.x + obb.axes[0].y * axis.y) +
+    obb.halfExtents[1] * Math.abs(obb.axes[1].x * axis.x + obb.axes[1].y * axis.y);
+}
+
+function pldObbOverlaps(a, b) {
+  if (!a || !b) return false;
+  const delta = { x: b.center.x - a.center.x, y: b.center.y - a.center.y };
+  return a.axes.concat(b.axes).every((axis) => {
+    const projected = Math.abs(delta.x * axis.x + delta.y * axis.y);
+    return projected < pldObbRadiusOnAxis(a, axis) + pldObbRadiusOnAxis(b, axis) - 1e-9;
+  });
+}
+
+function pldCircleOverlapsObb(circle, obb) {
+  const dx = circle.x - obb.center.x, dy = circle.y - obb.center.y;
+  const lx = dx * obb.axes[0].x + dy * obb.axes[0].y;
+  const ly = dx * obb.axes[1].x + dy * obb.axes[1].y;
+  const cx = Math.max(-obb.halfExtents[0], Math.min(obb.halfExtents[0], lx));
+  const cy = Math.max(-obb.halfExtents[1], Math.min(obb.halfExtents[1], ly));
+  return Math.hypot(lx - cx, ly - cy) < circle.radius - 1e-9;
+}
+
+function pldEntriesOverlap(a, b) {
+  const aObb = pldObbFor(a.entry, a.x, a.y);
+  const bObb = pldObbFor(b.entry, b.x, b.y);
+  if (aObb && bObb) return pldObbOverlaps(aObb, bObb);
+  if (aObb) return pldCircleOverlapsObb({ x: b.x, y: b.y, radius: b.radius }, aObb);
+  if (bObb) return pldCircleOverlapsObb({ x: a.x, y: a.y, radius: a.radius }, bObb);
+  return pldDist(a, b) < a.radius + b.radius;
+}
+
+function pldWallNormalsAt(x, y, plan) {
+  if (!plan || !plan.cells) return [];
+  const out = [];
+  const codeAt = (cx, cy) => (cx < 0 || cy < 0 || cx >= plan.cellW || cy >= plan.cellD)
+    ? null : plan.cells[cy * plan.cellW + cx];
+  if (codeAt(x, y - 1) === SPATIAL_CELL.WALL) out.push({ x: 0, y: -1 });
+  if (codeAt(x, y + 1) === SPATIAL_CELL.WALL) out.push({ x: 0, y: 1 });
+  if (codeAt(x - 1, y) === SPATIAL_CELL.WALL) out.push({ x: -1, y: 0 });
+  if (codeAt(x + 1, y) === SPATIAL_CELL.WALL) out.push({ x: 1, y: 0 });
+  return out;
+}
+
+function pldObbClearsWalls(entry, candidate, cell, plan) {
+  const obb = pldObbFor(entry, candidate.x, candidate.y);
+  if (!obb) return true;
+  return pldWallNormalsAt(cell.x, cell.y, plan).every((normal) => {
+    const wallPlane = { x: cell.x + normal.x * 0.5, y: cell.y + normal.y * 0.5 };
+    const inwardDistance = Math.abs((obb.center.x - wallPlane.x) * normal.x +
+      (obb.center.y - wallPlane.y) * normal.y);
+    return pldObbRadiusOnAxis(obb, normal) <= inwardDistance + 1e-9;
+  });
+}
+
+function pldFallbackOverlapEntry(entry) {
+  return entry && entry.visualAsset ? Object.assign({}, entry, {
+    visualAsset: Object.assign({}, entry.visualAsset, { placementStatus: "fallback-overlap" })
+  }) : entry;
+}
+
 /* placeDistribute(dressedPlan, opts) -> a shallow clone of dressedPlan with a rebuilt `dressing`
    array. `opts`: { walkId, focusSegNum } (focusSegNum is accepted per this unit's theater-data.js
    call-site contract but unused here — every room in dressedPlan.rooms is realized, not only the
@@ -214,7 +296,7 @@ function placeDistribute(dressedPlan, opts) {
       if (!pldIsEligible(item.entry)) return null; // covered by `anchors` already
       const pos = k < ordinal ? nextDressing[item.idx] : item.entry;
       if (!pos || !Number.isFinite(pos.x) || !Number.isFinite(pos.y)) return null;
-      return { x: pos.x, y: pos.y, radius: pldRadiusFor(item.entry.cardKind) };
+      return { entry: item.entry, x: pos.x, y: pos.y, radius: pldRadiusFor(item.entry.cardKind) };
     }
 
     bucket.forEach(({ entry, idx }, ordinal) => {
@@ -224,7 +306,7 @@ function placeDistribute(dressedPlan, opts) {
       }
       if (!legalCells || !legalCells.length) {
         // no room geometry / no legal cells at all -> identity-preserving default: leave at input.
-        nextDressing[idx] = entry;
+        nextDressing[idx] = pldFallbackOverlapEntry(entry);
         return;
       }
 
@@ -239,14 +321,16 @@ function placeDistribute(dressedPlan, opts) {
       // margin — an interior (non-wall-adjacent) cell always qualifies; a wall-adjacent cell only
       // qualifies when the margin is small enough (<=0.42 cell, i.e. it doesn't need to pull more
       // than a small fraction away from the wall face to clear itself).
-      const eligible = legalCells.filter((c) => !c.wallAdjacent || margin <= 0.42);
+      const eligible = pldVisualFootprint(entry)
+        ? legalCells
+        : legalCells.filter((c) => !c.wallAdjacent || margin <= 0.42);
       const candidates = eligible.length ? eligible : legalCells;
       const shuffled = pldShuffle(candidates, rng);
 
       // anchors (canonical focal/setPiece/blocker/wall-hang/light cards) carry their own real
       // footprint too — a repositioned filler must clear an anchor's own cardKind-derived radius,
       // not just its own, or a small filler could land visually inside a large setPiece's footprint.
-      const others = anchors.map((a) => ({ x: a.x, y: a.y, radius: pldRadiusFor(a.cardKind) }));
+      const others = anchors.map((a) => ({ entry: a, x: a.x, y: a.y, radius: pldRadiusFor(a.cardKind) }));
       for (let k = 0; k < bucket.length; k++) {
         if (k === ordinal) continue;
         const o = otherPositionFor(k, ordinal);
@@ -263,7 +347,9 @@ function placeDistribute(dressedPlan, opts) {
         const jx = c.x + (rng() * 2 - 1) * half;
         const jy = c.y + (rng() * 2 - 1) * half;
         const candidatePos = { x: jx, y: jy };
-        const violatesClearance = others.some((o) => pldDist(candidatePos, o) < (radius + o.radius));
+        if (!pldObbClearsWalls(entry, candidatePos, c, dressedPlan)) continue;
+        const candidateBody = { entry, x: candidatePos.x, y: candidatePos.y, radius };
+        const violatesClearance = others.some((o) => pldEntriesOverlap(candidateBody, o));
         if (!violatesClearance) { chosen = candidatePos; break; }
       }
 
@@ -272,20 +358,21 @@ function placeDistribute(dressedPlan, opts) {
         // preserving default: leave this entry at its input position (never invent a worse spot,
         // never drop the card — the spec's own "canonical card stays" reasoning applied to filler:
         // the SAFEST behavior on failure-to-fit is no-op, not a forced overlap).
-        nextDressing[idx] = entry;
+        nextDressing[idx] = pldFallbackOverlapEntry(entry);
         return;
       }
 
-      nextDressing[idx] = Object.assign({}, entry, {
+      const realizedEntry = Object.assign({}, entry, {
         x: chosen.x,
         y: chosen.y,
-        sourceRef: sourceRef,
         realizationIndex: ordinal,
         realizationSeed: seed,
         algorithmVersion: "v1",
         anchor: { x: entry.x, z: entry.y },
         regionKind: legalCells === eligible ? "eroded" : "eroded-fallback-wide",
       });
+      if (entry.visualAsset) realizedEntry.visualAsset = Object.assign({}, entry.visualAsset, { placementStatus: "placed" });
+      nextDressing[idx] = realizedEntry;
     });
   });
 

@@ -1114,11 +1114,7 @@ function extrusionPropFor(entry) {
 // throwing). place-dressing.js already guarantees every wall-hang entry is wall-adjacent
 // (dpAdjacentToWall) — this just names WHICH side, off the same plan.cells grid, never a second guess.
 function itrWallSideAt(x, y, plan) {
-  if (itrCellCodeAt(x, y - 1, plan) === SPATIAL_CELL.WALL) return "n";
-  if (itrCellCodeAt(x, y + 1, plan) === SPATIAL_CELL.WALL) return "s";
-  if (itrCellCodeAt(x - 1, y, plan) === SPATIAL_CELL.WALL) return "w";
-  if (itrCellCodeAt(x + 1, y, plan) === SPATIAL_CELL.WALL) return "e";
-  return null;
+  return typeof kenneyWallSideAt === "function" ? kenneyWallSideAt(x, y, plan) : null;
 }
 
 // ─── BW2-5 FINALE DAIS — "finale rooms get a centered 2-step dais platform... real 0.15-0.25 steps,
@@ -1872,14 +1868,14 @@ function interiorBuildBoard(plan, opts) {
       if (d.primary === "blocker") {
         const kind = itrFurnitureKindFor((plan.seed || "") + ":" + d.roomSegNum + ":" + d.x + "," + d.y + ":" + d.slug);
         furniture.push({ x: d.x, y: d.y, kind, realmId: kit.realmId, slug: d.slug, roomSegNum: d.roomSegNum,
-          renderStrategy: d.renderStrategy || "full-3d-prop" });
+          renderStrategy: d.renderStrategy || "full-3d-prop", visualAsset: d.visualAsset || null });
       } else if (d.primary === "wall-hang") {
         const info = extrusionPropFor(d);
         wallProps.push({
           x: d.x, y: d.y, roomSegNum: d.roomSegNum, slug: d.slug, cardKind: d.cardKind,
           renderStrategy: d.renderStrategy || "extruded-card",
           archetype: info.archetype, depth: info.depth, wallSide: itrWallSideAt(d.x, d.y, plan),
-          paintingOf: d.paintingOf || null,
+          paintingOf: d.paintingOf || null, visualAsset: d.visualAsset || null,
         });
       }
     });

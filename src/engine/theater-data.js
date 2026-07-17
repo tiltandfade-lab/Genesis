@@ -1760,13 +1760,19 @@ function trayFrom(source, scene, opts){
     // ENV-1c: source.clockMin (theaterHereSourceFor's own read) wins over opts.clockMin, mirroring
     // the env/realms precedence immediately above — same additive, null-safe shape.
     const clockMin = source.clockMin != null ? source.clockMin : opts.clockMin;
-    return theaterStageBeat(theaterIdleBoardFrom(env, realms, clockMin), beat, { env: env });
+    const board = theaterStageBeat(theaterIdleBoardFrom(env, realms, clockMin), beat, { env: env });
+    return typeof kenneyRealizePlan === "function" ? kenneyRealizePlan(board, {
+      realmId:Array.isArray(realms) && realms.length ? realms[0] : null
+    }) : board;
   }
   if(source.kind === "node"){
     const env = source.env || opts.env;
     const realms = source.realms || opts.realms;
     const clockMin = source.clockMin != null ? source.clockMin : opts.clockMin;
-    return theaterStageBeat(theaterNodeBoardBuild(source.record, realms, env, clockMin), beat, { env: env });
+    const board = theaterStageBeat(theaterNodeBoardBuild(source.record, realms, env, clockMin), beat, { env: env });
+    return typeof kenneyRealizePlan === "function" ? kenneyRealizePlan(board, {
+      realmId:board.realmId || (Array.isArray(realms) && realms.length ? realms[0] : null)
+    }) : board;
   }
   if(source.kind === "settlement"){
     // ENV-3 (docs/ENV-EXTERIOR-WAVE.md) — the compositional town tray. theaterHereSourceFor
@@ -1774,7 +1780,10 @@ function trayFrom(source, scene, opts){
     // single-site PLACE record — see theaterSettlementBoardBuild's own header for the full routing law.
     const env = source.env || opts.env || "urban";
     const realms = source.realms || opts.realms;
-    return theaterStageBeat(theaterSettlementBoardBuild({ id: source.nodeId, tier: source.tier }, realms, env), beat, { env: env });
+    const board = theaterStageBeat(theaterSettlementBoardBuild({ id: source.nodeId, tier: source.tier }, realms, env), beat, { env: env });
+    return typeof kenneyRealizePlan === "function" ? kenneyRealizePlan(board, {
+      realmId:board.realmId || (Array.isArray(realms) && realms.length ? realms[0] : null)
+    }) : board;
   }
   if(source.kind === "interior" && source.plan && typeof interiorBuildBoard === "function"){
     const env = source.env || opts.env;
@@ -1815,9 +1824,14 @@ function trayFrom(source, scene, opts){
     if(projectedDressing.length){
       dressedPlan = Object.assign({}, dressedPlan, { dressing:(dressedPlan.dressing||[]).concat(projectedDressing) });
     }
+    // KGR-5: resolve replaceable donor metadata only after every noun/card is frozen and before the
+    // placement pass.  The pure realization layer is additive and consumes no global RNG.
+    if(typeof kenneyRealizePlan === "function"){
+      dressedPlan = kenneyRealizePlan(dressedPlan, { realmId:realmId });
+    }
     // PHASE-3-WAVE-1-SPECS.md P3-1a (GP-3a Poisson place-distribution.js) — the frozen seam: nouns/
     // counts/source refs/home rooms/canonical anchors are decided above; ROOM_PLACE_DISTRIBUTE (src/
-    // engine/place-distribution.js, default false) gates a seeded incidental-filler realization pass
+    // engine/place-distribution.js, enabled by KGR-5's fixture gate) controls a seeded incidental-filler realization pass
     // so landing OFF keeps this render byte-identical to pre-this-unit.
     if(typeof placeDistribute === "function" && typeof ROOM_PLACE_DISTRIBUTE !== "undefined" && ROOM_PLACE_DISTRIBUTE){
       dressedPlan = placeDistribute(dressedPlan, {
@@ -1913,7 +1927,10 @@ function trayFrom(source, scene, opts){
     return board;
   }
   const segment = source.kind === "interior" ? source.record : source.segment;
-  return theaterStageBeat(theaterBoardBuild(segment, scene, opts), beat, opts);
+  const board = theaterStageBeat(theaterBoardBuild(segment, scene, opts), beat, opts);
+  return typeof kenneyRealizePlan === "function" ? kenneyRealizePlan(board, {
+    realmId:board.realmId || (Array.isArray(opts.realms) && opts.realms.length ? opts.realms[0] : null)
+  }) : board;
 }
 
 /* theaterBoardFrom is now a ONE-LINE WRAPPER over trayFrom — every existing combat caller

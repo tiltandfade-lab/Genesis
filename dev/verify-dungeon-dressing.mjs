@@ -243,6 +243,9 @@ console.log("\n[6 — PRODUCTION WIRING: trayFrom's {kind:\"interior\"} branch a
     read("src/engine/place-spatialize.js"),
     read("src/engine/place-semantics.js"),
     read("src/engine/place-dressing.js"),
+    read("data/kenney-runtime-registry.js"),
+    read("src/engine/kenney-realization.js"),
+    read("src/engine/place-distribution.js"),
     read("src/ui/theater-interior.js"),
     read("src/engine/theater-data.js"),
     "this.__trayFrom=typeof trayFrom!=='undefined'?trayFrom:undefined;",
@@ -250,13 +253,17 @@ console.log("\n[6 — PRODUCTION WIRING: trayFrom's {kind:\"interior\"} branch a
     "this.__spatializePlan=typeof spatializePlan!=='undefined'?spatializePlan:undefined;",
     "this.__semanticizePlan=typeof semanticizePlan!=='undefined'?semanticizePlan:undefined;",
     "this.__dressPlan=typeof dressPlan!=='undefined'?dressPlan:undefined;",
+    "this.__kenneyRealizePlan=typeof kenneyRealizePlan!=='undefined'?kenneyRealizePlan:undefined;",
+    "this.__placeDistribute=typeof placeDistribute!=='undefined'?placeDistribute:undefined;",
     // CR-1 item 5a — exposed so check 6c can ask theater-interior.js's OWN keepSet formula what
     // it kept, rather than re-deriving a second, possibly-diverging "which room is this" rule
     // (the exact discipline QF-A3's own header comment in theater-data.js insists on).
     "this.__itrActiveRoomKeepSet=typeof itrActiveRoomKeepSet!=='undefined'?itrActiveRoomKeepSet:undefined;",
   ].join("\n");
   vm.runInContext(combined, sandbox, { filename: "dungeon-graph-gr2-wiring.js" });
-  const { __trayFrom: trayFrom, __spatializePlan: spatializePlan, __semanticizePlan: semanticizePlan, __dressPlan: dressPlan, __itrActiveRoomKeepSet: itrActiveRoomKeepSet } = sandbox;
+  const { __trayFrom: trayFrom, __spatializePlan: spatializePlan, __semanticizePlan: semanticizePlan,
+    __dressPlan: dressPlan, __kenneyRealizePlan: kenneyRealizePlan, __placeDistribute: placeDistribute,
+    __itrActiveRoomKeepSet: itrActiveRoomKeepSet } = sandbox;
   ok(typeof trayFrom === "function", "6a-setup. theater-data.js's real trayFrom is loadable alongside theater-interior.js/place-dressing.js");
 
   if (typeof trayFrom === "function") {
@@ -270,6 +277,8 @@ console.log("\n[6 — PRODUCTION WIRING: trayFrom's {kind:\"interior\"} branch a
     ok(!!board, "6a. trayFrom({kind:\"interior\",plan}) returns a board");
     ok(Array.isArray(board && board.dressing), "6b. the returned board carries a `dressing` array field", JSON.stringify(board && board.dressing));
     const directDressed = dressPlan(semPlan, { realmId: "fantasy" });
+    const directRealized = kenneyRealizePlan(directDressed, { realmId: "fantasy" });
+    const directDistributed = placeDistribute(directRealized, { walkId:null, focusSegNum });
     // CR-1 item 5a (2026-07-15 adversarial review): 6c used to assert board.dressing was
     // BYTE-IDENTICAL to the unfiltered dressPlan() output — true before QF-A3 (theater-data.js
     // ~line 1740), false and WRONG to assert after it: QF-A3 deliberately narrows board.dressing
@@ -282,8 +291,8 @@ console.log("\n[6 — PRODUCTION WIRING: trayFrom's {kind:\"interior\"} branch a
     // (imported above), never a second hand-rolled "which room is this" rule.
     ok(typeof itrActiveRoomKeepSet === "function", "6c-setup. theater-interior.js's itrActiveRoomKeepSet is loadable alongside trayFrom");
     const keepSet = typeof itrActiveRoomKeepSet === "function" ? itrActiveRoomKeepSet(semPlan, focusSegNum) : null;
-    const expectedKept = (directDressed.dressing || []).filter((e) => e && (e.roomSegNum == null || (keepSet && keepSet.has(e.roomSegNum))));
-    const otherRoomProps = (directDressed.dressing || []).filter((e) => e && e.roomSegNum != null && !(keepSet && keepSet.has(e.roomSegNum)));
+    const expectedKept = (directDistributed.dressing || []).filter((e) => e && (e.roomSegNum == null || (keepSet && keepSet.has(e.roomSegNum))));
+    const otherRoomProps = (directDistributed.dressing || []).filter((e) => e && e.roomSegNum != null && !(keepSet && keepSet.has(e.roomSegNum)));
     ok(otherRoomProps.length > 0,
       "6c-setup. discriminating: the Hub fixture's direct (unfiltered) dressing actually spans MULTIPLE rooms (otherwise 6c below would pass vacuously)",
       `directDressed.dressing roomSegNums: ${JSON.stringify((directDressed.dressing || []).map((e) => e.roomSegNum))}`);
@@ -295,6 +304,10 @@ console.log("\n[6 — PRODUCTION WIRING: trayFrom's {kind:\"interior\"} branch a
       "6c-b. every OTHER room's prop (present in the direct unfiltered call) is ABSENT from board.dressing — no off-screen-room prop leaks onto stage",
       JSON.stringify(leakedOtherRoomProps));
     ok((board && board.dressing || []).length > 0, "6d. discriminating: the dressing array is actually non-empty for this fixture (a Hub with real rooms), not a vacuous pass");
+    const realizedAssets = (board && board.dressing || []).filter((e) => e && e.visualAsset);
+    ok(realizedAssets.length > 0, "6d2. production dressing carries at least one KGR-5 visualAsset from an already-present noun");
+    ok(realizedAssets.every((e) => e.visualAsset.registryHash && e.visualAsset.placementStatus),
+      "6d3. every realized donor carries registry provenance and a placement result");
 
     // MUTATION: prove 6b/6c are load-bearing, not vacuous — reload with the PRE-FIX trayFrom body
     // (interior branch calling interiorBuildBoard directly, no dressPlan) and confirm board.dressing
@@ -314,6 +327,7 @@ console.log("\n[6 — PRODUCTION WIRING: trayFrom's {kind:\"interior\"} branch a
     vm.createContext(sandbox2);
     vm.runInContext([
       read("src/engine/place-spatialize.js"), read("src/engine/place-semantics.js"), read("src/engine/place-dressing.js"),
+      read("data/kenney-runtime-registry.js"), read("src/engine/kenney-realization.js"), read("src/engine/place-distribution.js"),
       read("src/ui/theater-interior.js"), preFixTheaterData,
       "this.__trayFrom=typeof trayFrom!=='undefined'?trayFrom:undefined;",
     ].join("\n"), sandbox2, { filename: "dungeon-graph-gr2-wiring-prefix.js" });
@@ -432,7 +446,7 @@ async function runRenderCheck() {
       await sleep(150);
     }
 
-    const result = await page.evaluate(() => {
+    const cold = await page.evaluate(() => {
       const el = document.createElement("div");
       el.style.width = "800px"; el.style.height = "600px";
       document.body.appendChild(el);
@@ -447,26 +461,44 @@ async function runRenderCheck() {
       }));
       const plan = spatializePlan(fixture, "The Spine", { walkId: "gr2-render-check" });
       const semPlan = semanticizePlan(plan, fixture, []);
-      const board = interiorBuildBoard(semPlan, { realmId: "gloom" });
-      const dressed = dressPlan(semPlan, { realmId: "gloom", walkId: "gr2-render-check" });
-      board.dressing = dressed.dressing;
+      const board = trayFrom({ kind:"interior", plan:semPlan, focusSegNum:semPlan.rooms[0].segNum,
+        radius:1, env:"dungeon", realms:["fantasy"], walkId:"gr2-render-check" }, null, {});
 
       window.Theater.setInteriorBoard(board);
       const count = window.Theater.interiorDressingCount();
       const positions = window.Theater.interiorDressingWorldPositions();
+      const contactLayerCount = window.Theater.interiorDressingContactLayerCount();
       const origin = window.Theater.interiorBoardOrigin();
-      return { ok: true, requested: dressed.dressing.length, count, positions, origin, sourceEntries: dressed.dressing };
+      return { ok: true, requested: board.dressing.length,
+        directRequested:board.dressing.filter((d)=>d.primary!=="blocker"&&d.primary!=="wall-hang").length,
+        count, positions, contactLayerCount, origin, sourceEntries: board.dressing };
     });
+
+    if(cold.ok && cold.sourceEntries.some((e)=>e.visualAsset && e.visualAsset.placementStatus!=="fallback-overlap")){
+      await page.waitForFunction(() => window.Theater.interiorDressingWorldPositions().some((p)=>p.kenneyAsset),
+        { timeout:10000 });
+    }
+    const warmPositions = cold.ok ? await page.evaluate(() => window.Theater.interiorDressingWorldPositions()) : [];
+    const result = Object.assign({}, cold, { positions:warmPositions });
 
     ok(result.ok, "boot + mount + setInteriorBoard succeeded: " + JSON.stringify(result.stage || result));
     if (result.ok) {
       ok(result.requested > 0, `dressPlan produced dressing entries for the render-check fixture (${result.requested})`);
       ok(result.count === result.requested, `interiorDressingCount (${result.count}) === plan.dressing entries requested (${result.requested}) — none silently skipped`);
-      ok(Array.isArray(result.positions) && result.positions.length === result.requested, `interiorDressingWorldPositions returned one entry per mounted card (${result.positions.length})`);
+      ok(Array.isArray(result.positions) && result.positions.length === result.directRequested,
+        `interiorDressingWorldPositions returned one entry per direct dressing mount (${result.positions.length}; blocker/wall-hang use sibling channels)`);
+      ok(result.contactLayerCount === 1,
+        `interior dressing retains exactly one identity-tagged legacy contact layer (${result.contactLayerCount})`);
+      if(result.positions.length !== result.directRequested) console.error("  mount diagnostic: " + JSON.stringify({
+        direct:result.sourceEntries.filter((d)=>d.primary!=="blocker"&&d.primary!=="wall-hang").map((d)=>({slug:d.slug,primary:d.primary,visualAsset:d.visualAsset&&d.visualAsset.assetId,status:d.visualAsset&&d.visualAsset.placementStatus})),
+        mounted:result.positions
+      }));
+      ok(result.sourceEntries.some((e)=>e.visualAsset), "production fixture carries at least one realized Kenney visualAsset");
+      ok(result.positions.some((p)=>p.kenneyAsset), "successful async donor arrival replays the board and replaces a legacy card");
       ok(result.origin && typeof result.origin.cx === "number" && typeof result.origin.cz === "number", "interiorBoardOrigin exposed {cx,cz}");
       if (result.origin && result.positions.length && result.sourceEntries.length) {
-        const [cell] = result.sourceEntries;
-        const [pos] = result.positions;
+        const pos = result.positions[0];
+        const cell = result.sourceEntries.find((e)=>e.slug===pos.slug);
         const expectedX = cell.x - result.origin.cx;
         const expectedZ = cell.y - result.origin.cz;
         ok(Math.abs(pos.x - expectedX) < 1e-9, `first card world.x (${pos.x}) === cell.x - boardOrigin.cx (${expectedX})`);

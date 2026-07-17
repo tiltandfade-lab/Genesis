@@ -6,11 +6,10 @@
 
    Checks:
      1. COMBAT BYTE-GATE (STEP ZERO — the load-bearing check of the whole unit): theaterBoardFrom
-        (segment,scene,opts) over the fixture segment+scene in dev/fixtures/tabletop-u1-board.json
-        deep-equals the frozen pre-refactor snapshot. Byte-identical -> the trayFrom extraction never
-        altered combat's existing board shape. A bonus MUTATION (shown RED then restored) proves the
-        gate itself isn't vacuous: routing theaterBoardFrom's wrapper through {kind:"idle"} instead of
-        {kind:"segment"} flips this check red.
+        (segment,scene,opts) over the fixture segment+scene in dev/fixtures/tabletop-u1-board.json,
+        after omitting exactly KGR-5's derived `visualAsset` metadata, deep-equals the frozen
+        pre-refactor snapshot. The fixture stays frozen. Mutation controls prove canonical changes
+        and every other added/removed field still flip the gate red.
      2. trayFrom({kind:"segment",segment},scene,opts) === theaterBoardFrom(segment,scene,opts) (the
         wrapper IS trayFrom under the hood, not a parallel implementation).
      3. trayFrom({kind:"idle",env,realms}) — empty tiles/props, light from a seeded roll, renderProfile
@@ -84,15 +83,45 @@ const check = (name, cond, detail = "") =>
 const fixtureFile = JSON.parse(read("dev/fixtures/tabletop-u1-board.json"));
 const { FIXTURE_SEGMENT, FIXTURE_SCENE, FIXTURE_OPTS, board: FROZEN_BOARD } = fixtureFile;
 
+// KGR-5's runtime realization metadata is explicitly derived/non-persisted. Keep the legacy snapshot
+// frozen and normalize away ONLY that one named key; all canonical and other derived bytes remain in
+// the comparison. Recursive handling prevents a future visualAsset carrier from requiring a broader
+// exception while the mutation checks below prove this is not a general "ignore additions" filter.
+function withoutVisualAsset(value) {
+  if (Array.isArray(value)) return value.map(withoutVisualAsset);
+  if (!value || typeof value !== "object") return value;
+  const out = {};
+  Object.keys(value).forEach((key) => {
+    if (key !== "visualAsset") out[key] = withoutVisualAsset(value[key]);
+  });
+  return out;
+}
+
+function visualAssetKeyCount(value) {
+  if (Array.isArray(value)) return value.reduce((sum, item) => sum + visualAssetKeyCount(item), 0);
+  if (!value || typeof value !== "object") return 0;
+  return Object.keys(value).reduce((sum, key) => sum + (key === "visualAsset" ? 1 : visualAssetKeyCount(value[key])), 0);
+}
+
 // ============================================================================
 // 1. COMBAT BYTE-GATE — STEP ZERO, the load-bearing check
 // ============================================================================
 {
   const win = freshWin();
   const board = win.theaterBoardFrom(FIXTURE_SEGMENT, FIXTURE_SCENE, FIXTURE_OPTS);
-  const same = JSON.stringify(board) === JSON.stringify(FROZEN_BOARD);
-  check("1a. theaterBoardFrom(fixture) is BYTE-IDENTICAL to the frozen pre-refactor snapshot",
+  const same = JSON.stringify(withoutVisualAsset(board)) === JSON.stringify(FROZEN_BOARD);
+  check("1a. theaterBoardFrom(fixture), omitting only derived visualAsset, is BYTE-IDENTICAL to the frozen pre-refactor snapshot",
     same, same ? "" : JSON.stringify(board).slice(0, 300));
+  check("1a-guard. fixture exercises KGR-5 additive visualAsset (the exception is not vacuous)",
+    visualAssetKeyCount(board) > 0, `visualAsset keys=${visualAssetKeyCount(board)}`);
+  const canonicalMutation = JSON.parse(JSON.stringify(board));
+  canonicalMutation.props[0].x += 1;
+  check("1a-mutation. a canonical position change still makes the normalized byte gate RED",
+    JSON.stringify(withoutVisualAsset(canonicalMutation)) !== JSON.stringify(FROZEN_BOARD));
+  const otherDerivedMutation = JSON.parse(JSON.stringify(board));
+  otherDerivedMutation.props[0].unexpectedDerivedProbe = true;
+  check("1a-mutation. an unrelated derived addition still makes the normalized byte gate RED",
+    JSON.stringify(withoutVisualAsset(otherDerivedMutation)) !== JSON.stringify(FROZEN_BOARD));
   check("1b. the fixture actually exercises tiles/props/hazard/elevation/realm (non-trivial gate)",
     board.tiles.length > 0 && board.props.length > 0 && board.realmId, JSON.stringify({ tiles: board.tiles.length, props: board.props.length, realmId: board.realmId }));
 

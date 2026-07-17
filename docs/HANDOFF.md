@@ -17,7 +17,32 @@ reach the visual target. Read it before this handoff's historical graphics queue
 For any sprite/pixel-art generation or review work specifically, `docs/ART-DEPARTMENT.md` is the
 pixel register's canonical home — live-corpus state, the style law index, and the regen runbooks.
 
-## ⭐ Latest (2026-07-17, evening) — ADAM'S SHELL RULINGS: the prism shell is condemned; doors are just doors [Adam + Claude Fable 5]
+## ⭐ Latest (2026-07-17, night) — NIGHT RULINGS RECORDED; CLAY ROOM IS THE PROVING GROUND; 11 follow-ups await Adam [Adam + Claude Fable 5]
+
+Adam answered the KGR-8 fork questions (verbatim: ART-DIRECTION-CANON.md "NIGHT RULINGS"; digest:
+DESIGN.md 2026-07-17 night). The big ones: **THE PROTOTYPE-PROOF LAW** (no systemwide change
+without an approved test card — "never never never again"; the 5×5 clay room is the standing
+proving ground), **fixed camera** (not changing; rooms compose around it), **characters become
+composed-angle smooth-contour extrusions** (mirrored back interim), **room sizes quantize to the
+kit grammar**, short sealed connectors first, outward walls + faint floor grid + open tops,
+Kenney-beats-sprites, wall-relief feature nouns, varied-size floor decals, **normal maps YES**
+(revive MATERIAL-IDENTITY.md's Sobel path as a test card — its Stage-E re-scope is the canonical
+mega-pass failure). `KGR8-CODEX-ASSESSMENT.md` is ADOPTED (architecture-plan IR · macro-first
+recipes · no prism fallback in acceptance · clay/grid/production/whole-walk gates · correlated
+variation · 8A–8G split · clay go/no-go). Adam is primary art director; Codex is his
+technical-assessment assistant.
+
+**NEXT SESSION OPENS by presenting `docs/KGR8-OPEN-QUESTIONS.md` to Adam VERBATIM** — his own
+request: re-prompt him with that exact response (Ivory Pit explained, corridor pick, palette
+roller truth, sprite-light archaeology, then 11 follow-up questions on the proving-room card set,
+fixed-camera specifics, grid behavior, decal size/rotation/overlap, character mirroring and
+composed-angle ownership, normal-map scope). Record his answers per the decision-capture rule,
+THEN build the first clay card: one kit-built 5×5 room, one 5ft door, clay grey, current camera —
+in Genesis-kgr4c on a unit branch off integration `2e51e7f5`, landed with --no-ff on
+`integration/kenney-graphics-repair`, NEVER master. All file links to Adam are ABSOLUTE under
+/Volumes/Genesis/.
+
+## Latest (2026-07-17, evening) — ADAM'S SHELL RULINGS: the prism shell is condemned; doors are just doors [Adam + Claude Fable 5]
 
 Adam read the KGR-7 frames and named the real blocker: the any-polygon room system and the
 square-module Kenney kit are incompatible, and every unit had served both. Four rulings (DESIGN.md

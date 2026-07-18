@@ -1,0 +1,62 @@
+---
+type: system-spec
+project: Genesis
+status: SPECCED — build AFTER the come-home migration (first new-home unit); the door workbench (in flight) becomes page one
+created: 2026-07-17 (night)
+consumer: Adam (the portal's only user) + the rigs/engine that consume its lock files
+depends_on: door workbench (feat/kgr8-door-workbench), sprite-review.py, the parked LIGHT-LAB, DESIGN.md 2026-07-17 rulings
+---
+
+# THE DEV PORTAL — one launcher, every editor
+
+Adam's order (2026-07-17, verbatim): "really there should be a dev portal that allows me to use
+any editors we create, a launcher for that single dev portal is acceptable, that allows me to
+edit lighting settings per lighting object, my sprite sizes, horizontal and vertical alignment,
+the 3d workbench which allows me to adjust the alignment settings of specific objects that i
+request to be tweaked"
+
+## The unifying contract (what makes it a portal, not a pile of pages)
+
+1. **One launcher** in Adam's launcher folder → starts one server → opens one home page listing
+   every editor. No per-tool launchers ever again (the LIGHT-LAB launcher stranded on the
+   Desktop is the anti-pattern).
+2. **Every editor renders the REAL engine** (the door-workbench boot path), never a mock.
+3. **Every editor ends in SAVE**, and SAVE writes a named, committed **lock file** (the
+   door-mount-lock.json pattern): locks are data consumed by rigs + production, never hand-edits
+   to engine code. A lock file IS a test-card constant — the prototype-proof law's approval
+   artifact. Systemwide application of a lock stays gated on Adam's read of its card.
+4. **Fixture picker on every page**: the 5×5 clay room, the Ivory Pit, or any saved world state
+   (the workbench save API / --restore already does this).
+
+## Pages v1 (build order)
+
+1. **Object-Alignment Workbench** — the door workbench generalized: select any staged object
+   (click-pick or a request list Adam names), nudge position/rotation/scale RELATIVE TO ITS
+   ANCHOR (wall plane, floor cell, socket, ceiling), arrow-key fine steps, live numbers; SAVE
+   writes a per-object-class mount lock. "Specific objects that i request to be tweaked" —
+   the request list is the queue.
+2. **Sprite Editor** — the existing sprite-review (5179) embedded/linked as a portal page:
+   sprite sizes (feet), floor line, horizontal + vertical alignment, legacy-vs-faceted compare.
+   Its registry-write discipline is unchanged (regenerate, never hand-edit).
+3. **Lighting Lab** — revive the parked LIGHT-LAB as a page: per-light-object settings
+   (intensity, color, range, height, falloff) on real fixtures in the fixture room; the LL-1b
+   "2 lab tunables live-replay" rides this. SAVE writes per-fixture-class light locks.
+
+## Candidate pages v2 (Claude's "anything else" — each awaits Adam's yes)
+
+- **Time-of-day scrubber** — scrub the in-world clock; edit the CELESTIAL_ARC keyframes and
+  daylit soft-shadow table live (Adam's standing red-pen items from 2026-07-15).
+- **Decal Lab** — preview decal nouns at rolled size bands with free rotation/overlap (the
+  2026-07-17 decal rulings); dial each noun's band; SAVE writes the size-band table.
+- **Material/Normal-Map Tuner** — the Sobel-strength sliders per surface class (walls/floors,
+  props, characters) that generate the ordered normal-map taste cards.
+- **Shot Tuner** — the named compose/occlusion consts (ITR_OCCLUSION_UPPER_OPACITY,
+  STEM_HEIGHT_U, framing targets) as sliders. Camera PITCH stays frozen (28°, law).
+- **Provenance Inspector** — click any staged object → its chain: walk fact → table roll →
+  realized asset (read-only; the anti-drift boundary made visible).
+
+## Non-negotiables
+
+- Portal pages NEVER mutate production source; they write lock files and tables.
+- The worktree law and prototype-proof law apply to portal-driven changes like any other.
+- Build at the NEW repo home (post-migration); single server, zero new npm deps if possible.

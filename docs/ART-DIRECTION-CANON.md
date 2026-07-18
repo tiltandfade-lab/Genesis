@@ -309,3 +309,14 @@ Characters:
 > "yes mirrored sprite is fine with the interim jank"
 
 > "characters should rotate to interact with whover and whatever they are interacting with"
+
+## THE CLAY GATE RULING (Adam, 2026-07-17 — his read of clay card 01, the first prototype-proof gate)
+
+> "it actually looks pretty good now, that's a go. of course it's going to need some texture i
+> ike the rubble chips, though placement should be offered as part of a taste card"
+
+(Digest: clay card 01 shell = **GO** — the all-Kenney kit shell reads constructed on purpose at
+clay stage; texture expected later, clay is form-only by design. **Rubble chips KEEP** — the
+kit's authored base rubble stays; its PLACEMENT gets its own taste card in the queue. The door
+leaf fix — wall-plane-relative mounting — proceeds regardless; it failed the orchestrator read,
+not Adam's.)

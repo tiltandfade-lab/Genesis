@@ -5,7 +5,9 @@ Everything else is held identical: yaw 45°, orbit distance
 24.9557 (the production interior fit + the recorded 3-step zoom-out),
 orbit center [0, 0, 0], perspective FOV 20.
 Pitch is burned into each frame's corner label. Adam names a winner; that pitch freezes as the
-production camera constant (today: CAM_ELEV_DEG = 35 in src/ui/theater-boot.js — cam-b).
+production camera constant. **DECIDED: 28° — frozen.** (History: CAM_ELEV_DEG was 35 — cam-b —
+when this card was shot; the battlefield tiebreaker below decided 28, and the graduation landed.
+See "The graduation" at the bottom.)
 
 | frame | pitch | read | yaw | distance | camera position |
 | --- | --- | --- | --- | --- | --- |
@@ -52,3 +54,17 @@ Contact sheet: `battlefield-taste-card.png` (3-up, 22/25/28 left to right).
 Re-run: `node dev/battle-gate/capture-kgr8-clay-room.mjs --mode battlefield`, then compose the
 sheet: PIL — open the three frames, downscale ×0.5, paste side-by-side with an 8 px divider.
 Adam's pick freezes as the production `CAM_ELEV_DEG`.
+
+## The graduation (card 04 unit 3 — LANDED)
+
+Adam's pick: **28°** ("at 22° a piece behind cover vanishes; at 28° every piece reads" —
+DESIGN.md 2026-07-17 "THE CAMERA IS FROZEN AT 28°"). The approved single-constant swap landed:
+`CAM_ELEV_DEG` 35→28 in `src/ui/theater-boot.js` — no other camera surgery; this taste card +
+the battlefield tiebreaker ARE the prototype-proof approval trail.
+
+Verification (`--mode verify28`): the clay room re-shot through the pure production camera path,
+NO pitch override anywhere — `production-28-verify.png`. Recovered from the live camera's world
+direction: **pitch 28.000, yaw 45.000, FOV 20** (`production-28-verify-diagnosis.json`,
+`cameraVerify`). Note the production fit at 28° chooses its own orbit distance (camera pos
+[14.4723, 10.8825, 14.4723], dist ≈ 23.18) — the taste/tiebreaker frames held the 35°-fit
+distance 24.9557 with a pitch override, so the verify frame is the first TRUE native-28 framing.

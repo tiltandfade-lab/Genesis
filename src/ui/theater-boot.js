@@ -206,7 +206,7 @@ const WORLD_PSX_ENABLED = false;   // RULED (VERDICT-SEAT, 2026-07-10 night): wo
 const INTERIOR_CAM_MODE = "persp"; // 'ortho' | 'persp' — RULED (VERDICT-SEAT, 2026-07-10 night): ~20deg perspective ON
 const INTERIOR_CAM_FOV_DEG = 20;   // GRAPHICS-ENGINE law 2b: "gentle perspective ~20° FOV"
 
-const CAM_ELEV_DEG = 35;
+const CAM_ELEV_DEG = 28; // FROZEN (Adam, 2026-07-17 battlefield taste card — DESIGN.md "THE CAMERA IS FROZEN AT 28°"): was 35; 28 won the 22/25/28 clay-proxy tiebreaker (every piece reads). The single-constant swap IS the approved graduation — no other camera surgery.
 // G9 camera-yaw fix (docs/PRE-PLAYTEST-GAUNTLET.md §10b): the board's tile columns are plain
 // axis-aligned boxes (setBoard's BoxGeometry, world X/Z grid) — an isometric/dimetric read is ENTIRELY
 // a function of the camera sitting OFF that grid's axes. A yaw of exactly rotationStep*90° (the old

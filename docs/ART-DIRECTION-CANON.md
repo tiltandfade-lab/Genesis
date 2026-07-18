@@ -320,3 +320,25 @@ clay stage; texture expected later, clay is form-only by design. **Rubble chips 
 kit's authored base rubble stays; its PLACEMENT gets its own taste card in the queue. The door
 leaf fix — wall-plane-relative mounting — proceeds regardless; it failed the orchestrator read,
 not Adam's.)
+
+## THE DOOR REJECTION + THE CAMERA LEAN (Adam, 2026-07-17 — his read of clay card 02)
+
+The door (clay-01b-doorfix.png), REJECTED:
+
+> "the door is not fixed, there's still a gap, it doesn't sit aligned with the walls"
+
+(Scar recorded: the orchestrator had passed this card after rationalizing the remaining dark
+line as "the jamb's real reveal geometry in shade." **If Adam reads a gap, it IS a gap** — no
+geometric explanation converts a bad read into a good one. Prime suspect for the misalignment:
+the leaf was made coplanar with the wall SLAB, but the kit wall's face details protrude ~0.27
+past the slab, so the visible wall face sits proud of the leaf. Iterating in the sandbox.)
+
+The camera (camera-taste-card.png):
+
+> "i honestly like the 22 degree angle, but maybe 28 degrees is the safer bet for more
+> battlefield vision"
+
+(Not yet frozen. The tiebreaker is empirical: a battlefield-vision card — the same clay room
+with ~6 clay proxy pieces on the grid, shot at 22°/25°/28° — so the "can I read the
+battlefield" question is answered by looking, not guessing. His pick then freezes as the one
+camera constant.)

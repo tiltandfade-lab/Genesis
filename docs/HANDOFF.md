@@ -46,6 +46,17 @@ order: **camera angle** (pitch options, one decision, frozen) → grid applicati
 placement → normal-map three-ways (walls/floors, props, characters) → decal size/rotation/
 overlap → composed-angle characters. All links to Adam ABSOLUTE under /Volumes/Genesis/.
 
+**UPDATE (same day, card 02 read):** camera taste card delivered (50/35/28/22, integration
+`19f993a8`) — Adam leans 22° but suspects 28° for battlefield vision; the **battlefield
+tiebreaker card** (22/25/28 with clay proxy pieces) is in flight along with the **door
+re-fix** (Adam REJECTED clay-01b: "still a gap, it doesn't sit aligned with the walls" — see
+ART-DIRECTION-CANON.md "DOOR REJECTION"; leaf must align to the VISIBLE wall face, not the
+slab). **Two standing infra rulings (DESIGN.md 2026-07-17):** THE WORKTREE LAW — at most 1–2
+active worktrees; and THE COME-HOME DIRECTIVE — migrate the repo back to the internal SSD via
+docs/GIT-LFS-MIGRATION.md (READY; Adam's two confirm gates: the $5 GitHub LFS data pack +
+the force-push; runbook preconditions already require the worktree prune, so both rulings
+execute as one operation at a quiet moment — NOT mid-wave).
+
 ## Prior (2026-07-17, night) — NIGHT RULINGS RECORDED; CLAY ROOM IS THE PROVING GROUND; 11 follow-ups were answered above [Adam + Claude Fable 5]
 
 Adam answered the KGR-8 fork questions (verbatim: ART-DIRECTION-CANON.md "NIGHT RULINGS"; digest:

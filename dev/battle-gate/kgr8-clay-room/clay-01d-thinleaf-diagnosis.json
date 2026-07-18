@@ -1,0 +1,2382 @@
+{
+  "mode": "card",
+  "corner": "post",
+  "notes": [],
+  "boot": {
+    "ok": true,
+    "notes": [
+      "startSession() called"
+    ],
+    "worldId": "mrpqrp0d5pu48",
+    "worldName": "The Ash-Plaza"
+  },
+  "strippedMeta": {
+    "prismFloor": 26,
+    "prismWall": 25,
+    "prismDoorframe": 0,
+    "prismPillar": 0,
+    "portals": 1
+  },
+  "focusRect": {
+    "minX": 1,
+    "maxX": 5,
+    "minZ": 1,
+    "maxZ": 5
+  },
+  "mount": {
+    "ok": true,
+    "meshKinds": [
+      "skirt",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "origin": {
+      "cx": 3,
+      "cz": 3
+    }
+  },
+  "kit": {
+    "corner": "post",
+    "placed": 24,
+    "parapetCut": 8,
+    "manifest": [
+      {
+        "module": "kenney-modular-dungeon-kit/template-floor",
+        "role": "floor",
+        "x": 1.5,
+        "z": 1.5,
+        "rotY": 0,
+        "scaleY": 1
+      },
+      {
+        "module": "kenney-modular-dungeon-kit/template-floor",
+        "role": "floor",
+        "x": 1.5,
+        "z": 3.5,
+        "rotY": 0,
+        "scaleY": 1
+      },
+      {
+        "module": "kenney-modular-dungeon-kit/template-floor",
+        "role": "floor",
+        "x": 1.5,
+        "z": 4.5,
+        "rotY": 0,
+        "scaleY": 1
+      },
+      {
+        "module": "kenney-modular-dungeon-kit/template-floor",
+        "role": "floor",
+        "x": 3.5,
+        "z": 1.5,
+        "rotY": 0,
+        "scaleY": 1
+      },
+      {
+        "module": "kenney-modular-dungeon-kit/template-floor",
+        "role": "floor",
+        "x": 3.5,
+        "z": 3.5,
+        "rotY": 0,
+        "scaleY": 1
+      },
+      {
+        "module": "kenney-modular-dungeon-kit/template-floor",
+        "role": "floor",
+        "x": 3.5,
+        "z": 4.5,
+        "rotY": 0,
+        "scaleY": 1
+      },
+      {
+        "module": "kenney-modular-dungeon-kit/template-floor",
+        "role": "floor",
+        "x": 4.5,
+        "z": 1.5,
+        "rotY": 0,
+        "scaleY": 1
+      },
+      {
+        "module": "kenney-modular-dungeon-kit/template-floor",
+        "role": "floor",
+        "x": 4.5,
+        "z": 3.5,
+        "rotY": 0,
+        "scaleY": 1
+      },
+      {
+        "module": "kenney-modular-dungeon-kit/template-floor",
+        "role": "floor",
+        "x": 4.5,
+        "z": 4.5,
+        "rotY": 0,
+        "scaleY": 1
+      },
+      {
+        "module": "kenney-modular-dungeon-kit/template-wall",
+        "role": "wall-n",
+        "x": 1.5,
+        "z": 0.5,
+        "rotY": 0,
+        "scaleY": 1.1566265060240963
+      },
+      {
+        "module": "kenney-modular-dungeon-kit/template-wall",
+        "role": "wall-n",
+        "x": 4.5,
+        "z": 0.5,
+        "rotY": 0,
+        "scaleY": 1.1566265060240963
+      },
+      {
+        "module": "kenney-modular-dungeon-kit/template-wall",
+        "role": "wall-s",
+        "x": 1.5,
+        "z": 5.5,
+        "rotY": 3.141592653589793,
+        "scaleY": 1.1566265060240963
+      },
+      {
+        "module": "kenney-modular-dungeon-kit/template-wall-half",
+        "role": "wall-s",
+        "x": 3,
+        "z": 5.5,
+        "rotY": 3.141592653589793,
+        "scaleY": 1.1566265060240963
+      },
+      {
+        "module": "kenney-modular-dungeon-kit/template-wall",
+        "role": "wall-s",
+        "x": 4.5,
+        "z": 5.5,
+        "rotY": 3.141592653589793,
+        "scaleY": 1.1566265060240963
+      },
+      {
+        "module": "kenney-modular-dungeon-kit/template-wall",
+        "role": "wall-w",
+        "x": 0.5,
+        "z": 1.5,
+        "rotY": 1.5707963267948966,
+        "scaleY": 1.1566265060240963
+      },
+      {
+        "module": "kenney-modular-dungeon-kit/template-wall-half",
+        "role": "wall-w",
+        "x": 0.5,
+        "z": 3,
+        "rotY": 1.5707963267948966,
+        "scaleY": 1.1566265060240963
+      },
+      {
+        "module": "kenney-modular-dungeon-kit/template-wall",
+        "role": "wall-w",
+        "x": 0.5,
+        "z": 4.5,
+        "rotY": 1.5707963267948966,
+        "scaleY": 1.1566265060240963
+      },
+      {
+        "module": "kenney-modular-dungeon-kit/template-wall",
+        "role": "wall-e",
+        "x": 5.5,
+        "z": 1.5,
+        "rotY": -1.5707963267948966,
+        "scaleY": 1.1566265060240963
+      },
+      {
+        "module": "kenney-modular-dungeon-kit/template-wall-half",
+        "role": "wall-e",
+        "x": 5.5,
+        "z": 3,
+        "rotY": -1.5707963267948966,
+        "scaleY": 1.1566265060240963
+      },
+      {
+        "module": "kenney-modular-dungeon-kit/template-wall",
+        "role": "wall-e",
+        "x": 5.5,
+        "z": 4.5,
+        "rotY": -1.5707963267948966,
+        "scaleY": 1.1566265060240963
+      },
+      {
+        "module": "kenney-modular-dungeon-kit/template-wall-corner",
+        "role": "corner-nw",
+        "x": 0.5,
+        "z": 0.5,
+        "rotY": 0,
+        "scaleY": 1.1851851851851851
+      },
+      {
+        "module": "kenney-modular-dungeon-kit/template-wall-corner",
+        "role": "corner-ne",
+        "x": 5.5,
+        "z": 0.5,
+        "rotY": -1.5707963267948966,
+        "scaleY": 1.1851851851851851
+      },
+      {
+        "module": "kenney-modular-dungeon-kit/template-wall-corner",
+        "role": "corner-se",
+        "x": 5.5,
+        "z": 5.5,
+        "rotY": 3.141592653589793,
+        "scaleY": 1.1851851851851851
+      },
+      {
+        "module": "kenney-modular-dungeon-kit/template-wall-corner",
+        "role": "corner-sw",
+        "x": 0.5,
+        "z": 5.5,
+        "rotY": 1.5707963267948966,
+        "scaleY": 1.1851851851851851
+      }
+    ]
+  },
+  "leafShift": {
+    "ok": true,
+    "facePlane": -2.5,
+    "visibleFace": -2.2273,
+    "detailProtrusion": 0.2727,
+    "wallTop": 1.9,
+    "wallThickness": 0.4984,
+    "slabDepth": 0.4984,
+    "slabCenterZ": -2.7492,
+    "leafDepth": 0.2492,
+    "depthFrac": 0.5,
+    "revealDepth": 0.3973,
+    "floorTop": -0.3,
+    "aperture": [
+      -0.5,
+      0.5
+    ],
+    "overlapW": 0.15,
+    "applied": {
+      "dx": 0,
+      "dy": 0,
+      "dz": 0.2508,
+      "scaleX": 1.4444,
+      "scaleY": 1.1579,
+      "scaleZ": 0.7787
+    },
+    "leafBox": {
+      "min": [
+        -0.65,
+        -0.3,
+        -2.874
+      ],
+      "max": [
+        0.65,
+        1.9,
+        -2.625
+      ]
+    },
+    "apertureFill": [
+      {
+        "name": "sill",
+        "box": [
+          -0.56,
+          -0.5,
+          -2.9984,
+          0.56,
+          -0.3008,
+          -2.45
+        ]
+      },
+      {
+        "name": "plug",
+        "box": [
+          -0.56,
+          -0.35,
+          -2.9984,
+          0.56,
+          1.899,
+          -2.8538
+        ]
+      },
+      {
+        "name": "revealL",
+        "box": [
+          -0.56,
+          -0.35,
+          -2.9984,
+          -0.47,
+          1.899,
+          -2.2303
+        ]
+      },
+      {
+        "name": "revealR",
+        "box": [
+          0.47,
+          -0.35,
+          -2.9984,
+          0.56,
+          1.899,
+          -2.2303
+        ]
+      }
+    ]
+  },
+  "clay": {
+    "ok": true,
+    "clayed": 29,
+    "portalsKept": 0,
+    "pointsRemoved": 1,
+    "voidDarkened": 0,
+    "voidOutside": []
+  },
+  "zoom": {
+    "steps": 3,
+    "level": 1.953125
+  },
+  "clayReassert": {
+    "ok": true,
+    "clayed": 29,
+    "portalsKept": 0,
+    "pointsRemoved": 0,
+    "voidDarkened": 0,
+    "voidOutside": []
+  },
+  "inventory": [
+    {
+      "depth": 0,
+      "path": "interiorGroup[0]",
+      "type": "Mesh",
+      "name": null,
+      "kind": "skirt",
+      "userDataKeys": [
+        "interiorKind"
+      ],
+      "meshes": 1,
+      "instances": 24,
+      "box": {
+        "min": [
+          -3.5,
+          -0.9,
+          -3.5
+        ],
+        "max": [
+          3.5,
+          -0.5,
+          3.5
+        ]
+      }
+    },
+    {
+      "depth": 0,
+      "path": "interiorGroup[1]",
+      "type": "Group",
+      "name": null,
+      "kind": null,
+      "userDataKeys": [],
+      "meshes": 0,
+      "instances": 0,
+      "box": null
+    },
+    {
+      "depth": 0,
+      "path": "interiorGroup[2]",
+      "type": "Group",
+      "name": null,
+      "kind": null,
+      "userDataKeys": [],
+      "meshes": 0,
+      "instances": 0,
+      "box": null
+    },
+    {
+      "depth": 0,
+      "path": "interiorGroup[3]",
+      "type": "Group",
+      "name": null,
+      "kind": null,
+      "userDataKeys": [],
+      "meshes": 0,
+      "instances": 0,
+      "box": null
+    },
+    {
+      "depth": 0,
+      "path": "interiorGroup[4]",
+      "type": "Group",
+      "name": null,
+      "kind": null,
+      "userDataKeys": [],
+      "meshes": 0,
+      "instances": 0,
+      "box": null
+    },
+    {
+      "depth": 0,
+      "path": "interiorGroup[5]",
+      "type": "Group",
+      "name": null,
+      "kind": null,
+      "userDataKeys": [],
+      "meshes": 0,
+      "instances": 0,
+      "box": null
+    },
+    {
+      "depth": 0,
+      "path": "interiorGroup[6]",
+      "type": "Group",
+      "name": null,
+      "kind": null,
+      "userDataKeys": [
+        "bySourceRef"
+      ],
+      "meshes": 1,
+      "instances": 1,
+      "box": {
+        "min": [
+          -0.65,
+          -0.3,
+          -2.874
+        ],
+        "max": [
+          0.65,
+          1.9,
+          -2.625
+        ]
+      }
+    },
+    {
+      "depth": 1,
+      "path": "interiorGroup[6][0]",
+      "type": "Group",
+      "name": null,
+      "kind": null,
+      "userDataKeys": [
+        "kind",
+        "archetype",
+        "sourceRef",
+        "state",
+        "slug",
+        "leaf",
+        "arched",
+        "hingeSign",
+        "brokenVariant",
+        "shards"
+      ],
+      "meshes": 1,
+      "instances": 1,
+      "box": {
+        "min": [
+          -0.65,
+          -0.3,
+          -2.874
+        ],
+        "max": [
+          0.65,
+          1.9,
+          -2.625
+        ]
+      }
+    },
+    {
+      "depth": 0,
+      "path": "interiorGroup[7]",
+      "type": "Group",
+      "name": null,
+      "kind": null,
+      "userDataKeys": [],
+      "meshes": 0,
+      "instances": 0,
+      "box": null
+    },
+    {
+      "depth": 0,
+      "path": "interiorGroup[8]",
+      "type": "Group",
+      "name": null,
+      "kind": null,
+      "userDataKeys": [],
+      "meshes": 0,
+      "instances": 0,
+      "box": null
+    },
+    {
+      "depth": 0,
+      "path": "interiorGroup[9]",
+      "type": "Group",
+      "name": null,
+      "kind": null,
+      "userDataKeys": [],
+      "meshes": 0,
+      "instances": 0,
+      "box": null
+    },
+    {
+      "depth": 0,
+      "path": "interiorGroup[10]",
+      "type": "Group",
+      "name": null,
+      "kind": "kgr8-clay-kit",
+      "userDataKeys": [
+        "interiorKind"
+      ],
+      "meshes": 28,
+      "instances": 28,
+      "box": {
+        "min": [
+          -2.998,
+          -0.5,
+          -2.998
+        ],
+        "max": [
+          2.998,
+          1.9,
+          2.998
+        ]
+      }
+    },
+    {
+      "depth": 1,
+      "path": "interiorGroup[10][0]",
+      "type": "Group",
+      "name": null,
+      "kind": "kenney-modular-dungeon-kit/template-floor",
+      "userDataKeys": [
+        "kgr8Module",
+        "role",
+        "planX",
+        "planZ"
+      ],
+      "meshes": 1,
+      "instances": 1,
+      "box": {
+        "min": [
+          -2.5,
+          -0.3,
+          -2.5
+        ],
+        "max": [
+          -0.5,
+          -0.3,
+          -0.5
+        ]
+      }
+    },
+    {
+      "depth": 1,
+      "path": "interiorGroup[10][1]",
+      "type": "Group",
+      "name": null,
+      "kind": "kenney-modular-dungeon-kit/template-floor",
+      "userDataKeys": [
+        "kgr8Module",
+        "role",
+        "planX",
+        "planZ"
+      ],
+      "meshes": 1,
+      "instances": 1,
+      "box": {
+        "min": [
+          -2.5,
+          -0.3,
+          -0.5
+        ],
+        "max": [
+          -0.5,
+          -0.3,
+          1.5
+        ]
+      }
+    },
+    {
+      "depth": 1,
+      "path": "interiorGroup[10][2]",
+      "type": "Group",
+      "name": null,
+      "kind": "kenney-modular-dungeon-kit/template-floor",
+      "userDataKeys": [
+        "kgr8Module",
+        "role",
+        "planX",
+        "planZ"
+      ],
+      "meshes": 1,
+      "instances": 1,
+      "box": {
+        "min": [
+          -2.5,
+          -0.301,
+          0.5
+        ],
+        "max": [
+          -0.5,
+          -0.301,
+          2.5
+        ]
+      }
+    },
+    {
+      "depth": 1,
+      "path": "interiorGroup[10][3]",
+      "type": "Group",
+      "name": null,
+      "kind": "kenney-modular-dungeon-kit/template-floor",
+      "userDataKeys": [
+        "kgr8Module",
+        "role",
+        "planX",
+        "planZ"
+      ],
+      "meshes": 1,
+      "instances": 1,
+      "box": {
+        "min": [
+          -0.5,
+          -0.3,
+          -2.5
+        ],
+        "max": [
+          1.5,
+          -0.3,
+          -0.5
+        ]
+      }
+    },
+    {
+      "depth": 1,
+      "path": "interiorGroup[10][4]",
+      "type": "Group",
+      "name": null,
+      "kind": "kenney-modular-dungeon-kit/template-floor",
+      "userDataKeys": [
+        "kgr8Module",
+        "role",
+        "planX",
+        "planZ"
+      ],
+      "meshes": 1,
+      "instances": 1,
+      "box": {
+        "min": [
+          -0.5,
+          -0.3,
+          -0.5
+        ],
+        "max": [
+          1.5,
+          -0.3,
+          1.5
+        ]
+      }
+    },
+    {
+      "depth": 1,
+      "path": "interiorGroup[10][5]",
+      "type": "Group",
+      "name": null,
+      "kind": "kenney-modular-dungeon-kit/template-floor",
+      "userDataKeys": [
+        "kgr8Module",
+        "role",
+        "planX",
+        "planZ"
+      ],
+      "meshes": 1,
+      "instances": 1,
+      "box": {
+        "min": [
+          -0.5,
+          -0.301,
+          0.5
+        ],
+        "max": [
+          1.5,
+          -0.301,
+          2.5
+        ]
+      }
+    },
+    {
+      "depth": 1,
+      "path": "interiorGroup[10][6]",
+      "type": "Group",
+      "name": null,
+      "kind": "kenney-modular-dungeon-kit/template-floor",
+      "userDataKeys": [
+        "kgr8Module",
+        "role",
+        "planX",
+        "planZ"
+      ],
+      "meshes": 1,
+      "instances": 1,
+      "box": {
+        "min": [
+          0.5,
+          -0.301,
+          -2.5
+        ],
+        "max": [
+          2.5,
+          -0.301,
+          -0.5
+        ]
+      }
+    },
+    {
+      "depth": 1,
+      "path": "interiorGroup[10][7]",
+      "type": "Group",
+      "name": null,
+      "kind": "kenney-modular-dungeon-kit/template-floor",
+      "userDataKeys": [
+        "kgr8Module",
+        "role",
+        "planX",
+        "planZ"
+      ],
+      "meshes": 1,
+      "instances": 1,
+      "box": {
+        "min": [
+          0.5,
+          -0.301,
+          -0.5
+        ],
+        "max": [
+          2.5,
+          -0.301,
+          1.5
+        ]
+      }
+    },
+    {
+      "depth": 1,
+      "path": "interiorGroup[10][8]",
+      "type": "Group",
+      "name": null,
+      "kind": "kenney-modular-dungeon-kit/template-floor",
+      "userDataKeys": [
+        "kgr8Module",
+        "role",
+        "planX",
+        "planZ"
+      ],
+      "meshes": 1,
+      "instances": 1,
+      "box": {
+        "min": [
+          0.5,
+          -0.302,
+          0.5
+        ],
+        "max": [
+          2.5,
+          -0.302,
+          2.5
+        ]
+      }
+    },
+    {
+      "depth": 1,
+      "path": "interiorGroup[10][9]",
+      "type": "Group",
+      "name": null,
+      "kind": "kenney-modular-dungeon-kit/template-wall",
+      "userDataKeys": [
+        "kgr8Module",
+        "role",
+        "planX",
+        "planZ"
+      ],
+      "meshes": 1,
+      "instances": 1,
+      "box": {
+        "min": [
+          -2.5,
+          -0.5,
+          -2.998
+        ],
+        "max": [
+          -0.5,
+          1.9,
+          -2.002
+        ]
+      }
+    },
+    {
+      "depth": 1,
+      "path": "interiorGroup[10][10]",
+      "type": "Group",
+      "name": null,
+      "kind": "kenney-modular-dungeon-kit/template-wall",
+      "userDataKeys": [
+        "kgr8Module",
+        "role",
+        "planX",
+        "planZ"
+      ],
+      "meshes": 1,
+      "instances": 1,
+      "box": {
+        "min": [
+          0.5,
+          -0.5,
+          -2.998
+        ],
+        "max": [
+          2.5,
+          1.9,
+          -2.002
+        ]
+      }
+    },
+    {
+      "depth": 1,
+      "path": "interiorGroup[10][11]",
+      "type": "Group",
+      "name": null,
+      "kind": "kenney-modular-dungeon-kit/template-wall",
+      "userDataKeys": [
+        "kgr8Module",
+        "role",
+        "planX",
+        "planZ"
+      ],
+      "meshes": 1,
+      "instances": 1,
+      "box": {
+        "min": [
+          -2.5,
+          -0.5,
+          2.002
+        ],
+        "max": [
+          -0.5,
+          0.46,
+          2.998
+        ]
+      }
+    },
+    {
+      "depth": 1,
+      "path": "interiorGroup[10][12]",
+      "type": "Group",
+      "name": null,
+      "kind": "kenney-modular-dungeon-kit/template-wall-half",
+      "userDataKeys": [
+        "kgr8Module",
+        "role",
+        "planX",
+        "planZ"
+      ],
+      "meshes": 1,
+      "instances": 1,
+      "box": {
+        "min": [
+          -0.5,
+          -0.5,
+          2.048
+        ],
+        "max": [
+          0.5,
+          0.46,
+          2.952
+        ]
+      }
+    },
+    {
+      "depth": 1,
+      "path": "interiorGroup[10][13]",
+      "type": "Group",
+      "name": null,
+      "kind": "kenney-modular-dungeon-kit/template-wall",
+      "userDataKeys": [
+        "kgr8Module",
+        "role",
+        "planX",
+        "planZ"
+      ],
+      "meshes": 1,
+      "instances": 1,
+      "box": {
+        "min": [
+          0.5,
+          -0.5,
+          2.002
+        ],
+        "max": [
+          2.5,
+          0.46,
+          2.998
+        ]
+      }
+    },
+    {
+      "depth": 1,
+      "path": "interiorGroup[10][14]",
+      "type": "Group",
+      "name": null,
+      "kind": "kenney-modular-dungeon-kit/template-wall",
+      "userDataKeys": [
+        "kgr8Module",
+        "role",
+        "planX",
+        "planZ"
+      ],
+      "meshes": 1,
+      "instances": 1,
+      "box": {
+        "min": [
+          -2.998,
+          -0.5,
+          -2.5
+        ],
+        "max": [
+          -2.002,
+          1.9,
+          -0.5
+        ]
+      }
+    },
+    {
+      "depth": 1,
+      "path": "interiorGroup[10][15]",
+      "type": "Group",
+      "name": null,
+      "kind": "kenney-modular-dungeon-kit/template-wall-half",
+      "userDataKeys": [
+        "kgr8Module",
+        "role",
+        "planX",
+        "planZ"
+      ],
+      "meshes": 1,
+      "instances": 1,
+      "box": {
+        "min": [
+          -2.952,
+          -0.5,
+          -0.5
+        ],
+        "max": [
+          -2.048,
+          1.9,
+          0.5
+        ]
+      }
+    },
+    {
+      "depth": 1,
+      "path": "interiorGroup[10][16]",
+      "type": "Group",
+      "name": null,
+      "kind": "kenney-modular-dungeon-kit/template-wall",
+      "userDataKeys": [
+        "kgr8Module",
+        "role",
+        "planX",
+        "planZ"
+      ],
+      "meshes": 1,
+      "instances": 1,
+      "box": {
+        "min": [
+          -2.998,
+          -0.5,
+          0.5
+        ],
+        "max": [
+          -2.002,
+          1.9,
+          2.5
+        ]
+      }
+    },
+    {
+      "depth": 1,
+      "path": "interiorGroup[10][17]",
+      "type": "Group",
+      "name": null,
+      "kind": "kenney-modular-dungeon-kit/template-wall",
+      "userDataKeys": [
+        "kgr8Module",
+        "role",
+        "planX",
+        "planZ"
+      ],
+      "meshes": 1,
+      "instances": 1,
+      "box": {
+        "min": [
+          2.002,
+          -0.5,
+          -2.5
+        ],
+        "max": [
+          2.998,
+          0.46,
+          -0.5
+        ]
+      }
+    },
+    {
+      "depth": 1,
+      "path": "interiorGroup[10][18]",
+      "type": "Group",
+      "name": null,
+      "kind": "kenney-modular-dungeon-kit/template-wall-half",
+      "userDataKeys": [
+        "kgr8Module",
+        "role",
+        "planX",
+        "planZ"
+      ],
+      "meshes": 1,
+      "instances": 1,
+      "box": {
+        "min": [
+          2.048,
+          -0.5,
+          -0.5
+        ],
+        "max": [
+          2.952,
+          0.46,
+          0.5
+        ]
+      }
+    },
+    {
+      "depth": 1,
+      "path": "interiorGroup[10][19]",
+      "type": "Group",
+      "name": null,
+      "kind": "kenney-modular-dungeon-kit/template-wall",
+      "userDataKeys": [
+        "kgr8Module",
+        "role",
+        "planX",
+        "planZ"
+      ],
+      "meshes": 1,
+      "instances": 1,
+      "box": {
+        "min": [
+          2.002,
+          -0.5,
+          0.5
+        ],
+        "max": [
+          2.998,
+          0.46,
+          2.5
+        ]
+      }
+    },
+    {
+      "depth": 1,
+      "path": "interiorGroup[10][20]",
+      "type": "Group",
+      "name": null,
+      "kind": "kenney-modular-dungeon-kit/template-wall-corner",
+      "userDataKeys": [
+        "kgr8Module",
+        "role",
+        "planX",
+        "planZ"
+      ],
+      "meshes": 1,
+      "instances": 1,
+      "box": {
+        "min": [
+          -2.75,
+          -0.5,
+          -2.75
+        ],
+        "max": [
+          -2.25,
+          1.9,
+          -2.25
+        ]
+      }
+    },
+    {
+      "depth": 1,
+      "path": "interiorGroup[10][21]",
+      "type": "Group",
+      "name": null,
+      "kind": "kenney-modular-dungeon-kit/template-wall-corner",
+      "userDataKeys": [
+        "kgr8Module",
+        "role",
+        "planX",
+        "planZ"
+      ],
+      "meshes": 1,
+      "instances": 1,
+      "box": {
+        "min": [
+          2.25,
+          -0.5,
+          -2.75
+        ],
+        "max": [
+          2.75,
+          1.9,
+          -2.25
+        ]
+      }
+    },
+    {
+      "depth": 1,
+      "path": "interiorGroup[10][22]",
+      "type": "Group",
+      "name": null,
+      "kind": "kenney-modular-dungeon-kit/template-wall-corner",
+      "userDataKeys": [
+        "kgr8Module",
+        "role",
+        "planX",
+        "planZ"
+      ],
+      "meshes": 1,
+      "instances": 1,
+      "box": {
+        "min": [
+          2.25,
+          -0.5,
+          2.25
+        ],
+        "max": [
+          2.75,
+          0.46,
+          2.75
+        ]
+      }
+    },
+    {
+      "depth": 1,
+      "path": "interiorGroup[10][23]",
+      "type": "Group",
+      "name": null,
+      "kind": "kenney-modular-dungeon-kit/template-wall-corner",
+      "userDataKeys": [
+        "kgr8Module",
+        "role",
+        "planX",
+        "planZ"
+      ],
+      "meshes": 1,
+      "instances": 1,
+      "box": {
+        "min": [
+          -2.75,
+          -0.5,
+          2.25
+        ],
+        "max": [
+          -2.25,
+          0.46,
+          2.75
+        ]
+      }
+    },
+    {
+      "depth": 1,
+      "path": "interiorGroup[10][24]",
+      "type": "Group",
+      "name": null,
+      "kind": "kgr8/aperture-fill",
+      "userDataKeys": [
+        "kgr8Module",
+        "role",
+        "planX",
+        "planZ"
+      ],
+      "meshes": 4,
+      "instances": 4,
+      "box": {
+        "min": [
+          -0.56,
+          -0.5,
+          -2.998
+        ],
+        "max": [
+          0.56,
+          1.899,
+          -2.23
+        ]
+      }
+    }
+  ],
+  "clayFinal": {
+    "ok": true,
+    "clayed": 29,
+    "portalsKept": 0,
+    "pointsRemoved": 0,
+    "voidDarkened": 0,
+    "voidOutside": []
+  },
+  "leafShiftFinal": {
+    "ok": true,
+    "facePlane": -2.5,
+    "visibleFace": -2.2273,
+    "detailProtrusion": 0.2727,
+    "wallTop": 1.9,
+    "wallThickness": 0.4984,
+    "slabDepth": 0.4984,
+    "slabCenterZ": -2.7492,
+    "leafDepth": 0.2492,
+    "depthFrac": 0.5,
+    "revealDepth": 0.3973,
+    "floorTop": -0.3,
+    "aperture": [
+      -0.5,
+      0.5
+    ],
+    "overlapW": 0.15,
+    "applied": {
+      "dx": 0,
+      "dy": 0,
+      "dz": 0,
+      "scaleX": 1.4444,
+      "scaleY": 1.1579,
+      "scaleZ": 0.7787
+    },
+    "leafBox": {
+      "min": [
+        -0.65,
+        -0.3,
+        -2.874
+      ],
+      "max": [
+        0.65,
+        1.9,
+        -2.625
+      ]
+    },
+    "apertureFill": [
+      {
+        "name": "sill",
+        "box": [
+          -0.56,
+          -0.5,
+          -2.9984,
+          0.56,
+          -0.3008,
+          -2.45
+        ]
+      },
+      {
+        "name": "plug",
+        "box": [
+          -0.56,
+          -0.35,
+          -2.9984,
+          0.56,
+          1.899,
+          -2.8538
+        ]
+      },
+      {
+        "name": "revealL",
+        "box": [
+          -0.56,
+          -0.35,
+          -2.9984,
+          -0.47,
+          1.899,
+          -2.2303
+        ]
+      },
+      {
+        "name": "revealR",
+        "box": [
+          0.47,
+          -0.35,
+          -2.9984,
+          0.56,
+          1.899,
+          -2.2303
+        ]
+      }
+    ]
+  },
+  "inventoryFinal": [
+    {
+      "depth": 0,
+      "path": "interiorGroup[0]",
+      "type": "Mesh",
+      "name": null,
+      "kind": "skirt",
+      "userDataKeys": [
+        "interiorKind"
+      ],
+      "meshes": 1,
+      "instances": 24,
+      "box": {
+        "min": [
+          -3.5,
+          -0.9,
+          -3.5
+        ],
+        "max": [
+          3.5,
+          -0.5,
+          3.5
+        ]
+      }
+    },
+    {
+      "depth": 0,
+      "path": "interiorGroup[1]",
+      "type": "Group",
+      "name": null,
+      "kind": null,
+      "userDataKeys": [],
+      "meshes": 0,
+      "instances": 0,
+      "box": null
+    },
+    {
+      "depth": 0,
+      "path": "interiorGroup[2]",
+      "type": "Group",
+      "name": null,
+      "kind": null,
+      "userDataKeys": [],
+      "meshes": 0,
+      "instances": 0,
+      "box": null
+    },
+    {
+      "depth": 0,
+      "path": "interiorGroup[3]",
+      "type": "Group",
+      "name": null,
+      "kind": null,
+      "userDataKeys": [],
+      "meshes": 0,
+      "instances": 0,
+      "box": null
+    },
+    {
+      "depth": 0,
+      "path": "interiorGroup[4]",
+      "type": "Group",
+      "name": null,
+      "kind": null,
+      "userDataKeys": [],
+      "meshes": 0,
+      "instances": 0,
+      "box": null
+    },
+    {
+      "depth": 0,
+      "path": "interiorGroup[5]",
+      "type": "Group",
+      "name": null,
+      "kind": null,
+      "userDataKeys": [],
+      "meshes": 0,
+      "instances": 0,
+      "box": null
+    },
+    {
+      "depth": 0,
+      "path": "interiorGroup[6]",
+      "type": "Group",
+      "name": null,
+      "kind": null,
+      "userDataKeys": [
+        "bySourceRef"
+      ],
+      "meshes": 1,
+      "instances": 1,
+      "box": {
+        "min": [
+          -0.65,
+          -0.3,
+          -2.874
+        ],
+        "max": [
+          0.65,
+          1.9,
+          -2.625
+        ]
+      }
+    },
+    {
+      "depth": 1,
+      "path": "interiorGroup[6][0]",
+      "type": "Group",
+      "name": null,
+      "kind": null,
+      "userDataKeys": [
+        "kind",
+        "archetype",
+        "sourceRef",
+        "state",
+        "slug",
+        "leaf",
+        "arched",
+        "hingeSign",
+        "brokenVariant",
+        "shards"
+      ],
+      "meshes": 1,
+      "instances": 1,
+      "box": {
+        "min": [
+          -0.65,
+          -0.3,
+          -2.874
+        ],
+        "max": [
+          0.65,
+          1.9,
+          -2.625
+        ]
+      }
+    },
+    {
+      "depth": 0,
+      "path": "interiorGroup[7]",
+      "type": "Group",
+      "name": null,
+      "kind": null,
+      "userDataKeys": [],
+      "meshes": 0,
+      "instances": 0,
+      "box": null
+    },
+    {
+      "depth": 0,
+      "path": "interiorGroup[8]",
+      "type": "Group",
+      "name": null,
+      "kind": null,
+      "userDataKeys": [],
+      "meshes": 0,
+      "instances": 0,
+      "box": null
+    },
+    {
+      "depth": 0,
+      "path": "interiorGroup[9]",
+      "type": "Group",
+      "name": null,
+      "kind": null,
+      "userDataKeys": [],
+      "meshes": 0,
+      "instances": 0,
+      "box": null
+    },
+    {
+      "depth": 0,
+      "path": "interiorGroup[10]",
+      "type": "Group",
+      "name": null,
+      "kind": "kgr8-clay-kit",
+      "userDataKeys": [
+        "interiorKind"
+      ],
+      "meshes": 28,
+      "instances": 28,
+      "box": {
+        "min": [
+          -2.998,
+          -0.5,
+          -2.998
+        ],
+        "max": [
+          2.998,
+          1.9,
+          2.998
+        ]
+      }
+    },
+    {
+      "depth": 1,
+      "path": "interiorGroup[10][0]",
+      "type": "Group",
+      "name": null,
+      "kind": "kenney-modular-dungeon-kit/template-floor",
+      "userDataKeys": [
+        "kgr8Module",
+        "role",
+        "planX",
+        "planZ"
+      ],
+      "meshes": 1,
+      "instances": 1,
+      "box": {
+        "min": [
+          -2.5,
+          -0.3,
+          -2.5
+        ],
+        "max": [
+          -0.5,
+          -0.3,
+          -0.5
+        ]
+      }
+    },
+    {
+      "depth": 1,
+      "path": "interiorGroup[10][1]",
+      "type": "Group",
+      "name": null,
+      "kind": "kenney-modular-dungeon-kit/template-floor",
+      "userDataKeys": [
+        "kgr8Module",
+        "role",
+        "planX",
+        "planZ"
+      ],
+      "meshes": 1,
+      "instances": 1,
+      "box": {
+        "min": [
+          -2.5,
+          -0.3,
+          -0.5
+        ],
+        "max": [
+          -0.5,
+          -0.3,
+          1.5
+        ]
+      }
+    },
+    {
+      "depth": 1,
+      "path": "interiorGroup[10][2]",
+      "type": "Group",
+      "name": null,
+      "kind": "kenney-modular-dungeon-kit/template-floor",
+      "userDataKeys": [
+        "kgr8Module",
+        "role",
+        "planX",
+        "planZ"
+      ],
+      "meshes": 1,
+      "instances": 1,
+      "box": {
+        "min": [
+          -2.5,
+          -0.301,
+          0.5
+        ],
+        "max": [
+          -0.5,
+          -0.301,
+          2.5
+        ]
+      }
+    },
+    {
+      "depth": 1,
+      "path": "interiorGroup[10][3]",
+      "type": "Group",
+      "name": null,
+      "kind": "kenney-modular-dungeon-kit/template-floor",
+      "userDataKeys": [
+        "kgr8Module",
+        "role",
+        "planX",
+        "planZ"
+      ],
+      "meshes": 1,
+      "instances": 1,
+      "box": {
+        "min": [
+          -0.5,
+          -0.3,
+          -2.5
+        ],
+        "max": [
+          1.5,
+          -0.3,
+          -0.5
+        ]
+      }
+    },
+    {
+      "depth": 1,
+      "path": "interiorGroup[10][4]",
+      "type": "Group",
+      "name": null,
+      "kind": "kenney-modular-dungeon-kit/template-floor",
+      "userDataKeys": [
+        "kgr8Module",
+        "role",
+        "planX",
+        "planZ"
+      ],
+      "meshes": 1,
+      "instances": 1,
+      "box": {
+        "min": [
+          -0.5,
+          -0.3,
+          -0.5
+        ],
+        "max": [
+          1.5,
+          -0.3,
+          1.5
+        ]
+      }
+    },
+    {
+      "depth": 1,
+      "path": "interiorGroup[10][5]",
+      "type": "Group",
+      "name": null,
+      "kind": "kenney-modular-dungeon-kit/template-floor",
+      "userDataKeys": [
+        "kgr8Module",
+        "role",
+        "planX",
+        "planZ"
+      ],
+      "meshes": 1,
+      "instances": 1,
+      "box": {
+        "min": [
+          -0.5,
+          -0.301,
+          0.5
+        ],
+        "max": [
+          1.5,
+          -0.301,
+          2.5
+        ]
+      }
+    },
+    {
+      "depth": 1,
+      "path": "interiorGroup[10][6]",
+      "type": "Group",
+      "name": null,
+      "kind": "kenney-modular-dungeon-kit/template-floor",
+      "userDataKeys": [
+        "kgr8Module",
+        "role",
+        "planX",
+        "planZ"
+      ],
+      "meshes": 1,
+      "instances": 1,
+      "box": {
+        "min": [
+          0.5,
+          -0.301,
+          -2.5
+        ],
+        "max": [
+          2.5,
+          -0.301,
+          -0.5
+        ]
+      }
+    },
+    {
+      "depth": 1,
+      "path": "interiorGroup[10][7]",
+      "type": "Group",
+      "name": null,
+      "kind": "kenney-modular-dungeon-kit/template-floor",
+      "userDataKeys": [
+        "kgr8Module",
+        "role",
+        "planX",
+        "planZ"
+      ],
+      "meshes": 1,
+      "instances": 1,
+      "box": {
+        "min": [
+          0.5,
+          -0.301,
+          -0.5
+        ],
+        "max": [
+          2.5,
+          -0.301,
+          1.5
+        ]
+      }
+    },
+    {
+      "depth": 1,
+      "path": "interiorGroup[10][8]",
+      "type": "Group",
+      "name": null,
+      "kind": "kenney-modular-dungeon-kit/template-floor",
+      "userDataKeys": [
+        "kgr8Module",
+        "role",
+        "planX",
+        "planZ"
+      ],
+      "meshes": 1,
+      "instances": 1,
+      "box": {
+        "min": [
+          0.5,
+          -0.302,
+          0.5
+        ],
+        "max": [
+          2.5,
+          -0.302,
+          2.5
+        ]
+      }
+    },
+    {
+      "depth": 1,
+      "path": "interiorGroup[10][9]",
+      "type": "Group",
+      "name": null,
+      "kind": "kenney-modular-dungeon-kit/template-wall",
+      "userDataKeys": [
+        "kgr8Module",
+        "role",
+        "planX",
+        "planZ"
+      ],
+      "meshes": 1,
+      "instances": 1,
+      "box": {
+        "min": [
+          -2.5,
+          -0.5,
+          -2.998
+        ],
+        "max": [
+          -0.5,
+          1.9,
+          -2.002
+        ]
+      }
+    },
+    {
+      "depth": 1,
+      "path": "interiorGroup[10][10]",
+      "type": "Group",
+      "name": null,
+      "kind": "kenney-modular-dungeon-kit/template-wall",
+      "userDataKeys": [
+        "kgr8Module",
+        "role",
+        "planX",
+        "planZ"
+      ],
+      "meshes": 1,
+      "instances": 1,
+      "box": {
+        "min": [
+          0.5,
+          -0.5,
+          -2.998
+        ],
+        "max": [
+          2.5,
+          1.9,
+          -2.002
+        ]
+      }
+    },
+    {
+      "depth": 1,
+      "path": "interiorGroup[10][11]",
+      "type": "Group",
+      "name": null,
+      "kind": "kenney-modular-dungeon-kit/template-wall",
+      "userDataKeys": [
+        "kgr8Module",
+        "role",
+        "planX",
+        "planZ"
+      ],
+      "meshes": 1,
+      "instances": 1,
+      "box": {
+        "min": [
+          -2.5,
+          -0.5,
+          2.002
+        ],
+        "max": [
+          -0.5,
+          0.46,
+          2.998
+        ]
+      }
+    },
+    {
+      "depth": 1,
+      "path": "interiorGroup[10][12]",
+      "type": "Group",
+      "name": null,
+      "kind": "kenney-modular-dungeon-kit/template-wall-half",
+      "userDataKeys": [
+        "kgr8Module",
+        "role",
+        "planX",
+        "planZ"
+      ],
+      "meshes": 1,
+      "instances": 1,
+      "box": {
+        "min": [
+          -0.5,
+          -0.5,
+          2.048
+        ],
+        "max": [
+          0.5,
+          0.46,
+          2.952
+        ]
+      }
+    },
+    {
+      "depth": 1,
+      "path": "interiorGroup[10][13]",
+      "type": "Group",
+      "name": null,
+      "kind": "kenney-modular-dungeon-kit/template-wall",
+      "userDataKeys": [
+        "kgr8Module",
+        "role",
+        "planX",
+        "planZ"
+      ],
+      "meshes": 1,
+      "instances": 1,
+      "box": {
+        "min": [
+          0.5,
+          -0.5,
+          2.002
+        ],
+        "max": [
+          2.5,
+          0.46,
+          2.998
+        ]
+      }
+    },
+    {
+      "depth": 1,
+      "path": "interiorGroup[10][14]",
+      "type": "Group",
+      "name": null,
+      "kind": "kenney-modular-dungeon-kit/template-wall",
+      "userDataKeys": [
+        "kgr8Module",
+        "role",
+        "planX",
+        "planZ"
+      ],
+      "meshes": 1,
+      "instances": 1,
+      "box": {
+        "min": [
+          -2.998,
+          -0.5,
+          -2.5
+        ],
+        "max": [
+          -2.002,
+          1.9,
+          -0.5
+        ]
+      }
+    },
+    {
+      "depth": 1,
+      "path": "interiorGroup[10][15]",
+      "type": "Group",
+      "name": null,
+      "kind": "kenney-modular-dungeon-kit/template-wall-half",
+      "userDataKeys": [
+        "kgr8Module",
+        "role",
+        "planX",
+        "planZ"
+      ],
+      "meshes": 1,
+      "instances": 1,
+      "box": {
+        "min": [
+          -2.952,
+          -0.5,
+          -0.5
+        ],
+        "max": [
+          -2.048,
+          1.9,
+          0.5
+        ]
+      }
+    },
+    {
+      "depth": 1,
+      "path": "interiorGroup[10][16]",
+      "type": "Group",
+      "name": null,
+      "kind": "kenney-modular-dungeon-kit/template-wall",
+      "userDataKeys": [
+        "kgr8Module",
+        "role",
+        "planX",
+        "planZ"
+      ],
+      "meshes": 1,
+      "instances": 1,
+      "box": {
+        "min": [
+          -2.998,
+          -0.5,
+          0.5
+        ],
+        "max": [
+          -2.002,
+          1.9,
+          2.5
+        ]
+      }
+    },
+    {
+      "depth": 1,
+      "path": "interiorGroup[10][17]",
+      "type": "Group",
+      "name": null,
+      "kind": "kenney-modular-dungeon-kit/template-wall",
+      "userDataKeys": [
+        "kgr8Module",
+        "role",
+        "planX",
+        "planZ"
+      ],
+      "meshes": 1,
+      "instances": 1,
+      "box": {
+        "min": [
+          2.002,
+          -0.5,
+          -2.5
+        ],
+        "max": [
+          2.998,
+          0.46,
+          -0.5
+        ]
+      }
+    },
+    {
+      "depth": 1,
+      "path": "interiorGroup[10][18]",
+      "type": "Group",
+      "name": null,
+      "kind": "kenney-modular-dungeon-kit/template-wall-half",
+      "userDataKeys": [
+        "kgr8Module",
+        "role",
+        "planX",
+        "planZ"
+      ],
+      "meshes": 1,
+      "instances": 1,
+      "box": {
+        "min": [
+          2.048,
+          -0.5,
+          -0.5
+        ],
+        "max": [
+          2.952,
+          0.46,
+          0.5
+        ]
+      }
+    },
+    {
+      "depth": 1,
+      "path": "interiorGroup[10][19]",
+      "type": "Group",
+      "name": null,
+      "kind": "kenney-modular-dungeon-kit/template-wall",
+      "userDataKeys": [
+        "kgr8Module",
+        "role",
+        "planX",
+        "planZ"
+      ],
+      "meshes": 1,
+      "instances": 1,
+      "box": {
+        "min": [
+          2.002,
+          -0.5,
+          0.5
+        ],
+        "max": [
+          2.998,
+          0.46,
+          2.5
+        ]
+      }
+    },
+    {
+      "depth": 1,
+      "path": "interiorGroup[10][20]",
+      "type": "Group",
+      "name": null,
+      "kind": "kenney-modular-dungeon-kit/template-wall-corner",
+      "userDataKeys": [
+        "kgr8Module",
+        "role",
+        "planX",
+        "planZ"
+      ],
+      "meshes": 1,
+      "instances": 1,
+      "box": {
+        "min": [
+          -2.75,
+          -0.5,
+          -2.75
+        ],
+        "max": [
+          -2.25,
+          1.9,
+          -2.25
+        ]
+      }
+    },
+    {
+      "depth": 1,
+      "path": "interiorGroup[10][21]",
+      "type": "Group",
+      "name": null,
+      "kind": "kenney-modular-dungeon-kit/template-wall-corner",
+      "userDataKeys": [
+        "kgr8Module",
+        "role",
+        "planX",
+        "planZ"
+      ],
+      "meshes": 1,
+      "instances": 1,
+      "box": {
+        "min": [
+          2.25,
+          -0.5,
+          -2.75
+        ],
+        "max": [
+          2.75,
+          1.9,
+          -2.25
+        ]
+      }
+    },
+    {
+      "depth": 1,
+      "path": "interiorGroup[10][22]",
+      "type": "Group",
+      "name": null,
+      "kind": "kenney-modular-dungeon-kit/template-wall-corner",
+      "userDataKeys": [
+        "kgr8Module",
+        "role",
+        "planX",
+        "planZ"
+      ],
+      "meshes": 1,
+      "instances": 1,
+      "box": {
+        "min": [
+          2.25,
+          -0.5,
+          2.25
+        ],
+        "max": [
+          2.75,
+          0.46,
+          2.75
+        ]
+      }
+    },
+    {
+      "depth": 1,
+      "path": "interiorGroup[10][23]",
+      "type": "Group",
+      "name": null,
+      "kind": "kenney-modular-dungeon-kit/template-wall-corner",
+      "userDataKeys": [
+        "kgr8Module",
+        "role",
+        "planX",
+        "planZ"
+      ],
+      "meshes": 1,
+      "instances": 1,
+      "box": {
+        "min": [
+          -2.75,
+          -0.5,
+          2.25
+        ],
+        "max": [
+          -2.25,
+          0.46,
+          2.75
+        ]
+      }
+    },
+    {
+      "depth": 1,
+      "path": "interiorGroup[10][24]",
+      "type": "Group",
+      "name": null,
+      "kind": "kgr8/aperture-fill",
+      "userDataKeys": [
+        "kgr8Module",
+        "role",
+        "planX",
+        "planZ"
+      ],
+      "meshes": 4,
+      "instances": 4,
+      "box": {
+        "min": [
+          -0.56,
+          -0.5,
+          -2.998
+        ],
+        "max": [
+          0.56,
+          1.899,
+          -2.23
+        ]
+      }
+    }
+  ],
+  "productionCamera": {
+    "pitchDeg": 28,
+    "yawDeg": 45
+  },
+  "doorCard": {
+    "ok": true,
+    "yawDeg": 45,
+    "pitchDeg": 28,
+    "dist": 13,
+    "center": [
+      0,
+      0.8,
+      -2.7492
+    ],
+    "pos": [
+      8.1164,
+      6.9031,
+      5.3672
+    ],
+    "fov": 20
+  },
+  "doorAudit": {
+    "production": {
+      "ok": true,
+      "w": 812,
+      "h": 699,
+      "corners": [
+        {
+          "x": 304.8,
+          "y": 493.4,
+          "world": [
+            -0.45,
+            -0.27999999999999997,
+            -2.2273
+          ]
+        },
+        {
+          "x": 385.8,
+          "y": 452.1,
+          "world": [
+            -0.45,
+            -0.27999999999999997,
+            -2.9984
+          ]
+        },
+        {
+          "x": 296.6,
+          "y": 202.9,
+          "world": [
+            -0.45,
+            1.8699999999999999,
+            -2.2273
+          ]
+        },
+        {
+          "x": 384.2,
+          "y": 169.2,
+          "world": [
+            -0.45,
+            1.8699999999999999,
+            -2.9984
+          ]
+        },
+        {
+          "x": 398.2,
+          "y": 545.6,
+          "world": [
+            0.45,
+            -0.27999999999999997,
+            -2.2273
+          ]
+        },
+        {
+          "x": 479.2,
+          "y": 500.6,
+          "world": [
+            0.45,
+            -0.27999999999999997,
+            -2.9984
+          ]
+        },
+        {
+          "x": 397.5,
+          "y": 245.8,
+          "world": [
+            0.45,
+            1.8699999999999999,
+            -2.2273
+          ]
+        },
+        {
+          "x": 485.2,
+          "y": 208.8,
+          "world": [
+            0.45,
+            1.8699999999999999,
+            -2.9984
+          ]
+        }
+      ]
+    },
+    "grazing": {
+      "ok": true,
+      "w": 812,
+      "h": 699,
+      "corners": [
+        {
+          "x": 302.6,
+          "y": 510,
+          "world": [
+            -0.45,
+            -0.27999999999999997,
+            -2.2273
+          ]
+        },
+        {
+          "x": 385.5,
+          "y": 487.4,
+          "world": [
+            -0.45,
+            -0.27999999999999997,
+            -2.9984
+          ]
+        },
+        {
+          "x": 299,
+          "y": 188.2,
+          "world": [
+            -0.45,
+            1.8699999999999999,
+            -2.2273
+          ]
+        },
+        {
+          "x": 384.8,
+          "y": 177.7,
+          "world": [
+            -0.45,
+            1.8699999999999999,
+            -2.9984
+          ]
+        },
+        {
+          "x": 398,
+          "y": 538.9,
+          "world": [
+            0.45,
+            -0.27999999999999997,
+            -2.2273
+          ]
+        },
+        {
+          "x": 480.9,
+          "y": 514,
+          "world": [
+            0.45,
+            -0.27999999999999997,
+            -2.9984
+          ]
+        },
+        {
+          "x": 397.7,
+          "y": 201.5,
+          "world": [
+            0.45,
+            1.8699999999999999,
+            -2.2273
+          ]
+        },
+        {
+          "x": 483.5,
+          "y": 190,
+          "world": [
+            0.45,
+            1.8699999999999999,
+            -2.9984
+          ]
+        }
+      ]
+    }
+  },
+  "doorCardGrazing": {
+    "ok": true,
+    "yawDeg": 45,
+    "pitchDeg": 12,
+    "dist": 13,
+    "center": [
+      0,
+      0.8,
+      -2.7492
+    ],
+    "pos": [
+      8.9915,
+      3.5029,
+      6.2423
+    ],
+    "fov": 20
+  },
+  "generatedAt": "2026-07-18T02:22:39.816Z"
+}

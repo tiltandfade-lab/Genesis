@@ -8,7 +8,15 @@ pitch taste card, Adam's pick freezes the production camera angle). Card 03 foll
 `clay-01c-doorfix2.png` + `door-card.png` (unit 1 — Adam rejected the card-02 door: "there's
 still a gap, it doesn't sit aligned with the walls"; the leaf now rests on the VISIBLE wall face
 and covers its aperture — deviation 3 below) and `camera-taste/battlefield-*.png` (unit 2 — the
-22-vs-28 battlefield-vision tiebreaker with clay proxy pieces). One hand-authored 25 ft × 25 ft dungeon room, shell built **100% from
+22-vs-28 battlefield-vision tiebreaker with clay proxy pieces). Card 04 follow-ups:
+`clay-01d-thinleaf.png` + `door-card-2.png`/`door-card-2-grazing.png` + `door-card-2-audit.json`
+(unit 1 — Adam rejected the card-03 full-depth leaf: "no reason for the door to be that thick";
+the leaf is now HALF the wall slab depth, CENTERED in the slab, and the aperture void is closed
+by interior fill — deviation 3 below), `kenney-doors/` + `kenney-doors/kenney-doors-card.png`
+(unit 2 — every kit gate piece mounted in the doorway for Adam's read; NO single-wide door
+exists in either kit), and `camera-taste/production-28-verify.png` (unit 3 — the camera
+graduation: `CAM_ELEV_DEG` 35→28 landed in production; the pure production path re-shot with no
+override recovers pitch 28.000). One hand-authored 25 ft × 25 ft dungeon room, shell built **100% from
 kenney-modular-dungeon-kit modules**, uniform clay-grey matte, production camera angle
 (yaw 45°, rotationStep 0) with the production camera-side parapet cutaway (south+east walls at
 0.4 height), clean dark void beyond the walls, open top, nothing in the room.
@@ -29,7 +37,8 @@ decisions were read from.
 | `template-wall` | 8 | walls | 2-cell slabs, face ON the room boundary, thin body growing OUTWARD into the ring band |
 | `template-wall-half` | 3 | walls | 1-cell slab centered in each doorless side: wall–half–wall, mirroring the door side's wall–aperture–wall rhythm |
 | `template-wall-corner` | 4 | corners | square post AT each corner point, rotated per quadrant so its 0.5×0.5 body sits fully outward with both inner faces flush with the wall planes |
-| production flat leaf | 1 | door | the engine's own interactables door (state `shut`), aperture-COVERING fit by `kgr8FitLeafToAperture` v3 (card 03): 1.3 wide (laps the jambs 0.15/side), full height, full wall depth, interior face on the VISIBLE wall face plane (slab + 0.2727 detail protrusion) |
+| production flat leaf | 1 | door | the engine's own interactables door (state `shut`), fit by `kgr8FitLeafToAperture` v4 (card 04, Adam's depth spec): 1.3 wide (laps the jambs 0.15/side), full height, **0.2492 deep = HALF the 0.4984 wall slab, z-CENTERED in the slab** (box z [−2.874, −2.625] about slab center −2.7492); the resulting 0.3973 inset reveal off the visible face is the accepted read |
+| aperture fill (fixture boxes) | 4 | door | clay sill + plug + two reveal linings INSIDE the aperture (built by the same helper off live measurements) — closes every see-through-void vector the thin leaf opens; see deviation 3 |
 
 Structural placement is cell + quarter-turn only. Wall/corner pieces take the engine's own
 `KIT_WALL_NATIVE_HEIGHT`-style scale-y correction to the board's `wallHeightBase` (2.4/2.075 ≈
@@ -86,6 +95,29 @@ was touched.
    production 0.9-wide / 1.9-tall leaf constants are prism-era numbers. `door-card.png` is the
    dedicated close read (production camera direction, yaw 45° pitch 35°, dollied to dist 13 on
    the leaf center).
+   **REBUILT AGAIN card 04 unit 1 (Adam's depth spec):** the card-03 full-depth leaf was
+   REJECTED ("no reason for the door to be that thick"). The ruling: a leaf is the wall's depth
+   or THINNER — canonically ~half the wall slab depth, CENTERED in the slab; the inset reveal
+   that results is realistic and ACCEPTABLE; see-through void is NOT. v4 keeps card 03's
+   aperture-covering width, full slot height, and measurement split, and re-cuts the depth:
+   leaf 0.2492 deep (half the measured 0.4984 slab), z-centered on the slab's mid-depth
+   (−2.7492), reveal 0.3973 behind the visible face. The void card 03 closed with leaf thickness
+   is now closed by APERTURE-INTERIOR FILL built from the same live measurements: a clay SILL
+   (threshold under the tunnel), a clay PLUG (leaf back → slab outer plane, floor → wall top —
+   the open-top down-look slot behind a thin leaf), and two clay REVEAL LININGS straddling the
+   aperture's side planes through the full tunnel depth. The linings are a MEASURED necessity,
+   not decoration: the first card-04 frame's audit showed a full-height dark slit down the west
+   reveal — at yaw 45° the parallax shift across the 0.4 inset (≈ tan 45° · depth) beats the
+   0.15 side lap, and rays slip out the aperture's side planes through the sparse trim band and
+   behind the thin upper slab. Solid linings close the side planes for every yaw and read as the
+   clean reveal of a real doorway. Everything sits INSIDE the wall body — zero proud surround;
+   the door law holds. Pixel audit (`door-card-2-audit.json`, hull = the projected aperture
+   tunnel recorded in the diagnosis JSON): ZERO sub-70-luminance pixels below the wall
+   silhouette in BOTH `door-card-2.png` (production camera, pitch 28, dist 13) and
+   `door-card-2-grazing.png` (grazing pitch 12, same yaw/dolly); darkest doorway tone 124 —
+   joint shading, not void (card 03's own floor). GRADUATION SHAPE: leaf = aperture-covering
+   width, full slot height, half the slab depth, centered in the slab; aperture void closed by
+   sill+plug+reveal interior treatment measured off the wall geometry.
 4. **Parapet-cut parity is a mirror.** `itrCameraSideBand` + `ITR_CUTAWAY_PARAPET_FRAC` (0.4) are
    a sealed closure; the fixture reapplies the identical published math to its own wall holders
    (8 pieces cut, listed in the diagnosis).
@@ -106,6 +138,35 @@ intermediate · `cam-d` 22° cinematic low. Pitch burned into each frame; exact 
 Adam names the winner; that number freezes as the production constant. Rig note: an engine re-fit
 re-places the camera between override and screenshot (measured: a 50° override rendered at 35°),
 so the rig freezes the camera object per shot — see runCameraTaste's own comments.
+
+## The Kenney door lineup (card 04 unit 2 — `kenney-doors/`)
+
+Adam: *"what does the doorway look like when you put the kenney doors in there? are there single
+wide and double wide doors?"* Verified inventory answer: **NO single-wide door exists in either
+dungeon kit.** kenney-modular-dungeon-kit ships `gate` / `gate-door` / `gate-door-window` /
+`gate-metal-bars` — all 2.2 W × 2.2 H × 0.7 D calibrated, ARCHED, with proud surrounds;
+kenney-mini-dungeon ships `gate` — 1.6 W × 1.5 H × 0.4 D, arched, hinged leaf. Every one is a
+~2-cell piece, so the study room's aperture is WIDENED TO 2 CELLS (noted on the card; the canon
+clay room keeps its 1-cell doorway). Each piece loads through the real donor admission path,
+centers on the aperture with its interior face on the wall's visible face plane, and takes the
+wall band's own scale-y parity factor (wallHeightBase/2.075 — NOT per-piece, so the kit's
+gate-vs-wall height relationship is preserved: modular gates crown 0.145 proud of the wall top,
+the mini gate stands 0.66 short; both kit-true). Geometry untouched, clay like the shell (the
+donor-material read lives in `lineup-modular.png`/`lineup-mini.png`); no production leaf/portal
+on this board. Frames: `kenney-doors/<pack>-<slug>.png` (frozen production camera, pitch 28) +
+`<...>-zoom.png` (doorway dolly, dist 13) + `kenney-doors-card.png` (2×5 contact sheet, names
+burned) + `kenney-doors-manifest.json` (measured boxes, cameras, fits). These pieces violate the
+flat-leaf door law by construction — the card exists so Adam judges them with his own eyes.
+
+## The camera graduation (card 04 unit 3 — FROZEN at 28°)
+
+Adam's battlefield-card ruling landed in production: `CAM_ELEV_DEG` 35→28 in
+`src/ui/theater-boot.js` (the single-constant swap IS the approved graduation; no other camera
+surgery). Verification: the clay room re-shot through the PURE production camera path with no
+override — `camera-taste/production-28-verify.png` — and the pitch recovered from the live
+camera's world direction reads **28.000** (`camera-taste/production-28-verify-diagnosis.json`,
+`cameraVerify.pitchDeg`; yaw 45, FOV 20). Every card-04 frame carries the same recovered-pitch
+sanity in its diagnosis (`productionCamera`).
 
 ## Kit coverage gaps found (drive the next calibration/authoring tranche)
 

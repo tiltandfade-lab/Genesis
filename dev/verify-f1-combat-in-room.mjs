@@ -42,11 +42,11 @@ import { execSync } from "node:child_process";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const read = (p) => readFileSync(join(ROOT, p), "utf-8");
-// PRE-FIX BASELINE: pinned to c6ed1fcb (the MC-1 merge — this branch's own fork point, permanent
+// PRE-FIX BASELINE: pinned to 1a4bf607 (the MC-1 merge — this branch's own fork point, permanent
 // history that genuinely predates F1). Was `git show HEAD:`, which goes structurally stale the
 // moment the F1 commit exists (HEAD then IS the fix, so the red-first proves nothing) — the same
 // staleness class the sprite-registry harness hit twice on 2026-07-15, fixed the same way.
-const F1_PREFIX_BASE = "c6ed1fcb";
+const F1_PREFIX_BASE = "1a4bf607";
 const readAtHead = (p) => execSync(`git show ${F1_PREFIX_BASE}:${p}`, { cwd: ROOT, encoding: "utf-8", maxBuffer: 64 * 1024 * 1024 });
 
 const JSDOM_HOME = process.env.JSDOM_HOME || join(process.env.HOME, ".genesis-jsdom");

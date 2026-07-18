@@ -1,7 +1,7 @@
 {
   "generatedAt": "2026-07-16T01:12:08.256Z",
   "branch": "feat/ks1-kenney-adapter",
-  "sha": "66fc7a0b3c0a3af86ec1b85779cd59dfd0b83ab1",
+  "sha": "86ae72fc5bbf2d0f7d6251075df8bab094b8c0dd",
   "verdictedAt": "2026-07-16T01:30:00.000Z",
   "verdictedBy": "orchestrator (read the composite cards directly, per KS-1's own instruction)",
   "gateStrictness": "LOOSE — Adam's ruling: kit silhouettes fine; \"no pastel/toy read\" is the bar. REJECT to CHASSIS only if the modulated card still reads toy/pastel or fights the realm palette.",

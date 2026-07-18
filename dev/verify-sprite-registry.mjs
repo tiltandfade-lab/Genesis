@@ -41,7 +41,7 @@
          contentBounds (a transparent-crop orphan) silently dropped his ruled ground-contact line
          and fell back to the bbox bottom-center default. RED-FIRST: fold_in_orphans is driven
          DIRECTLY (python3 -c, importlib) against a pinned PRE-FIX commit of
-         build/gen-sprite-registry.py (66fc7a0b, the exact commit this branch forked from) with a
+         build/gen-sprite-registry.py (86ae72fc, the exact commit this branch forked from) with a
          synthetic orphan slug whose cut-record carries no contentBounds and whose overlay sets
          `floor`; the pre-fix module MUST ignore the override (footY stays at the un-overlaid 1.0
          default) before the real, current module is proven to honor it (footY == 1 - floor).
@@ -377,12 +377,12 @@ console.log("\n=== RED-FIRST: pre-S6 baseline sprite-review.py must reject overl
 // entry (Adam's editor `floor` override), not an unconditional {} ----
 console.log("\n=== RED-FIRST: CR-1 item 1 — fold_in_orphans must honor overlay `floor` when the cut-record carries no contentBounds ===");
 {
-  // Pinned at the exact master commit this branch forked from (66fc7a0b) — the commit
+  // Pinned at the exact master commit this branch forked from (86ae72fc) — the commit
   // immediately BEFORE gen-sprite-registry.py:346 was fixed to pass overlay.get(slug, {})
   // instead of {} into standee_contract_for. A moving ref (git merge-base) would go stale the
   // instant this fix lands on master — the same staleness class the S6 baseline section above
   // already hit once and fixed the same way (a hardcoded pinned SHA).
-  const preFixSha = "66fc7a0b";
+  const preFixSha = "86ae72fc";
   const preFixSrc = execFileSync("git", ["show", `${preFixSha}:build/gen-sprite-registry.py`],
     { cwd: ROOT, maxBuffer: 1024 * 1024 * 8 }).toString();
   const scratch = mkdtempSync(join(tmpdir(), "genesis-orphan-floor-"));

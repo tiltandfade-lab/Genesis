@@ -26,6 +26,18 @@ jobs:
         with:
           fetch-depth: 0
 
+      # As of the 2026-07-18 Git LFS migration, all binaries are LFS-tracked. We do NOT set
+      # `lfs: true` on checkout: that auto-pulls the full ~6 GB sprite/asset corpus every run
+      # and would exhaust the 10 GiB/mo free LFS bandwidth in a couple of runs. Only
+      # verify-bw2-3-material-texel actually decodes real PNG bytes (reads IHDR width/height
+      # of assets/textures/*.png); pull just that small set (~3.7 MB). All other harnesses use
+      # os.path.exists / path strings / text data files, which the checked-out LFS pointer
+      # stubs satisfy fine. Add more `--include` globs here if a harness starts decoding
+      # other real asset bytes.
+      - name: Materialize LFS textures (bw2-3 reads real PNG IHDR)
+        run: git lfs pull --include="assets/textures/**"
+        shell: bash
+
       # No npm cache: the only lock file (dev/jsdom-home/package-lock.json) is gitignored,
       # and setup-node hard-fails when cache-dependency-path doesn't exist at checkout.
       - uses: actions/setup-node@v4

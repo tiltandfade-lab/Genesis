@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /* dev/verify-board-admission-dirty-key.mjs — KENNEY-SOCKET-WAVE.md CR-1 item 6 (addendum): the A/B
-   flip rig's own finding, banked in the 66fc7a0b merge message ("setInteriorBoard dirty-key can serve
+   flip rig's own finding, banked in the 86ae72fc merge message ("setInteriorBoard dirty-key can serve
    stale textures across registry-only flips") and documented at length in
    dev/battle-gate/ab-flip-cards/capture-ab-flip.mjs's "LIVE-DEBUGGED FINDING" header comment.
 

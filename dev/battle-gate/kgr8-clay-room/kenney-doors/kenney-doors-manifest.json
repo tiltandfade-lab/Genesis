@@ -1,0 +1,284 @@
+{
+  "mode": "doors",
+  "corner": "post",
+  "notes": [],
+  "boot": {
+    "ok": true,
+    "notes": [
+      "startSession() called"
+    ],
+    "worldId": "mrpqw8g9knk8x",
+    "worldName": "The Tiered Capital"
+  },
+  "strippedMeta": {
+    "prismFloor": 27,
+    "prismWall": 22,
+    "prismDoorframe": 0,
+    "prismPillar": 0,
+    "portals": 2
+  },
+  "focusRect": {
+    "minX": 1,
+    "maxX": 5,
+    "minZ": 1,
+    "maxZ": 5
+  },
+  "kit": {
+    "corner": "post",
+    "doorway": "double",
+    "placed": 24,
+    "parapetCut": 8
+  },
+  "zoom": {
+    "steps": 3,
+    "level": 1.953125
+  },
+  "gates": [
+    {
+      "base": "modular-gate",
+      "pack": "kenney-modular-dungeon-kit",
+      "slug": "gate",
+      "fit": {
+        "ok": true,
+        "module": "kenney-modular-dungeon-kit/gate",
+        "scaleY": 1.1566,
+        "aperture": [
+          -0.5,
+          1.5
+        ],
+        "facePlane": -2.5,
+        "visibleFace": -2.2273,
+        "wallTop": 1.9,
+        "box": {
+          "min": [
+            -0.6,
+            -0.5,
+            -2.927
+          ],
+          "max": [
+            1.6,
+            2.045,
+            -2.227
+          ]
+        },
+        "size": [
+          2.2,
+          2.545,
+          0.7
+        ]
+      },
+      "productionCamera": {
+        "pitchDeg": 28,
+        "yawDeg": 45
+      },
+      "zoomCamera": {
+        "ok": true,
+        "yawDeg": 45,
+        "pitchDeg": 28,
+        "dist": 13,
+        "center": [
+          0.5,
+          0.7723,
+          -2.5773
+        ]
+      }
+    },
+    {
+      "base": "modular-gate-door",
+      "pack": "kenney-modular-dungeon-kit",
+      "slug": "gate-door",
+      "fit": {
+        "ok": true,
+        "module": "kenney-modular-dungeon-kit/gate-door",
+        "scaleY": 1.1566,
+        "aperture": [
+          -0.5,
+          1.5
+        ],
+        "facePlane": -2.5,
+        "visibleFace": -2.2273,
+        "wallTop": 1.9,
+        "box": {
+          "min": [
+            -0.6,
+            -0.5,
+            -2.927
+          ],
+          "max": [
+            1.6,
+            2.045,
+            -2.227
+          ]
+        },
+        "size": [
+          2.2,
+          2.545,
+          0.7
+        ]
+      },
+      "productionCamera": {
+        "pitchDeg": 28,
+        "yawDeg": 45
+      },
+      "zoomCamera": {
+        "ok": true,
+        "yawDeg": 45,
+        "pitchDeg": 28,
+        "dist": 13,
+        "center": [
+          0.5,
+          0.7723,
+          -2.5773
+        ]
+      }
+    },
+    {
+      "base": "modular-gate-door-window",
+      "pack": "kenney-modular-dungeon-kit",
+      "slug": "gate-door-window",
+      "fit": {
+        "ok": true,
+        "module": "kenney-modular-dungeon-kit/gate-door-window",
+        "scaleY": 1.1566,
+        "aperture": [
+          -0.5,
+          1.5
+        ],
+        "facePlane": -2.5,
+        "visibleFace": -2.2273,
+        "wallTop": 1.9,
+        "box": {
+          "min": [
+            -0.6,
+            -0.5,
+            -2.927
+          ],
+          "max": [
+            1.6,
+            2.045,
+            -2.227
+          ]
+        },
+        "size": [
+          2.2,
+          2.545,
+          0.7
+        ]
+      },
+      "productionCamera": {
+        "pitchDeg": 28,
+        "yawDeg": 45
+      },
+      "zoomCamera": {
+        "ok": true,
+        "yawDeg": 45,
+        "pitchDeg": 28,
+        "dist": 13,
+        "center": [
+          0.5,
+          0.7723,
+          -2.5773
+        ]
+      }
+    },
+    {
+      "base": "modular-gate-metal-bars",
+      "pack": "kenney-modular-dungeon-kit",
+      "slug": "gate-metal-bars",
+      "fit": {
+        "ok": true,
+        "module": "kenney-modular-dungeon-kit/gate-metal-bars",
+        "scaleY": 1.1566,
+        "aperture": [
+          -0.5,
+          1.5
+        ],
+        "facePlane": -2.5,
+        "visibleFace": -2.2273,
+        "wallTop": 1.9,
+        "box": {
+          "min": [
+            -0.6,
+            -0.5,
+            -2.927
+          ],
+          "max": [
+            1.6,
+            2.045,
+            -2.227
+          ]
+        },
+        "size": [
+          2.2,
+          2.545,
+          0.7
+        ]
+      },
+      "productionCamera": {
+        "pitchDeg": 28,
+        "yawDeg": 45
+      },
+      "zoomCamera": {
+        "ok": true,
+        "yawDeg": 45,
+        "pitchDeg": 28,
+        "dist": 13,
+        "center": [
+          0.5,
+          0.7723,
+          -2.5773
+        ]
+      }
+    },
+    {
+      "base": "mini-gate",
+      "pack": "kenney-mini-dungeon",
+      "slug": "gate",
+      "fit": {
+        "ok": true,
+        "module": "kenney-mini-dungeon/gate",
+        "scaleY": 1.1566,
+        "aperture": [
+          -0.5,
+          1.5
+        ],
+        "facePlane": -2.5,
+        "visibleFace": -2.2273,
+        "wallTop": 1.9,
+        "box": {
+          "min": [
+            -0.3,
+            -0.5,
+            -2.627
+          ],
+          "max": [
+            1.3,
+            1.235,
+            -2.227
+          ]
+        },
+        "size": [
+          1.6,
+          1.735,
+          0.4
+        ]
+      },
+      "productionCamera": {
+        "pitchDeg": 28,
+        "yawDeg": 45
+      },
+      "zoomCamera": {
+        "ok": true,
+        "yawDeg": 45,
+        "pitchDeg": 28,
+        "dist": 13,
+        "center": [
+          0.5,
+          0.3675,
+          -2.4273
+        ]
+      }
+    }
+  ],
+  "generatedAt": "2026-07-18T02:26:18.063Z"
+}

@@ -271,11 +271,32 @@ def crop_transparent(img, item, tolerance, padding):
     crop = img.crop((x1, y1, x2 + 1, y2 + 1)).convert("RGBA")
     px = crop.load()
     w, h = crop.size
-    for yy in range(h):
-        for xx in range(w):
-            r, g, b, a = px[xx, yy]
-            if is_magenta((r, g, b), tolerance):
-                px[xx, yy] = (r, g, b, 0)
+    # Component-mask: keep ONLY this creature's own connected component (1px-dilated so the
+    # natural anti-aliased edge survives), zeroing everything else in the bbox rectangle. This
+    # kills neighbor-bleed — a limb of the adjacent cell's creature poking into this crop's
+    # rectangle is a DIFFERENT component and gets dropped (the historical "slices of other
+    # sprites" bug). Falls back to plain magenta-keying when no component is attached (--single).
+    comp = item.get("pixels")
+    if comp:
+        keep = set()
+        for (pxc, pyc) in comp:
+            lx, ly = pxc - x1, pyc - y1
+            for dx in (-1, 0, 1):
+                for dy in (-1, 0, 1):
+                    keep.add((lx + dx, ly + dy))
+        for yy in range(h):
+            for xx in range(w):
+                r, g, b, a = px[xx, yy]
+                if (xx, yy) not in keep:
+                    px[xx, yy] = (0, 0, 0, 0)          # bg or neighbor-bleed → fully cleared
+                elif is_magenta((r, g, b), tolerance):
+                    px[xx, yy] = (r, g, b, 0)           # interior magenta hole within the creature
+    else:
+        for yy in range(h):
+            for xx in range(w):
+                r, g, b, a = px[xx, yy]
+                if is_magenta((r, g, b), tolerance):
+                    px[xx, yy] = (r, g, b, 0)
     defringe(crop)
     return crop
 

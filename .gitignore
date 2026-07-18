@@ -73,3 +73,7 @@ dev/diegetic-light-shots/
 .obsidian/
 # STATE-HYGIENE-EVAL: scorecard artifacts are per-run outputs; baselines/budgets are committed truth
 dev/state-eval/out/
+
+# Cold shelf (2026-07-18): heavy archival files moved to Google Drive "Genesis Cold Shelf".
+# Restore via dev/cold-shelf/fetch-cold.mjs (reads dev/cold-shelf/manifest.json). *.pdf already ignored above.
+quarantine-pack/

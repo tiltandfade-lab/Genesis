@@ -1,0 +1,300 @@
+{
+  "shelfName": "Genesis Cold Shelf",
+  "driveMount": "/Users/adamstephenson/Library/CloudStorage/GoogleDrive-adamstephenson17@gmail.com",
+  "shelfRootRelToMount": "My Drive/Genesis Cold Shelf",
+  "created": "2026-07-18",
+  "note": "Cold archive of heavy Genesis files. Restore with dev/cold-shelf/fetch-cold.mjs.",
+  "entries": [
+    {
+      "type": "file",
+      "repoPath": "Reference/Core - Official - Dungeon Master_s Guide 5e.pdf",
+      "shelfPath": "Reference/Core - Official - Dungeon Master_s Guide 5e.pdf",
+      "sha256": "fb470671dc5def35bf09897c11d4971161c70b3c5558cd792dc164cef2668f44",
+      "size": 89862104,
+      "backend": "drive",
+      "tracked": false
+    },
+    {
+      "type": "file",
+      "repoPath": "Reference/D&D 5e - Dungeon Master Guide 2024.pdf",
+      "shelfPath": "Reference/D&D 5e - Dungeon Master Guide 2024.pdf",
+      "sha256": "139c77f0fd4a4a204572221c1e2d8e6a6a4c488fd59f988cb59c84d782cf31ea",
+      "size": 150720125,
+      "backend": "drive",
+      "tracked": false
+    },
+    {
+      "type": "file",
+      "repoPath": "Reference/D&D 5e - Monster Manual 2024.pdf",
+      "shelfPath": "Reference/D&D 5e - Monster Manual 2024.pdf",
+      "sha256": "401204932d8cd442bfdf845448c8013d5050f91bc89f2724cd40452015cfbe8c",
+      "size": 330720040,
+      "backend": "drive",
+      "tracked": false
+    },
+    {
+      "type": "file",
+      "repoPath": "Reference/D&D 5e - Players Handbook 2024.pdf",
+      "shelfPath": "Reference/D&D 5e - Players Handbook 2024.pdf",
+      "sha256": "f2ea73369a6c4afbf6a7047249f06e5c51af503d9e42f87fe7a9c2c50aefafea",
+      "size": 88834798,
+      "backend": "drive",
+      "tracked": false
+    },
+    {
+      "type": "file",
+      "repoPath": "Reference/Dungeon Builder's Guidebook (2e).pdf",
+      "shelfPath": "Reference/Dungeon Builder's Guidebook (2e).pdf",
+      "sha256": "2f4cd0feb0838e25dbf77de3ae1d5a72e863b7f4cb9258f457db7245bb3ba268",
+      "size": 22998318,
+      "backend": "drive",
+      "tracked": false
+    },
+    {
+      "type": "file",
+      "repoPath": "Reference/SRD_CC_v5.2.1 (1).pdf",
+      "shelfPath": "Reference/SRD_CC_v5.2.1 (1).pdf",
+      "sha256": "8974902d109d6e63672d7c490bde9ccf052410503d9cfa768237154fbc5e3d87",
+      "size": 6031375,
+      "backend": "drive",
+      "tracked": false
+    },
+    {
+      "type": "file",
+      "repoPath": "Reference/Setting - Ravenloft - Van Richtens Guide to Ravenloft Subclasses5e.pdf",
+      "shelfPath": "Reference/Setting - Ravenloft - Van Richtens Guide to Ravenloft Subclasses5e.pdf",
+      "sha256": "83bf7e0945d21ab58619704089341d99c3477a245068ab7e74c5c47f83a6ed6a",
+      "size": 4898775,
+      "backend": "drive",
+      "tracked": false
+    },
+    {
+      "type": "file",
+      "repoPath": "Reference/Settings - Toril - Aventura Ghosts of Saltmarsh.pdf",
+      "shelfPath": "Reference/Settings - Toril - Aventura Ghosts of Saltmarsh.pdf",
+      "sha256": "44ac31d1ce6c13718e6f105cfb046a8b62535ecc3fc51bb21b997981d33f7aa4",
+      "size": 62904421,
+      "backend": "drive",
+      "tracked": false
+    },
+    {
+      "type": "file",
+      "repoPath": "Reference/Sourcebook - Official - Tasha-s-Cauldron-of-Everything-pdf.pdf",
+      "shelfPath": "Reference/Sourcebook - Official - Tasha-s-Cauldron-of-Everything-pdf.pdf",
+      "sha256": "27bea3a7acf0538d46f9f43d5905a02f8f9a1e5a1eb27419afe636879674f52f",
+      "size": 76876725,
+      "backend": "drive",
+      "tracked": false
+    },
+    {
+      "type": "file",
+      "repoPath": "Reference/Supplements - Official - Xanathars Guide to Everything.pdf",
+      "shelfPath": "Reference/Supplements - Official - Xanathars Guide to Everything.pdf",
+      "sha256": "7fa5d6f4ab5482c057484128fd4680d3b4aeece86665c0ec7b7ede60cc9b1606",
+      "size": 83830194,
+      "backend": "drive",
+      "tracked": false
+    },
+    {
+      "type": "file",
+      "repoPath": "quarantine-pack/pre-unification/originals-r2.zip",
+      "shelfPath": "quarantine-pack/pre-unification/originals-r2.zip",
+      "sha256": "3d4e9fc2d99e4cc1c07745f872839e7bdea6db0aee62e7a04d8b8d2f40546d34",
+      "size": 140679759,
+      "backend": "drive",
+      "tracked": true
+    },
+    {
+      "type": "file",
+      "repoPath": "quarantine-pack/pre-unification/originals.zip",
+      "shelfPath": "quarantine-pack/pre-unification/originals.zip",
+      "sha256": "2cce44dc07a7a7c5ea27353450eaed5549ea020ceff37319b4a8b97c4654eb93",
+      "size": 82889430,
+      "backend": "drive",
+      "tracked": true
+    },
+    {
+      "type": "file",
+      "repoPath": "quarantine-pack/pre-mc2/originals.zip",
+      "shelfPath": "quarantine-pack/pre-mc2/originals.zip",
+      "sha256": "da9ca0d5daf42e6228de27cfe83fbfbaf31304fc7bfac554dd75176022bab6df",
+      "size": 15032359,
+      "backend": "drive",
+      "tracked": true
+    },
+    {
+      "type": "file",
+      "repoPath": "quarantine-pack/pre-magenta-crud/originals.zip",
+      "shelfPath": "quarantine-pack/pre-magenta-crud/originals.zip",
+      "sha256": "154fe0b4375e4c2466500ff2e1a2865ca5531e9297130bd6bda7e1c3dc493dbd",
+      "size": 6365816,
+      "backend": "drive",
+      "tracked": true
+    },
+    {
+      "type": "tree",
+      "repoPath": "_external/faceted-harvest-2026-07-14",
+      "shelfPath": "_external/faceted-harvest-2026-07-14",
+      "origin": "/Volumes/Genesis/faceted-harvest-2026-07-14",
+      "backend": "drive",
+      "tracked": false,
+      "files": [
+        {
+          "path": "r3a-returns/genesis-r3a-returns-preserved/provenance/r3a-generation-calls.json",
+          "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+          "size": 3
+        },
+        {
+          "path": "r3a-returns/provenance/r3a-generation-calls.json",
+          "sha256": "7fca1c754a057d03cdb24186d132cd4a73ec3c9bf8389f7fdda10de9c2859013",
+          "size": 5539
+        },
+        {
+          "path": "r3a-returns/raw-figures/spr-fantasy-air-elemental-candidate-001.png",
+          "sha256": "f9c415aaf6ad3053f52a1389fb0d4343a55c2ad8daed36195b9443d4f6c3080e",
+          "size": 1195019
+        },
+        {
+          "path": "r3a-returns/raw-figures/spr-fantasy-animated-armor-candidate-001.png",
+          "sha256": "f790c47adc7c4e4a214a1f638360e3c90b0e520eb681b52f8ee215b4efa34773",
+          "size": 1120367
+        },
+        {
+          "path": "r3a-returns/raw-figures/spr-fantasy-animated-rug-of-smothering-candidate-001.png",
+          "sha256": "1d572231ef7a6de303270480d19e69fc2dd16e567e3021fc949952ef8ba81d7f",
+          "size": 778464
+        },
+        {
+          "path": "r3a-returns/raw-figures/spr-fantasy-barbed-devil-candidate-001.png",
+          "sha256": "663f5cef7027fb19202d6b008e7db97b55d409871b2b670bcae25e7197b1404f",
+          "size": 1926379
+        },
+        {
+          "path": "r3a-returns/raw-figures/spr-fantasy-bone-devil-candidate-001.png",
+          "sha256": "70f406bafa623ba0bea41bb3df610edd7593afb42ea67e917b46ab776c4843ed",
+          "size": 911777
+        },
+        {
+          "path": "r3a-returns/raw-figures/spr-fantasy-bugbear-stalker-candidate-001.png",
+          "sha256": "3ee589d2c4d2d128b688b600e70b0f01e008b1d3ffd3e99bdb6b6d51b648d1d7",
+          "size": 2613970
+        },
+        {
+          "path": "r3a-returns/raw-figures/spr-fantasy-centaur-trooper-candidate-001.png",
+          "sha256": "f987b15d6247c358dc5a19f157fd5437c02955e3ebe0f2b8c446744f4b047b77",
+          "size": 1790513
+        },
+        {
+          "path": "r3a-returns/raw-figures/spr-fantasy-chain-devil-candidate-001.png",
+          "sha256": "86002100b702d02b79a7b723b1fea55af5d364f233a3af79734e89fb96de3440",
+          "size": 786960
+        },
+        {
+          "path": "r3a-returns/raw-figures/spr-fantasy-clay-golem-candidate-001.png",
+          "sha256": "1b21bf221981d9bf48079000fd4cd0f4e84e49e101979daa2f75bd977a224e35",
+          "size": 1196674
+        },
+        {
+          "path": "r3a-returns/raw-figures/spr-fantasy-clockwork-law-construct-duodrone-candidate-001.png",
+          "sha256": "79a60b4079134c02dc69c7fc686119bae046415e7fc469f3c45b7f8017fa9ab0",
+          "size": 2807337
+        },
+        {
+          "path": "r3a-returns/raw-figures/spr-fantasy-cyclops-oracle-candidate-001.png",
+          "sha256": "f7af807bda76bb1950c6722e9f8d3c25470346a293257f8372c0574bf46e3e9c",
+          "size": 698572
+        },
+        {
+          "path": "r3a-returns/raw-figures/spr-fantasy-cyclops-sentry-candidate-001.png",
+          "sha256": "d0395d4d40621c30d7531c1cfeb13f861bf88d75624a3038745a28a06ef41ff6",
+          "size": 934186
+        },
+        {
+          "path": "r3a-returns/raw-figures/spr-fantasy-doppelganger-candidate-001.png",
+          "sha256": "66c95a3252c7ead80e75b6ed2fc626e6aee021dbfa32935e42fb8a94dfe11dad",
+          "size": 1999707
+        },
+        {
+          "path": "r3a-returns/raw-figures/spr-fantasy-earth-elemental-candidate-001.png",
+          "sha256": "645edba79d8b87407b57c6d1e36843a2c4b64deaeae6131c5845a1d7271efecd",
+          "size": 1602683
+        },
+        {
+          "path": "r3a-returns/raw-figures/spr-fantasy-flameskull-candidate-001.png",
+          "sha256": "2970bbefae53ec86fa2e6a12a3575feed61056273c36ec48c0866f4e1cd59585",
+          "size": 1157781
+        },
+        {
+          "path": "r3a-returns/raw-figures/spr-fantasy-flesh-golem-candidate-001.png",
+          "sha256": "c619539a2e5ee36d002a0154c325ee4f333322238638f12c7bce26fff8df528c",
+          "size": 1324937
+        },
+        {
+          "path": "r3a-returns/raw-figures/spr-fantasy-giant-ape-candidate-001.png",
+          "sha256": "34421e7f498a7b4b0b50c49938220c98dbf3443b8313935d89f61fd3af7b4373",
+          "size": 3601488
+        },
+        {
+          "path": "r3a-returns/raw-figures/spr-fantasy-giant-boar-candidate-001.png",
+          "sha256": "5405b13d1e4dfabcc8173e12c8c408c5911027d0398170852ac407fe8d5fdbe9",
+          "size": 3918455
+        },
+        {
+          "path": "r3a-returns/raw-figures/spr-fantasy-giant-crocodile-candidate-001.png",
+          "sha256": "41190efdb6c5c867434ebaa386fe2e908fe3258ca02a3cff1baa4704a3e681d8",
+          "size": 4172331
+        },
+        {
+          "path": "r3a-returns/raw-figures/spr-fantasy-giant-frog-candidate-001.png",
+          "sha256": "e9e8a226b4abc12ab8240a5124cfdac76506e8c3eba268e34422b6093ea044bf",
+          "size": 3706410
+        },
+        {
+          "path": "r3a-returns/raw-figures/spr-fantasy-giant-octopus-candidate-001.png",
+          "sha256": "585895b9df67e8db60af6bc87b523b65e8b4914eff5fc32833d704c63636bcbd",
+          "size": 4060694
+        },
+        {
+          "path": "r3a-returns/raw-figures/spr-fantasy-giant-seahorse-candidate-001.png",
+          "sha256": "11d5987c4d487aa80cc25c64d3d67cf9adb22d58666cd50cf2ede69ea2fd60e0",
+          "size": 4203786
+        },
+        {
+          "path": "r3a-returns/raw-figures/spr-fantasy-giant-toad-candidate-001.png",
+          "sha256": "51d5ade85b76aafb21b4c5263c52c1b0d4f3a40ccaf3a334eacb675f18bd9cd5",
+          "size": 2999894
+        },
+        {
+          "path": "r3b-returns/provenance/r3b-generation-calls.json",
+          "sha256": "6afe7c4ed7997aad5cbd8022a16228a9af56043a1e475950b7239674769ef88c",
+          "size": 489
+        },
+        {
+          "path": "r3b-returns/raw-figures/spr-fantasy-gibbering-mouther-candidate-001.png",
+          "sha256": "4c0a7a1ed10fe69bb4bc4008df3fd0bd8196bfb0eaab27f4864a5069300e068d",
+          "size": 1717335
+        },
+        {
+          "path": "r3b-returns/raw-figures/spr-fantasy-gibbering-mouther-candidate-002.png",
+          "sha256": "b06f0b1d09bfa7678b06039adf1ab5eb6e0ce1d5938d09ba5aba79c487cce25e",
+          "size": 1696774
+        }
+      ]
+    },
+    {
+      "type": "tree",
+      "repoPath": "_discarded/sprite-r4-round4-restart",
+      "shelfPath": "_discarded/sprite-r4-round4-restart",
+      "origin": "/Volumes/Genesis/Genesis-sprite-r4/.discarded-round4-restart",
+      "backend": "drive",
+      "tracked": false,
+      "files": [
+        {
+          "path": "fantasy-solo-v3-r4-01.png",
+          "sha256": "6f77d7423ac9bf7068f0c645196639802229887158ffa56c2441e0f2de9a966e",
+          "size": 2136033
+        }
+      ]
+    }
+  ]
+}

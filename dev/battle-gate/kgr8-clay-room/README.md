@@ -4,7 +4,11 @@
 14-room). **Adam's ruling: GO on the shell; rubble chips KEEP (placement taste-carded later).**
 Card 02 follow-ups live beside it: `clay-01b-doorfix.png` (unit 1 — the wall-plane-relative leaf
 mount; the card-01 leaf read as a proud slab beside a slot) and `camera-taste/` (unit 2 — the
-pitch taste card, Adam's pick freezes the production camera angle). One hand-authored 25 ft × 25 ft dungeon room, shell built **100% from
+pitch taste card, Adam's pick freezes the production camera angle). Card 03 follow-ups:
+`clay-01c-doorfix2.png` + `door-card.png` (unit 1 — Adam rejected the card-02 door: "there's
+still a gap, it doesn't sit aligned with the walls"; the leaf now rests on the VISIBLE wall face
+and covers its aperture — deviation 3 below) and `camera-taste/battlefield-*.png` (unit 2 — the
+22-vs-28 battlefield-vision tiebreaker with clay proxy pieces). One hand-authored 25 ft × 25 ft dungeon room, shell built **100% from
 kenney-modular-dungeon-kit modules**, uniform clay-grey matte, production camera angle
 (yaw 45°, rotationStep 0) with the production camera-side parapet cutaway (south+east walls at
 0.4 height), clean dark void beyond the walls, open top, nothing in the room.
@@ -25,7 +29,7 @@ decisions were read from.
 | `template-wall` | 8 | walls | 2-cell slabs, face ON the room boundary, thin body growing OUTWARD into the ring band |
 | `template-wall-half` | 3 | walls | 1-cell slab centered in each doorless side: wall–half–wall, mirroring the door side's wall–aperture–wall rhythm |
 | `template-wall-corner` | 4 | corners | square post AT each corner point, rotated per quadrant so its 0.5×0.5 body sits fully outward with both inner faces flush with the wall planes |
-| production flat leaf | 1 | door | the engine's own interactables door (state `shut`), aperture-fit by `kgr8FitLeafToAperture` (card 02): scaled ~1.089× wide / ~1.147× tall to fill the 1-cell aperture, interior face coplanar with the wall face |
+| production flat leaf | 1 | door | the engine's own interactables door (state `shut`), aperture-COVERING fit by `kgr8FitLeafToAperture` v3 (card 03): 1.3 wide (laps the jambs 0.15/side), full height, full wall depth, interior face on the VISIBLE wall face plane (slab + 0.2727 detail protrusion) |
 
 Structural placement is cell + quarter-turn only. Wall/corner pieces take the engine's own
 `KIT_WALL_NATIVE_HEIGHT`-style scale-y correction to the board's `wallHeightBase` (2.4/2.075 ≈
@@ -54,19 +58,34 @@ was touched.
 2. **Darkness portal retired on this card only.** It mounts nearer the room than the shut leaf
    (portal z ≈ −2.63 vs leaf ≈ −3.0, measured off the live inventory) and would fully cover it.
    Cards with open doorways re-adopt the production portal.
-3. **Leaf-plane correction — `kgr8FitLeafToAperture` (card 02 unit 1).** Production mounts the
-   leaf at the door CELL CENTER — the wall mid-plane under 1-cell-thick prism walls, but half a
-   cell OUTSIDE the thin kit slab (the card-01 frame showed it proud with a slot behind — failed
-   the read). The helper derives everything from the mounted wall geometry: the face plane from
-   the flanking wall holders' own mount frames (the calibrated template-wall face sits at its
-   local z=0 plane), the aperture span + wall top from their world boxes, then scales the leaf to
-   fill the aperture (0.01/0.02 clearances) and lands its interior face coplanar with the wall
-   face. Absolute box-to-plane alignment — idempotent, re-asserted at shot time. Measured result:
-   face plane −2.5, aperture [−0.5, 0.5], wall thickness 0.498, dz +0.34 DERIVED (the old +0.20
-   magic offset is retired). The remaining thin dark line at the hinge-side jamb is the slab's own
-   0.15-deep reveal face in shade — real doorway geometry, not a gap. GRADUATION: the production
-   door rebuild must mount leaves wall-plane-relative and size them to the kit aperture; the
-   production 0.9-wide / 1.9-tall leaf constants are prism-era numbers.
+3. **Leaf-plane correction — `kgr8FitLeafToAperture` (card 02 unit 1, REBUILT card 03 unit 1).**
+   Production mounts the leaf at the door CELL CENTER — the wall mid-plane under 1-cell-thick
+   prism walls, but half a cell OUTSIDE the thin kit slab (the card-01 frame showed it proud with
+   a slot behind — failed the read). Card 02 re-derived the mount from the wall holders' own
+   mount frames (the calibrated template-wall face at local z=0) and landed the leaf coplanar
+   with the SLAB plane — **Adam rejected that too** ("there's still a gap, it doesn't sit aligned
+   with the walls"), and he was right: the wall's FACE DETAILS protrude 0.2727 interior of the
+   slab plane, so the plane the eye reads as "the wall" is the detail plane; a slab-plane leaf
+   reads recessed with shaded reveals both sides. (The card-02 note below this one used to call
+   the remaining dark line "real doorway geometry, not a gap" — that rationalization is dead: if
+   it reads as a gap, it IS a gap.) Card 03: the leaf rests on the VISIBLE face plane (banded
+   vertex max of the flanking pieces' face details, clamped, + 0.005 anti-z-fight hair), is
+   WIDER than the aperture by 0.15 per side so it laps the jamb butt ends the way a real door
+   covers its frame (the door law forbids proud SURROUNDS — jambs/headers/gatehouses — not a leaf
+   covering its own opening), FULL height (floor top → wall top; the kit aperture is a
+   full-height slot, any head clearance is a see-through void), and FULL depth (back at the
+   wall's outer face — a pixel audit caught a 2×24 px void sliver peeking into the open
+   aperture-head tunnel behind a 0.32-deep leaf, through the parallax wedge beside a jamb's cap
+   end). The card-02 leaf emissive lift is retired with the recess that justified it. Measured:
+   slab plane −2.5, visible face −2.2273 (detail protrusion 0.2727), aperture [−0.5, 0.5], leaf
+   box x[−0.65, 0.65] y[−0.3, 1.9] z[−2.998, −2.222]. Pixel audit of `clay-01c-doorfix2.png`:
+   ZERO sub-70-luminance pixels in the doorway below the wall silhouette (darkest seam tone 124 —
+   joint shading, not void). Absolute box-to-plane alignment — idempotent, re-asserted at shot
+   time. GRADUATION: production door rebuild = a leaf that COVERS its aperture, resting on the
+   wall's visible face plane, never cell-center + constant and never the bare slab plane; the
+   production 0.9-wide / 1.9-tall leaf constants are prism-era numbers. `door-card.png` is the
+   dedicated close read (production camera direction, yaw 45° pitch 35°, dollied to dist 13 on
+   the leaf center).
 4. **Parapet-cut parity is a mirror.** `itrCameraSideBand` + `ITR_CUTAWAY_PARAPET_FRAC` (0.4) are
    a sealed closure; the fixture reapplies the identical published math to its own wall holders
    (8 pieces cut, listed in the diagnosis).

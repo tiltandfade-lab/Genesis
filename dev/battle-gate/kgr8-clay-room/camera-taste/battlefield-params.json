@@ -1,0 +1,143 @@
+{
+  "proxies": [
+    {
+      "id": "M1-cyl",
+      "kind": "cyl",
+      "planX": 1,
+      "planZ": 1,
+      "h": 1.05,
+      "note": "far NW corner"
+    },
+    {
+      "id": "M2-box",
+      "kind": "box",
+      "planX": 3,
+      "planZ": 2,
+      "h": 1,
+      "note": "mid, before the door"
+    },
+    {
+      "id": "M3-cyl",
+      "kind": "cyl",
+      "planX": 2,
+      "planZ": 3,
+      "h": 1.05,
+      "note": "mid-west"
+    },
+    {
+      "id": "M4-box",
+      "kind": "box",
+      "planX": 5,
+      "planZ": 4,
+      "h": 1,
+      "note": "FRONT BAND east (behind parapet cut)"
+    },
+    {
+      "id": "M5-cyl",
+      "kind": "cyl",
+      "planX": 2,
+      "planZ": 5,
+      "h": 1.05,
+      "note": "FRONT BAND south (behind parapet cut)"
+    },
+    {
+      "id": "M6-box",
+      "kind": "box",
+      "planX": 4,
+      "planZ": 5,
+      "h": 1,
+      "note": "FRONT BAND south (behind parapet cut)"
+    },
+    {
+      "id": "L1-box",
+      "kind": "box",
+      "planX": 3.5,
+      "planZ": 3.5,
+      "h": 1.7,
+      "note": "LARGE, center 2×2"
+    }
+  ],
+  "frames": [
+    {
+      "ok": true,
+      "pitchDeg": 22,
+      "yawDeg": 45,
+      "dist": 24.9557,
+      "center": [
+        0,
+        0,
+        0
+      ],
+      "pos": [
+        16.3614,
+        9.3486,
+        16.3614
+      ],
+      "fov": 20,
+      "recoveredFit": {
+        "dist": 24.9557,
+        "center": [
+          0,
+          0,
+          0
+        ],
+        "yawDeg": 45
+      },
+      "fitDrift": 0
+    },
+    {
+      "ok": true,
+      "pitchDeg": 25,
+      "yawDeg": 45,
+      "dist": 24.9557,
+      "center": [
+        0,
+        0,
+        0
+      ],
+      "pos": [
+        15.993,
+        10.5467,
+        15.993
+      ],
+      "fov": 20,
+      "recoveredFit": {
+        "dist": 24.9557,
+        "center": [
+          0,
+          0,
+          0
+        ],
+        "yawDeg": 45
+      },
+      "fitDrift": 0
+    },
+    {
+      "ok": true,
+      "pitchDeg": 28,
+      "yawDeg": 45,
+      "dist": 24.9557,
+      "center": [
+        0,
+        0,
+        0
+      ],
+      "pos": [
+        15.5808,
+        11.716,
+        15.5808
+      ],
+      "fov": 20,
+      "recoveredFit": {
+        "dist": 24.9557,
+        "center": [
+          0,
+          0,
+          0
+        ],
+        "yawDeg": 45
+      },
+      "fitDrift": 0
+    }
+  ]
+}

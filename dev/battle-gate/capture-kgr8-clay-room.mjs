@@ -51,12 +51,15 @@
             retired; see installLeafHelper's own header). The darkness portal stays retired ON
             THIS CARD ONLY — it mounts nearer the room than the shut leaf and would cover it.
 
-   Run:   node dev/battle-gate/capture-kgr8-clay-room.mjs                  (the card)
+   Run:   node dev/battle-gate/capture-kgr8-clay-room.mjs                  (the card + door-card.png)
           node dev/battle-gate/capture-kgr8-clay-room.mjs --mode lineup    (module contact probe)
           node dev/battle-gate/capture-kgr8-clay-room.mjs --mode camera    (pitch taste card)
+          node dev/battle-gate/capture-kgr8-clay-room.mjs --mode battlefield (card 03: proxy pieces
+                                                            at pitch 22/25/28 — the tiebreaker)
           node dev/battle-gate/capture-kgr8-clay-room.mjs --corner quad
-   Out:   dev/battle-gate/kgr8-clay-room/clay-01-shell.png (+ clay-01-diagnosis.json;
-          lineup mode writes lineup-modular.png / lineup-mini.png + lineup-manifest.json)
+   Out:   dev/battle-gate/kgr8-clay-room/<shot>.png (+ <shot>-diagnosis.json) + door-card.png;
+          lineup mode writes lineup-modular.png / lineup-mini.png + lineup-manifest.json;
+          battlefield mode writes camera-taste/battlefield-{22,25,28}.png + battlefield-params.json
 
    Server/Chrome/boot conventions VERBATIM from capture-ks3-kit-shells.mjs (itself from
    capture-ks2-door-assembly.mjs / capture-d4-doors.mjs). Fresh port range 5241-5245.
@@ -549,12 +552,12 @@ async function clayPass(page) {
       const THREE = K.THREE;
       if (!K || !K.scene || !K.interiorGroup) return { ok: false, error: "mount steps must run first" };
       const clay = K.clayMat || (K.clayMat = new THREE.MeshStandardMaterial({ color: 0xa8a29a, roughness: 0.93, metalness: 0.0 }));
-      // the leaf sits recessed inside the aperture tunnel where the neutral rig barely reaches — it
-      // gets the clay tone PLUS a small emissive lift, the clay-card analog of the engine's own
-      // "door leaf carries the sprite emissive readability floor" law (KGR-8 demolition item 5).
-      const leafClay = K.leafClayMat || (K.leafClayMat = new THREE.MeshStandardMaterial({
-        color: 0xa8a29a, roughness: 0.93, metalness: 0.0, emissive: 0x565049, emissiveIntensity: 1.0,
-      }));
+      // CARD 03: the leaf now rests on the VISIBLE wall face (kgr8FitLeafToAperture v3) — fully
+      // lit by the neutral rig like the wall around it. The card-02 emissive lift (justified only
+      // by the old recessed mount) would read as a BRIGHTER panel than the flanking wall — a tonal
+      // "doesn't sit aligned" — so the leaf takes the exact shell clay. (Production's own leaf
+      // emissive readability floor, KGR-8 demolition item 5, is a sprite-era law untouched here.)
+      const leafClay = clay;
       let clayed = 0, portalsKept = 0, pointsRemoved = 0;
       const clayTargets = [];
       if (K.kitGroup) clayTargets.push({ root: K.kitGroup, mat: clay });
@@ -637,42 +640,56 @@ async function clayPass(page) {
   });
 }
 
-/* installLeafHelper — injects window.kgr8FitLeafToAperture into the page: the WALL-PLANE-RELATIVE
-   leaf mount (KGR-8 clay card 02, unit 1). Production mounts the leaf hinge at the door CELL
-   CENTER — the wall MID-PLANE under the old 1-cell-thick prism walls, but half a cell outside a
-   thin kit slab. This helper derives the mount from the MOUNTED WALL GEOMETRY itself instead:
-     1. face plane   = interior-most vertex of the two flanking wall pieces along the wall's
-                       interior normal, sampled in the slab band (world y 0.2–1.2 — above the base
-                       plinth flare, below the cap crest, so plinth/rubble/crest never skew it);
-     2. aperture     = the tangent-axis gap between the flanking pieces' slab-band vertex extents
-                       (same band, so base rubble at the threshold is excluded);
-     3. wall top     = max y of the flanking pieces; floor top = max y of the kit floor tiles.
-   The leaf is then scaled to FILL the aperture (width and height, 0.01/0.02 clearances) and
-   aligned so its interior face is COPLANAR with the wall face — a flat leaf in the wall plane,
-   flush, closing the aperture, zero proud surround (the door law). Alignment is absolute
+/* installLeafHelper — injects window.kgr8FitLeafToAperture into the page: the VISIBLE-FACE-PLANE
+   leaf mount (KGR-8 clay card 03, unit 1 — reworked from card 02's slab-plane mount after Adam's
+   rejection: "the door is not fixed, there's still a gap, it doesn't sit aligned with the walls").
+   CARD-02 FAILURE, NAMED: the leaf's interior face was landed coplanar with the wall SLAB's mount
+   plane (template-wall's calibrated local z=0) — but the wall's FACE DETAILS (trim/braces)
+   protrude ~0.27 INTERIOR of that slab plane, so the plane the eye reads as "the wall" sits ~0.27
+   into the room. The leaf therefore read RECESSED: its exposed side faces + the shaded jamb
+   reveals around it enumerated as dark runs = Adam's gap. Card 03 mounts the leaf to the plane
+   that is actually SEEN:
+     1. slab plane    = the flanking wall holders' OWN mount frames (calibrated local z=0 —
+                        unchanged from card 02, still the authoritative structural plane);
+     2. visible face  = slab plane + the max INTERIOR vertex protrusion of the flanking pieces'
+                        face details, vertex-sampled in the slab band (world y 0.2–1.2 — above the
+                        base plinth flare, below the cap crest; clamped to +0.35 so a rogue chip
+                        can never drive the leaf into the room);
+     3. aperture      = the tangent-axis gap between the flanking holders' world boxes;
+     4. wall top      = max y of the flanking pieces; floor top = max y of the kit floor tiles.
+   The leaf is then scaled to COVER the aperture — wider than the opening by `overlapW` per side
+   (default 0.15) so it laps the jamb butt ends the way a real door covers its frame, and FULL
+   height (floor top → wall top, zero head clearance: the kit aperture is a full-height slot, any
+   head gap is a see-through void) — and aligned so its interior face sits a `proudEps` (0.005)
+   hair INTERIOR of the visible face plane: flush with the wall AS READ, covering every jamb seam,
+   no recess, no reveal, nothing to read as a gap. The overlap regions interpenetrate the jamb
+   slab/trim OUTWARD of the visible plane — invisible solid-on-solid in matte clay, and the door
+   law is untouched: the leaf is still one flat slab, and the law forbids proud SURROUNDS
+   (jambs/headers/gatehouses), not a leaf that covers its own opening. Alignment is absolute
    (box-to-plane), so the helper is idempotent — safe to re-run at shot time.
-   MEASUREMENT NOTE (v1 lesson, kept for the graduation): a vertex-sampled "slab band" estimator
-   failed twice over — big flat faces carry no mid-height vertices (the band missed the real jamb
-   ends: aperture read 2.36 wide), and the wall's own protruding face details poke past the slab
-   plane (face read 0.27 interior of truth). The authoritative plane is the wall module's OWN
-   MOUNT FRAME: the normalized template-wall face sits at its local z=0 plane by calibration, so
-   the mounted holder's frame IS the wall plane; the jamb ends come from the calibrated piece
-   bounds (±1 tangent half-extent) via the holders' world boxes. Wall thickness is reported off
-   the same boxes (facePlane − outward extent) for the record — the production leaf (0.32 deep)
-   is deeper than the kit slab, so its back rides proud into the OUTWARD tunnel (invisible from
-   the room; the void side is not a composed view).
-   GRADUATION SHAPE for the production door rebuild: aperture-fit leaf sized from the wall
-   module's own mount-frame plane + calibrated extents, never cell-center + constant. The card-01
-   +0.20z magic offset is retired. Axes here are the north wall's (normal +z, tangent x);
-   production graduates this by feeding its own wall-normal/tangent frame. */
+   MEASUREMENT NOTE (v1+v2 lessons, kept for the graduation): the v1 vertex-sampled estimator
+   failed for STRUCTURE (big flat faces carry no mid-height vertices — aperture read 2.36 wide)
+   and v2's mount-frame plane failed for the READ (the slab plane is structurally true, but the
+   face details protruding ~0.27 interior of it are what the eye calls "the wall" — Adam rejected
+   the slab-plane leaf as recessed/gapped). Card 03's split: STRUCTURE (aperture span, jamb ends,
+   wall top) comes from mount frames + calibrated world boxes, the leaf's RESTING PLANE comes
+   from the banded vertex max of the face details. Wall thickness is still reported off the boxes
+   (slab facePlane − outward extent); the leaf body rides back INTO the aperture tunnel and its
+   overlap laps interpenetrate the jamb trim — solid-on-solid, invisible in matte clay, and only
+   ever on the void side / inside the wall body (never a composed view).
+   GRADUATION SHAPE for the production door rebuild: a leaf that COVERS its aperture (overlap past
+   both jambs), resting on the wall's VISIBLE face plane (banded detail max, clamped), never
+   cell-center + constant and never the bare slab plane. The card-01 +0.20z magic offset stays
+   retired. Axes here are the north wall's (normal +z, tangent x); production graduates this by
+   feeding its own wall-normal/tangent frame. */
 async function installLeafHelper(page) {
   await page.evaluate(() => {
     window.kgr8FitLeafToAperture = function (K, opts) {
       opts = opts || {};
       const THREE = K.THREE;
       const wallRole = opts.wallRole || "wall-n";
-      const clearW = opts.clearW != null ? opts.clearW : 0.01;   // per-side tangent clearance
-      const clearH = opts.clearH != null ? opts.clearH : 0.02;   // head clearance under the wall top
+      const overlapW = opts.overlapW != null ? opts.overlapW : 0.15; // per-side jamb OVERLAP (card 03: cover the seams)
+      const proudEps = opts.proudEps != null ? opts.proudEps : 0.005; // hair of interior proud so leaf/trim planes never z-fight
       const flank = K.kitGroup.children.filter((h) => h.userData.role === wallRole);
       if (flank.length < 2) return { ok: false, error: "flanking wall pieces not found for " + wallRole };
       let hinge = null;
@@ -685,6 +702,30 @@ async function installLeafHelper(page) {
       const facePlane = Math.max(...planes);
       const planeSpread = Math.max(...planes) - Math.min(...planes);
       if (planeSpread > 1e-3) return { ok: false, error: "flanking walls disagree on the face plane: " + planeSpread };
+      // 1b. the VISIBLE face plane (card 03): the wall's face details protrude interior of the
+      //     slab plane — vertex-sample the flanking pieces in the slab band (y 0.2–1.2) for the
+      //     max interior z. Vertex sampling is RIGHT here (unlike the retired v1 aperture/face
+      //     estimator): the details are dense small geometry, and we want their extreme, not the
+      //     vertex-poor slab face. Clamped so a rogue chip can never drive the leaf into the room.
+      let visibleFace = facePlane;
+      {
+        const v = new THREE.Vector3();
+        const bandLo = 0.2, bandHi = 1.2;
+        flank.forEach((h) => {
+          h.updateWorldMatrix(true, true);
+          h.traverse((o) => {
+            if (!o.isMesh || !o.geometry || !o.geometry.attributes || !o.geometry.attributes.position) return;
+            const pos = o.geometry.attributes.position;
+            for (let i = 0; i < pos.count; i++) {
+              v.fromBufferAttribute(pos, i).applyMatrix4(o.matrixWorld);
+              if (v.y < bandLo || v.y > bandHi) continue;
+              if (v.z > visibleFace) visibleFace = v.z;
+            }
+          });
+        });
+        if (visibleFace - facePlane > 0.35) visibleFace = facePlane + 0.35;
+      }
+      const detailProtrusion = +(visibleFace - facePlane).toFixed(4);
       // 2-3. aperture span + wall top + outward extent off the holders' world boxes (the
       //    calibrated piece bounds end exactly at the ±1 tangent half-extent — clean jamb ends).
       let wallTop = -Infinity, outwardMin = Infinity;
@@ -707,27 +748,37 @@ async function installLeafHelper(page) {
         const b = new THREE.Box3().setFromObject(h);
         floorTop = Math.max(floorTop, b.max.y);
       });
-      // measure the leaf, scale to fill, re-measure, align absolutely.
+      // measure the leaf, scale to COVER (card 03), re-measure, align absolutely.
       hinge.updateWorldMatrix(true, true);
       let leafBox = new THREE.Box3().setFromObject(hinge);
       const leafW = leafBox.max.x - leafBox.min.x;
       const leafH = leafBox.max.y - leafBox.min.y;
-      const targetW = apertureW - 2 * clearW;
-      const targetH = (wallTop - floorTop) - clearH;
+      const leafD = leafBox.max.z - leafBox.min.z;
+      const targetW = apertureW + 2 * overlapW;      // laps the jamb butt ends — no seam can show
+      const targetH = wallTop - floorTop;            // full-height slot: zero head clearance
+      // full-depth: the leaf's back reaches the wall's OUTER face, filling the whole aperture
+      // tunnel. Pixel-audited on the first card-03 frame: a 0.32-deep leaf leaves an OPEN head
+      // slot behind it (aperture absence has no cap), and a high camera peeks a void sliver into
+      // it through the parallax wedge beside a jamb's cap butt end (2×24 px, the only dark run
+      // the audit found). Depth is invisible from the room — the face plane is unchanged — and
+      // the leaf's top face now bridges the wall depth exactly like the flanking caps do.
+      const targetD = (visibleFace + proudEps) - outwardMin;
       if (leafW > 1e-6) hinge.scale.x *= targetW / leafW;
       if (leafH > 1e-6) hinge.scale.y *= targetH / leafH;
+      if (leafD > 1e-6) hinge.scale.z *= targetD / leafD;
       hinge.updateWorldMatrix(true, true);
       leafBox = new THREE.Box3().setFromObject(hinge);
       const dx = ((apertureLeft + apertureRight) / 2) - ((leafBox.min.x + leafBox.max.x) / 2);
       const dy = floorTop - leafBox.min.y;
-      const dz = facePlane - leafBox.max.z; // interior faces coplanar — THE wall-plane mount
+      const dz = (visibleFace + proudEps) - leafBox.max.z; // interior face flush with the VISIBLE wall face
       hinge.position.x += dx; hinge.position.y += dy; hinge.position.z += dz;
       hinge.updateWorldMatrix(true, true);
       const finalBox = new THREE.Box3().setFromObject(hinge);
       return {
-        ok: true, facePlane: +facePlane.toFixed(4), wallTop: +wallTop.toFixed(4), wallThickness,
+        ok: true, facePlane: +facePlane.toFixed(4), visibleFace: +visibleFace.toFixed(4),
+        detailProtrusion, wallTop: +wallTop.toFixed(4), wallThickness,
         floorTop: +floorTop.toFixed(4), aperture: [+apertureLeft.toFixed(4), +apertureRight.toFixed(4)],
-        applied: { dx: +dx.toFixed(4), dy: +dy.toFixed(4), dz: +dz.toFixed(4), scaleX: +hinge.scale.x.toFixed(4), scaleY: +hinge.scale.y.toFixed(4) },
+        overlapW, applied: { dx: +dx.toFixed(4), dy: +dy.toFixed(4), dz: +dz.toFixed(4), scaleX: +hinge.scale.x.toFixed(4), scaleY: +hinge.scale.y.toFixed(4), scaleZ: +hinge.scale.z.toFixed(4) },
         leafBox: { min: finalBox.min.toArray().map((n) => +n.toFixed(3)), max: finalBox.max.toArray().map((n) => +n.toFixed(3)) },
       };
     };
@@ -904,6 +955,7 @@ async function runCard(page, metrics) {
   metrics.leafShiftFinal = await page.evaluate(() => window.kgr8FitLeafToAperture(window.__KGR8));
   metrics.inventoryFinal = await sceneInventory(page);
   if (MODE === "camera") { await runCameraTaste(page, metrics); return; }
+  if (MODE === "battlefield") { await runBattlefieldTaste(page, metrics); return; }
   if (args.xray2) {
     const groups = [
       ["xray2-floor", "(o)=>o.userData.role==='floor'"],
@@ -936,6 +988,51 @@ async function runCard(page, metrics) {
     await page.evaluate(() => { const K = window.__KGR8; K.hidden.forEach((o) => { o.visible = true; }); });
   }
   await shoot(page, SHOT + ".png");
+  // DOOR CARD (card 03 unit 1): the doorway filling most of the frame, from the PRODUCTION
+  // CAMERA DIRECTION — yaw and pitch recovered from the live production-fitted camera and held;
+  // only the orbit center (the leaf's own center) and distance change: a dolly toward the shut
+  // door so Adam judges it without squinting. Same per-shot freeze discipline as the taste card.
+  metrics.doorCard = await page.evaluate((doorDist) => {
+    const K = window.__KGR8;
+    const THREE = K.THREE;
+    const cam = K.camera;
+    if (!cam) return { ok: false, error: "no live camera captured" };
+    const dir = new THREE.Vector3();
+    cam.getWorldDirection(dir);
+    const yaw = Math.atan2(-dir.x, -dir.z);
+    const pitch = Math.asin(Math.max(-1, Math.min(1, -dir.y)));
+    // the doorway's own center, measured off the live leaf box (never a hand constant)
+    let hinge = null;
+    K.interiorGroup.children.forEach((c) => { if (c.userData && c.userData.bySourceRef && c.children.length) hinge = c.children[0]; });
+    if (!hinge) return { ok: false, error: "leaf hinge not found" };
+    hinge.updateWorldMatrix(true, true);
+    const lb = new THREE.Box3().setFromObject(hinge);
+    const center = lb.getCenter(new THREE.Vector3());
+    const horiz = Math.cos(pitch) * doorDist;
+    cam.position.set(center.x + Math.sin(yaw) * horiz, center.y + Math.sin(pitch) * doorDist, center.z + Math.cos(yaw) * horiz);
+    cam.lookAt(center);
+    cam.updateProjectionMatrix();
+    const fx = cam.position.x, fy = cam.position.y, fz = cam.position.z;
+    Object.defineProperty(cam.position, "x", { configurable: true, get: () => fx, set: () => {} });
+    Object.defineProperty(cam.position, "y", { configurable: true, get: () => fy, set: () => {} });
+    Object.defineProperty(cam.position, "z", { configurable: true, get: () => fz, set: () => {} });
+    cam.lookAt = function () {};
+    if (window.Theater._renderFrameForTest) window.Theater._renderFrameForTest();
+    return {
+      ok: true, yawDeg: +((yaw * 180) / Math.PI).toFixed(3), pitchDeg: +((pitch * 180) / Math.PI).toFixed(3),
+      dist: doorDist, center: center.toArray().map((n) => +n.toFixed(4)), pos: [fx, fy, fz].map((n) => +n.toFixed(4)), fov: cam.fov || null,
+    };
+  }, 13);
+  if (!metrics.doorCard.ok) throw new Error("door card camera failed: " + metrics.doorCard.error);
+  await sleep(200);
+  await shoot(page, "door-card.png");
+  await page.evaluate(() => {
+    const cam = window.__KGR8.camera;
+    const fx = cam.position.x, fy = cam.position.y, fz = cam.position.z;
+    delete cam.position.x; delete cam.position.y; delete cam.position.z;
+    cam.position.set(fx, fy, fz);
+    delete cam.lookAt;
+  });
   metrics.generatedAt = new Date().toISOString();
   fs.writeFileSync(path.join(outDir, SHOT.replace(/-shell$/, "") + "-diagnosis.json"), JSON.stringify(metrics, null, 2));
 }
@@ -1050,6 +1147,136 @@ the command in this folder's history (PIL side-by-side compose).
 `);
   fs.writeFileSync(path.join(camDir, "camera-taste-params.json"), JSON.stringify(metrics.cameraTaste, null, 2) + "\n");
   log("camera taste card written -> camera-taste/");
+}
+
+/* ─── KGR-8 CLAY CARD 03 UNIT 2 — THE BATTLEFIELD-VISION TIEBREAKER ──────────────────────────────
+   Adam on the pitch taste card: "i honestly like the 22 degree angle, but maybe 28 degrees is the
+   safer bet for more battlefield vision." Settled with evidence, not argument: the SAME clay room
+   with ~7 clay-grey PROXY pieces (simple standee-scale boxes/cylinders — Medium 1-cell footprints
+   plus one Large 2×2 — NO sprites, NO character art, clay only) spread across the floor grid,
+   including three in the front band hugging the parapet-cut south/east walls and one in the far
+   corner, shot at pitch 22° / 25° / 28°. Yaw, orbit center, and distance are HELD at the recorded
+   camera-taste params (yaw 45°, center [0,0,0], dist 24.9557 — cross-checked against the live
+   recovered fit and forced to the record if they drift), so the ONLY variable is pitch. Each
+   frame answers: can you read every piece's position and the grid space between them? */
+const BATTLEFIELD_PITCHES = [22, 25, 28];
+const TASTE_RECORD = { yawDeg: 45, dist: 24.9557, center: [0, 0, 0] }; // camera-taste-params.json
+async function placeBattlefieldProxies(page) {
+  return await page.evaluate(() => {
+    try {
+      const K = window.__KGR8;
+      const THREE = K.THREE;
+      if (!K || !K.interiorGroup) return { ok: false, error: "mount steps must run first" };
+      if (K.proxyGroup) { K.proxyGroup.parent && K.proxyGroup.parent.remove(K.proxyGroup); K.proxyGroup = null; }
+      const origin = window.Theater.interiorBoardOrigin() || { cx: 0, cz: 0 };
+      const FLOOR_TOP_Y = -0.3;
+      // same clay tone as the shell — the card reads POSITION legibility, not piece styling
+      const mat = K.clayMat || (K.clayMat = new THREE.MeshStandardMaterial({ color: 0xa8a29a, roughness: 0.93, metalness: 0.0 }));
+      const g = new THREE.Group();
+      g.userData = { interiorKind: "kgr8-battle-proxies" };
+      // plan-cell coordinates (interior cell centers 1..5; Large centers on the 2×2 seam).
+      // Front band = cells hugging the parapet-cut south (z=5) / east (x=5) walls.
+      const PIECES = [
+        { id: "M1-cyl", kind: "cyl", x: 1, z: 1, r: 0.32, h: 1.05, note: "far NW corner" },
+        { id: "M2-box", kind: "box", x: 3, z: 2, w: 0.62, h: 1.0, note: "mid, before the door" },
+        { id: "M3-cyl", kind: "cyl", x: 2, z: 3, r: 0.32, h: 1.05, note: "mid-west" },
+        { id: "M4-box", kind: "box", x: 5, z: 4, w: 0.62, h: 1.0, note: "FRONT BAND east (behind parapet cut)" },
+        { id: "M5-cyl", kind: "cyl", x: 2, z: 5, r: 0.32, h: 1.05, note: "FRONT BAND south (behind parapet cut)" },
+        { id: "M6-box", kind: "box", x: 4, z: 5, w: 0.62, h: 1.0, note: "FRONT BAND south (behind parapet cut)" },
+        { id: "L1-box", kind: "box", x: 3.5, z: 3.5, w: 1.35, h: 1.7, note: "LARGE, center 2×2" },
+      ];
+      const placed = [];
+      PIECES.forEach((p) => {
+        const geo = p.kind === "cyl"
+          ? new THREE.CylinderGeometry(p.r, p.r, p.h, 24)
+          : new THREE.BoxGeometry(p.w, p.h, p.w);
+        const mesh = new THREE.Mesh(geo, mat);
+        mesh.position.set(p.x - origin.cx, FLOOR_TOP_Y + p.h / 2, p.z - origin.cz);
+        mesh.userData = { kgr8Proxy: p.id };
+        g.add(mesh);
+        placed.push({ id: p.id, kind: p.kind, planX: p.x, planZ: p.z, h: p.h, note: p.note });
+      });
+      K.interiorGroup.add(g);
+      K.proxyGroup = g;
+      if (window.Theater._renderFrameForTest) window.Theater._renderFrameForTest();
+      return { ok: true, placed };
+    } catch (e) { return { ok: false, error: e.message, stack: e.stack }; }
+  });
+}
+async function runBattlefieldTaste(page, metrics) {
+  const camDir = path.join(outDir, "camera-taste");
+  fs.mkdirSync(camDir, { recursive: true });
+  metrics.proxies = await placeBattlefieldProxies(page);
+  if (!metrics.proxies.ok) throw new Error("proxy placement failed: " + metrics.proxies.error);
+  await sleep(400);
+  metrics.battlefield = [];
+  for (const deg of BATTLEFIELD_PITCHES) {
+    // label FIRST (its DOM append can trigger an engine re-fit — same hazard runCameraTaste hit)…
+    await page.evaluate((text) => {
+      let el = document.getElementById("kgr8-cam-label");
+      if (!el) {
+        el = document.createElement("div");
+        el.id = "kgr8-cam-label";
+        el.style.cssText = "position:absolute;left:12px;bottom:12px;z-index:99;background:rgba(10,9,8,0.85);color:#f2efe9;font:700 24px/1.35 monospace;padding:10px 16px;border:1px solid #6b675f;border-radius:4px;pointer-events:none";
+        document.querySelector(".theater-stage-canvas").appendChild(el);
+      }
+      el.textContent = text;
+    }, `pitch ${deg}° — battlefield read (7 clay proxies)`);
+    await sleep(400);
+    // …then override AND FREEZE, holding yaw/center/dist at the RECORDED taste-card params. The
+    // live fit is recovered first purely as a cross-check (same board + same zoom ⇒ must agree).
+    const applied = await page.evaluate((cfg) => {
+      const K = window.__KGR8;
+      const THREE = K.THREE;
+      const cam = K.camera;
+      if (!cam) return { ok: false, error: "no live camera captured" };
+      const dir = new THREE.Vector3();
+      cam.getWorldDirection(dir);
+      const pos = cam.position.clone();
+      let recovered = null;
+      const denom = dir.x * dir.x + dir.z * dir.z;
+      if (denom > 1e-9) {
+        const t = -(pos.x * dir.x + pos.z * dir.z) / denom;
+        if (t > 0) {
+          const c = pos.clone().add(dir.clone().multiplyScalar(t));
+          recovered = { dist: +t.toFixed(4), center: c.toArray().map((n) => +n.toFixed(4)), yawDeg: +((Math.atan2(pos.x - c.x, pos.z - c.z) * 180) / Math.PI).toFixed(3) };
+        }
+      }
+      const center = new THREE.Vector3(...cfg.record.center);
+      const dist = cfg.record.dist;
+      const yaw = (cfg.record.yawDeg * Math.PI) / 180;
+      const drift = recovered ? Math.max(Math.abs(recovered.dist - dist), Math.hypot(recovered.center[0] - center.x, recovered.center[2] - center.z)) : null;
+      const rad = (cfg.deg * Math.PI) / 180;
+      const horiz = Math.cos(rad) * dist;
+      cam.position.set(center.x + Math.sin(yaw) * horiz, center.y + Math.sin(rad) * dist, center.z + Math.cos(yaw) * horiz);
+      cam.lookAt(center);
+      cam.updateProjectionMatrix();
+      const fx = cam.position.x, fy = cam.position.y, fz = cam.position.z;
+      Object.defineProperty(cam.position, "x", { configurable: true, get: () => fx, set: () => {} });
+      Object.defineProperty(cam.position, "y", { configurable: true, get: () => fy, set: () => {} });
+      Object.defineProperty(cam.position, "z", { configurable: true, get: () => fz, set: () => {} });
+      cam.lookAt = function () {};
+      if (window.Theater._renderFrameForTest) window.Theater._renderFrameForTest();
+      return {
+        ok: true, pitchDeg: cfg.deg, yawDeg: cfg.record.yawDeg, dist, center: cfg.record.center,
+        pos: [fx, fy, fz].map((n) => +n.toFixed(4)), fov: cam.fov || null, recoveredFit: recovered, fitDrift: drift != null ? +drift.toFixed(4) : null,
+      };
+    }, { deg, record: TASTE_RECORD });
+    if (!applied.ok) throw new Error("battlefield pitch override failed: " + applied.error);
+    await sleep(200);
+    await shoot(page, path.join("camera-taste", `battlefield-${deg}.png`));
+    await page.evaluate(() => {
+      const cam = window.__KGR8.camera;
+      const fx = cam.position.x, fy = cam.position.y, fz = cam.position.z;
+      delete cam.position.x; delete cam.position.y; delete cam.position.z;
+      cam.position.set(fx, fy, fz);
+      delete cam.lookAt;
+    });
+    metrics.battlefield.push(applied);
+  }
+  await page.evaluate(() => { const el = document.getElementById("kgr8-cam-label"); if (el) el.remove(); });
+  fs.writeFileSync(path.join(camDir, "battlefield-params.json"), JSON.stringify({ proxies: metrics.proxies.placed, frames: metrics.battlefield }, null, 2) + "\n");
+  log("battlefield taste frames written -> camera-taste/battlefield-{22,25,28}.png");
 }
 
 async function main() {

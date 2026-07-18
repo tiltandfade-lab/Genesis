@@ -70,6 +70,35 @@ chain. The inspector's chain becomes: walk fact → table roll → chosen asset 
 shows WHICH sprite and WHICH recipe stamped it — provenance covers not just what was chosen
 but how it was manufactured into 3D. The Lab writes the recipes; the Inspector reads them.
 
+## THE AUTO-EXTRUDER (Adam's ruling, 2026-07-17 night — the Lab's bulk consumer)
+
+Adam, verbatim: "i do want the majority of non-decal noun sprites to be auto extruded to the
+best judgement that you can muster, i don't want to have to extrude each object myself, i also
+want some kind of classifier that knows when it has imported a new sprite from a codex batch
+and auto extrudes it"
+
+The architecture this fixes: **auto-extrusion is the DEFAULT; hand-tuning is the exception.**
+
+1. **Class recipes, not per-object labor.** The Extrusion Lab's job shifts: Adam tunes ONE
+   recipe per sprite class — character (composed-angle standee), creature, environment
+   prop (architecture-aligned citizen), wall-relief — and the AUTO-EXTRUDER applies the class
+   recipe to every sprite in that class, corpus-wide. Per-noun overrides remain possible in
+   the Lab (they save as noun-level locks that shadow the class recipe) but are the exception.
+2. **Exemptions:** decals NEVER extrude (the standing decal exemption law — flat naturalistic
+   surface marks). Effects stay flat pending their own ruling.
+3. **THE CLASSIFIER + IMPORT HOOK:** the sprite import pipeline (Codex batch → gate → slice →
+   admission → registry regen) gains a final stage: diff the corpus against the extrusion
+   manifest; every NEW sprite is classified (from registry/corpus tags — role, class, realm;
+   the classifier's judgment call is logged, low-confidence cases queue for Adam) and
+   auto-extruded with its class recipe. No sprite enters the game flat unless its class says
+   flat.
+4. **Provenance:** every auto-extruded piece stamps recipe id + version + classifier decision
+   into its provenance chain (the Inspector shows it; a hand-override is visibly distinct).
+5. **Prototype-proof gating:** the auto-extruder ships only AFTER the class recipes prove on
+   clay-room taste cards (the composed-standee/extrusion cards already ordered). Tuning a
+   class recipe later re-extrudes that class mechanically — recipes are data, extrusion is
+   deterministic, nothing is hand-carved.
+
 ## Non-negotiables
 
 - Portal pages NEVER mutate production source; they write lock files and tables.

@@ -1,0 +1,163 @@
+{
+  "mode": "lineup",
+  "corner": "lap",
+  "notes": [],
+  "boot": {
+    "ok": true,
+    "notes": [
+      "startSession() called"
+    ],
+    "worldId": "mrpkny1vc7g5q",
+    "worldName": "High-Harrow Gate"
+  },
+  "lineup-modular": {
+    "placed": 13,
+    "manifest": [
+      {
+        "module": "kenney-modular-dungeon-kit/template-wall",
+        "role": "lineup",
+        "x": 2.5,
+        "z": 2.5,
+        "rotY": 0
+      },
+      {
+        "module": "kenney-modular-dungeon-kit/template-wall-half",
+        "role": "lineup",
+        "x": 5.5,
+        "z": 2.5,
+        "rotY": 0
+      },
+      {
+        "module": "kenney-modular-dungeon-kit/template-corner",
+        "role": "lineup",
+        "x": 8.5,
+        "z": 2.5,
+        "rotY": 0
+      },
+      {
+        "module": "kenney-modular-dungeon-kit/template-wall-corner",
+        "role": "lineup",
+        "x": 11.5,
+        "z": 2.5,
+        "rotY": 0
+      },
+      {
+        "module": "kenney-modular-dungeon-kit/template-wall-top",
+        "role": "lineup",
+        "x": 14.5,
+        "z": 2.5,
+        "rotY": 0
+      },
+      {
+        "module": "kenney-modular-dungeon-kit/template-wall-detail-a",
+        "role": "lineup",
+        "x": 2.5,
+        "z": 5.7,
+        "rotY": 0
+      },
+      {
+        "module": "kenney-modular-dungeon-kit/template-detail",
+        "role": "lineup",
+        "x": 5.5,
+        "z": 5.7,
+        "rotY": 0
+      },
+      {
+        "module": "kenney-modular-dungeon-kit/template-floor",
+        "role": "lineup",
+        "x": 8.5,
+        "z": 5.7,
+        "rotY": 0
+      },
+      {
+        "module": "kenney-modular-dungeon-kit/template-floor-detail",
+        "role": "lineup",
+        "x": 11.5,
+        "z": 5.7,
+        "rotY": 0
+      },
+      {
+        "module": "kenney-modular-dungeon-kit/template-floor-detail-a",
+        "role": "lineup",
+        "x": 14.5,
+        "z": 5.7,
+        "rotY": 0
+      },
+      {
+        "module": "kenney-modular-dungeon-kit/gate",
+        "role": "lineup",
+        "x": 2.5,
+        "z": 8.9,
+        "rotY": 0
+      },
+      {
+        "module": "kenney-modular-dungeon-kit/gate-door",
+        "role": "lineup",
+        "x": 5.5,
+        "z": 8.9,
+        "rotY": 0
+      },
+      {
+        "module": "kenney-modular-dungeon-kit/gate-metal-bars",
+        "role": "lineup",
+        "x": 8.5,
+        "z": 8.9,
+        "rotY": 0
+      }
+    ]
+  },
+  "lineup-mini": {
+    "placed": 7,
+    "manifest": [
+      {
+        "module": "kenney-mini-dungeon/wall",
+        "role": "lineup",
+        "x": 2.5,
+        "z": 2.5,
+        "rotY": 0
+      },
+      {
+        "module": "kenney-mini-dungeon/wall-half",
+        "role": "lineup",
+        "x": 5.5,
+        "z": 2.5,
+        "rotY": 0
+      },
+      {
+        "module": "kenney-mini-dungeon/wall-narrow",
+        "role": "lineup",
+        "x": 8.5,
+        "z": 2.5,
+        "rotY": 0
+      },
+      {
+        "module": "kenney-mini-dungeon/wall-opening",
+        "role": "lineup",
+        "x": 11.5,
+        "z": 2.5,
+        "rotY": 0
+      },
+      {
+        "module": "kenney-mini-dungeon/gate",
+        "role": "lineup",
+        "x": 14.5,
+        "z": 2.5,
+        "rotY": 0
+      },
+      {
+        "module": "kenney-mini-dungeon/floor",
+        "role": "lineup",
+        "x": 2.5,
+        "z": 5.7,
+        "rotY": 0
+      },
+      {
+        "module": "kenney-mini-dungeon/floor-detail",
+        "role": "lineup",
+        "x": 5.5,
+        "z": 5.7,
+        "rotY": 0
+      }
+    ]
+  }
+}

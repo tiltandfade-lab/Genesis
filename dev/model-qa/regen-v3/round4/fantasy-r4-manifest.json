@@ -1,0 +1,2285 @@
+{
+ "sheets": [
+  {
+   "id": "fantasy-solo-v3-r4-01",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "1 row x 1 column",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 1,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-kraken",
+     "name": "Kraken",
+     "size": "Gargantuan"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-solo-v3-r4-02",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "1 row x 1 column",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 1,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-colossus",
+     "name": "Colossus",
+     "size": "Gargantuan"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-solo-v3-r4-03",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "1 row x 1 column",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 1,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-tarrasque",
+     "name": "Tarrasque",
+     "size": "Gargantuan"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-solo-v3-r4-04",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "1 row x 1 column",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 1,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-ancient-red-dragon",
+     "name": "Ancient Red Dragon",
+     "size": "Gargantuan"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-solo-v3-r4-05",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "1 row x 1 column",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 1,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-ancient-blue-dragon",
+     "name": "Ancient Blue Dragon",
+     "size": "Gargantuan"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-solo-v3-r4-06",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "1 row x 1 column",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 1,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-ancient-silver-dragon",
+     "name": "Ancient Silver Dragon",
+     "size": "Gargantuan"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-solo-v3-r4-07",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "1 row x 1 column",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 1,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-ancient-bronze-dragon",
+     "name": "Ancient Bronze Dragon",
+     "size": "Gargantuan"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-solo-v3-r4-08",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "1 row x 1 column",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 1,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-ancient-black-dragon",
+     "name": "Ancient Black Dragon",
+     "size": "Gargantuan"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-solo-v3-r4-09",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "1 row x 1 column",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 1,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-ancient-green-dragon",
+     "name": "Ancient Green Dragon",
+     "size": "Gargantuan"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-solo-v3-r4-10",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "1 row x 1 column",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 1,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-roc",
+     "name": "Roc",
+     "size": "Gargantuan"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-solo-v3-r4-11",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "1 row x 1 column",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 1,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-gulthias-blight",
+     "name": "Gulthias Blight",
+     "size": "Gargantuan"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-solo-v3-r4-12",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "1 row x 1 column",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 1,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-ancient-copper-dragon",
+     "name": "Ancient Copper Dragon",
+     "size": "Gargantuan"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-solo-v3-r4-13",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "1 row x 1 column",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 1,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-elemental-cataclysm",
+     "name": "Elemental Cataclysm",
+     "size": "Gargantuan"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-solo-v3-r4-14",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "1 row x 1 column",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 1,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-purple-worm",
+     "name": "Purple Worm",
+     "size": "Gargantuan"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-solo-v3-r4-15",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "1 row x 1 column",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 1,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-adult-black-dragon",
+     "name": "Adult Black Dragon",
+     "size": "Huge"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-solo-v3-r4-16",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "1 row x 1 column",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 1,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-ancient-brass-dragon",
+     "name": "Ancient Brass Dragon",
+     "size": "Gargantuan"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-solo-v3-r4-17",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "1 row x 1 column",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 1,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-ancient-white-dragon",
+     "name": "Ancient White Dragon",
+     "size": "Gargantuan"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-solo-v3-r4-18",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "1 row x 1 column",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 1,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-blob-of-annihilation",
+     "name": "Blob of Annihilation",
+     "size": "Gargantuan"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-solo-v3-r4-19",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "1 row x 1 column",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 1,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-shadow-dragon",
+     "name": "Shadow Dragon",
+     "size": "Huge"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-solo-v3-r4-20",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "1 row x 1 column",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 1,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-haunting-revenant",
+     "name": "Haunting Revenant",
+     "size": "Gargantuan"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-solo-v3-r4-21",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "1 row x 1 column",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 1,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-adult-bronze-dragon",
+     "name": "Adult Bronze Dragon",
+     "size": "Huge"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-solo-v3-r4-22",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "1 row x 1 column",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 1,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-adult-green-dragon",
+     "name": "Adult Green Dragon",
+     "size": "Huge"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-solo-v3-r4-23",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "1 row x 1 column",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 1,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-adult-blue-dragon",
+     "name": "Adult Blue Dragon",
+     "size": "Huge"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-solo-v3-r4-24",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "1 row x 1 column",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 1,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-dragon-turtle",
+     "name": "Dragon Turtle",
+     "size": "Gargantuan"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-huge-v3-r4-01",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "1 row x 2 columns",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 2,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-cloud-giant",
+     "name": "Cloud Giant",
+     "size": "Huge"
+    },
+    {
+     "n": 2,
+     "slug": "spr-fantasy-treant",
+     "name": "Treant",
+     "size": "Huge"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-huge-v3-r4-02",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "1 row x 2 columns",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 2,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-adult-white-dragon",
+     "name": "Adult White Dragon",
+     "size": "Huge"
+    },
+    {
+     "n": 2,
+     "slug": "spr-fantasy-behir",
+     "name": "Behir",
+     "size": "Huge"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-huge-v3-r4-03",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "1 row x 2 columns",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 2,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-adult-copper-dragon",
+     "name": "Adult Copper Dragon",
+     "size": "Huge"
+    },
+    {
+     "n": 2,
+     "slug": "spr-fantasy-adult-silver-dragon",
+     "name": "Adult Silver Dragon",
+     "size": "Huge"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-huge-v3-r4-04",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "1 row x 2 columns",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 2,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-adult-brass-dragon",
+     "name": "Adult Brass Dragon",
+     "size": "Huge"
+    },
+    {
+     "n": 2,
+     "slug": "spr-fantasy-awakened-tree",
+     "name": "Awakened Tree",
+     "size": "Huge"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-huge-v3-r4-05",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "1 row x 2 columns",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 2,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-adult-red-dragon",
+     "name": "Adult Red Dragon",
+     "size": "Huge"
+    },
+    {
+     "n": 2,
+     "slug": "spr-fantasy-hydra",
+     "name": "Hydra",
+     "size": "Huge"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-huge-v3-r4-06",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "1 row x 2 columns",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 2,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-storm-giant",
+     "name": "Storm Giant",
+     "size": "Huge"
+    },
+    {
+     "n": 2,
+     "slug": "spr-fantasy-giant-squid",
+     "name": "Giant Squid",
+     "size": "Huge"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-huge-v3-r4-07",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "1 row x 2 columns",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 2,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-remorhaz",
+     "name": "Remorhaz",
+     "size": "Huge"
+    },
+    {
+     "n": 2,
+     "slug": "spr-fantasy-cyclops-oracle",
+     "name": "Cyclops Oracle",
+     "size": "Huge"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-huge-v3-r4-08",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "1 row x 2 columns",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 2,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-primeval-owlbear",
+     "name": "Primeval Owlbear",
+     "size": "Huge"
+    },
+    {
+     "n": 2,
+     "slug": "spr-fantasy-dire-worg",
+     "name": "Dire Worg",
+     "size": "Huge"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-huge-v3-r4-09",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "1 row x 2 columns",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 2,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-dracolich",
+     "name": "Dracolich",
+     "size": "Huge"
+    },
+    {
+     "n": 2,
+     "slug": "spr-fantasy-mammoth",
+     "name": "Mammoth",
+     "size": "Huge"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-huge-v3-r4-10",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "1 row x 2 columns",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 2,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-hill-giant",
+     "name": "Hill Giant",
+     "size": "Huge"
+    },
+    {
+     "n": 2,
+     "slug": "spr-fantasy-fomorian",
+     "name": "Fomorian",
+     "size": "Huge"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-huge-v3-r4-11",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "1 row x 2 columns",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 2,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-archelon",
+     "name": "Archelon",
+     "size": "Huge"
+    },
+    {
+     "n": 2,
+     "slug": "spr-fantasy-triceratops",
+     "name": "Triceratops",
+     "size": "Huge"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-huge-v3-r4-12",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "1 row x 2 columns",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 2,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-stone-giant",
+     "name": "Stone Giant",
+     "size": "Huge"
+    },
+    {
+     "n": 2,
+     "slug": "spr-fantasy-fire-giant",
+     "name": "Fire Giant",
+     "size": "Huge"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-huge-v3-r4-13",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "1 row x 2 columns",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 2,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-empyrean",
+     "name": "Empyrean",
+     "size": "Huge"
+    },
+    {
+     "n": 2,
+     "slug": "spr-fantasy-cyclops-sentry",
+     "name": "Cyclops Sentry",
+     "size": "Huge"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-huge-v3-r4-14",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "1 row x 2 columns",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 2,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-giant-axe-beak",
+     "name": "Giant Axe Beak",
+     "size": "Huge"
+    },
+    {
+     "n": 2,
+     "slug": "spr-fantasy-frost-giant",
+     "name": "Frost Giant",
+     "size": "Huge"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-huge-v3-r4-15",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "1 row x 2 columns",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 2,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-elephant",
+     "name": "Elephant",
+     "size": "Huge"
+    },
+    {
+     "n": 2,
+     "slug": "spr-fantasy-tyrannosaurus-rex",
+     "name": "Tyrannosaurus Rex",
+     "size": "Huge"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-huge-v3-r4-16",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "1 row x 2 columns",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 2,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-graveyard-revenant",
+     "name": "Graveyard Revenant",
+     "size": "Huge"
+    },
+    {
+     "n": 2,
+     "slug": "spr-fantasy-tree-blight",
+     "name": "Tree Blight",
+     "size": "Huge"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-huge-v3-r4-17",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "1 row x 2 columns",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 2,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-abominable-yeti",
+     "name": "Abominable Yeti",
+     "size": "Huge"
+    },
+    {
+     "n": 2,
+     "slug": "spr-fantasy-balor",
+     "name": "Balor",
+     "size": "Huge"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-huge-v3-r4-18",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "1 row x 2 columns",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 2,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-giant-ape",
+     "name": "Giant Ape",
+     "size": "Huge"
+    },
+    {
+     "n": 2,
+     "slug": "spr-fantasy-giant-constrictor-snake",
+     "name": "Giant Constrictor Snake",
+     "size": "Huge"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-huge-v3-r4-19",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "1 row x 2 columns",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 2,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-giant-elk",
+     "name": "Giant Elk",
+     "size": "Huge"
+    },
+    {
+     "n": 2,
+     "slug": "spr-fantasy-killer-whale",
+     "name": "Killer Whale",
+     "size": "Huge"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-huge-v3-r4-20",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "1 row x 2 columns",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 2,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-ankylosaurus",
+     "name": "Ankylosaurus",
+     "size": "Huge"
+    },
+    {
+     "n": 2,
+     "slug": "spr-fantasy-giant-shark",
+     "name": "Giant Shark",
+     "size": "Huge"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-huge-v3-r4-21",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "1 row x 2 columns",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 1,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-giant-crocodile",
+     "name": "Giant Crocodile",
+     "size": "Huge"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-large-v3-r4-01",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "2 rows x 2 columns",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 4,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-giant-bat",
+     "name": "Giant Bat",
+     "size": "Large"
+    },
+    {
+     "n": 2,
+     "slug": "spr-fantasy-giant-owl",
+     "name": "Giant Owl",
+     "size": "Large"
+    },
+    {
+     "n": 3,
+     "slug": "spr-fantasy-young-blue-dragon",
+     "name": "Young Blue Dragon",
+     "size": "Large"
+    },
+    {
+     "n": 4,
+     "slug": "spr-fantasy-young-silver-dragon",
+     "name": "Young Silver Dragon",
+     "size": "Large"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-large-v3-r4-02",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "2 rows x 2 columns",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 4,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-giant-eagle",
+     "name": "Giant Eagle",
+     "size": "Large"
+    },
+    {
+     "n": 2,
+     "slug": "spr-fantasy-young-bronze-dragon",
+     "name": "Young Bronze Dragon",
+     "size": "Large"
+    },
+    {
+     "n": 3,
+     "slug": "spr-fantasy-eye-tyrant",
+     "name": "Eye-Tyrant",
+     "size": "Large"
+    },
+    {
+     "n": 4,
+     "slug": "spr-fantasy-young-black-dragon",
+     "name": "Young Black Dragon",
+     "size": "Large"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-large-v3-r4-03",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "2 rows x 2 columns",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 4,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-bone-devil",
+     "name": "Bone Devil",
+     "size": "Large"
+    },
+    {
+     "n": 2,
+     "slug": "spr-fantasy-marilith",
+     "name": "Marilith",
+     "size": "Large"
+    },
+    {
+     "n": 3,
+     "slug": "spr-fantasy-umber-hulk",
+     "name": "Umber Hulk",
+     "size": "Large"
+    },
+    {
+     "n": 4,
+     "slug": "spr-fantasy-young-red-dragon",
+     "name": "Young Red Dragon",
+     "size": "Large"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-large-v3-r4-04",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "2 rows x 2 columns",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 4,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-chimera",
+     "name": "Chimera",
+     "size": "Large"
+    },
+    {
+     "n": 2,
+     "slug": "spr-fantasy-young-copper-dragon",
+     "name": "Young Copper Dragon",
+     "size": "Large"
+    },
+    {
+     "n": 3,
+     "slug": "spr-fantasy-chasme",
+     "name": "Chasme",
+     "size": "Large"
+    },
+    {
+     "n": 4,
+     "slug": "spr-fantasy-young-green-dragon",
+     "name": "Young Green Dragon",
+     "size": "Large"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-large-v3-r4-05",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "2 rows x 2 columns",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 4,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-griffon",
+     "name": "Griffon",
+     "size": "Large"
+    },
+    {
+     "n": 2,
+     "slug": "spr-fantasy-giant-scorpion",
+     "name": "Giant Scorpion",
+     "size": "Large"
+    },
+    {
+     "n": 3,
+     "slug": "spr-fantasy-roper",
+     "name": "Roper",
+     "size": "Large"
+    },
+    {
+     "n": 4,
+     "slug": "spr-fantasy-sphinx-of-valor",
+     "name": "Sphinx of Valor",
+     "size": "Large"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-large-v3-r4-06",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "2 rows x 2 columns",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 4,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-wyvern",
+     "name": "Wyvern",
+     "size": "Large"
+    },
+    {
+     "n": 2,
+     "slug": "spr-fantasy-ogre-howdah",
+     "name": "Ogre Howdah",
+     "size": "Large"
+    },
+    {
+     "n": 3,
+     "slug": "spr-fantasy-young-brass-dragon",
+     "name": "Young Brass Dragon",
+     "size": "Large"
+    },
+    {
+     "n": 4,
+     "slug": "spr-fantasy-undead-eye-tyrant",
+     "name": "Undead Eye-Tyrant",
+     "size": "Large"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-large-v3-r4-07",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "2 rows x 2 columns",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 4,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-pit-fiend",
+     "name": "Pit Fiend",
+     "size": "Large"
+    },
+    {
+     "n": 2,
+     "slug": "spr-fantasy-brazen-gorgon",
+     "name": "Brazen Gorgon",
+     "size": "Large"
+    },
+    {
+     "n": 3,
+     "slug": "spr-fantasy-nalfeshnee",
+     "name": "Nalfeshnee",
+     "size": "Large"
+    },
+    {
+     "n": 4,
+     "slug": "spr-fantasy-hippogriff",
+     "name": "Hippogriff",
+     "size": "Large"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-large-v3-r4-08",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "2 rows x 2 columns",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 4,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-nycaloth",
+     "name": "Nycaloth",
+     "size": "Large"
+    },
+    {
+     "n": 2,
+     "slug": "spr-fantasy-fire-elemental",
+     "name": "Fire Elemental",
+     "size": "Large"
+    },
+    {
+     "n": 3,
+     "slug": "spr-fantasy-glabrezu",
+     "name": "Glabrezu",
+     "size": "Large"
+    },
+    {
+     "n": 4,
+     "slug": "spr-fantasy-planetar",
+     "name": "Planetar",
+     "size": "Large"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-large-v3-r4-09",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "2 rows x 2 columns",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 4,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-giant-goat",
+     "name": "Giant Goat",
+     "size": "Large"
+    },
+    {
+     "n": 2,
+     "slug": "spr-fantasy-hunter-shark",
+     "name": "Hunter Shark",
+     "size": "Large"
+    },
+    {
+     "n": 3,
+     "slug": "spr-fantasy-green-chaos-frog",
+     "name": "Green Chaos-Frog",
+     "size": "Large"
+    },
+    {
+     "n": 4,
+     "slug": "spr-fantasy-spirit-naga",
+     "name": "Spirit Naga",
+     "size": "Large"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-large-v3-r4-10",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "2 rows x 2 columns",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 4,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-swarm-of-bats",
+     "name": "Swarm of Bats",
+     "size": "Large"
+    },
+    {
+     "n": 2,
+     "slug": "spr-fantasy-guardian-naga",
+     "name": "Guardian Naga",
+     "size": "Large"
+    },
+    {
+     "n": 3,
+     "slug": "spr-fantasy-merrow",
+     "name": "Merrow",
+     "size": "Large"
+    },
+    {
+     "n": 4,
+     "slug": "spr-fantasy-cockatrice-regent",
+     "name": "Drake Regent",
+     "size": "Large"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-large-v3-r4-11",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "2 rows x 2 columns",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 4,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-violet-fungus-necrohulk",
+     "name": "Violet Fungus Necrohulk",
+     "size": "Large"
+    },
+    {
+     "n": 2,
+     "slug": "spr-fantasy-hezrou",
+     "name": "Hezrou",
+     "size": "Large"
+    },
+    {
+     "n": 3,
+     "slug": "spr-fantasy-salamander-inferno-master",
+     "name": "Salamander Inferno Master",
+     "size": "Large"
+    },
+    {
+     "n": 4,
+     "slug": "spr-fantasy-clay-golem",
+     "name": "Clay Golem",
+     "size": "Large"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-large-v3-r4-12",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "2 rows x 2 columns",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 4,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-sphinx-of-lore",
+     "name": "Sphinx of Lore",
+     "size": "Large"
+    },
+    {
+     "n": 2,
+     "slug": "spr-fantasy-minotaur-skeleton",
+     "name": "Minotaur Skeleton",
+     "size": "Large"
+    },
+    {
+     "n": 3,
+     "slug": "spr-fantasy-grick-ancient",
+     "name": "Grick Ancient",
+     "size": "Large"
+    },
+    {
+     "n": 4,
+     "slug": "spr-fantasy-giant-vulture",
+     "name": "Giant Vulture",
+     "size": "Large"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-large-v3-r4-13",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "2 rows x 2 columns",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 4,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-earth-elemental",
+     "name": "Earth Elemental",
+     "size": "Large"
+    },
+    {
+     "n": 2,
+     "slug": "spr-fantasy-shield-guardian",
+     "name": "Shield Guardian",
+     "size": "Large"
+    },
+    {
+     "n": 3,
+     "slug": "spr-fantasy-sahuagin-baron",
+     "name": "Sahuagin Baron",
+     "size": "Large"
+    },
+    {
+     "n": 4,
+     "slug": "spr-fantasy-blue-chaos-frog",
+     "name": "Blue Chaos-Frog",
+     "size": "Large"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-large-v3-r4-14",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "2 rows x 2 columns",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 4,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-sphinx-of-secrets",
+     "name": "Sphinx of Secrets",
+     "size": "Large"
+    },
+    {
+     "n": 2,
+     "slug": "spr-fantasy-ice-devil",
+     "name": "Ice Devil",
+     "size": "Large"
+    },
+    {
+     "n": 3,
+     "slug": "spr-fantasy-swarm-of-larvae",
+     "name": "Swarm of Larvae",
+     "size": "Large"
+    },
+    {
+     "n": 4,
+     "slug": "spr-fantasy-nightmare",
+     "name": "Nightmare",
+     "size": "Large"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-large-v3-r4-15",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "2 rows x 2 columns",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 4,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-clawed-drowner",
+     "name": "Clawed Drowner",
+     "size": "Large"
+    },
+    {
+     "n": 2,
+     "slug": "spr-fantasy-minotaur-of-the-horned-king",
+     "name": "Minotaur of the Horned King",
+     "size": "Large"
+    },
+    {
+     "n": 3,
+     "slug": "spr-fantasy-swarm-of-lemures",
+     "name": "Swarm of Lemures",
+     "size": "Large"
+    },
+    {
+     "n": 4,
+     "slug": "spr-fantasy-ettin",
+     "name": "Ettin",
+     "size": "Large"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-large-v3-r4-16",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "2 rows x 2 columns",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 4,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-axe-beak",
+     "name": "Axe Beak",
+     "size": "Large"
+    },
+    {
+     "n": 2,
+     "slug": "spr-fantasy-invisible-stalker",
+     "name": "Invisible Stalker",
+     "size": "Large"
+    },
+    {
+     "n": 3,
+     "slug": "spr-fantasy-manticore",
+     "name": "Manticore",
+     "size": "Large"
+    },
+    {
+     "n": 4,
+     "slug": "spr-fantasy-otyugh",
+     "name": "Otyugh",
+     "size": "Large"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-large-v3-r4-17",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "2 rows x 2 columns",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 4,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-unicorn",
+     "name": "Unicorn",
+     "size": "Large"
+    },
+    {
+     "n": 2,
+     "slug": "spr-fantasy-yuan-ti-abomination",
+     "name": "Yuan-ti Abomination",
+     "size": "Large"
+    },
+    {
+     "n": 3,
+     "slug": "spr-fantasy-red-chaos-frog",
+     "name": "Red Chaos-Frog",
+     "size": "Large"
+    },
+    {
+     "n": 4,
+     "slug": "spr-fantasy-shambling-mound",
+     "name": "Shambling Mound",
+     "size": "Large"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-large-v3-r4-18",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "2 rows x 2 columns",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 4,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-vrock",
+     "name": "Vrock",
+     "size": "Large"
+    },
+    {
+     "n": 2,
+     "slug": "spr-fantasy-efreeti",
+     "name": "Efreeti",
+     "size": "Large"
+    },
+    {
+     "n": 3,
+     "slug": "spr-fantasy-salamander",
+     "name": "Salamander",
+     "size": "Large"
+    },
+    {
+     "n": 4,
+     "slug": "spr-fantasy-centaur-warden",
+     "name": "Centaur Warden",
+     "size": "Large"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-large-v3-r4-19",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "2 rows x 2 columns",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 4,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-marid",
+     "name": "Marid",
+     "size": "Large"
+    },
+    {
+     "n": 2,
+     "slug": "spr-fantasy-oni",
+     "name": "Oni",
+     "size": "Large"
+    },
+    {
+     "n": 3,
+     "slug": "spr-fantasy-elk",
+     "name": "Elk",
+     "size": "Large"
+    },
+    {
+     "n": 4,
+     "slug": "spr-fantasy-eye-tyrant-zombie",
+     "name": "Eye-Tyrant Zombie",
+     "size": "Large"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-large-v3-r4-20",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "2 rows x 2 columns",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 4,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-cloaker",
+     "name": "Cloaker",
+     "size": "Large"
+    },
+    {
+     "n": 2,
+     "slug": "spr-fantasy-djinni",
+     "name": "Djinni",
+     "size": "Large"
+    },
+    {
+     "n": 3,
+     "slug": "spr-fantasy-young-white-dragon",
+     "name": "Young White Dragon",
+     "size": "Large"
+    },
+    {
+     "n": 4,
+     "slug": "spr-fantasy-elder-deep-thing",
+     "name": "Elder Deep-Thing",
+     "size": "Large"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-large-v3-r4-21",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "2 rows x 2 columns",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 4,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-arch-hag",
+     "name": "Arch-hag",
+     "size": "Large"
+    },
+    {
+     "n": 2,
+     "slug": "spr-fantasy-swarm-of-dretches",
+     "name": "Swarm of Dretches",
+     "size": "Large"
+    },
+    {
+     "n": 3,
+     "slug": "spr-fantasy-iron-golem",
+     "name": "Iron Golem",
+     "size": "Large"
+    },
+    {
+     "n": 4,
+     "slug": "spr-fantasy-air-elemental",
+     "name": "Air Elemental",
+     "size": "Large"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-large-v3-r4-22",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "2 rows x 2 columns",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 4,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-dao",
+     "name": "Dao",
+     "size": "Large"
+    },
+    {
+     "n": 2,
+     "slug": "spr-fantasy-animated-rug-of-smothering",
+     "name": "Animated Rug of Smothering",
+     "size": "Large"
+    },
+    {
+     "n": 3,
+     "slug": "spr-fantasy-centaur-trooper",
+     "name": "Centaur Trooper",
+     "size": "Large"
+    },
+    {
+     "n": 4,
+     "slug": "spr-fantasy-hook-horror",
+     "name": "Hook Horror",
+     "size": "Large"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-large-v3-r4-23",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "2 rows x 2 columns",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 4,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-horned-devil",
+     "name": "Horned Devil",
+     "size": "Large"
+    },
+    {
+     "n": 2,
+     "slug": "spr-fantasy-carrion-crawler",
+     "name": "Carrion Crawler",
+     "size": "Large"
+    },
+    {
+     "n": 3,
+     "slug": "spr-fantasy-pegasus",
+     "name": "Pegasus",
+     "size": "Large"
+    },
+    {
+     "n": 4,
+     "slug": "spr-fantasy-drider",
+     "name": "Drider",
+     "size": "Large"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-large-v3-r4-24",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "2 rows x 2 columns",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 4,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-ogre",
+     "name": "Ogre",
+     "size": "Large"
+    },
+    {
+     "n": 2,
+     "slug": "spr-fantasy-phase-spider",
+     "name": "Phase Spider",
+     "size": "Large"
+    },
+    {
+     "n": 3,
+     "slug": "spr-fantasy-gelatinous-cube",
+     "name": "Gelatinous Cube",
+     "size": "Large"
+    },
+    {
+     "n": 4,
+     "slug": "spr-fantasy-water-elemental",
+     "name": "Water Elemental",
+     "size": "Large"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-large-v3-r4-25",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "2 rows x 2 columns",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 4,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-troll-amalgam",
+     "name": "Troll Amalgam",
+     "size": "Large"
+    },
+    {
+     "n": 2,
+     "slug": "spr-fantasy-stone-golem",
+     "name": "Stone Golem",
+     "size": "Large"
+    },
+    {
+     "n": 3,
+     "slug": "spr-fantasy-solar",
+     "name": "Solar",
+     "size": "Large"
+    },
+    {
+     "n": 4,
+     "slug": "spr-fantasy-rhinoceros",
+     "name": "Rhinoceros",
+     "size": "Large"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-large-v3-r4-26",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "2 rows x 2 columns",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 4,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-water-weird",
+     "name": "Water Weird",
+     "size": "Large"
+    },
+    {
+     "n": 2,
+     "slug": "spr-fantasy-ogre-zombie",
+     "name": "Ogre Zombie",
+     "size": "Large"
+    },
+    {
+     "n": 3,
+     "slug": "spr-fantasy-allosaurus",
+     "name": "Allosaurus",
+     "size": "Large"
+    },
+    {
+     "n": 4,
+     "slug": "spr-fantasy-troll",
+     "name": "Troll",
+     "size": "Large"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-large-v3-r4-27",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "2 rows x 2 columns",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 4,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-displacer-beast",
+     "name": "Displacer Beast",
+     "size": "Large"
+    },
+    {
+     "n": 2,
+     "slug": "spr-fantasy-plesiosaurus",
+     "name": "Plesiosaurus",
+     "size": "Large"
+    },
+    {
+     "n": 3,
+     "slug": "spr-fantasy-greater-mimic",
+     "name": "Greater Mimic",
+     "size": "Large"
+    },
+    {
+     "n": 4,
+     "slug": "spr-fantasy-giant-seahorse",
+     "name": "Giant Seahorse",
+     "size": "Large"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-large-v3-r4-28",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "2 rows x 2 columns",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 4,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-giant-octopus",
+     "name": "Giant Octopus",
+     "size": "Large"
+    },
+    {
+     "n": 2,
+     "slug": "spr-fantasy-myconid-sovereign",
+     "name": "Myconid Sovereign",
+     "size": "Large"
+    },
+    {
+     "n": 3,
+     "slug": "spr-fantasy-owlbear",
+     "name": "Owlbear",
+     "size": "Large"
+    },
+    {
+     "n": 4,
+     "slug": "spr-fantasy-yeti",
+     "name": "Yeti",
+     "size": "Large"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-large-v3-r4-29",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "2 rows x 2 columns",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 4,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-bone-naga",
+     "name": "Bone Naga",
+     "size": "Large"
+    },
+    {
+     "n": 2,
+     "slug": "spr-fantasy-gorgon",
+     "name": "Gilded Medusa",
+     "size": "Large"
+    },
+    {
+     "n": 3,
+     "slug": "spr-fantasy-polar-bear",
+     "name": "Polar Bear",
+     "size": "Large"
+    },
+    {
+     "n": 4,
+     "slug": "spr-fantasy-camel",
+     "name": "Camel",
+     "size": "Large"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-large-v3-r4-30",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "2 rows x 2 columns",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 4,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-draft-horse",
+     "name": "Draft Horse",
+     "size": "Large"
+    },
+    {
+     "n": 2,
+     "slug": "spr-fantasy-lamia",
+     "name": "Lamia",
+     "size": "Large"
+    },
+    {
+     "n": 3,
+     "slug": "spr-fantasy-bulette",
+     "name": "Bulette",
+     "size": "Large"
+    },
+    {
+     "n": 4,
+     "slug": "spr-fantasy-hippopotamus",
+     "name": "Hippopotamus",
+     "size": "Large"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-large-v3-r4-31",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "2 rows x 2 columns",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 4,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-constrictor-snake",
+     "name": "Constrictor Snake",
+     "size": "Large"
+    },
+    {
+     "n": 2,
+     "slug": "spr-fantasy-gas-spore-fungus",
+     "name": "Gas Spore Fungus",
+     "size": "Large"
+    },
+    {
+     "n": 3,
+     "slug": "spr-fantasy-warhorse",
+     "name": "Warhorse",
+     "size": "Large"
+    },
+    {
+     "n": 4,
+     "slug": "spr-fantasy-warhorse-skeleton",
+     "name": "Warhorse Skeleton",
+     "size": "Large"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-large-v3-r4-32",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "2 rows x 2 columns",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 4,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-ochre-jelly",
+     "name": "Ochre Jelly",
+     "size": "Large"
+    },
+    {
+     "n": 2,
+     "slug": "spr-fantasy-saber-toothed-tiger",
+     "name": "Saber-Toothed Tiger",
+     "size": "Large"
+    },
+    {
+     "n": 3,
+     "slug": "spr-fantasy-riding-horse",
+     "name": "Riding Horse",
+     "size": "Large"
+    },
+    {
+     "n": 4,
+     "slug": "spr-fantasy-winter-wolf",
+     "name": "Winter Wolf",
+     "size": "Large"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-large-v3-r4-33",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "2 rows x 2 columns",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 4,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-brown-bear",
+     "name": "Brown Bear",
+     "size": "Large"
+    },
+    {
+     "n": 2,
+     "slug": "spr-fantasy-giant-spider",
+     "name": "Giant Spider",
+     "size": "Large"
+    },
+    {
+     "n": 3,
+     "slug": "spr-fantasy-ankheg",
+     "name": "Ankheg",
+     "size": "Large"
+    },
+    {
+     "n": 4,
+     "slug": "spr-fantasy-giant-boar",
+     "name": "Giant Boar",
+     "size": "Large"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-large-v3-r4-34",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "2 rows x 2 columns",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 4,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-black-pudding",
+     "name": "Black Pudding",
+     "size": "Large"
+    },
+    {
+     "n": 2,
+     "slug": "spr-fantasy-worg",
+     "name": "Worg",
+     "size": "Large"
+    },
+    {
+     "n": 3,
+     "slug": "spr-fantasy-dire-wolf",
+     "name": "Dire Wolf",
+     "size": "Large"
+    },
+    {
+     "n": 4,
+     "slug": "spr-fantasy-giant-hyena",
+     "name": "Giant Hyena",
+     "size": "Large"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-large-v3-r4-35",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "2 rows x 2 columns",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 4,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-giant-lizard",
+     "name": "Giant Lizard",
+     "size": "Large"
+    },
+    {
+     "n": 2,
+     "slug": "spr-fantasy-giant-toad",
+     "name": "Giant Toad",
+     "size": "Large"
+    },
+    {
+     "n": 3,
+     "slug": "spr-fantasy-lion",
+     "name": "Lion",
+     "size": "Large"
+    },
+    {
+     "n": 4,
+     "slug": "spr-fantasy-tiger",
+     "name": "Tiger",
+     "size": "Large"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-large-v3-r4-36",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "2 rows x 2 columns",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 1,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-crocodile",
+     "name": "Crocodile",
+     "size": "Large"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-redo-v3-r4-01",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "4 rows x 4 columns",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 16,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-swarm-of-piranhas",
+     "name": "Swarm of Piranhas",
+     "size": "Medium"
+    },
+    {
+     "n": 2,
+     "slug": "spr-fantasy-silver-dragon-wyrmling",
+     "name": "Silver Dragon Wyrmling",
+     "size": "Medium"
+    },
+    {
+     "n": 3,
+     "slug": "spr-fantasy-manes-vaporspawn",
+     "name": "Manes Vaporspawn",
+     "size": "Medium"
+    },
+    {
+     "n": 4,
+     "slug": "spr-fantasy-poltergeist",
+     "name": "Poltergeist",
+     "size": "Medium"
+    },
+    {
+     "n": 5,
+     "slug": "spr-fantasy-the-vine-blight",
+     "name": "The Vine Blight",
+     "size": "Medium"
+    },
+    {
+     "n": 6,
+     "slug": "spr-fantasy-lacedon-sodden-ghoul",
+     "name": "Lacedon (Sodden Ghoul)",
+     "size": "Medium"
+    },
+    {
+     "n": 7,
+     "slug": "spr-fantasy-skeleton-archer",
+     "name": "Skeleton Archer",
+     "size": "Medium"
+    },
+    {
+     "n": 8,
+     "slug": "spr-fantasy-banshee",
+     "name": "Banshee",
+     "size": "Medium"
+    },
+    {
+     "n": 9,
+     "slug": "spr-fantasy-berserker",
+     "name": "Berserker",
+     "size": "Medium"
+    },
+    {
+     "n": 10,
+     "slug": "spr-fantasy-ghost",
+     "name": "Ghost",
+     "size": "Medium"
+    },
+    {
+     "n": 11,
+     "slug": "spr-fantasy-skeleton-warrior",
+     "name": "Skeleton Warrior",
+     "size": "Medium"
+    },
+    {
+     "n": 12,
+     "slug": "spr-fantasy-aberrant-cultist",
+     "name": "Aberrant Cultist",
+     "size": "Medium"
+    },
+    {
+     "n": 13,
+     "slug": "spr-fantasy-archmage",
+     "name": "Archmage",
+     "size": "Medium"
+    },
+    {
+     "n": 14,
+     "slug": "spr-fantasy-dust-mephit",
+     "name": "Dust Mephit",
+     "size": "Small"
+    },
+    {
+     "n": 15,
+     "slug": "spr-fantasy-specter",
+     "name": "Specter",
+     "size": "Medium"
+    },
+    {
+     "n": 16,
+     "slug": "spr-fantasy-greater-shadow",
+     "name": "Greater Shadow",
+     "size": "Medium"
+    }
+   ]
+  },
+  {
+   "id": "fantasy-redo-v3-r4-02",
+   "realm": "fantasy",
+   "kind": "monster",
+   "grid": "4 rows x 4 columns",
+   "chroma": "#FF00FF",
+   "round": 4,
+   "expected": 6,
+   "cells": [
+    {
+     "n": 1,
+     "slug": "spr-fantasy-merfolk-wavebender",
+     "name": "Merfolk Wavebender",
+     "size": "Medium"
+    },
+    {
+     "n": 2,
+     "slug": "spr-fantasy-swarm-of-rats",
+     "name": "Swarm of Rats",
+     "size": "Medium"
+    },
+    {
+     "n": 3,
+     "slug": "spr-fantasy-sea-hag",
+     "name": "Sea Hag",
+     "size": "Medium"
+    },
+    {
+     "n": 4,
+     "slug": "spr-fantasy-swarm-of-stirges",
+     "name": "Swarm of Stirges",
+     "size": "Medium"
+    },
+    {
+     "n": 5,
+     "slug": "spr-fantasy-swarm-of-insects",
+     "name": "Swarm of Insects",
+     "size": "Medium"
+    },
+    {
+     "n": 6,
+     "slug": "spr-fantasy-flameskull",
+     "name": "Flameskull",
+     "size": "Tiny"
+    }
+   ]
+  }
+ ]
+}

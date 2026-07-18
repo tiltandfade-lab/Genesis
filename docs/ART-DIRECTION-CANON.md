@@ -342,3 +342,32 @@ The camera (camera-taste-card.png):
 with ~6 clay proxy pieces on the grid, shot at 22°/25°/28° — so the "can I read the
 battlefield" question is answered by looking, not guessing. His pick then freezes as the one
 camera constant.)
+
+## THE CAMERA FREEZE + THE DOOR DEPTH SPEC (Adam, 2026-07-17 — his read of clay card 03)
+
+> "28 is the way to go for sure, the debris is looking good, the door isn't correct yet but it
+> is servicable. there's no reason for the door to be that thick. and what does the doorway
+> look like when you put the kenney doors in there? are there single wide and double wide
+> doors?"
+
+> "ok, so do the walls truly sit outside of the 5x5 grid or are they sitting within the 5x5
+> grid? if they are inline, then that explains the door problem, either way the door needs to
+> be thinner. i mean we can look at the dungeon builder's guide and see the different types of
+> doors and maybe apply some of those states to the keny objects, but for now let's just see
+> the kenney doors in the clay room"
+
+> "the door is still inset, which is actually somewhat realistic so that's acceptable, but the
+> door still isn't quite right, the door should be the same depth as the wall or thinner, in
+> most cases the door is about half the depth of the wall and centered with the wall slab"
+
+(Digest: **THE CAMERA IS FROZEN AT PITCH 28°** — the battlefield card decided it; graduation
+is the approved single-constant swap CAM_ELEV_DEG 35→28. **Debris confirmed good.** **THE
+DOOR DEPTH SPEC:** a leaf is the wall's depth or thinner — canonically ~HALF the wall depth,
+CENTERED in the wall slab; an inset reveal is realistic and acceptable; see-through void is
+not; card 03's full-wall-depth leaf is rejected as too thick. Facts of record answering his
+questions: the walls sit OUTSIDE the 5×5 grid — interior face ON the room boundary, body
+growing outward — so wall placement is not the door problem; and the kits have NO single-wide
+door — kenney-modular-dungeon-kit carries gate / gate-door / gate-door-window /
+gate-metal-bars and kenney-mini-dungeon one gate, all ~2-cell-wide ARCHED pieces. The
+Kenney-door study card is ordered so he judges them mounted in the clay room. Future lane:
+apply the Dungeon Builder's Guidebook door-type/state tables to the Kenney door objects.)
